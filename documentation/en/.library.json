@@ -1,0 +1,25 @@
+{
+  "posts": [
+    {
+      "title": "About Lotus",
+      "slug": "",
+      "github": "en/about.md",
+      "value": null,
+      "posts": []
+    },
+    {
+      "title": "Lotus Architecture (WIP)",
+      "slug": "en+arch",
+      "github": "en/architecture/architecture.md",
+      "value": null,
+      "posts": [
+	{
+	  "title": "The Message Pool",
+	  "slug": "en+mpool",
+	  "github": "en/architecture/mpool.md",
+	  "value": null
+	}
+      ]
+    }
+  ]
+}
