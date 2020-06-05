@@ -6,11 +6,9 @@ import (
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-state-types/rt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/runtime"
 	"github.com/ipfs/go-cid"
-
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 )
 
 //go:generate go run ./gen
@@ -73,8 +71,6 @@ const (
 	// MethodInspectRuntime is the identifier for the method that returns the
 	// current runtime values.
 	MethodInspectRuntime
-	// MethodCreateState is the identifier for the method that creates the chaos actor's state.
-	MethodCreateState
 )
 
 // Exports defines the methods this actor exposes publicly.
@@ -89,7 +85,6 @@ func (a Actor) Exports() []interface{} {
 		MethodMutateState:         a.MutateState,
 		MethodAbortWith:           a.AbortWith,
 		MethodInspectRuntime:      a.InspectRuntime,
-		MethodCreateState:         a.CreateState,
 	}
 }
 
@@ -109,19 +104,19 @@ type SendArgs struct {
 
 // SendReturn is the return values for the Send method.
 type SendReturn struct {
-	Return builtin2.CBORBytes
+	Return runtime.CBORBytes
 	Code   exitcode.ExitCode
 }
 
 // Send requests for this actor to send a message to an actor with the
 // passed parameters.
-func (a Actor) Send(rt runtime2.Runtime, args *SendArgs) *SendReturn {
+func (a Actor) Send(rt runtime.Runtime, args *SendArgs) *SendReturn {
 	rt.ValidateImmediateCallerAcceptAny()
-	var out builtin2.CBORBytes
+	var out runtime.CBORBytes
 	code := rt.Send(
 		args.To,
 		args.Method,
-		builtin2.CBORBytes(args.Params),
+		runtime.CBORBytes(args.Params),
 		args.Value,
 		&out,
 	)
@@ -132,7 +127,7 @@ func (a Actor) Send(rt runtime2.Runtime, args *SendArgs) *SendReturn {
 }
 
 // Constructor will panic because the Chaos actor is a singleton.
-func (a Actor) Constructor(_ runtime2.Runtime, _ *abi.EmptyValue) *abi.EmptyValue {
+func (a Actor) Constructor(_ runtime.Runtime, _ *abi.EmptyValue) *abi.EmptyValue {
 	panic("constructor should not be called; the Chaos actor is a singleton actor")
 }
 
@@ -149,7 +144,7 @@ type CallerValidationArgs struct {
 //  CallerValidationBranchTwice validates twice.
 //  CallerValidationBranchIsAddress validates caller against CallerValidationArgs.Addrs.
 //  CallerValidationBranchIsType validates caller against CallerValidationArgs.Types.
-func (a Actor) CallerValidation(rt runtime2.Runtime, args *CallerValidationArgs) *abi.EmptyValue {
+func (a Actor) CallerValidation(rt runtime.Runtime, args *CallerValidationArgs) *abi.EmptyValue {
 	switch args.Branch {
 	case CallerValidationBranchNone:
 	case CallerValidationBranchTwice:
@@ -179,7 +174,7 @@ type CreateActorArgs struct {
 }
 
 // CreateActor creates an actor with the supplied CID and Address.
-func (a Actor) CreateActor(rt runtime2.Runtime, args *CreateActorArgs) *abi.EmptyValue {
+func (a Actor) CreateActor(rt runtime.Runtime, args *CreateActorArgs) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
 
 	var (
@@ -204,7 +199,7 @@ type ResolveAddressResponse struct {
 	Success bool
 }
 
-func (a Actor) ResolveAddress(rt runtime2.Runtime, args *address.Address) *ResolveAddressResponse {
+func (a Actor) ResolveAddress(rt runtime.Runtime, args *address.Address) *ResolveAddressResponse {
 	rt.ValidateImmediateCallerAcceptAny()
 
 	resolvedAddr, ok := rt.ResolveAddress(*args)
@@ -217,7 +212,7 @@ func (a Actor) ResolveAddress(rt runtime2.Runtime, args *address.Address) *Resol
 
 // DeleteActor deletes the executing actor from the state tree, transferring any
 // balance to beneficiary.
-func (a Actor) DeleteActor(rt runtime2.Runtime, beneficiary *address.Address) *abi.EmptyValue {
+func (a Actor) DeleteActor(rt runtime.Runtime, beneficiary *address.Address) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
 	rt.DeleteActor(*beneficiary)
 	return nil
@@ -230,16 +225,8 @@ type MutateStateArgs struct {
 	Branch MutateStateBranch
 }
 
-// CreateState creates the chaos actor's state
-func (a Actor) CreateState(rt runtime2.Runtime, _ *abi.EmptyValue) *abi.EmptyValue {
-	rt.ValidateImmediateCallerAcceptAny()
-	rt.StateCreate(&State{})
-
-	return nil
-}
-
 // MutateState attempts to mutate a state value in the actor.
-func (a Actor) MutateState(rt runtime2.Runtime, args *MutateStateArgs) *abi.EmptyValue {
+func (a Actor) MutateState(rt runtime.Runtime, args *MutateStateArgs) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
 	var st State
 	switch args.Branch {
@@ -270,7 +257,7 @@ type AbortWithArgs struct {
 }
 
 // AbortWith simply causes a panic with the passed exit code.
-func (a Actor) AbortWith(rt runtime2.Runtime, args *AbortWithArgs) *abi.EmptyValue {
+func (a Actor) AbortWith(rt runtime.Runtime, args *AbortWithArgs) *abi.EmptyValue {
 	if args.Uncontrolled { // uncontrolled abort: directly panic
 		panic(args.Message)
 	} else {
@@ -290,7 +277,7 @@ type InspectRuntimeReturn struct {
 }
 
 // InspectRuntime returns a copy of the serializable values available in the Runtime.
-func (a Actor) InspectRuntime(rt runtime2.Runtime, _ *abi.EmptyValue) *InspectRuntimeReturn {
+func (a Actor) InspectRuntime(rt runtime.Runtime, _ *abi.EmptyValue) *InspectRuntimeReturn {
 	rt.ValidateImmediateCallerAcceptAny()
 	var st State
 	rt.StateReadonly(&st)
