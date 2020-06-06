@@ -1,9 +1,9 @@
 package sealing
 
 import (
+	"bytes"
 	"time"
 
-	"github.com/hashicorp/go-multierror"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
@@ -13,7 +13,7 @@ import (
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-statemachine"
 
-	"github.com/filecoin-project/go-commp-utils/zerocomm"
+	"github.com/filecoin-project/lotus/extern/sector-storage/zerocomm"
 )
 
 const minRetryTime = 1 * time.Minute
@@ -77,34 +77,6 @@ func (m *Sealing) handlePreCommitFailed(ctx statemachine.Context, sector SectorI
 		return nil
 	}
 
-	if sector.PreCommitMessage != nil {
-		mw, err := m.api.StateSearchMsg(ctx.Context(), *sector.PreCommitMessage)
-		if err != nil {
-			// API error
-			if err := failedCooldown(ctx, sector); err != nil {
-				return err
-			}
-
-			return ctx.Send(SectorRetryPreCommitWait{})
-		}
-
-		if mw == nil {
-			// API error in precommit
-			return ctx.Send(SectorRetryPreCommitWait{})
-		}
-
-		switch mw.Receipt.ExitCode {
-		case exitcode.Ok:
-			// API error in PreCommitWait
-			return ctx.Send(SectorRetryPreCommitWait{})
-		case exitcode.SysErrOutOfGas:
-			// API error in PreCommitWait AND gas estimator guessed a wrong number in PreCommit
-			return ctx.Send(SectorRetryPreCommit{})
-		default:
-			// something else went wrong
-		}
-	}
-
 	if err := checkPrecommit(ctx.Context(), m.Address(), sector, tok, height, m.api); err != nil {
 		switch err.(type) {
 		case *ErrApi:
@@ -137,12 +109,12 @@ func (m *Sealing) handlePreCommitFailed(ctx statemachine.Context, sector SectorI
 
 	if pci, is := m.checkPreCommitted(ctx, sector); is && pci != nil {
 		if sector.PreCommitMessage == nil {
-			log.Warnf("sector %d is precommitted on chain, but we don't have precommit message", sector.SectorNumber)
+			log.Warn("sector %d is precommitted on chain, but we don't have precommit message", sector.SectorNumber)
 			return ctx.Send(SectorPreCommitLanded{TipSet: tok})
 		}
 
 		if pci.Info.SealedCID != *sector.CommR {
-			log.Warnf("sector %d is precommitted on chain, with different CommR: %x != %x", sector.SectorNumber, pci.Info.SealedCID, sector.CommR)
+			log.Warn("sector %d is precommitted on chain, with different CommR: %x != %x", sector.SectorNumber, pci.Info.SealedCID, sector.CommR)
 			return nil // TODO: remove when the actor allows re-precommit
 		}
 
@@ -188,34 +160,6 @@ func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo
 		return nil
 	}
 
-	if sector.CommitMessage != nil {
-		mw, err := m.api.StateSearchMsg(ctx.Context(), *sector.CommitMessage)
-		if err != nil {
-			// API error
-			if err := failedCooldown(ctx, sector); err != nil {
-				return err
-			}
-
-			return ctx.Send(SectorRetryCommitWait{})
-		}
-
-		if mw == nil {
-			// API error in commit
-			return ctx.Send(SectorRetryCommitWait{})
-		}
-
-		switch mw.Receipt.ExitCode {
-		case exitcode.Ok:
-			// API error in CcommitWait
-			return ctx.Send(SectorRetryCommitWait{})
-		case exitcode.SysErrOutOfGas:
-			// API error in CommitWait AND gas estimator guessed a wrong number in SubmitCommit
-			return ctx.Send(SectorRetrySubmitCommit{})
-		default:
-			// something else went wrong
-		}
-	}
-
 	if err := checkPrecommit(ctx.Context(), m.maddr, sector, tok, height, m.api); err != nil {
 		switch err.(type) {
 		case *ErrApi:
@@ -224,9 +168,9 @@ func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo
 		case *ErrBadCommD:
 			return ctx.Send(SectorSealPreCommit1Failed{xerrors.Errorf("bad CommD error: %w", err)})
 		case *ErrExpiredTicket:
-			return ctx.Send(SectorTicketExpired{xerrors.Errorf("ticket expired error, removing sector: %w", err)})
+			return ctx.Send(SectorSealPreCommit1Failed{xerrors.Errorf("ticket expired error: %w", err)})
 		case *ErrBadTicket:
-			return ctx.Send(SectorTicketExpired{xerrors.Errorf("expired ticket, removing sector: %w", err)})
+			return ctx.Send(SectorSealPreCommit1Failed{xerrors.Errorf("bad ticket: %w", err)})
 		case *ErrInvalidDeals:
 			log.Warnf("invalid deals in sector %d: %v", sector.SectorNumber, err)
 			return ctx.Send(SectorInvalidDealIDs{Return: RetCommitFailed})
@@ -309,22 +253,6 @@ func (m *Sealing) handleRemoveFailed(ctx statemachine.Context, sector SectorInfo
 	return ctx.Send(SectorRemove{})
 }
 
-func (m *Sealing) handleTerminateFailed(ctx statemachine.Context, sector SectorInfo) error {
-	// ignoring error as it's most likely an API error - `pci` will be nil, and we'll go back to
-	// the Terminating state after cooldown. If the API is still failing, well get back to here
-	// with the error in SectorInfo log.
-	pci, _ := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
-	if pci != nil {
-		return nil // pause the fsm, needs manual user action
-	}
-
-	if err := failedCooldown(ctx, sector); err != nil {
-		return err
-	}
-
-	return ctx.Send(SectorTerminate{})
-}
-
 func (m *Sealing) handleDealsExpired(ctx statemachine.Context, sector SectorInfo) error {
 	// First make vary sure the sector isn't committed
 	si, err := m.api.StateSectorGetInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
@@ -353,7 +281,6 @@ func (m *Sealing) handleRecoverDealIDs(ctx statemachine.Context, sector SectorIn
 	}
 
 	var toFix []int
-	paddingPieces := 0
 
 	for i, p := range sector.Pieces {
 		// if no deal is associated with the piece, ensure that we added it as
@@ -363,11 +290,10 @@ func (m *Sealing) handleRecoverDealIDs(ctx statemachine.Context, sector SectorIn
 			if !p.Piece.PieceCID.Equals(exp) {
 				return xerrors.Errorf("sector %d piece %d had non-zero PieceCID %+v", sector.SectorNumber, i, p.Piece.PieceCID)
 			}
-			paddingPieces++
 			continue
 		}
 
-		proposal, err := m.api.StateMarketStorageDealProposal(ctx.Context(), p.DealInfo.DealID, tok)
+		proposal, err := m.api.StateMarketStorageDeal(ctx.Context(), p.DealInfo.DealID, tok)
 		if err != nil {
 			log.Warnf("getting deal %d for piece %d: %+v", p.DealInfo.DealID, i, err)
 			toFix = append(toFix, i)
@@ -399,44 +325,37 @@ func (m *Sealing) handleRecoverDealIDs(ctx statemachine.Context, sector SectorIn
 		}
 	}
 
-	failed := map[int]error{}
 	updates := map[int]abi.DealID{}
 	for _, i := range toFix {
 		p := sector.Pieces[i]
 
 		if p.DealInfo.PublishCid == nil {
 			// TODO: check if we are in an early enough state try to remove this piece
-			log.Errorf("can't fix sector deals: piece %d (of %d) of sector %d has nil DealInfo.PublishCid (refers to deal %d)", i, len(sector.Pieces), sector.SectorNumber, p.DealInfo.DealID)
+			log.Error("can't fix sector deals: piece %d (of %d) of sector %d has nil DealInfo.PublishCid (refers to deal %d)", i, len(sector.Pieces), sector.SectorNumber, p.DealInfo.DealID)
 			// Not much to do here (and this can only happen for old spacerace sectors)
 			return ctx.Send(SectorRemove{})
 		}
 
-		var dp *market.DealProposal
-		if p.DealInfo.DealProposal != nil {
-			mdp := market.DealProposal(*p.DealInfo.DealProposal)
-			dp = &mdp
-		}
-		res, err := m.dealInfo.GetCurrentDealInfo(ctx.Context(), tok, dp, *p.DealInfo.PublishCid)
+		ml, err := m.api.StateSearchMsg(ctx.Context(), *p.DealInfo.PublishCid)
 		if err != nil {
-			failed[i] = xerrors.Errorf("getting current deal info for piece %d: %w", i, err)
+			return xerrors.Errorf("looking for publish deal message %s (sector %d, piece %d): %w", *p.DealInfo.PublishCid, sector.SectorNumber, i, err)
 		}
 
-		updates[i] = res.DealID
-	}
-
-	if len(failed) > 0 {
-		var merr error
-		for _, e := range failed {
-			merr = multierror.Append(merr, e)
+		if ml.Receipt.ExitCode != exitcode.Ok {
+			return xerrors.Errorf("looking for publish deal message %s (sector %d, piece %d): non-ok exit code: %s", *p.DealInfo.PublishCid, sector.SectorNumber, i, ml.Receipt.ExitCode)
 		}
 
-		if len(failed)+paddingPieces == len(sector.Pieces) {
-			log.Errorf("removing sector %d: all deals expired or unrecoverable: %+v", sector.SectorNumber, merr)
-			return ctx.Send(SectorRemove{})
+		var retval market.PublishStorageDealsReturn
+		if err := retval.UnmarshalCBOR(bytes.NewReader(ml.Receipt.Return)); err != nil {
+			return xerrors.Errorf("looking for publish deal message: unmarshaling message return: %w", err)
 		}
 
-		// todo: try to remove bad pieces (hard; see the todo above)
-		return xerrors.Errorf("failed to recover some deals: %w", merr)
+		if len(retval.IDs) != 1 {
+			// market currently only ever sends messages with 1 deal
+			return xerrors.Errorf("can't recover dealIDs from publish deal message with more than 1 deal")
+		}
+
+		updates[i] = retval.IDs[0]
 	}
 
 	// Not much to do here, we can't go back in time to commit this sector
