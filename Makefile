@@ -5,10 +5,10 @@ all: build
 
 unexport GOFLAGS
 
-GOVERSION:=$(shell go version | cut -d' ' -f 3 | sed 's/^go//' | awk -F. '{printf "%d%03d%03d", $$1, $$2, $$3}')
-ifeq ($(shell expr $(GOVERSION) \< 1015005), 1)
-$(warning Your Golang version is go$(shell expr $(GOVERSION) / 1000000).$(shell expr $(GOVERSION) % 1000000 / 1000).$(shell expr $(GOVERSION) % 1000))
-$(error Update Golang to version to at least 1.15.5)
+GOVERSION:=$(shell go version | cut -d' ' -f 3 | cut -d. -f 2)
+ifeq ($(shell expr $(GOVERSION) \< 14), 1)
+$(warning Your Golang version is go 1.$(GOVERSION))
+$(error Update Golang to version $(shell grep '^go' go.mod))
 endif
 
 # git modules that need to be loaded
@@ -41,14 +41,8 @@ MODULES+=$(FFI_PATH)
 BUILD_DEPS+=build/.filecoin-install
 CLEAN+=build/.filecoin-install
 
-ffi-version-check:
-	@[[ "$$(awk '/const Version/{print $$5}' extern/filecoin-ffi/version.go)" -eq 2 ]] || (echo "FFI version mismatch, update submodules"; exit 1)
-BUILD_DEPS+=ffi-version-check
-
-.PHONY: ffi-version-check
-
-
 $(MODULES): build/.update-modules ;
+
 # dummy file that marks the last time modules were updated
 build/.update-modules:
 	git submodule update --init --recursive
@@ -63,23 +57,11 @@ CLEAN+=build/.update-modules
 deps: $(BUILD_DEPS)
 .PHONY: deps
 
-build-devnets: build lotus-seed lotus-shed lotus-wallet lotus-gateway
-.PHONY: build-devnets
-
 debug: GOFLAGS+=-tags=debug
-debug: build-devnets
+debug: lotus lotus-miner lotus-worker lotus-seed
 
 2k: GOFLAGS+=-tags=2k
-2k: build-devnets
-
-calibnet: GOFLAGS+=-tags=calibnet
-calibnet: build-devnets
-
-nerpanet: GOFLAGS+=-tags=nerpanet
-nerpanet: build-devnets
-
-butterflynet: GOFLAGS+=-tags=butterflynet
-butterflynet: build-devnets
+2k: lotus lotus-miner lotus-worker lotus-seed
 
 lotus: $(BUILD_DEPS)
 	rm -f lotus
@@ -151,29 +133,17 @@ benchmarks:
 
 lotus-pond: 2k
 	go build -o lotus-pond ./lotuspond
+	(cd lotuspond/front && npm i && CI=false npm run build)
 .PHONY: lotus-pond
 BINS+=lotus-pond
-
-lotus-pond-front:
-	(cd lotuspond/front && npm i && CI=false npm run build)
-.PHONY: lotus-pond-front
-
-lotus-pond-app: lotus-pond-front lotus-pond
-.PHONY: lotus-pond-app
 
 lotus-townhall:
 	rm -f lotus-townhall
 	go build -o lotus-townhall ./cmd/lotus-townhall
+	(cd ./cmd/lotus-townhall/townhall && npm i && npm run build)
+	go run github.com/GeertJohan/go.rice/rice append --exec lotus-townhall -i ./cmd/lotus-townhall -i ./build
 .PHONY: lotus-townhall
 BINS+=lotus-townhall
-
-lotus-townhall-front:
-	(cd ./cmd/lotus-townhall/townhall && npm i && npm run build)
-.PHONY: lotus-townhall-front
-
-lotus-townhall-app: lotus-touch lotus-townhall-front
-	go run github.com/GeertJohan/go.rice/rice append --exec lotus-townhall -i ./cmd/lotus-townhall -i ./build
-.PHONY: lotus-townhall-app
 
 lotus-fountain:
 	rm -f lotus-fountain
@@ -197,7 +167,7 @@ BINS+=lotus-bench
 
 lotus-stats:
 	rm -f lotus-stats
-	go build $(GOFLAGS) -o lotus-stats ./cmd/lotus-stats
+	go build -o lotus-stats ./cmd/lotus-stats
 	go run github.com/GeertJohan/go.rice/rice append --exec lotus-stats -i ./build
 .PHONY: lotus-stats
 BINS+=lotus-stats
@@ -222,23 +192,10 @@ lotus-wallet:
 .PHONY: lotus-wallet
 BINS+=lotus-wallet
 
-lotus-keygen:
-	rm -f lotus-keygen
-	go build -o lotus-keygen ./cmd/lotus-keygen
-.PHONY: lotus-keygen
-BINS+=lotus-keygen
-
 testground:
 	go build -tags testground -o /dev/null ./cmd/lotus
 .PHONY: testground
 BINS+=testground
-
-
-tvx:
-	rm -f tvx
-	go build -o tvx ./cmd/tvx
-.PHONY: tvx
-BINS+=tvx
 
 install-chainwatch: lotus-chainwatch
 	install -C ./lotus-chainwatch /usr/local/bin/lotus-chainwatch
@@ -325,60 +282,17 @@ dist-clean:
 	git submodule deinit --all -f
 .PHONY: dist-clean
 
-type-gen: api-gen
+type-gen:
 	go run ./gen/main.go
-	go generate -x ./...
-	goimports -w api/
+	go generate ./...
 
-method-gen: api-gen
+method-gen:
 	(cd ./lotuspond/front/src/chain && go run ./methodgen.go)
 
-actors-gen:
-	go run ./chain/actors/agen
-	go fmt ./...
+gen: type-gen method-gen
 
-api-gen:
-	go run ./gen/api
-	goimports -w api
-	goimports -w api
-.PHONY: api-gen
-
-docsgen: docsgen-md docsgen-openrpc
-
-docsgen-md-bin: api-gen actors-gen
-	go build $(GOFLAGS) -o docgen-md ./api/docgen/cmd
-docsgen-openrpc-bin: api-gen actors-gen
-	go build $(GOFLAGS) -o docgen-openrpc ./api/docgen-openrpc/cmd
-
-docsgen-md: docsgen-md-full docsgen-md-storage docsgen-md-worker
-
-docsgen-md-full: docsgen-md-bin
-	./docgen-md "api/api_full.go" "FullNode" "api" "./api" > documentation/en/api-v1-unstable-methods.md
-	./docgen-md "api/v0api/full.go" "FullNode" "v0api" "./api/v0api" > documentation/en/api-v0-methods.md
-docsgen-md-storage: docsgen-md-bin
-	./docgen-md "api/api_storage.go" "StorageMiner" "api" "./api" > documentation/en/api-v0-methods-miner.md
-docsgen-md-worker: docsgen-md-bin
-	./docgen-md "api/api_worker.go" "Worker" "api" "./api" > documentation/en/api-v0-methods-worker.md
-
-docsgen-openrpc: docsgen-openrpc-full docsgen-openrpc-storage docsgen-openrpc-worker
-
-docsgen-openrpc-full: docsgen-openrpc-bin
-	./docgen-openrpc "api/api_full.go" "FullNode" "api" "./api" -gzip > build/openrpc/full.json.gz
-docsgen-openrpc-storage: docsgen-openrpc-bin
-	./docgen-openrpc "api/api_storage.go" "StorageMiner" "api" "./api" -gzip > build/openrpc/miner.json.gz
-docsgen-openrpc-worker: docsgen-openrpc-bin
-	./docgen-openrpc "api/api_worker.go" "Worker" "api" "./api" -gzip > build/openrpc/worker.json.gz
-
-.PHONY: docsgen docsgen-md-bin docsgen-openrpc-bin
-
-gen: actors-gen type-gen method-gen docsgen api-gen
-	@echo ">>> IF YOU'VE MODIFIED THE CLI, REMEMBER TO ALSO MAKE docsgen-cli"
-.PHONY: gen
-
-# separate from gen because it needs binaries
-docsgen-cli: lotus lotus-miner lotus-worker
-	python ./scripts/generate-lotus-cli.py
-.PHONY: docsgen-cli
+docsgen:
+	go run ./api/docgen > documentation/en/api-methods.md
 
 print-%:
 	@echo $*=$($*)
