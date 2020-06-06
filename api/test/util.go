@@ -8,7 +8,6 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-address"
-	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
 )
@@ -29,7 +28,7 @@ func SendFunds(ctx context.Context, t *testing.T, sender TestNode, addr address.
 	if err != nil {
 		t.Fatal(err)
 	}
-	res, err := sender.StateWaitMsg(ctx, sm.Cid(), 3, lapi.LookbackNoLimit, true)
+	res, err := sender.StateWaitMsg(ctx, sm.Cid(), 1)
 	if err != nil {
 		t.Fatal(err)
 	}
