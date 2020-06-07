@@ -19,26 +19,24 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/config"
 )
 
-var MpoolCmd = &cli.Command{
+var mpoolCmd = &cli.Command{
 	Name:  "mpool",
 	Usage: "Manage message pool",
 	Subcommands: []*cli.Command{
-		MpoolPending,
-		MpoolClear,
-		MpoolSub,
-		MpoolStat,
-		MpoolReplaceCmd,
-		MpoolFindCmd,
-		MpoolConfig,
-		MpoolGasPerfCmd,
-		mpoolManage,
+		mpoolPending,
+		mpoolClear,
+		mpoolSub,
+		mpoolStat,
+		mpoolReplaceCmd,
+		mpoolFindCmd,
+		mpoolConfig,
+		mpoolGasPerfCmd,
 	},
 }
 
-var MpoolPending = &cli.Command{
+var mpoolPending = &cli.Command{
 	Name:  "pending",
 	Usage: "Get pending messages",
 	Flags: []cli.Flag{
@@ -50,14 +48,6 @@ var MpoolPending = &cli.Command{
 			Name:  "cids",
 			Usage: "only print cids of messages in output",
 		},
-		&cli.StringFlag{
-			Name:  "to",
-			Usage: "return messages to a given address",
-		},
-		&cli.StringFlag{
-			Name:  "from",
-			Usage: "return messages from a given address",
-		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
@@ -67,23 +57,6 @@ var MpoolPending = &cli.Command{
 		defer closer()
 
 		ctx := ReqContext(cctx)
-
-		var toa, froma address.Address
-		if tos := cctx.String("to"); tos != "" {
-			a, err := address.NewFromString(tos)
-			if err != nil {
-				return fmt.Errorf("given 'to' address %q was invalid: %w", tos, err)
-			}
-			toa = a
-		}
-
-		if froms := cctx.String("from"); froms != "" {
-			a, err := address.NewFromString(froms)
-			if err != nil {
-				return fmt.Errorf("given 'from' address %q was invalid: %w", froms, err)
-			}
-			froma = a
-		}
 
 		var filter map[address.Address]struct{}
 		if cctx.Bool("local") {
@@ -111,13 +84,6 @@ var MpoolPending = &cli.Command{
 				}
 			}
 
-			if toa != address.Undef && msg.Message.To != toa {
-				continue
-			}
-			if froma != address.Undef && msg.Message.From != froma {
-				continue
-			}
-
 			if cctx.Bool("cids") {
 				fmt.Println(msg.Cid())
 			} else {
@@ -133,11 +99,9 @@ var MpoolPending = &cli.Command{
 	},
 }
 
-// Deprecated: MpoolClear is now available at `lotus-shed mpool clear`
-var MpoolClear = &cli.Command{
-	Name:   "clear",
-	Usage:  "Clear all pending messages from the mpool (USE WITH CARE) (DEPRECATED)",
-	Hidden: true,
+var mpoolClear = &cli.Command{
+	Name:  "clear",
+	Usage: "Clear all pending messages from the mpool (USE WITH CARE)",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "local",
@@ -149,7 +113,6 @@ var MpoolClear = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		fmt.Println("DEPRECATED: This behavior is being moved to `lotus-shed mpool clear`")
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -169,7 +132,7 @@ var MpoolClear = &cli.Command{
 	},
 }
 
-var MpoolSub = &cli.Command{
+var mpoolSub = &cli.Command{
 	Name:  "sub",
 	Usage: "Subscribe to mpool changes",
 	Action: func(cctx *cli.Context) error {
@@ -201,7 +164,7 @@ var MpoolSub = &cli.Command{
 	},
 }
 
-var MpoolStat = &cli.Command{
+var mpoolStat = &cli.Command{
 	Name:  "stat",
 	Usage: "print mempool stats",
 	Flags: []cli.Flag{
@@ -269,7 +232,6 @@ var MpoolStat = &cli.Command{
 			addr                 string
 			past, cur, future    uint64
 			belowCurr, belowPast uint64
-			gasLimit             big.Int
 		}
 
 		buckets := map[address.Address]*statBucket{}
@@ -311,7 +273,6 @@ var MpoolStat = &cli.Command{
 
 			var s mpStat
 			s.addr = a.String()
-			s.gasLimit = big.Zero()
 
 			for _, m := range bkt.msgs {
 				if m.Message.Nonce < act.Nonce {
@@ -328,8 +289,6 @@ var MpoolStat = &cli.Command{
 				if m.Message.GasFeeCap.LessThan(minBF) {
 					s.belowPast++
 				}
-
-				s.gasLimit = big.Add(s.gasLimit, types.NewInt(uint64(m.Message.GasLimit)))
 			}
 
 			out = append(out, s)
@@ -340,7 +299,6 @@ var MpoolStat = &cli.Command{
 		})
 
 		var total mpStat
-		total.gasLimit = big.Zero()
 
 		for _, stat := range out {
 			total.past += stat.past
@@ -348,33 +306,32 @@ var MpoolStat = &cli.Command{
 			total.future += stat.future
 			total.belowCurr += stat.belowCurr
 			total.belowPast += stat.belowPast
-			total.gasLimit = big.Add(total.gasLimit, stat.gasLimit)
 
-			fmt.Printf("%s: Nonce past: %d, cur: %d, future: %d; FeeCap cur: %d, min-%d: %d, gasLimit: %s\n", stat.addr, stat.past, stat.cur, stat.future, stat.belowCurr, cctx.Int("basefee-lookback"), stat.belowPast, stat.gasLimit)
+			fmt.Printf("%s: Nonce past: %d, cur: %d, future: %d; FeeCap cur: %d, min-%d: %d \n", stat.addr, stat.past, stat.cur, stat.future, stat.belowCurr, cctx.Int("basefee-lookback"), stat.belowPast)
 		}
 
 		fmt.Println("-----")
-		fmt.Printf("total: Nonce past: %d, cur: %d, future: %d; FeeCap cur: %d, min-%d: %d, gasLimit: %s\n", total.past, total.cur, total.future, total.belowCurr, cctx.Int("basefee-lookback"), total.belowPast, total.gasLimit)
+		fmt.Printf("total: Nonce past: %d, cur: %d, future: %d; FeeCap cur: %d, min-%d: %d \n", total.past, total.cur, total.future, total.belowCurr, cctx.Int("basefee-lookback"), total.belowPast)
 
 		return nil
 	},
 }
 
-var MpoolReplaceCmd = &cli.Command{
+var mpoolReplaceCmd = &cli.Command{
 	Name:  "replace",
 	Usage: "replace a message in the mempool",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "gas-feecap",
-			Usage: "gas feecap for new message (burn and pay to miner, attoFIL/GasUnit)",
+			Usage: "gas feecap for new message",
 		},
 		&cli.StringFlag{
 			Name:  "gas-premium",
-			Usage: "gas price for new message (pay to miner, attoFIL/GasUnit)",
+			Usage: "gas price for new message",
 		},
 		&cli.Int64Flag{
 			Name:  "gas-limit",
-			Usage: "gas limit for new message (GasUnit)",
+			Usage: "gas price for new message",
 		},
 		&cli.BoolFlag{
 			Name:  "auto",
@@ -382,7 +339,7 @@ var MpoolReplaceCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "max-fee",
-			Usage: "Spend up to X attoFIL for this message (applicable for auto mode)",
+			Usage: "Spend up to X FIL for this message (applicable for auto mode)",
 		},
 	},
 	ArgsUsage: "<from nonce> | <message-cid>",
@@ -477,16 +434,9 @@ var MpoolReplaceCmd = &cli.Command{
 
 			msg.GasPremium = big.Max(retm.GasPremium, minRBF)
 			msg.GasFeeCap = big.Max(retm.GasFeeCap, msg.GasPremium)
-
-			mff := func() (abi.TokenAmount, error) {
-				return abi.TokenAmount(config.DefaultDefaultMaxFee), nil
-			}
-
-			messagepool.CapGasFee(mff, &msg, mss)
+			messagepool.CapGasFee(&msg, mss.Get().MaxFee)
 		} else {
-			if cctx.IsSet("gas-limit") {
-				msg.GasLimit = cctx.Int64("gas-limit")
-			}
+			msg.GasLimit = cctx.Int64("gas-limit")
 			msg.GasPremium, err = types.BigFromString(cctx.String("gas-premium"))
 			if err != nil {
 				return fmt.Errorf("parsing gas-premium: %w", err)
@@ -513,7 +463,7 @@ var MpoolReplaceCmd = &cli.Command{
 	},
 }
 
-var MpoolFindCmd = &cli.Command{
+var mpoolFindCmd = &cli.Command{
 	Name:  "find",
 	Usage: "find a message in the mempool",
 	Flags: []cli.Flag{
@@ -596,7 +546,7 @@ var MpoolFindCmd = &cli.Command{
 	},
 }
 
-var MpoolConfig = &cli.Command{
+var mpoolConfig = &cli.Command{
 	Name:      "config",
 	Usage:     "get or set current mpool configuration",
 	ArgsUsage: "[new-config]",
@@ -641,7 +591,7 @@ var MpoolConfig = &cli.Command{
 	},
 }
 
-var MpoolGasPerfCmd = &cli.Command{
+var mpoolGasPerfCmd = &cli.Command{
 	Name:  "gas-perf",
 	Usage: "Check gas performance of messages in mempool",
 	Flags: []cli.Flag{
