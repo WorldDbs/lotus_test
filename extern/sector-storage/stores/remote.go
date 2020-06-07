@@ -3,7 +3,6 @@ package stores
 import (
 	"context"
 	"encoding/json"
-	"io"
 	"io/ioutil"
 	"math/bits"
 	"mime"
@@ -20,15 +19,13 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/tarutil"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/hashicorp/go-multierror"
+	files "github.com/ipfs/go-ipfs-files"
 	"golang.org/x/xerrors"
 )
 
 var FetchTempSubdir = "fetching"
-
-var CopyBuf = 1 << 20
 
 type Remote struct {
 	local *Local
@@ -41,7 +38,7 @@ type Remote struct {
 	fetching map[abi.SectorID]chan struct{}
 }
 
-func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error {
+func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types SectorFileType) error {
 	// TODO: do this on remotes too
 	//  (not that we really need to do that since it's always called by the
 	//   worker which pulled the copy)
@@ -61,17 +58,17 @@ func NewRemote(local *Local, index SectorIndex, auth http.Header, fetchLimit int
 	}
 }
 
-func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, pathType storiface.PathType, op storiface.AcquireMode) (storiface.SectorPaths, storiface.SectorPaths, error) {
+func (r *Remote) AcquireSector(ctx context.Context, s abi.SectorID, spt abi.RegisteredSealProof, existing SectorFileType, allocate SectorFileType, pathType PathType, op AcquireMode) (SectorPaths, SectorPaths, error) {
 	if existing|allocate != existing^allocate {
-		return storiface.SectorPaths{}, storiface.SectorPaths{}, xerrors.New("can't both find and allocate a sector")
+		return SectorPaths{}, SectorPaths{}, xerrors.New("can't both find and allocate a sector")
 	}
 
 	for {
 		r.fetchLk.Lock()
 
-		c, locked := r.fetching[s.ID]
+		c, locked := r.fetching[s]
 		if !locked {
-			r.fetching[s.ID] = make(chan struct{})
+			r.fetching[s] = make(chan struct{})
 			r.fetchLk.Unlock()
 			break
 		}
@@ -82,75 +79,75 @@ func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existin
 		case <-c:
 			continue
 		case <-ctx.Done():
-			return storiface.SectorPaths{}, storiface.SectorPaths{}, ctx.Err()
+			return SectorPaths{}, SectorPaths{}, ctx.Err()
 		}
 	}
 
 	defer func() {
 		r.fetchLk.Lock()
-		close(r.fetching[s.ID])
-		delete(r.fetching, s.ID)
+		close(r.fetching[s])
+		delete(r.fetching, s)
 		r.fetchLk.Unlock()
 	}()
 
-	paths, stores, err := r.local.AcquireSector(ctx, s, existing, allocate, pathType, op)
+	paths, stores, err := r.local.AcquireSector(ctx, s, spt, existing, allocate, pathType, op)
 	if err != nil {
-		return storiface.SectorPaths{}, storiface.SectorPaths{}, xerrors.Errorf("local acquire error: %w", err)
+		return SectorPaths{}, SectorPaths{}, xerrors.Errorf("local acquire error: %w", err)
 	}
 
-	var toFetch storiface.SectorFileType
-	for _, fileType := range storiface.PathTypes {
+	var toFetch SectorFileType
+	for _, fileType := range PathTypes {
 		if fileType&existing == 0 {
 			continue
 		}
 
-		if storiface.PathByType(paths, fileType) == "" {
+		if PathByType(paths, fileType) == "" {
 			toFetch |= fileType
 		}
 	}
 
-	apaths, ids, err := r.local.AcquireSector(ctx, s, storiface.FTNone, toFetch, pathType, op)
+	apaths, ids, err := r.local.AcquireSector(ctx, s, spt, FTNone, toFetch, pathType, op)
 	if err != nil {
-		return storiface.SectorPaths{}, storiface.SectorPaths{}, xerrors.Errorf("allocate local sector for fetching: %w", err)
+		return SectorPaths{}, SectorPaths{}, xerrors.Errorf("allocate local sector for fetching: %w", err)
 	}
 
-	odt := storiface.FSOverheadSeal
-	if pathType == storiface.PathStorage {
-		odt = storiface.FsOverheadFinalized
+	odt := FSOverheadSeal
+	if pathType == PathStorage {
+		odt = FsOverheadFinalized
 	}
 
-	releaseStorage, err := r.local.Reserve(ctx, s, toFetch, ids, odt)
+	releaseStorage, err := r.local.Reserve(ctx, s, spt, toFetch, ids, odt)
 	if err != nil {
-		return storiface.SectorPaths{}, storiface.SectorPaths{}, xerrors.Errorf("reserving storage space: %w", err)
+		return SectorPaths{}, SectorPaths{}, xerrors.Errorf("reserving storage space: %w", err)
 	}
 	defer releaseStorage()
 
-	for _, fileType := range storiface.PathTypes {
+	for _, fileType := range PathTypes {
 		if fileType&existing == 0 {
 			continue
 		}
 
-		if storiface.PathByType(paths, fileType) != "" {
+		if PathByType(paths, fileType) != "" {
 			continue
 		}
 
-		dest := storiface.PathByType(apaths, fileType)
-		storageID := storiface.PathByType(ids, fileType)
+		dest := PathByType(apaths, fileType)
+		storageID := PathByType(ids, fileType)
 
-		url, err := r.acquireFromRemote(ctx, s.ID, fileType, dest)
+		url, err := r.acquireFromRemote(ctx, s, fileType, dest)
 		if err != nil {
-			return storiface.SectorPaths{}, storiface.SectorPaths{}, err
+			return SectorPaths{}, SectorPaths{}, err
 		}
 
-		storiface.SetPathByType(&paths, fileType, dest)
-		storiface.SetPathByType(&stores, fileType, storageID)
+		SetPathByType(&paths, fileType, dest)
+		SetPathByType(&stores, fileType, storageID)
 
-		if err := r.index.StorageDeclareSector(ctx, ID(storageID), s.ID, fileType, op == storiface.AcquireMove); err != nil {
+		if err := r.index.StorageDeclareSector(ctx, ID(storageID), s, fileType, op == AcquireMove); err != nil {
 			log.Warnf("declaring sector %v in %s failed: %+v", s, storageID, err)
 			continue
 		}
 
-		if op == storiface.AcquireMove {
+		if op == AcquireMove {
 			if err := r.deleteFromRemote(ctx, url); err != nil {
 				log.Warnf("deleting sector %v from %s (delete %s): %+v", s, storageID, url, err)
 			}
@@ -172,7 +169,7 @@ func tempFetchDest(spath string, create bool) (string, error) {
 	return filepath.Join(tempdir, b), nil
 }
 
-func (r *Remote) acquireFromRemote(ctx context.Context, s abi.SectorID, fileType storiface.SectorFileType, dest string) (string, error) {
+func (r *Remote) acquireFromRemote(ctx context.Context, s abi.SectorID, fileType SectorFileType, dest string) (string, error) {
 	si, err := r.index.StorageFindSector(ctx, s, fileType, 0, false)
 	if err != nil {
 		return "", err
@@ -278,32 +275,23 @@ func (r *Remote) fetch(ctx context.Context, url, outname string) error {
 	case "application/x-tar":
 		return tarutil.ExtractTar(resp.Body, outname)
 	case "application/octet-stream":
-		f, err := os.Create(outname)
-		if err != nil {
-			return err
-		}
-		_, err = io.CopyBuffer(f, resp.Body, make([]byte, CopyBuf))
-		if err != nil {
-			f.Close() // nolint
-			return err
-		}
-		return f.Close()
+		return files.WriteTo(files.NewReaderFile(resp.Body), outname)
 	default:
 		return xerrors.Errorf("unknown content type: '%s'", mediatype)
 	}
 }
 
-func (r *Remote) MoveStorage(ctx context.Context, s storage.SectorRef, types storiface.SectorFileType) error {
+func (r *Remote) MoveStorage(ctx context.Context, s abi.SectorID, spt abi.RegisteredSealProof, types SectorFileType) error {
 	// Make sure we have the data local
-	_, _, err := r.AcquireSector(ctx, s, types, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)
+	_, _, err := r.AcquireSector(ctx, s, spt, types, FTNone, PathStorage, AcquireMove)
 	if err != nil {
 		return xerrors.Errorf("acquire src storage (remote): %w", err)
 	}
 
-	return r.local.MoveStorage(ctx, s, types)
+	return r.local.MoveStorage(ctx, s, spt, types)
 }
 
-func (r *Remote) Remove(ctx context.Context, sid abi.SectorID, typ storiface.SectorFileType, force bool) error {
+func (r *Remote) Remove(ctx context.Context, sid abi.SectorID, typ SectorFileType, force bool) error {
 	if bits.OnesCount(uint(typ)) != 1 {
 		return xerrors.New("delete expects one file type")
 	}
