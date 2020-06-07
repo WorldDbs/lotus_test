@@ -36,9 +36,8 @@ func (t *TestingLocalStorage) SetStorage(f func(*StorageConfig)) error {
 
 func (t *TestingLocalStorage) Stat(path string) (fsutil.FsStat, error) {
 	return fsutil.FsStat{
-		Capacity:    pathSize,
-		Available:   pathSize,
-		FSAvailable: pathSize,
+		Capacity:  pathSize,
+		Available: pathSize,
 	}, nil
 }
 
