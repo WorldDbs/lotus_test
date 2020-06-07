@@ -153,7 +153,6 @@ func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence 
 
 	best, err := e.tsc.best()
 	if err != nil {
-		e.lk.Unlock()
 		return xerrors.Errorf("error getting best tipset: %w", err)
 	}
 
@@ -178,7 +177,6 @@ func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence 
 		e.lk.Lock()
 		best, err = e.tsc.best()
 		if err != nil {
-			e.lk.Unlock()
 			return xerrors.Errorf("error getting best tipset: %w", err)
 		}
 		bestH = best.Height()
