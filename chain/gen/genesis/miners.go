@@ -23,11 +23,12 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
-	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
+	"github.com/filecoin-project/specs-actors/actors/runtime"
 
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
@@ -46,7 +47,7 @@ func MinerAddress(genesisIndex uint64) address.Address {
 }
 
 type fakedSigSyscalls struct {
-	runtime2.Syscalls
+	runtime.Syscalls
 }
 
 func (fss *fakedSigSyscalls) VerifySignature(signature crypto.Signature, signer address.Address, plaintext []byte) error {
@@ -54,9 +55,9 @@ func (fss *fakedSigSyscalls) VerifySignature(signature crypto.Signature, signer 
 }
 
 func mkFakedSigSyscalls(base vm.SyscallBuilder) vm.SyscallBuilder {
-	return func(ctx context.Context, rt *vm.Runtime) runtime2.Syscalls {
+	return func(ctx context.Context, cstate *state.StateTree, cst cbor.IpldStore) runtime.Syscalls {
 		return &fakedSigSyscalls{
-			base(ctx, rt),
+			base(ctx, cstate, cst),
 		}
 	}
 }
@@ -70,7 +71,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 		StateBase:      sroot,
 		Epoch:          0,
 		Rand:           &fakeRand{},
-		Bstore:         cs.StateBlockstore(),
+		Bstore:         cs.Blockstore(),
 		Syscalls:       mkFakedSigSyscalls(cs.VMSys()),
 		CircSupplyCalc: csc,
 		NtwkVersion:    genesisNetworkVersion,
@@ -99,7 +100,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 		i := i
 		m := m
 
-		spt, err := miner.SealProofTypeFromSectorSize(m.SectorSize, GenesisNetworkVersion)
+		spt, err := ffiwrapper.SealProofTypeFromSectorSize(m.SectorSize)
 		if err != nil {
 			return cid.Undef, err
 		}
@@ -113,7 +114,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 			}
 
 			params := mustEnc(constructorParams)
-			rval, err := doExecValue(ctx, vm, power.Address, m.Owner, m.PowerBalance, builtin0.MethodsPower.CreateMiner, params)
+			rval, err := doExecValue(ctx, vm, power.Address, m.Owner, m.PowerBalance, builtin.MethodsPower.CreateMiner, params)
 			if err != nil {
 				return cid.Undef, xerrors.Errorf("failed to create genesis miner: %w", err)
 			}
@@ -145,7 +146,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 
 		if m.MarketBalance.GreaterThan(big.Zero()) {
 			params := mustEnc(&minerInfos[i].maddr)
-			_, err := doExecValue(ctx, vm, market.Address, m.Worker, m.MarketBalance, builtin0.MethodsMarket.AddBalance, params)
+			_, err := doExecValue(ctx, vm, market.Address, m.Worker, m.MarketBalance, builtin.MethodsMarket.AddBalance, params)
 			if err != nil {
 				return cid.Undef, xerrors.Errorf("failed to create genesis miner (add balance): %w", err)
 			}
@@ -157,7 +158,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 			publish := func(params *market.PublishStorageDealsParams) error {
 				fmt.Printf("publishing %d storage deals on miner %s with worker %s\n", len(params.Deals), params.Deals[0].Proposal.Provider, m.Worker)
 
-				ret, err := doExecValue(ctx, vm, market.Address, m.Worker, big.Zero(), builtin0.MethodsMarket.PublishStorageDeals, mustEnc(params))
+				ret, err := doExecValue(ctx, vm, market.Address, m.Worker, big.Zero(), builtin.MethodsMarket.PublishStorageDeals, mustEnc(params))
 				if err != nil {
 					return xerrors.Errorf("failed to create genesis miner (publish deals): %w", err)
 				}
@@ -289,17 +290,17 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 				pledge = big.Add(pcd, pledge)
 
 				fmt.Println(types.FIL(pledge))
-				_, err = doExecValue(ctx, vm, minerInfos[i].maddr, m.Worker, pledge, builtin0.MethodsMiner.PreCommitSector, mustEnc(params))
+				_, err = doExecValue(ctx, vm, minerInfos[i].maddr, m.Worker, pledge, builtin.MethodsMiner.PreCommitSector, mustEnc(params))
 				if err != nil {
 					return cid.Undef, xerrors.Errorf("failed to confirm presealed sectors: %w", err)
 				}
 
 				// Commit one-by-one, otherwise pledge math tends to explode
-				confirmParams := &builtin0.ConfirmSectorProofsParams{
+				confirmParams := &builtin.ConfirmSectorProofsParams{
 					Sectors: []abi.SectorNumber{preseal.SectorID},
 				}
 
-				_, err = doExecValue(ctx, vm, minerInfos[i].maddr, power.Address, big.Zero(), builtin0.MethodsMiner.ConfirmSectorProofsValid, mustEnc(confirmParams))
+				_, err = doExecValue(ctx, vm, minerInfos[i].maddr, power.Address, big.Zero(), builtin.MethodsMiner.ConfirmSectorProofsValid, mustEnc(confirmParams))
 				if err != nil {
 					return cid.Undef, xerrors.Errorf("failed to confirm presealed sectors: %w", err)
 				}
@@ -348,7 +349,7 @@ func (fr *fakeRand) GetBeaconRandomness(ctx context.Context, personalization cry
 }
 
 func currentTotalPower(ctx context.Context, vm *vm.VM, maddr address.Address) (*power0.CurrentTotalPowerReturn, error) {
-	pwret, err := doExecValue(ctx, vm, power.Address, maddr, big.Zero(), builtin0.MethodsPower.CurrentTotalPower, nil)
+	pwret, err := doExecValue(ctx, vm, power.Address, maddr, big.Zero(), builtin.MethodsPower.CurrentTotalPower, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -372,7 +373,7 @@ func dealWeight(ctx context.Context, vm *vm.VM, maddr address.Address, dealIDs [
 		market.Address,
 		maddr,
 		abi.NewTokenAmount(0),
-		builtin0.MethodsMarket.VerifyDealsForActivation,
+		builtin.MethodsMarket.VerifyDealsForActivation,
 		mustEnc(params),
 	)
 	if err != nil {
@@ -386,7 +387,7 @@ func dealWeight(ctx context.Context, vm *vm.VM, maddr address.Address, dealIDs [
 }
 
 func currentEpochBlockReward(ctx context.Context, vm *vm.VM, maddr address.Address) (*reward0.ThisEpochRewardReturn, error) {
-	rwret, err := doExecValue(ctx, vm, reward.Address, maddr, big.Zero(), builtin0.MethodsReward.ThisEpochReward, nil)
+	rwret, err := doExecValue(ctx, vm, reward.Address, maddr, big.Zero(), builtin.MethodsReward.ThisEpochReward, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -404,7 +405,7 @@ func circSupply(ctx context.Context, vmi *vm.VM, maddr address.Address) abi.Toke
 	rt := unsafeVM.MakeRuntime(ctx, &types.Message{
 		GasLimit: 1_000_000_000,
 		From:     maddr,
-	})
+	}, maddr, 0, 0, 0)
 
 	return rt.TotalFilCircSupply()
 }
