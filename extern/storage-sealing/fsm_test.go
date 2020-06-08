@@ -44,9 +44,6 @@ func TestHappyPath(t *testing.T) {
 	}
 
 	m.planSingle(SectorPacked{})
-	require.Equal(m.t, m.state.State, GetTicket)
-
-	m.planSingle(SectorTicket{})
 	require.Equal(m.t, m.state.State, PreCommit1)
 
 	m.planSingle(SectorPreCommit1{})
@@ -76,7 +73,7 @@ func TestHappyPath(t *testing.T) {
 	m.planSingle(SectorFinalized{})
 	require.Equal(m.t, m.state.State, Proving)
 
-	expected := []SectorState{Packing, GetTicket, PreCommit1, PreCommit2, PreCommitting, PreCommitWait, WaitSeed, Committing, SubmitCommit, CommitWait, FinalizeSector, Proving}
+	expected := []SectorState{Packing, PreCommit1, PreCommit2, PreCommitting, PreCommitWait, WaitSeed, Committing, SubmitCommit, CommitWait, FinalizeSector, Proving}
 	for i, n := range notif {
 		if n.before.State != expected[i] {
 			t.Fatalf("expected before state: %s, got: %s", expected[i], n.before.State)
@@ -101,9 +98,6 @@ func TestSeedRevert(t *testing.T) {
 	}
 
 	m.planSingle(SectorPacked{})
-	require.Equal(m.t, m.state.State, GetTicket)
-
-	m.planSingle(SectorTicket{})
 	require.Equal(m.t, m.state.State, PreCommit1)
 
 	m.planSingle(SectorPreCommit1{})
@@ -159,54 +153,4 @@ func TestPlanCommittingHandlesSectorCommitFailed(t *testing.T) {
 	require.NoError(t, err)
 
 	require.Equal(t, CommitFailed, m.state.State)
-}
-
-func TestPlannerList(t *testing.T) {
-	for state := range ExistSectorStateList {
-		_, ok := fsmPlanners[state]
-		require.True(t, ok, "state %s", state)
-	}
-
-	for state := range fsmPlanners {
-		if state == UndefinedSectorState {
-			continue
-		}
-		_, ok := ExistSectorStateList[state]
-		require.True(t, ok, "state %s", state)
-	}
-}
-
-func TestBrokenState(t *testing.T) {
-	var notif []struct{ before, after SectorInfo }
-	ma, _ := address.NewIDAddress(55151)
-	m := test{
-		s: &Sealing{
-			maddr: ma,
-			stats: SectorStats{
-				bySector: map[abi.SectorID]statSectorState{},
-			},
-			notifee: func(before, after SectorInfo) {
-				notif = append(notif, struct{ before, after SectorInfo }{before, after})
-			},
-		},
-		t:     t,
-		state: &SectorInfo{State: "not a state"},
-	}
-
-	_, _, err := m.s.plan([]statemachine.Event{{User: SectorPacked{}}}, m.state)
-	require.Error(t, err)
-	require.Equal(m.t, m.state.State, SectorState("not a state"))
-
-	m.planSingle(SectorRemove{})
-	require.Equal(m.t, m.state.State, Removing)
-
-	expected := []SectorState{"not a state", "not a state", Removing}
-	for i, n := range notif {
-		if n.before.State != expected[i] {
-			t.Fatalf("expected before state: %s, got: %s", expected[i], n.before.State)
-		}
-		if n.after.State != expected[i+1] {
-			t.Fatalf("expected after state: %s, got: %s", expected[i+1], n.after.State)
-		}
-	}
 }
