@@ -276,15 +276,6 @@ func (s *state2) DeadlinesChanged(other State) (bool, error) {
 	return !s.State.Deadlines.Equals(other2.Deadlines), nil
 }
 
-func (s *state2) MinerInfoChanged(other State) (bool, error) {
-	other0, ok := other.(*state2)
-	if !ok {
-		// treat an upgrade as a change, always
-		return true, nil
-	}
-	return !s.State.Info.Equals(other0.State.Info), nil
-}
-
 func (s *state2) Info() (MinerInfo, error) {
 	info, err := s.State.GetInfo(s.store)
 	if err != nil {
@@ -294,11 +285,6 @@ func (s *state2) Info() (MinerInfo, error) {
 	var pid *peer.ID
 	if peerID, err := peer.IDFromBytes(info.PeerId); err == nil {
 		pid = &peerID
-	}
-
-	wpp, err := info.SealProofType.RegisteredWindowPoStProof()
-	if err != nil {
-		return MinerInfo{}, err
 	}
 
 	mi := MinerInfo{
@@ -311,7 +297,7 @@ func (s *state2) Info() (MinerInfo, error) {
 
 		PeerId:                     pid,
 		Multiaddrs:                 info.Multiaddrs,
-		WindowPoStProofType:        wpp,
+		SealProofType:              info.SealProofType,
 		SectorSize:                 info.SectorSize,
 		WindowPoStPartitionSectors: info.WindowPoStPartitionSectors,
 		ConsensusFaultElapsed:      info.ConsensusFaultElapsed,
@@ -327,10 +313,6 @@ func (s *state2) Info() (MinerInfo, error) {
 
 func (s *state2) DeadlineInfo(epoch abi.ChainEpoch) (*dline.Info, error) {
 	return s.State.DeadlineInfo(epoch), nil
-}
-
-func (s *state2) DeadlineCronActive() (bool, error) {
-	return true, nil // always active in this version
 }
 
 func (s *state2) sectors() (adt.Array, error) {
@@ -390,15 +372,8 @@ func (d *deadline2) PartitionsChanged(other Deadline) (bool, error) {
 	return !d.Deadline.Partitions.Equals(other2.Deadline.Partitions), nil
 }
 
-func (d *deadline2) PartitionsPoSted() (bitfield.BitField, error) {
+func (d *deadline2) PostSubmissions() (bitfield.BitField, error) {
 	return d.Deadline.PostSubmissions, nil
-}
-
-func (d *deadline2) DisputableProofCount() (uint64, error) {
-
-	// field doesn't exist until v3
-	return 0, nil
-
 }
 
 func (p *partition2) AllSectors() (bitfield.BitField, error) {
@@ -414,7 +389,6 @@ func (p *partition2) RecoveringSectors() (bitfield.BitField, error) {
 }
 
 func fromV2SectorOnChainInfo(v2 miner2.SectorOnChainInfo) SectorOnChainInfo {
-
 	return SectorOnChainInfo{
 		SectorNumber:          v2.SectorNumber,
 		SealProof:             v2.SealProof,
@@ -428,11 +402,9 @@ func fromV2SectorOnChainInfo(v2 miner2.SectorOnChainInfo) SectorOnChainInfo {
 		ExpectedDayReward:     v2.ExpectedDayReward,
 		ExpectedStoragePledge: v2.ExpectedStoragePledge,
 	}
-
 }
 
 func fromV2SectorPreCommitOnChainInfo(v2 miner2.SectorPreCommitOnChainInfo) SectorPreCommitOnChainInfo {
-
 	return SectorPreCommitOnChainInfo{
 		Info:               (SectorPreCommitInfo)(v2.Info),
 		PreCommitDeposit:   v2.PreCommitDeposit,
@@ -440,5 +412,4 @@ func fromV2SectorPreCommitOnChainInfo(v2 miner2.SectorPreCommitOnChainInfo) Sect
 		DealWeight:         v2.DealWeight,
 		VerifiedDealWeight: v2.VerifiedDealWeight,
 	}
-
 }
