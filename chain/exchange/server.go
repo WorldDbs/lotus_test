@@ -15,6 +15,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/ipfs/go-cid"
+	"github.com/libp2p/go-libp2p-core/helpers"
 	inet "github.com/libp2p/go-libp2p-core/network"
 )
 
@@ -39,14 +40,16 @@ func (s *server) HandleStream(stream inet.Stream) {
 	ctx, span := trace.StartSpan(context.Background(), "chainxchg.HandleStream")
 	defer span.End()
 
-	defer stream.Close() //nolint:errcheck
+	// Note: this will become just stream.Close once we've completed the go-libp2p migration to
+	//       go-libp2p-core 0.7.0
+	defer helpers.FullClose(stream) //nolint:errcheck
 
 	var req Request
 	if err := cborutil.ReadCborRPC(bufio.NewReader(stream), &req); err != nil {
 		log.Warnf("failed to read block sync request: %s", err)
 		return
 	}
-	log.Debugw("block sync request",
+	log.Infow("block sync request",
 		"start", req.Head, "len", req.Length)
 
 	resp, err := s.processRequest(ctx, &req)
@@ -56,11 +59,7 @@ func (s *server) HandleStream(stream inet.Stream) {
 	}
 
 	_ = stream.SetDeadline(time.Now().Add(WriteResDeadline))
-	buffered := bufio.NewWriter(stream)
-	if err = cborutil.WriteCborRPC(buffered, resp); err == nil {
-		err = buffered.Flush()
-	}
-	if err != nil {
+	if err := cborutil.WriteCborRPC(stream, resp); err != nil {
 		_ = stream.SetDeadline(time.Time{})
 		log.Warnw("failed to write back response for handle stream",
 			"err", err, "peer", stream.Conn().RemotePeer())
