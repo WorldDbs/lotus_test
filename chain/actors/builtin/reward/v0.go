@@ -28,14 +28,12 @@ type state0 struct {
 	store adt.Store
 }
 
-func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {
+func (s *state0) ThisEpochReward() (abi.StoragePower, error) {
 	return s.State.ThisEpochReward, nil
 }
 
 func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
-
 	return builtin.FromV0FilterEstimate(*s.State.ThisEpochRewardSmoothed), nil
-
 }
 
 func (s *state0) ThisEpochBaselinePower() (abi.StoragePower, error) {
@@ -54,11 +52,11 @@ func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 	return s.State.EffectiveNetworkTime, nil
 }
 
-func (s *state0) CumsumBaseline() (reward0.Spacetime, error) {
+func (s *state0) CumsumBaseline() (abi.StoragePower, error) {
 	return s.State.CumsumBaseline, nil
 }
 
-func (s *state0) CumsumRealized() (reward0.Spacetime, error) {
+func (s *state0) CumsumRealized() (abi.StoragePower, error) {
 	return s.State.CumsumRealized, nil
 }
 
