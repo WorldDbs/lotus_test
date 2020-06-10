@@ -1,17 +1,15 @@
 version: 2.1
 orbs:
   go: gotest/tools@0.0.13
-  aws-cli: circleci/aws-cli@1.3.2
-  packer: salaxander/packer@0.0.3
 
 executors:
   golang:
     docker:
-      - image: circleci/golang:1.15.5
+      - image: circleci/golang:1.14.6
     resource_class: 2xlarge
   ubuntu:
     docker:
-      - image: ubuntu:20.04
+      - image: ubuntu:19.10
 
 commands:
   install-deps:
@@ -36,7 +34,7 @@ commands:
           condition: << parameters.linux >>
           steps:
             - run: sudo apt-get update
-            - run: sudo apt-get install ocl-icd-opencl-dev libhwloc-dev
+            - run: sudo apt-get install ocl-icd-opencl-dev
       - run: git submodule sync
       - run: git submodule update --init
   download-params:
@@ -130,9 +128,6 @@ jobs:
       winpost-test:
         type: string
         default: "0"
-      deadline-test:
-        type: string
-        default: "0"
       test-suite-name:
         type: string
         default: unit
@@ -166,7 +161,6 @@ jobs:
           name: go test
           environment:
             LOTUS_TEST_WINDOW_POST: << parameters.winpost-test >>
-            LOTUS_TEST_DEADLINE_TOGGLING: << parameters.deadline-test >>
             SKIP_CONFORMANCE: "1"
           command: |
             mkdir -p /tmp/test-reports/<< parameters.test-suite-name >>
@@ -194,23 +188,9 @@ jobs:
                 command: |
                   bash <(curl -s https://codecov.io/bash)
 
-  test-chain:
-    <<: *test
-  test-node:
-    <<: *test
-  test-storage:
-    <<: *test
-  test-cli:
-    <<: *test
   test-short:
     <<: *test
   test-window-post:
-    <<: *test
-  test-window-post-dispute:
-    <<: *test
-  test-deadline-toggling:
-    <<: *test
-  test-terminate:
     <<: *test
   test-conformance:
     description: |
@@ -274,97 +254,24 @@ jobs:
           path: /tmp/test-reports
       - store_artifacts:
           path: /tmp/test-artifacts/conformance-coverage.html
-  build-ntwk-calibration:
-    description: |
-      Compile lotus binaries for the calibration network
-    parameters:
-      <<: *test-params
-    executor: << parameters.executor >>
-    steps:
-      - install-deps
-      - prepare
-      - run: make calibnet
-      - run: mkdir linux-calibrationnet && mv lotus lotus-miner lotus-worker linux-calibrationnet
-      - persist_to_workspace:
-          root: "."
-          paths:
-            - linux-calibrationnet
-  build-ntwk-butterfly:
-    description: |
-      Compile lotus binaries for the butterfly network
-    parameters:
-      <<: *test-params
-    executor: << parameters.executor >>
-    steps:
-      - install-deps
-      - prepare
-      - run: make butterflynet
-      - run: mkdir linux-butterflynet && mv lotus lotus-miner lotus-worker linux-butterflynet
-      - persist_to_workspace:
-          root: "."
-          paths:
-            - linux-butterflynet
-  build-ntwk-nerpa:
-    description: |
-      Compile lotus binaries for the nerpa network
-    parameters:
-      <<: *test-params
-    executor: << parameters.executor >>
-    steps:
-      - install-deps
-      - prepare
-      - run: make nerpanet
-      - run: mkdir linux-nerpanet && mv lotus lotus-miner lotus-worker linux-nerpanet
-      - persist_to_workspace:
-          root: "."
-          paths:
-            - linux-nerpanet
   build-lotus-soup:
     description: |
-      Compile `lotus-soup` Testground test plan
+      Compile `lotus-soup` Testground test plan using the current version of Lotus.
     parameters:
       <<: *test-params
     executor: << parameters.executor >>
     steps:
       - install-deps
       - prepare
+      - run: cd extern/oni && git submodule sync
+      - run: cd extern/oni && git submodule update --init
       - run: cd extern/filecoin-ffi && make
       - run:
-          name: "go get lotus@master"
-          command: cd testplans/lotus-soup && go mod edit -replace=github.com/filecoin-project/lotus=../..
+          name: "replace lotus, filecoin-ffi, blst and fil-blst deps"
+          command: cd extern/oni/lotus-soup && go mod edit -replace github.com/filecoin-project/lotus=../../../ && go mod edit -replace github.com/filecoin-project/filecoin-ffi=../../filecoin-ffi && go mod edit -replace github.com/supranational/blst=../../fil-blst/blst && go mod edit -replace github.com/filecoin-project/fil-blst=../../fil-blst
       - run:
           name: "build lotus-soup testplan"
-          command: pushd testplans/lotus-soup && go build -tags=testground .
-  trigger-testplans:
-    description: |
-      Trigger `lotus-soup` test cases on TaaS
-    parameters:
-      <<: *test-params
-    executor: << parameters.executor >>
-    steps:
-      - install-deps
-      - prepare
-      - run:
-          name: "download testground"
-          command: wget https://gist.github.com/nonsense/5fbf3167cac79945f658771aed32fc44/raw/2e17eb0debf7ec6bdf027c1bdafc2c92dd97273b/testground-d3e9603 -O ~/testground-cli && chmod +x ~/testground-cli
-      - run:
-          name: "prepare .env.toml"
-          command: pushd testplans/lotus-soup && mkdir -p $HOME/testground && cp env-ci.toml $HOME/testground/.env.toml && echo 'endpoint="https://ci.testground.ipfs.team"' >> $HOME/testground/.env.toml && echo 'user="circleci"' >> $HOME/testground/.env.toml
-      - run:
-          name: "prepare testground home dir and link test plans"
-          command: mkdir -p $HOME/testground/plans && ln -s $(pwd)/testplans/lotus-soup $HOME/testground/plans/lotus-soup && ln -s $(pwd)/testplans/graphsync $HOME/testground/plans/graphsync
-      - run:
-          name: "go get lotus@master"
-          command: cd testplans/lotus-soup && go get github.com/filecoin-project/lotus@master
-      - run:
-          name: "trigger deals baseline testplan on taas"
-          command: ~/testground-cli run composition -f $HOME/testground/plans/lotus-soup/_compositions/baseline-k8s-3-1.toml --metadata-commit=$CIRCLE_SHA1 --metadata-repo=filecoin-project/lotus --metadata-branch=$CIRCLE_BRANCH
-      - run:
-          name: "trigger payment channel stress testplan on taas"
-          command: ~/testground-cli run composition -f $HOME/testground/plans/lotus-soup/_compositions/paych-stress-k8s.toml --metadata-commit=$CIRCLE_SHA1 --metadata-repo=filecoin-project/lotus --metadata-branch=$CIRCLE_BRANCH
-      - run:
-          name: "trigger graphsync testplan on taas"
-          command: ~/testground-cli run composition -f $HOME/testground/plans/graphsync/_compositions/stress-k8s.toml --metadata-commit=$CIRCLE_SHA1 --metadata-repo=filecoin-project/lotus --metadata-branch=$CIRCLE_BRANCH
+          command: pushd extern/oni/lotus-soup && go build -tags=testground .
 
 
   build-macos:
@@ -379,8 +286,8 @@ jobs:
       - run:
           name: Install go
           command: |
-            curl -O https://dl.google.com/go/go1.15.5.darwin-amd64.pkg && \
-            sudo installer -pkg go1.15.5.darwin-amd64.pkg -target /
+            curl -O https://dl.google.com/go/go1.14.2.darwin-amd64.pkg && \
+            sudo installer -pkg go1.14.2.darwin-amd64.pkg -target /
       - run:
           name: Install pkg-config
           command: HOMEBREW_NO_AUTO_UPDATE=1 brew install pkg-config
@@ -394,15 +301,6 @@ jobs:
           command: |
             curl --location https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64 --output /usr/local/bin/jq
             chmod +x /usr/local/bin/jq
-      - run:
-          name: Install hwloc
-          command: |
-            mkdir ~/hwloc
-            curl --location https://download.open-mpi.org/release/hwloc/v2.4/hwloc-2.4.1.tar.gz --output ~/hwloc/hwloc-2.4.1.tar.gz
-            cd ~/hwloc
-            tar -xvzpf hwloc-2.4.1.tar.gz
-            cd hwloc-2.4.1
-            ./configure && make && sudo make install
       - restore_cache:
           name: restore cargo cache
           key: v3-go-deps-{{ arch }}-{{ checksum "~/go/src/github.com/filecoin-project/lotus/go.sum" }}
@@ -436,7 +334,7 @@ jobs:
       - run:
           command: "! go fmt ./... 2>&1 | read"
 
-  gen-check:
+  cbor-gen-check:
     executor: golang
     steps:
       - install-deps
@@ -444,10 +342,7 @@ jobs:
       - run: make deps
       - run: go install golang.org/x/tools/cmd/goimports
       - run: go install github.com/hannahhoward/cbor-gen-for
-      - run: make gen
-      - run: git --no-pager diff
-      - run: git --no-pager diff --quiet
-      - run: make docsgen-cli
+      - run: go generate ./...
       - run: git --no-pager diff
       - run: git --no-pager diff --quiet
 
@@ -456,19 +351,8 @@ jobs:
     steps:
       - install-deps
       - prepare
-      - run: go install golang.org/x/tools/cmd/goimports
-      - run: zcat build/openrpc/full.json.gz | jq > ../pre-openrpc-full
-      - run: zcat build/openrpc/miner.json.gz | jq > ../pre-openrpc-miner
-      - run: zcat build/openrpc/worker.json.gz | jq > ../pre-openrpc-worker
-      - run: make deps
       - run: make docsgen
-      - run: zcat build/openrpc/full.json.gz | jq > ../post-openrpc-full
-      - run: zcat build/openrpc/miner.json.gz | jq > ../post-openrpc-miner
-      - run: zcat build/openrpc/worker.json.gz | jq > ../post-openrpc-worker
       - run: git --no-pager diff
-      - run: diff ../pre-openrpc-full ../post-openrpc-full
-      - run: diff ../pre-openrpc-miner ../post-openrpc-miner
-      - run: diff ../pre-openrpc-worker ../post-openrpc-worker
       - run: git --no-pager diff --quiet
 
   lint: &lint
@@ -530,171 +414,6 @@ jobs:
           name: Publish release
           command: ./scripts/publish-release.sh
 
-  build-and-push-image:
-    description: build and push docker images to public AWS ECR registry
-    executor: aws-cli/default
-    parameters:
-      profile-name:
-        type: string
-        default: "default"
-        description: AWS profile name to be configured.
-
-      aws-access-key-id:
-        type: env_var_name
-        default: AWS_ACCESS_KEY_ID
-        description: >
-          AWS access key id for IAM role. Set this to the name of
-          the environment variable you will set to hold this
-          value, i.e. AWS_ACCESS_KEY.
-
-      aws-secret-access-key:
-        type: env_var_name
-        default: AWS_SECRET_ACCESS_KEY
-        description: >
-          AWS secret key for IAM role. Set this to the name of
-          the environment variable you will set to hold this
-          value, i.e. AWS_SECRET_ACCESS_KEY.
-
-      region:
-        type: env_var_name
-        default: AWS_REGION
-        description: >
-          Name of env var storing your AWS region information,
-          defaults to AWS_REGION
-
-      account-url:
-        type: env_var_name
-        default: AWS_ECR_ACCOUNT_URL
-        description: >
-          Env var storing Amazon ECR account URL that maps to an AWS account,
-          e.g. {awsAccountNum}.dkr.ecr.us-west-2.amazonaws.com
-          defaults to AWS_ECR_ACCOUNT_URL
-
-      dockerfile:
-        type: string
-        default: Dockerfile
-        description: Name of dockerfile to use. Defaults to Dockerfile.
-
-      path:
-        type: string
-        default: .
-        description: Path to the directory containing your Dockerfile and build context. Defaults to . (working directory).
-
-      extra-build-args:
-        type: string
-        default: ""
-        description: >
-          Extra flags to pass to docker build. For examples, see
-          https://docs.docker.com/engine/reference/commandline/build
-
-      repo:
-        type: string
-        description: Name of an Amazon ECR repository
-
-      tag:
-        type: string
-        default: "latest"
-        description: A comma-separated string containing docker image tags to build and push (default = latest)
-
-    steps:
-      - run:
-          name: Confirm that environment variables are set
-          command: |
-            if [ -z "$AWS_ACCESS_KEY_ID" ]; then
-              echo "No AWS_ACCESS_KEY_ID is set. Skipping build-and-push job ..."
-              circleci-agent step halt
-            fi
-
-      - aws-cli/setup:
-          profile-name: <<parameters.profile-name>>
-          aws-access-key-id: <<parameters.aws-access-key-id>>
-          aws-secret-access-key: <<parameters.aws-secret-access-key>>
-          aws-region: <<parameters.region>>
-
-      - run:
-          name: Log into Amazon ECR
-          command: |
-            aws ecr-public get-login-password --region $<<parameters.region>> --profile <<parameters.profile-name>> | docker login --username AWS --password-stdin $<<parameters.account-url>>
-
-      - checkout
-
-      - setup_remote_docker:
-          version: 19.03.13
-          docker_layer_caching: false
-
-      - run:
-          name: Build docker image
-          command: |
-            registry_id=$(echo $<<parameters.account-url>> | sed "s;\..*;;g")
-
-            docker_tag_args=""
-            IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
-            for tag in "${DOCKER_TAGS[@]}"; do
-              docker_tag_args="$docker_tag_args -t $<<parameters.account-url>>/<<parameters.repo>>:$tag"
-            done
-
-            docker build \
-              <<#parameters.extra-build-args>><<parameters.extra-build-args>><</parameters.extra-build-args>> \
-              -f <<parameters.path>>/<<parameters.dockerfile>> \
-              $docker_tag_args \
-              <<parameters.path>>
-
-      - run:
-          name: Push image to Amazon ECR
-          command: |
-            IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
-            for tag in "${DOCKER_TAGS[@]}"; do
-              docker push $<<parameters.account-url>>/<<parameters.repo>>:${tag}
-            done
-
-  publish-packer-mainnet:
-    description: build and push AWS IAM and DigitalOcean droplet.
-    executor:
-      name: packer/default
-      packer-version: 1.6.6
-    steps:
-      - checkout
-      - attach_workspace:
-          at: "."
-      - packer/build:
-          template: tools/packer/lotus.pkr.hcl
-          args: "-var ci_workspace_bins=./linux -var lotus_network=mainnet -var git_tag=$CIRCLE_TAG"
-  publish-packer-calibrationnet:
-    description: build and push AWS IAM and DigitalOcean droplet.
-    executor:
-      name: packer/default
-      packer-version: 1.6.6
-    steps:
-      - checkout
-      - attach_workspace:
-          at: "."
-      - packer/build:
-          template: tools/packer/lotus.pkr.hcl
-          args: "-var ci_workspace_bins=./linux-calibrationnet -var lotus_network=calibrationnet -var git_tag=$CIRCLE_TAG"
-  publish-packer-butterflynet:
-    description: build and push AWS IAM and DigitalOcean droplet.
-    executor:
-      name: packer/default
-      packer-version: 1.6.6
-    steps:
-      - checkout
-      - attach_workspace:
-          at: "."
-      - packer/build:
-          template: tools/packer/lotus.pkr.hcl
-          args: "-var ci_workspace_bins=./linux-butterflynet -var lotus_network=butterflynet -var git_tag=$CIRCLE_TAG"
-  publish-packer-nerpanet:
-    description: build and push AWS IAM and DigitalOcean droplet.
-    executor:
-      name: packer/default
-      packer-version: 1.6.6
-    steps:
-      - checkout
-      - attach_workspace:
-          at: "."
-      - packer/build:
-          template: tools/packer/lotus.pkr.hcl
-          args: "-var ci_workspace_bins=./linux-nerpanet -var lotus_network=nerpanet -var git_tag=$CIRCLE_TAG"
 
 workflows:
   version: 2.1
@@ -704,54 +423,22 @@ workflows:
           concurrency: "16"   # expend all docker 2xlarge CPUs.
       - mod-tidy-check
       - gofmt
-      - gen-check
+      - cbor-gen-check
       - docs-check
       - test:
           codecov-upload: true
           test-suite-name: full
-      - test-chain:
-          codecov-upload: true
-          test-suite-name: chain
-          packages: "./chain/..."
-      - test-node:
-          codecov-upload: true
-          test-suite-name: node
-          packages: "./node/..."
-      - test-storage:
-          codecov-upload: true
-          test-suite-name: storage
-          packages: "./storage/... ./extern/..."
-      - test-cli:
-          codecov-upload: true
-          test-suite-name: cli
-          packages: "./cli/... ./cmd/... ./api/..."
       - test-window-post:
-          codecov-upload: true
           go-test-flags: "-run=TestWindowedPost"
           winpost-test: "1"
           test-suite-name: window-post
-      - test-window-post-dispute:
-          codecov-upload: true
-          go-test-flags: "-run=TestWindowPostDispute"
-          winpost-test: "1"
-          test-suite-name: window-post-dispute
-      - test-terminate:
-          codecov-upload: true
-          go-test-flags: "-run=TestTerminate"
-          winpost-test: "1"
-          test-suite-name: terminate
-      - test-deadline-toggling:
-          codecov-upload: true
-          go-test-flags: "-run=TestDeadlineToggling"
-          deadline-test: "1"
-          test-suite-name: deadline-toggling
       - test-short:
           go-test-flags: "--timeout 10m --short"
           test-suite-name: short
           filters:
             tags:
               only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
+                - /^v\d+\.\d+\.\d+$/
       - test-conformance:
           test-suite-name: conformance
           packages: "./conformance"
@@ -760,11 +447,7 @@ workflows:
           test-suite-name: conformance-bleeding-edge
           packages: "./conformance"
           vectors-branch: master
-      - trigger-testplans:
-          filters:
-            branches:
-              only:
-                - master
+      - build-lotus-soup
       - build-debug
       - build-all:
           requires:
@@ -772,29 +455,7 @@ workflows:
           filters:
             tags:
               only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
-      - build-ntwk-calibration:
-          requires:
-            - test-short
-          filters:
-            tags:
-              only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
-      - build-ntwk-butterfly:
-          requires:
-            - test-short
-          filters:
-            tags:
-              only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
-      - build-ntwk-nerpa:
-          requires:
-            - test-short
-          filters:
-            tags:
-              only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
-      - build-lotus-soup
+                - /^v\d+\.\d+\.\d+$/
       - build-macos:
           requires:
             - test-short
@@ -804,7 +465,7 @@ workflows:
                 - /.*/
             tags:
               only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
+                - /^v\d+\.\d+\.\d+$/
       - publish:
           requires:
             - build-all
@@ -815,49 +476,4 @@ workflows:
                 - /.*/
             tags:
               only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
-      - build-and-push-image:
-          dockerfile: Dockerfile.lotus
-          path: .
-          repo: lotus-dev
-          tag: '${CIRCLE_SHA1:0:8}'
-      - publish-packer-mainnet:
-          requires:
-            - build-all
-          filters:
-            branches:
-              ignore:
-                - /.*/
-            tags:
-              only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
-      - publish-packer-calibrationnet:
-          requires:
-            - build-ntwk-calibration
-          filters:
-            branches:
-              ignore:
-                - /.*/
-            tags:
-              only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
-      - publish-packer-butterflynet:
-          requires:
-            - build-ntwk-butterfly
-          filters:
-            branches:
-              ignore:
-                - /.*/
-            tags:
-              only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
-      - publish-packer-nerpanet:
-          requires:
-            - build-ntwk-nerpa
-          filters:
-            branches:
-              ignore:
-                - /.*/
-            tags:
-              only:
-                - /^v\d+\.\d+\.\d+(-rc\d+)?$/
+                - /^v\d+\.\d+\.\d+$/
