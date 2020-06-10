@@ -6,13 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/filecoin-project/lotus/api/v0api"
-
 	"github.com/gorilla/mux"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
-	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/go-jsonrpc"
 
@@ -22,7 +18,6 @@ import (
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
-	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
@@ -46,12 +41,6 @@ func main() {
 				Name:    FlagWalletRepo,
 				EnvVars: []string{"WALLET_PATH"},
 				Value:   "~/.lotuswallet", // TODO: Consider XDG_DATA_HOME
-			},
-			&cli.StringFlag{
-				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},
-				Hidden:  true,
-				Value:   "~/.lotus",
 			},
 		},
 
@@ -78,14 +67,6 @@ var runCmd = &cli.Command{
 			Name:  "ledger",
 			Usage: "use a ledger device instead of an on-disk wallet",
 		},
-		&cli.BoolFlag{
-			Name:  "interactive",
-			Usage: "prompt before performing actions (DO NOT USE FOR MINER WORKER ADDRESS)",
-		},
-		&cli.BoolFlag{
-			Name:  "offline",
-			Usage: "don't query chain state in interactive mode",
-		},
 	},
 	Action: func(cctx *cli.Context) error {
 		log.Info("Starting lotus wallet")
@@ -93,13 +74,6 @@ var runCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
-
-		// Register all metric views
-		if err := view.Register(
-			metrics.DefaultViews...,
-		); err != nil {
-			log.Fatalf("Cannot register the view: %v", err)
-		}
 
 		repoPath := cctx.String(FlagWalletRepo)
 		r, err := repo.NewFS(repoPath)
@@ -132,9 +106,9 @@ var runCmd = &cli.Command{
 			return err
 		}
 
-		var w api.Wallet = lw
+		var w api.WalletAPI = lw
 		if cctx.Bool("ledger") {
-			ds, err := lr.Datastore(context.Background(), "/metadata")
+			ds, err := lr.Datastore("/metadata")
 			if err != nil {
 				return err
 			}
@@ -150,25 +124,8 @@ var runCmd = &cli.Command{
 
 		log.Info("Setting up API endpoint at " + address)
 
-		if cctx.Bool("interactive") {
-			var ag func() (v0api.FullNode, jsonrpc.ClientCloser, error)
-
-			if !cctx.Bool("offline") {
-				ag = func() (v0api.FullNode, jsonrpc.ClientCloser, error) {
-					return lcli.GetFullNodeAPI(cctx)
-				}
-			}
-
-			w = &InteractiveWallet{
-				under:     w,
-				apiGetter: ag,
-			}
-		} else {
-			w = &LoggedWallet{under: w}
-		}
-
 		rpcServer := jsonrpc.NewServer()
-		rpcServer.Register("Filecoin", metrics.MetricedWalletAPI(w))
+		rpcServer.Register("Filecoin", &LoggedWallet{under: w})
 
 		mux.Handle("/rpc/v0", rpcServer)
 		mux.PathPrefix("/").Handler(http.DefaultServeMux) // pprof
@@ -181,7 +138,6 @@ var runCmd = &cli.Command{
 		srv := &http.Server{
 			Handler: mux,
 			BaseContext: func(listener net.Listener) context.Context {
-				ctx, _ := tag.New(context.Background(), tag.Upsert(metrics.APIInterface, "lotus-wallet"))
 				return ctx
 			},
 		}
