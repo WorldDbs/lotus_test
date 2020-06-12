@@ -19,7 +19,7 @@ func TestTipSetKey(t *testing.T) {
 	fmt.Println(len(c1.Bytes()))
 
 	t.Run("zero value", func(t *testing.T) {
-		assert.Equal(t, EmptyTSK, NewTipSetKey())
+		assert.Equal(t, TipSetKey{}, NewTipSetKey())
 	})
 
 	t.Run("CID extraction", func(t *testing.T) {
