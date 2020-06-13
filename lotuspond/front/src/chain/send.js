@@ -30,7 +30,7 @@ async function pushMessage(client, from, inmsg) {
 
     console.log(inmsg)
 
-    await client.call('Filecoin.MpoolPushMessage', [inmsg, null])
+    await client.call('Filecoin.MpoolPushMessage', [inmsg])
 }
 
 export default pushMessage
