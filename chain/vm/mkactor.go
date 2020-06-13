@@ -3,10 +3,6 @@ package vm
 import (
 	"context"
 
-	"github.com/filecoin-project/go-state-types/network"
-
-	"github.com/filecoin-project/lotus/build"
-
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/lotus/chain/actors"
@@ -16,13 +12,9 @@ import (
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -42,10 +34,6 @@ var EmptyObjectCid cid.Cid
 func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, address.Address, aerrors.ActorError) {
 	if err := rt.chargeGasSafe(PricelistByEpoch(rt.height).OnCreateActor()); err != nil {
 		return nil, address.Undef, err
-	}
-
-	if addr == build.ZeroAddress && rt.NetworkVersion() >= network.Version10 {
-		return nil, address.Undef, aerrors.New(exitcode.ErrIllegalArgument, "cannot create the zero bls actor")
 	}
 
 	addrID, err := rt.state.RegisterNewAddress(addr)
@@ -68,7 +56,7 @@ func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, add
 	}
 	// call constructor on account
 
-	_, aerr = rt.internalSend(builtin.SystemActorAddr, addrID, account.Methods.Constructor, big.Zero(), p)
+	_, aerr = rt.internalSend(builtin0.SystemActorAddr, addrID, builtin0.MethodsAccount.Constructor, big.Zero(), p)
 	if aerr != nil {
 		return nil, address.Undef, aerrors.Wrap(aerr, "failed to invoke account constructor")
 	}
@@ -101,10 +89,6 @@ func newAccountActor(ver actors.Version) *types.Actor {
 		code = builtin0.AccountActorCodeID
 	case actors.Version2:
 		code = builtin2.AccountActorCodeID
-	case actors.Version3:
-		code = builtin3.AccountActorCodeID
-	case actors.Version4:
-		code = builtin4.AccountActorCodeID
 	default:
 		panic("unsupported actors version")
 	}
