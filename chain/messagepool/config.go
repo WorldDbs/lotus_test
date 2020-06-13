@@ -48,13 +48,9 @@ func saveConfig(cfg *types.MpoolConfig, ds dtypes.MetadataDS) error {
 }
 
 func (mp *MessagePool) GetConfig() *types.MpoolConfig {
-	return mp.getConfig().Clone()
-}
-
-func (mp *MessagePool) getConfig() *types.MpoolConfig {
-	mp.cfgLk.RLock()
-	defer mp.cfgLk.RUnlock()
-	return mp.cfg
+	mp.cfgLk.Lock()
+	defer mp.cfgLk.Unlock()
+	return mp.cfg.Clone()
 }
 
 func validateConfg(cfg *types.MpoolConfig) error {
