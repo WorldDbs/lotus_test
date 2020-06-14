@@ -54,7 +54,7 @@ func (fcs *fakeCS) ChainGetTipSet(ctx context.Context, key types.TipSetKey) (*ty
 	return fcs.tipsets[key], nil
 }
 
-func (fcs *fakeCS) StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error) {
+func (fcs *fakeCS) StateGetReceipt(context.Context, cid.Cid, types.TipSetKey) (*types.MessageReceipt, error) {
 	return nil, nil
 }
 
@@ -229,7 +229,7 @@ func (fcs *fakeCS) notifDone() {
 	fcs.sync.Unlock()
 }
 
-var _ EventAPI = &fakeCS{}
+var _ eventAPI = &fakeCS{}
 
 func TestAt(t *testing.T) {
 	fcs := &fakeCS{
@@ -572,9 +572,9 @@ func TestAtChainedConfidenceNull(t *testing.T) {
 	require.Equal(t, false, reverted)
 }
 
-func matchAddrMethod(to address.Address, m abi.MethodNum) func(msg *types.Message) (matched bool, err error) {
-	return func(msg *types.Message) (matched bool, err error) {
-		return to == msg.To && m == msg.Method, nil
+func matchAddrMethod(to address.Address, m abi.MethodNum) func(msg *types.Message) (matchOnce bool, matched bool, err error) {
+	return func(msg *types.Message) (matchOnce bool, matched bool, err error) {
+		return true, to == msg.To && m == msg.Method, nil
 	}
 }
 
