@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"syscall"
 
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log"
 )
 
 var log = logging.Logger("ulimit")
