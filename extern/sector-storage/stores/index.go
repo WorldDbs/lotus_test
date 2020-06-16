@@ -2,7 +2,6 @@ package stores
 
 import (
 	"context"
-	"errors"
 	"net/url"
 	gopath "path"
 	"sort"
@@ -11,11 +10,10 @@ import (
 
 	"golang.org/x/xerrors"
 
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 var HeartbeatInterval = 10 * time.Second
@@ -26,10 +24,9 @@ var SkippedHeartbeatThresh = HeartbeatInterval * 5
 type ID string
 
 type StorageInfo struct {
-	ID         ID
-	URLs       []string // TODO: Support non-http transports
-	Weight     uint64
-	MaxStorage uint64
+	ID     ID
+	URLs   []string // TODO: Support non-http transports
+	Weight uint64
 
 	CanSeal  bool
 	CanStore bool
@@ -37,7 +34,7 @@ type StorageInfo struct {
 
 type HealthReport struct {
 	Stat fsutil.FsStat
-	Err  string
+	Err  error
 }
 
 type SectorStorageInfo struct {
@@ -56,20 +53,20 @@ type SectorIndex interface { // part of storage-miner api
 	StorageInfo(context.Context, ID) (StorageInfo, error)
 	StorageReportHealth(context.Context, ID, HealthReport) error
 
-	StorageDeclareSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType, primary bool) error
-	StorageDropSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType) error
-	StorageFindSector(ctx context.Context, sector abi.SectorID, ft storiface.SectorFileType, ssize abi.SectorSize, allowFetch bool) ([]SectorStorageInfo, error)
+	StorageDeclareSector(ctx context.Context, storageID ID, s abi.SectorID, ft SectorFileType, primary bool) error
+	StorageDropSector(ctx context.Context, storageID ID, s abi.SectorID, ft SectorFileType) error
+	StorageFindSector(ctx context.Context, sector abi.SectorID, ft SectorFileType, spt abi.RegisteredSealProof, allowFetch bool) ([]SectorStorageInfo, error)
 
-	StorageBestAlloc(ctx context.Context, allocate storiface.SectorFileType, ssize abi.SectorSize, pathType storiface.PathType) ([]StorageInfo, error)
+	StorageBestAlloc(ctx context.Context, allocate SectorFileType, spt abi.RegisteredSealProof, pathType PathType) ([]StorageInfo, error)
 
 	// atomically acquire locks on all sector file types. close ctx to unlock
-	StorageLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) error
-	StorageTryLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)
+	StorageLock(ctx context.Context, sector abi.SectorID, read SectorFileType, write SectorFileType) error
+	StorageTryLock(ctx context.Context, sector abi.SectorID, read SectorFileType, write SectorFileType) (bool, error)
 }
 
 type Decl struct {
 	abi.SectorID
-	storiface.SectorFileType
+	SectorFileType
 }
 
 type declMeta struct {
@@ -107,10 +104,10 @@ func (i *Index) StorageList(ctx context.Context) (map[ID][]Decl, error) {
 	i.lk.RLock()
 	defer i.lk.RUnlock()
 
-	byID := map[ID]map[abi.SectorID]storiface.SectorFileType{}
+	byID := map[ID]map[abi.SectorID]SectorFileType{}
 
 	for id := range i.stores {
-		byID[id] = map[abi.SectorID]storiface.SectorFileType{}
+		byID[id] = map[abi.SectorID]SectorFileType{}
 	}
 	for decl, ids := range i.sectors {
 		for _, id := range ids {
@@ -156,11 +153,6 @@ func (i *Index) StorageAttach(ctx context.Context, si StorageInfo, st fsutil.FsS
 			i.stores[si.ID].info.URLs = append(i.stores[si.ID].info.URLs, u)
 		}
 
-		i.stores[si.ID].info.Weight = si.Weight
-		i.stores[si.ID].info.MaxStorage = si.MaxStorage
-		i.stores[si.ID].info.CanSeal = si.CanSeal
-		i.stores[si.ID].info.CanStore = si.CanStore
-
 		return nil
 	}
 	i.stores[si.ID] = &storageEntry{
@@ -182,22 +174,18 @@ func (i *Index) StorageReportHealth(ctx context.Context, id ID, report HealthRep
 	}
 
 	ent.fsi = report.Stat
-	if report.Err != "" {
-		ent.heartbeatErr = errors.New(report.Err)
-	} else {
-		ent.heartbeatErr = nil
-	}
+	ent.heartbeatErr = report.Err
 	ent.lastHeartbeat = time.Now()
 
 	return nil
 }
 
-func (i *Index) StorageDeclareSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType, primary bool) error {
+func (i *Index) StorageDeclareSector(ctx context.Context, storageID ID, s abi.SectorID, ft SectorFileType, primary bool) error {
 	i.lk.Lock()
 	defer i.lk.Unlock()
 
 loop:
-	for _, fileType := range storiface.PathTypes {
+	for _, fileType := range PathTypes {
 		if fileType&ft == 0 {
 			continue
 		}
@@ -224,11 +212,11 @@ loop:
 	return nil
 }
 
-func (i *Index) StorageDropSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType) error {
+func (i *Index) StorageDropSector(ctx context.Context, storageID ID, s abi.SectorID, ft SectorFileType) error {
 	i.lk.Lock()
 	defer i.lk.Unlock()
 
-	for _, fileType := range storiface.PathTypes {
+	for _, fileType := range PathTypes {
 		if fileType&ft == 0 {
 			continue
 		}
@@ -236,7 +224,7 @@ func (i *Index) StorageDropSector(ctx context.Context, storageID ID, s abi.Secto
 		d := Decl{s, fileType}
 
 		if len(i.sectors[d]) == 0 {
-			continue
+			return nil
 		}
 
 		rewritten := make([]*declMeta, 0, len(i.sectors[d])-1)
@@ -249,7 +237,7 @@ func (i *Index) StorageDropSector(ctx context.Context, storageID ID, s abi.Secto
 		}
 		if len(rewritten) == 0 {
 			delete(i.sectors, d)
-			continue
+			return nil
 		}
 
 		i.sectors[d] = rewritten
@@ -258,14 +246,14 @@ func (i *Index) StorageDropSector(ctx context.Context, storageID ID, s abi.Secto
 	return nil
 }
 
-func (i *Index) StorageFindSector(ctx context.Context, s abi.SectorID, ft storiface.SectorFileType, ssize abi.SectorSize, allowFetch bool) ([]SectorStorageInfo, error) {
+func (i *Index) StorageFindSector(ctx context.Context, s abi.SectorID, ft SectorFileType, spt abi.RegisteredSealProof, allowFetch bool) ([]SectorStorageInfo, error) {
 	i.lk.RLock()
 	defer i.lk.RUnlock()
 
 	storageIDs := map[ID]uint64{}
 	isprimary := map[ID]bool{}
 
-	for _, pathType := range storiface.PathTypes {
+	for _, pathType := range PathTypes {
 		if ft&pathType == 0 {
 			continue
 		}
@@ -292,7 +280,7 @@ func (i *Index) StorageFindSector(ctx context.Context, s abi.SectorID, ft storif
 				return nil, xerrors.Errorf("failed to parse url: %w", err)
 			}
 
-			rl.Path = gopath.Join(rl.Path, ft.String(), storiface.SectorName(s))
+			rl.Path = gopath.Join(rl.Path, ft.String(), SectorName(s))
 			urls[k] = rl.String()
 		}
 
@@ -309,7 +297,7 @@ func (i *Index) StorageFindSector(ctx context.Context, s abi.SectorID, ft storif
 	}
 
 	if allowFetch {
-		spaceReq, err := ft.SealSpaceUse(ssize)
+		spaceReq, err := ft.SealSpaceUse(spt)
 		if err != nil {
 			return nil, xerrors.Errorf("estimating required space: %w", err)
 		}
@@ -345,7 +333,7 @@ func (i *Index) StorageFindSector(ctx context.Context, s abi.SectorID, ft storif
 					return nil, xerrors.Errorf("failed to parse url: %w", err)
 				}
 
-				rl.Path = gopath.Join(rl.Path, ft.String(), storiface.SectorName(s))
+				rl.Path = gopath.Join(rl.Path, ft.String(), SectorName(s))
 				urls[k] = rl.String()
 			}
 
@@ -377,22 +365,22 @@ func (i *Index) StorageInfo(ctx context.Context, id ID) (StorageInfo, error) {
 	return *si.info, nil
 }
 
-func (i *Index) StorageBestAlloc(ctx context.Context, allocate storiface.SectorFileType, ssize abi.SectorSize, pathType storiface.PathType) ([]StorageInfo, error) {
+func (i *Index) StorageBestAlloc(ctx context.Context, allocate SectorFileType, spt abi.RegisteredSealProof, pathType PathType) ([]StorageInfo, error) {
 	i.lk.RLock()
 	defer i.lk.RUnlock()
 
 	var candidates []storageEntry
 
-	spaceReq, err := allocate.SealSpaceUse(ssize)
+	spaceReq, err := allocate.SealSpaceUse(spt)
 	if err != nil {
 		return nil, xerrors.Errorf("estimating required space: %w", err)
 	}
 
 	for _, p := range i.stores {
-		if (pathType == storiface.PathSealing) && !p.info.CanSeal {
+		if (pathType == PathSealing) && !p.info.CanSeal {
 			continue
 		}
-		if (pathType == storiface.PathStorage) && !p.info.CanStore {
+		if (pathType == PathStorage) && !p.info.CanStore {
 			continue
 		}
 
@@ -433,7 +421,7 @@ func (i *Index) StorageBestAlloc(ctx context.Context, allocate storiface.SectorF
 	return out, nil
 }
 
-func (i *Index) FindSector(id abi.SectorID, typ storiface.SectorFileType) ([]ID, error) {
+func (i *Index) FindSector(id abi.SectorID, typ SectorFileType) ([]ID, error) {
 	i.lk.RLock()
 	defer i.lk.RUnlock()
 
