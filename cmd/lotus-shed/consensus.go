@@ -36,7 +36,7 @@ type consensusItem struct {
 	targetTipset  *types.TipSet
 	headTipset    *types.TipSet
 	peerID        peer.ID
-	version       api.APIVersion
+	version       api.Version
 	api           api.FullNode
 }
 
@@ -113,12 +113,12 @@ var consensusCheckCmd = &cli.Command{
 				return err
 			}
 			ainfo := cliutil.APIInfo{Addr: apima.String()}
-			addr, err := ainfo.DialArgs("v1")
+			addr, err := ainfo.DialArgs()
 			if err != nil {
 				return err
 			}
 
-			api, closer, err := client.NewFullNodeRPCV1(cctx.Context, addr, nil)
+			api, closer, err := client.NewFullNodeRPC(cctx.Context, addr, nil)
 			if err != nil {
 				return err
 			}
