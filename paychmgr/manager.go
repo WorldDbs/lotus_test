@@ -8,22 +8,33 @@ import (
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
+	"go.uber.org/fx"
 	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/node/impl/full"
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
 var log = logging.Logger("paych")
 
 var errProofNotSupported = errors.New("payment channel proof parameter is not supported")
+
+// PaychAPI is used by dependency injection to pass the consituent APIs to NewManager()
+type PaychAPI struct {
+	fx.In
+
+	full.MpoolAPI
+	full.StateAPI
+}
 
 // stateManagerAPI defines the methods needed from StateManager
 type stateManagerAPI interface {
@@ -33,9 +44,9 @@ type stateManagerAPI interface {
 }
 
 // paychAPI defines the API methods needed by the payment channel manager
-type PaychAPI interface {
+type paychAPI interface {
 	StateAccountKey(context.Context, address.Address, types.TipSetKey) (address.Address, error)
-	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
+	StateWaitMsg(ctx context.Context, msg cid.Cid, confidence uint64) (*api.MsgLookup, error)
 	MpoolPushMessage(ctx context.Context, msg *types.Message, maxFee *api.MessageSendSpec) (*types.SignedMessage, error)
 	WalletHas(ctx context.Context, addr address.Address) (bool, error)
 	WalletSign(ctx context.Context, k address.Address, msg []byte) (*crypto.Signature, error)
@@ -45,13 +56,17 @@ type PaychAPI interface {
 // managerAPI defines all methods needed by the manager
 type managerAPI interface {
 	stateManagerAPI
-	PaychAPI
+	paychAPI
 }
 
 // managerAPIImpl is used to create a composite that implements managerAPI
 type managerAPIImpl struct {
-	stmgr.StateManagerAPI
-	PaychAPI
+	*stmgr.StateManager
+	paychAPI
+}
+
+func (m *managerAPIImpl) AdtStore(ctx context.Context) adt.Store {
+	return m.ChainStore().Store(ctx)
 }
 
 type Manager struct {
@@ -67,8 +82,11 @@ type Manager struct {
 	channels map[string]*channelAccessor
 }
 
-func NewManager(ctx context.Context, shutdown func(), sm stmgr.StateManagerAPI, pchstore *Store, api PaychAPI) *Manager {
-	impl := &managerAPIImpl{StateManagerAPI: sm, PaychAPI: api}
+func NewManager(mctx helpers.MetricsCtx, lc fx.Lifecycle, sm *stmgr.StateManager, pchstore *Store, api PaychAPI) *Manager {
+	ctx := helpers.LifecycleCtx(mctx, lc)
+	ctx, shutdown := context.WithCancel(ctx)
+
+	impl := &managerAPIImpl{StateManager: sm, paychAPI: &api}
 	return &Manager{
 		ctx:      ctx,
 		shutdown: shutdown,
@@ -88,6 +106,18 @@ func newManager(pchstore *Store, pchapi managerAPI) (*Manager, error) {
 		pchapi:   pchapi,
 	}
 	return pm, pm.Start()
+}
+
+// HandleManager is called by dependency injection to set up hooks
+func HandleManager(lc fx.Lifecycle, pm *Manager) {
+	lc.Append(fx.Hook{
+		OnStart: func(ctx context.Context) error {
+			return pm.Start()
+		},
+		OnStop: func(context.Context) error {
+			return pm.Stop()
+		},
+	})
 }
 
 // Start restarts tracking of any messages that were sent to chain.
