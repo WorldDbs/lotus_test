@@ -7,7 +7,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-multistore"
-	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/lib/blockstore"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 )
@@ -16,7 +16,7 @@ type Mgr struct {
 	mds *multistore.MultiStore
 	ds  datastore.Batching
 
-	Blockstore blockstore.BasicBlockstore
+	Blockstore blockstore.Blockstore
 }
 
 type Label string
@@ -31,7 +31,7 @@ const (
 func New(mds *multistore.MultiStore, ds datastore.Batching) *Mgr {
 	return &Mgr{
 		mds:        mds,
-		Blockstore: blockstore.Adapt(mds.MultiReadBlockstore()),
+		Blockstore: mds.MultiReadBlockstore(),
 
 		ds: datastore.NewLogDatastore(namespace.Wrap(ds, datastore.NewKey("/stores")), "storess"),
 	}
