@@ -20,10 +20,8 @@ import (
 var log = logging.Logger("events")
 
 // HeightHandler `curH`-`ts.Height` = `confidence`
-type (
-	HeightHandler func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error
-	RevertHandler func(ctx context.Context, ts *types.TipSet) error
-)
+type HeightHandler func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error
+type RevertHandler func(ctx context.Context, ts *types.TipSet) error
 
 type heightHandler struct {
 	confidence int
@@ -33,33 +31,33 @@ type heightHandler struct {
 	revert RevertHandler
 }
 
-type EventAPI interface {
+type eventAPI interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
 	ChainHead(context.Context) (*types.TipSet, error)
-	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
+	StateGetReceipt(context.Context, cid.Cid, types.TipSetKey) (*types.MessageReceipt, error)
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
 
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) // optional / for CalledMsg
 }
 
 type Events struct {
-	api EventAPI
+	api eventAPI
 
 	tsc *tipSetCache
 	lk  sync.Mutex
 
-	ready     chan struct{}
+	ready     sync.WaitGroup
 	readyOnce sync.Once
 
 	heightEvents
 	*hcEvents
-
-	observers []TipSetObserver
 }
 
-func NewEventsWithConfidence(ctx context.Context, api EventAPI, gcConfidence abi.ChainEpoch) *Events {
+func NewEvents(ctx context.Context, api eventAPI) *Events {
+	gcConfidence := 2 * build.ForkLengthThreshold
+
 	tsc := newTSCache(gcConfidence, api)
 
 	e := &Events{
@@ -77,25 +75,18 @@ func NewEventsWithConfidence(ctx context.Context, api EventAPI, gcConfidence abi
 			htHeights:        map[abi.ChainEpoch][]uint64{},
 		},
 
-		hcEvents:  newHCEvents(ctx, api, tsc, uint64(gcConfidence)),
-		ready:     make(chan struct{}),
-		observers: []TipSetObserver{},
+		hcEvents: newHCEvents(ctx, api, tsc, uint64(gcConfidence)),
 	}
+
+	e.ready.Add(1)
 
 	go e.listenHeadChanges(ctx)
 
-	// Wait for the first tipset to be seen or bail if shutting down
-	select {
-	case <-e.ready:
-	case <-ctx.Done():
-	}
+	e.ready.Wait()
+
+	// TODO: cleanup/gc goroutine
 
 	return e
-}
-
-func NewEvents(ctx context.Context, api EventAPI) *Events {
-	gcConfidence := 2 * build.ForkLengthThreshold
-	return NewEventsWithConfidence(ctx, api, gcConfidence)
 }
 
 func (e *Events) listenHeadChanges(ctx context.Context) {
@@ -105,13 +96,11 @@ func (e *Events) listenHeadChanges(ctx context.Context) {
 		} else {
 			log.Warn("listenHeadChanges quit")
 		}
-		select {
-		case <-build.Clock.After(time.Second):
-		case <-ctx.Done():
+		if ctx.Err() != nil {
 			log.Warnf("not restarting listenHeadChanges: context error: %s", ctx.Err())
 			return
 		}
-
+		build.Clock.Sleep(time.Second)
 		log.Info("restarting listenHeadChanges")
 	}
 }
@@ -122,21 +111,13 @@ func (e *Events) listenHeadChangesOnce(ctx context.Context) error {
 
 	notifs, err := e.api.ChainNotify(ctx)
 	if err != nil {
-		// Retry is handled by caller
+		// TODO: retry
 		return xerrors.Errorf("listenHeadChanges ChainNotify call failed: %w", err)
 	}
 
-	var cur []*api.HeadChange
-	var ok bool
-
-	// Wait for first tipset or bail
-	select {
-	case cur, ok = <-notifs:
-		if !ok {
-			return xerrors.Errorf("notification channel closed")
-		}
-	case <-ctx.Done():
-		return ctx.Err()
+	cur, ok := <-notifs // TODO: timeout?
+	if !ok {
+		return xerrors.Errorf("notification channel closed")
 	}
 
 	if len(cur) != 1 {
@@ -148,13 +129,13 @@ func (e *Events) listenHeadChangesOnce(ctx context.Context) error {
 	}
 
 	if err := e.tsc.add(cur[0].Val); err != nil {
-		log.Warnf("tsc.add: adding current tipset failed: %v", err)
+		log.Warn("tsc.add: adding current tipset failed: %w", err)
 	}
 
 	e.readyOnce.Do(func() {
 		e.lastTs = cur[0].Val
-		// Signal that we have seen first tipset
-		close(e.ready)
+
+		e.ready.Done()
 	})
 
 	for notif := range notifs {
@@ -170,7 +151,7 @@ func (e *Events) listenHeadChangesOnce(ctx context.Context) error {
 			}
 		}
 
-		if err := e.headChange(ctx, rev, app); err != nil {
+		if err := e.headChange(rev, app); err != nil {
 			log.Warnf("headChange failed: %s", err)
 		}
 
@@ -183,7 +164,7 @@ func (e *Events) listenHeadChangesOnce(ctx context.Context) error {
 	return nil
 }
 
-func (e *Events) headChange(ctx context.Context, rev, app []*types.TipSet) error {
+func (e *Events) headChange(rev, app []*types.TipSet) error {
 	if len(app) == 0 {
 		return xerrors.New("events.headChange expected at least one applied tipset")
 	}
@@ -195,39 +176,5 @@ func (e *Events) headChange(ctx context.Context, rev, app []*types.TipSet) error
 		return err
 	}
 
-	if err := e.observeChanges(ctx, rev, app); err != nil {
-		return err
-	}
 	return e.processHeadChangeEvent(rev, app)
-}
-
-// A TipSetObserver receives notifications of tipsets
-type TipSetObserver interface {
-	Apply(ctx context.Context, ts *types.TipSet) error
-	Revert(ctx context.Context, ts *types.TipSet) error
-}
-
-// TODO: add a confidence level so we can have observers with difference levels of confidence
-func (e *Events) Observe(obs TipSetObserver) error {
-	e.lk.Lock()
-	defer e.lk.Unlock()
-	e.observers = append(e.observers, obs)
-	return nil
-}
-
-// observeChanges expects caller to hold e.lk
-func (e *Events) observeChanges(ctx context.Context, rev, app []*types.TipSet) error {
-	for _, ts := range rev {
-		for _, o := range e.observers {
-			_ = o.Revert(ctx, ts)
-		}
-	}
-
-	for _, ts := range app {
-		for _, o := range e.observers {
-			_ = o.Apply(ctx, ts)
-		}
-	}
-
-	return nil
 }
