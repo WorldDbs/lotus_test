@@ -13,18 +13,17 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
 	"github.com/filecoin-project/lotus/chain/wallet"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 
 	"github.com/filecoin-project/lotus/api"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
@@ -95,7 +94,7 @@ func TestMessageChains(t *testing.T) {
 	block := tma.nextBlock()
 	ts := mock.TipSet(block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
 
@@ -333,7 +332,7 @@ func TestMessageChainSkipping(t *testing.T) {
 	block := tma.nextBlock()
 	ts := mock.TipSet(block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 	baseFee := types.NewInt(0)
 
 	tma.setBalance(a1, 1) // in FIL
@@ -410,7 +409,7 @@ func TestBasicMessageSelection(t *testing.T) {
 	ts := mock.TipSet(block)
 	tma.applyBlock(t, block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
 	tma.setBalance(a2, 1) // in FIL
@@ -554,7 +553,7 @@ func TestMessageSelectionTrimming(t *testing.T) {
 	ts := mock.TipSet(block)
 	tma.applyBlock(t, block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
 	tma.setBalance(a2, 1) // in FIL
@@ -617,7 +616,7 @@ func TestPriorityMessageSelection(t *testing.T) {
 	ts := mock.TipSet(block)
 	tma.applyBlock(t, block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
 	tma.setBalance(a2, 1) // in FIL
@@ -696,7 +695,7 @@ func TestPriorityMessageSelection2(t *testing.T) {
 	ts := mock.TipSet(block)
 	tma.applyBlock(t, block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
 	tma.setBalance(a2, 1) // in FIL
@@ -736,6 +735,8 @@ func TestPriorityMessageSelection2(t *testing.T) {
 }
 
 func TestPriorityMessageSelection3(t *testing.T) {
+	t.Skip("reenable after removing allow negative")
+
 	mp, tma := makeTestMpool()
 
 	// the actors
@@ -763,7 +764,7 @@ func TestPriorityMessageSelection3(t *testing.T) {
 	ts := mock.TipSet(block)
 	tma.applyBlock(t, block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
 	tma.setBalance(a2, 1) // in FIL
@@ -860,7 +861,7 @@ func TestOptimalMessageSelection1(t *testing.T) {
 	ts := mock.TipSet(block)
 	tma.applyBlock(t, block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
 	tma.setBalance(a2, 1) // in FIL
@@ -927,7 +928,7 @@ func TestOptimalMessageSelection2(t *testing.T) {
 	ts := mock.TipSet(block)
 	tma.applyBlock(t, block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
 	tma.setBalance(a2, 1) // in FIL
@@ -1005,7 +1006,7 @@ func TestOptimalMessageSelection3(t *testing.T) {
 	ts := mock.TipSet(block)
 	tma.applyBlock(t, block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 
 	for _, a := range actors {
 		tma.setBalance(a, 1) // in FIL
@@ -1085,7 +1086,7 @@ func testCompetitiveMessageSelection(t *testing.T, rng *rand.Rand, getPremium fu
 	ts := mock.TipSet(block)
 	tma.applyBlock(t, block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin.StorageMarketActorCodeID, M: 2}]
 	baseFee := types.NewInt(0)
 
 	for _, a := range actors {
@@ -1239,9 +1240,6 @@ func TestCompetitiveMessageSelectionExp(t *testing.T) {
 }
 
 func TestCompetitiveMessageSelectionZipf(t *testing.T) {
-	if testing.Short() {
-		t.Skip("skipping in short mode")
-	}
 	var capacityBoost, rewardBoost, tqReward float64
 	seeds := []int64{1947, 1976, 2020, 2100, 10000, 143324, 432432, 131, 32, 45}
 	for _, seed := range seeds {
@@ -1269,9 +1267,9 @@ func TestGasReward(t *testing.T) {
 		GasReward int64
 	}{
 		{Premium: 100, FeeCap: 200, BaseFee: 100, GasReward: 100},
-		{Premium: 100, FeeCap: 200, BaseFee: 210, GasReward: -10 * 3},
+		{Premium: 100, FeeCap: 200, BaseFee: 210, GasReward: -10},
 		{Premium: 200, FeeCap: 250, BaseFee: 210, GasReward: 40},
-		{Premium: 200, FeeCap: 250, BaseFee: 2000, GasReward: -1750 * 3},
+		{Premium: 200, FeeCap: 250, BaseFee: 2000, GasReward: -1750},
 	}
 
 	mp := new(MessagePool)
@@ -1333,7 +1331,7 @@ readLoop:
 	}
 
 	actorMap := make(map[address.Address]address.Address)
-	actorWallets := make(map[address.Address]api.Wallet)
+	actorWallets := make(map[address.Address]api.WalletAPI)
 
 	for _, m := range msgs {
 		baseNonce := baseNonces[m.Message.From]
