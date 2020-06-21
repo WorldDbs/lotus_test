@@ -5,8 +5,6 @@ import (
 	"math"
 	"sync"
 
-	"github.com/filecoin-project/lotus/chain/stmgr"
-
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
@@ -68,7 +66,7 @@ type queuedEvent struct {
 // Manages chain head change events, which may be forward (new tipset added to
 // chain) or backward (chain branch discarded in favour of heavier branch)
 type hcEvents struct {
-	cs           EventAPI
+	cs           eventAPI
 	tsc          *tipSetCache
 	ctx          context.Context
 	gcConfidence uint64
@@ -95,7 +93,7 @@ type hcEvents struct {
 	watcherEvents
 }
 
-func newHCEvents(ctx context.Context, cs EventAPI, tsc *tipSetCache, gcConfidence uint64) *hcEvents {
+func newHCEvents(ctx context.Context, cs eventAPI, tsc *tipSetCache, gcConfidence uint64) *hcEvents {
 	e := hcEvents{
 		ctx:          ctx,
 		cs:           cs,
@@ -355,14 +353,14 @@ type headChangeAPI interface {
 // watcherEvents watches for a state change
 type watcherEvents struct {
 	ctx   context.Context
-	cs    EventAPI
+	cs    eventAPI
 	hcAPI headChangeAPI
 
 	lk       sync.RWMutex
 	matchers map[triggerID]StateMatchFunc
 }
 
-func newWatcherEvents(ctx context.Context, hcAPI headChangeAPI, cs EventAPI) watcherEvents {
+func newWatcherEvents(ctx context.Context, hcAPI headChangeAPI, cs eventAPI) watcherEvents {
 	return watcherEvents{
 		ctx:      ctx,
 		cs:       cs,
@@ -457,19 +455,19 @@ func (we *watcherEvents) StateChanged(check CheckFunc, scHnd StateChangeHandler,
 // messageEvents watches for message calls to actors
 type messageEvents struct {
 	ctx   context.Context
-	cs    EventAPI
+	cs    eventAPI
 	hcAPI headChangeAPI
 
 	lk       sync.RWMutex
-	matchers map[triggerID]MsgMatchFunc
+	matchers map[triggerID][]MsgMatchFunc
 }
 
-func newMessageEvents(ctx context.Context, hcAPI headChangeAPI, cs EventAPI) messageEvents {
+func newMessageEvents(ctx context.Context, hcAPI headChangeAPI, cs eventAPI) messageEvents {
 	return messageEvents{
 		ctx:      ctx,
 		cs:       cs,
 		hcAPI:    hcAPI,
-		matchers: make(map[triggerID]MsgMatchFunc),
+		matchers: map[triggerID][]MsgMatchFunc{},
 	}
 }
 
@@ -484,23 +482,32 @@ func (me *messageEvents) checkNewCalls(ts *types.TipSet) (map[triggerID]eventDat
 	me.lk.RLock()
 	defer me.lk.RUnlock()
 
-	// For each message in the tipset
 	res := make(map[triggerID]eventData)
 	me.messagesForTs(pts, func(msg *types.Message) {
 		// TODO: provide receipts
 
-		// Run each trigger's matcher against the message
-		for tid, matchFn := range me.matchers {
-			matched, err := matchFn(msg)
-			if err != nil {
-				log.Errorf("event matcher failed: %s", err)
-				continue
+		for tid, matchFns := range me.matchers {
+			var matched bool
+			var once bool
+			for _, matchFn := range matchFns {
+				matchOne, ok, err := matchFn(msg)
+				if err != nil {
+					log.Errorf("event matcher failed: %s", err)
+					continue
+				}
+				matched = ok
+				once = matchOne
+
+				if matched {
+					break
+				}
 			}
 
-			// If there was a match, include the message in the results for the
-			// trigger
 			if matched {
 				res[tid] = msg
+				if once {
+					break
+				}
 			}
 		}
 	})
@@ -548,7 +555,7 @@ func (me *messageEvents) messagesForTs(ts *types.TipSet, consume func(*types.Mes
 // `curH`-`ts.Height` = `confidence`
 type MsgHandler func(msg *types.Message, rec *types.MessageReceipt, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)
 
-type MsgMatchFunc func(msg *types.Message) (matched bool, err error)
+type MsgMatchFunc func(msg *types.Message) (matchOnce bool, matched bool, err error)
 
 // Called registers a callback which is triggered when a specified method is
 //  called on an actor, or a timeout is reached.
@@ -585,16 +592,12 @@ func (me *messageEvents) Called(check CheckFunc, msgHnd MsgHandler, rev RevertHa
 			panic("expected msg")
 		}
 
-		ml, err := me.cs.StateSearchMsg(me.ctx, ts.Key(), msg.Cid(), stmgr.LookbackNoLimit, true)
+		rec, err := me.cs.StateGetReceipt(me.ctx, msg.Cid(), ts.Key())
 		if err != nil {
 			return false, err
 		}
 
-		if ml == nil {
-			return msgHnd(msg, nil, ts, height)
-		}
-
-		return msgHnd(msg, &ml.Receipt, ts, height)
+		return msgHnd(msg, rec, ts, height)
 	}
 
 	id, err := me.hcAPI.onHeadChanged(check, hnd, rev, confidence, timeout)
@@ -604,7 +607,7 @@ func (me *messageEvents) Called(check CheckFunc, msgHnd MsgHandler, rev RevertHa
 
 	me.lk.Lock()
 	defer me.lk.Unlock()
-	me.matchers[id] = mf
+	me.matchers[id] = append(me.matchers[id], mf)
 
 	return nil
 }
