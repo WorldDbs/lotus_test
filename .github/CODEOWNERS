@@ -8,9 +8,9 @@
 ## the PR before merging.
 
 ### Global owners.
-*                       @magik6k @arajasek
+*                       @magik6k @whyrusleeping @Kubuxu
 
 ### Conformance testing.
-conformance/            @ZenGround0
-extern/test-vectors     @ZenGround0
-cmd/tvx                 @ZenGround0
+conformance/            @raulk
+extern/test-vectors     @raulk
+cmd/tvx                 @raulk
