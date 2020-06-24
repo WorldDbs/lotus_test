@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	logging "github.com/ipfs/go-log/v2"
@@ -16,12 +15,9 @@ func main() {
 	logging.SetLogLevel("*", "INFO")
 
 	local := []*cli.Command{
-		base64Cmd,
 		base32Cmd,
 		base16Cmd,
 		bitFieldCmd,
-		cronWcCmd,
-		frozenMinersCmd,
 		keyinfoCmd,
 		jwtCmd,
 		noncefix,
@@ -32,32 +28,20 @@ func main() {
 		importObjectCmd,
 		commpToCidCmd,
 		fetchParamCmd,
-		postFindCmd,
 		proofsCmd,
 		verifRegCmd,
-		marketCmd,
 		miscCmd,
 		mpoolCmd,
 		genesisVerifyCmd,
 		mathCmd,
-		minerCmd,
 		mpoolStatsCmd,
 		exportChainCmd,
 		consensusCmd,
-		storageStatsCmd,
+		serveDealStatsCmd,
 		syncCmd,
 		stateTreePruneCmd,
 		datastoreCmd,
 		ledgerCmd,
-		sectorsCmd,
-		msgCmd,
-		electionCmd,
-		rpcCmd,
-		cidCmd,
-		blockmsgidCmd,
-		signaturesCmd,
-		actorCmd,
-		minerTypesCmd,
 	}
 
 	app := &cli.App{
@@ -71,13 +55,6 @@ func main() {
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-			},
-			&cli.StringFlag{
-				Name:    "miner-repo",
-				Aliases: []string{"storagerepo"},
-				EnvVars: []string{"LOTUS_MINER_PATH", "LOTUS_STORAGE_PATH"},
-				Value:   "~/.lotusminer", // TODO: Consider XDG_DATA_HOME
-				Usage:   fmt.Sprintf("Specify miner repo path. flag storagerepo and env LOTUS_STORAGE_PATH are DEPRECATION, will REMOVE SOON"),
 			},
 			&cli.StringFlag{
 				Name:  "log-level",
