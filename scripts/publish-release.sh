@@ -29,20 +29,12 @@ RELEASE_ID=`echo "${RELEASE_RESPONSE}" | jq '.id'`
 if [ "${RELEASE_ID}" = "null" ]; then
   echo "creating release"
 
-  COND_CREATE_DISCUSSION=""
-  PRERELEASE=true
-  if [[ ${CIRCLE_TAG} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    COND_CREATE_DISCUSSION="\"discussion_category_name\": \"announcement\","
-    PRERELEASE=false
-  fi
-
   RELEASE_DATA="{
     \"tag_name\": \"${CIRCLE_TAG}\",
     \"target_commitish\": \"${CIRCLE_SHA1}\",
-    ${COND_CREATE_DISCUSSION}
     \"name\": \"${CIRCLE_TAG}\",
     \"body\": \"\",
-    \"prerelease\": ${PRERELEASE}
+    \"prerelease\": false
   }"
 
   # create it if it doesn't exist yet
@@ -59,9 +51,8 @@ else
 fi
 
 RELEASE_UPLOAD_URL=`echo "${RELEASE_RESPONSE}" | jq -r '.upload_url' | cut -d'{' -f1`
-echo "Preparing to send artifacts to ${RELEASE_UPLOAD_URL}"
 
-artifacts=(
+bundles=(
   "lotus_${CIRCLE_TAG}_linux-amd64.tar.gz"
   "lotus_${CIRCLE_TAG}_linux-amd64.tar.gz.cid"
   "lotus_${CIRCLE_TAG}_linux-amd64.tar.gz.sha512"
@@ -69,10 +60,9 @@ artifacts=(
   "lotus_${CIRCLE_TAG}_darwin-amd64.tar.gz.cid"
   "lotus_${CIRCLE_TAG}_darwin-amd64.tar.gz.sha512"
 )
-
-for RELEASE_FILE in "${artifacts[@]}"
+for RELEASE_FILE in "${bundles[@]}"
 do
-  echo "Uploading ${RELEASE_FILE}..."
+  echo "Uploading release bundle: ${RELEASE_FILE}"
   curl \
     --request POST \
     --header "Authorization: token ${GITHUB_TOKEN}" \
@@ -80,7 +70,7 @@ do
     --data-binary "@${RELEASE_FILE}" \
     "$RELEASE_UPLOAD_URL?name=$(basename "${RELEASE_FILE}")"
 
-  echo "Uploaded ${RELEASE_FILE}"
+  echo "Release bundle uploaded: ${RELEASE_FILE}"
 done
 
 popd
