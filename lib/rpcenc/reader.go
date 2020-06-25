@@ -128,7 +128,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 		case ch <- wr:
 		case <-tctx.Done():
 			close(ch)
-			log.Errorf("context error in reader stream handler (1): %v", tctx.Err())
+			log.Error("context error in reader stream handler (1): %v", tctx.Err())
 			resp.WriteHeader(500)
 			return
 		}
@@ -136,7 +136,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 		select {
 		case <-wr.wait:
 		case <-req.Context().Done():
-			log.Errorf("context error in reader stream handler (2): %v", req.Context().Err())
+			log.Error("context error in reader stream handler (2): %v", req.Context().Err())
 			resp.WriteHeader(500)
 			return
 		}
