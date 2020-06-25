@@ -5,7 +5,6 @@ package exchange
 import (
 	"fmt"
 	"io"
-	"sort"
 
 	types "github.com/filecoin-project/lotus/chain/types"
 	cid "github.com/ipfs/go-cid"
@@ -14,8 +13,6 @@ import (
 )
 
 var _ = xerrors.Errorf
-var _ = cid.Undef
-var _ = sort.Sort
 
 var lengthBufRequest = []byte{131}
 
