@@ -20,8 +20,6 @@ type MpoolModuleAPI interface {
 	MpoolPush(ctx context.Context, smsg *types.SignedMessage) (cid.Cid, error)
 }
 
-var _ MpoolModuleAPI = *new(api.FullNode)
-
 // MpoolModule provides a default implementation of MpoolModuleAPI.
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
@@ -189,56 +187,8 @@ func (a *MpoolAPI) MpoolPushMessage(ctx context.Context, msg *types.Message, spe
 	})
 }
 
-func (a *MpoolAPI) MpoolBatchPush(ctx context.Context, smsgs []*types.SignedMessage) ([]cid.Cid, error) {
-	var messageCids []cid.Cid
-	for _, smsg := range smsgs {
-		smsgCid, err := a.Mpool.Push(smsg)
-		if err != nil {
-			return messageCids, err
-		}
-		messageCids = append(messageCids, smsgCid)
-	}
-	return messageCids, nil
-}
-
-func (a *MpoolAPI) MpoolBatchPushUntrusted(ctx context.Context, smsgs []*types.SignedMessage) ([]cid.Cid, error) {
-	var messageCids []cid.Cid
-	for _, smsg := range smsgs {
-		smsgCid, err := a.Mpool.PushUntrusted(smsg)
-		if err != nil {
-			return messageCids, err
-		}
-		messageCids = append(messageCids, smsgCid)
-	}
-	return messageCids, nil
-}
-
-func (a *MpoolAPI) MpoolBatchPushMessage(ctx context.Context, msgs []*types.Message, spec *api.MessageSendSpec) ([]*types.SignedMessage, error) {
-	var smsgs []*types.SignedMessage
-	for _, msg := range msgs {
-		smsg, err := a.MpoolPushMessage(ctx, msg, spec)
-		if err != nil {
-			return smsgs, err
-		}
-		smsgs = append(smsgs, smsg)
-	}
-	return smsgs, nil
-}
-
-func (a *MpoolAPI) MpoolCheckMessages(ctx context.Context, protos []*api.MessagePrototype) ([][]api.MessageCheckStatus, error) {
-	return a.Mpool.CheckMessages(protos)
-}
-
-func (a *MpoolAPI) MpoolCheckPendingMessages(ctx context.Context, from address.Address) ([][]api.MessageCheckStatus, error) {
-	return a.Mpool.CheckPendingMessages(from)
-}
-
-func (a *MpoolAPI) MpoolCheckReplaceMessages(ctx context.Context, msgs []*types.Message) ([][]api.MessageCheckStatus, error) {
-	return a.Mpool.CheckReplaceMessages(msgs)
-}
-
 func (a *MpoolAPI) MpoolGetNonce(ctx context.Context, addr address.Address) (uint64, error) {
-	return a.Mpool.GetNonce(ctx, addr, types.EmptyTSK)
+	return a.Mpool.GetNonce(addr)
 }
 
 func (a *MpoolAPI) MpoolSub(ctx context.Context) (<-chan api.MpoolUpdate, error) {
