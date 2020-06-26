@@ -24,13 +24,13 @@ type MultiWallet struct {
 }
 
 type getif interface {
-	api.Wallet
+	api.WalletAPI
 
 	// workaround for the fact that iface(*struct(nil)) != nil
-	Get() api.Wallet
+	Get() api.WalletAPI
 }
 
-func firstNonNil(wallets ...getif) api.Wallet {
+func firstNonNil(wallets ...getif) api.WalletAPI {
 	for _, w := range wallets {
 		if w.Get() != nil {
 			return w
@@ -40,8 +40,8 @@ func firstNonNil(wallets ...getif) api.Wallet {
 	return nil
 }
 
-func nonNil(wallets ...getif) []api.Wallet {
-	var out []api.Wallet
+func nonNil(wallets ...getif) []api.WalletAPI {
+	var out []api.WalletAPI
 	for _, w := range wallets {
 		if w.Get() == nil {
 			continue
@@ -53,7 +53,7 @@ func nonNil(wallets ...getif) []api.Wallet {
 	return out
 }
 
-func (m MultiWallet) find(ctx context.Context, address address.Address, wallets ...getif) (api.Wallet, error) {
+func (m MultiWallet) find(ctx context.Context, address address.Address, wallets ...getif) (api.WalletAPI, error) {
 	ws := nonNil(wallets...)
 
 	for _, w := range ws {
@@ -90,7 +90,7 @@ func (m MultiWallet) WalletHas(ctx context.Context, address address.Address) (bo
 }
 
 func (m MultiWallet) WalletList(ctx context.Context) ([]address.Address, error) {
-	out := make([]address.Address, 0)
+	var out []address.Address
 	seen := map[address.Address]struct{}{}
 
 	ws := nonNil(m.Remote, m.Ledger, m.Local)
@@ -167,4 +167,4 @@ func (m MultiWallet) WalletDelete(ctx context.Context, address address.Address) 
 	}
 }
 
-var _ api.Wallet = MultiWallet{}
+var _ api.WalletAPI = MultiWallet{}
