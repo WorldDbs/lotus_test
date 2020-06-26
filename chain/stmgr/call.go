@@ -59,12 +59,11 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 		StateBase:      bstate,
 		Epoch:          bheight,
 		Rand:           store.NewChainRand(sm.cs, ts.Cids()),
-		Bstore:         sm.cs.StateBlockstore(),
+		Bstore:         sm.cs.Blockstore(),
 		Syscalls:       sm.cs.VMSys(),
 		CircSupplyCalc: sm.GetVMCirculatingSupply,
 		NtwkVersion:    sm.GetNtwkVersion,
 		BaseFee:        types.NewInt(0),
-		LookbackState:  LookbackStateGetterForTipset(sm, ts),
 	}
 
 	vmi, err := sm.newVM(ctx, vmopt)
@@ -174,12 +173,11 @@ func (sm *StateManager) CallWithGas(ctx context.Context, msg *types.Message, pri
 		StateBase:      state,
 		Epoch:          ts.Height() + 1,
 		Rand:           r,
-		Bstore:         sm.cs.StateBlockstore(),
+		Bstore:         sm.cs.Blockstore(),
 		Syscalls:       sm.cs.VMSys(),
 		CircSupplyCalc: sm.GetVMCirculatingSupply,
 		NtwkVersion:    sm.GetNtwkVersion,
 		BaseFee:        ts.Blocks()[0].ParentBaseFee,
-		LookbackState:  LookbackStateGetterForTipset(sm, ts),
 	}
 	vmi, err := sm.newVM(ctx, vmopt)
 	if err != nil {
@@ -234,7 +232,6 @@ func (sm *StateManager) CallWithGas(ctx context.Context, msg *types.Message, pri
 		MsgCid:         msg.Cid(),
 		Msg:            msg,
 		MsgRct:         &ret.MessageReceipt,
-		GasCost:        MakeMsgGasCost(msg, ret),
 		ExecutionTrace: ret.ExecutionTrace,
 		Error:          errs,
 		Duration:       ret.Duration,
@@ -255,7 +252,7 @@ func (sm *StateManager) Replay(ctx context.Context, ts *types.TipSet, mcid cid.C
 		}
 		return nil
 	})
-	if err != nil && !xerrors.Is(err, errHaltExecution) {
+	if err != nil && err != errHaltExecution {
 		return nil, nil, xerrors.Errorf("unexpected error during execution: %w", err)
 	}
 
