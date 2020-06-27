@@ -5,19 +5,17 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
+	"os"
 	"sync/atomic"
 	"testing"
 	"time"
 
 	logging "github.com/ipfs/go-log/v2"
 
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/impl"
 )
@@ -61,11 +59,14 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 
 	newHeads, err := api.ChainNotify(ctx)
 	require.NoError(t, err)
-	at := (<-newHeads)[0].Val.Height()
+	initHead := (<-newHeads)[0]
+	if initHead.Val.Height() != 2 {
+		<-newHeads
+	}
 
 	h1, err := api.ChainHead(ctx)
 	require.NoError(t, err)
-	require.Equal(t, int64(at), int64(h1.Height()))
+	require.Equal(t, abi.ChainEpoch(2), h1.Height())
 
 	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
@@ -74,19 +75,21 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 
 	h2, err := api.ChainHead(ctx)
 	require.NoError(t, err)
-	require.Greater(t, int64(h2.Height()), int64(h1.Height()))
+	require.Equal(t, abi.ChainEpoch(3), h2.Height())
 
 	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
 
 	<-newHeads
 
-	h3, err := api.ChainHead(ctx)
+	h2, err = api.ChainHead(ctx)
 	require.NoError(t, err)
-	require.Greater(t, int64(h3.Height()), int64(h2.Height()))
+	require.Equal(t, abi.ChainEpoch(4), h2.Height())
 }
 
 func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExport bool) {
+	_ = os.Setenv("BELLMAN_NO_GPU", "1")
+
 	// test making a deal with a fresh miner, and see if it starts to mine
 
 	ctx := context.Background()
@@ -189,7 +192,7 @@ func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExpo
 		}
 	}()
 
-	deal := startDeal(t, ctx, provider, client, fcid, false, 0)
+	deal := startDeal(t, ctx, provider, client, fcid, false)
 
 	// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
 	time.Sleep(time.Second)
@@ -201,40 +204,4 @@ func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExpo
 	atomic.StoreInt32(&mine, 0)
 	fmt.Println("shutting down mining")
 	<-done
-}
-
-func (ts *testSuite) testNonGenesisMiner(t *testing.T) {
-	ctx := context.Background()
-	n, sn := ts.makeNodes(t, []FullNodeOpts{
-		FullNodeWithLatestActorsAt(-1),
-	}, []StorageMiner{
-		{Full: 0, Preseal: PresealGenesis},
-	})
-
-	full, ok := n[0].FullNode.(*impl.FullNodeAPI)
-	if !ok {
-		t.Skip("not testing with a full node")
-		return
-	}
-	genesisMiner := sn[0]
-
-	bm := NewBlockMiner(ctx, t, genesisMiner, 4*time.Millisecond)
-	bm.MineBlocks()
-	t.Cleanup(bm.Stop)
-
-	gaa, err := genesisMiner.ActorAddress(ctx)
-	require.NoError(t, err)
-
-	gmi, err := full.StateMinerInfo(ctx, gaa, types.EmptyTSK)
-	require.NoError(t, err)
-
-	testm := n[0].Stb(ctx, t, TestSpt, gmi.Owner)
-
-	ta, err := testm.ActorAddress(ctx)
-	require.NoError(t, err)
-
-	tid, err := address.IDFromAddress(ta)
-	require.NoError(t, err)
-
-	require.Equal(t, uint64(1001), tid)
 }

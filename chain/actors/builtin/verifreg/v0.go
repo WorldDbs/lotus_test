@@ -9,7 +9,6 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
-	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
 
 var _ State = (*state0)(nil)
@@ -33,25 +32,17 @@ func (s *state0) RootKey() (address.Address, error) {
 }
 
 func (s *state0) VerifiedClientDataCap(addr address.Address) (bool, abi.StoragePower, error) {
-	return getDataCap(s.store, actors.Version0, s.verifiedClients, addr)
+	return getDataCap(s.store, actors.Version0, s.State.VerifiedClients, addr)
 }
 
 func (s *state0) VerifierDataCap(addr address.Address) (bool, abi.StoragePower, error) {
-	return getDataCap(s.store, actors.Version0, s.verifiers, addr)
+	return getDataCap(s.store, actors.Version0, s.State.Verifiers, addr)
 }
 
 func (s *state0) ForEachVerifier(cb func(addr address.Address, dcap abi.StoragePower) error) error {
-	return forEachCap(s.store, actors.Version0, s.verifiers, cb)
+	return forEachCap(s.store, actors.Version0, s.State.Verifiers, cb)
 }
 
 func (s *state0) ForEachClient(cb func(addr address.Address, dcap abi.StoragePower) error) error {
-	return forEachCap(s.store, actors.Version0, s.verifiedClients, cb)
-}
-
-func (s *state0) verifiedClients() (adt.Map, error) {
-	return adt0.AsMap(s.store, s.VerifiedClients)
-}
-
-func (s *state0) verifiers() (adt.Map, error) {
-	return adt0.AsMap(s.store, s.Verifiers)
+	return forEachCap(s.store, actors.Version0, s.State.VerifiedClients, cb)
 }
