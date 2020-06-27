@@ -14,16 +14,15 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
+	tutils "github.com/filecoin-project/specs-actors/support/testing"
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
 func TestCheckVoucherValid(t *testing.T) {
@@ -238,7 +237,7 @@ func TestCreateVoucher(t *testing.T) {
 
 	// Create a voucher in lane 1
 	voucherLane1Amt := big.NewInt(5)
-	voucher := paych.SignedVoucher{
+	voucher := paych2.SignedVoucher{
 		Lane:   1,
 		Amount: voucherLane1Amt,
 	}
@@ -253,7 +252,7 @@ func TestCreateVoucher(t *testing.T) {
 
 	// Create a voucher in lane 1 again, with a higher amount
 	voucherLane1Amt = big.NewInt(8)
-	voucher = paych.SignedVoucher{
+	voucher = paych2.SignedVoucher{
 		Lane:   1,
 		Amount: voucherLane1Amt,
 	}
@@ -268,7 +267,7 @@ func TestCreateVoucher(t *testing.T) {
 	// Create a voucher in lane 2 that covers all the remaining funds
 	// in the channel
 	voucherLane2Amt := big.Sub(s.amt, voucherLane1Amt)
-	voucher = paych.SignedVoucher{
+	voucher = paych2.SignedVoucher{
 		Lane:   2,
 		Amount: voucherLane2Amt,
 	}
@@ -282,7 +281,7 @@ func TestCreateVoucher(t *testing.T) {
 	// Create a voucher in lane 2 that exceeds the remaining funds in the
 	// channel
 	voucherLane2Amt = big.Add(voucherLane2Amt, big.NewInt(1))
-	voucher = paych.SignedVoucher{
+	voucher = paych2.SignedVoucher{
 		Lane:   2,
 		Amount: voucherLane2Amt,
 	}
