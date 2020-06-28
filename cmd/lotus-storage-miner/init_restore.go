@@ -1,12 +1,9 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"io/ioutil"
 	"os"
-
-	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-datastore"
@@ -20,7 +17,6 @@ import (
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/big"
 
-	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -54,15 +50,9 @@ var initRestoreCmd = &cli.Command{
 			return xerrors.Errorf("expected 1 argument")
 		}
 
-		ctx := lcli.ReqContext(cctx)
-
 		log.Info("Trying to connect to full node RPC")
 
-		if err := checkV1ApiSupport(ctx, cctx); err != nil {
-			return err
-		}
-
-		api, closer, err := lcli.GetFullNodeAPIV1(cctx) // TODO: consider storing full node address in config
+		api, closer, err := lcli.GetFullNodeAPI(cctx) // TODO: consider storing full node address in config
 		if err != nil {
 			return err
 		}
@@ -70,17 +60,19 @@ var initRestoreCmd = &cli.Command{
 
 		log.Info("Checking full node version")
 
+		ctx := lcli.ReqContext(cctx)
+
 		v, err := api.Version(ctx)
 		if err != nil {
 			return err
 		}
 
-		if !v.APIVersion.EqMajorMinor(lapi.FullAPIVersion1) {
-			return xerrors.Errorf("Remote API version didn't match (expected %s, remote %s)", lapi.FullAPIVersion1, v.APIVersion)
+		if !v.APIVersion.EqMajorMinor(build.FullAPIVersion) {
+			return xerrors.Errorf("Remote API version didn't match (expected %s, remote %s)", build.FullAPIVersion, v.APIVersion)
 		}
 
 		if !cctx.Bool("nosync") {
-			if err := lcli.SyncWait(ctx, &v0api.WrapperV1Full{FullNode: api}, false); err != nil {
+			if err := lcli.SyncWait(ctx, api, false); err != nil {
 				return xerrors.Errorf("sync wait: %w", err)
 			}
 		}
@@ -198,7 +190,7 @@ var initRestoreCmd = &cli.Command{
 
 		log.Info("Restoring metadata backup")
 
-		mds, err := lr.Datastore(context.TODO(), "/metadata")
+		mds, err := lr.Datastore("/metadata")
 		if err != nil {
 			return err
 		}
