@@ -12,24 +12,23 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 )
 
-var SyncCmd = &cli.Command{
+var syncCmd = &cli.Command{
 	Name:  "sync",
 	Usage: "Inspect or interact with the chain syncer",
 	Subcommands: []*cli.Command{
-		SyncStatusCmd,
-		SyncWaitCmd,
-		SyncMarkBadCmd,
-		SyncUnmarkBadCmd,
-		SyncCheckBadCmd,
-		SyncCheckpointCmd,
+		syncStatusCmd,
+		syncWaitCmd,
+		syncMarkBadCmd,
+		syncUnmarkBadCmd,
+		syncCheckBadCmd,
+		syncCheckpointCmd,
 	},
 }
 
-var SyncStatusCmd = &cli.Command{
+var syncStatusCmd = &cli.Command{
 	Name:  "status",
 	Usage: "check sync status",
 	Action: func(cctx *cli.Context) error {
@@ -46,8 +45,8 @@ var SyncStatusCmd = &cli.Command{
 		}
 
 		fmt.Println("sync status:")
-		for _, ss := range state.ActiveSyncs {
-			fmt.Printf("worker %d:\n", ss.WorkerID)
+		for i, ss := range state.ActiveSyncs {
+			fmt.Printf("worker %d:\n", i)
 			var base, target []cid.Cid
 			var heightDiff int64
 			var theight abi.ChainEpoch
@@ -82,7 +81,7 @@ var SyncStatusCmd = &cli.Command{
 	},
 }
 
-var SyncWaitCmd = &cli.Command{
+var syncWaitCmd = &cli.Command{
 	Name:  "wait",
 	Usage: "Wait for sync to be complete",
 	Flags: []cli.Flag{
@@ -103,7 +102,7 @@ var SyncWaitCmd = &cli.Command{
 	},
 }
 
-var SyncMarkBadCmd = &cli.Command{
+var syncMarkBadCmd = &cli.Command{
 	Name:      "mark-bad",
 	Usage:     "Mark the given block as bad, will prevent syncing to a chain that contains it",
 	ArgsUsage: "[blockCid]",
@@ -128,7 +127,7 @@ var SyncMarkBadCmd = &cli.Command{
 	},
 }
 
-var SyncUnmarkBadCmd = &cli.Command{
+var syncUnmarkBadCmd = &cli.Command{
 	Name:  "unmark-bad",
 	Usage: "Unmark the given block as bad, makes it possible to sync to a chain containing it",
 	Flags: []cli.Flag{
@@ -163,7 +162,7 @@ var SyncUnmarkBadCmd = &cli.Command{
 	},
 }
 
-var SyncCheckBadCmd = &cli.Command{
+var syncCheckBadCmd = &cli.Command{
 	Name:      "check-bad",
 	Usage:     "check if the given block was marked bad, and for what reason",
 	ArgsUsage: "[blockCid]",
@@ -199,7 +198,7 @@ var SyncCheckBadCmd = &cli.Command{
 	},
 }
 
-var SyncCheckpointCmd = &cli.Command{
+var syncCheckpointCmd = &cli.Command{
 	Name:      "checkpoint",
 	Usage:     "mark a certain tipset as checkpointed; the node will never fork away from this tipset",
 	ArgsUsage: "[tipsetKey]",
@@ -241,7 +240,7 @@ var SyncCheckpointCmd = &cli.Command{
 	},
 }
 
-func SyncWait(ctx context.Context, napi v0api.FullNode, watch bool) error {
+func SyncWait(ctx context.Context, napi api.FullNode, watch bool) error {
 	tick := time.Second / 4
 
 	lastLines := 0
@@ -264,17 +263,12 @@ func SyncWait(ctx context.Context, napi v0api.FullNode, watch bool) error {
 			return err
 		}
 
-		if len(state.ActiveSyncs) == 0 {
-			time.Sleep(time.Second)
-			continue
-		}
-
 		head, err := napi.ChainHead(ctx)
 		if err != nil {
 			return err
 		}
 
-		working := -1
+		working := 0
 		for i, ss := range state.ActiveSyncs {
 			switch ss.Stage {
 			case api.StageSyncComplete:
@@ -285,12 +279,7 @@ func SyncWait(ctx context.Context, napi v0api.FullNode, watch bool) error {
 			}
 		}
 
-		if working == -1 {
-			working = len(state.ActiveSyncs) - 1
-		}
-
 		ss := state.ActiveSyncs[working]
-		workerID := ss.WorkerID
 
 		var baseHeight abi.ChainEpoch
 		var target []cid.Cid
@@ -313,7 +302,7 @@ func SyncWait(ctx context.Context, napi v0api.FullNode, watch bool) error {
 			fmt.Print("\r\x1b[2K\x1b[A")
 		}
 
-		fmt.Printf("Worker: %d; Base: %d; Target: %d (diff: %d)\n", workerID, baseHeight, theight, heightDiff)
+		fmt.Printf("Worker: %d; Base: %d; Target: %d (diff: %d)\n", working, baseHeight, theight, heightDiff)
 		fmt.Printf("State: %s; Current Epoch: %d; Todo: %d\n", ss.Stage, ss.Height, theight-ss.Height)
 		lastLines = 2
 

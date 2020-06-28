@@ -15,8 +15,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/go-jsonrpc/auth"
-
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules"
 )
@@ -99,19 +98,19 @@ var jwtTokenCmd = &cli.Command{
 		perms := []auth.Permission{}
 
 		if cctx.Bool("read") {
-			perms = append(perms, api.PermRead)
+			perms = append(perms, apistruct.PermRead)
 		}
 
 		if cctx.Bool("write") {
-			perms = append(perms, api.PermWrite)
+			perms = append(perms, apistruct.PermWrite)
 		}
 
 		if cctx.Bool("sign") {
-			perms = append(perms, api.PermSign)
+			perms = append(perms, apistruct.PermSign)
 		}
 
 		if cctx.Bool("admin") {
-			perms = append(perms, api.PermAdmin)
+			perms = append(perms, apistruct.PermAdmin)
 		}
 
 		p := modules.JwtPayload{
@@ -153,7 +152,7 @@ var jwtNewCmd = &cli.Command{
 		}
 
 		p := modules.JwtPayload{
-			Allow: api.AllPermissions,
+			Allow: apistruct.AllPermissions,
 		}
 
 		token, err := jwt.Sign(&p, jwt.NewHS256(keyInfo.PrivateKey))
@@ -169,7 +168,7 @@ var jwtNewCmd = &cli.Command{
 
 		defer func() {
 			if err := file.Close(); err != nil {
-				log.Warnf("failed to close output file: %v", err)
+				log.Warnf("failed to close output file: %w", err)
 			}
 		}()
 
