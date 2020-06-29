@@ -8,8 +8,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
-
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 var aSector = abi.SectorID{
@@ -19,41 +17,41 @@ var aSector = abi.SectorID{
 
 func TestCanLock(t *testing.T) {
 	lk := sectorLock{
-		r: [storiface.FileTypes]uint{},
-		w: storiface.FTNone,
+		r: [FileTypes]uint{},
+		w: FTNone,
 	}
 
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
-	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
+	require.Equal(t, true, lk.canLock(FTUnsealed, FTNone))
+	require.Equal(t, true, lk.canLock(FTNone, FTUnsealed))
 
-	ftAll := storiface.FTUnsealed | storiface.FTSealed | storiface.FTCache
+	ftAll := FTUnsealed | FTSealed | FTCache
 
-	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))
-	require.Equal(t, true, lk.canLock(storiface.FTNone, ftAll))
+	require.Equal(t, true, lk.canLock(ftAll, FTNone))
+	require.Equal(t, true, lk.canLock(FTNone, ftAll))
 
 	lk.r[0] = 1 // unsealed read taken
 
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
-	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
+	require.Equal(t, true, lk.canLock(FTUnsealed, FTNone))
+	require.Equal(t, false, lk.canLock(FTNone, FTUnsealed))
 
-	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))
-	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))
+	require.Equal(t, true, lk.canLock(ftAll, FTNone))
+	require.Equal(t, false, lk.canLock(FTNone, ftAll))
 
-	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTSealed|storiface.FTCache))
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTSealed|storiface.FTCache))
+	require.Equal(t, true, lk.canLock(FTNone, FTSealed|FTCache))
+	require.Equal(t, true, lk.canLock(FTUnsealed, FTSealed|FTCache))
 
 	lk.r[0] = 0
 
-	lk.w = storiface.FTSealed
+	lk.w = FTSealed
 
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
-	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
+	require.Equal(t, true, lk.canLock(FTUnsealed, FTNone))
+	require.Equal(t, true, lk.canLock(FTNone, FTUnsealed))
 
-	require.Equal(t, false, lk.canLock(storiface.FTSealed, storiface.FTNone))
-	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTSealed))
+	require.Equal(t, false, lk.canLock(FTSealed, FTNone))
+	require.Equal(t, false, lk.canLock(FTNone, FTSealed))
 
-	require.Equal(t, false, lk.canLock(ftAll, storiface.FTNone))
-	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))
+	require.Equal(t, false, lk.canLock(ftAll, FTNone))
+	require.Equal(t, false, lk.canLock(FTNone, ftAll))
 }
 
 func TestIndexLocksSeq(t *testing.T) {
@@ -63,32 +61,32 @@ func TestIndexLocksSeq(t *testing.T) {
 		locks: map[abi.SectorID]*sectorLock{},
 	}
 
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, FTNone, FTUnsealed))
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, FTNone, FTUnsealed))
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, FTNone, FTUnsealed))
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTUnsealed, storiface.FTNone))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, FTUnsealed, FTNone))
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, FTNone, FTUnsealed))
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, FTNone, FTUnsealed))
 	cancel()
 }
 
 func TestIndexLocksBlockOn(t *testing.T) {
-	test := func(r1 storiface.SectorFileType, w1 storiface.SectorFileType, r2 storiface.SectorFileType, w2 storiface.SectorFileType) func(t *testing.T) {
+	test := func(r1 SectorFileType, w1 SectorFileType, r2 SectorFileType, w2 SectorFileType) func(t *testing.T) {
 		return func(t *testing.T) {
 			ctx, cancel := context.WithCancel(context.Background())
 
@@ -128,9 +126,9 @@ func TestIndexLocksBlockOn(t *testing.T) {
 		}
 	}
 
-	t.Run("readBlocksWrite", test(storiface.FTUnsealed, storiface.FTNone, storiface.FTNone, storiface.FTUnsealed))
-	t.Run("writeBlocksRead", test(storiface.FTNone, storiface.FTUnsealed, storiface.FTUnsealed, storiface.FTNone))
-	t.Run("writeBlocksWrite", test(storiface.FTNone, storiface.FTUnsealed, storiface.FTNone, storiface.FTUnsealed))
+	t.Run("readBlocksWrite", test(FTUnsealed, FTNone, FTNone, FTUnsealed))
+	t.Run("writeBlocksRead", test(FTNone, FTUnsealed, FTUnsealed, FTNone))
+	t.Run("writeBlocksWrite", test(FTNone, FTUnsealed, FTNone, FTUnsealed))
 }
 
 func TestIndexLocksBlockWonR(t *testing.T) {
@@ -140,7 +138,7 @@ func TestIndexLocksBlockWonR(t *testing.T) {
 		locks: map[abi.SectorID]*sectorLock{},
 	}
 
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTUnsealed, storiface.FTNone))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, FTUnsealed, FTNone))
 
 	sch := make(chan struct{})
 	go func() {
@@ -148,7 +146,7 @@ func TestIndexLocksBlockWonR(t *testing.T) {
 
 		sch <- struct{}{}
 
-		require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+		require.NoError(t, ilk.StorageLock(ctx, aSector, FTNone, FTUnsealed))
 		cancel()
 
 		sch <- struct{}{}
