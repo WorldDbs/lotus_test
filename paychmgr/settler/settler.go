@@ -14,6 +14,8 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
@@ -21,7 +23,6 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
-	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
 var log = logging.Logger("payment-channel-settler")
@@ -41,7 +42,7 @@ type settlerAPI interface {
 	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)
 	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)
 	PaychVoucherSubmit(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (cid.Cid, error)
-	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
+	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64) (*api.MsgLookup, error)
 }
 
 type paymentChannelSettler struct {
@@ -51,12 +52,11 @@ type paymentChannelSettler struct {
 
 // SettlePaymentChannels checks the chain for events related to payment channels settling and
 // submits any vouchers for inbound channels tracked for this node
-func SettlePaymentChannels(mctx helpers.MetricsCtx, lc fx.Lifecycle, papi API) error {
-	ctx := helpers.LifecycleCtx(mctx, lc)
+func SettlePaymentChannels(lc fx.Lifecycle, api API) error {
 	lc.Append(fx.Hook{
-		OnStart: func(context.Context) error {
-			pcs := newPaymentChannelSettler(ctx, &papi)
-			ev := events.NewEvents(ctx, papi)
+		OnStart: func(ctx context.Context) error {
+			pcs := newPaymentChannelSettler(ctx, &api)
+			ev := events.NewEvents(ctx, &api)
 			return ev.Called(pcs.check, pcs.messageHandler, pcs.revertHandler, int(build.MessageConfidence+1), events.NoTimeout, pcs.matcher)
 		},
 	})
@@ -75,11 +75,6 @@ func (pcs *paymentChannelSettler) check(ts *types.TipSet) (done bool, more bool,
 }
 
 func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.MessageReceipt, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error) {
-	// Ignore unsuccessful settle messages
-	if rec.ExitCode != 0 {
-		return true, nil
-	}
-
 	bestByLane, err := paychmgr.BestSpendableByLane(pcs.ctx, pcs.api, msg.To)
 	if err != nil {
 		return true, err
@@ -93,7 +88,7 @@ func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.
 		}
 		go func(voucher *paych.SignedVoucher, submitMessageCID cid.Cid) {
 			defer wg.Done()
-			msgLookup, err := pcs.api.StateWaitMsg(pcs.ctx, submitMessageCID, build.MessageConfidence, api.LookbackNoLimit, true)
+			msgLookup, err := pcs.api.StateWaitMsg(pcs.ctx, submitMessageCID, build.MessageConfidence)
 			if err != nil {
 				log.Errorf("submitting voucher: %s", err.Error())
 			}
@@ -110,27 +105,27 @@ func (pcs *paymentChannelSettler) revertHandler(ctx context.Context, ts *types.T
 	return nil
 }
 
-func (pcs *paymentChannelSettler) matcher(msg *types.Message) (matched bool, err error) {
+func (pcs *paymentChannelSettler) matcher(msg *types.Message) (matchOnce bool, matched bool, err error) {
 	// Check if this is a settle payment channel message
-	if msg.Method != paych.Methods.Settle {
-		return false, nil
+	if msg.Method != builtin0.MethodsPaych.Settle {
+		return false, false, nil
 	}
 	// Check if this payment channel is of concern to this node (i.e. tracked in payment channel store),
 	// and its inbound (i.e. we're getting vouchers that we may need to redeem)
 	trackedAddresses, err := pcs.api.PaychList(pcs.ctx)
 	if err != nil {
-		return false, err
+		return false, false, err
 	}
 	for _, addr := range trackedAddresses {
 		if msg.To == addr {
 			status, err := pcs.api.PaychStatus(pcs.ctx, addr)
 			if err != nil {
-				return false, err
+				return false, false, err
 			}
 			if status.Direction == api.PCHInbound {
-				return true, nil
+				return false, true, nil
 			}
 		}
 	}
-	return false, nil
+	return false, false, nil
 }
