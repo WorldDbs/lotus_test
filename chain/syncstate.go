@@ -12,14 +12,13 @@ import (
 )
 
 type SyncerStateSnapshot struct {
-	WorkerID uint64
-	Target   *types.TipSet
-	Base     *types.TipSet
-	Stage    api.SyncStateStage
-	Height   abi.ChainEpoch
-	Message  string
-	Start    time.Time
-	End      time.Time
+	Target  *types.TipSet
+	Base    *types.TipSet
+	Stage   api.SyncStateStage
+	Height  abi.ChainEpoch
+	Message string
+	Start   time.Time
+	End     time.Time
 }
 
 type SyncerState struct {
