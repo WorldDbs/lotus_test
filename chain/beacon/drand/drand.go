@@ -3,6 +3,7 @@ package drand
 import (
 	"bytes"
 	"context"
+	"sync"
 	"time"
 
 	dchain "github.com/drand/drand/chain"
@@ -12,11 +13,10 @@ import (
 	gclient "github.com/drand/drand/lp2p/client"
 	"github.com/drand/kyber"
 	kzap "github.com/go-kit/kit/log/zap"
-	lru "github.com/hashicorp/golang-lru"
 	"go.uber.org/zap/zapcore"
 	"golang.org/x/xerrors"
 
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -61,12 +61,8 @@ type DrandBeacon struct {
 	filGenTime   uint64
 	filRoundTime uint64
 
-	localCache *lru.Cache
-}
-
-// DrandHTTPClient interface overrides the user agent used by drand
-type DrandHTTPClient interface {
-	SetUserAgent(string)
+	cacheLk    sync.Mutex
+	localCache map[uint64]types.BeaconEntry
 }
 
 func NewDrandBeacon(genesisTs, interval uint64, ps *pubsub.PubSub, config dtypes.DrandConfig) (*DrandBeacon, error) {
@@ -88,7 +84,6 @@ func NewDrandBeacon(genesisTs, interval uint64, ps *pubsub.PubSub, config dtypes
 		if err != nil {
 			return nil, xerrors.Errorf("could not create http drand client: %w", err)
 		}
-		hc.(DrandHTTPClient).SetUserAgent("drand-client-lotus/" + build.BuildVersion)
 		clients = append(clients, hc)
 
 	}
@@ -97,6 +92,7 @@ func NewDrandBeacon(genesisTs, interval uint64, ps *pubsub.PubSub, config dtypes
 		dclient.WithChainInfo(drandChain),
 		dclient.WithCacheSize(1024),
 		dclient.WithLogger(dlogger),
+		dclient.WithAutoWatch(),
 	}
 
 	if ps != nil {
@@ -110,14 +106,9 @@ func NewDrandBeacon(genesisTs, interval uint64, ps *pubsub.PubSub, config dtypes
 		return nil, xerrors.Errorf("creating drand client")
 	}
 
-	lc, err := lru.New(1024)
-	if err != nil {
-		return nil, err
-	}
-
 	db := &DrandBeacon{
 		client:     client,
-		localCache: lc,
+		localCache: make(map[uint64]types.BeaconEntry),
 	}
 
 	db.pubkey = drandChain.PublicKey
@@ -160,16 +151,19 @@ func (db *DrandBeacon) Entry(ctx context.Context, round uint64) <-chan beacon.Re
 	return out
 }
 func (db *DrandBeacon) cacheValue(e types.BeaconEntry) {
-	db.localCache.Add(e.Round, e)
+	db.cacheLk.Lock()
+	defer db.cacheLk.Unlock()
+	db.localCache[e.Round] = e
 }
 
 func (db *DrandBeacon) getCachedValue(round uint64) *types.BeaconEntry {
-	v, ok := db.localCache.Get(round)
+	db.cacheLk.Lock()
+	defer db.cacheLk.Unlock()
+	v, ok := db.localCache[round]
 	if !ok {
 		return nil
 	}
-	e, _ := v.(types.BeaconEntry)
-	return &e
+	return &v
 }
 
 func (db *DrandBeacon) VerifyEntry(curr types.BeaconEntry, prev types.BeaconEntry) error {
@@ -178,9 +172,6 @@ func (db *DrandBeacon) VerifyEntry(curr types.BeaconEntry, prev types.BeaconEntr
 		return nil
 	}
 	if be := db.getCachedValue(curr.Round); be != nil {
-		if !bytes.Equal(curr.Data, be.Data) {
-			return xerrors.New("invalid beacon value, does not match cached good value")
-		}
 		// return no error if the value is in the cache already
 		return nil
 	}
