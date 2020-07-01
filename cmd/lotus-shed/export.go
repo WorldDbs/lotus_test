@@ -3,17 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
 	"os"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
+	"github.com/filecoin-project/lotus/lib/blockstore"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
@@ -72,27 +71,19 @@ var exportChainCmd = &cli.Command{
 
 		defer fi.Close() //nolint:errcheck
 
-		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
-		if err != nil {
-			return fmt.Errorf("failed to open blockstore: %w", err)
-		}
-
-		defer func() {
-			if c, ok := bs.(io.Closer); ok {
-				if err := c.Close(); err != nil {
-					log.Warnf("failed to close blockstore: %s", err)
-				}
-			}
-		}()
-
-		mds, err := lr.Datastore(context.Background(), "/metadata")
+		ds, err := lr.Datastore("/chain")
 		if err != nil {
 			return err
 		}
 
-		cs := store.NewChainStore(bs, bs, mds, nil, nil)
-		defer cs.Close() //nolint:errcheck
+		mds, err := lr.Datastore("/metadata")
+		if err != nil {
+			return err
+		}
 
+		bs := blockstore.NewBlockstore(ds)
+
+		cs := store.NewChainStore(bs, mds, nil, nil)
 		if err := cs.Load(); err != nil {
 			return err
 		}
