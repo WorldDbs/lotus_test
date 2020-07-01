@@ -19,8 +19,7 @@ func (mp *MessagePool) pruneExcessMessages() error {
 	mp.lk.Lock()
 	defer mp.lk.Unlock()
 
-	mpCfg := mp.getConfig()
-	if mp.currentSize < mpCfg.SizeLimitHigh {
+	if mp.currentSize < mp.cfg.SizeLimitHigh {
 		return nil
 	}
 
@@ -28,7 +27,7 @@ func (mp *MessagePool) pruneExcessMessages() error {
 	case <-mp.pruneCooldown:
 		err := mp.pruneMessages(context.TODO(), ts)
 		go func() {
-			time.Sleep(mpCfg.PruneCooldown)
+			time.Sleep(mp.cfg.PruneCooldown)
 			mp.pruneCooldown <- struct{}{}
 		}()
 		return err
@@ -54,9 +53,8 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 	// protected actors -- not pruned
 	protected := make(map[address.Address]struct{})
 
-	mpCfg := mp.getConfig()
 	// we never prune priority addresses
-	for _, actor := range mpCfg.PriorityAddrs {
+	for _, actor := range mp.cfg.PriorityAddrs {
 		protected[actor] = struct{}{}
 	}
 
@@ -92,7 +90,7 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 	})
 
 	// Keep messages (remove them from pruneMsgs) from chains while we are under the low water mark
-	loWaterMark := mpCfg.SizeLimitLow
+	loWaterMark := mp.cfg.SizeLimitLow
 keepLoop:
 	for _, chain := range chains {
 		for _, m := range chain.msgs {
