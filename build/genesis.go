@@ -14,7 +14,7 @@ func MaybeGenesis() []byte {
 		log.Warnf("loading built-in genesis: %s", err)
 		return nil
 	}
-	genBytes, err := builtinGen.Bytes(GenesisFile)
+	genBytes, err := builtinGen.Bytes("devnet.car")
 	if err != nil {
 		log.Warnf("loading built-in genesis: %s", err)
 	}
