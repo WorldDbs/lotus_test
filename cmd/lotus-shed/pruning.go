@@ -3,19 +3,20 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/bbloom"
-	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
-
-	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/lotus/lib/blockstore"
 	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/ipfs/bbloom"
+	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore/query"
+	dshelp "github.com/ipfs/go-ipfs-ds-help"
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"
 )
 
 type cidSet interface {
@@ -131,47 +132,37 @@ var stateTreePruneCmd = &cli.Command{
 
 		defer lkrepo.Close() //nolint:errcheck
 
-		bs, err := lkrepo.Blockstore(ctx, repo.UniversalBlockstore)
+		ds, err := lkrepo.Datastore("/chain")
 		if err != nil {
-			return fmt.Errorf("failed to open blockstore: %w", err)
+			return err
 		}
 
-		defer func() {
-			if c, ok := bs.(io.Closer); ok {
-				if err := c.Close(); err != nil {
-					log.Warnf("failed to close blockstore: %s", err)
-				}
-			}
-		}()
+		defer ds.Close() //nolint:errcheck
 
-		// After migrating to native blockstores, this has been made
-		// database-specific.
-		badgbs, ok := bs.(*badgerbs.Blockstore)
-		if !ok {
-			return fmt.Errorf("only badger blockstores are supported")
-		}
-
-		mds, err := lkrepo.Datastore(context.Background(), "/metadata")
+		mds, err := lkrepo.Datastore("/metadata")
 		if err != nil {
 			return err
 		}
 		defer mds.Close() //nolint:errcheck
 
-		const DiscardRatio = 0.2
 		if cctx.Bool("only-ds-gc") {
-			fmt.Println("running datastore gc....")
-			for i := 0; i < cctx.Int("gc-count"); i++ {
-				if err := badgbs.DB.RunValueLogGC(DiscardRatio); err != nil {
-					return xerrors.Errorf("datastore GC failed: %w", err)
+			gcds, ok := ds.(datastore.GCDatastore)
+			if ok {
+				fmt.Println("running datastore gc....")
+				for i := 0; i < cctx.Int("gc-count"); i++ {
+					if err := gcds.CollectGarbage(); err != nil {
+						return xerrors.Errorf("datastore GC failed: %w", err)
+					}
 				}
+				fmt.Println("gc complete!")
+				return nil
 			}
-			fmt.Println("gc complete!")
-			return nil
+			return fmt.Errorf("datastore doesnt support gc")
 		}
 
-		cs := store.NewChainStore(bs, bs, mds, vm.Syscalls(ffiwrapper.ProofVerifier), nil)
-		defer cs.Close() //nolint:errcheck
+		bs := blockstore.NewBlockstore(ds)
 
+		cs := store.NewChainStore(bs, mds, vm.Syscalls(ffiwrapper.ProofVerifier), nil)
 		if err := cs.Load(); err != nil {
 			return fmt.Errorf("loading chainstore: %w", err)
 		}
@@ -191,7 +182,7 @@ var stateTreePruneCmd = &cli.Command{
 
 		rrLb := abi.ChainEpoch(cctx.Int64("keep-from-lookback"))
 
-		if err := cs.WalkSnapshot(ctx, ts, rrLb, true, true, func(c cid.Cid) error {
+		if err := cs.WalkSnapshot(ctx, ts, rrLb, true, func(c cid.Cid) error {
 			if goodSet.Len()%20 == 0 {
 				fmt.Printf("\renumerating keep set: %d             ", goodSet.Len())
 			}
@@ -208,30 +199,63 @@ var stateTreePruneCmd = &cli.Command{
 			return nil
 		}
 
-		b := badgbs.DB.NewWriteBatch()
-		defer b.Cancel()
-
+		var b datastore.Batch
+		var batchCount int
 		markForRemoval := func(c cid.Cid) error {
-			return b.Delete(badgbs.StorageKey(nil, c))
+			if b == nil {
+				nb, err := ds.Batch()
+				if err != nil {
+					return fmt.Errorf("opening batch: %w", err)
+				}
+
+				b = nb
+			}
+			batchCount++
+
+			if err := b.Delete(dshelp.MultihashToDsKey(c.Hash())); err != nil {
+				return err
+			}
+
+			if batchCount > 100 {
+				if err := b.Commit(); err != nil {
+					return xerrors.Errorf("failed to commit batch deletes: %w", err)
+				}
+				b = nil
+				batchCount = 0
+			}
+			return nil
 		}
 
-		keys, err := bs.AllKeysChan(context.Background())
+		res, err := ds.Query(query.Query{KeysOnly: true})
 		if err != nil {
-			return xerrors.Errorf("failed to query blockstore: %w", err)
+			return xerrors.Errorf("failed to query datastore: %w", err)
 		}
 
 		dupTo := cctx.Int("delete-up-to")
 
 		var deleteCount int
 		var goodHits int
-		for k := range keys {
-			if goodSet.HasRaw(k.Bytes()) {
+		for {
+			v, ok := res.NextSync()
+			if !ok {
+				break
+			}
+
+			bk, err := dshelp.BinaryFromDsKey(datastore.RawKey(v.Key[len("/blocks"):]))
+			if err != nil {
+				return xerrors.Errorf("failed to parse key: %w", err)
+			}
+
+			if goodSet.HasRaw(bk) {
 				goodHits++
 				continue
 			}
 
-			if err := markForRemoval(k); err != nil {
-				return fmt.Errorf("failed to remove cid %s: %w", k, err)
+			nc := cid.NewCidV1(cid.Raw, bk)
+
+			deleteCount++
+			if err := markForRemoval(nc); err != nil {
+				return fmt.Errorf("failed to remove cid %s: %w", nc, err)
 			}
 
 			if deleteCount%20 == 0 {
@@ -243,17 +267,22 @@ var stateTreePruneCmd = &cli.Command{
 			}
 		}
 
-		if err := b.Flush(); err != nil {
-			return xerrors.Errorf("failed to flush final batch delete: %w", err)
-		}
-
-		fmt.Println("running datastore gc....")
-		for i := 0; i < cctx.Int("gc-count"); i++ {
-			if err := badgbs.DB.RunValueLogGC(DiscardRatio); err != nil {
-				return xerrors.Errorf("datastore GC failed: %w", err)
+		if b != nil {
+			if err := b.Commit(); err != nil {
+				return xerrors.Errorf("failed to commit final batch delete: %w", err)
 			}
 		}
-		fmt.Println("gc complete!")
+
+		gcds, ok := ds.(datastore.GCDatastore)
+		if ok {
+			fmt.Println("running datastore gc....")
+			for i := 0; i < cctx.Int("gc-count"); i++ {
+				if err := gcds.CollectGarbage(); err != nil {
+					return xerrors.Errorf("datastore GC failed: %w", err)
+				}
+			}
+			fmt.Println("gc complete!")
+		}
 
 		return nil
 	},
