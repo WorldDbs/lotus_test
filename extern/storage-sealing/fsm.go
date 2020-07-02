@@ -37,38 +37,24 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 	// Sealing
 
 	UndefinedSectorState: planOne(
-		on(SectorStart{}, WaitDeals),
+		on(SectorStart{}, Empty),
 		on(SectorStartCC{}, Packing),
 	),
-	Empty: planOne( // deprecated
-		on(SectorAddPiece{}, AddPiece),
-		on(SectorStartPacking{}, Packing),
-	),
+	Empty: planOne(on(SectorAddPiece{}, WaitDeals)),
 	WaitDeals: planOne(
-		on(SectorAddPiece{}, AddPiece),
+		on(SectorAddPiece{}, WaitDeals),
 		on(SectorStartPacking{}, Packing),
 	),
-	AddPiece: planOne(
-		on(SectorPieceAdded{}, WaitDeals),
-		apply(SectorStartPacking{}),
-		on(SectorAddPieceFailed{}, AddPieceFailed),
-	),
-	Packing: planOne(on(SectorPacked{}, GetTicket)),
-	GetTicket: planOne(
-		on(SectorTicket{}, PreCommit1),
-		on(SectorCommitFailed{}, CommitFailed),
-	),
+	Packing: planOne(on(SectorPacked{}, PreCommit1)),
 	PreCommit1: planOne(
 		on(SectorPreCommit1{}, PreCommit2),
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 		on(SectorDealsExpired{}, DealsExpired),
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
-		on(SectorOldTicket{}, GetTicket),
 	),
 	PreCommit2: planOne(
 		on(SectorPreCommit2{}, PreCommitting),
 		on(SectorSealPreCommit2Failed{}, SealPreCommit2Failed),
-		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 	),
 	PreCommitting: planOne(
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
@@ -105,7 +91,6 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 
 	// Sealing errors
 
-	AddPieceFailed: planOne(),
 	SealPreCommit1Failed: planOne(
 		on(SectorRetrySealPreCommit1{}, PreCommit1),
 	),
@@ -115,7 +100,6 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 	),
 	PreCommitFailed: planOne(
 		on(SectorRetryPreCommit{}, PreCommitting),
-		on(SectorRetryPreCommitWait{}, PreCommitWait),
 		on(SectorRetryWaitSeed{}, WaitSeed),
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 		on(SectorPreCommitLanded{}, WaitSeed),
@@ -135,10 +119,8 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
 		on(SectorRetryPreCommit{}, PreCommitting),
 		on(SectorRetryCommitWait{}, CommitWait),
-		on(SectorRetrySubmitCommit{}, SubmitCommit),
 		on(SectorDealsExpired{}, DealsExpired),
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
-		on(SectorTicketExpired{}, Removing),
 	),
 	FinalizeFailed: planOne(
 		on(SectorRetryFinalize{}, FinalizeSector),
@@ -157,21 +139,6 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorFaultReported{}, FaultReported),
 		on(SectorFaulty{}, Faulty),
 	),
-	Terminating: planOne(
-		on(SectorTerminating{}, TerminateWait),
-		on(SectorTerminateFailed{}, TerminateFailed),
-	),
-	TerminateWait: planOne(
-		on(SectorTerminated{}, TerminateFinality),
-		on(SectorTerminateFailed{}, TerminateFailed),
-	),
-	TerminateFinality: planOne(
-		on(SectorTerminateFailed{}, TerminateFailed),
-		// SectorRemove (global)
-	),
-	TerminateFailed: planOne(
-	// SectorTerminating (global)
-	),
 	Removing: planOne(
 		on(SectorRemoved{}, Removed),
 		on(SectorRemoveFailed{}, RemoveFailed),
@@ -183,24 +150,19 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorFaultReported{}, FaultReported),
 	),
 
-	FaultReported: final, // not really supported right now
-
 	FaultedFinal: final,
 	Removed:      final,
-
-	FailedUnrecoverable: final,
 }
 
-func (m *Sealing) logEvents(events []statemachine.Event, state *SectorInfo) {
+func (m *Sealing) plan(events []statemachine.Event, state *SectorInfo) (func(statemachine.Context, SectorInfo) error, uint64, error) {
+	/////
+	// First process all events
+
 	for _, event := range events {
 		e, err := json.Marshal(event)
 		if err != nil {
 			log.Errorf("marshaling event for logging: %+v", err)
 			continue
-		}
-
-		if event.User == (SectorRestart{}) {
-			continue // don't log on every fsm restart
 		}
 
 		l := Log{
@@ -221,18 +183,11 @@ func (m *Sealing) logEvents(events []statemachine.Event, state *SectorInfo) {
 				Kind:      fmt.Sprintf("truncate"),
 			}
 
-			state.Log = append(state.Log[:2000], state.Log[6000:]...)
+			state.Log = append(state.Log[:2000], state.Log[:6000]...)
 		}
 
 		state.Log = append(state.Log, l)
 	}
-}
-
-func (m *Sealing) plan(events []statemachine.Event, state *SectorInfo) (func(statemachine.Context, SectorInfo) error, uint64, error) {
-	/////
-	// First process all events
-
-	m.logEvents(events, state)
 
 	if m.notifee != nil {
 		defer func(before SectorInfo) {
@@ -242,15 +197,7 @@ func (m *Sealing) plan(events []statemachine.Event, state *SectorInfo) (func(sta
 
 	p := fsmPlanners[state.State]
 	if p == nil {
-		if len(events) == 1 {
-			if _, ok := events[0].User.(globalMutator); ok {
-				p = planOne() // in case we're in a really weird state, allow restart / update state / remove
-			}
-		}
-
-		if p == nil {
-			return nil, 0, xerrors.Errorf("planner for state %s not found", state.State)
-		}
+		return nil, 0, xerrors.Errorf("planner for state %s not found", state.State)
 	}
 
 	processed, err := p(events, state)
@@ -263,17 +210,15 @@ func (m *Sealing) plan(events []statemachine.Event, state *SectorInfo) (func(sta
 
 	/*
 
-				      UndefinedSectorState (start)
-				       v                     |
-				*<- WaitDeals <-> AddPiece   |
-				|   |   /--------------------/
-				|   v   v
+				*   Empty <- incoming deals
+				|   |
+				|   v
+			    *<- WaitDeals <- incoming deals
+				|   |
+				|   v
 				*<- Packing <- incoming committed capacity
 				|   |
 				|   v
-				|   GetTicket
-				|   |   ^
-				|   v   |
 				*<- PreCommit1 <--> SealPreCommit1Failed
 				|   |       ^          ^^
 				|   |       *----------++----\
@@ -306,24 +251,22 @@ func (m *Sealing) plan(events []statemachine.Event, state *SectorInfo) (func(sta
 				v
 				FailedUnrecoverable
 
+				UndefinedSectorState <- ¯\_(ツ)_/¯
+					|                     ^
+					*---------------------/
+
 	*/
 
-	if err := m.onUpdateSector(context.TODO(), state); err != nil {
-		log.Errorw("update sector stats", "error", err)
-	}
+	m.stats.updateSector(m.minerSector(state.SectorNumber), state.State)
 
 	switch state.State {
 	// Happy path
 	case Empty:
 		fallthrough
 	case WaitDeals:
-		return m.handleWaitDeals, processed, nil
-	case AddPiece:
-		return m.handleAddPiece, processed, nil
+		log.Infof("Waiting for deals %d", state.SectorNumber)
 	case Packing:
 		return m.handlePacking, processed, nil
-	case GetTicket:
-		return m.handleGetTicket, processed, nil
 	case PreCommit1:
 		return m.handlePreCommit1, processed, nil
 	case PreCommit2:
@@ -367,14 +310,6 @@ func (m *Sealing) plan(events []statemachine.Event, state *SectorInfo) (func(sta
 	// Post-seal
 	case Proving:
 		return m.handleProvingSector, processed, nil
-	case Terminating:
-		return m.handleTerminating, processed, nil
-	case TerminateWait:
-		return m.handleTerminateWait, processed, nil
-	case TerminateFinality:
-		return m.handleTerminateFinality, processed, nil
-	case TerminateFailed:
-		return m.handleTerminateFailed, processed, nil
 	case Removing:
 		return m.handleRemoving, processed, nil
 	case Removed:
@@ -399,37 +334,6 @@ func (m *Sealing) plan(events []statemachine.Event, state *SectorInfo) (func(sta
 	}
 
 	return nil, processed, nil
-}
-
-func (m *Sealing) onUpdateSector(ctx context.Context, state *SectorInfo) error {
-	if m.getConfig == nil {
-		return nil // tests
-	}
-
-	cfg, err := m.getConfig()
-	if err != nil {
-		return xerrors.Errorf("getting config: %w", err)
-	}
-	sp, err := m.currentSealProof(ctx)
-	if err != nil {
-		return xerrors.Errorf("getting seal proof type: %w", err)
-	}
-
-	shouldUpdateInput := m.stats.updateSector(cfg, m.minerSectorID(state.SectorNumber), state.State)
-
-	// trigger more input processing when we've dipped below max sealing limits
-	if shouldUpdateInput {
-		go func() {
-			m.inputLk.Lock()
-			defer m.inputLk.Unlock()
-
-			if err := m.updateInput(ctx, sp); err != nil {
-				log.Errorf("%+v", err)
-			}
-		}()
-	}
-
-	return nil
 }
 
 func planCommitting(events []statemachine.Event, state *SectorInfo) (uint64, error) {
@@ -473,9 +377,47 @@ func (m *Sealing) restartSectors(ctx context.Context) error {
 		log.Errorf("loading sector list: %+v", err)
 	}
 
+	cfg, err := m.getConfig()
+	if err != nil {
+		return xerrors.Errorf("getting the sealing delay: %w", err)
+	}
+
+	m.unsealedInfoMap.lk.Lock()
+	defer m.unsealedInfoMap.lk.Unlock()
 	for _, sector := range trackedSectors {
 		if err := m.sectors.Send(uint64(sector.SectorNumber), SectorRestart{}); err != nil {
 			log.Errorf("restarting sector %d: %+v", sector.SectorNumber, err)
+		}
+
+		if sector.State == WaitDeals {
+
+			// put the sector in the unsealedInfoMap
+			if _, ok := m.unsealedInfoMap.infos[sector.SectorNumber]; ok {
+				// something's funky here, but probably safe to move on
+				log.Warnf("sector %v was already in the unsealedInfoMap when restarting", sector.SectorNumber)
+			} else {
+				ui := UnsealedSectorInfo{}
+				for _, p := range sector.Pieces {
+					if p.DealInfo != nil {
+						ui.numDeals++
+					}
+					ui.stored += p.Piece.Size
+					ui.pieceSizes = append(ui.pieceSizes, p.Piece.Size.Unpadded())
+				}
+
+				m.unsealedInfoMap.infos[sector.SectorNumber] = ui
+			}
+
+			// start a fresh timer for the sector
+			if cfg.WaitDealsDelay > 0 {
+				timer := time.NewTimer(cfg.WaitDealsDelay)
+				go func() {
+					<-timer.C
+					if err := m.StartPacking(sector.SectorNumber); err != nil {
+						log.Errorf("starting sector %d: %+v", sector.SectorNumber, err)
+					}
+				}()
+			}
 		}
 	}
 
@@ -489,82 +431,59 @@ func (m *Sealing) ForceSectorState(ctx context.Context, id abi.SectorNumber, sta
 }
 
 func final(events []statemachine.Event, state *SectorInfo) (uint64, error) {
-	if len(events) > 0 {
-		if gm, ok := events[0].User.(globalMutator); ok {
-			gm.applyGlobal(state)
-			return 1, nil
-		}
-	}
-
 	return 0, xerrors.Errorf("didn't expect any events in state %s, got %+v", state.State, events)
 }
 
-func on(mut mutator, next SectorState) func() (mutator, func(*SectorInfo) (bool, error)) {
-	return func() (mutator, func(*SectorInfo) (bool, error)) {
-		return mut, func(state *SectorInfo) (bool, error) {
+func on(mut mutator, next SectorState) func() (mutator, func(*SectorInfo) error) {
+	return func() (mutator, func(*SectorInfo) error) {
+		return mut, func(state *SectorInfo) error {
 			state.State = next
-			return false, nil
+			return nil
 		}
 	}
 }
 
-// like `on`, but doesn't change state
-func apply(mut mutator) func() (mutator, func(*SectorInfo) (bool, error)) {
-	return func() (mutator, func(*SectorInfo) (bool, error)) {
-		return mut, func(state *SectorInfo) (bool, error) {
-			return true, nil
-		}
-	}
-}
-
-func onReturning(mut mutator) func() (mutator, func(*SectorInfo) (bool, error)) {
-	return func() (mutator, func(*SectorInfo) (bool, error)) {
-		return mut, func(state *SectorInfo) (bool, error) {
+func onReturning(mut mutator) func() (mutator, func(*SectorInfo) error) {
+	return func() (mutator, func(*SectorInfo) error) {
+		return mut, func(state *SectorInfo) error {
 			if state.Return == "" {
-				return false, xerrors.Errorf("return state not set")
+				return xerrors.Errorf("return state not set")
 			}
 
 			state.State = SectorState(state.Return)
 			state.Return = ""
-			return false, nil
+			return nil
 		}
 	}
 }
 
-func planOne(ts ...func() (mut mutator, next func(*SectorInfo) (more bool, err error))) func(events []statemachine.Event, state *SectorInfo) (uint64, error) {
+func planOne(ts ...func() (mut mutator, next func(*SectorInfo) error)) func(events []statemachine.Event, state *SectorInfo) (uint64, error) {
 	return func(events []statemachine.Event, state *SectorInfo) (uint64, error) {
-		for i, event := range events {
-			if gm, ok := event.User.(globalMutator); ok {
-				gm.applyGlobal(state)
-				return uint64(i + 1), nil
-			}
+		if gm, ok := events[0].User.(globalMutator); ok {
+			gm.applyGlobal(state)
+			return 1, nil
+		}
 
-			for _, t := range ts {
-				mut, next := t()
+		for _, t := range ts {
+			mut, next := t()
 
-				if reflect.TypeOf(event.User) != reflect.TypeOf(mut) {
-					continue
-				}
-
-				if err, iserr := event.User.(error); iserr {
-					log.Warnf("sector %d got error event %T: %+v", state.SectorNumber, event.User, err)
-				}
-
-				event.User.(mutator).apply(state)
-				more, err := next(state)
-				if err != nil || !more {
-					return uint64(i + 1), err
-				}
-			}
-
-			_, ok := event.User.(Ignorable)
-			if ok {
+			if reflect.TypeOf(events[0].User) != reflect.TypeOf(mut) {
 				continue
 			}
 
-			return uint64(i + 1), xerrors.Errorf("planner for state %s received unexpected event %T (%+v)", state.State, event.User, event)
+			if err, iserr := events[0].User.(error); iserr {
+				log.Warnf("sector %d got error event %T: %+v", state.SectorNumber, events[0].User, err)
+			}
+
+			events[0].User.(mutator).apply(state)
+			return 1, next(state)
 		}
 
-		return uint64(len(events)), nil
+		_, ok := events[0].User.(Ignorable)
+		if ok {
+			return 1, nil
+		}
+
+		return 0, xerrors.Errorf("planner for state %s received unexpected event %T (%+v)", state.State, events[0].User, events[0])
 	}
 }
