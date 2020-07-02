@@ -11,9 +11,10 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
 
-	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/api/apibstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -62,18 +63,16 @@ var verifRegAddVerifierCmd = &cli.Command{
 		}
 
 		// TODO: ActorUpgrade: Abstract
-		params, err := actors.SerializeParams(&verifreg2.AddVerifierParams{Address: verifier, Allowance: allowance})
+		params, err := actors.SerializeParams(&verifreg0.AddVerifierParams{Address: verifier, Allowance: allowance})
 		if err != nil {
 			return err
 		}
 
-		srv, err := lcli.GetFullNodeServices(cctx)
+		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer srv.Close() //nolint:errcheck
-
-		api := srv.FullNodeAPI()
+		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		vrk, err := api.StateVerifiedRegistryRootKey(ctx, types.EmptyTSK)
@@ -81,21 +80,14 @@ var verifRegAddVerifierCmd = &cli.Command{
 			return err
 		}
 
-		proto, err := api.MsigPropose(ctx, vrk, verifreg.Address, big.Zero(), sender, uint64(verifreg.Methods.AddVerifier), params)
+		smsg, err := api.MsigPropose(ctx, vrk, verifreg.Address, big.Zero(), sender, uint64(builtin0.MethodsVerifiedRegistry.AddVerifier), params)
 		if err != nil {
 			return err
 		}
 
-		sm, _, err := srv.PublishMessage(ctx, proto, false)
-		if err != nil {
-			return err
-		}
+		fmt.Printf("message sent, now waiting on cid: %s\n", smsg)
 
-		msgCid := sm.Cid()
-
-		fmt.Printf("message sent, now waiting on cid: %s\n", msgCid)
-
-		mwait, err := api.StateWaitMsg(ctx, msgCid, uint64(cctx.Int("confidence")), build.Finality, true)
+		mwait, err := api.StateWaitMsg(ctx, smsg, build.MessageConfidence)
 		if err != nil {
 			return err
 		}
@@ -144,7 +136,7 @@ var verifRegVerifyClientCmd = &cli.Command{
 			return err
 		}
 
-		params, err := actors.SerializeParams(&verifreg2.AddVerifiedClientParams{Address: target, Allowance: allowance})
+		params, err := actors.SerializeParams(&verifreg0.AddVerifiedClientParams{Address: target, Allowance: allowance})
 		if err != nil {
 			return err
 		}
@@ -159,7 +151,7 @@ var verifRegVerifyClientCmd = &cli.Command{
 		msg := &types.Message{
 			To:     verifreg.Address,
 			From:   fromk,
-			Method: verifreg.Methods.AddVerifiedClient,
+			Method: builtin0.MethodsVerifiedRegistry.AddVerifiedClient,
 			Params: params,
 		}
 
@@ -199,7 +191,7 @@ var verifRegListVerifiersCmd = &cli.Command{
 			return err
 		}
 
-		apibs := blockstore.NewAPIBlockstore(api)
+		apibs := apibstore.NewAPIBlockstore(api)
 		store := adt.WrapStore(ctx, cbor.NewCborStore(apibs))
 
 		st, err := verifreg.Load(store, act)
@@ -229,7 +221,7 @@ var verifRegListClientsCmd = &cli.Command{
 			return err
 		}
 
-		apibs := blockstore.NewAPIBlockstore(api)
+		apibs := apibstore.NewAPIBlockstore(api)
 		store := adt.WrapStore(ctx, cbor.NewCborStore(apibs))
 
 		st, err := verifreg.Load(store, act)
@@ -312,7 +304,7 @@ var verifRegCheckVerifierCmd = &cli.Command{
 			return err
 		}
 
-		apibs := blockstore.NewAPIBlockstore(api)
+		apibs := apibstore.NewAPIBlockstore(api)
 		store := adt.WrapStore(ctx, cbor.NewCborStore(apibs))
 
 		st, err := verifreg.Load(store, act)
