@@ -3,22 +3,16 @@ package node
 import (
 	"context"
 	"errors"
-	"os"
 	"time"
 
-	metricsi "github.com/ipfs/go-metrics-interface"
-
-	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/exchange"
-	rpcstmgr "github.com/filecoin-project/lotus/chain/stmgr/rpc"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/hello"
-	"github.com/filecoin-project/lotus/system"
 
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log"
 	ci "github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -28,7 +22,6 @@ import (
 	"github.com/libp2p/go-libp2p-peerstore/pstoremem"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	record "github.com/libp2p/go-libp2p-record"
-	"github.com/libp2p/go-libp2p/p2p/net/conngater"
 	"github.com/multiformats/go-multiaddr"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
@@ -56,9 +49,9 @@ import (
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/journal"
+	"github.com/filecoin-project/lotus/lib/blockstore"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
@@ -101,7 +94,6 @@ var (
 	ConnectionManagerKey = special{9}  // Libp2p option
 	AutoNATSvcKey        = special{10} // Libp2p option
 	BandwidthReporterKey = special{11} // Libp2p option
-	ConnGaterKey         = special{12} // libp2p option
 )
 
 type invoke int
@@ -113,10 +105,8 @@ const (
 	// the system starts, so that it's available for all other components.
 	InitJournalKey = invoke(iota)
 
-	// System processes.
-	InitMemoryWatchdog
-
 	// libp2p
+
 	PstoreAddSelfKeysKey
 	StartListeningKey
 	BootstrapKey
@@ -131,12 +121,11 @@ const (
 
 	HandleIncomingBlocksKey
 	HandleIncomingMessagesKey
-	HandleMigrateClientFundsKey
+
 	HandlePaymentChannelManagerKey
 
 	// miner
 	GetParamsKey
-	HandleMigrateProviderFundsKey
 	HandleDealsKey
 	HandleRetrievalKey
 	RunSectorServiceKey
@@ -146,7 +135,6 @@ const (
 	HeadMetricsKey
 	SettlePaymentChannelsKey
 	RunPeerTaggerKey
-	SetupFallbackBlockstoresKey
 
 	SetApiEndpointKey
 
@@ -172,275 +160,69 @@ type Settings struct {
 	Lite   bool // Start node in "lite" mode
 }
 
-// Basic lotus-app services
 func defaults() []Option {
 	return []Option{
 		// global system journal.
 		Override(new(journal.DisabledEvents), journal.EnvDisabledEvents),
 		Override(new(journal.Journal), modules.OpenFilesystemJournal),
 
-		Override(new(system.MemoryConstraints), modules.MemoryConstraints),
-		Override(InitMemoryWatchdog, modules.MemoryWatchdog),
-
-		Override(new(helpers.MetricsCtx), func() context.Context {
-			return metricsi.CtxScope(context.Background(), "lotus")
-		}),
-
+		Override(new(helpers.MetricsCtx), context.Background),
+		Override(new(record.Validator), modules.RecordValidator),
+		Override(new(dtypes.Bootstrapper), dtypes.Bootstrapper(false)),
 		Override(new(dtypes.ShutdownChan), make(chan struct{})),
+
+		// Filecoin modules
+
 	}
 }
 
-var LibP2P = Options(
-	// Host config
-	Override(new(dtypes.Bootstrapper), dtypes.Bootstrapper(false)),
+func libp2p() Option {
+	return Options(
+		Override(new(peerstore.Peerstore), pstoremem.NewPeerstore),
 
-	// Host dependencies
-	Override(new(peerstore.Peerstore), pstoremem.NewPeerstore),
-	Override(PstoreAddSelfKeysKey, lp2p.PstoreAddSelfKeys),
-	Override(StartListeningKey, lp2p.StartListening(config.DefaultFullNode().Libp2p.ListenAddresses)),
+		Override(DefaultTransportsKey, lp2p.DefaultTransports),
 
-	// Host settings
-	Override(DefaultTransportsKey, lp2p.DefaultTransports),
-	Override(AddrsFactoryKey, lp2p.AddrsFactory(nil, nil)),
-	Override(SmuxTransportKey, lp2p.SmuxTransport(true)),
-	Override(RelayKey, lp2p.NoRelay()),
-	Override(SecurityKey, lp2p.Security(true, false)),
+		Override(new(lp2p.RawHost), lp2p.Host),
+		Override(new(host.Host), lp2p.RoutedHost),
+		Override(new(lp2p.BaseIpfsRouting), lp2p.DHTRouting(dht.ModeAuto)),
 
-	// Host
-	Override(new(lp2p.RawHost), lp2p.Host),
-	Override(new(host.Host), lp2p.RoutedHost),
-	Override(new(lp2p.BaseIpfsRouting), lp2p.DHTRouting(dht.ModeAuto)),
+		Override(DiscoveryHandlerKey, lp2p.DiscoveryHandler),
+		Override(AddrsFactoryKey, lp2p.AddrsFactory(nil, nil)),
+		Override(SmuxTransportKey, lp2p.SmuxTransport(true)),
+		Override(RelayKey, lp2p.NoRelay()),
+		Override(SecurityKey, lp2p.Security(true, false)),
 
-	Override(DiscoveryHandlerKey, lp2p.DiscoveryHandler),
+		Override(BaseRoutingKey, lp2p.BaseRouting),
+		Override(new(routing.Routing), lp2p.Routing),
 
-	// Routing
-	Override(new(record.Validator), modules.RecordValidator),
-	Override(BaseRoutingKey, lp2p.BaseRouting),
-	Override(new(routing.Routing), lp2p.Routing),
+		Override(NatPortMapKey, lp2p.NatPortMap),
+		Override(BandwidthReporterKey, lp2p.BandwidthCounter),
 
-	// Services
-	Override(NatPortMapKey, lp2p.NatPortMap),
-	Override(BandwidthReporterKey, lp2p.BandwidthCounter),
-	Override(AutoNATSvcKey, lp2p.AutoNATService),
+		Override(ConnectionManagerKey, lp2p.ConnectionManager(50, 200, 20*time.Second, nil)),
+		Override(AutoNATSvcKey, lp2p.AutoNATService),
 
-	// Services (pubsub)
-	Override(new(*dtypes.ScoreKeeper), lp2p.ScoreKeeper),
-	Override(new(*pubsub.PubSub), lp2p.GossipSub),
-	Override(new(*config.Pubsub), func(bs dtypes.Bootstrapper) *config.Pubsub {
-		return &config.Pubsub{
-			Bootstrapper: bool(bs),
-		}
-	}),
+		Override(new(*dtypes.ScoreKeeper), lp2p.ScoreKeeper),
+		Override(new(*pubsub.PubSub), lp2p.GossipSub),
+		Override(new(*config.Pubsub), func(bs dtypes.Bootstrapper) *config.Pubsub {
+			return &config.Pubsub{
+				Bootstrapper: bool(bs),
+			}
+		}),
 
-	// Services (connection management)
-	Override(ConnectionManagerKey, lp2p.ConnectionManager(50, 200, 20*time.Second, nil)),
-	Override(new(*conngater.BasicConnectionGater), lp2p.ConnGater),
-	Override(ConnGaterKey, lp2p.ConnGaterOption),
-)
+		Override(PstoreAddSelfKeysKey, lp2p.PstoreAddSelfKeys),
+		Override(StartListeningKey, lp2p.StartListening(config.DefaultFullNode().Libp2p.ListenAddresses)),
+	)
+}
 
 func isType(t repo.RepoType) func(s *Settings) bool {
 	return func(s *Settings) bool { return s.nodeType == t }
 }
 
-func isFullOrLiteNode(s *Settings) bool { return s.nodeType == repo.FullNode }
-func isFullNode(s *Settings) bool       { return s.nodeType == repo.FullNode && !s.Lite }
-func isLiteNode(s *Settings) bool       { return s.nodeType == repo.FullNode && s.Lite }
-
-// Chain node provides access to the Filecoin blockchain, by setting up a full
-// validator node, or by delegating some actions to other nodes (lite mode)
-var ChainNode = Options(
-	// Full node or lite node
-	// TODO: Fix offline mode
-
-	// Consensus settings
-	Override(new(dtypes.DrandSchedule), modules.BuiltinDrandConfig),
-	Override(new(stmgr.UpgradeSchedule), stmgr.DefaultUpgradeSchedule()),
-	Override(new(dtypes.NetworkName), modules.NetworkName),
-	Override(new(modules.Genesis), modules.ErrorGenesis),
-	Override(new(dtypes.AfterGenesisSet), modules.SetGenesis),
-	Override(SetGenesisKey, modules.DoSetGenesis),
-	Override(new(beacon.Schedule), modules.RandomSchedule),
-
-	// Network bootstrap
-	Override(new(dtypes.BootstrapPeers), modules.BuiltinBootstrap),
-	Override(new(dtypes.DrandBootstrap), modules.DrandBootstrap),
-
-	// Consensus: crypto dependencies
-	Override(new(ffiwrapper.Verifier), ffiwrapper.ProofVerifier),
-
-	// Consensus: VM
-	Override(new(vm.SyscallBuilder), vm.Syscalls),
-
-	// Consensus: Chain storage/access
-	Override(new(*store.ChainStore), modules.ChainStore),
-	Override(new(*stmgr.StateManager), modules.StateManager),
-	Override(new(dtypes.ChainBitswap), modules.ChainBitswap),
-	Override(new(dtypes.ChainBlockService), modules.ChainBlockService), // todo: unused
-
-	// Consensus: Chain sync
-
-	// We don't want the SyncManagerCtor to be used as an fx constructor, but rather as a value.
-	// It will be called implicitly by the Syncer constructor.
-	Override(new(chain.SyncManagerCtor), func() chain.SyncManagerCtor { return chain.NewSyncManager }),
-	Override(new(*chain.Syncer), modules.NewSyncer),
-	Override(new(exchange.Client), exchange.NewClient),
-
-	// Chain networking
-	Override(new(*hello.Service), hello.NewHelloService),
-	Override(new(exchange.Server), exchange.NewServer),
-	Override(new(*peermgr.PeerMgr), peermgr.NewPeerMgr),
-
-	// Chain mining API dependencies
-	Override(new(*slashfilter.SlashFilter), modules.NewSlashFilter),
-
-	// Service: Message Pool
-	Override(new(dtypes.DefaultMaxFeeFunc), modules.NewDefaultMaxFeeFunc),
-	Override(new(*messagepool.MessagePool), modules.MessagePool),
-	Override(new(*dtypes.MpoolLocker), new(dtypes.MpoolLocker)),
-
-	// Shared graphsync (markets, serving chain)
-	Override(new(dtypes.Graphsync), modules.Graphsync(config.DefaultFullNode().Client.SimultaneousTransfers)),
-
-	// Service: Wallet
-	Override(new(*messagesigner.MessageSigner), messagesigner.NewMessageSigner),
-	Override(new(*wallet.LocalWallet), wallet.NewWallet),
-	Override(new(wallet.Default), From(new(*wallet.LocalWallet))),
-	Override(new(api.Wallet), From(new(wallet.MultiWallet))),
-
-	// Service: Payment channels
-	Override(new(paychmgr.PaychAPI), From(new(modules.PaychAPI))),
-	Override(new(*paychmgr.Store), modules.NewPaychStore),
-	Override(new(*paychmgr.Manager), modules.NewManager),
-	Override(HandlePaymentChannelManagerKey, modules.HandlePaychManager),
-	Override(SettlePaymentChannelsKey, settler.SettlePaymentChannels),
-
-	// Markets (common)
-	Override(new(*discoveryimpl.Local), modules.NewLocalDiscovery),
-
-	// Markets (retrieval)
-	Override(new(discovery.PeerResolver), modules.RetrievalResolver),
-	Override(new(retrievalmarket.RetrievalClient), modules.RetrievalClient),
-	Override(new(dtypes.ClientDataTransfer), modules.NewClientGraphsyncDataTransfer),
-
-	// Markets (storage)
-	Override(new(*market.FundManager), market.NewFundManager),
-	Override(new(dtypes.ClientDatastore), modules.NewClientDatastore),
-	Override(new(storagemarket.StorageClient), modules.StorageClient),
-	Override(new(storagemarket.StorageClientNode), storageadapter.NewClientNodeAdapter),
-	Override(HandleMigrateClientFundsKey, modules.HandleMigrateClientFunds),
-
-	Override(new(*full.GasPriceCache), full.NewGasPriceCache),
-
-	// Lite node API
-	ApplyIf(isLiteNode,
-		Override(new(messagepool.Provider), messagepool.NewProviderLite),
-		Override(new(messagesigner.MpoolNonceAPI), From(new(modules.MpoolNonceAPI))),
-		Override(new(full.ChainModuleAPI), From(new(api.Gateway))),
-		Override(new(full.GasModuleAPI), From(new(api.Gateway))),
-		Override(new(full.MpoolModuleAPI), From(new(api.Gateway))),
-		Override(new(full.StateModuleAPI), From(new(api.Gateway))),
-		Override(new(stmgr.StateManagerAPI), rpcstmgr.NewRPCStateManager),
-	),
-
-	// Full node API / service startup
-	ApplyIf(isFullNode,
-		Override(new(messagepool.Provider), messagepool.NewProvider),
-		Override(new(messagesigner.MpoolNonceAPI), From(new(*messagepool.MessagePool))),
-		Override(new(full.ChainModuleAPI), From(new(full.ChainModule))),
-		Override(new(full.GasModuleAPI), From(new(full.GasModule))),
-		Override(new(full.MpoolModuleAPI), From(new(full.MpoolModule))),
-		Override(new(full.StateModuleAPI), From(new(full.StateModule))),
-		Override(new(stmgr.StateManagerAPI), From(new(*stmgr.StateManager))),
-
-		Override(RunHelloKey, modules.RunHello),
-		Override(RunChainExchangeKey, modules.RunChainExchange),
-		Override(RunPeerMgrKey, modules.RunPeerMgr),
-		Override(HandleIncomingMessagesKey, modules.HandleIncomingMessages),
-		Override(HandleIncomingBlocksKey, modules.HandleIncomingBlocks),
-	),
-)
-
-var MinerNode = Options(
-	// API dependencies
-	Override(new(api.Common), From(new(common.CommonAPI))),
-	Override(new(sectorstorage.StorageAuth), modules.StorageAuth),
-
-	// Actor config
-	Override(new(dtypes.MinerAddress), modules.MinerAddress),
-	Override(new(dtypes.MinerID), modules.MinerID),
-	Override(new(abi.RegisteredSealProof), modules.SealProofType),
-	Override(new(dtypes.NetworkName), modules.StorageNetworkName),
-
-	// Sector storage
-	Override(new(*stores.Index), stores.NewIndex),
-	Override(new(stores.SectorIndex), From(new(*stores.Index))),
-	Override(new(stores.LocalStorage), From(new(repo.LockedRepo))),
-	Override(new(*sectorstorage.Manager), modules.SectorStorage),
-	Override(new(sectorstorage.SectorManager), From(new(*sectorstorage.Manager))),
-	Override(new(storiface.WorkerReturn), From(new(sectorstorage.SectorManager))),
-
-	// Sector storage: Proofs
-	Override(new(ffiwrapper.Verifier), ffiwrapper.ProofVerifier),
-	Override(new(storage2.Prover), From(new(sectorstorage.SectorManager))),
-
-	// Sealing
-	Override(new(sealing.SectorIDCounter), modules.SectorIDCounter),
-	Override(GetParamsKey, modules.GetParams),
-
-	// Mining / proving
-	Override(new(*slashfilter.SlashFilter), modules.NewSlashFilter),
-	Override(new(*storage.Miner), modules.StorageMiner(config.DefaultStorageMiner().Fees)),
-	Override(new(*miner.Miner), modules.SetupBlockProducer),
-	Override(new(gen.WinningPoStProver), storage.NewWinningPoStProver),
-
-	Override(new(*storage.AddressSelector), modules.AddressSelector(nil)),
-
-	// Markets
-	Override(new(dtypes.StagingMultiDstore), modules.StagingMultiDatastore),
-	Override(new(dtypes.StagingBlockstore), modules.StagingBlockstore),
-	Override(new(dtypes.StagingDAG), modules.StagingDAG),
-	Override(new(dtypes.StagingGraphsync), modules.StagingGraphsync),
-	Override(new(dtypes.ProviderPieceStore), modules.NewProviderPieceStore),
-	Override(new(*sectorblocks.SectorBlocks), sectorblocks.NewSectorBlocks),
-
-	// Markets (retrieval)
-	Override(new(retrievalmarket.RetrievalProvider), modules.RetrievalProvider),
-	Override(new(dtypes.RetrievalDealFilter), modules.RetrievalDealFilter(nil)),
-	Override(HandleRetrievalKey, modules.HandleRetrieval),
-
-	// Markets (storage)
-	Override(new(dtypes.ProviderDataTransfer), modules.NewProviderDAGServiceDataTransfer),
-	Override(new(*storedask.StoredAsk), modules.NewStorageAsk),
-	Override(new(dtypes.StorageDealFilter), modules.BasicDealFilter(nil)),
-	Override(new(storagemarket.StorageProvider), modules.StorageProvider),
-	Override(new(*storageadapter.DealPublisher), storageadapter.NewDealPublisher(nil, storageadapter.PublishMsgConfig{})),
-	Override(new(storagemarket.StorageProviderNode), storageadapter.NewProviderNodeAdapter(nil, nil)),
-	Override(HandleMigrateProviderFundsKey, modules.HandleMigrateProviderFunds),
-	Override(HandleDealsKey, modules.HandleDeals),
-
-	// Config (todo: get a real property system)
-	Override(new(dtypes.ConsiderOnlineStorageDealsConfigFunc), modules.NewConsiderOnlineStorageDealsConfigFunc),
-	Override(new(dtypes.SetConsiderOnlineStorageDealsConfigFunc), modules.NewSetConsideringOnlineStorageDealsFunc),
-	Override(new(dtypes.ConsiderOnlineRetrievalDealsConfigFunc), modules.NewConsiderOnlineRetrievalDealsConfigFunc),
-	Override(new(dtypes.SetConsiderOnlineRetrievalDealsConfigFunc), modules.NewSetConsiderOnlineRetrievalDealsConfigFunc),
-	Override(new(dtypes.StorageDealPieceCidBlocklistConfigFunc), modules.NewStorageDealPieceCidBlocklistConfigFunc),
-	Override(new(dtypes.SetStorageDealPieceCidBlocklistConfigFunc), modules.NewSetStorageDealPieceCidBlocklistConfigFunc),
-	Override(new(dtypes.ConsiderOfflineStorageDealsConfigFunc), modules.NewConsiderOfflineStorageDealsConfigFunc),
-	Override(new(dtypes.SetConsiderOfflineStorageDealsConfigFunc), modules.NewSetConsideringOfflineStorageDealsFunc),
-	Override(new(dtypes.ConsiderOfflineRetrievalDealsConfigFunc), modules.NewConsiderOfflineRetrievalDealsConfigFunc),
-	Override(new(dtypes.SetConsiderOfflineRetrievalDealsConfigFunc), modules.NewSetConsiderOfflineRetrievalDealsConfigFunc),
-	Override(new(dtypes.ConsiderVerifiedStorageDealsConfigFunc), modules.NewConsiderVerifiedStorageDealsConfigFunc),
-	Override(new(dtypes.SetConsiderVerifiedStorageDealsConfigFunc), modules.NewSetConsideringVerifiedStorageDealsFunc),
-	Override(new(dtypes.ConsiderUnverifiedStorageDealsConfigFunc), modules.NewConsiderUnverifiedStorageDealsConfigFunc),
-	Override(new(dtypes.SetConsiderUnverifiedStorageDealsConfigFunc), modules.NewSetConsideringUnverifiedStorageDealsFunc),
-	Override(new(dtypes.SetSealingConfigFunc), modules.NewSetSealConfigFunc),
-	Override(new(dtypes.GetSealingConfigFunc), modules.NewGetSealConfigFunc),
-	Override(new(dtypes.SetExpectedSealDurationFunc), modules.NewSetExpectedSealDurationFunc),
-	Override(new(dtypes.GetExpectedSealDurationFunc), modules.NewGetExpectedSealDurationFunc),
-)
-
 // Online sets up basic libp2p node
 func Online() Option {
+	isFullOrLiteNode := func(s *Settings) bool { return s.nodeType == repo.FullNode }
+	isFullNode := func(s *Settings) bool { return s.nodeType == repo.FullNode && !s.Lite }
+	isLiteNode := func(s *Settings) bool { return s.nodeType == repo.FullNode && s.Lite }
 
 	return Options(
 		// make sure that online is applied before Config.
@@ -450,10 +232,153 @@ func Online() Option {
 			Error(errors.New("the Online option must be set before Config option")),
 		),
 
-		LibP2P,
+		libp2p(),
 
-		ApplyIf(isFullOrLiteNode, ChainNode),
-		ApplyIf(isType(repo.StorageMiner), MinerNode),
+		// common
+		Override(new(*slashfilter.SlashFilter), modules.NewSlashFilter),
+
+		// Full node or lite node
+		ApplyIf(isFullOrLiteNode,
+			// TODO: Fix offline mode
+
+			Override(new(dtypes.BootstrapPeers), modules.BuiltinBootstrap),
+			Override(new(dtypes.DrandBootstrap), modules.DrandBootstrap),
+			Override(new(dtypes.DrandSchedule), modules.BuiltinDrandConfig),
+
+			Override(new(ffiwrapper.Verifier), ffiwrapper.ProofVerifier),
+			Override(new(vm.SyscallBuilder), vm.Syscalls),
+			Override(new(*store.ChainStore), modules.ChainStore),
+			Override(new(stmgr.UpgradeSchedule), stmgr.DefaultUpgradeSchedule()),
+			Override(new(*stmgr.StateManager), stmgr.NewStateManagerWithUpgradeSchedule),
+			Override(new(stmgr.StateManagerAPI), From(new(*stmgr.StateManager))),
+			Override(new(*wallet.LocalWallet), wallet.NewWallet),
+			Override(new(wallet.Default), From(new(*wallet.LocalWallet))),
+			Override(new(api.WalletAPI), From(new(wallet.MultiWallet))),
+			Override(new(*messagesigner.MessageSigner), messagesigner.NewMessageSigner),
+
+			Override(new(dtypes.ChainGCLocker), blockstore.NewGCLocker),
+			Override(new(dtypes.ChainGCBlockstore), modules.ChainGCBlockstore),
+			Override(new(dtypes.ChainBitswap), modules.ChainBitswap),
+			Override(new(dtypes.ChainBlockService), modules.ChainBlockService),
+
+			// Filecoin services
+			// We don't want the SyncManagerCtor to be used as an fx constructor, but rather as a value.
+			// It will be called implicitly by the Syncer constructor.
+			Override(new(chain.SyncManagerCtor), func() chain.SyncManagerCtor { return chain.NewSyncManager }),
+			Override(new(*chain.Syncer), modules.NewSyncer),
+			Override(new(exchange.Client), exchange.NewClient),
+			Override(new(*messagepool.MessagePool), modules.MessagePool),
+
+			Override(new(modules.Genesis), modules.ErrorGenesis),
+			Override(new(dtypes.AfterGenesisSet), modules.SetGenesis),
+			Override(SetGenesisKey, modules.DoSetGenesis),
+
+			Override(new(dtypes.NetworkName), modules.NetworkName),
+			Override(new(*hello.Service), hello.NewHelloService),
+			Override(new(exchange.Server), exchange.NewServer),
+			Override(new(*peermgr.PeerMgr), peermgr.NewPeerMgr),
+
+			Override(new(dtypes.Graphsync), modules.Graphsync),
+			Override(new(*dtypes.MpoolLocker), new(dtypes.MpoolLocker)),
+			Override(new(*discoveryimpl.Local), modules.NewLocalDiscovery),
+			Override(new(discovery.PeerResolver), modules.RetrievalResolver),
+
+			Override(new(retrievalmarket.RetrievalClient), modules.RetrievalClient),
+			Override(new(dtypes.ClientDatastore), modules.NewClientDatastore),
+			Override(new(dtypes.ClientDataTransfer), modules.NewClientGraphsyncDataTransfer),
+			Override(new(modules.ClientDealFunds), modules.NewClientDealFunds),
+			Override(new(storagemarket.StorageClient), modules.StorageClient),
+			Override(new(storagemarket.StorageClientNode), storageadapter.NewClientNodeAdapter),
+			Override(new(beacon.Schedule), modules.RandomSchedule),
+
+			Override(new(*paychmgr.Store), paychmgr.NewStore),
+			Override(new(*paychmgr.Manager), paychmgr.NewManager),
+			Override(new(*market.FundMgr), market.StartFundManager),
+			Override(HandlePaymentChannelManagerKey, paychmgr.HandleManager),
+			Override(SettlePaymentChannelsKey, settler.SettlePaymentChannels),
+		),
+
+		// Lite node
+		ApplyIf(isLiteNode,
+			Override(new(messagesigner.MpoolNonceAPI), From(new(modules.MpoolNonceAPI))),
+			Override(new(full.ChainModuleAPI), From(new(api.GatewayAPI))),
+			Override(new(full.GasModuleAPI), From(new(api.GatewayAPI))),
+			Override(new(full.MpoolModuleAPI), From(new(api.GatewayAPI))),
+			Override(new(full.StateModuleAPI), From(new(api.GatewayAPI))),
+			Override(new(stmgr.StateManagerAPI), modules.NewRPCStateManager),
+		),
+
+		// Full node
+		ApplyIf(isFullNode,
+			Override(new(messagesigner.MpoolNonceAPI), From(new(*messagepool.MessagePool))),
+			Override(new(full.ChainModuleAPI), From(new(full.ChainModule))),
+			Override(new(full.GasModuleAPI), From(new(full.GasModule))),
+			Override(new(full.MpoolModuleAPI), From(new(full.MpoolModule))),
+			Override(new(full.StateModuleAPI), From(new(full.StateModule))),
+			Override(new(stmgr.StateManagerAPI), From(new(*stmgr.StateManager))),
+
+			Override(RunHelloKey, modules.RunHello),
+			Override(RunChainExchangeKey, modules.RunChainExchange),
+			Override(RunPeerMgrKey, modules.RunPeerMgr),
+			Override(HandleIncomingMessagesKey, modules.HandleIncomingMessages),
+			Override(HandleIncomingBlocksKey, modules.HandleIncomingBlocks),
+		),
+
+		// miner
+		ApplyIf(isType(repo.StorageMiner),
+			Override(new(api.Common), From(new(common.CommonAPI))),
+			Override(new(sectorstorage.StorageAuth), modules.StorageAuth),
+
+			Override(new(*stores.Index), stores.NewIndex),
+			Override(new(stores.SectorIndex), From(new(*stores.Index))),
+			Override(new(dtypes.MinerID), modules.MinerID),
+			Override(new(dtypes.MinerAddress), modules.MinerAddress),
+			Override(new(*ffiwrapper.Config), modules.ProofsConfig),
+			Override(new(stores.LocalStorage), From(new(repo.LockedRepo))),
+			Override(new(sealing.SectorIDCounter), modules.SectorIDCounter),
+			Override(new(*sectorstorage.Manager), modules.SectorStorage),
+			Override(new(ffiwrapper.Verifier), ffiwrapper.ProofVerifier),
+
+			Override(new(sectorstorage.SectorManager), From(new(*sectorstorage.Manager))),
+			Override(new(storage2.Prover), From(new(sectorstorage.SectorManager))),
+
+			Override(new(*sectorblocks.SectorBlocks), sectorblocks.NewSectorBlocks),
+			Override(new(*storage.Miner), modules.StorageMiner(config.DefaultStorageMiner().Fees)),
+			Override(new(dtypes.NetworkName), modules.StorageNetworkName),
+
+			Override(new(dtypes.StagingMultiDstore), modules.StagingMultiDatastore),
+			Override(new(dtypes.StagingBlockstore), modules.StagingBlockstore),
+			Override(new(dtypes.StagingDAG), modules.StagingDAG),
+			Override(new(dtypes.StagingGraphsync), modules.StagingGraphsync),
+			Override(new(retrievalmarket.RetrievalProvider), modules.RetrievalProvider),
+			Override(new(dtypes.ProviderDataTransfer), modules.NewProviderDAGServiceDataTransfer),
+			Override(new(dtypes.ProviderPieceStore), modules.NewProviderPieceStore),
+			Override(new(*storedask.StoredAsk), modules.NewStorageAsk),
+			Override(new(dtypes.DealFilter), modules.BasicDealFilter(nil)),
+			Override(new(modules.ProviderDealFunds), modules.NewProviderDealFunds),
+			Override(new(storagemarket.StorageProvider), modules.StorageProvider),
+			Override(new(storagemarket.StorageProviderNode), storageadapter.NewProviderNodeAdapter(nil)),
+			Override(HandleRetrievalKey, modules.HandleRetrieval),
+			Override(GetParamsKey, modules.GetParams),
+			Override(HandleDealsKey, modules.HandleDeals),
+			Override(new(gen.WinningPoStProver), storage.NewWinningPoStProver),
+			Override(new(*miner.Miner), modules.SetupBlockProducer),
+
+			Override(new(dtypes.ConsiderOnlineStorageDealsConfigFunc), modules.NewConsiderOnlineStorageDealsConfigFunc),
+			Override(new(dtypes.SetConsiderOnlineStorageDealsConfigFunc), modules.NewSetConsideringOnlineStorageDealsFunc),
+			Override(new(dtypes.ConsiderOnlineRetrievalDealsConfigFunc), modules.NewConsiderOnlineRetrievalDealsConfigFunc),
+			Override(new(dtypes.SetConsiderOnlineRetrievalDealsConfigFunc), modules.NewSetConsiderOnlineRetrievalDealsConfigFunc),
+			Override(new(dtypes.StorageDealPieceCidBlocklistConfigFunc), modules.NewStorageDealPieceCidBlocklistConfigFunc),
+			Override(new(dtypes.SetStorageDealPieceCidBlocklistConfigFunc), modules.NewSetStorageDealPieceCidBlocklistConfigFunc),
+			Override(new(dtypes.ConsiderOfflineStorageDealsConfigFunc), modules.NewConsiderOfflineStorageDealsConfigFunc),
+			Override(new(dtypes.SetConsiderOfflineStorageDealsConfigFunc), modules.NewSetConsideringOfflineStorageDealsFunc),
+			Override(new(dtypes.ConsiderOfflineRetrievalDealsConfigFunc), modules.NewConsiderOfflineRetrievalDealsConfigFunc),
+			Override(new(dtypes.SetConsiderOfflineRetrievalDealsConfigFunc), modules.NewSetConsiderOfflineRetrievalDealsConfigFunc),
+			Override(new(dtypes.SetSealingConfigFunc), modules.NewSetSealConfigFunc),
+			Override(new(dtypes.GetSealingConfigFunc), modules.NewGetSealConfigFunc),
+			Override(new(dtypes.SetExpectedSealDurationFunc), modules.NewSetExpectedSealDurationFunc),
+			Override(new(dtypes.GetExpectedSealDurationFunc), modules.NewGetExpectedSealDurationFunc),
+		),
 	)
 }
 
@@ -514,7 +439,6 @@ func ConfigCommon(cfg *config.Common) Option {
 		Override(AddrsFactoryKey, lp2p.AddrsFactory(
 			cfg.Libp2p.AnnounceAddresses,
 			cfg.Libp2p.NoAnnounceAddresses)),
-		Override(new(dtypes.MetadataDS), modules.Datastore(cfg.Backup.DisableMetadataLog)),
 	)
 }
 
@@ -527,15 +451,12 @@ func ConfigFullNode(c interface{}) Option {
 	ipfsMaddr := cfg.Client.IpfsMAddr
 	return Options(
 		ConfigCommon(&cfg.Common),
-
 		If(cfg.Client.UseIpfs,
-			Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsMaddr, cfg.Client.IpfsOnlineMode)),
+			Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsMaddr)),
 			If(cfg.Client.IpfsUseForRetrieval,
 				Override(new(dtypes.ClientRetrievalStoreManager), modules.ClientBlockstoreRetrievalStoreManager),
 			),
 		),
-		Override(new(dtypes.Graphsync), modules.Graphsync(cfg.Client.SimultaneousTransfers)),
-
 		If(cfg.Metrics.HeadNotifs,
 			Override(HeadMetricsKey, metrics.SendHeadNotifs(cfg.Metrics.Nickname)),
 		),
@@ -563,21 +484,12 @@ func ConfigStorageMiner(c interface{}) Option {
 		ConfigCommon(&cfg.Common),
 
 		If(cfg.Dealmaking.Filter != "",
-			Override(new(dtypes.StorageDealFilter), modules.BasicDealFilter(dealfilter.CliStorageDealFilter(cfg.Dealmaking.Filter))),
+			Override(new(dtypes.DealFilter), modules.BasicDealFilter(dealfilter.CliDealFilter(cfg.Dealmaking.Filter))),
 		),
 
-		If(cfg.Dealmaking.RetrievalFilter != "",
-			Override(new(dtypes.RetrievalDealFilter), modules.RetrievalDealFilter(dealfilter.CliRetrievalDealFilter(cfg.Dealmaking.RetrievalFilter))),
-		),
-
-		Override(new(*storageadapter.DealPublisher), storageadapter.NewDealPublisher(&cfg.Fees, storageadapter.PublishMsgConfig{
-			Period:         time.Duration(cfg.Dealmaking.PublishMsgPeriod),
-			MaxDealsPerMsg: cfg.Dealmaking.MaxDealsPerPublishMsg,
-		})),
-		Override(new(storagemarket.StorageProviderNode), storageadapter.NewProviderNodeAdapter(&cfg.Fees, &cfg.Dealmaking)),
+		Override(new(storagemarket.StorageProviderNode), storageadapter.NewProviderNodeAdapter(&cfg.Fees)),
 
 		Override(new(sectorstorage.SealerConfig), cfg.Storage),
-		Override(new(*storage.AddressSelector), modules.AddressSelector(&cfg.Addresses)),
 		Override(new(*storage.Miner), modules.StorageMiner(cfg.Fees)),
 	)
 }
@@ -593,47 +505,11 @@ func Repo(r repo.Repo) Option {
 			return err
 		}
 
-		var cfg *config.Chainstore
-		switch settings.nodeType {
-		case repo.FullNode:
-			cfgp, ok := c.(*config.FullNode)
-			if !ok {
-				return xerrors.Errorf("invalid config from repo, got: %T", c)
-			}
-			cfg = &cfgp.Chainstore
-		default:
-			cfg = &config.Chainstore{}
-		}
-
 		return Options(
 			Override(new(repo.LockedRepo), modules.LockedRepo(lr)), // module handles closing
 
-			Override(new(dtypes.UniversalBlockstore), modules.UniversalBlockstore),
-
-			If(cfg.EnableSplitstore,
-				If(cfg.Splitstore.HotStoreType == "badger",
-					Override(new(dtypes.HotBlockstore), modules.BadgerHotBlockstore)),
-				Override(new(dtypes.SplitBlockstore), modules.SplitBlockstore(cfg)),
-				Override(new(dtypes.BasicChainBlockstore), modules.ChainSplitBlockstore),
-				Override(new(dtypes.BasicStateBlockstore), modules.StateSplitBlockstore),
-				Override(new(dtypes.BaseBlockstore), From(new(dtypes.SplitBlockstore))),
-				Override(new(dtypes.ExposedBlockstore), From(new(dtypes.SplitBlockstore))),
-			),
-			If(!cfg.EnableSplitstore,
-				Override(new(dtypes.BasicChainBlockstore), modules.ChainFlatBlockstore),
-				Override(new(dtypes.BasicStateBlockstore), modules.StateFlatBlockstore),
-				Override(new(dtypes.BaseBlockstore), From(new(dtypes.UniversalBlockstore))),
-				Override(new(dtypes.ExposedBlockstore), From(new(dtypes.UniversalBlockstore))),
-			),
-
-			Override(new(dtypes.ChainBlockstore), From(new(dtypes.BasicChainBlockstore))),
-			Override(new(dtypes.StateBlockstore), From(new(dtypes.BasicStateBlockstore))),
-
-			If(os.Getenv("LOTUS_ENABLE_CHAINSTORE_FALLBACK") == "1",
-				Override(new(dtypes.ChainBlockstore), modules.FallbackChainBlockstore),
-				Override(new(dtypes.StateBlockstore), modules.FallbackStateBlockstore),
-				Override(SetupFallbackBlockstoresKey, modules.InitFallbackBlockstores),
-			),
+			Override(new(dtypes.MetadataDS), modules.Datastore),
+			Override(new(dtypes.ChainBlockstore), modules.ChainBlockstore),
 
 			Override(new(dtypes.ClientImportMgr), modules.ClientImportMgr),
 			Override(new(dtypes.ClientMultiDstore), modules.ClientMultiDatastore),
@@ -731,22 +607,5 @@ func Test() Option {
 		Unset(RunPeerMgrKey),
 		Unset(new(*peermgr.PeerMgr)),
 		Override(new(beacon.Schedule), testing.RandomBeacon),
-		Override(new(*storageadapter.DealPublisher), storageadapter.NewDealPublisher(nil, storageadapter.PublishMsgConfig{})),
 	)
-}
-
-// For 3rd party dep injection.
-
-func WithRepoType(repoType repo.RepoType) func(s *Settings) error {
-	return func(s *Settings) error {
-		s.nodeType = repoType
-		return nil
-	}
-}
-
-func WithInvokesKey(i invoke, resApi interface{}) func(s *Settings) error {
-	return func(s *Settings) error {
-		s.invokes[i] = fx.Populate(resApi)
-		return nil
-	}
 }
