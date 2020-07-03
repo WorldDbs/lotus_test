@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -19,6 +20,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
+	lcli "github.com/filecoin-project/lotus/cli"
 )
 
 var extractManyFlags struct {
@@ -43,8 +45,6 @@ var extractManyCmd = &cli.Command{
    after these compulsory seven.
 `,
 	Action: runExtractMany,
-	Before: initialize,
-	After:  destroy,
 	Flags: []cli.Flag{
 		&repoFlag,
 		&cli.StringFlag{
@@ -76,6 +76,15 @@ func runExtractMany(c *cli.Context) error {
 	// and disabling it (such that the state transformations are written immediately
 	// to the blockstore) worked.
 	_ = os.Setenv("LOTUS_DISABLE_VM_BUF", "iknowitsabadidea")
+
+	ctx := context.Background()
+
+	// Make the API client.
+	fapi, closer, err := lcli.GetFullNodeAPI(c)
+	if err != nil {
+		return err
+	}
+	defer closer()
 
 	var (
 		in     = extractManyFlags.in
@@ -189,8 +198,8 @@ func runExtractMany(c *cli.Context) error {
 			precursor: PrecursorSelectSender,
 		}
 
-		if err := doExtractMessage(opts); err != nil {
-			log.Println(color.RedString("failed to extract vector for message %s: %s; queuing for 'all' precursor selection", mcid, err))
+		if err := doExtract(ctx, fapi, opts); err != nil {
+			log.Println(color.RedString("failed to extract vector for message %s: %s; queuing for 'canonical' precursor selection", mcid, err))
 			retry = append(retry, opts)
 			continue
 		}
@@ -206,7 +215,7 @@ func runExtractMany(c *cli.Context) error {
 		log.Printf("retrying %s: %s", r.cid, r.id)
 
 		r.precursor = PrecursorSelectAll
-		if err := doExtractMessage(r); err != nil {
+		if err := doExtract(ctx, fapi, r); err != nil {
 			merr = multierror.Append(merr, fmt.Errorf("failed to extract vector for message %s: %w", r.cid, err))
 			continue
 		}
