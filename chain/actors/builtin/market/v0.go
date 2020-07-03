@@ -102,12 +102,7 @@ func (s *state0) LockedTable() (BalanceTable, error) {
 func (s *state0) VerifyDealsForActivation(
 	minerAddr address.Address, deals []abi.DealID, currEpoch, sectorExpiry abi.ChainEpoch,
 ) (weight, verifiedWeight abi.DealWeight, err error) {
-	w, vw, err := market0.ValidateDealsForActivation(&s.State, s.store, deals, minerAddr, sectorExpiry, currEpoch)
-	return w, vw, err
-}
-
-func (s *state0) NextID() (abi.DealID, error) {
-	return s.State.NextID, nil
+	return market0.ValidateDealsForActivation(&s.State, s.store, deals, minerAddr, sectorExpiry, currEpoch)
 }
 
 type balanceTable0 struct {
