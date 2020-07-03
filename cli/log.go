@@ -7,16 +7,16 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var LogCmd = &cli.Command{
+var logCmd = &cli.Command{
 	Name:  "log",
 	Usage: "Manage logging",
 	Subcommands: []*cli.Command{
-		LogList,
-		LogSetLevel,
+		logList,
+		logSetLevel,
 	},
 }
 
-var LogList = &cli.Command{
+var logList = &cli.Command{
 	Name:  "list",
 	Usage: "List log systems",
 	Action: func(cctx *cli.Context) error {
@@ -41,7 +41,7 @@ var LogList = &cli.Command{
 	},
 }
 
-var LogSetLevel = &cli.Command{
+var logSetLevel = &cli.Command{
 	Name:      "set-level",
 	Usage:     "Set log level",
 	ArgsUsage: "[level]",
@@ -93,7 +93,7 @@ var LogSetLevel = &cli.Command{
 
 		for _, system := range systems {
 			if err := api.LogSetLevel(ctx, system, cctx.Args().First()); err != nil {
-				return xerrors.Errorf("setting log level on %s: %v", system, err)
+				return xerrors.Errorf("setting log level on %s: %w", system, err)
 			}
 		}
 
