@@ -13,7 +13,6 @@ import (
 // Common is common config between full node and miner
 type Common struct {
 	API    API
-	Backup Backup
 	Libp2p Libp2p
 	Pubsub Pubsub
 }
@@ -21,18 +20,12 @@ type Common struct {
 // FullNode is a full node config
 type FullNode struct {
 	Common
-	Client     Client
-	Metrics    Metrics
-	Wallet     Wallet
-	Fees       FeeConfig
-	Chainstore Chainstore
+	Client  Client
+	Metrics Metrics
+	Wallet  Wallet
 }
 
 // // Common
-
-type Backup struct {
-	DisableMetadataLog bool
-}
 
 // StorageMiner is a miner config
 type StorageMiner struct {
@@ -42,30 +35,17 @@ type StorageMiner struct {
 	Sealing    SealingConfig
 	Storage    sectorstorage.SealerConfig
 	Fees       MinerFeeConfig
-	Addresses  MinerAddressConfig
 }
 
 type DealmakingConfig struct {
-	ConsiderOnlineStorageDeals     bool
-	ConsiderOfflineStorageDeals    bool
-	ConsiderOnlineRetrievalDeals   bool
-	ConsiderOfflineRetrievalDeals  bool
-	ConsiderVerifiedStorageDeals   bool
-	ConsiderUnverifiedStorageDeals bool
-	PieceCidBlocklist              []cid.Cid
-	ExpectedSealDuration           Duration
-	// The amount of time to wait for more deals to arrive before
-	// publishing
-	PublishMsgPeriod Duration
-	// The maximum number of deals to include in a single PublishStorageDeals
-	// message
-	MaxDealsPerPublishMsg uint64
-	// The maximum collateral that the provider will put up against a deal,
-	// as a multiplier of the minimum collateral bound
-	MaxProviderCollateralMultiplier uint64
+	ConsiderOnlineStorageDeals    bool
+	ConsiderOfflineStorageDeals   bool
+	ConsiderOnlineRetrievalDeals  bool
+	ConsiderOfflineRetrievalDeals bool
+	PieceCidBlocklist             []cid.Cid
+	ExpectedSealDuration          Duration
 
-	Filter          string
-	RetrievalFilter string
+	Filter string
 }
 
 type SealingConfig struct {
@@ -79,37 +59,14 @@ type SealingConfig struct {
 	MaxSealingSectorsForDeals uint64
 
 	WaitDealsDelay Duration
-
-	AlwaysKeepUnsealedCopy bool
-
-	// Keep this many sectors in sealing pipeline, start CC if needed
-	// todo TargetSealingSectors uint64
-
-	// todo TargetSectors - stop auto-pleding new sectors after this many sectors are sealed, default CC upgrade for deals sectors if above
 }
 
 type MinerFeeConfig struct {
 	MaxPreCommitGasFee     types.FIL
 	MaxCommitGasFee        types.FIL
-	MaxTerminateGasFee     types.FIL
 	MaxWindowPoStGasFee    types.FIL
 	MaxPublishDealsFee     types.FIL
 	MaxMarketBalanceAddFee types.FIL
-}
-
-type MinerAddressConfig struct {
-	PreCommitControl []string
-	CommitControl    []string
-	TerminateControl []string
-
-	// DisableOwnerFallback disables usage of the owner address for messages
-	// sent automatically
-	DisableOwnerFallback bool
-	// DisableWorkerFallback disables usage of the worker address for messages
-	// sent automatically, if control addresses are configured.
-	// A control address that doesn't have enough funds will still be chosen
-	// over the worker address if this flag is set.
-	DisableWorkerFallback bool
 }
 
 // API contains configs for API endpoint
@@ -133,24 +90,9 @@ type Libp2p struct {
 }
 
 type Pubsub struct {
-	Bootstrapper          bool
-	DirectPeers           []string
-	IPColocationWhitelist []string
-	RemoteTracer          string
-}
-
-type Chainstore struct {
-	EnableSplitstore bool
-	Splitstore       Splitstore
-}
-
-type Splitstore struct {
-	HotStoreType         string
-	TrackingStoreType    string
-	MarkSetType          string
-	EnableFullCompaction bool
-	EnableGC             bool // EXPERIMENTAL
-	Archival             bool
+	Bootstrapper bool
+	DirectPeers  []string
+	RemoteTracer string
 }
 
 // // Full Node
@@ -161,21 +103,15 @@ type Metrics struct {
 }
 
 type Client struct {
-	UseIpfs               bool
-	IpfsOnlineMode        bool
-	IpfsMAddr             string
-	IpfsUseForRetrieval   bool
-	SimultaneousTransfers uint64
+	UseIpfs             bool
+	IpfsMAddr           string
+	IpfsUseForRetrieval bool
 }
 
 type Wallet struct {
 	RemoteBackend string
 	EnableLedger  bool
 	DisableLocal  bool
-}
-
-type FeeConfig struct {
-	DefaultMaxFee types.FIL
 }
 
 func defCommon() Common {
@@ -205,25 +141,10 @@ func defCommon() Common {
 
 }
 
-var DefaultDefaultMaxFee = types.MustParseFIL("0.07")
-var DefaultSimultaneousTransfers = uint64(20)
-
 // DefaultFullNode returns the default config
 func DefaultFullNode() *FullNode {
 	return &FullNode{
 		Common: defCommon(),
-		Fees: FeeConfig{
-			DefaultMaxFee: DefaultDefaultMaxFee,
-		},
-		Client: Client{
-			SimultaneousTransfers: DefaultSimultaneousTransfers,
-		},
-		Chainstore: Chainstore{
-			EnableSplitstore: false,
-			Splitstore: Splitstore{
-				HotStoreType: "badger",
-			},
-		},
 	}
 }
 
@@ -236,7 +157,6 @@ func DefaultStorageMiner() *StorageMiner {
 			MaxSealingSectors:         0,
 			MaxSealingSectorsForDeals: 0,
 			WaitDealsDelay:            Duration(time.Hour * 6),
-			AlwaysKeepUnsealedCopy:    true,
 		},
 
 		Storage: sectorstorage.SealerConfig{
@@ -252,32 +172,21 @@ func DefaultStorageMiner() *StorageMiner {
 		},
 
 		Dealmaking: DealmakingConfig{
-			ConsiderOnlineStorageDeals:     true,
-			ConsiderOfflineStorageDeals:    true,
-			ConsiderOnlineRetrievalDeals:   true,
-			ConsiderOfflineRetrievalDeals:  true,
-			ConsiderVerifiedStorageDeals:   true,
-			ConsiderUnverifiedStorageDeals: true,
-			PieceCidBlocklist:              []cid.Cid{},
+			ConsiderOnlineStorageDeals:    true,
+			ConsiderOfflineStorageDeals:   true,
+			ConsiderOnlineRetrievalDeals:  true,
+			ConsiderOfflineRetrievalDeals: true,
+			PieceCidBlocklist:             []cid.Cid{},
 			// TODO: It'd be nice to set this based on sector size
-			ExpectedSealDuration:            Duration(time.Hour * 24),
-			PublishMsgPeriod:                Duration(time.Hour),
-			MaxDealsPerPublishMsg:           8,
-			MaxProviderCollateralMultiplier: 2,
+			ExpectedSealDuration: Duration(time.Hour * 24),
 		},
 
 		Fees: MinerFeeConfig{
 			MaxPreCommitGasFee:     types.MustParseFIL("0.025"),
 			MaxCommitGasFee:        types.MustParseFIL("0.05"),
-			MaxTerminateGasFee:     types.MustParseFIL("0.5"),
 			MaxWindowPoStGasFee:    types.MustParseFIL("5"),
 			MaxPublishDealsFee:     types.MustParseFIL("0.05"),
 			MaxMarketBalanceAddFee: types.MustParseFIL("0.007"),
-		},
-
-		Addresses: MinerAddressConfig{
-			PreCommitControl: []string{},
-			CommitControl:    []string{},
 		},
 	}
 	cfg.Common.API.ListenAddress = "/ip4/127.0.0.1/tcp/2345/http"
