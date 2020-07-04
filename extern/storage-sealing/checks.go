@@ -4,16 +4,18 @@ import (
 	"bytes"
 	"context"
 
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
+	proof0 "github.com/filecoin-project/specs-actors/actors/runtime/proof"
 
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/lotus/extern/sector-storage/zerocomm"
 )
 
 // TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting
@@ -52,7 +54,7 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 			continue
 		}
 
-		proposal, err := api.StateMarketStorageDealProposal(ctx, p.DealInfo.DealID, tok)
+		proposal, err := api.StateMarketStorageDeal(ctx, p.DealInfo.DealID, tok)
 		if err != nil {
 			return &ErrInvalidDeals{xerrors.Errorf("getting deal %d for piece %d: %w", p.DealInfo.DealID, i, err)}
 		}
@@ -93,9 +95,14 @@ func checkPrecommit(ctx context.Context, maddr address.Address, si SectorInfo, t
 		return &ErrBadCommD{xerrors.Errorf("on chain CommD differs from sector: %s != %s", commD, si.CommD)}
 	}
 
-	ticketEarliest := height - policy.MaxPreCommitRandomnessLookback
+	nv, err := api.StateNetworkVersion(ctx, tok)
+	if err != nil {
+		return &ErrApi{xerrors.Errorf("calling StateNetworkVersion: %w", err)}
+	}
 
-	if si.TicketEpoch < ticketEarliest {
+	msd := policy.GetMaxProveCommitDuration(actors.VersionForNetwork(nv), si.SectorType)
+
+	if height-(si.TicketEpoch+policy.SealRandomnessLookback) > msd {
 		return &ErrExpiredTicket{xerrors.Errorf("ticket expired: seal height: %d, head: %d", si.TicketEpoch+policy.SealRandomnessLookback, height)}
 	}
 
@@ -159,14 +166,23 @@ func (m *Sealing) checkCommit(ctx context.Context, si SectorInfo, proof []byte, 
 		return &ErrBadSeed{xerrors.Errorf("seed has changed")}
 	}
 
+	ss, err := m.api.StateMinerSectorSize(ctx, m.maddr, tok)
+	if err != nil {
+		return &ErrApi{err}
+	}
+	spt, err := ffiwrapper.SealProofTypeFromSectorSize(ss)
+	if err != nil {
+		return err
+	}
+
 	if *si.CommR != pci.Info.SealedCID {
 		log.Warn("on-chain sealed CID doesn't match!")
 	}
 
-	ok, err := m.verif.VerifySeal(proof2.SealVerifyInfo{
-		SectorID:              m.minerSectorID(si.SectorNumber),
+	ok, err := m.verif.VerifySeal(proof0.SealVerifyInfo{
+		SectorID:              m.minerSector(si.SectorNumber),
 		SealedCID:             pci.Info.SealedCID,
-		SealProof:             pci.Info.SealProof,
+		SealProof:             spt,
 		Proof:                 proof,
 		Randomness:            si.TicketValue,
 		InteractiveRandomness: si.SeedValue,
