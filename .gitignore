@@ -13,9 +13,6 @@
 /lotus-gateway
 /lotus-pcr
 /lotus-wallet
-/lotus-keygen
-/docgen-md
-/docgen-openrpc
 /bench.json
 /lotuspond/front/node_modules
 /lotuspond/front/build
