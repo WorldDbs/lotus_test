@@ -5,13 +5,21 @@ import (
 	"errors"
 	"fmt"
 	"sync"
-	"sync/atomic"
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
+
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	msig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
@@ -20,42 +28,26 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/network"
 
-	// Used for genesis.
-	msig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
-	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"
-
-	// we use the same adt for all receipts
-	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
-
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/cron"
-	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/metrics"
 )
 
-const LookbackNoLimit = api.LookbackNoLimit
-const ReceiptAmtBitwidth = 3
+const LookbackNoLimit = abi.ChainEpoch(-1)
 
 var log = logging.Logger("statemgr")
 
 type StateManagerAPI interface {
-	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)
-	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
 	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)
 	LookupID(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
@@ -66,40 +58,27 @@ type versionSpec struct {
 	atOrBelow      abi.ChainEpoch
 }
 
-type migration struct {
-	upgrade       MigrationFunc
-	preMigrations []PreMigration
-	cache         *nv10.MemMigrationCache
-}
-
 type StateManager struct {
 	cs *store.ChainStore
-
-	cancel   context.CancelFunc
-	shutdown chan struct{}
 
 	// Determines the network version at any given epoch.
 	networkVersions []versionSpec
 	latestVersion   network.Version
 
-	// Maps chain epochs to migrations.
-	stateMigrations map[abi.ChainEpoch]*migration
+	// Maps chain epochs to upgrade functions.
+	stateMigrations map[abi.ChainEpoch]UpgradeFunc
 	// A set of potentially expensive/time consuming upgrades. Explicit
 	// calls for, e.g., gas estimation fail against this epoch with
 	// ErrExpensiveFork.
 	expensiveUpgrades map[abi.ChainEpoch]struct{}
 
-	stCache             map[string][]cid.Cid
-	compWait            map[string]chan struct{}
-	stlk                sync.Mutex
-	genesisMsigLk       sync.Mutex
-	newVM               func(context.Context, *vm.VMOpts) (*vm.VM, error)
-	preIgnitionVesting  []msig0.State
-	postIgnitionVesting []msig0.State
-	postCalicoVesting   []msig0.State
-
-	genesisPledge      abi.TokenAmount
-	genesisMarketFunds abi.TokenAmount
+	stCache              map[string][]cid.Cid
+	compWait             map[string]chan struct{}
+	stlk                 sync.Mutex
+	genesisMsigLk        sync.Mutex
+	newVM                func(context.Context, *vm.VMOpts) (*vm.VM, error)
+	preIgnitionGenInfos  *genesisInfo
+	postIgnitionGenInfos *genesisInfo
 }
 
 func NewStateManager(cs *store.ChainStore) *StateManager {
@@ -116,7 +95,7 @@ func NewStateManagerWithUpgradeSchedule(cs *store.ChainStore, us UpgradeSchedule
 		return nil, err
 	}
 
-	stateMigrations := make(map[abi.ChainEpoch]*migration, len(us))
+	stateMigrations := make(map[abi.ChainEpoch]UpgradeFunc, len(us))
 	expensiveUpgrades := make(map[abi.ChainEpoch]struct{}, len(us))
 	var networkVersions []versionSpec
 	lastVersion := network.Version0
@@ -124,13 +103,8 @@ func NewStateManagerWithUpgradeSchedule(cs *store.ChainStore, us UpgradeSchedule
 		// If we have any upgrades, process them and create a version
 		// schedule.
 		for _, upgrade := range us {
-			if upgrade.Migration != nil || upgrade.PreMigrations != nil {
-				migration := &migration{
-					upgrade:       upgrade.Migration,
-					preMigrations: upgrade.PreMigrations,
-					cache:         nv10.NewMemMigrationCache(),
-				}
-				stateMigrations[upgrade.Height] = migration
+			if upgrade.Migration != nil {
+				stateMigrations[upgrade.Height] = upgrade.Migration
 			}
 			if upgrade.Expensive {
 				expensiveUpgrades[upgrade.Height] = struct{}{}
@@ -164,33 +138,6 @@ func cidsToKey(cids []cid.Cid) string {
 		out += c.KeyString()
 	}
 	return out
-}
-
-// Start starts the state manager's optional background processes. At the moment, this schedules
-// pre-migration functions to run ahead of network upgrades.
-//
-// This method is not safe to invoke from multiple threads or concurrently with Stop.
-func (sm *StateManager) Start(context.Context) error {
-	var ctx context.Context
-	ctx, sm.cancel = context.WithCancel(context.Background())
-	sm.shutdown = make(chan struct{})
-	go sm.preMigrationWorker(ctx)
-	return nil
-}
-
-// Stop starts the state manager's background processes.
-//
-// This method is not safe to invoke concurrently with Start.
-func (sm *StateManager) Stop(ctx context.Context) error {
-	if sm.cancel != nil {
-		sm.cancel()
-		select {
-		case <-sm.shutdown:
-		case <-ctx.Done():
-			return ctx.Err()
-		}
-	}
-	return nil
 }
 
 func (sm *StateManager) TipSetState(ctx context.Context, ts *types.TipSet) (st cid.Cid, rec cid.Cid, err error) {
@@ -262,9 +209,6 @@ func traceFunc(trace *[]*api.InvocResult) func(mcid cid.Cid, msg *types.Message,
 		if ret.ActorErr != nil {
 			ir.Error = ret.ActorErr.Error()
 		}
-		if ret.GasCosts != nil {
-			ir.GasCost = MakeMsgGasCost(msg, ret)
-		}
 		*trace = append(*trace, ir)
 		return nil
 	}
@@ -283,25 +227,17 @@ func (sm *StateManager) ExecutionTrace(ctx context.Context, ts *types.TipSet) (c
 type ExecCallback func(cid.Cid, *types.Message, *vm.ApplyRet) error
 
 func (sm *StateManager) ApplyBlocks(ctx context.Context, parentEpoch abi.ChainEpoch, pstate cid.Cid, bms []store.BlockMessages, epoch abi.ChainEpoch, r vm.Rand, cb ExecCallback, baseFee abi.TokenAmount, ts *types.TipSet) (cid.Cid, cid.Cid, error) {
-	done := metrics.Timer(ctx, metrics.VMApplyBlocksTotal)
-	defer done()
-
-	partDone := metrics.Timer(ctx, metrics.VMApplyEarly)
-	defer func() {
-		partDone()
-	}()
 
 	makeVmWithBaseState := func(base cid.Cid) (*vm.VM, error) {
 		vmopt := &vm.VMOpts{
 			StateBase:      base,
 			Epoch:          epoch,
 			Rand:           r,
-			Bstore:         sm.cs.StateBlockstore(),
+			Bstore:         sm.cs.Blockstore(),
 			Syscalls:       sm.cs.VMSys(),
 			CircSupplyCalc: sm.GetVMCirculatingSupply,
 			NtwkVersion:    sm.GetNtwkVersion,
 			BaseFee:        baseFee,
-			LookbackState:  LookbackStateGetterForTipset(sm, ts),
 		}
 
 		return sm.newVM(ctx, vmopt)
@@ -313,15 +249,16 @@ func (sm *StateManager) ApplyBlocks(ctx context.Context, parentEpoch abi.ChainEp
 	}
 
 	runCron := func(epoch abi.ChainEpoch) error {
+
 		cronMsg := &types.Message{
-			To:         cron.Address,
-			From:       builtin.SystemActorAddr,
+			To:         builtin0.CronActorAddr,
+			From:       builtin0.SystemActorAddr,
 			Nonce:      uint64(epoch),
 			Value:      types.NewInt(0),
 			GasFeeCap:  types.NewInt(0),
 			GasPremium: types.NewInt(0),
 			GasLimit:   build.BlockGasLimit * 10000, // Make super sure this is never too little
-			Method:     cron.Methods.EpochTick,
+			Method:     builtin0.MethodsCron.EpochTick,
 			Params:     nil,
 		}
 		ret, err := vmi.ApplyImplicitMessage(ctx, cronMsg)
@@ -371,9 +308,6 @@ func (sm *StateManager) ApplyBlocks(ctx context.Context, parentEpoch abi.ChainEp
 		pstate = newState
 	}
 
-	partDone()
-	partDone = metrics.Timer(ctx, metrics.VMApplyMessages)
-
 	var receipts []cbg.CBORMarshaler
 	processedMsgs := make(map[cid.Cid]struct{})
 	for _, b := range bms {
@@ -413,14 +347,14 @@ func (sm *StateManager) ApplyBlocks(ctx context.Context, parentEpoch abi.ChainEp
 		}
 
 		rwMsg := &types.Message{
-			From:       builtin.SystemActorAddr,
+			From:       builtin0.SystemActorAddr,
 			To:         reward.Address,
 			Nonce:      uint64(epoch),
 			Value:      types.NewInt(0),
 			GasFeeCap:  types.NewInt(0),
 			GasPremium: types.NewInt(0),
 			GasLimit:   1 << 30,
-			Method:     reward.Methods.AwardBlockReward,
+			Method:     builtin0.MethodsReward.AwardBlockReward,
 			Params:     params,
 		}
 		ret, actErr := vmi.ApplyImplicitMessage(ctx, rwMsg)
@@ -438,17 +372,15 @@ func (sm *StateManager) ApplyBlocks(ctx context.Context, parentEpoch abi.ChainEp
 		}
 	}
 
-	partDone()
-	partDone = metrics.Timer(ctx, metrics.VMApplyCron)
-
 	if err := runCron(epoch); err != nil {
 		return cid.Cid{}, cid.Cid{}, err
 	}
 
-	partDone()
-	partDone = metrics.Timer(ctx, metrics.VMApplyFlush)
-
-	rectarr := blockadt.MakeEmptyArray(sm.cs.ActorStore(ctx))
+	// XXX: Is the height correct? Or should it be epoch-1?
+	rectarr, err := adt.NewArray(sm.cs.Store(ctx), actors.VersionForNetwork(sm.GetNtwkVersion(ctx, epoch)))
+	if err != nil {
+		return cid.Undef, cid.Undef, xerrors.Errorf("failed to create receipts amt: %w", err)
+	}
 	for i, receipt := range receipts {
 		if err := rectarr.Set(uint64(i), receipt); err != nil {
 			return cid.Undef, cid.Undef, xerrors.Errorf("failed to build receipts amt: %w", err)
@@ -463,9 +395,6 @@ func (sm *StateManager) ApplyBlocks(ctx context.Context, parentEpoch abi.ChainEp
 	if err != nil {
 		return cid.Undef, cid.Undef, xerrors.Errorf("vm flush failed: %w", err)
 	}
-
-	stats.Record(ctx, metrics.VMSends.M(int64(atomic.LoadUint64(&vm.StatSends))),
-		metrics.VMApplied.M(int64(atomic.LoadUint64(&vm.StatApplied))))
 
 	return st, rectroot, nil
 }
@@ -536,26 +465,13 @@ func (sm *StateManager) ResolveToKeyAddress(ctx context.Context, addr address.Ad
 		ts = sm.cs.GetHeaviestTipSet()
 	}
 
-	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
-
-	// First try to resolve the actor in the parent state, so we don't have to compute anything.
-	tree, err := state.LoadStateTree(cst, ts.ParentState())
-	if err != nil {
-		return address.Undef, xerrors.Errorf("failed to load parent state tree: %w", err)
-	}
-
-	resolved, err := vm.ResolveToKeyAddr(tree, cst, addr)
-	if err == nil {
-		return resolved, nil
-	}
-
-	// If that fails, compute the tip-set and try again.
 	st, _, err := sm.TipSetState(ctx, ts)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("resolve address failed to get tipset state: %w", err)
 	}
 
-	tree, err = state.LoadStateTree(cst, st)
+	cst := cbor.NewCborStore(sm.cs.Blockstore())
+	tree, err := state.LoadStateTree(cst, st)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("failed to load state tree")
 	}
@@ -577,7 +493,7 @@ func (sm *StateManager) GetBlsPublicKey(ctx context.Context, addr address.Addres
 }
 
 func (sm *StateManager) LookupID(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
-	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
+	cst := cbor.NewCborStore(sm.cs.Blockstore())
 	state, err := state.LoadStateTree(cst, sm.parentState(ts))
 	if err != nil {
 		return address.Undef, xerrors.Errorf("load state tree: %w", err)
@@ -585,10 +501,24 @@ func (sm *StateManager) LookupID(ctx context.Context, addr address.Address, ts *
 	return state.LookupID(addr)
 }
 
+func (sm *StateManager) GetReceipt(ctx context.Context, msg cid.Cid, ts *types.TipSet) (*types.MessageReceipt, error) {
+	m, err := sm.cs.GetCMessage(msg)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load message: %w", err)
+	}
+
+	_, r, _, err := sm.searchBackForMsg(ctx, ts, m, LookbackNoLimit)
+	if err != nil {
+		return nil, fmt.Errorf("failed to look back through chain for message: %w", err)
+	}
+
+	return r, nil
+}
+
 // WaitForMessage blocks until a message appears on chain. It looks backwards in the chain to see if this has already
 // happened, with an optional limit to how many epochs it will search. It guarantees that the message has been on
 // chain for at least confidence epochs without being reverted before returning.
-func (sm *StateManager) WaitForMessage(ctx context.Context, mcid cid.Cid, confidence uint64, lookbackLimit abi.ChainEpoch, allowReplaced bool) (*types.TipSet, *types.MessageReceipt, cid.Cid, error) {
+func (sm *StateManager) WaitForMessage(ctx context.Context, mcid cid.Cid, confidence uint64, lookbackLimit abi.ChainEpoch) (*types.TipSet, *types.MessageReceipt, cid.Cid, error) {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -612,7 +542,7 @@ func (sm *StateManager) WaitForMessage(ctx context.Context, mcid cid.Cid, confid
 		return nil, nil, cid.Undef, fmt.Errorf("expected current head on SHC stream (got %s)", head[0].Type)
 	}
 
-	r, foundMsg, err := sm.tipsetExecutedMessage(head[0].Val, mcid, msg.VMMessage(), allowReplaced)
+	r, foundMsg, err := sm.tipsetExecutedMessage(head[0].Val, mcid, msg.VMMessage())
 	if err != nil {
 		return nil, nil, cid.Undef, err
 	}
@@ -626,9 +556,9 @@ func (sm *StateManager) WaitForMessage(ctx context.Context, mcid cid.Cid, confid
 	var backFm cid.Cid
 	backSearchWait := make(chan struct{})
 	go func() {
-		fts, r, foundMsg, err := sm.searchBackForMsg(ctx, head[0].Val, msg, lookbackLimit, allowReplaced)
+		fts, r, foundMsg, err := sm.searchBackForMsg(ctx, head[0].Val, msg, lookbackLimit)
 		if err != nil {
-			log.Warnf("failed to look back through chain for message: %v", err)
+			log.Warnf("failed to look back through chain for message: %w", err)
 			return
 		}
 
@@ -665,7 +595,7 @@ func (sm *StateManager) WaitForMessage(ctx context.Context, mcid cid.Cid, confid
 					if candidateTs != nil && val.Val.Height() >= candidateTs.Height()+abi.ChainEpoch(confidence) {
 						return candidateTs, candidateRcp, candidateFm, nil
 					}
-					r, foundMsg, err := sm.tipsetExecutedMessage(val.Val, mcid, msg.VMMessage(), allowReplaced)
+					r, foundMsg, err := sm.tipsetExecutedMessage(val.Val, mcid, msg.VMMessage())
 					if err != nil {
 						return nil, nil, cid.Undef, err
 					}
@@ -701,13 +631,15 @@ func (sm *StateManager) WaitForMessage(ctx context.Context, mcid cid.Cid, confid
 	}
 }
 
-func (sm *StateManager) SearchForMessage(ctx context.Context, head *types.TipSet, mcid cid.Cid, lookbackLimit abi.ChainEpoch, allowReplaced bool) (*types.TipSet, *types.MessageReceipt, cid.Cid, error) {
+func (sm *StateManager) SearchForMessage(ctx context.Context, mcid cid.Cid) (*types.TipSet, *types.MessageReceipt, cid.Cid, error) {
 	msg, err := sm.cs.GetCMessage(mcid)
 	if err != nil {
 		return nil, nil, cid.Undef, fmt.Errorf("failed to load message: %w", err)
 	}
 
-	r, foundMsg, err := sm.tipsetExecutedMessage(head, mcid, msg.VMMessage(), allowReplaced)
+	head := sm.cs.GetHeaviestTipSet()
+
+	r, foundMsg, err := sm.tipsetExecutedMessage(head, mcid, msg.VMMessage())
 	if err != nil {
 		return nil, nil, cid.Undef, err
 	}
@@ -716,7 +648,7 @@ func (sm *StateManager) SearchForMessage(ctx context.Context, head *types.TipSet
 		return head, r, foundMsg, nil
 	}
 
-	fts, r, foundMsg, err := sm.searchBackForMsg(ctx, head, msg, lookbackLimit, allowReplaced)
+	fts, r, foundMsg, err := sm.searchBackForMsg(ctx, head, msg, LookbackNoLimit)
 
 	if err != nil {
 		log.Warnf("failed to look back through chain for message %s", mcid)
@@ -736,7 +668,7 @@ func (sm *StateManager) SearchForMessage(ctx context.Context, head *types.TipSet
 // - 0 then no tipsets are searched
 // - 5 then five tipset are searched
 // - LookbackNoLimit then there is no limit
-func (sm *StateManager) searchBackForMsg(ctx context.Context, from *types.TipSet, m types.ChainMsg, limit abi.ChainEpoch, allowReplaced bool) (*types.TipSet, *types.MessageReceipt, cid.Cid, error) {
+func (sm *StateManager) searchBackForMsg(ctx context.Context, from *types.TipSet, m types.ChainMsg, limit abi.ChainEpoch) (*types.TipSet, *types.MessageReceipt, cid.Cid, error) {
 	limitHeight := from.Height() - limit
 	noLimit := limit == LookbackNoLimit
 
@@ -786,7 +718,7 @@ func (sm *StateManager) searchBackForMsg(ctx context.Context, from *types.TipSet
 
 		// check that between cur and parent tipset the nonce fell into range of our message
 		if actorNoExist || (curActor.Nonce > mNonce && act.Nonce <= mNonce) {
-			r, foundMsg, err := sm.tipsetExecutedMessage(cur, m.Cid(), m.VMMessage(), allowReplaced)
+			r, foundMsg, err := sm.tipsetExecutedMessage(cur, m.Cid(), m.VMMessage())
 			if err != nil {
 				return nil, nil, cid.Undef, xerrors.Errorf("checking for message execution during lookback: %w", err)
 			}
@@ -801,7 +733,7 @@ func (sm *StateManager) searchBackForMsg(ctx context.Context, from *types.TipSet
 	}
 }
 
-func (sm *StateManager) tipsetExecutedMessage(ts *types.TipSet, msg cid.Cid, vmm *types.Message, allowReplaced bool) (*types.MessageReceipt, cid.Cid, error) {
+func (sm *StateManager) tipsetExecutedMessage(ts *types.TipSet, msg cid.Cid, vmm *types.Message) (*types.MessageReceipt, cid.Cid, error) {
 	// The genesis block did not execute any messages
 	if ts.Height() == 0 {
 		return nil, cid.Undef, nil
@@ -824,7 +756,7 @@ func (sm *StateManager) tipsetExecutedMessage(ts *types.TipSet, msg cid.Cid, vmm
 
 		if m.VMMessage().From == vmm.From { // cheaper to just check origin first
 			if m.VMMessage().Nonce == vmm.Nonce {
-				if allowReplaced && m.VMMessage().EqualCall(vmm) {
+				if m.VMMessage().EqualCall(vmm) {
 					if m.Cid() != msg {
 						log.Warnw("found message with equal nonce and call params but different CID",
 							"wanted", msg, "found", m.Cid(), "nonce", vmm.Nonce, "from", vmm.From)
@@ -854,7 +786,10 @@ func (sm *StateManager) ListAllActors(ctx context.Context, ts *types.TipSet) ([]
 	if ts == nil {
 		ts = sm.cs.GetHeaviestTipSet()
 	}
-	st := ts.ParentState()
+	st, _, err := sm.TipSetState(ctx, ts)
+	if err != nil {
+		return nil, err
+	}
 
 	stateTree, err := sm.StateTree(st)
 	if err != nil {
@@ -884,7 +819,7 @@ func (sm *StateManager) MarketBalance(ctx context.Context, addr address.Address,
 		return api.MarketBalance{}, err
 	}
 
-	mstate, err := market.Load(sm.cs.ActorStore(ctx), act)
+	mstate, err := market.Load(sm.cs.Store(ctx), act)
 	if err != nil {
 		return api.MarketBalance{}, err
 	}
@@ -950,8 +885,23 @@ func (sm *StateManager) SetVMConstructor(nvm func(context.Context, *vm.VMOpts) (
 	sm.newVM = nvm
 }
 
-// sets up information about the vesting schedule
-func (sm *StateManager) setupGenesisVestingSchedule(ctx context.Context) error {
+type genesisInfo struct {
+	genesisMsigs []msig0.State
+	// info about the Accounts in the genesis state
+	genesisActors      []genesisActor
+	genesisPledge      abi.TokenAmount
+	genesisMarketFunds abi.TokenAmount
+}
+
+type genesisActor struct {
+	addr    address.Address
+	initBal abi.TokenAmount
+}
+
+// sets up information about the actors in the genesis state
+func (sm *StateManager) setupGenesisActors(ctx context.Context) error {
+
+	gi := genesisInfo{}
 
 	gb, err := sm.cs.GetGenesis()
 	if err != nil {
@@ -968,90 +918,236 @@ func (sm *StateManager) setupGenesisVestingSchedule(ctx context.Context) error {
 		return xerrors.Errorf("getting genesis tipset state: %w", err)
 	}
 
-	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
+	cst := cbor.NewCborStore(sm.cs.Blockstore())
 	sTree, err := state.LoadStateTree(cst, st)
 	if err != nil {
 		return xerrors.Errorf("loading state tree: %w", err)
 	}
 
-	gmf, err := getFilMarketLocked(ctx, sTree)
+	gi.genesisMarketFunds, err = getFilMarketLocked(ctx, sTree)
 	if err != nil {
 		return xerrors.Errorf("setting up genesis market funds: %w", err)
 	}
 
-	gp, err := getFilPowerLocked(ctx, sTree)
+	gi.genesisPledge, err = getFilPowerLocked(ctx, sTree)
 	if err != nil {
 		return xerrors.Errorf("setting up genesis pledge: %w", err)
 	}
 
-	sm.genesisMarketFunds = gmf
-	sm.genesisPledge = gp
-
 	totalsByEpoch := make(map[abi.ChainEpoch]abi.TokenAmount)
+	err = sTree.ForEach(func(kaddr address.Address, act *types.Actor) error {
+		if builtin.IsMultisigActor(act.Code) {
+			s, err := multisig.Load(sm.cs.Store(ctx), act)
+			if err != nil {
+				return err
+			}
 
-	// 6 months
-	sixMonths := abi.ChainEpoch(183 * builtin.EpochsInDay)
-	totalsByEpoch[sixMonths] = big.NewInt(49_929_341)
-	totalsByEpoch[sixMonths] = big.Add(totalsByEpoch[sixMonths], big.NewInt(32_787_700))
+			se, err := s.StartEpoch()
+			if err != nil {
+				return err
+			}
 
-	// 1 year
-	oneYear := abi.ChainEpoch(365 * builtin.EpochsInDay)
-	totalsByEpoch[oneYear] = big.NewInt(22_421_712)
+			if se != 0 {
+				return xerrors.New("genesis multisig doesn't start vesting at epoch 0!")
+			}
 
-	// 2 years
-	twoYears := abi.ChainEpoch(2 * 365 * builtin.EpochsInDay)
-	totalsByEpoch[twoYears] = big.NewInt(7_223_364)
+			ud, err := s.UnlockDuration()
+			if err != nil {
+				return err
+			}
 
-	// 3 years
-	threeYears := abi.ChainEpoch(3 * 365 * builtin.EpochsInDay)
-	totalsByEpoch[threeYears] = big.NewInt(87_637_883)
+			ib, err := s.InitialBalance()
+			if err != nil {
+				return err
+			}
 
-	// 6 years
-	sixYears := abi.ChainEpoch(6 * 365 * builtin.EpochsInDay)
-	totalsByEpoch[sixYears] = big.NewInt(100_000_000)
-	totalsByEpoch[sixYears] = big.Add(totalsByEpoch[sixYears], big.NewInt(300_000_000))
+			ot, f := totalsByEpoch[ud]
+			if f {
+				totalsByEpoch[ud] = big.Add(ot, ib)
+			} else {
+				totalsByEpoch[ud] = ib
+			}
 
-	sm.preIgnitionVesting = make([]msig0.State, 0, len(totalsByEpoch))
+		} else if builtin.IsAccountActor(act.Code) {
+			// should exclude burnt funds actor and "remainder account actor"
+			// should only ever be "faucet" accounts in testnets
+			if kaddr == builtin0.BurntFundsActorAddr {
+				return nil
+			}
+
+			kid, err := sTree.LookupID(kaddr)
+			if err != nil {
+				return xerrors.Errorf("resolving address: %w", err)
+			}
+
+			gi.genesisActors = append(gi.genesisActors, genesisActor{
+				addr:    kid,
+				initBal: act.Balance,
+			})
+		}
+		return nil
+	})
+
+	if err != nil {
+		return xerrors.Errorf("error setting up genesis infos: %w", err)
+	}
+
+	// TODO: use network upgrade abstractions or always start at actors v0?
+	gi.genesisMsigs = make([]msig0.State, 0, len(totalsByEpoch))
 	for k, v := range totalsByEpoch {
 		ns := msig0.State{
 			InitialBalance: v,
 			UnlockDuration: k,
 			PendingTxns:    cid.Undef,
 		}
-		sm.preIgnitionVesting = append(sm.preIgnitionVesting, ns)
+		gi.genesisMsigs = append(gi.genesisMsigs, ns)
 	}
+
+	sm.preIgnitionGenInfos = &gi
 
 	return nil
 }
 
-// sets up information about the vesting schedule post the ignition upgrade
-func (sm *StateManager) setupPostIgnitionVesting(ctx context.Context) error {
+// sets up information about the actors in the genesis state
+// For testnet we use a hardcoded set of multisig states, instead of what's actually in the genesis multisigs
+// We also do not consider ANY account actors (including the faucet)
+func (sm *StateManager) setupPreIgnitionGenesisActorsTestnet(ctx context.Context) error {
+
+	gi := genesisInfo{}
+
+	gb, err := sm.cs.GetGenesis()
+	if err != nil {
+		return xerrors.Errorf("getting genesis block: %w", err)
+	}
+
+	gts, err := types.NewTipSet([]*types.BlockHeader{gb})
+	if err != nil {
+		return xerrors.Errorf("getting genesis tipset: %w", err)
+	}
+
+	st, _, err := sm.TipSetState(ctx, gts)
+	if err != nil {
+		return xerrors.Errorf("getting genesis tipset state: %w", err)
+	}
+
+	cst := cbor.NewCborStore(sm.cs.Blockstore())
+	sTree, err := state.LoadStateTree(cst, st)
+	if err != nil {
+		return xerrors.Errorf("loading state tree: %w", err)
+	}
+
+	gi.genesisMarketFunds, err = getFilMarketLocked(ctx, sTree)
+	if err != nil {
+		return xerrors.Errorf("setting up genesis market funds: %w", err)
+	}
+
+	gi.genesisPledge, err = getFilPowerLocked(ctx, sTree)
+	if err != nil {
+		return xerrors.Errorf("setting up genesis pledge: %w", err)
+	}
 
 	totalsByEpoch := make(map[abi.ChainEpoch]abi.TokenAmount)
 
 	// 6 months
-	sixMonths := abi.ChainEpoch(183 * builtin.EpochsInDay)
+	sixMonths := abi.ChainEpoch(183 * builtin0.EpochsInDay)
 	totalsByEpoch[sixMonths] = big.NewInt(49_929_341)
 	totalsByEpoch[sixMonths] = big.Add(totalsByEpoch[sixMonths], big.NewInt(32_787_700))
 
 	// 1 year
-	oneYear := abi.ChainEpoch(365 * builtin.EpochsInDay)
+	oneYear := abi.ChainEpoch(365 * builtin0.EpochsInDay)
 	totalsByEpoch[oneYear] = big.NewInt(22_421_712)
 
 	// 2 years
-	twoYears := abi.ChainEpoch(2 * 365 * builtin.EpochsInDay)
+	twoYears := abi.ChainEpoch(2 * 365 * builtin0.EpochsInDay)
 	totalsByEpoch[twoYears] = big.NewInt(7_223_364)
 
 	// 3 years
-	threeYears := abi.ChainEpoch(3 * 365 * builtin.EpochsInDay)
+	threeYears := abi.ChainEpoch(3 * 365 * builtin0.EpochsInDay)
 	totalsByEpoch[threeYears] = big.NewInt(87_637_883)
 
 	// 6 years
-	sixYears := abi.ChainEpoch(6 * 365 * builtin.EpochsInDay)
+	sixYears := abi.ChainEpoch(6 * 365 * builtin0.EpochsInDay)
 	totalsByEpoch[sixYears] = big.NewInt(100_000_000)
 	totalsByEpoch[sixYears] = big.Add(totalsByEpoch[sixYears], big.NewInt(300_000_000))
 
-	sm.postIgnitionVesting = make([]msig0.State, 0, len(totalsByEpoch))
+	gi.genesisMsigs = make([]msig0.State, 0, len(totalsByEpoch))
+	for k, v := range totalsByEpoch {
+		ns := msig0.State{
+			InitialBalance: v,
+			UnlockDuration: k,
+			PendingTxns:    cid.Undef,
+		}
+		gi.genesisMsigs = append(gi.genesisMsigs, ns)
+	}
+
+	sm.preIgnitionGenInfos = &gi
+
+	return nil
+}
+
+// sets up information about the actors in the genesis state, post the ignition fork
+func (sm *StateManager) setupPostIgnitionGenesisActors(ctx context.Context) error {
+
+	gi := genesisInfo{}
+
+	gb, err := sm.cs.GetGenesis()
+	if err != nil {
+		return xerrors.Errorf("getting genesis block: %w", err)
+	}
+
+	gts, err := types.NewTipSet([]*types.BlockHeader{gb})
+	if err != nil {
+		return xerrors.Errorf("getting genesis tipset: %w", err)
+	}
+
+	st, _, err := sm.TipSetState(ctx, gts)
+	if err != nil {
+		return xerrors.Errorf("getting genesis tipset state: %w", err)
+	}
+
+	cst := cbor.NewCborStore(sm.cs.Blockstore())
+	sTree, err := state.LoadStateTree(cst, st)
+	if err != nil {
+		return xerrors.Errorf("loading state tree: %w", err)
+	}
+
+	// Unnecessary, should be removed
+	gi.genesisMarketFunds, err = getFilMarketLocked(ctx, sTree)
+	if err != nil {
+		return xerrors.Errorf("setting up genesis market funds: %w", err)
+	}
+
+	// Unnecessary, should be removed
+	gi.genesisPledge, err = getFilPowerLocked(ctx, sTree)
+	if err != nil {
+		return xerrors.Errorf("setting up genesis pledge: %w", err)
+	}
+
+	totalsByEpoch := make(map[abi.ChainEpoch]abi.TokenAmount)
+
+	// 6 months
+	sixMonths := abi.ChainEpoch(183 * builtin0.EpochsInDay)
+	totalsByEpoch[sixMonths] = big.NewInt(49_929_341)
+	totalsByEpoch[sixMonths] = big.Add(totalsByEpoch[sixMonths], big.NewInt(32_787_700))
+
+	// 1 year
+	oneYear := abi.ChainEpoch(365 * builtin0.EpochsInDay)
+	totalsByEpoch[oneYear] = big.NewInt(22_421_712)
+
+	// 2 years
+	twoYears := abi.ChainEpoch(2 * 365 * builtin0.EpochsInDay)
+	totalsByEpoch[twoYears] = big.NewInt(7_223_364)
+
+	// 3 years
+	threeYears := abi.ChainEpoch(3 * 365 * builtin0.EpochsInDay)
+	totalsByEpoch[threeYears] = big.NewInt(87_637_883)
+
+	// 6 years
+	sixYears := abi.ChainEpoch(6 * 365 * builtin0.EpochsInDay)
+	totalsByEpoch[sixYears] = big.NewInt(100_000_000)
+	totalsByEpoch[sixYears] = big.Add(totalsByEpoch[sixYears], big.NewInt(300_000_000))
+
+	gi.genesisMsigs = make([]msig0.State, 0, len(totalsByEpoch))
 	for k, v := range totalsByEpoch {
 		ns := msig0.State{
 			// In the pre-ignition logic, we incorrectly set this value in Fil, not attoFil, an off-by-10^18 error
@@ -1061,56 +1157,10 @@ func (sm *StateManager) setupPostIgnitionVesting(ctx context.Context) error {
 			// In the pre-ignition logic, the start epoch was 0. This changes in the fork logic of the Ignition upgrade itself.
 			StartEpoch: build.UpgradeLiftoffHeight,
 		}
-		sm.postIgnitionVesting = append(sm.postIgnitionVesting, ns)
+		gi.genesisMsigs = append(gi.genesisMsigs, ns)
 	}
 
-	return nil
-}
-
-// sets up information about the vesting schedule post the calico upgrade
-func (sm *StateManager) setupPostCalicoVesting(ctx context.Context) error {
-
-	totalsByEpoch := make(map[abi.ChainEpoch]abi.TokenAmount)
-
-	// 0 days
-	zeroDays := abi.ChainEpoch(0)
-	totalsByEpoch[zeroDays] = big.NewInt(10_632_000)
-
-	// 6 months
-	sixMonths := abi.ChainEpoch(183 * builtin.EpochsInDay)
-	totalsByEpoch[sixMonths] = big.NewInt(19_015_887)
-	totalsByEpoch[sixMonths] = big.Add(totalsByEpoch[sixMonths], big.NewInt(32_787_700))
-
-	// 1 year
-	oneYear := abi.ChainEpoch(365 * builtin.EpochsInDay)
-	totalsByEpoch[oneYear] = big.NewInt(22_421_712)
-	totalsByEpoch[oneYear] = big.Add(totalsByEpoch[oneYear], big.NewInt(9_400_000))
-
-	// 2 years
-	twoYears := abi.ChainEpoch(2 * 365 * builtin.EpochsInDay)
-	totalsByEpoch[twoYears] = big.NewInt(7_223_364)
-
-	// 3 years
-	threeYears := abi.ChainEpoch(3 * 365 * builtin.EpochsInDay)
-	totalsByEpoch[threeYears] = big.NewInt(87_637_883)
-	totalsByEpoch[threeYears] = big.Add(totalsByEpoch[threeYears], big.NewInt(898_958))
-
-	// 6 years
-	sixYears := abi.ChainEpoch(6 * 365 * builtin.EpochsInDay)
-	totalsByEpoch[sixYears] = big.NewInt(100_000_000)
-	totalsByEpoch[sixYears] = big.Add(totalsByEpoch[sixYears], big.NewInt(300_000_000))
-	totalsByEpoch[sixYears] = big.Add(totalsByEpoch[sixYears], big.NewInt(9_805_053))
-
-	sm.postCalicoVesting = make([]msig0.State, 0, len(totalsByEpoch))
-	for k, v := range totalsByEpoch {
-		ns := msig0.State{
-			InitialBalance: big.Mul(v, big.NewInt(int64(build.FilecoinPrecision))),
-			UnlockDuration: k,
-			PendingTxns:    cid.Undef,
-			StartEpoch:     build.UpgradeLiftoffHeight,
-		}
-		sm.postCalicoVesting = append(sm.postCalicoVesting, ns)
-	}
+	sm.postIgnitionGenInfos = &gi
 
 	return nil
 }
@@ -1121,19 +1171,12 @@ func (sm *StateManager) setupPostCalicoVesting(ctx context.Context) error {
 func (sm *StateManager) GetFilVested(ctx context.Context, height abi.ChainEpoch, st *state.StateTree) (abi.TokenAmount, error) {
 	vf := big.Zero()
 	if height <= build.UpgradeIgnitionHeight {
-		for _, v := range sm.preIgnitionVesting {
+		for _, v := range sm.preIgnitionGenInfos.genesisMsigs {
 			au := big.Sub(v.InitialBalance, v.AmountLocked(height))
 			vf = big.Add(vf, au)
 		}
-	} else if height <= build.UpgradeCalicoHeight {
-		for _, v := range sm.postIgnitionVesting {
-			// In the pre-ignition logic, we simply called AmountLocked(height), assuming startEpoch was 0.
-			// The start epoch changed in the Ignition upgrade.
-			au := big.Sub(v.InitialBalance, v.AmountLocked(height-v.StartEpoch))
-			vf = big.Add(vf, au)
-		}
 	} else {
-		for _, v := range sm.postCalicoVesting {
+		for _, v := range sm.postIgnitionGenInfos.genesisMsigs {
 			// In the pre-ignition logic, we simply called AmountLocked(height), assuming startEpoch was 0.
 			// The start epoch changed in the Ignition upgrade.
 			au := big.Sub(v.InitialBalance, v.AmountLocked(height-v.StartEpoch))
@@ -1141,12 +1184,26 @@ func (sm *StateManager) GetFilVested(ctx context.Context, height abi.ChainEpoch,
 		}
 	}
 
+	// there should not be any such accounts in testnet (and also none in mainnet?)
+	// continue to use preIgnitionGenInfos, nothing changed at the Ignition epoch
+	for _, v := range sm.preIgnitionGenInfos.genesisActors {
+		act, err := st.GetActor(v.addr)
+		if err != nil {
+			return big.Zero(), xerrors.Errorf("failed to get actor: %w", err)
+		}
+
+		diff := big.Sub(v.initBal, act.Balance)
+		if diff.GreaterThan(big.Zero()) {
+			vf = big.Add(vf, diff)
+		}
+	}
+
 	// After UpgradeActorsV2Height these funds are accounted for in GetFilReserveDisbursed
 	if height <= build.UpgradeActorsV2Height {
 		// continue to use preIgnitionGenInfos, nothing changed at the Ignition epoch
-		vf = big.Add(vf, sm.genesisPledge)
+		vf = big.Add(vf, sm.preIgnitionGenInfos.genesisPledge)
 		// continue to use preIgnitionGenInfos, nothing changed at the Ignition epoch
-		vf = big.Add(vf, sm.genesisMarketFunds)
+		vf = big.Add(vf, sm.preIgnitionGenInfos.genesisMarketFunds)
 	}
 
 	return vf, nil
@@ -1220,7 +1277,7 @@ func (sm *StateManager) GetFilLocked(ctx context.Context, st *state.StateTree) (
 }
 
 func GetFilBurnt(ctx context.Context, st *state.StateTree) (abi.TokenAmount, error) {
-	burnt, err := st.GetActor(builtin.BurntFundsActorAddr)
+	burnt, err := st.GetActor(builtin0.BurntFundsActorAddr)
 	if err != nil {
 		return big.Zero(), xerrors.Errorf("failed to load burnt actor: %w", err)
 	}
@@ -1240,22 +1297,16 @@ func (sm *StateManager) GetVMCirculatingSupply(ctx context.Context, height abi.C
 func (sm *StateManager) GetVMCirculatingSupplyDetailed(ctx context.Context, height abi.ChainEpoch, st *state.StateTree) (api.CirculatingSupply, error) {
 	sm.genesisMsigLk.Lock()
 	defer sm.genesisMsigLk.Unlock()
-	if sm.preIgnitionVesting == nil || sm.genesisPledge.IsZero() || sm.genesisMarketFunds.IsZero() {
-		err := sm.setupGenesisVestingSchedule(ctx)
+	if sm.preIgnitionGenInfos == nil {
+		err := sm.setupPreIgnitionGenesisActorsTestnet(ctx)
 		if err != nil {
-			return api.CirculatingSupply{}, xerrors.Errorf("failed to setup pre-ignition vesting schedule: %w", err)
+			return api.CirculatingSupply{}, xerrors.Errorf("failed to setup pre-ignition genesis information: %w", err)
 		}
 	}
-	if sm.postIgnitionVesting == nil {
-		err := sm.setupPostIgnitionVesting(ctx)
+	if sm.postIgnitionGenInfos == nil {
+		err := sm.setupPostIgnitionGenesisActors(ctx)
 		if err != nil {
-			return api.CirculatingSupply{}, xerrors.Errorf("failed to setup post-ignition vesting schedule: %w", err)
-		}
-	}
-	if sm.postCalicoVesting == nil {
-		err := sm.setupPostCalicoVesting(ctx)
-		if err != nil {
-			return api.CirculatingSupply{}, xerrors.Errorf("failed to setup post-calico vesting schedule: %w", err)
+			return api.CirculatingSupply{}, xerrors.Errorf("failed to setup post-ignition genesis information: %w", err)
 		}
 	}
 
@@ -1297,12 +1348,11 @@ func (sm *StateManager) GetVMCirculatingSupplyDetailed(ctx context.Context, heig
 	}
 
 	return api.CirculatingSupply{
-		FilVested:           filVested,
-		FilMined:            filMined,
-		FilBurnt:            filBurnt,
-		FilLocked:           filLocked,
-		FilCirculating:      ret,
-		FilReserveDisbursed: filReserveDisbursed,
+		FilVested:      filVested,
+		FilMined:       filMined,
+		FilBurnt:       filBurnt,
+		FilLocked:      filLocked,
+		FilCirculating: ret,
 	}, nil
 }
 
@@ -1328,7 +1378,7 @@ func (sm *StateManager) GetCirculatingSupply(ctx context.Context, height abi.Cha
 			unCirc = big.Add(unCirc, actor.Balance)
 
 		case a == market.Address:
-			mst, err := market.Load(sm.cs.ActorStore(ctx), actor)
+			mst, err := market.Load(sm.cs.Store(ctx), actor)
 			if err != nil {
 				return err
 			}
@@ -1345,7 +1395,7 @@ func (sm *StateManager) GetCirculatingSupply(ctx context.Context, height abi.Cha
 			circ = big.Add(circ, actor.Balance)
 
 		case builtin.IsStorageMinerActor(actor.Code):
-			mst, err := miner.Load(sm.cs.ActorStore(ctx), actor)
+			mst, err := miner.Load(sm.cs.Store(ctx), actor)
 			if err != nil {
 				return err
 			}
@@ -1362,7 +1412,7 @@ func (sm *StateManager) GetCirculatingSupply(ctx context.Context, height abi.Cha
 			}
 
 		case builtin.IsMultisigActor(actor.Code):
-			mst, err := multisig.Load(sm.cs.ActorStore(ctx), actor)
+			mst, err := multisig.Load(sm.cs.Store(ctx), actor)
 			if err != nil {
 				return err
 			}
@@ -1416,7 +1466,7 @@ func (sm *StateManager) GetPaychState(ctx context.Context, addr address.Address,
 		return nil, nil, err
 	}
 
-	actState, err := paych.Load(sm.cs.ActorStore(ctx), act)
+	actState, err := paych.Load(sm.cs.Store(ctx), act)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -1434,7 +1484,7 @@ func (sm *StateManager) GetMarketState(ctx context.Context, ts *types.TipSet) (m
 		return nil, err
 	}
 
-	actState, err := market.Load(sm.cs.ActorStore(ctx), act)
+	actState, err := market.Load(sm.cs.Store(ctx), act)
 	if err != nil {
 		return nil, err
 	}
