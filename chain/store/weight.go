@@ -28,7 +28,7 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 
 	tpow := big2.Zero()
 	{
-		cst := cbor.NewCborStore(cs.StateBlockstore())
+		cst := cbor.NewCborStore(cs.Blockstore())
 		state, err := state.LoadStateTree(cst, ts.ParentState())
 		if err != nil {
 			return types.NewInt(0), xerrors.Errorf("load state tree: %w", err)
@@ -39,7 +39,7 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 			return types.NewInt(0), xerrors.Errorf("get power actor: %w", err)
 		}
 
-		powState, err := power.Load(cs.ActorStore(ctx), act)
+		powState, err := power.Load(cs.Store(ctx), act)
 		if err != nil {
 			return types.NewInt(0), xerrors.Errorf("failed to load power actor state: %w", err)
 		}

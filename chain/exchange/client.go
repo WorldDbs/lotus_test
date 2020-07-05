@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/libp2p/go-libp2p-core/helpers"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -411,7 +412,11 @@ func (c *client) sendRequestToPeer(ctx context.Context, peer peer.ID, req *Reque
 		return nil, xerrors.Errorf("failed to open stream to peer: %w", err)
 	}
 
-	defer stream.Close() //nolint:errcheck
+	defer func() {
+		// Note: this will become just stream.Close once we've completed the go-libp2p migration to
+		//       go-libp2p-core 0.7.0
+		go helpers.FullClose(stream) //nolint:errcheck
+	}()
 
 	// Write request.
 	_ = stream.SetWriteDeadline(time.Now().Add(WriteReqDeadline))
