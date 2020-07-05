@@ -6,14 +6,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/filecoin-project/lotus/api/v0api"
-
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/urfave/cli/v2"
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
+	"golang.org/x/xerrors"
 
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -27,7 +25,6 @@ var ledgerCmd = &cli.Command{
 		ledgerListAddressesCmd,
 		ledgerKeyInfoCmd,
 		ledgerSignTestCmd,
-		ledgerShowCmd,
 	},
 }
 
@@ -43,7 +40,7 @@ var ledgerListAddressesCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		var api v0api.FullNode
+		var api api.FullNode
 		if cctx.Bool("print-balances") {
 			a, closer, err := lcli.GetFullNodeAPI(cctx)
 			if err != nil {
@@ -60,7 +57,6 @@ var ledgerListAddressesCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer fl.Close() // nolint
 
 		end := 20
 		for i := 0; i < end; i++ {
@@ -80,22 +76,15 @@ var ledgerListAddressesCmd = &cli.Command{
 			}
 
 			if cctx.Bool("print-balances") && api != nil { // api check makes linter happier
-				a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
+				b, err := api.WalletBalance(ctx, addr)
 				if err != nil {
-					if strings.Contains(err.Error(), "actor not found") {
-						a = nil
-					} else {
-						return err
-					}
+					return xerrors.Errorf("getting balance: %w", err)
+				}
+				if !b.IsZero() {
+					end = i + 21 // BIP32 spec, stop after 20 empty addresses
 				}
 
-				balance := big.Zero()
-				if a != nil {
-					balance = a.Balance
-					end = i + 20 + 1
-				}
-
-				fmt.Printf("%s %s %s\n", addr, printHDPath(p), types.FIL(balance))
+				fmt.Printf("%s %s %s\n", addr, printHDPath(p), types.FIL(b))
 			} else {
 				fmt.Printf("%s %s\n", addr, printHDPath(p))
 			}
@@ -170,7 +159,6 @@ var ledgerKeyInfoCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer fl.Close() // nolint
 
 		p, err := parseHDPath(cctx.Args().First())
 		if err != nil {
@@ -247,46 +235,13 @@ var ledgerSignTestCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Message: %x\n", b.RawData())
 
 		sig, err := fl.SignSECP256K1(p, b.RawData())
 		if err != nil {
 			return err
 		}
 
-		sigBytes := append([]byte{byte(crypto.SigTypeSecp256k1)}, sig.SignatureBytes()...)
-
-		fmt.Printf("Signature: %x\n", sigBytes)
-
-		return nil
-	},
-}
-
-var ledgerShowCmd = &cli.Command{
-	Name:      "show",
-	ArgsUsage: "[hd path]",
-	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {
-			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
-		}
-
-		fl, err := ledgerfil.FindLedgerFilecoinApp()
-		if err != nil {
-			return err
-		}
-		defer fl.Close() // nolint
-
-		p, err := parseHDPath(cctx.Args().First())
-		if err != nil {
-			return err
-		}
-
-		_, _, a, err := fl.ShowAddressPubKeySECP256K1(p)
-		if err != nil {
-			return err
-		}
-
-		fmt.Println(a)
+		fmt.Println(sig.SignatureBytes())
 
 		return nil
 	},
