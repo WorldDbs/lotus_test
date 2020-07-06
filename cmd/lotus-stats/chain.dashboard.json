@@ -1,11 +1,20 @@
 {
-  "__inputs": [],
+  "__inputs": [
+    {
+      "name": "DS_INFLUXDB",
+      "label": "InfluxDB",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
   "__requires": [
     {
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.3.0"
+      "version": "6.5.0-pre"
     },
     {
       "type": "panel",
@@ -27,8 +36,8 @@
     },
     {
       "type": "panel",
-      "id": "table-old",
-      "name": "Table (old)",
+      "id": "table",
+      "name": "Table",
       "version": ""
     }
   ],
@@ -49,7 +58,6 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1604018016916,
   "links": [],
   "panels": [
     {
@@ -57,15 +65,8 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$network",
+      "datasource": "${DS_INFLUXDB}",
       "decimals": 2,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
       "fill": 3,
       "fillGradient": 0,
       "gridPos": {
@@ -74,7 +75,6 @@
         "x": 0,
         "y": 0
       },
-      "hiddenSeries": false,
       "hideTimeOverride": false,
       "id": 38,
       "interval": "",
@@ -93,25 +93,15 @@
       },
       "lines": false,
       "linewidth": 1,
-      "nullPointMode": "null as zero",
+      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "all",
-          "bars": false,
-          "color": "rgb(99, 99, 99)",
-          "fill": 1,
-          "lines": true,
-          "stack": false
-        }
-      ],
+      "seriesOverrides": [],
       "spaceLength": 10,
       "stack": true,
       "steppedLine": false,
@@ -138,11 +128,10 @@
               "type": "fill"
             }
           ],
-          "hide": false,
           "measurement": "chain.election",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(\"value\") FROM \"chain.election\" WHERE $timeFilter GROUP BY time($blockInterval), \"miner\" fill(null)",
+          "query": "SELECT count(\"value\") FROM \"chain.election\" WHERE $timeFilter -10m GROUP BY time($__interval), \"miner\" fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -167,52 +156,13 @@
             ]
           ],
           "tags": []
-        },
-        {
-          "alias": "all",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": false,
-          "orderByTime": "ASC",
-          "policy": "defult",
-          "query": "SELECT TRIPLE_EXPONENTIAL_MOVING_AVERAGE(sum(\"value\"), 40) FROM \"chain.election\" WHERE  $timeFilter -$blockInterval*40 AND time < now() - $blockInterval*3 GROUP BY time($blockInterval) fill(0)",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Blocks and Win Counts",
+      "title": "Blocks Won",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -257,14 +207,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -273,7 +216,6 @@
         "x": 0,
         "y": 9
       },
-      "hiddenSeries": false,
       "id": 22,
       "interval": "",
       "legend": {
@@ -290,10 +232,9 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -377,13 +318,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "s",
       "gauge": {
         "maxValue": 100,
@@ -415,6 +350,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -486,13 +422,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "bytes",
       "gauge": {
         "maxValue": 100,
@@ -524,6 +454,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -562,7 +493,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(\"value\") FROM \"chain.power\" WHERE $timeFilter GROUP BY time(25s)",
+          "query": "SELECT sum(\"value\") FROM \"chain.miner_power\" WHERE $timeFilter GROUP BY time(45s)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -607,13 +538,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -645,6 +570,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -670,7 +596,7 @@
           "groupBy": [
             {
               "params": [
-                "$blockInterval"
+                "$interval"
               ],
               "type": "time"
             }
@@ -690,7 +616,7 @@
               },
               {
                 "params": [],
-                "type": "count"
+                "type": "sum"
               }
             ]
           ],
@@ -722,13 +648,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -760,6 +680,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -825,13 +746,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "s",
       "gauge": {
         "maxValue": 100,
@@ -863,6 +778,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -932,13 +848,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -970,6 +880,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -995,7 +906,7 @@
           "groupBy": [
             {
               "params": [
-                "$blockInterval"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -1006,7 +917,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "chain.message_gaspremium",
+          "measurement": "chain.message_gasprice",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -1021,7 +932,7 @@
               },
               {
                 "params": [],
-                "type": "median"
+                "type": "mean"
               }
             ]
           ],
@@ -1031,7 +942,7 @@
       "thresholds": "",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Avg Gas Premium",
+      "title": "Avg Gas Price",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1052,13 +963,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "decbytes",
       "gauge": {
         "maxValue": 100,
@@ -1090,6 +995,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -1115,7 +1021,7 @@
           "groupBy": [
             {
               "params": [
-                "$blockInterval"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -1172,13 +1078,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "bytes",
       "gauge": {
         "maxValue": 100,
@@ -1210,6 +1110,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -1235,7 +1136,7 @@
           "groupBy": [
             {
               "params": [
-                "$blockInterval"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -1292,13 +1193,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -1330,6 +1225,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "pluginVersion": "6.4.2",
       "postfix": "",
       "postfixFontSize": "50%",
@@ -1356,7 +1252,7 @@
           "groupBy": [
             {
               "params": [
-                "$blockInterval"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -1415,14 +1311,8 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
+      "datasource": "${DS_INFLUXDB}",
       "decimals": 0,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "format": "dateTimeFromNow",
       "gauge": {
         "maxValue": 100,
@@ -1454,6 +1344,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -1522,14 +1413,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1538,7 +1422,6 @@
         "x": 4,
         "y": 16
       },
-      "hiddenSeries": false,
       "id": 2,
       "legend": {
         "alignAsTable": true,
@@ -1558,10 +1441,9 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1687,13 +1569,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -1725,6 +1601,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "FIL",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -1783,13 +1660,7 @@
     },
     {
       "columns": [],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "fontSize": "100%",
       "gridPos": {
         "h": 21,
@@ -1798,6 +1669,7 @@
         "y": 19
       },
       "id": 28,
+      "options": {},
       "pageSize": null,
       "showHeader": true,
       "sort": {
@@ -1807,14 +1679,12 @@
       "styles": [
         {
           "alias": "Time",
-          "align": "auto",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "pattern": "Time",
           "type": "hidden"
         },
         {
           "alias": "",
-          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1831,7 +1701,6 @@
         },
         {
           "alias": "",
-          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1872,7 +1741,7 @@
       "timeShift": null,
       "title": "Top Power Table",
       "transform": "table",
-      "type": "table-old"
+      "type": "table"
     },
     {
       "aliasColors": {},
@@ -1880,14 +1749,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "fill": 5,
       "fillGradient": 0,
       "gridPos": {
@@ -1896,9 +1758,8 @@
         "x": 4,
         "y": 19
       },
-      "hiddenSeries": false,
       "id": 40,
-      "interval": "300s",
+      "interval": "",
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -1917,12 +1778,11 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": true,
-      "pluginVersion": "7.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1957,7 +1817,7 @@
           "measurement": "chain.miner_power",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"chain.miner_power\" WHERE $timeFilter GROUP BY time($__interval), \"miner\" fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"chain.miner_power\" WHERE $timeFilter GROUP BY time($__interval), \"miner\" fill(previous)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2025,13 +1885,7 @@
     },
     {
       "columns": [],
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "fontSize": "100%",
       "gridPos": {
         "h": 21,
@@ -2040,6 +1894,7 @@
         "y": 19
       },
       "id": 18,
+      "options": {},
       "pageSize": null,
       "showHeader": true,
       "sort": {
@@ -2049,7 +1904,6 @@
       "styles": [
         {
           "alias": "Height",
-          "align": "auto",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "link": false,
           "mappingType": 1,
@@ -2060,7 +1914,6 @@
         },
         {
           "alias": "Tipset",
-          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -2077,7 +1930,6 @@
         },
         {
           "alias": "",
-          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -2121,77 +1973,74 @@
       "timeShift": null,
       "title": "Chain Table",
       "transform": "timeseries_to_columns",
-      "type": "table-old"
+      "type": "table"
     },
     {
       "aliasColors": {},
       "bars": false,
+      "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 12,
         "x": 4,
         "y": 27
       },
-      "hiddenSeries": false,
-      "id": 50,
+      "id": 24,
       "legend": {
+        "alignAsTable": false,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": false
       },
       "lines": true,
       "linewidth": 1,
+      "links": [],
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "/.*/",
+          "color": "rgb(31, 120, 193)"
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "alias": "Total GasLimit",
           "groupBy": [
             {
               "params": [
-                "$blockInterval"
+                "$__interval"
               ],
               "type": "time"
             },
             {
               "params": [
-                "null"
+                "previous"
               ],
               "type": "fill"
             }
           ],
-          "measurement": "chain.gas_limit_total",
+          "measurement": "chain.pledge_collateral",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT max(\"value\") FROM \"chain.gas_limit_total\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": false,
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -2204,107 +2053,18 @@
               },
               {
                 "params": [],
-                "type": "max"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "Total GasUsed",
-          "groupBy": [
-            {
-              "params": [
-                "$blockInterval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "chain.gas_used_total",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT max(\"value\") FROM \"chain.gas_used_total\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": false,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "max"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "Total Unique GasLimit",
-          "groupBy": [
-            {
-              "params": [
-                "$blockInterval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "chain.gas_limit_uniq_total",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT max(\"value\") FROM \"chain.gas_limit_total\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": false,
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "max"
+                "type": "mean"
               }
             ]
           ],
           "tags": []
         }
       ],
-      "thresholds": [
-        {
-          "colorMode": "custom",
-          "fill": false,
-          "fillColor": "rgba(50, 116, 217, 0.2)",
-          "line": true,
-          "lineColor": "rgba(31, 96, 196, 0.6)",
-          "op": "gt",
-          "value": 25000000000,
-          "yaxis": "left"
-        }
-      ],
+      "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Network Gas",
+      "title": "Pledge Collateral",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2321,7 +2081,7 @@
       "yaxes": [
         {
           "format": "short",
-          "label": null,
+          "label": "FIL",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -2347,23 +2107,15 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 12,
         "x": 4,
-        "y": 34
+        "y": 33
       },
-      "hiddenSeries": false,
       "id": 44,
       "legend": {
         "avg": false,
@@ -2379,10 +2131,9 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2395,7 +2146,7 @@
           "groupBy": [
             {
               "params": [
-                "$blockInterval"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -2477,14 +2228,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -2493,7 +2237,6 @@
         "x": 0,
         "y": 40
       },
-      "hiddenSeries": false,
       "id": 34,
       "legend": {
         "alignAsTable": true,
@@ -2508,12 +2251,11 @@
       },
       "lines": false,
       "linewidth": 1,
-      "nullPointMode": "null as zero",
+      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2527,7 +2269,7 @@
           "groupBy": [
             {
               "params": [
-                "$blockInterval"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -2618,14 +2360,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -2634,7 +2369,6 @@
         "x": 12,
         "y": 40
       },
-      "hiddenSeries": false,
       "id": 36,
       "legend": {
         "alignAsTable": true,
@@ -2653,12 +2387,11 @@
       },
       "lines": false,
       "linewidth": 1,
-      "nullPointMode": "null as zero",
+      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "7.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2704,7 +2437,7 @@
           "measurement": "chain.message_count",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(\"value\") FROM \"chain.message_count\" WHERE $timeFilter GROUP BY time($blockInterval), \"method\", \"exitcode\", \"actor\" fill(null)",
+          "query": "SELECT sum(\"value\") FROM \"chain.message_count\" WHERE $timeFilter GROUP BY time($__interval), \"method\", \"exitcode\", \"actor\" fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2765,701 +2498,14 @@
         "align": false,
         "alignLevel": null
       }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 49
-      },
-      "hiddenSeries": false,
-      "id": 48,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "connected",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.3.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Transfer Fee",
-          "groupBy": [
-            {
-              "params": [
-                "$blockInterval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "chain.basefee",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean(\"value\")*1000000 FROM \"chain.basefee\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Cost of simple transfer [FIL]",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 2,
-          "format": "sci",
-          "label": "",
-          "logBase": 10,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 49
-      },
-      "hiddenSeries": false,
-      "id": 46,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "connected",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.3.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Transfer Fee",
-          "groupBy": [
-            {
-              "params": [
-                "$blockInterval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "chain.basefee",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"chain.basefee\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Base Fee[FIL]",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": null,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$network",
-      "decimals": null,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 57
-      },
-      "hiddenSeries": false,
-      "id": 51,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "connected",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.3.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Precommit Transfer Fee",
-          "groupBy": [
-            {
-              "params": [
-                "$blockInterval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "chain.basefee",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean(\"value\")*24000000 FROM \"chain.basefee\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "Commit Transfer Fee",
-          "groupBy": [
-            {
-              "params": [
-                "$blockInterval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "chain.basefee",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean(\"value\")*56000000 FROM \"chain.basefee\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Message Gas fees [FIL]",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 2,
-          "format": "none",
-          "label": null,
-          "logBase": 10,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$network",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 57
-      },
-      "hiddenSeries": false,
-      "id": 52,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "connected",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.3.0",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "10 PIB PoSt Fee",
-          "groupBy": [
-            {
-              "params": [
-                "$blockInterval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "chain.basefee",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean(\"value\")*940000000 FROM \"chain.basefee\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "750TiB miner PoSt Fee",
-          "groupBy": [
-            {
-              "params": [
-                "$blockInterval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "chain.basefee",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean(\"value\")*580000000 FROM \"chain.basefee\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "10TiB miner PoSt Fee",
-          "groupBy": [
-            {
-              "params": [
-                "$blockInterval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "chain.basefee",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean(\"value\")*380000000 FROM \"chain.basefee\" WHERE $timeFilter GROUP BY time($blockInterval) fill(null)",
-          "rawQuery": true,
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Message Gas fees [FIL]",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 2,
-          "format": "none",
-          "label": null,
-          "logBase": 10,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     }
   ],
-  "refresh": false,
-  "schemaVersion": 26,
+  "refresh": "45s",
+  "schemaVersion": 20,
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "current": {
-          "selected": false,
-          "text": "filecoin-ntwk-testnet",
-          "value": "filecoin-ntwk-testnet"
-        },
-        "error": null,
-        "hide": 0,
-        "includeAll": false,
-        "label": "Network",
-        "multi": false,
-        "name": "network",
-        "options": [],
-        "query": "influxdb",
-        "queryValue": "",
-        "refresh": 1,
-        "regex": "/^filecoin-ntwk-/",
-        "skipUrlSync": false,
-        "type": "datasource"
-      },
-      {
-        "auto": false,
-        "auto_count": 30,
-        "auto_min": "10s",
-        "current": {
-          "selected": false,
-          "text": "30s",
-          "value": "30s"
-        },
-        "error": null,
-        "hide": 2,
-        "label": null,
-        "name": "blockInterval",
-        "options": [
-          {
-            "selected": true,
-            "text": "30s",
-            "value": "30s"
-          }
-        ],
-        "query": "30s",
-        "refresh": 2,
-        "skipUrlSync": false,
-        "type": "interval"
-      }
-    ]
+    "list": []
   },
   "time": {
     "from": "now-30m",
@@ -3469,7 +2515,6 @@
     "refresh_intervals": [
       "5s",
       "10s",
-      "25s",
       "30s",
       "45s",
       "1m",
@@ -3482,7 +2527,7 @@
     ]
   },
   "timezone": "",
-  "title": "Filecoin Chain Stats",
+  "title": "Chain",
   "uid": "z6FtI92Zz",
-  "version": 4
+  "version": 9
 }
