@@ -3,9 +3,13 @@ package test
 import (
 	"context"
 	"fmt"
+	"os"
 	"sync/atomic"
 	"testing"
 	"time"
+
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	paych0 "github.com/filecoin-project/specs-actors/actors/builtin/paych"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -15,18 +19,18 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/api/apibstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
+	_ = os.Setenv("BELLMAN_NO_GPU", "1")
+
 	ctx := context.Background()
 	n, sn := b(t, TwoFull, OneMiner)
 
@@ -132,7 +136,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		t.Fatal("Unable to settle payment channel")
 	}
 
-	creatorStore := adt.WrapStore(ctx, cbor.NewCborStore(blockstore.NewAPIBlockstore(paymentCreator)))
+	creatorStore := adt.WrapStore(ctx, cbor.NewCborStore(apibstore.NewAPIBlockstore(paymentCreator)))
 
 	// wait for the receiver to submit their vouchers
 	ev := events.NewEvents(ctx, paymentCreator)
@@ -223,7 +227,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	}
 
 	// wait for the settlement period to pass before collecting
-	waitForBlocks(ctx, t, bm, paymentReceiver, receiverAddr, policy.PaychSettleDelay)
+	waitForBlocks(ctx, t, bm, paymentReceiver, receiverAddr, paych0.SettleDelay)
 
 	creatorPreCollectBalance, err := paymentCreator.WalletBalance(ctx, createrAddr)
 	if err != nil {
@@ -235,7 +239,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	res, err = paymentReceiver.StateWaitMsg(ctx, collectMsg, 3, api.LookbackNoLimit, true)
+	res, err = paymentReceiver.StateWaitMsg(ctx, collectMsg, 3)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -279,7 +283,7 @@ func waitForBlocks(ctx context.Context, t *testing.T, bm *BlockMiner, paymentRec
 
 		// Add a real block
 		m, err := paymentReceiver.MpoolPushMessage(ctx, &types.Message{
-			To:    builtin.BurntFundsActorAddr,
+			To:    builtin0.BurntFundsActorAddr,
 			From:  receiverAddr,
 			Value: types.NewInt(0),
 		}, nil)
@@ -287,7 +291,7 @@ func waitForBlocks(ctx context.Context, t *testing.T, bm *BlockMiner, paymentRec
 			t.Fatal(err)
 		}
 
-		_, err = paymentReceiver.StateWaitMsg(ctx, m.Cid(), 1, api.LookbackNoLimit, true)
+		_, err = paymentReceiver.StateWaitMsg(ctx, m.Cid(), 1)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -299,7 +303,7 @@ func waitForMessage(ctx context.Context, t *testing.T, paymentCreator TestNode, 
 	defer cancel()
 
 	fmt.Println("Waiting for", desc)
-	res, err := paymentCreator.StateWaitMsg(ctx, msgCid, 1, api.LookbackNoLimit, true)
+	res, err := paymentCreator.StateWaitMsg(ctx, msgCid, 1)
 	if err != nil {
 		fmt.Println("Error waiting for", desc, err)
 		t.Fatal(err)
