@@ -12,28 +12,20 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gorilla/mux"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-storedcounter"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/test"
-	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
-	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
@@ -41,15 +33,14 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	"github.com/filecoin-project/lotus/genesis"
-	lotusminer "github.com/filecoin-project/lotus/miner"
+	miner2 "github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/modules"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	testing2 "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/storage/mockstorage"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -57,13 +48,6 @@ import (
 	"github.com/multiformats/go-multiaddr"
 	"github.com/stretchr/testify/require"
 )
-
-func init() {
-	chain.BootstrapPeerThreshold = 1
-	messagepool.HeadChangeCoalesceMinDelay = time.Microsecond
-	messagepool.HeadChangeCoalesceMaxDelay = 2 * time.Microsecond
-	messagepool.HeadChangeCoalesceMergeInterval = 100 * time.Nanosecond
-}
 
 func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Address, act address.Address, pk crypto.PrivKey, tnd test.TestNode, mn mocknet.Mocknet, opts node.Option) test.TestStorageNode {
 	r := repo.NewMemory(nil)
@@ -83,7 +67,7 @@ func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Addr
 	})
 	require.NoError(t, err)
 
-	ds, err := lr.Datastore(context.TODO(), "/metadata")
+	ds, err := lr.Datastore("/metadata")
 	require.NoError(t, err)
 	err = ds.Put(datastore.NewKey("miner-address"), act.Bytes())
 	require.NoError(t, err)
@@ -102,13 +86,13 @@ func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Addr
 	peerid, err := peer.IDFromPrivateKey(pk)
 	require.NoError(t, err)
 
-	enc, err := actors.SerializeParams(&miner2.ChangePeerIDParams{NewID: abi.PeerID(peerid)})
+	enc, err := actors.SerializeParams(&miner0.ChangePeerIDParams{NewID: abi.PeerID(peerid)})
 	require.NoError(t, err)
 
 	msg := &types.Message{
 		To:     act,
 		From:   waddr,
-		Method: miner.Methods.ChangePeerID,
+		Method: builtin.MethodsMiner.ChangePeerID,
 		Params: enc,
 		Value:  types.NewInt(0),
 	}
@@ -119,7 +103,7 @@ func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Addr
 	// start node
 	var minerapi api.StorageMiner
 
-	mineBlock := make(chan lotusminer.MineReq)
+	mineBlock := make(chan miner2.MineReq)
 	stop, err := node.New(ctx,
 		node.StorageMiner(&minerapi),
 		node.Online(),
@@ -128,8 +112,8 @@ func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Addr
 
 		node.MockHost(mn),
 
-		node.Override(new(v1api.FullNode), tnd),
-		node.Override(new(*lotusminer.Miner), lotusminer.NewTestMiner(mineBlock, act)),
+		node.Override(new(api.FullNode), tnd),
+		node.Override(new(*miner2.Miner), miner2.NewTestMiner(mineBlock, act)),
 
 		opts,
 	)
@@ -145,7 +129,7 @@ func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Addr
 
 	err = minerapi.NetConnect(ctx, remoteAddrs)
 	require.NoError(t, err)*/
-	mineOne := func(ctx context.Context, req lotusminer.MineReq) error {
+	mineOne := func(ctx context.Context, req miner2.MineReq) error {
 		select {
 		case mineBlock <- req:
 			return nil
@@ -154,50 +138,7 @@ func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Addr
 		}
 	}
 
-	return test.TestStorageNode{StorageMiner: minerapi, MineOne: mineOne, Stop: stop}
-}
-
-func storageBuilder(parentNode test.TestNode, mn mocknet.Mocknet, opts node.Option) test.StorageBuilder {
-	return func(ctx context.Context, t *testing.T, spt abi.RegisteredSealProof, owner address.Address) test.TestStorageNode {
-		pk, _, err := crypto.GenerateEd25519Key(rand.Reader)
-		require.NoError(t, err)
-
-		minerPid, err := peer.IDFromPrivateKey(pk)
-		require.NoError(t, err)
-
-		params, serr := actors.SerializeParams(&power2.CreateMinerParams{
-			Owner:         owner,
-			Worker:        owner,
-			SealProofType: spt,
-			Peer:          abi.PeerID(minerPid),
-		})
-		require.NoError(t, serr)
-
-		createStorageMinerMsg := &types.Message{
-			To:    power.Address,
-			From:  owner,
-			Value: big.Zero(),
-
-			Method: power.Methods.CreateMiner,
-			Params: params,
-
-			GasLimit:   0,
-			GasPremium: big.NewInt(5252),
-		}
-
-		signed, err := parentNode.MpoolPushMessage(ctx, createStorageMinerMsg, nil)
-		require.NoError(t, err)
-
-		mw, err := parentNode.StateWaitMsg(ctx, signed.Cid(), build.MessageConfidence, api.LookbackNoLimit, true)
-		require.NoError(t, err)
-		require.Equal(t, exitcode.Ok, mw.Receipt.ExitCode)
-
-		var retval power2.CreateMinerReturn
-		err = retval.UnmarshalCBOR(bytes.NewReader(mw.Receipt.Return))
-		require.NoError(t, err)
-
-		return CreateTestStorageNode(ctx, t, owner, retval.IDAddress, pk, parentNode, mn, opts)
-	}
+	return test.TestStorageNode{StorageMiner: minerapi, MineOne: mineOne}
 }
 
 func Builder(t *testing.T, fullOpts []test.FullNodeOpts, storage []test.StorageMiner) ([]test.TestNode, []test.TestStorageNode) {
@@ -315,8 +256,6 @@ func mockBuilderOpts(t *testing.T, fullOpts []test.FullNodeOpts, storage []test.
 		if rpc {
 			fulls[i] = fullRpc(t, fulls[i])
 		}
-
-		fulls[i].Stb = storageBuilder(fulls[i], mn, node.Options())
 	}
 
 	for i, def := range storage {
@@ -339,11 +278,7 @@ func mockBuilderOpts(t *testing.T, fullOpts []test.FullNodeOpts, storage []test.
 		genMiner := maddrs[i]
 		wa := genms[i].Worker
 
-		opts := def.Opts
-		if opts == nil {
-			opts = node.Options()
-		}
-		storers[i] = CreateTestStorageNode(ctx, t, wa, genMiner, pk, f, mn, opts)
+		storers[i] = CreateTestStorageNode(ctx, t, wa, genMiner, pk, f, mn, node.Options())
 		if err := storers[i].StorageAddLocal(ctx, presealDirs[i]); err != nil {
 			t.Fatalf("%+v", err)
 		}
@@ -410,7 +345,7 @@ func mockSbBuilderOpts(t *testing.T, fullOpts []test.FullNodeOpts, storage []tes
 			preseals = test.GenesisPreseals
 		}
 
-		genm, k, err := mockstorage.PreSeal(abi.RegisteredSealProof_StackedDrg2KiBV1, maddr, preseals)
+		genm, k, err := mockstorage.PreSeal(2048, maddr, preseals)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -467,9 +402,6 @@ func mockSbBuilderOpts(t *testing.T, fullOpts []test.FullNodeOpts, storage []tes
 
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 
-			// so that we subscribe to pubsub topics immediately
-			node.Override(new(dtypes.Bootstrapper), dtypes.Bootstrapper(true)),
-
 			genesis,
 
 			fullOpts[i].Opts(fulls),
@@ -483,14 +415,6 @@ func mockSbBuilderOpts(t *testing.T, fullOpts []test.FullNodeOpts, storage []tes
 		if rpc {
 			fulls[i] = fullRpc(t, fulls[i])
 		}
-
-		fulls[i].Stb = storageBuilder(fulls[i], mn, node.Options(
-			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
-				return mock.NewMockSectorMgr(nil), nil
-			}),
-			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
-			node.Unset(new(*sectorstorage.Manager)),
-		))
 	}
 
 	for i, def := range storage {
@@ -518,17 +442,12 @@ func mockSbBuilderOpts(t *testing.T, fullOpts []test.FullNodeOpts, storage []tes
 			}
 		}
 
-		opts := def.Opts
-		if opts == nil {
-			opts = node.Options()
-		}
 		storers[i] = CreateTestStorageNode(ctx, t, genms[i].Worker, maddrs[i], pidKeys[i], f, mn, node.Options(
 			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
-				return mock.NewMockSectorMgr(sectors), nil
+				return mock.NewMockSectorMgr(build.DefaultSectorSize(), sectors), nil
 			}),
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 			node.Unset(new(*sectorstorage.Manager)),
-			opts,
 		))
 
 		if rpc {
@@ -559,49 +478,34 @@ func mockSbBuilderOpts(t *testing.T, fullOpts []test.FullNodeOpts, storage []tes
 }
 
 func fullRpc(t *testing.T, nd test.TestNode) test.TestNode {
-	ma, listenAddr, err := CreateRPCServer(t, map[string]interface{}{
-		"/rpc/v1": nd,
-		"/rpc/v0": &v0api.WrapperV1Full{FullNode: nd},
-	})
+	ma, listenAddr, err := CreateRPCServer(nd)
 	require.NoError(t, err)
 
-	var stop func()
 	var full test.TestNode
-	full.FullNode, stop, err = client.NewFullNodeRPCV1(context.Background(), listenAddr+"/rpc/v1", nil)
+	full.FullNode, _, err = client.NewFullNodeRPC(context.Background(), listenAddr, nil)
 	require.NoError(t, err)
-	t.Cleanup(stop)
 
 	full.ListenAddr = ma
 	return full
 }
 
 func storerRpc(t *testing.T, nd test.TestStorageNode) test.TestStorageNode {
-	ma, listenAddr, err := CreateRPCServer(t, map[string]interface{}{
-		"/rpc/v0": nd,
-	})
+	ma, listenAddr, err := CreateRPCServer(nd)
 	require.NoError(t, err)
 
-	var stop func()
 	var storer test.TestStorageNode
-	storer.StorageMiner, stop, err = client.NewStorageMinerRPCV0(context.Background(), listenAddr+"/rpc/v0", nil)
+	storer.StorageMiner, _, err = client.NewStorageMinerRPC(context.Background(), listenAddr, nil)
 	require.NoError(t, err)
-	t.Cleanup(stop)
 
 	storer.ListenAddr = ma
 	storer.MineOne = nd.MineOne
 	return storer
 }
 
-func CreateRPCServer(t *testing.T, handlers map[string]interface{}) (multiaddr.Multiaddr, string, error) {
-	m := mux.NewRouter()
-	for path, handler := range handlers {
-		rpcServer := jsonrpc.NewServer()
-		rpcServer.Register("Filecoin", handler)
-		m.Handle(path, rpcServer)
-	}
-	testServ := httptest.NewServer(m) //  todo: close
-	t.Cleanup(testServ.Close)
-	t.Cleanup(testServ.CloseClientConnections)
+func CreateRPCServer(handler interface{}) (multiaddr.Multiaddr, string, error) {
+	rpcServer := jsonrpc.NewServer()
+	rpcServer.Register("Filecoin", handler)
+	testServ := httptest.NewServer(rpcServer) //  todo: close
 
 	addr := testServ.Listener.Addr()
 	listenAddr := "ws://" + addr.String()
