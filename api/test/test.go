@@ -2,72 +2,49 @@ package test
 
 import (
 	"context"
-	"fmt"
-	"os"
-	"strings"
 	"testing"
 	"time"
 
-	logging "github.com/ipfs/go-log/v2"
+	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/types"
+
 	"github.com/multiformats/go-multiaddr"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/network"
-
-	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v1api"
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
 )
 
-func init() {
-	logging.SetAllLoggers(logging.LevelInfo)
-	err := os.Setenv("BELLMAN_NO_GPU", "1")
-	if err != nil {
-		panic(fmt.Sprintf("failed to set BELLMAN_NO_GPU env variable: %s", err))
-	}
-	build.InsecurePoStValidation = true
-}
-
-type StorageBuilder func(context.Context, *testing.T, abi.RegisteredSealProof, address.Address) TestStorageNode
-
 type TestNode struct {
-	v1api.FullNode
+	api.FullNode
 	// ListenAddr is the address on which an API server is listening, if an
 	// API server is created for this Node
 	ListenAddr multiaddr.Multiaddr
-
-	Stb StorageBuilder
 }
 
 type TestStorageNode struct {
-	lapi.StorageMiner
+	api.StorageMiner
 	// ListenAddr is the address on which an API server is listening, if an
 	// API server is created for this Node
 	ListenAddr multiaddr.Multiaddr
 
 	MineOne func(context.Context, miner.MineReq) error
-	Stop    func(context.Context) error
 }
 
 var PresealGenesis = -1
 
 const GenesisPreseals = 2
 
-const TestSpt = abi.RegisteredSealProof_StackedDrg2KiBV1_1
-
 // Options for setting up a mock storage miner
 type StorageMiner struct {
 	Full    int
-	Opts    node.Option
 	Preseal int
 }
 
@@ -102,7 +79,6 @@ func TestApis(t *testing.T, b APIBuilder) {
 	t.Run("testMining", ts.testMining)
 	t.Run("testMiningReal", ts.testMiningReal)
 	t.Run("testSearchMsg", ts.testSearchMsg)
-	t.Run("testNonGenesisMiner", ts.testNonGenesisMiner)
 }
 
 func DefaultFullOpts(nFull int) []FullNodeOpts {
@@ -121,74 +97,31 @@ var OneMiner = []StorageMiner{{Full: 0, Preseal: PresealGenesis}}
 var OneFull = DefaultFullOpts(1)
 var TwoFull = DefaultFullOpts(2)
 
-var FullNodeWithLatestActorsAt = func(upgradeHeight abi.ChainEpoch) FullNodeOpts {
-	if upgradeHeight == -1 {
-		upgradeHeight = 3
-	}
-
+var FullNodeWithUpgradeAt = func(upgradeHeight abi.ChainEpoch) FullNodeOpts {
 	return FullNodeOpts{
 		Opts: func(nodes []TestNode) node.Option {
 			return node.Override(new(stmgr.UpgradeSchedule), stmgr.UpgradeSchedule{{
-				// prepare for upgrade.
-				Network:   network.Version9,
-				Height:    1,
-				Migration: stmgr.UpgradeActorsV2,
-			}, {
-				Network:   network.Version10,
-				Height:    2,
-				Migration: stmgr.UpgradeActorsV3,
-			}, {
-				Network:   network.Version12,
+				// Skip directly to tape height so precommits work.
+				Network:   network.Version5,
 				Height:    upgradeHeight,
-				Migration: stmgr.UpgradeActorsV4,
-			}})
-		},
-	}
-}
-
-var FullNodeWithSDRAt = func(calico, persian abi.ChainEpoch) FullNodeOpts {
-	return FullNodeOpts{
-		Opts: func(nodes []TestNode) node.Option {
-			return node.Override(new(stmgr.UpgradeSchedule), stmgr.UpgradeSchedule{{
-				Network:   network.Version6,
-				Height:    1,
 				Migration: stmgr.UpgradeActorsV2,
-			}, {
-				Network:   network.Version7,
-				Height:    calico,
-				Migration: stmgr.UpgradeCalico,
-			}, {
-				Network: network.Version8,
-				Height:  persian,
 			}})
 		},
 	}
-}
-
-var MineNext = miner.MineReq{
-	InjectNulls: 0,
-	Done:        func(bool, abi.ChainEpoch, error) {},
 }
 
 func (ts *testSuite) testVersion(t *testing.T) {
-	lapi.RunningNodeType = lapi.NodeFull
-	t.Cleanup(func() {
-		lapi.RunningNodeType = lapi.NodeUnknown
-	})
+	build.RunningNodeType = build.NodeFull
 
 	ctx := context.Background()
 	apis, _ := ts.makeNodes(t, OneFull, OneMiner)
-	napi := apis[0]
+	api := apis[0]
 
-	v, err := napi.Version(ctx)
+	v, err := api.Version(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
-	versions := strings.Split(v.Version, "+")
-	if len(versions) <= 0 {
-		t.Fatal("empty version")
-	}
-	require.Equal(t, versions[0], build.BuildVersion)
+	require.Equal(t, v.Version, build.BuildVersion)
 }
 
 func (ts *testSuite) testSearchMsg(t *testing.T) {
@@ -215,7 +148,7 @@ func (ts *testSuite) testSearchMsg(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	res, err := api.StateWaitMsg(ctx, sm.Cid(), 1, lapi.LookbackNoLimit, true)
+	res, err := api.StateWaitMsg(ctx, sm.Cid(), 1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -223,7 +156,7 @@ func (ts *testSuite) testSearchMsg(t *testing.T) {
 		t.Fatal("did not successfully send message")
 	}
 
-	searchRes, err := api.StateSearchMsg(ctx, types.EmptyTSK, sm.Cid(), lapi.LookbackNoLimit, true)
+	searchRes, err := api.StateSearchMsg(ctx, sm.Cid())
 	if err != nil {
 		t.Fatal(err)
 	}
