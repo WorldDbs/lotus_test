@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
 )
 
 type MpoolLocker struct {
@@ -34,5 +33,3 @@ func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(),
 		<-lk
 	}, nil
 }
-
-type DefaultMaxFeeFunc func() (abi.TokenAmount, error)
