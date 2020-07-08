@@ -9,9 +9,9 @@ import (
 )
 
 func TestOpFinish(t *testing.T) {
-	sb := NewMockSectorMgr(nil)
+	sb := NewMockSectorMgr(2048, nil)
 
-	sid, pieces, err := sb.StageFakeData(123, abi.RegisteredSealProof_StackedDrg2KiBV1_1)
+	sid, pieces, err := sb.StageFakeData(123)
 	if err != nil {
 		t.Fatal(err)
 	}
