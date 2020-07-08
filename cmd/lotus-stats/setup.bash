@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-GRAFANA_HOST="http://localhost:13000"
+GRAFANA_HOST="localhost:3000"
 
 curl -s -XPOST http://admin:admin@$GRAFANA_HOST/api/datasources -H 'Content-Type: text/json' --data-binary @- > /dev/null << EOF
 {
-  "name":"filecoin-ntwk-localstats",
+  "name":"InfluxDB",
   "type":"influxdb",
   "database":"lotus",
   "url": "http://influxdb:8086",
