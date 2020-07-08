@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/filecoin-project/specs-actors/actors/runtime/proof"
+
 	"github.com/ipfs/go-cid"
 
 	ds "github.com/ipfs/go-datastore"
@@ -17,8 +19,6 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
@@ -346,15 +346,12 @@ func (tu *syncTestUtil) checkpointTs(node int, tsk types.TipSetKey) {
 	require.NoError(tu.t, tu.nds[node].SyncCheckpoint(context.TODO(), tsk))
 }
 
-func (tu *syncTestUtil) nodeHasTs(node int, tsk types.TipSetKey) bool {
-	_, err := tu.nds[node].ChainGetTipSet(context.TODO(), tsk)
-	return err == nil
-}
-
 func (tu *syncTestUtil) waitUntilNodeHasTs(node int, tsk types.TipSetKey) {
-	for !tu.nodeHasTs(node, tsk) {
-		// Time to allow for syncing and validation
-		time.Sleep(10 * time.Millisecond)
+	for {
+		_, err := tu.nds[node].ChainGetTipSet(context.TODO(), tsk)
+		if err != nil {
+			break
+		}
 	}
 
 	// Time to allow for syncing and validation
@@ -472,8 +469,8 @@ func (wpp badWpp) GenerateCandidates(context.Context, abi.PoStRandomness, uint64
 	return []uint64{1}, nil
 }
 
-func (wpp badWpp) ComputeProof(context.Context, []proof2.SectorInfo, abi.PoStRandomness) ([]proof2.PoStProof, error) {
-	return []proof2.PoStProof{
+func (wpp badWpp) ComputeProof(context.Context, []proof.SectorInfo, abi.PoStRandomness) ([]proof.PoStProof, error) {
+	return []proof.PoStProof{
 		{
 			PoStProof:  abi.RegisteredPoStProof_StackedDrgWinning2KiBV1,
 			ProofBytes: []byte("evil"),
@@ -576,14 +573,11 @@ func TestDuplicateNonce(t *testing.T) {
 
 	base := tu.g.CurTipset
 
-	// Get the banker from computed tipset state, not the parent.
-	st, _, err := tu.g.StateManager().TipSetState(context.TODO(), base.TipSet())
-	require.NoError(t, err)
-	ba, err := tu.g.StateManager().LoadActorRaw(context.TODO(), tu.g.Banker(), st)
-	require.NoError(t, err)
-
 	// Produce a message from the banker to the rcvr
 	makeMsg := func(rcvr address.Address) *types.SignedMessage {
+
+		ba, err := tu.nds[0].StateGetActor(context.TODO(), tu.g.Banker(), base.TipSet().Key())
+		require.NoError(t, err)
 		msg := types.Message{
 			To:   rcvr,
 			From: tu.g.Banker(),
@@ -625,17 +619,17 @@ func TestDuplicateNonce(t *testing.T) {
 
 	var includedMsg cid.Cid
 	var skippedMsg cid.Cid
-	r0, err0 := tu.nds[0].StateSearchMsg(context.TODO(), ts2.TipSet().Key(), msgs[0][0].Cid(), api.LookbackNoLimit, true)
-	r1, err1 := tu.nds[0].StateSearchMsg(context.TODO(), ts2.TipSet().Key(), msgs[1][0].Cid(), api.LookbackNoLimit, true)
+	r0, err0 := tu.nds[0].StateGetReceipt(context.TODO(), msgs[0][0].Cid(), ts2.TipSet().Key())
+	r1, err1 := tu.nds[0].StateGetReceipt(context.TODO(), msgs[1][0].Cid(), ts2.TipSet().Key())
 
 	if err0 == nil {
 		require.Error(t, err1, "at least one of the StateGetReceipt calls should fail")
-		require.True(t, r0.Receipt.ExitCode.IsSuccess())
+		require.True(t, r0.ExitCode.IsSuccess())
 		includedMsg = msgs[0][0].Message.Cid()
 		skippedMsg = msgs[1][0].Message.Cid()
 	} else {
 		require.NoError(t, err1, "both the StateGetReceipt calls should not fail")
-		require.True(t, r1.Receipt.ExitCode.IsSuccess())
+		require.True(t, r1.ExitCode.IsSuccess())
 		includedMsg = msgs[1][0].Message.Cid()
 		skippedMsg = msgs[0][0].Message.Cid()
 	}
@@ -791,13 +785,8 @@ func TestSyncCheckpointHead(t *testing.T) {
 	tu.connect(p1, p2)
 	tu.waitUntilNodeHasTs(p1, b.TipSet().Key())
 	p1Head := tu.getHead(p1)
-	require.True(tu.t, p1Head.Equals(a.TipSet()))
+	require.Equal(tu.t, p1Head, a.TipSet())
 	tu.assertBad(p1, b.TipSet())
-
-	// Should be able to switch forks.
-	tu.checkpointTs(p1, b.TipSet().Key())
-	p1Head = tu.getHead(p1)
-	require.True(tu.t, p1Head.Equals(b.TipSet()))
 }
 
 func TestSyncCheckpointEarlierThanHead(t *testing.T) {
@@ -838,11 +827,6 @@ func TestSyncCheckpointEarlierThanHead(t *testing.T) {
 	tu.connect(p1, p2)
 	tu.waitUntilNodeHasTs(p1, b.TipSet().Key())
 	p1Head := tu.getHead(p1)
-	require.True(tu.t, p1Head.Equals(a.TipSet()))
+	require.Equal(tu.t, p1Head, a.TipSet())
 	tu.assertBad(p1, b.TipSet())
-
-	// Should be able to switch forks.
-	tu.checkpointTs(p1, b.TipSet().Key())
-	p1Head = tu.getHead(p1)
-	require.True(tu.t, p1Head.Equals(b.TipSet()))
 }
