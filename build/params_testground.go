@@ -12,9 +12,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/ipfs/go-cid"
-
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
@@ -23,14 +21,14 @@ var (
 	UnixfsChunkSize     = uint64(1 << 20)
 	UnixfsLinksPerLevel = 1024
 
-	BlocksPerEpoch        = uint64(builtin2.ExpectedLeadersPerEpoch)
+	BlocksPerEpoch        = uint64(builtin.ExpectedLeadersPerEpoch)
 	BlockMessageLimit     = 512
 	BlockGasLimit         = int64(100_000_000_000)
 	BlockGasTarget        = int64(BlockGasLimit / 2)
 	BaseFeeMaxChangeDenom = int64(8) // 12.5%
 	InitialBaseFee        = int64(100e6)
 	MinimumBaseFee        = int64(100)
-	BlockDelaySecs        = uint64(builtin2.EpochDurationSeconds)
+	BlockDelaySecs        = uint64(builtin.EpochDurationSeconds)
 	PropagationDelaySecs  = uint64(6)
 
 	AllowableClockDriftSecs = uint64(1)
@@ -73,8 +71,8 @@ var (
 	}()
 
 	// Actor consts
-	// TODO: pieceSize unused from actors
-	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)
+	// TODO: Pull from actors when its made not private
+	MinDealDuration = abi.ChainEpoch(180 * builtin.EpochsInDay)
 
 	PackingEfficiencyNum   int64 = 4
 	PackingEfficiencyDenom int64 = 5
@@ -82,34 +80,19 @@ var (
 	UpgradeBreezeHeight      abi.ChainEpoch = -1
 	BreezeGasTampingDuration abi.ChainEpoch = 0
 
-	UpgradeSmokeHeight     abi.ChainEpoch = -1
-	UpgradeIgnitionHeight  abi.ChainEpoch = -2
-	UpgradeRefuelHeight    abi.ChainEpoch = -3
-	UpgradeTapeHeight      abi.ChainEpoch = -4
-	UpgradeActorsV2Height  abi.ChainEpoch = 10
-	UpgradeLiftoffHeight   abi.ChainEpoch = -5
-	UpgradeKumquatHeight   abi.ChainEpoch = -6
-	UpgradeCalicoHeight    abi.ChainEpoch = -7
-	UpgradePersianHeight   abi.ChainEpoch = -8
-	UpgradeOrangeHeight    abi.ChainEpoch = -9
-	UpgradeClausHeight     abi.ChainEpoch = -10
-	UpgradeActorsV3Height  abi.ChainEpoch = -11
-	UpgradeNorwegianHeight abi.ChainEpoch = -12
-	UpgradeActorsV4Height  abi.ChainEpoch = -13
+	UpgradeSmokeHeight    abi.ChainEpoch = -1
+	UpgradeIgnitionHeight abi.ChainEpoch = -2
+	UpgradeRefuelHeight   abi.ChainEpoch = -3
+	UpgradeTapeHeight     abi.ChainEpoch = -4
+	UpgradeActorsV2Height abi.ChainEpoch = 10
+	UpgradeLiftoffHeight  abi.ChainEpoch = -5
 
 	DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 		0: DrandMainnet,
 	}
 
-	NewestNetworkVersion       = network.Version11
+	NewestNetworkVersion       = network.Version5
 	ActorUpgradeNetworkVersion = network.Version4
 
-	Devnet      = true
-	ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
-
-	WhitelistedBlock  = cid.Undef
-	BootstrappersFile = ""
-	GenesisFile       = ""
+	Devnet = true
 )
-
-const BootstrapPeerThreshold = 1
