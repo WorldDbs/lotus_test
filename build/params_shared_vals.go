@@ -7,12 +7,12 @@ import (
 	"os"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/lotus/chain/actors/policy"
+
 	"github.com/filecoin-project/go-state-types/network"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-
-	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 )
 
 // /////
@@ -25,14 +25,14 @@ const UnixfsLinksPerLevel = 1024
 // Consensus / Network
 
 const AllowableClockDriftSecs = uint64(1)
-const NewestNetworkVersion = network.Version11
+const NewestNetworkVersion = network.Version5
 const ActorUpgradeNetworkVersion = network.Version4
 
 // Epochs
 const ForkLengthThreshold = Finality
 
 // Blocks (e)
-var BlocksPerEpoch = uint64(builtin2.ExpectedLeadersPerEpoch)
+var BlocksPerEpoch = uint64(builtin.ExpectedLeadersPerEpoch)
 
 // Epochs
 const Finality = policy.ChainFinality
@@ -60,9 +60,6 @@ const TicketRandomnessLookback = abi.ChainEpoch(1)
 // Address
 
 const AddressMainnetEnvVar = "_mainnet_"
-
-// the 'f' prefix doesn't matter
-var ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
 
 // /////
 // Devnet settings
@@ -118,5 +115,5 @@ const PackingEfficiencyNum = 4
 const PackingEfficiencyDenom = 5
 
 // Actor consts
-// TODO: pieceSize unused from actors
-var MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)
+// TODO: Pull from actors when its made not private
+var MinDealDuration = abi.ChainEpoch(180 * builtin.EpochsInDay)
