@@ -5,19 +5,14 @@ package sealing
 import (
 	"fmt"
 	"io"
-	"sort"
 
 	abi "github.com/filecoin-project/go-state-types/abi"
-	market "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	miner "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
 )
 
 var _ = xerrors.Errorf
-var _ = cid.Undef
-var _ = sort.Sort
 
 func (t *Piece) MarshalCBOR(w io.Writer) error {
 	if t == nil {
@@ -129,8 +124,7 @@ func (t *Piece) UnmarshalCBOR(r io.Reader) error {
 			}
 
 		default:
-			// Field doesn't exist on this type, so ignore it
-			cbg.ScanForLinks(r, func(cid.Cid) {})
+			return fmt.Errorf("unknown struct field %d: '%s'", i, name)
 		}
 	}
 
@@ -141,7 +135,7 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
-	if _, err := w.Write([]byte{165}); err != nil {
+	if _, err := w.Write([]byte{164}); err != nil {
 		return err
 	}
 
@@ -182,22 +176,6 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.DealID)); err != nil {
-		return err
-	}
-
-	// t.DealProposal (market.DealProposal) (struct)
-	if len("DealProposal") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"DealProposal\" was too long")
-	}
-
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("DealProposal"))); err != nil {
-		return err
-	}
-	if _, err := io.WriteString(w, string("DealProposal")); err != nil {
-		return err
-	}
-
-	if err := t.DealProposal.MarshalCBOR(w); err != nil {
 		return err
 	}
 
@@ -306,26 +284,6 @@ func (t *DealInfo) UnmarshalCBOR(r io.Reader) error {
 				t.DealID = abi.DealID(extra)
 
 			}
-			// t.DealProposal (market.DealProposal) (struct)
-		case "DealProposal":
-
-			{
-
-				b, err := br.ReadByte()
-				if err != nil {
-					return err
-				}
-				if b != cbg.CborNull[0] {
-					if err := br.UnreadByte(); err != nil {
-						return err
-					}
-					t.DealProposal = new(market.DealProposal)
-					if err := t.DealProposal.UnmarshalCBOR(br); err != nil {
-						return xerrors.Errorf("unmarshaling t.DealProposal pointer: %w", err)
-					}
-				}
-
-			}
 			// t.DealSchedule (sealing.DealSchedule) (struct)
 		case "DealSchedule":
 
@@ -356,8 +314,7 @@ func (t *DealInfo) UnmarshalCBOR(r io.Reader) error {
 			}
 
 		default:
-			// Field doesn't exist on this type, so ignore it
-			cbg.ScanForLinks(r, func(cid.Cid) {})
+			return fmt.Errorf("unknown struct field %d: '%s'", i, name)
 		}
 	}
 
@@ -507,8 +464,7 @@ func (t *DealSchedule) UnmarshalCBOR(r io.Reader) error {
 			}
 
 		default:
-			// Field doesn't exist on this type, so ignore it
-			cbg.ScanForLinks(r, func(cid.Cid) {})
+			return fmt.Errorf("unknown struct field %d: '%s'", i, name)
 		}
 	}
 
@@ -519,7 +475,7 @@ func (t *SectorInfo) MarshalCBOR(w io.Writer) error {
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
-	if _, err := w.Write([]byte{184, 26}); err != nil {
+	if _, err := w.Write([]byte{183}); err != nil {
 		return err
 	}
 
@@ -582,28 +538,6 @@ func (t *SectorInfo) MarshalCBOR(w io.Writer) error {
 		}
 	} else {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.SectorType-1)); err != nil {
-			return err
-		}
-	}
-
-	// t.CreationTime (int64) (int64)
-	if len("CreationTime") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"CreationTime\" was too long")
-	}
-
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("CreationTime"))); err != nil {
-		return err
-	}
-	if _, err := io.WriteString(w, string("CreationTime")); err != nil {
-		return err
-	}
-
-	if t.CreationTime >= 0 {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.CreationTime)); err != nil {
-			return err
-		}
-	} else {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.CreationTime-1)); err != nil {
 			return err
 		}
 	}
@@ -994,50 +928,6 @@ func (t *SectorInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	// t.TerminateMessage (cid.Cid) (struct)
-	if len("TerminateMessage") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"TerminateMessage\" was too long")
-	}
-
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("TerminateMessage"))); err != nil {
-		return err
-	}
-	if _, err := io.WriteString(w, string("TerminateMessage")); err != nil {
-		return err
-	}
-
-	if t.TerminateMessage == nil {
-		if _, err := w.Write(cbg.CborNull); err != nil {
-			return err
-		}
-	} else {
-		if err := cbg.WriteCidBuf(scratch, w, *t.TerminateMessage); err != nil {
-			return xerrors.Errorf("failed to write cid field t.TerminateMessage: %w", err)
-		}
-	}
-
-	// t.TerminatedAt (abi.ChainEpoch) (int64)
-	if len("TerminatedAt") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"TerminatedAt\" was too long")
-	}
-
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("TerminatedAt"))); err != nil {
-		return err
-	}
-	if _, err := io.WriteString(w, string("TerminatedAt")); err != nil {
-		return err
-	}
-
-	if t.TerminatedAt >= 0 {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.TerminatedAt)); err != nil {
-			return err
-		}
-	} else {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.TerminatedAt-1)); err != nil {
-			return err
-		}
-	}
-
 	// t.LastErr (string) (string)
 	if len("LastErr") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"LastErr\" was too long")
@@ -1172,32 +1062,6 @@ func (t *SectorInfo) UnmarshalCBOR(r io.Reader) error {
 				}
 
 				t.SectorType = abi.RegisteredSealProof(extraI)
-			}
-			// t.CreationTime (int64) (int64)
-		case "CreationTime":
-			{
-				maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-				var extraI int64
-				if err != nil {
-					return err
-				}
-				switch maj {
-				case cbg.MajUnsignedInt:
-					extraI = int64(extra)
-					if extraI < 0 {
-						return fmt.Errorf("int64 positive overflow")
-					}
-				case cbg.MajNegativeInt:
-					extraI = int64(extra)
-					if extraI < 0 {
-						return fmt.Errorf("int64 negative oveflow")
-					}
-					extraI = -1 - extraI
-				default:
-					return fmt.Errorf("wrong type for int64 field: %d", maj)
-				}
-
-				t.CreationTime = int64(extraI)
 			}
 			// t.Pieces ([]sealing.Piece) (slice)
 		case "Pieces":
@@ -1577,55 +1441,6 @@ func (t *SectorInfo) UnmarshalCBOR(r io.Reader) error {
 
 				t.Return = ReturnState(sval)
 			}
-			// t.TerminateMessage (cid.Cid) (struct)
-		case "TerminateMessage":
-
-			{
-
-				b, err := br.ReadByte()
-				if err != nil {
-					return err
-				}
-				if b != cbg.CborNull[0] {
-					if err := br.UnreadByte(); err != nil {
-						return err
-					}
-
-					c, err := cbg.ReadCid(br)
-					if err != nil {
-						return xerrors.Errorf("failed to read cid field t.TerminateMessage: %w", err)
-					}
-
-					t.TerminateMessage = &c
-				}
-
-			}
-			// t.TerminatedAt (abi.ChainEpoch) (int64)
-		case "TerminatedAt":
-			{
-				maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-				var extraI int64
-				if err != nil {
-					return err
-				}
-				switch maj {
-				case cbg.MajUnsignedInt:
-					extraI = int64(extra)
-					if extraI < 0 {
-						return fmt.Errorf("int64 positive overflow")
-					}
-				case cbg.MajNegativeInt:
-					extraI = int64(extra)
-					if extraI < 0 {
-						return fmt.Errorf("int64 negative oveflow")
-					}
-					extraI = -1 - extraI
-				default:
-					return fmt.Errorf("wrong type for int64 field: %d", maj)
-				}
-
-				t.TerminatedAt = abi.ChainEpoch(extraI)
-			}
 			// t.LastErr (string) (string)
 		case "LastErr":
 
@@ -1668,8 +1483,7 @@ func (t *SectorInfo) UnmarshalCBOR(r io.Reader) error {
 			}
 
 		default:
-			// Field doesn't exist on this type, so ignore it
-			cbg.ScanForLinks(r, func(cid.Cid) {})
+			return fmt.Errorf("unknown struct field %d: '%s'", i, name)
 		}
 	}
 
@@ -1856,8 +1670,7 @@ func (t *Log) UnmarshalCBOR(r io.Reader) error {
 			}
 
 		default:
-			// Field doesn't exist on this type, so ignore it
-			cbg.ScanForLinks(r, func(cid.Cid) {})
+			return fmt.Errorf("unknown struct field %d: '%s'", i, name)
 		}
 	}
 
