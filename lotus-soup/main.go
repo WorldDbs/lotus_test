@@ -1,27 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"github.com/filecoin-project/oni/lotus-soup/paych"
+	"github.com/filecoin-project/oni/lotus-soup/rfwp"
+	"github.com/filecoin-project/oni/lotus-soup/testkit"
 
 	"github.com/testground/sdk-go/run"
-	"github.com/testground/sdk-go/runtime"
 )
 
-var testplans = map[string]interface{}{
-	"lotus-baseline": doRun(baselineRoles),
+var cases = map[string]interface{}{
+	"deals-e2e":                     testkit.WrapTestEnvironment(dealsE2E),
+	"recovery-failed-windowed-post": testkit.WrapTestEnvironment(rfwp.RecoveryFromFailedWindowedPoStE2E),
+	"deals-stress":                  testkit.WrapTestEnvironment(dealsStress),
+	"drand-halting":                 testkit.WrapTestEnvironment(dealsE2E),
+	"paych-stress":                  testkit.WrapTestEnvironment(paych.Stress),
 }
 
 func main() {
-	run.InvokeMap(testplans)
-}
+	sanityCheck()
 
-func doRun(roles map[string]func(*TestEnvironment) error) run.InitializedTestCaseFn {
-	return func(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
-		role := runenv.StringParam("role")
-		proc, ok := roles[role]
-		if ok {
-			return proc(&TestEnvironment{RunEnv: runenv, InitContext: initCtx})
-		}
-		return fmt.Errorf("Unknown role: %s", role)
-	}
+	run.InvokeMap(cases)
 }
