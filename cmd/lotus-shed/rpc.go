@@ -28,10 +28,6 @@ var rpcCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name: "miner",
 		},
-		&cli.StringFlag{
-			Name:  "version",
-			Value: "v0",
-		},
 	},
 	Action: func(cctx *cli.Context) error {
 		rt := repo.FullNode
@@ -39,7 +35,7 @@ var rpcCmd = &cli.Command{
 			rt = repo.StorageMiner
 		}
 
-		addr, headers, err := lcli.GetRawAPI(cctx, rt, cctx.String("version"))
+		addr, headers, err := lcli.GetRawAPI(cctx, rt)
 		if err != nil {
 			return err
 		}
