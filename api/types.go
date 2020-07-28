@@ -3,10 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/build"
 	"github.com/ipfs/go-cid"
 
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -51,19 +51,6 @@ type MessageSendSpec struct {
 	MaxFee abi.TokenAmount
 }
 
-var DefaultMessageSendSpec = MessageSendSpec{
-	// MaxFee of 0.1FIL
-	MaxFee: abi.NewTokenAmount(int64(build.FilecoinPrecision) / 10),
-}
-
-func (ms *MessageSendSpec) Get() MessageSendSpec {
-	if ms == nil {
-		return DefaultMessageSendSpec
-	}
-
-	return *ms
-}
-
 type DataTransferChannel struct {
 	TransferID  datatransfer.TransferID
 	Status      datatransfer.Status
@@ -106,4 +93,25 @@ func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelSta
 		channel.OtherPeer = channelState.Sender()
 	}
 	return channel
+}
+
+type NetBlockList struct {
+	Peers     []peer.ID
+	IPAddrs   []string
+	IPSubnets []string
+}
+
+type ExtendedPeerInfo struct {
+	ID          peer.ID
+	Agent       string
+	Addrs       []string
+	Protocols   []string
+	ConnMgrMeta *ConnMgrInfo
+}
+
+type ConnMgrInfo struct {
+	FirstSeen time.Time
+	Value     int
+	Tags      map[string]int
+	Conns     map[string]time.Time
 }
