@@ -8,8 +8,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/host"
+	"github.com/libp2p/go-libp2p-core/peer"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -22,7 +24,6 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
@@ -31,17 +32,18 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/impl/common"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/storage"
 	"github.com/filecoin-project/lotus/storage/sectorblocks"
+	sto "github.com/filecoin-project/specs-storage/storage"
 )
 
 type StorageMinerAPI struct {
 	common.CommonAPI
 
-	ProofsConfig *ffiwrapper.Config
 	SectorBlocks *sectorblocks.SectorBlocks
 
 	PieceStore        dtypes.ProviderPieceStore
@@ -53,25 +55,32 @@ type StorageMinerAPI struct {
 	StorageMgr        *sectorstorage.Manager `optional:"true"`
 	IStorageMgr       sectorstorage.SectorManager
 	*stores.Index
-	DataTransfer dtypes.ProviderDataTransfer
-	Host         host.Host
+	storiface.WorkerReturn
+	DataTransfer  dtypes.ProviderDataTransfer
+	Host          host.Host
+	AddrSel       *storage.AddressSelector
+	DealPublisher *storageadapter.DealPublisher
 
 	DS dtypes.MetadataDS
 
-	ConsiderOnlineStorageDealsConfigFunc       dtypes.ConsiderOnlineStorageDealsConfigFunc
-	SetConsiderOnlineStorageDealsConfigFunc    dtypes.SetConsiderOnlineStorageDealsConfigFunc
-	ConsiderOnlineRetrievalDealsConfigFunc     dtypes.ConsiderOnlineRetrievalDealsConfigFunc
-	SetConsiderOnlineRetrievalDealsConfigFunc  dtypes.SetConsiderOnlineRetrievalDealsConfigFunc
-	StorageDealPieceCidBlocklistConfigFunc     dtypes.StorageDealPieceCidBlocklistConfigFunc
-	SetStorageDealPieceCidBlocklistConfigFunc  dtypes.SetStorageDealPieceCidBlocklistConfigFunc
-	ConsiderOfflineStorageDealsConfigFunc      dtypes.ConsiderOfflineStorageDealsConfigFunc
-	SetConsiderOfflineStorageDealsConfigFunc   dtypes.SetConsiderOfflineStorageDealsConfigFunc
-	ConsiderOfflineRetrievalDealsConfigFunc    dtypes.ConsiderOfflineRetrievalDealsConfigFunc
-	SetConsiderOfflineRetrievalDealsConfigFunc dtypes.SetConsiderOfflineRetrievalDealsConfigFunc
-	SetSealingConfigFunc                       dtypes.SetSealingConfigFunc
-	GetSealingConfigFunc                       dtypes.GetSealingConfigFunc
-	GetExpectedSealDurationFunc                dtypes.GetExpectedSealDurationFunc
-	SetExpectedSealDurationFunc                dtypes.SetExpectedSealDurationFunc
+	ConsiderOnlineStorageDealsConfigFunc        dtypes.ConsiderOnlineStorageDealsConfigFunc
+	SetConsiderOnlineStorageDealsConfigFunc     dtypes.SetConsiderOnlineStorageDealsConfigFunc
+	ConsiderOnlineRetrievalDealsConfigFunc      dtypes.ConsiderOnlineRetrievalDealsConfigFunc
+	SetConsiderOnlineRetrievalDealsConfigFunc   dtypes.SetConsiderOnlineRetrievalDealsConfigFunc
+	StorageDealPieceCidBlocklistConfigFunc      dtypes.StorageDealPieceCidBlocklistConfigFunc
+	SetStorageDealPieceCidBlocklistConfigFunc   dtypes.SetStorageDealPieceCidBlocklistConfigFunc
+	ConsiderOfflineStorageDealsConfigFunc       dtypes.ConsiderOfflineStorageDealsConfigFunc
+	SetConsiderOfflineStorageDealsConfigFunc    dtypes.SetConsiderOfflineStorageDealsConfigFunc
+	ConsiderOfflineRetrievalDealsConfigFunc     dtypes.ConsiderOfflineRetrievalDealsConfigFunc
+	SetConsiderOfflineRetrievalDealsConfigFunc  dtypes.SetConsiderOfflineRetrievalDealsConfigFunc
+	ConsiderVerifiedStorageDealsConfigFunc      dtypes.ConsiderVerifiedStorageDealsConfigFunc
+	SetConsiderVerifiedStorageDealsConfigFunc   dtypes.SetConsiderVerifiedStorageDealsConfigFunc
+	ConsiderUnverifiedStorageDealsConfigFunc    dtypes.ConsiderUnverifiedStorageDealsConfigFunc
+	SetConsiderUnverifiedStorageDealsConfigFunc dtypes.SetConsiderUnverifiedStorageDealsConfigFunc
+	SetSealingConfigFunc                        dtypes.SetSealingConfigFunc
+	GetSealingConfigFunc                        dtypes.GetSealingConfigFunc
+	GetExpectedSealDurationFunc                 dtypes.GetExpectedSealDurationFunc
+	SetExpectedSealDurationFunc                 dtypes.SetExpectedSealDurationFunc
 }
 
 func (sm *StorageMinerAPI) ServeRemote(w http.ResponseWriter, r *http.Request) {
@@ -84,11 +93,11 @@ func (sm *StorageMinerAPI) ServeRemote(w http.ResponseWriter, r *http.Request) {
 	sm.StorageMgr.ServeHTTP(w, r)
 }
 
-func (sm *StorageMinerAPI) WorkerStats(context.Context) (map[uint64]storiface.WorkerStats, error) {
+func (sm *StorageMinerAPI) WorkerStats(context.Context) (map[uuid.UUID]storiface.WorkerStats, error) {
 	return sm.StorageMgr.WorkerStats(), nil
 }
 
-func (sm *StorageMinerAPI) WorkerJobs(ctx context.Context) (map[uint64][]storiface.WorkerJob, error) {
+func (sm *StorageMinerAPI) WorkerJobs(ctx context.Context) (map[uuid.UUID][]storiface.WorkerJob, error) {
 	return sm.StorageMgr.WorkerJobs(), nil
 }
 
@@ -112,8 +121,30 @@ func (sm *StorageMinerAPI) ActorSectorSize(ctx context.Context, addr address.Add
 	return mi.SectorSize, nil
 }
 
-func (sm *StorageMinerAPI) PledgeSector(ctx context.Context) error {
-	return sm.Miner.PledgeSector()
+func (sm *StorageMinerAPI) PledgeSector(ctx context.Context) (abi.SectorID, error) {
+	sr, err := sm.Miner.PledgeSector(ctx)
+	if err != nil {
+		return abi.SectorID{}, err
+	}
+
+	// wait for the sector to enter the Packing state
+	// TODO: instead of polling implement some pubsub-type thing in storagefsm
+	for {
+		info, err := sm.Miner.GetSectorInfo(sr.ID.Number)
+		if err != nil {
+			return abi.SectorID{}, xerrors.Errorf("getting pledged sector info: %w", err)
+		}
+
+		if info.State != sealing.UndefinedSectorState {
+			return sr.ID, nil
+		}
+
+		select {
+		case <-time.After(10 * time.Millisecond):
+		case <-ctx.Done():
+			return abi.SectorID{}, ctx.Err()
+		}
+	}
 }
 
 func (sm *StorageMinerAPI) SectorsStatus(ctx context.Context, sid abi.SectorNumber, showOnChainInfo bool) (api.SectorInfo, error) {
@@ -210,8 +241,55 @@ func (sm *StorageMinerAPI) SectorsList(context.Context) ([]abi.SectorNumber, err
 
 	out := make([]abi.SectorNumber, len(sectors))
 	for i, sector := range sectors {
+		if sector.State == sealing.UndefinedSectorState {
+			continue // sector ID not set yet
+		}
+
 		out[i] = sector.SectorNumber
 	}
+	return out, nil
+}
+
+func (sm *StorageMinerAPI) SectorsListInStates(ctx context.Context, states []api.SectorState) ([]abi.SectorNumber, error) {
+	filterStates := make(map[sealing.SectorState]struct{})
+	for _, state := range states {
+		st := sealing.SectorState(state)
+		if _, ok := sealing.ExistSectorStateList[st]; !ok {
+			continue
+		}
+		filterStates[st] = struct{}{}
+	}
+
+	var sns []abi.SectorNumber
+	if len(filterStates) == 0 {
+		return sns, nil
+	}
+
+	sectors, err := sm.Miner.ListSectors()
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range sectors {
+		if _, ok := filterStates[sectors[i].State]; ok {
+			sns = append(sns, sectors[i].SectorNumber)
+		}
+	}
+	return sns, nil
+}
+
+func (sm *StorageMinerAPI) SectorsSummary(ctx context.Context) (map[api.SectorState]int, error) {
+	sectors, err := sm.Miner.ListSectors()
+	if err != nil {
+		return nil, err
+	}
+
+	out := make(map[api.SectorState]int)
+	for i := range sectors {
+		state := api.SectorState(sectors[i].State)
+		out[state]++
+	}
+
 	return out, nil
 }
 
@@ -278,6 +356,18 @@ func (sm *StorageMinerAPI) SectorRemove(ctx context.Context, id abi.SectorNumber
 	return sm.Miner.RemoveSector(ctx, id)
 }
 
+func (sm *StorageMinerAPI) SectorTerminate(ctx context.Context, id abi.SectorNumber) error {
+	return sm.Miner.TerminateSector(ctx, id)
+}
+
+func (sm *StorageMinerAPI) SectorTerminateFlush(ctx context.Context) (*cid.Cid, error) {
+	return sm.Miner.TerminateFlush(ctx)
+}
+
+func (sm *StorageMinerAPI) SectorTerminatePending(ctx context.Context) ([]abi.SectorID, error) {
+	return sm.Miner.TerminatePending(ctx)
+}
+
 func (sm *StorageMinerAPI) SectorMarkForUpgrade(ctx context.Context, id abi.SectorNumber) error {
 	return sm.Miner.MarkForUpgrade(id)
 }
@@ -293,8 +383,12 @@ func (sm *StorageMinerAPI) WorkerConnect(ctx context.Context, url string) error 
 	return sm.StorageMgr.AddWorker(ctx, w)
 }
 
-func (sm *StorageMinerAPI) SealingSchedDiag(ctx context.Context) (interface{}, error) {
-	return sm.StorageMgr.SchedDiag(ctx)
+func (sm *StorageMinerAPI) SealingSchedDiag(ctx context.Context, doSched bool) (interface{}, error) {
+	return sm.StorageMgr.SchedDiag(ctx, doSched)
+}
+
+func (sm *StorageMinerAPI) SealingAbort(ctx context.Context, call storiface.CallID) error {
+	return sm.StorageMgr.Abort(ctx, call)
 }
 
 func (sm *StorageMinerAPI) MarketImportDealData(ctx context.Context, propCid cid.Cid, path string) error {
@@ -400,6 +494,22 @@ func (sm *StorageMinerAPI) MarketListDataTransfers(ctx context.Context) ([]api.D
 	return apiChannels, nil
 }
 
+func (sm *StorageMinerAPI) MarketRestartDataTransfer(ctx context.Context, transferID datatransfer.TransferID, otherPeer peer.ID, isInitiator bool) error {
+	selfPeer := sm.Host.ID()
+	if isInitiator {
+		return sm.DataTransfer.RestartDataTransferChannel(ctx, datatransfer.ChannelID{Initiator: selfPeer, Responder: otherPeer, ID: transferID})
+	}
+	return sm.DataTransfer.RestartDataTransferChannel(ctx, datatransfer.ChannelID{Initiator: otherPeer, Responder: selfPeer, ID: transferID})
+}
+
+func (sm *StorageMinerAPI) MarketCancelDataTransfer(ctx context.Context, transferID datatransfer.TransferID, otherPeer peer.ID, isInitiator bool) error {
+	selfPeer := sm.Host.ID()
+	if isInitiator {
+		return sm.DataTransfer.CloseDataTransferChannel(ctx, datatransfer.ChannelID{Initiator: selfPeer, Responder: otherPeer, ID: transferID})
+	}
+	return sm.DataTransfer.CloseDataTransferChannel(ctx, datatransfer.ChannelID{Initiator: otherPeer, Responder: selfPeer, ID: transferID})
+}
+
 func (sm *StorageMinerAPI) MarketDataTransferUpdates(ctx context.Context) (<-chan api.DataTransferChannel, error) {
 	channels := make(chan api.DataTransferChannel)
 
@@ -417,6 +527,15 @@ func (sm *StorageMinerAPI) MarketDataTransferUpdates(ctx context.Context) (<-cha
 	}()
 
 	return channels, nil
+}
+
+func (sm *StorageMinerAPI) MarketPendingDeals(ctx context.Context) (api.PendingDealInfo, error) {
+	return sm.DealPublisher.PendingDeals(), nil
+}
+
+func (sm *StorageMinerAPI) MarketPublishPendingDeals(ctx context.Context) error {
+	sm.DealPublisher.ForcePublishPendingDeals()
+	return nil
 }
 
 func (sm *StorageMinerAPI) DealsList(ctx context.Context) ([]api.MarketDeal, error) {
@@ -457,6 +576,22 @@ func (sm *StorageMinerAPI) DealsConsiderOfflineRetrievalDeals(ctx context.Contex
 
 func (sm *StorageMinerAPI) DealsSetConsiderOfflineRetrievalDeals(ctx context.Context, b bool) error {
 	return sm.SetConsiderOfflineRetrievalDealsConfigFunc(b)
+}
+
+func (sm *StorageMinerAPI) DealsConsiderVerifiedStorageDeals(ctx context.Context) (bool, error) {
+	return sm.ConsiderVerifiedStorageDealsConfigFunc()
+}
+
+func (sm *StorageMinerAPI) DealsSetConsiderVerifiedStorageDeals(ctx context.Context, b bool) error {
+	return sm.SetConsiderVerifiedStorageDealsConfigFunc(b)
+}
+
+func (sm *StorageMinerAPI) DealsConsiderUnverifiedStorageDeals(ctx context.Context) (bool, error) {
+	return sm.ConsiderUnverifiedStorageDealsConfigFunc()
+}
+
+func (sm *StorageMinerAPI) DealsSetConsiderUnverifiedStorageDeals(ctx context.Context, b bool) error {
+	return sm.SetConsiderUnverifiedStorageDealsConfigFunc(b)
 }
 
 func (sm *StorageMinerAPI) DealsGetExpectedSealDurationFunc(ctx context.Context) (time.Duration, error) {
@@ -520,6 +655,39 @@ func (sm *StorageMinerAPI) PiecesGetCIDInfo(ctx context.Context, payloadCid cid.
 
 func (sm *StorageMinerAPI) CreateBackup(ctx context.Context, fpath string) error {
 	return backup(sm.DS, fpath)
+}
+
+func (sm *StorageMinerAPI) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []sto.SectorRef, expensive bool) (map[abi.SectorNumber]string, error) {
+	var rg storiface.RGetter
+	if expensive {
+		rg = func(ctx context.Context, id abi.SectorID) (cid.Cid, error) {
+			si, err := sm.Miner.GetSectorInfo(id.Number)
+			if err != nil {
+				return cid.Undef, err
+			}
+			if si.CommR == nil {
+				return cid.Undef, xerrors.Errorf("commr is nil")
+			}
+
+			return *si.CommR, nil
+		}
+	}
+
+	bad, err := sm.StorageMgr.CheckProvable(ctx, pp, sectors, rg)
+	if err != nil {
+		return nil, err
+	}
+
+	var out = make(map[abi.SectorNumber]string)
+	for sid, err := range bad {
+		out[sid.Number] = err
+	}
+
+	return out, nil
+}
+
+func (sm *StorageMinerAPI) ActorAddressConfig(ctx context.Context) (api.AddressConfig, error) {
+	return sm.AddrSel.AddressConfig, nil
 }
 
 var _ api.StorageMiner = &StorageMinerAPI{}
