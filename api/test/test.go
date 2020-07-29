@@ -2,12 +2,16 @@ package test
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/multiformats/go-multiaddr"
 
 	"github.com/stretchr/testify/assert"
@@ -21,6 +25,15 @@ import (
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
 )
+
+func init() {
+	logging.SetAllLoggers(logging.LevelInfo)
+	err := os.Setenv("BELLMAN_NO_GPU", "1")
+	if err != nil {
+		panic(fmt.Sprintf("failed to set BELLMAN_NO_GPU env variable: %s", err))
+	}
+	build.InsecurePoStValidation = true
+}
 
 type TestNode struct {
 	api.FullNode
@@ -36,6 +49,7 @@ type TestStorageNode struct {
 	ListenAddr multiaddr.Multiaddr
 
 	MineOne func(context.Context, miner.MineReq) error
+	Stop    func(context.Context) error
 }
 
 var PresealGenesis = -1
@@ -45,6 +59,7 @@ const GenesisPreseals = 2
 // Options for setting up a mock storage miner
 type StorageMiner struct {
 	Full    int
+	Opts    node.Option
 	Preseal int
 }
 
@@ -97,31 +112,64 @@ var OneMiner = []StorageMiner{{Full: 0, Preseal: PresealGenesis}}
 var OneFull = DefaultFullOpts(1)
 var TwoFull = DefaultFullOpts(2)
 
-var FullNodeWithUpgradeAt = func(upgradeHeight abi.ChainEpoch) FullNodeOpts {
+var FullNodeWithActorsV3At = func(upgradeHeight abi.ChainEpoch) FullNodeOpts {
 	return FullNodeOpts{
 		Opts: func(nodes []TestNode) node.Option {
 			return node.Override(new(stmgr.UpgradeSchedule), stmgr.UpgradeSchedule{{
-				// Skip directly to tape height so precommits work.
-				Network:   network.Version5,
-				Height:    upgradeHeight,
+				// prepare for upgrade.
+				Network:   network.Version9,
+				Height:    1,
 				Migration: stmgr.UpgradeActorsV2,
+			}, {
+				// Skip directly to tape height so precommits work.
+				Network:   network.Version10,
+				Height:    upgradeHeight,
+				Migration: stmgr.UpgradeActorsV3,
 			}})
 		},
 	}
 }
 
+var FullNodeWithSDRAt = func(calico, persian abi.ChainEpoch) FullNodeOpts {
+	return FullNodeOpts{
+		Opts: func(nodes []TestNode) node.Option {
+			return node.Override(new(stmgr.UpgradeSchedule), stmgr.UpgradeSchedule{{
+				Network:   network.Version6,
+				Height:    1,
+				Migration: stmgr.UpgradeActorsV2,
+			}, {
+				Network:   network.Version7,
+				Height:    calico,
+				Migration: stmgr.UpgradeCalico,
+			}, {
+				Network: network.Version8,
+				Height:  persian,
+			}})
+		},
+	}
+}
+
+var MineNext = miner.MineReq{
+	InjectNulls: 0,
+	Done:        func(bool, abi.ChainEpoch, error) {},
+}
+
 func (ts *testSuite) testVersion(t *testing.T) {
-	build.RunningNodeType = build.NodeFull
+	api.RunningNodeType = api.NodeFull
 
 	ctx := context.Background()
 	apis, _ := ts.makeNodes(t, OneFull, OneMiner)
-	api := apis[0]
+	napi := apis[0]
 
-	v, err := api.Version(ctx)
+	v, err := napi.Version(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
-	require.Equal(t, v.Version, build.BuildVersion)
+	versions := strings.Split(v.Version, "+")
+	if len(versions) <= 0 {
+		t.Fatal("empty version")
+	}
+	require.Equal(t, versions[0], build.BuildVersion)
 }
 
 func (ts *testSuite) testSearchMsg(t *testing.T) {
