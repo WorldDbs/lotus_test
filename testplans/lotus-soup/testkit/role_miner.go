@@ -17,6 +17,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-storedcounter"
 	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	genesis_chain "github.com/filecoin-project/lotus/chain/gen/genesis"
@@ -320,7 +321,7 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 	}
 
 	// print out the admin auth token
-	token, err := n.MinerApi.AuthNew(ctx, api.AllPermissions)
+	token, err := n.MinerApi.AuthNew(ctx, apistruct.AllPermissions)
 	if err != nil {
 		return nil, err
 	}
@@ -614,7 +615,7 @@ func startStorageMinerAPIServer(t *TestEnvironment, repo repo.Repo, minerApi api
 
 	ah := &auth.Handler{
 		Verify: func(ctx context.Context, token string) ([]auth.Permission, error) {
-			return api.AllPermissions, nil
+			return apistruct.AllPermissions, nil
 		},
 		Next: mux.ServeHTTP,
 	}
