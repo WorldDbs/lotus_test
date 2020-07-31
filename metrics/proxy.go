@@ -7,36 +7,37 @@ import (
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api/apistruct"
 )
 
 func MetricedStorMinerAPI(a api.StorageMiner) api.StorageMiner {
-	var out api.StorageMinerStruct
+	var out apistruct.StorageMinerStruct
 	proxy(a, &out.Internal)
 	proxy(a, &out.CommonStruct.Internal)
 	return &out
 }
 
 func MetricedFullAPI(a api.FullNode) api.FullNode {
-	var out api.FullNodeStruct
+	var out apistruct.FullNodeStruct
 	proxy(a, &out.Internal)
 	proxy(a, &out.CommonStruct.Internal)
 	return &out
 }
 
-func MetricedWorkerAPI(a api.Worker) api.Worker {
-	var out api.WorkerStruct
+func MetricedWorkerAPI(a api.WorkerAPI) api.WorkerAPI {
+	var out apistruct.WorkerStruct
 	proxy(a, &out.Internal)
 	return &out
 }
 
-func MetricedWalletAPI(a api.Wallet) api.Wallet {
-	var out api.WalletStruct
+func MetricedWalletAPI(a api.WalletAPI) api.WalletAPI {
+	var out apistruct.WalletStruct
 	proxy(a, &out.Internal)
 	return &out
 }
 
-func MetricedGatewayAPI(a api.Gateway) api.Gateway {
-	var out api.GatewayStruct
+func MetricedGatewayAPI(a api.GatewayAPI) api.GatewayAPI {
+	var out apistruct.GatewayStruct
 	proxy(a, &out.Internal)
 	return &out
 }
