@@ -1,6 +1,7 @@
 # Groups
 * [](#)
   * [Closing](#Closing)
+  * [Session](#Session)
   * [Shutdown](#Shutdown)
   * [Version](#Version)
 * [Auth](#Auth)
@@ -32,11 +33,14 @@
   * [ChainTipSetWeight](#ChainTipSetWeight)
 * [Client](#Client)
   * [ClientCalcCommP](#ClientCalcCommP)
+  * [ClientCancelDataTransfer](#ClientCancelDataTransfer)
   * [ClientDataTransferUpdates](#ClientDataTransferUpdates)
+  * [ClientDealPieceCID](#ClientDealPieceCID)
   * [ClientDealSize](#ClientDealSize)
   * [ClientFindData](#ClientFindData)
   * [ClientGenCar](#ClientGenCar)
   * [ClientGetDealInfo](#ClientGetDealInfo)
+  * [ClientGetDealStatus](#ClientGetDealStatus)
   * [ClientGetDealUpdates](#ClientGetDealUpdates)
   * [ClientHasLocal](#ClientHasLocal)
   * [ClientImport](#ClientImport)
@@ -64,11 +68,18 @@
   * [LogList](#LogList)
   * [LogSetLevel](#LogSetLevel)
 * [Market](#Market)
-  * [MarketEnsureAvailable](#MarketEnsureAvailable)
+  * [MarketAddBalance](#MarketAddBalance)
+  * [MarketGetReserved](#MarketGetReserved)
+  * [MarketReleaseFunds](#MarketReleaseFunds)
+  * [MarketReserveFunds](#MarketReserveFunds)
+  * [MarketWithdraw](#MarketWithdraw)
 * [Miner](#Miner)
   * [MinerCreateBlock](#MinerCreateBlock)
   * [MinerGetBaseInfo](#MinerGetBaseInfo)
 * [Mpool](#Mpool)
+  * [MpoolBatchPush](#MpoolBatchPush)
+  * [MpoolBatchPushMessage](#MpoolBatchPushMessage)
+  * [MpoolBatchPushUntrusted](#MpoolBatchPushUntrusted)
   * [MpoolClear](#MpoolClear)
   * [MpoolGetConfig](#MpoolGetConfig)
   * [MpoolGetNonce](#MpoolGetNonce)
@@ -88,6 +99,7 @@
   * [MsigCancel](#MsigCancel)
   * [MsigCreate](#MsigCreate)
   * [MsigGetAvailableBalance](#MsigGetAvailableBalance)
+  * [MsigGetPending](#MsigGetPending)
   * [MsigGetVested](#MsigGetVested)
   * [MsigGetVestingSchedule](#MsigGetVestingSchedule)
   * [MsigPropose](#MsigPropose)
@@ -102,10 +114,14 @@
   * [NetBandwidthStats](#NetBandwidthStats)
   * [NetBandwidthStatsByPeer](#NetBandwidthStatsByPeer)
   * [NetBandwidthStatsByProtocol](#NetBandwidthStatsByProtocol)
+  * [NetBlockAdd](#NetBlockAdd)
+  * [NetBlockList](#NetBlockList)
+  * [NetBlockRemove](#NetBlockRemove)
   * [NetConnect](#NetConnect)
   * [NetConnectedness](#NetConnectedness)
   * [NetDisconnect](#NetDisconnect)
   * [NetFindPeer](#NetFindPeer)
+  * [NetPeerInfo](#NetPeerInfo)
   * [NetPeers](#NetPeers)
   * [NetPubsubScores](#NetPubsubScores)
 * [Paych](#Paych)
@@ -133,6 +149,7 @@
   * [StateCirculatingSupply](#StateCirculatingSupply)
   * [StateCompute](#StateCompute)
   * [StateDealProviderCollateralBounds](#StateDealProviderCollateralBounds)
+  * [StateDecodeParams](#StateDecodeParams)
   * [StateGetActor](#StateGetActor)
   * [StateGetReceipt](#StateGetReceipt)
   * [StateListActors](#StateListActors)
@@ -154,14 +171,15 @@
   * [StateMinerPreCommitDepositForPower](#StateMinerPreCommitDepositForPower)
   * [StateMinerProvingDeadline](#StateMinerProvingDeadline)
   * [StateMinerRecoveries](#StateMinerRecoveries)
+  * [StateMinerSectorAllocated](#StateMinerSectorAllocated)
   * [StateMinerSectorCount](#StateMinerSectorCount)
   * [StateMinerSectors](#StateMinerSectors)
-  * [StateMsgGasCost](#StateMsgGasCost)
   * [StateNetworkName](#StateNetworkName)
   * [StateNetworkVersion](#StateNetworkVersion)
   * [StateReadState](#StateReadState)
   * [StateReplay](#StateReplay)
   * [StateSearchMsg](#StateSearchMsg)
+  * [StateSearchMsgLimited](#StateSearchMsgLimited)
   * [StateSectorExpiration](#StateSectorExpiration)
   * [StateSectorGetInfo](#StateSectorGetInfo)
   * [StateSectorPartition](#StateSectorPartition)
@@ -208,6 +226,15 @@ Inputs: `null`
 
 Response: `{}`
 
+### Session
+
+
+Perms: read
+
+Inputs: `null`
+
+Response: `"07070707-0707-0707-0707-070707070707"`
+
 ### Shutdown
 
 
@@ -228,7 +255,7 @@ Response:
 ```json
 {
   "Version": "string value",
-  "APIVersion": 4352,
+  "APIVersion": 65792,
   "BlockDelay": 42
 }
 ```
@@ -845,6 +872,23 @@ Response:
 }
 ```
 
+### ClientCancelDataTransfer
+ClientCancelDataTransfer cancels a data transfer with the given transfer ID and other peer
+
+
+Perms: write
+
+Inputs:
+```json
+[
+  3,
+  "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+  true
+]
+```
+
+Response: `{}`
+
 ### ClientDataTransferUpdates
 There are not yet any comments for this method.
 
@@ -866,6 +910,32 @@ Response:
   "Message": "string value",
   "OtherPeer": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
   "Transferred": 42
+}
+```
+
+### ClientDealPieceCID
+ClientCalcCommP calculates the CommP and data size of the specified CID
+
+
+Perms: read
+
+Inputs:
+```json
+[
+  {
+    "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+  }
+]
+```
+
+Response:
+```json
+{
+  "PayloadSize": 9,
+  "PieceSize": 1032,
+  "PieceCID": {
+    "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+  }
 }
 ```
 
@@ -959,7 +1029,8 @@ Response:
       "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
     },
     "PieceCid": null,
-    "PieceSize": 1024
+    "PieceSize": 1024,
+    "RawBlockSize": 42
   },
   "PieceCID": {
     "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
@@ -969,9 +1040,42 @@ Response:
   "Duration": 42,
   "DealID": 5432,
   "CreationTime": "0001-01-01T00:00:00Z",
-  "Verified": true
+  "Verified": true,
+  "TransferChannelID": {
+    "Initiator": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+    "Responder": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+    "ID": 3
+  },
+  "DataTransfer": {
+    "TransferID": 3,
+    "Status": 1,
+    "BaseCID": {
+      "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+    },
+    "IsInitiator": true,
+    "IsSender": true,
+    "Voucher": "string value",
+    "Message": "string value",
+    "OtherPeer": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+    "Transferred": 42
+  }
 }
 ```
+
+### ClientGetDealStatus
+ClientGetDealStatus returns status given a code
+
+
+Perms: read
+
+Inputs:
+```json
+[
+  42
+]
+```
+
+Response: `"string value"`
 
 ### ClientGetDealUpdates
 ClientGetDealUpdates returns the status of updated deals
@@ -996,7 +1100,8 @@ Response:
       "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
     },
     "PieceCid": null,
-    "PieceSize": 1024
+    "PieceSize": 1024,
+    "RawBlockSize": 42
   },
   "PieceCID": {
     "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
@@ -1006,7 +1111,25 @@ Response:
   "Duration": 42,
   "DealID": 5432,
   "CreationTime": "0001-01-01T00:00:00Z",
-  "Verified": true
+  "Verified": true,
+  "TransferChannelID": {
+    "Initiator": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+    "Responder": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+    "ID": 3
+  },
+  "DataTransfer": {
+    "TransferID": 3,
+    "Status": 1,
+    "BaseCID": {
+      "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+    },
+    "IsInitiator": true,
+    "IsSender": true,
+    "Voucher": "string value",
+    "Message": "string value",
+    "OtherPeer": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+    "Transferred": 42
+  }
 }
 ```
 
@@ -1296,7 +1419,8 @@ Inputs:
         "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
       },
       "PieceCid": null,
-      "PieceSize": 1024
+      "PieceSize": 1024,
+      "RawBlockSize": 42
     },
     "Wallet": "f01234",
     "Miner": "f01234",
@@ -1537,8 +1661,83 @@ Response: `{}`
 ## Market
 
 
-### MarketEnsureAvailable
-MarketFreeBalance
+### MarketAddBalance
+MarketAddBalance adds funds to the market actor
+
+
+Perms: sign
+
+Inputs:
+```json
+[
+  "f01234",
+  "f01234",
+  "0"
+]
+```
+
+Response:
+```json
+{
+  "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+}
+```
+
+### MarketGetReserved
+MarketGetReserved gets the amount of funds that are currently reserved for the address
+
+
+Perms: sign
+
+Inputs:
+```json
+[
+  "f01234"
+]
+```
+
+Response: `"0"`
+
+### MarketReleaseFunds
+MarketReleaseFunds releases funds reserved by MarketReserveFunds
+
+
+Perms: sign
+
+Inputs:
+```json
+[
+  "f01234",
+  "0"
+]
+```
+
+Response: `{}`
+
+### MarketReserveFunds
+MarketReserveFunds reserves funds for a deal
+
+
+Perms: sign
+
+Inputs:
+```json
+[
+  "f01234",
+  "f01234",
+  "0"
+]
+```
+
+Response:
+```json
+{
+  "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+}
+```
+
+### MarketWithdraw
+MarketWithdraw withdraws unlocked funds from the market actor
 
 
 Perms: sign
@@ -1681,6 +1880,54 @@ Response:
 The Mpool methods are for interacting with the message pool. The message pool
 manages all incoming and outgoing 'messages' going over the network.
 
+
+### MpoolBatchPush
+MpoolBatchPush batch pushes a signed message to mempool.
+
+
+Perms: write
+
+Inputs:
+```json
+[
+  null
+]
+```
+
+Response: `null`
+
+### MpoolBatchPushMessage
+MpoolBatchPushMessage batch pushes a unsigned message to mempool.
+
+
+Perms: sign
+
+Inputs:
+```json
+[
+  null,
+  {
+    "MaxFee": "0"
+  }
+]
+```
+
+Response: `null`
+
+### MpoolBatchPushUntrusted
+MpoolBatchPushUntrusted batch pushes a signed message to mempool from untrusted sources.
+
+
+Perms: write
+
+Inputs:
+```json
+[
+  null
+]
+```
+
+Response: `null`
 
 ### MpoolClear
 MpoolClear clears pending messages from the mpool
@@ -2203,6 +2450,31 @@ Inputs:
 
 Response: `"0"`
 
+### MsigGetPending
+MsigGetPending returns pending transactions for the given multisig
+wallet. Once pending transactions are fully approved, they will no longer
+appear here.
+
+
+Perms: read
+
+Inputs:
+```json
+[
+  "f01234",
+  [
+    {
+      "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+    },
+    {
+      "/": "bafy2bzacebp3shtrn43k7g3unredz7fxn4gj533d3o43tqn2p2ipxxhrvchve"
+    }
+  ]
+]
+```
+
+Response: `null`
+
 ### MsigGetVested
 MsigGetVested returns the amount of FIL that vested in a multisig in a certain period.
 It takes the following params: <multisig address>, <start epoch>, <end epoch>
@@ -2499,6 +2771,58 @@ Response:
 }
 ```
 
+### NetBlockAdd
+
+
+Perms: admin
+
+Inputs:
+```json
+[
+  {
+    "Peers": null,
+    "IPAddrs": null,
+    "IPSubnets": null
+  }
+]
+```
+
+Response: `{}`
+
+### NetBlockList
+
+
+Perms: read
+
+Inputs: `null`
+
+Response:
+```json
+{
+  "Peers": null,
+  "IPAddrs": null,
+  "IPSubnets": null
+}
+```
+
+### NetBlockRemove
+
+
+Perms: admin
+
+Inputs:
+```json
+[
+  {
+    "Peers": null,
+    "IPAddrs": null,
+    "IPSubnets": null
+  }
+]
+```
+
+Response: `{}`
+
 ### NetConnect
 
 
@@ -2561,6 +2885,38 @@ Response:
 {
   "Addrs": null,
   "ID": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf"
+}
+```
+
+### NetPeerInfo
+
+
+Perms: read
+
+Inputs:
+```json
+[
+  "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf"
+]
+```
+
+Response:
+```json
+{
+  "ID": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+  "Agent": "string value",
+  "Addrs": null,
+  "Protocols": null,
+  "ConnMgrMeta": {
+    "FirstSeen": "0001-01-01T00:00:00Z",
+    "Value": 123,
+    "Tags": {
+      "name": 42
+    },
+    "Conns": {
+      "name": "2021-03-08T22:52:18Z"
+    }
+  }
 }
 ```
 
@@ -2989,7 +3345,7 @@ Response:
 
 ## State
 The State methods are used to query, inspect, and interact with chain state.
-All methods take a TipSetKey as a parameter. The state looked up is the state at that tipset.
+Most methods take a TipSetKey as a parameter. The state looked up is the parent state of the tipset.
 A nil TipSetKey can be provided as a param, this will cause the heaviest tipset in the chain to be used.
 
 
@@ -3041,6 +3397,10 @@ Response: `null`
 
 ### StateCall
 StateCall runs the given message and returns its result without any persisted changes.
+
+StateCall applies the message to the tipset's parent state. The
+message is not applied on-top-of the messages in the passed-in
+tipset.
 
 
 Perms: read
@@ -3099,6 +3459,18 @@ Response:
     "ExitCode": 0,
     "Return": "Ynl0ZSBhcnJheQ==",
     "GasUsed": 9
+  },
+  "GasCost": {
+    "Message": {
+      "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+    },
+    "GasUsed": "0",
+    "BaseFeeBurn": "0",
+    "OverEstimationBurn": "0",
+    "MinerPenalty": "0",
+    "MinerTip": "0",
+    "Refund": "0",
+    "TotalCost": "0"
   },
   "ExecutionTrace": {
     "Msg": {
@@ -3253,6 +3625,31 @@ Response:
 }
 ```
 
+### StateDecodeParams
+StateDecodeParams attempts to decode the provided params, based on the recipient actor address and method number.
+
+
+Perms: read
+
+Inputs:
+```json
+[
+  "f01234",
+  1,
+  "Ynl0ZSBhcnJheQ==",
+  [
+    {
+      "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+    },
+    {
+      "/": "bafy2bzacebp3shtrn43k7g3unredz7fxn4gj533d3o43tqn2p2ipxxhrvchve"
+    }
+  ]
+]
+```
+
+Response: `{}`
+
 ### StateGetActor
 StateGetActor returns the indicated actor's nonce and balance.
 
@@ -3352,19 +3749,8 @@ Inputs:
 ```json
 [
   {
-    "Version": 42,
     "To": "f01234",
-    "From": "f01234",
-    "Nonce": 42,
-    "Value": "0",
-    "GasLimit": 9,
-    "GasFeeCap": "0",
-    "GasPremium": "0",
-    "Method": 1,
-    "Params": "Ynl0ZSBhcnJheQ==",
-    "CID": {
-      "/": "bafy2bzacebbpdegvr3i4cosewthysg5xkxpqfn2wfcz6mv2hmoktwbdxkax4s"
-    }
+    "From": "f01234"
   },
   [
     {
@@ -3708,7 +4094,7 @@ Response:
   "WorkerChangeEpoch": 10101,
   "PeerId": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
   "Multiaddrs": null,
-  "SealProofType": 3,
+  "WindowPoStProofType": 8,
   "SectorSize": 34359738368,
   "WindowPoStPartitionSectors": 42,
   "ConsensusFaultElapsed": 10101
@@ -3726,7 +4112,7 @@ Inputs:
 [
   "f01234",
   {
-    "SealProof": 3,
+    "SealProof": 8,
     "SectorNumber": 9,
     "SealedCID": {
       "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
@@ -3823,7 +4209,7 @@ Inputs:
 [
   "f01234",
   {
-    "SealProof": 3,
+    "SealProof": 8,
     "SectorNumber": 9,
     "SealedCID": {
       "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
@@ -3918,6 +4304,30 @@ Response:
 ]
 ```
 
+### StateMinerSectorAllocated
+StateMinerSectorAllocated checks if a sector is allocated
+
+
+Perms: read
+
+Inputs:
+```json
+[
+  "f01234",
+  9,
+  [
+    {
+      "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+    },
+    {
+      "/": "bafy2bzacebp3shtrn43k7g3unredz7fxn4gj533d3o43tqn2p2ipxxhrvchve"
+    }
+  ]
+]
+```
+
+Response: `true`
+
 ### StateMinerSectorCount
 StateMinerSectorCount returns the number of sectors in a miner's sector set and proving set
 
@@ -3974,45 +4384,6 @@ Inputs:
 
 Response: `null`
 
-### StateMsgGasCost
-StateMsgGasCost searches for a message in the chain, and returns details of the messages gas costs, including the penalty and miner tip
-
-
-Perms: read
-
-Inputs:
-```json
-[
-  {
-    "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
-  },
-  [
-    {
-      "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
-    },
-    {
-      "/": "bafy2bzacebp3shtrn43k7g3unredz7fxn4gj533d3o43tqn2p2ipxxhrvchve"
-    }
-  ]
-]
-```
-
-Response:
-```json
-{
-  "Message": {
-    "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
-  },
-  "GasUsed": "0",
-  "BaseFeeBurn": "0",
-  "OverEstimationBurn": "0",
-  "MinerPenalty": "0",
-  "MinerTip": "0",
-  "Refund": "0",
-  "TotalCost": "0"
-}
-```
-
 ### StateNetworkName
 StateNetworkName returns the name of the network the node is synced to
 
@@ -4043,7 +4414,7 @@ Inputs:
 ]
 ```
 
-Response: `5`
+Response: `9`
 
 ### StateReadState
 StateReadState returns the indicated actor's state.
@@ -4070,12 +4441,16 @@ Response:
 ```json
 {
   "Balance": "0",
+  "Code": {
+    "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+  },
   "State": {}
 }
 ```
 
 ### StateReplay
-StateReplay returns the result of executing the indicated message, assuming it was executed in the indicated tipset.
+StateReplay replays a given message, assuming it was included in a block in the specified tipset.
+If no tipset key is provided, the appropriate tipset is looked up.
 
 
 Perms: read
@@ -4123,6 +4498,18 @@ Response:
     "Return": "Ynl0ZSBhcnJheQ==",
     "GasUsed": 9
   },
+  "GasCost": {
+    "Message": {
+      "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+    },
+    "GasUsed": "0",
+    "BaseFeeBurn": "0",
+    "OverEstimationBurn": "0",
+    "MinerPenalty": "0",
+    "MinerTip": "0",
+    "Refund": "0",
+    "TotalCost": "0"
+  },
   "ExecutionTrace": {
     "Msg": {
       "Version": 42,
@@ -4166,6 +4553,46 @@ Inputs:
   {
     "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
   }
+]
+```
+
+Response:
+```json
+{
+  "Message": {
+    "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+  },
+  "Receipt": {
+    "ExitCode": 0,
+    "Return": "Ynl0ZSBhcnJheQ==",
+    "GasUsed": 9
+  },
+  "ReturnDec": {},
+  "TipSet": [
+    {
+      "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+    },
+    {
+      "/": "bafy2bzacebp3shtrn43k7g3unredz7fxn4gj533d3o43tqn2p2ipxxhrvchve"
+    }
+  ],
+  "Height": 10101
+}
+```
+
+### StateSearchMsgLimited
+StateSearchMsgLimited looks back up to limit epochs in the chain for a message, and returns its receipt and the tipset where it was executed
+
+
+Perms: read
+
+Inputs:
+```json
+[
+  {
+    "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+  },
+  10101
 ]
 ```
 
@@ -4251,7 +4678,7 @@ Response:
 ```json
 {
   "SectorNumber": 9,
-  "SealProof": 3,
+  "SealProof": 8,
   "SealedCID": {
     "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
   },
@@ -4322,7 +4749,7 @@ Response:
 ```json
 {
   "Info": {
-    "SealProof": 3,
+    "SealProof": 8,
     "SectorNumber": 9,
     "SealedCID": {
       "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
