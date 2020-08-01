@@ -9,6 +9,4 @@ func QuietMiningLogs() {
 	_ = log.SetLogLevel("sub", "ERROR")
 	_ = log.SetLogLevel("storageminer", "ERROR")
 	_ = log.SetLogLevel("pubsub", "ERROR")
-	_ = log.SetLogLevel("gen", "ERROR")
-	_ = log.SetLogLevel("dht/RtRefreshManager", "ERROR")
 }
