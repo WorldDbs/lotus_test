@@ -36,8 +36,6 @@ type fundsReq struct {
 	lk sync.Mutex
 	// merge parent, if this req is part of a merge
 	merge *mergedFundsReq
-	// whether the req's context has been cancelled
-	active bool
 }
 
 func newFundsReq(ctx context.Context, amt types.BigInt) *fundsReq {
@@ -46,7 +44,6 @@ func newFundsReq(ctx context.Context, amt types.BigInt) *fundsReq {
 		ctx:     ctx,
 		promise: promise,
 		amt:     amt,
-		active:  true,
 	}
 }
 
@@ -61,25 +58,18 @@ func (r *fundsReq) onComplete(res *paychFundsRes) {
 // cancel is called when the req's context is cancelled
 func (r *fundsReq) cancel() {
 	r.lk.Lock()
-
-	r.active = false
-	m := r.merge
-
-	r.lk.Unlock()
+	defer r.lk.Unlock()
 
 	// If there's a merge parent, tell the merge parent to check if it has any
 	// active reqs left
-	if m != nil {
-		m.checkActive()
+	if r.merge != nil {
+		r.merge.checkActive()
 	}
 }
 
 // isActive indicates whether the req's context has been cancelled
 func (r *fundsReq) isActive() bool {
-	r.lk.Lock()
-	defer r.lk.Unlock()
-
-	return r.active
+	return r.ctx.Err() == nil
 }
 
 // setMergeParent sets the merge that this req is part of
@@ -101,10 +91,13 @@ type mergedFundsReq struct {
 
 func newMergedFundsReq(reqs []*fundsReq) *mergedFundsReq {
 	ctx, cancel := context.WithCancel(context.Background())
+
+	rqs := make([]*fundsReq, len(reqs))
+	copy(rqs, reqs)
 	m := &mergedFundsReq{
 		ctx:    ctx,
 		cancel: cancel,
-		reqs:   reqs,
+		reqs:   rqs,
 	}
 
 	for _, r := range m.reqs {
@@ -201,7 +194,7 @@ func (ca *channelAccessor) processQueue(channelID string) (*api.ChannelAvailable
 	// Merge all pending requests into one.
 	// For example if there are pending requests for 3, 2, 4 then
 	// amt = 3 + 2 + 4 = 9
-	merged := newMergedFundsReq(ca.fundsReqQueue[:])
+	merged := newMergedFundsReq(ca.fundsReqQueue)
 	amt := merged.sum()
 	if amt.IsZero() {
 		// Note: The amount can be zero if requests are cancelled as we're
@@ -422,7 +415,7 @@ func (ca *channelAccessor) waitForPaychCreateMsg(channelID string, mcid cid.Cid)
 func (ca *channelAccessor) waitPaychCreateMsg(channelID string, mcid cid.Cid) error {
 	mwait, err := ca.api.StateWaitMsg(ca.chctx, mcid, build.MessageConfidence)
 	if err != nil {
-		log.Errorf("wait msg: %w", err)
+		log.Errorf("wait msg: %v", err)
 		return err
 	}
 
