@@ -2,6 +2,8 @@ package main
 
 import (
 	"bufio"
+	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -15,10 +17,13 @@ import (
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-cidutil/cidenc"
+	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
+	cborutil "github.com/filecoin-project/go-cbor-util"
+	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -110,6 +115,16 @@ var storageDealSelectionResetCmd = &cli.Command{
 			return err
 		}
 
+		err = smapi.DealsSetConsiderVerifiedStorageDeals(lcli.DaemonContext(cctx), true)
+		if err != nil {
+			return err
+		}
+
+		err = smapi.DealsSetConsiderUnverifiedStorageDeals(lcli.DaemonContext(cctx), true)
+		if err != nil {
+			return err
+		}
+
 		return nil
 	},
 }
@@ -123,6 +138,12 @@ var storageDealSelectionRejectCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name: "offline",
+		},
+		&cli.BoolFlag{
+			Name: "verified",
+		},
+		&cli.BoolFlag{
+			Name: "unverified",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -141,6 +162,20 @@ var storageDealSelectionRejectCmd = &cli.Command{
 
 		if cctx.Bool("offline") {
 			err = smapi.DealsSetConsiderOfflineStorageDeals(lcli.DaemonContext(cctx), false)
+			if err != nil {
+				return err
+			}
+		}
+
+		if cctx.Bool("verified") {
+			err = smapi.DealsSetConsiderVerifiedStorageDeals(lcli.DaemonContext(cctx), false)
+			if err != nil {
+				return err
+			}
+		}
+
+		if cctx.Bool("unverified") {
+			err = smapi.DealsSetConsiderUnverifiedStorageDeals(lcli.DaemonContext(cctx), false)
 			if err != nil {
 				return err
 			}
@@ -307,6 +342,7 @@ var storageDealsCmd = &cli.Command{
 		getBlocklistCmd,
 		resetBlocklistCmd,
 		setSealDurationCmd,
+		dealsPendingPublish,
 	},
 }
 
@@ -417,7 +453,7 @@ func outputStorageDeals(out io.Writer, deals []storagemarket.MinerDeal, verbose 
 	w := tabwriter.NewWriter(out, 2, 4, 2, ' ', 0)
 
 	if verbose {
-		_, _ = fmt.Fprintf(w, "Creation\tProposalCid\tDealId\tState\tClient\tSize\tPrice\tDuration\tMessage\n")
+		_, _ = fmt.Fprintf(w, "Creation\tVerified\tProposalCid\tDealId\tState\tClient\tSize\tPrice\tDuration\tTransferChannelID\tMessage\n")
 	} else {
 		_, _ = fmt.Fprintf(w, "ProposalCid\tDealId\tState\tClient\tSize\tPrice\tDuration\n")
 	}
@@ -431,11 +467,16 @@ func outputStorageDeals(out io.Writer, deals []storagemarket.MinerDeal, verbose 
 		fil := types.FIL(types.BigMul(deal.Proposal.StoragePricePerEpoch, types.NewInt(uint64(deal.Proposal.Duration()))))
 
 		if verbose {
-			_, _ = fmt.Fprintf(w, "%s\t", deal.CreationTime.Time().Format(time.Stamp))
+			_, _ = fmt.Fprintf(w, "%s\t%t\t", deal.CreationTime.Time().Format(time.Stamp), deal.Proposal.VerifiedDeal)
 		}
 
 		_, _ = fmt.Fprintf(w, "%s\t%d\t%s\t%s\t%s\t%s\t%s", propcid, deal.DealID, storagemarket.DealStates[deal.State], deal.Proposal.Client, units.BytesSize(float64(deal.Proposal.PieceSize)), fil, deal.Proposal.Duration())
 		if verbose {
+			tchid := ""
+			if deal.TransferChannelId != nil {
+				tchid = deal.TransferChannelId.String()
+			}
+			_, _ = fmt.Fprintf(w, "\t%s", tchid)
 			_, _ = fmt.Fprintf(w, "\t%s", deal.Message)
 		}
 
@@ -569,6 +610,135 @@ var dataTransfersCmd = &cli.Command{
 	Usage: "Manage data transfers",
 	Subcommands: []*cli.Command{
 		transfersListCmd,
+		marketRestartTransfer,
+		marketCancelTransfer,
+	},
+}
+
+var marketRestartTransfer = &cli.Command{
+	Name:  "restart",
+	Usage: "Force restart a stalled data transfer",
+	Flags: []cli.Flag{
+		&cli.StringFlag{
+			Name:  "peerid",
+			Usage: "narrow to transfer with specific peer",
+		},
+		&cli.BoolFlag{
+			Name:  "initiator",
+			Usage: "specify only transfers where peer is/is not initiator",
+			Value: false,
+		},
+	},
+	Action: func(cctx *cli.Context) error {
+		if !cctx.Args().Present() {
+			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
+		}
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
+		if err != nil {
+			return err
+		}
+		defer closer()
+		ctx := lcli.ReqContext(cctx)
+
+		transferUint, err := strconv.ParseUint(cctx.Args().First(), 10, 64)
+		if err != nil {
+			return fmt.Errorf("Error reading transfer ID: %w", err)
+		}
+		transferID := datatransfer.TransferID(transferUint)
+		initiator := cctx.Bool("initiator")
+		var other peer.ID
+		if pidstr := cctx.String("peerid"); pidstr != "" {
+			p, err := peer.Decode(pidstr)
+			if err != nil {
+				return err
+			}
+			other = p
+		} else {
+			channels, err := nodeApi.MarketListDataTransfers(ctx)
+			if err != nil {
+				return err
+			}
+			found := false
+			for _, channel := range channels {
+				if channel.IsInitiator == initiator && channel.TransferID == transferID {
+					other = channel.OtherPeer
+					found = true
+					break
+				}
+			}
+			if !found {
+				return errors.New("unable to find matching data transfer")
+			}
+		}
+
+		return nodeApi.MarketRestartDataTransfer(ctx, transferID, other, initiator)
+	},
+}
+
+var marketCancelTransfer = &cli.Command{
+	Name:  "cancel",
+	Usage: "Force cancel a data transfer",
+	Flags: []cli.Flag{
+		&cli.StringFlag{
+			Name:  "peerid",
+			Usage: "narrow to transfer with specific peer",
+		},
+		&cli.BoolFlag{
+			Name:  "initiator",
+			Usage: "specify only transfers where peer is/is not initiator",
+			Value: false,
+		},
+		&cli.DurationFlag{
+			Name:  "cancel-timeout",
+			Usage: "time to wait for cancel to be sent to client",
+			Value: 5 * time.Second,
+		},
+	},
+	Action: func(cctx *cli.Context) error {
+		if !cctx.Args().Present() {
+			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
+		}
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
+		if err != nil {
+			return err
+		}
+		defer closer()
+		ctx := lcli.ReqContext(cctx)
+
+		transferUint, err := strconv.ParseUint(cctx.Args().First(), 10, 64)
+		if err != nil {
+			return fmt.Errorf("Error reading transfer ID: %w", err)
+		}
+		transferID := datatransfer.TransferID(transferUint)
+		initiator := cctx.Bool("initiator")
+		var other peer.ID
+		if pidstr := cctx.String("peerid"); pidstr != "" {
+			p, err := peer.Decode(pidstr)
+			if err != nil {
+				return err
+			}
+			other = p
+		} else {
+			channels, err := nodeApi.MarketListDataTransfers(ctx)
+			if err != nil {
+				return err
+			}
+			found := false
+			for _, channel := range channels {
+				if channel.IsInitiator == initiator && channel.TransferID == transferID {
+					other = channel.OtherPeer
+					found = true
+					break
+				}
+			}
+			if !found {
+				return errors.New("unable to find matching data transfer")
+			}
+		}
+
+		timeoutCtx, cancel := context.WithTimeout(ctx, cctx.Duration("cancel-timeout"))
+		defer cancel()
+		return nodeApi.MarketCancelDataTransfer(timeoutCtx, transferID, other, initiator)
 	},
 }
 
@@ -576,6 +746,11 @@ var transfersListCmd = &cli.Command{
 	Name:  "list",
 	Usage: "List ongoing data transfers for this miner",
 	Flags: []cli.Flag{
+		&cli.BoolFlag{
+			Name:    "verbose",
+			Aliases: []string{"v"},
+			Usage:   "print verbose transfer details",
+		},
 		&cli.BoolFlag{
 			Name:  "color",
 			Usage: "use color in display output",
@@ -588,6 +763,10 @@ var transfersListCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "watch",
 			Usage: "watch deal updates in real-time, rather than a one time list",
+		},
+		&cli.BoolFlag{
+			Name:  "show-failed",
+			Usage: "show failed/cancelled transfers",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -603,10 +782,11 @@ var transfersListCmd = &cli.Command{
 			return err
 		}
 
+		verbose := cctx.Bool("verbose")
 		completed := cctx.Bool("completed")
 		color := cctx.Bool("color")
 		watch := cctx.Bool("watch")
-
+		showFailed := cctx.Bool("show-failed")
 		if watch {
 			channelUpdates, err := api.MarketDataTransferUpdates(ctx)
 			if err != nil {
@@ -618,7 +798,7 @@ var transfersListCmd = &cli.Command{
 
 				tm.MoveCursor(1, 1)
 
-				lcli.OutputDataTransferChannels(tm.Screen, channels, completed, color)
+				lcli.OutputDataTransferChannels(tm.Screen, channels, verbose, completed, color, showFailed)
 
 				tm.Flush()
 
@@ -643,7 +823,61 @@ var transfersListCmd = &cli.Command{
 				}
 			}
 		}
-		lcli.OutputDataTransferChannels(os.Stdout, channels, completed, color)
+		lcli.OutputDataTransferChannels(os.Stdout, channels, verbose, completed, color, showFailed)
+		return nil
+	},
+}
+
+var dealsPendingPublish = &cli.Command{
+	Name:  "pending-publish",
+	Usage: "list deals waiting in publish queue",
+	Flags: []cli.Flag{
+		&cli.BoolFlag{
+			Name:  "publish-now",
+			Usage: "send a publish message now",
+		},
+	},
+	Action: func(cctx *cli.Context) error {
+		api, closer, err := lcli.GetStorageMinerAPI(cctx)
+		if err != nil {
+			return err
+		}
+		defer closer()
+		ctx := lcli.ReqContext(cctx)
+
+		if cctx.Bool("publish-now") {
+			if err := api.MarketPublishPendingDeals(ctx); err != nil {
+				return xerrors.Errorf("publishing deals: %w", err)
+			}
+			fmt.Println("triggered deal publishing")
+			return nil
+		}
+
+		pending, err := api.MarketPendingDeals(ctx)
+		if err != nil {
+			return xerrors.Errorf("getting pending deals: %w", err)
+		}
+
+		if len(pending.Deals) > 0 {
+			endsIn := pending.PublishPeriodStart.Add(pending.PublishPeriod).Sub(time.Now())
+			w := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)
+			_, _ = fmt.Fprintf(w, "Publish period:             %s (ends in %s)\n", pending.PublishPeriod, endsIn.Round(time.Second))
+			_, _ = fmt.Fprintf(w, "First deal queued at:       %s\n", pending.PublishPeriodStart)
+			_, _ = fmt.Fprintf(w, "Deals will be published at: %s\n", pending.PublishPeriodStart.Add(pending.PublishPeriod))
+			_, _ = fmt.Fprintf(w, "%d deals queued to be published:\n", len(pending.Deals))
+			_, _ = fmt.Fprintf(w, "ProposalCID\tClient\tSize\n")
+			for _, deal := range pending.Deals {
+				proposalNd, err := cborutil.AsIpld(&deal) // nolint
+				if err != nil {
+					return err
+				}
+
+				_, _ = fmt.Fprintf(w, "%s\t%s\t%s\n", proposalNd.Cid(), deal.Proposal.Client, units.BytesSize(float64(deal.Proposal.PieceSize)))
+			}
+			return w.Flush()
+		}
+
+		fmt.Println("No deals queued to be published")
 		return nil
 	},
 }
