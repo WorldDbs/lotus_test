@@ -9,11 +9,12 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/filecoin-project/specs-storage/storage"
 
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
+	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 )
 
 // Piece is a tuple of piece and deal info
@@ -32,6 +33,7 @@ type Piece struct {
 type DealInfo struct {
 	PublishCid   *cid.Cid
 	DealID       abi.DealID
+	DealProposal *market.DealProposal
 	DealSchedule DealSchedule
 	KeepUnsealed bool
 }
@@ -70,7 +72,8 @@ type SectorInfo struct {
 	SectorType abi.RegisteredSealProof
 
 	// Packing
-	Pieces []Piece
+	CreationTime int64 // unix seconds
+	Pieces       []Piece
 
 	// PreCommit1
 	TicketValue   abi.SealRandomness
@@ -82,7 +85,7 @@ type SectorInfo struct {
 	CommR *cid.Cid
 	Proof []byte
 
-	PreCommitInfo    *miner0.SectorPreCommitInfo
+	PreCommitInfo    *miner.SectorPreCommitInfo
 	PreCommitDeposit big.Int
 	PreCommitMessage *cid.Cid
 	PreCommitTipSet  TipSetToken
@@ -102,6 +105,10 @@ type SectorInfo struct {
 
 	// Recovery
 	Return ReturnState
+
+	// Termination
+	TerminateMessage *cid.Cid
+	TerminatedAt     abi.ChainEpoch
 
 	// Debug
 	LastErr string
@@ -159,7 +166,7 @@ func (t *SectorInfo) sealingCtx(ctx context.Context) context.Context {
 
 // Returns list of offset/length tuples of sector data ranges which clients
 // requested to keep unsealed
-func (t *SectorInfo) keepUnsealedRanges(invert bool) []storage.Range {
+func (t *SectorInfo) keepUnsealedRanges(invert, alwaysKeep bool) []storage.Range {
 	var out []storage.Range
 
 	var at abi.UnpaddedPieceSize
@@ -170,7 +177,10 @@ func (t *SectorInfo) keepUnsealedRanges(invert bool) []storage.Range {
 		if piece.DealInfo == nil {
 			continue
 		}
-		if piece.DealInfo.KeepUnsealed == invert {
+
+		keep := piece.DealInfo.KeepUnsealed || alwaysKeep
+
+		if keep == invert {
 			continue
 		}
 
