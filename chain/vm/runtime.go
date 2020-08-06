@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/binary"
 	"fmt"
+	gruntime "runtime"
 	"time"
 
 	"github.com/filecoin-project/go-address"
@@ -53,8 +54,8 @@ func (m *Message) ValueReceived() abi.TokenAmount {
 var EnableGasTracing = false
 
 type Runtime struct {
-	rt0.Message
-	rt0.Syscalls
+	rt2.Message
+	rt2.Syscalls
 
 	ctx context.Context
 
@@ -72,6 +73,7 @@ type Runtime struct {
 	originNonce uint64
 
 	executionTrace    types.ExecutionTrace
+	depth             uint64
 	numActorsCreated  uint64
 	allowInternal     bool
 	callerValidated   bool
@@ -243,20 +245,23 @@ func (rt *Runtime) NewActorAddress() address.Address {
 	return addr
 }
 
-func (rt *Runtime) CreateActor(codeID cid.Cid, address address.Address) {
+func (rt *Runtime) CreateActor(codeID cid.Cid, addr address.Address) {
+	if addr == address.Undef && rt.NetworkVersion() >= network.Version7 {
+		rt.Abortf(exitcode.SysErrorIllegalArgument, "CreateActor with Undef address")
+	}
 	act, aerr := rt.vm.areg.Create(codeID, rt)
 	if aerr != nil {
 		rt.Abortf(aerr.RetCode(), aerr.Error())
 	}
 
-	_, err := rt.state.GetActor(address)
+	_, err := rt.state.GetActor(addr)
 	if err == nil {
 		rt.Abortf(exitcode.SysErrorIllegalArgument, "Actor address already exists")
 	}
 
 	rt.chargeGas(rt.Pricelist().OnCreateActor())
 
-	err = rt.state.SetActor(address, act)
+	err = rt.state.SetActor(addr, act)
 	if err != nil {
 		panic(aerrors.Fatalf("creating actor entry: %v", err))
 	}
@@ -265,7 +270,7 @@ func (rt *Runtime) CreateActor(codeID cid.Cid, address address.Address) {
 
 // DeleteActor deletes the executing actor from the state tree, transferring
 // any balance to beneficiary.
-// Aborts if the beneficiary does not exist.
+// Aborts if the beneficiary does not exist or is the calling actor.
 // May only be called by the actor itself.
 func (rt *Runtime) DeleteActor(beneficiary address.Address) {
 	rt.chargeGas(rt.Pricelist().OnDeleteActor())
@@ -277,6 +282,19 @@ func (rt *Runtime) DeleteActor(beneficiary address.Address) {
 		panic(aerrors.Fatalf("failed to get actor: %s", err))
 	}
 	if !act.Balance.IsZero() {
+		// TODO: Should be safe to drop the version-check,
+		//  since only the paych actor called this pre-version 7, but let's leave it for now
+		if rt.NetworkVersion() >= network.Version7 {
+			beneficiaryId, found := rt.ResolveAddress(beneficiary)
+			if !found {
+				rt.Abortf(exitcode.SysErrorIllegalArgument, "beneficiary doesn't exist")
+			}
+
+			if beneficiaryId == rt.Receiver() {
+				rt.Abortf(exitcode.SysErrorIllegalArgument, "benefactor cannot be beneficiary")
+			}
+		}
+
 		// Transfer the executing actor's balance to the beneficiary
 		if err := rt.vm.transfer(rt.Receiver(), beneficiary, act.Balance); err != nil {
 			panic(aerrors.Fatalf("failed to transfer balance to beneficiary actor: %s", err))
@@ -517,7 +535,7 @@ func (rt *Runtime) chargeGasInternal(gas GasCharge, skip int) aerrors.ActorError
 	if EnableGasTracing {
 		var callers [10]uintptr
 
-		cout := 0 //gruntime.Callers(2+skip, callers[:])
+		cout := gruntime.Callers(2+skip, callers[:])
 
 		now := build.Clock.Now()
 		if rt.lastGasCharge != nil {
@@ -532,12 +550,19 @@ func (rt *Runtime) chargeGasInternal(gas GasCharge, skip int) aerrors.ActorError
 			ComputeGas: gas.ComputeGas,
 			StorageGas: gas.StorageGas,
 
-			TotalVirtualGas:   gas.VirtualCompute*GasComputeMulti + gas.VirtualStorage*GasStorageMulti,
 			VirtualComputeGas: gas.VirtualCompute,
 			VirtualStorageGas: gas.VirtualStorage,
 
 			Callers: callers[:cout],
 		}
+		if gasTrace.VirtualStorageGas == 0 {
+			gasTrace.VirtualStorageGas = gasTrace.StorageGas
+		}
+		if gasTrace.VirtualComputeGas == 0 {
+			gasTrace.VirtualComputeGas = gasTrace.ComputeGas
+		}
+		gasTrace.TotalVirtualGas = gasTrace.VirtualComputeGas + gasTrace.VirtualStorageGas
+
 		rt.executionTrace.GasCharges = append(rt.executionTrace.GasCharges, &gasTrace)
 		rt.lastGasChargeTime = now
 		rt.lastGasCharge = &gasTrace
@@ -545,9 +570,10 @@ func (rt *Runtime) chargeGasInternal(gas GasCharge, skip int) aerrors.ActorError
 
 	// overflow safe
 	if rt.gasUsed > rt.gasAvailable-toUse {
+		gasUsed := rt.gasUsed
 		rt.gasUsed = rt.gasAvailable
-		return aerrors.Newf(exitcode.SysErrOutOfGas, "not enough gas: used=%d, available=%d",
-			rt.gasUsed, rt.gasAvailable)
+		return aerrors.Newf(exitcode.SysErrOutOfGas, "not enough gas: used=%d, available=%d, use=%d",
+			gasUsed, rt.gasAvailable, toUse)
 	}
 	rt.gasUsed += toUse
 	return nil
