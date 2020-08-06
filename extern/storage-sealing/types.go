@@ -72,8 +72,7 @@ type SectorInfo struct {
 	SectorType abi.RegisteredSealProof
 
 	// Packing
-	CreationTime int64 // unix seconds
-	Pieces       []Piece
+	Pieces []Piece
 
 	// PreCommit1
 	TicketValue   abi.SealRandomness
