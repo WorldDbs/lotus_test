@@ -101,16 +101,26 @@ func (evt SectorPacked) apply(state *SectorInfo) {
 	}
 }
 
+type SectorTicket struct {
+	TicketValue abi.SealRandomness
+	TicketEpoch abi.ChainEpoch
+}
+
+func (evt SectorTicket) apply(state *SectorInfo) {
+	state.TicketEpoch = evt.TicketEpoch
+	state.TicketValue = evt.TicketValue
+}
+
+type SectorOldTicket struct{}
+
+func (evt SectorOldTicket) apply(*SectorInfo) {}
+
 type SectorPreCommit1 struct {
 	PreCommit1Out storage.PreCommit1Out
-	TicketValue   abi.SealRandomness
-	TicketEpoch   abi.ChainEpoch
 }
 
 func (evt SectorPreCommit1) apply(state *SectorInfo) {
 	state.PreCommit1Out = evt.PreCommit1Out
-	state.TicketEpoch = evt.TicketEpoch
-	state.TicketValue = evt.TicketValue
 	state.PreCommit2Fails = 0
 }
 
@@ -195,6 +205,11 @@ type SectorDealsExpired struct{ error }
 
 func (evt SectorDealsExpired) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorDealsExpired) apply(*SectorInfo)                        {}
+
+type SectorTicketExpired struct{ error }
+
+func (evt SectorTicketExpired) FormatError(xerrors.Printer) (next error) { return evt.error }
+func (evt SectorTicketExpired) apply(*SectorInfo)                        {}
 
 type SectorCommitted struct {
 	Proof []byte
@@ -298,6 +313,32 @@ func (evt SectorFaultReported) apply(state *SectorInfo) {
 }
 
 type SectorFaultedFinal struct{}
+
+// Terminating
+
+type SectorTerminate struct{}
+
+func (evt SectorTerminate) applyGlobal(state *SectorInfo) bool {
+	state.State = Terminating
+	return true
+}
+
+type SectorTerminating struct{ Message *cid.Cid }
+
+func (evt SectorTerminating) apply(state *SectorInfo) {
+	state.TerminateMessage = evt.Message
+}
+
+type SectorTerminated struct{ TerminatedAt abi.ChainEpoch }
+
+func (evt SectorTerminated) apply(state *SectorInfo) {
+	state.TerminatedAt = evt.TerminatedAt
+}
+
+type SectorTerminateFailed struct{ error }
+
+func (evt SectorTerminateFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
+func (evt SectorTerminateFailed) apply(*SectorInfo)                        {}
 
 // External events
 
