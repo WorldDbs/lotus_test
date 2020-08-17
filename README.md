@@ -1,246 +1,55 @@
-# Project Oni 👹
+<p align="center">
+  <a href="https://docs.filecoin.io/" title="Filecoin Docs">
+    <img src="documentation/images/lotus_logo_h.png" alt="Project Lotus Logo" width="244" />
+  </a>
+</p>
 
-Our mandate is:
+<h1 align="center">Project Lotus - 莲</h1>
 
-> To verify the successful end-to-end outcome of the filecoin protocol and filecoin implementations, under a variety of real-world and simulated scenarios. 
+<p align="center">
+  <a href="https://circleci.com/gh/filecoin-project/lotus"><img src="https://circleci.com/gh/filecoin-project/lotus.svg?style=svg"></a>
+  <a href="https://codecov.io/gh/filecoin-project/lotus"><img src="https://codecov.io/gh/filecoin-project/lotus/branch/master/graph/badge.svg"></a>
+  <a href="https://goreportcard.com/report/github.com/filecoin-project/lotus"><img src="https://goreportcard.com/badge/github.com/filecoin-project/lotus" /></a>  
+  <a href=""><img src="https://img.shields.io/badge/golang-%3E%3D1.15.5-blue.svg" /></a>
+  <br>
+</p>
 
-➡️  Find out more about our goals, requirements, execution plan, and team culture, in our [Project Description](https://docs.google.com/document/d/16jYL--EWYpJhxT9bakYq7ZBGLQ9SB940Wd1lTDOAbNE).
+Lotus is an implementation of the Filecoin Distributed Storage Network. For more details about Filecoin, check out the [Filecoin Spec](https://spec.filecoin.io).
 
-## Table of Contents
+## Building & Documentation
 
-- [Testing topics](#testing-topics)
-- [Repository contents](#repository-contents)
-- [Running the test cases](#running-the-test-cases)
-- [Catalog](#catalog)
-- [Debugging](#debugging)
-- [Dependencies](#dependencies)
-- [Docker images changelog](#docker-images-changelog)
-- [Team](#team)
+For instructions on how to build, install and setup lotus, please visit [https://docs.filecoin.io/get-started/lotus](https://docs.filecoin.io/get-started/lotus/).
 
-## Testing topics
+## Reporting a Vulnerability
 
-These are the topics we are currently centering our testing efforts on. Our testing efforts include fault induction, stress tests, and end-to-end testing.
+Please send an email to security@filecoin.org. See our [security policy](SECURITY.md) for more details.
 
-* **slashing:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fslashing)
-    * We are recreating the scenarios that lead to slashing, as they are not readily seen in mono-client testnets.
-    * Context: slashing is the negative economic consequence of penalising a miner that has breached protocol by deducing FIL and/or removing their power from the network.
-* **windowed PoSt/sector proving faults:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fsector-proving)
-    * We are recreating the proving fault scenarios and triggering them in an accelerated fasion (by modifying the system configuration), so that we're able to verify that the sector state transitions properly through the different milestones (temporary faults, termination, etc.), and under chain fork conditions.
-    * Context: every 24 hours there are 36 windows where miners need to submit their proofs of sector liveness, correctness, and validity. Failure to do so will mark a sector as faulted, and will eventually terminate the sector, triggering slashing consequences for the miner.
-* **syncing/fork selection:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fsync-forks)
-    * Newly bootstrapped clients, and paused-then-resumed clients, are able to latch on to the correct chain even in the presence of a large number of forks in the network, either in the present, or throughout history.
-* **present-time mining/tipset assembly:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fmining-present)
-    * Induce forks in the network, create network partitions, simulate chain halts, long-range forks, etc. Stage many kinds of convoluted chain shapes, and network partitions, and ensure that miners are always able to arrive to consensus when disruptions subside.
-* **catch-up/rush mining:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fmining-rush)
-    * Induce network-wide, or partition-wide arrests, and investigate what the resulting chain is after the system is allowed to recover.
-    * Context: catch-up/rush mining is a dedicated pathway in the mining logic that brings the chain up to speed with present time, in order to recover from network halts. Basically it entails producing backdated blocks in a hot loop. Imagine all miners recover in unison from a network-wide disruption; miners will produce blocks for their winning rounds, and will label losing rounds as _null rounds_. In the current implementation, there is no time for block propagation, so miners will produce solo-chains, and the assumption is that when all these chains hit the network, the _fork choice rule_ will pick the heaviest one. Unfortunately this process is brittle and unbalanced, as it favours the miner that held the highest power before the disruption commenced.
-* **storage and retrieval deals:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fdeals)
-    * end-to-end flows where clients store and retrieve pieces from miners, including stress testing the system.
-* **payment channels:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fpaych)
-    * stress testing payment channels via excessive lane creation, excessive payment voucher atomisation, and redemption.
-* **drand incidents and impact on the filecoin network/protocol/chain:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fdrand)
-    * drand total unavailabilities, drand catch-ups, drand slowness, etc.
-* **mempool message selection:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fmempool)
-    * soundness of message selection logic; potentially targeted attacks against miners by flooding their message pools with different kinds of messages.
-* **presealing:** [_(view test scenarios)_](https://github.com/filecoin-project/oni/issues?q=is%3Aissue+sort%3Aupdated-desc+label%3Atopic%2Fpresealing)
-    * TBD, anything related to this worth testing?
+## Related packages
 
-## Repository contents
+These repos are independent and reusable modules, but are tightly integrated into Lotus to make up a fully featured Filecoin implementation:
 
-This repository consists of [test plans](https://docs.testground.ai/concepts-and-architecture/test-structure) built to be run on [Testground](https://github.com/testground/testground).
+- [go-fil-markets](https://github.com/filecoin-project/go-fil-markets) which has its own [kanban work tracker available here](https://app.zenhub.com/workspaces/markets-shared-components-5daa144a7046a60001c6e253/board)
+- [specs-actors](https://github.com/filecoin-project/specs-actors) which has its own [kanban work tracker available here](https://app.zenhub.com/workspaces/actors-5ee6f3aa87591f0016c05685/board)
 
-The source code for the various test cases can be found in the [`lotus-soup` directory](https://github.com/filecoin-project/oni/tree/master/lotus-soup).
+## Contribute
 
-## Running the test cases
+Lotus is a universally open project and welcomes contributions of all kinds: code, docs, and more. However, before making a contribution, we ask you to heed these recommendations:
 
-If you are unfamiliar with Testground, we strongly suggest you read the Testground [Getting Started guide](https://docs.testground.ai/getting-started) in order to learn how to install Testground and how to use it.
+1. If the proposal entails a protocol change, please first submit a [Filecoin Improvement Proposal](https://github.com/filecoin-project/FIPs).
+2. If the change is complex and requires prior discussion, [open an issue](github.com/filecoin-project/lotus/issues) or a [discussion](https://github.com/filecoin-project/lotus/discussions) to request feedback before you start working on a pull request. This is to avoid disappointment and sunk costs, in case the change is not actually needed or accepted.
+3. Please refrain from submitting PRs to adapt existing code to subjective preferences. The changeset should contain functional or technical improvements/enhancements, bug fixes, new features, or some other clear material contribution. Simple stylistic changes are likely to be rejected in order to reduce code churn.
 
-You can find various [composition files](https://docs.testground.ai/running-test-plans#composition-runs) describing various test scenarios built as part of Project Oni at [`lotus-soup/_compositions` directory](https://github.com/filecoin-project/oni/tree/master/lotus-soup/_compositions).
+When implementing a change:
 
-We've designed the test cases so that you can run them via the `local:exec`, `local:docker` and the `cluster:k8s` runners. Note that Lotus miners are quite resource intensive, requiring gigabytes of memory. Hence you would have to run these test cases on a beafy machine (when using `local:docker` and `local:exec`), or on a Kubernetes cluster (when using `cluster:k8s`).
+1. Adhere to the standard Go formatting guidelines, e.g. [Effective Go](https://golang.org/doc/effective_go.html). Run `go fmt`.
+2. Stick to the idioms and patterns used in the codebase. Familiar-looking code has a higher chance of being accepted than eerie code. Pay attention to commonly used variable and parameter names, avoidance of naked returns, error handling patterns, etc.
+3. Comments: follow the advice on the [Commentary](https://golang.org/doc/effective_go.html#commentary) section of Effective Go.
+4. Minimize code churn. Modify only what is strictly necessary. Well-encapsulated changesets will get a quicker response from maintainers.
+5. Lint your code with [`golangci-lint`](https://golangci-lint.run) (CI will reject your PR if unlinted).
+6. Add tests.
+7. Title the PR in a meaningful way and describe the rationale and the thought process in the PR description.
+8. Write clean, thoughtful, and detailed [commit messages](https://chris.beams.io/posts/git-commit/). This is even more important than the PR description, because commit messages are stored _inside_ the Git history. One good rule is: if you are happy posting the commit message as the PR description, then it's a good commit message.
 
-Here are the basics of how to run the baseline deals end-to-end test case:
+## License
 
-### Running the baseline deals end-to-end test case
-
-1. Compile and Install Testground from source code.
-    * See the [Getting Started](https://github.com/testground/testground#getting-started) section of the README for instructions.
-
-2. Run a Testground daemon
-
-```
-testground daemon
-```
-
-3. Download required Docker images for the `lotus-soup` test plan
-
-```
-make pull-images
-```
-
-Alternatively you can build them locally with
-
-```
-make build-images
-```
-
-4. Import the `lotus-soup` test plan into your Testground home directory
-
-```
-testground plan import --from ./lotus-soup
-```
-
-5. Init the `filecoin-ffi` Git submodule in the `extra` folder.
-
-```
-git submodule update --init --recursive
-```
-
-6. Compile the `filecoin-ffi` version locally (necessary if you use `local:exec`)
-
-```
-cd extra/filecoin-ffi
-make
-```
-
-7. Run a composition for the baseline deals end-to-end test case
-
-```
-testground run composition -f ./lotus-soup/_compositions/baseline.toml
-```
-
-## Batch-running randomised test cases
-
-The Oni testkit supports [range parameters](https://github.com/filecoin-project/oni/blob/master/lotus-soup/testkit/testenv_ranges.go),
-which test cases can use to generate random values, either at the instance level
-(each instance computes a random value within range), or at the run level (one
-instance computes the values, and propagates them to all other instances via the
-sync service).
-
-For example:
-
-```toml
-latency_range   = '["20ms", "500ms"]'
-loss_range      = '[0, 0.2]'
-```
-
-Could pick a random latency between 20ms and 500ms, and a packet loss
-probability between 0 and 0.2. We could apply those values through the
-`netclient.ConfigureNetwork` Testground SDK API.
-
-Randomized range-based parameters are specially interesting when combined with
-batch runs, as it enables Monte Carlo approaches to testing.
-
-The Oni codebase includes a batch test run driver in package `lotus-soup/runner`.
-You can point it at a composition file that uses range parameters and tell it to
-run N iterations of the test:
-
-```shell script
-$ go run ./runner -runs 5 _compositions/net-chaos/latency.toml
-```
-
-This will run the test as many times as instructed, and will place all outputs
-in a temporary directory. You can pass a concrete output directory with
-the `-output` flag. 
-
-## Catalog
-
-### Test cases part of `lotus-soup`
-
-* `deals-e2e` - Deals end-to-end test case. Clients pick a miner at random, start a deal, wait for it to be sealed, and try to retrieve from another random miner who offers back the data.
-* `drand-halting` - Test case that instructs Drand with a sequence of halt/resume/wait events, while running deals between clients and miners at the same time.
-* `deals-stress` - Deals stress test case. Clients pick a miner and send multiple deals (concurrently or serially) in order to test how many deals miners can handle.
-* `paych-stress` - A test case exercising various payment channel stress tests.
-
-### Compositions part of `lotus-soup`
-
-* `baseline-docker-5-1.toml` - Runs a `baseline` test (deals e2e test) with a network of 5 clients and 1 miner targeting `local:docker`
-* `baseline-k8s-10-3.toml` - Runs a `baseline` test (deals e2e test) with a network of 10 clients and 3 miner targeting `cluster:k8s`
-* `baseline-k8s-3-1.toml` - Runs a `baseline` test (deals e2e test) with a network of 3 clients and 1 miner targeting `cluster:k8s`
-* `baseline-k8s-3-2.toml` - Runs a `baseline` test (deals e2e test) with a network of 3 clients and 2 miner targeting `cluster:k8s`
-* `baseline.toml` - Runs a `baseline` test (deals e2e test) with a network of 3 clients and 2 miner targeting `local:exec`
-* `deals-stress-concurrent-natural-k8s.toml`
-* `deals-stress-concurrent-natural.toml`
-* `deals-stress-concurrent.toml`
-* `deals-stress-serial-natural.toml`
-* `deals-stress-serial.toml`
-* `drand-halt.toml`
-* `local-drand.toml`
-* `natural.toml`
-* `paych-stress.toml`
-* `pubsub-tracer.toml`
-
-
-## Debugging
-
-Find commands and how-to guides on debugging test plans at [DELVING.md](https://github.com/filecoin-project/oni/blob/master/DELVING.md)
-
-1. Querying the Lotus RPC API
-
-2. Useful commands / checks
-
-* Making sure miners are on the same chain
-
-* Checking deals
-
-* Sector queries
-
-* Sector sealing errors
-
-## Dependencies
-
-Our current test plan `lotus-soup` is building programatically the Lotus filecoin implementation and therefore requires all it's dependencies. The build process is slightly more complicated than a normal Go project, because we are binding a bit of Rust code. Lotus codebase is in Go, however its `proofs` and `crypto` libraries are in Rust (BLS signatures, SNARK verification, etc.).
-
-Depending on the runner you want to use to run the test plan, these dependencies are included in the build process in a different way, which you should be aware of should you require to use the test plan with a newer version of Lotus:
-
-### Filecoin FFI libraries
-
-* `local:docker`
-
-The Rust libraries are included in the Filecoin FFI Git submodule, which is part of the `iptestground/oni-buildbase` image. If the FFI changes on Lotus, we have to rebuild this image with the `make build-images` command, where X is the next version (see [Docker images changelog](#docker-images-changelog)
-below).
-
-* `local:exec`
-
-The Rust libraries are included via the `extra` directory. Make sure that the test plan reference to Lotus in `go.mod` and the `extra` directory are pointing to the same commit of the FFI git submodule. You also need to compile the `extra/filecoin-ffi` libraries with `make`.
-
-* `cluster:k8s`
-
-The same process as for `local:docker`, however you need to make sure that the respective `iptestground/oni-buildbase` image is available as a public Docker image, so that the Kubernetes cluster can download it.
-
-### proof parameters
-
-Additional to the Filecoin FFI Git submodules, we are also bundling `proof parameters` in the `iptestground/oni-runtime` image. If these change, you will need to rebuild that image with `make build-images` command, where X is the next version. These parameters are downloaded automatically for `local:exec` if they are not present.
-
-## Docker images changelog
-
-### oni-buildbase
-
-* `v1` => initial image locking in Filecoin FFI commit ca281af0b6c00314382a75ae869e5cb22c83655b.
-* `v2` => no changes; released only for aligning both images to aesthetically please @nonsense :D
-* `v3` => locking in Filecoin FFI commit 5342c7c97d1a1df4650629d14f2823d52889edd9.
-* `v4` => locking in Filecoin FFI commit 6a143e06f923f3a4f544c7a652e8b4df420a3d28.
-* `v5` => locking in Filecoin FFI commit cddc56607e1d851ea6d09d49404bd7db70cb3c2e.
-
-### oni-runtime
-
-* `v1` => initial image with 2048 parameters.
-* `v2` => adds auxiliary tools: `net-tools netcat traceroute iputils-ping wget vim curl telnet iproute2 dnsutils`.
-
-### oni-runtime-debug
-
-* `v1` => initial image
-* `v2` => locking in Lotus commit e21ea53
-* `v3` => locking in Lotus commit d557c40
-
-
-## Team
-
-* [@raulk](https://github.com/raulk) (Captain + TL)
-* [@nonsense](https://github.com/nonsense) (Testground TG + engineer)
-* [@yusefnapora](https://github.com/yusefnapora) (engineer and technical writer)
-* [@vyzo](https://github.com/vyzo) (engineer)
-* [@schomatis](https://github.com/schomatis) (advisor)
-* [@willscott](https://github.com/willscott) (engineer)
-* [@alanshaw](https://github.com/alanshaw) (engineer)
-
+Dual-licensed under [MIT](https://github.com/filecoin-project/lotus/blob/master/LICENSE-MIT) + [Apache 2.0](https://github.com/filecoin-project/lotus/blob/master/LICENSE-APACHE)
