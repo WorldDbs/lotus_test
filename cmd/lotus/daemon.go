@@ -16,6 +16,7 @@ import (
 	"strings"
 
 	paramfetch "github.com/filecoin-project/go-paramfetch"
+	metricsprom "github.com/ipfs/go-metrics-prometheus"
 	"github.com/mitchellh/go-homedir"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
@@ -35,7 +36,6 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/lib/blockstore"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 	"github.com/filecoin-project/lotus/lib/ulimit"
 	"github.com/filecoin-project/lotus/metrics"
@@ -136,6 +136,22 @@ var DaemonCmd = &cli.Command{
 			Name:  "config",
 			Usage: "specify path of config file to use",
 		},
+		// FIXME: This is not the correct place to put this configuration
+		//  option. Ideally it would be part of `config.toml` but at the
+		//  moment that only applies to the node configuration and not outside
+		//  components like the RPC server.
+		&cli.IntFlag{
+			Name:  "api-max-req-size",
+			Usage: "maximum API request size accepted by the JSON RPC server",
+		},
+		&cli.PathFlag{
+			Name:  "restore",
+			Usage: "restore from backup file",
+		},
+		&cli.PathFlag{
+			Name:  "restore-config",
+			Usage: "config file to use when restoring from backup",
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		isLite := cctx.Bool("lite")
@@ -195,9 +211,11 @@ var DaemonCmd = &cli.Command{
 			r.SetConfigPath(cctx.String("config"))
 		}
 
-		if err := r.Init(repo.FullNode); err != nil && err != repo.ErrRepoExists {
+		err = r.Init(repo.FullNode)
+		if err != nil && err != repo.ErrRepoExists {
 			return xerrors.Errorf("repo init error: %w", err)
 		}
+		freshRepo := err != repo.ErrRepoExists
 
 		if !isLite {
 			if err := paramfetch.GetParams(lcli.ReqContext(cctx), build.ParametersJSON(), 0); err != nil {
@@ -215,6 +233,15 @@ var DaemonCmd = &cli.Command{
 			genBytes = build.MaybeGenesis()
 		}
 
+		if cctx.IsSet("restore") {
+			if !freshRepo {
+				return xerrors.Errorf("restoring from backup is only possible with a fresh repo!")
+			}
+			if err := restore(cctx, r); err != nil {
+				return xerrors.Errorf("restoring from backup: %w", err)
+			}
+		}
+
 		chainfile := cctx.String("import-chain")
 		snapshot := cctx.String("import-snapshot")
 		if chainfile != "" || snapshot != "" {
@@ -227,7 +254,7 @@ var DaemonCmd = &cli.Command{
 				issnapshot = true
 			}
 
-			if err := ImportChain(r, chainfile, issnapshot); err != nil {
+			if err := ImportChain(ctx, r, chainfile, issnapshot); err != nil {
 				return err
 			}
 			if cctx.Bool("halt-after-import") {
@@ -262,8 +289,14 @@ var DaemonCmd = &cli.Command{
 			liteModeDeps = node.Override(new(api.GatewayAPI), gapi)
 		}
 
-		var api api.FullNode
+		// some libraries like ipfs/go-ds-measure and ipfs/go-ipfs-blockstore
+		// use ipfs/go-metrics-interface. This injects a Prometheus exporter
+		// for those. Metrics are exported to the default registry.
+		if err := metricsprom.Inject(); err != nil {
+			log.Warnf("unable to inject prometheus ipfs/go-metrics exporter; some metrics will be unavailable; err: %s", err)
+		}
 
+		var api api.FullNode
 		stop, err := node.New(ctx,
 			node.FullAPI(&api, node.Lite(isLite)),
 
@@ -315,7 +348,7 @@ var DaemonCmd = &cli.Command{
 		}
 
 		// TODO: properly parse api endpoint (or make it a URL)
-		return serveRPC(api, stop, endpoint, shutdownChan)
+		return serveRPC(api, stop, endpoint, shutdownChan, int64(cctx.Int("api-max-req-size")))
 	},
 	Subcommands: []*cli.Command{
 		daemonStopCmd,
@@ -352,11 +385,11 @@ func importKey(ctx context.Context, api api.FullNode, f string) error {
 		return err
 	}
 
-	log.Info("successfully imported key for %s", addr)
+	log.Infof("successfully imported key for %s", addr)
 	return nil
 }
 
-func ImportChain(r repo.Repo, fname string, snapshot bool) (err error) {
+func ImportChain(ctx context.Context, r repo.Repo, fname string, snapshot bool) (err error) {
 	var rd io.Reader
 	var l int64
 	if strings.HasPrefix(fname, "http://") || strings.HasPrefix(fname, "https://") {
@@ -399,23 +432,23 @@ func ImportChain(r repo.Repo, fname string, snapshot bool) (err error) {
 	}
 	defer lr.Close() //nolint:errcheck
 
-	ds, err := lr.Datastore("/chain")
+	bs, err := lr.Blockstore(ctx, repo.BlockstoreChain)
+	if err != nil {
+		return xerrors.Errorf("failed to open blockstore: %w", err)
+	}
+
+	mds, err := lr.Datastore(context.TODO(), "/metadata")
 	if err != nil {
 		return err
 	}
-
-	mds, err := lr.Datastore("/metadata")
-	if err != nil {
-		return err
-	}
-
-	bs := blockstore.NewBlockstore(ds)
 
 	j, err := journal.OpenFSJournal(lr, journal.EnvDisabledEvents())
 	if err != nil {
 		return xerrors.Errorf("failed to open journal: %w", err)
 	}
-	cst := store.NewChainStore(bs, mds, vm.Syscalls(ffiwrapper.ProofVerifier), j)
+
+	cst := store.NewChainStore(bs, bs, mds, vm.Syscalls(ffiwrapper.ProofVerifier), j)
+	defer cst.Close() //nolint:errcheck
 
 	log.Infof("importing chain from %s...", fname)
 
@@ -440,7 +473,7 @@ func ImportChain(r repo.Repo, fname string, snapshot bool) (err error) {
 		return xerrors.Errorf("flushing validation cache failed: %w", err)
 	}
 
-	gb, err := cst.GetTipsetByHeight(context.TODO(), 0, ts, true)
+	gb, err := cst.GetTipsetByHeight(ctx, 0, ts, true)
 	if err != nil {
 		return err
 	}
@@ -454,13 +487,13 @@ func ImportChain(r repo.Repo, fname string, snapshot bool) (err error) {
 
 	if !snapshot {
 		log.Infof("validating imported chain...")
-		if err := stm.ValidateChain(context.TODO(), ts); err != nil {
+		if err := stm.ValidateChain(ctx, ts); err != nil {
 			return xerrors.Errorf("chain validation failed: %w", err)
 		}
 	}
 
 	log.Infof("accepting %s as new head", ts.Cids())
-	if err := cst.SetHead(ts); err != nil {
+	if err := cst.ForceHeadSilent(ctx, ts); err != nil {
 		return err
 	}
 
