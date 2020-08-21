@@ -15,6 +15,7 @@ import (
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 )
 
 func init() {
@@ -24,9 +25,15 @@ func init() {
 	builtin.RegisterActorState(builtin2.InitActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
+	builtin.RegisterActorState(builtin3.InitActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load3(store, root)
+	})
 }
 
-var Address = builtin0.InitActorAddr
+var (
+	Address = builtin3.InitActorAddr
+	Methods = builtin3.MethodsInit
+)
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
@@ -34,6 +41,8 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 		return load0(store, act.Head)
 	case builtin2.InitActorCodeID:
 		return load2(store, act.Head)
+	case builtin3.InitActorCodeID:
+		return load3(store, act.Head)
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
@@ -54,4 +63,6 @@ type State interface {
 
 	// Sets the network's name. This should only be used on upgrade/fork.
 	SetNetworkName(name string) error
+
+	addressMap() (adt.Map, error)
 }
