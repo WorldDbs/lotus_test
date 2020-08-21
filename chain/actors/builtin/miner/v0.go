@@ -277,6 +277,15 @@ func (s *state0) DeadlinesChanged(other State) (bool, error) {
 	return !s.State.Deadlines.Equals(other0.Deadlines), nil
 }
 
+func (s *state0) MinerInfoChanged(other State) (bool, error) {
+	other0, ok := other.(*state0)
+	if !ok {
+		// treat an upgrade as a change, always
+		return true, nil
+	}
+	return !s.State.Info.Equals(other0.State.Info), nil
+}
+
 func (s *state0) Info() (MinerInfo, error) {
 	info, err := s.State.GetInfo(s.store)
 	if err != nil {
@@ -286,6 +295,11 @@ func (s *state0) Info() (MinerInfo, error) {
 	var pid *peer.ID
 	if peerID, err := peer.IDFromBytes(info.PeerId); err == nil {
 		pid = &peerID
+	}
+
+	wpp, err := info.SealProofType.RegisteredWindowPoStProof()
+	if err != nil {
+		return MinerInfo{}, err
 	}
 
 	mi := MinerInfo{
@@ -298,7 +312,7 @@ func (s *state0) Info() (MinerInfo, error) {
 
 		PeerId:                     pid,
 		Multiaddrs:                 info.Multiaddrs,
-		SealProofType:              info.SealProofType,
+		WindowPoStProofType:        wpp,
 		SectorSize:                 info.SectorSize,
 		WindowPoStPartitionSectors: info.WindowPoStPartitionSectors,
 		ConsensusFaultElapsed:      -1,
@@ -373,8 +387,13 @@ func (d *deadline0) PartitionsChanged(other Deadline) (bool, error) {
 	return !d.Deadline.Partitions.Equals(other0.Deadline.Partitions), nil
 }
 
-func (d *deadline0) PostSubmissions() (bitfield.BitField, error) {
+func (d *deadline0) PartitionsPoSted() (bitfield.BitField, error) {
 	return d.Deadline.PostSubmissions, nil
+}
+
+func (d *deadline0) DisputableProofCount() (uint64, error) {
+	// field doesn't exist until v3
+	return 0, nil
 }
 
 func (p *partition0) AllSectors() (bitfield.BitField, error) {
