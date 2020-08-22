@@ -6,11 +6,18 @@ import (
 	"net/http"
 	"os"
 
+	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-jsonrpc"
+	promclient "github.com/prometheus/client_golang/prometheus"
+	"go.opencensus.io/tag"
+
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
+	"github.com/filecoin-project/lotus/metrics"
+
 	logging "github.com/ipfs/go-log"
+	"go.opencensus.io/stats/view"
 
 	"github.com/gorilla/mux"
 	"github.com/urfave/cli/v2"
@@ -56,6 +63,10 @@ var runCmd = &cli.Command{
 			Usage: "host address and port the api server will listen on",
 			Value: "0.0.0.0:2346",
 		},
+		&cli.IntFlag{
+			Name:  "api-max-req-size",
+			Usage: "maximum API request size accepted by the JSON RPC server",
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		log.Info("Starting lotus gateway")
@@ -63,6 +74,13 @@ var runCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
+
+		// Register all metric views
+		if err := view.Register(
+			metrics.DefaultViews...,
+		); err != nil {
+			log.Fatalf("Cannot register the view: %v", err)
+		}
 
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
@@ -75,10 +93,25 @@ var runCmd = &cli.Command{
 
 		log.Info("Setting up API endpoint at " + address)
 
-		rpcServer := jsonrpc.NewServer()
-		rpcServer.Register("Filecoin", &GatewayAPI{api: api})
+		serverOptions := make([]jsonrpc.ServerOption, 0)
+		if maxRequestSize := cctx.Int("api-max-req-size"); maxRequestSize != 0 {
+			serverOptions = append(serverOptions, jsonrpc.WithMaxRequestSize(int64(maxRequestSize)))
+		}
+		rpcServer := jsonrpc.NewServer(serverOptions...)
+		rpcServer.Register("Filecoin", metrics.MetricedGatewayAPI(NewGatewayAPI(api)))
 
 		mux.Handle("/rpc/v0", rpcServer)
+
+		registry := promclient.DefaultRegisterer.(*promclient.Registry)
+		exporter, err := prometheus.NewExporter(prometheus.Options{
+			Registry:  registry,
+			Namespace: "lotus_gw",
+		})
+		if err != nil {
+			return err
+		}
+		mux.Handle("/debug/metrics", exporter)
+
 		mux.PathPrefix("/").Handler(http.DefaultServeMux)
 
 		/*ah := &auth.Handler{
@@ -89,6 +122,7 @@ var runCmd = &cli.Command{
 		srv := &http.Server{
 			Handler: mux,
 			BaseContext: func(listener net.Listener) context.Context {
+				ctx, _ := tag.New(context.Background(), tag.Upsert(metrics.APIInterface, "lotus-gateway"))
 				return ctx
 			},
 		}
