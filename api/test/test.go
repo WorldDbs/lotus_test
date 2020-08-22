@@ -155,13 +155,13 @@ var MineNext = miner.MineReq{
 }
 
 func (ts *testSuite) testVersion(t *testing.T) {
-	api.RunningNodeType = api.NodeFull
+	build.RunningNodeType = build.NodeFull
 
 	ctx := context.Background()
 	apis, _ := ts.makeNodes(t, OneFull, OneMiner)
-	napi := apis[0]
+	api := apis[0]
 
-	v, err := napi.Version(ctx)
+	v, err := api.Version(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
