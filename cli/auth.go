@@ -9,7 +9,6 @@ import (
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api/apistruct"
-	cliutil "github.com/filecoin-project/lotus/cli/util"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
@@ -128,7 +127,7 @@ var authApiInfoToken = &cli.Command{
 
 		// TODO: Log in audit log when it is implemented
 
-		fmt.Printf("%s=%s:%s\n", cliutil.EnvForRepo(t), string(token), ainfo.Addr)
+		fmt.Printf("%s=%s:%s\n", envForRepo(t), string(token), ainfo.Addr)
 		return nil
 	},
 }
