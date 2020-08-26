@@ -26,7 +26,7 @@ const FlagMinerRepo = "miner-repo"
 const FlagMinerRepoDeprecation = "storagerepo"
 
 func main() {
-	api.RunningNodeType = api.NodeMiner
+	build.RunningNodeType = build.NodeMiner
 
 	lotuslog.SetupLogLevels()
 
