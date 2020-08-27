@@ -8,7 +8,6 @@
 package build
 
 import (
-	"math"
 	"os"
 
 	"github.com/filecoin-project/go-address"
@@ -53,18 +52,14 @@ const UpgradeOrangeHeight = 336458
 // 2020-12-22T02:00:00Z
 const UpgradeClausHeight = 343200
 
-// 2021-03-04T00:00:30Z
-var UpgradeActorsV3Height = abi.ChainEpoch(550321)
+// TODO
+const UpgradeActorsV3Height = 999999999
 
 func init() {
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(10 << 40))
 
 	if os.Getenv("LOTUS_USE_TEST_ADDRESSES") != "1" {
 		SetAddressNetwork(address.Mainnet)
-	}
-
-	if os.Getenv("LOTUS_DISABLE_V3_ACTOR_MIGRATION") == "1" {
-		UpgradeActorsV3Height = math.MaxInt64
 	}
 
 	Devnet = false
