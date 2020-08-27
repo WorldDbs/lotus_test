@@ -7,6 +7,7 @@ import (
 	"sort"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
@@ -16,14 +17,13 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
 type GasModuleAPI interface {
@@ -35,9 +35,10 @@ type GasModuleAPI interface {
 // Injection (for example with a thin RPC client).
 type GasModule struct {
 	fx.In
-	Stmgr *stmgr.StateManager
-	Chain *store.ChainStore
-	Mpool *messagepool.MessagePool
+	Stmgr     *stmgr.StateManager
+	Chain     *store.ChainStore
+	Mpool     *messagepool.MessagePool
+	GetMaxFee dtypes.DefaultMaxFeeFunc
 }
 
 var _ GasModuleAPI = (*GasModule)(nil)
@@ -92,13 +93,15 @@ type gasMeta struct {
 	limit int64
 }
 
+// finds 55th percntile instead of median to put negative pressure on gas price
 func medianGasPremium(prices []gasMeta, blocks int) abi.TokenAmount {
 	sort.Slice(prices, func(i, j int) bool {
 		// sort desc by price
 		return prices[i].price.GreaterThan(prices[j].price)
 	})
 
-	at := build.BlockGasTarget * int64(blocks) / 2
+	at := build.BlockGasTarget * int64(blocks) / 2        // 50th
+	at += build.BlockGasTarget * int64(blocks) / (2 * 20) // move 5% further
 	prev1, prev2 := big.Zero(), big.Zero()
 	for _, price := range prices {
 		prev1, prev2 = price.price, prev1
@@ -191,11 +194,19 @@ func gasEstimateGasPremium(cstore *store.ChainStore, nblocksincl uint64) (types.
 	return premium, nil
 }
 
-func (a *GasAPI) GasEstimateGasLimit(ctx context.Context, msgIn *types.Message, _ types.TipSetKey) (int64, error) {
-	return gasEstimateGasLimit(ctx, a.Chain, a.Stmgr, a.Mpool, msgIn)
+func (a *GasAPI) GasEstimateGasLimit(ctx context.Context, msgIn *types.Message, tsk types.TipSetKey) (int64, error) {
+	ts, err := a.Chain.GetTipSetFromKey(tsk)
+	if err != nil {
+		return -1, xerrors.Errorf("getting tipset: %w", err)
+	}
+	return gasEstimateGasLimit(ctx, a.Chain, a.Stmgr, a.Mpool, msgIn, ts)
 }
-func (m *GasModule) GasEstimateGasLimit(ctx context.Context, msgIn *types.Message, _ types.TipSetKey) (int64, error) {
-	return gasEstimateGasLimit(ctx, m.Chain, m.Stmgr, m.Mpool, msgIn)
+func (m *GasModule) GasEstimateGasLimit(ctx context.Context, msgIn *types.Message, tsk types.TipSetKey) (int64, error) {
+	ts, err := m.Chain.GetTipSetFromKey(tsk)
+	if err != nil {
+		return -1, xerrors.Errorf("getting tipset: %w", err)
+	}
+	return gasEstimateGasLimit(ctx, m.Chain, m.Stmgr, m.Mpool, msgIn, ts)
 }
 func gasEstimateGasLimit(
 	ctx context.Context,
@@ -203,13 +214,13 @@ func gasEstimateGasLimit(
 	smgr *stmgr.StateManager,
 	mpool *messagepool.MessagePool,
 	msgIn *types.Message,
+	currTs *types.TipSet,
 ) (int64, error) {
 	msg := *msgIn
 	msg.GasLimit = build.BlockGasLimit
 	msg.GasFeeCap = types.NewInt(uint64(build.MinimumBaseFee) + 1)
 	msg.GasPremium = types.NewInt(1)
 
-	currTs := cstore.GetHeaviestTipSet()
 	fromA, err := smgr.ResolveToKeyAddress(ctx, msgIn.From, currTs)
 	if err != nil {
 		return -1, xerrors.Errorf("getting key address: %w", err)
@@ -218,6 +229,9 @@ func gasEstimateGasLimit(
 	pending, ts := mpool.PendingFor(fromA)
 	priorMsgs := make([]types.ChainMsg, 0, len(pending))
 	for _, m := range pending {
+		if m.Message.Nonce == msg.Nonce {
+			break
+		}
 		priorMsgs = append(priorMsgs, m)
 	}
 
@@ -259,7 +273,7 @@ func gasEstimateGasLimit(
 	if !builtin.IsPaymentChannelActor(act.Code) {
 		return res.MsgRct.GasUsed, nil
 	}
-	if msgIn.Method != builtin0.MethodsPaych.Collect {
+	if msgIn.Method != paych.Methods.Collect {
 		return res.MsgRct.GasUsed, nil
 	}
 
@@ -292,7 +306,7 @@ func (m *GasModule) GasEstimateMessageGas(ctx context.Context, msg *types.Messag
 		msg.GasFeeCap = feeCap
 	}
 
-	messagepool.CapGasFee(msg, spec.Get().MaxFee)
+	messagepool.CapGasFee(m.GetMaxFee, msg, spec)
 
 	return msg, nil
 }
