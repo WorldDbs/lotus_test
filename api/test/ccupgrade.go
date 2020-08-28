@@ -3,7 +3,6 @@ package test
 import (
 	"context"
 	"fmt"
-	"os"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -17,12 +16,10 @@ import (
 )
 
 func TestCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
-	_ = os.Setenv("BELLMAN_NO_GPU", "1")
-
 	for _, height := range []abi.ChainEpoch{
-		1,    // before
+		2,    // before
 		162,  // while sealing
-		520,  // after upgrade deal
+		530,  // after upgrade deal
 		5000, // after
 	} {
 		height := height // make linters happy by copying
@@ -34,7 +31,7 @@ func TestCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
 
 func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeHeight abi.ChainEpoch) {
 	ctx := context.Background()
-	n, sn := b(t, []FullNodeOpts{FullNodeWithUpgradeAt(upgradeHeight)}, OneMiner)
+	n, sn := b(t, []FullNodeOpts{FullNodeWithActorsV3At(upgradeHeight)}, OneMiner)
 	client := n[0].FullNode.(*impl.FullNodeAPI)
 	miner := sn[0]
 
@@ -92,7 +89,7 @@ func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeH
 		t.Fatal(err)
 	}
 
-	makeDeal(t, ctx, 6, client, miner, false, false)
+	MakeDeal(t, ctx, 6, client, miner, false, false, 0)
 
 	// Validate upgrade
 
