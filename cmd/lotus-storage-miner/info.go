@@ -14,6 +14,7 @@ import (
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"github.com/filecoin-project/lotus/api"
@@ -59,6 +60,38 @@ func infoCmdAct(cctx *cli.Context) error {
 
 	ctx := lcli.ReqContext(cctx)
 
+	fmt.Print("Chain: ")
+
+	head, err := api.ChainHead(ctx)
+	if err != nil {
+		return err
+	}
+
+	switch {
+	case time.Now().Unix()-int64(head.MinTimestamp()) < int64(build.BlockDelaySecs*3/2): // within 1.5 epochs
+		fmt.Printf("[%s]", color.GreenString("sync ok"))
+	case time.Now().Unix()-int64(head.MinTimestamp()) < int64(build.BlockDelaySecs*5): // within 5 epochs
+		fmt.Printf("[%s]", color.YellowString("sync slow (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))
+	default:
+		fmt.Printf("[%s]", color.RedString("sync behind! (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))
+	}
+
+	basefee := head.MinTicketBlock().ParentBaseFee
+	gasCol := []color.Attribute{color.FgBlue}
+	switch {
+	case basefee.GreaterThan(big.NewInt(7000_000_000)): // 7 nFIL
+		gasCol = []color.Attribute{color.BgRed, color.FgBlack}
+	case basefee.GreaterThan(big.NewInt(3000_000_000)): // 3 nFIL
+		gasCol = []color.Attribute{color.FgRed}
+	case basefee.GreaterThan(big.NewInt(750_000_000)): // 750 uFIL
+		gasCol = []color.Attribute{color.FgYellow}
+	case basefee.GreaterThan(big.NewInt(100_000_000)): // 100 uFIL
+		gasCol = []color.Attribute{color.FgGreen}
+	}
+	fmt.Printf(" [basefee %s]", color.New(gasCol...).Sprint(types.FIL(basefee).Short()))
+
+	fmt.Println()
+
 	maddr, err := getActorAddress(ctx, nodeApi, cctx.String("actor"))
 	if err != nil {
 		return err
@@ -75,15 +108,14 @@ func infoCmdAct(cctx *cli.Context) error {
 		return err
 	}
 
-	fmt.Printf("Miner: %s\n", color.BlueString("%s", maddr))
-
 	// Sector size
 	mi, err := api.StateMinerInfo(ctx, maddr, types.EmptyTSK)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Sector Size: %s\n", types.SizeStr(types.NewInt(uint64(mi.SectorSize))))
+	ssize := types.SizeStr(types.NewInt(uint64(mi.SectorSize)))
+	fmt.Printf("Miner: %s (%s sectors)\n", color.BlueString("%s", maddr), ssize)
 
 	pow, err := api.StateMinerPower(ctx, maddr, types.EmptyTSK)
 	if err != nil {
@@ -93,15 +125,15 @@ func infoCmdAct(cctx *cli.Context) error {
 	rpercI := types.BigDiv(types.BigMul(pow.MinerPower.RawBytePower, types.NewInt(1000000)), pow.TotalPower.RawBytePower)
 	qpercI := types.BigDiv(types.BigMul(pow.MinerPower.QualityAdjPower, types.NewInt(1000000)), pow.TotalPower.QualityAdjPower)
 
-	fmt.Printf("Byte Power:   %s / %s (%0.4f%%)\n",
-		color.BlueString(types.SizeStr(pow.MinerPower.RawBytePower)),
-		types.SizeStr(pow.TotalPower.RawBytePower),
-		float64(rpercI.Int64())/10000)
-
-	fmt.Printf("Actual Power: %s / %s (%0.4f%%)\n",
+	fmt.Printf("Power: %s / %s (%0.4f%%)\n",
 		color.GreenString(types.DeciStr(pow.MinerPower.QualityAdjPower)),
 		types.DeciStr(pow.TotalPower.QualityAdjPower),
 		float64(qpercI.Int64())/10000)
+
+	fmt.Printf("\tRaw: %s / %s (%0.4f%%)\n",
+		color.BlueString(types.SizeStr(pow.MinerPower.RawBytePower)),
+		types.SizeStr(pow.TotalPower.RawBytePower),
+		float64(rpercI.Int64())/10000)
 
 	secCounts, err := api.StateMinerSectorCount(ctx, maddr, types.EmptyTSK)
 	if err != nil {
@@ -150,6 +182,10 @@ func infoCmdAct(cctx *cli.Context) error {
 	var nactiveDeals, nVerifDeals, ndeals uint64
 	var activeDealBytes, activeVerifDealBytes, dealBytes abi.PaddedPieceSize
 	for _, deal := range deals {
+		if deal.State == storagemarket.StorageDealError {
+			continue
+		}
+
 		ndeals++
 		dealBytes += deal.Proposal.PieceSize
 
@@ -168,6 +204,8 @@ func infoCmdAct(cctx *cli.Context) error {
 	fmt.Printf("\tActive: %d, %s (Verified: %d, %s)\n", nactiveDeals, types.SizeStr(types.NewInt(uint64(activeDealBytes))), nVerifDeals, types.SizeStr(types.NewInt(uint64(activeVerifDealBytes))))
 	fmt.Println()
 
+	spendable := big.Zero()
+
 	// NOTE: there's no need to unlock anything here. Funds only
 	// vest on deadline boundaries, and they're unlocked by cron.
 	lockedFunds, err := mas.LockedFunds()
@@ -178,32 +216,46 @@ func infoCmdAct(cctx *cli.Context) error {
 	if err != nil {
 		return xerrors.Errorf("getting available balance: %w", err)
 	}
-	fmt.Printf("Miner Balance: %s\n", color.YellowString("%s", types.FIL(mact.Balance)))
-	fmt.Printf("\tPreCommit:   %s\n", types.FIL(lockedFunds.PreCommitDeposits))
-	fmt.Printf("\tPledge:      %s\n", types.FIL(lockedFunds.InitialPledgeRequirement))
-	fmt.Printf("\tVesting:     %s\n", types.FIL(lockedFunds.VestingFunds))
-	color.Green("\tAvailable:   %s", types.FIL(availBalance))
-	wb, err := api.WalletBalance(ctx, mi.Worker)
-	if err != nil {
-		return xerrors.Errorf("getting worker balance: %w", err)
-	}
-	color.Cyan("Worker Balance: %s", types.FIL(wb))
+	spendable = big.Add(spendable, availBalance)
+
+	fmt.Printf("Miner Balance:    %s\n", color.YellowString("%s", types.FIL(mact.Balance).Short()))
+	fmt.Printf("      PreCommit:  %s\n", types.FIL(lockedFunds.PreCommitDeposits).Short())
+	fmt.Printf("      Pledge:     %s\n", types.FIL(lockedFunds.InitialPledgeRequirement).Short())
+	fmt.Printf("      Vesting:    %s\n", types.FIL(lockedFunds.VestingFunds).Short())
+	colorTokenAmount("      Available:  %s\n", availBalance)
 
 	mb, err := api.StateMarketBalance(ctx, maddr, types.EmptyTSK)
 	if err != nil {
 		return xerrors.Errorf("getting market balance: %w", err)
 	}
-	fmt.Printf("Market (Escrow):  %s\n", types.FIL(mb.Escrow))
-	fmt.Printf("Market (Locked):  %s\n", types.FIL(mb.Locked))
+	spendable = big.Add(spendable, big.Sub(mb.Escrow, mb.Locked))
+
+	fmt.Printf("Market Balance:   %s\n", types.FIL(mb.Escrow).Short())
+	fmt.Printf("       Locked:    %s\n", types.FIL(mb.Locked).Short())
+	colorTokenAmount("       Available: %s\n", big.Sub(mb.Escrow, mb.Locked))
+
+	wb, err := api.WalletBalance(ctx, mi.Worker)
+	if err != nil {
+		return xerrors.Errorf("getting worker balance: %w", err)
+	}
+	spendable = big.Add(spendable, wb)
+	color.Cyan("Worker Balance:   %s", types.FIL(wb).Short())
+	if len(mi.ControlAddresses) > 0 {
+		cbsum := big.Zero()
+		for _, ca := range mi.ControlAddresses {
+			b, err := api.WalletBalance(ctx, ca)
+			if err != nil {
+				return xerrors.Errorf("getting control address balance: %w", err)
+			}
+			cbsum = big.Add(cbsum, b)
+		}
+		spendable = big.Add(spendable, cbsum)
+
+		fmt.Printf("       Control:   %s\n", types.FIL(cbsum).Short())
+	}
+	colorTokenAmount("Total Spendable:  %s\n", spendable)
 
 	fmt.Println()
-
-	sealdur, err := nodeApi.SectorGetExpectedSealDuration(ctx)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Expected Seal Duration: %s\n\n", sealdur)
 
 	if !cctx.Bool("hide-sectors-info") {
 		fmt.Println("Sectors:")
@@ -235,6 +287,7 @@ var stateList = []stateMeta{
 
 	{col: color.FgRed, state: sealing.UndefinedSectorState},
 	{col: color.FgYellow, state: sealing.Packing},
+	{col: color.FgYellow, state: sealing.GetTicket},
 	{col: color.FgYellow, state: sealing.PreCommit1},
 	{col: color.FgYellow, state: sealing.PreCommit2},
 	{col: color.FgYellow, state: sealing.PreCommitting},
@@ -245,6 +298,10 @@ var stateList = []stateMeta{
 	{col: color.FgYellow, state: sealing.CommitWait},
 	{col: color.FgYellow, state: sealing.FinalizeSector},
 
+	{col: color.FgCyan, state: sealing.Terminating},
+	{col: color.FgCyan, state: sealing.TerminateWait},
+	{col: color.FgCyan, state: sealing.TerminateFinality},
+	{col: color.FgCyan, state: sealing.TerminateFailed},
 	{col: color.FgCyan, state: sealing.Removing},
 	{col: color.FgCyan, state: sealing.Removed},
 
@@ -274,22 +331,18 @@ func init() {
 }
 
 func sectorsInfo(ctx context.Context, napi api.StorageMiner) error {
-	sectors, err := napi.SectorsList(ctx)
+	summary, err := napi.SectorsSummary(ctx)
 	if err != nil {
 		return err
 	}
 
-	buckets := map[sealing.SectorState]int{
-		"Total": len(sectors),
+	buckets := make(map[sealing.SectorState]int)
+	var total int
+	for s, c := range summary {
+		buckets[sealing.SectorState(s)] = c
+		total += c
 	}
-	for _, s := range sectors {
-		st, err := napi.SectorsStatus(ctx, s, false)
-		if err != nil {
-			return err
-		}
-
-		buckets[sealing.SectorState(st.State)]++
-	}
+	buckets["Total"] = total
 
 	var sorted []stateMeta
 	for state, i := range buckets {
@@ -305,4 +358,14 @@ func sectorsInfo(ctx context.Context, napi api.StorageMiner) error {
 	}
 
 	return nil
+}
+
+func colorTokenAmount(format string, amount abi.TokenAmount) {
+	if amount.GreaterThan(big.Zero()) {
+		color.Green(format, types.FIL(amount).Short())
+	} else if amount.Equals(big.Zero()) {
+		color.Yellow(format, types.FIL(amount).Short())
+	} else {
+		color.Red(format, types.FIL(amount).Short())
+	}
 }
