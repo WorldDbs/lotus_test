@@ -20,22 +20,29 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
+
+	states0 "github.com/filecoin-project/specs-actors/actors/states"
+	states2 "github.com/filecoin-project/specs-actors/v2/actors/states"
+	states3 "github.com/filecoin-project/specs-actors/v3/actors/states"
+	states4 "github.com/filecoin-project/specs-actors/v4/actors/states"
 )
 
 var log = logging.Logger("statetree")
 
 // StateTree stores actors state by their ID.
 type StateTree struct {
-	root    adt.Map
-	version types.StateTreeVersion
-	info    cid.Cid
-	Store   cbor.IpldStore
+	root        adt.Map
+	version     types.StateTreeVersion
+	info        cid.Cid
+	Store       cbor.IpldStore
+	lookupIDFun func(address.Address) (address.Address, error)
 
 	snaps *stateSnaps
 }
 
 type stateSnaps struct {
-	layers []*stateSnapLayer
+	layers                        []*stateSnapLayer
+	lastMaybeNonEmptyResolveCache int
 }
 
 type stateSnapLayer struct {
@@ -67,7 +74,12 @@ func (ss *stateSnaps) addLayer() {
 
 func (ss *stateSnaps) dropLayer() {
 	ss.layers[len(ss.layers)-1] = nil // allow it to be GCed
+
 	ss.layers = ss.layers[:len(ss.layers)-1]
+
+	if ss.lastMaybeNonEmptyResolveCache == len(ss.layers) {
+		ss.lastMaybeNonEmptyResolveCache = len(ss.layers) - 1
+	}
 }
 
 func (ss *stateSnaps) mergeLastLayer() {
@@ -86,7 +98,13 @@ func (ss *stateSnaps) mergeLastLayer() {
 }
 
 func (ss *stateSnaps) resolveAddress(addr address.Address) (address.Address, bool) {
-	for i := len(ss.layers) - 1; i >= 0; i-- {
+	for i := ss.lastMaybeNonEmptyResolveCache; i >= 0; i-- {
+		if len(ss.layers[i].resolveCache) == 0 {
+			if ss.lastMaybeNonEmptyResolveCache == i {
+				ss.lastMaybeNonEmptyResolveCache = i - 1
+			}
+			continue
+		}
 		resa, ok := ss.layers[i].resolveCache[addr]
 		if ok {
 			return resa, true
@@ -97,6 +115,7 @@ func (ss *stateSnaps) resolveAddress(addr address.Address) (address.Address, boo
 
 func (ss *stateSnaps) cacheResolveAddress(addr, resa address.Address) {
 	ss.layers[len(ss.layers)-1].resolveCache[addr] = resa
+	ss.lastMaybeNonEmptyResolveCache = len(ss.layers) - 1
 }
 
 func (ss *stateSnaps) getActor(addr address.Address) (*types.Actor, error) {
@@ -130,23 +149,12 @@ func VersionForNetwork(ver network.Version) types.StateTreeVersion {
 	return types.StateTreeVersion1
 }
 
-func adtForSTVersion(ver types.StateTreeVersion) actors.Version {
-	switch ver {
-	case types.StateTreeVersion0:
-		return actors.Version0
-	case types.StateTreeVersion1:
-		return actors.Version2
-	default:
-		panic("unhandled state tree version")
-	}
-}
-
 func NewStateTree(cst cbor.IpldStore, ver types.StateTreeVersion) (*StateTree, error) {
 	var info cid.Cid
 	switch ver {
 	case types.StateTreeVersion0:
 		// info is undefined
-	case types.StateTreeVersion1:
+	case types.StateTreeVersion1, types.StateTreeVersion2, types.StateTreeVersion3:
 		var err error
 		info, err = cst.Put(context.TODO(), new(types.StateInfo0))
 		if err != nil {
@@ -155,18 +163,47 @@ func NewStateTree(cst cbor.IpldStore, ver types.StateTreeVersion) (*StateTree, e
 	default:
 		return nil, xerrors.Errorf("unsupported state tree version: %d", ver)
 	}
-	root, err := adt.NewMap(adt.WrapStore(context.TODO(), cst), adtForSTVersion(ver))
-	if err != nil {
-		return nil, err
+
+	store := adt.WrapStore(context.TODO(), cst)
+	var hamt adt.Map
+	switch ver {
+	case types.StateTreeVersion0:
+		tree, err := states0.NewTree(store)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to create state tree: %w", err)
+		}
+		hamt = tree.Map
+	case types.StateTreeVersion1:
+		tree, err := states2.NewTree(store)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to create state tree: %w", err)
+		}
+		hamt = tree.Map
+	case types.StateTreeVersion2:
+		tree, err := states3.NewTree(store)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to create state tree: %w", err)
+		}
+		hamt = tree.Map
+	case types.StateTreeVersion3:
+		tree, err := states4.NewTree(store)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to create state tree: %w", err)
+		}
+		hamt = tree.Map
+	default:
+		return nil, xerrors.Errorf("unsupported state tree version: %d", ver)
 	}
 
-	return &StateTree{
-		root:    root,
+	s := &StateTree{
+		root:    hamt,
 		info:    info,
 		version: ver,
 		Store:   cst,
 		snaps:   newStateSnaps(),
-	}, nil
+	}
+	s.lookupIDFun = s.lookupIDinternal
+	return s, nil
 }
 
 func LoadStateTree(cst cbor.IpldStore, c cid.Cid) (*StateTree, error) {
@@ -178,28 +215,55 @@ func LoadStateTree(cst cbor.IpldStore, c cid.Cid) (*StateTree, error) {
 		root.Version = types.StateTreeVersion0
 	}
 
-	switch root.Version {
-	case types.StateTreeVersion0, types.StateTreeVersion1:
-		// Load the actual state-tree HAMT.
-		nd, err := adt.AsMap(
-			adt.WrapStore(context.TODO(), cst), root.Actors,
-			adtForSTVersion(root.Version),
-		)
-		if err != nil {
-			log.Errorf("loading hamt node %s failed: %s", c, err)
-			return nil, err
-		}
+	store := adt.WrapStore(context.TODO(), cst)
 
-		return &StateTree{
-			root:    nd,
-			info:    root.Info,
-			version: root.Version,
-			Store:   cst,
-			snaps:   newStateSnaps(),
-		}, nil
+	var (
+		hamt adt.Map
+		err  error
+	)
+	switch root.Version {
+	case types.StateTreeVersion0:
+		var tree *states0.Tree
+		tree, err = states0.LoadTree(store, root.Actors)
+		if tree != nil {
+			hamt = tree.Map
+		}
+	case types.StateTreeVersion1:
+		var tree *states2.Tree
+		tree, err = states2.LoadTree(store, root.Actors)
+		if tree != nil {
+			hamt = tree.Map
+		}
+	case types.StateTreeVersion2:
+		var tree *states3.Tree
+		tree, err = states3.LoadTree(store, root.Actors)
+		if tree != nil {
+			hamt = tree.Map
+		}
+	case types.StateTreeVersion3:
+		var tree *states4.Tree
+		tree, err = states4.LoadTree(store, root.Actors)
+		if tree != nil {
+			hamt = tree.Map
+		}
 	default:
 		return nil, xerrors.Errorf("unsupported state tree version: %d", root.Version)
 	}
+	if err != nil {
+		log.Errorf("failed to load state tree: %s", err)
+		return nil, xerrors.Errorf("failed to load state tree: %w", err)
+	}
+
+	s := &StateTree{
+		root:    hamt,
+		info:    root.Info,
+		version: root.Version,
+		Store:   cst,
+		snaps:   newStateSnaps(),
+	}
+	s.lookupIDFun = s.lookupIDinternal
+
+	return s, nil
 }
 
 func (st *StateTree) SetActor(addr address.Address, act *types.Actor) error {
@@ -213,17 +277,7 @@ func (st *StateTree) SetActor(addr address.Address, act *types.Actor) error {
 	return nil
 }
 
-// LookupID gets the ID address of this actor's `addr` stored in the `InitActor`.
-func (st *StateTree) LookupID(addr address.Address) (address.Address, error) {
-	if addr.Protocol() == address.ID {
-		return addr, nil
-	}
-
-	resa, ok := st.snaps.resolveAddress(addr)
-	if ok {
-		return resa, nil
-	}
-
+func (st *StateTree) lookupIDinternal(addr address.Address) (address.Address, error) {
 	act, err := st.GetActor(init_.Address)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("getting init actor: %w", err)
@@ -240,6 +294,23 @@ func (st *StateTree) LookupID(addr address.Address) (address.Address, error) {
 	}
 	if err != nil {
 		return address.Undef, xerrors.Errorf("resolve address %s: %w", addr, err)
+	}
+	return a, err
+}
+
+// LookupID gets the ID address of this actor's `addr` stored in the `InitActor`.
+func (st *StateTree) LookupID(addr address.Address) (address.Address, error) {
+	if addr.Protocol() == address.ID {
+		return addr, nil
+	}
+
+	resa, ok := st.snaps.resolveAddress(addr)
+	if ok {
+		return resa, nil
+	}
+	a, err := st.lookupIDFun(addr)
+	if err != nil {
+		return a, err
 	}
 
 	st.snaps.cacheResolveAddress(addr, a)
