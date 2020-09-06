@@ -11,13 +11,14 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/exchange"
+	rpcstmgr "github.com/filecoin-project/lotus/chain/stmgr/rpc"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/hello"
 	"github.com/filecoin-project/lotus/system"
 
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipfs/go-log/v2"
 	ci "github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -304,12 +305,13 @@ var ChainNode = Options(
 	Override(new(*messagesigner.MessageSigner), messagesigner.NewMessageSigner),
 	Override(new(*wallet.LocalWallet), wallet.NewWallet),
 	Override(new(wallet.Default), From(new(*wallet.LocalWallet))),
-	Override(new(api.WalletAPI), From(new(wallet.MultiWallet))),
+	Override(new(api.Wallet), From(new(wallet.MultiWallet))),
 
 	// Service: Payment channels
-	Override(new(*paychmgr.Store), paychmgr.NewStore),
-	Override(new(*paychmgr.Manager), paychmgr.NewManager),
-	Override(HandlePaymentChannelManagerKey, paychmgr.HandleManager),
+	Override(new(paychmgr.PaychAPI), From(new(modules.PaychAPI))),
+	Override(new(*paychmgr.Store), modules.NewPaychStore),
+	Override(new(*paychmgr.Manager), modules.NewManager),
+	Override(HandlePaymentChannelManagerKey, modules.HandlePaychManager),
 	Override(SettlePaymentChannelsKey, settler.SettlePaymentChannels),
 
 	// Markets (common)
@@ -327,18 +329,22 @@ var ChainNode = Options(
 	Override(new(storagemarket.StorageClientNode), storageadapter.NewClientNodeAdapter),
 	Override(HandleMigrateClientFundsKey, modules.HandleMigrateClientFunds),
 
+	Override(new(*full.GasPriceCache), full.NewGasPriceCache),
+
 	// Lite node API
 	ApplyIf(isLiteNode,
+		Override(new(messagepool.Provider), messagepool.NewProviderLite),
 		Override(new(messagesigner.MpoolNonceAPI), From(new(modules.MpoolNonceAPI))),
-		Override(new(full.ChainModuleAPI), From(new(api.GatewayAPI))),
-		Override(new(full.GasModuleAPI), From(new(api.GatewayAPI))),
-		Override(new(full.MpoolModuleAPI), From(new(api.GatewayAPI))),
-		Override(new(full.StateModuleAPI), From(new(api.GatewayAPI))),
-		Override(new(stmgr.StateManagerAPI), modules.NewRPCStateManager),
+		Override(new(full.ChainModuleAPI), From(new(api.Gateway))),
+		Override(new(full.GasModuleAPI), From(new(api.Gateway))),
+		Override(new(full.MpoolModuleAPI), From(new(api.Gateway))),
+		Override(new(full.StateModuleAPI), From(new(api.Gateway))),
+		Override(new(stmgr.StateManagerAPI), rpcstmgr.NewRPCStateManager),
 	),
 
 	// Full node API / service startup
 	ApplyIf(isFullNode,
+		Override(new(messagepool.Provider), messagepool.NewProvider),
 		Override(new(messagesigner.MpoolNonceAPI), From(new(*messagepool.MessagePool))),
 		Override(new(full.ChainModuleAPI), From(new(full.ChainModule))),
 		Override(new(full.GasModuleAPI), From(new(full.GasModule))),
@@ -408,7 +414,7 @@ var MinerNode = Options(
 	Override(new(dtypes.StorageDealFilter), modules.BasicDealFilter(nil)),
 	Override(new(storagemarket.StorageProvider), modules.StorageProvider),
 	Override(new(*storageadapter.DealPublisher), storageadapter.NewDealPublisher(nil, storageadapter.PublishMsgConfig{})),
-	Override(new(storagemarket.StorageProviderNode), storageadapter.NewProviderNodeAdapter(nil)),
+	Override(new(storagemarket.StorageProviderNode), storageadapter.NewProviderNodeAdapter(nil, nil)),
 	Override(HandleMigrateProviderFundsKey, modules.HandleMigrateProviderFunds),
 	Override(HandleDealsKey, modules.HandleDeals),
 
@@ -508,6 +514,7 @@ func ConfigCommon(cfg *config.Common) Option {
 		Override(AddrsFactoryKey, lp2p.AddrsFactory(
 			cfg.Libp2p.AnnounceAddresses,
 			cfg.Libp2p.NoAnnounceAddresses)),
+		Override(new(dtypes.MetadataDS), modules.Datastore(cfg.Backup.DisableMetadataLog)),
 	)
 }
 
@@ -567,7 +574,7 @@ func ConfigStorageMiner(c interface{}) Option {
 			Period:         time.Duration(cfg.Dealmaking.PublishMsgPeriod),
 			MaxDealsPerMsg: cfg.Dealmaking.MaxDealsPerPublishMsg,
 		})),
-		Override(new(storagemarket.StorageProviderNode), storageadapter.NewProviderNodeAdapter(&cfg.Fees)),
+		Override(new(storagemarket.StorageProviderNode), storageadapter.NewProviderNodeAdapter(&cfg.Fees, &cfg.Dealmaking)),
 
 		Override(new(sectorstorage.SealerConfig), cfg.Storage),
 		Override(new(*storage.AddressSelector), modules.AddressSelector(&cfg.Addresses)),
@@ -586,47 +593,41 @@ func Repo(r repo.Repo) Option {
 			return err
 		}
 
-		var cfg *config.Blockstore
+		var cfg *config.Chainstore
 		switch settings.nodeType {
 		case repo.FullNode:
 			cfgp, ok := c.(*config.FullNode)
 			if !ok {
 				return xerrors.Errorf("invalid config from repo, got: %T", c)
 			}
-			cfg = &cfgp.Blockstore
-		case repo.StorageMiner:
-			cfgp, ok := c.(*config.StorageMiner)
-			if !ok {
-				return xerrors.Errorf("invalid config from repo, got: %T", c)
-			}
-			cfg = &cfgp.Blockstore
+			cfg = &cfgp.Chainstore
 		default:
-			cfg = &config.Blockstore{}
+			cfg = &config.Chainstore{}
 		}
 
 		return Options(
 			Override(new(repo.LockedRepo), modules.LockedRepo(lr)), // module handles closing
 
-			Override(new(dtypes.MetadataDS), modules.Datastore),
 			Override(new(dtypes.UniversalBlockstore), modules.UniversalBlockstore),
 
-			If(cfg.Splitstore,
-				If(cfg.UseLMDB,
-					Override(new(dtypes.HotBlockstore), modules.LMDBHotBlockstore)),
-				If(!cfg.UseLMDB,
+			If(cfg.EnableSplitstore,
+				If(cfg.Splitstore.HotStoreType == "badger",
 					Override(new(dtypes.HotBlockstore), modules.BadgerHotBlockstore)),
-				Override(new(dtypes.SplitBlockstore), modules.SplitBlockstore),
-				Override(new(dtypes.ChainBlockstore), modules.ChainSplitBlockstore),
-				Override(new(dtypes.StateBlockstore), modules.StateSplitBlockstore),
+				Override(new(dtypes.SplitBlockstore), modules.SplitBlockstore(cfg)),
+				Override(new(dtypes.BasicChainBlockstore), modules.ChainSplitBlockstore),
+				Override(new(dtypes.BasicStateBlockstore), modules.StateSplitBlockstore),
 				Override(new(dtypes.BaseBlockstore), From(new(dtypes.SplitBlockstore))),
 				Override(new(dtypes.ExposedBlockstore), From(new(dtypes.SplitBlockstore))),
 			),
-			If(!cfg.Splitstore,
-				Override(new(dtypes.ChainBlockstore), modules.ChainFlatBlockstore),
-				Override(new(dtypes.StateBlockstore), modules.StateFlatBlockstore),
+			If(!cfg.EnableSplitstore,
+				Override(new(dtypes.BasicChainBlockstore), modules.ChainFlatBlockstore),
+				Override(new(dtypes.BasicStateBlockstore), modules.StateFlatBlockstore),
 				Override(new(dtypes.BaseBlockstore), From(new(dtypes.UniversalBlockstore))),
 				Override(new(dtypes.ExposedBlockstore), From(new(dtypes.UniversalBlockstore))),
 			),
+
+			Override(new(dtypes.ChainBlockstore), From(new(dtypes.BasicChainBlockstore))),
+			Override(new(dtypes.StateBlockstore), From(new(dtypes.BasicStateBlockstore))),
 
 			If(os.Getenv("LOTUS_ENABLE_CHAINSTORE_FALLBACK") == "1",
 				Override(new(dtypes.ChainBlockstore), modules.FallbackChainBlockstore),
@@ -732,4 +733,20 @@ func Test() Option {
 		Override(new(beacon.Schedule), testing.RandomBeacon),
 		Override(new(*storageadapter.DealPublisher), storageadapter.NewDealPublisher(nil, storageadapter.PublishMsgConfig{})),
 	)
+}
+
+// For 3rd party dep injection.
+
+func WithRepoType(repoType repo.RepoType) func(s *Settings) error {
+	return func(s *Settings) error {
+		s.nodeType = repoType
+		return nil
+	}
+}
+
+func WithInvokesKey(i invoke, resApi interface{}) func(s *Settings) error {
+	return func(s *Settings) error {
+		s.invokes[i] = fx.Populate(resApi)
+		return nil
+	}
 }
