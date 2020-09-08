@@ -44,6 +44,7 @@ import (
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
+	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/beacon"
@@ -54,7 +55,6 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	bstore "github.com/filecoin-project/lotus/lib/blockstore"
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/metrics"
 )
@@ -131,10 +131,6 @@ type Syncer struct {
 
 	tickerCtxCancel context.CancelFunc
 
-	checkptLk sync.Mutex
-
-	checkpt types.TipSetKey
-
 	ds dtypes.MetadataDS
 }
 
@@ -152,14 +148,8 @@ func NewSyncer(ds dtypes.MetadataDS, sm *stmgr.StateManager, exchange exchange.C
 		return nil, err
 	}
 
-	cp, err := loadCheckpoint(ds)
-	if err != nil {
-		return nil, xerrors.Errorf("error loading mpool config: %w", err)
-	}
-
 	s := &Syncer{
 		ds:             ds,
-		checkpt:        cp,
 		beacon:         beacon,
 		bad:            NewBadBlockCache(),
 		Genesis:        gent,
@@ -321,7 +311,7 @@ func (syncer *Syncer) ValidateMsgMeta(fblk *types.FullBlock) error {
 
 	// We use a temporary bstore here to avoid writing intermediate pieces
 	// into the blockstore.
-	blockstore := bstore.NewTemporary()
+	blockstore := bstore.NewMemory()
 	cst := cbor.NewCborStore(blockstore)
 
 	var bcids, scids []cid.Cid
@@ -354,7 +344,7 @@ func (syncer *Syncer) ValidateMsgMeta(fblk *types.FullBlock) error {
 	}
 
 	// Finally, flush.
-	return vm.Copy(context.TODO(), blockstore, syncer.store.Blockstore(), smroot)
+	return vm.Copy(context.TODO(), blockstore, syncer.store.ChainBlockstore(), smroot)
 }
 
 func (syncer *Syncer) LocalPeer() peer.ID {
@@ -561,7 +551,7 @@ func (syncer *Syncer) Sync(ctx context.Context, maybeHead *types.TipSet) error {
 		return nil
 	}
 
-	if err := syncer.collectChain(ctx, maybeHead, hts); err != nil {
+	if err := syncer.collectChain(ctx, maybeHead, hts, false); err != nil {
 		span.AddAttributes(trace.StringAttribute("col_error", err.Error()))
 		span.SetStatus(trace.Status{
 			Code:    13,
@@ -640,7 +630,7 @@ func (syncer *Syncer) minerIsValid(ctx context.Context, maddr address.Address, b
 		return xerrors.Errorf("failed to load power actor: %w", err)
 	}
 
-	powState, err := power.Load(syncer.store.Store(ctx), act)
+	powState, err := power.Load(syncer.store.ActorStore(ctx), act)
 	if err != nil {
 		return xerrors.Errorf("failed to load power actor state: %w", err)
 	}
@@ -751,6 +741,10 @@ func (syncer *Syncer) ValidateBlock(ctx context.Context, b *types.FullBlock, use
 	}
 
 	msgsCheck := async.Err(func() error {
+		if b.Cid() == build.WhitelistedBlock {
+			return nil
+		}
+
 		if err := syncer.checkBlockMessages(ctx, b, baseTs); err != nil {
 			return xerrors.Errorf("block had invalid messages: %w", err)
 		}
@@ -1055,7 +1049,7 @@ func (syncer *Syncer) checkBlockMessages(ctx context.Context, b *types.FullBlock
 		return err
 	}
 
-	st, err := state.LoadStateTree(syncer.store.Store(ctx), stateroot)
+	st, err := state.LoadStateTree(syncer.store.ActorStore(ctx), stateroot)
 	if err != nil {
 		return xerrors.Errorf("failed to load base state tree: %w", err)
 	}
@@ -1102,7 +1096,7 @@ func (syncer *Syncer) checkBlockMessages(ctx context.Context, b *types.FullBlock
 	}
 
 	// Validate message arrays in a temporary blockstore.
-	tmpbs := bstore.NewTemporary()
+	tmpbs := bstore.NewMemory()
 	tmpstore := blockadt.WrapStore(ctx, cbor.NewCborStore(tmpbs))
 
 	bmArr := blockadt.MakeEmptyArray(tmpstore)
@@ -1172,7 +1166,7 @@ func (syncer *Syncer) checkBlockMessages(ctx context.Context, b *types.FullBlock
 	}
 
 	// Finally, flush.
-	return vm.Copy(ctx, tmpbs, syncer.store.Blockstore(), mrcid)
+	return vm.Copy(ctx, tmpbs, syncer.store.ChainBlockstore(), mrcid)
 }
 
 func (syncer *Syncer) verifyBlsAggregate(ctx context.Context, sig *crypto.Signature, msgs []cid.Cid, pubks [][]byte) error {
@@ -1243,7 +1237,7 @@ func extractSyncState(ctx context.Context) *SyncerState {
 //
 // All throughout the process, we keep checking if the received blocks are in
 // the deny list, and short-circuit the process if so.
-func (syncer *Syncer) collectHeaders(ctx context.Context, incoming *types.TipSet, known *types.TipSet) ([]*types.TipSet, error) {
+func (syncer *Syncer) collectHeaders(ctx context.Context, incoming *types.TipSet, known *types.TipSet, ignoreCheckpoint bool) ([]*types.TipSet, error) {
 	ctx, span := trace.StartSpan(ctx, "collectHeaders")
 	defer span.End()
 	ss := extractSyncState(ctx)
@@ -1412,7 +1406,7 @@ loop:
 
 	// We have now ascertained that this is *not* a 'fast forward'
 	log.Warnf("(fork detected) synced header chain (%s - %d) does not link to our best block (%s - %d)", incoming.Cids(), incoming.Height(), known.Cids(), known.Height())
-	fork, err := syncer.syncFork(ctx, base, known)
+	fork, err := syncer.syncFork(ctx, base, known, ignoreCheckpoint)
 	if err != nil {
 		if xerrors.Is(err, ErrForkTooLong) || xerrors.Is(err, ErrForkCheckpoint) {
 			// TODO: we're marking this block bad in the same way that we mark invalid blocks bad. Maybe distinguish?
@@ -1438,11 +1432,14 @@ var ErrForkCheckpoint = fmt.Errorf("fork would require us to diverge from checkp
 // If the fork is too long (build.ForkLengthThreshold), or would cause us to diverge from the checkpoint (ErrForkCheckpoint),
 // we add the entire subchain to the denylist. Else, we find the common ancestor, and add the missing chain
 // fragment until the fork point to the returned []TipSet.
-func (syncer *Syncer) syncFork(ctx context.Context, incoming *types.TipSet, known *types.TipSet) ([]*types.TipSet, error) {
+func (syncer *Syncer) syncFork(ctx context.Context, incoming *types.TipSet, known *types.TipSet, ignoreCheckpoint bool) ([]*types.TipSet, error) {
 
-	chkpt := syncer.GetCheckpoint()
-	if known.Key() == chkpt {
-		return nil, ErrForkCheckpoint
+	var chkpt *types.TipSet
+	if !ignoreCheckpoint {
+		chkpt = syncer.store.GetCheckpoint()
+		if known.Equals(chkpt) {
+			return nil, ErrForkCheckpoint
+		}
 	}
 
 	// TODO: Does this mean we always ask for ForkLengthThreshold blocks from the network, even if we just need, like, 2? Yes.
@@ -1484,7 +1481,7 @@ func (syncer *Syncer) syncFork(ctx context.Context, incoming *types.TipSet, know
 			}
 
 			// We will be forking away from nts, check that it isn't checkpointed
-			if nts.Key() == chkpt {
+			if nts.Equals(chkpt) {
 				return nil, ErrForkCheckpoint
 			}
 
@@ -1553,7 +1550,7 @@ func (syncer *Syncer) iterFullTipsets(ctx context.Context, headers []*types.TipS
 
 		for bsi := 0; bsi < len(bstout); bsi++ {
 			// temp storage so we don't persist data we dont want to
-			bs := bstore.NewTemporary()
+			bs := bstore.NewMemory()
 			blks := cbor.NewCborStore(bs)
 
 			this := headers[i-bsi]
@@ -1574,7 +1571,7 @@ func (syncer *Syncer) iterFullTipsets(ctx context.Context, headers []*types.TipS
 				return err
 			}
 
-			if err := copyBlockstore(ctx, bs, syncer.store.Blockstore()); err != nil {
+			if err := copyBlockstore(ctx, bs, syncer.store.ChainBlockstore()); err != nil {
 				return xerrors.Errorf("message processing failed: %w", err)
 			}
 		}
@@ -1695,14 +1692,14 @@ func persistMessages(ctx context.Context, bs bstore.Blockstore, bst *exchange.Co
 //
 //  3. StageMessages: having acquired the headers and found a common tipset,
 //     we then move forward, requesting the full blocks, including the messages.
-func (syncer *Syncer) collectChain(ctx context.Context, ts *types.TipSet, hts *types.TipSet) error {
+func (syncer *Syncer) collectChain(ctx context.Context, ts *types.TipSet, hts *types.TipSet, ignoreCheckpoint bool) error {
 	ctx, span := trace.StartSpan(ctx, "collectChain")
 	defer span.End()
 	ss := extractSyncState(ctx)
 
 	ss.Init(hts, ts)
 
-	headers, err := syncer.collectHeaders(ctx, ts, hts)
+	headers, err := syncer.collectHeaders(ctx, ts, hts, ignoreCheckpoint)
 	if err != nil {
 		ss.Error(err)
 		return err
