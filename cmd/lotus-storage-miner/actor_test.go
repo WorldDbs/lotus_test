@@ -17,6 +17,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
@@ -50,7 +51,7 @@ func TestWorkerKeyChange(t *testing.T) {
 
 	blocktime := 1 * time.Millisecond
 
-	n, sn := builder.MockSbBuilder(t, []test.FullNodeOpts{test.FullNodeWithActorsV3At(2), test.FullNodeWithActorsV3At(2)}, test.OneMiner)
+	n, sn := builder.MockSbBuilder(t, []test.FullNodeOpts{test.FullNodeWithLatestActorsAt(-1), test.FullNodeWithLatestActorsAt(-1)}, test.OneMiner)
 
 	client1 := n[0]
 	client2 := n[1]
@@ -70,7 +71,7 @@ func TestWorkerKeyChange(t *testing.T) {
 			"testnode-storage": sn[0],
 		}
 		app.Writer = output
-		build.RunningNodeType = build.NodeMiner
+		api.RunningNodeType = api.NodeMiner
 
 		fs := flag.NewFlagSet("", flag.ContinueOnError)
 		for _, f := range cmd.Flags {
