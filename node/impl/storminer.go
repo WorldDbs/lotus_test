@@ -8,6 +8,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/gen"
+
+	"github.com/filecoin-project/lotus/build"
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/host"
@@ -30,7 +34,7 @@ import (
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/apistruct"
+	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/miner"
@@ -61,7 +65,8 @@ type StorageMinerAPI struct {
 	AddrSel       *storage.AddressSelector
 	DealPublisher *storageadapter.DealPublisher
 
-	DS dtypes.MetadataDS
+	Epp gen.WinningPoStProver
+	DS  dtypes.MetadataDS
 
 	ConsiderOnlineStorageDealsConfigFunc        dtypes.ConsiderOnlineStorageDealsConfigFunc
 	SetConsiderOnlineStorageDealsConfigFunc     dtypes.SetConsiderOnlineStorageDealsConfigFunc
@@ -84,7 +89,7 @@ type StorageMinerAPI struct {
 }
 
 func (sm *StorageMinerAPI) ServeRemote(w http.ResponseWriter, r *http.Request) {
-	if !auth.HasPerm(r.Context(), nil, apistruct.PermAdmin) {
+	if !auth.HasPerm(r.Context(), nil, api.PermAdmin) {
 		w.WriteHeader(401)
 		_ = json.NewEncoder(w).Encode(struct{ Error string }{"unauthorized: missing write permission"})
 		return
@@ -121,8 +126,30 @@ func (sm *StorageMinerAPI) ActorSectorSize(ctx context.Context, addr address.Add
 	return mi.SectorSize, nil
 }
 
-func (sm *StorageMinerAPI) PledgeSector(ctx context.Context) error {
-	return sm.Miner.PledgeSector()
+func (sm *StorageMinerAPI) PledgeSector(ctx context.Context) (abi.SectorID, error) {
+	sr, err := sm.Miner.PledgeSector(ctx)
+	if err != nil {
+		return abi.SectorID{}, err
+	}
+
+	// wait for the sector to enter the Packing state
+	// TODO: instead of polling implement some pubsub-type thing in storagefsm
+	for {
+		info, err := sm.Miner.GetSectorInfo(sr.ID.Number)
+		if err != nil {
+			return abi.SectorID{}, xerrors.Errorf("getting pledged sector info: %w", err)
+		}
+
+		if info.State != sealing.UndefinedSectorState {
+			return sr.ID, nil
+		}
+
+		select {
+		case <-time.After(10 * time.Millisecond):
+		case <-ctx.Done():
+			return abi.SectorID{}, ctx.Err()
+		}
+	}
 }
 
 func (sm *StorageMinerAPI) SectorsStatus(ctx context.Context, sid abi.SectorNumber, showOnChainInfo bool) (api.SectorInfo, error) {
@@ -219,6 +246,10 @@ func (sm *StorageMinerAPI) SectorsList(context.Context) ([]abi.SectorNumber, err
 
 	out := make([]abi.SectorNumber, len(sectors))
 	for i, sector := range sectors {
+		if sector.State == sealing.UndefinedSectorState {
+			continue // sector ID not set yet
+		}
+
 		out[i] = sector.SectorNumber
 	}
 	return out, nil
@@ -662,6 +693,14 @@ func (sm *StorageMinerAPI) CheckProvable(ctx context.Context, pp abi.RegisteredP
 
 func (sm *StorageMinerAPI) ActorAddressConfig(ctx context.Context) (api.AddressConfig, error) {
 	return sm.AddrSel.AddressConfig, nil
+}
+
+func (sm *StorageMinerAPI) Discover(ctx context.Context) (apitypes.OpenRPCDocument, error) {
+	return build.OpenRPCDiscoverJSON_Miner(), nil
+}
+
+func (sm *StorageMinerAPI) ComputeProof(ctx context.Context, ssi []builtin.SectorInfo, rand abi.PoStRandomness) ([]builtin.PoStProof, error) {
+	return sm.Epp.ComputeProof(ctx, ssi, rand)
 }
 
 var _ api.StorageMiner = &StorageMinerAPI{}
