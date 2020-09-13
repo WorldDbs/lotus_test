@@ -14,10 +14,11 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api/apibstore"
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 
@@ -36,7 +37,7 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 
 	ctx := context.Background()
 
-	tipsetsCh, err := tstats.GetTips(ctx, m.FullApi, abi.ChainEpoch(height), headlag)
+	tipsetsCh, err := tstats.GetTips(ctx, &v0api.WrapperV1Full{FullNode: m.FullApi}, abi.ChainEpoch(height), headlag)
 	if err != nil {
 		return err
 	}
@@ -699,7 +700,7 @@ func info(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr address.Addre
 		i.FaultyBytes = types.BigMul(types.NewInt(nfaults), types.NewInt(uint64(mi.SectorSize)))
 	}
 
-	stor := store.ActorStore(ctx, apibstore.NewAPIBlockstore(api))
+	stor := store.ActorStore(ctx, blockstore.NewAPIBlockstore(api))
 	mas, err := miner.Load(stor, mact)
 	if err != nil {
 		return nil, err
