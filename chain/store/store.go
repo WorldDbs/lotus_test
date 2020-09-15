@@ -54,8 +54,11 @@ import (
 
 var log = logging.Logger("chainstore")
 
-var chainHeadKey = dstore.NewKey("head")
-var blockValidationCacheKeyPrefix = dstore.NewKey("blockValidation")
+var (
+	chainHeadKey                  = dstore.NewKey("head")
+	checkpointKey                 = dstore.NewKey("/chain/checks")
+	blockValidationCacheKeyPrefix = dstore.NewKey("blockValidation")
+)
 
 var DefaultTipSetCacheSize = 8192
 var DefaultMsgMetaCacheSize = 2048
@@ -81,7 +84,7 @@ func init() {
 }
 
 // ReorgNotifee represents a callback that gets called upon reorgs.
-type ReorgNotifee func(rev, app []*types.TipSet) error
+type ReorgNotifee = func(rev, app []*types.TipSet) error
 
 // Journal event types.
 const (
@@ -113,8 +116,9 @@ type ChainStore struct {
 
 	chainLocalBlockstore bstore.Blockstore
 
-	heaviestLk sync.Mutex
+	heaviestLk sync.RWMutex
 	heaviest   *types.TipSet
+	checkpoint *types.TipSet
 
 	bestTips *pubsub.PubSub
 	pubLk    sync.Mutex
@@ -139,7 +143,6 @@ type ChainStore struct {
 	wg       sync.WaitGroup
 }
 
-// chainLocalBlockstore is guaranteed to fail Get* if requested block isn't stored locally
 func NewChainStore(chainBs bstore.Blockstore, stateBs bstore.Blockstore, ds dstore.Batching, vmcalls vm.SyscallBuilder, j journal.Journal) *ChainStore {
 	c, _ := lru.NewARC(DefaultMsgMetaCacheSize)
 	tsc, _ := lru.NewARC(DefaultTipSetCacheSize)
@@ -216,6 +219,15 @@ func (cs *ChainStore) Close() error {
 }
 
 func (cs *ChainStore) Load() error {
+	if err := cs.loadHead(); err != nil {
+		return err
+	}
+	if err := cs.loadCheckpoint(); err != nil {
+		return err
+	}
+	return nil
+}
+func (cs *ChainStore) loadHead() error {
 	head, err := cs.metadataDs.Get(chainHeadKey)
 	if err == dstore.ErrNotFound {
 		log.Warn("no previous chain state found")
@@ -236,6 +248,31 @@ func (cs *ChainStore) Load() error {
 	}
 
 	cs.heaviest = ts
+
+	return nil
+}
+
+func (cs *ChainStore) loadCheckpoint() error {
+	tskBytes, err := cs.metadataDs.Get(checkpointKey)
+	if err == dstore.ErrNotFound {
+		return nil
+	}
+	if err != nil {
+		return xerrors.Errorf("failed to load checkpoint from datastore: %w", err)
+	}
+
+	var tsk types.TipSetKey
+	err = json.Unmarshal(tskBytes, &tsk)
+	if err != nil {
+		return err
+	}
+
+	ts, err := cs.LoadTipSet(tsk)
+	if err != nil {
+		return xerrors.Errorf("loading tipset: %w", err)
+	}
+
+	cs.checkpoint = ts
 
 	return nil
 }
@@ -440,6 +477,11 @@ func (cs *ChainStore) exceedsForkLength(synced, external *types.TipSet) (bool, e
 			return false, nil
 		}
 
+		// Now check to see if we've walked back to the checkpoint.
+		if synced.Equals(cs.checkpoint) {
+			return true, nil
+		}
+
 		// If we didn't, go back *one* tipset on the `synced` side (incrementing
 		// the `forkLength`).
 		if synced.Height() == 0 {
@@ -468,6 +510,9 @@ func (cs *ChainStore) ForceHeadSilent(_ context.Context, ts *types.TipSet) error
 
 	cs.heaviestLk.Lock()
 	defer cs.heaviestLk.Unlock()
+	if err := cs.removeCheckpoint(); err != nil {
+		return err
+	}
 	cs.heaviest = ts
 
 	err := cs.writeHead(ts)
@@ -643,11 +688,78 @@ func FlushValidationCache(ds datastore.Batching) error {
 }
 
 // SetHead sets the chainstores current 'best' head node.
-// This should only be called if something is broken and needs fixing
+// This should only be called if something is broken and needs fixing.
+//
+// This function will bypass and remove any checkpoints.
 func (cs *ChainStore) SetHead(ts *types.TipSet) error {
 	cs.heaviestLk.Lock()
 	defer cs.heaviestLk.Unlock()
+	if err := cs.removeCheckpoint(); err != nil {
+		return err
+	}
 	return cs.takeHeaviestTipSet(context.TODO(), ts)
+}
+
+// RemoveCheckpoint removes the current checkpoint.
+func (cs *ChainStore) RemoveCheckpoint() error {
+	cs.heaviestLk.Lock()
+	defer cs.heaviestLk.Unlock()
+	return cs.removeCheckpoint()
+}
+
+func (cs *ChainStore) removeCheckpoint() error {
+	if err := cs.metadataDs.Delete(checkpointKey); err != nil {
+		return err
+	}
+	cs.checkpoint = nil
+	return nil
+}
+
+// SetCheckpoint will set a checkpoint past which the chainstore will not allow forks.
+//
+// NOTE: Checkpoints cannot be set beyond ForkLengthThreshold epochs in the past.
+func (cs *ChainStore) SetCheckpoint(ts *types.TipSet) error {
+	tskBytes, err := json.Marshal(ts.Key())
+	if err != nil {
+		return err
+	}
+
+	cs.heaviestLk.Lock()
+	defer cs.heaviestLk.Unlock()
+
+	if ts.Height() > cs.heaviest.Height() {
+		return xerrors.Errorf("cannot set a checkpoint in the future")
+	}
+
+	// Otherwise, this operation could get _very_ expensive.
+	if cs.heaviest.Height()-ts.Height() > build.ForkLengthThreshold {
+		return xerrors.Errorf("cannot set a checkpoint before the fork threshold")
+	}
+
+	if !ts.Equals(cs.heaviest) {
+		anc, err := cs.IsAncestorOf(ts, cs.heaviest)
+		if err != nil {
+			return xerrors.Errorf("cannot determine whether checkpoint tipset is in main-chain: %w", err)
+		}
+
+		if !anc {
+			return xerrors.Errorf("cannot mark tipset as checkpoint, since it isn't in the main-chain: %w", err)
+		}
+	}
+	err = cs.metadataDs.Put(checkpointKey, tskBytes)
+	if err != nil {
+		return err
+	}
+
+	cs.checkpoint = ts
+	return nil
+}
+
+func (cs *ChainStore) GetCheckpoint() *types.TipSet {
+	cs.heaviestLk.RLock()
+	chkpt := cs.checkpoint
+	cs.heaviestLk.RUnlock()
+	return chkpt
 }
 
 // Contains returns whether our BlockStore has all blocks in the supplied TipSet.
@@ -776,10 +888,11 @@ func ReorgOps(lts func(types.TipSetKey) (*types.TipSet, error), a, b *types.TipS
 }
 
 // GetHeaviestTipSet returns the current heaviest tipset known (i.e. our head).
-func (cs *ChainStore) GetHeaviestTipSet() *types.TipSet {
-	cs.heaviestLk.Lock()
-	defer cs.heaviestLk.Unlock()
-	return cs.heaviest
+func (cs *ChainStore) GetHeaviestTipSet() (ts *types.TipSet) {
+	cs.heaviestLk.RLock()
+	ts = cs.heaviest
+	cs.heaviestLk.RUnlock()
+	return
 }
 
 func (cs *ChainStore) AddToTipSetTracker(b *types.BlockHeader) error {
@@ -1428,8 +1541,9 @@ func (cs *ChainStore) Export(ctx context.Context, ts *types.TipSet, inclRecentRo
 		return xerrors.Errorf("failed to write car header: %s", err)
 	}
 
+	unionBs := bstore.Union(cs.stateBlockstore, cs.chainBlockstore)
 	return cs.WalkSnapshot(ctx, ts, inclRecentRoots, skipOldMsgs, true, func(c cid.Cid) error {
-		blk, err := cs.chainBlockstore.Get(c)
+		blk, err := unionBs.Get(c)
 		if err != nil {
 			return xerrors.Errorf("writing object to car, bs.Get: %w", err)
 		}
@@ -1503,7 +1617,7 @@ func (cs *ChainStore) WalkSnapshot(ctx context.Context, ts *types.TipSet, inclRe
 
 		if b.Height == 0 || b.Height > ts.Height()-inclRecentRoots {
 			if walked.Visit(b.ParentStateRoot) {
-				cids, err := recurseLinks(cs.chainBlockstore, walked, b.ParentStateRoot, []cid.Cid{b.ParentStateRoot})
+				cids, err := recurseLinks(cs.stateBlockstore, walked, b.ParentStateRoot, []cid.Cid{b.ParentStateRoot})
 				if err != nil {
 					return xerrors.Errorf("recursing genesis state failed: %w", err)
 				}
@@ -1549,6 +1663,11 @@ func (cs *ChainStore) WalkSnapshot(ctx context.Context, ts *types.TipSet, inclRe
 }
 
 func (cs *ChainStore) Import(r io.Reader) (*types.TipSet, error) {
+	// TODO: writing only to the state blockstore is incorrect.
+	//  At this time, both the state and chain blockstores are backed by the
+	//  universal store. When we physically segregate the stores, we will need
+	//  to route state objects to the state blockstore, and chain objects to
+	//  the chain blockstore.
 	header, err := car.LoadCar(cs.StateBlockstore(), r)
 	if err != nil {
 		return nil, xerrors.Errorf("loadcar failed: %w", err)
