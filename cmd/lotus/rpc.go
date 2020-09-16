@@ -3,41 +3,55 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"net"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
 	"os/signal"
+	"runtime"
 	"syscall"
 
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr/net"
+	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
-
-	"contrib.go.opencensus.io/exporter/prometheus"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/apistruct"
+	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v1api"
+	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
 )
 
 var log = logging.Logger("main")
 
-func serveRPC(a api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, shutdownCh <-chan struct{}) error {
-	rpcServer := jsonrpc.NewServer()
-	rpcServer.Register("Filecoin", apistruct.PermissionedFullAPI(a))
+func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, shutdownCh <-chan struct{}, maxRequestSize int64) error {
+	serverOptions := make([]jsonrpc.ServerOption, 0)
+	if maxRequestSize != 0 { // config set
+		serverOptions = append(serverOptions, jsonrpc.WithMaxRequestSize(maxRequestSize))
+	}
+	serveRpc := func(path string, hnd interface{}) {
+		rpcServer := jsonrpc.NewServer(serverOptions...)
+		rpcServer.Register("Filecoin", hnd)
 
-	ah := &auth.Handler{
-		Verify: a.AuthVerify,
-		Next:   rpcServer.ServeHTTP,
+		ah := &auth.Handler{
+			Verify: a.AuthVerify,
+			Next:   rpcServer.ServeHTTP,
+		}
+
+		http.Handle(path, ah)
 	}
 
-	http.Handle("/rpc/v0", ah)
+	pma := api.PermissionedFullAPI(metrics.MetricedFullAPI(a))
+
+	serveRpc("/rpc/v1", pma)
+	serveRpc("/rpc/v0", &v0api.WrapperV1Full{FullNode: pma})
 
 	importAH := &auth.Handler{
 		Verify: a.AuthVerify,
@@ -46,21 +60,24 @@ func serveRPC(a api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, shut
 
 	http.Handle("/rest/v0/import", importAH)
 
-	exporter, err := prometheus.NewExporter(prometheus.Options{
-		Namespace: "lotus",
-	})
-	if err != nil {
-		log.Fatalf("could not create the prometheus stats exporter: %v", err)
-	}
-
-	http.Handle("/debug/metrics", exporter)
+	http.Handle("/debug/metrics", metrics.Exporter())
+	http.Handle("/debug/pprof-set/block", handleFractionOpt("BlockProfileRate", runtime.SetBlockProfileRate))
+	http.Handle("/debug/pprof-set/mutex", handleFractionOpt("MutexProfileFraction",
+		func(x int) { runtime.SetMutexProfileFraction(x) },
+	))
 
 	lst, err := manet.Listen(addr)
 	if err != nil {
 		return xerrors.Errorf("could not listen: %w", err)
 	}
 
-	srv := &http.Server{Handler: http.DefaultServeMux}
+	srv := &http.Server{
+		Handler: http.DefaultServeMux,
+		BaseContext: func(listener net.Listener) context.Context {
+			ctx, _ := tag.New(context.Background(), tag.Upsert(metrics.APIInterface, "lotus-daemon"))
+			return ctx
+		},
+	}
 
 	sigCh := make(chan os.Signal, 2)
 	shutdownDone := make(chan struct{})
@@ -99,7 +116,7 @@ func handleImport(a *impl.FullNodeAPI) func(w http.ResponseWriter, r *http.Reque
 			w.WriteHeader(404)
 			return
 		}
-		if !auth.HasPerm(r.Context(), nil, apistruct.PermWrite) {
+		if !auth.HasPerm(r.Context(), nil, api.PermWrite) {
 			w.WriteHeader(401)
 			_ = json.NewEncoder(w).Encode(struct{ Error string }{"unauthorized: missing write permission"})
 			return
