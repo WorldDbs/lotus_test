@@ -63,20 +63,23 @@ CLEAN+=build/.update-modules
 deps: $(BUILD_DEPS)
 .PHONY: deps
 
+build-devnets: build lotus-seed lotus-shed lotus-wallet lotus-gateway
+.PHONY: build-devnets
+
 debug: GOFLAGS+=-tags=debug
-debug: lotus lotus-miner lotus-worker lotus-seed
+debug: build-devnets
 
 2k: GOFLAGS+=-tags=2k
-2k: lotus lotus-miner lotus-worker lotus-seed
+2k: build-devnets
 
 calibnet: GOFLAGS+=-tags=calibnet
-calibnet: lotus lotus-miner lotus-worker lotus-seed
+calibnet: build-devnets
 
 nerpanet: GOFLAGS+=-tags=nerpanet
-nerpanet: lotus lotus-miner lotus-worker lotus-seed
+nerpanet: build-devnets
 
 butterflynet: GOFLAGS+=-tags=butterflynet
-butterflynet: lotus lotus-miner lotus-worker lotus-seed
+butterflynet: build-devnets
 
 lotus: $(BUILD_DEPS)
 	rm -f lotus
@@ -230,6 +233,13 @@ testground:
 .PHONY: testground
 BINS+=testground
 
+
+tvx:
+	rm -f tvx
+	go build -o tvx ./cmd/tvx
+.PHONY: tvx
+BINS+=tvx
+
 install-chainwatch: lotus-chainwatch
 	install -C ./lotus-chainwatch /usr/local/bin/lotus-chainwatch
 
@@ -315,19 +325,60 @@ dist-clean:
 	git submodule deinit --all -f
 .PHONY: dist-clean
 
-type-gen:
+type-gen: api-gen
 	go run ./gen/main.go
-	go generate ./...
+	go generate -x ./...
+	goimports -w api/
 
-method-gen:
+method-gen: api-gen
 	(cd ./lotuspond/front/src/chain && go run ./methodgen.go)
 
-gen: type-gen method-gen
+actors-gen:
+	go run ./chain/actors/agen
+	go fmt ./...
 
-docsgen:
-	go run ./api/docgen "api/api_full.go" "FullNode" > documentation/en/api-methods.md
-	go run ./api/docgen "api/api_storage.go" "StorageMiner" > documentation/en/api-methods-miner.md
-	go run ./api/docgen "api/api_worker.go" "WorkerAPI" > documentation/en/api-methods-worker.md
+api-gen:
+	go run ./gen/api
+	goimports -w api
+	goimports -w api
+.PHONY: api-gen
+
+docsgen: docsgen-md docsgen-openrpc
+
+docsgen-md-bin: api-gen actors-gen
+	go build $(GOFLAGS) -o docgen-md ./api/docgen/cmd
+docsgen-openrpc-bin: api-gen actors-gen
+	go build $(GOFLAGS) -o docgen-openrpc ./api/docgen-openrpc/cmd
+
+docsgen-md: docsgen-md-full docsgen-md-storage docsgen-md-worker
+
+docsgen-md-full: docsgen-md-bin
+	./docgen-md "api/api_full.go" "FullNode" "api" "./api" > documentation/en/api-v1-unstable-methods.md
+	./docgen-md "api/v0api/full.go" "FullNode" "v0api" "./api/v0api" > documentation/en/api-v0-methods.md
+docsgen-md-storage: docsgen-md-bin
+	./docgen-md "api/api_storage.go" "StorageMiner" "api" "./api" > documentation/en/api-v0-methods-miner.md
+docsgen-md-worker: docsgen-md-bin
+	./docgen-md "api/api_worker.go" "Worker" "api" "./api" > documentation/en/api-v0-methods-worker.md
+
+docsgen-openrpc: docsgen-openrpc-full docsgen-openrpc-storage docsgen-openrpc-worker
+
+docsgen-openrpc-full: docsgen-openrpc-bin
+	./docgen-openrpc "api/api_full.go" "FullNode" "api" "./api" -gzip > build/openrpc/full.json.gz
+docsgen-openrpc-storage: docsgen-openrpc-bin
+	./docgen-openrpc "api/api_storage.go" "StorageMiner" "api" "./api" -gzip > build/openrpc/miner.json.gz
+docsgen-openrpc-worker: docsgen-openrpc-bin
+	./docgen-openrpc "api/api_worker.go" "Worker" "api" "./api" -gzip > build/openrpc/worker.json.gz
+
+.PHONY: docsgen docsgen-md-bin docsgen-openrpc-bin
+
+gen: actors-gen type-gen method-gen docsgen api-gen
+	@echo ">>> IF YOU'VE MODIFIED THE CLI, REMEMBER TO ALSO MAKE docsgen-cli"
+.PHONY: gen
+
+# separate from gen because it needs binaries
+docsgen-cli: lotus lotus-miner lotus-worker
+	python ./scripts/generate-lotus-cli.py
+.PHONY: docsgen-cli
 
 print-%:
 	@echo $*=$($*)
