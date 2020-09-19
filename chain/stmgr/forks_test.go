@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"sync"
 	"testing"
 
 	"github.com/ipfs/go-cid"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
@@ -16,14 +17,15 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/specs-actors/actors/builtin"
-	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"
-	"github.com/filecoin-project/specs-actors/actors/runtime"
+
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
+	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-	lotusinit "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	. "github.com/filecoin-project/lotus/chain/stmgr"
@@ -45,7 +47,7 @@ type testActor struct {
 }
 
 // must use existing actor that an account is allowed to exec.
-func (testActor) Code() cid.Cid  { return builtin.PaymentChannelActorCodeID }
+func (testActor) Code() cid.Cid  { return builtin0.PaymentChannelActorCodeID }
 func (testActor) State() cbor.Er { return new(testActorState) }
 
 type testActorState struct {
@@ -75,7 +77,7 @@ func (ta testActor) Exports() []interface{} {
 	}
 }
 
-func (ta *testActor) Constructor(rt runtime.Runtime, params *abi.EmptyValue) *abi.EmptyValue {
+func (ta *testActor) Constructor(rt rt2.Runtime, params *abi.EmptyValue) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
 	rt.StateCreate(&testActorState{11})
 	//fmt.Println("NEW ACTOR ADDRESS IS: ", rt.Receiver())
@@ -83,7 +85,7 @@ func (ta *testActor) Constructor(rt runtime.Runtime, params *abi.EmptyValue) *ab
 	return abi.Empty
 }
 
-func (ta *testActor) TestMethod(rt runtime.Runtime, params *abi.EmptyValue) *abi.EmptyValue {
+func (ta *testActor) TestMethod(rt rt2.Runtime, params *abi.EmptyValue) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
 	var st testActorState
 	rt.StateReadonly(&st)
@@ -121,9 +123,9 @@ func TestForkHeightTriggers(t *testing.T) {
 		cg.ChainStore(), UpgradeSchedule{{
 			Network: 1,
 			Height:  testForkHeight,
-			Migration: func(ctx context.Context, sm *StateManager, cb ExecCallback,
+			Migration: func(ctx context.Context, sm *StateManager, cache MigrationCache, cb ExecCallback,
 				root cid.Cid, height abi.ChainEpoch, ts *types.TipSet) (cid.Cid, error) {
-				cst := ipldcbor.NewCborStore(sm.ChainStore().Blockstore())
+				cst := ipldcbor.NewCborStore(sm.ChainStore().StateBlockstore())
 
 				st, err := sm.StateTree(root)
 				if err != nil {
@@ -175,15 +177,15 @@ func TestForkHeightTriggers(t *testing.T) {
 
 	var msgs []*types.SignedMessage
 
-	enc, err := actors.SerializeParams(&init0.ExecParams{CodeCID: (testActor{}).Code()})
+	enc, err := actors.SerializeParams(&init2.ExecParams{CodeCID: (testActor{}).Code()})
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	m := &types.Message{
 		From:     cg.Banker(),
-		To:       lotusinit.Address,
-		Method:   builtin.MethodsInit.Exec,
+		To:       _init.Address,
+		Method:   _init.Methods.Exec,
 		Params:   enc,
 		GasLimit: types.TestGasLimit,
 	}
@@ -251,7 +253,7 @@ func TestForkRefuseCall(t *testing.T) {
 			Network:   1,
 			Expensive: true,
 			Height:    testForkHeight,
-			Migration: func(ctx context.Context, sm *StateManager, cb ExecCallback,
+			Migration: func(ctx context.Context, sm *StateManager, cache MigrationCache, cb ExecCallback,
 				root cid.Cid, height abi.ChainEpoch, ts *types.TipSet) (cid.Cid, error) {
 				return root, nil
 			}}})
@@ -273,15 +275,15 @@ func TestForkRefuseCall(t *testing.T) {
 
 	cg.SetStateManager(sm)
 
-	enc, err := actors.SerializeParams(&init0.ExecParams{CodeCID: (testActor{}).Code()})
+	enc, err := actors.SerializeParams(&init2.ExecParams{CodeCID: (testActor{}).Code()})
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	m := &types.Message{
 		From:       cg.Banker(),
-		To:         lotusinit.Address,
-		Method:     builtin.MethodsInit.Exec,
+		To:         _init.Address,
+		Method:     _init.Methods.Exec,
 		Params:     enc,
 		GasLimit:   types.TestGasLimit,
 		Value:      types.NewInt(0),
@@ -315,4 +317,167 @@ func TestForkRefuseCall(t *testing.T) {
 			require.True(t, ret.MsgRct.ExitCode.IsSuccess())
 		}
 	}
+}
+
+func TestForkPreMigration(t *testing.T) {
+	logging.SetAllLoggers(logging.LevelInfo)
+
+	cg, err := gen.NewGenerator()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fooCid, err := abi.CidBuilder.Sum([]byte("foo"))
+	require.NoError(t, err)
+
+	barCid, err := abi.CidBuilder.Sum([]byte("bar"))
+	require.NoError(t, err)
+
+	failCid, err := abi.CidBuilder.Sum([]byte("fail"))
+	require.NoError(t, err)
+
+	var wait20 sync.WaitGroup
+	wait20.Add(3)
+
+	wasCanceled := make(chan struct{})
+
+	checkCache := func(t *testing.T, cache MigrationCache) {
+		found, value, err := cache.Read("foo")
+		require.NoError(t, err)
+		require.True(t, found)
+		require.Equal(t, fooCid, value)
+
+		found, value, err = cache.Read("bar")
+		require.NoError(t, err)
+		require.True(t, found)
+		require.Equal(t, barCid, value)
+
+		found, _, err = cache.Read("fail")
+		require.NoError(t, err)
+		require.False(t, found)
+	}
+
+	counter := make(chan struct{}, 10)
+
+	sm, err := NewStateManagerWithUpgradeSchedule(
+		cg.ChainStore(), UpgradeSchedule{{
+			Network: 1,
+			Height:  testForkHeight,
+			Migration: func(ctx context.Context, sm *StateManager, cache MigrationCache, cb ExecCallback,
+				root cid.Cid, height abi.ChainEpoch, ts *types.TipSet) (cid.Cid, error) {
+
+				// Make sure the test that should be canceled, is canceled.
+				select {
+				case <-wasCanceled:
+				case <-ctx.Done():
+					return cid.Undef, ctx.Err()
+				}
+
+				// the cache should be setup correctly.
+				checkCache(t, cache)
+
+				counter <- struct{}{}
+
+				return root, nil
+			},
+			PreMigrations: []PreMigration{{
+				StartWithin: 20,
+				PreMigration: func(ctx context.Context, _ *StateManager, cache MigrationCache,
+					_ cid.Cid, _ abi.ChainEpoch, _ *types.TipSet) error {
+					wait20.Done()
+					wait20.Wait()
+
+					err := cache.Write("foo", fooCid)
+					require.NoError(t, err)
+
+					counter <- struct{}{}
+
+					return nil
+				},
+			}, {
+				StartWithin: 20,
+				PreMigration: func(ctx context.Context, _ *StateManager, cache MigrationCache,
+					_ cid.Cid, _ abi.ChainEpoch, _ *types.TipSet) error {
+					wait20.Done()
+					wait20.Wait()
+
+					err := cache.Write("bar", barCid)
+					require.NoError(t, err)
+
+					counter <- struct{}{}
+
+					return nil
+				},
+			}, {
+				StartWithin: 20,
+				PreMigration: func(ctx context.Context, _ *StateManager, cache MigrationCache,
+					_ cid.Cid, _ abi.ChainEpoch, _ *types.TipSet) error {
+					wait20.Done()
+					wait20.Wait()
+
+					err := cache.Write("fail", failCid)
+					require.NoError(t, err)
+
+					counter <- struct{}{}
+
+					// Fail this migration. The cached entry should not be persisted.
+					return fmt.Errorf("failed")
+				},
+			}, {
+				StartWithin: 15,
+				StopWithin:  5,
+				PreMigration: func(ctx context.Context, _ *StateManager, cache MigrationCache,
+					_ cid.Cid, _ abi.ChainEpoch, _ *types.TipSet) error {
+
+					<-ctx.Done()
+					close(wasCanceled)
+
+					counter <- struct{}{}
+
+					return nil
+				},
+			}, {
+				StartWithin: 10,
+				PreMigration: func(ctx context.Context, _ *StateManager, cache MigrationCache,
+					_ cid.Cid, _ abi.ChainEpoch, _ *types.TipSet) error {
+
+					checkCache(t, cache)
+
+					counter <- struct{}{}
+
+					return nil
+				},
+			}}},
+		})
+	if err != nil {
+		t.Fatal(err)
+	}
+	require.NoError(t, sm.Start(context.Background()))
+	defer func() {
+		require.NoError(t, sm.Stop(context.Background()))
+	}()
+
+	inv := vm.NewActorRegistry()
+	inv.Register(nil, testActor{})
+
+	sm.SetVMConstructor(func(ctx context.Context, vmopt *vm.VMOpts) (*vm.VM, error) {
+		nvm, err := vm.NewVM(ctx, vmopt)
+		if err != nil {
+			return nil, err
+		}
+		nvm.SetInvoker(inv)
+		return nvm, nil
+	})
+
+	cg.SetStateManager(sm)
+
+	for i := 0; i < 50; i++ {
+		_, err := cg.NextTipSet()
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	// We have 5 pre-migration steps, and the migration. They should all have written something
+	// to this channel.
+	require.Equal(t, 6, len(counter))
 }
