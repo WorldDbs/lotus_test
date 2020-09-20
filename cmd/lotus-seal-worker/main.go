@@ -10,30 +10,34 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
+	"github.com/ipfs/go-datastore/namespace"
 	logging "github.com/ipfs/go-log/v2"
 	manet "github.com/multiformats/go-multiaddr/net"
 	"github.com/urfave/cli/v2"
+	"go.opencensus.io/stats/view"
+	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
+	"github.com/filecoin-project/go-statestore"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
+	cliutil "github.com/filecoin-project/lotus/cli/util"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/lib/rpcenc"
+	"github.com/filecoin-project/lotus/metrics"
+	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
@@ -45,7 +49,7 @@ const FlagWorkerRepo = "worker-repo"
 const FlagWorkerRepoDeprecation = "workerrepo"
 
 func main() {
-	build.RunningNodeType = build.NodeWorker
+	api.RunningNodeType = api.NodeWorker
 
 	lotuslog.SetupLogLevels()
 
@@ -53,6 +57,9 @@ func main() {
 		runCmd,
 		infoCmd,
 		storageCmd,
+		setCmd,
+		waitQuietCmd,
+		tasksCmd,
 	}
 
 	app := &cli.App{
@@ -170,15 +177,18 @@ var runCmd = &cli.Command{
 		}
 
 		// Connect to storage-miner
+		ctx := lcli.ReqContext(cctx)
+
 		var nodeApi api.StorageMiner
 		var closer func()
 		var err error
 		for {
-			nodeApi, closer, err = lcli.GetStorageMinerAPI(cctx,
-				jsonrpc.WithNoReconnect(),
-				jsonrpc.WithTimeout(30*time.Second))
+			nodeApi, closer, err = lcli.GetStorageMinerAPI(cctx, cliutil.StorageMinerUseHttp)
 			if err == nil {
-				break
+				_, err = nodeApi.Version(ctx)
+				if err == nil {
+					break
+				}
 			}
 			fmt.Printf("\r\x1b[0KConnecting to miner API... (%s)", err)
 			time.Sleep(time.Second)
@@ -186,20 +196,24 @@ var runCmd = &cli.Command{
 		}
 
 		defer closer()
-		ctx := lcli.ReqContext(cctx)
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
+
+		// Register all metric views
+		if err := view.Register(
+			metrics.DefaultViews...,
+		); err != nil {
+			log.Fatalf("Cannot register the view: %v", err)
+		}
 
 		v, err := nodeApi.Version(ctx)
 		if err != nil {
 			return err
 		}
-		if v.APIVersion != build.MinerAPIVersion {
-			return xerrors.Errorf("lotus-miner API version doesn't match: expected: %s", api.Version{APIVersion: build.MinerAPIVersion})
+		if v.APIVersion != api.MinerAPIVersion0 {
+			return xerrors.Errorf("lotus-miner API version doesn't match: expected: %s", api.APIVersion{APIVersion: api.MinerAPIVersion0})
 		}
 		log.Infof("Remote version %s", v)
-
-		watchMinerConn(ctx, cctx, nodeApi)
 
 		// Check params
 
@@ -294,7 +308,7 @@ var runCmd = &cli.Command{
 
 			{
 				// init datastore for r.Exists
-				_, err := lr.Datastore("/metadata")
+				_, err := lr.Datastore(context.Background(), "/metadata")
 				if err != nil {
 					return err
 				}
@@ -305,6 +319,15 @@ var runCmd = &cli.Command{
 		}
 
 		lr, err := r.Lock(repo.Worker)
+		if err != nil {
+			return err
+		}
+		defer func() {
+			if err := lr.Close(); err != nil {
+				log.Error("closing repo", err)
+			}
+		}()
+		ds, err := lr.Datastore(context.Background(), "/metadata")
 		if err != nil {
 			return err
 		}
@@ -333,11 +356,6 @@ var runCmd = &cli.Command{
 		}
 
 		// Setup remote sector store
-		spt, err := ffiwrapper.SealProofTypeFromSectorSize(ssize)
-		if err != nil {
-			return xerrors.Errorf("getting proof type: %w", err)
-		}
-
 		sminfo, err := lcli.GetAPIInfo(cctx, repo.StorageMiner)
 		if err != nil {
 			return xerrors.Errorf("could not get api info: %w", err)
@@ -345,14 +363,26 @@ var runCmd = &cli.Command{
 
 		remote := stores.NewRemote(localStore, nodeApi, sminfo.AuthHeader(), cctx.Int("parallel-fetch-limit"))
 
+		fh := &stores.FetchHandler{Local: localStore}
+		remoteHandler := func(w http.ResponseWriter, r *http.Request) {
+			if !auth.HasPerm(r.Context(), nil, api.PermAdmin) {
+				w.WriteHeader(401)
+				_ = json.NewEncoder(w).Encode(struct{ Error string }{"unauthorized: missing admin permission"})
+				return
+			}
+
+			fh.ServeHTTP(w, r)
+		}
+
 		// Create / expose the worker
+
+		wsts := statestore.New(namespace.Wrap(ds, modules.WorkerCallsPrefix))
 
 		workerApi := &worker{
 			LocalWorker: sectorstorage.NewLocalWorker(sectorstorage.WorkerConfig{
-				SealProof: spt,
 				TaskTypes: taskTypes,
 				NoSwap:    cctx.Bool("no-swap"),
-			}, remote, localStore, nodeApi),
+			}, remote, localStore, nodeApi, nodeApi, wsts),
 			localStore: localStore,
 			ls:         lr,
 		}
@@ -363,11 +393,11 @@ var runCmd = &cli.Command{
 
 		readerHandler, readerServerOpt := rpcenc.ReaderParamDecoder()
 		rpcServer := jsonrpc.NewServer(readerServerOpt)
-		rpcServer.Register("Filecoin", apistruct.PermissionedWorkerAPI(workerApi))
+		rpcServer.Register("Filecoin", api.PermissionedWorkerAPI(metrics.MetricedWorkerAPI(workerApi)))
 
 		mux.Handle("/rpc/v0", rpcServer)
 		mux.Handle("/rpc/streams/v0/push/{uuid}", readerHandler)
-		mux.PathPrefix("/remote").HandlerFunc((&stores.FetchHandler{Local: localStore}).ServeHTTP)
+		mux.PathPrefix("/remote").HandlerFunc(remoteHandler)
 		mux.PathPrefix("/").Handler(http.DefaultServeMux) // pprof
 
 		ah := &auth.Handler{
@@ -378,6 +408,7 @@ var runCmd = &cli.Command{
 		srv := &http.Server{
 			Handler: ah,
 			BaseContext: func(listener net.Listener) context.Context {
+				ctx, _ := tag.New(context.Background(), tag.Upsert(metrics.APIInterface, "lotus-worker"))
 				return ctx
 			},
 		}
@@ -422,67 +453,85 @@ var runCmd = &cli.Command{
 			}
 		}
 
-		log.Info("Waiting for tasks")
+		minerSession, err := nodeApi.Session(ctx)
+		if err != nil {
+			return xerrors.Errorf("getting miner session: %w", err)
+		}
+
+		waitQuietCh := func() chan struct{} {
+			out := make(chan struct{})
+			go func() {
+				workerApi.LocalWorker.WaitQuiet()
+				close(out)
+			}()
+			return out
+		}
 
 		go func() {
-			if err := nodeApi.WorkerConnect(ctx, "ws://"+address+"/rpc/v0"); err != nil {
-				log.Errorf("Registering worker failed: %+v", err)
-				cancel()
-				return
+			heartbeats := time.NewTicker(stores.HeartbeatInterval)
+			defer heartbeats.Stop()
+
+			var redeclareStorage bool
+			var readyCh chan struct{}
+			for {
+				// If we're reconnecting, redeclare storage first
+				if redeclareStorage {
+					log.Info("Redeclaring local storage")
+
+					if err := localStore.Redeclare(ctx); err != nil {
+						log.Errorf("Redeclaring local storage failed: %+v", err)
+
+						select {
+						case <-ctx.Done():
+							return // graceful shutdown
+						case <-heartbeats.C:
+						}
+						continue
+					}
+				}
+
+				// TODO: we could get rid of this, but that requires tracking resources for restarted tasks correctly
+				if readyCh == nil {
+					log.Info("Making sure no local tasks are running")
+					readyCh = waitQuietCh()
+				}
+
+				for {
+					curSession, err := nodeApi.Session(ctx)
+					if err != nil {
+						log.Errorf("heartbeat: checking remote session failed: %+v", err)
+					} else {
+						if curSession != minerSession {
+							minerSession = curSession
+							break
+						}
+					}
+
+					select {
+					case <-readyCh:
+						if err := nodeApi.WorkerConnect(ctx, "http://"+address+"/rpc/v0"); err != nil {
+							log.Errorf("Registering worker failed: %+v", err)
+							cancel()
+							return
+						}
+
+						log.Info("Worker registered successfully, waiting for tasks")
+
+						readyCh = nil
+					case <-heartbeats.C:
+					case <-ctx.Done():
+						return // graceful shutdown
+					}
+				}
+
+				log.Errorf("LOTUS-MINER CONNECTION LOST")
+
+				redeclareStorage = true
 			}
 		}()
 
 		return srv.Serve(nl)
 	},
-}
-
-func watchMinerConn(ctx context.Context, cctx *cli.Context, nodeApi api.StorageMiner) {
-	go func() {
-		closing, err := nodeApi.Closing(ctx)
-		if err != nil {
-			log.Errorf("failed to get remote closing channel: %+v", err)
-		}
-
-		select {
-		case <-closing:
-		case <-ctx.Done():
-		}
-
-		if ctx.Err() != nil {
-			return // graceful shutdown
-		}
-
-		log.Warnf("Connection with miner node lost, restarting")
-
-		exe, err := os.Executable()
-		if err != nil {
-			log.Errorf("getting executable for auto-restart: %+v", err)
-		}
-
-		_ = log.Sync()
-
-		// TODO: there are probably cleaner/more graceful ways to restart,
-		//  but this is good enough for now (FSM can recover from the mess this creates)
-		//nolint:gosec
-		if err := syscall.Exec(exe, []string{exe,
-			fmt.Sprintf("--worker-repo=%s", cctx.String("worker-repo")),
-			fmt.Sprintf("--miner-repo=%s", cctx.String("miner-repo")),
-			fmt.Sprintf("--enable-gpu-proving=%t", cctx.Bool("enable-gpu-proving")),
-			"run",
-			fmt.Sprintf("--listen=%s", cctx.String("listen")),
-			fmt.Sprintf("--no-local-storage=%t", cctx.Bool("no-local-storage")),
-			fmt.Sprintf("--no-swap=%t", cctx.Bool("no-swap")),
-			fmt.Sprintf("--addpiece=%t", cctx.Bool("addpiece")),
-			fmt.Sprintf("--precommit1=%t", cctx.Bool("precommit1")),
-			fmt.Sprintf("--unseal=%t", cctx.Bool("unseal")),
-			fmt.Sprintf("--precommit2=%t", cctx.Bool("precommit2")),
-			fmt.Sprintf("--commit=%t", cctx.Bool("commit")),
-			fmt.Sprintf("--parallel-fetch-limit=%d", cctx.Int("parallel-fetch-limit")),
-			fmt.Sprintf("--timeout=%s", cctx.String("timeout")),
-		}, os.Environ()); err != nil {
-			fmt.Println(err)
-		}
-	}()
 }
 
 func extractRoutableIP(timeout time.Duration) (string, error) {
