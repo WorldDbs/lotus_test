@@ -19,7 +19,7 @@ import (
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/api/apibstore"
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -53,8 +53,22 @@ var actorSetAddrsCmd = &cli.Command{
 			Usage: "set gas limit",
 			Value: 0,
 		},
+		&cli.BoolFlag{
+			Name:  "unset",
+			Usage: "unset address",
+			Value: false,
+		},
 	},
 	Action: func(cctx *cli.Context) error {
+		args := cctx.Args().Slice()
+		unset := cctx.Bool("unset")
+		if len(args) == 0 && !unset {
+			return cli.ShowSubcommandHelp(cctx)
+		}
+		if len(args) > 0 && unset {
+			return fmt.Errorf("unset can only be used with no arguments")
+		}
+
 		nodeAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
@@ -70,7 +84,7 @@ var actorSetAddrsCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		var addrs []abi.Multiaddrs
-		for _, a := range cctx.Args().Slice() {
+		for _, a := range args {
 			maddr, err := ma.NewMultiaddr(a)
 			if err != nil {
 				return fmt.Errorf("failed to parse %q as a multiaddr: %w", a, err)
@@ -307,7 +321,7 @@ var actorRepayDebtCmd = &cli.Command{
 				return err
 			}
 
-			store := adt.WrapStore(ctx, cbor.NewCborStore(apibstore.NewAPIBlockstore(api)))
+			store := adt.WrapStore(ctx, cbor.NewCborStore(blockstore.NewAPIBlockstore(api)))
 
 			mst, err := miner.Load(store, mact)
 			if err != nil {
@@ -420,6 +434,7 @@ var actorControlList = &cli.Command{
 
 		commit := map[address.Address]struct{}{}
 		precommit := map[address.Address]struct{}{}
+		terminate := map[address.Address]struct{}{}
 		post := map[address.Address]struct{}{}
 
 		for _, ca := range mi.ControlAddresses {
@@ -444,6 +459,16 @@ var actorControlList = &cli.Command{
 
 			delete(post, ca)
 			commit[ca] = struct{}{}
+		}
+
+		for _, ca := range ac.TerminateControl {
+			ca, err := api.StateLookupID(ctx, ca, types.EmptyTSK)
+			if err != nil {
+				return err
+			}
+
+			delete(post, ca)
+			terminate[ca] = struct{}{}
 		}
 
 		printKey := func(name string, a address.Address) {
@@ -486,6 +511,9 @@ var actorControlList = &cli.Command{
 			}
 			if _, ok := commit[a]; ok {
 				uses = append(uses, color.BlueString("commit"))
+			}
+			if _, ok := terminate[a]; ok {
+				uses = append(uses, color.YellowString("terminate"))
 			}
 
 			tw.Write(map[string]interface{}{
