@@ -5,11 +5,12 @@ import (
 	"log"
 	"sync"
 
+	"github.com/filecoin-project/lotus/api/v0api"
+
 	"github.com/fatih/color"
 	dssync "github.com/ipfs/go-datastore/sync"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/lib/blockstore"
+	"github.com/filecoin-project/lotus/blockstore"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
@@ -40,12 +41,12 @@ type Stores struct {
 // NewProxyingStores is a set of Stores backed by a proxying Blockstore that
 // proxies Get requests for unknown CIDs to a Filecoin node, via the
 // ChainReadObj RPC.
-func NewProxyingStores(ctx context.Context, api api.FullNode) *Stores {
+func NewProxyingStores(ctx context.Context, api v0api.FullNode) *Stores {
 	ds := dssync.MutexWrap(ds.NewMapDatastore())
 	bs := &proxyingBlockstore{
 		ctx:        ctx,
 		api:        api,
-		Blockstore: blockstore.NewBlockstore(ds),
+		Blockstore: blockstore.FromDatastore(ds),
 	}
 	return NewStores(ctx, ds, bs)
 }
@@ -85,7 +86,7 @@ type TracingBlockstore interface {
 // a Filecoin node via JSON-RPC.
 type proxyingBlockstore struct {
 	ctx context.Context
-	api api.FullNode
+	api v0api.FullNode
 
 	lk      sync.Mutex
 	tracing bool
