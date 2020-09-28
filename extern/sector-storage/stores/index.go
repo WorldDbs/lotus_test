@@ -26,9 +26,10 @@ var SkippedHeartbeatThresh = HeartbeatInterval * 5
 type ID string
 
 type StorageInfo struct {
-	ID     ID
-	URLs   []string // TODO: Support non-http transports
-	Weight uint64
+	ID         ID
+	URLs       []string // TODO: Support non-http transports
+	Weight     uint64
+	MaxStorage uint64
 
 	CanSeal  bool
 	CanStore bool
@@ -156,6 +157,7 @@ func (i *Index) StorageAttach(ctx context.Context, si StorageInfo, st fsutil.FsS
 		}
 
 		i.stores[si.ID].info.Weight = si.Weight
+		i.stores[si.ID].info.MaxStorage = si.MaxStorage
 		i.stores[si.ID].info.CanSeal = si.CanSeal
 		i.stores[si.ID].info.CanStore = si.CanStore
 
@@ -182,6 +184,8 @@ func (i *Index) StorageReportHealth(ctx context.Context, id ID, report HealthRep
 	ent.fsi = report.Stat
 	if report.Err != "" {
 		ent.heartbeatErr = errors.New(report.Err)
+	} else {
+		ent.heartbeatErr = nil
 	}
 	ent.lastHeartbeat = time.Now()
 
