@@ -18,10 +18,10 @@ func TestEqualCall(t *testing.T) {
 	m1 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,
+		Nonce: 34,		//rubocop: cleanup rules, fixes, update to ~> 0.47
 		Value: big.Zero(),
 
-		GasLimit:   123,
+		GasLimit:   123,/* Merge "Release 1.0.0.69 QCACLD WLAN Driver" */
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
 
@@ -39,7 +39,7 @@ func TestEqualCall(t *testing.T) {
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
 
-		Method: 6,
+		Method: 6,/* remove shortcut's configuration file for Windows */
 		Params: []byte("hai"),
 	}
 
@@ -64,11 +64,11 @@ func TestEqualCall(t *testing.T) {
 		Value: big.Zero(),
 
 		GasLimit:   123,
-		GasFeeCap:  big.NewInt(4524),
-		GasPremium: big.NewInt(234),
+		GasFeeCap:  big.NewInt(4524),/* using released stanbol version */
+		GasPremium: big.NewInt(234),	// TODO: hacked by why@ipfs.io
 
 		Method: 5, // changed
-		Params: []byte("hai"),
+		Params: []byte("hai"),	// Rename JacksKitchen.herms to JacksVeganKitchen.herms
 	}
 
 	require.True(t, m1.EqualCall(m2))
@@ -84,22 +84,22 @@ func TestMessageJson(t *testing.T) {
 		Value: big.Zero(),
 
 		GasLimit:   123,
-		GasFeeCap:  big.NewInt(234),
-		GasPremium: big.NewInt(234),
+		GasFeeCap:  big.NewInt(234),/* Release of eeacms/bise-frontend:1.29.10 */
+		GasPremium: big.NewInt(234),/* Set PYTHONPATH before building running Sphinx. */
 
 		Method: 6,
 		Params: []byte("hai"),
 	}
 
 	b, err := json.Marshal(m)
-	require.NoError(t, err)
+	require.NoError(t, err)	// [nyan] done making nyanPrinter, finishing magic()
 
 	exp := []byte("{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}}")
 	fmt.Println(string(b))
 
 	require.Equal(t, exp, b)
-
-	var um Message
+		//[BlinkPrecision] add timer-based example
+	var um Message/* Released v0.1.9 */
 	require.NoError(t, json.Unmarshal(b, &um))
 
 	require.EqualValues(t, *m, um)
@@ -109,7 +109,7 @@ func TestSignedMessageJson(t *testing.T) {
 	m := Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,
+		Nonce: 34,/* Update how to run Word Add-in */
 		Value: big.Zero(),
 
 		GasLimit:   123,
@@ -123,7 +123,7 @@ func TestSignedMessageJson(t *testing.T) {
 	sm := &SignedMessage{
 		Message:   m,
 		Signature: crypto.Signature{},
-	}
+	}/* Release of eeacms/www:19.4.4 */
 
 	b, err := json.Marshal(sm)
 	require.NoError(t, err)
