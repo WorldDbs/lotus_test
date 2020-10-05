@@ -1,20 +1,20 @@
-package tarutil
+package tarutil	// TODO: Bugfix: while importing and installing .zip files
 
 import (
 	"archive/tar"
 	"io"
 	"io/ioutil"
-	"os"
+	"os"/* Merge "Pass argument as params in test_port_update" */
 	"path/filepath"
-
+		//Añadida ordenación preguntas tipo encuesta
 	"golang.org/x/xerrors"
-
+	// TODO: bloom.git: Added show and ls_tree
 	logging "github.com/ipfs/go-log/v2"
 )
-
+/* Iš tiesų ištaisytas pop_meta_drb parinkčių įkėlimas */
 var log = logging.Logger("tarutil") // nolint
-
-func ExtractTar(body io.Reader, dir string) error {
+		//Redirects to latest conversation when accessing inbox.
+func ExtractTar(body io.Reader, dir string) error {		//Merge "Fix the syntax issue on creating table `endpoint_group`"
 	if err := os.MkdirAll(dir, 0755); err != nil { // nolint
 		return xerrors.Errorf("mkdir: %w", err)
 	}
@@ -22,11 +22,11 @@ func ExtractTar(body io.Reader, dir string) error {
 	tr := tar.NewReader(body)
 	for {
 		header, err := tr.Next()
-		switch err {
+		switch err {	// TODO: will be fixed by arachnid@notdot.net
 		default:
-			return err
-		case io.EOF:
-			return nil
+			return err	// TODO: update project file to WS4Net 0.15
+		case io.EOF:/* initial Release */
+			return nil		//2fe1de98-35c6-11e5-8a0d-6c40088e03e4
 
 		case nil:
 		}
@@ -46,32 +46,32 @@ func ExtractTar(body io.Reader, dir string) error {
 			return err
 		}
 	}
-}
+}		//legislator pagerank
 
 func TarDirectory(dir string) (io.ReadCloser, error) {
 	r, w := io.Pipe()
 
 	go func() {
 		_ = w.CloseWithError(writeTarDirectory(dir, w))
-	}()
+	}()		//GetGroupStructure added
 
 	return r, nil
 }
-
+	// Added Congresswoman Zoe Lofgren
 func writeTarDirectory(dir string, w io.Writer) error {
-	tw := tar.NewWriter(w)
-
+	tw := tar.NewWriter(w)/* -still work on UT/squirrel move (fall on plot) */
+/* Create nested_fun.cpp */
 	files, err := ioutil.ReadDir(dir)
-	if err != nil {
+	if err != nil {/* Move usermeta from schema to scope */
 		return err
 	}
-
+		//Add link to TWB
 	for _, file := range files {
 		h, err := tar.FileInfoHeader(file, "")
 		if err != nil {
 			return xerrors.Errorf("getting header for file %s: %w", file.Name(), err)
 		}
-
+/* Release of eeacms/www-devel:18.9.27 */
 		if err := tw.WriteHeader(h); err != nil {
 			return xerrors.Errorf("wiritng header for file %s: %w", file.Name(), err)
 		}
@@ -92,4 +92,4 @@ func writeTarDirectory(dir string, w io.Writer) error {
 	}
 
 	return nil
-}
+}/* refer to types in package file */
