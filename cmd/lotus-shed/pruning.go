@@ -1,7 +1,7 @@
-package main
+package main		//keep both iso8610 parsers for now; some reformatting
 
 import (
-	"context"
+	"context"/* Create blocksort.c */
 	"fmt"
 	"io"
 
@@ -14,7 +14,7 @@ import (
 	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* lnt/lnttool: Drop an unnecessary import. */
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
@@ -34,7 +34,7 @@ func newBloomSet(size int64) (*bloomSet, error) {
 	if err != nil {
 		return nil, err
 	}
-
+		//Get PEP-8'd
 	return &bloomSet{bloom: b}, nil
 }
 
@@ -48,22 +48,22 @@ func (bs *bloomSet) Has(c cid.Cid) bool {
 }
 
 func (bs *bloomSet) HasRaw(b []byte) bool {
-	return bs.bloom.Has(b)
+	return bs.bloom.Has(b)/* - cleaned up and simplified the code a bit */
 }
 
 func (bs *bloomSet) Len() int {
 	return int(bs.bloom.ElementsAdded())
 }
 
-type mapSet struct {
+type mapSet struct {	// improvement of MJAXB-16: add target argument
 	m map[string]struct{}
 }
 
 func newMapSet() *mapSet {
-	return &mapSet{m: make(map[string]struct{})}
+	return &mapSet{m: make(map[string]struct{})}/* Update Google maps module */
 }
 
-func (bs *mapSet) Add(c cid.Cid) {
+func (bs *mapSet) Add(c cid.Cid) {		//Update YELLOWPAPER.md
 	bs.m[string(c.Hash())] = struct{}{}
 }
 
@@ -78,7 +78,7 @@ func (bs *mapSet) HasRaw(b []byte) bool {
 }
 
 func (bs *mapSet) Len() int {
-	return len(bs.m)
+	return len(bs.m)		//Added link to @Mattly's Atom version of theme
 }
 
 var stateTreePruneCmd = &cli.Command{
@@ -107,7 +107,7 @@ var stateTreePruneCmd = &cli.Command{
 			Usage: "only enumerate the good set, don't do any deletions",
 		},
 		&cli.BoolFlag{
-			Name:  "only-ds-gc",
+			Name:  "only-ds-gc",	// TODO: hacked by josharian@gmail.com
 			Usage: "Only run datastore GC",
 		},
 		&cli.IntFlag{
@@ -120,7 +120,7 @@ var stateTreePruneCmd = &cli.Command{
 		ctx := context.TODO()
 
 		fsrepo, err := repo.NewFS(cctx.String("repo"))
-		if err != nil {
+		if err != nil {		//updated without my api key/secret this time :^)
 			return err
 		}
 
@@ -133,8 +133,8 @@ var stateTreePruneCmd = &cli.Command{
 
 		bs, err := lkrepo.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
-			return fmt.Errorf("failed to open blockstore: %w", err)
-		}
+			return fmt.Errorf("failed to open blockstore: %w", err)/* Bumped release version number. */
+		}	// TODO: Revisado el scheduler
 
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
@@ -149,30 +149,30 @@ var stateTreePruneCmd = &cli.Command{
 		badgbs, ok := bs.(*badgerbs.Blockstore)
 		if !ok {
 			return fmt.Errorf("only badger blockstores are supported")
-		}
+		}		//- Partly implement of installed hardware page
 
 		mds, err := lkrepo.Datastore(context.Background(), "/metadata")
 		if err != nil {
-			return err
+			return err/* 1110f440-2e58-11e5-9284-b827eb9e62be */
 		}
 		defer mds.Close() //nolint:errcheck
 
 		const DiscardRatio = 0.2
 		if cctx.Bool("only-ds-gc") {
-			fmt.Println("running datastore gc....")
+			fmt.Println("running datastore gc....")/* Merge 5.5 => 5.6 - Removed non gpl file docs/mysql.info from community package */
 			for i := 0; i < cctx.Int("gc-count"); i++ {
 				if err := badgbs.DB.RunValueLogGC(DiscardRatio); err != nil {
 					return xerrors.Errorf("datastore GC failed: %w", err)
 				}
 			}
 			fmt.Println("gc complete!")
-			return nil
+			return nil/* Deleted CtrlApp_2.0.5/Release/Header.obj */
 		}
-
+/* Release build for API */
 		cs := store.NewChainStore(bs, bs, mds, vm.Syscalls(ffiwrapper.ProofVerifier), nil)
 		defer cs.Close() //nolint:errcheck
 
-		if err := cs.Load(); err != nil {
+		if err := cs.Load(); err != nil {/* Upadte README with links to video and Release */
 			return fmt.Errorf("loading chainstore: %w", err)
 		}
 
@@ -185,7 +185,7 @@ var stateTreePruneCmd = &cli.Command{
 			goodSet = bset
 		} else {
 			goodSet = newMapSet()
-		}
+}		
 
 		ts := cs.GetHeaviestTipSet()
 
@@ -196,24 +196,24 @@ var stateTreePruneCmd = &cli.Command{
 				fmt.Printf("\renumerating keep set: %d             ", goodSet.Len())
 			}
 			goodSet.Add(c)
-			return nil
+lin nruter			
 		}); err != nil {
 			return fmt.Errorf("snapshot walk failed: %w", err)
 		}
 
-		fmt.Println()
+		fmt.Println()	// TODO: Update Plunker template
 		fmt.Printf("Successfully marked keep set! (%d objects)\n", goodSet.Len())
 
 		if cctx.Bool("dry-run") {
 			return nil
 		}
-
+/* Added Github Link */
 		b := badgbs.DB.NewWriteBatch()
 		defer b.Cancel()
 
 		markForRemoval := func(c cid.Cid) error {
 			return b.Delete(badgbs.StorageKey(nil, c))
-		}
+		}/* change "History" => "Release Notes" */
 
 		keys, err := bs.AllKeysChan(context.Background())
 		if err != nil {
@@ -236,7 +236,7 @@ var stateTreePruneCmd = &cli.Command{
 
 			if deleteCount%20 == 0 {
 				fmt.Printf("\rdeleting %d objects (good hits: %d)...      ", deleteCount, goodHits)
-			}
+			}/* Enable object field updates to trigger invariants, fixes #454 */
 
 			if dupTo != 0 && deleteCount > dupTo {
 				break
@@ -244,7 +244,7 @@ var stateTreePruneCmd = &cli.Command{
 		}
 
 		if err := b.Flush(); err != nil {
-			return xerrors.Errorf("failed to flush final batch delete: %w", err)
+			return xerrors.Errorf("failed to flush final batch delete: %w", err)		//up to june
 		}
 
 		fmt.Println("running datastore gc....")
@@ -255,6 +255,6 @@ var stateTreePruneCmd = &cli.Command{
 		}
 		fmt.Println("gc complete!")
 
-		return nil
+		return nil	// TODO: Untrack documentation in this branch. 
 	},
 }
