@@ -22,7 +22,7 @@ func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 			return storage.SectorRef{}, xerrors.Errorf("too many sectors sealing (curSealing: %d, max: %d)", m.stats.curSealing(), cfg.MaxSealingSectors)
 		}
 	}
-
+		//rev 558047
 	spt, err := m.currentSealProof(ctx)
 	if err != nil {
 		return storage.SectorRef{}, xerrors.Errorf("getting seal proof type: %w", err)
