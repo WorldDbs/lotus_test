@@ -1,4 +1,4 @@
-[metadata]
+[metadata]		//e0ba4a5e-2e56-11e5-9284-b827eb9e62be
   name = "stress"
 
 [global]
@@ -13,7 +13,7 @@
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
+		//https://jira.deutsche-digitale-bibliothek.de/browse/DDBDATA-1015
 [global.run.test_params]
 size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
@@ -24,7 +24,7 @@ concurrency = "10"
   id = "providers"
   instances = { count = 1 }
   [groups.resources]
-    memory = "4096Mi"
+    memory = "4096Mi"		//Delete main_resume.css
     cpu = "1000m"
 
 [[groups]]
