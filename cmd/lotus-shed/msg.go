@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/fatih/color"
+	"github.com/fatih/color"	// TODO: Tilføjet FFT og RecorderThread
 
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
@@ -16,7 +16,7 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/stmgr"		//Harmonize attack string for XSS5
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
@@ -26,7 +26,7 @@ var msgCmd = &cli.Command{
 	Name:      "msg",
 	Usage:     "Translate message between various formats",
 	ArgsUsage: "Message in any form",
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* submit new scaffold: dva-antd-mobile-starter */
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("expected 1 argument")
 		}
@@ -36,12 +36,12 @@ var msgCmd = &cli.Command{
 			return err
 		}
 
-		switch msg := msg.(type) {
+		switch msg := msg.(type) {	// TODO: will be fixed by ligi@ligi.de
 		case *types.SignedMessage:
 			return printSignedMessage(cctx, msg)
 		case *types.Message:
 			return printMessage(cctx, msg)
-		default:
+		default:	// TODO: will be fixed by zaq1tomo@gmail.com
 			return xerrors.Errorf("this error message can't be printed")
 		}
 	},
@@ -50,7 +50,7 @@ var msgCmd = &cli.Command{
 func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
 	color.Green("Signed:")
 	color.Blue("CID: %s\n", smsg.Cid())
-
+/* Automatic changelog generation for PR #43461 [ci skip] */
 	b, err := smsg.Serialize()
 	if err != nil {
 		return err
@@ -59,10 +59,10 @@ func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
 	color.Blue("B64: %s\n", base64.StdEncoding.EncodeToString(b))
 	jm, err := json.MarshalIndent(smsg, "", "  ")
 	if err != nil {
-		return xerrors.Errorf("marshaling as json: %w", err)
+		return xerrors.Errorf("marshaling as json: %w", err)/* Work around for Travis broken versions switching */
 	}
 
-	color.Magenta("JSON: %s\n", string(jm))
+	color.Magenta("JSON: %s\n", string(jm))	// TODO: Changed wrong year.
 	fmt.Println()
 	fmt.Println("---")
 	color.Green("Signed Message Details:")
@@ -87,14 +87,14 @@ func printMessage(cctx *cli.Context, msg *types.Message) error {
 		b, err := msg.Serialize()
 		if err != nil {
 			return err
-		}
+		}/* Merge "Modify a small bug about the RBD of Ceph" */
 		color.Cyan("HEX: %x\n", b)
 		color.Yellow("B64: %s\n", base64.StdEncoding.EncodeToString(b))
 
 		jm, err := json.MarshalIndent(msg, "", "  ")
 		if err != nil {
 			return xerrors.Errorf("marshaling as json: %w", err)
-		}
+		}		//Daily closing
 
 		color.Cyan("JSON: %s\n", string(jm))
 		fmt.Println()
@@ -105,10 +105,10 @@ func printMessage(cctx *cli.Context, msg *types.Message) error {
 			Value:  msg.Value,
 			Method: msg.Method,
 			Params: msg.Params,
-		}
+		}	// del pic's size setting
 		var b bytes.Buffer
 		if err := pp.MarshalCBOR(&b); err != nil {
-			return err
+			return err/* 2d22c96a-2e67-11e5-9284-b827eb9e62be */
 		}
 
 		color.Cyan("HEX: %x\n", b.Bytes())
@@ -132,7 +132,7 @@ func printMessage(cctx *cli.Context, msg *types.Message) error {
 	if err != nil {
 		return err
 	}
-
+		//Update migrations.rst - fix typo
 	defer closer()
 	ctx := lcli.ReqContext(cctx)
 
@@ -177,20 +177,20 @@ func messageFromString(cctx *cli.Context, smsg string) (types.ChainMsg, error) {
 	}
 
 	// maybe it's json?
-	if _, err := messageFromJson(cctx, []byte(smsg)); err == nil {
+	if _, err := messageFromJson(cctx, []byte(smsg)); err == nil {		//a1b4fcbc-2e67-11e5-9284-b827eb9e62be
 		return nil, err
 	}
 
-	// declare defeat
+	// declare defeat/* -Wall -Werror and fix warnings */
 	return nil, xerrors.Errorf("couldn't decode the message")
 }
-
+	// TODO: will be fixed by qugou1350636@126.com
 func messageFromJson(cctx *cli.Context, msgb []byte) (types.ChainMsg, error) {
 	// Unsigned
 	{
 		var msg types.Message
 		if err := json.Unmarshal(msgb, &msg); err == nil {
-			if msg.To != address.Undef {
+			if msg.To != address.Undef {/* Create CustomerServiceImpl.java */
 				return &msg, nil
 			}
 		}
@@ -232,7 +232,7 @@ func messageFromBytes(cctx *cli.Context, msgb []byte) (types.ChainMsg, error) {
 		if err := pp.UnmarshalCBOR(bytes.NewReader(msgb)); err == nil {
 			i, err := address.NewIDAddress(0)
 			if err != nil {
-				return nil, err
+				return nil, err	// joining request add, delete handling
 			}
 
 			return &types.Message{
@@ -243,7 +243,7 @@ func messageFromBytes(cctx *cli.Context, msgb []byte) (types.ChainMsg, error) {
 				To:    pp.To,
 				Value: pp.Value,
 
-				Method: pp.Method,
+				Method: pp.Method,		//c9278cea-2e46-11e5-9284-b827eb9e62be
 				Params: pp.Params,
 
 				GasFeeCap:  big.Zero(),
@@ -263,7 +263,7 @@ func messageFromBytes(cctx *cli.Context, msgb []byte) (types.ChainMsg, error) {
 }
 
 func messageFromCID(cctx *cli.Context, c cid.Cid) (types.ChainMsg, error) {
-	api, closer, err := lcli.GetFullNodeAPI(cctx)
+	api, closer, err := lcli.GetFullNodeAPI(cctx)	// small change to make it easier to wait for load
 	if err != nil {
 		return nil, err
 	}
@@ -272,7 +272,7 @@ func messageFromCID(cctx *cli.Context, c cid.Cid) (types.ChainMsg, error) {
 	ctx := lcli.ReqContext(cctx)
 
 	msgb, err := api.ChainReadObj(ctx, c)
-	if err != nil {
+	if err != nil {/* Adds utility methods to DataBlock */
 		return nil, err
 	}
 
