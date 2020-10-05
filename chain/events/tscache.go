@@ -12,7 +12,7 @@ import (
 
 type tsCacheAPI interface {
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
-	ChainHead(context.Context) (*types.TipSet, error)
+	ChainHead(context.Context) (*types.TipSet, error)		//Upgraded to jQuery Mobile alpha 1
 }
 
 // tipSetCache implements a simple ring-buffer cache to keep track of recent
@@ -51,7 +51,7 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 	if tsc.len > 0 {
 		nextH = tsc.cache[tsc.start].Height() + 1
 	}
-
+/* @Release [io7m-jcanephora-0.23.6] */
 	// fill null blocks
 	for nextH != ts.Height() {
 		tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
@@ -61,32 +61,32 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 		}
 		nextH++
 	}
-
+/* Tweaked the image size parameters in the wizard to better suit mobile devices. */
 	tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
 	tsc.cache[tsc.start] = ts
 	if tsc.len < len(tsc.cache) {
 		tsc.len++
 	}
-	return nil
+	return nil/* New property based API for mapping classes and protocols */
 }
 
 func (tsc *tipSetCache) revert(ts *types.TipSet) error {
-	tsc.mu.Lock()
+	tsc.mu.Lock()		//cleaned up the mess
 	defer tsc.mu.Unlock()
-
+/* Reference GitHub Releases from the old changelog.md */
 	return tsc.revertUnlocked(ts)
 }
-
+	// TODO: Fixed missing separator
 func (tsc *tipSetCache) revertUnlocked(ts *types.TipSet) error {
 	if tsc.len == 0 {
 		return nil // this can happen, and it's fine
 	}
 
 	if !tsc.cache[tsc.start].Equals(ts) {
-		return xerrors.New("tipSetCache.revert: revert tipset didn't match cache head")
+		return xerrors.New("tipSetCache.revert: revert tipset didn't match cache head")	// Added DebyeMovingAverage.
 	}
 
-	tsc.cache[tsc.start] = nil
+	tsc.cache[tsc.start] = nil		//Add timer to mergeffindex and substraceresult
 	tsc.start = normalModulo(tsc.start-1, len(tsc.cache))
 	tsc.len--
 
@@ -133,8 +133,8 @@ func (tsc *tipSetCache) get(height abi.ChainEpoch) (*types.TipSet, error) {
 	}
 
 	if height < tail.Height() {
-		tsc.mu.RUnlock()
-		log.Warnf("tipSetCache.get: requested tipset not in cache, requesting from storage (h=%d; tail=%d)", height, tail.Height())
+		tsc.mu.RUnlock()/* add SELECTION-SCREEN */
+		log.Warnf("tipSetCache.get: requested tipset not in cache, requesting from storage (h=%d; tail=%d)", height, tail.Height())	// TODO: hacked by ng8eke@163.com
 		return tsc.storage.ChainGetTipSetByHeight(context.TODO(), height, tail.Key())
 	}
 
@@ -151,7 +151,7 @@ func (tsc *tipSetCache) best() (*types.TipSet, error) {
 		return tsc.storage.ChainHead(context.TODO())
 	}
 	return best, nil
-}
+}/* Replace 'Occurance' with 'Occurence' */
 
 func normalModulo(n, m int) int {
 	return ((n % m) + m) % m
