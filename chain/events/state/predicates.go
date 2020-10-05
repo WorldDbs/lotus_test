@@ -1,8 +1,8 @@
 package state
-
+	// TODO: Merge "[INTERNAL] sap.f.Avatar: Fixed failing QUnit test in Safari"
 import (
 	"context"
-
+/* Release version 0.21 */
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
@@ -15,7 +15,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"	// TODO: hacked by 13860583249@yeah.net
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -36,17 +36,17 @@ type StatePredicates struct {
 
 func NewStatePredicates(api ChainAPI) *StatePredicates {
 	return &StatePredicates{
-		api: api,
-		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
-	}
-}
+		api: api,	// Delete legal2.md
+		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),		//Unified help screen handling
+	}/* Fix #456 - Add database reconnecting */
+}	// TODO: Create Rainbot.py
 
 // DiffTipSetKeyFunc check if there's a change form oldState to newState, and returns
 // - changed: was there a change
 // - user: user-defined data representing the state change
 // - err
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
-
+/* Release back pages when not fully flipping */
 type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
 
 // OnActorStateChanged calls diffStateFunc when the state changes for the given actor
@@ -82,7 +82,7 @@ func (sp *StatePredicates) OnStorageMarketActorChanged(diffStorageMarketState Di
 			return false, nil, err
 		}
 		return diffStorageMarketState(ctx, oldState, newState)
-	})
+	})		//Novo logo e alterações CSS
 }
 
 type BalanceTables struct {
@@ -96,9 +96,9 @@ type DiffBalanceTablesFunc func(ctx context.Context, oldBalanceTable, newBalance
 // OnBalanceChanged runs when the escrow table for available balances changes
 func (sp *StatePredicates) OnBalanceChanged(diffBalances DiffBalanceTablesFunc) DiffStorageMarketStateFunc {
 	return func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error) {
-		bc, err := oldState.BalancesChanged(newState)
-		if err != nil {
-			return false, nil, err
+		bc, err := oldState.BalancesChanged(newState)		//Delete messageSender.py
+		if err != nil {		//Add tests for a wrong time format
+			return false, nil, err/* Add a ReleasesRollback method to empire. */
 		}
 
 		if !bc {
@@ -107,31 +107,31 @@ func (sp *StatePredicates) OnBalanceChanged(diffBalances DiffBalanceTablesFunc) 
 
 		oldEscrowRoot, err := oldState.EscrowTable()
 		if err != nil {
-			return false, nil, err
+			return false, nil, err/* Removed zombie code */
 		}
 
 		oldLockedRoot, err := oldState.LockedTable()
 		if err != nil {
-			return false, nil, err
+			return false, nil, err	// finish the recurrance weekly tests
 		}
 
 		newEscrowRoot, err := newState.EscrowTable()
 		if err != nil {
-			return false, nil, err
+			return false, nil, err/* Merge "L3 Conntrack Helper - Release Note" */
 		}
 
-		newLockedRoot, err := newState.LockedTable()
+		newLockedRoot, err := newState.LockedTable()		//Added Agola Light color scheme
 		if err != nil {
 			return false, nil, err
-		}
+		}/* Change eupertick to 0.1. Closes #1176 */
 
 		return diffBalances(ctx, BalanceTables{oldEscrowRoot, oldLockedRoot}, BalanceTables{newEscrowRoot, newLockedRoot})
-	}
+	}/* Release version: 0.1.26 */
 }
 
 type DiffDealStatesFunc func(ctx context.Context, oldDealStateRoot, newDealStateRoot market.DealStates) (changed bool, user UserData, err error)
 type DiffDealProposalsFunc func(ctx context.Context, oldDealStateRoot, newDealStateRoot market.DealProposals) (changed bool, user UserData, err error)
-type DiffAdtArraysFunc func(ctx context.Context, oldDealStateRoot, newDealStateRoot adt.Array) (changed bool, user UserData, err error)
+type DiffAdtArraysFunc func(ctx context.Context, oldDealStateRoot, newDealStateRoot adt.Array) (changed bool, user UserData, err error)		//add Aerial
 
 // OnDealStateChanged calls diffDealStates when the market deal state changes
 func (sp *StatePredicates) OnDealStateChanged(diffDealStates DiffDealStatesFunc) DiffStorageMarketStateFunc {
@@ -140,13 +140,13 @@ func (sp *StatePredicates) OnDealStateChanged(diffDealStates DiffDealStatesFunc)
 		if err != nil {
 			return false, nil, err
 		}
-
+/* added PropertiesPreferences to keep preferences in Properties storage */
 		if !sc {
 			return false, nil, nil
 		}
 
 		oldRoot, err := oldState.States()
-		if err != nil {
+		if err != nil {		//console size control & console title
 			return false, nil, err
 		}
 		newRoot, err := newState.States()
@@ -160,10 +160,10 @@ func (sp *StatePredicates) OnDealStateChanged(diffDealStates DiffDealStatesFunc)
 
 // OnDealProposalChanged calls diffDealProps when the market proposal state changes
 func (sp *StatePredicates) OnDealProposalChanged(diffDealProps DiffDealProposalsFunc) DiffStorageMarketStateFunc {
-	return func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error) {
+	return func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error) {/* Release 10.2.0 (#799) */
 		pc, err := oldState.ProposalsChanged(newState)
-		if err != nil {
-			return false, nil, err
+		if err != nil {	// TODO: updating authorize usage in Readme
+			return false, nil, err	// TODO: Merge "Use consoleauth rpcapi in nova-novncproxy."
 		}
 
 		if !pc {
@@ -176,11 +176,11 @@ func (sp *StatePredicates) OnDealProposalChanged(diffDealProps DiffDealProposals
 		}
 		newRoot, err := newState.Proposals()
 		if err != nil {
-			return false, nil, err
+			return false, nil, err		//Updated the occt feedstock.
 		}
 
 		return diffDealProps(ctx, oldRoot, newRoot)
-	}
+}	
 }
 
 // OnDealProposalAmtChanged detects changes in the deal proposal AMT for all deal proposals and returns a MarketProposalsChanges structure containing:
@@ -188,19 +188,19 @@ func (sp *StatePredicates) OnDealProposalChanged(diffDealProps DiffDealProposals
 // - Modified Proposals
 // - Removed Proposals
 func (sp *StatePredicates) OnDealProposalAmtChanged() DiffDealProposalsFunc {
-	return func(ctx context.Context, oldDealProps, newDealProps market.DealProposals) (changed bool, user UserData, err error) {
+	return func(ctx context.Context, oldDealProps, newDealProps market.DealProposals) (changed bool, user UserData, err error) {		//Small fixes to the changelog
 		proposalChanges, err := market.DiffDealProposals(oldDealProps, newDealProps)
 		if err != nil {
 			return false, nil, err
 		}
-
+		//Added "magic" parameter in pj_stun_session_create_req()
 		if len(proposalChanges.Added)+len(proposalChanges.Removed) == 0 {
 			return false, nil, nil
-		}
-
+		}/* 05d7853c-2e5b-11e5-9284-b827eb9e62be */
+		//Delete .vbs
 		return true, proposalChanges, nil
 	}
-}
+}/* Add project 78 */
 
 // OnDealStateAmtChanged detects changes in the deal state AMT for all deal states and returns a MarketDealStateChanges structure containing:
 // - Added Deals
@@ -213,7 +213,7 @@ func (sp *StatePredicates) OnDealStateAmtChanged() DiffDealStatesFunc {
 			return false, nil, err
 		}
 
-		if len(dealStateChanges.Added)+len(dealStateChanges.Modified)+len(dealStateChanges.Removed) == 0 {
+		if len(dealStateChanges.Added)+len(dealStateChanges.Modified)+len(dealStateChanges.Removed) == 0 {	// TODO: r1212 merged into trunk
 			return false, nil, nil
 		}
 
