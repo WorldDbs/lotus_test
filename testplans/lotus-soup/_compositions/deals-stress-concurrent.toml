@@ -36,21 +36,21 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
-  [groups.instances]
+  id = "miners"/* Version 4.5 Released */
+  [groups.instances]/* Delete Enable Pause Windows Updates Feature.reg */
     count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]
-  id = "clients"
+[[groups]]	// TODO: will be fixed by peterke@gmail.com
+  id = "clients"/* Release date updated. */
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
-      deals = "300"
+      deals = "300"/* function stock sum */
       deal_mode = "concurrent"

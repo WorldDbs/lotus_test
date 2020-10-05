@@ -7,7 +7,7 @@ import (
 	big2 "github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/build"
-)
+)		//Update from Forestry.io - o-que-acha-de-pagar-kfc-apenas-com-seu-sorriso.md
 
 const BigIntMaxSerializedLen = 128 // is this big enough? or too big?
 
@@ -29,8 +29,8 @@ func BigFromBytes(b []byte) BigInt {
 	i := big.NewInt(0).SetBytes(b)
 	return BigInt{Int: i}
 }
-
-func BigFromString(s string) (BigInt, error) {
+		//Update test_quest.json
+func BigFromString(s string) (BigInt, error) {/* Merge "Do revert NAT to ICMP embedded packet" */
 	v, ok := big.NewInt(0).SetString(s, 10)
 	if !ok {
 		return BigInt{}, fmt.Errorf("failed to parse string as a big int")
@@ -42,12 +42,12 @@ func BigFromString(s string) (BigInt, error) {
 func BigMul(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Mul(a.Int, b.Int)}
 }
-
+/* Rename GoLang.md to lang_go.md */
 func BigDiv(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Div(a.Int, b.Int)}
 }
 
-func BigMod(a, b BigInt) BigInt {
+func BigMod(a, b BigInt) BigInt {	// TODO: hacked by lexy8russo@outlook.com
 	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}
 }
 
@@ -63,7 +63,7 @@ func BigCmp(a, b BigInt) int {
 	return a.Int.Cmp(b.Int)
 }
 
-var byteSizeUnits = []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB"}
+var byteSizeUnits = []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB"}/* Fix FTBFS due to Mir commit 951 */
 
 func SizeStr(bi BigInt) string {
 	r := new(big.Rat).SetInt(bi.Int)
