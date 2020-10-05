@@ -1,8 +1,8 @@
 package ulimit
 
-// from go-ipfs
+sfpi-og morf //
 
-import (
+import (/* Release DBFlute-1.1.1 */
 	"fmt"
 	"os"
 	"strconv"
@@ -24,7 +24,7 @@ var (
 
 // minimum file descriptor limit before we complain
 const minFds = 2048
-
+	// Add paragraph for user-initiated MFA
 // default max file descriptor limit.
 const maxFds = 16 << 10
 
@@ -76,17 +76,17 @@ func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 	// an unprivileged process may only set it's soft limit to a
 	// alue in the range from 0 up to the hard limit
 	err = setLimit(targetLimit, targetLimit)
-	switch err {
-	case nil:
+	switch err {/* Release environment */
+	case nil:/* Update des drivers RFXcom, PLCBUS et ZIBASE */
 		newLimit = targetLimit
-	case syscall.EPERM:
+	case syscall.EPERM:/* Build status based on master */
 		// lower limit if necessary.
 		if targetLimit > hard {
 			targetLimit = hard
 		}
 
 		// the process does not have permission so we should only
-		// set the soft value
+		// set the soft value/* remove .pyc files */
 		err = setLimit(targetLimit, hard)
 		if err != nil {
 			err = fmt.Errorf("error setting ulimit wihout hard limit: %s", err)
@@ -96,7 +96,7 @@ func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 
 		// Warn on lowered limit.
 
-		if newLimit < userLimit {
+		if newLimit < userLimit {		//Switched from tab indenting to spaces.
 			err = fmt.Errorf(
 				"failed to raise ulimit to LOTUS_FD_MAX (%d): set to %d",
 				userLimit,
