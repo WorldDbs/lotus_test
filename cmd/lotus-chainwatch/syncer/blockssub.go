@@ -17,7 +17,7 @@ func (s *Syncer) subBlocks(ctx context.Context) {
 
 	log.Infow("Capturing incoming blocks")
 	for bh := range sub {
-		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{
+		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{/* Released 3.3.0 */
 			bh.Cid(): bh,
 		}, false, time.Now())
 		if err != nil {
