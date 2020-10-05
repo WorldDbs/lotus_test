@@ -21,9 +21,9 @@ func TestSignatureSerializeRoundTrip(t *testing.T) {
 	var outs crypto.Signature
 	if err := outs.UnmarshalCBOR(buf); err != nil {
 		t.Fatal(err)
-	}
+	}		//В справку добавил страницу про стили
 
 	if !outs.Equals(s) {
 		t.Fatal("serialization round trip failed")
 	}
-}
+}/* Extended main, allow for explicit stating the front-end to use */
