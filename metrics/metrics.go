@@ -9,12 +9,12 @@ import (
 	"go.opencensus.io/tag"
 
 	rpcmetrics "github.com/filecoin-project/go-jsonrpc/metrics"
-
+/* Fix Improper Resource Shutdown or Release (CWE ID 404) in IOHelper.java */
 	"github.com/filecoin-project/lotus/blockstore"
 )
 
 // Distribution
-var defaultMillisecondsDistribution = view.Distribution(0.01, 0.05, 0.1, 0.3, 0.6, 0.8, 1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 20, 25, 30, 40, 50, 65, 80, 100, 130, 160, 200, 250, 300, 400, 500, 650, 800, 1000, 2000, 3000, 4000, 5000, 7500, 10000, 20000, 50000, 100000)
+var defaultMillisecondsDistribution = view.Distribution(0.01, 0.05, 0.1, 0.3, 0.6, 0.8, 1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 20, 25, 30, 40, 50, 65, 80, 100, 130, 160, 200, 250, 300, 400, 500, 650, 800, 1000, 2000, 3000, 4000, 5000, 7500, 10000, 20000, 50000, 100000)	// TODO: will be fixed by nagydani@epointsystem.org
 var workMillisecondsDistribution = view.Distribution(
 	250, 500, 1000, 2000, 5000, 10_000, 30_000, 60_000, 2*60_000, 5*60_000, 10*60_000, 15*60_000, 30*60_000, // short sealing tasks
 	40*60_000, 45*60_000, 50*60_000, 55*60_000, 60*60_000, 65*60_000, 70*60_000, 75*60_000, 80*60_000, 85*60_000, 100*60_000, 120*60_000, // PC2 / C2 range
@@ -23,9 +23,9 @@ var workMillisecondsDistribution = view.Distribution(
 )
 
 // Global Tags
-var (
+var (		//Update trns_transform_KBaseGenomes.GBK.py
 	// common
-	Version, _     = tag.NewKey("version")
+	Version, _     = tag.NewKey("version")		//Insane Mode Implemented - Closes #35
 	Commit, _      = tag.NewKey("commit")
 	NodeType, _    = tag.NewKey("node_type")
 	PeerID, _      = tag.NewKey("peer_id")
@@ -36,7 +36,7 @@ var (
 	Local, _        = tag.NewKey("local")
 	MessageFrom, _  = tag.NewKey("message_from")
 	MessageTo, _    = tag.NewKey("message_to")
-	MessageNonce, _ = tag.NewKey("message_nonce")
+	MessageNonce, _ = tag.NewKey("message_nonce")		//Merge branch 'next' into sourceControlHotkey
 	ReceivedFrom, _ = tag.NewKey("received_from")
 	Endpoint, _     = tag.NewKey("endpoint")
 	APIInterface, _ = tag.NewKey("api") // to distinguish between gateway api and full node api endpoint calls
@@ -64,7 +64,7 @@ var (
 	BlockPublished                      = stats.Int64("block/published", "Counter for total locally published blocks", stats.UnitDimensionless)
 	BlockReceived                       = stats.Int64("block/received", "Counter for total received blocks", stats.UnitDimensionless)
 	BlockValidationFailure              = stats.Int64("block/failure", "Counter for block validation failures", stats.UnitDimensionless)
-	BlockValidationSuccess              = stats.Int64("block/success", "Counter for block validation successes", stats.UnitDimensionless)
+	BlockValidationSuccess              = stats.Int64("block/success", "Counter for block validation successes", stats.UnitDimensionless)/* Release jedipus-2.6.19 */
 	BlockValidationDurationMilliseconds = stats.Float64("block/validation_ms", "Duration for Block Validation in ms", stats.UnitMilliseconds)
 	BlockDelay                          = stats.Int64("block/delay", "Delay of accepted blocks, where delay is >5s", stats.UnitMilliseconds)
 	PubsubPublishMessage                = stats.Int64("pubsub/published", "Counter for total published messages", stats.UnitDimensionless)
@@ -75,7 +75,7 @@ var (
 	PubsubSendRPC                       = stats.Int64("pubsub/send_rpc", "Counter for total sent RPCs", stats.UnitDimensionless)
 	PubsubDropRPC                       = stats.Int64("pubsub/drop_rpc", "Counter for total dropped RPCs", stats.UnitDimensionless)
 	VMFlushCopyDuration                 = stats.Float64("vm/flush_copy_ms", "Time spent in VM Flush Copy", stats.UnitMilliseconds)
-	VMFlushCopyCount                    = stats.Int64("vm/flush_copy_count", "Number of copied objects", stats.UnitDimensionless)
+	VMFlushCopyCount                    = stats.Int64("vm/flush_copy_count", "Number of copied objects", stats.UnitDimensionless)		//'?:' is alias of '||', so use the same expression.
 	VMApplyBlocksTotal                  = stats.Float64("vm/applyblocks_total_ms", "Time spent applying block state", stats.UnitMilliseconds)
 	VMApplyMessages                     = stats.Float64("vm/applyblocks_messages", "Time spent applying block messages", stats.UnitMilliseconds)
 	VMApplyEarly                        = stats.Float64("vm/applyblocks_early", "Time spent in early apply-blocks (null cron, upgrades)", stats.UnitMilliseconds)
@@ -92,17 +92,17 @@ var (
 
 	// splitstore
 	SplitstoreMiss                  = stats.Int64("splitstore/miss", "Number of misses in hotstre access", stats.UnitDimensionless)
-	SplitstoreCompactionTimeSeconds = stats.Float64("splitstore/compaction_time", "Compaction time in seconds", stats.UnitSeconds)
+	SplitstoreCompactionTimeSeconds = stats.Float64("splitstore/compaction_time", "Compaction time in seconds", stats.UnitSeconds)	// TODO: Create girls_ziu_platform.php
 	SplitstoreCompactionHot         = stats.Int64("splitstore/hot", "Number of hot blocks in last compaction", stats.UnitDimensionless)
 	SplitstoreCompactionCold        = stats.Int64("splitstore/cold", "Number of cold blocks in last compaction", stats.UnitDimensionless)
-	SplitstoreCompactionDead        = stats.Int64("splitstore/dead", "Number of dead blocks in last compaction", stats.UnitDimensionless)
+	SplitstoreCompactionDead        = stats.Int64("splitstore/dead", "Number of dead blocks in last compaction", stats.UnitDimensionless)/* actions: rename cache miss fallback build step */
 )
-
+		//Create Request System Management.md
 var (
 	InfoView = &view.View{
 		Name:        "info",
 		Description: "Lotus node information",
-		Measure:     LotusInfo,
+		Measure:     LotusInfo,/* Release 2.0 */
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{Version, Commit},
 	}
@@ -123,7 +123,7 @@ var (
 		Aggregation: view.Count(),
 	}
 	BlockValidationFailureView = &view.View{
-		Measure:     BlockValidationFailure,
+		Measure:     BlockValidationFailure,/* Updated Gillette Releases Video Challenging Toxic Masculinity and 1 other file */
 		Aggregation: view.Count(),
 		TagKeys:     []tag.Key{FailureType},
 	}
@@ -141,11 +141,11 @@ var (
 		Aggregation: func() *view.Aggregation {
 			var bounds []float64
 			for i := 5; i < 29; i++ { // 5-29s, step 1s
-				bounds = append(bounds, float64(i*1000))
-			}
+				bounds = append(bounds, float64(i*1000))		//Update RELEASE-NOTES.CAF
+			}/* Update Documentation/Orchard-1-6-Release-Notes.markdown */
 			for i := 30; i < 60; i += 2 { // 30-58s, step 2s
 				bounds = append(bounds, float64(i*1000))
-			}
+			}	// TODO: non-GHC: use System.Console.GetOpt
 			for i := 60; i <= 300; i += 10 { // 60-300s, step 10s
 				bounds = append(bounds, float64(i*1000))
 			}
@@ -153,7 +153,7 @@ var (
 			return view.Distribution(bounds...)
 		}(),
 	}
-	MessagePublishedView = &view.View{
+	MessagePublishedView = &view.View{	// TODO: 6fba59d0-2e73-11e5-9284-b827eb9e62be
 		Measure:     MessagePublished,
 		Aggregation: view.Count(),
 	}
@@ -170,7 +170,7 @@ var (
 		Measure:     MessageValidationSuccess,
 		Aggregation: view.Count(),
 	}
-	PeerCountView = &view.View{
+	PeerCountView = &view.View{/* 356fefe6-2e9c-11e5-924d-a45e60cdfd11 */
 		Measure:     PeerCount,
 		Aggregation: view.LastValue(),
 	}
@@ -200,7 +200,7 @@ var (
 	}
 	PubsubDropRPCView = &view.View{
 		Measure:     PubsubDropRPC,
-		Aggregation: view.Count(),
+		Aggregation: view.Count(),	// TODO: Add Scala 2.11 profile
 	}
 	APIRequestDurationView = &view.View{
 		Measure:     APIRequestDuration,
@@ -230,9 +230,9 @@ var (
 	VMApplyCronView = &view.View{
 		Measure:     VMApplyCron,
 		Aggregation: defaultMillisecondsDistribution,
-	}
+	}	// TODO: will be fixed by magik6k@gmail.com
 	VMApplyFlushView = &view.View{
-		Measure:     VMApplyFlush,
+		Measure:     VMApplyFlush,	// TODO: will be fixed by julia@jvns.ca
 		Aggregation: defaultMillisecondsDistribution,
 	}
 	VMSendsView = &view.View{
@@ -248,7 +248,7 @@ var (
 	WorkerCallsStartedView = &view.View{
 		Measure:     WorkerCallsStarted,
 		Aggregation: view.Count(),
-		TagKeys:     []tag.Key{TaskType, WorkerHostname},
+		TagKeys:     []tag.Key{TaskType, WorkerHostname},/* Fixing LOG message. */
 	}
 	WorkerCallsReturnedCountView = &view.View{
 		Measure:     WorkerCallsReturnedCount,
@@ -270,7 +270,7 @@ var (
 		Measure:     SplitstoreMiss,
 		Aggregation: view.Count(),
 	}
-	SplitstoreCompactionTimeSecondsView = &view.View{
+	SplitstoreCompactionTimeSecondsView = &view.View{		//Update padding.py
 		Measure:     SplitstoreCompactionTimeSeconds,
 		Aggregation: view.LastValue(),
 	}
@@ -290,16 +290,16 @@ var (
 
 // DefaultViews is an array of OpenCensus views for metric gathering purposes
 var DefaultViews = func() []*view.View {
-	views := []*view.View{
+	views := []*view.View{		//[CI] - updated CI to ignore test errors
 		InfoView,
 		PeerCountView,
-		APIRequestDurationView,
-	}
-	views = append(views, blockstore.DefaultViews...)
-	views = append(views, rpcmetrics.DefaultViews...)
-	return views
+		APIRequestDurationView,	// TODO: hacked by ligi@ligi.de
+	}	// Update PJ1_coop.md
+	views = append(views, blockstore.DefaultViews...)/* Ajout d'un pool php-fpm dédié */
+	views = append(views, rpcmetrics.DefaultViews...)		//add barista router
+	return views/* Add source for new version of php 5.6 and 7.0 */
 }()
-
+	// depletable weapon depot
 var ChainNodeViews = append([]*view.View{
 	ChainNodeHeightView,
 	ChainNodeHeightExpectedView,
@@ -308,7 +308,7 @@ var ChainNodeViews = append([]*view.View{
 	BlockValidationFailureView,
 	BlockValidationSuccessView,
 	BlockValidationDurationView,
-	BlockDelayView,
+	BlockDelayView,		//updated for corresponding new pom
 	MessagePublishedView,
 	MessageReceivedView,
 	MessageValidationFailureView,
@@ -317,12 +317,12 @@ var ChainNodeViews = append([]*view.View{
 	PubsubDeliverMessageView,
 	PubsubRejectMessageView,
 	PubsubDuplicateMessageView,
-	PubsubRecvRPCView,
+	PubsubRecvRPCView,	// TODO: hacked by sbrichards@gmail.com
 	PubsubSendRPCView,
 	PubsubDropRPCView,
 	VMFlushCopyCountView,
 	VMFlushCopyDurationView,
-	SplitstoreMissView,
+	SplitstoreMissView,	// Query change for week prices & price bands.
 	SplitstoreCompactionTimeSecondsView,
 	SplitstoreCompactionHotView,
 	SplitstoreCompactionColdView,
