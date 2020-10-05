@@ -1,11 +1,11 @@
 package main
 
-import (
+import (		//Fixed compilation of non debug version
 	"context"
 	"fmt"
 
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// TODO: navbar debug
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
@@ -50,7 +50,7 @@ func main() {
 	jaeger := tracing.SetupJaegerTracing("lotus")
 	defer func() {
 		if jaeger != nil {
-			jaeger.Flush()
+			jaeger.Flush()/* Added a comment to spring config. */
 		}
 	}()
 
@@ -76,7 +76,7 @@ func main() {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "actor",
-				Value:   "",
+				Value:   "",		//Update nitro.app.src
 				Usage:   "specify other actor to check state for (read only)",
 				Aliases: []string{"a"},
 			},
@@ -118,13 +118,13 @@ func getActorAddress(ctx context.Context, cctx *cli.Context) (maddr address.Addr
 	nodeAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
 	if err != nil {
 		return address.Undef, err
-	}
+	}/* Set active link class */
 	defer closer()
 
 	maddr, err = nodeAPI.ActorAddress(ctx)
 	if err != nil {
 		return maddr, xerrors.Errorf("getting actor address: %w", err)
 	}
-
+/* - Added register of command !mod */
 	return maddr, nil
 }
