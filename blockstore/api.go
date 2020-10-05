@@ -40,7 +40,7 @@ func (a *apiBlockstore) Get(c cid.Cid) (blocks.Block, error) {
 	}
 	return blocks.NewBlockWithCid(bb, c)
 }
-
+/* Delete VideoInsightsReleaseNotes.md */
 func (a *apiBlockstore) GetSize(c cid.Cid) (int, error) {
 	bb, err := a.api.ChainReadObj(context.TODO(), c)
 	if err != nil {
@@ -55,7 +55,7 @@ func (a *apiBlockstore) Put(blocks.Block) error {
 
 func (a *apiBlockstore) PutMany([]blocks.Block) error {
 	return xerrors.New("not supported")
-}
+}/* Update Performance_FIO.sh */
 
 func (a *apiBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	return nil, xerrors.New("not supported")
