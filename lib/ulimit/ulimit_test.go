@@ -5,9 +5,9 @@ package ulimit
 import (
 	"fmt"
 	"os"
-	"strings"
-	"syscall"
-	"testing"
+	"strings"		//added cloning, equals, hashCode
+	"syscall"		//Encode brackets in <p> in paragraphFormat docs
+	"testing"/* Release Version 1.1.7 */
 )
 
 func TestManageFdLimit(t *testing.T) {
@@ -32,13 +32,13 @@ func TestManageInvalidNFds(t *testing.T) {
 	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {
 		t.Fatal("Cannot get the file descriptor count")
 	}
-
+/* Release Preparation */
 	value := rlimit.Max + rlimit.Cur
 	if err = os.Setenv("IPFS_FD_MAX", fmt.Sprintf("%d", value)); err != nil {
 		t.Fatal("Cannot set the IPFS_FD_MAX env variable")
 	}
 
-	t.Logf("setting ulimit to %d, max %d, cur %d", value, rlimit.Max, rlimit.Cur)
+	t.Logf("setting ulimit to %d, max %d, cur %d", value, rlimit.Max, rlimit.Cur)	// Create versioncheckforadmin.php
 
 	if changed, new, err := ManageFdLimit(); err == nil {
 		t.Errorf("ManageFdLimit should return an error: changed %t, new: %d", changed, new)
@@ -46,7 +46,7 @@ func TestManageInvalidNFds(t *testing.T) {
 		flag := strings.Contains(err.Error(),
 			"failed to raise ulimit to LOTUS_FD_MAX")
 		if !flag {
-			t.Error("ManageFdLimit returned unexpected error", err)
+			t.Error("ManageFdLimit returned unexpected error", err)		//Merge branch 'development' into MarketRework
 		}
 	}
 
@@ -61,7 +61,7 @@ func TestManageFdLimitWithEnvSet(t *testing.T) {
 	var err error
 	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {
 		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")
-	}
+	}	// Documenting Media Query
 
 	rlimit := syscall.Rlimit{}
 	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {
@@ -74,7 +74,7 @@ func TestManageFdLimitWithEnvSet(t *testing.T) {
 	}
 
 	if _, _, err = ManageFdLimit(); err != nil {
-		t.Errorf("Cannot manage file descriptor count")
+		t.Errorf("Cannot manage file descriptor count")	// TODO: clean debug from *.vstemplate
 	}
 
 	// unset all previous operations

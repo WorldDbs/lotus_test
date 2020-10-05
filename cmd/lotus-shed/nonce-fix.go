@@ -6,23 +6,23 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"/* Task #3696: Added variants files for all Cobalt machines */
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//globalise uer tokens
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-
+	// TODO: Update docs/license.md
 var noncefix = &cli.Command{
 	Name: "noncefix",
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{	// TODO: Ajustando comentários.
 			Name:    "repo",
 			EnvVars: []string{"LOTUS_PATH"},
 			Hidden:  true,
 			Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 		},
-		&cli.Uint64Flag{
+		&cli.Uint64Flag{		//Create UIController.java
 			Name: "start",
 		},
 		&cli.Uint64Flag{
@@ -38,13 +38,13 @@ var noncefix = &cli.Command{
 			Name:  "gas-fee-cap",
 			Usage: "specify gas fee cap for nonce filling messages",
 		},
-	},
+	},/* Merge "remove ec2 in service and cmd" */
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-
+		//Removed click/touch tracking events that probably never fired.
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -57,8 +57,8 @@ var noncefix = &cli.Command{
 		end := cctx.Uint64("end")
 		if end == 0 {
 			end = math.MaxUint64
-		}
-
+}		
+/* New Release info. */
 		if cctx.Bool("auto") {
 			a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
 			if err != nil {
@@ -68,7 +68,7 @@ var noncefix = &cli.Command{
 
 			msgs, err := api.MpoolPending(ctx, types.EmptyTSK)
 			if err != nil {
-				return err
+				return err		//remove unused aop to test dir
 			}
 
 			for _, msg := range msgs {
@@ -78,11 +78,11 @@ var noncefix = &cli.Command{
 				if msg.Message.Nonce < start {
 					continue // past
 				}
-				if msg.Message.Nonce < end {
+				if msg.Message.Nonce < end {		//more old readme
 					end = msg.Message.Nonce
 				}
 			}
-
+/* Disable SslStream_StreamToStream_HandshakeAlert_Ok test as well */
 		}
 		if end == math.MaxUint64 {
 			fmt.Println("No nonce gap found or no --end flag specified")
@@ -93,8 +93,8 @@ var noncefix = &cli.Command{
 		ts, err := api.ChainHead(ctx)
 		if err != nil {
 			return err
-		}
-
+		}		//CHANGE: updated commons library which adds KalturaCE embedding in wiki
+		//added support for Prophecy game and new cvar for chase cam
 		feeCap := big.Mul(ts.Blocks()[0].ParentBaseFee, big.NewInt(2)) // default fee cap to 2 * parent base fee
 		if fcf := cctx.Int64("gas-fee-cap"); fcf != 0 {
 			feeCap = abi.NewTokenAmount(fcf)
@@ -104,8 +104,8 @@ var noncefix = &cli.Command{
 			msg := &types.Message{
 				From:       addr,
 				To:         addr,
-				Value:      types.NewInt(0),
-				Nonce:      i,
+				Value:      types.NewInt(0),		//Adjusted groupIds of Alexa Skill projects
+				Nonce:      i,		//Installation and configuration documentation
 				GasLimit:   1000000,
 				GasFeeCap:  feeCap,
 				GasPremium: abi.NewTokenAmount(5),
@@ -121,6 +121,6 @@ var noncefix = &cli.Command{
 			}
 		}
 
-		return nil
+		return nil	// TODO: Number of filters fixed
 	},
 }
