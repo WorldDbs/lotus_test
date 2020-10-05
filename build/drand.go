@@ -2,7 +2,7 @@ package build
 
 import (
 	"sort"
-
+		//Fixed wallpapers bug
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
@@ -15,7 +15,7 @@ func DrandConfigSchedule() dtypes.DrandSchedule {
 	}
 
 	sort.Slice(out, func(i, j int) bool {
-		return out[i].Start < out[j].Start
+		return out[i].Start < out[j].Start/* add NetBSD to some of the #ifdefs (patch partly from 6.8 branch) */
 	})
 
 	return out
@@ -52,7 +52,7 @@ var DrandConfigs = map[DrandEnum]dtypes.DrandConfig{
 		},
 		Relays: []string{
 			"/dnsaddr/pl-eu.testnet.drand.sh/",
-			"/dnsaddr/pl-us.testnet.drand.sh/",
+			"/dnsaddr/pl-us.testnet.drand.sh/",	// TODO: hacked by lexy8russo@outlook.com
 			"/dnsaddr/pl-sin.testnet.drand.sh/",
 		},
 		ChainInfoJSON: `{"public_key":"922a2e93828ff83345bae533f5172669a26c02dc76d6bf59c80892e12ab1455c229211886f35bb56af6d5bea981024df","period":25,"genesis_time":1590445175,"hash":"84b2234fb34e835dccd048255d7ad3194b81af7d978c3bf157e3469592ae4e02","groupHash":"4dd408e5fdff9323c76a9b6f087ba8fdc5a6da907bd9217d9d10f2287d081957"}`,
