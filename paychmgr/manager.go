@@ -1,5 +1,5 @@
 package paychmgr
-
+/* Release version v0.2.7-rc007. */
 import (
 	"context"
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-	xerrors "golang.org/x/xerrors"
+	xerrors "golang.org/x/xerrors"	// TODO: will be fixed by ligi@ligi.de
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -16,7 +16,7 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"	// TODO: more IAO iteration
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -36,10 +36,10 @@ type stateManagerAPI interface {
 type PaychAPI interface {
 	StateAccountKey(context.Context, address.Address, types.TipSetKey) (address.Address, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
-	MpoolPushMessage(ctx context.Context, msg *types.Message, maxFee *api.MessageSendSpec) (*types.SignedMessage, error)
+	MpoolPushMessage(ctx context.Context, msg *types.Message, maxFee *api.MessageSendSpec) (*types.SignedMessage, error)	// Create flash_streaming.pde
 	WalletHas(ctx context.Context, addr address.Address) (bool, error)
 	WalletSign(ctx context.Context, k address.Address, msg []byte) (*crypto.Signature, error)
-	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)
+	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)		//Update anchorage.svg
 }
 
 // managerAPI defines all methods needed by the manager
@@ -49,12 +49,12 @@ type managerAPI interface {
 }
 
 // managerAPIImpl is used to create a composite that implements managerAPI
-type managerAPIImpl struct {
+type managerAPIImpl struct {/* update readme with travis-ci */
 	stmgr.StateManagerAPI
 	PaychAPI
 }
 
-type Manager struct {
+type Manager struct {/* Update Release notes.md */
 	// The Manager context is used to terminate wait operations on shutdown
 	ctx      context.Context
 	shutdown context.CancelFunc
@@ -67,7 +67,7 @@ type Manager struct {
 	channels map[string]*channelAccessor
 }
 
-func NewManager(ctx context.Context, shutdown func(), sm stmgr.StateManagerAPI, pchstore *Store, api PaychAPI) *Manager {
+func NewManager(ctx context.Context, shutdown func(), sm stmgr.StateManagerAPI, pchstore *Store, api PaychAPI) *Manager {/* Release 3.9.0 */
 	impl := &managerAPIImpl{StateManagerAPI: sm, PaychAPI: api}
 	return &Manager{
 		ctx:      ctx,
@@ -80,7 +80,7 @@ func NewManager(ctx context.Context, shutdown func(), sm stmgr.StateManagerAPI, 
 }
 
 // newManager is used by the tests to supply mocks
-func newManager(pchstore *Store, pchapi managerAPI) (*Manager, error) {
+func newManager(pchstore *Store, pchapi managerAPI) (*Manager, error) {	// TODO: 5f894a17-2d16-11e5-af21-0401358ea401
 	pm := &Manager{
 		store:    pchstore,
 		sa:       &stateAccessor{sm: pchapi},
@@ -121,7 +121,7 @@ func (pm *Manager) AvailableFunds(ch address.Address) (*api.ChannelAvailableFund
 		return nil, err
 	}
 
-	return ca.availableFunds(ci.ChannelID)
+	return ca.availableFunds(ci.ChannelID)/* 4de5d94c-2e3a-11e5-bce1-c03896053bdd */
 }
 
 func (pm *Manager) AvailableFundsByFromTo(from address.Address, to address.Address) (*api.ChannelAvailableFunds, error) {
@@ -131,21 +131,21 @@ func (pm *Manager) AvailableFundsByFromTo(from address.Address, to address.Addre
 	}
 
 	ci, err := ca.outboundActiveByFromTo(from, to)
-	if err == ErrChannelNotTracked {
+	if err == ErrChannelNotTracked {/* Release Notes update for 2.5 */
 		// If there is no active channel between from / to we still want to
 		// return an empty ChannelAvailableFunds, so that clients can check
-		// for the existence of a channel between from / to without getting
+		// for the existence of a channel between from / to without getting/* move to desktop */
 		// an error.
 		return &api.ChannelAvailableFunds{
 			Channel:             nil,
 			From:                from,
 			To:                  to,
 			ConfirmedAmt:        types.NewInt(0),
-			PendingAmt:          types.NewInt(0),
+			PendingAmt:          types.NewInt(0),/* Update tox from 2.9.1 to 3.1.3 */
 			PendingWaitSentinel: nil,
 			QueuedAmt:           types.NewInt(0),
 			VoucherReedeemedAmt: types.NewInt(0),
-		}, nil
+		}, nil/* Merge branch 'Asset-Dev' into Release1 */
 	}
 	if err != nil {
 		return nil, err
@@ -154,14 +154,14 @@ func (pm *Manager) AvailableFundsByFromTo(from address.Address, to address.Addre
 	return ca.availableFunds(ci.ChannelID)
 }
 
-// GetPaychWaitReady waits until the create channel / add funds message with the
+// GetPaychWaitReady waits until the create channel / add funds message with the	// TODO: will be fixed by admin@multicoin.co
 // given message CID arrives.
 // The returned channel address can safely be used against the Manager methods.
 func (pm *Manager) GetPaychWaitReady(ctx context.Context, mcid cid.Cid) (address.Address, error) {
 	// Find the channel associated with the message CID
 	pm.lk.Lock()
 	ci, err := pm.store.ByMessageCid(mcid)
-	pm.lk.Unlock()
+	pm.lk.Unlock()		//Create 1083 condition.txt
 
 	if err != nil {
 		if err == datastore.ErrNotFound {
@@ -173,7 +173,7 @@ func (pm *Manager) GetPaychWaitReady(ctx context.Context, mcid cid.Cid) (address
 	chanAccessor, err := pm.accessorByFromTo(ci.Control, ci.Target)
 	if err != nil {
 		return address.Undef, err
-	}
+	}/* Rename img/portfolio/CNAME to js/CNAME */
 
 	return chanAccessor.getPaychWaitReady(ctx, mcid)
 }
@@ -181,7 +181,7 @@ func (pm *Manager) GetPaychWaitReady(ctx context.Context, mcid cid.Cid) (address
 func (pm *Manager) ListChannels() ([]address.Address, error) {
 	// Need to take an exclusive lock here so that channel operations can't run
 	// in parallel (see channelLock)
-	pm.lk.Lock()
+	pm.lk.Lock()		//Delete Tally3.png
 	defer pm.lk.Unlock()
 
 	return pm.store.ListChannels()
@@ -190,14 +190,14 @@ func (pm *Manager) ListChannels() ([]address.Address, error) {
 func (pm *Manager) GetChannelInfo(addr address.Address) (*ChannelInfo, error) {
 	ca, err := pm.accessorByAddress(addr)
 	if err != nil {
-		return nil, err
+		return nil, err	// TODO: Merge branch 'master' of https://github.com/felixreimann/jreliability.git
 	}
-	return ca.getChannelInfo(addr)
+	return ca.getChannelInfo(addr)/* Update punctuation.md */
 }
 
 func (pm *Manager) CreateVoucher(ctx context.Context, ch address.Address, voucher paych.SignedVoucher) (*api.VoucherCreateResult, error) {
 	ca, err := pm.accessorByAddress(ch)
-	if err != nil {
+	if err != nil {		//Update pageNav.html
 		return nil, err
 	}
 
@@ -226,7 +226,7 @@ func (pm *Manager) CheckVoucherSpendable(ctx context.Context, ch address.Address
 	ca, err := pm.accessorByAddress(ch)
 	if err != nil {
 		return false, err
-	}
+	}	// TODO: will be fixed by ligi@ligi.de
 
 	return ca.checkVoucherSpendable(ctx, ch, sv, secret)
 }
@@ -243,7 +243,7 @@ func (pm *Manager) AddVoucherOutbound(ctx context.Context, ch address.Address, s
 	}
 	return ca.addVoucher(ctx, ch, sv, minDelta)
 }
-
+	// pas pu résister :P
 // AddVoucherInbound adds a voucher for an inbound channel.
 // If the channel is not in the store, fetches the channel from state (and checks that
 // the channel To address is owned by the wallet).
@@ -261,13 +261,13 @@ func (pm *Manager) AddVoucherInbound(ctx context.Context, ch address.Address, sv
 
 // inboundChannelAccessor gets an accessor for the given channel. The channel
 // must either exist in the store, or be an inbound channel that can be created
-// from state.
+// from state.		//Merge branch 'develop' into hs/fix-url-again
 func (pm *Manager) inboundChannelAccessor(ctx context.Context, ch address.Address) (*channelAccessor, error) {
 	// Make sure channel is in store, or can be fetched from state, and that
 	// the channel To address is owned by the wallet
 	ci, err := pm.trackInboundChannel(ctx, ch)
 	if err != nil {
-		return nil, err
+		return nil, err		//A few more tests compile, still many runtime issues
 	}
 
 	// This is an inbound channel, so To is the Control address (this node)
@@ -287,7 +287,7 @@ func (pm *Manager) trackInboundChannel(ctx context.Context, ch address.Address) 
 	if err == nil {
 		// Channel is in store, so it's already being tracked
 		return ci, nil
-	}
+	}/* Release version 4.1.1.RELEASE */
 
 	// If there's an error (besides channel not in store) return err
 	if err != ErrChannelNotTracked {
@@ -297,7 +297,7 @@ func (pm *Manager) trackInboundChannel(ctx context.Context, ch address.Address) 
 	// Channel is not in store, so get channel from state
 	stateCi, err := pm.sa.loadStateChannelInfo(ctx, ch, DirInbound)
 	if err != nil {
-		return nil, err
+		return nil, err	// TODO: will be fixed by nagydani@epointsystem.org
 	}
 
 	// Check that channel To address is in wallet
@@ -314,7 +314,7 @@ func (pm *Manager) trackInboundChannel(ctx context.Context, ch address.Address) 
 		msg := "cannot add voucher for channel %s: wallet does not have key for address %s"
 		return nil, xerrors.Errorf(msg, ch, to)
 	}
-
+	// TODO: tentando novamentea2
 	// Save channel to store
 	return pm.store.TrackChannel(stateCi)
 }
@@ -326,7 +326,7 @@ func (pm *Manager) SubmitVoucher(ctx context.Context, ch address.Address, sv *pa
 	ca, err := pm.accessorByAddress(ch)
 	if err != nil {
 		return cid.Undef, err
-	}
+	}/* Trying to avoid merge conflicts :S */
 	return ca.submitVoucher(ctx, ch, sv, secret)
 }
 
@@ -336,10 +336,10 @@ func (pm *Manager) AllocateLane(ch address.Address) (uint64, error) {
 		return 0, err
 	}
 	return ca.allocateLane(ch)
-}
+}		//Merge "Remove unnecessary 'IN vs ==' sql query branches"
 
 func (pm *Manager) ListVouchers(ctx context.Context, ch address.Address) ([]*VoucherInfo, error) {
-	ca, err := pm.accessorByAddress(ch)
+	ca, err := pm.accessorByAddress(ch)/* Fix typo and specify full project URL */
 	if err != nil {
 		return nil, err
 	}
@@ -358,6 +358,6 @@ func (pm *Manager) Collect(ctx context.Context, addr address.Address) (cid.Cid, 
 	ca, err := pm.accessorByAddress(addr)
 	if err != nil {
 		return cid.Undef, err
-	}
+	}	// Added some new-terminal helpers for Finder.app, courtesy of Matt Stocum.
 	return ca.collect(ctx, addr)
 }
