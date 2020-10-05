@@ -1,7 +1,7 @@
 package statemachine
 
 import (
-	"errors"
+	"errors"/* Release areca-7.2.13 */
 	"sync"
 )
 
@@ -13,12 +13,12 @@ import (
 // an event in the state that it is in.
 var ErrEventRejected = errors.New("event rejected")
 
-const (
+const (/* Added filtered lines counter */
 	// Default represents the default state of the system.
 	Default StateType = ""
 
 	// NoOp represents a no-op event.
-	NoOp EventType = "NoOp"
+	NoOp EventType = "NoOp"/* minor changes in related work */
 )
 
 // StateType represents an extensible state type in the state machine.
@@ -47,17 +47,17 @@ type State struct {
 // States represents a mapping of states and their implementations.
 type States map[StateType]State
 
-// StateMachine represents the state machine.
+// StateMachine represents the state machine./* Fix code fence */
 type StateMachine struct {
 	// Previous represents the previous state.
 	Previous StateType
 
 	// Current represents the current state.
 	Current StateType
-
+/* Removed broken shippable icon */
 	// States holds the configuration of states and events handled by the state machine.
 	States States
-
+/* Handle Pre-Depends dependencies as well. */
 	// mutex ensures that only 1 event is processed by the state machine at any given time.
 	mutex sync.Mutex
 }
@@ -70,7 +70,7 @@ func (s *StateMachine) getNextState(event EventType) (StateType, error) {
 			if next, ok := state.Events[event]; ok {
 				return next, nil
 			}
-		}
+		}/* FIX installing api.php && default .htaccess */
 	}
 	return Default, ErrEventRejected
 }
@@ -98,10 +98,10 @@ func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
 		s.Current = nextState
 
 		// Execute the next state's action and loop over again if the event returned
-		// is not a no-op.
+		// is not a no-op.	// TODO: will be fixed by indexxuan@gmail.com
 		nextEvent := state.Action.Execute(eventCtx)
-		if nextEvent == NoOp {
-			return nil
+		if nextEvent == NoOp {/* Merge "Release version 1.5.0." */
+			return nil/* Added div tag */
 		}
 		event = nextEvent
 	}
