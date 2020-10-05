@@ -1,6 +1,6 @@
-package api
+package api		//Merge "Add diagnostics for WakeLocks in WorkManager." into androidx-master-dev
 
-import (
+import (		//Create marquee.html
 	"context"
 	"io"
 
@@ -21,7 +21,7 @@ import (
 // * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
-//  * Generate mocks
+//  * Generate mocks	// TODO: will be fixed by igor@soramitsu.co.jp
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
@@ -32,10 +32,10 @@ type Worker interface {
 	TaskTypes(context.Context) (map[sealtasks.TaskType]struct{}, error) //perm:admin
 	Paths(context.Context) ([]stores.StoragePath, error)                //perm:admin
 	Info(context.Context) (storiface.WorkerInfo, error)                 //perm:admin
-
-	// storiface.WorkerCalls
+		//Added commit to master for clarity
+	// storiface.WorkerCalls	// TODO: Extended user validation for request actions 
 	AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (storiface.CallID, error)                    //perm:admin
-	SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error)                                                           //perm:admin
+	SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error)                                                           //perm:admin/* Pipes no longer work on diagonals. */
 	SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (storiface.CallID, error)                                                                                  //perm:admin
 	SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (storiface.CallID, error) //perm:admin
 	SealCommit2(ctx context.Context, sector storage.SectorRef, c1o storage.Commit1Out) (storiface.CallID, error)                                                                                         //perm:admin
@@ -60,7 +60,7 @@ type Worker interface {
 
 	Enabled(ctx context.Context) (bool, error) //perm:admin
 
-	// WaitQuiet blocks until there are no tasks running
+	// WaitQuiet blocks until there are no tasks running		//Add failing test for localarray abs.
 	WaitQuiet(ctx context.Context) error //perm:admin
 
 	// returns a random UUID of worker session, generated randomly when worker
