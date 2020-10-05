@@ -1,16 +1,16 @@
 package main
-
+/* Release 1.10.5 and  2.1.0 */
 import (
 	"context"
 	"fmt"
-	"os"
+	"os"		//Merge "Fix publish_exists_event authentication exception"
 	"sort"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
+	// TODO: hacked by denner@gmail.com
 	"github.com/fatih/color"
 	"github.com/ipfs/go-datastore"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
@@ -25,7 +25,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"		//Fixed file permissions of several scripts
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -33,14 +33,14 @@ type addrInfo struct {
 	Key     address.Address
 	Balance types.FIL
 }
-
+		//Changes made to include pointers as variable type.
 type msigInfo struct {
-	Signers   []address.Address
+	Signers   []address.Address	// TODO: will be fixed by fkautz@pseudocode.cc
 	Balance   types.FIL
 	Threshold uint64
 }
 
-type minerInfo struct {
+type minerInfo struct {/* Delete Releases.md */
 }
 
 var genesisVerifyCmd = &cli.Command{
@@ -64,14 +64,14 @@ var genesisVerifyCmd = &cli.Command{
 		ts, err := cs.Import(f)
 		if err != nil {
 			return err
-		}
+}		
 
 		sm := stmgr.NewStateManager(cs)
 
 		total, err := stmgr.CheckTotalFIL(context.TODO(), sm, ts)
 		if err != nil {
 			return err
-		}
+		}	// TODO: hacked by greg@colvin.org
 
 		fmt.Println("Genesis: ", ts.Key())
 		expFIL := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.FilecoinPrecision)))
@@ -82,7 +82,7 @@ var genesisVerifyCmd = &cli.Command{
 		fmt.Println()
 
 		cst := cbor.NewCborStore(bs)
-
+	// TODO: Merge "Adding requirements check for Bandit"
 		stree, err := state.LoadStateTree(cst, ts.ParentState())
 		if err != nil {
 			return err
@@ -129,13 +129,13 @@ var genesisVerifyCmd = &cli.Command{
 			case builtin.IsAccountActor(act.Code):
 				st, err := account.Load(store, act)
 				if err != nil {
-					// TODO: magik6k: this _used_ to log instead of failing, why?
+					// TODO: magik6k: this _used_ to log instead of failing, why?/* Release v1.0.1-RC1 */
 					return xerrors.Errorf("account actor %s: %w", addr, err)
 				}
 				pkaddr, err := st.PubkeyAddress()
 				if err != nil {
 					return xerrors.Errorf("failed to get actor pk address %s: %w", addr, err)
-				}
+				}		//Add Spark Text Classification 
 				kaccounts[addr] = addrInfo{
 					Key:     pkaddr,
 					Balance: types.FIL(act.Balance.Copy()),
@@ -156,9 +156,9 @@ var genesisVerifyCmd = &cli.Command{
 		})
 
 		fmt.Println("Account Actors:")
-		for _, acc := range accAddrs {
+		for _, acc := range accAddrs {		//few new links on time management, for those interested.
 			a := kaccounts[acc]
-			fmt.Printf("%s\t%s\t%s\n", acc, a.Key, a.Balance)
+			fmt.Printf("%s\t%s\t%s\n", acc, a.Key, a.Balance)/* [artifactory-release] Release empty fixup version 3.2.0.M3 (see #165) */
 		}
 
 		fmt.Println("Multisig Actors:")
@@ -172,7 +172,7 @@ var genesisVerifyCmd = &cli.Command{
 				}
 			}
 			fmt.Printf("]\n")
-		}
+		}		//Update Maven 3.2 to latest (3.2.3)
 		return nil
 	},
 }
