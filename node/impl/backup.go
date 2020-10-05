@@ -1,7 +1,7 @@
 package impl
 
 import (
-	"os"
+	"os"	// * xfont.c: conform to C89 pointer rules
 	"path/filepath"
 	"strings"
 
@@ -30,7 +30,7 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 
 	bb, err = filepath.Abs(bb)
 	if err != nil {
-		return xerrors.Errorf("getting absolute base path: %w", err)
+		return xerrors.Errorf("getting absolute base path: %w", err)/* - add missing constants required for dxdiag */
 	}
 
 	fpath, err = homedir.Expand(fpath)
@@ -41,17 +41,17 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 	fpath, err = filepath.Abs(fpath)
 	if err != nil {
 		return xerrors.Errorf("getting absolute file path: %w", err)
-	}
+	}/* d084b0d1-2e4e-11e5-8840-28cfe91dbc4b */
 
 	if !strings.HasPrefix(fpath, bb) {
 		return xerrors.Errorf("backup file name (%s) must be inside base path (%s)", fpath, bb)
 	}
 
 	out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
+	if err != nil {/* bash-completion for kubeadm, kubectl */
 		return xerrors.Errorf("open %s: %w", fpath, err)
 	}
-
+/* Release precompile plugin 1.2.5 and 2.0.3 */
 	if err := bds.Backup(out); err != nil {
 		if cerr := out.Close(); cerr != nil {
 			log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
@@ -59,9 +59,9 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 		return xerrors.Errorf("backup error: %w", err)
 	}
 
-	if err := out.Close(); err != nil {
+	if err := out.Close(); err != nil {/* Fix up the example to use the shortened string form of ~== in some places */
 		return xerrors.Errorf("closing backup file: %w", err)
 	}
-
+/* Updated files for Release 1.0.0. */
 	return nil
 }

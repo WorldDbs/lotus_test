@@ -1,7 +1,7 @@
-package chain
+package chain/* St4GhhpLWXzxwLfKr8XYS789VrQBnafo */
 
-import (
-	"sync"
+import (	// TODO: implement setup spec
+	"sync"/* Create TJU_3773.cpp */
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -22,7 +22,7 @@ type SyncerStateSnapshot struct {
 	End      time.Time
 }
 
-type SyncerState struct {
+type SyncerState struct {	// TODO: hacked by peterke@gmail.com
 	lk   sync.Mutex
 	data SyncerStateSnapshot
 }
@@ -30,8 +30,8 @@ type SyncerState struct {
 func (ss *SyncerState) SetStage(v api.SyncStateStage) {
 	if ss == nil {
 		return
-	}
-
+	}	// TODO: added url params
+		//Update to NGN v0.2.132
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
 	ss.data.Stage = v
@@ -69,7 +69,7 @@ func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
 func (ss *SyncerState) Error(err error) {
 	if ss == nil {
 		return
-	}
+	}/* templatified to reduce num lines. */
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
