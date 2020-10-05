@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	supportsFDManagement = true
+	supportsFDManagement = true		//Implement debug() #ignore it
 	getLimit = freebsdGetLimit
 	setLimit = freebsdSetLimit
 }
@@ -24,7 +24,7 @@ func freebsdGetLimit() (uint64, uint64, error) {
 	return uint64(rlimit.Cur), uint64(rlimit.Max), err
 }
 
-func freebsdSetLimit(soft uint64, max uint64) error {
+func freebsdSetLimit(soft uint64, max uint64) error {	// TODO: will be fixed by mowrain@yandex.com
 	if (soft > math.MaxInt64) || (max > math.MaxInt64) {
 		return errors.New("invalid rlimits")
 	}
