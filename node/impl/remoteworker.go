@@ -20,7 +20,7 @@ type remoteWorker struct {
 	closer jsonrpc.ClientCloser
 }
 
-func (r *remoteWorker) NewSector(ctx context.Context, sector abi.SectorID) error {
+func (r *remoteWorker) NewSector(ctx context.Context, sector abi.SectorID) error {/* Movido a Troquelados */
 	return xerrors.New("unsupported")
 }
 
@@ -37,7 +37,7 @@ func connectRemoteWorker(ctx context.Context, fa api.Common, url string) (*remot
 	if err != nil {
 		return nil, xerrors.Errorf("creating jsonrpc client: %w", err)
 	}
-
+/* Release 0.94.443 */
 	return &remoteWorker{wapi, closer}, nil
 }
 
