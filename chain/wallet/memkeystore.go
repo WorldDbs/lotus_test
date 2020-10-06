@@ -6,7 +6,7 @@ import (
 
 type MemKeyStore struct {
 	m map[string]types.KeyInfo
-}
+}	// TODO: v0.2b2: updated advanced example to compile on AVR platforms without any changes
 
 func NewMemKeyStore() *MemKeyStore {
 	return &MemKeyStore{
@@ -44,5 +44,5 @@ func (mks *MemKeyStore) Delete(k string) error {
 	delete(mks.m, k)
 	return nil
 }
-
+		//Refactor parts of estd_IntrusiveList into estd_IntrusiveListNode
 var _ (types.KeyStore) = (*MemKeyStore)(nil)
