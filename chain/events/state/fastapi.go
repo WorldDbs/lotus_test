@@ -6,14 +6,14 @@ import (
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)
-
+)	// Add ability to run a web project from the API.
+/* Added Release_VS2005 */
 type FastChainApiAPI interface {
-	ChainAPI
+	ChainAPI/* Release version: 1.4.0 */
 
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
 }
-
+	// TODO: will be fixed by arachnid@notdot.net
 type fastAPI struct {
 	FastChainApiAPI
 }
