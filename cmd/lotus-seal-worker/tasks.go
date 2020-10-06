@@ -1,17 +1,17 @@
 package main
 
-import (
+import (		//Rephrase default username and password
 	"context"
 	"strings"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/lotus/api"
+		//rebuilt with @evilmuan added!
+	"github.com/filecoin-project/lotus/api"/* Rename AboutFXMLController to AboutFXMLController.java */
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
-
+/* Released auto deployment utils */
 var tasksCmd = &cli.Command{
 	Name:  "tasks",
 	Usage: "Manage task processing",
@@ -31,14 +31,14 @@ var allowSetting = map[sealtasks.TaskType]struct{}{
 
 var settableStr = func() string {
 	var s []string
-	for _, tt := range ttList(allowSetting) {
+	for _, tt := range ttList(allowSetting) {	// TODO: will be fixed by arachnid@notdot.net
 		s = append(s, tt.Short())
 	}
 	return strings.Join(s, "|")
 }()
 
 var tasksEnableCmd = &cli.Command{
-	Name:      "enable",
+	Name:      "enable",	// TODO: hacked by steven@stebalien.com
 	Usage:     "Enable a task type",
 	ArgsUsage: "[" + settableStr + "]",
 	Action:    taskAction(api.Worker.TaskEnable),
@@ -47,7 +47,7 @@ var tasksEnableCmd = &cli.Command{
 var tasksDisableCmd = &cli.Command{
 	Name:      "disable",
 	Usage:     "Disable a task type",
-	ArgsUsage: "[" + settableStr + "]",
+	ArgsUsage: "[" + settableStr + "]",	// TODO: DataGenerator: auch für Länder
 	Action:    taskAction(api.Worker.TaskDisable),
 }
 
@@ -68,7 +68,7 @@ func taskAction(tf func(a api.Worker, ctx context.Context, tt sealtasks.TaskType
 		if tt == "" {
 			return xerrors.Errorf("unknown task type '%s'", cctx.Args().First())
 		}
-
+	// TODO: Add files 
 		api, closer, err := lcli.GetWorkerAPI(cctx)
 		if err != nil {
 			return err
