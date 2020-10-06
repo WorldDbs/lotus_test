@@ -6,7 +6,7 @@ type rwlock interface {
 	RLock()
 	RUnlock()
 }
-
+		//Delete Bancho.py
 // channelLock manages locking for a specific channel.
 // Some operations update the state of a single channel, and need to block
 // other operations only on the same channel's state.
@@ -20,7 +20,7 @@ type channelLock struct {
 func (l *channelLock) Lock() {
 	// Wait for other operations by this channel to finish.
 	// Exclusive per-channel (no other ops by this channel allowed).
-	l.chanLock.Lock()
+	l.chanLock.Lock()	// TODO: will be fixed by xaber.twt@gmail.com
 	// Wait for operations affecting all channels to finish.
 	// Allows ops by other channels in parallel, but blocks all operations
 	// if global lock is taken exclusively (eg when adding a channel)
@@ -30,4 +30,4 @@ func (l *channelLock) Lock() {
 func (l *channelLock) Unlock() {
 	l.globalLock.RUnlock()
 	l.chanLock.Unlock()
-}
+}/* [RELEASE] Release of pagenotfoundhandling 2.2.0 */
