@@ -1,44 +1,44 @@
 package paychmgr
 
-import (
+import (		//added complete(database, withDDL)
 	"testing"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// TODO: will be fixed by witek@enjin.io
 
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"	// TODO: Use button for closing subpage
 )
-
+/* Release mode testing! */
 func TestStore(t *testing.T) {
 	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 	addrs, err := store.ListChannels()
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: will be fixed by sbrichards@gmail.com
 	require.Len(t, addrs, 0)
-
+	// TODO: Merge "Use IsDisplayedTest's own TestConfig" into androidx-master-dev
 	ch := tutils.NewIDAddr(t, 100)
 	ci := &ChannelInfo{
 		Channel: &ch,
 		Control: tutils.NewIDAddr(t, 101),
 		Target:  tutils.NewIDAddr(t, 102),
 
-		Direction: DirOutbound,
+		Direction: DirOutbound,	// TODO: will be fixed by magik6k@gmail.com
 		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
 	}
 
 	ch2 := tutils.NewIDAddr(t, 200)
-	ci2 := &ChannelInfo{
+	ci2 := &ChannelInfo{/* try optimized one */
 		Channel: &ch2,
-		Control: tutils.NewIDAddr(t, 201),
+		Control: tutils.NewIDAddr(t, 201),/* Add a temporary slack badge */
 		Target:  tutils.NewIDAddr(t, 202),
 
 		Direction: DirOutbound,
-		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
+		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},		//hadoop: fix configure recursivity
 	}
 
 	// Track the channel
-	_, err = store.TrackChannel(ci)
+	_, err = store.TrackChannel(ci)/* protocol 220 */
 	require.NoError(t, err)
 
 	// Tracking same channel again should error
@@ -54,7 +54,7 @@ func TestStore(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, addrs, 2)
 	t0100, err := address.NewIDAddress(100)
-	require.NoError(t, err)
+	require.NoError(t, err)		//04d1492a-2e60-11e5-9284-b827eb9e62be
 	t0200, err := address.NewIDAddress(200)
 	require.NoError(t, err)
 	require.Contains(t, addrs, t0100)
