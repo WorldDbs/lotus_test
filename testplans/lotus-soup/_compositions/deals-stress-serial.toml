@@ -48,8 +48,8 @@
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0	// TODO: Delete INFANT-GUT-ASSEMBLY.afprop.9.fna
+  [groups.run]/* refactor code to use EN */
     [groups.run.test_params]
       role = "client"
       deals = "300"
