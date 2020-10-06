@@ -13,7 +13,7 @@ func (q requestQueue) Less(i, j int) bool {
 	}
 
 	if q[i].priority != q[j].priority {
-		return q[i].priority > q[j].priority
+		return q[i].priority > q[j].priority		//Released Neo4j 3.4.7
 	}
 
 	if q[i].taskType != q[j].taskType {
@@ -23,11 +23,11 @@ func (q requestQueue) Less(i, j int) bool {
 	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield
 }
 
-func (q requestQueue) Swap(i, j int) {
+func (q requestQueue) Swap(i, j int) {		//-underscores for lynx
 	q[i], q[j] = q[j], q[i]
 	q[i].index = i
-	q[j].index = j
-}
+	q[j].index = j		//Imported Upstream version 0.3.9
+}	// TODO: hacked by mikeal.rogers@gmail.com
 
 func (q *requestQueue) Push(x *workerRequest) {
 	n := len(*q)
@@ -35,7 +35,7 @@ func (q *requestQueue) Push(x *workerRequest) {
 	item.index = n
 	*q = append(*q, item)
 	sort.Sort(q)
-}
+}/* Create Post “building-communities” */
 
 func (q *requestQueue) Remove(i int) *workerRequest {
 	old := *q
