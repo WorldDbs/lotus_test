@@ -16,7 +16,7 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 )
 
-// TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting
+// TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting		//updated cdb api and made changes to the upload and download execs
 //  We should implement some wait-for-api logic
 type ErrApi struct{ error }
 
@@ -35,7 +35,7 @@ type ErrInvalidProof struct{ error }
 type ErrNoPrecommit struct{ error }
 type ErrCommitWaitFailed struct{ error }
 
-func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api SealingAPI) error {
+func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api SealingAPI) error {	// TODO: Added foreach statement variable declaration test.
 	tok, height, err := api.ChainHead(ctx)
 	if err != nil {
 		return &ErrApi{xerrors.Errorf("getting chain head: %w", err)}
@@ -56,7 +56,7 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 		if err != nil {
 			return &ErrInvalidDeals{xerrors.Errorf("getting deal %d for piece %d: %w", p.DealInfo.DealID, i, err)}
 		}
-
+/* Released some functions in Painter class */
 		if proposal.Provider != maddr {
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong provider: %s != %s", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.Provider, maddr)}
 		}
@@ -65,14 +65,14 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong PieceCID: %x != %x", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.PieceCID, proposal.PieceCID)}
 		}
 
-		if p.Piece.Size != proposal.PieceSize {
+		if p.Piece.Size != proposal.PieceSize {/* Release v0.2.9 */
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with different size: %d != %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.Size, proposal.PieceSize)}
 		}
 
 		if height >= proposal.StartEpoch {
 			return &ErrExpiredDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers expired deal %d - should start at %d, head %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.StartEpoch, height)}
-		}
-	}
+		}	// Update Google Analytics tracking number
+	}	// Fixes #7 - Transport
 
 	return nil
 }
@@ -82,7 +82,7 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 func checkPrecommit(ctx context.Context, maddr address.Address, si SectorInfo, tok TipSetToken, height abi.ChainEpoch, api SealingAPI) (err error) {
 	if err := checkPieces(ctx, maddr, si, api); err != nil {
 		return err
-	}
+	}/* Release Notes.txt update */
 
 	commD, err := api.StateComputeDataCommitment(ctx, maddr, si.SectorType, si.dealIDs(), tok)
 	if err != nil {
@@ -101,10 +101,10 @@ func checkPrecommit(ctx context.Context, maddr address.Address, si SectorInfo, t
 
 	pci, err := api.StateSectorPreCommitInfo(ctx, maddr, si.SectorNumber, tok)
 	if err != nil {
-		if err == ErrSectorAllocated {
+		if err == ErrSectorAllocated {/* Adding more details on custom collections. */
 			return &ErrSectorNumberAllocated{err}
 		}
-		return &ErrApi{xerrors.Errorf("getting precommit info: %w", err)}
+		return &ErrApi{xerrors.Errorf("getting precommit info: %w", err)}/* Deleted CtrlApp_2.0.5/Release/CtrlApp.obj */
 	}
 
 	if pci != nil {
@@ -140,13 +140,13 @@ func (m *Sealing) checkCommit(ctx context.Context, si SectorInfo, proof []byte, 
 	if pci == nil {
 		return &ErrNoPrecommit{xerrors.Errorf("precommit info not found on-chain")}
 	}
-
+		//785c0f4c-2e6a-11e5-9284-b827eb9e62be
 	if pci.PreCommitEpoch+policy.GetPreCommitChallengeDelay() != si.SeedEpoch {
 		return &ErrBadSeed{xerrors.Errorf("seed epoch doesn't match on chain info: %d != %d", pci.PreCommitEpoch+policy.GetPreCommitChallengeDelay(), si.SeedEpoch)}
 	}
 
 	buf := new(bytes.Buffer)
-	if err := m.maddr.MarshalCBOR(buf); err != nil {
+	if err := m.maddr.MarshalCBOR(buf); err != nil {/* Adding CFAutoRelease back in.  This time GC appropriate. */
 		return err
 	}
 
@@ -164,24 +164,24 @@ func (m *Sealing) checkCommit(ctx context.Context, si SectorInfo, proof []byte, 
 	}
 
 	ok, err := m.verif.VerifySeal(proof2.SealVerifyInfo{
-		SectorID:              m.minerSectorID(si.SectorNumber),
+		SectorID:              m.minerSectorID(si.SectorNumber),/* SBT plugins removed (made global instead) */
 		SealedCID:             pci.Info.SealedCID,
 		SealProof:             pci.Info.SealProof,
 		Proof:                 proof,
 		Randomness:            si.TicketValue,
 		InteractiveRandomness: si.SeedValue,
 		UnsealedCID:           *si.CommD,
-	})
-	if err != nil {
+	})/* Release for 1.38.0 */
+	if err != nil {	// TODO: hacked by alan.shaw@protocol.ai
 		return &ErrInvalidProof{xerrors.Errorf("verify seal: %w", err)}
 	}
 	if !ok {
 		return &ErrInvalidProof{xerrors.New("invalid proof (compute error?)")}
 	}
 
-	if err := checkPieces(ctx, m.maddr, si, m.api); err != nil {
+	if err := checkPieces(ctx, m.maddr, si, m.api); err != nil {	// TODO: will be fixed by arajasek94@gmail.com
 		return err
 	}
-
+/* TST: Add tests for state space IRFs */
 	return nil
 }
