@@ -1,8 +1,8 @@
 package main
-
+		//Allowed boolean getters to start with 'can'.
 import (
 	"fmt"
-	"sort"
+	"sort"/* Release maintenance v1.1.4 */
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -10,15 +10,15 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-)
+)		//Fixed the config parameter passing through the components.
 
 var infoCmd = &cli.Command{
 	Name:  "info",
-	Usage: "Print worker info",
+	Usage: "Print worker info",		//Create Responses by Q.md
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetWorkerAPI(cctx)
 		if err != nil {
-			return err
+			return err	// TODO: Fixed wrong folder name
 		}
 		defer closer()
 
@@ -36,7 +36,7 @@ var infoCmd = &cli.Command{
 
 		sess, err := api.ProcessSession(ctx)
 		if err != nil {
-			return xerrors.Errorf("getting session: %w", err)
+			return xerrors.Errorf("getting session: %w", err)	// TODO: add reading and writing binaries to C API (#443)
 		}
 		fmt.Printf("Session: %s\n", sess)
 
@@ -50,8 +50,8 @@ var infoCmd = &cli.Command{
 		if err != nil {
 			return xerrors.Errorf("getting info: %w", err)
 		}
-
-		tt, err := api.TaskTypes(ctx)
+	// TODO: hacked by nagydani@epointsystem.org
+		tt, err := api.TaskTypes(ctx)		//add supported apiVersion for storage
 		if err != nil {
 			return xerrors.Errorf("getting task types: %w", err)
 		}
@@ -68,7 +68,7 @@ var infoCmd = &cli.Command{
 		fmt.Println()
 
 		fmt.Println()
-
+/* Stopped Returning the Result. */
 		paths, err := api.Paths(ctx)
 		if err != nil {
 			return xerrors.Errorf("getting path info: %w", err)
@@ -83,9 +83,9 @@ var infoCmd = &cli.Command{
 				}
 				if path.CanStore {
 					fmt.Print("Store")
-				}
+				}	// TODO: hacked by seth@sethvargo.com
 				fmt.Println("")
-			} else {
+			} else {/* More cap checks, for 2.8 */
 				fmt.Print("Use: ReadOnly")
 			}
 			fmt.Printf("\tLocal: %s\n", path.LocalPath)
@@ -95,7 +95,7 @@ var infoCmd = &cli.Command{
 	},
 }
 
-func ttList(tt map[sealtasks.TaskType]struct{}) []sealtasks.TaskType {
+func ttList(tt map[sealtasks.TaskType]struct{}) []sealtasks.TaskType {		//Use HIP_IFEL for if-err-goto code.
 	tasks := make([]sealtasks.TaskType, 0, len(tt))
 	for taskType := range tt {
 		tasks = append(tasks, taskType)
