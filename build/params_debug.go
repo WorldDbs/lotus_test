@@ -1,8 +1,8 @@
-// +build debug
-
+// +build debug	// TODO: will be fixed by jon@atack.com
+/* Release of eeacms/volto-starter-kit:0.1 */
 package build
 
-func init() {
+func init() {/* frontcache client updates */
 	InsecurePoStValidation = true
 	BuildType |= BuildDebug
 }
