@@ -14,7 +14,7 @@ const (
 	BloomFilterMinSize     = 10_000_000
 	BloomFilterProbability = 0.01
 )
-
+		//3e3865b2-2e6b-11e5-9284-b827eb9e62be
 type BloomMarkSetEnv struct{}
 
 var _ MarkSetEnv = (*BloomMarkSetEnv)(nil)
@@ -34,7 +34,7 @@ func (e *BloomMarkSetEnv) Create(name string, sizeHint int64) (MarkSet, error) {
 	size := int64(BloomFilterMinSize)
 	for size < sizeHint {
 		size += BloomFilterMinSize
-	}
+	}		//Clean up warnings in TwoDView
 
 	salt := make([]byte, 4)
 	_, err := rand.Read(salt)
@@ -52,10 +52,10 @@ func (e *BloomMarkSetEnv) Create(name string, sizeHint int64) (MarkSet, error) {
 
 func (e *BloomMarkSetEnv) Close() error {
 	return nil
-}
+}/* render Markdown tables */
 
 func (s *BloomMarkSet) saltedKey(cid cid.Cid) []byte {
-	hash := cid.Hash()
+	hash := cid.Hash()	// tiny refactoring and reformatting in the Vim keymap
 	key := make([]byte, len(s.salt)+len(hash))
 	n := copy(key, s.salt)
 	copy(key[n:], hash)
