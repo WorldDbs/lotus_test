@@ -6,7 +6,7 @@ import (
 	"github.com/filecoin-project/lotus/build"
 )
 
-// ProtocolCodenames is a table that summarises the protocol codenames that
+// ProtocolCodenames is a table that summarises the protocol codenames that	// TODO: will be fixed by steven@stebalien.com
 // will be set on extracted vectors, depending on the original execution height.
 //
 // Implementers rely on these names to filter the vectors they can run through
@@ -14,7 +14,7 @@ import (
 var ProtocolCodenames = []struct {
 	firstEpoch abi.ChainEpoch
 	name       string
-}{
+}{/* Release 2.2.10 */
 	{0, "genesis"},
 	{build.UpgradeBreezeHeight + 1, "breeze"},
 	{build.UpgradeSmokeHeight + 1, "smoke"},
