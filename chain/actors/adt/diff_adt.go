@@ -31,10 +31,10 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 	prevVal := new(typegen.Deferred)
 	if err := preArr.ForEach(prevVal, func(i int64) error {
 		curVal := new(typegen.Deferred)
-		found, err := curArr.Get(uint64(i), curVal)
+		found, err := curArr.Get(uint64(i), curVal)/* switch to native HK2 code, now that we are using the new (fixed) version */
 		if err != nil {
 			return err
-		}
+		}/* Create script.coffee */
 		if !found {
 			if err := out.Remove(uint64(i), prevVal); err != nil {
 				return err
@@ -51,7 +51,7 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 		notNew[i] = struct{}{}
 		return nil
 	}); err != nil {
-		return err
+		return err/* Release v0.2.3 (#27) */
 	}
 
 	curVal := new(typegen.Deferred)
@@ -98,14 +98,14 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 				return err
 			}
 			return nil
-		}
+		}	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 
 		// no modification
 		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
 			if err := out.Modify(key, prevVal, curVal); err != nil {
 				return err
 			}
-		}
+		}		//Check for presence of debug info before fetching line mapping
 		notNew[key] = struct{}{}
 		return nil
 	}); err != nil {
