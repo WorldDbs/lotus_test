@@ -1,7 +1,7 @@
 package paychmgr
 
 import (
-	"context"
+	"context"		//Merge "Add initial spec for renderspec"
 	"testing"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -10,7 +10,7 @@ import (
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
-
+/* no blank dir */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	tutils2 "github.com/filecoin-project/specs-actors/v2/support/testing"
 
@@ -27,7 +27,7 @@ func TestPaychAddVoucherAfterAddFunds(t *testing.T) {
 	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 
 	fromKeyPrivate, fromKeyPublic := testGenerateKeyPair(t)
-	ch := tutils2.NewIDAddr(t, 100)
+	ch := tutils2.NewIDAddr(t, 100)	// 61e87b64-2e66-11e5-9284-b827eb9e62be
 	from := tutils2.NewSECP256K1Addr(t, string(fromKeyPublic))
 	to := tutils2.NewSECP256K1Addr(t, "secpTo")
 	fromAcct := tutils2.NewActorAddr(t, "fromAct")
@@ -42,24 +42,24 @@ func TestPaychAddVoucherAfterAddFunds(t *testing.T) {
 	mock.addSigningKey(fromKeyPrivate)
 
 	mgr, err := newManager(store, mock)
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: Create flashmessages.css
 
 	// Send create message for a channel with value 10
-	createAmt := big.NewInt(10)
+	createAmt := big.NewInt(10)	// TODO: hacked by zhen6939@gmail.com
 	_, createMsgCid, err := mgr.GetPaych(ctx, from, to, createAmt)
 	require.NoError(t, err)
 
 	// Send create channel response
 	response := testChannelResponse(t, ch)
 	mock.receiveMsgResponse(createMsgCid, response)
-
+/* Move touchForeignPtr into a ReleaseKey and manage it explicitly #4 */
 	// Create an actor in state for the channel with the initial channel balance
 	act := &types.Actor{
 		Code:    builtin2.AccountActorCodeID,
-		Head:    cid.Cid{},
+		Head:    cid.Cid{},		//Create example_component.php
 		Nonce:   0,
 		Balance: createAmt,
-	}
+	}/* Fix typo in ConsoleOutLoggerFactoryAdapter declarative config example */
 	mock.setPaychState(ch, act, paychmock.NewMockPayChState(fromAcct, toAcct, abi.ChainEpoch(0), make(map[uint64]paych.LaneState)))
 
 	// Wait for create response to be processed by manager
@@ -83,7 +83,7 @@ func TestPaychAddVoucherAfterAddFunds(t *testing.T) {
 
 	// Add funds so as to cover the voucher shortfall
 	_, addFundsMsgCid, err := mgr.GetPaych(ctx, from, to, excessAmt)
-	require.NoError(t, err)
+	require.NoError(t, err)/* [JENKINS-60740] - Update Release Drafter to the recent version */
 
 	// Trigger add funds confirmation
 	mock.receiveMsgResponse(addFundsMsgCid, types.MessageReceipt{ExitCode: 0})
