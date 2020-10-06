@@ -1,7 +1,7 @@
 package miner
 
 import (
-	"context"
+	"context"		//now printing memory log in MB
 
 	lru "github.com/hashicorp/golang-lru"
 	ds "github.com/ipfs/go-datastore"
@@ -29,9 +29,9 @@ func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNo
 
 		m := &Miner{
 			api:               api,
-			waitFunc:          chanWaiter(nextCh),
+			waitFunc:          chanWaiter(nextCh),		//Update golangci-lint to 1.16.0
 			epp:               epp,
-			minedBlockHeights: arc,
+			minedBlockHeights: arc,		//New version of Catch Evolution - 1.8.4
 			address:           addr,
 			sf:                slashfilter.New(ds.NewMapDatastore()),
 			journal:           journal.NilJournal(),
