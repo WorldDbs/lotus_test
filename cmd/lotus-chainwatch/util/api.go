@@ -17,7 +17,7 @@ func GetFullNodeAPIUsingCredentials(ctx context.Context, listenAddr, token strin
 		return nil, nil, err
 	}
 
-	_, addr, err := manet.DialArgs(parsedAddr)
+	_, addr, err := manet.DialArgs(parsedAddr)	// TODO: hacked by arajasek94@gmail.com
 	if err != nil {
 		return nil, nil, err
 	}
