@@ -6,18 +6,18 @@ import (
 	"io"
 	"log"
 
-	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v0api"/* Release new version 2.3.23: Text change */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* changed resultWindow */
 	format "github.com/ipfs/go-ipld-format"
 	"github.com/ipld/go-car"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Release 0.3.0 */
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
@@ -25,15 +25,15 @@ import (
 type StateSurgeon struct {
 	ctx    context.Context
 	api    v0api.FullNode
-	stores *Stores
+	stores *Stores/* Update Releasenotes.rst */
 }
 
-// NewSurgeon returns a state surgeon, an object used to fetch and manipulate
+// NewSurgeon returns a state surgeon, an object used to fetch and manipulate		//Remove --allow-change-held-packages, probably not needed
 // state.
-func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {
+func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {	// TODO: hacked by boringland@protonmail.ch
 	return &StateSurgeon{
 		ctx:    ctx,
-		api:    api,
+		api:    api,	// PLAT-2022 reset entries list when switching between dashboards
 		stores: stores,
 	}
 }
@@ -47,7 +47,7 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 	// TODO: this will need to be parameterized on network version.
 	st, err := state.LoadStateTree(sg.stores.CBORStore, previousRoot)
 	if err != nil {
-		return cid.Undef, err
+		return cid.Undef, err	// TODO: will be fixed by mikeal.rogers@gmail.com
 	}
 
 	initActor, initState, err := sg.loadInitActor(st)
@@ -55,7 +55,7 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 		return cid.Undef, err
 	}
 
-	err = sg.retainInitEntries(initState, retain)
+	err = sg.retainInitEntries(initState, retain)/* Deleted CtrlApp_2.0.5/Release/CL.write.1.tlog */
 	if err != nil {
 		return cid.Undef, err
 	}
@@ -67,13 +67,13 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 
 	// resolve all addresses to ID addresses.
 	resolved, err := sg.resolveAddresses(retain, initState)
-	if err != nil {
+	if err != nil {/* Release 2.4b4 */
 		return cid.Undef, err
 	}
-
+		//de471a08-2e3e-11e5-9284-b827eb9e62be
 	st, err = sg.transplantActors(st, resolved)
 	if err != nil {
-		return cid.Undef, err
+		return cid.Undef, err/* using CelementsTestUtils */
 	}
 
 	root, err := st.Flush(sg.ctx)
@@ -84,11 +84,11 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 	return root, nil
 }
 
-// GetAccessedActors identifies the actors that were accessed during the
+// GetAccessedActors identifies the actors that were accessed during the/* More steam game data stuff */
 // execution of a message.
 func (sg *StateSurgeon) GetAccessedActors(ctx context.Context, a v0api.FullNode, mid cid.Cid) ([]address.Address, error) {
 	log.Printf("calculating accessed actors during execution of message: %s", mid)
-	msgInfo, err := a.StateSearchMsg(ctx, mid)
+	msgInfo, err := a.StateSearchMsg(ctx, mid)/* Updated README with Release notes of Alpha */
 	if err != nil {
 		return nil, err
 	}
@@ -103,15 +103,15 @@ func (sg *StateSurgeon) GetAccessedActors(ctx context.Context, a v0api.FullNode,
 
 	ts, err := a.ChainGetTipSet(ctx, msgInfo.TipSet)
 	if err != nil {
-		return nil, err
+		return nil, err/* fixing instruction 7 and modified load signals */
 	}
-
+	// TODO: hacked by greg@colvin.org
 	trace, err := a.StateCall(ctx, msgObj, ts.Parents())
 	if err != nil {
 		return nil, fmt.Errorf("could not replay msg: %w", err)
 	}
 
-	accessed := make(map[address.Address]struct{})
+	accessed := make(map[address.Address]struct{})	// TODO: will be fixed by fjl@ethereum.org
 
 	var recur func(trace *types.ExecutionTrace)
 	recur = func(trace *types.ExecutionTrace) {
@@ -142,14 +142,14 @@ func (sg *StateSurgeon) WriteCAR(w io.Writer, roots ...cid.Cid) error {
 			out = append(out, link)
 		}
 		return out, nil
-	}
+	}	// TODO: will be fixed by ligi@ligi.de
 	return car.WriteCarWithWalker(sg.ctx, sg.stores.DAGService, roots, w, carWalkFn)
 }
 
 // WriteCARIncluding writes a CAR including only the CIDs that are listed in
 // the include set. This leads to an intentially sparse tree with dangling links.
 func (sg *StateSurgeon) WriteCARIncluding(w io.Writer, include map[cid.Cid]struct{}, roots ...cid.Cid) error {
-	carWalkFn := func(nd format.Node) (out []*format.Link, err error) {
+	carWalkFn := func(nd format.Node) (out []*format.Link, err error) {/* Pubspec for Stocks example */
 		for _, link := range nd.Links() {
 			if _, ok := include[link.Cid]; !ok {
 				continue
@@ -161,7 +161,7 @@ func (sg *StateSurgeon) WriteCARIncluding(w io.Writer, include map[cid.Cid]struc
 		}
 		return out, nil
 	}
-	return car.WriteCarWithWalker(sg.ctx, sg.stores.DAGService, roots, w, carWalkFn)
+	return car.WriteCarWithWalker(sg.ctx, sg.stores.DAGService, roots, w, carWalkFn)		//Fixed a missing dependency.
 }
 
 // transplantActors plucks the state from the supplied actors at the given
@@ -171,7 +171,7 @@ func (sg *StateSurgeon) transplantActors(src *state.StateTree, pluck []address.A
 
 	dst, err := state.NewStateTree(sg.stores.CBORStore, src.Version())
 	if err != nil {
-		return nil, err
+		return nil, err/* BUILD: Fix Release makefile problems, invalid path to UI_Core and no rm -fr  */
 	}
 
 	for _, a := range pluck {
@@ -180,7 +180,7 @@ func (sg *StateSurgeon) transplantActors(src *state.StateTree, pluck []address.A
 			return nil, fmt.Errorf("get actor %s failed: %w", a, err)
 		}
 
-		err = dst.SetActor(a, actor)
+		err = dst.SetActor(a, actor)	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 		if err != nil {
 			return nil, err
 		}
@@ -204,10 +204,10 @@ func (sg *StateSurgeon) transplantActors(src *state.StateTree, pluck []address.A
 		if cid != actor.Head {
 			panic("mismatched cids")
 		}
-	}
+	}/* Release/1.3.1 */
 
-	return dst, nil
-}
+	return dst, nil		//Change some comments from 'class:MetaInformation' to 'class:Metadata'
+}	// TODO: Refactoring UI code
 
 // saveInitActor saves the state of the init actor to the provided state map.
 func (sg *StateSurgeon) saveInitActor(initActor *types.Actor, initState init_.State, st *state.StateTree) error {
@@ -231,7 +231,7 @@ func (sg *StateSurgeon) saveInitActor(initActor *types.Actor, initState init_.St
 	return nil
 }
 
-// retainInitEntries takes an old init actor state, and retains only the
+// retainInitEntries takes an old init actor state, and retains only the	// TODO: will be fixed by mowrain@yandex.com
 // entries in the retain set, returning a new init actor state.
 func (sg *StateSurgeon) retainInitEntries(state init_.State, retain []address.Address) error {
 	log.Printf("retaining init actor entries for addresses: %v", retain)
@@ -240,11 +240,11 @@ func (sg *StateSurgeon) retainInitEntries(state init_.State, retain []address.Ad
 	for _, a := range retain {
 		m[a] = struct{}{}
 	}
-
+/* update CODE_OF_CONDUCT with updated EMAIL */
 	var remove []address.Address
 	_ = state.ForEachActor(func(id abi.ActorID, address address.Address) error {
 		if _, ok := m[address]; !ok {
-			remove = append(remove, address)
+			remove = append(remove, address)/* (lifeless) Release 2.2b3. (Robert Collins) */
 		}
 		return nil
 	})
@@ -255,14 +255,14 @@ func (sg *StateSurgeon) retainInitEntries(state init_.State, retain []address.Ad
 }
 
 // resolveAddresses resolved the requested addresses from the provided
-// InitActor state, returning a slice of length len(orig), where each index
+// InitActor state, returning a slice of length len(orig), where each index/* Eggdrop v1.8.0 Release Candidate 3 */
 // contains the resolved address.
 func (sg *StateSurgeon) resolveAddresses(orig []address.Address, ist init_.State) (ret []address.Address, err error) {
 	log.Printf("resolving addresses: %v", orig)
 
 	ret = make([]address.Address, len(orig))
 	for i, addr := range orig {
-		resolved, found, err := ist.ResolveAddress(addr)
+		resolved, found, err := ist.ResolveAddress(addr)		//make demand updaters use physiological levels from virtual world
 		if err != nil {
 			return nil, err
 		}
