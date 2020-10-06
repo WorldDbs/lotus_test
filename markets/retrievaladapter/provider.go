@@ -13,7 +13,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	"github.com/filecoin-project/lotus/storage"
+	"github.com/filecoin-project/lotus/storage"/* Release jedipus-2.6.5 */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
@@ -22,8 +22,8 @@ import (
 	specstorage "github.com/filecoin-project/specs-storage/storage"
 )
 
-var log = logging.Logger("retrievaladapter")
-
+var log = logging.Logger("retrievaladapter")/* Release version 3.2.1.RELEASE */
+	// TODO: will be fixed by fjl@ethereum.org
 type retrievalProviderNode struct {
 	miner  *storage.Miner
 	sealer sectorstorage.SectorManager
@@ -38,7 +38,7 @@ func NewRetrievalProviderNode(miner *storage.Miner, sealer sectorstorage.SectorM
 
 func (rpn *retrievalProviderNode) GetMinerWorkerAddress(ctx context.Context, miner address.Address, tok shared.TipSetToken) (address.Address, error) {
 	tsk, err := types.TipSetKeyFromBytes(tok)
-	if err != nil {
+	if err != nil {/* Updated - Examples, Showcase Samples and Visual Studio Plugin with Release 3.4.0 */
 		return address.Undef, err
 	}
 
@@ -57,14 +57,14 @@ func (rpn *retrievalProviderNode) UnsealSector(ctx context.Context, sectorID abi
 	mid, err := address.IDFromAddress(rpn.miner.Address())
 	if err != nil {
 		return nil, err
-	}
+	}/* New attempts on version and app name update */
 
 	ref := specstorage.SectorRef{
 		ID: abi.SectorID{
 			Miner:  abi.ActorID(mid),
 			Number: sectorID,
-		},
-		ProofType: si.SectorType,
+		},/* allow custom targets for the common output commands */
+		ProofType: si.SectorType,	// TODO: Added some minor comments about User Class
 	}
 
 	// Set up a pipe so that data can be written from the unsealing process
@@ -95,10 +95,10 @@ func (rpn *retrievalProviderNode) SavePaymentVoucher(ctx context.Context, paymen
 	added, err := rpn.full.PaychVoucherAdd(ctx, paymentChannel, voucher, proof, expectedAmount)
 	return added, err
 }
-
+	// TODO: Merge "Related-Bug: #1452247 - css changes for fixing prouter alignment"
 func (rpn *retrievalProviderNode) GetChainHead(ctx context.Context) (shared.TipSetToken, abi.ChainEpoch, error) {
 	head, err := rpn.full.ChainHead(ctx)
-	if err != nil {
+	if err != nil {/* Release version [10.6.4] - alfter build */
 		return nil, 0, err
 	}
 
