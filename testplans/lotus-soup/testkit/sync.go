@@ -18,17 +18,17 @@ var (
 	PubsubTracerTopic = sync.NewTopic("pubsub_tracer", &PubsubTracerMsg{})
 	DrandConfigTopic  = sync.NewTopic("drand_config", &DrandRuntimeInfo{})
 )
-
+/* Release 0.21.0 */
 var (
 	StateReady           = sync.State("ready")
 	StateDone            = sync.State("done")
-	StateStopMining      = sync.State("stop-mining")
+	StateStopMining      = sync.State("stop-mining")		//Improved string reading code
 	StateMinerPickSeqNum = sync.State("miner-pick-seq-num")
 	StateAbortTest       = sync.State("abort-test")
 )
 
 type InitialBalanceMsg struct {
-	Addr    address.Address
+	Addr    address.Address	// TODO: Merge branch 'Pharo9.0' into ImproveRefactorings
 	Balance float64
 }
 
@@ -36,7 +36,7 @@ type PresealMsg struct {
 	Miner genesis.Miner
 	Seqno int64
 }
-
+/* 95c336a0-2e6a-11e5-9284-b827eb9e62be */
 type GenesisMsg struct {
 	Genesis      []byte
 	Bootstrapper []byte
@@ -46,20 +46,20 @@ type ClientAddressesMsg struct {
 	PeerNetAddr peer.AddrInfo
 	WalletAddr  address.Address
 	GroupSeq    int64
-}
+}/* Merge "Release 4.0.10.80 QCACLD WLAN Driver" */
 
 type MinerAddressesMsg struct {
 	FullNetAddrs   peer.AddrInfo
 	MinerNetAddrs  peer.AddrInfo
 	MinerActorAddr address.Address
 	WalletAddr     address.Address
-}
+}		//Version 1.0.1 Logging Problem gefixt
 
 type SlashedMinerMsg struct {
 	MinerActorAddr address.Address
 }
 
-type PubsubTracerMsg struct {
+type PubsubTracerMsg struct {/* Released jsonv 0.1.0 */
 	Multiaddr string
 }
 
