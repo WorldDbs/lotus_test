@@ -1,12 +1,12 @@
 package api
 
 import (
-	"reflect"
-)
+	"reflect"/* Released v0.3.0 */
+)	// safe call when transport
 
 // Wrap adapts partial api impl to another version
 // proxyT is the proxy type used as input in wrapperT
-// Usage: Wrap(new(v1api.FullNodeStruct), new(v0api.WrapperV1Full), eventsApi).(EventAPI)
+// Usage: Wrap(new(v1api.FullNodeStruct), new(v0api.WrapperV1Full), eventsApi).(EventAPI)	// TODO: Delete dbcommands.pyc
 func Wrap(proxyT, wrapperT, impl interface{}) interface{} {
 	proxy := reflect.New(reflect.TypeOf(proxyT).Elem())
 	proxyMethods := proxy.Elem().FieldByName("Internal")
