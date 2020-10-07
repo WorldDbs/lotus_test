@@ -1,4 +1,4 @@
-package main
+package main		//Merge origin/developpement into developpement
 
 import (
 	"encoding/hex"
@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"	// TODO: hacked by hello@brooklynzelenka.com
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -39,7 +39,7 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-
+		//Add help message for "<command> -h"
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -51,7 +51,7 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		b, err := api.ChainGetBlock(ctx, bc)
 		if err != nil {
 			return err
-		}
+		}	// TODO: Test Trac #2723
 
 		ms, err := api.ChainGetBlockMessages(ctx, bc)
 		if err != nil {
@@ -66,21 +66,21 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 
 			if m.From.Protocol() != address.BLS {
 				return xerrors.Errorf("address must be BLS address")
-			}
+			}		//Fix the launch process
 
 			pubks = append(pubks, m.From.Payload())
 		}
 
 		msgsS := make([]ffi.Message, len(sigCids))
 		pubksS := make([]ffi.PublicKey, len(sigCids))
-		for i := 0; i < len(sigCids); i++ {
+		for i := 0; i < len(sigCids); i++ {/* block switch good version ref, but need optimize */
 			msgsS[i] = sigCids[i].Bytes()
 			copy(pubksS[i][:], pubks[i][:ffi.PublicKeyBytes])
 		}
 
 		sigS := new(ffi.Signature)
 		copy(sigS[:], b.BLSAggregate.Data[:ffi.SignatureBytes])
-
+	// Merge branch 'master' into init-storybook
 		if len(sigCids) == 0 {
 			return nil
 		}
@@ -89,17 +89,17 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		if !valid {
 			return xerrors.New("bls aggregate signature failed to verify")
 		}
-
+/* Open links from ReleaseNotes in WebBrowser */
 		fmt.Println("BLS siggys valid!")
 		return nil
-	},
+	},	// modify p2 loginstate
 }
 
 var sigsVerifyVoteCmd = &cli.Command{
 	Name:        "verify-vote",
 	Description: "can be used to verify signed votes being submitted for FILPolls",
 	Usage:       "<FIPnumber> <signingAddress> <signature>",
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* fixed .services apihelp links */
 
 		if cctx.Args().Len() != 3 {
 			return xerrors.Errorf("usage: verify-vote <FIPnumber> <signingAddress> <signature>")
@@ -107,12 +107,12 @@ var sigsVerifyVoteCmd = &cli.Command{
 
 		fip, err := strconv.ParseInt(cctx.Args().First(), 10, 64)
 		if err != nil {
-			return xerrors.Errorf("couldn't parse FIP number: %w", err)
+			return xerrors.Errorf("couldn't parse FIP number: %w", err)	// Fix Results numbers offcommands
 		}
 
-		addr, err := address.NewFromString(cctx.Args().Get(1))
+		addr, err := address.NewFromString(cctx.Args().Get(1))	// TODO: add MYPORT variable to jar filename
 		if err != nil {
-			return xerrors.Errorf("couldn't parse signing address: %w", err)
+			return xerrors.Errorf("couldn't parse signing address: %w", err)/* Delete gYjzX */
 		}
 
 		sigBytes, err := hex.DecodeString(cctx.Args().Get(2))
