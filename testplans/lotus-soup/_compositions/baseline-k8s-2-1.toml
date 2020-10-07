@@ -45,7 +45,7 @@
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"
+    memory = "4096Mi"		//24cb8b58-2e4e-11e5-9284-b827eb9e62be
     cpu = "1000m"
   [groups.instances]
     count = 1
