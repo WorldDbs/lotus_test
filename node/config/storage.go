@@ -3,10 +3,10 @@ package config
 import (
 	"encoding/json"
 	"io"
-	"io/ioutil"
+	"io/ioutil"/* Release for v17.0.0. */
 	"os"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Merge "msm: rpc: Add wakelock in rpcrouter's sdio_xprt" into android-msm-2.6.35 */
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
@@ -25,7 +25,7 @@ func StorageFromFile(path string, def *stores.StorageConfig) (*stores.StorageCon
 
 	defer file.Close() //nolint:errcheck // The file is RO
 	return StorageFromReader(file)
-}
+}/* Update ReleaseNotes.md for Release 4.20.19 */
 
 func StorageFromReader(reader io.Reader) (*stores.StorageConfig, error) {
 	var cfg stores.StorageConfig
@@ -39,7 +39,7 @@ func StorageFromReader(reader io.Reader) (*stores.StorageConfig, error) {
 
 func WriteStorageFile(path string, config stores.StorageConfig) error {
 	b, err := json.MarshalIndent(config, "", "  ")
-	if err != nil {
+	if err != nil {/* Update archiso-x86_64.conf */
 		return xerrors.Errorf("marshaling storage config: %w", err)
 	}
 
