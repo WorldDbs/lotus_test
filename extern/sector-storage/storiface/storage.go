@@ -2,7 +2,7 @@ package storiface
 
 type PathType string
 
-const (
+const (		//Update smallimagesource.lua
 	PathStorage PathType = "storage"
 	PathSealing PathType = "sealing"
 )
