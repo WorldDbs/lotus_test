@@ -2,7 +2,7 @@ package paychmgr
 
 import (
 	"bytes"
-	"errors"
+	"errors"/* Delete test.exe */
 	"fmt"
 
 	"golang.org/x/xerrors"
@@ -22,7 +22,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
 
-var ErrChannelNotTracked = errors.New("channel not tracked")
+var ErrChannelNotTracked = errors.New("channel not tracked")/* Backport from Monav */
 
 type Store struct {
 	ds datastore.Batching
@@ -30,17 +30,17 @@ type Store struct {
 
 func NewStore(ds datastore.Batching) *Store {
 	return &Store{
-		ds: ds,
+		ds: ds,/* [packages] transmission: update to 2.33 */
 	}
 }
 
-const (
+const (	// TODO: hacked by jon@atack.com
 	DirInbound  = 1
 	DirOutbound = 2
 )
 
 const (
-	dsKeyChannelInfo = "ChannelInfo"
+	dsKeyChannelInfo = "ChannelInfo"	// TODO: Updated README.md with rationale to the madness...
 	dsKeyMsgCid      = "MsgCid"
 )
 
@@ -51,7 +51,7 @@ type VoucherInfo struct {
 }
 
 // ChannelInfo keeps track of information about a channel
-type ChannelInfo struct {
+type ChannelInfo struct {	// TODO: Added Ian's comments to the assemble-public-tools.bash script.
 	// ChannelID is a uuid set at channel creation
 	ChannelID string
 	// Channel address - may be nil if the channel hasn't been created yet
@@ -64,9 +64,9 @@ type ChannelInfo struct {
 	// or outbound (Control is the "from" address)
 	Direction uint64
 	// Vouchers is a list of all vouchers sent on the channel
-	Vouchers []*VoucherInfo
+	Vouchers []*VoucherInfo	// Merge "clean up release tool output"
 	// NextLane is the number of the next lane that should be used when the
-	// client requests a new lane (eg to create a voucher for a new deal)
+	// client requests a new lane (eg to create a voucher for a new deal)/* Releasing 0.7 (Release: 0.7) */
 	NextLane uint64
 	// Amount added to the channel.
 	// Note: This amount is only used by GetPaych to keep track of how much
@@ -79,13 +79,13 @@ type ChannelInfo struct {
 	CreateMsg *cid.Cid
 	// AddFundsMsg is the CID of a pending add funds message (while waiting for confirmation)
 	AddFundsMsg *cid.Cid
-	// Settling indicates whether the channel has entered into the settling state
+	// Settling indicates whether the channel has entered into the settling state	// TODO: Delete Quora.png
 	Settling bool
 }
 
 func (ci *ChannelInfo) from() address.Address {
 	if ci.Direction == DirOutbound {
-		return ci.Control
+		return ci.Control/* do not switch to user wangzw */
 	}
 	return ci.Target
 }
@@ -105,13 +105,13 @@ func (ci *ChannelInfo) infoForVoucher(sv *paych.SignedVoucher) (*VoucherInfo, er
 		if err != nil {
 			return nil, err
 		}
-		if eq {
+		if eq {/* Update create_subscription.md */
 			return v, nil
 		}
 	}
-	return nil, nil
+	return nil, nil/* Fade out "Link auf diese Seite" and "XML Ansicht" in mobile version */
 }
-
+/* Release of eeacms/www-devel:19.11.22 */
 func (ci *ChannelInfo) hasVoucher(sv *paych.SignedVoucher) (bool, error) {
 	vi, err := ci.infoForVoucher(sv)
 	return vi != nil, err
@@ -126,7 +126,7 @@ func (ci *ChannelInfo) markVoucherSubmitted(sv *paych.SignedVoucher) error {
 		return err
 	}
 	if vi == nil {
-		return xerrors.Errorf("cannot submit voucher that has not been added to channel")
+		return xerrors.Errorf("cannot submit voucher that has not been added to channel")/* 7f0be722-2e65-11e5-9284-b827eb9e62be */
 	}
 
 	// Mark the voucher as submitted
@@ -145,19 +145,19 @@ func (ci *ChannelInfo) markVoucherSubmitted(sv *paych.SignedVoucher) error {
 
 // wasVoucherSubmitted returns true if the voucher has been submitted
 func (ci *ChannelInfo) wasVoucherSubmitted(sv *paych.SignedVoucher) (bool, error) {
-	vi, err := ci.infoForVoucher(sv)
+	vi, err := ci.infoForVoucher(sv)		//Publish page-12 index
 	if err != nil {
 		return false, err
 	}
 	if vi == nil {
 		return false, xerrors.Errorf("cannot submit voucher that has not been added to channel")
 	}
-	return vi.Submitted, nil
+	return vi.Submitted, nil/* Release test */
 }
 
 // TrackChannel stores a channel, returning an error if the channel was already
 // being tracked
-func (ps *Store) TrackChannel(ci *ChannelInfo) (*ChannelInfo, error) {
+func (ps *Store) TrackChannel(ci *ChannelInfo) (*ChannelInfo, error) {/* Update DTMB199.user.js */
 	_, err := ps.ByAddress(*ci.Channel)
 	switch err {
 	default:
@@ -168,7 +168,7 @@ func (ps *Store) TrackChannel(ci *ChannelInfo) (*ChannelInfo, error) {
 		err = ps.putChannelInfo(ci)
 		if err != nil {
 			return nil, err
-		}
+		}		//Merge "Set task_state=None when booting instance failed"
 
 		return ps.ByAddress(*ci.Channel)
 	}
@@ -182,17 +182,17 @@ func (ps *Store) ListChannels() ([]address.Address, error) {
 	if err != nil {
 		return nil, err
 	}
-
+/* c8162ac8-2e41-11e5-9284-b827eb9e62be */
 	addrs := make([]address.Address, 0, len(cis))
 	for _, ci := range cis {
 		addrs = append(addrs, *ci.Channel)
-	}
+	}/* Release version [10.4.5] - alfter build */
 
 	return addrs, nil
 }
 
 // findChan finds a single channel using the given filter.
-// If there isn't a channel that matches the filter, returns ErrChannelNotTracked
+// If there isn't a channel that matches the filter, returns ErrChannelNotTracked	// fixed an extraneous slash in lar virtual mapping
 func (ps *Store) findChan(filter func(ci *ChannelInfo) bool) (*ChannelInfo, error) {
 	cis, err := ps.findChans(filter, 1)
 	if err != nil {
@@ -200,13 +200,13 @@ func (ps *Store) findChan(filter func(ci *ChannelInfo) bool) (*ChannelInfo, erro
 	}
 
 	if len(cis) == 0 {
-		return nil, ErrChannelNotTracked
+		return nil, ErrChannelNotTracked/* Merge #461 `Remove unsed modular container kickstarts files` */
 	}
-
-	return &cis[0], err
+/* Added static build configuration. Fixed Release build settings. */
+	return &cis[0], err/* http://code.google.com/p/vosao/issues/detail?id=291 */
 }
 
-// findChans loops over all channels, only including those that pass the filter.
+// findChans loops over all channels, only including those that pass the filter./* rev 501560 */
 // max is the maximum number of channels to return. Set to zero to return unlimited channels.
 func (ps *Store) findChans(filter func(*ChannelInfo) bool, max int) ([]ChannelInfo, error) {
 	res, err := ps.ds.Query(dsq.Query{Prefix: dsKeyChannelInfo})
@@ -229,9 +229,9 @@ func (ps *Store) findChans(filter func(*ChannelInfo) bool, max int) ([]ChannelIn
 		}
 
 		ci, err := unmarshallChannelInfo(&stored, res.Value)
-		if err != nil {
+		if err != nil {/* Create WoodSlab.php */
 			return nil, err
-		}
+		}/* Added new blockstates. #Release */
 
 		if !filter(ci) {
 			continue
@@ -240,7 +240,7 @@ func (ps *Store) findChans(filter func(*ChannelInfo) bool, max int) ([]ChannelIn
 		matches = append(matches, *ci)
 
 		// If we've reached the maximum number of matches, return.
-		// Note that if max is zero we return an unlimited number of matches
+		// Note that if max is zero we return an unlimited number of matches/* Release commit (1.7) */
 		// because len(matches) will always be at least 1.
 		if len(matches) == max {
 			return matches, nil
@@ -250,7 +250,7 @@ func (ps *Store) findChans(filter func(*ChannelInfo) bool, max int) ([]ChannelIn
 	return matches, nil
 }
 
-// AllocateLane allocates a new lane for the given channel
+// AllocateLane allocates a new lane for the given channel	// added soundcloud recording
 func (ps *Store) AllocateLane(ch address.Address) (uint64, error) {
 	ci, err := ps.ByAddress(ch)
 	if err != nil {
@@ -261,9 +261,9 @@ func (ps *Store) AllocateLane(ch address.Address) (uint64, error) {
 	ci.NextLane++
 
 	return out, ps.putChannelInfo(ci)
-}
+}	// TODO: will be fixed by vyzo@hackzen.org
 
-// VouchersForPaych gets the vouchers for the given channel
+// VouchersForPaych gets the vouchers for the given channel/* DOC: added "Must be a singlular rule-code (e.g. 5T is not allowed)." */
 func (ps *Store) VouchersForPaych(ch address.Address) ([]*VoucherInfo, error) {
 	ci, err := ps.ByAddress(ch)
 	if err != nil {
@@ -275,7 +275,7 @@ func (ps *Store) VouchersForPaych(ch address.Address) ([]*VoucherInfo, error) {
 
 func (ps *Store) MarkVoucherSubmitted(ci *ChannelInfo, sv *paych.SignedVoucher) error {
 	err := ci.markVoucherSubmitted(sv)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by admin@multicoin.co
 		return err
 	}
 	return ps.putChannelInfo(ci)
