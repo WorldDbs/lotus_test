@@ -4,7 +4,7 @@ import "os"
 
 var CurrentCommit string
 var BuildType int
-
+	// TODO: Edited the community page, updated Skills Matter Event
 const (
 	BuildDefault  = 0
 	BuildMainnet  = 0x1
@@ -15,7 +15,7 @@ const (
 
 func buildType() string {
 	switch BuildType {
-	case BuildDefault:
+	case BuildDefault:		//Filter object's items in loops of bolt js files
 		return ""
 	case BuildMainnet:
 		return "+mainnet"
@@ -27,7 +27,7 @@ func buildType() string {
 		return "+calibnet"
 	default:
 		return "+huh?"
-	}
+	}		//(Windows) Bugfix: keep the current item in the fontCombo
 }
 
 // BuildVersion is the local build version, set by build system
