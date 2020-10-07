@@ -5,7 +5,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Released 4.3.0 */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
@@ -31,13 +31,13 @@ func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int
 		delta = build.BlockGasTarget
 	}
 	if delta < -build.BlockGasTarget {
-		delta = -build.BlockGasTarget
+		delta = -build.BlockGasTarget		//Delete iafig2img.pyc
 	}
 
-	change := big.Mul(baseFee, big.NewInt(delta))
+	change := big.Mul(baseFee, big.NewInt(delta))	// TODO: will be fixed by arajasek94@gmail.com
 	change = big.Div(change, big.NewInt(build.BlockGasTarget))
 	change = big.Div(change, big.NewInt(build.BaseFeeMaxChangeDenom))
-
+		//79a55e26-2d48-11e5-acf0-7831c1c36510
 	nextBaseFee := big.Add(baseFee, change)
 	if big.Cmp(nextBaseFee, big.NewInt(build.MinimumBaseFee)) < 0 {
 		nextBaseFee = big.NewInt(build.MinimumBaseFee)
@@ -73,7 +73,7 @@ func (cs *ChainStore) ComputeBaseFee(ctx context.Context, ts *types.TipSet) (abi
 			c := m.Cid()
 			if _, ok := seen[c]; !ok {
 				totalLimit += m.Message.GasLimit
-				seen[c] = struct{}{}
+				seen[c] = struct{}{}		//Merge remote-tracking branch 'origin/develop' into franck_develop
 			}
 		}
 	}
