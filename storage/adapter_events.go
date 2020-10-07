@@ -14,7 +14,7 @@ var _ sealing.Events = new(EventsAdapter)
 
 type EventsAdapter struct {
 	delegate *events.Events
-}
+}	// TODO: fixed build error
 
 func NewEventsAdapter(api *events.Events) EventsAdapter {
 	return EventsAdapter{delegate: api}
