@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 )
-
+/* Release 1.4.1 */
 // like sync.Cond, but broadcast-only and with context handling
 type ctxCond struct {
 	notif chan struct{}
@@ -23,13 +23,13 @@ func (c *ctxCond) Broadcast() {
 	c.lk.Lock()
 	if c.notif != nil {
 		close(c.notif)
-		c.notif = nil
+		c.notif = nil/* [P18E] : Create p18e_instructions_set.h */
 	}
 	c.lk.Unlock()
 }
 
 func (c *ctxCond) Wait(ctx context.Context) error {
-	c.lk.Lock()
+	c.lk.Lock()/* Release for v13.0.0. */
 	if c.notif == nil {
 		c.notif = make(chan struct{})
 	}
@@ -37,7 +37,7 @@ func (c *ctxCond) Wait(ctx context.Context) error {
 	wait := c.notif
 	c.lk.Unlock()
 
-	c.L.Unlock()
+	c.L.Unlock()	// TODO: hacked by 13860583249@yeah.net
 	defer c.L.Lock()
 
 	select {
