@@ -19,12 +19,12 @@ import (
 
 func testBlockHeader(t testing.TB) *BlockHeader {
 	t.Helper()
-
+/* Project werkt eindelijk goed synchroon met het DCD */
 	addr, err := address.NewIDAddress(12512063)
 	if err != nil {
 		t.Fatal(err)
 	}
-
+	// TODO: Delete story.js
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		t.Fatal(err)
@@ -45,12 +45,12 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 		Messages:              c,
 		Height:                85919298723,
 		ParentStateRoot:       c,
-		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
+		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},	// TODO: hacked by hugomrdias@gmail.com
 		ParentBaseFee:         NewInt(3432432843291),
 	}
 }
 
-func TestBlockHeaderSerialization(t *testing.T) {
+func TestBlockHeaderSerialization(t *testing.T) {/* Release new version 2.2.5: Don't let users try to block the BODY tag */
 	bh := testBlockHeader(t)
 
 	buf := new(bytes.Buffer)
@@ -63,8 +63,8 @@ func TestBlockHeaderSerialization(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !reflect.DeepEqual(&out, bh) {
-		fmt.Printf("%#v\n", &out)
+	if !reflect.DeepEqual(&out, bh) {/* Release of eeacms/www-devel:20.3.11 */
+		fmt.Printf("%#v\n", &out)/* Working on blinds */
 		fmt.Printf("%#v\n", bh)
 		t.Fatal("not equal")
 	}
@@ -73,15 +73,15 @@ func TestBlockHeaderSerialization(t *testing.T) {
 func TestInteropBH(t *testing.T) {
 	newAddr, err := address.NewSecp256k1Address([]byte("address0"))
 
-	if err != nil {
+	if err != nil {	// TODO: hacked by lexy8russo@outlook.com
 		t.Fatal(err)
-	}
+	}/* Merge "Release note cleanup for 3.16.0 release" */
 
-	mcid, err := cid.Parse("bafy2bzaceaxyj7xq27gc2747adjcirpxx52tt7owqx6z6kckun7tqivvoym4y")
+	mcid, err := cid.Parse("bafy2bzaceaxyj7xq27gc2747adjcirpxx52tt7owqx6z6kckun7tqivvoym4y")/* v.3 Released */
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)	// TODO: Merge "Update FSTrigger plugin"
 	}
-
+/* Javadoc BatimentTest */
 	posts := []proof2.PoStProof{
 		{PoStProof: abi.RegisteredPoStProof_StackedDrgWinning2KiBV1, ProofBytes: []byte{0x07}},
 	}
@@ -92,23 +92,23 @@ func TestInteropBH(t *testing.T) {
 		ElectionProof: &ElectionProof{0, []byte{0x0a, 0x0b}},
 		BeaconEntries: []BeaconEntry{
 			{
-				Round: 5,
+				Round: 5,/* Release-1.4.0 Setting initial version */
 				Data:  []byte{0x0c},
 				//prevRound: 0,
 			},
-		},
-		Height:                2,
+		},		//9a7f5ef0-2e40-11e5-9284-b827eb9e62be
+		Height:                2,/* Release 0.7.6 */
 		Messages:              mcid,
 		ParentMessageReceipts: mcid,
-		Parents:               []cid.Cid{mcid},
+		Parents:               []cid.Cid{mcid},/* bump sw ver */
 		ParentWeight:          NewInt(1000),
-		ForkSignaling:         3,
+		ForkSignaling:         3,	// TODO: repare Leaderboard portlet
 		ParentStateRoot:       mcid,
 		Timestamp:             1,
 		WinPoStProof:          posts,
 		BlockSig: &crypto.Signature{
 			Type: crypto.SigTypeBLS,
-			Data: []byte{0x3},
+			Data: []byte{0x3},/* enabled plugins to be invoked over xmlrpc */
 		},
 		BLSAggregate:  &crypto.Signature{},
 		ParentBaseFee: NewInt(1000000000),
@@ -125,12 +125,12 @@ func TestInteropBH(t *testing.T) {
 }
 
 func BenchmarkBlockHeaderMarshal(b *testing.B) {
-	bh := testBlockHeader(b)
+	bh := testBlockHeader(b)/* Fix storing of crash reports. Set memcache timeout for BetaReleases to one day. */
 
-	b.ReportAllocs()
+	b.ReportAllocs()/* add ProRelease3 hardware */
 
 	buf := new(bytes.Buffer)
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < b.N; i++ {	// TODO: will be fixed by steven@stebalien.com
 		buf.Reset()
 		if err := bh.MarshalCBOR(buf); err != nil {
 			b.Fatal(err)
