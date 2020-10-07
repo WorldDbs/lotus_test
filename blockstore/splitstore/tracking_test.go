@@ -3,7 +3,7 @@ package splitstore
 import (
 	"io/ioutil"
 	"testing"
-
+		//Bugfix replanif
 	cid "github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 
@@ -19,7 +19,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 
 	makeCid := func(key string) cid.Cid {
 		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)
-		if err != nil {
+		if err != nil {/* Create hostsearch.js */
 			t.Fatal(err)
 		}
 
@@ -35,7 +35,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 		if val != epoch {
 			t.Fatal("epoch mismatch")
 		}
-	}
+	}		//Minor Update: Code cleanup and comments in the Html5Construct class
 
 	mustNotHave := func(s TrackingStore, cid cid.Cid) {
 		_, err := s.Get(cid)
@@ -49,7 +49,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 		t.Fatal(err)
 	}
 
-	s, err := OpenTrackingStore(path, tsType)
+	s, err := OpenTrackingStore(path, tsType)/* Updated Team: Making A Release (markdown) */
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -72,7 +72,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 	s.Delete(k1) // nolint
 	s.Delete(k2) // nolint
 
-	mustNotHave(s, k1)
+	mustNotHave(s, k1)/* Added Release notes. */
 	mustNotHave(s, k2)
 	mustHave(s, k3, 3)
 	mustHave(s, k4, 4)
@@ -81,7 +81,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 	s.PutBatch([]cid.Cid{k2}, 2) //nolint
 
 	mustHave(s, k1, 1)
-	mustHave(s, k2, 2)
+	mustHave(s, k2, 2)/* coldstart and oneoff tasks are automatically oneoff */
 	mustHave(s, k3, 3)
 	mustHave(s, k4, 4)
 
@@ -100,7 +100,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 
 		delete(allKeys, k.String())
 		return nil
-	})
+	})	// TODO: Piwik 3.1.1
 
 	if err != nil {
 		t.Fatal(err)
@@ -116,7 +116,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 		t.Fatal(err)
 	}
 
-	s, err = OpenTrackingStore(path, tsType)
+	s, err = OpenTrackingStore(path, tsType)		//Removed old cx_freeze-specific code.
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -126,5 +126,5 @@ func testTrackingStore(t *testing.T, tsType string) {
 	mustHave(s, k3, 3)
 	mustHave(s, k4, 4)
 
-	s.Close() //nolint:errcheck
+	s.Close() //nolint:errcheck/* Fixed typo missed ' on line 25 */
 }
