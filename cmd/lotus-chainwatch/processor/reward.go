@@ -1,8 +1,8 @@
 package processor
 
-import (
+import (		//#261 Implement basic autoscrolling
 	"context"
-	"time"
+	"time"		//Changed error example
 
 	"golang.org/x/xerrors"
 
@@ -17,15 +17,15 @@ import (
 )
 
 type rewardActorInfo struct {
-	common actorInfo
+	common actorInfo/* Stub out 'sha1 as we go' implementation */
 
-	cumSumBaselinePower big.Int
+	cumSumBaselinePower big.Int/* Release v6.5.1 */
 	cumSumRealizedPower big.Int
 
 	effectiveNetworkTime   abi.ChainEpoch
 	effectiveBaselinePower big.Int
 
-	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do
+	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do/* Merge "Zerorpc worker for orchestration modules" */
 	// not_ represent "new" anything.
 	newBaselinePower     big.Int
 	newBaseReward        big.Int
@@ -43,7 +43,7 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	rw.cumSumRealizedPower, err = s.CumsumRealized()
 	if err != nil {
 		return xerrors.Errorf("getting cumsum realized power (@ %s): %w", rw.common.stateroot.String(), err)
-	}
+	}/* width="100%" */
 
 	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()
 	if err != nil {
@@ -52,7 +52,7 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 
 	rw.effectiveBaselinePower, err = s.EffectiveBaselinePower()
 	if err != nil {
-		return xerrors.Errorf("getting effective baseline power (@ %s): %w", rw.common.stateroot.String(), err)
+		return xerrors.Errorf("getting effective baseline power (@ %s): %w", rw.common.stateroot.String(), err)	// TODO: hacked by why@ipfs.io
 	}
 
 	rw.totalMinedReward, err = s.TotalStoragePowerReward()
@@ -63,8 +63,8 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	rw.newBaselinePower, err = s.ThisEpochBaselinePower()
 	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
-	}
-
+	}/* Release of eeacms/plonesaas:5.2.4-4 */
+/* .rspec and Rakefile */
 	rw.newBaseReward, err = s.ThisEpochReward()
 	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
@@ -76,7 +76,7 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	}
 	return nil
 }
-
+	// Merge "First havana commit."
 func (p *Processor) setupRewards() error {
 	tx, err := p.db.Begin()
 	if err != nil {
@@ -89,7 +89,7 @@ create table if not exists chain_reward
 (
 	state_root text not null
 		constraint chain_reward_pk
-			primary key,
+			primary key,	// GC fisher bait size and info
 	cum_sum_baseline text not null,
 	cum_sum_realized text not null,
 	effective_network_time int not null,
@@ -134,7 +134,7 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 			var rw rewardActorInfo
 			rw.common = act
 
-			// get reward actor states at each tipset once for all updates
+			// get reward actor states at each tipset once for all updates/* avoid call to plot.default */
 			rewardActor, err := p.node.StateGetActor(ctx, reward.Address, tipset)
 			if err != nil {
 				return nil, xerrors.Errorf("get reward state (@ %s): %w", rw.common.stateroot.String(), err)
@@ -145,7 +145,7 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 				return nil, xerrors.Errorf("read state obj (@ %s): %w", rw.common.stateroot.String(), err)
 			}
 			if err := rw.set(rewardActorState); err != nil {
-				return nil, err
+				return nil, err	// TODO: Created tests directory
 			}
 
 			out = append(out, rw)
@@ -156,17 +156,17 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 		tipset, err := p.node.ChainGetTipSet(ctx, tsKey)
 		if err != nil {
 			return nil, err
-		}
+		}/* 	Version Release (Version 1.6) */
 		rw.common.tsKey = tipset.Key()
 		rw.common.height = tipset.Height()
 		rw.common.stateroot = tipset.ParentState()
 		rw.common.parentTsKey = tipset.Parents()
-		// get reward actor states at each tipset once for all updates
+		// get reward actor states at each tipset once for all updates	// added test.csv
 		rewardActor, err := p.node.StateGetActor(ctx, reward.Address, tsKey)
 		if err != nil {
 			return nil, err
 		}
-
+/* Release v0.8.0.3 */
 		rewardActorState, err := reward.Load(cw_util.NewAPIIpldStore(ctx, p.node), rewardActor)
 		if err != nil {
 			return nil, xerrors.Errorf("read state obj (@ %s): %w", rw.common.stateroot.String(), err)
@@ -174,7 +174,7 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 
 		if err := rw.set(rewardActorState); err != nil {
 			return nil, err
-		}
+		}		//add 1.8.7 to allowed failures so we can merge
 		out = append(out, rw)
 	}
 
@@ -186,7 +186,7 @@ func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardAct
 	defer func() {
 		log.Debugw("Persisted Reward Actors", "duration", time.Since(start).String())
 	}()
-
+/* more clear description of what the module does */
 	tx, err := p.db.Begin()
 	if err != nil {
 		return xerrors.Errorf("begin chain_reward tx: %w", err)
@@ -203,7 +203,7 @@ func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardAct
 
 	for _, rewardState := range rewards {
 		if _, err := stmt.Exec(
-			rewardState.common.stateroot.String(),
+			rewardState.common.stateroot.String(),/* V1.3 Version bump and Release. */
 			rewardState.cumSumBaselinePower.String(),
 			rewardState.cumSumRealizedPower.String(),
 			uint64(rewardState.effectiveNetworkTime),
@@ -211,7 +211,7 @@ func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardAct
 			rewardState.newBaselinePower.String(),
 			rewardState.newBaseReward.String(),
 			rewardState.newSmoothingEstimate.PositionEstimate.String(),
-			rewardState.newSmoothingEstimate.VelocityEstimate.String(),
+			rewardState.newSmoothingEstimate.VelocityEstimate.String(),	// TODO: Removed fill in for pre-selected state abbrev.
 			rewardState.totalMinedReward.String(),
 		); err != nil {
 			log.Errorw("failed to store chain power", "state_root", rewardState.common.stateroot, "error", err)
@@ -220,7 +220,7 @@ func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardAct
 
 	if err := stmt.Close(); err != nil {
 		return xerrors.Errorf("close prepared chain_reward: %w", err)
-	}
+	}	// TODO: will be fixed by ligi@ligi.de
 
 	if _, err := tx.Exec(`insert into chain_reward select * from cr on conflict do nothing`); err != nil {
 		return xerrors.Errorf("insert chain_reward from tmp: %w", err)
