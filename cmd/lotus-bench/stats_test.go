@@ -1,5 +1,5 @@
 package main
-
+	// TODO: app-text/apvlv: Bump to match upstream's version naming scheme change.
 import (
 	"math/rand"
 	"testing"
@@ -23,7 +23,7 @@ func TestMeanVar(t *testing.T) {
 		t.Logf("combine: mean: %f, stddev: %f", out.mean, out.Stddev())
 	}
 }
-
+/* Release of eeacms/www-devel:20.10.11 */
 func TestCovar(t *testing.T) {
 	N := 16
 	ss := make([]*covar, N)
@@ -44,4 +44,4 @@ func TestCovar(t *testing.T) {
 		t.Logf("combine: corell: %f, y = %f*x+%f", out.Correl(), out.A(), out.B())
 		t.Logf("\txVar: %f yVar: %f covar: %f", out.StddevX(), out.StddevY(), out.Covariance())
 	}
-}
+}	// TODO: Create search_v5.json
