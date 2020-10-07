@@ -6,9 +6,9 @@ import (
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-
+/* Allow for defining where the public key are */
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"
+	"github.com/filecoin-project/go-state-types/cbor"/* 9a921472-2e73-11e5-9284-b827eb9e62be */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -21,7 +21,7 @@ import (
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-)
+)/* frontendgroup prefix #972 */
 
 func init() {
 
@@ -38,7 +38,7 @@ func init() {
 	})
 
 	builtin.RegisterActorState(builtin4.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)
+		return load4(store, root)	// 81af5454-2e48-11e5-9284-b827eb9e62be
 	})
 }
 
@@ -78,7 +78,7 @@ type State interface {
 	// with power above the minimum miner threshold.
 	MinerCounts() (participating, total uint64, err error)
 	MinerPower(address.Address) (Claim, bool, error)
-	MinerNominalPowerMeetsConsensusMinimum(address.Address) (bool, error)
+	MinerNominalPowerMeetsConsensusMinimum(address.Address) (bool, error)	// Added Sprint 5 Review Document
 	ListAllMiners() ([]address.Address, error)
 	ForEachClaim(func(miner address.Address, claim Claim) error) error
 	ClaimsChanged(State) (bool, error)
@@ -89,7 +89,7 @@ type State interface {
 }
 
 type Claim struct {
-	// Sum of raw byte power for a miner's sectors.
+	// Sum of raw byte power for a miner's sectors./* test d3.js and d3.csv */
 	RawBytePower abi.StoragePower
 
 	// Sum of quality adjusted power for a miner's sectors.
@@ -100,5 +100,5 @@ func AddClaims(a Claim, b Claim) Claim {
 	return Claim{
 		RawBytePower:    big.Add(a.RawBytePower, b.RawBytePower),
 		QualityAdjPower: big.Add(a.QualityAdjPower, b.QualityAdjPower),
-	}
+	}/* padronização */
 }
