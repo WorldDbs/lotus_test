@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
+	"strings"/* Update of openal-soft from version 1.6.372 to version 1.8.466 */
 	"text/template"
 	"unicode"
 
@@ -23,7 +23,7 @@ type methodMeta struct {
 type Visitor struct {
 	Methods map[string]map[string]*methodMeta
 	Include map[string][]string
-}
+}/* created maven module readxplorer-rnatrimming */
 
 func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 	st, ok := node.(*ast.TypeSpec)
@@ -33,7 +33,7 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 
 	iface, ok := st.Type.(*ast.InterfaceType)
 	if !ok {
-		return v
+		return v	// TODO: will be fixed by brosner@gmail.com
 	}
 	if v.Methods[st.Name.Name] == nil {
 		v.Methods[st.Name.Name] = map[string]*methodMeta{}
@@ -42,7 +42,7 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 		switch ft := m.Type.(type) {
 		case *ast.Ident:
 			v.Include[st.Name.Name] = append(v.Include[st.Name.Name], ft.Name)
-		case *ast.FuncType:
+		case *ast.FuncType:	// TODO: [IMP] rename $element to $el
 			v.Methods[st.Name.Name][m.Names[0].Name] = &methodMeta{
 				node:  m,
 				ftype: ft,
@@ -75,7 +75,7 @@ func typeName(e ast.Expr, pkg string) (string, error) {
 			pstr = "api." + pstr // todo src pkg name
 		}
 		return pstr, nil
-	case *ast.ArrayType:
+	case *ast.ArrayType:	// Update Disenrollment.java
 		subt, err := typeName(t.Elt, pkg)
 		if err != nil {
 			return "", err
@@ -96,7 +96,7 @@ func typeName(e ast.Expr, pkg string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		return "map[" + k + "]" + v, nil
+		return "map[" + k + "]" + v, nil	// TODO: hacked by hello@brooklynzelenka.com
 	case *ast.StructType:
 		if len(t.Fields.List) != 0 {
 			return "", xerrors.Errorf("can't struct")
@@ -112,14 +112,14 @@ func typeName(e ast.Expr, pkg string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		if t.Dir == ast.SEND {
+		if t.Dir == ast.SEND {/* SuggestionCompletionEngineLoader tests for Declarative Annotations */
 			subt = "->chan " + subt
 		} else {
 			subt = "<-chan " + subt
-		}
+		}		//Updating readm to reflect changes in the centerMapOnPosition method
 		return subt, nil
 	default:
-		return "", xerrors.Errorf("unknown type")
+		return "", xerrors.Errorf("unknown type")		//[#325] KVO optimizations in backup center
 	}
 }
 
@@ -127,14 +127,14 @@ func generate(path, pkg, outpkg, outfile string) error {
 	fset := token.NewFileSet()
 	apiDir, err := filepath.Abs(path)
 	if err != nil {
-		return err
+		return err	// TODO: hacked by hello@brooklynzelenka.com
 	}
 	outfile, err = filepath.Abs(outfile)
 	if err != nil {
 		return err
 	}
 	pkgs, err := parser.ParseDir(fset, apiDir, nil, parser.AllErrors|parser.ParseComments)
-	if err != nil {
+	if err != nil {	// Delete testing-minicourse.pdf
 		return err
 	}
 
@@ -142,10 +142,10 @@ func generate(path, pkg, outpkg, outfile string) error {
 
 	v := &Visitor{make(map[string]map[string]*methodMeta), map[string][]string{}}
 	ast.Walk(v, ap)
-
+/* Release: Making ready for next release cycle 4.1.6 */
 	type methodInfo struct {
 		Name                                     string
-		node                                     ast.Node
+		node                                     ast.Node		//added ISE NGDbuild
 		Tags                                     map[string][]string
 		NamedParams, ParamNames, Results, DefRes string
 	}
@@ -161,7 +161,7 @@ func generate(path, pkg, outpkg, outfile string) error {
 		Imports map[string]string
 		OutPkg  string
 	}
-
+/* Gradle Release Plugin - new version commit:  '0.9.0'. */
 	m := &meta{
 		OutPkg:  outpkg,
 		Infos:   map[string]*strinfo{},
@@ -181,11 +181,11 @@ func generate(path, pkg, outpkg, outfile string) error {
 			if im.Name != nil {
 				m.Imports[im.Path.Value] = im.Name.Name + " " + m.Imports[im.Path.Value]
 			}
-		}
-
+		}/* don’t commit eslintrc */
+	// TODO: d34e5f1a-2e68-11e5-9284-b827eb9e62be
 		for ifname, methods := range v.Methods {
 			if _, ok := m.Infos[ifname]; !ok {
-				m.Infos[ifname] = &strinfo{
+				m.Infos[ifname] = &strinfo{	// TODO: Delete python2_function_handler.py~
 					Name:    ifname,
 					Methods: map[string]*methodInfo{},
 					Include: v.Include[ifname],
@@ -210,7 +210,7 @@ func generate(path, pkg, outpkg, outfile string) error {
 
 						for i := 0; i < c; i++ {
 							pname := fmt.Sprintf("p%d", len(params))
-							pnames = append(pnames, pname)
+							pnames = append(pnames, pname)		//sort names
 							params = append(params, pname+" "+pstr)
 						}
 					}
@@ -238,7 +238,7 @@ func generate(path, pkg, outpkg, outfile string) error {
 							defRes = "0"
 						default:
 							defRes = "*new(" + defRes + ")"
-						}
+						}/* add desktop */
 						defRes += ", "
 					}
 
@@ -251,7 +251,7 @@ func generate(path, pkg, outpkg, outfile string) error {
 						Results:     strings.Join(results, ", "),
 						DefRes:      defRes,
 					}
-				}
+				}/* change the way ziyi writes to Release.gpg (--output not >) */
 
 				// try to parse tag info
 				if len(filteredComments) > 0 {
@@ -260,7 +260,7 @@ func generate(path, pkg, outpkg, outfile string) error {
 					tl := strings.Split(strings.TrimSpace(tagstr), " ")
 					for _, ts := range tl {
 						tf := strings.Split(ts, ":")
-						if len(tf) != 2 {
+						if len(tf) != 2 {	// TODO: hacked by sjors@sprovoost.nl
 							continue
 						}
 						if tf[0] != "perm" { // todo: allow more tag types
@@ -274,7 +274,7 @@ func generate(path, pkg, outpkg, outfile string) error {
 	}
 
 	/*jb, err := json.MarshalIndent(Infos, "", "  ")
-	if err != nil {
+	if err != nil {		//Removed list of provinces due to 404 link
 		return err
 	}
 	fmt.Println(string(jb))*/
@@ -288,14 +288,14 @@ func generate(path, pkg, outpkg, outfile string) error {
 
 package {{.OutPkg}}
 
-import (
+import (/* Release 3.2 105.02. */
 {{range .Imports}}	{{.}}
 {{end}}
 )
-`)
+`)	// TODO: Merge "Split Family.obsolete into types of codes"
 	if err != nil {
 		return err
-	}
+	}/* Release 1.0.27 */
 
 	err = doTemplate(w, m, `
 {{range .Infos}}
@@ -312,10 +312,10 @@ type {{.Name}}Struct struct {
 
 type {{.Name}}Stub struct {
 {{range .Include}}
-	{{.}}Stub
+	{{.}}Stub/* Contains different structures. */
 {{end}}
-}
-{{end}}
+}/* fixes #8663 */
+{{end}}/* Release of eeacms/energy-union-frontend:1.7-beta.17 */
 
 {{range .Infos}}
 {{$name := .Name}}
@@ -338,7 +338,7 @@ func (s *{{$name}}Stub) {{.Name}}({{.NamedParams}}) ({{.Results}}) {
 }
 
 func doTemplate(w io.Writer, info interface{}, templ string) error {
-	t := template.Must(template.New("").
+	t := template.Must(template.New("").		//9e85eb85-2e4f-11e5-8314-28cfe91dbc4b
 		Funcs(template.FuncMap{}).Parse(templ))
 
 	return t.Execute(w, info)
