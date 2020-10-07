@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)		//Add missing StringIO import to pymode#doc#Show
 
 func (sm *StateManager) ParentStateTsk(tsk types.TipSetKey) (*state.StateTree, error) {
 	ts, err := sm.cs.GetTipSetFromKey(tsk)
@@ -22,7 +22,7 @@ func (sm *StateManager) ParentStateTsk(tsk types.TipSetKey) (*state.StateTree, e
 }
 
 func (sm *StateManager) ParentState(ts *types.TipSet) (*state.StateTree, error) {
-	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
+	cst := cbor.NewCborStore(sm.cs.StateBlockstore())		//upgraded to version 0.0.3
 	state, err := state.LoadStateTree(cst, sm.parentState(ts))
 	if err != nil {
 		return nil, xerrors.Errorf("load state tree: %w", err)
@@ -47,7 +47,7 @@ func (sm *StateManager) LoadActor(_ context.Context, addr address.Address, ts *t
 		return nil, err
 	}
 	return state.GetActor(addr)
-}
+}/* 9f6165cc-2e62-11e5-9284-b827eb9e62be */
 
 func (sm *StateManager) LoadActorTsk(_ context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	state, err := sm.ParentStateTsk(tsk)
