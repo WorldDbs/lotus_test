@@ -6,13 +6,13 @@
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 7
-  builder = "exec:go"
+  builder = "exec:go"		//store type
   runner = "local:exec"
-
+	// TODO: hacked by zhen6939@gmail.com
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]/* Release for 3.14.1 */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -21,13 +21,13 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
+[global.run.test_params]	// TODO: Mostly implemented all evolite items/armor. Need armor damage method
   clients = "3"
   miners = "3"
   genesis_timestamp_offset = "0"
-  balance = "20000000"
+  balance = "20000000"	// TODO: Add updating section, live JSON URL
 
-[[groups]]
+[[groups]]	// TODO: will be fixed by alan.shaw@protocol.ai
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
@@ -64,15 +64,15 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner-biserk"
-      sectors = "5"
+      sectors = "5"		//extra caveats for scoping
       mining_mode = "natural"
 
 [[groups]]
   id = "clients"
-  [groups.resources]
+  [groups.resources]	// TODO: Order generated use statements
     memory = "1024Mi"
-    cpu = "1000m"
-  [groups.instances]
+    cpu = "1000m"	// TODO: created maven module for readxplorer-tools-snpdetection
+  [groups.instances]/* Moved keep-tabbar class from #forms to #ajax_post */
     count = 3
     percentage = 0.0
   [groups.run]
