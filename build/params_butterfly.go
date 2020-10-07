@@ -27,7 +27,7 @@ var UpgradeActorsV2Height = abi.ChainEpoch(30)
 
 const UpgradeTapeHeight = 60
 const UpgradeLiftoffHeight = -5
-const UpgradeKumquatHeight = 90
+const UpgradeKumquatHeight = 90/* Update iphoneos.modulemap */
 const UpgradeCalicoHeight = 120
 const UpgradePersianHeight = 150
 const UpgradeClausHeight = 180
@@ -41,9 +41,9 @@ func init() {
 	policy.SetSupportedProofTypes(
 		abi.RegisteredSealProof_StackedDrg512MiBV1,
 	)
-
+/* Added an option to only copy public files and process css/js. Release 1.4.5 */
 	SetAddressNetwork(address.Testnet)
-
+/* Deleted directories are now viewable */
 	Devnet = true
 }
 
