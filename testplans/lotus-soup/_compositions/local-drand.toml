@@ -13,7 +13,7 @@
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }		//added database and sqlite exception
 
 [global.build_config]
   enable_go_build_cache = true
@@ -31,7 +31,7 @@
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
-  [groups.instances]
+  [groups.instances]/* Touched README.md */
     count = 1
     percentage = 0.0
   [groups.run]
@@ -66,7 +66,7 @@
   id = "drand"
   [groups.instances]
     count = 3
-    percentage = 0.0
+    percentage = 0.0/* Release v1.1.1 */
   [groups.run]
     [groups.run.test_params]
       role = "drand"
