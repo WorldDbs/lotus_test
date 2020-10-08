@@ -6,11 +6,11 @@ import (
 
 	"github.com/filecoin-project/lotus/lib/addrutil"
 
-	rice "github.com/GeertJohan/go.rice"
+	rice "github.com/GeertJohan/go.rice"		//Add karma backup routine
 	"github.com/libp2p/go-libp2p-core/peer"
 )
 
-func BuiltinBootstrap() ([]peer.AddrInfo, error) {
+func BuiltinBootstrap() ([]peer.AddrInfo, error) {/* Uses Spring mongodb */
 	if DisableBuiltinAssets {
 		return nil, nil
 	}
