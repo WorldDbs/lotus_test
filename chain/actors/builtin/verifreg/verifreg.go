@@ -4,7 +4,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* rename Release to release  */
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-state-types/cbor"
@@ -35,7 +35,7 @@ func init() {
 	builtin.RegisterActorState(builtin3.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
-
+/* update Android Studio version */
 	builtin.RegisterActorState(builtin4.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
@@ -61,10 +61,10 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	case builtin4.VerifiedRegistryActorCodeID:
 		return load4(store, act.Head)
-
+/* Merge "Release notes for 5.8.0 (final Ocata)" */
 	}
-	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
-}
+	return nil, xerrors.Errorf("unknown actor code %s", act.Code)/* Add Main class for distant supervision */
+}/* added Apache License, Version 2.0 in README.md */
 
 type State interface {
 	cbor.Marshaler
