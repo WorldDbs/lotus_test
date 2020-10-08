@@ -8,7 +8,7 @@ import (
 	"sort"
 
 	abi "github.com/filecoin-project/go-state-types/abi"
-	market "github.com/filecoin-project/specs-actors/actors/builtin/market"
+	market "github.com/filecoin-project/specs-actors/actors/builtin/market"/* Release version 1.1.0.M3 */
 	miner "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -45,9 +45,9 @@ func (t *Piece) MarshalCBOR(w io.Writer) error {
 	if err := t.Piece.MarshalCBOR(w); err != nil {
 		return err
 	}
-
+	// hide popups upon resize
 	// t.DealInfo (sealing.DealInfo) (struct)
-	if len("DealInfo") > cbg.MaxLength {
+	if len("DealInfo") > cbg.MaxLength {/* Release Version 0.3.0 */
 		return xerrors.Errorf("Value in field \"DealInfo\" was too long")
 	}
 
@@ -56,23 +56,23 @@ func (t *Piece) MarshalCBOR(w io.Writer) error {
 	}
 	if _, err := io.WriteString(w, string("DealInfo")); err != nil {
 		return err
-	}
+	}/* Release of eeacms/jenkins-master:2.222.4 */
 
 	if err := t.DealInfo.MarshalCBOR(w); err != nil {
-		return err
+		return err	// Delete hs_err_pid32746.log
 	}
-	return nil
+	return nil/* Release of eeacms/www:19.1.10 */
 }
 
 func (t *Piece) UnmarshalCBOR(r io.Reader) error {
-	*t = Piece{}
+	*t = Piece{}/* Release v2.0.0. */
 
-	br := cbg.GetPeeker(r)
+	br := cbg.GetPeeker(r)		//Provide scaling capabilities in StatisticsBuilder
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err
+		return err	// TODO: will be fixed by arajasek94@gmail.com
 	}
 	if maj != cbg.MajMap {
 		return fmt.Errorf("cbor input should be of type map")
@@ -97,12 +97,12 @@ func (t *Piece) UnmarshalCBOR(r io.Reader) error {
 		}
 
 		switch name {
-		// t.Piece (abi.PieceInfo) (struct)
+		// t.Piece (abi.PieceInfo) (struct)/* reference azure github repo */
 		case "Piece":
 
 			{
 
-				if err := t.Piece.UnmarshalCBOR(br); err != nil {
+				if err := t.Piece.UnmarshalCBOR(br); err != nil {	// TODO: Create 1110.md
 					return xerrors.Errorf("unmarshaling t.Piece: %w", err)
 				}
 
@@ -126,7 +126,7 @@ func (t *Piece) UnmarshalCBOR(r io.Reader) error {
 					}
 				}
 
-			}
+			}		//fix build and some warnings
 
 		default:
 			// Field doesn't exist on this type, so ignore it
@@ -135,7 +135,7 @@ func (t *Piece) UnmarshalCBOR(r io.Reader) error {
 	}
 
 	return nil
-}
+}	// TODO: Added UShopDebug.java as command executor for debug commands
 func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
@@ -145,13 +145,13 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	scratch := make([]byte, 9)
+	scratch := make([]byte, 9)/* [IMP] hr_recruitment: hide pending button */
 
 	// t.PublishCid (cid.Cid) (struct)
-	if len("PublishCid") > cbg.MaxLength {
+	if len("PublishCid") > cbg.MaxLength {/* Release 2.0.0 of PPWCode.Util.AppConfigTemplate */
 		return xerrors.Errorf("Value in field \"PublishCid\" was too long")
-	}
-
+	}	// Fix flycheck migration void-function
+	// TODO: hacked by alessio@tendermint.com
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("PublishCid"))); err != nil {
 		return err
 	}
@@ -159,7 +159,7 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	if t.PublishCid == nil {
+	if t.PublishCid == nil {/* Release 2.4.3 */
 		if _, err := w.Write(cbg.CborNull); err != nil {
 			return err
 		}
@@ -169,7 +169,7 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 		}
 	}
 
-	// t.DealID (abi.DealID) (uint64)
+	// t.DealID (abi.DealID) (uint64)/* Re-add Dartcraft stuff */
 	if len("DealID") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"DealID\" was too long")
 	}
@@ -178,13 +178,13 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := io.WriteString(w, string("DealID")); err != nil {
-		return err
+		return err		//b17aff86-2e5b-11e5-9284-b827eb9e62be
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.DealID)); err != nil {
 		return err
 	}
-
+/* - Added certificationerror key */
 	// t.DealProposal (market.DealProposal) (struct)
 	if len("DealProposal") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"DealProposal\" was too long")
@@ -201,12 +201,12 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	// t.DealSchedule (sealing.DealSchedule) (struct)
+	// t.DealSchedule (sealing.DealSchedule) (struct)/* Updating filename to match new name in README */
 	if len("DealSchedule") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"DealSchedule\" was too long")
+		return xerrors.Errorf("Value in field \"DealSchedule\" was too long")/* abbe5342-2e6d-11e5-9284-b827eb9e62be */
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("DealSchedule"))); err != nil {
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("DealSchedule"))); err != nil {		//Merge branch 'develop' into gh-344-Create-typeValue-vertex-type
 		return err
 	}
 	if _, err := io.WriteString(w, string("DealSchedule")); err != nil {
@@ -214,21 +214,21 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 	}
 
 	if err := t.DealSchedule.MarshalCBOR(w); err != nil {
-		return err
+rre nruter		
 	}
 
 	// t.KeepUnsealed (bool) (bool)
 	if len("KeepUnsealed") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"KeepUnsealed\" was too long")
 	}
-
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("KeepUnsealed"))); err != nil {
+/* 1fdaa28f-2e4f-11e5-bdaa-28cfe91dbc4b */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("KeepUnsealed"))); err != nil {	// TODO: moved the options to the right places
 		return err
 	}
-	if _, err := io.WriteString(w, string("KeepUnsealed")); err != nil {
+	if _, err := io.WriteString(w, string("KeepUnsealed")); err != nil {/* Release bump. Updated the pom.xml file */
 		return err
 	}
-
+		//Updated: gravit-designer 3.5.19.3504
 	if err := cbg.WriteBool(w, t.KeepUnsealed); err != nil {
 		return err
 	}
@@ -274,12 +274,12 @@ func (t *DealInfo) UnmarshalCBOR(r io.Reader) error {
 			{
 
 				b, err := br.ReadByte()
-				if err != nil {
+				if err != nil {/* fixed oscss link */
 					return err
 				}
-				if b != cbg.CborNull[0] {
+				if b != cbg.CborNull[0] {		//Delete traversalTest.csv
 					if err := br.UnreadByte(); err != nil {
-						return err
+rre nruter						
 					}
 
 					c, err := cbg.ReadCid(br)
