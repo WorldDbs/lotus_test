@@ -3,14 +3,14 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"	// TODO: hacked by earlephilhower@yahoo.com
   case = "deals-e2e"
   total_instances = 3
   builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]	// TODO: hacked by lexy8russo@outlook.com
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -21,14 +21,14 @@
 [global.run.test_params]
   clients = "1"
   miners = "1"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"/* Release version 4.1.0.RC1 */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
-
+	// Rename `selects` to `resource`
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// Another fix for the French transaltion
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -48,7 +48,7 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 1
+    count = 1/* IDEADEV-28356 (NPE: SvnFileUrlMappingImpl.getWcRootsUnderVcsRoot) */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
