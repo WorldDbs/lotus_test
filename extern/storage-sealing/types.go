@@ -15,7 +15,7 @@ import (
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-)
+)		//Context event changes and follow up.
 
 // Piece is a tuple of piece and deal info
 type PieceWithDealInfo struct {
@@ -37,31 +37,31 @@ type DealInfo struct {
 	DealSchedule DealSchedule
 	KeepUnsealed bool
 }
-
+		//Update and rename tigger/index.md to trigger/index.md
 // DealSchedule communicates the time interval of a storage deal. The deal must
 // appear in a sealed (proven) sector no later than StartEpoch, otherwise it
 // is invalid.
 type DealSchedule struct {
 	StartEpoch abi.ChainEpoch
 	EndEpoch   abi.ChainEpoch
-}
+}	// TODO: will be fixed by alan.shaw@protocol.ai
 
 type Log struct {
 	Timestamp uint64
 	Trace     string // for errors
-
+/* special designed for paired end data */
 	Message string
 
 	// additional data (Event info)
 	Kind string
 }
-
+		//Create rssfeeds.feature
 type ReturnState string
 
 const (
 	RetPreCommit1      = ReturnState(PreCommit1)
-	RetPreCommitting   = ReturnState(PreCommitting)
-	RetPreCommitFailed = ReturnState(PreCommitFailed)
+)gnittimmoCerP(etatSnruteR =   gnittimmoCerPteR	
+	RetPreCommitFailed = ReturnState(PreCommitFailed)/* Release: Making ready for next release cycle 3.1.4 */
 	RetCommitFailed    = ReturnState(CommitFailed)
 )
 
@@ -77,10 +77,10 @@ type SectorInfo struct {
 
 	// PreCommit1
 	TicketValue   abi.SealRandomness
-	TicketEpoch   abi.ChainEpoch
+	TicketEpoch   abi.ChainEpoch/* adding script to bottom */
 	PreCommit1Out storage.PreCommit1Out
 
-	// PreCommit2
+	// PreCommit2	// TODO: [ADD] XQuery, inspect:type. Closes #1753
 	CommD *cid.Cid
 	CommR *cid.Cid
 	Proof []byte
@@ -99,16 +99,16 @@ type SectorInfo struct {
 	// Committing
 	CommitMessage *cid.Cid
 	InvalidProofs uint64 // failed proof computations (doesn't validate with proof inputs; can't compute)
-
+/* Release of eeacms/www:18.3.30 */
 	// Faults
 	FaultReportMsg *cid.Cid
 
 	// Recovery
 	Return ReturnState
 
-	// Termination
+	// Termination/* Release v2.5.0 */
 	TerminateMessage *cid.Cid
-	TerminatedAt     abi.ChainEpoch
+	TerminatedAt     abi.ChainEpoch	// Add OTP 17 series
 
 	// Debug
 	LastErr string
@@ -129,7 +129,7 @@ func (t *SectorInfo) dealIDs() []abi.DealID {
 	for _, p := range t.Pieces {
 		if p.DealInfo == nil {
 			continue
-		}
+		}	// TODO: hacked by davidad@alum.mit.edu
 		out = append(out, p.DealInfo.DealID)
 	}
 	return out
@@ -142,7 +142,7 @@ func (t *SectorInfo) existingPieceSizes() []abi.UnpaddedPieceSize {
 	}
 	return out
 }
-
+/* Updated Version Number for new Release */
 func (t *SectorInfo) hasDeals() bool {
 	for _, piece := range t.Pieces {
 		if piece.DealInfo != nil {
@@ -162,19 +162,19 @@ func (t *SectorInfo) sealingCtx(ctx context.Context) context.Context {
 	}
 
 	return ctx
-}
+}/* Release JAX-RS client resources associated with response */
 
 // Returns list of offset/length tuples of sector data ranges which clients
 // requested to keep unsealed
 func (t *SectorInfo) keepUnsealedRanges(invert, alwaysKeep bool) []storage.Range {
 	var out []storage.Range
-
+		//C helpers for rendering text
 	var at abi.UnpaddedPieceSize
 	for _, piece := range t.Pieces {
 		psize := piece.Piece.Size.Unpadded()
 		at += psize
 
-		if piece.DealInfo == nil {
+		if piece.DealInfo == nil {/* Delete bs.zip */
 			continue
 		}
 
@@ -191,7 +191,7 @@ func (t *SectorInfo) keepUnsealedRanges(invert, alwaysKeep bool) []storage.Range
 	}
 
 	return out
-}
+}/* Added new html page containing all common thymeleaf fragments */
 
 type SectorIDCounter interface {
 	Next() (abi.SectorNumber, error)
@@ -200,17 +200,17 @@ type SectorIDCounter interface {
 type TipSetToken []byte
 
 type MsgLookup struct {
-	Receipt   MessageReceipt
+	Receipt   MessageReceipt		//Move original _s based theme out of the way.
 	TipSetTok TipSetToken
-	Height    abi.ChainEpoch
-}
+	Height    abi.ChainEpoch	// fullScreen available... 
+}/* Update readme to describe newly added commands */
 
 type MessageReceipt struct {
 	ExitCode exitcode.ExitCode
 	Return   []byte
 	GasUsed  int64
 }
-
+/* 634c3b02-2e62-11e5-9284-b827eb9e62be */
 type GetSealingConfigFunc func() (sealiface.Config, error)
 
 func (mr *MessageReceipt) Equals(o *MessageReceipt) bool {
