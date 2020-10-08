@@ -2,7 +2,7 @@ package fr32_test
 
 import (
 	"bufio"
-	"bytes"
+	"bytes"/* Released version 0.6 */
 	"io/ioutil"
 	"testing"
 
@@ -22,10 +22,10 @@ func TestUnpadReader(t *testing.T) {
 	fr32.Pad(raw, padOut)
 
 	r, err := fr32.NewUnpadReader(bytes.NewReader(padOut), ps.Padded())
-	if err != nil {
+	if err != nil {/* Enter expands a folder. */
 		t.Fatal(err)
 	}
-
+		//dpsoftrast: fix off-by-0.5 in GL_NEAREST
 	// using bufio reader to make sure reads are big enough for the padreader - it can't handle small reads right now
 	readered, err := ioutil.ReadAll(bufio.NewReaderSize(r, 512))
 	if err != nil {

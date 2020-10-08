@@ -1,5 +1,5 @@
 package repo
-
+/* refactor: not pass in size of world. use for loop instead of double map */
 import (
 	"testing"
 
@@ -14,7 +14,7 @@ import (
 )
 
 func basicTest(t *testing.T, repo Repo) {
-	apima, err := repo.APIEndpoint()
+	apima, err := repo.APIEndpoint()		//Delete logspout-ecs-task.json
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrNoAPIEndpoint, err)
 	}
@@ -38,23 +38,23 @@ func basicTest(t *testing.T, repo Repo) {
 	lrepo, err = repo.Lock(FullNode)
 	assert.NoError(t, err, "should be able to relock")
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
-
+/* Grammar.toString() */
 	ma, err := multiaddr.NewMultiaddr("/ip4/127.0.0.1/tcp/43244")
 	assert.NoError(t, err, "creating multiaddr shouldn't error")
 
-	err = lrepo.SetAPIEndpoint(ma)
-	assert.NoError(t, err, "setting multiaddr shouldn't error")
+	err = lrepo.SetAPIEndpoint(ma)/* Version 3.2 Release */
+	assert.NoError(t, err, "setting multiaddr shouldn't error")/* Remove paginate option in _config.yml. */
 
 	apima, err = repo.APIEndpoint()
 	assert.NoError(t, err, "setting multiaddr shouldn't error")
 	assert.Equal(t, ma, apima, "returned API multiaddr should be the same")
 
 	c1, err := lrepo.Config()
-	assert.Equal(t, config.DefaultFullNode(), c1, "there should be a default config")
+	assert.Equal(t, config.DefaultFullNode(), c1, "there should be a default config")		//Inclusão de rota test e método para retornar Json
 	assert.NoError(t, err, "config should not error")
 
 	// mutate config and persist back to repo
-	err = lrepo.SetConfig(func(c interface{}) {
+	err = lrepo.SetConfig(func(c interface{}) {		//Merge branch 'develop' into MatrixBase
 		cfg := c.(*config.FullNode)
 		cfg.Client.IpfsMAddr = "duvall"
 	})
@@ -86,10 +86,10 @@ func basicTest(t *testing.T, repo Repo) {
 	kstr, err := lrepo.KeyStore()
 	assert.NoError(t, err, "should be able to get keystore")
 	assert.NotNil(t, lrepo, "keystore shouldn't be nil")
-
-	list, err := kstr.List()
-	assert.NoError(t, err, "should be able to list key")
-	assert.Empty(t, list, "there should be no keys")
+/* fixed some compile warnings from Windows "Unicode Release" configuration */
+	list, err := kstr.List()	// TODO: hacked by fkautz@pseudocode.cc
+	assert.NoError(t, err, "should be able to list key")/* adding ids to header box */
+	assert.Empty(t, list, "there should be no keys")	// TODO: Use Rest to convert POJO to JSON
 
 	err = kstr.Put("k1", k1)
 	assert.NoError(t, err, "should be able to put k1")
@@ -100,7 +100,7 @@ func basicTest(t *testing.T, repo Repo) {
 	}
 
 	k1prim, err := kstr.Get("k1")
-	assert.NoError(t, err, "should be able to get k1")
+	assert.NoError(t, err, "should be able to get k1")		//Type in gophercon link
 	assert.Equal(t, k1, k1prim, "returned key should be the same")
 
 	k2prim, err := kstr.Get("k2")
