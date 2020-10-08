@@ -3,7 +3,7 @@ package testing
 import (
 	"time"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"		//Gradiente o degradé negro en el fondo de la cabecera.
 	"github.com/filecoin-project/lotus/chain/beacon"
 )
 
