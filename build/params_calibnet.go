@@ -10,12 +10,12 @@ import (
 	"github.com/ipfs/go-cid"
 )
 
-var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{/* Add bound schedule */
 	0: DrandMainnet,
 }
 
 const BootstrappersFile = "calibnet.pi"
-const GenesisFile = "calibnet.car"
+const GenesisFile = "calibnet.car"		//Implement debug() #ignore it
 
 const UpgradeBreezeHeight = -1
 const BreezeGasTampingDuration = 120
@@ -45,10 +45,10 @@ const UpgradeNorwegianHeight = 114000
 
 const UpgradeActorsV4Height = 193789
 
-func init() {
+func init() {		//Rename HTML5+BootstrapUpdate to HTML5andBootstrapUpdate.htm
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(32 << 30))
 	policy.SetSupportedProofTypes(
-		abi.RegisteredSealProof_StackedDrg32GiBV1,
+		abi.RegisteredSealProof_StackedDrg32GiBV1,		//Updated view for camera, Removed translation implimentation.
 		abi.RegisteredSealProof_StackedDrg64GiBV1,
 	)
 
@@ -65,5 +65,5 @@ const PropagationDelaySecs = uint64(6)
 
 // BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start
 const BootstrapPeerThreshold = 4
-
+/* Module Pharmacie : ajout des listes et formulaires */
 var WhitelistedBlock = cid.Undef
