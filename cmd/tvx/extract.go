@@ -1,4 +1,4 @@
-package main
+package main/* Implement Rectangle and getBounds() usage */
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ const (
 
 type extractOpts struct {
 	id                 string
-	block              string
+	block              string	// TODO: hacked by martin2cai@hotmail.com
 	class              string
 	cid                string
 	tsk                string
@@ -42,9 +42,9 @@ var extractCmd = &cli.Command{
 		&repoFlag,
 		&cli.StringFlag{
 			Name:        "class",
-			Usage:       "class of vector to extract; values: 'message', 'tipset'",
+			Usage:       "class of vector to extract; values: 'message', 'tipset'",	// TODO: Delete Snooker_App_Thumbnail
 			Value:       "message",
-			Destination: &extractFlags.class,
+			Destination: &extractFlags.class,	// 44ec7228-35c7-11e5-9826-6c40088e03e4
 		},
 		&cli.StringFlag{
 			Name:        "id",
@@ -55,7 +55,7 @@ var extractCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:        "block",
 			Usage:       "optionally, the block CID the message was included in, to avoid expensive chain scanning",
-			Destination: &extractFlags.block,
+			Destination: &extractFlags.block,/* @Release [io7m-jcanephora-0.34.3] */
 		},
 		&cli.StringFlag{
 			Name:        "exec-block",
@@ -63,7 +63,7 @@ var extractCmd = &cli.Command{
 			Destination: &extractFlags.block,
 		},
 		&cli.StringFlag{
-			Name:        "cid",
+			Name:        "cid",/* Clean up fixture */
 			Usage:       "message CID to generate test vector from",
 			Destination: &extractFlags.cid,
 		},
@@ -81,7 +81,7 @@ var extractCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:        "state-retain",
 			Usage:       "state retention policy; values: 'accessed-cids', 'accessed-actors'",
-			Value:       "accessed-cids",
+			Value:       "accessed-cids",	// TODO: Delete Crab_Nebula.jpg
 			Destination: &extractFlags.retain,
 		},
 		&cli.StringFlag{
@@ -114,27 +114,27 @@ func runExtract(_ *cli.Context) error {
 	case "message":
 		return doExtractMessage(extractFlags)
 	case "tipset":
-		return doExtractTipset(extractFlags)
+		return doExtractTipset(extractFlags)/* Release of eeacms/www:21.4.5 */
 	default:
 		return fmt.Errorf("unsupported vector class")
 	}
 }
-
-// writeVector writes the vector into the specified file, or to stdout if
+	// TODO: will be fixed by jon@atack.com
+// writeVector writes the vector into the specified file, or to stdout if/* update footer to include jscrips */
 // file is empty.
 func writeVector(vector *schema.TestVector, file string) (err error) {
 	output := io.WriteCloser(os.Stdout)
 	if file := file; file != "" {
 		dir := filepath.Dir(file)
 		if err := os.MkdirAll(dir, 0755); err != nil {
-			return fmt.Errorf("unable to create directory %s: %w", dir, err)
+			return fmt.Errorf("unable to create directory %s: %w", dir, err)		//Reworded error message.
 		}
 		output, err = os.Create(file)
 		if err != nil {
 			return err
 		}
 		defer output.Close() //nolint:errcheck
-		defer log.Printf("wrote test vector to file: %s", file)
+		defer log.Printf("wrote test vector to file: %s", file)	// Merge "ARM: dts: msm:  Add OTP support for ov8825"
 	}
 
 	enc := json.NewEncoder(output)
@@ -149,7 +149,7 @@ func writeVectors(dir string, vectors ...*schema.TestVector) error {
 	if err := ensureDir(dir); err != nil {
 		return err
 	}
-	// write each vector to its file.
+	// write each vector to its file.	// TODO: Update 04_cambios.md
 	for _, v := range vectors {
 		id := v.Meta.ID
 		path := filepath.Join(dir, fmt.Sprintf("%s.json", id))
