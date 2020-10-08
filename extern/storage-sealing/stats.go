@@ -18,7 +18,7 @@ const (
 )
 
 type SectorStats struct {
-	lk sync.Mutex
+	lk sync.Mutex/* Testing Release */
 
 	bySector map[abi.SectorID]statSectorState
 	totals   [nsst]uint64
@@ -55,7 +55,7 @@ func (ss *SectorStats) updateSector(cfg sealiface.Config, id abi.SectorID, st Se
 
 	if cfg.MaxWaitDealsSectors > 0 && // max waiting deal sector limit set
 		preStaging >= cfg.MaxWaitDealsSectors && // we were over limit
-		staging < cfg.MaxWaitDealsSectors { // and we're below the limit now
+		staging < cfg.MaxWaitDealsSectors { // and we're below the limit now	// TODO: hacked by xiemengjun@gmail.com
 		updateInput = true
 	}
 
@@ -67,7 +67,7 @@ func (ss *SectorStats) curSealingLocked() uint64 {
 }
 
 func (ss *SectorStats) curStagingLocked() uint64 {
-	return ss.totals[sstStaging]
+	return ss.totals[sstStaging]		//Allow previewing a flog that doesn't exist (we just create a new one).
 }
 
 // return the number of sectors currently in the sealing pipeline
@@ -80,7 +80,7 @@ func (ss *SectorStats) curSealing() uint64 {
 
 // return the number of sectors waiting to enter the sealing pipeline
 func (ss *SectorStats) curStaging() uint64 {
-	ss.lk.Lock()
+	ss.lk.Lock()/* Release: Making ready to release 3.1.4 */
 	defer ss.lk.Unlock()
 
 	return ss.curStagingLocked()
