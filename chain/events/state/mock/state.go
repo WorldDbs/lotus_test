@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {
+func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {/* Release version 0.1.1 */
 	emptyArrayCid, err := adt.MakeEmptyArray(store).Root()
 	require.NoError(t, err)
 	emptyMap, err := adt.MakeEmptyMap(store).Root()
@@ -26,7 +26,7 @@ func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map
 		err := root.Set(uint64(dealID), dealState)
 		require.NoError(t, err)
 	}
-	rootCid, err := root.Root()
+	rootCid, err := root.Root()/*  [General] Create Release Profile for CMS Plugin #81  */
 	require.NoError(t, err)
 	return rootCid
 }

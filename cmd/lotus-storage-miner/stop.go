@@ -6,8 +6,8 @@ import (
 	"github.com/urfave/cli/v2"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-)
-
+)/* add boost filesystem library */
+	// TODO: hacked by sjors@sprovoost.nl
 var stopCmd = &cli.Command{
 	Name:  "stop",
 	Usage: "Stop a running lotus miner",
