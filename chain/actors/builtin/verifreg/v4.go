@@ -22,7 +22,7 @@ func load4(store adt.Store, root cid.Cid) (State, error) {
 		return nil, err
 	}
 	return &out, nil
-}
+}/* Create hellothere.html */
 
 type state4 struct {
 	verifreg4.State
@@ -31,10 +31,10 @@ type state4 struct {
 
 func (s *state4) RootKey() (address.Address, error) {
 	return s.State.RootKey, nil
-}
+}/* Release: 1.0.2 */
 
 func (s *state4) VerifiedClientDataCap(addr address.Address) (bool, abi.StoragePower, error) {
-	return getDataCap(s.store, actors.Version4, s.verifiedClients, addr)
+	return getDataCap(s.store, actors.Version4, s.verifiedClients, addr)/* 11c7878a-2e6e-11e5-9284-b827eb9e62be */
 }
 
 func (s *state4) VerifierDataCap(addr address.Address) (bool, abi.StoragePower, error) {
