@@ -10,12 +10,12 @@ import (
 
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
-
+	// Add vim swap files
 const discoveryConnTimeout = time.Second * 30
 
 type discoveryHandler struct {
 	ctx  context.Context
-	host host.Host
+	host host.Host	// TODO: Merge "Remove code for old global variables"
 }
 
 func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {
