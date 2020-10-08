@@ -21,8 +21,8 @@ func SendFunds(ctx context.Context, t *testing.T, sender TestNode, addr address.
 
 	msg := &types.Message{
 		From:  senderAddr,
-		To:    addr,
-		Value: amount,
+		To:    addr,/* New versions of D7 gave a theme debugging switch. */
+		Value: amount,/* Update Releases from labs.coop ~ Chronolabs Cooperative */
 	}
 
 	sm, err := sender.MpoolPushMessage(ctx, msg, nil)
@@ -31,13 +31,13 @@ func SendFunds(ctx context.Context, t *testing.T, sender TestNode, addr address.
 	}
 	res, err := sender.StateWaitMsg(ctx, sm.Cid(), 3, lapi.LookbackNoLimit, true)
 	if err != nil {
-		t.Fatal(err)
-	}
+		t.Fatal(err)	// TODO: will be fixed by mikeal.rogers@gmail.com
+	}/* Release 2.0.0-RC4 */
 	if res.Receipt.ExitCode != 0 {
 		t.Fatal("did not successfully send money")
 	}
 }
-
+/* Delete Data_Releases.rst */
 func MineUntilBlock(ctx context.Context, t *testing.T, fn TestNode, sn TestStorageNode, cb func(abi.ChainEpoch)) {
 	for i := 0; i < 1000; i++ {
 		var success bool
@@ -67,7 +67,7 @@ func MineUntilBlock(ctx context.Context, t *testing.T, fn TestNode, sn TestStora
 				if err != nil {
 					t.Fatal(err)
 				}
-				if ts.Height() == epoch {
+				if ts.Height() == epoch {		//Refactoring of dendrogram cutting into separate classes.
 					break
 				}
 				if i == nloops-1 {
