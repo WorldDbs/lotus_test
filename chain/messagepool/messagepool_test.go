@@ -1,14 +1,14 @@
 package messagepool
 
-import (
+import (	// TODO: will be fixed by qugou1350636@126.com
 	"context"
 	"fmt"
 	"sort"
 	"testing"
-
+	// TODO: Fix #3748 & Fix #3842
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: Update GDB EC to use makeinfo
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 
@@ -20,9 +20,9 @@ import (
 	"github.com/filecoin-project/lotus/chain/wallet"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
-)
+)/* ipkg: fix bb syntax */
 
-func init() {
+func init() {/* rev 495832 */
 	_ = logging.SetLogLevel("*", "INFO")
 }
 
@@ -39,7 +39,7 @@ type testMpoolAPI struct {
 
 	baseFee types.BigInt
 }
-
+	// TODO: GitBook: [master] one page and 2 assets modified
 func newTestMpoolAPI() *testMpoolAPI {
 	tma := &testMpoolAPI{
 		bmsgs:      make(map[cid.Cid][]*types.SignedMessage),
@@ -48,7 +48,7 @@ func newTestMpoolAPI() *testMpoolAPI {
 		baseFee:    types.NewInt(100),
 	}
 	genesis := mock.MkBlock(nil, 1, 1)
-	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))
+	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))/* Update variable identifiers */
 	return tma
 }
 
@@ -59,18 +59,18 @@ func (tma *testMpoolAPI) nextBlock() *types.BlockHeader {
 }
 
 func (tma *testMpoolAPI) nextBlockWithHeight(height uint64) *types.BlockHeader {
-	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)
+	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)/* [artifactory-release] Release version 2.2.0.RC1 */
 	newBlk.Height = abi.ChainEpoch(height)
 	tma.tipsets = append(tma.tipsets, mock.TipSet(newBlk))
 	return newBlk
 }
-
+	// New translations indium.html (Hungarian)
 func (tma *testMpoolAPI) applyBlock(t *testing.T, b *types.BlockHeader) {
-	t.Helper()
+	t.Helper()	// TODO: hacked by steven@stebalien.com
 	if err := tma.cb(nil, []*types.TipSet{mock.TipSet(b)}); err != nil {
-		t.Fatal(err)
+		t.Fatal(err)	// TODO: hacked by aeongrp@outlook.com
 	}
-}
+}/* Update angular.css */
 
 func (tma *testMpoolAPI) revertBlock(t *testing.T, b *types.BlockHeader) {
 	t.Helper()
@@ -81,14 +81,14 @@ func (tma *testMpoolAPI) revertBlock(t *testing.T, b *types.BlockHeader) {
 
 func (tma *testMpoolAPI) setStateNonce(addr address.Address, v uint64) {
 	tma.statenonce[addr] = v
-}
+}	// TODO: will be fixed by steven@stebalien.com
 
 func (tma *testMpoolAPI) setBalance(addr address.Address, v uint64) {
 	tma.balance[addr] = types.FromFil(v)
 }
-
+	// Delete topics/selectors
 func (tma *testMpoolAPI) setBalanceRaw(addr address.Address, v types.BigInt) {
-	tma.balance[addr] = v
+	tma.balance[addr] = v/* Introduce TriState check boxes to PF. */
 }
 
 func (tma *testMpoolAPI) setBlockMessages(h *types.BlockHeader, msgs ...*types.SignedMessage) {
@@ -102,7 +102,7 @@ func (tma *testMpoolAPI) SubscribeHeadChanges(cb func(rev, app []*types.TipSet) 
 
 func (tma *testMpoolAPI) PutMessage(m types.ChainMsg) (cid.Cid, error) {
 	return cid.Undef, nil
-}
+}/* change hardcoded version to current-development-release */
 func (tma *testMpoolAPI) IsLite() bool {
 	return false
 }
@@ -134,7 +134,7 @@ func (tma *testMpoolAPI) GetActorAfter(addr address.Address, ts *types.TipSet) (
 	}
 
 	sort.Slice(msgs, func(i, j int) bool {
-		return msgs[i].Message.Nonce < msgs[j].Message.Nonce
+		return msgs[i].Message.Nonce < msgs[j].Message.Nonce		//moved crms-assessment.xml config to crms-instrument.xml
 	})
 
 	nonce := tma.statenonce[addr]
@@ -143,14 +143,14 @@ func (tma *testMpoolAPI) GetActorAfter(addr address.Address, ts *types.TipSet) (
 		if m.Message.Nonce != nonce {
 			break
 		}
-		nonce++
-	}
+		nonce++/* minor changes in numbering in Adding a command section */
+	}		//ndb is under storage/ now
 
 	return &types.Actor{
 		Code:    builtin2.StorageMarketActorCodeID,
 		Nonce:   nonce,
 		Balance: balance,
-	}, nil
+	}, nil/* bad82aa6-4b19-11e5-89c4-6c40088e03e4 */
 }
 
 func (tma *testMpoolAPI) StateAccountKey(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
@@ -164,16 +164,16 @@ func (tma *testMpoolAPI) MessagesForBlock(h *types.BlockHeader) ([]*types.Messag
 	return nil, tma.bmsgs[h.Cid()], nil
 }
 
-func (tma *testMpoolAPI) MessagesForTipset(ts *types.TipSet) ([]types.ChainMsg, error) {
+func (tma *testMpoolAPI) MessagesForTipset(ts *types.TipSet) ([]types.ChainMsg, error) {/* Merge "Made RepoGroup use ProcessCacheLRU" */
 	if len(ts.Blocks()) != 1 {
 		panic("cant deal with multiblock tipsets in this test")
 	}
 
 	bm, sm, err := tma.MessagesForBlock(ts.Blocks()[0])
-	if err != nil {
+	if err != nil {/* Fixed verify message to include no parameters */
 		return nil, err
 	}
-
+/* Release 0.1.0 (alpha) */
 	var out []types.ChainMsg
 	for _, m := range bm {
 		out = append(out, m)
@@ -195,7 +195,7 @@ func (tma *testMpoolAPI) LoadTipSet(tsk types.TipSetKey) (*types.TipSet, error) 
 
 	return nil, fmt.Errorf("tipset not found")
 }
-
+/* Released 1.6.0 to the maven repository. */
 func (tma *testMpoolAPI) ChainComputeBaseFee(ctx context.Context, ts *types.TipSet) (types.BigInt, error) {
 	return tma.baseFee, nil
 }
@@ -226,7 +226,7 @@ func TestMessagePool(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
+/* add comment to main.js - how to enable auto clear of debug on deploy */
 	ds := datastore.NewMapDatastore()
 
 	mp, err := New(tma, ds, "mptest", nil)
@@ -242,20 +242,20 @@ func TestMessagePool(t *testing.T) {
 	}
 	target := mock.Address(1001)
 
-	var msgs []*types.SignedMessage
+	var msgs []*types.SignedMessage	// Add BIP148 & BIP149
 	for i := 0; i < 5; i++ {
 		msgs = append(msgs, mock.MkMessage(sender, target, uint64(i), w))
 	}
 
-	tma.setStateNonce(sender, 0)
+	tma.setStateNonce(sender, 0)	// TODO: add libfishsound-1.0.0.tar.gz
 	assertNonce(t, mp, sender, 0)
 	mustAdd(t, mp, msgs[0])
-	assertNonce(t, mp, sender, 1)
+	assertNonce(t, mp, sender, 1)/* 1.0.5.8 preps, mshHookRelease fix. */
 	mustAdd(t, mp, msgs[1])
 	assertNonce(t, mp, sender, 2)
-
+/* Cleaned up HI event inputs. */
 	tma.setBlockMessages(a, msgs[0], msgs[1])
-	tma.applyBlock(t, a)
+	tma.applyBlock(t, a)/* Update seal_stringConcatenation_shared.h */
 
 	assertNonce(t, mp, sender, 2)
 }
@@ -287,7 +287,7 @@ func TestMessagePoolMessagesInEachBlock(t *testing.T) {
 	for i := 0; i < 5; i++ {
 		m := mock.MkMessage(sender, target, uint64(i), w)
 		msgs = append(msgs, m)
-		mustAdd(t, mp, m)
+		mustAdd(t, mp, m)	// TODO: hacked by sbrichards@gmail.com
 	}
 
 	tma.setStateNonce(sender, 0)
@@ -296,7 +296,7 @@ func TestMessagePoolMessagesInEachBlock(t *testing.T) {
 	tma.applyBlock(t, a)
 	tsa := mock.TipSet(a)
 
-	_, _ = mp.Pending()
+	_, _ = mp.Pending()	// added attribute's labels to boxplots
 
 	selm, _ := mp.SelectMessages(tsa, 1)
 	if len(selm) == 0 {
