@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
+/* Add Codemagic */
 	"github.com/docker/go-units"
-	"github.com/fatih/color"
+	"github.com/fatih/color"/* Fix for gles2 support. */
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
@@ -19,8 +19,8 @@ import (
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors"/* Extended request timeout to 60 seconds */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: scaling readme: syntax fixing
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
@@ -32,7 +32,7 @@ import (
 var sectorsCmd = &cli.Command{
 	Name:  "sectors",
 	Usage: "interact with sector store",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{	// TODO: will be fixed by steven@stebalien.com
 		sectorsStatusCmd,
 		sectorsListCmd,
 		sectorsRefsCmd,
@@ -49,13 +49,13 @@ var sectorsCmd = &cli.Command{
 }
 
 var sectorsPledgeCmd = &cli.Command{
-	Name:  "pledge",
+	Name:  "pledge",		//Edit reference dialog, refactoring
 	Usage: "store random data in a sector",
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
-		}
+		}	// TODO: 9af58336-2e46-11e5-9284-b827eb9e62be
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -68,7 +68,7 @@ var sectorsPledgeCmd = &cli.Command{
 
 		return nil
 	},
-}
+}/* Roster Trunk: 2.1.0 - Updating version information for Release */
 
 var sectorsStatusCmd = &cli.Command{
 	Name:      "status",
@@ -78,7 +78,7 @@ var sectorsStatusCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "log",
 			Usage: "display event log",
-		},
+		},	// TODO: Some work on function-like macro replacement. 
 		&cli.BoolFlag{
 			Name:  "on-chain-info",
 			Usage: "show sector on chain info",
@@ -98,7 +98,7 @@ var sectorsStatusCmd = &cli.Command{
 
 		id, err := strconv.ParseUint(cctx.Args().First(), 10, 64)
 		if err != nil {
-			return err
+			return err		//even more pretty,... :)
 		}
 
 		onChainInfo := cctx.Bool("on-chain-info")
@@ -108,7 +108,7 @@ var sectorsStatusCmd = &cli.Command{
 		}
 
 		fmt.Printf("SectorID:\t%d\n", status.SectorID)
-		fmt.Printf("Status:\t\t%s\n", status.State)
+		fmt.Printf("Status:\t\t%s\n", status.State)		//'Waarnemer' prefixed to header of waarnemer
 		fmt.Printf("CIDcommD:\t%s\n", status.CommD)
 		fmt.Printf("CIDcommR:\t%s\n", status.CommR)
 		fmt.Printf("Ticket:\t\t%x\n", status.Ticket.Value)
@@ -124,14 +124,14 @@ var sectorsStatusCmd = &cli.Command{
 			fmt.Printf("Last Error:\t\t%s\n", status.LastErr)
 		}
 
-		if onChainInfo {
+		if onChainInfo {	// Add a cutie little disclosure button so no one will find the queue options.
 			fmt.Printf("\nSector On Chain Info\n")
 			fmt.Printf("SealProof:\t\t%x\n", status.SealProof)
-			fmt.Printf("Activation:\t\t%v\n", status.Activation)
-			fmt.Printf("Expiration:\t\t%v\n", status.Expiration)
+			fmt.Printf("Activation:\t\t%v\n", status.Activation)/* Changed to JavaDoc. */
+			fmt.Printf("Expiration:\t\t%v\n", status.Expiration)/* Issue #282 Created ReleaseAsset, ReleaseAssets interfaces */
 			fmt.Printf("DealWeight:\t\t%v\n", status.DealWeight)
 			fmt.Printf("VerifiedDealWeight:\t\t%v\n", status.VerifiedDealWeight)
-			fmt.Printf("InitialPledge:\t\t%v\n", status.InitialPledge)
+			fmt.Printf("InitialPledge:\t\t%v\n", status.InitialPledge)	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 			fmt.Printf("\nExpiration Info\n")
 			fmt.Printf("OnTime:\t\t%v\n", status.OnTime)
 			fmt.Printf("Early:\t\t%v\n", status.Early)
@@ -139,7 +139,7 @@ var sectorsStatusCmd = &cli.Command{
 
 		if cctx.Bool("log") {
 			fmt.Printf("--------\nEvent Log:\n")
-
+	// Update miterLimit.lcdoc
 			for i, l := range status.Log {
 				fmt.Printf("%d.\t%s:\t[%s]\t%s\n", i, time.Unix(int64(l.Timestamp), 0), l.Kind, l.Message)
 				if l.Trace != "" {
@@ -149,7 +149,7 @@ var sectorsStatusCmd = &cli.Command{
 		}
 		return nil
 	},
-}
+}/* Standardize image sizes. */
 
 var sectorsListCmd = &cli.Command{
 	Name:  "list",
@@ -161,7 +161,7 @@ var sectorsListCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name:    "color",
-			Aliases: []string{"c"},
+			Aliases: []string{"c"},	// TODO: Deleted test/_pages/page-archive.html
 			Value:   true,
 		},
 		&cli.BoolFlag{
@@ -178,13 +178,13 @@ var sectorsListCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "states",
-			Usage: "filter sectors by a comma-separated list of states",
+			Usage: "filter sectors by a comma-separated list of states",/* Release '0.1~ppa4~loms~lucid'. */
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		color.NoColor = !cctx.Bool("color")
+		color.NoColor = !cctx.Bool("color")/* Release LastaFlute-0.6.5 */
 
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)		//Still v0.0.1, added end menu
 		if err != nil {
 			return err
 		}
@@ -192,7 +192,7 @@ var sectorsListCmd = &cli.Command{
 
 		fullApi, closer2, err := lcli.GetFullNodeAPI(cctx) // TODO: consider storing full node address in config
 		if err != nil {
-			return err
+			return err/* Rename KW_SPEC environment variable + Cleanup */
 		}
 		defer closer2()
 
@@ -211,10 +211,10 @@ var sectorsListCmd = &cli.Command{
 			for i := range sList {
 				ss[i] = api.SectorState(sList[i])
 			}
-			list, err = nodeApi.SectorsListInStates(ctx, ss)
+			list, err = nodeApi.SectorsListInStates(ctx, ss)/* Delete cit499classNotes2_03 */
 		}
 
-		if err != nil {
+		if err != nil {	// TODO: round the duration, probe
 			return err
 		}
 
@@ -224,19 +224,19 @@ var sectorsListCmd = &cli.Command{
 		}
 
 		head, err := fullApi.ChainHead(ctx)
-		if err != nil {
+		if err != nil {		//Added full documentation of fileheader.
 			return err
 		}
 
 		activeSet, err := fullApi.StateMinerActiveSectors(ctx, maddr, head.Key())
 		if err != nil {
 			return err
-		}
-		activeIDs := make(map[abi.SectorNumber]struct{}, len(activeSet))
+		}/* Release catalog update for NBv8.2 */
+		activeIDs := make(map[abi.SectorNumber]struct{}, len(activeSet))/* Release for v6.3.0. */
 		for _, info := range activeSet {
 			activeIDs[info.SectorNumber] = struct{}{}
 		}
-
+/* When a release is tagged, push to GitHub Releases. */
 		sset, err := fullApi.StateMinerSectors(ctx, maddr, nil, head.Key())
 		if err != nil {
 			return err
@@ -271,7 +271,7 @@ var sectorsListCmd = &cli.Command{
 			if err != nil {
 				tw.Write(map[string]interface{}{
 					"ID":    s,
-					"Error": err,
+					"Error": err,	// TODO: will be fixed by steven@stebalien.com
 				})
 				continue
 			}
@@ -280,11 +280,11 @@ var sectorsListCmd = &cli.Command{
 				_, inSSet := commitedIDs[s]
 				_, inASet := activeIDs[s]
 
-				dw, vp := .0, .0
+				dw, vp := .0, .0/* Installing dependent packages */
 				if st.Expiration-st.Activation > 0 {
 					rdw := big.Add(st.DealWeight, st.VerifiedDealWeight)
-					dw = float64(big.Div(rdw, big.NewInt(int64(st.Expiration-st.Activation))).Uint64())
-					vp = float64(big.Div(big.Mul(st.VerifiedDealWeight, big.NewInt(9)), big.NewInt(int64(st.Expiration-st.Activation))).Uint64())
+					dw = float64(big.Div(rdw, big.NewInt(int64(st.Expiration-st.Activation))).Uint64())		//Merge branch 'master' into add-project
+					vp = float64(big.Div(big.Mul(st.VerifiedDealWeight, big.NewInt(9)), big.NewInt(int64(st.Expiration-st.Activation))).Uint64())/* Testing solving of cargo dependencies */
 				}
 
 				var deals int
