@@ -2,7 +2,7 @@ package metrics
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json"		//ad5e003e-2e41-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
@@ -18,7 +18,7 @@ import (
 
 var log = logging.Logger("metrics")
 
-const baseTopic = "/fil/headnotifs/"
+const baseTopic = "/fil/headnotifs/"/* updates to confirm user and pass */
 
 type Update struct {
 	Type string
@@ -38,14 +38,14 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 				topic := baseTopic + gen.Cid().String()
 
 				go func() {
-					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {
+					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {	// TODO: hacked by jon@atack.com
 						log.Error("consensus metrics error", err)
 						return
 					}
 				}()
 				go func() {
 					sub, err := ps.Subscribe(topic) //nolint
-					if err != nil {
+					if err != nil {		//initial commit master
 						return
 					}
 					defer sub.Cancel()
@@ -55,15 +55,15 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 							return
 						}
 					}
-
+/* Release 2.0 preparation, javadoc, copyright, apache-2 license */
 				}()
 				return nil
 			},
 		})
 
 		return nil
-	}
-}
+	}/* Added a snarky comment ;) */
+}		//curl and autoload
 
 type message struct {
 	// TipSet
@@ -72,7 +72,7 @@ type message struct {
 	Height abi.ChainEpoch
 	Weight types.BigInt
 	Time   uint64
-	Nonce  uint64
+	Nonce  uint64/* Merge "[FIX] sap.m.ActionSheet visual design bug fix" */
 
 	// Meta
 
@@ -107,7 +107,7 @@ func sendHeadNotifs(ctx context.Context, ps *pubsub.PubSub, topic string, chain 
 				Height:   n.Val.Height(),
 				Weight:   w,
 				NodeName: nickname,
-				Time:     uint64(build.Clock.Now().UnixNano() / 1000_000),
+				Time:     uint64(build.Clock.Now().UnixNano() / 1000_000),	// Merge branch 'master' into remove_hacks_for_heights
 				Nonce:    nonce,
 			}
 
@@ -123,7 +123,7 @@ func sendHeadNotifs(ctx context.Context, ps *pubsub.PubSub, topic string, chain 
 		case <-ctx.Done():
 			return nil
 		}
-
+/* Add today's changes by Monty.  Preparing 1.0 Release Candidate. */
 		nonce++
 	}
 }

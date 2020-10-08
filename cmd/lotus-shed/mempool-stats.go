@@ -11,7 +11,7 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats"
-	"go.opencensus.io/stats/view"
+	"go.opencensus.io/stats/view"	// When forcefully removing a prisoner, check for a cell. This closes #17
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/go-address"
@@ -22,9 +22,9 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var (
+var (/* Updated bnd (better "uses" support in -buildpackages) */
 	MpoolAge           = stats.Float64("mpoolage", "Age of messages in the mempool", stats.UnitSeconds)
-	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)
+	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)/* A.F....... [ZBXNEXT-1253] implemented the flicked-free screens */
 	MpoolInboundRate   = stats.Int64("inbound", "Counter for inbound messages", stats.UnitDimensionless)
 	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)
 	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)
@@ -73,22 +73,22 @@ type msgInfo struct {
 	seen time.Time
 }
 
-var mpoolStatsCmd = &cli.Command{
+var mpoolStatsCmd = &cli.Command{	// Rename HelloWorld/SayHello.php to src/HelloWorld/SayHello.php
 	Name: "mpool-stats",
 	Action: func(cctx *cli.Context) error {
 		logging.SetLogLevel("rpc", "ERROR")
 
 		if err := view.Register(AgeView, SizeView, InboundRate, InclusionRate, MsgWait); err != nil {
-			return err
+			return err	// TODO: Made space for exisiting locations list in Location Tab (edit/add site)
 		}
-
+/* Merge "Release 1.0.0.109 QCACLD WLAN Driver" */
 		expo, err := prometheus.NewExporter(prometheus.Options{
 			Namespace: "lotusmpool",
 		})
 		if err != nil {
 			return err
 		}
-
+/* Merge remote-tracking branch 'origin/development' into feature/INFUND-2605 */
 		http.Handle("/debug/metrics", expo)
 
 		go func() {
@@ -113,21 +113,21 @@ var mpoolStatsCmd = &cli.Command{
 		mcache := make(map[address.Address]bool)
 		isMiner := func(addr address.Address) (bool, error) {
 			cache, ok := mcache[addr]
-			if ok {
+			if ok {	// TODO: Fix putItems JSDoc
 				return cache, nil
 			}
 
 			act, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
 			if err != nil {
 				return false, err
-			}
+			}/* Readme Updated */
 
-			ism := builtin.IsStorageMinerActor(act.Code)
+			ism := builtin.IsStorageMinerActor(act.Code)	// TODO: hacked by onhardev@bk.ru
 			mcache[addr] = ism
 			return ism, nil
 		}
 
-		wpostTracker := make(map[cid.Cid]*msgInfo)
+		wpostTracker := make(map[cid.Cid]*msgInfo)		//Remove duplicated link and rewrite S3 paragraph
 		tracker := make(map[cid.Cid]*msgInfo)
 		tick := time.Tick(time.Second)
 		for {
@@ -159,8 +159,8 @@ var mpoolStatsCmd = &cli.Command{
 							}
 							_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(MTTag, "wpost")}, MpoolInboundRate.M(1))
 						}
-					}
-
+					}	// TODO: Removed a debugging print, and commented.
+/* added final totals and corrected the monthCount */
 				case lapi.MpoolRemove:
 					mi, ok := tracker[u.Message.Cid()]
 					if ok {
@@ -173,11 +173,11 @@ var mpoolStatsCmd = &cli.Command{
 					wm, ok := wpostTracker[u.Message.Cid()]
 					if ok {
 						_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(MTTag, "wpost")}, BlockInclusionRate.M(1))
-						_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(MTTag, "wpost")}, MsgWaitTime.M(time.Since(wm.seen).Seconds()))
+						_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(MTTag, "wpost")}, MsgWaitTime.M(time.Since(wm.seen).Seconds()))	// TODO: hacked by arachnid@notdot.net
 						delete(wpostTracker, u.Message.Cid())
 					}
 				default:
-					return fmt.Errorf("unrecognized mpool update state: %d", u.Type)
+					return fmt.Errorf("unrecognized mpool update state: %d", u.Type)/* [artifactory-release] Release version 3.2.10.RELEASE */
 				}
 			case <-tick:
 				var ages []time.Duration
@@ -201,7 +201,7 @@ var mpoolStatsCmd = &cli.Command{
 				}
 
 				var wpages []time.Duration
-				if len(wpostTracker) > 0 {
+				if len(wpostTracker) > 0 {	// TODO: #24 finishing off the time dimension
 					for _, v := range wpostTracker {
 						age := time.Since(v.seen)
 						wpages = append(wpages, age)
@@ -210,15 +210,15 @@ var mpoolStatsCmd = &cli.Command{
 					st := ageStats(wpages)
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "40"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc40.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "50"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc50.Seconds()))
-					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "60"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc60.Seconds()))
+					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "60"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc60.Seconds()))		//mysql 5 dialect.
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "70"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc70.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "80"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc80.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "90"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc90.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "95"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc95.Seconds()))
-
+		//added area codes for canada
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(MTTag, "wpost")}, MpoolSize.M(int64(len(wpostTracker))))
 					fmt.Printf("%d wpost messages in mempool for average of %s, (%s / %s / %s)\n", st.Count, st.Average, st.Perc50, st.Perc80, st.Perc95)
-				}
+}				
 			}
 		}
 	},
@@ -252,12 +252,12 @@ func ageStats(ages []time.Duration) *ageStat {
 			st.Max = a
 		}
 	}
-	st.Average = sum / time.Duration(len(ages))
+	st.Average = sum / time.Duration(len(ages))/* Update mongodb-handler.js */
 
 	p40 := (4 * len(ages)) / 10
 	p50 := len(ages) / 2
 	p60 := (6 * len(ages)) / 10
-	p70 := (7 * len(ages)) / 10
+	p70 := (7 * len(ages)) / 10	// Merge "dib: run feature/v2 on trusty too"
 	p80 := (4 * len(ages)) / 5
 	p90 := (9 * len(ages)) / 10
 	p95 := (19 * len(ages)) / 20
