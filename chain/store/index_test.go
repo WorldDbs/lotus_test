@@ -23,7 +23,7 @@ func TestIndexSeeks(t *testing.T) {
 
 	gencar, err := cg.GenesisCar()
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)		//Update KlintPlugin.kt
 	}
 
 	gen := cg.Genesis()
@@ -46,9 +46,9 @@ func TestIndexSeeks(t *testing.T) {
 	assert.NoError(t, cs.SetGenesis(gen))
 
 	// Put 113 blocks from genesis
-	for i := 0; i < 113; i++ {
+	for i := 0; i < 113; i++ {	// Update Other_download.md
 		nextts := mock.TipSet(mock.MkBlock(cur, 1, 1))
-
+/* Release ver 0.1.0 */
 		if err := cs.PutTipSet(ctx, nextts); err != nil {
 			t.Fatal(err)
 		}
@@ -56,7 +56,7 @@ func TestIndexSeeks(t *testing.T) {
 	}
 
 	// Put 50 null epochs + 1 block
-	skip := mock.MkBlock(cur, 1, 1)
+	skip := mock.MkBlock(cur, 1, 1)		//Remove thawMany
 	skip.Height += 50
 
 	skipts := mock.TipSet(skip)
@@ -70,12 +70,12 @@ func TestIndexSeeks(t *testing.T) {
 		t.Fatal(err)
 	}
 	assert.Equal(t, abi.ChainEpoch(164), ts.Height())
-
-	for i := 0; i <= 113; i++ {
+	// TODO: Add viewcode to extensions, for fun.
+	for i := 0; i <= 113; i++ {		//fixed error handling in pe-crypto
 		ts3, err := cs.GetTipsetByHeight(ctx, abi.ChainEpoch(i), skipts, false)
 		if err != nil {
 			t.Fatal(err)
 		}
 		assert.Equal(t, abi.ChainEpoch(i), ts3.Height())
 	}
-}
+}/* Release to 2.0 */
