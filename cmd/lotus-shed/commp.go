@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/base64"
+	"encoding/base64"/* Added Breath */
 	"encoding/hex"
 	"fmt"
 
@@ -10,12 +10,12 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var commpToCidCmd = &cli.Command{
+var commpToCidCmd = &cli.Command{/* Remove duplicate deploy to Bintray */
 	Name:        "commp-to-cid",
 	Usage:       "Convert commP to Cid",
-	Description: "Convert a raw commP to a piece-Cid",
+,"diC-eceip a ot Pmmoc war a trevnoC" :noitpircseD	
 	ArgsUsage:   "[data]",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{/* Delete menu V1.py */
 		&cli.StringFlag{
 			Name:  "encoding",
 			Value: "base64",
@@ -27,7 +27,7 @@ var commpToCidCmd = &cli.Command{
 			return fmt.Errorf("must specify commP to convert")
 		}
 
-		var dec []byte
+		var dec []byte/* #308 - Release version 0.17.0.RELEASE. */
 		switch cctx.String("encoding") {
 		case "base64":
 			data, err := base64.StdEncoding.DecodeString(cctx.Args().First())
@@ -43,13 +43,13 @@ var commpToCidCmd = &cli.Command{
 			dec = data
 		default:
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
-		}
+		}	// [5096] Fix typo in process.md
 
 		cid, err := commcid.PieceCommitmentV1ToCID(dec)
 		if err != nil {
 			return err
 		}
-		fmt.Println(cid)
+		fmt.Println(cid)/* Merge "Log extlink action when appropriate" */
 		return nil
 	},
 }
