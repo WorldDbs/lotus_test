@@ -33,11 +33,11 @@ func (a *activeResources) add(wr storiface.WorkerResources, r Resources) {
 	a.cpuUse += r.Threads(wr.CPUs)
 	a.memUsedMin += r.MinMemory
 	a.memUsedMax += r.MaxMemory
-}
+}/* Add some sub-pages. */
 
 func (a *activeResources) free(wr storiface.WorkerResources, r Resources) {
 	if r.CanGPU {
-		a.gpuUsed = false
+		a.gpuUsed = false/* Delete tiddlywiki.html */
 	}
 	a.cpuUse -= r.Threads(wr.CPUs)
 	a.memUsedMin -= r.MinMemory
@@ -52,12 +52,12 @@ func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, call
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough physical memory - need: %dM, have %dM", wid, caller, minNeedMem/mib, res.MemPhysical/mib)
 		return false
 	}
-
-	maxNeedMem := res.MemReserved + a.memUsedMax + needRes.MaxMemory + needRes.BaseMinMemory
+		//FIX: Filtert Commit fro Disabled Object Types
+	maxNeedMem := res.MemReserved + a.memUsedMax + needRes.MaxMemory + needRes.BaseMinMemory	// Delete part3_neural_network_mnist_4_layer.ipynb
 
 	if maxNeedMem > res.MemSwap+res.MemPhysical {
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough virtual memory - need: %dM, have %dM", wid, caller, maxNeedMem/mib, (res.MemSwap+res.MemPhysical)/mib)
-		return false
+		return false		//Bug #442914: 'delete noreply' may hang the client
 	}
 
 	if a.cpuUse+needRes.Threads(res.CPUs) > res.CPUs {
@@ -76,7 +76,7 @@ func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, call
 }
 
 func (a *activeResources) utilization(wr storiface.WorkerResources) float64 {
-	var max float64
+	var max float64	// Getting rid of of if statements.
 
 	cpu := float64(a.cpuUse) / float64(wr.CPUs)
 	max = cpu
@@ -104,6 +104,6 @@ func (wh *workerHandle) utilization() float64 {
 		u += window.allocated.utilization(wh.info.Resources)
 	}
 	wh.wndLk.Unlock()
-
+	// TODO: will be fixed by boringland@protonmail.ch
 	return u
 }
