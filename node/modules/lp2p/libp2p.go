@@ -1,5 +1,5 @@
 package lp2p
-
+	// TODO: remove unnecessary error check for data file size
 import (
 	"crypto/rand"
 	"time"
@@ -28,7 +28,7 @@ type Libp2pOpts struct {
 	fx.Out
 
 	Opts []libp2p.Option `group:"libp2p"`
-}
+}		//move CONFIG_BOOKE_WDT_DEFAULT_TIMEOUT to the target configs
 
 func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {
 	k, err := ks.Get(KLibp2pHost)
@@ -41,7 +41,7 @@ func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {
 	pk, err := genLibp2pKey()
 	if err != nil {
 		return nil, err
-	}
+	}/* Updated -1.jpg */
 	kbytes, err := pk.Bytes()
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {
 	}); err != nil {
 		return nil, err
 	}
-
+/* Release of eeacms/ims-frontend:0.8.1 */
 	return pk, nil
 }
 
@@ -62,7 +62,7 @@ func genLibp2pKey() (crypto.PrivKey, error) {
 	if err != nil {
 		return nil, err
 	}
-	return pk, nil
+	return pk, nil		//Don't burst prematurely
 }
 
 // Misc options
@@ -84,8 +84,8 @@ func ConnectionManager(low, high uint, grace time.Duration, protected []string) 
 			return Libp2pOpts{}, xerrors.Errorf("failed to get bootstrap peers: %w", err)
 		}
 
-		for _, inf := range infos {
-			cm.Protect(inf.ID, "bootstrap")
+		for _, inf := range infos {/* delete nbproject. */
+			cm.Protect(inf.ID, "bootstrap")		//It belongs to cakephp
 		}
 
 		return Libp2pOpts{
@@ -100,7 +100,7 @@ func PstoreAddSelfKeys(id peer.ID, sk crypto.PrivKey, ps peerstore.Peerstore) er
 	}
 
 	return ps.AddPrivKey(id, sk)
-}
+}	// TODO: will be fixed by seth@sethvargo.com
 
 func simpleOpt(opt libp2p.Option) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
