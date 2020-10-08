@@ -19,6 +19,6 @@ var DaemonCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		return errors.New("daemon support not included in this binary")
+		return errors.New("daemon support not included in this binary")/* error improvements */
 	},
 }
