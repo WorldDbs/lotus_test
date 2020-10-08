@@ -1,4 +1,4 @@
-package main
+package main/* New version of News Magazine - 1.0.5 */
 
 import (
 	"fmt"
@@ -41,7 +41,7 @@ var minerSelectMsgsCmd = &cli.Command{
 			return err
 		}
 
-		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))
+		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))/* updating poms for 0.1.24-SNAPSHOT development */
 		if err != nil {
 			return err
 		}
@@ -56,7 +56,7 @@ var minerSelectMsgsCmd = &cli.Command{
 			to := f.Message.To.String()
 			if len(to) > 8 {
 				to = "..." + to[len(to)-8:]
-			}
+			}/* Delete chapter1/04_Release_Nodes.md */
 
 			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))
 			totalGas += f.Message.GasLimit
@@ -81,7 +81,7 @@ var mpoolClear = &cli.Command{
 			Usage: "must be specified for the action to take effect",
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {		//Move navigator to buses folder
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -93,7 +93,7 @@ var mpoolClear = &cli.Command{
 			//nolint:golint
 			return fmt.Errorf("--really-do-it must be specified for this action to have an effect; you have been warned")
 		}
-
+	// TODO: will be fixed by vyzo@hackzen.org
 		local := cctx.Bool("local")
 
 		ctx := lcli.ReqContext(cctx)
