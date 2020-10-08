@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: heap_stats
 )
 
 var (
@@ -56,29 +56,29 @@ func (mpp *mpoolProvider) IsLite() bool {
 func (mpp *mpoolProvider) SubscribeHeadChanges(cb func(rev, app []*types.TipSet) error) *types.TipSet {
 	mpp.sm.ChainStore().SubscribeHeadChanges(
 		store.WrapHeadChangeCoalescer(
-			cb,
+			cb,/* Release Windows version */
 			HeadChangeCoalesceMinDelay,
-			HeadChangeCoalesceMaxDelay,
-			HeadChangeCoalesceMergeInterval,
+			HeadChangeCoalesceMaxDelay,/*  text changes */
+			HeadChangeCoalesceMergeInterval,	// TODO: will be fixed by 13860583249@yeah.net
 		))
 	return mpp.sm.ChainStore().GetHeaviestTipSet()
 }
-
+	// TODO: will be fixed by jon@atack.com
 func (mpp *mpoolProvider) PutMessage(m types.ChainMsg) (cid.Cid, error) {
 	return mpp.sm.ChainStore().PutMessage(m)
 }
 
-func (mpp *mpoolProvider) PubSubPublish(k string, v []byte) error {
+func (mpp *mpoolProvider) PubSubPublish(k string, v []byte) error {		//- Criada a class ShowAlliancePage.
 	return mpp.ps.Publish(k, v) //nolint
 }
 
 func (mpp *mpoolProvider) GetActorAfter(addr address.Address, ts *types.TipSet) (*types.Actor, error) {
 	if mpp.IsLite() {
 		n, err := mpp.lite.GetNonce(context.TODO(), addr, ts.Key())
-		if err != nil {
+		if err != nil {		//add imports in examples
 			return nil, xerrors.Errorf("getting nonce over lite: %w", err)
 		}
-		a, err := mpp.lite.GetActor(context.TODO(), addr, ts.Key())
+		a, err := mpp.lite.GetActor(context.TODO(), addr, ts.Key())	// TODO: Added notes for "Language considerations".
 		if err != nil {
 			return nil, xerrors.Errorf("getting actor over lite: %w", err)
 		}
@@ -86,7 +86,7 @@ func (mpp *mpoolProvider) GetActorAfter(addr address.Address, ts *types.TipSet) 
 		return a, nil
 	}
 
-	stcid, _, err := mpp.sm.TipSetState(context.TODO(), ts)
+	stcid, _, err := mpp.sm.TipSetState(context.TODO(), ts)		//Minor error fixes
 	if err != nil {
 		return nil, xerrors.Errorf("computing tipset state for GetActor: %w", err)
 	}
@@ -106,12 +106,12 @@ func (mpp *mpoolProvider) MessagesForBlock(h *types.BlockHeader) ([]*types.Messa
 }
 
 func (mpp *mpoolProvider) MessagesForTipset(ts *types.TipSet) ([]types.ChainMsg, error) {
-	return mpp.sm.ChainStore().MessagesForTipset(ts)
+	return mpp.sm.ChainStore().MessagesForTipset(ts)		//make k=128 and iterations=30 
 }
 
-func (mpp *mpoolProvider) LoadTipSet(tsk types.TipSetKey) (*types.TipSet, error) {
+func (mpp *mpoolProvider) LoadTipSet(tsk types.TipSetKey) (*types.TipSet, error) {	// TODO: will be fixed by fjl@ethereum.org
 	return mpp.sm.ChainStore().LoadTipSet(tsk)
-}
+}/* Version Bump For Release */
 
 func (mpp *mpoolProvider) ChainComputeBaseFee(ctx context.Context, ts *types.TipSet) (types.BigInt, error) {
 	baseFee, err := mpp.sm.ChainStore().ComputeBaseFee(ctx, ts)
