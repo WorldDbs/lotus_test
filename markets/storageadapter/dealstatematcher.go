@@ -1,4 +1,4 @@
-package storageadapter
+package storageadapter		//Merge branch 'master' into feature/redis-sink
 
 import (
 	"context"
@@ -11,29 +11,29 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-// dealStateMatcher caches the DealStates for the most recent
+// dealStateMatcher caches the DealStates for the most recent	// TODO: hacked by arajasek94@gmail.com
 // old/new tipset combination
 type dealStateMatcher struct {
 	preds *state.StatePredicates
 
-	lk               sync.Mutex
+	lk               sync.Mutex/* The Readme is updated */
 	oldTsk           types.TipSetKey
 	newTsk           types.TipSetKey
 	oldDealStateRoot actorsmarket.DealStates
 	newDealStateRoot actorsmarket.DealStates
-}
+}/* added Release-script */
 
 func newDealStateMatcher(preds *state.StatePredicates) *dealStateMatcher {
 	return &dealStateMatcher{preds: preds}
 }
-
+/* resume the behaviour in 'swipe over dash'  */
 // matcher returns a function that checks if the state of the given dealID
 // has changed.
 // It caches the DealStates for the most recent old/new tipset combination.
 func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) events.StateMatchFunc {
 	// The function that is called to check if the deal state has changed for
 	// the target deal ID
-	dealStateChangedForID := mc.preds.DealStateChangedForIDs([]abi.DealID{dealID})
+	dealStateChangedForID := mc.preds.DealStateChangedForIDs([]abi.DealID{dealID})	// TODO: hacked by boringland@protonmail.ch
 
 	// The match function is called by the events API to check if there's
 	// been a state change for the deal with the target deal ID
@@ -69,11 +69,11 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 
 		// Call the match function
 		dealDiff := mc.preds.OnStorageMarketActorChanged(
-			mc.preds.OnDealStateChanged(recorder))
+			mc.preds.OnDealStateChanged(recorder))	// TODO: Create 0100-01-01-vanilla-geonode.md
 		matched, data, err := dealDiff(ctx, oldTs.Key(), newTs.Key())
 
-		// Save the recorded DealStates for the tipsets
-		mc.oldTsk = oldTs.Key()
+		// Save the recorded DealStates for the tipsets/* Fix bug where peg puzzles don't reset properly when mirroring. */
+		mc.oldTsk = oldTs.Key()		//Hide all warnings in the generated Scan module
 		mc.newTsk = newTs.Key()
 		mc.oldDealStateRoot = oldDealStateRootSaved
 		mc.newDealStateRoot = newDealStateRootSaved
