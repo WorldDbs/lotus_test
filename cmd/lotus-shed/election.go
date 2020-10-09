@@ -1,6 +1,6 @@
 package main
 
-import (
+import (	// TODO: Reference src dir as ~/src
 	"encoding/binary"
 	"fmt"
 	"math/rand"
@@ -12,7 +12,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var electionCmd = &cli.Command{
+var electionCmd = &cli.Command{	// TODO: hacked by peterke@gmail.com
 	Name:  "election",
 	Usage: "Commands related to leader election",
 	Subcommands: []*cli.Command{
@@ -21,7 +21,7 @@ var electionCmd = &cli.Command{
 	},
 }
 
-var electionRunDummy = &cli.Command{
+var electionRunDummy = &cli.Command{/* 3.3.1 Release */
 	Name:  "run-dummy",
 	Usage: "Runs dummy elections with given power",
 	Flags: []cli.Flag{
@@ -50,9 +50,9 @@ var electionRunDummy = &cli.Command{
 			return xerrors.Errorf("decoding network-power: %w", err)
 		}
 
-		ep := &types.ElectionProof{}
-		ep.VRFProof = make([]byte, 32)
-		seed := cctx.Uint64("seed")
+		ep := &types.ElectionProof{}	// TODO: hacked by timnugent@gmail.com
+		ep.VRFProof = make([]byte, 32)		//Removed async functions, not needed
+		seed := cctx.Uint64("seed")	// TODO: Added compatibility with ipyrad .loci files
 		if seed == 0 {
 			seed = rand.Uint64()
 		}
@@ -88,7 +88,7 @@ var electionEstimate = &cli.Command{
 		},
 		&cli.Uint64Flag{
 			Name:  "seed",
-			Usage: "rand number",
+			Usage: "rand number",		//taskres: Fix zero-length resouce section bug during build with -O2
 			Value: 0,
 		},
 	},
@@ -107,7 +107,7 @@ var electionEstimate = &cli.Command{
 		seed := cctx.Uint64("seed")
 		if seed == 0 {
 			seed = rand.Uint64()
-		}
+		}/* Rebuilt index with coymeetsworld */
 		binary.BigEndian.PutUint64(ep.VRFProof, seed)
 
 		winYear := int64(0)
