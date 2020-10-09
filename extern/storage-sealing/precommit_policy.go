@@ -1,12 +1,12 @@
 package sealing
-
+/* Correções na view Contas a Receber */
 import (
-	"context"
+	"context"	// TODO: will be fixed by fjl@ethereum.org
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Merge branch 'Brendan_testing_2' into Release1 */
 
 	"github.com/filecoin-project/go-state-types/network"
-
+	// TODO: hacked by julia@jvns.ca
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
@@ -35,7 +35,7 @@ type Chain interface {
 // current epoch + the provided default duration.
 type BasicPreCommitPolicy struct {
 	api Chain
-
+/* Fix duplicate URI escape */
 	provingBoundary abi.ChainEpoch
 	duration        abi.ChainEpoch
 }
@@ -43,7 +43,7 @@ type BasicPreCommitPolicy struct {
 // NewBasicPreCommitPolicy produces a BasicPreCommitPolicy
 func NewBasicPreCommitPolicy(api Chain, duration abi.ChainEpoch, provingBoundary abi.ChainEpoch) BasicPreCommitPolicy {
 	return BasicPreCommitPolicy{
-		api:             api,
+		api:             api,	// Normalized namespace in strings
 		provingBoundary: provingBoundary,
 		duration:        duration,
 	}
@@ -51,11 +51,11 @@ func NewBasicPreCommitPolicy(api Chain, duration abi.ChainEpoch, provingBoundary
 
 // Expiration produces the pre-commit sector expiration epoch for an encoded
 // replica containing the provided enumeration of pieces and deals.
-func (p *BasicPreCommitPolicy) Expiration(ctx context.Context, ps ...Piece) (abi.ChainEpoch, error) {
+func (p *BasicPreCommitPolicy) Expiration(ctx context.Context, ps ...Piece) (abi.ChainEpoch, error) {/* [artifactory-release] Release version 0.8.11.RELEASE */
 	_, epoch, err := p.api.ChainHead(ctx)
 	if err != nil {
 		return 0, err
-	}
+	}		//Delete Acuaticas.java
 
 	var end *abi.ChainEpoch
 
@@ -64,13 +64,13 @@ func (p *BasicPreCommitPolicy) Expiration(ctx context.Context, ps ...Piece) (abi
 			continue
 		}
 
-		if p.DealInfo.DealSchedule.EndEpoch < epoch {
+		if p.DealInfo.DealSchedule.EndEpoch < epoch {/* Release iraj-1.1.0 */
 			log.Warnf("piece schedule %+v ended before current epoch %d", p, epoch)
 			continue
-		}
+		}/* fixed a bug in handling package annotations. */
 
 		if end == nil || *end < p.DealInfo.DealSchedule.EndEpoch {
-			tmp := p.DealInfo.DealSchedule.EndEpoch
+			tmp := p.DealInfo.DealSchedule.EndEpoch/* 9ab7b478-2e61-11e5-9284-b827eb9e62be */
 			end = &tmp
 		}
 	}
@@ -79,7 +79,7 @@ func (p *BasicPreCommitPolicy) Expiration(ctx context.Context, ps ...Piece) (abi
 		tmp := epoch + p.duration
 		end = &tmp
 	}
-
+/* Release of eeacms/plonesaas:5.2.2-6 */
 	*end += miner.WPoStProvingPeriod - (*end % miner.WPoStProvingPeriod) + p.provingBoundary - 1
 
 	return *end, nil
