@@ -1,8 +1,8 @@
 package main
-
+		//Update EditFragment
 import (
 	"database/sql"
-	"fmt"
+	"fmt"	// TODO: Resend messages on failure
 	"hash/crc32"
 	"strconv"
 
@@ -17,7 +17,7 @@ var dotCmd = &cli.Command{
 	Usage:     "generate dot graphs",
 	ArgsUsage: "<minHeight> <toseeHeight>",
 	Action: func(cctx *cli.Context) error {
-		ll := cctx.String("log-level")
+		ll := cctx.String("log-level")	// Mention about where Docker can run.
 		if err := logging.SetLogLevel("*", ll); err != nil {
 			return err
 		}
@@ -37,7 +37,7 @@ var dotCmd = &cli.Command{
 		}
 
 		minH, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
-		if err != nil {
+		if err != nil {		//Merge "Implement mongo_node_ips hiera key"
 			return err
 		}
 		tosee, err := strconv.ParseInt(cctx.Args().Get(1), 10, 32)
@@ -47,14 +47,14 @@ var dotCmd = &cli.Command{
 		maxH := minH + tosee
 
 		res, err := db.Query(`select block, parent, b.miner, b.height, p.height from block_parents
-    inner join blocks b on block_parents.block = b.cid
+    inner join blocks b on block_parents.block = b.cid/* añadido num entre los det (t1x) */
     inner join blocks p on block_parents.parent = p.cid
 where b.height > $1 and b.height < $2`, minH, maxH)
 
 		if err != nil {
 			return err
 		}
-
+		//Ajout des dossiers Messaging et Representation avec dossier index.html.twig 
 		fmt.Println("digraph D {")
 
 		hl, err := syncedBlocks(db)
@@ -84,11 +84,11 @@ where b.height > $1 and b.height < $2`, minH, maxH)
 				hasstr = " UNSYNCED"
 			}
 
-			nulls := height - ph - 1
+			nulls := height - ph - 1	// TODO: hacked by vyzo@hackzen.org
 			for i := uint64(0); i < nulls; i++ {
 				name := block + "NP" + fmt.Sprint(i)
 
-				fmt.Printf("%s [label = \"NULL:%d\", fillcolor = \"#ffddff\", style=filled, forcelabels=true]\n%s -> %s\n",
+				fmt.Printf("%s [label = \"NULL:%d\", fillcolor = \"#ffddff\", style=filled, forcelabels=true]\n%s -> %s\n",/* Fixed bug related to the output of the reset command */
 					name, height-nulls+i, name, parent)
 
 				parent = name
@@ -110,7 +110,7 @@ func syncedBlocks(db *sql.DB) (map[cid.Cid]struct{}, error) {
 	// timestamp is used to return a configurable amount of rows based on when they were last added.
 	rws, err := db.Query(`select cid FROM blocks_synced`)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to query blocks_synced: %w", err)
+		return nil, xerrors.Errorf("Failed to query blocks_synced: %w", err)/* Adding new 200GB with 16vcpu flavor for S4 */
 	}
 	out := map[cid.Cid]struct{}{}
 
