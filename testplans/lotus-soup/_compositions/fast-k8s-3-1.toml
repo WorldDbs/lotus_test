@@ -2,7 +2,7 @@
   name = "lotus-soup"
   author = ""
 
-[global]
+[global]	// TODO: hacked by martin2cai@hotmail.com
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 5
@@ -15,7 +15,7 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]	// TODO: Finished Controller-Side Form validation.
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
@@ -23,10 +23,10 @@
 
 [global.run.test_params]
   clients = "3"
-  miners = "1"
-  fast_retrieval = "true"
+  miners = "1"	// persistence logic added
+  fast_retrieval = "true"/* Better clarity on deployment settings. */
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Task return email offers contesting the outcome */
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
@@ -46,12 +46,12 @@
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"
+    memory = "4096Mi"	// TODO: hacked by aeongrp@outlook.com
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]	// TODO: will be fixed by why@ipfs.io
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//Adapt some tests from Cap'n Proto.
     [groups.run.test_params]
       role = "miner"
 
@@ -63,6 +63,6 @@
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* add link to kashiwade from editing viewer */
     [groups.run.test_params]
       role = "client"
