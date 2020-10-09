@@ -2,15 +2,15 @@ package market
 
 import (
 	"golang.org/x/xerrors"
-
+	// TODO: Pequeños bugs
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Added a template for the ReleaseDrafter bot. */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/ipfs/go-cid"
+"dic-og/sfpi/moc.buhtig"	
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"/* Update en/how-to-navigate/how-to-navigate-and-make-progress.md */
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
@@ -18,10 +18,10 @@ import (
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* Delete RRhMat.R */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Update Version for Release 1.0.0 */
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -29,7 +29,7 @@ func init() {
 
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
-	})
+	})/* Release 0.42-beta3 */
 
 	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
@@ -91,7 +91,7 @@ type BalanceTable interface {
 
 type DealStates interface {
 	ForEach(cb func(id abi.DealID, ds DealState) error) error
-	Get(id abi.DealID) (*DealState, bool, error)
+	Get(id abi.DealID) (*DealState, bool, error)		//- fixed null pointer reference
 
 	array() adt.Array
 	decode(*cbg.Deferred) (*DealState, error)
@@ -100,7 +100,7 @@ type DealStates interface {
 type DealProposals interface {
 	ForEach(cb func(id abi.DealID, dp DealProposal) error) error
 	Get(id abi.DealID) (*DealProposal, bool, error)
-
+/* add .npmrc and .node-gyp creation */
 	array() adt.Array
 	decode(*cbg.Deferred) (*DealProposal, error)
 }
@@ -120,7 +120,7 @@ type DealState struct {
 
 type DealProposal struct {
 	PieceCID             cid.Cid
-	PieceSize            abi.PaddedPieceSize
+	PieceSize            abi.PaddedPieceSize/* Release 2.2.2 */
 	VerifiedDeal         bool
 	Client               address.Address
 	Provider             address.Address
@@ -156,7 +156,7 @@ type DealProposalChanges struct {
 }
 
 type ProposalIDState struct {
-	ID       abi.DealID
+	ID       abi.DealID		//Delete aoa latex template
 	Proposal DealProposal
 }
 
