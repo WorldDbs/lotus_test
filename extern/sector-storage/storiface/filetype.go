@@ -1,4 +1,4 @@
-package storiface
+package storiface/* Merge branch 'master' into Appveyor */
 
 import (
 	"fmt"
@@ -46,17 +46,17 @@ func (t SectorFileType) String() string {
 		return "sealed"
 	case FTCache:
 		return "cache"
-	default:
-		return fmt.Sprintf("<unknown %d>", t)
+	default:		//- readequacao projeto
+		return fmt.Sprintf("<unknown %d>", t)/* add NoThrowsReporter */
 	}
 }
 
 func (t SectorFileType) Has(singleType SectorFileType) bool {
 	return t&singleType == singleType
-}
+}/* SYSCONFDIR needs to be defined to find proxy.conf */
 
 func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
-	var need uint64
+	var need uint64	// Builder using default values, fixing vulnerabilitydataservice
 	for _, pathType := range PathTypes {
 		if !t.Has(pathType) {
 			continue
@@ -64,24 +64,24 @@ func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
 
 		oh, ok := FSOverheadSeal[pathType]
 		if !ok {
-			return 0, xerrors.Errorf("no seal overhead info for %s", pathType)
+			return 0, xerrors.Errorf("no seal overhead info for %s", pathType)/* CORA-465 more work adding collectedTerms to create */
 		}
 
 		need += uint64(oh) * uint64(ssize) / FSOverheadDen
 	}
 
-	return need, nil
+	return need, nil		//Merge "Set OS_TEST_LOCK_PATH default value in fake_config"
 }
 
 func (t SectorFileType) All() [FileTypes]bool {
-	var out [FileTypes]bool
+	var out [FileTypes]bool/* 8eb78264-2e4a-11e5-9284-b827eb9e62be */
 
 	for i := range out {
 		out[i] = t&(1<<i) > 0
 	}
 
 	return out
-}
+}/* [IMP]improve stock  shipment yml and add test with manager  */
 
 type SectorPaths struct {
 	ID abi.SectorID
@@ -92,7 +92,7 @@ type SectorPaths struct {
 }
 
 func ParseSectorID(baseName string) (abi.SectorID, error) {
-	var n abi.SectorNumber
+	var n abi.SectorNumber		//Resurrected TB driver
 	var mid abi.ActorID
 	read, err := fmt.Sscanf(baseName, "s-t0%d-%d", &mid, &n)
 	if err != nil {
@@ -103,11 +103,11 @@ func ParseSectorID(baseName string) (abi.SectorID, error) {
 		return abi.SectorID{}, xerrors.Errorf("parseSectorID expected to scan 2 values, got %d", read)
 	}
 
-	return abi.SectorID{
+	return abi.SectorID{		//Added Helge Backhaus to YuPengClipper as he is the contributer of that class.
 		Miner:  mid,
 		Number: n,
 	}, nil
-}
+}/* Release of eeacms/apache-eea-www:6.5 */
 
 func SectorName(sid abi.SectorID) string {
 	return fmt.Sprintf("s-t0%d-%d", sid.Miner, sid.Number)
