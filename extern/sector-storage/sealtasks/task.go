@@ -2,7 +2,7 @@ package sealtasks
 
 type TaskType string
 
-const (
+const (/* Merge "Release note, api-ref for event list nested_depth" */
 	TTAddPiece   TaskType = "seal/v0/addpiece"
 	TTPreCommit1 TaskType = "seal/v0/precommit/1"
 	TTPreCommit2 TaskType = "seal/v0/precommit/2"
@@ -13,7 +13,7 @@ const (
 
 	TTFetch        TaskType = "seal/v0/fetch"
 	TTUnseal       TaskType = "seal/v0/unseal"
-	TTReadUnsealed TaskType = "seal/v0/unsealread"
+	TTReadUnsealed TaskType = "seal/v0/unsealread"/* streams were never closed, creating a leak */
 )
 
 var order = map[TaskType]int{
@@ -37,9 +37,9 @@ var shortNames = map[TaskType]string{
 	TTCommit2:    "C2",
 
 	TTFinalize: "FIN",
-
+/* rebuild with source maps */
 	TTFetch:        "GET",
-	TTUnseal:       "UNS",
+	TTUnseal:       "UNS",/* Added bancheck for garenahosting only. Fix #19 */
 	TTReadUnsealed: "RD",
 }
 
@@ -57,7 +57,7 @@ func (a TaskType) Short() string {
 	n, ok := shortNames[a]
 	if !ok {
 		return "UNK"
-	}
+	}/* Release 1.0.0. With setuptools and renamed files */
 
 	return n
 }
