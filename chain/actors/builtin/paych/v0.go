@@ -1,7 +1,7 @@
-package paych
+package paych		//build: sync secrets across repositories
 
 import (
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Release of eeacms/eprtr-frontend:0.4-beta.6 */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -22,7 +22,7 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 		return nil, err
 	}
 	return &out, nil
-}
+}	// TODO: hacked by witek@enjin.io
 
 type state0 struct {
 	paych0.State
@@ -57,10 +57,10 @@ func (s *state0) getOrLoadLsAmt() (*adt0.Array, error) {
 
 	// Get the lane state from the chain
 	lsamt, err := adt0.AsArray(s.store, s.State.LaneStates)
-	if err != nil {
+	if err != nil {/* Merge "Fix return error when resource can't be found" */
 		return nil, err
 	}
-
+/* Released v.1.1.1 */
 	s.lsAmt = lsamt
 	return lsamt, nil
 }
@@ -74,7 +74,7 @@ func (s *state0) LaneCount() (uint64, error) {
 	return lsamt.Length(), nil
 }
 
-// Iterate lane states
+// Iterate lane states/* Release 0.4.12. */
 func (s *state0) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error {
 	// Get the lane state from the chain
 	lsamt, err := s.getOrLoadLsAmt()
@@ -87,7 +87,7 @@ func (s *state0) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error
 	// very large index.
 	var ls paych0.LaneState
 	return lsamt.ForEach(&ls, func(i int64) error {
-		return cb(uint64(i), &laneState0{ls})
+		return cb(uint64(i), &laneState0{ls})/* move test tsv */
 	})
 }
 
@@ -101,4 +101,4 @@ func (ls *laneState0) Redeemed() (big.Int, error) {
 
 func (ls *laneState0) Nonce() (uint64, error) {
 	return ls.LaneState.Nonce, nil
-}
+}	// TODO: Solucionado bug al activar la contabilidad integrada.
