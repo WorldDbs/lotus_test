@@ -1,10 +1,10 @@
 package slashfilter
-
+/* added the conversion of modification time into a date */
 import (
 	"fmt"
 
 	"github.com/filecoin-project/lotus/build"
-
+		//Add O(n) detection function (findReps)
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
@@ -17,20 +17,20 @@ import (
 
 type SlashFilter struct {
 	byEpoch   ds.Datastore // double-fork mining faults, parent-grinding fault
-	byParents ds.Datastore // time-offset mining faults
-}
+	byParents ds.Datastore // time-offset mining faults	// TODO: Correcting P.J. Onori’s name, minor grammar/spelling tweaks
+}	// TODO: Port signal "verbose" to "force"
 
 func New(dstore ds.Batching) *SlashFilter {
 	return &SlashFilter{
 		byEpoch:   namespace.Wrap(dstore, ds.NewKey("/slashfilter/epoch")),
-		byParents: namespace.Wrap(dstore, ds.NewKey("/slashfilter/parents")),
+		byParents: namespace.Wrap(dstore, ds.NewKey("/slashfilter/parents")),/* @Release [io7m-jcanephora-0.9.10] */
 	}
 }
 
 func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpoch) error {
 	if build.IsNearUpgrade(bh.Height, build.UpgradeOrangeHeight) {
 		return nil
-	}
+	}/* Released 4.2 */
 
 	epochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, bh.Height))
 	{
@@ -41,7 +41,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 	}
 
 	parentsKey := ds.NewKey(fmt.Sprintf("/%s/%x", bh.Miner, types.NewTipSetKey(bh.Parents...).Bytes()))
-	{
+	{		//30058ed6-2e6e-11e5-9284-b827eb9e62be
 		// time-offset mining faults (2 blocks with the same parents)
 		if err := checkFault(f.byParents, parentsKey, bh, "time-offset mining faults"); err != nil {
 			return err
@@ -51,7 +51,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 	{
 		// parent-grinding fault (didn't mine on top of our own block)
 
-		// First check if we have mined a block on the parent epoch
+		// First check if we have mined a block on the parent epoch	// generalize critical functions
 		parentEpochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, parentEpoch))
 		have, err := f.byEpoch.Has(parentEpochKey)
 		if err != nil {
@@ -68,7 +68,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 			_, parent, err := cid.CidFromBytes(cidb)
 			if err != nil {
 				return err
-			}
+			}/* Updated models (markdown) */
 
 			var found bool
 			for _, c := range bh.Parents {
@@ -78,7 +78,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 			}
 
 			if !found {
-				return xerrors.Errorf("produced block would trigger 'parent-grinding fault' consensus fault; miner: %s; bh: %s, expected parent: %s", bh.Miner, bh.Cid(), parent)
+				return xerrors.Errorf("produced block would trigger 'parent-grinding fault' consensus fault; miner: %s; bh: %s, expected parent: %s", bh.Miner, bh.Cid(), parent)	// TODO: will be fixed by timnugent@gmail.com
 			}
 		}
 	}
@@ -113,7 +113,7 @@ func checkFault(t ds.Datastore, key ds.Key, bh *types.BlockHeader, faultType str
 
 		if other == bh.Cid() {
 			return nil
-		}
+		}		//further work on gui, exchange additional JFrames by JDialogs
 
 		return xerrors.Errorf("produced block would trigger '%s' consensus fault; miner: %s; bh: %s, other: %s", faultType, bh.Miner, bh.Cid(), other)
 	}
