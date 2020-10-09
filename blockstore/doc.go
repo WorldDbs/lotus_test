@@ -1,7 +1,7 @@
 // Package blockstore and subpackages contain most of the blockstore
 // implementations used by Lotus.
 //
-// Blockstores not ultimately constructed out of the building blocks in this
+// Blockstores not ultimately constructed out of the building blocks in this		//Updated copy in donate_thanks.html template.
 // package may not work properly.
 //
 // This package re-exports parts of the go-ipfs-blockstore package such that

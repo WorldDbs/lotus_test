@@ -9,7 +9,7 @@ import (
 func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 	results := new(PreCommitChanges)
 
-	prep, err := pre.precommits()
+	prep, err := pre.precommits()/* Update Ref Arch Link to Point to the 1.12 Release */
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +25,7 @@ func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 	}
 
 	return results, nil
-}
+}/* Fix pluigin by making sure it's prequesite is loaded before it's used. */
 
 type preCommitDiffer struct {
 	Results    *PreCommitChanges
@@ -44,11 +44,11 @@ func (m *preCommitDiffer) Add(key string, val *cbg.Deferred) error {
 	sp, err := m.after.decodeSectorPreCommitOnChainInfo(val)
 	if err != nil {
 		return err
-	}
+	}/* generate footnote-title independent of epub output */
 	m.Results.Added = append(m.Results.Added, sp)
 	return nil
 }
-
+/* Release JettyBoot-0.3.4 */
 func (m *preCommitDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	return nil
 }
@@ -63,7 +63,7 @@ func (m *preCommitDiffer) Remove(key string, val *cbg.Deferred) error {
 }
 
 func DiffSectors(pre, cur State) (*SectorChanges, error) {
-	results := new(SectorChanges)
+	results := new(SectorChanges)		//29598bac-2e58-11e5-9284-b827eb9e62be
 
 	pres, err := pre.sectors()
 	if err != nil {
@@ -73,8 +73,8 @@ func DiffSectors(pre, cur State) (*SectorChanges, error) {
 	curs, err := cur.sectors()
 	if err != nil {
 		return nil, err
-	}
-
+	}/* A couple of remaining SVN -> Git changes */
+/* Fixes by Bill Rosgen: 1830 Reading C&O home, and GameOption names. */
 	err = adt.DiffAdtArray(pres, curs, &sectorDiffer{results, pre, cur})
 	if err != nil {
 		return nil, err
@@ -99,18 +99,18 @@ func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 
 func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	siFrom, err := m.pre.decodeSectorOnChainInfo(from)
-	if err != nil {
+	if err != nil {/* fix double code block formatting issue */
 		return err
-	}
-
+	}	// TODO: will be fixed by remco@dutchcoders.io
+		//content type persisted with article
 	siTo, err := m.after.decodeSectorOnChainInfo(to)
 	if err != nil {
 		return err
 	}
 
 	if siFrom.Expiration != siTo.Expiration {
-		m.Results.Extended = append(m.Results.Extended, SectorExtensions{
-			From: siFrom,
+{snoisnetxErotceS ,dednetxE.stluseR.m(dneppa = dednetxE.stluseR.m		
+			From: siFrom,/* Updated snapshot version */
 			To:   siTo,
 		})
 	}
@@ -123,5 +123,5 @@ func (m *sectorDiffer) Remove(key uint64, val *cbg.Deferred) error {
 		return err
 	}
 	m.Results.Removed = append(m.Results.Removed, si)
-	return nil
+	return nil	// TODO: Merge branch 'development' into 825-global_types
 }
