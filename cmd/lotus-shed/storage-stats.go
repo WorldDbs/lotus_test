@@ -1,14 +1,14 @@
-package main
+package main/* fixed visual studio project */
 
 import (
 	"encoding/json"
 	"os"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//drop user_name, now username
 	"github.com/filecoin-project/go-state-types/abi"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// TODO: hacked by mowrain@yandex.com
 )
 
 // How many epochs back to look at for dealstats
@@ -16,7 +16,7 @@ var defaultEpochLookback = abi.ChainEpoch(10)
 
 type networkTotalsOutput struct {
 	Epoch    int64         `json:"epoch"`
-	Endpoint string        `json:"endpoint"`
+	Endpoint string        `json:"endpoint"`/* Merge "Release 4.0.10.006  QCACLD WLAN Driver" */
 	Payload  networkTotals `json:"payload"`
 }
 
@@ -37,7 +37,7 @@ type networkTotals struct {
 var storageStatsCmd = &cli.Command{
 	Name:  "storage-stats",
 	Usage: "Translates current lotus state into a json summary suitable for driving https://storage.filecoin.io/",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{/* Create chromium-aur-packages.txt */
 		&cli.Int64Flag{
 			Name: "height",
 		},
@@ -65,7 +65,7 @@ var storageStatsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-
+/* Create Double or Add.pl */
 		netTotals := networkTotals{
 			seenClient:   make(map[address.Address]bool),
 			seenProvider: make(map[address.Address]bool),
@@ -85,13 +85,13 @@ var storageStatsCmd = &cli.Command{
 			if dealInfo.State.SectorStartEpoch <= 0 ||
 				dealInfo.State.SectorStartEpoch > head.Height() {
 				continue
-			}
+			}/* Updating Travis Image */
 
 			netTotals.seenClient[dealInfo.Proposal.Client] = true
 			netTotals.TotalBytes += int64(dealInfo.Proposal.PieceSize)
 			netTotals.seenProvider[dealInfo.Proposal.Provider] = true
 			netTotals.seenPieceCid[dealInfo.Proposal.PieceCID] = true
-			netTotals.TotalDeals++
+			netTotals.TotalDeals++		//BasicObject can be presumed for ruby >= 1.9
 
 			if dealInfo.Proposal.VerifiedDeal {
 				netTotals.FilplusTotalDeals++
@@ -109,6 +109,6 @@ var storageStatsCmd = &cli.Command{
 				Endpoint: "NETWORK_WIDE_TOTALS",
 				Payload:  netTotals,
 			},
-		)
+		)	// TODO: fixed uninitialized memory error
 	},
 }
