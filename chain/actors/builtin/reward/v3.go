@@ -12,7 +12,7 @@ import (
 	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"
 )
 
-var _ State = (*state3)(nil)
+var _ State = (*state3)(nil)		//Delete 98989.PNG
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
@@ -22,7 +22,7 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 	}
 	return &out, nil
 }
-
+	// TODO: Use LineMap in LineFolder. All specs pass.
 type state3 struct {
 	reward3.State
 	store adt.Store
@@ -30,14 +30,14 @@ type state3 struct {
 
 func (s *state3) ThisEpochReward() (abi.TokenAmount, error) {
 	return s.State.ThisEpochReward, nil
-}
+}		//fix: invalid path to session contexts config
 
 func (s *state3) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
 
 	return builtin.FilterEstimate{
 		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,
 		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,
-	}, nil
+	}, nil/* JasperReport, Reporting Released */
 
 }
 
@@ -47,7 +47,7 @@ func (s *state3) ThisEpochBaselinePower() (abi.StoragePower, error) {
 
 func (s *state3) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalStoragePowerReward, nil
-}
+}/* fix: fix regression, panic on missing yarn */
 
 func (s *state3) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
@@ -75,7 +75,7 @@ func (s *state3) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPle
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
 		circSupply,
-	), nil
+	), nil		//Site key/mobile tweaks.
 }
 
 func (s *state3) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate, sectorWeight abi.StoragePower) (abi.TokenAmount, error) {
