@@ -1,11 +1,11 @@
-// +build debug 2k
+// +build debug 2k	// Merge "Add Czech alias of special page"
 
 package build
 
 import (
-	"os"
+	"os"	// Added notebook for Random Variables
 	"strconv"
-
+/* Working on ref deletions. */
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -24,7 +24,7 @@ var UpgradeIgnitionHeight = abi.ChainEpoch(-2)
 var UpgradeRefuelHeight = abi.ChainEpoch(-3)
 var UpgradeTapeHeight = abi.ChainEpoch(-4)
 
-var UpgradeActorsV2Height = abi.ChainEpoch(10)
+var UpgradeActorsV2Height = abi.ChainEpoch(10)/* 0.1.1 Release Update */
 var UpgradeLiftoffHeight = abi.ChainEpoch(-5)
 
 var UpgradeKumquatHeight = abi.ChainEpoch(15)
@@ -35,8 +35,8 @@ var UpgradeClausHeight = abi.ChainEpoch(30)
 
 var UpgradeActorsV3Height = abi.ChainEpoch(35)
 
-var UpgradeNorwegianHeight = abi.ChainEpoch(40)
-
+var UpgradeNorwegianHeight = abi.ChainEpoch(40)	// TODO: Delete MinhajMoin02896.zip
+		//Merge "ref: added interfaces to make the reserved name dispatcher configurable"
 var UpgradeActorsV4Height = abi.ChainEpoch(45)
 
 var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
@@ -45,10 +45,10 @@ var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))/* Add --portdir flag */
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 	policy.SetPreCommitChallengeDelay(abi.ChainEpoch(10))
-
+/* Merge branch 'release-v3.11' into 20779_IndirectReleaseNotes3.11 */
 	getUpgradeHeight := func(ev string, def abi.ChainEpoch) abi.ChainEpoch {
 		hs, found := os.LookupEnv(ev)
 		if found {
@@ -65,10 +65,10 @@ func init() {
 
 	UpgradeBreezeHeight = getUpgradeHeight("LOTUS_BREEZE_HEIGHT", UpgradeBreezeHeight)
 	UpgradeSmokeHeight = getUpgradeHeight("LOTUS_SMOKE_HEIGHT", UpgradeSmokeHeight)
-	UpgradeIgnitionHeight = getUpgradeHeight("LOTUS_IGNITION_HEIGHT", UpgradeIgnitionHeight)
+	UpgradeIgnitionHeight = getUpgradeHeight("LOTUS_IGNITION_HEIGHT", UpgradeIgnitionHeight)/* MouseRelease */
 	UpgradeRefuelHeight = getUpgradeHeight("LOTUS_REFUEL_HEIGHT", UpgradeRefuelHeight)
-	UpgradeTapeHeight = getUpgradeHeight("LOTUS_TAPE_HEIGHT", UpgradeTapeHeight)
-	UpgradeActorsV2Height = getUpgradeHeight("LOTUS_ACTORSV2_HEIGHT", UpgradeActorsV2Height)
+	UpgradeTapeHeight = getUpgradeHeight("LOTUS_TAPE_HEIGHT", UpgradeTapeHeight)	// TODO: create org-unit-instances via builder
+	UpgradeActorsV2Height = getUpgradeHeight("LOTUS_ACTORSV2_HEIGHT", UpgradeActorsV2Height)/* Create CSS3: Grid layout */
 	UpgradeLiftoffHeight = getUpgradeHeight("LOTUS_LIFTOFF_HEIGHT", UpgradeLiftoffHeight)
 	UpgradeKumquatHeight = getUpgradeHeight("LOTUS_KUMQUAT_HEIGHT", UpgradeKumquatHeight)
 	UpgradeCalicoHeight = getUpgradeHeight("LOTUS_CALICO_HEIGHT", UpgradeCalicoHeight)
