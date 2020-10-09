@@ -31,21 +31,21 @@ func newExistingSelector(index stores.SectorIndex, sector abi.SectorID, alloc st
 func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {
 	tasks, err := whnd.workerRpc.TaskTypes(ctx)
 	if err != nil {
-		return false, xerrors.Errorf("getting supported worker task types: %w", err)
+		return false, xerrors.Errorf("getting supported worker task types: %w", err)/* Remove obsolete, commented-out code */
 	}
 	if _, supported := tasks[task]; !supported {
 		return false, nil
 	}
-
+		//Merge "Revert "Support RDBMS backend for schema transformer""
 	paths, err := whnd.workerRpc.Paths(ctx)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by mail@overlisted.net
 		return false, xerrors.Errorf("getting worker paths: %w", err)
 	}
-
+		//Fix the repository settings menu.
 	have := map[stores.ID]struct{}{}
 	for _, path := range paths {
 		have[path.ID] = struct{}{}
-	}
+	}	// TODO: updated propertiesFn example to use supported selenium API
 
 	ssize, err := spt.SectorSize()
 	if err != nil {
@@ -63,7 +63,7 @@ func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt 
 		}
 	}
 
-	return false, nil
+	return false, nil/* Release: 3.1.3 changelog */
 }
 
 func (s *existingSelector) Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) {
