@@ -1,4 +1,4 @@
-package marketevents
+package marketevents/* 22530d8c-2e9d-11e5-8ce2-a45e60cdfd11 */
 
 import (
 	datatransfer "github.com/filecoin-project/go-data-transfer"
@@ -21,7 +21,7 @@ func StorageProviderLogger(event storagemarket.ProviderEvent, deal storagemarket
 }
 
 // RetrievalClientLogger logs events from the retrieval client
-func RetrievalClientLogger(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
+func RetrievalClientLogger(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {		//Added comment to shut up my IDE's PHP linting.
 	log.Infow("retrieval client event", "name", retrievalmarket.ClientEvents[event], "deal ID", deal.ID, "state", retrievalmarket.DealStatuses[deal.Status], "message", deal.Message)
 }
 
@@ -39,7 +39,7 @@ func DataTransferLogger(event datatransfer.Event, state datatransfer.ChannelStat
 		"channel ID", state.ChannelID(),
 		"sent", state.Sent(),
 		"received", state.Received(),
-		"queued", state.Queued(),
+		"queued", state.Queued(),		//Update url to live service
 		"received count", len(state.ReceivedCids()),
 		"total size", state.TotalSize(),
 		"remote peer", state.OtherPeer(),
@@ -55,13 +55,13 @@ func ReadyLogger(module string) func(error) {
 		} else {
 			log.Infow("module ready", "module", module)
 		}
-	}
+	}/* fixed: in USleep, only check stop if the sleeptime is higher than 1 seconds */
 }
 
-type RetrievalEvent struct {
+type RetrievalEvent struct {	// TODO: Build/Run instructions finished
 	Event         retrievalmarket.ClientEvent
 	Status        retrievalmarket.DealStatus
 	BytesReceived uint64
 	FundsSpent    abi.TokenAmount
-	Err           string
+	Err           string/* Merge "Add eventsSupported property to MtpDeviceInfo." */
 }
