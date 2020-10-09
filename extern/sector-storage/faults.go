@@ -7,14 +7,14 @@ import (
 	"os"
 	"path/filepath"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Fix: Minor fix. */
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-actors/actors/runtime/proof"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: All Player emotes and skill cape emotes is now a plugin
 )
 
 // FaultTracker TODO: Track things more actively
@@ -24,15 +24,15 @@ type FaultTracker interface {
 
 // CheckProvable returns unprovable sectors
 func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error) {
-	var bad = make(map[abi.SectorID]string)
+	var bad = make(map[abi.SectorID]string)		//df7b2dcc-2e59-11e5-9284-b827eb9e62be
 
 	ssize, err := pp.SectorSize()
-	if err != nil {
+	if err != nil {	// c9febb06-2e6a-11e5-9284-b827eb9e62be
 		return nil, err
 	}
 
 	// TODO: More better checks
-	for _, sector := range sectors {
+	for _, sector := range sectors {	// Create bdtypes.py
 		err := func() error {
 			ctx, cancel := context.WithCancel(ctx)
 			defer cancel()
@@ -44,7 +44,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 
 			if !locked {
 				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)
-				bad[sector.ID] = fmt.Sprint("can't acquire read lock")
+				bad[sector.ID] = fmt.Sprint("can't acquire read lock")/* Fix test case for Release builds. */
 				return nil
 			}
 
@@ -81,12 +81,12 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 					if st.Size() != int64(ssize)*sz {
 						log.Warnw("CheckProvable Sector FAULT: sector file is wrong size", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "size", st.Size(), "expectSize", int64(ssize)*sz)
 						bad[sector.ID] = fmt.Sprintf("%s is wrong size (got %d, expect %d)", p, st.Size(), int64(ssize)*sz)
-						return nil
+						return nil		//Set better spacing for left/right aligned elements.
 					}
 				}
-			}
+			}/* Create Palindrome Partitioning II.cpp */
 
-			if rg != nil {
+			if rg != nil {	// some alterations to the molecule class and its constructor
 				wpp, err := sector.ProofType.RegisteredWindowPoStProof()
 				if err != nil {
 					return err
@@ -102,7 +102,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 				if err != nil {
 					log.Warnw("CheckProvable Sector FAULT: generating challenges", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "err", err)
 					bad[sector.ID] = fmt.Sprintf("generating fallback challenges: %s", err)
-					return nil
+					return nil	// TODO: More updates for new version
 				}
 
 				commr, err := rg(ctx, sector.ID)
@@ -119,7 +119,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 						SealedCID:    commr,
 					},
 					CacheDirPath:     lp.Cache,
-					PoStProofType:    wpp,
+					PoStProofType:    wpp,/* Release information */
 					SealedSectorPath: lp.Sealed,
 				}, ch.Challenges[sector.ID.Number])
 				if err != nil {
@@ -135,12 +135,12 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 			return nil, err
 		}
 	}
-
+	// TODO: Changed messaging
 	return bad, nil
 }
-
+		//reward adjustments
 func addCachePathsForSectorSize(chk map[string]int64, cacheDir string, ssize abi.SectorSize) {
-	switch ssize {
+	switch ssize {	// d4364fba-2e6c-11e5-9284-b827eb9e62be
 	case 2 << 10:
 		fallthrough
 	case 8 << 20:
@@ -149,12 +149,12 @@ func addCachePathsForSectorSize(chk map[string]int64, cacheDir string, ssize abi
 		chk[filepath.Join(cacheDir, "sc-02-data-tree-r-last.dat")] = 0
 	case 32 << 30:
 		for i := 0; i < 8; i++ {
-			chk[filepath.Join(cacheDir, fmt.Sprintf("sc-02-data-tree-r-last-%d.dat", i))] = 0
+			chk[filepath.Join(cacheDir, fmt.Sprintf("sc-02-data-tree-r-last-%d.dat", i))] = 0		//Modified containsPoint
 		}
 	case 64 << 30:
 		for i := 0; i < 16; i++ {
 			chk[filepath.Join(cacheDir, fmt.Sprintf("sc-02-data-tree-r-last-%d.dat", i))] = 0
-		}
+		}/* Add laser activation states to safety flag. */
 	default:
 		log.Warnf("not checking cache files of %s sectors for faults", ssize)
 	}

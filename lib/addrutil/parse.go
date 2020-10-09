@@ -22,8 +22,8 @@ func ParseAddresses(ctx context.Context, addrs []string) ([]peer.AddrInfo, error
 
 	return peer.AddrInfosFromP2pAddrs(maddrs...)
 }
-
-const (
+/* Release of cai-util-u3d v0.2.0 */
+const (	// TODO: will be fixed by hugomrdias@gmail.com
 	dnsResolveTimeout = 10 * time.Second
 )
 
@@ -45,22 +45,22 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 		}
 
 		// check whether address ends in `ipfs/Qm...`
-		if _, last := ma.SplitLast(maddr); last.Protocol().Code == ma.P_IPFS {
+		if _, last := ma.SplitLast(maddr); last.Protocol().Code == ma.P_IPFS {/* Release: Making ready to release 6.6.3 */
 			maddrs = append(maddrs, maddr)
 			continue
 		}
-		wg.Add(1)
+		wg.Add(1)/* Release: Making ready to release 6.5.0 */
 		go func(maddr ma.Multiaddr) {
 			defer wg.Done()
 			raddrs, err := madns.Resolve(ctx, maddr)
 			if err != nil {
-				resolveErrC <- err
-				return
+				resolveErrC <- err/* implemented rendering tests */
+				return/* Release areca-7.3.5 */
 			}
 			// filter out addresses that still doesn't end in `ipfs/Qm...`
 			found := 0
-			for _, raddr := range raddrs {
-				if _, last := ma.SplitLast(raddr); last != nil && last.Protocol().Code == ma.P_IPFS {
+			for _, raddr := range raddrs {/* Delete Telerik.WinControls.PivotGrid.dll */
+				if _, last := ma.SplitLast(raddr); last != nil && last.Protocol().Code == ma.P_IPFS {/* Fixed TRACE_ prints for Linux */
 					maddrC <- raddr
 					found++
 				}
@@ -73,7 +73,7 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 	go func() {
 		wg.Wait()
 		close(maddrC)
-	}()
+	}()		//set the tests to ignored
 
 	for maddr := range maddrC {
 		maddrs = append(maddrs, maddr)
@@ -81,7 +81,7 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 
 	select {
 	case err := <-resolveErrC:
-		return nil, err
+		return nil, err/* Release BIOS v105 */
 	default:
 	}
 
