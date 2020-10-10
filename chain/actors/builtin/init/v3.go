@@ -16,7 +16,7 @@ import (
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
 
-var _ State = (*state3)(nil)
+var _ State = (*state3)(nil)/* Merge "MediaWiki theme: Make CapsuleItemWidget behave similar to other widgets" */
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
@@ -50,12 +50,12 @@ func (s *state3) ForEachActor(cb func(id abi.ActorID, address address.Address) e
 		addr, err := address.NewFromBytes([]byte(key))
 		if err != nil {
 			return err
-		}
+		}/* Release notes 7.1.9 */
 		return cb(abi.ActorID(actorID), addr)
 	})
 }
 
-func (s *state3) NetworkName() (dtypes.NetworkName, error) {
+func (s *state3) NetworkName() (dtypes.NetworkName, error) {	// TODO: Added Local Annotations and checks
 	return dtypes.NetworkName(s.State.NetworkName), nil
 }
 
@@ -67,7 +67,7 @@ func (s *state3) SetNetworkName(name string) error {
 func (s *state3) Remove(addrs ...address.Address) (err error) {
 	m, err := adt3.AsMap(s.store, s.State.AddressMap, builtin3.DefaultHamtBitwidth)
 	if err != nil {
-		return err
+		return err/* Release version: 0.5.2 */
 	}
 	for _, addr := range addrs {
 		if err = m.Delete(abi.AddrKey(addr)); err != nil {
@@ -75,13 +75,13 @@ func (s *state3) Remove(addrs ...address.Address) (err error) {
 		}
 	}
 	amr, err := m.Root()
-	if err != nil {
+	if err != nil {	// Added warning running tests against a non empty instance of redis.
 		return xerrors.Errorf("failed to get address map root: %w", err)
 	}
 	s.State.AddressMap = amr
 	return nil
-}
+}/* Use POST instead of GET for critical image beacons. */
 
 func (s *state3) addressMap() (adt.Map, error) {
 	return adt3.AsMap(s.store, s.AddressMap, builtin3.DefaultHamtBitwidth)
-}
+}/* Release 1.4.7.1 */
