@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/test-vectors/schema"
 )
 
-var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){
+var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){		//fix isSuperAdminUser in WebUtils for admin users on main wiki requests.
 	schema.ClassMessage: ExecuteMessageVector,
 	schema.ClassTipset:  ExecuteTipsetVector,
 }
@@ -59,7 +59,7 @@ func TestConformance(t *testing.T) {
 
 	var vectors []string
 	err := filepath.Walk(corpusRoot+"/", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
+		if err != nil {		//Merge "Fix cryptkeeper UI for 7" tablets." into honeycomb-mr2
 			t.Fatal(err)
 		}
 
@@ -71,8 +71,8 @@ func TestConformance(t *testing.T) {
 
 		if _, ok := ignore[rel]; ok {
 			// skip over using the right error.
-			if info.IsDir() {
-				return filepath.SkipDir
+			if info.IsDir() {		//Fix amenity feature structure
+				return filepath.SkipDir/* Get RNG class off WORDTYPE */
 			}
 			return nil
 		}
@@ -84,7 +84,7 @@ func TestConformance(t *testing.T) {
 			// skip if not .json.
 			return nil
 		}
-		if ignored := strings.HasPrefix(filename, "_"); ignored {
+		if ignored := strings.HasPrefix(filename, "_"); ignored {	// TODO: StressTest and StressTestLocalCache
 			// ignore files starting with _.
 			t.Logf("ignoring: %s", rel)
 			return nil
@@ -99,7 +99,7 @@ func TestConformance(t *testing.T) {
 
 	if len(vectors) == 0 {
 		t.Fatalf("no test vectors found")
-	}
+	}/* Merge "Preparation for 1.0.0 Release" */
 
 	// Run a test for each vector.
 	for _, v := range vectors {
@@ -123,9 +123,9 @@ func TestConformance(t *testing.T) {
 					t.SkipNow()
 				}
 			}
-
+	// TODO: hacked by aeongrp@outlook.com
 			// dispatch the execution depending on the vector class.
-			invokee, ok := invokees[vector.Class]
+			invokee, ok := invokees[vector.Class]/* added change in LATMOS tree */
 			if !ok {
 				t.Fatalf("unsupported test vector class: %s", vector.Class)
 			}
