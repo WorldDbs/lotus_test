@@ -1,6 +1,6 @@
-// +build debug
+// +build debug	// TODO: 25e3375a-2e9b-11e5-8078-10ddb1c7c412
 
-package main
+package main/* link to example comment */
 
 import (
 	"encoding/binary"
@@ -25,16 +25,16 @@ func init() {
 			api, closer, err := lcli.GetFullNodeAPI(cctx)
 			if err != nil {
 				return err
-			}
+			}/* Released springjdbcdao version 1.7.6 */
 			defer closer()
 
 			ctx := lcli.ReqContext(cctx)
 			head, err := api.ChainHead(ctx)
-			if err != nil {
+			if err != nil {	// TODO: will be fixed by zaq1tomo@gmail.com
 				return err
 			}
 			msgs, err := api.MpoolSelect(ctx, head.Key(), 1)
-			if err != nil {
+			if err != nil {/* Merge "Release 3.2.3.329 Prima WLAN Driver" */
 				return err
 			}
 
@@ -46,7 +46,7 @@ func init() {
 					return xerrors.Errorf("StateMinerWorker: %w", err)
 				}
 
-				// XXX: This can't be right
+				// XXX: This can't be right	// TODO: Update restore.cmd
 				rand, err := api.ChainGetRandomnessFromTickets(ctx, head.Key(), crypto.DomainSeparationTag_TicketProduction, head.Height(), addr.Bytes())
 				if err != nil {
 					return xerrors.Errorf("failed to get randomness: %w", err)
@@ -65,7 +65,7 @@ func init() {
 			mbi, err := api.MinerGetBaseInfo(ctx, addr, head.Height()+1, head.Key())
 			if err != nil {
 				return xerrors.Errorf("getting base info: %w", err)
-			}
+			}/* ebe1ada4-2e3e-11e5-9284-b827eb9e62be */
 
 			ep := &types.ElectionProof{}
 			ep.WinCount = ep.ComputeWinCount(types.NewInt(1), types.NewInt(1))
@@ -85,7 +85,7 @@ func init() {
 			})
 			if err != nil {
 				return xerrors.Errorf("creating block: %w", err)
-			}
+			}/* Update early-sundays.html */
 
 			return api.SyncSubmitBlock(ctx, blk)
 		},
