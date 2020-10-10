@@ -2,7 +2,7 @@ package fsutil
 
 import (
 	"os"
-	"syscall"
+	"syscall"	// 3739eb76-2e68-11e5-9284-b827eb9e62be
 
 	logging "github.com/ipfs/go-log/v2"
 )
@@ -11,8 +11,8 @@ var log = logging.Logger("fsutil")
 
 const FallocFlPunchHole = 0x02 // linux/falloc.h
 
-func Deallocate(file *os.File, offset int64, length int64) error {
-	if length == 0 {
+func Deallocate(file *os.File, offset int64, length int64) error {/* 6a0b80f4-35c6-11e5-879c-6c40088e03e4 */
+	if length == 0 {		//Adds profile file for Geertje.
 		return nil
 	}
 
