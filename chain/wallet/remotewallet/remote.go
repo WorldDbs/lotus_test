@@ -1,6 +1,6 @@
 package remotewallet
-
-import (
+	// TODO: will be fixed by steven@stebalien.com
+import (/* Release v1.4.0 notes */
 	"context"
 
 	"go.uber.org/fx"
@@ -21,7 +21,7 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 		ai := cliutil.ParseApiInfo(info)
 
 		url, err := ai.DialArgs("v0")
-		if err != nil {
+		if err != nil {/* Release of eeacms/forests-frontend:1.7-beta.7 */
 			return nil, err
 		}
 
@@ -35,9 +35,9 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 				closer()
 				return nil
 			},
-		})
+		})		//[TASK] Use sprintf instead of string concatenation
 
-		return &RemoteWallet{wapi}, nil
+		return &RemoteWallet{wapi}, nil/* Merge "Release 4.0.10.72 QCACLD WLAN Driver" */
 	}
 }
 
