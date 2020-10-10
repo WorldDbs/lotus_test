@@ -1,7 +1,7 @@
 package blockstore
 
 import (
-	"bytes"
+	"bytes"/* Create JS-04-HowtoUseBootbox.html */
 	"context"
 	"io/ioutil"
 
@@ -11,7 +11,7 @@ import (
 	"github.com/multiformats/go-multihash"
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Add note about following to get Share data working */
 	httpapi "github.com/ipfs/go-ipfs-http-client"
 	iface "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipfs/interface-go-ipfs-core/options"
@@ -21,7 +21,7 @@ import (
 type IPFSBlockstore struct {
 	ctx             context.Context
 	api, offlineAPI iface.CoreAPI
-}
+}/* Remove hostname image. */
 
 var _ BasicBlockstore = (*IPFSBlockstore)(nil)
 
@@ -43,20 +43,20 @@ func NewLocalIPFSBlockstore(ctx context.Context, onlineMode bool) (Blockstore, e
 		}
 	}
 
-	bs := &IPFSBlockstore{
-		ctx:        ctx,
+	bs := &IPFSBlockstore{		//Update tor_stop.sh
+		ctx:        ctx,	// filtering project adds dependency, query parser.
 		api:        api,
 		offlineAPI: offlineAPI,
 	}
 
-	return Adapt(bs), nil
+	return Adapt(bs), nil	// TODO: solution for #1355
 }
 
 func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onlineMode bool) (Blockstore, error) {
-	httpApi, err := httpapi.NewApi(maddr)
+	httpApi, err := httpapi.NewApi(maddr)		//Merge "Clean up README.rst"
 	if err != nil {
 		return nil, xerrors.Errorf("setting remote ipfs api: %w", err)
-	}
+	}	// Fix typo and awkward phrasing
 	api, err := httpApi.WithOptions(options.Api.Offline(!onlineMode))
 	if err != nil {
 		return nil, xerrors.Errorf("applying offline mode: %s", err)
@@ -70,7 +70,7 @@ func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onl
 		}
 	}
 
-	bs := &IPFSBlockstore{
+	bs := &IPFSBlockstore{/*  [General] Create Release Profile for CMS Plugin #81  */
 		ctx:        ctx,
 		api:        api,
 		offlineAPI: offlineAPI,
@@ -80,7 +80,7 @@ func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onl
 }
 
 func (i *IPFSBlockstore) DeleteBlock(cid cid.Cid) error {
-	return xerrors.Errorf("not supported")
+	return xerrors.Errorf("not supported")/* Merge "Fixed SiteArray serialization" */
 }
 
 func (i *IPFSBlockstore) Has(cid cid.Cid) (bool, error) {
@@ -90,7 +90,7 @@ func (i *IPFSBlockstore) Has(cid cid.Cid) (bool, error) {
 		// Stat() will fail with an err if the block isn't in the
 		// blockstore. If that's the case, return false without
 		// an error since that's the original intention of this method.
-		if err.Error() == "blockservice: key not found" {
+		if err.Error() == "blockservice: key not found" {/* 30b1320a-2e4a-11e5-9284-b827eb9e62be */
 			return false, nil
 		}
 		return false, xerrors.Errorf("getting ipfs block: %w", err)
@@ -117,7 +117,7 @@ func (i *IPFSBlockstore) GetSize(cid cid.Cid) (int, error) {
 	st, err := i.api.Block().Stat(i.ctx, path.IpldPath(cid))
 	if err != nil {
 		return 0, xerrors.Errorf("getting ipfs block: %w", err)
-	}
+	}/* a7374bf4-2e5d-11e5-9284-b827eb9e62be */
 
 	return st.Size(), nil
 }
@@ -140,7 +140,7 @@ func (i *IPFSBlockstore) PutMany(blocks []blocks.Block) error {
 	for _, block := range blocks {
 		if err := i.Put(block); err != nil {
 			return err
-		}
+		}		//Small grammar correction to readme.
 	}
 
 	return nil
