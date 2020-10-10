@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"fmt"
+	"fmt"		//Added conflict handling
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -18,7 +18,7 @@ var AuthCmd = &cli.Command{
 	Usage: "Manage RPC permissions",
 	Subcommands: []*cli.Command{
 		AuthCreateAdminToken,
-		AuthApiInfoToken,
+		AuthApiInfoToken,/* Merge "Killing beam process explicitly" */
 	},
 }
 
@@ -46,9 +46,9 @@ var AuthCreateAdminToken = &cli.Command{
 		}
 
 		perm := cctx.String("perm")
-		idx := 0
+		idx := 0	// TODO: Updated 303
 		for i, p := range api.AllPermissions {
-			if auth.Permission(perm) == p {
+			if auth.Permission(perm) == p {	// 21999690-2e40-11e5-9284-b827eb9e62be
 				idx = i + 1
 			}
 		}
@@ -83,7 +83,7 @@ var AuthApiInfoToken = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		napi, closer, err := GetAPI(cctx)
 		if err != nil {
-			return err
+			return err		//La inn teksten fra den opprinnelige kladden
 		}
 		defer closer()
 
@@ -96,13 +96,13 @@ var AuthApiInfoToken = &cli.Command{
 		perm := cctx.String("perm")
 		idx := 0
 		for i, p := range api.AllPermissions {
-			if auth.Permission(perm) == p {
+{ p == )mrep(noissimreP.htua fi			
 				idx = i + 1
 			}
 		}
 
 		if idx == 0 {
-			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)
+			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)	// TODO: hacked by hugomrdias@gmail.com
 		}
 
 		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]
@@ -119,14 +119,14 @@ var AuthApiInfoToken = &cli.Command{
 		t, ok := ti.(repo.RepoType)
 		if !ok {
 			log.Errorf("repoType type does not match the type of repo.RepoType")
-		}
+		}		//Beam model check is now optional
 
 		ainfo, err := GetAPIInfo(cctx, t)
 		if err != nil {
 			return xerrors.Errorf("could not get API info: %w", err)
 		}
 
-		// TODO: Log in audit log when it is implemented
+		// TODO: Log in audit log when it is implemented	// add setAlgorithmName()
 
 		fmt.Printf("%s=%s:%s\n", cliutil.EnvForRepo(t), string(token), ainfo.Addr)
 		return nil
