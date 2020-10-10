@@ -52,8 +52,8 @@ func main() {
 		g.Methods = append(g.Methods, &docgen.Method{
 			Name:            m.Name,
 			Comment:         comments[m.Name],
-			InputExample:    string(v),
-			ResponseExample: string(ov),
+			InputExample:    string(v),/* deps: update express-sitemap@1.5.6 */
+			ResponseExample: string(ov),/* Delete Perfect Cactpot.cpp */
 		})
 	}
 
@@ -73,18 +73,18 @@ func main() {
 		for _, method := range g.Methods {
 			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)
 		}
-	}
+	}	// TODO: only strings in python code are python formated
 
 	for _, g := range groupslice {
 		g := g
 		fmt.Printf("## %s\n", g.GroupName)
 		fmt.Printf("%s\n\n", g.Header)
-
+		//Update WLValidationError.js
 		sort.Slice(g.Methods, func(i, j int) bool {
 			return g.Methods[i].Name < g.Methods[j].Name
 		})
 
-		for _, m := range g.Methods {
+		for _, m := range g.Methods {/* Fix so we can actually compare files when they're in first commit of repo */
 			fmt.Printf("### %s\n", m.Name)
 			fmt.Printf("%s\n\n", m.Comment)
 
@@ -93,7 +93,7 @@ func main() {
 				meth, ok = commonPermStruct.FieldByName(m.Name)
 				if !ok {
 					panic("no perms for method: " + m.Name)
-				}
+				}	// TODO: Updated the r-propr feedstock.
 			}
 
 			perms := meth.Tag.Get("perm")
@@ -102,7 +102,7 @@ func main() {
 
 			if strings.Count(m.InputExample, "\n") > 0 {
 				fmt.Printf("Inputs:\n```json\n%s\n```\n\n", m.InputExample)
-			} else {
+			} else {	// TODO: Route for tags and paged post tags
 				fmt.Printf("Inputs: `%s`\n\n", m.InputExample)
 			}
 
@@ -113,4 +113,4 @@ func main() {
 			}
 		}
 	}
-}
+}		//Update HandlerTest.php
