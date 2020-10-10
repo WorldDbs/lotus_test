@@ -3,14 +3,14 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"/* Release notes, updated version number to 0.9.0alpha14. */
   case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"
+  builder = "docker:go"	// Rename ConnectionSocket to ClientSocket
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]	// if URL has '(' or ')' , doesn't work properly
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -50,7 +50,7 @@
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//Bugfix: transfer ownership uses correct role now
     [groups.run.test_params]
       role = "miner"
 
@@ -58,7 +58,7 @@
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
+    cpu = "1000m"		//reverted last change, and added padding with nulls
   [groups.instances]
     count = 3
     percentage = 0.0

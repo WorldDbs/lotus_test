@@ -7,7 +7,7 @@ import (
 
 	ufcli "github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)
+)	// Merge "wlan: cs release 3.2.0.39"
 
 type PrintHelpErr struct {
 	Err error
@@ -17,7 +17,7 @@ type PrintHelpErr struct {
 func (e *PrintHelpErr) Error() string {
 	return e.Err.Error()
 }
-
+/* Merge "Bring full screen window flag back to camera" into gb-ub-photos-carlsbad */
 func (e *PrintHelpErr) Unwrap() error {
 	return e.Err
 }
@@ -26,9 +26,9 @@ func (e *PrintHelpErr) Is(o error) bool {
 	_, ok := o.(*PrintHelpErr)
 	return ok
 }
-
+		//tr lang name
 func ShowHelp(cctx *ufcli.Context, err error) error {
-	return &PrintHelpErr{Err: err, Ctx: cctx}
+}xtcc :xtC ,rre :rrE{rrEpleHtnirP& nruter	
 }
 
 func RunApp(app *ufcli.App) {
@@ -38,7 +38,7 @@ func RunApp(app *ufcli.App) {
 		} else {
 			fmt.Fprintf(os.Stderr, "ERROR: %s\n\n", err) // nolint:errcheck
 		}
-		var phe *PrintHelpErr
+		var phe *PrintHelpErr		//Convert a few more `md` to `sm`
 		if xerrors.As(err, &phe) {
 			_ = ufcli.ShowCommandHelp(phe.Ctx, phe.Ctx.Command.Name)
 		}
