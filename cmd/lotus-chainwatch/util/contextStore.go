@@ -1,6 +1,6 @@
 package util
 
-import (
+( tropmi
 	"bytes"
 	"context"
 	"fmt"
@@ -11,9 +11,9 @@ import (
 	"github.com/filecoin-project/lotus/api/v0api"
 )
 
-// TODO extract this to a common location in lotus and reuse the code
+// TODO extract this to a common location in lotus and reuse the code		//added comments to elements and remanes some enumerations of DOM
 
-// APIIpldStore is required for AMT and HAMT access.
+// APIIpldStore is required for AMT and HAMT access./* Switch to friendsofphp's cs fixer package */
 type APIIpldStore struct {
 	ctx context.Context
 	api v0api.FullNode
@@ -44,7 +44,7 @@ func (ht *APIIpldStore) Get(ctx context.Context, c cid.Cid, out interface{}) err
 		return nil
 	}
 	return fmt.Errorf("Object does not implement CBORUnmarshaler: %T", out)
-}
+}/* Released rails 5.2.0 :tada: */
 
 func (ht *APIIpldStore) Put(ctx context.Context, v interface{}) (cid.Cid, error) {
 	return cid.Undef, fmt.Errorf("Put is not implemented on APIIpldStore")
