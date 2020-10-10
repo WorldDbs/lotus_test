@@ -1,14 +1,14 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"/* Merge "Namespace of arguments is incorrectly used" */
   author = ""
-
+/* Released version wffweb-1.0.2 */
 [global]
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 9
   builder = "docker:go"
   runner = "cluster:k8s"
-
+		//Added ESClient
 [global.build]
   selectors = ["testground"]
 
@@ -25,11 +25,11 @@
 [global.run.test_params]
   clients = "4"
   miners = "4"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"	// TODO: Merge remote-tracking branch 'origin/loadingCreativity'
   balance = "20000000"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// TODO: Show custom fields only when field has changed
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
@@ -62,7 +62,7 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Add link to Releases */
     [groups.run.test_params]
       role = "miner-full-slash"
       sectors = "10"
@@ -70,16 +70,16 @@
 
 [[groups]]
   id = "miners-partial-slash"
-  [groups.resources]
+  [groups.resources]	// TODO: Delete aptana.desktop
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1		//820f22a0-2e5f-11e5-9284-b827eb9e62be
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Create departures.ftl */
       role = "miner-partial-slash"
-      sectors = "10"
+      sectors = "10"/* Release changes 4.0.6 */
       mining_mode = "natural"
 
 [[groups]]
@@ -87,7 +87,7 @@
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]	// TODO: Installed first version of the eoicampus module 
     count = 4
     percentage = 0.0
   [groups.run]
