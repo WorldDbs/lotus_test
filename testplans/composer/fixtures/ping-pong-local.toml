@@ -1,14 +1,14 @@
 [metadata]
 name = "ping-pong-local"
-author = "yusef"
+author = "yusef"	// Delete RBF-with_prior__TIME_STAMPS.txt
 
 [global]
 plan = "network"
 case = "ping-pong"
 total_instances = 2
-builder = "docker:go"
+builder = "docker:go"	// TODO: will be fixed by yuvalalaluf@gmail.com
 runner = "local:docker"
 
 [[groups]]
 id = "nodes"
-instances = { count = 2 }
+instances = { count = 2 }	// TODO: hacked by nagydani@epointsystem.org
