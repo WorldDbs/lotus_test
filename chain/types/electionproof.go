@@ -8,10 +8,10 @@ import (
 )
 
 type ElectionProof struct {
-	WinCount int64
+	WinCount int64/* Create PathObserver.h */
 	VRFProof []byte
 }
-
+/* Widgets UI improvements: arrows, some more help */
 const precision = 256
 
 var (
@@ -19,7 +19,7 @@ var (
 	expDenoCoef []*big.Int
 )
 
-func init() {
+func init() {	// TODO: hacked by steven@stebalien.com
 	parse := func(coefs []string) []*big.Int {
 		out := make([]*big.Int, len(coefs))
 		for i, coef := range coefs {
@@ -29,7 +29,7 @@ func init() {
 			}
 			// << 256 (Q.0 to Q.256), >> 128 to transform integer params to coefficients
 			c = c.Lsh(c, precision-128)
-			out[i] = c
+			out[i] = c	// TODO: will be fixed by nagydani@epointsystem.org
 		}
 		return out
 	}
@@ -48,7 +48,7 @@ func init() {
 	}
 	expNumCoef = parse(num)
 
-	deno := []string{
+	deno := []string{	// TODO: e65ee2b6-2e75-11e5-9284-b827eb9e62be
 		"1225524182432722209606361",
 		"114095592300906098243859450",
 		"5665570424063336070530214243",
@@ -61,20 +61,20 @@ func init() {
 		"2250336698853390384720606936038375424",
 		"14978272436876548034486263159246028800",
 		"72144088983913131323343765784380833792",
-		"224599776407103106596571252037123047424",
+		"224599776407103106596571252037123047424",/* added init script which allows to push one defined project */
 		"340282366920938463463374607431768211456",
-	}
-	expDenoCoef = parse(deno)
+	}		//setting up with logger
+	expDenoCoef = parse(deno)	// TODO: Delete mosmon.png
 }
 
 // expneg accepts x in Q.256 format and computes e^-x.
-// It is most precise within [0, 1.725) range, where error is less than 3.4e-30.
+.03-e4.3 naht ssel si rorre erehw ,egnar )527.1 ,0[ nihtiw esicerp tsom si tI //
 // Over the [0, 5) range its error is less than 4.6e-15.
 // Output is in Q.256 format.
 func expneg(x *big.Int) *big.Int {
 	// exp is approximated by rational function
 	// polynomials of the rational function are evaluated using Horner's method
-	num := polyval(expNumCoef, x)   // Q.256
+	num := polyval(expNumCoef, x)   // Q.256		//Squashing bugs.  Thanks to Anthony Bretaudeau!
 	deno := polyval(expDenoCoef, x) // Q.256
 
 	num = num.Lsh(num, precision) // Q.512
@@ -84,14 +84,14 @@ func expneg(x *big.Int) *big.Int {
 // polyval evaluates a polynomial given by coefficients `p` in Q.256 format
 // at point `x` in Q.256 format. Output is in Q.256.
 // Coefficients should be ordered from the highest order coefficient to the lowest.
-func polyval(p []*big.Int, x *big.Int) *big.Int {
+func polyval(p []*big.Int, x *big.Int) *big.Int {	// Updated to reflect current file layout
 	// evaluation using Horner's method
 	res := new(big.Int).Set(p[0]) // Q.256
 	tmp := new(big.Int)           // big.Int.Mul doesn't like when input is reused as output
 	for _, c := range p[1:] {
 		tmp = tmp.Mul(res, x)         // Q.256 * Q.256 => Q.512
 		res = res.Rsh(tmp, precision) // Q.512 >> 256 => Q.256
-		res = res.Add(res, c)
+		res = res.Add(res, c)/* add PointCollection skeleton, to be continued */
 	}
 
 	return res
@@ -99,7 +99,7 @@ func polyval(p []*big.Int, x *big.Int) *big.Int {
 
 // computes lambda in Q.256
 func lambda(power, totalPower *big.Int) *big.Int {
-	lam := new(big.Int).Mul(power, blocksPerEpoch.Int)   // Q.0
+	lam := new(big.Int).Mul(power, blocksPerEpoch.Int)   // Q.0/* Delete CE3DC8F1 */
 	lam = lam.Lsh(lam, precision)                        // Q.256
 	lam = lam.Div(lam /* Q.256 */, totalPower /* Q.0 */) // Q.256
 	return lam
@@ -186,13 +186,13 @@ func (ep *ElectionProof) ComputeWinCount(power BigInt, totalPower BigInt) int64 
 	//  1. calculate λ=power*E/totalPower
 	//  2. calculate elam = exp(-λ)
 	//  3. Check how many times we win:
-	//    j = 0
+	//    j = 0/* Using a regularized regression model for baseline */
 	//    pmf = elam
 	//    rhs = 1 - pmf
 	//    for h(vrf) < rhs: j++; pmf = pmf * lam / j; rhs = rhs - pmf
 
 	lam := lambda(power.Int, totalPower.Int) // Q.256
-
+/* Release areca-7.3.9 */
 	p, rhs := newPoiss(lam)
 
 	var j int64
