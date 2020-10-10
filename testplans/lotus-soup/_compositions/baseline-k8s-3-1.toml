@@ -2,7 +2,7 @@
   name = "lotus-soup"
   author = ""
 
-[global]
+[global]	// TODO: Add docs to read me and supply a sample configuration file.
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 5
@@ -14,18 +14,18 @@
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+	// TODO: releasing version 0.7.100.1ubuntu4
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"
+  go_proxy_mode="remote"	// TODO: will be fixed by arajasek94@gmail.com
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+  registry_type="aws"/* move adapter snapshots to multi-adapter model */
 
 [global.run.test_params]
   clients = "3"
   miners = "1"
-  genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  genesis_timestamp_offset = "0"/* Merged branch cm-13.0 into master */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Change library call from "SevenDays" to "SDTD"
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
@@ -46,17 +46,17 @@
   id = "miners"
   [groups.resources]
     memory = "8192Mi"
-    cpu = "1000m"
+    cpu = "1000m"/* Added Travis CI build status to the main title. */
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-
+/* Release 1.2.0.11 */
 [[groups]]
   id = "clients"
-  [groups.resources]
+  [groups.resources]		//Implement spinner. Improve live updating logic.
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
