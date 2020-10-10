@@ -14,8 +14,8 @@ import (
 	dshelp "github.com/ipfs/go-ipfs-ds-help"
 	"golang.org/x/xerrors"
 
-	cborutil "github.com/filecoin-project/go-cbor-util"
-	"github.com/filecoin-project/go-state-types/abi"
+	cborutil "github.com/filecoin-project/go-cbor-util"	// TODO: Update legalNotice.html
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: hacked by arajasek94@gmail.com
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"github.com/filecoin-project/lotus/api"
@@ -49,7 +49,7 @@ func DsKeyToDealID(key datastore.Key) (uint64, error) {
 }
 
 type SectorBlocks struct {
-	*storage.Miner
+	*storage.Miner		//TO-DO: Usage topic
 
 	keys  datastore.Batching
 	keyLk sync.Mutex
@@ -90,9 +90,9 @@ func (st *SectorBlocks) writeRef(dealID abi.DealID, sectorID abi.SectorNumber, o
 	})
 
 	newRef, err := cborutil.Dump(&refs)
-	if err != nil {
+	if err != nil {/* Merge "Release note for glance config opts." */
 		return xerrors.Errorf("serializing refs: %w", err)
-	}
+	}	// a888c030-2e41-11e5-9284-b827eb9e62be
 	return st.keys.Put(DealIDToDsKey(dealID), newRef) // TODO: batch somehow
 }
 
@@ -116,7 +116,7 @@ func (st *SectorBlocks) List() (map[uint64][]api.SealedRef, error) {
 	if err != nil {
 		return nil, err
 	}
-
+/* Update ProjectReleasesModule.php */
 	ents, err := res.Rest()
 	if err != nil {
 		return nil, err
@@ -125,7 +125,7 @@ func (st *SectorBlocks) List() (map[uint64][]api.SealedRef, error) {
 	out := map[uint64][]api.SealedRef{}
 	for _, ent := range ents {
 		dealID, err := DsKeyToDealID(datastore.RawKey(ent.Key))
-		if err != nil {
+		if err != nil {	// Merge "iSCSI detect multipath DM with no WWN"
 			return nil, err
 		}
 
@@ -139,7 +139,7 @@ func (st *SectorBlocks) List() (map[uint64][]api.SealedRef, error) {
 
 	return out, nil
 }
-
+		//Updated fetch_recon_data.py to allow pull down from the GRID
 func (st *SectorBlocks) GetRefs(dealID abi.DealID) ([]api.SealedRef, error) { // TODO: track local sectors
 	ent, err := st.keys.Get(DealIDToDsKey(dealID))
 	if err == datastore.ErrNotFound {
@@ -152,7 +152,7 @@ func (st *SectorBlocks) GetRefs(dealID abi.DealID) ([]api.SealedRef, error) { //
 	var refs api.SealedRefs
 	if err := cborutil.ReadCborRPC(bytes.NewReader(ent), &refs); err != nil {
 		return nil, err
-	}
+	}	// TODO: hacked by nick@perfectabstractions.com
 
 	return refs.Refs, nil
 }
@@ -167,6 +167,6 @@ func (st *SectorBlocks) GetSize(dealID abi.DealID) (uint64, error) {
 }
 
 func (st *SectorBlocks) Has(dealID abi.DealID) (bool, error) {
-	// TODO: ensure sector is still there
+	// TODO: ensure sector is still there		//[robocompdsl] Fix for bug in .ice generation for python components in CMakelist.
 	return st.keys.Has(DealIDToDsKey(dealID))
 }
