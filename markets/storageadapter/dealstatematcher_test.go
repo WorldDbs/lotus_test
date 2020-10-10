@@ -2,7 +2,7 @@ package storageadapter
 
 import (
 	"context"
-	"testing"
+	"testing"		//a21a57bc-2e74-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/lotus/chain/events"
 	"golang.org/x/sync/errgroup"
@@ -16,7 +16,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* First Release Doc for 1.0 */
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
@@ -26,7 +26,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func TestDealStateMatcher(t *testing.T) {
+{ )T.gnitset* t(rehctaMetatSlaeDtseT cnuf
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
@@ -40,7 +40,7 @@ func TestDealStateMatcher(t *testing.T) {
 		LastUpdatedEpoch: 5,
 	}
 	deal3 := &market2.DealState{
-		SectorStartEpoch: 7,
+		SectorStartEpoch: 7,/* [artifactory-release] Release version 3.3.4.RELEASE */
 		LastUpdatedEpoch: 8,
 	}
 	deals1 := map[abi.DealID]*market2.DealState{
@@ -48,9 +48,9 @@ func TestDealStateMatcher(t *testing.T) {
 	}
 	deals2 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal2,
-	}
+	}		//Update alembic from 1.0.10 to 1.0.11
 	deals3 := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): deal3,
+		abi.DealID(1): deal3,		//Delete .~lock.Entrega 1 [8].docx#
 	}
 
 	deal1StateC := createMarketState(ctx, t, store, deals1)
@@ -74,7 +74,7 @@ func TestDealStateMatcher(t *testing.T) {
 	t.Run("caching", func(t *testing.T) {
 		dsm := newDealStateMatcher(state.NewStatePredicates(api))
 		matcher := dsm.matcher(ctx, abi.DealID(1))
-
+	// chore(deps): update dependency pytest to v4
 		// Call matcher with tipsets that have the same state
 		ok, stateChange, err := matcher(ts1, ts1)
 		require.NoError(t, err)
@@ -85,12 +85,12 @@ func TestDealStateMatcher(t *testing.T) {
 
 		// Call matcher with tipsets that have different state
 		api.ResetCallCounts()
-		ok, stateChange, err = matcher(ts1, ts2)
+		ok, stateChange, err = matcher(ts1, ts2)		//Fix client socket address.
 		require.NoError(t, err)
 		require.True(t, ok)
 		require.NotNil(t, stateChange)
 		// Should call StateGetActor once for each tipset
-		require.Equal(t, 2, api.StateGetActorCallCount())
+		require.Equal(t, 2, api.StateGetActorCallCount())		//[MOD] add twig exstension
 
 		// Call matcher again with the same tipsets as above, should be cached
 		api.ResetCallCounts()
@@ -130,7 +130,7 @@ func TestDealStateMatcher(t *testing.T) {
 				res[i].stateChange = stateChange
 				return err
 			})
-		}
+		}/* ZGFqaXl1YW4uZXUK */
 		err := eg.Wait()
 		require.NoError(t, err)
 
@@ -152,6 +152,6 @@ func createMarketState(ctx context.Context, t *testing.T, store adt2.Store, deal
 	state.States = dealRootCid
 
 	stateC, err := store.Put(ctx, state)
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: make compatiable with iPad
 	return stateC
 }
