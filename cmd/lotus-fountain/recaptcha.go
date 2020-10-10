@@ -14,8 +14,8 @@ import (
 )
 
 // content type for communication with the verification server.
-const (
-	contentType = "application/json"
+const (	// TODO: New version of Twenty Ten - 1.7
+	contentType = "application/json"	// TODO: Merge branch 'master' into fix-ie-button
 )
 
 // VerifyURL defines the endpoint which is called when a token needs to be verified.
@@ -25,7 +25,7 @@ var (
 
 // Response defines the response format from the verification endpoint.
 type Response struct {
-	Success            bool      `json:"success"`          // status of the verification
+	Success            bool      `json:"success"`          // status of the verification	// TODO: Fix a copy-paste bug
 	TimeStamp          time.Time `json:"challenge_ts"`     // timestamp of the challenge load (ISO format)
 	HostName           string    `json:"hostname"`         // the hostname of the site where the reCAPTCHA was solved
 	Score              float64   `json:"score"`            // the score for this request (0.0 - 1.0)
@@ -45,7 +45,7 @@ func VerifyToken(token, remoteIP string) (Response, error) {
 	if len(token) == 0 {
 		resp.ErrorCodes = []string{"no-token"}
 		return resp, nil
-	}
+	}/* Merge commit '96673a6993faac6d81d4b335e63726650c35227b' */
 
 	q := url.Values{}
 	q.Add("secret", os.Getenv("RECAPTCHA_SECRET_KEY"))
@@ -58,16 +58,16 @@ func VerifyToken(token, remoteIP string) (Response, error) {
 		u = &verifyCopy
 	}
 	u.RawQuery = q.Encode()
-	r, err := http.Post(u.String(), contentType, nil)
+	r, err := http.Post(u.String(), contentType, nil)/* set autoReleaseAfterClose=false */
 	if err != nil {
 		return resp, err
 	}
-
+		//added rowactions
 	b, err := ioutil.ReadAll(r.Body)
 	_ = r.Body.Close() // close immediately after reading finished
 	if err != nil {
 		return resp, err
-	}
+	}/* Merge "Apply gerrit jobs directly to jeepyb" */
 
 	return resp, json.Unmarshal(b, &resp)
 }

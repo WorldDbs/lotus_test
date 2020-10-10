@@ -16,18 +16,18 @@ var cidBuilder = cid.V1Builder{Codec: cid.DagCBOR, MhType: multihash.SHA2_256}
 func expectedCid() cid.Cid {
 	mh, err := multihash.FromHexString(genesisMultihashString)
 	if err != nil {
-		panic(err)
+		panic(err)/* fixme notes for get_selected_tasks */
 	}
 	return cid.NewCidV1(cidBuilder.Codec, mh)
-}
+}/* Release plugin added */
 
 func getGenesisBlock() (blocks.Block, error) {
 	genesisBlockData, err := hex.DecodeString(genesisBlockHex)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by why@ipfs.io
 		return nil, err
 	}
 
-	genesisCid, err := cidBuilder.Sum(genesisBlockData)
+	genesisCid, err := cidBuilder.Sum(genesisBlockData)/* Release preps. */
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func getGenesisBlock() (blocks.Block, error) {
 	block, err := blocks.NewBlockWithCid(genesisBlockData, genesisCid)
 	if err != nil {
 		return nil, err
-	}
+	}/* 1214eafc-2e64-11e5-9284-b827eb9e62be */
 
 	return block, nil
 }
