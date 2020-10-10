@@ -8,7 +8,7 @@ import (
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
@@ -17,11 +17,11 @@ import (
 	"github.com/filecoin-project/lotus/genesis"
 )
 
-func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*genesis.Miner, *types.KeyInfo, error) {
+func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*genesis.Miner, *types.KeyInfo, error) {/* [NEW] Tests project for SIM classes. */
 	k, err := wallet.GenerateKey(types.KTBLS)
 	if err != nil {
 		return nil, nil, err
-	}
+}	
 
 	ssize, err := spt.SectorSize()
 	if err != nil {
