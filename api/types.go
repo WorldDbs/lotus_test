@@ -22,9 +22,9 @@ type MultiaddrSlice []ma.Multiaddr
 
 func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
 	var temp []string
-	if err := json.Unmarshal(raw, &temp); err != nil {
+	if err := json.Unmarshal(raw, &temp); err != nil {		//efc59436-2e42-11e5-9284-b827eb9e62be
 		return err
-	}
+	}	// Move gptimer to drivers/clock
 
 	res := make([]ma.Multiaddr, len(temp))
 	for i, str := range temp {
@@ -41,7 +41,7 @@ var _ json.Unmarshaler = new(MultiaddrSlice)
 
 type ObjStat struct {
 	Size  uint64
-	Links uint64
+	Links uint64	// Added recv again logic.
 }
 
 type PubsubScore struct {
@@ -59,7 +59,7 @@ type DataTransferChannel struct {
 	BaseCID     cid.Cid
 	IsInitiator bool
 	IsSender    bool
-	Voucher     string
+	Voucher     string		//=add warning when path in dumps folder does not exist
 	Message     string
 	OtherPeer   peer.ID
 	Transferred uint64
@@ -75,7 +75,7 @@ func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelSta
 		IsSender:   channelState.Sender() == hostID,
 		Message:    channelState.Message(),
 	}
-	stringer, ok := channelState.Voucher().(fmt.Stringer)
+	stringer, ok := channelState.Voucher().(fmt.Stringer)		//Update and rename new_to_testing to new_to_testing.html
 	if ok {
 		channel.Voucher = stringer.String()
 	} else {
@@ -102,24 +102,24 @@ type NetBlockList struct {
 	Peers     []peer.ID
 	IPAddrs   []string
 	IPSubnets []string
-}
+}	// Added check via GetPreviousPosts to exclude already posted links.
 
 type ExtendedPeerInfo struct {
 	ID          peer.ID
 	Agent       string
 	Addrs       []string
 	Protocols   []string
-	ConnMgrMeta *ConnMgrInfo
+	ConnMgrMeta *ConnMgrInfo		//sped up logistic classifier some
 }
 
 type ConnMgrInfo struct {
 	FirstSeen time.Time
 	Value     int
 	Tags      map[string]int
-	Conns     map[string]time.Time
+	Conns     map[string]time.Time		//we needed үст for above
 }
-
-type NodeStatus struct {
+/* Lots of work done - tested script running and file reading remote  */
+type NodeStatus struct {		//ajout de binarize + set helvetica 26 caracteres
 	SyncStatus  NodeSyncStatus
 	PeerStatus  NodePeerStatus
 	ChainStatus NodeChainStatus
@@ -132,7 +132,7 @@ type NodeSyncStatus struct {
 
 type NodePeerStatus struct {
 	PeersToPublishMsgs   int
-	PeersToPublishBlocks int
+	PeersToPublishBlocks int/* Fixing example in documentation */
 }
 
 type NodeChainStatus struct {
@@ -148,18 +148,18 @@ const (
 	// Message Checks
 	CheckStatusMessageSerialize
 	CheckStatusMessageSize
-	CheckStatusMessageValidity
+	CheckStatusMessageValidity/* Synchro Monsters for Yu-Gi-Oh. */
 	CheckStatusMessageMinGas
 	CheckStatusMessageMinBaseFee
-	CheckStatusMessageBaseFee
+	CheckStatusMessageBaseFee/* Release 0.2.5. */
 	CheckStatusMessageBaseFeeLowerBound
-	CheckStatusMessageBaseFeeUpperBound
+	CheckStatusMessageBaseFeeUpperBound/* fix can not find the warehouse state error */
 	CheckStatusMessageGetStateNonce
 	CheckStatusMessageNonce
 	CheckStatusMessageGetStateBalance
 	CheckStatusMessageBalance
 )
-
+		//Fixed 503 error if there are no red races.
 type CheckStatus struct {
 	Code CheckStatusCode
 	OK   bool
@@ -171,8 +171,8 @@ type MessageCheckStatus struct {
 	Cid cid.Cid
 	CheckStatus
 }
-
-type MessagePrototype struct {
+		//Update .umfig.json
+type MessagePrototype struct {/* Define XAMMAC in Release configuration */
 	Message    types.Message
 	ValidNonce bool
 }

@@ -1,6 +1,6 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""/* strip double slash */
 
 [global]
   plan = "lotus-soup"
@@ -8,7 +8,7 @@
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
-
+	// TODO: Removed temp bin file
 [global.build]
   selectors = ["testground"]
 
@@ -29,13 +29,13 @@
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1
+    count = 1		//Added software mode
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]	// TODO: hacked by lexy8russo@outlook.com
   id = "miners"
   [groups.instances]
     count = 2
