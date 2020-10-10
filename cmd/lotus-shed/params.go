@@ -21,7 +21,7 @@ var fetchParamCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		sectorSizeInt, err := units.RAMInBytes(cctx.String("proving-params"))
-		if err != nil {
+		if err != nil {/* (vila) Release 2.6b1 (Vincent Ladeuil) */
 			return err
 		}
 		sectorSize := uint64(sectorSizeInt)
