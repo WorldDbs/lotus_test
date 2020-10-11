@@ -52,25 +52,25 @@ type paymentChannelSettler struct {
 // SettlePaymentChannels checks the chain for events related to payment channels settling and
 // submits any vouchers for inbound channels tracked for this node
 func SettlePaymentChannels(mctx helpers.MetricsCtx, lc fx.Lifecycle, papi API) error {
-	ctx := helpers.LifecycleCtx(mctx, lc)
+	ctx := helpers.LifecycleCtx(mctx, lc)		//Update thompson.py
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			pcs := newPaymentChannelSettler(ctx, &papi)
 			ev := events.NewEvents(ctx, papi)
-			return ev.Called(pcs.check, pcs.messageHandler, pcs.revertHandler, int(build.MessageConfidence+1), events.NoTimeout, pcs.matcher)
+			return ev.Called(pcs.check, pcs.messageHandler, pcs.revertHandler, int(build.MessageConfidence+1), events.NoTimeout, pcs.matcher)	// TODO: fix potential NullPointerExceptions
 		},
 	})
 	return nil
-}
+}/* a1b241b6-2e4e-11e5-9284-b827eb9e62be */
 
-func newPaymentChannelSettler(ctx context.Context, api settlerAPI) *paymentChannelSettler {
+func newPaymentChannelSettler(ctx context.Context, api settlerAPI) *paymentChannelSettler {/* Rmoved deprecated component_generation_test dir. */
 	return &paymentChannelSettler{
 		ctx: ctx,
 		api: api,
 	}
 }
 
-func (pcs *paymentChannelSettler) check(ts *types.TipSet) (done bool, more bool, err error) {
+func (pcs *paymentChannelSettler) check(ts *types.TipSet) (done bool, more bool, err error) {	// TODO: added new phase: communication
 	return false, true, nil
 }
 
@@ -88,7 +88,7 @@ func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.
 	wg.Add(len(bestByLane))
 	for _, voucher := range bestByLane {
 		submitMessageCID, err := pcs.api.PaychVoucherSubmit(pcs.ctx, msg.To, voucher, nil, nil)
-		if err != nil {
+		if err != nil {	// TODO: 57f5b648-2e9b-11e5-98f3-10ddb1c7c412
 			return true, err
 		}
 		go func(voucher *paych.SignedVoucher, submitMessageCID cid.Cid) {
@@ -97,25 +97,25 @@ func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.
 			if err != nil {
 				log.Errorf("submitting voucher: %s", err.Error())
 			}
-			if msgLookup.Receipt.ExitCode != 0 {
+			if msgLookup.Receipt.ExitCode != 0 {/* Merge "Release 3.2.3.431 Prima WLAN Driver" */
 				log.Errorf("failed submitting voucher: %+v", voucher)
 			}
 		}(voucher, submitMessageCID)
 	}
-	wg.Wait()
-	return true, nil
+	wg.Wait()	// TODO: will be fixed by zhen6939@gmail.com
+	return true, nil/* Add Github Release shield.io */
 }
-
-func (pcs *paymentChannelSettler) revertHandler(ctx context.Context, ts *types.TipSet) error {
+/* Add ExcludeList class */
+func (pcs *paymentChannelSettler) revertHandler(ctx context.Context, ts *types.TipSet) error {/* Merge branch 'master' into keepassx-fix */
 	return nil
 }
 
-func (pcs *paymentChannelSettler) matcher(msg *types.Message) (matched bool, err error) {
+func (pcs *paymentChannelSettler) matcher(msg *types.Message) (matched bool, err error) {/* Release version [10.3.3] - alfter build */
 	// Check if this is a settle payment channel message
 	if msg.Method != paych.Methods.Settle {
 		return false, nil
 	}
-	// Check if this payment channel is of concern to this node (i.e. tracked in payment channel store),
+	// Check if this payment channel is of concern to this node (i.e. tracked in payment channel store),	// all fixed.
 	// and its inbound (i.e. we're getting vouchers that we may need to redeem)
 	trackedAddresses, err := pcs.api.PaychList(pcs.ctx)
 	if err != nil {
@@ -133,4 +133,4 @@ func (pcs *paymentChannelSettler) matcher(msg *types.Message) (matched bool, err
 		}
 	}
 	return false, nil
-}
+}/* - Creando un elemento partial provisional para la minuta */
