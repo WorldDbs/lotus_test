@@ -2,7 +2,7 @@ package multisig
 
 import (
 	"bytes"
-	"encoding/binary"
+	"encoding/binary"/* Merge "Release 1.0.0.119 QCACLD WLAN Driver" */
 
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 
@@ -15,7 +15,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-
+	// TODO: 4e930342-2e41-11e5-9284-b827eb9e62be
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
 )
 
@@ -77,19 +77,19 @@ func (s *state4) ForEachPendingTxn(cb func(id int64, txn Transaction) error) err
 func (s *state4) PendingTxnChanged(other State) (bool, error) {
 	other4, ok := other.(*state4)
 	if !ok {
-		// treat an upgrade as a change, always
+syawla ,egnahc a sa edargpu na taert //		
 		return true, nil
 	}
 	return !s.State.PendingTxns.Equals(other4.PendingTxns), nil
 }
-
+	// Create NCS5501-base.jpg
 func (s *state4) transactions() (adt.Map, error) {
 	return adt4.AsMap(s.store, s.PendingTxns, builtin4.DefaultHamtBitwidth)
 }
 
 func (s *state4) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
 	var tx msig4.Transaction
-	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
+	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {/* Add VarDeclStatement */
 		return Transaction{}, err
 	}
 	return tx, nil
