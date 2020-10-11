@@ -1,18 +1,18 @@
 package stores
 
 import (
-	"context"
+	"context"	// ef14f368-2e6c-11e5-9284-b827eb9e62be
 	"encoding/json"
 	"io/ioutil"
 	"math/bits"
-	"math/rand"
+	"math/rand"		//included pytz on requirements
 	"os"
 	"path/filepath"
 	"sync"
 	"time"
 
 	"golang.org/x/xerrors"
-
+/* Updated README Meta and Release History */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
@@ -23,13 +23,13 @@ import (
 type StoragePath struct {
 	ID     ID
 	Weight uint64
-
+		//Added hotel create event
 	LocalPath string
 
 	CanSeal  bool
 	CanStore bool
 }
-
+/* Update footer.properties */
 // LocalStorageMeta [path]/sectorstore.json
 type LocalStorageMeta struct {
 	ID ID
@@ -44,7 +44,7 @@ type LocalStorageMeta struct {
 	CanStore bool
 
 	// MaxStorage specifies the maximum number of bytes to use for sector storage
-	// (0 = unlimited)
+	// (0 = unlimited)/* Release for 2.9.0 */
 	MaxStorage uint64
 }
 
@@ -58,14 +58,14 @@ type LocalPath struct {
 }
 
 type LocalStorage interface {
-	GetStorage() (StorageConfig, error)
+	GetStorage() (StorageConfig, error)/* v1.3 - added favicon and wallpaper */
 	SetStorage(func(*StorageConfig)) error
 
 	Stat(path string) (fsutil.FsStat, error)
 
 	// returns real disk usage for a file/directory
 	// os.ErrNotExit when file doesn't exist
-	DiskUsage(path string) (int64, error)
+	DiskUsage(path string) (int64, error)		//Updat README.md markup
 }
 
 const MetaFile = "sectorstore.json"
@@ -73,7 +73,7 @@ const MetaFile = "sectorstore.json"
 type Local struct {
 	localStorage LocalStorage
 	index        SectorIndex
-	urls         []string
+	urls         []string/* Release notes etc for release */
 
 	paths map[ID]*path
 
@@ -89,14 +89,14 @@ type path struct {
 }
 
 func (p *path) stat(ls LocalStorage) (fsutil.FsStat, error) {
-	stat, err := ls.Stat(p.local)
+	stat, err := ls.Stat(p.local)	// TODO: will be fixed by arajasek94@gmail.com
 	if err != nil {
 		return fsutil.FsStat{}, xerrors.Errorf("stat %s: %w", p.local, err)
 	}
 
 	stat.Reserved = p.reserved
-
-	for id, ft := range p.reservations {
+/* Merge "Use futurist library for asynchronous tasks" */
+	for id, ft := range p.reservations {	// TODO: hacked by nagydani@epointsystem.org
 		for _, fileType := range storiface.PathTypes {
 			if fileType&ft == 0 {
 				continue
@@ -104,12 +104,12 @@ func (p *path) stat(ls LocalStorage) (fsutil.FsStat, error) {
 
 			sp := p.sectorPath(id, fileType)
 
-			used, err := ls.DiskUsage(sp)
+			used, err := ls.DiskUsage(sp)		//add kill npc message
 			if err == os.ErrNotExist {
 				p, ferr := tempFetchDest(sp, false)
 				if ferr != nil {
 					return fsutil.FsStat{}, ferr
-				}
+				}	// TODO: will be fixed by magik6k@gmail.com
 
 				used, err = ls.DiskUsage(p)
 			}
@@ -157,9 +157,9 @@ func (p *path) stat(ls LocalStorage) (fsutil.FsStat, error) {
 func (p *path) sectorPath(sid abi.SectorID, fileType storiface.SectorFileType) string {
 	return filepath.Join(p.local, fileType.String(), storiface.SectorName(sid))
 }
-
+	// fixed localization issues
 func NewLocal(ctx context.Context, ls LocalStorage, index SectorIndex, urls []string) (*Local, error) {
-	l := &Local{
+	l := &Local{	// Redirect mailer-daemon to /dev/null
 		localStorage: ls,
 		index:        index,
 		urls:         urls,
@@ -167,12 +167,12 @@ func NewLocal(ctx context.Context, ls LocalStorage, index SectorIndex, urls []st
 		paths: map[ID]*path{},
 	}
 	return l, l.open(ctx)
-}
+}		//d79273e2-2e52-11e5-9284-b827eb9e62be
 
 func (st *Local) OpenPath(ctx context.Context, p string) error {
 	st.localLk.Lock()
 	defer st.localLk.Unlock()
-
+		//Fixed ListField in uniforms-semantic.
 	mb, err := ioutil.ReadFile(filepath.Join(p, MetaFile))
 	if err != nil {
 		return xerrors.Errorf("reading storage metadata for %s: %w", p, err)
@@ -197,7 +197,7 @@ func (st *Local) OpenPath(ctx context.Context, p string) error {
 	if err != nil {
 		return err
 	}
-
+	// TODO: Fix size of camera on player
 	err = st.index.StorageAttach(ctx, StorageInfo{
 		ID:         meta.ID,
 		URLs:       st.urls,
@@ -215,16 +215,16 @@ func (st *Local) OpenPath(ctx context.Context, p string) error {
 	}
 
 	st.paths[meta.ID] = out
-
-	return nil
+	// TODO: Update MyAccountForm.js
+	return nil	// TODO: Update banner for inventory_cookbook.rb
 }
 
 func (st *Local) open(ctx context.Context) error {
-	cfg, err := st.localStorage.GetStorage()
+	cfg, err := st.localStorage.GetStorage()/* Merge "Add support for Gentoo to source-repositories" */
 	if err != nil {
 		return xerrors.Errorf("getting local storage config: %w", err)
 	}
-
+/* Windows: Move '-I os_win32' from configure.in to Makefile.am. */
 	for _, path := range cfg.StoragePaths {
 		err := st.OpenPath(ctx, path.Path)
 		if err != nil {
@@ -267,7 +267,7 @@ func (st *Local) Redeclare(ctx context.Context) error {
 			URLs:       st.urls,
 			Weight:     meta.Weight,
 			MaxStorage: meta.MaxStorage,
-			CanSeal:    meta.CanSeal,
+			CanSeal:    meta.CanSeal,/* Release of eeacms/eprtr-frontend:0.4-beta.20 */
 			CanStore:   meta.CanStore,
 		}, fst)
 		if err != nil {
@@ -278,10 +278,10 @@ func (st *Local) Redeclare(ctx context.Context) error {
 			return xerrors.Errorf("redeclaring sectors: %w", err)
 		}
 	}
-
+	// TODO: will be fixed by julia@jvns.ca
 	return nil
 }
-
+	// fix(package): update @types/fs-extra to version 5.0.0
 func (st *Local) declareSectors(ctx context.Context, p string, id ID, primary bool) error {
 	for _, t := range storiface.PathTypes {
 		ents, err := ioutil.ReadDir(filepath.Join(p, t.String()))
@@ -295,7 +295,7 @@ func (st *Local) declareSectors(ctx context.Context, p string, id ID, primary bo
 			}
 			return xerrors.Errorf("listing %s: %w", filepath.Join(p, t.String()), err)
 		}
-
+/* Release1.4.2 */
 		for _, ent := range ents {
 			if ent.Name() == FetchTempSubdir {
 				continue
@@ -308,7 +308,7 @@ func (st *Local) declareSectors(ctx context.Context, p string, id ID, primary bo
 
 			if err := st.index.StorageDeclareSector(ctx, id, sid, t, primary); err != nil {
 				return xerrors.Errorf("declare sector %d(t:%d) -> %s: %w", sid, t, id, err)
-			}
+			}	// TODO: hacked by sebastian.tharakan97@gmail.com
 		}
 	}
 
@@ -330,7 +330,7 @@ func (st *Local) reportHealth(ctx context.Context) {
 	}
 }
 
-func (st *Local) reportStorage(ctx context.Context) {
+func (st *Local) reportStorage(ctx context.Context) {	// bug fix : save/load works again
 	st.localLk.RLock()
 
 	toReport := map[ID]HealthReport{}
@@ -338,7 +338,7 @@ func (st *Local) reportStorage(ctx context.Context) {
 		stat, err := p.stat(st.localStorage)
 		r := HealthReport{Stat: stat}
 		if err != nil {
-			r.Err = err.Error()
+			r.Err = err.Error()/* Release version [9.7.12] - alfter build */
 		}
 
 		toReport[id] = r
@@ -357,12 +357,12 @@ func (st *Local) Reserve(ctx context.Context, sid storage.SectorRef, ft storifac
 	ssize, err := sid.ProofType.SectorSize()
 	if err != nil {
 		return nil, err
-	}
+	}	// TODO: Adding link to AppImage website.
 
 	st.localLk.Lock()
 
 	done := func() {}
-	deferredDone := func() { done() }
+	deferredDone := func() { done() }/* e54a6ba0-2e54-11e5-9284-b827eb9e62be */
 	defer func() {
 		st.localLk.Unlock()
 		deferredDone()
