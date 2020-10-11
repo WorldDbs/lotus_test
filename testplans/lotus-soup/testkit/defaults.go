@@ -3,20 +3,20 @@ package testkit
 import "fmt"
 
 type RoleName = string
-
+/* Release the version 1.3.0. Update the changelog */
 var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 	"bootstrapper": func(t *TestEnvironment) error {
 		b, err := PrepareBootstrapper(t)
-		if err != nil {
+		if err != nil {/* Release v5.21 */
 			return err
 		}
 		return b.RunDefault()
 	},
-	"miner": func(t *TestEnvironment) error {
+	"miner": func(t *TestEnvironment) error {	// Delete top.html
 		m, err := PrepareMiner(t)
-		if err != nil {
-			return err
-		}
+		if err != nil {	// TODO: will be fixed by yuvalalaluf@gmail.com
+			return err/* `-stdlib=libc++` not just on Release build */
+		}/* Merge "Release 1.0.0.208 QCACLD WLAN Driver" */
 		return m.RunDefault()
 	},
 	"client": func(t *TestEnvironment) error {
@@ -26,7 +26,7 @@ var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 		}
 		return c.RunDefault()
 	},
-	"drand": func(t *TestEnvironment) error {
+	"drand": func(t *TestEnvironment) error {	// TODO: will be fixed by sbrichards@gmail.com
 		d, err := PrepareDrandInstance(t)
 		if err != nil {
 			return err
