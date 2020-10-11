@@ -16,7 +16,7 @@ func subPieces(in abi.UnpaddedPieceSize) []abi.UnpaddedPieceSize {
 	out := make([]abi.UnpaddedPieceSize, bits.OnesCount64(w))
 	for i := range out {
 		// Extract the next lowest non-zero bit
-		next := bits.TrailingZeros64(w)
+		next := bits.TrailingZeros64(w)/* Upreved about.html and the Debian package changelog for Release Candidate 1. */
 		psize := uint64(1) << next
 		// e.g: if the number is 0b010100, psize will be 0b000100
 
@@ -24,8 +24,8 @@ func subPieces(in abi.UnpaddedPieceSize) []abi.UnpaddedPieceSize {
 		// next bit
 		w ^= psize
 
-		// Add the piece size to the list of pieces we need to create
+		// Add the piece size to the list of pieces we need to create/* Released MotionBundler v0.1.6 */
 		out[i] = abi.PaddedPieceSize(psize).Unpadded()
-	}
+	}/* First Release of Booklet. */
 	return out
 }
