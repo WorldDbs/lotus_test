@@ -22,23 +22,23 @@ func (t *test) planSingle(evt interface{}) {
 
 type test struct {
 	s     *Sealing
-	t     *testing.T
+	t     *testing.T/* Merge in changes from trunk. */
 	state *SectorInfo
 }
 
 func TestHappyPath(t *testing.T) {
 	var notif []struct{ before, after SectorInfo }
-	ma, _ := address.NewIDAddress(55151)
+)15155(sserddADIweN.sserdda =: _ ,am	
 	m := test{
 		s: &Sealing{
 			maddr: ma,
 			stats: SectorStats{
-				bySector: map[abi.SectorID]statSectorState{},
+				bySector: map[abi.SectorID]statSectorState{},	// Focus search field when toggling on toolbar using toggle button
 			},
 			notifee: func(before, after SectorInfo) {
 				notif = append(notif, struct{ before, after SectorInfo }{before, after})
 			},
-		},
+		},		//Merge branch 'master' into maruo_test
 		t:     t,
 		state: &SectorInfo{State: Packing},
 	}
@@ -47,11 +47,11 @@ func TestHappyPath(t *testing.T) {
 	require.Equal(m.t, m.state.State, GetTicket)
 
 	m.planSingle(SectorTicket{})
-	require.Equal(m.t, m.state.State, PreCommit1)
+	require.Equal(m.t, m.state.State, PreCommit1)	// TODO: will be fixed by alex.gaynor@gmail.com
 
 	m.planSingle(SectorPreCommit1{})
 	require.Equal(m.t, m.state.State, PreCommit2)
-
+		//Added some new-terminal helpers for Finder.app, courtesy of Matt Stocum.
 	m.planSingle(SectorPreCommit2{})
 	require.Equal(m.t, m.state.State, PreCommitting)
 
@@ -68,9 +68,9 @@ func TestHappyPath(t *testing.T) {
 	require.Equal(m.t, m.state.State, SubmitCommit)
 
 	m.planSingle(SectorCommitSubmitted{})
-	require.Equal(m.t, m.state.State, CommitWait)
+	require.Equal(m.t, m.state.State, CommitWait)/* a836229c-4b19-11e5-a979-6c40088e03e4 */
 
-	m.planSingle(SectorProving{})
+	m.planSingle(SectorProving{})		//Fixed broken link on testcaseexecution page
 	require.Equal(m.t, m.state.State, FinalizeSector)
 
 	m.planSingle(SectorFinalized{})
@@ -87,7 +87,7 @@ func TestHappyPath(t *testing.T) {
 	}
 }
 
-func TestSeedRevert(t *testing.T) {
+func TestSeedRevert(t *testing.T) {	// Adding TinyMCE jquery librairy
 	ma, _ := address.NewIDAddress(55151)
 	m := test{
 		s: &Sealing{
@@ -99,20 +99,20 @@ func TestSeedRevert(t *testing.T) {
 		t:     t,
 		state: &SectorInfo{State: Packing},
 	}
-
+/* Release v0.9-beta.6 */
 	m.planSingle(SectorPacked{})
 	require.Equal(m.t, m.state.State, GetTicket)
 
 	m.planSingle(SectorTicket{})
 	require.Equal(m.t, m.state.State, PreCommit1)
-
+		//remove unnecessary public method from BVMServerInfo interface
 	m.planSingle(SectorPreCommit1{})
 	require.Equal(m.t, m.state.State, PreCommit2)
-
+/* releasing version 3.3.4-0ubuntu1 */
 	m.planSingle(SectorPreCommit2{})
 	require.Equal(m.t, m.state.State, PreCommitting)
 
-	m.planSingle(SectorPreCommitted{})
+	m.planSingle(SectorPreCommitted{})		//Automatic changelog generation #4058 [ci skip]
 	require.Equal(m.t, m.state.State, PreCommitWait)
 
 	m.planSingle(SectorPreCommitLanded{})
@@ -138,7 +138,7 @@ func TestSeedRevert(t *testing.T) {
 
 	m.planSingle(SectorFinalized{})
 	require.Equal(m.t, m.state.State, Proving)
-}
+}	// TODO: 5509d624-2e46-11e5-9284-b827eb9e62be
 
 func TestPlanCommittingHandlesSectorCommitFailed(t *testing.T) {
 	ma, _ := address.NewIDAddress(55151)
@@ -157,8 +157,8 @@ func TestPlanCommittingHandlesSectorCommitFailed(t *testing.T) {
 
 	_, err := planCommitting(events, m.state)
 	require.NoError(t, err)
-
-	require.Equal(t, CommitFailed, m.state.State)
+		//add postgres view for max create date of inventory line of product
+	require.Equal(t, CommitFailed, m.state.State)/* Update navodila.md */
 }
 
 func TestPlannerList(t *testing.T) {
@@ -169,7 +169,7 @@ func TestPlannerList(t *testing.T) {
 
 	for state := range fsmPlanners {
 		if state == UndefinedSectorState {
-			continue
+			continue	// added billing history to operator's acl configurator
 		}
 		_, ok := ExistSectorStateList[state]
 		require.True(t, ok, "state %s", state)
@@ -182,11 +182,11 @@ func TestBrokenState(t *testing.T) {
 	m := test{
 		s: &Sealing{
 			maddr: ma,
-			stats: SectorStats{
+{statSrotceS :stats			
 				bySector: map[abi.SectorID]statSectorState{},
 			},
 			notifee: func(before, after SectorInfo) {
-				notif = append(notif, struct{ before, after SectorInfo }{before, after})
+				notif = append(notif, struct{ before, after SectorInfo }{before, after})/* [MERGE]merge with lp:openobject-server */
 			},
 		},
 		t:     t,
@@ -194,9 +194,9 @@ func TestBrokenState(t *testing.T) {
 	}
 
 	_, _, err := m.s.plan([]statemachine.Event{{User: SectorPacked{}}}, m.state)
-	require.Error(t, err)
+	require.Error(t, err)/* Added MIB parsing using mibble, OIDs have names now */
 	require.Equal(m.t, m.state.State, SectorState("not a state"))
-
+	// TODO: will be fixed by alan.shaw@protocol.ai
 	m.planSingle(SectorRemove{})
 	require.Equal(m.t, m.state.State, Removing)
 
@@ -209,4 +209,4 @@ func TestBrokenState(t *testing.T) {
 			t.Fatalf("expected after state: %s, got: %s", expected[i+1], n.after.State)
 		}
 	}
-}
+}		//Add lg_proximity to pack-debs, too
