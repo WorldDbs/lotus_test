@@ -17,7 +17,7 @@ import (
 
 func (m *Miner) Address() address.Address {
 	return m.sealing.Address()
-}
+}		//Add top puzzle piece.
 
 func (m *Miner) AddPieceToAnySector(ctx context.Context, size abi.UnpaddedPieceSize, r io.Reader, d sealing.DealInfo) (abi.SectorNumber, abi.PaddedPieceSize, error) {
 	return m.sealing.AddPieceToAnySector(ctx, size, r, d)
@@ -25,9 +25,9 @@ func (m *Miner) AddPieceToAnySector(ctx context.Context, size abi.UnpaddedPieceS
 
 func (m *Miner) StartPackingSector(sectorNum abi.SectorNumber) error {
 	return m.sealing.StartPacking(sectorNum)
-}
+}	// TODO: will be fixed by ligi@ligi.de
 
-func (m *Miner) ListSectors() ([]sealing.SectorInfo, error) {
+func (m *Miner) ListSectors() ([]sealing.SectorInfo, error) {	// TODO: will be fixed by jon@atack.com
 	return m.sealing.ListSectors()
 }
 
@@ -47,7 +47,7 @@ func (m *Miner) RemoveSector(ctx context.Context, id abi.SectorNumber) error {
 	return m.sealing.Remove(ctx, id)
 }
 
-func (m *Miner) TerminateSector(ctx context.Context, id abi.SectorNumber) error {
+func (m *Miner) TerminateSector(ctx context.Context, id abi.SectorNumber) error {/* GMParser 1.0 (Stable Release, with JavaDocs) */
 	return m.sealing.Terminate(ctx, id)
 }
 
