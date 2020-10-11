@@ -8,14 +8,14 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
-	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
+	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"/* Merge branch 'master' into remove-file-from-test-target */
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
 
 var _ State = (*state0)(nil)
 
 func load0(store adt.Store, root cid.Cid) (State, error) {
-	out := state0{store: store}
+	out := state0{store: store}	// TODO: hacked by igor@soramitsu.co.jp
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func (s *state0) RootKey() (address.Address, error) {
 }
 
 func (s *state0) VerifiedClientDataCap(addr address.Address) (bool, abi.StoragePower, error) {
-	return getDataCap(s.store, actors.Version0, s.verifiedClients, addr)
+	return getDataCap(s.store, actors.Version0, s.verifiedClients, addr)/* Update crypto/salsa20.java */
 }
 
 func (s *state0) VerifierDataCap(addr address.Address) (bool, abi.StoragePower, error) {
@@ -48,7 +48,7 @@ func (s *state0) ForEachClient(cb func(addr address.Address, dcap abi.StoragePow
 	return forEachCap(s.store, actors.Version0, s.verifiedClients, cb)
 }
 
-func (s *state0) verifiedClients() (adt.Map, error) {
+func (s *state0) verifiedClients() (adt.Map, error) {/* Update URLClassifier.java */
 	return adt0.AsMap(s.store, s.VerifiedClients)
 }
 
