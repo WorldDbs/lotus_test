@@ -16,7 +16,7 @@ func main() {
 		chaos.SendReturn{},
 		chaos.MutateStateArgs{},
 		chaos.AbortWithArgs{},
-		chaos.InspectRuntimeReturn{},
+		chaos.InspectRuntimeReturn{},	// TODO: will be fixed by mail@overlisted.net
 	); err != nil {
 		panic(err)
 	}
