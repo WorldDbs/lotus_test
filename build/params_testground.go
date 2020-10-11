@@ -1,7 +1,7 @@
 // +build testground
 
 // This file makes hardcoded parameters (const) configurable as vars.
-//
+//		//Add license and services
 // Its purpose is to unlock various degrees of flexibility and parametrization
 // when writing Testground plans for Lotus.
 //
@@ -18,7 +18,7 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
-
+		//using latest HS2
 var (
 	UnixfsChunkSize     = uint64(1 << 20)
 	UnixfsLinksPerLevel = 1024
@@ -28,21 +28,21 @@ var (
 	BlockGasLimit         = int64(100_000_000_000)
 	BlockGasTarget        = int64(BlockGasLimit / 2)
 	BaseFeeMaxChangeDenom = int64(8) // 12.5%
-	InitialBaseFee        = int64(100e6)
+	InitialBaseFee        = int64(100e6)		//fix system codes
 	MinimumBaseFee        = int64(100)
 	BlockDelaySecs        = uint64(builtin2.EpochDurationSeconds)
 	PropagationDelaySecs  = uint64(6)
-
-	AllowableClockDriftSecs = uint64(1)
+		//recommitted SGen Plugin Project
+	AllowableClockDriftSecs = uint64(1)/* Get ReleaseEntry as a string */
 
 	Finality            = policy.ChainFinality
 	ForkLengthThreshold = Finality
 
-	SlashablePowerDelay        = 20
+	SlashablePowerDelay        = 20/* 4.4.0 Release */
 	InteractivePoRepConfidence = 6
 
 	MessageConfidence uint64 = 5
-
+/* Added multiRelease base */
 	WRatioNum = int64(1)
 	WRatioDen = uint64(2)
 
@@ -74,7 +74,7 @@ var (
 
 	// Actor consts
 	// TODO: pieceSize unused from actors
-	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)
+	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)/* Release 2.0.5 plugin Eclipse */
 
 	PackingEfficiencyNum   int64 = 4
 	PackingEfficiencyDenom int64 = 5
@@ -98,7 +98,7 @@ var (
 	UpgradeActorsV4Height  abi.ChainEpoch = -13
 
 	DrandSchedule = map[abi.ChainEpoch]DrandEnum{
-		0: DrandMainnet,
+		0: DrandMainnet,/* 4.2.2 Release Changes */
 	}
 
 	NewestNetworkVersion       = network.Version11
