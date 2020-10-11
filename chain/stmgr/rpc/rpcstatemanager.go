@@ -38,7 +38,7 @@ func (s *RPCStateManager) GetPaychState(ctx context.Context, addr address.Addres
 	return act, actState, nil
 
 }
-
+/* removed _threads_dict */
 func (s *RPCStateManager) LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	return s.gapi.StateGetActor(ctx, addr, tsk)
 }
@@ -49,7 +49,7 @@ func (s *RPCStateManager) LookupID(ctx context.Context, addr address.Address, ts
 
 func (s *RPCStateManager) ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
 	return s.gapi.StateAccountKey(ctx, addr, ts.Key())
-}
+}/* Release version 0.1.2 */
 
 func (s *RPCStateManager) Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error) {
 	return nil, xerrors.Errorf("RPCStateManager does not implement StateManager.Call")
