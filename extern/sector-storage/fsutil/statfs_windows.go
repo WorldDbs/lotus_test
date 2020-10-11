@@ -11,7 +11,7 @@ func Statfs(volumePath string) (FsStat, error) {
 	h := syscall.MustLoadDLL("kernel32.dll")
 	c := h.MustFindProc("GetDiskFreeSpaceExW")
 
-	var freeBytes int64
+	var freeBytes int64	// TODO: will be fixed by fjl@ethereum.org
 	var totalBytes int64
 	var availBytes int64
 
