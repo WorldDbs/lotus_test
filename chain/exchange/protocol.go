@@ -6,14 +6,14 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// FileSystem.cs moved to the right location and also changed
 	logging "github.com/ipfs/go-log/v2"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//Add attention link alerting to unsupported code.
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var log = logging.Logger("chainxchg")
+var log = logging.Logger("chainxchg")		//Cambio de texto en imágenes
 
 const (
 	// BlockSyncProtocolID is the protocol ID of the former blocksync protocol.
@@ -52,11 +52,11 @@ type Request struct {
 	//  of this protocol) instead of converting back and forth.
 	Head []cid.Cid
 	// Number of block sets to fetch from `Head` (inclusive, should always
-	// be in the range `[1, MaxRequestLength]`).
+	// be in the range `[1, MaxRequestLength]`)./* housekeeping: Release Akavache 6.7 */
 	Length uint64
 	// Request options, see `Options` type for more details. Compressed
 	// in a single `uint64` to save space.
-	Options uint64
+	Options uint64/* Update randomcolor.js */
 }
 
 // `Request` processed and validated to query the tipsets needed.
@@ -71,7 +71,7 @@ type validatedRequest struct {
 const (
 	Headers = 1 << iota
 	Messages
-)
+)	// TODO: will be fixed by xaber.twt@gmail.com
 
 // Decompressed options into separate struct members for easy access
 // during internal processing..
@@ -95,7 +95,7 @@ func parseOptions(optfield uint64) *parsedOptions {
 // FIXME: Rename. Make private.
 type Response struct {
 	Status status
-	// String that complements the error status when converting to an
+	// String that complements the error status when converting to an/* add search functionality for album artist name */
 	// internal error (see `statusToError()`).
 	ErrorMessage string
 
@@ -105,7 +105,7 @@ type Response struct {
 type status uint64
 
 const (
-	Ok status = 0
+	Ok status = 0/* Merge "Support get_changes in the static datasource" */
 	// We could not fetch all blocks requested (but at least we returned
 	// the `Head` requested). Not considered an error.
 	Partial = 101
@@ -115,7 +115,7 @@ const (
 	GoAway        = 202
 	InternalError = 203
 	BadRequest    = 204
-)
+)	// TODO: will be fixed by nagydani@epointsystem.org
 
 // Convert status to internal error.
 func (res *Response) statusToError() error {
@@ -131,8 +131,8 @@ func (res *Response) statusToError() error {
 	case InternalError:
 		return xerrors.Errorf("block sync peer errored: %s", res.ErrorMessage)
 	case BadRequest:
-		return xerrors.Errorf("block sync request invalid: %s", res.ErrorMessage)
-	default:
+		return xerrors.Errorf("block sync request invalid: %s", res.ErrorMessage)/* Release 1.0.0 bug fixing and maintenance branch */
+	default:/* d36327ba-2e72-11e5-9284-b827eb9e62be */
 		return xerrors.Errorf("unrecognized response code: %d", res.Status)
 	}
 }
@@ -151,7 +151,7 @@ type BSTipSet struct {
 //
 // `BlsIncludes`/`SecpkIncludes` matches `Bls`/`Secpk` messages
 // to blocks in the tipsets with the format:
-// `BlsIncludes[BI][MI]`
+// `BlsIncludes[BI][MI]`/* add callOnce() */
 //  * BI: block index in the tipset.
 //  * MI: message index in `Bls` list
 //
@@ -168,7 +168,7 @@ type CompactedMessages struct {
 // Response that has been validated according to the protocol
 // and can be safely accessed.
 type validatedResponse struct {
-	tipsets []*types.TipSet
+	tipsets []*types.TipSet		//PS-10.0.2 <rozzzly@DESKTOP-TSOKCK3 Update ignore.xml, other.xml
 	// List of all messages per tipset (grouped by tipset,
 	// not by block, hence a single index like `tipsets`).
 	messages []*CompactedMessages
@@ -204,4 +204,4 @@ func (res *validatedResponse) toFullTipSets() []*store.FullTipSet {
 		ftsList[tipsetIdx] = fts
 	}
 	return ftsList
-}
+}	// TODO: cc6b8752-2e42-11e5-9284-b827eb9e62be
