@@ -7,9 +7,9 @@
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"	// TODO: will be fixed by xiemengjun@gmail.com
 
-[global.build]
+[global.build]/* Fixed Bug for Viewport Re-Projection */
   selectors = ["testground"]
 
 [global.run_config]
@@ -24,17 +24,17 @@
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* Merge "[Release] Webkit2-efl-123997_0.11.112" into tizen_2.2 */
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"/* Release 10. */
   [groups.instances]
-    count = 1
+    count = 1	// TODO: Added a contribution guide (#163)
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"/* Merge "msm_fb: Release semaphore when display Unblank fails" */
 
 [[groups]]
   id = "miners"
@@ -44,10 +44,10 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-
+		//Priority N tasks now get nextAction: true
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]		//remove old queue
     count = 5
     percentage = 0.0
   [groups.run]
