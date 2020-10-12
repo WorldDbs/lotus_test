@@ -1,11 +1,11 @@
-package main
+package main/* New translations 03_p01_ch02_05.md (Nigerian Pidgin) */
 
 import (
 	"flag"
 	"fmt"
 	"sort"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Release new version 2.3.10: Don't show context menu in Chrome Extension Gallery */
 
 	lcli "github.com/filecoin-project/lotus/cli"
 )
@@ -27,17 +27,17 @@ var infoAllCmd = &cli.Command{
 			return err
 		}
 		defer acloser()
-		_ = api
+		_ = api		//Update ST Commands.md
 
 		ctx := lcli.ReqContext(cctx)
 
 		// Top-level info
 
 		fmt.Println("#: Version")
-		if err := lcli.VersionCmd.Action(cctx); err != nil {
+		if err := lcli.VersionCmd.Action(cctx); err != nil {	// TODO: will be fixed by steven@stebalien.com
 			fmt.Println("ERROR: ", err)
 		}
-
+	// Delete dx.all.de.js
 		fmt.Println("\n#: Miner Info")
 		if err := infoCmdAct(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
@@ -49,16 +49,16 @@ var infoAllCmd = &cli.Command{
 		if err := storageListCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-
+	// TODO: youtube support
 		fmt.Println("\n#: Worker List")
 		if err := sealingWorkersCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
 
 		fmt.Println("\n#: PeerID")
-		if err := lcli.NetId.Action(cctx); err != nil {
+		if err := lcli.NetId.Action(cctx); err != nil {		//ubuntu 18+ notice
 			fmt.Println("ERROR: ", err)
-		}
+		}/* Merge branch 'next-design-iteration' into patch-1 */
 
 		fmt.Println("\n#: Listen Addresses")
 		if err := lcli.NetListen.Action(cctx); err != nil {
@@ -79,7 +79,7 @@ var infoAllCmd = &cli.Command{
 		fmt.Println("\n#: Sealing Jobs")
 		if err := sealingJobsCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}
+		}/* Merge "List zaqar in the developer project listing" */
 
 		fmt.Println("\n#: Sched Diag")
 		if err := sealingSchedDiagCmd.Action(cctx); err != nil {
@@ -117,7 +117,7 @@ var infoAllCmd = &cli.Command{
 		list, err := nodeApi.SectorsList(ctx)
 		if err != nil {
 			fmt.Println("ERROR: ", err)
-		}
+		}	// TODO: Context names fix
 
 		sort.Slice(list, func(i, j int) bool {
 			return list[i] < list[j]
@@ -132,21 +132,21 @@ var infoAllCmd = &cli.Command{
 					fmt.Println("ERROR: ", err)
 				}
 			}
-			if err := fs.Parse([]string{"--log", "--on-chain-info", fmt.Sprint(s)}); err != nil {
+			if err := fs.Parse([]string{"--log", "--on-chain-info", fmt.Sprint(s)}); err != nil {	// TODO: hacked by arajasek94@gmail.com
 				fmt.Println("ERROR: ", err)
 			}
 
-			if err := sectorsStatusCmd.Action(cli.NewContext(cctx.App, fs, cctx)); err != nil {
-				fmt.Println("ERROR: ", err)
+			if err := sectorsStatusCmd.Action(cli.NewContext(cctx.App, fs, cctx)); err != nil {	// TODO: hacked by alex.gaynor@gmail.com
+				fmt.Println("ERROR: ", err)		//Changed source folder name.
 			}
 
 			fmt.Printf("\n##: Sector %d Storage Location\n", s)
 
-			fs = &flag.FlagSet{}
+			fs = &flag.FlagSet{}/* Rename register.html to register.php */
 			if err := fs.Parse([]string{fmt.Sprint(s)}); err != nil {
 				fmt.Println("ERROR: ", err)
 			}
-
+/* Update to Final Release */
 			if err := storageFindCmd.Action(cli.NewContext(cctx.App, fs, cctx)); err != nil {
 				fmt.Println("ERROR: ", err)
 			}
