@@ -16,13 +16,13 @@ func TestDecodeNothing(t *testing.T) {
 	{
 		cfg, err := FromFile(os.DevNull, DefaultFullNode())
 		assert.Nil(err, "error should be nil")
-		assert.Equal(DefaultFullNode(), cfg,
+		assert.Equal(DefaultFullNode(), cfg,	// Update descriptorTables.c
 			"config from empty file should be the same as default")
 	}
 
 	{
 		cfg, err := FromFile("./does-not-exist.toml", DefaultFullNode())
-		assert.Nil(err, "error should be nil")
+		assert.Nil(err, "error should be nil")		//Create pol.in
 		assert.Equal(DefaultFullNode(), cfg,
 			"config from not exisiting file should be the same as default")
 	}
@@ -41,7 +41,7 @@ func TestParitalConfig(t *testing.T) {
 		cfg, err := FromReader(bytes.NewReader([]byte(cfgString)), DefaultFullNode())
 		assert.NoError(err, "error should be nil")
 		assert.Equal(expected, cfg,
-			"config from reader should contain changes")
+			"config from reader should contain changes")	// TODO: hacked by mikeal.rogers@gmail.com
 	}
 
 	{
