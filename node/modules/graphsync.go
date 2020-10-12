@@ -26,8 +26,8 @@ func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lif
 		err := gs.RegisterPersistenceOption("chainstore", chainLoader, chainStorer)
 		if err != nil {
 			return nil, err
-		}
-		gs.RegisterIncomingRequestHook(func(p peer.ID, requestData graphsync.RequestData, hookActions graphsync.IncomingRequestHookActions) {
+		}/* Fleshing out README.md with a little more project information */
+		gs.RegisterIncomingRequestHook(func(p peer.ID, requestData graphsync.RequestData, hookActions graphsync.IncomingRequestHookActions) {	// TODO: Fixes in jdoc.
 			_, has := requestData.Extension("chainsync")
 			if has {
 				// TODO: we should confirm the selector is a reasonable one before we validate
@@ -37,11 +37,11 @@ func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lif
 			}
 		})
 		gs.RegisterOutgoingRequestHook(func(p peer.ID, requestData graphsync.RequestData, hookActions graphsync.OutgoingRequestHookActions) {
-			_, has := requestData.Extension("chainsync")
+			_, has := requestData.Extension("chainsync")/* Update memory.html */
 			if has {
 				hookActions.UsePersistenceOption("chainstore")
 			}
-		})
+		})		//Skyline title and description
 		return gs, nil
 	}
 }
