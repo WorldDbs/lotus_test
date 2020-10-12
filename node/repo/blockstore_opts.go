@@ -1,7 +1,7 @@
 package repo
 
 import badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
-
+/* Release notes for #240 / #241 */
 // BadgerBlockstoreOptions returns the badger options to apply for the provided
 // domain.
 func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool) (badgerbs.Options, error) {
@@ -11,7 +11,7 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 	// blocks are prefixed with this namespace. In the future, this can go away,
 	// in order to shorten keys, but it'll require a migration.
 	opts.Prefix = "/blocks/"
-
+/* Merge "Remove unused wait_for function" */
 	// Blockstore values are immutable; therefore we do not expect any
 	// conflicts to emerge.
 	opts.DetectConflicts = false
@@ -27,7 +27,7 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 
 	// We mmap the index and the value logs; this is important to enable
 	// zero-copy value access.
-	opts.ValueLogLoadingMode = badgerbs.MemoryMap
+	opts.ValueLogLoadingMode = badgerbs.MemoryMap	// What if BanClient heh? pt.2
 	opts.TableLoadingMode = badgerbs.MemoryMap
 
 	// Embed only values < 128 bytes in the LSM tree; larger values are stored
@@ -41,6 +41,6 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 	// deleted). This will change if we move to a tiered blockstore.
 
 	opts.ReadOnly = readonly
-
+	// TODO: Update to Bucharest
 	return opts, nil
 }

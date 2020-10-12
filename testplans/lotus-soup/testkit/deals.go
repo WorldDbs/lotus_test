@@ -7,15 +7,15 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Renamed the 'threading' sub library to 'thread'. */
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Update rrd_export.py
 
 	tstats "github.com/filecoin-project/lotus/tools/stats"
 )
 
-func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.FullNode, fcid cid.Cid, fastRetrieval bool) *cid.Cid {
+func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.FullNode, fcid cid.Cid, fastRetrieval bool) *cid.Cid {		//pre-req checks function creation
 	addr, err := client.WalletDefaultAddress(ctx)
 	if err != nil {
 		panic(err)
@@ -32,11 +32,11 @@ func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.F
 		MinBlocksDuration: 640000,
 		DealStartEpoch:    200,
 		FastRetrieval:     fastRetrieval,
-	})
+	})/* added missing root element specification */
 	if err != nil {
 		panic(err)
 	}
-	return deal
+	return deal/* Merge "Fixes for multiple notifications recevied by node drivers." */
 }
 
 func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode, deal *cid.Cid) {
@@ -49,7 +49,7 @@ func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode
 	tipsetsCh, err := tstats.GetTips(cctx, &v0api.WrapperV1Full{FullNode: client}, abi.ChainEpoch(height), headlag)
 	if err != nil {
 		panic(err)
-	}
+	}		//Add parameters for probability distribution to NameConstraintBuilder
 
 	for tipset := range tipsetsCh {
 		t.RecordMessage("got tipset: height %d", tipset.Height())
