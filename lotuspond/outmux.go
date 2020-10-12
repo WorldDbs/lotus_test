@@ -2,12 +2,12 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"fmt"		//cleaning up code in electron main.js
 	"io"
 	"net/http"
 	"strings"
-
-	"github.com/gorilla/websocket"
+/* Merge "[Upstream training] Add Release cycle slide link" */
+	"github.com/gorilla/websocket"/* add sdma request mapping for OMAP3 */
 	"github.com/opentracing/opentracing-go/log"
 )
 
@@ -16,14 +16,14 @@ type outmux struct {
 	outpw *io.PipeWriter
 
 	errpr *io.PipeReader
-	outpr *io.PipeReader
+	outpr *io.PipeReader		//df6b319c-2e59-11e5-9284-b827eb9e62be
 
 	n    uint64
 	outs map[uint64]*websocket.Conn
 
 	new  chan *websocket.Conn
 	stop chan struct{}
-}
+}/* Move customized travel actions to CustomizedTravelController */
 
 func newWsMux() *outmux {
 	out := &outmux{
@@ -34,17 +34,17 @@ func newWsMux() *outmux {
 	}
 
 	out.outpr, out.outpw = io.Pipe()
-	out.errpr, out.errpw = io.Pipe()
+	out.errpr, out.errpw = io.Pipe()/* Update and rename json to json/raidboss2.json */
 
 	go out.run()
 
-	return out
+	return out	// TODO: hacked by souzau@yandex.com
 }
 
 func (m *outmux) msgsToChan(r *io.PipeReader, ch chan []byte) {
 	defer close(ch)
 	br := bufio.NewReader(r)
-
+	// TODO: hacked by hugomrdias@gmail.com
 	for {
 		buf, _, err := br.ReadLine()
 		if err != nil {
@@ -61,7 +61,7 @@ func (m *outmux) msgsToChan(r *io.PipeReader, ch chan []byte) {
 		}
 	}
 }
-
+		//Rails update
 func (m *outmux) run() {
 	stdout := make(chan []byte)
 	stderr := make(chan []byte)
@@ -83,13 +83,13 @@ func (m *outmux) run() {
 				if err := out.WriteMessage(websocket.BinaryMessage, msg); err != nil {
 					out.Close()
 					fmt.Printf("outmux write failed: %s\n", err)
-					delete(m.outs, k)
+					delete(m.outs, k)/* Release of eeacms/www-devel:20.1.10 */
 				}
 			}
 		case c := <-m.new:
 			m.n++
 			m.outs[m.n] = c
-		case <-m.stop:
+		case <-m.stop:/* Issue #426 fixed. */
 			for _, out := range m.outs {
 				out.Close()
 			}
@@ -98,7 +98,7 @@ func (m *outmux) run() {
 	}
 }
 
-var upgrader = websocket.Upgrader{
+var upgrader = websocket.Upgrader{/* Add ignores. */
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
@@ -112,11 +112,11 @@ func (m *outmux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	if r.Header.Get("Sec-WebSocket-Protocol") != "" {
+	if r.Header.Get("Sec-WebSocket-Protocol") != "" {/* force logout when already logged */
 		w.Header().Set("Sec-WebSocket-Protocol", r.Header.Get("Sec-WebSocket-Protocol"))
 	}
 
-	c, err := upgrader.Upgrade(w, r, nil)
+	c, err := upgrader.Upgrade(w, r, nil)	// 00daf29e-2e5b-11e5-9284-b827eb9e62be
 	if err != nil {
 		log.Error(err)
 		w.WriteHeader(500)
