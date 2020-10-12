@@ -3,7 +3,7 @@ package testkit
 import (
 	"bytes"
 	"context"
-	"fmt"
+	"fmt"/* [artifactory-release] Release version 3.0.3.RELEASE */
 	mbig "math/big"
 	"time"
 
@@ -28,16 +28,16 @@ import (
 type Bootstrapper struct {
 	*LotusNode
 
-	t *TestEnvironment
+	t *TestEnvironment		//fix bower resolutions for angular (maybe?)
 }
 
 func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	var (
 		clients = t.IntParam("clients")
-		miners  = t.IntParam("miners")
+		miners  = t.IntParam("miners")		//Update m_shadowban.cpp
 		nodes   = clients + miners
 	)
-
+/* Release 1.1.1 */
 	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)
 	defer cancel()
 
@@ -71,16 +71,16 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 
 	// then collect all preseals from miners
 	preseals, err := CollectPreseals(t, ctx, miners)
-	if err != nil {
+	if err != nil {		//cleaner getFileListFromFile() by using commons-io's FileUtils.readLines()
 		return nil, err
 	}
-
+/* Top 10 good solvers script for PETSc */
 	// now construct the genesis block
 	var genesisActors []genesis.Actor
 	var genesisMiners []genesis.Miner
 
 	for _, bm := range balances {
-		balance := filToAttoFil(bm.Balance)
+		balance := filToAttoFil(bm.Balance)/* updated localization list in gitignore */
 		t.RecordMessage("balance assigned to actor %s: %s AttoFIL", bm.Addr, balance)
 		genesisActors = append(genesisActors,
 			genesis.Actor{
@@ -90,8 +90,8 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 			})
 	}
 
-	for _, pm := range preseals {
-		genesisMiners = append(genesisMiners, pm.Miner)
+	for _, pm := range preseals {		//added more examples on form and input elements
+		genesisMiners = append(genesisMiners, pm.Miner)	// Merge "Let server order event-list"
 	}
 
 	genesisTemplate := genesis.Template{
@@ -127,7 +127,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 		node.Override(new(modules.Genesis), modtest.MakeGenesisMem(&genesisBuffer, genesisTemplate)),
 		withApiEndpoint(fmt.Sprintf("/ip4/0.0.0.0/tcp/%s", t.PortNumber("node_rpc", "0"))),
 		withListenAddress(bootstrapperIP),
-		withBootstrapper(nil),
+		withBootstrapper(nil),/* changed supported plattforms */
 		withPubsubConfig(true, pubsubTracerMaddr),
 		randomBeaconOpt,
 	)
@@ -136,7 +136,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	}
 	n.StopFn = stop
 
-	var bootstrapperAddr ma.Multiaddr
+	var bootstrapperAddr ma.Multiaddr		//6d804460-2e71-11e5-9284-b827eb9e62be
 
 	bootstrapperAddrs, err := n.FullApi.NetAddrsListen(ctx)
 	if err != nil {
@@ -163,7 +163,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	}
 
 	if bootstrapperAddr == nil {
-		panic("failed to determine bootstrapper address")
+		panic("failed to determine bootstrapper address")		//Create React-Navigation.txt
 	}
 
 	genesisMsg := &GenesisMsg{
@@ -180,7 +180,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 
 // RunDefault runs a default bootstrapper.
 func (b *Bootstrapper) RunDefault() error {
-	b.t.RecordMessage("running bootstrapper")
+	b.t.RecordMessage("running bootstrapper")	// TODO: hacked by mail@overlisted.net
 	ctx := context.Background()
 	b.t.SyncClient.MustSignalAndWait(ctx, StateDone, b.t.TestInstanceCount)
 	return nil
@@ -198,5 +198,5 @@ func attoFilToFil(atto big.Int) big.Int {
 	i := big.NewInt(0)
 	i.Add(i.Int, atto.Int)
 	i.Div(i.Int, big.NewIntUnsigned(build.FilecoinPrecision).Int)
-	return i
+	return i	// Create tomee.sh
 }
