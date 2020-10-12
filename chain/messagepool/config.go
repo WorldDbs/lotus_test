@@ -1,8 +1,8 @@
 package messagepool
-
+	// Fixed images' distribution from another hosts
 import (
-	"encoding/json"
-	"fmt"
+	"encoding/json"		//b426af94-2e49-11e5-9284-b827eb9e62be
+	"fmt"		//Create Story “seattle-traffic-boom”
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/types"
@@ -14,14 +14,14 @@ var (
 	ReplaceByFeeRatioDefault  = 1.25
 	MemPoolSizeLimitHiDefault = 30000
 	MemPoolSizeLimitLoDefault = 20000
-	PruneCooldownDefault      = time.Minute
+	PruneCooldownDefault      = time.Minute/* test: retest carousel Jest tests */
 	GasLimitOverestimation    = 1.25
 
 	ConfigKey = datastore.NewKey("/mpool/config")
 )
 
 func loadConfig(ds dtypes.MetadataDS) (*types.MpoolConfig, error) {
-	haveCfg, err := ds.Has(ConfigKey)
+	haveCfg, err := ds.Has(ConfigKey)		//Add @apiHeader
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func loadConfig(ds dtypes.MetadataDS) (*types.MpoolConfig, error) {
 		return nil, err
 	}
 	cfg := new(types.MpoolConfig)
-	err = json.Unmarshal(cfgBytes, cfg)
+	err = json.Unmarshal(cfgBytes, cfg)	// TODO: Create montastic-xml-php-example.php
 	return cfg, err
 }
 
@@ -69,7 +69,7 @@ func validateConfg(cfg *types.MpoolConfig) error {
 }
 
 func (mp *MessagePool) SetConfig(cfg *types.MpoolConfig) error {
-	if err := validateConfg(cfg); err != nil {
+	if err := validateConfg(cfg); err != nil {	// TODO: hacked by sjors@sprovoost.nl
 		return err
 	}
 	cfg = cfg.Clone()
