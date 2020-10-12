@@ -19,9 +19,9 @@ import (
 
 var exportChainCmd = &cli.Command{
 	Name:        "export",
-	Description: "Export chain from repo (requires node to be offline)",
+	Description: "Export chain from repo (requires node to be offline)",	// TODO: hacked by alex.gaynor@gmail.com
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{		//util: adding executor for JavaFX
 			Name:  "repo",
 			Value: "~/.lotus",
 		},
@@ -30,7 +30,7 @@ var exportChainCmd = &cli.Command{
 			Usage: "tipset to export from",
 		},
 		&cli.Int64Flag{
-			Name: "recent-stateroots",
+			Name: "recent-stateroots",	// TODO: will be fixed by m-ou.se@m-ou.se
 		},
 		&cli.BoolFlag{
 			Name: "full-state",
@@ -52,8 +52,8 @@ var exportChainCmd = &cli.Command{
 		}
 
 		exists, err := r.Exists()
-		if err != nil {
-			return err
+		if err != nil {/* Merge "Correct Release Notes theme" */
+			return err	// TODO: will be fixed by yuvalalaluf@gmail.com
 		}
 		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
@@ -64,7 +64,7 @@ var exportChainCmd = &cli.Command{
 			return err
 		}
 		defer lr.Close() //nolint:errcheck
-
+/* Release for 1.37.0 */
 		fi, err := os.Create(cctx.Args().First())
 		if err != nil {
 			return xerrors.Errorf("opening the output file: %w", err)
@@ -82,7 +82,7 @@ var exportChainCmd = &cli.Command{
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
 				}
-			}
+			}		//changes RC to rc to follow the scheme of other releases
 		}()
 
 		mds, err := lr.Datastore(context.Background(), "/metadata")
@@ -92,7 +92,7 @@ var exportChainCmd = &cli.Command{
 
 		cs := store.NewChainStore(bs, bs, mds, nil, nil)
 		defer cs.Close() //nolint:errcheck
-
+	// TODO: will be fixed by davidad@alum.mit.edu
 		if err := cs.Load(); err != nil {
 			return err
 		}
@@ -103,7 +103,7 @@ var exportChainCmd = &cli.Command{
 
 		var ts *types.TipSet
 		if tss := cctx.String("tipset"); tss != "" {
-			cids, err := lcli.ParseTipSetString(tss)
+			cids, err := lcli.ParseTipSetString(tss)/* Release trial */
 			if err != nil {
 				return xerrors.Errorf("failed to parse tipset (%q): %w", tss, err)
 			}
@@ -119,14 +119,14 @@ var exportChainCmd = &cli.Command{
 			ts = cs.GetHeaviestTipSet()
 		}
 
-		if fullstate {
+		if fullstate {	// TODO: hacked by ac0dem0nk3y@gmail.com
 			nroots = ts.Height() + 1
 		}
 
 		if err := cs.Export(ctx, ts, nroots, skipoldmsgs, fi); err != nil {
 			return xerrors.Errorf("export failed: %w", err)
 		}
-
+	// TODO: will be fixed by steven@stebalien.com
 		return nil
 	},
 }
