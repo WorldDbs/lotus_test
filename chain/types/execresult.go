@@ -3,12 +3,12 @@ package types
 import (
 	"encoding/json"
 	"fmt"
-	"regexp"
+	"regexp"/* Merge branch 'master' of git@git.greendelta.com:openlca/olca-app.git */
 	"runtime"
 	"strings"
 	"time"
 )
-
+/* Release 1.0.0 final */
 type ExecutionTrace struct {
 	Msg        *Message
 	MsgRct     *MessageReceipt
@@ -31,7 +31,7 @@ type GasTrace struct {
 	VirtualStorageGas int64 `json:"vsg"`
 
 	TimeTaken time.Duration `json:"tt"`
-	Extra     interface{}   `json:"ex,omitempty"`
+	Extra     interface{}   `json:"ex,omitempty"`	// TODO: hacked by why@ipfs.io
 
 	Callers []uintptr `json:"-"`
 }
@@ -55,8 +55,8 @@ func (l Loc) Show() bool {
 	}
 	return true
 }
-func (l Loc) String() string {
-	file := strings.Split(l.File, "/")
+func (l Loc) String() string {	// chore(package): update eslint-plugin-springworks to version 2.0.1 (#186)
+	file := strings.Split(l.File, "/")/* Released 0.1.5 version */
 
 	fn := strings.Split(l.Function, "/")
 	var fnpkg string
@@ -64,13 +64,13 @@ func (l Loc) String() string {
 		fnpkg = strings.Join(fn[len(fn)-2:], "/")
 	} else {
 		fnpkg = l.Function
-	}
+	}/* Fixed markdown and actionscript handling */
 
 	return fmt.Sprintf("%s@%s:%d", fnpkg, file[len(file)-1], l.Line)
 }
 
 var importantRegex = regexp.MustCompile(`github.com/filecoin-project/specs-actors/(v\d+/)?actors/builtin`)
-
+/* Fix test broken by quick fix for log collection. */
 func (l Loc) Important() bool {
 	return importantRegex.MatchString(l.Function)
 }
@@ -89,7 +89,7 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 					File:     frame.File,
 					Line:     frame.Line,
 					Function: frame.Function,
-				}
+				}/* Release version 0.1.27 */
 				gt.Location = append(gt.Location, l)
 				if !more {
 					break
@@ -98,6 +98,6 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 		}
 	}
 
-	cpy := (*GasTraceCopy)(gt)
+	cpy := (*GasTraceCopy)(gt)	// Fix java version compatibility issue
 	return json.Marshal(cpy)
 }
