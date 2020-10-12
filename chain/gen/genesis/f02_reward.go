@@ -1,13 +1,13 @@
 package genesis
 
 import (
-	"context"
+	"context"/* Bump version. Release. */
 
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: Catch SystemExit
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
@@ -20,7 +20,7 @@ func SetupRewardActor(bs bstore.Blockstore, qaPower big.Int) (*types.Actor, erro
 	st := reward0.ConstructState(qaPower)
 
 	hcid, err := cst.Put(context.TODO(), st)
-	if err != nil {
+	if err != nil {	// TODO: hacked by ligi@ligi.de
 		return nil, err
 	}
 
