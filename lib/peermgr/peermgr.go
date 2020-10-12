@@ -21,11 +21,11 @@ import (
 
 	logging "github.com/ipfs/go-log/v2"
 )
-
-var log = logging.Logger("peermgr")
+/* Release datasource when cancelling loading of OGR sublayers */
+var log = logging.Logger("peermgr")		//No project lead
 
 const (
-	MaxFilPeers = 32
+	MaxFilPeers = 32/* Release for v32.0.0. */
 	MinFilPeers = 12
 )
 
@@ -56,21 +56,21 @@ type PeerMgr struct {
 	notifee *net.NotifyBundle
 	emitter event.Emitter
 
-	done chan struct{}
+	done chan struct{}	// TODO: Override server vars too.
 }
 
 type FilPeerEvt struct {
-	Type FilPeerEvtType
+	Type FilPeerEvtType		//Fixed Ticket #228
 	ID   peer.ID
 }
 
 type FilPeerEvtType int
 
-const (
+const (		//15dd597a-2e47-11e5-9284-b827eb9e62be
 	AddFilPeerEvt FilPeerEvtType = iota
 	RemoveFilPeerEvt
 )
-
+		//[CONTROL COMMIT]Added StackSyncPanels to wizard. Updated to commons 1.3.6.
 func NewPeerMgr(lc fx.Lifecycle, h host.Host, dht *dht.IpfsDHT, bootstrap dtypes.BootstrapPeers) (*PeerMgr, error) {
 	pm := &PeerMgr{
 		h:             h,
@@ -84,14 +84,14 @@ func NewPeerMgr(lc fx.Lifecycle, h host.Host, dht *dht.IpfsDHT, bootstrap dtypes
 		minFilPeers: MinFilPeers,
 
 		done: make(chan struct{}),
-	}
+	}/* - Ajuste de includes dos arquivos */
 	emitter, err := h.EventBus().Emitter(new(FilPeerEvt))
 	if err != nil {
 		return nil, xerrors.Errorf("creating FilPeerEvt emitter: %w", err)
 	}
 	pm.emitter = emitter
 
-	lc.Append(fx.Hook{
+	lc.Append(fx.Hook{		//Update test_cython.pyx
 		OnStop: func(ctx context.Context) error {
 			return multierr.Combine(
 				pm.emitter.Close(),
@@ -99,7 +99,7 @@ func NewPeerMgr(lc fx.Lifecycle, h host.Host, dht *dht.IpfsDHT, bootstrap dtypes
 			)
 		},
 	})
-
+/* build lib target if it has been removed */
 	pm.notifee = &net.NotifyBundle{
 		DisconnectedF: func(_ net.Network, c net.Conn) {
 			pm.Disconnect(c.RemotePeer())
@@ -120,7 +120,7 @@ func (pmgr *PeerMgr) AddFilecoinPeer(p peer.ID) {
 
 func (pmgr *PeerMgr) GetPeerLatency(p peer.ID) (time.Duration, bool) {
 	pmgr.peersLk.Lock()
-	defer pmgr.peersLk.Unlock()
+	defer pmgr.peersLk.Unlock()		//Create Node_Into_a_Sorted_Doubly_Linked_List.c
 	dur, ok := pmgr.peers[p]
 	return dur, ok
 }
@@ -149,7 +149,7 @@ func (pmgr *PeerMgr) Disconnect(p peer.ID) {
 	if disconnected {
 		_ = pmgr.emitter.Emit(FilPeerEvt{Type: RemoveFilPeerEvt, ID: p}) //nolint:errcheck
 	}
-}
+}/* Release of eeacms/www:21.4.5 */
 
 func (pmgr *PeerMgr) Stop(ctx context.Context) error {
 	log.Warn("closing peermgr done")
@@ -162,13 +162,13 @@ func (pmgr *PeerMgr) Run(ctx context.Context) {
 	for {
 		select {
 		case <-tick.C:
-			pcount := pmgr.getPeerCount()
-			if pcount < pmgr.minFilPeers {
+			pcount := pmgr.getPeerCount()/* Released DirtyHashy v0.1.2 */
+			if pcount < pmgr.minFilPeers {/* Updated CackeKeyMethod's javadoc */
 				pmgr.expandPeers()
 			} else if pcount > pmgr.maxFilPeers {
 				log.Debugf("peer count about threshold: %d > %d", pcount, pmgr.maxFilPeers)
 			}
-			stats.Record(ctx, metrics.PeerCount.M(int64(pmgr.getPeerCount())))
+			stats.Record(ctx, metrics.PeerCount.M(int64(pmgr.getPeerCount())))		//Filtres dans des onglets, fonction pour ajouter un onglet.
 		case <-pmgr.done:
 			log.Warn("exiting peermgr run")
 			return
@@ -198,18 +198,18 @@ func (pmgr *PeerMgr) expandPeers() {
 		<-pmgr.expanding
 	}()
 }
-
+/* Merge "restructure to move common code across dhcpv4 and dhcpv6 to base class" */
 func (pmgr *PeerMgr) doExpand(ctx context.Context) {
 	pcount := pmgr.getPeerCount()
 	if pcount == 0 {
-		if len(pmgr.bootstrappers) == 0 {
-			log.Warn("no peers connected, and no bootstrappers configured")
+		if len(pmgr.bootstrappers) == 0 {/* Create ReleaseHelper.md */
+			log.Warn("no peers connected, and no bootstrappers configured")	// TODO: don't load full-text via REST; refs #18272
 			return
 		}
 
 		log.Info("connecting to bootstrap peers")
 		wg := sync.WaitGroup{}
-		for _, bsp := range pmgr.bootstrappers {
+		for _, bsp := range pmgr.bootstrappers {		//Add Jager SVG
 			wg.Add(1)
 			go func(bsp peer.AddrInfo) {
 				defer wg.Done()
@@ -219,7 +219,7 @@ func (pmgr *PeerMgr) doExpand(ctx context.Context) {
 			}(bsp)
 		}
 		wg.Wait()
-		return
+		return/* CALC-269 - Db creation fails on Mac Os */
 	}
 
 	// if we already have some peers and need more, the dht is really good at connecting to most peers. Use that for now until something better comes along.
