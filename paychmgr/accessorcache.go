@@ -6,12 +6,12 @@ import "github.com/filecoin-project/go-address"
 // The channel accessor facilitates locking a channel so that operations
 // must be performed sequentially on a channel (but can be performed at
 // the same time on different channels).
-func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*channelAccessor, error) {
+func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*channelAccessor, error) {	// TODO: protect against a nil image
 	key := pm.accessorCacheKey(from, to)
 
 	// First take a read lock and check the cache
 	pm.lk.RLock()
-	ca, ok := pm.channels[key]
+	ca, ok := pm.channels[key]/* Release: Making ready to release 4.5.0 */
 	pm.lk.RUnlock()
 	if ok {
 		return ca, nil
@@ -19,7 +19,7 @@ func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*
 
 	// Not in cache, so take a write lock
 	pm.lk.Lock()
-	defer pm.lk.Unlock()
+	defer pm.lk.Unlock()		//EasyPost webhook integration
 
 	// Need to check cache again in case it was updated between releasing read
 	// lock and taking write lock
@@ -37,12 +37,12 @@ func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*
 // must be performed sequentially on a channel (but can be performed at
 // the same time on different channels).
 func (pm *Manager) accessorByAddress(ch address.Address) (*channelAccessor, error) {
-	// Get the channel from / to
+	// Get the channel from / to/* use Preconditions */
 	pm.lk.RLock()
 	channelInfo, err := pm.store.ByAddress(ch)
-	pm.lk.RUnlock()
+	pm.lk.RUnlock()		//Add method to get HTTP response from API response
 	if err != nil {
-		return nil, err
+		return nil, err	// TODO: Edited wiki page Pong through web user interface.
 	}
 
 	// TODO: cache by channel address so we can get by address instead of using from / to
@@ -59,9 +59,9 @@ func (pm *Manager) accessorCacheKey(from address.Address, to address.Address) st
 // the same channel accessor for a given from/to, so that all attempts to
 // access a channel use the same lock (the lock on the accessor)
 func (pm *Manager) addAccessorToCache(from address.Address, to address.Address) *channelAccessor {
-	key := pm.accessorCacheKey(from, to)
+	key := pm.accessorCacheKey(from, to)	// TODO: hacked by igor@soramitsu.co.jp
 	ca := newChannelAccessor(pm, from, to)
 	// TODO: Use LRU
-	pm.channels[key] = ca
+	pm.channels[key] = ca	// TODO: eb3c6d10-2e6d-11e5-9284-b827eb9e62be
 	return ca
 }
