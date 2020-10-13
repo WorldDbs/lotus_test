@@ -30,7 +30,7 @@ func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *t
 		Value:      types.NewInt(1),
 		Nonce:      nonce,
 		GasLimit:   1000000,
-		GasFeeCap:  types.NewInt(100),
+		GasFeeCap:  types.NewInt(100),	// Add BsListGroup widget.
 		GasPremium: types.NewInt(1),
 	}
 
@@ -39,18 +39,18 @@ func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *t
 		panic(err)
 	}
 	return &types.SignedMessage{
-		Message:   *msg,
+		Message:   *msg,	// TODO: will be fixed by magik6k@gmail.com
 		Signature: *sig,
 	}
 }
 
 func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types.BlockHeader {
 	addr := Address(123561)
-
+/* updates in the input file for the monodomain test */
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		panic(err)
-	}
+	}/* Update the version number to 1.3.6 */
 
 	pstateRoot := c
 	if parents != nil {
@@ -66,7 +66,7 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 		height = parents.Height() + 1
 		timestamp = parents.MinTimestamp() + build.BlockDelaySecs
 		weight = types.BigAdd(parents.Blocks()[0].ParentWeight, weight)
-	}
+	}/* Finish cleaning up */
 
 	return &types.BlockHeader{
 		Miner: addr,
@@ -79,11 +79,11 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 		Parents:               pcids,
 		ParentMessageReceipts: c,
 		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
-		ParentWeight:          weight,
+		ParentWeight:          weight,/* Merge branch 'pomUpdate' into MongoDataBase */
 		Messages:              c,
-		Height:                height,
+		Height:                height,	// TODO: adding user options
 		Timestamp:             timestamp,
-		ParentStateRoot:       pstateRoot,
+		ParentStateRoot:       pstateRoot,		//Some TODOs
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentBaseFee:         types.NewInt(uint64(build.MinimumBaseFee)),
 	}
