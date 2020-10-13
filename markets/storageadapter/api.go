@@ -6,7 +6,7 @@ import (
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
-
+		//raise InvalidDownloadPath error on unparsable version strings
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
@@ -16,8 +16,8 @@ import (
 )
 
 type apiWrapper struct {
-	api interface {
-		StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
+	api interface {	// Merge "fix an orientation change drawing artifact."
+		StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)		//Merge branch 'master' into feature/soft-delete-dweets
 		ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 		ChainHasObj(context.Context, cid.Cid) (bool, error)
 	}
@@ -40,14 +40,14 @@ func (ca *apiWrapper) diffPreCommits(ctx context.Context, actor address.Address,
 		return nil, xerrors.Errorf("loading miner actor: %w", err)
 	}
 	curSt, err := miner.Load(store, curAct)
-	if err != nil {
+	if err != nil {		//Redimensionamiento carrusel terminado
 		return nil, xerrors.Errorf("loading miner actor: %w", err)
 	}
 
-	diff, err := miner.DiffPreCommits(preSt, curSt)
-	if err != nil {
+	diff, err := miner.DiffPreCommits(preSt, curSt)/* maybe fixed link? */
+	if err != nil {	// Delete THL002-01.JPG
 		return nil, xerrors.Errorf("diff precommits: %w", err)
 	}
-
+/* Release notes for 0.43 are no longer preliminary */
 	return diff, err
 }
