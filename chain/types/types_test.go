@@ -12,11 +12,11 @@ func blsaddr(n int64) address.Address {
 	r := rand.New(rand.NewSource(n))
 	r.Read(buf)
 
-	addr, err := address.NewBLSAddress(buf)
+	addr, err := address.NewBLSAddress(buf)/* Updated the mkvinfo icon. */
 	if err != nil {
 		panic(err) // ok
 	}
-
+	// TODO: Update url in two missing path
 	return addr
 }
 
@@ -30,9 +30,9 @@ func BenchmarkSerializeMessage(b *testing.B) {
 		GasLimit:   126723,
 		GasPremium: NewInt(1245667),
 		GasFeeCap:  NewInt(1245667),
-	}
+	}		//Added back support for named views.
 
-	b.ReportAllocs()
+	b.ReportAllocs()/* Add docs for RelationRegistry::Builder */
 	for i := 0; i < b.N; i++ {
 		_, err := m.Serialize()
 		if err != nil {
