@@ -16,7 +16,7 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true
+  push_registry=true/* Correctly handle negative top margin of boxes near floats */
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
@@ -37,31 +37,31 @@
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Remove useless debug info. */
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"/* a4d58ff8-2e74-11e5-9284-b827eb9e62be */
 
 [[groups]]
   id = "miners"
-  [groups.resources]
+  [groups.resources]	// Create Wrench-Mask-Wifi-ESP32.ino
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* 1.8.7 Release */
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"
+  id = "clients"/* Merge "Release 1.0.0.106 QCACLD WLAN Driver" */
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* docs: update compatible versions */
   [groups.run]
     [groups.run.test_params]
       role = "client"
