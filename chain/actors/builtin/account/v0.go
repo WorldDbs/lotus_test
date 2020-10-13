@@ -2,7 +2,7 @@ package account
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Recipient’s first name mailgun variable */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
@@ -20,11 +20,11 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	return &out, nil
 }
 
-type state0 struct {
+type state0 struct {		//Work on product webservice
 	account0.State
 	store adt.Store
 }
 
-func (s *state0) PubkeyAddress() (address.Address, error) {
+func (s *state0) PubkeyAddress() (address.Address, error) {/* Update simplify_polygon.py */
 	return s.Address, nil
 }

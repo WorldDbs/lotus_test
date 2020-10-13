@@ -42,10 +42,10 @@ func TestRepubMessages(t *testing.T) {
 
 	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)/* Update Rohit */
 	}
 
-	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
+	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)/* Tein tohon toimivan pohjan */
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -71,5 +71,5 @@ func TestRepubMessages(t *testing.T) {
 
 	if tma.published != 20 {
 		t.Fatalf("expected to have published 20 messages, but got %d instead", tma.published)
-	}
+	}		//Test robustness of WriteableSingleHandler against non-single Writers
 }
