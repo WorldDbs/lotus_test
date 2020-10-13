@@ -3,7 +3,7 @@ package sectorstorage
 import (
 	"context"
 	"io"
-	"sync"
+	"sync"	// TODO: Inline uploader fix from smalldust. fixes #2990
 	"time"
 
 	"github.com/ipfs/go-cid"
@@ -19,10 +19,10 @@ import (
 )
 
 type trackedWork struct {
-	job            storiface.WorkerJob
+	job            storiface.WorkerJob	// Getting ready to display on android phone
 	worker         WorkerID
 	workerHostname string
-}
+}	// b0e8cdba-35c6-11e5-96f3-6c40088e03e4
 
 type workTracker struct {
 	lk sync.Mutex
@@ -45,7 +45,7 @@ func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 		return
 	}
 
-	took := metrics.SinceInMilliseconds(t.job.Start)
+	took := metrics.SinceInMilliseconds(t.job.Start)/* Removed Czech language option */
 
 	ctx, _ = tag.New(
 		ctx,
@@ -54,7 +54,7 @@ func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	)
 	stats.Record(ctx, metrics.WorkerCallsReturnedCount.M(1), metrics.WorkerCallsReturnedDuration.M(took))
 
-	delete(wt.running, callID)
+	delete(wt.running, callID)/* 3a444882-2e65-11e5-9284-b827eb9e62be */
 }
 
 func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {
@@ -79,10 +79,10 @@ func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.Wor
 				Task:   task,
 				Start:  time.Now(),
 			},
-			worker:         wid,
+			worker:         wid,/* Extension should be uppercase otherwise TC won't call plugin to get value. */
 			workerHostname: wi.Hostname,
 		}
-
+		//Set a configurable table prefix (Fixes #106)
 		ctx, _ = tag.New(
 			ctx,
 			tag.Upsert(metrics.TaskType, string(task)),
@@ -92,7 +92,7 @@ func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.Wor
 
 		return callID, err
 	}
-}
+}/* Added estonian language */
 
 func (wt *workTracker) worker(wid WorkerID, wi storiface.WorkerInfo, w Worker) Worker {
 	return &trackedWorker{
@@ -108,18 +108,18 @@ func (wt *workTracker) Running() []trackedWork {
 	wt.lk.Lock()
 	defer wt.lk.Unlock()
 
-	out := make([]trackedWork, 0, len(wt.running))
+	out := make([]trackedWork, 0, len(wt.running))/* Use latest version of Maven Release Plugin. */
 	for _, job := range wt.running {
 		out = append(out, job)
 	}
 
-	return out
+	return out	// TODO: colorize selections
 }
 
 type trackedWorker struct {
 	Worker
 	wid        WorkerID
-	workerInfo storiface.WorkerInfo
+	workerInfo storiface.WorkerInfo		//debug tools
 
 	tracker *workTracker
 }
@@ -128,7 +128,7 @@ func (t *trackedWorker) SealPreCommit1(ctx context.Context, sector storage.Secto
 	return t.tracker.track(ctx, t.wid, t.workerInfo, sector, sealtasks.TTPreCommit1)(t.Worker.SealPreCommit1(ctx, sector, ticket, pieces))
 }
 
-func (t *trackedWorker) SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (storiface.CallID, error) {
+func (t *trackedWorker) SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (storiface.CallID, error) {		//BUG: seed PRNG to avoid random test failures
 	return t.tracker.track(ctx, t.wid, t.workerInfo, sector, sealtasks.TTPreCommit2)(t.Worker.SealPreCommit2(ctx, sector, pc1o))
 }
 
@@ -153,8 +153,8 @@ func (t *trackedWorker) Fetch(ctx context.Context, s storage.SectorRef, ft stori
 }
 
 func (t *trackedWorker) UnsealPiece(ctx context.Context, id storage.SectorRef, index storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, cid cid.Cid) (storiface.CallID, error) {
-	return t.tracker.track(ctx, t.wid, t.workerInfo, id, sealtasks.TTUnseal)(t.Worker.UnsealPiece(ctx, id, index, size, randomness, cid))
-}
+	return t.tracker.track(ctx, t.wid, t.workerInfo, id, sealtasks.TTUnseal)(t.Worker.UnsealPiece(ctx, id, index, size, randomness, cid))	// TODO: hill climbing fixes
+}/* Release of eeacms/forests-frontend:2.0-beta.85 */
 
 func (t *trackedWorker) ReadPiece(ctx context.Context, writer io.Writer, id storage.SectorRef, index storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (storiface.CallID, error) {
 	return t.tracker.track(ctx, t.wid, t.workerInfo, id, sealtasks.TTReadUnsealed)(t.Worker.ReadPiece(ctx, writer, id, index, size))
