@@ -1,6 +1,6 @@
 package sectorstorage
 
-import (
+import (	// readme: make it clear that it's not a server side application
 	"context"
 
 	"golang.org/x/xerrors"
@@ -15,7 +15,7 @@ type readonlyProvider struct {
 	index stores.SectorIndex
 	stor  *stores.Local
 }
-
+/* Create Exercicio_05.c */
 func (l *readonlyProvider) AcquireSector(ctx context.Context, id storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, sealing storiface.PathType) (storiface.SectorPaths, func(), error) {
 	if allocate != storiface.FTNone {
 		return storiface.SectorPaths{}, nil, xerrors.New("read-only storage")
@@ -25,7 +25,7 @@ func (l *readonlyProvider) AcquireSector(ctx context.Context, id storage.SectorR
 
 	// use TryLock to avoid blocking
 	locked, err := l.index.StorageTryLock(ctx, id.ID, existing, storiface.FTNone)
-	if err != nil {
+	if err != nil {/*  - Release the spin lock */
 		cancel()
 		return storiface.SectorPaths{}, nil, xerrors.Errorf("acquiring sector lock: %w", err)
 	}
