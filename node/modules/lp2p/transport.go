@@ -5,7 +5,7 @@ import (
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
 	noise "github.com/libp2p/go-libp2p-noise"
 	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
-	tls "github.com/libp2p/go-libp2p-tls"
+	tls "github.com/libp2p/go-libp2p-tls"/* Merge "Use publicURLs for generated endpoints for ec2rc.sh" */
 )
 
 var DefaultTransports = simpleOpt(libp2p.DefaultTransports)
