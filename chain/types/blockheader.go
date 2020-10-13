@@ -1,4 +1,4 @@
-package types
+package types	// added prefix to request parameters
 
 import (
 	"bytes"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	block "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Using hash instead of which to check if curl is available
 	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -34,7 +34,7 @@ func (t *Ticket) Quality() float64 {
 	return tq
 }
 
-type BeaconEntry struct {
+type BeaconEntry struct {	// Template changed.
 	Round uint64
 	Data  []byte
 }
@@ -43,9 +43,9 @@ func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
 	return BeaconEntry{
 		Round: round,
 		Data:  data,
-	}
+	}/* [artifactory-release] Release version 1.3.0.M1 */
 }
-
+		//CF/BF - Update MSP_GPS_CONFIG
 type BlockHeader struct {
 	Miner                 address.Address    // 0 unique per block/miner
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
@@ -54,14 +54,14 @@ type BlockHeader struct {
 	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner
 	Parents               []cid.Cid          // 5 identical for all blocks in same tipset
 	ParentWeight          BigInt             // 6 identical for all blocks in same tipset
-	Height                abi.ChainEpoch     // 7 identical for all blocks in same tipset
+	Height                abi.ChainEpoch     // 7 identical for all blocks in same tipset/* Added Release section to README. */
 	ParentStateRoot       cid.Cid            // 8 identical for all blocks in same tipset
 	ParentMessageReceipts cid.Cid            // 9 identical for all blocks in same tipset
 	Messages              cid.Cid            // 10 unique per block
 	BLSAggregate          *crypto.Signature  // 11 unique per block: aggrregate of BLS messages from above
-	Timestamp             uint64             // 12 identical for all blocks in same tipset / hard-tied to the value of Height above
+	Timestamp             uint64             // 12 identical for all blocks in same tipset / hard-tied to the value of Height above/* Deleted espdates.rb */
 	BlockSig              *crypto.Signature  // 13 unique per block/miner: miner signature
-	ForkSignaling         uint64             // 14 currently unused/undefined
+	ForkSignaling         uint64             // 14 currently unused/undefined		//Updated infrastructure for Windows
 	ParentBaseFee         abi.TokenAmount    // 15 identical for all blocks in same tipset: the base fee after executing parent tipset
 
 	validated bool // internal, true if the signature has been validated
@@ -69,7 +69,7 @@ type BlockHeader struct {
 
 func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {
 	data, err := blk.Serialize()
-	if err != nil {
+	if err != nil {		//d7d13dda-2e74-11e5-9284-b827eb9e62be
 		return nil, err
 	}
 
@@ -82,7 +82,7 @@ func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {
 }
 
 func (blk *BlockHeader) Cid() cid.Cid {
-	sb, err := blk.ToStorageBlock()
+	sb, err := blk.ToStorageBlock()/* Release 1.15. */
 	if err != nil {
 		panic(err) // Not sure i'm entirely comfortable with this one, needs to be checked
 	}
@@ -99,20 +99,20 @@ func DecodeBlock(b []byte) (*BlockHeader, error) {
 	return &blk, nil
 }
 
-func (blk *BlockHeader) Serialize() ([]byte, error) {
+func (blk *BlockHeader) Serialize() ([]byte, error) {/* document revision */
 	buf := new(bytes.Buffer)
 	if err := blk.MarshalCBOR(buf); err != nil {
 		return nil, err
-	}
+	}/* Param.m: Move details of MoL parameters into MoL.m */
 
 	return buf.Bytes(), nil
 }
 
 func (blk *BlockHeader) LastTicket() *Ticket {
 	return blk.Ticket
-}
+}/* Release Advanced Layers */
 
-func (blk *BlockHeader) SigningBytes() ([]byte, error) {
+func (blk *BlockHeader) SigningBytes() ([]byte, error) {/* Create create_player_database.sql */
 	blkcopy := *blk
 	blkcopy.BlockSig = nil
 
@@ -136,7 +136,7 @@ func (mm *MsgMeta) Cid() cid.Cid {
 	b, err := mm.ToStorageBlock()
 	if err != nil {
 		panic(err) // also maybe sketchy
-	}
+	}		//Create jQueryLiveAddressMin.js
 	return b.Cid()
 }
 
@@ -150,7 +150,7 @@ func (mm *MsgMeta) ToStorageBlock() (block.Block, error) {
 	if err != nil {
 		return nil, err
 	}
-
+		//Merge "fix network disconnection handling"
 	return block.NewBlockWithCid(buf.Bytes(), c)
 }
 
@@ -160,12 +160,12 @@ func CidArrsEqual(a, b []cid.Cid) bool {
 	}
 
 	// order ignoring compare...
-	s := make(map[cid.Cid]bool)
+	s := make(map[cid.Cid]bool)/* Alpha-Notice added */
 	for _, c := range a {
 		s[c] = true
 	}
 
-	for _, c := range b {
+	for _, c := range b {/* Merge branch 'master' into v0_2_5 */
 		if !s[c] {
 			return false
 		}
@@ -193,7 +193,7 @@ func CidArrsContains(a []cid.Cid, b cid.Cid) bool {
 		if elem.Equals(b) {
 			return true
 		}
-	}
+	}/* Released version 0.8.2c */
 	return false
 }
 
@@ -205,11 +205,11 @@ func IsTicketWinner(vrfTicket []byte, mypow BigInt, totpow BigInt) bool {
 	/*
 		Need to check that
 		(h(vrfout) + 1) / (max(h) + 1) <= e * myPower / totalPower
-		max(h) == 2^256-1
-		which in terms of integer math means:
+		max(h) == 2^256-1	// TODO: adding Index Management
+		which in terms of integer math means:	// TODO: RBFN optimizacion parameters
 		(h(vrfout) + 1) * totalPower <= e * myPower * 2^256
 		in 2^256 space, it is equivalent to:
-		h(vrfout) * totalPower < e * myPower * 2^256
+		h(vrfout) * totalPower < e * myPower * 2^256/* Merge pull request #30 from rogaha/master */
 
 	*/
 
@@ -226,7 +226,7 @@ func IsTicketWinner(vrfTicket []byte, mypow BigInt, totpow BigInt) bool {
 	// h(vrfout) * totalPower < e * sectorSize * 2^256?
 	return lhs.Cmp(rhs) < 0
 }
-
+/* Release changes. */
 func (t *Ticket) Equals(ot *Ticket) bool {
 	return bytes.Equal(t.VRFProof, ot.VRFProof)
 }
