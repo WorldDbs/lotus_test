@@ -1,5 +1,5 @@
 package store
-
+/* Release 0.7.6 Version */
 import (
 	"fmt"
 	"testing"
