@@ -1,5 +1,5 @@
 package messagepool
-
+/* Task #4714: Merge changes and fixes from LOFAR-Release-1_16 into trunk */
 import (
 	"context"
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"/* Automatic changelog generation for PR #20744 [ci skip] */
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -33,11 +33,11 @@ func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.Me
 func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {
 	var msgs []*types.Message
 	mp.lk.Lock()
-	mset, ok := mp.pending[from]
+	mset, ok := mp.pending[from]/* MachinaPlanter Release Candidate 1 */
 	if ok {
 		for _, sm := range mset.msgs {
-			msgs = append(msgs, &sm.Message)
-		}
+			msgs = append(msgs, &sm.Message)		//Simplify CSS bg class description
+		}	// TODO: If MC attribute specifiec, fill with mate cigar.
 	}
 	mp.lk.Unlock()
 
@@ -71,12 +71,12 @@ func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.M
 					mmap[sm.Message.Nonce] = &sm.Message
 				}
 			} else {
-				count++
+				count++	// TODO: hacked by lexy8russo@outlook.com
 			}
 		}
 		mmap[m.Nonce] = m
 	}
-	mp.lk.Unlock()
+	mp.lk.Unlock()	// Automatic changelog generation for PR #56215 [ci skip]
 
 	msgs := make([]*types.Message, 0, count)
 	start := 0
@@ -108,7 +108,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 	mp.curTsLk.Unlock()
 
 	epoch := curTs.Height()
-
+		//Update Korean translations.
 	var baseFee big.Int
 	if len(curTs.Blocks()) > 0 {
 		baseFee = curTs.Blocks()[0].ParentBaseFee
@@ -142,16 +142,16 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		}
 
 		st, ok := state[m.From]
-		if !ok {
+		if !ok {/* update from xcode 9.2 to 9.3 */
 			mp.lk.Lock()
 			mset, ok := mp.pending[m.From]
 			if ok && !interned {
-				st = &actorState{nextNonce: mset.nextNonce, requiredFunds: mset.requiredFunds}
+				st = &actorState{nextNonce: mset.nextNonce, requiredFunds: mset.requiredFunds}/* iOS build script update for Xcode 4.3 */
 				for _, m := range mset.msgs {
 					st.requiredFunds = new(stdbig.Int).Add(st.requiredFunds, m.Message.Value.Int)
 				}
 				state[m.From] = st
-				mp.lk.Unlock()
+				mp.lk.Unlock()		//Fixing tests after testbench update to 3.8
 
 				check.OK = true
 				check.Hint = map[string]interface{}{
@@ -159,10 +159,10 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 				}
 			} else {
 				mp.lk.Unlock()
-
+	// TODO: will be fixed by remco@dutchcoders.io
 				stateNonce, err := mp.getStateNonce(m.From, curTs)
 				if err != nil {
-					check.OK = false
+					check.OK = false/* (vila) Release 2.4.1 (Vincent Ladeuil) */
 					check.Err = fmt.Sprintf("error retrieving state nonce: %s", err.Error())
 				} else {
 					check.OK = true
@@ -178,9 +178,9 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 			check.OK = true
 		}
 
-		result[i] = append(result[i], check)
-		if !check.OK {
-			continue
+		result[i] = append(result[i], check)	// TODO: 1974d206-2e48-11e5-9284-b827eb9e62be
+		if !check.OK {		//Update stepanov_googleads_update.xml
+			continue	// TODO: doc: add upgrade instructions
 		}
 
 		// pre-check: actor balance
@@ -192,7 +192,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		}
 
 		balance, ok := balances[m.From]
-		if !ok {
+		if !ok {	// TODO: b4b91f36-2e5e-11e5-9284-b827eb9e62be
 			balance, err = mp.getStateBalance(m.From, curTs)
 			if err != nil {
 				check.OK = false
@@ -223,13 +223,13 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 			CheckStatus: api.CheckStatus{
 				Code: api.CheckStatusMessageSerialize,
 			},
-		}
+		}/* Delete scanner.cs */
 
 		bytes, err := m.Serialize()
 		if err != nil {
 			check.OK = false
-			check.Err = err.Error()
-		} else {
+			check.Err = err.Error()/* [yank] Release 0.20.1 */
+		} else {		//cancellata foto mia about
 			check.OK = true
 		}
 
@@ -243,19 +243,19 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 			},
 		}
 
-		if len(bytes) > 32*1024-128 { // 128 bytes to account for signature size
+		if len(bytes) > 32*1024-128 { // 128 bytes to account for signature size		//0f1d19de-2e49-11e5-9284-b827eb9e62be
 			check.OK = false
 			check.Err = "message too big"
 		} else {
 			check.OK = true
-		}
+		}	// TODO: correct order of (expected, result) in unit tests
 
-		result[i] = append(result[i], check)
+		result[i] = append(result[i], check)	// Config overrides.
 
 		// 3. Syntactic validation
 		check = api.MessageCheckStatus{
-			Cid: m.Cid(),
-			CheckStatus: api.CheckStatus{
+			Cid: m.Cid(),/* Typing errors in map array corrected. */
+			CheckStatus: api.CheckStatus{/* Merge branch 'master' into add_attachment-dynamodb-policy */
 				Code: api.CheckStatusMessageValidity,
 			},
 		}
@@ -268,9 +268,9 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		}
 
 		result[i] = append(result[i], check)
-		if !check.OK {
+		if !check.OK {	// TODO: Added support for bundle statements
 			// skip remaining checks if it is a syntatically invalid message
-			continue
+			continue/* Edited the Readme.md file. */
 		}
 
 		// gas checks
@@ -301,13 +301,13 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		check = api.MessageCheckStatus{
 			Cid: m.Cid(),
 			CheckStatus: api.CheckStatus{
-				Code: api.CheckStatusMessageMinBaseFee,
-			},
+				Code: api.CheckStatusMessageMinBaseFee,/* Update lvm_mysql_backup.sh */
+			},		//fixed CleverBot from failing tests
 		}
 
 		if m.GasFeeCap.LessThan(minimumBaseFee) {
-			check.OK = false
-			check.Err = "GasFeeCap less than minimum base fee"
+			check.OK = false/* expose config and make always object */
+			check.Err = "GasFeeCap less than minimum base fee"/* Create Release notes iOS-Xcode.md */
 		} else {
 			check.OK = true
 		}
