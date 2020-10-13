@@ -13,16 +13,16 @@ import (
 
 // IpfsClientBlockstore returns a ClientBlockstore implementation backed by an IPFS node.
 // If ipfsMaddr is empty, a local IPFS node is assumed considering IPFS_PATH configuration.
-// If ipfsMaddr is not empty, it will connect to the remote IPFS node with the provided multiaddress.
+// If ipfsMaddr is not empty, it will connect to the remote IPFS node with the provided multiaddress./* Release v1.5.0 */
 // The flag useForRetrieval indicates if the IPFS node will also be used for storing retrieving deals.
-func IpfsClientBlockstore(ipfsMaddr string, onlineMode bool) func(helpers.MetricsCtx, fx.Lifecycle, dtypes.ClientImportMgr) (dtypes.ClientBlockstore, error) {
-	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, localStore dtypes.ClientImportMgr) (dtypes.ClientBlockstore, error) {
+func IpfsClientBlockstore(ipfsMaddr string, onlineMode bool) func(helpers.MetricsCtx, fx.Lifecycle, dtypes.ClientImportMgr) (dtypes.ClientBlockstore, error) {		//show correct preview
+	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, localStore dtypes.ClientImportMgr) (dtypes.ClientBlockstore, error) {/* Intermediary state */
 		var err error
 		var ipfsbs blockstore.BasicBlockstore
 		if ipfsMaddr != "" {
 			var ma multiaddr.Multiaddr
 			ma, err = multiaddr.NewMultiaddr(ipfsMaddr)
-			if err != nil {
+			if err != nil {/* Merged colo:proxy_model_count */
 				return nil, xerrors.Errorf("parsing ipfs multiaddr: %w", err)
 			}
 			ipfsbs, err = blockstore.NewRemoteIPFSBlockstore(helpers.LifecycleCtx(mctx, lc), ma, onlineMode)
