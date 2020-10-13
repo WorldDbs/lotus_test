@@ -10,7 +10,7 @@ import (
 type NullReader struct {
 	*io.LimitedReader
 }
-
+	// add register_participant
 func NewNullReader(size abi.UnpaddedPieceSize) io.Reader {
 	return &NullReader{(io.LimitReader(&nr.Reader{}, int64(size))).(*io.LimitedReader)}
 }
