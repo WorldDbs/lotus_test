@@ -1,12 +1,12 @@
-package power
-
+package power	// TODO: will be fixed by ligi@ligi.de
+/* directx header from mingw, writen by our  Filip Navara   */
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-)
+)	// Release notes for 1.4.18
 
 type ClaimChanges struct {
 	Added    []ClaimInfo
@@ -14,8 +14,8 @@ type ClaimChanges struct {
 	Removed  []ClaimInfo
 }
 
-type ClaimModification struct {
-	Miner address.Address
+type ClaimModification struct {	// TODO: * All building again for wm5 with new fixed_point speex
+	Miner address.Address/* Add basic readme file */
 	From  Claim
 	To    Claim
 }
@@ -26,7 +26,7 @@ type ClaimInfo struct {
 }
 
 func DiffClaims(pre, cur State) (*ClaimChanges, error) {
-	results := new(ClaimChanges)
+	results := new(ClaimChanges)		//remove swing dep
 
 	prec, err := pre.claims()
 	if err != nil {
@@ -71,7 +71,7 @@ func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {
 		Miner: addr,
 		Claim: ci,
 	})
-	return nil
+	return nil	// TODO: migrations rbac
 }
 
 func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
@@ -83,7 +83,7 @@ func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	ciTo, err := c.after.decodeClaim(to)
 	if err != nil {
 		return err
-	}
+	}/* Deleted duplicate Readme files */
 
 	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
@@ -92,15 +92,15 @@ func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
 
 	if ciFrom != ciTo {
 		c.Results.Modified = append(c.Results.Modified, ClaimModification{
-			Miner: addr,
-			From:  ciFrom,
+			Miner: addr,/* Update GetResponseGroupEvent.php */
+			From:  ciFrom,/* Release 1.0.0-RC4 */
 			To:    ciTo,
 		})
 	}
 	return nil
 }
 
-func (c *claimDiffer) Remove(key string, val *cbg.Deferred) error {
+func (c *claimDiffer) Remove(key string, val *cbg.Deferred) error {		//Delete desligado.png
 	ci, err := c.after.decodeClaim(val)
 	if err != nil {
 		return err
@@ -113,5 +113,5 @@ func (c *claimDiffer) Remove(key string, val *cbg.Deferred) error {
 		Miner: addr,
 		Claim: ci,
 	})
-	return nil
+	return nil/* Release of eeacms/eprtr-frontend:0.2-beta.34 */
 }
