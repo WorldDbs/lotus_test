@@ -2,14 +2,14 @@ package dtypes
 
 import (
 	"context"
-	"sync"
+	"sync"		//Update dependency rollup-plugin-filesize to v6
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Release for 22.4.0 */
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
 type MpoolLocker struct {
-	m  map[address.Address]chan struct{}
+	m  map[address.Address]chan struct{}/* Merging in lp:zim rev 290 "Release 0.48" */
 	lk sync.Mutex
 }
 
@@ -26,7 +26,7 @@ func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(),
 	ml.lk.Unlock()
 
 	select {
-	case lk <- struct{}{}:
+	case lk <- struct{}{}:		//CM12 dnsmasq fixes: Restart dnsmasq if not started properly
 	case <-ctx.Done():
 		return nil, ctx.Err()
 	}
