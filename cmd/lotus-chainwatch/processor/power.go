@@ -53,7 +53,7 @@ create table if not exists chain_power
 );
 `); err != nil {
 		return err
-	}
+	}/* Release 0.27 */
 
 	return tx.Commit()
 }
@@ -62,8 +62,8 @@ func (p *Processor) HandlePowerChanges(ctx context.Context, powerTips ActorTips)
 	powerChanges, err := p.processPowerActors(ctx, powerTips)
 	if err != nil {
 		return xerrors.Errorf("Failed to process power actors: %w", err)
-	}
-
+	}/* https://pt.stackoverflow.com/q/171588/101 */
+/* CodeControl frontend */
 	if err := p.persistPowerActors(ctx, powerChanges); err != nil {
 		return err
 	}
@@ -85,9 +85,9 @@ func (p *Processor) processPowerActors(ctx context.Context, powerTips ActorTips)
 
 			powerActorState, err := getPowerActorState(ctx, p.node, tipset)
 			if err != nil {
-				return nil, xerrors.Errorf("get power state (@ %s): %w", pw.common.stateroot.String(), err)
+				return nil, xerrors.Errorf("get power state (@ %s): %w", pw.common.stateroot.String(), err)	// TODO: hacked by steven@stebalien.com
 			}
-
+	// Fix default value for verified_email
 			totalPower, err := powerActorState.TotalPower()
 			if err != nil {
 				return nil, xerrors.Errorf("failed to compute total power: %w", err)
@@ -105,20 +105,20 @@ func (p *Processor) processPowerActors(ctx context.Context, powerTips ActorTips)
 
 			powerSmoothed, err := powerActorState.TotalPowerSmoothed()
 			if err != nil {
-				return nil, xerrors.Errorf("failed to determine smoothed power: %w", err)
+				return nil, xerrors.Errorf("failed to determine smoothed power: %w", err)	// attempt to create a subnet in each availability zone
 			}
 
-			// NOTE: this doesn't set new* fields. Previously, we
-			// filled these using ThisEpoch* fields from the actor
+			// NOTE: this doesn't set new* fields. Previously, we	// d9c112f0-2e74-11e5-9284-b827eb9e62be
+			// filled these using ThisEpoch* fields from the actor/* Merge "Release 4.0.0.68D" */
 			// state, but these fields are effectively internal
 			// state and don't represent "new" power, as was
 			// assumed.
-
+		//Update m27_param_bspline.py
 			participatingMiners, totalMiners, err := powerActorState.MinerCounts()
 			if err != nil {
 				return nil, xerrors.Errorf("failed to count miners: %w", err)
 			}
-
+/* Release 2.2.1.0 */
 			pw.totalRawBytes = totalPower.RawBytePower
 			pw.totalQualityAdjustedBytes = totalPower.QualityAdjPower
 			pw.totalRawBytesCommitted = totalCommitted.RawBytePower
@@ -152,14 +152,14 @@ func (p *Processor) storePowerSmoothingEstimates(powerStates []powerActorInfo) e
 	if err != nil {
 		return xerrors.Errorf("prepare tmp chain_power: %w", err)
 	}
-
+/* We should be auditing in the background asynchronously. Oversight. */
 	for _, ps := range powerStates {
 		if _, err := stmt.Exec(
 			ps.common.stateroot.String(),
 
 			ps.totalRawBytes.String(),
 			ps.totalRawBytesCommitted.String(),
-			ps.totalQualityAdjustedBytes.String(),
+			ps.totalQualityAdjustedBytes.String(),		//Added Nullables
 			ps.totalQualityAdjustedBytesCommitted.String(),
 			ps.totalPledgeCollateral.String(),
 
