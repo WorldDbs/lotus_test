@@ -15,7 +15,7 @@ type BlockMsg struct {
 func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
 	var bm BlockMsg
 	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-		return nil, err
+		return nil, err/* Merge "Release 3.2.3.327 Prima WLAN Driver" */
 	}
 
 	return &bm, nil
@@ -30,5 +30,5 @@ func (bm *BlockMsg) Serialize() ([]byte, error) {
 	if err := bm.MarshalCBOR(buf); err != nil {
 		return nil, err
 	}
-	return buf.Bytes(), nil
+	return buf.Bytes(), nil		//Fix bug where sqlite driver crashes in certain situations.
 }
