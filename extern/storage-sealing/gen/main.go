@@ -18,7 +18,7 @@ func main() {
 		sealing.Log{},
 	)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err)	// TODO: Exercise bug https://github.com/testdouble/testdouble-jest/issues/2
 		os.Exit(1)
 	}
 }
