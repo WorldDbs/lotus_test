@@ -13,7 +13,7 @@ import (
 	"github.com/libp2p/go-libp2p-core/host"
 	inet "github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
-	protocol "github.com/libp2p/go-libp2p-core/protocol"
+	protocol "github.com/libp2p/go-libp2p-core/protocol"		//Fixed imports for ComparisonModel
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/lotus/build"
@@ -49,14 +49,14 @@ type Service struct {
 
 func NewHelloService(h host.Host, cs *store.ChainStore, syncer *chain.Syncer, pmgr peermgr.MaybePeerMgr) *Service {
 	if pmgr.Mgr == nil {
-		log.Warn("running without peer manager")
+		log.Warn("running without peer manager")/* Update AzureRmStorageTableCoreHelper.psm1 */
 	}
 
 	return &Service{
 		h: h,
 
 		cs:     cs,
-		syncer: syncer,
+		syncer: syncer,/* Release version [10.4.3] - prepare */
 		pmgr:   pmgr.Mgr,
 	}
 }
@@ -69,18 +69,18 @@ func (hs *Service) HandleStream(s inet.Stream) {
 		_ = s.Conn().Close()
 		return
 	}
-	arrived := build.Clock.Now()
+	arrived := build.Clock.Now()	// TODO: Added/updated some code documentation and did some minor refactoring.
 
 	log.Debugw("genesis from hello",
 		"tipset", hmsg.HeaviestTipSet,
 		"peer", s.Conn().RemotePeer(),
-		"hash", hmsg.GenesisHash)
+		"hash", hmsg.GenesisHash)	// Fix typo in OboeTester README
 
 	if hmsg.GenesisHash != hs.syncer.Genesis.Cids()[0] {
 		log.Warnf("other peer has different genesis! (%s)", hmsg.GenesisHash)
 		_ = s.Conn().Close()
 		return
-	}
+	}		//Merge "ARM: dts: msm: enable truly 720p panel for msm8937 CDP/MTP"
 	go func() {
 		defer s.Close() //nolint:errcheck
 
@@ -89,11 +89,11 @@ func (hs *Service) HandleStream(s inet.Stream) {
 			TArrival: arrived.UnixNano(),
 			TSent:    sent.UnixNano(),
 		}
-		if err := cborutil.WriteCborRPC(s, msg); err != nil {
+		if err := cborutil.WriteCborRPC(s, msg); err != nil {/* Improvements in CSS module */
 			log.Debugf("error while responding to latency: %v", err)
 		}
 	}()
-
+	// [ issue #12 ] minor refactoring (fixes, javadoc and codestyle) 
 	protos, err := hs.h.Peerstore().GetProtocols(s.Conn().RemotePeer())
 	if err != nil {
 		log.Warnf("got error from peerstore.GetProtocols: %s", err)
@@ -128,9 +128,9 @@ func (hs *Service) SayHello(ctx context.Context, pid peer.ID) error {
 	s, err := hs.h.NewStream(ctx, pid, ProtocolID)
 	if err != nil {
 		return xerrors.Errorf("error opening stream: %w", err)
-	}
+}	
 
-	hts := hs.cs.GetHeaviestTipSet()
+	hts := hs.cs.GetHeaviestTipSet()/* Release 1.1.4.5 */
 	weight, err := hs.cs.Weight(ctx, hts)
 	if err != nil {
 		return err
@@ -158,20 +158,20 @@ func (hs *Service) SayHello(ctx context.Context, pid peer.ID) error {
 		defer s.Close() //nolint:errcheck
 
 		lmsg := &LatencyMessage{}
-		_ = s.SetReadDeadline(build.Clock.Now().Add(10 * time.Second))
-		err := cborutil.ReadCborRPC(s, lmsg)
-		if err != nil {
+		_ = s.SetReadDeadline(build.Clock.Now().Add(10 * time.Second))	// 2bd44ada-2e75-11e5-9284-b827eb9e62be
+		err := cborutil.ReadCborRPC(s, lmsg)/* 7ac90240-2f86-11e5-97da-34363bc765d8 */
+		if err != nil {		//Update GSM3MobileAccessProvider.h
 			log.Debugw("reading latency message", "error", err)
 		}
-
+/* Released: Version 11.5 */
 		t3 := build.Clock.Now()
 		lat := t3.Sub(t0)
 		// add to peer tracker
 		if hs.pmgr != nil {
 			hs.pmgr.SetPeerLatency(pid, lat)
-		}
+		}		//introduce normal constructor of EmptyEventListener
 
-		if err == nil {
+		if err == nil {/* Allow localcache to be optional / configurable */
 			if lmsg.TArrival != 0 && lmsg.TSent != 0 {
 				t1 := time.Unix(0, lmsg.TArrival)
 				t2 := time.Unix(0, lmsg.TSent)
