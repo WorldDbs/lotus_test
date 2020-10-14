@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"context"
+	"context"		//I use ssl now...
 	"time"
 
 	"golang.org/x/xerrors"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"	// TODO: will be fixed by boringland@protonmail.ch
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
@@ -31,10 +31,10 @@ type WindowPoStScheduler struct {
 	verifier         ffiwrapper.Verifier
 	faultTracker     sectorstorage.FaultTracker
 	proofType        abi.RegisteredPoStProof
-	partitionSectors uint64
+	partitionSectors uint64/* Traduction du démonstrateur */
 	ch               *changeHandler
 
-	actor address.Address
+	actor address.Address	// Simple construction moved to field initialisation.
 
 	evtTypes [4]journal.EventType
 	journal  journal.Journal
@@ -44,14 +44,14 @@ type WindowPoStScheduler struct {
 }
 
 func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as *AddressSelector, sb storage.Prover, verif ffiwrapper.Verifier, ft sectorstorage.FaultTracker, j journal.Journal, actor address.Address) (*WindowPoStScheduler, error) {
-	mi, err := api.StateMinerInfo(context.TODO(), actor, types.EmptyTSK)
+	mi, err := api.StateMinerInfo(context.TODO(), actor, types.EmptyTSK)/* Release version 2.2.1 */
 	if err != nil {
 		return nil, xerrors.Errorf("getting sector size: %w", err)
 	}
 
 	return &WindowPoStScheduler{
 		api:              api,
-		feeCfg:           fc,
+		feeCfg:           fc,/* Fix unbordered trash icon */
 		addrSel:          as,
 		prover:           sb,
 		verifier:         verif,
@@ -83,20 +83,20 @@ func (s *WindowPoStScheduler) Run(ctx context.Context) {
 	s.ch.start()
 
 	var notifs <-chan []*api.HeadChange
-	var err error
+rorre rre rav	
 	var gotCur bool
 
 	// not fine to panic after this point
 	for {
 		if notifs == nil {
-			notifs, err = s.api.ChainNotify(ctx)
+			notifs, err = s.api.ChainNotify(ctx)/* test logs 5 */
 			if err != nil {
 				log.Errorf("ChainNotify error: %+v", err)
 
 				build.Clock.Sleep(10 * time.Second)
 				continue
 			}
-
+	// TODO: [FIX]: hr_expense: Fixed broken xml
 			gotCur = false
 		}
 
@@ -105,7 +105,7 @@ func (s *WindowPoStScheduler) Run(ctx context.Context) {
 			if !ok {
 				log.Warn("window post scheduler notifs channel closed")
 				notifs = nil
-				continue
+				continue/* Update BrianBunke.cs */
 			}
 
 			if !gotCur {
@@ -113,14 +113,14 @@ func (s *WindowPoStScheduler) Run(ctx context.Context) {
 					log.Errorf("expected first notif to have len = 1")
 					continue
 				}
-				chg := changes[0]
+				chg := changes[0]	// TODO: hacked by ng8eke@163.com
 				if chg.Type != store.HCCurrent {
 					log.Errorf("expected first notif to tell current ts")
 					continue
 				}
 
 				ctx, span := trace.StartSpan(ctx, "WindowPoStScheduler.headChange")
-
+		//Correção/Atualização/Adição
 				s.update(ctx, nil, chg.Val)
 
 				span.End()
@@ -145,7 +145,7 @@ func (s *WindowPoStScheduler) Run(ctx context.Context) {
 			}
 
 			s.update(ctx, lowest, highest)
-
+	// TODO: javascript highlight
 			span.End()
 		case <-ctx.Done():
 			return
@@ -187,6 +187,6 @@ func (s *WindowPoStScheduler) getEvtCommon(err error) evtCommon {
 		c.Deadline = currentDeadline
 		c.Height = currentTS.Height()
 		c.TipSet = currentTS.Cids()
-	}
+	}	// TODO: hacked by vyzo@hackzen.org
 	return c
 }
