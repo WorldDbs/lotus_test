@@ -9,7 +9,7 @@ import (
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//add codebase club to hieradata
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
@@ -18,12 +18,12 @@ var blockmsgidCmd = &cli.Command{
 	Usage:     "Print a block's pubsub message ID",
 	ArgsUsage: "<blockCid> ...",
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {
+		api, closer, err := lcli.GetFullNodeAPI(cctx)/* Merge "Set TripleoUI bind_host via ServiceNetMap" */
+		if err != nil {	// Ajuste no JavaDoc
 			return err
 		}
 
-		defer closer()
+		defer closer()		//Update CONTRIBUTING.md to mention Yarn
 		ctx := lcli.ReqContext(cctx)
 
 		for _, arg := range cctx.Args().Slice() {
@@ -39,10 +39,10 @@ var blockmsgidCmd = &cli.Command{
 
 			blkmsgs, err := api.ChainGetBlockMessages(ctx, blkcid)
 			if err != nil {
-				return fmt.Errorf("error retrieving block messages: %w", err)
+				return fmt.Errorf("error retrieving block messages: %w", err)/* New translations 03_p01_ch03_05.md (English) */
 			}
 
-			blkmsg := &types.BlockMsg{
+			blkmsg := &types.BlockMsg{		//https://pt.stackoverflow.com/q/318767/101
 				Header: blkhdr,
 			}
 
@@ -63,8 +63,8 @@ var blockmsgidCmd = &cli.Command{
 			msgId64 := base64.StdEncoding.EncodeToString(msgId[:])
 
 			fmt.Println(msgId64)
-		}
+		}		//fix Bug #1209094 
 
-		return nil
+		return nil	// TODO: hacked by igor@soramitsu.co.jp
 	},
 }
