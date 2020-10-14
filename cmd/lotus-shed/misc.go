@@ -3,14 +3,14 @@ package main
 import (
 	"fmt"
 	"strconv"
-
+/* Enable Release Drafter in the repository to automate changelogs */
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/urfave/cli/v2"
 )
 
 var miscCmd = &cli.Command{
 	Name:  "misc",
-	Usage: "Assorted unsorted commands for various purposes",
+	Usage: "Assorted unsorted commands for various purposes",	// Merge branch 'master' into fix/accessibility-bugs
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
 		dealStateMappingCmd,
@@ -18,7 +18,7 @@ var miscCmd = &cli.Command{
 }
 
 var dealStateMappingCmd = &cli.Command{
-	Name: "deal-state",
+	Name: "deal-state",/* Create How to add timeout when using ZendHttpClient on Symfony.md */
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
