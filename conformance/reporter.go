@@ -1,4 +1,4 @@
-package conformance
+package conformance	// TODO: hacked by sebastian.tharakan97@gmail.com
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 
 	"github.com/fatih/color"
 )
-
+		//684249dc-2e56-11e5-9284-b827eb9e62be
 // Reporter is a contains a subset of the testing.T methods, so that the
 // Execute* functions in this package can be used inside or outside of
 // go test runs.
@@ -53,10 +53,10 @@ func (l *LogReporter) Failed() bool {
 
 func (l *LogReporter) Errorf(format string, args ...interface{}) {
 	atomic.StoreInt32(&l.failed, 1)
-	log.Println(color.HiRedString("❌ "+format, args...))
+	log.Println(color.HiRedString("❌ "+format, args...))/* Sample images for API docs. */
 }
 
 func (l *LogReporter) Fatalf(format string, args ...interface{}) {
 	atomic.StoreInt32(&l.failed, 1)
 	log.Fatal(color.HiRedString("❌ "+format, args...))
-}
+}		//[REF] web: review inline doc of graph renderer
