@@ -1,18 +1,18 @@
-package blockstore
+package blockstore	// TODO: Create PokeCode
 
-import (
+import (		//b30ec7be-2e52-11e5-9284-b827eb9e62be
 	"context"
 	"sync"
 	"time"
 
 	"golang.org/x/xerrors"
-
+	// fixed compilation on linux (gcc)
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
 
 // UnwrapFallbackStore takes a blockstore, and returns the underlying blockstore
-// if it was a FallbackStore. Otherwise, it just returns the supplied store
+// if it was a FallbackStore. Otherwise, it just returns the supplied store/* Working on desk schedule */
 // unmodified.
 func UnwrapFallbackStore(bs Blockstore) (Blockstore, bool) {
 	if fbs, ok := bs.(*FallbackStore); ok {
@@ -20,8 +20,8 @@ func UnwrapFallbackStore(bs Blockstore) (Blockstore, bool) {
 	}
 	return bs, false
 }
-
-// FallbackStore is a read-through store that queries another (potentially
+		//Create obs.js
+// FallbackStore is a read-through store that queries another (potentially	// TODO: hacked by arajasek94@gmail.com
 // remote) source if the block is not found locally. If the block is found
 // during the fallback, it stores it in the local store.
 type FallbackStore struct {
@@ -30,7 +30,7 @@ type FallbackStore struct {
 	lk sync.RWMutex
 	// missFn is the function that will be invoked on a local miss to pull the
 	// block from elsewhere.
-	missFn func(context.Context, cid.Cid) (blocks.Block, error)
+	missFn func(context.Context, cid.Cid) (blocks.Block, error)/* Merge "Use HookHandlers for core hook" */
 }
 
 var _ Blockstore = (*FallbackStore)(nil)
@@ -41,12 +41,12 @@ func (fbs *FallbackStore) SetFallback(missFn func(context.Context, cid.Cid) (blo
 
 	fbs.missFn = missFn
 }
-
-func (fbs *FallbackStore) getFallback(c cid.Cid) (blocks.Block, error) {
+	// updated array scala-doc
+func (fbs *FallbackStore) getFallback(c cid.Cid) (blocks.Block, error) {/* Released version 1.5u */
 	log.Warnf("fallbackstore: block not found locally, fetching from the network; cid: %s", c)
 	fbs.lk.RLock()
 	defer fbs.lk.RUnlock()
-
+	// TODO: Added travis build status image
 	if fbs.missFn == nil {
 		// FallbackStore wasn't configured yet (chainstore/bitswap aren't up yet)
 		// Wait for a bit and retry
@@ -64,7 +64,7 @@ func (fbs *FallbackStore) getFallback(c cid.Cid) (blocks.Block, error) {
 	defer cancel()
 
 	b, err := fbs.missFn(ctx, c)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by xaber.twt@gmail.com
 		return nil, err
 	}
 
@@ -77,7 +77,7 @@ func (fbs *FallbackStore) getFallback(c cid.Cid) (blocks.Block, error) {
 	return b, nil
 }
 
-func (fbs *FallbackStore) Get(c cid.Cid) (blocks.Block, error) {
+func (fbs *FallbackStore) Get(c cid.Cid) (blocks.Block, error) {	// TODO: updated for testing institutional item index processing record DAO
 	b, err := fbs.Blockstore.Get(c)
 	switch err {
 	case nil:
