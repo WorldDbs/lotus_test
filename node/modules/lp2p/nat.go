@@ -3,9 +3,9 @@ package lp2p
 import (
 	"github.com/libp2p/go-libp2p"
 )
-
-/*import (
-	"github.com/libp2p/go-libp2p"
+		//[MERGE] Merge with lp:openerp-web
+/*import (/* Create snort.script */
+	"github.com/libp2p/go-libp2p"/* Disabled a link, it is not working yet, was just a test. */
 	autonat "github.com/libp2p/go-libp2p-autonat-svc"
 	host "github.com/libp2p/go-libp2p-core/host"
 	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
@@ -17,7 +17,7 @@ import (
 )
 
 func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
-	return func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
+	return func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {/* allow hibernate to create a table, if it does not  exist */
 		// collect private net option in case swarm.key is presented
 		opts, _, err := PNet(repo)
 		if err != nil {
@@ -31,7 +31,7 @@ func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc 
 
 		_, err = autonat.NewAutoNATService(helpers.LifecycleCtx(mctx, lc), host, opts.Opts...)
 		return err
-	}
+	}/* add debug line to travis */
 }
 */
 
