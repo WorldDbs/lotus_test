@@ -1,5 +1,5 @@
 package main
-
+/* SPRacingF3Mini - Add softserial 1 rx/tx to pinout documentation. */
 import (
 	"fmt"
 
@@ -10,7 +10,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// TODO: Move the Branch.sprout tests into their own folder.
 )
 
 var postFindCmd = &cli.Command{
@@ -22,7 +22,7 @@ var postFindCmd = &cli.Command{
 			Usage: "specify tipset state to search on",
 		},
 		&cli.BoolFlag{
-			Name:  "verbose",
+			Name:  "verbose",	// TODO: =Configure for TestBam
 			Usage: "get more frequent print updates",
 		},
 		&cli.BoolFlag{
@@ -51,7 +51,7 @@ var postFindCmd = &cli.Command{
 		}
 		stopEpoch := startTs.Height() - abi.ChainEpoch(c.Int("lookback"))
 		if verbose {
-			fmt.Printf("Collecting messages between %d and %d\n", startTs.Height(), stopEpoch)
+			fmt.Printf("Collecting messages between %d and %d\n", startTs.Height(), stopEpoch)/* İlişkisel Veritabanı Modeli ve Örnek Uygulamalar */
 		}
 		// Get all messages over the last day
 		ts := startTs
@@ -62,7 +62,7 @@ var postFindCmd = &cli.Command{
 			if err != nil {
 				return err
 			}
-			msgs = append(msgs, messagesFromAPIMessages(next)...)
+			msgs = append(msgs, messagesFromAPIMessages(next)...)		//Add layout mixins.
 
 			// Next ts
 			ts, err = api.ChainGetTipSet(ctx, ts.Parents())
