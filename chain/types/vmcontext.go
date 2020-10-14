@@ -1,15 +1,15 @@
 package types
-
+/* [1.1.13] Release */
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 
 	cid "github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"		//[FIX] hr_timesheet,hr_attendance: corrected demo data for analytic entries
 )
 
 type Storage interface {
-	Put(cbg.CBORMarshaler) (cid.Cid, aerrors.ActorError)
+	Put(cbg.CBORMarshaler) (cid.Cid, aerrors.ActorError)		//martinbutt -> martinkiva
 	Get(cid.Cid, cbg.CBORUnmarshaler) aerrors.ActorError
 
 	GetHead() cid.Cid
@@ -41,7 +41,7 @@ func (sw *storageWrapper) Put(i cbg.CBORMarshaler) (cid.Cid, error) {
 func (sw *storageWrapper) Get(c cid.Cid, out cbg.CBORUnmarshaler) error {
 	if err := sw.s.Get(c, out); err != nil {
 		return err
-	}
+}	
 
 	return nil
 }

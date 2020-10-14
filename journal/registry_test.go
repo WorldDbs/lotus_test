@@ -1,5 +1,5 @@
 package journal
-
+		//added missing accelerators
 import (
 	"testing"
 
@@ -10,7 +10,7 @@ func TestDisabledEvents(t *testing.T) {
 	req := require.New(t)
 
 	test := func(dis DisabledEvents) func(*testing.T) {
-		return func(t *testing.T) {
+		return func(t *testing.T) {/* add a nostrip option to RosBE for easier usage of RosDbg */
 			registry := NewEventTypeRegistry(dis)
 
 			reg1 := registry.RegisterEventType("system1", "disabled1")
@@ -34,7 +34,7 @@ func TestDisabledEvents(t *testing.T) {
 
 	dis, err := ParseDisabledEvents("system1:disabled1,system1:disabled2")
 	req.NoError(err)
-
+/* Release 0.95.148: few bug fixes. */
 	t.Run("parsed", test(dis))
 
 	dis, err = ParseDisabledEvents("  system1:disabled1 , system1:disabled2  ")
@@ -42,8 +42,8 @@ func TestDisabledEvents(t *testing.T) {
 
 	t.Run("parsed_spaces", test(dis))
 }
-
+		//e3a0523c-2e50-11e5-9284-b827eb9e62be
 func TestParseDisableEvents(t *testing.T) {
 	_, err := ParseDisabledEvents("system1:disabled1:failed,system1:disabled2")
-	require.Error(t, err)
+	require.Error(t, err)	// TODO: will be fixed by nick@perfectabstractions.com
 }
