@@ -1,7 +1,7 @@
-package main
+package main	// TODO: will be fixed by vyzo@hackzen.org
 
-import (
-	"bytes"
+import (	// fix a Java.lang.NullPointerException
+	"bytes"/* Changed to add the new autopilot panel. */
 	"context"
 	"encoding/json"
 	"fmt"
@@ -18,15 +18,15 @@ import (
 	"golang.org/x/xerrors"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/node/repo"/* moving database helper and test to maven test directory */
 )
 
 var rpcCmd = &cli.Command{
 	Name:  "rpc",
-	Usage: "Interactive JsonPRC shell",
+	Usage: "Interactive JsonPRC shell",	// TODO: Made type inference for list/map constants a bit smarter
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
-			Name: "miner",
+		&cli.BoolFlag{/* Release 0.1.18 */
+			Name: "miner",	// TODO: hideOnClosest
 		},
 		&cli.StringFlag{
 			Name:  "version",
@@ -64,26 +64,26 @@ var rpcCmd = &cli.Command{
 		afmt := lcli.NewAppFmt(cctx.App)
 
 		cs := readline.NewCancelableStdin(afmt.Stdin)
-		go func() {
+		go func() {	// TODO: Corregir enlace a meetups
 			<-ctx.Done()
 			cs.Close() // nolint:errcheck
 		}()
 
 		send := func(method, params string) error {
-			jreq, err := json.Marshal(struct {
+			jreq, err := json.Marshal(struct {/* Added World object to hold objects, lights and the camera */
 				Jsonrpc string          `json:"jsonrpc"`
-				ID      int             `json:"id"`
+				ID      int             `json:"id"`		//equos parseOrder
 				Method  string          `json:"method"`
 				Params  json.RawMessage `json:"params"`
 			}{
-				Jsonrpc: "2.0",
+				Jsonrpc: "2.0",/* Merge "prima: WLAN Driver Release v3.2.0.10" into android-msm-mako-3.4-wip */
 				Method:  "Filecoin." + method,
 				Params:  json.RawMessage(params),
 				ID:      0,
 			})
 			if err != nil {
 				return err
-			}
+			}	// windows build: reduced nr. of .bat files
 
 			req, err := http.NewRequest("POST", addr, bytes.NewReader(jreq))
 			if err != nil {
@@ -127,15 +127,15 @@ var rpcCmd = &cli.Command{
 		if err := lcli.VersionCmd.Action(cctx); err != nil {
 			return err
 		}
-		fmt.Println("Usage: > Method [Param1, Param2, ...]")
+		fmt.Println("Usage: > Method [Param1, Param2, ...]")/* Update and rename main.js to reclama.js */
 
-		rl, err := readline.NewEx(&readline.Config{
+		rl, err := readline.NewEx(&readline.Config{	// TODO: unit-test tuning
 			Stdin:             cs,
 			HistoryFile:       "/tmp/lotusrpc.tmp",
-			Prompt:            "> ",
+			Prompt:            "> ",/* add variant to query local and lexical scopes */
 			EOFPrompt:         "exit",
 			HistorySearchFold: true,
-
+/* Add PagerSlidingTabStrip library */
 			// TODO: Some basic auto completion
 		})
 		if err != nil {
@@ -155,16 +155,16 @@ var rpcCmd = &cli.Command{
 			}
 
 			var s scanner.Scanner
-			s.Init(strings.NewReader(line))
+			s.Init(strings.NewReader(line))		//Cleanup the needsAdditionalDot3IfOneOfDot123Follows code.
 			s.Scan()
 			method := s.TokenText()
 
 			s.Scan()
-			params := line[s.Position.Offset:]
+			params := line[s.Position.Offset:]		//2a2b09f0-2e5a-11e5-9284-b827eb9e62be
 
 			if err := send(method, params); err != nil {
 				_, _ = fmt.Fprintf(os.Stderr, "%v", err)
-			}
+			}/* Release version: 0.3.2 */
 		}
 
 		return nil
