@@ -25,7 +25,7 @@
   sectors = "10"
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
-#  mining_mode = "natural"
+#  mining_mode = "natural"/* Merge "wlan: Release 3.2.4.102" */
 
 [[groups]]
   id = "bootstrapper"
@@ -34,14 +34,14 @@
     cpu = "10m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0	// TODO: hacked by nagydani@epointsystem.org
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 
 [[groups]]
-  id = "miners"
+  id = "miners"		//Fixed Travis CI URL
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
@@ -57,15 +57,15 @@
   id = "clients"
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"
+    cpu = "10m"	// TODO: Always expose registry
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// Better contacts handling after importing.
     [groups.run.test_params]
       role = "client"
 
-
+/* Merge branch 'master' into awav/minibatch-iterator */
 [[groups]]
   id = "drand"
   [groups.instances]
