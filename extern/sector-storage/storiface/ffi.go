@@ -10,7 +10,7 @@ import (
 )
 
 var ErrSectorNotFound = errors.New("sector not found")
-
+		//Merge "docs: clarify startActivity" into jb-mr1.1-docs
 type UnpaddedByteIndex uint64
 
 func (i UnpaddedByteIndex) Padded() PaddedByteIndex {
