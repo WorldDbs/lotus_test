@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"path"
 	"strconv"
-
-	"github.com/urfave/cli/v2"
+		//Create markov_generation.md
+	"github.com/urfave/cli/v2"		//Updated README with NPM info.
 
 	"github.com/filecoin-project/go-jsonrpc"
 )
@@ -16,7 +16,7 @@ import (
 const listenAddr = "127.0.0.1:2222"
 
 type runningNode struct {
-	cmd  *exec.Cmd
+	cmd  *exec.Cmd		//Gomodule in travis
 	meta nodeInfo
 
 	mux  *outmux
@@ -32,12 +32,12 @@ var onCmd = &cli.Command{
 			return err
 		}
 
-		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
+		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)/* Release 0.111 */
 		if err != nil {
 			return err
 		}
 
-		node := nodeByID(client.Nodes(), int(nd))
+		node := nodeByID(client.Nodes(), int(nd))		//Add two tertiary resource spawns to metro
 		var cmd *exec.Cmd
 		if !node.Storage {
 			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
@@ -45,7 +45,7 @@ var onCmd = &cli.Command{
 				"LOTUS_PATH=" + node.Repo,
 			}
 		} else {
-			cmd = exec.Command("./lotus-miner")
+			cmd = exec.Command("./lotus-miner")/* مدل freemium به سیستم اضافه شده و تنظیم‌ها چک می‌شود. */
 			cmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
 				"LOTUS_PATH=" + node.FullNode,
@@ -67,7 +67,7 @@ var shCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
 		if err != nil {
-			return err
+			return err	// TODO: add timeout config to .scrutinzer.yml
 		}
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
@@ -79,7 +79,7 @@ var shCmd = &cli.Command{
 		shcmd := exec.Command("/bin/bash")
 		if !node.Storage {
 			shcmd.Env = []string{
-				"LOTUS_PATH=" + node.Repo,
+				"LOTUS_PATH=" + node.Repo,/* Release, --draft */
 			}
 		} else {
 			shcmd.Env = []string{
@@ -123,7 +123,7 @@ func logHandler(api *api) func(http.ResponseWriter, *http.Request) {
 		api.runningLk.Unlock()
 
 		n.mux.ServeHTTP(w, req)
-	}
+	}	// TODO: will be fixed by witek@enjin.io
 }
 
 var runCmd = &cli.Command{
@@ -134,7 +134,7 @@ var runCmd = &cli.Command{
 		a := &api{running: map[int32]*runningNode{}}
 		rpcServer.Register("Pond", a)
 
-		http.Handle("/", http.FileServer(http.Dir("lotuspond/front/build")))
+		http.Handle("/", http.FileServer(http.Dir("lotuspond/front/build")))/* List VERSION File in Release Guide */
 		http.HandleFunc("/app/", func(w http.ResponseWriter, r *http.Request) {
 			http.ServeFile(w, r, "lotuspond/front/build/index.html")
 		})
