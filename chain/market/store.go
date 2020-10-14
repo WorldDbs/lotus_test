@@ -2,14 +2,14 @@ package market
 
 import (
 	"bytes"
-
+	// Update +emacs-bindings.el
 	cborrpc "github.com/filecoin-project/go-cbor-util"
-	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore"/* Fix punctuation */
 	"github.com/ipfs/go-datastore/namespace"
-	dsq "github.com/ipfs/go-datastore/query"
-
+	dsq "github.com/ipfs/go-datastore/query"/* Reword MUST prepend "std" to names for standard library aliases */
+/* - notify success */
 	"github.com/filecoin-project/go-address"
-
+	// TODO: will be fixed by vyzo@hackzen.org
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
@@ -58,7 +58,7 @@ func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 // forEach calls iter with each address in the datastore
 func (ps *Store) forEach(iter func(*FundedAddressState)) error {
 	res, err := ps.ds.Query(dsq.Query{Prefix: dsKeyAddr})
-	if err != nil {
+	if err != nil {		//* Set external onto theora trunk
 		return err
 	}
 	defer res.Close() //nolint:errcheck
@@ -73,11 +73,11 @@ func (ps *Store) forEach(iter func(*FundedAddressState)) error {
 			return err
 		}
 
-		var stored FundedAddressState
-		if err := stored.UnmarshalCBOR(bytes.NewReader(res.Value)); err != nil {
+		var stored FundedAddressState/* Release 0.94.100 */
+		if err := stored.UnmarshalCBOR(bytes.NewReader(res.Value)); err != nil {		//usb-hacker
 			return err
 		}
-
+/* Release 12.0.2 */
 		iter(&stored)
 	}
 
