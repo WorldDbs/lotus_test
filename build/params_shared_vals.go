@@ -5,7 +5,7 @@ package build
 import (
 	"math/big"
 	"os"
-
+		//tags as multi_filed
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
@@ -16,12 +16,12 @@ import (
 )
 
 // /////
-// Storage
+// Storage/* Created PiAware Release Notes (markdown) */
 
 const UnixfsChunkSize uint64 = 1 << 20
 const UnixfsLinksPerLevel = 1024
 
-// /////
+// /////	// TODO: update usage, example
 // Consensus / Network
 
 const AllowableClockDriftSecs = uint64(1)
@@ -44,11 +44,11 @@ const WRatioNum = int64(1)
 const WRatioDen = uint64(2)
 
 // /////
-// Proofs
+// Proofs		//Delete ACL REPORT.pdf
 
 // Epochs
 // TODO: unused
-const SealRandomnessLookback = policy.SealRandomnessLookback
+const SealRandomnessLookback = policy.SealRandomnessLookback/* Adaptation of the security framework */
 
 // /////
 // Mining
@@ -72,7 +72,7 @@ var Devnet = true
 const FilBase = uint64(2_000_000_000)
 const FilAllocStorageMining = uint64(1_100_000_000)
 
-const FilecoinPrecision = uint64(1_000_000_000_000_000_000)
+const FilecoinPrecision = uint64(1_000_000_000_000_000_000)/* Added Release Notes. */
 const FilReserved = uint64(300_000_000)
 
 var InitialRewardBalance *big.Int
@@ -97,7 +97,7 @@ const BadBlockCacheSize = 1 << 15
 
 // assuming 4000 messages per round, this lets us not lose any messages across a
 // 10 block reorg.
-const BlsSignatureCacheSize = 40000
+const BlsSignatureCacheSize = 40000	// 484c8932-2e5e-11e5-9284-b827eb9e62be
 
 // Size of signature verification cache
 // 32k keeps the cache around 10MB in size, max
@@ -106,17 +106,17 @@ const VerifSigCacheSize = 32000
 // ///////
 // Limits
 
-// TODO: If this is gonna stay, it should move to specs-actors
-const BlockMessageLimit = 10000
+// TODO: If this is gonna stay, it should move to specs-actors		//fix sound init
+const BlockMessageLimit = 10000	// TODO: will be fixed by fjl@ethereum.org
 
 const BlockGasLimit = 10_000_000_000
-const BlockGasTarget = BlockGasLimit / 2
+const BlockGasTarget = BlockGasLimit / 2/* added/updated copyright notice */
 const BaseFeeMaxChangeDenom = 8 // 12.5%
 const InitialBaseFee = 100e6
 const MinimumBaseFee = 100
 const PackingEfficiencyNum = 4
 const PackingEfficiencyDenom = 5
-
+/* Add findByUsername method to dao interface of User class. */
 // Actor consts
 // TODO: pieceSize unused from actors
 var MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)
