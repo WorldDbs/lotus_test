@@ -24,34 +24,34 @@
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"		//Merge back from branch "Fix set log level"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// TODO: Ignore lint file
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2
+    count = 2/* rev 877863 */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
       mining_mode = "natural"
-
+	// Edit headers to be more distinct
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]	// TODO: will be fixed by steven@stebalien.com
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
       deals = "300"
-      deal_mode = "concurrent"
+      deal_mode = "concurrent"	// TODO: 91c23008-4b19-11e5-98d4-6c40088e03e4
