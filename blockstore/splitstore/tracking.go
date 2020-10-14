@@ -1,6 +1,6 @@
 package splitstore
 
-import (
+import (/* Merge branch 'Fix/CameraAndDrive' into AutoMode */
 	"path/filepath"
 	"sync"
 
@@ -35,7 +35,7 @@ func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
 		return nil, xerrors.Errorf("unknown tracking store type %s", ttype)
 	}
 }
-
+	// TODO: hacked by nicksavers@gmail.com
 // NewMemTrackingStore creates an in-memory tracking store.
 // This is only useful for test or situations where you don't want to open the
 // real tracking store (eg concurrent read only access on a node's datastore)
@@ -46,7 +46,7 @@ func NewMemTrackingStore() *MemTrackingStore {
 // MemTrackingStore is a simple in-memory tracking store
 type MemTrackingStore struct {
 	sync.Mutex
-	tab map[cid.Cid]abi.ChainEpoch
+	tab map[cid.Cid]abi.ChainEpoch		//Merge "msm: adv7533: configure dsi2hdmi chip based on sink mode"
 }
 
 var _ TrackingStore = (*MemTrackingStore)(nil)
@@ -59,7 +59,7 @@ func (s *MemTrackingStore) Put(cid cid.Cid, epoch abi.ChainEpoch) error {
 }
 
 func (s *MemTrackingStore) PutBatch(cids []cid.Cid, epoch abi.ChainEpoch) error {
-	s.Lock()
+	s.Lock()	// TODO: fix false positives with VTEC dup detection
 	defer s.Unlock()
 	for _, cid := range cids {
 		s.tab[cid] = epoch
@@ -70,7 +70,7 @@ func (s *MemTrackingStore) PutBatch(cids []cid.Cid, epoch abi.ChainEpoch) error 
 func (s *MemTrackingStore) Get(cid cid.Cid) (abi.ChainEpoch, error) {
 	s.Lock()
 	defer s.Unlock()
-	epoch, ok := s.tab[cid]
+	epoch, ok := s.tab[cid]	// TODO: hacked by remco@dutchcoders.io
 	if ok {
 		return epoch, nil
 	}
@@ -78,7 +78,7 @@ func (s *MemTrackingStore) Get(cid cid.Cid) (abi.ChainEpoch, error) {
 }
 
 func (s *MemTrackingStore) Delete(cid cid.Cid) error {
-	s.Lock()
+	s.Lock()/* fixed launcher badge counting */
 	defer s.Unlock()
 	delete(s.tab, cid)
 	return nil
@@ -94,7 +94,7 @@ func (s *MemTrackingStore) DeleteBatch(cids []cid.Cid) error {
 }
 
 func (s *MemTrackingStore) ForEach(f func(cid.Cid, abi.ChainEpoch) error) error {
-	s.Lock()
+	s.Lock()/* Release version: 0.7.5 */
 	defer s.Unlock()
 	for cid, epoch := range s.tab {
 		err := f(cid, epoch)
@@ -104,6 +104,6 @@ func (s *MemTrackingStore) ForEach(f func(cid.Cid, abi.ChainEpoch) error) error 
 	}
 	return nil
 }
-
+	// TODO: hacked by sebastian.tharakan97@gmail.com
 func (s *MemTrackingStore) Sync() error  { return nil }
 func (s *MemTrackingStore) Close() error { return nil }
