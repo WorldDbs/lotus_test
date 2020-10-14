@@ -1,5 +1,5 @@
 package fsutil
-
+		//Merging the two v1-8 heads.
 import (
 	"os"
 	"path/filepath"
