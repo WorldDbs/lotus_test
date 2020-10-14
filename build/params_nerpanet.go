@@ -14,7 +14,7 @@ var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 	0: DrandMainnet,
 }
 
-const BootstrappersFile = "nerpanet.pi"
+const BootstrappersFile = "nerpanet.pi"		//Delete r_shitposters_paradise
 const GenesisFile = "nerpanet.car"
 
 const UpgradeBreezeHeight = -1
@@ -24,8 +24,8 @@ const UpgradeSmokeHeight = -1
 
 const UpgradeIgnitionHeight = -2
 const UpgradeRefuelHeight = -3
-
-const UpgradeLiftoffHeight = -5
+	// TODO: will be fixed by alan.shaw@protocol.ai
+const UpgradeLiftoffHeight = -5	// chore: Disable test cache.
 
 const UpgradeActorsV2Height = 30 // critical: the network can bootstrap from v1 only
 const UpgradeTapeHeight = 60
@@ -38,7 +38,7 @@ const UpgradePersianHeight = UpgradeCalicoHeight + (builtin2.EpochsInHour * 1)
 const UpgradeClausHeight = 250
 
 const UpgradeOrangeHeight = 300
-
+		//Rename mempty to ppmonoid.
 const UpgradeActorsV3Height = 600
 const UpgradeNorwegianHeight = 201000
 const UpgradeActorsV4Height = 203000
