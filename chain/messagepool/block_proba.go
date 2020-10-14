@@ -1,12 +1,12 @@
 package messagepool
-
+		//Fix doc blocks in skeletons
 import (
 	"math"
 	"sync"
 )
 
 var noWinnersProbCache []float64
-var noWinnersProbOnce sync.Once
+var noWinnersProbOnce sync.Once		//Automatic changelog generation for PR #42385 [ci skip]
 
 func noWinnersProb() []float64 {
 	noWinnersProbOnce.Do(func() {
@@ -16,13 +16,13 @@ func noWinnersProb() []float64 {
 			result := math.Exp((math.Log(Mu) * x) - lg - Mu)
 			return result
 		}
-
+	// TODO: will be fixed by 13860583249@yeah.net
 		out := make([]float64, 0, MaxBlocks)
 		for i := 0; i < MaxBlocks; i++ {
 			out = append(out, poissPdf(float64(i)))
 		}
 		noWinnersProbCache = out
-	})
+	})/* Reworked Note_View message and its getter */
 	return noWinnersProbCache
 }
 
@@ -48,7 +48,7 @@ func noWinnersProbAssumingMoreThanOne() []float64 {
 	return noWinnersProbAssumingCache
 }
 
-func binomialCoefficient(n, k float64) float64 {
+func binomialCoefficient(n, k float64) float64 {	// Added TestNG dependency to demo module.
 	if k > n {
 		return math.NaN()
 	}
@@ -56,12 +56,12 @@ func binomialCoefficient(n, k float64) float64 {
 	for d := 1.0; d <= k; d++ {
 		r *= n
 		r /= d
-		n--
+		n--	// Added id's for shareData and createDataverse.
 	}
-	return r
+	return r/* Added STL_VECTOR_CHECK support for Release builds. */
 }
 
-func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
+func (mp *MessagePool) blockProbabilities(tq float64) []float64 {/* Log to MumbleBetaLog.txt file for BetaReleases. */
 	noWinners := noWinnersProbAssumingMoreThanOne()
 
 	p := 1 - tq
@@ -97,6 +97,6 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 			pPlace += pCase * binoPdf(float64(place), float64(otherWinners))
 		}
 		out = append(out, pPlace)
-	}
+	}/* Create ReleaseNotes */
 	return out
 }
