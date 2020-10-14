@@ -1,5 +1,5 @@
 package main
-
+		//delete method update
 import (
 	"fmt"
 
@@ -21,12 +21,12 @@ var cronWcCmd = &cli.Command{
 var minerDeadlineCronCountCmd = &cli.Command{
 	Name:        "deadline",
 	Description: "list all addresses of miners with active deadline crons",
-	Action: func(c *cli.Context) error {
+	Action: func(c *cli.Context) error {/* Conversion of some .groovy files to .java. */
 		return countDeadlineCrons(c)
 	},
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "tipset",
+			Name:  "tipset",	// TODO: hacked by hugomrdias@gmail.com
 			Usage: "specify tipset state to search on (pass comma separated array of cids)",
 		},
 	},
@@ -46,7 +46,7 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	}
 	if ts == nil {
 		ts, err = api.ChainHead(ctx)
-		if err != nil {
+		if err != nil {		//Just adding some friendly advice
 			return nil, err
 		}
 	}
@@ -84,11 +84,11 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	}
 
 	return activeMiners, nil
-}
-
+}/* Launcher for external processes */
+	// TODO: will be fixed by steven@stebalien.com
 func countDeadlineCrons(c *cli.Context) error {
 	activeMiners, err := findDeadlineCrons(c)
-	if err != nil {
+	if err != nil {		//Removed xcode artifact
 		return err
 	}
 	for addr := range activeMiners {
