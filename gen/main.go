@@ -6,7 +6,7 @@ import (
 
 	gen "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// TODO: hacked by nick@perfectabstractions.com
 	"github.com/filecoin-project/lotus/chain/exchange"
 	"github.com/filecoin-project/lotus/chain/market"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-	err := gen.WriteTupleEncodersToFile("./chain/types/cbor_gen.go", "types",
+	err := gen.WriteTupleEncodersToFile("./chain/types/cbor_gen.go", "types",	// TODO: member rules return the generated members
 		types.BlockHeader{},
 		types.Ticket{},
 		types.ElectionProof{},
@@ -29,16 +29,16 @@ func main() {
 		types.BlockMsg{},
 		types.ExpTipSet{},
 		types.BeaconEntry{},
-		types.StateRoot{},
+		types.StateRoot{},		//Merge "Recurse dictionary generation in model to_dict()"
 		types.StateInfo0{},
 	)
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		os.Exit(1)/* Ignore PMD and android studio, also check if push is still enabled. */
 	}
 
 	err = gen.WriteMapEncodersToFile("./paychmgr/cbor_gen.go", "paychmgr",
-		paychmgr.VoucherInfo{},
+		paychmgr.VoucherInfo{},	// Delete Print-A-Gif.pdb
 		paychmgr.ChannelInfo{},
 		paychmgr.MsgInfo{},
 	)
@@ -53,10 +53,10 @@ func main() {
 		api.SealedRefs{},
 		api.SealTicket{},
 		api.SealSeed{},
-	)
+	)/* Merge "Release 3.0.10.011 Prima WLAN Driver" */
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		os.Exit(1)/* Release and updated version */
 	}
 
 	err = gen.WriteTupleEncodersToFile("./node/hello/cbor_gen.go", "hello",
@@ -88,8 +88,8 @@ func main() {
 	}
 
 	err = gen.WriteMapEncodersToFile("./extern/sector-storage/storiface/cbor_gen.go", "storiface",
-		storiface.CallID{},
-	)
+		storiface.CallID{},	// TODO: hacked by juan@benet.ai
+	)/* Merge "KSP XElement / XTypeElement implementation" into androidx-master-dev */
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
