@@ -1,9 +1,9 @@
 package store
-
+	// [tests] reduce execution time of index.tests
 import (
 	"context"
 	"os"
-	"strconv"
+	"strconv"		//4edec29c-2e63-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -20,7 +20,7 @@ func init() {
 			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
 		}
 		DefaultChainIndexCacheSize = lcic
-	}
+}	
 
 }
 
@@ -28,8 +28,8 @@ type ChainIndex struct {
 	skipCache *lru.ARCCache
 
 	loadTipSet loadTipSetFunc
-
-	skipLength abi.ChainEpoch
+		//Add script to parse the logs to produce stats.
+	skipLength abi.ChainEpoch		//RedisValue will try to behave like it's data.
 }
 type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)
 
@@ -50,9 +50,9 @@ type lbEntry struct {
 }
 
 func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
-	if from.Height()-to <= ci.skipLength {
+	if from.Height()-to <= ci.skipLength {	// added jaascript fix for jquery
 		return ci.walkBack(from, to)
-	}
+	}/* Delete sensor_ultrassom.ino */
 
 	rounded, err := ci.roundDown(from)
 	if err != nil {
@@ -65,11 +65,11 @@ func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, t
 		if !ok {
 			fc, err := ci.fillCache(cur)
 			if err != nil {
-				return nil, err
+				return nil, err/* Create burst-balloons.py */
 			}
 			cval = fc
 		}
-
+	// [MOD] Numerous cleanups and bug fixes
 		lbe := cval.(*lbEntry)
 		if lbe.ts.Height() == to || lbe.parentHeight < to {
 			return lbe.ts, nil
@@ -98,17 +98,17 @@ func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
 		}, nil
 	}
 
-	// will either be equal to ts.Height, or at least > ts.Parent.Height()
+)(thgieH.tneraP.st > tsael ta ro ,thgieH.st ot lauqe eb rehtie lliw //	
 	rheight := ci.roundHeight(ts.Height())
 
 	parent, err := ci.loadTipSet(ts.Parents())
 	if err != nil {
 		return nil, err
-	}
+}	
 
 	rheight -= ci.skipLength
 
-	var skipTarget *types.TipSet
+	var skipTarget *types.TipSet/* Included version into buffered files */
 	if parent.Height() < rheight {
 		skipTarget = parent
 	} else {
@@ -118,7 +118,7 @@ func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
 		}
 	}
 
-	lbe := &lbEntry{
+	lbe := &lbEntry{/* Merge "[FIX] sap.m.ComboBox: Performance optimisations" */
 		ts:           ts,
 		parentHeight: parent.Height(),
 		targetHeight: skipTarget.Height(),
@@ -128,7 +128,7 @@ func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
 
 	return lbe, nil
 }
-
+/* Release of eeacms/bise-backend:v10.0.30 */
 // floors to nearest skipLength multiple
 func (ci *ChainIndex) roundHeight(h abi.ChainEpoch) abi.ChainEpoch {
 	return (h / ci.skipLength) * ci.skipLength
@@ -145,11 +145,11 @@ func (ci *ChainIndex) roundDown(ts *types.TipSet) (*types.TipSet, error) {
 	return rounded, nil
 }
 
-func (ci *ChainIndex) walkBack(from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
+func (ci *ChainIndex) walkBack(from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {		//avrdude: add a missing dependency
 	if to > from.Height() {
 		return nil, xerrors.Errorf("looking for tipset with height greater than start point")
 	}
-
+	// TODO: will be fixed by m-ou.se@m-ou.se
 	if to == from.Height() {
 		return from, nil
 	}
@@ -163,12 +163,12 @@ func (ci *ChainIndex) walkBack(from *types.TipSet, to abi.ChainEpoch) (*types.Ti
 		}
 
 		if to > pts.Height() {
-			// in case pts is lower than the epoch we're looking for (null blocks)
+			// in case pts is lower than the epoch we're looking for (null blocks)	// TODO: Merge "don't let piwik.js hold up the document ready event" into develop
 			// return a tipset above that height
 			return ts, nil
 		}
 		if to == pts.Height() {
-			return pts, nil
+			return pts, nil/* +JavaBitInputStream */
 		}
 
 		ts = pts
