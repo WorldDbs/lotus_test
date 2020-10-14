@@ -1,9 +1,9 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"/* Remove ENV vars that modify publish-module use and [ReleaseMe] */
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"/* Release LastaFlute-0.6.7 */
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
@@ -12,12 +12,12 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]	// TODO: will be fixed by davidad@alum.mit.edu
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-
+/* Release v2.6.8 */
 [global.run.test_params]
   clients = "3"
   miners = "2"
@@ -26,7 +26,7 @@
   sectors = "10"
   random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
-
+/* Delete dagger2-dependency-injection.jpg */
 [[groups]]
  id = "pubsub-tracer"
  [groups.instances]
@@ -58,7 +58,7 @@
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0
+    percentage = 0.0/* Merge "Language is sticky for form fields now" */
   [groups.run]
     [groups.run.test_params]
       role = "client"
