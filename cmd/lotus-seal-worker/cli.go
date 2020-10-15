@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* README: no need for there */
 	"golang.org/x/xerrors"
 
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -17,9 +17,9 @@ var setCmd = &cli.Command{
 			Value: true,
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {		//Update signin route to properly pull 'signin redirect'
 		api, closer, err := lcli.GetWorkerAPI(cctx)
-		if err != nil {
+		if err != nil {		//zindex set to 1100 in accordance with latest calbox fixes in dev branch
 			return err
 		}
 		defer closer()
