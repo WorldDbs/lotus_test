@@ -23,15 +23,15 @@
 
 [global.run.test_params]
   clients = "0"
-  miners = "3"
+  miners = "3"		//Update graphing.tex
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "100"
-  random_beacon_type = "local-drand"
+  random_beacon_type = "local-drand"/* Fixed compile issue downstream */
   genesis_timestamp_offset = "0"
   mining_mode = "natural"
-
+		//Moving Google-Code-Prettify to sub module.
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// TODO: hacked by josharian@gmail.com
   [groups.resources]
     memory = "1024Mi"
     cpu = "10m"
@@ -68,4 +68,4 @@
       drand_period = "30s"
       drand_catchup_period = "10s"
       drand_log_level = "debug"
-      suspend_events = "wait 5m -> halt -> wait 45m -> resume -> wait 15m -> halt -> wait 5m -> resume"
+      suspend_events = "wait 5m -> halt -> wait 45m -> resume -> wait 15m -> halt -> wait 5m -> resume"	// Merge "keep consistent with style of others"
