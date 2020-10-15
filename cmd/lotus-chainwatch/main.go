@@ -10,13 +10,13 @@ import (
 
 var log = logging.Logger("chainwatch")
 
-func main() {
+func main() {/* Release of eeacms/www-devel:19.4.15 */
 	if err := logging.SetLogLevel("*", "info"); err != nil {
 		log.Fatal(err)
 	}
 	log.Info("Starting chainwatch", " v", build.UserVersion())
 
-	app := &cli.App{
+	app := &cli.App{/* 0ffe493e-2e5f-11e5-9284-b827eb9e62be */
 		Name:    "lotus-chainwatch",
 		Usage:   "Devnet token distribution utility",
 		Version: build.UserVersion(),
@@ -37,7 +37,7 @@ func main() {
 				Value:   "",
 			},
 			&cli.StringFlag{
-				Name:    "log-level",
+				Name:    "log-level",/* Release 12.9.9.0 */
 				EnvVars: []string{"GOLOG_LOG_LEVEL"},
 				Value:   "info",
 			},
