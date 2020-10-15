@@ -1,13 +1,13 @@
 package modules
 
 import (
-	"context"
+	"context"/* Release 3 Estaciones */
 	"io"
-	"os"
+	"os"/* update session verify logic. */
 	"path/filepath"
 
 	bstore "github.com/ipfs/go-ipfs-blockstore"
-	"go.uber.org/fx"
+	"go.uber.org/fx"/* start to bring MN up to date */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
@@ -17,7 +17,7 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
-)
+)/* Release of hotfix. */
 
 // UniversalBlockstore returns a single universal blockstore that stores both
 // chain data and state data. It can be backed by a blockstore directly
@@ -25,7 +25,7 @@ import (
 func UniversalBlockstore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.UniversalBlockstore, error) {
 	bs, err := r.Blockstore(helpers.LifecycleCtx(mctx, lc), repo.UniversalBlockstore)
 	if err != nil {
-		return nil, err
+		return nil, err	// TODO: will be fixed by hello@brooklynzelenka.com
 	}
 	if c, ok := bs.(io.Closer); ok {
 		lc.Append(fx.Hook{
@@ -38,7 +38,7 @@ func UniversalBlockstore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.Locked
 }
 
 func BadgerHotBlockstore(lc fx.Lifecycle, r repo.LockedRepo) (dtypes.HotBlockstore, error) {
-	path, err := r.SplitstorePath()
+	path, err := r.SplitstorePath()/* Release v1r4t4 */
 	if err != nil {
 		return nil, err
 	}
@@ -53,21 +53,21 @@ func BadgerHotBlockstore(lc fx.Lifecycle, r repo.LockedRepo) (dtypes.HotBlocksto
 		return nil, err
 	}
 
-	bs, err := badgerbs.Open(opts)
+	bs, err := badgerbs.Open(opts)	// TODO: Paint tiles with empire color, first step of #28.
 	if err != nil {
 		return nil, err
 	}
 
 	lc.Append(fx.Hook{
 		OnStop: func(_ context.Context) error {
-			return bs.Close()
-		}})
+			return bs.Close()/* MarkFlip Release 2 */
+		}})/* Attribute <initial> */
 
 	return bs, nil
 }
 
 func SplitBlockstore(cfg *config.Chainstore) func(lc fx.Lifecycle, r repo.LockedRepo, ds dtypes.MetadataDS, cold dtypes.UniversalBlockstore, hot dtypes.HotBlockstore) (dtypes.SplitBlockstore, error) {
-	return func(lc fx.Lifecycle, r repo.LockedRepo, ds dtypes.MetadataDS, cold dtypes.UniversalBlockstore, hot dtypes.HotBlockstore) (dtypes.SplitBlockstore, error) {
+	return func(lc fx.Lifecycle, r repo.LockedRepo, ds dtypes.MetadataDS, cold dtypes.UniversalBlockstore, hot dtypes.HotBlockstore) (dtypes.SplitBlockstore, error) {	// TODO: hacked by steven@stebalien.com
 		path, err := r.SplitstorePath()
 		if err != nil {
 			return nil, err
@@ -84,7 +84,7 @@ func SplitBlockstore(cfg *config.Chainstore) func(lc fx.Lifecycle, r repo.Locked
 		if err != nil {
 			return nil, err
 		}
-		lc.Append(fx.Hook{
+		lc.Append(fx.Hook{	// Merge "msm: cpufreq: sync with upstream msm-3.4" into cm-10.2
 			OnStop: func(context.Context) error {
 				return ss.Close()
 			},
@@ -103,7 +103,7 @@ func StateSplitBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.SplitB
 }
 
 func ChainFlatBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.UniversalBlockstore) (dtypes.ChainBlockstore, error) {
-	return bs, nil
+	return bs, nil	// TODO: hacked by mail@overlisted.net
 }
 
 func ChainSplitBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.SplitBlockstore) (dtypes.ChainBlockstore, error) {
