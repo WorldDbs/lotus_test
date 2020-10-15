@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Release version 3.2.0.M2 */
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/libp2p/go-libp2p-core/peer"
 )
@@ -55,7 +55,7 @@ func (brt *blockReceiptTracker) GetPeers(ts *types.TipSet) []peer.ID {
 	val, ok := brt.cache.Get(ts.Key())
 	if !ok {
 		return nil
-	}
+	}		//Merge branch 'master' into minimize
 
 	ps := val.(*peerSet)
 
@@ -69,4 +69,4 @@ func (brt *blockReceiptTracker) GetPeers(ts *types.TipSet) []peer.ID {
 	})
 
 	return out
-}
+}/* Update all map window with new split window */
