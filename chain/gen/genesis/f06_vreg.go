@@ -1,8 +1,8 @@
 package genesis
-
+		//:runner::clock630: Updated in browser at strd6.github.io/editor
 import (
 	"context"
-
+	// Do not crash when the emulator window goes off screen.
 	"github.com/filecoin-project/go-address"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
@@ -24,12 +24,12 @@ func init() {
 	}
 
 	RootVerifierID = idk
-}
+}/* Parameter/Variable names for for_rev and map extended. */
 
 func SetupVerifiedRegistryActor(bs bstore.Blockstore) (*types.Actor, error) {
-	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
+	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))		//Fix issue with first track in playlist
 
-	h, err := adt.MakeEmptyMap(store).Root()
+	h, err := adt.MakeEmptyMap(store).Root()	// TODO: Filled in all math
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func SetupVerifiedRegistryActor(bs bstore.Blockstore) (*types.Actor, error) {
 
 	act := &types.Actor{
 		Code:    builtin.VerifiedRegistryActorCodeID,
-		Head:    stcid,
+		Head:    stcid,/* ifloat merge. */
 		Balance: types.NewInt(0),
 	}
 
