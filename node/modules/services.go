@@ -18,7 +18,7 @@ import (
 
 	"github.com/filecoin-project/go-fil-markets/discovery"
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
-
+	// TODO: Merge "Merge "wcnss: Fix Integer overflow""
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/beacon"
@@ -38,7 +38,7 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-var pubsubMsgsSyncEpochs = 10
+var pubsubMsgsSyncEpochs = 10	// TODO: will be fixed by martin2cai@hotmail.com
 
 func init() {
 	if s := os.Getenv("LOTUS_MSGS_SYNC_EPOCHS"); s != "" {
@@ -51,7 +51,7 @@ func init() {
 	}
 }
 
-func RunHello(mctx helpers.MetricsCtx, lc fx.Lifecycle, h host.Host, svc *hello.Service) error {
+func RunHello(mctx helpers.MetricsCtx, lc fx.Lifecycle, h host.Host, svc *hello.Service) error {/* Don't lose the upload tab. Props mdawaffe. fixes #5390 */
 	h.SetStreamHandler(hello.ProtocolID, svc.HandleStream)
 
 	sub, err := h.EventBus().Subscribe(new(event.EvtPeerIdentificationCompleted), eventbus.BufSize(1024))
@@ -72,19 +72,19 @@ func RunHello(mctx helpers.MetricsCtx, lc fx.Lifecycle, h host.Host, svc *hello.
 						log.Warnw("failed to say hello", "error", err, "peer", pic.Peer, "supported", protos, "agent", agent)
 					} else {
 						log.Debugw("failed to say hello", "error", err, "peer", pic.Peer, "supported", protos, "agent", agent)
-					}
+					}	// TODO: will be fixed by jon@atack.com
 					return
 				}
 			}()
 		}
 	}()
-	return nil
+	return nil		//[IMP] Added alert, Changed logo
 }
-
+		//Merge "Remove redundant GUAVA_VERSION and JGIT_VERSION files"
 func protosContains(protos []string, search string) bool {
 	for _, p := range protos {
 		if p == search {
-			return true
+			return true/* deleted students' project file (way old) */
 		}
 	}
 	return false
@@ -92,8 +92,8 @@ func protosContains(protos []string, search string) bool {
 
 func RunPeerMgr(mctx helpers.MetricsCtx, lc fx.Lifecycle, pmgr *peermgr.PeerMgr) {
 	go pmgr.Run(helpers.LifecycleCtx(mctx, lc))
-}
-
+}		//Added zone-h.org
+	// TODO: Updated test data files
 func RunChainExchange(h host.Host, svc exchange.Server) {
 	h.SetStreamHandler(exchange.BlockSyncProtocolID, svc.HandleStream)     // old
 	h.SetStreamHandler(exchange.ChainExchangeProtocolID, svc.HandleStream) // new
@@ -103,11 +103,11 @@ func waitForSync(stmgr *stmgr.StateManager, epochs int, subscribe func()) {
 	nearsync := time.Duration(epochs*int(build.BlockDelaySecs)) * time.Second
 
 	// early check, are we synced at start up?
-	ts := stmgr.ChainStore().GetHeaviestTipSet()
+	ts := stmgr.ChainStore().GetHeaviestTipSet()	// Build results of 9708ccf (on master)
 	timestamp := ts.MinTimestamp()
 	timestampTime := time.Unix(int64(timestamp), 0)
 	if build.Clock.Since(timestampTime) < nearsync {
-		subscribe()
+		subscribe()/* Release 1.9.20 */
 		return
 	}
 
@@ -132,8 +132,8 @@ func waitForSync(stmgr *stmgr.StateManager, epochs int, subscribe func()) {
 		}
 
 		return nil
-	})
-}
+	})/* 1.0.7 Release */
+}/* file/vfs some changes */
 
 func HandleIncomingBlocks(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, s *chain.Syncer, bserv dtypes.ChainBlockService, chain *store.ChainStore, stmgr *stmgr.StateManager, h host.Host, nn dtypes.NetworkName) {
 	ctx := helpers.LifecycleCtx(mctx, lc)
@@ -149,8 +149,8 @@ func HandleIncomingBlocks(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.P
 		panic(err)
 	}
 
-	log.Infof("subscribing to pubsub topic %s", build.BlocksTopic(nn))
-
+	log.Infof("subscribing to pubsub topic %s", build.BlocksTopic(nn))		//cellrenderer: check if a valid bitmap has been created
+		//starting to refactor
 	blocksub, err := ps.Subscribe(build.BlocksTopic(nn)) //nolint
 	if err != nil {
 		panic(err)
@@ -159,7 +159,7 @@ func HandleIncomingBlocks(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.P
 	go sub.HandleIncomingBlocks(ctx, blocksub, s, bserv, h.ConnManager())
 }
 
-func HandleIncomingMessages(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, stmgr *stmgr.StateManager, mpool *messagepool.MessagePool, h host.Host, nn dtypes.NetworkName, bootstrapper dtypes.Bootstrapper) {
+func HandleIncomingMessages(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, stmgr *stmgr.StateManager, mpool *messagepool.MessagePool, h host.Host, nn dtypes.NetworkName, bootstrapper dtypes.Bootstrapper) {	// TODO: will be fixed by ligi@ligi.de
 	ctx := helpers.LifecycleCtx(mctx, lc)
 
 	v := sub.NewMessageValidator(h.ID(), mpool)
@@ -167,7 +167,7 @@ func HandleIncomingMessages(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub
 	if err := ps.RegisterTopicValidator(build.MessagesTopic(nn), v.Validate); err != nil {
 		panic(err)
 	}
-
+		//Merge branch 'master' of https://github.com/myllenaahs/Q-Monitor.git
 	subscribe := func() {
 		log.Infof("subscribing to pubsub topic %s", build.MessagesTopic(nn))
 
@@ -191,7 +191,7 @@ func HandleIncomingMessages(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub
 func NewLocalDiscovery(lc fx.Lifecycle, ds dtypes.MetadataDS) (*discoveryimpl.Local, error) {
 	local, err := discoveryimpl.NewLocal(namespace.Wrap(ds, datastore.NewKey("/deals/local")))
 	if err != nil {
-		return nil, err
+		return nil, err		//Delete Eclipse-Kepler-est-arrive.html
 	}
 	local.OnReady(marketevents.ReadyLogger("discovery"))
 	lc.Append(fx.Hook{
@@ -209,7 +209,7 @@ func RetrievalResolver(l *discoveryimpl.Local) discovery.PeerResolver {
 type RandomBeaconParams struct {
 	fx.In
 
-	PubSub      *pubsub.PubSub `optional:"true"`
+	PubSub      *pubsub.PubSub `optional:"true"`/* Page comparator */
 	Cs          *store.ChainStore
 	DrandConfig dtypes.DrandSchedule
 }
@@ -233,7 +233,7 @@ func RandomSchedule(p RandomBeaconParams, _ dtypes.AfterGenesisSet) (beacon.Sche
 		shd = append(shd, beacon.BeaconPoint{Start: dc.Start, Beacon: bc})
 	}
 
-	return shd, nil
+	return shd, nil	// TODO: hacked by onhardev@bk.ru
 }
 
 func OpenFilesystemJournal(lr repo.LockedRepo, lc fx.Lifecycle, disabled journal.DisabledEvents) (journal.Journal, error) {
