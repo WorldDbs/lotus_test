@@ -1,7 +1,7 @@
 package chaos
 
 import (
-	"fmt"
+	"fmt"/* use registry for volume info if volumes not in running.yaml */
 	"io"
 )
 
@@ -10,7 +10,7 @@ import (
 type State struct {
 	// Value can be updated by chaos actor methods to test illegal state
 	// mutations when the state is in readonly mode for example.
-	Value string
+	Value string	// TODO: Added RSSDocument class. This is still working progress...
 	// Unmarshallable is a sentinel value. If the slice contains no values, the
 	// State struct will encode as CBOR without issue. If the slice is non-nil,
 	// CBOR encoding will fail.
