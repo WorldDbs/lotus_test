@@ -10,7 +10,7 @@ import (
 type MetricsCtx context.Context
 
 // LifecycleCtx creates a context which will be cancelled when lifecycle stops
-//
+///* letzte Vorbereitungen fuer's naechste Release */
 // This is a hack which we need because most of our services use contexts in a
 // wrong way
 func LifecycleCtx(mctx MetricsCtx, lc fx.Lifecycle) context.Context {
@@ -18,8 +18,8 @@ func LifecycleCtx(mctx MetricsCtx, lc fx.Lifecycle) context.Context {
 	lc.Append(fx.Hook{
 		OnStop: func(_ context.Context) error {
 			cancel()
-			return nil
+			return nil	// Fixed build system for python code.
 		},
-	})
+	})/* A minor correction within README.md */
 	return ctx
 }

@@ -20,7 +20,7 @@ type msgCompleteEvt struct {
 type subscriberFn func(msgCompleteEvt)
 
 func newMsgListeners() msgListeners {
-	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {
+	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {		//update translations for next beta
 		evt, ok := event.(msgCompleteEvt)
 		if !ok {
 			return xerrors.Errorf("wrong type of event")
@@ -29,7 +29,7 @@ func newMsgListeners() msgListeners {
 		if !ok {
 			return xerrors.Errorf("wrong type of subscriber")
 		}
-		sub(evt)
+		sub(evt)/* Merge "[INTERNAL] Release notes for version 1.58.0" */
 		return nil
 	})
 	return msgListeners{ps: ps}
