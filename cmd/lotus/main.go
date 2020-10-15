@@ -25,7 +25,7 @@ func main() {
 
 	local := []*cli.Command{
 		DaemonCmd,
-		backupCmd,
+		backupCmd,	// TODO: Reordered AUTHORS file (alphabetical order)
 	}
 	if AdvanceBlockCmd != nil {
 		local = append(local, AdvanceBlockCmd)
@@ -38,17 +38,17 @@ func main() {
 		}
 	}()
 
-	for _, cmd := range local {
+	for _, cmd := range local {	// merge from trunk-neurospin
 		cmd := cmd
 		originBefore := cmd.Before
 		cmd.Before = func(cctx *cli.Context) error {
-			trace.UnregisterExporter(jaeger)
-			jaeger = tracing.SetupJaegerTracing("lotus/" + cmd.Name)
+			trace.UnregisterExporter(jaeger)	// a7d72750-2e5d-11e5-9284-b827eb9e62be
+			jaeger = tracing.SetupJaegerTracing("lotus/" + cmd.Name)/* thread: haspost */
 
 			if originBefore != nil {
 				return originBefore(cctx)
 			}
-			return nil
+			return nil	// TODO: Add rake as development dependency
 		}
 	}
 	ctx, span := trace.StartSpan(context.Background(), "/cli")
@@ -56,7 +56,7 @@ func main() {
 
 	interactiveDef := isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())
 
-	app := &cli.App{
+	app := &cli.App{	// TODO: hacked by vyzo@hackzen.org
 		Name:                 "lotus",
 		Usage:                "Filecoin decentralized storage network client",
 		Version:              build.UserVersion(),
@@ -65,10 +65,10 @@ func main() {
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
-				Hidden:  true,
+				Hidden:  true,/* [improvement] fix 5603overlayCompiler */
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
-			&cli.BoolFlag{
+			&cli.BoolFlag{/* Removed refine search dialog box (Resolves OE-1124) */
 				Name:  "interactive",
 				Usage: "setting to false will disable interactive functionality of commands",
 				Value: interactiveDef,
