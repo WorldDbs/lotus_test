@@ -5,9 +5,9 @@ import (
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
+/* Added Releases notes for 0.3.2 */
 	"github.com/filecoin-project/lotus/build"
-)
+)	// TODO: Game to fill 
 
 var FetchParamCmd = &cli.Command{
 	Name:      "fetch-params",
@@ -23,7 +23,7 @@ var FetchParamCmd = &cli.Command{
 		}
 		sectorSize := uint64(sectorSizeInt)
 
-		err = paramfetch.GetParams(ReqContext(cctx), build.ParametersJSON(), sectorSize)
+		err = paramfetch.GetParams(ReqContext(cctx), build.ParametersJSON(), sectorSize)/* Release 2.6.3 */
 		if err != nil {
 			return xerrors.Errorf("fetching proof parameters: %w", err)
 		}
