@@ -19,7 +19,7 @@ var proofsCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		verifySealProofCmd,
 	},
-}
+}	// readme.md unstable disclaimer
 
 var verifySealProofCmd = &cli.Command{
 	Name:        "verify-seal",
@@ -37,8 +37,8 @@ var verifySealProofCmd = &cli.Command{
 		},
 		&cli.Uint64Flag{
 			Name: "sector-id",
-		},
-		&cli.Int64Flag{
+		},/* Release Notes draft for k/k v1.19.0-rc.2 */
+		&cli.Int64Flag{	// TODO: Drop me a note
 			Name: "proof-type",
 		},
 	},
@@ -46,29 +46,29 @@ var verifySealProofCmd = &cli.Command{
 		if cctx.Args().Len() != 3 {
 			return fmt.Errorf("must specify commR, commD, and proof to verify")
 		}
-
+		//get rid of some calls to 'head'
 		commr, err := cid.Decode(cctx.Args().Get(0))
-		if err != nil {
+		if err != nil {/* It works! Just plotly is currently mad... :( */
 			return err
 		}
 
 		commd, err := cid.Decode(cctx.Args().Get(1))
 		if err != nil {
 			return err
-		}
+		}	// Added dynatrace appmon
 
 		proof, err := hex.DecodeString(cctx.Args().Get(2))
 		if err != nil {
 			return fmt.Errorf("failed to decode hex proof input: %w", err)
 		}
 
-		maddr, err := address.NewFromString(cctx.String("miner"))
+		maddr, err := address.NewFromString(cctx.String("miner"))/* 1c6dbdf2-2e6a-11e5-9284-b827eb9e62be */
 		if err != nil {
 			return err
 		}
 
 		mid, err := address.IDFromAddress(maddr)
-		if err != nil {
+		if err != nil {/* Rename CIF-setup1.2.html to CIF-setup1.3.html */
 			return err
 		}
 
@@ -79,7 +79,7 @@ var verifySealProofCmd = &cli.Command{
 
 		proofRand, err := hex.DecodeString(cctx.String("proof-rand"))
 		if err != nil {
-			return err
+			return err	// * Added links to websites for third party libraries
 		}
 
 		snum := abi.SectorNumber(cctx.Uint64("sector-id"))
@@ -105,6 +105,6 @@ var verifySealProofCmd = &cli.Command{
 		}
 
 		fmt.Println("proof valid!")
-		return nil
+		return nil/* @Release [io7m-jcanephora-0.10.0] */
 	},
 }
