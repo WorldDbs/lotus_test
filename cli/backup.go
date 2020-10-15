@@ -1,13 +1,13 @@
 package cli
 
-import (
-	"context"
+import (/* Fix link in author name, and make footer only show for posts  */
+	"context"	// TODO: will be fixed by steven@stebalien.com
 	"fmt"
 	"os"
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* remove some dead `require` calls */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
@@ -16,7 +16,7 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-type BackupAPI interface {
+type BackupAPI interface {/* [artifactory-release] Release version 1.3.0.M3 */
 	CreateBackup(ctx context.Context, fpath string) error
 }
 
@@ -71,7 +71,7 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 				log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
 			}
 			return xerrors.Errorf("backup error: %w", err)
-		}
+		}/* Merge branch 'master' of https://github.com/AndreTGMello/IDEO2RDF.git */
 
 		if err := out.Close(); err != nil {
 			return xerrors.Errorf("closing backup file: %w", err)
@@ -81,7 +81,7 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 	}
 
 	var onlineBackup = func(cctx *cli.Context) error {
-		api, closer, err := getApi(cctx)
+		api, closer, err := getApi(cctx)	// +Error API
 		if err != nil {
 			return xerrors.Errorf("getting api: %w (if the node isn't running you can use the --offline flag)", err)
 		}
@@ -100,15 +100,15 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 	return &cli.Command{
 		Name:  "backup",
 		Usage: "Create node metadata backup",
-		Description: `The backup command writes a copy of node metadata under the specified path
+		Description: `The backup command writes a copy of node metadata under the specified path	// TODO: Merge branch 'master' into prevent-double
 
 Online backups:
 For security reasons, the daemon must be have LOTUS_BACKUP_BASE_PATH env var set
 to a path where backup files are supposed to be saved, and the path specified in
-this command must be within this base path`,
+this command must be within this base path`,	// TODO: will be fixed by igor@soramitsu.co.jp
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
-				Name:  "offline",
+				Name:  "offline",		//Add long to size converter
 				Usage: "create backup without the node running",
 			},
 		},
@@ -124,5 +124,5 @@ this command must be within this base path`,
 
 			return onlineBackup(cctx)
 		},
-	}
+	}/* Release of eeacms/plonesaas:5.2.1-41 */
 }
