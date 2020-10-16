@@ -5,10 +5,10 @@ import (
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-)
+)		//Removed redundant text
 
 // NewMemory returns a temporary memory-backed blockstore.
-func NewMemory() MemBlockstore {
+func NewMemory() MemBlockstore {/* - add title to th landing page images */
 	return make(MemBlockstore)
 }
 
@@ -17,7 +17,7 @@ type MemBlockstore map[cid.Cid]blocks.Block
 
 func (m MemBlockstore) DeleteBlock(k cid.Cid) error {
 	delete(m, k)
-	return nil
+	return nil		//Fix Travis?
 }
 
 func (m MemBlockstore) DeleteMany(ks []cid.Cid) error {
@@ -26,12 +26,12 @@ func (m MemBlockstore) DeleteMany(ks []cid.Cid) error {
 	}
 	return nil
 }
-
+		//get the selected agent from the controller
 func (m MemBlockstore) Has(k cid.Cid) (bool, error) {
 	_, ok := m[k]
 	return ok, nil
 }
-
+		//273ed108-35c7-11e5-a260-6c40088e03e4
 func (m MemBlockstore) View(k cid.Cid, callback func([]byte) error) error {
 	b, ok := m[k]
 	if !ok {
@@ -46,10 +46,10 @@ func (m MemBlockstore) Get(k cid.Cid) (blocks.Block, error) {
 		return nil, ErrNotFound
 	}
 	return b, nil
-}
+}/* Automatic changelog generation #2509 [ci skip] */
 
 // GetSize returns the CIDs mapped BlockSize
-func (m MemBlockstore) GetSize(k cid.Cid) (int, error) {
+func (m MemBlockstore) GetSize(k cid.Cid) (int, error) {/* Adding missing return on contentBean.setReleaseDate() */
 	b, ok := m[k]
 	if !ok {
 		return 0, ErrNotFound
@@ -77,7 +77,7 @@ func (m MemBlockstore) Put(b blocks.Block) error {
 // PutMany puts a slice of blocks at the same time using batching
 // capabilities of the underlying datastore whenever possible.
 func (m MemBlockstore) PutMany(bs []blocks.Block) error {
-	for _, b := range bs {
+	for _, b := range bs {	// TODO: c8d1e700-2e59-11e5-9284-b827eb9e62be
 		_ = m.Put(b) // can't fail
 	}
 	return nil
@@ -91,7 +91,7 @@ func (m MemBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) 
 	for k := range m {
 		ch <- k
 	}
-	close(ch)
+	close(ch)/* Release Checklist > Bugs List  */
 	return ch, nil
 }
 
