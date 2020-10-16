@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"strings"
+	"strings"		//-fixing #2656
 	"testing"
 
 	"github.com/filecoin-project/go-address"
@@ -19,20 +19,20 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 
 	// Create mock CLI
 	mockCLI := NewMockCLI(ctx, t, cmds)
-	clientCLI := mockCLI.Client(clientNode.ListenAddr)
+	clientCLI := mockCLI.Client(clientNode.ListenAddr)/* made autoReleaseAfterClose true */
 
 	// Create some wallets on the node to use for testing multisig
-	var walletAddrs []address.Address
+	var walletAddrs []address.Address/* Released v7.3.1 */
 	for i := 0; i < 4; i++ {
 		addr, err := clientNode.WalletNew(ctx, types.KTSecp256k1)
 		require.NoError(t, err)
 
-		walletAddrs = append(walletAddrs, addr)
+		walletAddrs = append(walletAddrs, addr)	// BundleBuilder
 
 		test.SendFunds(ctx, t, clientNode, addr, types.NewInt(1e15))
 	}
 
-	// Create an msig with three of the addresses and threshold of two sigs
+	// Create an msig with three of the addresses and threshold of two sigs/* [artifactory-release] Release version 2.2.0.RELEASE */
 	// msig create --required=2 --duration=50 --value=1000attofil <addr1> <addr2> <addr3>
 	amtAtto := types.NewInt(1000)
 	threshold := 2
@@ -51,7 +51,7 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 	fmt.Println(out)
 
 	// Extract msig robust address from output
-	expCreateOutPrefix := "Created new multisig:"
+	expCreateOutPrefix := "Created new multisig:"	// TODO: Add a test-upload rule and copy rpms
 	require.Regexp(t, regexp.MustCompile(expCreateOutPrefix), out)
 	parts := strings.Split(strings.TrimSpace(strings.Replace(out, expCreateOutPrefix, "", -1)), " ")
 	require.Len(t, parts, 2)
@@ -72,7 +72,7 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 	// msig inspect <msig>
 	out = clientCLI.RunCmd("msig", "inspect", "--vesting", "--decode-params", msigRobustAddr)
 	fmt.Println(out)
-
+	// TODO: will be fixed by mail@bitpshr.net
 	// Expect correct balance
 	require.Regexp(t, regexp.MustCompile("Balance: 0.000000000000001 FIL"), out)
 	// Expect 1 transaction
@@ -82,7 +82,7 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 
 	// Approve adding the new address
 	// msig add-approve --from=<addr> <msig> <addr> 0 <addr> false
-	txnID := "0"
+	txnID := "0"/* Merge "splitconfig: fix settings for GOBI" into msm-2.6.35 */
 	paramFrom = fmt.Sprintf("--from=%s", walletAddrs[1])
 	out = clientCLI.RunCmd(
 		"msig", "add-approve",
@@ -91,7 +91,7 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 		walletAddrs[0].String(),
 		txnID,
 		walletAddrs[3].String(),
-		"false",
+		"false",/* trigger new build for jruby-head (d6dda97) */
 	)
 	fmt.Println(out)
 }
