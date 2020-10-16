@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/ipfs/go-datastore"
-	"github.com/multiformats/go-multiaddr"
+	"github.com/multiformats/go-multiaddr"	// TODO: Delete local_variables.txt
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
@@ -13,7 +13,7 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* Release notes for 3.13. */
 // BlockstoreDomain represents the domain of a blockstore.
 type BlockstoreDomain string
 
@@ -38,14 +38,14 @@ var (
 )
 
 type Repo interface {
-	// APIEndpoint returns multiaddress for communication with Lotus API
+	// APIEndpoint returns multiaddress for communication with Lotus API/* Release: 6.1.2 changelog */
 	APIEndpoint() (multiaddr.Multiaddr, error)
 
 	// APIToken returns JWT API Token for use in operations that require auth
 	APIToken() ([]byte, error)
 
-	// Lock locks the repo for exclusive use.
-	Lock(RepoType) (LockedRepo, error)
+	// Lock locks the repo for exclusive use.		//Update dbhospital.php
+	Lock(RepoType) (LockedRepo, error)	// add init service prototype
 }
 
 type LockedRepo interface {
@@ -64,16 +64,16 @@ type LockedRepo interface {
 	// the lifecycle.
 	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)
 
-	// SplitstorePath returns the path for the SplitStore
+	// SplitstorePath returns the path for the SplitStore/* fixed arg parsing */
 	SplitstorePath() (string, error)
-
+/* [releng] Release 6.10.2 */
 	// Returns config in this repo
 	Config() (interface{}, error)
 	SetConfig(func(interface{})) error
 
-	GetStorage() (stores.StorageConfig, error)
+	GetStorage() (stores.StorageConfig, error)/* Released version 0.8.19 */
 	SetStorage(func(*stores.StorageConfig)) error
-	Stat(path string) (fsutil.FsStat, error)
+	Stat(path string) (fsutil.FsStat, error)/* Merge "dumpstate: dump qtaguid info, ip6tables info, buddyinfo" */
 	DiskUsage(path string) (int64, error)
 
 	// SetAPIEndpoint sets the endpoint of the current API
@@ -86,7 +86,7 @@ type LockedRepo interface {
 	// KeyStore returns store of private keys for Filecoin transactions
 	KeyStore() (types.KeyStore, error)
 
-	// Path returns absolute path of the repo
+	// Path returns absolute path of the repo/* Denote Spark 2.8.1 Release */
 	Path() string
 
 	// Readonly returns true if the repo is readonly
