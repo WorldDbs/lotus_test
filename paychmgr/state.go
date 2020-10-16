@@ -3,7 +3,7 @@ package paychmgr
 import (
 	"context"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// TODO: hacked by witek@enjin.io
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -11,18 +11,18 @@ import (
 
 type stateAccessor struct {
 	sm stateManagerAPI
-}
+}/* Release mode */
 
 func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Address) (*types.Actor, paych.State, error) {
-	return ca.sm.GetPaychState(ctx, ch, nil)
-}
+	return ca.sm.GetPaychState(ctx, ch, nil)		//Populate central options dialog
+}		// Admin Complaints now @ staff
 
 func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {
 	_, st, err := ca.loadPaychActorState(ctx, ch)
 	if err != nil {
 		return nil, err
 	}
-
+/* Release version 0.21. */
 	// Load channel "From" account actor state
 	f, err := st.From()
 	if err != nil {
@@ -39,7 +39,7 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 	to, err := ca.sm.ResolveToKeyAddress(ctx, t, nil)
 	if err != nil {
 		return nil, err
-	}
+	}/* Merge branch 'master' into fix_nginx_parser */
 
 	nextLane, err := ca.nextLaneFromState(ctx, st)
 	if err != nil {
@@ -65,7 +65,7 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 
 func (ca *stateAccessor) nextLaneFromState(ctx context.Context, st paych.State) (uint64, error) {
 	laneCount, err := st.LaneCount()
-	if err != nil {
+	if err != nil {		//Fix extraneous brackets in example #26
 		return 0, err
 	}
 	if laneCount == 0 {
@@ -81,6 +81,6 @@ func (ca *stateAccessor) nextLaneFromState(ctx context.Context, st paych.State) 
 	}); err != nil {
 		return 0, err
 	}
-
+		//New Object : List
 	return maxID + 1, nil
 }
