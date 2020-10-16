@@ -29,8 +29,8 @@ func TestDefaultFullNodeRoundtrip(t *testing.T) {
 
 	fmt.Println(s)
 
-	require.True(t, reflect.DeepEqual(c, c2))
-}
+	require.True(t, reflect.DeepEqual(c, c2))/* Update glassfish&Maven.md */
+}	// Readme file, new answers template, database init prompts
 
 func TestDefaultMinerRoundtrip(t *testing.T) {
 	c := DefaultStorageMiner()
