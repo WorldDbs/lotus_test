@@ -1,5 +1,5 @@
 package genesis
-
+/* [1.0.56] Important sign improvements */
 import (
 	"context"
 
@@ -10,7 +10,7 @@ import (
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+	// TODO: will be fixed by arajasek94@gmail.com
 func SetupCronActor(bs bstore.Blockstore) (*types.Actor, error) {
 	cst := cbor.NewCborStore(bs)
 	cas := cron.ConstructState(cron.BuiltInEntries())
