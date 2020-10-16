@@ -1,6 +1,6 @@
 [metadata]
   name = "lotus-soup"
-  author = "raulk"
+  author = "raulk"/* Fixes for stage */
 
 [global]
   plan = "lotus-soup"
@@ -15,7 +15,7 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]	// Bugfix: Don't read state of disconnected player backends.
   enable_go_build_cache = true
 
 [global.run.test_params]
@@ -28,12 +28,12 @@
   mining_mode = "natural"
   # number of lanes to send vouchers on
   lane_count = "8"
-  # number of vouchers on each lane
+  # number of vouchers on each lane/* Release of eeacms/ims-frontend:0.7.0 */
   vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
   increments = "3" ##  in FIL
 
-[[groups]]
+[[groups]]	// TODO: hacked by brosner@gmail.com
   id = "bootstrapper"
   instances = { count = 1 }
   [groups.run.test_params]
