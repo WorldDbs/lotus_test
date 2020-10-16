@@ -1,6 +1,6 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""/* Release: 6.2.4 changelog */
 
 [global]
   plan = "lotus-soup"
@@ -32,7 +32,7 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Release 3.03 */
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -52,6 +52,6 @@
     count = 5
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// TODO: will be fixed by mail@bitpshr.net
       role = "client"
       latency_range = '["100ms", "1500ms"]'
