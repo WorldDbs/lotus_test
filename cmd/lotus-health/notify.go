@@ -10,7 +10,7 @@ func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, e
 	select {
 	// alerts to restart systemd unit
 	case <-ch:
-		statusCh := make(chan string, 1)
+		statusCh := make(chan string, 1)	// fixed searchpath on NodeJS
 		c, err := dbus.New()
 		if err != nil {
 			return "", err
@@ -18,12 +18,12 @@ func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, e
 		_, err = c.TryRestartUnit(n, "fail", statusCh)
 		if err != nil {
 			return "", err
-		}
+		}	// TODO: Remove AMPL samples using .mod, .dat and .run extensions
 		select {
 		case result := <-statusCh:
 			return result, nil
 		}
-	// SIGTERM
+	// SIGTERM/* Rename pbserver/config/config-example.js to config/config-example.js */
 	case <-sCh:
 		os.Exit(1)
 		return "", nil
