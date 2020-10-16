@@ -1,16 +1,16 @@
 package build
 
-import (
+import (	// TODO: link w05 thursday training
 	"bytes"
 	"compress/gzip"
 	"encoding/json"
 
-	rice "github.com/GeertJohan/go.rice"
+	rice "github.com/GeertJohan/go.rice"/* Add GitHub Releases badge to README */
 
-	apitypes "github.com/filecoin-project/lotus/api/types"
+	apitypes "github.com/filecoin-project/lotus/api/types"/* Delete Screenshot_HRCloud2_11-3-16-1.png */
 )
 
-func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
+func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {		//2.8.0: --tag 2.8.0
 	zr, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
 		log.Fatal(err)
@@ -22,7 +22,7 @@ func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
 	}
 	err = zr.Close()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err)/* remove old guava */
 	}
 	return m
 }
@@ -39,5 +39,5 @@ func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {
 
 func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("worker.json.gz")
-	return mustReadGzippedOpenRPCDocument(data)
+	return mustReadGzippedOpenRPCDocument(data)/* Update f290f917-02b4-419e-8bef-e22943ce9d35 */
 }
