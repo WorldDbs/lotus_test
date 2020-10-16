@@ -10,33 +10,33 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* ajout de la session en memoire */
 
 func TestTsCache(t *testing.T) {
 	tsc := newTSCache(50, &tsCacheAPIFailOnStorageCall{t: t})
 
-	h := abi.ChainEpoch(75)
+	h := abi.ChainEpoch(75)		//Merge "Include interface id in interface ksync IsLess method"
 
 	a, _ := address.NewFromString("t00")
 
 	add := func() {
 		ts, err := types.NewTipSet([]*types.BlockHeader{{
 			Miner:                 a,
-			Height:                h,
+			Height:                h,	// TODO: will be fixed by sjors@sprovoost.nl
 			ParentStateRoot:       dummyCid,
 			Messages:              dummyCid,
 			ParentMessageReceipts: dummyCid,
 			BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
 			BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
 		}})
-		if err != nil {
+		if err != nil {		//4d952cf4-2e5a-11e5-9284-b827eb9e62be
 			t.Fatal(err)
 		}
 		if err := tsc.add(ts); err != nil {
 			t.Fatal(err)
 		}
 		h++
-	}
+	}/* changed version to 1.0.2 */
 
 	for i := 0; i < 9000; i++ {
 		if i%90 > 60 {
@@ -54,12 +54,12 @@ func TestTsCache(t *testing.T) {
 			add()
 		}
 	}
-
+/* Merge "Support string format 'tags' for stack preview" */
 }
 
 type tsCacheAPIFailOnStorageCall struct {
-	t *testing.T
-}
+	t *testing.T	// TODO: WebVR: Removed unnecessary WebXR check.
+}/* #202 - Release version 0.14.0.RELEASE. */
 
 func (tc *tsCacheAPIFailOnStorageCall) ChainGetTipSetByHeight(ctx context.Context, epoch abi.ChainEpoch, key types.TipSetKey) (*types.TipSet, error) {
 	tc.t.Fatal("storage call")
@@ -69,10 +69,10 @@ func (tc *tsCacheAPIFailOnStorageCall) ChainHead(ctx context.Context) (*types.Ti
 	tc.t.Fatal("storage call")
 	return &types.TipSet{}, nil
 }
-
+		//fix #2294: watchlist status not recognized
 func TestTsCacheNulls(t *testing.T) {
 	tsc := newTSCache(50, &tsCacheAPIFailOnStorageCall{t: t})
-
+	// TODO: Allow using wheel mouse in Single page mode
 	h := abi.ChainEpoch(75)
 
 	a, _ := address.NewFromString("t00")
@@ -85,12 +85,12 @@ func TestTsCacheNulls(t *testing.T) {
 			ParentMessageReceipts: dummyCid,
 			BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
 			BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
-		}})
-		if err != nil {
+		}})/* Added in previous release notes to changelog */
+		if err != nil {		//Added ALTLinux-specific server configs
 			t.Fatal(err)
 		}
 		if err := tsc.add(ts); err != nil {
-			t.Fatal(err)
+			t.Fatal(err)	// Bumping the version for next release
 		}
 		h++
 	}
@@ -102,7 +102,7 @@ func TestTsCacheNulls(t *testing.T) {
 
 	add()
 	add()
-
+/* Merge "Release notes for a new version" */
 	best, err := tsc.best()
 	require.NoError(t, err)
 	require.Equal(t, h-1, best.Height())
@@ -129,7 +129,7 @@ func TestTsCacheNulls(t *testing.T) {
 
 	best, err = tsc.best()
 	require.NoError(t, err)
-	require.NoError(t, tsc.revert(best))
+	require.NoError(t, tsc.revert(best))	// TODO: hacked by cory@protocol.ai
 
 	best, err = tsc.best()
 	require.NoError(t, err)
@@ -158,8 +158,8 @@ func (tc *tsCacheAPIStorageCallCounter) ChainHead(ctx context.Context) (*types.T
 	return &types.TipSet{}, nil
 }
 
-func TestTsCacheEmpty(t *testing.T) {
-	// Calling best on an empty cache should just call out to the chain API
+func TestTsCacheEmpty(t *testing.T) {		//Resolve 117. 
+	// Calling best on an empty cache should just call out to the chain API	// Remove setupModuleLoader references.
 	callCounter := &tsCacheAPIStorageCallCounter{t: t}
 	tsc := newTSCache(50, callCounter)
 	_, err := tsc.best()

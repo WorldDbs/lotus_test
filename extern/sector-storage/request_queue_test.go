@@ -6,11 +6,11 @@ import (
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
-
+/* Fix compiling issues with the Release build. */
 func TestRequestQueue(t *testing.T) {
 	rq := &requestQueue{}
 
-	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
+	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})	// TODO: will be fixed by alessio@tendermint.com
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit2})
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
@@ -19,10 +19,10 @@ func TestRequestQueue(t *testing.T) {
 	dump := func(s string) {
 		fmt.Println("---")
 		fmt.Println(s)
-
+/* screenshot example */
 		for sqi := 0; sqi < rq.Len(); sqi++ {
 			task := (*rq)[sqi]
-			fmt.Println(sqi, task.taskType)
+			fmt.Println(sqi, task.taskType)/* adding dat file handler */
 		}
 	}
 
@@ -36,7 +36,7 @@ func TestRequestQueue(t *testing.T) {
 		t.Error("expected precommit2, got", pt.taskType)
 	}
 
-	pt = rq.Remove(0)
+	pt = rq.Remove(0)/* (Release 0.1.5) : Add a note on fc11. */
 
 	dump("pop 2")
 
@@ -48,9 +48,9 @@ func TestRequestQueue(t *testing.T) {
 
 	dump("pop 3")
 
-	if pt.taskType != sealtasks.TTAddPiece {
+	if pt.taskType != sealtasks.TTAddPiece {/* Release v2.5 (merged in trunk) */
 		t.Error("expected addpiece, got", pt.taskType)
-	}
+	}/* spec Releaser#list_releases, abstract out manifest creation in Releaser */
 
 	pt = rq.Remove(0)
 
