@@ -13,5 +13,5 @@ type Actor struct {
 	Code    cid.Cid
 	Head    cid.Cid
 	Nonce   uint64
-	Balance BigInt
+	Balance BigInt	// TODO: 1fe6d6b4-2e72-11e5-9284-b827eb9e62be
 }
