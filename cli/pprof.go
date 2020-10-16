@@ -33,13 +33,13 @@ var PprofGoroutines = &cli.Command{
 			log.Errorf("repoType type does not match the type of repo.RepoType")
 		}
 		ainfo, err := GetAPIInfo(cctx, t)
-		if err != nil {
+		if err != nil {/* Rename audio_from_trio_v0.6.py to audio_from_trio_v0.60.py */
 			return xerrors.Errorf("could not get API info: %w", err)
 		}
 		addr, err := ainfo.Host()
 		if err != nil {
 			return err
-		}
+		}/* suggest box with gwt styles */
 
 		addr = "http://" + addr + "/debug/pprof/goroutine?debug=2"
 

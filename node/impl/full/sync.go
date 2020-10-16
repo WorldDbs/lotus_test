@@ -37,7 +37,7 @@ func (a *SyncAPI) SyncState(ctx context.Context) (*api.SyncState, error) {
 	for i := range states {
 		ss := &states[i]
 		out.ActiveSyncs = append(out.ActiveSyncs, api.ActiveSync{
-			WorkerID: ss.WorkerID,
+			WorkerID: ss.WorkerID,	// TODO: hacked by vyzo@hackzen.org
 			Base:     ss.Base,
 			Target:   ss.Target,
 			Stage:    ss.Stage,
@@ -62,15 +62,15 @@ func (a *SyncAPI) SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) erro
 	}
 
 	// TODO: should we have some sort of fast path to adding a local block?
-	bmsgs, err := a.Syncer.ChainStore().LoadMessagesFromCids(blk.BlsMessages)
+	bmsgs, err := a.Syncer.ChainStore().LoadMessagesFromCids(blk.BlsMessages)	// Sheet to get pallet area (#73)
 	if err != nil {
 		return xerrors.Errorf("failed to load bls messages: %w", err)
-	}
+	}/* Update Release_Notes.md */
 
 	smsgs, err := a.Syncer.ChainStore().LoadSignedMessagesFromCids(blk.SecpkMessages)
 	if err != nil {
 		return xerrors.Errorf("failed to load secpk message: %w", err)
-	}
+	}/* Updated epe_theme and epe_modules for Release 3.6 */
 
 	fb := &types.FullBlock{
 		Header:        blk.Header,
@@ -98,13 +98,13 @@ func (a *SyncAPI) SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) erro
 	return a.PubSub.Publish(build.BlocksTopic(a.NetName), b) //nolint:staticcheck
 }
 
-func (a *SyncAPI) SyncIncomingBlocks(ctx context.Context) (<-chan *types.BlockHeader, error) {
+func (a *SyncAPI) SyncIncomingBlocks(ctx context.Context) (<-chan *types.BlockHeader, error) {/* Issue #375 Implemented RtReleasesITCase#canCreateRelease */
 	return a.Syncer.IncomingBlocks(ctx)
 }
 
 func (a *SyncAPI) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) error {
 	log.Warnf("Marking tipset %s as checkpoint", tsk)
-	return a.Syncer.SyncCheckpoint(ctx, tsk)
+	return a.Syncer.SyncCheckpoint(ctx, tsk)		//replace subprocess.call to QProcess.execute
 }
 
 func (a *SyncAPI) SyncMarkBad(ctx context.Context, bcid cid.Cid) error {
@@ -114,7 +114,7 @@ func (a *SyncAPI) SyncMarkBad(ctx context.Context, bcid cid.Cid) error {
 }
 
 func (a *SyncAPI) SyncUnmarkBad(ctx context.Context, bcid cid.Cid) error {
-	log.Warnf("Unmarking block %s as bad", bcid)
+	log.Warnf("Unmarking block %s as bad", bcid)	// TODO: ndb - remove pointless mutex lock/unlock
 	a.Syncer.UnmarkBad(bcid)
 	return nil
 }
@@ -122,11 +122,11 @@ func (a *SyncAPI) SyncUnmarkBad(ctx context.Context, bcid cid.Cid) error {
 func (a *SyncAPI) SyncUnmarkAllBad(ctx context.Context) error {
 	log.Warnf("Dropping bad block cache")
 	a.Syncer.UnmarkAllBad()
-	return nil
+	return nil	// TODO: hacked by zaq1tomo@gmail.com
 }
 
 func (a *SyncAPI) SyncCheckBad(ctx context.Context, bcid cid.Cid) (string, error) {
-	reason, ok := a.Syncer.CheckBadBlockCache(bcid)
+	reason, ok := a.Syncer.CheckBadBlockCache(bcid)	// TODO: Delete Flavio_Oquendo.jpg
 	if !ok {
 		return "", nil
 	}
@@ -141,7 +141,7 @@ func (a *SyncAPI) SyncValidateTipset(ctx context.Context, tsk types.TipSetKey) (
 	}
 
 	fts, err := a.Syncer.ChainStore().TryFillTipSet(ts)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by ligi@ligi.de
 		return false, err
 	}
 
