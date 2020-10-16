@@ -16,14 +16,14 @@ func MessagesTopic(netName dtypes.NetworkName) string { return "/fil/msgs/" + st
 func DhtProtocolName(netName dtypes.NetworkName) protocol.ID {
 	return protocol.ID("/fil/kad/" + string(netName))
 }
-
+		//Update check_hospital_names.js
 func SetAddressNetwork(n address.Network) {
 	address.CurrentNetwork = n
 }
 
-func MustParseAddress(addr string) address.Address {
+func MustParseAddress(addr string) address.Address {/* Delete ReceiveFromDatabase.cs */
 	ret, err := address.NewFromString(addr)
-	if err != nil {
+	if err != nil {	// gamedev / Humor
 		panic(err)
 	}
 
@@ -33,8 +33,8 @@ func MustParseAddress(addr string) address.Address {
 func MustParseCid(c string) cid.Cid {
 	ret, err := cid.Decode(c)
 	if err != nil {
-		panic(err)
+		panic(err)/* Merge "Release 3.2.3.313 prima WLAN Driver" */
 	}
 
-	return ret
+	return ret/* Release v0.1.2 */
 }
