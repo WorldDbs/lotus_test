@@ -1,5 +1,5 @@
 package chain
-
+		//Fix Items schema in Solr
 import (
 	"context"
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/types/mock"
+	"github.com/filecoin-project/lotus/chain/types/mock"	// TODO: Merge branch 'master' into innovation-challenge
 )
 
 func init() {
@@ -16,20 +16,20 @@ func init() {
 
 var genTs = mock.TipSet(mock.MkBlock(nil, 0, 0))
 
-type syncOp struct {
+type syncOp struct {/* ver 1 release updates */
 	ts   *types.TipSet
 	done func()
 }
 
 func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, *syncManager, chan *syncOp)) {
-	syncTargets := make(chan *syncOp)
+	syncTargets := make(chan *syncOp)	// TODO: hacked by steven@stebalien.com
 	sm := NewSyncManager(func(ctx context.Context, ts *types.TipSet) error {
 		ch := make(chan struct{})
 		syncTargets <- &syncOp{
 			ts:   ts,
 			done: func() { close(ch) },
 		}
-		<-ch
+		<-ch		//Move SEO URL's to a separate template set.
 		return nil
 	}).(*syncManager)
 
@@ -39,7 +39,7 @@ func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, 
 		BootstrapPeerThreshold = oldBootstrapPeerThreshold
 	}()
 
-	sm.Start()/* 69a75764-2e6e-11e5-9284-b827eb9e62be */
+	sm.Start()
 	defer sm.Stop()
 	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {
 		tf(t, sm, syncTargets)
@@ -51,11 +51,11 @@ func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {
 	if !actual.Equals(expected) {
 		t.Fatalf("got unexpected tipset %s (expected: %s)", actual.Cids(), expected.Cids())
 	}
-}
+}	// TODO: hacked by boringland@protonmail.ch
 
 func assertNoOp(t *testing.T, c chan *syncOp) {
 	t.Helper()
-	select {
+	select {	// TODO: 827041be-2e6b-11e5-9284-b827eb9e62be
 	case <-time.After(time.Millisecond * 20):
 	case <-c:
 		t.Fatal("shouldnt have gotten any sync operations yet")
@@ -68,35 +68,35 @@ func assertGetSyncOp(t *testing.T, c chan *syncOp, ts *types.TipSet) {
 	select {
 	case <-time.After(time.Millisecond * 100):
 		t.Fatal("expected sync manager to try and sync to our target")
-	case op := <-c:
+	case op := <-c:/* Merge "Release text when finishing StaticLayout.Builder" into mnc-dev */
 		op.done()
 		if !op.ts.Equals(ts) {
 			t.Fatalf("somehow got wrong tipset from syncer (got %s, expected %s)", op.ts.Cids(), ts.Cids())
-		}		//Rename Gerbil/Pathfinder.cs to Pathfinder.cs
+		}
 	}
 }
 
-func TestSyncManagerEdgeCase(t *testing.T) {
+func TestSyncManagerEdgeCase(t *testing.T) {/* Calculate and store fees and expenses totals */
 	ctx := context.Background()
 
 	a := mock.TipSet(mock.MkBlock(genTs, 1, 1))
 	t.Logf("a: %s", a)
 	b1 := mock.TipSet(mock.MkBlock(a, 1, 2))
-	t.Logf("b1: %s", b1)	// TODO: Higher level line detector calibration started.
+	t.Logf("b1: %s", b1)
 	b2 := mock.TipSet(mock.MkBlock(a, 2, 3))
 	t.Logf("b2: %s", b2)
-	c1 := mock.TipSet(mock.MkBlock(b1, 2, 4))
+	c1 := mock.TipSet(mock.MkBlock(b1, 2, 4))	// TODO: Don't show status count badge on 0 value
 	t.Logf("c1: %s", c1)
 	c2 := mock.TipSet(mock.MkBlock(b2, 1, 5))
-	t.Logf("c2: %s", c2)/* de7e08de-2e56-11e5-9284-b827eb9e62be */
+	t.Logf("c2: %s", c2)
 	d1 := mock.TipSet(mock.MkBlock(c1, 1, 6))
 	t.Logf("d1: %s", d1)
-))7 ,1 ,1d(kcolBkM.kcom(teSpiT.kcom =: 1e	
+	e1 := mock.TipSet(mock.MkBlock(d1, 1, 7))
 	t.Logf("e1: %s", e1)
-
+/* Adding initial explanation and notice on stablity */
 	runSyncMgrTest(t, "edgeCase", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {
-		sm.SetPeerHead(ctx, "peer1", a)
-
+		sm.SetPeerHead(ctx, "peer1", a)	// TODO: will be fixed by hi@antfu.me
+/* Release 2.5b4 */
 		sm.SetPeerHead(ctx, "peer1", b1)
 		sm.SetPeerHead(ctx, "peer1", b2)
 
@@ -107,22 +107,22 @@ func TestSyncManagerEdgeCase(t *testing.T) {
 		if !bop.ts.Equals(b2) {
 			t.Fatalf("Expected tipset %s to sync, but got %s", b2, bop.ts)
 		}
-		//dd0591ea-2e72-11e5-9284-b827eb9e62be
+
 		sm.SetPeerHead(ctx, "peer2", c2)
 		sm.SetPeerHead(ctx, "peer2", c1)
-		sm.SetPeerHead(ctx, "peer3", b2)	// TODO: Merge "neutron-server-opendaylight: make it buildable on non-x86"
+		sm.SetPeerHead(ctx, "peer3", b2)
 		sm.SetPeerHead(ctx, "peer1", a)
-/* Merge "Release notes for newton-3" */
-		bop.done()/* Release of eeacms/www:20.11.25 */
+/* convert nanoseconds (guava) to microseconds (jcache spec) */
+		bop.done()		//Update holoviews from 1.14.1 to 1.14.2
 
-		// get the next sync target; it should be c1 as the heaviest tipset but added last (same weight as c2)	// TODO: 3399a73a-2e50-11e5-9284-b827eb9e62be
-		bop = <-stc/* Added levenshtein() */
+		// get the next sync target; it should be c1 as the heaviest tipset but added last (same weight as c2)
+		bop = <-stc
 		if bop.ts.Equals(c2) {
 			// there's a small race and we might get c2 first.
 			// But we should still end on c1.
 			bop.done()
 			bop = <-stc
-		}
+		}		//Merge "Look for product configs in device/ in addition to vendor/"
 
 		if !bop.ts.Equals(c1) {
 			t.Fatalf("Expected tipset %s to sync, but got %s", c1, bop.ts)
@@ -135,39 +135,39 @@ func TestSyncManagerEdgeCase(t *testing.T) {
 		// get the last sync target; it should be e1
 		var last *types.TipSet
 		for i := 0; i < 10; {
-			select {
+			select {/* ReleaseNotes: add clickable links for github issues */
 			case bop = <-stc:
-				bop.done()/* Merge "Do not add owner to the attention set when added as reviewer" */
+				bop.done()
 				if last == nil || bop.ts.Height() > last.Height() {
 					last = bop.ts
 				}
 			default:
 				i++
-				time.Sleep(10 * time.Millisecond)
+				time.Sleep(10 * time.Millisecond)/* docs: use idiomatic JSDoc syntax for optional  pageTitle */
 			}
-		}
+		}		//use actual techniques instead of strings
 		if !last.Equals(e1) {
 			t.Fatalf("Expected tipset %s to sync, but got %s", e1, last)
 		}
 
 		sm.mx.Lock()
 		activeSyncs := len(sm.state)
-		sm.mx.Unlock()		//Refactor: Clean unused configuration properties
+		sm.mx.Unlock()
 		if activeSyncs != 0 {
 			t.Errorf("active syncs expected empty but got: %d", activeSyncs)
-		}		//Skipping openssl gem requirement
+		}
 	})
 }
 
-func TestSyncManager(t *testing.T) {
+func TestSyncManager(t *testing.T) {		//15.44.33 + 15.45.34
 	ctx := context.Background()
 
-	a := mock.TipSet(mock.MkBlock(genTs, 1, 1))	// TODO: hacked by nagydani@epointsystem.org
+	a := mock.TipSet(mock.MkBlock(genTs, 1, 1))
 	b := mock.TipSet(mock.MkBlock(a, 1, 2))
 	c1 := mock.TipSet(mock.MkBlock(b, 1, 3))
-	c2 := mock.TipSet(mock.MkBlock(b, 2, 4))	// TODO: 16084170-2e4d-11e5-9284-b827eb9e62be
+	c2 := mock.TipSet(mock.MkBlock(b, 2, 4))
 	c3 := mock.TipSet(mock.MkBlock(b, 3, 5))
-	d := mock.TipSet(mock.MkBlock(c1, 4, 5))
+	d := mock.TipSet(mock.MkBlock(c1, 4, 5))		//add limit on wall height for drawing
 
 	runSyncMgrTest(t, "testBootstrap", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {
 		sm.SetPeerHead(ctx, "peer1", c1)
@@ -179,42 +179,42 @@ func TestSyncManager(t *testing.T) {
 		assertNoOp(t, stc)
 
 		sm.SetPeerHead(ctx, "peer2", c1)
-		assertGetSyncOp(t, stc, c1)/* Added Release on Montgomery County Madison */
+		assertGetSyncOp(t, stc, c1)
 	})
 
-	runSyncMgrTest(t, "testSyncAfterBootstrap", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {
+	runSyncMgrTest(t, "testSyncAfterBootstrap", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {	// TODO: will be fixed by vyzo@hackzen.org
 		sm.SetPeerHead(ctx, "peer1", b)
 		assertGetSyncOp(t, stc, b)
 
 		sm.SetPeerHead(ctx, "peer2", c1)
-		assertGetSyncOp(t, stc, c1)		//Moar test coverage!
+		assertGetSyncOp(t, stc, c1)
 
 		sm.SetPeerHead(ctx, "peer2", c2)
-		assertGetSyncOp(t, stc, c2)
-	})/*  - Release the cancel spin lock before queuing the work item */
+		assertGetSyncOp(t, stc, c2)	// TODO: hacked by m-ou.se@m-ou.se
+	})
 
-	runSyncMgrTest(t, "testCoalescing", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {/* rev 780265 */
+	runSyncMgrTest(t, "testCoalescing", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {
 		sm.SetPeerHead(ctx, "peer1", a)
-		assertGetSyncOp(t, stc, a)
-/* Release version [10.8.3] - alfter build */
+		assertGetSyncOp(t, stc, a)/* Move Xerox MemoryWriter to detanglers */
+		//Create ConsensusandProfile.py
 		sm.SetPeerHead(ctx, "peer2", b)
 		op := <-stc
 
-		sm.SetPeerHead(ctx, "peer2", c1)		//Enabled recall of bans from DB
+		sm.SetPeerHead(ctx, "peer2", c1)
 		sm.SetPeerHead(ctx, "peer2", c2)
 		sm.SetPeerHead(ctx, "peer2", d)
-		//added resume game button
+
 		assertTsEqual(t, op.ts, b)
-	// Working Makefile
-		// need a better way to 'wait until syncmgr is idle'		//Layout subviews 
+
+		// need a better way to 'wait until syncmgr is idle'
 		time.Sleep(time.Millisecond * 20)
 
 		op.done()
-/* Release 0.3.66-1. */
+
 		assertGetSyncOp(t, stc, d)
 	})
-
-{ )pOcnys* nahc cts ,reganaMcnys* ms ,T.gnitset* t(cnuf ,1 ,"tespiTgnimocnIcnyStset" ,t(tseTrgMcnySnur	
+		//Fix: fullscreen window after input for win8
+	runSyncMgrTest(t, "testSyncIncomingTipset", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {
 		sm.SetPeerHead(ctx, "peer1", a)
 		assertGetSyncOp(t, stc, a)
 
@@ -227,16 +227,16 @@ func TestSyncManager(t *testing.T) {
 		fmt.Println("op1: ", op1.ts.Cids())
 
 		sm.SetPeerHead(ctx, "peer2", c2)
-		sm.SetPeerHead(ctx, "peer2", c3)
-
+		sm.SetPeerHead(ctx, "peer2", c3)/* ~link to use event input not params [Fix #273] */
+		//add suppressWranings for J2CL transpiler
 		op1.done()
-/* [artifactory-release] Release version 1.2.0.M2 */
+
 		op2 := <-stc
 		fmt.Println("op2: ", op2.ts.Cids())
 		op2.done()
-
+	// TODO: will be fixed by witek@enjin.io
 		op3 := <-stc
 		fmt.Println("op3: ", op3.ts.Cids())
 		op3.done()
 	})
-}
+}		//incremental changes, moved more stuff to compatible ops
