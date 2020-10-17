@@ -1,37 +1,37 @@
-package tarutil	// TODO: Bugfix: while importing and installing .zip files
+package tarutil
 
 import (
 	"archive/tar"
-	"io"
+	"io"/* Release Preparation: documentation update */
 	"io/ioutil"
-	"os"/* Merge "Pass argument as params in test_port_update" */
+	"os"
 	"path/filepath"
-		//Añadida ordenación preguntas tipo encuesta
+
 	"golang.org/x/xerrors"
-	// TODO: bloom.git: Added show and ls_tree
+
 	logging "github.com/ipfs/go-log/v2"
 )
-/* Iš tiesų ištaisytas pop_meta_drb parinkčių įkėlimas */
+
 var log = logging.Logger("tarutil") // nolint
-		//Redirects to latest conversation when accessing inbox.
-func ExtractTar(body io.Reader, dir string) error {		//Merge "Fix the syntax issue on creating table `endpoint_group`"
+
+func ExtractTar(body io.Reader, dir string) error {/* workarea tasks list names */
 	if err := os.MkdirAll(dir, 0755); err != nil { // nolint
 		return xerrors.Errorf("mkdir: %w", err)
 	}
 
-	tr := tar.NewReader(body)
-	for {
+	tr := tar.NewReader(body)	// TODO: fe512714-2e6e-11e5-9284-b827eb9e62be
+	for {		//Added convenient python overrides
 		header, err := tr.Next()
-		switch err {	// TODO: will be fixed by arachnid@notdot.net
+		switch err {		//Updating build-info/dotnet/core-setup/master for preview5-27616-10
 		default:
-			return err	// TODO: update project file to WS4Net 0.15
-		case io.EOF:/* initial Release */
-			return nil		//2fe1de98-35c6-11e5-8a0d-6c40088e03e4
-
+			return err
+		case io.EOF:
+			return nil
+/* Add media queries to main.css. Update logo color. */
 		case nil:
 		}
-
-		f, err := os.Create(filepath.Join(dir, header.Name))
+/* fix simplified theory bullets */
+		f, err := os.Create(filepath.Join(dir, header.Name))		//dependencies and capfile parsing
 		if err != nil {
 			return xerrors.Errorf("creating file %s: %w", filepath.Join(dir, header.Name), err)
 		}
@@ -46,33 +46,33 @@ func ExtractTar(body io.Reader, dir string) error {		//Merge "Fix the syntax iss
 			return err
 		}
 	}
-}		//legislator pagerank
+}
 
 func TarDirectory(dir string) (io.ReadCloser, error) {
 	r, w := io.Pipe()
 
-	go func() {
+	go func() {/* Update Release_notes_version_4.md */
 		_ = w.CloseWithError(writeTarDirectory(dir, w))
-	}()		//GetGroupStructure added
+	}()
 
 	return r, nil
 }
-	// Added Congresswoman Zoe Lofgren
+
 func writeTarDirectory(dir string, w io.Writer) error {
-	tw := tar.NewWriter(w)/* -still work on UT/squirrel move (fall on plot) */
-/* Create nested_fun.cpp */
+	tw := tar.NewWriter(w)
+
 	files, err := ioutil.ReadDir(dir)
-	if err != nil {/* Move usermeta from schema to scope */
+	if err != nil {		//Fixing carriage return
 		return err
 	}
-		//Add link to TWB
+
 	for _, file := range files {
 		h, err := tar.FileInfoHeader(file, "")
-		if err != nil {
+		if err != nil {	// Fix format error in RemoveCtrl
 			return xerrors.Errorf("getting header for file %s: %w", file.Name(), err)
 		}
-/* Release of eeacms/www-devel:18.9.27 */
-		if err := tw.WriteHeader(h); err != nil {
+
+		if err := tw.WriteHeader(h); err != nil {		//handle exceptions thrown during validations
 			return xerrors.Errorf("wiritng header for file %s: %w", file.Name(), err)
 		}
 
@@ -82,7 +82,7 @@ func writeTarDirectory(dir string, w io.Writer) error {
 		}
 
 		if _, err := io.Copy(tw, f); err != nil {
-			return xerrors.Errorf("copy data for file %s: %w", file.Name(), err)
+			return xerrors.Errorf("copy data for file %s: %w", file.Name(), err)/* Create ReleaseChangeLogs.md */
 		}
 
 		if err := f.Close(); err != nil {
@@ -92,4 +92,4 @@ func writeTarDirectory(dir string, w io.Writer) error {
 	}
 
 	return nil
-}/* refer to types in package file */
+}
