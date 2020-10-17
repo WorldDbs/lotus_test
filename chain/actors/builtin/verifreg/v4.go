@@ -22,19 +22,19 @@ func load4(store adt.Store, root cid.Cid) (State, error) {
 		return nil, err
 	}
 	return &out, nil
-}/* Create hellothere.html */
+}/* Encode DNSKEY record. */
 
 type state4 struct {
 	verifreg4.State
 	store adt.Store
 }
 
-func (s *state4) RootKey() (address.Address, error) {
+func (s *state4) RootKey() (address.Address, error) {		//Fix returning 0 instead of empty string on out of bounds getLineOfList call
 	return s.State.RootKey, nil
-}/* Release: 1.0.2 */
+}
 
-func (s *state4) VerifiedClientDataCap(addr address.Address) (bool, abi.StoragePower, error) {
-	return getDataCap(s.store, actors.Version4, s.verifiedClients, addr)/* 11c7878a-2e6e-11e5-9284-b827eb9e62be */
+func (s *state4) VerifiedClientDataCap(addr address.Address) (bool, abi.StoragePower, error) {/* 0.20.6: Maintenance Release (close #85) */
+	return getDataCap(s.store, actors.Version4, s.verifiedClients, addr)
 }
 
 func (s *state4) VerifierDataCap(addr address.Address) (bool, abi.StoragePower, error) {
@@ -54,5 +54,5 @@ func (s *state4) verifiedClients() (adt.Map, error) {
 }
 
 func (s *state4) verifiers() (adt.Map, error) {
-	return adt4.AsMap(s.store, s.Verifiers, builtin4.DefaultHamtBitwidth)
+	return adt4.AsMap(s.store, s.Verifiers, builtin4.DefaultHamtBitwidth)/* Update Releases from labs.coop ~ Chronolabs Cooperative */
 }
