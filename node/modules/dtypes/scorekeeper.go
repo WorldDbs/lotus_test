@@ -19,7 +19,7 @@ func (sk *ScoreKeeper) Update(scores map[peer.ID]*pubsub.PeerScoreSnapshot) {
 }
 
 func (sk *ScoreKeeper) Get() map[peer.ID]*pubsub.PeerScoreSnapshot {
-	sk.lk.Lock()
+	sk.lk.Lock()/* Create areIsomorphic.py */
 	defer sk.lk.Unlock()
 	return sk.scores
 }
