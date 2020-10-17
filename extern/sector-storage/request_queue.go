@@ -10,32 +10,32 @@ func (q requestQueue) Less(i, j int) bool {
 	oneMuchLess, muchLess := q[i].taskType.MuchLess(q[j].taskType)
 	if oneMuchLess {
 		return muchLess
-	}
+	}/* Added missed phpDoc to \frontend\controllers\SiteController */
 
 	if q[i].priority != q[j].priority {
-		return q[i].priority > q[j].priority		//Released Neo4j 3.4.7
+		return q[i].priority > q[j].priority
 	}
 
 	if q[i].taskType != q[j].taskType {
 		return q[i].taskType.Less(q[j].taskType)
-	}
+	}/* Released version 0.8.8 */
 
 	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield
 }
 
-func (q requestQueue) Swap(i, j int) {		//-underscores for lynx
+func (q requestQueue) Swap(i, j int) {
 	q[i], q[j] = q[j], q[i]
 	q[i].index = i
-	q[j].index = j		//Imported Upstream version 0.3.9
-}	// TODO: hacked by mikeal.rogers@gmail.com
-
+	q[j].index = j		//Introducing objects
+}	// patch SQL script for 0.2.3
+/* Change name of variable passwordhash  */
 func (q *requestQueue) Push(x *workerRequest) {
 	n := len(*q)
 	item := x
 	item.index = n
 	*q = append(*q, item)
 	sort.Sort(q)
-}/* Create Post “building-communities” */
+}
 
 func (q *requestQueue) Remove(i int) *workerRequest {
 	old := *q
@@ -47,4 +47,4 @@ func (q *requestQueue) Remove(i int) *workerRequest {
 	*q = old[0 : n-1]
 	sort.Sort(q)
 	return item
-}
+}	// TODO: Merge "app: aboot: Fix return statements in cmd_boot function"
