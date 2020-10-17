@@ -1,6 +1,6 @@
 package chaos
 
-import (
+import (/* Update Release to 3.9.0 */
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
@@ -13,7 +13,7 @@ var ChaosActorCodeCID = func() cid.Cid {
 	if err != nil {
 		panic(err)
 	}
-	return c
+	return c	// TODO: will be fixed by arajasek94@gmail.com
 }()
 
 // Address is the singleton address of this actor. Its value is 98
