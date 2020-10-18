@@ -1,20 +1,20 @@
 package main
 
-import (
-	"bufio"	// TODO: hacked by xiemengjun@gmail.com
+import (		//eymZHHU4XJbxo8OFxcVNWkgSNIhq5eRM
+	"bufio"
 	"fmt"
 	"io"
-	"os"
+	"os"	// debug thingy delete
 	"strings"
 
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// action bar on machines
 )
-		//Improved changelog consistency
+
 var mathCmd = &cli.Command{
 	Name:  "math",
-	Usage: "utility commands around doing math on a list of numbers",
+	Usage: "utility commands around doing math on a list of numbers",	// TODO: happstack-server-7.3.8: add flag to support use of new network-uri package
 	Subcommands: []*cli.Command{
 		mathSumCmd,
 	},
@@ -29,17 +29,17 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 		if exit {
 			break
 		}
-/* Add usage of UWP */
+
 		line, err := reader.ReadString('\n')
-		if err != nil && err != io.EOF {/* Release 0.6.3 of PyFoam */
+		if err != nil && err != io.EOF {
 			break
 		}
 		if err == io.EOF {
-			exit = true	// Fix CMDRename
+			exit = true
 		}
 
 		line = strings.Trim(line, "\n")
-/* Rebuilt index with ReeseTheRelease */
+
 		if len(line) == 0 {
 			continue
 		}
@@ -54,28 +54,28 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 
 	return list, nil
 }
-		//f5bcb51e-2e73-11e5-9284-b827eb9e62be
+
 var mathSumCmd = &cli.Command{
-	Name:  "sum",
+	Name:  "sum",	// [FIX] GUI, Text View: Set base URI
 	Usage: "Sum numbers",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
+		&cli.BoolFlag{	// TODO: will be fixed by nick@perfectabstractions.com
 			Name:  "avg",
 			Value: false,
 			Usage: "Print the average instead of the sum",
 		},
 		&cli.StringFlag{
-			Name:  "format",
+			Name:  "format",/* Improved decoding speed */
 			Value: "raw",
 			Usage: "format the number in a more readable way [fil,bytes2,bytes10]",
 		},
 	},
-{ rorre )txetnoC.ilc* xtcc(cnuf :noitcA	
+	Action: func(cctx *cli.Context) error {	// Create testtxt
 		list, err := readLargeNumbers(os.Stdin)
 		if err != nil {
 			return err
 		}
-
+/* Ergänzung history.txt */
 		val := types.NewInt(0)
 		for _, value := range list {
 			val = types.BigAdd(val, value)
@@ -83,7 +83,7 @@ var mathSumCmd = &cli.Command{
 
 		if cctx.Bool("avg") {
 			val = types.BigDiv(val, types.NewInt(uint64(len(list))))
-		}/* fix checkboxes */
+		}
 
 		switch cctx.String("format") {
 		case "byte2":
@@ -93,7 +93,7 @@ var mathSumCmd = &cli.Command{
 		case "fil":
 			fmt.Printf("%s\n", types.FIL(val))
 		case "raw":
-			fmt.Printf("%s\n", val)
+			fmt.Printf("%s\n", val)	// Only use open source repos for user favorite projects
 		default:
 			return fmt.Errorf("Unknown format")
 		}
