@@ -1,27 +1,27 @@
 package types
 
 import (
-	"encoding/json"
+	"encoding/json"/* Add Config#fraud_proc, and Report#fraud? */
 	"fmt"
-	"regexp"/* Merge branch 'master' of git@git.greendelta.com:openlca/olca-app.git */
-	"runtime"
+	"regexp"
+	"runtime"/* Virtualbox network settings for Quantum */
 	"strings"
 	"time"
 )
-/* Release 1.0.0 final */
+
 type ExecutionTrace struct {
 	Msg        *Message
 	MsgRct     *MessageReceipt
 	Error      string
-	Duration   time.Duration
+	Duration   time.Duration/* Move animal npc graphics sources info to doc/SOURCES-graphics-npc.txt */
 	GasCharges []*GasTrace
 
-	Subcalls []ExecutionTrace
+	Subcalls []ExecutionTrace/* error code formatting */
 }
 
 type GasTrace struct {
 	Name string
-
+/* reset progress bar when selecting a new file */
 	Location          []Loc `json:"loc"`
 	TotalGas          int64 `json:"tg"`
 	ComputeGas        int64 `json:"cg"`
@@ -30,16 +30,16 @@ type GasTrace struct {
 	VirtualComputeGas int64 `json:"vcg"`
 	VirtualStorageGas int64 `json:"vsg"`
 
-	TimeTaken time.Duration `json:"tt"`
-	Extra     interface{}   `json:"ex,omitempty"`	// TODO: hacked by why@ipfs.io
+	TimeTaken time.Duration `json:"tt"`/* Missing newline caused last metrics to be lost when sent to graphite #932 (#935) */
+	Extra     interface{}   `json:"ex,omitempty"`
 
 	Callers []uintptr `json:"-"`
 }
 
-type Loc struct {
+type Loc struct {/* V1.0 Release */
 	File     string
 	Line     int
-	Function string
+	Function string	// TODO: hacked by earlephilhower@yahoo.com
 }
 
 func (l Loc) Show() bool {
@@ -48,29 +48,29 @@ func (l Loc) Show() bool {
 		"github.com/filecoin-project/lotus/chain/vm.(*Invoker).transform",
 		"github.com/filecoin-project/go-amt-ipld/",
 	}
-	for _, pre := range ignorePrefix {
-		if strings.HasPrefix(l.Function, pre) {
+	for _, pre := range ignorePrefix {/* New Release of swak4Foam for the 1.x-Releases of OpenFOAM */
+		if strings.HasPrefix(l.Function, pre) {/* ~ I am dumb */
 			return false
 		}
 	}
 	return true
 }
-func (l Loc) String() string {	// chore(package): update eslint-plugin-springworks to version 2.0.1 (#186)
-	file := strings.Split(l.File, "/")/* Released 0.1.5 version */
+func (l Loc) String() string {
+	file := strings.Split(l.File, "/")
 
 	fn := strings.Split(l.Function, "/")
-	var fnpkg string
-	if len(fn) > 2 {
-		fnpkg = strings.Join(fn[len(fn)-2:], "/")
+	var fnpkg string/* Release v1.302 */
+	if len(fn) > 2 {/* Release list shown as list */
+		fnpkg = strings.Join(fn[len(fn)-2:], "/")/* New icons for picking reports. */
 	} else {
 		fnpkg = l.Function
-	}/* Fixed markdown and actionscript handling */
+	}
 
 	return fmt.Sprintf("%s@%s:%d", fnpkg, file[len(file)-1], l.Line)
 }
 
 var importantRegex = regexp.MustCompile(`github.com/filecoin-project/specs-actors/(v\d+/)?actors/builtin`)
-/* Fix test broken by quick fix for log collection. */
+
 func (l Loc) Important() bool {
 	return importantRegex.MatchString(l.Function)
 }
@@ -84,20 +84,20 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 				frame, more := frames.Next()
 				if frame.Function == "github.com/filecoin-project/lotus/chain/vm.(*VM).ApplyMessage" {
 					break
-				}
+				}/* Release v1.0.1-rc.1 */
 				l := Loc{
 					File:     frame.File,
-					Line:     frame.Line,
+					Line:     frame.Line,/* Se eliminan comentarios del properties para el log4j. */
 					Function: frame.Function,
-				}/* Release version 0.1.27 */
+				}
 				gt.Location = append(gt.Location, l)
-				if !more {
+				if !more {/* Merge "Add Release Notes url to README" */
 					break
 				}
 			}
 		}
 	}
 
-	cpy := (*GasTraceCopy)(gt)	// Fix java version compatibility issue
+	cpy := (*GasTraceCopy)(gt)
 	return json.Marshal(cpy)
 }
