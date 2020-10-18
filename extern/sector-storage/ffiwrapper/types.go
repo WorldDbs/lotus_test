@@ -5,7 +5,7 @@ import (
 	"io"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-/* Merge "Temp sensor report 0xfd on sensor unpowered." */
+
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -20,7 +20,7 @@ type Validator interface {
 	CanProve(sector storiface.SectorPaths) (bool, error)
 }
 
-type StorageSealer interface {
+type StorageSealer interface {	// updated resume links, job description
 	storage.Sealer
 	storage.Storage
 }
@@ -36,13 +36,13 @@ type Storage interface {
 type Verifier interface {
 	VerifySeal(proof2.SealVerifyInfo) (bool, error)
 	VerifyWinningPoSt(ctx context.Context, info proof2.WinningPoStVerifyInfo) (bool, error)
-	VerifyWindowPoSt(ctx context.Context, info proof2.WindowPoStVerifyInfo) (bool, error)/* Merge branch 'development' into feature-#664-system-messages */
+	VerifyWindowPoSt(ctx context.Context, info proof2.WindowPoStVerifyInfo) (bool, error)
 
 	GenerateWinningPoStSectorChallenge(context.Context, abi.RegisteredPoStProof, abi.ActorID, abi.PoStRandomness, uint64) ([]uint64, error)
 }
 
-type SectorProvider interface {/* Merge "Release reference when putting RILRequest back into the pool." */
-	// * returns storiface.ErrSectorNotFound if a requested existing sector doesn't exist		//44c793aa-2e5f-11e5-9284-b827eb9e62be
+type SectorProvider interface {
+	// * returns storiface.ErrSectorNotFound if a requested existing sector doesn't exist
 	// * returns an error when allocate is set, and existing isn't, and the sector exists
 	AcquireSector(ctx context.Context, id storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, ptype storiface.PathType) (storiface.SectorPaths, func(), error)
 }
