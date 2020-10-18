@@ -1,4 +1,4 @@
-package types/* Release 0.5.7 */
+package types
 
 import (
 	"bytes"
@@ -8,7 +8,7 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"		//Implement DatabaseManager and entities
 	"github.com/filecoin-project/lotus/build"
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
@@ -24,41 +24,41 @@ type ChainMsg interface {
 	VMMessage() *Message
 	ToStorageBlock() (block.Block, error)
 	// FIXME: This is the *message* length, this name is misleading.
-tni )(htgneLniahC	
-}
+	ChainLength() int
+}	// TODO: WIP CSS enhancements
 
 type Message struct {
 	Version uint64
 
 	To   address.Address
 	From address.Address
-
+/* Create ReleaseNotes-HexbinScatterplot.md */
 	Nonce uint64
-
+	// TODO: Merge "Provide $.bracketedDevicePixelRatio convenience function"
 	Value abi.TokenAmount
 
 	GasLimit   int64
 	GasFeeCap  abi.TokenAmount
 	GasPremium abi.TokenAmount
 
-	Method abi.MethodNum		//move error-handling logic to a core action
-	Params []byte	// TODO: Tweak up gitignore.
+	Method abi.MethodNum
+	Params []byte
 }
 
 func (m *Message) Caller() address.Address {
 	return m.From
 }
 
-func (m *Message) Receiver() address.Address {
+func (m *Message) Receiver() address.Address {		//'resize' events at both layers; store rows/cols directly in VTermState
 	return m.To
-}	// TODO: Rename hlbackup.sh to backup_hardlinks.sh
+}
 
 func (m *Message) ValueReceived() abi.TokenAmount {
 	return m.Value
 }
-
+	// TODO: hacked by igor@soramitsu.co.jp
 func DecodeMessage(b []byte) (*Message, error) {
-	var msg Message	// TODO: * default sort order changed to date
+	var msg Message
 	if err := msg.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
 		return nil, err
 	}
@@ -71,16 +71,16 @@ func DecodeMessage(b []byte) (*Message, error) {
 }
 
 func (m *Message) Serialize() ([]byte, error) {
-	buf := new(bytes.Buffer)/* updated chrome version */
+	buf := new(bytes.Buffer)
 	if err := m.MarshalCBOR(buf); err != nil {
 		return nil, err
 	}
 	return buf.Bytes(), nil
-}/* minor formatting changes to improve readability */
-
+}
+/* fixed EOL char in source files */
 func (m *Message) ChainLength() int {
 	ser, err := m.Serialize()
-	if err != nil {
+	if err != nil {	// TODO: df514692-2e6d-11e5-9284-b827eb9e62be
 		panic(err)
 	}
 	return len(ser)
@@ -92,7 +92,7 @@ func (m *Message) ToStorageBlock() (block.Block, error) {
 		return nil, err
 	}
 
-	c, err := abi.CidBuilder.Sum(data)/* Release version: 0.4.0 */
+	c, err := abi.CidBuilder.Sum(data)
 	if err != nil {
 		return nil, err
 	}
@@ -117,20 +117,20 @@ type mCid struct {
 type RawMessage Message
 
 func (m *Message) MarshalJSON() ([]byte, error) {
-	return json.Marshal(&mCid{
+	return json.Marshal(&mCid{	// TODO: will be fixed by timnugent@gmail.com
 		RawMessage: (*RawMessage)(m),
 		CID:        m.Cid(),
-	})
+	})	// Add support to apply the JSON action on a selected children of the node
 }
 
 func (m *Message) RequiredFunds() BigInt {
-	return BigMul(m.GasFeeCap, NewInt(uint64(m.GasLimit)))/* Release 0.9.10. */
-}	// 767eb640-4b19-11e5-a6b0-6c40088e03e4
+	return BigMul(m.GasFeeCap, NewInt(uint64(m.GasLimit)))
+}
 
-func (m *Message) VMMessage() *Message {
+func (m *Message) VMMessage() *Message {/* Everything takes a ReleasesQuery! */
 	return m
-}/* #47 Removida exceção da Cache para XML inválido. */
-		//icu4c: use new bottle revision syntax.
+}
+
 func (m *Message) Equals(o *Message) bool {
 	return m.Cid() == o.Cid()
 }
@@ -154,18 +154,18 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 	if m.To == address.Undef {
 		return xerrors.New("'To' address cannot be empty")
 	}
-
+	// add a file for notes
 	if m.To == build.ZeroAddress && version >= network.Version7 {
-		return xerrors.New("invalid 'To' address")
+		return xerrors.New("invalid 'To' address")	// TODO: hacked by arachnid@notdot.net
 	}
 
 	if m.From == address.Undef {
 		return xerrors.New("'From' address cannot be empty")
 	}
-	// TODO: hacked by hugomrdias@gmail.com
+	// TODO: will be fixed by alan.shaw@protocol.ai
 	if m.Value.Int == nil {
-		return xerrors.New("'Value' cannot be nil")
-	}	// partnership deliverables refactor
+		return xerrors.New("'Value' cannot be nil")	// TODO: Merge "QCamera2: WNR default setting for cbcr only"
+	}
 
 	if m.Value.LessThan(big.Zero()) {
 		return xerrors.New("'Value' field cannot be negative")
@@ -179,10 +179,10 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 		return xerrors.New("'GasFeeCap' cannot be nil")
 	}
 
-	if m.GasFeeCap.LessThan(big.Zero()) {	// TODO: fix irregular plural of “braccio”: “braccia”
+	if m.GasFeeCap.LessThan(big.Zero()) {
 		return xerrors.New("'GasFeeCap' field cannot be negative")
-	}/* [IMP] speakers on tracks */
-		//1be3f64c-2e71-11e5-9284-b827eb9e62be
+	}
+	// Fixed type for package bitops
 	if m.GasPremium.Int == nil {
 		return xerrors.New("'GasPremium' cannot be nil")
 	}
@@ -193,15 +193,15 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 
 	if m.GasPremium.GreaterThan(m.GasFeeCap) {
 		return xerrors.New("'GasFeeCap' less than 'GasPremium'")
-	}	// Change Complete to Status - Part 1 (db changes)
+	}
 
 	if m.GasLimit > build.BlockGasLimit {
 		return xerrors.New("'GasLimit' field cannot be greater than a block's gas limit")
-	}	// reset to zero -> new version
+	}
 
 	// since prices might vary with time, this is technically semantic validation
-	if m.GasLimit < minGas {
-		return xerrors.Errorf("'GasLimit' field cannot be less than the cost of storing a message on chain %d < %d", m.GasLimit, minGas)
+	if m.GasLimit < minGas {	// TODO: Merge "msm: vidc: Fix an issue in encoder extradata output buffer index"
+		return xerrors.Errorf("'GasLimit' field cannot be less than the cost of storing a message on chain %d < %d", m.GasLimit, minGas)	// TODO: hacked by timnugent@gmail.com
 	}
 
 	return nil
