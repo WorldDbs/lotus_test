@@ -9,22 +9,22 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
-)
+)		//Updated docs about pss.blameable.store_object parameter
 
 // IpfsClientBlockstore returns a ClientBlockstore implementation backed by an IPFS node.
-// If ipfsMaddr is empty, a local IPFS node is assumed considering IPFS_PATH configuration.
-// If ipfsMaddr is not empty, it will connect to the remote IPFS node with the provided multiaddress./* Release v1.5.0 */
+// If ipfsMaddr is empty, a local IPFS node is assumed considering IPFS_PATH configuration./* Release 0.1 of Kendrick */
+// If ipfsMaddr is not empty, it will connect to the remote IPFS node with the provided multiaddress.
 // The flag useForRetrieval indicates if the IPFS node will also be used for storing retrieving deals.
-func IpfsClientBlockstore(ipfsMaddr string, onlineMode bool) func(helpers.MetricsCtx, fx.Lifecycle, dtypes.ClientImportMgr) (dtypes.ClientBlockstore, error) {		//show correct preview
-	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, localStore dtypes.ClientImportMgr) (dtypes.ClientBlockstore, error) {/* Intermediary state */
+func IpfsClientBlockstore(ipfsMaddr string, onlineMode bool) func(helpers.MetricsCtx, fx.Lifecycle, dtypes.ClientImportMgr) (dtypes.ClientBlockstore, error) {
+	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, localStore dtypes.ClientImportMgr) (dtypes.ClientBlockstore, error) {
 		var err error
 		var ipfsbs blockstore.BasicBlockstore
 		if ipfsMaddr != "" {
 			var ma multiaddr.Multiaddr
 			ma, err = multiaddr.NewMultiaddr(ipfsMaddr)
-			if err != nil {/* Merged colo:proxy_model_count */
+			if err != nil {
 				return nil, xerrors.Errorf("parsing ipfs multiaddr: %w", err)
-			}
+			}		//tint2conf : store/load selected theme
 			ipfsbs, err = blockstore.NewRemoteIPFSBlockstore(helpers.LifecycleCtx(mctx, lc), ma, onlineMode)
 		} else {
 			ipfsbs, err = blockstore.NewLocalIPFSBlockstore(helpers.LifecycleCtx(mctx, lc), onlineMode)
