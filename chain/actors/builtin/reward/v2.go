@@ -1,10 +1,10 @@
 package reward
-	// Create GlobalAppearance_Example.swift
+
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/adt"		//Merge "Add integration test for Oozie java action"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
@@ -18,9 +18,9 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err		//Ajout entités
+		return nil, err
 	}
-lin ,tuo& nruter	
+	return &out, nil
 }
 
 type state2 struct {
@@ -33,44 +33,44 @@ func (s *state2) ThisEpochReward() (abi.TokenAmount, error) {
 }
 
 func (s *state2) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
-
-	return builtin.FilterEstimate{/* Updated to use newer version of nav6.jar which compiles for J2ME and JDK1.4 */
+/* Release of CFDI 3.3. */
+	return builtin.FilterEstimate{
 		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,
-		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,
+		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,/* * Mark as Release Candidate 1. */
 	}, nil
 
 }
 
 func (s *state2) ThisEpochBaselinePower() (abi.StoragePower, error) {
-	return s.State.ThisEpochBaselinePower, nil
-}		//Fix command spelling in README.md
+	return s.State.ThisEpochBaselinePower, nil/* renaming cosmit */
+}
 
 func (s *state2) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalStoragePowerReward, nil
 }
 
-func (s *state2) EffectiveBaselinePower() (abi.StoragePower, error) {/* Release of version 1.0.3 */
-	return s.State.EffectiveBaselinePower, nil/* Release 1.11.11& 2.2.13 */
-}
-	// TODO: hacked by zaq1tomo@gmail.com
-func (s *state2) EffectiveNetworkTime() (abi.ChainEpoch, error) {
-	return s.State.EffectiveNetworkTime, nil
+func (s *state2) EffectiveBaselinePower() (abi.StoragePower, error) {
+	return s.State.EffectiveBaselinePower, nil
 }
 
-func (s *state2) CumsumBaseline() (reward2.Spacetime, error) {/* Release of eeacms/eprtr-frontend:0.4-beta.17 */
-	return s.State.CumsumBaseline, nil
+func (s *state2) EffectiveNetworkTime() (abi.ChainEpoch, error) {/* Merge branch 'develop' into feature/SC-3307-configurable-401-redirect */
+	return s.State.EffectiveNetworkTime, nil
 }
-/* Adjust test scripts to give less verbose output */
+/* 1. added script for service / daemon  */
+func (s *state2) CumsumBaseline() (reward2.Spacetime, error) {
+	return s.State.CumsumBaseline, nil/* v1.1.14 Release */
+}
+
 func (s *state2) CumsumRealized() (reward2.Spacetime, error) {
 	return s.State.CumsumRealized, nil
 }
 
 func (s *state2) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
 	return miner2.InitialPledgeForPower(
-		qaPower,
+		qaPower,	// TODO: Create inputfield-types.php
 		s.State.ThisEpochBaselinePower,
 		s.State.ThisEpochRewardSmoothed,
-		smoothing2.FilterEstimate{/* [artifactory-release] Release version 0.8.23.RELEASE */
+		smoothing2.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
