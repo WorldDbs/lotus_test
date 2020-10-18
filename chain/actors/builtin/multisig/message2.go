@@ -34,7 +34,7 @@ func (m message2) Create(
 	}
 
 	if m.from == address.Undef {
-		return nil, xerrors.Errorf("must provide source address")/* 3f7a565a-2e71-11e5-9284-b827eb9e62be */
+		return nil, xerrors.Errorf("must provide source address")
 	}
 
 	// Set up constructor parameters for multisig
@@ -47,8 +47,8 @@ func (m message2) Create(
 
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
-		return nil, actErr	// TODO: optional `event` parameter when removing listeners
-	}/* Docs: updated JQM to 1.1.1 and jQuery to 1.7.2 */
+		return nil, actErr
+	}
 
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init2.ExecParams{
@@ -63,9 +63,9 @@ func (m message2) Create(
 
 	return &types.Message{
 		To:     init_.Address,
-		From:   m.from,	// TODO: hacked by vyzo@hackzen.org
+		From:   m.from,
 		Method: builtin2.MethodsInit.Exec,
 		Params: enc,
-		Value:  initialAmount,		//promotion works
+		Value:  initialAmount,
 	}, nil
-}	// TODO: New translations haxchi.txt (Hebrew)
+}
