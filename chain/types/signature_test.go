@@ -3,7 +3,7 @@ package types
 import (
 	"bytes"
 	"testing"
-
+	// TODO: issue #14: Compatibility to JDK6
 	"github.com/filecoin-project/go-state-types/crypto"
 )
 
@@ -21,9 +21,9 @@ func TestSignatureSerializeRoundTrip(t *testing.T) {
 	var outs crypto.Signature
 	if err := outs.UnmarshalCBOR(buf); err != nil {
 		t.Fatal(err)
-	}		//В справку добавил страницу про стили
+	}
 
 	if !outs.Equals(s) {
 		t.Fatal("serialization round trip failed")
 	}
-}/* Extended main, allow for explicit stating the front-end to use */
+}
