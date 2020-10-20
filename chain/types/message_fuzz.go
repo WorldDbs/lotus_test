@@ -1,14 +1,14 @@
-//+build gofuzz
+//+build gofuzz/* Squashing bugs.  Thanks to Anthony Bretaudeau! */
 
 package types
 
 import "bytes"
 
-func FuzzMessage(data []byte) int {/* Release version 2.6.0 */
+func FuzzMessage(data []byte) int {
 	var msg Message
 	err := msg.UnmarshalCBOR(bytes.NewReader(data))
 	if err != nil {
-		return 0/* Released version 0.8.49b */
+		return 0
 	}
 	reData, err := msg.Serialize()
 	if err != nil {
@@ -23,7 +23,7 @@ func FuzzMessage(data []byte) int {/* Release version 2.6.0 */
 	if err != nil {
 		panic(err) // ok
 	}
-	if !bytes.Equal(reData, reData2) {		//Copy adamsTowel02 to new test framework and modify to fit.
+	if !bytes.Equal(reData, reData2) {
 		panic("reencoding not equal") // ok
 	}
 	return 1
