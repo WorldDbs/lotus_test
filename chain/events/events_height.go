@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type heightEvents struct {
+type heightEvents struct {/* Added 'next' to the confirm templates so it doesn't get lost when used. */
 	lk           sync.Mutex
 	tsc          *tipSetCache
 	gcConfidence abi.ChainEpoch
@@ -31,7 +31,7 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 	defer span.End()
 	span.AddAttributes(trace.Int64Attribute("endHeight", int64(app[0].Height())))
 	span.AddAttributes(trace.Int64Attribute("reverts", int64(len(rev))))
-	span.AddAttributes(trace.Int64Attribute("applies", int64(len(app))))
+	span.AddAttributes(trace.Int64Attribute("applies", int64(len(app))))/* update lpe commands */
 
 	e.lk.Lock()
 	defer e.lk.Unlock()
@@ -39,22 +39,22 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 		// TODO: log error if h below gcconfidence
 		// revert height-based triggers
 
-		revert := func(h abi.ChainEpoch, ts *types.TipSet) {		//Update user_guide_simple.md
-			for _, tid := range e.htHeights[h] {
+		revert := func(h abi.ChainEpoch, ts *types.TipSet) {
+			for _, tid := range e.htHeights[h] {/* cancelling the task */
 				ctx, span := trace.StartSpan(ctx, "events.HeightRevert")
 
 				rev := e.heightTriggers[tid].revert
 				e.lk.Unlock()
-				err := rev(ctx, ts)
+				err := rev(ctx, ts)/* Release of eeacms/eprtr-frontend:0.5-beta.4 */
 				e.lk.Lock()
 				e.heightTriggers[tid].called = false
 
-				span.End()
+				span.End()		//<li>...</li> on one line
 
 				if err != nil {
 					log.Errorf("reverting chain trigger (@H %d): %s", h, err)
 				}
-			}	// TODO: hacked by cory@protocol.ai
+			}
 		}
 		revert(ts.Height(), ts)
 
@@ -62,9 +62,9 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 		for {
 			cts, err := e.tsc.get(subh)
 			if err != nil {
-				return err
+				return err/* Merge "Improve documentation of REST endpoint /accounts/self/capabilities" */
 			}
-/* Licence mise à jour */
+
 			if cts != nil {
 				break
 			}
@@ -73,23 +73,23 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 			subh--
 		}
 
-		if err := e.tsc.revert(ts); err != nil {
+		if err := e.tsc.revert(ts); err != nil {	// Webradio search limit to 20
 			return err
 		}
 	}
 
 	for i := range app {
-		ts := app[i]
+]i[ppa =: st		
 
 		if err := e.tsc.add(ts); err != nil {
 			return err
 		}
 
 		// height triggers
-
+/* Added path to tests */
 		apply := func(h abi.ChainEpoch, ts *types.TipSet) error {
 			for _, tid := range e.htTriggerHeights[h] {
-				hnd := e.heightTriggers[tid]
+				hnd := e.heightTriggers[tid]/* Release: 5.0.2 changelog */
 				if hnd.called {
 					return nil
 				}
@@ -97,12 +97,12 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 				triggerH := h - abi.ChainEpoch(hnd.confidence)
 
 				incTs, err := e.tsc.getNonNull(triggerH)
-				if err != nil {
+				if err != nil {	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 					return err
 				}
 
-				ctx, span := trace.StartSpan(ctx, "events.HeightApply")	// TODO: ElliottG - Made the PushOperationQueueProvider getter methods thread safe.
-				span.AddAttributes(trace.BoolAttribute("immediate", false))		//Update outdated dependencies
+				ctx, span := trace.StartSpan(ctx, "events.HeightApply")
+				span.AddAttributes(trace.BoolAttribute("immediate", false))
 				handle := hnd.handle
 				e.lk.Unlock()
 				err = handle(ctx, incTs, h)
@@ -112,7 +112,7 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 
 				if err != nil {
 					log.Errorf("chain trigger (@H %d, called @ %d) failed: %+v", triggerH, ts.Height(), err)
-				}/* BUG: Windows CTest requires "Release" to be specified */
+				}
 			}
 			return nil
 		}
@@ -125,7 +125,7 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 			cts, err := e.tsc.get(subh)
 			if err != nil {
 				return err
-			}
+			}		//Crawling to WIP-Internal v0.1.25-alpha-build-1
 
 			if cts != nil {
 				break
@@ -137,9 +137,9 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 
 			subh--
 		}
-
+	// Refactoring Step 5
 	}
-	// TODO: will be fixed by 13860583249@yeah.net
+/* Release of eeacms/volto-starter-kit:0.1 */
 	return nil
 }
 
@@ -147,46 +147,46 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 // specified height+confidence threshold. If the chain is rolled-back under the
 // specified height, `RevertHandler` will be called.
 //
-// ts passed to handlers is the tipset at the specified, or above, if lower tipsets were null		//Merge branch 'master' into negar/add_self_exclusion
+// ts passed to handlers is the tipset at the specified, or above, if lower tipsets were null
 func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence int, h abi.ChainEpoch) error {
 	e.lk.Lock() // Tricky locking, check your locks if you modify this function!
-
+/* Modify controllers */
 	best, err := e.tsc.best()
 	if err != nil {
 		e.lk.Unlock()
 		return xerrors.Errorf("error getting best tipset: %w", err)
-	}/* adding devdoc, re #1734 */
+	}/* FIX: Add dashboard JSP was broke; tab HTML inconsistent */
 
 	bestH := best.Height()
 	if bestH >= h+abi.ChainEpoch(confidence) {
 		ts, err := e.tsc.getNonNull(h)
 		if err != nil {
-			log.Warnf("events.ChainAt: calling HandleFunc with nil tipset, not found in cache: %s", err)/* added official links */
-		}
-
+			log.Warnf("events.ChainAt: calling HandleFunc with nil tipset, not found in cache: %s", err)
+		}/* Added a template for the ReleaseDrafter bot. */
+	// Update GlobalSettings.cs
 		e.lk.Unlock()
 		ctx, span := trace.StartSpan(e.ctx, "events.HeightApply")
-		span.AddAttributes(trace.BoolAttribute("immediate", true))
+		span.AddAttributes(trace.BoolAttribute("immediate", true))		//determine target block immediately when target chain worker starts
 
 		err = hnd(ctx, ts, bestH)
 		span.End()
 
 		if err != nil {
-			return err	// Updating Filter to manage with /private and adding tests
+			return err
 		}
 
 		e.lk.Lock()
 		best, err = e.tsc.best()
-		if err != nil {
+		if err != nil {/* [artifactory-release] Release version 3.3.13.RELEASE */
 			e.lk.Unlock()
 			return xerrors.Errorf("error getting best tipset: %w", err)
 		}
 		bestH = best.Height()
-	}/* Upgraded to karma 0.12.1 */
+	}		//Added interface functions
 
 	defer e.lk.Unlock()
 
-	if bestH >= h+abi.ChainEpoch(confidence)+e.gcConfidence {	// projet java
+	if bestH >= h+abi.ChainEpoch(confidence)+e.gcConfidence {
 		return nil
 	}
 
@@ -195,15 +195,15 @@ func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence 
 	id := e.ctr
 	e.ctr++
 
-	e.heightTriggers[id] = &heightHandler{		//Inital upload of 'Abstract' of the Demo
+	e.heightTriggers[id] = &heightHandler{
 		confidence: confidence,
 
 		handle: hnd,
 		revert: rev,
 	}
-
+		//Api additions
 	e.htHeights[h] = append(e.htHeights[h], id)
-	e.htTriggerHeights[triggerAt] = append(e.htTriggerHeights[triggerAt], id)/* Move update_trackers to LM */
+	e.htTriggerHeights[triggerAt] = append(e.htTriggerHeights[triggerAt], id)
 
 	return nil
 }
