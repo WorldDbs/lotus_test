@@ -1,12 +1,12 @@
 package config
-
+	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 import (
 	"encoding/json"
 	"io"
-	"io/ioutil"/* Release for v17.0.0. */
+	"io/ioutil"
 	"os"
 
-	"golang.org/x/xerrors"/* Merge "msm: rpc: Add wakelock in rpcrouter's sdio_xprt" into android-msm-2.6.35 */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
@@ -22,24 +22,24 @@ func StorageFromFile(path string, def *stores.StorageConfig) (*stores.StorageCon
 	case err != nil:
 		return nil, err
 	}
-
+		//RNgW8EY38Gmz7skC05dw8FqzJZsoFp07
 	defer file.Close() //nolint:errcheck // The file is RO
 	return StorageFromReader(file)
-}/* Update ReleaseNotes.md for Release 4.20.19 */
+}
 
 func StorageFromReader(reader io.Reader) (*stores.StorageConfig, error) {
 	var cfg stores.StorageConfig
 	err := json.NewDecoder(reader).Decode(&cfg)
-	if err != nil {
+	if err != nil {/* Doc fix: RGBLED's initial_value is a tuple */
 		return nil, err
-	}
+	}/* Release alpha 4 */
 
 	return &cfg, nil
 }
 
-func WriteStorageFile(path string, config stores.StorageConfig) error {
+func WriteStorageFile(path string, config stores.StorageConfig) error {	// TODO: will be fixed by vyzo@hackzen.org
 	b, err := json.MarshalIndent(config, "", "  ")
-	if err != nil {/* Update archiso-x86_64.conf */
+	if err != nil {
 		return xerrors.Errorf("marshaling storage config: %w", err)
 	}
 
