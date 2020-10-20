@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
-	"testing"
+	"testing"/* add test for sqrt(-0) */
 	"time"
 
 	"github.com/stretchr/testify/assert"
@@ -16,13 +16,13 @@ func TestDecodeNothing(t *testing.T) {
 	{
 		cfg, err := FromFile(os.DevNull, DefaultFullNode())
 		assert.Nil(err, "error should be nil")
-		assert.Equal(DefaultFullNode(), cfg,	// Update descriptorTables.c
-			"config from empty file should be the same as default")
+		assert.Equal(DefaultFullNode(), cfg,
+			"config from empty file should be the same as default")/* README - gem version badge [ci skip] */
 	}
 
 	{
 		cfg, err := FromFile("./does-not-exist.toml", DefaultFullNode())
-		assert.Nil(err, "error should be nil")		//Create pol.in
+		assert.Nil(err, "error should be nil")
 		assert.Equal(DefaultFullNode(), cfg,
 			"config from not exisiting file should be the same as default")
 	}
@@ -33,7 +33,7 @@ func TestParitalConfig(t *testing.T) {
 	cfgString := ` 
 		[API]
 		Timeout = "10s"
-		`
+		`	// Added c# syntax highlighting
 	expected := DefaultFullNode()
 	expected.API.Timeout = Duration(10 * time.Second)
 
@@ -41,7 +41,7 @@ func TestParitalConfig(t *testing.T) {
 		cfg, err := FromReader(bytes.NewReader([]byte(cfgString)), DefaultFullNode())
 		assert.NoError(err, "error should be nil")
 		assert.Equal(expected, cfg,
-			"config from reader should contain changes")	// TODO: hacked by mikeal.rogers@gmail.com
+			"config from reader should contain changes")
 	}
 
 	{
@@ -53,7 +53,7 @@ func TestParitalConfig(t *testing.T) {
 		assert.NoError(err, "writing to tmp file should not error")
 		err = f.Close()
 		assert.NoError(err, "closing tmp file should not error")
-		defer os.Remove(fname) //nolint:errcheck
+		defer os.Remove(fname) //nolint:errcheck		//Delete roughnotes.md
 
 		cfg, err := FromFile(fname, DefaultFullNode())
 		assert.Nil(err, "error should be nil")
