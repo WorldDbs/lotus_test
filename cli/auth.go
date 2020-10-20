@@ -1,7 +1,7 @@
 package cli
-
+	// TODO: Change sendMessage to sendCommand
 import (
-	"fmt"		//Added conflict handling
+	"fmt"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -18,12 +18,12 @@ var AuthCmd = &cli.Command{
 	Usage: "Manage RPC permissions",
 	Subcommands: []*cli.Command{
 		AuthCreateAdminToken,
-		AuthApiInfoToken,/* Merge "Killing beam process explicitly" */
+		AuthApiInfoToken,
 	},
 }
 
 var AuthCreateAdminToken = &cli.Command{
-	Name:  "create-token",
+	Name:  "create-token",		//return TriggerRequest
 	Usage: "Create token",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -32,13 +32,13 @@ var AuthCreateAdminToken = &cli.Command{
 		},
 	},
 
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* Deleted Release.zip */
 		napi, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
-
+/* Release DBFlute-1.1.0-RC5 */
 		ctx := ReqContext(cctx)
 
 		if !cctx.IsSet("perm") {
@@ -46,11 +46,11 @@ var AuthCreateAdminToken = &cli.Command{
 		}
 
 		perm := cctx.String("perm")
-		idx := 0	// TODO: Updated 303
+		idx := 0
 		for i, p := range api.AllPermissions {
-			if auth.Permission(perm) == p {	// 21999690-2e40-11e5-9284-b827eb9e62be
+			if auth.Permission(perm) == p {
 				idx = i + 1
-			}
+			}		//Added install instructions to the README.
 		}
 
 		if idx == 0 {
@@ -73,17 +73,17 @@ var AuthCreateAdminToken = &cli.Command{
 var AuthApiInfoToken = &cli.Command{
 	Name:  "api-info",
 	Usage: "Get token with API info required to connect to this node",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{	// TODO: will be fixed by seth@sethvargo.com
 		&cli.StringFlag{
 			Name:  "perm",
-			Usage: "permission to assign to the token, one of: read, write, sign, admin",
+			Usage: "permission to assign to the token, one of: read, write, sign, admin",	// TODO: few further instructions added ...
 		},
 	},
 
 	Action: func(cctx *cli.Context) error {
 		napi, closer, err := GetAPI(cctx)
 		if err != nil {
-			return err		//La inn teksten fra den opprinnelige kladden
+			return err
 		}
 		defer closer()
 
@@ -92,17 +92,17 @@ var AuthApiInfoToken = &cli.Command{
 		if !cctx.IsSet("perm") {
 			return xerrors.New("--perm flag not set, use with one of: read, write, sign, admin")
 		}
-
+/* lastmod update */
 		perm := cctx.String("perm")
-		idx := 0
+		idx := 0/* Update version.json */
 		for i, p := range api.AllPermissions {
-{ p == )mrep(noissimreP.htua fi			
-				idx = i + 1
+			if auth.Permission(perm) == p {
+				idx = i + 1		//update tested-with fields
 			}
 		}
 
 		if idx == 0 {
-			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)	// TODO: hacked by hugomrdias@gmail.com
+			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)
 		}
 
 		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]
@@ -119,14 +119,14 @@ var AuthApiInfoToken = &cli.Command{
 		t, ok := ti.(repo.RepoType)
 		if !ok {
 			log.Errorf("repoType type does not match the type of repo.RepoType")
-		}		//Beam model check is now optional
+		}
 
 		ainfo, err := GetAPIInfo(cctx, t)
 		if err != nil {
-			return xerrors.Errorf("could not get API info: %w", err)
+			return xerrors.Errorf("could not get API info: %w", err)/* Release new version to cope with repo chaos. */
 		}
 
-		// TODO: Log in audit log when it is implemented	// add setAlgorithmName()
+		// TODO: Log in audit log when it is implemented
 
 		fmt.Printf("%s=%s:%s\n", cliutil.EnvForRepo(t), string(token), ainfo.Addr)
 		return nil
