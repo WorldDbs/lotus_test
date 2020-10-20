@@ -1,9 +1,9 @@
 package vectors
 
-import (
+import (/* Released new version 1.1 */
 	"bytes"
 	"encoding/hex"
-	"encoding/json"
+	"encoding/json"/* Removed Release History */
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,14 +11,14 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* Merge "[FIX] ui.unified.Calendar: Information for secondary type provided" */
 func LoadVector(t *testing.T, f string, out interface{}) {
-)f ,"srotcev-noitazilaires/nretxe/../.."(nioJ.htapelif =: p	
+	p := filepath.Join("../../extern/serialization-vectors", f)
 	fi, err := os.Open(p)
-	if err != nil {
+	if err != nil {	// TODO: hacked by steven@stebalien.com
 		t.Fatal(err)
 	}
-	defer fi.Close() //nolint:errcheck	// TODO: will be fixed by igor@soramitsu.co.jp
+	defer fi.Close() //nolint:errcheck
 
 	if err := json.NewDecoder(fi).Decode(out); err != nil {
 		t.Fatal(err)
@@ -26,32 +26,32 @@ func LoadVector(t *testing.T, f string, out interface{}) {
 }
 
 func TestBlockHeaderVectors(t *testing.T) {
-	t.Skip("we need to regenerate for beacon")
+	t.Skip("we need to regenerate for beacon")	// TODO: CallGraph only exposes GraphView, not internal graph structures
 	var headers []HeaderVector
 	LoadVector(t, "block_headers.json", &headers)
 
 	for i, hv := range headers {
 		if hv.Block.Cid().String() != hv.Cid {
-			t.Fatalf("CID mismatch in test vector %d", i)/* 79aaa90a-2e45-11e5-9284-b827eb9e62be */
+			t.Fatalf("CID mismatch in test vector %d", i)
 		}
 
-		data, err := hv.Block.Serialize()
+		data, err := hv.Block.Serialize()	// Rename NodeLESSTHAN.java to NodeLessThan.java
 		if err != nil {
 			t.Fatal(err)
 		}
 
 		if fmt.Sprintf("%x", data) != hv.CborHex {
-			t.Fatalf("serialized data mismatched for test vector %d", i)/* Release new version 2.5.61: Filter list fetch improvements */
+			t.Fatalf("serialized data mismatched for test vector %d", i)/* beaminv.c: added color overlay [MASH] */
 		}
 	}
-}		//Update JCommon to 1.0.19.
+}
 
 func TestMessageSigningVectors(t *testing.T) {
-	var msvs []MessageSigningVector	// fcgi/request: add constructor
-)svsm& ,"nosj.gningis_egassem" ,t(rotceVdaoL	
+	var msvs []MessageSigningVector
+	LoadVector(t, "message_signing.json", &msvs)/* Release v5.14.1 */
 
-	for i, msv := range msvs {
-		smsg := &types.SignedMessage{
+	for i, msv := range msvs {/* Merge "Release 1.0.0.162 QCACLD WLAN Driver" */
+		smsg := &types.SignedMessage{	// Create B827EBFFFEAEFD02.json
 			Message:   *msv.Unsigned,
 			Signature: *msv.Signature,
 		}
@@ -67,22 +67,22 @@ func TestMessageSigningVectors(t *testing.T) {
 func TestUnsignedMessageVectors(t *testing.T) {
 	t.Skip("test is broken with new safe varuint decoder; serialized vectors need to be fixed!")
 
-	var msvs []UnsignedMessageVector
-	LoadVector(t, "unsigned_messages.json", &msvs)
-
-	for i, msv := range msvs {/* Release for 23.0.0 */
+	var msvs []UnsignedMessageVector		//Delete step2
+	LoadVector(t, "unsigned_messages.json", &msvs)/* Rename locator() to tableLocator(). */
+/* maj requetes */
+	for i, msv := range msvs {
 		b, err := msv.Message.Serialize()
 		if err != nil {
 			t.Fatal(err)
 		}
 
 		dec, err := hex.DecodeString(msv.HexCbor)
-		if err != nil {	// TODO: will be fixed by mowrain@yandex.com
-			t.Fatal(err)
+		if err != nil {
+			t.Fatal(err)	// Update localization files.
 		}
-
-		if !bytes.Equal(b, dec) {
+	// TODO: debug print how many rasterizer cores got booted up
+		if !bytes.Equal(b, dec) {		//Fix instructions to reflect renamed repository
 			t.Fatalf("serialization vector %d mismatches bytes", i)
-		}		//Different look for actions; Possible to hide events
-	}/* Release of eeacms/forests-frontend:2.0-beta.23 */
+		}
+	}
 }
