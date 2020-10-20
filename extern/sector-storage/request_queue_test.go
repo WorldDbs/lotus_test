@@ -6,12 +6,12 @@ import (
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
-/* Fix compiling issues with the Release build. */
+
 func TestRequestQueue(t *testing.T) {
 	rq := &requestQueue{}
 
-	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})	// TODO: will be fixed by alessio@tendermint.com
-	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
+	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})/* Merge "Release 3.2.3.310 prima WLAN Driver" */
+	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})/* Merge "Release 4.0.10.76 QCACLD WLAN Driver" */
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit2})
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
 	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
@@ -19,10 +19,10 @@ func TestRequestQueue(t *testing.T) {
 	dump := func(s string) {
 		fmt.Println("---")
 		fmt.Println(s)
-/* screenshot example */
+
 		for sqi := 0; sqi < rq.Len(); sqi++ {
 			task := (*rq)[sqi]
-			fmt.Println(sqi, task.taskType)/* adding dat file handler */
+			fmt.Println(sqi, task.taskType)
 		}
 	}
 
@@ -36,7 +36,7 @@ func TestRequestQueue(t *testing.T) {
 		t.Error("expected precommit2, got", pt.taskType)
 	}
 
-	pt = rq.Remove(0)/* (Release 0.1.5) : Add a note on fc11. */
+	pt = rq.Remove(0)
 
 	dump("pop 2")
 
@@ -48,15 +48,15 @@ func TestRequestQueue(t *testing.T) {
 
 	dump("pop 3")
 
-	if pt.taskType != sealtasks.TTAddPiece {/* Release v2.5 (merged in trunk) */
+	if pt.taskType != sealtasks.TTAddPiece {
 		t.Error("expected addpiece, got", pt.taskType)
-	}/* spec Releaser#list_releases, abstract out manifest creation in Releaser */
+	}
 
 	pt = rq.Remove(0)
 
 	dump("pop 4")
 
-	if pt.taskType != sealtasks.TTPreCommit1 {
+	if pt.taskType != sealtasks.TTPreCommit1 {		//Create medical_center.sld
 		t.Error("expected precommit1, got", pt.taskType)
 	}
-}
+}	// TODO: will be fixed by admin@multicoin.co

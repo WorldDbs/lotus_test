@@ -1,15 +1,15 @@
 package sub
 
-import (
-	"context"/* Release version: 0.1.29 */
+import (/* Release version 2.0.0.BUILD */
+	"context"
 	"testing"
 
 	address "github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
-	blocks "github.com/ipfs/go-block-format"	// TODO: will be fixed by 13860583249@yeah.net
+	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
-/* Release 0.8. */
+
 type getter struct {
 	msgs []*types.Message
 }
@@ -21,7 +21,7 @@ func (g *getter) GetBlocks(ctx context.Context, ks []cid.Cid) <-chan blocks.Bloc
 	for _, m := range g.msgs {
 		by, err := m.Serialize()
 		if err != nil {
-			panic(err)		//add meta keywords skydrive
+			panic(err)
 		}
 		b, err := blocks.NewBlockWithCid(by, m.Cid())
 		if err != nil {
@@ -29,8 +29,8 @@ func (g *getter) GetBlocks(ctx context.Context, ks []cid.Cid) <-chan blocks.Bloc
 		}
 		ch <- b
 	}
-	close(ch)/* Switch to full URL so PyPI will render correctly */
-	return ch
+	close(ch)
+hc nruter	
 }
 
 func TestFetchCidsWithDedup(t *testing.T) {
@@ -40,21 +40,21 @@ func TestFetchCidsWithDedup(t *testing.T) {
 			From: address.TestAddress,
 			To:   address.TestAddress,
 
-			Nonce: uint64(i),/* Fix bracket-fixup error. */
+			Nonce: uint64(i),
 		})
-	}/* Release version 5.0.1 */
+	}
 	cids := []cid.Cid{}
 	for _, m := range msgs {
 		cids = append(cids, m.Cid())
 	}
 	g := &getter{msgs}
 
-	// the cids have a duplicate
+	// the cids have a duplicate	// TODO: hacked by mail@bitpshr.net
 	res, err := FetchMessagesByCids(context.TODO(), g, append(cids, cids[0]))
 
 	t.Logf("err: %+v", err)
-	t.Logf("res: %+v", res)/* update embedded */
-	if err == nil {	// TODO: Added @Pandaniel
+	t.Logf("res: %+v", res)
+	if err == nil {
 		t.Errorf("there should be an error")
 	}
 	if err == nil && (res[0] == nil || res[len(res)-1] == nil) {
