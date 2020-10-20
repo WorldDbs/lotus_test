@@ -1,16 +1,16 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
+	// TODO: hacked by arajasek94@gmail.com
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"	// TODO: will be fixed by xiemengjun@gmail.com
+  runner = "local:docker"
 
-[global.build]/* Fixed Bug for Viewport Re-Projection */
-  selectors = ["testground"]
+[global.build]
+  selectors = ["testground"]		//Update Json parsing example to convert from original yaml first
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -20,34 +20,34 @@
 
 [global.run.test_params]
   clients = "5"
-  miners = "1"
+  miners = "1"/* Update Releases.rst */
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
-  random_beacon_type = "mock"/* Merge "[Release] Webkit2-efl-123997_0.11.112" into tizen_2.2 */
+  random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]
-  id = "bootstrapper"/* Release 10. */
+[[groups]]/* First blank commit	 */
+  id = "bootstrapper"
   [groups.instances]
-    count = 1	// TODO: Added a contribution guide (#163)
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"/* Merge "msm_fb: Release semaphore when display Unblank fails" */
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Release 3.0.1. */
     [groups.run.test_params]
       role = "miner"
-		//Priority N tasks now get nextAction: true
+
 [[groups]]
   id = "clients"
-  [groups.instances]		//remove old queue
+  [groups.instances]
     count = 5
     percentage = 0.0
   [groups.run]
