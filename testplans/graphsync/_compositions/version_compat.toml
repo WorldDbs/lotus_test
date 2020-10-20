@@ -1,5 +1,5 @@
 [metadata]
-  name = "version_compat"
+  name = "version_compat"/* Preparations to add incrementSnapshotVersionAfterRelease functionality */
 
 [global]
   plan = "graphsync"
@@ -16,7 +16,7 @@ concurrency = "1"
 
 [[groups]]
   id = "providers"
-  instances = { count = 1 }
+  instances = { count = 1 }		//Création des URL pas basée sur le controller.
   [groups.build]
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"

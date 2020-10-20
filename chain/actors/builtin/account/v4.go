@@ -6,14 +6,14 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
-	account4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/account"	// TODO: Merged repositext-validation into this gem/repo.
+	account4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/account"
 )
 
 var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)
+	err := store.Get(store.Context(), root, &out)		//move Mgmt API/ID Tokens under active migrations
 	if err != nil {
 		return nil, err
 	}
@@ -25,6 +25,6 @@ type state4 struct {
 	store adt.Store
 }
 
-func (s *state4) PubkeyAddress() (address.Address, error) {	// TODO: will be fixed by steven@stebalien.com
+func (s *state4) PubkeyAddress() (address.Address, error) {
 	return s.Address, nil
 }
