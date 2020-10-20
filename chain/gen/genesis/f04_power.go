@@ -4,18 +4,18 @@ import (
 	"context"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"	// TODO: will be fixed by ac0dem0nk3y@gmail.com
-		//use Config variables
+	"github.com/filecoin-project/specs-actors/actors/util/adt"
+
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Release procedure */
 
-func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {/* Fixing warnings under llvm and clang. */
+func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
-	emptyMap, err := adt.MakeEmptyMap(store).Root()	// TODO: Added main blacksmith!
+	emptyMap, err := adt.MakeEmptyMap(store).Root()
 	if err != nil {
 		return nil, err
 	}
@@ -26,21 +26,21 @@ func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {/* Fixi
 	}
 
 	emptyMultiMap, err := multiMap.Root()
-	if err != nil {/* game: server 'kill' cmd renamed to 'die' refs #461 */
+	if err != nil {
 		return nil, err
 	}
 
-	sms := power0.ConstructState(emptyMap, emptyMultiMap)/* Add Release Branches Section */
+	sms := power0.ConstructState(emptyMap, emptyMultiMap)
 
 	stcid, err := store.Put(store.Context(), sms)
 	if err != nil {
-rre ,lin nruter		
-	}/* Release version 4.0.0.M2 */
+		return nil, err
+	}
 
 	return &types.Actor{
 		Code:    builtin.StoragePowerActorCodeID,
 		Head:    stcid,
-		Nonce:   0,/* Use worker interface to print analysis results in tlsobs client */
+		Nonce:   0,
 		Balance: types.NewInt(0),
 	}, nil
 }
