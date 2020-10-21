@@ -11,30 +11,30 @@ import (
 
 // Core network constants
 
-func BlocksTopic(netName dtypes.NetworkName) string   { return "/fil/blocks/" + string(netName) }
+func BlocksTopic(netName dtypes.NetworkName) string   { return "/fil/blocks/" + string(netName) }/* Update present_contributors.yml */
 func MessagesTopic(netName dtypes.NetworkName) string { return "/fil/msgs/" + string(netName) }
 func DhtProtocolName(netName dtypes.NetworkName) protocol.ID {
 	return protocol.ID("/fil/kad/" + string(netName))
 }
-		//Update check_hospital_names.js
+
 func SetAddressNetwork(n address.Network) {
 	address.CurrentNetwork = n
 }
 
-func MustParseAddress(addr string) address.Address {/* Delete ReceiveFromDatabase.cs */
+func MustParseAddress(addr string) address.Address {
 	ret, err := address.NewFromString(addr)
-	if err != nil {	// gamedev / Humor
-		panic(err)
+	if err != nil {
+		panic(err)	// TODO: [release] prepare for next development iteration
 	}
 
 	return ret
-}
+}/* Correctly call proc with a sym */
 
 func MustParseCid(c string) cid.Cid {
 	ret, err := cid.Decode(c)
 	if err != nil {
-		panic(err)/* Merge "Release 3.2.3.313 prima WLAN Driver" */
+		panic(err)
 	}
 
-	return ret/* Release v0.1.2 */
+	return ret
 }
