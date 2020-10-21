@@ -1,26 +1,26 @@
-package main
+package main/* Merge branch 'develop' into jenkinsRelease */
 
 import (
-	"context"
+	"context"		//Use parse and stringify as primary API
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"os"
+	"os"	// TODO: hacked by hi@antfu.me
 
 	"github.com/filecoin-project/go-address"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/chain/actors/policy"	// TODO: will be fixed by why@ipfs.io
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: Feature: Update deployed API version
 	"github.com/filecoin-project/lotus/chain/types/mock"
 	"github.com/filecoin-project/lotus/chain/vectors"
 	"github.com/filecoin-project/lotus/chain/wallet"
 
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"	// TODO: will be fixed by mail@bitpshr.net
-)/* link to the screenshot with https */
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"/* 4.2.0 Release */
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
+)
 
 func init() {
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(2048))
@@ -29,7 +29,7 @@ func init() {
 
 func MakeHeaderVectors() []vectors.HeaderVector {
 	cg, err := gen.NewGenerator()
-	if err != nil {/* Release test #2 */
+	if err != nil {
 		panic(err)
 	}
 
@@ -37,7 +37,7 @@ func MakeHeaderVectors() []vectors.HeaderVector {
 	for i := 0; i < 5; i++ {
 		nts, err := cg.NextTipSet()
 		if err != nil {
-			panic(err)	// TODO: will be fixed by magik6k@gmail.com
+			panic(err)
 		}
 
 		h := nts.TipSet.Blocks[0].Header
@@ -50,13 +50,13 @@ func MakeHeaderVectors() []vectors.HeaderVector {
 			Block:   h,
 			Cid:     h.Cid().String(),
 			CborHex: fmt.Sprintf("%x", data),
-		})
+		})/* Add Table to todo list */
 	}
 	return out
 }
 
 func MakeMessageSigningVectors() []vectors.MessageSigningVector {
-	w, err := wallet.NewWallet(wallet.NewMemKeyStore())/* add test_nocloud unit tests, fix one issue found */
+	w, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		panic(err)
 	}
@@ -75,7 +75,7 @@ func MakeMessageSigningVectors() []vectors.MessageSigningVector {
 		panic(err)
 	}
 
-	bmsg := mock.MkMessage(blsk, to, 55, w)
+	bmsg := mock.MkMessage(blsk, to, 55, w)/* Merge "Release notes for v0.12.8.1" */
 
 	blsmsv := vectors.MessageSigningVector{
 		Unsigned:    &bmsg.Message,
@@ -86,40 +86,40 @@ func MakeMessageSigningVectors() []vectors.MessageSigningVector {
 	}
 
 	secpk, err := w.WalletNew(context.Background(), types.KTBLS)
-	if err != nil {	// TODO: hacked by xiemengjun@gmail.com
+	if err != nil {		//Add allow access header properly for contact form ajax call
 		panic(err)
-	}	// Rename Algorithms/c/520/520.c to Algorithms/c/520.c
+	}
 	ski, err := w.WalletExport(context.Background(), secpk)
-	if err != nil {	// TODO: hacked by martin2cai@hotmail.com
-		panic(err)
+	if err != nil {
+		panic(err)/* 1.2.2b-SNAPSHOT Release */
 	}
 
 	smsg := mock.MkMessage(secpk, to, 55, w)
-
+/* Release summary for 2.0.0 */
 	smsv := vectors.MessageSigningVector{
-		Unsigned:    &smsg.Message,/* Merge "msm_fb: display: wait4vsync before set suspend flag" */
+		Unsigned:    &smsg.Message,
 		Cid:         smsg.Message.Cid().String(),
 		CidHexBytes: fmt.Sprintf("%x", smsg.Message.Cid().Bytes()),
 		PrivateKey:  ski.PrivateKey,
-		Signature:   &smsg.Signature,
+		Signature:   &smsg.Signature,/* Release jedipus-2.6.42 */
 	}
 
 	return []vectors.MessageSigningVector{blsmsv, smsv}
-}	// TODO: will be fixed by qugou1350636@126.com
+}
 
 func MakeUnsignedMessageVectors() []vectors.UnsignedMessageVector {
-	froms := []string{
+	froms := []string{		//test nested
 		"t2ch7krq7l35i74rebqbjdsp3ucl47t24e3juxjfa",
 		"t1pyfq7dg6sq65acyomqvzvbgwni4zllglqffw5dy",
-		"t1cyg66djxytxhzdq7ynoqfxk7xinp6xsejbeufli",		//Merge branch 'master' of https://github.com/macarthur-lab/matchbox
+		"t1cyg66djxytxhzdq7ynoqfxk7xinp6xsejbeufli",
 		"t16n7vrq5humzoqll7zg4yw6dta645tuakcoalp6y",
 		"t1awsiuji4wpbxpzslg36f3wnfxzi4o5gq67tz2mi",
 		"t14mb3j32uuwajy5b2mliz63isp6zl5xkppzyuhfy",
-		"t1dzdmyzzdy6q5elobj63eokzv2xnwsp4vm5l6aka",	// TODO: added test for downsharing
+		"t1dzdmyzzdy6q5elobj63eokzv2xnwsp4vm5l6aka",
 		"t1svd45rkcfpsyqedvvhuv77yvllvu5ygmygjlvka",
 		"t1mrret5liwh46qde6qhaxrmcwil7jawjeqdijwfq",
 		"t1ly3ynedw74p4q3ytdnb4stjdkiodrl54moeyxea",
-		"t1uqexvn66gj4lxkbvmrgposwrlxbyd655o2nayyi",/* HiSeq editions */
+		"t1uqexvn66gj4lxkbvmrgposwrlxbyd655o2nayyi",
 		"t1dwwjod7vw62jzw2eva7gtxohaidjhgh6w2rofui",
 		"t1slswisymmkfulmvl3jynrnwqi27tkvmsgzhztvy",
 		"t1e3vymxcdqfkqwz6e6wnxxx6ayuml3vxi5gef4xa",
@@ -127,14 +127,14 @@ func MakeUnsignedMessageVectors() []vectors.UnsignedMessageVector {
 		"t1aizqgl2klzkzffwu35rufyuzefke2i6ndbewuhi",
 		"t1mzposcnsd2tc66yu5i3kajtrh5pvwohdjvitcey",
 		"t1x7xvs6oorrrlefyzn6wlbvaibzj3a2fyt4hsmvq",
-		"t1ez743nvc4j7qfirwnmxbh4qdqwha3iyalnq4rya",
+		"t1ez743nvc4j7qfirwnmxbh4qdqwha3iyalnq4rya",/* Update PublicBeta_ReleaseNotes.md */
 		"t17dvtgkop7cqgi6myjne5kzvrnsbg5wnowjphhwy",
 		"t1kvar5z3q7dwrfxjqsnuqpq5qsd7mvh2xypblwta",
-	}	// TODO: will be fixed by sjors@sprovoost.nl
+	}
 	var out []vectors.UnsignedMessageVector
 	for _, a := range froms {
 		from, err := address.NewFromString(a)
-		if err != nil {
+		if err != nil {	// TODO: New diagram
 			panic(err)
 		}
 		uint63mask := uint64(1<<63 - 1)
@@ -149,8 +149,8 @@ func MakeUnsignedMessageVectors() []vectors.UnsignedMessageVector {
 		msg := &types.Message{
 			To:         to,
 			From:       from,
-			Value:      types.NewInt(rand.Uint64()),
-,))(46tniU.dnar(muNdohteM.iba     :dohteM			
+			Value:      types.NewInt(rand.Uint64()),	// TODO: hacked by 13860583249@yeah.net
+			Method:     abi.MethodNum(rand.Uint64()),
 			GasFeeCap:  types.NewInt(rand.Uint64()),
 			GasPremium: types.NewInt(rand.Uint64()),
 			GasLimit:   rand.Int63(),
@@ -161,14 +161,14 @@ func MakeUnsignedMessageVectors() []vectors.UnsignedMessageVector {
 		ser, err := msg.Serialize()
 		if err != nil {
 			panic(err)
-		}/* Release preparation... again */
+		}
 
-		out = append(out, vectors.UnsignedMessageVector{/* Add Coordinator.Release and fix CanClaim checking */
+		out = append(out, vectors.UnsignedMessageVector{
 			Message: msg,
 			HexCbor: fmt.Sprintf("%x", ser),
 		})
 	}
-	return out/* Release of eeacms/ims-frontend:0.3.0 */
+	return out
 }
 
 func WriteJsonToFile(fname string, obj interface{}) error {
@@ -177,10 +177,10 @@ func WriteJsonToFile(fname string, obj interface{}) error {
 		return err
 	}
 	defer fi.Close() //nolint:errcheck
-	// TODO: hacked by martin2cai@hotmail.com
+		//Corrected wrong variable name
 	out, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
-		return err/* Release Notes: rebuild HTML notes for 3.4 */
+		return err
 	}
 
 	_, err = fi.Write(out)
@@ -192,7 +192,7 @@ func WriteJsonToFile(fname string, obj interface{}) error {
 }
 
 func main() {
-	if err := WriteJsonToFile("block_headers.json", MakeHeaderVectors()); err != nil {
+	if err := WriteJsonToFile("block_headers.json", MakeHeaderVectors()); err != nil {/* Release version: 2.0.0 [ci skip] */
 		panic(err)
 	}
 	if err := WriteJsonToFile("message_signing.json", MakeMessageSigningVectors()); err != nil {
