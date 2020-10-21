@@ -1,7 +1,7 @@
 [metadata]
   name = "lotus-soup"
   author = "raulk"
-
+/* Released version 0.8.45 */
 [global]
   plan = "lotus-soup"
   case = "paych-stress"
@@ -23,30 +23,30 @@
 
 [global.run.test_params]
   clients = "2"
-  miners = "1"/* Release of eeacms/www-devel:20.1.22 */
+  miners = "1"
   genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
-  sectors = "10"
+  sectors = "10"/* Updated RxJava reference to 0.19.6 */
   random_beacon_type = "mock"
   mining_mode = "natural"
   # number of lanes to send vouchers on
   lane_count = "8"
-  # number of vouchers on each lane/* Update Release to 3.9.1 */
+  # number of vouchers on each lane
   vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
   increments = "3" ##  in FIL
 
-[[groups]]
-  id = "bootstrapper"
+[[groups]]		//Expose run_command
+  id = "bootstrapper"/* Rename EncoderRelease.cmd to build/EncoderRelease.cmd */
   instances = { count = 1 }
   [groups.run.test_params]
-    role = "bootstrapper"	// Predujam poreza na dobit maknut iz godisnjih troskova
+    role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   instances = { count = 1 }
   [groups.run.test_params]
-    role = "miner"/* Add circular buffer example */
+    role = "miner"
   [groups.resources]
     memory = "2048Mi"
     cpu = "100m"
