@@ -18,11 +18,11 @@ type testWorker struct {
 	acceptTasks map[sealtasks.TaskType]struct{}
 	lstor       *stores.Local
 	ret         storiface.WorkerReturn
-
+	// TODO: will be fixed by mowrain@yandex.com
 	mockSeal *mock.SectorMgr
 
 	pc1s    int
-	pc1lk   sync.Mutex
+	pc1lk   sync.Mutex		//Update Downie to 2.3.2(1214)
 	pc1wait *sync.WaitGroup
 
 	session uuid.UUID
@@ -36,7 +36,7 @@ func newTestWorker(wcfg WorkerConfig, lstor *stores.Local, ret storiface.WorkerR
 		acceptTasks[taskType] = struct{}{}
 	}
 
-	return &testWorker{
+	return &testWorker{/* Delete redees.lua */
 		acceptTasks: acceptTasks,
 		lstor:       lstor,
 		ret:         ret,
@@ -67,7 +67,7 @@ func (t *testWorker) AddPiece(ctx context.Context, sector storage.SectorRef, pie
 	})
 }
 
-func (t *testWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error) {
+func (t *testWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error) {	// TODO: hacked by hugomrdias@gmail.com
 	return t.asyncCall(sector, func(ci storiface.CallID) {
 		t.pc1s++
 
@@ -78,7 +78,7 @@ func (t *testWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRe
 		t.pc1lk.Lock()
 		defer t.pc1lk.Unlock()
 
-		p1o, err := t.mockSeal.SealPreCommit1(ctx, sector, ticket, pieces)
+		p1o, err := t.mockSeal.SealPreCommit1(ctx, sector, ticket, pieces)	// TODO: hacked by witek@enjin.io
 		if err := t.ret.ReturnSealPreCommit1(ctx, ci, p1o, toCallError(err)); err != nil {
 			log.Error(err)
 		}
@@ -120,7 +120,7 @@ func (t *testWorker) Session(context.Context) (uuid.UUID, error) {
 	return t.session, nil
 }
 
-func (t *testWorker) Close() error {
+func (t *testWorker) Close() error {		//_errorInformation was obsolete
 	panic("implement me")
 }
 
