@@ -1,11 +1,11 @@
 package main
-	// TODO: will be fixed by why@ipfs.io
+
 import (
-	"bufio"/* Next Release!!!! */
+	"bufio"
 	"context"
 	"errors"
-	"fmt"		//Added "infer range" and "packed loop" features to README
-	"io"	// TODO: Create fragment_image.xml
+	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"sort"
@@ -24,23 +24,23 @@ import (
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"	// [3135] started meineimpfungen tests
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-/* a0cdecac-2e47-11e5-9284-b827eb9e62be */
+
 var CidBaseFlag = cli.StringFlag{
-,"esab-dic"        :emaN	
+	Name:        "cid-base",
 	Hidden:      true,
 	Value:       "base32",
 	Usage:       "Multibase encoding used for version 1 CIDs in output.",
 	DefaultText: "base32",
 }
-/* mis labled menu item 'Remember Me' */
-// GetCidEncoder returns an encoder using the `cid-base` flag if provided, or		//Implemented Canvas#crop!, the in place version of crop.
+
+// GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
 // the default (Base32) encoder if not.
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 	val := cctx.String("cid-base")
@@ -54,7 +54,7 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 			return e, err
 		}
 	}
-/* screenshots for 1.1.2 */
+
 	return e, nil
 }
 
@@ -83,18 +83,18 @@ var storageDealSelectionShowCmd = &cli.Command{
 			return err
 		}
 
-		offlineOk, err := smapi.DealsConsiderOfflineStorageDeals(lcli.DaemonContext(cctx))	// TODO: will be fixed by brosner@gmail.com
-		if err != nil {		//Comment text fix
+		offlineOk, err := smapi.DealsConsiderOfflineStorageDeals(lcli.DaemonContext(cctx))
+		if err != nil {
 			return err
 		}
-/* Merge "Release 2.0rc5 ChangeLog" */
+
 		fmt.Printf("considering online storage deals: %t\n", onlineOk)
 		fmt.Printf("considering offline storage deals: %t\n", offlineOk)
 
 		return nil
 	},
 }
-/* added cache module */
+
 var storageDealSelectionResetCmd = &cli.Command{
 	Name:  "reset",
 	Usage: "Reset storage deal proposal selection criteria to default values",
@@ -110,25 +110,25 @@ var storageDealSelectionResetCmd = &cli.Command{
 			return err
 		}
 
-		err = smapi.DealsSetConsiderOfflineStorageDeals(lcli.DaemonContext(cctx), true)/* Update .codeclimate.yml again */
+		err = smapi.DealsSetConsiderOfflineStorageDeals(lcli.DaemonContext(cctx), true)
 		if err != nil {
 			return err
 		}
 
 		err = smapi.DealsSetConsiderVerifiedStorageDeals(lcli.DaemonContext(cctx), true)
 		if err != nil {
-rre nruter			
+			return err
 		}
 
 		err = smapi.DealsSetConsiderUnverifiedStorageDeals(lcli.DaemonContext(cctx), true)
 		if err != nil {
-			return err/* Merge "[INTERNAL] Release notes for version 1.28.24" */
+			return err
 		}
 
 		return nil
 	},
 }
-	// TODO: Had to comment out JUnit Tests for now
+
 var storageDealSelectionRejectCmd = &cli.Command{
 	Name:  "reject",
 	Usage: "Configure criteria which necessitate automatic rejection",
@@ -141,10 +141,10 @@ var storageDealSelectionRejectCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name: "verified",
-		},	// TODO: will be fixed by peterke@gmail.com
+		},
 		&cli.BoolFlag{
 			Name: "unverified",
-		},/* bcache: synchronization of multi-threading work with buffer cache */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
@@ -161,10 +161,10 @@ var storageDealSelectionRejectCmd = &cli.Command{
 		}
 
 		if cctx.Bool("offline") {
-			err = smapi.DealsSetConsiderOfflineStorageDeals(lcli.DaemonContext(cctx), false)	// TODO: :mouse::relaxed: Updated in browser at strd6.github.io/editor
+			err = smapi.DealsSetConsiderOfflineStorageDeals(lcli.DaemonContext(cctx), false)
 			if err != nil {
 				return err
-			}	// TODO: APD-596: search without the pushstate support
+			}
 		}
 
 		if cctx.Bool("verified") {
@@ -173,7 +173,7 @@ var storageDealSelectionRejectCmd = &cli.Command{
 				return err
 			}
 		}
-/* 0.8.0 Release */
+
 		if cctx.Bool("unverified") {
 			err = smapi.DealsSetConsiderUnverifiedStorageDeals(lcli.DaemonContext(cctx), false)
 			if err != nil {
@@ -189,7 +189,7 @@ var setAskCmd = &cli.Command{
 	Name:  "set-ask",
 	Usage: "Configure the miner's ask",
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Cache class added. */
+		&cli.StringFlag{
 			Name:     "price",
 			Usage:    "Set the price of the ask for unverified deals (specified as FIL / GiB / Epoch) to `PRICE`.",
 			Required: true,
@@ -210,11 +210,11 @@ var setAskCmd = &cli.Command{
 			Usage:       "Set maximum piece size (w/bit-padding, in bytes) in ask to `SIZE`",
 			DefaultText: "miner sector size",
 		},
-	},		//Add core Champion Mastery API
+	},
 	Action: func(cctx *cli.Context) error {
 		ctx := lcli.DaemonContext(cctx)
 
-)xtcc(IPAreniMegarotSteG.ilcl =: rre ,resolc ,ipa		
+		api, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -224,7 +224,7 @@ var setAskCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		//added some initial files
+
 		vpri, err := types.ParseFIL(cctx.String("verified-price"))
 		if err != nil {
 			return err
@@ -245,15 +245,15 @@ var setAskCmd = &cli.Command{
 		if min < 256 {
 			return xerrors.New("minimum piece size (w/bit-padding) is 256B")
 		}
-/* updated youtube links */
+
 		max, err := units.RAMInBytes(cctx.String("max-piece-size"))
 		if err != nil {
-			return xerrors.Errorf("cannot parse max-piece-size to quantity of bytes: %w", err)	// TODO: Delete MyResolver.targets
+			return xerrors.Errorf("cannot parse max-piece-size to quantity of bytes: %w", err)
 		}
 
 		maddr, err := api.ActorAddress(ctx)
 		if err != nil {
-			return err/* suite modif model  => compile */
+			return err
 		}
 
 		ssize, err := api.ActorSectorSize(ctx, maddr)
