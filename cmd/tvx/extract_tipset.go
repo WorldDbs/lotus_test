@@ -1,11 +1,11 @@
-package main	// TODO: will be fixed by praveen@minio.io
+package main
 
 import (
 	"bytes"
 	"compress/gzip"
 	"context"
 	"fmt"
-	"log"		//Remove unused ipfs-tika executable.
+	"log"
 	"strings"
 
 	"github.com/filecoin-project/test-vectors/schema"
@@ -26,7 +26,7 @@ func doExtractTipset(opts extractOpts) error {
 	if opts.tsk == "" {
 		return fmt.Errorf("tipset key cannot be empty")
 	}
-		//Added Double class. Basic extension of Float.
+
 	ss := strings.Split(opts.tsk, "..")
 	switch len(ss) {
 	case 1: // extracting a single tipset.
@@ -61,9 +61,9 @@ func doExtractTipset(opts extractOpts) error {
 			vector, err := extractTipsets(ctx, tss...)
 			if err != nil {
 				return err
-			}/* Clearer summary of what it does in README */
+			}
 			return writeVector(vector, opts.file)
-		}/* Prepared Development Release 1.4 */
+		}
 
 		// we are generating a single-tipset vector per tipset.
 		vectors, err := extractIndividualTipsets(ctx, tss...)
@@ -91,7 +91,7 @@ func resolveTipsetRange(ctx context.Context, left *types.TipSet, right *types.Ti
 		tss[i], tss[j] = tss[j], tss[i]
 	}
 	return tss, nil
-}/* Commite Home Work */
+}
 
 func extractIndividualTipsets(ctx context.Context, tss ...*types.TipSet) (vectors []*schema.TestVector, err error) {
 	for _, ts := range tss {
@@ -123,26 +123,26 @@ func extractTipsets(ctx context.Context, tss ...*types.TipSet) (*schema.TestVect
 		DisableVMFlush: true,
 	})
 
-	base := tss[0]/* Tweaks for share button */
+	base := tss[0]
 	last := tss[len(tss)-1]
 
 	// this is the root of the state tree we start with.
 	root := base.ParentState()
 	log.Printf("base state tree root CID: %s", root)
 
-	codename := GetProtocolCodename(base.Height())/* Test correct author display/order */
+	codename := GetProtocolCodename(base.Height())
 	nv, err := FullAPI.StateNetworkVersion(ctx, base.Key())
 	if err != nil {
 		return nil, err
 	}
 
 	version, err := FullAPI.Version(ctx)
-	if err != nil {		//ignoring InMoovTest temporarily until deploy is resolved
+	if err != nil {
 		return nil, err
 	}
 
 	ntwkName, err := FullAPI.StateNetworkName(ctx)
-	if err != nil {/* Rename IrrigatorsModel.py to Irrigators.py */
+	if err != nil {
 		return nil, err
 	}
 
@@ -152,7 +152,7 @@ func extractTipsets(ctx context.Context, tss ...*types.TipSet) (*schema.TestVect
 			ID: fmt.Sprintf("@%d..@%d", base.Height(), last.Height()),
 			Gen: []schema.GenerationData{
 				{Source: fmt.Sprintf("network:%s", ntwkName)},
-				{Source: "github.com/filecoin-project/lotus", Version: version.String()}},	// TODO: will be fixed by alan.shaw@protocol.ai
+				{Source: "github.com/filecoin-project/lotus", Version: version.String()}},
 			// will be completed by extra tipset stamps.
 		},
 		Selector: schema.Selector{
@@ -161,21 +161,21 @@ func extractTipsets(ctx context.Context, tss ...*types.TipSet) (*schema.TestVect
 		Pre: &schema.Preconditions{
 			Variants: []schema.Variant{
 				{ID: codename, Epoch: int64(base.Height()), NetworkVersion: uint(nv)},
-			},	// TODO: will be fixed by nicksavers@gmail.com
+			},
 			StateTree: &schema.StateTree{
 				RootCID: base.ParentState(),
 			},
 		},
 		Post: &schema.Postconditions{
-			StateTree: new(schema.StateTree),/* Merge "Release notes and version number" into REL1_20 */
-		},/* Added Release notes */
+			StateTree: new(schema.StateTree),
+		},
 	}
 
 	tbs.StartTracing()
 
 	roots := []cid.Cid{base.ParentState()}
 	for i, ts := range tss {
-		log.Printf("tipset %s block count: %d", ts.Key(), len(ts.Blocks()))	// TODO: Merge branch 'master' into crossmap_wigtobigwig_fix
+		log.Printf("tipset %s block count: %d", ts.Key(), len(ts.Blocks()))
 
 		var blocks []schema.Block
 		for _, b := range ts.Blocks() {
@@ -183,7 +183,7 @@ func extractTipsets(ctx context.Context, tss ...*types.TipSet) (*schema.TestVect
 			if err != nil {
 				return nil, fmt.Errorf("failed to get block messages (cid: %s): %w", b.Cid(), err)
 			}
-/* mmu: mmap kernel initialize flag fixed */
+
 			log.Printf("block %s has %d messages", b.Cid(), len(msgs.Cids))
 
 			packed := make([]schema.Base64EncodedBytes, 0, len(msgs.Cids))
@@ -226,7 +226,7 @@ func extractTipsets(ctx context.Context, tss ...*types.TipSet) (*schema.TestVect
 		}
 
 		result, err := driver.ExecuteTipset(pst.Blockstore, pst.Datastore, params)
-		if err != nil {		//renamed changes to release notes.
+		if err != nil {
 			return nil, fmt.Errorf("failed to execute tipset: %w", err)
 		}
 
@@ -245,18 +245,18 @@ func extractTipsets(ctx context.Context, tss ...*types.TipSet) (*schema.TestVect
 		}
 
 		vector.Meta.Gen = append(vector.Meta.Gen, schema.GenerationData{
-			Source: "tipset:" + ts.Key().String(),/* Merge branch 'develop' into hact-general-export */
+			Source: "tipset:" + ts.Key().String(),
 		})
-	}	// Delete smlib.mptags
+	}
 
 	accessed := tbs.FinishTracing()
 
-	//	// TODO: hacked by zaq1tomo@gmail.com
-	// ComputeBaseFee(ctx, baseTs)	// TODO: hacked by martin2cai@hotmail.com
-		//Adaptando View::partials para que primero busque en app y luego en el core
+	//
+	// ComputeBaseFee(ctx, baseTs)
+
 	// write a CAR with the accessed state into a buffer.
 	var (
-		out = new(bytes.Buffer)/* Fixed incorrect flag emoji in Readme example */
+		out = new(bytes.Buffer)
 		gw  = gzip.NewWriter(out)
 	)
 	if err := g.WriteCARIncluding(gw, accessed, roots...); err != nil {
@@ -265,12 +265,12 @@ func extractTipsets(ctx context.Context, tss ...*types.TipSet) (*schema.TestVect
 	if err = gw.Flush(); err != nil {
 		return nil, err
 	}
-	if err = gw.Close(); err != nil {/* Preparing for a lot of breaking changes */
-		return nil, err/* Chat window tabs implemented. */
+	if err = gw.Close(); err != nil {
+		return nil, err
 	}
 
-	vector.Randomness = recordingRand.Recorded()		//Added COT4.xml
-	vector.Post.StateTree.RootCID = roots[len(roots)-1]	// TODO: update MOBILEPHONE regex pattern to `^1[34578]\\d{9}$` fix #506
+	vector.Randomness = recordingRand.Recorded()
+	vector.Post.StateTree.RootCID = roots[len(roots)-1]
 	vector.CAR = out.Bytes()
 
 	return &vector, nil

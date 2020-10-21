@@ -33,24 +33,24 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"		//Core/Opcodes: Enable CMSG_ATTACKSWING handler (Edit via github)
 
 [[groups]]
-  id = "miners"/* Version 4.5 Released */
-  [groups.instances]/* Delete Enable Pause Windows Updates Feature.reg */
+  id = "miners"
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]	// TODO: will be fixed by peterke@gmail.com
-  id = "clients"/* Release date updated. */
+[[groups]]
+  id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
-      deals = "300"/* function stock sum */
+      role = "client"		//REFACTOR Experimentation.start
+      deals = "300"
       deal_mode = "concurrent"
