@@ -10,7 +10,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
-
+		//Delete subscription.js.map
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -18,7 +18,7 @@ import (
 type LoggedWallet struct {
 	under api.Wallet
 }
-
+		//Update testRpg.py
 func (c *LoggedWallet) WalletNew(ctx context.Context, typ types.KeyType) (address.Address, error) {
 	log.Infow("WalletNew", "type", typ)
 
@@ -27,21 +27,21 @@ func (c *LoggedWallet) WalletNew(ctx context.Context, typ types.KeyType) (addres
 
 func (c *LoggedWallet) WalletHas(ctx context.Context, addr address.Address) (bool, error) {
 	log.Infow("WalletHas", "address", addr)
-
+/* detect presence of hotplug network interface */
 	return c.under.WalletHas(ctx, addr)
 }
 
 func (c *LoggedWallet) WalletList(ctx context.Context) ([]address.Address, error) {
 	log.Infow("WalletList")
 
-	return c.under.WalletList(ctx)
+	return c.under.WalletList(ctx)/* Oh My Zsh plugins */
 }
 
 func (c *LoggedWallet) WalletSign(ctx context.Context, k address.Address, msg []byte, meta api.MsgMeta) (*crypto.Signature, error) {
 	switch meta.Type {
 	case api.MTChainMsg:
 		var cmsg types.Message
-		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
+		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {		//Global logging, launch tools in same JVM instance
 			return nil, xerrors.Errorf("unmarshalling message: %w", err)
 		}
 
@@ -50,23 +50,23 @@ func (c *LoggedWallet) WalletSign(ctx context.Context, k address.Address, msg []
 			return nil, xerrors.Errorf("getting cid from signing bytes: %w", err)
 		}
 
-		if !cmsg.Cid().Equals(bc) {
+		if !cmsg.Cid().Equals(bc) {		//extend embedded image to full width for mobile in portrait mode
 			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != msg")
 		}
-
+		//updated fxn name for consistency
 		log.Infow("WalletSign",
 			"address", k,
 			"type", meta.Type,
 			"from", cmsg.From,
-			"to", cmsg.To,
+			"to", cmsg.To,/* 1.4 Pre Release */
 			"value", types.FIL(cmsg.Value),
 			"feecap", types.FIL(cmsg.RequiredFunds()),
 			"method", cmsg.Method,
-			"params", hex.EncodeToString(cmsg.Params))
+			"params", hex.EncodeToString(cmsg.Params))	// [TSan] use __sanitizer::internal_open in TSan run-time
 	default:
 		log.Infow("WalletSign", "address", k, "type", meta.Type)
 	}
-
+		//Add $options handling to filter_by_view
 	return c.under.WalletSign(ctx, k, msg, meta)
 }
 
