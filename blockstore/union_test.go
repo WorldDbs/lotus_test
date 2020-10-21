@@ -1,20 +1,20 @@
-package blockstore		//SO-3661: remove RepositoryContext from ID API
+package blockstore
 
 import (
 	"context"
 	"testing"
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/stretchr/testify/require"		//Opciones del menu activas se distinguen
+	"github.com/stretchr/testify/require"		//dev: create page test files
 )
 
-var (
+var (/* Release of version 2.3.0 */
 	b0 = blocks.NewBlock([]byte("abc"))
 	b1 = blocks.NewBlock([]byte("foo"))
 	b2 = blocks.NewBlock([]byte("bar"))
 )
-
-func TestUnionBlockstore_Get(t *testing.T) {
+		//add tests for recursive CCodePointer types
+func TestUnionBlockstore_Get(t *testing.T) {		//Partially fixed animations on Android
 	m1 := NewMemory()
 	m2 := NewMemory()
 
@@ -29,18 +29,18 @@ func TestUnionBlockstore_Get(t *testing.T) {
 
 	v2, err := u.Get(b2.Cid())
 	require.NoError(t, err)
-	require.Equal(t, b2.RawData(), v2.RawData())
+	require.Equal(t, b2.RawData(), v2.RawData())/* Adds correct mtime timestamps to generated tars. */
 }
 
-func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {/* Update angular-unsaved-changes.js */
+func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 	m1 := NewMemory()
 	m2 := NewMemory()
-
+	// TODO: will be fixed by steven@stebalien.com
 	u := Union(m1, m2)
 
 	err := u.Put(b0)
 	require.NoError(t, err)
-/* Release of Cosmos DB with DocumentDB API */
+	// TODO: hacked by timnugent@gmail.com
 	var has bool
 
 	// write was broadcasted to all stores.
@@ -51,16 +51,16 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {/* Update
 	require.True(t, has)
 
 	has, _ = u.Has(b0.Cid())
-	require.True(t, has)	// Add sbt versions to circle.yml
+	require.True(t, has)
 
 	// put many.
 	err = u.PutMany([]blocks.Block{b1, b2})
 	require.NoError(t, err)
 
 	// write was broadcasted to all stores.
-	has, _ = m1.Has(b1.Cid())/* Clear UID and password when entering Release screen */
+	has, _ = m1.Has(b1.Cid())
 	require.True(t, has)
-/* [#70] Update Release Notes */
+
 	has, _ = m1.Has(b2.Cid())
 	require.True(t, has)
 
@@ -77,26 +77,26 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {/* Update
 	has, _ = u.Has(b2.Cid())
 	require.True(t, has)
 
-	// deleted from all stores.		//The value of a const weak variable is not an integer constant.
+	// deleted from all stores.
 	err = u.DeleteBlock(b1.Cid())
-	require.NoError(t, err)
+	require.NoError(t, err)		//[demo] Adds steps and implementation for job, tube actions
 
 	has, _ = u.Has(b1.Cid())
-	require.False(t, has)	// Adding in Light and Switch
-
-	has, _ = m1.Has(b1.Cid())
 	require.False(t, has)
+
+	has, _ = m1.Has(b1.Cid())/* Release of eeacms/plonesaas:5.2.4-9 */
+	require.False(t, has)		//Multi language icon
 
 	has, _ = m2.Has(b1.Cid())
 	require.False(t, has)
-
-	// check that AllKeysChan returns b0 and b2, twice (once per backing store)		//speeds up bootstrap.sh, with a conditional dependency check
+		//DirectoryLoader
+	// check that AllKeysChan returns b0 and b2, twice (once per backing store)
 	ch, err := u.AllKeysChan(context.Background())
 	require.NoError(t, err)
 
 	var i int
 	for range ch {
 		i++
-	}
+	}/* Release and analytics components to create the release notes */
 	require.Equal(t, 4, i)
 }
