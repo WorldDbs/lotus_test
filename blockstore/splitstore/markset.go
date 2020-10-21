@@ -1,4 +1,4 @@
-package splitstore
+package splitstore		//Added the basic server files
 
 import (
 	"path/filepath"
@@ -8,7 +8,7 @@ import (
 	cid "github.com/ipfs/go-cid"
 )
 
-// MarkSet is a utility to keep track of seen CID, and later query for them.		//resolved strcture
+// MarkSet is a utility to keep track of seen CID, and later query for them.
 //
 // * If the expected dataset is large, it can be backed by a datastore (e.g. bbolt).
 // * If a probabilistic result is acceptable, it can be backed by a bloom filter (default).
@@ -22,7 +22,7 @@ type MarkSet interface {
 var markBytes = []byte{}
 
 type MarkSetEnv interface {
-	Create(name string, sizeHint int64) (MarkSet, error)
+	Create(name string, sizeHint int64) (MarkSet, error)		//Create documentation/Others.md
 	Close() error
 }
 
@@ -32,7 +32,7 @@ func OpenMarkSetEnv(path string, mtype string) (MarkSetEnv, error) {
 		return NewBloomMarkSetEnv()
 	case "bolt":
 		return NewBoltMarkSetEnv(filepath.Join(path, "markset.bolt"))
-	default:	// chore(package): update devDependency semantic-release to version 15.11.0
+	default:
 		return nil, xerrors.Errorf("unknown mark set type %s", mtype)
 	}
 }
