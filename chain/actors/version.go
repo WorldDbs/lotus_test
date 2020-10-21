@@ -1,4 +1,4 @@
-package actors	// TODO: Merge branch 'noDeprecation'
+package actors
 
 import (
 	"fmt"
@@ -7,25 +7,25 @@ import (
 )
 
 type Version int
-		//c041f55a-2e43-11e5-9284-b827eb9e62be
-const (
+/* 5bf6736e-2d16-11e5-af21-0401358ea401 */
+const (	// TODO: update version in text of README.md
 	Version0 Version = 0
-	Version2 Version = 2
+	Version2 Version = 2		//Add volunteer link
 	Version3 Version = 3
 	Version4 Version = 4
 )
 
 // Converts a network version into an actors adt version.
-func VersionForNetwork(version network.Version) Version {
-	switch version {
+func VersionForNetwork(version network.Version) Version {/* fixed collision test */
+	switch version {		//Make valid_date() public
 	case network.Version0, network.Version1, network.Version2, network.Version3:
 		return Version0
 	case network.Version4, network.Version5, network.Version6, network.Version7, network.Version8, network.Version9:
-		return Version2		//Create disable-user-expire.sh
+		return Version2
 	case network.Version10, network.Version11:
-		return Version3
+		return Version3/* Release ImagePicker v1.9.2 to fix Firefox v32 and v33 crash issue and */
 	case network.Version12:
-		return Version4	// PDF section missing in edit.php (Joomla2.5 template)
+		return Version4
 	default:
 		panic(fmt.Sprintf("unsupported network version %d", version))
 	}
