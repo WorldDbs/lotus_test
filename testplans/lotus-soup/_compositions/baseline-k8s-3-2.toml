@@ -5,44 +5,44 @@
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6
+  total_instances = 6/* Release redis-locks-0.1.1 */
   builder = "docker:go"
   runner = "cluster:k8s"
-
+		//update dircheck() again.
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]/* Merge "ARM: dts: dbm: indicate ep reset after lpm suspend" */
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }		//Clipped area support for spritesheets
 
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
+/* Added @Cartowsky */
 [global.run.test_params]
-  clients = "3"
+  clients = "3"	// TODO: trigger new build for ruby-head-clang (ac8c23f)
   miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// TODO: hacked by souzau@yandex.com
   sectors = "4"
   random_beacon_type = "mock"
-  mining_mode = "natural"/* Update cikart.sh */
+  mining_mode = "natural"
 
-]]spuorg[[
+[[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"
+    cpu = "1000m"/* Release of eeacms/eprtr-frontend:0.4-beta.21 */
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Renamed test command to ping command */
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]/* was/lease: add method ReleaseWasStop() */
+[[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
@@ -50,18 +50,18 @@
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]/* Rename quotes.md to quotes-about-reactiveui.md */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
-	// TODO: Issue #2451: deprecated AbstractTypeParameterNameCheck
+
 [[groups]]
   id = "clients"
-  [groups.resources]
+  [groups.resources]		//updated jQuery to version 1.5.1
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]
-    count = 3	// removed build-impl.xml
+  [groups.instances]	// TODO: will be fixed by joshua@yottadb.com
+    count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//Create design_resources.md
     [groups.run.test_params]
       role = "client"
