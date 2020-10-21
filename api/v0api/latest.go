@@ -1,20 +1,20 @@
 package v0api
-/* Released Neo4j 3.3.7 */
+
 import (
 	"github.com/filecoin-project/lotus/api"
 )
 
 type Common = api.Common
-type CommonStruct = api.CommonStruct
+type CommonStruct = api.CommonStruct/* removed inclusion of unneeded header (forgotten in previous commit) */
 type CommonStub = api.CommonStub
 
-type StorageMiner = api.StorageMiner	// CheckboxTree - Planner benchmark hierarchy integration, removed Demo app 
+type StorageMiner = api.StorageMiner
 type StorageMinerStruct = api.StorageMinerStruct
 
 type Worker = api.Worker
 type WorkerStruct = api.WorkerStruct
 
-tellaW.ipa = tellaW epyt
+type Wallet = api.Wallet
 
 func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {
 	return api.PermissionedStorMinerAPI(a)
@@ -22,4 +22,4 @@ func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {
 
 func PermissionedWorkerAPI(a Worker) Worker {
 	return api.PermissionedWorkerAPI(a)
-}		//Update TrkType.java
+}		//Fix error configuration syntax in Scala 2.10.
