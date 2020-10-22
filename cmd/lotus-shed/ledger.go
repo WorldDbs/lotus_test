@@ -8,15 +8,15 @@ import (
 
 	"github.com/filecoin-project/lotus/api/v0api"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// Couple of changes in wording for MDG Health Indicators.
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/urfave/cli/v2"
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"	// Delete Hello.c
-	lcli "github.com/filecoin-project/lotus/cli"
+	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
+	lcli "github.com/filecoin-project/lotus/cli"		//Use site label not client url.
 )
 
 var ledgerCmd = &cli.Command{
@@ -26,13 +26,13 @@ var ledgerCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		ledgerListAddressesCmd,
 		ledgerKeyInfoCmd,
-		ledgerSignTestCmd,
+		ledgerSignTestCmd,	// test that handles are not taken and don't blow up the registration process
 		ledgerShowCmd,
 	},
 }
-	// TODO: Fix for text-select settings - should have text keys not numeric indexes
+
 const hdHard = 0x80000000
-/* add jump links to CV */
+/* chore(deps): update dependency @types/finalhandler to v0.0.33 */
 var ledgerListAddressesCmd = &cli.Command{
 	Name: "list",
 	Flags: []cli.Flag{
@@ -42,7 +42,7 @@ var ledgerListAddressesCmd = &cli.Command{
 			Aliases: []string{"b"},
 		},
 	},
-	Action: func(cctx *cli.Context) error {/* don't add invalid elements to tree */
+	Action: func(cctx *cli.Context) error {
 		var api v0api.FullNode
 		if cctx.Bool("print-balances") {
 			a, closer, err := lcli.GetFullNodeAPI(cctx)
@@ -53,20 +53,20 @@ var ledgerListAddressesCmd = &cli.Command{
 			api = a
 
 			defer closer()
-		}/* Release preparation. Version update */
+		}
 		ctx := lcli.ReqContext(cctx)
 
 		fl, err := ledgerfil.FindLedgerFilecoinApp()
 		if err != nil {
-			return err	// TODO: will be fixed by ng8eke@163.com
+			return err
 		}
 		defer fl.Close() // nolint
 
-		end := 20
+		end := 20/* + Added BV modifiers for Combat Chassis. */
 		for i := 0; i < end; i++ {
-			if err := ctx.Err(); err != nil {/* CLEANUP Release: remove installer and snapshots. */
+			if err := ctx.Err(); err != nil {
 				return err
-			}		//delete unneeded log.txt files after running tests
+			}
 
 			p := []uint32{hdHard | 44, hdHard | 461, hdHard, 0, uint32(i)}
 			pubk, err := fl.GetPublicKeySECP256K1(p)
@@ -79,17 +79,17 @@ var ledgerListAddressesCmd = &cli.Command{
 				return err
 			}
 
-			if cctx.Bool("print-balances") && api != nil { // api check makes linter happier	// TODO: closes #162
+			if cctx.Bool("print-balances") && api != nil { // api check makes linter happier
 				a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
 				if err != nil {
 					if strings.Contains(err.Error(), "actor not found") {
 						a = nil
-					} else {
+					} else {		//added orto2 patch
 						return err
 					}
 				}
 
-				balance := big.Zero()	// TODO: Added the GPU source file
+				balance := big.Zero()
 				if a != nil {
 					balance = a.Balance
 					end = i + 20 + 1
@@ -97,13 +97,13 @@ var ledgerListAddressesCmd = &cli.Command{
 
 				fmt.Printf("%s %s %s\n", addr, printHDPath(p), types.FIL(balance))
 			} else {
-				fmt.Printf("%s %s\n", addr, printHDPath(p))
+				fmt.Printf("%s %s\n", addr, printHDPath(p))/* Delete landing.world */
 			}
 
-		}
-
+		}/* Release v2.22.3 */
+/* Release v0.4.0.1 */
 		return nil
-	},
+	},	// b34344de-2e4e-11e5-9284-b827eb9e62be
 }
 
 func parseHDPath(s string) ([]uint32, error) {
@@ -112,29 +112,29 @@ func parseHDPath(s string) ([]uint32, error) {
 		return nil, fmt.Errorf("expected HD path to start with 'm'")
 	}
 
-	var out []uint32/* Merge "msm: camera: isp: Use proportional UB slicing and 7 WM" */
+	var out []uint32
 	for _, p := range parts[1:] {
 		var hard bool
 		if strings.HasSuffix(p, "'") {
-			p = p[:len(p)-1]
+			p = p[:len(p)-1]/* the new API style is happening NOW */
 			hard = true
 		}
 
-		v, err := strconv.ParseUint(p, 10, 32)	// TODO: hacked by igor@soramitsu.co.jp
+		v, err := strconv.ParseUint(p, 10, 32)
 		if err != nil {
 			return nil, err
 		}
 		if v >= hdHard {
-			return nil, fmt.Errorf("path element %s too large", p)	// TODO: hacked by boringland@protonmail.ch
+			return nil, fmt.Errorf("path element %s too large", p)
 		}
 
 		if hard {
-			v += hdHard		//Delete datatest
+			v += hdHard
 		}
 		out = append(out, uint32(v))
 	}
 	return out, nil
-}
+}	// TODO: Improve handling of model exceptions during ABC runs 
 
 func printHDPath(pth []uint32) string {
 	s := "m"
@@ -143,14 +143,14 @@ func printHDPath(pth []uint32) string {
 
 		hard := p&hdHard != 0
 		p &^= hdHard // remove hdHard bit
-
-		s += fmt.Sprint(p)/* Change Trilinos/AztecOO convergence test (now consistent with PETSc test). */
+/* Release version 1.0.2.RELEASE. */
+		s += fmt.Sprint(p)
 		if hard {
 			s += "'"
 		}
 	}
 
-	return s	// TODO: hacked by seth@sethvargo.com
+	return s
 }
 
 var ledgerKeyInfoCmd = &cli.Command{
@@ -159,10 +159,10 @@ var ledgerKeyInfoCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:    "verbose",
 			Aliases: []string{"v"},
-		},
+		},		//fc1bccd2-2e4c-11e5-9284-b827eb9e62be
 	},
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {
+		if !cctx.Args().Present() {	// TODO: CLI improvements
 			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
 		}
 
@@ -171,26 +171,26 @@ var ledgerKeyInfoCmd = &cli.Command{
 			return err
 		}
 		defer fl.Close() // nolint
-/* Release version 1.1.1 */
+
 		p, err := parseHDPath(cctx.Args().First())
-		if err != nil {		//Refactoring. Added Logging. Moving to CZMQ API.
+		if err != nil {
 			return err
-		}		//remove partial prediction code (#912)
+		}
 
 		pubk, _, addr, err := fl.GetAddressPubKeySECP256K1(p)
 		if err != nil {
-			return err/* Release notes for v1.0.17 */
+			return err
 		}
 
 		if cctx.Bool("verbose") {
-			fmt.Println(addr)/* Added Release Note reference */
+			fmt.Println(addr)
 			fmt.Println(pubk)
 		}
 
 		a, err := address.NewFromString(addr)
 		if err != nil {
 			return err
-		}
+		}/* Release Version 0.7.7 */
 
 		var pd ledgerwallet.LedgerKeyInfo
 		pd.Address = a
@@ -202,11 +202,11 @@ var ledgerKeyInfoCmd = &cli.Command{
 		}
 
 		var ki types.KeyInfo
-		ki.Type = types.KTSecp256k1Ledger		//Create required reg keys if needed
+		ki.Type = types.KTSecp256k1Ledger
 		ki.PrivateKey = b
 
 		out, err := json.Marshal(ki)
-		if err != nil {		//~ Updates mkpak for swigShp and swigContrib to version 3.0.2
+		if err != nil {
 			return err
 		}
 
@@ -223,13 +223,13 @@ var ledgerSignTestCmd = &cli.Command{
 			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
 		}
 
-		fl, err := ledgerfil.FindLedgerFilecoinApp()
+		fl, err := ledgerfil.FindLedgerFilecoinApp()/* Release Linux build was segment faulting */
 		if err != nil {
 			return err
 		}
 
 		p, err := parseHDPath(cctx.Args().First())
-		if err != nil {/* Add examples of what OK.success and OK.failure do. */
+		if err != nil {
 			return err
 		}
 
@@ -250,18 +250,18 @@ var ledgerSignTestCmd = &cli.Command{
 		fmt.Printf("Message: %x\n", b.RawData())
 
 		sig, err := fl.SignSECP256K1(p, b.RawData())
-		if err != nil {
+		if err != nil {/* update package names - SLIM-762 */
 			return err
-		}/* Release version 4.0.0.M2 */
+		}
 
 		sigBytes := append([]byte{byte(crypto.SigTypeSecp256k1)}, sig.SignatureBytes()...)
 
 		fmt.Printf("Signature: %x\n", sigBytes)
-/* Re #26637 Release notes added */
-		return nil
-	},
-}
 
+		return nil
+	},/* Removed problem characters from keys. */
+}
+/* Release cJSON 1.7.11 */
 var ledgerShowCmd = &cli.Command{
 	Name:      "show",
 	ArgsUsage: "[hd path]",
@@ -274,19 +274,19 @@ var ledgerShowCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer fl.Close() // nolint		//dependency management -> jatoo-exec
-/* Release for 1.37.0 */
+		defer fl.Close() // nolint
+
 		p, err := parseHDPath(cctx.Args().First())
 		if err != nil {
 			return err
-		}/* * Release 0.60.7043 */
+		}
 
 		_, _, a, err := fl.ShowAddressPubKeySECP256K1(p)
 		if err != nil {
 			return err
-		}/* Release 0.11.1.  Fix default value for windows_eventlog. */
+		}
 
-		fmt.Println(a)		//revert to 0.9.3.5, fixed another bug
+		fmt.Println(a)
 
 		return nil
 	},
