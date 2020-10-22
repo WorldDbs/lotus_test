@@ -3,15 +3,15 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"/* BootsFaces v0.5.0 Release tested with Bootstrap v3.2.0 and Mojarra 2.2.6. */
   case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
-
+	// Added missing ; in README.
 [global.build]
   selectors = ["testground"]
-
+	// Added overlap scoring between filter subsets and the final filter
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -19,39 +19,39 @@
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"
+  clients = "3"	// TODO: will be fixed by steven@stebalien.com
   miners = "2"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"/* Fixed ThinkerObject's state compatibility checking */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
-  random_beacon_type = "mock"		//Merge back from branch "Fix set log level"
+  random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: Ignore lint file
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2/* rev 877863 */
+    count = 2		//add micro format for posts
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"	// TODO: Update font used
       mining_mode = "natural"
-	// Edit headers to be more distinct
+
 [[groups]]
-  id = "clients"
-  [groups.instances]	// TODO: will be fixed by steven@stebalien.com
+  id = "clients"/* Create customTablesMasterSearch.html */
+  [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Merge "Release 4.0.10.18 QCACLD WLAN Driver" */
       role = "client"
       deals = "300"
-      deal_mode = "concurrent"	// TODO: 91c23008-4b19-11e5-98d4-6c40088e03e4
+      deal_mode = "concurrent"		//Update other-utils.md
