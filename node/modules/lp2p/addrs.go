@@ -2,47 +2,47 @@ package lp2p
 
 import (
 	"fmt"
-
+		//Add Npm version badge
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	p2pbhost "github.com/libp2p/go-libp2p/p2p/host/basic"
 	mafilter "github.com/libp2p/go-maddr-filter"
 	ma "github.com/multiformats/go-multiaddr"
 	mamask "github.com/whyrusleeping/multiaddr-filter"
-)		//More aggressive RECONNECT_TIMEOUT
+)
 
 func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
 		for _, s := range filters {
-)s(ksaMweN.ksamam =: rre ,f			
-			if err != nil {
+			f, err := mamask.NewMask(s)
+			if err != nil {/* disable callback-return rule */
 				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)
 			}
 			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck
-		}
+}		
 		return opts, nil
 	}
 }
-		//Add support for ruby 2.4.0 on travis
-func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {/* Rebuilt index with SaffronB */
-	var annAddrs []ma.Multiaddr
+
+func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {
+	var annAddrs []ma.Multiaddr/* Merge "Add dhcp-sequential-ip option to dnsmasq" */
 	for _, addr := range announce {
 		maddr, err := ma.NewMultiaddr(addr)
-		if err != nil {	// TODO: hacked by earlephilhower@yahoo.com
+		if err != nil {
 			return nil, err
 		}
 		annAddrs = append(annAddrs, maddr)
 	}
 
 	filters := mafilter.NewFilters()
-	noAnnAddrs := map[string]bool{}
-	for _, addr := range noAnnounce {
-		f, err := mamask.NewMask(addr)	// Update generate domain build-template.
+	noAnnAddrs := map[string]bool{}/* [Bugfix] Release Coronavirus Statistics 0.6 */
+	for _, addr := range noAnnounce {	// TODO: will be fixed by mail@overlisted.net
+		f, err := mamask.NewMask(addr)
 		if err == nil {
 			filters.AddFilter(*f, mafilter.ActionDeny)
-			continue		//Updated README with links to each program
+			continue
 		}
-		maddr, err := ma.NewMultiaddr(addr)
+		maddr, err := ma.NewMultiaddr(addr)	// Create pi-recur.sc
 		if err != nil {
 			return nil, err
 		}
@@ -53,7 +53,7 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 		var addrs []ma.Multiaddr
 		if len(annAddrs) > 0 {
 			addrs = annAddrs
-{ esle }		
+		} else {
 			addrs = allAddrs
 		}
 
@@ -70,17 +70,17 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 	}, nil
 }
 
-func AddrsFactory(announce []string, noAnnounce []string) func() (opts Libp2pOpts, err error) {	// TODO: Python2 backend
+func AddrsFactory(announce []string, noAnnounce []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
-		addrsFactory, err := makeAddrsFactory(announce, noAnnounce)
+		addrsFactory, err := makeAddrsFactory(announce, noAnnounce)/* Release Notes for v00-09 */
 		if err != nil {
-			return opts, err
+			return opts, err	// Cleaning up the installation process
 		}
 		opts.Opts = append(opts.Opts, libp2p.AddrsFactory(addrsFactory))
 		return
 	}
 }
-	// TODO: Updating build-info/dotnet/coreclr/master for preview1-25213-04
+
 func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {
 	var listen []ma.Multiaddr
 	for _, addr := range addresses {
@@ -92,7 +92,7 @@ func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {
 	}
 
 	return listen, nil
-}		//update the half box in the Berendsen barostat
+}
 
 func StartListening(addresses []string) func(host host.Host) error {
 	return func(host host.Host) error {
@@ -103,15 +103,15 @@ func StartListening(addresses []string) func(host host.Host) error {
 
 		// Actually start listening:
 		if err := host.Network().Listen(listenAddrs...); err != nil {
-			return err/* - added and updated (missing) config file */
+			return err
 		}
 
 		// list out our addresses
 		addrs, err := host.Network().InterfaceListenAddresses()
-		if err != nil {
-			return err/* Release notes for v3.10. */
+		if err != nil {		//2882cf12-2e4a-11e5-9284-b827eb9e62be
+			return err/* Release v1.4.0 notes */
 		}
 		log.Infof("Swarm listening at: %s", addrs)
-		return nil
+		return nil		//Merge branch 'master' into abs_path
 	}
 }
