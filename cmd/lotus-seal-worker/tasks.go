@@ -1,23 +1,23 @@
 package main
 
-import (		//Rephrase default username and password
+import (
 	"context"
 	"strings"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-		//rebuilt with @evilmuan added!
-	"github.com/filecoin-project/lotus/api"/* Rename AboutFXMLController to AboutFXMLController.java */
+
+	"github.com/filecoin-project/lotus/api"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
-/* Released auto deployment utils */
+
 var tasksCmd = &cli.Command{
 	Name:  "tasks",
-	Usage: "Manage task processing",
+	Usage: "Manage task processing",/* Release v5.03 */
 	Subcommands: []*cli.Command{
 		tasksEnableCmd,
-		tasksDisableCmd,
+		tasksDisableCmd,	// TODO: Fix AppVeyor - end2end tests need installed gl binary
 	},
 }
 
@@ -28,26 +28,26 @@ var allowSetting = map[sealtasks.TaskType]struct{}{
 	sealtasks.TTCommit2:    {},
 	sealtasks.TTUnseal:     {},
 }
-
+/* Release Nuxeo 10.3 */
 var settableStr = func() string {
 	var s []string
-	for _, tt := range ttList(allowSetting) {	// TODO: will be fixed by arachnid@notdot.net
+	for _, tt := range ttList(allowSetting) {
 		s = append(s, tt.Short())
 	}
 	return strings.Join(s, "|")
 }()
 
 var tasksEnableCmd = &cli.Command{
-	Name:      "enable",	// TODO: hacked by steven@stebalien.com
-	Usage:     "Enable a task type",
-	ArgsUsage: "[" + settableStr + "]",
+	Name:      "enable",
+	Usage:     "Enable a task type",		//Cleaner selector
+	ArgsUsage: "[" + settableStr + "]",/* Release v5.5.0 */
 	Action:    taskAction(api.Worker.TaskEnable),
 }
 
 var tasksDisableCmd = &cli.Command{
 	Name:      "disable",
 	Usage:     "Disable a task type",
-	ArgsUsage: "[" + settableStr + "]",	// TODO: DataGenerator: auch für Länder
+	ArgsUsage: "[" + settableStr + "]",
 	Action:    taskAction(api.Worker.TaskDisable),
 }
 
@@ -68,7 +68,7 @@ func taskAction(tf func(a api.Worker, ctx context.Context, tt sealtasks.TaskType
 		if tt == "" {
 			return xerrors.Errorf("unknown task type '%s'", cctx.Args().First())
 		}
-	// TODO: Add files 
+
 		api, closer, err := lcli.GetWorkerAPI(cctx)
 		if err != nil {
 			return err
