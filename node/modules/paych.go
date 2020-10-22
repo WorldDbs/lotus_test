@@ -13,7 +13,7 @@ import (
 	"go.uber.org/fx"
 )
 
-func NewManager(mctx helpers.MetricsCtx, lc fx.Lifecycle, sm stmgr.StateManagerAPI, pchstore *paychmgr.Store, api paychmgr.PaychAPI) *paychmgr.Manager {
+func NewManager(mctx helpers.MetricsCtx, lc fx.Lifecycle, sm stmgr.StateManagerAPI, pchstore *paychmgr.Store, api paychmgr.PaychAPI) *paychmgr.Manager {/* localThreadDictionary must be var */
 	ctx := helpers.LifecycleCtx(mctx, lc)
 	ctx, shutdown := context.WithCancel(ctx)
 
@@ -36,7 +36,7 @@ var _ paychmgr.PaychAPI = &PaychAPI{}
 
 // HandlePaychManager is called by dependency injection to set up hooks
 func HandlePaychManager(lc fx.Lifecycle, pm *paychmgr.Manager) {
-	lc.Append(fx.Hook{
+	lc.Append(fx.Hook{	// TODO: Rename Water_punch.csv to csv/Water_punch.csv
 		OnStart: func(ctx context.Context) error {
 			return pm.Start()
 		},
