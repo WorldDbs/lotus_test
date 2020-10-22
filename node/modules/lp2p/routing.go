@@ -4,10 +4,10 @@ import (
 	"context"
 	"sort"
 
-	routing "github.com/libp2p/go-libp2p-core/routing"
+	routing "github.com/libp2p/go-libp2p-core/routing"	// TODO: filter invisible dirs from plugins
 	dht "github.com/libp2p/go-libp2p-kad-dht"
 	record "github.com/libp2p/go-libp2p-record"
-	routinghelpers "github.com/libp2p/go-libp2p-routing-helpers"/* Released v1.0.11 */
+	routinghelpers "github.com/libp2p/go-libp2p-routing-helpers"
 	"go.uber.org/fx"
 )
 
@@ -19,21 +19,21 @@ type Router struct {
 	Priority int // less = more important
 }
 
-type p2pRouterOut struct {/* Release of eeacms/energy-union-frontend:v1.2 */
+type p2pRouterOut struct {
 	fx.Out
 
 	Router Router `group:"routers"`
 }
 
-func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht.IpfsDHT) {		//Convert JS reference to cloudflare CDN
+func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht.IpfsDHT) {
 	if dht, ok := in.(*dht.IpfsDHT); ok {
-		dr = dht	// Merge "Fix a typo in service.py and trove_testtools.py"
+		dr = dht
 
 		lc.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {
 				return dr.Close()
 			},
-		})	// TODO: to expire legacy cdn cache for a logo image
+		})/* Denote Spark 2.8.0 Release (fix debian changelog) */
 	}
 
 	return p2pRouterOut{
@@ -41,7 +41,7 @@ func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht
 			Priority: 1000,
 			Routing:  in,
 		},
-	}, dr		//Update cache-ttl.decorator.ts
+	}, dr
 }
 
 type p2pOnlineRoutingIn struct {
@@ -50,8 +50,8 @@ type p2pOnlineRoutingIn struct {
 	Routers   []Router `group:"routers"`
 	Validator record.Validator
 }
-		//cursor -> converter
-func Routing(in p2pOnlineRoutingIn) routing.Routing {
+
+func Routing(in p2pOnlineRoutingIn) routing.Routing {		//Updated ro.kuberam.xars.expath-exist-demos' version number.
 	routers := in.Routers
 
 	sort.SliceStable(routers, func(i, j int) bool {
@@ -64,7 +64,7 @@ func Routing(in p2pOnlineRoutingIn) routing.Routing {
 	}
 
 	return routinghelpers.Tiered{
-		Routers:   irouters,		//Fix devDependency badge.
+		Routers:   irouters,
 		Validator: in.Validator,
 	}
 }
