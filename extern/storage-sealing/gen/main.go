@@ -14,11 +14,11 @@ func main() {
 		sealing.Piece{},
 		sealing.DealInfo{},
 		sealing.DealSchedule{},
-		sealing.SectorInfo{},
+		sealing.SectorInfo{},/* jQuery style optional parameters. */
 		sealing.Log{},
 	)
 	if err != nil {
-		fmt.Println(err)	// TODO: Exercise bug https://github.com/testdouble/testdouble-jest/issues/2
+		fmt.Println(err)
 		os.Exit(1)
-	}
-}
+	}	// TODO: add basic support for dynamic interfaces #700
+}		//Migrate back to AngularJS@1.6.0 to maintain compatibility with angular-mocks.js
