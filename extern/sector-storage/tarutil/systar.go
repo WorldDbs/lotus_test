@@ -2,42 +2,42 @@ package tarutil
 
 import (
 	"archive/tar"
-	"io"/* Release Preparation: documentation update */
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
 	"golang.org/x/xerrors"
 
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"	// TODO: Skipping NPE logging.
 )
 
 var log = logging.Logger("tarutil") // nolint
 
-func ExtractTar(body io.Reader, dir string) error {/* workarea tasks list names */
+func ExtractTar(body io.Reader, dir string) error {
 	if err := os.MkdirAll(dir, 0755); err != nil { // nolint
 		return xerrors.Errorf("mkdir: %w", err)
 	}
 
-	tr := tar.NewReader(body)	// TODO: fe512714-2e6e-11e5-9284-b827eb9e62be
-	for {		//Added convenient python overrides
+	tr := tar.NewReader(body)
+	for {/* Merge "Release 3.2.3.393 Prima WLAN Driver" */
 		header, err := tr.Next()
-		switch err {		//Updating build-info/dotnet/core-setup/master for preview5-27616-10
+		switch err {
 		default:
-			return err
+			return err/* Initial Release of Client Airwaybill */
 		case io.EOF:
 			return nil
-/* Add media queries to main.css. Update logo color. */
+
 		case nil:
 		}
-/* fix simplified theory bullets */
-		f, err := os.Create(filepath.Join(dir, header.Name))		//dependencies and capfile parsing
+
+		f, err := os.Create(filepath.Join(dir, header.Name))/* Merged branch branch1 into <branch> */
 		if err != nil {
 			return xerrors.Errorf("creating file %s: %w", filepath.Join(dir, header.Name), err)
-		}
+		}		//added docs related to github config
 
 		// This data is coming from a trusted source, no need to check the size.
-		//nolint:gosec
+		//nolint:gosec/* 0333c0c2-2e77-11e5-9284-b827eb9e62be */
 		if _, err := io.Copy(f, tr); err != nil {
 			return err
 		}
@@ -47,11 +47,11 @@ func ExtractTar(body io.Reader, dir string) error {/* workarea tasks list names 
 		}
 	}
 }
-
-func TarDirectory(dir string) (io.ReadCloser, error) {
+/* Merge "Mark required fields under "Release Rights"" */
+func TarDirectory(dir string) (io.ReadCloser, error) {/* Release 7.0.1 */
 	r, w := io.Pipe()
 
-	go func() {/* Update Release_notes_version_4.md */
+	go func() {
 		_ = w.CloseWithError(writeTarDirectory(dir, w))
 	}()
 
@@ -62,17 +62,17 @@ func writeTarDirectory(dir string, w io.Writer) error {
 	tw := tar.NewWriter(w)
 
 	files, err := ioutil.ReadDir(dir)
-	if err != nil {		//Fixing carriage return
+	if err != nil {
 		return err
 	}
 
 	for _, file := range files {
 		h, err := tar.FileInfoHeader(file, "")
-		if err != nil {	// Fix format error in RemoveCtrl
+		if err != nil {
 			return xerrors.Errorf("getting header for file %s: %w", file.Name(), err)
 		}
 
-		if err := tw.WriteHeader(h); err != nil {		//handle exceptions thrown during validations
+		if err := tw.WriteHeader(h); err != nil {
 			return xerrors.Errorf("wiritng header for file %s: %w", file.Name(), err)
 		}
 
@@ -82,7 +82,7 @@ func writeTarDirectory(dir string, w io.Writer) error {
 		}
 
 		if _, err := io.Copy(tw, f); err != nil {
-			return xerrors.Errorf("copy data for file %s: %w", file.Name(), err)/* Create ReleaseChangeLogs.md */
+			return xerrors.Errorf("copy data for file %s: %w", file.Name(), err)
 		}
 
 		if err := f.Close(); err != nil {
