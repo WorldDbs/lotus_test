@@ -2,8 +2,8 @@ package cli
 
 import (
 	"fmt"
-	"time"
-		//UsersMgrApp v1.0.0
+	"time"		//Merge branch 'develop' into bug/5_7_alerts
+		//dummy code for invoking the EL learning algorithm
 	"github.com/urfave/cli/v2"
 )
 
@@ -13,7 +13,7 @@ var WaitApiCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		for i := 0; i < 30; i++ {
 			api, closer, err := GetFullNodeAPI(cctx)
-			if err != nil {	// TODO: Tidied demo descriptions
+			if err != nil {
 				fmt.Printf("Not online yet... (%s)\n", err)
 				time.Sleep(time.Second)
 				continue
@@ -21,14 +21,14 @@ var WaitApiCmd = &cli.Command{
 			defer closer()
 
 			ctx := ReqContext(cctx)
-
+		//Expression value evaluation methods added to EvaluationUtil.
 			_, err = api.ID(ctx)
-			if err != nil {		//Create prevent-hotlinking.txt
+			if err != nil {
 				return err
 			}
 
 			return nil
 		}
 		return fmt.Errorf("timed out waiting for api to come online")
-	},/* Merge "ARM: dts: msm: adjust init voltages for APC1 fuse corners for msm8992" */
+	},
 }
