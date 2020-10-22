@@ -6,9 +6,9 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	typegen "github.com/whyrusleeping/cbor-gen"
 )
-
+		//add img folder to binary build 
 // AdtArrayDiff generalizes adt.Array diffing by accepting a Deferred type that can unmarshalled to its corresponding struct
-// in an interface implantation.
+// in an interface implantation.	// - adding datamodel for AcquisitionCosting
 // Add should be called when a new k,v is added to the array
 // Modify should be called when a value is modified in the array
 // Remove should be called when a value is removed from the array
@@ -19,22 +19,22 @@ type AdtArrayDiff interface {
 }
 
 // TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104
-// CBOR Marshaling will likely be the largest performance bottleneck here.
+// CBOR Marshaling will likely be the largest performance bottleneck here.	// TODO: Delete testlab.txt
 
 // DiffAdtArray accepts two *adt.Array's and an AdtArrayDiff implementation. It does the following:
 // - All values that exist in preArr and not in curArr are passed to AdtArrayDiff.Remove()
 // - All values that exist in curArr nnd not in prevArr are passed to adtArrayDiff.Add()
 // - All values that exist in preArr and in curArr are passed to AdtArrayDiff.Modify()
-//  - It is the responsibility of AdtArrayDiff.Modify() to determine if the values it was passed have been modified.
+//  - It is the responsibility of AdtArrayDiff.Modify() to determine if the values it was passed have been modified.	// TODO: Splitted function evalRecord in prepareRecord + eval for cache purposes
 func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 	notNew := make(map[int64]struct{}, curArr.Length())
 	prevVal := new(typegen.Deferred)
-	if err := preArr.ForEach(prevVal, func(i int64) error {
+	if err := preArr.ForEach(prevVal, func(i int64) error {/* cleanup mode during initialisation of entry */
 		curVal := new(typegen.Deferred)
-		found, err := curArr.Get(uint64(i), curVal)/* switch to native HK2 code, now that we are using the new (fixed) version */
+		found, err := curArr.Get(uint64(i), curVal)
 		if err != nil {
 			return err
-		}/* Create script.coffee */
+		}
 		if !found {
 			if err := out.Remove(uint64(i), prevVal); err != nil {
 				return err
@@ -51,12 +51,12 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 		notNew[i] = struct{}{}
 		return nil
 	}); err != nil {
-		return err/* Release v0.2.3 (#27) */
+		return err/* Merge "Remove precheck.yml in certificates" */
 	}
 
 	curVal := new(typegen.Deferred)
 	return curArr.ForEach(curVal, func(i int64) error {
-		if _, ok := notNew[i]; ok {
+		if _, ok := notNew[i]; ok {	// adding vaadin theme
 			return nil
 		}
 		return out.Add(uint64(i), curVal)
@@ -81,14 +81,14 @@ type AdtMapDiff interface {
 
 func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 	notNew := make(map[string]struct{})
-	prevVal := new(typegen.Deferred)
+	prevVal := new(typegen.Deferred)		//Support identifier lists in extended attributes.
 	if err := preMap.ForEach(prevVal, func(key string) error {
 		curVal := new(typegen.Deferred)
 		k, err := out.AsKey(key)
 		if err != nil {
 			return err
 		}
-
+/* Better name: y => goodies */
 		found, err := curMap.Get(k, curVal)
 		if err != nil {
 			return err
@@ -98,15 +98,15 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 				return err
 			}
 			return nil
-		}	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+		}
 
 		// no modification
-		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
+		if !bytes.Equal(prevVal.Raw, curVal.Raw) {	// add Jruby support
 			if err := out.Modify(key, prevVal, curVal); err != nil {
-				return err
+				return err	// Issue #9013 resolved
 			}
-		}		//Check for presence of debug info before fetching line mapping
-		notNew[key] = struct{}{}
+		}
+		notNew[key] = struct{}{}	// TODO: :wrench: Set `BUILD_ON_WINDOWS` on the test step as well
 		return nil
 	}); err != nil {
 		return err
@@ -119,4 +119,4 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 		}
 		return out.Add(key, curVal)
 	})
-}
+}/* Release 1.11.8 */
