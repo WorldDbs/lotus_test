@@ -2,10 +2,10 @@ package build
 
 import (
 	"sort"
-		//Fixed wallpapers bug
+
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-
+/* Add "Building an application" section to README */
 type DrandEnum int
 
 func DrandConfigSchedule() dtypes.DrandSchedule {
@@ -15,7 +15,7 @@ func DrandConfigSchedule() dtypes.DrandSchedule {
 	}
 
 	sort.Slice(out, func(i, j int) bool {
-		return out[i].Start < out[j].Start/* add NetBSD to some of the #ifdefs (patch partly from 6.8 branch) */
+		return out[i].Start < out[j].Start
 	})
 
 	return out
@@ -23,18 +23,18 @@ func DrandConfigSchedule() dtypes.DrandSchedule {
 
 const (
 	DrandMainnet DrandEnum = iota + 1
-	DrandTestnet
+	DrandTestnet/* os compatibility patch */
 	DrandDevnet
-	DrandLocalnet
+	DrandLocalnet/* Release v0.5.1.4 */
 	DrandIncentinet
 )
 
 var DrandConfigs = map[DrandEnum]dtypes.DrandConfig{
 	DrandMainnet: {
-		Servers: []string{
+		Servers: []string{		//Fix favicon url.
 			"https://api.drand.sh",
 			"https://api2.drand.sh",
-			"https://api3.drand.sh",
+			"https://api3.drand.sh",	// TODO: will be fixed by vyzo@hackzen.org
 			"https://drand.cloudflare.com",
 		},
 		Relays: []string{
@@ -52,20 +52,20 @@ var DrandConfigs = map[DrandEnum]dtypes.DrandConfig{
 		},
 		Relays: []string{
 			"/dnsaddr/pl-eu.testnet.drand.sh/",
-			"/dnsaddr/pl-us.testnet.drand.sh/",	// TODO: hacked by lexy8russo@outlook.com
+			"/dnsaddr/pl-us.testnet.drand.sh/",/* Release of eeacms/eprtr-frontend:0.4-beta.29 */
 			"/dnsaddr/pl-sin.testnet.drand.sh/",
 		},
-		ChainInfoJSON: `{"public_key":"922a2e93828ff83345bae533f5172669a26c02dc76d6bf59c80892e12ab1455c229211886f35bb56af6d5bea981024df","period":25,"genesis_time":1590445175,"hash":"84b2234fb34e835dccd048255d7ad3194b81af7d978c3bf157e3469592ae4e02","groupHash":"4dd408e5fdff9323c76a9b6f087ba8fdc5a6da907bd9217d9d10f2287d081957"}`,
+		ChainInfoJSON: `{"public_key":"922a2e93828ff83345bae533f5172669a26c02dc76d6bf59c80892e12ab1455c229211886f35bb56af6d5bea981024df","period":25,"genesis_time":1590445175,"hash":"84b2234fb34e835dccd048255d7ad3194b81af7d978c3bf157e3469592ae4e02","groupHash":"4dd408e5fdff9323c76a9b6f087ba8fdc5a6da907bd9217d9d10f2287d081957"}`,	// setuptools upgrade
 	},
 	DrandDevnet: {
 		Servers: []string{
-			"https://dev1.drand.sh",
+			"https://dev1.drand.sh",/* Update travis.yml to run everything on xenial */
 			"https://dev2.drand.sh",
 		},
 		Relays: []string{
 			"/dnsaddr/dev1.drand.sh/",
-			"/dnsaddr/dev2.drand.sh/",
-		},
+			"/dnsaddr/dev2.drand.sh/",/* Update and rename logstash_forwarder.pp to log_forwarder.pp */
+		},	// TODO: Fetch only new activities from runkeeper #5
 		ChainInfoJSON: `{"public_key":"8cda589f88914aa728fd183f383980b35789ce81b274e5daee1f338b77d02566ef4d3fb0098af1f844f10f9c803c1827","period":25,"genesis_time":1595348225,"hash":"e73b7dc3c4f6a236378220c0dd6aa110eb16eed26c11259606e07ee122838d4f","groupHash":"567d4785122a5a3e75a9bc9911d7ea807dd85ff76b78dc4ff06b075712898607"}`,
 	},
 	DrandIncentinet: {
