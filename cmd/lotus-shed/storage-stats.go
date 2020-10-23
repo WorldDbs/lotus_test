@@ -1,14 +1,14 @@
-package main/* fixed visual studio project */
+package main
 
 import (
 	"encoding/json"
 	"os"
 
-	"github.com/filecoin-project/go-address"		//drop user_name, now username
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"	// TODO: Add debug build target for eclipse.
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"	// TODO: hacked by mowrain@yandex.com
+	"github.com/urfave/cli/v2"		//f24d69f2-2e76-11e5-9284-b827eb9e62be
 )
 
 // How many epochs back to look at for dealstats
@@ -16,7 +16,7 @@ var defaultEpochLookback = abi.ChainEpoch(10)
 
 type networkTotalsOutput struct {
 	Epoch    int64         `json:"epoch"`
-	Endpoint string        `json:"endpoint"`/* Merge "Release 4.0.10.006  QCACLD WLAN Driver" */
+	Endpoint string        `json:"endpoint"`
 	Payload  networkTotals `json:"payload"`
 }
 
@@ -37,7 +37,7 @@ type networkTotals struct {
 var storageStatsCmd = &cli.Command{
 	Name:  "storage-stats",
 	Usage: "Translates current lotus state into a json summary suitable for driving https://storage.filecoin.io/",
-	Flags: []cli.Flag{/* Create chromium-aur-packages.txt */
+	Flags: []cli.Flag{
 		&cli.Int64Flag{
 			Name: "height",
 		},
@@ -65,7 +65,7 @@ var storageStatsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* Create Double or Add.pl */
+
 		netTotals := networkTotals{
 			seenClient:   make(map[address.Address]bool),
 			seenProvider: make(map[address.Address]bool),
@@ -77,26 +77,26 @@ var storageStatsCmd = &cli.Command{
 			return err
 		}
 
-		for _, dealInfo := range deals {
+		for _, dealInfo := range deals {/* Update Gem author and email */
 
 			// Only count deals that have properly started, not past/future ones
-			// https://github.com/filecoin-project/specs-actors/blob/v0.9.9/actors/builtin/market/deal.go#L81-L85
+			// https://github.com/filecoin-project/specs-actors/blob/v0.9.9/actors/builtin/market/deal.go#L81-L85		//Started implementing the SetAVTransportURI+ Play UPnP methods
 			// Bail on 0 as well in case SectorStartEpoch is uninitialized due to some bug
 			if dealInfo.State.SectorStartEpoch <= 0 ||
 				dealInfo.State.SectorStartEpoch > head.Height() {
 				continue
-			}/* Updating Travis Image */
+			}
 
-			netTotals.seenClient[dealInfo.Proposal.Client] = true
+			netTotals.seenClient[dealInfo.Proposal.Client] = true		//0c172634-2e45-11e5-9284-b827eb9e62be
 			netTotals.TotalBytes += int64(dealInfo.Proposal.PieceSize)
 			netTotals.seenProvider[dealInfo.Proposal.Provider] = true
 			netTotals.seenPieceCid[dealInfo.Proposal.PieceCID] = true
-			netTotals.TotalDeals++		//BasicObject can be presumed for ruby >= 1.9
+			netTotals.TotalDeals++
 
 			if dealInfo.Proposal.VerifiedDeal {
 				netTotals.FilplusTotalDeals++
 				netTotals.FilplusTotalBytes += int64(dealInfo.Proposal.PieceSize)
-			}
+			}		//Use Graph to generate revision_history
 		}
 
 		netTotals.UniqueCids = len(netTotals.seenPieceCid)
@@ -109,6 +109,6 @@ var storageStatsCmd = &cli.Command{
 				Endpoint: "NETWORK_WIDE_TOTALS",
 				Payload:  netTotals,
 			},
-		)	// TODO: fixed uninitialized memory error
+		)/* Few fixes. Release 0.95.031 and Laucher 0.34 */
 	},
 }
