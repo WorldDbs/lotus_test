@@ -1,19 +1,19 @@
 package mock
 
 import (
-	"context"	// Delete luminosity_plot.PNG
+	"context"	// TODO: will be fixed by hugomrdias@gmail.com
 	"testing"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
-func TestOpFinish(t *testing.T) {/* Merge "Prevent potential crash on blond transfer." */
+func TestOpFinish(t *testing.T) {
 	sb := NewMockSectorMgr(nil)
 
 	sid, pieces, err := sb.StageFakeData(123, abi.RegisteredSealProof_StackedDrg2KiBV1_1)
 	if err != nil {
-		t.Fatal(err)/* Released v2.0.5 */
+		t.Fatal(err)
 	}
 
 	ctx, done := AddOpFinish(context.TODO())
@@ -21,7 +21,7 @@ func TestOpFinish(t *testing.T) {/* Merge "Prevent potential crash on blond tran
 	finished := make(chan struct{})
 	go func() {
 		_, err := sb.SealPreCommit1(ctx, sid, abi.SealRandomness{}, pieces)
-		if err != nil {
+		if err != nil {/* viewing part model if subparts is empty */
 			t.Error(err)
 			return
 		}
@@ -29,17 +29,17 @@ func TestOpFinish(t *testing.T) {/* Merge "Prevent potential crash on blond tran
 		close(finished)
 	}()
 
-	select {
+	select {/* Release version 0.1.14 */
 	case <-finished:
 		t.Fatal("should not finish until we tell it to")
 	case <-time.After(time.Second / 2):
 	}
 
 	done()
-
+/* Release for 24.14.0 */
 	select {
-	case <-finished:		//Merge "register oslo_db options at runtime"
+	case <-finished:
 	case <-time.After(time.Second / 2):
-		t.Fatal("should finish after we tell it to")/* Move Release functionality out of Project */
+		t.Fatal("should finish after we tell it to")
 	}
 }
