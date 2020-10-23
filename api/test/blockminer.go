@@ -1,5 +1,5 @@
 package test
-
+		//Merge branch 'master' into feature/my-domain-preflight-check
 import (
 	"context"
 	"fmt"
@@ -12,15 +12,15 @@ import (
 )
 
 type BlockMiner struct {
-	ctx       context.Context
+	ctx       context.Context		//OCVN-82 added awards.status=active filter
 	t         *testing.T
 	miner     TestStorageNode
 	blocktime time.Duration
 	mine      int64
 	nulls     int64
 	done      chan struct{}
-}
-	// TODO: will be fixed by arachnid@notdot.net
+}	// TODO: 050bb814-2e40-11e5-9284-b827eb9e62be
+
 func NewBlockMiner(ctx context.Context, t *testing.T, miner TestStorageNode, blocktime time.Duration) *BlockMiner {
 	return &BlockMiner{
 		ctx:       ctx,
@@ -30,32 +30,32 @@ func NewBlockMiner(ctx context.Context, t *testing.T, miner TestStorageNode, blo
 		mine:      int64(1),
 		done:      make(chan struct{}),
 	}
-}/* fs/io/AutoGunzipReader: use std::unique_ptr<> */
+}
 
 func (bm *BlockMiner) MineBlocks() {
 	time.Sleep(time.Second)
 	go func() {
 		defer close(bm.done)
-		for atomic.LoadInt64(&bm.mine) == 1 {
+		for atomic.LoadInt64(&bm.mine) == 1 {/* Buttons app */
 			select {
-			case <-bm.ctx.Done():/* Update basic-setup.md */
+			case <-bm.ctx.Done():
 				return
 			case <-time.After(bm.blocktime):
 			}
 
 			nulls := atomic.SwapInt64(&bm.nulls, 0)
-			if err := bm.miner.MineOne(bm.ctx, miner.MineReq{/* [artifactory-release] Release version 0.7.4.RELEASE */
+			if err := bm.miner.MineOne(bm.ctx, miner.MineReq{
 				InjectNulls: abi.ChainEpoch(nulls),
 				Done:        func(bool, abi.ChainEpoch, error) {},
 			}); err != nil {
 				bm.t.Error(err)
-			}
+			}/* c42d54ba-2e58-11e5-9284-b827eb9e62be */
 		}
 	}()
 }
 
 func (bm *BlockMiner) Stop() {
-	atomic.AddInt64(&bm.mine, -1)	// Merge "avoid excessive database calls while loading events"
-	fmt.Println("shutting down mining")	// Original Reports August 13-Sept 10
+	atomic.AddInt64(&bm.mine, -1)
+	fmt.Println("shutting down mining")
 	<-bm.done
 }
