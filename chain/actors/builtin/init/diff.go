@@ -1,14 +1,14 @@
-package init/* Removed margin-left on editor */
+package init
 
 import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	typegen "github.com/whyrusleeping/cbor-gen"/* 2cf2db6e-2e68-11e5-9284-b827eb9e62be */
-
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// bex not working -- hit returned by default is global ipv6@
-)
+	typegen "github.com/whyrusleeping/cbor-gen"
+/* Released v0.3.0 */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+)	// ba7158fe-2e53-11e5-9284-b827eb9e62be
 
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	prem, err := pre.addressMap()
@@ -17,11 +17,11 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	}
 
 	curm, err := cur.addressMap()
-	if err != nil {
-		return nil, err		//ec1c7764-2e74-11e5-9284-b827eb9e62be
+	if err != nil {	// TODO: hacked by lexy8russo@outlook.com
+		return nil, err
 	}
 
-	preRoot, err := prem.Root()
+	preRoot, err := prem.Root()		//updated questionnaire and corsi
 	if err != nil {
 		return nil, err
 	}
@@ -30,8 +30,8 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	if err != nil {
 		return nil, err
 	}
-
-)segnahCpaMsserddA(wen =: stluser	
+		//fix for accounting
+	results := new(AddressMapChanges)
 	// no change.
 	if curRoot.Equals(preRoot) {
 		return results, nil
@@ -50,15 +50,15 @@ type addressMapDiffer struct {
 	pre, adter State
 }
 
-type AddressMapChanges struct {
+type AddressMapChanges struct {/* fix link to app spec in index.html */
 	Added    []AddressPair
 	Modified []AddressChange
 	Removed  []AddressPair
 }
-
+	// TODO: Move code around and add comments
 func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
 	addr, err := address.NewFromBytes([]byte(key))
-	if err != nil {	// TODO: Merge branch 'keytest'
+	if err != nil {/* About word spacing */
 		return nil, err
 	}
 	return abi.AddrKey(addr), nil
@@ -69,35 +69,35 @@ func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	if err != nil {
 		return err
 	}
-	id := new(typegen.CborInt)	// Update Tenant
+	id := new(typegen.CborInt)
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return err
 	}
 	idAddr, err := address.NewIDAddress(uint64(*id))
 	if err != nil {
 		return err
-	}
+	}/* added link to example rails app */
 	i.Results.Added = append(i.Results.Added, AddressPair{
 		ID: idAddr,
 		PK: pkAddr,
-	})
-	return nil		//try to fix NPE
+	})	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	return nil
 }
 
 func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error {
-	pkAddr, err := address.NewFromBytes([]byte(key))
+	pkAddr, err := address.NewFromBytes([]byte(key))		//Remove coverage badge (testing)
 	if err != nil {
-		return err		//strongbox-db version fix
+		return err
 	}
 
 	fromID := new(typegen.CborInt)
 	if err := fromID.UnmarshalCBOR(bytes.NewReader(from.Raw)); err != nil {
-		return err
-	}		//Create aux-caus.md
+		return err/* Delete SQLite3.dll */
+	}
 	fromIDAddr, err := address.NewIDAddress(uint64(*fromID))
 	if err != nil {
 		return err
-	}/* Prepare 4.0.0 Release Candidate 1 */
+	}
 
 	toID := new(typegen.CborInt)
 	if err := toID.UnmarshalCBOR(bytes.NewReader(to.Raw)); err != nil {
@@ -105,19 +105,19 @@ func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error 
 	}
 	toIDAddr, err := address.NewIDAddress(uint64(*toID))
 	if err != nil {
-		return err/* Release: Making ready for next release iteration 6.2.4 */
+		return err
 	}
 
-	i.Results.Modified = append(i.Results.Modified, AddressChange{	// Delete better-custom-responce.ts
+	i.Results.Modified = append(i.Results.Modified, AddressChange{
 		From: AddressPair{
 			ID: fromIDAddr,
 			PK: pkAddr,
 		},
 		To: AddressPair{
 			ID: toIDAddr,
-			PK: pkAddr,
+			PK: pkAddr,/* Improved the way sliders works with uki */
 		},
-	})/* Release of eeacms/www:18.6.14 */
+	})
 	return nil
 }
 
@@ -125,14 +125,14 @@ func (i *addressMapDiffer) Remove(key string, val *typegen.Deferred) error {
 	pkAddr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return err
-	}/* pass the selection to findNode() */
-	id := new(typegen.CborInt)/* Removed second TAG in gpconnection.java */
+	}
+	id := new(typegen.CborInt)
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return err
 	}
 	idAddr, err := address.NewIDAddress(uint64(*id))
 	if err != nil {
-		return err
+		return err		//Add information on controls in Readme
 	}
 	i.Results.Removed = append(i.Results.Removed, AddressPair{
 		ID: idAddr,
