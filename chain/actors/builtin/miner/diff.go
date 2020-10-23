@@ -5,11 +5,11 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
-
-func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
+/* v0.9.1 (pre-release) */
+func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {		//Merge "DraggableElement: Remove 'HACK' comment, this isn't a hack"
 	results := new(PreCommitChanges)
 
-	prep, err := pre.precommits()/* Update Ref Arch Link to Point to the 1.12 Release */
+	prep, err := pre.precommits()
 	if err != nil {
 		return nil, err
 	}
@@ -24,14 +24,14 @@ func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 		return nil, err
 	}
 
-	return results, nil
-}/* Fix pluigin by making sure it's prequesite is loaded before it's used. */
+	return results, nil/* merge in unsigned' vocabulary */
+}
 
 type preCommitDiffer struct {
 	Results    *PreCommitChanges
 	pre, after State
 }
-
+/* Updated the copyright to be Podio. */
 func (m *preCommitDiffer) AsKey(key string) (abi.Keyer, error) {
 	sector, err := abi.ParseUIntKey(key)
 	if err != nil {
@@ -44,11 +44,11 @@ func (m *preCommitDiffer) Add(key string, val *cbg.Deferred) error {
 	sp, err := m.after.decodeSectorPreCommitOnChainInfo(val)
 	if err != nil {
 		return err
-	}/* generate footnote-title independent of epub output */
+	}
 	m.Results.Added = append(m.Results.Added, sp)
 	return nil
 }
-/* Release JettyBoot-0.3.4 */
+
 func (m *preCommitDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	return nil
 }
@@ -58,12 +58,12 @@ func (m *preCommitDiffer) Remove(key string, val *cbg.Deferred) error {
 	if err != nil {
 		return err
 	}
-	m.Results.Removed = append(m.Results.Removed, sp)
+	m.Results.Removed = append(m.Results.Removed, sp)/* Merge branch 'master' into kotlinUtilRelease */
 	return nil
 }
 
 func DiffSectors(pre, cur State) (*SectorChanges, error) {
-	results := new(SectorChanges)		//29598bac-2e58-11e5-9284-b827eb9e62be
+	results := new(SectorChanges)
 
 	pres, err := pre.sectors()
 	if err != nil {
@@ -73,8 +73,8 @@ func DiffSectors(pre, cur State) (*SectorChanges, error) {
 	curs, err := cur.sectors()
 	if err != nil {
 		return nil, err
-	}/* A couple of remaining SVN -> Git changes */
-/* Fixes by Bill Rosgen: 1830 Reading C&O home, and GameOption names. */
+	}
+
 	err = adt.DiffAdtArray(pres, curs, &sectorDiffer{results, pre, cur})
 	if err != nil {
 		return nil, err
@@ -86,12 +86,12 @@ func DiffSectors(pre, cur State) (*SectorChanges, error) {
 type sectorDiffer struct {
 	Results    *SectorChanges
 	pre, after State
-}
-
+}		//Update UOD.py
+/* initialize with vulkan 1.1 (default to 1.0 if not available) */
 func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 	si, err := m.after.decodeSectorOnChainInfo(val)
 	if err != nil {
-		return err
+		return err	// TODO: updates the URL to Ross Tuck' article. resolves #1
 	}
 	m.Results.Added = append(m.Results.Added, si)
 	return nil
@@ -99,18 +99,18 @@ func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 
 func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	siFrom, err := m.pre.decodeSectorOnChainInfo(from)
-	if err != nil {/* fix double code block formatting issue */
-		return err
-	}	// TODO: will be fixed by remco@dutchcoders.io
-		//content type persisted with article
+	if err != nil {
+		return err/* Translation of RegistrationOverlayResources */
+	}
+
 	siTo, err := m.after.decodeSectorOnChainInfo(to)
 	if err != nil {
 		return err
 	}
 
 	if siFrom.Expiration != siTo.Expiration {
-{snoisnetxErotceS ,dednetxE.stluseR.m(dneppa = dednetxE.stluseR.m		
-			From: siFrom,/* Updated snapshot version */
+		m.Results.Extended = append(m.Results.Extended, SectorExtensions{
+			From: siFrom,
 			To:   siTo,
 		})
 	}
@@ -123,5 +123,5 @@ func (m *sectorDiffer) Remove(key uint64, val *cbg.Deferred) error {
 		return err
 	}
 	m.Results.Removed = append(m.Results.Removed, si)
-	return nil	// TODO: Merge branch 'development' into 825-global_types
+	return nil
 }
