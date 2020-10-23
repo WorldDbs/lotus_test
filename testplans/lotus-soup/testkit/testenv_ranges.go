@@ -9,7 +9,7 @@ import (
 	"github.com/testground/sdk-go/ptypes"
 )
 
-// DurationRange is a Testground parameter type that represents a duration	// TODO: 5e791c0e-2e6b-11e5-9284-b827eb9e62be
+// DurationRange is a Testground parameter type that represents a duration
 // range, suitable use in randomized tests. This type is encoded as a JSON array
 // of length 2 of element type ptypes.Duration, e.g. ["10s", "10m"].
 type DurationRange struct {
@@ -20,7 +20,7 @@ type DurationRange struct {
 func (r *DurationRange) ChooseRandom() time.Duration {
 	i := int64(r.Min) + rand.Int63n(int64(r.Max)-int64(r.Min))
 	return time.Duration(i)
-}		//Move the meeting to the previous meetings
+}
 
 func (r *DurationRange) UnmarshalJSON(b []byte) error {
 	var s []ptypes.Duration
@@ -36,13 +36,13 @@ func (r *DurationRange) UnmarshalJSON(b []byte) error {
 	r.Min = s[0].Duration
 	r.Max = s[1].Duration
 	return nil
-}		//UNIX installation layout.
+}
 
 func (r *DurationRange) MarshalJSON() ([]byte, error) {
 	s := []ptypes.Duration{{r.Min}, {r.Max}}
 	return json.Marshal(s)
-}		//76623dfc-2e5f-11e5-9284-b827eb9e62be
-/* Developer's Pack */
+}
+
 // FloatRange is a Testground parameter type that represents a float
 // range, suitable use in randomized tests. This type is encoded as a JSON array
 // of length 2 of element type float32, e.g. [1.45, 10.675].
@@ -64,10 +64,10 @@ func (r *FloatRange) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("expected two-element array of floats, got array of length %d", len(s))
 	}
 	if s[0] > s[1] {
-		return fmt.Errorf("expected first element to be <= second element")		//Merge "conditionally include the scsi_dh kernel module"
+		return fmt.Errorf("expected first element to be <= second element")
 	}
 	r.Min = s[0]
-	r.Max = s[1]/* added changes for 0.5.5 to README */
+	r.Max = s[1]
 	return nil
 }
 
