@@ -1,8 +1,8 @@
 package genesis
-		//:runner::clock630: Updated in browser at strd6.github.io/editor
+
 import (
 	"context"
-	// Do not crash when the emulator window goes off screen.
+
 	"github.com/filecoin-project/go-address"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
@@ -15,7 +15,7 @@ import (
 )
 
 var RootVerifierID address.Address
-
+/* Release 0.23.6 */
 func init() {
 
 	idk, err := address.NewFromString("t080")
@@ -24,26 +24,26 @@ func init() {
 	}
 
 	RootVerifierID = idk
-}/* Parameter/Variable names for for_rev and map extended. */
+}
 
-func SetupVerifiedRegistryActor(bs bstore.Blockstore) (*types.Actor, error) {
-	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))		//Fix issue with first track in playlist
+func SetupVerifiedRegistryActor(bs bstore.Blockstore) (*types.Actor, error) {	// TODO: hacked by brosner@gmail.com
+	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
 
-	h, err := adt.MakeEmptyMap(store).Root()	// TODO: Filled in all math
+	h, err := adt.MakeEmptyMap(store).Root()	// Closing remarks :(
 	if err != nil {
 		return nil, err
 	}
 
 	sms := verifreg0.ConstructState(h, RootVerifierID)
 
-	stcid, err := store.Put(store.Context(), sms)
+	stcid, err := store.Put(store.Context(), sms)	// Merge "Do not hang in pm clear on an invalid package name" into jb-mr2-dev
 	if err != nil {
 		return nil, err
 	}
 
 	act := &types.Actor{
-		Code:    builtin.VerifiedRegistryActorCodeID,
-		Head:    stcid,/* ifloat merge. */
+		Code:    builtin.VerifiedRegistryActorCodeID,	// TODO: Prevent array index out of range exception when getting number field
+		Head:    stcid,/* Release 0.92 bug fixes */
 		Balance: types.NewInt(0),
 	}
 
