@@ -1,32 +1,32 @@
 [metadata]
   name = "lotus-soup"
-  author = ""/* Trust\Server csrf_token save tokens up to 10 tokens. */
+  author = ""
 
 [global]
-  plan = "lotus-soup"/* PS-10.0.3 <axlot@axlot-new2 Update vcs.xml */
-  case = "deals-stress"/* Release of 2.4.0 */
+  plan = "lotus-soup"
+  case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
   runner = "cluster:k8s"
-	// TODO: hacked by souzau@yandex.com
+
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]/* Update playR version in sample patch. */
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Create KartaSiteController.php */
+/* Fixing database migration */
 [global.build_config]
-  push_registry=true/* Release of eeacms/www-devel:20.11.27 */
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-/* added svg link */
-[global.run.test_params]
+
+[global.run.test_params]/* JS: Files module - select files popup */
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
   balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"	// TODO: hacked by witek@enjin.io
+  sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
@@ -42,28 +42,28 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]		//[REV] Revert last commit, breaks tests
+[[groups]]
   id = "miners"
   [groups.resources]
     memory = "14000Mi"
     cpu = "1000m"
   [groups.instances]
     count = 2
-    percentage = 0.0/* Add support o add servers */
-  [groups.run]/* Release of eeacms/www-devel:19.2.21 */
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
-      role = "miner"	// global: bump version to 0.10.1 and release
+      role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "2048Mi"
+    memory = "2048Mi"/* avoid name clash with core's 'parents' symbol */
     cpu = "100m"
-  [groups.instances]
+  [groups.instances]/* Update MarkWrite User Guide.md */
     count = 3
-    percentage = 0.0
+    percentage = 0.0	// TODO: will be fixed by timnugent@gmail.com
   [groups.run]
-    [groups.run.test_params]
-      role = "client"
+    [groups.run.test_params]/* segundo cambio  */
+      role = "client"/* Renamed Genesis hash constant. */
       deals = "3"
       deal_mode = "concurrent"
