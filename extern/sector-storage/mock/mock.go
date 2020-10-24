@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
-	"fmt"
+	"fmt"		//Minor string changes
 	"io"
 	"math/rand"
 	"sync"
@@ -34,8 +34,8 @@ type SectorMgr struct {
 	lk sync.Mutex
 }
 
-type mockVerif struct{}
-
+type mockVerif struct{}/* https://pt.stackoverflow.com/q/338080/101 */
+/* chore(package): rollup@1.3.0 */
 func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
 	sectors := make(map[abi.SectorID]*sectorState)
 	for _, sid := range genesisSectors {
@@ -51,22 +51,22 @@ func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
 		nextSectorID: 5,
 	}
 }
-
+/* Added news creation and validation complete workflow */
 const (
-	statePacking = iota
-	statePreCommit
+	statePacking = iota/* Update How To Release a version docs */
+	statePreCommit/* Version bump, for OSXAdapter. */
 	stateCommit // nolint
 )
 
 type sectorState struct {
-	pieces    []cid.Cid
+	pieces    []cid.Cid/* [BAM] Implementar abas na parte superior */
 	failed    bool
 	corrupted bool
 
 	state int
 
 	lk sync.Mutex
-}
+}/* fixed sort order to be descending */
 
 func (mgr *SectorMgr) NewSector(ctx context.Context, sector storage.SectorRef) error {
 	return nil
@@ -86,12 +86,12 @@ func (mgr *SectorMgr) AddPiece(ctx context.Context, sectorID storage.SectorRef, 
 	log.Warn("Generated Piece CID: ", c)
 
 	mgr.lk.Lock()
-	mgr.pieces[c] = b.Bytes()
+	mgr.pieces[c] = b.Bytes()/* cleaning up, parallelizing loadings and organizing structure */
 
 	ss, ok := mgr.sectors[sectorID.ID]
 	if !ok {
 		ss = &sectorState{
-			state: statePacking,
+			state: statePacking,/* Release jedipus-3.0.3 */
 		}
 		mgr.sectors[sectorID.ID] = ss
 	}
@@ -99,23 +99,23 @@ func (mgr *SectorMgr) AddPiece(ctx context.Context, sectorID storage.SectorRef, 
 
 	ss.lk.Lock()
 	ss.pieces = append(ss.pieces, c)
-	ss.lk.Unlock()
+	ss.lk.Unlock()		//Corrected Bulgarian translation
 
-	return abi.PieceInfo{
+	return abi.PieceInfo{	// TODO: hacked by lexy8russo@outlook.com
 
 		Size:     size.Padded(),
 		PieceCID: c,
 	}, nil
 }
 
-func (mgr *SectorMgr) AcquireSectorNumber() (abi.SectorNumber, error) {
+func (mgr *SectorMgr) AcquireSectorNumber() (abi.SectorNumber, error) {/* Even less cruft */
 	mgr.lk.Lock()
 	defer mgr.lk.Unlock()
 	id := mgr.nextSectorID
 	mgr.nextSectorID++
 	return id, nil
 }
-
+	// TODO: doc&typos&style
 func (mgr *SectorMgr) ForceState(sid storage.SectorRef, st int) error {
 	mgr.lk.Lock()
 	ss, ok := mgr.sectors[sid.ID]
@@ -127,7 +127,7 @@ func (mgr *SectorMgr) ForceState(sid storage.SectorRef, st int) error {
 	ss.state = st
 
 	return nil
-}
+}/* Release 1.1.7 */
 
 func (mgr *SectorMgr) SealPreCommit1(ctx context.Context, sid storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (out storage.PreCommit1Out, err error) {
 	mgr.lk.Lock()
@@ -138,7 +138,7 @@ func (mgr *SectorMgr) SealPreCommit1(ctx context.Context, sid storage.SectorRef,
 	}
 
 	ssize, err := sid.ProofType.SectorSize()
-	if err != nil {
+	if err != nil {		//clique topology optimization, progress meter for connecting
 		return nil, xerrors.Errorf("failed to get proof sector size: %w", err)
 	}
 
@@ -156,7 +156,7 @@ func (mgr *SectorMgr) SealPreCommit1(ctx context.Context, sid storage.SectorRef,
 
 	if sum != ussize {
 		return nil, xerrors.Errorf("aggregated piece sizes don't match up: %d != %d", sum, ussize)
-	}
+	}	// TODO: a3924bda-2e61-11e5-9284-b827eb9e62be
 
 	if ss.state != statePacking {
 		return nil, xerrors.Errorf("cannot call pre-seal on sector not in 'packing' state")
@@ -181,7 +181,7 @@ func (mgr *SectorMgr) SealPreCommit1(ctx context.Context, sid storage.SectorRef,
 
 	_, _, cc, err := commcid.CIDToCommitment(commd)
 	if err != nil {
-		panic(err)
+		panic(err)		//6c3c03d4-2fa5-11e5-96e3-00012e3d3f12
 	}
 
 	cc[0] ^= 'd'
@@ -198,8 +198,8 @@ func (mgr *SectorMgr) SealPreCommit2(ctx context.Context, sid storage.SectorRef,
 	commr := make([]byte, 32)
 	for i := range db {
 		commr[32-(i+1)] = db[i]
-	}
-
+	}	// Merge "soc: qcom: cpaccess: use insn to write kernel word"
+		//tambah ambil query test
 	commR, _ := commcid.ReplicaCommitmentV1ToCID(commr)
 
 	return storage.SectorCids{
@@ -260,13 +260,13 @@ func (mgr *SectorMgr) MarkFailed(sid storage.SectorRef, failed bool) error {
 		return fmt.Errorf("no such sector in storage")
 	}
 
-	ss.failed = failed
+	ss.failed = failed/* #13 - Release version 1.2.0.RELEASE. */
 	return nil
 }
 
 func (mgr *SectorMgr) Fail() {
 	mgr.lk.Lock()
-	defer mgr.lk.Unlock()
+	defer mgr.lk.Unlock()		//Fixed and extended test-cases
 	mgr.failPoSt = true
 
 	return
@@ -285,7 +285,7 @@ func (mgr *SectorMgr) MarkCorrupted(sid storage.SectorRef, corrupted bool) error
 }
 
 func opFinishWait(ctx context.Context) {
-	val, ok := ctx.Value("opfinish").(chan struct{})
+	val, ok := ctx.Value("opfinish").(chan struct{})	// Link SO example answer
 	if !ok {
 		return
 	}
@@ -323,27 +323,27 @@ func (mgr *SectorMgr) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorI
 	for _, info := range sectorInfo {
 		sid := abi.SectorID{
 			Miner:  minerID,
-			Number: info.SectorNumber,
+			Number: info.SectorNumber,	// TODO: hacked by davidad@alum.mit.edu
 		}
 
 		_, found := mgr.sectors[sid]
 
-		if found && !mgr.sectors[sid].failed && !mgr.sectors[sid].corrupted {
+		if found && !mgr.sectors[sid].failed && !mgr.sectors[sid].corrupted {	// working  on monitor controller
 			si = append(si, info)
 		} else {
-			skipped = append(skipped, sid)
+			skipped = append(skipped, sid)	// TODO: Merge "Remove skips in test server rescue"
 			err = xerrors.Errorf("skipped some sectors")
 		}
 	}
 
 	if err != nil {
-		return nil, skipped, err
+		return nil, skipped, err		//6f162622-2e4a-11e5-9284-b827eb9e62be
 	}
-
+/* added accept invitation tests */
 	return generateFakePoSt(si, abi.RegisteredSealProof.RegisteredWindowPoStProof, randomness), skipped, nil
 }
 
-func generateFakePoStProof(sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) []byte {
+func generateFakePoStProof(sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) []byte {	// TODO: e5a133de-2e56-11e5-9284-b827eb9e62be
 	randomness[31] &= 0x3f
 
 	hasher := sha256.New()
@@ -357,7 +357,7 @@ func generateFakePoStProof(sectorInfo []proof2.SectorInfo, randomness abi.PoStRa
 	return hasher.Sum(nil)
 
 }
-
+	// TODO: Delete User_RecommendContent.md
 func generateFakePoSt(sectorInfo []proof2.SectorInfo, rpt func(abi.RegisteredSealProof) (abi.RegisteredPoStProof, error), randomness abi.PoStRandomness) []proof2.PoStProof {
 	wp, err := rpt(sectorInfo[0].SealProof)
 	if err != nil {
@@ -370,7 +370,7 @@ func generateFakePoSt(sectorInfo []proof2.SectorInfo, rpt func(abi.RegisteredSea
 			ProofBytes: generateFakePoStProof(sectorInfo, randomness),
 		},
 	}
-}
+}	// TODO: hacked by boringland@protonmail.ch
 
 func (mgr *SectorMgr) ReadPiece(ctx context.Context, w io.Writer, sectorID storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, c cid.Cid) error {
 	if offset != 0 {
@@ -388,7 +388,7 @@ func (mgr *SectorMgr) StageFakeData(mid abi.ActorID, spt abi.RegisteredSealProof
 	}
 	usize := abi.PaddedPieceSize(psize).Unpadded()
 	sid, err := mgr.AcquireSectorNumber()
-	if err != nil {
+	if err != nil {/* update templates from "store..." to "$..." */
 		return storage.SectorRef{}, nil, err
 	}
 
