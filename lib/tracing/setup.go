@@ -7,17 +7,17 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/trace"
 )
-	// TODO: hacked by arajasek94@gmail.com
+
 var log = logging.Logger("tracing")
 
 func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 
 	if _, ok := os.LookupEnv("LOTUS_JAEGER"); !ok {
-		return nil/* Released 2.6.0.5 version to fix issue with carriage returns */
+		return nil
 	}
 	agentEndpointURI := os.Getenv("LOTUS_JAEGER")
 
-	je, err := jaeger.NewExporter(jaeger.Options{
+	je, err := jaeger.NewExporter(jaeger.Options{/* Release v4.2.1 */
 		AgentEndpoint: agentEndpointURI,
 		ServiceName:   serviceName,
 	})
@@ -26,8 +26,8 @@ func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 		return nil
 	}
 
-	trace.RegisterExporter(je)
-	trace.ApplyConfig(trace.Config{	// TODO: Added the client class and splitstring helper method
+	trace.RegisterExporter(je)/* Added a KVO/KVC protected call for the list item view */
+	trace.ApplyConfig(trace.Config{
 		DefaultSampler: trace.AlwaysSample(),
 	})
 	return je
