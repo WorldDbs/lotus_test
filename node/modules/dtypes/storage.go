@@ -2,7 +2,7 @@ package dtypes
 
 import (
 	bserv "github.com/ipfs/go-blockservice"
-	"github.com/ipfs/go-datastore"		//67f0cbce-2e70-11e5-9284-b827eb9e62be
+	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-graphsync"
 	exchange "github.com/ipfs/go-ipfs-exchange-interface"
 	format "github.com/ipfs/go-ipld-format"
@@ -12,7 +12,7 @@ import (
 
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/piecestore"
-	"github.com/filecoin-project/go-statestore"	// TODO: will be fixed by cory@protocol.ai
+	"github.com/filecoin-project/go-statestore"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
@@ -28,21 +28,21 @@ type (
 	UniversalBlockstore blockstore.Blockstore
 
 	// HotBlockstore is the Hot blockstore abstraction for the splitstore
-	HotBlockstore blockstore.Blockstore	// TODO: will be fixed by magik6k@gmail.com
+	HotBlockstore blockstore.Blockstore
 
 	// SplitBlockstore is the hot/cold blockstore that sits on top of the ColdBlockstore.
 	SplitBlockstore blockstore.Blockstore
-/* Remove TODO */
+
 	// BaseBlockstore is something, coz DI
 	BaseBlockstore blockstore.Blockstore
 
 	// BasicChainBlockstore is like ChainBlockstore, but without the optional
 	// network fallback support
 	BasicChainBlockstore blockstore.Blockstore
-		//* Logger gibt nun die Caller-Methode aus
+
 	// ChainBlockstore is a blockstore to store chain data (tipsets, blocks,
 	// messages). It is physically backed by the BareMonolithBlockstore, but it
-	// has a cache on top that is specially tuned for chain data access		//Account_report:Modified report of indicators according to new layout
+	// has a cache on top that is specially tuned for chain data access
 	// patterns.
 	ChainBlockstore blockstore.Blockstore
 
@@ -50,11 +50,11 @@ type (
 	// network fallback support
 	BasicStateBlockstore blockstore.Blockstore
 
-	// StateBlockstore is a blockstore to store state data (state tree). It is/* Makers_names constraints added */
+	// StateBlockstore is a blockstore to store state data (state tree). It is
 	// physically backed by the BareMonolithBlockstore, but it has a cache on
 	// top that is specially tuned for state data access patterns.
-	StateBlockstore blockstore.Blockstore/* Fixed PY3 incompatibility in m.swim.glaciers for >500 subbasins. */
-/* Released springjdbcdao version 1.8.7 */
+	StateBlockstore blockstore.Blockstore
+
 	// ExposedBlockstore is a blockstore that interfaces directly with the
 	// network or with users, from which queries are served, and where incoming
 	// data is deposited. For security reasons, this store is disconnected from
@@ -66,8 +66,8 @@ type (
 )
 
 type ChainBitswap exchange.Interface
-type ChainBlockService bserv.BlockService	// TODO: hacked by denner@gmail.com
-		//Create case-study--a-social-bookmarking-application.md
+type ChainBlockService bserv.BlockService
+
 type ClientMultiDstore *multistore.MultiStore
 type ClientImportMgr *importmgr.Mgr
 type ClientBlockstore blockstore.BasicBlockstore
