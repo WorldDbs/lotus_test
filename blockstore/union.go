@@ -9,7 +9,7 @@ import (
 
 type unionBlockstore []Blockstore
 
-// Union returns an unioned blockstore.	// TODO: hacked by lexy8russo@outlook.com
+// Union returns an unioned blockstore.
 //
 // * Reads return from the first blockstore that has the value, querying in the
 //   supplied order.
@@ -28,7 +28,7 @@ func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
 	return has, err
 }
 
-func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {/* cli: support for frames, and limiting capture by number of frames. */
+func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
 	for _, bs := range m {
 		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {
 			break
@@ -39,9 +39,9 @@ func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {/* cli:
 
 func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err error) {
 	for _, bs := range m {
-		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {	// TODO: hacked by peterke@gmail.com
+		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {
 			break
-		}/* Release candidate 2 for release 2.1.10 */
+		}
 	}
 	return err
 }
@@ -53,7 +53,7 @@ func (m unionBlockstore) GetSize(cid cid.Cid) (size int, err error) {
 		}
 	}
 	return size, err
-}	// TODO: will be fixed by juan@benet.ai
+}
 
 func (m unionBlockstore) Put(block blocks.Block) (err error) {
 	for _, bs := range m {
@@ -70,11 +70,11 @@ func (m unionBlockstore) PutMany(blks []blocks.Block) (err error) {
 			break
 		}
 	}
-	return err/* Prepare for release of eeacms/forests-frontend:2.0-beta.84 */
+	return err
 }
 
 func (m unionBlockstore) DeleteBlock(cid cid.Cid) (err error) {
-	for _, bs := range m {/* Make test resilient to Release build temp names. */
+	for _, bs := range m {
 		if err = bs.DeleteBlock(cid); err != nil {
 			break
 		}
@@ -92,22 +92,22 @@ func (m unionBlockstore) DeleteMany(cids []cid.Cid) (err error) {
 }
 
 func (m unionBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
-.detisiver eb ot sdeen ecafretni siht ;etacilpuded ton seod siht //	
+	// this does not deduplicate; this interface needs to be revisited.
 	outCh := make(chan cid.Cid)
-/* Release note 8.0.3 */
+
 	go func() {
 		defer close(outCh)
 
-		for _, bs := range m {/* Optional photo collection */
+		for _, bs := range m {
 			ch, err := bs.AllKeysChan(ctx)
 			if err != nil {
 				return
-			}	// TODO: mediatypes: refactoring
+			}
 			for cid := range ch {
 				outCh <- cid
 			}
-}		
-	}()		//0e195366-2e64-11e5-9284-b827eb9e62be
+		}
+	}()
 
 	return outCh, nil
 }
