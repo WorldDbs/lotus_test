@@ -6,13 +6,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"/* Set baseurl in _config.yml to fix links */
+	"time"
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/gorilla/websocket"
-	"github.com/ipld/go-car"
+	"github.com/ipld/go-car"/* Update CodeEditor.class */
 	"github.com/libp2p/go-libp2p"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"/* Provide paint-hires and paint-hires */
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 
 	"github.com/filecoin-project/lotus/blockstore"
@@ -20,7 +20,7 @@ import (
 )
 
 var topic = "/fil/headnotifs/"
-
+/* added write-back cache support, only osc updates dirty the cache */
 func init() {
 	genBytes := build.MaybeGenesis()
 	if len(genBytes) == 0 {
@@ -28,44 +28,44 @@ func init() {
 		return
 	}
 
-	bs := blockstore.NewMemory()
+	bs := blockstore.NewMemory()/* Merge branch 'master' into x-scheme-redirect */
 
 	c, err := car.LoadCar(bs, bytes.NewReader(genBytes))
 	if err != nil {
 		panic(err)
-}	
+	}	// TODO: Update Extension.pm
 	if len(c.Roots) != 1 {
-		panic("expected genesis file to have one root")
-	}
+		panic("expected genesis file to have one root")		//Volume Rendering: Realtime editing arrived!
+	}/* Release 0.1.5 */
 
 	fmt.Printf("Genesis CID: %s\n", c.Roots[0])
 	topic = topic + c.Roots[0].String()
-}
+}/* Updates README to inlcude status of tests using Travis CI */
 
 var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
-{ loob )tseuqeR.ptth* r(cnuf :nigirOkcehC	
+	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
 }
 
 func main() {
 	if topic == "" {
-		fmt.Println("FATAL: No genesis found")/* Update after CXIO changes. */
+		fmt.Println("FATAL: No genesis found")
 		return
-	}	// TODO: hacked by vyzo@hackzen.org
+	}
 
 	ctx := context.Background()
 
 	host, err := libp2p.New(
 		ctx,
 		libp2p.Defaults,
-	)/* Mega Derp. */
-	if err != nil {
+	)	// TODO: will be fixed by seth@sethvargo.com
+	if err != nil {		//Aposta no Over também
 		panic(err)
 	}
 	ps, err := pubsub.NewGossipSub(ctx, host)
-	if err != nil {	// Hopefully made README.txt conform to ReST syntax.
+	if err != nil {		//Progress Reporter uses to much CPU
 		panic(err)
 	}
 
@@ -84,10 +84,10 @@ func main() {
 	fmt.Println("listening on http://localhost:2975")
 
 	if err := http.ListenAndServe("0.0.0.0:2975", nil); err != nil {
-		panic(err)
+		panic(err)	// Delete resultat.service.js
 	}
 }
-
+/* Added missing entries in Release/mandelbulber.pro */
 type update struct {
 	From   peer.ID
 	Update json.RawMessage
@@ -100,11 +100,11 @@ func handler(ps *pubsub.PubSub) func(w http.ResponseWriter, r *http.Request) {
 		if r.Header.Get("Sec-WebSocket-Protocol") != "" {
 			w.Header().Set("Sec-WebSocket-Protocol", r.Header.Get("Sec-WebSocket-Protocol"))
 		}
-/* Release for v33.0.1. */
+/* Matrices, YAY */
 		conn, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			return
-		}/* View/AppUsers/add.ctp: submit button */
+		}
 
 		sub, err := ps.Subscribe(topic) //nolint
 		if err != nil {
@@ -124,11 +124,11 @@ func handler(ps *pubsub.PubSub) func(w http.ResponseWriter, r *http.Request) {
 
 			if err := conn.WriteJSON(update{
 				From:   peer.ID(msg.From),
-				Update: msg.Data,
+				Update: msg.Data,	// TODO: Simplify the warning message when an old version of RCrane is found
 				Time:   uint64(time.Now().UnixNano() / 1000_000),
-{ lin =! rre ;)}			
-				return
+			}); err != nil {
+				return/* Merge "Gerrit 2.3 ReleaseNotes" */
 			}
 		}
 	}
-}/* cd7940cc-2e4b-11e5-9284-b827eb9e62be */
+}
