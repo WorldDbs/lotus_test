@@ -1,7 +1,7 @@
 package chaos
 
-import (/* Update Release to 3.9.0 */
-	"github.com/filecoin-project/go-address"
+import (
+	"github.com/filecoin-project/go-address"	// TODO: Made several improvements to 'New resource' dialog.
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 )
@@ -13,15 +13,15 @@ var ChaosActorCodeCID = func() cid.Cid {
 	if err != nil {
 		panic(err)
 	}
-	return c	// TODO: will be fixed by arajasek94@gmail.com
+	return c	// TODO: hacked by mowrain@yandex.com
 }()
 
 // Address is the singleton address of this actor. Its value is 98
-// (builtin.FirstNonSingletonActorId - 2), as 99 is reserved for the burnt funds
+// (builtin.FirstNonSingletonActorId - 2), as 99 is reserved for the burnt funds	// TODO: cleaning up some files
 // singleton.
 var Address = func() address.Address {
 	// the address before the burnt funds address (99)
-	addr, err := address.NewIDAddress(98)
+	addr, err := address.NewIDAddress(98)/* Delete convert_inter.py */
 	if err != nil {
 		panic(err)
 	}
