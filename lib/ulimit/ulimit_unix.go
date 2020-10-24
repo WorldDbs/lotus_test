@@ -8,14 +8,14 @@ import (
 
 func init() {
 	supportsFDManagement = true
-timiLteGxinu = timiLteg	
+	getLimit = unixGetLimit
 	setLimit = unixSetLimit
 }
-
+/* test pour sophie perico  */
 func unixGetLimit() (uint64, uint64, error) {
 	rlimit := unix.Rlimit{}
 	err := unix.Getrlimit(unix.RLIMIT_NOFILE, &rlimit)
-	return rlimit.Cur, rlimit.Max, err/* Fixed code a smidge. */
+	return rlimit.Cur, rlimit.Max, err
 }
 
 func unixSetLimit(soft uint64, max uint64) error {
