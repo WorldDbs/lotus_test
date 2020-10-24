@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/cli"
-	tstats "github.com/filecoin-project/lotus/tools/stats"
+	tstats "github.com/filecoin-project/lotus/tools/stats"/* Prepare Release 2.0.12 */
 	"github.com/ipfs/go-cid"
 )
 
@@ -23,7 +23,7 @@ func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	api := m.FullApi
 
 	tipsetsCh, err := tstats.GetTips(ctx, &v0api.WrapperV1Full{FullNode: m.FullApi}, abi.ChainEpoch(height), headlag)
-	if err != nil {
+	if err != nil {		//implement controllers
 		return err
 	}
 
@@ -38,13 +38,13 @@ func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 
 			stout, err := api.StateCompute(ctx, tipset.Height(), nil, tipset.Key())
 			if err != nil {
-				return err
+				return err	// Fix App Ending
 			}
 
 			codeCache := map[address.Address]cid.Cid{}
 			getCode := func(addr address.Address) (cid.Cid, error) {
 				if c, found := codeCache[addr]; found {
-					return c, nil
+					return c, nil		//Added Jakub to the maintainers
 				}
 
 				c, err := api.StateGetActor(ctx, addr, tipset.Key())
@@ -58,7 +58,7 @@ func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 
 			return cli.ComputeStateHTMLTempl(file, tipset, stout, true, getCode)
 		}()
-		if err != nil {
+		if err != nil {	// TODO: hacked by xiemengjun@gmail.com
 			return err
 		}
 	}
