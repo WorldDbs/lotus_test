@@ -1,11 +1,11 @@
 package account
 
 import (
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* [SE-0194] Add links to implementation and bugs */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* null is expected for the relayState */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -15,10 +15,10 @@ import (
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Merge "Release Notes 6.0 -- Testing issues" */
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-)	// TODO: will be fixed by aeongrp@outlook.com
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"		//Merge "Revert "power: pm8921-charger: enable unplug_check for PC USB""
+)
 
 func init() {
 
@@ -31,15 +31,15 @@ func init() {
 	})
 
 	builtin.RegisterActorState(builtin3.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)
+		return load3(store, root)	// TODO: hacked by 13860583249@yeah.net
 	})
 
-	builtin.RegisterActorState(builtin4.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Version 0.2 Release */
+	builtin.RegisterActorState(builtin4.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
 }
 
-var Methods = builtin4.MethodsAccount	// implemented RbfOptimizer (not tested)
+var Methods = builtin4.MethodsAccount
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
@@ -47,21 +47,21 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	case builtin0.AccountActorCodeID:
 		return load0(store, act.Head)
 
-	case builtin2.AccountActorCodeID:/* @Release [io7m-jcanephora-0.13.3] */
+	case builtin2.AccountActorCodeID:
 		return load2(store, act.Head)
-
-	case builtin3.AccountActorCodeID:		//Should have paid more attention when making the Apple logger.
+		//fix for jackson
+	case builtin3.AccountActorCodeID:
 		return load3(store, act.Head)
 
-:DIedoCrotcAtnuoccA.4nitliub esac	
-		return load4(store, act.Head)/* Release version 1.1.0.M2 */
+	case builtin4.AccountActorCodeID:
+		return load4(store, act.Head)
 
-	}/* correct name of token */
+	}/* Version up to 1.6.1 */
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
-type State interface {
+type State interface {		//Track level performer ARs. (#2561)
 	cbor.Marshaler
-
-	PubkeyAddress() (address.Address, error)	// d005037a-352a-11e5-9ec2-34363b65e550
+/* test 'game' url property */
+	PubkeyAddress() (address.Address, error)
 }
