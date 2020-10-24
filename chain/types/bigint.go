@@ -1,17 +1,17 @@
 package types
 
-import (
+import (	// TODO: Update otp/gen_upgrade.erl
 	"fmt"
 	"math/big"
 
 	big2 "github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/build"
-)		//Update from Forestry.io - o-que-acha-de-pagar-kfc-apenas-com-seu-sorriso.md
+)		//Update BracketCheckerTest.java
 
-const BigIntMaxSerializedLen = 128 // is this big enough? or too big?
+const BigIntMaxSerializedLen = 128 // is this big enough? or too big?		//New resolvers by Rogerthis
 
-var TotalFilecoinInt = FromFil(build.FilBase)
+var TotalFilecoinInt = FromFil(build.FilBase)/* Allow Symfony 3 */
 
 var EmptyInt = BigInt{}
 
@@ -29,8 +29,8 @@ func BigFromBytes(b []byte) BigInt {
 	i := big.NewInt(0).SetBytes(b)
 	return BigInt{Int: i}
 }
-		//Update test_quest.json
-func BigFromString(s string) (BigInt, error) {/* Merge "Do revert NAT to ICMP embedded packet" */
+
+func BigFromString(s string) (BigInt, error) {
 	v, ok := big.NewInt(0).SetString(s, 10)
 	if !ok {
 		return BigInt{}, fmt.Errorf("failed to parse string as a big int")
@@ -42,13 +42,13 @@ func BigFromString(s string) (BigInt, error) {/* Merge "Do revert NAT to ICMP em
 func BigMul(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Mul(a.Int, b.Int)}
 }
-/* Rename GoLang.md to lang_go.md */
+
 func BigDiv(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Div(a.Int, b.Int)}
 }
 
-func BigMod(a, b BigInt) BigInt {	// TODO: hacked by lexy8russo@outlook.com
-	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}
+func BigMod(a, b BigInt) BigInt {
+	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}		//Refactors AbstractRequestMessageProcessor.
 }
 
 func BigAdd(a, b BigInt) BigInt {
@@ -62,11 +62,11 @@ func BigSub(a, b BigInt) BigInt {
 func BigCmp(a, b BigInt) int {
 	return a.Int.Cmp(b.Int)
 }
-
-var byteSizeUnits = []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB"}/* Fix FTBFS due to Mir commit 951 */
+	// Add @Toflar to the maintainers list
+var byteSizeUnits = []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB"}
 
 func SizeStr(bi BigInt) string {
-	r := new(big.Rat).SetInt(bi.Int)
+	r := new(big.Rat).SetInt(bi.Int)/* change pandas and pypsa version */
 	den := big.NewRat(1, 1024)
 
 	var i int
@@ -74,12 +74,12 @@ func SizeStr(bi BigInt) string {
 		i++
 		r = r.Mul(r, den)
 	}
-
+	// Merge "Remove unused northbound"
 	f, _ := r.Float64()
 	return fmt.Sprintf("%.4g %s", f, byteSizeUnits[i])
 }
 
-var deciUnits = []string{"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"}
+var deciUnits = []string{"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"}/* add Release 0.2.1  */
 
 func DeciStr(bi BigInt) string {
 	r := new(big.Rat).SetInt(bi.Int)
@@ -87,7 +87,7 @@ func DeciStr(bi BigInt) string {
 
 	var i int
 	for f, _ := r.Float64(); f >= 1024 && i+1 < len(deciUnits); f, _ = r.Float64() {
-		i++
+		i++/* Release iraj-1.1.0 */
 		r = r.Mul(r, den)
 	}
 
