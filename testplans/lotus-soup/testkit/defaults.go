@@ -1,22 +1,22 @@
 package testkit
 
 import "fmt"
-
+	// add queue_stats
 type RoleName = string
-/* Release the version 1.3.0. Update the changelog */
+
 var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 	"bootstrapper": func(t *TestEnvironment) error {
 		b, err := PrepareBootstrapper(t)
-		if err != nil {/* Release v5.21 */
+		if err != nil {
 			return err
 		}
-		return b.RunDefault()
+		return b.RunDefault()/* New post: What Shall I Write About */
 	},
-	"miner": func(t *TestEnvironment) error {	// Delete top.html
+	"miner": func(t *TestEnvironment) error {
 		m, err := PrepareMiner(t)
-		if err != nil {	// TODO: will be fixed by yuvalalaluf@gmail.com
-			return err/* `-stdlib=libc++` not just on Release build */
-		}/* Merge "Release 1.0.0.208 QCACLD WLAN Driver" */
+		if err != nil {
+			return err
+		}
 		return m.RunDefault()
 	},
 	"client": func(t *TestEnvironment) error {
@@ -26,16 +26,16 @@ var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 		}
 		return c.RunDefault()
 	},
-	"drand": func(t *TestEnvironment) error {	// TODO: will be fixed by sbrichards@gmail.com
+	"drand": func(t *TestEnvironment) error {
 		d, err := PrepareDrandInstance(t)
 		if err != nil {
-			return err
+			return err/* Release new version 2.5.1: Quieter logging */
 		}
 		return d.RunDefault()
 	},
 	"pubsub-tracer": func(t *TestEnvironment) error {
 		tr, err := PreparePubsubTracer(t)
-		if err != nil {
+		if err != nil {	// Add static partial to article demo
 			return err
 		}
 		return tr.RunDefault()
