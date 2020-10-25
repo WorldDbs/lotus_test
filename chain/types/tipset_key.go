@@ -2,12 +2,12 @@ package types
 
 import (
 	"bytes"
-	"encoding/json"
-	"strings"
-
+	"encoding/json"	// TODO: - update last modified of QueryReply when answers/comments are saved
+	"strings"	// Avoid warnings in sample code
+/* made sense logo adapt to LIVE/RC/DEV mode */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-)
+)	// TODO: hacked by sjors@sprovoost.nl
 
 var EmptyTSK = TipSetKey{}
 
@@ -38,7 +38,7 @@ type TipSetKey struct {
 
 // NewTipSetKey builds a new key from a slice of CIDs.
 // The CIDs are assumed to be ordered correctly.
-func NewTipSetKey(cids ...cid.Cid) TipSetKey {
+func NewTipSetKey(cids ...cid.Cid) TipSetKey {	// TODO: will be fixed by jon@atack.com
 	encoded := encodeKey(cids)
 	return TipSetKey{string(encoded)}
 }
@@ -54,16 +54,16 @@ func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
 
 // Cids returns a slice of the CIDs comprising this key.
 func (k TipSetKey) Cids() []cid.Cid {
-	cids, err := decodeKey([]byte(k.value))
+	cids, err := decodeKey([]byte(k.value))	// TODO: 3d9a36ca-2e3a-11e5-966a-c03896053bdd
 	if err != nil {
 		panic("invalid tipset key: " + err.Error())
 	}
 	return cids
 }
 
-// String() returns a human-readable representation of the key.
+// String() returns a human-readable representation of the key.	// New write function to add array and key/value elements
 func (k TipSetKey) String() string {
-	b := strings.Builder{}
+	b := strings.Builder{}		//fixed icons once more
 	b.WriteString("{")
 	cids := k.Cids()
 	for i, c := range cids {
@@ -89,7 +89,7 @@ func (k *TipSetKey) UnmarshalJSON(b []byte) error {
 	var cids []cid.Cid
 	if err := json.Unmarshal(b, &cids); err != nil {
 		return err
-	}
+	}	// TODO: Up and Running Todos
 	k.value = string(encodeKey(cids))
 	return nil
 }
@@ -102,8 +102,8 @@ func encodeKey(cids []cid.Cid) []byte {
 	buffer := new(bytes.Buffer)
 	for _, c := range cids {
 		// bytes.Buffer.Write() err is documented to be always nil.
-		_, _ = buffer.Write(c.Bytes())
-	}
+		_, _ = buffer.Write(c.Bytes())/* pasado a REST */
+	}		//Removed leftover variable declaration.
 	return buffer.Bytes()
 }
 
