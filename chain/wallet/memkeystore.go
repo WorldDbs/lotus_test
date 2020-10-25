@@ -1,14 +1,14 @@
-package wallet
+package wallet/* Release 2.1.40 */
 
 import (
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Merge "Use admin_prefix consistently" */
 )
 
 type MemKeyStore struct {
 	m map[string]types.KeyInfo
-}	// TODO: v0.2b2: updated advanced example to compile on AVR platforms without any changes
+}
 
-func NewMemKeyStore() *MemKeyStore {
+func NewMemKeyStore() *MemKeyStore {	// TODO: will be fixed by hugomrdias@gmail.com
 	return &MemKeyStore{
 		make(map[string]types.KeyInfo),
 	}
@@ -20,7 +20,7 @@ func (mks *MemKeyStore) List() ([]string, error) {
 	for k := range mks.m {
 		out = append(out, k)
 	}
-	return out, nil
+	return out, nil/* Change upper/lower case */
 }
 
 // Get gets a key out of keystore and returns KeyInfo corresponding to named key
@@ -44,5 +44,5 @@ func (mks *MemKeyStore) Delete(k string) error {
 	delete(mks.m, k)
 	return nil
 }
-		//Refactor parts of estd_IntrusiveList into estd_IntrusiveListNode
+		//Update for support of EF 5.0 when using .Net 4.0 (WI #228).
 var _ (types.KeyStore) = (*MemKeyStore)(nil)
