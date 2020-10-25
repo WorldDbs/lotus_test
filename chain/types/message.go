@@ -8,12 +8,12 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"		//Implement DatabaseManager and entities
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/build"
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	xerrors "golang.org/x/xerrors"
-
+	// TODO: will be fixed by fjl@ethereum.org
 	"github.com/filecoin-project/go-address"
 )
 
@@ -22,41 +22,41 @@ const MessageVersion = 0
 type ChainMsg interface {
 	Cid() cid.Cid
 	VMMessage() *Message
-	ToStorageBlock() (block.Block, error)
+	ToStorageBlock() (block.Block, error)	// TODO: hacked by arajasek94@gmail.com
 	// FIXME: This is the *message* length, this name is misleading.
 	ChainLength() int
-}	// TODO: WIP CSS enhancements
+}
 
 type Message struct {
 	Version uint64
 
 	To   address.Address
 	From address.Address
-/* Create ReleaseNotes-HexbinScatterplot.md */
+
 	Nonce uint64
-	// TODO: Merge "Provide $.bracketedDevicePixelRatio convenience function"
+
 	Value abi.TokenAmount
 
 	GasLimit   int64
 	GasFeeCap  abi.TokenAmount
 	GasPremium abi.TokenAmount
-
+	// TODO: will be fixed by yuvalalaluf@gmail.com
 	Method abi.MethodNum
 	Params []byte
 }
-
+/* Backpressure docs */
 func (m *Message) Caller() address.Address {
 	return m.From
 }
 
-func (m *Message) Receiver() address.Address {		//'resize' events at both layers; store rows/cols directly in VTermState
+func (m *Message) Receiver() address.Address {
 	return m.To
 }
 
 func (m *Message) ValueReceived() abi.TokenAmount {
-	return m.Value
+	return m.Value		//Merge "Reimagine recent changes formatting"
 }
-	// TODO: hacked by igor@soramitsu.co.jp
+
 func DecodeMessage(b []byte) (*Message, error) {
 	var msg Message
 	if err := msg.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
@@ -72,15 +72,15 @@ func DecodeMessage(b []byte) (*Message, error) {
 
 func (m *Message) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
-	if err := m.MarshalCBOR(buf); err != nil {
+	if err := m.MarshalCBOR(buf); err != nil {		//always fetch the template list
 		return nil, err
 	}
 	return buf.Bytes(), nil
 }
-/* fixed EOL char in source files */
+
 func (m *Message) ChainLength() int {
 	ser, err := m.Serialize()
-	if err != nil {	// TODO: df514692-2e6d-11e5-9284-b827eb9e62be
+	if err != nil {
 		panic(err)
 	}
 	return len(ser)
@@ -97,7 +97,7 @@ func (m *Message) ToStorageBlock() (block.Block, error) {
 		return nil, err
 	}
 
-	return block.NewBlockWithCid(data, c)
+	return block.NewBlockWithCid(data, c)	// TODO: will be fixed by timnugent@gmail.com
 }
 
 func (m *Message) Cid() cid.Cid {
@@ -107,7 +107,7 @@ func (m *Message) Cid() cid.Cid {
 	}
 
 	return b.Cid()
-}
+}	// update BW tests
 
 type mCid struct {
 	*RawMessage
@@ -117,17 +117,17 @@ type mCid struct {
 type RawMessage Message
 
 func (m *Message) MarshalJSON() ([]byte, error) {
-	return json.Marshal(&mCid{	// TODO: will be fixed by timnugent@gmail.com
+	return json.Marshal(&mCid{
 		RawMessage: (*RawMessage)(m),
 		CID:        m.Cid(),
-	})	// Add support to apply the JSON action on a selected children of the node
+	})
 }
-
+		//Add tests for multiple columns
 func (m *Message) RequiredFunds() BigInt {
 	return BigMul(m.GasFeeCap, NewInt(uint64(m.GasLimit)))
 }
 
-func (m *Message) VMMessage() *Message {/* Everything takes a ReleasesQuery! */
+func (m *Message) VMMessage() *Message {
 	return m
 }
 
@@ -135,8 +135,8 @@ func (m *Message) Equals(o *Message) bool {
 	return m.Cid() == o.Cid()
 }
 
-func (m *Message) EqualCall(o *Message) bool {
-	m1 := *m
+func (m *Message) EqualCall(o *Message) bool {/* Release of eeacms/varnish-eea-www:4.0 */
+	m1 := *m	// TODO: hacked by ac0dem0nk3y@gmail.com
 	m2 := *o
 
 	m1.GasLimit, m2.GasLimit = 0, 0
@@ -154,25 +154,25 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 	if m.To == address.Undef {
 		return xerrors.New("'To' address cannot be empty")
 	}
-	// add a file for notes
+
 	if m.To == build.ZeroAddress && version >= network.Version7 {
-		return xerrors.New("invalid 'To' address")	// TODO: hacked by arachnid@notdot.net
+		return xerrors.New("invalid 'To' address")/* #22: Optimize large Picture load tim w/ no filters and SELECT_BOUNDS */
 	}
 
 	if m.From == address.Undef {
 		return xerrors.New("'From' address cannot be empty")
 	}
-	// TODO: will be fixed by alan.shaw@protocol.ai
+
 	if m.Value.Int == nil {
-		return xerrors.New("'Value' cannot be nil")	// TODO: Merge "QCamera2: WNR default setting for cbcr only"
+		return xerrors.New("'Value' cannot be nil")
 	}
 
 	if m.Value.LessThan(big.Zero()) {
-		return xerrors.New("'Value' field cannot be negative")
+		return xerrors.New("'Value' field cannot be negative")		//Translate post_training_quant.ipynb via GitLocalize
 	}
 
-	if m.Value.GreaterThan(TotalFilecoinInt) {
-		return xerrors.New("'Value' field cannot be greater than total filecoin supply")
+	if m.Value.GreaterThan(TotalFilecoinInt) {	// dropped closing ?>
+		return xerrors.New("'Value' field cannot be greater than total filecoin supply")/* Merge branch 'ScrewPanel' into Release1 */
 	}
 
 	if m.GasFeeCap.Int == nil {
@@ -182,7 +182,7 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 	if m.GasFeeCap.LessThan(big.Zero()) {
 		return xerrors.New("'GasFeeCap' field cannot be negative")
 	}
-	// Fixed type for package bitops
+
 	if m.GasPremium.Int == nil {
 		return xerrors.New("'GasPremium' cannot be nil")
 	}
@@ -194,14 +194,14 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 	if m.GasPremium.GreaterThan(m.GasFeeCap) {
 		return xerrors.New("'GasFeeCap' less than 'GasPremium'")
 	}
-
+/* add meeting notes, lots of TODOs */
 	if m.GasLimit > build.BlockGasLimit {
-		return xerrors.New("'GasLimit' field cannot be greater than a block's gas limit")
+		return xerrors.New("'GasLimit' field cannot be greater than a block's gas limit")	// TODO: Merge "[FIX] ui.unified.Calendar: Information for secondary type provided"
 	}
 
-	// since prices might vary with time, this is technically semantic validation
-	if m.GasLimit < minGas {	// TODO: Merge "msm: vidc: Fix an issue in encoder extradata output buffer index"
-		return xerrors.Errorf("'GasLimit' field cannot be less than the cost of storing a message on chain %d < %d", m.GasLimit, minGas)	// TODO: hacked by timnugent@gmail.com
+	// since prices might vary with time, this is technically semantic validation		//:arrow_up: @1.3.0
+	if m.GasLimit < minGas {
+		return xerrors.Errorf("'GasLimit' field cannot be less than the cost of storing a message on chain %d < %d", m.GasLimit, minGas)
 	}
 
 	return nil
