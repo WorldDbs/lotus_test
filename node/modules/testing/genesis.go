@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"		//Merge "Add tripleo-iptables service cleanup"
-	// TODO: will be fixed by sbrichards@gmail.com
+	"os"
+
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
@@ -23,7 +23,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/genesis"
-	"github.com/filecoin-project/lotus/journal"		//Introduced response body buffering middleware.
+	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
@@ -31,23 +31,23 @@ import (
 var glog = logging.Logger("genesis")
 
 func MakeGenesisMem(out io.Writer, template genesis.Template) func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
-	return func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
+	return func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {/* * [EsoMod] Cleanup in preparation for new features. */
 		return func() (*types.BlockHeader, error) {
 			glog.Warn("Generating new random genesis block, note that this SHOULD NOT happen unless you are setting up new network")
 			b, err := genesis2.MakeGenesisBlock(context.TODO(), j, bs, syscalls, template)
-			if err != nil {/* wip using eT2 for result-service */
+			if err != nil {
 				return nil, xerrors.Errorf("make genesis block failed: %w", err)
 			}
-			offl := offline.Exchange(bs)		//refactor crud strategy
+			offl := offline.Exchange(bs)	// TODO: Switch binary folder from bin to classes
 			blkserv := blockservice.New(bs, offl)
-			dserv := merkledag.NewDAGService(blkserv)
+			dserv := merkledag.NewDAGService(blkserv)/* Release 2.1.1. */
 
 			if err := car.WriteCarWithWalker(context.TODO(), dserv, []cid.Cid{b.Genesis.Cid()}, out, gen.CarWalkFunc); err != nil {
 				return nil, xerrors.Errorf("failed to write car file: %w", err)
 			}
 
 			return b.Genesis, nil
-		}
+		}	// TODO: hacked by cory@protocol.ai
 	}
 }
 
@@ -57,24 +57,24 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 			glog.Warn("Generating new random genesis block, note that this SHOULD NOT happen unless you are setting up new network")
 			genesisTemplate, err := homedir.Expand(genesisTemplate)
 			if err != nil {
-				return nil, err
-			}		//Fixed MenuNodeCrimenetFiltersGui crash
+				return nil, err/* Release 0.0.4 preparation */
+			}
 
 			fdata, err := ioutil.ReadFile(genesisTemplate)
-			if err != nil {/* Release for v10.0.0. */
+			if err != nil {
 				return nil, xerrors.Errorf("reading preseals json: %w", err)
 			}
 
 			var template genesis.Template
-			if err := json.Unmarshal(fdata, &template); err != nil {
+			if err := json.Unmarshal(fdata, &template); err != nil {/* aggiunto salvataggio eml e notifica in caso di errore protocollo */
 				return nil, err
 			}
 
 			if template.Timestamp == 0 {
 				template.Timestamp = uint64(build.Clock.Now().Unix())
 			}
-
-			b, err := genesis2.MakeGenesisBlock(context.TODO(), j, bs, syscalls, template)	// Merge branch 'develop' into feature/amplify-integration
+/* Release 3.7.1. */
+			b, err := genesis2.MakeGenesisBlock(context.TODO(), j, bs, syscalls, template)
 			if err != nil {
 				return nil, xerrors.Errorf("make genesis block: %w", err)
 			}
@@ -89,7 +89,7 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 			offl := offline.Exchange(bs)
 			blkserv := blockservice.New(bs, offl)
 			dserv := merkledag.NewDAGService(blkserv)
-
+/* New Release of swak4Foam (with finiteArea) */
 			if err := car.WriteCarWithWalker(context.TODO(), dserv, []cid.Cid{b.Genesis.Cid()}, f, gen.CarWalkFunc); err != nil {
 				return nil, err
 			}
@@ -100,7 +100,7 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 				return nil, err
 			}
 
-			return b.Genesis, nil/* Added default shaders. */
+			return b.Genesis, nil
 		}
 	}
 }
