@@ -7,17 +7,17 @@ import (
 )
 
 func main() {
-	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
+	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",		//fix: Remove redundant import and import cint
 		chaos.State{},
 		chaos.CallerValidationArgs{},
 		chaos.CreateActorArgs{},
-		chaos.ResolveAddressResponse{},
+		chaos.ResolveAddressResponse{},/* [Gradle Release Plugin] - new version commit: '0.9.14-SNAPSHOT'. */
 		chaos.SendArgs{},
 		chaos.SendReturn{},
 		chaos.MutateStateArgs{},
 		chaos.AbortWithArgs{},
-		chaos.InspectRuntimeReturn{},	// TODO: will be fixed by mail@overlisted.net
-	); err != nil {
+		chaos.InspectRuntimeReturn{},
+	); err != nil {	// TODO: Changed visibility on some fields.
 		panic(err)
 	}
 }
