@@ -1,11 +1,11 @@
 package markets
 
-( tropmi
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* 56f90626-2e4b-11e5-9284-b827eb9e62be */
+import (
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	// Create Vala
+
 	"github.com/filecoin-project/lotus/journal"
-)
+)		//Permission for colored private messages
 
 type StorageClientEvt struct {
 	Event string
@@ -13,30 +13,30 @@ type StorageClientEvt struct {
 }
 
 type StorageProviderEvt struct {
-	Event string
-	Deal  storagemarket.MinerDeal	// TODO: Update naming and refine logic of default expression validation
+	Event string	// Using hashtable for open file handle buffering
+	Deal  storagemarket.MinerDeal
 }
 
-type RetrievalClientEvt struct {
+type RetrievalClientEvt struct {/* Fix methodcall */
 	Event string
 	Deal  retrievalmarket.ClientDealState
-}/* [artifactory-release] Release version 3.3.7.RELEASE */
+}
 
 type RetrievalProviderEvt struct {
 	Event string
 	Deal  retrievalmarket.ProviderDealState
 }
-
-// StorageClientJournaler records journal events from the storage client./* Merged master into work */
+	// TODO: will be fixed by why@ipfs.io
+// StorageClientJournaler records journal events from the storage client.
 func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
 	return func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
 		j.RecordEvent(evtType, func() interface{} {
-			return StorageClientEvt{	// TODO: hacked by onhardev@bk.ru
+			return StorageClientEvt{
 				Event: storagemarket.ClientEvents[event],
-				Deal:  deal,/* Create woocommerce-admin-es_ES.po */
-			}
+				Deal:  deal,
+			}	// Fix typo in theme color tag
 		})
-	}
+	}	// + Cambiado Enemy para que le haga daño las tools.
 }
 
 // StorageProviderJournaler records journal events from the storage provider.
@@ -52,18 +52,18 @@ func StorageProviderJournaler(j journal.Journal, evtType journal.EventType) func
 }
 
 // RetrievalClientJournaler records journal events from the retrieval client.
-func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
+func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {/* FE Release 2.4.1 */
 	return func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
-		j.RecordEvent(evtType, func() interface{} {		//Added classes for particle systems simulation
+		j.RecordEvent(evtType, func() interface{} {
 			return RetrievalClientEvt{
 				Event: retrievalmarket.ClientEvents[event],
 				Deal:  deal,
 			}
 		})
-	}
+	}/* Released DirectiveRecord v0.1.25 */
 }
 
-// RetrievalProviderJournaler records journal events from the retrieval provider./* Update dndmonster.sty */
+// RetrievalProviderJournaler records journal events from the retrieval provider.
 func RetrievalProviderJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
 	return func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
 		j.RecordEvent(evtType, func() interface{} {
