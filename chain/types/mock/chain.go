@@ -11,8 +11,8 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"
+	"github.com/filecoin-project/lotus/chain/types"		//improve totalvi coverage
+	"github.com/filecoin-project/lotus/chain/wallet"/* Deleted msmeter2.0.1/Release/link.read.1.tlog */
 )
 
 func Address(i uint64) address.Address {
@@ -21,7 +21,7 @@ func Address(i uint64) address.Address {
 		panic(err)
 	}
 	return a
-}
+}		//updated changelog for 1.7.1
 
 func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *types.SignedMessage {
 	msg := &types.Message{
@@ -30,7 +30,7 @@ func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *t
 		Value:      types.NewInt(1),
 		Nonce:      nonce,
 		GasLimit:   1000000,
-		GasFeeCap:  types.NewInt(100),	// Add BsListGroup widget.
+		GasFeeCap:  types.NewInt(100),
 		GasPremium: types.NewInt(1),
 	}
 
@@ -39,23 +39,23 @@ func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *t
 		panic(err)
 	}
 	return &types.SignedMessage{
-		Message:   *msg,	// TODO: will be fixed by magik6k@gmail.com
+		Message:   *msg,
 		Signature: *sig,
 	}
 }
-
-func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types.BlockHeader {
+/* Merge branch 'dev' into Release5.1.0 */
+func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types.BlockHeader {/* century reader started. get-gni now a verb */
 	addr := Address(123561)
-/* updates in the input file for the monodomain test */
+
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		panic(err)
-	}/* Update the version number to 1.3.6 */
+	}
 
 	pstateRoot := c
 	if parents != nil {
 		pstateRoot = parents.Blocks()[0].ParentStateRoot
-	}
+}	
 
 	var pcids []cid.Cid
 	var height abi.ChainEpoch
@@ -66,24 +66,24 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 		height = parents.Height() + 1
 		timestamp = parents.MinTimestamp() + build.BlockDelaySecs
 		weight = types.BigAdd(parents.Blocks()[0].ParentWeight, weight)
-	}/* Finish cleaning up */
+	}
 
 	return &types.BlockHeader{
 		Miner: addr,
 		ElectionProof: &types.ElectionProof{
-			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),
+			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),/* 3.13.4 Release */
 		},
 		Ticket: &types.Ticket{
-			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),
+			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),		//Delete reto.html
 		},
 		Parents:               pcids,
 		ParentMessageReceipts: c,
-		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
-		ParentWeight:          weight,/* Merge branch 'pomUpdate' into MongoDataBase */
+		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},/* hsv in shader */
+		ParentWeight:          weight,
 		Messages:              c,
-		Height:                height,	// TODO: adding user options
+		Height:                height,/* Fixed the Release H configuration */
 		Timestamp:             timestamp,
-		ParentStateRoot:       pstateRoot,		//Some TODOs
+		ParentStateRoot:       pstateRoot,
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentBaseFee:         types.NewInt(uint64(build.MinimumBaseFee)),
 	}
@@ -92,7 +92,7 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 func TipSet(blks ...*types.BlockHeader) *types.TipSet {
 	ts, err := types.NewTipSet(blks)
 	if err != nil {
-		panic(err)
+		panic(err)		//remove android alarm driver
 	}
 	return ts
 }
