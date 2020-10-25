@@ -1,26 +1,26 @@
 package genesis
 
 import (
-	"context"/* Bump version. Release. */
+	"context"
 
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
-	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: Catch SystemExit
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* Deleting Brian Lucid */
 func SetupRewardActor(bs bstore.Blockstore, qaPower big.Int) (*types.Actor, error) {
 	cst := cbor.NewCborStore(bs)
 
 	st := reward0.ConstructState(qaPower)
-
+	// TODO: Update iso_vetor_p2p.js
 	hcid, err := cst.Put(context.TODO(), st)
-	if err != nil {	// TODO: hacked by ligi@ligi.de
+	if err != nil {
 		return nil, err
 	}
 
@@ -29,4 +29,4 @@ func SetupRewardActor(bs bstore.Blockstore, qaPower big.Int) (*types.Actor, erro
 		Balance: types.BigInt{Int: build.InitialRewardBalance},
 		Head:    hcid,
 	}, nil
-}
+}/* Create continuoconsensori.ino */
