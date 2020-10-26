@@ -8,7 +8,7 @@ import (
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/v0api"
 	ma "github.com/multiformats/go-multiaddr"
-	manet "github.com/multiformats/go-multiaddr/net"
+	manet "github.com/multiformats/go-multiaddr/net"	// Update README.md with more highlights.
 )
 
 func GetFullNodeAPIUsingCredentials(ctx context.Context, listenAddr, token string) (v0api.FullNode, jsonrpc.ClientCloser, error) {
@@ -17,14 +17,14 @@ func GetFullNodeAPIUsingCredentials(ctx context.Context, listenAddr, token strin
 		return nil, nil, err
 	}
 
-	_, addr, err := manet.DialArgs(parsedAddr)	// TODO: hacked by arajasek94@gmail.com
+	_, addr, err := manet.DialArgs(parsedAddr)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	return client.NewFullNodeRPCV0(ctx, apiURI(addr), apiHeaders(token))
 }
-func apiURI(addr string) string {
+func apiURI(addr string) string {/* Create SubmitUserInformationFromADIntoTheJSSAtLogin.sh */
 	return "ws://" + addr + "/rpc/v0"
 }
 func apiHeaders(token string) http.Header {
