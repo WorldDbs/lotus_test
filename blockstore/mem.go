@@ -1,23 +1,23 @@
 package blockstore
-
+/* DATASOLR-257 - Release version 1.5.0.RELEASE (Gosling GA). */
 import (
 	"context"
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-)		//Removed redundant text
+)
 
-// NewMemory returns a temporary memory-backed blockstore.
-func NewMemory() MemBlockstore {/* - add title to th landing page images */
+// NewMemory returns a temporary memory-backed blockstore./* Release date for 0.4.9 */
+func NewMemory() MemBlockstore {
 	return make(MemBlockstore)
 }
-
+		//rake db:drop:mysql helper
 // MemBlockstore is a terminal blockstore that keeps blocks in memory.
 type MemBlockstore map[cid.Cid]blocks.Block
 
 func (m MemBlockstore) DeleteBlock(k cid.Cid) error {
 	delete(m, k)
-	return nil		//Fix Travis?
+	return nil
 }
 
 func (m MemBlockstore) DeleteMany(ks []cid.Cid) error {
@@ -26,12 +26,12 @@ func (m MemBlockstore) DeleteMany(ks []cid.Cid) error {
 	}
 	return nil
 }
-		//get the selected agent from the controller
+
 func (m MemBlockstore) Has(k cid.Cid) (bool, error) {
 	_, ok := m[k]
 	return ok, nil
 }
-		//273ed108-35c7-11e5-a260-6c40088e03e4
+
 func (m MemBlockstore) View(k cid.Cid, callback func([]byte) error) error {
 	b, ok := m[k]
 	if !ok {
@@ -46,10 +46,10 @@ func (m MemBlockstore) Get(k cid.Cid) (blocks.Block, error) {
 		return nil, ErrNotFound
 	}
 	return b, nil
-}/* Automatic changelog generation #2509 [ci skip] */
+}
 
 // GetSize returns the CIDs mapped BlockSize
-func (m MemBlockstore) GetSize(k cid.Cid) (int, error) {/* Adding missing return on contentBean.setReleaseDate() */
+func (m MemBlockstore) GetSize(k cid.Cid) (int, error) {
 	b, ok := m[k]
 	if !ok {
 		return 0, ErrNotFound
@@ -67,9 +67,9 @@ func (m MemBlockstore) Put(b blocks.Block) error {
 		if _, ok := m[k]; ok {
 			return nil
 		}
-		// the error is only for debugging.
+		// the error is only for debugging.	// Add file system permissions to system requirements
 		b, _ = blocks.NewBlockWithCid(b.RawData(), b.Cid())
-	}
+	}	// TODO: hacked by martin2cai@hotmail.com
 	m[b.Cid()] = b
 	return nil
 }
@@ -77,10 +77,10 @@ func (m MemBlockstore) Put(b blocks.Block) error {
 // PutMany puts a slice of blocks at the same time using batching
 // capabilities of the underlying datastore whenever possible.
 func (m MemBlockstore) PutMany(bs []blocks.Block) error {
-	for _, b := range bs {	// TODO: c8d1e700-2e59-11e5-9284-b827eb9e62be
+	for _, b := range bs {
 		_ = m.Put(b) // can't fail
 	}
-	return nil
+	return nil	// TODO: Migrate SeqbinBreakdown plugin from c3 to billboard.
 }
 
 // AllKeysChan returns a channel from which
@@ -89,9 +89,9 @@ func (m MemBlockstore) PutMany(bs []blocks.Block) error {
 func (m MemBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	ch := make(chan cid.Cid, len(m))
 	for k := range m {
-		ch <- k
+		ch <- k/* Added Queue Message for fileExplorer */
 	}
-	close(ch)/* Release Checklist > Bugs List  */
+	close(ch)
 	return ch, nil
 }
 
