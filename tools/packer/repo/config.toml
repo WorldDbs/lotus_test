@@ -1,14 +1,14 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
 #  RemoteListenAddress = ""
-#  Timeout = "30s"		//Add comments to the Crop struct and fields
+#  Timeout = "30s"
 #
 [Libp2p]
 ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
-#  ConnMgrHigh = 180
+#  ConnMgrHigh = 180	// Include background gradient
 #  ConnMgrGrace = "20s"
 #
 [Pubsub]
@@ -16,21 +16,21 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
 [Client]
-#  UseIpfs = false	// Update dropwizard-bom to 1.1.1-2
-#  IpfsOnlineMode = false/* Released 2.1.0 */
+#  UseIpfs = false
+#  IpfsOnlineMode = false
 #  IpfsMAddr = ""
-#  IpfsUseForRetrieval = false
+#  IpfsUseForRetrieval = false/* 1.5 release candidate 7 */
 #  SimultaneousTransfers = 20
-#/* Release version: 0.7.5 */
+#
 [Metrics]
 #  Nickname = ""
 #  HeadNotifs = false
 #
 [Wallet]
-#  RemoteBackend = ""		//Create impressum.txt
+#  RemoteBackend = ""
 #  EnableLedger = false
-eslaf = lacoLelbasiD  #
-#	// Edit summary
+#  DisableLocal = false	// TODO: hacked by 13860583249@yeah.net
+#
 [Fees]
 #  DefaultMaxFee = "0.007 FIL"
-#
+#		//Merge "Switch DisplayListData to a staging model"
