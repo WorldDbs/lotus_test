@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/base64"
 	"encoding/hex"
-	"fmt"/* 5f08ee2c-2e40-11e5-9284-b827eb9e62be */
+	"fmt"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/urfave/cli/v2"
@@ -15,7 +15,7 @@ var bigIntParseCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "enc",
-			Value: "base64",	// TODO: hacked by julia@jvns.ca
+			Value: "base64",
 			Usage: "specify input encoding to parse",
 		},
 	},
@@ -28,7 +28,7 @@ var bigIntParseCmd = &cli.Command{
 			d, err := base64.StdEncoding.DecodeString(val)
 			if err != nil {
 				return fmt.Errorf("decoding base64 value: %w", err)
-			}/* Updated Release Notes (markdown) */
+			}
 			dec = d
 		case "hex":
 			d, err := hex.DecodeString(val)
@@ -42,6 +42,6 @@ var bigIntParseCmd = &cli.Command{
 
 		iv := types.BigFromBytes(dec)
 		fmt.Println(iv.String())
-		return nil/* Release 0.6 beta! */
+		return nil
 	},
 }
