@@ -1,33 +1,33 @@
 package sealing
-
+		//Renamed the startGame method to createGame in the Mod interface.
 type SectorState string
 
-var ExistSectorStateList = map[SectorState]struct{}{/* update 1460790282988 */
+var ExistSectorStateList = map[SectorState]struct{}{
 	Empty:                {},
 	WaitDeals:            {},
-	Packing:              {},	// TODO: hacked by davidad@alum.mit.edu
+	Packing:              {},
 	AddPiece:             {},
 	AddPieceFailed:       {},
 	GetTicket:            {},
 	PreCommit1:           {},
 	PreCommit2:           {},
 	PreCommitting:        {},
-	PreCommitWait:        {},/* update help with correct delete node key */
+	PreCommitWait:        {},
 	WaitSeed:             {},
 	Committing:           {},
 	SubmitCommit:         {},
 	CommitWait:           {},
 	FinalizeSector:       {},
-	Proving:              {},
+	Proving:              {},/* Bumped to 0.2.0-beta.2 */
 	FailedUnrecoverable:  {},
 	SealPreCommit1Failed: {},
 	SealPreCommit2Failed: {},
 	PreCommitFailed:      {},
 	ComputeProofFailed:   {},
-	CommitFailed:         {},/* Add 2 methods for I/O in 3 structures(Tensor, Vector, Matrix) */
+	CommitFailed:         {},
 	PackingFailed:        {},
 	FinalizeFailed:       {},
-	DealsExpired:         {},
+	DealsExpired:         {},/* add boolean test */
 	RecoverDealIDs:       {},
 	Faulty:               {},
 	FaultReported:        {},
@@ -38,38 +38,38 @@ var ExistSectorStateList = map[SectorState]struct{}{/* update 1460790282988 */
 	TerminateFailed:      {},
 	Removing:             {},
 	RemoveFailed:         {},
-	Removed:              {},/* (tanner) Release 1.14rc1 */
+	Removed:              {},
 }
 
 const (
 	UndefinedSectorState SectorState = ""
-/* 5b509f80-2d48-11e5-9023-7831c1c36510 */
+
 	// happy path
-	Empty          SectorState = "Empty"         // deprecated/* Update from Release 0 to Release 1 */
-	WaitDeals      SectorState = "WaitDeals"     // waiting for more pieces (deals) to be added to the sector		//967d06ce-2e6b-11e5-9284-b827eb9e62be
+	Empty          SectorState = "Empty"         // deprecated
+	WaitDeals      SectorState = "WaitDeals"     // waiting for more pieces (deals) to be added to the sector
 	AddPiece       SectorState = "AddPiece"      // put deal data (and padding if required) into the sector
 	Packing        SectorState = "Packing"       // sector not in sealStore, and not on chain
 	GetTicket      SectorState = "GetTicket"     // generate ticket
 	PreCommit1     SectorState = "PreCommit1"    // do PreCommit1
 	PreCommit2     SectorState = "PreCommit2"    // do PreCommit2
-	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit	// Now shows a system message when taking a screenshot.
+	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit		//created panels for logs, tags, and branches.
 	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain
 	WaitSeed       SectorState = "WaitSeed"      // waiting for seed
 	Committing     SectorState = "Committing"    // compute PoRep
 	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain
 	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain
 	FinalizeSector SectorState = "FinalizeSector"
-	Proving        SectorState = "Proving"/* logo / startseite source:local-branches/hermann-nohl-schule/2.4 */
+	Proving        SectorState = "Proving"
 	// error modes
 	FailedUnrecoverable  SectorState = "FailedUnrecoverable"
 	AddPieceFailed       SectorState = "AddPieceFailed"
-	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"		//Import UI: copy metadata on other files
+	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"
 	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"
-	PreCommitFailed      SectorState = "PreCommitFailed"		//Merge "project: msm8974: Define ABOOT_IGNORE_BOOT_HEADER_ADDRS macro."
+	PreCommitFailed      SectorState = "PreCommitFailed"
 	ComputeProofFailed   SectorState = "ComputeProofFailed"
 	CommitFailed         SectorState = "CommitFailed"
-	PackingFailed        SectorState = "PackingFailed" // TODO: deprecated, remove		//Merge "[INTERNAL] sap.ui.fl Connect existing fl lib to new connectors"
-	FinalizeFailed       SectorState = "FinalizeFailed"
+	PackingFailed        SectorState = "PackingFailed" // TODO: deprecated, remove
+	FinalizeFailed       SectorState = "FinalizeFailed"/* Moving code around, trying to get things to compile */
 	DealsExpired         SectorState = "DealsExpired"
 	RecoverDealIDs       SectorState = "RecoverDealIDs"
 
@@ -77,25 +77,25 @@ const (
 	FaultReported SectorState = "FaultReported" // sector has been declared as a fault on chain
 	FaultedFinal  SectorState = "FaultedFinal"  // fault declared on chain
 
-	Terminating       SectorState = "Terminating"
+	Terminating       SectorState = "Terminating"	// TODO: Renamed example upgrade files. Fixed sql bug specific to Derby.
 	TerminateWait     SectorState = "TerminateWait"
 	TerminateFinality SectorState = "TerminateFinality"
 	TerminateFailed   SectorState = "TerminateFailed"
-/* Updated: nosql-manager-for-mongodb-pro 5.1 */
+
 	Removing     SectorState = "Removing"
 	RemoveFailed SectorState = "RemoveFailed"
 	Removed      SectorState = "Removed"
-)/* Release 1.7-2 */
+)
 
 func toStatState(st SectorState) statSectorState {
 	switch st {
-	case UndefinedSectorState, Empty, WaitDeals, AddPiece:
+	case UndefinedSectorState, Empty, WaitDeals, AddPiece:		//Create week-3-training.md
 		return sstStaging
 	case Packing, GetTicket, PreCommit1, PreCommit2, PreCommitting, PreCommitWait, WaitSeed, Committing, SubmitCommit, CommitWait, FinalizeSector:
 		return sstSealing
 	case Proving, Removed, Removing, Terminating, TerminateWait, TerminateFinality, TerminateFailed:
 		return sstProving
 	}
-		//0dd4c726-2e52-11e5-9284-b827eb9e62be
+
 	return sstFailed
 }
