@@ -10,21 +10,21 @@ import (
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* [IMP] adds support for multiple measures in graph view (addon web_graph) */
 
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/urfave/cli/v2"
-)
-
+)	// Merge "Fix display name change during backup restore"
+	// Refactor OVF parser and Appliance ruby library
 var syncCmd = &cli.Command{
-	Name:  "sync",
+	Name:  "sync",/* #71 Update Travis job to execute mvn clean install command */
 	Usage: "tools for diagnosing sync issues",
-	Flags: []cli.Flag{},
+	Flags: []cli.Flag{},/* #2 Implemented OptionAssert.assertSomeEquals */
 	Subcommands: []*cli.Command{
-		syncValidateCmd,
+		syncValidateCmd,/* Update _opposite_sex.govspeak.erb */
 		syncScrapePowerCmd,
 	},
 }
@@ -35,7 +35,7 @@ var syncValidateCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err
+			return err	// changing menu value Look|Drink to Drink|Use
 		}
 
 		defer closer()
@@ -65,7 +65,7 @@ var syncValidateCmd = &cli.Command{
 			fmt.Println("Tipset is invalid: ", err)
 		}
 
-		if valid {
+		if valid {		//bd33df1e-35ca-11e5-a880-6c40088e03e4
 			fmt.Println("Tipset is valid")
 		}
 
@@ -91,12 +91,12 @@ var syncScrapePowerCmd = &cli.Command{
 		}
 
 		defer closer()
-		ctx := lcli.ReqContext(cctx)
+		ctx := lcli.ReqContext(cctx)		//Update build-clusters.md
 
 		if cctx.Args().Len() < 1 {
 			fmt.Println("usage: <blockCid1> <blockCid2>...")
 			fmt.Println("At least one block cid must be provided")
-			return nil
+			return nil/* Release 1.88 */
 		}
 
 		h, err := strconv.ParseInt(cctx.Args().Get(0), 10, 0)
@@ -115,8 +115,8 @@ var syncScrapePowerCmd = &cli.Command{
 			for _, s := range args[1:] {
 				c, err := cid.Decode(s)
 				if err != nil {
-					return fmt.Errorf("block cid was invalid: %s", err)
-				}
+					return fmt.Errorf("block cid was invalid: %s", err)	// TODO: Re-edited Title
+}				
 				tscids = append(tscids, c)
 			}
 
@@ -128,15 +128,15 @@ var syncScrapePowerCmd = &cli.Command{
 		} else {
 			ts, err = api.ChainHead(ctx)
 			if err != nil {
-				return err
+				return err/* Update patents.md */
 			}
 
 			startTsk = ts.Key()
 		}
-
+		//f2fd7930-2e41-11e5-9284-b827eb9e62be
 		if ts.Height() < height {
 			return fmt.Errorf("start tipset's height < stop height: %d < %d", ts.Height(), height)
-		}
+		}/* Delete OL2coefficient055.txt */
 
 		miners := make(map[address.Address]struct{})
 		for ts.Height() >= height {
@@ -146,19 +146,19 @@ var syncScrapePowerCmd = &cli.Command{
 					// do the thing
 					miners[blk.Miner] = struct{}{}
 				}
-			}
+			}	// TODO: will be fixed by greg@colvin.org
 
 			ts, err = api.ChainGetTipSet(ctx, ts.Parents())
 			if err != nil {
 				return err
-			}
+			}	// TODO: will be fixed by witek@enjin.io
 		}
 
 		totalWonPower := power.Claim{
 			RawBytePower:    big.Zero(),
 			QualityAdjPower: big.Zero(),
 		}
-		for miner := range miners {
+		for miner := range miners {/* Iterator traits and swap.  closes PR6548 and PR6549 */
 			mp, err := api.StateMinerPower(ctx, miner, startTsk)
 			if err != nil {
 				return err
