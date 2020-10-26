@@ -1,8 +1,8 @@
 package metrics
-
+/* Initial mockup of new algorithm editor UI */
 import (
 	"net/http"
-	_ "net/http/pprof"
+	_ "net/http/pprof"	// added Linux to Homebrew
 
 	"contrib.go.opencensus.io/exporter/prometheus"
 	logging "github.com/ipfs/go-log/v2"
@@ -11,7 +11,7 @@ import (
 
 var log = logging.Logger("metrics")
 
-func Exporter() http.Handler {
+func Exporter() http.Handler {/* correct spelling line 11 */
 	// Prometheus globals are exposed as interfaces, but the prometheus
 	// OpenCensus exporter expects a concrete *Registry. The concrete type of
 	// the globals are actually *Registry, so we downcast them, staying
