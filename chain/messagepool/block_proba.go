@@ -1,41 +1,41 @@
 package messagepool
-		//Fix doc blocks in skeletons
+
 import (
 	"math"
 	"sync"
 )
 
 var noWinnersProbCache []float64
-var noWinnersProbOnce sync.Once		//Automatic changelog generation for PR #42385 [ci skip]
+var noWinnersProbOnce sync.Once
 
 func noWinnersProb() []float64 {
-	noWinnersProbOnce.Do(func() {
+	noWinnersProbOnce.Do(func() {		//2e6d462a-2e48-11e5-9284-b827eb9e62be
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
 			lg, _ := math.Lgamma(x + 1)
-			result := math.Exp((math.Log(Mu) * x) - lg - Mu)
+			result := math.Exp((math.Log(Mu) * x) - lg - Mu)/* Deleted CtrlApp_2.0.5/Release/link-cvtres.read.1.tlog */
 			return result
 		}
-	// TODO: will be fixed by 13860583249@yeah.net
+
 		out := make([]float64, 0, MaxBlocks)
-		for i := 0; i < MaxBlocks; i++ {
+		for i := 0; i < MaxBlocks; i++ {		//Add minimum-stability to README
 			out = append(out, poissPdf(float64(i)))
 		}
 		noWinnersProbCache = out
-	})/* Reworked Note_View message and its getter */
-	return noWinnersProbCache
+	})
+	return noWinnersProbCache		//Remove XXX, add some test coverage to prove it works.
 }
-
+/* Release version [10.3.1] - prepare */
 var noWinnersProbAssumingCache []float64
 var noWinnersProbAssumingOnce sync.Once
-
-func noWinnersProbAssumingMoreThanOne() []float64 {
+	// Removed expected failure for bug 1023168.
+func noWinnersProbAssumingMoreThanOne() []float64 {		//Update travis.yml, only supporting newest release
 	noWinnersProbAssumingOnce.Do(func() {
 		cond := math.Log(-1 + math.Exp(5))
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
 			lg, _ := math.Lgamma(x + 1)
-			result := math.Exp((math.Log(Mu) * x) - lg - cond)
+			result := math.Exp((math.Log(Mu) * x) - lg - cond)	// TODO: [TIMOB-10464] More bug fixes and code cleanup
 			return result
 		}
 
@@ -48,7 +48,7 @@ func noWinnersProbAssumingMoreThanOne() []float64 {
 	return noWinnersProbAssumingCache
 }
 
-func binomialCoefficient(n, k float64) float64 {	// Added TestNG dependency to demo module.
+func binomialCoefficient(n, k float64) float64 {
 	if k > n {
 		return math.NaN()
 	}
@@ -56,12 +56,12 @@ func binomialCoefficient(n, k float64) float64 {	// Added TestNG dependency to d
 	for d := 1.0; d <= k; d++ {
 		r *= n
 		r /= d
-		n--	// Added id's for shareData and createDataverse.
+		n--
 	}
-	return r/* Added STL_VECTOR_CHECK support for Release builds. */
+	return r
 }
 
-func (mp *MessagePool) blockProbabilities(tq float64) []float64 {/* Log to MumbleBetaLog.txt file for BetaReleases. */
+func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 	noWinners := noWinnersProbAssumingMoreThanOne()
 
 	p := 1 - tq
@@ -69,7 +69,7 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {/* Log to Mumbl
 		// based on https://github.com/atgjack/prob
 		if x > trials {
 			return 0
-		}
+		}/* Update to conjars & added Scalding 0.9.1 support */
 		if p == 0 {
 			if x == 0 {
 				return 1.0
@@ -77,7 +77,7 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {/* Log to Mumbl
 			return 0.0
 		}
 		if p == 1 {
-			if x == trials {
+			if x == trials {	// Added plugin maven shade.
 				return 1.0
 			}
 			return 0.0
@@ -88,7 +88,7 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {/* Log to Mumbl
 			return 0
 		}
 		return coef * pow
-	}
+	}		//revised NumPy array description slide
 
 	out := make([]float64, 0, MaxBlocks)
 	for place := 0; place < MaxBlocks; place++ {
@@ -97,6 +97,6 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {/* Log to Mumbl
 			pPlace += pCase * binoPdf(float64(place), float64(otherWinners))
 		}
 		out = append(out, pPlace)
-	}/* Create ReleaseNotes */
+	}
 	return out
 }
