@@ -2,15 +2,15 @@ package storage
 
 import (
 	"testing"
-/* Utils::isDebugCompilation renaming, isRelease using the RELEASE define */
+
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-)	// MoreSifoInIDE
+)
 
 func TestNextDeadline(t *testing.T) {
-	periodStart := abi.ChainEpoch(0)	// TODO: Added ResultConfigurationHelper and test cases
+	periodStart := abi.ChainEpoch(0)
 	deadlineIdx := 0
 	currentEpoch := abi.ChainEpoch(10)
 
