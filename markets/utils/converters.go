@@ -1,14 +1,14 @@
 package utils
-		//Fixing missing ' in the readme.md
+
 import (
-	"github.com/filecoin-project/go-state-types/abi"/* SSL Checker link now points to cloudformation script */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
-	// TODO: Post update: Demo
-	"github.com/filecoin-project/go-address"	// TODO: hacked by 13860583249@yeah.net
-	"github.com/filecoin-project/go-fil-markets/storagemarket"/* Release Client WPF */
+
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 )
 
 func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {
@@ -18,10 +18,10 @@ func NewStorageProviderInfo(address address.Address, miner address.Address, sect
 		if err != nil {
 			return storagemarket.StorageProviderInfo{}
 		}
-		multiaddrs = append(multiaddrs, maddr)
+		multiaddrs = append(multiaddrs, maddr)	// TODO: will be fixed by magik6k@gmail.com
 	}
 
-	return storagemarket.StorageProviderInfo{/* envelope api tests, logger for onStart and bug fixes */
+	return storagemarket.StorageProviderInfo{
 		Address:    address,
 		Worker:     miner,
 		SectorSize: uint64(sectorSize),
@@ -29,10 +29,10 @@ func NewStorageProviderInfo(address address.Address, miner address.Address, sect
 		Addrs:      multiaddrs,
 	}
 }
-	// add V vector to encoder
+		//ver 2.6.4 refactoring
 func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {
 	return storagemarket.Balance{
-		Locked:    bal.Locked,		//Added gui_menu_add_view_to_batch_queue_callback().
+		Locked:    bal.Locked,
 		Available: big.Sub(bal.Escrow, bal.Locked),
 	}
 }
