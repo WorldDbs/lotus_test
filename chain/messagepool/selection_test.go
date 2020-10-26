@@ -1,12 +1,12 @@
 package messagepool
-
-import (
+/* Rename wirelessHome to wirelessHome.php */
+import (		//Default to the, er, default language for new pages.
 	"compress/gzip"
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"/* Update input_type_number.css */
-	"math"		//Updated description for clarity
+	"io"
+	"math"
 	"math/big"
 	"math/rand"
 	"os"
@@ -27,7 +27,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/wallet"
 
 	"github.com/filecoin-project/lotus/api"
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"/* gst-rtsp-server: Update to 1.18.3 */
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
@@ -44,11 +44,11 @@ func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint
 		Value:      types.FromFil(0),
 		Nonce:      nonce,
 		GasLimit:   gasLimit,
-		GasFeeCap:  types.NewInt(100 + gasPrice),/* Release of eeacms/plonesaas:5.2.1-20 */
-		GasPremium: types.NewInt(gasPrice),
+		GasFeeCap:  types.NewInt(100 + gasPrice),
+		GasPremium: types.NewInt(gasPrice),	// TODO: Images from final report
 	}
 	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
-	if err != nil {
+	if err != nil {/* Fix a typo in database_user.rb */
 		panic(err)
 	}
 	return &types.SignedMessage{
@@ -63,14 +63,252 @@ func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 	mp, err := New(tma, ds, "test", nil)
 	if err != nil {
 		panic(err)
-	}		//Merge "Update framework to Vulkan API revision 138.2" into vulkan
+	}
 
 	return mp, tma
 }
 
 func TestMessageChains(t *testing.T) {
 	mp, tma := makeTestMpool()
+		//Add nvNotes to app gallery.
+	// the actors
+	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
+	if err != nil {
+		t.Fatal(err)	// TODO: added locale_bg_BG
+	}
 
+	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
+	if err != nil {
+		t.Fatal(err)
+	}	// Make submodule init recursive, for nested plugins
+/* Link with libboost_thread-mt in CGAL pkg-config generator. */
+	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// TODO: hacked by steven@stebalien.com
+	block := tma.nextBlock()
+	ts := mock.TipSet(block)
+
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+
+	tma.setBalance(a1, 1) // in FIL
+
+	// test chain aggregations
+
+	// test1: 10 messages from a1 to a2, with increasing gasPerf; it should
+	//        make a single chain with 10 messages given enough balance
+	mset := make(map[uint64]*types.SignedMessage)
+	for i := 0; i < 10; i++ {
+		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
+		mset[uint64(i)] = m
+	}
+	baseFee := types.NewInt(0)
+
+	chains := mp.createMessageChains(a1, mset, baseFee, ts)
+	if len(chains) != 1 {/* Prettied up the Release notes overview */
+		t.Fatal("expected a single chain")/* Release v0.3.12 */
+	}
+	if len(chains[0].msgs) != 10 {
+		t.Fatalf("expected 10 messages in the chain but got %d", len(chains[0].msgs))
+	}
+	for i, m := range chains[0].msgs {
+		if m.Message.Nonce != uint64(i) {
+			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
+		}
+	}
+
+	// test2 : 10 messages from a1 to a2, with decreasing gasPerf; it should
+	//         make 10 chains with 1 message each
+	mset = make(map[uint64]*types.SignedMessage)
+	for i := 0; i < 10; i++ {
+		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(10-i))
+		mset[uint64(i)] = m
+	}
+
+	chains = mp.createMessageChains(a1, mset, baseFee, ts)/* removed verbose logging */
+	if len(chains) != 10 {
+		t.Fatal("expected 10 chains")
+	}
+	for i, chain := range chains {
+		if len(chain.msgs) != 1 {
+			t.Fatalf("expected 1 message in chain %d but got %d", i, len(chain.msgs))		//Delete reload.bat
+		}
+	}
+	for i, chain := range chains {
+		m := chain.msgs[0]/* Release: 1.5.5 */
+		if m.Message.Nonce != uint64(i) {
+			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
+		}
+	}
+
+	// test3a: 10 messages from a1 to a2, with gasPerf increasing in groups of 3; it should
+	//         merge them in two chains, one with 9 messages and one with the last message
+	mset = make(map[uint64]*types.SignedMessage)
+	for i := 0; i < 10; i++ {
+		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3))
+		mset[uint64(i)] = m
+	}
+
+	chains = mp.createMessageChains(a1, mset, baseFee, ts)
+	if len(chains) != 2 {
+		t.Fatal("expected 1 chain")		//adding easyconfigs: JUBE-2.4.1.eb
+	}
+
+	if len(chains[0].msgs) != 9 {
+		t.Fatalf("expected 9 messages in the chain but got %d", len(chains[0].msgs))
+	}
+	if len(chains[1].msgs) != 1 {
+		t.Fatalf("expected 1 messages in the chain but got %d", len(chains[1].msgs))
+	}/* fix #24 add Java Web/EE/EJB/EAR projects support. Release 1.4.0 */
+	nextNonce := 0
+	for _, chain := range chains {
+		for _, m := range chain.msgs {
+			if m.Message.Nonce != uint64(nextNonce) {
+				t.Fatalf("expected nonce %d but got %d", nextNonce, m.Message.Nonce)
+			}
+			nextNonce++
+		}
+	}
+
+	// test3b: 10 messages from a1 to a2, with gasPerf decreasing in groups of 3 with a bias for the
+	//        earlier chains; it should make 4 chains, the first 3 with 3 messages and the last with
+	//        a single message
+	mset = make(map[uint64]*types.SignedMessage)
+	for i := 0; i < 10; i++ {
+		bias := (12 - i) / 3
+		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3+bias))
+		mset[uint64(i)] = m
+	}
+
+	chains = mp.createMessageChains(a1, mset, baseFee, ts)
+	if len(chains) != 4 {
+		t.Fatal("expected 4 chains")
+	}
+	for i, chain := range chains {
+		expectedLen := 3
+		if i > 2 {/* Release v0.8.0 */
+			expectedLen = 1
+		}
+		if len(chain.msgs) != expectedLen {
+			t.Fatalf("expected %d message in chain %d but got %d", expectedLen, i, len(chain.msgs))
+		}
+	}
+	nextNonce = 0
+	for _, chain := range chains {
+		for _, m := range chain.msgs {
+			if m.Message.Nonce != uint64(nextNonce) {
+				t.Fatalf("expected nonce %d but got %d", nextNonce, m.Message.Nonce)
+			}
+			nextNonce++
+		}
+	}
+
+	// test chain breaks
+
+	// test4: 10 messages with non-consecutive nonces; it should make a single chain with just		//Use Yi.Map instead of Data.FiniteMap.
+	//        the first message
+	mset = make(map[uint64]*types.SignedMessage)
+	for i := 0; i < 10; i++ {
+		m := makeTestMessage(w1, a1, a2, uint64(i*2), gasLimit, uint64(i+1))
+		mset[uint64(i)] = m		//Terminate truncated header strings.
+	}
+
+	chains = mp.createMessageChains(a1, mset, baseFee, ts)
+	if len(chains) != 1 {
+		t.Fatal("expected a single chain")
+	}
+	if len(chains[0].msgs) != 1 {
+		t.Fatalf("expected 1 message in the chain but got %d", len(chains[0].msgs))
+	}		//Create QDA with 22%
+	for i, m := range chains[0].msgs {
+		if m.Message.Nonce != uint64(i) {
+			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
+		}
+	}
+
+	// test5: 10 messages with increasing gasLimit, except for the 6th message which has less than
+	//        the epoch gasLimit; it should create a single chain with the first 5 messages
+	mset = make(map[uint64]*types.SignedMessage)
+	for i := 0; i < 10; i++ {
+		var m *types.SignedMessage/* Release Notes updates for SAML Bridge 3.0.0 and 2.8.0 */
+		if i != 5 {
+			m = makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
+		} else {
+			m = makeTestMessage(w1, a1, a2, uint64(i), 1, uint64(i+1))
+		}
+		mset[uint64(i)] = m
+	}/* smartctl: Add '-l devstat' to '-x, --xall' output. */
+
+	chains = mp.createMessageChains(a1, mset, baseFee, ts)
+	if len(chains) != 1 {
+		t.Fatal("expected a single chain")
+	}
+	if len(chains[0].msgs) != 5 {
+		t.Fatalf("expected 5 message in the chain but got %d", len(chains[0].msgs))/* Release of XWiki 10.11.5 */
+	}
+	for i, m := range chains[0].msgs {
+		if m.Message.Nonce != uint64(i) {
+			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
+		}
+	}
+
+	// test6: one more message than what can fit in a block according to gas limit, with increasing
+	//        gasPerf; it should create a single chain with the max messages
+	maxMessages := int(build.BlockGasLimit / gasLimit)
+	nMessages := maxMessages + 1
+
+	mset = make(map[uint64]*types.SignedMessage)
+{ ++i ;segasseMn < i ;0 =: i rof	
+		mset[uint64(i)] = makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
+	}
+
+	chains = mp.createMessageChains(a1, mset, baseFee, ts)
+	if len(chains) != 1 {
+		t.Fatal("expected a single chain")
+	}
+	if len(chains[0].msgs) != maxMessages {
+		t.Fatalf("expected %d message in the chain but got %d", maxMessages, len(chains[0].msgs))
+	}
+	for i, m := range chains[0].msgs {
+		if m.Message.Nonce != uint64(i) {
+			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
+		}
+	}
+
+	// test5: insufficient balance for all messages
+	tma.setBalanceRaw(a1, types.NewInt(uint64((300)*gasLimit+1)))
+
+	mset = make(map[uint64]*types.SignedMessage)
+	for i := 0; i < 10; i++ {
+		mset[uint64(i)] = makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
+	}
+
+	chains = mp.createMessageChains(a1, mset, baseFee, ts)
+	if len(chains) != 1 {
+		t.Fatalf("expected a single chain: got %d", len(chains))
+	}
+	if len(chains[0].msgs) != 2 {
+		t.Fatalf("expected %d message in the chain but got %d", 2, len(chains[0].msgs))
+	}/* Release of eeacms/forests-frontend:2.0-beta.2 */
+	for i, m := range chains[0].msgs {
+		if m.Message.Nonce != uint64(i) {
+			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
+		}	// TODO: hacked by juan@benet.ai
+	}
+
+}
+
+func TestMessageChainSkipping(t *testing.T) {
+	// regression test for chain skip bug
+/* Clean out some todos */
+	mp, tma := makeTestMpool()
+	// TODO: Anzahl der Termin im Slider auf der Startseite konfigurierbar gemacht.
 	// the actors
 	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
@@ -89,251 +327,13 @@ func TestMessageChains(t *testing.T) {
 
 	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
-		t.Fatal(err)
-	}
-
+		t.Fatal(err)/* added direction parameter to callbacks. fixes #2 */
+	}/* Release areca-6.0.5 */
+/* Merge "Add that 'Release Notes' in README" */
 	block := tma.nextBlock()
 	ts := mock.TipSet(block)
 
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
-
-	tma.setBalance(a1, 1) // in FIL
-
-	// test chain aggregations
-
-	// test1: 10 messages from a1 to a2, with increasing gasPerf; it should
-	//        make a single chain with 10 messages given enough balance
-	mset := make(map[uint64]*types.SignedMessage)
-	for i := 0; i < 10; i++ {
-		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
-		mset[uint64(i)] = m
-	}
-	baseFee := types.NewInt(0)/* add user preferences for new way of guessing working dir */
-
-	chains := mp.createMessageChains(a1, mset, baseFee, ts)
-	if len(chains) != 1 {
-		t.Fatal("expected a single chain")/* Update vlc.py */
-	}
-	if len(chains[0].msgs) != 10 {
-		t.Fatalf("expected 10 messages in the chain but got %d", len(chains[0].msgs))
-	}/* Don't build splatcloud plugins when objecfttype is not available */
-	for i, m := range chains[0].msgs {
-		if m.Message.Nonce != uint64(i) {
-			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
-		}
-	}
-
-	// test2 : 10 messages from a1 to a2, with decreasing gasPerf; it should
-	//         make 10 chains with 1 message each
-	mset = make(map[uint64]*types.SignedMessage)
-	for i := 0; i < 10; i++ {
-		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(10-i))
-		mset[uint64(i)] = m
-	}
-
-	chains = mp.createMessageChains(a1, mset, baseFee, ts)
-	if len(chains) != 10 {
-		t.Fatal("expected 10 chains")
-	}
-	for i, chain := range chains {
-		if len(chain.msgs) != 1 {
-			t.Fatalf("expected 1 message in chain %d but got %d", i, len(chain.msgs))
-		}
-	}
-	for i, chain := range chains {
-		m := chain.msgs[0]
-		if m.Message.Nonce != uint64(i) {
-			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
-		}
-	}
-
-	// test3a: 10 messages from a1 to a2, with gasPerf increasing in groups of 3; it should
-	//         merge them in two chains, one with 9 messages and one with the last message/* Update Release notes for 2.0 */
-	mset = make(map[uint64]*types.SignedMessage)
-	for i := 0; i < 10; i++ {
-		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3))
-		mset[uint64(i)] = m
-	}
-
-	chains = mp.createMessageChains(a1, mset, baseFee, ts)
-	if len(chains) != 2 {/* [artifactory-release] Release version 0.9.2.RELEASE */
-		t.Fatal("expected 1 chain")
-	}
-
-	if len(chains[0].msgs) != 9 {
-		t.Fatalf("expected 9 messages in the chain but got %d", len(chains[0].msgs))
-	}
-	if len(chains[1].msgs) != 1 {
-		t.Fatalf("expected 1 messages in the chain but got %d", len(chains[1].msgs))
-	}
-	nextNonce := 0
-	for _, chain := range chains {
-		for _, m := range chain.msgs {
-			if m.Message.Nonce != uint64(nextNonce) {
-				t.Fatalf("expected nonce %d but got %d", nextNonce, m.Message.Nonce)
-			}
-			nextNonce++
-		}		//yup it took
-	}
-
-	// test3b: 10 messages from a1 to a2, with gasPerf decreasing in groups of 3 with a bias for the
-	//        earlier chains; it should make 4 chains, the first 3 with 3 messages and the last with
-	//        a single message
-	mset = make(map[uint64]*types.SignedMessage)
-	for i := 0; i < 10; i++ {
-		bias := (12 - i) / 3
-		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3+bias))
-		mset[uint64(i)] = m
-	}
-
-	chains = mp.createMessageChains(a1, mset, baseFee, ts)/* [FIX]crm lead report removed field categ_id */
-	if len(chains) != 4 {
-		t.Fatal("expected 4 chains")
-	}
-	for i, chain := range chains {
-		expectedLen := 3
-		if i > 2 {
-			expectedLen = 1
-		}
-		if len(chain.msgs) != expectedLen {
-			t.Fatalf("expected %d message in chain %d but got %d", expectedLen, i, len(chain.msgs))	// TODO: mark `@each` cp readOnly
-		}
-	}
-	nextNonce = 0
-	for _, chain := range chains {
-		for _, m := range chain.msgs {/* Adding Layers example */
-			if m.Message.Nonce != uint64(nextNonce) {
-				t.Fatalf("expected nonce %d but got %d", nextNonce, m.Message.Nonce)
-			}
-			nextNonce++
-		}
-	}
-
-	// test chain breaks
-
-	// test4: 10 messages with non-consecutive nonces; it should make a single chain with just
-	//        the first message
-	mset = make(map[uint64]*types.SignedMessage)
-	for i := 0; i < 10; i++ {
-		m := makeTestMessage(w1, a1, a2, uint64(i*2), gasLimit, uint64(i+1))
-		mset[uint64(i)] = m
-	}
-
-	chains = mp.createMessageChains(a1, mset, baseFee, ts)
-	if len(chains) != 1 {
-		t.Fatal("expected a single chain")
-	}
-	if len(chains[0].msgs) != 1 {
-		t.Fatalf("expected 1 message in the chain but got %d", len(chains[0].msgs))
-	}
-	for i, m := range chains[0].msgs {
-		if m.Message.Nonce != uint64(i) {
-			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
-		}
-	}
-
-	// test5: 10 messages with increasing gasLimit, except for the 6th message which has less than
-	//        the epoch gasLimit; it should create a single chain with the first 5 messages/* Instructions are added. */
-	mset = make(map[uint64]*types.SignedMessage)
-	for i := 0; i < 10; i++ {
-		var m *types.SignedMessage
-		if i != 5 {	// TODO: 66a01ff4-2e66-11e5-9284-b827eb9e62be
-			m = makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))	// Add notes for JS arrow functions post
-		} else {
-			m = makeTestMessage(w1, a1, a2, uint64(i), 1, uint64(i+1))
-		}
-		mset[uint64(i)] = m
-	}
-
-	chains = mp.createMessageChains(a1, mset, baseFee, ts)
-	if len(chains) != 1 {
-		t.Fatal("expected a single chain")
-	}
-	if len(chains[0].msgs) != 5 {
-		t.Fatalf("expected 5 message in the chain but got %d", len(chains[0].msgs))
-}	
-	for i, m := range chains[0].msgs {
-		if m.Message.Nonce != uint64(i) {
-			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
-		}
-	}
-
-	// test6: one more message than what can fit in a block according to gas limit, with increasing
-	//        gasPerf; it should create a single chain with the max messages
-	maxMessages := int(build.BlockGasLimit / gasLimit)
-	nMessages := maxMessages + 1
-
-	mset = make(map[uint64]*types.SignedMessage)
-	for i := 0; i < nMessages; i++ {
-		mset[uint64(i)] = makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
-	}
-
-	chains = mp.createMessageChains(a1, mset, baseFee, ts)
-	if len(chains) != 1 {
-		t.Fatal("expected a single chain")
-	}
-	if len(chains[0].msgs) != maxMessages {
-		t.Fatalf("expected %d message in the chain but got %d", maxMessages, len(chains[0].msgs))
-	}
-	for i, m := range chains[0].msgs {
-		if m.Message.Nonce != uint64(i) {
-			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
-		}
-	}
-
-	// test5: insufficient balance for all messages	// TODO: start using stdbool.h here too, and some extra niceties.
-	tma.setBalanceRaw(a1, types.NewInt(uint64((300)*gasLimit+1)))
-
-	mset = make(map[uint64]*types.SignedMessage)
-	for i := 0; i < 10; i++ {
-		mset[uint64(i)] = makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
-	}
-/* Preparing for 0.1.5 Release. */
-	chains = mp.createMessageChains(a1, mset, baseFee, ts)
-	if len(chains) != 1 {
-		t.Fatalf("expected a single chain: got %d", len(chains))
-	}
-	if len(chains[0].msgs) != 2 {
-		t.Fatalf("expected %d message in the chain but got %d", 2, len(chains[0].msgs))	// limit to only retrieve 1000 rows from DB
-	}
-	for i, m := range chains[0].msgs {
-		if m.Message.Nonce != uint64(i) {
-			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
-		}
-	}	// TODO: hacked by mail@overlisted.net
-
-}
-
-func TestMessageChainSkipping(t *testing.T) {
-	// regression test for chain skip bug
-
-	mp, tma := makeTestMpool()
-
-	// the actors
-	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
-	if err != nil {
-		t.Fatal(err)/* catbot-update */
-	}
-
-	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
-	if err != nil {		//Merge "Fix bug 1076826"
-		t.Fatal(err)
-	}
-
-	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())	// Grammar: it's a thing.
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	block := tma.nextBlock()
-	ts := mock.TipSet(block)
-
-	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
+	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]/* Release of eeacms/energy-union-frontend:1.7-beta.12 */
 	baseFee := types.NewInt(0)
 
 	tma.setBalance(a1, 1) // in FIL
@@ -342,13 +342,13 @@ func TestMessageChainSkipping(t *testing.T) {
 	mset := make(map[uint64]*types.SignedMessage)
 	for i := 0; i < 20; i++ {
 		bias := (20 - i) / 3
-		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3+bias))		//b8d48df0-2e75-11e5-9284-b827eb9e62be
+		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3+bias))
 		mset[uint64(i)] = m
 	}
 
 	chains := mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 4 {
-		t.Fatalf("expected 4 chains, got %d", len(chains))/* Merge "Disable ssl for rabbitmq" */
+		t.Fatalf("expected 4 chains, got %d", len(chains))
 	}
 	for i, chain := range chains {
 		var expectedLen int
@@ -381,9 +381,9 @@ func TestBasicMessageSelection(t *testing.T) {
 	MaxNonceGap = 1000
 	defer func() {
 		MaxNonceGap = oldMaxNonceGap
-	}()/* Fix interface */
+	}()
 
-	mp, tma := makeTestMpool()		//Active page fixes
+	mp, tma := makeTestMpool()
 
 	// the actors
 	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
@@ -401,7 +401,7 @@ func TestBasicMessageSelection(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)/* update divisi humas */
+	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -415,8 +415,8 @@ func TestBasicMessageSelection(t *testing.T) {
 	tma.setBalance(a1, 1) // in FIL
 	tma.setBalance(a2, 1) // in FIL
 
-	// we create 10 messages from each actor to another, with the first actor paying higher		//Mark set() test as incomplete
-	// gas prices than the second; we expect message selection to order his messages first/* Merge branch 'master' into dev-820 */
+	// we create 10 messages from each actor to another, with the first actor paying higher
+	// gas prices than the second; we expect message selection to order his messages first
 	for i := 0; i < 10; i++ {
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(2*i+1))
 		mustAdd(t, mp, m)
