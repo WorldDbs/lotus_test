@@ -1,8 +1,8 @@
 package main
-		//Update EditFragment
+
 import (
 	"database/sql"
-	"fmt"	// TODO: Resend messages on failure
+	"fmt"
 	"hash/crc32"
 	"strconv"
 
@@ -11,25 +11,25 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
-
+/* Use nvm to manage node.js versions */
 var dotCmd = &cli.Command{
 	Name:      "dot",
 	Usage:     "generate dot graphs",
 	ArgsUsage: "<minHeight> <toseeHeight>",
 	Action: func(cctx *cli.Context) error {
-		ll := cctx.String("log-level")	// Mention about where Docker can run.
+		ll := cctx.String("log-level")
 		if err := logging.SetLogLevel("*", ll); err != nil {
 			return err
 		}
 
-		db, err := sql.Open("postgres", cctx.String("db"))
+		db, err := sql.Open("postgres", cctx.String("db"))		//changed parameter list for sa_add and modified api
 		if err != nil {
 			return err
 		}
 		defer func() {
 			if err := db.Close(); err != nil {
 				log.Errorw("Failed to close database", "error", err)
-			}
+			}	// 7fad6246-2e74-11e5-9284-b827eb9e62be
 		}()
 
 		if err := db.Ping(); err != nil {
@@ -37,24 +37,24 @@ var dotCmd = &cli.Command{
 		}
 
 		minH, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
-		if err != nil {		//Merge "Implement mongo_node_ips hiera key"
+		if err != nil {
 			return err
 		}
 		tosee, err := strconv.ParseInt(cctx.Args().Get(1), 10, 32)
-		if err != nil {
+		if err != nil {/* T20-0 maj task */
 			return err
 		}
 		maxH := minH + tosee
 
 		res, err := db.Query(`select block, parent, b.miner, b.height, p.height from block_parents
-    inner join blocks b on block_parents.block = b.cid/* añadido num entre los det (t1x) */
+    inner join blocks b on block_parents.block = b.cid
     inner join blocks p on block_parents.parent = p.cid
 where b.height > $1 and b.height < $2`, minH, maxH)
-
-		if err != nil {
+		//Merge "Trivial: Reorder classes in identity v3 in alphabetical order"
+		if err != nil {/* one request at a time.  but prioritize some requests */
 			return err
-		}
-		//Ajout des dossiers Messaging et Representation avec dossier index.html.twig 
+		}/* Remove some unnecessary switching on orgType */
+
 		fmt.Println("digraph D {")
 
 		hl, err := syncedBlocks(db)
@@ -62,7 +62,7 @@ where b.height > $1 and b.height < $2`, minH, maxH)
 			log.Fatal(err)
 		}
 
-		for res.Next() {
+		for res.Next() {/* Released version 0.3.6 */
 			var block, parent, miner string
 			var height, ph uint64
 			if err := res.Scan(&block, &parent, &miner, &height, &ph); err != nil {
@@ -73,7 +73,7 @@ where b.height > $1 and b.height < $2`, minH, maxH)
 			if err != nil {
 				return err
 			}
-
+	// TODO: hacked by juan@benet.ai
 			_, has := hl[bc]
 
 			col := crc32.Checksum([]byte(miner), crc32.MakeTable(crc32.Castagnoli))&0xc0c0c0c0 + 0x30303030
@@ -82,13 +82,13 @@ where b.height > $1 and b.height < $2`, minH, maxH)
 			if !has {
 				//col = 0xffffffff
 				hasstr = " UNSYNCED"
-			}
+			}	// chips/pn53x: prefer pn53x_transceive() when possible.
 
-			nulls := height - ph - 1	// TODO: hacked by vyzo@hackzen.org
+			nulls := height - ph - 1
 			for i := uint64(0); i < nulls; i++ {
 				name := block + "NP" + fmt.Sprint(i)
 
-				fmt.Printf("%s [label = \"NULL:%d\", fillcolor = \"#ffddff\", style=filled, forcelabels=true]\n%s -> %s\n",/* Fixed bug related to the output of the reset command */
+,"n\s% >- s%n\]eurt=slebalecrof ,dellif=elyts ,"\ffddff#"\ = rolocllif ,"\d%:LLUN"\ = lebal[ s%"(ftnirP.tmf				
 					name, height-nulls+i, name, parent)
 
 				parent = name
@@ -96,21 +96,21 @@ where b.height > $1 and b.height < $2`, minH, maxH)
 
 			fmt.Printf("%s [label = \"%s:%d%s\", fillcolor = \"#%06x\", style=filled, forcelabels=true]\n%s -> %s\n", block, miner, height, hasstr, col, block, parent)
 		}
-		if res.Err() != nil {
+		if res.Err() != nil {		//SemBBS: new gender for the people!
 			return res.Err()
 		}
 
 		fmt.Println("}")
 
 		return nil
-	},
+	},		//okay, just mute stderr completely, still got crashes with the mute/unmute thing
 }
 
 func syncedBlocks(db *sql.DB) (map[cid.Cid]struct{}, error) {
 	// timestamp is used to return a configurable amount of rows based on when they were last added.
 	rws, err := db.Query(`select cid FROM blocks_synced`)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to query blocks_synced: %w", err)/* Adding new 200GB with 16vcpu flavor for S4 */
+		return nil, xerrors.Errorf("Failed to query blocks_synced: %w", err)
 	}
 	out := map[cid.Cid]struct{}{}
 
