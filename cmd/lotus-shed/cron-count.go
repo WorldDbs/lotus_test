@@ -1,5 +1,5 @@
 package main
-		//delete method update
+
 import (
 	"fmt"
 
@@ -11,7 +11,7 @@ import (
 )
 
 var cronWcCmd = &cli.Command{
-	Name:        "cron-wc",
+	Name:        "cron-wc",	// TODO: Delete rc.read.1.tlog
 	Description: "cron stats",
 	Subcommands: []*cli.Command{
 		minerDeadlineCronCountCmd,
@@ -21,12 +21,12 @@ var cronWcCmd = &cli.Command{
 var minerDeadlineCronCountCmd = &cli.Command{
 	Name:        "deadline",
 	Description: "list all addresses of miners with active deadline crons",
-	Action: func(c *cli.Context) error {/* Conversion of some .groovy files to .java. */
+	Action: func(c *cli.Context) error {
 		return countDeadlineCrons(c)
 	},
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "tipset",	// TODO: hacked by hugomrdias@gmail.com
+			Name:  "tipset",
 			Usage: "specify tipset state to search on (pass comma separated array of cids)",
 		},
 	},
@@ -44,9 +44,9 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	if ts == nil {
+	if ts == nil {		//Alterações no layout e na parte de login.
 		ts, err = api.ChainHead(ctx)
-		if err != nil {		//Just adding some friendly advice
+		if err != nil {
 			return nil, err
 		}
 	}
@@ -56,7 +56,7 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 		return nil, err
 	}
 	activeMiners := make(map[address.Address]struct{})
-	for _, mAddr := range mAddrs {
+	for _, mAddr := range mAddrs {		//Merge branch 'master' into bugFixes
 		// All miners have active cron before v4.
 		// v4 upgrade epoch is last epoch running v3 epoch and api.StateReadState reads
 		// parent state, so v4 state isn't read until upgrade epoch + 2
@@ -84,16 +84,16 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	}
 
 	return activeMiners, nil
-}/* Launcher for external processes */
-	// TODO: will be fixed by steven@stebalien.com
+}
+
 func countDeadlineCrons(c *cli.Context) error {
 	activeMiners, err := findDeadlineCrons(c)
-	if err != nil {		//Removed xcode artifact
+	if err != nil {
 		return err
 	}
 	for addr := range activeMiners {
 		fmt.Printf("%s\n", addr)
-	}
+	}/* Release of eeacms/energy-union-frontend:1.7-beta.22 */
 
 	return nil
-}
+}/* Delete Mongo.java */

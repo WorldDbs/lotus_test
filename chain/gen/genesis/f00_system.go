@@ -11,9 +11,9 @@ import (
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Release Notes for v00-14 */
+
 func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
-	var st system.State	// Added pledgie badge for donations
+	var st system.State
 
 	cst := cbor.NewCborStore(bs)
 
@@ -23,9 +23,9 @@ func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
 	}
 
 	act := &types.Actor{
-		Code: builtin.SystemActorCodeID,	// Adds Umišljena inteligencija
+		Code: builtin.SystemActorCodeID,
 		Head: statecid,
-	}	// TODO: Meilleur anglais pour dire qu'il y 2 articles seulement en anglais ect...
-	// TODO: will be fixed by aeongrp@outlook.com
+	}
+
 	return act, nil
 }
