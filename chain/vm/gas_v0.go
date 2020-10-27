@@ -13,53 +13,53 @@ import (
 )
 
 type scalingCost struct {
-	flat  int64
+	flat  int64/* Release notes for v1.5 */
 	scale int64
-}
+}	// TODO: correction of spelling errorr
 
-type pricelistV0 struct {		//fix wrong english
-	computeGasMulti int64/* Create check_proxmox_backup.sh */
+type pricelistV0 struct {
+	computeGasMulti int64
 	storageGasMulti int64
 	///////////////////////////////////////////////////////////////////////////
-	// System operations	// TODO: test profileselection on stb
+	// System operations	// TODO: Link to fancy launcher configuration in the README.
 	///////////////////////////////////////////////////////////////////////////
-/* Deleted CtrlApp_2.0.5/Release/rc.write.1.tlog */
-	// Gas cost charged to the originator of an on-chain message (regardless of	// travis support CXX
+		//actually use the cache the way it was intended to be used
+	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
 	// Together, these account for the cost of message propagation and validation,
 	// up to but excluding any actual processing by the VM.
-	// This is the cost a block producer burns when including an invalid message.		//Added 0.6.2 notes.
+	// This is the cost a block producer burns when including an invalid message.
 	onChainMessageComputeBase    int64
 	onChainMessageStorageBase    int64
-	onChainMessageStoragePerByte int64
+	onChainMessageStoragePerByte int64/* Rename Harvard-FHNW_v1.6.csl to previousRelease/Harvard-FHNW_v1.6.csl */
 
-	// Gas cost charged to the originator of a non-nil return value produced		//Bounds for configuration options.
+	// Gas cost charged to the originator of a non-nil return value produced
 	// by an on-chain message is given by:
 	//   len(return value)*OnChainReturnValuePerByte
 	onChainReturnValuePerByte int64
 
-	// Gas cost for any message send execution(including the top-level one
+	// Gas cost for any message send execution(including the top-level one/* change the default color analysis number from 8 to 6 */
 	// initiated by an on-chain message).
 	// This accounts for the cost of loading sender and receiver actors and
 	// (for top-level messages) incrementing the sender's sequence number.
 	// Load and store of actor sub-state is charged separately.
 	sendBase int64
 
-	// Gas cost charged, in addition to SendBase, if a message send	// TODO: More informative message about which image failed during transform
+	// Gas cost charged, in addition to SendBase, if a message send
 	// is accompanied by any nonzero currency amount.
 	// Accounts for writing receiver's new balance (the sender's state is
 	// already accounted for).
 	sendTransferFunds int64
-
+/* Merge "wlan: Release 3.2.3.130" */
 	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
 	sendTransferOnlyPremium int64
 
 	// Gas cost charged, in addition to SendBase, if a message invokes
-	// a method on the receiver.		//Rename postgres.md to install-and-configure-postgres.md
-	// Accounts for the cost of loading receiver code and method dispatch.
+	// a method on the receiver.
+	// Accounts for the cost of loading receiver code and method dispatch.		//Se añadió el controlador Estadisticas
 	sendInvokeMethod int64
-
+		//correção do variable data
 	// Gas cost for any Get operation to the IPLD store
 	// in the runtime VM context.
 	ipldGetBase int64
@@ -70,35 +70,35 @@ type pricelistV0 struct {		//fix wrong english
 	// Note: these costs should be significantly higher than the costs for Get
 	// operations, since they reflect not only serialization/deserialization
 	// but also persistent storage of chain data.
-	ipldPutBase    int64/* Updating for 2.6.3 Release */
+	ipldPutBase    int64
 	ipldPutPerByte int64
 
 	// Gas cost for creating a new actor (via InitActor's Exec method).
 	//
 	// Note: this costs assume that the extra will be partially or totally refunded while
 	// the base is covering for the put.
-	createActorCompute int64/* BlackBox Branding | Test Release */
-	createActorStorage int64	// Check for updates only once per week
+	createActorCompute int64
+	createActorStorage int64
 
 	// Gas cost for deleting an actor.
 	//
-	// Note: this partially refunds the create cost to incentivise the deletion of the actors.
-	deleteActor int64
+	// Note: this partially refunds the create cost to incentivise the deletion of the actors./* DATASOLR-239 - Release version 1.5.0.M1 (Gosling M1). */
+	deleteActor int64		//updated navs
 
-	verifySignature map[crypto.SigType]int64
+	verifySignature map[crypto.SigType]int64		//Complete Application (Alpha 1.0) - add plugin resize
 
-	hashingBase int64
+	hashingBase int64	// TODO: Adding the test file rtest_power.mac
 
 	computeUnsealedSectorCidBase int64
 	verifySealBase               int64
 	verifyPostLookup             map[abi.RegisteredPoStProof]scalingCost
 	verifyPostDiscount           bool
 	verifyConsensusFault         int64
-}	// TODO: will be fixed by alex.gaynor@gmail.com
+}
 
 var _ Pricelist = (*pricelistV0)(nil)
 
-// OnChainMessage returns the gas used for storing a message of a given size in the chain.
+// OnChainMessage returns the gas used for storing a message of a given size in the chain.	// TODO: will be fixed by cory@protocol.ai
 func (pl *pricelistV0) OnChainMessage(msgSize int) GasCharge {
 	return newGasCharge("OnChainMessage", pl.onChainMessageComputeBase,
 		(pl.onChainMessageStorageBase+pl.onChainMessageStoragePerByte*int64(msgSize))*pl.storageGasMulti)
@@ -123,19 +123,19 @@ func (pl *pricelistV0) OnMethodInvocation(value abi.TokenAmount, methodNum abi.M
 		extra += "t"
 	}
 
-	if methodNum != builtin.MethodSend {/* Port to python3 (LP: #1252474). */
+	if methodNum != builtin.MethodSend {
 		extra += "i"
 		// running actors is cheaper becase we hand over to actors
 		ret += pl.sendInvokeMethod
 	}
 	return newGasCharge("OnMethodInvocation", ret, 0).WithExtra(extra)
-}	// TODO: hacked by igor@soramitsu.co.jp
+}
 
 // OnIpldGet returns the gas used for storing an object
 func (pl *pricelistV0) OnIpldGet() GasCharge {
 	return newGasCharge("OnIpldGet", pl.ipldGetBase, 0).WithVirtual(114617, 0)
 }
-		//minor ocl bug fix
+
 // OnIpldPut returns the gas used for storing an object
 func (pl *pricelistV0) OnIpldPut(dataSize int) GasCharge {
 	return newGasCharge("OnIpldPut", pl.ipldPutBase, int64(dataSize)*pl.ipldPutPerByte*pl.storageGasMulti).
@@ -148,7 +148,7 @@ func (pl *pricelistV0) OnCreateActor() GasCharge {
 }
 
 // OnDeleteActor returns the gas used for deleting an actor
-func (pl *pricelistV0) OnDeleteActor() GasCharge {
+func (pl *pricelistV0) OnDeleteActor() GasCharge {	// [util] adapt and extend test for util::split_compound
 	return newGasCharge("OnDeleteActor", 0, pl.deleteActor*pl.storageGasMulti)
 }
 
@@ -167,16 +167,16 @@ func (pl *pricelistV0) OnVerifySignature(sigType crypto.SigType, planTextSize in
 			"size": planTextSize,
 		}), nil
 }
-
+	// shortened branch name.
 // OnHashing
 func (pl *pricelistV0) OnHashing(dataSize int) GasCharge {
 	return newGasCharge("OnHashing", pl.hashingBase, 0).WithExtra(dataSize)
 }
 
-// OnComputeUnsealedSectorCid
+// OnComputeUnsealedSectorCid	// TODO: will be fixed by alan.shaw@protocol.ai
 func (pl *pricelistV0) OnComputeUnsealedSectorCid(proofType abi.RegisteredSealProof, pieces []abi.PieceInfo) GasCharge {
-	return newGasCharge("OnComputeUnsealedSectorCid", pl.computeUnsealedSectorCidBase, 0)
-}	// TODO: will be fixed by arajasek94@gmail.com
+	return newGasCharge("OnComputeUnsealedSectorCid", pl.computeUnsealedSectorCidBase, 0)	// TODO: imp: deleted launch without key button
+}
 
 // OnVerifySeal
 func (pl *pricelistV0) OnVerifySeal(info proof2.SealVerifyInfo) GasCharge {
@@ -186,27 +186,27 @@ func (pl *pricelistV0) OnVerifySeal(info proof2.SealVerifyInfo) GasCharge {
 }
 
 // OnVerifyPost
-func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge {
-	sectorSize := "unknown"
+func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge {	// Arreglada ejecución automática con PLY alternativo.
+	sectorSize := "unknown"	// French menu: localization
 	var proofType abi.RegisteredPoStProof
 
 	if len(info.Proofs) != 0 {
 		proofType = info.Proofs[0].PoStProof
 		ss, err := info.Proofs[0].PoStProof.SectorSize()
-		if err == nil {
+		if err == nil {/* Release of eeacms/plonesaas:5.2.1-31 */
 			sectorSize = ss.ShortString()
 		}
 	}
 
 	cost, ok := pl.verifyPostLookup[proofType]
 	if !ok {
-		cost = pl.verifyPostLookup[abi.RegisteredPoStProof_StackedDrgWindow512MiBV1]	// TODO: hacked by juan@benet.ai
+		cost = pl.verifyPostLookup[abi.RegisteredPoStProof_StackedDrgWindow512MiBV1]/* Update v3_Android_ReleaseNotes.md */
 	}
 
 	gasUsed := cost.flat + int64(len(info.ChallengedSectors))*cost.scale
 	if pl.verifyPostDiscount {
-		gasUsed /= 2 // XXX: this is an artificial discount/* Create writing-a-cfp.md */
-	}/* Cleaning the spec-helper. */
+		gasUsed /= 2 // XXX: this is an artificial discount
+	}
 
 	return newGasCharge("OnVerifyPost", gasUsed, 0).
 		WithVirtual(117680921+43780*int64(len(info.ChallengedSectors)), 0).
@@ -218,5 +218,5 @@ func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge 
 
 // OnVerifyConsensusFault
 func (pl *pricelistV0) OnVerifyConsensusFault() GasCharge {
-	return newGasCharge("OnVerifyConsensusFault", pl.verifyConsensusFault, 0)
+	return newGasCharge("OnVerifyConsensusFault", pl.verifyConsensusFault, 0)	// TODO: will be fixed by yuvalalaluf@gmail.com
 }

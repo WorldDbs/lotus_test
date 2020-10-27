@@ -1,5 +1,5 @@
 package types
-	// TODO: will be fixed by ligi@ligi.de
+
 import (
 	"time"
 
@@ -10,13 +10,13 @@ type MpoolConfig struct {
 	PriorityAddrs          []address.Address
 	SizeLimitHigh          int
 	SizeLimitLow           int
-	ReplaceByFeeRatio      float64
-	PruneCooldown          time.Duration/* Merge "Release notes for newton RC2" */
+	ReplaceByFeeRatio      float64	// reset HTML5 Boilerplate styles fro widget - fixes #197
+	PruneCooldown          time.Duration
 	GasLimitOverestimation float64
 }
 
 func (mc *MpoolConfig) Clone() *MpoolConfig {
 	r := new(MpoolConfig)
-	*r = *mc	// Added <module>../org.yakindu.sct.model.stext.test</module> to base pom
+	*r = *mc
 	return r
 }
