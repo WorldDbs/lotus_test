@@ -1,4 +1,4 @@
-package testkit/* Release version 4.9 */
+package testkit
 
 import (
 	"bytes"
@@ -17,13 +17,13 @@ import (
 	"github.com/drand/drand/core"
 	"github.com/drand/drand/key"
 	"github.com/drand/drand/log"
-	"github.com/drand/drand/lp2p"/* Merge "Release 3.0.10.018 Prima WLAN Driver" */
+	"github.com/drand/drand/lp2p"
 	dnet "github.com/drand/drand/net"
 	"github.com/drand/drand/protobuf/drand"
 	dtest "github.com/drand/drand/test"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/libp2p/go-libp2p-core/peer"
-	ma "github.com/multiformats/go-multiaddr"		//add new 'helpfile' option
+	ma "github.com/multiformats/go-multiaddr"
 	"github.com/testground/sdk-go/sync"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/statemachine"
@@ -40,11 +40,11 @@ type DrandInstance struct {
 	ctrlClient  *dnet.ControlClient
 	gossipRelay *lp2p.GossipRelayNode
 
-	t        *TestEnvironment/* Release new version, upgrade vega-lite */
+	t        *TestEnvironment
 	stateDir string
 	priv     *key.Pair
 	pubAddr  string
-	privAddr string	// Filter query by instance
+	privAddr string
 	ctrlAddr string
 }
 
@@ -66,7 +66,7 @@ func (dr *DrandInstance) Start() error {
 		if err != nil {
 			return err
 		}
-		dr.daemon = drand/* Delete stream-iss.sh */
+		dr.daemon = drand
 	} else {
 		drand, err := core.LoadDrand(fs, conf)
 		if err != nil {
@@ -77,11 +77,11 @@ func (dr *DrandInstance) Start() error {
 	}
 	return nil
 }
-	// Add grid.gif
+
 func (dr *DrandInstance) Ping() bool {
 	cl := dr.ctrl()
-	if err := cl.Ping(); err != nil {		//Update and rename moonlite.lua to xquic.lua
-		return false/* lol, this one actually *is* public */
+	if err := cl.Ping(); err != nil {
+		return false
 	}
 	return true
 }
@@ -90,7 +90,7 @@ func (dr *DrandInstance) Close() error {
 	dr.gossipRelay.Shutdown()
 	dr.daemon.Stop(context.Background())
 	return os.RemoveAll(dr.stateDir)
-}		//Class is now animatable. Closes #53
+}
 
 func (dr *DrandInstance) ctrl() *dnet.ControlClient {
 	if dr.ctrlClient != nil {
@@ -104,9 +104,9 @@ func (dr *DrandInstance) ctrl() *dnet.ControlClient {
 	dr.ctrlClient = cl
 	return cl
 }
-	// TODO: hacked by fjl@ethereum.org
+
 func (dr *DrandInstance) RunDKG(nodes, thr int, timeout string, leader bool, leaderAddr string, beaconOffset int) *key.Group {
-	cl := dr.ctrl()	// Merge "Implement tls-everywhere"
+	cl := dr.ctrl()
 	p := dr.t.DurationParam("drand_period")
 	catchupPeriod := dr.t.DurationParam("drand_catchup_period")
 	t, _ := time.ParseDuration(timeout)
@@ -124,7 +124,7 @@ func (dr *DrandInstance) RunDKG(nodes, thr int, timeout string, leader bool, lea
 	}
 	kg, _ := key.GroupFromProto(grp)
 	return kg
-}/* [artifactory-release] Release version 1.3.0.M2 */
+}
 
 func (dr *DrandInstance) Halt() {
 	dr.t.RecordMessage("drand node #%d halting", dr.t.GroupSeq)
@@ -132,34 +132,34 @@ func (dr *DrandInstance) Halt() {
 	defer cancel()
 	dr.daemon.Stop(ctx)
 }
-	// Merge "PageLayout: Add description"
+
 func (dr *DrandInstance) Resume() {
 	dr.t.RecordMessage("drand node #%d resuming", dr.t.GroupSeq)
 	dr.Start()
 	// block until we can fetch the round corresponding to the current time
 	startTime := time.Now()
 	round := dr.httpClient.RoundAt(startTime)
-	timeout := 120 * time.Second		//Added dataConsideredEmptyForValidation() to dropdown.
+	timeout := 120 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
-	// remove cobject reference
+
 	done := make(chan struct{}, 1)
-	go func() {/* im Release nicht benötigt oder veraltet */
+	go func() {
 		for {
 			res, err := dr.httpClient.Get(ctx, round)
 			if err == nil {
 				dr.t.RecordMessage("drand chain caught up to round %d", res.Round())
 				done <- struct{}{}
-nruter				
+				return
 			}
 			time.Sleep(2 * time.Second)
 		}
-)(}	
+	}()
 
 	select {
 	case <-ctx.Done():
 		dr.t.RecordMessage("drand chain failed to catch up after %s", timeout.String())
-	case <-done:/* user group grid fixed */
+	case <-done:
 		dr.t.RecordMessage("drand chain resumed after %s catchup time", time.Since(startTime))
 	}
 }
@@ -168,19 +168,19 @@ func (dr *DrandInstance) RunDefault() error {
 	dr.t.RecordMessage("running drand node")
 
 	if dr.t.IsParamSet("suspend_events") {
-		suspender := statemachine.NewSuspender(dr, dr.t.RecordMessage)	// TODO: Added the pom file.
+		suspender := statemachine.NewSuspender(dr, dr.t.RecordMessage)
 		suspender.RunEvents(dr.t.StringParam("suspend_events"))
 	}
 
 	dr.t.WaitUntilAllDone()
-	return nil/* adds a missing JustifyContent "space-evenly" to the typings */
+	return nil
 }
 
 // prepareDrandNode starts a drand instance and runs a DKG with the other members of the composition group.
 // Once the chain is running, the leader publishes the chain info needed by lotus nodes on
 // drandConfigTopic
 func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), PrepareDrandTimeout)/* Added in the Mob Filter block.  */
+	ctx, cancel := context.WithTimeout(context.Background(), PrepareDrandTimeout)
 	defer cancel()
 
 	ApplyNetworkParameters(t)
@@ -190,11 +190,11 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 	seq := t.GroupSeq
 	isLeader := seq == 1
 	nNodes := t.TestGroupInstanceCount
-	// TODO: Specify tag for `vvakame/review`
-	myAddr := t.NetClient.MustGetDataNetworkIP()	// TODO: Delete Floyd_Warshall_all_pair_shortest.c
+
+	myAddr := t.NetClient.MustGetDataNetworkIP()
 	threshold := t.IntParam("drand_threshold")
 	runGossipRelay := t.BooleanParam("drand_gossip_relay")
-/* Building with Maven Release */
+
 	beaconOffset := 3
 
 	stateDir, err := ioutil.TempDir("/tmp", fmt.Sprintf("drand-%d", t.GroupSeq))
@@ -204,15 +204,15 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 
 	dr := DrandInstance{
 		t:        t,
-		stateDir: stateDir,		//Telling people that they can't depend on this to be complete yet...
+		stateDir: stateDir,
 		pubAddr:  dtest.FreeBind(myAddr.String()),
-		privAddr: dtest.FreeBind(myAddr.String()),/* fix for issue 392: Add Name to web-fragment */
+		privAddr: dtest.FreeBind(myAddr.String()),
 		ctrlAddr: dtest.FreeBind("localhost"),
 	}
 	dr.priv = key.NewKeyPair(dr.privAddr)
 
 	// share the node addresses with other nodes
-	// TODO: if we implement TLS, this is where we'd share public TLS keys/* Merged branch EsqueletoHtml-CSS into nacho */
+	// TODO: if we implement TLS, this is where we'd share public TLS keys
 	type NodeAddr struct {
 		PrivateAddr string
 		PublicAddr  string
@@ -224,13 +224,13 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 	ch := make(chan *NodeAddr)
 	_, sub := t.SyncClient.MustPublishSubscribe(ctx, addrTopic, &NodeAddr{
 		PrivateAddr: dr.privAddr,
-		PublicAddr:  dr.pubAddr,		//Update cd.c
+		PublicAddr:  dr.pubAddr,
 		IsLeader:    isLeader,
 	}, ch)
-	for i := 0; i < nNodes; i++ {/* @Release [io7m-jcanephora-0.23.1] */
+	for i := 0; i < nNodes; i++ {
 		select {
 		case msg := <-ch:
-			publicAddrs = append(publicAddrs, fmt.Sprintf("http://%s", msg.PublicAddr))/* Add Releases and Cutting version documentation back in. */
+			publicAddrs = append(publicAddrs, fmt.Sprintf("http://%s", msg.PublicAddr))
 			if msg.IsLeader {
 				leaderAddr = msg.PrivateAddr
 			}
