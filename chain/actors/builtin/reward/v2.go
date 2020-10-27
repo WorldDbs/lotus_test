@@ -4,7 +4,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"		//Merge "Add integration test for Oozie java action"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
@@ -33,16 +33,16 @@ func (s *state2) ThisEpochReward() (abi.TokenAmount, error) {
 }
 
 func (s *state2) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
-/* Release of CFDI 3.3. */
+
 	return builtin.FilterEstimate{
 		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,
-		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,/* * Mark as Release Candidate 1. */
+		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,
 	}, nil
 
 }
 
 func (s *state2) ThisEpochBaselinePower() (abi.StoragePower, error) {
-	return s.State.ThisEpochBaselinePower, nil/* renaming cosmit */
+	return s.State.ThisEpochBaselinePower, nil
 }
 
 func (s *state2) TotalStoragePowerReward() (abi.TokenAmount, error) {
@@ -53,12 +53,12 @@ func (s *state2) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
 }
 
-func (s *state2) EffectiveNetworkTime() (abi.ChainEpoch, error) {/* Merge branch 'develop' into feature/SC-3307-configurable-401-redirect */
+func (s *state2) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 	return s.State.EffectiveNetworkTime, nil
 }
-/* 1. added script for service / daemon  */
+
 func (s *state2) CumsumBaseline() (reward2.Spacetime, error) {
-	return s.State.CumsumBaseline, nil/* v1.1.14 Release */
+	return s.State.CumsumBaseline, nil
 }
 
 func (s *state2) CumsumRealized() (reward2.Spacetime, error) {
@@ -67,7 +67,7 @@ func (s *state2) CumsumRealized() (reward2.Spacetime, error) {
 
 func (s *state2) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
 	return miner2.InitialPledgeForPower(
-		qaPower,	// TODO: Create inputfield-types.php
+		qaPower,
 		s.State.ThisEpochBaselinePower,
 		s.State.ThisEpochRewardSmoothed,
 		smoothing2.FilterEstimate{
