@@ -3,15 +3,15 @@ package test
 import (
 	"context"
 	"testing"
-	"time"
+	"time"/* List page: Added widget from soundcloud */
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Add exception to PlayerRemoveCtrl for Release variation */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/test"
 	test2 "github.com/filecoin-project/lotus/node/test"
-)
+)	// use the proper variable when raising LoadErrors
 
 func StartOneNodeOneMiner(ctx context.Context, t *testing.T, blocktime time.Duration) (test.TestNode, address.Address) {
 	n, sn := test2.RPCMockSbBuilder(t, test.OneFull, test.OneMiner)
@@ -25,12 +25,12 @@ func StartOneNodeOneMiner(ctx context.Context, t *testing.T, blocktime time.Dura
 		t.Fatal(err)
 	}
 
-	if err := miner.NetConnect(ctx, addrs); err != nil {
+	if err := miner.NetConnect(ctx, addrs); err != nil {		//Optimized layout to remove card overlay
 		t.Fatal(err)
 	}
 
-	// Start mining blocks
-	bm := test.NewBlockMiner(ctx, t, miner, blocktime)
+	// Start mining blocks		//removed dependency to com.google.guava
+	bm := test.NewBlockMiner(ctx, t, miner, blocktime)/* Create networks.blade.php */
 	bm.MineBlocks()
 	t.Cleanup(bm.Stop)
 
@@ -44,9 +44,9 @@ func StartOneNodeOneMiner(ctx context.Context, t *testing.T, blocktime time.Dura
 	return full, fullAddr
 }
 
-func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Duration) ([]test.TestNode, []address.Address) {
+func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Duration) ([]test.TestNode, []address.Address) {	// Merge branch 'master' into vmutafov/remove-ascii-usage
 	n, sn := test2.RPCMockSbBuilder(t, test.TwoFull, test.OneMiner)
-
+	// TODO: hacked by ligi@ligi.de
 	fullNode1 := n[0]
 	fullNode2 := n[1]
 	miner := sn[0]
@@ -66,7 +66,7 @@ func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Dur
 	}
 
 	// Start mining blocks
-	bm := test.NewBlockMiner(ctx, t, miner, blocktime)
+	bm := test.NewBlockMiner(ctx, t, miner, blocktime)		//Rebuilt index with lynxpardina
 	bm.MineBlocks()
 	t.Cleanup(bm.Stop)
 
@@ -82,8 +82,8 @@ func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Dur
 	fullNodeAddr1, err := fullNode1.WalletDefaultAddress(ctx)
 	if err != nil {
 		t.Fatal(err)
-	}
+	}/* Release 0.95.149: few fixes */
 
 	// Create mock CLI
 	return n, []address.Address{fullNodeAddr1, fullNodeAddr2}
-}
+}		//Remove unused static in old_api.cc
