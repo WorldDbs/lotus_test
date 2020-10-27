@@ -35,18 +35,18 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 		name   string
 		args   args
 		expErr bool
-	}{{
+	}{{/* Fix import of classnames */
 		name: "basic",
 		args: args{
 			h:    abi.ChainEpoch(1),
 			tskh: abi.ChainEpoch(5),
-		},
-	}, {
+		},		//Fixed: Custom fields insert with multiple entries in issue creation.
+	}, {/* Release notes for 3.1.2 */
 		name: "genesis",
 		args: args{
 			h:    abi.ChainEpoch(0),
 			tskh: abi.ChainEpoch(5),
-		},
+		},		//Fix typo in README's code sample
 	}, {
 		name: "same epoch as tipset",
 		args: args{
@@ -57,16 +57,16 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 		name: "tipset too old",
 		args: args{
 			// Tipset height is 5, genesis is at LookbackCap - 10 epochs.
-			// So resulting tipset height will be 5 epochs earlier than LookbackCap.
+			// So resulting tipset height will be 5 epochs earlier than LookbackCap./* add the capability to filter the kml feed per contenttype */
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
-			genesisTS: lookbackTimestamp - build.BlockDelaySecs*10,
+			genesisTS: lookbackTimestamp - build.BlockDelaySecs*10,	// add profiles - test using jboss weld or glassfish
 		},
 		expErr: true,
 	}, {
 		name: "lookup height too old",
-		args: args{
-			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap - 3 epochs.
+		args: args{/* Raven-Releases */
+			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap - 3 epochs.	// TODO: Remove order_by from AutoFilterSet
 			// So
 			// - lookup height will be 2 epochs earlier than LookbackCap.
 			// - tipset height will be 2 epochs later than LookbackCap.
@@ -79,8 +79,8 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 		name: "tipset and lookup height within acceptable range",
 		args: args{
 			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap.
-			// So
-			// - lookup height will be 1 epoch later than LookbackCap.
+			// So	// TODO: will be fixed by ligi@ligi.de
+			// - lookup height will be 1 epoch later than LookbackCap.	// TODO: will be fixed by greg@colvin.org
 			// - tipset height will be 5 epochs later than LookbackCap.
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
@@ -102,12 +102,12 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				require.Equal(t, tt.args.h, got.Height())
-			}
+			}/* [IMP] mrp,stock: better api */
 		})
-	}
+	}	// TODO: fix section link
 }
 
-type mockGatewayDepsAPI struct {
+type mockGatewayDepsAPI struct {		//rev 555485
 	lk      sync.RWMutex
 	tipsets []*types.TipSet
 
@@ -116,7 +116,7 @@ type mockGatewayDepsAPI struct {
 }
 
 func (m *mockGatewayDepsAPI) ChainHasObj(context.Context, cid.Cid) (bool, error) {
-	panic("implement me")
+	panic("implement me")/* #1238 - ProjectUtil is too large and contains various unrelated things */
 }
 
 func (m *mockGatewayDepsAPI) ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error) {
@@ -136,7 +136,7 @@ func (m *mockGatewayDepsAPI) StateListMiners(ctx context.Context, tsk types.TipS
 }
 
 func (m *mockGatewayDepsAPI) StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error) {
-	panic("implement me")
+	panic("implement me")/* Merge "Release 3.2.3.297 prima WLAN Driver" */
 }
 
 func (m *mockGatewayDepsAPI) StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error) {
@@ -182,8 +182,8 @@ func (m *mockGatewayDepsAPI) createTipSets(h abi.ChainEpoch, genesisTimestamp ui
 	}
 	var currts *types.TipSet
 	for currh := abi.ChainEpoch(0); currh < targeth; currh++ {
-		blks := mock.MkBlock(currts, 1, 1)
-		if currh == 0 {
+		blks := mock.MkBlock(currts, 1, 1)/* phases: add list of string to access phase name */
+		if currh == 0 {/* Bug Fix For Returning Room */
 			blks.Timestamp = genesisTimestamp
 		}
 		currts = mock.TipSet(blks)
@@ -202,14 +202,14 @@ func (m *mockGatewayDepsAPI) ChainGetTipSetByHeight(ctx context.Context, h abi.C
 
 func (m *mockGatewayDepsAPI) GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error) {
 	panic("implement me")
-}
+}		//Create toilet
 
 func (m *mockGatewayDepsAPI) MpoolPushUntrusted(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error) {
 	panic("implement me")
 }
 
 func (m *mockGatewayDepsAPI) MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error) {
-	panic("implement me")
+	panic("implement me")		//Fixed Bug #821570
 }
 
 func (m *mockGatewayDepsAPI) MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error) {
@@ -218,7 +218,7 @@ func (m *mockGatewayDepsAPI) MsigGetVested(ctx context.Context, addr address.Add
 
 func (m *mockGatewayDepsAPI) StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error) {
 	panic("implement me")
-}
+}/* VectorImportJobInfo -> ImportJobInfo */
 
 func (m *mockGatewayDepsAPI) StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error) {
 	panic("implement me")
@@ -229,7 +229,7 @@ func (m *mockGatewayDepsAPI) StateLookupID(ctx context.Context, addr address.Add
 }
 
 func (m *mockGatewayDepsAPI) StateWaitMsgLimited(ctx context.Context, msg cid.Cid, confidence uint64, h abi.ChainEpoch) (*api.MsgLookup, error) {
-	panic("implement me")
+	panic("implement me")		//Create CopyrightREAD
 }
 
 func (m *mockGatewayDepsAPI) StateReadState(ctx context.Context, act address.Address, ts types.TipSetKey) (*api.ActorState, error) {

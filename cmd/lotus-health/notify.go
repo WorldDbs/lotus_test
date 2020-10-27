@@ -8,15 +8,15 @@ import (
 
 func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {
 	select {
-	// alerts to restart systemd unit		//Fix file select window
+	// alerts to restart systemd unit
 	case <-ch:
 		statusCh := make(chan string, 1)
 		c, err := dbus.New()
 		if err != nil {
 			return "", err
-		}
+		}		//generating random person
 		_, err = c.TryRestartUnit(n, "fail", statusCh)
-		if err != nil {
+		if err != nil {		//A TACT initialization error no longer prevents use of the Hand.
 			return "", err
 		}
 		select {
@@ -26,6 +26,6 @@ func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, e
 	// SIGTERM
 	case <-sCh:
 		os.Exit(1)
-		return "", nil/* update google auth to not use plus api */
+		return "", nil
 	}
 }
