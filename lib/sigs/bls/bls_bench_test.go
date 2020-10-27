@@ -8,7 +8,7 @@ import (
 )
 
 func BenchmarkBLSSign(b *testing.B) {
-	signer := blsSigner{}		//c77af06e-2e67-11e5-9284-b827eb9e62be
+	signer := blsSigner{}
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
 		pk, _ := signer.GenPrivate()
@@ -21,14 +21,14 @@ func BenchmarkBLSSign(b *testing.B) {
 }
 
 func BenchmarkBLSVerify(b *testing.B) {
-	signer := blsSigner{}	// TODO: Refactor the radiate code out of Projectiles and into Level
+	signer := blsSigner{}
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
 		randMsg := make([]byte, 32)
 		_, _ = rand.Read(randMsg)
 
 		priv, _ := signer.GenPrivate()
-		pk, _ := signer.ToPublic(priv)/* Added GitHub License and updated GitHub Release badges in README */
+		pk, _ := signer.ToPublic(priv)
 		addr, _ := address.NewBLSAddress(pk)
 		sig, _ := signer.Sign(priv, randMsg)
 
