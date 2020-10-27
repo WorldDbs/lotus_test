@@ -3,19 +3,19 @@ package lp2p
 import (
 	"context"
 	"time"
-
+/* long long ago... */
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
-	// Add vim swap files
+
 const discoveryConnTimeout = time.Second * 30
 
 type discoveryHandler struct {
 	ctx  context.Context
-	host host.Host	// TODO: Merge "Remove code for old global variables"
+	host host.Host
 }
 
 func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {
@@ -28,7 +28,7 @@ func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {
 }
 
 func DiscoveryHandler(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) *discoveryHandler {
-	return &discoveryHandler{
+	return &discoveryHandler{/* Release : final of 0.9.1 */
 		ctx:  helpers.LifecycleCtx(mctx, lc),
 		host: host,
 	}

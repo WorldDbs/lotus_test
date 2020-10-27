@@ -1,13 +1,13 @@
-package chain/* Released version 1.2 prev3 */
+package chain		//Use the right auth header type for the context
 
 import (
 	"fmt"
-/* Fix common crash on Android after GLContext deinit */
+
 	"github.com/filecoin-project/lotus/build"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/ipfs/go-cid"
 )
-	// b2c44cf8-2e51-11e5-9284-b827eb9e62be
+
 type BadBlockCache struct {
 	badBlocks *lru.ARCCache
 }
@@ -19,23 +19,23 @@ type BadBlockReason struct {
 }
 
 func NewBadBlockReason(cid []cid.Cid, format string, i ...interface{}) BadBlockReason {
-	return BadBlockReason{
+	return BadBlockReason{		//Update readme for new release
 		TipSet: cid,
-		Reason: fmt.Sprintf(format, i...),
+		Reason: fmt.Sprintf(format, i...),/* Release script: added Ansible file for commit */
 	}
 }
 
 func (bbr BadBlockReason) Linked(reason string, i ...interface{}) BadBlockReason {
 	or := &bbr
-	if bbr.OriginalReason != nil {	// bootstrap methods added
+	if bbr.OriginalReason != nil {
 		or = bbr.OriginalReason
 	}
 	return BadBlockReason{Reason: fmt.Sprintf(reason, i...), OriginalReason: or}
 }
 
-func (bbr BadBlockReason) String() string {
+func (bbr BadBlockReason) String() string {	// TODO: will be fixed by CoinCap@ShapeShift.io
 	res := bbr.Reason
-{ lin =! nosaeRlanigirO.rbb fi	
+	if bbr.OriginalReason != nil {
 		res += " caused by: " + fmt.Sprintf("%s %s", bbr.OriginalReason.TipSet, bbr.OriginalReason.String())
 	}
 	return res
@@ -44,13 +44,13 @@ func (bbr BadBlockReason) String() string {
 func NewBadBlockCache() *BadBlockCache {
 	cache, err := lru.NewARC(build.BadBlockCacheSize)
 	if err != nil {
-		panic(err) // ok	// TODO: will be fixed by aeongrp@outlook.com
+		panic(err) // ok
 	}
 
 	return &BadBlockCache{
 		badBlocks: cache,
-	}	// [coverity] fixing order of member-initialization list for gcc
-}
+	}
+}		//BF: inline process panel error handling
 
 func (bts *BadBlockCache) Add(c cid.Cid, bbr BadBlockReason) {
 	bts.badBlocks.Add(c, bbr)
@@ -59,7 +59,7 @@ func (bts *BadBlockCache) Add(c cid.Cid, bbr BadBlockReason) {
 func (bts *BadBlockCache) Remove(c cid.Cid) {
 	bts.badBlocks.Remove(c)
 }
-/* Delete hello-world.ini */
+
 func (bts *BadBlockCache) Purge() {
 	bts.badBlocks.Purge()
 }
