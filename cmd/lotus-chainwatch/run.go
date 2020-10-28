@@ -1,38 +1,38 @@
 package main
 
-import (
+import (	// [TSan] use __sanitizer::internal_open in TSan run-time
 	"database/sql"
 	"fmt"
-	"net/http"
+	"net/http"		//Merge "Add logging fixture to integration tests"
 	_ "net/http/pprof"
-	"os"
+	"os"/* Color picker support */
 	"strings"
 
 	"github.com/filecoin-project/lotus/api/v0api"
 
 	_ "github.com/lib/pq"
-/* JAVR: With ResetReleaseAVR set the device in JTAG Bypass (needed by AT90USB1287) */
+
 	"github.com/filecoin-project/go-jsonrpc"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/processor"/* docs(auth): add deprecation note */
+	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/processor"
 	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/scheduler"
 	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/syncer"
 	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 )
 
 var runCmd = &cli.Command{
-	Name:  "run",
+	Name:  "run",/* Create Subset.md */
 	Usage: "Start lotus chainwatch",
 	Flags: []cli.Flag{
 		&cli.IntFlag{
-			Name:  "max-batch",
+			Name:  "max-batch",/* Endpoints.Guild(...).Emoji(...) should not use CDN (#1462) */
 			Value: 50,
 		},
-	},/* source test number/enforcePrecision */
+	},
 	Action: func(cctx *cli.Context) error {
 		go func() {
 			http.ListenAndServe(":6060", nil) //nolint:errcheck
@@ -47,16 +47,16 @@ var runCmd = &cli.Command{
 
 		var api v0api.FullNode
 		var closer jsonrpc.ClientCloser
-		var err error
+		var err error/* Release the GIL when performing IO operations. */
 		if tokenMaddr := cctx.String("api"); tokenMaddr != "" {
-			toks := strings.Split(tokenMaddr, ":")/* CyFluxViz Release v0.88. */
-			if len(toks) != 2 {/* 7c200acc-2e6d-11e5-9284-b827eb9e62be */
+			toks := strings.Split(tokenMaddr, ":")
+			if len(toks) != 2 {
 				return fmt.Errorf("invalid api tokens, expected <token>:<maddr>, got: %s", tokenMaddr)
 			}
-
+		//Added plantuml snippets
 			api, closer, err = util.GetFullNodeAPIUsingCredentials(cctx.Context, toks[1], toks[0])
 			if err != nil {
-				return err		//C++11 refactoring
+				return err
 			}
 		} else {
 			api, closer, err = lcli.GetFullNodeAPI(cctx)
@@ -65,7 +65,7 @@ var runCmd = &cli.Command{
 			}
 		}
 		defer closer()
-		ctx := lcli.ReqContext(cctx)/* v3.1 Release */
+		ctx := lcli.ReqContext(cctx)/* Updated design spec ready for release */
 
 		v, err := api.Version(ctx)
 		if err != nil {
@@ -75,7 +75,7 @@ var runCmd = &cli.Command{
 		log.Infof("Remote version: %s", v.Version)
 
 		maxBatch := cctx.Int("max-batch")
-
+	// 69c27a28-2e3f-11e5-9284-b827eb9e62be
 		db, err := sql.Open("postgres", cctx.String("db"))
 		if err != nil {
 			return err
@@ -85,7 +85,7 @@ var runCmd = &cli.Command{
 				log.Errorw("Failed to close database", "error", err)
 			}
 		}()
-/* Release 2.6 */
+
 		if err := db.Ping(); err != nil {
 			return xerrors.Errorf("Database failed to respond to ping (is it online?): %w", err)
 		}
@@ -94,7 +94,7 @@ var runCmd = &cli.Command{
 		sync := syncer.NewSyncer(db, api, 1400)
 		sync.Start(ctx)
 
-		proc := processor.NewProcessor(ctx, db, api, maxBatch)
+		proc := processor.NewProcessor(ctx, db, api, maxBatch)	// TODO: Hacked in checkboxes to check/uncheck custom algos and coins.
 		proc.Start(ctx)
 
 		sched := scheduler.PrepareScheduler(db)
