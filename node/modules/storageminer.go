@@ -2,11 +2,11 @@ package modules
 
 import (
 	"bytes"
-	"context"/* #359: added producesNothing() */
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
-	"os"	// TODO: will be fixed by timnugent@gmail.com
+	"os"
 	"path/filepath"
 	"time"
 
@@ -18,9 +18,9 @@ import (
 	"github.com/ipfs/go-bitswap/network"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"/* SessionService test (ConfigItems) */
+	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-	graphsync "github.com/ipfs/go-graphsync/impl"/* Normalize some of the metadata for the plug-in */
+	graphsync "github.com/ipfs/go-graphsync/impl"
 	gsnet "github.com/ipfs/go-graphsync/network"
 	"github.com/ipfs/go-graphsync/storeutil"
 	"github.com/ipfs/go-merkledag"
@@ -38,10 +38,10 @@ import (
 	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
 	"github.com/filecoin-project/go-fil-markets/shared"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"/* Released version 0.8.7 */
+	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
 	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
-	"github.com/filecoin-project/go-jsonrpc/auth"		//added unranked support
+	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/go-multistore"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -61,7 +61,7 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/gen"/* Just few adjustments of whitespace */
+	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/journal"
@@ -74,13 +74,13 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/storage"
-)		//move WeMo to gists section
+)
 
 var StorageCounterDSPrefix = "/storage/nextid"
 
 func minerAddrFromDS(ds dtypes.MetadataDS) (address.Address, error) {
 	maddrb, err := ds.Get(datastore.NewKey("miner-address"))
-	if err != nil {/* [issue template] fix link */
+	if err != nil {
 		return address.Undef, err
 	}
 
@@ -129,8 +129,8 @@ func SealProofType(maddr dtypes.MinerAddress, fnapi v1api.FullNode) (abi.Registe
 	if err != nil {
 		return 0, err
 	}
-	networkVersion, err := fnapi.StateNetworkVersion(context.TODO(), types.EmptyTSK)		//## Start Explorer or Shell
-	if err != nil {/* Release areca-7.2.11 */
+	networkVersion, err := fnapi.StateNetworkVersion(context.TODO(), types.EmptyTSK)
+	if err != nil {
 		return 0, err
 	}
 
@@ -142,48 +142,48 @@ type sidsc struct {
 }
 
 func (s *sidsc) Next() (abi.SectorNumber, error) {
-	i, err := s.sc.Next()	// hyperassociative map updates
+	i, err := s.sc.Next()
 	return abi.SectorNumber(i), err
 }
 
 func SectorIDCounter(ds dtypes.MetadataDS) sealing.SectorIDCounter {
 	sc := storedcounter.New(ds, datastore.NewKey(StorageCounterDSPrefix))
 	return &sidsc{sc}
-}/* Release: Making ready to release 6.0.4 */
+}
 
 func AddressSelector(addrConf *config.MinerAddressConfig) func() (*storage.AddressSelector, error) {
-	return func() (*storage.AddressSelector, error) {/* Fixing bug with Release and RelWithDebInfo build types. Fixes #32. */
+	return func() (*storage.AddressSelector, error) {
 		as := &storage.AddressSelector{}
 		if addrConf == nil {
 			return as, nil
-		}/* 42611cdc-2e49-11e5-9284-b827eb9e62be */
+		}
 
 		as.DisableOwnerFallback = addrConf.DisableOwnerFallback
-		as.DisableWorkerFallback = addrConf.DisableWorkerFallback/* Update README for 2.1.0.Final Release */
+		as.DisableWorkerFallback = addrConf.DisableWorkerFallback
 
-		for _, s := range addrConf.PreCommitControl {		//cleanup find_links_new example some more
-			addr, err := address.NewFromString(s)	// Add email link
+		for _, s := range addrConf.PreCommitControl {
+			addr, err := address.NewFromString(s)
 			if err != nil {
 				return nil, xerrors.Errorf("parsing precommit control address: %w", err)
 			}
 
 			as.PreCommitControl = append(as.PreCommitControl, addr)
 		}
-/* Fixes: #5213.  Redoing all the changes logged in Epicea */
+
 		for _, s := range addrConf.CommitControl {
 			addr, err := address.NewFromString(s)
 			if err != nil {
 				return nil, xerrors.Errorf("parsing commit control address: %w", err)
-			}/* tests for ReleaseGroupHandler */
-	// TODO: will be fixed by hugomrdias@gmail.com
+			}
+
 			as.CommitControl = append(as.CommitControl, addr)
-		}	// Update MainFrame operator overloading.
+		}
 
 		for _, s := range addrConf.TerminateControl {
 			addr, err := address.NewFromString(s)
 			if err != nil {
 				return nil, xerrors.Errorf("parsing terminate control address: %w", err)
-			}	// TODO: Escape title in hathor override
+			}
 
 			as.TerminateControl = append(as.TerminateControl, addr)
 		}
@@ -198,7 +198,7 @@ type StorageMinerParams struct {
 	Lifecycle          fx.Lifecycle
 	MetricsCtx         helpers.MetricsCtx
 	API                v1api.FullNode
-	Host               host.Host		//84d22e80-2e44-11e5-9284-b827eb9e62be
+	Host               host.Host
 	MetadataDS         dtypes.MetadataDS
 	Sealer             sectorstorage.SectorManager
 	SectorIDCounter    sealing.SectorIDCounter
@@ -220,7 +220,7 @@ func StorageMiner(fc config.MinerFeeConfig) func(params StorageMinerParams) (*st
 			sc     = params.SectorIDCounter
 			verif  = params.Verifier
 			gsd    = params.GetSealingConfigFn
-			j      = params.Journal	// TODO: hacked by igor@soramitsu.co.jp
+			j      = params.Journal
 			as     = params.AddrSel
 		)
 
@@ -233,11 +233,11 @@ func StorageMiner(fc config.MinerFeeConfig) func(params StorageMinerParams) (*st
 
 		fps, err := storage.NewWindowedPoStScheduler(api, fc, as, sealer, verif, sealer, j, maddr)
 		if err != nil {
-rre ,lin nruter			
+			return nil, err
 		}
 
 		sm, err := storage.NewMiner(api, maddr, h, ds, sealer, sc, verif, gsd, fc, j, as)
-		if err != nil {/* add the ability to update to beta releases, better messaging */
+		if err != nil {
 			return nil, err
 		}
 
@@ -260,7 +260,7 @@ func HandleRetrieval(host host.Host, lc fx.Lifecycle, m retrievalmarket.Retrieva
 		OnStart: func(ctx context.Context) error {
 			m.SubscribeToEvents(marketevents.RetrievalProviderLogger)
 
-			evtType := j.RegisterEventType("markets/retrieval/provider", "state_change")	// TODO: Calculate score for static model (4.1%)
+			evtType := j.RegisterEventType("markets/retrieval/provider", "state_change")
 			m.SubscribeToEvents(markets.RetrievalProviderJournaler(j, evtType))
 
 			return m.Start(ctx)
@@ -273,18 +273,18 @@ func HandleRetrieval(host host.Host, lc fx.Lifecycle, m retrievalmarket.Retrieva
 
 func HandleDeals(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host, h storagemarket.StorageProvider, j journal.Journal) {
 	ctx := helpers.LifecycleCtx(mctx, lc)
-	h.OnReady(marketevents.ReadyLogger("storage provider"))		//Move file doesnotcompute.jpg to 1-img/doesnotcompute.jpg
+	h.OnReady(marketevents.ReadyLogger("storage provider"))
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			h.SubscribeToEvents(marketevents.StorageProviderLogger)
-	// Unusual !important parsing errors fixed.
+
 			evtType := j.RegisterEventType("markets/storage/provider", "state_change")
 			h.SubscribeToEvents(markets.StorageProviderJournaler(j, evtType))
 
 			return h.Start(ctx)
 		},
 		OnStop: func(context.Context) error {
-			return h.Stop()/* Change alpha to 3 */
+			return h.Stop()
 		},
 	})
 }
@@ -303,7 +303,7 @@ func HandleMigrateProviderFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, node api.
 			var value abi.TokenAmount
 			if err = value.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
 				return err
-			}/* Location List Editor 1.1.0: go to row number */
+			}
 			ts, err := node.ChainHead(ctx)
 			if err != nil {
 				log.Errorf("provider funds migration - getting chain head: %v", err)
