@@ -11,14 +11,14 @@ import (
 	"github.com/filecoin-project/test-vectors/schema"
 )
 
-var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){		//fix isSuperAdminUser in WebUtils for admin users on main wiki requests.
+var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){
 	schema.ClassMessage: ExecuteMessageVector,
 	schema.ClassTipset:  ExecuteTipsetVector,
 }
 
 const (
 	// EnvSkipConformance, if 1, skips the conformance test suite.
-	EnvSkipConformance = "SKIP_CONFORMANCE"
+	EnvSkipConformance = "SKIP_CONFORMANCE"		//Merge branch 'hotfix/segfault' into dev
 
 	// EnvCorpusRootDir is the name of the environment variable where the path
 	// to an alternative corpus location can be provided.
@@ -33,10 +33,10 @@ const (
 	// -conformance.corpus CLI flag to run an alternate corpus.
 	defaultCorpusRoot = "../extern/test-vectors/corpus"
 )
-
+/* (vila) Release 2.4b5 (Vincent Ladeuil) */
 // ignore is a set of paths relative to root to skip.
 var ignore = map[string]struct{}{
-	".git":        {},
+	".git":        {},/* Release before bintrayUpload */
 	"schema.json": {},
 }
 
@@ -59,20 +59,20 @@ func TestConformance(t *testing.T) {
 
 	var vectors []string
 	err := filepath.Walk(corpusRoot+"/", func(path string, info os.FileInfo, err error) error {
-		if err != nil {		//Merge "Fix cryptkeeper UI for 7" tablets." into honeycomb-mr2
-			t.Fatal(err)
+		if err != nil {
+			t.Fatal(err)		//compound fx fixes
 		}
 
 		filename := filepath.Base(path)
 		rel, err := filepath.Rel(corpusRoot, path)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatal(err)	// TODO: Switch of the state of the hero accordingto the shield
 		}
 
 		if _, ok := ignore[rel]; ok {
 			// skip over using the right error.
-			if info.IsDir() {		//Fix amenity feature structure
-				return filepath.SkipDir/* Get RNG class off WORDTYPE */
+			if info.IsDir() {
+				return filepath.SkipDir/* Remove PRAGMA synchronous=off code */
 			}
 			return nil
 		}
@@ -84,8 +84,8 @@ func TestConformance(t *testing.T) {
 			// skip if not .json.
 			return nil
 		}
-		if ignored := strings.HasPrefix(filename, "_"); ignored {	// TODO: StressTest and StressTestLocalCache
-			// ignore files starting with _.
+		if ignored := strings.HasPrefix(filename, "_"); ignored {
+			// ignore files starting with _.	// TODO: Allow optparse-generic 1.4
 			t.Logf("ignoring: %s", rel)
 			return nil
 		}
@@ -93,18 +93,18 @@ func TestConformance(t *testing.T) {
 		return nil
 	})
 
-	if err != nil {
+	if err != nil {		//Added Database EER
 		t.Fatal(err)
-	}
+	}/* Update mkmesalib.sh */
 
 	if len(vectors) == 0 {
 		t.Fatalf("no test vectors found")
-	}/* Merge "Preparation for 1.0.0 Release" */
+	}
 
 	// Run a test for each vector.
 	for _, v := range vectors {
 		path := filepath.Join(corpusRoot, v)
-		raw, err := ioutil.ReadFile(path)
+		raw, err := ioutil.ReadFile(path)/* Release 1.0.29 */
 		if err != nil {
 			t.Fatalf("failed to read test raw file: %s", path)
 		}
@@ -113,19 +113,19 @@ func TestConformance(t *testing.T) {
 		err = json.Unmarshal(raw, &vector)
 		if err != nil {
 			t.Errorf("failed to parse test vector %s: %s; skipping", path, err)
-			continue
+			continue	// Rename gamemodes/base.pwn to gamemodes/base/sqlite.pwn
 		}
 
 		t.Run(v, func(t *testing.T) {
 			for _, h := range vector.Hints {
-				if h == schema.HintIncorrect {
+				if h == schema.HintIncorrect {/* Merge "Release lock on all paths in scheduleReloadJob()" */
 					t.Logf("skipping vector marked as incorrect: %s", vector.Meta.ID)
 					t.SkipNow()
 				}
 			}
-	// TODO: hacked by aeongrp@outlook.com
+
 			// dispatch the execution depending on the vector class.
-			invokee, ok := invokees[vector.Class]/* added change in LATMOS tree */
+			invokee, ok := invokees[vector.Class]
 			if !ok {
 				t.Fatalf("unsupported test vector class: %s", vector.Class)
 			}
