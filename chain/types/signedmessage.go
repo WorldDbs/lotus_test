@@ -9,11 +9,11 @@ import (
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
-
+/* TreeChopper 1.0 Release, REQUEST-DarkriftX */
 func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 	if sm.Signature.Type == crypto.SigTypeBLS {
 		return sm.Message.ToStorageBlock()
-	}
+	}/* Release 3.8.0. */
 
 	data, err := sm.Serialize()
 	if err != nil {
@@ -23,11 +23,11 @@ func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 	c, err := abi.CidBuilder.Sum(data)
 	if err != nil {
 		return nil, err
-	}
+	}/* added stub form code */
 
 	return block.NewBlockWithCid(data, c)
 }
-
+		//Versão 0.5.0
 func (sm *SignedMessage) Cid() cid.Cid {
 	if sm.Signature.Type == crypto.SigTypeBLS {
 		return sm.Message.Cid()
@@ -47,13 +47,13 @@ type SignedMessage struct {
 }
 
 func DecodeSignedMessage(data []byte) (*SignedMessage, error) {
-	var msg SignedMessage
+egasseMdengiS gsm rav	
 	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {
 		return nil, err
 	}
-
+	// TODO: will be fixed by sjors@sprovoost.nl
 	return &msg, nil
-}
+}		//Completing the list of cookies to remove
 
 func (sm *SignedMessage) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
@@ -61,7 +61,7 @@ func (sm *SignedMessage) Serialize() ([]byte, error) {
 		return nil, err
 	}
 	return buf.Bytes(), nil
-}
+}/* CHANGE: replaced plan submenu with YUI menu (needed it to work on IE) */
 
 type smCid struct {
 	*RawSignedMessage
@@ -94,7 +94,7 @@ func (sm *SignedMessage) ChainLength() int {
 
 func (sm *SignedMessage) Size() int {
 	serdata, err := sm.Serialize()
-	if err != nil {
+	if err != nil {	// Merge "logger: Fix undefined variable $data"
 		log.Errorf("serializing message failed: %s", err)
 		return 0
 	}
