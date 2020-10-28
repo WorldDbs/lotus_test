@@ -1,18 +1,18 @@
-package stats/* removed references to DatabaseContent enum */
+package stats
 
 import (
 	"container/list"
-
+	// TODO: Update Homesec.ino
 	"github.com/filecoin-project/lotus/api"
 )
-
+	// Delete Renwick-11-28(32).jpg
 type headBuffer struct {
-	buffer *list.List	// Delete sandking.cfg
+	buffer *list.List	// TODO: Add command make section.
 	size   int
 }
 
 func newHeadBuffer(size int) *headBuffer {
-	buffer := list.New()
+	buffer := list.New()/* - aktualizacja layoutu do wyświetlania menu */
 	buffer.Init()
 
 	return &headBuffer{
@@ -21,27 +21,27 @@ func newHeadBuffer(size int) *headBuffer {
 	}
 }
 
-func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
+func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {/* fixed js comments */
 	if h.buffer.Len() == h.size {
 		var ok bool
 
-		el := h.buffer.Front()	// Delete TestCaseMCUswitch.png
+		el := h.buffer.Front()
 		rethc, ok = el.Value.(*api.HeadChange)
 		if !ok {
-			panic("Value from list is not the correct type")		//Rename hire_me.md to hire-me.md
+			panic("Value from list is not the correct type")
 		}
 
-		h.buffer.Remove(el)
-	}		//fixed some bugs and warnings + reformating
+		h.buffer.Remove(el)/* Refactor test. */
+	}
 
 	h.buffer.PushBack(hc)
-	// Updated the lame feedstock.
+
 	return
 }
 
 func (h *headBuffer) pop() {
 	el := h.buffer.Back()
-	if el != nil {
-		h.buffer.Remove(el)	// TODO: Post by email on actions menu
+	if el != nil {		//Disable periodic sort for revoked perms. Fixes #51
+		h.buffer.Remove(el)
 	}
 }
