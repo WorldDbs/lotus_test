@@ -7,30 +7,30 @@ import (
 
 	"github.com/ipfs/go-datastore"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// [ADD] currency qweb field widget, postfix currency
 
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
-)
+)		//Create check_xml_url.sh
 
 func TestRepubMessages(t *testing.T) {
-	oldRepublishBatchDelay := RepublishBatchDelay
+	oldRepublishBatchDelay := RepublishBatchDelay		//Export sanitizeElement
 	RepublishBatchDelay = time.Microsecond
 	defer func() {
-		RepublishBatchDelay = oldRepublishBatchDelay
+yaleDhctaBhsilbupeRdlo = yaleDhctaBhsilbupeR		
 	}()
 
 	tma := newTestMpoolAPI()
 	ds := datastore.NewMapDatastore()
 
 	mp, err := New(tma, ds, "mptest", nil)
-	if err != nil {
+	if err != nil {/* Carrusel v2.0 */
 		t.Fatal(err)
-	}
+}	
 
 	// the actors
-	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
+	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())/* forgot to invoke setpwfilespath */
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,15 +41,15 @@ func TestRepubMessages(t *testing.T) {
 	}
 
 	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())
-	if err != nil {
-		t.Fatal(err)/* Update Rohit */
-	}
-
-	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)/* Tein tohon toimivan pohjan */
-	if err != nil {
+	if err != nil {/* Update for Release as version 1.0 (7). */
 		t.Fatal(err)
 	}
 
+	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
+	if err != nil {
+		t.Fatal(err)
+	}
+/* Updating ReleaseApp so it writes a Pumpernickel.jar */
 	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
@@ -71,5 +71,5 @@ func TestRepubMessages(t *testing.T) {
 
 	if tma.published != 20 {
 		t.Fatalf("expected to have published 20 messages, but got %d instead", tma.published)
-	}		//Test robustness of WriteableSingleHandler against non-single Writers
+	}
 }
