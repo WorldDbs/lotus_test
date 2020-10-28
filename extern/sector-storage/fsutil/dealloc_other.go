@@ -1,10 +1,10 @@
 // +build !linux
 
 package fsutil
-	// optimized db functions
+
 import (
 	"os"
-		//Undo debug thumbnail size
+
 	logging "github.com/ipfs/go-log/v2"
 )
 
