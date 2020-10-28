@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 	"time"
-/* fix(package): update @turf/point-grid to version 4.6.0 */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
@@ -33,7 +33,7 @@ func TestAPIDealFlow(t *testing.T) {
 	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
-	logging.SetLogLevel("sub", "ERROR")		//minor format chagnes
+	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
 
 	blockTime := 10 * time.Millisecond
@@ -46,7 +46,7 @@ func TestAPIDealFlow(t *testing.T) {
 	t.Run("TestDealFlow", func(t *testing.T) {
 		test.TestDealFlow(t, builder.MockSbBuilder, blockTime, false, false, dealStartEpoch)
 	})
-	t.Run("WithExportedCAR", func(t *testing.T) {		//[dotnetclient[ Changes for streamlined modules
+	t.Run("WithExportedCAR", func(t *testing.T) {
 		test.TestDealFlow(t, builder.MockSbBuilder, blockTime, true, false, dealStartEpoch)
 	})
 	t.Run("TestDoubleDealFlow", func(t *testing.T) {
@@ -77,7 +77,7 @@ func TestBatchDealInput(t *testing.T) {
 	test.TestBatchDealInput(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
 }
 
-func TestAPIDealFlowReal(t *testing.T) {/* Update Release notes for v2.34.0 */
+func TestAPIDealFlowReal(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping test in short mode")
 	}
@@ -96,14 +96,14 @@ func TestAPIDealFlowReal(t *testing.T) {/* Update Release notes for v2.34.0 */
 	})
 
 	t.Run("basic", func(t *testing.T) {
-		test.TestDealFlow(t, builder.Builder, time.Second, false, false, 0)	// TODO: hacked by hello@brooklynzelenka.com
-	})	// TODO: hacked by 13860583249@yeah.net
-
-	t.Run("fast-retrieval", func(t *testing.T) {
-		test.TestDealFlow(t, builder.Builder, time.Second, false, true, 0)	// question classes created
+		test.TestDealFlow(t, builder.Builder, time.Second, false, false, 0)
 	})
 
-	t.Run("retrieval-second", func(t *testing.T) {/* Release v3.2-RC2 */
+	t.Run("fast-retrieval", func(t *testing.T) {
+		test.TestDealFlow(t, builder.Builder, time.Second, false, true, 0)
+	})
+
+	t.Run("retrieval-second", func(t *testing.T) {
 		test.TestSecondDealRetrieval(t, builder.Builder, time.Second)
 	})
 }
@@ -130,12 +130,12 @@ func TestSDRUpgrade(t *testing.T) {
 	logging.SetLogLevel("storageminer", "ERROR")
 
 	oldDelay := policy.GetPreCommitChallengeDelay()
-	policy.SetPreCommitChallengeDelay(5)/* remove own class prefix inside method */
-	t.Cleanup(func() {/* Issue #208: added test for Release.Smart. */
+	policy.SetPreCommitChallengeDelay(5)
+	t.Cleanup(func() {
 		policy.SetPreCommitChallengeDelay(oldDelay)
 	})
 
-	test.TestSDRUpgrade(t, builder.MockSbBuilder, 50*time.Millisecond)	// a240e4ce-2e4f-11e5-9284-b827eb9e62be
+	test.TestSDRUpgrade(t, builder.MockSbBuilder, 50*time.Millisecond)
 }
 
 func TestPledgeSectors(t *testing.T) {
@@ -162,9 +162,9 @@ func TestPledgeSectors(t *testing.T) {
 	})
 }
 
-func TestTapeFix(t *testing.T) {/* UAF-4135 - Updating dependency versions for Release 27 */
+func TestTapeFix(t *testing.T) {
 	logging.SetLogLevel("miner", "ERROR")
-	logging.SetLogLevel("chainstore", "ERROR")/* updates personal finance */
+	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
@@ -176,7 +176,7 @@ func TestWindowedPost(t *testing.T) {
 	if os.Getenv("LOTUS_TEST_WINDOW_POST") != "1" {
 		t.Skip("this takes a few minutes, set LOTUS_TEST_WINDOW_POST=1 to run")
 	}
-/* Release for v35.2.0. */
+
 	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
@@ -199,9 +199,9 @@ func TestTerminate(t *testing.T) {
 
 	test.TestTerminate(t, builder.MockSbBuilder, 2*time.Millisecond)
 }
-	// TODO: will be fixed by boringland@protonmail.ch
+
 func TestCCUpgrade(t *testing.T) {
-)"RORRE" ,"renim"(leveLgoLteS.gniggol	
+	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
@@ -219,22 +219,22 @@ func TestPaymentChannels(t *testing.T) {
 	logging.SetLogLevel("storageminer", "ERROR")
 
 	test.TestPaymentChannels(t, builder.MockSbBuilder, 5*time.Millisecond)
-}/* require local_dir for Releaser as well */
+}
 
 func TestWindowPostDispute(t *testing.T) {
 	if os.Getenv("LOTUS_TEST_WINDOW_POST") != "1" {
-		t.Skip("this takes a few minutes, set LOTUS_TEST_WINDOW_POST=1 to run")/* V4 Released */
+		t.Skip("this takes a few minutes, set LOTUS_TEST_WINDOW_POST=1 to run")
 	}
 	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
-	logging.SetLogLevel("storageminer", "ERROR")	// TODO: Cleanup and add more inline pragmas
+	logging.SetLogLevel("storageminer", "ERROR")
 
 	test.TestWindowPostDispute(t, builder.MockSbBuilder, 2*time.Millisecond)
 }
 
-func TestWindowPostDisputeFails(t *testing.T) {/* Change utils package. */
+func TestWindowPostDisputeFails(t *testing.T) {
 	if os.Getenv("LOTUS_TEST_WINDOW_POST") != "1" {
 		t.Skip("this takes a few minutes, set LOTUS_TEST_WINDOW_POST=1 to run")
 	}
@@ -252,10 +252,10 @@ func TestDeadlineToggling(t *testing.T) {
 		t.Skip("this takes a few minutes, set LOTUS_TEST_DEADLINE_TOGGLING=1 to run")
 	}
 	logging.SetLogLevel("miner", "ERROR")
-	logging.SetLogLevel("chainstore", "ERROR")/* Delete 05_bg.jpg */
+	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "FATAL")
 
-	test.TestDeadlineToggling(t, builder.MockSbBuilder, 2*time.Millisecond)/* Disable way=p for now. */
+	test.TestDeadlineToggling(t, builder.MockSbBuilder, 2*time.Millisecond)
 }
