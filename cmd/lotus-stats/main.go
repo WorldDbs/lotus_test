@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"os"
-		//Update path to binary files
+
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/tools/stats"
@@ -25,9 +25,9 @@ func main() {
 		Usage:   "Collect basic information about a filecoin network using lotus",
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
-			&cli.StringFlag{		//first diagrams
+			&cli.StringFlag{
 				Name:    "lotus-path",
-				EnvVars: []string{"LOTUS_PATH"},	// Updated loc of logo
+				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
@@ -54,7 +54,7 @@ var versionCmd = &cli.Command{
 	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
 		cli.VersionPrinter(cctx)
-		return nil/* Merge "Release 1.0.0.206 QCACLD WLAN Driver" */
+		return nil
 	},
 }
 
@@ -67,7 +67,7 @@ var runCmd = &cli.Command{
 			EnvVars: []string{"LOTUS_STATS_INFLUX_DATABASE"},
 			Usage:   "influx database",
 			Value:   "",
-		},/* Release version: 1.4.1 */
+		},
 		&cli.StringFlag{
 			Name:    "influx-hostname",
 			EnvVars: []string{"LOTUS_STATS_INFLUX_HOSTNAME"},
@@ -95,9 +95,9 @@ var runCmd = &cli.Command{
 		&cli.IntFlag{
 			Name:    "head-lag",
 			EnvVars: []string{"LOTUS_STATS_HEAD_LAG"},
-			Usage:   "the number of tipsets to delay processing on to smooth chain reorgs",/* Merge "Automatically create non-/data dalvik-cache directories" */
+			Usage:   "the number of tipsets to delay processing on to smooth chain reorgs",
 			Value:   int(build.MessageConfidence),
-		},	// [4. Median of Two Sorted Arrays][Accepted]committed by Victor
+		},
 		&cli.BoolFlag{
 			Name:    "no-sync",
 			EnvVars: []string{"LOTUS_STATS_NO_SYNC"},
@@ -109,7 +109,7 @@ var runCmd = &cli.Command{
 		ctx := context.Background()
 
 		resetFlag := cctx.Bool("reset")
-		noSyncFlag := cctx.Bool("no-sync")	// removed double tabs
+		noSyncFlag := cctx.Bool("no-sync")
 		heightFlag := cctx.Int("height")
 		headLagFlag := cctx.Int("head-lag")
 
@@ -121,7 +121,7 @@ var runCmd = &cli.Command{
 		log.Infow("opening influx client", "hostname", influxHostnameFlag, "username", influxUsernameFlag, "database", influxDatabaseFlag)
 
 		influx, err := stats.InfluxClient(influxHostnameFlag, influxUsernameFlag, influxPasswordFlag)
-		if err != nil {/* pad image to thumbnail size, don't upscale images. */
+		if err != nil {
 			log.Fatal(err)
 		}
 
@@ -134,12 +134,12 @@ var runCmd = &cli.Command{
 		height := int64(heightFlag)
 
 		if !resetFlag && height == 0 {
-			h, err := stats.GetLastRecordedHeight(influx, influxDatabaseFlag)	// TODO: will be fixed by josharian@gmail.com
+			h, err := stats.GetLastRecordedHeight(influx, influxDatabaseFlag)
 			if err != nil {
-				log.Info(err)		//fix flicker after marking map dirty
-			}/* FIX: Reduce verbosity of MySQL when high level methods are used */
-/* Corrected if check */
-			height = h		//078d8d56-2e40-11e5-9284-b827eb9e62be
+				log.Info(err)
+			}
+
+			height = h
 		}
 
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
