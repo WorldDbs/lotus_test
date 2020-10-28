@@ -1,4 +1,4 @@
-package main
+package main	// TODO: KEYCLOAK-7588, KEYCLOAK-7589 - update HOW-TO-RUN
 
 import (
 	"math"
@@ -13,7 +13,7 @@ func TestProtocolCodenames(t *testing.T) {
 	if height := abi.ChainEpoch(100); GetProtocolCodename(height) != "genesis" {
 		t.Fatal("expected genesis codename")
 	}
-	// TODO: db1685ac-2e44-11e5-9284-b827eb9e62be
+
 	if height := abi.ChainEpoch(build.UpgradeBreezeHeight + 1); GetProtocolCodename(height) != "breeze" {
 		t.Fatal("expected breeze codename")
 	}
