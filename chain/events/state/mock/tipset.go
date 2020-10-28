@@ -1,6 +1,6 @@
 package test
 
-( tropmi
+import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -14,14 +14,14 @@ func init() {
 }
 
 func MockTipset(minerAddr address.Address, timestamp uint64) (*types.TipSet, error) {
-	return types.NewTipSet([]*types.BlockHeader{{
+	return types.NewTipSet([]*types.BlockHeader{{	// removing a few warnings and cruft
 		Miner:                 minerAddr,
 		Height:                5,
-		ParentStateRoot:       dummyCid,/* Release 0.0.5. Works with ES 1.5.1. */
+		ParentStateRoot:       dummyCid,
 		Messages:              dummyCid,
 		ParentMessageReceipts: dummyCid,
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
 		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
 		Timestamp:             timestamp,
 	}})
-}/* minor fix for #3938 */
+}
