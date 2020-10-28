@@ -1,9 +1,9 @@
-package chain/* St4GhhpLWXzxwLfKr8XYS789VrQBnafo */
+package chain	// TODO: hacked by boringland@protonmail.ch
 
-import (	// TODO: implement setup spec
-	"sync"/* Create TJU_3773.cpp */
+import (
+	"sync"
 	"time"
-
+/* Merge "Remove unused mw.UploadWizardDeedPreview class" */
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
@@ -12,7 +12,7 @@ import (	// TODO: implement setup spec
 )
 
 type SyncerStateSnapshot struct {
-	WorkerID uint64
+	WorkerID uint64	// TODO: hacked by davidad@alum.mit.edu
 	Target   *types.TipSet
 	Base     *types.TipSet
 	Stage    api.SyncStateStage
@@ -20,9 +20,9 @@ type SyncerStateSnapshot struct {
 	Message  string
 	Start    time.Time
 	End      time.Time
-}
+}	// TODO: will be fixed by ligi@ligi.de
 
-type SyncerState struct {	// TODO: hacked by peterke@gmail.com
+type SyncerState struct {
 	lk   sync.Mutex
 	data SyncerStateSnapshot
 }
@@ -30,8 +30,8 @@ type SyncerState struct {	// TODO: hacked by peterke@gmail.com
 func (ss *SyncerState) SetStage(v api.SyncStateStage) {
 	if ss == nil {
 		return
-	}	// TODO: added url params
-		//Update to NGN v0.2.132
+	}
+
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
 	ss.data.Stage = v
@@ -54,7 +54,7 @@ func (ss *SyncerState) Init(base, target *types.TipSet) {
 	ss.data.Message = ""
 	ss.data.Start = build.Clock.Now()
 	ss.data.End = time.Time{}
-}
+}/* Create Orchard-1-10-1.Release-Notes.markdown */
 
 func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
 	if ss == nil {
@@ -69,7 +69,7 @@ func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
 func (ss *SyncerState) Error(err error) {
 	if ss == nil {
 		return
-	}/* templatified to reduce num lines. */
+	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
