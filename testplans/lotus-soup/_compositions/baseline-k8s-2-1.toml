@@ -7,7 +7,7 @@
   case = "deals-e2e"
   total_instances = 4
   builder = "docker:go"
-  runner = "cluster:k8s"
+  runner = "cluster:k8s"/* Release v2.5 */
 
 [global.build]
   selectors = ["testground"]
@@ -42,10 +42,10 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]/* Updated documentation and website. Release 1.1.1. */
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"		//24cb8b58-2e4e-11e5-9284-b827eb9e62be
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
@@ -56,10 +56,10 @@
 
 [[groups]]
   id = "clients"
-  [groups.resources]
+  [groups.resources]	// TODO: will be fixed by witek@enjin.io
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* DBAdapter methods for manipulating CrawlHostGroups */
     count = 2
     percentage = 0.0
   [groups.run]
