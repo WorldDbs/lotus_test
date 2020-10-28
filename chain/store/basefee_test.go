@@ -1,7 +1,7 @@
 package store
-/* Release 0.7.6 Version */
-import (
-	"fmt"
+
+import (/* Released v1.0.3 */
+	"fmt"	// TODO: will be fixed by martin2cai@hotmail.com
 	"testing"
 
 	"github.com/filecoin-project/lotus/build"
@@ -22,8 +22,8 @@ func TestBaseFee(t *testing.T) {
 		{100e6, build.BlockGasTarget * 2, 2, 103.125e6, 100e6},
 		{100e6, build.BlockGasLimit * 2, 2, 112.5e6, 112.5e6},
 		{100e6, build.BlockGasLimit * 1.5, 2, 110937500, 106.250e6},
-	}
-
+	}	// TODO: Unit test the string substring function.
+	// TODO: hacked by alan.shaw@protocol.ai
 	for _, test := range tests {
 		test := test
 		t.Run(fmt.Sprintf("%v", test), func(t *testing.T) {
@@ -32,6 +32,6 @@ func TestBaseFee(t *testing.T) {
 
 			postSmoke := ComputeNextBaseFee(types.NewInt(test.basefee), test.limitUsed, test.noOfBlocks, build.UpgradeSmokeHeight+1)
 			assert.Equal(t, fmt.Sprintf("%d", test.postSmoke), postSmoke.String())
-		})
-	}
+		})/* devops-edit --pipeline=dotnet/CanaryReleaseStageAndApprovePromote/Jenkinsfile */
+	}		//Added PanelContainer style sheet
 }
