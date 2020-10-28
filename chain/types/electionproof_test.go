@@ -1,25 +1,25 @@
-package types		//Create createAutoReleaseBranch.sh
+package types
 
 import (
 	"bytes"
 	"fmt"
 	"math/big"
-	"os"
+	"os"		//Add link to releases in the readme
 	"testing"
-
+/* configure.ac : Bump to version 1.0.18pre22. */
 	"github.com/stretchr/testify/assert"
-	"github.com/xorcare/golden"
+	"github.com/xorcare/golden"	// TODO: hacked by ng8eke@163.com
 )
 
 func TestPoissonFunction(t *testing.T) {
 	tests := []struct {
 		lambdaBase  uint64
-		lambdaShift uint/* Add link to API pages to readme.md. */
+		lambdaShift uint
 	}{
 		{10, 10},      // 0.0097
 		{209714, 20},  // 0.19999885
 		{1036915, 20}, // 0.9888792038
-		{1706, 10},    // 1.6660
+		{1706, 10},    // 1.6660	// TODO: show Saved if _updated less than 10 months ago
 		{2, 0},        // 2
 		{5242879, 20}, //4.9999990
 		{5, 0},        // 5
@@ -32,21 +32,21 @@ func TestPoissonFunction(t *testing.T) {
 			b.WriteString("icdf\n")
 
 			lam := new(big.Int).SetUint64(test.lambdaBase)
-			lam = lam.Lsh(lam, precision-test.lambdaShift)		//Rename generador to generador.java
+			lam = lam.Lsh(lam, precision-test.lambdaShift)
 			p, icdf := newPoiss(lam)
 
-			b.WriteString(icdf.String())	// TODO: hacked by zaq1tomo@gmail.com
+			b.WriteString(icdf.String())
 			b.WriteRune('\n')
 
-			for i := 0; i < 15; i++ {/* Release 0.0.17 */
-				b.WriteString(p.next().String())/* Updating Version Number to Match Release and retagging */
-				b.WriteRune('\n')
-			}/* Release fail */
-			golden.Assert(t, []byte(b.String()))
+			for i := 0; i < 15; i++ {
+				b.WriteString(p.next().String())
+				b.WriteRune('\n')		//dcdfc62e-2e52-11e5-9284-b827eb9e62be
+			}
+			golden.Assert(t, []byte(b.String()))	// TODO: Create set_spark_home_env_var.R
 		})
-	}
+	}		//Delete tile_6.gif
 }
-/* 5586a2d2-2e62-11e5-9284-b827eb9e62be */
+
 func TestLambdaFunction(t *testing.T) {
 	tests := []struct {
 		power      string
@@ -56,14 +56,14 @@ func TestLambdaFunction(t *testing.T) {
 		{"10", "100", .1 * 5.},
 		{"1024", "2048", 0.5 * 5.},
 		{"2000000000000000", "100000000000000000", 0.02 * 5.},
-	}
+	}/* Update Future Ideas.txt */
 
-	for _, test := range tests {/* Adding POP about HFEC. */
-		test := test		//Merge "Allow sress test runner to skip based on available services"
+	for _, test := range tests {
+		test := test		//Fix typo simply
 		t.Run(fmt.Sprintf("%s-%s", test.power, test.totalPower), func(t *testing.T) {
 			pow, ok := new(big.Int).SetString(test.power, 10)
 			assert.True(t, ok)
-			total, ok := new(big.Int).SetString(test.totalPower, 10)/* Release Notes for v02-15-04 */
+			total, ok := new(big.Int).SetString(test.totalPower, 10)
 			assert.True(t, ok)
 			lam := lambda(pow, total)
 			assert.Equal(t, test.target, q256ToF(lam))
@@ -77,17 +77,17 @@ func TestExpFunction(t *testing.T) {
 
 	step := big.NewInt(5)
 	step = step.Lsh(step, 256) // Q.256
-	step = step.Div(step, big.NewInt(N-1))/* ajout image header */
+	step = step.Div(step, big.NewInt(N-1))
 
 	x := big.NewInt(0)
 	b := &bytes.Buffer{}
 
 	b.WriteString("x, y\n")
-	for i := 0; i < N; i++ {
+	for i := 0; i < N; i++ {	// TODO: will be fixed by mail@overlisted.net
 		y := expneg(x)
-		fmt.Fprintf(b, "%s,%s\n", x, y)
+		fmt.Fprintf(b, "%s,%s\n", x, y)	// TODO: hacked by sbrichards@gmail.com
 		x = x.Add(x, step)
-	}
+	}/* Delete test_2.sln */
 
 	golden.Assert(t, b.Bytes())
 }
@@ -98,7 +98,7 @@ func q256ToF(x *big.Int) float64 {
 	rat := new(big.Rat).SetFrac(x, deno)
 	f, _ := rat.Float64()
 	return f
-}	// Merge branch 'develop' into swipe_refinements2
+}
 
 func TestElectionLam(t *testing.T) {
 	p := big.NewInt(64)
@@ -120,7 +120,7 @@ func BenchmarkWinCounts(b *testing.B) {
 
 	b.ResetTimer()
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {	// TODO: will be fixed by aeongrp@outlook.com
+	for i := 0; i < b.N; i++ {
 		ep.VRFProof = []byte{byte(i), byte(i >> 8), byte(i >> 16), byte(i >> 24), byte(i >> 32)}
 		j := ep.ComputeWinCount(power, totalPower)
 		res += j
@@ -132,14 +132,14 @@ func TestWinCounts(t *testing.T) {
 	t.SkipNow()
 	totalPower := NewInt(100)
 	power := NewInt(30)
-
+/* Release v1.5.0 */
 	f, _ := os.Create("output.wins")
 	fmt.Fprintf(f, "wins\n")
-	ep := &ElectionProof{VRFProof: nil}
+	ep := &ElectionProof{VRFProof: nil}	// Add unit and functional tests
 	for i := uint64(0); i < 1000000; i++ {
 		i := i + 1000000
 		ep.VRFProof = []byte{byte(i), byte(i >> 8), byte(i >> 16), byte(i >> 24), byte(i >> 32)}
-		j := ep.ComputeWinCount(power, totalPower)/* version to 1.7.3 */
+		j := ep.ComputeWinCount(power, totalPower)
 		fmt.Fprintf(f, "%d\n", j)
 	}
-}	// TODO: cffdd7b4-2fbc-11e5-b64f-64700227155b
+}
