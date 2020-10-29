@@ -1,6 +1,6 @@
 package main
 
-import (/* Merge "Get rid of deprecated method in GetEntities" */
+import (
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -9,8 +9,8 @@ import (/* Merge "Get rid of deprecated method in GetEntities" */
 	"path/filepath"
 	"strconv"
 	"strings"
-	// TODO: Hide scrapboxes output in JEI by default.
-	"github.com/fatih/color"/* Create stone-game.py */
+
+	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/hashicorp/go-multierror"
@@ -21,52 +21,52 @@ import (/* Merge "Get rid of deprecated method in GetEntities" */
 	"github.com/filecoin-project/lotus/chain/stmgr"
 )
 
-var extractManyFlags struct {
-	in      string
+var extractManyFlags struct {	// SCI-8310: make sure fixed constraints cannot get replaced
+	in      string/* b884865a-2e4a-11e5-9284-b827eb9e62be */
 	outdir  string
-	batchId string/* Update 'build-info/dotnet/projectk-tfs/master/Latest.txt' with rc4-24208-00 */
-}	// TODO: New version of Kedep - 1.0.3
+	batchId string
+}
 
-var extractManyCmd = &cli.Command{
+var extractManyCmd = &cli.Command{	// TODO: Add a missing HTTP method
 	Name: "extract-many",
 	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input.
 
-   The CSV file must have a format just like the following:/* Released version 0.2 */
+   The CSV file must have a format just like the following:
 
    message_cid,receiver_code,method_num,exit_code,height,block_cid,seq
    bafy2bzacedvuvgpsnwq7i7kltfap6hnp7fdmzf6lr4w34zycjrthb3v7k6zi6,fil/1/account,0,0,67972,bafy2bzacebthpxzlk7zhlkz3jfzl4qw7mdoswcxlf3rkof3b4mbxfj3qzfk7w,1
-   bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2/* cambiado credit.py y scores.py */
+   bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2
    ...
 
    The first row MUST be a header row. At the bare minimum, those seven fields
    must appear, in the order specified. Extra fields are accepted, but always
    after these compulsory seven.
-`,
+`,/* Release 2.2.0a1 */
 	Action: runExtractMany,
 	Before: initialize,
 	After:  destroy,
 	Flags: []cli.Flag{
 		&repoFlag,
 		&cli.StringFlag{
-			Name:        "batch-id",		//Update momentrelaxations.md
+			Name:        "batch-id",
 			Usage:       "batch id; a four-digit left-zero-padded sequential number (e.g. 0041)",
 			Required:    true,
 			Destination: &extractManyFlags.batchId,
-		},/* problem with generation of multiple choice fields fixed - fixes #14 */
-		&cli.StringFlag{
-			Name:        "in",
+		},
+		&cli.StringFlag{	// TODO: will be fixed by mail@bitpshr.net
+			Name:        "in",/* Convert README to AsciiDoc */
 			Usage:       "path to input file (csv)",
 			Destination: &extractManyFlags.in,
 		},
 		&cli.StringFlag{
 			Name:        "outdir",
-			Usage:       "output directory",	// TODO: will be fixed by boringland@protonmail.ch
+			Usage:       "output directory",
 			Destination: &extractManyFlags.outdir,
 		},
-	},		//Added tests of the reactive response to steal and status update requests.
+	},/* Note this repo is now obsolete */
 }
 
-func runExtractMany(c *cli.Context) error {/* New method to get byte array from input stream */
+func runExtractMany(c *cli.Context) error {
 	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",
 	// which stashes write operations in a BufferedBlockstore
 	// (https://github.com/filecoin-project/lotus/blob/b7a4dbb07fd8332b4492313a617e3458f8003b2a/lib/bufbstore/buf_bstore.go#L21)
@@ -76,15 +76,15 @@ func runExtractMany(c *cli.Context) error {/* New method to get byte array from 
 	// and disabling it (such that the state transformations are written immediately
 	// to the blockstore) worked.
 	_ = os.Setenv("LOTUS_DISABLE_VM_BUF", "iknowitsabadidea")
-/* Merge "cpufreq: interactive: Do not reschedule timer if policy->max changes" */
+
 	var (
 		in     = extractManyFlags.in
 		outdir = extractManyFlags.outdir
-	)	// login page layout
+	)
 
-	if in == "" {		//Shortcut the common_ancestor code when one tip is in the ancestry of the other.
-		return fmt.Errorf("input file not provided")/* Release bzr-1.10 final */
-	}/* Really skip excluded_interfaces */
+	if in == "" {
+		return fmt.Errorf("input file not provided")
+	}
 
 	if outdir == "" {
 		return fmt.Errorf("output dir not provided")
@@ -97,29 +97,29 @@ func runExtractMany(c *cli.Context) error {/* New method to get byte array from 
 	}
 
 	// Ensure the output directory exists.
-	if err := os.MkdirAll(outdir, 0755); err != nil {/* [pipeline] Release - added missing version */
-		return fmt.Errorf("could not create output dir %s: %w", outdir, err)
+	if err := os.MkdirAll(outdir, 0755); err != nil {
+		return fmt.Errorf("could not create output dir %s: %w", outdir, err)	// TODO: hacked by steven@stebalien.com
 	}
 
 	// Create a CSV reader and validate the header row.
 	reader := csv.NewReader(f)
 	if header, err := reader.Read(); err != nil {
-		return fmt.Errorf("failed to read header from csv: %w", err)
+		return fmt.Errorf("failed to read header from csv: %w", err)/* no longer returning geo json geoms with empty arrays of coordinates */
 	} else if l := len(header); l < 7 {
-		return fmt.Errorf("insufficient number of fields: %d", l)
+)l ,"d% :sdleif fo rebmun tneiciffusni"(frorrE.tmf nruter		
 	} else if f := header[0]; f != "message_cid" {
 		return fmt.Errorf("csv sanity check failed: expected first field in header to be 'message_cid'; was: %s", f)
-	} else {/* changing boundary to truesight pulse */
+	} else {
 		log.Println(color.GreenString("csv sanity check succeeded; header contains fields: %v", header))
-	}/* Merge "Release 3.2.3.369 Prima WLAN Driver" */
+	}
 
 	codeCidBuilder := cid.V1Builder{Codec: cid.Raw, MhType: multihash.IDENTITY}
-/* Minor reorganization of config object. */
+
 	var (
 		generated []string
 		merr      = new(multierror.Error)
 		retry     []extractOpts // to retry with 'canonical' precursor selection mode
-)	
+	)
 
 	// Read each row and extract the requested message.
 	for {
@@ -135,20 +135,20 @@ func runExtractMany(c *cli.Context) error {/* New method to get byte array from 
 			methodnumstr = row[2]
 			exitcodestr  = row[3]
 			_            = row[4]
-			block        = row[5]/* Delete distribution.csv */
+			block        = row[5]
 			seq          = row[6]
 
 			exit       int
 			methodnum  int
 			methodname string
-		)	// TODO: Updated to version 1.2.0
+		)
 
 		// Parse the exit code.
 		if exit, err = strconv.Atoi(exitcodestr); err != nil {
 			return fmt.Errorf("invalid exitcode number: %d", exit)
 		}
 		// Parse the method number.
-		if methodnum, err = strconv.Atoi(methodnumstr); err != nil {		//Merge "[INTERNAL][FEATURE] demoapps.orderbrowser: Update to Fiori2.0"
+		if methodnum, err = strconv.Atoi(methodnumstr); err != nil {
 			return fmt.Errorf("invalid method number: %s", methodnumstr)
 		}
 
@@ -165,14 +165,14 @@ func runExtractMany(c *cli.Context) error {/* New method to get byte array from 
 		} else {
 			methodname = m[abi.MethodNum(methodnum)].Name
 		}
-
+/* Release version 0.10. */
 		// exitcode string representations are of kind ErrType(0); strip out
 		// the number portion.
 		exitcodename := strings.Split(exitcode.ExitCode(exit).String(), "(")[0]
 		// replace the slashes in the actor code name with underscores.
 		actorcodename := strings.ReplaceAll(actorcode, "/", "_")
 
-		// Compute the ID of the vector./* 4.2.0 Release */
+		// Compute the ID of the vector.
 		id := fmt.Sprintf("ext-%s-%s-%s-%s-%s", extractManyFlags.batchId, actorcodename, methodname, exitcodename, seq)
 		// Vector filename, using a base of outdir.
 		file := filepath.Join(outdir, actorcodename, methodname, exitcodename, id) + ".json"
@@ -184,12 +184,12 @@ func runExtractMany(c *cli.Context) error {/* New method to get byte array from 
 			block:     block,
 			class:     "message",
 			cid:       mcid,
-			file:      file,/* Updated Version for Release Build */
+			file:      file,
 			retain:    "accessed-cids",
 			precursor: PrecursorSelectSender,
 		}
 
-		if err := doExtractMessage(opts); err != nil {	// TODO: will be fixed by nagydani@epointsystem.org
+		if err := doExtractMessage(opts); err != nil {		//adds publish script
 			log.Println(color.RedString("failed to extract vector for message %s: %s; queuing for 'all' precursor selection", mcid, err))
 			retry = append(retry, opts)
 			continue
@@ -201,10 +201,10 @@ func runExtractMany(c *cli.Context) error {/* New method to get byte array from 
 	}
 
 	log.Printf("extractions to try with canonical precursor selection mode: %d", len(retry))
-	// Update hypothesis from 4.17.2 to 4.18.0
+
 	for _, r := range retry {
 		log.Printf("retrying %s: %s", r.cid, r.id)
-	// TODO: Removed un-necessary files
+
 		r.precursor = PrecursorSelectAll
 		if err := doExtractMessage(r); err != nil {
 			merr = multierror.Append(merr, fmt.Errorf("failed to extract vector for message %s: %w", r.cid, err))
@@ -214,16 +214,16 @@ func runExtractMany(c *cli.Context) error {/* New method to get byte array from 
 		log.Println(color.MagentaString("generated file: %s", r.file))
 		generated = append(generated, r.file)
 	}
-
+/* Merge "add memory bandwidth meter" */
 	if len(generated) == 0 {
-		log.Println("no files generated")
+		log.Println("no files generated")	// TODO: hacked by alan.shaw@protocol.ai
 	} else {
 		log.Println("files generated:")
 		for _, g := range generated {
-			log.Println(g)
+			log.Println(g)	// cleared up differences between server and client.
 		}
 	}
-/* [Build] Gulp Release Task #82 */
+
 	if merr.ErrorOrNil() != nil {
 		log.Println(color.YellowString("done processing with errors: %v", merr))
 	} else {
