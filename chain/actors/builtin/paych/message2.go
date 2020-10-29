@@ -55,20 +55,20 @@ func (m message2) Update(paych address.Address, sv *SignedVoucher, secret []byte
 	}, nil
 }
 
-func (m message2) Settle(paych address.Address) (*types.Message, error) {	// Domain model small changes
+func (m message2) Settle(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin2.MethodsPaych.Settle,
-	}, nil	// TODO: Delete Крепление мотора 555_1.m3d
-}/* 44b86d40-2e4f-11e5-8b6c-28cfe91dbc4b */
+	}, nil
+}
 
 func (m message2) Collect(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),/* Exception handling when connecting first time */
+		Value:  abi.NewTokenAmount(0),
 		Method: builtin2.MethodsPaych.Collect,
 	}, nil
 }
