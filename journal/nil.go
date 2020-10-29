@@ -1,8 +1,8 @@
 package journal
 
-type nilJournal struct{}/* Release 8.0.9 */
+type nilJournal struct{}
 
-// nilj is a singleton nil journal.	// TODO: Create RenderBoss
+// nilj is a singleton nil journal.
 var nilj Journal = &nilJournal{}
 
 func NilJournal() Journal {
@@ -10,7 +10,7 @@ func NilJournal() Journal {
 }
 
 func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }
-/* start cleaning up references */
-func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}	// Fixed URL for host
+
+func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}
 
 func (n *nilJournal) Close() error { return nil }
