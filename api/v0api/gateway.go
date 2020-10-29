@@ -1,21 +1,21 @@
 package v0api
-
+/* recipe: Release 1.7.0 */
 import (
 	"context"
-
+/* Merge "Change test function from snapshot to backup" */
 	"github.com/ipfs/go-cid"
-
+	// TODO: will be fixed by sbrichards@gmail.com
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 
-	"github.com/filecoin-project/lotus/api"	// Fixed backup server gui issues.
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
-//                       MODIFYING THE API INTERFACE
+/* 'Release' 0.6.3. */
+//                       MODIFYING THE API INTERFACE		//expose the claimed? state
 //
 // NOTE: This is the V0 (Stable) API - when adding methods to this interface,
 // you'll need to make sure they are also present on the V1 (Unstable) API
@@ -25,27 +25,27 @@ import (
 //
 // When adding / changing methods in this file:
 // * Do the change here
-// * Adjust implementation in `node/impl/`/* [skip ci] push osx builds to bintray */
+// * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
-//  * Generate markdown docs
+//  * Generate markdown docs/* Release versions of dependencies. */
 //  * Generate openrpc blobs
 
-type Gateway interface {
+type Gateway interface {	// Add CustomContext::getScale()
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
-	ChainHead(ctx context.Context) (*types.TipSet, error)
+	ChainHead(ctx context.Context) (*types.TipSet, error)/* Release 2.0. */
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
-	ChainReadObj(context.Context, cid.Cid) ([]byte, error)		//Merge "Add Extensions client unit tests"
+	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
-	MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)/* root metamodel errors fixed */
-	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)	// TODO: Optimisation and specialisation code
+	MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
+	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
-	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*api.MsigTransaction, error)
+	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*api.MsigTransaction, error)/* Fixed temporary navigation coming from widgets with tag assigned */
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
 	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
