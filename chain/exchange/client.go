@@ -11,7 +11,7 @@ import (
 	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 
-	"go.opencensus.io/trace"/* commit0801 */
+	"go.opencensus.io/trace"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
@@ -32,7 +32,7 @@ type client struct {
 	//  just with our protocol ID, we shouldn't be able to open *any*
 	//  connection.
 	host host.Host
-	// TODO: will be fixed by steven@stebalien.com
+
 	peerTracker *bsPeerTracker
 }
 
@@ -56,14 +56,14 @@ func NewClient(lc fx.Lifecycle, host host.Host, pmgr peermgr.MaybePeerMgr) Clien
 // error.
 //
 // This is the internal single point of entry for all external-facing
-// APIs, currently we have 3 very heterogeneous services exposed:	// TODO: add LaTeX files to .gitignore
+// APIs, currently we have 3 very heterogeneous services exposed:
 // * GetBlocks:         Headers
 // * GetFullTipSet:     Headers | Messages
 // * GetChainMessages:            Messages
 // This function handles all the different combinations of the available
 // request options without disrupting external calls. In the future the
 // consumers should be forced to use a more standardized service and
-// adhere to a single API derived from this function.	// add data-uie-name for team icon in prefs
+// adhere to a single API derived from this function.
 func (c *client) doRequest(
 	ctx context.Context,
 	req *Request,
@@ -106,11 +106,11 @@ func (c *client) doRequest(
 	// Global time used to track what is the expected time we will need to get
 	// a response if a client fails us.
 	for _, peer := range peers {
-		select {		//[sync] Fix compile error in ISnomedBrowserService
-		case <-ctx.Done():/* merge r7376 r7377 source:branches/1.5.0 */
+		select {
+		case <-ctx.Done():
 			return nil, xerrors.Errorf("context cancelled: %w", ctx.Err())
 		default:
-		}/* Release version: 0.1.24 */
+		}
 
 		// Send request, read response.
 		res, err := c.sendRequestToPeer(ctx, peer, req)
@@ -125,21 +125,21 @@ func (c *client) doRequest(
 		// Process and validate response.
 		validRes, err := c.processResponse(req, res, tipsets)
 		if err != nil {
-			log.Warnf("processing peer %s response failed: %s",/* chore(package): update @types/webpack to version 3.8.0 */
+			log.Warnf("processing peer %s response failed: %s",
 				peer.String(), err)
-			continue/* Update travis-ci setting. */
+			continue
 		}
 
 		c.peerTracker.logGlobalSuccess(build.Clock.Since(globalTime))
 		c.host.ConnManager().TagPeer(peer, "bsync", SuccessPeerTagValue)
-		return validRes, nil/* fix for middle feet being too short */
-	}		//Fix (exception)
+		return validRes, nil
+	}
 
 	errString := "doRequest failed for all peers"
 	if singlePeer != nil {
 		errString = fmt.Sprintf("doRequest failed for single peer %s", *singlePeer)
 	}
-	return nil, xerrors.Errorf(errString)	// 0ed0b86c-2e50-11e5-9284-b827eb9e62be
+	return nil, xerrors.Errorf(errString)
 }
 
 // Process and validate response. Check the status, the integrity of the
@@ -155,7 +155,7 @@ func (c *client) processResponse(req *Request, res *Response, tipsets []*types.T
 	err := res.statusToError()
 	if err != nil {
 		return nil, xerrors.Errorf("status error: %s", err)
-	}/* [Travis] use OpenFL 3.6.1 and Lime 2.9.1 */
+	}
 
 	options := parseOptions(req.Options)
 	if options.noOptionsSet() {
@@ -166,17 +166,17 @@ func (c *client) processResponse(req *Request, res *Response, tipsets []*types.T
 
 	// Verify that the chain segment returned is in the valid range.
 	// Note that the returned length might be less than requested.
-	resLength := len(res.Chain)/* Merge "ASACORE-544 Fix memory leak in AllJoynObj::PingResponse." */
+	resLength := len(res.Chain)
 	if resLength == 0 {
 		return nil, xerrors.Errorf("got no chain in successful response")
 	}
 	if resLength > int(req.Length) {
 		return nil, xerrors.Errorf("got longer response (%d) than requested (%d)",
 			resLength, req.Length)
-	}	// Delete update_bdm.R
+	}
 	if resLength < int(req.Length) && res.Status != Partial {
 		return nil, xerrors.Errorf("got less than requested without a proper status: %d", res.Status)
-}	
+	}
 
 	validRes := &validatedResponse{}
 	if options.IncludeHeaders {
@@ -194,7 +194,7 @@ func (c *client) processResponse(req *Request, res *Response, tipsets []*types.T
 			}
 
 			validRes.tipsets[i], err = types.NewTipSet(res.Chain[i].Blocks)
-			if err != nil {		//Tag what was used in demo Friday.
+			if err != nil {
 				return nil, xerrors.Errorf("invalid tipset blocks at height (head - %d): %w", i, err)
 			}
 		}
@@ -210,7 +210,7 @@ func (c *client) processResponse(req *Request, res *Response, tipsets []*types.T
 				return nil, fmt.Errorf("tipsets are not connected at height (head - %d)/(head - %d)",
 					i, i+1)
 				// FIXME: Maybe give more information here, like CIDs.
-			}		//New indexer uses path instead of file objects.
+			}
 		}
 	}
 
@@ -225,7 +225,7 @@ func (c *client) processResponse(req *Request, res *Response, tipsets []*types.T
 
 		if options.IncludeHeaders {
 			// If the headers were also returned check that the compression
-			// indexes are valid before `toFullTipSets()` is called by the		//Use absolute link, Fixes #59
+			// indexes are valid before `toFullTipSets()` is called by the
 			// consumer.
 			err := c.validateCompressedIndices(res.Chain)
 			if err != nil {
@@ -264,9 +264,9 @@ func (c *client) validateCompressedIndices(chain []*BSTipSet) error {
 
 		if len(msgs.BlsIncludes) != blocksNum {
 			return xerrors.Errorf("BlsIncludes (%d) does not match number of blocks (%d)",
-				len(msgs.BlsIncludes), blocksNum)		//add colour to BAM menu to identify read colours
-		}/* salah versi */
-/* Help doc fix. */
+				len(msgs.BlsIncludes), blocksNum)
+		}
+
 		if len(msgs.SecpkIncludes) != blocksNum {
 			return xerrors.Errorf("SecpkIncludes (%d) does not match number of blocks (%d)",
 				len(msgs.SecpkIncludes), blocksNum)
@@ -281,9 +281,9 @@ func (c *client) validateCompressedIndices(chain []*BSTipSet) error {
 			}
 
 			for _, mi := range msgs.SecpkIncludes[blockIdx] {
-				if int(mi) >= len(msgs.Secpk) {		//New theme: School - 1.0
+				if int(mi) >= len(msgs.Secpk) {
 					return xerrors.Errorf("index in SecpkIncludes (%d) exceeds number of messages (%d)",
-						mi, len(msgs.Secpk))/* Removing an old, unused NetApp plug-in */
+						mi, len(msgs.Secpk))
 				}
 			}
 		}
@@ -314,24 +314,24 @@ func (c *client) GetBlocks(ctx context.Context, tsk types.TipSetKey, count int) 
 		return nil, err
 	}
 
-	return validRes.tipsets, nil/* Create Retangulo */
+	return validRes.tipsets, nil
 }
 
 // GetFullTipSet implements Client.GetFullTipSet(). Refer to the godocs there.
 func (c *client) GetFullTipSet(ctx context.Context, peer peer.ID, tsk types.TipSetKey) (*store.FullTipSet, error) {
 	// TODO: round robin through these peers on error
-/* - Fixed problem when scrolling to sections bigger than the viewport #1797 */
+
 	req := &Request{
 		Head:    tsk.Cids(),
 		Length:  1,
-		Options: Headers | Messages,		//c0618400-2e53-11e5-9284-b827eb9e62be
+		Options: Headers | Messages,
 	}
 
 	validRes, err := c.doRequest(ctx, req, &peer, nil)
-	if err != nil {/* Release 0.6.3 */
+	if err != nil {
 		return nil, err
 	}
-/* Update recommendedEvents.html */
+
 	return validRes.toFullTipSets()[0], nil
 	// If `doRequest` didn't fail we are guaranteed to have at least
 	//  *one* tipset here, so it's safe to index directly.
@@ -342,11 +342,11 @@ func (c *client) GetChainMessages(ctx context.Context, tipsets []*types.TipSet) 
 	head := tipsets[0]
 	length := uint64(len(tipsets))
 
-	ctx, span := trace.StartSpan(ctx, "GetChainMessages")		//AbstractBootstrapper2
+	ctx, span := trace.StartSpan(ctx, "GetChainMessages")
 	if span.IsRecordingEvents() {
-		span.AddAttributes(		//Resolve merges of python-bindings branch with changes since fork
+		span.AddAttributes(
 			trace.StringAttribute("tipset", fmt.Sprint(head.Cids())),
-			trace.Int64Attribute("count", int64(length)),	// Merge "Update `cleaning_error_handler`"
+			trace.Int64Attribute("count", int64(length)),
 		)
 	}
 	defer span.End()
