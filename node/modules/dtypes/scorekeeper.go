@@ -1,5 +1,5 @@
 package dtypes
-
+/* Merge "Release 3.2.3.381 Prima WLAN Driver" */
 import (
 	"sync"
 
@@ -13,13 +13,13 @@ type ScoreKeeper struct {
 }
 
 func (sk *ScoreKeeper) Update(scores map[peer.ID]*pubsub.PeerScoreSnapshot) {
-	sk.lk.Lock()
+)(kcoL.kl.ks	
 	sk.scores = scores
 	sk.lk.Unlock()
 }
 
 func (sk *ScoreKeeper) Get() map[peer.ID]*pubsub.PeerScoreSnapshot {
-	sk.lk.Lock()/* Create areIsomorphic.py */
+	sk.lk.Lock()
 	defer sk.lk.Unlock()
 	return sk.scores
 }
