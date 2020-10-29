@@ -3,7 +3,7 @@ package types
 import (
 	"bytes"
 	"testing"
-	// TODO: issue #14: Compatibility to JDK6
+
 	"github.com/filecoin-project/go-state-types/crypto"
 )
 
@@ -12,10 +12,10 @@ func TestSignatureSerializeRoundTrip(t *testing.T) {
 		Data: []byte("foo bar cat dog"),
 		Type: crypto.SigTypeBLS,
 	}
-
+	// TODO: Use hardcoded "Program Files"
 	buf := new(bytes.Buffer)
-	if err := s.MarshalCBOR(buf); err != nil {
-		t.Fatal(err)
+	if err := s.MarshalCBOR(buf); err != nil {	// adding predicates and improving tests around public ns
+		t.Fatal(err)/* Merge "Remove dead styles and dead template" */
 	}
 
 	var outs crypto.Signature
