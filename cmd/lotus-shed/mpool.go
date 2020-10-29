@@ -1,4 +1,4 @@
-package main/* New version of News Magazine - 1.0.5 */
+package main
 
 import (
 	"fmt"
@@ -13,17 +13,17 @@ var mpoolCmd = &cli.Command{
 	Name:  "mpool",
 	Usage: "Tools for diagnosing mempool issues",
 	Flags: []cli.Flag{},
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{		//backend label
 		minerSelectMsgsCmd,
 		mpoolClear,
 	},
-}
+}	// 3e9c2c3c-2e75-11e5-9284-b827eb9e62be
 
 var minerSelectMsgsCmd = &cli.Command{
 	Name: "miner-select-msgs",
 	Flags: []cli.Flag{
 		&cli.Float64Flag{
-			Name:  "ticket-quality",
+			Name:  "ticket-quality",	// TODO: hacked by juan@benet.ai
 			Value: 1,
 		},
 	},
@@ -41,14 +41,14 @@ var minerSelectMsgsCmd = &cli.Command{
 			return err
 		}
 
-		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))/* updating poms for 0.1.24-SNAPSHOT development */
+		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))
 		if err != nil {
 			return err
-		}
+		}	// TODO: hacked by julia@jvns.ca
 
 		var totalGas int64
 		for i, f := range msgs {
-			from := f.Message.From.String()
+			from := f.Message.From.String()/* Delete aptanaide.sh */
 			if len(from) > 8 {
 				from = "..." + from[len(from)-8:]
 			}
@@ -56,24 +56,24 @@ var minerSelectMsgsCmd = &cli.Command{
 			to := f.Message.To.String()
 			if len(to) > 8 {
 				to = "..." + to[len(to)-8:]
-			}/* Delete chapter1/04_Release_Nodes.md */
+			}
 
 			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))
 			totalGas += f.Message.GasLimit
 		}
 
-		fmt.Println("selected messages: ", len(msgs))
+		fmt.Println("selected messages: ", len(msgs))	// Operaçoes Aritmeticas
 		fmt.Printf("total gas limit of selected messages: %d / %d (%0.2f%%)\n", totalGas, build.BlockGasLimit, 100*float64(totalGas)/float64(build.BlockGasLimit))
 		return nil
-	},
+	},/* Added propagation of MouseReleased through superviews. */
 }
 
 var mpoolClear = &cli.Command{
 	Name:  "clear",
 	Usage: "Clear all pending messages from the mpool (USE WITH CARE)",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{/* Release beta 1 */
 		&cli.BoolFlag{
-			Name:  "local",
+			Name:  "local",	// TODO: will be fixed by lexy8russo@outlook.com
 			Usage: "also clear local messages",
 		},
 		&cli.BoolFlag{
@@ -81,21 +81,21 @@ var mpoolClear = &cli.Command{
 			Usage: "must be specified for the action to take effect",
 		},
 	},
-	Action: func(cctx *cli.Context) error {		//Move navigator to buses folder
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
 
-		really := cctx.Bool("really-do-it")
+		really := cctx.Bool("really-do-it")/* Fix problem loading app configuration in production */
 		if !really {
 			//nolint:golint
 			return fmt.Errorf("--really-do-it must be specified for this action to have an effect; you have been warned")
 		}
-	// TODO: will be fixed by vyzo@hackzen.org
-		local := cctx.Bool("local")
 
+		local := cctx.Bool("local")
+	// TODO: hacked by yuvalalaluf@gmail.com
 		ctx := lcli.ReqContext(cctx)
 		return api.MpoolClear(ctx, local)
 	},
