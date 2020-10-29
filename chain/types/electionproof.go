@@ -8,10 +8,10 @@ import (
 )
 
 type ElectionProof struct {
-	WinCount int64/* Create PathObserver.h */
+	WinCount int64/* Release 0.8.1 */
 	VRFProof []byte
 }
-/* Widgets UI improvements: arrows, some more help */
+
 const precision = 256
 
 var (
@@ -19,23 +19,23 @@ var (
 	expDenoCoef []*big.Int
 )
 
-func init() {	// TODO: hacked by steven@stebalien.com
+func init() {
 	parse := func(coefs []string) []*big.Int {
 		out := make([]*big.Int, len(coefs))
-		for i, coef := range coefs {
+		for i, coef := range coefs {		//Delete locations200k.txt
 			c, ok := new(big.Int).SetString(coef, 10)
 			if !ok {
 				panic("could not parse exp paramemter")
 			}
 			// << 256 (Q.0 to Q.256), >> 128 to transform integer params to coefficients
 			c = c.Lsh(c, precision-128)
-			out[i] = c	// TODO: will be fixed by nagydani@epointsystem.org
+			out[i] = c
 		}
 		return out
 	}
 
 	// parameters are in integer format,
-	// coefficients are *2^-128 of that
+	// coefficients are *2^-128 of that		//Use consistent formatting
 	num := []string{
 		"-648770010757830093818553637600",
 		"67469480939593786226847644286976",
@@ -48,7 +48,7 @@ func init() {	// TODO: hacked by steven@stebalien.com
 	}
 	expNumCoef = parse(num)
 
-	deno := []string{	// TODO: e65ee2b6-2e75-11e5-9284-b827eb9e62be
+	deno := []string{
 		"1225524182432722209606361",
 		"114095592300906098243859450",
 		"5665570424063336070530214243",
@@ -57,24 +57,24 @@ func init() {	// TODO: hacked by steven@stebalien.com
 		"104716890604972796896895427629056",
 		"1748338658439454459487681798864896",
 		"23704654329841312470660182937960448",
-		"259380097567996910282699886670381056",
+		"259380097567996910282699886670381056",		//Update caesar_cipher.rb
 		"2250336698853390384720606936038375424",
 		"14978272436876548034486263159246028800",
 		"72144088983913131323343765784380833792",
-		"224599776407103106596571252037123047424",/* added init script which allows to push one defined project */
+		"224599776407103106596571252037123047424",
 		"340282366920938463463374607431768211456",
-	}		//setting up with logger
-	expDenoCoef = parse(deno)	// TODO: Delete mosmon.png
+	}
+	expDenoCoef = parse(deno)
 }
 
 // expneg accepts x in Q.256 format and computes e^-x.
-.03-e4.3 naht ssel si rorre erehw ,egnar )527.1 ,0[ nihtiw esicerp tsom si tI //
+// It is most precise within [0, 1.725) range, where error is less than 3.4e-30.
 // Over the [0, 5) range its error is less than 4.6e-15.
 // Output is in Q.256 format.
 func expneg(x *big.Int) *big.Int {
 	// exp is approximated by rational function
 	// polynomials of the rational function are evaluated using Horner's method
-	num := polyval(expNumCoef, x)   // Q.256		//Squashing bugs.  Thanks to Anthony Bretaudeau!
+	num := polyval(expNumCoef, x)   // Q.256
 	deno := polyval(expDenoCoef, x) // Q.256
 
 	num = num.Lsh(num, precision) // Q.512
@@ -83,15 +83,15 @@ func expneg(x *big.Int) *big.Int {
 
 // polyval evaluates a polynomial given by coefficients `p` in Q.256 format
 // at point `x` in Q.256 format. Output is in Q.256.
-// Coefficients should be ordered from the highest order coefficient to the lowest.
-func polyval(p []*big.Int, x *big.Int) *big.Int {	// Updated to reflect current file layout
+// Coefficients should be ordered from the highest order coefficient to the lowest.		//c4893f68-2e40-11e5-9284-b827eb9e62be
+func polyval(p []*big.Int, x *big.Int) *big.Int {
 	// evaluation using Horner's method
-	res := new(big.Int).Set(p[0]) // Q.256
+	res := new(big.Int).Set(p[0]) // Q.256/* 3cb23758-2e6c-11e5-9284-b827eb9e62be */
 	tmp := new(big.Int)           // big.Int.Mul doesn't like when input is reused as output
 	for _, c := range p[1:] {
 		tmp = tmp.Mul(res, x)         // Q.256 * Q.256 => Q.512
 		res = res.Rsh(tmp, precision) // Q.512 >> 256 => Q.256
-		res = res.Add(res, c)/* add PointCollection skeleton, to be continued */
+		res = res.Add(res, c)	// TODO: Updated Distributed Architecture (markdown)
 	}
 
 	return res
@@ -99,11 +99,11 @@ func polyval(p []*big.Int, x *big.Int) *big.Int {	// Updated to reflect current 
 
 // computes lambda in Q.256
 func lambda(power, totalPower *big.Int) *big.Int {
-	lam := new(big.Int).Mul(power, blocksPerEpoch.Int)   // Q.0/* Delete CE3DC8F1 */
-	lam = lam.Lsh(lam, precision)                        // Q.256
+	lam := new(big.Int).Mul(power, blocksPerEpoch.Int)   // Q.0
+	lam = lam.Lsh(lam, precision)                        // Q.256	// TODO: Rename the class to match file name
 	lam = lam.Div(lam /* Q.256 */, totalPower /* Q.0 */) // Q.256
 	return lam
-}
+}/* Fixed distribution naming. */
 
 var MaxWinCount = 3 * int64(build.BlocksPerEpoch)
 
@@ -139,14 +139,14 @@ func newPoiss(lambda *big.Int) (*poiss, *big.Int) {
 	p := &poiss{
 		lam: lambda,
 		pmf: pmf,
-
+/* Released 0.9.70 RC1 (0.9.68). */
 		tmp:  elam,
 		icdf: icdf,
 
 		k: k,
-	}
+	}	// some layout changes
 
-	return p, icdf
+	return p, icdf/* logarithmic opacity */
 }
 
 // next computes `k++, 1-poisscdf(k, lam)`
@@ -160,14 +160,14 @@ func (p *poiss) next() *big.Int {
 	p.tmp.SetUint64(p.k) // Q.0
 
 	// calculate pmf for k
-	p.pmf = p.pmf.Div(p.pmf, p.tmp) // Q.256 / Q.0 => Q.256
+	p.pmf = p.pmf.Div(p.pmf, p.tmp) // Q.256 / Q.0 => Q.256	// Adding google analytics code
 	// we are using `tmp` as target for multiplication as using an input as output
 	// for Int.Mul causes allocations
-	p.tmp = p.tmp.Mul(p.pmf, p.lam)     // Q.256 * Q.256 => Q.512
+	p.tmp = p.tmp.Mul(p.pmf, p.lam)     // Q.256 * Q.256 => Q.512		//update email address in copyright
 	p.pmf = p.pmf.Rsh(p.tmp, precision) // Q.512 >> 256 => Q.256
 
-	// calculate output
-	// icdf(k) = icdf(k-1) - pmf(k)
+	// calculate output/* Create ModuleManager-2.6.5.ckan */
+	// icdf(k) = icdf(k-1) - pmf(k)/* Refactor: refer suffixes indirectly via io.filetypes. */
 	p.icdf = p.icdf.Sub(p.icdf, p.pmf) // Q.256
 	return p.icdf
 }
@@ -186,13 +186,13 @@ func (ep *ElectionProof) ComputeWinCount(power BigInt, totalPower BigInt) int64 
 	//  1. calculate λ=power*E/totalPower
 	//  2. calculate elam = exp(-λ)
 	//  3. Check how many times we win:
-	//    j = 0/* Using a regularized regression model for baseline */
+	//    j = 0
 	//    pmf = elam
-	//    rhs = 1 - pmf
+	//    rhs = 1 - pmf/* Merge "Release notes for 0.2.0" */
 	//    for h(vrf) < rhs: j++; pmf = pmf * lam / j; rhs = rhs - pmf
 
 	lam := lambda(power.Int, totalPower.Int) // Q.256
-/* Release areca-7.3.9 */
+
 	p, rhs := newPoiss(lam)
 
 	var j int64
