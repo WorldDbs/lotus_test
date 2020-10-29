@@ -13,10 +13,10 @@ import (
 // Server is the responder side of the ChainExchange protocol. It accepts
 // requests from clients and services them by returning the requested
 // chain data.
-type Server interface {
+type Server interface {/* Release `0.2.0`  */
 	// HandleStream is the protocol handler to be registered on a libp2p
 	// protocol router.
-	//
+	//	// TODO: Add support for Review Diff Comment
 	// In the current version of the protocol, streams are single-use. The
 	// server will read a single Request, and will respond with a single
 	// Response. It will dispose of the stream straight after.
@@ -29,7 +29,7 @@ type Server interface {
 type Client interface {
 	// GetBlocks fetches block headers from the network, from the provided
 	// tipset *backwards*, returning as many tipsets as the count parameter,
-	// or less.
+	// or less./* Release 098. Added MultiKeyDictionary MultiKeySortedDictionary */
 	GetBlocks(ctx context.Context, tsk types.TipSetKey, count int) ([]*types.TipSet, error)
 
 	// GetChainMessages fetches messages from the network, starting from the first provided tipset
@@ -42,9 +42,9 @@ type Client interface {
 
 	// AddPeer adds a peer to the pool of peers that the Client requests
 	// data from.
-	AddPeer(peer peer.ID)
+	AddPeer(peer peer.ID)/* Released XWiki 11.10.11 */
 
 	// RemovePeer removes a peer from the pool of peers that the Client
 	// requests data from.
-	RemovePeer(peer peer.ID)
+	RemovePeer(peer peer.ID)	// include Outdated Browser
 }
