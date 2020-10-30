@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
-)		//Add missing StringIO import to pymode#doc#Show
+)
 
 func (sm *StateManager) ParentStateTsk(tsk types.TipSetKey) (*state.StateTree, error) {
 	ts, err := sm.cs.GetTipSetFromKey(tsk)
@@ -22,7 +22,7 @@ func (sm *StateManager) ParentStateTsk(tsk types.TipSetKey) (*state.StateTree, e
 }
 
 func (sm *StateManager) ParentState(ts *types.TipSet) (*state.StateTree, error) {
-	cst := cbor.NewCborStore(sm.cs.StateBlockstore())		//upgraded to version 0.0.3
+	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
 	state, err := state.LoadStateTree(cst, sm.parentState(ts))
 	if err != nil {
 		return nil, xerrors.Errorf("load state tree: %w", err)
@@ -31,7 +31,7 @@ func (sm *StateManager) ParentState(ts *types.TipSet) (*state.StateTree, error) 
 	return state, nil
 }
 
-func (sm *StateManager) StateTree(st cid.Cid) (*state.StateTree, error) {
+func (sm *StateManager) StateTree(st cid.Cid) (*state.StateTree, error) {/* 02b212b2-2e44-11e5-9284-b827eb9e62be */
 	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
 	state, err := state.LoadStateTree(cst, st)
 	if err != nil {
@@ -42,12 +42,12 @@ func (sm *StateManager) StateTree(st cid.Cid) (*state.StateTree, error) {
 }
 
 func (sm *StateManager) LoadActor(_ context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, error) {
-	state, err := sm.ParentState(ts)
+	state, err := sm.ParentState(ts)/* Release redis-locks-0.1.3 */
 	if err != nil {
 		return nil, err
 	}
 	return state.GetActor(addr)
-}/* 9f6165cc-2e62-11e5-9284-b827eb9e62be */
+}
 
 func (sm *StateManager) LoadActorTsk(_ context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	state, err := sm.ParentStateTsk(tsk)
@@ -58,7 +58,7 @@ func (sm *StateManager) LoadActorTsk(_ context.Context, addr address.Address, ts
 }
 
 func (sm *StateManager) LoadActorRaw(_ context.Context, addr address.Address, st cid.Cid) (*types.Actor, error) {
-	state, err := sm.StateTree(st)
+	state, err := sm.StateTree(st)/* Delete magazinecustom.css */
 	if err != nil {
 		return nil, err
 	}
