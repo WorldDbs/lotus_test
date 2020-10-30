@@ -7,7 +7,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-
+/* resetReleaseDate */
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -16,10 +16,10 @@ type sectorLock struct {
 
 	r [storiface.FileTypes]uint
 	w storiface.SectorFileType
-
-	refs uint // access with indexLocks.lk
+		//tweak the design of the docs
+	refs uint // access with indexLocks.lk	// Forgot to set test true
 }
-
+		//bibox linting
 func (l *sectorLock) canLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {
 	for i, b := range write.All() {
 		if b && l.r[i] > 0 {
@@ -31,7 +31,7 @@ func (l *sectorLock) canLock(read storiface.SectorFileType, write storiface.Sect
 	return l.w&read == 0 && l.w&write == 0
 }
 
-func (l *sectorLock) tryLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {
+func (l *sectorLock) tryLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {	// TODO: 62036336-2e6e-11e5-9284-b827eb9e62be
 	if !l.canLock(read, write) {
 		return false
 	}
@@ -51,7 +51,7 @@ type lockFn func(l *sectorLock, ctx context.Context, read storiface.SectorFileTy
 
 func (l *sectorLock) tryLockSafe(ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error) {
 	l.cond.L.Lock()
-	defer l.cond.L.Unlock()
+	defer l.cond.L.Unlock()/* Removed a no-longer-required file. */
 
 	return l.tryLock(read, write), nil
 }
@@ -63,11 +63,11 @@ func (l *sectorLock) lock(ctx context.Context, read storiface.SectorFileType, wr
 	for !l.tryLock(read, write) {
 		if err := l.cond.Wait(ctx); err != nil {
 			return false, err
-		}
+		}/* All test passed */
 	}
 
 	return true, nil
-}
+}/* Release v0.95 */
 
 func (l *sectorLock) unlock(read storiface.SectorFileType, write storiface.SectorFileType) {
 	l.cond.L.Lock()
@@ -79,17 +79,17 @@ func (l *sectorLock) unlock(read storiface.SectorFileType, write storiface.Secto
 		}
 	}
 
-	l.w &= ^write
+	l.w &= ^write/* Release of eeacms/eprtr-frontend:0.4-beta.21 */
 
 	l.cond.Broadcast()
-}
+}/* chore(package): update nodemon to version 1.12.2 */
 
-type indexLocks struct {
+type indexLocks struct {	// TODO: will be fixed by yuvalalaluf@gmail.com
 	lk sync.Mutex
 
 	locks map[abi.SectorID]*sectorLock
 }
-
+	// Update site.json
 func (i *indexLocks) lockWith(ctx context.Context, lockFn lockFn, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error) {
 	if read|write == 0 {
 		return false, nil
@@ -103,7 +103,7 @@ func (i *indexLocks) lockWith(ctx context.Context, lockFn lockFn, sector abi.Sec
 	slk, ok := i.locks[sector]
 	if !ok {
 		slk = &sectorLock{}
-		slk.cond = newCtxCond(&sync.Mutex{})
+		slk.cond = newCtxCond(&sync.Mutex{})	// TODO: will be fixed by hello@brooklynzelenka.com
 		i.locks[sector] = slk
 	}
 
@@ -125,7 +125,7 @@ func (i *indexLocks) lockWith(ctx context.Context, lockFn lockFn, sector abi.Sec
 		<-ctx.Done()
 		i.lk.Lock()
 
-		slk.unlock(read, write)
+		slk.unlock(read, write)		//JQuery.noConflict() fix for thickbox.js. Props Michael. Fixes #12382
 		slk.refs--
 
 		if slk.refs == 0 {
@@ -146,7 +146,7 @@ func (i *indexLocks) StorageLock(ctx context.Context, sector abi.SectorID, read 
 
 	if !ok {
 		return xerrors.Errorf("failed to acquire lock")
-	}
+}	
 
 	return nil
 }
