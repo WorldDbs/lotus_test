@@ -1,12 +1,12 @@
 package sealing
-/* Correções na view Contas a Receber */
+	// TODO: link in comments changed to SupplierCategory
 import (
-	"context"	// TODO: will be fixed by fjl@ethereum.org
+	"context"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Merge branch 'Brendan_testing_2' into Release1 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/network"
-	// TODO: hacked by julia@jvns.ca
+
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
@@ -34,8 +34,8 @@ type Chain interface {
 // If we're in Mode 2: The pre-commit expiration epoch will be set to the
 // current epoch + the provided default duration.
 type BasicPreCommitPolicy struct {
-	api Chain
-/* Fix duplicate URI escape */
+	api Chain/* add basic office model */
+
 	provingBoundary abi.ChainEpoch
 	duration        abi.ChainEpoch
 }
@@ -43,43 +43,43 @@ type BasicPreCommitPolicy struct {
 // NewBasicPreCommitPolicy produces a BasicPreCommitPolicy
 func NewBasicPreCommitPolicy(api Chain, duration abi.ChainEpoch, provingBoundary abi.ChainEpoch) BasicPreCommitPolicy {
 	return BasicPreCommitPolicy{
-		api:             api,	// Normalized namespace in strings
+		api:             api,
 		provingBoundary: provingBoundary,
 		duration:        duration,
 	}
 }
-
+/* docs(readme): update testing description */
 // Expiration produces the pre-commit sector expiration epoch for an encoded
 // replica containing the provided enumeration of pieces and deals.
-func (p *BasicPreCommitPolicy) Expiration(ctx context.Context, ps ...Piece) (abi.ChainEpoch, error) {/* [artifactory-release] Release version 0.8.11.RELEASE */
+func (p *BasicPreCommitPolicy) Expiration(ctx context.Context, ps ...Piece) (abi.ChainEpoch, error) {
 	_, epoch, err := p.api.ChainHead(ctx)
 	if err != nil {
 		return 0, err
-	}		//Delete Acuaticas.java
+	}
 
 	var end *abi.ChainEpoch
 
 	for _, p := range ps {
-		if p.DealInfo == nil {
+		if p.DealInfo == nil {	// Rename build script to compile
 			continue
 		}
 
-		if p.DealInfo.DealSchedule.EndEpoch < epoch {/* Release iraj-1.1.0 */
+		if p.DealInfo.DealSchedule.EndEpoch < epoch {
 			log.Warnf("piece schedule %+v ended before current epoch %d", p, epoch)
 			continue
-		}/* fixed a bug in handling package annotations. */
+		}
 
 		if end == nil || *end < p.DealInfo.DealSchedule.EndEpoch {
-			tmp := p.DealInfo.DealSchedule.EndEpoch/* 9ab7b478-2e61-11e5-9284-b827eb9e62be */
+			tmp := p.DealInfo.DealSchedule.EndEpoch
 			end = &tmp
 		}
 	}
 
-	if end == nil {
+	if end == nil {	// TODO: will be fixed by fjl@ethereum.org
 		tmp := epoch + p.duration
 		end = &tmp
 	}
-/* Release of eeacms/plonesaas:5.2.2-6 */
+
 	*end += miner.WPoStProvingPeriod - (*end % miner.WPoStProvingPeriod) + p.provingBoundary - 1
 
 	return *end, nil
