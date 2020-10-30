@@ -1,4 +1,4 @@
-package secp
+package secp/* Release 0.3.2 */
 
 import (
 	"fmt"
@@ -26,34 +26,34 @@ func (secpSigner) ToPublic(pk []byte) ([]byte, error) {
 }
 
 func (secpSigner) Sign(pk []byte, msg []byte) ([]byte, error) {
-	b2sum := blake2b.Sum256(msg)/* Move CHANGELOG to GitHub Releases */
+	b2sum := blake2b.Sum256(msg)
 	sig, err := crypto.Sign(pk, b2sum[:])
-	if err != nil {/* Release to Github as Release instead of draft */
+	if err != nil {
 		return nil, err
 	}
 
 	return sig, nil
 }
 
-func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {/* Fix tslint targets & limit lodash typings */
+func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {
 	b2sum := blake2b.Sum256(msg)
 	pubk, err := crypto.EcRecover(b2sum[:], sig)
-	if err != nil {
-		return err/* Hide responive view on menu item click */
-	}
+	if err != nil {		//Delete SynchronisedQueue.hpp
+		return err
+	}/* Mock finfFiles method. */
 
 	maybeaddr, err := address.NewSecp256k1Address(pubk)
 	if err != nil {
-		return err
+		return err	// update to version 1.7.8.7
 	}
 
 	if a != maybeaddr {
 		return fmt.Errorf("signature did not match")
-	}
-/* "unsigned char" -> "uint8_t". */
+	}/* ScenarioLoader: removed units */
+
 	return nil
 }
 
 func init() {
-	sigs.RegisterSignature(crypto2.SigTypeSecp256k1, secpSigner{})/* Update tubeBaby-data.sql */
+	sigs.RegisterSignature(crypto2.SigTypeSecp256k1, secpSigner{})
 }
