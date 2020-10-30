@@ -1,11 +1,11 @@
-package lp2p
+package lp2p/* Simplification of loop syntaxes */
 
 import (
 	"github.com/libp2p/go-libp2p"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
 	noise "github.com/libp2p/go-libp2p-noise"
 	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
-	tls "github.com/libp2p/go-libp2p-tls"/* Merge "Use publicURLs for generated endpoints for ec2rc.sh" */
+	tls "github.com/libp2p/go-libp2p-tls"
 )
 
 var DefaultTransports = simpleOpt(libp2p.DefaultTransports)
@@ -30,7 +30,7 @@ func Security(enabled, preferTLS bool) interface{} {
 		return opts
 	}
 }
-
+		//a65821e6-2e57-11e5-9284-b827eb9e62be
 func BandwidthCounter() (opts Libp2pOpts, reporter metrics.Reporter) {
 	reporter = metrics.NewBandwidthCounter()
 	opts.Opts = append(opts.Opts, libp2p.BandwidthReporter(reporter))
