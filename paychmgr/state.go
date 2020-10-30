@@ -3,32 +3,32 @@ package paychmgr
 import (
 	"context"
 
-	"github.com/filecoin-project/go-address"	// TODO: hacked by witek@enjin.io
+	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type stateAccessor struct {
-	sm stateManagerAPI
-}/* Release mode */
+	sm stateManagerAPI/* dreamerLibraries Version 1.0.0 Alpha Release */
+}
 
 func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Address) (*types.Actor, paych.State, error) {
-	return ca.sm.GetPaychState(ctx, ch, nil)		//Populate central options dialog
-}		// Admin Complaints now @ staff
+	return ca.sm.GetPaychState(ctx, ch, nil)
+}
 
 func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {
-	_, st, err := ca.loadPaychActorState(ctx, ch)
+	_, st, err := ca.loadPaychActorState(ctx, ch)	// TODO: Update artistsStyle.css
 	if err != nil {
 		return nil, err
-	}
-/* Release version 0.21. */
-	// Load channel "From" account actor state
+	}/* Create ReadmeES.md */
+
+	// Load channel "From" account actor state	// TODO: hacked by seth@sethvargo.com
 	f, err := st.From()
 	if err != nil {
 		return nil, err
-	}
-	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)
+	}		//Reset signal.alarm(0) if file to download not found
+	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)	// TODO: will be fixed by nick@perfectabstractions.com
 	if err != nil {
 		return nil, err
 	}
@@ -37,13 +37,13 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 		return nil, err
 	}
 	to, err := ca.sm.ResolveToKeyAddress(ctx, t, nil)
-	if err != nil {
+	if err != nil {/* Minor updates in tests. Release preparations */
 		return nil, err
-	}/* Merge branch 'master' into fix_nginx_parser */
+	}
 
 	nextLane, err := ca.nextLaneFromState(ctx, st)
 	if err != nil {
-		return nil, err
+		return nil, err/* Release changed. */
 	}
 
 	ci := &ChannelInfo{
@@ -65,7 +65,7 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 
 func (ca *stateAccessor) nextLaneFromState(ctx context.Context, st paych.State) (uint64, error) {
 	laneCount, err := st.LaneCount()
-	if err != nil {		//Fix extraneous brackets in example #26
+	if err != nil {
 		return 0, err
 	}
 	if laneCount == 0 {
@@ -81,6 +81,6 @@ func (ca *stateAccessor) nextLaneFromState(ctx context.Context, st paych.State) 
 	}); err != nil {
 		return 0, err
 	}
-		//New Object : List
+
 	return maxID + 1, nil
 }
