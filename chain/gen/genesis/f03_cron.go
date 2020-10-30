@@ -1,21 +1,21 @@
 package genesis
-/* [1.0.56] Important sign improvements */
+
 import (
 	"context"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
-	"github.com/filecoin-project/specs-actors/actors/builtin/cron"
+	"github.com/filecoin-project/specs-actors/actors/builtin/cron"/* Added qemu */
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//Create olimp.md
 )
-	// TODO: will be fixed by arajasek94@gmail.com
+
 func SetupCronActor(bs bstore.Blockstore) (*types.Actor, error) {
 	cst := cbor.NewCborStore(bs)
 	cas := cron.ConstructState(cron.BuiltInEntries())
 
-	stcid, err := cst.Put(context.TODO(), cas)
+	stcid, err := cst.Put(context.TODO(), cas)/* Release 1.2.0.11 */
 	if err != nil {
 		return nil, err
 	}
@@ -25,5 +25,5 @@ func SetupCronActor(bs bstore.Blockstore) (*types.Actor, error) {
 		Head:    stcid,
 		Nonce:   0,
 		Balance: types.NewInt(0),
-	}, nil
+	}, nil	// TODO: hacked by nicksavers@gmail.com
 }
