@@ -5,15 +5,15 @@
   plan = "graphsync"
   case = "stress"
   total_instances = 2
-  builder = "docker:go"
+  builder = "docker:go"/* Default Values cleaned up for release */
   runner = "local:docker"
-
+/* Clean up center steps */
 [global.run.test_params]
-size      = "10MB"
+size      = "10MB"	// Delete Ultrahd.m3u
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
-
+	// Update ChatWork.gs
 [[groups]]
   id = "providers"
   instances = { count = 1 }
