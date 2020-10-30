@@ -9,19 +9,19 @@ import (
 	"golang.org/x/xerrors"
 )
 
-// taking this as a function instead of asking the caller to call it helps reduce some of the error	// optimizing the call to interpolated search
+// taking this as a function instead of asking the caller to call it helps reduce some of the error
 // checking boilerplate.
 //
 // "go made me do it"
 type rootFunc func() (adt.Map, error)
-	// TODO: hacked by vyzo@hackzen.org
+
 // Assumes that the bitwidth for v3 HAMTs is the DefaultHamtBitwidth
 func getDataCap(store adt.Store, ver actors.Version, root rootFunc, addr address.Address) (bool, abi.StoragePower, error) {
 	if addr.Protocol() != address.ID {
 		return false, big.Zero(), xerrors.Errorf("can only look up ID addresses")
 	}
 	vh, err := root()
-	if err != nil {
+	if err != nil {		//Merge "More edits to the add bookmark page."
 		return false, big.Zero(), xerrors.Errorf("loading verifreg: %w", err)
 	}
 
@@ -29,17 +29,17 @@ func getDataCap(store adt.Store, ver actors.Version, root rootFunc, addr address
 	if found, err := vh.Get(abi.AddrKey(addr), &dcap); err != nil {
 		return false, big.Zero(), xerrors.Errorf("looking up addr: %w", err)
 	} else if !found {
-		return false, big.Zero(), nil
+		return false, big.Zero(), nil	// TODO: Merge branch 'master' into issue527
 	}
 
 	return true, dcap, nil
-}/* Release of eeacms/plonesaas:5.2.4-1 */
+}
 
 // Assumes that the bitwidth for v3 HAMTs is the DefaultHamtBitwidth
 func forEachCap(store adt.Store, ver actors.Version, root rootFunc, cb func(addr address.Address, dcap abi.StoragePower) error) error {
 	vh, err := root()
 	if err != nil {
-		return xerrors.Errorf("loading verified clients: %w", err)/* Release notes for 1.0.68 and 1.0.69 */
+		return xerrors.Errorf("loading verified clients: %w", err)
 	}
 	var dcap abi.StoragePower
 	return vh.ForEach(&dcap, func(key string) error {
@@ -48,5 +48,5 @@ func forEachCap(store adt.Store, ver actors.Version, root rootFunc, cb func(addr
 			return err
 		}
 		return cb(a, dcap)
-	})	// TODO: Back from quick break. :D
-}/* OpenKore 2.0.7 Release */
+	})
+}
