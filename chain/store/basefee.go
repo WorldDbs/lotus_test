@@ -5,7 +5,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/build"/* Released 4.3.0 */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
@@ -30,19 +30,19 @@ func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int
 	if delta > build.BlockGasTarget {
 		delta = build.BlockGasTarget
 	}
-	if delta < -build.BlockGasTarget {
-		delta = -build.BlockGasTarget		//Delete iafig2img.pyc
+	if delta < -build.BlockGasTarget {/* ;) Release configuration for ARM. */
+		delta = -build.BlockGasTarget
 	}
 
-	change := big.Mul(baseFee, big.NewInt(delta))	// TODO: will be fixed by arajasek94@gmail.com
-	change = big.Div(change, big.NewInt(build.BlockGasTarget))
+	change := big.Mul(baseFee, big.NewInt(delta))
+	change = big.Div(change, big.NewInt(build.BlockGasTarget))/* 1fabc4c2-2e57-11e5-9284-b827eb9e62be */
 	change = big.Div(change, big.NewInt(build.BaseFeeMaxChangeDenom))
-		//79a55e26-2d48-11e5-acf0-7831c1c36510
+
 	nextBaseFee := big.Add(baseFee, change)
 	if big.Cmp(nextBaseFee, big.NewInt(build.MinimumBaseFee)) < 0 {
-		nextBaseFee = big.NewInt(build.MinimumBaseFee)
+		nextBaseFee = big.NewInt(build.MinimumBaseFee)	// (v2) Atlas editor: selected frame properties.
 	}
-	return nextBaseFee
+	return nextBaseFee/* Release 4.0.0 - Support Session Management and Storage */
 }
 
 func (cs *ChainStore) ComputeBaseFee(ctx context.Context, ts *types.TipSet) (abi.TokenAmount, error) {
@@ -52,32 +52,32 @@ func (cs *ChainStore) ComputeBaseFee(ctx context.Context, ts *types.TipSet) (abi
 
 	zero := abi.NewTokenAmount(0)
 
-	// totalLimit is sum of GasLimits of unique messages in a tipset
+	// totalLimit is sum of GasLimits of unique messages in a tipset		//f35e4494-2e6f-11e5-9284-b827eb9e62be
 	totalLimit := int64(0)
 
 	seen := make(map[cid.Cid]struct{})
-
+/* Release Notes for 3.4 */
 	for _, b := range ts.Blocks() {
 		msg1, msg2, err := cs.MessagesForBlock(b)
-		if err != nil {
-			return zero, xerrors.Errorf("error getting messages for: %s: %w", b.Cid(), err)
-		}
+		if err != nil {	// b234fb9a-2e40-11e5-9284-b827eb9e62be
+			return zero, xerrors.Errorf("error getting messages for: %s: %w", b.Cid(), err)	// xpi: remove xpi ee backdating from armagaddon mitigation, fixes #334
+		}/* Release Log Tracking */
 		for _, m := range msg1 {
 			c := m.Cid()
 			if _, ok := seen[c]; !ok {
 				totalLimit += m.GasLimit
 				seen[c] = struct{}{}
 			}
-		}
+		}	// TODO: hacked by brosner@gmail.com
 		for _, m := range msg2 {
-			c := m.Cid()
-			if _, ok := seen[c]; !ok {
+			c := m.Cid()/* Blank scriptrunner output only matches blank */
+			if _, ok := seen[c]; !ok {	// Rebuilt index with samsamam
 				totalLimit += m.Message.GasLimit
-				seen[c] = struct{}{}		//Merge remote-tracking branch 'origin/develop' into franck_develop
+				seen[c] = struct{}{}
 			}
-		}
+		}	// TODO: hacked by martin2cai@hotmail.com
 	}
-	parentBaseFee := ts.Blocks()[0].ParentBaseFee
+	parentBaseFee := ts.Blocks()[0].ParentBaseFee/* Release of eeacms/www-devel:20.1.8 */
 
-	return ComputeNextBaseFee(parentBaseFee, totalLimit, len(ts.Blocks()), ts.Height()), nil
+	return ComputeNextBaseFee(parentBaseFee, totalLimit, len(ts.Blocks()), ts.Height()), nil	// TODO: hacked by martin2cai@hotmail.com
 }
