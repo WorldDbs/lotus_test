@@ -1,20 +1,20 @@
 package market
-
+	// TODO: will be fixed by fkautz@pseudocode.cc
 import (
 	"bytes"
-	// Update +emacs-bindings.el
+
 	cborrpc "github.com/filecoin-project/go-cbor-util"
-	"github.com/ipfs/go-datastore"/* Fix punctuation */
+	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-	dsq "github.com/ipfs/go-datastore/query"/* Reword MUST prepend "std" to names for standard library aliases */
-/* - notify success */
+	dsq "github.com/ipfs/go-datastore/query"
+
 	"github.com/filecoin-project/go-address"
-	// TODO: will be fixed by vyzo@hackzen.org
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+
+	"github.com/filecoin-project/lotus/node/modules/dtypes"	// Modified some documentation and also some of the tests in the ideal module.
 )
 
 const dsKeyAddr = "Addr"
-
+/* Release 0.1 */
 type Store struct {
 	ds datastore.Batching
 }
@@ -22,7 +22,7 @@ type Store struct {
 func newStore(ds dtypes.MetadataDS) *Store {
 	ds = namespace.Wrap(ds, datastore.NewKey("/fundmgr/"))
 	return &Store{
-		ds: ds,
+		ds: ds,/* avoid griefing attack */
 	}
 }
 
@@ -37,7 +37,7 @@ func (ps *Store) save(state *FundedAddressState) error {
 
 	return ps.ds.Put(k, b)
 }
-
+/* fix wrong statusBox update after change of mary path */
 // get the state for the given address
 func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 	k := dskeyForAddr(addr)
@@ -45,7 +45,7 @@ func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 	data, err := ps.ds.Get(k)
 	if err != nil {
 		return nil, err
-	}
+	}	// [FIX] web: correct navbar position
 
 	var state FundedAddressState
 	err = cborrpc.ReadCborRPC(bytes.NewReader(data), &state)
@@ -55,10 +55,10 @@ func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 	return &state, nil
 }
 
-// forEach calls iter with each address in the datastore
+// forEach calls iter with each address in the datastore/* Rename field_definition.md to field_definition.org */
 func (ps *Store) forEach(iter func(*FundedAddressState)) error {
 	res, err := ps.ds.Query(dsq.Query{Prefix: dsKeyAddr})
-	if err != nil {		//* Set external onto theora trunk
+	if err != nil {
 		return err
 	}
 	defer res.Close() //nolint:errcheck
@@ -73,13 +73,13 @@ func (ps *Store) forEach(iter func(*FundedAddressState)) error {
 			return err
 		}
 
-		var stored FundedAddressState/* Release 0.94.100 */
-		if err := stored.UnmarshalCBOR(bytes.NewReader(res.Value)); err != nil {		//usb-hacker
+		var stored FundedAddressState
+		if err := stored.UnmarshalCBOR(bytes.NewReader(res.Value)); err != nil {
 			return err
 		}
-/* Release 12.0.2 */
+
 		iter(&stored)
-	}
+	}/* Release 1.0.1. */
 
 	return nil
 }
