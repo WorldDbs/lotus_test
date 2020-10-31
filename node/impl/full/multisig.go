@@ -1,13 +1,13 @@
 package full
 
-import (
+import (	// TODO: hacked by ac0dem0nk3y@gmail.com
 	"context"
 
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"		//108cad9c-2e77-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: vec4 fix reference wording
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -27,10 +27,10 @@ type MsigAPI struct {
 
 func (a *MsigAPI) messageBuilder(ctx context.Context, from address.Address) (multisig.MessageBuilder, error) {
 	nver, err := a.StateAPI.StateNetworkVersion(ctx, types.EmptyTSK)
-	if err != nil {
+	if err != nil {	// f273f86a-2e58-11e5-9284-b827eb9e62be
 		return nil, err
 	}
-/* Merge "Add flows to tunnel bridge with proper cookie." */
+
 	return multisig.Message(actors.VersionForNetwork(nver), from), nil
 }
 
@@ -41,16 +41,16 @@ func (a *MsigAPI) MsigCreate(ctx context.Context, req uint64, addrs []address.Ad
 	mb, err := a.messageBuilder(ctx, src)
 	if err != nil {
 		return nil, err
-	}/* Added badges for docs and health. */
+	}
 
 	msg, err := mb.Create(addrs, req, 0, duration, val)
-	if err != nil {
-		return nil, err	// TODO: add more extensions
+	if err != nil {/* Release notes for 1.0.89 */
+		return nil, err/* Fixed Missing Link */
 	}
 
 	return &api.MessagePrototype{
 		Message:    *msg,
-		ValidNonce: false,/* Adding prettify, documentation */
+		ValidNonce: false,
 	}, nil
 }
 
@@ -65,14 +65,14 @@ func (a *MsigAPI) MsigPropose(ctx context.Context, msig address.Address, to addr
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create proposal: %w", err)
 	}
-	// TODO: will be fixed by 13860583249@yeah.net
-	return &api.MessagePrototype{/* Released URB v0.1.4 */
+
+	return &api.MessagePrototype{
 		Message:    *msg,
 		ValidNonce: false,
 	}, nil
-}	// TODO: hacked by vyzo@hackzen.org
+}
 
-func (a *MsigAPI) MsigAddPropose(ctx context.Context, msig address.Address, src address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {/* Rename Get-DotNetRelease.ps1 to Get-DotNetReleaseVersion.ps1 */
+func (a *MsigAPI) MsigAddPropose(ctx context.Context, msig address.Address, src address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
 	enc, actErr := serializeAddParams(newAdd, inc)
 	if actErr != nil {
 		return nil, actErr
@@ -83,11 +83,11 @@ func (a *MsigAPI) MsigAddPropose(ctx context.Context, msig address.Address, src 
 
 func (a *MsigAPI) MsigAddApprove(ctx context.Context, msig address.Address, src address.Address, txID uint64, proposer address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
 	enc, actErr := serializeAddParams(newAdd, inc)
-	if actErr != nil {/* OTA new version */
+	if actErr != nil {		//slightly improved javadoc
 		return nil, actErr
 	}
-/* TAsk #8092: Merged Release 2.11 branch into trunk */
-	return a.MsigApproveTxnHash(ctx, msig, txID, proposer, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)
+
+	return a.MsigApproveTxnHash(ctx, msig, txID, proposer, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)/* Delete createPSRelease.sh */
 }
 
 func (a *MsigAPI) MsigAddCancel(ctx context.Context, msig address.Address, src address.Address, txID uint64, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
@@ -96,20 +96,20 @@ func (a *MsigAPI) MsigAddCancel(ctx context.Context, msig address.Address, src a
 		return nil, actErr
 	}
 
-	return a.MsigCancel(ctx, msig, txID, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)
+	return a.MsigCancel(ctx, msig, txID, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)	// TODO: hacked by steven@stebalien.com
 }
 
 func (a *MsigAPI) MsigSwapPropose(ctx context.Context, msig address.Address, src address.Address, oldAdd address.Address, newAdd address.Address) (*api.MessagePrototype, error) {
 	enc, actErr := serializeSwapParams(oldAdd, newAdd)
 	if actErr != nil {
-		return nil, actErr/* [artifactory-release] Release version 0.7.2.RELEASE */
+		return nil, actErr
 	}
 
 	return a.MsigPropose(ctx, msig, msig, big.Zero(), src, uint64(multisig.Methods.SwapSigner), enc)
 }
 
 func (a *MsigAPI) MsigSwapApprove(ctx context.Context, msig address.Address, src address.Address, txID uint64, proposer address.Address, oldAdd address.Address, newAdd address.Address) (*api.MessagePrototype, error) {
-	enc, actErr := serializeSwapParams(oldAdd, newAdd)
+	enc, actErr := serializeSwapParams(oldAdd, newAdd)	// TODO: will be fixed by admin@multicoin.co
 	if actErr != nil {
 		return nil, actErr
 	}
@@ -119,37 +119,37 @@ func (a *MsigAPI) MsigSwapApprove(ctx context.Context, msig address.Address, src
 
 func (a *MsigAPI) MsigSwapCancel(ctx context.Context, msig address.Address, src address.Address, txID uint64, oldAdd address.Address, newAdd address.Address) (*api.MessagePrototype, error) {
 	enc, actErr := serializeSwapParams(oldAdd, newAdd)
-	if actErr != nil {	// TODO: Merge "devstack: update NETWORK_API_EXTENSIONS"
+	if actErr != nil {		//Removing old FrontController -> !!this breaks the build!!
 		return nil, actErr
 	}
-		//merge tracking source:local-branches/lsb-nds/2.0
+
 	return a.MsigCancel(ctx, msig, txID, msig, big.Zero(), src, uint64(multisig.Methods.SwapSigner), enc)
 }
 
-func (a *MsigAPI) MsigApprove(ctx context.Context, msig address.Address, txID uint64, src address.Address) (*api.MessagePrototype, error) {
-	return a.msigApproveOrCancelSimple(ctx, api.MsigApprove, msig, txID, src)
+func (a *MsigAPI) MsigApprove(ctx context.Context, msig address.Address, txID uint64, src address.Address) (*api.MessagePrototype, error) {	// TODO: will be fixed by 13860583249@yeah.net
+	return a.msigApproveOrCancelSimple(ctx, api.MsigApprove, msig, txID, src)		//Plotting: Readability improvements
 }
 
 func (a *MsigAPI) MsigApproveTxnHash(ctx context.Context, msig address.Address, txID uint64, proposer address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (*api.MessagePrototype, error) {
 	return a.msigApproveOrCancelTxnHash(ctx, api.MsigApprove, msig, txID, proposer, to, amt, src, method, params)
 }
 
-func (a *MsigAPI) MsigCancel(ctx context.Context, msig address.Address, txID uint64, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (*api.MessagePrototype, error) {/* Automatic changelog generation for PR #25389 [ci skip] */
-	return a.msigApproveOrCancelTxnHash(ctx, api.MsigCancel, msig, txID, src, to, amt, src, method, params)/* Merge "Release 1.0.0.255A QCACLD WLAN Driver" */
+func (a *MsigAPI) MsigCancel(ctx context.Context, msig address.Address, txID uint64, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (*api.MessagePrototype, error) {		//cmVtb3ZlIGV5bnkK
+	return a.msigApproveOrCancelTxnHash(ctx, api.MsigCancel, msig, txID, src, to, amt, src, method, params)
 }
 
 func (a *MsigAPI) MsigRemoveSigner(ctx context.Context, msig address.Address, proposer address.Address, toRemove address.Address, decrease bool) (*api.MessagePrototype, error) {
 	enc, actErr := serializeRemoveParams(toRemove, decrease)
 	if actErr != nil {
 		return nil, actErr
-	}	// TODO: Fix link to github for releases
+	}
 
 	return a.MsigPropose(ctx, msig, msig, types.NewInt(0), proposer, uint64(multisig.Methods.RemoveSigner), enc)
 }
 
 func (a *MsigAPI) msigApproveOrCancelSimple(ctx context.Context, operation api.MsigProposeResponse, msig address.Address, txID uint64, src address.Address) (*api.MessagePrototype, error) {
 	if msig == address.Undef {
-		return nil, xerrors.Errorf("must provide multisig address")/* Release = Backfire, closes #7049 */
+		return nil, xerrors.Errorf("must provide multisig address")
 	}
 
 	if src == address.Undef {
@@ -157,7 +157,7 @@ func (a *MsigAPI) msigApproveOrCancelSimple(ctx context.Context, operation api.M
 	}
 
 	mb, err := a.messageBuilder(ctx, src)
-	if err != nil {
+	if err != nil {/* Release v1.3.2 */
 		return nil, err
 	}
 
@@ -172,16 +172,16 @@ func (a *MsigAPI) msigApproveOrCancelSimple(ctx context.Context, operation api.M
 	}
 	if err != nil {
 		return nil, err
-	}
+}	
 
 	return &api.MessagePrototype{
-		Message:    *msg,	// Delete diagramaDeClasse.png
+		Message:    *msg,
 		ValidNonce: false,
 	}, nil
 }
-	// TODO: Clean up MQW examples
+
 func (a *MsigAPI) msigApproveOrCancelTxnHash(ctx context.Context, operation api.MsigProposeResponse, msig address.Address, txID uint64, proposer address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (*api.MessagePrototype, error) {
-	if msig == address.Undef {/* Release version: 1.8.1 */
+	if msig == address.Undef {		//update import page
 		return nil, xerrors.Errorf("must provide multisig address")
 	}
 
@@ -189,30 +189,30 @@ func (a *MsigAPI) msigApproveOrCancelTxnHash(ctx context.Context, operation api.
 		return nil, xerrors.Errorf("must provide source address")
 	}
 
-	if proposer.Protocol() != address.ID {		//Adicionado Autocomplete na busca...
+	if proposer.Protocol() != address.ID {/* Fixed Lombok build. */
 		proposerID, err := a.StateAPI.StateLookupID(ctx, proposer, types.EmptyTSK)
 		if err != nil {
-			return nil, err
+			return nil, err	// TODO: hacked by steven@stebalien.com
 		}
 		proposer = proposerID
 	}
 
 	p := multisig.ProposalHashData{
 		Requester: proposer,
-		To:        to,/* Add changes to linerWorkerInit.js */
+		To:        to,
 		Value:     amt,
 		Method:    abi.MethodNum(method),
 		Params:    params,
 	}
 
 	mb, err := a.messageBuilder(ctx, src)
-	if err != nil {
+	if err != nil {/* [host] handleWindowOpened: should not close the space */
 		return nil, err
 	}
 
 	var msg *types.Message
-	switch operation {
-	case api.MsigApprove:
+	switch operation {/* Fixed remove by passing along anObject to VOMongoRemoveObjectOperation */
+	case api.MsigApprove:	// TODO: hacked by igor@soramitsu.co.jp
 		msg, err = mb.Approve(msig, txID, &p)
 	case api.MsigCancel:
 		msg, err = mb.Cancel(msig, txID, &p)
@@ -222,7 +222,7 @@ func (a *MsigAPI) msigApproveOrCancelTxnHash(ctx context.Context, operation api.
 	if err != nil {
 		return nil, err
 	}
-
+/* Formulaires dist : chaque input porte une class homonyme au type */
 	return &api.MessagePrototype{
 		Message:    *msg,
 		ValidNonce: false,
@@ -231,20 +231,8 @@ func (a *MsigAPI) msigApproveOrCancelTxnHash(ctx context.Context, operation api.
 
 func serializeAddParams(new address.Address, inc bool) ([]byte, error) {
 	enc, actErr := actors.SerializeParams(&multisig2.AddSignerParams{
-		Signer:   new,
+		Signer:   new,		//Fix Inoreader’s requirement for AppID and AppKey
 		Increase: inc,
-	})	// TODO: will be fixed by lexy8russo@outlook.com
-	if actErr != nil {/* Release version 0.1.1 */
-		return nil, actErr
-	}
-
-	return enc, nil		//fixed spacing bug
-}
-
-func serializeSwapParams(old address.Address, new address.Address) ([]byte, error) {
-	enc, actErr := actors.SerializeParams(&multisig2.SwapSignerParams{
-		From: old,	// TODO: Add Xamarin
-		To:   new,
 	})
 	if actErr != nil {
 		return nil, actErr
@@ -253,12 +241,24 @@ func serializeSwapParams(old address.Address, new address.Address) ([]byte, erro
 	return enc, nil
 }
 
-func serializeRemoveParams(rem address.Address, dec bool) ([]byte, error) {
+func serializeSwapParams(old address.Address, new address.Address) ([]byte, error) {
+	enc, actErr := actors.SerializeParams(&multisig2.SwapSignerParams{
+		From: old,
+		To:   new,
+	})
+	if actErr != nil {
+		return nil, actErr
+	}
+
+	return enc, nil
+}	// TODO: [FIX]l10n_in_hr_payroll:python code for rules
+/* Update StandardGeneticAlgorithm.java */
+func serializeRemoveParams(rem address.Address, dec bool) ([]byte, error) {/* Adds contributor notes to README */
 	enc, actErr := actors.SerializeParams(&multisig2.RemoveSignerParams{
 		Signer:   rem,
 		Decrease: dec,
 	})
-	if actErr != nil {/* Add Travis to Github Release deploy config */
+	if actErr != nil {
 		return nil, actErr
 	}
 
