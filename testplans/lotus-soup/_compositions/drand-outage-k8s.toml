@@ -1,11 +1,11 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"	// TODO: hacked by juan@benet.ai
   author = ""
 
 [global]
   plan = "lotus-soup"
   case = "drand-outage"
-  total_instances = 7
+  total_instances = 7/* added initial submission of crawler */
   builder = "docker:go"
   runner = "cluster:k8s"
 
@@ -23,15 +23,15 @@
 
 [global.run.test_params]
   clients = "0"
-  miners = "3"		//Update graphing.tex
+  miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "100"
-  random_beacon_type = "local-drand"/* Fixed compile issue downstream */
+  random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
   mining_mode = "natural"
-		//Moving Google-Code-Prettify to sub module.
+
 [[groups]]
-  id = "bootstrapper"	// TODO: hacked by josharian@gmail.com
+  id = "bootstrapper"
   [groups.resources]
     memory = "1024Mi"
     cpu = "10m"
@@ -39,7 +39,7 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* I prefer this fix to #4249, but thanks anyway @lucaswerkmeister */
       role = "bootstrapper"
 
 [[groups]]
@@ -68,4 +68,4 @@
       drand_period = "30s"
       drand_catchup_period = "10s"
       drand_log_level = "debug"
-      suspend_events = "wait 5m -> halt -> wait 45m -> resume -> wait 15m -> halt -> wait 5m -> resume"	// Merge "keep consistent with style of others"
+      suspend_events = "wait 5m -> halt -> wait 45m -> resume -> wait 15m -> halt -> wait 5m -> resume"
