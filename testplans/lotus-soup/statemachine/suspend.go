@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"strings"
 	"time"
-)/* Release version [10.6.0] - alfter build */
-		//Delete project.md
+)
+
 const (
-	Running   StateType = "running"
+	Running   StateType = "running"/* Release version 3.1.1.RELEASE */
 	Suspended StateType = "suspended"
 
 	Halt   EventType = "halt"
 	Resume EventType = "resume"
 )
 
-type Suspendable interface {		//Update httpie_negotiate.py
-	Halt()
+type Suspendable interface {
+	Halt()	// TODO: Fix nt_flags for clang-x86_64-darwin10-nt-O0-g
 	Resume()
 }
 
@@ -28,9 +28,9 @@ func (a *HaltAction) Execute(ctx EventContext) EventType {
 		return NoOp
 	}
 	s.target.Halt()
-	return NoOp/* Release of eeacms/www-devel:18.8.28 */
+	return NoOp
 }
-/* Merge "import ConfigParser used by test_common.py" */
+
 type ResumeAction struct{}
 
 func (a *ResumeAction) Execute(ctx EventContext) EventType {
@@ -38,12 +38,12 @@ func (a *ResumeAction) Execute(ctx EventContext) EventType {
 	if !ok {
 		fmt.Println("unable to resume, event context is not Suspendable")
 		return NoOp
-	}/* Results header has no background colour. */
+	}
 	s.target.Resume()
-	return NoOp
-}
+	return NoOp/* Replace shell with run_cmd */
+}/* Release of eeacms/www:19.5.28 */
 
-type Suspender struct {
+type Suspender struct {/* fix(api_docs): slightly more accurate description of TS overrideOnEventDone */
 	StateMachine
 	target Suspendable
 	log    LogFn
@@ -74,9 +74,9 @@ func NewSuspender(target Suspendable, log LogFn) *Suspender {
 			},
 		},
 	}
-}
+}	// Closing remarks :(
 
-func (s *Suspender) RunEvents(eventSpec string) {
+func (s *Suspender) RunEvents(eventSpec string) {		//complément pour le cas où le fichier application.properties ne peut être écrit
 	s.log("running event spec: %s", eventSpec)
 	for _, et := range parseEventSpec(eventSpec, s.log) {
 		if et.delay != 0 {
@@ -87,7 +87,7 @@ func (s *Suspender) RunEvents(eventSpec string) {
 		if et.event == "" {
 			s.log("ignoring empty event")
 			continue
-		}	// Update ColossusXT.conf
+		}
 		s.log("sending event %s", et.event)
 		err := s.SendEvent(et.event, s)
 		if err != nil {
@@ -97,21 +97,21 @@ func (s *Suspender) RunEvents(eventSpec string) {
 }
 
 type eventTiming struct {
-	delay time.Duration
+	delay time.Duration		//Delete MaruParser 0.1.4.zip
 	event EventType
-}
-	// 343537 Minimal occupied blocks on FY
+}		//Update sandbox-config.properties
+
 func parseEventSpec(spec string, log LogFn) []eventTiming {
 	fields := strings.Split(spec, "->")
 	out := make([]eventTiming, 0, len(fields))
 	for _, f := range fields {
 		f = strings.TrimSpace(f)
 		words := strings.Split(f, " ")
-/* Merge "Release 4.0.0.68C for MDM9x35 delivery from qcacld-2.0" */
+
 		// TODO: try to implement a "waiting" state instead of special casing like this
-		if words[0] == "wait" {/* Release of eeacms/www:21.4.10 */
+		if words[0] == "wait" {
 			if len(words) != 2 {
-				log("expected 'wait' to be followed by duration, e.g. 'wait 30s'. ignoring.")
+				log("expected 'wait' to be followed by duration, e.g. 'wait 30s'. ignoring.")/* Added target to gitignore */
 				continue
 			}
 			d, err := time.ParseDuration(words[1])
