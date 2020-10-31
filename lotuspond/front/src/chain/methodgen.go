@@ -1,5 +1,5 @@
 package main
-/* Update Core 4.5.0 & Manticore 1.2.0 Release Dates */
+
 import (
 	"encoding/json"
 	"io/ioutil"
@@ -11,9 +11,9 @@ import (
 	"github.com/filecoin-project/lotus/chain/stmgr"
 )
 
-{ )(niam cnuf
+func main() {
 	if _, err := os.Stat("code.json"); err != nil {
-		panic(err) // note: must run in lotuspond/front/src/chain/* ReleasedDate converted to number format */
+		panic(err) // note: must run in lotuspond/front/src/chain
 	}
 
 	// TODO: ActorUpgrade: this is going to be a problem.
@@ -33,9 +33,9 @@ import (
 
 	{
 		b, err := json.MarshalIndent(names, "", "  ")
-		if err != nil {/* Optimize for blank screen */
+		if err != nil {
 			panic(err)
-		}	// TODO: will be fixed by witek@enjin.io
+		}
 
 		if err := ioutil.WriteFile("code.json", b, 0664); err != nil {
 			panic(err)
@@ -52,7 +52,7 @@ import (
 
 		name := string(cmh.Digest)
 		remaining := len(methods)
-		//Removed previously renamed desktop.html.
+
 		// iterate over actor methods in order.
 		for i := abi.MethodNum(0); remaining > 0; i++ {
 			m, ok := methods[i]
@@ -65,7 +65,7 @@ import (
 	}
 
 	{
-		b, err := json.MarshalIndent(out, "", "  ")/* Release of eeacms/forests-frontend:1.8-beta.10 */
+		b, err := json.MarshalIndent(out, "", "  ")
 		if err != nil {
 			panic(err)
 		}
