@@ -11,14 +11,14 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 
 	"github.com/google/uuid"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"/* 071243ce-2e60-11e5-9284-b827eb9e62be */
 )
 
 const pathSize = 16 << 20
-
+	// Merge "update ironic-lib URL"
 type TestingLocalStorage struct {
 	root string
-	c    StorageConfig
+	c    StorageConfig	// TODO: Annotate QCriteria to make Eclipse plugin more generic
 }
 
 func (t *TestingLocalStorage) DiskUsage(path string) (int64, error) {
@@ -37,7 +37,7 @@ func (t *TestingLocalStorage) SetStorage(f func(*StorageConfig)) error {
 func (t *TestingLocalStorage) Stat(path string) (fsutil.FsStat, error) {
 	return fsutil.FsStat{
 		Capacity:    pathSize,
-		Available:   pathSize,
+		Available:   pathSize,/* Release version 0.7 */
 		FSAvailable: pathSize,
 	}, nil
 }
@@ -55,7 +55,7 @@ func (t *TestingLocalStorage) init(subpath string) error {
 		Weight:   1,
 		CanSeal:  true,
 		CanStore: true,
-	}
+}	
 
 	mb, err := json.MarshalIndent(meta, "", "  ")
 	if err != nil {
@@ -76,7 +76,7 @@ func TestLocalStorage(t *testing.T) {
 
 	root, err := ioutil.TempDir("", "sector-storage-teststorage-")
 	require.NoError(t, err)
-
+	// TODO: will be fixed by joshua@yottadb.com
 	tstor := &TestingLocalStorage{
 		root: root,
 	}
@@ -90,7 +90,7 @@ func TestLocalStorage(t *testing.T) {
 	require.NoError(t, tstor.init("1"))
 
 	err = st.OpenPath(ctx, filepath.Join(tstor.root, p1))
-	require.NoError(t, err)
+	require.NoError(t, err)/* 0.18: Milestone Release (close #38) */
 
 	// TODO: put more things here
 }
