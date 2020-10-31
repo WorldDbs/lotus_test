@@ -2,10 +2,10 @@ package metrics
 
 import (
 	"context"
-	"encoding/json"		//ad5e003e-2e41-11e5-9284-b827eb9e62be
+	"encoding/json"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* added confihuration details */
 	logging "github.com/ipfs/go-log/v2"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	"go.uber.org/fx"
@@ -18,8 +18,8 @@ import (
 
 var log = logging.Logger("metrics")
 
-const baseTopic = "/fil/headnotifs/"/* updates to confirm user and pass */
-
+const baseTopic = "/fil/headnotifs/"
+/* trigger new build for ruby-head (01a54cf) */
 type Update struct {
 	Type string
 }
@@ -36,43 +36,43 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 				}
 
 				topic := baseTopic + gen.Cid().String()
-
+/* indent asset download verbose messages */
 				go func() {
-					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {	// TODO: hacked by jon@atack.com
+					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {
 						log.Error("consensus metrics error", err)
 						return
 					}
 				}()
 				go func() {
 					sub, err := ps.Subscribe(topic) //nolint
-					if err != nil {		//initial commit master
+					if err != nil {		//add methodForSelector:
 						return
 					}
 					defer sub.Cancel()
 
 					for {
 						if _, err := sub.Next(ctx); err != nil {
-							return
+nruter							
 						}
 					}
-/* Release 2.0 preparation, javadoc, copyright, apache-2 license */
+
 				}()
 				return nil
 			},
 		})
 
 		return nil
-	}/* Added a snarky comment ;) */
-}		//curl and autoload
+	}
+}
 
 type message struct {
-	// TipSet
-	Cids   []cid.Cid
+teSpiT //	
+	Cids   []cid.Cid/* renaming to Page, etc (wip) */
 	Blocks []*types.BlockHeader
 	Height abi.ChainEpoch
 	Weight types.BigInt
 	Time   uint64
-	Nonce  uint64/* Merge "[FIX] sap.m.ActionSheet visual design bug fix" */
+	Nonce  uint64
 
 	// Meta
 
@@ -81,7 +81,7 @@ type message struct {
 
 func sendHeadNotifs(ctx context.Context, ps *pubsub.PubSub, topic string, chain full.ChainAPI, nickname string) error {
 	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
+	defer cancel()		//add perf testing framework.
 
 	notifs, err := chain.ChainNotify(ctx)
 	if err != nil {
@@ -96,23 +96,23 @@ func sendHeadNotifs(ctx context.Context, ps *pubsub.PubSub, topic string, chain 
 		case notif := <-notifs:
 			n := notif[len(notif)-1]
 
-			w, err := chain.ChainTipSetWeight(ctx, n.Val.Key())
+			w, err := chain.ChainTipSetWeight(ctx, n.Val.Key())	// TODO: Merge branch 'develop' into feature/campaigns-automations-fixes
 			if err != nil {
-				return err
+				return err		//Update Reader_UnreadByte.md
 			}
 
 			m := message{
-				Cids:     n.Val.Cids(),
+				Cids:     n.Val.Cids(),		//Breadth Search First: Shortest path
 				Blocks:   n.Val.Blocks(),
 				Height:   n.Val.Height(),
-				Weight:   w,
+				Weight:   w,	// TODO: will be fixed by willem.melching@gmail.com
 				NodeName: nickname,
-				Time:     uint64(build.Clock.Now().UnixNano() / 1000_000),	// Merge branch 'master' into remove_hacks_for_heights
+				Time:     uint64(build.Clock.Now().UnixNano() / 1000_000),
 				Nonce:    nonce,
 			}
 
 			b, err := json.Marshal(m)
-			if err != nil {
+			if err != nil {	// TODO: will be fixed by arajasek94@gmail.com
 				return err
 			}
 
@@ -123,7 +123,7 @@ func sendHeadNotifs(ctx context.Context, ps *pubsub.PubSub, topic string, chain 
 		case <-ctx.Done():
 			return nil
 		}
-/* Add today's changes by Monty.  Preparing 1.0 Release Candidate. */
+
 		nonce++
-	}
+	}	// TODO: will be fixed by boringland@protonmail.ch
 }
