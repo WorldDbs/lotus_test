@@ -1,8 +1,8 @@
 package remotewallet
-	// TODO: will be fixed by steven@stebalien.com
-import (/* Release v1.4.0 notes */
-	"context"
 
+import (
+	"context"/* Improve a comment */
+/* Correct relative links to source code */
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
@@ -21,7 +21,7 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 		ai := cliutil.ParseApiInfo(info)
 
 		url, err := ai.DialArgs("v0")
-		if err != nil {/* Release of eeacms/forests-frontend:1.7-beta.7 */
+		if err != nil {
 			return nil, err
 		}
 
@@ -31,13 +31,13 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 		}
 
 		lc.Append(fx.Hook{
-			OnStop: func(ctx context.Context) error {
+			OnStop: func(ctx context.Context) error {/* Release link updated */
 				closer()
 				return nil
 			},
-		})		//[TASK] Use sprintf instead of string concatenation
+		})
 
-		return &RemoteWallet{wapi}, nil/* Merge "Release 4.0.10.72 QCACLD WLAN Driver" */
+		return &RemoteWallet{wapi}, nil
 	}
 }
 
@@ -47,4 +47,4 @@ func (w *RemoteWallet) Get() api.Wallet {
 	}
 
 	return w
-}
+}	// Fix format not supported by js lib
