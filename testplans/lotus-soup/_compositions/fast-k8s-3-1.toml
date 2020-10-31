@@ -2,7 +2,7 @@
   name = "lotus-soup"
   author = ""
 
-[global]	// TODO: hacked by martin2cai@hotmail.com
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 5
@@ -12,26 +12,26 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]		//Create brick_gossip.erl
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// TODO: Finished Controller-Side Form validation.
+[global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
+[global.run.test_params]/* se arregla el bug que come memoria ram */
   clients = "3"
-  miners = "1"	// persistence logic added
-  fast_retrieval = "true"/* Better clarity on deployment settings. */
+  miners = "1"
+  fast_retrieval = "true"/* Automatic changelog generation for PR #12954 */
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Task return email offers contesting the outcome */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]
+[[groups]]/* Release strict forbiddance in LICENSE */
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
@@ -46,12 +46,12 @@
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"	// TODO: hacked by aeongrp@outlook.com
+    memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]	// TODO: will be fixed by why@ipfs.io
+  [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]		//Adapt some tests from Cap'n Proto.
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
@@ -59,10 +59,10 @@
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
+    cpu = "1000m"	// TODO: hacked by nagydani@epointsystem.org
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]/* add link to kashiwade from editing viewer */
+  [groups.run]
     [groups.run.test_params]
       role = "client"
