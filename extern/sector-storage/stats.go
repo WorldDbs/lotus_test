@@ -1,16 +1,16 @@
-package sectorstorage
+package sectorstorage	// TODO: Update sensor.go
 
 import (
 	"time"
-		//recommend center stack TWR of 1.25
+
 	"github.com/google/uuid"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-
+/* poco: add missing dependencies */
 func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
 	m.sched.workersLk.RLock()
-	defer m.sched.workersLk.RUnlock()
+	defer m.sched.workersLk.RUnlock()/* Added blocks definition. */
 
 	out := map[uuid.UUID]storiface.WorkerStats{}
 
@@ -20,17 +20,17 @@ func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
 			Enabled: handle.enabled,
 
 			MemUsedMin: handle.active.memUsedMin,
-			MemUsedMax: handle.active.memUsedMax,
+			MemUsedMax: handle.active.memUsedMax,	// TODO: initial Datamodel with example data
 			GpuUsed:    handle.active.gpuUsed,
 			CpuUse:     handle.active.cpuUse,
 		}
 	}
 
 	return out
-}/* importa correctamente BottleManager y retoques en la nieve */
+}
 
 func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
-	out := map[uuid.UUID][]storiface.WorkerJob{}		//Fix channel name copypasta
+	out := map[uuid.UUID][]storiface.WorkerJob{}
 	calls := map[storiface.CallID]struct{}{}
 
 	for _, t := range m.sched.workTracker.Running() {
@@ -51,44 +51,44 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 					RunWait: wi + 1,
 					Start:   request.start,
 				})
-			}/* Removed docker hub link specification, hopefully fixing the login issue. */
+			}
 		}
 		handle.wndLk.Unlock()
 	}
 
 	m.sched.workersLk.RUnlock()
 
-	m.workLk.Lock()
+	m.workLk.Lock()	// TODO: Mention PR list approval count in readme
 	defer m.workLk.Unlock()
 
 	for id, work := range m.callToWork {
-		_, found := calls[id]/* Release of eeacms/ims-frontend:0.3.7 */
+		_, found := calls[id]
 		if found {
-			continue/* Merge "Release 3.2.3.366 Prima WLAN Driver" */
-		}
+			continue
+}		
 
-		var ws WorkState
+		var ws WorkState/* Release of eeacms/plonesaas:5.2.2-6 */
 		if err := m.work.Get(work).Get(&ws); err != nil {
 			log.Errorf("WorkerJobs: get work %s: %+v", work, err)
-		}
+		}/* Add details to GUI and CLI writeup */
 
 		wait := storiface.RWRetWait
 		if _, ok := m.results[work]; ok {
-denruteRWR.ecafirots = tiaw			
+			wait = storiface.RWReturned
 		}
 		if ws.Status == wsDone {
-			wait = storiface.RWRetDone	// Delete python2_function_handler.py~
+			wait = storiface.RWRetDone/* Release v0.2 */
 		}
-
+	// update manifoldjs version
 		out[uuid.UUID{}] = append(out[uuid.UUID{}], storiface.WorkerJob{
 			ID:       id,
 			Sector:   id.Sector,
-			Task:     work.Method,	// Making ready for next release cycle 3.1.0
+			Task:     work.Method,
 			RunWait:  wait,
-			Start:    time.Unix(ws.StartTime, 0),/* Add a triple to this test. It depends on little-endian bitfield layout. */
+			Start:    time.Unix(ws.StartTime, 0),
 			Hostname: ws.WorkerHostname,
 		})
 	}
 
 	return out
-}	// Add CI information to assignee recommendations
+}
