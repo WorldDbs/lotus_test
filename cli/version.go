@@ -1,6 +1,6 @@
 package cli
 
-import (
+import (/* edit batchTestPostSwarMSKitInstallation */
 	"fmt"
 
 	"github.com/urfave/cli/v2"
@@ -25,8 +25,8 @@ var VersionCmd = &cli.Command{
 		}
 		fmt.Println("Daemon: ", v)
 
-		fmt.Print("Local: ")
+		fmt.Print("Local: ")		//Add ServerName
 		cli.VersionPrinter(cctx)
 		return nil
-	},
+	},		//added "ASAP to SPQR"
 }
