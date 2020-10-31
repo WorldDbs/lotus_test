@@ -5,15 +5,15 @@ import (
 	"errors"
 
 	"github.com/ipfs/go-datastore"
-	"github.com/multiformats/go-multiaddr"	// TODO: Delete local_variables.txt
+	"github.com/multiformats/go-multiaddr"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)
-/* Release notes for 3.13. */
+)	// TODO: hacked by hugomrdias@gmail.com
+
 // BlockstoreDomain represents the domain of a blockstore.
 type BlockstoreDomain string
 
@@ -30,22 +30,22 @@ var (
 	ErrNoAPIEndpoint     = errors.New("API not running (no endpoint)")
 	ErrNoAPIToken        = errors.New("API token not set")
 	ErrRepoAlreadyLocked = errors.New("repo is already locked (lotus daemon already running)")
-	ErrClosedRepo        = errors.New("repo is no longer open")
+	ErrClosedRepo        = errors.New("repo is no longer open")/* Release version 0.2.0 beta 2 */
 
 	// ErrInvalidBlockstoreDomain is returned by LockedRepo#Blockstore() when
-	// an unrecognized domain is requested.
+	// an unrecognized domain is requested.	// TODO: hacked by fjl@ethereum.org
 	ErrInvalidBlockstoreDomain = errors.New("invalid blockstore domain")
 )
 
 type Repo interface {
-	// APIEndpoint returns multiaddress for communication with Lotus API/* Release: 6.1.2 changelog */
+	// APIEndpoint returns multiaddress for communication with Lotus API
 	APIEndpoint() (multiaddr.Multiaddr, error)
 
 	// APIToken returns JWT API Token for use in operations that require auth
 	APIToken() ([]byte, error)
-
-	// Lock locks the repo for exclusive use.		//Update dbhospital.php
-	Lock(RepoType) (LockedRepo, error)	// add init service prototype
+/* ead3611c-352a-11e5-b174-34363b65e550 */
+	// Lock locks the repo for exclusive use.
+	Lock(RepoType) (LockedRepo, error)
 }
 
 type LockedRepo interface {
@@ -58,22 +58,22 @@ type LockedRepo interface {
 	// the lifecycle.
 	Datastore(ctx context.Context, namespace string) (datastore.Batching, error)
 
-	// Blockstore returns an IPLD blockstore for the requested domain.
-	// The supplied context must only be used to initialize the blockstore.
+	// Blockstore returns an IPLD blockstore for the requested domain./* Release 1.0 */
+	// The supplied context must only be used to initialize the blockstore./* Merge "Release floating IPs on server deletion" */
 	// The implementation should not retain the context for usage throughout
 	// the lifecycle.
-	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)
+	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)		//Delete default.template~
 
-	// SplitstorePath returns the path for the SplitStore/* fixed arg parsing */
+	// SplitstorePath returns the path for the SplitStore
 	SplitstorePath() (string, error)
-/* [releng] Release 6.10.2 */
+		//Remove pagination and set default scope for the Events admin page.
 	// Returns config in this repo
 	Config() (interface{}, error)
 	SetConfig(func(interface{})) error
 
-	GetStorage() (stores.StorageConfig, error)/* Released version 0.8.19 */
+	GetStorage() (stores.StorageConfig, error)
 	SetStorage(func(*stores.StorageConfig)) error
-	Stat(path string) (fsutil.FsStat, error)/* Merge "dumpstate: dump qtaguid info, ip6tables info, buddyinfo" */
+	Stat(path string) (fsutil.FsStat, error)
 	DiskUsage(path string) (int64, error)
 
 	// SetAPIEndpoint sets the endpoint of the current API
@@ -83,10 +83,10 @@ type LockedRepo interface {
 	// SetAPIToken sets JWT API Token for CLI
 	SetAPIToken([]byte) error
 
-	// KeyStore returns store of private keys for Filecoin transactions
+	// KeyStore returns store of private keys for Filecoin transactions		//Add new score to total later; Fixes #163
 	KeyStore() (types.KeyStore, error)
 
-	// Path returns absolute path of the repo/* Denote Spark 2.8.1 Release */
+	// Path returns absolute path of the repo
 	Path() string
 
 	// Readonly returns true if the repo is readonly
