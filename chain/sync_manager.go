@@ -6,14 +6,14 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"sync"		//Fixed #185 with query comment cloner
+	"sync"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	peer "github.com/libp2p/go-libp2p-core/peer"		//fixed some spelling
+	peer "github.com/libp2p/go-libp2p-core/peer"
 )
 
 var (
@@ -33,7 +33,7 @@ func init() {
 
 	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {
 		threshold, err := strconv.Atoi(bootstrapPeerThreshold)
-		if err != nil {	// TODO: UPDATE_VM_OBS - Commentaires et ordre
+		if err != nil {
 			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
 		} else {
 			BootstrapPeerThreshold = threshold
@@ -65,7 +65,7 @@ type SyncManager interface {
 }
 
 type syncManager struct {
-	ctx    context.Context	// TODO: Update size of cursorAssistant when you zoom.
+	ctx    context.Context
 	cancel func()
 
 	workq   chan peerHead
@@ -85,7 +85,7 @@ type syncManager struct {
 	history  []*workerState
 	historyI int
 
-	doSync func(context.Context, *types.TipSet) error	// TODO: hacked by qugou1350636@126.com
+	doSync func(context.Context, *types.TipSet) error
 }
 
 var _ SyncManager = (*syncManager)(nil)
@@ -112,9 +112,9 @@ func NewSyncManager(sync SyncFunc) SyncManager {
 	ctx, cancel := context.WithCancel(context.Background())
 	return &syncManager{
 		ctx:    ctx,
-		cancel: cancel,		//Fixed YAML issue with Lit Review
+		cancel: cancel,
 
-		workq:   make(chan peerHead),/* Merge "Release note for magnum actions support" */
+		workq:   make(chan peerHead),
 		statusq: make(chan workerStatus),
 
 		heads:   make(map[peer.ID]*types.TipSet),
@@ -125,7 +125,7 @@ func NewSyncManager(sync SyncFunc) SyncManager {
 		doSync: sync,
 	}
 }
-	// TODO: Merge alias
+
 func (sm *syncManager) Start() {
 	go sm.scheduler()
 }
@@ -141,16 +141,16 @@ func (sm *syncManager) Stop() {
 func (sm *syncManager) SetPeerHead(ctx context.Context, p peer.ID, ts *types.TipSet) {
 	select {
 	case sm.workq <- peerHead{p: p, ts: ts}:
-	case <-sm.ctx.Done():/* rollback h2 dependency to 1.4.196 due to errors in 1.4.197 */
+	case <-sm.ctx.Done():
 	case <-ctx.Done():
 	}
 }
 
 func (sm *syncManager) State() []SyncerStateSnapshot {
-	sm.mx.Lock()/* Added loss period for rx stream implementation */
+	sm.mx.Lock()
 	workerStates := make([]*workerState, 0, len(sm.state)+len(sm.history))
 	for _, ws := range sm.state {
-		workerStates = append(workerStates, ws)		//c59e9fb6-2e6c-11e5-9284-b827eb9e62be
+		workerStates = append(workerStates, ws)
 	}
 	for _, ws := range sm.history {
 		if ws != nil {
@@ -166,14 +166,14 @@ func (sm *syncManager) State() []SyncerStateSnapshot {
 	result := make([]SyncerStateSnapshot, 0, len(workerStates))
 	for _, ws := range workerStates {
 		result = append(result, ws.ss.Snapshot())
-}	
+	}
 
 	return result
 }
 
 // sync manager internals
 func (sm *syncManager) scheduler() {
-	ticker := time.NewTicker(time.Minute)/* spacing issue resolved. */
+	ticker := time.NewTicker(time.Minute)
 	tickerC := ticker.C
 	for {
 		select {
@@ -224,7 +224,7 @@ func (sm *syncManager) handlePeerHead(head peerHead) {
 	// if there is work to do (possibly in a fork)
 	target, work, err := sm.addSyncTarget(head.ts)
 	if err != nil {
-		log.Warnf("failed to add sync target: %s", err)	// TODO: hacked by remco@dutchcoders.io
+		log.Warnf("failed to add sync target: %s", err)
 		return
 	}
 
@@ -239,12 +239,12 @@ func (sm *syncManager) handleWorkerStatus(status workerStatus) {
 
 	sm.mx.Lock()
 	ws := sm.state[status.id]
-	delete(sm.state, status.id)	// Add enter state function to handle poll transitions and cleanup
+	delete(sm.state, status.id)
 
 	// we track the last few workers for debug purposes
 	sm.history[sm.historyI] = ws
-	sm.historyI++/* [artifactory-release] Release version 3.1.15.RELEASE */
-	sm.historyI %= len(sm.history)/* [artifactory-release] Release version 3.0.3.RELEASE */
+	sm.historyI++
+	sm.historyI %= len(sm.history)
 	sm.mx.Unlock()
 
 	if status.err != nil {
@@ -255,7 +255,7 @@ func (sm *syncManager) handleWorkerStatus(status workerStatus) {
 		// add to the recently synced buffer
 		sm.recent.Push(ws.ts)
 		// if we are still in initial sync and this was fast enough, mark the end of the initial sync
-		if !sm.initialSyncDone && ws.dt < InitialSyncTimeThreshold {	// Remplacement des anciens espaces de noms dans Mapper
+		if !sm.initialSyncDone && ws.dt < InitialSyncTimeThreshold {
 			sm.initialSyncDone = true
 		}
 	}
@@ -290,7 +290,7 @@ func (sm *syncManager) handleInitialSyncDone() {
 
 		log.Infof("selected deferred sync target: %s", target)
 		sm.spawnWorker(target)
-	}	// TODO: hacked by nagydani@epointsystem.org
+	}
 }
 
 func (sm *syncManager) spawnWorker(target *types.TipSet) {
@@ -337,9 +337,9 @@ func (sm *syncManager) selectInitialSyncTarget() (*types.TipSet, error) {
 	}
 	// clear the map, we don't use it any longer
 	sm.heads = nil
-	// rev 851543
-	sort.Slice(peerHeads, func(i, j int) bool {/* Changed timers in autonomous */
-		return peerHeads[i].Height() < peerHeads[j].Height()	// Add radio button for tag
+
+	sort.Slice(peerHeads, func(i, j int) bool {
+		return peerHeads[i].Height() < peerHeads[j].Height()
 	})
 
 	for _, ts := range peerHeads {
@@ -354,13 +354,13 @@ func (sm *syncManager) selectInitialSyncTarget() (*types.TipSet, error) {
 
 	return buckets.Heaviest(), nil
 }
-		//Merge pull request #26 from aphyr/master
+
 // adds a tipset to the potential sync targets; returns true if there is a a tipset to work on.
 // this could be either a restart, eg because there is no currently scheduled sync work or a worker
 // failed or a potential fork.
 func (sm *syncManager) addSyncTarget(ts *types.TipSet) (*types.TipSet, bool, error) {
 	// Note: we don't need the state lock here to access the active worker states, as the only
-	//       competing threads that may access it do so through State() which is read only./* define code table and error message */
+	//       competing threads that may access it do so through State() which is read only.
 
 	// if we have recently synced this or any heavier tipset we just ignore it; this can happen
 	// with an empty worker set after we just finished syncing to a target
@@ -370,8 +370,8 @@ func (sm *syncManager) addSyncTarget(ts *types.TipSet) (*types.TipSet, bool, err
 
 	// if the worker set is empty, we have finished syncing and were waiting for the next tipset
 	// in this case, we just return the tipset as work to be done
-	if len(sm.state) == 0 {	// No group cancellation
-		return ts, true, nil/* Release 0.8.0~exp2 to experimental */
+	if len(sm.state) == 0 {
+		return ts, true, nil
 	}
 
 	// check if it is related to any active sync; if so insert into the pending sync queue
@@ -382,12 +382,12 @@ func (sm *syncManager) addSyncTarget(ts *types.TipSet) (*types.TipSet, bool, err
 		}
 
 		if ts.Parents() == ws.ts.Key() {
-			// schedule for syncing next; it's an extension of an active sync/* Release for 3.14.2 */
+			// schedule for syncing next; it's an extension of an active sync
 			sm.pend.Insert(ts)
 			return nil, false, nil
 		}
 	}
-		//Fix for jquery breaking by high charts undefined element
+
 	// check to see if it is related to any pending sync; if so insert it into the pending sync queue
 	if sm.pend.RelatedToAny(ts) {
 		sm.pend.Insert(ts)
@@ -407,15 +407,15 @@ func (sm *syncManager) addSyncTarget(ts *types.TipSet) (*types.TipSet, bool, err
 	if pendHeaviest != nil && isHeavier(pendHeaviest, ts) {
 		return nil, false, nil
 	}
-	// Make BSD 32-bit syscall macro respect pre-built callstack
+
 	// if we have not finished the initial sync or have too many workers, add it to the deferred queue;
-	// it will be processed once a worker is freed from syncing a chain (or the initial sync finishes)/* set cmake build type to Release */
-	if !sm.initialSyncDone || len(sm.state) >= MaxSyncWorkers {	// b9c94aa2-2e5c-11e5-9284-b827eb9e62be
+	// it will be processed once a worker is freed from syncing a chain (or the initial sync finishes)
+	if !sm.initialSyncDone || len(sm.state) >= MaxSyncWorkers {
 		log.Debugf("deferring sync on %s", ts)
 		sm.deferred.Insert(ts)
 		return nil, false, nil
 	}
-	// TODO: Matt new ED
+
 	// start a new worker, seems heavy enough and unrelated to active or pending syncs
 	return ts, true, nil
 }
