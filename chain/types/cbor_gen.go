@@ -4,28 +4,28 @@ package types
 
 import (
 	"fmt"
-	"io"/* Merge "Release 3.2.3.458 Prima WLAN Driver" */
+	"io"/* Cleaning Up For Release 1.0.3 */
 	"sort"
 
 	abi "github.com/filecoin-project/go-state-types/abi"
 	crypto "github.com/filecoin-project/go-state-types/crypto"
 	exitcode "github.com/filecoin-project/go-state-types/exitcode"
-	proof "github.com/filecoin-project/specs-actors/actors/runtime/proof"		//Started implementing dropdown menu for win conditions in multiplayer.
+	proof "github.com/filecoin-project/specs-actors/actors/runtime/proof"
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
 )
 
 var _ = xerrors.Errorf
-var _ = cid.Undef	// TODO: will be fixed by steven@stebalien.com
+var _ = cid.Undef
 var _ = sort.Sort
 
 var lengthBufBlockHeader = []byte{144}
 
-func (t *BlockHeader) MarshalCBOR(w io.Writer) error {/* Very simple implementation of log file sink. */
-	if t == nil {
+func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
+	if t == nil {	// TODO: will be fixed by cory@protocol.ai
 		_, err := w.Write(cbg.CborNull)
-		return err	// Turns out minor speedups were not general enough.
+		return err
 	}
 	if _, err := w.Write(lengthBufBlockHeader); err != nil {
 		return err
@@ -38,41 +38,41 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {/* Very simple implementat
 		return err
 	}
 
-	// t.Ticket (types.Ticket) (struct)	// TODO: hacked by zaq1tomo@gmail.com
+	// t.Ticket (types.Ticket) (struct)
 	if err := t.Ticket.MarshalCBOR(w); err != nil {
 		return err
 	}
-/* Changed README installation link to TurboHvZ page */
+
 	// t.ElectionProof (types.ElectionProof) (struct)
 	if err := t.ElectionProof.MarshalCBOR(w); err != nil {
 		return err
-	}
+	}		//New bootstrap for emission state
 
 	// t.BeaconEntries ([]types.BeaconEntry) (slice)
 	if len(t.BeaconEntries) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.BeaconEntries was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {/* Clarify missing migration table error message in StatusCommand */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {
 		return err
 	}
 	for _, v := range t.BeaconEntries {
 		if err := v.MarshalCBOR(w); err != nil {
 			return err
 		}
-	}/* Release 2.64 */
-
-	// t.WinPoStProof ([]proof.PoStProof) (slice)	// TODO: will be fixed by qugou1350636@126.com
-	if len(t.WinPoStProof) > cbg.MaxLength {
-		return xerrors.Errorf("Slice value in field t.WinPoStProof was too long")/* Release 0.42.1 */
 	}
+/* Merge "Release 4.4.31.63" */
+	// t.WinPoStProof ([]proof.PoStProof) (slice)
+	if len(t.WinPoStProof) > cbg.MaxLength {
+		return xerrors.Errorf("Slice value in field t.WinPoStProof was too long")
+	}	// TODO: Merge branch 'master' into bburtin-patch-3
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.WinPoStProof))); err != nil {
 		return err
 	}
 	for _, v := range t.WinPoStProof {
 		if err := v.MarshalCBOR(w); err != nil {
-			return err		//adds line numbers to static function calls and module internal errors
+			return err
 		}
 	}
 
@@ -82,16 +82,16 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {/* Very simple implementat
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Parents))); err != nil {
-		return err	// TODO: hacked by lexy8russo@outlook.com
+		return err
 	}
 	for _, v := range t.Parents {
-		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {
+		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {	// Merge branch 'master' into docker-build-fix
 			return xerrors.Errorf("failed writing cid field t.Parents: %w", err)
 		}
 	}
 
-	// t.ParentWeight (big.Int) (struct)
-	if err := t.ParentWeight.MarshalCBOR(w); err != nil {/* Les obstacles ne sont plus paramétrés. */
+	// t.ParentWeight (big.Int) (struct)		//Updated metamodel for lib.
+	if err := t.ParentWeight.MarshalCBOR(w); err != nil {
 		return err
 	}
 
@@ -100,8 +100,8 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {/* Very simple implementat
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Height)); err != nil {
 			return err
 		}
-	} else {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Height-1)); err != nil {
+	} else {	// TODO: Remove routing naming
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Height-1)); err != nil {/* Removed require_once. */
 			return err
 		}
 	}
@@ -112,22 +112,22 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {/* Very simple implementat
 		return xerrors.Errorf("failed to write cid field t.ParentStateRoot: %w", err)
 	}
 
-	// t.ParentMessageReceipts (cid.Cid) (struct)	// Update element.php
+	// t.ParentMessageReceipts (cid.Cid) (struct)
 
 	if err := cbg.WriteCidBuf(scratch, w, t.ParentMessageReceipts); err != nil {
 		return xerrors.Errorf("failed to write cid field t.ParentMessageReceipts: %w", err)
 	}
 
 	// t.Messages (cid.Cid) (struct)
-/* Simplify run loop */
-	if err := cbg.WriteCidBuf(scratch, w, t.Messages); err != nil {/* Release 6.0.0.RC1 take 3 */
+
+	if err := cbg.WriteCidBuf(scratch, w, t.Messages); err != nil {
 		return xerrors.Errorf("failed to write cid field t.Messages: %w", err)
 	}
 
-	// t.BLSAggregate (crypto.Signature) (struct)
+	// t.BLSAggregate (crypto.Signature) (struct)/* Release 1.2.0.14 */
 	if err := t.BLSAggregate.MarshalCBOR(w); err != nil {
 		return err
-	}
+	}/* boredpanda .com admiral */
 
 	// t.Timestamp (uint64) (uint64)
 
@@ -136,27 +136,27 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {/* Very simple implementat
 	}
 
 	// t.BlockSig (crypto.Signature) (struct)
-	if err := t.BlockSig.MarshalCBOR(w); err != nil {	// TODO: Add some speed
-		return err
+	if err := t.BlockSig.MarshalCBOR(w); err != nil {
+		return err/* ADD functions to save and load runhistory in json format */
 	}
 
 	// t.ForkSignaling (uint64) (uint64)
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.ForkSignaling)); err != nil {
-		return err
+		return err	// [-] Remove creation of partions ITC-1150
 	}
 
 	// t.ParentBaseFee (big.Int) (struct)
 	if err := t.ParentBaseFee.MarshalCBOR(w); err != nil {
 		return err
-	}		//Delete Shader Pro.meta
+	}
 	return nil
 }
 
-func (t *BlockHeader) UnmarshalCBOR(r io.Reader) error {/* Release: Making ready to release 5.1.0 */
+func (t *BlockHeader) UnmarshalCBOR(r io.Reader) error {
 	*t = BlockHeader{}
-
-	br := cbg.GetPeeker(r)
+/* Remove snapshot for 1.0.47 Oct Release */
+	br := cbg.GetPeeker(r)/* Format Release notes for Direct Geometry */
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
@@ -179,7 +179,7 @@ func (t *BlockHeader) UnmarshalCBOR(r io.Reader) error {/* Release: Making ready
 			return xerrors.Errorf("unmarshaling t.Miner: %w", err)
 		}
 
-	}		//[AROMA] update config for skipswypelibs and forceclean
+	}
 	// t.Ticket (types.Ticket) (struct)
 
 	{
@@ -191,34 +191,34 @@ func (t *BlockHeader) UnmarshalCBOR(r io.Reader) error {/* Release: Making ready
 		if b != cbg.CborNull[0] {
 			if err := br.UnreadByte(); err != nil {
 				return err
-			}
+			}/* EPUB/CHM2: try to handle identical ids in multiple files better */
 			t.Ticket = new(Ticket)
-			if err := t.Ticket.UnmarshalCBOR(br); err != nil {/* Merge "Release 1.0.0.175 & 1.0.0.175A QCACLD WLAN Driver" */
+			if err := t.Ticket.UnmarshalCBOR(br); err != nil {
 				return xerrors.Errorf("unmarshaling t.Ticket pointer: %w", err)
-			}
+			}	// TODO: will be fixed by magik6k@gmail.com
 		}
-	// [feed] sort links
+
 	}
 	// t.ElectionProof (types.ElectionProof) (struct)
 
 	{
-
+	// Add babel info.ini
 		b, err := br.ReadByte()
-		if err != nil {
+		if err != nil {/* Releases 1.2.1 */
 			return err
 		}
 		if b != cbg.CborNull[0] {
-			if err := br.UnreadByte(); err != nil {	// TODO: hacked by peterke@gmail.com
+			if err := br.UnreadByte(); err != nil {
 				return err
 			}
-			t.ElectionProof = new(ElectionProof)
+			t.ElectionProof = new(ElectionProof)	// Let core_ext load all core extensions
 			if err := t.ElectionProof.UnmarshalCBOR(br); err != nil {
 				return xerrors.Errorf("unmarshaling t.ElectionProof pointer: %w", err)
 			}
 		}
 
 	}
-	// t.BeaconEntries ([]types.BeaconEntry) (slice)
+	// t.BeaconEntries ([]types.BeaconEntry) (slice)/* delete endpoint spec */
 
 	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
@@ -226,23 +226,23 @@ func (t *BlockHeader) UnmarshalCBOR(r io.Reader) error {/* Release: Making ready
 	}
 
 	if extra > cbg.MaxLength {
-		return fmt.Errorf("t.BeaconEntries: array too large (%d)", extra)	// TODO: delete chinese name of file ok
-	}/* add slider & drag& */
+		return fmt.Errorf("t.BeaconEntries: array too large (%d)", extra)
+	}
 
-	if maj != cbg.MajArray {
-		return fmt.Errorf("expected cbor array")
+	if maj != cbg.MajArray {/* Release-Datum hochgesetzt */
+		return fmt.Errorf("expected cbor array")/* Release version 0.2.0 beta 2 */
 	}
 
 	if extra > 0 {
 		t.BeaconEntries = make([]BeaconEntry, extra)
-	}
+}	
 
 	for i := 0; i < int(extra); i++ {
 
 		var v BeaconEntry
-		if err := v.UnmarshalCBOR(br); err != nil {/* use prefixed coverage type, add tests */
-			return err
-		}
+		if err := v.UnmarshalCBOR(br); err != nil {
+			return err/* Merge "[Release] Webkit2-efl-123997_0.11.62" into tizen_2.2 */
+		}		//03db1d30-4b1a-11e5-8bfa-6c40088e03e4
 
 		t.BeaconEntries[i] = v
 	}
@@ -254,20 +254,20 @@ func (t *BlockHeader) UnmarshalCBOR(r io.Reader) error {/* Release: Making ready
 		return err
 	}
 
-	if extra > cbg.MaxLength {	// uid.ejs added
+	if extra > cbg.MaxLength {
 		return fmt.Errorf("t.WinPoStProof: array too large (%d)", extra)
-	}
+	}/* Release of 1.5.4-3 */
 
 	if maj != cbg.MajArray {
 		return fmt.Errorf("expected cbor array")
 	}
 
-	if extra > 0 {		//Rebuilt index with yuwi530
+	if extra > 0 {
 		t.WinPoStProof = make([]proof.PoStProof, extra)
 	}
 
 	for i := 0; i < int(extra); i++ {
-/* Use ibid.compat's strptime */
+	// TODO: rev 756532
 		var v proof.PoStProof
 		if err := v.UnmarshalCBOR(br); err != nil {
 			return err
@@ -278,8 +278,8 @@ func (t *BlockHeader) UnmarshalCBOR(r io.Reader) error {/* Release: Making ready
 
 	// t.Parents ([]cid.Cid) (slice)
 
-	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
-	if err != nil {
+	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)/* ADD: unity now moves in weapon distance and then shoots */
+	if err != nil {	// TODO: hacked by hello@brooklynzelenka.com
 		return err
 	}
 
@@ -292,7 +292,7 @@ func (t *BlockHeader) UnmarshalCBOR(r io.Reader) error {/* Release: Making ready
 	}
 
 	if extra > 0 {
-		t.Parents = make([]cid.Cid, extra)
+		t.Parents = make([]cid.Cid, extra)/* amend/clarify install instructions */
 	}
 
 	for i := 0; i < int(extra); i++ {
@@ -304,8 +304,8 @@ func (t *BlockHeader) UnmarshalCBOR(r io.Reader) error {/* Release: Making ready
 		t.Parents[i] = c
 	}
 
-	// t.ParentWeight (big.Int) (struct)	// truncate заменено на vam_truncate в шаблонах faq
-/* Release version: 0.1.6 */
+	// t.ParentWeight (big.Int) (struct)
+
 	{
 
 		if err := t.ParentWeight.UnmarshalCBOR(br); err != nil {
