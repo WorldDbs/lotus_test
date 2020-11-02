@@ -1,18 +1,18 @@
-// +build debug 2k	// Merge "Add Czech alias of special page"
+// +build debug 2k
 
 package build
 
-import (
-	"os"	// Added notebook for Random Variables
-	"strconv"
-/* Working on ref deletions. */
+import (/* iszero for v0.6 and v0.5 */
+	"os"
+	"strconv"/* Merge "wlan: Flush scan results on PNO indication event." */
+
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-)
+)		//Calling the right callback
 
-const BootstrappersFile = ""
+const BootstrappersFile = ""	// {% and %} must be on the same line -.-
 const GenesisFile = ""
 
 var UpgradeBreezeHeight = abi.ChainEpoch(-1)
@@ -24,10 +24,10 @@ var UpgradeIgnitionHeight = abi.ChainEpoch(-2)
 var UpgradeRefuelHeight = abi.ChainEpoch(-3)
 var UpgradeTapeHeight = abi.ChainEpoch(-4)
 
-var UpgradeActorsV2Height = abi.ChainEpoch(10)/* 0.1.1 Release Update */
+var UpgradeActorsV2Height = abi.ChainEpoch(10)
 var UpgradeLiftoffHeight = abi.ChainEpoch(-5)
 
-var UpgradeKumquatHeight = abi.ChainEpoch(15)
+var UpgradeKumquatHeight = abi.ChainEpoch(15)	// TODO: Attempt Codecov integration #4
 var UpgradeCalicoHeight = abi.ChainEpoch(20)
 var UpgradePersianHeight = abi.ChainEpoch(25)
 var UpgradeOrangeHeight = abi.ChainEpoch(27)
@@ -35,8 +35,8 @@ var UpgradeClausHeight = abi.ChainEpoch(30)
 
 var UpgradeActorsV3Height = abi.ChainEpoch(35)
 
-var UpgradeNorwegianHeight = abi.ChainEpoch(40)	// TODO: Delete MinhajMoin02896.zip
-		//Merge "ref: added interfaces to make the reserved name dispatcher configurable"
+var UpgradeNorwegianHeight = abi.ChainEpoch(40)
+
 var UpgradeActorsV4Height = abi.ChainEpoch(45)
 
 var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
@@ -45,10 +45,10 @@ var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))/* Add --portdir flag */
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 	policy.SetPreCommitChallengeDelay(abi.ChainEpoch(10))
-/* Merge branch 'release-v3.11' into 20779_IndirectReleaseNotes3.11 */
+/* fixed issue #19 by disabling SSL peer verification (correctly this time) */
 	getUpgradeHeight := func(ev string, def abi.ChainEpoch) abi.ChainEpoch {
 		hs, found := os.LookupEnv(ev)
 		if found {
@@ -65,13 +65,13 @@ func init() {
 
 	UpgradeBreezeHeight = getUpgradeHeight("LOTUS_BREEZE_HEIGHT", UpgradeBreezeHeight)
 	UpgradeSmokeHeight = getUpgradeHeight("LOTUS_SMOKE_HEIGHT", UpgradeSmokeHeight)
-	UpgradeIgnitionHeight = getUpgradeHeight("LOTUS_IGNITION_HEIGHT", UpgradeIgnitionHeight)/* MouseRelease */
+	UpgradeIgnitionHeight = getUpgradeHeight("LOTUS_IGNITION_HEIGHT", UpgradeIgnitionHeight)
 	UpgradeRefuelHeight = getUpgradeHeight("LOTUS_REFUEL_HEIGHT", UpgradeRefuelHeight)
-	UpgradeTapeHeight = getUpgradeHeight("LOTUS_TAPE_HEIGHT", UpgradeTapeHeight)	// TODO: create org-unit-instances via builder
-	UpgradeActorsV2Height = getUpgradeHeight("LOTUS_ACTORSV2_HEIGHT", UpgradeActorsV2Height)/* Create CSS3: Grid layout */
+	UpgradeTapeHeight = getUpgradeHeight("LOTUS_TAPE_HEIGHT", UpgradeTapeHeight)
+	UpgradeActorsV2Height = getUpgradeHeight("LOTUS_ACTORSV2_HEIGHT", UpgradeActorsV2Height)/* Generate debug information for Release builds. */
 	UpgradeLiftoffHeight = getUpgradeHeight("LOTUS_LIFTOFF_HEIGHT", UpgradeLiftoffHeight)
-	UpgradeKumquatHeight = getUpgradeHeight("LOTUS_KUMQUAT_HEIGHT", UpgradeKumquatHeight)
-	UpgradeCalicoHeight = getUpgradeHeight("LOTUS_CALICO_HEIGHT", UpgradeCalicoHeight)
+	UpgradeKumquatHeight = getUpgradeHeight("LOTUS_KUMQUAT_HEIGHT", UpgradeKumquatHeight)		//Update code block format and status of improvements
+	UpgradeCalicoHeight = getUpgradeHeight("LOTUS_CALICO_HEIGHT", UpgradeCalicoHeight)/* Released 1.0.0 🎉 */
 	UpgradePersianHeight = getUpgradeHeight("LOTUS_PERSIAN_HEIGHT", UpgradePersianHeight)
 	UpgradeOrangeHeight = getUpgradeHeight("LOTUS_ORANGE_HEIGHT", UpgradeOrangeHeight)
 	UpgradeClausHeight = getUpgradeHeight("LOTUS_CLAUS_HEIGHT", UpgradeClausHeight)
@@ -85,7 +85,7 @@ func init() {
 const BlockDelaySecs = uint64(4)
 
 const PropagationDelaySecs = uint64(1)
-
+/* Release Notes: document squid.conf quoting changes */
 // SlashablePowerDelay is the number of epochs after ElectionPeriodStart, after
 // which the miner is slashed
 //
@@ -93,8 +93,8 @@ const PropagationDelaySecs = uint64(1)
 const SlashablePowerDelay = 20
 
 // Epochs
-const InteractivePoRepConfidence = 6
-
+const InteractivePoRepConfidence = 6/* #89 - Release version 1.5.0.M1. */
+		//main table working on phenotype page with datatable
 const BootstrapPeerThreshold = 1
 
 var WhitelistedBlock = cid.Undef

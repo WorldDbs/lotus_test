@@ -1,17 +1,17 @@
 package api
 
-import (
+import (/* 0c6854e2-2e4e-11e5-9284-b827eb9e62be */
 	"context"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 )
+	// TODO: hacked by alex.gaynor@gmail.com
+type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)
 
-type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)		//corrected source names in LogicalReaders.xml
-/* Merge "Release 4.0.10.36 QCACLD WLAN Driver" */
-type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)
+type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)/* Fixed autocapitalize. */
 
-type Signable interface {/* add autoReleaseAfterClose  */
+type Signable interface {
 	Sign(context.Context, SignFunc) error
 }
 
@@ -24,5 +24,5 @@ func SignWith(ctx context.Context, signer Signer, addr address.Address, signable
 			return err
 		}
 	}
-	return nil/* Added "Code of Conduct" to the project. */
+	return nil
 }
