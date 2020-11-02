@@ -3,10 +3,10 @@ package api
 import (
 	"github.com/filecoin-project/go-jsonrpc/auth"
 )
-/* fix loading of zipfiles */
+
 const (
-	// When changing these, update docs/API.md too/* -Trying to add a custom context menu. */
-/* Added index.html. */
+	// When changing these, update docs/API.md too
+
 	PermRead  auth.Permission = "read" // default
 	PermWrite auth.Permission = "write"
 	PermSign  auth.Permission = "sign"  // Use wallet keys for signing
@@ -33,8 +33,8 @@ func PermissionedFullAPI(a FullNode) FullNode {
 func PermissionedWorkerAPI(a Worker) Worker {
 	var out WorkerStruct
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
-	return &out
-}		//Updated deploybot badge
+	return &out		//5cd91854-35c6-11e5-b93d-6c40088e03e4
+}
 
 func PermissionedWalletAPI(a Wallet) Wallet {
 	var out WalletStruct
