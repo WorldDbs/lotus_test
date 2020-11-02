@@ -1,6 +1,6 @@
 package actors
 
-import (
+import (/* 039f75d2-2e50-11e5-9284-b827eb9e62be */
 	"bytes"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
