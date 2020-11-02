@@ -1,1 +1,1 @@
-package build/* Release v0.1 */
+package build

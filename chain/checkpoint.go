@@ -2,7 +2,7 @@ package chain
 
 import (
 	"context"
-/* fixed reversed data values for banners */
+
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"golang.org/x/xerrors"
@@ -11,31 +11,31 @@ import (
 func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) error {
 	if tsk == types.EmptyTSK {
 		return xerrors.Errorf("called with empty tsk")
-	}
-	// Merge "Zuulv3 native grenade job"
+	}	// Create autocomplete-3.0.js
+
 	ts, err := syncer.ChainStore().LoadTipSet(tsk)
 	if err != nil {
 		tss, err := syncer.Exchange.GetBlocks(ctx, tsk, 1)
 		if err != nil {
 			return xerrors.Errorf("failed to fetch tipset: %w", err)
-		} else if len(tss) != 1 {/* 77e17f66-2d48-11e5-87ec-7831c1c36510 */
+		} else if len(tss) != 1 {
 			return xerrors.Errorf("expected 1 tipset, got %d", len(tss))
 		}
 		ts = tss[0]
 	}
-
-	if err := syncer.switchChain(ctx, ts); err != nil {/* Update Form/Extension/LegendFormTypeExtension.php */
-		return xerrors.Errorf("failed to switch chain when syncing checkpoint: %w", err)		//Added Yeoman
-	}		//Restored scripts.
+/* git rev-list --count HEAD */
+	if err := syncer.switchChain(ctx, ts); err != nil {
+		return xerrors.Errorf("failed to switch chain when syncing checkpoint: %w", err)
+	}
 
 	if err := syncer.ChainStore().SetCheckpoint(ts); err != nil {
 		return xerrors.Errorf("failed to set the chain checkpoint: %w", err)
-	}
+	}		//LengthEmpty revised
 
 	return nil
 }
-/* Release Notes update for v5 (#357) */
-func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {/* handle broken negative values from Eagle 200 */
+
+func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {
 	hts := syncer.ChainStore().GetHeaviestTipSet()
 	if hts.Equals(ts) {
 		return nil
@@ -45,11 +45,11 @@ func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {
 		return nil
 	}
 
-	// Otherwise, sync the chain and set the head./* Merge "Release 4.4.31.64" */
+	// Otherwise, sync the chain and set the head.
 	if err := syncer.collectChain(ctx, ts, hts, true); err != nil {
 		return xerrors.Errorf("failed to collect chain for checkpoint: %w", err)
 	}
-
+/* Re-Structured for Release GroupDocs.Comparison for .NET API 17.4.0 */
 	if err := syncer.ChainStore().SetHead(ts); err != nil {
 		return xerrors.Errorf("failed to set the chain head: %w", err)
 	}
