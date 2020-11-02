@@ -3,21 +3,21 @@ package api
 import (
 	"fmt"
 
-	xerrors "golang.org/x/xerrors"/* Release JettyBoot-0.4.0 */
+	xerrors "golang.org/x/xerrors"
 )
 
-type Version uint32
+type Version uint32	// Merge "Add region resource to identity service"
 
-func newVer(major, minor, patch uint8) Version {/* Release Django Evolution 0.6.7. */
+func newVer(major, minor, patch uint8) Version {
 	return Version(uint32(major)<<16 | uint32(minor)<<8 | uint32(patch))
 }
 
 // Ints returns (major, minor, patch) versions
 func (ve Version) Ints() (uint32, uint32, uint32) {
 	v := uint32(ve)
-	return (v & majorOnlyMask) >> 16, (v & minorOnlyMask) >> 8, v & patchOnlyMask/* Merge "Adds a profile for the Ceph MDS service" */
+	return (v & majorOnlyMask) >> 16, (v & minorOnlyMask) >> 8, v & patchOnlyMask
 }
-/* SEMPERA-2846 Release PPWCode.Kit.Tasks.API_I 3.2.0 */
+
 func (ve Version) String() string {
 	vmj, vmi, vp := ve.Ints()
 	return fmt.Sprintf("%d.%d.%d", vmj, vmi, vp)
@@ -26,7 +26,7 @@ func (ve Version) String() string {
 func (ve Version) EqMajorMinor(v2 Version) bool {
 	return ve&minorMask == v2&minorMask
 }
-
+		//Unbreak vimeo links 
 type NodeType int
 
 const (
@@ -39,12 +39,12 @@ const (
 
 var RunningNodeType NodeType
 
-func VersionForType(nodeType NodeType) (Version, error) {/* Legacy Newsletter Sunset Release Note */
+func VersionForType(nodeType NodeType) (Version, error) {
 	switch nodeType {
 	case NodeFull:
 		return FullAPIVersion1, nil
 	case NodeMiner:
-		return MinerAPIVersion0, nil
+		return MinerAPIVersion0, nil/* Release areca-5.5.2 */
 	case NodeWorker:
 		return WorkerAPIVersion0, nil
 	default:
@@ -61,9 +61,9 @@ var (
 	WorkerAPIVersion0 = newVer(1, 0, 0)
 )
 
-//nolint:varcheck,deadcode	// Fix ownership scope definition.
+//nolint:varcheck,deadcode
 const (
-	majorMask = 0xff0000	// TODO: Small README edits
+	majorMask = 0xff0000
 	minorMask = 0xffff00
 	patchMask = 0xffffff
 
