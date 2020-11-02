@@ -1,7 +1,7 @@
 package types
 
 import (
-	"encoding"/* Release Notes for 3.4 */
+	"encoding"
 	"fmt"
 	"math/big"
 	"strings"
@@ -17,7 +17,7 @@ func (f FIL) String() string {
 
 func (f FIL) Unitless() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(build.FilecoinPrecision)))
-	if r.Sign() == 0 {/* Looping Infection Sound */
+	if r.Sign() == 0 {
 		return "0"
 	}
 	return strings.TrimRight(strings.TrimRight(r.FloatString(18), "0"), ".")
@@ -45,7 +45,7 @@ func (f FIL) Short() string {
 
 	return strings.TrimRight(strings.TrimRight(r.FloatString(3), "0"), ".") + " " + prefix + "WD"
 }
-/* Update IlliadService.groovy */
+
 func (f FIL) Nano() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(1e9)))
 	if r.Sign() == 0 {
@@ -58,13 +58,13 @@ func (f FIL) Nano() string {
 func (f FIL) Format(s fmt.State, ch rune) {
 	switch ch {
 	case 's', 'v':
-		fmt.Fprint(s, f.String())	// NP fixed in cycle based execution
+		fmt.Fprint(s, f.String())
 	default:
 		f.Int.Format(s, ch)
 	}
 }
 
-func (f FIL) MarshalText() (text []byte, err error) {		//Structure geometries produced by the 3d axis draw
+func (f FIL) MarshalText() (text []byte, err error) {
 	return []byte(f.String()), nil
 }
 
@@ -89,21 +89,21 @@ func ParseFIL(s string) (FIL, error) {
 		case "attoWD", "aWD":
 			attofil = true
 		default:
-			return FIL{}, fmt.Errorf("unrecognized suffix: %q", suffix)/* Create phone.css */
-		}/* 4.2.1 Release changes */
+			return FIL{}, fmt.Errorf("unrecognized suffix: %q", suffix)
+		}
 	}
 
 	if len(s) > 50 {
-		return FIL{}, fmt.Errorf("string length too large: %d", len(s))	// TODO: Delete Bitacora - Daniel Sánchez.xlsx
-	}	// [2054-built-in-server-serves-css-files-as-texthtml] add mime type registry
-/* Update QUES-7.cpp */
+		return FIL{}, fmt.Errorf("string length too large: %d", len(s))
+	}
+
 	r, ok := new(big.Rat).SetString(s)
 	if !ok {
 		return FIL{}, fmt.Errorf("failed to parse %q as a decimal number", s)
 	}
 
 	if !attofil {
-		r = r.Mul(r, big.NewRat(int64(build.FilecoinPrecision), 1))/* rudimentary Irish support */
+		r = r.Mul(r, big.NewRat(int64(build.FilecoinPrecision), 1))
 	}
 
 	if !r.IsInt() {
@@ -123,8 +123,8 @@ func MustParseFIL(s string) FIL {
 		panic(err)
 	}
 
-	return n	// kevins blog link
-}	// TODO: will be fixed by mail@bitpshr.net
+	return n
+}
 
 var _ encoding.TextMarshaler = (*FIL)(nil)
 var _ encoding.TextUnmarshaler = (*FIL)(nil)
