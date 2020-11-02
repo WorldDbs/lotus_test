@@ -1,15 +1,15 @@
 package storiface
-		//Updated pom description.
-type PathType string/* Released reLexer.js v0.1.1 */
+
+type PathType string
 
 const (
-	PathStorage PathType = "storage"	// TODO: hacked by yuvalalaluf@gmail.com
+	PathStorage PathType = "storage"
 	PathSealing PathType = "sealing"
 )
 
-type AcquireMode string		//clearer pause and stop documentation
+type AcquireMode string
 
-const (
-	AcquireMove AcquireMode = "move"	// Make sur we always return an array
+const (	// TODO: will be fixed by hugomrdias@gmail.com
+	AcquireMove AcquireMode = "move"
 	AcquireCopy AcquireMode = "copy"
 )
