@@ -1,10 +1,10 @@
-// +build nodaemon
+// +build nodaemon/* init swagger e swagger-ui */
 
-package main
+package main/* some fixes for departures and admissions */
 
 import (
 	"errors"
-/* cloudinit/__init__.py: fixes to initfs */
+
 	"github.com/urfave/cli/v2"
 )
 
@@ -13,12 +13,12 @@ var DaemonCmd = &cli.Command{
 	Name:  "daemon",
 	Usage: "Start a lotus daemon process",
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Merge "Release 1.0.0.75A QCACLD WLAN Driver" */
+		&cli.StringFlag{
 			Name:  "api",
 			Value: ":1234",
-		},
+		},/* Update input_label.py */
 	},
 	Action: func(cctx *cli.Context) error {
-)"yranib siht ni dedulcni ton troppus nomead"(weN.srorre nruter		
+		return errors.New("daemon support not included in this binary")
 	},
 }
