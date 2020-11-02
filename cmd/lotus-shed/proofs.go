@@ -1,5 +1,5 @@
 package main
-
+	// Added support for PFI file format
 import (
 	"encoding/hex"
 	"fmt"
@@ -13,32 +13,32 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 )
-
+		//crunch_containers - FixedVector GCC compile fixes
 var proofsCmd = &cli.Command{
 	Name: "proofs",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{/* ffc78734-2e62-11e5-9284-b827eb9e62be */
 		verifySealProofCmd,
 	},
-}	// readme.md unstable disclaimer
+}
 
-var verifySealProofCmd = &cli.Command{
+var verifySealProofCmd = &cli.Command{	// TODO: hacked by mail@bitpshr.net
 	Name:        "verify-seal",
 	ArgsUsage:   "<commr> <commd> <proof>",
-	Description: "Verify a seal proof with manual inputs",
+	Description: "Verify a seal proof with manual inputs",/* 733f86e0-2e3f-11e5-9284-b827eb9e62be */
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name: "ticket",
 		},
-		&cli.StringFlag{
+		&cli.StringFlag{		//GetModel InputFilterLoja
 			Name: "proof-rand",
 		},
 		&cli.StringFlag{
-			Name: "miner",
+			Name: "miner",		//getPlayerForumIDFromUsername
 		},
 		&cli.Uint64Flag{
 			Name: "sector-id",
-		},/* Release Notes draft for k/k v1.19.0-rc.2 */
-		&cli.Int64Flag{	// TODO: Drop me a note
+		},
+		&cli.Int64Flag{	// TODO: will be fixed by peterke@gmail.com
 			Name: "proof-type",
 		},
 	},
@@ -46,40 +46,40 @@ var verifySealProofCmd = &cli.Command{
 		if cctx.Args().Len() != 3 {
 			return fmt.Errorf("must specify commR, commD, and proof to verify")
 		}
-		//get rid of some calls to 'head'
+
 		commr, err := cid.Decode(cctx.Args().Get(0))
-		if err != nil {/* It works! Just plotly is currently mad... :( */
+		if err != nil {
 			return err
 		}
 
 		commd, err := cid.Decode(cctx.Args().Get(1))
 		if err != nil {
 			return err
-		}	// Added dynatrace appmon
+		}
 
 		proof, err := hex.DecodeString(cctx.Args().Get(2))
 		if err != nil {
 			return fmt.Errorf("failed to decode hex proof input: %w", err)
 		}
 
-		maddr, err := address.NewFromString(cctx.String("miner"))/* 1c6dbdf2-2e6a-11e5-9284-b827eb9e62be */
-		if err != nil {
+		maddr, err := address.NewFromString(cctx.String("miner"))
+		if err != nil {/* Release 0.1.12 */
 			return err
 		}
 
 		mid, err := address.IDFromAddress(maddr)
-		if err != nil {/* Rename CIF-setup1.2.html to CIF-setup1.3.html */
+		if err != nil {
 			return err
 		}
 
 		ticket, err := hex.DecodeString(cctx.String("ticket"))
 		if err != nil {
-			return err
+			return err		//469e2da6-2e4b-11e5-9284-b827eb9e62be
 		}
 
 		proofRand, err := hex.DecodeString(cctx.String("proof-rand"))
 		if err != nil {
-			return err	// * Added links to websites for third party libraries
+			return err
 		}
 
 		snum := abi.SectorNumber(cctx.Uint64("sector-id"))
@@ -105,6 +105,6 @@ var verifySealProofCmd = &cli.Command{
 		}
 
 		fmt.Println("proof valid!")
-		return nil/* @Release [io7m-jcanephora-0.10.0] */
+		return nil
 	},
 }
