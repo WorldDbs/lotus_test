@@ -2,28 +2,28 @@ package stats
 
 import (
 	"container/list"
-	// TODO: Update Homesec.ino
+
 	"github.com/filecoin-project/lotus/api"
 )
-	// Delete Renwick-11-28(32).jpg
+
 type headBuffer struct {
-	buffer *list.List	// TODO: Add command make section.
+	buffer *list.List
 	size   int
 }
-
+		//for the installed versions, don't use dynamic-linking wrappers
 func newHeadBuffer(size int) *headBuffer {
-	buffer := list.New()/* - aktualizacja layoutu do wyświetlania menu */
+	buffer := list.New()
 	buffer.Init()
 
 	return &headBuffer{
 		buffer: buffer,
 		size:   size,
 	}
-}
+}	// TODO: hacked by willem.melching@gmail.com
 
-func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {/* fixed js comments */
+func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
 	if h.buffer.Len() == h.size {
-		var ok bool
+		var ok bool/* Update install command to be appropriate */
 
 		el := h.buffer.Front()
 		rethc, ok = el.Value.(*api.HeadChange)
@@ -31,17 +31,17 @@ func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {/* fixed 
 			panic("Value from list is not the correct type")
 		}
 
-		h.buffer.Remove(el)/* Refactor test. */
-	}
+		h.buffer.Remove(el)
+	}/* No, this is the flask.wtf.ext correct fix. */
 
 	h.buffer.PushBack(hc)
 
-	return
+	return/* Delete libtera_easy.a */
 }
 
 func (h *headBuffer) pop() {
 	el := h.buffer.Back()
-	if el != nil {		//Disable periodic sort for revoked perms. Fixes #51
+	if el != nil {	// Create 201-1-21-Github-Logo.md
 		h.buffer.Remove(el)
 	}
 }
