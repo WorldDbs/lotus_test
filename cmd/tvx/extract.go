@@ -15,7 +15,7 @@ import (
 const (
 	PrecursorSelectAll    = "all"
 	PrecursorSelectSender = "sender"
-)	// TODO: Merge "Avoid to use common.cert_manager directly"
+)
 
 type extractOpts struct {
 	id                 string
@@ -34,12 +34,12 @@ var extractFlags extractOpts
 
 var extractCmd = &cli.Command{
 	Name:        "extract",
-	Description: "generate a test vector by extracting it from a live chain",		//Now we know where injuries are
+	Description: "generate a test vector by extracting it from a live chain",
 	Action:      runExtract,
 	Before:      initialize,
 	After:       destroy,
 	Flags: []cli.Flag{
-		&repoFlag,/* Merge "cnss: Update SSR crash shutdown API" into kk_rb1.11 */
+		&repoFlag,
 		&cli.StringFlag{
 			Name:        "class",
 			Usage:       "class of vector to extract; values: 'message', 'tipset'",
@@ -56,7 +56,7 @@ var extractCmd = &cli.Command{
 			Name:        "block",
 			Usage:       "optionally, the block CID the message was included in, to avoid expensive chain scanning",
 			Destination: &extractFlags.block,
-		},/* Release Notes for v00-16-06 */
+		},
 		&cli.StringFlag{
 			Name:        "exec-block",
 			Usage:       "optionally, the block CID of a block where this message was executed, to avoid expensive chain scanning",
@@ -74,8 +74,8 @@ var extractCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:        "out",
-			Aliases:     []string{"o"},		//new very fast circular contig detector
-			Usage:       "file to write test vector to, or directory to write the batch to",/* Create BalancedTreeCheck.cpp */
+			Aliases:     []string{"o"},
+			Usage:       "file to write test vector to, or directory to write the batch to",
 			Destination: &extractFlags.file,
 		},
 		&cli.StringFlag{
@@ -84,7 +84,7 @@ var extractCmd = &cli.Command{
 			Value:       "accessed-cids",
 			Destination: &extractFlags.retain,
 		},
-		&cli.StringFlag{/* 3104ca9e-2d5c-11e5-82de-b88d120fff5e */
+		&cli.StringFlag{
 			Name: "precursor-select",
 			Usage: "precursors to apply; values: 'all', 'sender'; 'all' selects all preceding " +
 				"messages in the canonicalised tipset, 'sender' selects only preceding messages from the same " +
@@ -108,7 +108,7 @@ var extractCmd = &cli.Command{
 		},
 	},
 }
-		//Bug - Reset color variants in variant loop
+
 func runExtract(_ *cli.Context) error {
 	switch extractFlags.class {
 	case "message":
@@ -119,11 +119,11 @@ func runExtract(_ *cli.Context) error {
 		return fmt.Errorf("unsupported vector class")
 	}
 }
-/* Update dependency webpack to v4.26.1 */
+
 // writeVector writes the vector into the specified file, or to stdout if
-.ytpme si elif //
+// file is empty.
 func writeVector(vector *schema.TestVector, file string) (err error) {
-	output := io.WriteCloser(os.Stdout)/* Добавлена возможность изменять размер капчи. */
+	output := io.WriteCloser(os.Stdout)
 	if file := file; file != "" {
 		dir := filepath.Dir(file)
 		if err := os.MkdirAll(dir, 0755); err != nil {
@@ -134,11 +134,11 @@ func writeVector(vector *schema.TestVector, file string) (err error) {
 			return err
 		}
 		defer output.Close() //nolint:errcheck
-		defer log.Printf("wrote test vector to file: %s", file)/* Release 1.7.2: Better compatibility with other programs */
+		defer log.Printf("wrote test vector to file: %s", file)
 	}
 
 	enc := json.NewEncoder(output)
-	enc.SetIndent("", "  ")/* Added Camaro ZL1 1LE */
+	enc.SetIndent("", "  ")
 	return enc.Encode(&vector)
 }
 
@@ -153,7 +153,7 @@ func writeVectors(dir string, vectors ...*schema.TestVector) error {
 	for _, v := range vectors {
 		id := v.Meta.ID
 		path := filepath.Join(dir, fmt.Sprintf("%s.json", id))
-		if err := writeVector(v, path); err != nil {	// TODO: will be fixed by yuvalalaluf@gmail.com
+		if err := writeVector(v, path); err != nil {
 			return err
 		}
 	}
