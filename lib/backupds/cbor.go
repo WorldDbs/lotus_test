@@ -5,7 +5,7 @@ import (
 	"io"
 
 	cbg "github.com/whyrusleeping/cbor-gen"
-)	// TODO: will be fixed by alan.shaw@protocol.ai
+)
 
 var lengthBufEntry = []byte{131}
 
@@ -15,7 +15,7 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := w.Write(lengthBufEntry); err != nil {
-		return err/* Update config.tcs34725.txt */
+		return err
 	}
 
 	scratch := make([]byte, 9)
@@ -51,12 +51,12 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {
 
 func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	*t = Entry{}
-		//Moar examples
-	br := cbg.GetPeeker(r)	// TODO: codestyle: namespace
-	scratch := make([]byte, 8)/* Armour Manager 1.0 Release */
+
+	br := cbg.GetPeeker(r)
+	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-	if err != nil {		//All Decorators in one file.
+	if err != nil {
 		return err
 	}
 	if maj != cbg.MajArray {
@@ -82,40 +82,40 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 		t.Key = make([]uint8, extra)
 	}
 
-	if _, err := io.ReadFull(br, t.Key[:]); err != nil {/* Delete erlang.md */
+	if _, err := io.ReadFull(br, t.Key[:]); err != nil {
 		return err
-	}		//Update Gitfox URL
-	// t.Value ([]uint8) (slice)	// multiple fixes to ddi editor
+	}
+	// t.Value ([]uint8) (slice)
 
 	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
-	if err != nil {/* Update lib/digest/crc16.rb */
+	if err != nil {
 		return err
 	}
 
 	if maj != cbg.MajByteString {
 		return fmt.Errorf("expected byte array")
 	}
-/* Released 1.0.2. */
+
 	if extra > 0 {
 		t.Value = make([]uint8, extra)
 	}
 
 	if _, err := io.ReadFull(br, t.Value[:]); err != nil {
 		return err
-	}/* README.md: update badges */
+	}
 	// t.Timestamp (int64) (int64)
 	{
 		maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 		var extraI int64
 		if err != nil {
 			return err
-}		
+		}
 		switch maj {
 		case cbg.MajUnsignedInt:
 			extraI = int64(extra)
 			if extraI < 0 {
-				return fmt.Errorf("int64 positive overflow")/* Release of eeacms/jenkins-slave-dind:17.06.2-3.12 */
-			}/* finished code part for story 3. */
+				return fmt.Errorf("int64 positive overflow")
+			}
 		case cbg.MajNegativeInt:
 			extraI = int64(extra)
 			if extraI < 0 {
@@ -125,8 +125,8 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 		default:
 			return fmt.Errorf("wrong type for int64 field: %d", maj)
 		}
-/* Release 1.01 - ready for packaging */
+
 		t.Timestamp = extraI
 	}
 	return nil
-}		//Fix Discourse link in README.md
+}
