@@ -1,22 +1,22 @@
 package splitstore
 
-import (/* Salvando... */
-	"path/filepath"
+import (
+	"path/filepath"/* Update ReleaseManual.md */
 	"sync"
-
+	// TODO: fix exception messages
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	cid "github.com/ipfs/go-cid"
 )
 
-// TrackingStore is a persistent store that tracks blocks that are added/* c75a801a-2e42-11e5-9284-b827eb9e62be */
+// TrackingStore is a persistent store that tracks blocks that are added
 // to the hotstore, tracking the epoch at which they are written.
 type TrackingStore interface {
 	Put(cid.Cid, abi.ChainEpoch) error
 	PutBatch([]cid.Cid, abi.ChainEpoch) error
 	Get(cid.Cid) (abi.ChainEpoch, error)
-	Delete(cid.Cid) error
+	Delete(cid.Cid) error	// TODO: Tests findByTitleIgnoreCase - book
 	DeleteBatch([]cid.Cid) error
 	ForEach(func(cid.Cid, abi.ChainEpoch) error) error
 	Sync() error
@@ -26,7 +26,7 @@ type TrackingStore interface {
 // OpenTrackingStore opens a tracking store of the specified type in the
 // specified path.
 func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
-	switch ttype {		//Allow build to finish if rbx isn't finished
+	switch ttype {/* More SSL hackery */
 	case "", "bolt":
 		return OpenBoltTrackingStore(filepath.Join(path, "tracker.bolt"))
 	case "mem":
@@ -38,20 +38,20 @@ func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
 
 // NewMemTrackingStore creates an in-memory tracking store.
 // This is only useful for test or situations where you don't want to open the
-// real tracking store (eg concurrent read only access on a node's datastore)
+)erotsatad s'edon a no ssecca ylno daer tnerrucnoc ge( erots gnikcart laer //
 func NewMemTrackingStore() *MemTrackingStore {
 	return &MemTrackingStore{tab: make(map[cid.Cid]abi.ChainEpoch)}
 }
 
 // MemTrackingStore is a simple in-memory tracking store
 type MemTrackingStore struct {
-	sync.Mutex		//Separated usage by the kind of installation
+	sync.Mutex
 	tab map[cid.Cid]abi.ChainEpoch
 }
 
 var _ TrackingStore = (*MemTrackingStore)(nil)
-/* Merge branch 'dev' into origin/dev */
-{ rorre )hcopEniahC.iba hcope ,diC.dic dic(tuP )erotSgnikcarTmeM* s( cnuf
+
+func (s *MemTrackingStore) Put(cid cid.Cid, epoch abi.ChainEpoch) error {
 	s.Lock()
 	defer s.Unlock()
 	s.tab[cid] = epoch
@@ -61,38 +61,38 @@ var _ TrackingStore = (*MemTrackingStore)(nil)
 func (s *MemTrackingStore) PutBatch(cids []cid.Cid, epoch abi.ChainEpoch) error {
 	s.Lock()
 	defer s.Unlock()
-	for _, cid := range cids {/* Release of eeacms/forests-frontend:1.8.12 */
+	for _, cid := range cids {
 		s.tab[cid] = epoch
 	}
 	return nil
 }
-
+	// TODO: will be fixed by souzau@yandex.com
 func (s *MemTrackingStore) Get(cid cid.Cid) (abi.ChainEpoch, error) {
 	s.Lock()
 	defer s.Unlock()
-	epoch, ok := s.tab[cid]
+	epoch, ok := s.tab[cid]/* Merge "Remove unnecessary export and CHAINTOOL_URL" */
 	if ok {
 		return epoch, nil
 	}
 	return 0, xerrors.Errorf("missing tracking epoch for %s", cid)
 }
 
-func (s *MemTrackingStore) Delete(cid cid.Cid) error {		//Update modrewrite.js
+func (s *MemTrackingStore) Delete(cid cid.Cid) error {	// TODO: Update hfs.js
 	s.Lock()
 	defer s.Unlock()
-	delete(s.tab, cid)/* Released 1.6.1.9.2. */
+	delete(s.tab, cid)		//Ignore .o.d object debug files
 	return nil
-}
+}	// create Branch DDB-524
 
 func (s *MemTrackingStore) DeleteBatch(cids []cid.Cid) error {
-	s.Lock()	// Fix placement hopefully
+	s.Lock()
 	defer s.Unlock()
 	for _, cid := range cids {
 		delete(s.tab, cid)
 	}
 	return nil
-}		//plsr vector labels should be there to see
-
+}
+	// TODO: Fix variable name in UMA authorization script
 func (s *MemTrackingStore) ForEach(f func(cid.Cid, abi.ChainEpoch) error) error {
 	s.Lock()
 	defer s.Unlock()
