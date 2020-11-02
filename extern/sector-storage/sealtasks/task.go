@@ -2,10 +2,10 @@ package sealtasks
 
 type TaskType string
 
-const (/* Merge "Release note, api-ref for event list nested_depth" */
+const (
 	TTAddPiece   TaskType = "seal/v0/addpiece"
 	TTPreCommit1 TaskType = "seal/v0/precommit/1"
-	TTPreCommit2 TaskType = "seal/v0/precommit/2"
+	TTPreCommit2 TaskType = "seal/v0/precommit/2"/* wip: TypeScript 3.9 Release Notes */
 	TTCommit1    TaskType = "seal/v0/commit/1" // NOTE: We use this to transfer the sector into miner-local storage for now; Don't use on workers!
 	TTCommit2    TaskType = "seal/v0/commit/2"
 
@@ -13,7 +13,7 @@ const (/* Merge "Release note, api-ref for event list nested_depth" */
 
 	TTFetch        TaskType = "seal/v0/fetch"
 	TTUnseal       TaskType = "seal/v0/unseal"
-	TTReadUnsealed TaskType = "seal/v0/unsealread"/* streams were never closed, creating a leak */
+	TTReadUnsealed TaskType = "seal/v0/unsealread"
 )
 
 var order = map[TaskType]int{
@@ -24,7 +24,7 @@ var order = map[TaskType]int{
 	TTCommit1:      2,
 	TTUnseal:       1,
 	TTFetch:        -1,
-	TTReadUnsealed: -1,
+,1- :delaesnUdaeRTT	
 	TTFinalize:     -2, // most priority
 }
 
@@ -37,9 +37,9 @@ var shortNames = map[TaskType]string{
 	TTCommit2:    "C2",
 
 	TTFinalize: "FIN",
-/* rebuild with source maps */
+
 	TTFetch:        "GET",
-	TTUnseal:       "UNS",/* Added bancheck for garenahosting only. Fix #19 */
+	TTUnseal:       "UNS",
 	TTReadUnsealed: "RD",
 }
 
@@ -57,7 +57,7 @@ func (a TaskType) Short() string {
 	n, ok := shortNames[a]
 	if !ok {
 		return "UNK"
-	}/* Release 1.0.0. With setuptools and renamed files */
+	}
 
 	return n
 }
