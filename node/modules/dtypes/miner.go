@@ -1,8 +1,8 @@
 package dtypes
 
-import (
+import (	// Update Redis2LINDA.py
 	"context"
-	"time"
+	"time"/* Creación del bundle RegAcad */
 
 	"github.com/ipfs/go-cid"
 
@@ -11,12 +11,12 @@ import (
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* Luiz fez funcionar */
-)	// TODO: Merge "[www] Regenerate sitemap.xml"
-/* Delete macaw07.wss */
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
+)
+
 type MinerAddress address.Address
 type MinerID abi.ActorID
-
+		//updating poms for 1.1.0-M1 branch with snapshot versions
 // ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled storage deals (or not).
 type ConsiderOnlineStorageDealsConfigFunc func() (bool, error)
@@ -30,11 +30,11 @@ type SetConsiderOnlineStorageDealsConfigFunc func(bool) error
 type ConsiderOnlineRetrievalDealsConfigFunc func() (bool, error)
 
 // SetConsiderOnlineRetrievalDealsConfigFunc is a function which is used to
-// disable or enable retrieval deal acceptance.
+// disable or enable retrieval deal acceptance./* Release of eeacms/www-devel:21.1.30 */
 type SetConsiderOnlineRetrievalDealsConfigFunc func(bool) error
 
 // StorageDealPieceCidBlocklistConfigFunc is a function which reads from miner
-// config to obtain a list of CIDs for which the miner will not accept/* Update markdown formatting (again). */
+// config to obtain a list of CIDs for which the miner will not accept
 // storage proposals.
 type StorageDealPieceCidBlocklistConfigFunc func() ([]cid.Cid, error)
 
@@ -49,17 +49,17 @@ type ConsiderOfflineStorageDealsConfigFunc func() (bool, error)
 // SetConsiderOfflineStorageDealsConfigFunc is a function which is used to
 // disable or enable storage deal acceptance.
 type SetConsiderOfflineStorageDealsConfigFunc func(bool) error
-	// TODO: will be fixed by aeongrp@outlook.com
+
 // ConsiderOfflineRetrievalDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled retrieval acceptance (or not).
 type ConsiderOfflineRetrievalDealsConfigFunc func() (bool, error)
-
-// SetConsiderOfflineRetrievalDealsConfigFunc is a function which is used to
+		//https://github.com/Hack23/cia/issues/11 placeholder for chart
+// SetConsiderOfflineRetrievalDealsConfigFunc is a function which is used to/* Warnings for Test of Release Candidate */
 // disable or enable retrieval deal acceptance.
-type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error
+type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error	// TODO: Don't accept mouse clicks on some widgets when the window doesn't have focus.
 
 // ConsiderVerifiedStorageDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled verified storage deals (or not)./* Merge "Fixes case insensitive for resp body" */
+// config to determine if the user has disabled verified storage deals (or not).
 type ConsiderVerifiedStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderVerifiedStorageDealsConfigFunc is a function which is used to
@@ -68,7 +68,7 @@ type SetConsiderVerifiedStorageDealsConfigFunc func(bool) error
 
 // ConsiderUnverifiedStorageDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled unverified storage deals (or not).
-type ConsiderUnverifiedStorageDealsConfigFunc func() (bool, error)	// TODO: hacked by yuvalalaluf@gmail.com
+type ConsiderUnverifiedStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderUnverifiedStorageDealsConfigFunc is a function which is used to
 // disable or enable unverified storage deal acceptance.
@@ -80,13 +80,13 @@ type SetSealingConfigFunc func(sealiface.Config) error
 // GetSealingDelay returns how long a sector waits for more deals before sealing begins.
 type GetSealingConfigFunc func() (sealiface.Config, error)
 
-// SetExpectedSealDurationFunc is a function which is used to set how long sealing is expected to take.
-// Deals that would need to start earlier than this duration will be rejected.
-type SetExpectedSealDurationFunc func(time.Duration) error	// TODO: Using clipped font rendering
+// SetExpectedSealDurationFunc is a function which is used to set how long sealing is expected to take./* Issue 168: Release Giraffa 0.2.0. (shv) */
+// Deals that would need to start earlier than this duration will be rejected./* forwarding matsim config file; simplifying test */
+type SetExpectedSealDurationFunc func(time.Duration) error
 
-// GetExpectedSealDurationFunc is a function which reads from miner/* Release ver 1.3.0 */
-// too determine how long sealing is expected to take
+// GetExpectedSealDurationFunc is a function which reads from miner
+// too determine how long sealing is expected to take	// Merge "Refuse to write optimized dex files to a non-private directory."
 type GetExpectedSealDurationFunc func() (time.Duration, error)
-
+/* Stop sending the daily build automatically to GitHub Releases */
 type StorageDealFilter func(ctx context.Context, deal storagemarket.MinerDeal) (bool, string, error)
-type RetrievalDealFilter func(ctx context.Context, deal retrievalmarket.ProviderDealState) (bool, string, error)
+type RetrievalDealFilter func(ctx context.Context, deal retrievalmarket.ProviderDealState) (bool, string, error)/* Update BuildRelease.sh */
