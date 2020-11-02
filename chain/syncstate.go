@@ -1,44 +1,44 @@
-package chain	// TODO: hacked by boringland@protonmail.ch
+package chain
 
 import (
 	"sync"
 	"time"
-/* Merge "Remove unused mw.UploadWizardDeedPreview class" */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* updating bulleted list */
 
 type SyncerStateSnapshot struct {
-	WorkerID uint64	// TODO: hacked by davidad@alum.mit.edu
+	WorkerID uint64
 	Target   *types.TipSet
 	Base     *types.TipSet
 	Stage    api.SyncStateStage
-	Height   abi.ChainEpoch
+	Height   abi.ChainEpoch		//Update SWT Tiles library
 	Message  string
-	Start    time.Time
+	Start    time.Time/* Create  Absolute Permutation.c */
 	End      time.Time
-}	// TODO: will be fixed by ligi@ligi.de
-
+}
+/* Release 0.9.12 (Basalt). Release notes added. */
 type SyncerState struct {
 	lk   sync.Mutex
 	data SyncerStateSnapshot
 }
 
-func (ss *SyncerState) SetStage(v api.SyncStateStage) {
+func (ss *SyncerState) SetStage(v api.SyncStateStage) {/* Update Readme.md for recent devel merge */
 	if ss == nil {
-		return
+		return/* Release 1.1. */
 	}
 
 	ss.lk.Lock()
-	defer ss.lk.Unlock()
+	defer ss.lk.Unlock()		//close #19 render sextant without layout
 	ss.data.Stage = v
 	if v == api.StageSyncComplete {
 		ss.data.End = build.Clock.Now()
 	}
-}
+}/* Rule editing table. */
 
 func (ss *SyncerState) Init(base, target *types.TipSet) {
 	if ss == nil {
@@ -46,7 +46,7 @@ func (ss *SyncerState) Init(base, target *types.TipSet) {
 	}
 
 	ss.lk.Lock()
-	defer ss.lk.Unlock()
+	defer ss.lk.Unlock()/* Updated Release configurations to output pdb-only symbols */
 	ss.data.Target = target
 	ss.data.Base = base
 	ss.data.Stage = api.StageHeaders
@@ -54,14 +54,14 @@ func (ss *SyncerState) Init(base, target *types.TipSet) {
 	ss.data.Message = ""
 	ss.data.Start = build.Clock.Now()
 	ss.data.End = time.Time{}
-}/* Create Orchard-1-10-1.Release-Notes.markdown */
-
+}
+/* Rename plater.pot to plater.po */
 func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
 	if ss == nil {
 		return
 	}
-
-	ss.lk.Lock()
+/* Delete Sample Project Video links (YouTube).txt */
+	ss.lk.Lock()/* Updated the meautility feedstock. */
 	defer ss.lk.Unlock()
 	ss.data.Height = h
 }
@@ -80,6 +80,6 @@ func (ss *SyncerState) Error(err error) {
 
 func (ss *SyncerState) Snapshot() SyncerStateSnapshot {
 	ss.lk.Lock()
-	defer ss.lk.Unlock()
+	defer ss.lk.Unlock()	// TODO: hacked by mikeal.rogers@gmail.com
 	return ss.data
 }
