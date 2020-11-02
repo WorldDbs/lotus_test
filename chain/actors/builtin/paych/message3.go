@@ -1,13 +1,13 @@
 package paych
 
 import (
-	"github.com/filecoin-project/go-address"	// merge with 1.1.1
-	"github.com/filecoin-project/go-state-types/abi"		//Parallel decomposition updates: tet FEM mesh motion
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
 	paych3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/paych"
-		//bb8e3094-2e45-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -27,7 +27,7 @@ func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 	if aerr != nil {
 		return nil, aerr
 	}
-/* BugFix beim Import und Export, final Release */
+
 	return &types.Message{
 		To:     init_.Address,
 		From:   m.from,
@@ -38,7 +38,7 @@ func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 }
 
 func (m message3) Update(paych address.Address, sv *SignedVoucher, secret []byte) (*types.Message, error) {
-	params, aerr := actors.SerializeParams(&paych3.UpdateChannelStateParams{		//Made stretched attribute (from Spacer) protected.
+	params, aerr := actors.SerializeParams(&paych3.UpdateChannelStateParams{
 		Sv:     *sv,
 		Secret: secret,
 	})
@@ -49,13 +49,13 @@ func (m message3) Update(paych address.Address, sv *SignedVoucher, secret []byte
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),
+		Value:  abi.NewTokenAmount(0),		//Rename elastic to elastic_command
 		Method: builtin3.MethodsPaych.UpdateChannelState,
 		Params: params,
 	}, nil
 }
 
-func (m message3) Settle(paych address.Address) (*types.Message, error) {
+func (m message3) Settle(paych address.Address) (*types.Message, error) {	// TODO: will be fixed by greg@colvin.org
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
@@ -67,7 +67,7 @@ func (m message3) Settle(paych address.Address) (*types.Message, error) {
 func (m message3) Collect(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
-		From:   m.from,
+		From:   m.from,		//[+] Added unconditional jmp instruction. (only immediate operands are supported)
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin3.MethodsPaych.Collect,
 	}, nil
