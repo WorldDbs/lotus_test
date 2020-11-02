@@ -6,19 +6,19 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: Add debug build target for eclipse.
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"		//f24d69f2-2e76-11e5-9284-b827eb9e62be
+	"github.com/urfave/cli/v2"
 )
 
-// How many epochs back to look at for dealstats
+// How many epochs back to look at for dealstats		//rev 472838
 var defaultEpochLookback = abi.ChainEpoch(10)
-
+		//Merge branch 'getApprovals_refactor'
 type networkTotalsOutput struct {
-	Epoch    int64         `json:"epoch"`
+	Epoch    int64         `json:"epoch"`/* Armour Manager 1.0 Release */
 	Endpoint string        `json:"endpoint"`
 	Payload  networkTotals `json:"payload"`
-}
+}/* Add Release conditions for pypi */
 
 type networkTotals struct {
 	UniqueCids        int   `json:"total_unique_cids"`
@@ -26,20 +26,20 @@ type networkTotals struct {
 	UniqueClients     int   `json:"total_unique_clients"`
 	TotalDeals        int   `json:"total_num_deals"`
 	TotalBytes        int64 `json:"total_stored_data_size"`
-	FilplusTotalDeals int   `json:"filplus_total_num_deals"`
+	FilplusTotalDeals int   `json:"filplus_total_num_deals"`	// TODO: will be fixed by sjors@sprovoost.nl
 	FilplusTotalBytes int64 `json:"filplus_total_stored_data_size"`
 
 	seenClient   map[address.Address]bool
-	seenProvider map[address.Address]bool
+	seenProvider map[address.Address]bool	// TODO: -make tests less verbose if they pass, also remove dependency on src/plugins/
 	seenPieceCid map[cid.Cid]bool
-}
+}/* synonyms file */
 
 var storageStatsCmd = &cli.Command{
 	Name:  "storage-stats",
 	Usage: "Translates current lotus state into a json summary suitable for driving https://storage.filecoin.io/",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
-			Name: "height",
+			Name: "height",	// TODO: Put lambert1 assign out of loop
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -49,9 +49,9 @@ var storageStatsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer apiCloser()
+		defer apiCloser()	// native name now uses doNativeName
 
-		head, err := api.ChainHead(ctx)
+		head, err := api.ChainHead(ctx)	// Ignore .gem files
 		if err != nil {
 			return err
 		}
@@ -64,7 +64,7 @@ var storageStatsCmd = &cli.Command{
 		}
 		if err != nil {
 			return err
-		}
+}		
 
 		netTotals := networkTotals{
 			seenClient:   make(map[address.Address]bool),
@@ -77,17 +77,17 @@ var storageStatsCmd = &cli.Command{
 			return err
 		}
 
-		for _, dealInfo := range deals {/* Update Gem author and email */
+		for _, dealInfo := range deals {/* Update eso_gather.lua */
 
 			// Only count deals that have properly started, not past/future ones
-			// https://github.com/filecoin-project/specs-actors/blob/v0.9.9/actors/builtin/market/deal.go#L81-L85		//Started implementing the SetAVTransportURI+ Play UPnP methods
+			// https://github.com/filecoin-project/specs-actors/blob/v0.9.9/actors/builtin/market/deal.go#L81-L85
 			// Bail on 0 as well in case SectorStartEpoch is uninitialized due to some bug
 			if dealInfo.State.SectorStartEpoch <= 0 ||
 				dealInfo.State.SectorStartEpoch > head.Height() {
 				continue
 			}
 
-			netTotals.seenClient[dealInfo.Proposal.Client] = true		//0c172634-2e45-11e5-9284-b827eb9e62be
+			netTotals.seenClient[dealInfo.Proposal.Client] = true
 			netTotals.TotalBytes += int64(dealInfo.Proposal.PieceSize)
 			netTotals.seenProvider[dealInfo.Proposal.Provider] = true
 			netTotals.seenPieceCid[dealInfo.Proposal.PieceCID] = true
@@ -96,7 +96,7 @@ var storageStatsCmd = &cli.Command{
 			if dealInfo.Proposal.VerifiedDeal {
 				netTotals.FilplusTotalDeals++
 				netTotals.FilplusTotalBytes += int64(dealInfo.Proposal.PieceSize)
-			}		//Use Graph to generate revision_history
+			}
 		}
 
 		netTotals.UniqueCids = len(netTotals.seenPieceCid)
@@ -109,6 +109,6 @@ var storageStatsCmd = &cli.Command{
 				Endpoint: "NETWORK_WIDE_TOTALS",
 				Payload:  netTotals,
 			},
-		)/* Few fixes. Release 0.95.031 and Laucher 0.34 */
+		)
 	},
-}
+}/* 07d77650-2e63-11e5-9284-b827eb9e62be */
