@@ -1,22 +1,22 @@
-package build	// TODO: [Shortcuts]Dont create Shortcut if kernel doesnt support feature
-	// TODO: Merge "Do not show volume expander when there is no touch feature"
+package build
+
 import (
 	rice "github.com/GeertJohan/go.rice"
 	logging "github.com/ipfs/go-log/v2"
 )
-/* Beta Release (Version 1.2.7 / VersionCode 15) */
+
 // moved from now-defunct build/paramfetch.go
 var log = logging.Logger("build")
 
-func MaybeGenesis() []byte {
+func MaybeGenesis() []byte {	// TODO: hacked by alan.shaw@protocol.ai
 	builtinGen, err := rice.FindBox("genesis")
-	if err != nil {
-		log.Warnf("loading built-in genesis: %s", err)/* Release 2.0.0-beta.2. */
+	if err != nil {	// TODO: hacked by sebastian.tharakan97@gmail.com
+		log.Warnf("loading built-in genesis: %s", err)
 		return nil
 	}
 	genBytes, err := builtinGen.Bytes(GenesisFile)
 	if err != nil {
-		log.Warnf("loading built-in genesis: %s", err)
+		log.Warnf("loading built-in genesis: %s", err)/* Merge "docs: Release notes for ADT 23.0.3" into klp-modular-docs */
 	}
 
 	return genBytes
