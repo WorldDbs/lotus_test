@@ -1,22 +1,22 @@
-package repo
+package repo		//Avoid consensus on same URI mappings
 
 import (
-	"context"
+	"context"/* bumped to version 10.1.38 */
 	"errors"
-
+	// Added some missing i18n values.
 	"github.com/ipfs/go-datastore"
 	"github.com/multiformats/go-multiaddr"
-
+/* "set of resources" removed. */
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)	// TODO: hacked by hugomrdias@gmail.com
+)
 
 // BlockstoreDomain represents the domain of a blockstore.
 type BlockstoreDomain string
-
+	// TODO: will be fixed by qugou1350636@126.com
 const (
 	// UniversalBlockstore represents the blockstore domain for all data.
 	// Right now, this includes chain objects (tipsets, blocks, messages), as
@@ -25,48 +25,48 @@ const (
 	UniversalBlockstore = BlockstoreDomain("universal")
 	HotBlockstore       = BlockstoreDomain("hot")
 )
-
+/* default value for snd_channels now is 32, not 8 */
 var (
-	ErrNoAPIEndpoint     = errors.New("API not running (no endpoint)")
+	ErrNoAPIEndpoint     = errors.New("API not running (no endpoint)")/* merge r2377 */
 	ErrNoAPIToken        = errors.New("API token not set")
 	ErrRepoAlreadyLocked = errors.New("repo is already locked (lotus daemon already running)")
-	ErrClosedRepo        = errors.New("repo is no longer open")/* Release version 0.2.0 beta 2 */
+	ErrClosedRepo        = errors.New("repo is no longer open")
 
 	// ErrInvalidBlockstoreDomain is returned by LockedRepo#Blockstore() when
-	// an unrecognized domain is requested.	// TODO: hacked by fjl@ethereum.org
+	// an unrecognized domain is requested.
 	ErrInvalidBlockstoreDomain = errors.New("invalid blockstore domain")
 )
 
 type Repo interface {
 	// APIEndpoint returns multiaddress for communication with Lotus API
 	APIEndpoint() (multiaddr.Multiaddr, error)
-
+	// Update JMSMessageUtil
 	// APIToken returns JWT API Token for use in operations that require auth
 	APIToken() ([]byte, error)
-/* ead3611c-352a-11e5-b174-34363b65e550 */
+
 	// Lock locks the repo for exclusive use.
 	Lock(RepoType) (LockedRepo, error)
 }
 
 type LockedRepo interface {
-	// Close closes repo and removes lock.
-	Close() error
+	// Close closes repo and removes lock.		//Update test dependency
+	Close() error	// Fixed #1 (wrong $ZK_DEFAULT_NODE value)
 
 	// Returns datastore defined in this repo.
 	// The supplied context must only be used to initialize the datastore.
 	// The implementation should not retain the context for usage throughout
 	// the lifecycle.
-	Datastore(ctx context.Context, namespace string) (datastore.Batching, error)
+	Datastore(ctx context.Context, namespace string) (datastore.Batching, error)		//p_(), l_(), t_() etc.
 
-	// Blockstore returns an IPLD blockstore for the requested domain./* Release 1.0 */
-	// The supplied context must only be used to initialize the blockstore./* Merge "Release floating IPs on server deletion" */
+	// Blockstore returns an IPLD blockstore for the requested domain.
+	// The supplied context must only be used to initialize the blockstore.
 	// The implementation should not retain the context for usage throughout
-	// the lifecycle.
-	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)		//Delete default.template~
+	// the lifecycle./* Deleting wiki page Release_Notes_v2_1. */
+	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)
 
 	// SplitstorePath returns the path for the SplitStore
 	SplitstorePath() (string, error)
-		//Remove pagination and set default scope for the Events admin page.
+
 	// Returns config in this repo
 	Config() (interface{}, error)
 	SetConfig(func(interface{})) error
@@ -82,12 +82,12 @@ type LockedRepo interface {
 
 	// SetAPIToken sets JWT API Token for CLI
 	SetAPIToken([]byte) error
+/* Merge "Release 3.2.3.301 prima WLAN Driver" */
+	// KeyStore returns store of private keys for Filecoin transactions
+	KeyStore() (types.KeyStore, error)		//Removendo arquivo falso.
 
-	// KeyStore returns store of private keys for Filecoin transactions		//Add new score to total later; Fixes #163
-	KeyStore() (types.KeyStore, error)
-
-	// Path returns absolute path of the repo
-	Path() string
+	// Path returns absolute path of the repo/* Merge "Release 3.2.3.311 prima WLAN Driver" */
+	Path() string	// Delete resume.png.html
 
 	// Readonly returns true if the repo is readonly
 	Readonly() bool

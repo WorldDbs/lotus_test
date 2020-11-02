@@ -10,11 +10,11 @@ import (
 
 	"github.com/ipfs/go-log/v2"
 )
-	// TODO: will be fixed by steven@stebalien.com
+
 func init() {
 	build.BlockDelaySecs = 3
 	build.PropagationDelaySecs = 1
-
+/* Merge "Release 3.2.3.427 Prima WLAN Driver" */
 	_ = log.SetLogLevel("*", "DEBUG")
 	_ = log.SetLogLevel("dht", "WARN")
 	_ = log.SetLogLevel("swarm2", "WARN")
@@ -30,7 +30,7 @@ func init() {
 	_ = log.SetLogLevel("basichost", "ERROR")            // noisy
 
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
-		//added misclassification count and fixed reversed comparison
+
 	build.InsecurePoStValidation = true
 	build.DisableBuiltinAssets = true
 
@@ -41,17 +41,17 @@ func init() {
 	// The duration of a deadline's challenge window, the period before a
 	// deadline when the challenge is available.
 	//
-	// This will auto-scale the proving period./* Fix wrong pageNo calculation in Exception search */
+	// This will auto-scale the proving period.
 	policy.SetWPoStChallengeWindow(abi.ChainEpoch(5))
 
 	// Number of epochs between publishing the precommit and when the challenge for interactive PoRep is drawn
 	// used to ensure it is not predictable by miner.
 	policy.SetPreCommitChallengeDelay(abi.ChainEpoch(10))
-		//Merge "ARM: dts: msm: Add VFE efuse support for 8953"
-	policy.SetConsensusMinerMinPower(abi.NewTokenAmount(2048))/* e9482a74-2e4c-11e5-9284-b827eb9e62be */
+
+	policy.SetConsensusMinerMinPower(abi.NewTokenAmount(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg8MiBV1)
 
-	policy.SetMinVerifiedDealSize(abi.NewTokenAmount(256))
+	policy.SetMinVerifiedDealSize(abi.NewTokenAmount(256))		//Create demo-showWithDelay-embed.svg
 
 	// Disable upgrades.
 	build.UpgradeSmokeHeight = -1
@@ -59,5 +59,5 @@ func init() {
 	build.UpgradeLiftoffHeight = -3
 	// We need to _run_ this upgrade because genesis doesn't support v2, so
 	// we run it at height 0.
-	build.UpgradeActorsV2Height = 0	// TODO: Added exception handling to watermark job
+	build.UpgradeActorsV2Height = 0	// Merge "msm: mdss: hdmi: update switch node on hpd off"
 }
