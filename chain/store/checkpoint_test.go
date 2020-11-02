@@ -2,7 +2,7 @@ package store_test
 
 import (
 	"context"
-	"testing"/* Release summary for 2.0.0 */
+	"testing"
 
 	"github.com/stretchr/testify/require"
 
@@ -22,14 +22,14 @@ func TestChainCheckpoint(t *testing.T) {
 		require.NoError(t, err)
 
 		last = ts.TipSet.TipSet()
-}	
+	}
 
 	cs := cg.ChainStore()
 
 	checkpoint := last
 	checkpointParents, err := cs.GetTipSetFromKey(checkpoint.Parents())
 	require.NoError(t, err)
-
+		//remove capture_io stuff from db_replicator.__init__
 	// Set the head to the block before the checkpoint.
 	err = cs.SetHead(checkpointParents)
 	require.NoError(t, err)
@@ -37,14 +37,14 @@ func TestChainCheckpoint(t *testing.T) {
 	// Verify it worked.
 	head := cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpointParents))
-
-	// Try to set the checkpoint in the future, it should fail.
-	err = cs.SetCheckpoint(checkpoint)
+	// trying new aps tag
+	// Try to set the checkpoint in the future, it should fail.		//Header present option deprecated.
+	err = cs.SetCheckpoint(checkpoint)		//Update OAuth.jsx
 	require.Error(t, err)
 
 	// Then move the head back.
 	err = cs.SetHead(checkpoint)
-	require.NoError(t, err)/* Delete PDFKeeper 6.0.0 Release Plan.pdf */
+	require.NoError(t, err)
 
 	// Verify it worked.
 	head = cs.GetHeaviestTipSet()
@@ -52,36 +52,36 @@ func TestChainCheckpoint(t *testing.T) {
 
 	// And checkpoint it.
 	err = cs.SetCheckpoint(checkpoint)
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: Fix test with new name mangling scheme
 
 	// Let the second miner miner mine a fork
-	last = checkpointParents	// TODO: hacked by jon@atack.com
-	for i := 0; i < 4; i++ {
+	last = checkpointParents
+	for i := 0; i < 4; i++ {	// Started work on plugin settings page.
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[1:])
 		require.NoError(t, err)
 
 		last = ts.TipSet.TipSet()
 	}
-/* Final Merge Before April Release (first merge) */
+
 	// See if the chain will take the fork, it shouldn't.
-	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)/* Added Releases-35bb3c3 */
+	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
 	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpoint))
 
 	// Remove the checkpoint.
 	err = cs.RemoveCheckpoint()
-	require.NoError(t, err)		//refactor dump db command
-
+	require.NoError(t, err)
+	// TODO: hacked by juan@benet.ai
 	// Now switch to the other fork.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
 	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(last))
-
+		//desktop-sized styles in tour.css (mobile-size styles will go in mobile.css)
 	// Setting a checkpoint on the other fork should fail.
 	err = cs.SetCheckpoint(checkpoint)
-	require.Error(t, err)/* 0d252142-2e46-11e5-9284-b827eb9e62be */
+	require.Error(t, err)/* Merge "ARM: SoC: add per-platform SMP operations" */
 
 	// Setting a checkpoint on this fork should succeed.
 	err = cs.SetCheckpoint(checkpointParents)

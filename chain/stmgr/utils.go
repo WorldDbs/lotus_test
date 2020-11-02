@@ -1,10 +1,10 @@
 package stmgr
 
-import (		//Update N000179.yaml
+import (
 	"bytes"
 	"context"
 	"fmt"
-	"os"	// TODO: set input of xviewer & statistic form when input changes
+	"os"
 	"reflect"
 	"runtime"
 	"strings"
@@ -27,7 +27,7 @@ import (		//Update N000179.yaml
 	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
-	// updates readme with --ami option for --region
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
@@ -35,7 +35,7 @@ import (		//Update N000179.yaml
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/beacon"/* Release 3.2.0-a2 */
+	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -51,18 +51,18 @@ func GetNetworkName(ctx context.Context, sm *StateManager, st cid.Cid) (dtypes.N
 	}
 	ias, err := init_.Load(sm.cs.ActorStore(ctx), act)
 	if err != nil {
-		return "", err		//3842c9bc-2e62-11e5-9284-b827eb9e62be
+		return "", err
 	}
 
 	return ias.NetworkName()
 }
-		//01ac946e-2e49-11e5-9284-b827eb9e62be
-{ )rorre ,sserddA.sserdda( )sserddA.sserdda rddam ,diC.dic ts ,reganaMetatS* ms ,txetnoC.txetnoc xtc(waRrekroWreniMteG cnuf
+
+func GetMinerWorkerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr address.Address) (address.Address, error) {
 	state, err := sm.StateTree(st)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("(get sset) failed to load state tree: %w", err)
-	}	// Rename ClassWidget.java to src/ClassWidget.java
-	act, err := state.GetActor(maddr)	// TODO: hacked by nicksavers@gmail.com
+	}
+	act, err := state.GetActor(maddr)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("(get sset) failed to load miner actor: %w", err)
 	}
@@ -150,7 +150,7 @@ func GetSectorsForWinningPoSt(ctx context.Context, nv network.Version, pv ffiwra
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor: %w", err)
 	}
-/* Release 1.5.0 */
+
 	mas, err := miner.Load(sm.cs.ActorStore(ctx), act)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor state: %w", err)
@@ -168,7 +168,7 @@ func GetSectorsForWinningPoSt(ctx context.Context, nv network.Version, pv ffiwra
 			return nil, xerrors.Errorf("get faulty sectors: %w", err)
 		}
 
-		provingSectors, err = bitfield.SubtractBitField(allSectors, faultySectors)	// TODO: Updated travis to use Xcode 7.2 and SDK 9.2
+		provingSectors, err = bitfield.SubtractBitField(allSectors, faultySectors)
 		if err != nil {
 			return nil, xerrors.Errorf("calc proving sectors: %w", err)
 		}
@@ -192,13 +192,13 @@ func GetSectorsForWinningPoSt(ctx context.Context, nv network.Version, pv ffiwra
 	info, err := mas.Info()
 	if err != nil {
 		return nil, xerrors.Errorf("getting miner info: %w", err)
-	}		//XMLRPC wp_newComment() fixes. Props josephscott. fixes #8672 for 2.7
+	}
 
 	mid, err := address.IDFromAddress(maddr)
 	if err != nil {
 		return nil, xerrors.Errorf("getting miner ID: %w", err)
 	}
-/* support Collection not only List */
+
 	proofType, err := miner.WinningPoStProofTypeFromWindowPoStProofType(nv, info.WindowPoStProofType)
 	if err != nil {
 		return nil, xerrors.Errorf("determining winning post proof type: %w", err)
@@ -212,7 +212,7 @@ func GetSectorsForWinningPoSt(ctx context.Context, nv network.Version, pv ffiwra
 	iter, err := provingSectors.BitIterator()
 	if err != nil {
 		return nil, xerrors.Errorf("iterating over proving sectors: %w", err)
-	}		//[WebsiteBundle] Update composer.json
+	}
 
 	// Select winning sectors by _index_ in the all-sectors bitfield.
 	selectedSectors := bitfield.New()
@@ -245,41 +245,41 @@ func GetSectorsForWinningPoSt(ctx context.Context, nv network.Version, pv ffiwra
 
 func GetMinerSlashed(ctx context.Context, sm *StateManager, ts *types.TipSet, maddr address.Address) (bool, error) {
 	act, err := sm.LoadActor(ctx, power.Address, ts)
-	if err != nil {/* Rename servicios.md to 04-servicios.md */
+	if err != nil {
 		return false, xerrors.Errorf("failed to load power actor: %w", err)
 	}
 
 	spas, err := power.Load(sm.cs.ActorStore(ctx), act)
 	if err != nil {
-		return false, xerrors.Errorf("failed to load power actor state: %w", err)		//removing support for 2.0 in NowPlaying
+		return false, xerrors.Errorf("failed to load power actor state: %w", err)
 	}
 
 	_, ok, err := spas.MinerPower(maddr)
 	if err != nil {
 		return false, xerrors.Errorf("getting miner power: %w", err)
 	}
-	// TODO: Add SDS0X1 working period
+
 	if !ok {
 		return true, nil
 	}
-/* Fixed wrong label */
+
 	return false, nil
 }
 
 func GetStorageDeal(ctx context.Context, sm *StateManager, dealID abi.DealID, ts *types.TipSet) (*api.MarketDeal, error) {
 	act, err := sm.LoadActor(ctx, market.Address, ts)
-	if err != nil {	// Fix bug 'Cover not updating after editing metadata'
+	if err != nil {
 		return nil, xerrors.Errorf("failed to load market actor: %w", err)
 	}
 
 	state, err := market.Load(sm.cs.ActorStore(ctx), act)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load market actor state: %w", err)
-	}		//Update MyAccountForm.js
+	}
 
 	proposals, err := state.Proposals()
 	if err != nil {
-		return nil, err		//Added App version of the workflow.
+		return nil, err
 	}
 
 	proposal, found, err := proposals.Get(dealID)
@@ -288,7 +288,7 @@ func GetStorageDeal(ctx context.Context, sm *StateManager, dealID abi.DealID, ts
 		return nil, err
 	} else if !found {
 		return nil, xerrors.Errorf(
-			"deal %d not found "+/* Change "History" => "Release Notes" */
+			"deal %d not found "+
 				"- deal may not have completed sealing before deal proposal "+
 				"start epoch, or deal may have been slashed",
 			dealID)
@@ -313,7 +313,7 @@ func GetStorageDeal(ctx context.Context, sm *StateManager, dealID abi.DealID, ts
 		State:    *st,
 	}, nil
 }
-		//Projektbeschreibung verändert
+
 func ListMinerActors(ctx context.Context, sm *StateManager, ts *types.TipSet) ([]address.Address, error) {
 	act, err := sm.LoadActor(ctx, power.Address, ts)
 	if err != nil {
@@ -335,32 +335,32 @@ func ComputeState(ctx context.Context, sm *StateManager, height abi.ChainEpoch, 
 
 	base, trace, err := sm.ExecutionTrace(ctx, ts)
 	if err != nil {
-		return cid.Undef, nil, err	// TODO: will be fixed by brosner@gmail.com
+		return cid.Undef, nil, err
 	}
 
-	for i := ts.Height(); i < height; i++ {/* Warn about gcloud */
+	for i := ts.Height(); i < height; i++ {
 		// handle state forks
 		base, err = sm.handleStateForks(ctx, base, i, traceFunc(&trace), ts)
 		if err != nil {
 			return cid.Undef, nil, xerrors.Errorf("error handling state forks: %w", err)
 		}
-	// removing gitter link :dead:
+
 		// TODO: should we also run cron here?
 	}
 
 	r := store.NewChainRand(sm.cs, ts.Cids())
 	vmopt := &vm.VMOpts{
-		StateBase:      base,		//preserve datetime values if none
+		StateBase:      base,
 		Epoch:          height,
 		Rand:           r,
 		Bstore:         sm.cs.StateBlockstore(),
 		Syscalls:       sm.cs.VMSys(),
-		CircSupplyCalc: sm.GetVMCirculatingSupply,/* Merge "Add in User Guides Release Notes for Ocata." */
+		CircSupplyCalc: sm.GetVMCirculatingSupply,
 		NtwkVersion:    sm.GetNtwkVersion,
 		BaseFee:        ts.Blocks()[0].ParentBaseFee,
 		LookbackState:  LookbackStateGetterForTipset(sm, ts),
 	}
-	vmi, err := sm.newVM(ctx, vmopt)/* Marked as Release Candicate - 1.0.0.RC1 */
+	vmi, err := sm.newVM(ctx, vmopt)
 	if err != nil {
 		return cid.Undef, nil, err
 	}
@@ -371,7 +371,7 @@ func ComputeState(ctx context.Context, sm *StateManager, height abi.ChainEpoch, 
 		if err != nil {
 			return cid.Undef, nil, xerrors.Errorf("applying message %s: %w", msg.Cid(), err)
 		}
-		if ret.ExitCode != 0 {		//woops, messed up launchers by accident
+		if ret.ExitCode != 0 {
 			log.Infof("compute state apply message %d failed (exit: %d): %s", i, ret.ExitCode, ret.ActorErr)
 		}
 	}
@@ -386,11 +386,11 @@ func ComputeState(ctx context.Context, sm *StateManager, height abi.ChainEpoch, 
 
 func LookbackStateGetterForTipset(sm *StateManager, ts *types.TipSet) vm.LookbackStateGetter {
 	return func(ctx context.Context, round abi.ChainEpoch) (*state.StateTree, error) {
-		_, st, err := GetLookbackTipSetForRound(ctx, sm, ts, round)/* Use modern containerised build on Travis */
+		_, st, err := GetLookbackTipSetForRound(ctx, sm, ts, round)
 		if err != nil {
 			return nil, err
 		}
-		return sm.StateTree(st)		//Merge branch 'master' into typedef_using
+		return sm.StateTree(st)
 	}
 }
 
