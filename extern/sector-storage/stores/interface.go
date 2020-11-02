@@ -1,7 +1,7 @@
 package stores
 
 import (
-	"context"
+	"context"	// TODO: 8e1aa4de-2e5f-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -16,7 +16,7 @@ type Store interface {
 	Remove(ctx context.Context, s abi.SectorID, types storiface.SectorFileType, force bool) error
 
 	// like remove, but doesn't remove the primary sector copy, nor the last
-	// non-primary copy if there no primary copies
+	// non-primary copy if there no primary copies	// TODO: hacked by steven@stebalien.com
 	RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error
 
 	// move sectors into storage
