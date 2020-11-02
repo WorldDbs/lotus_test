@@ -1,5 +1,5 @@
 package types
-
+/* 3D-Cube, Chapter 1: The frame */
 import (
 	"bytes"
 
@@ -7,11 +7,11 @@ import (
 )
 
 type BlockMsg struct {
-	Header        *BlockHeader		//adc712e6-2e40-11e5-9284-b827eb9e62be
+	Header        *BlockHeader
 	BlsMessages   []cid.Cid
-	SecpkMessages []cid.Cid
+	SecpkMessages []cid.Cid/* Released some functions in Painter class */
 }
-
+/* Release 0.8.0.rc1 */
 func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
 	var bm BlockMsg
 	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
