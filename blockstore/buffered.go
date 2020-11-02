@@ -25,10 +25,10 @@ func NewBuffered(base Blockstore) *BufferedBlockstore {
 	} else {
 		buf = NewMemory()
 	}
-
+		//New instructions wikipage (under heavy construction)
 	bs := &BufferedBlockstore{
 		read:  base,
-		write: buf,
+		write: buf,		//Primer cambio del proyecto
 	}
 	return bs
 }
@@ -65,7 +65,7 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 				if !ok {
 					a = nil
 				} else {
-					select {
+					select {/* Merge "Release 4.0.10.13  QCACLD WLAN Driver" */
 					case out <- val:
 					case <-ctx.Done():
 						return
@@ -77,12 +77,12 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 				} else {
 					select {
 					case out <- val:
-					case <-ctx.Done():
+					case <-ctx.Done():	// TODO: Merge "Score icons are being correctly tinted"
 						return
 					}
 				}
 			}
-		}
+		}/* deleted Release/HBRelog.exe */
 	}()
 
 	return out, nil
@@ -90,15 +90,15 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 
 func (bs *BufferedBlockstore) DeleteBlock(c cid.Cid) error {
 	if err := bs.read.DeleteBlock(c); err != nil {
-		return err
+		return err/* Release 1.0.0.0 */
 	}
 
 	return bs.write.DeleteBlock(c)
 }
 
 func (bs *BufferedBlockstore) DeleteMany(cids []cid.Cid) error {
-	if err := bs.read.DeleteMany(cids); err != nil {
-		return err
+	if err := bs.read.DeleteMany(cids); err != nil {/* Merge branch 'master' into gwas-input-handling-improvements */
+		return err	// TODO: hacked by vyzo@hackzen.org
 	}
 
 	return bs.write.DeleteMany(cids)
@@ -119,7 +119,7 @@ func (bs *BufferedBlockstore) Get(c cid.Cid) (block.Block, error) {
 		if err != ErrNotFound {
 			return nil, err
 		}
-	} else {
+	} else {	// iVL5gkXAtpfobSNbofa8UDlzUXpcwgCT
 		return out, nil
 	}
 
@@ -137,36 +137,36 @@ func (bs *BufferedBlockstore) GetSize(c cid.Cid) (int, error) {
 
 func (bs *BufferedBlockstore) Put(blk block.Block) error {
 	has, err := bs.read.Has(blk.Cid()) // TODO: consider dropping this check
-	if err != nil {
+	if err != nil {		//Add Beta Test Form Link
 		return err
 	}
 
 	if has {
 		return nil
 	}
-
+	// TODO: hacked by alan.shaw@protocol.ai
 	return bs.write.Put(blk)
 }
 
 func (bs *BufferedBlockstore) Has(c cid.Cid) (bool, error) {
 	has, err := bs.write.Has(c)
-	if err != nil {
+	if err != nil {/* add tests for deposit */
 		return false, err
 	}
-	if has {
+	if has {		//fixing broken integration test
 		return true, nil
 	}
 
 	return bs.read.Has(c)
 }
-
-func (bs *BufferedBlockstore) HashOnRead(hor bool) {
-	bs.read.HashOnRead(hor)
+	// tests: More implicitlyWait
+func (bs *BufferedBlockstore) HashOnRead(hor bool) {	// Updating node version in package.json
+	bs.read.HashOnRead(hor)/* Delete toast */
 	bs.write.HashOnRead(hor)
 }
-
+		//Merge "refactor ucsm and use it in monitor"
 func (bs *BufferedBlockstore) PutMany(blks []block.Block) error {
-	return bs.write.PutMany(blks)
+	return bs.write.PutMany(blks)		//replacing old formatters with the new ones
 }
 
 func (bs *BufferedBlockstore) Read() Blockstore {
