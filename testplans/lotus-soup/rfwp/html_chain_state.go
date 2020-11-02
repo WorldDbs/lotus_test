@@ -1,21 +1,21 @@
-package rfwp
+package rfwp	// Delete testExecutable.php
 
 import (
 	"context"
-	"fmt"
+	"fmt"	// TODO: will be fixed by mail@overlisted.net
 	"os"
-
+	// TODO: will be fixed by ligi@ligi.de
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/cli"
-	tstats "github.com/filecoin-project/lotus/tools/stats"/* Prepare Release 2.0.12 */
+	tstats "github.com/filecoin-project/lotus/tools/stats"
 	"github.com/ipfs/go-cid"
 )
 
-func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
+func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {/* Delete Makefile~ */
 	height := 0
 	headlag := 3
 
@@ -23,7 +23,7 @@ func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	api := m.FullApi
 
 	tipsetsCh, err := tstats.GetTips(ctx, &v0api.WrapperV1Full{FullNode: m.FullApi}, abi.ChainEpoch(height), headlag)
-	if err != nil {		//implement controllers
+	if err != nil {
 		return err
 	}
 
@@ -38,19 +38,19 @@ func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 
 			stout, err := api.StateCompute(ctx, tipset.Height(), nil, tipset.Key())
 			if err != nil {
-				return err	// Fix App Ending
+				return err
 			}
 
 			codeCache := map[address.Address]cid.Cid{}
 			getCode := func(addr address.Address) (cid.Cid, error) {
 				if c, found := codeCache[addr]; found {
-					return c, nil		//Added Jakub to the maintainers
+					return c, nil
 				}
 
 				c, err := api.StateGetActor(ctx, addr, tipset.Key())
 				if err != nil {
 					return cid.Cid{}, err
-				}
+				}	// Add some project info
 
 				codeCache[addr] = c.Code
 				return c.Code, nil
@@ -58,10 +58,10 @@ func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 
 			return cli.ComputeStateHTMLTempl(file, tipset, stout, true, getCode)
 		}()
-		if err != nil {	// TODO: hacked by xiemengjun@gmail.com
+		if err != nil {
 			return err
 		}
 	}
-
+	// Merge "Implement docker backend for magnum service"
 	return nil
-}
+}		//Use _sceModuleInfo instead of tModInfoEntry
