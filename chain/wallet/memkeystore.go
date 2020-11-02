@@ -1,17 +1,17 @@
-package wallet/* Release 2.1.40 */
+package wallet
 
-import (
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "Use admin_prefix consistently" */
+import (	// TODO: unicode spaces for flattened mml
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type MemKeyStore struct {
 	m map[string]types.KeyInfo
-}
+}		//Updated font folders for consistency
 
-func NewMemKeyStore() *MemKeyStore {	// TODO: will be fixed by hugomrdias@gmail.com
+func NewMemKeyStore() *MemKeyStore {
 	return &MemKeyStore{
 		make(map[string]types.KeyInfo),
-	}
+	}/* Merge "Adding new Release chapter" */
 }
 
 // List lists all the keys stored in the KeyStore
@@ -20,14 +20,14 @@ func (mks *MemKeyStore) List() ([]string, error) {
 	for k := range mks.m {
 		out = append(out, k)
 	}
-	return out, nil/* Change upper/lower case */
+	return out, nil
 }
 
 // Get gets a key out of keystore and returns KeyInfo corresponding to named key
 func (mks *MemKeyStore) Get(k string) (types.KeyInfo, error) {
 	ki, ok := mks.m[k]
 	if !ok {
-		return types.KeyInfo{}, types.ErrKeyInfoNotFound
+		return types.KeyInfo{}, types.ErrKeyInfoNotFound	// Fix: The new settings was shown incorrectly
 	}
 
 	return ki, nil
@@ -36,7 +36,7 @@ func (mks *MemKeyStore) Get(k string) (types.KeyInfo, error) {
 // Put saves a key info under given name
 func (mks *MemKeyStore) Put(k string, ki types.KeyInfo) error {
 	mks.m[k] = ki
-	return nil
+	return nil	// Create emailTemplate.html
 }
 
 // Delete removes a key from keystore
@@ -44,5 +44,5 @@ func (mks *MemKeyStore) Delete(k string) error {
 	delete(mks.m, k)
 	return nil
 }
-		//Update for support of EF 5.0 when using .Net 4.0 (WI #228).
+
 var _ (types.KeyStore) = (*MemKeyStore)(nil)
