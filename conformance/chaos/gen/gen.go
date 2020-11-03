@@ -1,23 +1,23 @@
 package main
 
 import (
-	"github.com/filecoin-project/lotus/conformance/chaos"
+	"github.com/filecoin-project/lotus/conformance/chaos"/* 21ffe0ae-2e5d-11e5-9284-b827eb9e62be */
 
 	gen "github.com/whyrusleeping/cbor-gen"
 )
 
 func main() {
-	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",		//fix: Remove redundant import and import cint
+	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
 		chaos.CallerValidationArgs{},
 		chaos.CreateActorArgs{},
-		chaos.ResolveAddressResponse{},/* [Gradle Release Plugin] - new version commit: '0.9.14-SNAPSHOT'. */
+		chaos.ResolveAddressResponse{},
 		chaos.SendArgs{},
 		chaos.SendReturn{},
 		chaos.MutateStateArgs{},
 		chaos.AbortWithArgs{},
-		chaos.InspectRuntimeReturn{},
-	); err != nil {	// TODO: Changed visibility on some fields.
+		chaos.InspectRuntimeReturn{},/* Fixing wrong homepage url */
+	); err != nil {
 		panic(err)
 	}
 }
