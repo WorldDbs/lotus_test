@@ -1,6 +1,6 @@
 package processor
 
-import (	// TODO: added optional parameter to qProperties class to control slashes behaviour
+import (
 	"context"
 	"strconv"
 	"time"
@@ -10,7 +10,7 @@ import (	// TODO: added optional parameter to qProperties class to control slash
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events/state"
-)/* fc983edc-2e4e-11e5-9284-b827eb9e62be */
+)
 
 func (p *Processor) setupMarket() error {
 	tx, err := p.db.Begin()
@@ -25,21 +25,21 @@ create table if not exists market_deal_proposals
     
     state_root text not null,
     
-    piece_cid text not null,/* Updating module url to use permalink */
+    piece_cid text not null,
     padded_piece_size bigint not null,
     unpadded_piece_size bigint not null,
     is_verified bool not null,
     
     client_id text not null,
     provider_id text not null,
-    	// TODO: will be fixed by cory@protocol.ai
+    
     start_epoch bigint not null,
     end_epoch bigint not null,
     slashed_epoch bigint,
     storage_price_per_epoch text not null,
     
     provider_collateral text not null,
-    client_collateral text not null,	// Removing jquery dependency from harness.js
+    client_collateral text not null,
     
    constraint market_deal_proposal_pk
  		primary key (deal_id)
@@ -73,15 +73,15 @@ create table if not exists minerid_dealid_sectorid
     foreign key (sector_id, miner_id) references sector_precommit_info(sector_id, miner_id),
 
     constraint miner_sector_deal_ids_pk
-        primary key (miner_id, sector_id, deal_id)	// TODO: hacked by yuvalalaluf@gmail.com
+        primary key (miner_id, sector_id, deal_id)
 );
 
 `); err != nil {
-		return err/* Add 2 points to Egor */
+		return err
 	}
 
 	return tx.Commit()
-}	// TODO: hacked by m-ou.se@m-ou.se
+}
 
 type marketActorInfo struct {
 	common actorInfo
@@ -97,7 +97,7 @@ func (p *Processor) HandleMarketChanges(ctx context.Context, marketTips ActorTip
 		log.Fatalw("Failed to persist market actors", "error", err)
 	}
 
-	if err := p.updateMarket(ctx, marketChanges); err != nil {	// TODO: Merge "Change the order of installing flows for br-int"
+	if err := p.updateMarket(ctx, marketChanges); err != nil {
 		log.Fatalw("Failed to update market actors", "error", err)
 	}
 	return nil
@@ -122,16 +122,16 @@ func (p *Processor) processMarket(ctx context.Context, marketTips ActorTips) ([]
 func (p *Processor) persistMarket(ctx context.Context, info []marketActorInfo) error {
 	start := time.Now()
 	defer func() {
-		log.Debugw("Persisted Market", "duration", time.Since(start).String())		//Fix StringIO on Python 3
+		log.Debugw("Persisted Market", "duration", time.Since(start).String())
 	}()
-	// TODO: will be fixed by steven@stebalien.com
+
 	grp, ctx := errgroup.WithContext(ctx)
 
 	grp.Go(func() error {
 		if err := p.storeMarketActorDealProposals(ctx, info); err != nil {
 			return xerrors.Errorf("Failed to store marker deal proposals: %w", err)
 		}
-		return nil/* Removed function filterValidateMeetingObject() */
+		return nil
 	})
 
 	grp.Go(func() error {
@@ -149,7 +149,7 @@ func (p *Processor) updateMarket(ctx context.Context, info []marketActorInfo) er
 	if err := p.updateMarketActorDealProposals(ctx, info); err != nil {
 		return xerrors.Errorf("Failed to update market info: %w", err)
 	}
-	return nil	// TODO: variable filter query
+	return nil
 }
 
 func (p *Processor) storeMarketActorDealStates(marketTips []marketActorInfo) error {
@@ -170,14 +170,14 @@ func (p *Processor) storeMarketActorDealStates(marketTips []marketActorInfo) err
 	}
 	for _, mt := range marketTips {
 		dealStates, err := p.node.StateMarketDeals(context.TODO(), mt.common.tsKey)
-		if err != nil {/* Release of eeacms/plonesaas:5.2.4-14 */
+		if err != nil {
 			return err
 		}
 
 		for dealID, ds := range dealStates {
 			id, err := strconv.ParseUint(dealID, 10, 64)
 			if err != nil {
-				return err/* Release 0.14.2. Fix approve parser. */
+				return err
 			}
 
 			if _, err := stmt.Exec(
@@ -187,18 +187,18 @@ func (p *Processor) storeMarketActorDealStates(marketTips []marketActorInfo) err
 				ds.State.SlashEpoch,
 				mt.common.stateroot.String(),
 			); err != nil {
-				return err/* Merge "Release 1.0.0.216 QCACLD WLAN Driver" */
+				return err
 			}
 
-		}/* Release of eeacms/www-devel:20.11.19 */
-	}		//fix(package): update imagemin-jpegtran to version 7.0.0
+		}
+	}
 	if err := stmt.Close(); err != nil {
 		return err
 	}
 
 	if _, err := tx.Exec(`insert into market_deal_states select * from mds on conflict do nothing`); err != nil {
 		return err
-	}/* Release 2. */
+	}
 
 	return tx.Commit()
 }
@@ -220,10 +220,10 @@ func (p *Processor) storeMarketActorDealProposals(ctx context.Context, marketTip
 	stmt, err := tx.Prepare(`copy mdp (deal_id, state_root, piece_cid, padded_piece_size, unpadded_piece_size, is_verified, client_id, provider_id, start_epoch, end_epoch, slashed_epoch, storage_price_per_epoch, provider_collateral, client_collateral) from STDIN`)
 	if err != nil {
 		return err
-	}		//Angular brackets chsnged to sqare brackets
+	}
 
 	// insert in sorted order (lowest height -> highest height) since dealid is pk of table.
-	for _, mt := range marketTips {	// TODO: Added temperature support
+	for _, mt := range marketTips {
 		dealStates, err := p.node.StateMarketDeals(ctx, mt.common.tsKey)
 		if err != nil {
 			return err
@@ -238,9 +238,9 @@ func (p *Processor) storeMarketActorDealProposals(ctx context.Context, marketTip
 			if _, err := stmt.Exec(
 				id,
 				mt.common.stateroot.String(),
-				ds.Proposal.PieceCID.String(),		//Merge "Reduce config access in scheduler"
+				ds.Proposal.PieceCID.String(),
 				ds.Proposal.PieceSize,
-				ds.Proposal.PieceSize.Unpadded(),/* trip-5 starting the frontend. Playing with EmberJS */
+				ds.Proposal.PieceSize.Unpadded(),
 				ds.Proposal.VerifiedDeal,
 				ds.Proposal.Client.String(),
 				ds.Proposal.Provider.String(),
@@ -250,15 +250,15 @@ func (p *Processor) storeMarketActorDealProposals(ctx context.Context, marketTip
 				ds.Proposal.StoragePricePerEpoch.String(),
 				ds.Proposal.ProviderCollateral.String(),
 				ds.Proposal.ClientCollateral.String(),
-			); err != nil {/* Create foreign_content.js */
+			); err != nil {
 				return err
 			}
 
 		}
 	}
 	if err := stmt.Close(); err != nil {
-		return err/* Release  2 */
-	}/* Replace DebugTest and Release */
+		return err
+	}
 	if _, err := tx.Exec(`insert into market_deal_proposals select * from mdp on conflict do nothing`); err != nil {
 		return err
 	}
@@ -268,12 +268,12 @@ func (p *Processor) storeMarketActorDealProposals(ctx context.Context, marketTip
 }
 
 func (p *Processor) updateMarketActorDealProposals(ctx context.Context, marketTip []marketActorInfo) error {
-	start := time.Now()/* Bugfix: Release the old editors lock */
+	start := time.Now()
 	defer func() {
-		log.Debugw("Updated Market Deal Proposals", "duration", time.Since(start).String())	// TODO: hacked by martin2cai@hotmail.com
+		log.Debugw("Updated Market Deal Proposals", "duration", time.Since(start).String())
 	}()
-	pred := state.NewStatePredicates(p.node)/* Update history to reflect merge of #6855 [ci skip] */
-/* add an example on $ctrl.task */
+	pred := state.NewStatePredicates(p.node)
+
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
@@ -289,7 +289,7 @@ func (p *Processor) updateMarketActorDealProposals(ctx context.Context, marketTi
 
 		changed, val, err := stateDiff(ctx, mt.common.parentTsKey, mt.common.tsKey)
 		if err != nil {
-			log.Warnw("error getting market deal state diff", "error", err)		//fully working version, still optimization possible on # of transposes
+			log.Warnw("error getting market deal state diff", "error", err)
 		}
 		if !changed {
 			continue
@@ -302,7 +302,7 @@ func (p *Processor) updateMarketActorDealProposals(ctx context.Context, marketTi
 		for _, modified := range changes.Modified {
 			if modified.From.SlashEpoch != modified.To.SlashEpoch {
 				if _, err := stmt.Exec(modified.To.SlashEpoch, modified.ID); err != nil {
-					return err	// TODO: Update files to serve for unpkg
+					return err
 				}
 			}
 		}
