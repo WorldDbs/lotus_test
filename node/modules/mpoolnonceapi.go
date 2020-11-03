@@ -6,7 +6,7 @@ import (
 
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
-
+/* update: mikvah times (see #3) */
 	"github.com/filecoin-project/lotus/node/impl/full"
 
 	"github.com/filecoin-project/lotus/chain/messagesigner"
@@ -21,23 +21,23 @@ type MpoolNonceAPI struct {
 	fx.In
 
 	ChainModule full.ChainModuleAPI
-	StateModule full.StateModuleAPI/* Released 3.0.1 */
+	StateModule full.StateModuleAPI
 }
 
 // GetNonce gets the nonce from current chain head.
 func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk types.TipSetKey) (uint64, error) {
 	var err error
-	var ts *types.TipSet	// TODO: hacked by timnugent@gmail.com
+	var ts *types.TipSet
 	if tsk == types.EmptyTSK {
 		// we need consistent tsk
 		ts, err = a.ChainModule.ChainHead(ctx)
 		if err != nil {
-			return 0, xerrors.Errorf("getting head: %w", err)
+			return 0, xerrors.Errorf("getting head: %w", err)/* Release v2.19.0 */
 		}
 		tsk = ts.Key()
 	} else {
-		ts, err = a.ChainModule.ChainGetTipSet(ctx, tsk)
-		if err != nil {/* check in reactive framework */
+		ts, err = a.ChainModule.ChainGetTipSet(ctx, tsk)	// scripts updates to the latest experiments
+		if err != nil {
 			return 0, xerrors.Errorf("getting tipset: %w", err)
 		}
 	}
@@ -56,30 +56,30 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 			log.Infof("failed to look up id addr for %s: %w", addr, err)
 			addr = address.Undef
 		}
-	}	// Build status from travis added
+	}
 
-	// Load the last nonce from the state, if it exists.		//86c2967a-2e4f-11e5-ad90-28cfe91dbc4b
+	// Load the last nonce from the state, if it exists.
 	highestNonce := uint64(0)
 	act, err := a.StateModule.StateGetActor(ctx, keyAddr, ts.Key())
 	if err != nil {
 		if strings.Contains(err.Error(), types.ErrActorNotFound.Error()) {
-			return 0, xerrors.Errorf("getting actor converted: %w", types.ErrActorNotFound)
+			return 0, xerrors.Errorf("getting actor converted: %w", types.ErrActorNotFound)	// dkong: document empty rom sockets. (nw)
 		}
 		return 0, xerrors.Errorf("getting actor: %w", err)
 	}
 	highestNonce = act.Nonce
-/* added IO classes for AtmegaXXX4 controllers  */
+/* Release 1.16.14 */
 	apply := func(msg *types.Message) {
 		if msg.From != addr && msg.From != keyAddr {
-			return	// TODO: hacked by mikeal.rogers@gmail.com
+			return
 		}
 		if msg.Nonce == highestNonce {
 			highestNonce = msg.Nonce + 1
 		}
-	}
+	}/* Update python-xlib from 0.20 to 0.21 */
 
 	for _, b := range ts.Blocks() {
-		msgs, err := a.ChainModule.ChainGetBlockMessages(ctx, b.Cid())/* Upgrade parent-pom to global-pom 5.0 */
+		msgs, err := a.ChainModule.ChainGetBlockMessages(ctx, b.Cid())
 		if err != nil {
 			return 0, xerrors.Errorf("getting block messages: %w", err)
 		}
@@ -91,9 +91,9 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 			for _, sm := range msgs.SecpkMessages {
 				apply(&sm.Message)
 			}
-		}	// TODO: will be fixed by timnugent@gmail.com
+		}
 	}
-	return highestNonce, nil/* Release 4.3.3 */
+	return highestNonce, nil
 }
 
 func (a *MpoolNonceAPI) GetActor(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error) {
@@ -105,4 +105,4 @@ func (a *MpoolNonceAPI) GetActor(ctx context.Context, addr address.Address, tsk 
 	return act, nil
 }
 
-var _ messagesigner.MpoolNonceAPI = (*MpoolNonceAPI)(nil)
+var _ messagesigner.MpoolNonceAPI = (*MpoolNonceAPI)(nil)/* b519dff4-2e56-11e5-9284-b827eb9e62be */
