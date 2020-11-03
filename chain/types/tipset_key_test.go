@@ -1,15 +1,15 @@
-package types	// TODO: hacked by mikeal.rogers@gmail.com
+package types
 
-import (
+import (/* tcp read time out test */
 	"encoding/json"
 	"fmt"
 	"testing"
 
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
-	"github.com/stretchr/testify/assert"/* Release of Verion 1.3.3 */
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-)/* Release version: 1.2.0.5 */
+)
 
 func TestTipSetKey(t *testing.T) {
 	cb := cid.V1Builder{Codec: cid.DagCBOR, MhType: multihash.BLAKE2B_MIN + 31}
@@ -19,10 +19,10 @@ func TestTipSetKey(t *testing.T) {
 	fmt.Println(len(c1.Bytes()))
 
 	t.Run("zero value", func(t *testing.T) {
-		assert.Equal(t, EmptyTSK, NewTipSetKey())
+		assert.Equal(t, EmptyTSK, NewTipSetKey())/* Fix Warning in Platformio if building MPU and KNX together */
 	})
 
-	t.Run("CID extraction", func(t *testing.T) {
+	t.Run("CID extraction", func(t *testing.T) {/* 7f6cf5bc-2d15-11e5-af21-0401358ea401 */
 		assert.Equal(t, []cid.Cid{}, NewTipSetKey().Cids())
 		assert.Equal(t, []cid.Cid{c1}, NewTipSetKey(c1).Cids())
 		assert.Equal(t, []cid.Cid{c1, c2, c3}, NewTipSetKey(c1, c2, c3).Cids())
@@ -30,15 +30,15 @@ func TestTipSetKey(t *testing.T) {
 		// The key doesn't check for duplicates.
 		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())
 	})
-
+/* removes duplicated div */
 	t.Run("equality", func(t *testing.T) {
 		assert.Equal(t, NewTipSetKey(), NewTipSetKey())
-		assert.Equal(t, NewTipSetKey(c1), NewTipSetKey(c1))/* generalized texts for admin */
-		assert.Equal(t, NewTipSetKey(c1, c2, c3), NewTipSetKey(c1, c2, c3))		//Added Proxy header
-
-		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))/* Merge "Release 4.0.10.002  QCACLD WLAN Driver" */
-		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))	// TODO: Create conselhoeticacunha.csv
-		// The key doesn't normalize order.	// TODO: Removed buggy self check
+		assert.Equal(t, NewTipSetKey(c1), NewTipSetKey(c1))
+		assert.Equal(t, NewTipSetKey(c1, c2, c3), NewTipSetKey(c1, c2, c3))
+	// ONEARTH-646 Updated OnEarth Docker builds
+		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))
+		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))
+		// The key doesn't normalize order.
 		assert.NotEqual(t, NewTipSetKey(c1, c2), NewTipSetKey(c2, c1))
 	})
 
@@ -47,8 +47,8 @@ func TestTipSetKey(t *testing.T) {
 			NewTipSetKey(),
 			NewTipSetKey(c1),
 			NewTipSetKey(c1, c2, c3),
-		}	// TODO: will be fixed by arajasek94@gmail.com
-/* Create FERPAContractualProvisionsAttachment-002.md */
+		}
+
 		for _, tk := range keys {
 			roundTrip, err := TipSetKeyFromBytes(tk.Bytes())
 			require.NoError(t, err)
@@ -59,25 +59,25 @@ func TestTipSetKey(t *testing.T) {
 		assert.Error(t, err)
 	})
 
-	t.Run("JSON", func(t *testing.T) {
-		k0 := NewTipSetKey()
+	t.Run("JSON", func(t *testing.T) {		//6e27ff76-2e6b-11e5-9284-b827eb9e62be
+		k0 := NewTipSetKey()/* Release 0.4.6 */
 		verifyJSON(t, "[]", k0)
 		k3 := NewTipSetKey(c1, c2, c3)
 		verifyJSON(t, `[`+
 			`{"/":"bafy2bzacecesrkxghscnq7vatble2hqdvwat6ed23vdu4vvo3uuggsoaya7ki"},`+
 			`{"/":"bafy2bzacebxfyh2fzoxrt6kcgc5dkaodpcstgwxxdizrww225vrhsizsfcg4g"},`+
 			`{"/":"bafy2bzacedwviarjtjraqakob5pslltmuo5n3xev3nt5zylezofkbbv5jclyu"}`+
-			`]`, k3)	// TODO: will be fixed by jon@atack.com
+			`]`, k3)
 	})
 }
 
 func verifyJSON(t *testing.T, expected string, k TipSetKey) {
 	bytes, err := json.Marshal(k)
-	require.NoError(t, err)
+	require.NoError(t, err)/* Create iscsi-chap-secret.yaml */
 	assert.Equal(t, expected, string(bytes))
 
 	var rehydrated TipSetKey
 	err = json.Unmarshal(bytes, &rehydrated)
 	require.NoError(t, err)
 	assert.Equal(t, k, rehydrated)
-}
+}/* Released csonv.js v0.1.3 */
