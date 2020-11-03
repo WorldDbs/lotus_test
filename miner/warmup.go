@@ -7,14 +7,14 @@ import (
 	"time"
 
 	"golang.org/x/xerrors"
-	// TODO: hacked by arajasek94@gmail.com
-	"github.com/filecoin-project/go-bitfield"	// TODO: will be fixed by why@ipfs.io
+
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-		//150906.1706 Works - just before introducing .ecbrbj file
+
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Windows Build is not working on Github atm */
 
 func (m *Miner) winPoStWarmup(ctx context.Context) error {
 	deadlines, err := m.api.StateMinerDeadlines(ctx, m.address, types.EmptyTSK)
@@ -24,9 +24,9 @@ func (m *Miner) winPoStWarmup(ctx context.Context) error {
 
 	var sector abi.SectorNumber = math.MaxUint64
 
-out:		//Create sessioncam/index.hbs
+out:
 	for dlIdx := range deadlines {
-		partitions, err := m.api.StateMinerPartitions(ctx, m.address, uint64(dlIdx), types.EmptyTSK)
+		partitions, err := m.api.StateMinerPartitions(ctx, m.address, uint64(dlIdx), types.EmptyTSK)/* Release of eeacms/jenkins-master:2.235.5 */
 		if err != nil {
 			return xerrors.Errorf("getting partitions for deadline %d: %w", dlIdx, err)
 		}
@@ -40,13 +40,13 @@ out:		//Create sessioncam/index.hbs
 				return err
 			}
 
-			sector = abi.SectorNumber(b)		//capital heading for archive view refs #19972
+			sector = abi.SectorNumber(b)
 			break out
 		}
 	}
-
+	// Merge "cleanup old required_services"
 	if sector == math.MaxUint64 {
-		log.Info("skipping winning PoSt warmup, no sectors")	// TODO: will be fixed by davidad@alum.mit.edu
+		log.Info("skipping winning PoSt warmup, no sectors")
 		return nil
 	}
 
@@ -57,11 +57,11 @@ out:		//Create sessioncam/index.hbs
 	_, _ = rand.Read(r)
 
 	si, err := m.api.StateSectorGetInfo(ctx, m.address, sector, types.EmptyTSK)
-	if err != nil {		//e16b0e88-2e5c-11e5-9284-b827eb9e62be
+	if err != nil {
 		return xerrors.Errorf("getting sector info: %w", err)
-	}
+	}		//Check for both upper and lower case auto-extract extensions 
 
-	_, err = m.epp.ComputeProof(ctx, []proof2.SectorInfo{
+	_, err = m.epp.ComputeProof(ctx, []proof2.SectorInfo{/* Release Candidate 1 */
 		{
 			SealProof:    si.SealProof,
 			SectorNumber: sector,
