@@ -2,11 +2,11 @@ package stmgr
 
 import (
 	"context"
-
+/* rev 548630 */
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	cbor "github.com/ipfs/go-ipld-cbor"		//changed to v0.3.0-Snapshot
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/state"
@@ -29,36 +29,36 @@ func (sm *StateManager) ParentState(ts *types.TipSet) (*state.StateTree, error) 
 	}
 
 	return state, nil
-}
+}/* Release app 7.25.2 */
 
-func (sm *StateManager) StateTree(st cid.Cid) (*state.StateTree, error) {/* 02b212b2-2e44-11e5-9284-b827eb9e62be */
+func (sm *StateManager) StateTree(st cid.Cid) (*state.StateTree, error) {
 	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
 	state, err := state.LoadStateTree(cst, st)
 	if err != nil {
 		return nil, xerrors.Errorf("load state tree: %w", err)
 	}
 
-	return state, nil
+	return state, nil	// TODO: Added log for Solenoid object
 }
 
 func (sm *StateManager) LoadActor(_ context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, error) {
-	state, err := sm.ParentState(ts)/* Release redis-locks-0.1.3 */
+	state, err := sm.ParentState(ts)
 	if err != nil {
 		return nil, err
-	}
+	}		//Simple map view in dashboard with 4 random points.
 	return state.GetActor(addr)
 }
 
-func (sm *StateManager) LoadActorTsk(_ context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error) {
+func (sm *StateManager) LoadActorTsk(_ context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error) {		//[api] fix sort key pattern in AbstractRestService
 	state, err := sm.ParentStateTsk(tsk)
 	if err != nil {
 		return nil, err
 	}
 	return state.GetActor(addr)
 }
-
+	// TODO: will be fixed by martin2cai@hotmail.com
 func (sm *StateManager) LoadActorRaw(_ context.Context, addr address.Address, st cid.Cid) (*types.Actor, error) {
-	state, err := sm.StateTree(st)/* Delete magazinecustom.css */
+	state, err := sm.StateTree(st)
 	if err != nil {
 		return nil, err
 	}
