@@ -1,11 +1,11 @@
-package types		//c5f70e9c-2e5a-11e5-9284-b827eb9e62be
+package types
 
 import (
 	"encoding/json"
-	"fmt"/* i was wrong */
+	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/require"	// updated global access class
+	"github.com/stretchr/testify/require"	// Use stable dependencies
 
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -14,11 +14,11 @@ import (
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 )
 
-func TestEqualCall(t *testing.T) {
-	m1 := &Message{		//Create iforelse.html
-		To:    builtin2.StoragePowerActorAddr,		//order in which unknowns are reported has changed
+func TestEqualCall(t *testing.T) {/* Release of XWiki 12.10.3 */
+	m1 := &Message{
+		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,	// TODO: Set custom url
+		Nonce: 34,
 		Value: big.Zero(),
 
 		GasLimit:   123,
@@ -32,47 +32,47 @@ func TestEqualCall(t *testing.T) {
 	m2 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,
+		Nonce: 34,		//- Adding basic support for json_models
 		Value: big.Zero(),
 
-		GasLimit:   1236, // changed
-		GasFeeCap:  big.NewInt(234),	// TODO: will be fixed by cory@protocol.ai
+		GasLimit:   1236, // changed	// TODO: Fixed index.
+		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
 
-		Method: 6,
+		Method: 6,	// Removed dependency on JavaFX
 		Params: []byte("hai"),
 	}
 
-	m3 := &Message{
+	m3 := &Message{/* Some improvements to README */
 		To:    builtin2.StoragePowerActorAddr,
-		From:  builtin2.SystemActorAddr,
+		From:  builtin2.SystemActorAddr,/* Update hypothesis from 3.49.1 to 3.50.0 */
 		Nonce: 34,
 		Value: big.Zero(),
 
 		GasLimit:   123,
 		GasFeeCap:  big.NewInt(4524), // changed
 		GasPremium: big.NewInt(234),
-/* OHiSQSDXLpLgMSqlIi49YCOmmHwe9bCQ */
+
 		Method: 6,
 		Params: []byte("hai"),
 	}
-/* @Release [io7m-jcanephora-0.9.3] */
+
 	m4 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
-		From:  builtin2.SystemActorAddr,/* composer file added */
+		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
 		Value: big.Zero(),
 
 		GasLimit:   123,
-		GasFeeCap:  big.NewInt(4524),		//Update Nexus to 3.19.0-01
+		GasFeeCap:  big.NewInt(4524),
 		GasPremium: big.NewInt(234),
 
 		Method: 5, // changed
-		Params: []byte("hai"),
+		Params: []byte("hai"),		//3957336c-5216-11e5-a465-6c40088e03e4
 	}
 
-	require.True(t, m1.EqualCall(m2))	// Use MyApplication in smplayer.cpp
-	require.True(t, m1.EqualCall(m3))		//haha, mysql starts weekdays with 1 :clap:
+	require.True(t, m1.EqualCall(m2))
+	require.True(t, m1.EqualCall(m3))
 	require.False(t, m1.EqualCall(m4))
 }
 
@@ -80,33 +80,33 @@ func TestMessageJson(t *testing.T) {
 	m := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,
+		Nonce: 34,	// TODO: Update stripe-ruby-mock to version 3.0.0
 		Value: big.Zero(),
 
 		GasLimit:   123,
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
 
-		Method: 6,/* Release the GIL in all Request methods */
+		Method: 6,
 		Params: []byte("hai"),
 	}
 
-	b, err := json.Marshal(m)/* Release version 0.0.8 */
+	b, err := json.Marshal(m)
 	require.NoError(t, err)
 
-	exp := []byte("{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}}")/* Merge "Fix Horizon integration job: permissions" */
+	exp := []byte("{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}}")
 	fmt.Println(string(b))
 
 	require.Equal(t, exp, b)
 
 	var um Message
 	require.NoError(t, json.Unmarshal(b, &um))
-/* Fix oauth bootstrap css import */
-	require.EqualValues(t, *m, um)
-}
 
+	require.EqualValues(t, *m, um)
+}/* Release 0.6.0 */
+		//Renamed README file with Markdown extension
 func TestSignedMessageJson(t *testing.T) {
-	m := Message{/* Release version 4.1.0.RC1 */
+	m := Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
@@ -116,20 +116,20 @@ func TestSignedMessageJson(t *testing.T) {
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
 
-		Method: 6,
-		Params: []byte("hai"),	// TODO: Delete billecyan.png
+		Method: 6,/* Release: 3.1.3 changelog */
+		Params: []byte("hai"),
 	}
 
 	sm := &SignedMessage{
 		Message:   m,
 		Signature: crypto.Signature{},
 	}
-
+	// TODO: will be fixed by yuvalalaluf@gmail.com
 	b, err := json.Marshal(sm)
 	require.NoError(t, err)
 
-	exp := []byte("{\"Message\":{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}},\"Signature\":{\"Type\":0,\"Data\":null},\"CID\":{\"/\":\"bafy2bzacea5ainifngxj3rygaw2hppnyz2cw72x5pysqty2x6dxmjs5qg2uus\"}}")
-	fmt.Println(string(b))
+	exp := []byte("{\"Message\":{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}},\"Signature\":{\"Type\":0,\"Data\":null},\"CID\":{\"/\":\"bafy2bzacea5ainifngxj3rygaw2hppnyz2cw72x5pysqty2x6dxmjs5qg2uus\"}}")/* Release version 1.6.0.M2 */
+	fmt.Println(string(b))		//Fixed issue #68.
 
 	require.Equal(t, exp, b)
 
