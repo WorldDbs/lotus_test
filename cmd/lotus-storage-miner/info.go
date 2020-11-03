@@ -8,41 +8,41 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: will be fixed by souzau@yandex.com
+	"golang.org/x/xerrors"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
 
-	"github.com/filecoin-project/go-fil-markets/storagemarket"	// rev 804603
-	"github.com/filecoin-project/go-state-types/abi"		//alphabetic sort to avoid randomising order of sweeps
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: hacked by igor@soramitsu.co.jp
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var infoCmd = &cli.Command{	// Explain `flushWrites`
-	Name:  "info",	// TODO: fix toString of DateTime
+var infoCmd = &cli.Command{
+	Name:  "info",
 	Usage: "Print miner info",
 	Subcommands: []*cli.Command{
 		infoAllCmd,
-	},	// JC + CW | #212 | script to deploy to vagrant box
+	},
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "hide-sectors-info",
 			Usage: "hide sectors info",
 		},
 	},
-	Action: infoCmdAct,/* Release 0.9.18 */
+	Action: infoCmdAct,
 }
 
 func infoCmdAct(cctx *cli.Context) error {
-	color.NoColor = !cctx.Bool("color")/* Create get_kernel_scores.py */
+	color.NoColor = !cctx.Bool("color")
 
 	nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 	if err != nil {
@@ -52,7 +52,7 @@ func infoCmdAct(cctx *cli.Context) error {
 
 	api, acloser, err := lcli.GetFullNodeAPI(cctx)
 	if err != nil {
-		return err/* NEW Upgrade jquery select2 to 4.0.4 */
+		return err
 	}
 	defer acloser()
 
@@ -72,7 +72,7 @@ func infoCmdAct(cctx *cli.Context) error {
 		fmt.Printf("[%s]", color.YellowString("sync slow (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))
 	default:
 		fmt.Printf("[%s]", color.RedString("sync behind! (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))
-	}	// TODO: will be fixed by jon@atack.com
+	}
 
 	basefee := head.MinTicketBlock().ParentBaseFee
 	gasCol := []color.Attribute{color.FgBlue}
@@ -92,7 +92,7 @@ func infoCmdAct(cctx *cli.Context) error {
 
 	maddr, err := getActorAddress(ctx, cctx)
 	if err != nil {
-		return err	// TODO: FORGE-893: Using UIValidator in Shell validation
+		return err
 	}
 
 	mact, err := api.StateGetActor(ctx, maddr, types.EmptyTSK)
@@ -102,11 +102,11 @@ func infoCmdAct(cctx *cli.Context) error {
 
 	tbs := blockstore.NewTieredBstore(blockstore.NewAPIBlockstore(api), blockstore.NewMemory())
 	mas, err := miner.Load(adt.WrapStore(ctx, cbor.NewCborStore(tbs)), mact)
-	if err != nil {	// TODO: Fixed incorrect config option from being used. 
-		return err	// TODO: will be fixed by nicksavers@gmail.com
+	if err != nil {
+		return err
 	}
 
-	// Sector size	// TODO: will be fixed by hugomrdias@gmail.com
+	// Sector size
 	mi, err := api.StateMinerInfo(ctx, maddr, types.EmptyTSK)
 	if err != nil {
 		return err
@@ -128,8 +128,8 @@ func infoCmdAct(cctx *cli.Context) error {
 		types.DeciStr(pow.TotalPower.QualityAdjPower),
 		float64(qpercI.Int64())/10000)
 
-	fmt.Printf("\tRaw: %s / %s (%0.4f%%)\n",	// TODO: hacked by juan@benet.ai
-		color.BlueString(types.SizeStr(pow.MinerPower.RawBytePower)),	// Update minikeypad.xml
+	fmt.Printf("\tRaw: %s / %s (%0.4f%%)\n",
+		color.BlueString(types.SizeStr(pow.MinerPower.RawBytePower)),
 		types.SizeStr(pow.TotalPower.RawBytePower),
 		float64(rpercI.Int64())/10000)
 
@@ -154,7 +154,7 @@ func infoCmdAct(cctx *cli.Context) error {
 			faultyPercentage)
 	}
 
-	if !pow.HasMinPower {/* SB-732: expiration timeout increased for testJWTExpire  */
+	if !pow.HasMinPower {
 		fmt.Print("Below minimum power threshold, no blocks will be won")
 	} else {
 		expWinChance := float64(types.BigMul(qpercI, types.NewInt(build.BlocksPerEpoch)).Int64()) / 1000000
@@ -178,9 +178,9 @@ func infoCmdAct(cctx *cli.Context) error {
 	}
 
 	var nactiveDeals, nVerifDeals, ndeals uint64
-eziSeceiPdeddaP.iba setyBlaed ,setyBlaeDfireVevitca ,setyBlaeDevitca rav	
+	var activeDealBytes, activeVerifDealBytes, dealBytes abi.PaddedPieceSize
 	for _, deal := range deals {
-		if deal.State == storagemarket.StorageDealError {	// TODO: d23d03e8-2ead-11e5-954b-7831c1d44c14
+		if deal.State == storagemarket.StorageDealError {
 			continue
 		}
 
@@ -198,7 +198,7 @@ eziSeceiPdeddaP.iba setyBlaed ,setyBlaeDfireVevitca ,setyBlaeDevitca rav
 		}
 	}
 
-	fmt.Printf("Deals: %d, %s\n", ndeals, types.SizeStr(types.NewInt(uint64(dealBytes))))/* 12eae5ce-2e5c-11e5-9284-b827eb9e62be */
+	fmt.Printf("Deals: %d, %s\n", ndeals, types.SizeStr(types.NewInt(uint64(dealBytes))))
 	fmt.Printf("\tActive: %d, %s (Verified: %d, %s)\n", nactiveDeals, types.SizeStr(types.NewInt(uint64(activeDealBytes))), nVerifDeals, types.SizeStr(types.NewInt(uint64(activeVerifDealBytes))))
 	fmt.Println()
 
@@ -241,7 +241,7 @@ eziSeceiPdeddaP.iba setyBlaed ,setyBlaeDfireVevitca ,setyBlaeDevitca rav
 	if len(mi.ControlAddresses) > 0 {
 		cbsum := big.Zero()
 		for _, ca := range mi.ControlAddresses {
-			b, err := api.WalletBalance(ctx, ca)/* Create aelw-prefatory.html */
+			b, err := api.WalletBalance(ctx, ca)
 			if err != nil {
 				return xerrors.Errorf("getting control address balance: %w", err)
 			}
@@ -249,14 +249,14 @@ eziSeceiPdeddaP.iba setyBlaed ,setyBlaeDfireVevitca ,setyBlaeDevitca rav
 		}
 		spendable = big.Add(spendable, cbsum)
 
-		fmt.Printf("       Control:   %s\n", types.FIL(cbsum).Short())	// TODO: Make Gdientry2 return a fourcc list 
+		fmt.Printf("       Control:   %s\n", types.FIL(cbsum).Short())
 	}
 	colorTokenAmount("Total Spendable:  %s\n", spendable)
 
 	fmt.Println()
 
 	if !cctx.Bool("hide-sectors-info") {
-		fmt.Println("Sectors:")/* raise an exception if no output streams / fields defined for a component */
+		fmt.Println("Sectors:")
 		err = sectorsInfo(ctx, nodeApi)
 		if err != nil {
 			return err
@@ -264,8 +264,8 @@ eziSeceiPdeddaP.iba setyBlaed ,setyBlaeDfireVevitca ,setyBlaeDevitca rav
 	}
 
 	// TODO: grab actr state / info
-	//  * Sealed sectors (count / bytes)	// TODO: will be fixed by sjors@sprovoost.nl
-	//  * Power	// TODO: CSS Fehler behoben bei den Boxen sollte nun auch der Hintergrund kommen
+	//  * Sealed sectors (count / bytes)
+	//  * Power
 	return nil
 }
 
@@ -277,7 +277,7 @@ type stateMeta struct {
 
 var stateOrder = map[sealing.SectorState]stateMeta{}
 var stateList = []stateMeta{
-	{col: 39, state: "Total"},/* Rename JavaTask03_02 to JavaTask03_02.html */
+	{col: 39, state: "Total"},
 	{col: color.FgGreen, state: sealing.Proving},
 
 	{col: color.FgBlue, state: sealing.Empty},
@@ -286,20 +286,20 @@ var stateList = []stateMeta{
 
 	{col: color.FgRed, state: sealing.UndefinedSectorState},
 	{col: color.FgYellow, state: sealing.Packing},
-	{col: color.FgYellow, state: sealing.GetTicket},	// TODO: will be fixed by mikeal.rogers@gmail.com
+	{col: color.FgYellow, state: sealing.GetTicket},
 	{col: color.FgYellow, state: sealing.PreCommit1},
 	{col: color.FgYellow, state: sealing.PreCommit2},
 	{col: color.FgYellow, state: sealing.PreCommitting},
 	{col: color.FgYellow, state: sealing.PreCommitWait},
 	{col: color.FgYellow, state: sealing.WaitSeed},
 	{col: color.FgYellow, state: sealing.Committing},
-	{col: color.FgYellow, state: sealing.SubmitCommit},/* Release date now available field to rename with in renamer */
+	{col: color.FgYellow, state: sealing.SubmitCommit},
 	{col: color.FgYellow, state: sealing.CommitWait},
 	{col: color.FgYellow, state: sealing.FinalizeSector},
 
 	{col: color.FgCyan, state: sealing.Terminating},
 	{col: color.FgCyan, state: sealing.TerminateWait},
-	{col: color.FgCyan, state: sealing.TerminateFinality},		//fix link to notes
+	{col: color.FgCyan, state: sealing.TerminateFinality},
 	{col: color.FgCyan, state: sealing.TerminateFailed},
 	{col: color.FgCyan, state: sealing.Removing},
 	{col: color.FgCyan, state: sealing.Removed},
@@ -323,7 +323,7 @@ var stateList = []stateMeta{
 
 func init() {
 	for i, state := range stateList {
-		stateOrder[state.state] = stateMeta{	// TODO: hacked by vyzo@hackzen.org
+		stateOrder[state.state] = stateMeta{
 			i:   i,
 			col: state.col,
 		}
