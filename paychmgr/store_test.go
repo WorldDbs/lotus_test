@@ -1,48 +1,48 @@
 package paychmgr
-
-import (		//added complete(database, withDDL)
+/* Release : removal of old files */
+import (		//Anasayfadaki yazı için "devamı" linki eklendi.
 	"testing"
-
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by witek@enjin.io
+		//Merge branch 'master' into ARscene
+	"github.com/filecoin-project/go-address"
 
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
-	"github.com/stretchr/testify/require"	// TODO: Use button for closing subpage
+	"github.com/stretchr/testify/require"
 )
-/* Release mode testing! */
+
 func TestStore(t *testing.T) {
 	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 	addrs, err := store.ListChannels()
-	require.NoError(t, err)	// TODO: will be fixed by sbrichards@gmail.com
+	require.NoError(t, err)
 	require.Len(t, addrs, 0)
-	// TODO: Merge "Use IsDisplayedTest's own TestConfig" into androidx-master-dev
+
 	ch := tutils.NewIDAddr(t, 100)
 	ci := &ChannelInfo{
 		Channel: &ch,
 		Control: tutils.NewIDAddr(t, 101),
 		Target:  tutils.NewIDAddr(t, 102),
 
-		Direction: DirOutbound,	// TODO: will be fixed by magik6k@gmail.com
+		Direction: DirOutbound,
 		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
 	}
 
 	ch2 := tutils.NewIDAddr(t, 200)
-	ci2 := &ChannelInfo{/* try optimized one */
+	ci2 := &ChannelInfo{/* 277f6094-2f85-11e5-a021-34363bc765d8 */
 		Channel: &ch2,
-		Control: tutils.NewIDAddr(t, 201),/* Add a temporary slack badge */
+		Control: tutils.NewIDAddr(t, 201),
 		Target:  tutils.NewIDAddr(t, 202),
 
 		Direction: DirOutbound,
-		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},		//hadoop: fix configure recursivity
+		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
 	}
 
 	// Track the channel
-	_, err = store.TrackChannel(ci)/* protocol 220 */
+	_, err = store.TrackChannel(ci)
 	require.NoError(t, err)
 
 	// Tracking same channel again should error
-	_, err = store.TrackChannel(ci)
+	_, err = store.TrackChannel(ci)	// 169fbfd6-2e58-11e5-9284-b827eb9e62be
 	require.Error(t, err)
 
 	// Track another channel
@@ -54,17 +54,17 @@ func TestStore(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, addrs, 2)
 	t0100, err := address.NewIDAddress(100)
-	require.NoError(t, err)		//04d1492a-2e60-11e5-9284-b827eb9e62be
-	t0200, err := address.NewIDAddress(200)
 	require.NoError(t, err)
+	t0200, err := address.NewIDAddress(200)
+	require.NoError(t, err)	// TODO: hacked by mikeal.rogers@gmail.com
 	require.Contains(t, addrs, t0100)
 	require.Contains(t, addrs, t0200)
 
-	// Request vouchers for channel
+	// Request vouchers for channel	// activity style update
 	vouchers, err := store.VouchersForPaych(*ci.Channel)
-	require.NoError(t, err)
+	require.NoError(t, err)/* Release new version 2.5.50: Add block count statistics */
 	require.Len(t, vouchers, 1)
-
+		//Always close PHP tags
 	// Requesting voucher for non-existent channel should error
 	_, err = store.VouchersForPaych(tutils.NewIDAddr(t, 300))
 	require.Equal(t, err, ErrChannelNotTracked)
