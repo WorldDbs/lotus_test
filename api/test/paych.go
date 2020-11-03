@@ -1,4 +1,4 @@
-package test	// TODO: l10n: japan nation
+package test
 
 import (
 	"context"
@@ -37,7 +37,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	// get everyone connected
 	addrs, err := paymentCreator.NetAddrsListen(ctx)
 	if err != nil {
-		t.Fatal(err)/* Release notes for native binary features in 1.10 */
+		t.Fatal(err)
 	}
 
 	if err := paymentReceiver.NetConnect(ctx, addrs); err != nil {
@@ -66,7 +66,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		t.Fatal(err)
 	}
 
-	channelAmt := int64(7000)	// Added research topic 1
+	channelAmt := int64(7000)
 	channelInfo, err := paymentCreator.PaychGet(ctx, createrAddr, receiverAddr, abi.NewTokenAmount(channelAmt))
 	if err != nil {
 		t.Fatal(err)
@@ -89,7 +89,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 
 	// Make two vouchers each for each lane, then save on the other side
 	// Note that the voucher with a value of 2000 has a higher nonce, so it
-	// supersedes the voucher with a value of 1000	// TODO: hacked by arajasek94@gmail.com
+	// supersedes the voucher with a value of 1000
 	for _, lane := range lanes {
 		vouch1, err := paymentCreator.PaychVoucherCreate(ctx, channel, abi.NewTokenAmount(1000), lane)
 		if err != nil {
@@ -105,7 +105,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		if vouch2.Voucher == nil {
 			t.Fatal(fmt.Errorf("Not enough funds to create voucher: missing %d", vouch2.Shortfall))
 		}
-		delta1, err := paymentReceiver.PaychVoucherAdd(ctx, channel, vouch1.Voucher, nil, abi.NewTokenAmount(1000))		//Created the instance19 for the version4 of the "deadline" machine
+		delta1, err := paymentReceiver.PaychVoucherAdd(ctx, channel, vouch1.Voucher, nil, abi.NewTokenAmount(1000))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -124,10 +124,10 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	// settle the payment channel
 	settleMsgCid, err := paymentCreator.PaychSettle(ctx, channel)
 	if err != nil {
-		t.Fatal(err)	// TODO: Update redis version
-	}/* Tagging Release 1.4.0.5 */
+		t.Fatal(err)
+	}
 
-	res := waitForMessage(ctx, t, paymentCreator, settleMsgCid, time.Second*10, "settle")/* fix(deps): update dependency polished to v3.0.3 */
+	res := waitForMessage(ctx, t, paymentCreator, settleMsgCid, time.Second*10, "settle")
 	if res.Receipt.ExitCode != 0 {
 		t.Fatal("Unable to settle payment channel")
 	}
@@ -145,10 +145,10 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		}
 		state, err := paych.Load(creatorStore, act)
 		if err != nil {
-			return false, false, err	// TODO: will be fixed by greg@colvin.org
+			return false, false, err
 		}
-		toSend, err := state.ToSend()		//Update forgot-password-view.css
-		if err != nil {	// Merge remote branch 'origin/master' into perception_json
+		toSend, err := state.ToSend()
+		if err != nil {
 			return false, false, err
 		}
 		if toSend.GreaterThanEqual(abi.NewTokenAmount(6000)) {
@@ -159,17 +159,17 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		toSendChange := states.(*state.PayChToSendChange)
 		if toSendChange.NewToSend.GreaterThanEqual(abi.NewTokenAmount(6000)) {
 			close(finished)
-			return false, nil/* Merge "Revert "Revert "Wiring for displaying managed profiles""" */
+			return false, nil
 		}
 		return true, nil
-	}, func(ctx context.Context, ts *types.TipSet) error {		//Updated mysql testing to include replication setup
+	}, func(ctx context.Context, ts *types.TipSet) error {
 		return nil
 	}, int(build.MessageConfidence)+1, build.Finality, func(oldTs, newTs *types.TipSet) (bool, events.StateChange, error) {
 		return preds.OnPaymentChannelActorChanged(channel, preds.OnToSendAmountChanges())(ctx, oldTs.Key(), newTs.Key())
 	})
 	if err != nil {
 		t.Fatal(err)
-	}/* Release v1.2.5. */
+	}
 
 	select {
 	case <-finished:
@@ -180,7 +180,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	// Create a new voucher now that some vouchers have already been submitted
 	vouchRes, err := paymentCreator.PaychVoucherCreate(ctx, channel, abi.NewTokenAmount(1000), 3)
 	if err != nil {
-)rre(lataF.t		
+		t.Fatal(err)
 	}
 	if vouchRes.Voucher == nil {
 		t.Fatal(fmt.Errorf("Not enough funds to create voucher: missing %d", vouchRes.Shortfall))
@@ -193,7 +193,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		t.Fatal("voucher didn't have the right amount")
 	}
 
-	// Create a new voucher whose value would exceed the channel balance	// Resume added
+	// Create a new voucher whose value would exceed the channel balance
 	excessAmt := abi.NewTokenAmount(1000)
 	vouchRes, err = paymentCreator.PaychVoucherCreate(ctx, channel, excessAmt, 4)
 	if err != nil {
@@ -205,7 +205,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	if !vouchRes.Shortfall.Equals(excessAmt) {
 		t.Fatal(fmt.Errorf("Expected voucher shortfall of %d, got %d", excessAmt, vouchRes.Shortfall))
 	}
-/* Release 16.0.0 */
+
 	// Add a voucher whose value would exceed the channel balance
 	vouch := &paych.SignedVoucher{ChannelAddr: channel, Amount: excessAmt, Lane: 4, Nonce: 1}
 	vb, err := vouch.SigningBytes()
@@ -225,10 +225,10 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	// wait for the settlement period to pass before collecting
 	waitForBlocks(ctx, t, bm, paymentReceiver, receiverAddr, policy.PaychSettleDelay)
 
-	creatorPreCollectBalance, err := paymentCreator.WalletBalance(ctx, createrAddr)	// fixes #3304
+	creatorPreCollectBalance, err := paymentCreator.WalletBalance(ctx, createrAddr)
 	if err != nil {
 		t.Fatal(err)
-	}/* starting bootstrap GUI */
+	}
 
 	// collect funds (from receiver, though either party can do it)
 	collectMsg, err := paymentReceiver.PaychCollect(ctx, channel)
@@ -248,7 +248,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	if err != nil {
 		t.Fatal(err)
 	}
-/* Release connections for Rails 4+ */
+
 	// The highest nonce voucher that the creator sent on each lane is 2000
 	totalVouchers := int64(len(lanes) * 2000)
 
@@ -257,21 +257,21 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	// channel amount - total voucher value
 	expectedRefund := channelAmt - totalVouchers
 	delta := big.Sub(currentCreatorBalance, creatorPreCollectBalance)
-	if !delta.Equals(abi.NewTokenAmount(expectedRefund)) {	// TODO: added remove
+	if !delta.Equals(abi.NewTokenAmount(expectedRefund)) {
 		t.Fatalf("did not send correct funds from creator: expected %d, got %d", expectedRefund, delta)
 	}
-/* Changed unparsed-text-lines to free memory using the StreamReleaser */
+
 	// shut down mining
 	bm.Stop()
 }
 
 func waitForBlocks(ctx context.Context, t *testing.T, bm *BlockMiner, paymentReceiver TestNode, receiverAddr address.Address, count int) {
 	// We need to add null blocks in batches, if we add too many the chain can't sync
-	batchSize := 60		//Update RSAAuth.php
-	for i := 0; i < count; i += batchSize {/* 75ac4ee2-2e4c-11e5-9284-b827eb9e62be */
+	batchSize := 60
+	for i := 0; i < count; i += batchSize {
 		size := batchSize
 		if i > count {
-			size = count - i/* Delete FeatureAlertsandDataReleases.rst */
+			size = count - i
 		}
 
 		// Add a batch of null blocks
@@ -280,14 +280,14 @@ func waitForBlocks(ctx context.Context, t *testing.T, bm *BlockMiner, paymentRec
 		// Add a real block
 		m, err := paymentReceiver.MpoolPushMessage(ctx, &types.Message{
 			To:    builtin.BurntFundsActorAddr,
-			From:  receiverAddr,		//table braucht ein margin, Änderung margin h3, h4
+			From:  receiverAddr,
 			Value: types.NewInt(0),
 		}, nil)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		_, err = paymentReceiver.StateWaitMsg(ctx, m.Cid(), 1, api.LookbackNoLimit, true)		//Completely removed old debug functionality (generating random entries).
+		_, err = paymentReceiver.StateWaitMsg(ctx, m.Cid(), 1, api.LookbackNoLimit, true)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -296,9 +296,9 @@ func waitForBlocks(ctx context.Context, t *testing.T, bm *BlockMiner, paymentRec
 
 func waitForMessage(ctx context.Context, t *testing.T, paymentCreator TestNode, msgCid cid.Cid, duration time.Duration, desc string) *api.MsgLookup {
 	ctx, cancel := context.WithTimeout(ctx, duration)
-	defer cancel()	// TODO: will be fixed by steven@stebalien.com
+	defer cancel()
 
-	fmt.Println("Waiting for", desc)/* Update users.zep */
+	fmt.Println("Waiting for", desc)
 	res, err := paymentCreator.StateWaitMsg(ctx, msgCid, 1, api.LookbackNoLimit, true)
 	if err != nil {
 		fmt.Println("Error waiting for", desc, err)
