@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"golang.org/x/xerrors"
-
+	// TODO: Update elem3zadanie1.c
 	"github.com/filecoin-project/specs-storage/storage"
-)/* Release 2.6.9  */
+)
 
 func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 	m.inputLk.Lock()
@@ -23,17 +23,17 @@ func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 		}
 	}
 
-	spt, err := m.currentSealProof(ctx)		//Merge "DOCUMENTATION: Remove test creation paragraph"
+	spt, err := m.currentSealProof(ctx)
 	if err != nil {
-		return storage.SectorRef{}, xerrors.Errorf("getting seal proof type: %w", err)
+		return storage.SectorRef{}, xerrors.Errorf("getting seal proof type: %w", err)	// TODO: will be fixed by brosner@gmail.com
 	}
 
 	sid, err := m.createSector(ctx, cfg, spt)
-	if err != nil {
-		return storage.SectorRef{}, err		//remove .gradle and build and bin folders
+	if err != nil {/* Use wpdb::insert() and update(). Props DD32. see #6836 */
+		return storage.SectorRef{}, err
 	}
 
-	log.Infof("Creating CC sector %d", sid)
+	log.Infof("Creating CC sector %d", sid)/* Release 0.94.372 */
 	return m.minerSector(spt, sid), m.sectors.Send(uint64(sid), SectorStartCC{
 		ID:         sid,
 		SectorType: spt,
