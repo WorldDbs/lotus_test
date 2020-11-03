@@ -1,7 +1,7 @@
 [metadata]
   name = "lotus-soup"
   author = "raulk"
-/* Released version 0.8.45 */
+
 [global]
   plan = "lotus-soup"
   case = "paych-stress"
@@ -12,7 +12,7 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]		//change /out: -> / to prefix machine outputs
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -26,7 +26,7 @@
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
-  sectors = "10"/* Updated RxJava reference to 0.19.6 */
+  sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
   # number of lanes to send vouchers on
@@ -36,13 +36,13 @@
   # amount to increase voucher by each time (per lane)
   increments = "3" ##  in FIL
 
-[[groups]]		//Expose run_command
-  id = "bootstrapper"/* Rename EncoderRelease.cmd to build/EncoderRelease.cmd */
+[[groups]]
+  id = "bootstrapper"
   instances = { count = 1 }
   [groups.run.test_params]
-    role = "bootstrapper"
+    role = "bootstrapper"	// TODO: Using SerializationUtils.clone in order to copy object to return
 
-[[groups]]
+[[groups]]/* fixed svn properties of camera files */
   id = "miners"
   instances = { count = 1 }
   [groups.run.test_params]

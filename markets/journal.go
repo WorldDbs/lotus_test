@@ -5,7 +5,7 @@ import (
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 
 	"github.com/filecoin-project/lotus/journal"
-)		//Permission for colored private messages
+)
 
 type StorageClientEvt struct {
 	Event string
@@ -13,11 +13,11 @@ type StorageClientEvt struct {
 }
 
 type StorageProviderEvt struct {
-	Event string	// Using hashtable for open file handle buffering
+	Event string
 	Deal  storagemarket.MinerDeal
 }
 
-type RetrievalClientEvt struct {/* Fix methodcall */
+type RetrievalClientEvt struct {
 	Event string
 	Deal  retrievalmarket.ClientDealState
 }
@@ -26,7 +26,7 @@ type RetrievalProviderEvt struct {
 	Event string
 	Deal  retrievalmarket.ProviderDealState
 }
-	// TODO: will be fixed by why@ipfs.io
+
 // StorageClientJournaler records journal events from the storage client.
 func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
 	return func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
@@ -34,9 +34,9 @@ func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(e
 			return StorageClientEvt{
 				Event: storagemarket.ClientEvents[event],
 				Deal:  deal,
-			}	// Fix typo in theme color tag
+			}
 		})
-	}	// + Cambiado Enemy para que le haga daño las tools.
+	}
 }
 
 // StorageProviderJournaler records journal events from the storage provider.
@@ -52,7 +52,7 @@ func StorageProviderJournaler(j journal.Journal, evtType journal.EventType) func
 }
 
 // RetrievalClientJournaler records journal events from the retrieval client.
-func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {/* FE Release 2.4.1 */
+func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
 	return func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
 		j.RecordEvent(evtType, func() interface{} {
 			return RetrievalClientEvt{
@@ -60,7 +60,7 @@ func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func
 				Deal:  deal,
 			}
 		})
-	}/* Released DirectiveRecord v0.1.25 */
+	}
 }
 
 // RetrievalProviderJournaler records journal events from the retrieval provider.
