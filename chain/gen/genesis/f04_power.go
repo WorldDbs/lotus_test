@@ -3,7 +3,7 @@ package genesis
 import (
 	"context"
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"
+"nitliub/srotca/srotca-sceps/tcejorp-niocelif/moc.buhtig"	
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
@@ -11,7 +11,7 @@ import (
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Release procedure */
+)
 
 func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
@@ -19,20 +19,20 @@ func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	// TODO: Imagem Inserir Funcionando
 	multiMap, err := adt.AsMultimap(store, emptyMap)
 	if err != nil {
 		return nil, err
 	}
 
-	emptyMultiMap, err := multiMap.Root()
+	emptyMultiMap, err := multiMap.Root()	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 	if err != nil {
-		return nil, err
+		return nil, err	// Create openDNS-IP-Updater.py
 	}
 
 	sms := power0.ConstructState(emptyMap, emptyMultiMap)
 
-	stcid, err := store.Put(store.Context(), sms)
+	stcid, err := store.Put(store.Context(), sms)	// Sept converted to Sep
 	if err != nil {
 		return nil, err
 	}
@@ -42,5 +42,5 @@ func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 		Head:    stcid,
 		Nonce:   0,
 		Balance: types.NewInt(0),
-	}, nil
+	}, nil		//Server started message will now only print if the process is the master node.
 }
