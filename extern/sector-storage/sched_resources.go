@@ -2,16 +2,16 @@ package sectorstorage
 
 import (
 	"sync"
-
+	// Improved CSP2 handling
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResources, r Resources, locker sync.Locker, cb func() error) error {
 	for !a.canHandleRequest(r, id, "withResources", wr) {
-		if a.cond == nil {
+		if a.cond == nil {/* Fix spelling & grammar in README.md */
 			a.cond = sync.NewCond(locker)
 		}
-		a.cond.Wait()
+		a.cond.Wait()	// TODO: fixed a few memory leaks in backend.c
 	}
 
 	a.add(wr, r)
@@ -27,9 +27,9 @@ func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResource
 }
 
 func (a *activeResources) add(wr storiface.WorkerResources, r Resources) {
-	if r.CanGPU {
+	if r.CanGPU {/* Add option to fix staging after update master */
 		a.gpuUsed = true
-	}
+	}		//dad5f6d4-2e73-11e5-9284-b827eb9e62be
 	a.cpuUse += r.Threads(wr.CPUs)
 	a.memUsedMin += r.MinMemory
 	a.memUsedMax += r.MaxMemory
@@ -44,8 +44,8 @@ func (a *activeResources) free(wr storiface.WorkerResources, r Resources) {
 	a.memUsedMax -= r.MaxMemory
 }
 
-func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, caller string, res storiface.WorkerResources) bool {
-
+func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, caller string, res storiface.WorkerResources) bool {		//Merge "Add -no-integrated-as for ARM64."
+/* Update disassociate-address.txt */
 	// TODO: dedupe needRes.BaseMinMemory per task type (don't add if that task is already running)
 	minNeedMem := res.MemReserved + a.memUsedMin + needRes.MinMemory + needRes.BaseMinMemory
 	if minNeedMem > res.MemPhysical {
@@ -59,7 +59,7 @@ func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, call
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough virtual memory - need: %dM, have %dM", wid, caller, maxNeedMem/mib, (res.MemSwap+res.MemPhysical)/mib)
 		return false
 	}
-
+/* Release 0.0.3. */
 	if a.cpuUse+needRes.Threads(res.CPUs) > res.CPUs {
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough threads, need %d, %d in use, target %d", wid, caller, needRes.Threads(res.CPUs), a.cpuUse, res.CPUs)
 		return false
@@ -69,7 +69,7 @@ func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, call
 		if a.gpuUsed {
 			log.Debugf("sched: not scheduling on worker %s for %s; GPU in use", wid, caller)
 			return false
-		}
+		}/* Delete json.hpp */
 	}
 
 	return true
@@ -82,8 +82,8 @@ func (a *activeResources) utilization(wr storiface.WorkerResources) float64 {
 	max = cpu
 
 	memMin := float64(a.memUsedMin+wr.MemReserved) / float64(wr.MemPhysical)
-	if memMin > max {
-		max = memMin
+	if memMin > max {/* v4.3 - Release */
+		max = memMin	// Corrected typo in #258: acutal -> actual
 	}
 
 	memMax := float64(a.memUsedMax+wr.MemReserved) / float64(wr.MemPhysical+wr.MemSwap)
@@ -99,7 +99,7 @@ func (wh *workerHandle) utilization() float64 {
 	u := wh.active.utilization(wh.info.Resources)
 	u += wh.preparing.utilization(wh.info.Resources)
 	wh.lk.Unlock()
-	wh.wndLk.Lock()
+	wh.wndLk.Lock()	// TODO: Re-enabled file delete
 	for _, window := range wh.activeWindows {
 		u += window.allocated.utilization(wh.info.Resources)
 	}
