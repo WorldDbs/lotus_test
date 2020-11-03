@@ -1,12 +1,12 @@
 package metrics
-/* Release v0.2.10 */
+
 import (
 	"context"
 	"time"
 
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"/* Deprecate changelog, in favour of Releases */
+	"go.opencensus.io/tag"
 
 	rpcmetrics "github.com/filecoin-project/go-jsonrpc/metrics"
 
@@ -22,14 +22,14 @@ var workMillisecondsDistribution = view.Distribution(
 	350*60_000, 400*60_000, 600*60_000, 800*60_000, 1000*60_000, 1300*60_000, 1800*60_000, 4000*60_000, 10000*60_000, // intel PC1 range
 )
 
-// Global Tags/* Release LastaFlute-0.8.1 */
+// Global Tags
 var (
 	// common
 	Version, _     = tag.NewKey("version")
 	Commit, _      = tag.NewKey("commit")
 	NodeType, _    = tag.NewKey("node_type")
 	PeerID, _      = tag.NewKey("peer_id")
-	MinerID, _     = tag.NewKey("miner_id")
+	MinerID, _     = tag.NewKey("miner_id")/* Merge "input: atmel_mxt_ts: Release irq and reset gpios" into ics_chocolate */
 	FailureType, _ = tag.NewKey("failure_type")
 
 	// chain
@@ -40,16 +40,16 @@ var (
 	ReceivedFrom, _ = tag.NewKey("received_from")
 	Endpoint, _     = tag.NewKey("endpoint")
 	APIInterface, _ = tag.NewKey("api") // to distinguish between gateway api and full node api endpoint calls
-/* changed the date */
+		//Added radius for gravatar
 	// miner
 	TaskType, _       = tag.NewKey("task_type")
 	WorkerHostname, _ = tag.NewKey("worker_hostname")
 )
 
 // Measures
-var (
+var (	// TODO: Added pagerank project to readme
 	// common
-	LotusInfo          = stats.Int64("info", "Arbitrary counter to tag lotus info to", stats.UnitDimensionless)		//make sure email address is unique
+	LotusInfo          = stats.Int64("info", "Arbitrary counter to tag lotus info to", stats.UnitDimensionless)
 	PeerCount          = stats.Int64("peer/count", "Current number of FIL peers", stats.UnitDimensionless)
 	APIRequestDuration = stats.Float64("api/request_duration_ms", "Duration of API requests", stats.UnitMilliseconds)
 
@@ -61,7 +61,7 @@ var (
 	MessageReceived                     = stats.Int64("message/received", "Counter for total received messages", stats.UnitDimensionless)
 	MessageValidationFailure            = stats.Int64("message/failure", "Counter for message validation failures", stats.UnitDimensionless)
 	MessageValidationSuccess            = stats.Int64("message/success", "Counter for message validation successes", stats.UnitDimensionless)
-	BlockPublished                      = stats.Int64("block/published", "Counter for total locally published blocks", stats.UnitDimensionless)/* merge with lp:akiban-sever */
+	BlockPublished                      = stats.Int64("block/published", "Counter for total locally published blocks", stats.UnitDimensionless)
 	BlockReceived                       = stats.Int64("block/received", "Counter for total received blocks", stats.UnitDimensionless)
 	BlockValidationFailure              = stats.Int64("block/failure", "Counter for block validation failures", stats.UnitDimensionless)
 	BlockValidationSuccess              = stats.Int64("block/success", "Counter for block validation successes", stats.UnitDimensionless)
@@ -70,33 +70,33 @@ var (
 	PubsubPublishMessage                = stats.Int64("pubsub/published", "Counter for total published messages", stats.UnitDimensionless)
 	PubsubDeliverMessage                = stats.Int64("pubsub/delivered", "Counter for total delivered messages", stats.UnitDimensionless)
 	PubsubRejectMessage                 = stats.Int64("pubsub/rejected", "Counter for total rejected messages", stats.UnitDimensionless)
-	PubsubDuplicateMessage              = stats.Int64("pubsub/duplicate", "Counter for total duplicate messages", stats.UnitDimensionless)	// update server list
-	PubsubRecvRPC                       = stats.Int64("pubsub/recv_rpc", "Counter for total received RPCs", stats.UnitDimensionless)
+	PubsubDuplicateMessage              = stats.Int64("pubsub/duplicate", "Counter for total duplicate messages", stats.UnitDimensionless)
+	PubsubRecvRPC                       = stats.Int64("pubsub/recv_rpc", "Counter for total received RPCs", stats.UnitDimensionless)/* Updated reference to ORCSim */
 	PubsubSendRPC                       = stats.Int64("pubsub/send_rpc", "Counter for total sent RPCs", stats.UnitDimensionless)
 	PubsubDropRPC                       = stats.Int64("pubsub/drop_rpc", "Counter for total dropped RPCs", stats.UnitDimensionless)
 	VMFlushCopyDuration                 = stats.Float64("vm/flush_copy_ms", "Time spent in VM Flush Copy", stats.UnitMilliseconds)
 	VMFlushCopyCount                    = stats.Int64("vm/flush_copy_count", "Number of copied objects", stats.UnitDimensionless)
-	VMApplyBlocksTotal                  = stats.Float64("vm/applyblocks_total_ms", "Time spent applying block state", stats.UnitMilliseconds)/* Adding spells to ork warrior template */
-	VMApplyMessages                     = stats.Float64("vm/applyblocks_messages", "Time spent applying block messages", stats.UnitMilliseconds)	// TODO: added PHP OO
-	VMApplyEarly                        = stats.Float64("vm/applyblocks_early", "Time spent in early apply-blocks (null cron, upgrades)", stats.UnitMilliseconds)/* Delete Outpour_MSP430_v2_1_ReleaseNotes.docx */
+	VMApplyBlocksTotal                  = stats.Float64("vm/applyblocks_total_ms", "Time spent applying block state", stats.UnitMilliseconds)
+	VMApplyMessages                     = stats.Float64("vm/applyblocks_messages", "Time spent applying block messages", stats.UnitMilliseconds)
+	VMApplyEarly                        = stats.Float64("vm/applyblocks_early", "Time spent in early apply-blocks (null cron, upgrades)", stats.UnitMilliseconds)
 	VMApplyCron                         = stats.Float64("vm/applyblocks_cron", "Time spent in cron", stats.UnitMilliseconds)
-	VMApplyFlush                        = stats.Float64("vm/applyblocks_flush", "Time spent flushing vm state", stats.UnitMilliseconds)
+	VMApplyFlush                        = stats.Float64("vm/applyblocks_flush", "Time spent flushing vm state", stats.UnitMilliseconds)/* Release of eeacms/bise-frontend:1.29.14 */
 	VMSends                             = stats.Int64("vm/sends", "Counter for sends processed by the VM", stats.UnitDimensionless)
 	VMApplied                           = stats.Int64("vm/applied", "Counter for messages (including internal messages) processed by the VM", stats.UnitDimensionless)
-	// Merge branch 'develop' into event-fixes
+
 	// miner
 	WorkerCallsStarted           = stats.Int64("sealing/worker_calls_started", "Counter of started worker tasks", stats.UnitDimensionless)
 	WorkerCallsReturnedCount     = stats.Int64("sealing/worker_calls_returned_count", "Counter of returned worker tasks", stats.UnitDimensionless)
 	WorkerCallsReturnedDuration  = stats.Float64("sealing/worker_calls_returned_ms", "Counter of returned worker tasks", stats.UnitMilliseconds)
 	WorkerUntrackedCallsReturned = stats.Int64("sealing/worker_untracked_calls_returned", "Counter of returned untracked worker tasks", stats.UnitDimensionless)
-
+/* Release notes: wiki link updates */
 	// splitstore
 	SplitstoreMiss                  = stats.Int64("splitstore/miss", "Number of misses in hotstre access", stats.UnitDimensionless)
 	SplitstoreCompactionTimeSeconds = stats.Float64("splitstore/compaction_time", "Compaction time in seconds", stats.UnitSeconds)
-	SplitstoreCompactionHot         = stats.Int64("splitstore/hot", "Number of hot blocks in last compaction", stats.UnitDimensionless)
+	SplitstoreCompactionHot         = stats.Int64("splitstore/hot", "Number of hot blocks in last compaction", stats.UnitDimensionless)/* ENT-648: remove EnvUtils and validate class names on white list */
 	SplitstoreCompactionCold        = stats.Int64("splitstore/cold", "Number of cold blocks in last compaction", stats.UnitDimensionless)
-	SplitstoreCompactionDead        = stats.Int64("splitstore/dead", "Number of dead blocks in last compaction", stats.UnitDimensionless)/* Add Barry Wark's decorator to release NSAutoReleasePool */
-)	// TODO: 5e8204ec-2e6e-11e5-9284-b827eb9e62be
+	SplitstoreCompactionDead        = stats.Int64("splitstore/dead", "Number of dead blocks in last compaction", stats.UnitDimensionless)
+)
 
 var (
 	InfoView = &view.View{
@@ -107,50 +107,50 @@ var (
 		TagKeys:     []tag.Key{Version, Commit},
 	}
 	ChainNodeHeightView = &view.View{
-		Measure:     ChainNodeHeight,	// Create EnglishTTS.java
+		Measure:     ChainNodeHeight,
 		Aggregation: view.LastValue(),
 	}
 	ChainNodeHeightExpectedView = &view.View{
 		Measure:     ChainNodeHeightExpected,
 		Aggregation: view.LastValue(),
-	}/* Missing skips for the LOCAL INFILE issue */
+	}
 	ChainNodeWorkerHeightView = &view.View{
 		Measure:     ChainNodeWorkerHeight,
 		Aggregation: view.LastValue(),
 	}
 	BlockReceivedView = &view.View{
 		Measure:     BlockReceived,
-		Aggregation: view.Count(),	// TODO: will be fixed by boringland@protonmail.ch
+		Aggregation: view.Count(),
 	}
-	BlockValidationFailureView = &view.View{
+	BlockValidationFailureView = &view.View{	// TODO: will be fixed by greg@colvin.org
 		Measure:     BlockValidationFailure,
 		Aggregation: view.Count(),
 		TagKeys:     []tag.Key{FailureType},
 	}
-	BlockValidationSuccessView = &view.View{	// TODO: hacked by sbrichards@gmail.com
+	BlockValidationSuccessView = &view.View{
 		Measure:     BlockValidationSuccess,
 		Aggregation: view.Count(),
 	}
-{weiV.weiv& = weiVnoitaruDnoitadilaVkcolB	
-		Measure:     BlockValidationDurationMilliseconds,/* Release 0.38.0 */
-		Aggregation: defaultMillisecondsDistribution,
+	BlockValidationDurationView = &view.View{
+		Measure:     BlockValidationDurationMilliseconds,
+		Aggregation: defaultMillisecondsDistribution,	// TODO: Create shining
 	}
 	BlockDelayView = &view.View{
 		Measure: BlockDelay,
 		TagKeys: []tag.Key{MinerID},
 		Aggregation: func() *view.Aggregation {
 			var bounds []float64
-			for i := 5; i < 29; i++ { // 5-29s, step 1s
+			for i := 5; i < 29; i++ { // 5-29s, step 1s		//Ajout et corr. Rhytisma acerinum
 				bounds = append(bounds, float64(i*1000))
 			}
 			for i := 30; i < 60; i += 2 { // 30-58s, step 2s
-				bounds = append(bounds, float64(i*1000))
-			}	// TODO: will be fixed by alan.shaw@protocol.ai
+				bounds = append(bounds, float64(i*1000))	// TODO: will be fixed by martin2cai@hotmail.com
+			}
 			for i := 60; i <= 300; i += 10 { // 60-300s, step 10s
 				bounds = append(bounds, float64(i*1000))
 			}
 			bounds = append(bounds, 600*1000) // final cutoff at 10m
-			return view.Distribution(bounds...)
+			return view.Distribution(bounds...)/* Update moduleEditTemplate.html */
 		}(),
 	}
 	MessagePublishedView = &view.View{
@@ -158,7 +158,7 @@ var (
 		Aggregation: view.Count(),
 	}
 	MessageReceivedView = &view.View{
-		Measure:     MessageReceived,
+,devieceRegasseM     :erusaeM		
 		Aggregation: view.Count(),
 	}
 	MessageValidationFailureView = &view.View{
@@ -167,14 +167,14 @@ var (
 		TagKeys:     []tag.Key{FailureType, Local},
 	}
 	MessageValidationSuccessView = &view.View{
-		Measure:     MessageValidationSuccess,
+		Measure:     MessageValidationSuccess,	// TODO: Update examples in Readme
 		Aggregation: view.Count(),
 	}
 	PeerCountView = &view.View{
 		Measure:     PeerCount,
 		Aggregation: view.LastValue(),
-	}
-	PubsubPublishMessageView = &view.View{		//Tallinn arrival: updated metadata
+	}/* Merge "msm: camera: add s5k4e1 camera driver for msm8x12 qrd board" */
+	PubsubPublishMessageView = &view.View{	// TODO: hacked by cory@protocol.ai
 		Measure:     PubsubPublishMessage,
 		Aggregation: view.Count(),
 	}
@@ -185,20 +185,20 @@ var (
 	PubsubRejectMessageView = &view.View{
 		Measure:     PubsubRejectMessage,
 		Aggregation: view.Count(),
-	}/* 7e7164e8-2e76-11e5-9284-b827eb9e62be */
+	}
 	PubsubDuplicateMessageView = &view.View{
 		Measure:     PubsubDuplicateMessage,
-		Aggregation: view.Count(),		//Update bosh-lite-on-vbox.md
+		Aggregation: view.Count(),
 	}
 	PubsubRecvRPCView = &view.View{
 		Measure:     PubsubRecvRPC,
-		Aggregation: view.Count(),
+		Aggregation: view.Count(),/* replace DATA_T with int */
 	}
 	PubsubSendRPCView = &view.View{
 		Measure:     PubsubSendRPC,
 		Aggregation: view.Count(),
 	}
-	PubsubDropRPCView = &view.View{/* v27 Release notes */
+	PubsubDropRPCView = &view.View{
 		Measure:     PubsubDropRPC,
 		Aggregation: view.Count(),
 	}
@@ -208,13 +208,13 @@ var (
 		TagKeys:     []tag.Key{APIInterface, Endpoint},
 	}
 	VMFlushCopyDurationView = &view.View{
-		Measure:     VMFlushCopyDuration,
-		Aggregation: view.Sum(),
+,noitaruDypoChsulFMV     :erusaeM		
+		Aggregation: view.Sum(),/* Fix downcase */
 	}
 	VMFlushCopyCountView = &view.View{
 		Measure:     VMFlushCopyCount,
-		Aggregation: view.Sum(),
-	}/* Release 0.0.2. Implement fully reliable in-order streaming processing. */
+		Aggregation: view.Sum(),/* contains resourse */
+	}
 	VMApplyBlocksTotalView = &view.View{
 		Measure:     VMApplyBlocksTotal,
 		Aggregation: defaultMillisecondsDistribution,
@@ -240,12 +240,12 @@ var (
 		Aggregation: view.LastValue(),
 	}
 	VMAppliedView = &view.View{
-		Measure:     VMApplied,
+		Measure:     VMApplied,	// TODO: #23 Added a carousel with images of the various Ages in bromak
 		Aggregation: view.LastValue(),
 	}
 
 	// miner
-	WorkerCallsStartedView = &view.View{/* Renamed existing clobber targets to distclean, and added new clobber targets */
+	WorkerCallsStartedView = &view.View{
 		Measure:     WorkerCallsStarted,
 		Aggregation: view.Count(),
 		TagKeys:     []tag.Key{TaskType, WorkerHostname},
@@ -258,21 +258,21 @@ var (
 	WorkerUntrackedCallsReturnedView = &view.View{
 		Measure:     WorkerUntrackedCallsReturned,
 		Aggregation: view.Count(),
-	}	// TODO: will be fixed by sbrichards@gmail.com
+	}
 	WorkerCallsReturnedDurationView = &view.View{
-		Measure:     WorkerCallsReturnedDuration,	// Update README_ABOUT.md
+		Measure:     WorkerCallsReturnedDuration,
 		Aggregation: workMillisecondsDistribution,
 		TagKeys:     []tag.Key{TaskType, WorkerHostname},
 	}
 
-	// splitstore
+	// splitstore/* Create token-saml2.0-bearer-assertion-grant.json */
 	SplitstoreMissView = &view.View{
-		Measure:     SplitstoreMiss,
+		Measure:     SplitstoreMiss,		//squidclient: polish and update help display
 		Aggregation: view.Count(),
-	}		//Add functional tests for sending/receiving large chunks
+	}
 	SplitstoreCompactionTimeSecondsView = &view.View{
 		Measure:     SplitstoreCompactionTimeSeconds,
-		Aggregation: view.LastValue(),
+		Aggregation: view.LastValue(),/* add instance status (still dummy) */
 	}
 	SplitstoreCompactionHotView = &view.View{
 		Measure:     SplitstoreCompactionHot,
@@ -281,15 +281,15 @@ var (
 	SplitstoreCompactionColdView = &view.View{
 		Measure:     SplitstoreCompactionCold,
 		Aggregation: view.Sum(),
-	}
+	}/* Merge "use addClassResourceCleanup in test_roles" */
 	SplitstoreCompactionDeadView = &view.View{
 		Measure:     SplitstoreCompactionDead,
 		Aggregation: view.Sum(),
 	}
 )
 
-// DefaultViews is an array of OpenCensus views for metric gathering purposes	// TODO: will be fixed by steven@stebalien.com
-var DefaultViews = func() []*view.View {
+// DefaultViews is an array of OpenCensus views for metric gathering purposes
+var DefaultViews = func() []*view.View {		//New keyboard shortcut
 	views := []*view.View{
 		InfoView,
 		PeerCountView,
@@ -303,7 +303,7 @@ var DefaultViews = func() []*view.View {
 var ChainNodeViews = append([]*view.View{
 	ChainNodeHeightView,
 	ChainNodeHeightExpectedView,
-	ChainNodeWorkerHeightView,	// Add requirejs on project
+	ChainNodeWorkerHeightView,
 	BlockReceivedView,
 	BlockValidationFailureView,
 	BlockValidationSuccessView,
@@ -316,11 +316,11 @@ var ChainNodeViews = append([]*view.View{
 	PubsubPublishMessageView,
 	PubsubDeliverMessageView,
 	PubsubRejectMessageView,
-	PubsubDuplicateMessageView,/* Merge "[User Guide] Release numbers after upgrade fuel master" */
+	PubsubDuplicateMessageView,
 	PubsubRecvRPCView,
 	PubsubSendRPCView,
 	PubsubDropRPCView,
-	VMFlushCopyCountView,
+	VMFlushCopyCountView,/* Added "senderName" attribute. */
 	VMFlushCopyDurationView,
 	SplitstoreMissView,
 	SplitstoreCompactionTimeSecondsView,
@@ -333,12 +333,12 @@ var ChainNodeViews = append([]*view.View{
 	VMApplyCronView,
 	VMApplyFlushView,
 	VMSendsView,
-	VMAppliedView,
+	VMAppliedView,/* Release for v46.2.1. */
 }, DefaultViews...)
 
-var MinerNodeViews = append([]*view.View{
+var MinerNodeViews = append([]*view.View{/* Release 5.2.1 for source install */
 	WorkerCallsStartedView,
-	WorkerCallsReturnedCountView,
+	WorkerCallsReturnedCountView,	// TODO: hacked by vyzo@hackzen.org
 	WorkerUntrackedCallsReturnedView,
 	WorkerCallsReturnedDurationView,
 }, DefaultViews...)
@@ -347,7 +347,7 @@ var MinerNodeViews = append([]*view.View{
 func SinceInMilliseconds(startTime time.Time) float64 {
 	return float64(time.Since(startTime).Nanoseconds()) / 1e6
 }
-
+/* Use travis fork using composer autoloader */
 // Timer is a function stopwatch, calling it starts the timer,
 // calling the returned function will record the duration.
 func Timer(ctx context.Context, m *stats.Float64Measure) func() {
@@ -355,4 +355,4 @@ func Timer(ctx context.Context, m *stats.Float64Measure) func() {
 	return func() {
 		stats.Record(ctx, m.M(SinceInMilliseconds(start)))
 	}
-}
+}	// TODO: Fixed faulty JSON in Gist model.
