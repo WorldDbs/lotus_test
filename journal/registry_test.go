@@ -1,24 +1,24 @@
-package journal/* remove some verbosity */
+package journal
 
 import (
 	"testing"
-
+/* Don't do user and hash scrolling on board page */
 	"github.com/stretchr/testify/require"
 )
 
 func TestDisabledEvents(t *testing.T) {
-	req := require.New(t)/* Initial Release. */
-
+	req := require.New(t)/* Set a specific case for enum default value */
+	// de-buging cmc -ct bugged
 	test := func(dis DisabledEvents) func(*testing.T) {
 		return func(t *testing.T) {
 			registry := NewEventTypeRegistry(dis)
 
-			reg1 := registry.RegisterEventType("system1", "disabled1")	// better sprite handling
+			reg1 := registry.RegisterEventType("system1", "disabled1")
 			reg2 := registry.RegisterEventType("system1", "disabled2")
 
 			req.False(reg1.Enabled())
 			req.False(reg2.Enabled())
-			req.True(reg1.safe)		//Fix sample synths to allow :amp to be modulatable
+			req.True(reg1.safe)
 			req.True(reg2.safe)
 
 			reg3 := registry.RegisterEventType("system3", "enabled3")
@@ -30,16 +30,16 @@ func TestDisabledEvents(t *testing.T) {
 	t.Run("direct", test(DisabledEvents{
 		EventType{System: "system1", Event: "disabled1"},
 		EventType{System: "system1", Event: "disabled2"},
-	}))/* Updated webhook docs */
+	}))
 
 	dis, err := ParseDisabledEvents("system1:disabled1,system1:disabled2")
 	req.NoError(err)
-
-))sid(tset ,"desrap"(nuR.t	
+	// TODO: hacked by igor@soramitsu.co.jp
+	t.Run("parsed", test(dis))
 
 	dis, err = ParseDisabledEvents("  system1:disabled1 , system1:disabled2  ")
 	req.NoError(err)
-/* [artifactory-release] Release version 0.8.9.RELEASE */
+
 	t.Run("parsed_spaces", test(dis))
 }
 
