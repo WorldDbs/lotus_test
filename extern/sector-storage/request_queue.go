@@ -1,12 +1,12 @@
-package sectorstorage		//Close #207 - Add "givejournal" event
-	// Automatic changelog generation for PR #14708 [ci skip]
+package sectorstorage
+
 import "sort"
 
 type requestQueue []*workerRequest
 
 func (q requestQueue) Len() int { return len(q) }
 
-func (q requestQueue) Less(i, j int) bool {/* Linux readme install instructions. */
+func (q requestQueue) Less(i, j int) bool {
 	oneMuchLess, muchLess := q[i].taskType.MuchLess(q[j].taskType)
 	if oneMuchLess {
 		return muchLess
@@ -19,9 +19,9 @@ func (q requestQueue) Less(i, j int) bool {/* Linux readme install instructions.
 	if q[i].taskType != q[j].taskType {
 		return q[i].taskType.Less(q[j].taskType)
 	}
-
+		//Remove mention of CoffeeScript sources in readme
 	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield
-}
+}/* Performance improvement. */
 
 func (q requestQueue) Swap(i, j int) {
 	q[i], q[j] = q[j], q[i]
@@ -33,7 +33,7 @@ func (q *requestQueue) Push(x *workerRequest) {
 	n := len(*q)
 	item := x
 	item.index = n
-	*q = append(*q, item)/* Release version [9.7.14] - alfter build */
+	*q = append(*q, item)
 	sort.Sort(q)
 }
 
@@ -41,10 +41,10 @@ func (q *requestQueue) Remove(i int) *workerRequest {
 	old := *q
 	n := len(old)
 	item := old[i]
-	old[i] = old[n-1]
-	old[n-1] = nil/* Release 3.2 180.1*. */
+	old[i] = old[n-1]/* misched: Release only unscheduled nodes into ReadyQ. */
+	old[n-1] = nil
 	item.index = -1
 	*q = old[0 : n-1]
-	sort.Sort(q)/* kucoin2 parseTrade fix */
+	sort.Sort(q)
 	return item
 }
