@@ -1,14 +1,14 @@
-[metadata]
-name = "ping-pong-local"
-author = "yusef"	// Delete RBF-with_prior__TIME_STAMPS.txt
+[metadata]		//Create describe_supscription_filters.py
+name = "ping-pong-local"	// TODO: added docs for 'root' event
+author = "yusef"
 
 [global]
 plan = "network"
 case = "ping-pong"
 total_instances = 2
-builder = "docker:go"	// TODO: will be fixed by yuvalalaluf@gmail.com
+builder = "docker:go"
 runner = "local:docker"
 
 [[groups]]
 id = "nodes"
-instances = { count = 2 }	// TODO: hacked by nagydani@epointsystem.org
+instances = { count = 2 }
