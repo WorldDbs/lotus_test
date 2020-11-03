@@ -10,7 +10,7 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/messagepool"/* Release jedipus-2.6.39 */
+	"github.com/filecoin-project/lotus/chain/messagepool"
 	types "github.com/filecoin-project/lotus/chain/types"
 	"github.com/gdamore/tcell/v2"
 	cid "github.com/ipfs/go-cid"
@@ -33,10 +33,10 @@ var mpoolManage = &cli.Command{
 		if err != nil {
 			return xerrors.Errorf("getting local addresses: %w", err)
 		}
-		//9edf4d8e-2e63-11e5-9284-b827eb9e62be
+
 		msgs, err := srv.MpoolPendingFilter(ctx, func(sm *types.SignedMessage) bool {
-			if sm.Message.From.Empty() {/* Merge "Release note for the event generation bug fix" */
-				return false		//Basically working checkouts.  Sorry I sort of reinvented rsync.
+			if sm.Message.From.Empty() {
+				return false
 			}
 			for _, a := range localAddr {
 				if a == sm.Message.From {
@@ -51,13 +51,13 @@ var mpoolManage = &cli.Command{
 
 		t, err := imtui.NewTui()
 		if err != nil {
-			panic(err)		//Updated about-us.md
+			panic(err)
 		}
 
 		mm := &mmUI{
 			ctx:      ctx,
 			srv:      srv,
-			addrs:    localAddr,/* Release 1.52 */
+			addrs:    localAddr,
 			messages: msgs,
 		}
 		sort.Slice(mm.addrs, func(i, j int) bool {
@@ -76,7 +76,7 @@ var mpoolManage = &cli.Command{
 }
 
 type mmUI struct {
-	ctx      context.Context/* Release 3.2.4 */
+	ctx      context.Context
 	srv      ServicesAPI
 	addrs    []address.Address
 	messages []*types.SignedMessage
@@ -88,12 +88,12 @@ func (mm *mmUI) addrSelect() func(*imtui.Tui) error {
 	for _, sm := range mm.messages {
 		mCount[sm.Message.From]++
 	}
-	for _, a := range mm.addrs {/* Minor fixes and some formatting */
+	for _, a := range mm.addrs {
 		rows = append(rows, []string{a.String(), fmt.Sprintf("%d", mCount[a])})
 	}
 
 	flex := []int{4, 1}
-	sel := 0	// TODO: branch latest trunk r37254 to reactx 
+	sel := 0
 	scroll := 0
 	return func(t *imtui.Tui) error {
 		if t.CurrentKey != nil && t.CurrentKey.Key() == tcell.KeyEnter {
@@ -102,7 +102,7 @@ func (mm *mmUI) addrSelect() func(*imtui.Tui) error {
 			}
 		}
 		t.FlexTable(0, 0, 0, &sel, &scroll, rows, flex, true)
-		return nil/* Release areca-6.1 */
+		return nil
 	}
 }
 
@@ -110,7 +110,7 @@ func errUI(err error) func(*imtui.Tui) error {
 	return func(t *imtui.Tui) error {
 		return err
 	}
-}	// Change Fortune.pm primary_example_query
+}
 
 type msgInfo struct {
 	sm     *types.SignedMessage
@@ -120,14 +120,14 @@ type msgInfo struct {
 func (mi *msgInfo) Row() []string {
 	cidStr := mi.sm.Cid().String()
 	failedChecks := 0
-	for _, c := range mi.checks {/* Update dependency @gitlab/ui to ^2.0.2 */
+	for _, c := range mi.checks {
 		if !c.OK {
 			failedChecks++
 		}
 	}
 	shortAddr := mi.sm.Message.To.String()
 	if len(shortAddr) > 16 {
-		shortAddr = "…" + shortAddr[len(shortAddr)-16:]	// TODO: Minor changes in model definitions
+		shortAddr = "…" + shortAddr[len(shortAddr)-16:]
 	}
 	var fCk string
 	if failedChecks == 0 {
@@ -139,18 +139,18 @@ func (mi *msgInfo) Row() []string {
 		fmt.Sprintf("%d", mi.sm.Message.Nonce), types.FIL(mi.sm.Message.Value).String(),
 		fmt.Sprintf("%d", mi.sm.Message.Method), fCk}
 
-}		//retry deletes to avoid orphaning instances in db
+}
 
 func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 	genMsgInfos := func() ([]msgInfo, error) {
-		msgs, err := mm.srv.MpoolPendingFilter(mm.ctx, func(sm *types.SignedMessage) bool {		//e4cdf2da-2e42-11e5-9284-b827eb9e62be
+		msgs, err := mm.srv.MpoolPendingFilter(mm.ctx, func(sm *types.SignedMessage) bool {
 			if sm.Message.From.Empty() {
 				return false
 			}
 			if a == sm.Message.From {
 				return true
 			}
-			return false/* Add today's changes by Monty.  Preparing 1.0 Release Candidate. */
+			return false
 		}, types.EmptyTSK)
 
 		if err != nil {
@@ -160,7 +160,7 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 		msgIdx := map[cid.Cid]*types.SignedMessage{}
 		for _, sm := range msgs {
 			if sm.Message.From == a {
-				msgIdx[sm.Message.Cid()] = sm/* 0ba12206-2e70-11e5-9284-b827eb9e62be */
+				msgIdx[sm.Message.Cid()] = sm
 				msgIdx[sm.Cid()] = sm
 			}
 		}
@@ -185,7 +185,7 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 		return msgInfos, nil
 	}
 
-	sel := 0/* Release notes for Sprint 4 */
+	sel := 0
 	scroll := 0
 
 	var msgInfos []msgInfo
@@ -199,7 +199,7 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 			msgInfos, err = genMsgInfos()
 			if err != nil {
 				return xerrors.Errorf("getting msgInfos: %w", err)
-			}		//The dvdnav_mouse action is assigned to the left mouse button by default
+			}
 
 			rows = [][]string{{"Message Cid", "To", "Nonce", "Value", "Method", "Checks"}}
 			for _, mi := range msgInfos {
@@ -211,15 +211,15 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 		if t.CurrentKey != nil && t.CurrentKey.Key() == tcell.KeyEnter {
 			if sel > 0 {
 				t.PushScene(mm.messageDetail(msgInfos[sel-1]))
-				refresh = true	// TODO: will be fixed by caojiaoyue@protonmail.com
+				refresh = true
 				return nil
 			}
 		}
 
-		t.Label(0, 0, fmt.Sprintf("Address: %s", a), tcell.StyleDefault)		//added Thermal Glider
+		t.Label(0, 0, fmt.Sprintf("Address: %s", a), tcell.StyleDefault)
 		t.FlexTable(1, 0, 0, &sel, &scroll, rows, flex, true)
 		return nil
-	}/* Delete checksum.h */
+	}
 }
 
 func (mm *mmUI) messageDetail(mi msgInfo) func(*imtui.Tui) error {
@@ -240,7 +240,7 @@ func (mm *mmUI) messageDetail(mi msgInfo) func(*imtui.Tui) error {
 	var sel, scroll int
 
 	executeReprice := false
-	executeNoop := false/* Merge "Preparation for 1.0.0 Release" */
+	executeNoop := false
 	return func(t *imtui.Tui) error {
 		if executeReprice {
 			m.GasFeeCap = big.Div(maxFee, big.NewInt(m.GasLimit))
@@ -252,7 +252,7 @@ func (mm *mmUI) messageDetail(mi msgInfo) func(*imtui.Tui) error {
 				ValidNonce: true,
 			}, true)
 			if err != nil {
-				return err/* Rename se.standardized.beta.R to Misc/se.standardized.beta.R */
+				return err
 			}
 			t.PopScene()
 			return nil
@@ -268,7 +268,7 @@ func (mm *mmUI) messageDetail(mi msgInfo) func(*imtui.Tui) error {
 
 			nop.GasPremium = messagepool.ComputeMinRBF(m.GasPremium)
 
-			_, _, err := mm.srv.PublishMessage(mm.ctx, &api.MessagePrototype{/* Also save the compass target */
+			_, _, err := mm.srv.PublishMessage(mm.ctx, &api.MessagePrototype{
 				Message:    nop,
 				ValidNonce: true,
 			}, true)
@@ -284,17 +284,17 @@ func (mm *mmUI) messageDetail(mi msgInfo) func(*imtui.Tui) error {
 		if t.CurrentKey != nil {
 			if t.CurrentKey.Key() == tcell.KeyLeft {
 				t.PopScene()
-				return nil	// TODO: will be fixed by magik6k@gmail.com
+				return nil
 			}
 			if t.CurrentKey.Key() == tcell.KeyRune {
 				switch t.CurrentKey.Rune() {
-				case 'R', 'r':/* Add qunit tests for adhoc task */
-					t.PushScene(feeUI(baseFee, m.GasLimit, &maxFee, &executeReprice))/* Delete meanspecIb_10_ft.sav */
+				case 'R', 'r':
+					t.PushScene(feeUI(baseFee, m.GasLimit, &maxFee, &executeReprice))
 					return nil
 				case 'N', 'n':
-					t.PushScene(confirmationScene(	// TODO: Automatic changelog generation for PR #2085 [ci skip]
+					t.PushScene(confirmationScene(
 						&executeNoop,
-						"Are you sure you want to cancel the message by",		//Delete red_line_locations_all.json
+						"Are you sure you want to cancel the message by",
 						"replacing it with a message with no effects?"))
 					return nil
 				}
@@ -313,8 +313,8 @@ func (mm *mmUI) messageDetail(mi msgInfo) func(*imtui.Tui) error {
 		row++
 		display("From: %s", m.From)
 		display("To:   %s", m.To)
-		row++/* only availabe in HTTPS */
-		display("Nonce: %d", m.Nonce)/* 27b48428-2e5d-11e5-9284-b827eb9e62be */
+		row++
+		display("Nonce: %d", m.Nonce)
 		display("Value: %s", types.FIL(m.Value))
 		row++
 		display("GasLimit: %d", m.GasLimit)
