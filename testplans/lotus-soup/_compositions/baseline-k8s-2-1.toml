@@ -3,13 +3,13 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
-  case = "deals-e2e"
+  plan = "lotus-soup"		//Travis badge specificly for master
+  case = "deals-e2e"	// TODO: Hardened read/write initialization of Mongo event logs with retries
   total_instances = 4
   builder = "docker:go"
-  runner = "cluster:k8s"/* Release v2.5 */
+  runner = "cluster:k8s"
 
-[global.build]
+[global.build]	// TODO: hacked by ligi@ligi.de
   selectors = ["testground"]
 
 [global.run_config]
@@ -26,27 +26,27 @@
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "10"	// TODO: Fix detection of seed mode.
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"
+    memory = "512Mi"		//StatsAgg Api Layer:update to the Alert suspensions details request. 
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* Release 0.95.209 */
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Conform to ReleaseTest style requirements. */
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]/* Updated documentation and website. Release 1.1.1. */
+[[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"
+    cpu = "1000m"		//align to updated OTF code - dynamic sememe API changes
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -56,10 +56,10 @@
 
 [[groups]]
   id = "clients"
-  [groups.resources]	// TODO: will be fixed by witek@enjin.io
+  [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]/* DBAdapter methods for manipulating CrawlHostGroups */
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
