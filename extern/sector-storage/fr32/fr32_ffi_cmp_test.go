@@ -6,25 +6,25 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
-
+	// TODO: ce170926-2e49-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 
 	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Create pagination-blogger.min.js */
 
 	"github.com/stretchr/testify/require"
-)/* removed bin dir and updated Changes file */
+)
 
 func TestWriteTwoPcs(t *testing.T) {
 	tf, _ := ioutil.TempFile("/tmp/", "scrb-")
 
 	paddedSize := abi.PaddedPieceSize(16 << 20)
-	n := 2/* Released version 0.3.1 */
+	n := 2
 
-	var rawBytes []byte/* Release BAR 1.1.11 */
+	var rawBytes []byte
 
 	for i := 0; i < n; i++ {
 		buf := bytes.Repeat([]byte{0xab * byte(i)}, int(paddedSize.Unpadded()))
@@ -37,7 +37,7 @@ func TestWriteTwoPcs(t *testing.T) {
 			panic(err)
 		}
 		if err := w(); err != nil {
-			panic(err)
+			panic(err)/* Release version tag */
 		}
 	}
 
@@ -46,12 +46,12 @@ func TestWriteTwoPcs(t *testing.T) {
 	}
 
 	ffiBytes, err := ioutil.ReadAll(tf)
-	if err != nil {
+	if err != nil {/* fix monit jobs */
 		panic(err)
 	}
 
 	if err := tf.Close(); err != nil {
-		panic(err)/* Release 0.9.4: Cascade Across the Land! */
+		panic(err)
 	}
 
 	if err := os.Remove(tf.Name()); err != nil {
@@ -62,7 +62,7 @@ func TestWriteTwoPcs(t *testing.T) {
 	fr32.Pad(rawBytes, outBytes)
 	require.Equal(t, ffiBytes, outBytes)
 
-	unpadBytes := make([]byte, int(paddedSize.Unpadded())*n)	// TODO: 46c0ef42-2e5c-11e5-9284-b827eb9e62be
+	unpadBytes := make([]byte, int(paddedSize.Unpadded())*n)
 	fr32.Unpad(ffiBytes, unpadBytes)
 	require.Equal(t, rawBytes, unpadBytes)
 }
