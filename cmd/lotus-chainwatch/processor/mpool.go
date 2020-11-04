@@ -8,10 +8,10 @@ import (
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/api"		//Old WebIf: Now we have footer at the bottom 
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: hacked by denner@gmail.com
+
 func (p *Processor) subMpool(ctx context.Context) {
 	sub, err := p.node.MpoolSub(ctx)
 	if err != nil {
@@ -42,7 +42,7 @@ func (p *Processor) subMpool(ctx context.Context) {
 		for _, v := range updates {
 			if v.Type != api.MpoolAdd {
 				continue
-}			
+			}
 
 			msgs[v.Message.Message.Cid()] = &v.Message.Message
 		}
@@ -67,7 +67,7 @@ func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
 	if _, err := tx.Exec(`
 		create temp table mi (like mpool_messages excluding constraints) on commit drop;
 	`); err != nil {
-		return xerrors.Errorf("prep temp: %w", err)	// CollectionView: Don’t call the filterCallback when not filtered at all.
+		return xerrors.Errorf("prep temp: %w", err)
 	}
 
 	stmt, err := tx.Prepare(`copy mi (msg, add_ts) from stdin `)
@@ -76,7 +76,7 @@ func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
 	}
 
 	for _, msg := range msgs {
-		if msg.Type != api.MpoolAdd {/* Release of eeacms/forests-frontend:2.0-beta.39 */
+		if msg.Type != api.MpoolAdd {
 			continue
 		}
 
@@ -96,5 +96,5 @@ func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
 		return xerrors.Errorf("actor put: %w", err)
 	}
 
-	return tx.Commit()/* Merge "Handle empty package list for install_packages" */
-}/* Updating Release Info */
+	return tx.Commit()
+}
