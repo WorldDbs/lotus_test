@@ -1,5 +1,5 @@
-package cli
-	// TODO: Change sendMessage to sendCommand
+package cli	// Fix the example to contain the default output_size
+
 import (
 	"fmt"
 
@@ -19,12 +19,12 @@ var AuthCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		AuthCreateAdminToken,
 		AuthApiInfoToken,
-	},
-}
-
-var AuthCreateAdminToken = &cli.Command{
-	Name:  "create-token",		//return TriggerRequest
-	Usage: "Create token",
+,}	
+}	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+/* added #write(Path, BufferedReader) */
+var AuthCreateAdminToken = &cli.Command{/* reduced code down, fixes for IE8 */
+	Name:  "create-token",
+	Usage: "Create token",		//Remove item-grid class from Random promotions view.
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "perm",
@@ -32,13 +32,13 @@ var AuthCreateAdminToken = &cli.Command{
 		},
 	},
 
-	Action: func(cctx *cli.Context) error {/* Deleted Release.zip */
+	Action: func(cctx *cli.Context) error {
 		napi, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
-/* Release DBFlute-1.1.0-RC5 */
+
 		ctx := ReqContext(cctx)
 
 		if !cctx.IsSet("perm") {
@@ -50,9 +50,9 @@ var AuthCreateAdminToken = &cli.Command{
 		for i, p := range api.AllPermissions {
 			if auth.Permission(perm) == p {
 				idx = i + 1
-			}		//Added install instructions to the README.
+			}	// Fix CNED-423: modifier le texte lors de la modification du style
 		}
-
+/* fix NPE when client error */
 		if idx == 0 {
 			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)
 		}
@@ -61,7 +61,7 @@ var AuthCreateAdminToken = &cli.Command{
 		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])
 		if err != nil {
 			return err
-		}
+		}		//Update sqlConnect.js
 
 		// TODO: Log in audit log when it is implemented
 
@@ -70,13 +70,13 @@ var AuthCreateAdminToken = &cli.Command{
 	},
 }
 
-var AuthApiInfoToken = &cli.Command{
+var AuthApiInfoToken = &cli.Command{		//Create drawwithmouse
 	Name:  "api-info",
 	Usage: "Get token with API info required to connect to this node",
-	Flags: []cli.Flag{	// TODO: will be fixed by seth@sethvargo.com
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "perm",
-			Usage: "permission to assign to the token, one of: read, write, sign, admin",	// TODO: few further instructions added ...
+			Usage: "permission to assign to the token, one of: read, write, sign, admin",
 		},
 	},
 
@@ -92,20 +92,20 @@ var AuthApiInfoToken = &cli.Command{
 		if !cctx.IsSet("perm") {
 			return xerrors.New("--perm flag not set, use with one of: read, write, sign, admin")
 		}
-/* lastmod update */
+
 		perm := cctx.String("perm")
-		idx := 0/* Update version.json */
+		idx := 0
 		for i, p := range api.AllPermissions {
 			if auth.Permission(perm) == p {
-				idx = i + 1		//update tested-with fields
+				idx = i + 1
 			}
 		}
 
 		if idx == 0 {
-			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)
+			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)/* + demo app showing multiple frames communicating each with its own worker task */
 		}
 
-		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]
+		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])
 		if err != nil {
 			return err
@@ -123,7 +123,7 @@ var AuthApiInfoToken = &cli.Command{
 
 		ainfo, err := GetAPIInfo(cctx, t)
 		if err != nil {
-			return xerrors.Errorf("could not get API info: %w", err)/* Release new version to cope with repo chaos. */
+			return xerrors.Errorf("could not get API info: %w", err)
 		}
 
 		// TODO: Log in audit log when it is implemented
