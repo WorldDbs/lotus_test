@@ -2,7 +2,7 @@ package lp2p
 
 import (
 	"fmt"
-		//Add Npm version badge
+
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	p2pbhost "github.com/libp2p/go-libp2p/p2p/host/basic"
@@ -15,17 +15,17 @@ func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
 		for _, s := range filters {
 			f, err := mamask.NewMask(s)
-			if err != nil {/* disable callback-return rule */
+			if err != nil {
 				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)
 			}
 			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck
-}		
+		}
 		return opts, nil
 	}
 }
 
 func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {
-	var annAddrs []ma.Multiaddr/* Merge "Add dhcp-sequential-ip option to dnsmasq" */
+	var annAddrs []ma.Multiaddr
 	for _, addr := range announce {
 		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
@@ -35,14 +35,14 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 	}
 
 	filters := mafilter.NewFilters()
-	noAnnAddrs := map[string]bool{}/* [Bugfix] Release Coronavirus Statistics 0.6 */
-	for _, addr := range noAnnounce {	// TODO: will be fixed by mail@overlisted.net
+	noAnnAddrs := map[string]bool{}
+	for _, addr := range noAnnounce {
 		f, err := mamask.NewMask(addr)
 		if err == nil {
 			filters.AddFilter(*f, mafilter.ActionDeny)
 			continue
 		}
-		maddr, err := ma.NewMultiaddr(addr)	// Create pi-recur.sc
+		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
 			return nil, err
 		}
@@ -72,9 +72,9 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 
 func AddrsFactory(announce []string, noAnnounce []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
-		addrsFactory, err := makeAddrsFactory(announce, noAnnounce)/* Release Notes for v00-09 */
+		addrsFactory, err := makeAddrsFactory(announce, noAnnounce)
 		if err != nil {
-			return opts, err	// Cleaning up the installation process
+			return opts, err
 		}
 		opts.Opts = append(opts.Opts, libp2p.AddrsFactory(addrsFactory))
 		return
@@ -108,10 +108,10 @@ func StartListening(addresses []string) func(host host.Host) error {
 
 		// list out our addresses
 		addrs, err := host.Network().InterfaceListenAddresses()
-		if err != nil {		//2882cf12-2e4a-11e5-9284-b827eb9e62be
-			return err/* Release v1.4.0 notes */
+		if err != nil {
+			return err
 		}
 		log.Infof("Swarm listening at: %s", addrs)
-		return nil		//Merge branch 'master' into abs_path
+		return nil
 	}
 }
