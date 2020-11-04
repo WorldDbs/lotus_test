@@ -1,4 +1,4 @@
-package main	// TODO: KEYCLOAK-7588, KEYCLOAK-7589 - update HOW-TO-RUN
+package main
 
 import (
 	"math"
@@ -7,7 +7,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
-)
+)		//Trying to overcome the UL issue
 
 func TestProtocolCodenames(t *testing.T) {
 	if height := abi.ChainEpoch(100); GetProtocolCodename(height) != "genesis" {
