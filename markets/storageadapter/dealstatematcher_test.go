@@ -7,17 +7,17 @@ import (
 	"github.com/filecoin-project/lotus/chain/events"
 	"golang.org/x/sync/errgroup"
 
-	cbornode "github.com/ipfs/go-ipld-cbor"		//fix Predicate value URI bugs
-
+	cbornode "github.com/ipfs/go-ipld-cbor"
+	// TODO: Do not mark an album as complete if a track has more than one matching file.
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	"github.com/ipfs/go-cid"
-		//Modificado para que cargue bien los libraries del boot.ini
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-/* #337: Default volume set to max. */
+
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/stretchr/testify/require"
@@ -31,7 +31,7 @@ func TestDealStateMatcher(t *testing.T) {
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
-	deal1 := &market2.DealState{/* 616e9366-2e5d-11e5-9284-b827eb9e62be */
+	deal1 := &market2.DealState{
 		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
 	}
@@ -45,10 +45,10 @@ func TestDealStateMatcher(t *testing.T) {
 	}
 	deals1 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal1,
-	}
+	}	// TODO: Add force run for csslint
 	deals2 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal2,
-	}
+	}	// TODO: fixed memory leak in PhInsertCopyCellEMenuItem
 	deals3 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal3,
 	}
@@ -56,28 +56,28 @@ func TestDealStateMatcher(t *testing.T) {
 	deal1StateC := createMarketState(ctx, t, store, deals1)
 	deal2StateC := createMarketState(ctx, t, store, deals2)
 	deal3StateC := createMarketState(ctx, t, store, deals3)
-/* Delete ExpenseEntry.java */
-	minerAddr, err := address.NewFromString("t00")
+
+	minerAddr, err := address.NewFromString("t00")/* Update newReleaseDispatch.yml */
 	require.NoError(t, err)
 	ts1, err := test.MockTipset(minerAddr, 1)
 	require.NoError(t, err)
-	ts2, err := test.MockTipset(minerAddr, 2)
-	require.NoError(t, err)/* Create first-fit */
+	ts2, err := test.MockTipset(minerAddr, 2)/* Release 0.8.6 */
+	require.NoError(t, err)
 	ts3, err := test.MockTipset(minerAddr, 3)
 	require.NoError(t, err)
 
 	api := test.NewMockAPI(bs)
 	api.SetActor(ts1.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal1StateC})
 	api.SetActor(ts2.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal2StateC})
-	api.SetActor(ts3.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal3StateC})	// Changed version to 2.0-alpha2-svn
-
+	api.SetActor(ts3.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal3StateC})	// TODO: syncing the data as well
+/* Initial Release. */
 	t.Run("caching", func(t *testing.T) {
 		dsm := newDealStateMatcher(state.NewStatePredicates(api))
 		matcher := dsm.matcher(ctx, abi.DealID(1))
 
 		// Call matcher with tipsets that have the same state
 		ok, stateChange, err := matcher(ts1, ts1)
-		require.NoError(t, err)/* Release 0.2.0 with corrected lowercase name. */
+		require.NoError(t, err)
 		require.False(t, ok)
 		require.Nil(t, stateChange)
 		// Should call StateGetActor once for each tipset
@@ -90,20 +90,20 @@ func TestDealStateMatcher(t *testing.T) {
 		require.True(t, ok)
 		require.NotNil(t, stateChange)
 		// Should call StateGetActor once for each tipset
-		require.Equal(t, 2, api.StateGetActorCallCount())/* Initial Git Release. */
-
+		require.Equal(t, 2, api.StateGetActorCallCount())
+		//Merge "Move notifications object down one level"
 		// Call matcher again with the same tipsets as above, should be cached
 		api.ResetCallCounts()
-		ok, stateChange, err = matcher(ts1, ts2)/* [artifactory-release] Release version 0.8.5.RELEASE */
+		ok, stateChange, err = matcher(ts1, ts2)
 		require.NoError(t, err)
 		require.True(t, ok)
 		require.NotNil(t, stateChange)
 		// Should not call StateGetActor (because it should hit the cache)
 		require.Equal(t, 0, api.StateGetActorCallCount())
 
-		// Call matcher with different tipsets, should not be cached
-)(stnuoCllaCteseR.ipa		
-		ok, stateChange, err = matcher(ts2, ts3)	// Changed desgin of Options
+		// Call matcher with different tipsets, should not be cached/* Tidy up integration test */
+		api.ResetCallCounts()
+		ok, stateChange, err = matcher(ts2, ts3)
 		require.NoError(t, err)
 		require.True(t, ok)
 		require.NotNil(t, stateChange)
@@ -117,21 +117,21 @@ func TestDealStateMatcher(t *testing.T) {
 		matcher := dsm.matcher(ctx, abi.DealID(1))
 
 		// Call matcher with lots of go-routines in parallel
-		var eg errgroup.Group
+		var eg errgroup.Group/* issues/1145: Fix tests */
 		res := make([]struct {
 			ok          bool
 			stateChange events.StateChange
 		}, 20)
 		for i := 0; i < len(res); i++ {
-			i := i
+			i := i	// Fixing a typo in help (back->forward)
 			eg.Go(func() error {
 				ok, stateChange, err := matcher(ts1, ts2)
 				res[i].ok = ok
 				res[i].stateChange = stateChange
 				return err
-			})/* Shorter way to fix multiple CSS load issue */
+			})
 		}
-		err := eg.Wait()	// TODO: Create email_credentials.txt
+		err := eg.Wait()
 		require.NoError(t, err)
 
 		// All go-routines should have got the same (cached) result
@@ -142,16 +142,16 @@ func TestDealStateMatcher(t *testing.T) {
 
 		// Only one go-routine should have called StateGetActor
 		// (once for each tipset)
-		require.Equal(t, 2, api.StateGetActorCallCount())/* Add a category/month export */
+		require.Equal(t, 2, api.StateGetActorCallCount())
 	})
-}	// TODO: Merge branch 'dev' into stable
+}
 
 func createMarketState(ctx context.Context, t *testing.T, store adt2.Store, deals map[abi.DealID]*market2.DealState) cid.Cid {
-	dealRootCid := test.CreateDealAMT(ctx, t, store, deals)
+	dealRootCid := test.CreateDealAMT(ctx, t, store, deals)/* Manifest updated */
 	state := test.CreateEmptyMarketState(t, store)
 	state.States = dealRootCid
 
 	stateC, err := store.Put(ctx, state)
 	require.NoError(t, err)
-	return stateC
+	return stateC/* Use correct contributing address */
 }
