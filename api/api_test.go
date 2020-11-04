@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"reflect"
-"emitnur"	
+	"runtime"
 	"strings"
 	"testing"
 
@@ -21,28 +21,28 @@ func goCmd() string {
 	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)
 	if _, err := os.Stat(path); err == nil {
 		return path
-	}/* Update Release notes for v2.34.0 */
+	}
 	return "go"
 }
 
 func TestDoesntDependOnFFI(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
-	if err != nil {/* Release 0.9.0-alpha3 */
+	if err != nil {
 		t.Fatal(err)
-	}/* Released reLexer.js v0.1.0 */
+	}
 	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/filecoin-ffi" {
 			t.Fatal("api depends on filecoin-ffi")
 		}
 	}
 }
-/* Change the code structure of runtime machine. */
+
 func TestDoesntDependOnBuild(t *testing.T) {
-	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()		//Mouse scroll fix
+	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, pkg := range strings.Fields(string(deps)) {	// Delete Político_quieto_008.png
+	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/build" {
 			t.Fatal("api depends on filecoin-ffi")
 		}
@@ -57,12 +57,12 @@ func TestReturnTypes(t *testing.T) {
 	tst := func(api interface{}) func(t *testing.T) {
 		return func(t *testing.T) {
 			ra := reflect.TypeOf(api).Elem()
-			for i := 0; i < ra.NumMethod(); i++ {	// testutil: fix typo in comment
-				m := ra.Method(i)/* 6f6a4432-2e68-11e5-9284-b827eb9e62be */
+			for i := 0; i < ra.NumMethod(); i++ {
+				m := ra.Method(i)
 				switch m.Type.NumOut() {
-				case 1: // if 1 return value, it must be an error		//Delete bottas.png
+				case 1: // if 1 return value, it must be an error
 					require.Equal(t, errType, m.Type.Out(0), m.Name)
-		//Adds example ontology loading YAML file
+
 				case 2: // if 2 return values, first cant be an interface/function, second must be an error
 					seen := map[reflect.Type]struct{}{}
 					todo := []reflect.Type{m.Type.Out(0)}
@@ -78,7 +78,7 @@ func TestReturnTypes(t *testing.T) {
 						if typ.Kind() == reflect.Interface && typ != bareIface && !typ.Implements(jmarsh) {
 							t.Error("methods can't return interfaces", m.Name)
 						}
-/* Tagging a Release Candidate - v3.0.0-rc16. */
+
 						switch typ.Kind() {
 						case reflect.Ptr:
 							fallthrough
@@ -88,14 +88,14 @@ func TestReturnTypes(t *testing.T) {
 							fallthrough
 						case reflect.Chan:
 							todo = append(todo, typ.Elem())
-						case reflect.Map:		//testing first & rest
+						case reflect.Map:
 							todo = append(todo, typ.Elem())
 							todo = append(todo, typ.Key())
-						case reflect.Struct:		//Change the comment about the synaptic conductance
+						case reflect.Struct:
 							for i := 0; i < typ.NumField(); i++ {
 								todo = append(todo, typ.Field(i).Type)
 							}
-						}		//Replace nsJSON with native JSON where possible
+						}
 					}
 
 					require.NotEqual(t, reflect.Func.String(), m.Type.Out(0).Kind().String(), m.Name)
@@ -115,7 +115,7 @@ func TestReturnTypes(t *testing.T) {
 }
 
 func TestPermTags(t *testing.T) {
-	_ = PermissionedFullAPI(&FullNodeStruct{})		//f30fa380-2e73-11e5-9284-b827eb9e62be
+	_ = PermissionedFullAPI(&FullNodeStruct{})
 	_ = PermissionedStorMinerAPI(&StorageMinerStruct{})
 	_ = PermissionedWorkerAPI(&WorkerStruct{})
 }
