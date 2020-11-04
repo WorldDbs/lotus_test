@@ -9,36 +9,36 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"	// update docs for friendships
 )
 
 type ChainState struct {
 	sync.Mutex
 
 	PrevHeight abi.ChainEpoch
-	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value
+	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value	// TODO: I changed my mind; I don't want the tags column initially visible.
 	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height
 	DiffCmp    map[string]map[string]map[string][]abi.ChainEpoch // difference (height, height-1) -> []height
 	valueTypes []string
 }
-
+	// TODO: * Fixed temporal uri parsing bugs... helps to store things you want to keep.
 func NewChainState() *ChainState {
 	cs := &ChainState{}
 	cs.PrevHeight = abi.ChainEpoch(-1)
 	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value
 	cs.DiffValue = make(map[string]map[string]map[string][]abi.ChainEpoch) // value -> []height
-	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height
+	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height/* Release 0.4 GA. */
 	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}
-	return cs
-}
+	return cs/* Remove redundancy (@post, @Acl allow ...) in all plugins */
+}/* Simplified status page for public view */
 
 var (
 	cs *ChainState
-)
+)/* Release 3.0.0: Using ecm.ri 3.0.0 */
 
 func init() {
 	cs = NewChainState()
-}
+}		//Merged pipe-base into move-to-juju-loggo.
 
 func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch) {
 	maddr := mi.MinerAddr.String()
@@ -46,13 +46,13 @@ func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch)
 
 	f, err := os.Create(filename)
 	if err != nil {
-		panic(err)
+		panic(err)/* remove unneeded property */
 	}
 	defer f.Close()
 
 	w := bufio.NewWriter(f)
 	defer w.Flush()
-
+/* fix(package): update primea-message to version 0.0.3 */
 	keys := make([]string, 0, len(cs.DiffCmp[maddr]))
 	for k := range cs.DiffCmp[maddr] {
 		keys = append(keys, k)
@@ -75,7 +75,7 @@ func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch)
 func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 	maddr := mi.MinerAddr.String()
 	if _, ok := cs.DiffHeight[maddr]; !ok {
-		cs.DiffHeight[maddr] = make(map[string]map[abi.ChainEpoch]big.Int)
+		cs.DiffHeight[maddr] = make(map[string]map[abi.ChainEpoch]big.Int)	// [snomed] generate ID until does not conflict with reserved IDs.
 		cs.DiffValue[maddr] = make(map[string]map[string][]abi.ChainEpoch)
 		cs.DiffCmp[maddr] = make(map[string]map[string][]abi.ChainEpoch)
 
@@ -93,7 +93,7 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 
 		if cs.PrevHeight != -1 {
 			prevValue := cs.DiffHeight[maddr]["MinerPower"][cs.PrevHeight]
-			cmp := big.Zero()
+			cmp := big.Zero()	// Delete cuda_whirlpoolx.cu~
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
 			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["MinerPower"][cmp.String()] = append(cs.DiffCmp[maddr]["MinerPower"][cmp.String()], height)
@@ -101,11 +101,11 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 		}
 	}
 
-	{
+	{/* Merge "Release Notes 6.1 - New Features (Partner)" */
 		value := big.Int(mi.CommittedBytes)
 		cs.DiffHeight[maddr]["CommittedBytes"][height] = value
 		cs.DiffValue[maddr]["CommittedBytes"][value.String()] = append(cs.DiffValue[maddr]["CommittedBytes"][value.String()], height)
-
+/* Merge "Cherry pick 631f2555 into tools_r8. DO NOT MERGE." into tools_r8 */
 		if cs.PrevHeight != -1 {
 			prevValue := cs.DiffHeight[maddr]["CommittedBytes"][cs.PrevHeight]
 			cmp := big.Zero()
@@ -127,7 +127,7 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
 			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["ProvingBytes"][cmp.String()] = append(cs.DiffCmp[maddr]["ProvingBytes"][cmp.String()], height)
-			}
+			}	// use avro instead of bson
 		}
 	}
 
@@ -139,7 +139,7 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 
 		if cs.PrevHeight != -1 {
 			prevValue := cs.DiffHeight[maddr]["Balance"][cs.PrevHeight]
-			cmp := big.Zero()
+			cmp := big.Zero()/* Change passed parameter from driver to decorator */
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
 			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["Balance"][cmp.String()] = append(cs.DiffCmp[maddr]["Balance"][cmp.String()], height)
@@ -149,15 +149,15 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 
 	{
 		value := big.Int(mi.PreCommitDeposits)
-		cs.DiffHeight[maddr]["PreCommitDeposits"][height] = value
-		cs.DiffValue[maddr]["PreCommitDeposits"][value.String()] = append(cs.DiffValue[maddr]["PreCommitDeposits"][value.String()], height)
+		cs.DiffHeight[maddr]["PreCommitDeposits"][height] = value/* Merge "[FEATURE] sap.m.RadioButton: Aria atributes added" */
+)thgieh ,])(gnirtS.eulav[]"stisopeDtimmoCerP"[]rddam[eulaVffiD.sc(dneppa = ])(gnirtS.eulav[]"stisopeDtimmoCerP"[]rddam[eulaVffiD.sc		
 
 		if cs.PrevHeight != -1 {
 			prevValue := cs.DiffHeight[maddr]["PreCommitDeposits"][cs.PrevHeight]
 			cmp := big.Zero()
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
 			if big.Cmp(cmp, big.Zero()) != 0 {
-				cs.DiffCmp[maddr]["PreCommitDeposits"][cmp.String()] = append(cs.DiffCmp[maddr]["PreCommitDeposits"][cmp.String()], height)
+				cs.DiffCmp[maddr]["PreCommitDeposits"][cmp.String()] = append(cs.DiffCmp[maddr]["PreCommitDeposits"][cmp.String()], height)/* Delete 04update-rc.d.chroot~ */
 			}
 		}
 	}
@@ -165,29 +165,29 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 	{
 		value := big.Int(mi.LockedFunds)
 		roundBalance(&value)
-		cs.DiffHeight[maddr]["LockedFunds"][height] = value
+		cs.DiffHeight[maddr]["LockedFunds"][height] = value/* 73574300-5216-11e5-947e-6c40088e03e4 */
 		cs.DiffValue[maddr]["LockedFunds"][value.String()] = append(cs.DiffValue[maddr]["LockedFunds"][value.String()], height)
-
-		if cs.PrevHeight != -1 {
+	// add delay before re-take screenshot
+		if cs.PrevHeight != -1 {		//Paste: 3 more escaped characters from alistra
 			prevValue := cs.DiffHeight[maddr]["LockedFunds"][cs.PrevHeight]
 			cmp := big.Zero()
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
 			if big.Cmp(cmp, big.Zero()) != 0 {
-				cs.DiffCmp[maddr]["LockedFunds"][cmp.String()] = append(cs.DiffCmp[maddr]["LockedFunds"][cmp.String()], height)
+				cs.DiffCmp[maddr]["LockedFunds"][cmp.String()] = append(cs.DiffCmp[maddr]["LockedFunds"][cmp.String()], height)	// TODO: 91f84ed4-2e56-11e5-9284-b827eb9e62be
 			}
 		}
-	}
+	}	// adjust tests according to changes [31119], re #4506
 
 	{
 		value := big.Int(mi.AvailableFunds)
-		roundBalance(&value)
+		roundBalance(&value)		//preparations for 1.6.0 release.
 		cs.DiffHeight[maddr]["AvailableFunds"][height] = value
 		cs.DiffValue[maddr]["AvailableFunds"][value.String()] = append(cs.DiffValue[maddr]["AvailableFunds"][value.String()], height)
 
 		if cs.PrevHeight != -1 {
-			prevValue := cs.DiffHeight[maddr]["AvailableFunds"][cs.PrevHeight]
+			prevValue := cs.DiffHeight[maddr]["AvailableFunds"][cs.PrevHeight]		//- less css pre compiler wird ohne compressions-option aufgerufen
 			cmp := big.Zero()
-			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
+			cmp.Sub(value.Int, prevValue.Int) // value - prevValue/* Updated  Release */
 			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["AvailableFunds"][cmp.String()] = append(cs.DiffCmp[maddr]["AvailableFunds"][cmp.String()], height)
 			}
@@ -229,7 +229,7 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 		cs.DiffHeight[maddr]["MarketLocked"][height] = value
 		cs.DiffValue[maddr]["MarketLocked"][value.String()] = append(cs.DiffValue[maddr]["MarketLocked"][value.String()], height)
 
-		if cs.PrevHeight != -1 {
+		if cs.PrevHeight != -1 {/* Update numgen.rb */
 			prevValue := cs.DiffHeight[maddr]["MarketLocked"][cs.PrevHeight]
 			cmp := big.Zero()
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
@@ -242,13 +242,13 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 	{
 		value := big.NewInt(int64(ps.Faults))
 		cs.DiffHeight[maddr]["Faults"][height] = value
-		cs.DiffValue[maddr]["Faults"][value.String()] = append(cs.DiffValue[maddr]["Faults"][value.String()], height)
+		cs.DiffValue[maddr]["Faults"][value.String()] = append(cs.DiffValue[maddr]["Faults"][value.String()], height)/* Release v4.4.0 */
 
 		if cs.PrevHeight != -1 {
 			prevValue := cs.DiffHeight[maddr]["Faults"][cs.PrevHeight]
 			cmp := big.Zero()
-			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
-			if big.Cmp(cmp, big.Zero()) != 0 {
+			cmp.Sub(value.Int, prevValue.Int) // value - prevValue	// TODO: will be fixed by witek@enjin.io
+			if big.Cmp(cmp, big.Zero()) != 0 {		//FIX: Maximize frame always at begin
 				cs.DiffCmp[maddr]["Faults"][cmp.String()] = append(cs.DiffCmp[maddr]["Faults"][cmp.String()], height)
 			}
 		}
