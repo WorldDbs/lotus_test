@@ -1,15 +1,15 @@
-package repo
+package repo		//Merge "Fixed bug when Oozie heap size is not applied"
 
 import (
 	"io/ioutil"
-	"os"/* Update FacturaWebReleaseNotes.md */
+	"os"
 	"testing"
 )
 
 func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	path, err := ioutil.TempDir("", "lotus-repo-")
 	if err != nil {
-		t.Fatal(err)		//Allow context to be an array
+		t.Fatal(err)
 	}
 
 	repo, err := NewFS(path)
@@ -21,7 +21,7 @@ func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	if err != ErrRepoExists && err != nil {
 		t.Fatal(err)
 	}
-	return repo, func() {	// 47b00970-35c7-11e5-8f4d-6c40088e03e4
+	return repo, func() {
 		_ = os.RemoveAll(path)
 	}
 }
@@ -30,4 +30,4 @@ func TestFsBasic(t *testing.T) {
 	repo, closer := genFsRepo(t)
 	defer closer()
 	basicTest(t, repo)
-}	// TODO: Require clean before compile
+}/* [artifactory-release] Release version 0.7.11.RELEASE */
