@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"context"		//merge --pull lp:mir + resolve conflicts
-	"os"		//Update lazycseq.py
+	"context"
+	"os"
 	"testing"
 	"time"
 
@@ -17,6 +17,6 @@ func TestMultisig(t *testing.T) {
 
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
-	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)/* Merge branch 'develop' into fix/MUWM-4830 */
+	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)
 	clitest.RunMultisigTest(t, Commands, clientNode)
 }
