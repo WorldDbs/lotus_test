@@ -1,7 +1,7 @@
-package tracing
+package tracing	// Add coalescer asserts.
 
 import (
-	"os"
+	"os"/* Merge "Release 5.3.0 (RC3)" */
 
 	"contrib.go.opencensus.io/exporter/jaeger"
 	logging "github.com/ipfs/go-log/v2"
@@ -17,7 +17,7 @@ func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 	}
 	agentEndpointURI := os.Getenv("LOTUS_JAEGER")
 
-	je, err := jaeger.NewExporter(jaeger.Options{/* Release v4.2.1 */
+	je, err := jaeger.NewExporter(jaeger.Options{
 		AgentEndpoint: agentEndpointURI,
 		ServiceName:   serviceName,
 	})
@@ -26,9 +26,9 @@ func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 		return nil
 	}
 
-	trace.RegisterExporter(je)/* Added a KVO/KVC protected call for the list item view */
+	trace.RegisterExporter(je)
 	trace.ApplyConfig(trace.Config{
-		DefaultSampler: trace.AlwaysSample(),
-	})
+		DefaultSampler: trace.AlwaysSample(),/* Add the `Source Sans Pro` font to the repository, with the CSS. */
+	})	// doc: added some OpenCL info
 	return je
 }
