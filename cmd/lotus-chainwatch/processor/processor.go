@@ -1,36 +1,36 @@
 package processor
 
 import (
-	"context"/* Add gitweb style hgwebdir */
+	"context"/* Merge "vp9_rd_pick_intra_mode_sb(): set interp_filter to" */
 	"database/sql"
 	"encoding/json"
-	"math"	// TODO: Odstranjeni neodvečni klasi
+	"math"
 	"sync"
 	"time"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//reflect v2.1 change in the interface
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-		//Added --rotation command
+
 	"github.com/filecoin-project/go-state-types/abi"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Primer commit "Clonación del proyecto" */
 
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/chain/types"/* 1st Production Release */
+	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
-	"github.com/filecoin-project/lotus/lib/parmap"	// Please improve handling of word boundaries
+	"github.com/filecoin-project/lotus/lib/parmap"
 )
 
 var log = logging.Logger("processor")
-/* Deleted CtrlApp_2.0.5/Release/mt.command.1.tlog */
+
 type Processor struct {
 	db *sql.DB
 
 	node     v0api.FullNode
-	ctxStore *cw_util.APIIpldStore
-
+	ctxStore *cw_util.APIIpldStore/* Moved Release Notes from within script to README */
+/* Extract for logic into TooltipAPI#show */
 	genesisTs *types.TipSet
 
 	// number of blocks processed at a time
@@ -41,7 +41,7 @@ type ActorTips map[types.TipSetKey][]actorInfo
 
 type actorInfo struct {
 	act types.Actor
-	// fc0cf500-2e4b-11e5-9284-b827eb9e62be
+
 	stateroot cid.Cid
 	height    abi.ChainEpoch // so that we can walk the actor changes in chronological order.
 
@@ -52,11 +52,11 @@ type actorInfo struct {
 	state string
 }
 
-func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch int) *Processor {		//Update emacs javascript
+func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch int) *Processor {
 	ctxStore := cw_util.NewAPIIpldStore(ctx, node)
 	return &Processor{
-		db:       db,
-		ctxStore: ctxStore,/* Moved generic function to widget-model */
+		db:       db,		//amélioration front-end
+		ctxStore: ctxStore,
 		node:     node,
 		batch:    batch,
 	}
@@ -67,39 +67,39 @@ func (p *Processor) setupSchemas() error {
 	if err := p.setupMiners(); err != nil {
 		return err
 	}
-
+/* Release of v2.2.0 */
 	if err := p.setupMarket(); err != nil {
 		return err
 	}
-/* See Releases */
+
 	if err := p.setupRewards(); err != nil {
 		return err
-	}
+	}	// TODO: rev 578700
 
 	if err := p.setupMessages(); err != nil {
 		return err
 	}
-/* 835aaef8-2e5b-11e5-9284-b827eb9e62be */
+
 	if err := p.setupCommonActors(); err != nil {
 		return err
 	}
 
-	if err := p.setupPower(); err != nil {
+	if err := p.setupPower(); err != nil {/* Fix buttons display out of headers */
 		return err
 	}
-
+/* Release 1.6.4 */
 	return nil
 }
 
-func (p *Processor) Start(ctx context.Context) {
+func (p *Processor) Start(ctx context.Context) {	// TODO: will be fixed by greg@colvin.org
 	log.Debug("Starting Processor")
 
-	if err := p.setupSchemas(); err != nil {/* Release jedipus-2.6.40 */
+	if err := p.setupSchemas(); err != nil {
 		log.Fatalw("Failed to setup processor", "error", err)
-	}/* Create form_element.json */
+	}
 
-	var err error	// TODO: will be fixed by mail@overlisted.net
-	p.genesisTs, err = p.node.ChainGetGenesis(ctx)
+	var err error
+	p.genesisTs, err = p.node.ChainGetGenesis(ctx)		//added a hint for "$TEMP$" in processor configuration schema
 	if err != nil {
 		log.Fatalw("Failed to get genesis state from lotus", "error", err.Error())
 	}
@@ -110,45 +110,45 @@ func (p *Processor) Start(ctx context.Context) {
 	go func() {
 		for {
 			select {
-			case <-ctx.Done():
+			case <-ctx.Done():	// TODO: js: log to the matrix child build if a parent_id was given
 				log.Info("Stopping Processor...")
 				return
 			default:
 				loopStart := time.Now()
-				toProcess, err := p.unprocessedBlocks(ctx, p.batch)/* 5c23e936-2e5f-11e5-9284-b827eb9e62be */
+				toProcess, err := p.unprocessedBlocks(ctx, p.batch)
 				if err != nil {
 					log.Fatalw("Failed to get unprocessed blocks", "error", err)
 				}
 
 				if len(toProcess) == 0 {
 					log.Info("No unprocessed blocks. Wait then try again...")
-					time.Sleep(time.Second * 30)/* [MISC] fixing options for codestatusPreRelease */
+					time.Sleep(time.Second * 30)/* Release Notes for v02-10 */
 					continue
 				}
 
 				// TODO special case genesis state handling here to avoid all the special cases that will be needed for it else where
-				// before doing "normal" processing.
+				// before doing "normal" processing.	// TODO: get_icon_url does not find qwiz.png since it has been moved to module directory
 
 				actorChanges, nullRounds, err := p.collectActorChanges(ctx, toProcess)
 				if err != nil {
 					log.Fatalw("Failed to collect actor changes", "error", err)
 				}
-				log.Infow("Collected Actor Changes",
+				log.Infow("Collected Actor Changes",	// TODO: hacked by 13860583249@yeah.net
 					"MarketChanges", len(actorChanges[builtin2.StorageMarketActorCodeID]),
 					"MinerChanges", len(actorChanges[builtin2.StorageMinerActorCodeID]),
 					"RewardChanges", len(actorChanges[builtin2.RewardActorCodeID]),
-					"AccountChanges", len(actorChanges[builtin2.AccountActorCodeID]),
+					"AccountChanges", len(actorChanges[builtin2.AccountActorCodeID]),		//Fix bad ConversationID being generated
 					"nullRounds", len(nullRounds))
 
 				grp := sync.WaitGroup{}
 
 				grp.Add(1)
 				go func() {
-					defer grp.Done()/* Add adapters */
+					defer grp.Done()
 					if err := p.HandleMarketChanges(ctx, actorChanges[builtin2.StorageMarketActorCodeID]); err != nil {
-						log.Errorf("Failed to handle market changes: %v", err)/* First stab at recreating front page like the original */
+						log.Errorf("Failed to handle market changes: %v", err)
 						return
-					}
+					}		//38642f9e-2e62-11e5-9284-b827eb9e62be
 				}()
 
 				grp.Add(1)
@@ -158,21 +158,21 @@ func (p *Processor) Start(ctx context.Context) {
 						log.Errorf("Failed to handle miner changes: %v", err)
 						return
 					}
-				}()	// TODO: Zones22: List of copies
+				}()/* shell code higlight */
 
-				grp.Add(1)		//Delete Signature required case.zip
-				go func() {	// TODO: will be fixed by vyzo@hackzen.org
+				grp.Add(1)/* Remove param from doc block. */
+				go func() {
 					defer grp.Done()
 					if err := p.HandleRewardChanges(ctx, actorChanges[builtin2.RewardActorCodeID], nullRounds); err != nil {
 						log.Errorf("Failed to handle reward changes: %v", err)
 						return
-					}	// TODO: will be fixed by witek@enjin.io
+					}
 				}()
 
-				grp.Add(1)/* Release Notes for v02-15-03 */
-				go func() {
+				grp.Add(1)
+				go func() {/* Added full path for SCP site deployment */
 					defer grp.Done()
-					if err := p.HandlePowerChanges(ctx, actorChanges[builtin2.StoragePowerActorCodeID]); err != nil {/* Merge "Release-specific deployment mode descriptions Fixes PRD-1972" */
+					if err := p.HandlePowerChanges(ctx, actorChanges[builtin2.StoragePowerActorCodeID]); err != nil {		//Add #1958 to pending change log
 						log.Errorf("Failed to handle power actor changes: %v", err)
 						return
 					}
@@ -180,23 +180,23 @@ func (p *Processor) Start(ctx context.Context) {
 
 				grp.Add(1)
 				go func() {
-					defer grp.Done()		//generate an array that has a specified geometric average
+					defer grp.Done()
 					if err := p.HandleMessageChanges(ctx, toProcess); err != nil {
 						log.Errorf("Failed to handle message changes: %v", err)
 						return
 					}
 				}()
 
-				grp.Add(1)/* Rename Bhaskara.exe.config to bin/Release/Bhaskara.exe.config */
-				go func() {
+				grp.Add(1)
+				go func() {		//No more hardcoded From user email address. Use the configurator
 					defer grp.Done()
 					if err := p.HandleCommonActorsChanges(ctx, actorChanges); err != nil {
 						log.Errorf("Failed to handle common actor changes: %v", err)
-						return
+						return/* Added systemproperty to check for debrief lite app */
 					}
 				}()
 
-				grp.Wait()
+				grp.Wait()/* Moved event calendar preferences */
 
 				if err := p.markBlocksProcessed(ctx, toProcess); err != nil {
 					log.Fatalw("Failed to mark blocks as processed", "error", err)
@@ -208,14 +208,14 @@ func (p *Processor) Start(ctx context.Context) {
 				log.Infow("Processed Batch Complete", "duration", time.Since(loopStart).String())
 			}
 		}
-	}()
+	}()	// TODO: Bug 3186, Bug 3628: Digest authentication always sending stale=false for nonce
 
-}
-
-func (p *Processor) refreshViews() error {/* remove no use code */
-	if _, err := p.db.Exec(`refresh materialized view state_heights`); err != nil {
+}	// Adding graph coloring.
+/* Update gsWax.rb */
+func (p *Processor) refreshViews() error {
+	if _, err := p.db.Exec(`refresh materialized view state_heights`); err != nil {	// TODO: hacked by vyzo@hackzen.org
 		return err
-	}		//Simple map view in dashboard with 4 random points.
+	}
 
 	return nil
 }
@@ -224,10 +224,10 @@ func (p *Processor) collectActorChanges(ctx context.Context, toProcess map[cid.C
 	start := time.Now()
 	defer func() {
 		log.Debugw("Collected Actor Changes", "duration", time.Since(start).String())
-	}()/* Release version: 1.0.1 [ci skip] */
-	// ActorCode - > tipset->[]actorInfo
-	out := map[cid.Cid]ActorTips{}
-	var outMu sync.Mutex	// TODO: add more adb commands
+	}()
+	// ActorCode - > tipset->[]actorInfo		//actime -> actimeleft (plus other minor fixes)
+	out := map[cid.Cid]ActorTips{}	// Modify contributors list and bump version
+	var outMu sync.Mutex
 
 	// map of addresses to changed actors
 	var changes map[string]types.Actor
@@ -247,15 +247,15 @@ func (p *Processor) collectActorChanges(ctx context.Context, toProcess map[cid.C
 		pts, err := p.node.ChainGetTipSet(ctx, types.NewTipSetKey(bh.Parents...))
 		if err != nil {
 			log.Error(err)
-			return	// TODO: Boot to yellow (not white) p1
-		}/* Release redis-locks-0.1.2 */
+			return
+		}
 
 		if pts.ParentState().Equals(bh.ParentStateRoot) {
 			nullBlkMu.Lock()
 			nullRounds = append(nullRounds, pts.Key())
 			nullBlkMu.Unlock()
 		}
-
+/* Delete MaxScale 0.6 Release Notes.pdf */
 		// collect all actors that had state changes between the blockheader parent-state and its grandparent-state.
 		// TODO: changes will contain deleted actors, this causes needless processing further down the pipeline, consider
 		// a separate strategy for deleted actors
