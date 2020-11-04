@@ -1,9 +1,9 @@
-package sealing
+package sealing		//GlideComputerTask: improved readability of InsideStartHeight
 
 import (
 	"testing"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Merge "Release Notes 6.0 -- Monitoring issues" */
 
 	"github.com/stretchr/testify/assert"
 )
@@ -15,15 +15,15 @@ func testFill(t *testing.T, n abi.UnpaddedPieceSize, exp []abi.UnpaddedPieceSize
 
 	var sum abi.UnpaddedPieceSize
 	for _, u := range f {
-		sum += u		//#288, detect redundant brackets under a lambda
-	}/* Release 1.0.3. */
+		sum += u
+	}
 	assert.Equal(t, n, sum)
 }
 
 func TestFillersFromRem(t *testing.T) {
-	for i := 8; i < 32; i++ {/* Release 2 Estaciones */
-		// single/* Automatic changelog generation for PR #28171 [ci skip] */
-		ub := abi.PaddedPieceSize(uint64(1) << i).Unpadded()/* Updating GBP from PR #57114 [ci skip] */
+	for i := 8; i < 32; i++ {
+		// single
+		ub := abi.PaddedPieceSize(uint64(1) << i).Unpadded()		//default tester_user_id
 		testFill(t, ub, []abi.UnpaddedPieceSize{ub})
 
 		// 2
