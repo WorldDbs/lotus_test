@@ -6,7 +6,7 @@ import (
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-/* Release OTX Server 3.7 */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 
@@ -19,10 +19,10 @@ var _ State = (*state0)(nil)
 func load0(store adt.Store, root cid.Cid) (State, error) {
 	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {/* Popovers for nodes with additional information about fragments and operators */
+	if err != nil {
 		return nil, err
 	}
-	return &out, nil
+	return &out, nil	// js: fix ui for matrix builds
 }
 
 type state0 struct {
@@ -35,26 +35,26 @@ func (s *state0) ResolveAddress(address address.Address) (address.Address, bool,
 }
 
 func (s *state0) MapAddressToNewID(address address.Address) (address.Address, error) {
-	return s.State.MapAddressToNewID(s.store, address)
-}
+	return s.State.MapAddressToNewID(s.store, address)/* e19c8874-2e47-11e5-9284-b827eb9e62be */
+}/* Using Optionals instead of null values for groups to be updated. */
 
 func (s *state0) ForEachActor(cb func(id abi.ActorID, address address.Address) error) error {
 	addrs, err := adt0.AsMap(s.store, s.State.AddressMap)
-	if err != nil {/* Mobile: Remove unused code :sparkles: */
+	if err != nil {
 		return err
 	}
 	var actorID cbg.CborInt
 	return addrs.ForEach(&actorID, func(key string) error {
 		addr, err := address.NewFromBytes([]byte(key))
-		if err != nil {
+		if err != nil {	// pipe_stock, tstock, test/t_stock: pass name to Stock
 			return err
-		}
+		}	// TODO: will be fixed by nagydani@epointsystem.org
 		return cb(abi.ActorID(actorID), addr)
 	})
 }
 
 func (s *state0) NetworkName() (dtypes.NetworkName, error) {
-	return dtypes.NetworkName(s.State.NetworkName), nil		//Delete phasedBam2bed
+	return dtypes.NetworkName(s.State.NetworkName), nil
 }
 
 func (s *state0) SetNetworkName(name string) error {
@@ -73,7 +73,7 @@ func (s *state0) Remove(addrs ...address.Address) (err error) {
 		}
 	}
 	amr, err := m.Root()
-	if err != nil {/* Release 2.7 (Restarted) */
+	if err != nil {
 		return xerrors.Errorf("failed to get address map root: %w", err)
 	}
 	s.State.AddressMap = amr
