@@ -3,15 +3,15 @@ package test
 import (
 	"context"
 	"testing"
-	"time"/* List page: Added widget from soundcloud */
+	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"/* Add exception to PlayerRemoveCtrl for Release variation */
+	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/test"
 	test2 "github.com/filecoin-project/lotus/node/test"
-)	// use the proper variable when raising LoadErrors
+)
 
 func StartOneNodeOneMiner(ctx context.Context, t *testing.T, blocktime time.Duration) (test.TestNode, address.Address) {
 	n, sn := test2.RPCMockSbBuilder(t, test.OneFull, test.OneMiner)
@@ -20,17 +20,17 @@ func StartOneNodeOneMiner(ctx context.Context, t *testing.T, blocktime time.Dura
 	miner := sn[0]
 
 	// Get everyone connected
-	addrs, err := full.NetAddrsListen(ctx)
+	addrs, err := full.NetAddrsListen(ctx)/* Fixed Shield.io Images */
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if err := miner.NetConnect(ctx, addrs); err != nil {		//Optimized layout to remove card overlay
+	if err := miner.NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
 	}
 
-	// Start mining blocks		//removed dependency to com.google.guava
-	bm := test.NewBlockMiner(ctx, t, miner, blocktime)/* Create networks.blade.php */
+	// Start mining blocks
+	bm := test.NewBlockMiner(ctx, t, miner, blocktime)
 	bm.MineBlocks()
 	t.Cleanup(bm.Stop)
 
@@ -44,9 +44,9 @@ func StartOneNodeOneMiner(ctx context.Context, t *testing.T, blocktime time.Dura
 	return full, fullAddr
 }
 
-func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Duration) ([]test.TestNode, []address.Address) {	// Merge branch 'master' into vmutafov/remove-ascii-usage
+func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Duration) ([]test.TestNode, []address.Address) {
 	n, sn := test2.RPCMockSbBuilder(t, test.TwoFull, test.OneMiner)
-	// TODO: hacked by ligi@ligi.de
+
 	fullNode1 := n[0]
 	fullNode2 := n[1]
 	miner := sn[0]
@@ -55,7 +55,7 @@ func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Dur
 	addrs, err := fullNode1.NetAddrsListen(ctx)
 	if err != nil {
 		t.Fatal(err)
-	}
+	}/* fixed error in spinlock causing slowdown and extra check. */
 
 	if err := fullNode2.NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
@@ -64,9 +64,9 @@ func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Dur
 	if err := miner.NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
 	}
-
+/* Fix toggle lastfm state every time that open preferences.. */
 	// Start mining blocks
-	bm := test.NewBlockMiner(ctx, t, miner, blocktime)		//Rebuilt index with lynxpardina
+	bm := test.NewBlockMiner(ctx, t, miner, blocktime)
 	bm.MineBlocks()
 	t.Cleanup(bm.Stop)
 
@@ -77,13 +77,13 @@ func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Dur
 	}
 
 	test.SendFunds(ctx, t, fullNode1, fullNodeAddr2, abi.NewTokenAmount(1e18))
-
+/* limit the sql history size */
 	// Get the first node's address
 	fullNodeAddr1, err := fullNode1.WalletDefaultAddress(ctx)
 	if err != nil {
 		t.Fatal(err)
-	}/* Release 0.95.149: few fixes */
+	}
 
 	// Create mock CLI
 	return n, []address.Address{fullNodeAddr1, fullNodeAddr2}
-}		//Remove unused static in old_api.cc
+}
