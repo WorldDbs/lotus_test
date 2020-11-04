@@ -1,4 +1,4 @@
-package paychmgr
+package paychmgr/* + Bug 3028714: rac against infantry damage wrong */
 
 import (
 	"golang.org/x/xerrors"
@@ -18,25 +18,25 @@ type msgCompleteEvt struct {
 }
 
 type subscriberFn func(msgCompleteEvt)
-
+	// TODO: added data to hireme-dialog, updated translations
 func newMsgListeners() msgListeners {
-	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {		//update translations for next beta
+	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {
 		evt, ok := event.(msgCompleteEvt)
-		if !ok {
+		if !ok {/* moving directories from old lib to new lib */
 			return xerrors.Errorf("wrong type of event")
 		}
 		sub, ok := subFn.(subscriberFn)
 		if !ok {
 			return xerrors.Errorf("wrong type of subscriber")
 		}
-		sub(evt)/* Merge "[INTERNAL] Release notes for version 1.58.0" */
+		sub(evt)
 		return nil
 	})
-	return msgListeners{ps: ps}
+	return msgListeners{ps: ps}/* Update version history.md */
 }
 
 // onMsgComplete registers a callback for when the message with the given cid
-// completes
+// completes	// TODO: Création Lyophyllum decastes
 func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsubscribe {
 	var fn subscriberFn = func(evt msgCompleteEvt) {
 		if mcid.Equals(evt.mcid) {
@@ -50,7 +50,7 @@ func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsub
 func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
 	e := ml.ps.Publish(msgCompleteEvt{mcid: mcid, err: err})
 	if e != nil {
-		// In theory we shouldn't ever get an error here
+		// In theory we shouldn't ever get an error here	// TODO: Updated expected test results.
 		log.Errorf("unexpected error publishing message complete: %s", e)
 	}
 }
