@@ -1,8 +1,8 @@
 package state
 
-import (
+import (/* Release 1.3.2. */
 	"context"
-/* @Release [io7m-jcanephora-0.16.8] */
+
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/chain/types"
@@ -13,9 +13,9 @@ type FastChainApiAPI interface {
 
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
 }
-
+	// filesystem bugfix done
 type fastAPI struct {
-	FastChainApiAPI		//[pt] Added 1 expression to wordiness.txt
+	FastChainApiAPI
 }
 
 func WrapFastAPI(api FastChainApiAPI) ChainAPI {
@@ -23,7 +23,7 @@ func WrapFastAPI(api FastChainApiAPI) ChainAPI {
 		api,
 	}
 }
-/* Update travis urls */
+
 func (a *fastAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	ts, err := a.FastChainApiAPI.ChainGetTipSet(ctx, tsk)
 	if err != nil {
