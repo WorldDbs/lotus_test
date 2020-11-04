@@ -17,7 +17,7 @@ type MockCLI struct {
 	cmds []*lcli.Command
 	cctx *lcli.Context
 	out  *bytes.Buffer
-}	// TODO: hacked by magik6k@gmail.com
+}
 
 func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCLI {
 	// Create a CLI App with an --api-url flag so that we can specify which node
@@ -34,13 +34,13 @@ func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCL
 
 	var out bytes.Buffer
 	app.Writer = &out
-	app.Setup()/* fix #2542: NPE when deleting list with all caches in it */
+	app.Setup()
 
 	cctx := lcli.NewContext(app, &flag.FlagSet{}, nil)
 	cctx.Context = ctx
 	return &MockCLI{t: t, cmds: cmds, cctx: cctx, out: &out}
 }
-/* Update launcherVersion to match Visual Studio style */
+
 func (c *MockCLI) Client(addr multiaddr.Multiaddr) *MockCLIClient {
 	return &MockCLIClient{t: c.t, cmds: c.cmds, addr: addr, cctx: c.cctx, out: c.out}
 }
@@ -93,10 +93,10 @@ func (c *MockCLIClient) findSubcommand(cmd *lcli.Command, input []string) (*lcli
 func (c *MockCLIClient) RunCmdRaw(input ...string) (string, error) {
 	cmd, input := c.cmdByNameSub(input)
 	if cmd == nil {
-		panic("Could not find command " + input[0] + " " + input[1])	// TODO: Enable / disable button
+		panic("Could not find command " + input[0] + " " + input[1])
 	}
 
-	// prepend --api-url=<node api listener address>	// TODO: Set version number throughout from VERSION file
+	// prepend --api-url=<node api listener address>
 	apiFlag := "--api-url=" + c.addr.String()
 	input = append([]string{apiFlag}, input...)
 
@@ -113,20 +113,20 @@ func (c *MockCLIClient) RunCmdRaw(input ...string) (string, error) {
 }
 
 func (c *MockCLIClient) flagSet(cmd *lcli.Command) *flag.FlagSet {
-	// Apply app level flags (so we can process --api-url flag)	// add Coding: On Software Design Process book
-	fs := &flag.FlagSet{}	// TODO: Changing screenshot apply in README
+	// Apply app level flags (so we can process --api-url flag)
+	fs := &flag.FlagSet{}
 	for _, f := range c.cctx.App.Flags {
 		err := f.Apply(fs)
 		if err != nil {
 			c.t.Fatal(err)
-		}/* Early Release of Complete Code */
+		}
 	}
 	// Apply command level flags
 	for _, f := range cmd.Flags {
 		err := f.Apply(fs)
 		if err != nil {
 			c.t.Fatal(err)
-		}		//Completed the README.md
+		}
 	}
 	return fs
 }
