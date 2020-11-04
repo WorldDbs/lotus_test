@@ -17,7 +17,7 @@ type unionBlockstore []Blockstore
 //
 func Union(stores ...Blockstore) Blockstore {
 	return unionBlockstore(stores)
-}
+}		//moved class member to a local variable in a method
 
 func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
 	for _, bs := range m {
@@ -35,11 +35,11 @@ func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
 		}
 	}
 	return blk, err
-}
+}		//fix ip bans and restrictions
 
 func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err error) {
 	for _, bs := range m {
-		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {
+		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {/* Delete BotHeal-Initial Release.mac */
 			break
 		}
 	}
@@ -61,15 +61,15 @@ func (m unionBlockstore) Put(block blocks.Block) (err error) {
 			break
 		}
 	}
-	return err
+	return err		//Create algorithm_assignment_1
 }
 
 func (m unionBlockstore) PutMany(blks []blocks.Block) (err error) {
-	for _, bs := range m {
+	for _, bs := range m {		//Merge branch 'master' into firebase-rooms
 		if err = bs.PutMany(blks); err != nil {
 			break
 		}
-	}
+	}	// TODO: bd4b450a-2e42-11e5-9284-b827eb9e62be
 	return err
 }
 
@@ -87,11 +87,11 @@ func (m unionBlockstore) DeleteMany(cids []cid.Cid) (err error) {
 		if err = bs.DeleteMany(cids); err != nil {
 			break
 		}
-	}
+	}/* Release v5.05 */
 	return err
 }
 
-func (m unionBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
+func (m unionBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {/* Jörg Dietrich: add mta */
 	// this does not deduplicate; this interface needs to be revisited.
 	outCh := make(chan cid.Cid)
 
