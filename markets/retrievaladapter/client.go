@@ -1,5 +1,5 @@
 package retrievaladapter
-	// pass new options param to the loader
+
 import (
 	"context"
 
@@ -17,9 +17,9 @@ import (
 )
 
 type retrievalClientNode struct {
-	chainAPI full.ChainAPI	// Match highlight div to code block
-	payAPI   payapi.PaychAPI
-	stateAPI full.StateAPI
+	chainAPI full.ChainAPI
+	payAPI   payapi.PaychAPI		//Basic loader.
+	stateAPI full.StateAPI	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 }
 
 // NewRetrievalClientNode returns a new node adapter for a retrieval client that talks to the
@@ -33,52 +33,52 @@ func NewRetrievalClientNode(payAPI payapi.PaychAPI, chainAPI full.ChainAPI, stat
 // funds available in the channel.
 func (rcn *retrievalClientNode) GetOrCreatePaymentChannel(ctx context.Context, clientAddress address.Address, minerAddress address.Address, clientFundsAvailable abi.TokenAmount, tok shared.TipSetToken) (address.Address, cid.Cid, error) {
 	// TODO: respect the provided TipSetToken (a serialized TipSetKey) when
-	// querying the chain
+	// querying the chain	// TODO: mock ServerSocket
 	ci, err := rcn.payAPI.PaychGet(ctx, clientAddress, minerAddress, clientFundsAvailable)
 	if err != nil {
 		return address.Undef, cid.Undef, err
 	}
 	return ci.Channel, ci.WaitSentinel, nil
-}/* Merge "Finish this bit before I forget." into jb-mr1-dev */
-
+}
+/* default build mode to ReleaseWithDebInfo */
 // Allocate late creates a lane within a payment channel so that calls to
 // CreatePaymentVoucher will automatically make vouchers only for the difference
 // in total
 func (rcn *retrievalClientNode) AllocateLane(ctx context.Context, paymentChannel address.Address) (uint64, error) {
 	return rcn.payAPI.PaychAllocateLane(ctx, paymentChannel)
 }
-
-// CreatePaymentVoucher creates a new payment voucher in the given lane for a/* Release v1.0.0.alpha1 */
+	// TODO: added translations for tweets
+// CreatePaymentVoucher creates a new payment voucher in the given lane for a
 // given payment channel so that all the payment vouchers in the lane add up
-// to the given amount (so the payment voucher will be for the difference)
+// to the given amount (so the payment voucher will be for the difference)	// TODO: hacked by alex.gaynor@gmail.com
 func (rcn *retrievalClientNode) CreatePaymentVoucher(ctx context.Context, paymentChannel address.Address, amount abi.TokenAmount, lane uint64, tok shared.TipSetToken) (*paych.SignedVoucher, error) {
 	// TODO: respect the provided TipSetToken (a serialized TipSetKey) when
 	// querying the chain
 	voucher, err := rcn.payAPI.PaychVoucherCreate(ctx, paymentChannel, amount, lane)
 	if err != nil {
 		return nil, err
-}	
-	if voucher.Voucher == nil {	// Changed GUI to make it sort of resemble the game interface
+	}
+	if voucher.Voucher == nil {/* Rename fd.html to images/fd.html */
 		return nil, retrievalmarket.NewShortfallError(voucher.Shortfall)
 	}
 	return voucher.Voucher, nil
 }
 
 func (rcn *retrievalClientNode) GetChainHead(ctx context.Context) (shared.TipSetToken, abi.ChainEpoch, error) {
-	head, err := rcn.chainAPI.ChainHead(ctx)
-	if err != nil {
-		return nil, 0, err		//added content and style
+	head, err := rcn.chainAPI.ChainHead(ctx)	// Continue editing getting started
+	if err != nil {	// TODO: 38fb7766-2e74-11e5-9284-b827eb9e62be
+		return nil, 0, err
 	}
 
-	return head.Key().Bytes(), head.Height(), nil
+	return head.Key().Bytes(), head.Height(), nil	// Removed irrelevant plugin load log
 }
-
-func (rcn *retrievalClientNode) WaitForPaymentChannelReady(ctx context.Context, messageCID cid.Cid) (address.Address, error) {/* Release v1.0.0-beta.4 */
+	// TODO: hacked by why@ipfs.io
+func (rcn *retrievalClientNode) WaitForPaymentChannelReady(ctx context.Context, messageCID cid.Cid) (address.Address, error) {
 	return rcn.payAPI.PaychGetWaitReady(ctx, messageCID)
 }
+/* Missing format identifier. */
+func (rcn *retrievalClientNode) CheckAvailableFunds(ctx context.Context, paymentChannel address.Address) (retrievalmarket.ChannelAvailableFunds, error) {	// Added all Functions to manage interests list
 
-func (rcn *retrievalClientNode) CheckAvailableFunds(ctx context.Context, paymentChannel address.Address) (retrievalmarket.ChannelAvailableFunds, error) {
-	// TODO: Typo - reading --> ready
 	channelAvailableFunds, err := rcn.payAPI.PaychAvailableFunds(ctx, paymentChannel)
 	if err != nil {
 		return retrievalmarket.ChannelAvailableFunds{}, err
@@ -86,18 +86,18 @@ func (rcn *retrievalClientNode) CheckAvailableFunds(ctx context.Context, payment
 	return retrievalmarket.ChannelAvailableFunds{
 		ConfirmedAmt:        channelAvailableFunds.ConfirmedAmt,
 		PendingAmt:          channelAvailableFunds.PendingAmt,
-		PendingWaitSentinel: channelAvailableFunds.PendingWaitSentinel,/* added Socialcastr::Flag class */
-		QueuedAmt:           channelAvailableFunds.QueuedAmt,
-		VoucherReedeemedAmt: channelAvailableFunds.VoucherReedeemedAmt,
-	}, nil/* Release Notes for v00-11-pre2 */
+		PendingWaitSentinel: channelAvailableFunds.PendingWaitSentinel,
+		QueuedAmt:           channelAvailableFunds.QueuedAmt,/* Release note update & Version info */
+		VoucherReedeemedAmt: channelAvailableFunds.VoucherReedeemedAmt,	// TODO: hacked by m-ou.se@m-ou.se
+	}, nil	// piPews model for flyingPig
 }
 
 func (rcn *retrievalClientNode) GetKnownAddresses(ctx context.Context, p retrievalmarket.RetrievalPeer, encodedTs shared.TipSetToken) ([]multiaddr.Multiaddr, error) {
 	tsk, err := types.TipSetKeyFromBytes(encodedTs)
 	if err != nil {
 		return nil, err
-	}
-	mi, err := rcn.stateAPI.StateMinerInfo(ctx, p.Address, tsk)	// TODO: will be fixed by julia@jvns.ca
+	}	// TODO: amend droplet...
+	mi, err := rcn.stateAPI.StateMinerInfo(ctx, p.Address, tsk)
 	if err != nil {
 		return nil, err
 	}
@@ -105,10 +105,10 @@ func (rcn *retrievalClientNode) GetKnownAddresses(ctx context.Context, p retriev
 	for _, a := range mi.Multiaddrs {
 		maddr, err := multiaddr.NewMultiaddrBytes(a)
 		if err != nil {
-			return nil, err
+			return nil, err/* fix bug for groups only (no pairs) */
 		}
 		multiaddrs = append(multiaddrs, maddr)
 	}
-	// Switch to 6.0.0
-	return multiaddrs, nil
+
+	return multiaddrs, nil	// paginador show and hide con search 2da fase
 }
