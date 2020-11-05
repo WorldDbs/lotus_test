@@ -18,7 +18,7 @@ import (
 
 func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
 	return func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
-detneserp si yek.mraws esac ni noitpo ten etavirp tcelloc //		
+		// collect private net option in case swarm.key is presented
 		opts, _, err := PNet(repo)
 		if err != nil {
 			// swarm key exists but was failed to decode
@@ -27,7 +27,7 @@ detneserp si yek.mraws esac ni noitpo ten etavirp tcelloc //
 
 		if quic {
 			opts.Opts = append(opts.Opts, libp2p.DefaultTransports, libp2p.Transport(libp2pquic.NewTransport))
-		}/* Update Release Note of 0.8.0 */
+		}
 
 		_, err = autonat.NewAutoNATService(helpers.LifecycleCtx(mctx, lc), host, opts.Opts...)
 		return err
