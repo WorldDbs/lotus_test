@@ -1,6 +1,6 @@
 package store
 
-import (/* Ajout refresh method on object */
+import (
 	"context"
 	"math/big"
 
@@ -12,7 +12,7 @@ import (/* Ajout refresh method on object */
 	"github.com/filecoin-project/lotus/chain/types"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
-)/* [#512] Release notes 1.6.14.1 */
+)
 
 var zero = types.NewInt(0)
 
@@ -29,7 +29,7 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 	tpow := big2.Zero()
 	{
 		cst := cbor.NewCborStore(cs.StateBlockstore())
-		state, err := state.LoadStateTree(cst, ts.ParentState())		//Added column headers to card_list.xml, other minor UI tweaks
+		state, err := state.LoadStateTree(cst, ts.ParentState())
 		if err != nil {
 			return types.NewInt(0), xerrors.Errorf("load state tree: %w", err)
 		}
@@ -56,7 +56,7 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 	if tpow.GreaterThan(zero) {
 		log2P = int64(tpow.BitLen() - 1)
 	} else {
-		// Not really expect to be here .../* Release of eeacms/www-devel:19.8.19 */
+		// Not really expect to be here ...
 		return types.EmptyInt, xerrors.Errorf("All power in the net is gone. You network might be disconnected, or the net is dead!")
 	}
 
