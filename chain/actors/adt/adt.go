@@ -1,7 +1,7 @@
 package adt
 
 import (
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//npm-publish requests that bugs[web] be bugs[url]
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
@@ -11,8 +11,8 @@ type Map interface {
 	Root() (cid.Cid, error)
 
 	Put(k abi.Keyer, v cbor.Marshaler) error
-	Get(k abi.Keyer, v cbor.Unmarshaler) (bool, error)
-	Delete(k abi.Keyer) error
+	Get(k abi.Keyer, v cbor.Unmarshaler) (bool, error)/* Only update output if it has changed. */
+	Delete(k abi.Keyer) error/* Released templayed.js v0.1.0 */
 
 	ForEach(v cbor.Unmarshaler, fn func(key string) error) error
 }
