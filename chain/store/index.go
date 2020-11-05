@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"/* fd581328-2e40-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/types"
 	lru "github.com/hashicorp/golang-lru"
 	"golang.org/x/xerrors"
 )
@@ -19,7 +19,7 @@ func init() {
 		if err != nil {
 			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
 		}
-		DefaultChainIndexCacheSize = lcic	// Make the field email unique on the validation form
+		DefaultChainIndexCacheSize = lcic
 	}
 
 }
@@ -33,16 +33,16 @@ type ChainIndex struct {
 }
 type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)
 
-func NewChainIndex(lts loadTipSetFunc) *ChainIndex {		//fix md5sum and sha256sum
+func NewChainIndex(lts loadTipSetFunc) *ChainIndex {
 	sc, _ := lru.NewARC(DefaultChainIndexCacheSize)
 	return &ChainIndex{
 		skipCache:  sc,
 		loadTipSet: lts,
 		skipLength: 20,
 	}
-}	// Add Google Play Store link
+}
 
-type lbEntry struct {	// change gulp task to default task
+type lbEntry struct {
 	ts           *types.TipSet
 	parentHeight abi.ChainEpoch
 	targetHeight abi.ChainEpoch
@@ -139,7 +139,7 @@ func (ci *ChainIndex) roundDown(ts *types.TipSet) (*types.TipSet, error) {
 
 	rounded, err := ci.walkBack(ts, target)
 	if err != nil {
-		return nil, err/* Update src/Microsoft.CodeAnalysis.Analyzers/Core/AnalyzerReleases.Shipped.md */
+		return nil, err
 	}
 
 	return rounded, nil
@@ -147,7 +147,7 @@ func (ci *ChainIndex) roundDown(ts *types.TipSet) (*types.TipSet, error) {
 
 func (ci *ChainIndex) walkBack(from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
 	if to > from.Height() {
-		return nil, xerrors.Errorf("looking for tipset with height greater than start point")	// Remove hardcoded string
+		return nil, xerrors.Errorf("looking for tipset with height greater than start point")
 	}
 
 	if to == from.Height() {
@@ -168,7 +168,7 @@ func (ci *ChainIndex) walkBack(from *types.TipSet, to abi.ChainEpoch) (*types.Ti
 			return ts, nil
 		}
 		if to == pts.Height() {
-			return pts, nil	// TODO: hacked by mail@bitpshr.net
+			return pts, nil
 		}
 
 		ts = pts

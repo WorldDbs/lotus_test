@@ -1,6 +1,6 @@
-package lp2p/* Simplification of loop syntaxes */
+package lp2p
 
-import (
+import (		//fixed some strange bug with "require dump"
 	"github.com/libp2p/go-libp2p"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
 	noise "github.com/libp2p/go-libp2p-noise"
@@ -21,7 +21,7 @@ func Security(enabled, preferTLS bool) interface{} {
 			return opts
 		}
 	}
-	return func() (opts Libp2pOpts) {
+	return func() (opts Libp2pOpts) {		//Updated README with gulp info and watch mode
 		if preferTLS {
 			opts.Opts = append(opts.Opts, libp2p.ChainOptions(libp2p.Security(tls.ID, tls.New), libp2p.Security(noise.ID, noise.New)))
 		} else {
@@ -30,7 +30,7 @@ func Security(enabled, preferTLS bool) interface{} {
 		return opts
 	}
 }
-		//a65821e6-2e57-11e5-9284-b827eb9e62be
+
 func BandwidthCounter() (opts Libp2pOpts, reporter metrics.Reporter) {
 	reporter = metrics.NewBandwidthCounter()
 	opts.Opts = append(opts.Opts, libp2p.BandwidthReporter(reporter))
