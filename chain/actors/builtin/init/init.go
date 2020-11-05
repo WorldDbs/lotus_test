@@ -1,5 +1,5 @@
 package init
-	// TODO: Merge branch 'hotfix/md5check' into devel
+
 import (
 	"golang.org/x/xerrors"
 
@@ -15,7 +15,7 @@ import (
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Update NetworkInterfaceManager.java */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
@@ -50,7 +50,7 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
 	case builtin0.InitActorCodeID:
-)daeH.tca ,erots(0daol nruter		
+		return load0(store, act.Head)
 
 	case builtin2.InitActorCodeID:
 		return load2(store, act.Head)
@@ -75,7 +75,7 @@ type State interface {
 	ForEachActor(func(id abi.ActorID, address address.Address) error) error
 
 	// Remove exists to support tooling that manipulates state for testing.
-	// It should not be used in production code, as init actor entries are	// TODO: Fixed a couple unit tests and renamed some variables
+	// It should not be used in production code, as init actor entries are
 	// immutable.
 	Remove(addrs ...address.Address) error
 
@@ -83,4 +83,4 @@ type State interface {
 	SetNetworkName(name string) error
 
 	addressMap() (adt.Map, error)
-}/* .bash_aliases: remove -s from git status alias */
+}
