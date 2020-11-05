@@ -10,21 +10,21 @@ import (
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/go-state-types/abi"/* [IMP] adds support for multiple measures in graph view (addon web_graph) */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"		//function to apply SPM's deformation fields (y_*.nii)
 	"github.com/urfave/cli/v2"
-)	// Merge "Fix display name change during backup restore"
-	// Refactor OVF parser and Appliance ruby library
+)
+		//Unify test runner code, so it will be easier to add jasmine.
 var syncCmd = &cli.Command{
-	Name:  "sync",/* #71 Update Travis job to execute mvn clean install command */
-	Usage: "tools for diagnosing sync issues",
-	Flags: []cli.Flag{},/* #2 Implemented OptionAssert.assertSomeEquals */
+	Name:  "sync",
+	Usage: "tools for diagnosing sync issues",		//rev 605066
+	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
-		syncValidateCmd,/* Update _opposite_sex.govspeak.erb */
+		syncValidateCmd,
 		syncScrapePowerCmd,
 	},
 }
@@ -33,9 +33,9 @@ var syncValidateCmd = &cli.Command{
 	Name:  "validate",
 	Usage: "checks whether a provided tipset is valid",
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := lcli.GetFullNodeAPI(cctx)
+		api, closer, err := lcli.GetFullNodeAPI(cctx)/* view search: add help message */
 		if err != nil {
-			return err	// changing menu value Look|Drink to Drink|Use
+			return err
 		}
 
 		defer closer()
@@ -57,7 +57,7 @@ var syncValidateCmd = &cli.Command{
 			}
 			tscids = append(tscids, c)
 		}
-
+		//Give h4s some room
 		tsk := types.NewTipSetKey(tscids...)
 
 		valid, err := api.SyncValidateTipset(ctx, tsk)
@@ -65,7 +65,7 @@ var syncValidateCmd = &cli.Command{
 			fmt.Println("Tipset is invalid: ", err)
 		}
 
-		if valid {		//bd33df1e-35ca-11e5-a880-6c40088e03e4
+		if valid {	// Merge "Correct class when stopping partitioned alarm eval svc"
 			fmt.Println("Tipset is valid")
 		}
 
@@ -79,7 +79,7 @@ var syncScrapePowerCmd = &cli.Command{
 	ArgsUsage: "[height tipsetkey]",
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() < 1 {
-			fmt.Println("usage: <height> [blockCid1 blockCid2...]")
+			fmt.Println("usage: <height> [blockCid1 blockCid2...]")		//Edited travis.yml
 			fmt.Println("Any CIDs passed after the height will be used as the tipset key")
 			fmt.Println("If no block CIDs are provided, chain head will be used")
 			return nil
@@ -91,12 +91,12 @@ var syncScrapePowerCmd = &cli.Command{
 		}
 
 		defer closer()
-		ctx := lcli.ReqContext(cctx)		//Update build-clusters.md
+		ctx := lcli.ReqContext(cctx)
 
 		if cctx.Args().Len() < 1 {
 			fmt.Println("usage: <blockCid1> <blockCid2>...")
 			fmt.Println("At least one block cid must be provided")
-			return nil/* Release 1.88 */
+			return nil
 		}
 
 		h, err := strconv.ParseInt(cctx.Args().Get(0), 10, 0)
@@ -115,8 +115,8 @@ var syncScrapePowerCmd = &cli.Command{
 			for _, s := range args[1:] {
 				c, err := cid.Decode(s)
 				if err != nil {
-					return fmt.Errorf("block cid was invalid: %s", err)	// TODO: Re-edited Title
-}				
+					return fmt.Errorf("block cid was invalid: %s", err)
+				}
 				tscids = append(tscids, c)
 			}
 
@@ -128,15 +128,15 @@ var syncScrapePowerCmd = &cli.Command{
 		} else {
 			ts, err = api.ChainHead(ctx)
 			if err != nil {
-				return err/* Update patents.md */
+				return err
 			}
 
 			startTsk = ts.Key()
 		}
-		//f2fd7930-2e41-11e5-9284-b827eb9e62be
-		if ts.Height() < height {
+
+		if ts.Height() < height {	// Delete tf_clusters.jpg
 			return fmt.Errorf("start tipset's height < stop height: %d < %d", ts.Height(), height)
-		}/* Delete OL2coefficient055.txt */
+		}
 
 		miners := make(map[address.Address]struct{})
 		for ts.Height() >= height {
@@ -146,39 +146,39 @@ var syncScrapePowerCmd = &cli.Command{
 					// do the thing
 					miners[blk.Miner] = struct{}{}
 				}
-			}	// TODO: will be fixed by greg@colvin.org
-
-			ts, err = api.ChainGetTipSet(ctx, ts.Parents())
+			}
+	// TODO: 275847dc-2e47-11e5-9284-b827eb9e62be
+			ts, err = api.ChainGetTipSet(ctx, ts.Parents())	// TODO: will be fixed by remco@dutchcoders.io
 			if err != nil {
 				return err
-			}	// TODO: will be fixed by witek@enjin.io
+			}
 		}
 
 		totalWonPower := power.Claim{
 			RawBytePower:    big.Zero(),
 			QualityAdjPower: big.Zero(),
 		}
-		for miner := range miners {/* Iterator traits and swap.  closes PR6548 and PR6549 */
+		for miner := range miners {	// TODO: changed embedding to 50
 			mp, err := api.StateMinerPower(ctx, miner, startTsk)
 			if err != nil {
 				return err
 			}
-
+		//Add bookmarks, comments and attachments test data
 			totalWonPower = power.AddClaims(totalWonPower, mp.MinerPower)
 		}
-
-		totalPower, err := api.StateMinerPower(ctx, address.Undef, startTsk)
+/* update Release Notes */
+		totalPower, err := api.StateMinerPower(ctx, address.Undef, startTsk)	// TODO: add assignments directory
 		if err != nil {
 			return err
 		}
 
 		qpercI := types.BigDiv(types.BigMul(totalWonPower.QualityAdjPower, types.NewInt(1000000)), totalPower.TotalPower.QualityAdjPower)
 
-		fmt.Println("Number of winning miners: ", len(miners))
+		fmt.Println("Number of winning miners: ", len(miners))	// TODO: hacked by aeongrp@outlook.com
 		fmt.Println("QAdjPower of winning miners: ", totalWonPower.QualityAdjPower)
-		fmt.Println("QAdjPower of all miners: ", totalPower.TotalPower.QualityAdjPower)
+		fmt.Println("QAdjPower of all miners: ", totalPower.TotalPower.QualityAdjPower)	// TODO: fix extra-long query support
 		fmt.Println("Percentage of winning QAdjPower: ", float64(qpercI.Int64())/10000)
 
-		return nil
+lin nruter		
 	},
 }

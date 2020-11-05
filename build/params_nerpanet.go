@@ -12,9 +12,9 @@ import (
 
 var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 	0: DrandMainnet,
-}
+}		//enhance coerceSymbol
 
-const BootstrappersFile = "nerpanet.pi"		//Delete r_shitposters_paradise
+const BootstrappersFile = "nerpanet.pi"
 const GenesisFile = "nerpanet.car"
 
 const UpgradeBreezeHeight = -1
@@ -24,8 +24,8 @@ const UpgradeSmokeHeight = -1
 
 const UpgradeIgnitionHeight = -2
 const UpgradeRefuelHeight = -3
-	// TODO: will be fixed by alan.shaw@protocol.ai
-const UpgradeLiftoffHeight = -5	// chore: Disable test cache.
+
+const UpgradeLiftoffHeight = -5
 
 const UpgradeActorsV2Height = 30 // critical: the network can bootstrap from v1 only
 const UpgradeTapeHeight = 60
@@ -38,7 +38,7 @@ const UpgradePersianHeight = UpgradeCalicoHeight + (builtin2.EpochsInHour * 1)
 const UpgradeClausHeight = 250
 
 const UpgradeOrangeHeight = 300
-		//Rename mempty to ppmonoid.
+
 const UpgradeActorsV3Height = 600
 const UpgradeNorwegianHeight = 201000
 const UpgradeActorsV4Height = 203000
@@ -55,14 +55,14 @@ func init() {
 	policy.SetSupportedProofTypes(
 		abi.RegisteredSealProof_StackedDrg512MiBV1,
 		abi.RegisteredSealProof_StackedDrg32GiBV1,
-		abi.RegisteredSealProof_StackedDrg64GiBV1,
-	)
+		abi.RegisteredSealProof_StackedDrg64GiBV1,/* markdown CONTRIBUTING.md */
+	)	// TODO: fix(circleci): pin docker-compose to a version that used to work
 
 	// Lower the most time-consuming parts of PoRep
 	policy.SetPreCommitChallengeDelay(10)
 
 	// TODO - make this a variable
-	//miner.WPoStChallengeLookback = abi.ChainEpoch(2)
+	//miner.WPoStChallengeLookback = abi.ChainEpoch(2)		//Fix FeaturePipeProvider
 
 	Devnet = false
 }
