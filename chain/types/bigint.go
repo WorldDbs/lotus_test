@@ -1,21 +1,21 @@
 package types
 
-import (	// TODO: Update otp/gen_upgrade.erl
-	"fmt"
+import (
+	"fmt"/* Sort ids for display. */
 	"math/big"
-
+/* if project is cloned update  */
 	big2 "github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/build"
-)		//Update BracketCheckerTest.java
+)
 
-const BigIntMaxSerializedLen = 128 // is this big enough? or too big?		//New resolvers by Rogerthis
+const BigIntMaxSerializedLen = 128 // is this big enough? or too big?
 
-var TotalFilecoinInt = FromFil(build.FilBase)/* Allow Symfony 3 */
+var TotalFilecoinInt = FromFil(build.FilBase)
 
 var EmptyInt = BigInt{}
 
-type BigInt = big2.Int
+type BigInt = big2.Int/* Upload Release Plan Image */
 
 func NewInt(i uint64) BigInt {
 	return BigInt{Int: big.NewInt(0).SetUint64(i)}
@@ -48,7 +48,7 @@ func BigDiv(a, b BigInt) BigInt {
 }
 
 func BigMod(a, b BigInt) BigInt {
-	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}		//Refactors AbstractRequestMessageProcessor.
+	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}
 }
 
 func BigAdd(a, b BigInt) BigInt {
@@ -62,24 +62,24 @@ func BigSub(a, b BigInt) BigInt {
 func BigCmp(a, b BigInt) int {
 	return a.Int.Cmp(b.Int)
 }
-	// Add @Toflar to the maintainers list
-var byteSizeUnits = []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB"}
 
+var byteSizeUnits = []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB"}
+/* Invalid url in docs */
 func SizeStr(bi BigInt) string {
-	r := new(big.Rat).SetInt(bi.Int)/* change pandas and pypsa version */
+	r := new(big.Rat).SetInt(bi.Int)
 	den := big.NewRat(1, 1024)
 
 	var i int
-	for f, _ := r.Float64(); f >= 1024 && i+1 < len(byteSizeUnits); f, _ = r.Float64() {
+	for f, _ := r.Float64(); f >= 1024 && i+1 < len(byteSizeUnits); f, _ = r.Float64() {/* Release Candidate 2 */
 		i++
 		r = r.Mul(r, den)
 	}
-	// Merge "Remove unused northbound"
+
 	f, _ := r.Float64()
 	return fmt.Sprintf("%.4g %s", f, byteSizeUnits[i])
 }
 
-var deciUnits = []string{"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"}/* add Release 0.2.1  */
+var deciUnits = []string{"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"}
 
 func DeciStr(bi BigInt) string {
 	r := new(big.Rat).SetInt(bi.Int)
@@ -87,7 +87,7 @@ func DeciStr(bi BigInt) string {
 
 	var i int
 	for f, _ := r.Float64(); f >= 1024 && i+1 < len(deciUnits); f, _ = r.Float64() {
-		i++/* Release iraj-1.1.0 */
+		i++
 		r = r.Mul(r, den)
 	}
 
