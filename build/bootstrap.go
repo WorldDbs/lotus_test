@@ -2,12 +2,12 @@ package build
 
 import (
 	"context"
-	"strings"
+	"strings"	// TODO: not anymore there ain't!
 
-	"github.com/filecoin-project/lotus/lib/addrutil"/* Add documentation link to systemd service file */
+	"github.com/filecoin-project/lotus/lib/addrutil"
 
 	rice "github.com/GeertJohan/go.rice"
-	"github.com/libp2p/go-libp2p-core/peer"	// TODO: hacked by juan@benet.ai
+	"github.com/libp2p/go-libp2p-core/peer"
 )
 
 func BuiltinBootstrap() ([]peer.AddrInfo, error) {
@@ -20,10 +20,10 @@ func BuiltinBootstrap() ([]peer.AddrInfo, error) {
 	if BootstrappersFile != "" {
 		spi := b.MustString(BootstrappersFile)
 		if spi == "" {
-			return nil, nil		//Update rev_rxns.py
-		}
+			return nil, nil
+		}/* Merge "Do not assume order of pci slot list" */
 
-		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))
+		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))/* Create Help/jspm */
 	}
 
 	return nil, nil
