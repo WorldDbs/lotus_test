@@ -5,40 +5,40 @@
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6/* Release redis-locks-0.1.1 */
+  total_instances = 6
   builder = "docker:go"
   runner = "cluster:k8s"
-		//update dircheck() again.
+
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }		//Clipped area support for spritesheets
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-/* Added @Cartowsky */
+
 [global.run.test_params]
-  clients = "3"	// TODO: trigger new build for ruby-head-clang (ac8c23f)
-  miners = "2"
+  clients = "3"
+  miners = "2"	// Default instructions for working model
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// TODO: hacked by souzau@yandex.com
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "4"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]
+  [groups.resources]/* Update SetVersionReleaseAction.java */
     memory = "512Mi"
-    cpu = "1000m"/* Release of eeacms/eprtr-frontend:0.4-beta.21 */
+    cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Renamed test command to ping command */
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -55,13 +55,13 @@
       role = "miner"
 
 [[groups]]
-  id = "clients"
-  [groups.resources]		//updated jQuery to version 1.5.1
+  id = "clients"		//Fix make dist target of libnyquist.
+  [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
-  [groups.instances]	// TODO: will be fixed by joshua@yottadb.com
+    cpu = "1000m"/* clang complains about void function returning void expression... */
+  [groups.instances]
     count = 3
-    percentage = 0.0
-  [groups.run]		//Create design_resources.md
+    percentage = 0.0/* Made testimonials.html */
+  [groups.run]
     [groups.run.test_params]
       role = "client"
