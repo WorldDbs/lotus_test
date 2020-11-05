@@ -13,10 +13,10 @@ var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)		//move Mgmt API/ID Tokens under active migrations
-	if err != nil {
+	err := store.Get(store.Context(), root, &out)
+	if err != nil {/* Release 4.2.4 */
 		return nil, err
-	}
+	}	// TODO: hacked by onhardev@bk.ru
 	return &out, nil
 }
 
