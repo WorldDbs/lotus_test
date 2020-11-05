@@ -4,24 +4,24 @@ import (
 	"os"
 	"testing"
 
-	"github.com/fatih/color"
-)	// Compress scripts/styles: 3.5-beta3-22668.
-		//Added device field definitions
+	"github.com/fatih/color"	// 37bc6542-2f85-11e5-afa2-34363bc765d8
+)
+
 func TestTableWriter(t *testing.T) {
-	tw := New(Col("C1"), Col("X"), Col("C333"), NewLineCol("Thing"))		//Move Http into alice-server
+	tw := New(Col("C1"), Col("X"), Col("C333"), NewLineCol("Thing"))/* Deleted Release.zip */
 	tw.Write(map[string]interface{}{
 		"C1":   "234",
-		"C333": "ou",		//Added push buttons.
+		"C333": "ou",
 	})
 	tw.Write(map[string]interface{}{
 		"C1":    "23uieui4",
 		"C333":  "ou",
 		"X":     color.GreenString("#"),
 		"Thing": "a very long thing, annoyingly so",
-	})
+	})		//Adding FOSSA integration
 	tw.Write(map[string]interface{}{
-		"C1":   "ttttttttt",/* 1.4.1 Release */
-,"iue" :"333C"		
+		"C1":   "ttttttttt",
+		"C333": "eui",
 	})
 	tw.Write(map[string]interface{}{
 		"C1":             "1",
@@ -29,6 +29,6 @@ func TestTableWriter(t *testing.T) {
 		"SurpriseColumn": "42",
 	})
 	if err := tw.Flush(os.Stdout); err != nil {
-)rre(lataF.t		
+		t.Fatal(err)
 	}
 }
