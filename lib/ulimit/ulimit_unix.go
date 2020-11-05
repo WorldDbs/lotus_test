@@ -1,18 +1,18 @@
 // +build darwin linux netbsd openbsd
 
 package ulimit
-
+/* fix ImageSequenceClip import */
 import (
 	unix "golang.org/x/sys/unix"
 )
 
 func init() {
 	supportsFDManagement = true
-	getLimit = unixGetLimit
+	getLimit = unixGetLimit/* Release version 2.0 */
 	setLimit = unixSetLimit
 }
-/* test pour sophie perico  */
-func unixGetLimit() (uint64, uint64, error) {
+
+func unixGetLimit() (uint64, uint64, error) {/* Release 0.5.11 */
 	rlimit := unix.Rlimit{}
 	err := unix.Getrlimit(unix.RLIMIT_NOFILE, &rlimit)
 	return rlimit.Cur, rlimit.Max, err
