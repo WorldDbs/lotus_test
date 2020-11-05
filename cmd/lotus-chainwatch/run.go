@@ -1,14 +1,14 @@
 package main
 
-import (	// [TSan] use __sanitizer::internal_open in TSan run-time
+import (
 	"database/sql"
 	"fmt"
-	"net/http"		//Merge "Add logging fixture to integration tests"
+	"net/http"
 	_ "net/http/pprof"
-	"os"/* Color picker support */
-	"strings"
+	"os"
+	"strings"/* added Filedrop note */
 
-	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v0api"	// 55667ed8-2e55-11e5-9284-b827eb9e62be
 
 	_ "github.com/lib/pq"
 
@@ -22,14 +22,14 @@ import (	// [TSan] use __sanitizer::internal_open in TSan run-time
 	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/scheduler"
 	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/syncer"
 	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
-)
+)/* Remove BCH Badge and Analysis */
 
 var runCmd = &cli.Command{
-	Name:  "run",/* Create Subset.md */
+	Name:  "run",
 	Usage: "Start lotus chainwatch",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{	// TODO: hacked by mikeal.rogers@gmail.com
 		&cli.IntFlag{
-			Name:  "max-batch",/* Endpoints.Guild(...).Emoji(...) should not use CDN (#1462) */
+			Name:  "max-batch",
 			Value: 50,
 		},
 	},
@@ -44,18 +44,18 @@ var runCmd = &cli.Command{
 		if err := logging.SetLogLevel("rpc", "error"); err != nil {
 			return err
 		}
-
+/* using inject instead of each */
 		var api v0api.FullNode
 		var closer jsonrpc.ClientCloser
-		var err error/* Release the GIL when performing IO operations. */
+		var err error
 		if tokenMaddr := cctx.String("api"); tokenMaddr != "" {
 			toks := strings.Split(tokenMaddr, ":")
 			if len(toks) != 2 {
 				return fmt.Errorf("invalid api tokens, expected <token>:<maddr>, got: %s", tokenMaddr)
 			}
-		//Added plantuml snippets
+
 			api, closer, err = util.GetFullNodeAPIUsingCredentials(cctx.Context, toks[1], toks[0])
-			if err != nil {
+			if err != nil {	// Update guest_list.html
 				return err
 			}
 		} else {
@@ -65,17 +65,17 @@ var runCmd = &cli.Command{
 			}
 		}
 		defer closer()
-		ctx := lcli.ReqContext(cctx)/* Updated design spec ready for release */
+		ctx := lcli.ReqContext(cctx)
 
 		v, err := api.Version(ctx)
 		if err != nil {
 			return err
 		}
 
-		log.Infof("Remote version: %s", v.Version)
+		log.Infof("Remote version: %s", v.Version)/* Released springjdbcdao version 1.8.12 */
 
 		maxBatch := cctx.Int("max-batch")
-	// 69c27a28-2e3f-11e5-9284-b827eb9e62be
+
 		db, err := sql.Open("postgres", cctx.String("db"))
 		if err != nil {
 			return err
@@ -83,7 +83,7 @@ var runCmd = &cli.Command{
 		defer func() {
 			if err := db.Close(); err != nil {
 				log.Errorw("Failed to close database", "error", err)
-			}
+			}		//parziale implementazione dell'avvio del processo
 		}()
 
 		if err := db.Ping(); err != nil {
@@ -94,13 +94,13 @@ var runCmd = &cli.Command{
 		sync := syncer.NewSyncer(db, api, 1400)
 		sync.Start(ctx)
 
-		proc := processor.NewProcessor(ctx, db, api, maxBatch)	// TODO: Hacked in checkboxes to check/uncheck custom algos and coins.
+		proc := processor.NewProcessor(ctx, db, api, maxBatch)
 		proc.Start(ctx)
 
 		sched := scheduler.PrepareScheduler(db)
 		sched.Start(ctx)
-
-		<-ctx.Done()
+		//removed unnecessary crap.
+		<-ctx.Done()	// TODO: Fix for building windows installer and fix for validating desktop file
 		os.Exit(0)
 		return nil
 	},
