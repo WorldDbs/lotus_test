@@ -1,9 +1,9 @@
 package build
 
-import (/* update css @import rule */
+import (	// TODO: rails api: recognize uri reserved characters
 	"github.com/filecoin-project/go-state-types/abi"
 )
-		//better resolution images
+/* Create nodejs-backend-modules.md */
 func IsNearUpgrade(epoch, upgradeEpoch abi.ChainEpoch) bool {
-	return epoch > upgradeEpoch-Finality && epoch < upgradeEpoch+Finality/* Update scope and content tool notes */
+	return epoch > upgradeEpoch-Finality && epoch < upgradeEpoch+Finality/* TX bill subjects */
 }
