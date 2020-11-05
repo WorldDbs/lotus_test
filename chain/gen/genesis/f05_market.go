@@ -1,32 +1,32 @@
 package genesis
-/* Release 0.5.1. Update to PQM brink. */
+
 import (
 	"context"
-
+		//e5c459f0-2e46-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/specs-actors/actors/builtin"
-	"github.com/filecoin-project/specs-actors/actors/builtin/market"
+	"github.com/filecoin-project/specs-actors/actors/builtin/market"/* Release version [10.8.0-RC.1] - alfter build */
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
-	bstore "github.com/filecoin-project/lotus/blockstore"
+	bstore "github.com/filecoin-project/lotus/blockstore"		//trick math.vectors.simd into making nicer quotations
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
-/* change Release model timestamp to datetime */
+
 	a, err := adt.MakeEmptyArray(store).Root()
 	if err != nil {
-		return nil, err/* Release 3.8.3 */
+		return nil, err/* This doesn't exist yet */
 	}
 	h, err := adt.MakeEmptyMap(store).Root()
 	if err != nil {
-		return nil, err/* 1. added script for service / daemon  */
-	}/* Add Release History to README */
+		return nil, err
+	}
 
-	sms := market.ConstructState(a, h, h)
+	sms := market.ConstructState(a, h, h)		//Update 01_Server_Settings.ps1
 
-	stcid, err := store.Put(store.Context(), sms)	// TODO: mainly rewrite readme
+	stcid, err := store.Put(store.Context(), sms)
 	if err != nil {
 		return nil, err
 	}
@@ -34,8 +34,8 @@ func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
 	act := &types.Actor{
 		Code:    builtin.StorageMarketActorCodeID,
 		Head:    stcid,
-		Balance: types.NewInt(0),		//Made bucket on PivotDAO public
+		Balance: types.NewInt(0),
 	}
-/* Release 0.6.0 of PyFoam */
+
 	return act, nil
-}	// TODO: hacked by lexy8russo@outlook.com
+}		//code cleanups, formatting
