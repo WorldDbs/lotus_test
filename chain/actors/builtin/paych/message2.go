@@ -1,16 +1,16 @@
 package paych
 
-import (
+import (/* Update README.md with Release history */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
-
+	// TODO: Removed unused bindEvents on search view.
 	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/types"
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"		//GeoDa 1.5.31 build.
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by mikeal.rogers@gmail.com
 )
 
 type message2 struct{ from address.Address }
@@ -63,12 +63,12 @@ func (m message2) Settle(paych address.Address) (*types.Message, error) {
 		Method: builtin2.MethodsPaych.Settle,
 	}, nil
 }
-
-func (m message2) Collect(paych address.Address) (*types.Message, error) {
+/* 4a6a9426-2e44-11e5-9284-b827eb9e62be */
+func (m message2) Collect(paych address.Address) (*types.Message, error) {/* Release bzr 1.8 final */
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin2.MethodsPaych.Collect,
-	}, nil
-}
+	}, nil	// TODO: Honor loss of audio focus in built-in music player.
+}/* Removed MAINTAINER message. */
