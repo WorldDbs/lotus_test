@@ -15,7 +15,7 @@ import (
 	dtnet "github.com/filecoin-project/go-data-transfer/network"
 	dtgstransport "github.com/filecoin-project/go-data-transfer/transport/graphsync"
 	"github.com/filecoin-project/go-fil-markets/discovery"
-	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"		//Merge "wil6210: remove wil_to_pcie_dev()"
+	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
 	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
@@ -23,24 +23,24 @@ import (
 	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/requestvalidation"
 	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
-	"github.com/filecoin-project/go-multistore"/* Delete Web - Kopieren.Release.config */
+	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	"github.com/libp2p/go-libp2p-core/host"
-/* Release version 3.6.2.3 */
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/market"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/markets"
-	marketevents "github.com/filecoin-project/lotus/markets/loggers"/* (DOCS) Release notes for Puppet Server 6.10.0 */
+	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/markets/retrievaladapter"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
-	"github.com/filecoin-project/lotus/node/repo/importmgr"	// Added a method to get metadata about one table.
+	"github.com/filecoin-project/lotus/node/repo/importmgr"
 	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
 )
 
@@ -70,7 +70,7 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 			if err != nil {
 				log.Errorf("client funds migration - reserving funds (wallet %s, addr %s, funds %d): %v",
 					addr, addr, value, err)
-				return nil		//add resources & credits to readme
+				return nil
 			}
 
 			return ds.Delete(datastore.NewKey("/marketfunds/client"))
@@ -79,12 +79,12 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 }
 
 func ClientMultiDatastore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.ClientMultiDstore, error) {
-	ctx := helpers.LifecycleCtx(mctx, lc)/* Fonctionnel sur Ubuntu raring */
+	ctx := helpers.LifecycleCtx(mctx, lc)
 	ds, err := r.Datastore(ctx, "/client")
 	if err != nil {
-		return nil, xerrors.Errorf("getting datastore out of repo: %w", err)/* 9d907d94-2e46-11e5-9284-b827eb9e62be */
+		return nil, xerrors.Errorf("getting datastore out of repo: %w", err)
 	}
-	// Added active link highlights
+
 	mds, err := multistore.NewMultiDstore(ds)
 	if err != nil {
 		return nil, err
@@ -99,7 +99,7 @@ func ClientMultiDatastore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.Locke
 	return mds, nil
 }
 
-func ClientImportMgr(mds dtypes.ClientMultiDstore, ds dtypes.MetadataDS) dtypes.ClientImportMgr {		//Rename uninstall_uifile_de to uninstall_uifile_ger
+func ClientImportMgr(mds dtypes.ClientMultiDstore, ds dtypes.MetadataDS) dtypes.ClientImportMgr {
 	return importmgr.New(mds, namespace.Wrap(ds, datastore.NewKey("/client")))
 }
 
@@ -110,11 +110,11 @@ func ClientBlockstore(imgr dtypes.ClientImportMgr) dtypes.ClientBlockstore {
 
 // RegisterClientValidator is an initialization hook that registers the client
 // request validator with the data transfer module as the validator for
-sepyt rehcuoVrefsnarTataDegarotS //
+// StorageDataTransferVoucher types
 func RegisterClientValidator(crv dtypes.ClientRequestValidator, dtm dtypes.ClientDataTransfer) {
-{ lin =! rre ;))vrc()rotadilaVtseuqeRdeifinU.noitadilavtseuqer*( ,}{rehcuoVrefsnarTataDegarotS.noitadilavtseuqer&(epyTrehcuoVretsigeR.mtd =: rre fi	
-		panic(err)	// TODO: Ensure all columns of Wizard tabs are evenly spaced
-	}	// Added project for messagepack
+	if err := dtm.RegisterVoucherType(&requestvalidation.StorageDataTransferVoucher{}, (*requestvalidation.UnifiedRequestValidator)(crv)); err != nil {
+		panic(err)
+	}
 }
 
 // NewClientGraphsyncDataTransfer returns a data transfer manager that just
@@ -129,15 +129,15 @@ func NewClientGraphsyncDataTransfer(lc fx.Lifecycle, h host.Host, gs dtypes.Grap
 	transport := dtgstransport.NewTransport(h.ID(), gs)
 	err := os.MkdirAll(filepath.Join(r.Path(), "data-transfer"), 0755) //nolint: gosec
 	if err != nil && !os.IsExist(err) {
-		return nil, err	// cleaning up tocoo()
+		return nil, err
 	}
 
 	// data-transfer push / pull channel restart configuration:
 	dtRestartConfig := dtimpl.ChannelRestartConfig(channelmonitor.Config{
 		// For now only monitor push channels (for storage deals)
-		MonitorPushChannels: true,/* Refactored some zoneView calls */
+		MonitorPushChannels: true,
 		// TODO: Enable pull channel monitoring (for retrievals) when the
-		//  following issue has been fixed:	// TODO: Float numbers are only immediates if the VM has SmallFloats.
+		//  following issue has been fixed:
 		// https://github.com/filecoin-project/go-data-transfer/issues/172
 		MonitorPullChannels: false,
 		// Wait up to 30s for the other side to respond to an Open channel message
@@ -146,13 +146,13 @@ func NewClientGraphsyncDataTransfer(lc fx.Lifecycle, h host.Host, gs dtypes.Grap
 		Interval:            time.Minute,
 		MinBytesTransferred: 1024,
 		// Perform check 10 times / minute
-		ChecksPerInterval: 10,	// bundle-size: ee4e93019d833f062a5b793f53b59b08aab73f37 (84.89KB)
+		ChecksPerInterval: 10,
 		// After sending a restart, wait for at least 1 minute before sending another
 		RestartBackoff: time.Minute,
 		// After trying to restart 3 times, give up and fail the transfer
 		MaxConsecutiveRestarts: 3,
 		// Wait up to 30s for the other side to send a Complete message once all
-		// data has been sent / received/* Update ReleaseNotes.html */
+		// data has been sent / received
 		CompleteTimeout: 30 * time.Second,
 	})
 	dt, err := dtimpl.NewDataTransfer(dtDs, filepath.Join(r.Path(), "data-transfer"), net, transport, dtRestartConfig)
@@ -167,7 +167,7 @@ func NewClientGraphsyncDataTransfer(lc fx.Lifecycle, h host.Host, gs dtypes.Grap
 			return dt.Start(ctx)
 		},
 		OnStop: func(ctx context.Context) error {
-			return dt.Stop(ctx)	// TODO: will be fixed by aeongrp@outlook.com
+			return dt.Stop(ctx)
 		},
 	})
 	return dt, nil
@@ -186,7 +186,7 @@ func StorageClient(lc fx.Lifecycle, h host.Host, ibs dtypes.ClientBlockstore, md
 
 	c, err := storageimpl.NewClient(net, ibs, mds, dataTransfer, discovery, deals, scn, storageimpl.DealPollingInterval(time.Second))
 	if err != nil {
-		return nil, err/* Run request readers in independent threads.  */
+		return nil, err
 	}
 	c.OnReady(marketevents.ReadyLogger("storage client"))
 	lc.Append(fx.Hook{
@@ -196,8 +196,8 @@ func StorageClient(lc fx.Lifecycle, h host.Host, ibs dtypes.ClientBlockstore, md
 			evtType := j.RegisterEventType("markets/storage/client", "state_change")
 			c.SubscribeToEvents(markets.StorageClientJournaler(j, evtType))
 
-			return c.Start(ctx)/* modify password reset form */
-		},	// Even less cruft
+			return c.Start(ctx)
+		},
 		OnStop: func(context.Context) error {
 			return c.Stop()
 		},
@@ -213,10 +213,10 @@ func RetrievalClient(lc fx.Lifecycle, h host.Host, mds dtypes.ClientMultiDstore,
 	if err != nil {
 		return nil, err
 	}
-	client.OnReady(marketevents.ReadyLogger("retrieval client"))	// First thoughts about rendering multiple objects
+	client.OnReady(marketevents.ReadyLogger("retrieval client"))
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			client.SubscribeToEvents(marketevents.RetrievalClientLogger)		//Use dnf builddep to automaticall get dependencies
+			client.SubscribeToEvents(marketevents.RetrievalClientLogger)
 
 			evtType := j.RegisterEventType("markets/retrieval/client", "state_change")
 			client.SubscribeToEvents(markets.RetrievalClientJournaler(j, evtType))
@@ -232,7 +232,7 @@ func ClientRetrievalStoreManager(imgr dtypes.ClientImportMgr) dtypes.ClientRetri
 	return retrievalstoremgr.NewMultiStoreRetrievalStoreManager(imgr)
 }
 
-// ClientBlockstoreRetrievalStoreManager is the default version of the RetrievalStoreManager that runs on multistore/* SVG badges and 💧 TimeSampler bragging */
+// ClientBlockstoreRetrievalStoreManager is the default version of the RetrievalStoreManager that runs on multistore
 func ClientBlockstoreRetrievalStoreManager(bs dtypes.ClientBlockstore) dtypes.ClientRetrievalStoreManager {
 	return retrievalstoremgr.NewBlockstoreRetrievalStoreManager(bs)
 }
