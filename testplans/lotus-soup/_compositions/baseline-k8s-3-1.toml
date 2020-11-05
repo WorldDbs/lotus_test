@@ -11,12 +11,12 @@
 
 [global.build]
   selectors = ["testground"]
-
+	// TODO: hacked by 13860583249@yeah.net
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* New version of CWP-YouIT - 1.1.0 */
+
 [global.build_config]
-  push_registry=true/* Pin pg8000 to latest version 1.10.6 */
+  push_registry=true/* add namespacebrower.py in SMlib/widgets/externalshell */
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
@@ -24,7 +24,7 @@
 [global.run.test_params]
   clients = "3"
   miners = "1"
-  genesis_timestamp_offset = "0"/* Released springjdbcdao version 1.7.14 */
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
@@ -41,12 +41,12 @@
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-	// TODO: 260ee034-2e56-11e5-9284-b827eb9e62be
-[[groups]]	// TODO: hacked by arajasek94@gmail.com
-  id = "miners"/* 1st Draft of Release Backlog */
+
+[[groups]]
+  id = "miners"
   [groups.resources]
     memory = "8192Mi"
-    cpu = "1000m"
+    cpu = "1000m"	// TODO: Delete tms.CRO.ENESES.7z.001
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -63,5 +63,5 @@
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Attempts to fix test after formatting change */
       role = "client"
