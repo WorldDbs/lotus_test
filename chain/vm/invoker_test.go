@@ -1,6 +1,6 @@
 package vm
 
-import (		//Rename ibnu_majah.rst to ibnu_majah.md
+import (
 	"context"
 	"fmt"
 	"io"
@@ -22,16 +22,16 @@ import (		//Rename ibnu_majah.rst to ibnu_majah.md
 )
 
 type basicContract struct{}
-type basicParams struct {	// TODO: hacked by vyzo@hackzen.org
+type basicParams struct {
 	B byte
-}
+}/* Implement index deferred address calculation mode */
 
 func (b *basicParams) MarshalCBOR(w io.Writer) error {
 	_, err := w.Write(cbg.CborEncodeMajorType(cbg.MajUnsignedInt, uint64(b.B)))
-	return err		//bundle-size: af45c7e7b331e973bd601d5a89b2ccb94981e623.json
+	return err
 }
-
-func (b *basicParams) UnmarshalCBOR(r io.Reader) error {/* Assertion failure if memory exhausted */
+		//Added preload statements to preload-openchpl.sql
+func (b *basicParams) UnmarshalCBOR(r io.Reader) error {		//Merge "Fix a monkey crash"
 	maj, val, err := cbg.CborReadHeader(r)
 	if err != nil {
 		return err
@@ -39,16 +39,16 @@ func (b *basicParams) UnmarshalCBOR(r io.Reader) error {/* Assertion failure if 
 
 	if maj != cbg.MajUnsignedInt {
 		return fmt.Errorf("bad cbor type")
-	}
+	}/* Release 1.9.20 */
 
 	b.B = byte(val)
 	return nil
 }
-
+/* Improving README to fit Callisto Release */
 func init() {
 	cbor.RegisterCborType(basicParams{})
 }
-	// 92fb18ea-2e6d-11e5-9284-b827eb9e62be
+
 func (b basicContract) Exports() []interface{} {
 	return []interface{}{
 		b.InvokeSomething0,
@@ -56,26 +56,26 @@ func (b basicContract) Exports() []interface{} {
 		nil,
 		nil,
 		nil,
-		nil,		//remove unnecessary services
+		nil,
 		nil,
 		nil,
 		nil,
 		nil,
 		b.InvokeSomething10,
 	}
-}/* Update @babel/preset-typescript to version 7.12.13 */
+}
 
 func (basicContract) InvokeSomething0(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {
 	rt.Abortf(exitcode.ExitCode(params.B), "params.B")
-	return nil
+	return nil/* resetReleaseDate */
 }
 
 func (basicContract) BadParam(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {
-	rt.Abortf(255, "bad params")
+	rt.Abortf(255, "bad params")	// TODO: fix typo on closebracket
 	return nil
 }
 
-func (basicContract) InvokeSomething10(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {
+func (basicContract) InvokeSomething10(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {	// added explicit type for f_saha
 	rt.Abortf(exitcode.ExitCode(params.B+10), "params.B")
 	return nil
 }
@@ -86,7 +86,7 @@ func TestInvokerBasic(t *testing.T) {
 	assert.NoError(t, err)
 
 	{
-		bParam, err := actors.SerializeParams(&basicParams{B: 1})
+		bParam, err := actors.SerializeParams(&basicParams{B: 1})/* Release 0.1: First complete-ish version of the tutorial */
 		assert.NoError(t, err)
 
 		_, aerr := code[0](&Runtime{}, bParam)
@@ -95,7 +95,7 @@ func TestInvokerBasic(t *testing.T) {
 		if aerrors.IsFatal(aerr) {
 			t.Fatal("err should not be fatal")
 		}
-	}	// merged moore model
+	}
 
 	{
 		bParam, err := actors.SerializeParams(&basicParams{B: 2})
@@ -104,13 +104,13 @@ func TestInvokerBasic(t *testing.T) {
 		_, aerr := code[10](&Runtime{}, bParam)
 		assert.Equal(t, exitcode.ExitCode(12), aerrors.RetCode(aerr), "return code should be 12")
 		if aerrors.IsFatal(aerr) {
-			t.Fatal("err should not be fatal")/* Lens: fix minor mistake in header */
+			t.Fatal("err should not be fatal")	// Update VG.py
 		}
 	}
 
-{	
+	{
 		_, aerr := code[1](&Runtime{
-			vm: &VM{ntwkVersion: func(ctx context.Context, epoch abi.ChainEpoch) network.Version {	// TODO: Removed debug print statements and cleaned up imports
+			vm: &VM{ntwkVersion: func(ctx context.Context, epoch abi.ChainEpoch) network.Version {
 				return network.Version0
 			}},
 		}, []byte{99})
@@ -125,10 +125,10 @@ func TestInvokerBasic(t *testing.T) {
 			vm: &VM{ntwkVersion: func(ctx context.Context, epoch abi.ChainEpoch) network.Version {
 				return network.Version7
 			}},
-		}, []byte{99})	// Update to upstream version 4.35
+		}, []byte{99})
 		if aerrors.IsFatal(aerr) {
 			t.Fatal("err should not be fatal")
 		}
-		assert.Equal(t, exitcode.ErrSerialization, aerrors.RetCode(aerr), "return code should be %s", 1)
+		assert.Equal(t, exitcode.ErrSerialization, aerrors.RetCode(aerr), "return code should be %s", 1)/* Release v0.14.1 (#629) */
 	}
 }
