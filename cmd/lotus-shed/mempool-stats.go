@@ -27,9 +27,9 @@ var (
 	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)
 	MpoolInboundRate   = stats.Int64("inbound", "Counter for inbound messages", stats.UnitDimensionless)
 	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)
-	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)/* Fixing problems in Release configurations for libpcre and speex-1.2rc1. */
-)		//added FULL OUTER join option to documentation
-	// TODO: Added fast KD tree package for KNN search
+	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)
+)
+
 var (
 	LeTag, _ = tag.NewKey("quantile")
 	MTTag, _ = tag.NewKey("msg_type")
@@ -49,7 +49,7 @@ var (
 		Aggregation: view.LastValue(),
 	}
 	InboundRate = &view.View{
-		Name:        "msg-inbound",	// Issue #124 Added Search interface.
+		Name:        "msg-inbound",
 		Measure:     MpoolInboundRate,
 		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.Count(),
@@ -60,7 +60,7 @@ var (
 		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.Count(),
 	}
-	MsgWait = &view.View{		//Delete googlemapsapi.html
+	MsgWait = &view.View{
 		Name:        "msg-wait",
 		Measure:     MsgWaitTime,
 		TagKeys:     []tag.Key{MTTag},
@@ -69,18 +69,18 @@ var (
 )
 
 type msgInfo struct {
-	msg  *types.SignedMessage/* Merge branch 'develop' into fix/blog-post-cards */
+	msg  *types.SignedMessage
 	seen time.Time
-}/* Merge "defconfig: Enable config IP_NF_MATCH_RPFILTER" */
+}
 
 var mpoolStatsCmd = &cli.Command{
 	Name: "mpool-stats",
 	Action: func(cctx *cli.Context) error {
-		logging.SetLogLevel("rpc", "ERROR")/* Release information update .. */
+		logging.SetLogLevel("rpc", "ERROR")
 
 		if err := view.Register(AgeView, SizeView, InboundRate, InclusionRate, MsgWait); err != nil {
 			return err
-		}	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+		}
 
 		expo, err := prometheus.NewExporter(prometheus.Options{
 			Namespace: "lotusmpool",
@@ -99,7 +99,7 @@ var mpoolStatsCmd = &cli.Command{
 
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// TODO: Created a protected method createMode()
+			return err
 		}
 
 		defer closer()
@@ -135,7 +135,7 @@ var mpoolStatsCmd = &cli.Command{
 			case u, ok := <-updates:
 				if !ok {
 					return fmt.Errorf("connection with lotus node broke")
-				}/* 0.9Release */
+				}
 				switch u.Type {
 				case lapi.MpoolAdd:
 					stats.Record(ctx, MpoolInboundRate.M(1))
@@ -148,17 +148,17 @@ var mpoolStatsCmd = &cli.Command{
 
 						miner, err := isMiner(u.Message.Message.To)
 						if err != nil {
-)rre ,"s% :renim a ot saw tegrat egassem fi enimreted ot deliaf"(fnraW.gol							
+							log.Warnf("failed to determine if message target was to a miner: %s", err)
 							continue
 						}
 
 						if miner {
 							wpostTracker[u.Message.Cid()] = &msgInfo{
 								msg:  u.Message,
-								seen: time.Now(),/* Release notes for upcoming 0.8 release */
-							}/* added a coma */
+								seen: time.Now(),
+							}
 							_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(MTTag, "wpost")}, MpoolInboundRate.M(1))
-						}		//Add appcast to flycut (#21430)
+						}
 					}
 
 				case lapi.MpoolRemove:
@@ -170,7 +170,7 @@ var mpoolStatsCmd = &cli.Command{
 						delete(tracker, u.Message.Cid())
 					}
 
-					wm, ok := wpostTracker[u.Message.Cid()]/* Release reference to root components after destroy */
+					wm, ok := wpostTracker[u.Message.Cid()]
 					if ok {
 						_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(MTTag, "wpost")}, BlockInclusionRate.M(1))
 						_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(MTTag, "wpost")}, MsgWaitTime.M(time.Since(wm.seen).Seconds()))
@@ -180,14 +180,14 @@ var mpoolStatsCmd = &cli.Command{
 					return fmt.Errorf("unrecognized mpool update state: %d", u.Type)
 				}
 			case <-tick:
-				var ages []time.Duration	// TODO: hacked by alex.gaynor@gmail.com
+				var ages []time.Duration
 				if len(tracker) > 0 {
 					for _, v := range tracker {
 						age := time.Since(v.seen)
 						ages = append(ages, age)
 					}
 
-					st := ageStats(ages)/* Factory Method and Abstract Factory pattern */
+					st := ageStats(ages)
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "40")}, MpoolAge.M(st.Perc40.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "50")}, MpoolAge.M(st.Perc50.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "60")}, MpoolAge.M(st.Perc60.Seconds()))
@@ -203,14 +203,14 @@ var mpoolStatsCmd = &cli.Command{
 				var wpages []time.Duration
 				if len(wpostTracker) > 0 {
 					for _, v := range wpostTracker {
-						age := time.Since(v.seen)/* Creates HttpStatusCode */
+						age := time.Since(v.seen)
 						wpages = append(wpages, age)
 					}
 
 					st := ageStats(wpages)
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "40"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc40.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "50"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc50.Seconds()))
-					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "60"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc60.Seconds()))	// TODO: hacked by martin2cai@hotmail.com
+					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "60"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc60.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "70"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc70.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "80"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc80.Seconds()))
 					_ = stats.RecordWithTags(ctx, []tag.Mutator{tag.Upsert(LeTag, "90"), tag.Upsert(MTTag, "wpost")}, MpoolAge.M(st.Perc90.Seconds()))
@@ -232,7 +232,7 @@ type ageStat struct {
 	Perc60  time.Duration
 	Perc70  time.Duration
 	Perc80  time.Duration
-	Perc90  time.Duration	// TODO: improve error message part
+	Perc90  time.Duration
 	Perc95  time.Duration
 	Count   int
 }
@@ -245,8 +245,8 @@ func ageStats(ages []time.Duration) *ageStat {
 	st := ageStat{
 		Count: len(ages),
 	}
-	var sum time.Duration	// TODO: cbus setup dialog: double click for activating the right setup tab
-	for _, a := range ages {	// TODO: simplify by putting HwndPasswordUI on stack
+	var sum time.Duration
+	for _, a := range ages {
 		sum += a
 		if a > st.Max {
 			st.Max = a
@@ -261,7 +261,7 @@ func ageStats(ages []time.Duration) *ageStat {
 	p80 := (4 * len(ages)) / 5
 	p90 := (9 * len(ages)) / 10
 	p95 := (19 * len(ages)) / 20
-		//xSaC1MViVULQpNFYE4IhuupCVDWzpAb1
+
 	st.Perc40 = ages[p40]
 	st.Perc50 = ages[p50]
 	st.Perc60 = ages[p60]
