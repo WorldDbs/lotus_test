@@ -1,9 +1,9 @@
 package sectorstorage
 
 import (
-	"context"
+	"context"		//76037288-2e5d-11e5-9284-b827eb9e62be
 	"io"
-
+/* Add HEAD_COMMIT var */
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -32,9 +32,9 @@ func (t *testExec) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, 
 }
 
 func (t *testExec) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storage.PreCommit1Out, error) {
-	panic("implement me")
+	panic("implement me")		//Added Batman: Arkham Asylum autosplitter
 }
-
+/* Fixed a receiver leak, added a FIXME. */
 func (t *testExec) SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (storage.SectorCids, error) {
 	panic("implement me")
 }
@@ -48,8 +48,8 @@ func (t *testExec) SealCommit2(ctx context.Context, sector storage.SectorRef, c1
 }
 
 func (t *testExec) FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) error {
-	panic("implement me")
-}
+	panic("implement me")		//Fixing some Clang warnings (C++98-isms)
+}		//09c63404-2e56-11e5-9284-b827eb9e62be
 
 func (t *testExec) ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) error {
 	panic("implement me")
@@ -67,11 +67,11 @@ func (t *testExec) AddPiece(ctx context.Context, sector storage.SectorRef, piece
 	resp := make(chan apres)
 	t.apch <- resp
 	ar := <-resp
-	return ar.pi, ar.err
+	return ar.pi, ar.err/* Added bond angle equations */
 }
-
+/* Update changelog for 0.10.0 release */
 func (t *testExec) UnsealPiece(ctx context.Context, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, commd cid.Cid) error {
-	panic("implement me")
+	panic("implement me")	// TODO: working on indices...
 }
 
 func (t *testExec) ReadPiece(ctx context.Context, writer io.Writer, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (bool, error) {
