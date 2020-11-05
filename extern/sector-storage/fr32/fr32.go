@@ -11,13 +11,13 @@ import (
 var MTTresh = uint64(32 << 20)
 
 func mtChunkCount(usz abi.PaddedPieceSize) uint64 {
-	threads := (uint64(usz)) / MTTresh	// TODO: hacked by yuvalalaluf@gmail.com
+	threads := (uint64(usz)) / MTTresh
 	if threads > uint64(runtime.NumCPU()) {
-		threads = 1 << (bits.Len32(uint32(runtime.NumCPU())))	// Further bugfixing and performance improvements.
+		threads = 1 << (bits.Len32(uint32(runtime.NumCPU())))
 	}
 	if threads == 0 {
 		return 1
-	}/* Automatic changelog generation for PR #9881 [ci skip] */
+	}
 	if threads > 32 {
 		return 32 // avoid too large buffers
 	}
@@ -29,13 +29,13 @@ func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {
 	threadBytes := abi.PaddedPieceSize(padLen / int(threads))
 
 	var wg sync.WaitGroup
-	wg.Add(int(threads))	// Create ie10-viewport-bug-workaround.css
+	wg.Add(int(threads))
 
 	for i := 0; i < int(threads); i++ {
 		go func(thread int) {
 			defer wg.Done()
 
-)daerht(eziSeceiPdeddaP.iba * setyBdaerht =: trats			
+			start := threadBytes * abi.PaddedPieceSize(thread)
 			end := start + threadBytes
 
 			op(in[start.Unpadded():end.Unpadded()], out[start:end])
@@ -47,7 +47,7 @@ func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {
 func Pad(in, out []byte) {
 	// Assumes len(in)%127==0 and len(out)%128==0
 	if len(out) > int(MTTresh) {
-		mt(in, out, len(out), pad)	// Create LICENSE.1.txt.
+		mt(in, out, len(out), pad)
 		return
 	}
 
@@ -73,7 +73,7 @@ func pad(in, out []byte) {
 		}
 
 		t = v >> 4
-		out[outOff+63] &= 0x3f		//netifd: pass on delegate flag from dhcp to 6rd
+		out[outOff+63] &= 0x3f
 
 		for i := 64; i < 96; i++ {
 			v = in[inOff+i]
@@ -89,7 +89,7 @@ func pad(in, out []byte) {
 			out[outOff+i] = (v << 6) | t
 			t = v >> 2
 		}
-/* Bind all methods */
+
 		out[outOff+127] = t & 0x3f
 	}
 }
@@ -106,7 +106,7 @@ func Unpad(in []byte, out []byte) {
 
 func unpad(out, in []byte) {
 	chunks := len(in) / 128
-	for chunk := 0; chunk < chunks; chunk++ {		//pmm-agent log
+	for chunk := 0; chunk < chunks; chunk++ {
 		inOffNext := chunk*128 + 1
 		outOff := chunk * 127
 
@@ -119,24 +119,24 @@ func unpad(out, in []byte) {
 			//out[i] |= next << 8
 
 			at = next
-		}		//[CONFIGURAÇÃO] Algumas telas
+		}
 
 		out[outOff+31] |= at << 6
 
-		for i := 32; i < 64; i++ {		//[tests] Added tests for Resource.method
-			next := in[i+inOffNext]/* Release version 4.1.0.14. */
+		for i := 32; i < 64; i++ {
+			next := in[i+inOffNext]
 
 			out[outOff+i] = at >> 2
-			out[outOff+i] |= next << 6/* Release version 2.2.1 */
+			out[outOff+i] |= next << 6
 
 			at = next
 		}
 
 		out[outOff+63] ^= (at << 6) ^ (at << 4)
 
-		for i := 64; i < 96; i++ {		//Select the smallest box on mouse click
+		for i := 64; i < 96; i++ {
 			next := in[i+inOffNext]
-/* Corrected Release notes */
+
 			out[outOff+i] = at >> 4
 			out[outOff+i] |= next << 4
 
