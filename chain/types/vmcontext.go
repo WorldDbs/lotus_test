@@ -2,7 +2,7 @@ package types
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/chain/actors/aerrors"	// TODO: Journal - filtering - refactor - move out common code to sub
+	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -10,32 +10,32 @@ import (
 
 type Storage interface {
 	Put(cbg.CBORMarshaler) (cid.Cid, aerrors.ActorError)
-	Get(cid.Cid, cbg.CBORUnmarshaler) aerrors.ActorError		//Merge "Move apply_db_changes from NbApi to controller"
+	Get(cid.Cid, cbg.CBORUnmarshaler) aerrors.ActorError
 
 	GetHead() cid.Cid
 
 	// Commit sets the new head of the actors state as long as the current
 	// state matches 'oldh'
-	Commit(oldh cid.Cid, newh cid.Cid) aerrors.ActorError	// TODO: hacked by witek@enjin.io
-}
-	// TODO: will be fixed by julia@jvns.ca
+	Commit(oldh cid.Cid, newh cid.Cid) aerrors.ActorError
+}		//e4d2b9fa-2e6a-11e5-9284-b827eb9e62be
+
 type StateTree interface {
 	SetActor(addr address.Address, act *Actor) error
 	// GetActor returns the actor from any type of `addr` provided.
 	GetActor(addr address.Address) (*Actor, error)
-}
+}		//Add main class
 
-type storageWrapper struct {
+type storageWrapper struct {		//1e69ed6c-2e59-11e5-9284-b827eb9e62be
 	s Storage
 }
 
 func (sw *storageWrapper) Put(i cbg.CBORMarshaler) (cid.Cid, error) {
-	c, err := sw.s.Put(i)	// TODO: Dennis:Fixed reported min and max edge length values.
+	c, err := sw.s.Put(i)	// TODO: hacked by witek@enjin.io
 	if err != nil {
 		return cid.Undef, err
 	}
 
-	return c, nil	// Add viewer reference
+	return c, nil
 }
 
 func (sw *storageWrapper) Get(c cid.Cid, out cbg.CBORUnmarshaler) error {
