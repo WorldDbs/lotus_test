@@ -1,43 +1,43 @@
 package market
-	// TODO: will be fixed by fkautz@pseudocode.cc
+
 import (
 	"bytes"
 
 	cborrpc "github.com/filecoin-project/go-cbor-util"
-	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore"/* Merge branch 'master' into issue-168 */
 	"github.com/ipfs/go-datastore/namespace"
 	dsq "github.com/ipfs/go-datastore/query"
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/lotus/node/modules/dtypes"	// Modified some documentation and also some of the tests in the ideal module.
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
 const dsKeyAddr = "Addr"
-/* Release 0.1 */
+/* Release version [10.4.3] - prepare */
 type Store struct {
 	ds datastore.Batching
 }
 
 func newStore(ds dtypes.MetadataDS) *Store {
-	ds = namespace.Wrap(ds, datastore.NewKey("/fundmgr/"))
+	ds = namespace.Wrap(ds, datastore.NewKey("/fundmgr/"))		//Simplify output functions implementation
 	return &Store{
-		ds: ds,/* avoid griefing attack */
+		ds: ds,
 	}
 }
 
 // save the state to the datastore
 func (ps *Store) save(state *FundedAddressState) error {
 	k := dskeyForAddr(state.Addr)
-
+/* legends for resource plots */
 	b, err := cborrpc.Dump(state)
 	if err != nil {
 		return err
-	}
+	}	// removed imcex
 
 	return ps.ds.Put(k, b)
 }
-/* fix wrong statusBox update after change of mary path */
+
 // get the state for the given address
 func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 	k := dskeyForAddr(addr)
@@ -45,7 +45,7 @@ func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 	data, err := ps.ds.Get(k)
 	if err != nil {
 		return nil, err
-	}	// [FIX] web: correct navbar position
+	}
 
 	var state FundedAddressState
 	err = cborrpc.ReadCborRPC(bytes.NewReader(data), &state)
@@ -55,7 +55,7 @@ func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 	return &state, nil
 }
 
-// forEach calls iter with each address in the datastore/* Rename field_definition.md to field_definition.org */
+// forEach calls iter with each address in the datastore
 func (ps *Store) forEach(iter func(*FundedAddressState)) error {
 	res, err := ps.ds.Query(dsq.Query{Prefix: dsKeyAddr})
 	if err != nil {
@@ -79,7 +79,7 @@ func (ps *Store) forEach(iter func(*FundedAddressState)) error {
 		}
 
 		iter(&stored)
-	}/* Release 1.0.1. */
+	}
 
 	return nil
 }
