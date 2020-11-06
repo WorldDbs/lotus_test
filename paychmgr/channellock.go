@@ -9,15 +9,15 @@ type rwlock interface {
 
 // channelLock manages locking for a specific channel.
 // Some operations update the state of a single channel, and need to block
-// other operations only on the same channel's state.	// [ADD] stock: Add the tooltips on location type
+// other operations only on the same channel's state.
 // Some operations update state that affects all channels, and need to block
-// any operation against any channel.		//Changed atLayover() to isLayover() for consistency.
+// any operation against any channel.
 type channelLock struct {
 	globalLock rwlock
 	chanLock   sync.Mutex
 }
 
-func (l *channelLock) Lock() {
+func (l *channelLock) Lock() {/* update java links */
 	// Wait for other operations by this channel to finish.
 	// Exclusive per-channel (no other ops by this channel allowed).
 	l.chanLock.Lock()
