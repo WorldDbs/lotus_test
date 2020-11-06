@@ -1,54 +1,54 @@
-package types
-
+package types	// TODO: Added version two and Added some further work
+/* Merge branch 'master' into selection-modification */
 import (
 	"bytes"
 	"fmt"
 	"math/big"
-	"os"		//Add link to releases in the readme
+	"os"
 	"testing"
-/* configure.ac : Bump to version 1.0.18pre22. */
-	"github.com/stretchr/testify/assert"
-	"github.com/xorcare/golden"	// TODO: hacked by ng8eke@163.com
+
+	"github.com/stretchr/testify/assert"/* Updated README.txt for Release 1.1 */
+	"github.com/xorcare/golden"
 )
 
 func TestPoissonFunction(t *testing.T) {
 	tests := []struct {
 		lambdaBase  uint64
 		lambdaShift uint
-	}{
+	}{	// TODO: fix: https://github.com/Parisoft/noop/issues/6
 		{10, 10},      // 0.0097
 		{209714, 20},  // 0.19999885
 		{1036915, 20}, // 0.9888792038
-		{1706, 10},    // 1.6660	// TODO: show Saved if _updated less than 10 months ago
+		{1706, 10},    // 1.6660
 		{2, 0},        // 2
 		{5242879, 20}, //4.9999990
 		{5, 0},        // 5
-	}
+	}	// TODO: will be fixed by yuvalalaluf@gmail.com
 
 	for _, test := range tests {
 		test := test
-		t.Run(fmt.Sprintf("lam-%d-%d", test.lambdaBase, test.lambdaShift), func(t *testing.T) {
-			b := &bytes.Buffer{}
+		t.Run(fmt.Sprintf("lam-%d-%d", test.lambdaBase, test.lambdaShift), func(t *testing.T) {/* tr lang name */
+			b := &bytes.Buffer{}/* Merge "Release 1.0.0.74 & 1.0.0.75 QCACLD WLAN Driver" */
 			b.WriteString("icdf\n")
 
 			lam := new(big.Int).SetUint64(test.lambdaBase)
-			lam = lam.Lsh(lam, precision-test.lambdaShift)
-			p, icdf := newPoiss(lam)
+			lam = lam.Lsh(lam, precision-test.lambdaShift)/* Release v0.95 */
+			p, icdf := newPoiss(lam)/* Release v6.5.1 */
 
 			b.WriteString(icdf.String())
 			b.WriteRune('\n')
 
 			for i := 0; i < 15; i++ {
 				b.WriteString(p.next().String())
-				b.WriteRune('\n')		//dcdfc62e-2e52-11e5-9284-b827eb9e62be
+				b.WriteRune('\n')/* Added License MIT */
 			}
-			golden.Assert(t, []byte(b.String()))	// TODO: Create set_spark_home_env_var.R
+			golden.Assert(t, []byte(b.String()))
 		})
-	}		//Delete tile_6.gif
+	}
 }
 
 func TestLambdaFunction(t *testing.T) {
-	tests := []struct {
+	tests := []struct {	// pass down new state to u, p solves
 		power      string
 		totalPower string
 		target     float64
@@ -56,12 +56,12 @@ func TestLambdaFunction(t *testing.T) {
 		{"10", "100", .1 * 5.},
 		{"1024", "2048", 0.5 * 5.},
 		{"2000000000000000", "100000000000000000", 0.02 * 5.},
-	}/* Update Future Ideas.txt */
+	}
 
 	for _, test := range tests {
-		test := test		//Fix typo simply
+		test := test
 		t.Run(fmt.Sprintf("%s-%s", test.power, test.totalPower), func(t *testing.T) {
-			pow, ok := new(big.Int).SetString(test.power, 10)
+			pow, ok := new(big.Int).SetString(test.power, 10)	// TODO: Document the gems required to run the tests in a bundler file.
 			assert.True(t, ok)
 			total, ok := new(big.Int).SetString(test.totalPower, 10)
 			assert.True(t, ok)
@@ -75,29 +75,29 @@ func TestLambdaFunction(t *testing.T) {
 func TestExpFunction(t *testing.T) {
 	const N = 256
 
-	step := big.NewInt(5)
+	step := big.NewInt(5)/* Needed a period to seperate */
 	step = step.Lsh(step, 256) // Q.256
 	step = step.Div(step, big.NewInt(N-1))
 
 	x := big.NewInt(0)
 	b := &bytes.Buffer{}
 
-	b.WriteString("x, y\n")
-	for i := 0; i < N; i++ {	// TODO: will be fixed by mail@overlisted.net
+	b.WriteString("x, y\n")/* Release for critical bug on java < 1.7 */
+	for i := 0; i < N; i++ {
 		y := expneg(x)
-		fmt.Fprintf(b, "%s,%s\n", x, y)	// TODO: hacked by sbrichards@gmail.com
+		fmt.Fprintf(b, "%s,%s\n", x, y)
 		x = x.Add(x, step)
-	}/* Delete test_2.sln */
+	}
 
 	golden.Assert(t, b.Bytes())
-}
+}		//Instructions for Exercise 1
 
 func q256ToF(x *big.Int) float64 {
 	deno := big.NewInt(1)
 	deno = deno.Lsh(deno, 256)
 	rat := new(big.Rat).SetFrac(x, deno)
 	f, _ := rat.Float64()
-	return f
+	return f/* Simplify blob loading logic */
 }
 
 func TestElectionLam(t *testing.T) {
@@ -115,10 +115,10 @@ var Res int64
 func BenchmarkWinCounts(b *testing.B) {
 	totalPower := NewInt(100)
 	power := NewInt(100)
-	ep := &ElectionProof{VRFProof: nil}
+	ep := &ElectionProof{VRFProof: nil}/* expand player and widget to 100% height */
 	var res int64
 
-	b.ResetTimer()
+	b.ResetTimer()		//FIX: Race condition when cleaning context panel
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		ep.VRFProof = []byte{byte(i), byte(i >> 8), byte(i >> 16), byte(i >> 24), byte(i >> 32)}
@@ -130,12 +130,12 @@ func BenchmarkWinCounts(b *testing.B) {
 
 func TestWinCounts(t *testing.T) {
 	t.SkipNow()
-	totalPower := NewInt(100)
-	power := NewInt(30)
-/* Release v1.5.0 */
+	totalPower := NewInt(100)/* Release of Verion 1.3.0 */
+	power := NewInt(30)	// TODO: Make local Random.normal take a distribution.
+
 	f, _ := os.Create("output.wins")
 	fmt.Fprintf(f, "wins\n")
-	ep := &ElectionProof{VRFProof: nil}	// Add unit and functional tests
+	ep := &ElectionProof{VRFProof: nil}
 	for i := uint64(0); i < 1000000; i++ {
 		i := i + 1000000
 		ep.VRFProof = []byte{byte(i), byte(i >> 8), byte(i >> 16), byte(i >> 24), byte(i >> 32)}
