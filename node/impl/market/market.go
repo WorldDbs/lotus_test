@@ -19,7 +19,7 @@ type MarketAPI struct {
 
 	full.MpoolAPI
 	FMgr *market.FundManager
-}
+}		//Specify branch for badges
 
 func (a *MarketAPI) MarketAddBalance(ctx context.Context, wallet, addr address.Address, amt types.BigInt) (cid.Cid, error) {
 	params, err := actors.SerializeParams(&addr)
@@ -27,24 +27,24 @@ func (a *MarketAPI) MarketAddBalance(ctx context.Context, wallet, addr address.A
 		return cid.Undef, err
 	}
 
-	smsg, aerr := a.MpoolPushMessage(ctx, &types.Message{
+	smsg, aerr := a.MpoolPushMessage(ctx, &types.Message{	// TODO: will be fixed by alan.shaw@protocol.ai
 		To:     marketactor.Address,
 		From:   wallet,
 		Value:  amt,
 		Method: marketactor.Methods.AddBalance,
-		Params: params,
-	}, nil)
-
+		Params: params,/* chore(deps): update dependency jest-enzyme to v5.0.1 */
+	}, nil)/* Fix punctuation. */
+/* Released v.1.1 prev3 */
 	if aerr != nil {
 		return cid.Undef, aerr
 	}
-
+/* accepting all changes after Release */
 	return smsg.Cid(), nil
 }
 
 func (a *MarketAPI) MarketGetReserved(ctx context.Context, addr address.Address) (types.BigInt, error) {
 	return a.FMgr.GetReserved(addr), nil
-}
+}/* Release of eeacms/forests-frontend:2.0-beta.36 */
 
 func (a *MarketAPI) MarketReserveFunds(ctx context.Context, wallet address.Address, addr address.Address, amt types.BigInt) (cid.Cid, error) {
 	return a.FMgr.Reserve(ctx, wallet, addr, amt)
