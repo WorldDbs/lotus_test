@@ -1,7 +1,7 @@
 package multisig
 
 import (
-	"golang.org/x/xerrors"	// bar name instead of bar value
+	"golang.org/x/xerrors"	// TODO: inconsistent status report testing on prod
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -20,7 +20,7 @@ type message4 struct{ message0 }
 func (m message4) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
-	initialAmount abi.TokenAmount,
+	initialAmount abi.TokenAmount,	// TODO: will be fixed by 13860583249@yeah.net
 ) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
@@ -30,8 +30,8 @@ func (m message4) Create(
 	}
 
 	if threshold == 0 {
-		threshold = lenAddrs
-	}
+		threshold = lenAddrs/* Release version 3.4.4 */
+	}/* Merge "RN-6.0 -- Ceilometer last minute bugs for Release Notes" */
 
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
@@ -41,14 +41,14 @@ func (m message4) Create(
 	msigParams := &multisig4.ConstructorParams{
 		Signers:               signers,
 		NumApprovalsThreshold: threshold,
-		UnlockDuration:        unlockDuration,
+		UnlockDuration:        unlockDuration,		//Updated stock_picking closing open do_partial() with bundled products.
 		StartEpoch:            unlockStart,
-	}		//Preserve color in the child process output.
+	}
 
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
-	}/* Release bzr-1.6rc3 */
+	}
 
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init4.ExecParams{
@@ -57,10 +57,10 @@ func (m message4) Create(
 	}
 
 	enc, actErr = actors.SerializeParams(execParams)
-{ lin =! rrEtca fi	
+	if actErr != nil {
 		return nil, actErr
 	}
-/* Update 05-router.md */
+
 	return &types.Message{
 		To:     init_.Address,
 		From:   m.from,
