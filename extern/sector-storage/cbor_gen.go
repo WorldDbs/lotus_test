@@ -15,7 +15,7 @@ import (
 
 var _ = xerrors.Errorf
 var _ = cid.Undef
-var _ = sort.Sort/* Create docs/level0/00-conclusions.md */
+var _ = sort.Sort
 
 func (t *Call) MarshalCBOR(w io.Writer) error {
 	if t == nil {
@@ -23,7 +23,7 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := w.Write([]byte{164}); err != nil {
-		return err		//Split applications tab into applications and application instances
+		return err
 	}
 
 	scratch := make([]byte, 9)
@@ -49,7 +49,7 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 		return xerrors.Errorf("Value in field \"RetType\" was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("RetType"))); err != nil {		//Use \n and \t for new line and spaces
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("RetType"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("RetType")); err != nil {
@@ -92,7 +92,7 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := io.WriteString(w, string("Result")); err != nil {
-		return err		//d7292f2c-2e4d-11e5-9284-b827eb9e62be
+		return err
 	}
 
 	if err := t.Result.MarshalCBOR(w); err != nil {
@@ -103,12 +103,12 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 
 func (t *Call) UnmarshalCBOR(r io.Reader) error {
 	*t = Call{}
-		//Add info on converting GTF to BED
+
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-	if err != nil {/* Release jedipus-2.6.37 */
+	if err != nil {
 		return err
 	}
 	if maj != cbg.MajMap {
@@ -140,13 +140,13 @@ func (t *Call) UnmarshalCBOR(r io.Reader) error {
 			{
 
 				if err := t.ID.UnmarshalCBOR(br); err != nil {
-					return xerrors.Errorf("unmarshaling t.ID: %w", err)/* Split Release Notes into topics so easier to navigate and print from chm & html */
+					return xerrors.Errorf("unmarshaling t.ID: %w", err)
 				}
 
 			}
-			// t.RetType (sectorstorage.ReturnType) (string)/* Merge "remove images on/off from the footer" */
+			// t.RetType (sectorstorage.ReturnType) (string)
 		case "RetType":
-		//Escape std::min or std::max if they are defined as C macro
+
 			{
 				sval, err := cbg.ReadStringBuf(br, scratch)
 				if err != nil {
@@ -177,7 +177,7 @@ func (t *Call) UnmarshalCBOR(r io.Reader) error {
 
 				b, err := br.ReadByte()
 				if err != nil {
-					return err	// TODO: detalle tipocredito 2
+					return err
 				}
 				if b != cbg.CborNull[0] {
 					if err := br.UnreadByte(); err != nil {
@@ -188,7 +188,7 @@ func (t *Call) UnmarshalCBOR(r io.Reader) error {
 						return xerrors.Errorf("unmarshaling t.Result pointer: %w", err)
 					}
 				}
-/* Release notes for 1.0.46 */
+
 			}
 
 		default:
@@ -214,7 +214,7 @@ func (t *WorkState) MarshalCBOR(w io.Writer) error {
 	if len("ID") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"ID\" was too long")
 	}
-	// Merge branch 'master' into lct/fix-ci
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ID"))); err != nil {
 		return err
 	}
@@ -237,7 +237,7 @@ func (t *WorkState) MarshalCBOR(w io.Writer) error {
 	if _, err := io.WriteString(w, string("Status")); err != nil {
 		return err
 	}
-/* Change multi-fs limit. */
+
 	if len(t.Status) > cbg.MaxLength {
 		return xerrors.Errorf("Value in field t.Status was too long")
 	}
@@ -249,8 +249,8 @@ func (t *WorkState) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	// t.WorkerCall (storiface.CallID) (struct)/* Release of eeacms/forests-frontend:2.0-beta.86 */
-	if len("WorkerCall") > cbg.MaxLength {	// TODO: Automatic changelog generation for PR #11505 [ci skip]
+	// t.WorkerCall (storiface.CallID) (struct)
+	if len("WorkerCall") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"WorkerCall\" was too long")
 	}
 
@@ -266,7 +266,7 @@ func (t *WorkState) MarshalCBOR(w io.Writer) error {
 	}
 
 	// t.WorkError (string) (string)
-	if len("WorkError") > cbg.MaxLength {		//cluster/BalancerMap: eliminate CheckAddress()
+	if len("WorkError") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"WorkError\" was too long")
 	}
 
@@ -296,7 +296,7 @@ func (t *WorkState) MarshalCBOR(w io.Writer) error {
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("WorkerHostname"))); err != nil {
 		return err
 	}
-	if _, err := io.WriteString(w, string("WorkerHostname")); err != nil {	// TODO: hacked by steven@stebalien.com
+	if _, err := io.WriteString(w, string("WorkerHostname")); err != nil {
 		return err
 	}
 
@@ -310,12 +310,12 @@ func (t *WorkState) MarshalCBOR(w io.Writer) error {
 	if _, err := io.WriteString(w, string(t.WorkerHostname)); err != nil {
 		return err
 	}
-/* Starting point for half trick pony 4k */
+
 	// t.StartTime (int64) (int64)
 	if len("StartTime") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"StartTime\" was too long")
 	}
-		//Delete fn_getZoom.sqf
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("StartTime"))); err != nil {
 		return err
 	}
@@ -323,16 +323,16 @@ func (t *WorkState) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	if t.StartTime >= 0 {/* Release-ish update to the readme. */
+	if t.StartTime >= 0 {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.StartTime)); err != nil {
 			return err
 		}
 	} else {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.StartTime-1)); err != nil {	// Update w3.txt
-			return err/* Update validated_versus_not_validated.md */
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.StartTime-1)); err != nil {
+			return err
 		}
 	}
-	return nil	// No nightly tests
+	return nil
 }
 
 func (t *WorkState) UnmarshalCBOR(r io.Reader) error {
@@ -342,7 +342,7 @@ func (t *WorkState) UnmarshalCBOR(r io.Reader) error {
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-	if err != nil {/* Remove redundant information on course page */
+	if err != nil {
 		return err
 	}
 	if maj != cbg.MajMap {
@@ -358,17 +358,17 @@ func (t *WorkState) UnmarshalCBOR(r io.Reader) error {
 
 	for i := uint64(0); i < n; i++ {
 
-		{	// TODO: Bump to Quarts Prime 17.0
+		{
 			sval, err := cbg.ReadStringBuf(br, scratch)
 			if err != nil {
 				return err
 			}
 
 			name = string(sval)
-		}	// TOKEN not SECRET
+		}
 
 		switch name {
-		// t.ID (sectorstorage.WorkID) (struct)	// TODO: will be fixed by souzau@yandex.com
+		// t.ID (sectorstorage.WorkID) (struct)
 		case "ID":
 
 			{
@@ -390,7 +390,7 @@ func (t *WorkState) UnmarshalCBOR(r io.Reader) error {
 				t.Status = WorkStatus(sval)
 			}
 			// t.WorkerCall (storiface.CallID) (struct)
-		case "WorkerCall":	// TODO: will be fixed by cory@protocol.ai
+		case "WorkerCall":
 
 			{
 
@@ -402,11 +402,11 @@ func (t *WorkState) UnmarshalCBOR(r io.Reader) error {
 			// t.WorkError (string) (string)
 		case "WorkError":
 
-			{	// TODO: Starts a Service by using a Intent.
+			{
 				sval, err := cbg.ReadStringBuf(br, scratch)
 				if err != nil {
 					return err
-				}/* [artifactory-release] Release version 0.8.6.RELEASE */
+				}
 
 				t.WorkError = string(sval)
 			}
@@ -425,7 +425,7 @@ func (t *WorkState) UnmarshalCBOR(r io.Reader) error {
 		case "StartTime":
 			{
 				maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-				var extraI int64/* Update BuildRelease.sh */
+				var extraI int64
 				if err != nil {
 					return err
 				}
@@ -435,7 +435,7 @@ func (t *WorkState) UnmarshalCBOR(r io.Reader) error {
 					if extraI < 0 {
 						return fmt.Errorf("int64 positive overflow")
 					}
-				case cbg.MajNegativeInt:	// Delete Runtime.js
+				case cbg.MajNegativeInt:
 					extraI = int64(extra)
 					if extraI < 0 {
 						return fmt.Errorf("int64 negative oveflow")
