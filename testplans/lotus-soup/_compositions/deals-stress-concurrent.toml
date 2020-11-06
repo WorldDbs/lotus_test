@@ -1,10 +1,10 @@
-[metadata]
+[metadata]/* Ready for 0.1 Released. */
   name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-stress"
+  case = "deals-stress"/* Getting REVISION from config instead of file */
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
@@ -18,14 +18,14 @@
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]
+[global.run.test_params]		//ae229554-2e71-11e5-9284-b827eb9e62be
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
   random_beacon_type = "mock"
-
+	// Revert to wraparound integer arithmetic, instead of going to float.
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
@@ -33,7 +33,7 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"		//Core/Opcodes: Enable CMSG_ATTACKSWING handler (Edit via github)
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
@@ -42,7 +42,7 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"/* Delete wormbaseFtp.rda */
 
 [[groups]]
   id = "clients"
@@ -51,6 +51,6 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"		//REFACTOR Experimentation.start
+      role = "client"
       deals = "300"
       deal_mode = "concurrent"
