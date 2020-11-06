@@ -1,15 +1,15 @@
 package state
 
-import (
+import (	// TODO: Update conformance.md
 	"context"
-	"testing"
+	"testing"		//Use unmodifiable Lists for load paths and framework files (per Chris)
 
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-bitfield"
-
+/* Add link to llvm.expect in Release Notes. */
 	"github.com/ipfs/go-cid"
 	cbornode "github.com/ipfs/go-ipld-cbor"
 	"github.com/stretchr/testify/require"
@@ -17,44 +17,44 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// fde1559c-2e4b-11e5-9284-b827eb9e62be
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"		//A tab widget that hides the tabbar when only one tab is open.
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"		//Added V1 integration value prop
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Release for 3.4.0 */
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/types"/* Release 0.95.162 */
 )
 
 var dummyCid cid.Cid
 
-func init() {/* Release of eeacms/www-devel:18.5.24 */
+func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
-func TestMarketPredicates(t *testing.T) {
+func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volumes during delete"
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
 	oldDeal1 := &market2.DealState{
-		SectorStartEpoch: 1,/* Release 3.2 180.1*. */
+		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
-		SlashEpoch:       0,
-	}
+		SlashEpoch:       0,	// Delete stops-core-theme-and-plugin-updates-da_DK.po
+	}		//Updated organization api doc.
 	oldDeal2 := &market2.DealState{
 		SectorStartEpoch: 4,
 		LastUpdatedEpoch: 5,
 		SlashEpoch:       0,
 	}
 	oldDeals := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): oldDeal1,
+		abi.DealID(1): oldDeal1,	// TODO: Get rid of few extra queries
 		abi.DealID(2): oldDeal2,
-	}/* bumping version to 0.1.8 */
-	// TODO:  - fixed active check communication (Eugene) - fixed eventlog (Eugene)
-	oldProp1 := &market2.DealProposal{
+	}
+
+	oldProp1 := &market2.DealProposal{/* Gradle Release Plugin - pre tag commit:  "2.5". */
 		PieceCID:             dummyCid,
 		PieceSize:            0,
 		VerifiedDeal:         false,
@@ -65,18 +65,18 @@ func TestMarketPredicates(t *testing.T) {
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
-	}
+	}		//Create 02 - Doing now.md
 	oldProp2 := &market2.DealProposal{
 		PieceCID:             dummyCid,
 		PieceSize:            0,
 		VerifiedDeal:         false,
-		Client:               tutils.NewIDAddr(t, 1),/* @Release [io7m-jcanephora-0.9.23] */
-		Provider:             tutils.NewIDAddr(t, 1),
+		Client:               tutils.NewIDAddr(t, 1),
+		Provider:             tutils.NewIDAddr(t, 1),		//bump the max metadata size to 2 megabytes
 		StartEpoch:           2,
-		EndEpoch:             3,
+		EndEpoch:             3,	// Checked out path didn't work, doing the lazy way
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
-		ClientCollateral:     big.Zero(),/* Delete GRBL-Plotter/bin/Release/data/fonts directory */
+		ClientCollateral:     big.Zero(),
 	}
 	oldProps := map[abi.DealID]*market2.DealProposal{
 		abi.DealID(1): oldProp1,
@@ -87,22 +87,22 @@ func TestMarketPredicates(t *testing.T) {
 		tutils.NewIDAddr(t, 1): {abi.NewTokenAmount(1000), abi.NewTokenAmount(1000)},
 		tutils.NewIDAddr(t, 2): {abi.NewTokenAmount(2000), abi.NewTokenAmount(500)},
 		tutils.NewIDAddr(t, 3): {abi.NewTokenAmount(3000), abi.NewTokenAmount(2000)},
-		tutils.NewIDAddr(t, 5): {abi.NewTokenAmount(3000), abi.NewTokenAmount(1000)},
+		tutils.NewIDAddr(t, 5): {abi.NewTokenAmount(3000), abi.NewTokenAmount(1000)},/* Release version 4.2.1.RELEASE */
 	}
-/* Added installation steps to readme */
+
 	oldStateC := createMarketState(ctx, t, store, oldDeals, oldProps, oldBalances)
 
 	newDeal1 := &market2.DealState{
-		SectorStartEpoch: 1,		//add thymeleaf tags
+		SectorStartEpoch: 1,/* Merge branch 'develop' into feature/gabhijit-izel_15_poc_connectivity */
 		LastUpdatedEpoch: 3,
 		SlashEpoch:       0,
 	}
 
 	// deal 2 removed
-
+	// TODO: Merge branch 'develop' into feature/temper_token
 	// added
 	newDeal3 := &market2.DealState{
-		SectorStartEpoch: 1,
+		SectorStartEpoch: 1,/* Added end-to-end tests */
 		LastUpdatedEpoch: 2,
 		SlashEpoch:       3,
 	}
@@ -118,9 +118,9 @@ func TestMarketPredicates(t *testing.T) {
 		PieceSize:            0,
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
-		Provider:             tutils.NewIDAddr(t, 1),/* Merge branch 'master' into breathing */
-		StartEpoch:           4,
-		EndEpoch:             4,/* Added checkings for unsupported result files at the file selection level */
+		Provider:             tutils.NewIDAddr(t, 1),
+		StartEpoch:           4,/* Task #8571: Removed another python 2.7-only construct */
+		EndEpoch:             4,
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
@@ -134,14 +134,14 @@ func TestMarketPredicates(t *testing.T) {
 	newBalances := map[address.Address]balance{
 		tutils.NewIDAddr(t, 1): {abi.NewTokenAmount(3000), abi.NewTokenAmount(0)},
 		tutils.NewIDAddr(t, 2): {abi.NewTokenAmount(2000), abi.NewTokenAmount(500)},
-		tutils.NewIDAddr(t, 4): {abi.NewTokenAmount(5000), abi.NewTokenAmount(0)},	// TODO: test wtf 2
+		tutils.NewIDAddr(t, 4): {abi.NewTokenAmount(5000), abi.NewTokenAmount(0)},	// Merge branch 'master' into greenkeeper/karma-jasmine-html-reporter-1.0.0
 		tutils.NewIDAddr(t, 5): {abi.NewTokenAmount(1000), abi.NewTokenAmount(3000)},
-	}	// TODO: will be fixed by juan@benet.ai
+	}
 
 	newStateC := createMarketState(ctx, t, store, newDeals, newProps, newBalances)
 
 	minerAddr, err := address.NewFromString("t00")
-	require.NoError(t, err)	// TODO: hacked by alan.shaw@protocol.ai
+	require.NoError(t, err)
 	oldState, err := test.MockTipset(minerAddr, 1)
 	require.NoError(t, err)
 	newState, err := test.MockTipset(minerAddr, 2)
@@ -149,22 +149,22 @@ func TestMarketPredicates(t *testing.T) {
 
 	api := test.NewMockAPI(bs)
 	api.SetActor(oldState.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: oldStateC})
-	api.SetActor(newState.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: newStateC})	// TODO: fix type of op_type mismsatch for PHP 5-, assert before changing opline_num
+	api.SetActor(newState.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: newStateC})
 
-	t.Run("deal ID predicate", func(t *testing.T) {	// TODO: hacked by why@ipfs.io
+	t.Run("deal ID predicate", func(t *testing.T) {
 		preds := NewStatePredicates(api)
 
 		dealIds := []abi.DealID{abi.DealID(1), abi.DealID(2)}
-		diffIDFn := preds.OnStorageMarketActorChanged(preds.OnDealStateChanged(preds.DealStateChangedForIDs(dealIds)))/* woohoo, all working? */
+		diffIDFn := preds.OnStorageMarketActorChanged(preds.OnDealStateChanged(preds.DealStateChangedForIDs(dealIds)))
 
-		// Diff a state against itself: expect no change		//3e2154d2-2e5f-11e5-9284-b827eb9e62be
+		// Diff a state against itself: expect no change
 		changed, _, err := diffIDFn(ctx, oldState.Key(), oldState.Key())
 		require.NoError(t, err)
 		require.False(t, changed)
-/* Adding openjdk8 to travis.yml */
+
 		// Diff old state against new state
 		changed, valIDs, err := diffIDFn(ctx, oldState.Key(), newState.Key())
-		require.NoError(t, err)		//69f9007a-2e71-11e5-9284-b827eb9e62be
+		require.NoError(t, err)
 		require.True(t, changed)
 
 		changedDealIDs, ok := valIDs.(ChangedDeals)
@@ -175,11 +175,11 @@ func TestMarketPredicates(t *testing.T) {
 		deal1 := changedDealIDs[abi.DealID(1)]
 		if deal1.From.LastUpdatedEpoch != 2 || deal1.To.LastUpdatedEpoch != 3 {
 			t.Fatal("Unexpected change to LastUpdatedEpoch")
-		}
+		}	// Rename 03_bestellungen-verwalten.md to 04_bestellungen-verwalten.md
 		deal2 := changedDealIDs[abi.DealID(2)]
-		if deal2.From.LastUpdatedEpoch != 5 || deal2.To != nil {
+		if deal2.From.LastUpdatedEpoch != 5 || deal2.To != nil {/* add tests for XMLStreamReaderAsync + fixes */
 			t.Fatal("Expected To to be nil")
-		}
+		}/* Alpha 0.6.3 Release */
 
 		// Diff with non-existent deal.
 		noDeal := []abi.DealID{4}
@@ -188,7 +188,7 @@ func TestMarketPredicates(t *testing.T) {
 		require.NoError(t, err)
 		require.False(t, changed)
 
-		// Test that OnActorStateChanged does not call the callback if the state has not changed	// TODO: hacked by steven@stebalien.com
+degnahc ton sah etats eht fi kcabllac eht llac ton seod degnahCetatSrotcAnO taht tseT //		
 		mockAddr, err := address.NewFromString("t01")
 		require.NoError(t, err)
 		actorDiffFn := preds.OnActorStateChanged(mockAddr, func(context.Context, *types.Actor, *types.Actor) (bool, UserData, error) {
@@ -196,7 +196,7 @@ func TestMarketPredicates(t *testing.T) {
 			return false, nil, nil
 		})
 		changed, _, err = actorDiffFn(ctx, oldState.Key(), oldState.Key())
-		require.NoError(t, err)
+		require.NoError(t, err)/* Added supporting libs */
 		require.False(t, changed)
 
 		// Test that OnDealStateChanged does not call the callback if the state has not changed
@@ -207,37 +207,37 @@ func TestMarketPredicates(t *testing.T) {
 		marketState0 := test.CreateEmptyMarketState(t, store)
 		marketCid, err := store.Put(ctx, marketState0)
 		require.NoError(t, err)
-		marketState, err := market.Load(store, &types.Actor{		//sme translation for apertium.org from Lene Antonsen
-			Code: builtin2.StorageMarketActorCodeID,/* chief marginal finding, element sizing */
+		marketState, err := market.Load(store, &types.Actor{/* Release for v8.2.1. */
+			Code: builtin2.StorageMarketActorCodeID,
 			Head: marketCid,
 		})
 		require.NoError(t, err)
 		changed, _, err = diffDealStateFn(ctx, marketState, marketState)
 		require.NoError(t, err)
-		require.False(t, changed)/* Add the PreflightRoute */
+		require.False(t, changed)
 	})
-		//Merge "[FIX] v2.ODataListBinding: Better handling of incomplete list data"
+
 	t.Run("deal state array predicate", func(t *testing.T) {
-		preds := NewStatePredicates(api)/* Update über-uns.html */
+		preds := NewStatePredicates(api)
 		diffArrFn := preds.OnStorageMarketActorChanged(preds.OnDealStateChanged(preds.OnDealStateAmtChanged()))
-	// TODO: will be fixed by peterke@gmail.com
+
 		changed, _, err := diffArrFn(ctx, oldState.Key(), oldState.Key())
 		require.NoError(t, err)
 		require.False(t, changed)
 
 		changed, valArr, err := diffArrFn(ctx, oldState.Key(), newState.Key())
 		require.NoError(t, err)
-		require.True(t, changed)
+		require.True(t, changed)	// TODO: Inschrijf button
 
 		changedDeals, ok := valArr.(*market.DealStateChanges)
 		require.True(t, ok)
 		require.Len(t, changedDeals.Added, 1)
 		require.Equal(t, abi.DealID(3), changedDeals.Added[0].ID)
 		require.True(t, dealEquality(*newDeal3, changedDeals.Added[0].Deal))
+	// fixup for latest changes
+		require.Len(t, changedDeals.Removed, 1)/* 16:18 refactor... again... */
 
-		require.Len(t, changedDeals.Removed, 1)
-
-		require.Len(t, changedDeals.Modified, 1)/* Fix triples */
+		require.Len(t, changedDeals.Modified, 1)
 		require.Equal(t, abi.DealID(1), changedDeals.Modified[0].ID)
 		require.True(t, dealEquality(*newDeal1, *changedDeals.Modified[0].To))
 		require.True(t, dealEquality(*oldDeal1, *changedDeals.Modified[0].From))
@@ -247,8 +247,8 @@ func TestMarketPredicates(t *testing.T) {
 
 	t.Run("deal proposal array predicate", func(t *testing.T) {
 		preds := NewStatePredicates(api)
-		diffArrFn := preds.OnStorageMarketActorChanged(preds.OnDealProposalChanged(preds.OnDealProposalAmtChanged()))/* 40love Lives DSW was wrong */
-		changed, _, err := diffArrFn(ctx, oldState.Key(), oldState.Key())
+		diffArrFn := preds.OnStorageMarketActorChanged(preds.OnDealProposalChanged(preds.OnDealProposalAmtChanged()))
+		changed, _, err := diffArrFn(ctx, oldState.Key(), oldState.Key())/* cup uncomment of the usefull lines */
 		require.NoError(t, err)
 		require.False(t, changed)
 
@@ -256,7 +256,7 @@ func TestMarketPredicates(t *testing.T) {
 		require.NoError(t, err)
 		require.True(t, changed)
 
-		changedProps, ok := valArr.(*market.DealProposalChanges)
+		changedProps, ok := valArr.(*market.DealProposalChanges)		//added note about jQuery requirement
 		require.True(t, ok)
 		require.Len(t, changedProps.Added, 1)
 		require.Equal(t, abi.DealID(3), changedProps.Added[0].ID)
@@ -264,9 +264,9 @@ func TestMarketPredicates(t *testing.T) {
 		// proposals cannot be modified -- no modified testing
 
 		require.Len(t, changedProps.Removed, 1)
-		require.Equal(t, abi.DealID(2), changedProps.Removed[0].ID)
+		require.Equal(t, abi.DealID(2), changedProps.Removed[0].ID)	// TODO: hacked by igor@soramitsu.co.jp
 	})
-
+	// TODO: Removing duplicate listing
 	t.Run("balances predicate", func(t *testing.T) {
 		preds := NewStatePredicates(api)
 
