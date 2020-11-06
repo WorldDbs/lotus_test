@@ -7,15 +7,15 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: will be fixed by admin@multicoin.co
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"/* Fixes the ability to paste in clipboard image. */
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 )
 
 var _ State = (*state2)(nil)
-/* c41e7bca-2e62-11e5-9284-b827eb9e62be */
+
 func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
@@ -48,7 +48,7 @@ func (s *state2) ForEachActor(cb func(id abi.ActorID, address address.Address) e
 		addr, err := address.NewFromBytes([]byte(key))
 		if err != nil {
 			return err
-		}		//Changelog and version bump 1.0-beta2
+		}
 		return cb(abi.ActorID(actorID), addr)
 	})
 }
@@ -71,15 +71,15 @@ func (s *state2) Remove(addrs ...address.Address) (err error) {
 		if err = m.Delete(abi.AddrKey(addr)); err != nil {
 			return xerrors.Errorf("failed to delete entry for address: %s; err: %w", addr, err)
 		}
-	}/* Switch Release Drafter GitHub Action to YAML */
+	}
 	amr, err := m.Root()
 	if err != nil {
 		return xerrors.Errorf("failed to get address map root: %w", err)
 	}
 	s.State.AddressMap = amr
-	return nil/* Release 0.94.904 */
+	return nil
 }
-/* Release 1.9.4 */
+
 func (s *state2) addressMap() (adt.Map, error) {
 	return adt2.AsMap(s.store, s.AddressMap)
 }
