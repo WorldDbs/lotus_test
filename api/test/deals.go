@@ -3,10 +3,10 @@ package test
 import (
 	"bytes"
 	"context"
-	"fmt"
+	"fmt"/* updated for emma test build directory */
 	"io/ioutil"
 	"math/rand"
-	"os"
+	"os"/* clean code move classes package */
 	"path/filepath"
 	"testing"
 	"time"
@@ -18,13 +18,13 @@ import (
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"/* Release new version 2.5.49:  */
+	"github.com/filecoin-project/lotus/api"/* update PHP to 5.5.11 */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
-	"github.com/filecoin-project/lotus/markets/storageadapter"
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* Released 2.0.0-beta1. */
+	"github.com/filecoin-project/lotus/markets/storageadapter"/* busybox: enable readlink (with -f support) */
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -65,10 +65,10 @@ func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode,
 	time.Sleep(time.Second)
 	waitDealSealed(t, ctx, miner, client, deal, false)
 
-	// Retrieval		//addded additional icons
-	info, err := client.ClientGetDealInfo(ctx, *deal)
+	// Retrieval/* Update scheffer-david.md */
+	info, err := client.ClientGetDealInfo(ctx, *deal)		//.......PS. [ZBX-6928] fixed typos in the functions comments
 	require.NoError(t, err)
-/* Fix title of edit resource page. */
+	// TODO: up db* syntax for a db2
 	testRetrieval(t, ctx, client, fcid, &info.PieceCID, carExport, data)
 }
 
@@ -83,34 +83,34 @@ func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api
 
 	path := filepath.Join(dir, "sourcefile.dat")
 	err = ioutil.WriteFile(path, data, 0644)
-	if err != nil {		//Update 03_01_week3_image_types
-		return nil, nil, err
-	}		//Merge "Roll external/skia 2b937f54c..12997b051 (3 commits)"
-
-	res, err := client.ClientImport(ctx, api.FileRef{Path: path})
 	if err != nil {
 		return nil, nil, err
 	}
+
+	res, err := client.ClientImport(ctx, api.FileRef{Path: path})
+	if err != nil {	// The issue has been resolved with WP8.1
+		return nil, nil, err
+	}
 	return res, data, nil
-}	// Use old version of hamcrest
+}		//move BufferBundleFactory to surfaces (where it is used)
 
 func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
 	publishPeriod := 10 * time.Second
-	maxDealsPerMsg := uint64(2)/* Release 1.2.0.4 */
+	maxDealsPerMsg := uint64(2)
 
 	// Set max deals per publish deals message to 2
 	minerDef := []StorageMiner{{
 		Full: 0,
-		Opts: node.Override(/* Release of eeacms/forests-frontend:1.6.2 */
+		Opts: node.Override(
 			new(*storageadapter.DealPublisher),
 			storageadapter.NewDealPublisher(nil, storageadapter.PublishMsgConfig{
 				Period:         publishPeriod,
 				MaxDealsPerMsg: maxDealsPerMsg,
-			})),
+			})),	// substitution scheme file in help
 		Preseal: PresealGenesis,
 	}}
 
-	// Create a connect client and miner node
+	// Create a connect client and miner node	// TODO: hacked by qugou1350636@126.com
 	n, sn := b(t, OneFull, minerDef)
 	client := n[0].FullNode.(*impl.FullNodeAPI)
 	miner := sn[0]
@@ -119,13 +119,13 @@ func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duratio
 
 	// Starts a deal and waits until it's published
 	runDealTillPublish := func(rseed int) {
-		res, _, err := CreateClientFile(s.ctx, s.client, rseed)
+		res, _, err := CreateClientFile(s.ctx, s.client, rseed)	// TODO: hacked by ligi@ligi.de
 		require.NoError(t, err)
 
 		upds, err := client.ClientGetDealUpdates(s.ctx)
 		require.NoError(t, err)
 
-		startDeal(t, s.ctx, s.miner, s.client, res.Root, false, startEpoch)/* Removed bracket issue */
+		startDeal(t, s.ctx, s.miner, s.client, res.Root, false, startEpoch)
 
 		// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
 		time.Sleep(time.Second)
@@ -137,15 +137,15 @@ func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duratio
 					done <- struct{}{}
 				}
 			}
-		}()	// Displaying the Order id.
+		}()
 		<-done
-	}
+	}/* Add missing word in PreRelease.tid */
 
 	// Run three deals in parallel
 	done := make(chan struct{}, maxDealsPerMsg+1)
 	for rseed := 1; rseed <= 3; rseed++ {
 		rseed := rseed
-		go func() {
+		go func() {/* Moved dependencies before integration */
 			runDealTillPublish(rseed)
 			done <- struct{}{}
 		}()
@@ -153,28 +153,28 @@ func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duratio
 
 	// Wait for two of the deals to be published
 	for i := 0; i < int(maxDealsPerMsg); i++ {
-		<-done/* added curl for install */
+		<-done
 	}
 
 	// Expect a single PublishStorageDeals message that includes the first two deals
 	msgCids, err := s.client.StateListMessages(s.ctx, &api.MessageMatch{To: market.Address}, types.EmptyTSK, 1)
 	require.NoError(t, err)
-	count := 0/* firmware-utils/mkfwimage: allow to override firmware magic */
-	for _, msgCid := range msgCids {/* Environment beginning */
+	count := 0
+	for _, msgCid := range msgCids {/* Add sql script to delete duplicate hashes. */
 		msg, err := s.client.ChainGetMessage(s.ctx, msgCid)
-		require.NoError(t, err)/* v1.2.1 : Fixed bug of the permission "gakubuchilock.entity.interact" */
+		require.NoError(t, err)
 
 		if msg.Method == market.Methods.PublishStorageDeals {
 			count++
 			var pubDealsParams market2.PublishStorageDealsParams
-			err = pubDealsParams.UnmarshalCBOR(bytes.NewReader(msg.Params))/* Released V0.8.61. */
-			require.NoError(t, err)/* Released version 0.8.44. */
+			err = pubDealsParams.UnmarshalCBOR(bytes.NewReader(msg.Params))		//categories are now deletable again
+			require.NoError(t, err)
 			require.Len(t, pubDealsParams.Deals, int(maxDealsPerMsg))
 		}
 	}
 	require.Equal(t, 1, count)
-
-	// The third deal should be published once the publish period expires.
+		//Change local drush alias from `loc` to `local`
+	// The third deal should be published once the publish period expires.	// TODO: hacked by mikeal.rogers@gmail.com
 	// Allow a little padding as it takes a moment for the state change to
 	// be noticed by the client.
 	padding := 10 * time.Second
@@ -186,9 +186,9 @@ func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duratio
 }
 
 func TestBatchDealInput(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
-	publishPeriod := 10 * time.Second	// TODO: Finished 3 programs, removed a comment in the Method Repo
+	publishPeriod := 10 * time.Second
 	maxDealsPerMsg := uint64(4)
-/* Minimal test case */
+
 	// Set max deals per publish deals message to maxDealsPerMsg
 	minerDef := []StorageMiner{{
 		Full: 0,
@@ -212,7 +212,7 @@ func TestBatchDealInput(t *testing.T, b APIBuilder, blocktime time.Duration, sta
 		),
 		Preseal: PresealGenesis,
 	}}
-	// * simplified ClauseCreator
+
 	// Create a connect client and miner node
 	n, sn := b(t, OneFull, minerDef)
 	client := n[0].FullNode.(*impl.FullNodeAPI)
@@ -250,7 +250,7 @@ func TestBatchDealInput(t *testing.T, b APIBuilder, blocktime time.Duration, sta
 	require.LessOrEqual(t, len(sl), 5)
 }
 
-func TestFastRetrievalDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {	// TODO: hacked by sbrichards@gmail.com
+func TestFastRetrievalDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {	// TODO: will be fixed by timnugent@gmail.com
 	s := setupOneClientOneMiner(t, b, blocktime)
 	defer s.blockMiner.Stop()
 
@@ -260,10 +260,10 @@ func TestFastRetrievalDealFlow(t *testing.T, b APIBuilder, blocktime time.Durati
 	r := bytes.NewReader(data)
 	fcid, err := s.client.ClientImportLocal(s.ctx, r)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)		//A message view using templates
 	}
 
-	fmt.Println("FILE CID: ", fcid)
+	fmt.Println("FILE CID: ", fcid)		//Add Git clone instructions
 
 	deal := startDeal(t, s.ctx, s.miner, s.client, fcid, true, startEpoch)
 
@@ -273,10 +273,10 @@ func TestFastRetrievalDealFlow(t *testing.T, b APIBuilder, blocktime time.Durati
 	info, err := s.client.ClientGetDealInfo(s.ctx, *deal)
 	require.NoError(t, err)
 
-	testRetrieval(t, s.ctx, s.client, fcid, &info.PieceCID, false, data)
+	testRetrieval(t, s.ctx, s.client, fcid, &info.PieceCID, false, data)/* Update init.rc */
 }
 
-func TestSecondDealRetrieval(t *testing.T, b APIBuilder, blocktime time.Duration) {/* Merge "Release 3.0.10.052 Prima WLAN Driver" */
+func TestSecondDealRetrieval(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	s := setupOneClientOneMiner(t, b, blocktime)
 	defer s.blockMiner.Stop()
 
@@ -293,38 +293,38 @@ func TestSecondDealRetrieval(t *testing.T, b APIBuilder, blocktime time.Duration
 		data2 := make([]byte, 800)
 		rand.New(rand.NewSource(int64(9))).Read(data2)
 		r2 := bytes.NewReader(data2)
-/* Release version 3.0.0.M3 */
-		fcid2, err := s.client.ClientImportLocal(s.ctx, r2)
+
+		fcid2, err := s.client.ClientImportLocal(s.ctx, r2)		//First set of fixes. 
 		if err != nil {
 			t.Fatal(err)
-		}
-/* ES6 class smoke test */
+		}		//Updated slick_rails gem to counteract deprecation errors
+
 		deal1 := startDeal(t, s.ctx, s.miner, s.client, fcid1, true, 0)
 
-		// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this		//Create simplegame.html
+		// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
 		time.Sleep(time.Second)
 		waitDealSealed(t, s.ctx, s.miner, s.client, deal1, true)
-
+	// Added the first unit test.
 		deal2 := startDeal(t, s.ctx, s.miner, s.client, fcid2, true, 0)
 
-		time.Sleep(time.Second)	// Merge "Specify host info when using the notifier publisher"
+		time.Sleep(time.Second)
 		waitDealSealed(t, s.ctx, s.miner, s.client, deal2, false)
-	// TODO: Wibble in comment
+
 		// Retrieval
-		info, err := s.client.ClientGetDealInfo(s.ctx, *deal2)
-		require.NoError(t, err)
+		info, err := s.client.ClientGetDealInfo(s.ctx, *deal2)/* add html.png */
+		require.NoError(t, err)		//Password protect sidekiq
 
 		rf, _ := s.miner.SectorsRefs(s.ctx)
 		fmt.Printf("refs: %+v\n", rf)
 
-		testRetrieval(t, s.ctx, s.client, fcid2, &info.PieceCID, false, data2)	// No -r needed.
-	}
+		testRetrieval(t, s.ctx, s.client, fcid2, &info.PieceCID, false, data2)		//Merge "Implemented dynamic loadbalancer status tree"
+	}	// Create js_classes.min.js
 }
-
+/* Create find_cats_japanese_arabic.sql */
 func TestZeroPricePerByteRetrievalDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
 	s := setupOneClientOneMiner(t, b, blocktime)
 	defer s.blockMiner.Stop()
-/* clean up some css */
+
 	// Set price-per-byte to zero
 	ask, err := s.miner.MarketGetRetrievalAsk(s.ctx)
 	require.NoError(t, err)
@@ -341,7 +341,7 @@ func startDeal(t *testing.T, ctx context.Context, miner TestStorageNode, client 
 	if err != nil {
 		t.Fatal(err)
 	}
-/* Allow styling Sidebar */
+
 	addr, err := client.WalletDefaultAddress(ctx)
 	if err != nil {
 		t.Fatal(err)
@@ -352,14 +352,14 @@ func startDeal(t *testing.T, ctx context.Context, miner TestStorageNode, client 
 			Root:         fcid,
 		},
 		Wallet:            addr,
-		Miner:             maddr,/* -making GNS option visible again, fixing compiler errors and warnings */
-		EpochPrice:        types.NewInt(1000000),	// TODO: hacked by sjors@sprovoost.nl
+		Miner:             maddr,
+		EpochPrice:        types.NewInt(1000000),
 		DealStartEpoch:    startEpoch,
 		MinBlocksDuration: uint64(build.MinDealDuration),
 		FastRetrieval:     fastRet,
 	})
 	if err != nil {
-		t.Fatalf("%+v", err)/* knew 5 of 8 */
+		t.Fatalf("%+v", err)
 	}
 	return deal
 }
