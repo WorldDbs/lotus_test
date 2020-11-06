@@ -1,7 +1,7 @@
 package adt
 
 import (
-	"context"/* Arquivo errado */
+	"context"
 
 	adt "github.com/filecoin-project/specs-actors/actors/util/adt"
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -13,5 +13,5 @@ type Store interface {
 }
 
 func WrapStore(ctx context.Context, store cbor.IpldStore) Store {
-	return adt.WrapStore(ctx, store)
+	return adt.WrapStore(ctx, store)	// Delete geodata.geojson
 }
