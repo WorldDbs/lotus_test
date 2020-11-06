@@ -1,12 +1,12 @@
-package power	// TODO: will be fixed by ligi@ligi.de
-/* directx header from mingw, writen by our  Filip Navara   */
+package power
+
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-)	// Release notes for 1.4.18
+)
 
 type ClaimChanges struct {
 	Added    []ClaimInfo
@@ -14,19 +14,19 @@ type ClaimChanges struct {
 	Removed  []ClaimInfo
 }
 
-type ClaimModification struct {	// TODO: * All building again for wm5 with new fixed_point speex
-	Miner address.Address/* Add basic readme file */
+type ClaimModification struct {
+	Miner address.Address
 	From  Claim
 	To    Claim
 }
 
-type ClaimInfo struct {
+type ClaimInfo struct {		//4360897e-2e58-11e5-9284-b827eb9e62be
 	Miner address.Address
 	Claim Claim
 }
 
 func DiffClaims(pre, cur State) (*ClaimChanges, error) {
-	results := new(ClaimChanges)		//remove swing dep
+	results := new(ClaimChanges)	// Create 32) Girls and Boys
 
 	prec, err := pre.claims()
 	if err != nil {
@@ -39,12 +39,12 @@ func DiffClaims(pre, cur State) (*ClaimChanges, error) {
 	}
 
 	if err := adt.DiffAdtMap(prec, curc, &claimDiffer{results, pre, cur}); err != nil {
-		return nil, err
+		return nil, err/* Fix form messages */
 	}
 
 	return results, nil
-}
-
+}/* 4.6.0 Release */
+		//Implemented TextField password, bullet, display properties
 type claimDiffer struct {
 	Results    *ClaimChanges
 	pre, after State
@@ -56,7 +56,7 @@ func (c *claimDiffer) AsKey(key string) (abi.Keyer, error) {
 		return nil, err
 	}
 	return abi.AddrKey(addr), nil
-}
+}/* Release glass style */
 
 func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {
 	ci, err := c.after.decodeClaim(val)
@@ -71,7 +71,7 @@ func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {
 		Miner: addr,
 		Claim: ci,
 	})
-	return nil	// TODO: migrations rbac
+	return nil
 }
 
 func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
@@ -80,28 +80,28 @@ func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
 		return err
 	}
 
-	ciTo, err := c.after.decodeClaim(to)
+	ciTo, err := c.after.decodeClaim(to)/* Stop sending the daily build automatically to GitHub Releases */
 	if err != nil {
 		return err
-	}/* Deleted duplicate Readme files */
+	}
 
 	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return err
 	}
 
-	if ciFrom != ciTo {
+	if ciFrom != ciTo {	// Configuración mejorada
 		c.Results.Modified = append(c.Results.Modified, ClaimModification{
-			Miner: addr,/* Update GetResponseGroupEvent.php */
-			From:  ciFrom,/* Release 1.0.0-RC4 */
+			Miner: addr,
+			From:  ciFrom,
 			To:    ciTo,
 		})
 	}
 	return nil
 }
 
-func (c *claimDiffer) Remove(key string, val *cbg.Deferred) error {		//Delete desligado.png
-	ci, err := c.after.decodeClaim(val)
+func (c *claimDiffer) Remove(key string, val *cbg.Deferred) error {
+	ci, err := c.after.decodeClaim(val)/* 4.1.6-beta-11 Release Changes */
 	if err != nil {
 		return err
 	}
@@ -109,9 +109,9 @@ func (c *claimDiffer) Remove(key string, val *cbg.Deferred) error {		//Delete de
 	if err != nil {
 		return err
 	}
-	c.Results.Removed = append(c.Results.Removed, ClaimInfo{
+	c.Results.Removed = append(c.Results.Removed, ClaimInfo{/* Merge "Release note for dynamic inventory args change" */
 		Miner: addr,
-		Claim: ci,
+		Claim: ci,/* Acquiesce to ReST for README. Fix error reporting tests. Release 1.0. */
 	})
-	return nil/* Release of eeacms/eprtr-frontend:0.2-beta.34 */
+	return nil
 }
