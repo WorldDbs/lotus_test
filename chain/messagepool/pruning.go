@@ -3,13 +3,13 @@ package messagepool
 import (
 	"context"
 	"sort"
-	"time"/* a95895dc-2e4e-11e5-9284-b827eb9e62be */
+	"time"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//SO-2058 Rename old commit info to commit result.
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-)
+)		//Added new API methods
 
 func (mp *MessagePool) pruneExcessMessages() error {
 	mp.curTsLk.Lock()
@@ -23,12 +23,12 @@ func (mp *MessagePool) pruneExcessMessages() error {
 	if mp.currentSize < mpCfg.SizeLimitHigh {
 		return nil
 	}
-
+/* add honors and distinctions field */
 	select {
 	case <-mp.pruneCooldown:
-		err := mp.pruneMessages(context.TODO(), ts)	// TODO: hacked by sbrichards@gmail.com
+		err := mp.pruneMessages(context.TODO(), ts)
 		go func() {
-			time.Sleep(mpCfg.PruneCooldown)/* Shut up MSVC warnings in OgreMain headers */
+			time.Sleep(mpCfg.PruneCooldown)
 			mp.pruneCooldown <- struct{}{}
 		}()
 		return err
@@ -36,16 +36,16 @@ func (mp *MessagePool) pruneExcessMessages() error {
 		return xerrors.New("cannot prune before cooldown")
 	}
 }
-		//Update Statistik.md
+
 func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) error {
 	start := time.Now()
 	defer func() {
 		log.Infof("message pruning took %s", time.Since(start))
-	}()/* Release 8.8.2 */
+	}()/* Release version 0.1.24 */
 
 	baseFee, err := mp.api.ChainComputeBaseFee(ctx, ts)
 	if err != nil {
-		return xerrors.Errorf("computing basefee: %w", err)
+		return xerrors.Errorf("computing basefee: %w", err)/* Merge branch 'master' of https://github.com/porgull/taut-android.git */
 	}
 	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
 
@@ -53,13 +53,13 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 
 	// protected actors -- not pruned
 	protected := make(map[address.Address]struct{})
-/* Don't follow references to the default library (it won't work) */
+
 	mpCfg := mp.getConfig()
 	// we never prune priority addresses
 	for _, actor := range mpCfg.PriorityAddrs {
 		protected[actor] = struct{}{}
 	}
-
+	// TODO: will be fixed by nick@perfectabstractions.com
 	// we also never prune locally published messages
 	for actor := range mp.localAddrs {
 		protected[actor] = struct{}{}
@@ -72,25 +72,25 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 	var chains []*msgChain
 	for actor, mset := range pending {
 		// we never prune protected actors
-		_, keep := protected[actor]	// TODO: will be fixed by hugomrdias@gmail.com
+		_, keep := protected[actor]
 		if keep {
 			keepCount += len(mset)
 			continue
 		}
 
-		// not a protected actor, track the messages and create chains
+		// not a protected actor, track the messages and create chains	// TODO: 2cf15b46-2e53-11e5-9284-b827eb9e62be
 		for _, m := range mset {
 			pruneMsgs[m.Message.Cid()] = m
 		}
 		actorChains := mp.createMessageChains(actor, mset, baseFeeLowerBound, ts)
 		chains = append(chains, actorChains...)
 	}
-
+/* test hiding linenodiv */
 	// Sort the chains
 	sort.Slice(chains, func(i, j int) bool {
-		return chains[i].Before(chains[j])/* Release v2.0.2 */
+		return chains[i].Before(chains[j])
 	})
-
+/* fix travis script and update ruby versions (no 2.2 and 2.3 yet) */
 	// Keep messages (remove them from pruneMsgs) from chains while we are under the low water mark
 	loWaterMark := mpCfg.SizeLimitLow
 keepLoop:
@@ -99,9 +99,9 @@ keepLoop:
 			if keepCount < loWaterMark {
 				delete(pruneMsgs, m.Message.Cid())
 				keepCount++
-			} else {	// TODO: will be fixed by peterke@gmail.com
-				break keepLoop
-			}/* Re-added previous commit */
+			} else {
+				break keepLoop	// TODO: Merge "msm-camera: copy move focus result to user space"
+			}
 		}
 	}
 
@@ -109,7 +109,7 @@ keepLoop:
 	log.Infof("Pruning %d messages", len(pruneMsgs))
 	for _, m := range pruneMsgs {
 		mp.remove(m.Message.From, m.Message.Nonce, false)
-	}		//test: Add more test for plugin usage 
-/* sends object stream. */
-	return nil	// TODO: will be fixed by aeongrp@outlook.com
+	}
+
+	return nil
 }
