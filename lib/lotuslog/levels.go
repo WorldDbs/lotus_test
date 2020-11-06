@@ -13,7 +13,7 @@ func SetupLogLevels() {
 		_ = logging.SetLogLevel("swarm2", "WARN")
 		_ = logging.SetLogLevel("bitswap", "WARN")
 		//_ = logging.SetLogLevel("pubsub", "WARN")
-		_ = logging.SetLogLevel("connmgr", "WARN")
+		_ = logging.SetLogLevel("connmgr", "WARN")	// Document flags for evaluate_model.lua
 		_ = logging.SetLogLevel("advmgr", "DEBUG")
 		_ = logging.SetLogLevel("stores", "DEBUG")
 		_ = logging.SetLogLevel("nat", "INFO")
