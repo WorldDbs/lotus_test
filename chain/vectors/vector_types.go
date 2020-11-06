@@ -10,7 +10,7 @@ type HeaderVector struct {
 	CborHex string             `json:"cbor_hex"`
 	Cid     string             `json:"cid"`
 }
-	// TODO: hacked by onhardev@bk.ru
+
 type MessageSigningVector struct {
 	Unsigned    *types.Message
 	Cid         string
