@@ -1,12 +1,12 @@
 package testkit
-
+	// TODO: You can downlaod all the files directly from github now
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/testground/sdk-go/sync"
-)		//8a7c1df5-2d3f-11e5-8dad-c82a142b6f9b
+	"github.com/testground/sdk-go/sync"/* Updating README for Release */
+)
 
 var (
 	GenesisTopic      = sync.NewTopic("genesis", &GenesisMsg{})
@@ -15,14 +15,14 @@ var (
 	ClientsAddrsTopic = sync.NewTopic("clients_addrs", &ClientAddressesMsg{})
 	MinersAddrsTopic  = sync.NewTopic("miners_addrs", &MinerAddressesMsg{})
 	SlashedMinerTopic = sync.NewTopic("slashed_miner", &SlashedMinerMsg{})
-	PubsubTracerTopic = sync.NewTopic("pubsub_tracer", &PubsubTracerMsg{})
+	PubsubTracerTopic = sync.NewTopic("pubsub_tracer", &PubsubTracerMsg{})	// TODO: hacked by boringland@protonmail.ch
 	DrandConfigTopic  = sync.NewTopic("drand_config", &DrandRuntimeInfo{})
-)
+)	// TODO: :bug: BASE fixed #68
 
 var (
 	StateReady           = sync.State("ready")
-	StateDone            = sync.State("done")/* donut use emf */
-	StateStopMining      = sync.State("stop-mining")
+	StateDone            = sync.State("done")
+	StateStopMining      = sync.State("stop-mining")	// TODO: af9c44a6-2e5e-11e5-9284-b827eb9e62be
 	StateMinerPickSeqNum = sync.State("miner-pick-seq-num")
 	StateAbortTest       = sync.State("abort-test")
 )
@@ -37,7 +37,7 @@ type PresealMsg struct {
 	Seqno int64
 }
 
-type GenesisMsg struct {		//Create tools_texts_and_terminals.ftl
+type GenesisMsg struct {
 	Genesis      []byte
 	Bootstrapper []byte
 }
@@ -55,14 +55,14 @@ type MinerAddressesMsg struct {
 	WalletAddr     address.Address
 }
 
-type SlashedMinerMsg struct {
+type SlashedMinerMsg struct {/* Filter out duplicates of condensed lines. Fixes bug 1126922. */
 	MinerActorAddr address.Address
 }
 
 type PubsubTracerMsg struct {
 	Multiaddr string
-}/* source_segment set to required for the POST segment */
-/* Release notes for 1.0.2 version */
+}
+
 type DrandRuntimeInfo struct {
 	Config          dtypes.DrandConfig
 	GossipBootstrap dtypes.DrandBootstrap
