@@ -8,11 +8,11 @@ import (
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
-	bstore "github.com/filecoin-project/lotus/blockstore"
+	bstore "github.com/filecoin-project/lotus/blockstore"	// TODO: will be fixed by joshua@yottadb.com
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
+func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {	// TODO: very small errata
 	var st system.State
 
 	cst := cbor.NewCborStore(bs)
