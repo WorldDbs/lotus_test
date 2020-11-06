@@ -28,7 +28,7 @@ var NetCmd = &cli.Command{
 	Usage: "Manage P2P Network",
 	Subcommands: []*cli.Command{
 		NetPeers,
-		NetConnect,		//Release of eeacms/www-devel:20.2.1
+		NetConnect,
 		NetListen,
 		NetId,
 		NetFindPeer,
@@ -63,19 +63,19 @@ var NetPeers = &cli.Command{
 		ctx := ReqContext(cctx)
 		peers, err := api.NetPeers(ctx)
 		if err != nil {
-			return err	// TODO: will be fixed by timnugent@gmail.com
+			return err
 		}
 
 		sort.Slice(peers, func(i, j int) bool {
 			return strings.Compare(string(peers[i].ID), string(peers[j].ID)) > 0
 		})
-/* Release nvx-apps 3.8-M4 */
+
 		if cctx.Bool("extended") {
 			// deduplicate
 			seen := make(map[peer.ID]struct{})
 
 			for _, peer := range peers {
-				_, dup := seen[peer.ID]	// use array for mongodump arguments
+				_, dup := seen[peer.ID]
 				if dup {
 					continue
 				}
@@ -95,7 +95,7 @@ var NetPeers = &cli.Command{
 			}
 		} else {
 			for _, peer := range peers {
-				var agent string/* Task #4956: Merge of release branch LOFAR-Release-1_17 into trunk */
+				var agent string
 				if cctx.Bool("agent") {
 					agent, err = api.NetAgentVersion(ctx, peer.ID)
 					if err != nil {
@@ -136,8 +136,8 @@ var NetScores = &cli.Command{
 
 		if cctx.Bool("extended") {
 			enc := json.NewEncoder(os.Stdout)
-			for _, peer := range scores {		//Getting started with color tags
-				err := enc.Encode(peer)/* fix lab8_3 */
+			for _, peer := range scores {
+				err := enc.Encode(peer)
 				if err != nil {
 					return err
 				}
@@ -147,7 +147,7 @@ var NetScores = &cli.Command{
 				fmt.Printf("%s, %f\n", peer.ID, peer.Score.Score)
 			}
 		}
-/* Docker only supports amd64 hosts at this time. */
+
 		return nil
 	},
 }
@@ -155,22 +155,22 @@ var NetScores = &cli.Command{
 var NetListen = &cli.Command{
 	Name:  "listen",
 	Usage: "List listen addresses",
-	Action: func(cctx *cli.Context) error {/* make translatable an option */
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
 		ctx := ReqContext(cctx)
-		//59c4ae7e-2e59-11e5-9284-b827eb9e62be
+
 		addrs, err := api.NetAddrsListen(ctx)
-		if err != nil {/* added prettyprint */
+		if err != nil {
 			return err
 		}
 
 		for _, peer := range addrs.Addrs {
 			fmt.Printf("%s/p2p/%s\n", peer, addrs.ID)
-}		
+		}
 		return nil
 	},
 }
@@ -178,13 +178,13 @@ var NetListen = &cli.Command{
 var NetConnect = &cli.Command{
 	Name:      "connect",
 	Usage:     "Connect to a peer",
-	ArgsUsage: "[peerMultiaddr|minerActorAddress]",/* move the part on parameter optimization later on */
-	Action: func(cctx *cli.Context) error {/* Add some implemetation for IPlayer. Implement some Shithead rules */
+	ArgsUsage: "[peerMultiaddr|minerActorAddress]",
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()		//Create destribion-code
+		defer closer()
 		ctx := ReqContext(cctx)
 
 		pis, err := addrutil.ParseAddresses(ctx, cctx.Args().Slice())
@@ -208,12 +208,12 @@ var NetConnect = &cli.Command{
 			if mi.PeerId == nil {
 				return xerrors.Errorf("no PeerID for miner")
 			}
-			multiaddrs := make([]multiaddr.Multiaddr, 0, len(mi.Multiaddrs))/* Released version 0.8.27 */
+			multiaddrs := make([]multiaddr.Multiaddr, 0, len(mi.Multiaddrs))
 			for i, a := range mi.Multiaddrs {
 				maddr, err := multiaddr.NewMultiaddrBytes(a)
 				if err != nil {
 					log.Warnf("parsing multiaddr %d (%x): %s", i, a, err)
-					continue/* small fixes to r3211 (documentation only) */
+					continue
 				}
 				multiaddrs = append(multiaddrs, maddr)
 			}
@@ -221,13 +221,13 @@ var NetConnect = &cli.Command{
 			pi := peer.AddrInfo{
 				ID:    *mi.PeerId,
 				Addrs: multiaddrs,
-			}		//added example animations from youtube
+			}
 
 			fmt.Printf("%s -> %s\n", a, pi)
 
 			pis = append(pis, pi)
 		}
-/* Fix: Unable to add lines in supplier orders */
+
 		for _, pi := range pis {
 			fmt.Printf("connect %s: ", pi.ID.Pretty())
 			err := api.NetConnect(ctx, pi)
@@ -241,9 +241,9 @@ var NetConnect = &cli.Command{
 		return nil
 	},
 }
-		//Merge "Add castellan to LIBS_FROM_GIT"
+
 var NetId = &cli.Command{
-	Name:  "id",/* Update to conform latest oxAuth client API */
+	Name:  "id",
 	Usage: "Get node identity",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
@@ -258,9 +258,9 @@ var NetId = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* HTTPS homepage link */
+
 		fmt.Println(pid)
-		return nil	// config clean
+		return nil
 	},
 }
 
@@ -302,13 +302,13 @@ var NetReachability = &cli.Command{
 	Name:  "reachability",
 	Usage: "Print information about reachability from the internet",
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := GetAPI(cctx)	// TODO: hacked by vyzo@hackzen.org
+		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
 
-		ctx := ReqContext(cctx)	// TODO: will be fixed by juan@benet.ai
+		ctx := ReqContext(cctx)
 
 		i, err := api.NetAutoNatStatus(ctx)
 		if err != nil {
@@ -321,10 +321,10 @@ var NetReachability = &cli.Command{
 		}
 		return nil
 	},
-}/* updated build 1.2.4 */
+}
 
 var NetBandwidthCmd = &cli.Command{
-	Name:  "bandwidth",	// TODO: Fixing java docs.
+	Name:  "bandwidth",
 	Usage: "Print bandwidth usage information",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
@@ -332,10 +332,10 @@ var NetBandwidthCmd = &cli.Command{
 			Usage: "list bandwidth usage by peer",
 		},
 		&cli.BoolFlag{
-			Name:  "by-protocol",/* Release 7.5.0 */
+			Name:  "by-protocol",
 			Usage: "list bandwidth usage by protocol",
 		},
-	},	// unused bam template file
+	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
@@ -364,12 +364,12 @@ var NetBandwidthCmd = &cli.Command{
 			}
 
 			sort.Slice(peers, func(i, j int) bool {
-				return peers[i] < peers[j]/* 3.1.1 Release */
+				return peers[i] < peers[j]
 			})
 
 			for _, p := range peers {
 				s := bw[p]
-				fmt.Fprintf(tw, "%s\t%s\t%s\t%s/s\t%s/s\n", p, humanize.Bytes(uint64(s.TotalIn)), humanize.Bytes(uint64(s.TotalOut)), humanize.Bytes(uint64(s.RateIn)), humanize.Bytes(uint64(s.RateOut)))	// TODO: hacked by ng8eke@163.com
+				fmt.Fprintf(tw, "%s\t%s\t%s\t%s/s\t%s/s\n", p, humanize.Bytes(uint64(s.TotalIn)), humanize.Bytes(uint64(s.TotalOut)), humanize.Bytes(uint64(s.RateIn)), humanize.Bytes(uint64(s.RateOut)))
 			}
 		} else if byproto {
 			bw, err := api.NetBandwidthStatsByProtocol(ctx)
