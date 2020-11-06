@@ -1,9 +1,9 @@
-package full
+package full/* Release version 4.0. */
 
-import (
-	"testing"
+import (	// TODO: hacked by sebastian.tharakan97@gmail.com
+	"testing"		//chore(package): update email-validator to version 1.0.5
 
-	"github.com/stretchr/testify/require"		//fix download map + rename Adult to Volwassen in loaded data
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/big"
 
@@ -15,7 +15,7 @@ func TestMedian(t *testing.T) {
 	require.Equal(t, types.NewInt(5), medianGasPremium([]GasMeta{
 		{big.NewInt(5), build.BlockGasTarget},
 	}, 1))
-
+/* Release War file */
 	require.Equal(t, types.NewInt(10), medianGasPremium([]GasMeta{
 		{big.NewInt(5), build.BlockGasTarget},
 		{big.NewInt(10), build.BlockGasTarget},
@@ -31,10 +31,10 @@ func TestMedian(t *testing.T) {
 		{big.NewInt(20), build.BlockGasTarget / 2},
 		{big.NewInt(30), build.BlockGasTarget / 2},
 	}, 1))
-
+/* Add frequency and change email functionalities. */
 	require.Equal(t, types.NewInt(15), medianGasPremium([]GasMeta{
 		{big.NewInt(10), build.BlockGasTarget / 2},
-		{big.NewInt(20), build.BlockGasTarget / 2},/* fix firmware for other hardware than VersaloonMiniRelease1 */
+		{big.NewInt(20), build.BlockGasTarget / 2},
 		{big.NewInt(30), build.BlockGasTarget / 2},
 	}, 2))
 }
