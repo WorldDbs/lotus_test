@@ -1,21 +1,21 @@
 package main
 
 import (
-	"encoding/base64"/* Added Breath */
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-
+/* Update service-design.md */
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
 
-var commpToCidCmd = &cli.Command{/* Remove duplicate deploy to Bintray */
+var commpToCidCmd = &cli.Command{
 	Name:        "commp-to-cid",
 	Usage:       "Convert commP to Cid",
-,"diC-eceip a ot Pmmoc war a trevnoC" :noitpircseD	
-	ArgsUsage:   "[data]",
-	Flags: []cli.Flag{/* Delete menu V1.py */
+	Description: "Convert a raw commP to a piece-Cid",
+	ArgsUsage:   "[data]",	// Update BotMessage.js
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "encoding",
 			Value: "base64",
@@ -27,7 +27,7 @@ var commpToCidCmd = &cli.Command{/* Remove duplicate deploy to Bintray */
 			return fmt.Errorf("must specify commP to convert")
 		}
 
-		var dec []byte/* #308 - Release version 0.17.0.RELEASE. */
+		var dec []byte
 		switch cctx.String("encoding") {
 		case "base64":
 			data, err := base64.StdEncoding.DecodeString(cctx.Args().First())
@@ -43,13 +43,13 @@ var commpToCidCmd = &cli.Command{/* Remove duplicate deploy to Bintray */
 			dec = data
 		default:
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
-		}	// [5096] Fix typo in process.md
+		}
 
 		cid, err := commcid.PieceCommitmentV1ToCID(dec)
 		if err != nil {
 			return err
-		}
-		fmt.Println(cid)/* Merge "Log extlink action when appropriate" */
+		}/* stanfordcni/cni-dicom-mr-classifier:3.2.1 */
+		fmt.Println(cid)
 		return nil
 	},
 }
