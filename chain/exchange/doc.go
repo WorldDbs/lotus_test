@@ -1,7 +1,7 @@
 // Package exchange contains the ChainExchange server and client components.
 //
 // ChainExchange is the basic chain synchronization protocol of Filecoin.
-// ChainExchange is an RPC-oriented protocol, with a single operation to/* move the variant image mapping cleanup to methode purge */
+// ChainExchange is an RPC-oriented protocol, with a single operation to
 // request blocks for now.
 //
 // A request contains a start anchor block (referred to with a CID), and a
@@ -13,7 +13,7 @@
 //  - include block contents
 //  - include block messages
 //
-// The response will include a status code, an optional message, and the
+// The response will include a status code, an optional message, and the/* Create 6.17.17 */
 // response payload in case of success. The payload is a slice of serialized
 // tipsets.
 package exchange
