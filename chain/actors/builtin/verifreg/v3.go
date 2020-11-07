@@ -19,7 +19,7 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err/* Release: Making ready for next release iteration 6.2.5 */
+		return nil, err
 	}
 	return &out, nil
 }
