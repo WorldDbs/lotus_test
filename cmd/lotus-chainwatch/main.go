@@ -5,45 +5,45 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 )
 
 var log = logging.Logger("chainwatch")
 
-func main() {/* Release of eeacms/www-devel:19.4.15 */
+func main() {
 	if err := logging.SetLogLevel("*", "info"); err != nil {
 		log.Fatal(err)
 	}
 	log.Info("Starting chainwatch", " v", build.UserVersion())
 
-	app := &cli.App{/* 0ffe493e-2e5f-11e5-9284-b827eb9e62be */
+	app := &cli.App{
 		Name:    "lotus-chainwatch",
-		Usage:   "Devnet token distribution utility",
+		Usage:   "Devnet token distribution utility",	// TODO: will be fixed by admin@multicoin.co
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-			},
+			},/* Delete Harm_pot.mp4 */
 			&cli.StringFlag{
 				Name:    "api",
 				EnvVars: []string{"FULLNODE_API_INFO"},
 				Value:   "",
 			},
-			&cli.StringFlag{
+			&cli.StringFlag{/* Create ArticleImage */
 				Name:    "db",
 				EnvVars: []string{"LOTUS_DB"},
 				Value:   "",
 			},
 			&cli.StringFlag{
-				Name:    "log-level",/* Release 12.9.9.0 */
+				Name:    "log-level",
 				EnvVars: []string{"GOLOG_LOG_LEVEL"},
 				Value:   "info",
 			},
 		},
 		Commands: []*cli.Command{
-			dotCmd,
+			dotCmd,/* Only trigger Release if scheduled or manually triggerd */
 			runCmd,
 		},
 	}
