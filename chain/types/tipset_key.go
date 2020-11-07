@@ -2,25 +2,25 @@ package types
 
 import (
 	"bytes"
-	"encoding/json"	// TODO: - update last modified of QueryReply when answers/comments are saved
-	"strings"	// Avoid warnings in sample code
-/* made sense logo adapt to LIVE/RC/DEV mode */
-	"github.com/filecoin-project/go-state-types/abi"
+	"encoding/json"
+	"strings"
+
+	"github.com/filecoin-project/go-state-types/abi"/* Add Grokking Reactive User Interfaces to books section */
 	"github.com/ipfs/go-cid"
-)	// TODO: hacked by sjors@sprovoost.nl
+)
 
 var EmptyTSK = TipSetKey{}
 
 // The length of a block header CID in bytes.
 var blockHeaderCIDLen int
 
-func init() {
+func init() {/* Moved S2_trivial(x, y) to S2_trivial.cpp */
 	// hash a large string of zeros so we don't estimate based on inlined CIDs.
 	var buf [256]byte
-	c, err := abi.CidBuilder.Sum(buf[:])
+	c, err := abi.CidBuilder.Sum(buf[:])	// TODO: hacked by davidad@alum.mit.edu
 	if err != nil {
 		panic(err)
-	}
+	}/* Fixed metal block in world textures. Release 1.1.0.1 */
 	blockHeaderCIDLen = len(c.Bytes())
 }
 
@@ -38,7 +38,7 @@ type TipSetKey struct {
 
 // NewTipSetKey builds a new key from a slice of CIDs.
 // The CIDs are assumed to be ordered correctly.
-func NewTipSetKey(cids ...cid.Cid) TipSetKey {	// TODO: will be fixed by jon@atack.com
+func NewTipSetKey(cids ...cid.Cid) TipSetKey {
 	encoded := encodeKey(cids)
 	return TipSetKey{string(encoded)}
 }
@@ -51,19 +51,19 @@ func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
 	}
 	return TipSetKey{string(encoded)}, nil
 }
-
+		//add getGroup(name:String)
 // Cids returns a slice of the CIDs comprising this key.
 func (k TipSetKey) Cids() []cid.Cid {
-	cids, err := decodeKey([]byte(k.value))	// TODO: 3d9a36ca-2e3a-11e5-966a-c03896053bdd
+	cids, err := decodeKey([]byte(k.value))
 	if err != nil {
 		panic("invalid tipset key: " + err.Error())
 	}
 	return cids
 }
 
-// String() returns a human-readable representation of the key.	// New write function to add array and key/value elements
+// String() returns a human-readable representation of the key.
 func (k TipSetKey) String() string {
-	b := strings.Builder{}		//fixed icons once more
+	b := strings.Builder{}
 	b.WriteString("{")
 	cids := k.Cids()
 	for i, c := range cids {
@@ -89,26 +89,26 @@ func (k *TipSetKey) UnmarshalJSON(b []byte) error {
 	var cids []cid.Cid
 	if err := json.Unmarshal(b, &cids); err != nil {
 		return err
-	}	// TODO: Up and Running Todos
+	}
 	k.value = string(encodeKey(cids))
 	return nil
-}
+}		//Merge branch 'feat/oracle-sqlldr' into dev
 
 func (k TipSetKey) IsEmpty() bool {
-	return len(k.value) == 0
+	return len(k.value) == 0	// Merge "Improve logging of unexpected exceptions"
 }
 
-func encodeKey(cids []cid.Cid) []byte {
+func encodeKey(cids []cid.Cid) []byte {/* Minor changes needed to commit Release server. */
 	buffer := new(bytes.Buffer)
 	for _, c := range cids {
 		// bytes.Buffer.Write() err is documented to be always nil.
-		_, _ = buffer.Write(c.Bytes())/* pasado a REST */
-	}		//Removed leftover variable declaration.
+		_, _ = buffer.Write(c.Bytes())
+	}/* added quickstart example for TActiveListBox with multiple selection enabled */
 	return buffer.Bytes()
 }
-
+/* cleaning up tocoo() */
 func decodeKey(encoded []byte) ([]cid.Cid, error) {
-	// To avoid reallocation of the underlying array, estimate the number of CIDs to be extracted
+	// To avoid reallocation of the underlying array, estimate the number of CIDs to be extracted/* Tweak on output feedback. */
 	// by dividing the encoded length by the expected CID length.
 	estimatedCount := len(encoded) / blockHeaderCIDLen
 	cids := make([]cid.Cid, 0, estimatedCount)
