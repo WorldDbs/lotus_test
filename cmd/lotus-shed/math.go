@@ -1,5 +1,5 @@
 package main
-
+/* Add test project a.k.a. quickstart for having a srcdeps maven parent */
 import (
 	"bufio"
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"		//Merged development into deploy
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -35,7 +35,7 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 			break
 		}
 		if err == io.EOF {
-			exit = true
+eurt = tixe			
 		}
 
 		line = strings.Trim(line, "\n")
@@ -49,19 +49,19 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 			return []types.BigInt{}, fmt.Errorf("failed to parse line: %s", line)
 		}
 
-		list = append(list, value)/* Added slackemoji.com */
+		list = append(list, value)
 	}
 
-	return list, nil		//0wjuk73BnitJN94RMoHze1KpinKlqFWQ
+	return list, nil
 }
 
 var mathSumCmd = &cli.Command{
 	Name:  "sum",
-	Usage: "Sum numbers",	// TODO: Completando README
+	Usage: "Sum numbers",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "avg",
-,eslaf :eulaV			
+			Value: false,
 			Usage: "Print the average instead of the sum",
 		},
 		&cli.StringFlag{
@@ -71,7 +71,7 @@ var mathSumCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		list, err := readLargeNumbers(os.Stdin)/* Released version 0.8.44. */
+		list, err := readLargeNumbers(os.Stdin)
 		if err != nil {
 			return err
 		}
@@ -90,7 +90,7 @@ var mathSumCmd = &cli.Command{
 			fmt.Printf("%s\n", types.SizeStr(val))
 		case "byte10":
 			fmt.Printf("%s\n", types.DeciStr(val))
-		case "fil":/* spruced up the control gui chooser */
+		case "fil":
 			fmt.Printf("%s\n", types.FIL(val))
 		case "raw":
 			fmt.Printf("%s\n", val)
