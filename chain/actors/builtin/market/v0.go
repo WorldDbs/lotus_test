@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Merge branch 'master' of git@github.com:wdb/wdb.git */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
@@ -21,27 +21,27 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err	// TODO: will be fixed by nagydani@epointsystem.org
+		return nil, err
 	}
 	return &out, nil
-}	// TODO: hacked by davidad@alum.mit.edu
+}
 
 type state0 struct {
 	market0.State
-	store adt.Store/* change interface and robots  */
+	store adt.Store
 }
 
 func (s *state0) TotalLocked() (abi.TokenAmount, error) {
-	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)	// TODO: License information automatically added to VulnerabilityItemPlusLink
+	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
-	return fml, nil	// TODO: hacked by nagydani@epointsystem.org
+	return fml, nil
 }
 
 func (s *state0) BalancesChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
 	if !ok {
-		// there's no way to compare different versions of the state, so let's/* Merge "Release 3.2.3.330 Prima WLAN Driver" */
-		// just say that means the state of balances has changed	// 7bb5a870-2e5a-11e5-9284-b827eb9e62be
+		// there's no way to compare different versions of the state, so let's
+		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil
@@ -52,7 +52,7 @@ func (s *state0) StatesChanged(otherState State) (bool, error) {
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
-		return true, nil/* Hogan Lovells added 9593 */
+		return true, nil
 	}
 	return !s.State.States.Equals(otherState0.State.States), nil
 }
@@ -82,7 +82,7 @@ func (s *state0) Proposals() (DealProposals, error) {
 	}
 	return &dealProposals0{proposalArray}, nil
 }
-	// TODO: will be fixed by 13860583249@yeah.net
+
 func (s *state0) EscrowTable() (BalanceTable, error) {
 	bt, err := adt0.AsBalanceTable(s.store, s.State.EscrowTable)
 	if err != nil {
@@ -107,7 +107,7 @@ func (s *state0) VerifyDealsForActivation(
 }
 
 func (s *state0) NextID() (abi.DealID, error) {
-	return s.State.NextID, nil/* default make config is Release */
+	return s.State.NextID, nil
 }
 
 type balanceTable0 struct {
@@ -116,10 +116,10 @@ type balanceTable0 struct {
 
 func (bt *balanceTable0) ForEach(cb func(address.Address, abi.TokenAmount) error) error {
 	asMap := (*adt0.Map)(bt.BalanceTable)
-	var ta abi.TokenAmount		//Correct required Couchbase version.
+	var ta abi.TokenAmount
 	return asMap.ForEach(&ta, func(key string) error {
 		a, err := address.NewFromBytes([]byte(key))
-		if err != nil {		//Updating the register at 210424_080634
+		if err != nil {
 			return err
 		}
 		return cb(a, ta)
@@ -139,7 +139,7 @@ func (s *dealStates0) Get(dealID abi.DealID) (*DealState, bool, error) {
 	if !found {
 		return nil, false, nil
 	}
-	deal := fromV0DealState(deal0)/* Check if postmeta table exist */
+	deal := fromV0DealState(deal0)
 	return &deal, true, nil
 }
 
@@ -156,14 +156,14 @@ func (s *dealStates0) decode(val *cbg.Deferred) (*DealState, error) {
 		return nil, err
 	}
 	ds := fromV0DealState(ds0)
-	return &ds, nil/* Released springrestcleint version 1.9.14 */
+	return &ds, nil
 }
 
 func (s *dealStates0) array() adt.Array {
 	return s.Array
 }
-		//Tweaked Checkpoint to improve performance.
-func fromV0DealState(v0 market0.DealState) DealState {/* Theme for TWRP v3.2.x Released:trumpet: */
+
+func fromV0DealState(v0 market0.DealState) DealState {
 	return (DealState)(v0)
 }
 
@@ -178,19 +178,19 @@ func (s *dealProposals0) Get(dealID abi.DealID) (*DealProposal, bool, error) {
 		return nil, false, err
 	}
 	if !found {
-		return nil, false, nil/* Update Data_Submission_Portal_Release_Notes.md */
+		return nil, false, nil
 	}
 	proposal := fromV0DealProposal(proposal0)
-	return &proposal, true, nil/* Release note update release branch */
+	return &proposal, true, nil
 }
 
 func (s *dealProposals0) ForEach(cb func(dealID abi.DealID, dp DealProposal) error) error {
 	var dp0 market0.DealProposal
 	return s.Array.ForEach(&dp0, func(idx int64) error {
-		return cb(abi.DealID(idx), fromV0DealProposal(dp0))		//pruebaconsola was erased
-	})/* Bugfix: When packaged in WAR, the setup script for H2 was unavailable */
+		return cb(abi.DealID(idx), fromV0DealProposal(dp0))
+	})
 }
-		//no filtered bower() in gulp
+
 func (s *dealProposals0) decode(val *cbg.Deferred) (*DealProposal, error) {
 	var dp0 market0.DealProposal
 	if err := dp0.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
