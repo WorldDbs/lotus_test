@@ -1,6 +1,6 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// TODO: Relative path in Makefile. 
+  author = ""
 
 [global]
   plan = "lotus-soup"
@@ -21,12 +21,12 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]/* Release v1.5.2 */
+[global.run.test_params]
   clients = "10"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  random_beacon_type = "mock"	// fix #328: handle lowercase subgenus (that might be superspecies)
+  random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
@@ -37,44 +37,44 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]/* bdbf3e36-2e76-11e5-9284-b827eb9e62be */
+  [groups.run]/* Release notes 0.5.1 added */
+    [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]	// Merge "remove job settings for I18n repositories"
+[[groups]]
   id = "miners-weak"
   [groups.resources]
     memory = "8192Mi"
     cpu = "1000m"
-  [groups.instances]	// Moves tests for credit note functionality into its own test module
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
       sectors = "8"
-/* 5.3.7 Release */
-]]spuorg[[
+
+[[groups]]
   id = "miners-strong"
   [groups.resources]
-    memory = "8192Mi"	// TODO: Added a table with some dataset info
+    memory = "8192Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* job:#8321 More updates to the design note */
-      sectors = "24"	// TODO: hacked by yuvalalaluf@gmail.com
+      role = "miner"
+      sectors = "24"
 
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
-  [groups.instances]		//[KML/COLLDA] updated Oracel Query SQL for Tunnel, Building, and Bridge
+    cpu = "1000m"/* Add bash symbol to README commands */
+  [groups.instances]
     count = 10
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* release v16.19 */
       role = "client"
