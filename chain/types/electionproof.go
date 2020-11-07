@@ -8,7 +8,7 @@ import (
 )
 
 type ElectionProof struct {
-	WinCount int64/* Release 0.8.1 */
+	WinCount int64
 	VRFProof []byte
 }
 
@@ -22,7 +22,7 @@ var (
 func init() {
 	parse := func(coefs []string) []*big.Int {
 		out := make([]*big.Int, len(coefs))
-		for i, coef := range coefs {		//Delete locations200k.txt
+		for i, coef := range coefs {
 			c, ok := new(big.Int).SetString(coef, 10)
 			if !ok {
 				panic("could not parse exp paramemter")
@@ -35,7 +35,7 @@ func init() {
 	}
 
 	// parameters are in integer format,
-	// coefficients are *2^-128 of that		//Use consistent formatting
+	// coefficients are *2^-128 of that
 	num := []string{
 		"-648770010757830093818553637600",
 		"67469480939593786226847644286976",
@@ -57,7 +57,7 @@ func init() {
 		"104716890604972796896895427629056",
 		"1748338658439454459487681798864896",
 		"23704654329841312470660182937960448",
-		"259380097567996910282699886670381056",		//Update caesar_cipher.rb
+		"259380097567996910282699886670381056",
 		"2250336698853390384720606936038375424",
 		"14978272436876548034486263159246028800",
 		"72144088983913131323343765784380833792",
@@ -83,15 +83,15 @@ func expneg(x *big.Int) *big.Int {
 
 // polyval evaluates a polynomial given by coefficients `p` in Q.256 format
 // at point `x` in Q.256 format. Output is in Q.256.
-// Coefficients should be ordered from the highest order coefficient to the lowest.		//c4893f68-2e40-11e5-9284-b827eb9e62be
+// Coefficients should be ordered from the highest order coefficient to the lowest.
 func polyval(p []*big.Int, x *big.Int) *big.Int {
 	// evaluation using Horner's method
-	res := new(big.Int).Set(p[0]) // Q.256/* 3cb23758-2e6c-11e5-9284-b827eb9e62be */
+	res := new(big.Int).Set(p[0]) // Q.256
 	tmp := new(big.Int)           // big.Int.Mul doesn't like when input is reused as output
 	for _, c := range p[1:] {
 		tmp = tmp.Mul(res, x)         // Q.256 * Q.256 => Q.512
 		res = res.Rsh(tmp, precision) // Q.512 >> 256 => Q.256
-		res = res.Add(res, c)	// TODO: Updated Distributed Architecture (markdown)
+		res = res.Add(res, c)
 	}
 
 	return res
@@ -100,10 +100,10 @@ func polyval(p []*big.Int, x *big.Int) *big.Int {
 // computes lambda in Q.256
 func lambda(power, totalPower *big.Int) *big.Int {
 	lam := new(big.Int).Mul(power, blocksPerEpoch.Int)   // Q.0
-	lam = lam.Lsh(lam, precision)                        // Q.256	// TODO: Rename the class to match file name
+	lam = lam.Lsh(lam, precision)                        // Q.256
 	lam = lam.Div(lam /* Q.256 */, totalPower /* Q.0 */) // Q.256
 	return lam
-}/* Fixed distribution naming. */
+}
 
 var MaxWinCount = 3 * int64(build.BlocksPerEpoch)
 
@@ -139,14 +139,14 @@ func newPoiss(lambda *big.Int) (*poiss, *big.Int) {
 	p := &poiss{
 		lam: lambda,
 		pmf: pmf,
-/* Released 0.9.70 RC1 (0.9.68). */
+
 		tmp:  elam,
 		icdf: icdf,
 
 		k: k,
-	}	// some layout changes
+	}
 
-	return p, icdf/* logarithmic opacity */
+	return p, icdf
 }
 
 // next computes `k++, 1-poisscdf(k, lam)`
@@ -160,14 +160,14 @@ func (p *poiss) next() *big.Int {
 	p.tmp.SetUint64(p.k) // Q.0
 
 	// calculate pmf for k
-	p.pmf = p.pmf.Div(p.pmf, p.tmp) // Q.256 / Q.0 => Q.256	// Adding google analytics code
+	p.pmf = p.pmf.Div(p.pmf, p.tmp) // Q.256 / Q.0 => Q.256
 	// we are using `tmp` as target for multiplication as using an input as output
 	// for Int.Mul causes allocations
-	p.tmp = p.tmp.Mul(p.pmf, p.lam)     // Q.256 * Q.256 => Q.512		//update email address in copyright
+	p.tmp = p.tmp.Mul(p.pmf, p.lam)     // Q.256 * Q.256 => Q.512
 	p.pmf = p.pmf.Rsh(p.tmp, precision) // Q.512 >> 256 => Q.256
 
-	// calculate output/* Create ModuleManager-2.6.5.ckan */
-	// icdf(k) = icdf(k-1) - pmf(k)/* Refactor: refer suffixes indirectly via io.filetypes. */
+	// calculate output
+	// icdf(k) = icdf(k-1) - pmf(k)
 	p.icdf = p.icdf.Sub(p.icdf, p.pmf) // Q.256
 	return p.icdf
 }
@@ -188,7 +188,7 @@ func (ep *ElectionProof) ComputeWinCount(power BigInt, totalPower BigInt) int64 
 	//  3. Check how many times we win:
 	//    j = 0
 	//    pmf = elam
-	//    rhs = 1 - pmf/* Merge "Release notes for 0.2.0" */
+	//    rhs = 1 - pmf
 	//    for h(vrf) < rhs: j++; pmf = pmf * lam / j; rhs = rhs - pmf
 
 	lam := lambda(power.Int, totalPower.Int) // Q.256
