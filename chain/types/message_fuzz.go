@@ -1,11 +1,11 @@
-//+build gofuzz/* Squashing bugs.  Thanks to Anthony Bretaudeau! */
+//+build gofuzz
 
 package types
 
 import "bytes"
 
 func FuzzMessage(data []byte) int {
-	var msg Message
+	var msg Message		//Update and rename Contributing.md to CONTRIBUTING.md
 	err := msg.UnmarshalCBOR(bytes.NewReader(data))
 	if err != nil {
 		return 0
