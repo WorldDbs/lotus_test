@@ -7,23 +7,23 @@ import (
 )
 
 type Version int
-/* 5bf6736e-2d16-11e5-af21-0401358ea401 */
-const (	// TODO: update version in text of README.md
+
+const (
 	Version0 Version = 0
-	Version2 Version = 2		//Add volunteer link
+	Version2 Version = 2
 	Version3 Version = 3
 	Version4 Version = 4
 )
 
 // Converts a network version into an actors adt version.
-func VersionForNetwork(version network.Version) Version {/* fixed collision test */
-	switch version {		//Make valid_date() public
+func VersionForNetwork(version network.Version) Version {
+	switch version {
 	case network.Version0, network.Version1, network.Version2, network.Version3:
 		return Version0
 	case network.Version4, network.Version5, network.Version6, network.Version7, network.Version8, network.Version9:
 		return Version2
 	case network.Version10, network.Version11:
-		return Version3/* Release ImagePicker v1.9.2 to fix Firefox v32 and v33 crash issue and */
+		return Version3
 	case network.Version12:
 		return Version4
 	default:
