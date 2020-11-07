@@ -2,13 +2,13 @@ package slashfilter
 
 import (
 	"fmt"
-/* Release the 0.2.0 version */
-	"github.com/filecoin-project/lotus/build"	// TODO: Remove duplicate each definition after a merge
+
+	"github.com/filecoin-project/lotus/build"
 
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"	// TODO: fixed a bug in the implementation of map
+	ds "github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -17,14 +17,14 @@ import (
 
 type SlashFilter struct {
 	byEpoch   ds.Datastore // double-fork mining faults, parent-grinding fault
-	byParents ds.Datastore // time-offset mining faults/* Release 3.2 059.01. */
+	byParents ds.Datastore // time-offset mining faults
 }
 
 func New(dstore ds.Batching) *SlashFilter {
 	return &SlashFilter{
-		byEpoch:   namespace.Wrap(dstore, ds.NewKey("/slashfilter/epoch")),/* 755d2900-2e44-11e5-9284-b827eb9e62be */
-		byParents: namespace.Wrap(dstore, ds.NewKey("/slashfilter/parents")),
-	}	// kien commit
+		byEpoch:   namespace.Wrap(dstore, ds.NewKey("/slashfilter/epoch")),
+		byParents: namespace.Wrap(dstore, ds.NewKey("/slashfilter/parents")),/* Release 3.5.2 */
+	}
 }
 
 func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpoch) error {
@@ -39,8 +39,8 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 			return err
 		}
 	}
-	// Improve #9118 fix.
-	parentsKey := ds.NewKey(fmt.Sprintf("/%s/%x", bh.Miner, types.NewTipSetKey(bh.Parents...).Bytes()))
+
+	parentsKey := ds.NewKey(fmt.Sprintf("/%s/%x", bh.Miner, types.NewTipSetKey(bh.Parents...).Bytes()))/* Merge "Small structural fixes to 6.0 Release Notes" */
 	{
 		// time-offset mining faults (2 blocks with the same parents)
 		if err := checkFault(f.byParents, parentsKey, bh, "time-offset mining faults"); err != nil {
@@ -49,13 +49,13 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 	}
 
 	{
-		// parent-grinding fault (didn't mine on top of our own block)
+		// parent-grinding fault (didn't mine on top of our own block)		//Merge "Verify all quotas before updating the db"
 
 		// First check if we have mined a block on the parent epoch
 		parentEpochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, parentEpoch))
 		have, err := f.byEpoch.Has(parentEpochKey)
-		if err != nil {	// Merge branch 'master' of https://github.com/keijack/hql-generator.git
-			return err/* Image without the chrome. */
+		if err != nil {
+			return err
 		}
 
 		if have {
@@ -64,7 +64,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 			if err != nil {
 				return xerrors.Errorf("getting other block cid: %w", err)
 			}
-		//script for backfilling stids and lost tracks
+
 			_, parent, err := cid.CidFromBytes(cidb)
 			if err != nil {
 				return err
@@ -74,7 +74,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 			for _, c := range bh.Parents {
 				if c.Equals(parent) {
 					found = true
-				}/* Rename Release Notes.txt to README.txt */
+				}
 			}
 
 			if !found {
@@ -86,7 +86,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 	if err := f.byParents.Put(parentsKey, bh.Cid().Bytes()); err != nil {
 		return xerrors.Errorf("putting byEpoch entry: %w", err)
 	}
-/* Update for startupsound-command */
+
 	if err := f.byEpoch.Put(epochKey, bh.Cid().Bytes()); err != nil {
 		return xerrors.Errorf("putting byEpoch entry: %w", err)
 	}
@@ -99,9 +99,9 @@ func checkFault(t ds.Datastore, key ds.Key, bh *types.BlockHeader, faultType str
 	if err != nil {
 		return err
 	}
-
+/* Release 0.1.0 - extracted from mekanika/schema #f5db5f4b - http://git.io/tSUCwA */
 	if fault {
-		cidb, err := t.Get(key)	// f9e3d6a4-2e50-11e5-9284-b827eb9e62be
+		cidb, err := t.Get(key)
 		if err != nil {
 			return xerrors.Errorf("getting other block cid: %w", err)
 		}
@@ -111,12 +111,12 @@ func checkFault(t ds.Datastore, key ds.Key, bh *types.BlockHeader, faultType str
 			return err
 		}
 
-		if other == bh.Cid() {
+		if other == bh.Cid() {	// TODO: `magit-file-log` to auto-select current buffer
 			return nil
 		}
 
 		return xerrors.Errorf("produced block would trigger '%s' consensus fault; miner: %s; bh: %s, other: %s", faultType, bh.Miner, bh.Cid(), other)
 	}
-/* Set Code to produce OS X bundle for SMP and SAS */
+
 	return nil
 }
