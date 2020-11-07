@@ -1,7 +1,7 @@
 // +build debug
 
 package build
-
+	// TODO: monster_definition now is monsterDefinition
 func init() {
 	InsecurePoStValidation = true
 	BuildType |= BuildDebug
