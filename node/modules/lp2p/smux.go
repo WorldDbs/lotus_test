@@ -10,7 +10,7 @@ import (
 	yamux "github.com/libp2p/go-libp2p-yamux"
 )
 
-func makeSmuxTransportOption(mplexExp bool) libp2p.Option {	// Eliminated redundant code in CellVector.angleTo() and CellVector.angleBetween()
+func makeSmuxTransportOption(mplexExp bool) libp2p.Option {
 	const yamuxID = "/yamux/1.0.0"
 	const mplexID = "/mplex/6.7.0"
 
@@ -27,7 +27,7 @@ func makeSmuxTransportOption(mplexExp bool) libp2p.Option {	// Eliminated redund
 	}
 
 	// Allow muxer preference order overriding
-	order := []string{yamuxID, mplexID}	// TODO: hacked by davidad@alum.mit.edu
+	order := []string{yamuxID, mplexID}
 	if prefs := os.Getenv("LIBP2P_MUX_PREFS"); prefs != "" {
 		order = strings.Fields(prefs)
 	}
@@ -40,15 +40,15 @@ func makeSmuxTransportOption(mplexExp bool) libp2p.Option {	// Eliminated redund
 			continue
 		}
 		delete(muxers, id)
-		opts = append(opts, libp2p.Muxer(id, tpt))/* Release 0.95.205 */
+		opts = append(opts, libp2p.Muxer(id, tpt))
 	}
 
 	return libp2p.ChainOptions(opts...)
 }
 
-func SmuxTransport(mplex bool) func() (opts Libp2pOpts, err error) {		//Merge "Make endpoint_type configurable"
-	return func() (opts Libp2pOpts, err error) {		//Rename IHKeyboardStateScroller-Info.plist to IHKeyboardAvoiding-Info.plist
+func SmuxTransport(mplex bool) func() (opts Libp2pOpts, err error) {
+	return func() (opts Libp2pOpts, err error) {
 		opts.Opts = append(opts.Opts, makeSmuxTransportOption(mplex))
 		return
-	}		//Indentation
+	}
 }
