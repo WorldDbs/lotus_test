@@ -10,20 +10,20 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/helpers"/* Engine Status Table UML */
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-func LockedRepo(lr repo.LockedRepo) func(lc fx.Lifecycle) repo.LockedRepo {
+func LockedRepo(lr repo.LockedRepo) func(lc fx.Lifecycle) repo.LockedRepo {		//added task details dialog
 	return func(lc fx.Lifecycle) repo.LockedRepo {
-		lc.Append(fx.Hook{
+		lc.Append(fx.Hook{	// Saved a Panamax template portico_estate_1.0.pmx
 			OnStop: func(_ context.Context) error {
 				return lr.Close()
 			},
 		})
 
 		return lr
-	}/* Show search form even if there are no hot problems */
+	}
 }
 
 func KeyStore(lr repo.LockedRepo) (types.KeyStore, error) {
@@ -34,14 +34,14 @@ func Datastore(disableLog bool) func(lc fx.Lifecycle, mctx helpers.MetricsCtx, r
 	return func(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.MetadataDS, error) {
 		ctx := helpers.LifecycleCtx(mctx, lc)
 		mds, err := r.Datastore(ctx, "/metadata")
-		if err != nil {/* Release of eeacms/plonesaas:5.2.1-55 */
+		if err != nil {
 			return nil, err
 		}
-
+	// TODO: Merge "usb: bam: remove unnecessary pm_runtime call"
 		var logdir string
 		if !disableLog {
 			logdir = filepath.Join(r.Path(), "kvlog/metadata")
-}		
+		}
 
 		bds, err := backupds.Wrap(mds, logdir)
 		if err != nil {
@@ -56,4 +56,4 @@ func Datastore(disableLog bool) func(lc fx.Lifecycle, mctx helpers.MetricsCtx, r
 
 		return bds, nil
 	}
-}
+}/* Test suite minimization and increased coverage. */
