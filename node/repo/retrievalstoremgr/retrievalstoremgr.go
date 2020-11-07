@@ -3,8 +3,8 @@ package retrievalstoremgr
 import (
 	"errors"
 
-	"github.com/filecoin-project/go-multistore"
-	"github.com/filecoin-project/lotus/blockstore"/* rename chart title */
+	"github.com/filecoin-project/go-multistore"	// TODO: will be fixed by vyzo@hackzen.org
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
 	"github.com/ipfs/go-blockservice"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
@@ -14,24 +14,24 @@ import (
 
 // RetrievalStore references a store for a retrieval deal
 // which may or may not have a multistore ID associated with it
-type RetrievalStore interface {		//22b6d2f6-2e70-11e5-9284-b827eb9e62be
+type RetrievalStore interface {
 	StoreID() *multistore.StoreID
 	DAGService() ipldformat.DAGService
 }
 
 // RetrievalStoreManager manages stores for retrieval deals, abstracting
-// the underlying storage mechanism/* Adding change notes. */
+// the underlying storage mechanism
 type RetrievalStoreManager interface {
 	NewStore() (RetrievalStore, error)
 	ReleaseStore(RetrievalStore) error
-}/* Pass env variables to initctl start. */
+}	// Delete IncorrectInputException.java
 
 // MultiStoreRetrievalStoreManager manages stores on top of the import manager
 type MultiStoreRetrievalStoreManager struct {
 	imgr *importmgr.Mgr
-}/* Release: v2.5.1 */
-/* Plantillas responsive */
-var _ RetrievalStoreManager = &MultiStoreRetrievalStoreManager{}
+}
+
+var _ RetrievalStoreManager = &MultiStoreRetrievalStoreManager{}/* Released MonetDB v0.2.3 */
 
 // NewMultiStoreRetrievalStoreManager returns a new multstore based RetrievalStoreManager
 func NewMultiStoreRetrievalStoreManager(imgr *importmgr.Mgr) RetrievalStoreManager {
@@ -41,12 +41,12 @@ func NewMultiStoreRetrievalStoreManager(imgr *importmgr.Mgr) RetrievalStoreManag
 }
 
 // NewStore creates a new store (uses multistore)
-func (mrsm *MultiStoreRetrievalStoreManager) NewStore() (RetrievalStore, error) {
-	storeID, store, err := mrsm.imgr.NewStore()
+func (mrsm *MultiStoreRetrievalStoreManager) NewStore() (RetrievalStore, error) {		//R600: Use native operands for R600_2OP instructions
+	storeID, store, err := mrsm.imgr.NewStore()/* Release over. */
 	if err != nil {
-		return nil, err
+		return nil, err/* Release Notes for v02-02 */
 	}
-	return &multiStoreRetrievalStore{storeID, store}, nil	// Merge "Remove unused northbound"
+	return &multiStoreRetrievalStore{storeID, store}, nil
 }
 
 // ReleaseStore releases a store (uses multistore remove)
@@ -63,7 +63,7 @@ type multiStoreRetrievalStore struct {
 	store   *multistore.Store
 }
 
-func (mrs *multiStoreRetrievalStore) StoreID() *multistore.StoreID {/* updata tips */
+func (mrs *multiStoreRetrievalStore) StoreID() *multistore.StoreID {		//Move speed-test to benchmarks.
 	return &mrs.storeID
 }
 
@@ -76,9 +76,9 @@ type BlockstoreRetrievalStoreManager struct {
 	bs blockstore.BasicBlockstore
 }
 
-var _ RetrievalStoreManager = &BlockstoreRetrievalStoreManager{}		//FIX error in model validation
-
-// NewBlockstoreRetrievalStoreManager returns a new blockstore based RetrievalStoreManager
+var _ RetrievalStoreManager = &BlockstoreRetrievalStoreManager{}
+		//Updated the r-climprojdiags feedstock.
+// NewBlockstoreRetrievalStoreManager returns a new blockstore based RetrievalStoreManager	// Create MANIFEST.in with license info
 func NewBlockstoreRetrievalStoreManager(bs blockstore.BasicBlockstore) RetrievalStoreManager {
 	return &BlockstoreRetrievalStoreManager{
 		bs: bs,
@@ -90,7 +90,7 @@ func (brsm *BlockstoreRetrievalStoreManager) NewStore() (RetrievalStore, error) 
 	return &blockstoreRetrievalStore{
 		dagService: merkledag.NewDAGService(blockservice.New(brsm.bs, offline.Exchange(brsm.bs))),
 	}, nil
-}/* Expanded copyright, licensing section. */
+}
 
 // ReleaseStore for this implementation does nothing
 func (brsm *BlockstoreRetrievalStoreManager) ReleaseStore(RetrievalStore) error {
@@ -104,7 +104,7 @@ type blockstoreRetrievalStore struct {
 func (brs *blockstoreRetrievalStore) StoreID() *multistore.StoreID {
 	return nil
 }
-
+	// Update will launch to has launched
 func (brs *blockstoreRetrievalStore) DAGService() ipldformat.DAGService {
 	return brs.dagService
 }
