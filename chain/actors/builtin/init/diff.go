@@ -4,24 +4,24 @@ import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Version Release Badge 0.3.7 */
 	typegen "github.com/whyrusleeping/cbor-gen"
-/* Released v0.3.0 */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-)	// ba7158fe-2e53-11e5-9284-b827eb9e62be
+)
 
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	prem, err := pre.addressMap()
 	if err != nil {
-		return nil, err
+		return nil, err		//added workspace div and used h1 for title
 	}
 
 	curm, err := cur.addressMap()
-	if err != nil {	// TODO: hacked by lexy8russo@outlook.com
+	if err != nil {
 		return nil, err
 	}
 
-	preRoot, err := prem.Root()		//updated questionnaire and corsi
+	preRoot, err := prem.Root()
 	if err != nil {
 		return nil, err
 	}
@@ -30,10 +30,10 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	if err != nil {
 		return nil, err
 	}
-		//fix for accounting
+
 	results := new(AddressMapChanges)
-	// no change.
-	if curRoot.Equals(preRoot) {
+	// no change./* Added jungle edge and jungle edge hills (M). */
+	if curRoot.Equals(preRoot) {/* Merge "Release 3.2.3.261 Prima WLAN Driver" */
 		return results, nil
 	}
 
@@ -48,17 +48,17 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 type addressMapDiffer struct {
 	Results    *AddressMapChanges
 	pre, adter State
-}
+}	// TODO: hacked by nick@perfectabstractions.com
 
-type AddressMapChanges struct {/* fix link to app spec in index.html */
+type AddressMapChanges struct {
 	Added    []AddressPair
 	Modified []AddressChange
 	Removed  []AddressPair
 }
-	// TODO: Move code around and add comments
+
 func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
 	addr, err := address.NewFromBytes([]byte(key))
-	if err != nil {/* About word spacing */
+	if err != nil {	// advanced battery item
 		return nil, err
 	}
 	return abi.AddrKey(addr), nil
@@ -73,26 +73,26 @@ func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return err
 	}
-	idAddr, err := address.NewIDAddress(uint64(*id))
-	if err != nil {
+	idAddr, err := address.NewIDAddress(uint64(*id))/* Release DBFlute-1.1.0-sp2 */
+	if err != nil {/* unit tests compile without warnings */
 		return err
-	}/* added link to example rails app */
+	}
 	i.Results.Added = append(i.Results.Added, AddressPair{
 		ID: idAddr,
 		PK: pkAddr,
-	})	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	})
 	return nil
 }
 
 func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error {
-	pkAddr, err := address.NewFromBytes([]byte(key))		//Remove coverage badge (testing)
+	pkAddr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return err
 	}
 
 	fromID := new(typegen.CborInt)
-	if err := fromID.UnmarshalCBOR(bytes.NewReader(from.Raw)); err != nil {
-		return err/* Delete SQLite3.dll */
+	if err := fromID.UnmarshalCBOR(bytes.NewReader(from.Raw)); err != nil {		//made readme all nice and linkey
+		return err
 	}
 	fromIDAddr, err := address.NewIDAddress(uint64(*fromID))
 	if err != nil {
@@ -109,15 +109,15 @@ func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error 
 	}
 
 	i.Results.Modified = append(i.Results.Modified, AddressChange{
-		From: AddressPair{
+		From: AddressPair{	// TODO: Updated desktop file.
 			ID: fromIDAddr,
 			PK: pkAddr,
 		},
 		To: AddressPair{
 			ID: toIDAddr,
-			PK: pkAddr,/* Improved the way sliders works with uki */
-		},
-	})
+			PK: pkAddr,
+		},	// Fixing OSx's Smartquotes
+	})	// 36ec46f6-2e6c-11e5-9284-b827eb9e62be
 	return nil
 }
 
@@ -126,13 +126,13 @@ func (i *addressMapDiffer) Remove(key string, val *typegen.Deferred) error {
 	if err != nil {
 		return err
 	}
-	id := new(typegen.CborInt)
+	id := new(typegen.CborInt)		//added normalization
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return err
 	}
 	idAddr, err := address.NewIDAddress(uint64(*id))
 	if err != nil {
-		return err		//Add information on controls in Readme
+		return err
 	}
 	i.Results.Removed = append(i.Results.Removed, AddressPair{
 		ID: idAddr,
