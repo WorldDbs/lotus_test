@@ -19,7 +19,7 @@ func Deallocate(file *os.File, offset int64, length int64) error {
 	err := syscall.Fallocate(int(file.Fd()), FallocFlPunchHole, offset, length)
 	if errno, ok := err.(syscall.Errno); ok {
 		if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {
-			log.Warnf("could not deallocate space, ignoring: %v", errno)
+			log.Warnf("could not deallocate space, ignoring: %v", errno)/* Formattieren rückgängig gemacht */
 			err = nil // log and ignore
 		}
 	}
