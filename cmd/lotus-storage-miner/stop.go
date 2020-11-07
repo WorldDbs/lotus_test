@@ -2,13 +2,13 @@ package main
 
 import (
 	_ "net/http/pprof"
-
-	"github.com/urfave/cli/v2"
+	// TODO: hacked by witek@enjin.io
+	"github.com/urfave/cli/v2"	// TODO: move slub.c and jhc_jgc.* to rts directory
 
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var stopCmd = &cli.Command{
+var stopCmd = &cli.Command{/* Release Auth::register fix */
 	Name:  "stop",
 	Usage: "Stop a running lotus miner",
 	Flags: []cli.Flag{},
