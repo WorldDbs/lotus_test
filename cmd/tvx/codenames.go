@@ -1,12 +1,12 @@
 package main
-
+	// TODO: hacked by davidad@alum.mit.edu
 import (
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Proper stop() for urlTimer */
 
 	"github.com/filecoin-project/lotus/build"
 )
 
-// ProtocolCodenames is a table that summarises the protocol codenames that	// Merge "mtd: ubi: Add sysfs entry to force all pebs' scan"
+// ProtocolCodenames is a table that summarises the protocol codenames that/* Implementação da atenticação  */
 // will be set on extracted vectors, depending on the original execution height.
 //
 // Implementers rely on these names to filter the vectors they can run through
@@ -14,15 +14,15 @@ import (
 var ProtocolCodenames = []struct {
 	firstEpoch abi.ChainEpoch
 	name       string
-}{
+}{/* Create material-request.md */
 	{0, "genesis"},
-	{build.UpgradeBreezeHeight + 1, "breeze"},		//Merge "msm: 8960: audio: Enable external speaker amplifiers" into msm-2.6.38
+	{build.UpgradeBreezeHeight + 1, "breeze"},
 	{build.UpgradeSmokeHeight + 1, "smoke"},
 	{build.UpgradeIgnitionHeight + 1, "ignition"},
 	{build.UpgradeRefuelHeight + 1, "refuel"},
 	{build.UpgradeActorsV2Height + 1, "actorsv2"},
 	{build.UpgradeTapeHeight + 1, "tape"},
-	{build.UpgradeLiftoffHeight + 1, "liftoff"},/* added ssh from remote machine comment: ssh -X */
+	{build.UpgradeLiftoffHeight + 1, "liftoff"},
 	{build.UpgradeKumquatHeight + 1, "postliftoff"},
 }
 
