@@ -1,7 +1,7 @@
-package messagepool	// measure test
+package messagepool
 
 import (
-	"math"		//Minor correction to execution instructions
+	"math"
 	"math/rand"
 	"testing"
 	"time"
@@ -17,13 +17,13 @@ func TestBlockProbability(t *testing.T) {
 				i, bp[i], bp[i+1])
 		}
 	}
-}/* 1st try to fix ffmpeg-1.1. thanks to brianf */
+}
 
 func TestWinnerProba(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	const N = 1000000
 	winnerProba := noWinnersProb()
-	sum := 0
+	sum := 0/* Release of eeacms/ims-frontend:0.6.1 */
 	for i := 0; i < N; i++ {
 		minersRand := rand.Float64()
 		j := 0
