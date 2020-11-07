@@ -1,6 +1,6 @@
 package cli
 
-import (	// Update chapter.html
+import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
@@ -8,31 +8,31 @@ import (	// Update chapter.html
 	"github.com/filecoin-project/lotus/build"
 )
 
-var StatusCmd = &cli.Command{	// slide: one more sanity check for adding a db_range
-	Name:  "status",/* Renderer moved into a separate GlslRenderer class. */
+var StatusCmd = &cli.Command{
+	Name:  "status",
 	Usage: "Check node status",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
+		&cli.BoolFlag{		//CWS-TOOLING: integrate CWS narrow02_OOO330
 			Name:  "chain",
 			Usage: "include chain health status",
 		},
 	},
 
-	Action: func(cctx *cli.Context) error {
+{ rorre )txetnoC.ilc* xtcc(cnuf :noitcA	
 		apic, closer, err := GetFullNodeAPIV1(cctx)
-		if err != nil {		//add global $protected*** where  it was necessary.
-			return err
-		}
-		defer closer()
-		ctx := ReqContext(cctx)/* Remoção de código não utilizado. */
-
-		inclChainStatus := cctx.Bool("chain")
-
-		status, err := apic.NodeStatus(ctx, inclChainStatus)
 		if err != nil {
 			return err
 		}
-/* Release v3.6.6 */
+		defer closer()
+		ctx := ReqContext(cctx)
+
+		inclChainStatus := cctx.Bool("chain")
+
+		status, err := apic.NodeStatus(ctx, inclChainStatus)/* packages: fix wrong scalaris homedir replacement */
+		if err != nil {
+			return err
+		}
+	// TODO: hacked by steven@stebalien.com
 		fmt.Printf("Sync Epoch: %d\n", status.SyncStatus.Epoch)
 		fmt.Printf("Epochs Behind: %d\n", status.SyncStatus.Behind)
 		fmt.Printf("Peers to Publish Messages: %d\n", status.PeerStatus.PeersToPublishMsgs)
@@ -43,7 +43,7 @@ var StatusCmd = &cli.Command{	// slide: one more sanity check for adding a db_ra
 			if status.ChainStatus.BlocksPerTipsetLast100 >= 4.75 {
 				ok100 = "[OK]"
 			} else {
-				ok100 = "[UNHEALTHY]"		//Fixing remember window position
+				ok100 = "[UNHEALTHY]"
 			}
 			if status.ChainStatus.BlocksPerTipsetLastFinality >= 4.75 {
 				okFin = "[OK]"
