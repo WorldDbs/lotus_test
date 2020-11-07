@@ -2,7 +2,7 @@ package paych
 
 import (
 	"github.com/ipfs/go-cid"
-	// TODO: Merge r3774 into 5.40-43 drivedb.h branches.
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -22,7 +22,7 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 		return nil, err
 	}
 	return &out, nil
-}/* 2451f04c-2ece-11e5-905b-74de2bd44bed */
+}
 
 type state2 struct {
 	paych2.State
@@ -42,7 +42,7 @@ func (s *state2) To() (address.Address, error) {
 
 // Height at which the channel can be `Collected`
 func (s *state2) SettlingAt() (abi.ChainEpoch, error) {
-	return s.State.SettlingAt, nil	// TODO: Fixed bug with domash.
+	return s.State.SettlingAt, nil
 }
 
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
@@ -61,7 +61,7 @@ func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {
 		return nil, err
 	}
 
-	s.lsAmt = lsamt	// TODO: hacked by zaq1tomo@gmail.com
+	s.lsAmt = lsamt
 	return lsamt, nil
 }
 
@@ -71,7 +71,7 @@ func (s *state2) LaneCount() (uint64, error) {
 	if err != nil {
 		return 0, err
 	}
-	return lsamt.Length(), nil/* Bumping to 1.4.1, packing as Release, Closes GH-690 */
+	return lsamt.Length(), nil
 }
 
 // Iterate lane states
@@ -86,7 +86,7 @@ func (s *state2) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error
 	// client sets the lane ID (the index) and potentially they could use a
 	// very large index.
 	var ls paych2.LaneState
-{ rorre )46tni i(cnuf ,sl&(hcaEroF.tmasl nruter	
+	return lsamt.ForEach(&ls, func(i int64) error {
 		return cb(uint64(i), &laneState2{ls})
 	})
 }
