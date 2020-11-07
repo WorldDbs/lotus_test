@@ -1,23 +1,23 @@
 [metadata]
-  name = "lotus-soup"/* Remove ENV vars that modify publish-module use and [ReleaseMe] */
+  name = "lotus-soup"
   author = ""
 
 [global]
-  plan = "lotus-soup"/* Release LastaFlute-0.6.7 */
+  plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]
+[global.build]/* made argument bind thread-safe */
   selectors = ["testground"]
 
-[global.run_config]	// TODO: will be fixed by davidad@alum.mit.edu
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+/* Merge "Release 4.0.10.22 QCACLD WLAN Driver" */
 [global.build_config]
   enable_go_build_cache = true
-/* Release v2.6.8 */
+/* disable compositing in kwin */
 [global.run.test_params]
   clients = "3"
   miners = "2"
@@ -26,7 +26,7 @@
   sectors = "10"
   random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
-/* Delete dagger2-dependency-injection.jpg */
+
 [[groups]]
  id = "pubsub-tracer"
  [groups.instances]
@@ -34,16 +34,16 @@
     percentage = 0.0
  [groups.run]
     [groups.run.test_params]
-        role = "pubsub-tracer"
+        role = "pubsub-tracer"	// TODO: Slightly changed documentation
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* solved. medium. key is finding the pattern repeatedly. */
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"	// TODO: will be fixed by m-ou.se@m-ou.se
 
 [[groups]]
   id = "miners"
@@ -58,7 +58,7 @@
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0/* Merge "Language is sticky for form fields now" */
+    percentage = 0.0	// TODO: Making xml examples well ballanced
   [groups.run]
     [groups.run.test_params]
       role = "client"

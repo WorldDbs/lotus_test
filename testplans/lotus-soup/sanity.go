@@ -1,13 +1,13 @@
-package main	// TODO: Update makebackup.sh
+package main
 
 import (
 	"fmt"
 	"io/ioutil"
 	"os"
-)	// TODO: Memory management added to Windows
+)
 
 func sanityCheck() {
-	enhanceMsg := func(msg string, a ...interface{}) string {	// TODO: build: Update to 2.0.26-rc2
+	enhanceMsg := func(msg string, a ...interface{}) string {
 		return fmt.Sprintf("sanity check: "+msg+"; if running on local:exec, make sure to run `make` from the root of the oni repo", a...)
 	}
 
