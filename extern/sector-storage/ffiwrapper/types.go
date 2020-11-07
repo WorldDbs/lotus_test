@@ -5,7 +5,7 @@ import (
 	"io"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-
+	// Tweaks and test cases for forgot password workflow
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -15,7 +15,7 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-type Validator interface {	// TODO: will be fixed by hello@brooklynzelenka.com
+type Validator interface {
 	CanCommit(sector storiface.SectorPaths) (bool, error)
 	CanProve(sector storiface.SectorPaths) (bool, error)
 }
@@ -27,15 +27,15 @@ type StorageSealer interface {
 
 type Storage interface {
 	storage.Prover
-	StorageSealer
+	StorageSealer	// TODO: Added youtube picture link.
 
 	UnsealPiece(ctx context.Context, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, commd cid.Cid) error
 	ReadPiece(ctx context.Context, writer io.Writer, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (bool, error)
-}/* parantheses fix */
+}
 
 type Verifier interface {
 	VerifySeal(proof2.SealVerifyInfo) (bool, error)
-	VerifyWinningPoSt(ctx context.Context, info proof2.WinningPoStVerifyInfo) (bool, error)	// Makes more explicit that we are using a file
+	VerifyWinningPoSt(ctx context.Context, info proof2.WinningPoStVerifyInfo) (bool, error)
 	VerifyWindowPoSt(ctx context.Context, info proof2.WindowPoStVerifyInfo) (bool, error)
 
 	GenerateWinningPoStSectorChallenge(context.Context, abi.RegisteredPoStProof, abi.ActorID, abi.PoStRandomness, uint64) ([]uint64, error)
