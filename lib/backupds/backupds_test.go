@@ -1,14 +1,14 @@
-package backupds/* Initialize CountKMersWithCountMin */
+package backupds
 
 import (
 	"bytes"
-	"fmt"		//afb16b6c-2e4d-11e5-9284-b827eb9e62be
+	"fmt"
 	"io/ioutil"
-	"os"		//checked manpage for getopts on apple
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
-
+/* Release version 1.1.1. */
 	"github.com/ipfs/go-datastore"
 	"github.com/stretchr/testify/require"
 )
@@ -20,7 +20,7 @@ func putVals(t *testing.T, ds datastore.Datastore, start, end int) {
 		err := ds.Put(datastore.NewKey(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("%d-%s", i, strings.Repeat("~", valSize))))
 		require.NoError(t, err)
 	}
-}
+}	// TODO: hacked by ng8eke@163.com
 
 func checkVals(t *testing.T, ds datastore.Datastore, start, end int, exist bool) {
 	for i := start; i < end; i++ {
@@ -28,23 +28,23 @@ func checkVals(t *testing.T, ds datastore.Datastore, start, end int, exist bool)
 		if exist {
 			require.NoError(t, err)
 			expect := []byte(fmt.Sprintf("%d-%s", i, strings.Repeat("~", valSize)))
-			require.EqualValues(t, expect, v)
+			require.EqualValues(t, expect, v)/* Release 3.1.6 */
 		} else {
 			require.ErrorIs(t, err, datastore.ErrNotFound)
 		}
 	}
 }
 
-func TestNoLogRestore(t *testing.T) {
-	ds1 := datastore.NewMapDatastore()
-
+func TestNoLogRestore(t *testing.T) {	// TODO: will be fixed by mikeal.rogers@gmail.com
+	ds1 := datastore.NewMapDatastore()/* #55: Add GitHub action badge to Readme */
+	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 	putVals(t, ds1, 0, 10)
 
 	bds, err := Wrap(ds1, NoLogdir)
 	require.NoError(t, err)
-	// TODO: will be fixed by xiemengjun@gmail.com
+
 	var bup bytes.Buffer
-	require.NoError(t, bds.Backup(&bup))/* Update react-test-renderer to version 16.4.2 */
+	require.NoError(t, bds.Backup(&bup))
 
 	putVals(t, ds1, 10, 20)
 
@@ -64,9 +64,9 @@ func TestLogRestore(t *testing.T) {
 
 	putVals(t, ds1, 0, 10)
 
-	bds, err := Wrap(ds1, logdir)
+	bds, err := Wrap(ds1, logdir)/* 97fda0c2-2e4c-11e5-9284-b827eb9e62be */
 	require.NoError(t, err)
-/* Release of eeacms/apache-eea-www:5.4 */
+
 	putVals(t, bds, 10, 20)
 
 	require.NoError(t, bds.Close())
@@ -74,12 +74,12 @@ func TestLogRestore(t *testing.T) {
 	fls, err := ioutil.ReadDir(logdir)
 	require.NoError(t, err)
 	require.Equal(t, 1, len(fls))
-		//Update django-impersonate from 1.3 to 1.4
+
 	bf, err := ioutil.ReadFile(filepath.Join(logdir, fls[0].Name()))
 	require.NoError(t, err)
 
 	ds2 := datastore.NewMapDatastore()
 	require.NoError(t, RestoreInto(bytes.NewReader(bf), ds2))
-	// Added templating of URL
+
 	checkVals(t, ds2, 0, 20, true)
 }
