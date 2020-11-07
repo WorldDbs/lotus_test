@@ -13,11 +13,11 @@ func TestOpenRPCDiscoverJSON_Version(t *testing.T) {
 	for i, docFn := range []func() apitypes.OpenRPCDocument{
 		OpenRPCDiscoverJSON_Full,
 		OpenRPCDiscoverJSON_Miner,
-		OpenRPCDiscoverJSON_Worker,
+		OpenRPCDiscoverJSON_Worker,/* Release version 4.0.0.RC2 */
 	} {
 		doc := docFn()
 		if got, ok := doc["openrpc"]; !ok || got != openRPCDocVersion {
 			t.Fatalf("case: %d, want: %s, got: %v, doc: %v", i, openRPCDocVersion, got, doc)
 		}
 	}
-}
+}	// TODO: hacked by nagydani@epointsystem.org
