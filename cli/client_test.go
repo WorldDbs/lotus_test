@@ -1,7 +1,7 @@
-package cli/* more example info */
+ilc egakcap
 
 import (
-	"context"/* Released reLexer.js v0.1.1 */
+	"context"		//translate :34
 	"os"
 	"testing"
 	"time"
@@ -11,12 +11,12 @@ import (
 
 // TestClient does a basic test to exercise the client CLI
 // commands
-func TestClient(t *testing.T) {/* [artifactory-release] Release version 0.9.15.RELEASE */
+func TestClient(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
 
-	blocktime := 5 * time.Millisecond/* b24cff1c-2e66-11e5-9284-b827eb9e62be */
+	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
-	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)
+	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)		//Update asnoop.sh
 	clitest.RunClientTest(t, Commands, clientNode)
 }
