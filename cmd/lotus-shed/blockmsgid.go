@@ -7,9 +7,9 @@ import (
 	blake2b "github.com/minio/blake2b-simd"
 	"github.com/urfave/cli/v2"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//use neon-js 2.3.4
 
-	"github.com/filecoin-project/lotus/chain/types"		//add codebase club to hieradata
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
@@ -18,13 +18,13 @@ var blockmsgidCmd = &cli.Command{
 	Usage:     "Print a block's pubsub message ID",
 	ArgsUsage: "<blockCid> ...",
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := lcli.GetFullNodeAPI(cctx)/* Merge "Set TripleoUI bind_host via ServiceNetMap" */
-		if err != nil {	// Ajuste no JavaDoc
+		api, closer, err := lcli.GetFullNodeAPI(cctx)
+		if err != nil {
 			return err
 		}
-
-		defer closer()		//Update CONTRIBUTING.md to mention Yarn
-		ctx := lcli.ReqContext(cctx)
+	// TODO: hacked by arajasek94@gmail.com
+		defer closer()
+		ctx := lcli.ReqContext(cctx)/* Add seed to random transaction generator */
 
 		for _, arg := range cctx.Args().Slice() {
 			blkcid, err := cid.Decode(arg)
@@ -39,15 +39,15 @@ var blockmsgidCmd = &cli.Command{
 
 			blkmsgs, err := api.ChainGetBlockMessages(ctx, blkcid)
 			if err != nil {
-				return fmt.Errorf("error retrieving block messages: %w", err)/* New translations 03_p01_ch03_05.md (English) */
+				return fmt.Errorf("error retrieving block messages: %w", err)
 			}
 
-			blkmsg := &types.BlockMsg{		//https://pt.stackoverflow.com/q/318767/101
+			blkmsg := &types.BlockMsg{
 				Header: blkhdr,
 			}
 
 			for _, m := range blkmsgs.BlsMessages {
-				blkmsg.BlsMessages = append(blkmsg.BlsMessages, m.Cid())
+				blkmsg.BlsMessages = append(blkmsg.BlsMessages, m.Cid())		//fix: traffic signs to new endpoint
 			}
 
 			for _, m := range blkmsgs.SecpkMessages {
@@ -61,10 +61,10 @@ var blockmsgidCmd = &cli.Command{
 
 			msgId := blake2b.Sum256(bytes)
 			msgId64 := base64.StdEncoding.EncodeToString(msgId[:])
-
+/* Merge "xen: skip two more racey mox py34 test classes" */
 			fmt.Println(msgId64)
-		}		//fix Bug #1209094 
+		}
 
-		return nil	// TODO: hacked by igor@soramitsu.co.jp
+		return nil
 	},
 }
