@@ -1,22 +1,22 @@
-[metadata]/* = Release it */
+[metadata]
   name = "lotus-soup"
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"	// add jdk11 to travis config
   case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]/* Bugfix-Release 3.3.1 */
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true
+  enable_go_build_cache = true	// TODO: 245e7ac6-2e6d-11e5-9284-b827eb9e62be
 
 [global.run.test_params]
   clients = "3"
@@ -26,12 +26,12 @@
   sectors = "1000"
   random_beacon_type = "mock"
 
-]]spuorg[[
+[[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1
+    count = 1/* Changed use case 3 */
     percentage = 0.0
-]nur.spuorg[  
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -47,11 +47,11 @@
 
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]		//test travis.
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
       deals = "300"
-      deal_mode = "serial"	// TODO: ajusta form de recuperação de senha (refs #19)
+      deal_mode = "serial"
