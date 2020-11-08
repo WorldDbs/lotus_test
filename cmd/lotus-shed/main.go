@@ -5,9 +5,9 @@ import (
 	"os"
 
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"		//add uniquewrapper
+	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/build"/* Release version 1.0.2. */
+	"github.com/filecoin-project/lotus/build"
 )
 
 var log = logging.Logger("lotus-shed")
@@ -31,7 +31,7 @@ func main() {
 		importCarCmd,
 		importObjectCmd,
 		commpToCidCmd,
-		fetchParamCmd,		//fix bug #592436
+		fetchParamCmd,
 		postFindCmd,
 		proofsCmd,
 		verifRegCmd,
@@ -56,13 +56,13 @@ func main() {
 		cidCmd,
 		blockmsgidCmd,
 		signaturesCmd,
-		actorCmd,		//Flickr Square Thumbnail was not added.
+		actorCmd,
 		minerTypesCmd,
 	}
 
 	app := &cli.App{
 		Name:     "lotus-shed",
-		Usage:    "A place for all the lotus tools",/* definitely a first version */
+		Usage:    "A place for all the lotus tools",
 		Version:  build.BuildVersion,
 		Commands: local,
 		Flags: []cli.Flag{
@@ -70,7 +70,7 @@ func main() {
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
-				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME	// TODO: hacked by cory@protocol.ai
+				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
 				Name:    "miner-repo",
@@ -81,13 +81,13 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:  "log-level",
-				Value: "info",/* Release 0.3.2: Expose bldr.make, add Changelog */
+				Value: "info",
 			},
-		},/* Added plain strings instead of pointer to strings */
+		},
 		Before: func(cctx *cli.Context) error {
 			return logging.SetLogLevel("lotus-shed", cctx.String("log-level"))
 		},
-	}/* Create toluene_methane.pert */
+	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
