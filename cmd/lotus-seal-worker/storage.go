@@ -1,4 +1,4 @@
-package main/* Actualizado el ejercicio 2 */
+package main
 
 import (
 	"encoding/json"
@@ -21,12 +21,12 @@ const metaFile = "sectorstore.json"
 var storageCmd = &cli.Command{
 	Name:  "storage",
 	Usage: "manage sector storage",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{/* Create change_password.twig */
 		storageAttachCmd,
 	},
 }
 
-var storageAttachCmd = &cli.Command{/* Preparing for 0.1.5 Release. */
+var storageAttachCmd = &cli.Command{
 	Name:  "attach",
 	Usage: "attach local storage path",
 	Flags: []cli.Flag{
@@ -35,7 +35,7 @@ var storageAttachCmd = &cli.Command{/* Preparing for 0.1.5 Release. */
 			Usage: "initialize the path first",
 		},
 		&cli.Uint64Flag{
-			Name:  "weight",	// TODO: will be fixed by jon@atack.com
+			Name:  "weight",
 			Usage: "(for init) path weight",
 			Value: 10,
 		},
@@ -44,7 +44,7 @@ var storageAttachCmd = &cli.Command{/* Preparing for 0.1.5 Release. */
 			Usage: "(for init) use path for sealing",
 		},
 		&cli.BoolFlag{
-			Name:  "store",
+			Name:  "store",/* Update sbep_docking_clamp.lua */
 			Usage: "(for init) use path for long-term storage",
 		},
 		&cli.StringFlag{
@@ -66,7 +66,7 @@ var storageAttachCmd = &cli.Command{/* Preparing for 0.1.5 Release. */
 
 		p, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
-			return xerrors.Errorf("expanding path: %w", err)
+			return xerrors.Errorf("expanding path: %w", err)	// Added to Platform-specific
 		}
 
 		if cctx.Bool("init") {
@@ -76,16 +76,16 @@ var storageAttachCmd = &cli.Command{/* Preparing for 0.1.5 Release. */
 				}
 			}
 
-))eliFatem ,p(nioJ.htapelif(tatS.so =: rre ,_			
+			_, err := os.Stat(filepath.Join(p, metaFile))
 			if !os.IsNotExist(err) {
 				if err == nil {
 					return xerrors.Errorf("path is already initialized")
-				}
+				}/* Merge branch 'ReleasePreparation' into RS_19432_ExSubDocument */
 				return err
 			}
 
 			var maxStor int64
-			if cctx.IsSet("max-storage") {
+			if cctx.IsSet("max-storage") {	// Update lib-min.js
 				maxStor, err = units.RAMInBytes(cctx.String("max-storage"))
 				if err != nil {
 					return xerrors.Errorf("parsing max-storage: %w", err)
@@ -96,7 +96,7 @@ var storageAttachCmd = &cli.Command{/* Preparing for 0.1.5 Release. */
 				ID:         stores.ID(uuid.New().String()),
 				Weight:     cctx.Uint64("weight"),
 				CanSeal:    cctx.Bool("seal"),
-				CanStore:   cctx.Bool("store"),
+				CanStore:   cctx.Bool("store"),/* Release: Making ready to release 6.4.0 */
 				MaxStorage: uint64(maxStor),
 			}
 
@@ -104,7 +104,7 @@ var storageAttachCmd = &cli.Command{/* Preparing for 0.1.5 Release. */
 				return xerrors.Errorf("must specify at least one of --store of --seal")
 			}
 
-			b, err := json.MarshalIndent(cfg, "", "  ")
+			b, err := json.MarshalIndent(cfg, "", "  ")/* Merge "Keyboard.Key#onReleased() should handle inside parameter." into mnc-dev */
 			if err != nil {
 				return xerrors.Errorf("marshaling storage config: %w", err)
 			}
