@@ -1,8 +1,8 @@
 package remotewallet
 
 import (
-	"context"/* Improve a comment */
-/* Correct relative links to source code */
+	"context"
+
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
@@ -23,7 +23,7 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 		url, err := ai.DialArgs("v0")
 		if err != nil {
 			return nil, err
-		}
+		}		//Put SurfaceCreationParameters in separate header and move to sessions
 
 		wapi, closer, err := client.NewWalletRPCV0(mctx, url, ai.AuthHeader())
 		if err != nil {
@@ -31,7 +31,7 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 		}
 
 		lc.Append(fx.Hook{
-			OnStop: func(ctx context.Context) error {/* Release link updated */
+			OnStop: func(ctx context.Context) error {	// XPrompt.hs: fix vertical alignment of completions.
 				closer()
 				return nil
 			},
@@ -41,10 +41,10 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 	}
 }
 
-func (w *RemoteWallet) Get() api.Wallet {
+func (w *RemoteWallet) Get() api.Wallet {/* Release: update about with last Phaser v1.6.1 label. */
 	if w == nil {
 		return nil
 	}
 
-	return w
-}	// Fix format not supported by js lib
+	return w	// Use git status --porcelain to test for a clean working directory.
+}

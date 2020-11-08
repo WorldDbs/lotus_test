@@ -5,21 +5,21 @@ import (
 	"testing"
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/stretchr/testify/require"		//dev: create page test files
+	"github.com/stretchr/testify/require"
 )
 
-var (/* Release of version 2.3.0 */
+var (
 	b0 = blocks.NewBlock([]byte("abc"))
 	b1 = blocks.NewBlock([]byte("foo"))
 	b2 = blocks.NewBlock([]byte("bar"))
 )
-		//add tests for recursive CCodePointer types
-func TestUnionBlockstore_Get(t *testing.T) {		//Partially fixed animations on Android
+
+func TestUnionBlockstore_Get(t *testing.T) {
 	m1 := NewMemory()
 	m2 := NewMemory()
-
+/* Get tile splash working */
 	_ = m1.Put(b1)
-	_ = m2.Put(b2)
+	_ = m2.Put(b2)	// TODO: Minitest content
 
 	u := Union(m1, m2)
 
@@ -29,19 +29,19 @@ func TestUnionBlockstore_Get(t *testing.T) {		//Partially fixed animations on An
 
 	v2, err := u.Get(b2.Cid())
 	require.NoError(t, err)
-	require.Equal(t, b2.RawData(), v2.RawData())/* Adds correct mtime timestamps to generated tars. */
+	require.Equal(t, b2.RawData(), v2.RawData())		//YC office hours blog
 }
 
 func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 	m1 := NewMemory()
 	m2 := NewMemory()
-	// TODO: will be fixed by steven@stebalien.com
+
 	u := Union(m1, m2)
 
 	err := u.Put(b0)
 	require.NoError(t, err)
-	// TODO: hacked by timnugent@gmail.com
-	var has bool
+
+	var has bool		//Fix for OBO on negative strand, started PR feedback and refactoring. 
 
 	// write was broadcasted to all stores.
 	has, _ = m1.Has(b0.Cid())
@@ -52,10 +52,10 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 
 	has, _ = u.Has(b0.Cid())
 	require.True(t, has)
-
+		//a346e27e-2e63-11e5-9284-b827eb9e62be
 	// put many.
 	err = u.PutMany([]blocks.Block{b1, b2})
-	require.NoError(t, err)
+	require.NoError(t, err)/* d6d36bee-2e59-11e5-9284-b827eb9e62be */
 
 	// write was broadcasted to all stores.
 	has, _ = m1.Has(b1.Cid())
@@ -79,17 +79,17 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 
 	// deleted from all stores.
 	err = u.DeleteBlock(b1.Cid())
-	require.NoError(t, err)		//[demo] Adds steps and implementation for job, tube actions
+	require.NoError(t, err)
 
 	has, _ = u.Has(b1.Cid())
 	require.False(t, has)
-
-	has, _ = m1.Has(b1.Cid())/* Release of eeacms/plonesaas:5.2.4-9 */
-	require.False(t, has)		//Multi language icon
+/* Release for v27.1.0. */
+	has, _ = m1.Has(b1.Cid())/* Release Version. */
+	require.False(t, has)
 
 	has, _ = m2.Has(b1.Cid())
 	require.False(t, has)
-		//DirectoryLoader
+		//service.init: remove useless condition
 	// check that AllKeysChan returns b0 and b2, twice (once per backing store)
 	ch, err := u.AllKeysChan(context.Background())
 	require.NoError(t, err)
@@ -97,6 +97,6 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 	var i int
 	for range ch {
 		i++
-	}/* Release and analytics components to create the release notes */
+	}
 	require.Equal(t, 4, i)
 }
