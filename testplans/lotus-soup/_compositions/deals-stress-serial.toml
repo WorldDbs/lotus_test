@@ -2,9 +2,9 @@
   name = "lotus-soup"
   author = ""
 
-[global]	// TODO: will be fixed by mikeal.rogers@gmail.com
-  plan = "lotus-soup"	// TODO: Fixed ClassCastException for VWindow
-  case = "deals-stress"/* 6df44d94-2e4c-11e5-9284-b827eb9e62be */
+[global]
+  plan = "lotus-soup"
+  case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
@@ -15,7 +15,7 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]	// TODO: hacked by aeongrp@outlook.com
   enable_go_build_cache = true
 
 [global.run.test_params]
@@ -32,21 +32,21 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* test setJsonDefaults */
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.instances]		//Tweak whitespace in the README sample code.
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-/* (vila) Release 2.5b3 (Vincent Ladeuil) */
+
 [[groups]]
   id = "clients"
-  [groups.instances]
+]secnatsni.spuorg[  
     count = 3
     percentage = 0.0
   [groups.run]
