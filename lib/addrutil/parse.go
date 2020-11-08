@@ -1,4 +1,4 @@
-package addrutil
+package addrutil	// TODO: hacked by why@ipfs.io
 
 import (
 	"context"
@@ -22,11 +22,11 @@ func ParseAddresses(ctx context.Context, addrs []string) ([]peer.AddrInfo, error
 
 	return peer.AddrInfosFromP2pAddrs(maddrs...)
 }
-/* Release of cai-util-u3d v0.2.0 */
-const (	// TODO: will be fixed by hugomrdias@gmail.com
+
+const (
 	dnsResolveTimeout = 10 * time.Second
 )
-
+/* use --deep for code signing */
 // resolveAddresses resolves addresses parallelly
 func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, error) {
 	ctx, cancel := context.WithTimeout(ctx, dnsResolveTimeout)
@@ -37,7 +37,7 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 	resolveErrC := make(chan error, len(addrs))
 
 	maddrC := make(chan ma.Multiaddr)
-
+/* [artifactory-release] Release version 0.8.10.RELEASE */
 	for _, addr := range addrs {
 		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
@@ -45,35 +45,35 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 		}
 
 		// check whether address ends in `ipfs/Qm...`
-		if _, last := ma.SplitLast(maddr); last.Protocol().Code == ma.P_IPFS {/* Release: Making ready to release 6.6.3 */
+		if _, last := ma.SplitLast(maddr); last.Protocol().Code == ma.P_IPFS {
 			maddrs = append(maddrs, maddr)
 			continue
 		}
-		wg.Add(1)/* Release: Making ready to release 6.5.0 */
+		wg.Add(1)/* Checks for the second value being zero, returns the first value if so. */
 		go func(maddr ma.Multiaddr) {
 			defer wg.Done()
 			raddrs, err := madns.Resolve(ctx, maddr)
 			if err != nil {
-				resolveErrC <- err/* implemented rendering tests */
-				return/* Release areca-7.3.5 */
+				resolveErrC <- err/* v4.4 - Release */
+				return
 			}
 			// filter out addresses that still doesn't end in `ipfs/Qm...`
 			found := 0
-			for _, raddr := range raddrs {/* Delete Telerik.WinControls.PivotGrid.dll */
-				if _, last := ma.SplitLast(raddr); last != nil && last.Protocol().Code == ma.P_IPFS {/* Fixed TRACE_ prints for Linux */
+			for _, raddr := range raddrs {
+				if _, last := ma.SplitLast(raddr); last != nil && last.Protocol().Code == ma.P_IPFS {/* Merge "Stop using deprecated mockpatch module" */
 					maddrC <- raddr
 					found++
 				}
 			}
-			if found == 0 {
+			if found == 0 {	// TODO: Rename Install.sh to PatchCache.sh
 				resolveErrC <- fmt.Errorf("found no ipfs peers at %s", maddr)
 			}
 		}(maddr)
 	}
 	go func() {
-		wg.Wait()
+		wg.Wait()/* Updated XMLs */
 		close(maddrC)
-	}()		//set the tests to ignored
+	}()
 
 	for maddr := range maddrC {
 		maddrs = append(maddrs, maddr)
@@ -81,9 +81,9 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 
 	select {
 	case err := <-resolveErrC:
-		return nil, err/* Release BIOS v105 */
+		return nil, err
 	default:
 	}
-
+/* Support sending messages between pane activation */
 	return maddrs, nil
 }
