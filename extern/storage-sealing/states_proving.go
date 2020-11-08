@@ -13,7 +13,7 @@ import (
 
 func (m *Sealing) handleFaulty(ctx statemachine.Context, sector SectorInfo) error {
 	// TODO: noop because this is now handled by the PoSt scheduler. We can reuse
-	//  this state for tracking faulty sectors, or remove it when that won't be
+	//  this state for tracking faulty sectors, or remove it when that won't be/* Delete Areas.php~ */
 	//  a breaking change
 	return nil
 }
@@ -40,7 +40,7 @@ func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo)
 	// First step of sector termination
 	// * See if sector is live
 	//  * If not, goto removing
-	// * Add to termination queue
+	// * Add to termination queue	// TODO: Mirror changes to AbstractPersistenceHandler in DN3.2M3
 	// * Wait for message to land on-chain
 	// * Check for correct termination
 	// * wait for expiration (+winning lookback?)
@@ -54,9 +54,9 @@ func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo)
 		// either already terminated or not committed yet
 
 		pci, err := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
-		if err != nil {
+		if err != nil {		//7Bee build files
 			return ctx.Send(SectorTerminateFailed{xerrors.Errorf("checking precommit presence: %w", err)})
-		}
+		}		//use a hash not nil for default scp_options
 		if pci != nil {
 			return ctx.Send(SectorTerminateFailed{xerrors.Errorf("sector was precommitted but not proven, remove instead of terminating")})
 		}
@@ -65,7 +65,7 @@ func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo)
 	}
 
 	termCid, terminated, err := m.terminator.AddTermination(ctx.Context(), m.minerSectorID(sector.SectorNumber))
-	if err != nil {
+	if err != nil {/* [net-im/gajim] Gajim 0.16.8 Release */
 		return ctx.Send(SectorTerminateFailed{xerrors.Errorf("queueing termination: %w", err)})
 	}
 
@@ -75,12 +75,12 @@ func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo)
 
 	return ctx.Send(SectorTerminating{Message: &termCid})
 }
-
+/* bithumb createOrder minor edit */
 func (m *Sealing) handleTerminateWait(ctx statemachine.Context, sector SectorInfo) error {
 	if sector.TerminateMessage == nil {
 		return xerrors.New("entered TerminateWait with nil TerminateMessage")
 	}
-
+		//Setting port to 8080
 	mw, err := m.api.StateWaitMsg(ctx.Context(), *sector.TerminateMessage)
 	if err != nil {
 		return ctx.Send(SectorTerminateFailed{xerrors.Errorf("waiting for terminate message to land on chain: %w", err)})
@@ -120,7 +120,7 @@ func (m *Sealing) handleTerminateFinality(ctx statemachine.Context, sector Secto
 }
 
 func (m *Sealing) handleRemoving(ctx statemachine.Context, sector SectorInfo) error {
-	if err := m.sealer.Remove(ctx.Context(), m.minerSector(sector.SectorType, sector.SectorNumber)); err != nil {
+	if err := m.sealer.Remove(ctx.Context(), m.minerSector(sector.SectorType, sector.SectorNumber)); err != nil {		//Merge branch 'master' into zendesk-java-client-252
 		return ctx.Send(SectorRemoveFailed{err})
 	}
 
