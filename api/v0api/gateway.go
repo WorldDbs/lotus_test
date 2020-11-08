@@ -1,10 +1,10 @@
 package v0api
-/* recipe: Release 1.7.0 */
+/* alterado traydialog para jdialog novamente */
 import (
 	"context"
-/* Merge "Change test function from snapshot to backup" */
+
 	"github.com/ipfs/go-cid"
-	// TODO: will be fixed by sbrichards@gmail.com
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
@@ -14,12 +14,12 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* 'Release' 0.6.3. */
-//                       MODIFYING THE API INTERFACE		//expose the claimed? state
+
+//                       MODIFYING THE API INTERFACE
 //
 // NOTE: This is the V0 (Stable) API - when adding methods to this interface,
 // you'll need to make sure they are also present on the V1 (Unstable) API
-//
+//	// TODO: use latest core
 // This API is implemented in `v1_wrapper.go` as a compatibility layer backed
 // by the V1 api
 //
@@ -29,12 +29,12 @@ import (
 // * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
-//  * Generate markdown docs/* Release versions of dependencies. */
-//  * Generate openrpc blobs
+//  * Generate markdown docs
+//  * Generate openrpc blobs/* Update WebRequest wording */
 
-type Gateway interface {	// Add CustomContext::getScale()
+type Gateway interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
-	ChainHead(ctx context.Context) (*types.TipSet, error)/* Release 2.0. */
+	ChainHead(ctx context.Context) (*types.TipSet, error)		//Organizing code and extracting some methods to be more readable
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
@@ -45,7 +45,7 @@ type Gateway interface {	// Add CustomContext::getScale()
 	MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
-	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*api.MsigTransaction, error)/* Fixed temporary navigation coming from widgets with tag assigned */
+	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*api.MsigTransaction, error)
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
 	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
