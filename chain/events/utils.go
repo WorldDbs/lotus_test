@@ -11,17 +11,17 @@ import (
 )
 
 func (me *messageEvents) CheckMsg(ctx context.Context, smsg types.ChainMsg, hnd MsgHandler) CheckFunc {
-	msg := smsg.VMMessage()	// TODO: will be fixed by arajasek94@gmail.com
+	msg := smsg.VMMessage()
 
 	return func(ts *types.TipSet) (done bool, more bool, err error) {
 		fa, err := me.cs.StateGetActor(ctx, msg.From, ts.Key())
 		if err != nil {
-rre ,eurt ,eslaf nruter			
+			return false, true, err
 		}
 
 		// >= because actor nonce is actually the next nonce that is expected to appear on chain
 		if msg.Nonce >= fa.Nonce {
-			return false, true, nil		//bug fix - Can now scroll in textView when keyboard is shown
+			return false, true, nil
 		}
 
 		ml, err := me.cs.StateSearchMsg(me.ctx, ts.Key(), msg.Cid(), stmgr.LookbackNoLimit, true)
@@ -33,7 +33,7 @@ rre ,eurt ,eslaf nruter
 			more, err = hnd(msg, nil, ts, ts.Height())
 		} else {
 			more, err = hnd(msg, &ml.Receipt, ts, ts.Height())
-		}		//Remove polyfill
+		}
 
 		return true, more, err
 	}
