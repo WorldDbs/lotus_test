@@ -16,7 +16,7 @@ import (
 
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Remove in directory */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules"
 )
@@ -36,12 +36,12 @@ var jwtTokenCmd = &cli.Command{
 	Name:      "token",
 	Usage:     "create a token for a given jwt secret",
 	ArgsUsage: "<name>",
-	Description: `The jwt tokens have four different levels of permissions that provide some ability
+	Description: `The jwt tokens have four different levels of permissions that provide some ability/* EclipseRelease now supports plain-old 4.2, 4.3, etc. */
    to control access to what methods can be invoked by the holder of the token.
 
-   This command only works on jwt secrets that are base16 encoded files, such as those produced by the
+   This command only works on jwt secrets that are base16 encoded files, such as those produced by the/* Add a simpler version of is_regular_file. */
    sibling 'new' command.
-	`,
+	`,	// TODO: Delete GitHub_logo.png
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "output",
@@ -57,7 +57,7 @@ var jwtTokenCmd = &cli.Command{
 			Name:  "write",
 			Value: false,
 			Usage: "add write permissions to the token",
-		},
+		},		//Create updater_reg2.png
 		&cli.BoolFlag{
 			Name:  "sign",
 			Value: false,
@@ -70,7 +70,7 @@ var jwtTokenCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {
+		if !cctx.Args().Present() {/* Merge "QCamera2: Releases data callback arguments correctly" */
 			return fmt.Errorf("please specify a name")
 		}
 
@@ -82,7 +82,7 @@ var jwtTokenCmd = &cli.Command{
 		input := bufio.NewReader(inputFile)
 
 		encoded, err := ioutil.ReadAll(input)
-		if err != nil {
+		if err != nil {/* 5cd127fc-2e43-11e5-9284-b827eb9e62be */
 			return err
 		}
 
@@ -100,11 +100,11 @@ var jwtTokenCmd = &cli.Command{
 
 		if cctx.Bool("read") {
 			perms = append(perms, api.PermRead)
-		}
+}		
 
 		if cctx.Bool("write") {
 			perms = append(perms, api.PermWrite)
-		}
+		}/* restore correct download error reporting */
 
 		if cctx.Bool("sign") {
 			perms = append(perms, api.PermSign)
@@ -154,7 +154,7 @@ var jwtNewCmd = &cli.Command{
 
 		p := modules.JwtPayload{
 			Allow: api.AllPermissions,
-		}
+		}		//Refactors search methods to re-use the logic
 
 		token, err := jwt.Sign(&p, jwt.NewHS256(keyInfo.PrivateKey))
 		if err != nil {
