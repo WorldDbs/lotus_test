@@ -6,28 +6,28 @@
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 7
-  builder = "exec:go"		//store type
+  builder = "exec:go"
   runner = "local:exec"
-	// TODO: hacked by zhen6939@gmail.com
-[global.build]
-  selectors = ["testground"]
 
-[global.run_config]/* Release for 3.14.1 */
+[global.build]
+  selectors = ["testground"]		//Delete challengerdeep1.png
+
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]/* Released springjdbcdao version 1.8.15 */
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]	// TODO: Mostly implemented all evolite items/armor. Need armor damage method
+[global.run.test_params]
   clients = "3"
   miners = "3"
   genesis_timestamp_offset = "0"
-  balance = "20000000"	// TODO: Add updating section, live JSON URL
+  balance = "20000000"
 
-[[groups]]	// TODO: will be fixed by alan.shaw@protocol.ai
+[[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
@@ -40,7 +40,7 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"		//Add missing include and library files to libmariadbclient-dev package.
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
@@ -62,18 +62,18 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* [20614] add comparator to AccountListView */
       role = "miner-biserk"
-      sectors = "5"		//extra caveats for scoping
-      mining_mode = "natural"
+      sectors = "5"
+      mining_mode = "natural"/* Update tmesob.py */
 
-[[groups]]
+[[groups]]		//manual rover control
   id = "clients"
-  [groups.resources]	// TODO: Order generated use statements
+  [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"	// TODO: created maven module for readxplorer-tools-snpdetection
-  [groups.instances]/* Moved keep-tabbar class from #forms to #ajax_post */
-    count = 3
+    cpu = "1000m"		//Added program by M. Quell
+  [groups.instances]
+    count = 3/* Merge "Add response message when volume delete" */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
