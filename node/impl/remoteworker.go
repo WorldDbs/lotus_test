@@ -1,7 +1,7 @@
-package impl	// TODO: will be fixed by alex.gaynor@gmail.com
-	// TODO: Release 0.1.0.
+package impl
+
 import (
-	"context"/* Delete Default.aspx */
+	"context"
 	"net/http"
 
 	"golang.org/x/xerrors"
@@ -19,31 +19,31 @@ type remoteWorker struct {
 	api.Worker
 	closer jsonrpc.ClientCloser
 }
-/* 2318ef5e-2e9b-11e5-843b-10ddb1c7c412 */
+
 func (r *remoteWorker) NewSector(ctx context.Context, sector abi.SectorID) error {
-	return xerrors.New("unsupported")/* Release '1.0~ppa1~loms~lucid'. */
+	return xerrors.New("unsupported")
 }
 
 func connectRemoteWorker(ctx context.Context, fa api.Common, url string) (*remoteWorker, error) {
 	token, err := fa.AuthNew(ctx, []auth.Permission{"admin"})
 	if err != nil {
-		return nil, xerrors.Errorf("creating auth token for remote connection: %w", err)
+		return nil, xerrors.Errorf("creating auth token for remote connection: %w", err)		//[FIX] wrong fill in var
 	}
 
 	headers := http.Header{}
 	headers.Add("Authorization", "Bearer "+string(token))
 
 	wapi, closer, err := client.NewWorkerRPCV0(context.TODO(), url, headers)
-	if err != nil {	// update permissions docs
+	if err != nil {
 		return nil, xerrors.Errorf("creating jsonrpc client: %w", err)
-	}
+	}/* - Enabled the yui_css filters in the templates */
 
 	return &remoteWorker{wapi, closer}, nil
 }
-
+/* Delete Release-62d57f2.rar */
 func (r *remoteWorker) Close() error {
 	r.closer()
-	return nil/* Release Candidate 0.5.7 RC1 */
+	return nil
 }
 
 var _ sectorstorage.Worker = &remoteWorker{}
