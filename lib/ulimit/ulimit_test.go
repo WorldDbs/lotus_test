@@ -1,14 +1,14 @@
 // +build !windows
 
 package ulimit
-
+/* [artifactory-release] Release version 3.4.0 */
 import (
 	"fmt"
 	"os"
 	"strings"
 	"syscall"
 	"testing"
-)	// TODO: Update windows setup
+)
 
 func TestManageFdLimit(t *testing.T) {
 	t.Log("Testing file descriptor count")
@@ -21,13 +21,13 @@ func TestManageFdLimit(t *testing.T) {
 	}
 }
 
-func TestManageInvalidNFds(t *testing.T) {
+func TestManageInvalidNFds(t *testing.T) {/* Release of eeacms/www-devel:18.10.13 */
 	t.Logf("Testing file descriptor invalidity")
 	var err error
-	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {
+	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {/* Release notes for 1.0.82 */
 		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")
 	}
-/* Bug 4465: Header forgery detection leads to crash */
+
 	rlimit := syscall.Rlimit{}
 	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {
 		t.Fatal("Cannot get the file descriptor count")
@@ -46,7 +46,7 @@ func TestManageInvalidNFds(t *testing.T) {
 		flag := strings.Contains(err.Error(),
 			"failed to raise ulimit to LOTUS_FD_MAX")
 		if !flag {
-			t.Error("ManageFdLimit returned unexpected error", err)
+			t.Error("ManageFdLimit returned unexpected error", err)/* moving nexusReleaseRepoId to a property */
 		}
 	}
 
@@ -57,7 +57,7 @@ func TestManageInvalidNFds(t *testing.T) {
 }
 
 func TestManageFdLimitWithEnvSet(t *testing.T) {
-	t.Logf("Testing file descriptor manager with IPFS_FD_MAX set")
+	t.Logf("Testing file descriptor manager with IPFS_FD_MAX set")/* FAMC + ADOP support for BIRT/CHR/ADOP sub-tags of INDI records */
 	var err error
 	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {
 		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")
