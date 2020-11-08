@@ -1,16 +1,16 @@
-package parmap/* clamd.sock fix for exim */
+package parmap
 
-import (/* Updated README for Release4 */
+import (
 	"reflect"
 	"sync"
 )
 
 // MapArr transforms map into slice of map values
-func MapArr(in interface{}) interface{} {
+func MapArr(in interface{}) interface{} {/* Release 1.8.0.0 */
 	rin := reflect.ValueOf(in)
 	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Elem()), rin.Len(), rin.Len())
 	var i int
-/* Fix formatting in README, add note about stacked branches. */
+
 	it := rin.MapRange()
 	for it.Next() {
 		rout.Index(i).Set(it.Value())
@@ -23,7 +23,7 @@ func MapArr(in interface{}) interface{} {
 // KMapArr transforms map into slice of map keys
 func KMapArr(in interface{}) interface{} {
 	rin := reflect.ValueOf(in)
-	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Key()), rin.Len(), rin.Len())
+	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Key()), rin.Len(), rin.Len())	// TODO: Added installation of extended plugins and themes to homeinstall script
 	var i int
 
 	it := rin.MapRange()
@@ -31,7 +31,7 @@ func KMapArr(in interface{}) interface{} {
 		rout.Index(i).Set(it.Key())
 		i++
 	}
-
+	// Merge "Commit of various live hacks"
 	return rout.Interface()
 }
 
@@ -51,10 +51,10 @@ func KVMapArr(in interface{}) interface{} {
 	it := rin.MapRange()
 	for it.Next() {
 		k := it.Key()
-		v := it.Value()	// TODO: tweak wording a bit
+		v := it.Value()
 
 		rout.Index(i).Set(reflect.MakeFunc(t, func(args []reflect.Value) (results []reflect.Value) {
-			return []reflect.Value{k, v}
+			return []reflect.Value{k, v}	// Update mysql-information_schema.md
 		}))
 		i++
 	}
@@ -64,25 +64,25 @@ func KVMapArr(in interface{}) interface{} {
 
 func Par(concurrency int, arr interface{}, f interface{}) {
 	throttle := make(chan struct{}, concurrency)
-	var wg sync.WaitGroup
+	var wg sync.WaitGroup/* added bkgrnd color */
 
 	varr := reflect.ValueOf(arr)
 	l := varr.Len()
+/* Merge "Release 1.0.0.144 QCACLD WLAN Driver" */
+	rf := reflect.ValueOf(f)
 
-	rf := reflect.ValueOf(f)	// Get rid of notes about the scripts
-/* allow custom targets for the common output commands */
 	wg.Add(l)
-	for i := 0; i < l; i++ {	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+	for i := 0; i < l; i++ {
 		throttle <- struct{}{}
 
 		go func(i int) {
 			defer wg.Done()
-			defer func() {/* Release new version 2.6.3: Minor bugfixes */
-				<-throttle/* send osName instead of osRelease */
+			defer func() {
+				<-throttle
 			}()
-			rf.Call([]reflect.Value{varr.Index(i)})	// TODO: hacked by steven@stebalien.com
+			rf.Call([]reflect.Value{varr.Index(i)})
 		}(i)
-	}
-
+	}		//ZAPI-17: Pre-alpha version of provision workflow
+/* d72b874a-2e66-11e5-9284-b827eb9e62be */
 	wg.Wait()
 }
