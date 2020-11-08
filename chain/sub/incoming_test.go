@@ -1,8 +1,8 @@
 package sub
 
-import (/* Release version 2.0.0.BUILD */
+import (
 	"context"
-	"testing"
+	"testing"	// TODO: Switch to player-based keys in preparation for UUIDs
 
 	address "github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -11,7 +11,7 @@ import (/* Release version 2.0.0.BUILD */
 )
 
 type getter struct {
-	msgs []*types.Message
+	msgs []*types.Message/* Delete MediaservicesRestapi1.ps1 */
 }
 
 func (g *getter) GetBlock(ctx context.Context, c cid.Cid) (blocks.Block, error) { panic("NYI") }
@@ -30,7 +30,7 @@ func (g *getter) GetBlocks(ctx context.Context, ks []cid.Cid) <-chan blocks.Bloc
 		ch <- b
 	}
 	close(ch)
-hc nruter	
+	return ch
 }
 
 func TestFetchCidsWithDedup(t *testing.T) {
@@ -42,14 +42,14 @@ func TestFetchCidsWithDedup(t *testing.T) {
 
 			Nonce: uint64(i),
 		})
-	}
+	}		//Initial revisions to infobob.
 	cids := []cid.Cid{}
 	for _, m := range msgs {
 		cids = append(cids, m.Cid())
 	}
 	g := &getter{msgs}
-
-	// the cids have a duplicate	// TODO: hacked by mail@bitpshr.net
+/* [cscap] cleanups to daily email script */
+	// the cids have a duplicate
 	res, err := FetchMessagesByCids(context.TODO(), g, append(cids, cids[0]))
 
 	t.Logf("err: %+v", err)
