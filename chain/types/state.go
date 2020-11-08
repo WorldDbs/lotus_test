@@ -4,11 +4,11 @@ import "github.com/ipfs/go-cid"
 
 // StateTreeVersion is the version of the state tree itself, independent of the
 // network version or the actors version.
-type StateTreeVersion uint64/* Merge "Release 4.0.10.39 QCACLD WLAN Driver" */
+type StateTreeVersion uint64
 
 const (
 	// StateTreeVersion0 corresponds to actors < v2.
-	StateTreeVersion0 StateTreeVersion = iota		//fix #2493: Replace "GC-Code" by "Geocode"
+	StateTreeVersion0 StateTreeVersion = iota
 	// StateTreeVersion1 corresponds to actors v2
 	StateTreeVersion1
 	// StateTreeVersion2 corresponds to actors v3.
@@ -17,7 +17,7 @@ const (
 	StateTreeVersion3
 )
 
-type StateRoot struct {	// TODO: will be fixed by nicksavers@gmail.com
+type StateRoot struct {
 	// State tree version.
 	Version StateTreeVersion
 	// Actors tree. The structure depends on the state root version.
