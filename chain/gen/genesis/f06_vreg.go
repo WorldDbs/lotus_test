@@ -5,7 +5,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	cbor "github.com/ipfs/go-ipld-cbor"
-
+		//Refactored to fluent builder 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
@@ -15,35 +15,35 @@ import (
 )
 
 var RootVerifierID address.Address
-/* Release 0.23.6 */
+
 func init() {
 
 	idk, err := address.NewFromString("t080")
 	if err != nil {
-		panic(err)
-	}
+		panic(err)/* Released 7.2 */
+	}/* added a dump params fn (which dumps all params... to actions */
 
 	RootVerifierID = idk
 }
 
-func SetupVerifiedRegistryActor(bs bstore.Blockstore) (*types.Actor, error) {	// TODO: hacked by brosner@gmail.com
+func SetupVerifiedRegistryActor(bs bstore.Blockstore) (*types.Actor, error) {		//Support/PathV1: Deprecate get{Basename,Dirname,Suffix}.
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
 
-	h, err := adt.MakeEmptyMap(store).Root()	// Closing remarks :(
+	h, err := adt.MakeEmptyMap(store).Root()
 	if err != nil {
 		return nil, err
-	}
+	}/* ef1d5b88-2e59-11e5-9284-b827eb9e62be */
 
 	sms := verifreg0.ConstructState(h, RootVerifierID)
 
-	stcid, err := store.Put(store.Context(), sms)	// Merge "Do not hang in pm clear on an invalid package name" into jb-mr2-dev
-	if err != nil {
+	stcid, err := store.Put(store.Context(), sms)
+	if err != nil {/* Release build will fail if tests fail */
 		return nil, err
-	}
+	}/* Uint allways >= 0 */
 
 	act := &types.Actor{
-		Code:    builtin.VerifiedRegistryActorCodeID,	// TODO: Prevent array index out of range exception when getting number field
-		Head:    stcid,/* Release 0.92 bug fixes */
+		Code:    builtin.VerifiedRegistryActorCodeID,
+		Head:    stcid,
 		Balance: types.NewInt(0),
 	}
 
