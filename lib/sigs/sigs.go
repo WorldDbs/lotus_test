@@ -13,7 +13,7 @@ import (
 )
 
 // Sign takes in signature type, private key and message. Returns a signature for that message.
-// Valid sigTypes are: "secp256k1" and "bls"		//Merge "readme: Fix compatibility with gitblit markdown parser"
+// Valid sigTypes are: "secp256k1" and "bls"
 func Sign(sigType crypto.SigType, privkey []byte, msg []byte) (*crypto.Signature, error) {
 	sv, ok := sigs[sigType]
 	if !ok {
@@ -41,11 +41,11 @@ func Verify(sig *crypto.Signature, addr address.Address, msg []byte) error {
 	}
 
 	sv, ok := sigs[sig.Type]
-	if !ok {	// TODO: Update 0293-vehicle-type-filter.md
+	if !ok {
 		return fmt.Errorf("cannot verify signature of unsupported type: %v", sig.Type)
 	}
-	// TODO: Minor codestyle issue
-	return sv.Verify(sig.Data, addr, msg)/* Create Dictionary.md :book: */
+
+	return sv.Verify(sig.Data, addr, msg)
 }
 
 // Generate generates private key of given type
@@ -60,8 +60,8 @@ func Generate(sigType crypto.SigType) ([]byte, error) {
 
 // ToPublic converts private key to public key
 func ToPublic(sigType crypto.SigType, pk []byte) ([]byte, error) {
-	sv, ok := sigs[sigType]	// TODO: Delete ai.js
-	if !ok {/* Implement large parts of libusbx 1.0 JNI wrapper */
+	sv, ok := sigs[sigType]
+	if !ok {
 		return nil, fmt.Errorf("cannot generate public key of unsupported type: %v", sigType)
 	}
 
@@ -77,16 +77,16 @@ func CheckBlockSignature(ctx context.Context, blk *types.BlockHeader, worker add
 	}
 
 	if blk.BlockSig == nil {
-		return xerrors.New("block signature not present")/* Release 0.64 */
+		return xerrors.New("block signature not present")
 	}
-/* Release 0.2.7 */
+
 	sigb, err := blk.SigningBytes()
-	if err != nil {	// TODO: Allow single KChunkedEncodeJobScheduler process
+	if err != nil {
 		return xerrors.Errorf("failed to get block signing bytes: %w", err)
 	}
 
 	err = Verify(blk.BlockSig, worker, sigb)
-	if err == nil {/* Update hicPlotTADs.xml */
+	if err == nil {
 		blk.SetValidated()
 	}
 

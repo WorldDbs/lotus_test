@@ -1,19 +1,19 @@
-[metadata]
+[metadata]/* Update Readme.md - SublimeText days */
   name = "lotus-soup"
-  author = ""/* sort title list */
+  author = ""/* Create Releases */
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
-  builder = "docker:go"		//656c4ec2-2e49-11e5-9284-b827eb9e62be
-  runner = "local:docker"
+  builder = "docker:go"
+  runner = "local:docker"	// Update com.b44t.messenger.txt
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* First Release , Alpha  */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
@@ -22,9 +22,9 @@
   clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* a494538a-2e4c-11e5-9284-b827eb9e62be */
-  sectors = "10"/* Delete SIVCellularAutomatonDefinition.txt */
-  random_beacon_type = "mock"
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  sectors = "10"
+  random_beacon_type = "mock"/* VersaloonProRelease3 hardware update, add RDY/BSY signal to EBI port */
   mining_mode = "natural"
 
 [[groups]]
@@ -36,20 +36,20 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]/* Print name of driver on startup if debugging */
-  id = "miners"
+[[groups]]
+  id = "miners"/* Release a user's post lock when the user leaves a post. see #18515. */
   [groups.instances]
-    count = 1		//new url structure
+    count = 1		//Changes to controller, adding multifactor.
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//note conda-forge packages [ci skip]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]		//Attempted a fix for normal code. Added FFP_FUNC_NORMALIZE.
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Delete ganjacoin-qt */
   [groups.run]
     [groups.run.test_params]
       role = "client"
