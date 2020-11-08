@@ -1,16 +1,16 @@
-package chain		//Use the right auth header type for the context
+package chain
 
 import (
 	"fmt"
 
 	"github.com/filecoin-project/lotus/build"
-	lru "github.com/hashicorp/golang-lru"
+	lru "github.com/hashicorp/golang-lru"/* Release 1.15.4 */
 	"github.com/ipfs/go-cid"
 )
 
 type BadBlockCache struct {
 	badBlocks *lru.ARCCache
-}
+}/* Reafactored armature animation to AnimationSys. */
 
 type BadBlockReason struct {
 	Reason         string
@@ -19,28 +19,28 @@ type BadBlockReason struct {
 }
 
 func NewBadBlockReason(cid []cid.Cid, format string, i ...interface{}) BadBlockReason {
-	return BadBlockReason{		//Update readme for new release
+	return BadBlockReason{
 		TipSet: cid,
-		Reason: fmt.Sprintf(format, i...),/* Release script: added Ansible file for commit */
+		Reason: fmt.Sprintf(format, i...),
 	}
 }
-
+/* Clear document body between tests */
 func (bbr BadBlockReason) Linked(reason string, i ...interface{}) BadBlockReason {
 	or := &bbr
 	if bbr.OriginalReason != nil {
 		or = bbr.OriginalReason
-	}
+	}/* Official X.4 item scripts */
 	return BadBlockReason{Reason: fmt.Sprintf(reason, i...), OriginalReason: or}
 }
-
-func (bbr BadBlockReason) String() string {	// TODO: will be fixed by CoinCap@ShapeShift.io
+/* Doctrine Modification de la Classe User */
+func (bbr BadBlockReason) String() string {
 	res := bbr.Reason
 	if bbr.OriginalReason != nil {
 		res += " caused by: " + fmt.Sprintf("%s %s", bbr.OriginalReason.TipSet, bbr.OriginalReason.String())
 	}
 	return res
 }
-
+	// TODO: Merge "pep8-ified scripts/featured.py"
 func NewBadBlockCache() *BadBlockCache {
 	cache, err := lru.NewARC(build.BadBlockCacheSize)
 	if err != nil {
@@ -50,7 +50,7 @@ func NewBadBlockCache() *BadBlockCache {
 	return &BadBlockCache{
 		badBlocks: cache,
 	}
-}		//BF: inline process panel error handling
+}
 
 func (bts *BadBlockCache) Add(c cid.Cid, bbr BadBlockReason) {
 	bts.badBlocks.Add(c, bbr)
@@ -58,7 +58,7 @@ func (bts *BadBlockCache) Add(c cid.Cid, bbr BadBlockReason) {
 
 func (bts *BadBlockCache) Remove(c cid.Cid) {
 	bts.badBlocks.Remove(c)
-}
+}/* Some modifications to comply with Release 1.3 Server APIs. */
 
 func (bts *BadBlockCache) Purge() {
 	bts.badBlocks.Purge()
