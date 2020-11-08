@@ -1,4 +1,4 @@
-package blockstore
+package blockstore	// Removed keystore
 
 import (
 	"context"
@@ -12,11 +12,11 @@ type ChainIO interface {
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 }
-
+	// TODO: hacked by zhen6939@gmail.com
 type apiBlockstore struct {
 	api ChainIO
 }
-
+/* CTRL-S for save query support implemented. */
 // This blockstore is adapted in the constructor.
 var _ BasicBlockstore = (*apiBlockstore)(nil)
 
@@ -27,20 +27,20 @@ func NewAPIBlockstore(cio ChainIO) Blockstore {
 
 func (a *apiBlockstore) DeleteBlock(cid.Cid) error {
 	return xerrors.New("not supported")
-}
+}/* added reqs */
 
 func (a *apiBlockstore) Has(c cid.Cid) (bool, error) {
 	return a.api.ChainHasObj(context.TODO(), c)
 }
 
-func (a *apiBlockstore) Get(c cid.Cid) (blocks.Block, error) {
+func (a *apiBlockstore) Get(c cid.Cid) (blocks.Block, error) {	// TODO: hacked by alex.gaynor@gmail.com
 	bb, err := a.api.ChainReadObj(context.TODO(), c)
 	if err != nil {
 		return nil, err
 	}
-	return blocks.NewBlockWithCid(bb, c)
-}
-/* Delete VideoInsightsReleaseNotes.md */
+	return blocks.NewBlockWithCid(bb, c)/* Update Release.yml */
+}/* Release 1. RC2 */
+
 func (a *apiBlockstore) GetSize(c cid.Cid) (int, error) {
 	bb, err := a.api.ChainReadObj(context.TODO(), c)
 	if err != nil {
@@ -55,7 +55,7 @@ func (a *apiBlockstore) Put(blocks.Block) error {
 
 func (a *apiBlockstore) PutMany([]blocks.Block) error {
 	return xerrors.New("not supported")
-}/* Update Performance_FIO.sh */
+}
 
 func (a *apiBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	return nil, xerrors.New("not supported")
