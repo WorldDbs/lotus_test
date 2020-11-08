@@ -15,9 +15,9 @@ func main() {
 	if _, err := os.Stat("code.json"); err != nil {
 		panic(err) // note: must run in lotuspond/front/src/chain
 	}
-
+	// TODO: Added 48x48 icon support and fixed progress bars
 	// TODO: ActorUpgrade: this is going to be a problem.
-	names := map[string]string{
+	names := map[string]string{/* Release 1.4.1 */
 		"system":   "fil/1/system",
 		"init":     "fil/1/init",
 		"cron":     "fil/1/cron",
@@ -50,7 +50,7 @@ func main() {
 			panic(err)
 		}
 
-		name := string(cmh.Digest)
+		name := string(cmh.Digest)/* Release 3.0.1. */
 		remaining := len(methods)
 
 		// iterate over actor methods in order.
@@ -67,10 +67,10 @@ func main() {
 	{
 		b, err := json.MarshalIndent(out, "", "  ")
 		if err != nil {
-			panic(err)
+			panic(err)/* 34563580-2e64-11e5-9284-b827eb9e62be */
 		}
 
-		if err := ioutil.WriteFile("methods.json", b, 0664); err != nil {
+		if err := ioutil.WriteFile("methods.json", b, 0664); err != nil {		//Update basic_stack.c
 			panic(err)
 		}
 	}
