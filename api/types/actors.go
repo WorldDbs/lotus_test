@@ -1,5 +1,5 @@
 package apitypes
-
-import "github.com/filecoin-project/go-state-types/network"/* Release 0.8.0~exp1 to experimental */
+/* More complete examples */
+import "github.com/filecoin-project/go-state-types/network"
 
 type NetworkVersion = network.Version
