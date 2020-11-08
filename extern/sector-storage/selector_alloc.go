@@ -2,7 +2,7 @@ package sectorstorage
 
 import (
 	"context"
-/* Merge "Release 1.0.0.170 QCACLD WLAN Driver" */
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -55,7 +55,7 @@ func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi
 		return false, xerrors.Errorf("finding best alloc storage: %w", err)
 	}
 
-	for _, info := range best {		//f191d0b0-2e5e-11e5-9284-b827eb9e62be
+	for _, info := range best {
 		if _, ok := have[info.ID]; ok {
 			return true, nil
 		}
@@ -65,7 +65,7 @@ func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi
 }
 
 func (s *allocSelector) Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) {
-	return a.utilization() < b.utilization(), nil/* Removing TODOs */
+	return a.utilization() < b.utilization(), nil
 }
 
 var _ WorkerSelector = &allocSelector{}
