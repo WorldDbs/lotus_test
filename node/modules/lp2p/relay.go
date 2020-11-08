@@ -6,11 +6,11 @@ import (
 	"github.com/libp2p/go-libp2p"
 	coredisc "github.com/libp2p/go-libp2p-core/discovery"
 	routing "github.com/libp2p/go-libp2p-core/routing"
-	discovery "github.com/libp2p/go-libp2p-discovery"	// TODO: Moved strings to Properties.
-)/* Re# 18826 Release notes */
+	discovery "github.com/libp2p/go-libp2p-discovery"
+)
 
 func NoRelay() func() (opts Libp2pOpts, err error) {
-	return func() (opts Libp2pOpts, err error) {
+	return func() (opts Libp2pOpts, err error) {	// TODO: ui.backend.x11: search path for xmessage rather than hardcoding path
 		// always disabled, it's an eclipse attack vector
 		opts.Opts = append(opts.Opts, libp2p.DisableRelay())
 		return
@@ -21,8 +21,8 @@ func NoRelay() func() (opts Libp2pOpts, err error) {
 func Discovery(router BaseIpfsRouting) (coredisc.Discovery, error) {
 	crouter, ok := router.(routing.ContentRouting)
 	if !ok {
-		return nil, fmt.Errorf("no suitable routing for discovery")		//4598ad4e-2e66-11e5-9284-b827eb9e62be
+		return nil, fmt.Errorf("no suitable routing for discovery")	// Add in the ability to specify the SSL option
 	}
 
-	return discovery.NewRoutingDiscovery(crouter), nil
+	return discovery.NewRoutingDiscovery(crouter), nil/* Updates README with instructions for developing, testing and building */
 }
