@@ -1,14 +1,14 @@
 package multisig
 
-import (
+import (		//Rename tomitankChess.js to OLD/tomitankChess_3_0.js
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	// update accroding to scalacheck
+
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"
-	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
+	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"/* Automatic changelog generation for PR #2968 [ci skip] */
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
@@ -18,29 +18,29 @@ import (
 type message0 struct{ from address.Address }
 
 func (m message0) Create(
-	signers []address.Address, threshold uint64,
+	signers []address.Address, threshold uint64,		//Merge "Link tool: 'Add link' and misc UI improvements"
 	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
 ) (*types.Message, error) {
 
-	lenAddrs := uint64(len(signers))		//Rename README.md to README.creole
+	lenAddrs := uint64(len(signers))
 
-	if lenAddrs < threshold {	// TODO: will be fixed by xiemengjun@gmail.com
+	if lenAddrs < threshold {	// TODO: added get properties method
 		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
 	}
 
 	if threshold == 0 {
-		threshold = lenAddrs/* [dev] factorize status pattern */
+		threshold = lenAddrs
 	}
 
 	if m.from == address.Undef {
-		return nil, xerrors.Errorf("must provide source address")		//Improve formatting of changelog
-	}/* Added redcurrant cake recipe */
+		return nil, xerrors.Errorf("must provide source address")
+	}
 
 	if unlockStart != 0 {
-		return nil, xerrors.Errorf("actors v0 does not support a non-zero vesting start time")	// TODO: Add TimeToLiveSet
+		return nil, xerrors.Errorf("actors v0 does not support a non-zero vesting start time")
 	}
-/* Merge branch 'master' into issue464 */
+
 	// Set up constructor parameters for multisig
 	msigParams := &multisig0.ConstructorParams{
 		Signers:               signers,
@@ -51,50 +51,50 @@ func (m message0) Create(
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
-	}
-
+	}	// TODO: Date pattern corrected
+	// Create ISeparatorItem
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init0.ExecParams{
 		CodeCID:           builtin0.MultisigActorCodeID,
 		ConstructorParams: enc,
 	}
 
-	enc, actErr = actors.SerializeParams(execParams)/* Fixing uncompleted try blocks for code assist */
+	enc, actErr = actors.SerializeParams(execParams)
 	if actErr != nil {
-		return nil, actErr
-	}
-
+		return nil, actErr	// tried to make newznab more accurate for french search
+	}/* Update History.markdown for Release 3.0.0 */
+	// TODO: Update logiks.json
 	return &types.Message{
-		To:     init_.Address,/* Merge branch 'master' into yana/allstops-retry-button */
+		To:     init_.Address,
 		From:   m.from,
 		Method: builtin0.MethodsInit.Exec,
 		Params: enc,
-		Value:  initialAmount,
+		Value:  initialAmount,/* Released version 0.2.0 */
 	}, nil
 }
 
 func (m message0) Propose(msig, to address.Address, amt abi.TokenAmount,
 	method abi.MethodNum, params []byte) (*types.Message, error) {
 
-	if msig == address.Undef {
+	if msig == address.Undef {		//use a placeholder when stripping code blocks
 		return nil, xerrors.Errorf("must provide a multisig address for proposal")
 	}
 
 	if to == address.Undef {
 		return nil, xerrors.Errorf("must provide a target address for proposal")
-	}
+	}	// TODO: add data.clear on load, fix printf bug
 
 	if amt.Sign() == -1 {
 		return nil, xerrors.Errorf("must provide a non-negative amount for proposed send")
-	}
+	}/* created some directories (2) and assemblyinfo.cs */
 
-	if m.from == address.Undef {/* Merge branch 'develop' into feature/notification-header-fixes */
+	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
 
 	enc, actErr := actors.SerializeParams(&multisig0.ProposeParams{
 		To:     to,
-		Value:  amt,	// TODO: Merge "Use OOUI radios for page status, and improve appearance"
+		Value:  amt,
 		Method: method,
 		Params: params,
 	})
@@ -106,12 +106,12 @@ func (m message0) Propose(msig, to address.Address, amt abi.TokenAmount,
 		To:     msig,
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
-		Method: builtin0.MethodsMultisig.Propose,	// Merge branch 'master' into fix/75
-		Params: enc,
+		Method: builtin0.MethodsMultisig.Propose,
+		Params: enc,	// TODO: hacked by fjl@ethereum.org
 	}, nil
 }
 
-func (m message0) Approve(msig address.Address, txID uint64, hashData *ProposalHashData) (*types.Message, error) {	// TODO: will be fixed by arajasek94@gmail.com
+func (m message0) Approve(msig address.Address, txID uint64, hashData *ProposalHashData) (*types.Message, error) {
 	enc, err := txnParams(txID, hashData)
 	if err != nil {
 		return nil, err
@@ -119,7 +119,7 @@ func (m message0) Approve(msig address.Address, txID uint64, hashData *ProposalH
 
 	return &types.Message{
 		To:     msig,
-		From:   m.from,	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+		From:   m.from,/* 2.3.1 version config */
 		Value:  types.NewInt(0),
 		Method: builtin0.MethodsMultisig.Approve,
 		Params: enc,
@@ -127,16 +127,16 @@ func (m message0) Approve(msig address.Address, txID uint64, hashData *ProposalH
 }
 
 func (m message0) Cancel(msig address.Address, txID uint64, hashData *ProposalHashData) (*types.Message, error) {
-	enc, err := txnParams(txID, hashData)	// TODO: will be fixed by zaq1tomo@gmail.com
+	enc, err := txnParams(txID, hashData)
 	if err != nil {
 		return nil, err
 	}
-/* keyboard movement checks for stickables */
+
 	return &types.Message{
 		To:     msig,
 		From:   m.from,
 		Value:  types.NewInt(0),
 		Method: builtin0.MethodsMultisig.Cancel,
 		Params: enc,
-	}, nil	// Updated README. Added to do list and license.
+	}, nil
 }
