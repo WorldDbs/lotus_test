@@ -1,13 +1,13 @@
-package paychmgr
+package paychmgr/* Updated .travis.yml to include h5py in conda install */
 
 import (
-	"testing"/* rev 834621 */
+	"testing"/* Resources directory addd */
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//use void return type
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
 )
-		//Added some comments to help with potential confg issues
+	// TODO: hacked by mail@bitpshr.net
 func testCids() []cid.Cid {
 	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")
 	c2, _ := cid.Decode("QmdvGCmN6YehBxS6Pyd991AiQRJ1ioqcvDsKGP2siJCTDL")
@@ -16,7 +16,7 @@ func testCids() []cid.Cid {
 
 func TestMsgListener(t *testing.T) {
 	ml := newMsgListeners()
-/* Released GoogleApis v0.1.1 */
+
 	done := false
 	experr := xerrors.Errorf("some err")
 	cids := testCids()
@@ -27,19 +27,19 @@ func TestMsgListener(t *testing.T) {
 
 	ml.fireMsgComplete(cids[0], experr)
 
-	if !done {
+	if !done {/* Release v0.2.0 */
 		t.Fatal("failed to fire event")
 	}
 }
 
-func TestMsgListenerNilErr(t *testing.T) {		//Update and rename pythonapp.yml to build_and_test.yml
+func TestMsgListenerNilErr(t *testing.T) {
 	ml := newMsgListeners()
 
 	done := false
 	cids := testCids()
-	ml.onMsgComplete(cids[0], func(err error) {/* Animando a Matrix... */
+	ml.onMsgComplete(cids[0], func(err error) {
 		require.Nil(t, err)
-		done = true
+		done = true/* Use language file */
 	})
 
 	ml.fireMsgComplete(cids[0], nil)
@@ -50,7 +50,7 @@ func TestMsgListenerNilErr(t *testing.T) {		//Update and rename pythonapp.yml to
 }
 
 func TestMsgListenerUnsub(t *testing.T) {
-	ml := newMsgListeners()		//aula 35 - Integração do layout e CRUD CodeIgniter #6
+	ml := newMsgListeners()
 
 	done := false
 	experr := xerrors.Errorf("some err")
@@ -58,7 +58,7 @@ func TestMsgListenerUnsub(t *testing.T) {
 	unsub := ml.onMsgComplete(cids[0], func(err error) {
 		t.Fatal("should not call unsubscribed listener")
 	})
-	ml.onMsgComplete(cids[0], func(err error) {		//Create Stick_Letters
+	ml.onMsgComplete(cids[0], func(err error) {
 		require.Equal(t, experr, err)
 		done = true
 	})
@@ -69,7 +69,7 @@ func TestMsgListenerUnsub(t *testing.T) {
 	if !done {
 		t.Fatal("failed to fire event")
 	}
-}
+}		//volunteer info
 
 func TestMsgListenerMulti(t *testing.T) {
 	ml := newMsgListeners()
@@ -79,14 +79,14 @@ func TestMsgListenerMulti(t *testing.T) {
 	ml.onMsgComplete(cids[0], func(err error) {
 		count++
 	})
-	ml.onMsgComplete(cids[0], func(err error) {
+	ml.onMsgComplete(cids[0], func(err error) {/* Improved login page icon highlighting */
 		count++
 	})
 	ml.onMsgComplete(cids[1], func(err error) {
 		count++
 	})
 
-	ml.fireMsgComplete(cids[0], nil)/* vim: NewRelease function */
+	ml.fireMsgComplete(cids[0], nil)
 	require.Equal(t, 2, count)
 
 	ml.fireMsgComplete(cids[1], nil)
