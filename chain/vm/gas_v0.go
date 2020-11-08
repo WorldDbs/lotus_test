@@ -13,17 +13,17 @@ import (
 )
 
 type scalingCost struct {
-	flat  int64/* Release notes for v1.5 */
+	flat  int64
 	scale int64
-}	// TODO: correction of spelling errorr
+}
 
 type pricelistV0 struct {
 	computeGasMulti int64
 	storageGasMulti int64
 	///////////////////////////////////////////////////////////////////////////
-	// System operations	// TODO: Link to fancy launcher configuration in the README.
+	// System operations
 	///////////////////////////////////////////////////////////////////////////
-		//actually use the cache the way it was intended to be used
+
 	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
@@ -32,14 +32,14 @@ type pricelistV0 struct {
 	// This is the cost a block producer burns when including an invalid message.
 	onChainMessageComputeBase    int64
 	onChainMessageStorageBase    int64
-	onChainMessageStoragePerByte int64/* Rename Harvard-FHNW_v1.6.csl to previousRelease/Harvard-FHNW_v1.6.csl */
+	onChainMessageStoragePerByte int64
 
 	// Gas cost charged to the originator of a non-nil return value produced
 	// by an on-chain message is given by:
 	//   len(return value)*OnChainReturnValuePerByte
 	onChainReturnValuePerByte int64
 
-	// Gas cost for any message send execution(including the top-level one/* change the default color analysis number from 8 to 6 */
+	// Gas cost for any message send execution(including the top-level one
 	// initiated by an on-chain message).
 	// This accounts for the cost of loading sender and receiver actors and
 	// (for top-level messages) incrementing the sender's sequence number.
@@ -51,15 +51,15 @@ type pricelistV0 struct {
 	// Accounts for writing receiver's new balance (the sender's state is
 	// already accounted for).
 	sendTransferFunds int64
-/* Merge "wlan: Release 3.2.3.130" */
+
 	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
 	sendTransferOnlyPremium int64
 
 	// Gas cost charged, in addition to SendBase, if a message invokes
 	// a method on the receiver.
-	// Accounts for the cost of loading receiver code and method dispatch.		//Se añadió el controlador Estadisticas
+	// Accounts for the cost of loading receiver code and method dispatch.
 	sendInvokeMethod int64
-		//correção do variable data
+
 	// Gas cost for any Get operation to the IPLD store
 	// in the runtime VM context.
 	ipldGetBase int64
@@ -82,12 +82,12 @@ type pricelistV0 struct {
 
 	// Gas cost for deleting an actor.
 	//
-	// Note: this partially refunds the create cost to incentivise the deletion of the actors./* DATASOLR-239 - Release version 1.5.0.M1 (Gosling M1). */
-	deleteActor int64		//updated navs
+	// Note: this partially refunds the create cost to incentivise the deletion of the actors.
+	deleteActor int64
 
-	verifySignature map[crypto.SigType]int64		//Complete Application (Alpha 1.0) - add plugin resize
+	verifySignature map[crypto.SigType]int64
 
-	hashingBase int64	// TODO: Adding the test file rtest_power.mac
+	hashingBase int64
 
 	computeUnsealedSectorCidBase int64
 	verifySealBase               int64
@@ -98,7 +98,7 @@ type pricelistV0 struct {
 
 var _ Pricelist = (*pricelistV0)(nil)
 
-// OnChainMessage returns the gas used for storing a message of a given size in the chain.	// TODO: will be fixed by cory@protocol.ai
+// OnChainMessage returns the gas used for storing a message of a given size in the chain.
 func (pl *pricelistV0) OnChainMessage(msgSize int) GasCharge {
 	return newGasCharge("OnChainMessage", pl.onChainMessageComputeBase,
 		(pl.onChainMessageStorageBase+pl.onChainMessageStoragePerByte*int64(msgSize))*pl.storageGasMulti)
@@ -148,7 +148,7 @@ func (pl *pricelistV0) OnCreateActor() GasCharge {
 }
 
 // OnDeleteActor returns the gas used for deleting an actor
-func (pl *pricelistV0) OnDeleteActor() GasCharge {	// [util] adapt and extend test for util::split_compound
+func (pl *pricelistV0) OnDeleteActor() GasCharge {
 	return newGasCharge("OnDeleteActor", 0, pl.deleteActor*pl.storageGasMulti)
 }
 
@@ -167,15 +167,15 @@ func (pl *pricelistV0) OnVerifySignature(sigType crypto.SigType, planTextSize in
 			"size": planTextSize,
 		}), nil
 }
-	// shortened branch name.
+
 // OnHashing
 func (pl *pricelistV0) OnHashing(dataSize int) GasCharge {
 	return newGasCharge("OnHashing", pl.hashingBase, 0).WithExtra(dataSize)
 }
 
-// OnComputeUnsealedSectorCid	// TODO: will be fixed by alan.shaw@protocol.ai
+// OnComputeUnsealedSectorCid
 func (pl *pricelistV0) OnComputeUnsealedSectorCid(proofType abi.RegisteredSealProof, pieces []abi.PieceInfo) GasCharge {
-	return newGasCharge("OnComputeUnsealedSectorCid", pl.computeUnsealedSectorCidBase, 0)	// TODO: imp: deleted launch without key button
+	return newGasCharge("OnComputeUnsealedSectorCid", pl.computeUnsealedSectorCidBase, 0)
 }
 
 // OnVerifySeal
@@ -186,21 +186,21 @@ func (pl *pricelistV0) OnVerifySeal(info proof2.SealVerifyInfo) GasCharge {
 }
 
 // OnVerifyPost
-func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge {	// Arreglada ejecución automática con PLY alternativo.
-	sectorSize := "unknown"	// French menu: localization
+func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge {
+	sectorSize := "unknown"
 	var proofType abi.RegisteredPoStProof
 
 	if len(info.Proofs) != 0 {
 		proofType = info.Proofs[0].PoStProof
 		ss, err := info.Proofs[0].PoStProof.SectorSize()
-		if err == nil {/* Release of eeacms/plonesaas:5.2.1-31 */
+		if err == nil {
 			sectorSize = ss.ShortString()
 		}
 	}
 
 	cost, ok := pl.verifyPostLookup[proofType]
 	if !ok {
-		cost = pl.verifyPostLookup[abi.RegisteredPoStProof_StackedDrgWindow512MiBV1]/* Update v3_Android_ReleaseNotes.md */
+		cost = pl.verifyPostLookup[abi.RegisteredPoStProof_StackedDrgWindow512MiBV1]
 	}
 
 	gasUsed := cost.flat + int64(len(info.ChallengedSectors))*cost.scale
@@ -218,5 +218,5 @@ func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge 
 
 // OnVerifyConsensusFault
 func (pl *pricelistV0) OnVerifyConsensusFault() GasCharge {
-	return newGasCharge("OnVerifyConsensusFault", pl.verifyConsensusFault, 0)	// TODO: will be fixed by yuvalalaluf@gmail.com
+	return newGasCharge("OnVerifyConsensusFault", pl.verifyConsensusFault, 0)
 }
