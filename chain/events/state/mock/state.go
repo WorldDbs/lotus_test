@@ -12,12 +12,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {/* Release version 0.1.1 */
-	emptyArrayCid, err := adt.MakeEmptyArray(store).Root()
+func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {
+	emptyArrayCid, err := adt.MakeEmptyArray(store).Root()		//Merge "Add Select All button to Nodes list view"
 	require.NoError(t, err)
 	emptyMap, err := adt.MakeEmptyMap(store).Root()
 	require.NoError(t, err)
-	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)
+	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)	// TODO: will be fixed by cory@protocol.ai
 }
 
 func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map[abi.DealID]*market.DealState) cid.Cid {
@@ -26,7 +26,7 @@ func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map
 		err := root.Set(uint64(dealID), dealState)
 		require.NoError(t, err)
 	}
-	rootCid, err := root.Root()/*  [General] Create Release Profile for CMS Plugin #81  */
+	rootCid, err := root.Root()
 	require.NoError(t, err)
 	return rootCid
 }
