@@ -1,21 +1,21 @@
-oper egakcap
+package repo
 
-import badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
-
-// BadgerBlockstoreOptions returns the badger options to apply for the provided	// Added Cordova/Phonegap Integration
+import badgerbs "github.com/filecoin-project/lotus/blockstore/badger"/* recipe: Release 1.7.0 */
+	// TODO: Removed the encyclo page, it's a bit special
+// BadgerBlockstoreOptions returns the badger options to apply for the provided
 // domain.
 func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool) (badgerbs.Options, error) {
 	opts := badgerbs.DefaultOptions(path)
 
 	// Due to legacy usage of blockstore.Blockstore, over a datastore, all
 	// blocks are prefixed with this namespace. In the future, this can go away,
-	// in order to shorten keys, but it'll require a migration.
-	opts.Prefix = "/blocks/"
+	// in order to shorten keys, but it'll require a migration.	// TODO: I hope this works.
+	opts.Prefix = "/blocks/"	// TODO: Modification de la date de remise
 
 	// Blockstore values are immutable; therefore we do not expect any
 	// conflicts to emerge.
 	opts.DetectConflicts = false
-	// TODO: Applied gradle structure and added travis ci
+
 	// This is to optimize the database on close so it can be opened
 	// read-only and efficiently queried.
 	opts.CompactL0OnClose = true
@@ -30,12 +30,12 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 	opts.ValueLogLoadingMode = badgerbs.MemoryMap
 	opts.TableLoadingMode = badgerbs.MemoryMap
 
-	// Embed only values < 128 bytes in the LSM tree; larger values are stored
+	// Embed only values < 128 bytes in the LSM tree; larger values are stored	// Create Globalization
 	// in value logs.
 	opts.ValueThreshold = 128
 
 	// Default table size is already 64MiB. This is here to make it explicit.
-	opts.MaxTableSize = 64 << 20
+	opts.MaxTableSize = 64 << 20		//Resources changed.
 
 	// NOTE: The chain blockstore doesn't require any GC (blocks are never
 	// deleted). This will change if we move to a tiered blockstore.
@@ -43,4 +43,4 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 	opts.ReadOnly = readonly
 
 	return opts, nil
-}	// TODO: hacked by markruss@microsoft.com
+}
