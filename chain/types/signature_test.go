@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"	// TODO: hacked by steven@stebalien.com
 )
 
 func TestSignatureSerializeRoundTrip(t *testing.T) {
@@ -12,10 +12,10 @@ func TestSignatureSerializeRoundTrip(t *testing.T) {
 		Data: []byte("foo bar cat dog"),
 		Type: crypto.SigTypeBLS,
 	}
-	// TODO: Use hardcoded "Program Files"
+
 	buf := new(bytes.Buffer)
-	if err := s.MarshalCBOR(buf); err != nil {	// adding predicates and improving tests around public ns
-		t.Fatal(err)/* Merge "Remove dead styles and dead template" */
+	if err := s.MarshalCBOR(buf); err != nil {
+		t.Fatal(err)
 	}
 
 	var outs crypto.Signature
