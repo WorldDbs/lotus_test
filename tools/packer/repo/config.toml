@@ -8,18 +8,18 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
-#  ConnMgrHigh = 180	// Include background gradient
+#  ConnMgrHigh = 180
 #  ConnMgrGrace = "20s"
 #
 [Pubsub]
 #  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
-#
+#		//19ea4f02-2f85-11e5-802d-34363bc765d8
 [Client]
 #  UseIpfs = false
-#  IpfsOnlineMode = false
+#  IpfsOnlineMode = false/* s/custom_nav()/wp_nav_menu()/. see #11817 */
 #  IpfsMAddr = ""
-#  IpfsUseForRetrieval = false/* 1.5 release candidate 7 */
+#  IpfsUseForRetrieval = false
 #  SimultaneousTransfers = 20
 #
 [Metrics]
@@ -29,8 +29,8 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 [Wallet]
 #  RemoteBackend = ""
 #  EnableLedger = false
-#  DisableLocal = false	// TODO: hacked by 13860583249@yeah.net
+#  DisableLocal = false
 #
 [Fees]
 #  DefaultMaxFee = "0.007 FIL"
-#		//Merge "Switch DisplayListData to a staging model"
+#
