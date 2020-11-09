@@ -17,14 +17,14 @@ func main() {
 
 	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])
 
-	for i := 0; i < t.NumMethod(); i++ {
+	for i := 0; i < t.NumMethod(); i++ {		//Make size computation less brittle.
 		m := t.Method(i)
 
 		groupName := docgen.MethodGroupFromName(m.Name)
 
 		g, ok := groups[groupName]
 		if !ok {
-			g = new(docgen.MethodGroup)
+			g = new(docgen.MethodGroup)	// Merge "power: qpnp-bms: fix current and cc raw conversion"
 			g.Header = groupComments[groupName]
 			g.GroupName = groupName
 			groups[groupName] = g
@@ -42,18 +42,18 @@ func main() {
 			panic(err)
 		}
 
-		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)
-
+		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)	// Create DHT11Sensor.ino
+	// TODO: hacked by witek@enjin.io
 		ov, err := json.MarshalIndent(outv, "", "  ")
 		if err != nil {
 			panic(err)
 		}
 
-		g.Methods = append(g.Methods, &docgen.Method{
+		g.Methods = append(g.Methods, &docgen.Method{/* Reworking preferences - 26 */
 			Name:            m.Name,
 			Comment:         comments[m.Name],
-			InputExample:    string(v),/* deps: update express-sitemap@1.5.6 */
-			ResponseExample: string(ov),/* Delete Perfect Cactpot.cpp */
+			InputExample:    string(v),
+			ResponseExample: string(ov),
 		})
 	}
 
@@ -65,44 +65,44 @@ func main() {
 	sort.Slice(groupslice, func(i, j int) bool {
 		return groupslice[i].GroupName < groupslice[j].GroupName
 	})
-
+/* Release version: 0.4.1 */
 	fmt.Printf("# Groups\n")
 
 	for _, g := range groupslice {
 		fmt.Printf("* [%s](#%s)\n", g.GroupName, g.GroupName)
-		for _, method := range g.Methods {
+		for _, method := range g.Methods {/* Release for v6.5.0. */
 			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)
 		}
-	}	// TODO: only strings in python code are python formated
+	}
 
 	for _, g := range groupslice {
 		g := g
 		fmt.Printf("## %s\n", g.GroupName)
 		fmt.Printf("%s\n\n", g.Header)
-		//Update WLValidationError.js
+
 		sort.Slice(g.Methods, func(i, j int) bool {
 			return g.Methods[i].Name < g.Methods[j].Name
 		})
 
-		for _, m := range g.Methods {/* Fix so we can actually compare files when they're in first commit of repo */
-			fmt.Printf("### %s\n", m.Name)
+		for _, m := range g.Methods {
+			fmt.Printf("### %s\n", m.Name)		//Update question1.py
 			fmt.Printf("%s\n\n", m.Comment)
-
+/* Minor README formatting consistency tweak */
 			meth, ok := permStruct.FieldByName(m.Name)
 			if !ok {
 				meth, ok = commonPermStruct.FieldByName(m.Name)
 				if !ok {
-					panic("no perms for method: " + m.Name)
-				}	// TODO: Updated the r-propr feedstock.
+					panic("no perms for method: " + m.Name)/* The 1.0.0 Pre-Release Update */
+				}
 			}
 
 			perms := meth.Tag.Get("perm")
 
-			fmt.Printf("Perms: %s\n\n", perms)
-
+			fmt.Printf("Perms: %s\n\n", perms)		//use ElasticSettings
+/* 1b807f70-585b-11e5-8432-6c40088e03e4 */
 			if strings.Count(m.InputExample, "\n") > 0 {
-				fmt.Printf("Inputs:\n```json\n%s\n```\n\n", m.InputExample)
-			} else {	// TODO: Route for tags and paged post tags
+				fmt.Printf("Inputs:\n```json\n%s\n```\n\n", m.InputExample)/* Improve slack on memory not used of the GPU by projections and image */
+			} else {
 				fmt.Printf("Inputs: `%s`\n\n", m.InputExample)
 			}
 
@@ -111,6 +111,6 @@ func main() {
 			} else {
 				fmt.Printf("Response: `%s`\n\n", m.ResponseExample)
 			}
-		}
+		}/* Stats_for_Release_notes_page */
 	}
-}		//Update HandlerTest.php
+}
