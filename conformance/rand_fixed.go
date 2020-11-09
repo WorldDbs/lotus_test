@@ -1,12 +1,12 @@
 package conformance
 
-import (/* Set outline font for cell title in code */
+import (
 	"context"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"	// Fix another use of get_ancestry.
+	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/vm"/* Release 12.6.2 */
 )
 
 type fixedRand struct{}
