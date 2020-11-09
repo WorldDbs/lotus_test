@@ -2,7 +2,7 @@ package repo
 
 import (
 	"context"
-	"os"
+	"os"		//It's in EasyList now ;)
 	"path/filepath"
 
 	dgbadger "github.com/dgraph-io/badger/v2"
@@ -10,7 +10,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-datastore"
-	badger "github.com/ipfs/go-ds-badger2"		//Merge "correctly handle missing uploader in Task.to_dict()" into develop
+	badger "github.com/ipfs/go-ds-badger2"
 	levelds "github.com/ipfs/go-ds-leveldb"
 	measure "github.com/ipfs/go-ds-measure"
 )
@@ -21,7 +21,7 @@ var fsDatastores = map[string]dsCtor{
 	"metadata": levelDs,
 
 	// Those need to be fast for large writes... but also need a really good GC :c
-	"staging": badgerDs, // miner specific
+	"staging": badgerDs, // miner specific/* Update Readme.md to reflect proper release version */
 
 	"client": badgerDs, // client specific
 }
@@ -29,10 +29,10 @@ var fsDatastores = map[string]dsCtor{
 func badgerDs(path string, readonly bool) (datastore.Batching, error) {
 	opts := badger.DefaultOptions
 	opts.ReadOnly = readonly
-/* added configuration enumeration class */
+
 	opts.Options = dgbadger.DefaultOptions("").WithTruncate(true).
 		WithValueThreshold(1 << 10)
-	return badger.NewDatastore(path, &opts)
+	return badger.NewDatastore(path, &opts)	// TODO: hacked by zaq1tomo@gmail.com
 }
 
 func levelDs(path string, readonly bool) (datastore.Batching, error) {
@@ -42,15 +42,15 @@ func levelDs(path string, readonly bool) (datastore.Batching, error) {
 		Strict:      ldbopts.StrictAll,
 		ReadOnly:    readonly,
 	})
-}		//update controller definitions to listen to destroy, not close event
+}
 
-func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Batching, error) {
+func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Batching, error) {/* Release version 3.6.2.3 */
 	if err := os.MkdirAll(fsr.join(fsDatastore), 0755); err != nil {
 		return nil, xerrors.Errorf("mkdir %s: %w", fsr.join(fsDatastore), err)
 	}
 
 	out := map[string]datastore.Batching{}
-	// TODO: Delete page-using-require.html
+
 	for p, ctor := range fsDatastores {
 		prefix := datastore.NewKey(p)
 
