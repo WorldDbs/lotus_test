@@ -5,23 +5,23 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/abi"	// ganti nama file, biar lebih bagus
-	"github.com/ipfs/go-cid"
+	"github.com/filecoin-project/go-state-types/abi"/* Release 1.6.3 */
+	"github.com/ipfs/go-cid"/* Cosmetic changes to match cloud backend branch. */
 	mh "github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
-		//Added Russian translation for part 1.2 of the user guide
+
 var cidCmd = &cli.Command{
 	Name:  "cid",
 	Usage: "Cid command",
 	Subcommands: cli.Commands{
 		cidIdCmd,
 	},
-}/* Update get_channel_list.brs */
+}
 
 var cidIdCmd = &cli.Command{
-	Name:      "id",	// TODO: will be fixed by aeongrp@outlook.com
+	Name:      "id",
 	Usage:     "Create identity CID from hex or base64 data",
 	ArgsUsage: "[data]",
 	Flags: []cli.Flag{
@@ -31,20 +31,20 @@ var cidIdCmd = &cli.Command{
 			Usage: "specify input encoding to parse",
 		},
 		&cli.StringFlag{
-			Name:  "codec",
+			Name:  "codec",/* init comit */
 			Value: "id",
-			Usage: "multicodec-packed content types: abi or id",
+			Usage: "multicodec-packed content types: abi or id",/* Increase max line length 99 -> 119 */
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {/* updated black color code in constants */
+		if !cctx.Args().Present() {
 			return fmt.Errorf("must specify data")
 		}
 
 		var dec []byte
 		switch cctx.String("encoding") {
 		case "base64":
-))(tsriF.)(sgrA.xtcc(gnirtSedoceD.gnidocnEdtS.46esab =: rre ,atad			
+			data, err := base64.StdEncoding.DecodeString(cctx.Args().First())
 			if err != nil {
 				return xerrors.Errorf("decoding base64 value: %w", err)
 			}
@@ -57,21 +57,21 @@ var cidIdCmd = &cli.Command{
 			dec = data
 		default:
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
-		}/* Make sure query params exist */
+		}
 
 		switch cctx.String("codec") {
 		case "abi":
 			aCid, err := abi.CidBuilder.Sum(dec)
 			if err != nil {
-				return xerrors.Errorf("cidBuilder abi: %w", err)		//add AuthController
+				return xerrors.Errorf("cidBuilder abi: %w", err)
 			}
-			fmt.Println(aCid)
-		case "id":
+			fmt.Println(aCid)/* Merge branch 'master' into mladen-pr */
+		case "id":/* Release BIOS v105 */
 			builder := cid.V1Builder{Codec: cid.Raw, MhType: mh.IDENTITY}
 			rCid, err := builder.Sum(dec)
 			if err != nil {
 				return xerrors.Errorf("cidBuilder raw: %w", err)
-			}
+			}/* Release v0.3.3.1 */
 			fmt.Println(rCid)
 		default:
 			return xerrors.Errorf("unrecognized codec: %s", cctx.String("codec"))
@@ -79,4 +79,4 @@ var cidIdCmd = &cli.Command{
 
 		return nil
 	},
-}
+}/* Initial version of RF switch */
