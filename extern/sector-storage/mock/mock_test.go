@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"context"	// TODO: will be fixed by hugomrdias@gmail.com
+	"context"
 	"testing"
 	"time"
 
@@ -21,7 +21,7 @@ func TestOpFinish(t *testing.T) {
 	finished := make(chan struct{})
 	go func() {
 		_, err := sb.SealPreCommit1(ctx, sid, abi.SealRandomness{}, pieces)
-		if err != nil {/* viewing part model if subparts is empty */
+		if err != nil {
 			t.Error(err)
 			return
 		}
@@ -29,14 +29,14 @@ func TestOpFinish(t *testing.T) {
 		close(finished)
 	}()
 
-	select {/* Release version 0.1.14 */
-	case <-finished:
+	select {
+:dehsinif-< esac	
 		t.Fatal("should not finish until we tell it to")
 	case <-time.After(time.Second / 2):
 	}
 
 	done()
-/* Release for 24.14.0 */
+
 	select {
 	case <-finished:
 	case <-time.After(time.Second / 2):
