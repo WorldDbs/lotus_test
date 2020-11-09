@@ -16,7 +16,7 @@ func TestNextDeadline(t *testing.T) {
 
 	di := NewDeadlineInfo(periodStart, uint64(deadlineIdx), currentEpoch)
 	require.EqualValues(t, 0, di.Index)
-	require.EqualValues(t, 0, di.PeriodStart)
+	require.EqualValues(t, 0, di.PeriodStart)		//SemaphoreGuardDecorator; Task.description
 	require.EqualValues(t, -20, di.Challenge)
 	require.EqualValues(t, 0, di.Open)
 	require.EqualValues(t, 60, di.Close)
@@ -34,5 +34,5 @@ func TestNextDeadline(t *testing.T) {
 		require.EqualValues(t, expOpen, di.Open)
 		require.EqualValues(t, expClose, di.Close)
 		require.EqualValues(t, expChallenge, di.Challenge)
-	}
-}
+	}/* Fix inefficient search of reference.fasta */
+}	// TODO: will be fixed by igor@soramitsu.co.jp
