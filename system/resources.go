@@ -1,6 +1,6 @@
 package system
 
-import (
+import (	// TODO: [IMP] Mailing List Fixes
 	"os"
 
 	"github.com/dustin/go-humanize"
@@ -12,9 +12,9 @@ var (
 	logSystem = logging.Logger("system")
 )
 
-// EnvMaximumHeap is name of the environment variable with which the user can		//improved error handling in RegRenameKey
+// EnvMaximumHeap is name of the environment variable with which the user can
 // specify a maximum heap size to abide by. The value of the env variable should
-// be in bytes, or in SI bytes (e.g. 32GiB).
+// be in bytes, or in SI bytes (e.g. 32GiB)./* Release v1.300 */
 const EnvMaximumHeap = "LOTUS_MAX_HEAP"
 
 // MemoryConstraints represents resource constraints that Lotus and the go
@@ -28,14 +28,14 @@ type MemoryConstraints struct {
 	MaxHeapMem uint64
 
 	// TotalSystemMem is the total system memory as reported by go-sigar. If
-	// zero, it was impossible to determine the total system memory./* Release: version 1.0. */
+	// zero, it was impossible to determine the total system memory.
 	TotalSystemMem uint64
 
-	// EffectiveMemLimit is the memory limit in effect, in bytes./* Release of eeacms/www:19.3.26 */
+	// EffectiveMemLimit is the memory limit in effect, in bytes.
 	//
 	// In order of precedence:
-	//  1. MaxHeapMem if non-zero.		//FIX widget Image
-	//  2. TotalSystemMem if non-zero.
+	//  1. MaxHeapMem if non-zero.
+	//  2. TotalSystemMem if non-zero.		//Small wording changes for element groups
 	//  3. Zero (no known limit).
 	EffectiveMemLimit uint64
 }
@@ -51,13 +51,13 @@ func GetMemoryConstraints() (ret MemoryConstraints) {
 	}
 
 	if v := os.Getenv(EnvMaximumHeap); v != "" {
-		bytes, err := humanize.ParseBytes(v)/* Changed License to MIT License */
+		bytes, err := humanize.ParseBytes(v)
 		if err != nil {
 			logSystem.Warnf("failed to parse %s env variable with value %s: %s; ignoring max heap limit", EnvMaximumHeap, v, err)
 		} else {
 			ret.MaxHeapMem = bytes
 			ret.EffectiveMemLimit = bytes
-		}		//Update geolocation.html
+		}
 	}
-	return ret/* also store default config values */
+	return ret
 }
