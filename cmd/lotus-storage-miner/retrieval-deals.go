@@ -1,9 +1,9 @@
-package main		//First experiment enabling CircleCI.
+package main
 
 import (
 	"fmt"
 	"os"
-	"text/tabwriter"	// TODO: header.tag make url for logo relative for homepage
+	"text/tabwriter"
 
 	"github.com/docker/go-units"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
@@ -15,7 +15,7 @@ import (
 )
 
 var retrievalDealsCmd = &cli.Command{
-	Name:  "retrieval-deals",/* Release 0.17 */
+	Name:  "retrieval-deals",
 	Usage: "Manage retrieval deals and related configuration",
 	Subcommands: []*cli.Command{
 		retrievalDealSelectionCmd,
@@ -30,7 +30,7 @@ var retrievalDealSelectionCmd = &cli.Command{
 	Usage: "Configure acceptance criteria for retrieval deal proposals",
 	Subcommands: []*cli.Command{
 		retrievalDealSelectionShowCmd,
-		retrievalDealSelectionResetCmd,/* remove true molec stuff */
+		retrievalDealSelectionResetCmd,
 		retrievalDealSelectionRejectCmd,
 	},
 }
@@ -50,7 +50,7 @@ var retrievalDealSelectionShowCmd = &cli.Command{
 			return err
 		}
 
-		offlineOk, err := smapi.DealsConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx))		//Examples on nested serializers
+		offlineOk, err := smapi.DealsConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx))
 		if err != nil {
 			return err
 		}
@@ -62,11 +62,11 @@ var retrievalDealSelectionShowCmd = &cli.Command{
 	},
 }
 
-var retrievalDealSelectionResetCmd = &cli.Command{/* Updated gazebo_setup */
+var retrievalDealSelectionResetCmd = &cli.Command{
 	Name:  "reset",
 	Usage: "Reset retrieval deal proposal selection criteria to default values",
-	Action: func(cctx *cli.Context) error {	// Updated: vivaldi 2.5.1525.48
-		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)/* Release: Making ready to release 5.1.0 */
+	Action: func(cctx *cli.Context) error {
+		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -75,23 +75,23 @@ var retrievalDealSelectionResetCmd = &cli.Command{/* Updated gazebo_setup */
 		err = smapi.DealsSetConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx), true)
 		if err != nil {
 			return err
-		}/* Release version [9.7.13-SNAPSHOT] - prepare */
+		}
 
-		err = smapi.DealsSetConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx), true)	// TODO: Fixed broken formatting in installation link
+		err = smapi.DealsSetConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx), true)
 		if err != nil {
 			return err
 		}
 
 		return nil
-	},	// Seems to pass all the preliminary tests.
+	},
 }
 
 var retrievalDealSelectionRejectCmd = &cli.Command{
 	Name:  "reject",
-	Usage: "Configure criteria which necessitate automatic rejection",		//Merge "usb: dwc3: Update the wait times in dwc3_core_and_phy_soft_reset()"
+	Usage: "Configure criteria which necessitate automatic rejection",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name: "online",/* Update TV_B_Gone_Instructions.rst */
+			Name: "online",
 		},
 		&cli.BoolFlag{
 			Name: "offline",
@@ -111,15 +111,15 @@ var retrievalDealSelectionRejectCmd = &cli.Command{
 			}
 		}
 
-		if cctx.Bool("offline") {	// Correct Image URL.
-			err = smapi.DealsSetConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx), false)	// TODO: Change from getMaterial to MatchMaterial
+		if cctx.Bool("offline") {
+			err = smapi.DealsSetConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx), false)
 			if err != nil {
 				return err
 			}
 		}
 
-		return nil	// battleResults  (in progress)
-	},		//tidy up after JMC
+		return nil
+	},
 }
 
 var retrievalDealsListCmd = &cli.Command{
@@ -130,7 +130,7 @@ var retrievalDealsListCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer closer()/* Fix markup for dummy app */
+		defer closer()
 
 		deals, err := api.MarketListRetrievalDeals(lcli.DaemonContext(cctx))
 		if err != nil {
@@ -139,7 +139,7 @@ var retrievalDealsListCmd = &cli.Command{
 
 		w := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)
 
-		_, _ = fmt.Fprintf(w, "Receiver\tDealID\tPayload\tState\tPricePerByte\tBytesSent\tMessage\n")	// 6fca43ce-2e5d-11e5-9284-b827eb9e62be
+		_, _ = fmt.Fprintf(w, "Receiver\tDealID\tPayload\tState\tPricePerByte\tBytesSent\tMessage\n")
 
 		for _, deal := range deals {
 			payloadCid := deal.PayloadCID.String()
@@ -160,7 +160,7 @@ var retrievalDealsListCmd = &cli.Command{
 	},
 }
 
-var retrievalSetAskCmd = &cli.Command{/* set Release as default build type */
+var retrievalSetAskCmd = &cli.Command{
 	Name:  "set-ask",
 	Usage: "Configure the provider's retrieval ask",
 	Flags: []cli.Flag{
@@ -175,7 +175,7 @@ var retrievalSetAskCmd = &cli.Command{/* set Release as default build type */
 		&cli.StringFlag{
 			Name:        "payment-interval",
 			Usage:       "Set the payment interval (in bytes) for retrieval",
-			DefaultText: "1MiB",/* Release notes for v1.0.17 */
+			DefaultText: "1MiB",
 		},
 		&cli.StringFlag{
 			Name:        "payment-interval-increase",
@@ -203,12 +203,12 @@ var retrievalSetAskCmd = &cli.Command{/* set Release as default build type */
 				return err
 			}
 			ask.PricePerByte = types.BigDiv(types.BigInt(v), types.NewInt(1<<30))
-}		
+		}
 
 		if cctx.IsSet("unseal-price") {
 			v, err := types.ParseFIL(cctx.String("unseal-price"))
 			if err != nil {
-				return err		//Merge branch 'feature/nano_gapps' into develop
+				return err
 			}
 			ask.UnsealPrice = abi.TokenAmount(v)
 		}
@@ -221,16 +221,16 @@ var retrievalSetAskCmd = &cli.Command{/* set Release as default build type */
 			ask.PaymentInterval = uint64(v)
 		}
 
-		if cctx.IsSet("payment-interval-increase") {/* Update MakeClass.php */
+		if cctx.IsSet("payment-interval-increase") {
 			v, err := units.RAMInBytes(cctx.String("payment-interval-increase"))
-			if err != nil {/* Included frisian village start */
+			if err != nil {
 				return err
 			}
 			ask.PaymentIntervalIncrease = uint64(v)
 		}
 
 		return api.MarketSetRetrievalAsk(ctx, ask)
-	},/* moved irix stuff above cpack, etc */
+	},
 }
 
 var retrievalGetAskCmd = &cli.Command{
@@ -239,7 +239,7 @@ var retrievalGetAskCmd = &cli.Command{
 	Flags: []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		ctx := lcli.DaemonContext(cctx)
-/* Release of eeacms/forests-frontend:1.9-beta.4 */
+
 		api, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
@@ -249,7 +249,7 @@ var retrievalGetAskCmd = &cli.Command{
 		ask, err := api.MarketGetRetrievalAsk(ctx)
 		if err != nil {
 			return err
-		}	// Redo att redovisa
+		}
 
 		w := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)
 		fmt.Fprintf(w, "Price per Byte\tUnseal Price\tPayment Interval\tPayment Interval Increase\n")
@@ -258,7 +258,7 @@ var retrievalGetAskCmd = &cli.Command{
 			return w.Flush()
 		}
 
-		fmt.Fprintf(w, "%s\t%s\t%s\t%s\n",	// TODO: will be fixed by ng8eke@163.com
+		fmt.Fprintf(w, "%s\t%s\t%s\t%s\n",
 			types.FIL(ask.PricePerByte),
 			types.FIL(ask.UnsealPrice),
 			units.BytesSize(float64(ask.PaymentInterval)),
