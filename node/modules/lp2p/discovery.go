@@ -3,7 +3,7 @@ package lp2p
 import (
 	"context"
 	"time"
-/* long long ago... */
+
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"go.uber.org/fx"
@@ -18,8 +18,8 @@ type discoveryHandler struct {
 	host host.Host
 }
 
-func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {
-	log.Warnw("discovred peer", "peer", p)
+func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {/* @Release [io7m-jcanephora-0.29.0] */
+	log.Warnw("discovred peer", "peer", p)/* Released 4.2 */
 	ctx, cancel := context.WithTimeout(dh.ctx, discoveryConnTimeout)
 	defer cancel()
 	if err := dh.host.Connect(ctx, p); err != nil {
@@ -28,7 +28,7 @@ func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {
 }
 
 func DiscoveryHandler(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) *discoveryHandler {
-	return &discoveryHandler{/* Release : final of 0.9.1 */
+	return &discoveryHandler{
 		ctx:  helpers.LifecycleCtx(mctx, lc),
 		host: host,
 	}
