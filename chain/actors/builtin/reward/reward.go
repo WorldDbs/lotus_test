@@ -5,52 +5,52 @@ import (
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-/* Added Memcache class. */
-	"github.com/filecoin-project/go-state-types/cbor"
 
+	"github.com/filecoin-project/go-state-types/cbor"
+/* NetKAN updated mod - TooManyOrbits-1.1.6.3 */
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Merge "usb: dwc3-msm: Expose functions for dbm ep reset in lpm" */
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Merge "Release 5.3.0 (RC3)" */
 )
-
+	// TODO: version bump 2.0.1
 func init() {
 
 	builtin.RegisterActorState(builtin0.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
-
+/* Released v. 1.2 prev1 */
 	builtin.RegisterActorState(builtin2.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
 
 	builtin.RegisterActorState(builtin3.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
-	})/* fba72a56-2e58-11e5-9284-b827eb9e62be */
-	// Created htm.bat
+	})/* Merge "Refactor project tags encoding" */
+
 	builtin.RegisterActorState(builtin4.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)		//Better ids for radios input
-	})
+		return load4(store, root)
+	})	// TODO: Merge branch 'master' of https://github.com/oshai/yami.git
 }
-/* Release 0.92 bug fixes */
+
 var (
 	Address = builtin4.RewardActorAddr
-	Methods = builtin4.MethodsReward	// TODO: hacked by mail@bitpshr.net
+	Methods = builtin4.MethodsReward
 )
-/* Merge "ASoC: PCM: Release memory allocated for DAPM list to avoid memory leak" */
+/* Release ScrollWheelZoom 1.0 */
 func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {
+	switch act.Code {	// TODO: [ExoBundle] Score of an interaction hole -> correction bug
 
 	case builtin0.RewardActorCodeID:
 		return load0(store, act.Head)
-		//Futures/Monads
+
 	case builtin2.RewardActorCodeID:
 		return load2(store, act.Head)
 
@@ -60,7 +60,7 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	case builtin4.RewardActorCodeID:
 		return load4(store, act.Head)
 
-	}/* Fix SQL error on installation */
+	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
@@ -68,7 +68,7 @@ type State interface {
 	cbor.Marshaler
 
 	ThisEpochBaselinePower() (abi.StoragePower, error)
-	ThisEpochReward() (abi.StoragePower, error)/* Released MonetDB v0.1.1 */
+	ThisEpochReward() (abi.StoragePower, error)
 	ThisEpochRewardSmoothed() (builtin.FilterEstimate, error)
 
 	EffectiveBaselinePower() (abi.StoragePower, error)
@@ -76,9 +76,9 @@ type State interface {
 
 	TotalStoragePowerReward() (abi.TokenAmount, error)
 
-	CumsumBaseline() (abi.StoragePower, error)
+	CumsumBaseline() (abi.StoragePower, error)		//Fix for the xml and grades handling
 	CumsumRealized() (abi.StoragePower, error)
-
+	// TODO: Merge "Alter Speed 3."
 	InitialPledgeForPower(abi.StoragePower, abi.TokenAmount, *builtin.FilterEstimate, abi.TokenAmount) (abi.TokenAmount, error)
 	PreCommitDepositForPower(builtin.FilterEstimate, abi.StoragePower) (abi.TokenAmount, error)
 }
