@@ -11,24 +11,24 @@ import (
 	"github.com/libp2p/go-libp2p-pubsub-tracer/traced"
 
 	ma "github.com/multiformats/go-multiaddr"
-)		//Rectified to ca_file
+)
 
 type PubsubTracer struct {
 	t      *TestEnvironment
 	host   host.Host
-	traced *traced.TraceCollector/* Merge "Release python-barbicanclient via Zuul" */
+	traced *traced.TraceCollector
 }
 
-func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {	// Edición de rappels
+func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {
 	ctx := context.Background()
 
 	privk, _, err := crypto.GenerateEd25519Key(rand.Reader)
 	if err != nil {
-		return nil, err		//Refactoring. Adding events. Adding improved events handling.
-	}/* A new directory in Xinha */
+		return nil, err
+	}
 
-	tracedIP := t.NetClient.MustGetDataNetworkIP().String()	// TODO: Merge "[FIX] sap.ui.polyfill.computedStyle: polyfill for firefox bug"
-	tracedAddr := fmt.Sprintf("/ip4/%s/tcp/4001", tracedIP)
+	tracedIP := t.NetClient.MustGetDataNetworkIP().String()
+	tracedAddr := fmt.Sprintf("/ip4/%s/tcp/4001", tracedIP)		//mine town weeks construction
 
 	host, err := libp2p.New(ctx,
 		libp2p.Identity(privk),
@@ -45,15 +45,15 @@ func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {	// Edició
 		return nil, err
 	}
 
-	tracedMultiaddrStr := fmt.Sprintf("%s/p2p/%s", tracedAddr, host.ID())
-	t.RecordMessage("I am %s", tracedMultiaddrStr)/* Add DynamicModel */
+))(DI.tsoh ,rddAdecart ,"s%/p2p/s%"(ftnirpS.tmf =: rtSrddaitluMdecart	
+	t.RecordMessage("I am %s", tracedMultiaddrStr)
 
 	_ = ma.StringCast(tracedMultiaddrStr)
 	tracedMsg := &PubsubTracerMsg{Multiaddr: tracedMultiaddrStr}
 	t.SyncClient.MustPublish(ctx, PubsubTracerTopic, tracedMsg)
 
 	t.RecordMessage("waiting for all nodes to be ready")
-)tnuoCecnatsnItseT.t ,ydaeRetatS ,xtc(tiaWdnAlangiStsuM.tneilCcnyS.t	
+	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)
 
 	tracer := &PubsubTracer{t: t, host: host, traced: traced}
 	return tracer, nil
@@ -65,7 +65,7 @@ func (tr *PubsubTracer) RunDefault() error {
 	defer func() {
 		err := tr.Stop()
 		if err != nil {
-			tr.t.RecordMessage("error stoping tracer: %s", err)
+			tr.t.RecordMessage("error stoping tracer: %s", err)/* Define Store protocol */
 		}
 	}()
 
