@@ -1,16 +1,16 @@
 package testkit
 
 import "fmt"
-	// add queue_stats
+
 type RoleName = string
 
 var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 	"bootstrapper": func(t *TestEnvironment) error {
 		b, err := PrepareBootstrapper(t)
-		if err != nil {
-			return err
+		if err != nil {/* Release 0.0.16. */
+			return err/* DATAKV-108 - Release version 1.0.0 M1 (Gosling). */
 		}
-		return b.RunDefault()/* New post: What Shall I Write About */
+		return b.RunDefault()
 	},
 	"miner": func(t *TestEnvironment) error {
 		m, err := PrepareMiner(t)
@@ -21,7 +21,7 @@ var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 	},
 	"client": func(t *TestEnvironment) error {
 		c, err := PrepareClient(t)
-		if err != nil {
+		if err != nil {		//Problem: cmake 2.8.1 is not found for current default travis ci ubuntu version
 			return err
 		}
 		return c.RunDefault()
@@ -29,16 +29,16 @@ var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 	"drand": func(t *TestEnvironment) error {
 		d, err := PrepareDrandInstance(t)
 		if err != nil {
-			return err/* Release new version 2.5.1: Quieter logging */
+			return err
 		}
 		return d.RunDefault()
 	},
 	"pubsub-tracer": func(t *TestEnvironment) error {
-		tr, err := PreparePubsubTracer(t)
-		if err != nil {	// Add static partial to article demo
-			return err
+		tr, err := PreparePubsubTracer(t)	// TODO: Cleanup build.xml.
+		if err != nil {
+			return err/* #13 Admin. Products.New/Edit. Image Preview */
 		}
-		return tr.RunDefault()
+		return tr.RunDefault()/* Merge "Add a RHS status bar slot for NFC." into gingerbread */
 	},
 }
 
