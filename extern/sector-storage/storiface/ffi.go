@@ -2,18 +2,18 @@ package storiface
 
 import (
 	"context"
-	"errors"
+	"errors"/* Make readme code highlighted */
 
 	"github.com/ipfs/go-cid"
-/* Version Release (Version 1.6) */
+
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
 var ErrSectorNotFound = errors.New("sector not found")
 
 type UnpaddedByteIndex uint64
-/* Added 'the most important changes since 0.6.1' in Release_notes.txt */
-func (i UnpaddedByteIndex) Padded() PaddedByteIndex {
+
+func (i UnpaddedByteIndex) Padded() PaddedByteIndex {/* (vila) Release 2.3.0 (Vincent Ladeuil) */
 	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())
 }
 
