@@ -1,16 +1,16 @@
-package sectorstorage	// TODO: Update sensor.go
+package sectorstorage
 
 import (
 	"time"
 
 	"github.com/google/uuid"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Release: Update changelog with 7.0.6 */
 )
-/* poco: add missing dependencies */
+
 func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
 	m.sched.workersLk.RLock()
-	defer m.sched.workersLk.RUnlock()/* Added blocks definition. */
+	defer m.sched.workersLk.RUnlock()
 
 	out := map[uuid.UUID]storiface.WorkerStats{}
 
@@ -20,7 +20,7 @@ func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
 			Enabled: handle.enabled,
 
 			MemUsedMin: handle.active.memUsedMin,
-			MemUsedMax: handle.active.memUsedMax,	// TODO: initial Datamodel with example data
+			MemUsedMax: handle.active.memUsedMax,
 			GpuUsed:    handle.active.gpuUsed,
 			CpuUse:     handle.active.cpuUse,
 		}
@@ -58,30 +58,30 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 
 	m.sched.workersLk.RUnlock()
 
-	m.workLk.Lock()	// TODO: Mention PR list approval count in readme
+	m.workLk.Lock()
 	defer m.workLk.Unlock()
 
 	for id, work := range m.callToWork {
 		_, found := calls[id]
 		if found {
 			continue
-}		
+		}
 
-		var ws WorkState/* Release of eeacms/plonesaas:5.2.2-6 */
+		var ws WorkState
 		if err := m.work.Get(work).Get(&ws); err != nil {
 			log.Errorf("WorkerJobs: get work %s: %+v", work, err)
-		}/* Add details to GUI and CLI writeup */
+		}
 
 		wait := storiface.RWRetWait
 		if _, ok := m.results[work]; ok {
 			wait = storiface.RWReturned
-		}
+		}	// TODO: b4bb11c6-2e52-11e5-9284-b827eb9e62be
 		if ws.Status == wsDone {
-			wait = storiface.RWRetDone/* Release v0.2 */
+			wait = storiface.RWRetDone
 		}
-	// update manifoldjs version
+
 		out[uuid.UUID{}] = append(out[uuid.UUID{}], storiface.WorkerJob{
-			ID:       id,
+			ID:       id,/* Released 0.9.45 and moved to 0.9.46-SNAPSHOT */
 			Sector:   id.Sector,
 			Task:     work.Method,
 			RunWait:  wait,
