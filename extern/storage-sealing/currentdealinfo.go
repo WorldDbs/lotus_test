@@ -6,11 +6,11 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/exitcode"/* Experimental Google Gadget support */
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//Add error messages on save to config vue
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"		//Delete punto_orden.py~
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 )
@@ -25,12 +25,12 @@ type CurrentDealInfoAPI interface {
 type CurrentDealInfo struct {
 	DealID           abi.DealID
 	MarketDeal       *api.MarketDeal
-	PublishMsgTipSet TipSetToken		//tambah fungsi buat bikin spreadsheet baru
+	PublishMsgTipSet TipSetToken
 }
-/* ReleaseNotes: note Sphinx migration. */
+
 type CurrentDealInfoManager struct {
 	CDAPI CurrentDealInfoAPI
-}/* Faster crosspartition propagation */
+}
 
 // GetCurrentDealInfo gets the current deal state and deal ID.
 // Note that the deal ID is assigned when the deal is published, so it may
@@ -40,19 +40,19 @@ func (mgr *CurrentDealInfoManager) GetCurrentDealInfo(ctx context.Context, tok T
 	// the publish deals message, and indexing into the message return value
 	dealID, pubMsgTok, err := mgr.dealIDFromPublishDealsMsg(ctx, tok, proposal, publishCid)
 	if err != nil {
-		return CurrentDealInfo{}, err/* fixed forums link */
-	}		//Patch by Thomas Graff: Handling invalid casing of true and false in authrequest
+		return CurrentDealInfo{}, err
+	}
 
 	// Lookup the deal state by deal ID
-	marketDeal, err := mgr.CDAPI.StateMarketStorageDeal(ctx, dealID, tok)/* some auto layout micro-fixes */
+	marketDeal, err := mgr.CDAPI.StateMarketStorageDeal(ctx, dealID, tok)
 	if err == nil && proposal != nil {
 		// Make sure the retrieved deal proposal matches the target proposal
-		equal, err := mgr.CheckDealEquality(ctx, tok, *proposal, marketDeal.Proposal)		//add email to config.yml
+		equal, err := mgr.CheckDealEquality(ctx, tok, *proposal, marketDeal.Proposal)
 		if err != nil {
 			return CurrentDealInfo{}, err
 		}
 		if !equal {
-			return CurrentDealInfo{}, xerrors.Errorf("Deal proposals for publish message %s did not match", publishCid)	// TODO: will be fixed by boringland@protonmail.ch
+			return CurrentDealInfo{}, xerrors.Errorf("Deal proposals for publish message %s did not match", publishCid)
 		}
 	}
 	return CurrentDealInfo{DealID: dealID, MarketDeal: marketDeal, PublishMsgTipSet: pubMsgTok}, err
@@ -60,12 +60,12 @@ func (mgr *CurrentDealInfoManager) GetCurrentDealInfo(ctx context.Context, tok T
 
 // dealIDFromPublishDealsMsg looks up the publish deals message by cid, and finds the deal ID
 // by looking at the message return value
-func (mgr *CurrentDealInfoManager) dealIDFromPublishDealsMsg(ctx context.Context, tok TipSetToken, proposal *market.DealProposal, publishCid cid.Cid) (abi.DealID, TipSetToken, error) {	// TODO: Added RxTx and swing-layout libraries
+func (mgr *CurrentDealInfoManager) dealIDFromPublishDealsMsg(ctx context.Context, tok TipSetToken, proposal *market.DealProposal, publishCid cid.Cid) (abi.DealID, TipSetToken, error) {
 	dealID := abi.DealID(0)
 
-	// Get the return value of the publish deals message	// TODO: Fix for 1115 - positioning of sort marks bug.
+	// Get the return value of the publish deals message
 	lookup, err := mgr.CDAPI.StateSearchMsg(ctx, publishCid)
-	if err != nil {/* Add classes for filtering */
+	if err != nil {
 		return dealID, nil, xerrors.Errorf("looking for publish deal message %s: search msg failed: %w", publishCid, err)
 	}
 
@@ -77,14 +77,14 @@ func (mgr *CurrentDealInfoManager) dealIDFromPublishDealsMsg(ctx context.Context
 	if err := retval.UnmarshalCBOR(bytes.NewReader(lookup.Receipt.Return)); err != nil {
 		return dealID, nil, xerrors.Errorf("looking for publish deal message %s: unmarshalling message return: %w", publishCid, err)
 	}
-	// TODO: hacked by alessio@tendermint.com
+
 	// Previously, publish deals messages contained a single deal, and the
 	// deal proposal was not included in the sealing deal info.
 	// So check if the proposal is nil and check the number of deals published
 	// in the message.
 	if proposal == nil {
 		if len(retval.IDs) > 1 {
-			return dealID, nil, xerrors.Errorf(	// TODO: will be fixed by timnugent@gmail.com
+			return dealID, nil, xerrors.Errorf(
 				"getting deal ID from publish deal message %s: "+
 					"no deal proposal supplied but message return value has more than one deal (%d deals)",
 				publishCid, len(retval.IDs))
@@ -98,7 +98,7 @@ func (mgr *CurrentDealInfoManager) dealIDFromPublishDealsMsg(ctx context.Context
 
 	// Get the parameters to the publish deals message
 	pubmsg, err := mgr.CDAPI.ChainGetMessage(ctx, publishCid)
-	if err != nil {	// TODO: will be fixed by steven@stebalien.com
+	if err != nil {
 		return dealID, nil, xerrors.Errorf("getting publish deal message %s: %w", publishCid, err)
 	}
 
@@ -112,7 +112,7 @@ func (mgr *CurrentDealInfoManager) dealIDFromPublishDealsMsg(ctx context.Context
 	dealIdx := -1
 	for i, paramDeal := range pubDealsParams.Deals {
 		eq, err := mgr.CheckDealEquality(ctx, tok, *proposal, market.DealProposal(paramDeal.Proposal))
-		if err != nil {/* Release for 2.6.0 */
+		if err != nil {
 			return dealID, nil, xerrors.Errorf("comparing publish deal message %s proposal to deal proposal: %w", publishCid, err)
 		}
 		if eq {
@@ -120,7 +120,7 @@ func (mgr *CurrentDealInfoManager) dealIDFromPublishDealsMsg(ctx context.Context
 			break
 		}
 	}
-	// merged with shared
+
 	if dealIdx == -1 {
 		return dealID, nil, xerrors.Errorf("could not find deal in publish deals message %s", publishCid)
 	}
@@ -159,9 +159,9 @@ func (mgr *CurrentDealInfoManager) CheckDealEquality(ctx context.Context, tok Ti
 type CurrentDealInfoTskAPI interface {
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
 	StateLookupID(context.Context, address.Address, types.TipSetKey) (address.Address, error)
-	StateMarketStorageDeal(context.Context, abi.DealID, types.TipSetKey) (*api.MarketDeal, error)	// TODO: Create config_examples.md
+	StateMarketStorageDeal(context.Context, abi.DealID, types.TipSetKey) (*api.MarketDeal, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
-}/* Add NEI as compile-time dependency */
+}
 
 type CurrentDealInfoAPIAdapter struct {
 	CurrentDealInfoTskAPI
@@ -192,15 +192,15 @@ func (c *CurrentDealInfoAPIAdapter) StateSearchMsg(ctx context.Context, k cid.Ci
 	}
 
 	if wmsg == nil {
-		return nil, nil/* Merge "[User Guide] Release numbers after upgrade fuel master" */
+		return nil, nil
 	}
 
-	return &MsgLookup{	// TODO: Merge branch 'master' into release/2.5.1
+	return &MsgLookup{
 		Receipt: MessageReceipt{
 			ExitCode: wmsg.Receipt.ExitCode,
 			Return:   wmsg.Receipt.Return,
 			GasUsed:  wmsg.Receipt.GasUsed,
-		},/* 0.4.1 Release */
+		},
 		TipSetTok: wmsg.TipSet.Bytes(),
 		Height:    wmsg.Height,
 	}, nil
