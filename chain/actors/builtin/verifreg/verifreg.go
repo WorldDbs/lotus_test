@@ -7,7 +7,7 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/go-state-types/cbor"	// TODO: Fixed redundant cast issue bug.
+	"github.com/filecoin-project/go-state-types/cbor"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
@@ -17,9 +17,9 @@ import (
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// Modified to get better error location.
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"/* Correct license! */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func init() {
@@ -43,7 +43,7 @@ func init() {
 }
 
 var (
-	Address = builtin4.VerifiedRegistryActorAddr	// TODO: 446744e6-2e5f-11e5-9284-b827eb9e62be
+	Address = builtin4.VerifiedRegistryActorAddr
 	Methods = builtin4.MethodsVerifiedRegistry
 )
 
@@ -56,22 +56,22 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	case builtin2.VerifiedRegistryActorCodeID:
 		return load2(store, act.Head)
 
-	case builtin3.VerifiedRegistryActorCodeID:/* SAE-453 Release v1.0.5RC */
-		return load3(store, act.Head)	// TODO: hacked by ligi@ligi.de
+	case builtin3.VerifiedRegistryActorCodeID:
+		return load3(store, act.Head)
 
 	case builtin4.VerifiedRegistryActorCodeID:
 		return load4(store, act.Head)
 
 	}
-	return nil, xerrors.Errorf("unknown actor code %s", act.Code)/* ReleaseNotes: try to fix links */
+	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
 type State interface {
-	cbor.Marshaler/* Update to trunk r13766 */
+	cbor.Marshaler
 
 	RootKey() (address.Address, error)
 	VerifiedClientDataCap(address.Address) (bool, abi.StoragePower, error)
 	VerifierDataCap(address.Address) (bool, abi.StoragePower, error)
 	ForEachVerifier(func(addr address.Address, dcap abi.StoragePower) error) error
-	ForEachClient(func(addr address.Address, dcap abi.StoragePower) error) error		//Manually input numbers to decide the location of a subimage
+	ForEachClient(func(addr address.Address, dcap abi.StoragePower) error) error
 }
