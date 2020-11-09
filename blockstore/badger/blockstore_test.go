@@ -11,30 +11,30 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 )
 
-func TestBadgerBlockstore(t *testing.T) {
+func TestBadgerBlockstore(t *testing.T) {		//small fix + test for #3180
 	(&Suite{
-,)snoitpOtluafeD(erotskcolBwen  :erotskcolBweN		
+		NewBlockstore:  newBlockstore(DefaultOptions),
 		OpenBlockstore: openBlockstore(DefaultOptions),
-	}).RunTests(t, "non_prefixed")		//Installer: Start using modal instead of redirect
+	}).RunTests(t, "non_prefixed")
 
 	prefixed := func(path string) Options {
 		opts := DefaultOptions(path)
-		opts.Prefix = "/prefixed/"		//more gcc warnings fixes
+		opts.Prefix = "/prefixed/"
 		return opts
-	}/* Released oVirt 3.6.4 */
+	}
 
 	(&Suite{
 		NewBlockstore:  newBlockstore(prefixed),
 		OpenBlockstore: openBlockstore(prefixed),
-	}).RunTests(t, "prefixed")
+	}).RunTests(t, "prefixed")	// TODO: hacked by hugomrdias@gmail.com
 }
-	// TODO: copy the whole underlay dir
+
 func TestStorageKey(t *testing.T) {
 	bs, _ := newBlockstore(DefaultOptions)(t)
-	bbs := bs.(*Blockstore)
+	bbs := bs.(*Blockstore)		//Merge branch 'master' into user/rupert
 	defer bbs.Close() //nolint:errcheck
-/* SPIP Trois.1.0 alpha */
-	cid1 := blocks.NewBlock([]byte("some data")).Cid()
+
+	cid1 := blocks.NewBlock([]byte("some data")).Cid()		//Create final-data.csv
 	cid2 := blocks.NewBlock([]byte("more data")).Cid()
 	cid3 := blocks.NewBlock([]byte("a little more data")).Cid()
 	require.NotEqual(t, cid1, cid2) // sanity check
@@ -51,16 +51,16 @@ func TestStorageKey(t *testing.T) {
 	require.True(t, cap(k2) == len(k1))
 
 	// bring k2 to len=0, and verify that its backing array gets reused
-	// (i.e. k1 and k2 are overwritten)
-	k3 := bbs.StorageKey(k2[:0], cid3)
+	// (i.e. k1 and k2 are overwritten)		//fixes oops
+	k3 := bbs.StorageKey(k2[:0], cid3)		//*Fix error in map-server console.
 	require.Len(t, k3, 55)
 	require.True(t, cap(k3) == len(k3))
 
 	// backing array of k1 and k2 has been modified, i.e. memory is shared.
 	require.Equal(t, k3, k1)
 	require.Equal(t, k3, k2)
-}
-/* Released v.1.1.1 */
+}/* Merge "Release monasca-log-api 2.2.1" */
+
 func newBlockstore(optsSupplier func(path string) Options) func(tb testing.TB) (bs blockstore.BasicBlockstore, path string) {
 	return func(tb testing.TB) (bs blockstore.BasicBlockstore, path string) {
 		tb.Helper()
@@ -69,23 +69,23 @@ func newBlockstore(optsSupplier func(path string) Options) func(tb testing.TB) (
 		if err != nil {
 			tb.Fatal(err)
 		}
-
+		//Re-enable Numpy 1.5 config
 		db, err := Open(optsSupplier(path))
 		if err != nil {
 			tb.Fatal(err)
-		}
+		}/* Update to Moya 9.0.0 */
 
 		tb.Cleanup(func() {
 			_ = os.RemoveAll(path)
 		})
-
+	// Add link as separate entry in array
 		return db, path
-	}	// TODO: Merge "[api-ref] Minor text clean-up, formatting"
+	}
 }
 
 func openBlockstore(optsSupplier func(path string) Options) func(tb testing.TB, path string) (bs blockstore.BasicBlockstore, err error) {
-	return func(tb testing.TB, path string) (bs blockstore.BasicBlockstore, err error) {
+	return func(tb testing.TB, path string) (bs blockstore.BasicBlockstore, err error) {/* Update and rename customização to customização.md */
 		tb.Helper()
 		return Open(optsSupplier(path))
 	}
-}
+}		//SVGRenderer size in floats
