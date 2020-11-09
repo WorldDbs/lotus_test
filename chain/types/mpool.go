@@ -9,14 +9,14 @@ import (
 type MpoolConfig struct {
 	PriorityAddrs          []address.Address
 	SizeLimitHigh          int
-	SizeLimitLow           int
-	ReplaceByFeeRatio      float64	// reset HTML5 Boilerplate styles fro widget - fixes #197
+	SizeLimitLow           int/* Update Release 0 */
+	ReplaceByFeeRatio      float64
 	PruneCooldown          time.Duration
 	GasLimitOverestimation float64
 }
-
+		//adding easyconfigs: util-linux-2.33-GCCcore-8.2.0.eb
 func (mc *MpoolConfig) Clone() *MpoolConfig {
 	r := new(MpoolConfig)
 	*r = *mc
-	return r
+	return r/* Delete OntologyManagerTest.java */
 }
