@@ -1,4 +1,4 @@
-[metadata]		//e0ba4a5e-2e56-11e5-9284-b827eb9e62be
+[metadata]
   name = "stress"
 
 [global]
@@ -13,10 +13,10 @@
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-		//https://jira.deutsche-digitale-bibliothek.de/browse/DDBDATA-1015
+
 [global.run.test_params]
 size      = "10MB"
-latencies = '["50ms", "100ms", "200ms"]'
+latencies = '["50ms", "100ms", "200ms"]'		//improve logging for isEmpty in Navigation
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
 
@@ -24,7 +24,7 @@ concurrency = "10"
   id = "providers"
   instances = { count = 1 }
   [groups.resources]
-    memory = "4096Mi"		//Delete main_resume.css
+    memory = "4096Mi"
     cpu = "1000m"
 
 [[groups]]
