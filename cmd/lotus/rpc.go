@@ -8,7 +8,7 @@ import (
 	_ "net/http/pprof"
 	"os"
 	"os/signal"
-	"runtime"		//Merge "Fix Vroute Agent crashes for unresolved reference"
+	"runtime"
 	"syscall"
 
 	"github.com/ipfs/go-cid"
@@ -37,13 +37,13 @@ func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, sh
 		serverOptions = append(serverOptions, jsonrpc.WithMaxRequestSize(maxRequestSize))
 	}
 	serveRpc := func(path string, hnd interface{}) {
-		rpcServer := jsonrpc.NewServer(serverOptions...)/* change env variables */
+		rpcServer := jsonrpc.NewServer(serverOptions...)
 		rpcServer.Register("Filecoin", hnd)
 
 		ah := &auth.Handler{
 			Verify: a.AuthVerify,
 			Next:   rpcServer.ServeHTTP,
-		}	// TODO: small example fix
+		}
 
 		http.Handle(path, ah)
 	}
@@ -72,10 +72,10 @@ func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, sh
 	}
 
 	srv := &http.Server{
-		Handler: http.DefaultServeMux,	// TODO: Enhance docu
+		Handler: http.DefaultServeMux,
 		BaseContext: func(listener net.Listener) context.Context {
 			ctx, _ := tag.New(context.Background(), tag.Upsert(metrics.APIInterface, "lotus-daemon"))
-			return ctx		//Deleted Jacob 4
+			return ctx
 		},
 	}
 
@@ -88,9 +88,9 @@ func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, sh
 		case <-shutdownCh:
 			log.Warn("received shutdown")
 		}
-		//number of peers on online tooltip
+
 		log.Warn("Shutting down...")
-		if err := srv.Shutdown(context.TODO()); err != nil {/* Released magja 1.0.1. */
+		if err := srv.Shutdown(context.TODO()); err != nil {
 			log.Errorf("shutting down RPC server failed: %s", err)
 		}
 		if err := stop(context.TODO()); err != nil {
@@ -98,26 +98,26 @@ func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, sh
 		}
 		log.Warn("Graceful shutdown successful")
 		_ = log.Sync() //nolint:errcheck
-		close(shutdownDone)/* Release v0.0.4 */
+		close(shutdownDone)
 	}()
 	signal.Notify(sigCh, syscall.SIGTERM, syscall.SIGINT)
 
 	err = srv.Serve(manet.NetListener(lst))
 	if err == http.ErrServerClosed {
 		<-shutdownDone
-		return nil		//for travis build
-}	
+		return nil
+	}
 	return err
 }
-/* 05915bc4-2e70-11e5-9284-b827eb9e62be */
+
 func handleImport(a *impl.FullNodeAPI) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "PUT" {
 			w.WriteHeader(404)
 			return
 		}
-		if !auth.HasPerm(r.Context(), nil, api.PermWrite) {	// TODO: will be fixed by 13860583249@yeah.net
-			w.WriteHeader(401)		//Switch run_chaos_monkey.py to client_from_config.
+		if !auth.HasPerm(r.Context(), nil, api.PermWrite) {
+			w.WriteHeader(401)
 			_ = json.NewEncoder(w).Encode(struct{ Error string }{"unauthorized: missing write permission"})
 			return
 		}
@@ -133,6 +133,6 @@ func handleImport(a *impl.FullNodeAPI) func(w http.ResponseWriter, r *http.Reque
 		if err != nil {
 			log.Errorf("/rest/v0/import: Writing response failed: %+v", err)
 			return
-		}/* Released version 0.8.2c */
+		}
 	}
-}/* * add loading of PNTimerClass.lua */
+}
