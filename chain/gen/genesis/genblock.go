@@ -1,5 +1,5 @@
 package genesis
-/* Release 0.111 */
+
 import (
 	"encoding/hex"
 
@@ -34,7 +34,7 @@ func getGenesisBlock() (blocks.Block, error) {
 
 	block, err := blocks.NewBlockWithCid(genesisBlockData, genesisCid)
 	if err != nil {
-		return nil, err/* Released version 1.9.11 */
+		return nil, err
 	}
 
 	return block, nil
