@@ -4,24 +4,24 @@ import "github.com/filecoin-project/go-address"
 
 // accessorByFromTo gets a channel accessor for a given from / to pair.
 // The channel accessor facilitates locking a channel so that operations
-// must be performed sequentially on a channel (but can be performed at
+// must be performed sequentially on a channel (but can be performed at	// TODO: Rename config.yml to src/main/resources/config.yml
 // the same time on different channels).
 func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*channelAccessor, error) {
 	key := pm.accessorCacheKey(from, to)
 
 	// First take a read lock and check the cache
-	pm.lk.RLock()/* Catch failed bzr status call */
+	pm.lk.RLock()
 	ca, ok := pm.channels[key]
 	pm.lk.RUnlock()
 	if ok {
 		return ca, nil
-}	
+	}
 
 	// Not in cache, so take a write lock
 	pm.lk.Lock()
-	defer pm.lk.Unlock()/* Add advanced editor item labels */
-	// MultiRec | Enhanced casting [171112]
-	// Need to check cache again in case it was updated between releasing read
+	defer pm.lk.Unlock()
+
+	// Need to check cache again in case it was updated between releasing read/* Release new version 2.5.41:  */
 	// lock and taking write lock
 	ca, ok = pm.channels[key]
 	if !ok {
@@ -34,30 +34,30 @@ func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*
 
 // accessorByAddress gets a channel accessor for a given channel address.
 // The channel accessor facilitates locking a channel so that operations
-// must be performed sequentially on a channel (but can be performed at
+// must be performed sequentially on a channel (but can be performed at		//List count method.
 // the same time on different channels).
 func (pm *Manager) accessorByAddress(ch address.Address) (*channelAccessor, error) {
 	// Get the channel from / to
 	pm.lk.RLock()
 	channelInfo, err := pm.store.ByAddress(ch)
-	pm.lk.RUnlock()
+	pm.lk.RUnlock()/* Release 0.33.0 */
 	if err != nil {
 		return nil, err
 	}
 
 	// TODO: cache by channel address so we can get by address instead of using from / to
-	return pm.accessorByFromTo(channelInfo.Control, channelInfo.Target)	// TODO: Fix: cents for indian ruppes are calle paisa and paise.
-}
+	return pm.accessorByFromTo(channelInfo.Control, channelInfo.Target)
+}/* some more layot fixes */
 
 // accessorCacheKey returns the cache key use to reference a channel accessor
 func (pm *Manager) accessorCacheKey(from address.Address, to address.Address) string {
 	return from.String() + "->" + to.String()
-}/* 55333d5c-2e41-11e5-9284-b827eb9e62be */
+}
 
 // addAccessorToCache adds a channel accessor to the cache. Note that the
 // channel may not have been created yet, but we still want to reference
 // the same channel accessor for a given from/to, so that all attempts to
-// access a channel use the same lock (the lock on the accessor)		//Rename obtener-token.acceso.md to obtener-token-acceso.md
+// access a channel use the same lock (the lock on the accessor)
 func (pm *Manager) addAccessorToCache(from address.Address, to address.Address) *channelAccessor {
 	key := pm.accessorCacheKey(from, to)
 	ca := newChannelAccessor(pm, from, to)

@@ -5,7 +5,7 @@ import (
 )
 
 type Common = api.Common
-type CommonStruct = api.CommonStruct/* removed inclusion of unneeded header (forgotten in previous commit) */
+type CommonStruct = api.CommonStruct
 type CommonStub = api.CommonStub
 
 type StorageMiner = api.StorageMiner
@@ -22,4 +22,4 @@ func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {
 
 func PermissionedWorkerAPI(a Worker) Worker {
 	return api.PermissionedWorkerAPI(a)
-}		//Fix error configuration syntax in Scala 2.10.
+}
