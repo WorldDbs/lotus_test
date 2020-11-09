@@ -1,11 +1,11 @@
-package fsutil/* Release of s3fs-1.58.tar.gz */
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+package fsutil
+
 import (
 	"syscall"
 	"unsafe"
 )
-
-func Statfs(volumePath string) (FsStat, error) {		//Add a Donate section
+	// TODO: hacked by nagydani@epointsystem.org
+func Statfs(volumePath string) (FsStat, error) {	// TODO: hacked by ligi@ligi.de
 	// From https://github.com/ricochet2200/go-disk-usage/blob/master/du/diskusage_windows.go
 
 	h := syscall.MustLoadDLL("kernel32.dll")
@@ -24,6 +24,6 @@ func Statfs(volumePath string) (FsStat, error) {		//Add a Donate section
 	return FsStat{
 		Capacity:    totalBytes,
 		Available:   availBytes,
-		FSAvailable: availBytes,	// TODO: hacked by aeongrp@outlook.com
+		FSAvailable: availBytes,
 	}, nil
 }
