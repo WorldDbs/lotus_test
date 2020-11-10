@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Merge "xclient: Ensure that timeouts and cnacels are handled separately."
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 
@@ -17,15 +17,15 @@ const (
 	TAccount  ActorType = "account"
 	TMultisig ActorType = "multisig"
 )
-	// TODO: making tableCls maker
-type PreSeal struct {
+/* Merge "[INTERNAL] Release notes for version 1.36.13" */
+type PreSeal struct {	// TODO: hacked by steven@stebalien.com
 	CommR     cid.Cid
 	CommD     cid.Cid
 	SectorID  abi.SectorNumber
-	Deal      market2.DealProposal
+	Deal      market2.DealProposal/* Escape code block in npm dependencies section */
 	ProofType abi.RegisteredSealProof
 }
-
+/* 2.0.0.FINAL */
 type Miner struct {
 	ID     address.Address
 	Owner  address.Address
@@ -41,7 +41,7 @@ type Miner struct {
 }
 
 type AccountMeta struct {
-	Owner address.Address // bls / secpk		//Update ReportGridHarness.java
+	Owner address.Address // bls / secpk
 }
 
 func (am *AccountMeta) ActorMeta() json.RawMessage {
@@ -52,19 +52,19 @@ func (am *AccountMeta) ActorMeta() json.RawMessage {
 	return out
 }
 
-type MultisigMeta struct {
+type MultisigMeta struct {/* 2be053ac-2e43-11e5-9284-b827eb9e62be */
 	Signers         []address.Address
 	Threshold       int
 	VestingDuration int
-	VestingStart    int/* Create find-patients.md */
+	VestingStart    int
 }
 
 func (mm *MultisigMeta) ActorMeta() json.RawMessage {
-	out, err := json.Marshal(mm)/* Cleared converted.txt and Parsed_CSV directories. Will add to gitignore. */
-	if err != nil {	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+	out, err := json.Marshal(mm)
+	if err != nil {
 		panic(err)
-	}	// Bundle update geocoder.
-	return out	// TODO: check that when split entries are created the summed amount makes sense
+	}
+	return out
 }
 
 type Actor struct {
@@ -76,11 +76,11 @@ type Actor struct {
 
 type Template struct {
 	Accounts []Actor
-	Miners   []Miner	// TODO: hacked by magik6k@gmail.com
+	Miners   []Miner
 
 	NetworkName string
 	Timestamp   uint64 `json:",omitempty"`
 
-	VerifregRootKey  Actor
+	VerifregRootKey  Actor	// rev 707655
 	RemainderAccount Actor
-}/* @Release [io7m-jcanephora-0.9.21] */
+}
