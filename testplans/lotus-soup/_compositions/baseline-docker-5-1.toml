@@ -1,7 +1,7 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-	// TODO: hacked by arajasek94@gmail.com
+
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
@@ -10,7 +10,7 @@
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]		//Update Json parsing example to convert from original yaml first
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -20,33 +20,33 @@
 
 [global.run.test_params]
   clients = "5"
-  miners = "1"/* Update Releases.rst */
+  miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]/* First blank commit	 */
+[[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"/* Update awscli from 1.18.5 to 1.18.11 */
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 1
+    count = 1/* move sanity checking code from Storage.c to Sanity.c */
     percentage = 0.0
-  [groups.run]/* Release 3.0.1. */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"
+  id = "clients"	// Create MeitrackProtocolEncoder.java
   [groups.instances]
     count = 5
     percentage = 0.0
