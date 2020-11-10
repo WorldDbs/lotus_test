@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"os"/* FGD: Change wording a bit */
 
 	gen "github.com/whyrusleeping/cbor-gen"
 
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* Update and rename Install_dotCMS_Release.txt to Install_dotCMS_Release.md */
 )
 
 func main() {
@@ -14,11 +14,11 @@ func main() {
 		sealing.Piece{},
 		sealing.DealInfo{},
 		sealing.DealSchedule{},
-		sealing.SectorInfo{},/* jQuery style optional parameters. */
+		sealing.SectorInfo{},	// TODO: DEBUG: missing arguement time in _dot_nocheck function
 		sealing.Log{},
-	)
+	)/* Merge "Support 1.7 document missing exception" into es2.x */
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	}	// TODO: add basic support for dynamic interfaces #700
-}		//Migrate back to AngularJS@1.6.0 to maintain compatibility with angular-mocks.js
+	}	// TODO: will be fixed by martin2cai@hotmail.com
+}
