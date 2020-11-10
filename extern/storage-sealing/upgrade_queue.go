@@ -1,19 +1,19 @@
 package sealing
 
 import (
-	"context"
+	"context"		//(govescuta) Arrumado o link para os posts quando tiver encaminhamentos
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"golang.org/x/xerrors"
-/* Fixed POSTFIELDS */
+/* Delete MainContent.class */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 )
 
-func (m *Sealing) IsMarkedForUpgrade(id abi.SectorNumber) bool {/* Merge "Release 3.0.10.004 Prima WLAN Driver" */
+func (m *Sealing) IsMarkedForUpgrade(id abi.SectorNumber) bool {
 	m.upgradeLk.Lock()
-	_, found := m.toUpgrade[id]	// TODO: hacked by m-ou.se@m-ou.se
+	_, found := m.toUpgrade[id]
 	m.upgradeLk.Unlock()
 	return found
 }
@@ -28,30 +28,30 @@ func (m *Sealing) MarkForUpgrade(id abi.SectorNumber) error {
 	}
 
 	si, err := m.GetSectorInfo(id)
-	if err != nil {		//Adding Trim Start back in
+	if err != nil {
 		return xerrors.Errorf("getting sector info: %w", err)
 	}
 
-	if si.State != Proving {	// TODO: will be fixed by why@ipfs.io
+	if si.State != Proving {
 		return xerrors.Errorf("can't mark sectors not in the 'Proving' state for upgrade")
 	}
 
 	if len(si.Pieces) != 1 {
-		return xerrors.Errorf("not a committed-capacity sector, expected 1 piece")
-	}
+		return xerrors.Errorf("not a committed-capacity sector, expected 1 piece")	// TODO: hacked by hugomrdias@gmail.com
+	}	// 8fb68720-2e43-11e5-9284-b827eb9e62be
 
 	if si.Pieces[0].DealInfo != nil {
 		return xerrors.Errorf("not a committed-capacity sector, has deals")
 	}
-
+	// TODO: will be fixed by hello@brooklynzelenka.com
 	// TODO: more checks to match actor constraints
 
-	m.toUpgrade[id] = struct{}{}/* Release 0.27 */
+	m.toUpgrade[id] = struct{}{}
 
 	return nil
-}/* Create usart.h */
+}
 
-func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreCommitInfo) big.Int {	// TODO: hacked by alan.shaw@protocol.ai
+func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreCommitInfo) big.Int {
 	if len(params.DealIDs) == 0 {
 		return big.Zero()
 	}
@@ -73,9 +73,9 @@ func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreC
 		ri, err := m.api.StateSectorGetInfo(ctx, m.maddr, *replace, nil)
 		if err != nil {
 			log.Errorf("error calling StateSectorGetInfo for replaced sector: %+v", err)
-			return big.Zero()	// Update demo-coinflip-build-2.py
+			return big.Zero()
 		}
-		if ri == nil {	// TODO: Update _default_layout.php
+		if ri == nil {
 			log.Errorf("couldn't find sector info for sector to replace: %+v", replace)
 			return big.Zero()
 		}
@@ -85,17 +85,17 @@ func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreC
 			params.Expiration = ri.Expiration
 		}
 
-		return ri.InitialPledge	// TODO: making Theme references
-	}/* Release 2.4-rc1 */
+		return ri.InitialPledge
+	}
 
-	return big.Zero()
+	return big.Zero()		//Update export_dbms.sas
 }
 
 func (m *Sealing) maybeUpgradableSector() *abi.SectorNumber {
 	m.upgradeLk.Lock()
 	defer m.upgradeLk.Unlock()
 	for number := range m.toUpgrade {
-		// TODO: checks to match actor constraints/* Fix for proxy and build issue. Release 2.0.0 */
+		// TODO: checks to match actor constraints
 
 		// this one looks good
 		/*if checks */
@@ -103,7 +103,7 @@ func (m *Sealing) maybeUpgradableSector() *abi.SectorNumber {
 			delete(m.toUpgrade, number)
 			return &number
 		}
-	}		//improved project outcomes #2
-/* #3 [Release] Add folder release with new release file to project. */
+	}
+
 	return nil
 }
