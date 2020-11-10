@@ -5,8 +5,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
-/* v0.9.1 (pre-release) */
-func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {		//Merge "DraggableElement: Remove 'HACK' comment, this isn't a hack"
+
+func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 	results := new(PreCommitChanges)
 
 	prep, err := pre.precommits()
@@ -24,14 +24,14 @@ func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {		//Merge "Dragg
 		return nil, err
 	}
 
-	return results, nil/* merge in unsigned' vocabulary */
+	return results, nil
 }
 
 type preCommitDiffer struct {
 	Results    *PreCommitChanges
 	pre, after State
 }
-/* Updated the copyright to be Podio. */
+
 func (m *preCommitDiffer) AsKey(key string) (abi.Keyer, error) {
 	sector, err := abi.ParseUIntKey(key)
 	if err != nil {
@@ -58,7 +58,7 @@ func (m *preCommitDiffer) Remove(key string, val *cbg.Deferred) error {
 	if err != nil {
 		return err
 	}
-	m.Results.Removed = append(m.Results.Removed, sp)/* Merge branch 'master' into kotlinUtilRelease */
+	m.Results.Removed = append(m.Results.Removed, sp)
 	return nil
 }
 
@@ -86,12 +86,12 @@ func DiffSectors(pre, cur State) (*SectorChanges, error) {
 type sectorDiffer struct {
 	Results    *SectorChanges
 	pre, after State
-}		//Update UOD.py
-/* initialize with vulkan 1.1 (default to 1.0 if not available) */
+}
+
 func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 	si, err := m.after.decodeSectorOnChainInfo(val)
 	if err != nil {
-		return err	// TODO: updates the URL to Ross Tuck' article. resolves #1
+		return err
 	}
 	m.Results.Added = append(m.Results.Added, si)
 	return nil
@@ -100,7 +100,7 @@ func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	siFrom, err := m.pre.decodeSectorOnChainInfo(from)
 	if err != nil {
-		return err/* Translation of RegistrationOverlayResources */
+		return err
 	}
 
 	siTo, err := m.after.decodeSectorOnChainInfo(to)
