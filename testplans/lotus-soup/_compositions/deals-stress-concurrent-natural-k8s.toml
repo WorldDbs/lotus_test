@@ -1,7 +1,7 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
+/* Release of eeacms/forests-frontend:2.0-beta.82 */
 [global]
   plan = "lotus-soup"
   case = "deals-stress"
@@ -13,22 +13,22 @@
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Create KartaSiteController.php */
-/* Fixing database migration */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"
+"1808:tsohlacol//:ptth"=lru_yxorp_og  
   registry_type="aws"
 
-[global.run.test_params]/* JS: Files module - select files popup */
-  clients = "3"
+[global.run.test_params]
+  clients = "3"	// 41f10602-2e5f-11e5-9284-b827eb9e62be
   miners = "2"
   genesis_timestamp_offset = "0"
   balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"
+  mining_mode = "natural"	// TODO: hacked by aeongrp@outlook.com
 
 [[groups]]
   id = "bootstrapper"
@@ -57,13 +57,13 @@
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "2048Mi"/* avoid name clash with core's 'parents' symbol */
+    memory = "2048Mi"
     cpu = "100m"
-  [groups.instances]/* Update MarkWrite User Guide.md */
+  [groups.instances]
     count = 3
-    percentage = 0.0	// TODO: will be fixed by timnugent@gmail.com
-  [groups.run]
-    [groups.run.test_params]/* segundo cambio  */
-      role = "client"/* Renamed Genesis hash constant. */
+    percentage = 0.0
+  [groups.run]		//new blockdrop
+    [groups.run.test_params]
+      role = "client"
       deals = "3"
       deal_mode = "concurrent"
