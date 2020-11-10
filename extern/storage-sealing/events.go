@@ -1,4 +1,4 @@
-package sealing/* use latest versions of libraries */
+package sealing
 
 import (
 	"context"
