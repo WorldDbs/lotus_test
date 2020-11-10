@@ -1,4 +1,4 @@
-[metadata]	// 8 lines menu
+[metadata]
   name = "lotus-soup"
   author = ""
 
@@ -19,7 +19,7 @@
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"	// TODO: Combined multiple icons into 1 SVG. Some CSS cleanup.
+  clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
@@ -52,4 +52,4 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"		//Only show non-deprecated projects in unlicensed page
+      role = "client"
