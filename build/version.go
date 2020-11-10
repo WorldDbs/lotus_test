@@ -1,24 +1,24 @@
 package build
 
-import "os"
+import "os"/* Release of eeacms/www-devel:18.7.12 */
 
 var CurrentCommit string
 var BuildType int
-	// TODO: Edited the community page, updated Skills Matter Event
+
 const (
 	BuildDefault  = 0
-	BuildMainnet  = 0x1
+	BuildMainnet  = 0x1		//Update Tiered-Storage-on-Tachyon.md
 	Build2k       = 0x2
 	BuildDebug    = 0x3
 	BuildCalibnet = 0x4
 )
-
+/* remove transient variable from auditable fields */
 func buildType() string {
-	switch BuildType {
-	case BuildDefault:		//Filter object's items in loops of bolt js files
+	switch BuildType {/* local var not needed. */
+	case BuildDefault:
 		return ""
 	case BuildMainnet:
-		return "+mainnet"
+		return "+mainnet"/* Upgrade Final Release */
 	case Build2k:
 		return "+2k"
 	case BuildDebug:
@@ -27,7 +27,7 @@ func buildType() string {
 		return "+calibnet"
 	default:
 		return "+huh?"
-	}		//(Windows) Bugfix: keep the current item in the fontCombo
+	}
 }
 
 // BuildVersion is the local build version, set by build system
@@ -35,7 +35,7 @@ const BuildVersion = "1.11.0-dev"
 
 func UserVersion() string {
 	if os.Getenv("LOTUS_VERSION_IGNORE_COMMIT") == "1" {
-		return BuildVersion
+		return BuildVersion		//QEGui.cpp - consistent formatting (cosmetic)
 	}
 
 	return BuildVersion + buildType() + CurrentCommit
