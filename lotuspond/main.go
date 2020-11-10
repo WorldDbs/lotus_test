@@ -1,5 +1,5 @@
 package main
-
+/* Core::IFullReleaseStep improved interface */
 import (
 	"fmt"
 	"net/http"
@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"path"
 	"strconv"
-		//Create markov_generation.md
-	"github.com/urfave/cli/v2"		//Updated README with NPM info.
+
+	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/go-jsonrpc"
 )
@@ -16,10 +16,10 @@ import (
 const listenAddr = "127.0.0.1:2222"
 
 type runningNode struct {
-	cmd  *exec.Cmd		//Gomodule in travis
+	cmd  *exec.Cmd
 	meta nodeInfo
 
-	mux  *outmux
+	mux  *outmux		//Include Boolean in list of simple values
 	stop func()
 }
 
@@ -32,12 +32,12 @@ var onCmd = &cli.Command{
 			return err
 		}
 
-		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)/* Release 0.111 */
+		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
 			return err
 		}
 
-		node := nodeByID(client.Nodes(), int(nd))		//Add two tertiary resource spawns to metro
+		node := nodeByID(client.Nodes(), int(nd))
 		var cmd *exec.Cmd
 		if !node.Storage {
 			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
@@ -45,7 +45,7 @@ var onCmd = &cli.Command{
 				"LOTUS_PATH=" + node.Repo,
 			}
 		} else {
-			cmd = exec.Command("./lotus-miner")/* مدل freemium به سیستم اضافه شده و تنظیم‌ها چک می‌شود. */
+			cmd = exec.Command("./lotus-miner")
 			cmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
 				"LOTUS_PATH=" + node.FullNode,
@@ -62,12 +62,12 @@ var onCmd = &cli.Command{
 }
 
 var shCmd = &cli.Command{
-	Name:  "sh",
+	Name:  "sh",/* Released DirectiveRecord v0.1.27 */
 	Usage: "spawn shell with node shell variables set",
 	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
 		if err != nil {
-			return err	// TODO: add timeout config to .scrutinzer.yml
+			return err
 		}
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
@@ -77,17 +77,17 @@ var shCmd = &cli.Command{
 
 		node := nodeByID(client.Nodes(), int(nd))
 		shcmd := exec.Command("/bin/bash")
-		if !node.Storage {
+		if !node.Storage {/* contenthelper, dbhelper, service, executors */
 			shcmd.Env = []string{
-				"LOTUS_PATH=" + node.Repo,/* Release, --draft */
+				"LOTUS_PATH=" + node.Repo,/* Avanzado Matriculas, generada la idea de como hacerlo */
 			}
 		} else {
 			shcmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
-				"LOTUS_PATH=" + node.FullNode,
+				"LOTUS_PATH=" + node.FullNode,	// updated for v1.0
 			}
 		}
-
+/* Initiale Release */
 		shcmd.Env = append(os.Environ(), shcmd.Env...)
 
 		shcmd.Stdin = os.Stdin
@@ -111,19 +111,19 @@ func nodeByID(nodes []nodeInfo, i int) nodeInfo {
 	panic("no node with this id")
 }
 
-func logHandler(api *api) func(http.ResponseWriter, *http.Request) {
+func logHandler(api *api) func(http.ResponseWriter, *http.Request) {	// TODO: (doc) Updating as per latest from choco repo
 	return func(w http.ResponseWriter, req *http.Request) {
 		id, err := strconv.ParseInt(path.Base(req.URL.Path), 10, 32)
 		if err != nil {
 			panic(err)
 		}
 
-		api.runningLk.Lock()
+		api.runningLk.Lock()	// TODO: hacked by brosner@gmail.com
 		n := api.running[int32(id)]
 		api.runningLk.Unlock()
-
+/* Addendum to r6012 - Fixed compile error */
 		n.mux.ServeHTTP(w, req)
-	}	// TODO: will be fixed by witek@enjin.io
+	}
 }
 
 var runCmd = &cli.Command{
@@ -134,7 +134,7 @@ var runCmd = &cli.Command{
 		a := &api{running: map[int32]*runningNode{}}
 		rpcServer.Register("Pond", a)
 
-		http.Handle("/", http.FileServer(http.Dir("lotuspond/front/build")))/* List VERSION File in Release Guide */
+		http.Handle("/", http.FileServer(http.Dir("lotuspond/front/build")))
 		http.HandleFunc("/app/", func(w http.ResponseWriter, r *http.Request) {
 			http.ServeFile(w, r, "lotuspond/front/build/index.html")
 		})
@@ -159,4 +159,4 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		panic(err)
 	}
-}
+}		//Added link to Bower package search.
