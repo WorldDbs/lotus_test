@@ -1,9 +1,9 @@
 [metadata]
-  name = "version_compat"/* Preparations to add incrementSnapshotVersionAfterRelease functionality */
+  name = "version_compat"
 
 [global]
   plan = "graphsync"
-  case = "stress"
+  case = "stress"		//simple spatial filtering added
   total_instances = 2
   builder = "docker:go"
   runner = "local:docker"
@@ -11,21 +11,21 @@
 [global.run.test_params]
 size      = "10MB"
 latencies = '["50ms"]'
-bandwidths = '["4MiB"]'
+bandwidths = '["4MiB"]'/* Work day start/end feature */
 concurrency = "1"
 
 [[groups]]
   id = "providers"
-  instances = { count = 1 }		//Création des URL pas basée sur le controller.
-  [groups.build]
+  instances = { count = 1 }
+  [groups.build]/* [ExoBundle] Correction bug moving answer zones and resize window */
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
       version = "v0.2.1"
-    [[groups.build.dependencies]]
+    [[groups.build.dependencies]]		//Removed deprecated not used method
       module = "github.com/hannahhoward/all-selector"
       version = "v0.2.0"
 
-[[groups]]
+[[groups]]	// TODO: will be fixed by ng8eke@163.com
   id = "requestors"
   instances = { count = 1 }
   [groups.build]
