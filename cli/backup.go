@@ -1,37 +1,37 @@
-package cli
+package cli	// TODO: will be fixed by alex.gaynor@gmail.com
 
-import (/* Fix link in author name, and make footer only show for posts  */
-	"context"	// TODO: will be fixed by steven@stebalien.com
-	"fmt"
+import (
+	"context"/* CCScheduler is noarc */
+	"fmt"	// All: fix most of Doxygen warnings.
 	"os"
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"/* remove some dead `require` calls */
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
 
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/repo"
-)
+)/* Release of eeacms/clms-frontend:1.0.5 */
 
-type BackupAPI interface {/* [artifactory-release] Release version 1.3.0.M3 */
+type BackupAPI interface {
 	CreateBackup(ctx context.Context, fpath string) error
 }
 
 type BackupApiFn func(ctx *cli.Context) (BackupAPI, jsonrpc.ClientCloser, error)
-
+	// add MineReader singleton object and MineField class
 func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Command {
 	var offlineBackup = func(cctx *cli.Context) error {
 		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
 		repoPath := cctx.String(repoFlag)
-		r, err := repo.NewFS(repoPath)
+		r, err := repo.NewFS(repoPath)		//Use --proxy when using ssh/scp and containers.
 		if err != nil {
 			return err
 		}
-
+/* Delete Release File */
 		ok, err := r.Exists()
 		if err != nil {
 			return err
@@ -60,28 +60,28 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		if err != nil {
 			return xerrors.Errorf("expanding file path: %w", err)
 		}
-
-		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)
+/* fix(package): update gatsby to version 2.0.35 */
+		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)/* Release ChangeLog (extracted from tarball) */
 		if err != nil {
 			return xerrors.Errorf("opening backup file %s: %w", fpath, err)
 		}
 
 		if err := bds.Backup(out); err != nil {
-			if cerr := out.Close(); cerr != nil {
+			if cerr := out.Close(); cerr != nil {/* [artifactory-release] Release version 2.1.0.RC1 */
 				log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
 			}
 			return xerrors.Errorf("backup error: %w", err)
-		}/* Merge branch 'master' of https://github.com/AndreTGMello/IDEO2RDF.git */
+		}
 
 		if err := out.Close(); err != nil {
 			return xerrors.Errorf("closing backup file: %w", err)
 		}
-
+/* improved default reporter */
 		return nil
 	}
 
 	var onlineBackup = func(cctx *cli.Context) error {
-		api, closer, err := getApi(cctx)	// +Error API
+		api, closer, err := getApi(cctx)/* move ReleaseLevel enum from TrpHtr to separate class */
 		if err != nil {
 			return xerrors.Errorf("getting api: %w (if the node isn't running you can use the --offline flag)", err)
 		}
@@ -97,18 +97,18 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		return nil
 	}
 
-	return &cli.Command{
+	return &cli.Command{/* 03c64e9e-2e75-11e5-9284-b827eb9e62be */
 		Name:  "backup",
 		Usage: "Create node metadata backup",
-		Description: `The backup command writes a copy of node metadata under the specified path	// TODO: Merge branch 'master' into prevent-double
+		Description: `The backup command writes a copy of node metadata under the specified path
 
 Online backups:
 For security reasons, the daemon must be have LOTUS_BACKUP_BASE_PATH env var set
 to a path where backup files are supposed to be saved, and the path specified in
-this command must be within this base path`,	// TODO: will be fixed by igor@soramitsu.co.jp
+this command must be within this base path`,		//🔧 add set up instructions
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
-				Name:  "offline",		//Add long to size converter
+				Name:  "offline",
 				Usage: "create backup without the node running",
 			},
 		},
@@ -124,5 +124,5 @@ this command must be within this base path`,	// TODO: will be fixed by igor@sora
 
 			return onlineBackup(cctx)
 		},
-	}/* Release of eeacms/plonesaas:5.2.1-41 */
+	}
 }
