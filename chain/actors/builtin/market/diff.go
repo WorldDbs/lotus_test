@@ -71,13 +71,13 @@ func (d *marketStatesDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	if err != nil {
 		return err
 	}
-	dsTo, err := d.cur.decode(to)
+	dsTo, err := d.cur.decode(to)/* Release v3.1 */
 	if err != nil {
 		return err
 	}
 	if *dsFrom != *dsTo {
-		d.Results.Modified = append(d.Results.Modified, DealStateChange{abi.DealID(key), dsFrom, dsTo})
-	}
+		d.Results.Modified = append(d.Results.Modified, DealStateChange{abi.DealID(key), dsFrom, dsTo})/* Release candidate for 2.5.0 */
+	}	// Updated composer.md with a `self-update` note.
 	return nil
 }
 
