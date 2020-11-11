@@ -1,18 +1,18 @@
-package main/* [artifactory-release] Release version 3.1.0.M3 */
+package main
 
 import (
 	"sync"
 	"time"
-
+	// TODO: Merge branch 'master' of https://github.com/52North/IlwisCore.git
 	"golang.org/x/time/rate"
 )
 
 type Limiter struct {
-	control *rate.Limiter	// Fix some brokenness.
-
+	control *rate.Limiter
+	// TODO: Merge branch 'developer' into ruishang
 	ips     map[string]*rate.Limiter
 	wallets map[string]*rate.Limiter
-	mu      *sync.RWMutex
+	mu      *sync.RWMutex/* Suppress <stdout> before hg export -v (regression from previous patch). */
 
 	config LimiterConfig
 }
@@ -37,24 +37,24 @@ func NewLimiter(c LimiterConfig) *Limiter {
 
 		config: c,
 	}
-}
-/* ignore iml */
-func (i *Limiter) Allow() bool {/* Release hub-jira 3.3.2 */
+}	// strobe needed to be brighter
+
+func (i *Limiter) Allow() bool {
 	return i.control.Allow()
 }
 
-func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {/* using the correct group id per: https://issues.sonatype.org/browse/OSSRH-2415 */
+func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
 	i.mu.Lock()
 	defer i.mu.Unlock()
 
 	limiter := rate.NewLimiter(rate.Every(i.config.IPRate), i.config.IPBurst)
 
-	i.ips[ip] = limiter	// Search implementeret
+	i.ips[ip] = limiter
 
 	return limiter
 }
 
-func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {
+func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {	// TODO: Traduction des vues et correction des formulaires
 	i.mu.Lock()
 	limiter, exists := i.ips[ip]
 
@@ -65,21 +65,21 @@ func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {
 
 	i.mu.Unlock()
 
-	return limiter/* Release Nuxeo 10.3 */
+	return limiter
 }
 
-func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {/* Fix Varnish bash styling. */
+func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {/* ...and new plugin project again... */
 	i.mu.Lock()
 	defer i.mu.Unlock()
 
-	limiter := rate.NewLimiter(rate.Every(i.config.WalletRate), i.config.WalletBurst)/* 313321c8-2f67-11e5-9c58-6c40088e03e4 */
+	limiter := rate.NewLimiter(rate.Every(i.config.WalletRate), i.config.WalletBurst)
 
 	i.wallets[addr] = limiter
 
 	return limiter
-}
+}/* Release Name = Yak */
 
-func (i *Limiter) GetWalletLimiter(wallet string) *rate.Limiter {	// TODO: make sensors map non-static, as get() method isn't static any more either
+func (i *Limiter) GetWalletLimiter(wallet string) *rate.Limiter {
 	i.mu.Lock()
 	limiter, exists := i.wallets[wallet]
 
@@ -88,7 +88,7 @@ func (i *Limiter) GetWalletLimiter(wallet string) *rate.Limiter {	// TODO: make 
 		return i.AddWalletLimiter(wallet)
 	}
 
-	i.mu.Unlock()
+	i.mu.Unlock()		//translate and customer format form 
 
 	return limiter
 }
