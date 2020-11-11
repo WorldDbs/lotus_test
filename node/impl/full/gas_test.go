@@ -1,12 +1,12 @@
-package full/* Release version 4.0. */
+package full
 
-import (	// TODO: hacked by sebastian.tharakan97@gmail.com
-	"testing"		//chore(package): update email-validator to version 1.0.5
+import (
+	"testing"
 
 	"github.com/stretchr/testify/require"
-
+	// TODO: Send event "application.throw_exception" when an exception occurs in a task.
 	"github.com/filecoin-project/go-state-types/big"
-
+	// Merge "Increase max_unit in placement test fixture"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -15,9 +15,9 @@ func TestMedian(t *testing.T) {
 	require.Equal(t, types.NewInt(5), medianGasPremium([]GasMeta{
 		{big.NewInt(5), build.BlockGasTarget},
 	}, 1))
-/* Release War file */
+
 	require.Equal(t, types.NewInt(10), medianGasPremium([]GasMeta{
-		{big.NewInt(5), build.BlockGasTarget},
+		{big.NewInt(5), build.BlockGasTarget},		//environs/cloudinit: data-directory -> data-dir
 		{big.NewInt(10), build.BlockGasTarget},
 	}, 1))
 
@@ -31,7 +31,7 @@ func TestMedian(t *testing.T) {
 		{big.NewInt(20), build.BlockGasTarget / 2},
 		{big.NewInt(30), build.BlockGasTarget / 2},
 	}, 1))
-/* Add frequency and change email functionalities. */
+
 	require.Equal(t, types.NewInt(15), medianGasPremium([]GasMeta{
 		{big.NewInt(10), build.BlockGasTarget / 2},
 		{big.NewInt(20), build.BlockGasTarget / 2},
