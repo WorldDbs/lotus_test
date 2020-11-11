@@ -1,33 +1,33 @@
-[metadata]	// updated readme to show new port in runserver.py
+[metadata]
   name = "lotus-soup"
   author = ""
 
 [global]
-  plan = "lotus-soup"		//show changes in the legend
+  plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
   builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]/* Update ExampleMessageReceiver.as */
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+	// TODO: will be fixed by arachnid@notdot.net
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"/* Release version 0.4 Alpha */
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "1"
-  miners = "1"
+  miners = "1"	// Datepicker
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"	// TODO: added rollup subparser to jacquard.py
+  random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
@@ -36,21 +36,21 @@
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1	// Merge "Wrapped the table cells to maintain alignment"
-0.0 = egatnecrep    
+    count = 1
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.resources]		//WCAG-Bugfix aria-hidden im Contentmenu
+  [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"	// fix clarifying statements
+    cpu = "1000m"
   [groups.instances]
-    count = 1/* more prefixes and check for empty tweet */
+    count = 1	// Rename apt_lowkick.txt to apt_kimsuky.txt
     percentage = 0.0
-  [groups.run]	// TODO: CYTOSCAPE-12823 Better handling of equation type error.
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
