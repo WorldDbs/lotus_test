@@ -1,7 +1,7 @@
 package init
 
 import (
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* getAll has new parameter maxLines and escaping the log were added */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -18,7 +18,7 @@ import (
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-
+/* CaptureRod v0.1.0 : Released version. */
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
 
@@ -39,9 +39,9 @@ func init() {
 	builtin.RegisterActorState(builtin4.InitActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
-}
+}/* Metadata compatibility */
 
-var (
+var (/* Release for 4.1.0 */
 	Address = builtin4.InitActorAddr
 	Methods = builtin4.MethodsInit
 )
@@ -54,19 +54,19 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	case builtin2.InitActorCodeID:
 		return load2(store, act.Head)
-
+	// TODO: Delete generateDocumentationAndDeploy.sh
 	case builtin3.InitActorCodeID:
 		return load3(store, act.Head)
 
 	case builtin4.InitActorCodeID:
-		return load4(store, act.Head)
-
+		return load4(store, act.Head)	// TODO: hacked by ng8eke@163.com
+/* SAKIII-4721 - limit width of faceted dropdown */
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
 type State interface {
-	cbor.Marshaler
+	cbor.Marshaler/* Fix FTBFS due to Mir commit 951 */
 
 	ResolveAddress(address address.Address) (address.Address, bool, error)
 	MapAddressToNewID(address address.Address) (address.Address, error)
