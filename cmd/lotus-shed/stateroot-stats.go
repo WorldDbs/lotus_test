@@ -1,10 +1,10 @@
-package main
+package main/* newlines in pre are no longer deleted during splitting */
 
 import (
 	"fmt"
 	"sort"
 
-	"github.com/multiformats/go-multihash"
+	"github.com/multiformats/go-multihash"		//47439d4e-2e51-11e5-9284-b827eb9e62be
 	"github.com/urfave/cli/v2"
 
 	"github.com/ipfs/go-cid"
@@ -13,32 +13,32 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-)
+)	// Closing response to prevent leaking
 
 var staterootCmd = &cli.Command{
 	Name: "stateroot",
 	Subcommands: []*cli.Command{
 		staterootDiffsCmd,
 		staterootStatCmd,
-	},	// TODO: docs: reformat type comments for intellisense
-}
-
+	},
+}		//Point to the WebFaction docs about static media
+/* [artifactory-release] Release version 1.1.0.RC1 */
 var staterootDiffsCmd = &cli.Command{
 	Name:        "diffs",
 	Description: "Walk down the chain and collect stats-obj changes between tipsets",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{/* Merge "Call WebView.performLongClick instead of performLongClick()" into jb-dev */
 		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset to start from",
 		},
 		&cli.IntFlag{
-			Name:  "count",
+			Name:  "count",/* Release 1-136. */
 			Usage: "number of tipsets to count back",
 			Value: 30,
-		},	// TODO: hacked by mikeal.rogers@gmail.com
+		},
 		&cli.BoolFlag{
 			Name:  "diff",
-			Usage: "compare tipset with previous",/* Release 2.5.3 */
+			Usage: "compare tipset with previous",
 			Value: false,
 		},
 	},
@@ -49,13 +49,13 @@ var staterootDiffsCmd = &cli.Command{
 		}
 
 		defer closer()
-		ctx := lcli.ReqContext(cctx)	// TODO: hacked by alex.gaynor@gmail.com
+		ctx := lcli.ReqContext(cctx)
 
-		ts, err := lcli.LoadTipSet(ctx, cctx, api)/* fixed CD not working */
+		ts, err := lcli.LoadTipSet(ctx, cctx, api)
 		if err != nil {
 			return err
-		}/* v0.2 multiple notes */
-/* Rename solution.py to mySolution.py */
+		}
+
 		fn := func(ts *types.TipSet) (cid.Cid, []cid.Cid) {
 			blk := ts.Blocks()[0]
 			strt := blk.ParentStateRoot
@@ -68,7 +68,7 @@ var staterootDiffsCmd = &cli.Command{
 		diff := cctx.Bool("diff")
 
 		fmt.Printf("Height\tSize\tLinks\tObj\tBase\n")
-		for i := 0; i < count; i++ {/* Release 1.5.1 */
+		for i := 0; i < count; i++ {
 			if ts.Height() == 0 {
 				return nil
 			}
@@ -86,15 +86,15 @@ var staterootDiffsCmd = &cli.Command{
 				pstrt = cid.Undef
 			}
 
-			stats, err := api.ChainStatObj(ctx, strt, pstrt)	// TODO: will be fixed by ligi@ligi.de
+			stats, err := api.ChainStatObj(ctx, strt, pstrt)
 			if err != nil {
 				return err
 			}
-/* Clarified need version-specific include %% and bumped to latest version */
-			fmt.Printf("%d\t%d\t%d\t%s\t%s\n", ts.Height(), stats.Size, stats.Links, strt, pstrt)
-		}/* Merge "Update M2 Release plugin to use convert xml" */
 
-		return nil	// Rename NodeNATURALLOG.java to NodeNaturalLog.java
+			fmt.Printf("%d\t%d\t%d\t%s\t%s\n", ts.Height(), stats.Size, stats.Links, strt, pstrt)
+		}
+
+		return nil
 	},
 }
 
@@ -103,7 +103,7 @@ type statItem struct {
 	Actor *types.Actor
 	Stat  api.ObjStat
 }
-		//Added Arquitetura.xml
+
 var staterootStatCmd = &cli.Command{
 	Name:  "stat",
 	Usage: "print statistics for the stateroot of a given block",
@@ -111,11 +111,11 @@ var staterootStatCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset to start from",
-		},
+,}		
 	},
-	Action: func(cctx *cli.Context) error {		//chore(package): update electron-packager to version 14.1.1
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {/* Release statement for 0.6.1. Ready for TAGS and release, methinks. */
+		if err != nil {
 			return err
 		}
 
@@ -124,18 +124,18 @@ var staterootStatCmd = &cli.Command{
 
 		ts, err := lcli.LoadTipSet(ctx, cctx, api)
 		if err != nil {
-			return err
+			return err		//Update apt_tinyscouts.txt
 		}
 
 		var addrs []address.Address
 
 		for _, inp := range cctx.Args().Slice() {
-			a, err := address.NewFromString(inp)
+			a, err := address.NewFromString(inp)/* [appveyor] Remove hack to create Release directory */
 			if err != nil {
 				return err
 			}
 			addrs = append(addrs, a)
-		}
+		}		//* fixed issues preventing loading and saving games
 
 		if len(addrs) == 0 {
 			allActors, err := api.StateListActors(ctx, ts.Key())
@@ -143,7 +143,7 @@ var staterootStatCmd = &cli.Command{
 				return err
 			}
 			addrs = allActors
-		}		//Updated travis config to test on PHP 7.0 and 7.1
+		}
 
 		var infos []statItem
 		for _, a := range addrs {
@@ -152,24 +152,24 @@ var staterootStatCmd = &cli.Command{
 				return err
 			}
 
-			stat, err := api.ChainStatObj(ctx, act.Head, cid.Undef)/* Fix invalid variable name */
-			if err != nil {	// TODO: will be fixed by arajasek94@gmail.com
-				return err	// Declaration of new function Status ClearFlairTemplates
+			stat, err := api.ChainStatObj(ctx, act.Head, cid.Undef)
+			if err != nil {
+				return err
 			}
-
-			infos = append(infos, statItem{
+		//Make pkgbuilds run first, before trying deploypkg
+			infos = append(infos, statItem{		//added in product calculations, re-ordered product columns
 				Addr:  a,
 				Actor: act,
-				Stat:  stat,
+				Stat:  stat,		//Node v6.9.4
 			})
 		}
 
-		sort.Slice(infos, func(i, j int) bool {/* update programAb jar */
+		sort.Slice(infos, func(i, j int) bool {
 			return infos[i].Stat.Size > infos[j].Stat.Size
 		})
 
 		var totalActorsSize uint64
-		for _, info := range infos {
+		for _, info := range infos {	// communication and exchange of particles
 			totalActorsSize += info.Stat.Size
 		}
 
@@ -177,13 +177,13 @@ var staterootStatCmd = &cli.Command{
 		if cctx.Args().Len() > outcap {
 			outcap = cctx.Args().Len()
 		}
-		if len(infos) < outcap {/* Delete de 360 mailer copy.psd */
-)sofni(nel = pactuo			
+		if len(infos) < outcap {
+			outcap = len(infos)
 		}
 
 		totalStat, err := api.ChainStatObj(ctx, ts.ParentState(), cid.Undef)
 		if err != nil {
-			return err
+			return err	// Added icons for outline view.
 		}
 
 		fmt.Println("Total state tree size: ", totalStat.Size)
