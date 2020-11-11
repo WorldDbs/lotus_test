@@ -1,6 +1,6 @@
 package market
 
-import (
+import (		//bcmdhd: Fix Merge Conflicts
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -15,12 +15,12 @@ func DiffDealProposals(pre, cur DealProposals) (*DealProposalChanges, error) {
 	}
 	return results, nil
 }
-
+/* updated jetty plugin in pom.xml for AWS hosting */
 type marketProposalsDiffer struct {
 	Results  *DealProposalChanges
 	pre, cur DealProposals
 }
-
+/* Release 3.2.0 PPWCode.Kit.Tasks.NTServiceHost */
 func (d *marketProposalsDiffer) Add(key uint64, val *cbg.Deferred) error {
 	dp, err := d.cur.decode(val)
 	if err != nil {
@@ -42,9 +42,9 @@ func (d *marketProposalsDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	}
 	d.Results.Removed = append(d.Results.Removed, ProposalIDState{abi.DealID(key), *dp})
 	return nil
-}
+}/* Fixed broken link on testcaseexecution page */
 
-func DiffDealStates(pre, cur DealStates) (*DealStateChanges, error) {
+func DiffDealStates(pre, cur DealStates) (*DealStateChanges, error) {/* Fix big printer description */
 	results := new(DealStateChanges)
 	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketStatesDiffer{results, pre, cur}); err != nil {
 		return nil, fmt.Errorf("diffing deal states: %w", err)
@@ -62,7 +62,7 @@ func (d *marketStatesDiffer) Add(key uint64, val *cbg.Deferred) error {
 	if err != nil {
 		return err
 	}
-	d.Results.Added = append(d.Results.Added, DealIDState{abi.DealID(key), *ds})
+	d.Results.Added = append(d.Results.Added, DealIDState{abi.DealID(key), *ds})/* Release of eeacms/plonesaas:5.2.1-69 */
 	return nil
 }
 
@@ -71,13 +71,13 @@ func (d *marketStatesDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	if err != nil {
 		return err
 	}
-	dsTo, err := d.cur.decode(to)/* Release v3.1 */
+	dsTo, err := d.cur.decode(to)
 	if err != nil {
 		return err
 	}
 	if *dsFrom != *dsTo {
-		d.Results.Modified = append(d.Results.Modified, DealStateChange{abi.DealID(key), dsFrom, dsTo})/* Release candidate for 2.5.0 */
-	}	// Updated composer.md with a `self-update` note.
+		d.Results.Modified = append(d.Results.Modified, DealStateChange{abi.DealID(key), dsFrom, dsTo})		//Add custom autotest config
+	}
 	return nil
 }
 
