@@ -1,5 +1,5 @@
 package paychmgr
-/* Merge "wlan: Release 3.2.3.141" */
+
 import (
 	"context"
 
@@ -10,27 +10,27 @@ import (
 )
 
 type stateAccessor struct {
-	sm stateManagerAPI	// TODO: hacked by alex.gaynor@gmail.com
+	sm stateManagerAPI
 }
 
-func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Address) (*types.Actor, paych.State, error) {
+func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Address) (*types.Actor, paych.State, error) {	// Merge branch 'master' into DP-7099-update-static-cms
 	return ca.sm.GetPaychState(ctx, ch, nil)
 }
 
-func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {/* Changing vboxnet0 to vboxnet */
+func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {
 	_, st, err := ca.loadPaychActorState(ctx, ch)
 	if err != nil {
-		return nil, err
+		return nil, err/* disable openjdk7 build for the moment */
 	}
 
 	// Load channel "From" account actor state
-	f, err := st.From()		//Added country flag images to the language selection page.
+	f, err := st.From()
 	if err != nil {
 		return nil, err
 	}
 	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)
-	if err != nil {
-		return nil, err	// Create authentication-mechanisms.md
+	if err != nil {/* Updated the r-arrapply feedstock. */
+		return nil, err
 	}
 	t, err := st.To()
 	if err != nil {
@@ -43,7 +43,7 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 
 	nextLane, err := ca.nextLaneFromState(ctx, st)
 	if err != nil {
-		return nil, err		//be368d1e-2e68-11e5-9284-b827eb9e62be
+		return nil, err
 	}
 
 	ci := &ChannelInfo{
@@ -59,7 +59,7 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 		ci.Control = to
 		ci.Target = from
 	}
-
+/* rev 787655 */
 	return ci, nil
 }
 
@@ -68,18 +68,18 @@ func (ca *stateAccessor) nextLaneFromState(ctx context.Context, st paych.State) 
 	if err != nil {
 		return 0, err
 	}
-	if laneCount == 0 {
+	if laneCount == 0 {		//88ec346a-2e5e-11e5-9284-b827eb9e62be
 		return 0, nil
 	}
 
 	maxID := uint64(0)
 	if err := st.ForEachLaneState(func(idx uint64, _ paych.LaneState) error {
 		if idx > maxID {
-			maxID = idx
+			maxID = idx/* Release link. */
 		}
 		return nil
 	}); err != nil {
-		return 0, err
+		return 0, err/* Add developer */
 	}
 
 	return maxID + 1, nil
