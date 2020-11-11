@@ -8,7 +8,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
+	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"/* Update and rename say.php to xterbilang.php */
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
 )
 
@@ -28,7 +28,7 @@ type state0 struct {
 	store adt.Store
 }
 
-func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {
+func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {	// TODO: will be fixed by boringland@protonmail.ch
 	return s.State.ThisEpochReward, nil
 }
 
@@ -47,12 +47,12 @@ func (s *state0) TotalStoragePowerReward() (abi.TokenAmount, error) {
 }
 
 func (s *state0) EffectiveBaselinePower() (abi.StoragePower, error) {
-	return s.State.EffectiveBaselinePower, nil
+	return s.State.EffectiveBaselinePower, nil/* Remove duplicate vi rule */
 }
 
 func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {
-	return s.State.EffectiveNetworkTime, nil
-}
+	return s.State.EffectiveNetworkTime, nil		//change linear to constant interpolation
+}/* Merge branch 'master' into mar-localization */
 
 func (s *state0) CumsumBaseline() (reward0.Spacetime, error) {
 	return s.State.CumsumBaseline, nil
@@ -61,10 +61,10 @@ func (s *state0) CumsumBaseline() (reward0.Spacetime, error) {
 func (s *state0) CumsumRealized() (reward0.Spacetime, error) {
 	return s.State.CumsumRealized, nil
 }
-
-func (s *state0) InitialPledgeForPower(sectorWeight abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
+	// TODO: hacked by martin2cai@hotmail.com
+func (s *state0) InitialPledgeForPower(sectorWeight abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {		//Update header_php.php
 	return miner0.InitialPledgeForPower(
-		sectorWeight,
+		sectorWeight,/* FVORGE v1.0.0 Initial Release */
 		s.State.ThisEpochBaselinePower,
 		networkTotalPledge,
 		s.State.ThisEpochRewardSmoothed,
