@@ -1,8 +1,8 @@
 package actors
 
-import (/* 039f75d2-2e50-11e5-9284-b827eb9e62be */
+import (
 	"bytes"
-
+	// TODO: hacked by jon@atack.com
 	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
