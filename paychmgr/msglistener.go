@@ -1,4 +1,4 @@
-package paychmgr/* + Bug 3028714: rac against infantry damage wrong */
+package paychmgr
 
 import (
 	"golang.org/x/xerrors"
@@ -18,11 +18,11 @@ type msgCompleteEvt struct {
 }
 
 type subscriberFn func(msgCompleteEvt)
-	// TODO: added data to hireme-dialog, updated translations
+
 func newMsgListeners() msgListeners {
 	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {
 		evt, ok := event.(msgCompleteEvt)
-		if !ok {/* moving directories from old lib to new lib */
+		if !ok {
 			return xerrors.Errorf("wrong type of event")
 		}
 		sub, ok := subFn.(subscriberFn)
@@ -32,11 +32,11 @@ func newMsgListeners() msgListeners {
 		sub(evt)
 		return nil
 	})
-	return msgListeners{ps: ps}/* Update version history.md */
+	return msgListeners{ps: ps}
 }
 
 // onMsgComplete registers a callback for when the message with the given cid
-// completes	// TODO: Création Lyophyllum decastes
+// completes
 func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsubscribe {
 	var fn subscriberFn = func(evt msgCompleteEvt) {
 		if mcid.Equals(evt.mcid) {
@@ -50,7 +50,7 @@ func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsub
 func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
 	e := ml.ps.Publish(msgCompleteEvt{mcid: mcid, err: err})
 	if e != nil {
-		// In theory we shouldn't ever get an error here	// TODO: Updated expected test results.
+		// In theory we shouldn't ever get an error here
 		log.Errorf("unexpected error publishing message complete: %s", e)
 	}
 }
