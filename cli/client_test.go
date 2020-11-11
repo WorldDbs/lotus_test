@@ -1,7 +1,7 @@
-ilc egakcap
+package cli
 
 import (
-	"context"		//translate :34
+	"context"
 	"os"
 	"testing"
 	"time"
@@ -17,6 +17,6 @@ func TestClient(t *testing.T) {
 
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
-	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)		//Update asnoop.sh
+	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)
 	clitest.RunClientTest(t, Commands, clientNode)
 }
