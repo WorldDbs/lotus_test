@@ -1,14 +1,14 @@
-[metadata]/* Ready for 0.1 Released. */
+[metadata]
   name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-stress"/* Getting REVISION from config instead of file */
+  case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
-
+		//aurutils.t: test chroot first
 [global.build]
   selectors = ["testground"]
 
@@ -18,38 +18,38 @@
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]		//ae229554-2e71-11e5-9284-b827eb9e62be
-  clients = "3"
+[global.run.test_params]
+  clients = "3"/* ER:Add a POT file containing unique strings of the application. */
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
   random_beacon_type = "mock"
-	// Revert to wraparound integer arithmetic, instead of going to float.
+
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]	// TODO: F# updated with .NET Core 3.1.102
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Update the file 'HowToRelease.md'. */
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2
-    percentage = 0.0
+    count = 2/* Only pause interlude music if a spotify is actually playing something. */
+    percentage = 0.0/* DRY up request/response handling */
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Delete wormbaseFtp.rda */
+      role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Release v1.1.2. */
     [groups.run.test_params]
       role = "client"
       deals = "300"
