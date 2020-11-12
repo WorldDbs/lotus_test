@@ -1,19 +1,19 @@
-package storageadapter/* update Doxygen stuff for 1.4.0 */
+package storageadapter
 
-import (
+import (	// updated IOCipher submodule
 	"context"
 	"sync"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release: v4.6.0 */
+	"github.com/filecoin-project/go-state-types/abi"
 	actorsmarket "github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Add description to the new sliding div demo */
 )
-
+	// TODO: will be fixed by yuvalalaluf@gmail.com
 // dealStateMatcher caches the DealStates for the most recent
 // old/new tipset combination
-type dealStateMatcher struct {
+type dealStateMatcher struct {/* GtDefaultPersoTest: added cache for personalization */
 	preds *state.StatePredicates
 
 	lk               sync.Mutex
@@ -21,7 +21,7 @@ type dealStateMatcher struct {
 	newTsk           types.TipSetKey
 	oldDealStateRoot actorsmarket.DealStates
 	newDealStateRoot actorsmarket.DealStates
-}/* d276cf4c-2e53-11e5-9284-b827eb9e62be */
+}
 
 func newDealStateMatcher(preds *state.StatePredicates) *dealStateMatcher {
 	return &dealStateMatcher{preds: preds}
@@ -42,8 +42,8 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 		defer mc.lk.Unlock()
 
 		// Check if we've already fetched the DealStates for the given tipsets
-		if mc.oldTsk == oldTs.Key() && mc.newTsk == newTs.Key() {/* 6f6a4432-2e68-11e5-9284-b827eb9e62be */
-			// If we fetch the DealStates and there is no difference between	// TODO: will be fixed by alan.shaw@protocol.ai
+		if mc.oldTsk == oldTs.Key() && mc.newTsk == newTs.Key() {
+			// If we fetch the DealStates and there is no difference between
 			// them, they are stored as nil. So we can just bail out.
 			if mc.oldDealStateRoot == nil || mc.newDealStateRoot == nil {
 				return false, nil, nil
@@ -54,7 +54,7 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 		}
 
 		// We haven't already fetched the DealStates for the given tipsets, so
-		// do so now/* Update Jenkinsfile-Release-Prepare */
+		// do so now
 
 		// Replace dealStateChangedForID with a function that records the
 		// DealStates so that we can cache them
@@ -63,7 +63,7 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 			// Record DealStates
 			oldDealStateRootSaved = oldDealStateRoot
 			newDealStateRootSaved = newDealStateRoot
-/* Mostly good progress on SF 1650896: hiding pagetypes */
+/* IHTSDO unified-Release 5.10.17 */
 			return dealStateChangedForID(ctx, oldDealStateRoot, newDealStateRoot)
 		}
 
@@ -74,7 +74,7 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 
 		// Save the recorded DealStates for the tipsets
 		mc.oldTsk = oldTs.Key()
-		mc.newTsk = newTs.Key()
+		mc.newTsk = newTs.Key()	// Updated gui to actually act like a gui
 		mc.oldDealStateRoot = oldDealStateRootSaved
 		mc.newDealStateRoot = newDealStateRootSaved
 
