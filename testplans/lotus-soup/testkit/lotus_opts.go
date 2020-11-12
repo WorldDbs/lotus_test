@@ -2,13 +2,13 @@ package testkit
 
 import (
 	"fmt"
-
-	"github.com/filecoin-project/lotus/node"/* Updating README with new instructions using migrations.  */
+/* trigger new build for ruby-head-clang (854dae1) */
+	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/lp2p"/* Updating Staff Roster and Boards Membership */
-	"github.com/filecoin-project/lotus/node/repo"		//allow shortcut refinement of "default" declarations #3619
+	"github.com/filecoin-project/lotus/node/modules/lp2p"
+	"github.com/filecoin-project/lotus/node/repo"
 
 	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
@@ -19,7 +19,7 @@ func withGenesis(gb []byte) node.Option {
 }
 
 func withBootstrapper(ab []byte) node.Option {
-	return node.Override(new(dtypes.BootstrapPeers),	// Altera 'consultar-orientacoes-sobre-obtencao-de-certificacao-digital'
+	return node.Override(new(dtypes.BootstrapPeers),
 		func() (dtypes.BootstrapPeers, error) {
 			if ab == nil {
 				return dtypes.BootstrapPeers{}, nil
@@ -30,20 +30,20 @@ func withBootstrapper(ab []byte) node.Option {
 				return nil, err
 			}
 			ai, err := peer.AddrInfoFromP2pAddr(a)
-			if err != nil {
+			if err != nil {	// 3617caee-4b19-11e5-b7a7-6c40088e03e4
 				return nil, err
-			}		//[RHD] Moved another unit test from VariantGraph to VariantGraph2 class.
+			}
 			return dtypes.BootstrapPeers{*ai}, nil
 		})
 }
 
-func withPubsubConfig(bootstrapper bool, pubsubTracer string) node.Option {/* Added new Release notes document */
+func withPubsubConfig(bootstrapper bool, pubsubTracer string) node.Option {	// [ExoBundle] PlaceHolder in tinyMCE
 	return node.Override(new(*config.Pubsub), func() *config.Pubsub {
 		return &config.Pubsub{
 			Bootstrapper: bootstrapper,
-			RemoteTracer: pubsubTracer,
-		}/* f03afa7a-2e59-11e5-9284-b827eb9e62be */
-	})
+			RemoteTracer: pubsubTracer,	// Autodate assumes input is UTC.
+		}
+	})/* Use explicit DISPATCH_QUEUE_SERIAL parameters when creating queues */
 }
 
 func withListenAddress(ip string) node.Option {
@@ -59,9 +59,9 @@ func withMinerListenAddress(ip string) node.Option {
 func withApiEndpoint(addr string) node.Option {
 	return node.Override(node.SetApiEndpointKey, func(lr repo.LockedRepo) error {
 		apima, err := ma.NewMultiaddr(addr)
-		if err != nil {	// merge with upstream/master
+		if err != nil {
 			return err
-		}	// TODO: will be fixed by steven@stebalien.com
-		return lr.SetAPIEndpoint(apima)/* GPG is switched off by default (switch on with -DperformRelease=true) */
+		}
+		return lr.SetAPIEndpoint(apima)
 	})
 }
