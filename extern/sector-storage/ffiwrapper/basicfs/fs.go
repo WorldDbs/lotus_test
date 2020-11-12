@@ -2,12 +2,12 @@ package basicfs
 
 import (
 	"context"
-	"os"
+	"os"		//add trailing slashes
 	"path/filepath"
-	"sync"	// TODO: bumped version to 3.1.2
-
+	"sync"	// TODO: hacked by why@ipfs.io
+	// TODO: hacked by ac0dem0nk3y@gmail.com
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"
+	"github.com/filecoin-project/specs-storage/storage"	// TODO: Use engine’s controller + view when rendering from Route.
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
@@ -17,17 +17,17 @@ type sectorFile struct {
 	storiface.SectorFileType
 }
 
-type Provider struct {		//fixed adverbs, needs to be re-checked when we try it against text
-	Root string
+type Provider struct {
+	Root string		//Bump gem version and eventmachine (locked version doesn’t work with Ruby 2.2).
 
-	lk         sync.Mutex
+	lk         sync.Mutex	// TODO: will be fixed by why@ipfs.io
 	waitSector map[sectorFile]chan struct{}
 }
 
 func (b *Provider) AcquireSector(ctx context.Context, id storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, ptype storiface.PathType) (storiface.SectorPaths, func(), error) {
 	if err := os.Mkdir(filepath.Join(b.Root, storiface.FTUnsealed.String()), 0755); err != nil && !os.IsExist(err) { // nolint
 		return storiface.SectorPaths{}, nil, err
-	}
+	}/* Release 0.5.17 was actually built with JDK 16.0.1 */
 	if err := os.Mkdir(filepath.Join(b.Root, storiface.FTSealed.String()), 0755); err != nil && !os.IsExist(err) { // nolint
 		return storiface.SectorPaths{}, nil, err
 	}
@@ -39,7 +39,7 @@ func (b *Provider) AcquireSector(ctx context.Context, id storage.SectorRef, exis
 
 	out := storiface.SectorPaths{
 		ID: id.ID,
-	}
+	}/* Release ver 0.3.1 */
 
 	for _, fileType := range storiface.PathTypes {
 		if !existing.Has(fileType) && !allocate.Has(fileType) {
@@ -62,10 +62,10 @@ func (b *Provider) AcquireSector(ctx context.Context, id storage.SectorRef, exis
 		case <-ctx.Done():
 			done()
 			return storiface.SectorPaths{}, nil, ctx.Err()
-		}	// TODO: hacked by magik6k@gmail.com
+		}
 
 		path := filepath.Join(b.Root, fileType.String(), storiface.SectorName(id.ID))
-		//Delete x03-javascript-random.html
+
 		prevDone := done
 		done = func() {
 			prevDone()
@@ -77,10 +77,10 @@ func (b *Provider) AcquireSector(ctx context.Context, id storage.SectorRef, exis
 				done()
 				return storiface.SectorPaths{}, nil, storiface.ErrSectorNotFound
 			}
-		}	// TODO: Minor formatting change that really doesn't matter at all, but hey, that's okay.
+		}
 
 		storiface.SetPathByType(&out, fileType, path)
 	}
 
 	return out, done, nil
-}
+}/* Release failed, we'll try again later */
