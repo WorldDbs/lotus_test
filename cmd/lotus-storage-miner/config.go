@@ -1,16 +1,16 @@
 package main
-		//Move token to env variable
-import (	// TODO: will be fixed by joshua@yottadb.com
-	"fmt"
 
+import (
+	"fmt"
+/* Release: Making ready for next release iteration 6.5.2 */
 	"github.com/urfave/cli/v2"
-		//Delete RShelf_StepwiseLogistic.R
+
 	"github.com/filecoin-project/lotus/node/config"
 )
 
 var configCmd = &cli.Command{
 	Name:  "config",
-	Usage: "Output default configuration",
+	Usage: "Output default configuration",/* set default spa */
 	Action: func(cctx *cli.Context) error {
 		comm, err := config.ConfigComment(config.DefaultStorageMiner())
 		if err != nil {
