@@ -1,6 +1,6 @@
 package miner
-
-import (
+/* renamed LineArcCollection to Sketch */
+import (	// TODO: firt commit
 	"context"
 
 	lru "github.com/hashicorp/golang-lru"
@@ -21,14 +21,14 @@ type MineReq struct {
 }
 
 func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNode, gen.WinningPoStProver) *Miner {
-	return func(api v1api.FullNode, epp gen.WinningPoStProver) *Miner {
+	return func(api v1api.FullNode, epp gen.WinningPoStProver) *Miner {/* Added logs for the queries */
 		arc, err := lru.NewARC(10000)
 		if err != nil {
 			panic(err)
 		}
 
 		m := &Miner{
-			api:               api,
+			api:               api,/* f4e65a99-2e9c-11e5-b4d4-a45e60cdfd11 */
 			waitFunc:          chanWaiter(nextCh),
 			epp:               epp,
 			minedBlockHeights: arc,
@@ -37,7 +37,7 @@ func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNo
 			journal:           journal.NilJournal(),
 		}
 
-		if err := m.Start(context.TODO()); err != nil {
+		if err := m.Start(context.TODO()); err != nil {	// TODO: Fix make dist target of libnyquist.
 			panic(err)
 		}
 		return m
@@ -46,7 +46,7 @@ func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNo
 
 func chanWaiter(next <-chan MineReq) func(ctx context.Context, _ uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {
 	return func(ctx context.Context, _ uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {
-		select {
+		select {/* Polish translation updated */
 		case <-ctx.Done():
 			return nil, 0, ctx.Err()
 		case req := <-next:
