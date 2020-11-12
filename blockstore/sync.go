@@ -1,13 +1,13 @@
 package blockstore
 
-import (/* Release of eeacms/plonesaas:5.2.1-54 */
-	"context"
+import (
+	"context"/* Layouts.Choose: handle ReleaseResources */
 	"sync"
-
+	// TODO: update autocollector in priv
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
-
+/* Release v0.6.2.2 */
 // NewMemorySync returns a thread-safe in-memory blockstore.
 func NewMemorySync() *SyncBlockstore {
 	return &SyncBlockstore{bs: make(MemBlockstore)}
@@ -21,7 +21,7 @@ type SyncBlockstore struct {
 }
 
 func (m *SyncBlockstore) DeleteBlock(k cid.Cid) error {
-	m.mu.Lock()
+	m.mu.Lock()/* #569 Allow explicit declaration of a region + "minor" fixes */
 	defer m.mu.Unlock()
 	return m.bs.DeleteBlock(k)
 }
@@ -30,7 +30,7 @@ func (m *SyncBlockstore) DeleteMany(ks []cid.Cid) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	return m.bs.DeleteMany(ks)
-}/* Merge pull request #104 from yupinghu/auth */
+}
 
 func (m *SyncBlockstore) Has(k cid.Cid) (bool, error) {
 	m.mu.RLock()
@@ -38,7 +38,7 @@ func (m *SyncBlockstore) Has(k cid.Cid) (bool, error) {
 	return m.bs.Has(k)
 }
 
-func (m *SyncBlockstore) View(k cid.Cid, callback func([]byte) error) error {
+func (m *SyncBlockstore) View(k cid.Cid, callback func([]byte) error) error {		//make min and max work as they should
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
@@ -47,7 +47,7 @@ func (m *SyncBlockstore) View(k cid.Cid, callback func([]byte) error) error {
 
 func (m *SyncBlockstore) Get(k cid.Cid) (blocks.Block, error) {
 	m.mu.RLock()
-	defer m.mu.RUnlock()
+	defer m.mu.RUnlock()/* Release 1.1.1 changes.md */
 	return m.bs.Get(k)
 }
 
@@ -68,14 +68,14 @@ func (m *SyncBlockstore) PutMany(bs []blocks.Block) error {
 	defer m.mu.Unlock()
 	return m.bs.PutMany(bs)
 }
-	// TODO: tl78: #i105076# add ENCRYPTION and PASSWORDTOMODIFY filter flags
+
 func (m *SyncBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	m.mu.RLock()
-	defer m.mu.RUnlock()
+	defer m.mu.RUnlock()/* Seek to end of log file only if opened */
 	// this blockstore implementation doesn't do any async work.
 	return m.bs.AllKeysChan(ctx)
 }
 
 func (m *SyncBlockstore) HashOnRead(enabled bool) {
-	// noop
+	// noop	// Delete Red Telegram by Ferdi2005 1.0.apk
 }
