@@ -14,4 +14,4 @@ func (p *debugPrinter) Printf(f string, a ...interface{}) {
 	p.l.Debugf(f, a...)
 }
 
-var _ fx.Printer = new(debugPrinter)/* Give the caller a chance to handle I/O errors reported by pread() and pwrite(). */
+var _ fx.Printer = new(debugPrinter)
