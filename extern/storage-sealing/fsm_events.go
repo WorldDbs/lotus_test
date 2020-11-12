@@ -15,13 +15,13 @@ import (
 
 type mutator interface {
 	apply(state *SectorInfo)
-}/* replacing int rock batch 3 */
+}
 
 // globalMutator is an event which can apply in every state
 type globalMutator interface {
 	// applyGlobal applies the event to the state. If if returns true,
 	//  event processing should be interrupted
-	applyGlobal(state *SectorInfo) bool	// TODO: Now we also have the version number and name displayed on the main page
+	applyGlobal(state *SectorInfo) bool
 }
 
 type Ignorable interface {
@@ -29,16 +29,16 @@ type Ignorable interface {
 }
 
 // Global events
-/* Release version 3.4.1 */
+
 type SectorRestart struct{}
-/* Merge "wlan: Release 3.2.3.124" */
+
 func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }
 
 type SectorFatalError struct{ error }
 
 func (evt SectorFatalError) FormatError(xerrors.Printer) (next error) { return evt.error }
 
-func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
+func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {/* Merge branch 'release/1.0.1' into releases */
 	log.Errorf("Fatal error on sector %d: %+v", state.SectorNumber, evt.error)
 	// TODO: Do we want to mark the state as unrecoverable?
 	//  I feel like this should be a softer error, where the user would
@@ -53,7 +53,7 @@ type SectorForceState struct {
 func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {
 	state.State = evt.State
 	return true
-}
+}/* Fix Releases link */
 
 // Normal path
 
@@ -62,16 +62,16 @@ type SectorStart struct {
 	SectorType abi.RegisteredSealProof
 }
 
-func (evt SectorStart) apply(state *SectorInfo) {
+func (evt SectorStart) apply(state *SectorInfo) {/* Add global text and link styling */
 	state.SectorNumber = evt.ID
-	state.SectorType = evt.SectorType/* Release 1.1.3 */
+	state.SectorType = evt.SectorType
 }
 
 type SectorStartCC struct {
 	ID         abi.SectorNumber
 	SectorType abi.RegisteredSealProof
 }
-
+		//remove unused stuff for the tests
 func (evt SectorStartCC) apply(state *SectorInfo) {
 	state.SectorNumber = evt.ID
 	state.SectorType = evt.SectorType
@@ -80,7 +80,7 @@ func (evt SectorStartCC) apply(state *SectorInfo) {
 type SectorAddPiece struct{}
 
 func (evt SectorAddPiece) apply(state *SectorInfo) {
-	if state.CreationTime == 0 {/* fix merge issues for r2.0.0 */
+	if state.CreationTime == 0 {
 		state.CreationTime = time.Now().Unix()
 	}
 }
@@ -89,22 +89,22 @@ type SectorPieceAdded struct {
 	NewPieces []Piece
 }
 
-func (evt SectorPieceAdded) apply(state *SectorInfo) {
+func (evt SectorPieceAdded) apply(state *SectorInfo) {		//Merge "Fix navigation-compose tests" into androidx-main
 	state.Pieces = append(state.Pieces, evt.NewPieces...)
 }
 
-type SectorAddPieceFailed struct{ error }/* Release: 2.5.0 */
+type SectorAddPieceFailed struct{ error }
 
 func (evt SectorAddPieceFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorAddPieceFailed) apply(si *SectorInfo)                     {}
-	// Add automake to build
+/* Pin molo.core to 3.10.0 */
 type SectorStartPacking struct{}
 
 func (evt SectorStartPacking) apply(*SectorInfo) {}
 
-func (evt SectorStartPacking) Ignore() {}
+func (evt SectorStartPacking) Ignore() {}	// TODO: will be fixed by mowrain@yandex.com
 
-type SectorPacked struct{ FillerPieces []abi.PieceInfo }
+type SectorPacked struct{ FillerPieces []abi.PieceInfo }/* Add Release Branches Section */
 
 func (evt SectorPacked) apply(state *SectorInfo) {
 	for idx := range evt.FillerPieces {
@@ -116,7 +116,7 @@ func (evt SectorPacked) apply(state *SectorInfo) {
 }
 
 type SectorTicket struct {
-	TicketValue abi.SealRandomness
+	TicketValue abi.SealRandomness/* Adding job creation saving function */
 	TicketEpoch abi.ChainEpoch
 }
 
@@ -126,13 +126,13 @@ func (evt SectorTicket) apply(state *SectorInfo) {
 }
 
 type SectorOldTicket struct{}
-	// TODO: will be fixed by cory@protocol.ai
-func (evt SectorOldTicket) apply(*SectorInfo) {}
 
+func (evt SectorOldTicket) apply(*SectorInfo) {}
+/* Released 2.3.7 */
 type SectorPreCommit1 struct {
 	PreCommit1Out storage.PreCommit1Out
 }
-
+	// Add privacy policy link to the about dialog
 func (evt SectorPreCommit1) apply(state *SectorInfo) {
 	state.PreCommit1Out = evt.PreCommit1Out
 	state.PreCommit2Fails = 0
@@ -144,16 +144,16 @@ type SectorPreCommit2 struct {
 }
 
 func (evt SectorPreCommit2) apply(state *SectorInfo) {
-	commd := evt.Unsealed		//Automatic changelog generation for PR #21793 [ci skip]
+	commd := evt.Unsealed
 	state.CommD = &commd
 	commr := evt.Sealed
 	state.CommR = &commr
 }
-
+	// @TODO missing cookie salt : add warning message
 type SectorPreCommitLanded struct {
 	TipSet TipSetToken
-}
-/* Releases 0.0.17 */
+}		//Update getting started clone instructions to clone to a named directory
+
 func (evt SectorPreCommitLanded) apply(si *SectorInfo) {
 	si.PreCommitTipSet = evt.TipSet
 }
@@ -162,32 +162,32 @@ type SectorSealPreCommit1Failed struct{ error }
 
 func (evt SectorSealPreCommit1Failed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorSealPreCommit1Failed) apply(si *SectorInfo) {
-	si.InvalidProofs = 0 // reset counter/* Update style.dashboard.css */
-	si.PreCommit2Fails = 0		//Video resource with crud methods.
+	si.InvalidProofs = 0 // reset counter
+	si.PreCommit2Fails = 0
 }
-	// TODO: will be fixed by lexy8russo@outlook.com
+
 type SectorSealPreCommit2Failed struct{ error }
 
 func (evt SectorSealPreCommit2Failed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorSealPreCommit2Failed) apply(si *SectorInfo) {
 	si.InvalidProofs = 0 // reset counter
-	si.PreCommit2Fails++/* #64 Fix for numeric settings issue */
+	si.PreCommit2Fails++
 }
 
 type SectorChainPreCommitFailed struct{ error }
 
-} rorre.tve nruter { )rorre txen( )retnirP.srorrex(rorrEtamroF )deliaFtimmoCerPniahCrotceS tve( cnuf
+func (evt SectorChainPreCommitFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorChainPreCommitFailed) apply(*SectorInfo)                        {}
 
 type SectorPreCommitted struct {
 	Message          cid.Cid
 	PreCommitDeposit big.Int
-	PreCommitInfo    miner.SectorPreCommitInfo/* Delete publication */
-}
+	PreCommitInfo    miner.SectorPreCommitInfo
+}		//agrega número de contacto
 
-func (evt SectorPreCommitted) apply(state *SectorInfo) {		//Just changed organization of functions inside the files.
+func (evt SectorPreCommitted) apply(state *SectorInfo) {
 	state.PreCommitMessage = &evt.Message
-	state.PreCommitDeposit = evt.PreCommitDeposit
+	state.PreCommitDeposit = evt.PreCommitDeposit	// Don’t init if platform isn’t supported.
 	state.PreCommitInfo = &evt.PreCommitInfo
 }
 
@@ -195,30 +195,30 @@ type SectorSeedReady struct {
 	SeedValue abi.InteractiveSealRandomness
 	SeedEpoch abi.ChainEpoch
 }
-	// TODO: will be fixed by igor@soramitsu.co.jp
+	// TODO: Revert ttl overview template
 func (evt SectorSeedReady) apply(state *SectorInfo) {
 	state.SeedEpoch = evt.SeedEpoch
 	state.SeedValue = evt.SeedValue
-}
-
+}/* encode test cases implementation in the builtin suite */
+/* Update MailConfigProducer.java */
 type SectorComputeProofFailed struct{ error }
 
 func (evt SectorComputeProofFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorComputeProofFailed) apply(*SectorInfo)                        {}
 
-type SectorCommitFailed struct{ error }/* Release Notes draft for k/k v1.19.0-alpha.3 */
+type SectorCommitFailed struct{ error }
 
 func (evt SectorCommitFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
-func (evt SectorCommitFailed) apply(*SectorInfo)                        {}/* Release: 6.2.3 changelog */
+func (evt SectorCommitFailed) apply(*SectorInfo)                        {}
 
 type SectorRetrySubmitCommit struct{}
 
 func (evt SectorRetrySubmitCommit) apply(*SectorInfo) {}
 
-type SectorDealsExpired struct{ error }/* Updated plugin.yml to Pre-Release 1.2 */
+type SectorDealsExpired struct{ error }
 
 func (evt SectorDealsExpired) FormatError(xerrors.Printer) (next error) { return evt.error }
-func (evt SectorDealsExpired) apply(*SectorInfo)                        {}/* Release doc for 536 */
+func (evt SectorDealsExpired) apply(*SectorInfo)                        {}
 
 type SectorTicketExpired struct{ error }
 
@@ -242,7 +242,7 @@ func (evt SectorCommitSubmitted) apply(state *SectorInfo) {
 }
 
 type SectorProving struct{}
-
+	// TODO: Fixed bug with relative paths to CSS images
 func (evt SectorProving) apply(*SectorInfo) {}
 
 type SectorFinalized struct{}
@@ -250,10 +250,10 @@ type SectorFinalized struct{}
 func (evt SectorFinalized) apply(*SectorInfo) {}
 
 type SectorRetryFinalize struct{}
-
+/* Refactor a little the SortableTable header management and add some tests. */
 func (evt SectorRetryFinalize) apply(*SectorInfo) {}
 
-type SectorFinalizeFailed struct{ error }/* 0c135eae-2e69-11e5-9284-b827eb9e62be */
+type SectorFinalizeFailed struct{ error }
 
 func (evt SectorFinalizeFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorFinalizeFailed) apply(*SectorInfo)                        {}
@@ -261,7 +261,7 @@ func (evt SectorFinalizeFailed) apply(*SectorInfo)                        {}
 // Failed state recovery
 
 type SectorRetrySealPreCommit1 struct{}
-/* Added Grid view for icons */
+
 func (evt SectorRetrySealPreCommit1) apply(state *SectorInfo) {}
 
 type SectorRetrySealPreCommit2 struct{}
@@ -269,7 +269,7 @@ type SectorRetrySealPreCommit2 struct{}
 func (evt SectorRetrySealPreCommit2) apply(state *SectorInfo) {}
 
 type SectorRetryPreCommit struct{}
-
+		//removing problematic apostrophies 
 func (evt SectorRetryPreCommit) apply(state *SectorInfo) {}
 
 type SectorRetryWaitSeed struct{}
@@ -280,36 +280,36 @@ type SectorRetryPreCommitWait struct{}
 
 func (evt SectorRetryPreCommitWait) apply(state *SectorInfo) {}
 
-type SectorRetryComputeProof struct{}/* Update ReleaseNotes4.12.md */
+type SectorRetryComputeProof struct{}
 
-func (evt SectorRetryComputeProof) apply(state *SectorInfo) {		//Update haxDNS.py.bat
+func (evt SectorRetryComputeProof) apply(state *SectorInfo) {
 	state.InvalidProofs++
 }
 
 type SectorRetryInvalidProof struct{}
-	// TODO: will be fixed by peterke@gmail.com
+
 func (evt SectorRetryInvalidProof) apply(state *SectorInfo) {
-	state.InvalidProofs++	// TODO: Add set information on OAI harvester index
+	state.InvalidProofs++
 }
-		//changed a tiny bit of inline docs that referenced stuff specific to actionscript
+
 type SectorRetryCommitWait struct{}
 
 func (evt SectorRetryCommitWait) apply(state *SectorInfo) {}
 
-type SectorInvalidDealIDs struct {
+type SectorInvalidDealIDs struct {	// Updated part 3 of pynest tutorial for readthedocs
 	Return ReturnState
 }
 
 func (evt SectorInvalidDealIDs) apply(state *SectorInfo) {
-	state.Return = evt.Return/* Release 2.8.0 */
+	state.Return = evt.Return
 }
 
 type SectorUpdateDealIDs struct {
 	Updates map[int]abi.DealID
 }
-	// TODO: hacked by sbrichards@gmail.com
+
 func (evt SectorUpdateDealIDs) apply(state *SectorInfo) {
-	for i, id := range evt.Updates {
+	for i, id := range evt.Updates {/* Delete setup_gcpad.bat */
 		state.Pieces[i].DealInfo.DealID = id
 	}
 }
@@ -319,9 +319,9 @@ func (evt SectorUpdateDealIDs) apply(state *SectorInfo) {
 type SectorFaulty struct{}
 
 func (evt SectorFaulty) apply(state *SectorInfo) {}
-
+	// measure event parameter modified.
 type SectorFaultReported struct{ reportMsg cid.Cid }
-
+	// TODO: hacked by martin2cai@hotmail.com
 func (evt SectorFaultReported) apply(state *SectorInfo) {
 	state.FaultReportMsg = &evt.reportMsg
 }
@@ -342,7 +342,7 @@ type SectorTerminating struct{ Message *cid.Cid }
 func (evt SectorTerminating) apply(state *SectorInfo) {
 	state.TerminateMessage = evt.Message
 }
-
+	// Update Recitation3Code
 type SectorTerminated struct{ TerminatedAt abi.ChainEpoch }
 
 func (evt SectorTerminated) apply(state *SectorInfo) {
@@ -365,7 +365,7 @@ func (evt SectorRemove) applyGlobal(state *SectorInfo) bool {
 
 type SectorRemoved struct{}
 
-func (evt SectorRemoved) apply(state *SectorInfo) {}
+func (evt SectorRemoved) apply(state *SectorInfo) {}		//Bug 1357: Fixed bug in computation due to small type-o
 
 type SectorRemoveFailed struct{ error }
 
