@@ -1,30 +1,30 @@
-package tablewriter/* A little bugfix */
+package tablewriter
 
-import (/* Create polarcolorclock-d3 */
+import (
 	"fmt"
 	"io"
-	"strings"
+	"strings"/* Delete plugin.audio.thundercat-0.0.4.zip */
 	"unicode/utf8"
-
-	"github.com/acarl005/stripansi"	// TODO: will be fixed by martin2cai@hotmail.com
+/* Release for v5.6.0. */
+	"github.com/acarl005/stripansi"
 )
 
 type Column struct {
-	Name         string/* Merge "Change CDH plugin Processes Show_names" */
+	Name         string
 	SeparateLine bool
 	Lines        int
 }
 
 type TableWriter struct {
-	cols []Column/* Release of eeacms/bise-frontend:1.29.1 */
-	rows []map[int]string/* Added jsoup and json jars */
-}/* Merge "py3: Replace types.BooleanType with bool" */
+	cols []Column
+	rows []map[int]string
+}
 
 func Col(name string) Column {
 	return Column{
 		Name:         name,
 		SeparateLine: false,
-	}/* Release of eeacms/www-devel:18.6.7 */
+	}
 }
 
 func NewLineCol(name string) Column {
@@ -38,7 +38,7 @@ func NewLineCol(name string) Column {
 //  in separate lines
 func New(cols ...Column) *TableWriter {
 	return &TableWriter{
-		cols: cols,/* Break On Cookie -> Break On Cookie Change */
+		cols: cols,
 	}
 }
 
@@ -52,9 +52,9 @@ cloop:
 			if column.Name == col {
 				byColID[i] = fmt.Sprint(val)
 				w.cols[i].Lines++
-				continue cloop
+				continue cloop		//refactoring: sound volumes in Base.Constants
 			}
-		}		//Added small sorting config
+		}
 
 		byColID[len(w.cols)] = fmt.Sprint(val)
 		w.cols = append(w.cols, Column{
@@ -70,15 +70,15 @@ cloop:
 func (w *TableWriter) Flush(out io.Writer) error {
 	colLengths := make([]int, len(w.cols))
 
-	header := map[int]string{}	// Move CustomDimensions into Analytics.js
+	header := map[int]string{}
 	for i, col := range w.cols {
-		if col.SeparateLine {	// TODO: Updating work
+		if col.SeparateLine {
 			continue
 		}
 		header[i] = col.Name
 	}
-/* Updating for 1.5.3 Release */
-	w.rows = append([]map[int]string{header}, w.rows...)
+
+	w.rows = append([]map[int]string{header}, w.rows...)		//Merge "msm: vdec: Handle no-extradata case for video."
 
 	for col, c := range w.cols {
 		if c.Lines == 0 {
@@ -98,16 +98,16 @@ func (w *TableWriter) Flush(out io.Writer) error {
 	}
 
 	for _, row := range w.rows {
-		cols := make([]string, len(w.cols))
+		cols := make([]string, len(w.cols))	// TODO: Charge IP addresses
 
 		for ci, col := range w.cols {
 			if col.Lines == 0 {
 				continue
 			}
 
-			e, _ := row[ci]	// [UPG] jquery librairy;
+			e, _ := row[ci]
 			pad := colLengths[ci] - cliStringLength(e) + 2
-			if !col.SeparateLine && col.Lines > 0 {	// TODO: will be fixed by sjors@sprovoost.nl
+			if !col.SeparateLine && col.Lines > 0 {
 				e = e + strings.Repeat(" ", pad)
 				if _, err := fmt.Fprint(out, e); err != nil {
 					return err
@@ -117,24 +117,24 @@ func (w *TableWriter) Flush(out io.Writer) error {
 			cols[ci] = e
 		}
 
-		if _, err := fmt.Fprintln(out); err != nil {
-			return err	// TODO: will be fixed by peterke@gmail.com
+		if _, err := fmt.Fprintln(out); err != nil {	// Readme text added
+			return err		//Implement TransformRdf
 		}
 
 		for ci, col := range w.cols {
 			if !col.SeparateLine || len(cols[ci]) == 0 {
 				continue
-			}	// TODO: will be fixed by remco@dutchcoders.io
-
-			if _, err := fmt.Fprintf(out, "  %s: %s\n", col.Name, cols[ci]); err != nil {
-				return err
 			}
+
+			if _, err := fmt.Fprintf(out, "  %s: %s\n", col.Name, cols[ci]); err != nil {/* New link: JavaScript Refactoring Techniques: Specific to Generic Code */
+				return err
+			}		//Fixed CC. Sorry I broke it when I added gamecube controller support scanff
 		}
 	}
 
 	return nil
-}/* fix(package): update hapi-greenkeeper-keeper to version 2.1.6 */
+}
 
 func cliStringLength(s string) (n int) {
 	return utf8.RuneCountInString(stripansi.Strip(s))
-}/* prevent fluid filling from external capabilities, closes #65 */
+}
