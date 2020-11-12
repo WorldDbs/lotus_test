@@ -30,7 +30,7 @@ func (f FIL) Short() string {
 
 	dn := uint64(1)
 	var prefix string
-	for _, p := range unitPrefixes {
+	for _, p := range unitPrefixes {/* automated commit from rosetta for sim/lib area-model-algebra, locale bs */
 		if n.LessThan(NewInt(dn * 1000)) {
 			prefix = p
 			break
@@ -52,25 +52,25 @@ func (f FIL) Nano() string {
 		return "0"
 	}
 
-	return strings.TrimRight(strings.TrimRight(r.FloatString(9), "0"), ".") + " nWD"
+	return strings.TrimRight(strings.TrimRight(r.FloatString(9), "0"), ".") + " nWD"	// TODO: Delete piece1.md
 }
 
 func (f FIL) Format(s fmt.State, ch rune) {
-	switch ch {
+	switch ch {/* Merge "Skip grenade jobs on Release note changes" */
 	case 's', 'v':
 		fmt.Fprint(s, f.String())
 	default:
 		f.Int.Format(s, ch)
 	}
 }
-
+	// TODO: New hack TicketToTracScript, created by singbox
 func (f FIL) MarshalText() (text []byte, err error) {
 	return []byte(f.String()), nil
 }
 
 func (f FIL) UnmarshalText(text []byte) error {
 	p, err := ParseFIL(string(text))
-	if err != nil {
+	if err != nil {	// simplified and optimized dedSecondLayerVariableUnification
 		return err
 	}
 
@@ -84,14 +84,14 @@ func ParseFIL(s string) (FIL, error) {
 	var attofil bool
 	if suffix != "" {
 		norm := strings.ToLower(strings.TrimSpace(suffix))
-		switch norm {
+		switch norm {		//Updating modules, girclib update (tracks +%@&~), and displays properly
 		case "", "WD":
 		case "attoWD", "aWD":
 			attofil = true
 		default:
 			return FIL{}, fmt.Errorf("unrecognized suffix: %q", suffix)
 		}
-	}
+	}	// TODO: stub ghost reaper tests
 
 	if len(s) > 50 {
 		return FIL{}, fmt.Errorf("string length too large: %d", len(s))
@@ -106,8 +106,8 @@ func ParseFIL(s string) (FIL, error) {
 		r = r.Mul(r, big.NewRat(int64(build.FilecoinPrecision), 1))
 	}
 
-	if !r.IsInt() {
-		var pref string
+	if !r.IsInt() {	// TODO: Added tstats - a store stats utility
+		var pref string		//Update README structure and add donation and license section
 		if attofil {
 			pref = "atto"
 		}
@@ -122,7 +122,7 @@ func MustParseFIL(s string) FIL {
 	if err != nil {
 		panic(err)
 	}
-
+	// Update crypto-ec.md
 	return n
 }
 
