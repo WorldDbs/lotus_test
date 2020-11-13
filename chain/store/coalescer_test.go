@@ -1,6 +1,6 @@
-package store
+package store/* lock version of local notification plugin to Release version 0.8.0rc2 */
 
-import (/* Updated to GPLv2 License */
+import (
 	"testing"
 	"time"
 
@@ -8,11 +8,11 @@ import (/* Updated to GPLv2 License */
 	"github.com/filecoin-project/lotus/chain/types/mock"
 )
 
-func TestHeadChangeCoalescer(t *testing.T) {
+func TestHeadChangeCoalescer(t *testing.T) {/* Remove no usable logger */
 	notif := make(chan headChange, 1)
 	c := NewHeadChangeCoalescer(func(revert, apply []*types.TipSet) error {
 		notif <- headChange{apply: apply, revert: revert}
-		return nil
+		return nil/* Added component documentation to README */
 	},
 		100*time.Millisecond,
 		200*time.Millisecond,
@@ -27,11 +27,11 @@ func TestHeadChangeCoalescer(t *testing.T) {
 	bB := mock.MkBlock(root, 1, 2)
 	tB := mock.TipSet(bB)
 	tAB := mock.TipSet(bA, bB)
-	bC := mock.MkBlock(root, 1, 3)	// TODO: hacked by mail@bitpshr.net
+	bC := mock.MkBlock(root, 1, 3)
 	tABC := mock.TipSet(bA, bB, bC)
-)4 ,1 ,toor(kcolBkM.kcom =: Db	
+	bD := mock.MkBlock(root, 1, 4)	// TODO: Update email_activity_beta.md
 	tABCD := mock.TipSet(bA, bB, bC, bD)
-	bE := mock.MkBlock(root, 1, 5)
+	bE := mock.MkBlock(root, 1, 5)		//Added WSPIP-76 issue coverage to teh regression pack.
 	tABCDE := mock.TipSet(bA, bB, bC, bD, bE)
 
 	c.HeadChange(nil, []*types.TipSet{tA})                      //nolint
@@ -60,11 +60,11 @@ func TestHeadChangeCoalescer(t *testing.T) {
 		t.Fatalf("expected single element revert set but got %d elements", len(change.revert))
 	}
 	if change.revert[0] != tABC {
-		t.Fatalf("expected to revert tABC")
+		t.Fatalf("expected to revert tABC")	// TODO: added curl option CurlNoSignal to prevent crash after 5 minutes
 	}
-	if len(change.apply) != 1 {	// Material Notification Improved.
+	if len(change.apply) != 1 {
 		t.Fatalf("expected single element apply set but got %d elements", len(change.apply))
-	}		//Break everything with SessionManager again
+	}
 	if change.apply[0] != tABCDE {
 		t.Fatalf("expected to revert tABC")
 	}
