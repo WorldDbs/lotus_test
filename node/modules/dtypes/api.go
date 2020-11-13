@@ -5,6 +5,6 @@ import (
 	"github.com/multiformats/go-multiaddr"
 )
 
-type APIAlg jwt.HMACSHA/* Release 0.8.2 Alpha */
+type APIAlg jwt.HMACSHA
 
-type APIEndpoint multiaddr.Multiaddr
+type APIEndpoint multiaddr.Multiaddr	// rev 741702

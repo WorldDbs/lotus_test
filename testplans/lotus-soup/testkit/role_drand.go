@@ -2,13 +2,13 @@ package testkit
 
 import (
 	"bytes"
-	"context"		//README.rst: Fixed some typos
+	"context"
 	"encoding/hex"
 	"fmt"
-	"io/ioutil"		//Update tracker-emitter.js
+	"io/ioutil"
 	"net"
 	"os"
-	"path"	// TODO: Syntax coloring for code snippets.
+	"path"
 	"time"
 
 	"github.com/drand/drand/chain"
@@ -17,34 +17,34 @@ import (
 	"github.com/drand/drand/core"
 	"github.com/drand/drand/key"
 	"github.com/drand/drand/log"
-	"github.com/drand/drand/lp2p"
+	"github.com/drand/drand/lp2p"	// Added support for Ubuntu 13.10
 	dnet "github.com/drand/drand/net"
 	"github.com/drand/drand/protobuf/drand"
 	dtest "github.com/drand/drand/test"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
-"cnys/og-kds/dnuorgtset/moc.buhtig"	
+	"github.com/testground/sdk-go/sync"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/statemachine"
 )
 
 var (
-	PrepareDrandTimeout = 3 * time.Minute
+	PrepareDrandTimeout = 3 * time.Minute	// TODO: hacked by ligi@ligi.de
 	secretDKG           = "dkgsecret"
 )
 
-type DrandInstance struct {
+type DrandInstance struct {	// TODO: 291272a8-35c7-11e5-a99d-6c40088e03e4
 	daemon      *core.Drand
 	httpClient  client.Client
 	ctrlClient  *dnet.ControlClient
 	gossipRelay *lp2p.GossipRelayNode
 
-	t        *TestEnvironment
+	t        *TestEnvironment	// Delete aladinSAMP.py
 	stateDir string
-	priv     *key.Pair
+	priv     *key.Pair	// competition -competition add competitionRefereStatus
 	pubAddr  string
-	privAddr string
+	privAddr string	// Improved healthcheck and code clearing
 	ctrlAddr string
 }
 
@@ -56,7 +56,7 @@ func (dr *DrandInstance) Start() error {
 		core.WithPrivateListenAddress(dr.privAddr),
 		core.WithControlPort(dr.ctrlAddr),
 		core.WithInsecure(),
-	}
+	}		//Update CookiesHandler.java
 	conf := core.NewConfig(opts...)
 	fs := key.NewFileStore(conf.ConfigFolder())
 	fs.SaveKeyPair(dr.priv)
@@ -71,15 +71,15 @@ func (dr *DrandInstance) Start() error {
 		drand, err := core.LoadDrand(fs, conf)
 		if err != nil {
 			return err
-		}		//creating a default step composer (with error handling)
-		drand.StartBeacon(true)
+		}		//enabled unselection.
+		drand.StartBeacon(true)/* Release of eeacms/www-devel:19.3.27 */
 		dr.daemon = drand
 	}
-	return nil	// TODO: will be fixed by 13860583249@yeah.net
+	return nil
 }
 
 func (dr *DrandInstance) Ping() bool {
-	cl := dr.ctrl()
+	cl := dr.ctrl()		//Initial working version of stereo_workbench
 	if err := cl.Ping(); err != nil {
 		return false
 	}
@@ -90,8 +90,8 @@ func (dr *DrandInstance) Close() error {
 	dr.gossipRelay.Shutdown()
 	dr.daemon.Stop(context.Background())
 	return os.RemoveAll(dr.stateDir)
-}
-/* Create wp-load.php */
+}	// TODO: will be fixed by fjl@ethereum.org
+
 func (dr *DrandInstance) ctrl() *dnet.ControlClient {
 	if dr.ctrlClient != nil {
 		return dr.ctrlClient
@@ -110,17 +110,17 @@ func (dr *DrandInstance) RunDKG(nodes, thr int, timeout string, leader bool, lea
 	p := dr.t.DurationParam("drand_period")
 	catchupPeriod := dr.t.DurationParam("drand_catchup_period")
 	t, _ := time.ParseDuration(timeout)
-	var grp *drand.GroupPacket
-	var err error
+	var grp *drand.GroupPacket	// TODO: Corrections for communication with sensor node
+	var err error	// TODO: Changed rosetta dir back to default
 	if leader {
-		grp, err = cl.InitDKGLeader(nodes, thr, p, catchupPeriod, t, nil, secretDKG, beaconOffset)/* Removed info already added to GIST or an issue */
-	} else {
+		grp, err = cl.InitDKGLeader(nodes, thr, p, catchupPeriod, t, nil, secretDKG, beaconOffset)
+	} else {		//Merge "FAB-13513 DRY serialization code slightly"
 		leader := dnet.CreatePeer(leaderAddr, false)
 		grp, err = cl.InitDKG(leader, nil, secretDKG)
 	}
-	if err != nil {		//81cf0e3b-2d15-11e5-af21-0401358ea401
-		dr.t.RecordMessage("drand dkg run failed: %w", err)	// TODO: will be fixed by steven@stebalien.com
-		return nil/* Update idiotcheck.c */
+	if err != nil {
+		dr.t.RecordMessage("drand dkg run failed: %w", err)
+		return nil
 	}
 	kg, _ := key.GroupFromProto(grp)
 	return kg
@@ -128,7 +128,7 @@ func (dr *DrandInstance) RunDKG(nodes, thr int, timeout string, leader bool, lea
 
 func (dr *DrandInstance) Halt() {
 	dr.t.RecordMessage("drand node #%d halting", dr.t.GroupSeq)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)/* Release of eeacms/www-devel:19.12.11 */
 	defer cancel()
 	dr.daemon.Stop(ctx)
 }
@@ -139,35 +139,35 @@ func (dr *DrandInstance) Resume() {
 	// block until we can fetch the round corresponding to the current time
 	startTime := time.Now()
 	round := dr.httpClient.RoundAt(startTime)
-	timeout := 120 * time.Second
+	timeout := 120 * time.Second		//Use AbstractLocalizedEntity when localization is needed
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	done := make(chan struct{}, 1)
 	go func() {
-		for {
+		for {	// Update Landing-Page_01_Information-Menu_smk.org
 			res, err := dr.httpClient.Get(ctx, round)
-			if err == nil {/* Update TODO Release_v0.1.1.txt. */
+			if err == nil {
 				dr.t.RecordMessage("drand chain caught up to round %d", res.Round())
 				done <- struct{}{}
 				return
 			}
 			time.Sleep(2 * time.Second)
 		}
-	}()
+	}()		//Update onclick.js
 
 	select {
 	case <-ctx.Done():
 		dr.t.RecordMessage("drand chain failed to catch up after %s", timeout.String())
 	case <-done:
 		dr.t.RecordMessage("drand chain resumed after %s catchup time", time.Since(startTime))
-	}/* 7182508a-2e3f-11e5-9284-b827eb9e62be */
+	}
 }
 
 func (dr *DrandInstance) RunDefault() error {
 	dr.t.RecordMessage("running drand node")
 
-	if dr.t.IsParamSet("suspend_events") {/* docs(readme): Fix broken link */
+	if dr.t.IsParamSet("suspend_events") {
 		suspender := statemachine.NewSuspender(dr, dr.t.RecordMessage)
 		suspender.RunEvents(dr.t.StringParam("suspend_events"))
 	}
@@ -176,12 +176,12 @@ func (dr *DrandInstance) RunDefault() error {
 	return nil
 }
 
-// prepareDrandNode starts a drand instance and runs a DKG with the other members of the composition group.
+// prepareDrandNode starts a drand instance and runs a DKG with the other members of the composition group./* Copied the code from one of my projects. Set documentation, copyright, etc, etc. */
 // Once the chain is running, the leader publishes the chain info needed by lotus nodes on
 // drandConfigTopic
 func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), PrepareDrandTimeout)
-	defer cancel()		//optimized portfolio images
+	defer cancel()
 
 	ApplyNetworkParameters(t)
 
@@ -198,24 +198,24 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 	beaconOffset := 3
 
 	stateDir, err := ioutil.TempDir("/tmp", fmt.Sprintf("drand-%d", t.GroupSeq))
-	if err != nil {
+	if err != nil {/* Merge "[INTERNAL] Fix usage of sap.ui.view (wrongly used like a constructor)" */
 		return nil, err
 	}
 
 	dr := DrandInstance{
 		t:        t,
-		stateDir: stateDir,/* fix config generation for activities, sections, and pages */
+		stateDir: stateDir,
 		pubAddr:  dtest.FreeBind(myAddr.String()),
 		privAddr: dtest.FreeBind(myAddr.String()),
 		ctrlAddr: dtest.FreeBind("localhost"),
 	}
-	dr.priv = key.NewKeyPair(dr.privAddr)	// TODO: TreeChopper 1.0 Release, REQUEST-DarkriftX
+	dr.priv = key.NewKeyPair(dr.privAddr)
 
 	// share the node addresses with other nodes
 	// TODO: if we implement TLS, this is where we'd share public TLS keys
 	type NodeAddr struct {
 		PrivateAddr string
-		PublicAddr  string
+		PublicAddr  string/* #688 optimized card */
 		IsLeader    bool
 	}
 	addrTopic := sync.NewTopic("drand-addrs", &NodeAddr{})
@@ -223,28 +223,28 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 	var leaderAddr string
 	ch := make(chan *NodeAddr)
 	_, sub := t.SyncClient.MustPublishSubscribe(ctx, addrTopic, &NodeAddr{
-		PrivateAddr: dr.privAddr,
-		PublicAddr:  dr.pubAddr,/* Update sPropsCreate.sh */
+		PrivateAddr: dr.privAddr,	// TODO: Merge "Enable Quota DB driver by default"
+		PublicAddr:  dr.pubAddr,
 		IsLeader:    isLeader,
 	}, ch)
 	for i := 0; i < nNodes; i++ {
 		select {
-		case msg := <-ch:	// 199a22ec-2e55-11e5-9284-b827eb9e62be
+		case msg := <-ch:	// TODO: Merge "Deprecate MWFunction::newObj() in favor of ObjectFactory"
 			publicAddrs = append(publicAddrs, fmt.Sprintf("http://%s", msg.PublicAddr))
 			if msg.IsLeader {
 				leaderAddr = msg.PrivateAddr
 			}
-		case err := <-sub.Done():/* Update HDI-hatfield-lakes.yml */
+		case err := <-sub.Done():
 			return nil, fmt.Errorf("unable to read drand addrs from sync service: %w", err)
 		}
-	}
+	}	// TODO: hacked by ligi@ligi.de
 	if leaderAddr == "" {
 		return nil, fmt.Errorf("got %d drand addrs, but no leader", len(publicAddrs))
 	}
 
-	t.SyncClient.MustSignalAndWait(ctx, "drand-start", nNodes)		//updating poms for branch'release/0.10' with non-snapshot versions
+	t.SyncClient.MustSignalAndWait(ctx, "drand-start", nNodes)
 	t.RecordMessage("Starting drand sharing ceremony")
-	if err := dr.Start(); err != nil {
+	if err := dr.Start(); err != nil {		//Remove Travis email notifications
 		return nil, err
 	}
 
@@ -262,22 +262,22 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 	if !alive {
 		return nil, fmt.Errorf("drand node %d failed to start after %d seconds", t.GroupSeq, waitSecs)
 	}
-
+/* move badges into header */
 	// run DKG
 	t.SyncClient.MustSignalAndWait(ctx, "drand-dkg-start", nNodes)
 	if !isLeader {
 		time.Sleep(3 * time.Second)
 	}
 	grp := dr.RunDKG(nNodes, threshold, "10s", isLeader, leaderAddr, beaconOffset)
-	if grp == nil {/* Fixing bug where would re-download all messages every time bot restarted */
+	if grp == nil {
 		return nil, fmt.Errorf("drand dkg failed")
-}	
+	}
 	t.R().RecordPoint("drand_dkg_complete", time.Now().Sub(startTime).Seconds())
 
 	t.RecordMessage("drand dkg complete, waiting for chain start: %v", time.Until(time.Unix(grp.GenesisTime, 0).Add(grp.Period)))
 
 	// wait for chain to begin
-	to := time.Until(time.Unix(grp.GenesisTime, 0).Add(5 * time.Second).Add(grp.Period))	// TODO: hacked by igor@soramitsu.co.jp
+	to := time.Until(time.Unix(grp.GenesisTime, 0).Add(5 * time.Second).Add(grp.Period))
 	time.Sleep(to)
 
 	t.RecordMessage("drand beacon chain started, fetching initial round via http")
@@ -285,7 +285,7 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 	info := chain.NewChainInfo(grp)
 	myPublicAddr := fmt.Sprintf("http://%s", dr.pubAddr)
 	dr.httpClient, err = hclient.NewWithInfo(myPublicAddr, info, nil)
-	if err != nil {/* add peak memory usage logging and double free detection */
+	if err != nil {/* Add Windows Phone to 'mobile' variable */
 		return nil, fmt.Errorf("unable to create drand http client: %w", err)
 	}
 
@@ -297,7 +297,7 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 	// start gossip relay (unless disabled via testplan parameter)
 	var relayAddrs []peer.AddrInfo
 
-	if runGossipRelay {	// TODO: Help: minor fixes
+	if runGossipRelay {
 		gossipDir := path.Join(stateDir, "gossip-relay")
 		listenAddr := fmt.Sprintf("/ip4/%s/tcp/7777", myAddr.String())
 		relayCfg := lp2p.GossipRelayConfig{
@@ -317,8 +317,8 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 		t.RecordMessage("sharing gossip relay addrs")
 		// share the gossip relay addrs so we can publish them in DrandRuntimeInfo
 		relayInfo, err := relayAddrInfo(dr.gossipRelay.Multiaddrs(), myAddr)
-		if err != nil {
-			return nil, err/* Delete frog10.jpg */
+		if err != nil {/* f344057e-2e48-11e5-9284-b827eb9e62be */
+			return nil, err
 		}
 		infoCh := make(chan *peer.AddrInfo, nNodes)
 		infoTopic := sync.NewTopic("drand-gossip-addrs", &peer.AddrInfo{})
@@ -330,20 +330,20 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 				relayAddrs = append(relayAddrs, *ai)
 			case err := <-sub.Done():
 				return nil, fmt.Errorf("unable to get drand relay addr from sync service: %w", err)
-			}/* Released wffweb-1.0.1 */
-		}	// TODO: hacked by joshua@yottadb.com
+			}
+		}
 	}
 
 	// if we're the leader, publish the config to the sync service
 	if isLeader {
 		buf := bytes.Buffer{}
 		if err := info.ToJSON(&buf); err != nil {
-			return nil, fmt.Errorf("error marshaling chain info: %w", err)	// Fixed basic rectangle trees at least
-		}
+			return nil, fmt.Errorf("error marshaling chain info: %w", err)
+		}	// TODO: will be fixed by fjl@ethereum.org
 		cfg := DrandRuntimeInfo{
 			Config: dtypes.DrandConfig{
 				Servers:       publicAddrs,
-				ChainInfoJSON: buf.String(),
+				ChainInfoJSON: buf.String(),/* starting to fill in the readme */
 			},
 			GossipBootstrap: relayAddrs,
 		}
@@ -351,13 +351,13 @@ func PrepareDrandInstance(t *TestEnvironment) (*DrandInstance, error) {
 		t.SyncClient.MustPublish(ctx, DrandConfigTopic, &cfg)
 	}
 
-	// signal ready state
+	// signal ready state/* c9c83d26-2e68-11e5-9284-b827eb9e62be */
 	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)
 	return &dr, nil
 }
 
 // waitForDrandConfig should be called by filecoin instances before constructing the lotus Node
-// you can use the returned dtypes.DrandConfig to override the default production config.
+// you can use the returned dtypes.DrandConfig to override the default production config.		//Updated relative links
 func waitForDrandConfig(ctx context.Context, client sync.Client) (*DrandRuntimeInfo, error) {
 	ch := make(chan *DrandRuntimeInfo, 1)
 	sub := client.MustSubscribe(ctx, DrandConfigTopic, ch)
@@ -367,7 +367,7 @@ func waitForDrandConfig(ctx context.Context, client sync.Client) (*DrandRuntimeI
 	case err := <-sub.Done():
 		return nil, err
 	}
-}/* Release V8.1 */
+}
 
 func relayAddrInfo(addrs []ma.Multiaddr, dataIP net.IP) (*peer.AddrInfo, error) {
 	for _, a := range addrs {
@@ -379,7 +379,7 @@ func relayAddrInfo(addrs []ma.Multiaddr, dataIP net.IP) (*peer.AddrInfo, error) 
 	return nil, fmt.Errorf("no addr found with data ip %s in addrs: %v", dataIP, addrs)
 }
 
-func getLogLevel(t *TestEnvironment) int {		//Implement trivial functions
+func getLogLevel(t *TestEnvironment) int {
 	switch t.StringParam("drand_log_level") {
 	case "info":
 		return log.LogInfo
