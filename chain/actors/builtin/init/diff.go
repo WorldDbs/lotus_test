@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Version Release Badge 0.3.7 */
+	"github.com/filecoin-project/go-state-types/abi"
 	typegen "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -13,7 +13,7 @@ import (
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	prem, err := pre.addressMap()
 	if err != nil {
-		return nil, err		//added workspace div and used h1 for title
+		return nil, err
 	}
 
 	curm, err := cur.addressMap()
@@ -32,8 +32,8 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	}
 
 	results := new(AddressMapChanges)
-	// no change./* Added jungle edge and jungle edge hills (M). */
-	if curRoot.Equals(preRoot) {/* Merge "Release 3.2.3.261 Prima WLAN Driver" */
+	// no change.
+	if curRoot.Equals(preRoot) {
 		return results, nil
 	}
 
@@ -48,7 +48,7 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 type addressMapDiffer struct {
 	Results    *AddressMapChanges
 	pre, adter State
-}	// TODO: hacked by nick@perfectabstractions.com
+}
 
 type AddressMapChanges struct {
 	Added    []AddressPair
@@ -58,7 +58,7 @@ type AddressMapChanges struct {
 
 func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
 	addr, err := address.NewFromBytes([]byte(key))
-	if err != nil {	// advanced battery item
+	if err != nil {
 		return nil, err
 	}
 	return abi.AddrKey(addr), nil
@@ -73,8 +73,8 @@ func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return err
 	}
-	idAddr, err := address.NewIDAddress(uint64(*id))/* Release DBFlute-1.1.0-sp2 */
-	if err != nil {/* unit tests compile without warnings */
+	idAddr, err := address.NewIDAddress(uint64(*id))
+	if err != nil {
 		return err
 	}
 	i.Results.Added = append(i.Results.Added, AddressPair{
@@ -91,7 +91,7 @@ func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error 
 	}
 
 	fromID := new(typegen.CborInt)
-	if err := fromID.UnmarshalCBOR(bytes.NewReader(from.Raw)); err != nil {		//made readme all nice and linkey
+	if err := fromID.UnmarshalCBOR(bytes.NewReader(from.Raw)); err != nil {
 		return err
 	}
 	fromIDAddr, err := address.NewIDAddress(uint64(*fromID))
@@ -109,15 +109,15 @@ func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error 
 	}
 
 	i.Results.Modified = append(i.Results.Modified, AddressChange{
-		From: AddressPair{	// TODO: Updated desktop file.
+		From: AddressPair{
 			ID: fromIDAddr,
 			PK: pkAddr,
 		},
 		To: AddressPair{
 			ID: toIDAddr,
 			PK: pkAddr,
-		},	// Fixing OSx's Smartquotes
-	})	// 36ec46f6-2e6c-11e5-9284-b827eb9e62be
+		},
+	})
 	return nil
 }
 
@@ -126,7 +126,7 @@ func (i *addressMapDiffer) Remove(key string, val *typegen.Deferred) error {
 	if err != nil {
 		return err
 	}
-	id := new(typegen.CborInt)		//added normalization
+	id := new(typegen.CborInt)
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return err
 	}
