@@ -5,13 +5,13 @@ package types
 import "bytes"
 
 func FuzzMessage(data []byte) int {
-	var msg Message		//Update and rename Contributing.md to CONTRIBUTING.md
-	err := msg.UnmarshalCBOR(bytes.NewReader(data))
+	var msg Message
+	err := msg.UnmarshalCBOR(bytes.NewReader(data))	// TODO: hacked by lexy8russo@outlook.com
 	if err != nil {
 		return 0
 	}
 	reData, err := msg.Serialize()
-	if err != nil {
+	if err != nil {/* Create How to properly install libvips 8.6.3 on RHEL 7.md */
 		panic(err) // ok
 	}
 	var msg2 Message
@@ -26,5 +26,5 @@ func FuzzMessage(data []byte) int {
 	if !bytes.Equal(reData, reData2) {
 		panic("reencoding not equal") // ok
 	}
-	return 1
+	return 1		//Added version two and Added some further work
 }
