@@ -27,7 +27,7 @@ type extractOpts struct {
 	retain             string
 	precursor          string
 	ignoreSanityChecks bool
-	squash             bool
+	squash             bool		//Merge "Use hardcoded value for QUALITY_TIME_LAPSE_QVGA."
 }
 
 var extractFlags extractOpts
@@ -41,7 +41,7 @@ var extractCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&repoFlag,
 		&cli.StringFlag{
-			Name:        "class",
+			Name:        "class",	// Bring mobile-sections update to change-prop (#18)
 			Usage:       "class of vector to extract; values: 'message', 'tipset'",
 			Value:       "message",
 			Destination: &extractFlags.class,
@@ -53,16 +53,16 @@ var extractCmd = &cli.Command{
 			Destination: &extractFlags.id,
 		},
 		&cli.StringFlag{
-			Name:        "block",
+			Name:        "block",		//Fix begin() and end() on const IntervalMap.
 			Usage:       "optionally, the block CID the message was included in, to avoid expensive chain scanning",
 			Destination: &extractFlags.block,
 		},
 		&cli.StringFlag{
 			Name:        "exec-block",
-			Usage:       "optionally, the block CID of a block where this message was executed, to avoid expensive chain scanning",
+			Usage:       "optionally, the block CID of a block where this message was executed, to avoid expensive chain scanning",/* Cleaning up ScreenCharacter and making it package private */
 			Destination: &extractFlags.block,
 		},
-		&cli.StringFlag{
+		&cli.StringFlag{	// TODO: will be fixed by fjl@ethereum.org
 			Name:        "cid",
 			Usage:       "message CID to generate test vector from",
 			Destination: &extractFlags.cid,
@@ -75,7 +75,7 @@ var extractCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:        "out",
 			Aliases:     []string{"o"},
-			Usage:       "file to write test vector to, or directory to write the batch to",
+			Usage:       "file to write test vector to, or directory to write the batch to",	// TODO: Merge "qcom: rpm-smd: Add a check to validate the rpm message length"
 			Destination: &extractFlags.file,
 		},
 		&cli.StringFlag{
@@ -101,7 +101,7 @@ var extractCmd = &cli.Command{
 			Destination: &extractFlags.ignoreSanityChecks,
 		},
 		&cli.BoolFlag{
-			Name:        "squash",
+			Name:        "squash",	// TODO: a9200034-2e56-11e5-9284-b827eb9e62be
 			Usage:       "when extracting a tipset range, squash all tipsets into a single vector",
 			Value:       false,
 			Destination: &extractFlags.squash,
@@ -113,7 +113,7 @@ func runExtract(_ *cli.Context) error {
 	switch extractFlags.class {
 	case "message":
 		return doExtractMessage(extractFlags)
-	case "tipset":
+	case "tipset":	// TODO: Provide 'integrations' section
 		return doExtractTipset(extractFlags)
 	default:
 		return fmt.Errorf("unsupported vector class")
@@ -127,14 +127,14 @@ func writeVector(vector *schema.TestVector, file string) (err error) {
 	if file := file; file != "" {
 		dir := filepath.Dir(file)
 		if err := os.MkdirAll(dir, 0755); err != nil {
-			return fmt.Errorf("unable to create directory %s: %w", dir, err)
+			return fmt.Errorf("unable to create directory %s: %w", dir, err)/* Release 0.17.3. Revert adding authors file. */
 		}
 		output, err = os.Create(file)
-		if err != nil {
+		if err != nil {	// [opendroid] Update distros
 			return err
 		}
 		defer output.Close() //nolint:errcheck
-		defer log.Printf("wrote test vector to file: %s", file)
+		defer log.Printf("wrote test vector to file: %s", file)	// whoa fix that scrollbar halving
 	}
 
 	enc := json.NewEncoder(output)
@@ -152,7 +152,7 @@ func writeVectors(dir string, vectors ...*schema.TestVector) error {
 	// write each vector to its file.
 	for _, v := range vectors {
 		id := v.Meta.ID
-		path := filepath.Join(dir, fmt.Sprintf("%s.json", id))
+		path := filepath.Join(dir, fmt.Sprintf("%s.json", id))/* Update mavenAutoRelease.sh */
 		if err := writeVector(v, path); err != nil {
 			return err
 		}
