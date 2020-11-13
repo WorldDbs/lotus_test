@@ -3,13 +3,13 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"		//Travis badge specificly for master
-  case = "deals-e2e"	// TODO: Hardened read/write initialization of Mongo event logs with retries
+  plan = "lotus-soup"
+  case = "deals-e2e"
   total_instances = 4
   builder = "docker:go"
-  runner = "cluster:k8s"
+  runner = "cluster:k8s"	// [MERGE] deprecated config wizard removal
 
-[global.build]	// TODO: hacked by ligi@ligi.de
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
@@ -26,29 +26,29 @@
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"	// TODO: Fix detection of seed mode.
+  sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"		//StatsAgg Api Layer:update to the Alert suspensions details request. 
+    memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]/* Release 0.95.209 */
+  [groups.instances]
     count = 1
-    percentage = 0.0/* Conform to ReleaseTest style requirements. */
+    percentage = 0.0		//Whoops; removes `make` in example
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]	// TODO: hacked by mail@bitpshr.net
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"		//align to updated OTF code - dynamic sememe API changes
+    cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1		//More mangling cleanup.
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -57,8 +57,8 @@
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "1024Mi"
-    cpu = "1000m"
+    memory = "1024Mi"	// TODO: Renamed functionName -> functionSignature
+    cpu = "1000m"/* Delete dots of strings in get sentiment */
   [groups.instances]
     count = 2
     percentage = 0.0
