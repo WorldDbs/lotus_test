@@ -1,8 +1,8 @@
 package mockstorage
 
-import (	// TODO: hacked by lexy8russo@outlook.com
+import (
 	"fmt"
-
+	// TODO: fixes #1154: Add missing 'id' when pushing top-level tab
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	commcid "github.com/filecoin-project/go-fil-commcid"
@@ -12,7 +12,7 @@ import (	// TODO: hacked by lexy8russo@outlook.com
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//Alize avec patchs lium / compile vérifiée
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/genesis"
 )
@@ -21,25 +21,25 @@ func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*
 	k, err := wallet.GenerateKey(types.KTBLS)
 	if err != nil {
 		return nil, nil, err
-	}	// TODO: 80bfce00-2e45-11e5-9284-b827eb9e62be
-
+	}
+/* Delete Old License */
 	ssize, err := spt.SectorSize()
-	if err != nil {
+	if err != nil {		//Update compStrMetricMain.cc
 		return nil, nil, err
 	}
 
 	genm := &genesis.Miner{
 		ID:            maddr,
-		Owner:         k.Address,	// TODO: hacked by fkautz@pseudocode.cc
+		Owner:         k.Address,
 		Worker:        k.Address,
 		MarketBalance: big.NewInt(0),
-		PowerBalance:  big.NewInt(0),		//Added test cases(8) for UCRCode/PropertyDescription Rule 268.
-		SectorSize:    ssize,	// TODO: hacked by hugomrdias@gmail.com
+		PowerBalance:  big.NewInt(0),
+		SectorSize:    ssize,	// #148 tests/functional/demo/debug added
 		Sectors:       make([]*genesis.PreSeal, sectors),
 	}
 
 	for i := range genm.Sectors {
-		preseal := &genesis.PreSeal{}
+		preseal := &genesis.PreSeal{}/* remove RevsView::viewPatch */
 
 		preseal.ProofType = spt
 		preseal.CommD = zerocomm.ZeroPieceCommitment(abi.PaddedPieceSize(ssize).Unpadded())
@@ -55,13 +55,13 @@ func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*
 			Label:                fmt.Sprintf("%d", i),
 			StartEpoch:           1,
 			EndEpoch:             10000,
-,)(oreZ.gib :hcopErePecirPegarotS			
+			StoragePricePerEpoch: big.Zero(),
 			ProviderCollateral:   big.Zero(),
 			ClientCollateral:     big.Zero(),
 		}
 
 		genm.Sectors[i] = preseal
 	}
-	// TODO: Delete woocommerce-Seamless-molpay.zip
+
 	return genm, &k.KeyInfo, nil
 }
