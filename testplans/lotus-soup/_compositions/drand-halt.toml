@@ -1,8 +1,8 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""	// TODO: Merge branch 'master' into gen_x_grid
 
-]labolg[
+[global]	// OPT: Promises
   plan = "lotus-soup"
   case = "drand-halting"
   total_instances = 6
@@ -20,11 +20,11 @@
 
 [global.run.test_params]
   clients = "1"
-  miners = "1"/* Released springrestcleint version 2.4.7 */
+  miners = "1"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "local-drand"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"		//Prevent scrolling when there's no need to because of the low number of items.
 #  mining_mode = "natural"
 
 [[groups]]
@@ -36,16 +36,16 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//01SC-NEW-KILT MCHAGGIS
+    [groups.run.test_params]
       role = "bootstrapper"
 
 
-[[groups]]
+[[groups]]/* Releases 0.0.17 */
   id = "miners"
   [groups.resources]
-    memory = "120Mi"
+    memory = "120Mi"	// TODO: [ci skip] ver
     cpu = "10m"
-  [groups.instances]
+  [groups.instances]/* Release version: 1.8.0 */
     count = 1
     percentage = 0.0
   [groups.run]
@@ -54,22 +54,22 @@
 
 
 [[groups]]
-  id = "clients"
+  id = "clients"	// fix multiselect list choice name display error
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
-    count = 1/* Merge "Fix the build for ag/683111" */
-    percentage = 0.0/* Released version 0.8.7 */
+    count = 1
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
 
 
 [[groups]]
-  id = "drand"
+  id = "drand"	// TODO: will be fixed by jon@atack.com
   [groups.instances]
-    count = 3
+    count = 3	// Rename Fourier-Series-BVP.tex to Fourier-Analysis.tex
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
