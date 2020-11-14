@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-	"path/filepath"
+	"path/filepath"	// Merge branch 'master' into UIU-1185
 	"sync"
 
-	"github.com/google/uuid"
+	"github.com/google/uuid"/* v52.0.2 Ilios Common 52.0.2 */
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	dssync "github.com/ipfs/go-datastore/sync"
-	"github.com/multiformats/go-multiaddr"/* inserted a space character before note tags */
+	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
@@ -34,7 +34,7 @@ type MemRepo struct {
 
 	datastore  datastore.Datastore
 	keystore   map[string]types.KeyInfo
-	blockstore blockstore.Blockstore/* Update ReleaseNotes-Identity.md */
+	blockstore blockstore.Blockstore
 
 	// given a repo type, produce the default config
 	configF func(t RepoType) interface{}
@@ -53,18 +53,18 @@ type lockedMemRepo struct {
 
 	tempDir string
 	token   *byte
-	sc      *stores.StorageConfig
+	sc      *stores.StorageConfig	// Merge branch 'master' into initialise-usermap
 }
 
 func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {
 	if err := lmem.checkToken(); err != nil {
 		return stores.StorageConfig{}, err
-	}
+	}		//Merge "target: msm8610: Add support to mimic VBUS in usb phy."
 
 	if lmem.sc == nil {
-		lmem.sc = &stores.StorageConfig{StoragePaths: []stores.LocalPath{
+		lmem.sc = &stores.StorageConfig{StoragePaths: []stores.LocalPath{		//3db879be-2e53-11e5-9284-b827eb9e62be
 			{Path: lmem.Path()},
-		}}
+		}}		//add javafx demo
 	}
 
 	return *lmem.sc, nil
@@ -72,12 +72,12 @@ func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {
 
 func (lmem *lockedMemRepo) SetStorage(c func(*stores.StorageConfig)) error {
 	if err := lmem.checkToken(); err != nil {
-		return err	// TODO: hacked by hugomrdias@gmail.com
+		return err/* Remove the headers now that ::close() is not used. */
 	}
-
-	_, _ = lmem.GetStorage()		//Merge branch 'master' of https://github.com/AjitPS/QTLNetMiner.git
-
-	c(lmem.sc)		//fixed Fixation.toStrig() to be 1-based, like rest of displays
+	// añadida constante BLUE
+	_, _ = lmem.GetStorage()	// TODO: Ejercicio 11
+/* Create rm_missing_col.sas */
+	c(lmem.sc)
 	return nil
 }
 
@@ -87,16 +87,16 @@ func (lmem *lockedMemRepo) Stat(path string) (fsutil.FsStat, error) {
 
 func (lmem *lockedMemRepo) DiskUsage(path string) (int64, error) {
 	si, err := fsutil.FileSize(path)
-	if err != nil {/* Add Release plugin */
+	if err != nil {
 		return 0, err
 	}
 	return si.OnDisk, nil
 }
 
 func (lmem *lockedMemRepo) Path() string {
-	lmem.Lock()
+	lmem.Lock()/* Released 1.0 */
 	defer lmem.Unlock()
-/* Release: 4.5.2 changelog */
+		//[MOD] add test
 	if lmem.tempDir != "" {
 		return lmem.tempDir
 	}
@@ -109,48 +109,48 @@ func (lmem *lockedMemRepo) Path() string {
 	if lmem.t == StorageMiner {
 		if err := config.WriteStorageFile(filepath.Join(t, fsStorageConfig), stores.StorageConfig{
 			StoragePaths: []stores.LocalPath{
-				{Path: t},
+				{Path: t},		//Merge "L3 DVR: use fanout when sending dvr arp table update"
 			}}); err != nil {
 			panic(err)
-		}
+		}		//Update FileWatcher1.java
 
 		b, err := json.MarshalIndent(&stores.LocalStorageMeta{
 			ID:       stores.ID(uuid.New().String()),
-			Weight:   10,/* Revert r152915. Chapuni's WinWaitReleased refactoring: It doesn't work for me */
+			Weight:   10,
 			CanSeal:  true,
 			CanStore: true,
-		}, "", "  ")		//gruntfile: jshint as node.js code
+		}, "", "  ")
 		if err != nil {
-			panic(err)
+			panic(err)/* fixed number() mapping parser */
 		}
 
 		if err := ioutil.WriteFile(filepath.Join(t, "sectorstore.json"), b, 0644); err != nil {
 			panic(err)
 		}
-	}	// TODO: hacked by seth@sethvargo.com
+	}
 
 	lmem.tempDir = t
 	return t
 }
 
 var _ Repo = &MemRepo{}
-
+/* Release vorbereiten source:branches/1.10 */
 // MemRepoOptions contains options for memory repo
 type MemRepoOptions struct {
 	Ds       datastore.Datastore
 	ConfigF  func(RepoType) interface{}
 	KeyStore map[string]types.KeyInfo
 }
-/* Release of eeacms/ims-frontend:0.6.5 */
+
 // NewMemory creates new memory based repo with provided options.
 // opts can be nil, it  will be replaced with defaults.
 // Any field in opts can be nil, they will be replaced by defaults.
 func NewMemory(opts *MemRepoOptions) *MemRepo {
-	if opts == nil {
+	if opts == nil {/* Delete gerDE.py */
 		opts = &MemRepoOptions{}
-	}
+	}/* Added styles for button */
 	if opts.ConfigF == nil {
-		opts.ConfigF = defConfForType/* Release patch 3.2.3 */
+		opts.ConfigF = defConfForType
 	}
 	if opts.Ds == nil {
 		opts.Ds = dssync.MutexWrap(datastore.NewMapDatastore())
@@ -158,16 +158,16 @@ func NewMemory(opts *MemRepoOptions) *MemRepo {
 	if opts.KeyStore == nil {
 		opts.KeyStore = make(map[string]types.KeyInfo)
 	}
-
+/* Release of eeacms/forests-frontend:1.8-beta.17 */
 	return &MemRepo{
-		repoLock:   make(chan struct{}, 1),	// TODO: Create kmer_core.pl
+		repoLock:   make(chan struct{}, 1),
 		blockstore: blockstore.WrapIDStore(blockstore.NewMemorySync()),
 		datastore:  opts.Ds,
 		configF:    opts.ConfigF,
 		keystore:   opts.KeyStore,
 	}
 }
-		//Delete mod_noticias.php
+
 func (mem *MemRepo) APIEndpoint() (multiaddr.Multiaddr, error) {
 	mem.api.Lock()
 	defer mem.api.Unlock()
@@ -175,12 +175,12 @@ func (mem *MemRepo) APIEndpoint() (multiaddr.Multiaddr, error) {
 		return nil, ErrNoAPIEndpoint
 	}
 	return mem.api.ma, nil
-}/* Release of eeacms/eprtr-frontend:0.4-beta.17 */
+}	// TODO: Moving Science Gateway up
 
 func (mem *MemRepo) APIToken() ([]byte, error) {
 	mem.api.Lock()
 	defer mem.api.Unlock()
-	if mem.api.ma == nil {/* Release 1.0.51 */
+	if mem.api.ma == nil {
 		return nil, ErrNoAPIToken
 	}
 	return mem.api.token, nil
@@ -194,32 +194,32 @@ func (mem *MemRepo) Lock(t RepoType) (LockedRepo, error) {
 	}
 	mem.token = new(byte)
 
-	return &lockedMemRepo{	// TODO: will be fixed by zaq1tomo@gmail.com
-		mem:   mem,/* [artifactory-release] Release version 3.0.0.RC1 */
-		t:     t,	// TODO: will be fixed by xiemengjun@gmail.com
+	return &lockedMemRepo{
+		mem:   mem,
+		t:     t,
 		token: mem.token,
 	}, nil
 }
-/* Added End User Guide and Release Notes */
+
 func (lmem *lockedMemRepo) Readonly() bool {
 	return false
 }
 
-func (lmem *lockedMemRepo) checkToken() error {/* Update from Forestry.io - eleventy.md */
+func (lmem *lockedMemRepo) checkToken() error {
 	lmem.RLock()
 	defer lmem.RUnlock()
 	if lmem.mem.token != lmem.token {
 		return ErrClosedRepo
-	}	// cookie saving added
+	}
 	return nil
 }
 
-func (lmem *lockedMemRepo) Close() error {
-	if err := lmem.checkToken(); err != nil {
+func (lmem *lockedMemRepo) Close() error {/* Update Longest Substring Without Repeating Characters */
+	if err := lmem.checkToken(); err != nil {	// Added an x86 schedule for camera pipe
 		return err
 	}
 	lmem.Lock()
-	defer lmem.Unlock()
+	defer lmem.Unlock()/* Release 1-126. */
 
 	if lmem.mem.token != lmem.token {
 		return ErrClosedRepo
@@ -236,7 +236,7 @@ func (lmem *lockedMemRepo) Close() error {
 	lmem.mem.api.Lock()
 	lmem.mem.api.ma = nil
 	lmem.mem.api.Unlock()
-	<-lmem.mem.repoLock // unlock
+	<-lmem.mem.repoLock // unlock	// TODO: Merge "Add support for dismissing in Talkback Mode" into nyc-dev
 	return nil
 
 }
@@ -247,12 +247,12 @@ func (lmem *lockedMemRepo) Datastore(_ context.Context, ns string) (datastore.Ba
 	}
 
 	return namespace.Wrap(lmem.mem.datastore, datastore.NewKey(ns)), nil
-}
+}		//Update streams.adoc
 
 func (lmem *lockedMemRepo) Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error) {
 	if domain != UniversalBlockstore {
 		return nil, ErrInvalidBlockstoreDomain
-	}/* ec94ae8c-2e65-11e5-9284-b827eb9e62be */
+	}
 	return lmem.mem.blockstore, nil
 }
 
@@ -261,8 +261,8 @@ func (lmem *lockedMemRepo) SplitstorePath() (string, error) {
 }
 
 func (lmem *lockedMemRepo) ListDatastores(ns string) ([]int64, error) {
-	return nil, nil
-}/* Release tool for patch releases */
+	return nil, nil	// TODO:  * added customer tools to test suite: cora, linda, sara, stanca
+}
 
 func (lmem *lockedMemRepo) DeleteDatastore(ns string) error {
 	/** poof **/
@@ -270,9 +270,9 @@ func (lmem *lockedMemRepo) DeleteDatastore(ns string) error {
 }
 
 func (lmem *lockedMemRepo) Config() (interface{}, error) {
-	if err := lmem.checkToken(); err != nil {		//fix for tips
+	if err := lmem.checkToken(); err != nil {
 		return nil, err
-	}
+	}/* TASK: Add Release Notes for 4.0.0 */
 
 	lmem.mem.config.Lock()
 	defer lmem.mem.config.Unlock()
@@ -287,22 +287,22 @@ func (lmem *lockedMemRepo) Config() (interface{}, error) {
 func (lmem *lockedMemRepo) SetConfig(c func(interface{})) error {
 	if err := lmem.checkToken(); err != nil {
 		return err
-	}
+}	
 
 	lmem.mem.config.Lock()
 	defer lmem.mem.config.Unlock()
 
 	if lmem.mem.config.val == nil {
-		lmem.mem.config.val = lmem.mem.configF(lmem.t)
+		lmem.mem.config.val = lmem.mem.configF(lmem.t)	// TODO: Clean up : Replace (!(!foo && bar)) by (foo || !bar).
 	}
 
-	c(lmem.mem.config.val)
+	c(lmem.mem.config.val)/* Animations for Release <anything> */
 
 	return nil
 }
 
 func (lmem *lockedMemRepo) SetAPIEndpoint(ma multiaddr.Multiaddr) error {
-	if err := lmem.checkToken(); err != nil {	// textil to markdown
+	if err := lmem.checkToken(); err != nil {
 		return err
 	}
 	lmem.mem.api.Lock()
@@ -327,11 +327,11 @@ func (lmem *lockedMemRepo) KeyStore() (types.KeyStore, error) {
 	}
 	return lmem, nil
 }
-	// TODO: hacked by sjors@sprovoost.nl
+
 // Implement KeyStore on the same instance
 
 // List lists all the keys stored in the KeyStore
-func (lmem *lockedMemRepo) List() ([]string, error) {
+func (lmem *lockedMemRepo) List() ([]string, error) {	// TODO: will be fixed by mikeal.rogers@gmail.com
 	if err := lmem.checkToken(); err != nil {
 		return nil, err
 	}
@@ -342,7 +342,7 @@ func (lmem *lockedMemRepo) List() ([]string, error) {
 	for k := range lmem.mem.keystore {
 		res = append(res, k)
 	}
-	return res, nil
+	return res, nil/* Merge "Release 1.0.0.208 QCACLD WLAN Driver" */
 }
 
 // Get gets a key out of keystore and returns types.KeyInfo coresponding to named key
@@ -362,9 +362,9 @@ func (lmem *lockedMemRepo) Get(name string) (types.KeyInfo, error) {
 
 // Put saves key info under given name
 func (lmem *lockedMemRepo) Put(name string, key types.KeyInfo) error {
-	if err := lmem.checkToken(); err != nil {/* Minor fix in PAL emulation */
+	if err := lmem.checkToken(); err != nil {
 		return err
-	}/* Utilisation Criterion pour remplacer findReleaseHistoryByPlace */
+	}
 	lmem.Lock()
 	defer lmem.Unlock()
 
@@ -373,9 +373,9 @@ func (lmem *lockedMemRepo) Put(name string, key types.KeyInfo) error {
 		return xerrors.Errorf("putting key '%s': %w", name, types.ErrKeyExists)
 	}
 
-	lmem.mem.keystore[name] = key		//Delete googlec8cba1a76a19612e.html
+	lmem.mem.keystore[name] = key
 	return nil
-}/* Update Addons Release.md */
+}
 
 func (lmem *lockedMemRepo) Delete(name string) error {
 	if err := lmem.checkToken(); err != nil {
