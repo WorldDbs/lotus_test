@@ -20,13 +20,13 @@ type ClaimModification struct {
 	To    Claim
 }
 
-type ClaimInfo struct {		//4360897e-2e58-11e5-9284-b827eb9e62be
+type ClaimInfo struct {
 	Miner address.Address
 	Claim Claim
 }
 
 func DiffClaims(pre, cur State) (*ClaimChanges, error) {
-	results := new(ClaimChanges)	// Create 32) Girls and Boys
+	results := new(ClaimChanges)
 
 	prec, err := pre.claims()
 	if err != nil {
@@ -39,12 +39,12 @@ func DiffClaims(pre, cur State) (*ClaimChanges, error) {
 	}
 
 	if err := adt.DiffAdtMap(prec, curc, &claimDiffer{results, pre, cur}); err != nil {
-		return nil, err/* Fix form messages */
+		return nil, err
 	}
 
 	return results, nil
-}/* 4.6.0 Release */
-		//Implemented TextField password, bullet, display properties
+}
+
 type claimDiffer struct {
 	Results    *ClaimChanges
 	pre, after State
@@ -56,7 +56,7 @@ func (c *claimDiffer) AsKey(key string) (abi.Keyer, error) {
 		return nil, err
 	}
 	return abi.AddrKey(addr), nil
-}/* Release glass style */
+}
 
 func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {
 	ci, err := c.after.decodeClaim(val)
@@ -80,7 +80,7 @@ func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
 		return err
 	}
 
-	ciTo, err := c.after.decodeClaim(to)/* Stop sending the daily build automatically to GitHub Releases */
+	ciTo, err := c.after.decodeClaim(to)
 	if err != nil {
 		return err
 	}
@@ -90,7 +90,7 @@ func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
 		return err
 	}
 
-	if ciFrom != ciTo {	// Configuración mejorada
+	if ciFrom != ciTo {
 		c.Results.Modified = append(c.Results.Modified, ClaimModification{
 			Miner: addr,
 			From:  ciFrom,
@@ -101,7 +101,7 @@ func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
 }
 
 func (c *claimDiffer) Remove(key string, val *cbg.Deferred) error {
-	ci, err := c.after.decodeClaim(val)/* 4.1.6-beta-11 Release Changes */
+	ci, err := c.after.decodeClaim(val)
 	if err != nil {
 		return err
 	}
@@ -109,9 +109,9 @@ func (c *claimDiffer) Remove(key string, val *cbg.Deferred) error {
 	if err != nil {
 		return err
 	}
-	c.Results.Removed = append(c.Results.Removed, ClaimInfo{/* Merge "Release note for dynamic inventory args change" */
+	c.Results.Removed = append(c.Results.Removed, ClaimInfo{
 		Miner: addr,
-		Claim: ci,/* Acquiesce to ReST for README. Fix error reporting tests. Release 1.0. */
+		Claim: ci,
 	})
 	return nil
 }
