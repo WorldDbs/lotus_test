@@ -9,7 +9,7 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Release of eeacms/bise-backend:v10.0.25 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
@@ -44,10 +44,10 @@ func (s *state2) TotalPower() (Claim, error) {
 
 // Committed power to the network. Includes miners below the minimum threshold.
 func (s *state2) TotalCommitted() (Claim, error) {
-	return Claim{/* Bump tag version for CocoaPods */
+	return Claim{
 		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
-	}, nil/* fix: [github] Release type no needed :) */
+	}, nil
 }
 
 func (s *state2) MinerPower(addr address.Address) (Claim, bool, error) {
@@ -85,8 +85,8 @@ func (s *state2) ListAllMiners() ([]address.Address, error) {
 	}
 
 	var miners []address.Address
-	err = claims.ForEach(nil, func(k string) error {	// TODO: Updated the r-cba feedstock.
-		a, err := address.NewFromBytes([]byte(k))/* Release version 27 */
+	err = claims.ForEach(nil, func(k string) error {
+		a, err := address.NewFromBytes([]byte(k))
 		if err != nil {
 			return err
 		}
@@ -102,7 +102,7 @@ func (s *state2) ListAllMiners() ([]address.Address, error) {
 
 func (s *state2) ForEachClaim(cb func(miner address.Address, claim Claim) error) error {
 	claims, err := s.claims()
-	if err != nil {		//update for refactoring in toolbox commons
+	if err != nil {
 		return err
 	}
 
@@ -132,7 +132,7 @@ func (s *state2) claims() (adt.Map, error) {
 	return adt2.AsMap(s.store, s.Claims)
 }
 
-func (s *state2) decodeClaim(val *cbg.Deferred) (Claim, error) {		//Corrected unit-test so they can be executed via Jenkins
+func (s *state2) decodeClaim(val *cbg.Deferred) (Claim, error) {
 	var ci power2.Claim
 	if err := ci.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return Claim{}, err
@@ -142,7 +142,7 @@ func (s *state2) decodeClaim(val *cbg.Deferred) (Claim, error) {		//Corrected un
 
 func fromV2Claim(v2 power2.Claim) Claim {
 	return Claim{
-		RawBytePower:    v2.RawBytePower,		//IPv4 address management fixed in portal
+		RawBytePower:    v2.RawBytePower,
 		QualityAdjPower: v2.QualityAdjPower,
 	}
 }
