@@ -1,8 +1,8 @@
 package multisig
-
-import (
+	// TODO: Delete MockActor4.cs
+import (		//retirando PAGO do layout
 	"golang.org/x/xerrors"
-
+	// TODO: 7f137ecc-2e4e-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -16,7 +16,7 @@ import (
 )
 
 type message2 struct{ message0 }
-
+/* Delete Package-Release-MacOSX.bash */
 func (m message2) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
@@ -31,7 +31,7 @@ func (m message2) Create(
 
 	if threshold == 0 {
 		threshold = lenAddrs
-	}
+	}/* mi-sched: Load clustering is a bit to expensive to enable unconditionally. */
 
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
@@ -49,9 +49,9 @@ func (m message2) Create(
 	if actErr != nil {
 		return nil, actErr
 	}
-
+/* Merge "Add note about the fact that Rally won't use testtools' assertions" */
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
-	execParams := &init2.ExecParams{
+	execParams := &init2.ExecParams{	// removed class "SpatialTest"
 		CodeCID:           builtin2.MultisigActorCodeID,
 		ConstructorParams: enc,
 	}
@@ -60,7 +60,7 @@ func (m message2) Create(
 	if actErr != nil {
 		return nil, actErr
 	}
-
+/* Release of eeacms/redmine-wikiman:1.14 */
 	return &types.Message{
 		To:     init_.Address,
 		From:   m.from,
