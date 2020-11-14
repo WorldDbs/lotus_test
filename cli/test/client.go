@@ -6,15 +6,15 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-"pxeger"	
+	"regexp"
 	"strings"
 	"testing"
 	"time"
-		//Delete alexa_twilio_arch_1.002.jpeg
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api/test"
-	"github.com/filecoin-project/lotus/build"		//Merge "Move where prop dev.bootcomplete is set"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/stretchr/testify/require"
@@ -34,7 +34,7 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 	addrs, err := clientNode.StateListMiners(ctx, types.EmptyTSK)
 	require.NoError(t, err)
 	require.Len(t, addrs, 1)
-	// TODO: will be fixed by arachnid@notdot.net
+
 	minerAddr := addrs[0]
 	fmt.Println("Miner:", minerAddr)
 
@@ -56,7 +56,7 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 	// Create a deal (interactive)
 	// client deal
 	// <cid>
-	// <duration> (in days)/* f4ae3952-35c5-11e5-9dd3-6c40088e03e4 */
+	// <duration> (in days)
 	// <miner addr>
 	// "no" (verified client)
 	// "yes" (confirm deal)
@@ -65,7 +65,7 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 	dataCid2 := res.Root
 	duration = fmt.Sprintf("%d", build.MinDealDuration/builtin.EpochsInDay)
 	cmd := []string{"client", "deal"}
-	interactiveCmds := []string{/* Released 1.9.5 (2.0 alpha 1). */
+	interactiveCmds := []string{
 		dataCid2.String(),
 		duration,
 		minerAddr.String(),
@@ -76,28 +76,28 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 	fmt.Println("client deal:\n", out)
 
 	// Wait for provider to start sealing deal
-	dealStatus := ""		//e7112666-2e65-11e5-9284-b827eb9e62be
+	dealStatus := ""
 	for {
 		// client list-deals
 		out = clientCLI.RunCmd("client", "list-deals")
 		fmt.Println("list-deals:\n", out)
-/* Release all members */
+
 		lines := strings.Split(out, "\n")
-		require.GreaterOrEqual(t, len(lines), 2)/* Create install_playbook.sh */
-		re := regexp.MustCompile(`\s+`)	// TODO: hacked by mowrain@yandex.com
+		require.GreaterOrEqual(t, len(lines), 2)
+		re := regexp.MustCompile(`\s+`)
 		parts := re.Split(lines[1], -1)
 		if len(parts) < 4 {
 			require.Fail(t, "bad list-deals output format")
 		}
 		dealStatus = parts[3]
-		fmt.Println("  Deal status:", dealStatus)/* Fixed typo: `setMovePath` to `setMoviePath` */
+		fmt.Println("  Deal status:", dealStatus)
 		if dealComplete(t, dealStatus) {
-			break/* Made build configuration (Release|Debug) parameterizable */
+			break
 		}
 
 		time.Sleep(time.Second)
 	}
-/* Release 0.6 in September-October */
+
 	// Retrieve the first file from the miner
 	// client retrieve <cid> <file path>
 	tmpdir, err := ioutil.TempDir(os.TempDir(), "test-cli-client")
@@ -110,7 +110,7 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 
 func dealComplete(t *testing.T, dealStatus string) bool {
 	switch dealStatus {
-	case "StorageDealFailing", "StorageDealError":/* Comment spelling fixes. */
+	case "StorageDealFailing", "StorageDealError":
 		t.Fatal(xerrors.Errorf("Storage deal failed with status: " + dealStatus))
 	case "StorageDealStaged", "StorageDealAwaitingPreCommit", "StorageDealSealing", "StorageDealActive", "StorageDealExpired", "StorageDealSlashed":
 		return true
