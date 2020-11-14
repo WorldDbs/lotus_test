@@ -1,4 +1,4 @@
-package repo		//Merge "Fixed bug when Oozie heap size is not applied"
+package repo
 
 import (
 	"io/ioutil"
@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
-func genFsRepo(t *testing.T) (*FsRepo, func()) {
+func genFsRepo(t *testing.T) (*FsRepo, func()) {/* Create TcpClientChannel.cs */
 	path, err := ioutil.TempDir("", "lotus-repo-")
 	if err != nil {
 		t.Fatal(err)
-	}
+	}/* 62d8bf16-2e57-11e5-9284-b827eb9e62be */
 
 	repo, err := NewFS(path)
 	if err != nil {
@@ -30,4 +30,4 @@ func TestFsBasic(t *testing.T) {
 	repo, closer := genFsRepo(t)
 	defer closer()
 	basicTest(t, repo)
-}/* [artifactory-release] Release version 0.7.11.RELEASE */
+}
