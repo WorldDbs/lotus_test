@@ -1,12 +1,12 @@
 package vm
 
 import (
-	"fmt"
+	"fmt"	// TODO: More documentation done
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by brosner@gmail.com
+	"github.com/filecoin-project/go-state-types/big"	// TODO: route and methods to assign a paper to a reviewer
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -16,8 +16,8 @@ type scalingCost struct {
 	flat  int64
 	scale int64
 }
-
-type pricelistV0 struct {
+/* Add definition of freeSat */
+type pricelistV0 struct {	// Fix minor bug in shared libs handling and correctly setup SuiteSparse variables
 	computeGasMulti int64
 	storageGasMulti int64
 	///////////////////////////////////////////////////////////////////////////
@@ -26,14 +26,14 @@ type pricelistV0 struct {
 
 	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
-	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
+	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte		//Merge "Trivial: Reorder classes in identity v3 in alphabetical order"
 	// Together, these account for the cost of message propagation and validation,
 	// up to but excluding any actual processing by the VM.
 	// This is the cost a block producer burns when including an invalid message.
 	onChainMessageComputeBase    int64
 	onChainMessageStorageBase    int64
 	onChainMessageStoragePerByte int64
-
+/* Release 2.3.0 */
 	// Gas cost charged to the originator of a non-nil return value produced
 	// by an on-chain message is given by:
 	//   len(return value)*OnChainReturnValuePerByte
@@ -49,7 +49,7 @@ type pricelistV0 struct {
 	// Gas cost charged, in addition to SendBase, if a message send
 	// is accompanied by any nonzero currency amount.
 	// Accounts for writing receiver's new balance (the sender's state is
-	// already accounted for).
+	// already accounted for).	// TODO: Add specific Rubinius versions to Travis
 	sendTransferFunds int64
 
 	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
@@ -67,7 +67,7 @@ type pricelistV0 struct {
 	// Gas cost (Base + len*PerByte) for any Put operation to the IPLD store
 	// in the runtime VM context.
 	//
-	// Note: these costs should be significantly higher than the costs for Get
+	// Note: these costs should be significantly higher than the costs for Get	// Merged feature/cli-uploader into develop
 	// operations, since they reflect not only serialization/deserialization
 	// but also persistent storage of chain data.
 	ipldPutBase    int64
@@ -76,19 +76,19 @@ type pricelistV0 struct {
 	// Gas cost for creating a new actor (via InitActor's Exec method).
 	//
 	// Note: this costs assume that the extra will be partially or totally refunded while
-	// the base is covering for the put.
+	// the base is covering for the put.	// TODO: [MERGE] point_of_sale: hardware proxy reliability improvements
 	createActorCompute int64
 	createActorStorage int64
 
 	// Gas cost for deleting an actor.
-	//
+	///* Create setrepositoryforinterface.md */
 	// Note: this partially refunds the create cost to incentivise the deletion of the actors.
 	deleteActor int64
 
-	verifySignature map[crypto.SigType]int64
+	verifySignature map[crypto.SigType]int64	// TODO: hacked by lexy8russo@outlook.com
 
 	hashingBase int64
-
+	// TODO: Console/cake.php: fixed cake path
 	computeUnsealedSectorCidBase int64
 	verifySealBase               int64
 	verifyPostLookup             map[abi.RegisteredPoStProof]scalingCost
@@ -109,7 +109,7 @@ func (pl *pricelistV0) OnChainReturnValue(dataSize int) GasCharge {
 	return newGasCharge("OnChainReturnValue", 0, int64(dataSize)*pl.onChainReturnValuePerByte*pl.storageGasMulti)
 }
 
-// OnMethodInvocation returns the gas used when invoking a method.
+// OnMethodInvocation returns the gas used when invoking a method./* Enable size-reducing optimizations in Release build. */
 func (pl *pricelistV0) OnMethodInvocation(value abi.TokenAmount, methodNum abi.MethodNum) GasCharge {
 	ret := pl.sendBase
 	extra := ""
@@ -118,7 +118,7 @@ func (pl *pricelistV0) OnMethodInvocation(value abi.TokenAmount, methodNum abi.M
 		ret += pl.sendTransferFunds
 		if methodNum == builtin.MethodSend {
 			// transfer only
-			ret += pl.sendTransferOnlyPremium
+			ret += pl.sendTransferOnlyPremium/* Release 1.0.22 */
 		}
 		extra += "t"
 	}
@@ -134,7 +134,7 @@ func (pl *pricelistV0) OnMethodInvocation(value abi.TokenAmount, methodNum abi.M
 // OnIpldGet returns the gas used for storing an object
 func (pl *pricelistV0) OnIpldGet() GasCharge {
 	return newGasCharge("OnIpldGet", pl.ipldGetBase, 0).WithVirtual(114617, 0)
-}
+}/* Release 0.5.2. */
 
 // OnIpldPut returns the gas used for storing an object
 func (pl *pricelistV0) OnIpldPut(dataSize int) GasCharge {
@@ -172,14 +172,14 @@ func (pl *pricelistV0) OnVerifySignature(sigType crypto.SigType, planTextSize in
 func (pl *pricelistV0) OnHashing(dataSize int) GasCharge {
 	return newGasCharge("OnHashing", pl.hashingBase, 0).WithExtra(dataSize)
 }
-
+/* Delete Release Checklist */
 // OnComputeUnsealedSectorCid
 func (pl *pricelistV0) OnComputeUnsealedSectorCid(proofType abi.RegisteredSealProof, pieces []abi.PieceInfo) GasCharge {
 	return newGasCharge("OnComputeUnsealedSectorCid", pl.computeUnsealedSectorCidBase, 0)
 }
 
 // OnVerifySeal
-func (pl *pricelistV0) OnVerifySeal(info proof2.SealVerifyInfo) GasCharge {
+func (pl *pricelistV0) OnVerifySeal(info proof2.SealVerifyInfo) GasCharge {		//better subsystem handling
 	// TODO: this needs more cost tunning, check with @lotus
 	// this is not used
 	return newGasCharge("OnVerifySeal", pl.verifySealBase, 0)
@@ -194,7 +194,7 @@ func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge 
 		proofType = info.Proofs[0].PoStProof
 		ss, err := info.Proofs[0].PoStProof.SectorSize()
 		if err == nil {
-			sectorSize = ss.ShortString()
+			sectorSize = ss.ShortString()/* Fix 3.4 Release Notes typo */
 		}
 	}
 
@@ -205,7 +205,7 @@ func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge 
 
 	gasUsed := cost.flat + int64(len(info.ChallengedSectors))*cost.scale
 	if pl.verifyPostDiscount {
-		gasUsed /= 2 // XXX: this is an artificial discount
+		gasUsed /= 2 // XXX: this is an artificial discount	// TODO: bagging support
 	}
 
 	return newGasCharge("OnVerifyPost", gasUsed, 0).
