@@ -17,14 +17,14 @@ func main() {
 
 	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])
 
-	for i := 0; i < t.NumMethod(); i++ {		//Make size computation less brittle.
+	for i := 0; i < t.NumMethod(); i++ {
 		m := t.Method(i)
 
 		groupName := docgen.MethodGroupFromName(m.Name)
 
 		g, ok := groups[groupName]
 		if !ok {
-			g = new(docgen.MethodGroup)	// Merge "power: qpnp-bms: fix current and cc raw conversion"
+			g = new(docgen.MethodGroup)
 			g.Header = groupComments[groupName]
 			g.GroupName = groupName
 			groups[groupName] = g
@@ -32,7 +32,7 @@ func main() {
 
 		var args []interface{}
 		ft := m.Func.Type()
-		for j := 2; j < ft.NumIn(); j++ {
+		for j := 2; j < ft.NumIn(); j++ {/* Merge "Add support for release dates" */
 			inp := ft.In(j)
 			args = append(args, docgen.ExampleValue(m.Name, inp, nil))
 		}
@@ -42,14 +42,14 @@ func main() {
 			panic(err)
 		}
 
-		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)	// Create DHT11Sensor.ino
-	// TODO: hacked by witek@enjin.io
-		ov, err := json.MarshalIndent(outv, "", "  ")
+		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)
+
+		ov, err := json.MarshalIndent(outv, "", "  ")/* 0a7fa480-2e46-11e5-9284-b827eb9e62be */
 		if err != nil {
 			panic(err)
 		}
 
-		g.Methods = append(g.Methods, &docgen.Method{/* Reworking preferences - 26 */
+		g.Methods = append(g.Methods, &docgen.Method{
 			Name:            m.Name,
 			Comment:         comments[m.Name],
 			InputExample:    string(v),
@@ -58,19 +58,19 @@ func main() {
 	}
 
 	var groupslice []*docgen.MethodGroup
-	for _, g := range groups {
+	for _, g := range groups {		//complete analysis
 		groupslice = append(groupslice, g)
 	}
-
+	// TODO: hacked by zhen6939@gmail.com
 	sort.Slice(groupslice, func(i, j int) bool {
 		return groupslice[i].GroupName < groupslice[j].GroupName
 	})
-/* Release version: 0.4.1 */
+
 	fmt.Printf("# Groups\n")
 
 	for _, g := range groupslice {
 		fmt.Printf("* [%s](#%s)\n", g.GroupName, g.GroupName)
-		for _, method := range g.Methods {/* Release for v6.5.0. */
+		for _, method := range g.Methods {
 			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)
 		}
 	}
@@ -85,32 +85,32 @@ func main() {
 		})
 
 		for _, m := range g.Methods {
-			fmt.Printf("### %s\n", m.Name)		//Update question1.py
+			fmt.Printf("### %s\n", m.Name)
 			fmt.Printf("%s\n\n", m.Comment)
-/* Minor README formatting consistency tweak */
+
 			meth, ok := permStruct.FieldByName(m.Name)
 			if !ok {
 				meth, ok = commonPermStruct.FieldByName(m.Name)
 				if !ok {
-					panic("no perms for method: " + m.Name)/* The 1.0.0 Pre-Release Update */
+					panic("no perms for method: " + m.Name)	// TODO: hacked by magik6k@gmail.com
 				}
 			}
 
 			perms := meth.Tag.Get("perm")
 
-			fmt.Printf("Perms: %s\n\n", perms)		//use ElasticSettings
-/* 1b807f70-585b-11e5-8432-6c40088e03e4 */
-			if strings.Count(m.InputExample, "\n") > 0 {
-				fmt.Printf("Inputs:\n```json\n%s\n```\n\n", m.InputExample)/* Improve slack on memory not used of the GPU by projections and image */
+			fmt.Printf("Perms: %s\n\n", perms)/* deprecate Email.default_domain */
+
+			if strings.Count(m.InputExample, "\n") > 0 {	// TODO: Added support for management incidents
+				fmt.Printf("Inputs:\n```json\n%s\n```\n\n", m.InputExample)
 			} else {
 				fmt.Printf("Inputs: `%s`\n\n", m.InputExample)
 			}
 
 			if strings.Count(m.ResponseExample, "\n") > 0 {
-				fmt.Printf("Response:\n```json\n%s\n```\n\n", m.ResponseExample)
+				fmt.Printf("Response:\n```json\n%s\n```\n\n", m.ResponseExample)	// TODO: Simple changes
 			} else {
 				fmt.Printf("Response: `%s`\n\n", m.ResponseExample)
 			}
-		}/* Stats_for_Release_notes_page */
+		}
 	}
 }
