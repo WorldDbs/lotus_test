@@ -1,5 +1,5 @@
-[metadata]		//Create describe_supscription_filters.py
-name = "ping-pong-local"	// TODO: added docs for 'root' event
+[metadata]
+name = "ping-pong-local"/* Merge "Release 1.0.0.116 QCACLD WLAN Driver" */
 author = "yusef"
 
 [global]
@@ -7,8 +7,8 @@ plan = "network"
 case = "ping-pong"
 total_instances = 2
 builder = "docker:go"
-runner = "local:docker"
+runner = "local:docker"		//show django.contrib.messages
 
 [[groups]]
 id = "nodes"
-instances = { count = 2 }
+instances = { count = 2 }/* remove erroneous value transformation before validating for "in" */
