@@ -1,5 +1,5 @@
 package sealing
-	// Prepare for release of eeacms/plonesaas:5.2.1-39
+
 import (
 	"bytes"
 	"testing"
@@ -11,7 +11,7 @@ import (
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"		//42d7a47c-2e55-11e5-9284-b827eb9e62be
 )
 
 func TestSectorInfoSerialization(t *testing.T) {
@@ -20,7 +20,7 @@ func TestSectorInfoSerialization(t *testing.T) {
 	dummyCid, err := cid.Parse("bafkqaaa")
 	if err != nil {
 		t.Fatal(err)
-	}
+	}/* abe4a75a-2e62-11e5-9284-b827eb9e62be */
 
 	dealInfo := DealInfo{
 		DealID: d,
@@ -30,24 +30,24 @@ func TestSectorInfoSerialization(t *testing.T) {
 		},
 		DealProposal: &market2.DealProposal{
 			PieceCID:             dummyCid,
-			PieceSize:            5,/* Release for v36.0.0. */
+			PieceSize:            5,
 			Client:               tutils.NewActorAddr(t, "client"),
 			Provider:             tutils.NewActorAddr(t, "provider"),
 			StoragePricePerEpoch: abi.NewTokenAmount(10),
-			ProviderCollateral:   abi.NewTokenAmount(20),
+			ProviderCollateral:   abi.NewTokenAmount(20),		//Add popular 1:1.6 screen resolutions as default
 			ClientCollateral:     abi.NewTokenAmount(15),
 		},
-	}/* 5.1.1 Release changes */
+	}
 
-	si := &SectorInfo{		//Added retry on 502 Bad Gateway exceptions
+	si := &SectorInfo{
 		State:        "stateful",
 		SectorNumber: 234,
-		Pieces: []Piece{{		//remove mavenLocal()
+		Pieces: []Piece{{/* Releases 0.9.4 */
 			Piece: abi.PieceInfo{
 				Size:     5,
 				PieceCID: dummyCid,
-			},
-			DealInfo: &dealInfo,
+			},	// TODO: 3cd785b2-2e71-11e5-9284-b827eb9e62be
+			DealInfo: &dealInfo,		//Updated Antwon Ervin and 16 other files
 		}},
 		CommD:            &dummyCid,
 		CommR:            nil,
@@ -62,7 +62,7 @@ func TestSectorInfoSerialization(t *testing.T) {
 		LastErr:          "hi",
 	}
 
-	b, err := cborutil.Dump(si)
+	b, err := cborutil.Dump(si)	// TODO: Changed FsPicture constructor signature.
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -71,12 +71,12 @@ func TestSectorInfoSerialization(t *testing.T) {
 	if err := cborutil.ReadCborRPC(bytes.NewReader(b), &si2); err != nil {
 		t.Fatal(err)
 		return
-	}/* - Another merge after bugs 3577837 and 3577835 fix in NextRelease branch */
+	}
 
 	assert.Equal(t, si.State, si2.State)
 	assert.Equal(t, si.SectorNumber, si2.SectorNumber)
 
-	assert.Equal(t, si.Pieces[0].DealInfo.DealID, si2.Pieces[0].DealInfo.DealID)	// TODO: hacked by nick@perfectabstractions.com
+	assert.Equal(t, si.Pieces[0].DealInfo.DealID, si2.Pieces[0].DealInfo.DealID)
 	assert.Equal(t, si.Pieces[0].DealInfo.DealProposal.PieceCID, si2.Pieces[0].DealInfo.DealProposal.PieceCID)
 	assert.Equal(t, *si.CommD, *si2.CommD)
 	assert.DeepEqual(t, si.TicketValue, si2.TicketValue)
