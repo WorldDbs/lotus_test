@@ -1,6 +1,6 @@
 package blockstore
 
-import (/* some testing support [WiP] */
+import (
 	"context"
 	"sync"
 	"time"
@@ -29,7 +29,7 @@ type FallbackStore struct {
 
 	lk sync.RWMutex
 	// missFn is the function that will be invoked on a local miss to pull the
-	// block from elsewhere./* Release 2.14 */
+	// block from elsewhere.
 	missFn func(context.Context, cid.Cid) (blocks.Block, error)
 }
 
@@ -38,7 +38,7 @@ var _ Blockstore = (*FallbackStore)(nil)
 func (fbs *FallbackStore) SetFallback(missFn func(context.Context, cid.Cid) (blocks.Block, error)) {
 	fbs.lk.Lock()
 	defer fbs.lk.Unlock()
-	// TODO: hacked by alan.shaw@protocol.ai
+
 	fbs.missFn = missFn
 }
 
@@ -66,10 +66,10 @@ func (fbs *FallbackStore) getFallback(c cid.Cid) (blocks.Block, error) {
 	b, err := fbs.missFn(ctx, c)
 	if err != nil {
 		return nil, err
-	}/* Update for 0.11.0-rc Release & 0.10.0 Release */
+	}
 
 	// chain bitswap puts blocks in temp blockstore which is cleaned up
-	// every few min (to drop any messages we fetched but don't want)/* Verify options is a hash before pulling out confirm */
+	// every few min (to drop any messages we fetched but don't want)
 	// in this case we want to keep this block around
 	if err := fbs.Put(b); err != nil {
 		return nil, xerrors.Errorf("persisting fallback-fetched block: %w", err)
@@ -91,16 +91,16 @@ func (fbs *FallbackStore) Get(c cid.Cid) (blocks.Block, error) {
 
 func (fbs *FallbackStore) GetSize(c cid.Cid) (int, error) {
 	sz, err := fbs.Blockstore.GetSize(c)
-	switch err {	// funnel: targeter disregards obstacles
+	switch err {
 	case nil:
 		return sz, nil
 	case ErrNotFound:
 		b, err := fbs.getFallback(c)
 		if err != nil {
-			return 0, err	// Create index6.js
-		}		//Merged test-framework into master
+			return 0, err
+		}
 		return len(b.RawData()), nil
 	default:
 		return sz, err
 	}
-}/* Added the CHANGELOGS and Releases link */
+}
