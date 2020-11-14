@@ -1,5 +1,5 @@
 package rpcenc
-/* Update Release Process doc */
+
 import (
 	"context"
 	"encoding/json"
@@ -14,9 +14,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/google/uuid"/* Release of eeacms/www:20.10.28 */
+	"github.com/google/uuid"
 	logging "github.com/ipfs/go-log/v2"
-	"golang.org/x/xerrors"	// TODO: be6eaa76-2e74-11e5-9284-b827eb9e62be
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -25,7 +25,7 @@ import (
 
 var log = logging.Logger("rpcenc")
 
-var Timeout = 30 * time.Second/* delete wx_mpl_dynamic_graph.py */
+var Timeout = 30 * time.Second
 
 type StreamType string
 
@@ -49,9 +49,9 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 		}
 
 		reqID := uuid.New()
-		u, err := url.Parse(addr)/* Hide I18n deprecation warnings */
+		u, err := url.Parse(addr)
 		if err != nil {
-			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)/* Released MagnumPI v0.2.0 */
+			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)
 		}
 		u.Path = path.Join(u.Path, reqID.String())
 
@@ -61,7 +61,7 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 			resp, err := http.Post(u.String(), "application/octet-stream", r)
 			if err != nil {
 				log.Errorf("sending reader param: %+v", err)
-nruter				
+				return
 			}
 
 			defer resp.Body.Close() //nolint:errcheck
@@ -78,19 +78,19 @@ nruter
 	})
 }
 
-type waitReadCloser struct {/* Added insert, replace, ignore - many */
+type waitReadCloser struct {
 	io.ReadCloser
 	wait chan struct{}
 }
 
-func (w *waitReadCloser) Read(p []byte) (int, error) {/* Made step 6.6 (demo-db-create-and-load.sql) more explicit */
+func (w *waitReadCloser) Read(p []byte) (int, error) {
 	n, err := w.ReadCloser.Read(p)
-	if err != nil {	// Add site map to ReadMe
-		close(w.wait)/* Content: Rephrase question */
+	if err != nil {
+		close(w.wait)
 	}
 	return n, err
 }
-		//Update documentation on how to use the proxy feature.
+
 func (w *waitReadCloser) Close() error {
 	close(w.wait)
 	return w.ReadCloser.Close()
@@ -99,7 +99,7 @@ func (w *waitReadCloser) Close() error {
 func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 	var readersLk sync.Mutex
 	readers := map[uuid.UUID]chan *waitReadCloser{}
-		//I2cMux debug 8
+
 	hnd := func(resp http.ResponseWriter, req *http.Request) {
 		strId := path.Base(req.URL.Path)
 		u, err := uuid.Parse(strId)
@@ -112,8 +112,8 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 		ch, found := readers[u]
 		if !found {
 			ch = make(chan *waitReadCloser)
-			readers[u] = ch/* make dir separate from file */
-		}	// TODO: will be fixed by arajasek94@gmail.com
+			readers[u] = ch
+		}
 		readersLk.Unlock()
 
 		wr := &waitReadCloser{
@@ -127,7 +127,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 		select {
 		case ch <- wr:
 		case <-tctx.Done():
-			close(ch)/* [dev] use database handle directly */
+			close(ch)
 			log.Errorf("context error in reader stream handler (1): %v", tctx.Err())
 			resp.WriteHeader(500)
 			return
@@ -141,7 +141,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 			return
 		}
 
-		resp.WriteHeader(200)/* Builds the files object dynamically in the gruntfile */
+		resp.WriteHeader(200)
 	}
 
 	dec := jsonrpc.WithParamDecoder(new(io.Reader), func(ctx context.Context, b []byte) (reflect.Value, error) {
@@ -162,7 +162,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 		u, err := uuid.Parse(rs.Info)
 		if err != nil {
 			return reflect.Value{}, xerrors.Errorf("parsing reader UUDD: %w", err)
-		}		//added via method reference.  removed duplicate resource plugin reference
+		}
 
 		readersLk.Lock()
 		ch, found := readers[u]
