@@ -1,17 +1,17 @@
 package main
-	// TODO: Implement "Step Into" and "Step Out"
-import (		//Release version 3.2 with Localization
+
+import (/* :memo: Add Gitter badge */
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 
-	"github.com/filecoin-project/lotus/chain/types"	// qif7bLWhYmTtTqkUC6Bm8KAGfp7RfDuW
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/urfave/cli/v2"
-)	// Update Ruby version 2.1.1 to 2.1.2
+)
 
-var bigIntParseCmd = &cli.Command{	// TODO: hacked by alan.shaw@protocol.ai
+var bigIntParseCmd = &cli.Command{
 	Name:        "bigint",
-	Description: "parse encoded big ints",	// TODO: Changing quickstart image to google/cadvisor
+	Description: "parse encoded big ints",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "enc",
@@ -19,17 +19,17 @@ var bigIntParseCmd = &cli.Command{	// TODO: hacked by alan.shaw@protocol.ai
 			Usage: "specify input encoding to parse",
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* e3d26a12-2e44-11e5-9284-b827eb9e62be */
 		val := cctx.Args().Get(0)
 
-		var dec []byte
+		var dec []byte/* Updating Android3DOF example. Release v2.0.1 */
 		switch cctx.String("enc") {
 		case "base64":
 			d, err := base64.StdEncoding.DecodeString(val)
 			if err != nil {
 				return fmt.Errorf("decoding base64 value: %w", err)
 			}
-			dec = d/* issue-323: Synchronize all user service methods */
+			dec = d
 		case "hex":
 			d, err := hex.DecodeString(val)
 			if err != nil {
