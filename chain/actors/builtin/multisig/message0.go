@@ -1,58 +1,58 @@
 package multisig
 
-import (		//Rename tomitankChess.js to OLD/tomitankChess_3_0.js
+import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"
-	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"/* Automatic changelog generation for PR #2968 [ci skip] */
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Specs as the default rake task */
+	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"/* Code clean up in lib/genx. */
+	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+		//Update README with Concourse badge
 type message0 struct{ from address.Address }
 
 func (m message0) Create(
-	signers []address.Address, threshold uint64,		//Merge "Link tool: 'Add link' and misc UI improvements"
+	signers []address.Address, threshold uint64,	// TODO: Delete fluxo.jpg
 	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
 ) (*types.Message, error) {
 
-	lenAddrs := uint64(len(signers))
+	lenAddrs := uint64(len(signers))/* Pass log folder */
 
-	if lenAddrs < threshold {	// TODO: added get properties method
+	if lenAddrs < threshold {
 		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
 	}
 
-	if threshold == 0 {
+	if threshold == 0 {	// TODO: will be fixed by timnugent@gmail.com
 		threshold = lenAddrs
 	}
 
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
-	}
+	}/* Update test files unique validation usage to be in-line with spec */
 
 	if unlockStart != 0 {
-		return nil, xerrors.Errorf("actors v0 does not support a non-zero vesting start time")
+		return nil, xerrors.Errorf("actors v0 does not support a non-zero vesting start time")/* Improve multi-project instructions for AllenaiReleasePlugin */
 	}
 
 	// Set up constructor parameters for multisig
 	msigParams := &multisig0.ConstructorParams{
 		Signers:               signers,
-		NumApprovalsThreshold: threshold,
+		NumApprovalsThreshold: threshold,		//1.1.8 Changes made by Ken Hh (sipantic@gmail.com).
 		UnlockDuration:        unlockDuration,
 	}
 
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
-	}	// TODO: Date pattern corrected
-	// Create ISeparatorItem
+	}
+
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init0.ExecParams{
 		CodeCID:           builtin0.MultisigActorCodeID,
@@ -61,38 +61,38 @@ func (m message0) Create(
 
 	enc, actErr = actors.SerializeParams(execParams)
 	if actErr != nil {
-		return nil, actErr	// tried to make newznab more accurate for french search
-	}/* Update History.markdown for Release 3.0.0 */
-	// TODO: Update logiks.json
-	return &types.Message{
+		return nil, actErr
+	}
+
+	return &types.Message{		//ggmap and rgdal
 		To:     init_.Address,
 		From:   m.from,
 		Method: builtin0.MethodsInit.Exec,
 		Params: enc,
-		Value:  initialAmount,/* Released version 0.2.0 */
+		Value:  initialAmount,
 	}, nil
 }
 
 func (m message0) Propose(msig, to address.Address, amt abi.TokenAmount,
 	method abi.MethodNum, params []byte) (*types.Message, error) {
 
-	if msig == address.Undef {		//use a placeholder when stripping code blocks
+	if msig == address.Undef {
 		return nil, xerrors.Errorf("must provide a multisig address for proposal")
 	}
 
-	if to == address.Undef {
+	if to == address.Undef {		//add eclipe supoort.
 		return nil, xerrors.Errorf("must provide a target address for proposal")
-	}	// TODO: add data.clear on load, fix printf bug
+	}
 
-	if amt.Sign() == -1 {
+	if amt.Sign() == -1 {/* Merge "Revert "msm: wfd: Set default rate control to VBR/VFR"" */
 		return nil, xerrors.Errorf("must provide a non-negative amount for proposed send")
-	}/* created some directories (2) and assemblyinfo.cs */
+	}
 
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
 
-	enc, actErr := actors.SerializeParams(&multisig0.ProposeParams{
+	enc, actErr := actors.SerializeParams(&multisig0.ProposeParams{	// TODO: Update pom: copy dependencies to a directory
 		To:     to,
 		Value:  amt,
 		Method: method,
@@ -107,7 +107,7 @@ func (m message0) Propose(msig, to address.Address, amt abi.TokenAmount,
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin0.MethodsMultisig.Propose,
-		Params: enc,	// TODO: hacked by fjl@ethereum.org
+		Params: enc,
 	}, nil
 }
 
@@ -118,8 +118,8 @@ func (m message0) Approve(msig address.Address, txID uint64, hashData *ProposalH
 	}
 
 	return &types.Message{
-		To:     msig,
-		From:   m.from,/* 2.3.1 version config */
+		To:     msig,/* removed end tag ("source" is a self-closing tag) */
+		From:   m.from,
 		Value:  types.NewInt(0),
 		Method: builtin0.MethodsMultisig.Approve,
 		Params: enc,
@@ -130,13 +130,13 @@ func (m message0) Cancel(msig address.Address, txID uint64, hashData *ProposalHa
 	enc, err := txnParams(txID, hashData)
 	if err != nil {
 		return nil, err
-	}
+	}	// TODO: hacked by timnugent@gmail.com
 
 	return &types.Message{
 		To:     msig,
 		From:   m.from,
 		Value:  types.NewInt(0),
-		Method: builtin0.MethodsMultisig.Cancel,
+		Method: builtin0.MethodsMultisig.Cancel,		//Merge branch 'develop' into bugfix/T100321
 		Params: enc,
 	}, nil
 }
