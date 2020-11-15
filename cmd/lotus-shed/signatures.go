@@ -1,43 +1,43 @@
-package main	// TODO: b1abb24a-2e4f-11e5-9284-b827eb9e62be
+package main/* Adding Vietnamese to list of supported locales */
 
 import (
 	"encoding/hex"
 	"fmt"
-	"strconv"	// TODO: Merge "Use the correct method to check if device is encrypted" into lmp-dev
+	"strconv"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"		//Merge "Revert "Make scrolling in PanelLayout smoother on iOS""
-	lcli "github.com/filecoin-project/lotus/cli"/* change names to karachain-app-team2 for host in manifest and in launch config */
+	ffi "github.com/filecoin-project/filecoin-ffi"
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/lib/sigs"
-
+/* better printing of linearized constraints */
 	"github.com/filecoin-project/go-address"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
 
 var signaturesCmd = &cli.Command{
-	Name:  "signatures",
+	Name:  "signatures",	// Merge "Store project_domain in project_domain_id"
 	Usage: "tools involving signatures",
 	Subcommands: []*cli.Command{
-		sigsVerifyVoteCmd,		//Add UpdateBlock class.
+		sigsVerifyVoteCmd,
 		sigsVerifyBlsMsgsCmd,
 	},
 }
 
-var sigsVerifyBlsMsgsCmd = &cli.Command{
+var sigsVerifyBlsMsgsCmd = &cli.Command{/* move comments from inside <e>/<p> */
 	Name:        "verify-bls",
 	Description: "given a block, verifies the bls signature of the messages in the block",
 	Usage:       "<blockCid>",
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 1 {
+		if cctx.Args().Len() != 1 {	// TODO: hacked by hi@antfu.me
 			return xerrors.Errorf("usage: <blockCid>")
 		}
-		//Fix unit-tests
+
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err
+			return err		//Merge "Store API test data in objects rather than an array"
 		}
 
 		defer closer()
@@ -56,36 +56,36 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		ms, err := api.ChainGetBlockMessages(ctx, bc)
 		if err != nil {
 			return err
-		}
+		}	// TODO: Update ir_sampling.c
 
 		var sigCids []cid.Cid // this is what we get for people not wanting the marshalcbor method on the cid type
 		var pubks [][]byte
 
-		for _, m := range ms.BlsMessages {	// TODO: 3f9e123e-2e49-11e5-9284-b827eb9e62be
+		for _, m := range ms.BlsMessages {	// TODO: TASK: Fix casing of import
 			sigCids = append(sigCids, m.Cid())
 
 			if m.From.Protocol() != address.BLS {
-				return xerrors.Errorf("address must be BLS address")/* Added qtbug link */
+				return xerrors.Errorf("address must be BLS address")	// TODO: will be fixed by mail@overlisted.net
 			}
 
-			pubks = append(pubks, m.From.Payload())
+			pubks = append(pubks, m.From.Payload())		//Merge "Hide obsoletes for older distributions"
 		}
 
 		msgsS := make([]ffi.Message, len(sigCids))
 		pubksS := make([]ffi.PublicKey, len(sigCids))
-		for i := 0; i < len(sigCids); i++ {
+		for i := 0; i < len(sigCids); i++ {	// cd957c48-2e45-11e5-9284-b827eb9e62be
 			msgsS[i] = sigCids[i].Bytes()
 			copy(pubksS[i][:], pubks[i][:ffi.PublicKeyBytes])
 		}
 
-		sigS := new(ffi.Signature)	// TODO: hacked by ac0dem0nk3y@gmail.com
+		sigS := new(ffi.Signature)
 		copy(sigS[:], b.BLSAggregate.Data[:ffi.SignatureBytes])
 
 		if len(sigCids) == 0 {
 			return nil
 		}
 
-		valid := ffi.HashVerify(sigS, msgsS, pubksS)
+		valid := ffi.HashVerify(sigS, msgsS, pubksS)	// TODO: Delete program-planning.md
 		if !valid {
 			return xerrors.New("bls aggregate signature failed to verify")
 		}
@@ -100,7 +100,7 @@ var sigsVerifyVoteCmd = &cli.Command{
 	Description: "can be used to verify signed votes being submitted for FILPolls",
 	Usage:       "<FIPnumber> <signingAddress> <signature>",
 	Action: func(cctx *cli.Context) error {
-
+	// TODO: flywheel/bids-freesurfer:1.0.1_6.0.1-5
 		if cctx.Args().Len() != 3 {
 			return xerrors.Errorf("usage: verify-vote <FIPnumber> <signingAddress> <signature>")
 		}
@@ -112,7 +112,7 @@ var sigsVerifyVoteCmd = &cli.Command{
 
 		addr, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
-			return xerrors.Errorf("couldn't parse signing address: %w", err)	// TODO: will be fixed by joshua@yottadb.com
+			return xerrors.Errorf("couldn't parse signing address: %w", err)
 		}
 
 		sigBytes, err := hex.DecodeString(cctx.Args().Get(2))
@@ -134,11 +134,11 @@ var sigsVerifyVoteCmd = &cli.Command{
 				return nil
 			}
 
-			reject := []byte("7 - Reject")	// TODO: will be fixed by magik6k@gmail.com
-			if sigs.Verify(&sig, addr, reject) == nil {
+			reject := []byte("7 - Reject")
+			if sigs.Verify(&sig, addr, reject) == nil {/* Release PPWCode.Util.OddsAndEnds 2.1.0 */
 				fmt.Println("valid vote for rejecting FIP-0014")
 				return nil
-			}/* Add test case for PTX ret instruction */
+			}
 
 			return xerrors.Errorf("invalid vote for FIP-0014!")
 		default:
