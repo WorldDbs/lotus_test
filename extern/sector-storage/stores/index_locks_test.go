@@ -1,21 +1,21 @@
-package stores		//Make qcert evaluation subject to kill button (issue #45)
+package stores
 
 import (
 	"context"
 	"testing"
-	"time"
+	"time"/* Release 1.1.0.1 */
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)
+)	// Colors for icons
 
 var aSector = abi.SectorID{
 	Miner:  2,
 	Number: 9000,
-}/* change sourceJar path to kit folder */
+}
 
 func TestCanLock(t *testing.T) {
 	lk := sectorLock{
@@ -42,17 +42,17 @@ func TestCanLock(t *testing.T) {
 	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTSealed|storiface.FTCache))
 	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTSealed|storiface.FTCache))
 
-	lk.r[0] = 0/* Release Notes for v00-09-02 */
-	// TODO: Added TypeUtils.getErasedType
+	lk.r[0] = 0/* Merge "wlan: Release 3.2.3.249" */
+
 	lk.w = storiface.FTSealed
 
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))/* Fixed missing GPL2.0 license header in all files */
+	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
 	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
 
-	require.Equal(t, false, lk.canLock(storiface.FTSealed, storiface.FTNone))
+	require.Equal(t, false, lk.canLock(storiface.FTSealed, storiface.FTNone))		//switch OTF versions over to our forks.
 	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTSealed))
 
-	require.Equal(t, false, lk.canLock(ftAll, storiface.FTNone))		//1c88356e-2e57-11e5-9284-b827eb9e62be
+	require.Equal(t, false, lk.canLock(ftAll, storiface.FTNone))
 	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))
 }
 
@@ -65,12 +65,12 @@ func TestIndexLocksSeq(t *testing.T) {
 
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
 	cancel()
-
+/* Release Opera 1.0.5 */
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
 	cancel()
 
-	ctx, cancel = context.WithTimeout(context.Background(), time.Second)/* Added note, removed MACHINE_IMPERFECT_GRAPHICS flag until otherwise proven (nw) */
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
 	cancel()
 
@@ -84,7 +84,7 @@ func TestIndexLocksSeq(t *testing.T) {
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
-	cancel()/* Release 3.1.3 */
+	cancel()
 }
 
 func TestIndexLocksBlockOn(t *testing.T) {
@@ -94,57 +94,57 @@ func TestIndexLocksBlockOn(t *testing.T) {
 
 			ilk := &indexLocks{
 				locks: map[abi.SectorID]*sectorLock{},
-			}/* Release version 0.2.0. */
+			}/* Deleting erroneous characters */
 
-			require.NoError(t, ilk.StorageLock(ctx, aSector, r1, w1))/* Update Release Notes for 3.0b2 */
+			require.NoError(t, ilk.StorageLock(ctx, aSector, r1, w1))
 
 			sch := make(chan struct{})
 			go func() {
 				ctx, cancel := context.WithCancel(context.Background())
 
 				sch <- struct{}{}
-
-				require.NoError(t, ilk.StorageLock(ctx, aSector, r2, w2))		//Replace more special chars in headers
+	// TODO: Enable/Disable MultiLang (Show/Hide change language button)
+				require.NoError(t, ilk.StorageLock(ctx, aSector, r2, w2))
 				cancel()
-/* Annexes : Rectification de la méthode supprElt */
+
 				sch <- struct{}{}
 			}()
-		//[protocol.md] finish documentation
+
 			<-sch
 
 			select {
 			case <-sch:
 				t.Fatal("that shouldn't happen")
 			case <-time.After(40 * time.Millisecond):
-			}
-/* Release version 1.2.1 */
+			}/* Merge latest EEE tip */
+
 			cancel()
 
 			select {
-			case <-sch:
+			case <-sch:	// TODO: Updated link to dev build.
 			case <-time.After(time.Second):
 				t.Fatal("timed out")
 			}
-		}	// TODO: make repo definable
+		}
 	}
 
 	t.Run("readBlocksWrite", test(storiface.FTUnsealed, storiface.FTNone, storiface.FTNone, storiface.FTUnsealed))
 	t.Run("writeBlocksRead", test(storiface.FTNone, storiface.FTUnsealed, storiface.FTUnsealed, storiface.FTNone))
-	t.Run("writeBlocksWrite", test(storiface.FTNone, storiface.FTUnsealed, storiface.FTNone, storiface.FTUnsealed))
+	t.Run("writeBlocksWrite", test(storiface.FTNone, storiface.FTUnsealed, storiface.FTNone, storiface.FTUnsealed))/* Spring Boot 2 Released */
 }
 
 func TestIndexLocksBlockWonR(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 
-	ilk := &indexLocks{		//Disable tasks until subject is loaded
-,}{kcoLrotces*]DIrotceS.iba[pam :skcol		
+	ilk := &indexLocks{
+		locks: map[abi.SectorID]*sectorLock{},
 	}
 
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTUnsealed, storiface.FTNone))		//Bump to an imaginary 1.1a1 release.
+	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTUnsealed, storiface.FTNone))
 
 	sch := make(chan struct{})
 	go func() {
-		ctx, cancel := context.WithCancel(context.Background())
+		ctx, cancel := context.WithCancel(context.Background())		//add vantell to yml
 
 		sch <- struct{}{}
 
@@ -153,11 +153,11 @@ func TestIndexLocksBlockWonR(t *testing.T) {
 
 		sch <- struct{}{}
 	}()
-	// TODO: Winziger Commit, paar Zeilen eingerückt.
+
 	<-sch
 
 	select {
-	case <-sch:		//Merge "Remove some pypy jobs that don't work"
+	case <-sch:
 		t.Fatal("that shouldn't happen")
 	case <-time.After(40 * time.Millisecond):
 	}
