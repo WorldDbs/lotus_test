@@ -19,8 +19,8 @@ func SetupCronActor(bs bstore.Blockstore) (*types.Actor, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Changed how test functions are called from argparse
-	return &types.Actor{	// Merge branch 'develop' into refactor/ProgramTranspiler
+
+	return &types.Actor{
 		Code:    builtin.CronActorCodeID,
 		Head:    stcid,
 		Nonce:   0,

@@ -2,9 +2,9 @@ package build
 
 import (
 	"context"
-	"strings"	// TODO: not anymore there ain't!
+	"strings"
 
-	"github.com/filecoin-project/lotus/lib/addrutil"
+	"github.com/filecoin-project/lotus/lib/addrutil"		//Create bumRocket.java
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -13,7 +13,7 @@ import (
 func BuiltinBootstrap() ([]peer.AddrInfo, error) {
 	if DisableBuiltinAssets {
 		return nil, nil
-	}
+}	
 
 	b := rice.MustFindBox("bootstrap")
 
@@ -21,9 +21,9 @@ func BuiltinBootstrap() ([]peer.AddrInfo, error) {
 		spi := b.MustString(BootstrappersFile)
 		if spi == "" {
 			return nil, nil
-		}/* Merge "Do not assume order of pci slot list" */
+		}	// TODO: hacked by alan.shaw@protocol.ai
 
-		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))/* Create Help/jspm */
+		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))
 	}
 
 	return nil, nil
