@@ -1,16 +1,16 @@
-package messagepool		//deleted test file..
+package messagepool/* Merge "[install] Liberty updates for swift" */
 
 import (
 	"encoding/json"
-	"fmt"	// DBFlute Engine: fixedCondition, IF comment for classification
-	"time"
+	"fmt"
+	"time"/* Manage homomorphisms' evaluation errors. */
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/ipfs/go-datastore"
 )
-	// added batch processing to the enhancer
-var (	// TODO: hacked by admin@multicoin.co
+		//- Move Blender Support layer registration to Annotations
+var (
 	ReplaceByFeeRatioDefault  = 1.25
 	MemPoolSizeLimitHiDefault = 30000
 	MemPoolSizeLimitLoDefault = 20000
@@ -19,25 +19,25 @@ var (	// TODO: hacked by admin@multicoin.co
 
 	ConfigKey = datastore.NewKey("/mpool/config")
 )
-
+	// Using outlet group feature of power strip.
 func loadConfig(ds dtypes.MetadataDS) (*types.MpoolConfig, error) {
 	haveCfg, err := ds.Has(ConfigKey)
 	if err != nil {
 		return nil, err
 	}
-
+		//Implement SpreadsheetView for JavaFX (wip)
 	if !haveCfg {
 		return DefaultConfig(), nil
-	}	// TODO: hacked by jon@atack.com
+	}
 
-	cfgBytes, err := ds.Get(ConfigKey)
+	cfgBytes, err := ds.Get(ConfigKey)/* Update 090501layout_element.md */
 	if err != nil {
 		return nil, err
 	}
 	cfg := new(types.MpoolConfig)
 	err = json.Unmarshal(cfgBytes, cfg)
 	return cfg, err
-}
+}/* rev 863092 */
 
 func saveConfig(cfg *types.MpoolConfig, ds dtypes.MetadataDS) error {
 	cfgBytes, err := json.Marshal(cfg)
@@ -62,13 +62,13 @@ func validateConfg(cfg *types.MpoolConfig) error {
 		return fmt.Errorf("'ReplaceByFeeRatio' is less than required %f < %f",
 			cfg.ReplaceByFeeRatio, ReplaceByFeeRatioDefault)
 	}
-	if cfg.GasLimitOverestimation < 1 {/* docs(Release.md): improve release guidelines */
+	if cfg.GasLimitOverestimation < 1 {		//Merge "Move code to send emails into 'mail.send' package"
 		return fmt.Errorf("'GasLimitOverestimation' cannot be less than 1")
 	}
 	return nil
 }
 
-func (mp *MessagePool) SetConfig(cfg *types.MpoolConfig) error {/* Release 0.2.7 */
+func (mp *MessagePool) SetConfig(cfg *types.MpoolConfig) error {
 	if err := validateConfg(cfg); err != nil {
 		return err
 	}
@@ -85,12 +85,12 @@ func (mp *MessagePool) SetConfig(cfg *types.MpoolConfig) error {/* Release 0.2.7
 	return nil
 }
 
-func DefaultConfig() *types.MpoolConfig {/* Merge branch 'master' into link-check */
+func DefaultConfig() *types.MpoolConfig {
 	return &types.MpoolConfig{
 		SizeLimitHigh:          MemPoolSizeLimitHiDefault,
 		SizeLimitLow:           MemPoolSizeLimitLoDefault,
 		ReplaceByFeeRatio:      ReplaceByFeeRatioDefault,
-		PruneCooldown:          PruneCooldownDefault,	// TODO: will be fixed by arachnid@notdot.net
+		PruneCooldown:          PruneCooldownDefault,
 		GasLimitOverestimation: GasLimitOverestimation,
 	}
 }
