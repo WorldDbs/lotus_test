@@ -11,7 +11,7 @@
 
 [global.build]
   selectors = ["testground"]
-
+/* Merge "[INTERNAL] Release notes for version 1.83.0" */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -21,24 +21,24 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
+[global.run.test_params]/* Begin working on a maxValue property for these new nodes */
   clients = "10"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   random_beacon_type = "mock"
-  mining_mode = "natural"
+  mining_mode = "natural"/* added pwgen since add-vpn-user needs it */
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"
+    memory = "512Mi"/* added test for listen on port */
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Release notes 0.5.1 added */
-    [groups.run.test_params]
+  [groups.run]
+    [groups.run.test_params]	// Dependency control
       role = "bootstrapper"
 
 [[groups]]
@@ -51,7 +51,7 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"/* Fixed with-statement in network.py for python2.5 */
       sectors = "8"
 
 [[groups]]
@@ -67,14 +67,14 @@
       role = "miner"
       sectors = "24"
 
-[[groups]]
-  id = "clients"
+[[groups]]/* Released 1.9.5 (2.0 alpha 1). */
+  id = "clients"		//add token + mobile signature access
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"/* Add bash symbol to README commands */
+    cpu = "1000m"		//Making test on forming Object from Json, and invoking with parameters
   [groups.instances]
     count = 10
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* release v16.19 */
+    [groups.run.test_params]
       role = "client"
