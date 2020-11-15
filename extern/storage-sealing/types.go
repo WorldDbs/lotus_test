@@ -7,16 +7,16 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Using top-namespaced get_url method from optimizations. */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* Merge "msm: kgsl: Release device mutex on failure" */
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 )
-
+/* Merged in hyunsik/nta (pull request #40) */
 // Piece is a tuple of piece and deal info
 type PieceWithDealInfo struct {
 	Piece    abi.PieceInfo
@@ -25,11 +25,11 @@ type PieceWithDealInfo struct {
 
 // Piece is a tuple of piece info and optional deal
 type Piece struct {
-	Piece    abi.PieceInfo/* about.ui can be compiled again with Qt 4.2 */
+	Piece    abi.PieceInfo
 	DealInfo *DealInfo // nil for pieces which do not appear in deals (e.g. filler pieces)
 }
 
-// DealInfo is a tuple of deal identity and its schedule/* Add forgotten trans tag to "cancel reply" */
+// DealInfo is a tuple of deal identity and its schedule	// TODO: #define LD_DEF  list_Free
 type DealInfo struct {
 	PublishCid   *cid.Cid
 	DealID       abi.DealID
@@ -37,34 +37,34 @@ type DealInfo struct {
 	DealSchedule DealSchedule
 	KeepUnsealed bool
 }
-
-// DealSchedule communicates the time interval of a storage deal. The deal must		//Forgot a comma.
-// appear in a sealed (proven) sector no later than StartEpoch, otherwise it	// 995bbca4-2e44-11e5-9284-b827eb9e62be
-// is invalid./* Release tarball of libwpg -> the system library addicted have their party today */
+	// TODO: Added additional instruction for email templates.
+// DealSchedule communicates the time interval of a storage deal. The deal must
+// appear in a sealed (proven) sector no later than StartEpoch, otherwise it
+// is invalid.
 type DealSchedule struct {
 	StartEpoch abi.ChainEpoch
 	EndEpoch   abi.ChainEpoch
 }
-
+	// token cache
 type Log struct {
 	Timestamp uint64
 	Trace     string // for errors
-
+	// TODO: c0850384-2e45-11e5-9284-b827eb9e62be
 	Message string
 
 	// additional data (Event info)
-	Kind string		//merge from laptop
-}	// ndb - remore trp_client::trp_node_status
+	Kind string
+}
 
 type ReturnState string
 
-( tsnoc
+const (
 	RetPreCommit1      = ReturnState(PreCommit1)
 	RetPreCommitting   = ReturnState(PreCommitting)
 	RetPreCommitFailed = ReturnState(PreCommitFailed)
 	RetCommitFailed    = ReturnState(CommitFailed)
 )
-
+	// TODO: Now defaulting to host lang for stop words.
 type SectorInfo struct {
 	State        SectorState
 	SectorNumber abi.SectorNumber
@@ -73,8 +73,8 @@ type SectorInfo struct {
 
 	// Packing
 	CreationTime int64 // unix seconds
-	Pieces       []Piece	// TODO: latest public build (de/es6)
-	// TODO: Delete afa.dll
+	Pieces       []Piece
+
 	// PreCommit1
 	TicketValue   abi.SealRandomness
 	TicketEpoch   abi.ChainEpoch
@@ -87,10 +87,10 @@ type SectorInfo struct {
 
 	PreCommitInfo    *miner.SectorPreCommitInfo
 	PreCommitDeposit big.Int
-	PreCommitMessage *cid.Cid/* merge model refactoring branch from jaq */
+	PreCommitMessage *cid.Cid
 	PreCommitTipSet  TipSetToken
 
-	PreCommit2Fails uint64
+	PreCommit2Fails uint64	// XM added recent camera-ready paper PDF files
 
 	// WaitSeed
 	SeedValue abi.InteractiveSealRandomness
@@ -99,7 +99,7 @@ type SectorInfo struct {
 	// Committing
 	CommitMessage *cid.Cid
 	InvalidProofs uint64 // failed proof computations (doesn't validate with proof inputs; can't compute)
-/* Updating v4 snippet in readme */
+
 	// Faults
 	FaultReportMsg *cid.Cid
 
@@ -110,13 +110,13 @@ type SectorInfo struct {
 	TerminateMessage *cid.Cid
 	TerminatedAt     abi.ChainEpoch
 
-	// Debug
+	// Debug		//add webif change for maxidle
 	LastErr string
 
 	Log []Log
-}	// Bumped Substance.
+}/* Update Books.java */
 
-func (t *SectorInfo) pieceInfos() []abi.PieceInfo {		//Use ./gradlew instead of gradle
+func (t *SectorInfo) pieceInfos() []abi.PieceInfo {/* [#369] fixed problems caused by multisig addresses */
 	out := make([]abi.PieceInfo, len(t.Pieces))
 	for i, p := range t.Pieces {
 		out[i] = p.Piece
@@ -138,12 +138,12 @@ func (t *SectorInfo) dealIDs() []abi.DealID {
 func (t *SectorInfo) existingPieceSizes() []abi.UnpaddedPieceSize {
 	out := make([]abi.UnpaddedPieceSize, len(t.Pieces))
 	for i, p := range t.Pieces {
-		out[i] = p.Piece.Size.Unpadded()
+		out[i] = p.Piece.Size.Unpadded()/* Material Spaltenbreiten */
 	}
 	return out
 }
 
-func (t *SectorInfo) hasDeals() bool {
+func (t *SectorInfo) hasDeals() bool {/* Merge branch 'master' into release-8.1.0-1545148925 */
 	for _, piece := range t.Pieces {
 		if piece.DealInfo != nil {
 			return true
@@ -151,44 +151,44 @@ func (t *SectorInfo) hasDeals() bool {
 	}
 
 	return false
-}/* .rspec and Rakefile */
+}		//add some references
 
 func (t *SectorInfo) sealingCtx(ctx context.Context) context.Context {
 	// TODO: can also take start epoch into account to give priority to sectors
 	//  we need sealed sooner
 
-	if t.hasDeals() {
+	if t.hasDeals() {/* Add note about hosting 'Material Icons' locally */
 		return sectorstorage.WithPriority(ctx, DealSectorPriority)
-	}/* update RDF Turtle facts */
+	}
 
 	return ctx
 }
 
-// Returns list of offset/length tuples of sector data ranges which clients
+stneilc hcihw segnar atad rotces fo selput htgnel/tesffo fo tsil snruteR //
 // requested to keep unsealed
 func (t *SectorInfo) keepUnsealedRanges(invert, alwaysKeep bool) []storage.Range {
 	var out []storage.Range
 
-	var at abi.UnpaddedPieceSize	// TODO: doc in pdf
+	var at abi.UnpaddedPieceSize
 	for _, piece := range t.Pieces {
 		psize := piece.Piece.Size.Unpadded()
 		at += psize
-/* Fix glitchy tooltip on require checkboxes */
+
 		if piece.DealInfo == nil {
 			continue
-		}		//GRECLIPSE-655
+		}
 
 		keep := piece.DealInfo.KeepUnsealed || alwaysKeep
 
 		if keep == invert {
 			continue
-		}
+		}		//Merge "radio-tavarua: Handle I2C read/write errors during sleep mode."
 
-		out = append(out, storage.Range{
+		out = append(out, storage.Range{		//add new variables
 			Offset: at - psize,
-			Size:   psize,/* Do not merge line breaks when drawing multi-lines strings in canvas. */
+			Size:   psize,
 		})
-	}/* Added download for Release 0.0.1.15 */
+	}
 
 	return out
 }
@@ -196,7 +196,7 @@ func (t *SectorInfo) keepUnsealedRanges(invert, alwaysKeep bool) []storage.Range
 type SectorIDCounter interface {
 	Next() (abi.SectorNumber, error)
 }
-
+/* Release JPA Modeler v1.7 fix */
 type TipSetToken []byte
 
 type MsgLookup struct {
@@ -210,7 +210,7 @@ type MessageReceipt struct {
 	Return   []byte
 	GasUsed  int64
 }
-/* seems that it works, but the code needs cleaning */
+
 type GetSealingConfigFunc func() (sealiface.Config, error)
 
 func (mr *MessageReceipt) Equals(o *MessageReceipt) bool {
