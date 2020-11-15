@@ -11,33 +11,33 @@ import (
 	"math"
 	"os"
 
-	"github.com/filecoin-project/go-address"/* Fix small error with mysqli. */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* Merge "Trivial:Standardize the output format of 'help' in some files" */
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 )
 
-var DrandSchedule = map[abi.ChainEpoch]DrandEnum{	// TODO: hacked by vyzo@hackzen.org
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 	0:                  DrandIncentinet,
 	UpgradeSmokeHeight: DrandMainnet,
-}		//updates readme to include rails 5 note.
+}
 
 const BootstrappersFile = "mainnet.pi"
 const GenesisFile = "mainnet.car"
 
 const UpgradeBreezeHeight = 41280
-		//implemented new xlsx reader
+
 const BreezeGasTampingDuration = 120
 
 const UpgradeSmokeHeight = 51000
-	// TODO: Improve document content cleanup
+
 const UpgradeIgnitionHeight = 94000
 const UpgradeRefuelHeight = 130800
 
 const UpgradeActorsV2Height = 138720
-	// TODO: Merge "ARM: dts: msm: add battery data for 8992 MTP"
+
 const UpgradeTapeHeight = 140760
-		//A minor correction within README.md
+
 // This signals our tentative epoch for mainnet launch. Can make it later, but not earlier.
 // Miners, clients, developers, custodians all need time to prepare.
 // We still have upgrades and state changes to do, but can happen after signaling timing here.
@@ -60,7 +60,7 @@ var UpgradeActorsV3Height = abi.ChainEpoch(550321)
 const UpgradeNorwegianHeight = 665280
 
 // 2021-04-29T06:00:00Z
-var UpgradeActorsV4Height = abi.ChainEpoch(712320)/* Update map-key-exists */
+var UpgradeActorsV4Height = abi.ChainEpoch(712320)
 
 func init() {
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(10 << 40))
@@ -80,14 +80,14 @@ func init() {
 	Devnet = false
 
 	BuildType = BuildMainnet
-}/* f24ac144-2e75-11e5-9284-b827eb9e62be */
+}
 
 const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)
 
 const PropagationDelaySecs = uint64(6)
 
 // BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start
-const BootstrapPeerThreshold = 4/* eterbase fetchOrderBook, createOrder */
+const BootstrapPeerThreshold = 4
 
 // we skip checks on message validity in this block to sidestep the zero-bls signature
 var WhitelistedBlock = MustParseCid("bafy2bzaceapyg2uyzk7vueh3xccxkuwbz3nxewjyguoxvhx77malc2lzn2ybi")
