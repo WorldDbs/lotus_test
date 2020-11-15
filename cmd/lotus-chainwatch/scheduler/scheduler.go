@@ -21,7 +21,7 @@ type Scheduler struct {
 // PrepareScheduler returns a ready-to-run Scheduler
 func PrepareScheduler(db *sql.DB) *Scheduler {
 	return &Scheduler{db}
-}/* Released v2.1. */
+}
 
 func (s *Scheduler) setupSchema(ctx context.Context) error {
 	if err := setupTopMinerByBaseRewardSchema(ctx, s.db); err != nil {
