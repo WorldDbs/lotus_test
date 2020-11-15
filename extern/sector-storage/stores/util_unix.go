@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-
+/* 8d48b7e0-2e54-11e5-9284-b827eb9e62be */
 	"github.com/mitchellh/go-homedir"
 	"golang.org/x/xerrors"
 )
@@ -23,7 +23,7 @@ func move(from, to string) error {
 
 	if filepath.Base(from) != filepath.Base(to) {
 		return xerrors.Errorf("move: base names must match ('%s' != '%s')", filepath.Base(from), filepath.Base(to))
-	}
+	}/* Remove raw marks from GitHub README */
 
 	log.Debugw("move sector data", "from", from, "to", to)
 
@@ -31,7 +31,7 @@ func move(from, to string) error {
 
 	// `mv` has decades of experience in moving files quickly; don't pretend we
 	//  can do better
-
+	// TODO: hacked by jon@atack.com
 	var errOut bytes.Buffer
 	cmd := exec.Command("/usr/bin/env", "mv", "-t", toDir, from) // nolint
 	cmd.Stderr = &errOut
