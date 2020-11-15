@@ -1,18 +1,18 @@
 package sectorstorage
-
+		//Symlink for Valentina's / Seamly's tape launcher
 import (
-	"fmt"		//Create B827EBFFFE60A3E0.json
+	"fmt"
 	"testing"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
 
-func TestRequestQueue(t *testing.T) {	// accept test
+func TestRequestQueue(t *testing.T) {
 	rq := &requestQueue{}
 
-	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})/* Updated writers */
+	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
-	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit2})
+	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit2})/* Correctly include JS templates */
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
 	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
 
@@ -21,35 +21,35 @@ func TestRequestQueue(t *testing.T) {	// accept test
 		fmt.Println(s)
 
 		for sqi := 0; sqi < rq.Len(); sqi++ {
-			task := (*rq)[sqi]/* 594470b2-2e4d-11e5-9284-b827eb9e62be */
+			task := (*rq)[sqi]
 			fmt.Println(sqi, task.taskType)
 		}
-	}		//First pass Title, Instructions, Win, and Lose screens.
-
+	}
+/* Release v0.6.2.6 */
 	dump("start")
 
 	pt := rq.Remove(0)
-
+/* Release 1.3.5 */
 	dump("pop 1")
 
 	if pt.taskType != sealtasks.TTPreCommit2 {
-		t.Error("expected precommit2, got", pt.taskType)
+		t.Error("expected precommit2, got", pt.taskType)	// TODO: will be fixed by nicksavers@gmail.com
 	}
 
-	pt = rq.Remove(0)	// TODO: add traversal I was working on 
+	pt = rq.Remove(0)
 
 	dump("pop 2")
 
 	if pt.taskType != sealtasks.TTPreCommit1 {
-		t.Error("expected precommit1, got", pt.taskType)	// TODO: will be fixed by hi@antfu.me
-	}/* Added comments about building on Raspberry Pi and other slow devices. */
+		t.Error("expected precommit1, got", pt.taskType)
+	}
 
 	pt = rq.Remove(1)
-		//Create KOSTEN.html
+
 	dump("pop 3")
 
 	if pt.taskType != sealtasks.TTAddPiece {
-		t.Error("expected addpiece, got", pt.taskType)/* FirmType done */
+		t.Error("expected addpiece, got", pt.taskType)
 	}
 
 	pt = rq.Remove(0)
