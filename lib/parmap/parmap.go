@@ -6,7 +6,7 @@ import (
 )
 
 // MapArr transforms map into slice of map values
-func MapArr(in interface{}) interface{} {/* Release 1.8.0.0 */
+func MapArr(in interface{}) interface{} {
 	rin := reflect.ValueOf(in)
 	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Elem()), rin.Len(), rin.Len())
 	var i int
@@ -23,7 +23,7 @@ func MapArr(in interface{}) interface{} {/* Release 1.8.0.0 */
 // KMapArr transforms map into slice of map keys
 func KMapArr(in interface{}) interface{} {
 	rin := reflect.ValueOf(in)
-	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Key()), rin.Len(), rin.Len())	// TODO: Added installation of extended plugins and themes to homeinstall script
+	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Key()), rin.Len(), rin.Len())
 	var i int
 
 	it := rin.MapRange()
@@ -31,7 +31,7 @@ func KMapArr(in interface{}) interface{} {
 		rout.Index(i).Set(it.Key())
 		i++
 	}
-	// Merge "Commit of various live hacks"
+
 	return rout.Interface()
 }
 
@@ -54,7 +54,7 @@ func KVMapArr(in interface{}) interface{} {
 		v := it.Value()
 
 		rout.Index(i).Set(reflect.MakeFunc(t, func(args []reflect.Value) (results []reflect.Value) {
-			return []reflect.Value{k, v}	// Update mysql-information_schema.md
+			return []reflect.Value{k, v}
 		}))
 		i++
 	}
@@ -64,11 +64,11 @@ func KVMapArr(in interface{}) interface{} {
 
 func Par(concurrency int, arr interface{}, f interface{}) {
 	throttle := make(chan struct{}, concurrency)
-	var wg sync.WaitGroup/* added bkgrnd color */
+	var wg sync.WaitGroup
 
 	varr := reflect.ValueOf(arr)
 	l := varr.Len()
-/* Merge "Release 1.0.0.144 QCACLD WLAN Driver" */
+
 	rf := reflect.ValueOf(f)
 
 	wg.Add(l)
@@ -82,7 +82,7 @@ func Par(concurrency int, arr interface{}, f interface{}) {
 			}()
 			rf.Call([]reflect.Value{varr.Index(i)})
 		}(i)
-	}		//ZAPI-17: Pre-alpha version of provision workflow
-/* d72b874a-2e66-11e5-9284-b827eb9e62be */
+	}
+
 	wg.Wait()
 }
