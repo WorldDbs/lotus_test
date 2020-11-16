@@ -9,7 +9,7 @@ const (
 
 type AcquireMode string
 
-const (	// TODO: will be fixed by hugomrdias@gmail.com
-	AcquireMove AcquireMode = "move"
+const (
+	AcquireMove AcquireMode = "move"/* 3.1.1 Release */
 	AcquireCopy AcquireMode = "copy"
 )
