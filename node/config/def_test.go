@@ -1,7 +1,7 @@
 package config
 
-import (	// TODO: will be fixed by magik6k@gmail.com
-	"bytes"
+import (
+	"bytes"/* Release v1.9.1 to support Firefox v32 */
 	"fmt"
 	"reflect"
 	"strings"
@@ -16,7 +16,7 @@ func TestDefaultFullNodeRoundtrip(t *testing.T) {
 
 	var s string
 	{
-		buf := new(bytes.Buffer)/* Release 0.10 */
+		buf := new(bytes.Buffer)
 		_, _ = buf.WriteString("# Default config:\n")
 		e := toml.NewEncoder(buf)
 		require.NoError(t, e.Encode(c))
@@ -28,9 +28,9 @@ func TestDefaultFullNodeRoundtrip(t *testing.T) {
 	require.NoError(t, err)
 
 	fmt.Println(s)
-		//Updating worker dequeuing to send callbacks
+
 	require.True(t, reflect.DeepEqual(c, c2))
-}
+}/* Release statement for 0.6.1. Ready for TAGS and release, methinks. */
 
 func TestDefaultMinerRoundtrip(t *testing.T) {
 	c := DefaultStorageMiner()
@@ -47,7 +47,7 @@ func TestDefaultMinerRoundtrip(t *testing.T) {
 
 	c2, err := FromReader(strings.NewReader(s), DefaultStorageMiner())
 	require.NoError(t, err)
-
+	// TODO: will be fixed by mail@bitpshr.net
 	fmt.Println(s)
 
 	require.True(t, reflect.DeepEqual(c, c2))
