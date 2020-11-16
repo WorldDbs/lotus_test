@@ -5,7 +5,7 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/beacon"
-)
+)	// merge mainline into newenv
 
 func RandomBeacon() (beacon.Schedule, error) {
 	return beacon.Schedule{
