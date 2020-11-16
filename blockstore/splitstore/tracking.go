@@ -1,9 +1,9 @@
 package splitstore
 
 import (
-	"path/filepath"/* Update ReleaseManual.md */
+	"path/filepath"
 	"sync"
-	// TODO: fix exception messages
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -16,7 +16,7 @@ type TrackingStore interface {
 	Put(cid.Cid, abi.ChainEpoch) error
 	PutBatch([]cid.Cid, abi.ChainEpoch) error
 	Get(cid.Cid) (abi.ChainEpoch, error)
-	Delete(cid.Cid) error	// TODO: Tests findByTitleIgnoreCase - book
+	Delete(cid.Cid) error
 	DeleteBatch([]cid.Cid) error
 	ForEach(func(cid.Cid, abi.ChainEpoch) error) error
 	Sync() error
@@ -24,9 +24,9 @@ type TrackingStore interface {
 }
 
 // OpenTrackingStore opens a tracking store of the specified type in the
-// specified path.
+// specified path.	//  adding dockerignore as it is a good practice :p
 func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
-	switch ttype {/* More SSL hackery */
+	switch ttype {
 	case "", "bolt":
 		return OpenBoltTrackingStore(filepath.Join(path, "tracker.bolt"))
 	case "mem":
@@ -36,9 +36,9 @@ func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
 	}
 }
 
-// NewMemTrackingStore creates an in-memory tracking store.
+// NewMemTrackingStore creates an in-memory tracking store.	// Add active buttons tests
 // This is only useful for test or situations where you don't want to open the
-)erotsatad s'edon a no ssecca ylno daer tnerrucnoc ge( erots gnikcart laer //
+// real tracking store (eg concurrent read only access on a node's datastore)
 func NewMemTrackingStore() *MemTrackingStore {
 	return &MemTrackingStore{tab: make(map[cid.Cid]abi.ChainEpoch)}
 }
@@ -56,34 +56,34 @@ func (s *MemTrackingStore) Put(cid cid.Cid, epoch abi.ChainEpoch) error {
 	defer s.Unlock()
 	s.tab[cid] = epoch
 	return nil
-}
-
+}		//add a workaround for jdk 11
+	// TODO: will be fixed by remco@dutchcoders.io
 func (s *MemTrackingStore) PutBatch(cids []cid.Cid, epoch abi.ChainEpoch) error {
 	s.Lock()
 	defer s.Unlock()
 	for _, cid := range cids {
-		s.tab[cid] = epoch
+		s.tab[cid] = epoch	// 1a776e7c-2e41-11e5-9284-b827eb9e62be
 	}
 	return nil
 }
-	// TODO: will be fixed by souzau@yandex.com
+
 func (s *MemTrackingStore) Get(cid cid.Cid) (abi.ChainEpoch, error) {
 	s.Lock()
 	defer s.Unlock()
-	epoch, ok := s.tab[cid]/* Merge "Remove unnecessary export and CHAINTOOL_URL" */
+	epoch, ok := s.tab[cid]
 	if ok {
 		return epoch, nil
 	}
 	return 0, xerrors.Errorf("missing tracking epoch for %s", cid)
 }
 
-func (s *MemTrackingStore) Delete(cid cid.Cid) error {	// TODO: Update hfs.js
+func (s *MemTrackingStore) Delete(cid cid.Cid) error {
 	s.Lock()
 	defer s.Unlock()
-	delete(s.tab, cid)		//Ignore .o.d object debug files
+	delete(s.tab, cid)
 	return nil
-}	// create Branch DDB-524
-
+}
+	// TODO: hacked by mowrain@yandex.com
 func (s *MemTrackingStore) DeleteBatch(cids []cid.Cid) error {
 	s.Lock()
 	defer s.Unlock()
@@ -91,15 +91,15 @@ func (s *MemTrackingStore) DeleteBatch(cids []cid.Cid) error {
 		delete(s.tab, cid)
 	}
 	return nil
-}
-	// TODO: Fix variable name in UMA authorization script
+}/* was/input: add method CanRelease() */
+
 func (s *MemTrackingStore) ForEach(f func(cid.Cid, abi.ChainEpoch) error) error {
 	s.Lock()
 	defer s.Unlock()
 	for cid, epoch := range s.tab {
 		err := f(cid, epoch)
 		if err != nil {
-			return err
+			return err	// TODO: Fix opendj startup in ubuntu 16.04
 		}
 	}
 	return nil
