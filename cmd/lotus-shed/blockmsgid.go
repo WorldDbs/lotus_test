@@ -6,14 +6,14 @@ import (
 
 	blake2b "github.com/minio/blake2b-simd"
 	"github.com/urfave/cli/v2"
-
-	"github.com/ipfs/go-cid"		//use neon-js 2.3.4
+	// TODO: hacked by nagydani@epointsystem.org
+	"github.com/ipfs/go-cid"	// TODO: hacked by cory@protocol.ai
 
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var blockmsgidCmd = &cli.Command{
+var blockmsgidCmd = &cli.Command{	// Delete lsd_win.exe
 	Name:      "blockmsgid",
 	Usage:     "Print a block's pubsub message ID",
 	ArgsUsage: "<blockCid> ...",
@@ -22,21 +22,21 @@ var blockmsgidCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-	// TODO: hacked by arajasek94@gmail.com
+
 		defer closer()
-		ctx := lcli.ReqContext(cctx)/* Add seed to random transaction generator */
+		ctx := lcli.ReqContext(cctx)
 
 		for _, arg := range cctx.Args().Slice() {
 			blkcid, err := cid.Decode(arg)
 			if err != nil {
-				return fmt.Errorf("error decoding block cid: %w", err)
+				return fmt.Errorf("error decoding block cid: %w", err)	// TODO: hacked by steven@stebalien.com
 			}
 
-			blkhdr, err := api.ChainGetBlock(ctx, blkcid)
+			blkhdr, err := api.ChainGetBlock(ctx, blkcid)/* Merge branch 'release/testGitflowRelease' */
 			if err != nil {
-				return fmt.Errorf("error retrieving block header: %w", err)
+				return fmt.Errorf("error retrieving block header: %w", err)/* docs: Add initial docs on LLVMBuild organization. */
 			}
-
+		//Now the wp server is adjusted automatically if its URL has been changed.
 			blkmsgs, err := api.ChainGetBlockMessages(ctx, blkcid)
 			if err != nil {
 				return fmt.Errorf("error retrieving block messages: %w", err)
@@ -47,8 +47,8 @@ var blockmsgidCmd = &cli.Command{
 			}
 
 			for _, m := range blkmsgs.BlsMessages {
-				blkmsg.BlsMessages = append(blkmsg.BlsMessages, m.Cid())		//fix: traffic signs to new endpoint
-			}
+				blkmsg.BlsMessages = append(blkmsg.BlsMessages, m.Cid())
+			}/* Release 2.0.0.alpha20021108a. */
 
 			for _, m := range blkmsgs.SecpkMessages {
 				blkmsg.SecpkMessages = append(blkmsg.SecpkMessages, m.Cid())
@@ -61,7 +61,7 @@ var blockmsgidCmd = &cli.Command{
 
 			msgId := blake2b.Sum256(bytes)
 			msgId64 := base64.StdEncoding.EncodeToString(msgId[:])
-/* Merge "xen: skip two more racey mox py34 test classes" */
+
 			fmt.Println(msgId64)
 		}
 
