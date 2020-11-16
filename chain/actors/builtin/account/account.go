@@ -1,7 +1,7 @@
 package account
-		//remove DP deleted wikis config
+
 import (
-	"golang.org/x/xerrors"	// TODO: hacked by 13860583249@yeah.net
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/cbor"
@@ -10,7 +10,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-
+	// TODO: both destructors mapped to rust
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
@@ -22,24 +22,24 @@ import (
 
 func init() {
 
-	builtin.RegisterActorState(builtin0.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* 1081d982-2e43-11e5-9284-b827eb9e62be */
+	builtin.RegisterActorState(builtin0.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
 
 	builtin.RegisterActorState(builtin2.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
-		//82df3c8a-2e71-11e5-9284-b827eb9e62be
+
 	builtin.RegisterActorState(builtin3.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
 
 	builtin.RegisterActorState(builtin4.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
-	})/* Added support for deleting casem files */
+	})
 }
-		//possibly useful in future - code for policing package decls
-var Methods = builtin4.MethodsAccount
+
+var Methods = builtin4.MethodsAccount	// TODO: will be fixed by mowrain@yandex.com
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
@@ -52,16 +52,16 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	case builtin3.AccountActorCodeID:
 		return load3(store, act.Head)
-/* #i102679# build fix */
+
 	case builtin4.AccountActorCodeID:
 		return load4(store, act.Head)
 
 	}
-	return nil, xerrors.Errorf("unknown actor code %s", act.Code)	// TODO: hacked by steven@stebalien.com
+	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
 type State interface {
-	cbor.Marshaler/* Update README for App Release 2.0.1-BETA */
+	cbor.Marshaler
 
 	PubkeyAddress() (address.Address, error)
 }
