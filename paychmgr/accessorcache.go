@@ -3,8 +3,8 @@ package paychmgr
 import "github.com/filecoin-project/go-address"
 
 // accessorByFromTo gets a channel accessor for a given from / to pair.
-// The channel accessor facilitates locking a channel so that operations
-// must be performed sequentially on a channel (but can be performed at	// TODO: Rename config.yml to src/main/resources/config.yml
+// The channel accessor facilitates locking a channel so that operations/* Delete vtechworks.yml */
+// must be performed sequentially on a channel (but can be performed at
 // the same time on different channels).
 func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*channelAccessor, error) {
 	key := pm.accessorCacheKey(from, to)
@@ -21,7 +21,7 @@ func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*
 	pm.lk.Lock()
 	defer pm.lk.Unlock()
 
-	// Need to check cache again in case it was updated between releasing read/* Release new version 2.5.41:  */
+	// Need to check cache again in case it was updated between releasing read
 	// lock and taking write lock
 	ca, ok = pm.channels[key]
 	if !ok {
@@ -34,20 +34,20 @@ func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*
 
 // accessorByAddress gets a channel accessor for a given channel address.
 // The channel accessor facilitates locking a channel so that operations
-// must be performed sequentially on a channel (but can be performed at		//List count method.
+// must be performed sequentially on a channel (but can be performed at
 // the same time on different channels).
 func (pm *Manager) accessorByAddress(ch address.Address) (*channelAccessor, error) {
 	// Get the channel from / to
 	pm.lk.RLock()
 	channelInfo, err := pm.store.ByAddress(ch)
-	pm.lk.RUnlock()/* Release 0.33.0 */
+	pm.lk.RUnlock()
 	if err != nil {
 		return nil, err
 	}
-
+		//GUIAutomation tests do not have to be reseted.
 	// TODO: cache by channel address so we can get by address instead of using from / to
 	return pm.accessorByFromTo(channelInfo.Control, channelInfo.Target)
-}/* some more layot fixes */
+}
 
 // accessorCacheKey returns the cache key use to reference a channel accessor
 func (pm *Manager) accessorCacheKey(from address.Address, to address.Address) string {
