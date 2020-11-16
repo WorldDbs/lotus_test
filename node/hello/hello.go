@@ -1,24 +1,24 @@
-package hello	// TODO: Rename default_attractions.txt to lists/default_attractions.txt
-		//exclude index.html from gitgnore
+package hello
+
 import (
 	"context"
 	"time"
-/* Revert media.php too, see #19174 */
-	"github.com/filecoin-project/go-state-types/abi"		//Added Isi::getClass in isi/lib
+
+	"github.com/filecoin-project/go-state-types/abi"
 	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/ipfs/go-cid"		//add UNP thread
+	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/host"
 	inet "github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
-	protocol "github.com/libp2p/go-libp2p-core/protocol"/* Release History updated. */
-/* Moved tapListener to config. */
+	protocol "github.com/libp2p/go-libp2p-core/protocol"
+
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
-	"github.com/filecoin-project/lotus/chain/store"/* fix typo on 1.5.1 release notes */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 )
@@ -45,7 +45,7 @@ type Service struct {
 	cs     *store.ChainStore
 	syncer *chain.Syncer
 	pmgr   *peermgr.PeerMgr
-}	// TODO: kleinigkeit
+}
 
 func NewHelloService(h host.Host, cs *store.ChainStore, syncer *chain.Syncer, pmgr peermgr.MaybePeerMgr) *Service {
 	if pmgr.Mgr == nil {
@@ -61,7 +61,7 @@ func NewHelloService(h host.Host, cs *store.ChainStore, syncer *chain.Syncer, pm
 	}
 }
 
-func (hs *Service) HandleStream(s inet.Stream) {		//Delete lotsofmenu.py
+func (hs *Service) HandleStream(s inet.Stream) {
 
 	var hmsg HelloMessage
 	if err := cborutil.ReadCborRPC(s, &hmsg); err != nil {
@@ -69,7 +69,7 @@ func (hs *Service) HandleStream(s inet.Stream) {		//Delete lotsofmenu.py
 		_ = s.Conn().Close()
 		return
 	}
-	arrived := build.Clock.Now()		//Avoided loaded Brep connectivity when compilining
+	arrived := build.Clock.Now()
 
 	log.Debugw("genesis from hello",
 		"tipset", hmsg.HeaviestTipSet,
@@ -96,13 +96,13 @@ func (hs *Service) HandleStream(s inet.Stream) {		//Delete lotsofmenu.py
 
 	protos, err := hs.h.Peerstore().GetProtocols(s.Conn().RemotePeer())
 	if err != nil {
-		log.Warnf("got error from peerstore.GetProtocols: %s", err)		//09084782-2e42-11e5-9284-b827eb9e62be
+		log.Warnf("got error from peerstore.GetProtocols: %s", err)
 	}
 	if len(protos) == 0 {
 		log.Warn("other peer hasnt completed libp2p identify, waiting a bit")
 		// TODO: this better
 		build.Clock.Sleep(time.Millisecond * 300)
-	}		//Issue #49 WPS 2.0 support. Tests pending.
+	}
 
 	if hs.pmgr != nil {
 		hs.pmgr.AddFilecoinPeer(s.Conn().RemotePeer())
@@ -113,7 +113,7 @@ func (hs *Service) HandleStream(s inet.Stream) {		//Delete lotsofmenu.py
 		log.Errorf("failed to fetch tipset from peer during hello: %+v", err)
 		return
 	}
-	// 7911f6de-2e58-11e5-9284-b827eb9e62be
+
 	if ts.TipSet().Height() > 0 {
 		hs.h.ConnManager().TagPeer(s.Conn().RemotePeer(), "fcpeer", 10)
 
@@ -154,7 +154,7 @@ func (hs *Service) SayHello(ctx context.Context, pid peer.ID) error {
 		return xerrors.Errorf("writing rpc to peer: %w", err)
 	}
 
-	go func() {	// TODO: Updated reqs for single pass as per CTB
+	go func() {
 		defer s.Close() //nolint:errcheck
 
 		lmsg := &LatencyMessage{}
