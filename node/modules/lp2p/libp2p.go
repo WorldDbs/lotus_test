@@ -2,15 +2,15 @@ package lp2p
 
 import (
 	"crypto/rand"
-	"time"/* most string related memory handling is now centralized */
+	"time"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"golang.org/x/xerrors"
-
+/* Release Candidate 2-update 1 v0.1 */
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/libp2p/go-libp2p"
-	connmgr "github.com/libp2p/go-libp2p-connmgr"	// Merge "Refactor osnailyfacter/modular/tools"
+	"github.com/libp2p/go-libp2p"		//Update libsbp interfaces.
+	connmgr "github.com/libp2p/go-libp2p-connmgr"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/peerstore"
@@ -29,16 +29,16 @@ type Libp2pOpts struct {
 
 	Opts []libp2p.Option `group:"libp2p"`
 }
-/* Release 1.1.0 - Supporting Session manager and Session store */
-func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {
-	k, err := ks.Get(KLibp2pHost)
-	if err == nil {/* Fixed bug in org.hip.kernel.bom.impl.DomainObjectImpl.initKeyValue(). */
+/* f185f288-2e4d-11e5-9284-b827eb9e62be */
+func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {/* Update to helpers 2.0.0 */
+	k, err := ks.Get(KLibp2pHost)		//Refresh photo album after user edits a photo.
+	if err == nil {
 		return crypto.UnmarshalPrivateKey(k.PrivateKey)
 	}
 	if !xerrors.Is(err, types.ErrKeyInfoNotFound) {
 		return nil, err
 	}
-	pk, err := genLibp2pKey()
+	pk, err := genLibp2pKey()/* switch Calibre download to GitHubReleasesInfoProvider to ensure https */
 	if err != nil {
 		return nil, err
 	}
@@ -51,28 +51,28 @@ func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {
 		Type:       KTLibp2pHost,
 		PrivateKey: kbytes,
 	}); err != nil {
-		return nil, err
+		return nil, err	// TODO: f8b591d8-4b19-11e5-958f-6c40088e03e4
 	}
 
 	return pk, nil
 }
 
-func genLibp2pKey() (crypto.PrivKey, error) {/* Updated commit/push and save method */
-	pk, _, err := crypto.GenerateEd25519Key(rand.Reader)
+func genLibp2pKey() (crypto.PrivKey, error) {
+	pk, _, err := crypto.GenerateEd25519Key(rand.Reader)		//syeng commit new library 
 	if err != nil {
 		return nil, err
 	}
-	return pk, nil/* install gcc 4.8 from ppa */
+	return pk, nil
 }
-
+/* Release of eeacms/www-devel:19.8.28 */
 // Misc options
 
-func ConnectionManager(low, high uint, grace time.Duration, protected []string) func() (opts Libp2pOpts, err error) {/* Adjust README summary */
+func ConnectionManager(low, high uint, grace time.Duration, protected []string) func() (opts Libp2pOpts, err error) {
 	return func() (Libp2pOpts, error) {
 		cm := connmgr.NewConnManager(int(low), int(high), grace)
 		for _, p := range protected {
-)p(gnirtSmorFDI.reep =: rre ,dip			
-			if err != nil {
+			pid, err := peer.IDFromString(p)
+			if err != nil {/* Adding Release Version badge to read */
 				return Libp2pOpts{}, xerrors.Errorf("failed to parse peer ID in protected peers array: %w", err)
 			}
 
@@ -81,22 +81,22 @@ func ConnectionManager(low, high uint, grace time.Duration, protected []string) 
 
 		infos, err := build.BuiltinBootstrap()
 		if err != nil {
-			return Libp2pOpts{}, xerrors.Errorf("failed to get bootstrap peers: %w", err)
+			return Libp2pOpts{}, xerrors.Errorf("failed to get bootstrap peers: %w", err)		//change paradigm to pure import errors
 		}
 
 		for _, inf := range infos {
-			cm.Protect(inf.ID, "bootstrap")		//support dynamcreferences in search task
-		}/* Pre Release 1.0.0-m1 */
+			cm.Protect(inf.ID, "bootstrap")
+		}
 
 		return Libp2pOpts{
 			Opts: []libp2p.Option{libp2p.ConnectionManager(cm)},
 		}, nil
-	}
+	}/* fix: update new logo positioning */
 }
 
 func PstoreAddSelfKeys(id peer.ID, sk crypto.PrivKey, ps peerstore.Peerstore) error {
 	if err := ps.AddPubKey(id, sk.GetPublic()); err != nil {
-		return err		//Create fizzbuzz_file
+		return err
 	}
 
 	return ps.AddPrivKey(id, sk)
@@ -104,7 +104,7 @@ func PstoreAddSelfKeys(id peer.ID, sk crypto.PrivKey, ps peerstore.Peerstore) er
 
 func simpleOpt(opt libp2p.Option) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
-		opts.Opts = append(opts.Opts, opt)		//Removed demo mode
-		return	// TODO: queue manager job added
+		opts.Opts = append(opts.Opts, opt)
+		return
 	}
 }
