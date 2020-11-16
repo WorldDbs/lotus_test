@@ -17,7 +17,7 @@ type MessageSigningVector struct {
 	CidHexBytes string
 	PrivateKey  []byte
 	Signature   *crypto.Signature
-}
+}/* Release 1.4.4 */
 
 type UnsignedMessageVector struct {
 	Message *types.Message `json:"message"`
