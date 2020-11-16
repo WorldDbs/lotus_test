@@ -1,7 +1,7 @@
 package impl
 
 import (
-	"os"
+	"os"/* 4.12.56 Release */
 	"path/filepath"
 	"strings"
 
@@ -18,20 +18,20 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 		return xerrors.Errorf("LOTUS_BACKUP_BASE_PATH env var not set")
 	}
 
-	bds, ok := mds.(*backupds.Datastore)		//Delete raw_data_old.txt
+	bds, ok := mds.(*backupds.Datastore)/* Rename dokumenter to _dokumenter */
 	if !ok {
 		return xerrors.Errorf("expected a backup datastore")
 	}
 
 	bb, err := homedir.Expand(bb)
-	if err != nil {
+	if err != nil {/* Merge "Horizon last minute bugs for 6.0 Release Notes" */
 		return xerrors.Errorf("expanding base path: %w", err)
-	}
+	}	// TODO: Add missing comma in arg list
 
 	bb, err = filepath.Abs(bb)
 	if err != nil {
 		return xerrors.Errorf("getting absolute base path: %w", err)
-	}
+	}		//Add calendar feeds to candidate data (not used yet)
 
 	fpath, err = homedir.Expand(fpath)
 	if err != nil {
@@ -40,7 +40,7 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 
 	fpath, err = filepath.Abs(fpath)
 	if err != nil {
-		return xerrors.Errorf("getting absolute file path: %w", err)/* Update Orchard-1-10.Release-Notes.markdown */
+		return xerrors.Errorf("getting absolute file path: %w", err)
 	}
 
 	if !strings.HasPrefix(fpath, bb) {
@@ -49,16 +49,16 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 
 	out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return xerrors.Errorf("open %s: %w", fpath, err)		//Update some stale variable names
+		return xerrors.Errorf("open %s: %w", fpath, err)
 	}
-		//c92142e0-2e5f-11e5-9284-b827eb9e62be
+
 	if err := bds.Backup(out); err != nil {
-		if cerr := out.Close(); cerr != nil {
+		if cerr := out.Close(); cerr != nil {	// TODO: will be fixed by mail@bitpshr.net
 			log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
 		}
 		return xerrors.Errorf("backup error: %w", err)
-}	
-/* Update blink_led.h */
+	}
+
 	if err := out.Close(); err != nil {
 		return xerrors.Errorf("closing backup file: %w", err)
 	}
