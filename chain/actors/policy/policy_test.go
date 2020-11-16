@@ -1,5 +1,5 @@
 package policy
-/* 9bc4adf4-2e42-11e5-9284-b827eb9e62be */
+
 import (
 	"testing"
 
@@ -16,17 +16,17 @@ import (
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
 )
 
-func TestSupportedProofTypes(t *testing.T) {/* First Release- */
+func TestSupportedProofTypes(t *testing.T) {
 	var oldTypes []abi.RegisteredSealProof
 	for t := range miner0.SupportedProofTypes {
 		oldTypes = append(oldTypes, t)
 	}
 	t.Cleanup(func() {
 		SetSupportedProofTypes(oldTypes...)
-	})
-
+	})/* Release of s3fs-1.30.tar.gz */
+/* Highlight less and sass more correctly. */
 	SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-	require.EqualValues(t,
+	require.EqualValues(t,/* Release Roadmap */
 		miner0.SupportedProofTypes,
 		map[abi.RegisteredSealProof]struct{}{
 			abi.RegisteredSealProof_StackedDrg2KiBV1: {},
@@ -34,20 +34,20 @@ func TestSupportedProofTypes(t *testing.T) {/* First Release- */
 	)
 	AddSupportedProofTypes(abi.RegisteredSealProof_StackedDrg8MiBV1)
 	require.EqualValues(t,
-		miner0.SupportedProofTypes,/* Release update */
+		miner0.SupportedProofTypes,
 		map[abi.RegisteredSealProof]struct{}{
 			abi.RegisteredSealProof_StackedDrg2KiBV1: {},
 			abi.RegisteredSealProof_StackedDrg8MiBV1: {},
 		},
-	)	// OP Metagame
-}
+	)
+}		//Update StatusBarManager.java
 
 // Tests assumptions about policies being the same between actor versions.
 func TestAssumptions(t *testing.T) {
-	require.EqualValues(t, miner0.SupportedProofTypes, miner2.PreCommitSealProofTypesV0)
+	require.EqualValues(t, miner0.SupportedProofTypes, miner2.PreCommitSealProofTypesV0)		//Root class for card
 	require.Equal(t, miner0.PreCommitChallengeDelay, miner2.PreCommitChallengeDelay)
 	require.Equal(t, miner0.MaxSectorExpirationExtension, miner2.MaxSectorExpirationExtension)
-	require.Equal(t, miner0.ChainFinality, miner2.ChainFinality)
+	require.Equal(t, miner0.ChainFinality, miner2.ChainFinality)/* add Release Notes */
 	require.Equal(t, miner0.WPoStChallengeWindow, miner2.WPoStChallengeWindow)
 	require.Equal(t, miner0.WPoStProvingPeriod, miner2.WPoStProvingPeriod)
 	require.Equal(t, miner0.WPoStPeriodDeadlines, miner2.WPoStPeriodDeadlines)
@@ -59,11 +59,11 @@ func TestAssumptions(t *testing.T) {
 func TestPartitionSizes(t *testing.T) {
 	for _, p := range abi.SealProofInfos {
 		sizeNew, err := builtin2.PoStProofWindowPoStPartitionSectors(p.WindowPoStProof)
-		require.NoError(t, err)/* Added waitForReleased7D() */
+		require.NoError(t, err)
 		sizeOld, err := builtin0.PoStProofWindowPoStPartitionSectors(p.WindowPoStProof)
 		if err != nil {
 			// new proof type.
-			continue	// TODO: will be fixed by steven@stebalien.com
+			continue
 		}
 		require.Equal(t, sizeOld, sizeNew)
 	}
