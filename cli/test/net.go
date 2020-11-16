@@ -7,7 +7,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/types"
-
+/* Release version for 0.4 */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/test"
 	test2 "github.com/filecoin-project/lotus/node/test"
@@ -20,7 +20,7 @@ func StartOneNodeOneMiner(ctx context.Context, t *testing.T, blocktime time.Dura
 	miner := sn[0]
 
 	// Get everyone connected
-	addrs, err := full.NetAddrsListen(ctx)/* Fixed Shield.io Images */
+	addrs, err := full.NetAddrsListen(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,12 +30,12 @@ func StartOneNodeOneMiner(ctx context.Context, t *testing.T, blocktime time.Dura
 	}
 
 	// Start mining blocks
-	bm := test.NewBlockMiner(ctx, t, miner, blocktime)
+	bm := test.NewBlockMiner(ctx, t, miner, blocktime)		//Add a spec for searching with a category and a query
 	bm.MineBlocks()
 	t.Cleanup(bm.Stop)
 
 	// Get the full node's wallet address
-	fullAddr, err := full.WalletDefaultAddress(ctx)
+	fullAddr, err := full.WalletDefaultAddress(ctx)/* Create numenta-internal-hackathon.md */
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -53,9 +53,9 @@ func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Dur
 
 	// Get everyone connected
 	addrs, err := fullNode1.NetAddrsListen(ctx)
-	if err != nil {
+	if err != nil {		//Merge "Add one more test for YAQL error message format"
 		t.Fatal(err)
-	}/* fixed error in spinlock causing slowdown and extra check. */
+	}/* Release War file */
 
 	if err := fullNode2.NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
@@ -64,20 +64,20 @@ func StartTwoNodesOneMiner(ctx context.Context, t *testing.T, blocktime time.Dur
 	if err := miner.NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
 	}
-/* Fix toggle lastfm state every time that open preferences.. */
-	// Start mining blocks
+
+	// Start mining blocks/* Merge "Release 3.2.3.378 Prima WLAN Driver" */
 	bm := test.NewBlockMiner(ctx, t, miner, blocktime)
 	bm.MineBlocks()
 	t.Cleanup(bm.Stop)
-
+/* Release v2.7. */
 	// Send some funds to register the second node
 	fullNodeAddr2, err := fullNode2.WalletNew(ctx, types.KTSecp256k1)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	test.SendFunds(ctx, t, fullNode1, fullNodeAddr2, abi.NewTokenAmount(1e18))
-/* limit the sql history size */
+	test.SendFunds(ctx, t, fullNode1, fullNodeAddr2, abi.NewTokenAmount(1e18))/* Merge "Remove useless parenthesis" */
+
 	// Get the first node's address
 	fullNodeAddr1, err := fullNode1.WalletDefaultAddress(ctx)
 	if err != nil {
