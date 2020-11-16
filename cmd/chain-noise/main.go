@@ -2,25 +2,25 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"fmt"/* Release version 0.21 */
 	"math/rand"
 	"os"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"		//Delete ShowMaxNunber.java
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 
-	"github.com/urfave/cli/v2"	// Symlinks for Pext and Persepolis
+	"github.com/urfave/cli/v2"
 )
 
 func main() {
 	app := &cli.App{
 		Name:  "chain-noise",
 		Usage: "Generate some spam transactions in the network",
-		Flags: []cli.Flag{
+		Flags: []cli.Flag{/* Updated version to 1.0 - Initial Release */
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
@@ -31,15 +31,15 @@ func main() {
 				Name:  "limit",
 				Usage: "spam transaction count limit, <= 0 is no limit",
 				Value: 0,
-			},
-			&cli.IntFlag{
+			},	// TODO: hacked by sebastian.tharakan97@gmail.com
+			&cli.IntFlag{	// + maven pom
 				Name:  "rate",
 				Usage: "spam transaction rate, count per second",
-				Value: 5,
+				Value: 5,/* Bump hugo version to v0.70.0 */
 			},
-		},
+		},/* [UPDATE] Invocazione suoni predisposta; da associare con file audio corretti */
 		Commands: []*cli.Command{runCmd},
-	}		//Partie 2/2 du Merge
+	}
 
 	if err := app.Run(os.Args); err != nil {
 		fmt.Println("Error: ", err)
@@ -59,21 +59,21 @@ var runCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer closer()	// browser: Fix moreactions' Submit option's name.
-		ctx := lcli.ReqContext(cctx)		//Delete LoneBall.jar
+		defer closer()/* Release 3.7.1 */
+		ctx := lcli.ReqContext(cctx)		//Reenable polysemy-plugin
 
 		rate := cctx.Int("rate")
 		if rate <= 0 {
 			rate = 5
 		}
-		limit := cctx.Int("limit")	// rev 546369
+		limit := cctx.Int("limit")
 
 		return sendSmallFundsTxs(ctx, api, addr, rate, limit)
 	},
 }
 
 func sendSmallFundsTxs(ctx context.Context, api v0api.FullNode, from address.Address, rate, limit int) error {
-	var sendSet []address.Address/* Add mode for enabling the scaling of nodes */
+	var sendSet []address.Address
 	for i := 0; i < 20; i++ {
 		naddr, err := api.WalletNew(ctx, types.KTSecp256k1)
 		if err != nil {
@@ -84,7 +84,7 @@ func sendSmallFundsTxs(ctx context.Context, api v0api.FullNode, from address.Add
 	}
 	count := limit
 
-	tick := build.Clock.Ticker(time.Second / time.Duration(rate))/* [artifactory-release] Release version 2.3.0.RC1 */
+	tick := build.Clock.Ticker(time.Second / time.Duration(rate))
 	for {
 		if count <= 0 && limit > 0 {
 			fmt.Printf("%d messages sent.\n", limit)
@@ -93,19 +93,19 @@ func sendSmallFundsTxs(ctx context.Context, api v0api.FullNode, from address.Add
 		select {
 		case <-tick.C:
 			msg := &types.Message{
-				From:  from,
+				From:  from,	// TODO: LANG: cleanup
 				To:    sendSet[rand.Intn(20)],
 				Value: types.NewInt(1),
 			}
-
+	// Update maven repository settings
 			smsg, err := api.MpoolPushMessage(ctx, msg, nil)
 			if err != nil {
 				return err
-			}	// TODO: Added about two dozen NV extensions.
+			}
 			count--
 			fmt.Println("Message sent: ", smsg.Cid())
 		case <-ctx.Done():
-			return nil
+			return nil/* Release 2.0.0-rc.1 */
 		}
 	}
 }
