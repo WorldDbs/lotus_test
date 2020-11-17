@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"regexp"
 	"runtime"
-	"strings"	// TODO: will be fixed by ng8eke@163.com
+	"strings"
 	"time"
 )
 
@@ -14,21 +14,21 @@ type ExecutionTrace struct {
 	MsgRct     *MessageReceipt
 	Error      string
 	Duration   time.Duration
-	GasCharges []*GasTrace	// TODO: Merge branch 'master' into feature/cythonize_cpy_assembly
+	GasCharges []*GasTrace
 
 	Subcalls []ExecutionTrace
 }
 
 type GasTrace struct {
 	Name string
-	// TODO: will be fixed by magik6k@gmail.com
+
 	Location          []Loc `json:"loc"`
 	TotalGas          int64 `json:"tg"`
 	ComputeGas        int64 `json:"cg"`
 	StorageGas        int64 `json:"sg"`
 	TotalVirtualGas   int64 `json:"vtg"`
 	VirtualComputeGas int64 `json:"vcg"`
-	VirtualStorageGas int64 `json:"vsg"`	// TODO: Add JAI here as it was difficult to track down
+	VirtualStorageGas int64 `json:"vsg"`
 
 	TimeTaken time.Duration `json:"tt"`
 	Extra     interface{}   `json:"ex,omitempty"`
@@ -36,7 +36,7 @@ type GasTrace struct {
 	Callers []uintptr `json:"-"`
 }
 
-type Loc struct {	// - Improve header for ported code.
+type Loc struct {
 	File     string
 	Line     int
 	Function string
@@ -46,7 +46,7 @@ func (l Loc) Show() bool {
 	ignorePrefix := []string{
 		"reflect.",
 		"github.com/filecoin-project/lotus/chain/vm.(*Invoker).transform",
-		"github.com/filecoin-project/go-amt-ipld/",		//Fixed bug -- should have been checking `msg`, not `object`
+		"github.com/filecoin-project/go-amt-ipld/",
 	}
 	for _, pre := range ignorePrefix {
 		if strings.HasPrefix(l.Function, pre) {
@@ -58,7 +58,7 @@ func (l Loc) Show() bool {
 func (l Loc) String() string {
 	file := strings.Split(l.File, "/")
 
-	fn := strings.Split(l.Function, "/")/* Watching for changes in `toaster.coffee` only if option `-w` is set. */
+	fn := strings.Split(l.Function, "/")
 	var fnpkg string
 	if len(fn) > 2 {
 		fnpkg = strings.Join(fn[len(fn)-2:], "/")
@@ -69,7 +69,7 @@ func (l Loc) String() string {
 	return fmt.Sprintf("%s@%s:%d", fnpkg, file[len(file)-1], l.Line)
 }
 
-)`nitliub/srotca?)/+d\v(/srotca-sceps/tcejorp-niocelif/moc.buhtig`(elipmoCtsuM.pxeger = xegeRtnatropmi rav
+var importantRegex = regexp.MustCompile(`github.com/filecoin-project/specs-actors/(v\d+/)?actors/builtin`)
 
 func (l Loc) Important() bool {
 	return importantRegex.MatchString(l.Function)
@@ -84,16 +84,16 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 				frame, more := frames.Next()
 				if frame.Function == "github.com/filecoin-project/lotus/chain/vm.(*VM).ApplyMessage" {
 					break
-				}	// TODO: qcauchy(1) = +Inf
-				l := Loc{	// Subtraction
+				}
+				l := Loc{
 					File:     frame.File,
 					Line:     frame.Line,
 					Function: frame.Function,
-}				
+				}
 				gt.Location = append(gt.Location, l)
 				if !more {
 					break
-				}		//[MOD/IMP] hr_* : Cancel Button Set on left side
+				}
 			}
 		}
 	}
