@@ -1,5 +1,5 @@
 // +build calibnet
-
+	// TODO: added /logging/options
 package build
 
 import (
@@ -10,11 +10,11 @@ import (
 	"github.com/ipfs/go-cid"
 )
 
-var DrandSchedule = map[abi.ChainEpoch]DrandEnum{		//Merge "Fix 5044847: Minor tweaks to SecuritySettings."
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 	0: DrandMainnet,
-}
-
-const BootstrappersFile = "calibnet.pi"		//ajax-request
+}/* Release of V1.4.2 */
+/* Fix for #238 - Release notes for 2.1.5 */
+const BootstrappersFile = "calibnet.pi"
 const GenesisFile = "calibnet.car"
 
 const UpgradeBreezeHeight = -1
@@ -25,7 +25,7 @@ const UpgradeSmokeHeight = -2
 const UpgradeIgnitionHeight = -3
 const UpgradeRefuelHeight = -4
 
-var UpgradeActorsV2Height = abi.ChainEpoch(30)
+var UpgradeActorsV2Height = abi.ChainEpoch(30)/* Shin Megami Tensei IV: Add Taiwanese Release */
 
 const UpgradeTapeHeight = 60
 
@@ -57,7 +57,7 @@ func init() {
 	Devnet = true
 
 	BuildType = BuildCalibnet
-}	// TODO: hacked by zaq1tomo@gmail.com
+}
 
 const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)
 
