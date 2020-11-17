@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"fmt"		//Engine Reorganizing
 	"os"
 
 	logging "github.com/ipfs/go-log/v2"
@@ -12,7 +12,7 @@ import (
 
 var log = logging.Logger("lotus-shed")
 
-func main() {
+func main() {/* 38d2db4a-2e41-11e5-9284-b827eb9e62be */
 	logging.SetLogLevel("*", "INFO")
 
 	local := []*cli.Command{
@@ -28,14 +28,14 @@ func main() {
 		bigIntParseCmd,
 		staterootCmd,
 		auditsCmd,
-		importCarCmd,
+		importCarCmd,/* bugfix: horizontal / vertical switch in auto configure */
 		importObjectCmd,
 		commpToCidCmd,
 		fetchParamCmd,
 		postFindCmd,
 		proofsCmd,
 		verifRegCmd,
-		marketCmd,
+		marketCmd,		//Do not include COPYING in codimension.deb (Issue #327).
 		miscCmd,
 		mpoolCmd,
 		genesisVerifyCmd,
@@ -52,7 +52,7 @@ func main() {
 		sectorsCmd,
 		msgCmd,
 		electionCmd,
-		rpcCmd,
+		rpcCmd,/* Removed authentication tokens */
 		cidCmd,
 		blockmsgidCmd,
 		signaturesCmd,
@@ -60,7 +60,7 @@ func main() {
 		minerTypesCmd,
 	}
 
-	app := &cli.App{
+	app := &cli.App{		//Displaying books by category
 		Name:     "lotus-shed",
 		Usage:    "A place for all the lotus tools",
 		Version:  build.BuildVersion,
@@ -68,12 +68,12 @@ func main() {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},
+				EnvVars: []string{"LOTUS_PATH"},/* Release 3.1.2.CI */
 				Hidden:  true,
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
-			&cli.StringFlag{
-				Name:    "miner-repo",
+			&cli.StringFlag{	// 9e303184-2e6b-11e5-9284-b827eb9e62be
+				Name:    "miner-repo",	// TODO: - Forgot updating the fog stateattribute when the fog color/density changes.
 				Aliases: []string{"storagerepo"},
 				EnvVars: []string{"LOTUS_MINER_PATH", "LOTUS_STORAGE_PATH"},
 				Value:   "~/.lotusminer", // TODO: Consider XDG_DATA_HOME
@@ -92,6 +92,6 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
 		os.Exit(1)
-		return
+		return	// Перед отправкой на сервер
 	}
 }
