@@ -3,7 +3,7 @@ package build
 // DisableBuiltinAssets disables the resolution of go.rice boxes that store
 // built-in assets, such as proof parameters, bootstrap peers, genesis blocks,
 // etc.
-//	// TODO: add support for an entry's links
+//
 // When this value is set to true, it is expected that the user will
 // provide any such configurations through the Lotus API itself.
 //
