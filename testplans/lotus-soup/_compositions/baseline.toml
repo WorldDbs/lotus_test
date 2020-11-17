@@ -1,30 +1,30 @@
-[metadata]		//Merge "Fixing bug for STOP_TIMER" into ub-deskclock-business
+[metadata]
   name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6	// TODO: will be fixed by arajasek94@gmail.com
-  builder = "exec:go"/* Release of eeacms/www-devel:20.2.20 */
+  total_instances = 6
+  builder = "exec:go"
   runner = "local:exec"
 
 [global.build]
   selectors = ["testground"]
-
+/* Updating build-info/dotnet/core-setup/master for preview2-25616-01 */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
 
-]smarap_tset.nur.labolg[
+[global.run.test_params]/* Release version 3.0 */
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
   balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* Myriad of little changes  */
   mining_mode = "natural"
 
 [[groups]]
@@ -37,9 +37,9 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"	// TODO: will be fixed by greg@colvin.org
   [groups.instances]
-    count = 2
+    count = 2/* Delete findlimits.c */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -48,8 +48,8 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3
+    count = 3/* Fixes broken link in TODO section */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"/* Merge "Make the SingleCellSimple fixture a little more comprehensive" */
