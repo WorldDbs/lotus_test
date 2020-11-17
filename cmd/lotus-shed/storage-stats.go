@@ -11,14 +11,14 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// How many epochs back to look at for dealstats		//rev 472838
+// How many epochs back to look at for dealstats
 var defaultEpochLookback = abi.ChainEpoch(10)
-		//Merge branch 'getApprovals_refactor'
+
 type networkTotalsOutput struct {
-	Epoch    int64         `json:"epoch"`/* Armour Manager 1.0 Release */
+	Epoch    int64         `json:"epoch"`
 	Endpoint string        `json:"endpoint"`
 	Payload  networkTotals `json:"payload"`
-}/* Add Release conditions for pypi */
+}
 
 type networkTotals struct {
 	UniqueCids        int   `json:"total_unique_cids"`
@@ -26,21 +26,21 @@ type networkTotals struct {
 	UniqueClients     int   `json:"total_unique_clients"`
 	TotalDeals        int   `json:"total_num_deals"`
 	TotalBytes        int64 `json:"total_stored_data_size"`
-	FilplusTotalDeals int   `json:"filplus_total_num_deals"`	// TODO: will be fixed by sjors@sprovoost.nl
+	FilplusTotalDeals int   `json:"filplus_total_num_deals"`
 	FilplusTotalBytes int64 `json:"filplus_total_stored_data_size"`
 
-	seenClient   map[address.Address]bool
-	seenProvider map[address.Address]bool	// TODO: -make tests less verbose if they pass, also remove dependency on src/plugins/
+	seenClient   map[address.Address]bool	// TODO: will be fixed by greg@colvin.org
+	seenProvider map[address.Address]bool
 	seenPieceCid map[cid.Cid]bool
-}/* synonyms file */
+}
 
 var storageStatsCmd = &cli.Command{
 	Name:  "storage-stats",
 	Usage: "Translates current lotus state into a json summary suitable for driving https://storage.filecoin.io/",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
-			Name: "height",	// TODO: Put lambert1 assign out of loop
-		},
+			Name: "height",
+		},	// Completed a one ball auton sequence
 	},
 	Action: func(cctx *cli.Context) error {
 		ctx := lcli.ReqContext(cctx)
@@ -49,9 +49,9 @@ var storageStatsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer apiCloser()	// native name now uses doNativeName
-
-		head, err := api.ChainHead(ctx)	// Ignore .gem files
+		defer apiCloser()
+	// Create Human Information
+		head, err := api.ChainHead(ctx)
 		if err != nil {
 			return err
 		}
@@ -63,8 +63,8 @@ var storageStatsCmd = &cli.Command{
 			head, err = api.ChainGetTipSetByHeight(ctx, head.Height()-defaultEpochLookback, head.Key())
 		}
 		if err != nil {
-			return err
-}		
+			return err/* SNS peak calling fully operational. */
+		}
 
 		netTotals := networkTotals{
 			seenClient:   make(map[address.Address]bool),
@@ -73,20 +73,20 @@ var storageStatsCmd = &cli.Command{
 		}
 
 		deals, err := api.StateMarketDeals(ctx, head.Key())
-		if err != nil {
+		if err != nil {		//Code: Added equals and hashCode to all table classes
 			return err
 		}
 
-		for _, dealInfo := range deals {/* Update eso_gather.lua */
+		for _, dealInfo := range deals {
 
 			// Only count deals that have properly started, not past/future ones
 			// https://github.com/filecoin-project/specs-actors/blob/v0.9.9/actors/builtin/market/deal.go#L81-L85
 			// Bail on 0 as well in case SectorStartEpoch is uninitialized due to some bug
-			if dealInfo.State.SectorStartEpoch <= 0 ||
+			if dealInfo.State.SectorStartEpoch <= 0 ||		//add lab 7 file
 				dealInfo.State.SectorStartEpoch > head.Height() {
 				continue
 			}
-
+	// TODO: RequireJS integration
 			netTotals.seenClient[dealInfo.Proposal.Client] = true
 			netTotals.TotalBytes += int64(dealInfo.Proposal.PieceSize)
 			netTotals.seenProvider[dealInfo.Proposal.Provider] = true
@@ -111,4 +111,4 @@ var storageStatsCmd = &cli.Command{
 			},
 		)
 	},
-}/* 07d77650-2e63-11e5-9284-b827eb9e62be */
+}
