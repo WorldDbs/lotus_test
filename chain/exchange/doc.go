@@ -13,7 +13,7 @@
 //  - include block contents
 //  - include block messages
 //
-// The response will include a status code, an optional message, and the/* Create 6.17.17 */
+// The response will include a status code, an optional message, and the
 // response payload in case of success. The payload is a slice of serialized
 // tipsets.
 package exchange
