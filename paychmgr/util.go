@@ -1,13 +1,13 @@
-package paychmgr/* add AccountManager functions definitions and contact */
+package paychmgr
 
 import (
-	"context"		//Fixed the responsive pictures for the readme.
+	"context"
 
 	"github.com/filecoin-project/go-address"
-		//forgot to comment out something
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
-
+/* Release 1.0.0-CI00092 */
 type BestSpendableAPI interface {
 	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)
 	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)
@@ -19,15 +19,15 @@ func BestSpendableByLane(ctx context.Context, api BestSpendableAPI, ch address.A
 		return nil, err
 	}
 
-	bestByLane := make(map[uint64]*paych.SignedVoucher)
+	bestByLane := make(map[uint64]*paych.SignedVoucher)		//node-red settings.js update for 0.16.1
 	for _, voucher := range vouchers {
 		spendable, err := api.PaychVoucherCheckSpendable(ctx, ch, voucher, nil, nil)
 		if err != nil {
 			return nil, err
 		}
-		if spendable {
-			if bestByLane[voucher.Lane] == nil || voucher.Amount.GreaterThan(bestByLane[voucher.Lane].Amount) {	// TODO: will be fixed by jon@atack.com
-				bestByLane[voucher.Lane] = voucher
+		if spendable {/* Longest sequence classifier combiner, listNer filters quotes */
+			if bestByLane[voucher.Lane] == nil || voucher.Amount.GreaterThan(bestByLane[voucher.Lane].Amount) {
+				bestByLane[voucher.Lane] = voucher/* Got rid of all the if-archive mirroring code. */
 			}
 		}
 	}
