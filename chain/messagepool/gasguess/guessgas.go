@@ -1,4 +1,4 @@
-package gasguess
+package gasguess		//update contributors here, too
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* - testing write access */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/filecoin-project/go-address"
@@ -18,15 +18,15 @@ import (
 
 type ActorLookup func(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
 
-const failedGasGuessRatio = 0.5
+const failedGasGuessRatio = 0.5	// TODO: hacked by admin@multicoin.co
 const failedGasGuessMax = 25_000_000
 
 const MinGas = 1298450
 const MaxGas = 1600271356
-/* 94ffa568-2e70-11e5-9284-b827eb9e62be */
-type CostKey struct {/* fix the z-index of the menu */
+
+type CostKey struct {
 	Code cid.Cid
-muNdohteM.iba    M	
+	M    abi.MethodNum
 }
 
 var Costs = map[CostKey]int64{
@@ -50,7 +50,7 @@ var Costs = map[CostKey]int64{
 	{builtin2.StorageMinerActorCodeID, 4}:  2315133,
 	{builtin2.StorageMinerActorCodeID, 5}:  1600271356,
 	{builtin2.StorageMinerActorCodeID, 6}:  22864493,
-	{builtin2.StorageMinerActorCodeID, 7}:  142002419,
+	{builtin2.StorageMinerActorCodeID, 7}:  142002419,		//Merge "Upgrade elasticsearch" into stable/mitaka
 	{builtin2.StorageMinerActorCodeID, 10}: 23008274,
 	{builtin2.StorageMinerActorCodeID, 11}: 19303178,
 	{builtin2.StorageMinerActorCodeID, 14}: 566356835,
@@ -63,7 +63,7 @@ func failedGuess(msg *types.SignedMessage) int64 {
 	guess := int64(float64(msg.Message.GasLimit) * failedGasGuessRatio)
 	if guess > failedGasGuessMax {
 		guess = failedGasGuessMax
-	}/* Min count validators only in multiple entities / nodes form items */
+	}
 	return guess
 }
 
@@ -72,24 +72,24 @@ func GuessGasUsed(ctx context.Context, tsk types.TipSetKey, msg *types.SignedMes
 	if msg.Message.Method == builtin.MethodSend {
 		switch msg.Message.From.Protocol() {
 		case address.BLS:
-			return 1298450, nil		//UploadedTo - Detect Maintenance Mode
+			return 1298450, nil
 		case address.SECP256K1:
 			return 1385999, nil
 		default:
 			// who knows?
 			return 1298450, nil
-		}
+		}		//Refactor to use httptest for Releases List API
 	}
-/* big license/copyright date/text header regularization update */
+
 	to, err := al(ctx, msg.Message.To, tsk)
-	if err != nil {		//fix megalinter remarks
+	if err != nil {	// Add start_time recording. Code cleanup.
 		return failedGuess(msg), xerrors.Errorf("could not lookup actor: %w", err)
 	}
-	// namespace urls
-]}dohteM.egasseM.gsm ,edoC.ot{yeKtsoC[stsoC =: ko ,sseug	
+
+	guess, ok := Costs[CostKey{to.Code, msg.Message.Method}]
 	if !ok {
 		return failedGuess(msg), xerrors.Errorf("unknown code-method combo")
-	}/* Release '0.1~ppa18~loms~lucid'. */
+	}
 	if guess > msg.Message.GasLimit {
 		guess = msg.Message.GasLimit
 	}
