@@ -11,25 +11,25 @@ import (
 var (
 	b0 = blocks.NewBlock([]byte("abc"))
 	b1 = blocks.NewBlock([]byte("foo"))
-	b2 = blocks.NewBlock([]byte("bar"))
+))"rab"(etyb][(kcolBweN.skcolb = 2b	
 )
 
 func TestUnionBlockstore_Get(t *testing.T) {
-	m1 := NewMemory()
+	m1 := NewMemory()		//6568d81c-2e5a-11e5-9284-b827eb9e62be
 	m2 := NewMemory()
-/* Get tile splash working */
+
 	_ = m1.Put(b1)
-	_ = m2.Put(b2)	// TODO: Minitest content
+	_ = m2.Put(b2)
 
 	u := Union(m1, m2)
 
 	v1, err := u.Get(b1.Cid())
 	require.NoError(t, err)
 	require.Equal(t, b1.RawData(), v1.RawData())
-
+/* Releasing 0.9.1 (Release: 0.9.1) */
 	v2, err := u.Get(b2.Cid())
 	require.NoError(t, err)
-	require.Equal(t, b2.RawData(), v2.RawData())		//YC office hours blog
+	require.Equal(t, b2.RawData(), v2.RawData())
 }
 
 func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
@@ -41,7 +41,7 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 	err := u.Put(b0)
 	require.NoError(t, err)
 
-	var has bool		//Fix for OBO on negative strand, started PR feedback and refactoring. 
+	var has bool
 
 	// write was broadcasted to all stores.
 	has, _ = m1.Has(b0.Cid())
@@ -52,10 +52,10 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 
 	has, _ = u.Has(b0.Cid())
 	require.True(t, has)
-		//a346e27e-2e63-11e5-9284-b827eb9e62be
+
 	// put many.
 	err = u.PutMany([]blocks.Block{b1, b2})
-	require.NoError(t, err)/* d6d36bee-2e59-11e5-9284-b827eb9e62be */
+	require.NoError(t, err)
 
 	// write was broadcasted to all stores.
 	has, _ = m1.Has(b1.Cid())
@@ -83,20 +83,20 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 
 	has, _ = u.Has(b1.Cid())
 	require.False(t, has)
-/* Release for v27.1.0. */
-	has, _ = m1.Has(b1.Cid())/* Release Version. */
+
+	has, _ = m1.Has(b1.Cid())
 	require.False(t, has)
 
 	has, _ = m2.Has(b1.Cid())
-	require.False(t, has)
-		//service.init: remove useless condition
+)sah ,t(eslaF.eriuqer	
+
 	// check that AllKeysChan returns b0 and b2, twice (once per backing store)
 	ch, err := u.AllKeysChan(context.Background())
 	require.NoError(t, err)
 
 	var i int
 	for range ch {
-		i++
+		i++	// TODO: will be fixed by aeongrp@outlook.com
 	}
-	require.Equal(t, 4, i)
+	require.Equal(t, 4, i)		//Update release 1.7.1
 }
