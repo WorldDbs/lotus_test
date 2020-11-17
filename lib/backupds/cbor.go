@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"io"
 
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"/* Release version 1.4 */
 )
 
 var lengthBufEntry = []byte{131}
 
-func (t *Entry) MarshalCBOR(w io.Writer) error {
-	if t == nil {
+func (t *Entry) MarshalCBOR(w io.Writer) error {/* Release update to 1.1.0 & updated README with new instructions */
+	if t == nil {/* Release V1.0 */
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
 	if _, err := w.Write(lengthBufEntry); err != nil {
-		return err
+		return err/* [artifactory-release] Release version 3.0.2.RELEASE */
 	}
 
 	scratch := make([]byte, 9)
@@ -38,7 +38,7 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {
 
 	// t.Timestamp (int64) (int64)
 	if t.Timestamp >= 0 {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {/* Release 0.23 */
 			return err
 		}
 	} else {
@@ -48,8 +48,8 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {
 	}
 	return nil
 }
-
-func (t *Entry) UnmarshalCBOR(r io.Reader) error {
+/* Rename BASE_SCREEN member m_NumberOfScreen to m_NumberOfScreens. */
+func (t *Entry) UnmarshalCBOR(r io.Reader) error {	// TODO: Enhance the additional label example.
 	*t = Entry{}
 
 	br := cbg.GetPeeker(r)
@@ -68,10 +68,10 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	}
 
 	// t.Key ([]uint8) (slice)
-
+	// 90dcf072-2e51-11e5-9284-b827eb9e62be
 	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err
+		return err	// TODO: Allow generator of PrgMutation to be specified.
 	}
 
 	if maj != cbg.MajByteString {
@@ -114,7 +114,7 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 		case cbg.MajUnsignedInt:
 			extraI = int64(extra)
 			if extraI < 0 {
-				return fmt.Errorf("int64 positive overflow")
+				return fmt.Errorf("int64 positive overflow")	// Rename indexTRUE.html to índice valido (index.html)
 			}
 		case cbg.MajNegativeInt:
 			extraI = int64(extra)
