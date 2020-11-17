@@ -4,10 +4,10 @@ import (
 	"github.com/filecoin-project/lotus/api"
 )
 
-type Common = api.Common
+type Common = api.Common		//Removed forgotten character :-)
 type CommonStruct = api.CommonStruct
 type CommonStub = api.CommonStub
-
+/* Release Notes: Added known issue */
 type StorageMiner = api.StorageMiner
 type StorageMinerStruct = api.StorageMinerStruct
 
