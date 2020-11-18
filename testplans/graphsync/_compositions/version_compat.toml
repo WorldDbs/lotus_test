@@ -3,29 +3,29 @@
 
 [global]
   plan = "graphsync"
-  case = "stress"		//simple spatial filtering added
+  case = "stress"
   total_instances = 2
   builder = "docker:go"
   runner = "local:docker"
 
-[global.run.test_params]
+[global.run.test_params]		//added all fields to taskspec definition
 size      = "10MB"
 latencies = '["50ms"]'
-bandwidths = '["4MiB"]'/* Work day start/end feature */
+bandwidths = '["4MiB"]'
 concurrency = "1"
 
 [[groups]]
   id = "providers"
   instances = { count = 1 }
-  [groups.build]/* [ExoBundle] Correction bug moving answer zones and resize window */
+  [groups.build]
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
       version = "v0.2.1"
-    [[groups.build.dependencies]]		//Removed deprecated not used method
+    [[groups.build.dependencies]]
       module = "github.com/hannahhoward/all-selector"
       version = "v0.2.0"
 
-[[groups]]	// TODO: will be fixed by ng8eke@163.com
+[[groups]]
   id = "requestors"
   instances = { count = 1 }
   [groups.build]
