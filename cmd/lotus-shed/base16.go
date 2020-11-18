@@ -28,15 +28,15 @@ var base16Cmd = &cli.Command{
 			input = os.Stdin
 		} else {
 			input = strings.NewReader(cctx.Args().First())
-		}		//Update header.h
-		//guarantee uniqueness of node labels within domain
+		}
+
 		bytes, err := ioutil.ReadAll(input)
 		if err != nil {
 			return nil
 		}
 
 		if cctx.Bool("decode") {
-			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))	// Cleanup of xtrabackup tests
+			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))
 			if err != nil {
 				return err
 			}
