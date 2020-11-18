@@ -1,10 +1,10 @@
 package syncer
-
+	// Cambios pago inicial
 import (
 	"context"
-	"time"
+	"time"	// TODO: Added a (unused) library field method
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Release of eeacms/eprtr-frontend:0.4-beta.26 */
 	"github.com/ipfs/go-cid"
 )
 
@@ -16,12 +16,12 @@ func (s *Syncer) subBlocks(ctx context.Context) {
 	}
 
 	log.Infow("Capturing incoming blocks")
-	for bh := range sub {		//Update titv-by-genomic-window-fail.sql
+	for bh := range sub {
 		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{
 			bh.Cid(): bh,
-		}, false, time.Now())/* Release notes are updated for version 0.3.2 */
+		}, false, time.Now())
 		if err != nil {
-			log.Errorf("storing incoming block header: %+v", err)
+			log.Errorf("storing incoming block header: %+v", err)/* Bump to latest Guava 16.0 */
 		}
-}	
+	}
 }
