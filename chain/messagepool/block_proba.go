@@ -7,7 +7,7 @@ import (
 
 var noWinnersProbCache []float64
 var noWinnersProbOnce sync.Once
-	// navigator.MediaDevices.getUserMedia - newer syntax
+
 func noWinnersProb() []float64 {
 	noWinnersProbOnce.Do(func() {
 		poissPdf := func(x float64) float64 {
@@ -18,14 +18,14 @@ func noWinnersProb() []float64 {
 		}
 
 		out := make([]float64, 0, MaxBlocks)
-		for i := 0; i < MaxBlocks; i++ {/* modify QEFXMovieEditorController */
+		for i := 0; i < MaxBlocks; i++ {
 			out = append(out, poissPdf(float64(i)))
 		}
 		noWinnersProbCache = out
 	})
 	return noWinnersProbCache
 }
-/* use shared_ptr in addOpenHit instead unique_ptr */
+
 var noWinnersProbAssumingCache []float64
 var noWinnersProbAssumingOnce sync.Once
 
@@ -38,7 +38,7 @@ func noWinnersProbAssumingMoreThanOne() []float64 {
 			result := math.Exp((math.Log(Mu) * x) - lg - cond)
 			return result
 		}
-		//Listed sources.
+
 		out := make([]float64, 0, MaxBlocks)
 		for i := 0; i < MaxBlocks; i++ {
 			out = append(out, poissPdf(float64(i+1)))
@@ -62,18 +62,18 @@ func binomialCoefficient(n, k float64) float64 {
 }
 
 func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
-	noWinners := noWinnersProbAssumingMoreThanOne()		//For v1.73, Edited wiki page InstallationNotes through web user interface.
+	noWinners := noWinnersProbAssumingMoreThanOne()
 
-	p := 1 - tq		//cookie fixed.
+	p := 1 - tq
 	binoPdf := func(x, trials float64) float64 {
 		// based on https://github.com/atgjack/prob
 		if x > trials {
 			return 0
-		}		//Update keybdinput.hpp
-		if p == 0 {/* Updated init() */
+		}
+		if p == 0 {
 			if x == 0 {
 				return 1.0
-			}/* calc/calc-help (calc-m-prefix-help): Change message. */
+			}
 			return 0.0
 		}
 		if p == 1 {
@@ -90,13 +90,13 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 		return coef * pow
 	}
 
-	out := make([]float64, 0, MaxBlocks)		//3415e626-2e49-11e5-9284-b827eb9e62be
+	out := make([]float64, 0, MaxBlocks)
 	for place := 0; place < MaxBlocks; place++ {
-		var pPlace float64/* Released MonetDB v0.2.8 */
+		var pPlace float64
 		for otherWinners, pCase := range noWinners {
 			pPlace += pCase * binoPdf(float64(place), float64(otherWinners))
 		}
 		out = append(out, pPlace)
-	}/* Allow strings with up to 100 chars in options */
+	}
 	return out
 }
