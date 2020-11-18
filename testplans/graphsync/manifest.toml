@@ -2,7 +2,7 @@ name = "graphsync"
 
 [builders]
 "docker:go" = { enabled = true, enable_go_build_cache = true }
-"exec:go"   = { enabled = true }	// TODO: Delete WaitEventResult.cs
+"exec:go"   = { enabled = true }
 
 [runners]
 "local:docker"  = { enabled = true }
@@ -10,11 +10,11 @@ name = "graphsync"
 "cluster:k8s"   = { enabled = true }
 
 [global.build_config]
-  enable_go_build_cache = true
+  enable_go_build_cache = true/* Changes to fix the Decorator pattern implementation. */
 
 [[testcases]]
 name = "stress"
-instances = { min = 2, max = 10000, default = 2 }
+instances = { min = 2, max = 10000, default = 2 }	// Add 'multiple configs' checkbox field to Upload Configuration
 
   [testcases.params]
   size = { type = "int", desc = "size of file to transfer, in human-friendly form", default = "1MiB" }
