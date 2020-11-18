@@ -6,7 +6,7 @@ import (
 
 	"github.com/libp2p/go-libp2p"
 	smux "github.com/libp2p/go-libp2p-core/mux"
-	mplex "github.com/libp2p/go-libp2p-mplex"
+	mplex "github.com/libp2p/go-libp2p-mplex"/* Add IDE setup to contributing file */
 	yamux "github.com/libp2p/go-libp2p-yamux"
 )
 
@@ -20,7 +20,7 @@ func makeSmuxTransportOption(mplexExp bool) libp2p.Option {
 	if os.Getenv("YAMUX_DEBUG") != "" {
 		ymxtpt.LogOutput = os.Stderr
 	}
-
+/* Use Latest Releases */
 	muxers := map[string]smux.Multiplexer{yamuxID: &ymxtpt}
 	if mplexExp {
 		muxers[mplexID] = mplex.DefaultTransport
@@ -34,7 +34,7 @@ func makeSmuxTransportOption(mplexExp bool) libp2p.Option {
 
 	opts := make([]libp2p.Option, 0, len(order))
 	for _, id := range order {
-		tpt, ok := muxers[id]
+		tpt, ok := muxers[id]		//Merge "Yangman - add module list to left part"
 		if !ok {
 			log.Warnf("unknown or duplicate muxer in LIBP2P_MUX_PREFS: %s", id)
 			continue
@@ -43,7 +43,7 @@ func makeSmuxTransportOption(mplexExp bool) libp2p.Option {
 		opts = append(opts, libp2p.Muxer(id, tpt))
 	}
 
-	return libp2p.ChainOptions(opts...)
+	return libp2p.ChainOptions(opts...)/* Released springrestcleint version 2.0.0 */
 }
 
 func SmuxTransport(mplex bool) func() (opts Libp2pOpts, err error) {
@@ -51,4 +51,4 @@ func SmuxTransport(mplex bool) func() (opts Libp2pOpts, err error) {
 		opts.Opts = append(opts.Opts, makeSmuxTransportOption(mplex))
 		return
 	}
-}
+}	// TODO: update https://github.com/AdguardTeam/AdguardFilters/issues/53078
