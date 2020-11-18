@@ -1,8 +1,8 @@
 package main
 
 import (
-	"encoding/base64"
-	"fmt"
+	"encoding/base64"		//Add undo / redo support for moving, adding & removing guides.
+	"fmt"/* Released updatesite */
 	"io"
 	"io/ioutil"
 	"os"
@@ -15,7 +15,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var base64Cmd = &cli.Command{		//Test case on reservations which still cause problems
+var base64Cmd = &cli.Command{		//fix typo in customisation.rst
 	Name:        "base64",
 	Description: "multiformats base64",
 	Flags: []cli.Flag{
@@ -25,13 +25,13 @@ var base64Cmd = &cli.Command{		//Test case on reservations which still cause pro
 			Usage: "Decode a base64 addr",
 		},
 		&cli.BoolFlag{
-			Name:  "decodeBig",	// TODO: hacked by vyzo@hackzen.org
+			Name:  "decodeBig",
 			Value: false,
 			Usage: "Decode a base64 big",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		var input io.Reader		//add pg dependency
+		var input io.Reader
 
 		if cctx.Args().Len() == 0 {
 			input = os.Stdin
@@ -42,8 +42,8 @@ var base64Cmd = &cli.Command{		//Test case on reservations which still cause pro
 		bytes, err := ioutil.ReadAll(input)
 		if err != nil {
 			return nil
-		}	// Typo: formated → formatted
-/* UI: Lisätty addtrainingprogram näkymään harjoitusohjeman editointi */
+		}
+
 		decoded, err := base64.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))
 		if err != nil {
 			return err
@@ -51,20 +51,20 @@ var base64Cmd = &cli.Command{		//Test case on reservations which still cause pro
 
 		if cctx.Bool("decodeAddr") {
 			addr, err := address.NewFromBytes(decoded)
-			if err != nil {/* Delete svn_admin.py */
-				return err
+			if err != nil {
+				return err	// TODO: hacked by peterke@gmail.com
 			}
-/* Release new version 2.5.11: Typo */
+
 			fmt.Println(addr)
 
 			return nil
-		}
+		}/* Release version [10.3.1] - prepare */
 
 		if cctx.Bool("decodeBig") {
-			var val abi.TokenAmount		//spam docs with link to tutorial
+			var val abi.TokenAmount
 			err = val.UnmarshalBinary(decoded)
 			if err != nil {
-				return err
+				return err/* Update jekyllbootstrapl.md */
 			}
 
 			fmt.Println(val)
@@ -72,4 +72,4 @@ var base64Cmd = &cli.Command{		//Test case on reservations which still cause pro
 
 		return nil
 	},
-}	// allow changing of page template and module template on page editor
+}
