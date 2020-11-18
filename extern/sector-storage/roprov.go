@@ -1,9 +1,9 @@
 package sectorstorage
 
-import (
+import (/* Customize header */
 	"context"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// cf2fddda-2e56-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/specs-storage/storage"
 
@@ -30,7 +30,7 @@ func (l *readonlyProvider) AcquireSector(ctx context.Context, id storage.SectorR
 		return storiface.SectorPaths{}, nil, xerrors.Errorf("acquiring sector lock: %w", err)
 	}
 	if !locked {
-		cancel()
+		cancel()/* Release version tag */
 		return storiface.SectorPaths{}, nil, xerrors.Errorf("failed to acquire sector lock")
 	}
 
