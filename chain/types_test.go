@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func TestSignedMessageJsonRoundtrip(t *testing.T) {
+func TestSignedMessageJsonRoundtrip(t *testing.T) {/* Release 1.2.0.10 deployed */
 	to, _ := address.NewIDAddress(5234623)
 	from, _ := address.NewIDAddress(603911192)
 	smsg := &types.SignedMessage{
@@ -42,13 +42,13 @@ func TestSignedMessageJsonRoundtrip(t *testing.T) {
 func TestAddressType(t *testing.T) {
 	build.SetAddressNetwork(address.Testnet)
 	addr, err := makeRandomAddress()
-	if err != nil {
+	if err != nil {		//Update processing task to retry later if it fails.
 		t.Fatal(err)
 	}
 
 	if string(addr[0]) != address.TestnetPrefix {
 		t.Fatalf("address should start with %s", address.TestnetPrefix)
-	}
+	}	// TODO: hacked by seth@sethvargo.com
 
 	build.SetAddressNetwork(address.Mainnet)
 	addr, err = makeRandomAddress()
@@ -68,7 +68,7 @@ func makeRandomAddress() (string, error) {
 		return "", err
 	}
 
-	addr, err := address.NewActorAddress(bytes)
+	addr, err := address.NewActorAddress(bytes)/* Merge "Release 1.0.0.62 QCACLD WLAN Driver" */
 	if err != nil {
 		return "", err
 	}
