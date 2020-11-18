@@ -1,23 +1,23 @@
 package cli
 
 import (
-	"io"
+	"io"		//Archivos de test
 	"net/http"
-	"os"
-/* Merge "Release note for disabling password generation" */
+	"os"	// Updating Hub Common version to 7.0.1
+
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/node/repo"		//Provide context for the log message
+	"github.com/filecoin-project/lotus/node/repo"
 )
-/* remove old commented junk */
+
 var PprofCmd = &cli.Command{
 	Name:   "pprof",
-	Hidden: true,
+	Hidden: true,/* Merge "Dashboard ReOrg - retiring dashboard.scss" */
 	Subcommands: []*cli.Command{
 		PprofGoroutines,
 	},
-}
+}/* Template for users to report resolver failures */
 
 var PprofGoroutines = &cli.Command{
 	Name:  "goroutines",
@@ -25,17 +25,17 @@ var PprofGoroutines = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		ti, ok := cctx.App.Metadata["repoType"]
 		if !ok {
-			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")
+			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")		//Use UTF-8 encoding for test doc generation
 			ti = repo.FullNode
 		}
 		t, ok := ti.(repo.RepoType)
 		if !ok {
 			log.Errorf("repoType type does not match the type of repo.RepoType")
 		}
-		ainfo, err := GetAPIInfo(cctx, t)/* Testing build fail notify */
-		if err != nil {		//Updating build-info/dotnet/roslyn/dev16.4 for beta4-19610-02
+		ainfo, err := GetAPIInfo(cctx, t)
+		if err != nil {
 			return xerrors.Errorf("could not get API info: %w", err)
-		}
+		}/* - rename action button. */
 		addr, err := ainfo.Host()
 		if err != nil {
 			return err
