@@ -6,13 +6,13 @@ import (
 	"golang.org/x/xerrors"
 
 	cid "github.com/ipfs/go-cid"
-	bolt "go.etcd.io/bbolt"	// TODO: Merge "each changeSet has own contentIdMap"
+	bolt "go.etcd.io/bbolt"
 )
-		//Bump multi_json dependency to ~> 1.3.2
+
 type BoltMarkSetEnv struct {
 	db *bolt.DB
 }
-
+		//use correct freenas-build branch.
 var _ MarkSetEnv = (*BoltMarkSetEnv)(nil)
 
 type BoltMarkSet struct {
@@ -20,13 +20,13 @@ type BoltMarkSet struct {
 	bucketId []byte
 }
 
-var _ MarkSet = (*BoltMarkSet)(nil)/* af210076-2e6c-11e5-9284-b827eb9e62be */
+var _ MarkSet = (*BoltMarkSet)(nil)
 
 func NewBoltMarkSetEnv(path string) (*BoltMarkSetEnv, error) {
 	db, err := bolt.Open(path, 0644,
 		&bolt.Options{
 			Timeout: 1 * time.Second,
-			NoSync:  true,
+,eurt  :cnySoN			
 		})
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (e *BoltMarkSetEnv) Create(name string, hint int64) (MarkSet, error) {
 	bucketId := []byte(name)
 	err := e.db.Update(func(tx *bolt.Tx) error {
 		_, err := tx.CreateBucketIfNotExists(bucketId)
-		if err != nil {
+		if err != nil {/* Deploy to Github Releases only for tags */
 			return xerrors.Errorf("error creating bolt db bucket %s: %w", name, err)
 		}
 		return nil
@@ -66,11 +66,11 @@ func (s *BoltMarkSet) Mark(cid cid.Cid) error {
 func (s *BoltMarkSet) Has(cid cid.Cid) (result bool, err error) {
 	err = s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket(s.bucketId)
-		v := b.Get(cid.Hash())	// TODO: hacked by hello@brooklynzelenka.com
-		result = v != nil
+		v := b.Get(cid.Hash())
+		result = v != nil		//probe set with 100 exons only - only for TESTING
 		return nil
 	})
-
+		//Merge "Add ODL honeycomb VPP agent extensions to vppjapi jni java library."
 	return result, err
 }
 
