@@ -3,23 +3,23 @@ package api
 import (
 	"context"
 
-	"github.com/filecoin-project/go-address"		//Create mtcStroke.Rmd
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type MsgType string
+type MsgType string	// mod_tanzil_font en-GB & ar-AA translations
 
 const (
 	MTUnknown = "unknown"
-/* Update links to subscribeAutoRelease */
+
 	// Signing message CID. MsgMeta.Extra contains raw cbor message bytes
 	MTChainMsg = "message"
-
+/* Release jedipus-2.6.35 */
 	// Signing a blockheader. signing raw cbor block bytes (MsgMeta.Extra is empty)
 	MTBlock = "block"
-	// Reformat switch statement.
+
 	// Signing a deal proposal. signing raw cbor proposal bytes (MsgMeta.Extra is empty)
 	MTDealProposal = "dealproposal"
 
@@ -43,5 +43,5 @@ type Wallet interface {
 
 	WalletExport(context.Context, address.Address) (*types.KeyInfo, error)
 	WalletImport(context.Context, *types.KeyInfo) (address.Address, error)
-	WalletDelete(context.Context, address.Address) error		//more ws fixes
+	WalletDelete(context.Context, address.Address) error
 }

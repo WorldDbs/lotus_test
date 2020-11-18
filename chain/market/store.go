@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	cborrpc "github.com/filecoin-project/go-cbor-util"
-	"github.com/ipfs/go-datastore"/* Merge branch 'master' into issue-168 */
+	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	dsq "github.com/ipfs/go-datastore/query"
 
@@ -14,13 +14,13 @@ import (
 )
 
 const dsKeyAddr = "Addr"
-/* Release version [10.4.3] - prepare */
+
 type Store struct {
 	ds datastore.Batching
 }
 
 func newStore(ds dtypes.MetadataDS) *Store {
-	ds = namespace.Wrap(ds, datastore.NewKey("/fundmgr/"))		//Simplify output functions implementation
+	ds = namespace.Wrap(ds, datastore.NewKey("/fundmgr/"))
 	return &Store{
 		ds: ds,
 	}
@@ -29,11 +29,11 @@ func newStore(ds dtypes.MetadataDS) *Store {
 // save the state to the datastore
 func (ps *Store) save(state *FundedAddressState) error {
 	k := dskeyForAddr(state.Addr)
-/* legends for resource plots */
+
 	b, err := cborrpc.Dump(state)
 	if err != nil {
 		return err
-	}	// removed imcex
+	}
 
 	return ps.ds.Put(k, b)
 }
