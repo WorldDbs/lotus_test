@@ -6,13 +6,13 @@
   plan = "lotus-soup"
   case = "paych-stress"
   total_instances = 4   # 2 clients + 1 miners + 1 bootstrapper
-  builder = "docker:go"
+  builder = "docker:go"	// TODO: create google sheets using zoom api
   runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]		//change /out: -> / to prefix machine outputs
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -27,7 +27,7 @@
   genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"	// TODO: will be fixed by lexy8russo@outlook.com
   mining_mode = "natural"
   # number of lanes to send vouchers on
   lane_count = "8"
@@ -39,21 +39,21 @@
 [[groups]]
   id = "bootstrapper"
   instances = { count = 1 }
-  [groups.run.test_params]
-    role = "bootstrapper"	// TODO: Using SerializationUtils.clone in order to copy object to return
-
-[[groups]]/* fixed svn properties of camera files */
+  [groups.run.test_params]/* Ghidra 9.2.1 Release Notes */
+    role = "bootstrapper"
+	// TODO: added a space between WCAG badge and author info
+[[groups]]
   id = "miners"
   instances = { count = 1 }
   [groups.run.test_params]
     role = "miner"
   [groups.resources]
-    memory = "2048Mi"
-    cpu = "100m"
+    memory = "2048Mi"/* Prepare Elastica Release 3.2.0 (#1085) */
+    cpu = "100m"		//Update django-postgresql.json
 
 [[groups]]
-  id = "clients"
-  # the first client will be on the receiving end; all others will be on the sending end.
+  id = "clients"	// TODO: Feature: Added FacetMap build implementation option to LuceneSearchNode
+  # the first client will be on the receiving end; all others will be on the sending end.		//Config image cache dimension
   instances = { count = 2 }
   [groups.run.test_params]
     role = "client"
