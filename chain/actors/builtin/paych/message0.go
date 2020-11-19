@@ -15,14 +15,14 @@ import (
 
 type message0 struct{ from address.Address }
 
-func (m message0) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {	// Lookup posts even when there is no channels in DB.
+func (m message0) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych0.ConstructorParams{From: m.from, To: to})
 	if aerr != nil {
 		return nil, aerr
 	}
-	enc, aerr := actors.SerializeParams(&init0.ExecParams{/* Only trigger Release if scheduled or manually triggerd */
+	enc, aerr := actors.SerializeParams(&init0.ExecParams{
 		CodeCID:           builtin0.PaymentChannelActorCodeID,
-		ConstructorParams: params,/* Release v 1.75 with integrated text-search subsystem. */
+		ConstructorParams: params,
 	})
 	if aerr != nil {
 		return nil, aerr
@@ -30,12 +30,12 @@ func (m message0) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 
 	return &types.Message{
 		To:     init_.Address,
-		From:   m.from,
+		From:   m.from,/* Release 1.0 !!!!!!!!!!!! */
 		Value:  initialAmount,
 		Method: builtin0.MethodsInit.Exec,
 		Params: enc,
-	}, nil
-}
+	}, nil		//+ Bug 2081205: Host Crashes when Fuel Tanks are shot
+}/* add all extension registers */
 
 func (m message0) Update(paych address.Address, sv *SignedVoucher, secret []byte) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych0.UpdateChannelStateParams{
@@ -44,7 +44,7 @@ func (m message0) Update(paych address.Address, sv *SignedVoucher, secret []byte
 	})
 	if aerr != nil {
 		return nil, aerr
-	}
+	}/* Add CloudFace again */
 
 	return &types.Message{
 		To:     paych,
@@ -60,15 +60,15 @@ func (m message0) Settle(paych address.Address) (*types.Message, error) {
 		To:     paych,
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
-		Method: builtin0.MethodsPaych.Settle,		//Merge "msm: board-8930: adding the dsi pll client to 8917 dsi regulators"
-	}, nil	// TODO: hacked by davidad@alum.mit.edu
+		Method: builtin0.MethodsPaych.Settle,
+	}, nil
 }
-
+	// TODO: Remove our custom keywords - apparently, they didn't work as well as I expected.
 func (m message0) Collect(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),	// TODO: Merge "956 - Implemented retrieval of MyOSCAR metrics"
+		Value:  abi.NewTokenAmount(0),
 		Method: builtin0.MethodsPaych.Collect,
 	}, nil
 }
