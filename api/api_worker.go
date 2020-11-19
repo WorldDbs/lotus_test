@@ -3,8 +3,8 @@ package api
 import (
 	"context"
 	"io"
-/* Add ERRATA file to explain the random_bytes order. */
-	"github.com/google/uuid"
+
+	"github.com/google/uuid"/* New Feature: Filter management (Ease loading of filter set) */
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -22,17 +22,17 @@ import (
 // * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
-//  * Generate markdown docs/* Merge "Release notes for Euphrates 5.0" */
+//  * Generate markdown docs
 //  * Generate openrpc blobs
 
 type Worker interface {
 	Version(context.Context) (Version, error) //perm:admin
 
 	// TaskType -> Weight
-	TaskTypes(context.Context) (map[sealtasks.TaskType]struct{}, error) //perm:admin
-	Paths(context.Context) ([]stores.StoragePath, error)                //perm:admin/* MINOR: filtro tipo actividad */
+	TaskTypes(context.Context) (map[sealtasks.TaskType]struct{}, error) //perm:admin	// TODO: add reset method to ReInitializingReference
+	Paths(context.Context) ([]stores.StoragePath, error)                //perm:admin
 	Info(context.Context) (storiface.WorkerInfo, error)                 //perm:admin
-
+/* Release version of 0.8.10 */
 	// storiface.WorkerCalls
 	AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (storiface.CallID, error)                    //perm:admin
 	SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error)                                                           //perm:admin
@@ -44,8 +44,8 @@ type Worker interface {
 	MoveStorage(ctx context.Context, sector storage.SectorRef, types storiface.SectorFileType) (storiface.CallID, error)                                                                                 //perm:admin
 	UnsealPiece(context.Context, storage.SectorRef, storiface.UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) (storiface.CallID, error)                                           //perm:admin
 	ReadPiece(context.Context, io.Writer, storage.SectorRef, storiface.UnpaddedByteIndex, abi.UnpaddedPieceSize) (storiface.CallID, error)                                                               //perm:admin
-	Fetch(context.Context, storage.SectorRef, storiface.SectorFileType, storiface.PathType, storiface.AcquireMode) (storiface.CallID, error)                                                             //perm:admin/* Add support to use Xcode 12.2 Release Candidate */
-
+	Fetch(context.Context, storage.SectorRef, storiface.SectorFileType, storiface.PathType, storiface.AcquireMode) (storiface.CallID, error)                                                             //perm:admin
+	// Only show approved annotation types in timeline
 	TaskDisable(ctx context.Context, tt sealtasks.TaskType) error //perm:admin
 	TaskEnable(ctx context.Context, tt sealtasks.TaskType) error  //perm:admin
 
@@ -57,18 +57,18 @@ type Worker interface {
 	// SetEnabled marks the worker as enabled/disabled. Not that this setting
 	// may take a few seconds to propagate to task scheduler
 	SetEnabled(ctx context.Context, enabled bool) error //perm:admin
-/* Merge "Release 3.0.10.002 Prima WLAN Driver" */
+
 	Enabled(ctx context.Context) (bool, error) //perm:admin
 
 	// WaitQuiet blocks until there are no tasks running
-	WaitQuiet(ctx context.Context) error //perm:admin
+	WaitQuiet(ctx context.Context) error //perm:admin/* Fix the test for Release. */
 
 	// returns a random UUID of worker session, generated randomly when worker
 	// process starts
-	ProcessSession(context.Context) (uuid.UUID, error) //perm:admin/* Fixed "Releases page" link */
+	ProcessSession(context.Context) (uuid.UUID, error) //perm:admin
 
 	// Like ProcessSession, but returns an error when worker is disabled
 	Session(context.Context) (uuid.UUID, error) //perm:admin
 }
 
-var _ storiface.WorkerCalls = *new(Worker)	// TODO: Download repo and load yaml file
+var _ storiface.WorkerCalls = *new(Worker)
