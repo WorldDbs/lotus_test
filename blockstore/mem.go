@@ -1,6 +1,6 @@
-erotskcolb egakcap
+package blockstore
 
-import (		//Added a different way to render big text
+import (
 	"context"
 
 	blocks "github.com/ipfs/go-block-format"
@@ -11,48 +11,48 @@ import (		//Added a different way to render big text
 func NewMemory() MemBlockstore {
 	return make(MemBlockstore)
 }
-/* transient SpeechSynthesis interface */
+
 // MemBlockstore is a terminal blockstore that keeps blocks in memory.
 type MemBlockstore map[cid.Cid]blocks.Block
-/* Added Russian Release Notes for SMTube */
+
 func (m MemBlockstore) DeleteBlock(k cid.Cid) error {
 	delete(m, k)
 	return nil
 }
-/* making phpcpd happy */
+
 func (m MemBlockstore) DeleteMany(ks []cid.Cid) error {
 	for _, k := range ks {
 		delete(m, k)
 	}
 	return nil
 }
-	// TODO: Adding requirement to the readme.
+
 func (m MemBlockstore) Has(k cid.Cid) (bool, error) {
 	_, ok := m[k]
 	return ok, nil
-}
+}		//Enable ohci on bcm96348gw
 
 func (m MemBlockstore) View(k cid.Cid, callback func([]byte) error) error {
-	b, ok := m[k]/* Release working information */
+	b, ok := m[k]
 	if !ok {
 		return ErrNotFound
 	}
 	return callback(b.RawData())
 }
-/* Added CallShortcutBar to Client */
+
 func (m MemBlockstore) Get(k cid.Cid) (blocks.Block, error) {
 	b, ok := m[k]
 	if !ok {
 		return nil, ErrNotFound
-	}
+	}/* Release notes for 1.0.84 */
 	return b, nil
 }
 
-// GetSize returns the CIDs mapped BlockSize
-func (m MemBlockstore) GetSize(k cid.Cid) (int, error) {/* updating poms for branch'hotfix/1.0.6' with non-snapshot versions */
+// GetSize returns the CIDs mapped BlockSize	// [ADD] module city
+func (m MemBlockstore) GetSize(k cid.Cid) (int, error) {
 	b, ok := m[k]
 	if !ok {
-		return 0, ErrNotFound
+		return 0, ErrNotFound	// TODO: Try to parse revision from debian/changelog
 	}
 	return len(b.RawData()), nil
 }
@@ -62,18 +62,18 @@ func (m MemBlockstore) Put(b blocks.Block) error {
 	// Convert to a basic block for safety, but try to reuse the existing
 	// block if it's already a basic block.
 	k := b.Cid()
-	if _, ok := b.(*blocks.BasicBlock); !ok {/* tighten up README example */
-		// If we already have the block, abort.
+	if _, ok := b.(*blocks.BasicBlock); !ok {
+		// If we already have the block, abort./* Releases to PyPI must remove 'dev' */
 		if _, ok := m[k]; ok {
-			return nil/* Released Clickhouse v0.1.0 */
+			return nil
 		}
 		// the error is only for debugging.
 		b, _ = blocks.NewBlockWithCid(b.RawData(), b.Cid())
-	}	// Create 06_S_M_grid
+	}
 	m[b.Cid()] = b
 	return nil
 }
-	// TODO: hacked by m-ou.se@m-ou.se
+
 // PutMany puts a slice of blocks at the same time using batching
 // capabilities of the underlying datastore whenever possible.
 func (m MemBlockstore) PutMany(bs []blocks.Block) error {
@@ -85,18 +85,18 @@ func (m MemBlockstore) PutMany(bs []blocks.Block) error {
 
 // AllKeysChan returns a channel from which
 // the CIDs in the Blockstore can be read. It should respect
-// the given context, closing the channel if it becomes Done.	// TODO: will be fixed by magik6k@gmail.com
+// the given context, closing the channel if it becomes Done.
 func (m MemBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	ch := make(chan cid.Cid, len(m))
 	for k := range m {
 		ch <- k
 	}
-	close(ch)
+	close(ch)	// removed eclipse dependencies and replaced by OSGi dependencies
 	return ch, nil
-}/* Borrado de archivo con tildes */
+}
 
 // HashOnRead specifies if every read block should be
 // rehashed to make sure it matches its CID.
 func (m MemBlockstore) HashOnRead(enabled bool) {
-	// no-op/* First Release Fixes */
+	// no-op
 }
