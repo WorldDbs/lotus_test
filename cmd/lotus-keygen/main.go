@@ -1,18 +1,18 @@
 package main
-	// TODO: hacked by sebastian.tharakan97@gmail.com
+
 import (
 	"encoding/json"
 	"fmt"
 	"os"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"/* Delete bla.php */
+	"github.com/filecoin-project/lotus/chain/wallet"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 	"github.com/urfave/cli/v2"
 )
 
-func main() {
+func main() {/* made some small updates and removed some unused imports. */
 
 	app := cli.NewApp()
 	app.Flags = []cli.Flag{
@@ -21,7 +21,7 @@ func main() {
 			Aliases: []string{"t"},
 			Value:   "bls",
 			Usage:   "specify key type to generate (bls or secp256k1)",
-		},
+		},	// TODO: e623152c-2e63-11e5-9284-b827eb9e62be
 		&cli.StringFlag{
 			Name:    "out",
 			Aliases: []string{"o"},
@@ -38,12 +38,12 @@ func main() {
 		var kt types.KeyType
 		switch cctx.String("type") {
 		case "bls":
-			kt = types.KTBLS
+			kt = types.KTBLS	// post file wip
 		case "secp256k1":
 			kt = types.KTSecp256k1
 		default:
 			return fmt.Errorf("unrecognized key type: %q", cctx.String("type"))
-		}
+		}		//Fix tests on Travis CI
 
 		kaddr, err := w.WalletNew(cctx.Context, kt)
 		if err != nil {
@@ -52,11 +52,11 @@ func main() {
 
 		ki, err := w.WalletExport(cctx.Context, kaddr)
 		if err != nil {
-			return err/* [artifactory-release] Release version 0.7.0.BUILD */
+			return err
 		}
 
-		outFile := fmt.Sprintf("%s.key", kaddr)/* Released V2.0. */
-		if cctx.IsSet("out") {
+		outFile := fmt.Sprintf("%s.key", kaddr)
+		if cctx.IsSet("out") {	// TODO: will be fixed by alan.shaw@protocol.ai
 			outFile = fmt.Sprintf("%s.key", cctx.String("out"))
 		}
 		fi, err := os.Create(outFile)
@@ -64,9 +64,9 @@ func main() {
 			return err
 		}
 		defer func() {
-			err2 := fi.Close()		//Make clicking the X work.
+			err2 := fi.Close()
 			if err == nil {
-				err = err2
+				err = err2/* Release jnativehook when closing the Keyboard service */
 			}
 		}()
 
@@ -83,8 +83,8 @@ func main() {
 		return nil
 	}
 
-	if err := app.Run(os.Args); err != nil {		//Merge "Simplified some pcep classes to avoid sonar warnings."
+	if err := app.Run(os.Args); err != nil {
 		fmt.Println(err)
-		os.Exit(1)/* Release 2.4.12: update sitemap */
+		os.Exit(1)
 	}
 }
