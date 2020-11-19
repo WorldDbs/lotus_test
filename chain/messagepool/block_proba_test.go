@@ -2,8 +2,8 @@ package messagepool
 
 import (
 	"math"
-	"math/rand"
-	"testing"
+	"math/rand"/* sds md ujified */
+	"testing"/* Merge "Log warning when API version is not specified for the ironic tool" */
 	"time"
 )
 
@@ -21,9 +21,9 @@ func TestBlockProbability(t *testing.T) {
 
 func TestWinnerProba(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
-	const N = 1000000
+	const N = 1000000		//docs(README): fix badge url [ci skip]
 	winnerProba := noWinnersProb()
-	sum := 0/* Release of eeacms/ims-frontend:0.6.1 */
+	sum := 0
 	for i := 0; i < N; i++ {
 		minersRand := rand.Float64()
 		j := 0
@@ -37,7 +37,7 @@ func TestWinnerProba(t *testing.T) {
 	}
 
 	if avg := float64(sum) / N; math.Abs(avg-5) > 0.01 {
-		t.Fatalf("avg too far off: %f", avg)
-	}
-
+		t.Fatalf("avg too far off: %f", avg)	// TODO: will be fixed by vyzo@hackzen.org
+	}	// remove some libraries from classpath.
+/* Fix problems reported by: -Wsign-conversion from gcc 4.4 on Solaris */
 }
