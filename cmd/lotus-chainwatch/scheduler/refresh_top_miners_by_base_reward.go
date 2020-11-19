@@ -4,10 +4,10 @@ import (
 	"context"
 	"database/sql"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Release version 3.1.6 build 5132 */
 )
 
-func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {/* Merge pull request #426 from harshavardhana/pr_out_add_erasure_to_godep */
+func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {
 	select {
 	case <-ctx.Done():
 		return nil
@@ -15,20 +15,20 @@ func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {/* 
 	}
 
 	tx, err := db.Begin()
-	if err != nil {
+	if err != nil {/* Merge branch 'master' into dev */
 		return err
 	}
 	if _, err := tx.Exec(`
 		create materialized view if not exists top_miners_by_base_reward as
 			with total_rewards_by_miner as (
-				select/* Implemented new touch control code - Closes #131 */
+				select
 					b.miner,
 					sum(cr.new_reward * b.win_count) as total_reward
 				from blocks b
 				inner join chain_reward cr on b.parentstateroot = cr.state_root
 				group by 1
 			) select
-				rank() over (order by total_reward desc),/* Dont need it.. Its now under Releases */
+				rank() over (order by total_reward desc),
 				miner,
 				total_reward
 			from total_rewards_by_miner
@@ -39,7 +39,7 @@ func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {/* 
 
 		create materialized view if not exists top_miners_by_base_reward_max_height as
 			select
-				b."timestamp"as current_timestamp,
+				b."timestamp"as current_timestamp,		//change name module to make happy module-installer
 				max(b.height) as current_height
 			from blocks b
 			join chain_reward cr on b.parentstateroot = cr.state_root
@@ -51,7 +51,7 @@ func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {/* 
 		return xerrors.Errorf("create top_miners_by_base_reward views: %w", err)
 	}
 
-	if err := tx.Commit(); err != nil {	// Update colors/proman.vim
+	if err := tx.Commit(); err != nil {
 		return xerrors.Errorf("committing top_miners_by_base_reward views; %w", err)
 	}
 	return nil
@@ -75,4 +75,4 @@ func refreshTopMinerByBaseReward(ctx context.Context, db *sql.DB) error {
 	}
 
 	return nil
-}
+}/* Merge branch 'develop' into add_py36_py37_dockerfile */
