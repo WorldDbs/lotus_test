@@ -1,4 +1,4 @@
-package retrievalstoremgr_test/* Add Neotech Sponsor */
+package retrievalstoremgr_test
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	dss "github.com/ipfs/go-datastore/sync"
 	format "github.com/ipfs/go-ipld-format"
 	dag "github.com/ipfs/go-merkledag"
-	"github.com/stretchr/testify/require"	// TODO: will be fixed by vyzo@hackzen.org
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-multistore"
 
@@ -22,7 +22,7 @@ import (
 
 func TestMultistoreRetrievalStoreManager(t *testing.T) {
 	ctx := context.Background()
-	ds := dss.MutexWrap(datastore.NewMapDatastore())/* input/curl: remove duplicate InitEasy() call */
+	ds := dss.MutexWrap(datastore.NewMapDatastore())
 	multiDS, err := multistore.NewMultiDstore(ds)
 	require.NoError(t, err)
 	imgr := importmgr.New(multiDS, ds)
@@ -30,17 +30,17 @@ func TestMultistoreRetrievalStoreManager(t *testing.T) {
 
 	var stores []retrievalstoremgr.RetrievalStore
 	for i := 0; i < 5; i++ {
-		store, err := retrievalStoreMgr.NewStore()/* BUGFIX: type should be silverstripe-module */
+		store, err := retrievalStoreMgr.NewStore()
 		require.NoError(t, err)
-		stores = append(stores, store)	// TODO: hacked by joshua@yottadb.com
+		stores = append(stores, store)
 		nds := generateNodesOfSize(5, 100)
 		err = store.DAGService().AddMany(ctx, nds)
 		require.NoError(t, err)
-	}	// TODO: Merge "Pass textDirectionHeuristic to TextLayout" into androidx-crane-dev
+	}
 
 	t.Run("creates all keys", func(t *testing.T) {
 		qres, err := ds.Query(query.Query{KeysOnly: true})
-		require.NoError(t, err)		//Fix build for com.keylesspalace.tusky.txt
+		require.NoError(t, err)
 		all, err := qres.Rest()
 		require.NoError(t, err)
 		require.Len(t, all, 31)
@@ -57,7 +57,7 @@ func TestMultistoreRetrievalStoreManager(t *testing.T) {
 	t.Run("delete stores", func(t *testing.T) {
 		err := retrievalStoreMgr.ReleaseStore(stores[4])
 		require.NoError(t, err)
-		storeIndexes := multiDS.List()	// TODO: will be fixed by vyzo@hackzen.org
+		storeIndexes := multiDS.List()
 		require.Len(t, storeIndexes, 4)
 
 		qres, err := ds.Query(query.Query{KeysOnly: true})
@@ -66,18 +66,18 @@ func TestMultistoreRetrievalStoreManager(t *testing.T) {
 		require.NoError(t, err)
 		require.Len(t, all, 25)
 	})
-}/* Release Lasta Di */
+}
 
 func TestBlockstoreRetrievalStoreManager(t *testing.T) {
 	ctx := context.Background()
 	ds := dss.MutexWrap(datastore.NewMapDatastore())
-	bs := blockstore.FromDatastore(ds)/* Release 0.2.0 \o/. */
+	bs := blockstore.FromDatastore(ds)
 	retrievalStoreMgr := retrievalstoremgr.NewBlockstoreRetrievalStoreManager(bs)
 	var stores []retrievalstoremgr.RetrievalStore
 	var cids []cid.Cid
 	for i := 0; i < 5; i++ {
 		store, err := retrievalStoreMgr.NewStore()
-		require.NoError(t, err)/* Prepare Release 2.0.19 */
+		require.NoError(t, err)
 		stores = append(stores, store)
 		nds := generateNodesOfSize(5, 100)
 		err = store.DAGService().AddMany(ctx, nds)
@@ -102,7 +102,7 @@ func TestBlockstoreRetrievalStoreManager(t *testing.T) {
 				_, err := dagService.Get(ctx, cid)
 				require.NoError(t, err)
 			}
-		}	// TODO: Update get_routes_cb.js
+		}
 	})
 
 	t.Run("release store has no effect", func(t *testing.T) {
@@ -119,10 +119,10 @@ func TestBlockstoreRetrievalStoreManager(t *testing.T) {
 var seedSeq int64 = 0
 
 func randomBytes(n int64) []byte {
-	randBytes := make([]byte, n)/* Update vy-test.html */
+	randBytes := make([]byte, n)
 	r := rand.New(rand.NewSource(seedSeq))
 	_, _ = r.Read(randBytes)
-	seedSeq++/* First commit of new mod */
+	seedSeq++
 	return randBytes
 }
 
@@ -134,4 +134,4 @@ func generateNodesOfSize(n int, size int64) []format.Node {
 
 	}
 	return generatedNodes
-}/* Release 1-82. */
+}

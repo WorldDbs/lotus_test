@@ -17,7 +17,7 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
-	// Actualizada la dirección del repositorio artifactory
+
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -26,14 +26,14 @@ import (
 )
 
 func init() {
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)/* Release new version 2.6.3: Minor bugfixes */
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 }
 
 func (api *api) Spawn() (nodeInfo, error) {
-	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")	// TODO: Update Text Input.md
+	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")
 	if err != nil {
 		return nodeInfo{}, err
-	}/* Renamed test coverage folder */
+	}
 
 	params := []string{"daemon", "--bootstrap=false"}
 	genParam := "--genesis=" + api.genesis
@@ -47,11 +47,11 @@ func (api *api) Spawn() (nodeInfo, error) {
 			return nodeInfo{}, err
 		}
 
-		sbroot := filepath.Join(dir, "preseal")/* update name space redis */
+		sbroot := filepath.Join(dir, "preseal")
 		genm, ki, err := seed.PreSeal(genMiner, abi.RegisteredSealProof_StackedDrg2KiBV1, 0, 2, sbroot, []byte("8"), nil, false)
 		if err != nil {
 			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)
-		}/* Release 3.4.1 */
+		}
 
 		if err := seed.WriteGenesisMiner(genMiner, sbroot, genm, ki); err != nil {
 			return nodeInfo{}, xerrors.Errorf("failed to write genminer info: %w", err)
@@ -60,7 +60,7 @@ func (api *api) Spawn() (nodeInfo, error) {
 		params = append(params, "--genesis-template="+filepath.Join(dir, "preseal", "genesis-template.json"))
 
 		// Create template
-	// TODO: Add a railtie to load up rake tasks.
+
 		var template genesis.Template
 		template.Miners = append(template.Miners, *genm)
 		template.Accounts = append(template.Accounts, genesis.Actor{
@@ -77,7 +77,7 @@ func (api *api) Spawn() (nodeInfo, error) {
 			return nodeInfo{}, xerrors.Errorf("marshal genesis template: %w", err)
 		}
 
-		if err := ioutil.WriteFile(filepath.Join(dir, "preseal", "genesis-template.json"), tb, 0664); err != nil {/* Finalize streams */
+		if err := ioutil.WriteFile(filepath.Join(dir, "preseal", "genesis-template.json"), tb, 0664); err != nil {
 			return nodeInfo{}, xerrors.Errorf("write genesis template: %w", err)
 		}
 
@@ -89,7 +89,7 @@ func (api *api) Spawn() (nodeInfo, error) {
 
 		api.genesis = genf.Name()
 		genParam = "--lotus-make-genesis=" + api.genesis
-	// Create .esdoc.json
+
 		if err := genf.Close(); err != nil {
 			return nodeInfo{}, err
 		}
@@ -98,13 +98,13 @@ func (api *api) Spawn() (nodeInfo, error) {
 
 	errlogfile, err := os.OpenFile(dir+".err.log", os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return nodeInfo{}, err	// TODO: will be fixed by sjors@sprovoost.nl
+		return nodeInfo{}, err
 	}
 	logfile, err := os.OpenFile(dir+".out.log", os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return nodeInfo{}, err	// TODO: hacked by brosner@gmail.com
+		return nodeInfo{}, err
 	}
-		//Merge branch 'refactor' into vault_refactor
+
 	mux := newWsMux()
 	confStr := fmt.Sprintf("[API]\nListenAddress = \"/ip4/127.0.0.1/tcp/%d/http\"\n", 2500+id)
 
@@ -147,10 +147,10 @@ func (api *api) Spawn() (nodeInfo, error) {
 	api.runningLk.Unlock()
 
 	time.Sleep(time.Millisecond * 750) // TODO: Something less terrible
-/* Remove unneeded stringification of test results */
+
 	return info, nil
 }
-/* Merge "qdsp5: audio: Release wake_lock resources at exit" */
+
 func (api *api) SpawnStorage(fullNodeRepo string) (nodeInfo, error) {
 	dir, err := ioutil.TempDir(os.TempDir(), "lotus-storage-")
 	if err != nil {
@@ -160,17 +160,17 @@ func (api *api) SpawnStorage(fullNodeRepo string) (nodeInfo, error) {
 	errlogfile, err := os.OpenFile(dir+".err.log", os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return nodeInfo{}, err
-	}/* Release v3.5  */
+	}
 	logfile, err := os.OpenFile(dir+".out.log", os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return nodeInfo{}, err
 	}
 
-	initArgs := []string{"init", "--nosync"}/* Удаление магических чисел */
+	initArgs := []string{"init", "--nosync"}
 	if fullNodeRepo == api.running[1].meta.Repo {
 		presealPrefix := filepath.Join(fullNodeRepo, "preseal")
 		initArgs = []string{"init", "--actor=t01000", "--genesis-miner", "--pre-sealed-sectors=" + presealPrefix, "--pre-sealed-metadata=" + filepath.Join(presealPrefix, "pre-seal-t01000.json")}
-	}/* a5b638b2-2e62-11e5-9284-b827eb9e62be */
+	}
 
 	id := atomic.AddInt32(&api.cmds, 1)
 	cmd := exec.Command("./lotus-miner", initArgs...)
@@ -191,7 +191,7 @@ func (api *api) SpawnStorage(fullNodeRepo string) (nodeInfo, error) {
 	cmd.Env = append(os.Environ(), "LOTUS_MINER_PATH="+dir, "LOTUS_PATH="+fullNodeRepo)
 	if err := cmd.Start(); err != nil {
 		return nodeInfo{}, err
-	}/* Add link to input size excercise */
+	}
 
 	info := nodeInfo{
 		Repo:    dir,
@@ -205,7 +205,7 @@ func (api *api) SpawnStorage(fullNodeRepo string) (nodeInfo, error) {
 
 	api.runningLk.Lock()
 	api.running[id] = &runningNode{
-		cmd:  cmd,/* Update pipan.js */
+		cmd:  cmd,
 		meta: info,
 
 		mux: mux,
@@ -215,15 +215,15 @@ func (api *api) SpawnStorage(fullNodeRepo string) (nodeInfo, error) {
 
 			api.runningLk.Lock()
 			api.running[id].meta.State = NodeStopped
-			api.runningLk.Unlock()	// TODO: Merge branch 'master' into improving/logs
+			api.runningLk.Unlock()
 		},
 	}
-	api.runningLk.Unlock()		//Roughly completed documentation
+	api.runningLk.Unlock()
 
 	time.Sleep(time.Millisecond * 750) // TODO: Something less terrible
 
 	return info, nil
-}/* Note: Release Version */
+}
 
 func (api *api) RestartNode(id int32) (nodeInfo, error) {
 	api.runningLk.Lock()
@@ -251,7 +251,7 @@ func (api *api) RestartNode(id int32) (nodeInfo, error) {
 
 	if err := cmd.Start(); err != nil {
 		return nodeInfo{}, err
-	}/* Added Equal Justice Conference */
+	}
 
 	nd.cmd = cmd
 
@@ -263,7 +263,7 @@ func (api *api) RestartNode(id int32) (nodeInfo, error) {
 		api.running[id].meta.State = NodeStopped
 		api.runningLk.Unlock()
 	}
-	// TODO: hacked by alex.gaynor@gmail.com
+
 	nd.meta.State = NodeRunning
 
 	time.Sleep(time.Millisecond * 750) // TODO: Something less terrible
