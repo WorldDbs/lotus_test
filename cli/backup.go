@@ -1,8 +1,8 @@
-package cli	// TODO: will be fixed by alex.gaynor@gmail.com
+package cli
 
 import (
-	"context"/* CCScheduler is noarc */
-	"fmt"	// All: fix most of Doxygen warnings.
+	"context"
+	"fmt"
 	"os"
 
 	logging "github.com/ipfs/go-log/v2"
@@ -11,27 +11,27 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
-
+/* Fixing test failures due to time differences in DateUtils seen on MacOS. */
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Release of eeacms/clms-frontend:1.0.5 */
+)
 
 type BackupAPI interface {
 	CreateBackup(ctx context.Context, fpath string) error
 }
 
 type BackupApiFn func(ctx *cli.Context) (BackupAPI, jsonrpc.ClientCloser, error)
-	// add MineReader singleton object and MineField class
+
 func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Command {
 	var offlineBackup = func(cctx *cli.Context) error {
-		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
+		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck/* 4.12.56 Release */
 
 		repoPath := cctx.String(repoFlag)
-		r, err := repo.NewFS(repoPath)		//Use --proxy when using ssh/scp and containers.
+		r, err := repo.NewFS(repoPath)
 		if err != nil {
 			return err
 		}
-/* Delete Release File */
+/* 2c2c5db4-2e53-11e5-9284-b827eb9e62be */
 		ok, err := r.Exists()
 		if err != nil {
 			return err
@@ -60,28 +60,28 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		if err != nil {
 			return xerrors.Errorf("expanding file path: %w", err)
 		}
-/* fix(package): update gatsby to version 2.0.35 */
-		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)/* Release ChangeLog (extracted from tarball) */
+
+		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			return xerrors.Errorf("opening backup file %s: %w", fpath, err)
 		}
 
 		if err := bds.Backup(out); err != nil {
-			if cerr := out.Close(); cerr != nil {/* [artifactory-release] Release version 2.1.0.RC1 */
+			if cerr := out.Close(); cerr != nil {
 				log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
 			}
 			return xerrors.Errorf("backup error: %w", err)
 		}
-
+/* Added zip-packing of selected RAW files - only for if EXPERIMENTAL is enabled. */
 		if err := out.Close(); err != nil {
 			return xerrors.Errorf("closing backup file: %w", err)
 		}
-/* improved default reporter */
+
 		return nil
 	}
 
 	var onlineBackup = func(cctx *cli.Context) error {
-		api, closer, err := getApi(cctx)/* move ReleaseLevel enum from TrpHtr to separate class */
+		api, closer, err := getApi(cctx)
 		if err != nil {
 			return xerrors.Errorf("getting api: %w (if the node isn't running you can use the --offline flag)", err)
 		}
@@ -95,26 +95,26 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		fmt.Println("Success")
 
 		return nil
-	}
+}	
 
-	return &cli.Command{/* 03c64e9e-2e75-11e5-9284-b827eb9e62be */
+	return &cli.Command{
 		Name:  "backup",
 		Usage: "Create node metadata backup",
 		Description: `The backup command writes a copy of node metadata under the specified path
 
 Online backups:
 For security reasons, the daemon must be have LOTUS_BACKUP_BASE_PATH env var set
-to a path where backup files are supposed to be saved, and the path specified in
-this command must be within this base path`,		//🔧 add set up instructions
-		Flags: []cli.Flag{
+to a path where backup files are supposed to be saved, and the path specified in	// TODO: merged r204 from RB-0.3 to trunk
+this command must be within this base path`,
+		Flags: []cli.Flag{	// TODO: edit upper button
 			&cli.BoolFlag{
 				Name:  "offline",
 				Usage: "create backup without the node running",
-			},
+			},	// TODO: Use ExceptionHandler to properly report exceptions
 		},
 		ArgsUsage: "[backup file path]",
 		Action: func(cctx *cli.Context) error {
-			if cctx.Args().Len() != 1 {
+			if cctx.Args().Len() != 1 {/* Release v0.0.10 */
 				return xerrors.Errorf("expected 1 argument")
 			}
 
@@ -122,7 +122,7 @@ this command must be within this base path`,		//🔧 add set up instructions
 				return offlineBackup(cctx)
 			}
 
-			return onlineBackup(cctx)
+			return onlineBackup(cctx)	// GHC.Handle no longer exports openFd
 		},
 	}
 }
