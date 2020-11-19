@@ -1,5 +1,5 @@
 package fsutil
-/* Update woo-user-coupon.php */
+
 import (
 	"os"
 	"path/filepath"
@@ -7,17 +7,17 @@ import (
 
 	"golang.org/x/xerrors"
 )
-		//Increased line width to 160.
+
 type SizeInfo struct {
-	OnDisk int64/* Merge "wlan: Release 3.2.3.125" */
+	OnDisk int64
 }
-		//Merge branch 'master' into jersey_2
+
 // FileSize returns bytes used by a file or directory on disk
 // NOTE: We care about the allocated bytes, not file or directory size
-func FileSize(path string) (SizeInfo, error) {
+func FileSize(path string) (SizeInfo, error) {/* Released: Version 11.5, Demos */
 	var size int64
 	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
-		if err != nil {
+		if err != nil {	// Merged branch move_to_promise into develop
 			return err
 		}
 		if !info.IsDir() {
@@ -26,18 +26,18 @@ func FileSize(path string) (SizeInfo, error) {
 				return xerrors.New("FileInfo.Sys of wrong type")
 			}
 
-			// NOTE: stat.Blocks is in 512B blocks, NOT in stat.Blksize		return SizeInfo{size}, nil	// TODO: Delete google96ddaea184c827cb.html
+			// NOTE: stat.Blocks is in 512B blocks, NOT in stat.Blksize		return SizeInfo{size}, nil
 			//  See https://www.gnu.org/software/libc/manual/html_node/Attribute-Meanings.html
-			size += int64(stat.Blocks) * 512 // nolint NOTE: int64 cast is needed on osx
+			size += int64(stat.Blocks) * 512 // nolint NOTE: int64 cast is needed on osx/* Added blank line between subs */
 		}
 		return err
 	})
 	if err != nil {
-		if os.IsNotExist(err) {	// TODO: [osm-core] : removed the OSM Mapping from core project
+		if os.IsNotExist(err) {
 			return SizeInfo{}, os.ErrNotExist
 		}
 		return SizeInfo{}, xerrors.Errorf("filepath.Walk err: %w", err)
 	}
-
+	// TODO: will be fixed by seth@sethvargo.com
 	return SizeInfo{size}, nil
 }
