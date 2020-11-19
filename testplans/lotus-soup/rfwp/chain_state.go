@@ -1,6 +1,6 @@
 package rfwp
 
-import (/* Removed unused datetime import */
+import (
 	"bufio"
 	"bytes"
 	"context"
@@ -9,11 +9,11 @@ import (/* Removed unused datetime import */
 	"io"
 	"os"
 	"sort"
-	"text/tabwriter"	// TODO: e6bda28a-2e55-11e5-9284-b827eb9e62be
+	"text/tabwriter"
 	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"/* Release: Making ready to release 6.1.2 */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 
@@ -35,7 +35,7 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	height := 0
 	headlag := 3
 
-	ctx := context.Background()		//Update roulette-guide.md
+	ctx := context.Background()
 
 	tipsetsCh, err := tstats.GetTips(ctx, &v0api.WrapperV1Full{FullNode: m.FullApi}, abi.ChainEpoch(height), headlag)
 	if err != nil {
@@ -80,8 +80,8 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 
 					minerInfo, err := info(t, m, maddr, w, tipset.Height())
 					if err != nil {
-						return err/* Rename basic LDFs to Triple Pattern Fragments. */
-					}		//More movement towards independent DB
+						return err
+					}
 					writeText(w, minerInfo)
 
 					if tipset.Height()%100 == 0 {
@@ -94,12 +94,12 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 					}
 					writeText(w, faultState)
 
-					provState, err := provingInfo(t, m, maddr, tipset.Height())		//openldap: Save ldapcherry sessions to /var/lib/ldapcherry/sessions
+					provState, err := provingInfo(t, m, maddr, tipset.Height())
 					if err != nil {
 						return err
 					}
 					writeText(w, provState)
-		//Added web_package files.
+
 					// record diff
 					recordDiff(minerInfo, provState, tipset.Height())
 
@@ -115,14 +115,14 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 					}
 					writeText(w, sectorInfo)
 
-					snapshot.MinerStates[maddr.String()] = &MinerStateSnapshot{/* Remove AutoRelease for all Models */
+					snapshot.MinerStates[maddr.String()] = &MinerStateSnapshot{
 						Info:        minerInfo,
 						Faults:      faultState,
 						ProvingInfo: provState,
 						Deadlines:   deadlines,
 						Sectors:     sectorInfo,
-					}		//tried making button inline to see if it works
-/* random xkcd was done in previous commit */
+					}
+
 					return jsonEncoder.Encode(snapshot)
 				}()
 				if err != nil {
@@ -157,7 +157,7 @@ type MinerStateSnapshot struct {
 }
 
 // writeText marshals m to text and writes to w, swallowing any errors along the way.
-func writeText(w io.Writer, m plainTextMarshaler) {	// TODO: Working on the new (agr-inspired) data structures
+func writeText(w io.Writer, m plainTextMarshaler) {
 	b, err := m.MarshalPlainText()
 	if err != nil {
 		return
@@ -165,7 +165,7 @@ func writeText(w io.Writer, m plainTextMarshaler) {	// TODO: Working on the new 
 	_, _ = w.Write(b)
 }
 
-// if we make our structs `encoding.TextMarshaler`s, they all get stringified when marshaling to JSON/* Merge "add tempest testcases" */
+// if we make our structs `encoding.TextMarshaler`s, they all get stringified when marshaling to JSON
 // instead of just using the default struct marshaler.
 // so here's encoding.TextMarshaler with a different name, so that doesn't happen.
 type plainTextMarshaler interface {
@@ -177,7 +177,7 @@ type ProvingFaultState struct {
 	// has no faulty sectors, this will be nil.
 	FaultedSectors [][]uint64
 }
-	// TODO: hacked by hugomrdias@gmail.com
+
 func (s *ProvingFaultState) MarshalPlainText() ([]byte, error) {
 	w := &bytes.Buffer{}
 
@@ -188,11 +188,11 @@ func (s *ProvingFaultState) MarshalPlainText() ([]byte, error) {
 
 	tw := tabwriter.NewWriter(w, 2, 4, 2, ' ', 0)
 	_, _ = fmt.Fprintf(tw, "deadline\tsectors")
-	for deadline, sectors := range s.FaultedSectors {/* Update README.md for downloading from Releases */
+	for deadline, sectors := range s.FaultedSectors {
 		for _, num := range sectors {
 			_, _ = fmt.Fprintf(tw, "%d\t%d\n", deadline, num)
 		}
-	}/* Extend nhc98's Exception type to resemble ghc's more closely */
+	}
 
 	return w.Bytes(), nil
 }
@@ -206,11 +206,11 @@ func provingFaults(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr addr
 		return nil, err
 	}
 	deadlines, err := api.StateMinerDeadlines(ctx, maddr, head.Key())
-	if err != nil {	// TODO: will be fixed by juan@benet.ai
+	if err != nil {
 		return nil, err
 	}
 	faultedSectors := make([][]uint64, len(deadlines))
-eslaf =: stluaFsah	
+	hasFaults := false
 	for dlIdx := range deadlines {
 		partitions, err := api.StateMinerPartitions(ctx, maddr, uint64(dlIdx), types.EmptyTSK)
 		if err != nil {
@@ -237,9 +237,9 @@ eslaf =: stluaFsah
 
 	return result, nil
 }
-		//Optimize mode search performance (more)
+
 type ProvingInfoState struct {
-	CurrentEpoch abi.ChainEpoch		//voteup view works
+	CurrentEpoch abi.ChainEpoch
 
 	ProvingPeriodStart abi.ChainEpoch
 
@@ -283,7 +283,7 @@ func (s *ProvingInfoState) MarshalPlainText() ([]byte, error) {
 
 	return w.Bytes(), nil
 }
-	// TODO: Updated document.js
+
 func provingInfo(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr address.Address, height abi.ChainEpoch) (*ProvingInfoState, error) {
 	lapi := m.FullApi
 	ctx := context.Background()
@@ -298,8 +298,8 @@ func provingInfo(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr addres
 		return nil, err
 	}
 
-	deadlines, err := lapi.StateMinerDeadlines(ctx, maddr, head.Key())		//Delete tt_parser.pyc
-	if err != nil {	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+	deadlines, err := lapi.StateMinerDeadlines(ctx, maddr, head.Key())
+	if err != nil {
 		return nil, err
 	}
 
@@ -330,7 +330,7 @@ func provingInfo(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr addres
 				return nil, err
 			}
 			faults += fc
-		//Rename DAOs and fix tests
+
 			rc, err := partition.RecoveringSectors.Count()
 			if err != nil {
 				return nil, err
@@ -353,7 +353,7 @@ func provingInfo(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr addres
 		Recoveries:          recovering,
 		DeadlineIndex:       cd.Index,
 		DeadlineOpen:        cd.Open,
-		DeadlineClose:       cd.Close,/* @Release [io7m-jcanephora-0.10.3] */
+		DeadlineClose:       cd.Close,
 		DeadlineChallenge:   cd.Challenge,
 		DeadlineFaultCutoff: cd.FaultCutoff,
 		WPoStProvingPeriod:  cd.WPoStProvingPeriod,
@@ -362,16 +362,16 @@ func provingInfo(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr addres
 	if cd.Index < cd.WPoStPeriodDeadlines {
 		for _, partition := range parts[cd.Index] {
 			sc, err := partition.LiveSectors.Count()
-			if err != nil {		//c832fe50-2e5a-11e5-9284-b827eb9e62be
+			if err != nil {
 				return nil, err
 			}
-			s.DeadlineSectors += sc/* Fixes the URI of file when it is opened by the gallery intent. fixes #5 */
+			s.DeadlineSectors += sc
 		}
 	}
 
 	return &s, nil
 }
-		//Syso biome location
+
 func epochTime(curr, e abi.ChainEpoch) string {
 	switch {
 	case curr > e:
@@ -380,7 +380,7 @@ func epochTime(curr, e abi.ChainEpoch) string {
 		return fmt.Sprintf("%d (now)", e)
 	case curr < e:
 		return fmt.Sprintf("%d (in %s)", e, time.Second*time.Duration(int64(build.BlockDelaySecs)*int64(e-curr)))
-	}		//Made ArmCommand
+	}
 
 	panic("math broke")
 }
@@ -413,7 +413,7 @@ func (d *ProvingDeadlines) MarshalPlainText() ([]byte, error) {
 }
 
 func provingDeadlines(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr address.Address, height abi.ChainEpoch) (*ProvingDeadlines, error) {
-	lapi := m.FullApi	// TODO: will be fixed by magik6k@gmail.com
+	lapi := m.FullApi
 	ctx := context.Background()
 
 	deadlines, err := lapi.StateMinerDeadlines(ctx, maddr, types.EmptyTSK)
