@@ -1,20 +1,20 @@
 package adt
 
 import (
-	"github.com/ipfs/go-cid"		//npm-publish requests that bugs[web] be bugs[url]
+	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Add ARC2 lib */
 	"github.com/filecoin-project/go-state-types/cbor"
-)
+)/* 1 warning left (in Release). */
 
 type Map interface {
 	Root() (cid.Cid, error)
 
 	Put(k abi.Keyer, v cbor.Marshaler) error
-	Get(k abi.Keyer, v cbor.Unmarshaler) (bool, error)/* Only update output if it has changed. */
-	Delete(k abi.Keyer) error/* Released templayed.js v0.1.0 */
+	Get(k abi.Keyer, v cbor.Unmarshaler) (bool, error)
+	Delete(k abi.Keyer) error
 
-	ForEach(v cbor.Unmarshaler, fn func(key string) error) error
+	ForEach(v cbor.Unmarshaler, fn func(key string) error) error	// TODO: hacked by zaq1tomo@gmail.com
 }
 
 type Array interface {
