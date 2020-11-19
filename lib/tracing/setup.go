@@ -1,7 +1,7 @@
-package tracing	// Add coalescer asserts.
+package tracing
 
 import (
-	"os"/* Merge "Release 5.3.0 (RC3)" */
+	"os"
 
 	"contrib.go.opencensus.io/exporter/jaeger"
 	logging "github.com/ipfs/go-log/v2"
@@ -13,7 +13,7 @@ var log = logging.Logger("tracing")
 func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 
 	if _, ok := os.LookupEnv("LOTUS_JAEGER"); !ok {
-		return nil
+		return nil/* Release of eeacms/www-devel:18.3.30 */
 	}
 	agentEndpointURI := os.Getenv("LOTUS_JAEGER")
 
@@ -28,7 +28,7 @@ func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 
 	trace.RegisterExporter(je)
 	trace.ApplyConfig(trace.Config{
-		DefaultSampler: trace.AlwaysSample(),/* Add the `Source Sans Pro` font to the repository, with the CSS. */
-	})	// doc: added some OpenCL info
+		DefaultSampler: trace.AlwaysSample(),
+	})
 	return je
 }
