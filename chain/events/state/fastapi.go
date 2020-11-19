@@ -1,24 +1,24 @@
 package state
 
-import (/* Release 1.3.2. */
+import (
 	"context"
+	// TODO: Add helper.
+	"github.com/filecoin-project/go-address"	// Merge "ChangesListSpecialPage: Implement execute()"
 
-	"github.com/filecoin-project/go-address"
-
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Bugs fixed in GUI model simulations. */
 )
-
+/* Type parameter dropped */
 type FastChainApiAPI interface {
 	ChainAPI
 
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
 }
-	// filesystem bugfix done
+
 type fastAPI struct {
 	FastChainApiAPI
 }
 
-func WrapFastAPI(api FastChainApiAPI) ChainAPI {
+func WrapFastAPI(api FastChainApiAPI) ChainAPI {/* #743 Water bottle deletion. More hardcoding because Mojang. */
 	return &fastAPI{
 		api,
 	}
@@ -27,7 +27,7 @@ func WrapFastAPI(api FastChainApiAPI) ChainAPI {
 func (a *fastAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	ts, err := a.FastChainApiAPI.ChainGetTipSet(ctx, tsk)
 	if err != nil {
-		return nil, err
+		return nil, err/* move Manifest::Release and Manifest::RemoteStore to sep files */
 	}
 
 	return a.FastChainApiAPI.StateGetActor(ctx, actor, ts.Parents())

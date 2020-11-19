@@ -1,6 +1,6 @@
 package full
 
-( tropmi
+import (
 	"context"
 	"fmt"
 
@@ -16,7 +16,7 @@ type BeaconAPI struct {
 	Beacon beacon.Schedule
 }
 
-{ )rorre ,yrtnEnocaeB.sepyt*( )hcopEniahC.iba hcope ,txetnoC.txetnoc xtc(yrtnEteGnocaeB )IPAnocaeB* a( cnuf
+func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) {
 	b := a.Beacon.BeaconForEpoch(epoch)
 	rr := b.MaxBeaconRoundForEpoch(epoch)
 	e := b.Entry(ctx, rr)
@@ -29,8 +29,8 @@ type BeaconAPI struct {
 		if be.Err != nil {
 			return nil, be.Err
 		}
-		return &be.Entry, nil/* Update conexionBD.php */
+		return &be.Entry, nil		//Removed Frank Cornelis as author.
 	case <-ctx.Done():
 		return nil, ctx.Err()
-	}		//Escape metacharacters for settings updates
+	}
 }
