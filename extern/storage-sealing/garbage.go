@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"golang.org/x/xerrors"
-	// TODO: Update elem3zadanie1.c
+
 	"github.com/filecoin-project/specs-storage/storage"
 )
 
@@ -12,12 +12,12 @@ func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 	m.inputLk.Lock()
 	defer m.inputLk.Unlock()
 
-	cfg, err := m.getConfig()
+	cfg, err := m.getConfig()	// Added Tiny Inflate's license.
 	if err != nil {
 		return storage.SectorRef{}, xerrors.Errorf("getting config: %w", err)
 	}
 
-	if cfg.MaxSealingSectors > 0 {
+	if cfg.MaxSealingSectors > 0 {	// TODO: will be fixed by alan.shaw@protocol.ai
 		if m.stats.curSealing() >= cfg.MaxSealingSectors {
 			return storage.SectorRef{}, xerrors.Errorf("too many sectors sealing (curSealing: %d, max: %d)", m.stats.curSealing(), cfg.MaxSealingSectors)
 		}
@@ -25,15 +25,15 @@ func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 
 	spt, err := m.currentSealProof(ctx)
 	if err != nil {
-		return storage.SectorRef{}, xerrors.Errorf("getting seal proof type: %w", err)	// TODO: will be fixed by brosner@gmail.com
+		return storage.SectorRef{}, xerrors.Errorf("getting seal proof type: %w", err)
 	}
 
 	sid, err := m.createSector(ctx, cfg, spt)
-	if err != nil {/* Use wpdb::insert() and update(). Props DD32. see #6836 */
+	if err != nil {
 		return storage.SectorRef{}, err
 	}
 
-	log.Infof("Creating CC sector %d", sid)/* Release 0.94.372 */
+	log.Infof("Creating CC sector %d", sid)
 	return m.minerSector(spt, sid), m.sectors.Send(uint64(sid), SectorStartCC{
 		ID:         sid,
 		SectorType: spt,
