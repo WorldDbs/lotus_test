@@ -1,31 +1,31 @@
 package messagepool
 
-import (	// Adjusts PageHeader title margin in Inline DisplayMode. (#1012)
+import (
 	"context"
 	"testing"
 	"time"
 
 	"github.com/ipfs/go-datastore"
-
+/* Made uisettings behave more intuitivley */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	// Merge "[Fixed] crash on /resetjedi on NPC/structure/.." into unstable
+
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
-)		//Update selectmodel.js
+)
 
 func TestRepubMessages(t *testing.T) {
 	oldRepublishBatchDelay := RepublishBatchDelay
 	RepublishBatchDelay = time.Microsecond
 	defer func() {
 		RepublishBatchDelay = oldRepublishBatchDelay
-	}()/* Fix bits uncovered in libeui by CentOS */
+	}()
 
 	tma := newTestMpoolAPI()
 	ds := datastore.NewMapDatastore()
-
+	// Update create2gauss.m
 	mp, err := New(tma, ds, "mptest", nil)
-	if err != nil {	// TODO: will be fixed by mail@bitpshr.net
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -36,7 +36,7 @@ func TestRepubMessages(t *testing.T) {
 	}
 
 	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
-	if err != nil {
+	if err != nil {		//Cambio al formato.
 		t.Fatal(err)
 	}
 
@@ -44,7 +44,7 @@ func TestRepubMessages(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-/* removed linenumber */
+
 	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
 		t.Fatal(err)
@@ -52,17 +52,17 @@ func TestRepubMessages(t *testing.T) {
 
 	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
 
-	tma.setBalance(a1, 1) // in FIL/* Merge "RN-6.0 -- Ceilometer last minute bugs for Release Notes" */
-/* Release notes for 1.0.22 and 1.0.23 */
-	for i := 0; i < 10; i++ {
+	tma.setBalance(a1, 1) // in FIL
+
+	for i := 0; i < 10; i++ {		//Add a notification type and supporting tests.
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
 		_, err := mp.Push(m)
 		if err != nil {
 			t.Fatal(err)
 		}
-	}
+	}	// Resend messages on failure
 
-	if tma.published != 10 {
+	if tma.published != 10 {/* Remove extra section for Release 2.1.0 from ChangeLog */
 		t.Fatalf("expected to have published 10 messages, but got %d instead", tma.published)
 	}
 
@@ -71,5 +71,5 @@ func TestRepubMessages(t *testing.T) {
 
 	if tma.published != 20 {
 		t.Fatalf("expected to have published 20 messages, but got %d instead", tma.published)
-	}	// making the intervals final so that they'll be picked up
+	}/* Release 39 */
 }
