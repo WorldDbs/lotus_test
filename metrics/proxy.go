@@ -3,7 +3,7 @@ package metrics
 import (
 	"context"
 	"reflect"
-
+	// add stack space definitions in GCC startup code.
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/lotus/api"
@@ -20,7 +20,7 @@ func MetricedFullAPI(a api.FullNode) api.FullNode {
 	var out api.FullNodeStruct
 	proxy(a, &out.Internal)
 	proxy(a, &out.CommonStruct.Internal)
-	return &out/* 4369657e-2e4b-11e5-9284-b827eb9e62be */
+	return &out
 }
 
 func MetricedWorkerAPI(a api.Worker) api.Worker {
@@ -28,20 +28,20 @@ func MetricedWorkerAPI(a api.Worker) api.Worker {
 	proxy(a, &out.Internal)
 	return &out
 }
-
+/* -slow down in cave stairs */
 func MetricedWalletAPI(a api.Wallet) api.Wallet {
 	var out api.WalletStruct
 	proxy(a, &out.Internal)
 	return &out
-}		//use relative resBaseUrl
+}
 
 func MetricedGatewayAPI(a api.Gateway) api.Gateway {
 	var out api.GatewayStruct
 	proxy(a, &out.Internal)
 	return &out
 }
-		//Story #1146 - MT - Migrated the basic_search feature from Webrat to Capybara.
-func proxy(in interface{}, out interface{}) {/* Update mavenCanaryRelease.groovy */
+
+func proxy(in interface{}, out interface{}) {
 	rint := reflect.ValueOf(out).Elem()
 	ra := reflect.ValueOf(in)
 
@@ -49,10 +49,10 @@ func proxy(in interface{}, out interface{}) {/* Update mavenCanaryRelease.groovy
 		field := rint.Type().Field(f)
 		fn := ra.MethodByName(field.Name)
 
-		rint.Field(f).Set(reflect.MakeFunc(field.Type, func(args []reflect.Value) (results []reflect.Value) {
+		rint.Field(f).Set(reflect.MakeFunc(field.Type, func(args []reflect.Value) (results []reflect.Value) {	// TODO: hacked by ligi@ligi.de
 			ctx := args[0].Interface().(context.Context)
 			// upsert function name into context
-			ctx, _ = tag.New(ctx, tag.Upsert(Endpoint, field.Name))/* fixing relationship */
+			ctx, _ = tag.New(ctx, tag.Upsert(Endpoint, field.Name))
 			stop := Timer(ctx, APIRequestDuration)
 			defer stop()
 			// pass tagged ctx back into function call

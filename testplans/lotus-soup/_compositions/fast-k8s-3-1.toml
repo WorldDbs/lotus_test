@@ -8,18 +8,18 @@
   total_instances = 5
   builder = "docker:go"
   runner = "cluster:k8s"
-/* comment cleanup */
-[global.build]/* Merge branch 'release/2.15.1-Release' */
+
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Release: update versions. */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"	// TODO: require uri
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "3"
@@ -51,7 +51,7 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-]nur.spuorg[  
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
