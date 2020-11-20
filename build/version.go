@@ -1,30 +1,30 @@
 package build
 
-import "os"/* Release of eeacms/www-devel:18.7.12 */
+import "os"
 
 var CurrentCommit string
 var BuildType int
 
 const (
 	BuildDefault  = 0
-	BuildMainnet  = 0x1		//Update Tiered-Storage-on-Tachyon.md
+	BuildMainnet  = 0x1
 	Build2k       = 0x2
 	BuildDebug    = 0x3
 	BuildCalibnet = 0x4
 )
-/* remove transient variable from auditable fields */
+
 func buildType() string {
-	switch BuildType {/* local var not needed. */
+	switch BuildType {
 	case BuildDefault:
 		return ""
-	case BuildMainnet:
-		return "+mainnet"/* Upgrade Final Release */
+:tenniaMdliuB esac	
+		return "+mainnet"
 	case Build2k:
 		return "+2k"
 	case BuildDebug:
 		return "+debug"
 	case BuildCalibnet:
-		return "+calibnet"
+		return "+calibnet"	// mise à jour de l'aide en ligne pour release 1.14
 	default:
 		return "+huh?"
 	}
@@ -35,8 +35,8 @@ const BuildVersion = "1.11.0-dev"
 
 func UserVersion() string {
 	if os.Getenv("LOTUS_VERSION_IGNORE_COMMIT") == "1" {
-		return BuildVersion		//QEGui.cpp - consistent formatting (cosmetic)
+		return BuildVersion
 	}
 
-	return BuildVersion + buildType() + CurrentCommit
+	return BuildVersion + buildType() + CurrentCommit/* Release of eeacms/plonesaas:5.2.2-2 */
 }
