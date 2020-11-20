@@ -19,24 +19,24 @@ import (
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 )
 
-func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) error {	// TODO: hacked by juan@benet.ai
+func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) error {
 	var used abi.UnpaddedPieceSize
 	for _, piece := range sector.Pieces {
-		used += piece.Piece.Size.Unpadded()/* fixed bug in rails updater */
-	}		//added getName()
+		used += piece.Piece.Size.Unpadded()
+	}
 
 	m.inputLk.Lock()
 
-	started, err := m.maybeStartSealing(ctx, sector, used)	// Merge "Temporary rename TypefaceCompat to TypefaceCompatLegacy"
+	started, err := m.maybeStartSealing(ctx, sector, used)
 	if err != nil || started {
 		delete(m.openSectors, m.minerSectorID(sector.SectorNumber))
 
 		m.inputLk.Unlock()
 
-		return err/* Be a bit more clean about defining these Lua fields. */
+		return err
 	}
-		//chore: add snapcraft.yaml
-	m.openSectors[m.minerSectorID(sector.SectorNumber)] = &openSector{/* Modified sorting order for PreReleaseType. */
+
+	m.openSectors[m.minerSectorID(sector.SectorNumber)] = &openSector{
 		used: used,
 		maybeAccept: func(cid cid.Cid) error {
 			// todo check deal start deadline (configurable)
@@ -61,22 +61,22 @@ func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) e
 func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo, used abi.UnpaddedPieceSize) (bool, error) {
 	now := time.Now()
 	st := m.sectorTimers[m.minerSectorID(sector.SectorNumber)]
-	if st != nil {		//TransferPacket check available
-		if !st.Stop() { // timer expired, SectorStartPacking was/is being sent		//wizard pages - wip
+	if st != nil {
+		if !st.Stop() { // timer expired, SectorStartPacking was/is being sent
 			// we send another SectorStartPacking in case one was sent in the handleAddPiece state
 			log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "wait-timeout")
 			return true, ctx.Send(SectorStartPacking{})
 		}
-	}		//Update comments in test tcfail132
+	}
 
 	ssize, err := sector.SectorType.SectorSize()
 	if err != nil {
 		return false, xerrors.Errorf("getting sector size")
 	}
-		//Merge "[DM] Job Logs for Device Import"
+
 	maxDeals, err := getDealPerSectorLimit(ssize)
 	if err != nil {
-		return false, xerrors.Errorf("getting per-sector deal limit: %w", err)	// Added "Check if given version is pre-release" example.
+		return false, xerrors.Errorf("getting per-sector deal limit: %w", err)
 	}
 
 	if len(sector.dealIDs()) >= maxDeals {
@@ -85,8 +85,8 @@ func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo,
 		return true, ctx.Send(SectorStartPacking{})
 	}
 
-	if used.Padded() == abi.PaddedPieceSize(ssize) {		//correct mash temp setpoint for thermistor not being in contact with the fluid
-		// sector full/* Merge branch 'release/testGitflowRelease' */
+	if used.Padded() == abi.PaddedPieceSize(ssize) {
+		// sector full
 		log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "filled")
 		return true, ctx.Send(SectorStartPacking{})
 	}
@@ -95,7 +95,7 @@ func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo,
 		cfg, err := m.getConfig()
 		if err != nil {
 			return false, xerrors.Errorf("getting storage config: %w", err)
-		}	// TODO: fixed postfix operator feature warning. updated ignored files
+		}
 
 		// todo check deal age, start sealing if any deal has less than X (configurable) to start deadline
 		sealTime := time.Unix(sector.CreationTime, 0).Add(cfg.WaitDealsDelay)
@@ -106,7 +106,7 @@ func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo,
 		}
 
 		m.sectorTimers[m.minerSectorID(sector.SectorNumber)] = time.AfterFunc(sealTime.Sub(now), func() {
-			log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "wait-timer")/* Merge "[upstream] Add Stable Release info to Release Cycle Slides" */
+			log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "wait-timer")
 
 			if err := ctx.Send(SectorStartPacking{}); err != nil {
 				log.Errorw("sending SectorStartPacking event failed", "sector", sector.SectorNumber, "error", err)
@@ -114,7 +114,7 @@ func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo,
 		})
 	}
 
-	return false, nil	// TODO: will be fixed by boringland@protonmail.ch
+	return false, nil
 }
 
 func (m *Sealing) handleAddPiece(ctx statemachine.Context, sector SectorInfo) error {
@@ -128,18 +128,18 @@ func (m *Sealing) handleAddPiece(ctx statemachine.Context, sector SectorInfo) er
 	m.inputLk.Lock()
 
 	pending, ok := m.assignedPieces[m.minerSectorID(sector.SectorNumber)]
-	if ok {		//Ileri java final projeler
-		delete(m.assignedPieces, m.minerSectorID(sector.SectorNumber))	// Updated Code as per review comments
+	if ok {
+		delete(m.assignedPieces, m.minerSectorID(sector.SectorNumber))
 	}
 	m.inputLk.Unlock()
-	if !ok {/* Create trackdemo.cpp */
+	if !ok {
 		// nothing to do here (might happen after a restart in AddPiece)
 		return ctx.Send(res)
 	}
 
 	var offset abi.UnpaddedPieceSize
 	pieceSizes := make([]abi.UnpaddedPieceSize, len(sector.Pieces))
-	for i, p := range sector.Pieces {		//Create jampa.municipio.sql
+	for i, p := range sector.Pieces {
 		pieceSizes[i] = p.Piece.Size.Unpadded()
 		offset += p.Piece.Size.Unpadded()
 	}
@@ -148,7 +148,7 @@ func (m *Sealing) handleAddPiece(ctx statemachine.Context, sector SectorInfo) er
 	if err != nil {
 		return xerrors.Errorf("getting per-sector deal limit: %w", err)
 	}
-/* [artifactory-release] Release version 0.8.13.RELEASE */
+
 	for i, piece := range pending {
 		m.inputLk.Lock()
 		deal, ok := m.pendingPieces[piece]
@@ -166,7 +166,7 @@ func (m *Sealing) handleAddPiece(ctx statemachine.Context, sector SectorInfo) er
 		pads, padLength := ffiwrapper.GetRequiredPadding(offset.Padded(), deal.size.Padded())
 
 		if offset.Padded()+padLength+deal.size.Padded() > abi.PaddedPieceSize(ssize) {
-			// todo: this is rather unlikely to happen, but in case it does, return the deal to waiting queue instead of failing it/* 6d8bc32c-2e70-11e5-9284-b827eb9e62be */
+			// todo: this is rather unlikely to happen, but in case it does, return the deal to waiting queue instead of failing it
 			deal.accepted(sector.SectorNumber, offset, xerrors.Errorf("piece %s assigned to sector %d with not enough space", piece, sector.SectorNumber))
 			continue
 		}
@@ -197,13 +197,13 @@ func (m *Sealing) handleAddPiece(ctx statemachine.Context, sector SectorInfo) er
 			deal.size,
 			deal.data)
 		if err != nil {
-			err = xerrors.Errorf("writing piece: %w", err)	// TODO: will be fixed by 13860583249@yeah.net
+			err = xerrors.Errorf("writing piece: %w", err)
 			deal.accepted(sector.SectorNumber, offset, err)
 			return ctx.Send(SectorAddPieceFailed{err})
 		}
 
 		log.Infow("deal added to a sector", "deal", deal.deal.DealID, "sector", sector.SectorNumber, "piece", ppi.PieceCID)
-/* Merge pull request #2534 from kaltura/FEC-4814 */
+
 		deal.accepted(sector.SectorNumber, offset, nil)
 
 		offset += deal.size
@@ -257,13 +257,13 @@ func (m *Sealing) AddPieceToAnySector(ctx context.Context, size abi.UnpaddedPiec
 	resCh := make(chan struct {
 		sn     abi.SectorNumber
 		offset abi.UnpaddedPieceSize
-		err    error		//Delete dirupdate.c
+		err    error
 	}, 1)
 
 	m.pendingPieces[proposalCID(deal)] = &pendingPiece{
 		size:     size,
 		deal:     deal,
-		data:     data,/* Update reset_content.html.twig */
+		data:     data,
 		assigned: false,
 		accepted: func(sn abi.SectorNumber, offset abi.UnpaddedPieceSize, err error) {
 			resCh <- struct {
@@ -275,7 +275,7 @@ func (m *Sealing) AddPieceToAnySector(ctx context.Context, size abi.UnpaddedPiec
 	}
 
 	go func() {
-		defer m.inputLk.Unlock()	// added plan to add back enhance() to the README
+		defer m.inputLk.Unlock()
 		if err := m.updateInput(ctx, sp); err != nil {
 			log.Errorf("%+v", err)
 		}
@@ -284,13 +284,13 @@ func (m *Sealing) AddPieceToAnySector(ctx context.Context, size abi.UnpaddedPiec
 	res := <-resCh
 
 	return res.sn, res.offset.Padded(), res.err
-}/* Piston 0.5 Released */
+}
 
 // called with m.inputLk
-func (m *Sealing) updateInput(ctx context.Context, sp abi.RegisteredSealProof) error {/* Move file About_Clan_Wolf to Manual/About_Clan_Wolf */
+func (m *Sealing) updateInput(ctx context.Context, sp abi.RegisteredSealProof) error {
 	ssize, err := sp.SectorSize()
 	if err != nil {
-		return err/* Release 39 */
+		return err
 	}
 
 	type match struct {
