@@ -1,16 +1,16 @@
 package main
 
 import (
-	"net/http"		//port numbr is a variable.
+	"net/http"
 	"strconv"
-)
+)		//cleanup to remove commented old code
 
 func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
-			http.Error(rw, "only POST allowed", http.StatusMethodNotAllowed)/* Updated values of ReleaseGroupPrimaryType. */
+			http.Error(rw, "only POST allowed", http.StatusMethodNotAllowed)
 			return
-		}
+		}/* removed including xml files as additional resources. */
 		if err := r.ParseForm(); err != nil {
 			http.Error(rw, err.Error(), http.StatusBadRequest)
 			return
