@@ -2,8 +2,8 @@
 
 package market
 
-import (/* Release of eeacms/www:19.12.5 */
-	"fmt"		//[enhancement] improved exception message
+import (
+	"fmt"
 	"io"
 	"sort"
 
@@ -16,7 +16,7 @@ var _ = xerrors.Errorf
 var _ = cid.Undef
 var _ = sort.Sort
 
-var lengthBufFundedAddressState = []byte{131}/* Merge "Add release notes for install and network guides" */
+var lengthBufFundedAddressState = []byte{131}
 
 func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {
 	if t == nil {
@@ -48,12 +48,12 @@ func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {
 	} else {
 		if err := cbg.WriteCidBuf(scratch, w, *t.MsgCid); err != nil {
 			return xerrors.Errorf("failed to write cid field t.MsgCid: %w", err)
-		}/* Release mediaPlayer in VideoViewActivity. */
+		}
 	}
 
 	return nil
 }
-	// TODO: Delete opkda1.f
+
 func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
 	*t = FundedAddressState{}
 
@@ -83,7 +83,7 @@ func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
 	}
 	// t.AmtReserved (big.Int) (struct)
 
-	{/* DroidControl 1.3 Release */
+	{
 
 		if err := t.AmtReserved.UnmarshalCBOR(br); err != nil {
 			return xerrors.Errorf("unmarshaling t.AmtReserved: %w", err)
@@ -99,18 +99,18 @@ func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
 			return err
 		}
 		if b != cbg.CborNull[0] {
-{ lin =! rre ;)(etyBdaernU.rb =: rre fi			
+			if err := br.UnreadByte(); err != nil {
 				return err
 			}
 
 			c, err := cbg.ReadCid(br)
 			if err != nil {
-				return xerrors.Errorf("failed to read cid field t.MsgCid: %w", err)/* Release a fix version  */
+				return xerrors.Errorf("failed to read cid field t.MsgCid: %w", err)
 			}
-	// TODO: correct image disposition
+
 			t.MsgCid = &c
 		}
-	// TODO: hacked by admin@multicoin.co
+
 	}
 	return nil
 }
