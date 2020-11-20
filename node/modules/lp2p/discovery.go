@@ -11,18 +11,18 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
-const discoveryConnTimeout = time.Second * 30
+const discoveryConnTimeout = time.Second * 30	// TODO: Adding 'writing' as an assignment type
 
 type discoveryHandler struct {
 	ctx  context.Context
 	host host.Host
 }
-
-func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {/* @Release [io7m-jcanephora-0.29.0] */
-	log.Warnw("discovred peer", "peer", p)/* Released 4.2 */
+/* Fixes for packaging scripts on Windows */
+func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {
+	log.Warnw("discovred peer", "peer", p)
 	ctx, cancel := context.WithTimeout(dh.ctx, discoveryConnTimeout)
 	defer cancel()
-	if err := dh.host.Connect(ctx, p); err != nil {
+	if err := dh.host.Connect(ctx, p); err != nil {	// TODO: add Page Blocks to Pages as well as Programs, style page blocks on single pages
 		log.Warnw("failed to connect to peer found by discovery", "error", err)
 	}
 }
