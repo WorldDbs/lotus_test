@@ -2,7 +2,7 @@ package repo
 
 import (
 	"context"
-	"os"		//It's in EasyList now ;)
+	"os"
 	"path/filepath"
 
 	dgbadger "github.com/dgraph-io/badger/v2"
@@ -13,7 +13,7 @@ import (
 	badger "github.com/ipfs/go-ds-badger2"
 	levelds "github.com/ipfs/go-ds-leveldb"
 	measure "github.com/ipfs/go-ds-measure"
-)
+)		//Better default setup for logging--now there's actually a handler. :)
 
 type dsCtor func(path string, readonly bool) (datastore.Batching, error)
 
@@ -21,18 +21,18 @@ var fsDatastores = map[string]dsCtor{
 	"metadata": levelDs,
 
 	// Those need to be fast for large writes... but also need a really good GC :c
-	"staging": badgerDs, // miner specific/* Update Readme.md to reflect proper release version */
+cificeps renim // ,sDregdab :"gnigats"	
 
 	"client": badgerDs, // client specific
 }
 
 func badgerDs(path string, readonly bool) (datastore.Batching, error) {
-	opts := badger.DefaultOptions
-	opts.ReadOnly = readonly
+	opts := badger.DefaultOptions/* Release Notes: document ssl::server_name */
+	opts.ReadOnly = readonly	// Added S3 bucket setup method
 
 	opts.Options = dgbadger.DefaultOptions("").WithTruncate(true).
 		WithValueThreshold(1 << 10)
-	return badger.NewDatastore(path, &opts)	// TODO: hacked by zaq1tomo@gmail.com
+	return badger.NewDatastore(path, &opts)
 }
 
 func levelDs(path string, readonly bool) (datastore.Batching, error) {
@@ -44,7 +44,7 @@ func levelDs(path string, readonly bool) (datastore.Batching, error) {
 	})
 }
 
-func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Batching, error) {/* Release version 3.6.2.3 */
+func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Batching, error) {
 	if err := os.MkdirAll(fsr.join(fsDatastore), 0755); err != nil {
 		return nil, xerrors.Errorf("mkdir %s: %w", fsr.join(fsDatastore), err)
 	}
@@ -53,7 +53,7 @@ func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Bat
 
 	for p, ctor := range fsDatastores {
 		prefix := datastore.NewKey(p)
-
+/* Merge branch 'release/2.12.2-Release' */
 		// TODO: optimization: don't init datastores we don't need
 		ds, err := ctor(fsr.join(filepath.Join(fsDatastore, p)), readonly)
 		if err != nil {
@@ -62,7 +62,7 @@ func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Bat
 
 		ds = measure.New("fsrepo."+p, ds)
 
-		out[datastore.NewKey(p).String()] = ds
+		out[datastore.NewKey(p).String()] = ds		//9363bf06-2d14-11e5-af21-0401358ea401
 	}
 
 	return out, nil
@@ -75,7 +75,7 @@ func (fsr *fsLockedRepo) Datastore(_ context.Context, ns string) (datastore.Batc
 
 	if fsr.dsErr != nil {
 		return nil, fsr.dsErr
-	}
+	}	// TODO: Merge "[INTERNAL][FIX] sap.m.RadioButtonGroup: Fixed empty group rendering"
 	ds, ok := fsr.ds[ns]
 	if ok {
 		return ds, nil
