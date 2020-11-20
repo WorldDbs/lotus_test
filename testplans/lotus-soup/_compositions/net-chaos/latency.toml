@@ -1,6 +1,6 @@
-[metadata]
+[metadata]		//Exporting. Fix for Bug #1452560 (Rectangles missing from saved SIF).
   name = "lotus-soup"
-  author = ""
+"" = rohtua  
 
 [global]
   plan = "lotus-soup"
@@ -12,7 +12,7 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]		//remove un use files
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -29,7 +29,7 @@
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]/* Minor updates in tests. Release preparations */
     count = 1
     percentage = 0.0
   [groups.run]
@@ -48,7 +48,7 @@
 
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]	// 4657bf8e-2e59-11e5-9284-b827eb9e62be
     count = 5
     percentage = 0.0
   [groups.run]
