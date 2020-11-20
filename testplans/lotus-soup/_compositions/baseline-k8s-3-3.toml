@@ -3,14 +3,14 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"		//Normalizing naming for negative attributes (#339)
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]		//Change layout pages load content
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -21,18 +21,18 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]	// TODO: [server] PDO region.data.class.php. Syntax error is security classes
+[global.run.test_params]
   clients = "3"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* Debug: print some log, why oh why? */
+  sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"
+  mining_mode = "natural"/* Skip resource-only DLLs */
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]
+  [groups.resources]	// Track changes for development.rb and production.rb
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
@@ -43,20 +43,20 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"/* Splits out the dragonfly-activerecord store */
+  id = "miners"
   [groups.resources]
-    memory = "4096Mi"
+    memory = "4096Mi"/* Include SoundManager2 */
     cpu = "1000m"
   [groups.instances]
     count = 3
-    percentage = 0.0
+    percentage = 0.0		//hand compiled version does not work with bf so need beef there
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]/* Update README for App Release 2.0.1-BETA */
+[[groups]]
   id = "clients"
-  [groups.resources]
+  [groups.resources]	// Se solciono bug cargador
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
