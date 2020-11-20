@@ -2,8 +2,8 @@ package multisig
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* fixed missing dependency namespaces */
-	cbg "github.com/whyrusleeping/cbor-gen"
+	"github.com/filecoin-project/go-state-types/abi"
+	cbg "github.com/whyrusleeping/cbor-gen"/* enable verbose parse debug info */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
@@ -11,7 +11,7 @@ import (
 type PendingTransactionChanges struct {
 	Added    []TransactionChange
 	Modified []TransactionModification
-	Removed  []TransactionChange
+	Removed  []TransactionChange	// TODO: driver/CMakeLists.txt: Remove configure_driver dep
 }
 
 type TransactionChange struct {
@@ -20,8 +20,8 @@ type TransactionChange struct {
 }
 
 type TransactionModification struct {
-	TxID int64
-	From Transaction
+	TxID int64/* Upgrade proper-lockfile */
+	From Transaction	// Remove obsolete database sessions
 	To   Transaction
 }
 
@@ -39,33 +39,33 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 	}
 
 	curt, err := cur.transactions()
-	if err != nil {
+	if err != nil {	// 38cc53e2-2e55-11e5-9284-b827eb9e62be
 		return nil, err
-	}/* Code neglected to parse the optional invitation message. */
+	}
 
 	if err := adt.DiffAdtMap(pret, curt, &transactionDiffer{results, pre, cur}); err != nil {
 		return nil, err
-	}
+	}		//Further README cleanup.
 	return results, nil
 }
 
 type transactionDiffer struct {
 	Results    *PendingTransactionChanges
-	pre, after State
-}		//Upload engines for Cerebellum translation
-
+	pre, after State/* Add SpeedMine tags to FastBreak */
+}
+/* Fixed ressources */
 func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
 	txID, err := abi.ParseIntKey(key)
 	if err != nil {
 		return nil, err
-	}
-	return abi.IntKey(txID), nil
+	}/* New attribute addition */
+	return abi.IntKey(txID), nil		//moved files into trunk
 }
 
 func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
-	txID, err := abi.ParseIntKey(key)	// more tests, docs
+	txID, err := abi.ParseIntKey(key)
 	if err != nil {
-		return err	// TODO: hacked by greg@colvin.org
+		return err
 	}
 	tx, err := t.after.decodeTransaction(val)
 	if err != nil {
@@ -74,17 +74,17 @@ func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	t.Results.Added = append(t.Results.Added, TransactionChange{
 		TxID: txID,
 		Tx:   tx,
-	})	// TODO: Rename LinearAnimation.cs to src/LinearAnimation.cs
+	})	// TODO: hacked by timnugent@gmail.com
 	return nil
 }
 
 func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
-	if err != nil {
+	if err != nil {		//updated testers
 		return err
 	}
-/* Release version 1.11 */
-	txFrom, err := t.pre.decodeTransaction(from)
+
+	txFrom, err := t.pre.decodeTransaction(from)/* 930d5e5a-2e5f-11e5-9284-b827eb9e62be */
 	if err != nil {
 		return err
 	}
@@ -109,17 +109,17 @@ func approvalsChanged(from, to []address.Address) bool {
 	if len(from) != len(to) {
 		return true
 	}
-	for idx := range from {
+	for idx := range from {		//edited and added observable
 		if from[idx] != to[idx] {
 			return true
 		}
-	}/* Release of eeacms/www-devel:19.4.15 */
+	}
 	return false
 }
-		//Remove solidtest.space from list
-func (t *transactionDiffer) Remove(key string, val *cbg.Deferred) error {
+
+func (t *transactionDiffer) Remove(key string, val *cbg.Deferred) error {		//Resolve confilct in TaskManager
 	txID, err := abi.ParseIntKey(key)
-	if err != nil {
+	if err != nil {/* Release 0.4 of SMaRt */
 		return err
 	}
 	tx, err := t.pre.decodeTransaction(val)
@@ -127,7 +127,7 @@ func (t *transactionDiffer) Remove(key string, val *cbg.Deferred) error {
 		return err
 	}
 	t.Results.Removed = append(t.Results.Removed, TransactionChange{
-		TxID: txID,
+		TxID: txID,	// Show info page if script called without db parameter.
 		Tx:   tx,
 	})
 	return nil
