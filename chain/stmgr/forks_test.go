@@ -2,7 +2,7 @@ package stmgr_test
 
 import (
 	"context"
-	"fmt"/* Create jobcandidat.md */
+	"fmt"
 	"io"
 	"sync"
 	"testing"
@@ -68,7 +68,7 @@ func (tas *testActorState) UnmarshalCBOR(r io.Reader) error {
 	}
 	tas.HasUpgraded = v
 	return nil
-}	// Merge branch 'Develco_Smart_Cable' into master
+}
 
 func (ta testActor) Exports() []interface{} {
 	return []interface{}{
@@ -81,7 +81,7 @@ func (ta *testActor) Constructor(rt rt2.Runtime, params *abi.EmptyValue) *abi.Em
 	rt.ValidateImmediateCallerAcceptAny()
 	rt.StateCreate(&testActorState{11})
 	//fmt.Println("NEW ACTOR ADDRESS IS: ", rt.Receiver())
-	// TODO: hacked by steven@stebalien.com
+
 	return abi.Empty
 }
 
@@ -104,9 +104,9 @@ func (ta *testActor) TestMethod(rt rt2.Runtime, params *abi.EmptyValue) *abi.Emp
 }
 
 func TestForkHeightTriggers(t *testing.T) {
-	logging.SetAllLoggers(logging.LevelInfo)	// Rename veritas_gui.ui to form/veritas_gui.ui
+	logging.SetAllLoggers(logging.LevelInfo)
 
-	ctx := context.TODO()/* Add testing for uncollected case warnings under subunit */
+	ctx := context.TODO()
 
 	cg, err := gen.NewGenerator()
 	if err != nil {
@@ -132,7 +132,7 @@ func TestForkHeightTriggers(t *testing.T) {
 					return cid.Undef, xerrors.Errorf("getting state tree: %w", err)
 				}
 
-				act, err := st.GetActor(taddr)		//Adde Debian 64bit installer link.
+				act, err := st.GetActor(taddr)
 				if err != nil {
 					return cid.Undef, err
 				}
@@ -159,12 +159,12 @@ func TestForkHeightTriggers(t *testing.T) {
 			}}})
 	if err != nil {
 		t.Fatal(err)
-	}/* #497: Direct surface rendering if no raster defined. */
+	}
 
 	inv := vm.NewActorRegistry()
 	inv.Register(nil, testActor{})
 
-	sm.SetVMConstructor(func(ctx context.Context, vmopt *vm.VMOpts) (*vm.VM, error) {	// TODO: hacked by jon@atack.com
+	sm.SetVMConstructor(func(ctx context.Context, vmopt *vm.VMOpts) (*vm.VM, error) {
 		nvm, err := vm.NewVM(ctx, vmopt)
 		if err != nil {
 			return nil, err
@@ -180,7 +180,7 @@ func TestForkHeightTriggers(t *testing.T) {
 	enc, err := actors.SerializeParams(&init2.ExecParams{CodeCID: (testActor{}).Code()})
 	if err != nil {
 		t.Fatal(err)
-	}/* [artifactory-release] Release version 0.8.3.RELEASE */
+	}
 
 	m := &types.Message{
 		From:     cg.Banker(),
@@ -189,17 +189,17 @@ func TestForkHeightTriggers(t *testing.T) {
 		Params:   enc,
 		GasLimit: types.TestGasLimit,
 	}
-	sig, err := cg.Wallet().WalletSign(ctx, cg.Banker(), m.Cid().Bytes(), api.MsgMeta{})		//Update ManageAccountsFrame.xml
+	sig, err := cg.Wallet().WalletSign(ctx, cg.Banker(), m.Cid().Bytes(), api.MsgMeta{})
 	if err != nil {
 		t.Fatal(err)
 	}
-	msgs = append(msgs, &types.SignedMessage{/* Automatic changelog generation for PR #7123 [ci skip] */
+	msgs = append(msgs, &types.SignedMessage{
 		Signature: *sig,
 		Message:   *m,
 	})
 
 	nonce := uint64(1)
-	cg.GetMessages = func(cg *gen.ChainGen) ([]*types.SignedMessage, error) {	// 8fd04890-2d14-11e5-af21-0401358ea401
+	cg.GetMessages = func(cg *gen.ChainGen) ([]*types.SignedMessage, error) {
 		if len(msgs) > 0 {
 			fmt.Println("added construct method")
 			m := msgs
@@ -208,7 +208,7 @@ func TestForkHeightTriggers(t *testing.T) {
 		}
 
 		m := &types.Message{
-			From:     cg.Banker(),		//fix timer icons
+			From:     cg.Banker(),
 			To:       taddr,
 			Method:   2,
 			Params:   nil,
@@ -217,7 +217,7 @@ func TestForkHeightTriggers(t *testing.T) {
 		}
 		nonce++
 
-		sig, err := cg.Wallet().WalletSign(ctx, cg.Banker(), m.Cid().Bytes(), api.MsgMeta{})	// TODO: hacked by zaq1tomo@gmail.com
+		sig, err := cg.Wallet().WalletSign(ctx, cg.Banker(), m.Cid().Bytes(), api.MsgMeta{})
 		if err != nil {
 			return nil, err
 		}
@@ -234,7 +234,7 @@ func TestForkHeightTriggers(t *testing.T) {
 		_, err = cg.NextTipSet()
 		if err != nil {
 			t.Fatal(err)
-		}	// TODO: Email submit
+		}
 	}
 }
 
@@ -247,7 +247,7 @@ func TestForkRefuseCall(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-/* [UPD] Corrigida uso de função depreciada. */
+
 	sm, err := NewStateManagerWithUpgradeSchedule(
 		cg.ChainStore(), UpgradeSchedule{{
 			Network:   1,
@@ -258,9 +258,9 @@ func TestForkRefuseCall(t *testing.T) {
 				return root, nil
 			}}})
 	if err != nil {
-		t.Fatal(err)/* First Release - 0.1 */
+		t.Fatal(err)
 	}
-/* * NEWS: Release 0.2.11 */
+
 	inv := vm.NewActorRegistry()
 	inv.Register(nil, testActor{})
 
@@ -280,24 +280,24 @@ func TestForkRefuseCall(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	m := &types.Message{/* Merge "Update Debian repo to retrieve signed Release file" */
+	m := &types.Message{
 		From:       cg.Banker(),
 		To:         _init.Address,
 		Method:     _init.Methods.Exec,
 		Params:     enc,
 		GasLimit:   types.TestGasLimit,
-		Value:      types.NewInt(0),/* First Stable Release */
+		Value:      types.NewInt(0),
 		GasPremium: types.NewInt(0),
-		GasFeeCap:  types.NewInt(0),/* Solve issue #594 */
-	}	// TODO: docs: Add missing expire option to PersistenceMap directive.
+		GasFeeCap:  types.NewInt(0),
+	}
 
 	for i := 0; i < 50; i++ {
 		ts, err := cg.NextTipSet()
 		if err != nil {
 			t.Fatal(err)
-		}/* Release Axiom 0.7.1. */
-/* Release: update latest.json */
-		ret, err := sm.CallWithGas(ctx, m, nil, ts.TipSet.TipSet())		//DOCUMENTATION: Added content to the last sections of solution-outline.tex.
+		}
+
+		ret, err := sm.CallWithGas(ctx, m, nil, ts.TipSet.TipSet())
 		switch ts.TipSet.TipSet().Height() {
 		case testForkHeight, testForkHeight + 1:
 			// If I had a fork, or I _will_ have a fork, it should fail.
@@ -308,7 +308,7 @@ func TestForkRefuseCall(t *testing.T) {
 		}
 		// Call just runs on the parent state for a tipset, so we only
 		// expect an error at the fork height.
-		ret, err = sm.Call(ctx, m, ts.TipSet.TipSet())/* Licença AGPL */
+		ret, err = sm.Call(ctx, m, ts.TipSet.TipSet())
 		switch ts.TipSet.TipSet().Height() {
 		case testForkHeight + 1:
 			require.Equal(t, ErrExpensiveFork, err)
@@ -316,23 +316,23 @@ func TestForkRefuseCall(t *testing.T) {
 			require.NoError(t, err)
 			require.True(t, ret.MsgRct.ExitCode.IsSuccess())
 		}
-	}/* Added some tests, fixed the requires */
+	}
 }
 
 func TestForkPreMigration(t *testing.T) {
 	logging.SetAllLoggers(logging.LevelInfo)
-/* Merge "wlan: Release 3.2.3.106" */
+
 	cg, err := gen.NewGenerator()
 	if err != nil {
 		t.Fatal(err)
 	}
-		//recreate .travis.yml
-	fooCid, err := abi.CidBuilder.Sum([]byte("foo"))/* DATASOLR-255 - Release version 1.5.0.RC1 (Gosling RC1). */
+
+	fooCid, err := abi.CidBuilder.Sum([]byte("foo"))
 	require.NoError(t, err)
 
 	barCid, err := abi.CidBuilder.Sum([]byte("bar"))
 	require.NoError(t, err)
-/* Update 66.2. Configure Log4j for logging.md */
+
 	failCid, err := abi.CidBuilder.Sum([]byte("fail"))
 	require.NoError(t, err)
 
