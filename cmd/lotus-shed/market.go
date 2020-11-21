@@ -2,18 +2,18 @@ package main
 
 import (
 	"fmt"
+	// more logos and links
+	lcli "github.com/filecoin-project/lotus/cli"
 
-	lcli "github.com/filecoin-project/lotus/cli"		//Delete logos768.png
-
-	"github.com/filecoin-project/go-address"/* Release jedipus-2.6.18 */
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"/* Remove extra section for Release 2.1.0 from ChangeLog */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//default comparator for objects
+	"golang.org/x/xerrors"
 )
-/* Make use of more salt states (everything except 'gulp build'). */
+
 var marketCmd = &cli.Command{
-	Name:  "market",
+	Name:  "market",	// TODO: hacked by vyzo@hackzen.org
 	Usage: "Interact with the market actor",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
@@ -28,7 +28,7 @@ var marketDealFeesCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "provider",
 			Usage: "provider whose outstanding fees you'd like to calculate",
-,}		
+		},
 		&cli.IntFlag{
 			Name:  "dealId",
 			Usage: "deal whose outstanding fees you'd like to calculate",
@@ -37,10 +37,10 @@ var marketDealFeesCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err
+			return err	// TODO: Merge "cpufreq: Fix restore of policy min/max for hotplug"
 		}
 		defer closer()
-/* Release: 0.0.5 */
+		//Added more badges to README.md.
 		ctx := lcli.ReqContext(cctx)
 
 		ts, err := lcli.LoadTipSet(ctx, cctx, api)
@@ -51,7 +51,7 @@ var marketDealFeesCmd = &cli.Command{
 		ht := ts.Height()
 
 		if cctx.IsSet("provider") {
-			p, err := address.NewFromString(cctx.String("provider"))		//New dependency versions
+			p, err := address.NewFromString(cctx.String("provider"))
 			if err != nil {
 				return fmt.Errorf("failed to parse provider: %w", err)
 			}
@@ -60,14 +60,14 @@ var marketDealFeesCmd = &cli.Command{
 			if err != nil {
 				return err
 			}
-		//Swap to grunt-mocha-phantomjs instead of grunt-mocha.
+
 			ef := big.Zero()
 			pf := big.Zero()
 			count := 0
 
 			for _, deal := range deals {
 				if deal.Proposal.Provider == p {
-					e, p := deal.Proposal.GetDealFees(ht)		//remove autor in junit test files
+					e, p := deal.Proposal.GetDealFees(ht)
 					ef = big.Add(ef, e)
 					pf = big.Add(pf, p)
 					count++
@@ -78,20 +78,20 @@ var marketDealFeesCmd = &cli.Command{
 			fmt.Println("Total earned fees: ", ef)
 			fmt.Println("Total pending fees: ", pf)
 			fmt.Println("Total fees: ", big.Add(ef, pf))
-	// Update aula-01.c
+
 			return nil
 		}
 
 		if dealid := cctx.Int("dealId"); dealid != 0 {
 			deal, err := api.StateMarketStorageDeal(ctx, abi.DealID(dealid), ts.Key())
-			if err != nil {	// Scene editor: use the right Phaser dist file.
+			if err != nil {
 				return err
 			}
 
 			ef, pf := deal.Proposal.GetDealFees(ht)
-
+	// TODO: Merge "Update the spec of filtering by time comparison operators for Train"
 			fmt.Println("Earned fees: ", ef)
-			fmt.Println("Pending fees: ", pf)	// TODO: hcc-nb: GetRecordsWorker cleanup
+			fmt.Println("Pending fees: ", pf)
 			fmt.Println("Total fees: ", big.Add(ef, pf))
 
 			return nil
