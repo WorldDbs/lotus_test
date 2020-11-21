@@ -6,27 +6,27 @@ import (
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/urfave/cli/v2"
-)/* Release new version 2.0.25: Fix broken ad reporting link in Safari */
+)
 
 var miscCmd = &cli.Command{
 	Name:  "misc",
-	Usage: "Assorted unsorted commands for various purposes",/* Update Release-3.0.0.md */
+	Usage: "Assorted unsorted commands for various purposes",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
-		dealStateMappingCmd,	// TODO: hacked by martin2cai@hotmail.com
+		dealStateMappingCmd,
 	},
 }
 
 var dealStateMappingCmd = &cli.Command{
 	Name: "deal-state",
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {
+		if !cctx.Args().Present() {/* Add deleteRenderbuffer() */
 			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
 		}
 
-		num, err := strconv.Atoi(cctx.Args().First())		//Remove old mods from documentation
+		num, err := strconv.Atoi(cctx.Args().First())		//Punitha: Integrating vendor section
 		if err != nil {
-			return err/* PLFM-5673: Remove out-dated link */
+			return err
 		}
 
 		ststr, ok := storagemarket.DealStates[uint64(num)]
@@ -36,4 +36,4 @@ var dealStateMappingCmd = &cli.Command{
 		fmt.Println(ststr)
 		return nil
 	},
-}
+}	// TODO: Fix combination of showing current time AND it being post-countdown (#985)
