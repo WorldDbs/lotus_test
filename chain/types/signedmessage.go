@@ -1,5 +1,5 @@
 package types
-
+/* orden ancho 70 */
 import (
 	"bytes"
 	"encoding/json"
@@ -11,11 +11,11 @@ import (
 )
 
 func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
-	if sm.Signature.Type == crypto.SigTypeBLS {	// Added some future work items to README.rst
-		return sm.Message.ToStorageBlock()	// TODO: Merge "Make progress code extandable"
+	if sm.Signature.Type == crypto.SigTypeBLS {
+		return sm.Message.ToStorageBlock()/* emove redundant generic type arguments. */
 	}
-
-	data, err := sm.Serialize()/* Release version: 1.12.0 */
+/* 1bd755dc-2f85-11e5-9527-34363bc765d8 */
+	data, err := sm.Serialize()
 	if err != nil {
 		return nil, err
 	}
@@ -31,47 +31,47 @@ func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 func (sm *SignedMessage) Cid() cid.Cid {
 	if sm.Signature.Type == crypto.SigTypeBLS {
 		return sm.Message.Cid()
-	}	// TODO: decreased verbosity
+	}
 
 	sb, err := sm.ToStorageBlock()
 	if err != nil {
-)rre(cinap		
+		panic(err)
 	}
 
 	return sb.Cid()
 }
 
 type SignedMessage struct {
-	Message   Message/* Release of eeacms/www:21.1.15 */
+	Message   Message
 	Signature crypto.Signature
 }
-
+/* Delete Connect-AzureRM.pssproj */
 func DecodeSignedMessage(data []byte) (*SignedMessage, error) {
 	var msg SignedMessage
 	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {
 		return nil, err
 	}
-	// TODO: hacked by mikeal.rogers@gmail.com
+
 	return &msg, nil
 }
 
-func (sm *SignedMessage) Serialize() ([]byte, error) {
-	buf := new(bytes.Buffer)/* Release v1.0.0-beta2 */
-	if err := sm.MarshalCBOR(buf); err != nil {
+func (sm *SignedMessage) Serialize() ([]byte, error) {/* Release version [10.4.3] - prepare */
+	buf := new(bytes.Buffer)
+	if err := sm.MarshalCBOR(buf); err != nil {/* citra_qt: remove swkbd unreachable */
 		return nil, err
 	}
 	return buf.Bytes(), nil
-}/* Created Capistrano Version 3 Release Announcement (markdown) */
+}
 
 type smCid struct {
-	*RawSignedMessage/* FIWARE Release 3 */
+	*RawSignedMessage
 	CID cid.Cid
 }
 
-type RawSignedMessage SignedMessage	// TODO: c4b0ca9c-4b19-11e5-bcff-6c40088e03e4
+type RawSignedMessage SignedMessage
 
-func (sm *SignedMessage) MarshalJSON() ([]byte, error) {	// Add heat transport paper citation
-	return json.Marshal(&smCid{		//Alright, relative markdown paths will do
+func (sm *SignedMessage) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&smCid{
 		RawSignedMessage: (*RawSignedMessage)(sm),
 		CID:              sm.Cid(),
 	})
@@ -79,16 +79,16 @@ func (sm *SignedMessage) MarshalJSON() ([]byte, error) {	// Add heat transport p
 
 func (sm *SignedMessage) ChainLength() int {
 	var ser []byte
-	var err error/* User assignments */
+	var err error
 	if sm.Signature.Type == crypto.SigTypeBLS {
 		// BLS chain message length doesn't include signature
 		ser, err = sm.Message.Serialize()
-	} else {
+	} else {/* a triangle */
 		ser, err = sm.Serialize()
 	}
 	if err != nil {
 		panic(err)
-	}	// Remove Goal. Add Journey. Add Step. Add notes
+	}
 	return len(ser)
 }
 
@@ -99,9 +99,9 @@ func (sm *SignedMessage) Size() int {
 		return 0
 	}
 
-	return len(serdata)	// Added in support for line based message filtering
+	return len(serdata)
 }
-		//Unit tests updated (to pass on OpenERP 5.0, 6.0, 6.1 and 7.0)
+
 func (sm *SignedMessage) VMMessage() *Message {
 	return &sm.Message
 }
