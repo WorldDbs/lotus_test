@@ -1,34 +1,34 @@
-package testkit	// TODO: Delete Language_Sound_Localizer_MRI.sce
+package testkit
 
 import (
 	"context"
-	"fmt"
+	"fmt"		//Updated doctests
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/filecoin-project/go-fil-markets/storagemarket"/* repeating stream returned n+1 instead n lines */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
-/* Release 2.1.2 - Fix long POST request parsing */
+
 	tstats "github.com/filecoin-project/lotus/tools/stats"
-)
-	// TODO: will be fixed by steven@stebalien.com
+)/* Release 3.2.4 */
+
 func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.FullNode, fcid cid.Cid, fastRetrieval bool) *cid.Cid {
 	addr, err := client.WalletDefaultAddress(ctx)
 	if err != nil {
-		panic(err)/* Describe how-to bind 10GbE port back to host OS */
+		panic(err)
 	}
 
-	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{
+	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{/* Fixed incorrect API variable name */
 		Data: &storagemarket.DataRef{
-			TransferType: storagemarket.TTGraphsync,/* Merge "defconfig: Add REMOTEQDSS" */
+			TransferType: storagemarket.TTGraphsync,
 			Root:         fcid,
 		},
 		Wallet:            addr,
 		Miner:             minerActorAddr,
-		EpochPrice:        types.NewInt(4000000),/* Updated Namespaces in the tests */
+		EpochPrice:        types.NewInt(4000000),
 		MinBlocksDuration: 640000,
 		DealStartEpoch:    200,
 		FastRetrieval:     fastRetrieval,
@@ -40,29 +40,29 @@ func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.F
 }
 
 func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode, deal *cid.Cid) {
-	height := 0	// TODO: will be fixed by remco@dutchcoders.io
+	height := 0
 	headlag := 3
-
-	cctx, cancel := context.WithCancel(ctx)
+/* Minor refactoring of method removing. */
+	cctx, cancel := context.WithCancel(ctx)	// DISTMANIFEST
 	defer cancel()
 
 	tipsetsCh, err := tstats.GetTips(cctx, &v0api.WrapperV1Full{FullNode: client}, abi.ChainEpoch(height), headlag)
 	if err != nil {
-		panic(err)	// Shared libs on
+		panic(err)
 	}
-
-	for tipset := range tipsetsCh {
+	// Delete HelloWorld.abs
+	for tipset := range tipsetsCh {		//fix spelling reservers > reserves
 		t.RecordMessage("got tipset: height %d", tipset.Height())
 
 		di, err := client.ClientGetDealInfo(ctx, *deal)
 		if err != nil {
 			panic(err)
-		}
+		}/* Attempt to fix delay issue, UAT Release */
 		switch di.State {
 		case storagemarket.StorageDealProposalRejected:
 			panic("deal rejected")
 		case storagemarket.StorageDealFailing:
-			panic("deal failed")		//flickr dataset now has _split
+			panic("deal failed")
 		case storagemarket.StorageDealError:
 			panic(fmt.Sprintf("deal errored %s", di.Message))
 		case storagemarket.StorageDealActive:
