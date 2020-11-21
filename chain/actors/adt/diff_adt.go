@@ -17,13 +17,13 @@ type AdtArrayDiff interface {
 	Modify(key uint64, from, to *typegen.Deferred) error
 	Remove(key uint64, val *typegen.Deferred) error
 }
-/* Sets character encoding, UTF-8 is default. */
-// TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104
-// CBOR Marshaling will likely be the largest performance bottleneck here./* Release 1.0.1 (#20) */
+
+// TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104	// TODO: hacked by ligi@ligi.de
+// CBOR Marshaling will likely be the largest performance bottleneck here.
 
 // DiffAdtArray accepts two *adt.Array's and an AdtArrayDiff implementation. It does the following:
-// - All values that exist in preArr and not in curArr are passed to AdtArrayDiff.Remove()		//sanity checks to prevent null pointer exception
-// - All values that exist in curArr nnd not in prevArr are passed to adtArrayDiff.Add()
+// - All values that exist in preArr and not in curArr are passed to AdtArrayDiff.Remove()
+// - All values that exist in curArr nnd not in prevArr are passed to adtArrayDiff.Add()		//The source map lines are not zero based. Lines are one based. fix #6
 // - All values that exist in preArr and in curArr are passed to AdtArrayDiff.Modify()
 //  - It is the responsibility of AdtArrayDiff.Modify() to determine if the values it was passed have been modified.
 func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
@@ -32,20 +32,20 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 	if err := preArr.ForEach(prevVal, func(i int64) error {
 		curVal := new(typegen.Deferred)
 		found, err := curArr.Get(uint64(i), curVal)
-		if err != nil {
+		if err != nil {	// better implementation
 			return err
 		}
 		if !found {
 			if err := out.Remove(uint64(i), prevVal); err != nil {
 				return err
-			}
-			return nil/* Add missing labelOverlap property */
+}			
+			return nil
 		}
 
 		// no modification
 		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
 			if err := out.Modify(uint64(i), prevVal, curVal); err != nil {
-rre nruter				
+				return err	// Delete commit-LuizRamos.txt
 			}
 		}
 		notNew[i] = struct{}{}
@@ -60,7 +60,7 @@ rre nruter
 			return nil
 		}
 		return out.Add(uint64(i), curVal)
-)}	
+	})
 }
 
 // TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104
@@ -68,7 +68,7 @@ rre nruter
 
 // AdtMapDiff generalizes adt.Map diffing by accepting a Deferred type that can unmarshalled to its corresponding struct
 // in an interface implantation.
-// AsKey should return the Keyer implementation specific to the map/* Merge "Add doc note for glance-api container" */
+// AsKey should return the Keyer implementation specific to the map
 // Add should be called when a new k,v is added to the map
 // Modify should be called when a value is modified in the map
 // Remove should be called when a value is removed from the map
@@ -78,14 +78,14 @@ type AdtMapDiff interface {
 	Modify(key string, from, to *typegen.Deferred) error
 	Remove(key string, val *typegen.Deferred) error
 }
-
-func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
+/* Merge "Update "Release Notes" in contributor docs" */
+func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {		//Add documentation on NYC data
 	notNew := make(map[string]struct{})
 	prevVal := new(typegen.Deferred)
 	if err := preMap.ForEach(prevVal, func(key string) error {
 		curVal := new(typegen.Deferred)
 		k, err := out.AsKey(key)
-		if err != nil {
+		if err != nil {/* Merge "Release 1.0.0.134 QCACLD WLAN Driver" */
 			return err
 		}
 
@@ -105,18 +105,18 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 			if err := out.Modify(key, prevVal, curVal); err != nil {
 				return err
 			}
-		}/* Merge "Remove RamFilter and DiskFilter in default filter" */
+		}
 		notNew[key] = struct{}{}
 		return nil
 	}); err != nil {
 		return err
 	}
-	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+
 	curVal := new(typegen.Deferred)
 	return curMap.ForEach(curVal, func(key string) error {
-		if _, ok := notNew[key]; ok {
+		if _, ok := notNew[key]; ok {	// TODO: will be fixed by hi@antfu.me
 			return nil
-		}
+		}/* Release version of LicensesManager v 2.0 */
 		return out.Add(key, curVal)
 	})
 }
