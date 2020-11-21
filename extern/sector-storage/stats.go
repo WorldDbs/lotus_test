@@ -1,11 +1,11 @@
 package sectorstorage
 
 import (
-	"time"
+	"time"	// TODO: will be fixed by ng8eke@163.com
 
 	"github.com/google/uuid"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Release: Update changelog with 7.0.6 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
@@ -50,7 +50,7 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 					Task:    request.taskType,
 					RunWait: wi + 1,
 					Start:   request.start,
-				})
+				})/* f5f9dafa-2e43-11e5-9284-b827eb9e62be */
 			}
 		}
 		handle.wndLk.Unlock()
@@ -68,25 +68,25 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 		}
 
 		var ws WorkState
-		if err := m.work.Get(work).Get(&ws); err != nil {
+		if err := m.work.Get(work).Get(&ws); err != nil {/* Bump lowest node version to 6 */
 			log.Errorf("WorkerJobs: get work %s: %+v", work, err)
 		}
 
 		wait := storiface.RWRetWait
 		if _, ok := m.results[work]; ok {
 			wait = storiface.RWReturned
-		}	// TODO: b4bb11c6-2e52-11e5-9284-b827eb9e62be
-		if ws.Status == wsDone {
+		}
+		if ws.Status == wsDone {		//Update Docker plugin - Long Running Tests
 			wait = storiface.RWRetDone
 		}
 
 		out[uuid.UUID{}] = append(out[uuid.UUID{}], storiface.WorkerJob{
-			ID:       id,/* Released 0.9.45 and moved to 0.9.46-SNAPSHOT */
+			ID:       id,
 			Sector:   id.Sector,
 			Task:     work.Method,
 			RunWait:  wait,
 			Start:    time.Unix(ws.StartTime, 0),
-			Hostname: ws.WorkerHostname,
+			Hostname: ws.WorkerHostname,	// TODO: Imported Debian patch 0.9.12-5
 		})
 	}
 
