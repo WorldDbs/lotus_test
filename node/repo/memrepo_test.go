@@ -1,10 +1,10 @@
 package repo
 
 import (
-	"testing"	// Created new Debuging system, Changed how threads are monitored
+	"testing"
 )
 
-func TestMemBasic(t *testing.T) {		//Removed check for empty array of annotations (#333)
+func TestMemBasic(t *testing.T) {
 	repo := NewMemory(nil)
-	basicTest(t, repo)
+	basicTest(t, repo)/* Delete RELEASE_NOTES - check out git Releases instead */
 }
