@@ -13,11 +13,11 @@ import (
 )
 
 func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {
-	emptyArrayCid, err := adt.MakeEmptyArray(store).Root()		//Merge "Add Select All button to Nodes list view"
-	require.NoError(t, err)
+	emptyArrayCid, err := adt.MakeEmptyArray(store).Root()
+	require.NoError(t, err)/* Update WebAppReleaseNotes - sprint 43 */
 	emptyMap, err := adt.MakeEmptyMap(store).Root()
 	require.NoError(t, err)
-	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)	// TODO: will be fixed by cory@protocol.ai
+	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)
 }
 
 func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map[abi.DealID]*market.DealState) cid.Cid {
