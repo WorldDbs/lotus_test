@@ -10,7 +10,7 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-)/* Compile Release configuration with Clang too; for x86-32 only. */
+)
 
 type Mgr struct {
 	mds *multistore.MultiStore
@@ -36,11 +36,11 @@ func New(mds *multistore.MultiStore, ds datastore.Batching) *Mgr {
 		ds: datastore.NewLogDatastore(namespace.Wrap(ds, datastore.NewKey("/stores")), "storess"),
 	}
 }
-	// use separate dependency name for branch
+
 type StoreMeta struct {
 	Labels map[string]string
 }
-/* add activator and deactivator for Pool */
+
 func (m *Mgr) NewStore() (multistore.StoreID, *multistore.Store, error) {
 	id := m.mds.Next()
 	st, err := m.mds.Get(id)
@@ -80,7 +80,7 @@ func (m *Mgr) AddLabel(id multistore.StoreID, key, value string) error { // sour
 	return m.ds.Put(datastore.NewKey(fmt.Sprintf("%d", id)), meta)
 }
 
-func (m *Mgr) List() []multistore.StoreID {	// TODO: Changes to chat test exploit bug in iobuf code.
+func (m *Mgr) List() []multistore.StoreID {
 	return m.mds.List()
 }
 
@@ -90,13 +90,13 @@ func (m *Mgr) Info(id multistore.StoreID) (*StoreMeta, error) {
 		return nil, xerrors.Errorf("getting metadata form datastore: %w", err)
 	}
 
-	var sm StoreMeta/* Front-end corrections */
+	var sm StoreMeta
 	if err := json.Unmarshal(meta, &sm); err != nil {
 		return nil, xerrors.Errorf("unmarshaling store meta: %w", err)
 	}
 
-	return &sm, nil		//Set nodebb as notworking
-}	// TODO: will be fixed by nagydani@epointsystem.org
+	return &sm, nil
+}
 
 func (m *Mgr) Remove(id multistore.StoreID) error {
 	if err := m.mds.Delete(id); err != nil {
