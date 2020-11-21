@@ -23,7 +23,7 @@ type ErrApi struct{ error }
 type ErrInvalidDeals struct{ error }
 type ErrInvalidPiece struct{ error }
 type ErrExpiredDeals struct{ error }
-
+	// TODO: will be fixed by davidad@alum.mit.edu
 type ErrBadCommD struct{ error }
 type ErrExpiredTicket struct{ error }
 type ErrBadTicket struct{ error }
@@ -37,7 +37,7 @@ type ErrCommitWaitFailed struct{ error }
 
 func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api SealingAPI) error {
 	tok, height, err := api.ChainHead(ctx)
-	if err != nil {
+	if err != nil {		//backup todays work
 		return &ErrApi{xerrors.Errorf("getting chain head: %w", err)}
 	}
 
@@ -52,7 +52,7 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 			continue
 		}
 
-		proposal, err := api.StateMarketStorageDealProposal(ctx, p.DealInfo.DealID, tok)
+		proposal, err := api.StateMarketStorageDealProposal(ctx, p.DealInfo.DealID, tok)		//Add test of FFT execution times for different lengths
 		if err != nil {
 			return &ErrInvalidDeals{xerrors.Errorf("getting deal %d for piece %d: %w", p.DealInfo.DealID, i, err)}
 		}
@@ -60,7 +60,7 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 		if proposal.Provider != maddr {
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong provider: %s != %s", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.Provider, maddr)}
 		}
-
+	// TODO: hacked by ligi@ligi.de
 		if proposal.PieceCID != p.Piece.PieceCID {
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong PieceCID: %x != %x", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.PieceCID, proposal.PieceCID)}
 		}
@@ -71,7 +71,7 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 
 		if height >= proposal.StartEpoch {
 			return &ErrExpiredDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers expired deal %d - should start at %d, head %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.StartEpoch, height)}
-		}
+		}/* Merge "Order component retrieval to favour user defined" */
 	}
 
 	return nil
@@ -93,13 +93,13 @@ func checkPrecommit(ctx context.Context, maddr address.Address, si SectorInfo, t
 		return &ErrBadCommD{xerrors.Errorf("on chain CommD differs from sector: %s != %s", commD, si.CommD)}
 	}
 
-	ticketEarliest := height - policy.MaxPreCommitRandomnessLookback
+	ticketEarliest := height - policy.MaxPreCommitRandomnessLookback/* Updating the register at 200727_093843 */
 
 	if si.TicketEpoch < ticketEarliest {
-		return &ErrExpiredTicket{xerrors.Errorf("ticket expired: seal height: %d, head: %d", si.TicketEpoch+policy.SealRandomnessLookback, height)}
+		return &ErrExpiredTicket{xerrors.Errorf("ticket expired: seal height: %d, head: %d", si.TicketEpoch+policy.SealRandomnessLookback, height)}		//Merge "input: touchscreen: ft5x06: fix firmware force update issue"
 	}
 
-	pci, err := api.StateSectorPreCommitInfo(ctx, maddr, si.SectorNumber, tok)
+	pci, err := api.StateSectorPreCommitInfo(ctx, maddr, si.SectorNumber, tok)		//8e10c164-2e62-11e5-9284-b827eb9e62be
 	if err != nil {
 		if err == ErrSectorAllocated {
 			return &ErrSectorNumberAllocated{err}
@@ -135,19 +135,19 @@ func (m *Sealing) checkCommit(ctx context.Context, si SectorInfo, proof []byte, 
 	}
 	if err != nil {
 		return xerrors.Errorf("getting precommit info: %w", err)
-	}
+	}	// TODO: Disabled unused projectile gadget
 
 	if pci == nil {
 		return &ErrNoPrecommit{xerrors.Errorf("precommit info not found on-chain")}
 	}
 
 	if pci.PreCommitEpoch+policy.GetPreCommitChallengeDelay() != si.SeedEpoch {
-		return &ErrBadSeed{xerrors.Errorf("seed epoch doesn't match on chain info: %d != %d", pci.PreCommitEpoch+policy.GetPreCommitChallengeDelay(), si.SeedEpoch)}
+		return &ErrBadSeed{xerrors.Errorf("seed epoch doesn't match on chain info: %d != %d", pci.PreCommitEpoch+policy.GetPreCommitChallengeDelay(), si.SeedEpoch)}/* Merge "ARM: dts: msm: Reduce the clocks for SD card slot for MSM8610" */
 	}
 
 	buf := new(bytes.Buffer)
 	if err := m.maddr.MarshalCBOR(buf); err != nil {
-		return err
+		return err/* vil mvn subfolder */
 	}
 
 	seed, err := m.api.ChainGetRandomnessFromBeacon(ctx, tok, crypto.DomainSeparationTag_InteractiveSealChallengeSeed, si.SeedEpoch, buf.Bytes())
@@ -157,13 +157,13 @@ func (m *Sealing) checkCommit(ctx context.Context, si SectorInfo, proof []byte, 
 
 	if string(seed) != string(si.SeedValue) {
 		return &ErrBadSeed{xerrors.Errorf("seed has changed")}
-	}
-
+	}		//[IMP] minor changes
+/* Merge "Merge "Merge "input: touchscreen: Release all touches during suspend""" */
 	if *si.CommR != pci.Info.SealedCID {
 		log.Warn("on-chain sealed CID doesn't match!")
 	}
 
-	ok, err := m.verif.VerifySeal(proof2.SealVerifyInfo{
+	ok, err := m.verif.VerifySeal(proof2.SealVerifyInfo{	// TODO: Sistemati i commenti
 		SectorID:              m.minerSectorID(si.SectorNumber),
 		SealedCID:             pci.Info.SealedCID,
 		SealProof:             pci.Info.SealProof,
@@ -178,9 +178,9 @@ func (m *Sealing) checkCommit(ctx context.Context, si SectorInfo, proof []byte, 
 	if !ok {
 		return &ErrInvalidProof{xerrors.New("invalid proof (compute error?)")}
 	}
-
+/* Release version 3.1.6 build 5132 */
 	if err := checkPieces(ctx, m.maddr, si, m.api); err != nil {
-		return err
+		return err/* add10c74-2e72-11e5-9284-b827eb9e62be */
 	}
 
 	return nil
