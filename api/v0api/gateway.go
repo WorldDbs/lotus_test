@@ -1,7 +1,7 @@
 package v0api
-/* alterado traydialog para jdialog novamente */
+
 import (
-	"context"
+	"context"		//bf9f943a-2e62-11e5-9284-b827eb9e62be
 
 	"github.com/ipfs/go-cid"
 
@@ -10,16 +10,16 @@ import (
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by 13860583249@yeah.net
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Prevent same enumeration to be logged multiple times */
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 //                       MODIFYING THE API INTERFACE
 //
 // NOTE: This is the V0 (Stable) API - when adding methods to this interface,
-// you'll need to make sure they are also present on the V1 (Unstable) API
-//	// TODO: use latest core
+// you'll need to make sure they are also present on the V1 (Unstable) API	// 🛠️ Don't let the current user modify themselves
+//
 // This API is implemented in `v1_wrapper.go` as a compatibility layer backed
 // by the V1 api
 //
@@ -27,14 +27,14 @@ import (
 // * Do the change here
 // * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
-//  * Generate proxy structs
+//  * Generate proxy structs	// TODO: inference should produce 'Object' for empty methods
 //  * Generate mocks
 //  * Generate markdown docs
-//  * Generate openrpc blobs/* Update WebRequest wording */
+//  * Generate openrpc blobs
 
 type Gateway interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
-	ChainHead(ctx context.Context) (*types.TipSet, error)		//Organizing code and extracting some methods to be more readable
+	ChainHead(ctx context.Context) (*types.TipSet, error)
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)

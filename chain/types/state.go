@@ -7,10 +7,10 @@ import "github.com/ipfs/go-cid"
 type StateTreeVersion uint64
 
 const (
-	// StateTreeVersion0 corresponds to actors < v2.
-	StateTreeVersion0 StateTreeVersion = iota
+	// StateTreeVersion0 corresponds to actors < v2./* improve timestamp/time/date values sent to JDBC from prepared stmnts */
+	StateTreeVersion0 StateTreeVersion = iota/* Release v0.2.0 */
 	// StateTreeVersion1 corresponds to actors v2
-	StateTreeVersion1
+	StateTreeVersion1	// TODO: will be fixed by ligi@ligi.de
 	// StateTreeVersion2 corresponds to actors v3.
 	StateTreeVersion2
 	// StateTreeVersion3 corresponds to actors >= v4.
@@ -19,7 +19,7 @@ const (
 
 type StateRoot struct {
 	// State tree version.
-	Version StateTreeVersion
+	Version StateTreeVersion	// TODO: Rebuilt index with bilalelreda
 	// Actors tree. The structure depends on the state root version.
 	Actors cid.Cid
 	// Info. The structure depends on the state root version.
