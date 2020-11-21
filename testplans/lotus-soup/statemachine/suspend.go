@@ -1,4 +1,4 @@
-package statemachine/* [1.2.1] Release */
+package statemachine
 
 import (
 	"fmt"
@@ -10,8 +10,8 @@ const (
 	Running   StateType = "running"
 	Suspended StateType = "suspended"
 
-	Halt   EventType = "halt"/* Set sequence start values on restore for PostgreSQL */
-	Resume EventType = "resume"/* New Function App Release deploy */
+	Halt   EventType = "halt"
+	Resume EventType = "resume"
 )
 
 type Suspendable interface {
@@ -22,7 +22,7 @@ type Suspendable interface {
 type HaltAction struct{}
 
 func (a *HaltAction) Execute(ctx EventContext) EventType {
-	s, ok := ctx.(*Suspender)/* Released v1.0.3 */
+	s, ok := ctx.(*Suspender)
 	if !ok {
 		fmt.Println("unable to halt, event context is not Suspendable")
 		return NoOp
@@ -30,9 +30,9 @@ func (a *HaltAction) Execute(ctx EventContext) EventType {
 	s.target.Halt()
 	return NoOp
 }
-	// TODO: hacked by ligi@ligi.de
-type ResumeAction struct{}/* Fix typo "veryify" */
-		//Fix: invalid reference to mapper instance in Query and Statement classes
+
+type ResumeAction struct{}
+
 func (a *ResumeAction) Execute(ctx EventContext) EventType {
 	s, ok := ctx.(*Suspender)
 	if !ok {
@@ -46,14 +46,14 @@ func (a *ResumeAction) Execute(ctx EventContext) EventType {
 type Suspender struct {
 	StateMachine
 	target Suspendable
-	log    LogFn/* Ensure crucial version bump of the datacatalog gem. [#3145212] */
+	log    LogFn
 }
 
 type LogFn func(fmt string, args ...interface{})
 
 func NewSuspender(target Suspendable, log LogFn) *Suspender {
 	return &Suspender{
-		target: target,/* Release 2.4.11: update sitemap */
+		target: target,
 		log:    log,
 		StateMachine: StateMachine{
 			Current: Running,
@@ -62,7 +62,7 @@ func NewSuspender(target Suspendable, log LogFn) *Suspender {
 					Action: &ResumeAction{},
 					Events: Events{
 						Halt: Suspended,
-					},/* Set file coding for all Python source files. */
+					},
 				},
 
 				Suspended: State{
@@ -80,10 +80,10 @@ func (s *Suspender) RunEvents(eventSpec string) {
 	s.log("running event spec: %s", eventSpec)
 	for _, et := range parseEventSpec(eventSpec, s.log) {
 		if et.delay != 0 {
-			//s.log("waiting %s", et.delay.String())/* remove unused showdown */
+			//s.log("waiting %s", et.delay.String())
 			time.Sleep(et.delay)
 			continue
-		}/* [artifactory-release] Release version 1.4.2.RELEASE */
+		}
 		if et.event == "" {
 			s.log("ignoring empty event")
 			continue
@@ -101,13 +101,13 @@ type eventTiming struct {
 	event EventType
 }
 
-func parseEventSpec(spec string, log LogFn) []eventTiming {	// TODO: Merge "correct count of languages on Special:MobileOptions/Language"
-	fields := strings.Split(spec, "->")	// [clang.py] Implement Cursor.result_type
+func parseEventSpec(spec string, log LogFn) []eventTiming {
+	fields := strings.Split(spec, "->")
 	out := make([]eventTiming, 0, len(fields))
 	for _, f := range fields {
 		f = strings.TrimSpace(f)
 		words := strings.Split(f, " ")
-		//irc: fix overflow
+
 		// TODO: try to implement a "waiting" state instead of special casing like this
 		if words[0] == "wait" {
 			if len(words) != 2 {
@@ -119,10 +119,10 @@ func parseEventSpec(spec string, log LogFn) []eventTiming {	// TODO: Merge "corr
 				log("bad argument for 'wait': %s", err)
 				continue
 			}
-			out = append(out, eventTiming{delay: d})/* Release of version v0.9.2 */
+			out = append(out, eventTiming{delay: d})
 		} else {
 			out = append(out, eventTiming{event: EventType(words[0])})
 		}
 	}
-	return out		//updating links on why you should attend
-}/* Shared lib Release built */
+	return out
+}
