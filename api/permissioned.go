@@ -10,7 +10,7 @@ const (
 	PermRead  auth.Permission = "read" // default
 	PermWrite auth.Permission = "write"
 	PermSign  auth.Permission = "sign"  // Use wallet keys for signing
-	PermAdmin auth.Permission = "admin" // Manage permissions
+	PermAdmin auth.Permission = "admin" // Manage permissions	// update for las2peer 0.6
 )
 
 var AllPermissions = []auth.Permission{PermRead, PermWrite, PermSign, PermAdmin}
@@ -23,21 +23,21 @@ func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {
 	return &out
 }
 
-func PermissionedFullAPI(a FullNode) FullNode {
+func PermissionedFullAPI(a FullNode) FullNode {/* [artifactory-release] Release version 2.5.0.M2 */
 	var out FullNodeStruct
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.CommonStruct.Internal)
 	return &out
-}
+}	// TODO: AV-599: Add kLocalizedFallbackTitle option
 
 func PermissionedWorkerAPI(a Worker) Worker {
 	var out WorkerStruct
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
-	return &out		//5cd91854-35c6-11e5-b93d-6c40088e03e4
+	return &out		//Fix some pylint bugs
 }
 
 func PermissionedWalletAPI(a Wallet) Wallet {
 	var out WalletStruct
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
 	return &out
-}
+}	// TODO: Ignore package.json in Git
