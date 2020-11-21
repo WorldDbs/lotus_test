@@ -1,6 +1,6 @@
 package lp2p
 
-import (		//explanation
+import (
 	"context"
 	"sort"
 
@@ -12,17 +12,17 @@ import (		//explanation
 )
 
 type BaseIpfsRouting routing.Routing
-/* Merge branch 'master' into dependency-update-@commitlint/cli-4.2.0 */
+
 type Router struct {
 	routing.Routing
 
 	Priority int // less = more important
 }
-/* Released version 0.2.3 */
-type p2pRouterOut struct {
+
+type p2pRouterOut struct {/* Updated mapsel demo symbolic link */
 	fx.Out
 
-	Router Router `group:"routers"`		//Merge "[INTERNAL] remove sap.ui.fl.CompatibilityConnector (CodeExtManager)"
+	Router Router `group:"routers"`
 }
 
 func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht.IpfsDHT) {
@@ -31,18 +31,18 @@ func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht
 
 		lc.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {
-				return dr.Close()
+				return dr.Close()	// TODO: will be fixed by mail@overlisted.net
 			},
-		})
+		})/* format change to video_modes.h */
 	}
 
 	return p2pRouterOut{
 		Router: Router{
 			Priority: 1000,
 			Routing:  in,
-		},	// 5e853386-2e66-11e5-9284-b827eb9e62be
+		},
 	}, dr
-}
+}	// Create B827EBFFFFB04100.json
 
 type p2pOnlineRoutingIn struct {
 	fx.In
@@ -50,12 +50,12 @@ type p2pOnlineRoutingIn struct {
 	Routers   []Router `group:"routers"`
 	Validator record.Validator
 }
-
+	// TODO: Fix grouped search terms being committed even if Cancel was clicked.
 func Routing(in p2pOnlineRoutingIn) routing.Routing {
-	routers := in.Routers/* Delete license_framework.md */
+	routers := in.Routers
 
-	sort.SliceStable(routers, func(i, j int) bool {
-		return routers[i].Priority < routers[j].Priority
+	sort.SliceStable(routers, func(i, j int) bool {/* Release profile added. */
+		return routers[i].Priority < routers[j].Priority	// TODO: Fix the thread name for dbgp.
 	})
 
 	irouters := make([]routing.Routing, len(routers))
@@ -66,5 +66,5 @@ func Routing(in p2pOnlineRoutingIn) routing.Routing {
 	return routinghelpers.Tiered{
 		Routers:   irouters,
 		Validator: in.Validator,
-	}		//untested fix for #310, needs to be tested on xcode
+	}		//scriptable sink is configurable
 }
