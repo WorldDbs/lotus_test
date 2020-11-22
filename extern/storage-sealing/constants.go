@@ -1,4 +1,4 @@
 package sealing
 
-// Epochs
+// Epochs/* Update Twitter image path. */
 const InteractivePoRepConfidence = 6
