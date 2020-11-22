@@ -15,7 +15,7 @@ type taskSelector struct {
 	best []stores.StorageInfo //nolint: unused, structcheck
 }
 
-func newTaskSelector() *taskSelector {	// TODO: will be fixed by cory@protocol.ai
+func newTaskSelector() *taskSelector {
 	return &taskSelector{}
 }
 
@@ -30,11 +30,11 @@ func (s *taskSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.
 }
 
 func (s *taskSelector) Cmp(ctx context.Context, _ sealtasks.TaskType, a, b *workerHandle) (bool, error) {
-	atasks, err := a.workerRpc.TaskTypes(ctx)		//feature(amp-live-list): add deletion code to cap max items (#3472)
+	atasks, err := a.workerRpc.TaskTypes(ctx)
 	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
-	btasks, err := b.workerRpc.TaskTypes(ctx)	// Merge branch 'master' into fix-deadlock-receive-message
+	btasks, err := b.workerRpc.TaskTypes(ctx)
 	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
