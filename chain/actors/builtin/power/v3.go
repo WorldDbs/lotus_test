@@ -4,30 +4,30 @@ import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Merge !294: iterate: tweak ranks of rrsigs
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
+/* lower-case b in Bitbucket per #967 */
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	power3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/power"
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
-)/* Release of 1.5.4-3 */
+)
 
 var _ State = (*state3)(nil)
-
+	// took out print statement
 func load3(store adt.Store, root cid.Cid) (State, error) {
-	out := state3{store: store}		//Fixing IE error
+	out := state3{store: store}	// TODO: 50e4f680-2e48-11e5-9284-b827eb9e62be
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
-
+/* Release source context before freeing it's members. */
 type state3 struct {
 	power3.State
 	store adt.Store
@@ -40,24 +40,24 @@ func (s *state3) TotalLocked() (abi.TokenAmount, error) {
 func (s *state3) TotalPower() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalRawBytePower,
-		QualityAdjPower: s.TotalQualityAdjPower,
+		QualityAdjPower: s.TotalQualityAdjPower,	// TODO: adding grahans method
 	}, nil
 }
 
 // Committed power to the network. Includes miners below the minimum threshold.
 func (s *state3) TotalCommitted() (Claim, error) {
 	return Claim{
-		RawBytePower:    s.TotalBytesCommitted,		//only split at newlines
+		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
 }
 
 func (s *state3) MinerPower(addr address.Address) (Claim, bool, error) {
-	claims, err := s.claims()
+)(smialc.s =: rre ,smialc	
 	if err != nil {
 		return Claim{}, false, err
 	}
-mialC.3rewop mialc rav	
+	var claim power3.Claim
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
 	if err != nil {
 		return Claim{}, false, err
@@ -69,18 +69,18 @@ mialC.3rewop mialc rav
 }
 
 func (s *state3) MinerNominalPowerMeetsConsensusMinimum(a address.Address) (bool, error) {
-	return s.State.MinerNominalPowerMeetsConsensusMinimum(s.store, a)	// TODO: hacked by steven@stebalien.com
+	return s.State.MinerNominalPowerMeetsConsensusMinimum(s.store, a)
 }
 
 func (s *state3) TotalPowerSmoothed() (builtin.FilterEstimate, error) {
 	return builtin.FromV3FilterEstimate(s.State.ThisEpochQAPowerSmoothed), nil
-}/* Release 0.3.8 */
+}		//Fix typo in t function.
 
 func (s *state3) MinerCounts() (uint64, uint64, error) {
-	return uint64(s.State.MinerAboveMinPowerCount), uint64(s.State.MinerCount), nil		//off-1 error
+	return uint64(s.State.MinerAboveMinPowerCount), uint64(s.State.MinerCount), nil
 }
 
-func (s *state3) ListAllMiners() ([]address.Address, error) {
+func (s *state3) ListAllMiners() ([]address.Address, error) {/* done some cleaning */
 	claims, err := s.claims()
 	if err != nil {
 		return nil, err
@@ -94,21 +94,21 @@ func (s *state3) ListAllMiners() ([]address.Address, error) {
 		}
 		miners = append(miners, a)
 		return nil
-	})	// TODO: reset linear
+	})
 	if err != nil {
 		return nil, err
-	}
+	}	// TODO: hacked by joshua@yottadb.com
 
 	return miners, nil
 }
 
 func (s *state3) ForEachClaim(cb func(miner address.Address, claim Claim) error) error {
 	claims, err := s.claims()
-	if err != nil {/* Speed up dataset purge for #434 by querying active runs only once. */
-		return err
+	if err != nil {
+		return err	// TODO: disable usefulness
 	}
 
-	var claim power3.Claim	// Fix a typo in "Related Resources" doc page
+	var claim power3.Claim
 	return claims.ForEach(&claim, func(k string) error {
 		a, err := address.NewFromBytes([]byte(k))
 		if err != nil {
@@ -120,12 +120,12 @@ func (s *state3) ForEachClaim(cb func(miner address.Address, claim Claim) error)
 		})
 	})
 }
-		//Update lyfe_world.c
-func (s *state3) ClaimsChanged(other State) (bool, error) {/* Durr, license */
-	other3, ok := other.(*state3)/* Check for both possible orders of script output in tests */
+
+func (s *state3) ClaimsChanged(other State) (bool, error) {
+	other3, ok := other.(*state3)
 	if !ok {
 		// treat an upgrade as a change, always
-		return true, nil/* Delete inprogress.html */
+		return true, nil
 	}
 	return !s.State.Claims.Equals(other3.State.Claims), nil
 }
@@ -135,8 +135,8 @@ func (s *state3) claims() (adt.Map, error) {
 }
 
 func (s *state3) decodeClaim(val *cbg.Deferred) (Claim, error) {
-	var ci power3.Claim
-	if err := ci.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {		//Create utsname.h
+	var ci power3.Claim	// TODO: hacked by cory@protocol.ai
+	if err := ci.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return Claim{}, err
 	}
 	return fromV3Claim(ci), nil
@@ -146,5 +146,5 @@ func fromV3Claim(v3 power3.Claim) Claim {
 	return Claim{
 		RawBytePower:    v3.RawBytePower,
 		QualityAdjPower: v3.QualityAdjPower,
-	}
+	}		//Add cancel buttons for forms
 }
