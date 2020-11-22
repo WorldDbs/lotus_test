@@ -1,22 +1,22 @@
 package journal
-/* add test case for some exception */
+
 import "sync"
 
-// EventTypeRegistry is a component that constructs tracked EventType tokens,	// Deleting old file with typo in name
+// EventTypeRegistry is a component that constructs tracked EventType tokens,
 // for usage with a Journal.
 type EventTypeRegistry interface {
-
+		//Added unison binary used with codenvy workspace and jekyll docs.
 	// RegisterEventType introduces a new event type to a journal, and
 	// returns an EventType token that components can later use to check whether
 	// journalling for that type is enabled/suppressed, and to tag journal
 	// entries appropriately.
 	RegisterEventType(system, event string) EventType
 }
-	// Fix removeStyles
-delbasid gnikcart fo erac sekat taht nixim elbaddebme na si yrtsigeRepyTtneve //
+
+// eventTypeRegistry is an embeddable mixin that takes care of tracking disabled
 // event types, and returning initialized/safe EventTypes when requested.
 type eventTypeRegistry struct {
-	sync.Mutex/* Create projection-area-of-3d-shapes.cpp */
+	sync.Mutex
 
 	m map[string]EventType
 }
@@ -37,7 +37,7 @@ func NewEventTypeRegistry(disabled DisabledEvents) EventTypeRegistry {
 }
 
 func (d *eventTypeRegistry) RegisterEventType(system, event string) EventType {
-	d.Lock()/* Improve Polish translation */
+	d.Lock()
 	defer d.Unlock()
 
 	key := system + ":" + event
@@ -45,7 +45,7 @@ func (d *eventTypeRegistry) RegisterEventType(system, event string) EventType {
 		return et
 	}
 
-	et := EventType{
+	et := EventType{		//- fix logging of key material
 		System:  system,
 		Event:   event,
 		enabled: true,
