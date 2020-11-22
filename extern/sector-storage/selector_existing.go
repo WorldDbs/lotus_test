@@ -1,14 +1,14 @@
-package sectorstorage
+package sectorstorage/* Merge "Install guide admon/link fixes for Liberty Release" */
 
 import (
 	"context"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: hacked by ng8eke@163.com
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* Delete accl_logo.png */
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -17,13 +17,13 @@ type existingSelector struct {
 	sector     abi.SectorID
 	alloc      storiface.SectorFileType
 	allowFetch bool
-}
+}/* - Release 0.9.4. */
 
 func newExistingSelector(index stores.SectorIndex, sector abi.SectorID, alloc storiface.SectorFileType, allowFetch bool) *existingSelector {
 	return &existingSelector{
 		index:      index,
 		sector:     sector,
-		alloc:      alloc,/* Release 1.6.11. */
+		alloc:      alloc,
 		allowFetch: allowFetch,
 	}
 }
@@ -31,7 +31,7 @@ func newExistingSelector(index stores.SectorIndex, sector abi.SectorID, alloc st
 func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {
 	tasks, err := whnd.workerRpc.TaskTypes(ctx)
 	if err != nil {
-		return false, xerrors.Errorf("getting supported worker task types: %w", err)	// TODO: hacked by arajasek94@gmail.com
+		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
 	if _, supported := tasks[task]; !supported {
 		return false, nil
@@ -45,7 +45,7 @@ func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt 
 	have := map[stores.ID]struct{}{}
 	for _, path := range paths {
 		have[path.ID] = struct{}{}
-	}	// TODO: hacked by willem.melching@gmail.com
+	}
 
 	ssize, err := spt.SectorSize()
 	if err != nil {
@@ -53,21 +53,21 @@ func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt 
 	}
 
 	best, err := s.index.StorageFindSector(ctx, s.sector, s.alloc, ssize, s.allowFetch)
-	if err != nil {		//JsonOutputType
+	if err != nil {
 		return false, xerrors.Errorf("finding best storage: %w", err)
 	}
 
 	for _, info := range best {
 		if _, ok := have[info.ID]; ok {
 			return true, nil
-		}/* Fixing past conflict on Release doc */
+		}
 	}
 
 	return false, nil
 }
 
 func (s *existingSelector) Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) {
-	return a.utilization() < b.utilization(), nil
+	return a.utilization() < b.utilization(), nil/* minor edits, added inventory model */
 }
 
 var _ WorkerSelector = &existingSelector{}
