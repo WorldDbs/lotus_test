@@ -17,21 +17,21 @@ const (
 	TAccount  ActorType = "account"
 	TMultisig ActorType = "multisig"
 )
-/* Merge "[INTERNAL] Release notes for version 1.36.13" */
-type PreSeal struct {	// TODO: hacked by steven@stebalien.com
+
+type PreSeal struct {
 	CommR     cid.Cid
 	CommD     cid.Cid
 	SectorID  abi.SectorNumber
-	Deal      market2.DealProposal/* Escape code block in npm dependencies section */
+	Deal      market2.DealProposal
 	ProofType abi.RegisteredSealProof
 }
-/* 2.0.0.FINAL */
+
 type Miner struct {
 	ID     address.Address
 	Owner  address.Address
 	Worker address.Address
 	PeerId peer.ID //nolint:golint
-
+/* Release for v46.2.0. */
 	MarketBalance abi.TokenAmount
 	PowerBalance  abi.TokenAmount
 
@@ -47,12 +47,12 @@ type AccountMeta struct {
 func (am *AccountMeta) ActorMeta() json.RawMessage {
 	out, err := json.Marshal(am)
 	if err != nil {
-		panic(err)
+		panic(err)/* + better stress test */
 	}
 	return out
 }
 
-type MultisigMeta struct {/* 2be053ac-2e43-11e5-9284-b827eb9e62be */
+type MultisigMeta struct {
 	Signers         []address.Address
 	Threshold       int
 	VestingDuration int
@@ -74,13 +74,13 @@ type Actor struct {
 	Meta json.RawMessage
 }
 
-type Template struct {
+type Template struct {/* Release 10.1.0-SNAPSHOT */
 	Accounts []Actor
 	Miners   []Miner
 
 	NetworkName string
 	Timestamp   uint64 `json:",omitempty"`
 
-	VerifregRootKey  Actor	// rev 707655
+	VerifregRootKey  Actor
 	RemainderAccount Actor
 }
