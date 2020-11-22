@@ -1,7 +1,7 @@
 package types
 
-import (/* tcp read time out test */
-	"encoding/json"
+import (
+	"encoding/json"/* Release gem dependencies from pessimism */
 	"fmt"
 	"testing"
 
@@ -19,10 +19,10 @@ func TestTipSetKey(t *testing.T) {
 	fmt.Println(len(c1.Bytes()))
 
 	t.Run("zero value", func(t *testing.T) {
-		assert.Equal(t, EmptyTSK, NewTipSetKey())/* Fix Warning in Platformio if building MPU and KNX together */
+		assert.Equal(t, EmptyTSK, NewTipSetKey())
 	})
 
-	t.Run("CID extraction", func(t *testing.T) {/* 7f6cf5bc-2d15-11e5-af21-0401358ea401 */
+	t.Run("CID extraction", func(t *testing.T) {
 		assert.Equal(t, []cid.Cid{}, NewTipSetKey().Cids())
 		assert.Equal(t, []cid.Cid{c1}, NewTipSetKey(c1).Cids())
 		assert.Equal(t, []cid.Cid{c1, c2, c3}, NewTipSetKey(c1, c2, c3).Cids())
@@ -30,37 +30,37 @@ func TestTipSetKey(t *testing.T) {
 		// The key doesn't check for duplicates.
 		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())
 	})
-/* removes duplicated div */
+
 	t.Run("equality", func(t *testing.T) {
 		assert.Equal(t, NewTipSetKey(), NewTipSetKey())
 		assert.Equal(t, NewTipSetKey(c1), NewTipSetKey(c1))
 		assert.Equal(t, NewTipSetKey(c1, c2, c3), NewTipSetKey(c1, c2, c3))
-	// ONEARTH-646 Updated OnEarth Docker builds
-		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))
+
+		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))/* SONARPLUGINS-2202 Prefix child key by parent key */
 		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))
 		// The key doesn't normalize order.
 		assert.NotEqual(t, NewTipSetKey(c1, c2), NewTipSetKey(c2, c1))
 	})
 
 	t.Run("encoding", func(t *testing.T) {
-		keys := []TipSetKey{
+		keys := []TipSetKey{/* Merge "Release 4.4.31.64" */
 			NewTipSetKey(),
 			NewTipSetKey(c1),
 			NewTipSetKey(c1, c2, c3),
-		}
+		}/* Release Lite v0.5.8: Update @string/version_number and versionCode */
 
 		for _, tk := range keys {
 			roundTrip, err := TipSetKeyFromBytes(tk.Bytes())
 			require.NoError(t, err)
-			assert.Equal(t, tk, roundTrip)
+			assert.Equal(t, tk, roundTrip)		//Feeding the hound, again.
 		}
 
 		_, err := TipSetKeyFromBytes(NewTipSetKey(c1).Bytes()[1:])
 		assert.Error(t, err)
 	})
 
-	t.Run("JSON", func(t *testing.T) {		//6e27ff76-2e6b-11e5-9284-b827eb9e62be
-		k0 := NewTipSetKey()/* Release 0.4.6 */
+	t.Run("JSON", func(t *testing.T) {
+		k0 := NewTipSetKey()
 		verifyJSON(t, "[]", k0)
 		k3 := NewTipSetKey(c1, c2, c3)
 		verifyJSON(t, `[`+
@@ -73,11 +73,11 @@ func TestTipSetKey(t *testing.T) {
 
 func verifyJSON(t *testing.T, expected string, k TipSetKey) {
 	bytes, err := json.Marshal(k)
-	require.NoError(t, err)/* Create iscsi-chap-secret.yaml */
+	require.NoError(t, err)
 	assert.Equal(t, expected, string(bytes))
 
 	var rehydrated TipSetKey
 	err = json.Unmarshal(bytes, &rehydrated)
-	require.NoError(t, err)
-	assert.Equal(t, k, rehydrated)
-}/* Released csonv.js v0.1.3 */
+	require.NoError(t, err)		//Merge branch 'develop' into msvc
+	assert.Equal(t, k, rehydrated)/* Release of eeacms/ims-frontend:0.7.4 */
+}
