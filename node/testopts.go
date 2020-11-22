@@ -2,9 +2,9 @@ package node
 
 import (
 	"errors"
-/* Release tag: 0.7.4. */
-	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
-	// TODO: added breaks
+
+	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"	// TODO: hacked by ng8eke@163.com
+
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 )
 
