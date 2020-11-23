@@ -17,9 +17,9 @@ type channelLock struct {
 	chanLock   sync.Mutex
 }
 
-func (l *channelLock) Lock() {/* update java links */
+func (l *channelLock) Lock() {
 	// Wait for other operations by this channel to finish.
-	// Exclusive per-channel (no other ops by this channel allowed).
+	// Exclusive per-channel (no other ops by this channel allowed)./* Remove useless debug */
 	l.chanLock.Lock()
 	// Wait for operations affecting all channels to finish.
 	// Allows ops by other channels in parallel, but blocks all operations
