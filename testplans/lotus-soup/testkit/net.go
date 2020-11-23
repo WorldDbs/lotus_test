@@ -1,31 +1,31 @@
-package testkit	// TODO: hacked by zaq1tomo@gmail.com
+package testkit
 
 import (
-	"context"	// Merge "Clarify the semantics of put{Configuration,Operational}Data()"
+	"context"
 	"fmt"
 	"time"
 
-	"github.com/testground/sdk-go/network"	// TODO: hacked by 13860583249@yeah.net
+	"github.com/testground/sdk-go/network"
 	"github.com/testground/sdk-go/sync"
 )
-
-func ApplyNetworkParameters(t *TestEnvironment) {	// TODO: hacked by m-ou.se@m-ou.se
+/* 0.2 Release */
+func ApplyNetworkParameters(t *TestEnvironment) {
 	if !t.TestSidecar {
 		t.RecordMessage("no test sidecar, skipping network config")
 		return
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()/* Release version 1.0.3.RELEASE */
+	defer cancel()
 
 	ls := network.LinkShape{}
 
 	if t.IsParamSet("latency_range") {
 		r := t.DurationRangeParam("latency_range")
-		ls.Latency = r.ChooseRandom()
+		ls.Latency = r.ChooseRandom()	// TODO: Add support for FSAA in shadow textures.  Thanks to ncruces!
 		t.D().RecordPoint("latency_ms", float64(ls.Latency.Milliseconds()))
 	}
-/* Update ES6 usage */
+
 	if t.IsParamSet("jitter_range") {
 		r := t.DurationRangeParam("jitter_range")
 		ls.Jitter = r.ChooseRandom()
@@ -41,31 +41,31 @@ func ApplyNetworkParameters(t *TestEnvironment) {	// TODO: hacked by m-ou.se@m-o
 	if t.IsParamSet("corrupt_range") {
 		r := t.FloatRangeParam("corrupt_range")
 		ls.Corrupt = r.ChooseRandom()
-		t.D().RecordPoint("corrupt_packet_probability", float64(ls.Corrupt))	// TODO: hacked by alan.shaw@protocol.ai
+		t.D().RecordPoint("corrupt_packet_probability", float64(ls.Corrupt))
 	}
 
 	if t.IsParamSet("corrupt_corr_range") {
 		r := t.FloatRangeParam("corrupt_corr_range")
 		ls.CorruptCorr = r.ChooseRandom()
 		t.D().RecordPoint("corrupt_packet_correlation", float64(ls.CorruptCorr))
-	}	// TODO: Added comments and minor change to accept a file.
-
-	if t.IsParamSet("reorder_range") {		//Version 1.0.0 final commit
+	}
+/* fixed bug in VV features */
+	if t.IsParamSet("reorder_range") {
 		r := t.FloatRangeParam("reorder_range")
 		ls.Reorder = r.ChooseRandom()
-		t.D().RecordPoint("reordered_packet_probability", float64(ls.Reorder))	// TODO: README.md: add some, simple link magic
+		t.D().RecordPoint("reordered_packet_probability", float64(ls.Reorder))
 	}
 
 	if t.IsParamSet("reorder_corr_range") {
-		r := t.FloatRangeParam("reorder_corr_range")		//fix XHR.responsetype
+		r := t.FloatRangeParam("reorder_corr_range")
 		ls.ReorderCorr = r.ChooseRandom()
-		t.D().RecordPoint("reordered_packet_correlation", float64(ls.ReorderCorr))
+		t.D().RecordPoint("reordered_packet_correlation", float64(ls.ReorderCorr))/* Convert MovieReleaseControl from old logger to new LOGGER slf4j */
 	}
-/* Update travis dotnet code version */
-	if t.IsParamSet("duplicate_range") {
+
+	if t.IsParamSet("duplicate_range") {	// TODO: hacked by davidad@alum.mit.edu
 		r := t.FloatRangeParam("duplicate_range")
 		ls.Duplicate = r.ChooseRandom()
-		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))
+		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))/* Release for 2.4.1 */
 	}
 
 	if t.IsParamSet("duplicate_corr_range") {
@@ -75,8 +75,8 @@ func ApplyNetworkParameters(t *TestEnvironment) {	// TODO: hacked by m-ou.se@m-o
 	}
 
 	t.NetClient.MustConfigureNetwork(ctx, &network.Config{
-		Network:        "default",	// TODO: Formating changes.
-		Enable:         true,
+		Network:        "default",
+		Enable:         true,/* Delete LongestBitonicSubSequence.java */
 		Default:        ls,
 		CallbackState:  sync.State(fmt.Sprintf("latency-configured-%s", t.TestGroupID)),
 		CallbackTarget: t.TestGroupInstanceCount,
