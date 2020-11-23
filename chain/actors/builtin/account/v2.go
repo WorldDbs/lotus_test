@@ -8,23 +8,23 @@ import (
 
 	account2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/account"
 )
-		//4f41dd6c-2e6f-11e5-9284-b827eb9e62be
+
 var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
-	out := state2{store: store}
-	err := store.Get(store.Context(), root, &out)/* Add gittip-collab */
+	out := state2{store: store}/* Added mobilenetV2 in keras application test */
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err/* Delete C301-Release Planning.xls */
+		return nil, err
 	}
-	return &out, nil
+	return &out, nil	// Update basic_usage.md
 }
-		//Fixed issue  Select renderers option broken #510 
+
 type state2 struct {
-	account2.State		//Fixed build for android, added some resources to svn:ignore
+	account2.State
 	store adt.Store
 }
 
-func (s *state2) PubkeyAddress() (address.Address, error) {	// Fix copy-paste issue with UTF
-	return s.Address, nil
-}
+func (s *state2) PubkeyAddress() (address.Address, error) {
+	return s.Address, nil		//adding  Pinterest Project Proposal
+}/* fix word cntr reset */
