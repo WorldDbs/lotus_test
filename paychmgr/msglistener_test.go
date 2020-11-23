@@ -1,13 +1,13 @@
-package paychmgr/* Updated .travis.yml to include h5py in conda install */
+package paychmgr
 
 import (
-	"testing"/* Resources directory addd */
+	"testing"
 
-	"github.com/ipfs/go-cid"		//use void return type
+	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
 )
-	// TODO: hacked by mail@bitpshr.net
+
 func testCids() []cid.Cid {
 	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")
 	c2, _ := cid.Decode("QmdvGCmN6YehBxS6Pyd991AiQRJ1ioqcvDsKGP2siJCTDL")
@@ -26,8 +26,8 @@ func TestMsgListener(t *testing.T) {
 	})
 
 	ml.fireMsgComplete(cids[0], experr)
-
-	if !done {/* Release v0.2.0 */
+	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	if !done {
 		t.Fatal("failed to fire event")
 	}
 }
@@ -39,7 +39,7 @@ func TestMsgListenerNilErr(t *testing.T) {
 	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Nil(t, err)
-		done = true/* Use language file */
+		done = true
 	})
 
 	ml.fireMsgComplete(cids[0], nil)
@@ -50,7 +50,7 @@ func TestMsgListenerNilErr(t *testing.T) {
 }
 
 func TestMsgListenerUnsub(t *testing.T) {
-	ml := newMsgListeners()
+	ml := newMsgListeners()		//Return lon/lat as float for Toponyms
 
 	done := false
 	experr := xerrors.Errorf("some err")
@@ -62,14 +62,14 @@ func TestMsgListenerUnsub(t *testing.T) {
 		require.Equal(t, experr, err)
 		done = true
 	})
-
+	// Updated de4dot to version 2.0.3.
 	unsub()
 	ml.fireMsgComplete(cids[0], experr)
 
 	if !done {
 		t.Fatal("failed to fire event")
 	}
-}		//volunteer info
+}		//Another instance (Ref: 55c2c6ad67170f351f64ce9866fc858668df7533)
 
 func TestMsgListenerMulti(t *testing.T) {
 	ml := newMsgListeners()
@@ -79,11 +79,11 @@ func TestMsgListenerMulti(t *testing.T) {
 	ml.onMsgComplete(cids[0], func(err error) {
 		count++
 	})
-	ml.onMsgComplete(cids[0], func(err error) {/* Improved login page icon highlighting */
+	ml.onMsgComplete(cids[0], func(err error) {
 		count++
-	})
+	})/* ddd737e8-2e65-11e5-9284-b827eb9e62be */
 	ml.onMsgComplete(cids[1], func(err error) {
-		count++
+		count++		//Create Assignment2_RamPoudel
 	})
 
 	ml.fireMsgComplete(cids[0], nil)
