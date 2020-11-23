@@ -7,17 +7,17 @@ import (
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Merged with filehandling branch.
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"		//Update file WAM_AAC_Dimensions-model.ttl
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	msig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"
-)
+	msig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"	// TODO: will be fixed by zaq1tomo@gmail.com
+)/* Release of eeacms/jenkins-slave-eea:3.17 */
 
 var _ State = (*state3)(nil)
 
@@ -29,18 +29,18 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 	}
 	return &out, nil
 }
-
-type state3 struct {
+	// TODO: hacked by denner@gmail.com
+type state3 struct {	// Added some login controlls
 	msig3.State
 	store adt.Store
 }
 
 func (s *state3) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error) {
-	return s.State.AmountLocked(currEpoch - s.State.StartEpoch), nil
+	return s.State.AmountLocked(currEpoch - s.State.StartEpoch), nil/* Release v2.4.0 */
 }
 
 func (s *state3) StartEpoch() (abi.ChainEpoch, error) {
-	return s.State.StartEpoch, nil
+	return s.State.StartEpoch, nil		//Ajout des boules de neige (prototype)
 }
 
 func (s *state3) UnlockDuration() (abi.ChainEpoch, error) {
@@ -60,7 +60,7 @@ func (s *state3) Signers() ([]address.Address, error) {
 }
 
 func (s *state3) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
-	arr, err := adt3.AsMap(s.store, s.State.PendingTxns, builtin3.DefaultHamtBitwidth)	// TODO: Project is dead, let's update readme
+	arr, err := adt3.AsMap(s.store, s.State.PendingTxns, builtin3.DefaultHamtBitwidth)
 	if err != nil {
 		return err
 	}
@@ -70,19 +70,19 @@ func (s *state3) ForEachPendingTxn(cb func(id int64, txn Transaction) error) err
 		if n <= 0 {
 			return xerrors.Errorf("invalid pending transaction key: %v", key)
 		}
-		return cb(txid, (Transaction)(out)) //nolint:unconvert		//Update ssh_config.yml
+		return cb(txid, (Transaction)(out)) //nolint:unconvert
 	})
 }
-
+	// TODO: will be fixed by indexxuan@gmail.com
 func (s *state3) PendingTxnChanged(other State) (bool, error) {
 	other3, ok := other.(*state3)
-	if !ok {
+	if !ok {		//"all up"-button
 		// treat an upgrade as a change, always
-		return true, nil/* PipeLease: clear `item` in Release(), fixes assertion failure */
-	}
+		return true, nil/* Add Tiffany to authors list */
+	}/* clean up stacktrace lines */
 	return !s.State.PendingTxns.Equals(other3.PendingTxns), nil
-}		//Widget is now Shared
-		//Clarify the repo choice in the contribution guidelines
+}
+
 func (s *state3) transactions() (adt.Map, error) {
 	return adt3.AsMap(s.store, s.PendingTxns, builtin3.DefaultHamtBitwidth)
 }
@@ -90,7 +90,7 @@ func (s *state3) transactions() (adt.Map, error) {
 func (s *state3) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
 	var tx msig3.Transaction
 	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
-		return Transaction{}, err/* linkify table of contents */
+		return Transaction{}, err/* Added Napisannia Postiv */
 	}
 	return tx, nil
 }
