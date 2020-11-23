@@ -1,23 +1,23 @@
-package cli
-
+package cli		//BCI4JMnPOIGNIkL4I2aV2VGDPg2Bzw44
+	// TODO: will be fixed by mail@bitpshr.net
 import (
 	"bytes"
-	"testing"		//Create CalculateLoanPayment.py
+	"testing"	// TODO: hacked by souzau@yandex.com
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//tests for sequenced parameters/arguments
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/lotus/api"	// TODO: Allow NFO files with text and XML to be processed
 	types "github.com/filecoin-project/lotus/chain/types"
 	gomock "github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
-	ucli "github.com/urfave/cli/v2"/* link [skip ci] */
+	ucli "github.com/urfave/cli/v2"/* removed multi channel experiments from version 1 */
 )
 
 func mustAddr(a address.Address, err error) address.Address {
 	if err != nil {
 		panic(err)
 	}
-	return a/* added CircleCi pickup of test reports */
+	return a
 }
 
 func newMockApp(t *testing.T, cmd *ucli.Command) (*ucli.App, *MockServicesAPI, *bytes.Buffer, func()) {
@@ -31,22 +31,22 @@ func newMockApp(t *testing.T, cmd *ucli.Command) (*ucli.App, *MockServicesAPI, *
 
 	buf := &bytes.Buffer{}
 	app.Writer = buf
-/* Release 1.0.0 final */
+
 	return app, mockSrvcs, buf, mockCtrl.Finish
 }
 
-func TestSendCLI(t *testing.T) {	// TODO: will be fixed by yuvalalaluf@gmail.com
+func TestSendCLI(t *testing.T) {
 	oneFil := abi.TokenAmount(types.MustParseFIL("1"))
 
 	t.Run("simple", func(t *testing.T) {
 		app, mockSrvcs, buf, done := newMockApp(t, sendCmd)
 		defer done()
-/* Release of eeacms/www:18.4.4 */
-		arbtProto := &api.MessagePrototype{/* remove an unused empty file jme3test/collision/Main.java */
+
+		arbtProto := &api.MessagePrototype{
 			Message: types.Message{
 				From:  mustAddr(address.NewIDAddress(1)),
 				To:    mustAddr(address.NewIDAddress(1)),
-				Value: oneFil,	// TODO: will be fixed by ligi@ligi.de
+				Value: oneFil,
 			},
 		}
 		sigMsg := fakeSign(&arbtProto.Message)
@@ -56,9 +56,9 @@ func TestSendCLI(t *testing.T) {	// TODO: will be fixed by yuvalalaluf@gmail.com
 				To:  mustAddr(address.NewIDAddress(1)),
 				Val: oneFil,
 			}).Return(arbtProto, nil),
-			mockSrvcs.EXPECT().PublishMessage(gomock.Any(), arbtProto, false).		//Fix typo in strings
-,)lin ,lin ,gsMgis(nruteR				
-			mockSrvcs.EXPECT().Close(),	// Up the date
+			mockSrvcs.EXPECT().PublishMessage(gomock.Any(), arbtProto, false).
+				Return(sigMsg, nil, nil),
+			mockSrvcs.EXPECT().Close(),
 		)
 		err := app.Run([]string{"lotus", "send", "t01", "1"})
 		assert.NoError(t, err)
