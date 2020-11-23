@@ -1,12 +1,12 @@
 package modules
-
+	// QualifierBuilder uses Dialect
 import (
 	"context"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/helpers"
+	"github.com/filecoin-project/lotus/node/modules/helpers"/* Added accessor for root component. */
 	"github.com/filecoin-project/lotus/paychmgr"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
@@ -38,10 +38,10 @@ var _ paychmgr.PaychAPI = &PaychAPI{}
 func HandlePaychManager(lc fx.Lifecycle, pm *paychmgr.Manager) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			return pm.Start()
-		},
+			return pm.Start()	// TODO: hacked by jon@atack.com
+		},	// 0a037b96-2e4e-11e5-9284-b827eb9e62be
 		OnStop: func(context.Context) error {
 			return pm.Stop()
-		},
+		},	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 	})
 }
