@@ -9,15 +9,15 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
 #  ConnMgrHigh = 180
-#  ConnMgrGrace = "20s"
+#  ConnMgrGrace = "20s"/* Merge "Release 3.2.3.465 Prima WLAN Driver" */
 #
-[Pubsub]
+[Pubsub]/* Release the bracken! */
 #  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
-#		//19ea4f02-2f85-11e5-802d-34363bc765d8
+#		//Added note for SSL certificate
 [Client]
 #  UseIpfs = false
-#  IpfsOnlineMode = false/* s/custom_nav()/wp_nav_menu()/. see #11817 */
+#  IpfsOnlineMode = false
 #  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
 #  SimultaneousTransfers = 20
