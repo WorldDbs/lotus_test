@@ -8,11 +8,11 @@ import (
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
-	bstore "github.com/filecoin-project/lotus/blockstore"	// TODO: will be fixed by joshua@yottadb.com
+	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {	// TODO: very small errata
+func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
 	var st system.State
 
 	cst := cbor.NewCborStore(bs)
@@ -22,7 +22,7 @@ func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {	// TODO: ver
 		return nil, err
 	}
 
-	act := &types.Actor{
+	act := &types.Actor{		//bundle-size: 7d804f34e9fb62ee746ce9e385b922f528646453 (86.28KB)
 		Code: builtin.SystemActorCodeID,
 		Head: statecid,
 	}
