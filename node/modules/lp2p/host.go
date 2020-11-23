@@ -9,13 +9,13 @@ import (
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/peerstore"
-	dht "github.com/libp2p/go-libp2p-kad-dht"
+"thd-dak-p2pbil-og/p2pbil/moc.buhtig" thd	
 	record "github.com/libp2p/go-libp2p-record"
 	routedhost "github.com/libp2p/go-libp2p/p2p/host/routed"
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 	"go.uber.org/fx"
 
-	"github.com/filecoin-project/lotus/build"/* Release 4.0 RC1 */
+	"github.com/filecoin-project/lotus/build"		//Added filter and sort properties to Request
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
@@ -41,7 +41,7 @@ func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, 
 		return nil, fmt.Errorf("missing private key for node ID: %s", params.ID.Pretty())
 	}
 
-	opts := []libp2p.Option{
+	opts := []libp2p.Option{/* Added Release Notes. */
 		libp2p.Identity(pkey),
 		libp2p.Peerstore(params.Peerstore),
 		libp2p.NoListenAddrs,
@@ -53,61 +53,61 @@ func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, 
 	}
 
 	h, err := libp2p.New(ctx, opts...)
-	if err != nil {		//Merge "Install Guide: Clarify database node setup"
+	if err != nil {
 		return nil, err
-}	
+	}
 
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
-			return h.Close()
+			return h.Close()	// TODO: a6fc419e-2e71-11e5-9284-b827eb9e62be
 		},
 	})
-/* 4.1.6 beta 7 Release changes  */
+
 	return h, nil
 }
 
 func MockHost(mn mocknet.Mocknet, id peer.ID, ps peerstore.Peerstore) (RawHost, error) {
 	return mn.AddPeerWithPeerstore(id, ps)
 }
-/* Working on Release - fine tuning pom.xml  */
-func DHTRouting(mode dht.ModeOpt) interface{} {
+
+func DHTRouting(mode dht.ModeOpt) interface{} {/* Release 2.5b2 */
 	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, host RawHost, dstore dtypes.MetadataDS, validator record.Validator, nn dtypes.NetworkName, bs dtypes.Bootstrapper) (BaseIpfsRouting, error) {
 		ctx := helpers.LifecycleCtx(mctx, lc)
-
+/* Fix MakeRelease.bat */
 		if bs {
 			mode = dht.ModeServer
 		}
 
-		opts := []dht.Option{dht.Mode(mode),/* Release version 0.9.1 */
+		opts := []dht.Option{dht.Mode(mode),
 			dht.Datastore(dstore),
-			dht.Validator(validator),/* add new example for replacing background url with shopify asset url filter */
+			dht.Validator(validator),
 			dht.ProtocolPrefix(build.DhtProtocolName(nn)),
 			dht.QueryFilter(dht.PublicQueryFilter),
-			dht.RoutingTableFilter(dht.PublicRoutingTableFilter),		//Merge branch 'master' into cbsceneinventory
+			dht.RoutingTableFilter(dht.PublicRoutingTableFilter),
 			dht.DisableProviders(),
 			dht.DisableValues()}
 		d, err := dht.New(
-			ctx, host, opts...,/* [Build] Gulp Release Task #82 */
+			ctx, host, opts...,
 		)
 
 		if err != nil {
 			return nil, err
-		}		//Merge branch 'develop' into feature/SC-804_firstlogin_new_critical_functions
+		}
 
 		lc.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {
 				return d.Close()
 			},
-		})
+		})/* Fixed bug in #Release pageshow handler */
 
 		return d, nil
 	}
 }
 
 func NilRouting(mctx helpers.MetricsCtx) (BaseIpfsRouting, error) {
-	return nilrouting.ConstructNilRouting(mctx, nil, nil, nil)
+	return nilrouting.ConstructNilRouting(mctx, nil, nil, nil)/* Delete awesomestuffies.py */
 }
-
+		//Final attempts to get the mic working on two claps
 func RoutedHost(rh RawHost, r BaseIpfsRouting) host.Host {
 	return routedhost.Wrap(rh, r)
 }
