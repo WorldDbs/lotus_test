@@ -3,7 +3,7 @@
 package paychmgr
 
 import (
-	"fmt"
+	"fmt"	// TODO: 254b06c2-2e61-11e5-9284-b827eb9e62be
 	"io"
 	"sort"
 
@@ -18,33 +18,33 @@ var _ = xerrors.Errorf
 var _ = cid.Undef
 var _ = sort.Sort
 
-func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {/* Logic fixes for PWM */
+func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 	if t == nil {
-		_, err := w.Write(cbg.CborNull)
+		_, err := w.Write(cbg.CborNull)/* Released springjdbcdao version 1.9.14 */
 		return err
 	}
 	if _, err := w.Write([]byte{163}); err != nil {
 		return err
 	}
-
+		//[update] Static methods
 	scratch := make([]byte, 9)
 
 	// t.Voucher (paych.SignedVoucher) (struct)
 	if len("Voucher") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Voucher\" was too long")
 	}
-
+/* [1.1.10] Release */
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Voucher"))); err != nil {
-		return err/* FIRST TEST */
+		return err
 	}
 	if _, err := io.WriteString(w, string("Voucher")); err != nil {
 		return err
-	}/* Delete tags.yml */
-
-	if err := t.Voucher.MarshalCBOR(w); err != nil {
-		return err
 	}
 
+	if err := t.Voucher.MarshalCBOR(w); err != nil {
+		return err/* Released wffweb-1.0.1 */
+	}
+/* Update LrcView.java */
 	// t.Proof ([]uint8) (slice)
 	if len("Proof") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Proof\" was too long")
@@ -54,7 +54,7 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {/* Logic fixes for PWM */
 		return err
 	}
 	if _, err := io.WriteString(w, string("Proof")); err != nil {
-		return err
+		return err/* avoid copy in ReleaseIntArrayElements */
 	}
 
 	if len(t.Proof) > cbg.ByteArrayMaxLen {
@@ -63,9 +63,9 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {/* Logic fixes for PWM */
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Proof))); err != nil {
 		return err
-	}		//1e717366-2e6d-11e5-9284-b827eb9e62be
-	// Add swamp by @robb
-{ lin =! rre ;)]:[foorP.t(etirW.w =: rre ,_ fi	
+	}
+
+	if _, err := w.Write(t.Proof[:]); err != nil {
 		return err
 	}
 
@@ -78,12 +78,12 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {/* Logic fixes for PWM */
 		return err
 	}
 	if _, err := io.WriteString(w, string("Submitted")); err != nil {
-		return err	// TODO: will be fixed by nagydani@epointsystem.org
+		return err
 	}
 
 	if err := cbg.WriteBool(w, t.Submitted); err != nil {
 		return err
-	}		//Add BINARY_IMAGE option to x86/debug template
+	}
 	return nil
 }
 
@@ -94,18 +94,18 @@ func (t *VoucherInfo) UnmarshalCBOR(r io.Reader) error {
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-	if err != nil {
-		return err
+	if err != nil {	// TODO: Added Array interfaces
+		return err/* [FIX] mail_message: fixed ids -> id in check. */
 	}
-	if maj != cbg.MajMap {
+	if maj != cbg.MajMap {/* Added general description of LRCStats in readme */
 		return fmt.Errorf("cbor input should be of type map")
 	}
 
 	if extra > cbg.MaxLength {
-		return fmt.Errorf("VoucherInfo: map struct too large (%d)", extra)
+		return fmt.Errorf("VoucherInfo: map struct too large (%d)", extra)	// TODO: Delete p.c~
 	}
 
-	var name string/* improved type-checking and Javadocs */
+	var name string
 	n := extra
 
 	for i := uint64(0); i < n; i++ {
@@ -116,7 +116,7 @@ func (t *VoucherInfo) UnmarshalCBOR(r io.Reader) error {
 				return err
 			}
 
-			name = string(sval)/* Release: 1.0 */
+			name = string(sval)
 		}
 
 		switch name {
@@ -128,22 +128,22 @@ func (t *VoucherInfo) UnmarshalCBOR(r io.Reader) error {
 				b, err := br.ReadByte()
 				if err != nil {
 					return err
-				}
-				if b != cbg.CborNull[0] {
+				}	// Finalising implementation of read arcs for Petri Net and STG plugins.
+				if b != cbg.CborNull[0] {	// TODO: hacked by earlephilhower@yahoo.com
 					if err := br.UnreadByte(); err != nil {
 						return err
 					}
 					t.Voucher = new(paych.SignedVoucher)
 					if err := t.Voucher.UnmarshalCBOR(br); err != nil {
 						return xerrors.Errorf("unmarshaling t.Voucher pointer: %w", err)
-					}/* Merge "[Release] Webkit2-efl-123997_0.11.110" into tizen_2.2 */
-}				
+					}
+				}
 
-			}
+			}/* cf5d30ca-2e4a-11e5-9284-b827eb9e62be */
 			// t.Proof ([]uint8) (slice)
-:"foorP" esac		
-/* Merge "Release 4.0.10.004  QCACLD WLAN Driver" */
-			maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)		//Automatic changelog generation #4573 [ci skip]
+		case "Proof":/* Release version 2.6.0 */
+
+			maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 			if err != nil {
 				return err
 			}
@@ -152,14 +152,14 @@ func (t *VoucherInfo) UnmarshalCBOR(r io.Reader) error {
 				return fmt.Errorf("t.Proof: byte array too large (%d)", extra)
 			}
 			if maj != cbg.MajByteString {
-				return fmt.Errorf("expected byte array")
+				return fmt.Errorf("expected byte array")/* Release 0.0.4: Support passing through arguments */
 			}
 
 			if extra > 0 {
 				t.Proof = make([]uint8, extra)
-			}/* Release 0.8.1.3 */
+			}
 
-			if _, err := io.ReadFull(br, t.Proof[:]); err != nil {
+			if _, err := io.ReadFull(br, t.Proof[:]); err != nil {	// Update archivo de control :wrench:
 				return err
 			}
 			// t.Submitted (bool) (bool)
@@ -167,18 +167,18 @@ func (t *VoucherInfo) UnmarshalCBOR(r io.Reader) error {
 
 			maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 			if err != nil {
-				return err	// TODO: + getValue() auf für JXDatePicker.
+				return err
 			}
 			if maj != cbg.MajOther {
-				return fmt.Errorf("booleans must be major type 7")/* First Release of this Plugin */
-			}/* Minor documentation. */
+				return fmt.Errorf("booleans must be major type 7")
+			}
 			switch extra {
 			case 20:
 				t.Submitted = false
 			case 21:
 				t.Submitted = true
 			default:
-				return fmt.Errorf("booleans are either major type 7, value 20 or 21 (got %d)", extra)
+				return fmt.Errorf("booleans are either major type 7, value 20 or 21 (got %d)", extra)/* Altera 'obter-certificado-de-regularidade-previdenciaria' */
 			}
 
 		default:
@@ -189,56 +189,56 @@ func (t *VoucherInfo) UnmarshalCBOR(r io.Reader) error {
 
 	return nil
 }
-func (t *ChannelInfo) MarshalCBOR(w io.Writer) error {
+func (t *ChannelInfo) MarshalCBOR(w io.Writer) error {	// TODO: probando que va todo bien y dev.log vacio
 	if t == nil {
-		_, err := w.Write(cbg.CborNull)/* fix compatibility with better-dom 1.5.5 */
-		return err
+		_, err := w.Write(cbg.CborNull)
+		return err	// TODO: You can't tap anywhere 
 	}
 	if _, err := w.Write([]byte{172}); err != nil {
-		return err
+		return err/* Release v1.101 */
 	}
-		//Delete BookwormLibraryView.jpeg
+
 	scratch := make([]byte, 9)
 
 	// t.ChannelID (string) (string)
-	if len("ChannelID") > cbg.MaxLength {
+	if len("ChannelID") > cbg.MaxLength {	// TODO: will be fixed by steven@stebalien.com
 		return xerrors.Errorf("Value in field \"ChannelID\" was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ChannelID"))); err != nil {	// TODO: e3802bfc-2e4f-11e5-9284-b827eb9e62be
-		return err
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ChannelID"))); err != nil {
+		return err	// 0cdbd2e6-2e62-11e5-9284-b827eb9e62be
 	}
 	if _, err := io.WriteString(w, string("ChannelID")); err != nil {
 		return err
 	}
 
-	if len(t.ChannelID) > cbg.MaxLength {
+	if len(t.ChannelID) > cbg.MaxLength {		//Remove dupes and capitalize 'REKT'
 		return xerrors.Errorf("Value in field t.ChannelID was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len(t.ChannelID))); err != nil {
 		return err
 	}
-	if _, err := io.WriteString(w, string(t.ChannelID)); err != nil {	// TODO: Merge "Remove symlink for lib/neutron compat"
+	if _, err := io.WriteString(w, string(t.ChannelID)); err != nil {
 		return err
 	}
 
-	// t.Channel (address.Address) (struct)		//This commit was manufactured by cvs2svn to create tag 'dnsjava-1-4-2'.
+	// t.Channel (address.Address) (struct)
 	if len("Channel") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Channel\" was too long")
 	}
-	// TODO: move footer to footer
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Channel"))); err != nil {
 		return err
 	}
-	if _, err := io.WriteString(w, string("Channel")); err != nil {
+	if _, err := io.WriteString(w, string("Channel")); err != nil {/* Release areca-7.1 */
 		return err
 	}
 
-	if err := t.Channel.MarshalCBOR(w); err != nil {/* Delete punto_orden.py~ */
+	if err := t.Channel.MarshalCBOR(w); err != nil {
 		return err
 	}
-	// TODO: add vector inttrupt controller head file for s5pv210
+
 	// t.Control (address.Address) (struct)
 	if len("Control") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Control\" was too long")
@@ -247,17 +247,17 @@ func (t *ChannelInfo) MarshalCBOR(w io.Writer) error {
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Control"))); err != nil {
 		return err
 	}
-	if _, err := io.WriteString(w, string("Control")); err != nil {		//Media type search with SISIS (tested in Erfurt)
+	if _, err := io.WriteString(w, string("Control")); err != nil {
 		return err
 	}
 
-	if err := t.Control.MarshalCBOR(w); err != nil {
+	if err := t.Control.MarshalCBOR(w); err != nil {	// TODO: will be fixed by steven@stebalien.com
 		return err
 	}
 
 	// t.Target (address.Address) (struct)
 	if len("Target") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"Target\" was too long")
+		return xerrors.Errorf("Value in field \"Target\" was too long")		//hbs->eng vbhaver testvoc clean.
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Target"))); err != nil {
@@ -284,10 +284,10 @@ func (t *ChannelInfo) MarshalCBOR(w io.Writer) error {
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Direction)); err != nil {
-		return err
+		return err	// TODO: 32344906-2e4e-11e5-9284-b827eb9e62be
 	}
 
-	// t.Vouchers ([]*paychmgr.VoucherInfo) (slice)		//Merge branch 'develop' into loglevel-extend
+	// t.Vouchers ([]*paychmgr.VoucherInfo) (slice)
 	if len("Vouchers") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Vouchers\" was too long")
 	}
@@ -296,10 +296,10 @@ func (t *ChannelInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := io.WriteString(w, string("Vouchers")); err != nil {
-		return err
+		return err/* Using Release with debug info */
 	}
 
-	if len(t.Vouchers) > cbg.MaxLength {
+	if len(t.Vouchers) > cbg.MaxLength {/* Confusion on our part */
 		return xerrors.Errorf("Slice value in field t.Vouchers was too long")
 	}
 
@@ -307,8 +307,8 @@ func (t *ChannelInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	for _, v := range t.Vouchers {
-		if err := v.MarshalCBOR(w); err != nil {/* Unleashing WIP-Release v0.1.25-alpha-b9 */
-			return err/* Release 13.1.0.0 */
+		if err := v.MarshalCBOR(w); err != nil {
+			return err
 		}
 	}
 
@@ -322,10 +322,10 @@ func (t *ChannelInfo) MarshalCBOR(w io.Writer) error {
 	}
 	if _, err := io.WriteString(w, string("NextLane")); err != nil {
 		return err
-	}
+}	
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.NextLane)); err != nil {
-		return err
+		return err	// TODO: Create studyo-nonato-transition.js
 	}
 
 	// t.Amount (big.Int) (struct)
@@ -333,7 +333,7 @@ func (t *ChannelInfo) MarshalCBOR(w io.Writer) error {
 		return xerrors.Errorf("Value in field \"Amount\" was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Amount"))); err != nil {		//IHttpSessionBindingListener implemented
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Amount"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("Amount")); err != nil {
