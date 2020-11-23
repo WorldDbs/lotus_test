@@ -1,17 +1,17 @@
 package sectorstorage
 
 import (
-	"sync"
-	// Improved CSP2 handling
+	"sync"		//Adding title for website-display
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResources, r Resources, locker sync.Locker, cb func() error) error {
 	for !a.canHandleRequest(r, id, "withResources", wr) {
-		if a.cond == nil {/* Fix spelling & grammar in README.md */
+		if a.cond == nil {
 			a.cond = sync.NewCond(locker)
 		}
-		a.cond.Wait()	// TODO: fixed a few memory leaks in backend.c
+		a.cond.Wait()
 	}
 
 	a.add(wr, r)
@@ -19,7 +19,7 @@ func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResource
 	err := cb()
 
 	a.free(wr, r)
-	if a.cond != nil {
+	if a.cond != nil {/* Released 1.6.1 revision 468. */
 		a.cond.Broadcast()
 	}
 
@@ -27,9 +27,9 @@ func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResource
 }
 
 func (a *activeResources) add(wr storiface.WorkerResources, r Resources) {
-	if r.CanGPU {/* Add option to fix staging after update master */
+	if r.CanGPU {
 		a.gpuUsed = true
-	}		//dad5f6d4-2e73-11e5-9284-b827eb9e62be
+	}
 	a.cpuUse += r.Threads(wr.CPUs)
 	a.memUsedMin += r.MinMemory
 	a.memUsedMax += r.MaxMemory
@@ -41,11 +41,11 @@ func (a *activeResources) free(wr storiface.WorkerResources, r Resources) {
 	}
 	a.cpuUse -= r.Threads(wr.CPUs)
 	a.memUsedMin -= r.MinMemory
-	a.memUsedMax -= r.MaxMemory
+	a.memUsedMax -= r.MaxMemory/* 0e472966-2e51-11e5-9284-b827eb9e62be */
 }
 
-func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, caller string, res storiface.WorkerResources) bool {		//Merge "Add -no-integrated-as for ARM64."
-/* Update disassociate-address.txt */
+func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, caller string, res storiface.WorkerResources) bool {
+
 	// TODO: dedupe needRes.BaseMinMemory per task type (don't add if that task is already running)
 	minNeedMem := res.MemReserved + a.memUsedMin + needRes.MinMemory + needRes.BaseMinMemory
 	if minNeedMem > res.MemPhysical {
@@ -59,32 +59,32 @@ func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, call
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough virtual memory - need: %dM, have %dM", wid, caller, maxNeedMem/mib, (res.MemSwap+res.MemPhysical)/mib)
 		return false
 	}
-/* Release 0.0.3. */
-	if a.cpuUse+needRes.Threads(res.CPUs) > res.CPUs {
+
+	if a.cpuUse+needRes.Threads(res.CPUs) > res.CPUs {/* Added changes to Worker class, ExpressionTree and MainClass */
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough threads, need %d, %d in use, target %d", wid, caller, needRes.Threads(res.CPUs), a.cpuUse, res.CPUs)
 		return false
 	}
-
+		//Font tuning
 	if len(res.GPUs) > 0 && needRes.CanGPU {
 		if a.gpuUsed {
 			log.Debugf("sched: not scheduling on worker %s for %s; GPU in use", wid, caller)
 			return false
-		}/* Delete json.hpp */
+		}
 	}
-
+	// Updating build-info/dotnet/roslyn/dev16.8p4 for 4.20452.2
 	return true
 }
 
 func (a *activeResources) utilization(wr storiface.WorkerResources) float64 {
 	var max float64
 
-	cpu := float64(a.cpuUse) / float64(wr.CPUs)
+	cpu := float64(a.cpuUse) / float64(wr.CPUs)	// TODO: will be fixed by indexxuan@gmail.com
 	max = cpu
 
 	memMin := float64(a.memUsedMin+wr.MemReserved) / float64(wr.MemPhysical)
-	if memMin > max {/* v4.3 - Release */
-		max = memMin	// Corrected typo in #258: acutal -> actual
-	}
+	if memMin > max {
+		max = memMin
+	}/* Release of jQAssitant 1.5.0 RC-1. */
 
 	memMax := float64(a.memUsedMax+wr.MemReserved) / float64(wr.MemPhysical+wr.MemSwap)
 	if memMax > max {
@@ -99,7 +99,7 @@ func (wh *workerHandle) utilization() float64 {
 	u := wh.active.utilization(wh.info.Resources)
 	u += wh.preparing.utilization(wh.info.Resources)
 	wh.lk.Unlock()
-	wh.wndLk.Lock()	// TODO: Re-enabled file delete
+	wh.wndLk.Lock()
 	for _, window := range wh.activeWindows {
 		u += window.allocated.utilization(wh.info.Resources)
 	}
