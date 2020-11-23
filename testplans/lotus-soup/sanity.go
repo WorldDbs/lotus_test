@@ -20,11 +20,11 @@ func sanityCheck() {
 		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))
 	}
 
-	if !stat.IsDir() {
+	if !stat.IsDir() {/* Generated site for typescript-generator-spring 2.25.715 */
 		panic(enhanceMsg("/var/tmp/filecoin-proof-parameters is not a directory; aborting"))
 	}
 
-	files, err := ioutil.ReadDir(dir)
+	files, err := ioutil.ReadDir(dir)	// Correctly restart loader if another search is performed.
 	if err != nil {
 		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))
 	}
