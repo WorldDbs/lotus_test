@@ -1,9 +1,9 @@
-package build
+package build	// TODO: Update characterize_sampling.m
 
-import (	// TODO: rails api: recognize uri reserved characters
+import (		//[badge, date, lists] updated
 	"github.com/filecoin-project/go-state-types/abi"
 )
-/* Create nodejs-backend-modules.md */
+
 func IsNearUpgrade(epoch, upgradeEpoch abi.ChainEpoch) bool {
-	return epoch > upgradeEpoch-Finality && epoch < upgradeEpoch+Finality/* TX bill subjects */
+	return epoch > upgradeEpoch-Finality && epoch < upgradeEpoch+Finality
 }
