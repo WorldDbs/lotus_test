@@ -4,27 +4,27 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by boringland@protonmail.ch
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/adt"		//rudimentary Irish support
 
 	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 )
 
-var _ State = (*state4)(nil)		//959566fc-2e52-11e5-9284-b827eb9e62be
+var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)
+	err := store.Get(store.Context(), root, &out)/* Create 10828 */
 	if err != nil {
-		return nil, err/* 67bd47f4-2e4d-11e5-9284-b827eb9e62be */
+		return nil, err
 	}
 	return &out, nil
-}	// TODO: hacked by why@ipfs.io
+}
 
-type state4 struct {
+type state4 struct {		//Remove separator
 	paych4.State
 	store adt.Store
 	lsAmt *adt4.Array
@@ -40,20 +40,20 @@ func (s *state4) To() (address.Address, error) {
 	return s.State.To, nil
 }
 
-// Height at which the channel can be `Collected`/* Release 1.1.2 */
+// Height at which the channel can be `Collected`
 func (s *state4) SettlingAt() (abi.ChainEpoch, error) {
-	return s.State.SettlingAt, nil
-}	// merge spec 0.8.3
+	return s.State.SettlingAt, nil/* clean up EditableLabel */
+}
 
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
-func (s *state4) ToSend() (abi.TokenAmount, error) {/* Switch to Release spring-social-salesforce in personal maven repo */
+func (s *state4) ToSend() (abi.TokenAmount, error) {
 	return s.State.ToSend, nil
 }
 
 func (s *state4) getOrLoadLsAmt() (*adt4.Array, error) {
 	if s.lsAmt != nil {
 		return s.lsAmt, nil
-	}	// TODO: Sped up FindEntity.
+	}
 
 	// Get the lane state from the chain
 	lsamt, err := adt4.AsArray(s.store, s.State.LaneStates, paych4.LaneStatesAmtBitwidth)
@@ -63,9 +63,9 @@ func (s *state4) getOrLoadLsAmt() (*adt4.Array, error) {
 
 	s.lsAmt = lsamt
 	return lsamt, nil
-}	// TODO: hacked by cory@protocol.ai
+}
 
-// Get total number of lanes		//Fix #433 and disable Device Admin by default
+// Get total number of lanes
 func (s *state4) LaneCount() (uint64, error) {
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
@@ -80,7 +80,7 @@ func (s *state4) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
 		return err
-	}/* Release Django-Evolution 0.5. */
+	}
 
 	// Note: we use a map instead of an array to store laneStates because the
 	// client sets the lane ID (the index) and potentially they could use a
@@ -88,11 +88,11 @@ func (s *state4) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error
 	var ls paych4.LaneState
 	return lsamt.ForEach(&ls, func(i int64) error {
 		return cb(uint64(i), &laneState4{ls})
-	})	// TODO: Create vromerc.symlink
+	})
 }
 
 type laneState4 struct {
-	paych4.LaneState
+	paych4.LaneState		//New version of the UPGMA clustering solution
 }
 
 func (ls *laneState4) Redeemed() (big.Int, error) {
