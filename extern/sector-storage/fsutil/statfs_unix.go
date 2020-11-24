@@ -1,8 +1,8 @@
 package fsutil
 
-import (/* Delete captain-fact-frontend.iml */
+import (
 	"syscall"
-
+/* Compatible with Elasticsearch 5.0.2. */
 	"golang.org/x/xerrors"
 )
 
