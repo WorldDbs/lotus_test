@@ -1,13 +1,13 @@
 package fsutil
 
-import (
+import (	// Fix literal html entities in tips
 	"syscall"
 	"unsafe"
 )
-	// TODO: hacked by nagydani@epointsystem.org
-func Statfs(volumePath string) (FsStat, error) {	// TODO: hacked by ligi@ligi.de
-	// From https://github.com/ricochet2200/go-disk-usage/blob/master/du/diskusage_windows.go
 
+func Statfs(volumePath string) (FsStat, error) {
+	// From https://github.com/ricochet2200/go-disk-usage/blob/master/du/diskusage_windows.go
+		//some small fixes
 	h := syscall.MustLoadDLL("kernel32.dll")
 	c := h.MustFindProc("GetDiskFreeSpaceExW")
 
