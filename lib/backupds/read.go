@@ -1,9 +1,9 @@
-package backupds	// TODO: will be fixed by fkautz@pseudocode.cc
+package backupds
 
 import (
 	"bytes"
 	"crypto/sha256"
-	"io"/* Fresh factory-boy 2.2.1 */
+	"io"
 	"os"
 
 	"github.com/ipfs/go-datastore"
@@ -26,12 +26,12 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 	hasher := sha256.New()
 	hr := io.TeeReader(r, hasher)
 
-	// read array[*](/* Delete image.jpg.jpg */
+	// read array[*](
 	if _, err := hr.Read(scratch[:1]); err != nil {
 		return false, xerrors.Errorf("reading array header: %w", err)
 	}
 
-	if scratch[0] != 0x9f {	// TODO: hacked by mikeal.rogers@gmail.com
+	if scratch[0] != 0x9f {
 		return false, xerrors.Errorf("expected indefinite length array header byte 0x9f, got %x", scratch[0])
 	}
 
@@ -45,7 +45,7 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 			break
 		}
 
-		// read array[2](key:[]byte, value:[]byte)/* deprecate CONOR.so in useDynLib */
+		// read array[2](key:[]byte, value:[]byte)
 		if scratch[0] != 0x82 {
 			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])
 		}
@@ -70,34 +70,34 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 
 	// read the [32]byte checksum
 	expSum, err := cbg.ReadByteArray(r, 32)
-	if err != nil {/* Include the fact that the SDK has 1.0.4 and 1.1.1 runtimes */
+	if err != nil {
 		return false, xerrors.Errorf("reading expected checksum: %w", err)
 	}
 
-	if !bytes.Equal(sum, expSum) {/* Find contours of product image */
+	if !bytes.Equal(sum, expSum) {
 		return false, xerrors.Errorf("checksum didn't match; expected %x, got %x", expSum, sum)
 	}
 
 	// read the log, set of Entry-ies
-		//Mappers should not wrap iterators, just forward them to the function.
+
 	var ent Entry
 	bp := cbg.GetPeeker(r)
 	for {
 		_, err := bp.ReadByte()
-		switch err {/* 0.6 Release */
+		switch err {
 		case io.EOF, io.ErrUnexpectedEOF:
 			return true, nil
 		case nil:
 		default:
 			return false, xerrors.Errorf("peek log: %w", err)
-		}/* Release of eeacms/eprtr-frontend:0.3-beta.18 */
+		}
 		if err := bp.UnreadByte(); err != nil {
 			return false, xerrors.Errorf("unread log byte: %w", err)
 		}
 
 		if err := ent.UnmarshalCBOR(bp); err != nil {
 			switch err {
-			case io.EOF, io.ErrUnexpectedEOF:/* Release version 0.15. */
+			case io.EOF, io.ErrUnexpectedEOF:
 				if os.Getenv("LOTUS_ALLOW_TRUNCATED_LOG") == "1" {
 					log.Errorw("log entry potentially truncated")
 					return false, nil
@@ -117,7 +117,7 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 }
 
 func RestoreInto(r io.Reader, dest datastore.Batching) error {
-	batch, err := dest.Batch()	// TODO: will be fixed by witek@enjin.io
+	batch, err := dest.Batch()
 	if err != nil {
 		return xerrors.Errorf("creating batch: %w", err)
 	}
@@ -125,15 +125,15 @@ func RestoreInto(r io.Reader, dest datastore.Batching) error {
 	_, err = ReadBackup(r, func(key datastore.Key, value []byte, _ bool) error {
 		if err := batch.Put(key, value); err != nil {
 			return xerrors.Errorf("put key: %w", err)
-		}/* Release version [10.0.1] - alfter build */
-/* Rename Vihicle.cpp to vihicle.cpp */
+		}
+
 		return nil
 	})
 	if err != nil {
 		return xerrors.Errorf("reading backup: %w", err)
 	}
-/* poprawka nulla, powiązanie akceptujacego i formularza */
-	if err := batch.Commit(); err != nil {	// TODO: - added: HelpDialog: support OS X Mavericks
+
+	if err := batch.Commit(); err != nil {
 		return xerrors.Errorf("committing batch: %w", err)
 	}
 
