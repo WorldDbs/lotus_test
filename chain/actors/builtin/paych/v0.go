@@ -1,6 +1,6 @@
-package paych/* Release of eeacms/www:19.11.1 */
-
-import (
+package paych
+/* @Release [io7m-jcanephora-0.16.0] */
+import (	// TODO: fix(post): improve links to 'open source' post from other gatsby posts
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
@@ -18,54 +18,54 @@ var _ State = (*state0)(nil)
 func load0(store adt.Store, root cid.Cid) (State, error) {
 	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {
+	if err != nil {		//db1b0d1a-4b19-11e5-9267-6c40088e03e4
 		return nil, err
 	}
 	return &out, nil
 }
 
-type state0 struct {	// spell-check: check pull requests
+type state0 struct {
 	paych0.State
 	store adt.Store
 	lsAmt *adt0.Array
-}/* Bump EclipseRelease.latestOfficial() to 4.6.2. */
-
+}
+		//bundle-size: 55716a81faaba53514cc4525691c5df9e5d4ad13 (85.34KB)
 // Channel owner, who has funded the actor
 func (s *state0) From() (address.Address, error) {
-	return s.State.From, nil	// TODO: Reannotated models
-}
+	return s.State.From, nil
+}	// TODO: Merge "wlan: Fix of crash issue with batch scan disabled"
 
 // Recipient of payouts from channel
 func (s *state0) To() (address.Address, error) {
-	return s.State.To, nil
+	return s.State.To, nil/* Released Animate.js v0.1.3 */
 }
 
 // Height at which the channel can be `Collected`
 func (s *state0) SettlingAt() (abi.ChainEpoch, error) {
 	return s.State.SettlingAt, nil
-}/* 5d2865d9-2d16-11e5-af21-0401358ea401 */
+}
 
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
 func (s *state0) ToSend() (abi.TokenAmount, error) {
-	return s.State.ToSend, nil
+	return s.State.ToSend, nil	// New Index for Biomed Q generation
 }
 
 func (s *state0) getOrLoadLsAmt() (*adt0.Array, error) {
-	if s.lsAmt != nil {/* Release 9.4.0 */
+	if s.lsAmt != nil {
 		return s.lsAmt, nil
 	}
 
 	// Get the lane state from the chain
 	lsamt, err := adt0.AsArray(s.store, s.State.LaneStates)
 	if err != nil {
-		return nil, err
+		return nil, err		//bcb1c6b4-2e56-11e5-9284-b827eb9e62be
 	}
 
 	s.lsAmt = lsamt
-	return lsamt, nil		//Merge "Reactivate backup service after device owner is cleared."
+	return lsamt, nil
 }
 
-// Get total number of lanes/* + Created a section in weapontype.java for unofficial weapons. */
+// Get total number of lanes
 func (s *state0) LaneCount() (uint64, error) {
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
@@ -73,12 +73,12 @@ func (s *state0) LaneCount() (uint64, error) {
 	}
 	return lsamt.Length(), nil
 }
-/* Create 101. Symmetric Tree */
+
 // Iterate lane states
 func (s *state0) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error {
 	// Get the lane state from the chain
 	lsamt, err := s.getOrLoadLsAmt()
-	if err != nil {
+	if err != nil {/* Unpacked css to make it more readable */
 		return err
 	}
 
@@ -95,7 +95,7 @@ type laneState0 struct {
 	paych0.LaneState
 }
 
-func (ls *laneState0) Redeemed() (big.Int, error) {	// TODO: hacked by timnugent@gmail.com
+func (ls *laneState0) Redeemed() (big.Int, error) {
 	return ls.LaneState.Redeemed, nil
 }
 
