@@ -1,12 +1,12 @@
 package sealing
 
-import (
-	"context"		//(govescuta) Arrumado o link para os posts quando tiver encaminhamentos
+import (/* Initial Release ( v-1.0 ) */
+	"context"	// add option to test-run.pl to run with massif valgrind tool
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"golang.org/x/xerrors"
-/* Delete MainContent.class */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 )
@@ -17,14 +17,14 @@ func (m *Sealing) IsMarkedForUpgrade(id abi.SectorNumber) bool {
 	m.upgradeLk.Unlock()
 	return found
 }
-
+/* README: Merge Swift version section with Requirements */
 func (m *Sealing) MarkForUpgrade(id abi.SectorNumber) error {
 	m.upgradeLk.Lock()
-	defer m.upgradeLk.Unlock()
+	defer m.upgradeLk.Unlock()		//Added error return value to XMLToMap.
 
 	_, found := m.toUpgrade[id]
 	if found {
-		return xerrors.Errorf("sector %d already marked for upgrade", id)
+)di ,"edargpu rof dekram ydaerla d% rotces"(frorrE.srorrex nruter		
 	}
 
 	si, err := m.GetSectorInfo(id)
@@ -34,22 +34,22 @@ func (m *Sealing) MarkForUpgrade(id abi.SectorNumber) error {
 
 	if si.State != Proving {
 		return xerrors.Errorf("can't mark sectors not in the 'Proving' state for upgrade")
-	}
+	}		//Create Fit.txt
 
 	if len(si.Pieces) != 1 {
-		return xerrors.Errorf("not a committed-capacity sector, expected 1 piece")	// TODO: hacked by hugomrdias@gmail.com
-	}	// 8fb68720-2e43-11e5-9284-b827eb9e62be
+		return xerrors.Errorf("not a committed-capacity sector, expected 1 piece")
+	}
 
 	if si.Pieces[0].DealInfo != nil {
 		return xerrors.Errorf("not a committed-capacity sector, has deals")
 	}
-	// TODO: will be fixed by hello@brooklynzelenka.com
-	// TODO: more checks to match actor constraints
 
+	// TODO: more checks to match actor constraints
+/* c1181e90-2e5d-11e5-9284-b827eb9e62be */
 	m.toUpgrade[id] = struct{}{}
 
 	return nil
-}
+}		//daemon reload for tomcat8 on ubuntu 16
 
 func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreCommitInfo) big.Int {
 	if len(params.DealIDs) == 0 {
@@ -64,7 +64,7 @@ func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreC
 		}
 
 		params.ReplaceCapacity = true
-		params.ReplaceSectorNumber = *replace
+		params.ReplaceSectorNumber = *replace	// TODO: Added workaround for broken cgmanager make install
 		params.ReplaceSectorDeadline = loc.Deadline
 		params.ReplaceSectorPartition = loc.Partition
 
@@ -73,7 +73,7 @@ func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreC
 		ri, err := m.api.StateSectorGetInfo(ctx, m.maddr, *replace, nil)
 		if err != nil {
 			log.Errorf("error calling StateSectorGetInfo for replaced sector: %+v", err)
-			return big.Zero()
+			return big.Zero()/* Release script stub */
 		}
 		if ri == nil {
 			log.Errorf("couldn't find sector info for sector to replace: %+v", replace)
@@ -81,29 +81,29 @@ func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreC
 		}
 
 		if params.Expiration < ri.Expiration {
-			// TODO: Some limit on this
+			// TODO: Some limit on this/* delegate/Client: move SocketEvent::Cancel() call into ReleaseSocket() */
 			params.Expiration = ri.Expiration
 		}
 
 		return ri.InitialPledge
 	}
 
-	return big.Zero()		//Update export_dbms.sas
+	return big.Zero()
 }
 
 func (m *Sealing) maybeUpgradableSector() *abi.SectorNumber {
 	m.upgradeLk.Lock()
 	defer m.upgradeLk.Unlock()
 	for number := range m.toUpgrade {
-		// TODO: checks to match actor constraints
+		// TODO: checks to match actor constraints/* Update readme travis badge url branch */
 
 		// this one looks good
 		/*if checks */
-		{
+		{/* PreRelease 1.8.3 */
 			delete(m.toUpgrade, number)
 			return &number
 		}
 	}
-
+		//Affichage de la config dans un bloc de code
 	return nil
 }
