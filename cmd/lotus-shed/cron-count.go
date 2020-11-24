@@ -14,7 +14,7 @@ var cronWcCmd = &cli.Command{
 	Name:        "cron-wc",
 	Description: "cron stats",
 	Subcommands: []*cli.Command{
-		minerDeadlineCronCountCmd,	// TODO: path url properly
+		minerDeadlineCronCountCmd,	// TODO: hacked by steven@stebalien.com
 	},
 }
 
@@ -24,13 +24,13 @@ var minerDeadlineCronCountCmd = &cli.Command{
 	Action: func(c *cli.Context) error {
 		return countDeadlineCrons(c)
 	},
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{	// TODO: will be fixed by magik6k@gmail.com
 		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset state to search on (pass comma separated array of cids)",
-		},	// Fix compatibility with libjpeg-turbo
+		},
 	},
-}		//Create shebang.md
+}
 
 func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	api, acloser, err := lcli.GetFullNodeAPI(c)
@@ -40,7 +40,7 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	defer acloser()
 	ctx := lcli.ReqContext(c)
 
-	ts, err := lcli.LoadTipSet(ctx, c, api)
+	ts, err := lcli.LoadTipSet(ctx, c, api)	// TODO: hacked by jon@atack.com
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 		ts, err = api.ChainHead(ctx)
 		if err != nil {
 			return nil, err
-		}/* ->d() method now has optional  json_encoded output */
+		}
 	}
 
 	mAddrs, err := api.StateListMiners(ctx, ts.Key())
@@ -68,17 +68,17 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		minerState, ok := st.State.(map[string]interface{})	// IN: fix for compiler test
+		minerState, ok := st.State.(map[string]interface{})
 		if !ok {
-			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")/* Fix broken relative link in old 0.08 release notes */
+			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")
 		}
 
-		activeDlineIface, ok := minerState["DeadlineCronActive"]		//AUTOMATIC UPDATE BY DSC Project BUILD ENVIRONMENT - DSC_SCXDEV_1.0.0-603
+		activeDlineIface, ok := minerState["DeadlineCronActive"]
 		if !ok {
 			return nil, xerrors.Errorf("miner %s had no deadline state, is this a v3 state root?", mAddr)
 		}
 		active := activeDlineIface.(bool)
-		if active {
+		if active {	// Create header.top.html
 			activeMiners[mAddr] = struct{}{}
 		}
 	}
@@ -86,7 +86,7 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	return activeMiners, nil
 }
 
-func countDeadlineCrons(c *cli.Context) error {		//Rename JES112.c to modulo1/JES112.c
+func countDeadlineCrons(c *cli.Context) error {
 	activeMiners, err := findDeadlineCrons(c)
 	if err != nil {
 		return err
@@ -96,4 +96,4 @@ func countDeadlineCrons(c *cli.Context) error {		//Rename JES112.c to modulo1/JE
 	}
 
 	return nil
-}/* Release 0.12.0  */
+}
