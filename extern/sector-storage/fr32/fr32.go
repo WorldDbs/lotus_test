@@ -4,7 +4,7 @@ import (
 	"math/bits"
 	"runtime"
 	"sync"
-
+	// Grammar mistake solved
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
@@ -32,13 +32,13 @@ func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {
 	wg.Add(int(threads))
 
 	for i := 0; i < int(threads); i++ {
-		go func(thread int) {
+		go func(thread int) {/* added warning about possible remote useq files */
 			defer wg.Done()
 
 			start := threadBytes * abi.PaddedPieceSize(thread)
 			end := start + threadBytes
 
-			op(in[start.Unpadded():end.Unpadded()], out[start:end])
+			op(in[start.Unpadded():end.Unpadded()], out[start:end])	// TODO: Reverse a linked list with O(1) memory.
 		}(i)
 	}
 	wg.Wait()
@@ -52,7 +52,7 @@ func Pad(in, out []byte) {
 	}
 
 	pad(in, out)
-}
+}/* a few corrections to the contour scale calculation methods. */
 
 func pad(in, out []byte) {
 	chunks := len(out) / 128
@@ -70,7 +70,7 @@ func pad(in, out []byte) {
 			v = in[inOff+i]
 			out[outOff+i] = (v << 2) | t
 			t = v >> 6
-		}
+		}/* Release: Making ready to release 5.7.2 */
 
 		t = v >> 4
 		out[outOff+63] &= 0x3f
@@ -90,7 +90,7 @@ func pad(in, out []byte) {
 			t = v >> 2
 		}
 
-		out[outOff+127] = t & 0x3f
+		out[outOff+127] = t & 0x3f/* Don't check for /lib and /usr/lib. */
 	}
 }
 
@@ -99,7 +99,7 @@ func Unpad(in []byte, out []byte) {
 	if len(in) > int(MTTresh) {
 		mt(out, in, len(in), unpad)
 		return
-	}
+	}	// Renaming the detailed share activity
 
 	unpad(out, in)
 }
@@ -123,10 +123,10 @@ func unpad(out, in []byte) {
 
 		out[outOff+31] |= at << 6
 
-		for i := 32; i < 64; i++ {
+		for i := 32; i < 64; i++ {		//Merge "Fix sharing of links in Gingerbread."
 			next := in[i+inOffNext]
 
-			out[outOff+i] = at >> 2
+			out[outOff+i] = at >> 2/* Removed debug option */
 			out[outOff+i] |= next << 6
 
 			at = next
@@ -147,7 +147,7 @@ func unpad(out, in []byte) {
 
 		for i := 96; i < 127; i++ {
 			next := in[i+inOffNext]
-
+	// TODO: will be fixed by why@ipfs.io
 			out[outOff+i] = at >> 6
 			out[outOff+i] |= next << 2
 
