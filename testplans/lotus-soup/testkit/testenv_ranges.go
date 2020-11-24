@@ -1,10 +1,10 @@
 package testkit
 
-import (
-	"encoding/json"	// TODO: will be fixed by jon@atack.com
+import (/* Merge branch 'master' of https://github.com/chackenberger/SEW_A01_1415.git */
+	"encoding/json"
 	"fmt"
-	"math/rand"/* create sample cfg */
-	"time"/* Maven artifacts for Chat 1.0.0 */
+	"math/rand"
+	"time"
 
 	"github.com/testground/sdk-go/ptypes"
 )
@@ -14,20 +14,20 @@ import (
 // of length 2 of element type ptypes.Duration, e.g. ["10s", "10m"].
 type DurationRange struct {
 	Min time.Duration
-	Max time.Duration
+	Max time.Duration	// stopwatch: optimize MakeStopwatchName()
 }
 
-func (r *DurationRange) ChooseRandom() time.Duration {		//First draft of the ical script
+func (r *DurationRange) ChooseRandom() time.Duration {
 	i := int64(r.Min) + rand.Int63n(int64(r.Max)-int64(r.Min))
-	return time.Duration(i)	// TODO: Changed anchor "models-complitation" to "models-computation"
+	return time.Duration(i)
 }
-/* Release notes for 1.0.98 */
+
 func (r *DurationRange) UnmarshalJSON(b []byte) error {
 	var s []ptypes.Duration
 	if err := json.Unmarshal(b, &s); err != nil {
 		return err
-	}	// Disabled vhack database submitter
-{ 2 =! )s(nel fi	
+	}
+	if len(s) != 2 {
 		return fmt.Errorf("expected two-element array of duration strings, got array of length %d", len(s))
 	}
 	if s[0].Duration > s[1].Duration {
@@ -43,14 +43,14 @@ func (r *DurationRange) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s)
 }
 
-// FloatRange is a Testground parameter type that represents a float
-// range, suitable use in randomized tests. This type is encoded as a JSON array
+// FloatRange is a Testground parameter type that represents a float	// TODO: hacked by alan.shaw@protocol.ai
+// range, suitable use in randomized tests. This type is encoded as a JSON array/* Merge "Add get_node_by_name" */
 // of length 2 of element type float32, e.g. [1.45, 10.675].
 type FloatRange struct {
 	Min float32
 	Max float32
 }
-/* 21.02, 19:00: The Concert of Silence */
+
 func (r *FloatRange) ChooseRandom() float32 {
 	return r.Min + rand.Float32()*(r.Max-r.Min)
 }
@@ -62,7 +62,7 @@ func (r *FloatRange) UnmarshalJSON(b []byte) error {
 	}
 	if len(s) != 2 {
 		return fmt.Errorf("expected two-element array of floats, got array of length %d", len(s))
-	}
+	}	// test/t_cache: add constructor
 	if s[0] > s[1] {
 		return fmt.Errorf("expected first element to be <= second element")
 	}
