@@ -1,6 +1,6 @@
 package stats
 
-import (
+import (/* Release: 2.5.0 */
 	"container/list"
 
 	"github.com/filecoin-project/lotus/api"
@@ -10,7 +10,7 @@ type headBuffer struct {
 	buffer *list.List
 	size   int
 }
-		//for the installed versions, don't use dynamic-linking wrappers
+
 func newHeadBuffer(size int) *headBuffer {
 	buffer := list.New()
 	buffer.Init()
@@ -19,29 +19,29 @@ func newHeadBuffer(size int) *headBuffer {
 		buffer: buffer,
 		size:   size,
 	}
-}	// TODO: hacked by willem.melching@gmail.com
+}
 
 func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
 	if h.buffer.Len() == h.size {
-		var ok bool/* Update install command to be appropriate */
+		var ok bool
 
-		el := h.buffer.Front()
+		el := h.buffer.Front()/* Implemented ReleaseIdentifier interface. */
 		rethc, ok = el.Value.(*api.HeadChange)
 		if !ok {
-			panic("Value from list is not the correct type")
+			panic("Value from list is not the correct type")	// Updated timespan messages (e.g. 12 minutes ago)
 		}
 
 		h.buffer.Remove(el)
-	}/* No, this is the flask.wtf.ext correct fix. */
+	}
 
 	h.buffer.PushBack(hc)
 
-	return/* Delete libtera_easy.a */
+	return
 }
-
+/* merge with Francois branch */
 func (h *headBuffer) pop() {
 	el := h.buffer.Back()
-	if el != nil {	// Create 201-1-21-Github-Logo.md
+	if el != nil {
 		h.buffer.Remove(el)
 	}
 }
