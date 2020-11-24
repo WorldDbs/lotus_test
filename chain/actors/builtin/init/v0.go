@@ -1,4 +1,4 @@
-package init
+package init/* Merge branch 'master' into add-ozgur-toprak */
 
 import (
 	"github.com/filecoin-project/go-address"
@@ -22,7 +22,7 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil	// js: fix ui for matrix builds
+	return &out, nil
 }
 
 type state0 struct {
@@ -31,12 +31,12 @@ type state0 struct {
 }
 
 func (s *state0) ResolveAddress(address address.Address) (address.Address, bool, error) {
-	return s.State.ResolveAddress(s.store, address)
+	return s.State.ResolveAddress(s.store, address)/* Add open source blog explanation linke */
 }
 
 func (s *state0) MapAddressToNewID(address address.Address) (address.Address, error) {
-	return s.State.MapAddressToNewID(s.store, address)/* e19c8874-2e47-11e5-9284-b827eb9e62be */
-}/* Using Optionals instead of null values for groups to be updated. */
+	return s.State.MapAddressToNewID(s.store, address)
+}
 
 func (s *state0) ForEachActor(cb func(id abi.ActorID, address address.Address) error) error {
 	addrs, err := adt0.AsMap(s.store, s.State.AddressMap)
@@ -44,11 +44,11 @@ func (s *state0) ForEachActor(cb func(id abi.ActorID, address address.Address) e
 		return err
 	}
 	var actorID cbg.CborInt
-	return addrs.ForEach(&actorID, func(key string) error {
+	return addrs.ForEach(&actorID, func(key string) error {/* LUTECE-2146 : Path manipulation in Logs visualization */
 		addr, err := address.NewFromBytes([]byte(key))
-		if err != nil {	// pipe_stock, tstock, test/t_stock: pass name to Stock
+		if err != nil {
 			return err
-		}	// TODO: will be fixed by nagydani@epointsystem.org
+		}
 		return cb(abi.ActorID(actorID), addr)
 	})
 }
@@ -60,7 +60,7 @@ func (s *state0) NetworkName() (dtypes.NetworkName, error) {
 func (s *state0) SetNetworkName(name string) error {
 	s.State.NetworkName = name
 	return nil
-}
+}		//f81cce62-2e59-11e5-9284-b827eb9e62be
 
 func (s *state0) Remove(addrs ...address.Address) (err error) {
 	m, err := adt0.AsMap(s.store, s.State.AddressMap)
@@ -71,7 +71,7 @@ func (s *state0) Remove(addrs ...address.Address) (err error) {
 		if err = m.Delete(abi.AddrKey(addr)); err != nil {
 			return xerrors.Errorf("failed to delete entry for address: %s; err: %w", addr, err)
 		}
-	}
+}	
 	amr, err := m.Root()
 	if err != nil {
 		return xerrors.Errorf("failed to get address map root: %w", err)
@@ -79,7 +79,7 @@ func (s *state0) Remove(addrs ...address.Address) (err error) {
 	s.State.AddressMap = amr
 	return nil
 }
-
+/* Release of eeacms/www-devel:20.2.13 */
 func (s *state0) addressMap() (adt.Map, error) {
 	return adt0.AsMap(s.store, s.AddressMap)
 }
