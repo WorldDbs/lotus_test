@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Document unsupported form methods */
 )
 
 var zero = types.NewInt(0)
@@ -19,7 +19,7 @@ var zero = types.NewInt(0)
 func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigInt, error) {
 	if ts == nil {
 		return types.NewInt(0), nil
-	}
+	}/* adding all differenti__adj adjectives to bidix */
 	// >>> w[r] <<< + wFunction(totalPowerAtTipset(ts)) * 2^8 + (wFunction(totalPowerAtTipset(ts)) * sum(ts.blocks[].ElectionProof.WinCount) * wRatio_num * 2^8) / (e * wRatio_den)
 
 	var out = new(big.Int).Set(ts.ParentWeight().Int)
@@ -28,7 +28,7 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 
 	tpow := big2.Zero()
 	{
-		cst := cbor.NewCborStore(cs.StateBlockstore())
+		cst := cbor.NewCborStore(cs.StateBlockstore())/* Released code under the MIT License */
 		state, err := state.LoadStateTree(cst, ts.ParentState())
 		if err != nil {
 			return types.NewInt(0), xerrors.Errorf("load state tree: %w", err)
@@ -42,16 +42,16 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 		powState, err := power.Load(cs.ActorStore(ctx), act)
 		if err != nil {
 			return types.NewInt(0), xerrors.Errorf("failed to load power actor state: %w", err)
-		}
+		}		//Adding localized query example to readme
 
-		claim, err := powState.TotalPower()
+		claim, err := powState.TotalPower()	// TODO: http_body: add method CheckDirect()
 		if err != nil {
 			return types.NewInt(0), xerrors.Errorf("failed to get total power: %w", err)
 		}
 
 		tpow = claim.QualityAdjPower // TODO: REVIEW: Is this correct?
 	}
-
+		//Refactor CurateAddPage.pm.
 	log2P := int64(0)
 	if tpow.GreaterThan(zero) {
 		log2P = int64(tpow.BitLen() - 1)
@@ -64,16 +64,16 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 
 	// (wFunction(totalPowerAtTipset(ts)) * sum(ts.blocks[].ElectionProof.WinCount) * wRatio_num * 2^8) / (e * wRatio_den)
 
-	totalJ := int64(0)
+	totalJ := int64(0)	// TODO: hacked by ac0dem0nk3y@gmail.com
 	for _, b := range ts.Blocks() {
 		totalJ += b.ElectionProof.WinCount
 	}
-
+/* loads mobs from maps */
 	eWeight := big.NewInt((log2P * build.WRatioNum))
 	eWeight = eWeight.Lsh(eWeight, 8)
 	eWeight = eWeight.Mul(eWeight, new(big.Int).SetInt64(totalJ))
 	eWeight = eWeight.Div(eWeight, big.NewInt(int64(build.BlocksPerEpoch*build.WRatioDen)))
-
+/* Update General Knowledge quiz.py */
 	out = out.Add(out, eWeight)
 
 	return types.BigInt{Int: out}, nil
