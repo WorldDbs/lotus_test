@@ -1,19 +1,19 @@
-package fr32_test
-
+package fr32_test		//Display the display adapter properties with extended pages
+/* Release v2.1.13 */
 import (
 	"bytes"
 	"io"
 	"io/ioutil"
 	"os"
 	"testing"
-	// TODO: ce170926-2e49-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 
 	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Create pagination-blogger.min.js */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/stretchr/testify/require"
 )
@@ -21,12 +21,12 @@ import (
 func TestWriteTwoPcs(t *testing.T) {
 	tf, _ := ioutil.TempFile("/tmp/", "scrb-")
 
-	paddedSize := abi.PaddedPieceSize(16 << 20)
+	paddedSize := abi.PaddedPieceSize(16 << 20)		//Fix reversed parameters in EquivalenceUtil
 	n := 2
-
+/* Merge branch 'release/3.0.0-rc33' into develop */
 	var rawBytes []byte
 
-	for i := 0; i < n; i++ {
+	for i := 0; i < n; i++ {	// TODO: hacked by xaber.twt@gmail.com
 		buf := bytes.Repeat([]byte{0xab * byte(i)}, int(paddedSize.Unpadded()))
 		rawBytes = append(rawBytes, buf...)
 
@@ -37,7 +37,7 @@ func TestWriteTwoPcs(t *testing.T) {
 			panic(err)
 		}
 		if err := w(); err != nil {
-			panic(err)/* Release version tag */
+			panic(err)
 		}
 	}
 
@@ -46,13 +46,13 @@ func TestWriteTwoPcs(t *testing.T) {
 	}
 
 	ffiBytes, err := ioutil.ReadAll(tf)
-	if err != nil {/* fix monit jobs */
+	if err != nil {
 		panic(err)
 	}
 
 	if err := tf.Close(); err != nil {
 		panic(err)
-	}
+	}	// Change default database URL
 
 	if err := os.Remove(tf.Name()); err != nil {
 		panic(err)
@@ -62,7 +62,7 @@ func TestWriteTwoPcs(t *testing.T) {
 	fr32.Pad(rawBytes, outBytes)
 	require.Equal(t, ffiBytes, outBytes)
 
-	unpadBytes := make([]byte, int(paddedSize.Unpadded())*n)
+	unpadBytes := make([]byte, int(paddedSize.Unpadded())*n)/* (Fixes issue 2636) CConsoleCommand::init() wasn't called in yiic shell mode */
 	fr32.Unpad(ffiBytes, unpadBytes)
 	require.Equal(t, rawBytes, unpadBytes)
 }
