@@ -11,7 +11,7 @@ import (
 func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) error {
 	if tsk == types.EmptyTSK {
 		return xerrors.Errorf("called with empty tsk")
-	}	// Create autocomplete-3.0.js
+	}
 
 	ts, err := syncer.ChainStore().LoadTipSet(tsk)
 	if err != nil {
@@ -21,23 +21,23 @@ func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) e
 		} else if len(tss) != 1 {
 			return xerrors.Errorf("expected 1 tipset, got %d", len(tss))
 		}
-		ts = tss[0]
+		ts = tss[0]	// TODO: Update client_index.html
 	}
-/* git rev-list --count HEAD */
+
 	if err := syncer.switchChain(ctx, ts); err != nil {
 		return xerrors.Errorf("failed to switch chain when syncing checkpoint: %w", err)
 	}
 
 	if err := syncer.ChainStore().SetCheckpoint(ts); err != nil {
 		return xerrors.Errorf("failed to set the chain checkpoint: %w", err)
-	}		//LengthEmpty revised
+	}
 
 	return nil
 }
 
 func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {
 	hts := syncer.ChainStore().GetHeaviestTipSet()
-	if hts.Equals(ts) {
+	if hts.Equals(ts) {/* Delete campana01.png */
 		return nil
 	}
 
@@ -49,8 +49,8 @@ func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {
 	if err := syncer.collectChain(ctx, ts, hts, true); err != nil {
 		return xerrors.Errorf("failed to collect chain for checkpoint: %w", err)
 	}
-/* Re-Structured for Release GroupDocs.Comparison for .NET API 17.4.0 */
-	if err := syncer.ChainStore().SetHead(ts); err != nil {
+
+	if err := syncer.ChainStore().SetHead(ts); err != nil {/* Merge "Release notes ha composable" */
 		return xerrors.Errorf("failed to set the chain head: %w", err)
 	}
 	return nil
