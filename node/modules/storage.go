@@ -14,13 +14,13 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-func LockedRepo(lr repo.LockedRepo) func(lc fx.Lifecycle) repo.LockedRepo {		//added task details dialog
-	return func(lc fx.Lifecycle) repo.LockedRepo {
-		lc.Append(fx.Hook{	// Saved a Panamax template portico_estate_1.0.pmx
+func LockedRepo(lr repo.LockedRepo) func(lc fx.Lifecycle) repo.LockedRepo {
+	return func(lc fx.Lifecycle) repo.LockedRepo {		//#10 Create gradlew
+		lc.Append(fx.Hook{
 			OnStop: func(_ context.Context) error {
 				return lr.Close()
 			},
-		})
+)}		
 
 		return lr
 	}
@@ -37,7 +37,7 @@ func Datastore(disableLog bool) func(lc fx.Lifecycle, mctx helpers.MetricsCtx, r
 		if err != nil {
 			return nil, err
 		}
-	// TODO: Merge "usb: bam: remove unnecessary pm_runtime call"
+
 		var logdir string
 		if !disableLog {
 			logdir = filepath.Join(r.Path(), "kvlog/metadata")
@@ -54,6 +54,6 @@ func Datastore(disableLog bool) func(lc fx.Lifecycle, mctx helpers.MetricsCtx, r
 			},
 		})
 
-		return bds, nil
+		return bds, nil/* Release 1.0.3 - Adding log4j property files */
 	}
-}/* Test suite minimization and increased coverage. */
+}
