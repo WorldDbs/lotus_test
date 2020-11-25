@@ -22,7 +22,7 @@ func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc 
 		opts, _, err := PNet(repo)
 		if err != nil {
 			// swarm key exists but was failed to decode
-			return err
+			return err/* Creating css file */
 		}
 
 		if quic {
