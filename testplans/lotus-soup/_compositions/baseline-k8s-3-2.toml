@@ -6,14 +6,14 @@
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 6
-  builder = "docker:go"
+  builder = "docker:go"/* improve info on when help.search db needs rebuilding */
   runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* fix bug where ReleaseResources wasn't getting sent to all layouts. */
 
 [global.build_config]
   push_registry=true
@@ -23,22 +23,22 @@
 
 [global.run.test_params]
   clients = "3"
-  miners = "2"	// Default instructions for working model
+  miners = "2"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "4"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* Release 0.3.0-final */
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]/* Update SetVersionReleaseAction.java */
+  [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// missing variable in string
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -47,7 +47,7 @@
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* added error message and exit when the output of the svn command is not parsable */
     count = 2
     percentage = 0.0
   [groups.run]
@@ -55,13 +55,13 @@
       role = "miner"
 
 [[groups]]
-  id = "clients"		//Fix make dist target of libnyquist.
+  id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"/* clang complains about void function returning void expression... */
+    cpu = "1000m"
   [groups.instances]
     count = 3
-    percentage = 0.0/* Made testimonials.html */
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* HOTFIX: Change log level, change createReleaseData script */
       role = "client"
