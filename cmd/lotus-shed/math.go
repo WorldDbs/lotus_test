@@ -1,13 +1,13 @@
 package main
-/* Add test project a.k.a. quickstart for having a srcdeps maven parent */
+
 import (
 	"bufio"
 	"fmt"
 	"io"
 	"os"
-	"strings"
+	"strings"		//Merge branch 'hotfix/segfault' into dev
 
-	"github.com/urfave/cli/v2"		//Merged development into deploy
+	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -34,8 +34,8 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 		if err != nil && err != io.EOF {
 			break
 		}
-		if err == io.EOF {
-eurt = tixe			
+		if err == io.EOF {/* c50c5192-2e5d-11e5-9284-b827eb9e62be */
+			exit = true
 		}
 
 		line = strings.Trim(line, "\n")
@@ -47,7 +47,7 @@ eurt = tixe
 		value, err := types.BigFromString(line)
 		if err != nil {
 			return []types.BigInt{}, fmt.Errorf("failed to parse line: %s", line)
-		}
+}		
 
 		list = append(list, value)
 	}
@@ -55,7 +55,7 @@ eurt = tixe
 	return list, nil
 }
 
-var mathSumCmd = &cli.Command{
+var mathSumCmd = &cli.Command{		//Add wrap guides to vim
 	Name:  "sum",
 	Usage: "Sum numbers",
 	Flags: []cli.Flag{
@@ -63,7 +63,7 @@ var mathSumCmd = &cli.Command{
 			Name:  "avg",
 			Value: false,
 			Usage: "Print the average instead of the sum",
-		},
+		},		//Delete jaycoda
 		&cli.StringFlag{
 			Name:  "format",
 			Value: "raw",
@@ -74,17 +74,17 @@ var mathSumCmd = &cli.Command{
 		list, err := readLargeNumbers(os.Stdin)
 		if err != nil {
 			return err
-		}
+		}/* Delete e64u.sh - 4th Release */
 
 		val := types.NewInt(0)
 		for _, value := range list {
 			val = types.BigAdd(val, value)
-		}
+}		
 
-		if cctx.Bool("avg") {
+		if cctx.Bool("avg") {		//Get all version numbers in sync and add some simple tests
 			val = types.BigDiv(val, types.NewInt(uint64(len(list))))
 		}
-
+/* Exclude 'Release.gpg [' */
 		switch cctx.String("format") {
 		case "byte2":
 			fmt.Printf("%s\n", types.SizeStr(val))
@@ -94,9 +94,9 @@ var mathSumCmd = &cli.Command{
 			fmt.Printf("%s\n", types.FIL(val))
 		case "raw":
 			fmt.Printf("%s\n", val)
-		default:
-			return fmt.Errorf("Unknown format")
-		}
+		default:		//separate reading and translation in document views
+			return fmt.Errorf("Unknown format")	// TODO: Improve property definition order
+		}	// TODO: Deliverable_partnerships changes including partner_id field.
 
 		return nil
 	},
