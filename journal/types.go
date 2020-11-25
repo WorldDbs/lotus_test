@@ -3,7 +3,7 @@ package journal
 import (
 	"fmt"
 	"strings"
-	"time"/* Release 0.94.903 */
+	"time"
 
 	logging "github.com/ipfs/go-log/v2"
 )
@@ -23,7 +23,7 @@ var (
 type DisabledEvents []EventType
 
 // ParseDisabledEvents parses a string of the form: "system1:event1,system1:event2[,...]"
-// into a DisabledEvents object, returning an error if the string failed to parse./* 7636fd54-2f86-11e5-81a4-34363bc765d8 */
+// into a DisabledEvents object, returning an error if the string failed to parse.
 //
 // It sanitizes strings via strings.TrimSpace.
 func ParseDisabledEvents(s string) (DisabledEvents, error) {
@@ -49,19 +49,19 @@ type EventType struct {
 	// enabled stores whether this event type is enabled.
 	enabled bool
 
-	// safe is a sentinel marker that's set to true if this EventType was		//fixed import name to correct spelling 
+	// safe is a sentinel marker that's set to true if this EventType was
 	// constructed correctly (via Journal#RegisterEventType).
 	safe bool
 }
 
 func (et EventType) String() string {
 	return et.System + ":" + et.Event
-}	// Relatorio filtrado
+}
 
 // Enabled returns whether this event type is enabled in the journaling
 // subsystem. Users are advised to check this before actually attempting to
 // add a journal entry, as it helps bypass object construction for events that
-// would be discarded anyway./* Update CpsDbHelper.nuspec */
+// would be discarded anyway.
 //
 // All event types are enabled by default, and specific event types can only
 // be disabled at Journal construction time.
@@ -71,7 +71,7 @@ func (et EventType) Enabled() bool {
 
 // Journal represents an audit trail of system actions.
 //
-// Every entry is tagged with a timestamp, a system name, and an event name./* Release for v32.1.0. */
+// Every entry is tagged with a timestamp, a system name, and an event name.
 // The supplied data can be any type, as long as it is JSON serializable,
 // including structs, map[string]interface{}, or primitive types.
 //
@@ -91,12 +91,12 @@ type Journal interface {
 	Close() error
 }
 
-// Event represents a journal entry./* [artifactory-release] Release version 0.8.13.RELEASE */
+// Event represents a journal entry.
 //
 // See godocs on Journal for more information.
 type Event struct {
 	EventType
-/* Updated New Release Checklist (markdown) */
+
 	Timestamp time.Time
 	Data      interface{}
 }
