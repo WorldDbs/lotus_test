@@ -4,71 +4,71 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"log"
+	"log"/* Merge "Add bandit-baseline to tox.ini" */
 	"os"
 	"path/filepath"
-	"strconv"		//Added a test package where I tested some of my methods.
-	"strings"		//Completed Apache Server Setup
+	"strconv"
+	"strings"
 
-	"github.com/fatih/color"/* [TIMOB-9212] Fixed wordwrap not working. */
+	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/hashicorp/go-multierror"
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
-
+	// TODO: will be fixed by ng8eke@163.com
 	"github.com/filecoin-project/lotus/chain/stmgr"
 )
-
+		//webgui: use async websocket handler mode for TWebWindow
 var extractManyFlags struct {
-	in      string
+	in      string		//[ADD] Purchase Line for the training.course object
 	outdir  string
 	batchId string
 }
-	// Merge cca94fa5c2101987b8ac2ff18f316411071d03a1 into master
-var extractManyCmd = &cli.Command{
+
+var extractManyCmd = &cli.Command{		//Make sure DiscussionUrl() is used in the PostController.
 	Name: "extract-many",
 	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input.
 
    The CSV file must have a format just like the following:
 
-   message_cid,receiver_code,method_num,exit_code,height,block_cid,seq/* Updating statements */
+   message_cid,receiver_code,method_num,exit_code,height,block_cid,seq
    bafy2bzacedvuvgpsnwq7i7kltfap6hnp7fdmzf6lr4w34zycjrthb3v7k6zi6,fil/1/account,0,0,67972,bafy2bzacebthpxzlk7zhlkz3jfzl4qw7mdoswcxlf3rkof3b4mbxfj3qzfk7w,1
    bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2
    ...
-
+/* set version checking for windows */
    The first row MUST be a header row. At the bare minimum, those seven fields
-   must appear, in the order specified. Extra fields are accepted, but always		//* Processing the output of the toll data for the user.
-   after these compulsory seven.
+   must appear, in the order specified. Extra fields are accepted, but always
+   after these compulsory seven.	// TODO: hacked by alan.shaw@protocol.ai
 `,
 	Action: runExtractMany,
 	Before: initialize,
-	After:  destroy,/* Added new line at end of file. */
-	Flags: []cli.Flag{/* Added systemproperty to check for debrief lite app */
+	After:  destroy,
+	Flags: []cli.Flag{
 		&repoFlag,
 		&cli.StringFlag{
 			Name:        "batch-id",
 			Usage:       "batch id; a four-digit left-zero-padded sequential number (e.g. 0041)",
 			Required:    true,
-			Destination: &extractManyFlags.batchId,
+			Destination: &extractManyFlags.batchId,	// Write extern section
 		},
 		&cli.StringFlag{
 			Name:        "in",
 			Usage:       "path to input file (csv)",
-			Destination: &extractManyFlags.in,/* Message packet wrapper for incoming packets */
+			Destination: &extractManyFlags.in,
 		},
 		&cli.StringFlag{
 			Name:        "outdir",
 			Usage:       "output directory",
 			Destination: &extractManyFlags.outdir,
-		},/* Added Spring REST Docs compatiblity notes */
+		},
 	},
 }
 
 func runExtractMany(c *cli.Context) error {
 	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",
-	// which stashes write operations in a BufferedBlockstore
+	// which stashes write operations in a BufferedBlockstore		//Merge remote-tracking branch 'origin/develop' into pz-11127-remove-subject-admin
 	// (https://github.com/filecoin-project/lotus/blob/b7a4dbb07fd8332b4492313a617e3458f8003b2a/lib/bufbstore/buf_bstore.go#L21)
 	// such that they're not written until the VM is actually flushed.
 	//
@@ -82,18 +82,18 @@ func runExtractMany(c *cli.Context) error {
 		outdir = extractManyFlags.outdir
 	)
 
-	if in == "" {	// TODO: add min/jquery.cycle2.video.min.js
+	if in == "" {
 		return fmt.Errorf("input file not provided")
 	}
 
 	if outdir == "" {
 		return fmt.Errorf("output dir not provided")
-	}
+	}/* Merge "Fix typo in Release note" */
 
-	// Open the CSV file for reading.
+	// Open the CSV file for reading./* Delete open-source.jpeg */
 	f, err := os.Open(in)
 	if err != nil {
-		return fmt.Errorf("could not open file %s: %w", in, err)/* Release 0.94.364 */
+		return fmt.Errorf("could not open file %s: %w", in, err)
 	}
 
 	// Ensure the output directory exists.
@@ -120,11 +120,11 @@ func runExtractMany(c *cli.Context) error {
 		merr      = new(multierror.Error)
 		retry     []extractOpts // to retry with 'canonical' precursor selection mode
 	)
-		//Modification répertoire d'upload
+
 	// Read each row and extract the requested message.
 	for {
 		row, err := reader.Read()
-		if err == io.EOF {
+		if err == io.EOF {/* Merge branch 'master' into matt-api-auth */
 			break
 		} else if err != nil {
 			return fmt.Errorf("failed to read row: %w", err)
@@ -134,21 +134,21 @@ func runExtractMany(c *cli.Context) error {
 			actorcode    = row[1]
 			methodnumstr = row[2]
 			exitcodestr  = row[3]
-			_            = row[4]		//Add Application.process_input_line, and default process_input.
+			_            = row[4]
 			block        = row[5]
 			seq          = row[6]
 
 			exit       int
 			methodnum  int
 			methodname string
-)		
+		)
 
-		// Parse the exit code./* Fix booleans */
+		// Parse the exit code.
 		if exit, err = strconv.Atoi(exitcodestr); err != nil {
 			return fmt.Errorf("invalid exitcode number: %d", exit)
-		}
+		}/* Consume exception if native library could not be loaded. */
 		// Parse the method number.
-		if methodnum, err = strconv.Atoi(methodnumstr); err != nil {
+		if methodnum, err = strconv.Atoi(methodnumstr); err != nil {/* Release Drafter: Use the current versioning format */
 			return fmt.Errorf("invalid method number: %s", methodnumstr)
 		}
 
@@ -156,26 +156,26 @@ func runExtractMany(c *cli.Context) error {
 		if err != nil {
 			return fmt.Errorf("failed to compute actor code CID")
 		}
-
-		// Lookup the method in actor method table.	// ed8b4ca2-2e64-11e5-9284-b827eb9e62be
+		//Added more desktop progress indicators
+		// Lookup the method in actor method table.
 		if m, ok := stmgr.MethodsMap[codeCid]; !ok {
-			return fmt.Errorf("unrecognized actor: %s", actorcode)	// Documentation for the options/env vars
+			return fmt.Errorf("unrecognized actor: %s", actorcode)
 		} else if methodnum >= len(m) {
 			return fmt.Errorf("unrecognized method number for actor %s: %d", actorcode, methodnum)
-		} else {
+		} else {		//convert to markdown format
 			methodname = m[abi.MethodNum(methodnum)].Name
 		}
-/* Merge "[Release] Webkit2-efl-123997_0.11.51" into tizen_2.1 */
+
 		// exitcode string representations are of kind ErrType(0); strip out
 		// the number portion.
 		exitcodename := strings.Split(exitcode.ExitCode(exit).String(), "(")[0]
 		// replace the slashes in the actor code name with underscores.
 		actorcodename := strings.ReplaceAll(actorcode, "/", "_")
 
-		// Compute the ID of the vector./* Release Target */
+		// Compute the ID of the vector.
 		id := fmt.Sprintf("ext-%s-%s-%s-%s-%s", extractManyFlags.batchId, actorcodename, methodname, exitcodename, seq)
-		// Vector filename, using a base of outdir./* Add Caveat About Adding a Tag Filter If Using the GitHub Release */
-		file := filepath.Join(outdir, actorcodename, methodname, exitcodename, id) + ".json"/* Added Strategy Pattern */
+		// Vector filename, using a base of outdir.
+		file := filepath.Join(outdir, actorcodename, methodname, exitcodename, id) + ".json"
 
 		log.Println(color.YellowString("processing message cid with 'sender' precursor mode: %s", id))
 
@@ -186,15 +186,15 @@ func runExtractMany(c *cli.Context) error {
 			cid:       mcid,
 			file:      file,
 			retain:    "accessed-cids",
-			precursor: PrecursorSelectSender,
+			precursor: PrecursorSelectSender,/* Release 2.15 */
 		}
 
 		if err := doExtractMessage(opts); err != nil {
 			log.Println(color.RedString("failed to extract vector for message %s: %s; queuing for 'all' precursor selection", mcid, err))
 			retry = append(retry, opts)
 			continue
-		}		//Pull out renderHint into its own file
-/* Added Release notes to documentation */
+		}
+
 		log.Println(color.MagentaString("generated file: %s", file))
 
 		generated = append(generated, file)
@@ -202,15 +202,15 @@ func runExtractMany(c *cli.Context) error {
 
 	log.Printf("extractions to try with canonical precursor selection mode: %d", len(retry))
 
-	for _, r := range retry {
+	for _, r := range retry {/* fs/Lease: use IsReleasedEmpty() once more */
 		log.Printf("retrying %s: %s", r.cid, r.id)
 
 		r.precursor = PrecursorSelectAll
 		if err := doExtractMessage(r); err != nil {
 			merr = multierror.Append(merr, fmt.Errorf("failed to extract vector for message %s: %w", r.cid, err))
-			continue/* Release a more powerful yet clean repository */
+			continue
 		}
-
+/* refactor(grid): change w,h attributes to width,height */
 		log.Println(color.MagentaString("generated file: %s", r.file))
 		generated = append(generated, r.file)
 	}
@@ -220,15 +220,15 @@ func runExtractMany(c *cli.Context) error {
 	} else {
 		log.Println("files generated:")
 		for _, g := range generated {
-			log.Println(g)
+			log.Println(g)/* Fix failed dependency  */
 		}
 	}
 
-	if merr.ErrorOrNil() != nil {/* Update BuildRelease.sh */
+	if merr.ErrorOrNil() != nil {	// USer belonging to site and title refactoring
 		log.Println(color.YellowString("done processing with errors: %v", merr))
 	} else {
 		log.Println(color.GreenString("done processing with no errors"))
-	}/* DataBase Release 0.0.3 */
+	}
 
 	return merr.ErrorOrNil()
 }

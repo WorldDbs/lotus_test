@@ -1,11 +1,11 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// merged from lp:~mmcg069/software-center/sumbit-review-dialog 
+  author = ""
 
-[global]/* Release 1.0.60 */
+[global]
   plan = "lotus-soup"
   case = "drand-outage"
-  total_instances = 7/* [BUGFIX] Lo stato di attack diventava ciclico tra i nemici e non ne uscivano più */
+  total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
 
@@ -15,9 +15,9 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// TODO: 2455bbce-2e64-11e5-9284-b827eb9e62be
+[global.build_config]
   enable_go_build_cache = true
-
+		//Add shared superclass for coordinate parameters
 [global.run.test_params]
   clients = "0"
   miners = "3"
@@ -25,7 +25,7 @@
   sectors = "10"
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
-  mining_mode = "natural"/* Merge "wlan: Release 3.2.3.140" */
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
@@ -39,21 +39,21 @@
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 3
+    count = 3	// TODO: hacked by arachnid@notdot.net
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* [artifactory-release] Release version 0.8.14.RELEASE */
       role = "miner"
 
 [[groups]]
   id = "drand"
   [groups.instances]
-    count = 3
+    count = 3	// TODO: will be fixed by sbrichards@gmail.com
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Wire up event to hide settings help. */
       role = "drand"
       drand_period = "30s"
       drand_catchup_period = "10s"
       drand_log_level = "debug"
-      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"
+      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"		//Fixed some file IO errors, added ignore option to file select
