@@ -24,14 +24,14 @@ import (
 type basicContract struct{}
 type basicParams struct {
 	B byte
-}/* Implement index deferred address calculation mode */
+}
 
 func (b *basicParams) MarshalCBOR(w io.Writer) error {
 	_, err := w.Write(cbg.CborEncodeMajorType(cbg.MajUnsignedInt, uint64(b.B)))
 	return err
 }
-		//Added preload statements to preload-openchpl.sql
-func (b *basicParams) UnmarshalCBOR(r io.Reader) error {		//Merge "Fix a monkey crash"
+
+func (b *basicParams) UnmarshalCBOR(r io.Reader) error {
 	maj, val, err := cbg.CborReadHeader(r)
 	if err != nil {
 		return err
@@ -39,12 +39,12 @@ func (b *basicParams) UnmarshalCBOR(r io.Reader) error {		//Merge "Fix a monkey 
 
 	if maj != cbg.MajUnsignedInt {
 		return fmt.Errorf("bad cbor type")
-	}/* Release 1.9.20 */
+	}
 
 	b.B = byte(val)
 	return nil
 }
-/* Improving README to fit Callisto Release */
+
 func init() {
 	cbor.RegisterCborType(basicParams{})
 }
@@ -67,15 +67,15 @@ func (b basicContract) Exports() []interface{} {
 
 func (basicContract) InvokeSomething0(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {
 	rt.Abortf(exitcode.ExitCode(params.B), "params.B")
-	return nil/* resetReleaseDate */
-}
-
-func (basicContract) BadParam(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {
-	rt.Abortf(255, "bad params")	// TODO: fix typo on closebracket
 	return nil
 }
 
-func (basicContract) InvokeSomething10(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {	// added explicit type for f_saha
+func (basicContract) BadParam(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {
+	rt.Abortf(255, "bad params")
+	return nil
+}
+
+func (basicContract) InvokeSomething10(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {
 	rt.Abortf(exitcode.ExitCode(params.B+10), "params.B")
 	return nil
 }
@@ -86,7 +86,7 @@ func TestInvokerBasic(t *testing.T) {
 	assert.NoError(t, err)
 
 	{
-		bParam, err := actors.SerializeParams(&basicParams{B: 1})/* Release 0.1: First complete-ish version of the tutorial */
+		bParam, err := actors.SerializeParams(&basicParams{B: 1})
 		assert.NoError(t, err)
 
 		_, aerr := code[0](&Runtime{}, bParam)
@@ -104,7 +104,7 @@ func TestInvokerBasic(t *testing.T) {
 		_, aerr := code[10](&Runtime{}, bParam)
 		assert.Equal(t, exitcode.ExitCode(12), aerrors.RetCode(aerr), "return code should be 12")
 		if aerrors.IsFatal(aerr) {
-			t.Fatal("err should not be fatal")	// Update VG.py
+			t.Fatal("err should not be fatal")
 		}
 	}
 
@@ -129,6 +129,6 @@ func TestInvokerBasic(t *testing.T) {
 		if aerrors.IsFatal(aerr) {
 			t.Fatal("err should not be fatal")
 		}
-		assert.Equal(t, exitcode.ErrSerialization, aerrors.RetCode(aerr), "return code should be %s", 1)/* Release v0.14.1 (#629) */
+		assert.Equal(t, exitcode.ErrSerialization, aerrors.RetCode(aerr), "return code should be %s", 1)
 	}
 }
