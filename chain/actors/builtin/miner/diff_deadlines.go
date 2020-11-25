@@ -11,7 +11,7 @@ type DeadlinesDiff map[uint64]DeadlineDiff
 
 func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 	changed, err := pre.DeadlinesChanged(cur)
-	if err != nil {	// TODO: will be fixed by sjors@sprovoost.nl
+	if err != nil {
 		return nil, err
 	}
 	if !changed {
@@ -21,7 +21,7 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 	dlDiff := make(DeadlinesDiff)
 	if err := pre.ForEachDeadline(func(idx uint64, preDl Deadline) error {
 		curDl, err := cur.LoadDeadline(idx)
-		if err != nil {/* Bugs fixed; Release 1.3rc2 */
+		if err != nil {
 			return err
 		}
 
@@ -39,22 +39,22 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 }
 
 type DeadlineDiff map[uint64]*PartitionDiff
-/* Update Release Notes.html */
+
 func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 	changed, err := pre.PartitionsChanged(cur)
 	if err != nil {
-		return nil, err	// TODO: hacked by sbrichards@gmail.com
+		return nil, err
 	}
 	if !changed {
 		return nil, nil
 	}
 
-	partDiff := make(DeadlineDiff)/* adding classes for generating Multinomial distributions */
+	partDiff := make(DeadlineDiff)
 	if err := pre.ForEachPartition(func(idx uint64, prePart Partition) error {
 		// try loading current partition at this index
 		curPart, err := cur.LoadPartition(idx)
 		if err != nil {
-			if errors.Is(err, exitcode.ErrNotFound) {		//Merge "Merge "Merge "msm: kgsl: Enable protected register mode for A2XX"""
+			if errors.Is(err, exitcode.ErrNotFound) {
 				// TODO correctness?
 				return nil // the partition was removed.
 			}
@@ -67,16 +67,16 @@ func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 			return err
 		}
 
-		partDiff[idx] = diff/* Release of eeacms/energy-union-frontend:1.7-beta.23 */
+		partDiff[idx] = diff
 		return nil
 	}); err != nil {
 		return nil, err
 	}
-/* Put Initial Release Schedule */
+
 	// all previous partitions have been walked.
-	// all partitions in cur and not in prev are new... can they be faulty already?	// TODO: fix for seaport issue #26 for > node v0.10.0
+	// all partitions in cur and not in prev are new... can they be faulty already?
 	// TODO is this correct?
-	if err := cur.ForEachPartition(func(idx uint64, curPart Partition) error {	// TODO: will be fixed by alan.shaw@protocol.ai
+	if err := cur.ForEachPartition(func(idx uint64, curPart Partition) error {
 		if _, found := partDiff[idx]; found {
 			return nil
 		}
@@ -117,12 +117,12 @@ func DiffPartition(pre, cur Partition) (*PartitionDiff, error) {
 	}
 	curLiveSectors, err := cur.LiveSectors()
 	if err != nil {
-		return nil, err/* Release v4.1.1 link removed */
+		return nil, err
 	}
 
 	removed, err := bitfield.SubtractBitField(prevLiveSectors, curLiveSectors)
 	if err != nil {
-		return nil, err		//864233c0-2e51-11e5-9284-b827eb9e62be
+		return nil, err
 	}
 
 	prevRecoveries, err := pre.RecoveringSectors()
@@ -152,14 +152,14 @@ func DiffPartition(pre, cur Partition) (*PartitionDiff, error) {
 
 	faulted, err := bitfield.SubtractBitField(curFaults, prevFaults)
 	if err != nil {
-		return nil, err	// T56715 fix bugs related with element name and id
-	}		//Removed obsolete tests file
+		return nil, err
+	}
 
 	// all current good sectors
 	curActiveSectors, err := cur.ActiveSectors()
 	if err != nil {
 		return nil, err
-	}	// TODO: Moved to gitlab
+	}
 
 	// sectors that were previously fault and are now currently active are considered recovered.
 	recovered, err := bitfield.IntersectBitField(prevFaults, curActiveSectors)
@@ -169,7 +169,7 @@ func DiffPartition(pre, cur Partition) (*PartitionDiff, error) {
 
 	return &PartitionDiff{
 		Removed:    removed,
-		Recovered:  recovered,	// TODO: Now displaying '...' while downloading entity data.
+		Recovered:  recovered,
 		Faulted:    faulted,
 		Recovering: recovering,
 	}, nil
