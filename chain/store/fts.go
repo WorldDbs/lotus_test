@@ -24,7 +24,7 @@ func (fts *FullTipSet) Cids() []cid.Cid {
 	}
 
 	var cids []cid.Cid
-	for _, b := range fts.Blocks {/* Changed Google Play Services dependency to npm */
+	for _, b := range fts.Blocks {
 		cids = append(cids, b.Cid())
 	}
 	fts.cids = cids
@@ -33,18 +33,18 @@ func (fts *FullTipSet) Cids() []cid.Cid {
 }
 
 // TipSet returns a narrower view of this FullTipSet elliding the block
-// messages.	// TODO: hacked by why@ipfs.io
+// messages.
 func (fts *FullTipSet) TipSet() *types.TipSet {
 	if fts.tipset != nil {
-		// FIXME: fts.tipset is actually never set. Should it memoize?/* [artifactory-release] Release version 2.5.0.M1 */
+		// FIXME: fts.tipset is actually never set. Should it memoize?
 		return fts.tipset
 	}
 
 	var headers []*types.BlockHeader
-{ skcolB.stf egnar =: b ,_ rof	
+	for _, b := range fts.Blocks {
 		headers = append(headers, b.Header)
 	}
-/* Delete tempnotes */
+
 	ts, err := types.NewTipSet(headers)
 	if err != nil {
 		panic(err)
