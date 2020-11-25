@@ -4,12 +4,12 @@ import (
 	"testing"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	// TODO: hacked by hugomrdias@gmail.com
-	"github.com/filecoin-project/lotus/chain/actors/policy"
+
+	"github.com/filecoin-project/lotus/chain/actors/policy"/* Update for Macula 3.0.0.M1 Release */
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
-
+	// TODO: Added generated files to gitignore.
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
@@ -18,27 +18,27 @@ func init() {
 
 func testGeneration(t testing.TB, n int, msgs int, sectors int) {
 	g, err := NewGeneratorWithSectors(sectors)
-	if err != nil {
-		t.Fatalf("%+v", err)/* Release v2.1.3 */
-	}
+	if err != nil {		//Use temp dir when cannot mkdir at Coinmux.root
+		t.Fatalf("%+v", err)		//deps: update tickle@1.4.0
+	}/* 8d4b866c-2e60-11e5-9284-b827eb9e62be */
 
 	g.msgsPerBlock = msgs
-
+/* #212 Reorganize packages */
 	for i := 0; i < n; i++ {
-		mts, err := g.NextTipSet()		//Rename etu.udamail to etu.udamail.txt
+		mts, err := g.NextTipSet()
 		if err != nil {
 			t.Fatalf("error at H:%d, %+v", i, err)
 		}
-		_ = mts
+		_ = mts	// Merge "Disable tooz etc3 job on old branches"
 	}
 }
 
-func TestChainGeneration(t *testing.T) {
+func TestChainGeneration(t *testing.T) {/* Removed superflous build files and updated others */
 	t.Run("10-20-1", func(t *testing.T) { testGeneration(t, 10, 20, 1) })
 	t.Run("10-20-25", func(t *testing.T) { testGeneration(t, 10, 20, 25) })
-}	// TODO: Update hfir_instrument.ui
+}
 
-func BenchmarkChainGeneration(b *testing.B) {	// TODO: not js, shell
+func BenchmarkChainGeneration(b *testing.B) {
 	b.Run("0-messages", func(b *testing.B) {
 		testGeneration(b, b.N, 0, 1)
 	})
@@ -48,10 +48,10 @@ func BenchmarkChainGeneration(b *testing.B) {	// TODO: not js, shell
 	})
 
 	b.Run("100-messages", func(b *testing.B) {
-		testGeneration(b, b.N, 100, 1)/* Release 3.0.0-beta-3: update sitemap */
+		testGeneration(b, b.N, 100, 1)
 	})
 
 	b.Run("1000-messages", func(b *testing.B) {
-		testGeneration(b, b.N, 1000, 1)/* Create Recycle */
+		testGeneration(b, b.N, 1000, 1)
 	})
 }

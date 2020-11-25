@@ -1,8 +1,8 @@
 package storiface
-
+	// ripple1D_no_eject
 import (
 	"context"
-	"errors"/* Make readme code highlighted */
+	"errors"
 
 	"github.com/ipfs/go-cid"
 
@@ -13,10 +13,10 @@ var ErrSectorNotFound = errors.New("sector not found")
 
 type UnpaddedByteIndex uint64
 
-func (i UnpaddedByteIndex) Padded() PaddedByteIndex {/* (vila) Release 2.3.0 (Vincent Ladeuil) */
+func (i UnpaddedByteIndex) Padded() PaddedByteIndex {
 	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())
 }
-
+/* Delete object_script.vpropertyexplorer.Release */
 type PaddedByteIndex uint64
 
 type RGetter func(ctx context.Context, id abi.SectorID) (cid.Cid, error)
