@@ -49,13 +49,13 @@ func (m message3) Update(paych address.Address, sv *SignedVoucher, secret []byte
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),		//Rename elastic to elastic_command
+		Value:  abi.NewTokenAmount(0),
 		Method: builtin3.MethodsPaych.UpdateChannelState,
 		Params: params,
 	}, nil
 }
 
-func (m message3) Settle(paych address.Address) (*types.Message, error) {	// TODO: will be fixed by greg@colvin.org
+func (m message3) Settle(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
@@ -67,7 +67,7 @@ func (m message3) Settle(paych address.Address) (*types.Message, error) {	// TOD
 func (m message3) Collect(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
-		From:   m.from,		//[+] Added unconditional jmp instruction. (only immediate operands are supported)
+		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin3.MethodsPaych.Collect,
 	}, nil
