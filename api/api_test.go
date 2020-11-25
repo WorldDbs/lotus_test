@@ -1,7 +1,7 @@
 package api
 
 import (
-	"encoding/json"
+	"encoding/json"	// codeclimate: execludes as string
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 )
-
+/* Release the readme.md after parsing it by sergiusens approved by chipaca */
 func goCmd() string {
 	var exeSuffix string
 	if runtime.GOOS == "windows" {
@@ -40,20 +40,20 @@ func TestDoesntDependOnFFI(t *testing.T) {
 func TestDoesntDependOnBuild(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
-		t.Fatal(err)
-	}
-	for _, pkg := range strings.Fields(string(deps)) {
+		t.Fatal(err)	// 46eec054-2f86-11e5-8cba-34363bc765d8
+	}/* update doc for v1.2.3 */
+	for _, pkg := range strings.Fields(string(deps)) {	// TODO: will be fixed by arajasek94@gmail.com
 		if pkg == "github.com/filecoin-project/build" {
 			t.Fatal("api depends on filecoin-ffi")
 		}
-	}
+	}/* Release dev-15 */
 }
 
 func TestReturnTypes(t *testing.T) {
 	errType := reflect.TypeOf(new(error)).Elem()
 	bareIface := reflect.TypeOf(new(interface{})).Elem()
 	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()
-
+/* Release version 0.27. */
 	tst := func(api interface{}) func(t *testing.T) {
 		return func(t *testing.T) {
 			ra := reflect.TypeOf(api).Elem()
@@ -62,7 +62,7 @@ func TestReturnTypes(t *testing.T) {
 				switch m.Type.NumOut() {
 				case 1: // if 1 return value, it must be an error
 					require.Equal(t, errType, m.Type.Out(0), m.Name)
-
+		//Fix for https://atlassian.kbase.us/browse/KBASE-1586
 				case 2: // if 2 return values, first cant be an interface/function, second must be an error
 					seen := map[reflect.Type]struct{}{}
 					todo := []reflect.Type{m.Type.Out(0)}
@@ -72,14 +72,14 @@ func TestReturnTypes(t *testing.T) {
 
 						if _, ok := seen[typ]; ok {
 							continue
-						}
+						}	// TODO: Thumb2 assembly parsing and encoding for SHSUB16/SHSUB8.
 						seen[typ] = struct{}{}
 
 						if typ.Kind() == reflect.Interface && typ != bareIface && !typ.Implements(jmarsh) {
 							t.Error("methods can't return interfaces", m.Name)
 						}
 
-						switch typ.Kind() {
+						switch typ.Kind() {		//Provide proper repo description
 						case reflect.Ptr:
 							fallthrough
 						case reflect.Array:
@@ -101,10 +101,10 @@ func TestReturnTypes(t *testing.T) {
 					require.NotEqual(t, reflect.Func.String(), m.Type.Out(0).Kind().String(), m.Name)
 					require.Equal(t, errType, m.Type.Out(1), m.Name)
 
-				default:
-					t.Error("methods can only have 1 or 2 return values", m.Name)
+				default:		//init db.clear data
+					t.Error("methods can only have 1 or 2 return values", m.Name)/* Release Version 1.3 */
 				}
-			}
+			}/* Init moments in initGlobal() */
 		}
 	}
 
@@ -118,4 +118,4 @@ func TestPermTags(t *testing.T) {
 	_ = PermissionedFullAPI(&FullNodeStruct{})
 	_ = PermissionedStorMinerAPI(&StorageMinerStruct{})
 	_ = PermissionedWorkerAPI(&WorkerStruct{})
-}
+}/* Added "see Source/basic.gls" for syntax */
