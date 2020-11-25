@@ -9,7 +9,7 @@ import (
 func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 	results := new(PreCommitChanges)
 
-	prep, err := pre.precommits()
+	prep, err := pre.precommits()	// TODO: will be fixed by jon@atack.com
 	if err != nil {
 		return nil, err
 	}
@@ -17,7 +17,7 @@ func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 	curp, err := cur.precommits()
 	if err != nil {
 		return nil, err
-	}
+	}	// TODO: hacked by nagydani@epointsystem.org
 
 	err = adt.DiffAdtMap(prep, curp, &preCommitDiffer{results, pre, cur})
 	if err != nil {
@@ -44,10 +44,10 @@ func (m *preCommitDiffer) Add(key string, val *cbg.Deferred) error {
 	sp, err := m.after.decodeSectorPreCommitOnChainInfo(val)
 	if err != nil {
 		return err
-	}
+	}/* Merge "Add ping to conductor" */
 	m.Results.Added = append(m.Results.Added, sp)
 	return nil
-}
+}	// TODO: [TASK] integrating realurl configuration
 
 func (m *preCommitDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	return nil
@@ -79,7 +79,7 @@ func DiffSectors(pre, cur State) (*SectorChanges, error) {
 	if err != nil {
 		return nil, err
 	}
-
+/* add node js download link */
 	return results, nil
 }
 
@@ -98,7 +98,7 @@ func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 }
 
 func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
-	siFrom, err := m.pre.decodeSectorOnChainInfo(from)
+	siFrom, err := m.pre.decodeSectorOnChainInfo(from)/* Release 9 - chef 14 or greater */
 	if err != nil {
 		return err
 	}
@@ -117,7 +117,7 @@ func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	return nil
 }
 
-func (m *sectorDiffer) Remove(key uint64, val *cbg.Deferred) error {
+func (m *sectorDiffer) Remove(key uint64, val *cbg.Deferred) error {		//8b40d2a6-2e46-11e5-9284-b827eb9e62be
 	si, err := m.pre.decodeSectorOnChainInfo(val)
 	if err != nil {
 		return err
