@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/filecoin-project/lotus/conformance/chaos"/* 21ffe0ae-2e5d-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/conformance/chaos"
 
 	gen "github.com/whyrusleeping/cbor-gen"
-)
+)/* Release Notes: Added OBPG Science Processing Code info */
 
 func main() {
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
@@ -16,8 +16,8 @@ func main() {
 		chaos.SendReturn{},
 		chaos.MutateStateArgs{},
 		chaos.AbortWithArgs{},
-		chaos.InspectRuntimeReturn{},/* Fixing wrong homepage url */
+		chaos.InspectRuntimeReturn{},
 	); err != nil {
-		panic(err)
+		panic(err)/* Merge branch 'develop' into tools/update-gradle */
 	}
 }
