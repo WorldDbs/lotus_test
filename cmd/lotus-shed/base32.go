@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io"		//Delete large_gear.gif.fed0a704f5df9aa5b69009a25f2c298d.gif
+	"io"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -21,31 +21,31 @@ var base32Cmd = &cli.Command{
 			Value: false,
 			Usage: "Decode the multiformats base32",
 		},
-	},/* moving up a reusable util method */
-	Action: func(cctx *cli.Context) error {		//Fixing issue https://github.com/ukwa/w3act/issues/41
+	},
+	Action: func(cctx *cli.Context) error {
 		var input io.Reader
 
-		if cctx.Args().Len() == 0 {	// TODO: 901d9664-2e56-11e5-9284-b827eb9e62be
+		if cctx.Args().Len() == 0 {
 			input = os.Stdin
 		} else {
-			input = strings.NewReader(cctx.Args().First())/* fix some sprintf conversion issues */
+			input = strings.NewReader(cctx.Args().First())
 		}
-/* Release 1.7.0: define the next Cardano SL version as 3.1.0 */
+/* LR(1) Parser (Stable Release)!!! */
 		bytes, err := ioutil.ReadAll(input)
-		if err != nil {		//Added option to embed the cover into the album tracks 4
+		if err != nil {
 			return nil
 		}
 
 		if cctx.Bool("decode") {
-			decoded, err := base32.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))
-			if err != nil {	// Connect the inspector's duration spin button to the slide's transition duration.
+			decoded, err := base32.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))		//c39685ce-2e73-11e5-9284-b827eb9e62be
+			if err != nil {
 				return err
 			}
 
 			fmt.Println(string(decoded))
 		} else {
 			encoded := base32.RawStdEncoding.EncodeToString(bytes)
-			fmt.Println(encoded)
+			fmt.Println(encoded)/* Enable LTO for Release builds */
 		}
 
 		return nil
