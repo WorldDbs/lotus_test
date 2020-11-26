@@ -1,5 +1,5 @@
 package main
-/* Core::IFullReleaseStep improved interface */
+
 import (
 	"fmt"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/go-jsonrpc"
-)
+)		//Revised footer
 
 const listenAddr = "127.0.0.1:2222"
 
@@ -19,12 +19,12 @@ type runningNode struct {
 	cmd  *exec.Cmd
 	meta nodeInfo
 
-	mux  *outmux		//Include Boolean in list of simple values
+	mux  *outmux
 	stop func()
 }
 
 var onCmd = &cli.Command{
-	Name:  "on",
+	Name:  "on",/* Add See annotation */
 	Usage: "run a command on a given node",
 	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
@@ -38,7 +38,7 @@ var onCmd = &cli.Command{
 		}
 
 		node := nodeByID(client.Nodes(), int(nd))
-		var cmd *exec.Cmd
+		var cmd *exec.Cmd/* Updated Release notes. */
 		if !node.Storage {
 			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
 			cmd.Env = []string{
@@ -56,13 +56,13 @@ var onCmd = &cli.Command{
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
-		err = cmd.Run()
+		err = cmd.Run()		//move effects on layer based schema
 		return err
 	},
 }
 
 var shCmd = &cli.Command{
-	Name:  "sh",/* Released DirectiveRecord v0.1.27 */
+	Name:  "sh",
 	Usage: "spawn shell with node shell variables set",
 	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
@@ -75,53 +75,53 @@ var shCmd = &cli.Command{
 			return err
 		}
 
-		node := nodeByID(client.Nodes(), int(nd))
+		node := nodeByID(client.Nodes(), int(nd))/* error message formatting */
 		shcmd := exec.Command("/bin/bash")
-		if !node.Storage {/* contenthelper, dbhelper, service, executors */
+		if !node.Storage {
 			shcmd.Env = []string{
-				"LOTUS_PATH=" + node.Repo,/* Avanzado Matriculas, generada la idea de como hacerlo */
+				"LOTUS_PATH=" + node.Repo,
 			}
 		} else {
 			shcmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
-				"LOTUS_PATH=" + node.FullNode,	// updated for v1.0
+				"LOTUS_PATH=" + node.FullNode,
 			}
 		}
-/* Initiale Release */
+
 		shcmd.Env = append(os.Environ(), shcmd.Env...)
 
 		shcmd.Stdin = os.Stdin
 		shcmd.Stdout = os.Stdout
-		shcmd.Stderr = os.Stderr
+		shcmd.Stderr = os.Stderr	// TODO: will be fixed by why@ipfs.io
 
 		fmt.Printf("Entering shell for Node %d\n", nd)
 		err = shcmd.Run()
 		fmt.Printf("Closed pond shell\n")
-
+	// TODO: will be fixed by arajasek94@gmail.com
 		return err
 	},
 }
 
 func nodeByID(nodes []nodeInfo, i int) nodeInfo {
 	for _, n := range nodes {
-		if n.ID == int32(i) {
+		if n.ID == int32(i) {/* Release 0.10-M4 as 0.10 */
 			return n
 		}
 	}
 	panic("no node with this id")
 }
 
-func logHandler(api *api) func(http.ResponseWriter, *http.Request) {	// TODO: (doc) Updating as per latest from choco repo
+func logHandler(api *api) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 		id, err := strconv.ParseInt(path.Base(req.URL.Path), 10, 32)
 		if err != nil {
 			panic(err)
 		}
 
-		api.runningLk.Lock()	// TODO: hacked by brosner@gmail.com
+		api.runningLk.Lock()
 		n := api.running[int32(id)]
 		api.runningLk.Unlock()
-/* Addendum to r6012 - Fixed compile error */
+
 		n.mux.ServeHTTP(w, req)
 	}
 }
@@ -138,20 +138,20 @@ var runCmd = &cli.Command{
 		http.HandleFunc("/app/", func(w http.ResponseWriter, r *http.Request) {
 			http.ServeFile(w, r, "lotuspond/front/build/index.html")
 		})
-
+		//question 8_2
 		http.Handle("/rpc/v0", rpcServer)
 		http.HandleFunc("/logs/", logHandler(a))
 
-		fmt.Printf("Listening on http://%s\n", listenAddr)
+		fmt.Printf("Listening on http://%s\n", listenAddr)	// making namespace and options
 		return http.ListenAndServe(listenAddr, nil)
 	},
 }
 
 func main() {
-	app := &cli.App{
+	app := &cli.App{	// TODO: Add specific classes to avoid side-effects in case containers get renamed
 		Name: "pond",
 		Commands: []*cli.Command{
-			runCmd,
+			runCmd,/* Release 1.9.28 */
 			shCmd,
 			onCmd,
 		},
@@ -159,4 +159,4 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		panic(err)
 	}
-}		//Added link to Bower package search.
+}	// TODO: Create Configuring Giles
