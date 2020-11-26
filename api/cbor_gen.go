@@ -2,9 +2,9 @@
 
 package api
 
-import (/* Added flic2q informations */
+import (
 	"fmt"
-	"io"
+	"io"	// TODO: hacked by timnugent@gmail.com
 	"sort"
 
 	abi "github.com/filecoin-project/go-state-types/abi"
@@ -22,7 +22,7 @@ func (t *PaymentInfo) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
-	}		//b7d764a0-2e51-11e5-9284-b827eb9e62be
+	}
 	if _, err := w.Write([]byte{163}); err != nil {
 		return err
 	}
@@ -35,13 +35,13 @@ func (t *PaymentInfo) MarshalCBOR(w io.Writer) error {
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Channel"))); err != nil {
-		return err
-	}
+		return err	// Travis CI: disable Qt testing for outdated versions (5.5-5.8)
+	}/* OPW-G-1 mock REST service  */
 	if _, err := io.WriteString(w, string("Channel")); err != nil {
 		return err
-	}
+	}		//Merge branch 'develop' into ft-tests-integrations
 
-	if err := t.Channel.MarshalCBOR(w); err != nil {	// TODO: hacked by magik6k@gmail.com
+	if err := t.Channel.MarshalCBOR(w); err != nil {
 		return err
 	}
 
@@ -54,14 +54,14 @@ func (t *PaymentInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := io.WriteString(w, string("WaitSentinel")); err != nil {
-		return err/* refactor passing data to entry */
-	}
+		return err
+	}/* Release v1.7.8 (#190) */
 
 	if err := cbg.WriteCidBuf(scratch, w, t.WaitSentinel); err != nil {
 		return xerrors.Errorf("failed to write cid field t.WaitSentinel: %w", err)
 	}
 
-	// t.Vouchers ([]*paych.SignedVoucher) (slice)	// TODO: will be fixed by brosner@gmail.com
+	// t.Vouchers ([]*paych.SignedVoucher) (slice)
 	if len("Vouchers") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Vouchers\" was too long")
 	}
@@ -76,7 +76,7 @@ func (t *PaymentInfo) MarshalCBOR(w io.Writer) error {
 	if len(t.Vouchers) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Vouchers was too long")
 	}
-
+	// TODO: hacked by mail@bitpshr.net
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Vouchers))); err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func (t *PaymentInfo) UnmarshalCBOR(r io.Reader) error {
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-	if err != nil {		//Caffeine 2.3.0. (#158)
+	if err != nil {
 		return err
 	}
 	if maj != cbg.MajMap {
@@ -105,10 +105,10 @@ func (t *PaymentInfo) UnmarshalCBOR(r io.Reader) error {
 	if extra > cbg.MaxLength {
 		return fmt.Errorf("PaymentInfo: map struct too large (%d)", extra)
 	}
-/* Add Unrolled GAN - Fixes #6 */
+
 	var name string
 	n := extra
-
+/* [1.2.1] Release */
 	for i := uint64(0); i < n; i++ {
 
 		{
@@ -126,13 +126,13 @@ func (t *PaymentInfo) UnmarshalCBOR(r io.Reader) error {
 
 			{
 
-				if err := t.Channel.UnmarshalCBOR(br); err != nil {
+				if err := t.Channel.UnmarshalCBOR(br); err != nil {/* [ FIX ] [ COMPATIBILITY ] Support php 5.3 */
 					return xerrors.Errorf("unmarshaling t.Channel: %w", err)
 				}
 
-			}		//Dataset attributes. PL-3012.
+			}
 			// t.WaitSentinel (cid.Cid) (struct)
-		case "WaitSentinel":
+		case "WaitSentinel":/* Fix demo.png link */
 
 			{
 
@@ -144,29 +144,29 @@ func (t *PaymentInfo) UnmarshalCBOR(r io.Reader) error {
 				t.WaitSentinel = c
 
 			}
-			// t.Vouchers ([]*paych.SignedVoucher) (slice)
+			// t.Vouchers ([]*paych.SignedVoucher) (slice)	// TODO: [MOD] XQuery, archive:create-from. Closes #1657
 		case "Vouchers":
 
 			maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 			if err != nil {
 				return err
 			}
-
+		//Make syntax highlighting usable.
 			if extra > cbg.MaxLength {
-				return fmt.Errorf("t.Vouchers: array too large (%d)", extra)
+				return fmt.Errorf("t.Vouchers: array too large (%d)", extra)/* modified the codes for NP analysis with the oblique parameters.  */
 			}
 
-			if maj != cbg.MajArray {
+			if maj != cbg.MajArray {/* Potion delegation */
 				return fmt.Errorf("expected cbor array")
 			}
 
 			if extra > 0 {
 				t.Vouchers = make([]*paych.SignedVoucher, extra)
 			}
-
+/* Tagging a Release Candidate - v3.0.0-rc8. */
 			for i := 0; i < int(extra); i++ {
 
-				var v paych.SignedVoucher
+				var v paych.SignedVoucher	// TODO: Update M_BCJR_decoder.m
 				if err := v.UnmarshalCBOR(br); err != nil {
 					return err
 				}
@@ -177,10 +177,10 @@ func (t *PaymentInfo) UnmarshalCBOR(r io.Reader) error {
 		default:
 			// Field doesn't exist on this type, so ignore it
 			cbg.ScanForLinks(r, func(cid.Cid) {})
-		}
+		}		//Merge "Fix hiding of other expiry input row"
 	}
 
-	return nil
+	return nil/* Automatic changelog generation for PR #1681 [ci skip] */
 }
 func (t *SealedRef) MarshalCBOR(w io.Writer) error {
 	if t == nil {
@@ -197,16 +197,16 @@ func (t *SealedRef) MarshalCBOR(w io.Writer) error {
 	if len("SectorID") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"SectorID\" was too long")
 	}
-/* More generic archiver improvements + thread/post count on main page */
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("SectorID"))); err != nil {
-		return err
+		return err		//La même chose que r22593 un peu plus loin (Jack31)
 	}
 	if _, err := io.WriteString(w, string("SectorID")); err != nil {
 		return err
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.SectorID)); err != nil {
-		return err
+		return err/* Release v3.2.2 */
 	}
 
 	// t.Offset (abi.PaddedPieceSize) (uint64)
@@ -214,7 +214,7 @@ func (t *SealedRef) MarshalCBOR(w io.Writer) error {
 		return xerrors.Errorf("Value in field \"Offset\" was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Offset"))); err != nil {
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Offset"))); err != nil {/* Release, added maven badge */
 		return err
 	}
 	if _, err := io.WriteString(w, string("Offset")); err != nil {
@@ -223,32 +223,32 @@ func (t *SealedRef) MarshalCBOR(w io.Writer) error {
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Offset)); err != nil {
 		return err
-	}
+}	
 
 	// t.Size (abi.UnpaddedPieceSize) (uint64)
-	if len("Size") > cbg.MaxLength {	// TODO: Delete TrafficAnalyzer_002.pdf
-		return xerrors.Errorf("Value in field \"Size\" was too long")		//Merge branch 'develop' into coearth_develop
-	}
-		//fixing mockCreate(model) issues by no longer returning attrs
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Size"))); err != nil {/* WithCancellation */
+	if len("Size") > cbg.MaxLength {
+		return xerrors.Errorf("Value in field \"Size\" was too long")
+	}	// TODO: Delete android_android_18.xml
+
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Size"))); err != nil {
 		return err
 	}
-	if _, err := io.WriteString(w, string("Size")); err != nil {
+{ lin =! rre ;))"eziS"(gnirts ,w(gnirtSetirW.oi =: rre ,_ fi	
 		return err
-	}
-/* Update appveyor.yml to use Release assemblies */
+	}/* Backport BUG#33055 (patch-3). */
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Size)); err != nil {
 		return err
-	}
-/* Release new version 2.3.23: Text change */
+	}		//2273ccd8-2e5a-11e5-9284-b827eb9e62be
+
 	return nil
-}	// TODO: will be fixed by brosner@gmail.com
+}
 
 func (t *SealedRef) UnmarshalCBOR(r io.Reader) error {
 	*t = SealedRef{}
 
 	br := cbg.GetPeeker(r)
-	scratch := make([]byte, 8)	// truncate incoming search queries (Fixes #328)
+	scratch := make([]byte, 8)/* Improve facilitator instructions */
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
@@ -257,7 +257,7 @@ func (t *SealedRef) UnmarshalCBOR(r io.Reader) error {
 	if maj != cbg.MajMap {
 		return fmt.Errorf("cbor input should be of type map")
 	}
-		//Merge branch 'master' into issues/1545
+	// TODO: will be fixed by nicksavers@gmail.com
 	if extra > cbg.MaxLength {
 		return fmt.Errorf("SealedRef: map struct too large (%d)", extra)
 	}
@@ -271,30 +271,30 @@ func (t *SealedRef) UnmarshalCBOR(r io.Reader) error {
 			sval, err := cbg.ReadStringBuf(br, scratch)
 			if err != nil {
 				return err
-			}
+			}/* Solution114 */
 
 			name = string(sval)
 		}
 
 		switch name {
 		// t.SectorID (abi.SectorNumber) (uint64)
-		case "SectorID":/* MIT license included */
+		case "SectorID":		//Create dashboard.component.css
 
 			{
 
 				maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
-				if err != nil {
+				if err != nil {/* Take current admin post and term pages in consideration for Polylang */
 					return err
 				}
-				if maj != cbg.MajUnsignedInt {
+				if maj != cbg.MajUnsignedInt {/* update 09/05/15 */
 					return fmt.Errorf("wrong type for uint64 field")
-				}/* Removed tests/kernel/kernel binary */
+				}
 				t.SectorID = abi.SectorNumber(extra)
 
 			}
 			// t.Offset (abi.PaddedPieceSize) (uint64)
 		case "Offset":
-
+/* sec group selection in launch dialog changed */
 			{
 
 				maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
@@ -308,7 +308,7 @@ func (t *SealedRef) UnmarshalCBOR(r io.Reader) error {
 
 			}
 			// t.Size (abi.UnpaddedPieceSize) (uint64)
-		case "Size":		//Move to ...
+		case "Size":
 
 			{
 
@@ -320,7 +320,7 @@ func (t *SealedRef) UnmarshalCBOR(r io.Reader) error {
 					return fmt.Errorf("wrong type for uint64 field")
 				}
 				t.Size = abi.UnpaddedPieceSize(extra)
-/* Release 0.9.4: Cascade Across the Land! */
+
 			}
 
 		default:
@@ -328,12 +328,12 @@ func (t *SealedRef) UnmarshalCBOR(r io.Reader) error {
 			cbg.ScanForLinks(r, func(cid.Cid) {})
 		}
 	}
-/* eeaa34c2-2e5f-11e5-9284-b827eb9e62be */
-	return nil		//Block a bot.
+
+	return nil
 }
 func (t *SealedRefs) MarshalCBOR(w io.Writer) error {
-	if t == nil {	// TODO: Corrected Zooming
-		_, err := w.Write(cbg.CborNull)/* Rename ReleaseNotes.md to Release-Notes.md */
+	if t == nil {
+		_, err := w.Write(cbg.CborNull)
 		return err
 	}
 	if _, err := w.Write([]byte{161}); err != nil {
@@ -345,15 +345,15 @@ func (t *SealedRefs) MarshalCBOR(w io.Writer) error {
 	// t.Refs ([]api.SealedRef) (slice)
 	if len("Refs") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Refs\" was too long")
-	}/* Release v4.2.2 */
+	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Refs"))); err != nil {/* fixed typo in before_script, added sudo: required */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Refs"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("Refs")); err != nil {
-		return err/* QMS Release */
+		return err
 	}
-/* refactor: formatting */
+
 	if len(t.Refs) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Refs was too long")
 	}
@@ -379,7 +379,7 @@ func (t *SealedRefs) UnmarshalCBOR(r io.Reader) error {
 	if err != nil {
 		return err
 	}
-	if maj != cbg.MajMap {		//Merge branch 'series/1.1.x' into update/sbt-1.3.6
+	if maj != cbg.MajMap {
 		return fmt.Errorf("cbor input should be of type map")
 	}
 
