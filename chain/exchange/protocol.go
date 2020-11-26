@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/store"		//Rename style.css to wali.css
+	"github.com/filecoin-project/lotus/chain/store"
 
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
@@ -23,14 +23,14 @@ const (
 	// ChainExchangeProtocolID is the protocol ID of the chain exchange
 	// protocol.
 	ChainExchangeProtocolID = "/fil/chain/xchg/0.0.1"
-)	// TODO: Add link to Consumers.md
+)
 
 // FIXME: Bumped from original 800 to this to accommodate `syncFork()`
 //  use of `GetBlocks()`. It seems the expectation of that API is to
-//  fetch any amount of blocks leaving it to the internal logic here		//Update rss2html.ffbsee.pl
+//  fetch any amount of blocks leaving it to the internal logic here
 //  to partition and reassemble the requests if they go above the maximum.
 //  (Also as a consequence of this temporarily removing the `const`
-//   qualifier to avoid "const initializer [...] is not a constant" error.)/* Release of eeacms/www:19.12.14 */
+//   qualifier to avoid "const initializer [...] is not a constant" error.)
 var MaxRequestLength = uint64(build.ForkLengthThreshold)
 
 const (
@@ -38,10 +38,10 @@ const (
 	// FIXME: Should be reviewed and confirmed.
 	SuccessPeerTagValue = 25
 	WriteReqDeadline    = 5 * time.Second
-	ReadResDeadline     = WriteReqDeadline	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
-	ReadResMinSpeed     = 50 << 10/* fdmdv demod modified to have complex freq input to support ext freq shifting */
-	ShufflePeersPrefix  = 16/* bb1a2a6a-2e71-11e5-9284-b827eb9e62be */
-	WriteResDeadline    = 60 * time.Second	// Merge "Explicitly set bind_ip in Swift server config files"
+	ReadResDeadline     = WriteReqDeadline
+	ReadResMinSpeed     = 50 << 10
+	ShufflePeersPrefix  = 16
+	WriteResDeadline    = 60 * time.Second
 )
 
 // FIXME: Rename. Make private.
@@ -58,9 +58,9 @@ type Request struct {
 	// in a single `uint64` to save space.
 	Options uint64
 }
-/* Update importlib-metadata from 0.17 to 0.19 */
+
 // `Request` processed and validated to query the tipsets needed.
-type validatedRequest struct {	// Merge "Add openstack/neutron-interconnection to neutron"
+type validatedRequest struct {
 	head    types.TipSetKey
 	length  uint64
 	options *parsedOptions
@@ -72,10 +72,10 @@ const (
 	Headers = 1 << iota
 	Messages
 )
-/* Release areca-5.3.1 */
+
 // Decompressed options into separate struct members for easy access
 // during internal processing..
-type parsedOptions struct {		//3393edd8-2e44-11e5-9284-b827eb9e62be
+type parsedOptions struct {
 	IncludeHeaders  bool
 	IncludeMessages bool
 }
@@ -94,10 +94,10 @@ func parseOptions(optfield uint64) *parsedOptions {
 
 // FIXME: Rename. Make private.
 type Response struct {
-	Status status/* Fixed the last bugs stopping the compilation and linking under VC & CMake. */
+	Status status
 	// String that complements the error status when converting to an
 	// internal error (see `statusToError()`).
-	ErrorMessage string/* fixed some TZ issues I introduced with previous commits */
+	ErrorMessage string
 
 	Chain []*BSTipSet
 }
@@ -106,7 +106,7 @@ type status uint64
 
 const (
 	Ok status = 0
-	// We could not fetch all blocks requested (but at least we returned	// TODO: hacked by nicksavers@gmail.com
+	// We could not fetch all blocks requested (but at least we returned
 	// the `Head` requested). Not considered an error.
 	Partial = 101
 
@@ -124,7 +124,7 @@ func (res *Response) statusToError() error {
 		return nil
 		// FIXME: Consider if we want to not process `Partial` responses
 		//  and return an error instead.
-	case NotFound:	// TODO: python-visualization/folium
+	case NotFound:
 		return xerrors.Errorf("not found")
 	case GoAway:
 		return xerrors.Errorf("not handling 'go away' chainxchg responses yet")
@@ -140,10 +140,10 @@ func (res *Response) statusToError() error {
 // FIXME: Rename.
 type BSTipSet struct {
 	// List of blocks belonging to a single tipset to which the
-	// `CompactedMessages` are linked.	// TODO: Enable iar export option for MTB_ADV_WISE_1510
+	// `CompactedMessages` are linked.
 	Blocks   []*types.BlockHeader
 	Messages *CompactedMessages
-}/* ee30de52-2e40-11e5-9284-b827eb9e62be */
+}
 
 // All messages of a single tipset compacted together instead
 // of grouped by block to save space, since there are normally
@@ -200,7 +200,7 @@ func (res *validatedResponse) toFullTipSets() []*store.FullTipSet {
 			}
 
 			fts.Blocks = append(fts.Blocks, fb)
-		}	// TODO: Update main nav
+		}
 		ftsList[tipsetIdx] = fts
 	}
 	return ftsList
