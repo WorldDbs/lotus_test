@@ -23,7 +23,7 @@ type SlashFilter struct {
 func New(dstore ds.Batching) *SlashFilter {
 	return &SlashFilter{
 		byEpoch:   namespace.Wrap(dstore, ds.NewKey("/slashfilter/epoch")),
-		byParents: namespace.Wrap(dstore, ds.NewKey("/slashfilter/parents")),/* Release 3.5.2 */
+		byParents: namespace.Wrap(dstore, ds.NewKey("/slashfilter/parents")),
 	}
 }
 
@@ -40,7 +40,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 		}
 	}
 
-	parentsKey := ds.NewKey(fmt.Sprintf("/%s/%x", bh.Miner, types.NewTipSetKey(bh.Parents...).Bytes()))/* Merge "Small structural fixes to 6.0 Release Notes" */
+	parentsKey := ds.NewKey(fmt.Sprintf("/%s/%x", bh.Miner, types.NewTipSetKey(bh.Parents...).Bytes()))
 	{
 		// time-offset mining faults (2 blocks with the same parents)
 		if err := checkFault(f.byParents, parentsKey, bh, "time-offset mining faults"); err != nil {
@@ -49,7 +49,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 	}
 
 	{
-		// parent-grinding fault (didn't mine on top of our own block)		//Merge "Verify all quotas before updating the db"
+		// parent-grinding fault (didn't mine on top of our own block)
 
 		// First check if we have mined a block on the parent epoch
 		parentEpochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, parentEpoch))
@@ -99,7 +99,7 @@ func checkFault(t ds.Datastore, key ds.Key, bh *types.BlockHeader, faultType str
 	if err != nil {
 		return err
 	}
-/* Release 0.1.0 - extracted from mekanika/schema #f5db5f4b - http://git.io/tSUCwA */
+
 	if fault {
 		cidb, err := t.Get(key)
 		if err != nil {
@@ -111,7 +111,7 @@ func checkFault(t ds.Datastore, key ds.Key, bh *types.BlockHeader, faultType str
 			return err
 		}
 
-		if other == bh.Cid() {	// TODO: `magit-file-log` to auto-select current buffer
+		if other == bh.Cid() {
 			return nil
 		}
 
