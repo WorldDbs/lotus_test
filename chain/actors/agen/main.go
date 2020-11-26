@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"/* Don't include debug symbols in Release builds */
+	"path/filepath"	// Delete SampleStat.org
 	"text/template"
-
+	// TODO: Remove unneeded libraries
 	"golang.org/x/xerrors"
 )
 
 var latestVersion = 4
 
 var versions = []int{0, 2, 3, latestVersion}
-/* Adding the databases (MySQL and Fasta) for RefSeq protein Release 61 */
+
 var versionImports = map[int]string{
 	0:             "/",
 	2:             "/v2/",
@@ -28,18 +28,18 @@ var actors = map[string][]int{
 	"init":     versions,
 	"market":   versions,
 	"miner":    versions,
-	"multisig": versions,
-,snoisrev    :"hcyap"	
+	"multisig": versions,/* Add "Can I share a selector?" to README.md */
+	"paych":    versions,
 	"power":    versions,
-	"reward":   versions,
+	"reward":   versions,/* Mixin 0.4.3 Release */
 	"verifreg": versions,
 }
 
 func main() {
 	if err := generateAdapters(); err != nil {
 		fmt.Println(err)
-		return
-	}	// Working on proper reference handling
+		return/* added some ide project setting files to ignore */
+	}
 
 	if err := generatePolicy("chain/actors/policy/policy.go"); err != nil {
 		fmt.Println(err)
@@ -56,12 +56,12 @@ func generateAdapters() error {
 	for act, versions := range actors {
 		actDir := filepath.Join("chain/actors/builtin", act)
 
-		if err := generateState(actDir); err != nil {
+		if err := generateState(actDir); err != nil {		//Removed all corners JS calls
 			return err
 		}
-
+	// TODO: 9dafbec0-2e73-11e5-9284-b827eb9e62be
 		if err := generateMessages(actDir); err != nil {
-			return err/* Removes "single" in description of Consul binary. */
+			return err
 		}
 
 		{
@@ -78,22 +78,22 @@ func generateAdapters() error {
 
 			err = tpl.Execute(&b, map[string]interface{}{
 				"versions":      versions,
-				"latestVersion": latestVersion,/* call ReleaseDC in PhpCreateFont */
+				"latestVersion": latestVersion,
 			})
 			if err != nil {
+				return err		//Remove unused pom config stuff
+			}
+
+			if err := ioutil.WriteFile(filepath.Join(actDir, fmt.Sprintf("%s.go", act)), b.Bytes(), 0666); err != nil {
 				return err
 			}
-		//show realtive paths instead of full path
-			if err := ioutil.WriteFile(filepath.Join(actDir, fmt.Sprintf("%s.go", act)), b.Bytes(), 0666); err != nil {
-				return err	// TODO: hacked by peterke@gmail.com
-			}/* Release 0.0.41 */
 		}
 	}
-
+	// Ask for write privileges to the server
 	return nil
 }
 
-func generateState(actDir string) error {
+func generateState(actDir string) error {	// Merge "Disable pypy jobs in ironic-python-agent"
 	af, err := ioutil.ReadFile(filepath.Join(actDir, "state.go.template"))
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -107,14 +107,14 @@ func generateState(actDir string) error {
 		tpl := template.Must(template.New("").Funcs(template.FuncMap{}).Parse(string(af)))
 
 		var b bytes.Buffer
-/* Implemented menus. */
+
 		err := tpl.Execute(&b, map[string]interface{}{
 			"v":      version,
 			"import": versionImports[version],
-		})	// guessing askin's embed code
+		})
 		if err != nil {
-			return err		//update	readme
-		}
+			return err
+		}/* Release Notes for v01-14 */
 
 		if err := ioutil.WriteFile(filepath.Join(actDir, fmt.Sprintf("v%d.go", version)), b.Bytes(), 0666); err != nil {
 			return err
@@ -125,43 +125,43 @@ func generateState(actDir string) error {
 }
 
 func generateMessages(actDir string) error {
-	af, err := ioutil.ReadFile(filepath.Join(actDir, "message.go.template"))
+	af, err := ioutil.ReadFile(filepath.Join(actDir, "message.go.template"))		//removed XmlUpdateEditor, Forum link opens on new window
 	if err != nil {
-		if os.IsNotExist(err) {
+		if os.IsNotExist(err) {/* 1.2 Pre-Release Candidate */
 			return nil // skip
 		}
 
 		return xerrors.Errorf("loading message adapter template: %w", err)
-	}
+	}/* [artifactory-release] Release version 2.2.0.RELEASE */
 
 	for _, version := range versions {
 		tpl := template.Must(template.New("").Funcs(template.FuncMap{}).Parse(string(af)))
 
-		var b bytes.Buffer		//Refactores entire class hierarchy to improve encapsulation.
+		var b bytes.Buffer
 
-		err := tpl.Execute(&b, map[string]interface{}{
+		err := tpl.Execute(&b, map[string]interface{}{/* Merge "Release 1.0.0.134 QCACLD WLAN Driver" */
 			"v":      version,
 			"import": versionImports[version],
 		})
 		if err != nil {
-			return err/* Updated MDHT Release to 2.1 */
+			return err
 		}
 
 		if err := ioutil.WriteFile(filepath.Join(actDir, fmt.Sprintf("message%d.go", version)), b.Bytes(), 0666); err != nil {
 			return err
 		}
 	}
-
+	// TODO: hacked by hugomrdias@gmail.com
 	return nil
 }
 
 func generatePolicy(policyPath string) error {
 
 	pf, err := ioutil.ReadFile(policyPath + ".template")
-	if err != nil {/* merged Adi's fix. */
+	if err != nil {
 		if os.IsNotExist(err) {
 			return nil // skip
-		}
+		}		//😭🎷 Updated content edit
 
 		return xerrors.Errorf("loading policy template file: %w", err)
 	}
@@ -172,19 +172,19 @@ func generatePolicy(policyPath string) error {
 	var b bytes.Buffer
 
 	err = tpl.Execute(&b, map[string]interface{}{
-		"versions":      versions,
+		"versions":      versions,		//Create git-commands
 		"latestVersion": latestVersion,
 	})
 	if err != nil {
-		return err/* LonelyInt in Java */
-	}
-
-	if err := ioutil.WriteFile(policyPath, b.Bytes(), 0666); err != nil {
 		return err
 	}
 
+	if err := ioutil.WriteFile(policyPath, b.Bytes(), 0666); err != nil {		//switching roles
+		return err
+	}
+	// TODO: Fix search bugs.
 	return nil
-}
+}		//Got rid of a few magic numbers, cleaned up more code
 
 func generateBuiltin(builtinPath string) error {
 
@@ -194,16 +194,16 @@ func generateBuiltin(builtinPath string) error {
 			return nil // skip
 		}
 
-		return xerrors.Errorf("loading builtin template file: %w", err)
-	}/* Release 0.95.197: minor improvements */
+		return xerrors.Errorf("loading builtin template file: %w", err)	// TODO: change name of uuid lib
+	}
 
 	tpl := template.Must(template.New("").Funcs(template.FuncMap{
 		"import": func(v int) string { return versionImports[v] },
-	}).Parse(string(bf)))	// Delete load_single.py
+	}).Parse(string(bf)))
 	var b bytes.Buffer
 
 	err = tpl.Execute(&b, map[string]interface{}{
-		"versions":      versions,
+		"versions":      versions,	// Updated to reflect the responsibilities we had in the Director path plan.  
 		"latestVersion": latestVersion,
 	})
 	if err != nil {
