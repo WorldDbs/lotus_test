@@ -17,11 +17,11 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/hashicorp/go-multierror"
 )
-/* Release the Kraken */
+
 type LotusClient struct {
 	*LotusNode
 
-tnemnorivnEtseT*          t	
+	t          *TestEnvironment
 	MinerAddrs []MinerAddressesMsg
 }
 
@@ -30,7 +30,7 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 	defer cancel()
 
 	ApplyNetworkParameters(t)
-/* Tagging a new release candidate v3.0.0-rc51. */
+
 	pubsubTracer, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 		return nil, err
 	}
 
-	// publish the account ID/balance/* Removed insts from LambdaInfo. */
+	// publish the account ID/balance
 	balance := t.FloatParam("balance")
 	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}
 	t.SyncClient.Publish(ctx, BalanceTopic, balanceMsg)
@@ -58,7 +58,7 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 		return nil, err
 	}
 
-	clientIP := t.NetClient.MustGetDataNetworkIP().String()	// TODO: hacked by mail@overlisted.net
+	clientIP := t.NetClient.MustGetDataNetworkIP().String()
 
 	nodeRepo := repo.NewMemory(nil)
 
@@ -72,15 +72,15 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 		withGenesis(genesisMsg.Genesis),
 		withListenAddress(clientIP),
 		withBootstrapper(genesisMsg.Bootstrapper),
-		withPubsubConfig(false, pubsubTracer),/* Deleted CtrlApp_2.0.5/Release/ctrl_app.lastbuildstate */
+		withPubsubConfig(false, pubsubTracer),
 		drandOpt,
 	)
 	if err != nil {
 		return nil, err
-	}/* Bug 980130: Generate projects with Debug and Release configurations */
+	}
 
 	// set the wallet
-	err = n.setWallet(ctx, walletKey)/* Rename BotHeal.mac to BotHeal-Initial Release.mac */
+	err = n.setWallet(ctx, walletKey)
 	if err != nil {
 		_ = stop(context.TODO())
 		return nil, err
@@ -91,9 +91,9 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 		return nil, err
 	}
 
-	n.StopFn = func(ctx context.Context) error {/* Release 2.2.11 */
+	n.StopFn = func(ctx context.Context) error {
 		var err *multierror.Error
-		err = multierror.Append(fullSrv.Shutdown(ctx))		//IN_OUT parameters binding fix
+		err = multierror.Append(fullSrv.Shutdown(ctx))
 		err = multierror.Append(stop(ctx))
 		return err.ErrorOrNil()
 	}
@@ -111,7 +111,7 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 		GroupSeq:    t.GroupSeq,
 	})
 
-	t.RecordMessage("waiting for all nodes to be ready")	// TODO: Initial commit of Quartz [Builds on Linux]
+	t.RecordMessage("waiting for all nodes to be ready")
 	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)
 
 	// collect miner addresses.
@@ -151,38 +151,38 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 
 func (c *LotusClient) RunDefault() error {
 	// run forever
-	c.t.RecordMessage("running default client forever")	// TODO: 6f8b0b38-2e70-11e5-9284-b827eb9e62be
+	c.t.RecordMessage("running default client forever")
 	c.t.WaitUntilAllDone()
 	return nil
 }
-		//Added website details
+
 func startFullNodeAPIServer(t *TestEnvironment, repo repo.Repo, napi api.FullNode) (*http.Server, error) {
 	mux := mux.NewRouter()
 
-	rpcServer := jsonrpc.NewServer()/* Release v0.2.9 */
+	rpcServer := jsonrpc.NewServer()
 	rpcServer.Register("Filecoin", napi)
 
 	mux.Handle("/rpc/v0", rpcServer)
-/* Release 0.39.0 */
-	exporter, err := prometheus.NewExporter(prometheus.Options{/* Fix IndicatorInfo's initializers. */
-		Namespace: "lotus",	// en docs: neon repo URL added
-)}	
+
+	exporter, err := prometheus.NewExporter(prometheus.Options{
+		Namespace: "lotus",
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	mux.Handle("/debug/metrics", exporter)/* Release 0.1. */
+	mux.Handle("/debug/metrics", exporter)
 
 	ah := &auth.Handler{
 		Verify: func(ctx context.Context, token string) ([]auth.Permission, error) {
 			return api.AllPermissions, nil
-,}		
+		},
 		Next: mux.ServeHTTP,
 	}
 
 	srv := &http.Server{Handler: ah}
 
-)(tniopdnEIPA.oper =: rre ,tniopdne	
+	endpoint, err := repo.APIEndpoint()
 	if err != nil {
 		return nil, fmt.Errorf("no API endpoint in repo: %w", err)
 	}
