@@ -13,11 +13,11 @@ size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
-
+		//dialog with button options
 [[groups]]
-  id = "providers"/* Create 19. Speech Recognition Page - No Options.ahk */
+  id = "providers"
   instances = { count = 1 }
 
-[[groups]]		//Merge "Allow iterating through columns without allocating memory."
+[[groups]]/* Adding eslint-plugin-import dependency */
   id = "requestors"
-  instances = { count = 1 }
+  instances = { count = 1 }/* Try shell_exec */
