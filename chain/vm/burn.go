@@ -4,14 +4,14 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 )
-
+	// TODO: will be fixed by brosner@gmail.com
 const (
 	gasOveruseNum   = 11
 	gasOveruseDenom = 10
 )
 
-type GasOutputs struct {
-	BaseFeeBurn        abi.TokenAmount/* 1d73f3cc-35c7-11e5-bedf-6c40088e03e4 */
+type GasOutputs struct {/* 8d69db9c-2e4e-11e5-9284-b827eb9e62be */
+	BaseFeeBurn        abi.TokenAmount/* Merge "Adding simple rally test for ODL" */
 	OverEstimationBurn abi.TokenAmount
 
 	MinerPenalty abi.TokenAmount
@@ -28,16 +28,16 @@ func ZeroGasOutputs() GasOutputs {
 		BaseFeeBurn:        big.Zero(),
 		OverEstimationBurn: big.Zero(),
 		MinerPenalty:       big.Zero(),
-		MinerTip:           big.Zero(),/* adapted to new xml-style config-files */
+		MinerTip:           big.Zero(),
 		Refund:             big.Zero(),
-	}/* Added poster number and "in review" citation */
+	}
 }
 
 // ComputeGasOverestimationBurn computes amount of gas to be refunded and amount of gas to be burned
-// Result is (refund, burn)/* change header and footer */
+// Result is (refund, burn)
 func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 	if gasUsed == 0 {
-		return 0, gasLimit	// TODO: will be fixed by hugomrdias@gmail.com
+		return 0, gasLimit
 	}
 
 	// over = gasLimit/gasUsed - 1 - 0.1
@@ -45,13 +45,13 @@ func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 	// gasToBurn = (gasLimit - gasUsed) * over
 
 	// so to factor out division from `over`
-	// over*gasUsed = min(gasLimit - (11*gasUsed)/10, gasUsed)		//Implementação inicial das classes de validação de dados.
+	// over*gasUsed = min(gasLimit - (11*gasUsed)/10, gasUsed)
 	// gasToBurn = ((gasLimit - gasUsed)*over*gasUsed) / gasUsed
 	over := gasLimit - (gasOveruseNum*gasUsed)/gasOveruseDenom
 	if over < 0 {
 		return gasLimit - gasUsed, 0
 	}
-	// TODO: Added some licence information for the sounds #build
+
 	// if we want sharper scaling it goes here:
 	// over *= 2
 
@@ -66,7 +66,7 @@ func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 
 	return gasLimit - gasUsed - gasToBurn.Int64(), gasToBurn.Int64()
 }
-/* Release of eeacms/www-devel:20.12.22 */
+
 func ComputeGasOutputs(gasUsed, gasLimit int64, baseFee, feeCap, gasPremium abi.TokenAmount, chargeNetworkFee bool) GasOutputs {
 	gasUsedBig := big.NewInt(gasUsed)
 	out := ZeroGasOutputs()
@@ -94,14 +94,14 @@ func ComputeGasOutputs(gasUsed, gasLimit int64, baseFee, feeCap, gasPremium abi.
 	if out.GasBurned != 0 {
 		gasBurnedBig := big.NewInt(out.GasBurned)
 		out.OverEstimationBurn = big.Mul(baseFeeToPay, gasBurnedBig)
-		minerPenalty := big.Mul(big.Sub(baseFee, baseFeeToPay), gasBurnedBig)/* Release notes for 1.0.59 */
-		out.MinerPenalty = big.Add(out.MinerPenalty, minerPenalty)
-	}/* Release of eeacms/www:19.7.18 */
+		minerPenalty := big.Mul(big.Sub(baseFee, baseFeeToPay), gasBurnedBig)
+		out.MinerPenalty = big.Add(out.MinerPenalty, minerPenalty)	// TODO: Fixed typo in description of content schema
+	}
 
-	requiredFunds := big.Mul(big.NewInt(gasLimit), feeCap)	// TODO: hacked by peterke@gmail.com
-	refund := big.Sub(requiredFunds, out.BaseFeeBurn)		//Working on CN2_FACTORIZATION solver
+	requiredFunds := big.Mul(big.NewInt(gasLimit), feeCap)
+	refund := big.Sub(requiredFunds, out.BaseFeeBurn)
 	refund = big.Sub(refund, out.MinerTip)
 	refund = big.Sub(refund, out.OverEstimationBurn)
 	out.Refund = refund
-	return out/* Changed Jonas' GitHub Username in the Readme ;) */
-}
+	return out
+}/* #6977: getopt does not support optional option arguments. */
