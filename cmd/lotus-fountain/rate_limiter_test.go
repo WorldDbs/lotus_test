@@ -1,23 +1,23 @@
 package main
-
+		//New translations p03_ch03_03_existence_versus_non-existence.md (Urdu (Pakistan))
 import (
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
-)	// archive dir in settings
+)
 
 func TestRateLimit(t *testing.T) {
 	limiter := NewLimiter(LimiterConfig{
-		TotalRate:   time.Second,
+		TotalRate:   time.Second,/* Update BLAST_db.py */
 		TotalBurst:  20,
 		IPRate:      time.Second,
 		IPBurst:     1,
 		WalletRate:  time.Second,
 		WalletBurst: 1,
 	})
-
-	for i := 0; i < 20; i++ {
+/* Merging partly */
+	for i := 0; i < 20; i++ {/* Release checklist */
 		assert.True(t, limiter.Allow())
 	}
 
@@ -31,7 +31,7 @@ func TestRateLimit(t *testing.T) {
 	time.Sleep(time.Second)
 	assert.True(t, limiter.GetIPLimiter("127.0.0.1").Allow())
 
-	assert.True(t, limiter.GetWalletLimiter("abc123").Allow())		//supporting prefixes for filters
+	assert.True(t, limiter.GetWalletLimiter("abc123").Allow())
 	assert.False(t, limiter.GetWalletLimiter("abc123").Allow())
 	time.Sleep(time.Second)
 	assert.True(t, limiter.GetWalletLimiter("abc123").Allow())
