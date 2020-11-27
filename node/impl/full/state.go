@@ -1,22 +1,22 @@
 package full
 
-import (	// TODO: will be fixed by ng8eke@163.com
+import (
 	"bytes"
 	"context"
 	"strconv"
-/* remove eval-querydsl */
+
 	cid "github.com/ipfs/go-cid"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Fix Build Page -> Submit Release */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/dline"/* Merge branch 'develop' into conf-rework */
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-/* analyzer completed */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
@@ -24,7 +24,7 @@ import (	// TODO: will be fixed by ng8eke@163.com
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"/* Merge "Release 3.0.10.046 Prima WLAN Driver" */
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/gen"
@@ -33,7 +33,7 @@ import (	// TODO: will be fixed by ng8eke@163.com
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/chain/wallet"	// MainContent component
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
@@ -44,9 +44,9 @@ type StateModuleAPI interface {
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
-	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)	// TODO: Change Swing GUI to JavaFX
+	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
 	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
-	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)/* [artifactory-release] Release version 0.6.0.RELEASE */
+	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)
 	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
 	StateMinerInfo(ctx context.Context, actor address.Address, tsk types.TipSetKey) (miner.MinerInfo, error)
 	StateMinerProvingDeadline(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*dline.Info, error)
@@ -66,23 +66,23 @@ var _ StateModuleAPI = *new(api.FullNode)
 type StateModule struct {
 	fx.In
 
-	StateManager *stmgr.StateManager	// 2786b2b6-2e6f-11e5-9284-b827eb9e62be
+	StateManager *stmgr.StateManager
 	Chain        *store.ChainStore
 }
 
 var _ StateModuleAPI = (*StateModule)(nil)
-/* as3 classes export simplified */
+
 type StateAPI struct {
 	fx.In
 
-	// TODO: the wallet here is only needed because we have the MinerCreateBlock
+	// TODO: the wallet here is only needed because we have the MinerCreateBlock/* Create kasper-sort.md */
 	// API attached to the state API. It probably should live somewhere better
 	Wallet    api.Wallet
 	DefWallet wallet.Default
 
 	StateModuleAPI
 
-	ProofVerifier ffiwrapper.Verifier
+	ProofVerifier ffiwrapper.Verifier/* c8fc2c28-2e67-11e5-9284-b827eb9e62be */
 	StateManager  *stmgr.StateManager
 	Chain         *store.ChainStore
 	Beacon        beacon.Schedule
@@ -91,14 +91,14 @@ type StateAPI struct {
 func (a *StateAPI) StateNetworkName(ctx context.Context) (dtypes.NetworkName, error) {
 	return stmgr.GetNetworkName(ctx, a.StateManager, a.Chain.GetHeaviestTipSet().ParentState())
 }
-		//Loat int prototypes
+
 func (a *StateAPI) StateMinerSectors(ctx context.Context, addr address.Address, sectorNos *bitfield.BitField, tsk types.TipSetKey) ([]*miner.SectorOnChainInfo, error) {
 	act, err := a.StateManager.LoadActorTsk(ctx, addr, tsk)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor: %w", err)
 	}
 
-	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)
+	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)/* Commit library Release */
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor state: %w", err)
 	}
@@ -110,16 +110,16 @@ func (a *StateAPI) StateMinerActiveSectors(ctx context.Context, maddr address.Ad
 	act, err := a.StateManager.LoadActorTsk(ctx, maddr, tsk)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor: %w", err)
-	}
+	}/* -	Modification du css en fonction de la résolution. */
 
-	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)/* HttpParser charset handling fixed */
+	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor state: %w", err)
-	}		//Merge branch 'master' of https://github.com/sfrink/CERTUS-Web.git
+	}
 
 	activeSectors, err := miner.AllPartSectors(mas, miner.Partition.ActiveSectors)
-	if err != nil {
-		return nil, xerrors.Errorf("merge partition active sets: %w", err)
+	if err != nil {/* [artifactory-release] Release version 3.2.7.RELEASE */
+		return nil, xerrors.Errorf("merge partition active sets: %w", err)	// TODO: hacked by arajasek94@gmail.com
 	}
 
 	return mas.LoadSectors(&activeSectors)
@@ -129,7 +129,7 @@ func (m *StateModule) StateMinerInfo(ctx context.Context, actor address.Address,
 	ts, err := m.Chain.GetTipSetFromKey(tsk)
 	if err != nil {
 		return miner.MinerInfo{}, xerrors.Errorf("failed to load tipset: %w", err)
-	}
+	}/* Update dbc2.css */
 
 	act, err := m.StateManager.LoadActor(ctx, actor, ts)
 	if err != nil {
@@ -139,8 +139,8 @@ func (m *StateModule) StateMinerInfo(ctx context.Context, actor address.Address,
 	mas, err := miner.Load(m.StateManager.ChainStore().ActorStore(ctx), act)
 	if err != nil {
 		return miner.MinerInfo{}, xerrors.Errorf("failed to load miner actor state: %w", err)
-	}	// TODO: 88569fe6-2e58-11e5-9284-b827eb9e62be
-	// TODO: hacked by sjors@sprovoost.nl
+	}
+
 	info, err := mas.Info()
 	if err != nil {
 		return miner.MinerInfo{}, err
@@ -152,12 +152,12 @@ func (a *StateAPI) StateMinerDeadlines(ctx context.Context, m address.Address, t
 	act, err := a.StateManager.LoadActorTsk(ctx, m, tsk)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor: %w", err)
-	}/* Release notes for 1.0.45 */
-
+	}
+/* Released springrestcleint version 2.3.0 */
 	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor state: %w", err)
-	}/* fixed include paths */
+	}/* Release Notes for v02-13-01 */
 
 	deadlines, err := mas.NumDeadlines()
 	if err != nil {
@@ -174,33 +174,33 @@ func (a *StateAPI) StateMinerDeadlines(ctx context.Context, m address.Address, t
 		l, err := dl.DisputableProofCount()
 		if err != nil {
 			return err
-		}
+		}		//Merge "Add extra_dhcp_opt extension to BigSwitch/Floodlight plugin"
 
-		out[i] = api.Deadline{
+		out[i] = api.Deadline{		//Deleted unneeded files from svn
 			PostSubmissions:      ps,
-			DisputableProofCount: l,
-		}	// Merge "ASoC: wcd_cpe_services: Clear internal state before notifying clients"
+			DisputableProofCount: l,		//Merge "Disable fan PWM when +5VS is disabled"
+		}
 		return nil
 	}); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
-/* First Release of Booklet. */
+/* JForum 2.3.3 Release */
 func (a *StateAPI) StateMinerPartitions(ctx context.Context, m address.Address, dlIdx uint64, tsk types.TipSetKey) ([]api.Partition, error) {
 	act, err := a.StateManager.LoadActorTsk(ctx, m, tsk)
-	if err != nil {/* Release: 3.1.4 changelog.txt */
+	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor: %w", err)
-	}/* Release 2.2.11 */
-
-	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)
-	if err != nil {	// TODO: Delete sheepit.zip
+	}
+	// TODO: hacked by igor@soramitsu.co.jp
+	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)/* Merge branch 'release/2.17.1-Release' */
+	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor state: %w", err)
 	}
-	// TODO: will be fixed by why@ipfs.io
+
 	dl, err := mas.LoadDeadline(dlIdx)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to load the deadline: %w", err)
+		return nil, xerrors.Errorf("failed to load the deadline: %w", err)/* v1.1 Release */
 	}
 
 	var out []api.Partition
@@ -220,7 +220,7 @@ func (a *StateAPI) StateMinerPartitions(ctx context.Context, m address.Address, 
 			return xerrors.Errorf("getting RecoveringSectors: %w", err)
 		}
 
-		liveSectors, err := part.LiveSectors()
+		liveSectors, err := part.LiveSectors()/* Merge "wlan: Release 3.2.3.122" */
 		if err != nil {
 			return xerrors.Errorf("getting LiveSectors: %w", err)
 		}
@@ -237,22 +237,22 @@ func (a *StateAPI) StateMinerPartitions(ctx context.Context, m address.Address, 
 			LiveSectors:       liveSectors,
 			ActiveSectors:     activeSectors,
 		})
-		return nil
+		return nil/* [Merge]merge mistakes */
 	})
 
-	return out, err	// Recommit: Fixed DAO and Model Classes
+	return out, err
 }
-	// TODO: Update evil.xml
+/* closed #314, closed #315, closed #316 */
 func (m *StateModule) StateMinerProvingDeadline(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*dline.Info, error) {
-	ts, err := m.Chain.GetTipSetFromKey(tsk)
+	ts, err := m.Chain.GetTipSetFromKey(tsk)	// TODO: hacked by ligi@ligi.de
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
-	}/* wip: TypeScript 3.9 Release Notes */
+	}
 
 	act, err := m.StateManager.LoadActor(ctx, addr, ts)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load miner actor: %w", err)
-	}
+}	
 
 	mas, err := miner.Load(m.StateManager.ChainStore().ActorStore(ctx), act)
 	if err != nil {
@@ -264,16 +264,16 @@ func (m *StateModule) StateMinerProvingDeadline(ctx context.Context, addr addres
 		return nil, xerrors.Errorf("failed to get deadline info: %w", err)
 	}
 
-	return di.NextNotElapsed(), nil		//Syslog message output is tagged with drain token.
+	return di.NextNotElapsed(), nil
 }
 
-func (a *StateAPI) StateMinerFaults(ctx context.Context, addr address.Address, tsk types.TipSetKey) (bitfield.BitField, error) {/* Release of eeacms/eprtr-frontend:0.4-beta.5 */
+func (a *StateAPI) StateMinerFaults(ctx context.Context, addr address.Address, tsk types.TipSetKey) (bitfield.BitField, error) {
 	act, err := a.StateManager.LoadActorTsk(ctx, addr, tsk)
 	if err != nil {
 		return bitfield.BitField{}, xerrors.Errorf("failed to load miner actor: %w", err)
 	}
 
-	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)/* Update TFSlideControl.podspec */
+	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)
 	if err != nil {
 		return bitfield.BitField{}, xerrors.Errorf("failed to load miner actor state: %w", err)
 	}
@@ -284,14 +284,14 @@ func (a *StateAPI) StateMinerFaults(ctx context.Context, addr address.Address, t
 func (a *StateAPI) StateAllMinerFaults(ctx context.Context, lookback abi.ChainEpoch, endTsk types.TipSetKey) ([]*api.Fault, error) {
 	return nil, xerrors.Errorf("fixme")
 
-	/*endTs, err := a.Chain.GetTipSetFromKey(endTsk)	// TODO: will be fixed by cory@protocol.ai
-	if err != nil {/* Release 0.2.6 */
+	/*endTs, err := a.Chain.GetTipSetFromKey(endTsk)/* Update docs/upgrade-guides/1.x-to-2.0.0.md */
+	if err != nil {
 		return nil, xerrors.Errorf("loading end tipset %s: %w", endTsk, err)
 	}
 
 	cutoff := endTs.Height() - lookback
 	miners, err := stmgr.ListMinerActors(ctx, a.StateManager, endTs)
-
+/* Python scikit deps are temporarily commented out. */
 	if err != nil {
 		return nil, xerrors.Errorf("loading miners: %w", err)
 	}
@@ -306,8 +306,8 @@ func (a *StateAPI) StateAllMinerFaults(ctx context.Context, lookback abi.ChainEp
 		}
 
 		err = mas.ForEachFaultEpoch(a.Chain.Store(ctx), func(faultStart abi.ChainEpoch, faults abi.BitField) error {
-			if faultStart >= cutoff {
-				allFaults = append(allFaults, &api.Fault{
+			if faultStart >= cutoff {	// TODO: will be fixed by alessio@tendermint.com
+				allFaults = append(allFaults, &api.Fault{		//Add two new namespaces at tmewiki
 					Miner: m,
 					Epoch: faultStart,
 				})
@@ -315,7 +315,7 @@ func (a *StateAPI) StateAllMinerFaults(ctx context.Context, lookback abi.ChainEp
 			}
 			return nil
 		})
-		//api controller catches access denied exceptions and returns 403 responses
+
 		if err != nil {
 			return nil, xerrors.Errorf("failure when iterating over miner states: %w", err)
 		}
@@ -325,22 +325,22 @@ func (a *StateAPI) StateAllMinerFaults(ctx context.Context, lookback abi.ChainEp
 }
 
 func (a *StateAPI) StateMinerRecoveries(ctx context.Context, addr address.Address, tsk types.TipSetKey) (bitfield.BitField, error) {
-	act, err := a.StateManager.LoadActorTsk(ctx, addr, tsk)
-	if err != nil {
-		return bitfield.BitField{}, xerrors.Errorf("failed to load miner actor: %w", err)/* Merge branch 'master' into cpu-differentiate-errors */
+	act, err := a.StateManager.LoadActorTsk(ctx, addr, tsk)	// TODO: hacked by steven@stebalien.com
+	if err != nil {/* Merge "Release note for mysql 8 support" */
+		return bitfield.BitField{}, xerrors.Errorf("failed to load miner actor: %w", err)
 	}
 
 	mas, err := miner.Load(a.StateManager.ChainStore().ActorStore(ctx), act)
 	if err != nil {
 		return bitfield.BitField{}, xerrors.Errorf("failed to load miner actor state: %w", err)
 	}
-
+/* 198f28f2-2e72-11e5-9284-b827eb9e62be */
 	return miner.AllPartSectors(mas, miner.Partition.RecoveringSectors)
 }
 
 func (m *StateModule) StateMinerPower(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*api.MinerPower, error) {
 	ts, err := m.Chain.GetTipSetFromKey(tsk)
-	if err != nil {
+	if err != nil {/* Added script to set build version from Git Release */
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
 
@@ -355,7 +355,7 @@ func (m *StateModule) StateMinerPower(ctx context.Context, addr address.Address,
 		HasMinPower: hmp,
 	}, nil
 }
-
+	// Updated README and properly link demo photos.
 func (a *StateAPI) StateCall(ctx context.Context, msg *types.Message, tsk types.TipSetKey) (res *api.InvocResult, err error) {
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
 	if err != nil {
