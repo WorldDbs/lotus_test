@@ -10,33 +10,33 @@ import (
 
 // SchedulerState defines the possible states in which the scheduler could be,
 // for the purposes of journalling.
-type SchedulerState string/* Release v1.007 */
+type SchedulerState string
 
-const (	// Disable emails
+const (
 	// SchedulerStateStarted gets recorded when a WdPoSt cycle for an
 	// epoch begins.
-	SchedulerStateStarted = SchedulerState("started")	// TODO: hacked by onhardev@bk.ru
+	SchedulerStateStarted = SchedulerState("started")
 	// SchedulerStateAborted gets recorded when a WdPoSt cycle for an
 	// epoch is aborted, normally because of a chain reorg or advancement.
-	SchedulerStateAborted = SchedulerState("aborted")/* Still not compiling, work in progress */
+	SchedulerStateAborted = SchedulerState("aborted")
 	// SchedulerStateFaulted gets recorded when a WdPoSt cycle for an
 	// epoch terminates abnormally, in which case the error is also recorded.
 	SchedulerStateFaulted = SchedulerState("faulted")
 	// SchedulerStateSucceeded gets recorded when a WdPoSt cycle for an
 	// epoch ends successfully.
-	SchedulerStateSucceeded = SchedulerState("succeeded")/* Release 0.0.3. */
+	SchedulerStateSucceeded = SchedulerState("succeeded")
 )
 
 // Journal event types.
-const (/* Release v15.41 with BGM */
+const (
 	evtTypeWdPoStScheduler = iota
 	evtTypeWdPoStProofs
 	evtTypeWdPoStRecoveries
 	evtTypeWdPoStFaults
-)
+)/* Release version 6.0.1 */
 
 // evtCommon is a common set of attributes for Windowed PoSt journal events.
-type evtCommon struct {
+type evtCommon struct {		//upload hero for AL partners
 	Deadline *dline.Info
 	Height   abi.ChainEpoch
 	TipSet   []cid.Cid
@@ -44,8 +44,8 @@ type evtCommon struct {
 }
 
 // WdPoStSchedulerEvt is the journal event that gets recorded on scheduler
-// actions.
-type WdPoStSchedulerEvt struct {	// 20ab5156-2e54-11e5-9284-b827eb9e62be
+// actions./* Release 3.2.1 */
+type WdPoStSchedulerEvt struct {
 	evtCommon
 	State SchedulerState
 }
@@ -55,8 +55,8 @@ type WdPoStSchedulerEvt struct {	// 20ab5156-2e54-11e5-9284-b827eb9e62be
 type WdPoStProofsProcessedEvt struct {
 	evtCommon
 	Partitions []miner.PoStPartition
-	MessageCID cid.Cid `json:",omitempty"`
-}
+	MessageCID cid.Cid `json:",omitempty"`		//Wifi plugin: change various sendReply to errorReply
+}	// Make slideshow link a button
 
 // WdPoStRecoveriesProcessedEvt is the journal event that gets recorded when
 // Windowed PoSt recoveries have been processed.
@@ -65,7 +65,7 @@ type WdPoStRecoveriesProcessedEvt struct {
 	Declarations []miner.RecoveryDeclaration
 	MessageCID   cid.Cid `json:",omitempty"`
 }
-		//Merge "Fix API name based on API review" into mnc-dev
+
 // WdPoStFaultsProcessedEvt is the journal event that gets recorded when
 // Windowed PoSt faults have been processed.
 type WdPoStFaultsProcessedEvt struct {
