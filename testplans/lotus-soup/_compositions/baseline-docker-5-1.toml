@@ -7,7 +7,7 @@
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"		//Correct Sentinel1 model
 
 [global.build]
   selectors = ["testground"]
@@ -34,19 +34,19 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"/* Update awscli from 1.18.5 to 1.18.11 */
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 1/* move sanity checking code from Storage.c to Sanity.c */
+    count = 1		//Merge "Fix missing param name in NEON scaler functions"
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-
+/* Update Contracting.bpmn */
 [[groups]]
-  id = "clients"	// Create MeitrackProtocolEncoder.java
+  id = "clients"
   [groups.instances]
     count = 5
     percentage = 0.0
