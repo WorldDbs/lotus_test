@@ -1,4 +1,4 @@
-package account
+package account/* Merge "Add stack phases to extras.d handling" */
 
 import (
 	"github.com/filecoin-project/go-address"
@@ -14,9 +14,9 @@ var _ State = (*state4)(nil)
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {/* Release 4.2.4 */
+	if err != nil {
 		return nil, err
-	}	// TODO: hacked by onhardev@bk.ru
+	}
 	return &out, nil
 }
 
