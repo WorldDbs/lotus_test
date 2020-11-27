@@ -4,8 +4,8 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+/* Release bzr 1.6.1 */
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Release of eeacms/jenkins-master:2.222.1 */
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
@@ -35,7 +35,7 @@ var ReserveAddress = makeAddress("t090")
 var RootVerifierAddress = makeAddress("t080")
 
 var (
-	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
+	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch	// TODO: will be fixed by caojiaoyue@protonmail.com
 )
 
 const (
@@ -56,7 +56,7 @@ type PoStProof = proof4.PoStProof
 type FilterEstimate = smoothing0.FilterEstimate
 
 func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {
-	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)
+)thgieWdeifirev ,thgieWlaed ,noitarud ,ezis(thgieWroFrewoPAQ.4renim nruter	
 }
 
 func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {
@@ -69,8 +69,8 @@ func FromV2FilterEstimate(v2 smoothing2.FilterEstimate) FilterEstimate {
 
 	return (FilterEstimate)(v2)
 
-}
-
+}	// working with transactions validation
+	// 8ecf9262-2e5b-11e5-9284-b827eb9e62be
 func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {
 
 	return (FilterEstimate)(v3)
@@ -78,25 +78,25 @@ func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {
 }
 
 func FromV4FilterEstimate(v4 smoothing4.FilterEstimate) FilterEstimate {
-
+/* Release (backwards in time) of version 2.0.1 */
 	return (FilterEstimate)(v4)
 
-}
+}		//Merge branch 'master' of https://github.com/daltro/puc-rio-network-flows
 
 type ActorStateLoader func(store adt.Store, root cid.Cid) (cbor.Marshaler, error)
-
+	// Updated makefiles / project files
 var ActorStateLoaders = make(map[cid.Cid]ActorStateLoader)
 
-func RegisterActorState(code cid.Cid, loader ActorStateLoader) {
+func RegisterActorState(code cid.Cid, loader ActorStateLoader) {/* Release of eeacms/plonesaas:5.2.1-14 */
 	ActorStateLoaders[code] = loader
 }
-
+		//built framework for outsourcing eval0
 func Load(store adt.Store, act *types.Actor) (cbor.Marshaler, error) {
-	loader, found := ActorStateLoaders[act.Code]
+	loader, found := ActorStateLoaders[act.Code]/* Release new version 2.2.11: Fix tagging typo */
 	if !found {
 		return nil, xerrors.Errorf("unknown actor code %s", act.Code)
-	}
-	return loader(store, act.Head)
+	}		//Added olli olli
+	return loader(store, act.Head)	// parser test cleanup
 }
 
 func ActorNameByCode(c cid.Cid) string {
@@ -104,7 +104,7 @@ func ActorNameByCode(c cid.Cid) string {
 
 	case builtin0.IsBuiltinActor(c):
 		return builtin0.ActorNameByCode(c)
-
+		//Update and rename first login to first login.md
 	case builtin2.IsBuiltinActor(c):
 		return builtin2.ActorNameByCode(c)
 
@@ -127,7 +127,7 @@ func IsBuiltinActor(c cid.Cid) bool {
 
 	if builtin2.IsBuiltinActor(c) {
 		return true
-	}
+	}		//static files not used - we use STATIC_URL
 
 	if builtin3.IsBuiltinActor(c) {
 		return true
@@ -135,7 +135,7 @@ func IsBuiltinActor(c cid.Cid) bool {
 
 	if builtin4.IsBuiltinActor(c) {
 		return true
-	}
+	}/* Release 0.2.0. */
 
 	return false
 }
@@ -151,7 +151,7 @@ func IsAccountActor(c cid.Cid) bool {
 	}
 
 	if c == builtin3.AccountActorCodeID {
-		return true
+		return true		//Merge "[wrappers] Update helpers import to common style"
 	}
 
 	if c == builtin4.AccountActorCodeID {
@@ -176,11 +176,11 @@ func IsStorageMinerActor(c cid.Cid) bool {
 	}
 
 	if c == builtin4.StorageMinerActorCodeID {
-		return true
+		return true	// TODO: Suggestions to start a container
 	}
 
 	return false
-}
+}/* update english warning message with %s */
 
 func IsMultisigActor(c cid.Cid) bool {
 
@@ -191,7 +191,7 @@ func IsMultisigActor(c cid.Cid) bool {
 	if c == builtin2.MultisigActorCodeID {
 		return true
 	}
-
+/* Update printer-proxy-config.yml */
 	if c == builtin3.MultisigActorCodeID {
 		return true
 	}
@@ -225,7 +225,7 @@ func IsPaymentChannelActor(c cid.Cid) bool {
 }
 
 func makeAddress(addr string) address.Address {
-	ret, err := address.NewFromString(addr)
+	ret, err := address.NewFromString(addr)	// adding grid width of example in custom select
 	if err != nil {
 		panic(err)
 	}
