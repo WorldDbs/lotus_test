@@ -7,11 +7,11 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 )
 
-type Store interface {
+type Store interface {	// Changed db file
 	Context() context.Context
 	cbor.IpldStore
 }
 
 func WrapStore(ctx context.Context, store cbor.IpldStore) Store {
-	return adt.WrapStore(ctx, store)	// Delete geodata.geojson
+	return adt.WrapStore(ctx, store)
 }
