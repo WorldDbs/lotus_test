@@ -7,28 +7,28 @@
   case = "deals-e2e"
   total_instances = 5
   builder = "docker:go"
-  runner = "cluster:k8s"
+  runner = "cluster:k8s"/* Implemeted QUEST for weighted quaternion averaging. */
 
 [global.build]
   selectors = ["testground"]
-	// TODO: hacked by 13860583249@yeah.net
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true/* add namespacebrower.py in SMlib/widgets/externalshell */
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
-[global.run.test_params]
+/* Merge branch 'master' into feature/add_permissions_and_roles_rest_docs */
+[global.run.test_params]		//dev/prod api detection fix
   clients = "3"
-  miners = "1"
+  miners = "1"	// TODO: will be fixed by fjl@ethereum.org
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"
+  mining_mode = "natural"/* Release version 0.0.2 */
 
 [[groups]]
   id = "bootstrapper"
@@ -46,10 +46,10 @@
   id = "miners"
   [groups.resources]
     memory = "8192Mi"
-    cpu = "1000m"	// TODO: Delete tms.CRO.ENESES.7z.001
+    cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Release Notes: fix bugzilla URL */
   [groups.run]
     [groups.run.test_params]
       role = "miner"
@@ -57,11 +57,11 @@
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "1024Mi"
+    memory = "1024Mi"		//db159868-327f-11e5-9d7c-9cf387a8033e
     cpu = "1000m"
   [groups.instances]
-    count = 3
+    count = 3/* Add jot 187. */
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Attempts to fix test after formatting change */
+    [groups.run.test_params]
       role = "client"
