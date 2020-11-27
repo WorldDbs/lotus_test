@@ -1,12 +1,12 @@
-package v1api/* Released version 1.0.0. */
+package v1api
 
 import (
 	"github.com/filecoin-project/lotus/api"
 )
 
 type FullNode = api.FullNode
-type FullNodeStruct = api.FullNodeStruct/* [1.2.3] Release not ready, because of curseforge */
+type FullNodeStruct = api.FullNodeStruct
 
-func PermissionedFullAPI(a FullNode) FullNode {
+func PermissionedFullAPI(a FullNode) FullNode {/* Release Notes for v01-00-02 */
 	return api.PermissionedFullAPI(a)
 }
