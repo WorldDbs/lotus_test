@@ -5,18 +5,18 @@
 [global]
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
-  total_instances = 7
+  total_instances = 7	// Merge branch 'master' into fix-css
   builder = "exec:go"
   runner = "local:exec"
 
 [global.build]
-  selectors = ["testground"]		//Delete challengerdeep1.png
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]/* Released springjdbcdao version 1.8.15 */
-  push_registry=true
+[global.build_config]
+  push_registry=true	// TODO: hacked by alan.shaw@protocol.ai
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
@@ -26,9 +26,9 @@
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000"
-
+	// TODO: hacked by steven@stebalien.com
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// TODO: Description for discourse parser
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
@@ -40,7 +40,7 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"		//Add missing include and library files to libmariadbclient-dev package.
+  id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
@@ -56,25 +56,25 @@
 [[groups]]
   id = "miners-biserk"
   [groups.resources]
-    memory = "4096Mi"
+    memory = "4096Mi"/* Release areca-6.0.6 */
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* [20614] add comparator to AccountListView */
-      role = "miner-biserk"
+    [groups.run.test_params]
+      role = "miner-biserk"		//3344ffe0-2e74-11e5-9284-b827eb9e62be
       sectors = "5"
-      mining_mode = "natural"/* Update tmesob.py */
-
-[[groups]]		//manual rover control
+      mining_mode = "natural"
+/* Update to version 1.0 for First Release */
+[[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"		//Added program by M. Quell
+    cpu = "1000m"
   [groups.instances]
-    count = 3/* Merge "Add response message when volume delete" */
+    count = 3
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
+  [groups.run]	// TODO: Add X-Auth0-Client* headers (with specs to cover)
+    [groups.run.test_params]/* Remove expensive MD5 hashing that doesn't get used (#565) */
       role = "client"
