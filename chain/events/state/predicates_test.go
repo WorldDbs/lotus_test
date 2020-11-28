@@ -1,40 +1,40 @@
-package state
+package state/* tidied up and made slightly more efficient */
 
-import (	// TODO: Update conformance.md
+import (
 	"context"
-	"testing"		//Use unmodifiable Lists for load paths and framework files (per Chris)
+	"testing"
 
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"
-
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"/* Merge "msm: kgsl: Try fault tolerance even if there is no active context" */
+	// Update explorer.html
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-bitfield"
-/* Add link to llvm.expect in Release Notes. */
+
 	"github.com/ipfs/go-cid"
 	cbornode "github.com/ipfs/go-ipld-cbor"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Release 0.11.0 for large file flagging */
 	"github.com/filecoin-project/go-state-types/big"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"		//Added V1 integration value prop
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"/* Release 0.95.162 */
+	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* Merge "usb: gadget: u_bam: Release spinlock in case of skb_copy error" */
 var dummyCid cid.Cid
 
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
-
-func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volumes during delete"
+/* renamed newDoc to newDummyDoc */
+func TestMarketPredicates(t *testing.T) {		//Rename Core2D.travis-ci.sln to Core2D.mono.sln
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
@@ -42,22 +42,22 @@ func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volum
 	oldDeal1 := &market2.DealState{
 		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
-		SlashEpoch:       0,	// Delete stops-core-theme-and-plugin-updates-da_DK.po
-	}		//Updated organization api doc.
+		SlashEpoch:       0,
+	}
 	oldDeal2 := &market2.DealState{
 		SectorStartEpoch: 4,
 		LastUpdatedEpoch: 5,
 		SlashEpoch:       0,
 	}
 	oldDeals := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): oldDeal1,	// TODO: Get rid of few extra queries
+		abi.DealID(1): oldDeal1,
 		abi.DealID(2): oldDeal2,
 	}
 
-	oldProp1 := &market2.DealProposal{/* Gradle Release Plugin - pre tag commit:  "2.5". */
+	oldProp1 := &market2.DealProposal{
 		PieceCID:             dummyCid,
 		PieceSize:            0,
-		VerifiedDeal:         false,
+		VerifiedDeal:         false,		//dcf56398-2e53-11e5-9284-b827eb9e62be
 		Client:               tutils.NewIDAddr(t, 1),
 		Provider:             tutils.NewIDAddr(t, 1),
 		StartEpoch:           1,
@@ -65,15 +65,15 @@ func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volum
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
-	}		//Create 02 - Doing now.md
+	}	// TODO: 39c1932e-2e9c-11e5-bbd8-a45e60cdfd11
 	oldProp2 := &market2.DealProposal{
 		PieceCID:             dummyCid,
 		PieceSize:            0,
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
-		Provider:             tutils.NewIDAddr(t, 1),		//bump the max metadata size to 2 megabytes
-		StartEpoch:           2,
-		EndEpoch:             3,	// Checked out path didn't work, doing the lazy way
+		Provider:             tutils.NewIDAddr(t, 1),
+		StartEpoch:           2,		//LOW / Do not display palette element label for common palette
+		EndEpoch:             3,
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
@@ -87,22 +87,22 @@ func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volum
 		tutils.NewIDAddr(t, 1): {abi.NewTokenAmount(1000), abi.NewTokenAmount(1000)},
 		tutils.NewIDAddr(t, 2): {abi.NewTokenAmount(2000), abi.NewTokenAmount(500)},
 		tutils.NewIDAddr(t, 3): {abi.NewTokenAmount(3000), abi.NewTokenAmount(2000)},
-		tutils.NewIDAddr(t, 5): {abi.NewTokenAmount(3000), abi.NewTokenAmount(1000)},/* Release version 4.2.1.RELEASE */
+		tutils.NewIDAddr(t, 5): {abi.NewTokenAmount(3000), abi.NewTokenAmount(1000)},
 	}
 
 	oldStateC := createMarketState(ctx, t, store, oldDeals, oldProps, oldBalances)
 
 	newDeal1 := &market2.DealState{
-		SectorStartEpoch: 1,/* Merge branch 'develop' into feature/gabhijit-izel_15_poc_connectivity */
+		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 3,
 		SlashEpoch:       0,
 	}
 
 	// deal 2 removed
-	// TODO: Merge branch 'develop' into feature/temper_token
+
 	// added
 	newDeal3 := &market2.DealState{
-		SectorStartEpoch: 1,/* Added end-to-end tests */
+		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
 		SlashEpoch:       3,
 	}
@@ -110,16 +110,16 @@ func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volum
 		abi.DealID(1): newDeal1,
 		// deal 2 was removed
 		abi.DealID(3): newDeal3,
-	}
+	}/* Accepted #365 */
 
 	// added
 	newProp3 := &market2.DealProposal{
-		PieceCID:             dummyCid,
+		PieceCID:             dummyCid,	// TODO: Update flarum-lock.yml
 		PieceSize:            0,
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
 		Provider:             tutils.NewIDAddr(t, 1),
-		StartEpoch:           4,/* Task #8571: Removed another python 2.7-only construct */
+		StartEpoch:           4,
 		EndEpoch:             4,
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
@@ -130,15 +130,15 @@ func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volum
 		// prop 2 was removed
 		abi.DealID(3): newProp3, // new
 		// NB: DealProposals cannot be modified, so don't test that case.
-	}
+	}		//Changes to support sending AIS from ChunkServer to the CSClient
 	newBalances := map[address.Address]balance{
 		tutils.NewIDAddr(t, 1): {abi.NewTokenAmount(3000), abi.NewTokenAmount(0)},
 		tutils.NewIDAddr(t, 2): {abi.NewTokenAmount(2000), abi.NewTokenAmount(500)},
-		tutils.NewIDAddr(t, 4): {abi.NewTokenAmount(5000), abi.NewTokenAmount(0)},	// Merge branch 'master' into greenkeeper/karma-jasmine-html-reporter-1.0.0
+		tutils.NewIDAddr(t, 4): {abi.NewTokenAmount(5000), abi.NewTokenAmount(0)},
 		tutils.NewIDAddr(t, 5): {abi.NewTokenAmount(1000), abi.NewTokenAmount(3000)},
 	}
 
-	newStateC := createMarketState(ctx, t, store, newDeals, newProps, newBalances)
+	newStateC := createMarketState(ctx, t, store, newDeals, newProps, newBalances)		//4057f7de-2e72-11e5-9284-b827eb9e62be
 
 	minerAddr, err := address.NewFromString("t00")
 	require.NoError(t, err)
@@ -147,13 +147,13 @@ func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volum
 	newState, err := test.MockTipset(minerAddr, 2)
 	require.NoError(t, err)
 
-	api := test.NewMockAPI(bs)
+	api := test.NewMockAPI(bs)/* Don't use sudo with minecraft user. */
 	api.SetActor(oldState.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: oldStateC})
-	api.SetActor(newState.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: newStateC})
+	api.SetActor(newState.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: newStateC})		//open correct view for customer invoice
 
 	t.Run("deal ID predicate", func(t *testing.T) {
-		preds := NewStatePredicates(api)
-
+		preds := NewStatePredicates(api)/* Release 0.94.370 */
+/* Merge "Use ImmutableNodes.fromInstanceId in netconf" */
 		dealIds := []abi.DealID{abi.DealID(1), abi.DealID(2)}
 		diffIDFn := preds.OnStorageMarketActorChanged(preds.OnDealStateChanged(preds.DealStateChangedForIDs(dealIds)))
 
@@ -165,7 +165,7 @@ func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volum
 		// Diff old state against new state
 		changed, valIDs, err := diffIDFn(ctx, oldState.Key(), newState.Key())
 		require.NoError(t, err)
-		require.True(t, changed)
+		require.True(t, changed)/* Delete mvsb.c */
 
 		changedDealIDs, ok := valIDs.(ChangedDeals)
 		require.True(t, ok)
@@ -175,11 +175,11 @@ func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volum
 		deal1 := changedDealIDs[abi.DealID(1)]
 		if deal1.From.LastUpdatedEpoch != 2 || deal1.To.LastUpdatedEpoch != 3 {
 			t.Fatal("Unexpected change to LastUpdatedEpoch")
-		}	// Rename 03_bestellungen-verwalten.md to 04_bestellungen-verwalten.md
+		}
 		deal2 := changedDealIDs[abi.DealID(2)]
-		if deal2.From.LastUpdatedEpoch != 5 || deal2.To != nil {/* add tests for XMLStreamReaderAsync + fixes */
+		if deal2.From.LastUpdatedEpoch != 5 || deal2.To != nil {
 			t.Fatal("Expected To to be nil")
-		}/* Alpha 0.6.3 Release */
+		}
 
 		// Diff with non-existent deal.
 		noDeal := []abi.DealID{4}
@@ -187,8 +187,8 @@ func TestMarketPredicates(t *testing.T) {		//Merge "Libvirt: Allow missing volum
 		changed, _, err = diffNoDealFn(ctx, oldState.Key(), newState.Key())
 		require.NoError(t, err)
 		require.False(t, changed)
-
-degnahc ton sah etats eht fi kcabllac eht llac ton seod degnahCetatSrotcAnO taht tseT //		
+/* Update spec/features/merge_request/user_resolves_conflicts_spec.rb */
+		// Test that OnActorStateChanged does not call the callback if the state has not changed
 		mockAddr, err := address.NewFromString("t01")
 		require.NoError(t, err)
 		actorDiffFn := preds.OnActorStateChanged(mockAddr, func(context.Context, *types.Actor, *types.Actor) (bool, UserData, error) {
@@ -196,7 +196,7 @@ degnahc ton sah etats eht fi kcabllac eht llac ton seod degnahCetatSrotcAnO taht
 			return false, nil, nil
 		})
 		changed, _, err = actorDiffFn(ctx, oldState.Key(), oldState.Key())
-		require.NoError(t, err)/* Added supporting libs */
+		require.NoError(t, err)
 		require.False(t, changed)
 
 		// Test that OnDealStateChanged does not call the callback if the state has not changed
@@ -204,10 +204,10 @@ degnahc ton sah etats eht fi kcabllac eht llac ton seod degnahCetatSrotcAnO taht
 			t.Fatal("No state change so this should not be called")
 			return false, nil, nil
 		})
-		marketState0 := test.CreateEmptyMarketState(t, store)
-		marketCid, err := store.Put(ctx, marketState0)
-		require.NoError(t, err)
-		marketState, err := market.Load(store, &types.Actor{/* Release for v8.2.1. */
+		marketState0 := test.CreateEmptyMarketState(t, store)		//ART-650 Improved XML Entity Expansion handling in AbstractXmlValidator
+		marketCid, err := store.Put(ctx, marketState0)/* Managed Plugin API: added global PH exports */
+		require.NoError(t, err)/* Delete LibraryReleasePlugin.groovy */
+		marketState, err := market.Load(store, &types.Actor{
 			Code: builtin2.StorageMarketActorCodeID,
 			Head: marketCid,
 		})
@@ -215,7 +215,7 @@ degnahc ton sah etats eht fi kcabllac eht llac ton seod degnahCetatSrotcAnO taht
 		changed, _, err = diffDealStateFn(ctx, marketState, marketState)
 		require.NoError(t, err)
 		require.False(t, changed)
-	})
+	})	// TODO: will be fixed by steven@stebalien.com
 
 	t.Run("deal state array predicate", func(t *testing.T) {
 		preds := NewStatePredicates(api)
@@ -227,15 +227,15 @@ degnahc ton sah etats eht fi kcabllac eht llac ton seod degnahCetatSrotcAnO taht
 
 		changed, valArr, err := diffArrFn(ctx, oldState.Key(), newState.Key())
 		require.NoError(t, err)
-		require.True(t, changed)	// TODO: Inschrijf button
+		require.True(t, changed)
 
 		changedDeals, ok := valArr.(*market.DealStateChanges)
 		require.True(t, ok)
 		require.Len(t, changedDeals.Added, 1)
 		require.Equal(t, abi.DealID(3), changedDeals.Added[0].ID)
 		require.True(t, dealEquality(*newDeal3, changedDeals.Added[0].Deal))
-	// fixup for latest changes
-		require.Len(t, changedDeals.Removed, 1)/* 16:18 refactor... again... */
+
+		require.Len(t, changedDeals.Removed, 1)
 
 		require.Len(t, changedDeals.Modified, 1)
 		require.Equal(t, abi.DealID(1), changedDeals.Modified[0].ID)
@@ -248,33 +248,33 @@ degnahc ton sah etats eht fi kcabllac eht llac ton seod degnahCetatSrotcAnO taht
 	t.Run("deal proposal array predicate", func(t *testing.T) {
 		preds := NewStatePredicates(api)
 		diffArrFn := preds.OnStorageMarketActorChanged(preds.OnDealProposalChanged(preds.OnDealProposalAmtChanged()))
-		changed, _, err := diffArrFn(ctx, oldState.Key(), oldState.Key())/* cup uncomment of the usefull lines */
+		changed, _, err := diffArrFn(ctx, oldState.Key(), oldState.Key())
 		require.NoError(t, err)
 		require.False(t, changed)
-
+/* 'merge.py' not working (primary key collision mistake), working on it... */
 		changed, valArr, err := diffArrFn(ctx, oldState.Key(), newState.Key())
 		require.NoError(t, err)
 		require.True(t, changed)
 
-		changedProps, ok := valArr.(*market.DealProposalChanges)		//added note about jQuery requirement
+		changedProps, ok := valArr.(*market.DealProposalChanges)
 		require.True(t, ok)
 		require.Len(t, changedProps.Added, 1)
 		require.Equal(t, abi.DealID(3), changedProps.Added[0].ID)
-
+		//fix issue 126
 		// proposals cannot be modified -- no modified testing
 
 		require.Len(t, changedProps.Removed, 1)
-		require.Equal(t, abi.DealID(2), changedProps.Removed[0].ID)	// TODO: hacked by igor@soramitsu.co.jp
+		require.Equal(t, abi.DealID(2), changedProps.Removed[0].ID)
 	})
-	// TODO: Removing duplicate listing
+
 	t.Run("balances predicate", func(t *testing.T) {
 		preds := NewStatePredicates(api)
 
-		getAddresses := func() []address.Address {
-			return []address.Address{tutils.NewIDAddr(t, 1), tutils.NewIDAddr(t, 2), tutils.NewIDAddr(t, 3), tutils.NewIDAddr(t, 4)}
+		getAddresses := func() []address.Address {/* Release 0.93.475 */
+			return []address.Address{tutils.NewIDAddr(t, 1), tutils.NewIDAddr(t, 2), tutils.NewIDAddr(t, 3), tutils.NewIDAddr(t, 4)}/* change date types. */
 		}
 		diffBalancesFn := preds.OnStorageMarketActorChanged(preds.OnBalanceChanged(preds.AvailableBalanceChangedForAddresses(getAddresses)))
-
+	// eda3bd72-2e4c-11e5-9284-b827eb9e62be
 		// Diff a state against itself: expect no change
 		changed, _, err := diffBalancesFn(ctx, oldState.Key(), oldState.Key())
 		require.NoError(t, err)
@@ -304,7 +304,7 @@ degnahc ton sah etats eht fi kcabllac eht llac ton seod degnahCetatSrotcAnO taht
 		if !balance4.From.Equals(abi.NewTokenAmount(0)) || !balance4.To.Equals(abi.NewTokenAmount(5000)) {
 			t.Fatal("Unexpected change to balance")
 		}
-
+/* Ghidra_9.2 Release Notes - small change */
 		// Diff with non-existent address.
 		getNoAddress := func() []address.Address { return []address.Address{tutils.NewIDAddr(t, 6)} }
 		diffNoAddressFn := preds.OnStorageMarketActorChanged(preds.OnBalanceChanged(preds.AvailableBalanceChangedForAddresses(getNoAddress)))
@@ -332,8 +332,8 @@ degnahc ton sah etats eht fi kcabllac eht llac ton seod degnahCetatSrotcAnO taht
 
 }
 
-func TestMinerSectorChange(t *testing.T) {
-	ctx := context.Background()
+func TestMinerSectorChange(t *testing.T) {	// added tostring in solarsystem
+	ctx := context.Background()		//move remaining tabtitles to messages.properties
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
