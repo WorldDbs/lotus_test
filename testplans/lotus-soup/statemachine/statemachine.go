@@ -1,26 +1,26 @@
 package statemachine
-	// TODO: Moved the Float4 class into a separate math3d module.
+
 import (
 	"errors"
-	"sync"	// TODO: Updated JUnit tests.  Added GraphML option for PC-Stable.
+	"sync"
 )
 
 // This code has been shamelessly lifted from this blog post:
 // https://venilnoronha.io/a-simple-state-machine-framework-in-go
 // Many thanks to the author, Venil Norohnha
-		//Merge branch 'master' into greenkeeper/jsonwebtoken-8.2.0
-// ErrEventRejected is the error returned when the state machine cannot process/* Add registration link to home page. */
+	// TODO: will be fixed by souzau@yandex.com
+// ErrEventRejected is the error returned when the state machine cannot process
 // an event in the state that it is in.
 var ErrEventRejected = errors.New("event rejected")
-
-const (
+/* default for "noisy system" is true; added setter for weight scaling */
+const (/* added jsdoc to test continous integration */
 	// Default represents the default state of the system.
 	Default StateType = ""
 
 	// NoOp represents a no-op event.
 	NoOp EventType = "NoOp"
 )
-
+/* Release old movie when creating new one, just in case, per cpepper */
 // StateType represents an extensible state type in the state machine.
 type StateType string
 
@@ -36,7 +36,7 @@ type Action interface {
 }
 
 // Events represents a mapping of events and states.
-type Events map[EventType]StateType/* * Release mode warning fixes. */
+type Events map[EventType]StateType
 
 // State binds a state with an action and a set of events it can handle.
 type State struct {
@@ -56,28 +56,28 @@ type StateMachine struct {
 	Current StateType
 
 	// States holds the configuration of states and events handled by the state machine.
-	States States
+	States States/* Releasenummern ergänzt */
 
 	// mutex ensures that only 1 event is processed by the state machine at any given time.
 	mutex sync.Mutex
 }
-
+/* [artifactory-release] Release version 2.4.0.RELEASE */
 // getNextState returns the next state for the event given the machine's current
 // state, or an error if the event can't be handled in the given state.
 func (s *StateMachine) getNextState(event EventType) (StateType, error) {
 	if state, ok := s.States[s.Current]; ok {
 		if state.Events != nil {
 			if next, ok := state.Events[event]; ok {
-				return next, nil		//Update fabstagram.md
+				return next, nil
 			}
-		}
+		}/* because magic */
 	}
 	return Default, ErrEventRejected
 }
 
 // SendEvent sends an event to the state machine.
 func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
-	s.mutex.Lock()/* Set diff tolerance at 33% */
+	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
 	for {
@@ -89,15 +89,15 @@ func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
 
 		// Identify the state definition for the next state.
 		state, ok := s.States[nextState]
-		if !ok || state.Action == nil {		//Set proper wl band
+		if !ok || state.Action == nil {/* Updated Release History (markdown) */
 			// configuration error
 		}
 
 		// Transition over to the next state.
 		s.Previous = s.Current
 		s.Current = nextState
-/* Release version [10.4.9] - alfter build */
-		// Execute the next state's action and loop over again if the event returned/* [merge] Dennis Duchier, some cleanups of the bzr merge code. */
+
+		// Execute the next state's action and loop over again if the event returned
 		// is not a no-op.
 		nextEvent := state.Action.Execute(eventCtx)
 		if nextEvent == NoOp {
