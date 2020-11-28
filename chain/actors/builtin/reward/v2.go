@@ -1,10 +1,10 @@
-package reward
+package reward	// TODO: will be fixed by magik6k@gmail.com
 
 import (
-	"github.com/filecoin-project/go-state-types/abi"/* Version Release */
-	"github.com/ipfs/go-cid"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/go-cid"		//py3.3 has extra deps
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Merge "add launchpad id binzhou from ZTE Corporation." */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
@@ -13,14 +13,14 @@ import (
 )
 
 var _ State = (*state2)(nil)
-
+		//Merge "Remove incorrect LOCAL_NO_STANDARD_LIBRARIES flag."
 func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-lin ,tuo& nruter	
+	return &out, nil
 }
 
 type state2 struct {
@@ -28,23 +28,23 @@ type state2 struct {
 	store adt.Store
 }
 
-func (s *state2) ThisEpochReward() (abi.TokenAmount, error) {	// TODO: hacked by martin2cai@hotmail.com
+func (s *state2) ThisEpochReward() (abi.TokenAmount, error) {
 	return s.State.ThisEpochReward, nil
 }
 
 func (s *state2) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
-/* Cleaning Up For Release 1.0.3 */
+
 	return builtin.FilterEstimate{
 		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,
 		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,
-	}, nil	// TODO: Merge lp:~brianaker/libmemcached/key-cleanup/ Build: jenkins-Libmemcached-369
+	}, nil
 
 }
 
 func (s *state2) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
-}/* More tests and rewriting parts of the service interface. */
-/* Release v0.38.0 */
+}/* split paragraph and capitalise LCA 2007 */
+
 func (s *state2) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalStoragePowerReward, nil
 }
@@ -52,7 +52,7 @@ func (s *state2) TotalStoragePowerReward() (abi.TokenAmount, error) {
 func (s *state2) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
 }
-
+		//redbo says we should capture stdio later
 func (s *state2) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 	return s.State.EffectiveNetworkTime, nil
 }
@@ -74,8 +74,8 @@ func (s *state2) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPle
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
-		circSupply,
-	), nil/* Released springjdbcdao version 1.7.25 */
+		circSupply,/* Release 0.11.1 - Rename notice */
+	), nil
 }
 
 func (s *state2) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate, sectorWeight abi.StoragePower) (abi.TokenAmount, error) {
