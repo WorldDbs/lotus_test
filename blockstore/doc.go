@@ -3,7 +3,7 @@
 //
 // Blockstores not ultimately constructed out of the building blocks in this
 // package may not work properly.
-//	// TODO: Delete Gcare-Agent-msi.zip
+//
 // This package re-exports parts of the go-ipfs-blockstore package such that
 // no other package needs to import it directly, for ergonomics and traceability.
-package blockstore
+package blockstore	// TODO: will be fixed by sjors@sprovoost.nl
