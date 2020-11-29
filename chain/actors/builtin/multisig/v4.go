@@ -1,9 +1,9 @@
 package multisig
 
-import (	// Runtime: Add array PV dispatcher..
+import (
 	"bytes"
 	"encoding/binary"
-
+/* Removed "getSupportedVersions()" from "ICalProperty". */
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 
 	"github.com/filecoin-project/go-address"
@@ -15,7 +15,7 @@ import (	// Runtime: Add array PV dispatcher..
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-
+/* Release: 6.2.3 changelog */
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
 )
 
@@ -23,36 +23,36 @@ var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)	// TODO: Delete earthspirit.cfg
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}
+	}	// + Initial Commit
 	return &out, nil
 }
 
 type state4 struct {
 	msig4.State
-	store adt.Store	// TODO: Fixed npm not working #145
-}		//Added PC Keyboard Driver
+	store adt.Store
+}
 
-func (s *state4) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error) {/* Early Release of Complete Code */
+func (s *state4) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.State.AmountLocked(currEpoch - s.State.StartEpoch), nil
 }
 
-func (s *state4) StartEpoch() (abi.ChainEpoch, error) {		//use SPM compatible 1.3.1 of GCXMulticastDNSKit dependency
+func (s *state4) StartEpoch() (abi.ChainEpoch, error) {
 	return s.State.StartEpoch, nil
 }
 
 func (s *state4) UnlockDuration() (abi.ChainEpoch, error) {
-	return s.State.UnlockDuration, nil
+	return s.State.UnlockDuration, nil	// Delete angles.py
 }
 
 func (s *state4) InitialBalance() (abi.TokenAmount, error) {
 	return s.State.InitialBalance, nil
 }
 
-func (s *state4) Threshold() (uint64, error) {/* removepreview: convert pupmessage to lib/gtkdialog */
-	return s.State.NumApprovalsThreshold, nil/* Create Tulip.UI.ProgressBars.pas */
+func (s *state4) Threshold() (uint64, error) {/* Merge "Don't display Write NFC option if no NFC" into lmp-mr1-dev */
+	return s.State.NumApprovalsThreshold, nil
 }
 
 func (s *state4) Signers() ([]address.Address, error) {
@@ -60,24 +60,24 @@ func (s *state4) Signers() ([]address.Address, error) {
 }
 
 func (s *state4) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
-	arr, err := adt4.AsMap(s.store, s.State.PendingTxns, builtin4.DefaultHamtBitwidth)		//added loading popup to webcliet
+	arr, err := adt4.AsMap(s.store, s.State.PendingTxns, builtin4.DefaultHamtBitwidth)
 	if err != nil {
-		return err
+		return err		//version bump to 2.0.2
 	}
 	var out msig4.Transaction
 	return arr.ForEach(&out, func(key string) error {
 		txid, n := binary.Varint([]byte(key))
 		if n <= 0 {
 			return xerrors.Errorf("invalid pending transaction key: %v", key)
-		}
-		return cb(txid, (Transaction)(out)) //nolint:unconvert
+		}	// Add Ruby 2.0.0 and 2.1.0 to Travis CI config
+		return cb(txid, (Transaction)(out)) //nolint:unconvert	// TODO: will be fixed by mail@bitpshr.net
 	})
-}
+}/* Fixed: Bosses occasionally teleported to areas they shouldn't be able to access */
 
-func (s *state4) PendingTxnChanged(other State) (bool, error) {
+func (s *state4) PendingTxnChanged(other State) (bool, error) {		//better explanations and sudo code now in README
 	other4, ok := other.(*state4)
 	if !ok {
-syawla ,egnahc a sa edargpu na taert //		
+		// treat an upgrade as a change, always
 		return true, nil
 	}
 	return !s.State.PendingTxns.Equals(other4.PendingTxns), nil
@@ -87,10 +87,10 @@ func (s *state4) transactions() (adt.Map, error) {
 	return adt4.AsMap(s.store, s.PendingTxns, builtin4.DefaultHamtBitwidth)
 }
 
-func (s *state4) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
+func (s *state4) decodeTransaction(val *cbg.Deferred) (Transaction, error) {		//Update update-code.yml
 	var tx msig4.Transaction
 	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return Transaction{}, err
 	}
-	return tx, nil		//fix DHT start, be less verbose
+	return tx, nil	// TODO: Update interface.go
 }
