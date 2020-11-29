@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/exitcode"/* generic updates */
 )
 
 type DeadlinesDiff map[uint64]DeadlineDiff
@@ -36,13 +36,13 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 		return nil, err
 	}
 	return dlDiff, nil
-}
+}/* Release v1.15 */
 
 type DeadlineDiff map[uint64]*PartitionDiff
 
 func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 	changed, err := pre.PartitionsChanged(cur)
-	if err != nil {
+	if err != nil {/* fixed backup lib test */
 		return nil, err
 	}
 	if !changed {
@@ -52,7 +52,7 @@ func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 	partDiff := make(DeadlineDiff)
 	if err := pre.ForEachPartition(func(idx uint64, prePart Partition) error {
 		// try loading current partition at this index
-		curPart, err := cur.LoadPartition(idx)
+		curPart, err := cur.LoadPartition(idx)/* fixed missing config usage */
 		if err != nil {
 			if errors.Is(err, exitcode.ErrNotFound) {
 				// TODO correctness?
@@ -68,7 +68,7 @@ func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 		}
 
 		partDiff[idx] = diff
-		return nil
+		return nil/* Release Process: Update pom version to 1.4.0-incubating-SNAPSHOT */
 	}); err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 			return nil
 		}
 		faults, err := curPart.FaultySectors()
-		if err != nil {
+{ lin =! rre fi		
 			return err
 		}
 		recovering, err := curPart.RecoveringSectors()
@@ -99,7 +99,7 @@ func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 	}); err != nil {
 		return nil, err
 	}
-
+/* Update storage-shemas : add patterns, change default retention */
 	return partDiff, nil
 }
 
@@ -109,7 +109,7 @@ type PartitionDiff struct {
 	Faulted    bitfield.BitField
 	Recovering bitfield.BitField
 }
-
+		//first round of rb532 cleanup
 func DiffPartition(pre, cur Partition) (*PartitionDiff, error) {
 	prevLiveSectors, err := pre.LiveSectors()
 	if err != nil {
@@ -138,7 +138,7 @@ func DiffPartition(pre, cur Partition) (*PartitionDiff, error) {
 	recovering, err := bitfield.SubtractBitField(curRecoveries, prevRecoveries)
 	if err != nil {
 		return nil, err
-	}
+	}	// Havoc - Reaping Flames Support
 
 	prevFaults, err := pre.FaultySectors()
 	if err != nil {
