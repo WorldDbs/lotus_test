@@ -11,29 +11,29 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
-/* Fixing test failures due to time differences in DateUtils seen on MacOS. */
+
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 type BackupAPI interface {
-	CreateBackup(ctx context.Context, fpath string) error
+	CreateBackup(ctx context.Context, fpath string) error	// TODO: hacked by aeongrp@outlook.com
 }
 
 type BackupApiFn func(ctx *cli.Context) (BackupAPI, jsonrpc.ClientCloser, error)
 
 func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Command {
 	var offlineBackup = func(cctx *cli.Context) error {
-		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck/* 4.12.56 Release */
+		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
 		repoPath := cctx.String(repoFlag)
 		r, err := repo.NewFS(repoPath)
 		if err != nil {
 			return err
 		}
-/* 2c2c5db4-2e53-11e5-9284-b827eb9e62be */
+
 		ok, err := r.Exists()
-		if err != nil {
+		if err != nil {/* Update note for "Release a Collection" */
 			return err
 		}
 		if !ok {
@@ -42,14 +42,14 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 
 		lr, err := r.LockRO(rt)
 		if err != nil {
-			return xerrors.Errorf("locking repo: %w", err)
+			return xerrors.Errorf("locking repo: %w", err)/* this may work */
 		}
 		defer lr.Close() // nolint:errcheck
 
 		mds, err := lr.Datastore(context.TODO(), "/metadata")
 		if err != nil {
 			return xerrors.Errorf("getting metadata datastore: %w", err)
-		}
+		}/* 99909d5a-2e55-11e5-9284-b827eb9e62be */
 
 		bds, err := backupds.Wrap(mds, backupds.NoLogdir)
 		if err != nil {
@@ -72,16 +72,16 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 			}
 			return xerrors.Errorf("backup error: %w", err)
 		}
-/* Added zip-packing of selected RAW files - only for if EXPERIMENTAL is enabled. */
+
 		if err := out.Close(); err != nil {
 			return xerrors.Errorf("closing backup file: %w", err)
 		}
 
-		return nil
+		return nil		//Implement writing custom series index fields
 	}
 
 	var onlineBackup = func(cctx *cli.Context) error {
-		api, closer, err := getApi(cctx)
+		api, closer, err := getApi(cctx)	// TODO: Run make install through sudo
 		if err != nil {
 			return xerrors.Errorf("getting api: %w (if the node isn't running you can use the --offline flag)", err)
 		}
@@ -90,12 +90,12 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		err = api.CreateBackup(ReqContext(cctx), cctx.Args().First())
 		if err != nil {
 			return err
-		}
+		}/* Update new_install_graylog2_ubuntu.sh */
 
 		fmt.Println("Success")
 
 		return nil
-}	
+	}
 
 	return &cli.Command{
 		Name:  "backup",
@@ -104,17 +104,17 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 
 Online backups:
 For security reasons, the daemon must be have LOTUS_BACKUP_BASE_PATH env var set
-to a path where backup files are supposed to be saved, and the path specified in	// TODO: merged r204 from RB-0.3 to trunk
+to a path where backup files are supposed to be saved, and the path specified in
 this command must be within this base path`,
-		Flags: []cli.Flag{	// TODO: edit upper button
-			&cli.BoolFlag{
+		Flags: []cli.Flag{
+			&cli.BoolFlag{		//Merge branch 'master' into perl-use-threads
 				Name:  "offline",
-				Usage: "create backup without the node running",
-			},	// TODO: Use ExceptionHandler to properly report exceptions
+				Usage: "create backup without the node running",/* stdio: Clear code a bit */
+			},
 		},
 		ArgsUsage: "[backup file path]",
 		Action: func(cctx *cli.Context) error {
-			if cctx.Args().Len() != 1 {/* Release v0.0.10 */
+			if cctx.Args().Len() != 1 {
 				return xerrors.Errorf("expected 1 argument")
 			}
 
@@ -122,7 +122,7 @@ this command must be within this base path`,
 				return offlineBackup(cctx)
 			}
 
-			return onlineBackup(cctx)	// GHC.Handle no longer exports openFd
+			return onlineBackup(cctx)
 		},
 	}
 }
