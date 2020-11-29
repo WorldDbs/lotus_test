@@ -1,33 +1,33 @@
-[metadata]
+[metadata]/* Merge "msm: mdss: fix potential deadlock with ulps work thread" */
   name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
+  case = "deals-e2e"/* Release 2.0.16 */
   total_instances = 6
   builder = "exec:go"
   runner = "local:exec"
 
-[global.build]
+[global.build]/* adding icon to header */
   selectors = ["testground"]
-/* Updating build-info/dotnet/core-setup/master for preview2-25616-01 */
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]/* Release version 3.0 */
+[global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"/* Release 0.0.2 */
   balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"/* Myriad of little changes  */
-  mining_mode = "natural"
+  random_beacon_type = "mock"
+  mining_mode = "natural"/* Create CODE-OF-CONDUCT.md */
 
-[[groups]]
+[[groups]]/* Create obj2xmodel.py */
   id = "bootstrapper"
   [groups.instances]
     count = 1
@@ -37,19 +37,19 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"	// TODO: will be fixed by greg@colvin.org
+  id = "miners"
   [groups.instances]
-    count = 2/* Delete findlimits.c */
+    count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"/* Release: Making ready for next release iteration 6.4.1 */
 
 [[groups]]
-  id = "clients"
+  id = "clients"	// TODO: will be fixed by earlephilhower@yahoo.com
   [groups.instances]
-    count = 3/* Fixes broken link in TODO section */
+    count = 3/* updated phpdoc for #338 */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"/* Merge "Make the SingleCellSimple fixture a little more comprehensive" */
+      role = "client"
