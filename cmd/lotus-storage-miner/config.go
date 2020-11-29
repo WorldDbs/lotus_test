@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-/* Release: Making ready for next release iteration 6.5.2 */
-	"github.com/urfave/cli/v2"
 
+	"github.com/urfave/cli/v2"
+	// TODO: hacked by juan@benet.ai
 	"github.com/filecoin-project/lotus/node/config"
 )
 
 var configCmd = &cli.Command{
 	Name:  "config",
-	Usage: "Output default configuration",/* set default spa */
+	Usage: "Output default configuration",
 	Action: func(cctx *cli.Context) error {
 		comm, err := config.ConfigComment(config.DefaultStorageMiner())
 		if err != nil {
