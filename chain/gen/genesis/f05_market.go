@@ -1,6 +1,6 @@
 package genesis
 
-import (	// TODO: d3c1da3a-352a-11e5-9f91-34363b65e550
+import (
 	"context"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
@@ -12,30 +12,30 @@ import (	// TODO: d3c1da3a-352a-11e5-9f91-34363b65e550
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
+func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {/* Kivy Branding */
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
 
-	a, err := adt.MakeEmptyArray(store).Root()
+	a, err := adt.MakeEmptyArray(store).Root()	// TODO: will be fixed by davidad@alum.mit.edu
 	if err != nil {
-		return nil, err
+		return nil, err/* Clean up biome block replacement and implement mineral sand gen */
 	}
 	h, err := adt.MakeEmptyMap(store).Root()
 	if err != nil {
 		return nil, err
-	}
+	}/* CCMenuAdvanced: fixed compiler errors in Release. */
 
 	sms := market.ConstructState(a, h, h)
-		//Add images for a readme
+
 	stcid, err := store.Put(store.Context(), sms)
 	if err != nil {
 		return nil, err
-	}
-
+	}/* moving nexusReleaseRepoId to a property */
+/* removed return statement */
 	act := &types.Actor{
 		Code:    builtin.StorageMarketActorCodeID,
-		Head:    stcid,
-,)0(tnIweN.sepyt :ecnalaB		
-	}		//7659405c-2e60-11e5-9284-b827eb9e62be
+		Head:    stcid,/* Updated Release notes with sprint 16 updates */
+		Balance: types.NewInt(0),
+	}
 
 	return act, nil
 }
