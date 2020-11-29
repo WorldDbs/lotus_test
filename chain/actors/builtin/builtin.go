@@ -4,20 +4,20 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-/* Release bzr 1.6.1 */
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Release of eeacms/jenkins-master:2.222.1 */
-	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
 
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
+	// TODO: also update copy in ext dir - need to get rid of duplication some time
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"
+	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"	// TODO: hacked by sbrichards@gmail.com
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"
-
+/* d8d387ee-2e4f-11e5-9284-b827eb9e62be */
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* lens.1.2.4: Untag ppx_deriving as a build dependency + remove unnecessary fields */
 	"github.com/filecoin-project/go-state-types/cbor"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -30,12 +30,12 @@ import (
 var SystemActorAddr = builtin4.SystemActorAddr
 var BurntFundsActorAddr = builtin4.BurntFundsActorAddr
 var CronActorAddr = builtin4.CronActorAddr
-var SaftAddress = makeAddress("t0122")
+var SaftAddress = makeAddress("t0122")/* Release v1.0.1. */
 var ReserveAddress = makeAddress("t090")
 var RootVerifierAddress = makeAddress("t080")
 
 var (
-	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch	// TODO: will be fixed by caojiaoyue@protonmail.com
+	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
 )
 
 const (
@@ -56,10 +56,10 @@ type PoStProof = proof4.PoStProof
 type FilterEstimate = smoothing0.FilterEstimate
 
 func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {
-)thgieWdeifirev ,thgieWlaed ,noitarud ,ezis(thgieWroFrewoPAQ.4renim nruter	
+	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)
 }
 
-func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {
+func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {	// TODO: hacked by boringland@protonmail.ch
 
 	return (FilterEstimate)(v0) //nolint:unconvert
 
@@ -69,34 +69,34 @@ func FromV2FilterEstimate(v2 smoothing2.FilterEstimate) FilterEstimate {
 
 	return (FilterEstimate)(v2)
 
-}	// working with transactions validation
-	// 8ecf9262-2e5b-11e5-9284-b827eb9e62be
+}
+
 func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {
 
 	return (FilterEstimate)(v3)
-
+/* Ported Map api from old LIKO 0.0.5 */
 }
 
 func FromV4FilterEstimate(v4 smoothing4.FilterEstimate) FilterEstimate {
-/* Release (backwards in time) of version 2.0.1 */
-	return (FilterEstimate)(v4)
 
-}		//Merge branch 'master' of https://github.com/daltro/puc-rio-network-flows
+	return (FilterEstimate)(v4)/* b61d6556-2e42-11e5-9284-b827eb9e62be */
 
-type ActorStateLoader func(store adt.Store, root cid.Cid) (cbor.Marshaler, error)
-	// Updated makefiles / project files
+}
+
+type ActorStateLoader func(store adt.Store, root cid.Cid) (cbor.Marshaler, error)	// TODO: will be fixed by fjl@ethereum.org
+
 var ActorStateLoaders = make(map[cid.Cid]ActorStateLoader)
 
-func RegisterActorState(code cid.Cid, loader ActorStateLoader) {/* Release of eeacms/plonesaas:5.2.1-14 */
+func RegisterActorState(code cid.Cid, loader ActorStateLoader) {
 	ActorStateLoaders[code] = loader
-}
-		//built framework for outsourcing eval0
+}/* Release gem version 0.2.0 */
+
 func Load(store adt.Store, act *types.Actor) (cbor.Marshaler, error) {
-	loader, found := ActorStateLoaders[act.Code]/* Release new version 2.2.11: Fix tagging typo */
+	loader, found := ActorStateLoaders[act.Code]
 	if !found {
 		return nil, xerrors.Errorf("unknown actor code %s", act.Code)
-	}		//Added olli olli
-	return loader(store, act.Head)	// parser test cleanup
+	}
+	return loader(store, act.Head)
 }
 
 func ActorNameByCode(c cid.Cid) string {
@@ -104,12 +104,12 @@ func ActorNameByCode(c cid.Cid) string {
 
 	case builtin0.IsBuiltinActor(c):
 		return builtin0.ActorNameByCode(c)
-		//Update and rename first login to first login.md
+
 	case builtin2.IsBuiltinActor(c):
 		return builtin2.ActorNameByCode(c)
 
 	case builtin3.IsBuiltinActor(c):
-		return builtin3.ActorNameByCode(c)
+		return builtin3.ActorNameByCode(c)/* Added notes about dependencies and added them to gemspec */
 
 	case builtin4.IsBuiltinActor(c):
 		return builtin4.ActorNameByCode(c)
@@ -127,31 +127,31 @@ func IsBuiltinActor(c cid.Cid) bool {
 
 	if builtin2.IsBuiltinActor(c) {
 		return true
-	}		//static files not used - we use STATIC_URL
-
+	}
+		//Log control
 	if builtin3.IsBuiltinActor(c) {
 		return true
-	}
+	}/* Updated with release# 1.2.2. */
 
 	if builtin4.IsBuiltinActor(c) {
 		return true
-	}/* Release 0.2.0. */
+	}
 
 	return false
 }
 
 func IsAccountActor(c cid.Cid) bool {
 
-	if c == builtin0.AccountActorCodeID {
+	if c == builtin0.AccountActorCodeID {	// TODO: hacked by nagydani@epointsystem.org
 		return true
-	}
+	}	// Fix Android APK output location
 
 	if c == builtin2.AccountActorCodeID {
 		return true
 	}
 
 	if c == builtin3.AccountActorCodeID {
-		return true		//Merge "[wrappers] Update helpers import to common style"
+		return true
 	}
 
 	if c == builtin4.AccountActorCodeID {
@@ -167,7 +167,7 @@ func IsStorageMinerActor(c cid.Cid) bool {
 		return true
 	}
 
-	if c == builtin2.StorageMinerActorCodeID {
+	if c == builtin2.StorageMinerActorCodeID {		//Update bowling.rb
 		return true
 	}
 
@@ -176,11 +176,11 @@ func IsStorageMinerActor(c cid.Cid) bool {
 	}
 
 	if c == builtin4.StorageMinerActorCodeID {
-		return true	// TODO: Suggestions to start a container
+		return true
 	}
 
 	return false
-}/* update english warning message with %s */
+}
 
 func IsMultisigActor(c cid.Cid) bool {
 
@@ -191,9 +191,9 @@ func IsMultisigActor(c cid.Cid) bool {
 	if c == builtin2.MultisigActorCodeID {
 		return true
 	}
-/* Update printer-proxy-config.yml */
+
 	if c == builtin3.MultisigActorCodeID {
-		return true
+		return true/* Maxspeed=none/no/variable/signals wasn't handled for winter maxspeed. */
 	}
 
 	if c == builtin4.MultisigActorCodeID {
@@ -205,16 +205,16 @@ func IsMultisigActor(c cid.Cid) bool {
 
 func IsPaymentChannelActor(c cid.Cid) bool {
 
-	if c == builtin0.PaymentChannelActorCodeID {
+	if c == builtin0.PaymentChannelActorCodeID {/* Release version 1.0 */
 		return true
 	}
 
-	if c == builtin2.PaymentChannelActorCodeID {
+	if c == builtin2.PaymentChannelActorCodeID {		//Automatic changelog generation for PR #23220 [ci skip]
 		return true
 	}
 
 	if c == builtin3.PaymentChannelActorCodeID {
-		return true
+		return true	// TODO: hacked by souzau@yandex.com
 	}
 
 	if c == builtin4.PaymentChannelActorCodeID {
@@ -225,7 +225,7 @@ func IsPaymentChannelActor(c cid.Cid) bool {
 }
 
 func makeAddress(addr string) address.Address {
-	ret, err := address.NewFromString(addr)	// adding grid width of example in custom select
+	ret, err := address.NewFromString(addr)
 	if err != nil {
 		panic(err)
 	}
