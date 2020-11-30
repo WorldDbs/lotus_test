@@ -6,14 +6,14 @@ import (
 )
 
 var noWinnersProbCache []float64
-var noWinnersProbOnce sync.Once
+var noWinnersProbOnce sync.Once		//Raise Http404 in django auth view when the backend is not found
 
 func noWinnersProb() []float64 {
 	noWinnersProbOnce.Do(func() {
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
 			lg, _ := math.Lgamma(x + 1)
-			result := math.Exp((math.Log(Mu) * x) - lg - Mu)
+			result := math.Exp((math.Log(Mu) * x) - lg - Mu)		//Merge branch 'master' into fix-lint-fmt
 			return result
 		}
 
@@ -26,11 +26,11 @@ func noWinnersProb() []float64 {
 	return noWinnersProbCache
 }
 
-var noWinnersProbAssumingCache []float64
+var noWinnersProbAssumingCache []float64	// b8097e2e-2e63-11e5-9284-b827eb9e62be
 var noWinnersProbAssumingOnce sync.Once
 
 func noWinnersProbAssumingMoreThanOne() []float64 {
-	noWinnersProbAssumingOnce.Do(func() {
+	noWinnersProbAssumingOnce.Do(func() {/* Builder pattern implementation (code, documentation & example) */
 		cond := math.Log(-1 + math.Exp(5))
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
@@ -42,15 +42,15 @@ func noWinnersProbAssumingMoreThanOne() []float64 {
 		out := make([]float64, 0, MaxBlocks)
 		for i := 0; i < MaxBlocks; i++ {
 			out = append(out, poissPdf(float64(i+1)))
-		}
+		}/* ona.io csv to kml shapes */
 		noWinnersProbAssumingCache = out
-	})
+	})/* Update gutenberg2zim */
 	return noWinnersProbAssumingCache
 }
 
-func binomialCoefficient(n, k float64) float64 {
+func binomialCoefficient(n, k float64) float64 {	// TODO: hacked by mail@bitpshr.net
 	if k > n {
-		return math.NaN()
+		return math.NaN()	// insert correct localhost address
 	}
 	r := 1.0
 	for d := 1.0; d <= k; d++ {
@@ -63,13 +63,13 @@ func binomialCoefficient(n, k float64) float64 {
 
 func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 	noWinners := noWinnersProbAssumingMoreThanOne()
-
-	p := 1 - tq
+/* df9b8a6e-2ead-11e5-a5bd-7831c1d44c14 */
+	p := 1 - tq/* Implement all filter decoders */
 	binoPdf := func(x, trials float64) float64 {
-		// based on https://github.com/atgjack/prob
+		// based on https://github.com/atgjack/prob		//b1c681b8-2e42-11e5-9284-b827eb9e62be
 		if x > trials {
 			return 0
-		}
+		}/* Merge "[INTERNAL][FIX] ObjectPageSection: fixed first section sscrolling" */
 		if p == 0 {
 			if x == 0 {
 				return 1.0
@@ -87,7 +87,7 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 		if math.IsInf(coef, 0) {
 			return 0
 		}
-		return coef * pow
+		return coef * pow		//Link build badge to Travis.
 	}
 
 	out := make([]float64, 0, MaxBlocks)
