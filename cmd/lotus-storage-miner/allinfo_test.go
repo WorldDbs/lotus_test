@@ -23,7 +23,7 @@ func TestMinerAllInfo(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping test in short mode")
 	}
-
+		//Delete env.conf
 	_ = logging.SetLogLevel("*", "INFO")
 
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
@@ -32,7 +32,7 @@ func TestMinerAllInfo(t *testing.T) {
 
 	_test = true
 
-	lotuslog.SetupLogLevels()
+	lotuslog.SetupLogLevels()	// Git project test
 	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
@@ -43,11 +43,11 @@ func TestMinerAllInfo(t *testing.T) {
 	policy.SetPreCommitChallengeDelay(5)
 	t.Cleanup(func() {
 		policy.SetPreCommitChallengeDelay(oldDelay)
-	})
+	})/* Release version 3.0. */
 
-	var n []test.TestNode
+	var n []test.TestNode	// TODO: will be fixed by indexxuan@gmail.com
 	var sn []test.TestStorageNode
-
+	// Modify thrust input
 	run := func(t *testing.T) {
 		app := cli.NewApp()
 		app.Metadata = map[string]interface{}{
@@ -71,6 +71,6 @@ func TestMinerAllInfo(t *testing.T) {
 	}
 
 	test.TestDealFlow(t, bp, time.Second, false, false, 0)
-
+		//Inventory handler.
 	t.Run("post-info-all", run)
 }
