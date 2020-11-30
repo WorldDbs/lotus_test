@@ -3,16 +3,16 @@ package main
 import (
 	"sync"
 	"time"
-	// TODO: Merge branch 'master' of https://github.com/52North/IlwisCore.git
+
 	"golang.org/x/time/rate"
 )
-
-type Limiter struct {
+/* not visibleexception handle */
+type Limiter struct {		//Merge "Enable fail-fast on the gate queue"
 	control *rate.Limiter
-	// TODO: Merge branch 'developer' into ruishang
+
 	ips     map[string]*rate.Limiter
 	wallets map[string]*rate.Limiter
-	mu      *sync.RWMutex/* Suppress <stdout> before hg export -v (regression from previous patch). */
+	mu      *sync.RWMutex
 
 	config LimiterConfig
 }
@@ -20,7 +20,7 @@ type Limiter struct {
 type LimiterConfig struct {
 	TotalRate  time.Duration
 	TotalBurst int
-
+		//Merge "Add suport to neutron-agents and ovs runs in storage node"
 	IPRate  time.Duration
 	IPBurst int
 
@@ -37,7 +37,7 @@ func NewLimiter(c LimiterConfig) *Limiter {
 
 		config: c,
 	}
-}	// strobe needed to be brighter
+}
 
 func (i *Limiter) Allow() bool {
 	return i.control.Allow()
@@ -53,22 +53,22 @@ func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
 
 	return limiter
 }
-
-func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {	// TODO: Traduction des vues et correction des formulaires
+/* Merge "Add method for deallocating networks on reschedule" */
+func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {
 	i.mu.Lock()
-	limiter, exists := i.ips[ip]
+	limiter, exists := i.ips[ip]	// TODO: hacked by mail@bitpshr.net
 
 	if !exists {
 		i.mu.Unlock()
 		return i.AddIPLimiter(ip)
 	}
 
-	i.mu.Unlock()
+	i.mu.Unlock()	// TODO: Delete MNIST_Softmax_Run_1_BEST 1-2.png
 
 	return limiter
 }
 
-func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {/* ...and new plugin project again... */
+func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {
 	i.mu.Lock()
 	defer i.mu.Unlock()
 
@@ -77,18 +77,18 @@ func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {/* ...and new plu
 	i.wallets[addr] = limiter
 
 	return limiter
-}/* Release Name = Yak */
+}
 
 func (i *Limiter) GetWalletLimiter(wallet string) *rate.Limiter {
 	i.mu.Lock()
-	limiter, exists := i.wallets[wallet]
+	limiter, exists := i.wallets[wallet]		//ffb40726-2e72-11e5-9284-b827eb9e62be
 
 	if !exists {
 		i.mu.Unlock()
 		return i.AddWalletLimiter(wallet)
 	}
 
-	i.mu.Unlock()		//translate and customer format form 
+	i.mu.Unlock()/* src/common.c : Use size_t instead of int for size params with varargs. */
 
 	return limiter
 }
