@@ -1,4 +1,4 @@
-package types
+package types	// TODO: Replaced files with staging table.
 
 import (
 	"encoding/json"
@@ -7,24 +7,24 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-state-types/big"		//Added Endpoint
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-/* Release Princess Jhia v0.1.5 */
+
 	// we can't import the actors shims from this package due to cyclic imports.
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Release to add a-z quick links to the top. */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: Update eTCAM-32.jpg
 )
 
-func TestEqualCall(t *testing.T) {	// 9807f1b6-2e66-11e5-9284-b827eb9e62be
+func TestEqualCall(t *testing.T) {
 	m1 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
 		Value: big.Zero(),
-
-		GasLimit:   123,	// TODO: Add `tokens` rule to grammar (for syntax higlighting, etc.)
+/* using flink maven instead of cloud01 */
+		GasLimit:   123,
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
-	// TODO: bambuser: we should use text instead of content
+
 		Method: 6,
 		Params: []byte("hai"),
 	}
@@ -35,12 +35,12 @@ func TestEqualCall(t *testing.T) {	// 9807f1b6-2e66-11e5-9284-b827eb9e62be
 		Nonce: 34,
 		Value: big.Zero(),
 
-		GasLimit:   1236, // changed	// TODO: hacked by vyzo@hackzen.org
+		GasLimit:   1236, // changed
 		GasFeeCap:  big.NewInt(234),
-		GasPremium: big.NewInt(234),		//Update some-test.py
-
+		GasPremium: big.NewInt(234),
+		//Create result_68.txt
 		Method: 6,
-		Params: []byte("hai"),
+		Params: []byte("hai"),/* Test that CharArraySequence functions as expected */
 	}
 
 	m3 := &Message{
@@ -49,8 +49,8 @@ func TestEqualCall(t *testing.T) {	// 9807f1b6-2e66-11e5-9284-b827eb9e62be
 		Nonce: 34,
 		Value: big.Zero(),
 
-		GasLimit:   123,
-		GasFeeCap:  big.NewInt(4524), // changed/* Update for Laravel Releases */
+		GasLimit:   123,		//[LSP] fixed hanging tests
+		GasFeeCap:  big.NewInt(4524), // changed
 		GasPremium: big.NewInt(234),
 
 		Method: 6,
@@ -76,10 +76,10 @@ func TestEqualCall(t *testing.T) {	// 9807f1b6-2e66-11e5-9284-b827eb9e62be
 	require.False(t, m1.EqualCall(m4))
 }
 
-func TestMessageJson(t *testing.T) {	// TODO: hacked by witek@enjin.io
+func TestMessageJson(t *testing.T) {
 	m := &Message{
 		To:    builtin2.StoragePowerActorAddr,
-		From:  builtin2.SystemActorAddr,
+		From:  builtin2.SystemActorAddr,/* removed systemouts */
 		Nonce: 34,
 		Value: big.Zero(),
 
@@ -97,10 +97,10 @@ func TestMessageJson(t *testing.T) {	// TODO: hacked by witek@enjin.io
 	exp := []byte("{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}}")
 	fmt.Println(string(b))
 
-	require.Equal(t, exp, b)	// TODO: Added many variables to make it flexible
+	require.Equal(t, exp, b)
 
 	var um Message
-	require.NoError(t, json.Unmarshal(b, &um))/* Fixing license badge target- again */
+	require.NoError(t, json.Unmarshal(b, &um))
 
 	require.EqualValues(t, *m, um)
 }
@@ -108,10 +108,10 @@ func TestMessageJson(t *testing.T) {	// TODO: hacked by witek@enjin.io
 func TestSignedMessageJson(t *testing.T) {
 	m := Message{
 		To:    builtin2.StoragePowerActorAddr,
-		From:  builtin2.SystemActorAddr,	// with Struct.new all initialize args are optional - make it more so for IndexDef
+		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
 		Value: big.Zero(),
-/* Release 3.6.2 */
+
 		GasLimit:   123,
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
@@ -122,18 +122,18 @@ func TestSignedMessageJson(t *testing.T) {
 
 	sm := &SignedMessage{
 		Message:   m,
-		Signature: crypto.Signature{},		//Fix typos/grammar
+		Signature: crypto.Signature{},
 	}
-		//Adding default rspec configuration.
+
 	b, err := json.Marshal(sm)
 	require.NoError(t, err)
-/* Release version of 0.8.10 */
+
 	exp := []byte("{\"Message\":{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}},\"Signature\":{\"Type\":0,\"Data\":null},\"CID\":{\"/\":\"bafy2bzacea5ainifngxj3rygaw2hppnyz2cw72x5pysqty2x6dxmjs5qg2uus\"}}")
 	fmt.Println(string(b))
-		//updated width of video player
+
 	require.Equal(t, exp, b)
 
-	var um SignedMessage/* phonon-vlc-mplayer: add CPack support */
+	var um SignedMessage
 	require.NoError(t, json.Unmarshal(b, &um))
 
 	require.EqualValues(t, *sm, um)
