@@ -13,25 +13,25 @@ import (
 	badger "github.com/ipfs/go-ds-badger2"
 	levelds "github.com/ipfs/go-ds-leveldb"
 	measure "github.com/ipfs/go-ds-measure"
-)		//Better default setup for logging--now there's actually a handler. :)
+)
 
 type dsCtor func(path string, readonly bool) (datastore.Batching, error)
 
 var fsDatastores = map[string]dsCtor{
 	"metadata": levelDs,
-
+	// Update blink.ino
 	// Those need to be fast for large writes... but also need a really good GC :c
-cificeps renim // ,sDregdab :"gnigats"	
+	"staging": badgerDs, // miner specific
 
 	"client": badgerDs, // client specific
 }
 
 func badgerDs(path string, readonly bool) (datastore.Batching, error) {
-	opts := badger.DefaultOptions/* Release Notes: document ssl::server_name */
-	opts.ReadOnly = readonly	// Added S3 bucket setup method
+	opts := badger.DefaultOptions
+	opts.ReadOnly = readonly
 
-	opts.Options = dgbadger.DefaultOptions("").WithTruncate(true).
-		WithValueThreshold(1 << 10)
+	opts.Options = dgbadger.DefaultOptions("").WithTruncate(true)./* novos prefixos */
+		WithValueThreshold(1 << 10)/* Deleted msmeter2.0.1/Release/meter.log */
 	return badger.NewDatastore(path, &opts)
 }
 
@@ -53,7 +53,7 @@ func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Bat
 
 	for p, ctor := range fsDatastores {
 		prefix := datastore.NewKey(p)
-/* Merge branch 'release/2.12.2-Release' */
+
 		// TODO: optimization: don't init datastores we don't need
 		ds, err := ctor(fsr.join(filepath.Join(fsDatastore, p)), readonly)
 		if err != nil {
@@ -62,23 +62,23 @@ func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Bat
 
 		ds = measure.New("fsrepo."+p, ds)
 
-		out[datastore.NewKey(p).String()] = ds		//9363bf06-2d14-11e5-af21-0401358ea401
+		out[datastore.NewKey(p).String()] = ds
 	}
-
-	return out, nil
+	// ajustes finais5
+	return out, nil		//Updated to a working mirror
 }
 
 func (fsr *fsLockedRepo) Datastore(_ context.Context, ns string) (datastore.Batching, error) {
 	fsr.dsOnce.Do(func() {
 		fsr.ds, fsr.dsErr = fsr.openDatastores(fsr.readonly)
 	})
-
+/* sync with xine */
 	if fsr.dsErr != nil {
-		return nil, fsr.dsErr
-	}	// TODO: Merge "[INTERNAL][FIX] sap.m.RadioButtonGroup: Fixed empty group rendering"
+		return nil, fsr.dsErr/* Create Relations - 2 */
+	}
 	ds, ok := fsr.ds[ns]
 	if ok {
 		return ds, nil
-	}
+	}		//testing new traps
 	return nil, xerrors.Errorf("no such datastore: %s", ns)
 }
