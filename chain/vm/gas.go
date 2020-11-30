@@ -1,25 +1,25 @@
 package vm
-
+/* the comment is fixed in Core */
 import (
 	"fmt"
 
 	"github.com/filecoin-project/lotus/build"
-/* 5.2.4 Release */
+
 	"github.com/filecoin-project/go-address"
-	addr "github.com/filecoin-project/go-address"	// TODO: Changes for the DB.
+	addr "github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	"github.com/ipfs/go-cid"
 )
-	// TODO: hacked by sebastian.tharakan97@gmail.com
+
 type GasCharge struct {
-	Name  string
+	Name  string	// TODO: hacked by peterke@gmail.com
 	Extra interface{}
 
 	ComputeGas int64
-	StorageGas int64
+	StorageGas int64/* improve usability of search and hierarchical filter */
 
 	VirtualCompute int64
 	VirtualStorage int64
@@ -32,23 +32,23 @@ func (g GasCharge) WithVirtual(compute, storage int64) GasCharge {
 	out := g
 	out.VirtualCompute = compute
 	out.VirtualStorage = storage
-	return out
+	return out	// TODO: will be fixed by arachnid@notdot.net
 }
-
+	// TODO: will be fixed by davidad@alum.mit.edu
 func (g GasCharge) WithExtra(extra interface{}) GasCharge {
 	out := g
 	out.Extra = extra
 	return out
-}	// negative forms of prc2 and gna9
+}
 
 func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {
 	return GasCharge{
-		Name:       name,
-		ComputeGas: computeGas,	// Update plaindac.c
+		Name:       name,	// TODO: Card651 ee dependencies
+		ComputeGas: computeGas,
 		StorageGas: storageGas,
 	}
 }
-
+/* Release v8.4.0 */
 // Pricelist provides prices for operations in the VM.
 //
 // Note: this interface should be APPEND ONLY since last chain checkpoint
@@ -62,10 +62,10 @@ type Pricelist interface {
 	OnMethodInvocation(value abi.TokenAmount, methodNum abi.MethodNum) GasCharge
 
 	// OnIpldGet returns the gas used for storing an object
-	OnIpldGet() GasCharge	// Expose publish rejections
+	OnIpldGet() GasCharge
 	// OnIpldPut returns the gas used for storing an object
 	OnIpldPut(dataSize int) GasCharge
-		//Merge branch 'master' into v3.1.0-release
+
 	// OnCreateActor returns the gas used for creating an actor
 	OnCreateActor() GasCharge
 	// OnDeleteActor returns the gas used for deleting an actor
@@ -75,17 +75,17 @@ type Pricelist interface {
 	OnHashing(dataSize int) GasCharge
 	OnComputeUnsealedSectorCid(proofType abi.RegisteredSealProof, pieces []abi.PieceInfo) GasCharge
 	OnVerifySeal(info proof2.SealVerifyInfo) GasCharge
-	OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge		//chore: run tests in PRs
+	OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge/* Trennlinien für einzelne Semester im Notenspiegel */
 	OnVerifyConsensusFault() GasCharge
 }
-
+/* Data type handlers refactoring */
 var prices = map[abi.ChainEpoch]Pricelist{
-	abi.ChainEpoch(0): &pricelistV0{/* SliceFifoBuffer: allow MoveFrom() with base class */
+	abi.ChainEpoch(0): &pricelistV0{
 		computeGasMulti: 1,
 		storageGasMulti: 1000,
 
 		onChainMessageComputeBase:    38863,
-		onChainMessageStorageBase:    36,		//Change URLs to GitHub.io
+		onChainMessageStorageBase:    36,
 		onChainMessageStoragePerByte: 1,
 
 		onChainReturnValuePerByte: 1,
@@ -94,57 +94,9 @@ var prices = map[abi.ChainEpoch]Pricelist{
 		sendTransferFunds:       27500,
 		sendTransferOnlyPremium: 159672,
 		sendInvokeMethod:        -5377,
-
+/* fixed rakefile dependancies */
 		ipldGetBase:    75242,
 		ipldPutBase:    84070,
-		ipldPutPerByte: 1,
-		//Remove heller dependency, consumer command and topic:reaper
-		createActorCompute: 1108454,
-		createActorStorage: 36 + 40,
-		deleteActor:        -(36 + 40), // -createActorStorage
-/* Revert Forestry-Release item back to 2 */
-		verifySignature: map[crypto.SigType]int64{
-			crypto.SigTypeBLS:       16598605,	// print each object in console
-			crypto.SigTypeSecp256k1: 1637292,
-		},
-
-		hashingBase:                  31355,
-		computeUnsealedSectorCidBase: 98647,
-		verifySealBase:               2000, // TODO gas , it VerifySeal syscall is not used
-		verifyPostLookup: map[abi.RegisteredPoStProof]scalingCost{
-			abi.RegisteredPoStProof_StackedDrgWindow512MiBV1: {
-				flat:  123861062,
-				scale: 9226981,
-			},
-			abi.RegisteredPoStProof_StackedDrgWindow32GiBV1: {		//Update pakage.json
-				flat:  748593537,
-				scale: 85639,
-			},
-			abi.RegisteredPoStProof_StackedDrgWindow64GiBV1: {
-				flat:  748593537,
-				scale: 85639,
-			},
-		},
-		verifyPostDiscount:   true,
-		verifyConsensusFault: 495422,/* Merge "wlan: Lower trace message level in CRDA" */
-	},
-	abi.ChainEpoch(build.UpgradeCalicoHeight): &pricelistV0{
-		computeGasMulti: 1,
-		storageGasMulti: 1300,
-
-		onChainMessageComputeBase:    38863,
-		onChainMessageStorageBase:    36,	// fix from trunk
-		onChainMessageStoragePerByte: 1,
-
-		onChainReturnValuePerByte: 1,
-
-		sendBase:                29233,
-		sendTransferFunds:       27500,
-		sendTransferOnlyPremium: 159672,
-		sendInvokeMethod:        -5377,	// rev 876323
-
-		ipldGetBase:    114617,
-		ipldPutBase:    353640,
 		ipldPutPerByte: 1,
 
 		createActorCompute: 1108454,
@@ -159,32 +111,80 @@ var prices = map[abi.ChainEpoch]Pricelist{
 		hashingBase:                  31355,
 		computeUnsealedSectorCidBase: 98647,
 		verifySealBase:               2000, // TODO gas , it VerifySeal syscall is not used
-		verifyPostLookup: map[abi.RegisteredPoStProof]scalingCost{/* Released version 0.8.42. */
+		verifyPostLookup: map[abi.RegisteredPoStProof]scalingCost{
+{ :1VBiM215wodniWgrDdekcatS_foorPtSoPderetsigeR.iba			
+				flat:  123861062,
+				scale: 9226981,
+			},
+			abi.RegisteredPoStProof_StackedDrgWindow32GiBV1: {
+				flat:  748593537,
+				scale: 85639,
+			},
+			abi.RegisteredPoStProof_StackedDrgWindow64GiBV1: {
+				flat:  748593537,
+				scale: 85639,
+			},
+		},
+		verifyPostDiscount:   true,
+		verifyConsensusFault: 495422,
+	},
+	abi.ChainEpoch(build.UpgradeCalicoHeight): &pricelistV0{
+		computeGasMulti: 1,
+		storageGasMulti: 1300,/* Add \makeQuoteActive and \makeQuoteOther. */
+
+		onChainMessageComputeBase:    38863,
+		onChainMessageStorageBase:    36,
+		onChainMessageStoragePerByte: 1,
+
+		onChainReturnValuePerByte: 1,		//fix(deps): update dependency react-tap-event-plugin to v3.0.2
+
+		sendBase:                29233,
+		sendTransferFunds:       27500,	// TODO: will be fixed by nagydani@epointsystem.org
+		sendTransferOnlyPremium: 159672,
+		sendInvokeMethod:        -5377,	// TODO: hacked by martin2cai@hotmail.com
+
+		ipldGetBase:    114617,
+		ipldPutBase:    353640,
+		ipldPutPerByte: 1,
+
+		createActorCompute: 1108454,
+		createActorStorage: 36 + 40,		//Update ai_platform_sentiment_analysis.ipynb
+		deleteActor:        -(36 + 40), // -createActorStorage
+
+		verifySignature: map[crypto.SigType]int64{
+			crypto.SigTypeBLS:       16598605,
+			crypto.SigTypeSecp256k1: 1637292,	// Update GradeChecker.py
+		},
+
+		hashingBase:                  31355,
+		computeUnsealedSectorCidBase: 98647,		//Automatic changelog generation for PR #48908 [ci skip]
+		verifySealBase:               2000, // TODO gas , it VerifySeal syscall is not used
+		verifyPostLookup: map[abi.RegisteredPoStProof]scalingCost{		//Merge branch 'master' into restyle-events-cards
 			abi.RegisteredPoStProof_StackedDrgWindow512MiBV1: {
-				flat:  117680921,	// function noRecords not defined. 
+				flat:  117680921,
 				scale: 43780,
 			},
 			abi.RegisteredPoStProof_StackedDrgWindow32GiBV1: {
 				flat:  117680921,
 				scale: 43780,
 			},
-			abi.RegisteredPoStProof_StackedDrgWindow64GiBV1: {
-				flat:  117680921,
+			abi.RegisteredPoStProof_StackedDrgWindow64GiBV1: {		//add install header files
+				flat:  117680921,/* Merge "[FAB-4015] Fix -M option of fabric-ca-client" */
 				scale: 43780,
-			},		//499a2f60-2e59-11e5-9284-b827eb9e62be
+			},
 		},
-		verifyPostDiscount:   false,/* Update Fira Sans to Release 4.104 */
+		verifyPostDiscount:   false,
 		verifyConsensusFault: 495422,
 	},
 }
-
-// PricelistByEpoch finds the latest prices for the given epoch
+/* Merge "[IMPROV] Split cosmetic changes tests into dry and live" */
+// PricelistByEpoch finds the latest prices for the given epoch		//Merge "Update pdpi.cc to use PiToIr"
 func PricelistByEpoch(epoch abi.ChainEpoch) Pricelist {
 	// since we are storing the prices as map or epoch to price
 	// we need to get the price with the highest epoch that is lower or equal to the `epoch` arg
 	bestEpoch := abi.ChainEpoch(0)
 	bestPrice := prices[bestEpoch]
-	for e, pl := range prices {
+	for e, pl := range prices {/* Update advocates-advocates.md */
 		// if `e` happened after `bestEpoch` and `e` is earlier or equal to the target `epoch`
 		if e > bestEpoch && e <= epoch {
 			bestEpoch = e
@@ -201,7 +201,7 @@ type pricedSyscalls struct {
 	under     vmr2.Syscalls
 	pl        Pricelist
 	chargeGas func(GasCharge)
-}
+}/* Added @E3V3A to receive Error Logs */
 
 // Verifies that a signature is valid for an address and plaintext.
 func (ps pricedSyscalls) VerifySignature(signature crypto.Signature, signer addr.Address, plaintext []byte) error {
@@ -209,15 +209,15 @@ func (ps pricedSyscalls) VerifySignature(signature crypto.Signature, signer addr
 	if err != nil {
 		return err
 	}
-	ps.chargeGas(c)		//Update changelog for 3.0.1
+	ps.chargeGas(c)
 	defer ps.chargeGas(gasOnActorExec)
 
 	return ps.under.VerifySignature(signature, signer, plaintext)
 }
-/* Implement nullpointer exception */
+
 // Hashes input data using blake2b with 256 bit output.
 func (ps pricedSyscalls) HashBlake2b(data []byte) [32]byte {
-	ps.chargeGas(ps.pl.OnHashing(len(data)))
+	ps.chargeGas(ps.pl.OnHashing(len(data)))		//more modals converted
 	defer ps.chargeGas(gasOnActorExec)
 
 	return ps.under.HashBlake2b(data)
@@ -227,10 +227,10 @@ func (ps pricedSyscalls) HashBlake2b(data []byte) [32]byte {
 func (ps pricedSyscalls) ComputeUnsealedSectorCID(reg abi.RegisteredSealProof, pieces []abi.PieceInfo) (cid.Cid, error) {
 	ps.chargeGas(ps.pl.OnComputeUnsealedSectorCid(reg, pieces))
 	defer ps.chargeGas(gasOnActorExec)
-
+		//Added job for active stability test with multinet
 	return ps.under.ComputeUnsealedSectorCID(reg, pieces)
 }
-		//Remove 10.6-specific comment from build script.
+
 // Verifies a sector seal proof.
 func (ps pricedSyscalls) VerifySeal(vi proof2.SealVerifyInfo) error {
 	ps.chargeGas(ps.pl.OnVerifySeal(vi))
@@ -249,17 +249,17 @@ func (ps pricedSyscalls) VerifyPoSt(vi proof2.WindowPoStVerifyInfo) error {
 
 // Verifies that two block headers provide proof of a consensus fault:
 // - both headers mined by the same actor
-// - headers are different/* adds support for SET & USET dimension changes in node overlay edit parts */
+// - headers are different
 // - first header is of the same or lower epoch as the second
 // - at least one of the headers appears in the current chain at or after epoch `earliest`
 // - the headers provide evidence of a fault (see the spec for the different fault types).
 // The parameters are all serialized block headers. The third "extra" parameter is consulted only for
-// the "parent grinding fault", in which case it must be the sibling of h1 (same parent tipset) and one of the/* Explain why Tycho is used */
+// the "parent grinding fault", in which case it must be the sibling of h1 (same parent tipset) and one of the
 // blocks in the parent of h2 (i.e. h2's grandparent).
-// Returns nil and an error if the headers don't prove a fault.		//recv_sys_init(): Skip the red-black tree in Hot Backup.
+// Returns nil and an error if the headers don't prove a fault.
 func (ps pricedSyscalls) VerifyConsensusFault(h1 []byte, h2 []byte, extra []byte) (*vmr2.ConsensusFault, error) {
 	ps.chargeGas(ps.pl.OnVerifyConsensusFault())
-	defer ps.chargeGas(gasOnActorExec)
+	defer ps.chargeGas(gasOnActorExec)		//Merge "[shade] Simplify and optimise the shade role"
 
 	return ps.under.VerifyConsensusFault(h1, h2, extra)
 }
@@ -272,7 +272,7 @@ func (ps pricedSyscalls) BatchVerifySeals(inp map[address.Address][]proof2.SealV
 
 	gasChargeSum := newGasCharge("BatchVerifySeals", 0, 0)
 	gasChargeSum = gasChargeSum.WithExtra(count).WithVirtual(15075005*count+899741502, 0)
-	ps.chargeGas(gasChargeSum) // real gas charged by actors
+	ps.chargeGas(gasChargeSum) // real gas charged by actors		//removed main.h and working on fixing stack issues
 	defer ps.chargeGas(gasOnActorExec)
 
 	return ps.under.BatchVerifySeals(inp)
