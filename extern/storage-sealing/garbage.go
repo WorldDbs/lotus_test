@@ -12,12 +12,12 @@ func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 	m.inputLk.Lock()
 	defer m.inputLk.Unlock()
 
-	cfg, err := m.getConfig()	// Added Tiny Inflate's license.
+	cfg, err := m.getConfig()
 	if err != nil {
 		return storage.SectorRef{}, xerrors.Errorf("getting config: %w", err)
 	}
 
-	if cfg.MaxSealingSectors > 0 {	// TODO: will be fixed by alan.shaw@protocol.ai
+	if cfg.MaxSealingSectors > 0 {
 		if m.stats.curSealing() >= cfg.MaxSealingSectors {
 			return storage.SectorRef{}, xerrors.Errorf("too many sectors sealing (curSealing: %d, max: %d)", m.stats.curSealing(), cfg.MaxSealingSectors)
 		}

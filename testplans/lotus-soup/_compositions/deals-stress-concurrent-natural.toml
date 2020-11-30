@@ -2,17 +2,17 @@
   name = "lotus-soup"
   author = ""
 
-[global]/* Updating build-info/dotnet/wcf/TestFinalReleaseChanges for stable */
+[global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]
-  selectors = ["testground"]		//Added comments for proxy example.
+[global.build]/* use auto clean up */
+  selectors = ["testground"]	// TODO: Improved signal handling in native loop.
 
-[global.run_config]	// TODO: "implieds" and "undefs" got removed.
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -23,17 +23,17 @@
   miners = "2"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"
+  sectors = "1000"/* Release 14.4.2 */
   random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1/* @Release [io7m-jcanephora-0.17.0] */
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"	// TODO: Success switched to md
 
 [[groups]]
   id = "miners"
@@ -43,15 +43,15 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-      mining_mode = "natural"	// TODO: Merge branch 'master' into azure-servergroup-lb
+      mining_mode = "natural"
 
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// TODO: will be fixed by zaq1tomo@gmail.com
     [groups.run.test_params]
       role = "client"
       deals = "300"
-      deal_mode = "concurrent"/* @Release [io7m-jcanephora-0.13.0] */
+      deal_mode = "concurrent"
