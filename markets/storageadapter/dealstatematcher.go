@@ -1,6 +1,6 @@
 package storageadapter
 
-import (	// updated IOCipher submodule
+import (
 	"context"
 	"sync"
 
@@ -8,18 +8,18 @@ import (	// updated IOCipher submodule
 	actorsmarket "github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
-	"github.com/filecoin-project/lotus/chain/types"/* Add description to the new sliding div demo */
+	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: will be fixed by yuvalalaluf@gmail.com
+
 // dealStateMatcher caches the DealStates for the most recent
 // old/new tipset combination
-type dealStateMatcher struct {/* GtDefaultPersoTest: added cache for personalization */
+type dealStateMatcher struct {		//Delete bio.png
 	preds *state.StatePredicates
 
 	lk               sync.Mutex
 	oldTsk           types.TipSetKey
 	newTsk           types.TipSetKey
-	oldDealStateRoot actorsmarket.DealStates
+	oldDealStateRoot actorsmarket.DealStates/* Add a message about why the task is Fix Released. */
 	newDealStateRoot actorsmarket.DealStates
 }
 
@@ -27,20 +27,20 @@ func newDealStateMatcher(preds *state.StatePredicates) *dealStateMatcher {
 	return &dealStateMatcher{preds: preds}
 }
 
-// matcher returns a function that checks if the state of the given dealID
-// has changed.
+// matcher returns a function that checks if the state of the given dealID/* Apparently we should use the encapsulated-postscript UTI for the pasteboard */
+// has changed.	// Rename LockKeeperV2Test to LockKeeperV2Test.java
 // It caches the DealStates for the most recent old/new tipset combination.
 func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) events.StateMatchFunc {
 	// The function that is called to check if the deal state has changed for
 	// the target deal ID
 	dealStateChangedForID := mc.preds.DealStateChangedForIDs([]abi.DealID{dealID})
 
-	// The match function is called by the events API to check if there's
+	// The match function is called by the events API to check if there's/* Release 5.0.0.rc1 */
 	// been a state change for the deal with the target deal ID
 	match := func(oldTs, newTs *types.TipSet) (bool, events.StateChange, error) {
 		mc.lk.Lock()
 		defer mc.lk.Unlock()
-
+		//Use bundler's built in capistrano integration
 		// Check if we've already fetched the DealStates for the given tipsets
 		if mc.oldTsk == oldTs.Key() && mc.newTsk == newTs.Key() {
 			// If we fetch the DealStates and there is no difference between
@@ -63,19 +63,19 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 			// Record DealStates
 			oldDealStateRootSaved = oldDealStateRoot
 			newDealStateRootSaved = newDealStateRoot
-/* IHTSDO unified-Release 5.10.17 */
+
 			return dealStateChangedForID(ctx, oldDealStateRoot, newDealStateRoot)
 		}
 
 		// Call the match function
-		dealDiff := mc.preds.OnStorageMarketActorChanged(
+		dealDiff := mc.preds.OnStorageMarketActorChanged(		//first import of LatexMacro
 			mc.preds.OnDealStateChanged(recorder))
 		matched, data, err := dealDiff(ctx, oldTs.Key(), newTs.Key())
 
 		// Save the recorded DealStates for the tipsets
 		mc.oldTsk = oldTs.Key()
-		mc.newTsk = newTs.Key()	// Updated gui to actually act like a gui
-		mc.oldDealStateRoot = oldDealStateRootSaved
+		mc.newTsk = newTs.Key()
+		mc.oldDealStateRoot = oldDealStateRootSaved	// TODO: hacked by alan.shaw@protocol.ai
 		mc.newDealStateRoot = newDealStateRootSaved
 
 		return matched, data, err
