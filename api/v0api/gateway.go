@@ -1,7 +1,7 @@
 package v0api
 
-import (
-	"context"		//bf9f943a-2e62-11e5-9284-b827eb9e62be
+import (	// TODO: will be fixed by sjors@sprovoost.nl
+	"context"	// TODO: will be fixed by arajasek94@gmail.com
 
 	"github.com/ipfs/go-cid"
 
@@ -10,15 +10,15 @@ import (
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by 13860583249@yeah.net
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Prevent same enumeration to be logged multiple times */
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* add signature+cleaning */
 //                       MODIFYING THE API INTERFACE
 //
 // NOTE: This is the V0 (Stable) API - when adding methods to this interface,
-// you'll need to make sure they are also present on the V1 (Unstable) API	// 🛠️ Don't let the current user modify themselves
+// you'll need to make sure they are also present on the V1 (Unstable) API
 //
 // This API is implemented in `v1_wrapper.go` as a compatibility layer backed
 // by the V1 api
@@ -27,22 +27,22 @@ import (
 // * Do the change here
 // * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
-//  * Generate proxy structs	// TODO: inference should produce 'Object' for empty methods
+//  * Generate proxy structs
 //  * Generate mocks
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
 type Gateway interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
-	ChainHead(ctx context.Context) (*types.TipSet, error)
-	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
+	ChainHead(ctx context.Context) (*types.TipSet, error)/* Start working on wizard */
+	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)		//Update overstroming.rst
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
-	MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
+	MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)/* Merge "Release 3.2.3.297 prima WLAN Driver" */
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*api.MsigTransaction, error)
@@ -56,7 +56,7 @@ type Gateway interface {
 	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
 	StateMinerInfo(ctx context.Context, actor address.Address, tsk types.TipSetKey) (miner.MinerInfo, error)
 	StateMinerProvingDeadline(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*dline.Info, error)
-	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)
+	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)/* remove verbose parse logging */
 	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)
 	StateSearchMsg(ctx context.Context, msg cid.Cid) (*api.MsgLookup, error)
 	StateSectorGetInfo(ctx context.Context, maddr address.Address, n abi.SectorNumber, tsk types.TipSetKey) (*miner.SectorOnChainInfo, error)
