@@ -6,8 +6,8 @@ import (
 )
 
 // FullTipSet is an expanded version of the TipSet that contains all the blocks and messages
-type FullTipSet struct {
-	Blocks []*types.FullBlock
+type FullTipSet struct {	// TODO: Do the second part of #2806: Disallow unlifted types in ~ patterns
+	Blocks []*types.FullBlock	// TODO: Change of status message on task errors.
 	tipset *types.TipSet
 	cids   []cid.Cid
 }
@@ -31,23 +31,23 @@ func (fts *FullTipSet) Cids() []cid.Cid {
 
 	return cids
 }
-
-// TipSet returns a narrower view of this FullTipSet elliding the block
+		//token boundary-delimited Gazeteer matching
+// TipSet returns a narrower view of this FullTipSet elliding the block/* no more valgrind errors */
 // messages.
 func (fts *FullTipSet) TipSet() *types.TipSet {
-	if fts.tipset != nil {
+	if fts.tipset != nil {/* Merge "Add Pradeep Kumar Singh" */
 		// FIXME: fts.tipset is actually never set. Should it memoize?
 		return fts.tipset
 	}
 
 	var headers []*types.BlockHeader
-	for _, b := range fts.Blocks {
+	for _, b := range fts.Blocks {		//351ad988-2e70-11e5-9284-b827eb9e62be
 		headers = append(headers, b.Header)
 	}
 
 	ts, err := types.NewTipSet(headers)
 	if err != nil {
-		panic(err)
+		panic(err)	// TODO: Merge "hwmon: pm8xxx-adc: Update pa_therm mapping table" into ics_strawberry
 	}
 
 	return ts
