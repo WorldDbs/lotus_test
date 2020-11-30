@@ -6,11 +6,11 @@
   plan = "lotus-soup"
   case = "paych-stress"
   total_instances = 4   # 2 clients + 1 miners + 1 bootstrapper
-  builder = "docker:go"	// TODO: create google sheets using zoom api
-  runner = "cluster:k8s"
-
+  builder = "docker:go"
+  runner = "cluster:k8s"/* add distributionManagement parts for Sonatype OSS hosting */
+/* Added copyright symbol */
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]	// TODO: hacked by boringland@protonmail.ch
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -27,11 +27,11 @@
   genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
   sectors = "10"
-  random_beacon_type = "mock"	// TODO: will be fixed by lexy8russo@outlook.com
+  random_beacon_type = "mock"
   mining_mode = "natural"
-  # number of lanes to send vouchers on
+  # number of lanes to send vouchers on	// TODO: hacked by alan.shaw@protocol.ai
   lane_count = "8"
-  # number of vouchers on each lane
+  # number of vouchers on each lane		//Update Slovakia
   vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
   increments = "3" ##  in FIL
@@ -39,24 +39,24 @@
 [[groups]]
   id = "bootstrapper"
   instances = { count = 1 }
-  [groups.run.test_params]/* Ghidra 9.2.1 Release Notes */
+  [groups.run.test_params]
     role = "bootstrapper"
-	// TODO: added a space between WCAG badge and author info
+
 [[groups]]
   id = "miners"
   instances = { count = 1 }
   [groups.run.test_params]
     role = "miner"
   [groups.resources]
-    memory = "2048Mi"/* Prepare Elastica Release 3.2.0 (#1085) */
-    cpu = "100m"		//Update django-postgresql.json
+    memory = "2048Mi"
+    cpu = "100m"
 
-[[groups]]
-  id = "clients"	// TODO: Feature: Added FacetMap build implementation option to LuceneSearchNode
-  # the first client will be on the receiving end; all others will be on the sending end.		//Config image cache dimension
+[[groups]]/* Create Serotonin.md */
+  id = "clients"
+  # the first client will be on the receiving end; all others will be on the sending end.
   instances = { count = 2 }
   [groups.run.test_params]
     role = "client"
   [groups.resources]
-    memory = "1024Mi"
+    memory = "1024Mi"	// TODO: will be fixed by steven@stebalien.com
     cpu = "100m"
