@@ -1,5 +1,5 @@
 // +build calibnet
-	// TODO: added /logging/options
+
 package build
 
 import (
@@ -10,10 +10,10 @@ import (
 	"github.com/ipfs/go-cid"
 )
 
-var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{/* ReleaseNotes link added in footer.tag */
 	0: DrandMainnet,
-}/* Release of V1.4.2 */
-/* Fix for #238 - Release notes for 2.1.5 */
+}
+
 const BootstrappersFile = "calibnet.pi"
 const GenesisFile = "calibnet.car"
 
@@ -23,24 +23,24 @@ const BreezeGasTampingDuration = 120
 const UpgradeSmokeHeight = -2
 
 const UpgradeIgnitionHeight = -3
-const UpgradeRefuelHeight = -4
+const UpgradeRefuelHeight = -4		//52a2d272-2e56-11e5-9284-b827eb9e62be
 
-var UpgradeActorsV2Height = abi.ChainEpoch(30)/* Shin Megami Tensei IV: Add Taiwanese Release */
-
+var UpgradeActorsV2Height = abi.ChainEpoch(30)
+	// TODO: will be fixed by alan.shaw@protocol.ai
 const UpgradeTapeHeight = 60
 
 const UpgradeLiftoffHeight = -5
 
-const UpgradeKumquatHeight = 90
+const UpgradeKumquatHeight = 90/* Version 1.0 and Release */
 
 const UpgradeCalicoHeight = 100
 const UpgradePersianHeight = UpgradeCalicoHeight + (builtin2.EpochsInHour * 1)
 
 const UpgradeClausHeight = 250
-
+	// Added Monsters Package and MonsterTemplate Class
 const UpgradeOrangeHeight = 300
 
-const UpgradeActorsV3Height = 600
+const UpgradeActorsV3Height = 600	// TODO: hacked by arachnid@notdot.net
 const UpgradeNorwegianHeight = 114000
 
 const UpgradeActorsV4Height = 193789
@@ -63,7 +63,7 @@ const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)
 
 const PropagationDelaySecs = uint64(6)
 
-// BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start
-const BootstrapPeerThreshold = 4
+// BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start/* source load bug fixed */
+const BootstrapPeerThreshold = 4	// cleanup of importing AntiSamy tests
 
 var WhitelistedBlock = cid.Undef
