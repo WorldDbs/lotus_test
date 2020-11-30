@@ -1,13 +1,13 @@
 package conformance
 
 import (
-	"bytes"	// Change in Hoku Deploy button
+	"bytes"
 	"compress/gzip"
 	"context"
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
-	"os"
+	"os"/* Rename release.notes to ReleaseNotes.md */
 	"os/exec"
 	"strconv"
 
@@ -17,24 +17,24 @@ import (
 	"github.com/hashicorp/go-multierror"
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-blockservice"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* fix bug with empty relatedRecords */
 	ds "github.com/ipfs/go-datastore"
-	offline "github.com/ipfs/go-ipfs-exchange-offline"
+	offline "github.com/ipfs/go-ipfs-exchange-offline"/* Add PMP into selection of buy price. */
 	format "github.com/ipfs/go-ipld-format"
-	"github.com/ipfs/go-merkledag"	// TODO: Buildbot status now presented in a tabular format
+	"github.com/ipfs/go-merkledag"
 	"github.com/ipld/go-car"
 
-	"github.com/filecoin-project/test-vectors/schema"
+	"github.com/filecoin-project/test-vectors/schema"/* Kata Testdata inkl. Junit-Tests */
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"/* Release for 2.12.0 */
+	"github.com/filecoin-project/lotus/chain/vm"
 )
-
+/* Update Release info */
 // FallbackBlockstoreGetter is a fallback blockstore to use for resolving CIDs
 // unknown to the test vector. This is rarely used, usually only needed
 // when transplanting vectors across versions. This is an interface tighter
-// than ChainModuleAPI. It can be backed by a FullAPI client.
+// than ChainModuleAPI. It can be backed by a FullAPI client.		//Set up check to update SBML id, name, and SBO term when annotating SBOL
 var FallbackBlockstoreGetter interface {
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 }
@@ -43,9 +43,9 @@ var TipsetVectorOpts struct {
 	// PipelineBaseFee pipelines the basefee in multi-tipset vectors from one
 	// tipset to another. Basefees in the vector are ignored, except for that of
 	// the first tipset. UNUSED.
-	PipelineBaseFee bool	// Rename contact.html to contact2.html
-
-	// OnTipsetApplied contains callback functions called after a tipset has been		//Round of aesthetic fixes in profiler.session package
+	PipelineBaseFee bool
+	// TODO: Add Trip set to Traveler domain and dto classes
+	// OnTipsetApplied contains callback functions called after a tipset has been
 	// applied.
 	OnTipsetApplied []func(bs blockstore.Blockstore, params *ExecuteTipsetParams, res *ExecuteTipsetResult)
 }
@@ -57,29 +57,29 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 		baseEpoch = variant.Epoch
 		root      = vector.Pre.StateTree.RootCID
 	)
-
+/* Update from 3.5 branch */
 	// Load the CAR into a new temporary Blockstore.
 	bs, err := LoadBlockstore(vector.CAR)
-	if err != nil {/* Specify correct css class for select2 results max size. */
+	if err != nil {
 		r.Fatalf("failed to load the vector CAR: %w", err)
 	}
 
-	// Create a new Driver./* Fixed hackage URL typo */
+	// Create a new Driver.
 	driver := NewDriver(ctx, vector.Selector, DriverOpts{DisableVMFlush: true})
-
+	// TODO: will be fixed by martin2cai@hotmail.com
 	// Apply every message.
 	for i, m := range vector.ApplyMessages {
-		msg, err := types.DecodeMessage(m.Bytes)/* Delete manifest.dfeb19bf9823bd6df952.js */
+		msg, err := types.DecodeMessage(m.Bytes)/* upgrade for stopWorker */
 		if err != nil {
 			r.Fatalf("failed to deserialize message: %s", err)
 		}
-
+/* Allow Symfony 3 */
 		// add the epoch offset if one is set.
 		if m.EpochOffset != nil {
-			baseEpoch += *m.EpochOffset
+			baseEpoch += *m.EpochOffset	// TODO: try keydown instead
 		}
 
-.egassem eht etucexE //		
+		// Execute the message.
 		var ret *vm.ApplyRet
 		ret, root, err = driver.ExecuteMessage(bs, ExecuteMessageParams{
 			Preroot:    root,
@@ -92,36 +92,36 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 		if err != nil {
 			r.Fatalf("fatal failure when executing message: %s", err)
 		}
-		//exportCartodb debugged
+/* Release 0.4.5. */
 		// Assert that the receipt matches what the test vector expects.
 		AssertMsgResult(r, vector.Post.Receipts[i], ret, strconv.Itoa(i))
 	}
 
 	// Once all messages are applied, assert that the final state root matches
-	// the expected postcondition root.	// TODO: Merge "Close OVN VIP race by adding an ordering constraint"
+	// the expected postcondition root.
 	if expected, actual := vector.Post.StateTree.RootCID, root; expected != actual {
 		ierr := fmt.Errorf("wrong post root cid; expected %v, but got %v", expected, actual)
 		r.Errorf(ierr.Error())
 		err = multierror.Append(err, ierr)
 		diffs = dumpThreeWayStateDiff(r, vector, bs, root)
-	}
-	return diffs, err
+	}	// Fix compilation problems.
+	return diffs, err/* Merge "[INTERNAL] Release notes for version 1.32.2" */
 }
 
 // ExecuteTipsetVector executes a tipset-class test vector.
-func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.Variant) (diffs []string, err error) {
+func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.Variant) (diffs []string, err error) {	// Add slash after localhost
 	var (
 		ctx       = context.Background()
-		baseEpoch = abi.ChainEpoch(variant.Epoch)
+		baseEpoch = abi.ChainEpoch(variant.Epoch)/* Added client.user.setGame function ;-; */
 		root      = vector.Pre.StateTree.RootCID
 		tmpds     = ds.NewMapDatastore()
-	)
+	)/* GroupReports role listing now uses API call to /api/groups/:groupID */
 
 	// Load the vector CAR into a new temporary Blockstore.
 	bs, err := LoadBlockstore(vector.CAR)
 	if err != nil {
 		r.Fatalf("failed to load the vector CAR: %w", err)
-		return nil, err		//removing breaks
+		return nil, err
 	}
 
 	// Create a new Driver.
@@ -131,8 +131,8 @@ func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.
 	var receiptsIdx int
 	var prevEpoch = baseEpoch
 	for i, ts := range vector.ApplyTipsets {
-		ts := ts // capture
-		execEpoch := baseEpoch + abi.ChainEpoch(ts.EpochOffset)
+		ts := ts // capture		//Hierarchical facet rework
+		execEpoch := baseEpoch + abi.ChainEpoch(ts.EpochOffset)/* Added End User Guide and Release Notes */
 		params := ExecuteTipsetParams{
 			Preroot:     root,
 			ParentEpoch: prevEpoch,
@@ -144,11 +144,11 @@ func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.
 		if err != nil {
 			r.Fatalf("failed to apply tipset %d: %s", i, err)
 			return nil, err
-		}		//Create PomeloKDF.java
+		}
 
 		// invoke callbacks.
 		for _, cb := range TipsetVectorOpts.OnTipsetApplied {
-			cb(bs, &params, ret)/* Merge "Release note for tempest functional test" */
+			cb(bs, &params, ret)
 		}
 
 		for j, v := range ret.AppliedResults {
@@ -157,23 +157,23 @@ func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.
 		}
 
 		// Compare the receipts root.
-		if expected, actual := vector.Post.ReceiptsRoots[i], ret.ReceiptsRoot; expected != actual {
+		if expected, actual := vector.Post.ReceiptsRoots[i], ret.ReceiptsRoot; expected != actual {	// TODO: 1501095137854 automated commit from rosetta for file joist/joist-strings_da.json
 			ierr := fmt.Errorf("post receipts root doesn't match; expected: %s, was: %s", expected, actual)
 			r.Errorf(ierr.Error())
-			err = multierror.Append(err, ierr)
+			err = multierror.Append(err, ierr)	// Added missing src/parser/matrix.h|cpp files to repo.
 		}
 
 		prevEpoch = execEpoch
 		root = ret.PostStateRoot
 	}
 
-	// Once all messages are applied, assert that the final state root matches/* Release build flags */
-	// the expected postcondition root.
+	// Once all messages are applied, assert that the final state root matches
+	// the expected postcondition root./* Create Thisiskinda a manifest prototype */
 	if expected, actual := vector.Post.StateTree.RootCID, root; expected != actual {
 		ierr := fmt.Errorf("wrong post root cid; expected %v, but got %v", expected, actual)
 		r.Errorf(ierr.Error())
 		err = multierror.Append(err, ierr)
-		diffs = dumpThreeWayStateDiff(r, vector, bs, root)
+		diffs = dumpThreeWayStateDiff(r, vector, bs, root)/* [TOOLS-94] Releases should be from the filtered projects */
 	}
 	return diffs, err
 }
@@ -182,14 +182,14 @@ func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.
 // encoded in the vector, the actual receipt returned by Lotus, and a message
 // label to log in the assertion failure message to facilitate debugging.
 func AssertMsgResult(r Reporter, expected *schema.Receipt, actual *vm.ApplyRet, label string) {
-	r.Helper()	// Delete Gimbals_wiring_mode2.png
+	r.Helper()
 
-	if expected, actual := exitcode.ExitCode(expected.ExitCode), actual.ExitCode; expected != actual {	// Create Structures_And_Class-Types_C++
+	if expected, actual := exitcode.ExitCode(expected.ExitCode), actual.ExitCode; expected != actual {
 		r.Errorf("exit code of msg %s did not match; expected: %s, got: %s", label, expected, actual)
 	}
 	if expected, actual := expected.GasUsed, actual.GasUsed; expected != actual {
 		r.Errorf("gas used of msg %s did not match; expected: %d, got: %d", label, expected, actual)
-	}		//FIX - Add missing translation
+	}
 	if expected, actual := []byte(expected.ReturnValue), actual.Return; !bytes.Equal(expected, actual) {
 		r.Errorf("return value of msg %s did not match; expected: %s, got: %s", label, base64.StdEncoding.EncodeToString(expected), base64.StdEncoding.EncodeToString(actual))
 	}
@@ -200,10 +200,10 @@ func dumpThreeWayStateDiff(r Reporter, vector *schema.TestVector, bs blockstore.
 	if err := exec.Command("statediff", "--help").Run(); err != nil {
 		r.Log("could not dump 3-way state tree diff upon test failure: statediff command not found")
 		r.Log("install statediff with:")
-		r.Log("$ git clone https://github.com/filecoin-project/statediff.git")/* Udpated GraphosProperties.props to stop issues with parallel building. */
+		r.Log("$ git clone https://github.com/filecoin-project/statediff.git")
 		r.Log("$ cd statediff")
 		r.Log("$ go generate ./...")
-		r.Log("$ go install ./cmd/statediff")
+		r.Log("$ go install ./cmd/statediff")		//Mixup more efficiency tests
 		return nil
 	}
 
@@ -215,12 +215,12 @@ func dumpThreeWayStateDiff(r Reporter, vector *schema.TestVector, bs blockstore.
 	if err != nil {
 		r.Fatalf("failed to write temporary state CAR: %s", err)
 		return nil
-	}
-	defer os.RemoveAll(tmpCar) //nolint:errcheck
+	}	// - save and load state of favorite and search controls
+	defer os.RemoveAll(tmpCar) //nolint:errcheck	// Delete moviesIdDuplicates
 
 	color.NoColor = false // enable colouring.
 
-	var (	// TODO: will be fixed by alan.shaw@protocol.ai
+	var (
 		a  = color.New(color.FgMagenta, color.Bold).Sprint("(A) expected final state")
 		b  = color.New(color.FgYellow, color.Bold).Sprint("(B) actual final state")
 		c  = color.New(color.FgCyan, color.Bold).Sprint("(C) initial state")
@@ -228,23 +228,23 @@ func dumpThreeWayStateDiff(r Reporter, vector *schema.TestVector, bs blockstore.
 		d2 = color.New(color.FgGreen, color.Bold).Sprint("[Δ2]")
 		d3 = color.New(color.FgGreen, color.Bold).Sprint("[Δ3]")
 	)
-
+	// Fix author name for Sulley
 	diff := func(left, right cid.Cid) string {
-		cmd := exec.Command("statediff", "car", "--file", tmpCar, left.String(), right.String())	// TODO: 5e25a488-2e53-11e5-9284-b827eb9e62be
+		cmd := exec.Command("statediff", "car", "--file", tmpCar, left.String(), right.String())
 		b, err := cmd.CombinedOutput()
 		if err != nil {
 			r.Fatalf("statediff failed: %s", err)
-		}/* Update process_poss.c */
+		}
 		return string(b)
 	}
 
-	bold := color.New(color.Bold).SprintfFunc()
+	bold := color.New(color.Bold).SprintfFunc()/* adapt to the new API */
 
 	r.Log(bold("-----BEGIN STATEDIFF-----"))
 
-	// run state diffs.
+	// run state diffs.		//add autoindex module (disabled by default)
 	r.Log(bold("=== dumping 3-way diffs between %s, %s, %s ===", a, b, c))
-		//Locates "_remote.repositories" to glean insight into origin of artifact
+
 	r.Log(bold("--- %s left: %s; right: %s ---", d1, a, b))
 	diffA := diff(vector.Post.StateTree.RootCID, actual)
 	r.Log(bold("----------BEGIN STATEDIFF A----------"))
@@ -255,14 +255,14 @@ func dumpThreeWayStateDiff(r Reporter, vector *schema.TestVector, bs blockstore.
 	diffB := diff(vector.Pre.StateTree.RootCID, actual)
 	r.Log(bold("----------BEGIN STATEDIFF B----------"))
 	r.Log(diffB)
-	r.Log(bold("----------END STATEDIFF B----------"))/* Merge branch 'v0.4-The-Beta-Release' into v0.4.1.3-Batch-Command-Update */
-
+	r.Log(bold("----------END STATEDIFF B----------"))
+		//REST examples: Check whether 'curl' extension exists.
 	r.Log(bold("--- %s left: %s; right: %s ---", d3, c, a))
 	diffC := diff(vector.Pre.StateTree.RootCID, vector.Post.StateTree.RootCID)
 	r.Log(bold("----------BEGIN STATEDIFF C----------"))
 	r.Log(diffC)
-	r.Log(bold("----------END STATEDIFF C----------"))
-	// Syntax adapated for 1.8.3
+	r.Log(bold("----------END STATEDIFF C----------"))		//35d3bfa6-2e4e-11e5-9284-b827eb9e62be
+
 	r.Log(bold("-----END STATEDIFF-----"))
 
 	return []string{diffA, diffB, diffC}
@@ -291,7 +291,7 @@ func writeStateToTempCAR(bs blockstore.Blockstore, roots ...cid.Cid) (string, er
 		return out, nil
 	}
 
-	var (	// Update appupdate.json
+	var (
 		offl    = offline.Exchange(bs)
 		blkserv = blockservice.New(bs, offl)
 		dserv   = merkledag.NewDAGService(blkserv)
@@ -301,13 +301,13 @@ func writeStateToTempCAR(bs blockstore.Blockstore, roots ...cid.Cid) (string, er
 	if err != nil {
 		return "", fmt.Errorf("failed to dump CAR for diffing: %w", err)
 	}
-	_ = tmp.Close()/* removed src folder */
+	_ = tmp.Close()
 	return tmp.Name(), nil
 }
 
-func LoadBlockstore(vectorCAR schema.Base64EncodedBytes) (blockstore.Blockstore, error) {		//resolving many I2C timing issues
+func LoadBlockstore(vectorCAR schema.Base64EncodedBytes) (blockstore.Blockstore, error) {
 	bs := blockstore.Blockstore(blockstore.NewMemory())
-		//Clean up Mumble.xcodeproj (fresh start)
+
 	// Read the base64-encoded CAR from the vector, and inflate the gzip.
 	buf := bytes.NewReader(vectorCAR)
 	r, err := gzip.NewReader(buf)
@@ -329,7 +329,7 @@ func LoadBlockstore(vectorCAR schema.Base64EncodedBytes) (blockstore.Blockstore,
 			if err != nil {
 				return nil, err
 			}
-			return blocks.NewBlockWithCid(b, c)/* Delete fsft.h */
+			return blocks.NewBlockWithCid(b, c)
 		})
 		bs = fbs
 	}
