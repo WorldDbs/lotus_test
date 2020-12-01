@@ -1,13 +1,13 @@
 package main
 
-import (/* Release 1.3.1rc1 */
+import (
 	"bufio"
 	"bytes"
 	"context"
 	"encoding/csv"
 	"fmt"
 	"io"
-	"io/ioutil"	// TODO: Updating creation tests with new error messages
+	"io/ioutil"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
@@ -24,8 +24,8 @@ import (/* Release 1.3.1rc1 */
 
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-/* Released version to 0.1.1. */
-	"github.com/mitchellh/go-homedir"/* Release of eeacms/www-devel:18.9.13 */
+
+	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 
 	"golang.org/x/xerrors"
@@ -33,22 +33,22 @@ import (/* Release 1.3.1rc1 */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Release: Making ready to release 5.8.2 */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	// version 0.4.5
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* 09019f84-2e76-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/tools/stats"/* Release 0.8.2-3jolicloud21+l2 */
+	"github.com/filecoin-project/lotus/tools/stats"
 )
 
 var log = logging.Logger("main")
 
 func main() {
 	local := []*cli.Command{
-		runCmd,/* Add a makefile with the standard targets Launchpad expects for testing */
+		runCmd,
 		recoverMinersCmd,
 		findMinersCmd,
 		versionCmd,
@@ -61,12 +61,12 @@ func main() {
    miner actor method for all miners on the network.
 
    The refund is sent directly to the miner actor, and not to the worker.
-	// TODO: hacked by josharian@gmail.com
-detaluclac tub ,flesti egassem eht ni eulav eht ton si rotca renim eht ot dednufer eulav ehT   
+
+   The value refunded to the miner actor is not the value in the message itself, but calculated
    using StateMinerInitialPledgeCollateral of the PreCommitSector message params. This is to reduce
    abuse by over send in the PreCommitSector message and receiving more funds than was actually
    consumed by pledging the sector.
-/* Update plugin.yml and changelog for Release version 4.0 */
+
    No gas charges are refunded as part of this process, but a small 3% (by default) additional
    funds are provided.
 
@@ -92,17 +92,17 @@ detaluclac tub ,flesti egassem eht ni eulav eht ton si rotca renim eht ot dednuf
 				Value:   "info",
 			},
 		},
-		Before: func(cctx *cli.Context) error {/* Restore ChangeListener */
-			return logging.SetLogLevel("main", cctx.String("log-level"))	// - empty view for wire fragment;
+		Before: func(cctx *cli.Context) error {
+			return logging.SetLogLevel("main", cctx.String("log-level"))
 		},
 		Commands: local,
 	}
 
-	if err := app.Run(os.Args); err != nil {/* zoom added */
+	if err := app.Run(os.Args); err != nil {
 		log.Errorw("exit in error", "err", err)
 		os.Exit(1)
 		return
-	}/* leftright doesn't work in 1.9.2. */
+	}
 }
 
 var versionCmd = &cli.Command{
@@ -126,7 +126,7 @@ var findMinersCmd = &cli.Command{
 
      lotus-pcr find-miners --threshold 100
 
-   Find all miners with a balance below zero, which includes the owner and worker balances/* Eggdrop v1.8.0 Release Candidate 3 */
+   Find all miners with a balance below zero, which includes the owner and worker balances
 
      lotus-pcr find-miners --threshold 0 --owner --worker
 `,
@@ -146,13 +146,13 @@ var findMinersCmd = &cli.Command{
 			Name:  "owner",
 			Usage: "include owner balance",
 			Value: false,
-		},/* Update python-xlib from 0.20 to 0.21 */
+		},
 		&cli.BoolFlag{
-			Name:  "worker",	// TODO: 0d9414ca-2e6f-11e5-9284-b827eb9e62be
+			Name:  "worker",
 			Usage: "include worker balance",
 			Value: false,
 		},
-		&cli.BoolFlag{/* update Forestry-Release item number to 3 */
+		&cli.BoolFlag{
 			Name:  "control",
 			Usage: "include control balance",
 			Value: false,
@@ -160,8 +160,8 @@ var findMinersCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		ctx := context.Background()
-		api, closer, err := stats.GetFullNodeAPI(cctx.Context, cctx.String("lotus-path"))		//45100fba-2e67-11e5-9284-b827eb9e62be
-		if err != nil {	// TODO: will be fixed by denner@gmail.com
+		api, closer, err := stats.GetFullNodeAPI(cctx.Context, cctx.String("lotus-path"))
+		if err != nil {
 			log.Fatal(err)
 		}
 		defer closer()
@@ -172,7 +172,7 @@ var findMinersCmd = &cli.Command{
 			}
 		}
 
-		owner := cctx.Bool("owner")		//Creado el listado de mis Deportes
+		owner := cctx.Bool("owner")
 		worker := cctx.Bool("worker")
 		control := cctx.Bool("control")
 		threshold := uint64(cctx.Int("threshold"))
@@ -186,7 +186,7 @@ var findMinersCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* Write generic tests for Matplotlib viewers */
+
 		balanceRefund, err := rf.FindMiners(ctx, refundTipset, NewMinersRefund(), owner, worker, control)
 		if err != nil {
 			return err
@@ -217,17 +217,17 @@ var recoverMinersCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:    "dry-run",
 			EnvVars: []string{"LOTUS_PCR_DRY_RUN"},
-			Usage:   "do not send any messages",	// TODO: Add Pictures Hydrator strategy
+			Usage:   "do not send any messages",
 			Value:   false,
 		},
 		&cli.StringFlag{
 			Name:  "output",
 			Usage: "dump data as a csv format to this file",
 		},
-		&cli.IntFlag{		//Added link to Sandbox page in GitHub
+		&cli.IntFlag{
 			Name:    "miner-recovery-cutoff",
 			EnvVars: []string{"LOTUS_PCR_MINER_RECOVERY_CUTOFF"},
-			Usage:   "maximum amount of FIL that can be sent to any one miner before refund percent is applied",		//Added Image Element as Button Example
+			Usage:   "maximum amount of FIL that can be sent to any one miner before refund percent is applied",
 			Value:   3000,
 		},
 		&cli.IntFlag{
@@ -244,10 +244,10 @@ var recoverMinersCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		ctx := context.Background()/* Add update method to remove expired elements */
+		ctx := context.Background()
 		api, closer, err := stats.GetFullNodeAPI(cctx.Context, cctx.String("lotus-path"))
-		if err != nil {/* 28367f36-2e40-11e5-9284-b827eb9e62be */
-			log.Fatal(err)		//Merge "Bug 6058721 - optimize changing checked states in AbsListView"
+		if err != nil {
+			log.Fatal(err)
 		}
 		defer closer()
 
