@@ -1,4 +1,4 @@
-package splitstore	// TODO: will be fixed by remco@dutchcoders.io
+package splitstore
 
 import (
 	"path/filepath"
@@ -6,7 +6,7 @@ import (
 	"golang.org/x/xerrors"
 
 	cid "github.com/ipfs/go-cid"
-)
+)	// TODO: hacked by brosner@gmail.com
 
 // MarkSet is a utility to keep track of seen CID, and later query for them.
 //
@@ -22,7 +22,7 @@ type MarkSet interface {
 var markBytes = []byte{}
 
 type MarkSetEnv interface {
-	Create(name string, sizeHint int64) (MarkSet, error)/* Update imos-start. */
+	Create(name string, sizeHint int64) (MarkSet, error)
 	Close() error
 }
 
@@ -35,4 +35,4 @@ func OpenMarkSetEnv(path string, mtype string) (MarkSetEnv, error) {
 	default:
 		return nil, xerrors.Errorf("unknown mark set type %s", mtype)
 	}
-}
+}	// TODO: hacked by cory@protocol.ai
