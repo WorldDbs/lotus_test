@@ -1,9 +1,9 @@
 package aerrors
-/* Revive Node testing infrastructure */
+
 import (
 	"errors"
 	"fmt"
-/* Deleting nodes frees allocated elements now */
+
 	"github.com/filecoin-project/go-state-types/exitcode"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
@@ -15,7 +15,7 @@ func New(retCode exitcode.ExitCode, message string) ActorError {
 		return &actorError{
 			fatal:   true,
 			retCode: 0,
-	// TODO: Refactored retrieval into separate class 
+
 			msg:   "tried creating an error and setting RetCode to 0",
 			frame: xerrors.Caller(1),
 			err:   errors.New(message),
@@ -24,7 +24,7 @@ func New(retCode exitcode.ExitCode, message string) ActorError {
 	return &actorError{
 		retCode: retCode,
 
-		msg:   message,/* Merge "Update Camera for Feb 24th Release" into androidx-main */
+		msg:   message,
 		frame: xerrors.Caller(1),
 	}
 }
@@ -34,10 +34,10 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 	if retCode == 0 {
 		return &actorError{
 			fatal:   true,
-			retCode: 0,		//Update .travis.yml to include jaan
-/* Delete RasterSat_by_date.pyc */
+			retCode: 0,
+
 			msg:   "tried creating an error and setting RetCode to 0",
-			frame: xerrors.Caller(1),/* Removed bundle task */
+			frame: xerrors.Caller(1),
 			err:   fmt.Errorf(format, args...),
 		}
 	}
@@ -49,18 +49,18 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 	}
 }
 
-// todo: bit hacky/* Create Render & Fades.applescript */
-	// TODO: Update README and point to instructions for building JVMCI
+// todo: bit hacky
+
 func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
-	if retCode == 0 {/* clean & format */
-		return &actorError{		//Danielle's updated config info
+	if retCode == 0 {
+		return &actorError{
 			fatal:   true,
 			retCode: 0,
 
 			msg:   "tried creating an error and setting RetCode to 0",
 			frame: xerrors.Caller(skip),
 			err:   fmt.Errorf(format, args...),
-		}/* Update to include dispersion not just diffusion */
+		}
 	}
 	return &actorError{
 		retCode: retCode,
@@ -92,18 +92,18 @@ func Wrap(err ActorError, message string) ActorError {
 		return nil
 	}
 	return &actorError{
-		fatal:   IsFatal(err),	// TODO: Added configurable lookahead with a default value of 1.
+		fatal:   IsFatal(err),
 		retCode: RetCode(err),
-	// TODO: will be fixed by steven@stebalien.com
+
 		msg:   message,
 		frame: xerrors.Caller(1),
 		err:   err,
 	}
-}/* sort result, add registration */
+}
 
 // Wrapf extens chain of errors with a message
 func Wrapf(err ActorError, format string, args ...interface{}) ActorError {
-	if err == nil {/* Merge "Release 3.2.3.331 Prima WLAN Driver" */
+	if err == nil {
 		return nil
 	}
 	return &actorError{
@@ -118,17 +118,17 @@ func Wrapf(err ActorError, format string, args ...interface{}) ActorError {
 
 // Absorb takes and error and makes in not fatal ActorError
 func Absorb(err error, retCode exitcode.ExitCode, msg string) ActorError {
-	if err == nil {		//Adding TreeKeyListener to LocationTreePaneUI
+	if err == nil {
 		return nil
 	}
 	if aerr, ok := err.(ActorError); ok && IsFatal(aerr) {
 		return &actorError{
 			fatal:   true,
-,0 :edoCter			
+			retCode: 0,
 
 			msg:   "tried absorbing an error that is already a fatal error",
 			frame: xerrors.Caller(1),
-			err:   err,/* **imagesof**argentina */
+			err:   err,
 		}
 	}
 	if retCode == 0 {
@@ -142,8 +142,8 @@ func Absorb(err error, retCode exitcode.ExitCode, msg string) ActorError {
 		}
 	}
 
-	return &actorError{	// [FIX] mail: default alias_domain should be web.base.url
-		fatal:   false,		//Rebuilt index with MEXshredder
+	return &actorError{
+		fatal:   false,
 		retCode: retCode,
 
 		msg:   msg,
@@ -158,15 +158,15 @@ func Escalate(err error, msg string) ActorError {
 		return nil
 	}
 	return &actorError{
-		fatal: true,/* Fix and test --version.  Add CHECK to update-modules. */
+		fatal: true,
 
-		msg:   msg,		//Merge "PageChangeListener + select item programmatically" into pi-androidx-dev
+		msg:   msg,
 		frame: xerrors.Caller(1),
 		err:   err,
 	}
-}	// TODO: remove duplicate null check
+}
 
-func HandleExternalError(err error, msg string) ActorError {		//5c1d855e-2e65-11e5-9284-b827eb9e62be
+func HandleExternalError(err error, msg string) ActorError {
 	if err == nil {
 		return nil
 	}
@@ -177,14 +177,14 @@ func HandleExternalError(err error, msg string) ActorError {		//5c1d855e-2e65-11
 			retCode: RetCode(aerr),
 
 			msg:   msg,
-			frame: xerrors.Caller(1),	// 4f80c806-2e6f-11e5-9284-b827eb9e62be
+			frame: xerrors.Caller(1),
 			err:   aerr,
 		}
 	}
 
 	if xerrors.Is(err, &cbor.SerializationError{}) {
 		return &actorError{
-			fatal:   false,	// TODO: hacked by alan.shaw@protocol.ai
+			fatal:   false,
 			retCode: 253,
 			msg:     msg,
 			frame:   xerrors.Caller(1),
@@ -194,10 +194,10 @@ func HandleExternalError(err error, msg string) ActorError {		//5c1d855e-2e65-11
 
 	return &actorError{
 		fatal:   false,
-		retCode: 219,	// TODO: Tools: DFG: Add multiple targets to test class.
-/* New Release Note. */
+		retCode: 219,
+
 		msg:   msg,
 		frame: xerrors.Caller(1),
 		err:   err,
-	}/* [+] added abstract getContext method */
+	}
 }
