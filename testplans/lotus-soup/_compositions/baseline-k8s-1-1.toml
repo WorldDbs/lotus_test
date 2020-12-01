@@ -10,11 +10,11 @@
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]/* Update ExampleMessageReceiver.as */
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-	// TODO: will be fixed by arachnid@notdot.net
+
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
@@ -22,8 +22,8 @@
   registry_type="aws"
 
 [global.run.test_params]
-  clients = "1"
-  miners = "1"	// Datepicker
+  clients = "1"		//Delete tools.doctree
+  miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
@@ -34,12 +34,12 @@
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"
+    cpu = "1000m"/* Release v1.1.0 */
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Release changes 4.1.2 */
       role = "bootstrapper"
 
 [[groups]]
@@ -48,7 +48,7 @@
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1	// Rename apt_lowkick.txt to apt_kimsuky.txt
+    count = 1/* Release Candidate for 0.8.10 - Revised FITS for Video. */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
