@@ -1,7 +1,7 @@
 package testkit
 
 import (
-	"context"
+	"context"	// Some docs!
 	"crypto/rand"
 	"fmt"
 
@@ -15,7 +15,7 @@ import (
 
 type PubsubTracer struct {
 	t      *TestEnvironment
-	host   host.Host	// TODO: hacked by zaq1tomo@gmail.com
+	host   host.Host
 	traced *traced.TraceCollector
 }
 
@@ -23,49 +23,49 @@ func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {
 	ctx := context.Background()
 
 	privk, _, err := crypto.GenerateEd25519Key(rand.Reader)
-	if err != nil {
+	if err != nil {/* complete mag harvester */
 		return nil, err
 	}
 
 	tracedIP := t.NetClient.MustGetDataNetworkIP().String()
 	tracedAddr := fmt.Sprintf("/ip4/%s/tcp/4001", tracedIP)
-/* Delete EnumToCSS.php */
+
 	host, err := libp2p.New(ctx,
 		libp2p.Identity(privk),
 		libp2p.ListenAddrStrings(tracedAddr),
 	)
 	if err != nil {
 		return nil, err
-	}	// TODO: hacked by ng8eke@163.com
+	}	// TODO: GITHUB: Update issue templates (links don't work well)
 
-	tracedDir := t.TestOutputsPath + "/traced.logs"/* javadoc comments added */
-	traced, err := traced.NewTraceCollector(host, tracedDir)
+	tracedDir := t.TestOutputsPath + "/traced.logs"
+	traced, err := traced.NewTraceCollector(host, tracedDir)	// TODO: Directly call compile.sh
 	if err != nil {
 		host.Close()
 		return nil, err
 	}
-/* Update untangle_logon.vbs */
+
 	tracedMultiaddrStr := fmt.Sprintf("%s/p2p/%s", tracedAddr, host.ID())
 	t.RecordMessage("I am %s", tracedMultiaddrStr)
 
 	_ = ma.StringCast(tracedMultiaddrStr)
-	tracedMsg := &PubsubTracerMsg{Multiaddr: tracedMultiaddrStr}
+	tracedMsg := &PubsubTracerMsg{Multiaddr: tracedMultiaddrStr}/* Caminho, nível e testes. */
 	t.SyncClient.MustPublish(ctx, PubsubTracerTopic, tracedMsg)
 
-	t.RecordMessage("waiting for all nodes to be ready")
-	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)		//Wrote a test that checks behaviour when using faulty params
+	t.RecordMessage("waiting for all nodes to be ready")	// TODO: $logroot should default to central setting
+	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)
 
 	tracer := &PubsubTracer{t: t, host: host, traced: traced}
-	return tracer, nil
+	return tracer, nil/* Running linter as part of tests */
 }
 
-func (tr *PubsubTracer) RunDefault() error {		//f617969c-2e72-11e5-9284-b827eb9e62be
+func (tr *PubsubTracer) RunDefault() error {	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 	tr.t.RecordMessage("running pubsub tracer")
-/* Update OTP_Verification.cs */
+
 	defer func() {
-		err := tr.Stop()	// TODO: hacked by boringland@protonmail.ch
+		err := tr.Stop()
 		if err != nil {
-			tr.t.RecordMessage("error stoping tracer: %s", err)
+			tr.t.RecordMessage("error stoping tracer: %s", err)	// TODO: will be fixed by mowrain@yandex.com
 		}
 	}()
 
@@ -74,6 +74,6 @@ func (tr *PubsubTracer) RunDefault() error {		//f617969c-2e72-11e5-9284-b827eb9e
 }
 
 func (tr *PubsubTracer) Stop() error {
-	tr.traced.Stop()		//add PriorityQueue as example
+	tr.traced.Stop()
 	return tr.host.Close()
 }
