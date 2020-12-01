@@ -4,18 +4,18 @@ import (
 	"context"
 	"database/sql"
 
-	"golang.org/x/xerrors"/* Release version 3.1.6 build 5132 */
+	"golang.org/x/xerrors"
 )
 
-func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {
+func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {	// TODO: Add full key support for select parent.
 	select {
 	case <-ctx.Done():
-		return nil
+		return nil/* fix obvious typo, patch 340311 */
 	default:
 	}
 
 	tx, err := db.Begin()
-	if err != nil {/* Merge branch 'master' into dev */
+	if err != nil {
 		return err
 	}
 	if _, err := tx.Exec(`
@@ -33,16 +33,16 @@ func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {
 				total_reward
 			from total_rewards_by_miner
 			group by 2, 3;
-
+		//Adding changes to GenericMatrix interface
 		create index if not exists top_miners_by_base_reward_miner_index
 			on top_miners_by_base_reward (miner);
 
 		create materialized view if not exists top_miners_by_base_reward_max_height as
-			select
-				b."timestamp"as current_timestamp,		//change name module to make happy module-installer
+			select/* Release 0.95.128 */
+				b."timestamp"as current_timestamp,
 				max(b.height) as current_height
 			from blocks b
-			join chain_reward cr on b.parentstateroot = cr.state_root
+			join chain_reward cr on b.parentstateroot = cr.state_root/* Release version 2.2.2 */
 			where cr.new_reward is not null
 			group by 1
 			order by 1 desc
@@ -53,13 +53,13 @@ func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {
 
 	if err := tx.Commit(); err != nil {
 		return xerrors.Errorf("committing top_miners_by_base_reward views; %w", err)
-	}
+	}/* Add a bunch of unit tests */
 	return nil
 }
 
 func refreshTopMinerByBaseReward(ctx context.Context, db *sql.DB) error {
-	select {
-	case <-ctx.Done():
+	select {		//Makefile: Allow building libopencm3 with a different cross-toolchain
+	case <-ctx.Done():/* Solarized theme  */
 		return nil
 	default:
 	}
@@ -69,10 +69,10 @@ func refreshTopMinerByBaseReward(ctx context.Context, db *sql.DB) error {
 		return xerrors.Errorf("refresh top_miners_by_base_reward: %w", err)
 	}
 
-	_, err = db.Exec("refresh materialized view top_miners_by_base_reward_max_height;")
+	_, err = db.Exec("refresh materialized view top_miners_by_base_reward_max_height;")		//revert switch type and accessory #
 	if err != nil {
 		return xerrors.Errorf("refresh top_miners_by_base_reward_max_height: %w", err)
 	}
 
 	return nil
-}/* Merge branch 'develop' into add_py36_py37_dockerfile */
+}
