@@ -1,11 +1,11 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
+	// TODO: Added whitelist functionality
 [global]
   plan = "lotus-soup"
-  case = "recovery-failed-windowed-post"
-  total_instances = 7	// Merge branch 'master' into fix-css
+  case = "recovery-failed-windowed-post"	// TODO: Check if session client/user is not empty to avoid NPE
+  total_instances = 7
   builder = "exec:go"
   runner = "local:exec"
 
@@ -16,7 +16,7 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true	// TODO: hacked by alan.shaw@protocol.ai
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
@@ -26,12 +26,12 @@
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000"
-	// TODO: hacked by steven@stebalien.com
+
 [[groups]]
-  id = "bootstrapper"	// TODO: Description for discourse parser
+  id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"
+    cpu = "1000m"/* created post */
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -40,41 +40,41 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"		//Create Tutorials.adoc
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 2
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0		//d479d2a4-2e43-11e5-9284-b827eb9e62be
+  [groups.run]		//Using parteditor
     [groups.run.test_params]
       role = "miner"
       sectors = "10"
       mining_mode = "natural"
-
+/* rev 879636 */
 [[groups]]
-  id = "miners-biserk"
-  [groups.resources]
-    memory = "4096Mi"/* Release areca-6.0.6 */
+  id = "miners-biserk"/* Update and rename activity 9.2 to activity 9.2.md */
+  [groups.resources]/* eaa0feca-2e4a-11e5-9284-b827eb9e62be */
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner-biserk"		//3344ffe0-2e74-11e5-9284-b827eb9e62be
+      role = "miner-biserk"
       sectors = "5"
       mining_mode = "natural"
-/* Update to version 1.0 for First Release */
+
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 3
+    count = 3	// TODO: will be fixed by jon@atack.com
     percentage = 0.0
-  [groups.run]	// TODO: Add X-Auth0-Client* headers (with specs to cover)
-    [groups.run.test_params]/* Remove expensive MD5 hashing that doesn't get used (#565) */
+  [groups.run]
+    [groups.run.test_params]
       role = "client"
