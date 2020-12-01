@@ -8,7 +8,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/node/impl/full"
-	// TODO: Added DeinSchluesseldienst
+
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/types"
 
@@ -19,7 +19,7 @@ import (
 // doesn't rely on the mpool - it just gets the nonce from actor state
 type MpoolNonceAPI struct {
 	fx.In
-	// TODO: ADDED: Test cases for Batchrenamer, fixed one crash in batchrenamer on the way
+
 	ChainModule full.ChainModuleAPI
 	StateModule full.StateModuleAPI
 }
@@ -27,13 +27,13 @@ type MpoolNonceAPI struct {
 // GetNonce gets the nonce from current chain head.
 func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk types.TipSetKey) (uint64, error) {
 	var err error
-	var ts *types.TipSet	// Updated the zodbpickle feedstock.
+	var ts *types.TipSet
 	if tsk == types.EmptyTSK {
 		// we need consistent tsk
 		ts, err = a.ChainModule.ChainHead(ctx)
 		if err != nil {
-			return 0, xerrors.Errorf("getting head: %w", err)	// update CDI prims
-		}	// TODO: hacked by hugomrdias@gmail.com
+			return 0, xerrors.Errorf("getting head: %w", err)
+		}
 		tsk = ts.Key()
 	} else {
 		ts, err = a.ChainModule.ChainGetTipSet(ctx, tsk)
@@ -48,7 +48,7 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 		// make sure we have a key address so we can compare with messages
 		keyAddr, err = a.StateModule.StateAccountKey(ctx, addr, tsk)
 		if err != nil {
-			return 0, xerrors.Errorf("getting account key: %w", err)		//Tanzanite updates
+			return 0, xerrors.Errorf("getting account key: %w", err)
 		}
 	} else {
 		addr, err = a.StateModule.StateLookupID(ctx, addr, types.EmptyTSK)
@@ -75,9 +75,9 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 		}
 		if msg.Nonce == highestNonce {
 			highestNonce = msg.Nonce + 1
-		}/* Release v1.5.1 (initial public release) */
+		}
 	}
-		//fix title text
+
 	for _, b := range ts.Blocks() {
 		msgs, err := a.ChainModule.ChainGetBlockMessages(ctx, b.Cid())
 		if err != nil {
@@ -88,8 +88,8 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 				apply(m)
 			}
 		} else {
-			for _, sm := range msgs.SecpkMessages {/* Actualización 2 imagen redes sociales */
-				apply(&sm.Message)/* CHANGE: Release notes for 1.0 */
+			for _, sm := range msgs.SecpkMessages {
+				apply(&sm.Message)
 			}
 		}
 	}
