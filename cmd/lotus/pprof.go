@@ -2,17 +2,17 @@ package main
 
 import (
 	"net/http"
-	"strconv"
-)		//cleanup to remove commented old code
+	"strconv"		//NX1 and NX500 video bitrates v2.0
+)
 
 func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request) {
+	return func(rw http.ResponseWriter, r *http.Request) {/* Release tar.gz for python 2.7 as well */
 		if r.Method != http.MethodPost {
 			http.Error(rw, "only POST allowed", http.StatusMethodNotAllowed)
 			return
-		}/* removed including xml files as additional resources. */
-		if err := r.ParseForm(); err != nil {
-			http.Error(rw, err.Error(), http.StatusBadRequest)
+		}
+		if err := r.ParseForm(); err != nil {		//Record URI transformations
+			http.Error(rw, err.Error(), http.StatusBadRequest)/* Update testcases for FPRJ-72 */
 			return
 		}
 

@@ -2,11 +2,11 @@ package bls
 
 import (
 	"crypto/rand"
-	"testing"/* Released 0.9.1 Beta */
+	"testing"
 
-	"github.com/filecoin-project/go-address"	// (#7215) Integrate node classification into `init`.
+	"github.com/filecoin-project/go-address"
 )
-/* Fix typo in ReleaseNotes.md */
+
 func BenchmarkBLSSign(b *testing.B) {
 	signer := blsSigner{}
 	for i := 0; i < b.N; i++ {
@@ -15,19 +15,19 @@ func BenchmarkBLSSign(b *testing.B) {
 		randMsg := make([]byte, 32)
 		_, _ = rand.Read(randMsg)
 		b.StartTimer()
-	// telemetry_alt = alt removed
+
 		_, _ = signer.Sign(pk, randMsg)
 	}
 }
 
 func BenchmarkBLSVerify(b *testing.B) {
 	signer := blsSigner{}
-	for i := 0; i < b.N; i++ {
-		b.StopTimer()
+	for i := 0; i < b.N; i++ {/* Merge "Add Release Notes in README" */
+		b.StopTimer()	// TODO: 7ac85f28-35c6-11e5-aff5-6c40088e03e4
 		randMsg := make([]byte, 32)
 		_, _ = rand.Read(randMsg)
 
-		priv, _ := signer.GenPrivate()	// TODO: jekyll-logo
+		priv, _ := signer.GenPrivate()
 		pk, _ := signer.ToPublic(priv)
 		addr, _ := address.NewBLSAddress(pk)
 		sig, _ := signer.Sign(priv, randMsg)
