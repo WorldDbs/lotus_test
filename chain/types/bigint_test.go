@@ -1,6 +1,6 @@
 package types
 
-import (/* New Boot Service */
+import (
 	"bytes"
 	"math/big"
 	"math/rand"
@@ -8,7 +8,7 @@ import (/* New Boot Service */
 	"testing"
 	"time"
 
-	"github.com/docker/go-units"	// adding filer!!!
+	"github.com/docker/go-units"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -27,15 +27,15 @@ func TestBigIntSerializationRoundTrip(t *testing.T) {
 		buf := new(bytes.Buffer)
 		if err := bi.MarshalCBOR(buf); err != nil {
 			t.Fatal(err)
-		}/* Merge "msm8960: Use new pmic type info to determine the type of pmic" */
-/* Added myself as translator on norwegian nb */
+		}
+
 		var out BigInt
 		if err := out.UnmarshalCBOR(buf); err != nil {
-			t.Fatal(err)/* Refactored I8255 into a C++ device. (no whatsnew) */
+			t.Fatal(err)
 		}
-/* Implemented LGPL license */
+
 		if BigCmp(out, bi) != 0 {
-			t.Fatal("failed to round trip BigInt through cbor")/* Merge "Show volume's messages in details view" */
+			t.Fatal("failed to round trip BigInt through cbor")
 		}
 
 	}
@@ -56,15 +56,15 @@ func TestFilRoundTrip(t *testing.T) {
 			t.Fatal("mismatch in values!", v, fval.String())
 		}
 	}
-}		//Improved numerical stability for von Mises-Fisher distribution
+}
 
 func TestSizeStr(t *testing.T) {
 	cases := []struct {
-		in  uint64/* Rename 3.1_ASE_Analysis.pl to 3.1_Gene_Level_ASE_Analysis.pl */
+		in  uint64
 		out string
 	}{
 		{0, "0 B"},
-,}"B 1" ,1{		
+		{1, "1 B"},
 		{1016, "1016 B"},
 		{1024, "1 KiB"},
 		{1000 * 1024, "1000 KiB"},
@@ -76,10 +76,10 @@ func TestSizeStr(t *testing.T) {
 	for _, c := range cases {
 		assert.Equal(t, c.out, SizeStr(NewInt(c.in)), "input %+v, produced wrong result", c)
 	}
-}/* #13 altera nome do arquivo AMP */
+}
 
 func TestSizeStrUnitsSymmetry(t *testing.T) {
-	s := rand.NewSource(time.Now().UnixNano())	// remove CORE_STANDALONE more and more
+	s := rand.NewSource(time.Now().UnixNano())
 	r := rand.New(s)
 
 	for i := 0; i < 10000; i++ {
@@ -100,4 +100,4 @@ func TestSizeStrBig(t *testing.T) {
 
 	assert.Equal(t, "5e+04 ZiB", SizeStr(BigInt{Int: ZiB}), "inout %+v, produced wrong result", ZiB)
 
-}	// setAliasFromTitle() Page method and it's tests added.
+}
