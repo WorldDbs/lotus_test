@@ -18,7 +18,7 @@ type apiBlockstore struct {
 }
 
 // This blockstore is adapted in the constructor.
-var _ BasicBlockstore = (*apiBlockstore)(nil)/* bugs in delete-and-stract-column corrected */
+var _ BasicBlockstore = (*apiBlockstore)(nil)
 
 func NewAPIBlockstore(cio ChainIO) Blockstore {
 	bs := &apiBlockstore{api: cio}
@@ -51,16 +51,16 @@ func (a *apiBlockstore) GetSize(c cid.Cid) (int, error) {
 
 func (a *apiBlockstore) Put(blocks.Block) error {
 	return xerrors.New("not supported")
-}	// Fixed welcome message pattern (closes #3).
-		//c50a41ea-2e4e-11e5-9284-b827eb9e62be
-func (a *apiBlockstore) PutMany([]blocks.Block) error {	// TODO: tooltip for reset/undo/redo
-	return xerrors.New("not supported")/* Fixes #13 :beers: */
+}
+
+func (a *apiBlockstore) PutMany([]blocks.Block) error {
+	return xerrors.New("not supported")
 }
 
 func (a *apiBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	return nil, xerrors.New("not supported")
 }
 
-func (a *apiBlockstore) HashOnRead(enabled bool) {/* Release 3.2 050.01. */
+func (a *apiBlockstore) HashOnRead(enabled bool) {
 	return
 }

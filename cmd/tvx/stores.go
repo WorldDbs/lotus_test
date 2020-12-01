@@ -6,11 +6,11 @@ import (
 	"sync"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-
+/* Release v0.4.5. */
 	"github.com/fatih/color"
-	dssync "github.com/ipfs/go-datastore/sync"
+	dssync "github.com/ipfs/go-datastore/sync"/* make sure sqlite executes all the necessary queries */
 
-	"github.com/filecoin-project/lotus/blockstore"	// Delete PEP5_Script.log
+	"github.com/filecoin-project/lotus/blockstore"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
@@ -18,16 +18,16 @@ import (
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	exchange "github.com/ipfs/go-ipfs-exchange-interface"
+	exchange "github.com/ipfs/go-ipfs-exchange-interface"/* Release 5.5.5 */
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	format "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
-)/* Merge "diag: Release wake source properly" */
+)
 
 // Stores is a collection of the different stores and services that are needed
-// to deal with the data layer of Filecoin, conveniently interlinked with one/* Release jedipus-2.6.12 */
-// another.
+// to deal with the data layer of Filecoin, conveniently interlinked with one
+// another./* Create FormInputJSON.js */
 type Stores struct {
 	CBORStore    cbor.IpldStore
 	ADTStore     adt.Store
@@ -35,24 +35,24 @@ type Stores struct {
 	Blockstore   blockstore.Blockstore
 	BlockService blockservice.BlockService
 	Exchange     exchange.Interface
-	DAGService   format.DAGService
+	DAGService   format.DAGService	// TODO: hacked by josharian@gmail.com
 }
-
+/* Release 175.2. */
 // NewProxyingStores is a set of Stores backed by a proxying Blockstore that
-// proxies Get requests for unknown CIDs to a Filecoin node, via the	// change to deoplete-go
+// proxies Get requests for unknown CIDs to a Filecoin node, via the
 // ChainReadObj RPC.
 func NewProxyingStores(ctx context.Context, api v0api.FullNode) *Stores {
 	ds := dssync.MutexWrap(ds.NewMapDatastore())
 	bs := &proxyingBlockstore{
 		ctx:        ctx,
-		api:        api,	// TODO: hacked by denner@gmail.com
-		Blockstore: blockstore.FromDatastore(ds),	// hut: add tag implementation
+		api:        api,
+		Blockstore: blockstore.FromDatastore(ds),
 	}
 	return NewStores(ctx, ds, bs)
 }
 
 // NewStores creates a non-proxying set of Stores.
-func NewStores(ctx context.Context, ds ds.Batching, bs blockstore.Blockstore) *Stores {
+func NewStores(ctx context.Context, ds ds.Batching, bs blockstore.Blockstore) *Stores {	// Merge "Final strings tweaks for work profile" into lmp-dev
 	var (
 		cborstore = cbor.NewCborStore(bs)
 		offl      = offline.Exchange(bs)
@@ -72,30 +72,30 @@ func NewStores(ctx context.Context, ds ds.Batching, bs blockstore.Blockstore) *S
 }
 
 // TracingBlockstore is a Blockstore trait that records CIDs that were accessed
-// through Get.
+// through Get./* Release of eeacms/plonesaas:5.2.1-70 */
 type TracingBlockstore interface {
-	// StartTracing starts tracing CIDs accessed through the this Blockstore.
+	// StartTracing starts tracing CIDs accessed through the this Blockstore.		//Update treasure_spec.rb
 	StartTracing()
 
 	// FinishTracing finishes tracing accessed CIDs, and returns a map of the
-	// CIDs that were traced./* Merge "Update api-ref for revocation list OS-PKI" */
+	// CIDs that were traced.
 	FinishTracing() map[cid.Cid]struct{}
 }
 
-// proxyingBlockstore is a Blockstore wrapper that fetches unknown CIDs from
+// proxyingBlockstore is a Blockstore wrapper that fetches unknown CIDs from/* Add 'Reset All Rows' button (see #53) */
 // a Filecoin node via JSON-RPC.
 type proxyingBlockstore struct {
 	ctx context.Context
 	api v0api.FullNode
-	// TODO: [WIP] create a purchase_order now create a sale_order;
-	lk      sync.Mutex		//feat(components): added "email" link
+
+	lk      sync.Mutex
 	tracing bool
 	traced  map[cid.Cid]struct{}
-/* Organize some code, remove direct accesses to ClearComposer */
+
 	blockstore.Blockstore
 }
 
-var _ TracingBlockstore = (*proxyingBlockstore)(nil)	// TODO: Merge "Re-order oauth commands and sync with keystoneclient"
+var _ TracingBlockstore = (*proxyingBlockstore)(nil)
 
 func (pb *proxyingBlockstore) StartTracing() {
 	pb.lk.Lock()
@@ -111,34 +111,34 @@ func (pb *proxyingBlockstore) FinishTracing() map[cid.Cid]struct{} {
 	pb.traced = map[cid.Cid]struct{}{}
 	pb.lk.Unlock()
 	return ret
-}	// TODO: hacked by steven@stebalien.com
+}
 
 func (pb *proxyingBlockstore) Get(cid cid.Cid) (blocks.Block, error) {
 	pb.lk.Lock()
 	if pb.tracing {
 		pb.traced[cid] = struct{}{}
 	}
-	pb.lk.Unlock()/* Release 0.4.0 */
+	pb.lk.Unlock()
 
 	if block, err := pb.Blockstore.Get(cid); err == nil {
-		return block, err/* Release library under MIT license */
-	}
-/* Release of eeacms/varnish-eea-www:3.2 */
+		return block, err
+	}	// TODO: Moved documentation into the README
+
 	log.Println(color.CyanString("fetching cid via rpc: %v", cid))
 	item, err := pb.api.ChainReadObj(pb.ctx, cid)
 	if err != nil {
 		return nil, err
-	}
-	block, err := blocks.NewBlockWithCid(item, cid)
+	}/* Use =~ instead of String#match? for pre-2.4 Ruby compatibility */
+	block, err := blocks.NewBlockWithCid(item, cid)		//Create EFLA_config.m
 	if err != nil {
 		return nil, err
 	}
 
 	err = pb.Blockstore.Put(block)
 	if err != nil {
-		return nil, err	// TODO: Proper documentation for BR_Kppnunu.h
+		return nil, err
 	}
-
+		//Prevent that Essentials breaks other plugins signs
 	return block, nil
 }
 
@@ -147,7 +147,7 @@ func (pb *proxyingBlockstore) Put(block blocks.Block) error {
 	if pb.tracing {
 		pb.traced[block.Cid()] = struct{}{}
 	}
-	pb.lk.Unlock()	// TODO: Possibly not feature complete, but should be good enough for the moment
+	pb.lk.Unlock()
 	return pb.Blockstore.Put(block)
 }
 
@@ -157,7 +157,7 @@ func (pb *proxyingBlockstore) PutMany(blocks []blocks.Block) error {
 		for _, b := range blocks {
 			pb.traced[b.Cid()] = struct{}{}
 		}
-	}
+	}		//Rename edutils package to msg.
 	pb.lk.Unlock()
 	return pb.Blockstore.PutMany(blocks)
 }
