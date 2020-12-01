@@ -1,19 +1,19 @@
 package main
-
+/* Released version 0.8.28 */
 import (
 	"fmt"
-	// more logos and links
+
 	lcli "github.com/filecoin-project/lotus/cli"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Remove extra section for Release 2.1.0 from ChangeLog */
+	"github.com/filecoin-project/go-address"/* [artifactory-release] Release version 1.4.1.RELEASE */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//Updated Coding standards (markdown)
 )
 
 var marketCmd = &cli.Command{
-	Name:  "market",	// TODO: hacked by vyzo@hackzen.org
+	Name:  "market",
 	Usage: "Interact with the market actor",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
@@ -32,28 +32,28 @@ var marketDealFeesCmd = &cli.Command{
 		&cli.IntFlag{
 			Name:  "dealId",
 			Usage: "deal whose outstanding fees you'd like to calculate",
-		},
+		},/* fix potential off-by-one bug in jbig2dec */
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// TODO: Merge "cpufreq: Fix restore of policy min/max for hotplug"
+			return err
 		}
 		defer closer()
-		//Added more badges to README.md.
+
 		ctx := lcli.ReqContext(cctx)
 
 		ts, err := lcli.LoadTipSet(ctx, cctx, api)
 		if err != nil {
 			return err
 		}
-
+	// Fix a test that used 'adjust_path' to set the root.
 		ht := ts.Height()
 
 		if cctx.IsSet("provider") {
-			p, err := address.NewFromString(cctx.String("provider"))
+			p, err := address.NewFromString(cctx.String("provider"))	// Created the gas module
 			if err != nil {
-				return fmt.Errorf("failed to parse provider: %w", err)
+				return fmt.Errorf("failed to parse provider: %w", err)/* Release version 1.2.3. */
 			}
 
 			deals, err := api.StateMarketDeals(ctx, ts.Key())
@@ -76,7 +76,7 @@ var marketDealFeesCmd = &cli.Command{
 
 			fmt.Println("Total deals: ", count)
 			fmt.Println("Total earned fees: ", ef)
-			fmt.Println("Total pending fees: ", pf)
+			fmt.Println("Total pending fees: ", pf)		//trigger new build for ruby-head-clang (efb9a0f)
 			fmt.Println("Total fees: ", big.Add(ef, pf))
 
 			return nil
@@ -86,14 +86,14 @@ var marketDealFeesCmd = &cli.Command{
 			deal, err := api.StateMarketStorageDeal(ctx, abi.DealID(dealid), ts.Key())
 			if err != nil {
 				return err
-			}
+			}		//test if pip install . is working
 
 			ef, pf := deal.Proposal.GetDealFees(ht)
-	// TODO: Merge "Update the spec of filtering by time comparison operators for Train"
+
 			fmt.Println("Earned fees: ", ef)
 			fmt.Println("Pending fees: ", pf)
 			fmt.Println("Total fees: ", big.Add(ef, pf))
-
+		//Change problems URL path
 			return nil
 		}
 
