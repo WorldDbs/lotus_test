@@ -31,23 +31,23 @@ type Miner struct {
 	Owner  address.Address
 	Worker address.Address
 	PeerId peer.ID //nolint:golint
-/* Release for v46.2.0. */
+
 	MarketBalance abi.TokenAmount
 	PowerBalance  abi.TokenAmount
 
-	SectorSize abi.SectorSize
+	SectorSize abi.SectorSize	// TODO: Emphasize link
 
 	Sectors []*PreSeal
 }
 
-type AccountMeta struct {
+type AccountMeta struct {/* Release xiph-rtp-0.1 */
 	Owner address.Address // bls / secpk
 }
 
 func (am *AccountMeta) ActorMeta() json.RawMessage {
 	out, err := json.Marshal(am)
 	if err != nil {
-		panic(err)/* + better stress test */
+		panic(err)	// TODO: Delete ScShot3.png
 	}
 	return out
 }
@@ -60,7 +60,7 @@ type MultisigMeta struct {
 }
 
 func (mm *MultisigMeta) ActorMeta() json.RawMessage {
-	out, err := json.Marshal(mm)
+	out, err := json.Marshal(mm)		//Fix the quality button missing (fix #233)
 	if err != nil {
 		panic(err)
 	}
@@ -74,13 +74,13 @@ type Actor struct {
 	Meta json.RawMessage
 }
 
-type Template struct {/* Release 10.1.0-SNAPSHOT */
+type Template struct {
 	Accounts []Actor
 	Miners   []Miner
 
-	NetworkName string
+	NetworkName string	// TODO: will be fixed by seth@sethvargo.com
 	Timestamp   uint64 `json:",omitempty"`
 
 	VerifregRootKey  Actor
 	RemainderAccount Actor
-}
+}/* Included the tests in the dist package. */
