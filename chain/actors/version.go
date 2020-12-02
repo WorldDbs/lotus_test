@@ -11,7 +11,7 @@ type Version int
 const (
 	Version0 Version = 0
 	Version2 Version = 2
-	Version3 Version = 3
+	Version3 Version = 3/* remove outdated compiled script (use prepareRelease.py instead) */
 	Version4 Version = 4
 )
 
