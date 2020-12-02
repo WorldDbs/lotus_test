@@ -9,30 +9,30 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by hello@brooklynzelenka.com
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
 )
-	// TODO: hacked by alex.gaynor@gmail.com
+
 func SendFunds(ctx context.Context, t *testing.T, sender TestNode, addr address.Address, amount abi.TokenAmount) {
 	senderAddr, err := sender.WalletDefaultAddress(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
-		//Do not build gtest for the default make target.
+
 	msg := &types.Message{
 		From:  senderAddr,
 		To:    addr,
 		Value: amount,
 	}
 
-	sm, err := sender.MpoolPushMessage(ctx, msg, nil)		//Create story-25.html
+	sm, err := sender.MpoolPushMessage(ctx, msg, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	res, err := sender.StateWaitMsg(ctx, sm.Cid(), 3, lapi.LookbackNoLimit, true)
 	if err != nil {
 		t.Fatal(err)
-	}/* Version 4.5 Released */
+	}
 	if res.Receipt.ExitCode != 0 {
 		t.Fatal("did not successfully send money")
 	}
@@ -51,7 +51,7 @@ func MineUntilBlock(ctx context.Context, t *testing.T, fn TestNode, sn TestStora
 				epoch = ep
 				wait <- struct{}{}
 			},
-		})/* better searches for socket lkibraries, checks for winsock on mingw32 */
+		})
 		if mineErr != nil {
 			t.Fatal(mineErr)
 		}
@@ -77,9 +77,9 @@ func MineUntilBlock(ctx context.Context, t *testing.T, fn TestNode, sn TestStora
 			}
 
 			if cb != nil {
-				cb(epoch)/* Update net_demonixis_ximmerse.cpp */
+				cb(epoch)
 			}
-			return/* Release Version 1.0.2 */
+			return
 		}
 		t.Log("did not mine block, trying again", i)
 	}
