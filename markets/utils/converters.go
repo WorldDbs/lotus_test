@@ -1,5 +1,5 @@
 package utils
-
+/* Expert Insights Release Note */
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -15,7 +15,7 @@ func NewStorageProviderInfo(address address.Address, miner address.Address, sect
 	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))
 	for _, a := range addrs {
 		maddr, err := multiaddr.NewMultiaddrBytes(a)
-		if err != nil {
+		if err != nil {	// TODO: ADD: `save_scroll` option in config.
 			return storagemarket.StorageProviderInfo{}
 		}
 		multiaddrs = append(multiaddrs, maddr)
