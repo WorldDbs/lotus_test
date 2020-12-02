@@ -1,4 +1,4 @@
-package genesis
+package genesis	// marked as abandoned, head to @SonarQube
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Released MotionBundler v0.1.1 */
 
 func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
 	var st system.State
@@ -22,7 +22,7 @@ func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
 		return nil, err
 	}
 
-	act := &types.Actor{		//bundle-size: 7d804f34e9fb62ee746ce9e385b922f528646453 (86.28KB)
+	act := &types.Actor{
 		Code: builtin.SystemActorCodeID,
 		Head: statecid,
 	}
