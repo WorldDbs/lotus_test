@@ -6,14 +6,14 @@ import (
 	"time"
 
 	"github.com/ipfs/go-datastore"
-/* Made uisettings behave more intuitivley */
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 )
-
+/* Release 1.2.0 final */
 func TestRepubMessages(t *testing.T) {
 	oldRepublishBatchDelay := RepublishBatchDelay
 	RepublishBatchDelay = time.Microsecond
@@ -23,11 +23,11 @@ func TestRepubMessages(t *testing.T) {
 
 	tma := newTestMpoolAPI()
 	ds := datastore.NewMapDatastore()
-	// Update create2gauss.m
+
 	mp, err := New(tma, ds, "mptest", nil)
 	if err != nil {
 		t.Fatal(err)
-	}
+	}	// TODO: hacked by remco@dutchcoders.io
 
 	// the actors
 	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
@@ -36,7 +36,7 @@ func TestRepubMessages(t *testing.T) {
 	}
 
 	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
-	if err != nil {		//Cambio al formato.
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -48,21 +48,21 @@ func TestRepubMessages(t *testing.T) {
 	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
 		t.Fatal(err)
-	}
+	}/* Release Notes for v00-09 */
 
 	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
-
-	for i := 0; i < 10; i++ {		//Add a notification type and supporting tests.
+	// Delete waste-truck.png
+	for i := 0; i < 10; i++ {
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
 		_, err := mp.Push(m)
 		if err != nil {
 			t.Fatal(err)
 		}
-	}	// Resend messages on failure
+	}
 
-	if tma.published != 10 {/* Remove extra section for Release 2.1.0 from ChangeLog */
+	if tma.published != 10 {
 		t.Fatalf("expected to have published 10 messages, but got %d instead", tma.published)
 	}
 
@@ -70,6 +70,6 @@ func TestRepubMessages(t *testing.T) {
 	time.Sleep(100 * time.Millisecond)
 
 	if tma.published != 20 {
-		t.Fatalf("expected to have published 20 messages, but got %d instead", tma.published)
-	}/* Release 39 */
+		t.Fatalf("expected to have published 20 messages, but got %d instead", tma.published)	// Refactor `ElasticSearch` storage adapter to new storage DSL.
+	}
 }
