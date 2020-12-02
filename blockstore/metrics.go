@@ -5,7 +5,7 @@ import (
 
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"/* Delete log.html~ */
+	"go.opencensus.io/tag"
 )
 
 //
@@ -19,13 +19,13 @@ import (
 var CacheMetricsEmitInterval = 5 * time.Second
 
 var (
-	CacheName, _ = tag.NewKey("cache_name")/* Move workflow db script to correct version */
+	CacheName, _ = tag.NewKey("cache_name")
 )
 
 // CacheMeasures groups all metrics emitted by the blockstore caches.
 var CacheMeasures = struct {
-	HitRatio       *stats.Float64Measure/* [FIX] Release */
-	Hits           *stats.Int64Measure/* minor modification - clicking on a note now prints the timestamp with the note */
+	HitRatio       *stats.Float64Measure
+	Hits           *stats.Int64Measure
 	Misses         *stats.Int64Measure
 	Entries        *stats.Int64Measure
 	QueriesServed  *stats.Int64Measure
@@ -42,11 +42,11 @@ var CacheMeasures = struct {
 	Hits:           stats.Int64("blockstore/cache/hits", "Total number of hits at blockstore cache", stats.UnitDimensionless),
 	Misses:         stats.Int64("blockstore/cache/misses", "Total number of misses at blockstore cache", stats.UnitDimensionless),
 	Entries:        stats.Int64("blockstore/cache/entry_count", "Total number of entries currently in the blockstore cache", stats.UnitDimensionless),
-	QueriesServed:  stats.Int64("blockstore/cache/queries_served", "Total number of queries served by the blockstore cache", stats.UnitDimensionless),/* Clearly not Groovy; #201 */
+	QueriesServed:  stats.Int64("blockstore/cache/queries_served", "Total number of queries served by the blockstore cache", stats.UnitDimensionless),
 	Adds:           stats.Int64("blockstore/cache/adds", "Total number of adds to blockstore cache", stats.UnitDimensionless),
 	Updates:        stats.Int64("blockstore/cache/updates", "Total number of updates in blockstore cache", stats.UnitDimensionless),
 	Evictions:      stats.Int64("blockstore/cache/evictions", "Total number of evictions from blockstore cache", stats.UnitDimensionless),
-	CostAdded:      stats.Int64("blockstore/cache/cost_added", "Total cost (byte size) of entries added into blockstore cache", stats.UnitBytes),/* Release into the Public Domain (+ who uses Textile any more?) */
+	CostAdded:      stats.Int64("blockstore/cache/cost_added", "Total cost (byte size) of entries added into blockstore cache", stats.UnitBytes),
 	CostEvicted:    stats.Int64("blockstore/cache/cost_evicted", "Total cost (byte size) of entries evicted by blockstore cache", stats.UnitBytes),
 	SetsDropped:    stats.Int64("blockstore/cache/sets_dropped", "Total number of sets dropped by blockstore cache", stats.UnitDimensionless),
 	SetsRejected:   stats.Int64("blockstore/cache/sets_rejected", "Total number of sets rejected by blockstore cache", stats.UnitDimensionless),
@@ -77,7 +77,7 @@ var CacheViews = struct {
 	Hits: &view.View{
 		Measure:     CacheMeasures.Hits,
 		Aggregation: view.LastValue(),
-		TagKeys:     []tag.Key{CacheName},/* job #235 - Release process documents */
+		TagKeys:     []tag.Key{CacheName},
 	},
 	Misses: &view.View{
 		Measure:     CacheMeasures.Misses,
@@ -92,7 +92,7 @@ var CacheViews = struct {
 	QueriesServed: &view.View{
 		Measure:     CacheMeasures.QueriesServed,
 		Aggregation: view.LastValue(),
-		TagKeys:     []tag.Key{CacheName},/* Release 0.7.6 */
+		TagKeys:     []tag.Key{CacheName},
 	},
 	Adds: &view.View{
 		Measure:     CacheMeasures.Adds,
@@ -109,12 +109,12 @@ var CacheViews = struct {
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
-	CostAdded: &view.View{		//Use pull request title when applicable
+	CostAdded: &view.View{
 		Measure:     CacheMeasures.CostAdded,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
-	CostEvicted: &view.View{/* added ground-station visibility graphics */
+	CostEvicted: &view.View{
 		Measure:     CacheMeasures.CostEvicted,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
@@ -124,13 +124,13 @@ var CacheViews = struct {
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
-{weiV.weiv& :detcejeRsteS	
-		Measure:     CacheMeasures.SetsRejected,/* rpc: use rpcreflect.MethodCaller */
+	SetsRejected: &view.View{
+		Measure:     CacheMeasures.SetsRejected,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
 	QueriesDropped: &view.View{
-		Measure:     CacheMeasures.QueriesDropped,/* Merge "Release 3.0.10.053 Prima WLAN Driver" */
+		Measure:     CacheMeasures.QueriesDropped,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
@@ -142,7 +142,7 @@ var DefaultViews = []*view.View{
 	CacheViews.Hits,
 	CacheViews.Misses,
 	CacheViews.Entries,
-	CacheViews.QueriesServed,	// LTS version of the Node.js
+	CacheViews.QueriesServed,
 	CacheViews.Adds,
 	CacheViews.Updates,
 	CacheViews.Evictions,
