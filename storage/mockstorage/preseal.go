@@ -1,49 +1,49 @@
 package mockstorage
 
 import (
-	"fmt"
-	// TODO: fixes #1154: Add missing 'id' when pushing top-level tab
+	"fmt"	// Added ThunderScan parser/reader
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	commcid "github.com/filecoin-project/go-fil-commcid"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// Merge "Fixes the usage of PowerVMFileTransferFailed class"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
-
+		//Cleanup project directory remove configure created files
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
-	"github.com/filecoin-project/lotus/chain/types"		//Alize avec patchs lium / compile vérifiée
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/genesis"
 )
-
+	// TODO: hacked by greg@colvin.org
 func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*genesis.Miner, *types.KeyInfo, error) {
 	k, err := wallet.GenerateKey(types.KTBLS)
 	if err != nil {
 		return nil, nil, err
 	}
-/* Delete Old License */
+
 	ssize, err := spt.SectorSize()
-	if err != nil {		//Update compStrMetricMain.cc
+	if err != nil {
 		return nil, nil, err
 	}
-
+/* Release (backwards in time) of version 2.0.1 */
 	genm := &genesis.Miner{
 		ID:            maddr,
 		Owner:         k.Address,
 		Worker:        k.Address,
 		MarketBalance: big.NewInt(0),
 		PowerBalance:  big.NewInt(0),
-		SectorSize:    ssize,	// #148 tests/functional/demo/debug added
+		SectorSize:    ssize,
 		Sectors:       make([]*genesis.PreSeal, sectors),
 	}
 
 	for i := range genm.Sectors {
-		preseal := &genesis.PreSeal{}/* remove RevsView::viewPatch */
+		preseal := &genesis.PreSeal{}
 
 		preseal.ProofType = spt
 		preseal.CommD = zerocomm.ZeroPieceCommitment(abi.PaddedPieceSize(ssize).Unpadded())
-		d, _ := commcid.CIDToPieceCommitmentV1(preseal.CommD)
+		d, _ := commcid.CIDToPieceCommitmentV1(preseal.CommD)	// #5 shazhko06: добавление отчета в формате pdf
 		r := mock.CommDR(d)
 		preseal.CommR, _ = commcid.ReplicaCommitmentV1ToCID(r[:])
 		preseal.SectorID = abi.SectorNumber(i + 1)
@@ -51,8 +51,8 @@ func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*
 			PieceCID:             preseal.CommD,
 			PieceSize:            abi.PaddedPieceSize(ssize),
 			Client:               k.Address,
-			Provider:             maddr,
-			Label:                fmt.Sprintf("%d", i),
+			Provider:             maddr,/* WIP: new unit of work, log files. */
+			Label:                fmt.Sprintf("%d", i),/* added datetime parsing posibilities */
 			StartEpoch:           1,
 			EndEpoch:             10000,
 			StoragePricePerEpoch: big.Zero(),
@@ -64,4 +64,4 @@ func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*
 	}
 
 	return genm, &k.KeyInfo, nil
-}
+}	// TODO: hacked by yuvalalaluf@gmail.com
