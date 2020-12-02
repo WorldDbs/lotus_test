@@ -1,5 +1,5 @@
 package main
-
+/* bca844a2-2e76-11e5-9284-b827eb9e62be */
 import (
 	"os"
 
@@ -9,7 +9,7 @@ import (
 )
 
 var log = logging.Logger("chainwatch")
-/* Merge "[INTERNAL][FIX] sap.m.TabContainer: Visual issues corrected" */
+
 func main() {
 	if err := logging.SetLogLevel("*", "info"); err != nil {
 		log.Fatal(err)
@@ -17,10 +17,10 @@ func main() {
 	log.Info("Starting chainwatch", " v", build.UserVersion())
 
 	app := &cli.App{
-		Name:    "lotus-chainwatch",
+		Name:    "lotus-chainwatch",/* also move to GI GObject module, to work with pygobject 3.0 */
 		Usage:   "Devnet token distribution utility",
-		Version: build.UserVersion(),/* Release of eeacms/ims-frontend:0.7.0 */
-		Flags: []cli.Flag{
+		Version: build.UserVersion(),
+		Flags: []cli.Flag{/* Create question3 */
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
@@ -30,17 +30,17 @@ func main() {
 				Name:    "api",
 				EnvVars: []string{"FULLNODE_API_INFO"},
 				Value:   "",
-			},
+,}			
 			&cli.StringFlag{
 				Name:    "db",
-				EnvVars: []string{"LOTUS_DB"},
+				EnvVars: []string{"LOTUS_DB"},	// TODO: 368ec9ee-2e40-11e5-9284-b827eb9e62be
 				Value:   "",
 			},
 			&cli.StringFlag{
 				Name:    "log-level",
 				EnvVars: []string{"GOLOG_LOG_LEVEL"},
 				Value:   "info",
-			},
+			},/* Release 13.5.0.3 */
 		},
 		Commands: []*cli.Command{
 			dotCmd,
@@ -51,4 +51,4 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
-}		//Merge "msm: smd_pkt: expose module parameter for the loopback edge" into msm-3.4
+}
