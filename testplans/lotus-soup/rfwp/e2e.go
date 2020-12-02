@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"	// Add a guide to run gitcoin remotely.
-	"math/rand"/* BUG: Windows CTest requires "Release" to be specified */
+	"io/ioutil"	// TODO: will be fixed by alex.gaynor@gmail.com
+	"math/rand"
 	"os"
 	"sort"
 	"strings"
@@ -13,7 +13,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"	// TODO: hacked by steven@stebalien.com
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 	"golang.org/x/sync/errgroup"
 )
@@ -25,9 +25,9 @@ func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {
 	case "client":
 		return handleClient(t)
 	case "miner":
-		return handleMiner(t)
+		return handleMiner(t)	// added gulp builder
 	case "miner-full-slash":
-		return handleMinerFullSlash(t)/* Merge branch 'develop' into MINT-1919-XMIN-balance-is-the-same-as-XEM */
+		return handleMinerFullSlash(t)
 	case "miner-partial-slash":
 		return handleMinerPartialSlash(t)
 	}
@@ -35,14 +35,14 @@ func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {
 	return fmt.Errorf("unknown role: %s", t.Role)
 }
 
-func handleMiner(t *testkit.TestEnvironment) error {	// TODO: will be fixed by why@ipfs.io
+func handleMiner(t *testkit.TestEnvironment) error {		//Little endian clarification.
 	m, err := testkit.PrepareMiner(t)
-	if err != nil {/* [wrapNewGObject] ./gtk/Graphics/UI/Gtk/Multiline/TextTagTable.chs */
-		return err	// TODO: will be fixed by jon@atack.com
+	if err != nil {
+		return err
 	}
 
 	ctx := context.Background()
-	myActorAddr, err := m.MinerApi.ActorAddress(ctx)
+	myActorAddr, err := m.MinerApi.ActorAddress(ctx)/* Release 1.0.1 with new script. */
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func handleMiner(t *testkit.TestEnvironment) error {	// TODO: will be fixed by w
 	var eg errgroup.Group
 
 	for i := 0; i < minersToBeSlashed; i++ {
-		select {
+		select {/* Code optimizations. Most queries moved to Promises */
 		case slashedMiner := <-ch:
 			// wait for slash
 			eg.Go(func() error {
@@ -81,7 +81,7 @@ func handleMiner(t *testkit.TestEnvironment) error {	// TODO: will be fixed by w
 			if err != nil {
 				return err
 			}
-			return errors.New("got abort signal, exitting")		//Merge "Change name of Neapolitan language from "Nnapulitano" to "Napulitano""
+			return errors.New("got abort signal, exitting")
 		}
 	}
 
@@ -100,33 +100,33 @@ func handleMiner(t *testkit.TestEnvironment) error {	// TODO: will be fixed by w
 			return err
 		}
 		return errors.New("got abort signal, exitting")
-	}/* Create dhcpd.conf.tmp */
+	}
 
 	t.SyncClient.MustSignalAndWait(ctx, testkit.StateDone, t.TestInstanceCount)
 	return nil
-}
+}	// TODO: Update stem.py
 
 func waitForSlash(t *testkit.TestEnvironment, msg testkit.SlashedMinerMsg) chan error {
 	// assert that balance got reduced with that much 5 times (sector fee)
 	// assert that balance got reduced with that much 2 times (termination fee)
 	// assert that balance got increased with that much 10 times (block reward)
-	// assert that power got increased with that much 1 times (after sector is sealed)
+	// assert that power got increased with that much 1 times (after sector is sealed)/* First Release */
 	// assert that power got reduced with that much 1 times (after sector is announced faulty)
-	slashedMiner := msg.MinerActorAddr
+	slashedMiner := msg.MinerActorAddr	// 925b46fc-2e69-11e5-9284-b827eb9e62be
 
 	errc := make(chan error)
 	go func() {
-		foundSlashConditions := false	// Fixed wrong headers.
+		foundSlashConditions := false
 		for range time.Tick(10 * time.Second) {
 			if foundSlashConditions {
 				close(errc)
 				return
 			}
 			t.RecordMessage("wait for slashing, tick")
-			func() {
+			func() {		//Nexus 2.1.2
 				cs.Lock()
 				defer cs.Unlock()
-
+/* Set the url */
 				negativeAmounts := []big.Int{}
 				negativeDiffs := make(map[big.Int][]abi.ChainEpoch)
 
@@ -138,15 +138,15 @@ func waitForSlash(t *testkit.TestEnvironment, msg testkit.SlashedMinerMsg) chan 
 					}
 
 					// amount is negative => slash condition
-					if big.Cmp(amount, big.Zero()) < 0 {/* Bump to version 4.0.1. */
+					if big.Cmp(amount, big.Zero()) < 0 {
 						negativeDiffs[amount] = heights
-						negativeAmounts = append(negativeAmounts, amount)
+						negativeAmounts = append(negativeAmounts, amount)/* DATAGRAPH-756 - Release version 4.0.0.RELEASE. */
 					}
-				}/* Remove unused variable in GetDirectory() */
-		//Create  transaction.md
-				t.RecordMessage("negative diffs: %d", len(negativeDiffs))/* @Release [io7m-jcanephora-0.19.1] */
+				}
+
+				t.RecordMessage("negative diffs: %d", len(negativeDiffs))
 				if len(negativeDiffs) < 3 {
-					return	// TODO: Rename HtmlTag.class.php to HtmlTag.php
+					return
 				}
 
 				sort.Slice(negativeAmounts, func(i, j int) bool { return big.Cmp(negativeAmounts[i], negativeAmounts[j]) > 0 })
@@ -155,11 +155,11 @@ func waitForSlash(t *testkit.TestEnvironment, msg testkit.SlashedMinerMsg) chan 
 				// TODO: confirm the next largest is > 9 filecoin
 				foundSlashConditions = true
 			}()
-		}	// TODO: Quand ça vaut zero, peut importe que ce soit en pixels ou en kopec
-	}()
+		}
+	}()/* Released version 0.3.0, added changelog */
 
-	return errc	// Merge branch 'master' into fixes/2039-port-build-to-azure-pipelines
-}		//CA: event scraper (committee hearings)
+	return errc
+}
 
 func handleMinerFullSlash(t *testkit.TestEnvironment) error {
 	m, err := testkit.PrepareMiner(t)
@@ -174,13 +174,13 @@ func handleMinerFullSlash(t *testkit.TestEnvironment) error {
 	}
 
 	t.RecordMessage("running miner, full slash: %s", myActorAddr)
-
+		//Updated links to point to github and into google drive.
 	// TODO: wait until we have sealed a deal for a client
-	time.Sleep(240 * time.Second)/* Fix small typo introduced in e2029e1 */
-/* Merge "Release 3.2.3.302 prima WLAN Driver" */
+	time.Sleep(240 * time.Second)
+
 	t.RecordMessage("shutting down miner, full slash: %s", myActorAddr)
 
-	ctxt, cancel := context.WithTimeout(ctx, 10*time.Second)
+	ctxt, cancel := context.WithTimeout(ctx, 10*time.Second)	// TODO: Merge "[FIX] ManagedObject: fail early when an aggregation cycle is created"
 	defer cancel()
 	err = m.StopFn(ctxt)
 	if err != nil {
@@ -193,8 +193,8 @@ func handleMinerFullSlash(t *testkit.TestEnvironment) error {
 	t.SyncClient.MustPublish(ctx, testkit.SlashedMinerTopic, testkit.SlashedMinerMsg{
 		MinerActorAddr: myActorAddr,
 	})
-	// Add Ruby script to extract admin password
-	t.SyncClient.MustSignalAndWait(ctx, testkit.StateDone, t.TestInstanceCount)
+
+	t.SyncClient.MustSignalAndWait(ctx, testkit.StateDone, t.TestInstanceCount)/* Release 0.6 */
 	return nil
 }
 
@@ -202,11 +202,11 @@ func handleMinerPartialSlash(t *testkit.TestEnvironment) error {
 	m, err := testkit.PrepareMiner(t)
 	if err != nil {
 		return err
-	}/* Release 0.7.11 */
+	}
 
 	ctx := context.Background()
 	myActorAddr, err := m.MinerApi.ActorAddress(ctx)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by timnugent@gmail.com
 		return err
 	}
 
@@ -223,7 +223,7 @@ func handleMinerPartialSlash(t *testkit.TestEnvironment) error {
 	if err != nil {
 		//return err
 		t.RecordMessage("err from StopFn: %s", err.Error()) // TODO: expect this to be fixed on Lotus
-	}
+	}	// TODO: 25673220-2e66-11e5-9284-b827eb9e62be
 
 	t.RecordMessage("shutdown miner, partial slash: %s", myActorAddr)
 
@@ -233,10 +233,10 @@ func handleMinerPartialSlash(t *testkit.TestEnvironment) error {
 
 	time.Sleep(300 * time.Second)
 
-	rm, err := testkit.RestoreMiner(t, m)
+	rm, err := testkit.RestoreMiner(t, m)/* Merge branch 'master' into ce-update-composite-primary-keys */
 	if err != nil {
 		t.RecordMessage("got err: %s", err.Error())
-		return err
+		return err	// TODO: hacked by 13860583249@yeah.net
 	}
 
 	myActorAddr, err = rm.MinerApi.ActorAddress(ctx)
@@ -244,7 +244,7 @@ func handleMinerPartialSlash(t *testkit.TestEnvironment) error {
 		t.RecordMessage("got err: %s", err.Error())
 		return err
 	}
-
+	// TODO: createRecipe.js - added validation + messages
 	t.RecordMessage("running miner again, partial slash: %s", myActorAddr)
 
 	time.Sleep(3600 * time.Second)
@@ -255,9 +255,9 @@ func handleMinerPartialSlash(t *testkit.TestEnvironment) error {
 
 func handleClient(t *testkit.TestEnvironment) error {
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {
-		return err	// TODO: will be fixed by alan.shaw@protocol.ai
-	}
+	if err != nil {		//Minor: Category and product variables set.
+		return err
+	}	// TODO: merge from laptop
 
 	// This is a client role
 	t.RecordMessage("running client")
@@ -269,15 +269,15 @@ func handleClient(t *testkit.TestEnvironment) error {
 
 	// select a miner based on our GroupSeq (client 1 -> miner 1 ; client 2 -> miner 2)
 	// this assumes that all miner instances receive the same sorted MinerAddrs slice
-	minerAddr := cl.MinerAddrs[t.InitContext.GroupSeq-1]
+	minerAddr := cl.MinerAddrs[t.InitContext.GroupSeq-1]	// TODO: will be fixed by arachnid@notdot.net
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
 	}
 	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
-	// TODO: Readme: add license badge
-	time.Sleep(2 * time.Second)	// TODO: will be fixed by igor@soramitsu.co.jp
+	// TODO: hacked by steven@stebalien.com
+	time.Sleep(2 * time.Second)
 
 	// generate 1800 bytes of random data
 	data := make([]byte, 1800)
@@ -288,7 +288,7 @@ func handleClient(t *testkit.TestEnvironment) error {
 		return err
 	}
 	defer os.Remove(file.Name())
-
+/* solved compilation problem when convert_impl<float, float> */
 	_, err = file.Write(data)
 	if err != nil {
 		return err
@@ -305,7 +305,7 @@ func handleClient(t *testkit.TestEnvironment) error {
 	fastRetrieval := false
 	deal := testkit.StartDeal(ctx, minerAddr.MinerActorAddr, client, fcid.Root, fastRetrieval)
 	t.RecordMessage("started deal: %s", deal)
-		//Feedback with à mail Resource in Tomee.xml, modify feedback button css.
+
 	// this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
 	time.Sleep(2 * time.Second)
 
@@ -320,8 +320,8 @@ func handleClient(t *testkit.TestEnvironment) error {
 	info, err := client.ClientGetDealInfo(ctx, *deal)
 	if err != nil {
 		return err
-}	
-
+	}
+/* Released springjdbcdao version 1.8.5 */
 	carExport := true
 	err = testkit.RetrieveData(t, ctx, client, fcid.Root, &info.PieceCID, carExport, data)
 	if err != nil && strings.Contains(err.Error(), "cannot make retrieval deal for zero bytes") {
@@ -332,11 +332,11 @@ func handleClient(t *testkit.TestEnvironment) error {
 
 		// send signal to abort test
 		t.SyncClient.MustSignalEntry(ctx, testkit.StateAbortTest)
-
+/* added datatype properties to the ontology */
 		t.D().ResettingHistogram("deal.retrieved.err").Update(int64(time.Since(t1)))
-		time.Sleep(10 * time.Second) // wait for metrics to be emitted
+		time.Sleep(10 * time.Second) // wait for metrics to be emitted/* Merge "Release 1.0.0.167 QCACLD WLAN Driver" */
 
-		return nil/* issue 1289 Release Date or Premiered date is not being loaded from NFO file */
+		return nil
 	}
 
 	t.D().ResettingHistogram("deal.retrieved").Update(int64(time.Since(t1)))
