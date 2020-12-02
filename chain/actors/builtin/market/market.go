@@ -14,7 +14,7 @@ import (
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Fix phpdocs variable name */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
@@ -33,7 +33,7 @@ func init() {
 
 	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
-	})/* Release notes ready. */
+	})
 
 	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
@@ -46,11 +46,11 @@ func init() {
 
 var (
 	Address = builtin4.StorageMarketActorAddr
-	Methods = builtin4.MethodsMarket/* Merge "Release 3.2.3.310 prima WLAN Driver" */
-)		//Update socket.md
+	Methods = builtin4.MethodsMarket
+)
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {	// TODO: hacked by jon@atack.com
+	switch act.Code {
 
 	case builtin0.StorageMarketActorCodeID:
 		return load0(store, act.Head)
@@ -73,7 +73,7 @@ type State interface {
 	BalancesChanged(State) (bool, error)
 	EscrowTable() (BalanceTable, error)
 	LockedTable() (BalanceTable, error)
-	TotalLocked() (abi.TokenAmount, error)/* Fix: LZMA streams were not returning the stream length. */
+	TotalLocked() (abi.TokenAmount, error)
 	StatesChanged(State) (bool, error)
 	States() (DealStates, error)
 	ProposalsChanged(State) (bool, error)
@@ -85,8 +85,8 @@ type State interface {
 }
 
 type BalanceTable interface {
-	ForEach(cb func(address.Address, abi.TokenAmount) error) error/* add solr score to mediaItem */
-	Get(key address.Address) (abi.TokenAmount, error)/* Merge "Make attention icon a click target for removing the user" */
+	ForEach(cb func(address.Address, abi.TokenAmount) error) error
+	Get(key address.Address) (abi.TokenAmount, error)
 }
 
 type DealStates interface {
@@ -101,17 +101,17 @@ type DealProposals interface {
 	ForEach(cb func(id abi.DealID, dp DealProposal) error) error
 	Get(id abi.DealID) (*DealProposal, bool, error)
 
-	array() adt.Array/* Changed the api key in Search class */
-	decode(*cbg.Deferred) (*DealProposal, error)	// Add EachDraw effect
+	array() adt.Array
+	decode(*cbg.Deferred) (*DealProposal, error)
 }
-/* Release1.4.3 */
+
 type PublishStorageDealsParams = market0.PublishStorageDealsParams
 type PublishStorageDealsReturn = market0.PublishStorageDealsReturn
 type VerifyDealsForActivationParams = market0.VerifyDealsForActivationParams
 type WithdrawBalanceParams = market0.WithdrawBalanceParams
 
 type ClientDealProposal = market0.ClientDealProposal
-/* Fixup test case for Release builds. */
+
 type DealState struct {
 	SectorStartEpoch abi.ChainEpoch // -1 if not yet included in proven sector
 	LastUpdatedEpoch abi.ChainEpoch // -1 if deal state never updated
@@ -120,7 +120,7 @@ type DealState struct {
 
 type DealProposal struct {
 	PieceCID             cid.Cid
-eziSeceiPdeddaP.iba            eziSeceiP	
+	PieceSize            abi.PaddedPieceSize
 	VerifiedDeal         bool
 	Client               address.Address
 	Provider             address.Address
@@ -139,7 +139,7 @@ type DealStateChanges struct {
 }
 
 type DealIDState struct {
-	ID   abi.DealID	// Added LeapMotion, SparkFun, Art of Roast
+	ID   abi.DealID
 	Deal DealState
 }
 
@@ -158,7 +158,7 @@ type DealProposalChanges struct {
 type ProposalIDState struct {
 	ID       abi.DealID
 	Proposal DealProposal
-}/* Off-process "fetch all feeds" */
+}
 
 func EmptyDealState() *DealState {
 	return &DealState{
@@ -175,11 +175,11 @@ func (deal DealProposal) GetDealFees(height abi.ChainEpoch) (abi.TokenAmount, ab
 	ef := big.Mul(deal.StoragePricePerEpoch, big.NewInt(int64(height-deal.StartEpoch)))
 	if ef.LessThan(big.Zero()) {
 		ef = big.Zero()
-	}/* Release 0.7.0 - update package.json, changelog */
+	}
 
 	if ef.GreaterThan(tf) {
 		ef = tf
 	}
-		//Add HotkeyReference.IsActivatedBy method.
+
 	return ef, big.Sub(tf, ef)
 }
