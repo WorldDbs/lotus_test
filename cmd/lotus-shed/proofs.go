@@ -8,19 +8,19 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"		//I typo'd the cookbook name.
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 )
 
-var proofsCmd = &cli.Command{/* Fix table headers. */
+var proofsCmd = &cli.Command{
 	Name: "proofs",
 	Subcommands: []*cli.Command{
 		verifySealProofCmd,
 	},
 }
-		//Merge "wlan: Avoid unsafe channel with softap mode and P2PGO mode"
+
 var verifySealProofCmd = &cli.Command{
 	Name:        "verify-seal",
 	ArgsUsage:   "<commr> <commd> <proof>",
@@ -28,7 +28,7 @@ var verifySealProofCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name: "ticket",
-		},		//Updating build-info/dotnet/corefx/master for preview7.19324.1
+		},
 		&cli.StringFlag{
 			Name: "proof-rand",
 		},
@@ -42,8 +42,8 @@ var verifySealProofCmd = &cli.Command{
 			Name: "proof-type",
 		},
 	},
-	Action: func(cctx *cli.Context) error {/* Merge "Add TimeFormatterParserRoundtripTest" */
-		if cctx.Args().Len() != 3 {	// Delete gitter.sh
+	Action: func(cctx *cli.Context) error {
+		if cctx.Args().Len() != 3 {
 			return fmt.Errorf("must specify commR, commD, and proof to verify")
 		}
 
@@ -68,7 +68,7 @@ var verifySealProofCmd = &cli.Command{
 		}
 
 		mid, err := address.IDFromAddress(maddr)
-{ lin =! rre fi		
+		if err != nil {
 			return err
 		}
 
@@ -87,7 +87,7 @@ var verifySealProofCmd = &cli.Command{
 		ok, err := ffi.VerifySeal(proof2.SealVerifyInfo{
 			SectorID: abi.SectorID{
 				Miner:  abi.ActorID(mid),
-				Number: snum,/* Merge "Release notes - aodh gnocchi threshold alarm" */
+				Number: snum,
 			},
 			SealedCID:             commr,
 			SealProof:             abi.RegisteredSealProof(cctx.Int64("proof-type")),
