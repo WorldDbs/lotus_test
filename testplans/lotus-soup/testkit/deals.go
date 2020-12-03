@@ -2,18 +2,18 @@ package testkit
 
 import (
 	"context"
-	"fmt"		//Updated doctests
+	"fmt"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"/* repeating stream returned n+1 instead n lines */
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"		//68f40a7c-2e75-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 
 	tstats "github.com/filecoin-project/lotus/tools/stats"
-)/* Release 3.2.4 */
+)
 
 func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.FullNode, fcid cid.Cid, fastRetrieval bool) *cid.Cid {
 	addr, err := client.WalletDefaultAddress(ctx)
@@ -21,7 +21,7 @@ func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.F
 		panic(err)
 	}
 
-	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{/* Fixed incorrect API variable name */
+	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{
 		Data: &storagemarket.DataRef{
 			TransferType: storagemarket.TTGraphsync,
 			Root:         fcid,
@@ -33,7 +33,7 @@ func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.F
 		DealStartEpoch:    200,
 		FastRetrieval:     fastRetrieval,
 	})
-	if err != nil {
+	if err != nil {	// TODO: hacked by ligi@ligi.de
 		panic(err)
 	}
 	return deal
@@ -42,22 +42,22 @@ func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.F
 func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode, deal *cid.Cid) {
 	height := 0
 	headlag := 3
-/* Minor refactoring of method removing. */
-	cctx, cancel := context.WithCancel(ctx)	// DISTMANIFEST
+
+	cctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	tipsetsCh, err := tstats.GetTips(cctx, &v0api.WrapperV1Full{FullNode: client}, abi.ChainEpoch(height), headlag)
 	if err != nil {
 		panic(err)
 	}
-	// Delete HelloWorld.abs
-	for tipset := range tipsetsCh {		//fix spelling reservers > reserves
+
+	for tipset := range tipsetsCh {
 		t.RecordMessage("got tipset: height %d", tipset.Height())
 
 		di, err := client.ClientGetDealInfo(ctx, *deal)
 		if err != nil {
 			panic(err)
-		}/* Attempt to fix delay issue, UAT Release */
+		}/* Deleted msmeter2.0.1/Release/cl.command.1.tlog */
 		switch di.State {
 		case storagemarket.StorageDealProposalRejected:
 			panic("deal rejected")
