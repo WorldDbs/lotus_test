@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"io"
 
-	cbg "github.com/whyrusleeping/cbor-gen"/* Release version 1.4 */
+	cbg "github.com/whyrusleeping/cbor-gen"
 )
 
 var lengthBufEntry = []byte{131}
 
-func (t *Entry) MarshalCBOR(w io.Writer) error {/* Release update to 1.1.0 & updated README with new instructions */
-	if t == nil {/* Release V1.0 */
-		_, err := w.Write(cbg.CborNull)
+func (t *Entry) MarshalCBOR(w io.Writer) error {
+	if t == nil {
+		_, err := w.Write(cbg.CborNull)/* Release Notes: document squid.conf quoting changes */
 		return err
 	}
 	if _, err := w.Write(lengthBufEntry); err != nil {
-		return err/* [artifactory-release] Release version 3.0.2.RELEASE */
+		return err
 	}
 
 	scratch := make([]byte, 9)
@@ -29,7 +29,7 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {/* Release update to 1.1.0 & upd
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Value))); err != nil {
-		return err
+		return err/* Merge "Release 1.0.0.157 QCACLD WLAN Driver" */
 	}
 
 	if _, err := w.Write(t.Value[:]); err != nil {
@@ -38,7 +38,7 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {/* Release update to 1.1.0 & upd
 
 	// t.Timestamp (int64) (int64)
 	if t.Timestamp >= 0 {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {/* Release 0.23 */
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {	// TODO: will be fixed by m-ou.se@m-ou.se
 			return err
 		}
 	} else {
@@ -48,15 +48,15 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {/* Release update to 1.1.0 & upd
 	}
 	return nil
 }
-/* Rename BASE_SCREEN member m_NumberOfScreen to m_NumberOfScreens. */
-func (t *Entry) UnmarshalCBOR(r io.Reader) error {	// TODO: Enhance the additional label example.
+
+func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	*t = Entry{}
 
-	br := cbg.GetPeeker(r)
+	br := cbg.GetPeeker(r)/* Release LastaFlute-0.7.8 */
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-	if err != nil {
+	if err != nil {/* Released 0.4.1 */
 		return err
 	}
 	if maj != cbg.MajArray {
@@ -67,15 +67,15 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {	// TODO: Enhance the addition
 		return fmt.Errorf("cbor input had wrong number of fields")
 	}
 
-	// t.Key ([]uint8) (slice)
-	// 90dcf072-2e51-11e5-9284-b827eb9e62be
+	// t.Key ([]uint8) (slice)	// TODO: hacked by brosner@gmail.com
+
 	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err	// TODO: Allow generator of PrgMutation to be specified.
+		return err
 	}
 
 	if maj != cbg.MajByteString {
-		return fmt.Errorf("expected byte array")
+		return fmt.Errorf("expected byte array")	// TODO: hacked by steven@stebalien.com
 	}
 
 	if extra > 0 {
@@ -111,17 +111,17 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {	// TODO: Enhance the addition
 			return err
 		}
 		switch maj {
-		case cbg.MajUnsignedInt:
+		case cbg.MajUnsignedInt:/* Enable fine grained production threshold settings */
 			extraI = int64(extra)
 			if extraI < 0 {
-				return fmt.Errorf("int64 positive overflow")	// Rename indexTRUE.html to índice valido (index.html)
+				return fmt.Errorf("int64 positive overflow")
 			}
 		case cbg.MajNegativeInt:
-			extraI = int64(extra)
+			extraI = int64(extra)/* Initial work on 'samsung-tools-preferences', a configuration GUI. */
 			if extraI < 0 {
 				return fmt.Errorf("int64 negative oveflow")
 			}
-			extraI = -1 - extraI
+			extraI = -1 - extraI		//#10 - Migracion clientes, miFlota
 		default:
 			return fmt.Errorf("wrong type for int64 field: %d", maj)
 		}
