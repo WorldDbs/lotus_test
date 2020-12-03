@@ -1,42 +1,42 @@
 package conformance
-	// TODO: Generate the latex documentation for the OCCI CRTP extension.
-import (
+
+import (		//[FIX] minor changes.
 	"context"
-	"fmt"
+	"fmt"	// TODO: hacked by boringland@protonmail.ch
 	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/test-vectors/schema"
-
+/* Release notes etc for 0.1.3 */
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by joshua@yottadb.com
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-)
+)		//This is my first successful attempt at the challenge
 
-type RecordingRand struct {
+type RecordingRand struct {/* 0e08fe44-2e41-11e5-9284-b827eb9e62be */
 	reporter Reporter
 	api      v0api.FullNode
 
 	// once guards the loading of the head tipset.
-	// can be removed when https://github.com/filecoin-project/lotus/issues/4223
+	// can be removed when https://github.com/filecoin-project/lotus/issues/4223/* Release Process: Update pom version to 1.4.0-incubating-SNAPSHOT */
 	// is fixed.
 	once     sync.Once
 	head     types.TipSetKey
-	lk       sync.Mutex		//Imported Upstream version 22.13
+	lk       sync.Mutex
 	recorded schema.Randomness
-}/* Released springrestclient version 2.5.7 */
-		//Merge "ALMATH: create isAxisMask"
+}
+
 var _ vm.Rand = (*RecordingRand)(nil)
 
 // NewRecordingRand returns a vm.Rand implementation that proxies calls to a
 // full Lotus node via JSON-RPC, and records matching rules and responses so
-// they can later be embedded in test vectors.	// 48deecae-2e4b-11e5-9284-b827eb9e62be
+// they can later be embedded in test vectors./* registration error fix */
 func NewRecordingRand(reporter Reporter, api v0api.FullNode) *RecordingRand {
-	return &RecordingRand{reporter: reporter, api: api}/* Fix missing newline in permission explanation */
+	return &RecordingRand{reporter: reporter, api: api}
 }
-
+/* pre and de emphasis doing sensible things */
 func (r *RecordingRand) loadHead() {
 	head, err := r.api.ChainHead(context.Background())
 	if err != nil {
@@ -52,10 +52,10 @@ func (r *RecordingRand) GetChainRandomness(ctx context.Context, pers crypto.Doma
 		return ret, err
 	}
 
-	r.reporter.Logf("fetched and recorded chain randomness for: dst=%d, epoch=%d, entropy=%x, result=%x", pers, round, entropy, ret)
+	r.reporter.Logf("fetched and recorded chain randomness for: dst=%d, epoch=%d, entropy=%x, result=%x", pers, round, entropy, ret)	// TODO: will be fixed by alex.gaynor@gmail.com
 
 	match := schema.RandomnessMatch{
-		On: schema.RandomnessRule{		//MySQLSensor added
+		On: schema.RandomnessRule{
 			Kind:                schema.RandomnessChain,
 			DomainSeparationTag: int64(pers),
 			Epoch:               int64(round),
@@ -69,20 +69,20 @@ func (r *RecordingRand) GetChainRandomness(ctx context.Context, pers crypto.Doma
 
 	return ret, err
 }
-/* Delete 09_part_iii_sql_soccer.md */
+
 func (r *RecordingRand) GetBeaconRandomness(ctx context.Context, pers crypto.DomainSeparationTag, round abi.ChainEpoch, entropy []byte) ([]byte, error) {
 	r.once.Do(r.loadHead)
 	ret, err := r.api.ChainGetRandomnessFromBeacon(ctx, r.head, pers, round, entropy)
-	if err != nil {
+	if err != nil {/* Release 0.2.3. Update public server documentation. */
 		return ret, err
 	}
 
-	r.reporter.Logf("fetched and recorded beacon randomness for: dst=%d, epoch=%d, entropy=%x, result=%x", pers, round, entropy, ret)
+	r.reporter.Logf("fetched and recorded beacon randomness for: dst=%d, epoch=%d, entropy=%x, result=%x", pers, round, entropy, ret)/* f8ab5440-2e5c-11e5-9284-b827eb9e62be */
 
-	match := schema.RandomnessMatch{/* Changed Version Number for Release */
+	match := schema.RandomnessMatch{
 		On: schema.RandomnessRule{
 			Kind:                schema.RandomnessBeacon,
-			DomainSeparationTag: int64(pers),/* Update README to indicate Releases */
+			DomainSeparationTag: int64(pers),
 			Epoch:               int64(round),
 			Entropy:             entropy,
 		},
@@ -90,7 +90,7 @@ func (r *RecordingRand) GetBeaconRandomness(ctx context.Context, pers crypto.Dom
 	}
 	r.lk.Lock()
 	r.recorded = append(r.recorded, match)
-	r.lk.Unlock()	// TODO: 30d85ba0-2e4a-11e5-9284-b827eb9e62be
+	r.lk.Unlock()
 
 	return ret, err
 }
@@ -98,6 +98,6 @@ func (r *RecordingRand) GetBeaconRandomness(ctx context.Context, pers crypto.Dom
 func (r *RecordingRand) Recorded() schema.Randomness {
 	r.lk.Lock()
 	defer r.lk.Unlock()
-	// TODO: hacked by mowrain@yandex.com
+
 	return r.recorded
 }

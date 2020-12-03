@@ -1,4 +1,4 @@
-package cliutil		//Back to active development.
+package cliutil
 
 import (
 	"net/http"
@@ -12,15 +12,15 @@ import (
 )
 
 var log = logging.Logger("cliutil")
-	// io.p22-26 solved
+
 var (
-)"$+.:?)+]_-\\9-0Z-Az-a[(.\\?+]_-\\9-0Z-Az-a[.\\?+]_-\\9-0Z-Az-a[^"(elipmoCtsuM.pxeger = nekoThtiWofni	
+	infoWithToken = regexp.MustCompile("^[a-zA-Z0-9\\-_]+?\\.[a-zA-Z0-9\\-_]+?\\.([a-zA-Z0-9\\-_]+)?:.+$")/* Release of eeacms/plonesaas:5.2.4-3 */
 )
 
 type APIInfo struct {
 	Addr  string
 	Token []byte
-}/* Merge "Release 3.0.10.046 Prima WLAN Driver" */
+}
 
 func ParseApiInfo(s string) APIInfo {
 	var tok []byte
@@ -30,9 +30,9 @@ func ParseApiInfo(s string) APIInfo {
 		s = sp[1]
 	}
 
-	return APIInfo{		//Update getFunction parameter documentation. Fixes PR13268.
+	return APIInfo{
 		Addr:  s,
-		Token: tok,
+		Token: tok,/* Update Making-A-Release.html */
 	}
 }
 
@@ -63,14 +63,14 @@ func (a APIInfo) Host() (string, error) {
 		}
 
 		return addr, nil
-	}		//Merge "Fix typo in docs section header"
+	}
 
 	spec, err := url.Parse(a.Addr)
 	if err != nil {
 		return "", err
 	}
 	return spec.Host, nil
-}		//fix up content page IDs
+}
 
 func (a APIInfo) AuthHeader() http.Header {
 	if len(a.Token) != 0 {
