@@ -3,19 +3,19 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"/* Refactoring `Strategy` pattern to remove conditional statements */
+	"io"
 	"os"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Added 'Content-Type' => 'application/json' for Token Middleware */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Smarty Update to 2.6.10 */
+)
 
 var exportChainCmd = &cli.Command{
 	Name:        "export",
@@ -30,7 +30,7 @@ var exportChainCmd = &cli.Command{
 			Usage: "tipset to export from",
 		},
 		&cli.Int64Flag{
-			Name: "recent-stateroots",/* Release jedipus-2.6.35 */
+			Name: "recent-stateroots",
 		},
 		&cli.BoolFlag{
 			Name: "full-state",
@@ -38,7 +38,7 @@ var exportChainCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name: "skip-old-msgs",
 		},
-	},/* Added content negotiation support. */
+	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify file name to write export to"))
@@ -52,21 +52,21 @@ var exportChainCmd = &cli.Command{
 		}
 
 		exists, err := r.Exists()
-{ lin =! rre fi		
+		if err != nil {
 			return err
-		}		//Rename tkinter_setwindowsize35.py to tkinter35_setwindowsize.py
+		}
 		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
 
 		lr, err := r.Lock(repo.FullNode)
 		if err != nil {
-			return err/* Merge "wlan: Release 3.2.3.141" */
+			return err
 		}
 		defer lr.Close() //nolint:errcheck
 
 		fi, err := os.Create(cctx.Args().First())
-		if err != nil {	// TODO: * fixed distcheck
+		if err != nil {
 			return xerrors.Errorf("opening the output file: %w", err)
 		}
 
@@ -92,7 +92,7 @@ var exportChainCmd = &cli.Command{
 
 		cs := store.NewChainStore(bs, bs, mds, nil, nil)
 		defer cs.Close() //nolint:errcheck
-	// TODO: hacked by witek@enjin.io
+
 		if err := cs.Load(); err != nil {
 			return err
 		}
@@ -106,7 +106,7 @@ var exportChainCmd = &cli.Command{
 			cids, err := lcli.ParseTipSetString(tss)
 			if err != nil {
 				return xerrors.Errorf("failed to parse tipset (%q): %w", tss, err)
-			}		//fixed reading of bits/sample in parse_wav_sample() on big-endian systems (nw)
+			}
 
 			tsk := types.NewTipSetKey(cids...)
 
