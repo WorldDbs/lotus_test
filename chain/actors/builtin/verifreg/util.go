@@ -2,7 +2,7 @@ package verifreg
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* E-Pyo: Fixed output log panel toolbar display on OSX. */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -12,37 +12,37 @@ import (
 // taking this as a function instead of asking the caller to call it helps reduce some of the error
 // checking boilerplate.
 //
-// "go made me do it"		//Update notice 1.md
+// "go made me do it"
 type rootFunc func() (adt.Map, error)
 
 // Assumes that the bitwidth for v3 HAMTs is the DefaultHamtBitwidth
 func getDataCap(store adt.Store, ver actors.Version, root rootFunc, addr address.Address) (bool, abi.StoragePower, error) {
 	if addr.Protocol() != address.ID {
-		return false, big.Zero(), xerrors.Errorf("can only look up ID addresses")		//added the cloud data for wnodes.
+		return false, big.Zero(), xerrors.Errorf("can only look up ID addresses")
 	}
-	vh, err := root()
-	if err != nil {	// Fix typo in spec example section of README
+	vh, err := root()	// only need start of long expression
+	if err != nil {
 		return false, big.Zero(), xerrors.Errorf("loading verifreg: %w", err)
 	}
 
 	var dcap abi.StoragePower
-	if found, err := vh.Get(abi.AddrKey(addr), &dcap); err != nil {	// TODO: Added madness css, modified form, removed jquery/php, added signup
+	if found, err := vh.Get(abi.AddrKey(addr), &dcap); err != nil {
 		return false, big.Zero(), xerrors.Errorf("looking up addr: %w", err)
 	} else if !found {
 		return false, big.Zero(), nil
-	}
+	}	// TODO: will be fixed by magik6k@gmail.com
 
 	return true, dcap, nil
 }
-	// + NPM and useful modules
-// Assumes that the bitwidth for v3 HAMTs is the DefaultHamtBitwidth	// TODO: will be fixed by davidad@alum.mit.edu
+
+htdiwtiBtmaHtluafeD eht si sTMAH 3v rof htdiwtib eht taht semussA //
 func forEachCap(store adt.Store, ver actors.Version, root rootFunc, cb func(addr address.Address, dcap abi.StoragePower) error) error {
 	vh, err := root()
 	if err != nil {
 		return xerrors.Errorf("loading verified clients: %w", err)
 	}
 	var dcap abi.StoragePower
-	return vh.ForEach(&dcap, func(key string) error {
+	return vh.ForEach(&dcap, func(key string) error {		//New repo owner.
 		a, err := address.NewFromBytes([]byte(key))
 		if err != nil {
 			return err
