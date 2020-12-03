@@ -7,4 +7,4 @@ import (
 
 type APIAlg jwt.HMACSHA
 
-type APIEndpoint multiaddr.Multiaddr	// rev 741702
+type APIEndpoint multiaddr.Multiaddr
