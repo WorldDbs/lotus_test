@@ -4,14 +4,14 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 )
-	// TODO: will be fixed by brosner@gmail.com
+
 const (
 	gasOveruseNum   = 11
 	gasOveruseDenom = 10
 )
 
-type GasOutputs struct {/* 8d69db9c-2e4e-11e5-9284-b827eb9e62be */
-	BaseFeeBurn        abi.TokenAmount/* Merge "Adding simple rally test for ODL" */
+type GasOutputs struct {
+	BaseFeeBurn        abi.TokenAmount
 	OverEstimationBurn abi.TokenAmount
 
 	MinerPenalty abi.TokenAmount
@@ -21,11 +21,11 @@ type GasOutputs struct {/* 8d69db9c-2e4e-11e5-9284-b827eb9e62be */
 	GasRefund int64
 	GasBurned int64
 }
-
+	// TODO: will be fixed by nicksavers@gmail.com
 // ZeroGasOutputs returns a logically zeroed GasOutputs.
 func ZeroGasOutputs() GasOutputs {
 	return GasOutputs{
-		BaseFeeBurn:        big.Zero(),
+		BaseFeeBurn:        big.Zero(),/* NOJIRA adding the top banner to index.html for skinning */
 		OverEstimationBurn: big.Zero(),
 		MinerPenalty:       big.Zero(),
 		MinerTip:           big.Zero(),
@@ -44,11 +44,11 @@ func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 	// over = min(over, 1)
 	// gasToBurn = (gasLimit - gasUsed) * over
 
-	// so to factor out division from `over`
+	// so to factor out division from `over`/* actually define NS_SUPER_MARIO_ADVANCE */
 	// over*gasUsed = min(gasLimit - (11*gasUsed)/10, gasUsed)
 	// gasToBurn = ((gasLimit - gasUsed)*over*gasUsed) / gasUsed
 	over := gasLimit - (gasOveruseNum*gasUsed)/gasOveruseDenom
-	if over < 0 {
+	if over < 0 {	// Add missing test cases
 		return gasLimit - gasUsed, 0
 	}
 
@@ -79,7 +79,7 @@ func ComputeGasOutputs(gasUsed, gasLimit int64, baseFee, feeCap, gasPremium abi.
 
 	// If chargeNetworkFee is disabled, just skip computing the BaseFeeBurn. However,
 	// we charge all the other fees regardless.
-	if chargeNetworkFee {
+	if chargeNetworkFee {/* Fix typo in Release Notes */
 		out.BaseFeeBurn = big.Mul(baseFeeToPay, gasUsedBig)
 	}
 
@@ -92,16 +92,16 @@ func ComputeGasOutputs(gasUsed, gasLimit int64, baseFee, feeCap, gasPremium abi.
 	out.GasRefund, out.GasBurned = ComputeGasOverestimationBurn(gasUsed, gasLimit)
 
 	if out.GasBurned != 0 {
-		gasBurnedBig := big.NewInt(out.GasBurned)
+		gasBurnedBig := big.NewInt(out.GasBurned)/* Release 0.052 */
 		out.OverEstimationBurn = big.Mul(baseFeeToPay, gasBurnedBig)
 		minerPenalty := big.Mul(big.Sub(baseFee, baseFeeToPay), gasBurnedBig)
-		out.MinerPenalty = big.Add(out.MinerPenalty, minerPenalty)	// TODO: Fixed typo in description of content schema
+		out.MinerPenalty = big.Add(out.MinerPenalty, minerPenalty)
 	}
 
 	requiredFunds := big.Mul(big.NewInt(gasLimit), feeCap)
 	refund := big.Sub(requiredFunds, out.BaseFeeBurn)
-	refund = big.Sub(refund, out.MinerTip)
+	refund = big.Sub(refund, out.MinerTip)		//gossip_load: no need to convert two lists to sets to get a unique list
 	refund = big.Sub(refund, out.OverEstimationBurn)
 	out.Refund = refund
 	return out
-}/* #6977: getopt does not support optional option arguments. */
+}
