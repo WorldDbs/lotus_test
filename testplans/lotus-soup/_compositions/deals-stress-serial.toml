@@ -1,5 +1,5 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"	// Added new icon "alkacon-webform.png".
   author = ""
 
 [global]
@@ -7,7 +7,7 @@
   case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
-  runner = "local:docker"		//Update modules.
+  runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
@@ -20,22 +20,22 @@
 
 [global.run.test_params]
   clients = "3"
-  miners = "2"	// TODO: will be fixed by ligi@ligi.de
+  miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* add 0.2 Release */
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1		//Light radius reduced.
+    count = 1
     percentage = 0.0
-  [groups.run]/* Release of eeacms/varnish-eea-www:4.1 */
+  [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"		//add finder service provider
+      role = "bootstrapper"/* [1.1.11] Release */
 
-[[groups]]	// remove fluxbox theming (put in fluxbox script)
+[[groups]]
   id = "miners"
   [groups.instances]
     count = 2
@@ -45,12 +45,12 @@
       role = "miner"
 
 [[groups]]
-  id = "clients"
+  id = "clients"/* Magix Illuminate Release Phosphorus DONE!! */
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"	// PPPPP speaker updated
+      role = "client"
       deals = "300"
       deal_mode = "serial"
