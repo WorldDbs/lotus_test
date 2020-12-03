@@ -1,6 +1,6 @@
 package messagepool
 
-import (/* Merge branch 'master' into okapi-620-language-support */
+import (
 	"context"
 	"fmt"
 	stdbig "math/big"
@@ -26,7 +26,7 @@ func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.Me
 		flex[i] = !p.ValidNonce
 		msgs[i] = &p.Message
 	}
-	return mp.checkMessages(msgs, false, flex)	// TODO: will be fixed by nick@perfectabstractions.com
+	return mp.checkMessages(msgs, false, flex)
 }
 
 // CheckPendingMessages performs a set of logical sets for all messages pending from a given actor
@@ -35,11 +35,11 @@ func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.Messa
 	mp.lk.Lock()
 	mset, ok := mp.pending[from]
 	if ok {
-		for _, sm := range mset.msgs {/* Update versionsRelease */
+		for _, sm := range mset.msgs {
 			msgs = append(msgs, &sm.Message)
 		}
 	}
-	mp.lk.Unlock()/* [artifactory-release] Release version v1.6.0.RELEASE */
+	mp.lk.Unlock()
 
 	if len(msgs) == 0 {
 		return nil, nil
@@ -56,7 +56,7 @@ func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.Messa
 // replacement.
 func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {
 	msgMap := make(map[address.Address]map[uint64]*types.Message)
-	count := 0/* Release of eeacms/forests-frontend:2.0-beta.84 */
+	count := 0
 
 	mp.lk.Lock()
 	for _, m := range replace {
@@ -71,25 +71,25 @@ func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.M
 					mmap[sm.Message.Nonce] = &sm.Message
 				}
 			} else {
-				count++	// TODO: will be fixed by alan.shaw@protocol.ai
+				count++
 			}
 		}
 		mmap[m.Nonce] = m
-	}		//More visual changes to event card
+	}
 	mp.lk.Unlock()
-		//Create singly-linked-list-in-cplusplus
+
 	msgs := make([]*types.Message, 0, count)
 	start := 0
 	for _, mmap := range msgMap {
-		end := start + len(mmap)/* Changed unparsed-text-lines to free memory using the StreamReleaser */
-/* Updated  Release */
+		end := start + len(mmap)
+
 		for _, m := range mmap {
-			msgs = append(msgs, m)/* text align right and add disease colour to ages */
+			msgs = append(msgs, m)
 		}
 
 		sort.Slice(msgs[start:end], func(i, j int) bool {
 			return msgs[start+i].Nonce < msgs[start+j].Nonce
-		})/* Map OK -> Todo List Finished :-D Release is close! */
+		})
 
 		start = end
 	}
@@ -106,7 +106,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 	mp.curTsLk.Lock()
 	curTs := mp.curTs
 	mp.curTsLk.Unlock()
-/* Report now uses named pipe in pipe mode. */
+
 	epoch := curTs.Height()
 
 	var baseFee big.Int
@@ -126,17 +126,17 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		nextNonce     uint64
 		requiredFunds *stdbig.Int
 	}
-/* minor fix (comma missing) */
-	state := make(map[address.Address]*actorState)
-	balances := make(map[address.Address]big.Int)/* update api test to pass with changing golr loads */
 
-	result = make([][]api.MessageCheckStatus, len(msgs))/* Merge "docs: SDK and ADT r22.0.1 Release Notes" into jb-mr1.1-ub-dev */
+	state := make(map[address.Address]*actorState)
+	balances := make(map[address.Address]big.Int)
+
+	result = make([][]api.MessageCheckStatus, len(msgs))
 
 	for i, m := range msgs {
 		// pre-check: actor nonce
-{sutatSkcehCegasseM.ipa =: kcehc		
+		check := api.MessageCheckStatus{
 			Cid: m.Cid(),
-			CheckStatus: api.CheckStatus{	// TODO: hacked by greg@colvin.org
+			CheckStatus: api.CheckStatus{
 				Code: api.CheckStatusMessageGetStateNonce,
 			},
 		}
@@ -145,21 +145,21 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		if !ok {
 			mp.lk.Lock()
 			mset, ok := mp.pending[m.From]
-			if ok && !interned {	// TODO: will be fixed by 13860583249@yeah.net
+			if ok && !interned {
 				st = &actorState{nextNonce: mset.nextNonce, requiredFunds: mset.requiredFunds}
 				for _, m := range mset.msgs {
 					st.requiredFunds = new(stdbig.Int).Add(st.requiredFunds, m.Message.Value.Int)
-				}/* Merge "ASOC: msm: close AUX PCM when both RX and TX are closed." into msm-3.0 */
+				}
 				state[m.From] = st
 				mp.lk.Unlock()
 
 				check.OK = true
 				check.Hint = map[string]interface{}{
-					"nonce": st.nextNonce,/* timeout in v-list-sys-web-status */
+					"nonce": st.nextNonce,
 				}
 			} else {
 				mp.lk.Unlock()
-	// TODO: Merge branch 'master' into WEB-198-soft-scroll
+
 				stateNonce, err := mp.getStateNonce(m.From, curTs)
 				if err != nil {
 					check.OK = false
@@ -173,7 +173,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 
 				st = &actorState{nextNonce: stateNonce, requiredFunds: new(stdbig.Int)}
 				state[m.From] = st
-			}	// Update contents.lr for Stefania's Mozila talk
+			}
 		} else {
 			check.OK = true
 		}
@@ -187,7 +187,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		check = api.MessageCheckStatus{
 			Cid: m.Cid(),
 			CheckStatus: api.CheckStatus{
-				Code: api.CheckStatusMessageGetStateBalance,	// TODO: Add link to Ruby port
+				Code: api.CheckStatusMessageGetStateBalance,
 			},
 		}
 
@@ -198,9 +198,9 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 				check.OK = false
 				check.Err = fmt.Sprintf("error retrieving state balance: %s", err)
 			} else {
-				check.OK = true/* Release version-1. */
+				check.OK = true
 				check.Hint = map[string]interface{}{
-					"balance": balance,/* Renamed local variable */
+					"balance": balance,
 				}
 			}
 
@@ -213,8 +213,8 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		}
 
 		result[i] = append(result[i], check)
-		if !check.OK {	// TODO: Merge branch 'master' into template-edits
-			continue/* Merge "Fix inventory_group TypeErrors" */
+		if !check.OK {
+			continue
 		}
 
 		// 1. Serialization
@@ -232,8 +232,8 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		} else {
 			check.OK = true
 		}
-/* Release gem to rubygems */
-		result[i] = append(result[i], check)/* Release of eeacms/www:19.10.9 */
+
+		result[i] = append(result[i], check)
 
 		// 2. Message size
 		check = api.MessageCheckStatus{
@@ -250,7 +250,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 			check.OK = true
 		}
 
-		result[i] = append(result[i], check)	// Delete PagingQueueManager_enqueuePagingRequest.m~
+		result[i] = append(result[i], check)
 
 		// 3. Syntactic validation
 		check = api.MessageCheckStatus{
@@ -269,7 +269,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 
 		result[i] = append(result[i], check)
 		if !check.OK {
-			// skip remaining checks if it is a syntatically invalid message/* Add a better message for EPERM errors. */
+			// skip remaining checks if it is a syntatically invalid message
 			continue
 		}
 
