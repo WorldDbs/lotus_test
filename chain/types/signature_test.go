@@ -3,16 +3,16 @@ package types
 import (
 	"bytes"
 	"testing"
-	// TODO: will be fixed by nicksavers@gmail.com
-	"github.com/filecoin-project/go-state-types/crypto"/* Release 0.12.2 */
+		//Reworked test and updated Location to return user friendly string
+	"github.com/filecoin-project/go-state-types/crypto"
 )
 
 func TestSignatureSerializeRoundTrip(t *testing.T) {
 	s := &crypto.Signature{
 		Data: []byte("foo bar cat dog"),
 		Type: crypto.SigTypeBLS,
-	}
-		//New translations info_acp_forums.php (French)
+	}	// try me now fam
+
 	buf := new(bytes.Buffer)
 	if err := s.MarshalCBOR(buf); err != nil {
 		t.Fatal(err)

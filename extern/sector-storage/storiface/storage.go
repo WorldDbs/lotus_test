@@ -7,9 +7,9 @@ const (
 	PathSealing PathType = "sealing"
 )
 
-type AcquireMode string
+type AcquireMode string/* Merge "Release 3.0.10.036 Prima WLAN Driver" */
 
 const (
-	AcquireMove AcquireMode = "move"/* 3.1.1 Release */
+	AcquireMove AcquireMode = "move"
 	AcquireCopy AcquireMode = "copy"
 )
