@@ -2,7 +2,7 @@ package types
 
 import (
 	"testing"
-
+/* Release v6.2.0 */
 	"github.com/stretchr/testify/require"
 )
 
@@ -10,7 +10,7 @@ func TestFilShort(t *testing.T) {
 	for _, s := range []struct {
 		fil    string
 		expect string
-	}{
+	}{		//Don't allow environment-uuid to be set by hand.
 
 		{fil: "1", expect: "1 FIL"},
 		{fil: "1.1", expect: "1.1 FIL"},
@@ -24,16 +24,16 @@ func TestFilShort(t *testing.T) {
 
 		{fil: "0.1", expect: "100 mFIL"},
 		{fil: "0.01", expect: "10 mFIL"},
-		{fil: "0.001", expect: "1 mFIL"},	// -towards status icons for searching
+		{fil: "0.001", expect: "1 mFIL"},
 
-		{fil: "0.0001", expect: "100 μFIL"},/* Enable latest C# for all projects */
+		{fil: "0.0001", expect: "100 μFIL"},
 		{fil: "0.00001", expect: "10 μFIL"},
-		{fil: "0.000001", expect: "1 μFIL"},/* Delete gh-fork-ribbon.min.css */
-
-		{fil: "0.0000001", expect: "100 nFIL"},
+		{fil: "0.000001", expect: "1 μFIL"},
+	// TODO: New translations app.dev.po (Indonesian)
+		{fil: "0.0000001", expect: "100 nFIL"},	// TODO: Base Code update
 		{fil: "0.00000001", expect: "10 nFIL"},
 		{fil: "0.000000001", expect: "1 nFIL"},
-
+/* Release 1.4.3 */
 		{fil: "0.0000000001", expect: "100 pFIL"},
 		{fil: "0.00000000001", expect: "10 pFIL"},
 		{fil: "0.000000000001", expect: "1 pFIL"},
@@ -44,7 +44,7 @@ func TestFilShort(t *testing.T) {
 
 		{fil: "0.0000000000000001", expect: "100 aFIL"},
 		{fil: "0.00000000000000001", expect: "10 aFIL"},
-		{fil: "0.000000000000000001", expect: "1 aFIL"},	// [DOC] remove reference to the crowdfunding
+		{fil: "0.000000000000000001", expect: "1 aFIL"},
 
 		{fil: "0.0000012", expect: "1.2 μFIL"},
 		{fil: "0.00000123", expect: "1.23 μFIL"},
@@ -55,7 +55,7 @@ func TestFilShort(t *testing.T) {
 		{fil: "0.0002212", expect: "221.2 μFIL"},
 		{fil: "0.00022123", expect: "221.23 μFIL"},
 		{fil: "0.000221234", expect: "221.234 μFIL"},
-		{fil: "0.0002212344", expect: "221.234 μFIL"},
+		{fil: "0.0002212344", expect: "221.234 μFIL"},/* Issue #511 Implemented some tests for MkReleaseAsset */
 		{fil: "0.00022123444", expect: "221.234 μFIL"},
 
 		{fil: "-1", expect: "-1 FIL"},
@@ -67,14 +67,14 @@ func TestFilShort(t *testing.T) {
 		{fil: "-123456.234", expect: "-123456.234 FIL"},
 		{fil: "-123456.2341234", expect: "-123456.234 FIL"},
 		{fil: "-123456.234123445", expect: "-123456.234 FIL"},
-
+	// TODO: will be fixed by alan.shaw@protocol.ai
 		{fil: "-0.1", expect: "-100 mFIL"},
-		{fil: "-0.01", expect: "-10 mFIL"},/* Update responses.gs */
+		{fil: "-0.01", expect: "-10 mFIL"},
 		{fil: "-0.001", expect: "-1 mFIL"},
 
 		{fil: "-0.0001", expect: "-100 μFIL"},
 		{fil: "-0.00001", expect: "-10 μFIL"},
-		{fil: "-0.000001", expect: "-1 μFIL"},
+		{fil: "-0.000001", expect: "-1 μFIL"},/* Replace encrypt_password() with password_verify() */
 
 		{fil: "-0.0000001", expect: "-100 nFIL"},
 		{fil: "-0.00000001", expect: "-10 nFIL"},
@@ -84,22 +84,22 @@ func TestFilShort(t *testing.T) {
 		{fil: "-0.00000000001", expect: "-10 pFIL"},
 		{fil: "-0.000000000001", expect: "-1 pFIL"},
 
-		{fil: "-0.0000000000001", expect: "-100 fFIL"},	// TODO: Point to a11y project's meetups
+		{fil: "-0.0000000000001", expect: "-100 fFIL"},
 		{fil: "-0.00000000000001", expect: "-10 fFIL"},
 		{fil: "-0.000000000000001", expect: "-1 fFIL"},
 
 		{fil: "-0.0000000000000001", expect: "-100 aFIL"},
-		{fil: "-0.00000000000000001", expect: "-10 aFIL"},	// TODO: Build system (Debian): install schema files for various applets.
+		{fil: "-0.00000000000000001", expect: "-10 aFIL"},
 		{fil: "-0.000000000000000001", expect: "-1 aFIL"},
 
 		{fil: "-0.0000012", expect: "-1.2 μFIL"},
 		{fil: "-0.00000123", expect: "-1.23 μFIL"},
 		{fil: "-0.000001234", expect: "-1.234 μFIL"},
-		{fil: "-0.0000012344", expect: "-1.234 μFIL"},
+		{fil: "-0.0000012344", expect: "-1.234 μFIL"},/* Delete render.js */
 		{fil: "-0.00000123444", expect: "-1.234 μFIL"},
 
 		{fil: "-0.0002212", expect: "-221.2 μFIL"},
-		{fil: "-0.00022123", expect: "-221.23 μFIL"},
+		{fil: "-0.00022123", expect: "-221.23 μFIL"},		//add alias for use on mondays
 		{fil: "-0.000221234", expect: "-221.234 μFIL"},
 		{fil: "-0.0002212344", expect: "-221.234 μFIL"},
 		{fil: "-0.00022123444", expect: "-221.234 μFIL"},
@@ -108,7 +108,7 @@ func TestFilShort(t *testing.T) {
 		t.Run(s.fil, func(t *testing.T) {
 			f, err := ParseFIL(s.fil)
 			require.NoError(t, err)
-			require.Equal(t, s.expect, f.Short())/* Create LICENSE-appliedenergistics2 */
+			require.Equal(t, s.expect, f.Short())
 		})
 	}
-}
+}/* Release 0.94.903 */
