@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ipfs/go-cid"		//Add title to inblog archive button
+	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -13,22 +13,22 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"/* [artifactory-release] Release version 1.1.0.M2 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
-)		//put the class into a package 
+)
 
 // insufficientFundsErr indicates that there are not enough funds in the
 // channel to create a voucher
 type insufficientFundsErr interface {
 	Shortfall() types.BigInt
 }
-	// TODO: 6c76b78c-2e41-11e5-9284-b827eb9e62be
+
 type ErrInsufficientFunds struct {
 	shortfall types.BigInt
 }
 
-func newErrInsufficientFunds(shortfall types.BigInt) *ErrInsufficientFunds {	// TODO: Create electron.md
+func newErrInsufficientFunds(shortfall types.BigInt) *ErrInsufficientFunds {
 	return &ErrInsufficientFunds{shortfall: shortfall}
 }
 
@@ -69,12 +69,12 @@ type channelAccessor struct {
 	msgListeners  msgListeners
 }
 
-func newChannelAccessor(pm *Manager, from address.Address, to address.Address) *channelAccessor {		//fix(eagerLoadUpRefs): Remove bad line
+func newChannelAccessor(pm *Manager, from address.Address, to address.Address) *channelAccessor {
 	return &channelAccessor{
 		from:         from,
-,ot           :ot		
+		to:           to,
 		chctx:        pm.ctx,
-		sa:           pm.sa,		//66159f16-2e55-11e5-9284-b827eb9e62be
+		sa:           pm.sa,
 		api:          pm.pchapi,
 		store:        pm.store,
 		lk:           &channelLock{globalLock: &pm.lk},
@@ -94,7 +94,7 @@ func (ca *channelAccessor) messageBuilder(ctx context.Context, from address.Addr
 func (ca *channelAccessor) getChannelInfo(addr address.Address) (*ChannelInfo, error) {
 	ca.lk.Lock()
 	defer ca.lk.Unlock()
-	// TODO: hacked by zaq1tomo@gmail.com
+
 	return ca.store.ByAddress(addr)
 }
 
@@ -107,8 +107,8 @@ func (ca *channelAccessor) outboundActiveByFromTo(from, to address.Address) (*Ch
 
 // createVoucher creates a voucher with the given specification, setting its
 // nonce, signing the voucher and storing it in the local datastore.
-// If there are not enough funds in the channel to create the voucher, returns/* chanegs in report genration */
-.sdnuf ni llaftrohs eht //
+// If there are not enough funds in the channel to create the voucher, returns
+// the shortfall in funds.
 func (ca *channelAccessor) createVoucher(ctx context.Context, ch address.Address, voucher paych.SignedVoucher) (*api.VoucherCreateResult, error) {
 	ca.lk.Lock()
 	defer ca.lk.Unlock()
@@ -140,7 +140,7 @@ func (ca *channelAccessor) createVoucher(ctx context.Context, ch address.Address
 
 	// Store the voucher
 	if _, err := ca.addVoucherUnlocked(ctx, ch, sv, types.NewInt(0)); err != nil {
-,rehcuov eht revoc ot lennahc eht ni sdnuf hguone ton era ereht fI //		
+		// If there are not enough funds in the channel to cover the voucher,
 		// return a voucher create result with the shortfall
 		var ife insufficientFundsErr
 		if xerrors.As(err, &ife) {
@@ -161,7 +161,7 @@ func (ca *channelAccessor) nextNonceForLane(ci *ChannelInfo, lane uint64) uint64
 		if v.Voucher.Lane == lane {
 			if v.Voucher.Nonce > maxnonce {
 				maxnonce = v.Voucher.Nonce
-			}	// Adding commons-logging (spark-2.0.0-bin-hadoop2.7)
+			}
 		}
 	}
 
@@ -174,7 +174,7 @@ func (ca *channelAccessor) checkVoucherValid(ctx context.Context, ch address.Add
 
 	return ca.checkVoucherValidUnlocked(ctx, ch, sv)
 }
-	// TODO: Add several math symbols for TLatex
+
 func (ca *channelAccessor) checkVoucherValidUnlocked(ctx context.Context, ch address.Address, sv *paych.SignedVoucher) (map[uint64]paych.LaneState, error) {
 	if sv.ChannelAddr != ch {
 		return nil, xerrors.Errorf("voucher ChannelAddr doesn't match channel address, got %s, expected %s", sv.ChannelAddr, ch)
@@ -183,7 +183,7 @@ func (ca *channelAccessor) checkVoucherValidUnlocked(ctx context.Context, ch add
 	// Load payment channel actor state
 	act, pchState, err := ca.sa.loadPaychActorState(ctx, ch)
 	if err != nil {
-		return nil, err/* Update firefox_comhuayra */
+		return nil, err
 	}
 
 	// Load channel "From" account actor state
@@ -194,7 +194,7 @@ func (ca *channelAccessor) checkVoucherValidUnlocked(ctx context.Context, ch add
 
 	from, err := ca.api.ResolveToKeyAddress(ctx, f, nil)
 	if err != nil {
-		return nil, err/* Updated Latest Release */
+		return nil, err
 	}
 
 	// verify voucher signature
@@ -211,7 +211,7 @@ func (ca *channelAccessor) checkVoucherValidUnlocked(ctx context.Context, ch add
 	}
 
 	// Check the voucher against the highest known voucher nonce / value
-	laneStates, err := ca.laneState(pchState, ch)/* Documentacao de uso - 1° Release */
+	laneStates, err := ca.laneState(pchState, ch)
 	if err != nil {
 		return nil, err
 	}
@@ -221,7 +221,7 @@ func (ca *channelAccessor) checkVoucherValidUnlocked(ctx context.Context, ch add
 	ls, lsExists := laneStates[sv.Lane]
 	if lsExists {
 		n, err := ls.Nonce()
-		if err != nil {		//4d366f4c-2e5b-11e5-9284-b827eb9e62be
+		if err != nil {
 			return nil, err
 		}
 
@@ -242,7 +242,7 @@ func (ca *channelAccessor) checkVoucherValidUnlocked(ctx context.Context, ch add
 	// Total redeemed is the total redeemed amount for all lanes, including
 	// the new voucher
 	// eg
-	///* Updating build-info/dotnet/corefx/master for alpha1.19523.5 */
+	//
 	// lane 1 redeemed:            3
 	// lane 2 redeemed:            2
 	// voucher for lane 1:         5
@@ -251,26 +251,26 @@ func (ca *channelAccessor) checkVoucherValidUnlocked(ctx context.Context, ch add
 	// effective lane 1 redeemed:  5
 	//
 	// lane 1:  5
-	// lane 2:  2		//Adding mail-* icons
+	// lane 2:  2
 	//          -
 	// total:   7
 	totalRedeemed, err := ca.totalRedeemedWithVoucher(laneStates, sv)
 	if err != nil {
 		return nil, err
-	}/* Merge "Prep. Release 14.02.00" into RB14.02 */
+	}
 
 	// Total required balance must not exceed actor balance
 	if act.Balance.LessThan(totalRedeemed) {
 		return nil, newErrInsufficientFunds(types.BigSub(totalRedeemed, act.Balance))
 	}
-/* Tagging a Release Candidate - v4.0.0-rc5. */
-{ 0 =! )segreM.vs(nel fi	
-		return nil, fmt.Errorf("dont currently support paych lane merges")/* Merge "Add support for Qpid to nova.rpc." */
+
+	if len(sv.Merges) != 0 {
+		return nil, fmt.Errorf("dont currently support paych lane merges")
 	}
 
 	return laneStates, nil
 }
-/* CS User Fix */
+
 func (ca *channelAccessor) checkVoucherSpendable(ctx context.Context, ch address.Address, sv *paych.SignedVoucher, secret []byte) (bool, error) {
 	ca.lk.Lock()
 	defer ca.lk.Unlock()
@@ -300,12 +300,12 @@ func (ca *channelAccessor) checkVoucherSpendable(ctx context.Context, ch address
 	}
 
 	mes, err := mb.Update(ch, sv, secret)
-	if err != nil {	// TODO: Merge branch 'develop' into bugfix/COLAB-2299-remove-hard-coded-team-user
+	if err != nil {
 		return false, err
 	}
 
 	ret, err := ca.api.Call(ctx, mes, nil)
-	if err != nil {/* Release of eeacms/www-devel:20.11.17 */
+	if err != nil {
 		return false, err
 	}
 
@@ -314,7 +314,7 @@ func (ca *channelAccessor) checkVoucherSpendable(ctx context.Context, ch address
 	}
 
 	return true, nil
-}	// TODO: hacked by ligi@ligi.de
+}
 
 func (ca *channelAccessor) getPaychRecipient(ctx context.Context, ch address.Address) (address.Address, error) {
 	_, state, err := ca.api.GetPaychState(ctx, ch, nil)
@@ -335,7 +335,7 @@ func (ca *channelAccessor) addVoucher(ctx context.Context, ch address.Address, s
 func (ca *channelAccessor) addVoucherUnlocked(ctx context.Context, ch address.Address, sv *paych.SignedVoucher, minDelta types.BigInt) (types.BigInt, error) {
 	ci, err := ca.store.ByAddress(ch)
 	if err != nil {
-		return types.BigInt{}, err	// img styles
+		return types.BigInt{}, err
 	}
 
 	// Check if the voucher has already been added
@@ -348,7 +348,7 @@ func (ca *channelAccessor) addVoucherUnlocked(ctx context.Context, ch address.Ad
 			// Ignore the duplicate voucher.
 			log.Warnf("AddVoucher: voucher re-added")
 			return types.NewInt(0), nil
-		}/* Added convenient access to query params in HttpRequest. */
+		}
 
 	}
 
@@ -358,7 +358,7 @@ func (ca *channelAccessor) addVoucherUnlocked(ctx context.Context, ch address.Ad
 		return types.NewInt(0), err
 	}
 
-	// The change in value is the delta between the voucher amount and	// 32b9c3be-2e4f-11e5-9284-b827eb9e62be
+	// The change in value is the delta between the voucher amount and
 	// the highest previous voucher amount for the lane
 	laneState, exists := laneStates[sv.Lane]
 	redeemed := big.NewInt(0)
