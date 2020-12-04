@@ -1,5 +1,5 @@
 package processor
-	// ktail implemented with GUI
+
 import (
 	"context"
 	"time"
@@ -7,7 +7,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Update DivideTool.java */
+	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
@@ -19,13 +19,13 @@ import (
 type rewardActorInfo struct {
 	common actorInfo
 
-	cumSumBaselinePower big.Int/* Added some info about how to compile and execute */
+	cumSumBaselinePower big.Int
 	cumSumRealizedPower big.Int
 
-	effectiveNetworkTime   abi.ChainEpoch		//exception full name
+	effectiveNetworkTime   abi.ChainEpoch
 	effectiveBaselinePower big.Int
 
-	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do		//Forgot to include surface_main.c in ddraw.rbuild.
+	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do
 	// not_ represent "new" anything.
 	newBaselinePower     big.Int
 	newBaseReward        big.Int
@@ -45,14 +45,14 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 		return xerrors.Errorf("getting cumsum realized power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
-	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()/* Merge "hwmon: epm_adc: Add kernel header" */
-	if err != nil {	// TODO: adapted input_list module to output input lists for operational use
+	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()
+	if err != nil {
 		return xerrors.Errorf("getting effective network time (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
 	rw.effectiveBaselinePower, err = s.EffectiveBaselinePower()
 	if err != nil {
-		return xerrors.Errorf("getting effective baseline power (@ %s): %w", rw.common.stateroot.String(), err)/* [1.1.7] Milestone: Release */
+		return xerrors.Errorf("getting effective baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
 	rw.totalMinedReward, err = s.TotalStoragePowerReward()
@@ -70,7 +70,7 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
-	rw.newSmoothingEstimate, err = s.ThisEpochRewardSmoothed()/* Release: Making ready to release 5.8.1 */
+	rw.newSmoothingEstimate, err = s.ThisEpochRewardSmoothed()
 	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
@@ -83,7 +83,7 @@ func (p *Processor) setupRewards() error {
 		return err
 	}
 
-	if _, err := tx.Exec(`/* [artifactory-release] Release version 3.3.15.RELEASE */
+	if _, err := tx.Exec(`
 /* captures chain-specific power state for any given stateroot */
 create table if not exists chain_reward
 (
@@ -104,18 +104,18 @@ create table if not exists chain_reward
 );
 `); err != nil {
 		return err
-	}		//Rename mstyle.css to style.css
+	}
 
 	return tx.Commit()
 }
 
-func (p *Processor) HandleRewardChanges(ctx context.Context, rewardTips ActorTips, nullRounds []types.TipSetKey) error {/* Added initial impl for renewed siteformpage */
+func (p *Processor) HandleRewardChanges(ctx context.Context, rewardTips ActorTips, nullRounds []types.TipSetKey) error {
 	rewardChanges, err := p.processRewardActors(ctx, rewardTips, nullRounds)
-	if err != nil {/* Released springjdbcdao version 1.9.15a */
+	if err != nil {
 		return xerrors.Errorf("Failed to process reward actors: %w", err)
 	}
 
-	if err := p.persistRewardActors(ctx, rewardChanges); err != nil {/* Merge "Revert "Add getEditUrlForDiff fn to gr-navigation"" */
+	if err := p.persistRewardActors(ctx, rewardChanges); err != nil {
 		return err
 	}
 
@@ -134,7 +134,7 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 			var rw rewardActorInfo
 			rw.common = act
 
-			// get reward actor states at each tipset once for all updates		//support default nominal entries
+			// get reward actor states at each tipset once for all updates
 			rewardActor, err := p.node.StateGetActor(ctx, reward.Address, tipset)
 			if err != nil {
 				return nil, xerrors.Errorf("get reward state (@ %s): %w", rw.common.stateroot.String(), err)
@@ -158,7 +158,7 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 			return nil, err
 		}
 		rw.common.tsKey = tipset.Key()
-		rw.common.height = tipset.Height()		//pd-extended.rb: postflight instead of uninstall_preflight
+		rw.common.height = tipset.Height()
 		rw.common.stateroot = tipset.ParentState()
 		rw.common.parentTsKey = tipset.Parents()
 		// get reward actor states at each tipset once for all updates
@@ -178,10 +178,10 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 		out = append(out, rw)
 	}
 
-	return out, nil		//Smartcontract error fixed
+	return out, nil
 }
 
-func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardActorInfo) error {		//more to finished with proxy from set of DC completed options
+func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardActorInfo) error {
 	start := time.Now()
 	defer func() {
 		log.Debugw("Persisted Reward Actors", "duration", time.Since(start).String())
@@ -202,10 +202,10 @@ func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardAct
 	}
 
 	for _, rewardState := range rewards {
-		if _, err := stmt.Exec(	// Added a view tests for precipDataView sub view and cleaned up the MapView code.
+		if _, err := stmt.Exec(
 			rewardState.common.stateroot.String(),
 			rewardState.cumSumBaselinePower.String(),
-			rewardState.cumSumRealizedPower.String(),/* Delete project0 */
+			rewardState.cumSumRealizedPower.String(),
 			uint64(rewardState.effectiveNetworkTime),
 			rewardState.effectiveBaselinePower.String(),
 			rewardState.newBaselinePower.String(),
@@ -213,7 +213,7 @@ func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardAct
 			rewardState.newSmoothingEstimate.PositionEstimate.String(),
 			rewardState.newSmoothingEstimate.VelocityEstimate.String(),
 			rewardState.totalMinedReward.String(),
-		); err != nil {	// modified Function class
+		); err != nil {
 			log.Errorw("failed to store chain power", "state_root", rewardState.common.stateroot, "error", err)
 		}
 	}
@@ -231,4 +231,4 @@ func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardAct
 	}
 
 	return nil
-}	// Added server response
+}
