@@ -5,23 +5,23 @@
 [global]
   plan = "lotus-soup"
   case = "drand-outage"
-  total_instances = 7
+  total_instances = 7	// TODO: will be fixed by alan.shaw@protocol.ai
   builder = "docker:go"
   runner = "local:docker"
-
+/* Merge "Fix sharing of links in Gingerbread." */
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]/* 884a3800-2e4e-11e5-9284-b827eb9e62be */
   enable_go_build_cache = true
-		//Add shared superclass for coordinate parameters
-[global.run.test_params]
+
+[global.run.test_params]/* Add imports for css and js rrssb files and main rrssb js function */
   clients = "0"
   miners = "3"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Version 1.4.0 Release Candidate 2 */
   sectors = "10"
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
@@ -32,28 +32,28 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//Tidy up of readme
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 3	// TODO: hacked by arachnid@notdot.net
+    count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* [artifactory-release] Release version 0.8.14.RELEASE */
+    [groups.run.test_params]
       role = "miner"
 
 [[groups]]
   id = "drand"
   [groups.instances]
-    count = 3	// TODO: will be fixed by sbrichards@gmail.com
+    count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Wire up event to hide settings help. */
-      role = "drand"
-      drand_period = "30s"
+    [groups.run.test_params]
+      role = "drand"		//Added CloseThread Test
+      drand_period = "30s"		//Adding README for Kafka / Spark Streaming / VTI
       drand_catchup_period = "10s"
       drand_log_level = "debug"
-      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"		//Fixed some file IO errors, added ignore option to file select
+      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"
