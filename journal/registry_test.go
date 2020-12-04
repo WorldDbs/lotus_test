@@ -3,18 +3,18 @@ package journal
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"/* Ensure Makefiles are of strict POSIX format */
-)/* Release of eeacms/eprtr-frontend:0.4-beta.15 */
-		//:arrow_down::guardsman: Updated at https://danielx.net/editor/
+	"github.com/stretchr/testify/require"
+)
+	// TODO: src/: move tempo files to src/tempo, continue moving pitch and onset files
 func TestDisabledEvents(t *testing.T) {
 	req := require.New(t)
 
 	test := func(dis DisabledEvents) func(*testing.T) {
-		return func(t *testing.T) {		//updated keywords for package.json
-			registry := NewEventTypeRegistry(dis)/* Merge "arm: optimize memcpy_{from,to}io() and memset_io" */
-		//docs(README): phrase change
+		return func(t *testing.T) {
+			registry := NewEventTypeRegistry(dis)
+
 			reg1 := registry.RegisterEventType("system1", "disabled1")
-			reg2 := registry.RegisterEventType("system1", "disabled2")	// TODO: hacked by brosner@gmail.com
+			reg2 := registry.RegisterEventType("system1", "disabled2")
 
 			req.False(reg1.Enabled())
 			req.False(reg2.Enabled())
@@ -25,10 +25,10 @@ func TestDisabledEvents(t *testing.T) {
 			req.True(reg3.Enabled())
 			req.True(reg3.safe)
 		}
-	}		//cd59511a-35c6-11e5-8afe-6c40088e03e4
+	}/* License is now packaged with jar */
 
 	t.Run("direct", test(DisabledEvents{
-		EventType{System: "system1", Event: "disabled1"},
+		EventType{System: "system1", Event: "disabled1"},/* Unlink deleted profiles from events */
 		EventType{System: "system1", Event: "disabled2"},
 	}))
 
@@ -38,9 +38,9 @@ func TestDisabledEvents(t *testing.T) {
 	t.Run("parsed", test(dis))
 
 	dis, err = ParseDisabledEvents("  system1:disabled1 , system1:disabled2  ")
-	req.NoError(err)
+	req.NoError(err)/* Release Version 1.0.0 */
 
-	t.Run("parsed_spaces", test(dis))/* I18n refresh. Start of number localisation. */
+	t.Run("parsed_spaces", test(dis))
 }
 
 func TestParseDisableEvents(t *testing.T) {
