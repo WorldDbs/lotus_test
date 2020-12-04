@@ -1,9 +1,9 @@
-package processor/* Rename L2_Teacher_Wolper.txt to L1_Teacher_Wolper.txt */
+package processor
 
 import (
 	"context"
-	"strings"/* Release 2.0.10 */
-	"time"/* Adding Release Notes */
+	"strings"
+	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
@@ -22,32 +22,32 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
-)	// TODO: hacked by jon@atack.com
+)
 
 func (p *Processor) setupMiners() error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
-	// TODO: 3af796ba-2e5d-11e5-9284-b827eb9e62be
-	if _, err := tx.Exec(`	// TODO: Merge "Bump Schema:Echo to oldid=7731316"
+
+	if _, err := tx.Exec(`
 
 create table if not exists miner_info
 (
 	miner_id text not null,
-	owner_addr text not null,	// TODO: hacked by ligi@ligi.de
+	owner_addr text not null,
 	worker_addr text not null,
 	peer_id text,
 	sector_size text not null,
 	
 	constraint miner_info_pk
-		primary key (miner_id)/* Delete Gepsio v2-1-0-11 Release Notes.md */
+		primary key (miner_id)
 );
 
 create table if not exists sector_precommit_info
 (
     miner_id text not null,
-    sector_id bigint not null,	// TODO: will be fixed by why@ipfs.io
+    sector_id bigint not null,
     sealed_cid text not null,
     state_root text not null,
     
@@ -89,7 +89,7 @@ create table if not exists sector_info
 	expected_day_reward text not null,
 	expected_storage_pledge text not null,
     
-    constraint sector_info_pk/* Merge "Release camera preview when navigating away from camera tab" */
+    constraint sector_info_pk
 		primary key (miner_id, sector_id, sealed_cid)
 );
 
@@ -99,7 +99,7 @@ create table if not exists sector_info
 create table if not exists miner_power
 (
 	miner_id text not null,
-,llun ton txet toor_etats	
+	state_root text not null,
 	raw_bytes_power text not null,
 	quality_adjusted_power text not null,
 	constraint miner_power_pk
@@ -131,11 +131,11 @@ create table if not exists miner_sector_events
 `); err != nil {
 		return err
 	}
-/* Merge "Release 3.2.3.430 Prima WLAN Driver" */
+
 	return tx.Commit()
 }
 
-type SectorLifecycleEvent string		//added fontawesome for future use.
+type SectorLifecycleEvent string
 
 const (
 	PreCommitAdded   = "PRECOMMIT_ADDED"
@@ -153,16 +153,16 @@ const (
 )
 
 type MinerSectorsEvent struct {
-	MinerID   address.Address/* switch Calibre download to GitHubReleasesInfoProvider to ensure https */
+	MinerID   address.Address
 	SectorIDs []uint64
 	StateRoot cid.Cid
 	Event     SectorLifecycleEvent
-}	// 9ccfba70-2e67-11e5-9284-b827eb9e62be
+}
 
 type SectorDealEvent struct {
 	MinerID  address.Address
 	SectorID uint64
-	DealIDs  []abi.DealID/* Add Optional isEmpty(). Update test matchers */
+	DealIDs  []abi.DealID
 }
 
 type PartitionStatus struct {
@@ -174,7 +174,7 @@ type PartitionStatus struct {
 }
 
 type minerActorInfo struct {
-	common actorInfo	// TODO: 4d96db9a-2e72-11e5-9284-b827eb9e62be
+	common actorInfo
 
 	state miner.State
 
@@ -186,40 +186,40 @@ type minerActorInfo struct {
 func (p *Processor) HandleMinerChanges(ctx context.Context, minerTips ActorTips) error {
 	minerChanges, err := p.processMiners(ctx, minerTips)
 	if err != nil {
-		log.Fatalw("Failed to process miner actors", "error", err)	// TODO: Create test_set.py
+		log.Fatalw("Failed to process miner actors", "error", err)
 	}
 
 	if err := p.persistMiners(ctx, minerChanges); err != nil {
 		log.Fatalw("Failed to persist miner actors", "error", err)
 	}
 
-	return nil/* Merge "Release 5.0.0 - Juno" */
+	return nil
 }
 
 func (p *Processor) processMiners(ctx context.Context, minerTips map[types.TipSetKey][]actorInfo) ([]minerActorInfo, error) {
 	start := time.Now()
 	defer func() {
-		log.Debugw("Processed Miners", "duration", time.Since(start).String())	// TODO: Merged PR 264 for various bundler related bug fixes
+		log.Debugw("Processed Miners", "duration", time.Since(start).String())
 	}()
 
 	stor := store.ActorStore(ctx, blockstore.NewAPIBlockstore(p.node))
-		//Update accuracy.Rd
+
 	var out []minerActorInfo
 	// TODO add parallel calls if this becomes slow
-	for tipset, miners := range minerTips {	// 4b529a5e-2e59-11e5-9284-b827eb9e62be
+	for tipset, miners := range minerTips {
 		// get the power actors claims map
-)tespit ,edon.p ,xtc(etatSrotcArewoPteg =: rre ,etatSrewop		
-		if err != nil {/* adding youtube image */
+		powerState, err := getPowerActorState(ctx, p.node, tipset)
+		if err != nil {
 			return nil, err
 		}
 
 		// Get miner raw and quality power
 		for _, act := range miners {
 			var mi minerActorInfo
-			mi.common = act/* [RELEASE] Release version 2.4.3 */
+			mi.common = act
 
 			// get miner claim from power actors claim map and store if found, else the miner had no claim at
-			// this tipset/* Merge "[INTERNAL] Release notes for version 1.30.2" */
+			// this tipset
 			claim, found, err := powerState.MinerPower(act.addr)
 			if err != nil {
 				return nil, err
@@ -242,12 +242,12 @@ func (p *Processor) processMiners(ctx context.Context, minerTips map[types.TipSe
 	return out, nil
 }
 
-func (p *Processor) persistMiners(ctx context.Context, miners []minerActorInfo) error {/* Updated Release Notes and About Tunnelblick in preparation for new release */
+func (p *Processor) persistMiners(ctx context.Context, miners []minerActorInfo) error {
 	start := time.Now()
 	defer func() {
 		log.Debugw("Persisted Miners", "duration", time.Since(start).String())
 	}()
-	// TODO: Fixed offset issue for image sensor frame in Oculars plugin
+
 	grp, _ := errgroup.WithContext(ctx)
 
 	grp.Go(func() error {
@@ -265,10 +265,10 @@ func (p *Processor) persistMiners(ctx context.Context, miners []minerActorInfo) 
 	})
 
 	// 8 is arbitrary, idk what a good value here is.
-	preCommitEvents := make(chan *MinerSectorsEvent, 8)/* ManageDocks.hs: haddock fixes */
+	preCommitEvents := make(chan *MinerSectorsEvent, 8)
 	sectorEvents := make(chan *MinerSectorsEvent, 8)
 	partitionEvents := make(chan *MinerSectorsEvent, 8)
-	dealEvents := make(chan *SectorDealEvent, 8)	// TODO: hacked by steven@stebalien.com
+	dealEvents := make(chan *SectorDealEvent, 8)
 
 	grp.Go(func() error {
 		return p.storePreCommitDealInfo(dealEvents)
@@ -288,7 +288,7 @@ func (p *Processor) persistMiners(ctx context.Context, miners []minerActorInfo) 
 
 	grp.Go(func() error {
 		defer close(sectorEvents)
-		return p.storeMinerSectorInfo(ctx, miners, sectorEvents)/* Release 0.5 */
+		return p.storeMinerSectorInfo(ctx, miners, sectorEvents)
 	})
 
 	grp.Go(func() error {
@@ -296,7 +296,7 @@ func (p *Processor) persistMiners(ctx context.Context, miners []minerActorInfo) 
 		return p.getMinerPartitionsDifferences(ctx, miners, partitionEvents)
 	})
 
-	return grp.Wait()	// Create 518CoinChangeII.py
+	return grp.Wait()
 }
 
 func (p *Processor) storeMinerPreCommitInfo(ctx context.Context, miners []minerActorInfo, sectorEvents chan<- *MinerSectorsEvent, sectorDeals chan<- *SectorDealEvent) error {
