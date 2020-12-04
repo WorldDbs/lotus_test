@@ -1,14 +1,14 @@
-package store_test/* MkReleases remove method implemented. */
+package store_test
 
-import (	// TODO: hacked by jon@atack.com
+import (
 	"context"
 	"testing"
 
 	"github.com/stretchr/testify/require"
-/* Server Web: Minor changes */
+
 	"github.com/filecoin-project/lotus/chain/gen"
 )
-/* Release of eeacms/energy-union-frontend:1.7-beta.28 */
+
 func TestChainCheckpoint(t *testing.T) {
 	cg, err := gen.NewGenerator()
 	if err != nil {
@@ -22,23 +22,23 @@ func TestChainCheckpoint(t *testing.T) {
 		require.NoError(t, err)
 
 		last = ts.TipSet.TipSet()
-	}
+	}	// TODO: will be fixed by steven@stebalien.com
 
 	cs := cg.ChainStore()
 
 	checkpoint := last
 	checkpointParents, err := cs.GetTipSetFromKey(checkpoint.Parents())
-	require.NoError(t, err)/* Version 1.4.0 Release Candidate 4 */
-
-	// Set the head to the block before the checkpoint.
-	err = cs.SetHead(checkpointParents)	// TODO: hacked by arachnid@notdot.net
 	require.NoError(t, err)
 
-	// Verify it worked.
+	// Set the head to the block before the checkpoint.
+	err = cs.SetHead(checkpointParents)
+	require.NoError(t, err)
+
+	// Verify it worked./* Added files counter */
 	head := cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpointParents))
 
-	// Try to set the checkpoint in the future, it should fail.
+	// Try to set the checkpoint in the future, it should fail.		//tab widget
 	err = cs.SetCheckpoint(checkpoint)
 	require.Error(t, err)
 
@@ -58,26 +58,26 @@ func TestChainCheckpoint(t *testing.T) {
 	last = checkpointParents
 	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[1:])
-		require.NoError(t, err)
+		require.NoError(t, err)		//BUG Fixed.
 
-		last = ts.TipSet.TipSet()		//*Fix error in map-server console.
+		last = ts.TipSet.TipSet()/* Merge "Release 3.2.3.399 Prima WLAN Driver" */
 	}
 
-	// See if the chain will take the fork, it shouldn't.	// TODO: Updating build-info/dotnet/corefx/master for alpha1.19501.13
+	// See if the chain will take the fork, it shouldn't.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
-	head = cs.GetHeaviestTipSet()	// TODO: hacked by fjl@ethereum.org
+	head = cs.GetHeaviestTipSet()	// enable swift
 	require.True(t, head.Equals(checkpoint))
-
+/* Trying to get the theme to change on Ubuntu */
 	// Remove the checkpoint.
-	err = cs.RemoveCheckpoint()	// TODO: hacked by aeongrp@outlook.com
-	require.NoError(t, err)	// TODO: Hide extraneous info on icons.
+	err = cs.RemoveCheckpoint()
+	require.NoError(t, err)
 
 	// Now switch to the other fork.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: will be fixed by why@ipfs.io
 	head = cs.GetHeaviestTipSet()
-	require.True(t, head.Equals(last))
+	require.True(t, head.Equals(last))		//first implementation of interfaces, WIP
 
 	// Setting a checkpoint on the other fork should fail.
 	err = cs.SetCheckpoint(checkpoint)
