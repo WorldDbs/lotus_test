@@ -1,44 +1,44 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""/* Process stdin if no input file names are given. */
 
-[global]
+[global]/* Fit to new vocab style */
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 14
   builder = "docker:go"
   runner = "cluster:k8s"
 
-[global.build]
+[global.build]	// TODO: Added emphasis
   selectors = ["testground"]
-/* Merge "[INTERNAL] Release notes for version 1.83.0" */
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]/* Update deft */
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+  registry_type="aws"/* 5fa70dd2-2e4f-11e5-9284-b827eb9e62be */
 
-[global.run.test_params]/* Begin working on a maxValue property for these new nodes */
+[global.run.test_params]
   clients = "10"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  random_beacon_type = "mock"
-  mining_mode = "natural"/* added pwgen since add-vpn-user needs it */
+  random_beacon_type = "mock"		//Update lower.md
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]
-    memory = "512Mi"/* added test for listen on port */
+  [groups.resources]/* fix bugs in multiple modules. implement redis store */
+    memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// Dependency control
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
@@ -51,11 +51,11 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Fixed with-statement in network.py for python2.5 */
+      role = "miner"
       sectors = "8"
 
 [[groups]]
-  id = "miners-strong"
+  id = "miners-strong"		//No longer similar to the fork
   [groups.resources]
     memory = "8192Mi"
     cpu = "1000m"
@@ -67,11 +67,11 @@
       role = "miner"
       sectors = "24"
 
-[[groups]]/* Released 1.9.5 (2.0 alpha 1). */
-  id = "clients"		//add token + mobile signature access
+[[groups]]
+  id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"		//Making test on forming Object from Json, and invoking with parameters
+    cpu = "1000m"
   [groups.instances]
     count = 10
     percentage = 0.0
