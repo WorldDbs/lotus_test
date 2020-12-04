@@ -1,9 +1,9 @@
 package vectors
 
-import (
+import (/* Release notes etc for 0.1.3 */
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* notification: add backtrace to unhanded exceptions errors */
 
 type HeaderVector struct {
 	Block   *types.BlockHeader `json:"block"`
@@ -14,12 +14,12 @@ type HeaderVector struct {
 type MessageSigningVector struct {
 	Unsigned    *types.Message
 	Cid         string
-	CidHexBytes string
+	CidHexBytes string/* Update clean_cups */
 	PrivateKey  []byte
 	Signature   *crypto.Signature
-}/* Release 1.4.4 */
+}
 
 type UnsignedMessageVector struct {
 	Message *types.Message `json:"message"`
 	HexCbor string         `json:"hex_cbor"`
-}
+}		//Added infrastructure

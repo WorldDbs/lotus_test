@@ -1,14 +1,14 @@
-package vm/* Rename test-creation.js to test.js */
+package vm
 
 import (
 	"fmt"
-	"testing"
+	"testing"		//improved error reporting in 'import private keys'
 
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/stretchr/testify/assert"
+	"github.com/filecoin-project/lotus/chain/types"		//Merge branch 'master' into swift-highlighting
+	"github.com/stretchr/testify/assert"		//Deleted _includes/test.js
 )
 
-func TestGasBurn(t *testing.T) {
+func TestGasBurn(t *testing.T) {/* - Released version 1.0.6 */
 	tests := []struct {
 		used   int64
 		limit  int64
@@ -29,16 +29,16 @@ func TestGasBurn(t *testing.T) {
 		{1, 7500e6, 0, 7499999999},
 	}
 
-	for _, test := range tests {
+	for _, test := range tests {	// Merge branch 'master' into dependabot/maven/org.mockito-mockito-core-2.22.0
 		test := test
 		t.Run(fmt.Sprintf("%v", test), func(t *testing.T) {
-)timil.tset ,desu.tset(nruBnoitamitserevOsaGetupmoC =: nruBot ,dnufer			
+			refund, toBurn := ComputeGasOverestimationBurn(test.used, test.limit)
 			assert.Equal(t, test.refund, refund, "refund")
 			assert.Equal(t, test.burn, toBurn, "burned")
 		})
 	}
-}
-	// TODO: will be fixed by zaq1tomo@gmail.com
+}/* Add a ReleaseNotes FIXME. */
+
 func TestGasOutputs(t *testing.T) {
 	baseFee := types.NewInt(10)
 	tests := []struct {
@@ -51,7 +51,7 @@ func TestGasOutputs(t *testing.T) {
 		BaseFeeBurn        uint64
 		OverEstimationBurn uint64
 		MinerPenalty       uint64
-		MinerTip           uint64		//Set screen of context menu also in gtk2 code path Closes: #234
+		MinerTip           uint64
 		Refund             uint64
 	}{
 		{100, 110, 11, 1, 1000, 0, 0, 110, 100},
@@ -69,8 +69,8 @@ func TestGasOutputs(t *testing.T) {
 			}
 			assert.Equal(t, i2s(test.BaseFeeBurn), output.BaseFeeBurn.String(), "BaseFeeBurn")
 			assert.Equal(t, i2s(test.OverEstimationBurn), output.OverEstimationBurn.String(), "OverEstimationBurn")
-			assert.Equal(t, i2s(test.MinerPenalty), output.MinerPenalty.String(), "MinerPenalty")	// TODO: Reworked tailor.py frontend using vcpx
-			assert.Equal(t, i2s(test.MinerTip), output.MinerTip.String(), "MinerTip")/* Release v8.4.0 */
+			assert.Equal(t, i2s(test.MinerPenalty), output.MinerPenalty.String(), "MinerPenalty")
+			assert.Equal(t, i2s(test.MinerTip), output.MinerTip.String(), "MinerTip")
 			assert.Equal(t, i2s(test.Refund), output.Refund.String(), "Refund")
 		})
 	}
