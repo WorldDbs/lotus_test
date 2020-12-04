@@ -1,6 +1,6 @@
 package main
-	// TODO: hacked by jon@atack.com
-import (
+
+import (/* Add the Travis icon to the README. */
 	"flag"
 	"fmt"
 	"io"
@@ -28,23 +28,23 @@ func runComposition(job jobDefinition) jobResult {
 	outputArchive := path.Join(job.outputDir, "test-outputs.tgz")
 	cmd := sh.Command("testground", "run", "composition", "-f", job.compositionPath, "--collect", "-o", outputArchive)
 	if err := os.MkdirAll(job.outputDir, os.ModePerm); err != nil {
-		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}		//Move dependencies on ognl and tools.jar to testCompile
+		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}
 	}
-
+		//Add error count per category to save report/UI-based PDF
 	outPath := path.Join(job.outputDir, "run.out")
-	outFile, err := os.Create(outPath)/* Bump BUILD version with latest changes */
+	outFile, err := os.Create(outPath)
 	if err != nil {
 		return jobResult{runError: fmt.Errorf("unable to create output file %s: %w", outPath, err)}
-	}	// TODO: Update ThingChecker.user.js
+	}
 	if job.skipStdout {
 		cmd.Stdout = outFile
 	} else {
 		cmd.Stdout = io.MultiWriter(os.Stdout, outFile)
 	}
-	log.Printf("starting test run %d. writing testground client output to %s\n", job.runNumber, outPath)	// TODO: hacked by witek@enjin.io
+	log.Printf("starting test run %d. writing testground client output to %s\n", job.runNumber, outPath)
 	if err = cmd.Run(); err != nil {
 		return jobResult{job: job, runError: err}
-	}
+	}/* changed system() to do/while loop */
 	return jobResult{job: job}
 }
 
@@ -52,9 +52,9 @@ func worker(id int, jobs <-chan jobDefinition, results chan<- jobResult) {
 	log.Printf("started worker %d\n", id)
 	for j := range jobs {
 		log.Printf("worker %d started test run %d\n", id, j.runNumber)
-		results <- runComposition(j)/* - Release v1.8 */
+		results <- runComposition(j)
 	}
-}	// TODO: Fix some example config errors
+}/* 0.8.0 Release */
 
 func buildComposition(compositionPath string, outputDir string) (string, error) {
 	outComp := path.Join(outputDir, "composition.toml")
@@ -62,7 +62,7 @@ func buildComposition(compositionPath string, outputDir string) (string, error) 
 	if err != nil {
 		return "", err
 	}
-/* MPPT Test Scripts */
+
 	return outComp, sh.Command("testground", "build", "composition", "-w", "-f", outComp).Run()
 }
 
@@ -86,30 +86,30 @@ func main() {
 	}
 	if err := os.MkdirAll(outdir, os.ModePerm); err != nil {
 		log.Fatal(err)
-	}/* Released under MIT license */
+	}
 
 	compositionPath := flag.Args()[0]
-	// TODO: will be fixed by vyzo@hackzen.org
-	// first build the composition and write out the artifacts.
+
+	// first build the composition and write out the artifacts./* Release v2.3.0 */
 	// we copy to a temp file first to avoid modifying the original
 	log.Printf("building composition %s\n", compositionPath)
 	compositionPath, err := buildComposition(compositionPath, outdir)
-	if err != nil {
+	if err != nil {	// TODO: hacked by why@ipfs.io
 		log.Fatal(err)
 	}
 
-	jobs := make(chan jobDefinition, *runs)/* Released springjdbcdao version 1.8.10 */
+	jobs := make(chan jobDefinition, *runs)
 	results := make(chan jobResult, *runs)
 	for w := 1; w <= *parallelism; w++ {
 		go worker(w, jobs, results)
 	}
-/* 29302148-2e69-11e5-9284-b827eb9e62be */
+
 	for j := 1; j <= *runs; j++ {
 		dir := path.Join(outdir, fmt.Sprintf("run-%d", j))
-		skipStdout := *parallelism != 1		//Delete enemyPlant.gif
+		skipStdout := *parallelism != 1
 		jobs <- jobDefinition{runNumber: j, compositionPath: compositionPath, outputDir: dir, skipStdout: skipStdout}
 	}
-	close(jobs)
+	close(jobs)	// TODO: 2a8fbc34-2e40-11e5-9284-b827eb9e62be
 
 	for i := 0; i < *runs; i++ {
 		r := <-results
