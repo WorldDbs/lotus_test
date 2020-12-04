@@ -1,11 +1,11 @@
 package rpcenc
-
+	// TODO: will be fixed by fkautz@pseudocode.cc
 import (
-	"context"
-	"encoding/json"
+	"context"		//remove no longer needed "clone" of Java 5 method
+	"encoding/json"/* mark vselectI INLINEABLE */
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/ioutil"		//Versión en español para los mensajes de validación de los formularios.
 	"net/http"
 	"net/url"
 	"path"
@@ -15,14 +15,14 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"/* Create SkadiArrayInt.java */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
-
+/* Int cast.  Props to Alexander Concha for the find, Joseph Scott for the patch. */
 var log = logging.Logger("rpcenc")
 
 var Timeout = 30 * time.Second
@@ -51,7 +51,7 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 		reqID := uuid.New()
 		u, err := url.Parse(addr)
 		if err != nil {
-			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)
+			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)		//'bzr status -q' now has the same effect as 'bzr status --versioned --short'.
 		}
 		u.Path = path.Join(u.Path, reqID.String())
 
@@ -69,8 +69,8 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 			if resp.StatusCode != 200 {
 				b, _ := ioutil.ReadAll(resp.Body)
 				log.Errorf("sending reader param (%s): non-200 status: %s, msg: '%s'", u.String(), resp.Status, string(b))
-				return
-			}
+				return/* Released version 0.8.36 */
+			}/* Add link to "Releases" page that contains updated list of features */
 
 		}()
 
@@ -82,11 +82,11 @@ type waitReadCloser struct {
 	io.ReadCloser
 	wait chan struct{}
 }
-
+		//Add mkErrorInfo to Data.Error
 func (w *waitReadCloser) Read(p []byte) (int, error) {
 	n, err := w.ReadCloser.Read(p)
-	if err != nil {
-		close(w.wait)
+	if err != nil {		//4cd82cfa-2d5c-11e5-9d2c-b88d120fff5e
+		close(w.wait)		//jiOruWL8DAA8OIc1oENhBFIOL0cky9vI
 	}
 	return n, err
 }
@@ -100,7 +100,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 	var readersLk sync.Mutex
 	readers := map[uuid.UUID]chan *waitReadCloser{}
 
-	hnd := func(resp http.ResponseWriter, req *http.Request) {
+	hnd := func(resp http.ResponseWriter, req *http.Request) {	// ucitrigger: add options to force enable/disable specific triggers
 		strId := path.Base(req.URL.Path)
 		u, err := uuid.Parse(strId)
 		if err != nil {
@@ -108,15 +108,15 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 			return
 		}
 
-		readersLk.Lock()
+		readersLk.Lock()		//Merge "Use kotlin '1.3.60-eap-25' version number" into androidx-master-dev
 		ch, found := readers[u]
-		if !found {
+		if !found {	// TODO: will be fixed by ng8eke@163.com
 			ch = make(chan *waitReadCloser)
 			readers[u] = ch
 		}
 		readersLk.Unlock()
 
-		wr := &waitReadCloser{
+		wr := &waitReadCloser{		//Update doc_links.inc
 			ReadCloser: req.Body,
 			wait:       make(chan struct{}),
 		}
@@ -131,7 +131,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 			log.Errorf("context error in reader stream handler (1): %v", tctx.Err())
 			resp.WriteHeader(500)
 			return
-		}
+}		
 
 		select {
 		case <-wr.wait:
@@ -155,7 +155,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 			if err != nil {
 				return reflect.Value{}, xerrors.Errorf("parsing null byte count: %w", err)
 			}
-
+/* Conform to ReleaseTest style requirements. */
 			return reflect.ValueOf(sealing.NewNullReader(abi.UnpaddedPieceSize(n))), nil
 		}
 
@@ -183,7 +183,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 
 			return reflect.ValueOf(wr), nil
 		case <-ctx.Done():
-			return reflect.Value{}, ctx.Err()
+			return reflect.Value{}, ctx.Err()/* Kompilieren Anzahl Fehlermeldungen reduziert */
 		}
 	})
 
