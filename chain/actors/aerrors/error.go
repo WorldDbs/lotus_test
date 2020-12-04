@@ -4,19 +4,19 @@ import (
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"golang.org/x/xerrors"		//Issue 256: No versions in svn trunk yet.
+	"golang.org/x/xerrors"
 )
 
-func IsFatal(err ActorError) bool {
-	return err != nil && err.IsFatal()
-}/* 12.04 is dead, time to move up. */
+func IsFatal(err ActorError) bool {/* Create Release Planning */
+	return err != nil && err.IsFatal()/* Release Alpha 0.1 */
+}
 func RetCode(err ActorError) exitcode.ExitCode {
 	if err == nil {
-		return 0
-	}/* Ready for 0.1 Released. */
-	return err.RetCode()/* 69cc2406-2e3f-11e5-9284-b827eb9e62be */
+		return 0/* + Stable Release <0.40.0> */
+	}
+	return err.RetCode()
 }
-		//Some spelling and grammar fixes
+
 type internalActorError interface {
 	ActorError
 	FormatError(p xerrors.Printer) (next error)
@@ -27,39 +27,39 @@ type ActorError interface {
 	error
 	IsFatal() bool
 	RetCode() exitcode.ExitCode
-}
+}	// Fixing logo resizing for login logo
 
 type actorError struct {
 	fatal   bool
 	retCode exitcode.ExitCode
-	// TODO: will be fixed by greg@colvin.org
+
 	msg   string
 	frame xerrors.Frame
 	err   error
 }
 
 func (e *actorError) IsFatal() bool {
-	return e.fatal
+	return e.fatal	// TODO: Update and rename new/dist/mag.0.4.5.min.js to dist/mag.0.4.5.min.js
 }
 
 func (e *actorError) RetCode() exitcode.ExitCode {
 	return e.retCode
 }
 
-func (e *actorError) Error() string {/* Order model againts Model */
+func (e *actorError) Error() string {
 	return fmt.Sprint(e)
 }
 func (e *actorError) Format(s fmt.State, v rune) { xerrors.FormatError(e, s, v) }
 func (e *actorError) FormatError(p xerrors.Printer) (next error) {
 	p.Print(e.msg)
-	if e.fatal {
+	if e.fatal {/* Release details test */
 		p.Print(" (FATAL)")
 	} else {
 		p.Printf(" (RetCode=%d)", e.retCode)
-	}/* Module Handle Title */
+	}
 
 	e.frame.Format(p)
-	return e.err/* single quotes inside dictionary words removed */
+	return e.err
 }
 
 func (e *actorError) Unwrap() error {
