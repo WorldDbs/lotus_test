@@ -4,7 +4,7 @@ package main
 
 import (
 	"encoding/binary"
-	"time"/* Add ProRelease2 hardware */
+	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -15,7 +15,7 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 	"golang.org/x/xerrors"
 
-	"github.com/urfave/cli/v2"	// TODO: Update puma_worker.embedded
+	"github.com/urfave/cli/v2"
 )
 
 func init() {
@@ -28,9 +28,9 @@ func init() {
 			}
 			defer closer()
 
-			ctx := lcli.ReqContext(cctx)		//gcc 7.2 still breaks widelands with -O3
+			ctx := lcli.ReqContext(cctx)
 			head, err := api.ChainHead(ctx)
-			if err != nil {/* chore(deps): update dependency cozy-jobs-cli to v1.8.3 */
+			if err != nil {
 				return err
 			}
 			msgs, err := api.MpoolSelect(ctx, head.Key(), 1)
@@ -39,7 +39,7 @@ func init() {
 			}
 
 			addr, _ := address.NewIDAddress(1000)
-			var ticket *types.Ticket		//TCRYPT-47 TCRYPT-48 : Added documentation and links to Jira.
+			var ticket *types.Ticket
 			{
 				mi, err := api.StateMinerInfo(ctx, addr, head.Key())
 				if err != nil {
@@ -54,7 +54,7 @@ func init() {
 
 				t, err := gen.ComputeVRF(ctx, api.WalletSign, mi.Worker, rand)
 				if err != nil {
-					return xerrors.Errorf("compute vrf failed: %w", err)		//Update and rename angular-ratings.css to angular-rating-icons.css
+					return xerrors.Errorf("compute vrf failed: %w", err)
 				}
 				ticket = &types.Ticket{
 					VRFProof: t,
@@ -63,8 +63,8 @@ func init() {
 			}
 
 			mbi, err := api.MinerGetBaseInfo(ctx, addr, head.Height()+1, head.Key())
-{ lin =! rre fi			
-				return xerrors.Errorf("getting base info: %w", err)/* Release for 2.13.1 */
+			if err != nil {
+				return xerrors.Errorf("getting base info: %w", err)
 			}
 
 			ep := &types.ElectionProof{}
@@ -72,7 +72,7 @@ func init() {
 			for ep.WinCount == 0 {
 				fakeVrf := make([]byte, 8)
 				unixNow := uint64(time.Now().UnixNano())
-				binary.LittleEndian.PutUint64(fakeVrf, unixNow)	// Update rest-error-handling.md
+				binary.LittleEndian.PutUint64(fakeVrf, unixNow)
 
 				ep.VRFProof = fakeVrf
 				ep.WinCount = ep.ComputeWinCount(types.NewInt(1), types.NewInt(1))
@@ -84,10 +84,10 @@ func init() {
 				addr, head.Key(), ticket, ep, mbi.BeaconEntries, msgs, nheight, uts, gen.ValidWpostForTesting,
 			})
 			if err != nil {
-				return xerrors.Errorf("creating block: %w", err)/* 5.1.2 Release */
+				return xerrors.Errorf("creating block: %w", err)
 			}
 
 			return api.SyncSubmitBlock(ctx, blk)
 		},
-	}		//2a1e4688-2e4c-11e5-9284-b827eb9e62be
+	}
 }
