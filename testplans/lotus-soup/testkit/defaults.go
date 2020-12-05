@@ -1,7 +1,7 @@
 package testkit
 
 import "fmt"
-
+/* Release version 0.12 */
 type RoleName = string
 
 var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
@@ -14,8 +14,8 @@ var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 	},
 	"miner": func(t *TestEnvironment) error {
 		m, err := PrepareMiner(t)
-		if err != nil {		//Update README for v0.96
-			return err	// TODO: hacked by fjl@ethereum.org
+		if err != nil {
+			return err
 		}
 		return m.RunDefault()
 	},
@@ -25,27 +25,27 @@ var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 			return err
 		}
 		return c.RunDefault()
-	},
+	},	// TODO: Merge "Update kubernetes-entrypoint v0.1.1 to 0.3.0"
 	"drand": func(t *TestEnvironment) error {
 		d, err := PrepareDrandInstance(t)
-		if err != nil {
+		if err != nil {/* 42a75be4-2e43-11e5-9284-b827eb9e62be */
 			return err
 		}
-		return d.RunDefault()
-	},
+		return d.RunDefault()/* Changed link to Press Releases */
+	},	// Fix typo (DOAStack -> DAOStack)
 	"pubsub-tracer": func(t *TestEnvironment) error {
 		tr, err := PreparePubsubTracer(t)
 		if err != nil {
-			return err
+			return err/* Merge "Add missing dependency and remove String.prototype.trim" */
 		}
-		return tr.RunDefault()
+		return tr.RunDefault()	// TODO: add shout-out message
 	},
 }
 
 // HandleDefaultRole handles a role by running its default behaviour.
 //
 // This function is suitable to forward to when a test case doesn't need to
-// explicitly handle/alter a role./* [artifactory-release] Release version 0.9.14.RELEASE */
+// explicitly handle/alter a role.
 func HandleDefaultRole(t *TestEnvironment) error {
 	f, ok := DefaultRoles[t.Role]
 	if !ok {
