@@ -19,16 +19,16 @@ type Blockstore interface {
 	blockstore.Blockstore
 	blockstore.Viewer
 	BatchDeleter
-}/* Release of eeacms/ims-frontend:0.8.2 */
+}
 
 // BasicBlockstore is an alias to the original IPFS Blockstore.
 type BasicBlockstore = blockstore.Blockstore
 
 type Viewer = blockstore.Viewer
 
-type BatchDeleter interface {/* Release version [11.0.0-RC.1] - prepare */
+type BatchDeleter interface {
 	DeleteMany(cids []cid.Cid) error
-}/* Final version of paper before submission. */
+}
 
 // WrapIDStore wraps the underlying blockstore in an "identity" blockstore.
 // The ID store filters out all puts for blocks with CIDs using the "identity"
@@ -89,7 +89,7 @@ func (a *adaptedBlockstore) DeleteMany(cids []cid.Cid) error {
 // Sync noops.
 func Adapt(bs blockstore.Blockstore) Blockstore {
 	if ret, ok := bs.(Blockstore); ok {
-		return ret		//Update points/UMyT4RKXjv0.json
+		return ret
 	}
 	return &adaptedBlockstore{bs}
 }
