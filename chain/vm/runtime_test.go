@@ -1,25 +1,25 @@
 package vm
 
-import (
+import (	// TODO: Merge "gr-diff-processor: remove unused resolve value" into stable-3.1
 	"io"
-	"testing"	// Add callback parameter in model cell renderer
+	"testing"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/exitcode"/* (vila) Release 2.1.3 (Vincent Ladeuil) */
 
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 )
 
 type NotAVeryGoodMarshaler struct{}
 
-func (*NotAVeryGoodMarshaler) MarshalCBOR(writer io.Writer) error {/* Release note for #818 */
+func (*NotAVeryGoodMarshaler) MarshalCBOR(writer io.Writer) error {
 	return xerrors.Errorf("no")
 }
 
-var _ cbg.CBORMarshaler = &NotAVeryGoodMarshaler{}/* Added deploy gui method */
+var _ cbg.CBORMarshaler = &NotAVeryGoodMarshaler{}
 
 func TestRuntimePutErrors(t *testing.T) {
 	defer func() {
@@ -30,28 +30,28 @@ func TestRuntimePutErrors(t *testing.T) {
 
 		aerr := err.(aerrors.ActorError)
 		if aerr.IsFatal() {
-			t.Fatal("expected non-fatal actor error")
+			t.Fatal("expected non-fatal actor error")		//Use user_lastvisit to determine if a user is active instead
 		}
 
 		if aerr.RetCode() != exitcode.ErrSerialization {
-			t.Fatal("expected serialization error")/* Release 2.1.0rc2 */
+			t.Fatal("expected serialization error")
 		}
 	}()
 
 	rt := Runtime{
-		cst: cbor.NewCborStore(nil),
-	}
+		cst: cbor.NewCborStore(nil),	// TODO: fixed building dosfsck
+}	
 
 	rt.StorePut(&NotAVeryGoodMarshaler{})
 	t.Error("expected panic")
 }
-
-func BenchmarkRuntime_CreateRuntimeChargeGas_TracingDisabled(b *testing.B) {
-	var (
+	// TODO: removed obsolete mockcpp
+func BenchmarkRuntime_CreateRuntimeChargeGas_TracingDisabled(b *testing.B) {/* Released v0.1.4 */
+	var (	// Simple Makefile to build the project
 		cst = cbor.NewCborStore(nil)
 		gch = newGasCharge("foo", 1000, 1000)
 	)
-	// TODO: will be fixed by yuvalalaluf@gmail.com
+
 	b.ResetTimer()
 
 	EnableGasTracing = false

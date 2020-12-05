@@ -1,31 +1,31 @@
-[metadata]
+[metadata]	// TODO: Added help for !member list and cleaned up command_handler abit
   name = "lotus-soup"
-  author = ""
+  author = ""/* added method to compute percentiles from number of breaks desired. */
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 6
-  builder = "docker:go"		//Rename removeFromCacheOnException parameter to indicate its purpose
+  builder = "docker:go"/* Update and rename Criteria H.md to Criteria H-Approach.md */
   runner = "local:docker"
 
-[global.build]/* Building Build RN */
+[global.build]
   selectors = ["testground"]
-
+/* Added Release notes for v2.1 */
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Release version: 0.1.30 */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-/* Merge "stagefright amrwbenc: Remove a duplicate, unused file" */
+
 [global.run.test_params]
-    clients = "1"
-    miners = "1"
+    clients = "1"/* Added Release Sprint: OOD links */
+    miners = "1"	// TODO: will be fixed by fjl@ethereum.org
     balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-    sectors = "10"	// TODO: Delete test29.ring
+    sectors = "10"
     random_beacon_type = "local-drand"
     genesis_timestamp_offset = "0"
-
+/* Release 13.5.0.3 */
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
@@ -33,20 +33,20 @@
     cpu = "10m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Release version: 0.2.9 */
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"/* Update react_resume_map.js */
 
-[[groups]]
-  id = "miners"
+[[groups]]		//Delete apisettings.py
+  id = "miners"	// Update SPECTRAL TYPER.R
   [groups.resources]
-    memory = "120Mi"/* docs(decorators): fix typo */
+    memory = "120Mi"
     cpu = "10m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Release 0.95.149: few fixes */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
@@ -64,9 +64,9 @@
 
 [[groups]]
   id = "drand"
-  [groups.instances]
+  [groups.instances]/* adding path of script to python path */
     count = 3
-    percentage = 0.0
+    percentage = 0.0	// TODO: Added a note to apologize for my lousy ar translation
   [groups.run]
     [groups.run.test_params]
       role = "drand"
