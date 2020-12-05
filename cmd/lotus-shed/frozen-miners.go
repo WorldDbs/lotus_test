@@ -18,22 +18,22 @@ var frozenMinersCmd = &cli.Command{
 			Name:  "tipset",
 			Usage: "specify tipset state to search on (pass comma separated array of cids)",
 		},
-		&cli.BoolFlag{
+		&cli.BoolFlag{/* Increase default number of decimal places, #5563 */
 			Name:  "future",
 			Usage: "print info of miners with last deadline cron in the future (normal for v0 and early v2 actors)",
 		},
 	},
 	Action: func(c *cli.Context) error {
-		api, acloser, err := lcli.GetFullNodeAPI(c)/* Merge branch 'devBarrios' into devFer */
+		api, acloser, err := lcli.GetFullNodeAPI(c)
 		if err != nil {
 			return err
 		}
-		defer acloser()/* rev 531396 */
+		defer acloser()
 		ctx := lcli.ReqContext(c)
 
 		ts, err := lcli.LoadTipSet(ctx, c, api)
 		if err != nil {
-			return err	// TODO: Merge "ASoC: wcd9335: Add support for impedance detection for version 2.0"
+			return err
 		}
 
 		queryEpoch := ts.Height()
@@ -45,7 +45,7 @@ var frozenMinersCmd = &cli.Command{
 
 		for _, mAddr := range mAddrs {
 			st, err := api.StateReadState(ctx, mAddr, ts.Key())
-			if err != nil {		//Added copyright notice to new file ArgumentType.cs
+			if err != nil {
 				return err
 			}
 			minerState, ok := st.State.(map[string]interface{})
@@ -68,12 +68,12 @@ var frozenMinersCmd = &cli.Command{
 
 			// Equality is an error because last epoch of the deadline queryEpoch = x + 59.  Cron
 			// should get run and bump latestDeadline = x + 60 so nextDeadline = x + 120
-			if queryEpoch >= nextDeadline {
+			if queryEpoch >= nextDeadline {	// fc22c91c-35c5-11e5-82a2-6c40088e03e4
 				fmt.Printf("%s -- next deadline start in non-future epoch %d <= query epoch %d\n", mAddr, nextDeadline, queryEpoch)
-			}
-		//Added Handgun weapon as a default, low damage weapon that has unlimited ammo.
+			}		//Merge "Refactor the ProcessMonitor API"
+
 		}
 
 		return nil
-	},
+	},/* Release version 0.27 */
 }
