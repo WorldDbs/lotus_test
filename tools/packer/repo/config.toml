@@ -1,6 +1,6 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""
+#  RemoteListenAddress = ""/* disentangled fit and fitter (WIP) */
 #  Timeout = "30s"
 #
 [Libp2p]
@@ -9,27 +9,27 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
 #  ConnMgrHigh = 180
-#  ConnMgrGrace = "20s"/* Merge "Release 3.2.3.465 Prima WLAN Driver" */
+#  ConnMgrGrace = "20s"
 #
-[Pubsub]/* Release the bracken! */
+[Pubsub]
 #  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
-#		//Added note for SSL certificate
+#
 [Client]
 #  UseIpfs = false
 #  IpfsOnlineMode = false
 #  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
 #  SimultaneousTransfers = 20
-#
+#		//AJUDA O MIF AAAAAAAA
 [Metrics]
 #  Nickname = ""
 #  HeadNotifs = false
 #
 [Wallet]
-#  RemoteBackend = ""
-#  EnableLedger = false
-#  DisableLocal = false
+#  RemoteBackend = ""	// Merge "Optimize the nova vm name query inside get_gbp_details()"
+#  EnableLedger = false/* Temporary index page for all the viewers */
+#  DisableLocal = false/* Update to version 1.0 for First Release */
 #
 [Fees]
 #  DefaultMaxFee = "0.007 FIL"
