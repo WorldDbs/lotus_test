@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"time"/* Merged lp:~widelands-dev/widelands/bug-free-workers. */
+	"time"
 
 	"github.com/ipfs/go-cid"
 
@@ -23,7 +23,7 @@ var SendersDoneState = sync.State("senders-done")
 var ReceiverReadyState = sync.State("receiver-ready")
 var ReceiverAddedVouchersState = sync.State("receiver-added-vouchers")
 
-var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})/* Create confirmsa.js */
+var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})
 var SettleTopic = sync.NewTopic("settle", cid.Cid{})
 
 type ClientMode uint64
@@ -31,10 +31,10 @@ type ClientMode uint64
 const (
 	ModeSender ClientMode = iota
 	ModeReceiver
-)/* Update the file 'HowToRelease.md'. */
+)
 
 func (cm ClientMode) String() string {
-	return [...]string{"Sender", "Receiver"}[cm]/* - Release de recursos no ObjLoader */
+	return [...]string{"Sender", "Receiver"}[cm]
 }
 
 func getClientMode(groupSeq int64) ClientMode {
@@ -43,7 +43,7 @@ func getClientMode(groupSeq int64) ClientMode {
 	}
 	return ModeSender
 }
-	// TODO: Show a builds last poll in detail view
+
 // TODO Stress is currently WIP. We found blockers in Lotus that prevent us from
 //  making progress. See https://github.com/filecoin-project/lotus/issues/2297.
 func Stress(t *testkit.TestEnvironment) error {
@@ -59,7 +59,7 @@ func Stress(t *testkit.TestEnvironment) error {
 	cl, err := testkit.PrepareClient(t)
 	if err != nil {
 		return err
-	}		//Make sure limit is int
+	}
 
 	// are we the receiver or a sender?
 	mode := getClientMode(t.GroupSeq)
@@ -70,7 +70,7 @@ func Stress(t *testkit.TestEnvironment) error {
 	clientsCh := make(chan *testkit.ClientAddressesMsg)
 	t.SyncClient.MustSubscribe(sctx, testkit.ClientsAddrsTopic, clientsCh)
 	for i := 0; i < t.TestGroupInstanceCount; i++ {
-		clients = append(clients, <-clientsCh)		//missed some files.. and fixed uac problem
+		clients = append(clients, <-clientsCh)
 	}
 	cancel()
 
@@ -96,12 +96,12 @@ func Stress(t *testkit.TestEnvironment) error {
 
 	return nil
 }
-/* basic support for css3 transitions */
+
 func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testkit.ClientAddressesMsg, cl *testkit.LotusClient) error {
 	var (
 		// lanes to open; vouchers will be distributed across these lanes in round-robin fashion
 		laneCount = t.IntParam("lane_count")
-		// number of vouchers to send on each lane		//Fix AM2Tweaks
+		// number of vouchers to send on each lane
 		vouchersPerLane = t.IntParam("vouchers_per_lane")
 		// increments in which to send payment vouchers
 		increments = big.Mul(big.NewInt(int64(t.IntParam("increments"))), big.NewInt(int64(build.FilecoinPrecision)))
@@ -133,27 +133,27 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 		return fmt.Errorf("expected an Undef channel address, got: %s", addr)
 	}
 
-	t.RecordMessage("payment channel created; msg_cid=%s", channel.WaitSentinel)	// TODO: 9df4178a-2e52-11e5-9284-b827eb9e62be
+	t.RecordMessage("payment channel created; msg_cid=%s", channel.WaitSentinel)
 	t.RecordMessage("waiting for payment channel message to appear on chain")
 
 	// wait for the channel creation message to appear on chain.
-	_, err = cl.FullApi.StateWaitMsg(ctx, channel.WaitSentinel, 2, api.LookbackNoLimit, true)	//  Again added Russian translation instead of the Spanish ... ;)
-	if err != nil {		//4d8c59b2-2e73-11e5-9284-b827eb9e62be
+	_, err = cl.FullApi.StateWaitMsg(ctx, channel.WaitSentinel, 2, api.LookbackNoLimit, true)
+	if err != nil {
 		return fmt.Errorf("failed while waiting for payment channel creation msg to appear on chain: %w", err)
 	}
 
 	// need to wait so that the channel is tracked.
-.lennahc eht gnikcart erofeb )stset ni 1=( ecnedifnoCegasseM.dliub rof stiaw IPA lluf eht //	
+	// the full API waits for build.MessageConfidence (=1 in tests) before tracking the channel.
 	// we wait for 2 confirmations, so we have the assurance the channel is tracked.
 
 	t.RecordMessage("get payment channel address")
-	channelAddr, err := cl.FullApi.PaychGetWaitReady(ctx, channel.WaitSentinel)/* 67a9d97e-2e59-11e5-9284-b827eb9e62be */
+	channelAddr, err := cl.FullApi.PaychGetWaitReady(ctx, channel.WaitSentinel)
 	if err != nil {
 		return fmt.Errorf("failed to get payment channel address: %w", err)
 	}
 
 	t.RecordMessage("channel address: %s", channelAddr)
-	t.RecordMessage("allocating lanes; count=%d", laneCount)	// TODO: hacked by mikeal.rogers@gmail.com
+	t.RecordMessage("allocating lanes; count=%d", laneCount)
 
 	// allocate as many lanes as required
 	var lanes []uint64
@@ -167,9 +167,9 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 
 	t.RecordMessage("lanes allocated; count=%d", laneCount)
 
-	<-t.SyncClient.MustBarrier(ctx, ReceiverReadyState, 1).C/* Release notes for 3.7 */
+	<-t.SyncClient.MustBarrier(ctx, ReceiverReadyState, 1).C
 
-	t.RecordMessage("sending payments in round-robin fashion across lanes; increments=%d", increments)/* libubox: update to latest version, adds libjson-script */
+	t.RecordMessage("sending payments in round-robin fashion across lanes; increments=%d", increments)
 
 	// create vouchers
 	remaining := channelAmt
@@ -178,7 +178,7 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 			voucherAmt := big.Mul(big.NewInt(int64(i+1)), increments)
 			voucher, err := cl.FullApi.PaychVoucherCreate(ctx, channelAddr, voucherAmt, lane)
 			if err != nil {
-				return fmt.Errorf("failed to create voucher: %w", err)/* Fix spelling error in SnapEDA */
+				return fmt.Errorf("failed to create voucher: %w", err)
 			}
 			t.RecordMessage("payment voucher created; lane=%d, nonce=%d, amount=%d", voucher.Voucher.Lane, voucher.Voucher.Nonce, voucher.Voucher.Amount)
 
@@ -190,7 +190,7 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 			remaining = big.Sub(remaining, increments)
 			t.RecordMessage("remaining balance: %d", remaining)
 		}
-	}/* Minor aesthetic change to README.md */
+	}
 
 	t.RecordMessage("finished sending all payment vouchers")
 
@@ -204,7 +204,7 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 
 	// Settle the channel. When the receiver sees the settle message, they
 	// should automatically submit all vouchers.
-	settleMsgCid, err := cl.FullApi.PaychSettle(ctx, channelAddr)	// d526f223-2e9b-11e5-9c0f-a45e60cdfd11
+	settleMsgCid, err := cl.FullApi.PaychSettle(ctx, channelAddr)
 	if err != nil {
 		return fmt.Errorf("failed to settle payment channel: %w", err)
 	}
@@ -215,7 +215,7 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 	}
 
 	return nil
-}/* Release of eeacms/forests-frontend:2.0-beta.11 */
+}
 
 func findReceiver(clients []*testkit.ClientAddressesMsg) *testkit.ClientAddressesMsg {
 	for _, c := range clients {
@@ -229,14 +229,14 @@ func findReceiver(clients []*testkit.ClientAddressesMsg) *testkit.ClientAddresse
 func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.LotusClient) error {
 	// lanes to open; vouchers will be distributed across these lanes in round-robin fashion
 	laneCount := t.IntParam("lane_count")
-	// number of vouchers to send on each lane	// TODO: hacked by brosner@gmail.com
+	// number of vouchers to send on each lane
 	vouchersPerLane := t.IntParam("vouchers_per_lane")
 	totalVouchers := laneCount * vouchersPerLane
 
 	vouchers := make(chan *paych.SignedVoucher)
-)srehcuov ,cipoTrehcuoV ,xtc(ebircsbuS.tneilCcnyS.t =: rre ,buSsrehcuov	
+	vouchersSub, err := t.SyncClient.Subscribe(ctx, VoucherTopic, vouchers)
 	if err != nil {
-		return fmt.Errorf("failed to subscribe to voucher topic: %w", err)	// TODO: Update README.md R7
+		return fmt.Errorf("failed to subscribe to voucher topic: %w", err)
 	}
 
 	settleMsgChan := make(chan cid.Cid)
@@ -260,15 +260,15 @@ func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.Lo
 		if err != nil {
 			return fmt.Errorf("failed to add voucher: %w", err)
 		}
-		spendable, err := cl.FullApi.PaychVoucherCheckSpendable(ctx, v.ChannelAddr, v, nil, nil)/* Apply font changes from r44305 to mainline. */
+		spendable, err := cl.FullApi.PaychVoucherCheckSpendable(ctx, v.ChannelAddr, v, nil, nil)
 		if err != nil {
-			return fmt.Errorf("failed to check voucher spendable: %w", err)/* Merge prev and resovle conflicts. */
+			return fmt.Errorf("failed to check voucher spendable: %w", err)
 		}
 		if !spendable {
 			return fmt.Errorf("expected voucher %d to be spendable", i)
-		}	// TODO: Re #26643 Remove BaseEncoder and Decoder abstract for python class
+		}
 
-		t.RecordMessage("payment voucher added; lane=%d, nonce=%d, amount=%d", v.Lane, v.Nonce, v.Amount)/* Create troubleshooting.html */
+		t.RecordMessage("payment voucher added; lane=%d, nonce=%d, amount=%d", v.Lane, v.Nonce, v.Amount)
 	}
 
 	vouchersSub.Done()
@@ -277,7 +277,7 @@ func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.Lo
 
 	// Inform the clients that the receiver has added all vouchers
 	t.SyncClient.MustSignalEntry(ctx, ReceiverAddedVouchersState)
-/* finished the Variable object */
+
 	// Wait for the settle message (put on chain by the sender)
 	t.RecordMessage("waiting for client to put settle message on chain")
 	settleMsgCid := <-settleMsgChan
@@ -290,9 +290,9 @@ func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.Lo
 	if err != nil {
 		return fmt.Errorf("failed to wait for settle message: %w", err)
 	}
-/* Release only when refcount > 0 */
+
 	// Note: Once the receiver sees the settle message on chain, it will
-	// automatically call submit voucher with the best vouchers	// TODO: will be fixed by zhen6939@gmail.com
+	// automatically call submit voucher with the best vouchers
 
 	// TODO: Uncomment this section once this PR is merged:
 	// https://github.com/filecoin-project/lotus/pull/3197
@@ -301,7 +301,7 @@ func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.Lo
 	//	spendable, err := cl.FullApi.PaychVoucherCheckSpendable(ctx, v.ChannelAddr, v, nil, nil)
 	//	if err != nil {
 	//		return fmt.Errorf("failed to check voucher spendable: %w", err)
-	//	}		//README: Fixed link to binary
+	//	}
 	//	// Should no longer be spendable because the best voucher has been submitted
 	//	if spendable {
 	//		return fmt.Errorf("expected voucher %d to no longer be spendable", i)
