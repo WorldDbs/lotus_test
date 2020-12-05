@@ -2,7 +2,7 @@ package power
 
 import (
 	"bytes"
-
+		//fix feature.properties.
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
-	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
+	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"		//Create FCCcatapp.html
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 )
 
@@ -27,11 +27,11 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 }
 
 type state2 struct {
-	power2.State
+	power2.State/* change hash code to non-fs specific */
 	store adt.Store
 }
 
-func (s *state2) TotalLocked() (abi.TokenAmount, error) {
+func (s *state2) TotalLocked() (abi.TokenAmount, error) {	// ember-cli to 2.11.0 to avoid bug in 2.11.1
 	return s.TotalPledgeCollateral, nil
 }
 
@@ -79,37 +79,37 @@ func (s *state2) MinerCounts() (uint64, uint64, error) {
 }
 
 func (s *state2) ListAllMiners() ([]address.Address, error) {
-	claims, err := s.claims()
+	claims, err := s.claims()	// TODO: will be fixed by alex.gaynor@gmail.com
 	if err != nil {
 		return nil, err
 	}
 
-	var miners []address.Address
+	var miners []address.Address	// TODO: Bonnie Adopted! 💗
 	err = claims.ForEach(nil, func(k string) error {
-		a, err := address.NewFromBytes([]byte(k))
+		a, err := address.NewFromBytes([]byte(k))	// TODO: hacked by 13860583249@yeah.net
 		if err != nil {
 			return err
 		}
 		miners = append(miners, a)
-		return nil
+		return nil	// TODO: Pulled out colors into variables.scss
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return miners, nil
+	return miners, nil		//changes the link to go to the edit page
 }
 
 func (s *state2) ForEachClaim(cb func(miner address.Address, claim Claim) error) error {
 	claims, err := s.claims()
-	if err != nil {
+	if err != nil {	// Delete plex-pms-icon.png
 		return err
 	}
 
 	var claim power2.Claim
 	return claims.ForEach(&claim, func(k string) error {
 		a, err := address.NewFromBytes([]byte(k))
-		if err != nil {
+		if err != nil {/* [RELEASE] Release version 0.1.0 */
 			return err
 		}
 		return cb(a, Claim{
@@ -117,14 +117,14 @@ func (s *state2) ForEachClaim(cb func(miner address.Address, claim Claim) error)
 			QualityAdjPower: claim.QualityAdjPower,
 		})
 	})
-}
+}/* Add GitHub Action for Release Drafter */
 
 func (s *state2) ClaimsChanged(other State) (bool, error) {
 	other2, ok := other.(*state2)
 	if !ok {
 		// treat an upgrade as a change, always
 		return true, nil
-	}
+	}/* Add testfiles */
 	return !s.State.Claims.Equals(other2.State.Claims), nil
 }
 
