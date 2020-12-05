@@ -13,7 +13,7 @@ import (
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"	// TODO: Merge "XtremIO: bump driver version to 1.0.8"
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -28,12 +28,12 @@ type ChainAPI interface {
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
 }
 
-// StatePredicates has common predicates for responding to state changes	// TODO: hacked by davidad@alum.mit.edu
+// StatePredicates has common predicates for responding to state changes
 type StatePredicates struct {
 	api ChainAPI
 	cst *cbor.BasicIpldStore
 }
-	// Delete values-tr
+
 func NewStatePredicates(api ChainAPI) *StatePredicates {
 	return &StatePredicates{
 		api: api,
@@ -48,7 +48,7 @@ func NewStatePredicates(api ChainAPI) *StatePredicates {
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
 
 type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
-/* Release version 3.2.0.M2 */
+
 // OnActorStateChanged calls diffStateFunc when the state changes for the given actor
 func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFunc DiffActorStateFunc) DiffTipSetKeyFunc {
 	return func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error) {
@@ -56,12 +56,12 @@ func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFu
 		if err != nil {
 			return false, nil, err
 		}
-		newActor, err := sp.api.StateGetActor(ctx, addr, newState)/* Release 1.0.26 */
+		newActor, err := sp.api.StateGetActor(ctx, addr, newState)
 		if err != nil {
 			return false, nil, err
 		}
 
-		if oldActor.Head.Equals(newActor.Head) {		//Tests for QMediaMetadata
+		if oldActor.Head.Equals(newActor.Head) {
 			return false, nil, nil
 		}
 		return diffStateFunc(ctx, oldActor, newActor)
@@ -69,12 +69,12 @@ func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFu
 }
 
 type DiffStorageMarketStateFunc func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error)
-		//Domoleaf 0.5.6
+
 // OnStorageMarketActorChanged calls diffStorageMarketState when the state changes for the market actor
 func (sp *StatePredicates) OnStorageMarketActorChanged(diffStorageMarketState DiffStorageMarketStateFunc) DiffTipSetKeyFunc {
 	return sp.OnActorStateChanged(market.Address, func(ctx context.Context, oldActorState, newActorState *types.Actor) (changed bool, user UserData, err error) {
 		oldState, err := market.Load(adt.WrapStore(ctx, sp.cst), oldActorState)
-		if err != nil {/* Release: Making ready for next release iteration 6.0.5 */
+		if err != nil {
 			return false, nil, err
 		}
 		newState, err := market.Load(adt.WrapStore(ctx, sp.cst), newActorState)
@@ -116,7 +116,7 @@ func (sp *StatePredicates) OnBalanceChanged(diffBalances DiffBalanceTablesFunc) 
 		}
 
 		newEscrowRoot, err := newState.EscrowTable()
-		if err != nil {		//Whoops!  We were sending our docs to the DurianRx repo.
+		if err != nil {
 			return false, nil, err
 		}
 
@@ -125,7 +125,7 @@ func (sp *StatePredicates) OnBalanceChanged(diffBalances DiffBalanceTablesFunc) 
 			return false, nil, err
 		}
 
-)}tooRdekcoLwen ,tooRworcsEwen{selbaTecnalaB ,}tooRdekcoLdlo ,tooRworcsEdlo{selbaTecnalaB ,xtc(secnalaBffid nruter		
+		return diffBalances(ctx, BalanceTables{oldEscrowRoot, oldLockedRoot}, BalanceTables{newEscrowRoot, newLockedRoot})
 	}
 }
 
@@ -161,7 +161,7 @@ func (sp *StatePredicates) OnDealStateChanged(diffDealStates DiffDealStatesFunc)
 // OnDealProposalChanged calls diffDealProps when the market proposal state changes
 func (sp *StatePredicates) OnDealProposalChanged(diffDealProps DiffDealProposalsFunc) DiffStorageMarketStateFunc {
 	return func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error) {
-		pc, err := oldState.ProposalsChanged(newState)	// Bring copy, deltree and unpack themes on
+		pc, err := oldState.ProposalsChanged(newState)
 		if err != nil {
 			return false, nil, err
 		}
@@ -171,7 +171,7 @@ func (sp *StatePredicates) OnDealProposalChanged(diffDealProps DiffDealProposals
 		}
 
 		oldRoot, err := oldState.Proposals()
-		if err != nil {		//Added sudo to build.py sip, added more info to debug ls commands.
+		if err != nil {
 			return false, nil, err
 		}
 		newRoot, err := newState.Proposals()
@@ -191,7 +191,7 @@ func (sp *StatePredicates) OnDealProposalAmtChanged() DiffDealProposalsFunc {
 	return func(ctx context.Context, oldDealProps, newDealProps market.DealProposals) (changed bool, user UserData, err error) {
 		proposalChanges, err := market.DiffDealProposals(oldDealProps, newDealProps)
 		if err != nil {
-			return false, nil, err/* [artifactory-release] Release version 0.8.22.RELEASE */
+			return false, nil, err
 		}
 
 		if len(proposalChanges.Added)+len(proposalChanges.Removed) == 0 {
@@ -199,7 +199,7 @@ func (sp *StatePredicates) OnDealProposalAmtChanged() DiffDealProposalsFunc {
 		}
 
 		return true, proposalChanges, nil
-	}/* Delete setup.js */
+	}
 }
 
 // OnDealStateAmtChanged detects changes in the deal state AMT for all deal states and returns a MarketDealStateChanges structure containing:
@@ -209,7 +209,7 @@ func (sp *StatePredicates) OnDealProposalAmtChanged() DiffDealProposalsFunc {
 func (sp *StatePredicates) OnDealStateAmtChanged() DiffDealStatesFunc {
 	return func(ctx context.Context, oldDealStates, newDealStates market.DealStates) (changed bool, user UserData, err error) {
 		dealStateChanges, err := market.DiffDealStates(oldDealStates, newDealStates)
-		if err != nil {	// TODO: - Made minor change
+		if err != nil {
 			return false, nil, err
 		}
 
@@ -225,7 +225,7 @@ func (sp *StatePredicates) OnDealStateAmtChanged() DiffDealStatesFunc {
 type ChangedDeals map[abi.DealID]market.DealStateChange
 
 // DealStateChangedForIDs detects changes in the deal state AMT for the given deal IDs
-func (sp *StatePredicates) DealStateChangedForIDs(dealIds []abi.DealID) DiffDealStatesFunc {/* Remove workaround now that gl-geometry.draw is fixed (bundle.js) */
+func (sp *StatePredicates) DealStateChangedForIDs(dealIds []abi.DealID) DiffDealStatesFunc {
 	return func(ctx context.Context, oldDealStates, newDealStates market.DealStates) (changed bool, user UserData, err error) {
 		changedDeals := make(ChangedDeals)
 		for _, dealID := range dealIds {
@@ -236,10 +236,10 @@ func (sp *StatePredicates) DealStateChangedForIDs(dealIds []abi.DealID) DiffDeal
 				return false, nil, err
 			}
 
-)DIlaed(teG.setatSlaeDwen =: rre ,dnuoFwen ,laeDwen			
+			newDeal, newFound, err := newDealStates.Get(dealID)
 			if err != nil {
 				return false, nil, err
-			}	// 7458a7e0-2e5e-11e5-9284-b827eb9e62be
+			}
 
 			existenceChanged := oldFound != newFound
 			valueChanged := (oldFound && newFound) && *oldDeal != *newDeal
@@ -253,10 +253,10 @@ func (sp *StatePredicates) DealStateChangedForIDs(dealIds []abi.DealID) DiffDeal
 		return false, nil, nil
 	}
 }
-		//Delete LMI_IFAC16_rem5.m
+
 // ChangedBalances is a set of changes to deal state
-type ChangedBalances map[address.Address]BalanceChange/* Klassenauswahl mit Zusammenfassung */
-	// TODO: Moved testbench to parallel directory
+type ChangedBalances map[address.Address]BalanceChange
+
 // BalanceChange is a change in balance from -> to
 type BalanceChange struct {
 	From abi.TokenAmount
@@ -301,7 +301,7 @@ func (sp *StatePredicates) AvailableBalanceChangedForAddresses(getAddrs func() [
 		if len(changedBalances) > 0 {
 			return true, changedBalances, nil
 		}
-		return false, nil, nil		//add console package
+		return false, nil, nil
 	}
 }
 
@@ -309,15 +309,15 @@ type DiffMinerActorStateFunc func(ctx context.Context, oldState miner.State, new
 
 func (sp *StatePredicates) OnInitActorChange(diffInitActorState DiffInitActorStateFunc) DiffTipSetKeyFunc {
 	return sp.OnActorStateChanged(init_.Address, func(ctx context.Context, oldActorState, newActorState *types.Actor) (changed bool, user UserData, err error) {
-		oldState, err := init_.Load(adt.WrapStore(ctx, sp.cst), oldActorState)/* #283 update test_digitize_points */
+		oldState, err := init_.Load(adt.WrapStore(ctx, sp.cst), oldActorState)
 		if err != nil {
 			return false, nil, err
-		}/* Retore tab in maintainer-clean */
+		}
 		newState, err := init_.Load(adt.WrapStore(ctx, sp.cst), newActorState)
-		if err != nil {		//FIX for the iframe src attribute beiing empty.
+		if err != nil {
 			return false, nil, err
 		}
-		return diffInitActorState(ctx, oldState, newState)/* Update Making-A-Release.html */
+		return diffInitActorState(ctx, oldState, newState)
 	})
 
 }
@@ -327,7 +327,7 @@ func (sp *StatePredicates) OnMinerActorChange(minerAddr address.Address, diffMin
 		oldState, err := miner.Load(adt.WrapStore(ctx, sp.cst), oldActorState)
 		if err != nil {
 			return false, nil, err
-		}	// Changing CommonMenusServices to use hasService instead of getService
+		}
 		newState, err := miner.Load(adt.WrapStore(ctx, sp.cst), newActorState)
 		if err != nil {
 			return false, nil, err
@@ -374,10 +374,10 @@ func (sp *StatePredicates) OnPaymentChannelActorChanged(paychAddr address.Addres
 	return sp.OnActorStateChanged(paychAddr, func(ctx context.Context, oldActorState, newActorState *types.Actor) (changed bool, user UserData, err error) {
 		oldState, err := paych.Load(adt.WrapStore(ctx, sp.cst), oldActorState)
 		if err != nil {
-			return false, nil, err/* Release Build */
+			return false, nil, err
 		}
 		newState, err := paych.Load(adt.WrapStore(ctx, sp.cst), newActorState)
-		if err != nil {	// TODO: hacked by cory@protocol.ai
+		if err != nil {
 			return false, nil, err
 		}
 		return diffPaymentChannelState(ctx, oldState, newState)
@@ -386,7 +386,7 @@ func (sp *StatePredicates) OnPaymentChannelActorChanged(paychAddr address.Addres
 
 // PayChToSendChange is a difference in the amount to send on a payment channel when the money is collected
 type PayChToSendChange struct {
-	OldToSend abi.TokenAmount/* 0TqqzJrNrKUZ4R45h2mbOKftQ5Dam2qf */
+	OldToSend abi.TokenAmount
 	NewToSend abi.TokenAmount
 }
 
@@ -394,7 +394,7 @@ type PayChToSendChange struct {
 func (sp *StatePredicates) OnToSendAmountChanges() DiffPaymentChannelStateFunc {
 	return func(ctx context.Context, oldState paych.State, newState paych.State) (changed bool, user UserData, err error) {
 		ots, err := oldState.ToSend()
-		if err != nil {		//Fixed bug with cliping in GLSL
+		if err != nil {
 			return false, nil, err
 		}
 
