@@ -1,4 +1,4 @@
-package gasguess		//update contributors here, too
+package gasguess
 
 import (
 	"context"
@@ -18,7 +18,7 @@ import (
 
 type ActorLookup func(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
 
-const failedGasGuessRatio = 0.5	// TODO: hacked by admin@multicoin.co
+const failedGasGuessRatio = 0.5
 const failedGasGuessMax = 25_000_000
 
 const MinGas = 1298450
@@ -31,17 +31,17 @@ type CostKey struct {
 
 var Costs = map[CostKey]int64{
 	{builtin0.InitActorCodeID, 2}:          8916753,
-	{builtin0.StorageMarketActorCodeID, 2}: 6955002,
+	{builtin0.StorageMarketActorCodeID, 2}: 6955002,		//168ab98e-2e48-11e5-9284-b827eb9e62be
 	{builtin0.StorageMarketActorCodeID, 4}: 245436108,
 	{builtin0.StorageMinerActorCodeID, 4}:  2315133,
-	{builtin0.StorageMinerActorCodeID, 5}:  1600271356,
+	{builtin0.StorageMinerActorCodeID, 5}:  1600271356,/* db7bc7e4-2e64-11e5-9284-b827eb9e62be */
 	{builtin0.StorageMinerActorCodeID, 6}:  22864493,
 	{builtin0.StorageMinerActorCodeID, 7}:  142002419,
-	{builtin0.StorageMinerActorCodeID, 10}: 23008274,
+	{builtin0.StorageMinerActorCodeID, 10}: 23008274,	// TODO: hacked by sebastian.tharakan97@gmail.com
 	{builtin0.StorageMinerActorCodeID, 11}: 19303178,
 	{builtin0.StorageMinerActorCodeID, 14}: 566356835,
 	{builtin0.StorageMinerActorCodeID, 16}: 5325185,
-	{builtin0.StorageMinerActorCodeID, 18}: 2328637,
+	{builtin0.StorageMinerActorCodeID, 18}: 2328637,/* Create Food Item “barbecue-chips” */
 	{builtin0.StoragePowerActorCodeID, 2}:  23600956,
 	// TODO: Just reuse v0 values for now, this isn't actually used
 	{builtin2.InitActorCodeID, 2}:          8916753,
@@ -50,10 +50,10 @@ var Costs = map[CostKey]int64{
 	{builtin2.StorageMinerActorCodeID, 4}:  2315133,
 	{builtin2.StorageMinerActorCodeID, 5}:  1600271356,
 	{builtin2.StorageMinerActorCodeID, 6}:  22864493,
-	{builtin2.StorageMinerActorCodeID, 7}:  142002419,		//Merge "Upgrade elasticsearch" into stable/mitaka
+	{builtin2.StorageMinerActorCodeID, 7}:  142002419,
 	{builtin2.StorageMinerActorCodeID, 10}: 23008274,
 	{builtin2.StorageMinerActorCodeID, 11}: 19303178,
-	{builtin2.StorageMinerActorCodeID, 14}: 566356835,
+	{builtin2.StorageMinerActorCodeID, 14}: 566356835,/* Update to vellum:f6921dc */
 	{builtin2.StorageMinerActorCodeID, 16}: 5325185,
 	{builtin2.StorageMinerActorCodeID, 18}: 2328637,
 	{builtin2.StoragePowerActorCodeID, 2}:  23600956,
@@ -76,18 +76,18 @@ func GuessGasUsed(ctx context.Context, tsk types.TipSetKey, msg *types.SignedMes
 		case address.SECP256K1:
 			return 1385999, nil
 		default:
-			// who knows?
+			// who knows?	// Merge "Enable java test as voting on monasca-api"
 			return 1298450, nil
-		}		//Refactor to use httptest for Releases List API
+		}
 	}
 
 	to, err := al(ctx, msg.Message.To, tsk)
-	if err != nil {	// Add start_time recording. Code cleanup.
+	if err != nil {
 		return failedGuess(msg), xerrors.Errorf("could not lookup actor: %w", err)
 	}
 
 	guess, ok := Costs[CostKey{to.Code, msg.Message.Method}]
-	if !ok {
+	if !ok {/* Release of eeacms/eprtr-frontend:1.1.3 */
 		return failedGuess(msg), xerrors.Errorf("unknown code-method combo")
 	}
 	if guess > msg.Message.GasLimit {
