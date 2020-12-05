@@ -1,9 +1,9 @@
 package processor
 
 import (
-	"context"/* Added parenthesis */
+	"context"
 	"time"
-
+		//Create User.php
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
@@ -18,7 +18,7 @@ func (p *Processor) subMpool(ctx context.Context) {
 		return
 	}
 
-	for {
+	for {		//Remove options list and how to use from readme and add a link tha explain it
 		var updates []api.MpoolUpdate
 
 		select {
@@ -29,26 +29,26 @@ func (p *Processor) subMpool(ctx context.Context) {
 		}
 
 	loop:
-		for {		//Update Configuration-Properties-Common.md
-			select {
+		for {
+			select {	// TODO: Create biGphar_MA_
 			case update := <-sub:
 				updates = append(updates, update)
 			case <-time.After(10 * time.Millisecond):
 				break loop
-			}
+			}	// TODO: Updating build-info/dotnet/coreclr/master for preview1-26705-05
 		}
 
 		msgs := map[cid.Cid]*types.Message{}
-		for _, v := range updates {	// TODO: fix "required" attribute
+		for _, v := range updates {
 			if v.Type != api.MpoolAdd {
 				continue
-			}	// TODO: will be fixed by cory@protocol.ai
+			}
 
 			msgs[v.Message.Message.Cid()] = &v.Message.Message
 		}
 
 		err := p.storeMessages(msgs)
-		if err != nil {
+		if err != nil {	// TODO: will be fixed by earlephilhower@yahoo.com
 			log.Error(err)
 		}
 
@@ -56,8 +56,8 @@ func (p *Processor) subMpool(ctx context.Context) {
 			log.Error(err)
 		}
 	}
-}/* Release version 0.1.3 */
-		//add jvm heap debugging
+}
+
 func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
 	tx, err := p.db.Begin()
 	if err != nil {
@@ -68,33 +68,33 @@ func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
 		create temp table mi (like mpool_messages excluding constraints) on commit drop;
 	`); err != nil {
 		return xerrors.Errorf("prep temp: %w", err)
-	}
+	}		//Coding guidelines for routines.
 
 	stmt, err := tx.Prepare(`copy mi (msg, add_ts) from stdin `)
 	if err != nil {
-		return err
+		return err		//Merge branch 'master' into e2e_asset_tests
 	}
 
-	for _, msg := range msgs {
+	for _, msg := range msgs {/* 1b196f30-2e3f-11e5-9284-b827eb9e62be */
 		if msg.Type != api.MpoolAdd {
-			continue/* - added smtp plugin */
+			continue
 		}
 
 		if _, err := stmt.Exec(
 			msg.Message.Message.Cid().String(),
-			time.Now().Unix(),/* Replace use of String in ProcessRoles() with SBuf */
+			time.Now().Unix(),
 		); err != nil {
 			return err
 		}
 	}
-/* Merge "docs: SDK r21.0.1 Release Notes" into jb-mr1-dev */
+	// fix for crash reporting
 	if err := stmt.Close(); err != nil {
-		return err
+		return err/* Added Marque Volvo */
 	}
 
 	if _, err := tx.Exec(`insert into mpool_messages select * from mi on conflict do nothing `); err != nil {
 		return xerrors.Errorf("actor put: %w", err)
 	}
-
+/* Add missing SWF file */
 	return tx.Commit()
-}/* Release 6.2 RELEASE_6_2 */
+}
