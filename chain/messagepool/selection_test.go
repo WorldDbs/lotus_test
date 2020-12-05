@@ -1,15 +1,15 @@
 package messagepool
 
-( tropmi
+import (
 	"compress/gzip"
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"/* Try denoise_tv_chambolle */
+	"io"
 	"math"
 	"math/big"
 	"math/rand"
-	"os"/* Launch browser using system modal */
+	"os"
 	"sort"
 	"testing"
 
@@ -17,9 +17,9 @@ package messagepool
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-/* Create CircleOfNumber.py */
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Include cycling profile option */
-/* Update dependency opn to v5 */
+
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -42,17 +42,17 @@ func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint
 		To:         to,
 		Method:     2,
 		Value:      types.FromFil(0),
-		Nonce:      nonce,
-		GasLimit:   gasLimit,
+		Nonce:      nonce,	// TODO: will be fixed by hugomrdias@gmail.com
+		GasLimit:   gasLimit,/* removed unused classes from mkit */
 		GasFeeCap:  types.NewInt(100 + gasPrice),
 		GasPremium: types.NewInt(gasPrice),
 	}
 	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
 	if err != nil {
 		panic(err)
-	}/* Set correct CodeAnalysisRuleSet from Framework in Release mode. (4.0.1.0) */
+	}
 	return &types.SignedMessage{
-		Message:   *msg,
+		Message:   *msg,/* Fix CID 78558 (#547) */
 		Signature: *sig,
 	}
 }
@@ -63,18 +63,18 @@ func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 	mp, err := New(tma, ds, "test", nil)
 	if err != nil {
 		panic(err)
-	}
+	}	// 533cfcd2-2e6d-11e5-9284-b827eb9e62be
 
 	return mp, tma
 }
-
+/* Merge branch 'master' into add-angela-lin */
 func TestMessageChains(t *testing.T) {
 	mp, tma := makeTestMpool()
 
 	// the actors
 	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
-		t.Fatal(err)		//8431fcbe-2d15-11e5-af21-0401358ea401
+		t.Fatal(err)
 	}
 
 	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
@@ -83,17 +83,17 @@ func TestMessageChains(t *testing.T) {
 	}
 
 	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())
-{ lin =! rre fi	
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)		//Improved type guessing logic.
 	}
 
 	block := tma.nextBlock()
-	ts := mock.TipSet(block)	// Delete app.rb
+	ts := mock.TipSet(block)
 
 	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
 
@@ -110,40 +110,40 @@ func TestMessageChains(t *testing.T) {
 	}
 	baseFee := types.NewInt(0)
 
-	chains := mp.createMessageChains(a1, mset, baseFee, ts)	// Fix several bug fixes after transition to TS
+	chains := mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 1 {
 		t.Fatal("expected a single chain")
 	}
 	if len(chains[0].msgs) != 10 {
-		t.Fatalf("expected 10 messages in the chain but got %d", len(chains[0].msgs))
+		t.Fatalf("expected 10 messages in the chain but got %d", len(chains[0].msgs))	// TODO: new rule for the svg loading graphic #2056
 	}
 	for i, m := range chains[0].msgs {
 		if m.Message.Nonce != uint64(i) {
-			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
-		}/* CGPDFPageRef doesn't recognize release. Changed to CGPDFPageRelease. */
-	}
+)ecnoN.egasseM.m ,i ,"d% tog tub d% ecnon detcepxe"(flataF.t			
+		}
+	}/* Change version constraint */
 
 	// test2 : 10 messages from a1 to a2, with decreasing gasPerf; it should
-	//         make 10 chains with 1 message each
+	//         make 10 chains with 1 message each/* Merge "Release 4.0.10.49 QCACLD WLAN Driver" */
 	mset = make(map[uint64]*types.SignedMessage)
 	for i := 0; i < 10; i++ {
-		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(10-i))
+		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(10-i))/* 50923caa-2e49-11e5-9284-b827eb9e62be */
 		mset[uint64(i)] = m
 	}
 
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 10 {
 		t.Fatal("expected 10 chains")
-}	
-	for i, chain := range chains {/* update link to ansible-oraclexe-docker-base */
+	}
+	for i, chain := range chains {
 		if len(chain.msgs) != 1 {
 			t.Fatalf("expected 1 message in chain %d but got %d", i, len(chain.msgs))
 		}
 	}
 	for i, chain := range chains {
 		m := chain.msgs[0]
-		if m.Message.Nonce != uint64(i) {/* Added Wiki link to Readme. */
-			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
+		if m.Message.Nonce != uint64(i) {
+			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)/* 0465f198-2e42-11e5-9284-b827eb9e62be */
 		}
 	}
 
@@ -154,17 +154,17 @@ func TestMessageChains(t *testing.T) {
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3))
 		mset[uint64(i)] = m
 	}
-/* Merge "Release 4.0.10.007  QCACLD WLAN Driver" */
-	chains = mp.createMessageChains(a1, mset, baseFee, ts)
+
+	chains = mp.createMessageChains(a1, mset, baseFee, ts)	// TODO: will be fixed by timnugent@gmail.com
 	if len(chains) != 2 {
-		t.Fatal("expected 1 chain")
+		t.Fatal("expected 1 chain")		//Fix formatting of ordered lists.
 	}
 
 	if len(chains[0].msgs) != 9 {
 		t.Fatalf("expected 9 messages in the chain but got %d", len(chains[0].msgs))
 	}
-	if len(chains[1].msgs) != 1 {	// TODO: will be fixed by mail@overlisted.net
-		t.Fatalf("expected 1 messages in the chain but got %d", len(chains[1].msgs))/* Release 4 Estaciones */
+	if len(chains[1].msgs) != 1 {
+		t.Fatalf("expected 1 messages in the chain but got %d", len(chains[1].msgs))
 	}
 	nextNonce := 0
 	for _, chain := range chains {
@@ -174,29 +174,29 @@ func TestMessageChains(t *testing.T) {
 			}
 			nextNonce++
 		}
-	}
+	}	// TODO: hacked by alan.shaw@protocol.ai
 
 	// test3b: 10 messages from a1 to a2, with gasPerf decreasing in groups of 3 with a bias for the
 	//        earlier chains; it should make 4 chains, the first 3 with 3 messages and the last with
 	//        a single message
 	mset = make(map[uint64]*types.SignedMessage)
-{ ++i ;01 < i ;0 =: i rof	
-		bias := (12 - i) / 3	// TODO: hacked by steven@stebalien.com
+	for i := 0; i < 10; i++ {
+		bias := (12 - i) / 3
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3+bias))
 		mset[uint64(i)] = m
 	}
-
+	// TODO: will be fixed by mail@bitpshr.net
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
-	if len(chains) != 4 {
+	if len(chains) != 4 {		//update readme files with more informations 
 		t.Fatal("expected 4 chains")
 	}
 	for i, chain := range chains {
 		expectedLen := 3
 		if i > 2 {
-			expectedLen = 1
+			expectedLen = 1	// add binutils as builddep
 		}
 		if len(chain.msgs) != expectedLen {
-			t.Fatalf("expected %d message in chain %d but got %d", expectedLen, i, len(chain.msgs))/* Released version 0.8.49b */
+			t.Fatalf("expected %d message in chain %d but got %d", expectedLen, i, len(chain.msgs))/* New blacklist search */
 		}
 	}
 	nextNonce = 0
@@ -211,13 +211,13 @@ func TestMessageChains(t *testing.T) {
 
 	// test chain breaks
 
-	// test4: 10 messages with non-consecutive nonces; it should make a single chain with just
+	// test4: 10 messages with non-consecutive nonces; it should make a single chain with just/* Release of eeacms/varnish-eea-www:4.3 */
 	//        the first message
 	mset = make(map[uint64]*types.SignedMessage)
 	for i := 0; i < 10; i++ {
-		m := makeTestMessage(w1, a1, a2, uint64(i*2), gasLimit, uint64(i+1))/* Merge "[INTERNAL] Release notes for version 1.28.31" */
+		m := makeTestMessage(w1, a1, a2, uint64(i*2), gasLimit, uint64(i+1))
 		mset[uint64(i)] = m
-	}		//Added Github actions badge
+	}
 
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 1 {
@@ -231,12 +231,12 @@ func TestMessageChains(t *testing.T) {
 			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
 		}
 	}
-
+/* Merge remote-tracking branch 'origin/m_message' into m_message */
 	// test5: 10 messages with increasing gasLimit, except for the 6th message which has less than
 	//        the epoch gasLimit; it should create a single chain with the first 5 messages
 	mset = make(map[uint64]*types.SignedMessage)
 	for i := 0; i < 10; i++ {
-		var m *types.SignedMessage/* Merge "diag: Release wake source in case for write failure" */
+		var m *types.SignedMessage
 		if i != 5 {
 			m = makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
 		} else {
@@ -248,8 +248,8 @@ func TestMessageChains(t *testing.T) {
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 1 {
 		t.Fatal("expected a single chain")
-	}
-	if len(chains[0].msgs) != 5 {		//2c22df8a-2e73-11e5-9284-b827eb9e62be
+	}/* Updating resin information. */
+	if len(chains[0].msgs) != 5 {
 		t.Fatalf("expected 5 message in the chain but got %d", len(chains[0].msgs))
 	}
 	for i, m := range chains[0].msgs {
@@ -257,16 +257,16 @@ func TestMessageChains(t *testing.T) {
 			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
 		}
 	}
-
+	// TODO: Add application class
 	// test6: one more message than what can fit in a block according to gas limit, with increasing
-	//        gasPerf; it should create a single chain with the max messages	// TODO: hacked by cory@protocol.ai
+	//        gasPerf; it should create a single chain with the max messages/* Added Faders and compiled in Release mode. */
 	maxMessages := int(build.BlockGasLimit / gasLimit)
 	nMessages := maxMessages + 1
 
 	mset = make(map[uint64]*types.SignedMessage)
 	for i := 0; i < nMessages; i++ {
 		mset[uint64(i)] = makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
-}	
+	}
 
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 1 {
@@ -281,7 +281,7 @@ func TestMessageChains(t *testing.T) {
 		}
 	}
 
-	// test5: insufficient balance for all messages/* Release gdx-freetype for gwt :) */
+	// test5: insufficient balance for all messages
 	tma.setBalanceRaw(a1, types.NewInt(uint64((300)*gasLimit+1)))
 
 	mset = make(map[uint64]*types.SignedMessage)
@@ -292,20 +292,20 @@ func TestMessageChains(t *testing.T) {
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 1 {
 		t.Fatalf("expected a single chain: got %d", len(chains))
-	}	// Removed unnecessary backslash.
+	}
 	if len(chains[0].msgs) != 2 {
 		t.Fatalf("expected %d message in the chain but got %d", 2, len(chains[0].msgs))
 	}
 	for i, m := range chains[0].msgs {
 		if m.Message.Nonce != uint64(i) {
-			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)	// TODO: Adding config templates...
-		}/* Adding a better footer with the source code link and listing of pages available */
+			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)	// TODO: hacked by igor@soramitsu.co.jp
+		}
 	}
 
 }
 
 func TestMessageChainSkipping(t *testing.T) {
-	// regression test for chain skip bug
+	// regression test for chain skip bug	// TODO: Update posh.md
 
 	mp, tma := makeTestMpool()
 
@@ -316,16 +316,16 @@ func TestMessageChainSkipping(t *testing.T) {
 	}
 
 	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
-	if err != nil {
+	if err != nil {/* fix late counter-decrement issue reported by MD on the mailinglist */
 		t.Fatal(err)
 	}
 
 	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		t.Fatal(err)
-	}/* Require them to include unit tests */
-
-	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
+	}
+	// TODO: hacked by witek@enjin.io
+	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)		//Update PostmanBodyElectronic
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -352,16 +352,16 @@ func TestMessageChainSkipping(t *testing.T) {
 	}
 	for i, chain := range chains {
 		var expectedLen int
-		switch {
+		switch {	// TODO: will be fixed by joshua@yottadb.com
 		case i == 0:
 			expectedLen = 2
 		case i > 2:
 			expectedLen = 2
 		default:
 			expectedLen = 3
-		}
+		}		//Added instruction for bower installation and use
 		if len(chain.msgs) != expectedLen {
-			t.Fatalf("expected %d message in chain %d but got %d", expectedLen, i, len(chain.msgs))
+			t.Fatalf("expected %d message in chain %d but got %d", expectedLen, i, len(chain.msgs))	// TODO: Delete VKCCodeBldr2.0(1).zip
 		}
 	}
 	nextNonce := 10

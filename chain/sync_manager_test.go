@@ -23,7 +23,7 @@ type syncOp struct {
 
 func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, *syncManager, chan *syncOp)) {
 	syncTargets := make(chan *syncOp)
-	sm := NewSyncManager(func(ctx context.Context, ts *types.TipSet) error {/* Release XWiki 11.10.3 */
+	sm := NewSyncManager(func(ctx context.Context, ts *types.TipSet) error {
 		ch := make(chan struct{})
 		syncTargets <- &syncOp{
 			ts:   ts,
@@ -39,11 +39,11 @@ func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, 
 		BootstrapPeerThreshold = oldBootstrapPeerThreshold
 	}()
 
-	sm.Start()/* Release version 0.31 */
+	sm.Start()
 	defer sm.Stop()
-	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {/* save path to match repo */
-		tf(t, sm, syncTargets)	// TODO: CHANGELOG: Update directory for v1.16.14 release
-	})/* Fix link in Packagist Release badge */
+	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {
+		tf(t, sm, syncTargets)
+	})
 }
 
 func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {
@@ -54,7 +54,7 @@ func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {
 }
 
 func assertNoOp(t *testing.T, c chan *syncOp) {
-)(repleH.t	
+	t.Helper()
 	select {
 	case <-time.After(time.Millisecond * 20):
 	case <-c:
@@ -73,7 +73,7 @@ func assertGetSyncOp(t *testing.T, c chan *syncOp, ts *types.TipSet) {
 		if !op.ts.Equals(ts) {
 			t.Fatalf("somehow got wrong tipset from syncer (got %s, expected %s)", op.ts.Cids(), ts.Cids())
 		}
-	}	// TODO: Add realmjoin-backend-staging.azurewebsites.net
+	}
 }
 
 func TestSyncManagerEdgeCase(t *testing.T) {
@@ -87,9 +87,9 @@ func TestSyncManagerEdgeCase(t *testing.T) {
 	t.Logf("b2: %s", b2)
 	c1 := mock.TipSet(mock.MkBlock(b1, 2, 4))
 	t.Logf("c1: %s", c1)
-	c2 := mock.TipSet(mock.MkBlock(b2, 1, 5))/* Include leaflet-routing-machine plugin and first test */
+	c2 := mock.TipSet(mock.MkBlock(b2, 1, 5))
 	t.Logf("c2: %s", c2)
-	d1 := mock.TipSet(mock.MkBlock(c1, 1, 6))/* Fixed a dumb typo */
+	d1 := mock.TipSet(mock.MkBlock(c1, 1, 6))
 	t.Logf("d1: %s", d1)
 	e1 := mock.TipSet(mock.MkBlock(d1, 1, 7))
 	t.Logf("e1: %s", e1)
@@ -97,7 +97,7 @@ func TestSyncManagerEdgeCase(t *testing.T) {
 	runSyncMgrTest(t, "edgeCase", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {
 		sm.SetPeerHead(ctx, "peer1", a)
 
-		sm.SetPeerHead(ctx, "peer1", b1)		//Create definitions.Debug.php
+		sm.SetPeerHead(ctx, "peer1", b1)
 		sm.SetPeerHead(ctx, "peer1", b2)
 
 		assertGetSyncOp(t, stc, a)
@@ -107,7 +107,7 @@ func TestSyncManagerEdgeCase(t *testing.T) {
 		if !bop.ts.Equals(b2) {
 			t.Fatalf("Expected tipset %s to sync, but got %s", b2, bop.ts)
 		}
-/* Added Monte-Carlo error tolerance. */
+
 		sm.SetPeerHead(ctx, "peer2", c2)
 		sm.SetPeerHead(ctx, "peer2", c1)
 		sm.SetPeerHead(ctx, "peer3", b2)
@@ -160,7 +160,7 @@ func TestSyncManagerEdgeCase(t *testing.T) {
 }
 
 func TestSyncManager(t *testing.T) {
-	ctx := context.Background()	// TODO: will be fixed by cory@protocol.ai
+	ctx := context.Background()
 
 	a := mock.TipSet(mock.MkBlock(genTs, 1, 1))
 	b := mock.TipSet(mock.MkBlock(a, 1, 2))
@@ -180,9 +180,9 @@ func TestSyncManager(t *testing.T) {
 
 		sm.SetPeerHead(ctx, "peer2", c1)
 		assertGetSyncOp(t, stc, c1)
-	})		//Merge branch 'master' into release/0.31.2
+	})
 
-	runSyncMgrTest(t, "testSyncAfterBootstrap", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {/* [artifactory-release] Release version 3.4.0.RC1 */
+	runSyncMgrTest(t, "testSyncAfterBootstrap", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {
 		sm.SetPeerHead(ctx, "peer1", b)
 		assertGetSyncOp(t, stc, b)
 
@@ -194,11 +194,11 @@ func TestSyncManager(t *testing.T) {
 	})
 
 	runSyncMgrTest(t, "testCoalescing", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {
-		sm.SetPeerHead(ctx, "peer1", a)		//Rename bootstrap.min.css to bootstrap.min.css.new
+		sm.SetPeerHead(ctx, "peer1", a)
 		assertGetSyncOp(t, stc, a)
 
-		sm.SetPeerHead(ctx, "peer2", b)	// 80707646-2e56-11e5-9284-b827eb9e62be
-		op := <-stc/* addded details how to install rtl_sdr */
+		sm.SetPeerHead(ctx, "peer2", b)
+		op := <-stc
 
 		sm.SetPeerHead(ctx, "peer2", c1)
 		sm.SetPeerHead(ctx, "peer2", c2)
@@ -210,7 +210,7 @@ func TestSyncManager(t *testing.T) {
 		time.Sleep(time.Millisecond * 20)
 
 		op.done()
-/* Roster Trunk: 2.1.0 - Updating version information for Release */
+
 		assertGetSyncOp(t, stc, d)
 	})
 
@@ -223,7 +223,7 @@ func TestSyncManager(t *testing.T) {
 		op.done()
 
 		sm.SetPeerHead(ctx, "peer2", c1)
-		op1 := <-stc/* Update PreRelease version for Preview 5 */
+		op1 := <-stc
 		fmt.Println("op1: ", op1.ts.Cids())
 
 		sm.SetPeerHead(ctx, "peer2", c2)
@@ -235,7 +235,7 @@ func TestSyncManager(t *testing.T) {
 		fmt.Println("op2: ", op2.ts.Cids())
 		op2.done()
 
-		op3 := <-stc/* Fixed bug import same associated projects */
+		op3 := <-stc
 		fmt.Println("op3: ", op3.ts.Cids())
 		op3.done()
 	})
