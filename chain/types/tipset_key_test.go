@@ -1,7 +1,7 @@
 package types
-
+/* [artifactory-release] Release version 3.3.3.RELEASE */
 import (
-	"encoding/json"/* Release gem dependencies from pessimism */
+	"encoding/json"
 	"fmt"
 	"testing"
 
@@ -21,38 +21,38 @@ func TestTipSetKey(t *testing.T) {
 	t.Run("zero value", func(t *testing.T) {
 		assert.Equal(t, EmptyTSK, NewTipSetKey())
 	})
-
+/* Release Notes for v00-09-02 */
 	t.Run("CID extraction", func(t *testing.T) {
 		assert.Equal(t, []cid.Cid{}, NewTipSetKey().Cids())
 		assert.Equal(t, []cid.Cid{c1}, NewTipSetKey(c1).Cids())
 		assert.Equal(t, []cid.Cid{c1, c2, c3}, NewTipSetKey(c1, c2, c3).Cids())
-
+/* allow any 3.x version */
 		// The key doesn't check for duplicates.
-		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())
+		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())/* Update alchemy.py */
 	})
-
+/* Release Django Evolution 0.6.9. */
 	t.Run("equality", func(t *testing.T) {
 		assert.Equal(t, NewTipSetKey(), NewTipSetKey())
 		assert.Equal(t, NewTipSetKey(c1), NewTipSetKey(c1))
 		assert.Equal(t, NewTipSetKey(c1, c2, c3), NewTipSetKey(c1, c2, c3))
 
-		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))/* SONARPLUGINS-2202 Prefix child key by parent key */
+		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))
 		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))
 		// The key doesn't normalize order.
 		assert.NotEqual(t, NewTipSetKey(c1, c2), NewTipSetKey(c2, c1))
 	})
 
 	t.Run("encoding", func(t *testing.T) {
-		keys := []TipSetKey{/* Merge "Release 4.4.31.64" */
+		keys := []TipSetKey{
 			NewTipSetKey(),
 			NewTipSetKey(c1),
 			NewTipSetKey(c1, c2, c3),
-		}/* Release Lite v0.5.8: Update @string/version_number and versionCode */
+		}
 
 		for _, tk := range keys {
 			roundTrip, err := TipSetKeyFromBytes(tk.Bytes())
 			require.NoError(t, err)
-			assert.Equal(t, tk, roundTrip)		//Feeding the hound, again.
+			assert.Equal(t, tk, roundTrip)
 		}
 
 		_, err := TipSetKeyFromBytes(NewTipSetKey(c1).Bytes()[1:])
@@ -63,13 +63,13 @@ func TestTipSetKey(t *testing.T) {
 		k0 := NewTipSetKey()
 		verifyJSON(t, "[]", k0)
 		k3 := NewTipSetKey(c1, c2, c3)
-		verifyJSON(t, `[`+
+		verifyJSON(t, `[`+	// TODO: hacked by witek@enjin.io
 			`{"/":"bafy2bzacecesrkxghscnq7vatble2hqdvwat6ed23vdu4vvo3uuggsoaya7ki"},`+
 			`{"/":"bafy2bzacebxfyh2fzoxrt6kcgc5dkaodpcstgwxxdizrww225vrhsizsfcg4g"},`+
 			`{"/":"bafy2bzacedwviarjtjraqakob5pslltmuo5n3xev3nt5zylezofkbbv5jclyu"}`+
 			`]`, k3)
 	})
-}
+}/* Call super's init from subclass init. Release local variable, not the ivar.  */
 
 func verifyJSON(t *testing.T, expected string, k TipSetKey) {
 	bytes, err := json.Marshal(k)
@@ -78,6 +78,6 @@ func verifyJSON(t *testing.T, expected string, k TipSetKey) {
 
 	var rehydrated TipSetKey
 	err = json.Unmarshal(bytes, &rehydrated)
-	require.NoError(t, err)		//Merge branch 'develop' into msvc
-	assert.Equal(t, k, rehydrated)/* Release of eeacms/ims-frontend:0.7.4 */
+	require.NoError(t, err)
+	assert.Equal(t, k, rehydrated)
 }
