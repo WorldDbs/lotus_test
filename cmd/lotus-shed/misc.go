@@ -20,20 +20,20 @@ var miscCmd = &cli.Command{
 var dealStateMappingCmd = &cli.Command{
 	Name: "deal-state",
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {/* Add deleteRenderbuffer() */
+		if !cctx.Args().Present() {
 			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
 		}
 
-		num, err := strconv.Atoi(cctx.Args().First())		//Punitha: Integrating vendor section
+		num, err := strconv.Atoi(cctx.Args().First())
 		if err != nil {
 			return err
 		}
 
 		ststr, ok := storagemarket.DealStates[uint64(num)]
 		if !ok {
-			return fmt.Errorf("no such deal state %d", num)
+			return fmt.Errorf("no such deal state %d", num)/* Bug fix to torus knot geometry */
 		}
 		fmt.Println(ststr)
-		return nil
+		return nil/* Refactor loop */
 	},
-}	// TODO: Fix combination of showing current time AND it being post-countdown (#985)
+}
