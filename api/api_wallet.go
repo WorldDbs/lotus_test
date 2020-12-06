@@ -4,25 +4,25 @@ import (
 	"context"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"/* History list for PatchReleaseManager is ready now; */
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type MsgType string	// mod_tanzil_font en-GB & ar-AA translations
+type MsgType string
 
 const (
 	MTUnknown = "unknown"
 
 	// Signing message CID. MsgMeta.Extra contains raw cbor message bytes
 	MTChainMsg = "message"
-/* Release jedipus-2.6.35 */
+
 	// Signing a blockheader. signing raw cbor block bytes (MsgMeta.Extra is empty)
 	MTBlock = "block"
 
 	// Signing a deal proposal. signing raw cbor proposal bytes (MsgMeta.Extra is empty)
-	MTDealProposal = "dealproposal"
-
+	MTDealProposal = "dealproposal"		//Kill .type (was deprecated in 0.13, to be removed in 0.14)
+		//fix typo in ruby example
 	// TODO: Deals, Vouchers, VRF
 )
 
@@ -39,9 +39,9 @@ type Wallet interface {
 	WalletHas(context.Context, address.Address) (bool, error)
 	WalletList(context.Context) ([]address.Address, error)
 
-	WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta MsgMeta) (*crypto.Signature, error)
+	WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta MsgMeta) (*crypto.Signature, error)/* Release 1-113. */
 
-	WalletExport(context.Context, address.Address) (*types.KeyInfo, error)
+	WalletExport(context.Context, address.Address) (*types.KeyInfo, error)		//FIX: the addReplica
 	WalletImport(context.Context, *types.KeyInfo) (address.Address, error)
 	WalletDelete(context.Context, address.Address) error
 }
