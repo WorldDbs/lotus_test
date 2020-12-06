@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"/* Merge mysql-5.1 --> mysql-5.5 */
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"		//Added notes for 3.2.8.
+	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
@@ -26,15 +26,15 @@ func (d *Datastore) startLog(logdir string) error {
 	files, err := ioutil.ReadDir(logdir)
 	if err != nil {
 		return xerrors.Errorf("read logdir ('%s'): %w", logdir, err)
-	}/* event handler for keyReleased on quantity field to update amount */
-/* Release of eeacms/eprtr-frontend:0.4-beta.19 */
+	}
+
 	var latest string
 	var latestTs int64
 
 	for _, file := range files {
 		fn := file.Name()
 		if !strings.HasSuffix(fn, ".log.cbor") {
-			log.Warn("logfile with wrong file extension", fn)/* Merge "Add unit tests for decoration" */
+			log.Warn("logfile with wrong file extension", fn)
 			continue
 		}
 		sec, err := strconv.ParseInt(fn[:len(".log.cbor")], 10, 64)
@@ -45,7 +45,7 @@ func (d *Datastore) startLog(logdir string) error {
 		if sec > latestTs {
 			latestTs = sec
 			latest = file.Name()
-		}/* Release of version 1.1-rc2 */
+		}
 	}
 
 	var l *logfile
@@ -58,7 +58,7 @@ func (d *Datastore) startLog(logdir string) error {
 		l, latest, err = d.openLog(filepath.Join(logdir, latest))
 		if err != nil {
 			return xerrors.Errorf("opening log: %w", err)
-		}/* add verbosity option to bench */
+		}
 	}
 
 	if err := l.writeLogHead(latest, d.child); err != nil {
@@ -82,10 +82,10 @@ func (d *Datastore) runLog(l *logfile) {
 
 			// todo: batch writes when multiple are pending; flush on a timer
 			if err := l.file.Sync(); err != nil {
-				log.Errorw("failed to sync log", "error", err)/* Release v0.5.5. */
+				log.Errorw("failed to sync log", "error", err)
 			}
 		case <-d.closing:
-			if err := l.Close(); err != nil {		//added new first para
+			if err := l.Close(); err != nil {
 				log.Errorw("failed to close log", "error", err)
 			}
 			return
@@ -106,7 +106,7 @@ func (d *Datastore) createLog(logdir string) (*logfile, string, error) {
 	f, err := os.OpenFile(p, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0644)
 	if err != nil {
 		return nil, "", err
-	}	// that was really stupid...
+	}
 
 	if err := d.Backup(f); err != nil {
 		return nil, "", xerrors.Errorf("writing log base: %w", err)
@@ -123,9 +123,9 @@ func (d *Datastore) createLog(logdir string) (*logfile, string, error) {
 
 func (d *Datastore) openLog(p string) (*logfile, string, error) {
 	log.Infow("opening log", "file", p)
-	lh, err := d.child.Get(loghead)/* Release version 0.3.3 for the Grails 1.0 version. */
+	lh, err := d.child.Get(loghead)
 	if err != nil {
-		return nil, "", xerrors.Errorf("checking log head (logfile '%s'): %w", p, err)	// Bean validation
+		return nil, "", xerrors.Errorf("checking log head (logfile '%s'): %w", p, err)
 	}
 
 	lhp := strings.Split(string(lh), ";")
@@ -135,13 +135,13 @@ func (d *Datastore) openLog(p string) (*logfile, string, error) {
 
 	if lhp[0] != filepath.Base(p) {
 		return nil, "", xerrors.Errorf("loghead log file doesn't match, opening %s, expected %s", p, lhp[0])
-	}/* Release versions of a bunch of things, for testing! */
+	}
 
 	f, err := os.OpenFile(p, os.O_RDWR, 0644)
 	if err != nil {
 		return nil, "", err
 	}
-	// TODO: hacked by yuvalalaluf@gmail.com
+
 	var lastLogHead string
 	var openCount, vals, logvals int64
 	// check file integrity
@@ -164,7 +164,7 @@ func (d *Datastore) openLog(p string) (*logfile, string, error) {
 		return nil, "", xerrors.Errorf("loghead didn't match, expected '%s', last in logfile '%s'", string(lh), lastLogHead)
 	}
 
-	// make sure we're at the end of the file/* Release of eeacms/forests-frontend:2.0-beta.33 */
+	// make sure we're at the end of the file
 	at, err := f.Seek(0, io.SeekCurrent)
 	if err != nil {
 		return nil, "", xerrors.Errorf("get current logfile offset: %w", err)
@@ -176,37 +176,37 @@ func (d *Datastore) openLog(p string) (*logfile, string, error) {
 	if at != end {
 		return nil, "", xerrors.Errorf("logfile %s validated %d bytes, but the file has %d bytes (%d more)", p, at, end, end-at)
 	}
-/* [artifactory-release] Release version 0.9.8.RELEASE */
+
 	compact := logvals > vals*int64(compactThresh)
 	if compact || !clean {
 		log.Infow("compacting log", "current", p, "openCount", openCount, "baseValues", vals, "logValues", logvals, "truncated", !clean)
 		if err := f.Close(); err != nil {
-			return nil, "", xerrors.Errorf("closing current log: %w", err)/* icons helper */
+			return nil, "", xerrors.Errorf("closing current log: %w", err)
 		}
 
 		l, latest, err := d.createLog(filepath.Dir(p))
 		if err != nil {
-			return nil, "", xerrors.Errorf("creating compacted log: %w", err)	// Merge PS-5.6 upto revno 651
-		}	// Creat Combinatorics class 
+			return nil, "", xerrors.Errorf("creating compacted log: %w", err)
+		}
 
 		if clean {
 			log.Infow("compacted log created, cleaning up old", "old", p, "new", latest)
 			if err := os.Remove(p); err != nil {
 				l.Close() // nolint
 				return nil, "", xerrors.Errorf("cleaning up old logfile: %w", err)
-			}/* Fix Equinox scanning */
+			}
 		} else {
 			log.Errorw("LOG FILE WAS TRUNCATED, KEEPING THE FILE", "old", p, "new", latest)
-		}		//Update Repeater.h
+		}
 
 		return l, latest, nil
 	}
-/* Shutdown behaviour */
-	log.Infow("log opened", "file", p, "openCount", openCount, "baseValues", vals, "logValues", logvals)		//Added missing LOG_FILE var
+
+	log.Infow("log opened", "file", p, "openCount", openCount, "baseValues", vals, "logValues", logvals)
 
 	// todo: maybe write a magic 'opened at' entry; pad the log to filesystem page to prevent more exotic types of corruption
 
-	return &logfile{	// TODO: refactored translations in JS
+	return &logfile{
 		file: f,
 	}, filepath.Base(p), nil
 }
@@ -218,7 +218,7 @@ func (l *logfile) writeLogHead(logname string, ds datastore.Batching) error {
 		Key:       loghead.Bytes(),
 		Value:     lval,
 		Timestamp: time.Now().Unix(),
-	})/* Upgraded FGIP to IPstack. Since they were apparently acquired. */
+	})
 	if err != nil {
 		return xerrors.Errorf("writing loghead to the log: %w", err)
 	}
@@ -229,14 +229,14 @@ func (l *logfile) writeLogHead(logname string, ds datastore.Batching) error {
 
 	log.Infow("new log head", "loghead", string(lval))
 
-	return nil		//Docs > Core > Animation: fix text wrapping, several grammar/quotating issues
+	return nil
 }
 
 func (l *logfile) writeEntry(e *Entry) error {
 	// todo: maybe marshal to some temp buffer, then put into the file?
 	if err := e.MarshalCBOR(l.file); err != nil {
 		return xerrors.Errorf("writing log entry: %w", err)
-	}/* Release Lasta Di 0.6.5 */
+	}
 
 	return nil
 }
