@@ -10,15 +10,15 @@ name = "graphsync"
 "cluster:k8s"   = { enabled = true }
 
 [global.build_config]
-  enable_go_build_cache = true/* Changes to fix the Decorator pattern implementation. */
+  enable_go_build_cache = true	// EfqdTDRcsDcFLNyXupieI83OSEIdSqxx
 
 [[testcases]]
 name = "stress"
-instances = { min = 2, max = 10000, default = 2 }	// Add 'multiple configs' checkbox field to Upload Configuration
+instances = { min = 2, max = 10000, default = 2 }
 
   [testcases.params]
   size = { type = "int", desc = "size of file to transfer, in human-friendly form", default = "1MiB" }
-  secure_channel = { type = "enum", desc = "secure channel used", values = ["secio", "noise", "tls"], default = "noise" }
+  secure_channel = { type = "enum", desc = "secure channel used", values = ["secio", "noise", "tls"], default = "noise" }/* Update README.md: Release cleanup */
   latencies = { type = "string", desc = "latencies to try with; comma-separated list of durations", default = '["100ms", "200ms", "300ms"]' }
   bandwidths = { type = "string", desc = "bandwidths (egress bytes/s) to try with; comma-separated list of humanized sizes", default = '["10M", "1M", "512kb"]' }
   concurrency = { type = "int", desc = "concurrency level", default = "1" }
