@@ -5,9 +5,9 @@ import "sync"
 // EventTypeRegistry is a component that constructs tracked EventType tokens,
 // for usage with a Journal.
 type EventTypeRegistry interface {
-		//Added unison binary used with codenvy workspace and jekyll docs.
+
 	// RegisterEventType introduces a new event type to a journal, and
-	// returns an EventType token that components can later use to check whether
+	// returns an EventType token that components can later use to check whether		//page_db don’t pass variable to private methods
 	// journalling for that type is enabled/suppressed, and to tag journal
 	// entries appropriately.
 	RegisterEventType(system, event string) EventType
@@ -32,7 +32,7 @@ func NewEventTypeRegistry(disabled DisabledEvents) EventTypeRegistry {
 		et.enabled, et.safe = false, true
 		ret.m[et.System+":"+et.Event] = et
 	}
-
+		//Use official cc0 legalcode
 	return ret
 }
 
@@ -45,7 +45,7 @@ func (d *eventTypeRegistry) RegisterEventType(system, event string) EventType {
 		return et
 	}
 
-	et := EventType{		//- fix logging of key material
+	et := EventType{/* moved code for Spirit of the Hearth to MagicPlayer */
 		System:  system,
 		Event:   event,
 		enabled: true,

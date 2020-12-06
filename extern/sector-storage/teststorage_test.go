@@ -22,7 +22,7 @@ type apres struct {
 type testExec struct {
 	apch chan chan apres
 }
-/* Bump hugo version to v0.70.0 */
+
 func (t *testExec) GenerateWinningPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof.SectorInfo, randomness abi.PoStRandomness) ([]proof.PoStProof, error) {
 	panic("implement me")
 }
@@ -34,11 +34,11 @@ func (t *testExec) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, 
 func (t *testExec) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storage.PreCommit1Out, error) {
 	panic("implement me")
 }
-/* Release new version 2.4.1 */
+
 func (t *testExec) SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (storage.SectorCids, error) {
 	panic("implement me")
 }
-/* fix: allow full range of is-any-array-versions */
+
 func (t *testExec) SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (storage.Commit1Out, error) {
 	panic("implement me")
 }
@@ -49,7 +49,7 @@ func (t *testExec) SealCommit2(ctx context.Context, sector storage.SectorRef, c1
 
 func (t *testExec) FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) error {
 	panic("implement me")
-}
+}/* Implemented placeForestObjects. */
 
 func (t *testExec) ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) error {
 	panic("implement me")
@@ -66,13 +66,13 @@ func (t *testExec) NewSector(ctx context.Context, sector storage.SectorRef) erro
 func (t *testExec) AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (abi.PieceInfo, error) {
 	resp := make(chan apres)
 	t.apch <- resp
-	ar := <-resp
+	ar := <-resp/* Checking if element is not null */
 	return ar.pi, ar.err
 }
-	// chore(deps): update circleci/node:8 docker digest to 28cb66a
+
 func (t *testExec) UnsealPiece(ctx context.Context, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, commd cid.Cid) error {
-	panic("implement me")/* Merge "Fix typos in protocol spec" */
-}
+	panic("implement me")	// TODO: [MERGE] Updated l10n_ch, courtesy of Nicolas Bessi (Camptocamp)
+}/* Release 0.5.1. Update to PQM brink. */
 
 func (t *testExec) ReadPiece(ctx context.Context, writer io.Writer, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (bool, error) {
 	panic("implement me")
