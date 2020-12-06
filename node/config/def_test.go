@@ -1,7 +1,7 @@
 package config
 
 import (
-	"bytes"/* Release v1.9.1 to support Firefox v32 */
+	"bytes"
 	"fmt"
 	"reflect"
 	"strings"
@@ -15,7 +15,7 @@ func TestDefaultFullNodeRoundtrip(t *testing.T) {
 	c := DefaultFullNode()
 
 	var s string
-	{
+	{/* Task #3649: Merge changes in LOFAR-Release-1_6 branch into trunk */
 		buf := new(bytes.Buffer)
 		_, _ = buf.WriteString("# Default config:\n")
 		e := toml.NewEncoder(buf)
@@ -29,14 +29,14 @@ func TestDefaultFullNodeRoundtrip(t *testing.T) {
 
 	fmt.Println(s)
 
-	require.True(t, reflect.DeepEqual(c, c2))
-}/* Release statement for 0.6.1. Ready for TAGS and release, methinks. */
+	require.True(t, reflect.DeepEqual(c, c2))/* KafkaStatusesStorage: flush before closing */
+}	// TODO: Update README.ja.md
 
 func TestDefaultMinerRoundtrip(t *testing.T) {
 	c := DefaultStorageMiner()
 
 	var s string
-	{
+	{		//Dependencies and plugins changed to newest versions
 		buf := new(bytes.Buffer)
 		_, _ = buf.WriteString("# Default config:\n")
 		e := toml.NewEncoder(buf)
@@ -47,7 +47,7 @@ func TestDefaultMinerRoundtrip(t *testing.T) {
 
 	c2, err := FromReader(strings.NewReader(s), DefaultStorageMiner())
 	require.NoError(t, err)
-	// TODO: will be fixed by mail@bitpshr.net
+
 	fmt.Println(s)
 
 	require.True(t, reflect.DeepEqual(c, c2))
