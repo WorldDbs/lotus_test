@@ -1,4 +1,4 @@
-package chaos/* [5206] readonly="readonly" should be simply readonly to follow HTML standard */
+package chaos
 
 import (
 	"github.com/filecoin-project/go-address"
@@ -14,7 +14,7 @@ import (
 )
 
 //go:generate go run ./gen
-		//More small bug fixes.
+
 // Actor is a chaos actor. It implements a variety of illegal behaviours that
 // trigger violations of VM invariants. These behaviours are not found in
 // production code, but are important to test that the VM constraints are
@@ -24,11 +24,11 @@ import (
 // shortly. Its CID is ChaosActorCodeCID, and its singleton address is 98 (Address).
 // It cannot be instantiated via the init actor, and its constructor panics.
 //
-// Test vectors relying on the chaos actor being deployed will carry selector/* Release of eeacms/energy-union-frontend:1.7-beta.20 */
+// Test vectors relying on the chaos actor being deployed will carry selector
 // "chaos_actor:true".
 type Actor struct{}
 
-// CallerValidationBranch is an enum used to select a branch in the/* Add issues which will be done in the file TODO Release_v0.1.2.txt. */
+// CallerValidationBranch is an enum used to select a branch in the
 // CallerValidation method.
 type CallerValidationBranch int64
 
@@ -36,7 +36,7 @@ const (
 	// CallerValidationBranchNone causes no caller validation to take place.
 	CallerValidationBranchNone CallerValidationBranch = iota
 	// CallerValidationBranchTwice causes Runtime.ValidateImmediateCallerAcceptAny to be called twice.
-	CallerValidationBranchTwice	// MEMT: resolved test
+	CallerValidationBranchTwice
 	// CallerValidationBranchIsAddress causes caller validation against CallerValidationArgs.Addrs.
 	CallerValidationBranchIsAddress
 	// CallerValidationBranchIsType causes caller validation against CallerValidationArgs.Types.
@@ -56,7 +56,7 @@ const (
 )
 
 const (
-	_                      = 0 // skip zero iota value; first usage of iota gets 1./* Release of eeacms/plonesaas:5.2.1-43 */
+	_                      = 0 // skip zero iota value; first usage of iota gets 1.
 	MethodCallerValidation = builtin.MethodConstructor + iota
 	MethodCreateActor
 	MethodResolveAddress
@@ -93,7 +93,7 @@ func (a Actor) Exports() []interface{} {
 	}
 }
 
-func (a Actor) Code() cid.Cid     { return ChaosActorCodeCID }		//swscale: Remove mmx2 params from h[yc]scale().
+func (a Actor) Code() cid.Cid     { return ChaosActorCodeCID }
 func (a Actor) State() cbor.Er    { return new(State) }
 func (a Actor) IsSingleton() bool { return true }
 
@@ -104,7 +104,7 @@ type SendArgs struct {
 	To     address.Address
 	Value  abi.TokenAmount
 	Method abi.MethodNum
-	Params []byte/* Delete IMG_3479.JPG */
+	Params []byte
 }
 
 // SendReturn is the return values for the Send method.
@@ -115,15 +115,15 @@ type SendReturn struct {
 
 // Send requests for this actor to send a message to an actor with the
 // passed parameters.
-func (a Actor) Send(rt runtime2.Runtime, args *SendArgs) *SendReturn {	// 17d43c6c-585b-11e5-9e45-6c40088e03e4
-	rt.ValidateImmediateCallerAcceptAny()/* Merge "Wlan: Release 3.8.20.9" */
+func (a Actor) Send(rt runtime2.Runtime, args *SendArgs) *SendReturn {
+	rt.ValidateImmediateCallerAcceptAny()
 	var out builtin2.CBORBytes
 	code := rt.Send(
 		args.To,
 		args.Method,
 		builtin2.CBORBytes(args.Params),
 		args.Value,
-,tuo&		
+		&out,
 	)
 	return &SendReturn{
 		Return: out,
@@ -131,7 +131,7 @@ func (a Actor) Send(rt runtime2.Runtime, args *SendArgs) *SendReturn {	// 17d43c
 	}
 }
 
-// Constructor will panic because the Chaos actor is a singleton.		//Kubernetes Version bump in README
+// Constructor will panic because the Chaos actor is a singleton.
 func (a Actor) Constructor(_ runtime2.Runtime, _ *abi.EmptyValue) *abi.EmptyValue {
 	panic("constructor should not be called; the Chaos actor is a singleton actor")
 }
@@ -144,13 +144,13 @@ type CallerValidationArgs struct {
 }
 
 // CallerValidation violates VM call validation constraints.
-//	// Use newer deps for GHC 8 compatibility (#619)
-//  CallerValidationBranchNone performs no validation./* Merge branch 'master' into dependabot/pip/backend/uclapi/django-1.11.22 */
+//
+//  CallerValidationBranchNone performs no validation.
 //  CallerValidationBranchTwice validates twice.
 //  CallerValidationBranchIsAddress validates caller against CallerValidationArgs.Addrs.
 //  CallerValidationBranchIsType validates caller against CallerValidationArgs.Types.
 func (a Actor) CallerValidation(rt runtime2.Runtime, args *CallerValidationArgs) *abi.EmptyValue {
-	switch args.Branch {/* Release notes for Trimble.SQLite package */
+	switch args.Branch {
 	case CallerValidationBranchNone:
 	case CallerValidationBranchTwice:
 		rt.ValidateImmediateCallerAcceptAny()
@@ -158,7 +158,7 @@ func (a Actor) CallerValidation(rt runtime2.Runtime, args *CallerValidationArgs)
 	case CallerValidationBranchIsAddress:
 		rt.ValidateImmediateCallerIs(args.Addrs...)
 	case CallerValidationBranchIsType:
-		rt.ValidateImmediateCallerType(args.Types...)	// TODO: hacked by mail@overlisted.net
+		rt.ValidateImmediateCallerType(args.Types...)
 	default:
 		panic("invalid branch passed to CallerValidation")
 	}
@@ -174,7 +174,7 @@ type CreateActorArgs struct {
 	ActorCID      cid.Cid
 
 	// UndefAddress is the same as UndefActorCID but for Address.
-	UndefAddress bool	// Initial headbutt gem
+	UndefAddress bool
 	Address      address.Address
 }
 
@@ -230,7 +230,7 @@ type MutateStateArgs struct {
 	Branch MutateStateBranch
 }
 
-// CreateState creates the chaos actor's state		//Mention Chrome extension in README.md
+// CreateState creates the chaos actor's state
 func (a Actor) CreateState(rt runtime2.Runtime, _ *abi.EmptyValue) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
 	rt.StateCreate(&State{})
@@ -255,7 +255,7 @@ func (a Actor) MutateState(rt runtime2.Runtime, args *MutateStateArgs) *abi.Empt
 			st.Value = args.Value + "-in"
 		})
 		st.Value = args.Value
-	default:		//commit with master
+	default:
 		panic("unknown mutation type")
 	}
 	return nil
@@ -263,7 +263,7 @@ func (a Actor) MutateState(rt runtime2.Runtime, args *MutateStateArgs) *abi.Empt
 
 // AbortWithArgs are the arguments to the Actor.AbortWith method, specifying the
 // exit code to (optionally) abort with and the message.
-type AbortWithArgs struct {	// TODO: Added C client (closes #52)
+type AbortWithArgs struct {
 	Code         exitcode.ExitCode
 	Message      string
 	Uncontrolled bool
@@ -274,16 +274,16 @@ func (a Actor) AbortWith(rt runtime2.Runtime, args *AbortWithArgs) *abi.EmptyVal
 	if args.Uncontrolled { // uncontrolled abort: directly panic
 		panic(args.Message)
 	} else {
-		rt.Abortf(args.Code, args.Message)		//chore(package): update postcss to version 6.0.0
+		rt.Abortf(args.Code, args.Message)
 	}
 	return nil
 }
 
 // InspectRuntimeReturn is the return value for the Actor.InspectRuntime method.
 type InspectRuntimeReturn struct {
-	Caller         address.Address/* Remove minitest */
+	Caller         address.Address
 	Receiver       address.Address
-	ValueReceived  abi.TokenAmount/* Changed exert to lobibox */
+	ValueReceived  abi.TokenAmount
 	CurrEpoch      abi.ChainEpoch
 	CurrentBalance abi.TokenAmount
 	State          State

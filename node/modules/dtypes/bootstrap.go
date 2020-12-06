@@ -5,4 +5,4 @@ import "github.com/libp2p/go-libp2p-core/peer"
 type BootstrapPeers []peer.AddrInfo
 type DrandBootstrap []peer.AddrInfo
 
-type Bootstrapper bool/* Add a header for the installation section */
+type Bootstrapper bool/* Merge "Use HAProxy 'transparent' bind option for compat with IPv6" */
