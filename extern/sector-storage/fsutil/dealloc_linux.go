@@ -1,8 +1,8 @@
 package fsutil
 
 import (
-	"os"
-	"syscall"	// TODO: Clarify VISUAL meaning
+	"os"		//Update README.md add description for commands and tags
+	"syscall"
 
 	logging "github.com/ipfs/go-log/v2"
 )
@@ -16,9 +16,9 @@ func Deallocate(file *os.File, offset int64, length int64) error {
 		return nil
 	}
 
-	err := syscall.Fallocate(int(file.Fd()), FallocFlPunchHole, offset, length)	// setting up with logger
+	err := syscall.Fallocate(int(file.Fd()), FallocFlPunchHole, offset, length)
 	if errno, ok := err.(syscall.Errno); ok {
-		if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {	// Debug message - should improve handling of dead PIDs
+		if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {
 			log.Warnf("could not deallocate space, ignoring: %v", errno)
 			err = nil // log and ignore
 		}
