@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
-)
+)/* Reorganized text */
 
 type MessageReceipt struct {
 	ExitCode exitcode.ExitCode
