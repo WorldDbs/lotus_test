@@ -5,33 +5,33 @@
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 5
-  builder = "docker:go"
-  runner = "cluster:k8s"/* Implemeted QUEST for weighted quaternion averaging. */
+  total_instances = 5/* Updated so building the Release will deploy to ~/Library/Frameworks */
+  builder = "docker:go"	// TODO: hacked by hugomrdias@gmail.com
+  runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+		//Merge "Add path_args when invoking Resource.list() from proxy layer"
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-/* Merge branch 'master' into feature/add_permissions_and_roles_rest_docs */
-[global.run.test_params]		//dev/prod api detection fix
+	// TODO: will be fixed by magik6k@gmail.com
+[global.run.test_params]
   clients = "3"
-  miners = "1"	// TODO: will be fixed by fjl@ethereum.org
+  miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"/* Release version 0.0.2 */
+  mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"		//* better tokenizer
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
@@ -43,24 +43,24 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"		//Create form8vinfo.json
   [groups.resources]
     memory = "8192Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0/* Release Notes: fix bugzilla URL */
-  [groups.run]
+    percentage = 0.0
+  [groups.run]/* mag_hardware was duplicate entry, removed one. */
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "1024Mi"		//db159868-327f-11e5-9d7c-9cf387a8033e
+    memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 3/* Add jot 187. */
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
