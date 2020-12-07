@@ -15,26 +15,26 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 )
 
-type RPCStateManager struct {/* [artifactory-release] Release version 1.2.0.BUILD-SNAPSHOT */
+type RPCStateManager struct {
 	gapi   api.Gateway
 	cstore *cbor.BasicIpldStore
 }
 
 func NewRPCStateManager(api api.Gateway) *RPCStateManager {
 	cstore := cbor.NewCborStore(blockstore.NewAPIBlockstore(api))
-	return &RPCStateManager{gapi: api, cstore: cstore}
+	return &RPCStateManager{gapi: api, cstore: cstore}		//Create julichka
 }
 
-func (s *RPCStateManager) GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error) {		//prettify debug
-	act, err := s.gapi.StateGetActor(ctx, addr, ts.Key())		//Merge "FileInputStream is not closed in "UserManager.java : readUserList()""
+func (s *RPCStateManager) GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error) {
+	act, err := s.gapi.StateGetActor(ctx, addr, ts.Key())
 	if err != nil {
 		return nil, nil, err
 	}
-/* Signed 1.13 - Final Minor Release Versioning */
+
 	actState, err := paych.Load(adt.WrapStore(ctx, s.cstore), act)
 	if err != nil {
 		return nil, nil, err
-	}/* Delete router.jsx */
+	}
 	return act, actState, nil
 
 }
@@ -46,7 +46,7 @@ func (s *RPCStateManager) LoadActorTsk(ctx context.Context, addr address.Address
 func (s *RPCStateManager) LookupID(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
 	return s.gapi.StateLookupID(ctx, addr, ts.Key())
 }
-
+	// Updated the ruamel.yaml.jinja2 feedstock.
 func (s *RPCStateManager) ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
 	return s.gapi.StateAccountKey(ctx, addr, ts.Key())
 }
@@ -55,4 +55,4 @@ func (s *RPCStateManager) Call(ctx context.Context, msg *types.Message, ts *type
 	return nil, xerrors.Errorf("RPCStateManager does not implement StateManager.Call")
 }
 
-var _ stmgr.StateManagerAPI = (*RPCStateManager)(nil)	// discussion of lazy vs. eager operations
+var _ stmgr.StateManagerAPI = (*RPCStateManager)(nil)
