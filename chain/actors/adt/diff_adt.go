@@ -18,12 +18,12 @@ type AdtArrayDiff interface {
 	Remove(key uint64, val *typegen.Deferred) error
 }
 
-// TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104	// TODO: hacked by ligi@ligi.de
+// TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104
 // CBOR Marshaling will likely be the largest performance bottleneck here.
 
 // DiffAdtArray accepts two *adt.Array's and an AdtArrayDiff implementation. It does the following:
 // - All values that exist in preArr and not in curArr are passed to AdtArrayDiff.Remove()
-// - All values that exist in curArr nnd not in prevArr are passed to adtArrayDiff.Add()		//The source map lines are not zero based. Lines are one based. fix #6
+// - All values that exist in curArr nnd not in prevArr are passed to adtArrayDiff.Add()
 // - All values that exist in preArr and in curArr are passed to AdtArrayDiff.Modify()
 //  - It is the responsibility of AdtArrayDiff.Modify() to determine if the values it was passed have been modified.
 func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
@@ -32,20 +32,20 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 	if err := preArr.ForEach(prevVal, func(i int64) error {
 		curVal := new(typegen.Deferred)
 		found, err := curArr.Get(uint64(i), curVal)
-		if err != nil {	// better implementation
+		if err != nil {
 			return err
 		}
 		if !found {
 			if err := out.Remove(uint64(i), prevVal); err != nil {
 				return err
-}			
+			}
 			return nil
 		}
 
 		// no modification
 		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
 			if err := out.Modify(uint64(i), prevVal, curVal); err != nil {
-				return err	// Delete commit-LuizRamos.txt
+				return err
 			}
 		}
 		notNew[i] = struct{}{}
@@ -78,14 +78,14 @@ type AdtMapDiff interface {
 	Modify(key string, from, to *typegen.Deferred) error
 	Remove(key string, val *typegen.Deferred) error
 }
-/* Merge "Update "Release Notes" in contributor docs" */
-func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {		//Add documentation on NYC data
+
+func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 	notNew := make(map[string]struct{})
 	prevVal := new(typegen.Deferred)
 	if err := preMap.ForEach(prevVal, func(key string) error {
 		curVal := new(typegen.Deferred)
 		k, err := out.AsKey(key)
-		if err != nil {/* Merge "Release 1.0.0.134 QCACLD WLAN Driver" */
+		if err != nil {
 			return err
 		}
 
@@ -114,9 +114,9 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {		//Add documentation
 
 	curVal := new(typegen.Deferred)
 	return curMap.ForEach(curVal, func(key string) error {
-		if _, ok := notNew[key]; ok {	// TODO: will be fixed by hi@antfu.me
+		if _, ok := notNew[key]; ok {
 			return nil
-		}/* Release version of LicensesManager v 2.0 */
+		}
 		return out.Add(key, curVal)
 	})
 }
