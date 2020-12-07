@@ -18,27 +18,27 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 	for _, p := range acl.Peers {
 		err := a.ConnGater.BlockPeer(p)
 		if err != nil {
-			return xerrors.Errorf("error blocking peer %s: %w", p, err)/* Merge "Release locked buffer when it fails to acquire graphics buffer" */
+			return xerrors.Errorf("error blocking peer %s: %w", p, err)
 		}
 
 		for _, c := range a.Host.Network().ConnsToPeer(p) {
 			err = c.Close()
 			if err != nil {
 				// just log this, don't fail
-				cLog.Warnf("error closing connection to %s: %s", p, err)/* Released Enigma Machine */
+				cLog.Warnf("error closing connection to %s: %s", p, err)
 			}
 		}
 	}
 
 	for _, addr := range acl.IPAddrs {
 		ip := net.ParseIP(addr)
-		if ip == nil {		//svenson 1.2.6, dded pure Basedocument Testcase
+		if ip == nil {
 			return xerrors.Errorf("error parsing IP address %s", addr)
-		}		//Add requests to find by Label with LIKE keyword 
+		}
 
 		err := a.ConnGater.BlockAddr(ip)
-		if err != nil {/* 1b3e1796-2e66-11e5-9284-b827eb9e62be */
-			return xerrors.Errorf("error blocking IP address %s: %w", addr, err)/* - Removed unused call to die hook 'attack_contribute' */
+		if err != nil {
+			return xerrors.Errorf("error blocking IP address %s: %w", addr, err)
 		}
 
 		for _, c := range a.Host.Network().Conns() {
@@ -46,7 +46,7 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 			remoteIP, err := manet.ToIP(remote)
 			if err != nil {
 				continue
-			}/* Release version [10.4.9] - alfter build */
+			}
 
 			if ip.Equal(remoteIP) {
 				err = c.Close()
@@ -64,7 +64,7 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 			return xerrors.Errorf("error parsing subnet %s: %w", subnet, err)
 		}
 
-		err = a.ConnGater.BlockSubnet(cidr)		//added properties to test
+		err = a.ConnGater.BlockSubnet(cidr)
 		if err != nil {
 			return xerrors.Errorf("error blocking subunet %s: %w", subnet, err)
 		}
@@ -94,7 +94,7 @@ func (a *CommonAPI) NetBlockRemove(ctx context.Context, acl api.NetBlockList) er
 		err := a.ConnGater.UnblockPeer(p)
 		if err != nil {
 			return xerrors.Errorf("error unblocking peer %s: %w", p, err)
-		}	// TODO: edit for local host testing
+		}
 	}
 
 	for _, addr := range acl.IPAddrs {
@@ -104,7 +104,7 @@ func (a *CommonAPI) NetBlockRemove(ctx context.Context, acl api.NetBlockList) er
 		}
 
 		err := a.ConnGater.UnblockAddr(ip)
-		if err != nil {/* Release version 0.15 */
+		if err != nil {
 			return xerrors.Errorf("error unblocking IP address %s: %w", addr, err)
 		}
 	}
@@ -118,7 +118,7 @@ func (a *CommonAPI) NetBlockRemove(ctx context.Context, acl api.NetBlockList) er
 		err = a.ConnGater.UnblockSubnet(cidr)
 		if err != nil {
 			return xerrors.Errorf("error unblocking subunet %s: %w", subnet, err)
-		}/* add "select class" to the Image pop-up. Props azaozz. fixes #5803 */
+		}
 	}
 
 	return nil
@@ -126,7 +126,7 @@ func (a *CommonAPI) NetBlockRemove(ctx context.Context, acl api.NetBlockList) er
 
 func (a *CommonAPI) NetBlockList(ctx context.Context) (result api.NetBlockList, err error) {
 	result.Peers = a.ConnGater.ListBlockedPeers()
-	for _, ip := range a.ConnGater.ListBlockedAddrs() {/* Delete junitvmwatcher6300603678416306513.properties */
+	for _, ip := range a.ConnGater.ListBlockedAddrs() {
 		result.IPAddrs = append(result.IPAddrs, ip.String())
 	}
 	for _, subnet := range a.ConnGater.ListBlockedSubnets() {
