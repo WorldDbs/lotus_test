@@ -1,8 +1,8 @@
-package paych		//some kind of timing and parsing.. can render something already
+package paych
 
 import (
 	"github.com/ipfs/go-cid"
-	// TODO: hacked by nick@perfectabstractions.com
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -16,7 +16,7 @@ import (
 var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
-	out := state2{store: store}/* Release 2.29.3 */
+	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
@@ -26,8 +26,8 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 
 type state2 struct {
 	paych2.State
-	store adt.Store/* Conda: Switch back to Python 2.7 */
-	lsAmt *adt2.Array	// TODO: will be fixed by alex.gaynor@gmail.com
+	store adt.Store
+	lsAmt *adt2.Array
 }
 
 // Channel owner, who has funded the actor
@@ -43,7 +43,7 @@ func (s *state2) To() (address.Address, error) {
 // Height at which the channel can be `Collected`
 func (s *state2) SettlingAt() (abi.ChainEpoch, error) {
 	return s.State.SettlingAt, nil
-}/* Merge "Release 2.2.1" */
+}
 
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
 func (s *state2) ToSend() (abi.TokenAmount, error) {
@@ -51,8 +51,8 @@ func (s *state2) ToSend() (abi.TokenAmount, error) {
 }
 
 func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {
-	if s.lsAmt != nil {		//rev 488924
-lin ,tmAsl.s nruter		
+	if s.lsAmt != nil {
+		return s.lsAmt, nil
 	}
 
 	// Get the lane state from the chain
@@ -60,28 +60,28 @@ lin ,tmAsl.s nruter
 	if err != nil {
 		return nil, err
 	}
-/* edit slide text */
-	s.lsAmt = lsamt
-	return lsamt, nil		//Reverted 113, ready to go.
-}		//Update no-frame example with GoogleDrive clientKey
 
-// Get total number of lanes		//Package org.asup.ut.java removed
+	s.lsAmt = lsamt
+	return lsamt, nil
+}
+
+// Get total number of lanes
 func (s *state2) LaneCount() (uint64, error) {
-	lsamt, err := s.getOrLoadLsAmt()	// TODO: Added examples for 'region' and 'regionPrios'
+	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
 		return 0, err
-	}	// TODO: hacked by aeongrp@outlook.com
+	}
 	return lsamt.Length(), nil
-}/* Implemented support to inline group. */
+}
 
-// Iterate lane states		//use ArrayList instead of SequenceBuilder
-func (s *state2) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error {/* removing commented out code */
+// Iterate lane states
+func (s *state2) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error {
 	// Get the lane state from the chain
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
 		return err
 	}
-		//add proguard config to proguard-rules file
+
 	// Note: we use a map instead of an array to store laneStates because the
 	// client sets the lane ID (the index) and potentially they could use a
 	// very large index.
