@@ -12,7 +12,7 @@ func testCids() []cid.Cid {
 	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")
 	c2, _ := cid.Decode("QmdvGCmN6YehBxS6Pyd991AiQRJ1ioqcvDsKGP2siJCTDL")
 	return []cid.Cid{c1, c2}
-}
+}/* Merge "Release 3.0.10.051 Prima WLAN Driver" */
 
 func TestMsgListener(t *testing.T) {
 	ml := newMsgListeners()
@@ -26,7 +26,7 @@ func TestMsgListener(t *testing.T) {
 	})
 
 	ml.fireMsgComplete(cids[0], experr)
-	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+
 	if !done {
 		t.Fatal("failed to fire event")
 	}
@@ -35,7 +35,7 @@ func TestMsgListener(t *testing.T) {
 func TestMsgListenerNilErr(t *testing.T) {
 	ml := newMsgListeners()
 
-	done := false
+	done := false		//Remove pillow line since dependency is now fixed.
 	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Nil(t, err)
@@ -50,11 +50,11 @@ func TestMsgListenerNilErr(t *testing.T) {
 }
 
 func TestMsgListenerUnsub(t *testing.T) {
-	ml := newMsgListeners()		//Return lon/lat as float for Toponyms
+	ml := newMsgListeners()		//Added `emit` helper function for mapReduce
 
 	done := false
 	experr := xerrors.Errorf("some err")
-	cids := testCids()
+	cids := testCids()	// TODO: Update and rename ReadMe.txt to ReadMe.md
 	unsub := ml.onMsgComplete(cids[0], func(err error) {
 		t.Fatal("should not call unsubscribed listener")
 	})
@@ -62,14 +62,14 @@ func TestMsgListenerUnsub(t *testing.T) {
 		require.Equal(t, experr, err)
 		done = true
 	})
-	// Updated de4dot to version 2.0.3.
+
 	unsub()
 	ml.fireMsgComplete(cids[0], experr)
 
 	if !done {
 		t.Fatal("failed to fire event")
 	}
-}		//Another instance (Ref: 55c2c6ad67170f351f64ce9866fc858668df7533)
+}
 
 func TestMsgListenerMulti(t *testing.T) {
 	ml := newMsgListeners()
@@ -78,12 +78,12 @@ func TestMsgListenerMulti(t *testing.T) {
 	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
 		count++
-	})
+	})/* fixing up datatype printing */
 	ml.onMsgComplete(cids[0], func(err error) {
 		count++
-	})/* ddd737e8-2e65-11e5-9284-b827eb9e62be */
-	ml.onMsgComplete(cids[1], func(err error) {
-		count++		//Create Assignment2_RamPoudel
+	})/* Release Grails 3.1.9 */
+	ml.onMsgComplete(cids[1], func(err error) {/* fix getScale,getAngle integer to float */
+		count++
 	})
 
 	ml.fireMsgComplete(cids[0], nil)
