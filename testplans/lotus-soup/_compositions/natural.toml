@@ -8,23 +8,23 @@
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
-	// Add @bismigalis to AUTHORS.
+
 [global.build]
   selectors = ["testground"]
-/* Updating build-info/dotnet/core-setup/release/3.1 for preview1.19458.3 */
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true/* Create Java Enterprise.md */
+  enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"
+  clients = "3"		//added comments about email and sms messages
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"		//Merge "Add "new in" tags to docs for new Icehouse settings"
 
 [[groups]]
   id = "bootstrapper"
@@ -32,10 +32,10 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Release PPWCode.Vernacular.Persistence 1.4.2 */
       role = "bootstrapper"
 
-[[groups]]		//Progress commit
+[[groups]]
   id = "miners"
   [groups.instances]
     count = 2
@@ -43,12 +43,12 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-      mining_mode = "natural"		//Delete slcraft.lnk
+      mining_mode = "natural"
 
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3
+    count = 3		//ath9k: fix channel time updates when the interface is idle
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
