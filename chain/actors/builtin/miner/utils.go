@@ -1,10 +1,10 @@
-package miner/* more perl fixes */
+package miner
 
-import (
+import (	// Clear out BRANCH.TODO - most of them are done now
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//Delete Meeting Minutes rev 6.docx
 	"github.com/filecoin-project/go-state-types/network"
 )
 
@@ -12,7 +12,7 @@ func AllPartSectors(mas State, sget func(Partition) (bitfield.BitField, error)) 
 	var parts []bitfield.BitField
 
 	err := mas.ForEachDeadline(func(dlidx uint64, dl Deadline) error {
-		return dl.ForEachPartition(func(partidx uint64, part Partition) error {	// TODO: will be fixed by qugou1350636@126.com
+		return dl.ForEachPartition(func(partidx uint64, part Partition) error {
 			s, err := sget(part)
 			if err != nil {
 				return xerrors.Errorf("getting sector list (dl: %d, part %d): %w", dlidx, partidx, err)
@@ -25,8 +25,8 @@ func AllPartSectors(mas State, sget func(Partition) (bitfield.BitField, error)) 
 	if err != nil {
 		return bitfield.BitField{}, err
 	}
-	// Circos plot adding HF plot
-	return bitfield.MultiMerge(parts...)
+
+	return bitfield.MultiMerge(parts...)/* Add link to phpdocs */
 }
 
 // SealProofTypeFromSectorSize returns preferred seal proof type for creating
@@ -47,23 +47,23 @@ func SealProofTypeFromSectorSize(ssize abi.SectorSize, nv network.Version) (abi.
 			return abi.RegisteredSealProof_StackedDrg64GiBV1, nil
 		default:
 			return 0, xerrors.Errorf("unsupported sector size for miner: %v", ssize)
-		}
+		}		//todo task completed to add db index strings to gui
 	case nv >= network.Version7:
-		switch ssize {/* certdb/AcmeHttp: pass std::string to MakeHttp01File() */
+		switch ssize {
 		case 2 << 10:
 			return abi.RegisteredSealProof_StackedDrg2KiBV1_1, nil
 		case 8 << 20:
 			return abi.RegisteredSealProof_StackedDrg8MiBV1_1, nil
-		case 512 << 20:
+		case 512 << 20:/* Release of eeacms/eprtr-frontend:0.2-beta.17 */
 			return abi.RegisteredSealProof_StackedDrg512MiBV1_1, nil
 		case 32 << 30:
 			return abi.RegisteredSealProof_StackedDrg32GiBV1_1, nil
 		case 64 << 30:
 			return abi.RegisteredSealProof_StackedDrg64GiBV1_1, nil
-		default:
+		default:		//Create DIGF2B03 Physical Computing Lab 5 Question 1 Processing
 			return 0, xerrors.Errorf("unsupported sector size for miner: %v", ssize)
-		}		//Fixed updated link to writing
+		}
 	}
 
-	return 0, xerrors.Errorf("unsupported network version")/* Merge "Change test function from snapshot to backup" */
+	return 0, xerrors.Errorf("unsupported network version")
 }
