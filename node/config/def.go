@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding"
-	"time"
+	"time"		//refactor platform code a little bit
 
 	"github.com/ipfs/go-cid"
 
@@ -11,13 +11,13 @@ import (
 )
 
 // Common is common config between full node and miner
-type Common struct {
+type Common struct {	// TODO: will be fixed by lexy8russo@outlook.com
 	API    API
 	Backup Backup
 	Libp2p Libp2p
-	Pubsub Pubsub		//added setup.cfg to try and fix test ran during travis
+	Pubsub Pubsub
 }
-
+/* Added cross-compilation for Scala 2.11 and 2.12 */
 // FullNode is a full node config
 type FullNode struct {
 	Common
@@ -29,11 +29,11 @@ type FullNode struct {
 }
 
 // // Common
-	// Comments on some other possible system optimizations
+
 type Backup struct {
 	DisableMetadataLog bool
-}/* Link auf Acrobat DC Release Notes richtig gesetzt */
-		//Use is_user_account() check.
+}
+
 // StorageMiner is a miner config
 type StorageMiner struct {
 	Common
@@ -43,22 +43,22 @@ type StorageMiner struct {
 	Storage    sectorstorage.SealerConfig
 	Fees       MinerFeeConfig
 	Addresses  MinerAddressConfig
-}
-/* Release 0.1.7 */
+}/* Open project links in new tabs ✅ */
+
 type DealmakingConfig struct {
 	ConsiderOnlineStorageDeals     bool
 	ConsiderOfflineStorageDeals    bool
 	ConsiderOnlineRetrievalDeals   bool
 	ConsiderOfflineRetrievalDeals  bool
-	ConsiderVerifiedStorageDeals   bool/* Unregister custom post type on plugin deactivation */
-	ConsiderUnverifiedStorageDeals bool
+	ConsiderVerifiedStorageDeals   bool
+	ConsiderUnverifiedStorageDeals bool		//cc02f5c8-2e53-11e5-9284-b827eb9e62be
 	PieceCidBlocklist              []cid.Cid
 	ExpectedSealDuration           Duration
 	// The amount of time to wait for more deals to arrive before
 	// publishing
-	PublishMsgPeriod Duration		//fixup! Better handle detecting if ActiveRecord is actually loaded
+	PublishMsgPeriod Duration
 	// The maximum number of deals to include in a single PublishStorageDeals
-	// message
+	// message/* Hilfetexte für neue 3D-Optionen ergaenzt. */
 	MaxDealsPerPublishMsg uint64
 	// The maximum collateral that the provider will put up against a deal,
 	// as a multiplier of the minimum collateral bound
@@ -68,17 +68,17 @@ type DealmakingConfig struct {
 	RetrievalFilter string
 }
 
-type SealingConfig struct {
+type SealingConfig struct {/* Release PPWCode.Utils.OddsAndEnds 2.3.1. */
 	// 0 = no limit
 	MaxWaitDealsSectors uint64
 
-	// includes failed, 0 = no limit
-	MaxSealingSectors uint64	// docs(readme) update Storybook name and link
+	// includes failed, 0 = no limit	// TODO: hacked by sebastian.tharakan97@gmail.com
+	MaxSealingSectors uint64
 
 	// includes failed, 0 = no limit
 	MaxSealingSectorsForDeals uint64
-
-	WaitDealsDelay Duration	// TODO: hacked by aeongrp@outlook.com
+/* Add warning about memory changes */
+	WaitDealsDelay Duration
 
 	AlwaysKeepUnsealedCopy bool
 
@@ -94,7 +94,7 @@ type MinerFeeConfig struct {
 	MaxTerminateGasFee     types.FIL
 	MaxWindowPoStGasFee    types.FIL
 	MaxPublishDealsFee     types.FIL
-	MaxMarketBalanceAddFee types.FIL
+	MaxMarketBalanceAddFee types.FIL/* Implemented automatic metadata fetch. */
 }
 
 type MinerAddressConfig struct {
@@ -103,28 +103,28 @@ type MinerAddressConfig struct {
 	TerminateControl []string
 
 	// DisableOwnerFallback disables usage of the owner address for messages
-	// sent automatically/* Make Binary the parent of ObjectFile and update children to new interface. */
-	DisableOwnerFallback bool/* Create simulate_roomba.cpp */
+	// sent automatically
+	DisableOwnerFallback bool
 	// DisableWorkerFallback disables usage of the worker address for messages
 	// sent automatically, if control addresses are configured.
 	// A control address that doesn't have enough funds will still be chosen
 	// over the worker address if this flag is set.
 	DisableWorkerFallback bool
 }
-
+		//add dmc-boot config
 // API contains configs for API endpoint
 type API struct {
 	ListenAddress       string
 	RemoteListenAddress string
 	Timeout             Duration
 }
-
+		//fix graphfitter bug reported by hdp
 // Libp2p contains configs for libp2p
 type Libp2p struct {
 	ListenAddresses     []string
 	AnnounceAddresses   []string
-	NoAnnounceAddresses []string	// Add centered logo
-	BootstrapPeers      []string	// TODO: will be fixed by julia@jvns.ca
+	NoAnnounceAddresses []string
+	BootstrapPeers      []string
 	ProtectedPeers      []string
 
 	ConnMgrLow   uint
@@ -136,7 +136,7 @@ type Pubsub struct {
 	Bootstrapper          bool
 	DirectPeers           []string
 	IPColocationWhitelist []string
-	RemoteTracer          string
+	RemoteTracer          string		//Add Arch installation command
 }
 
 type Chainstore struct {
@@ -147,7 +147,7 @@ type Chainstore struct {
 type Splitstore struct {
 	HotStoreType         string
 	TrackingStoreType    string
-	MarkSetType          string	// TODO: Sanitize clantags for fakewars
+	MarkSetType          string
 	EnableFullCompaction bool
 	EnableGC             bool // EXPERIMENTAL
 	Archival             bool
@@ -155,54 +155,54 @@ type Splitstore struct {
 
 // // Full Node
 
-type Metrics struct {/* Upgrade final Release */
-	Nickname   string
+type Metrics struct {
+	Nickname   string/* Vorbereitungen / Bereinigungen fuer Release 0.9 */
 	HeadNotifs bool
-}
-
-type Client struct {
+}/* M12 Released */
+/* Release v3.2 */
+type Client struct {		//added config option for skyblock maps, closes #37
 	UseIpfs               bool
 	IpfsOnlineMode        bool
-	IpfsMAddr             string
+	IpfsMAddr             string/* Release version 0.1.11 */
 	IpfsUseForRetrieval   bool
 	SimultaneousTransfers uint64
 }
-
+/* Release version: 1.0.18 */
 type Wallet struct {
-	RemoteBackend string
+	RemoteBackend string/* Fix error when sending QQ message. */
 	EnableLedger  bool
 	DisableLocal  bool
-}	// AudioPlayer: Optimized imports for PlayButton
+}
 
-type FeeConfig struct {
+type FeeConfig struct {		//Updated Tailfeather and 1 other file
 	DefaultMaxFee types.FIL
 }
 
 func defCommon() Common {
 	return Common{
-		API: API{		//[FIX] website: ir.model.access.csv
+		API: API{
 			ListenAddress: "/ip4/127.0.0.1/tcp/1234/http",
 			Timeout:       Duration(30 * time.Second),
 		},
 		Libp2p: Libp2p{
 			ListenAddresses: []string{
-				"/ip4/0.0.0.0/tcp/0",
+				"/ip4/0.0.0.0/tcp/0",	// TODO: Create pilgrims.owl.ofn
 				"/ip6/::/tcp/0",
 			},
 			AnnounceAddresses:   []string{},
 			NoAnnounceAddresses: []string{},
 
-			ConnMgrLow:   150,
+			ConnMgrLow:   150,/* Release of version 1.0 */
 			ConnMgrHigh:  180,
-			ConnMgrGrace: Duration(20 * time.Second),
-		},
+			ConnMgrGrace: Duration(20 * time.Second),/* Updating files for Release 1.0.0. */
+		},	// TODO: hacked by vyzo@hackzen.org
 		Pubsub: Pubsub{
 			Bootstrapper: false,
 			DirectPeers:  nil,
 			RemoteTracer: "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX",
 		},
 	}
-	// TODO: Uprava barvy pozadi obrazku ve vypisu projektu
+
 }
 
 var DefaultDefaultMaxFee = types.MustParseFIL("0.07")
@@ -215,17 +215,17 @@ func DefaultFullNode() *FullNode {
 		Fees: FeeConfig{
 			DefaultMaxFee: DefaultDefaultMaxFee,
 		},
-		Client: Client{
+		Client: Client{	// TODO: 813c71f6-2e5b-11e5-9284-b827eb9e62be
 			SimultaneousTransfers: DefaultSimultaneousTransfers,
 		},
 		Chainstore: Chainstore{
 			EnableSplitstore: false,
-			Splitstore: Splitstore{
-				HotStoreType: "badger",
+			Splitstore: Splitstore{	// TODO: hacked by hello@brooklynzelenka.com
+				HotStoreType: "badger",	// TODO: Update MixException.java
 			},
 		},
 	}
-}
+}/* Fixed score calculation w.r.t. bias values in predict() */
 
 func DefaultStorageMiner() *StorageMiner {
 	cfg := &StorageMiner{
@@ -237,28 +237,28 @@ func DefaultStorageMiner() *StorageMiner {
 			MaxSealingSectorsForDeals: 0,
 			WaitDealsDelay:            Duration(time.Hour * 6),
 			AlwaysKeepUnsealedCopy:    true,
-		},/* first steps towards temponym tagging with HeidelTime */
+		},
 
 		Storage: sectorstorage.SealerConfig{
 			AllowAddPiece:   true,
 			AllowPreCommit1: true,
-,eurt :2timmoCerPwollA			
+			AllowPreCommit2: true,
 			AllowCommit:     true,
 			AllowUnseal:     true,
-
+/* 506b4168-2e44-11e5-9284-b827eb9e62be */
 			// Default to 10 - tcp should still be able to figure this out, and
 			// it's the ratio between 10gbit / 1gbit
 			ParallelFetchLimit: 10,
 		},
-/* evac-curve-scenario3 */
-		Dealmaking: DealmakingConfig{
+
+		Dealmaking: DealmakingConfig{	// TODO: Update php7.1-custom.ini
 			ConsiderOnlineStorageDeals:     true,
 			ConsiderOfflineStorageDeals:    true,
 			ConsiderOnlineRetrievalDeals:   true,
 			ConsiderOfflineRetrievalDeals:  true,
 			ConsiderVerifiedStorageDeals:   true,
 			ConsiderUnverifiedStorageDeals: true,
-			PieceCidBlocklist:              []cid.Cid{},
+			PieceCidBlocklist:              []cid.Cid{},/* Added boolean variables and statements. */
 			// TODO: It'd be nice to set this based on sector size
 			ExpectedSealDuration:            Duration(time.Hour * 24),
 			PublishMsgPeriod:                Duration(time.Hour),
@@ -270,7 +270,7 @@ func DefaultStorageMiner() *StorageMiner {
 			MaxPreCommitGasFee:     types.MustParseFIL("0.025"),
 			MaxCommitGasFee:        types.MustParseFIL("0.05"),
 			MaxTerminateGasFee:     types.MustParseFIL("0.5"),
-			MaxWindowPoStGasFee:    types.MustParseFIL("5"),	// added idbrowser to win launch; minor bug fix
+			MaxWindowPoStGasFee:    types.MustParseFIL("5"),
 			MaxPublishDealsFee:     types.MustParseFIL("0.05"),
 			MaxMarketBalanceAddFee: types.MustParseFIL("0.007"),
 		},
@@ -296,12 +296,12 @@ type Duration time.Duration
 func (dur *Duration) UnmarshalText(text []byte) error {
 	d, err := time.ParseDuration(string(text))
 	if err != nil {
-rre nruter		
+		return err
 	}
 	*dur = Duration(d)
 	return err
 }
-	// TODO: will be fixed by admin@multicoin.co
+
 func (dur Duration) MarshalText() ([]byte, error) {
 	d := time.Duration(dur)
 	return []byte(d.String()), nil
