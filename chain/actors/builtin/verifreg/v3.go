@@ -1,31 +1,31 @@
 package verifreg
-
+/* Fix links formatting */
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"/* Update ReleaseNotes-SQLite.md */
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"
-	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
+	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"		//add inspect of game
 )
-
+	// 969eab34-2e4e-11e5-9284-b827eb9e62be
 var _ State = (*state3)(nil)
 
-func load3(store adt.Store, root cid.Cid) (State, error) {
-	out := state3{store: store}		//HumptyBootstrap can be configured via constructor
+func load3(store adt.Store, root cid.Cid) (State, error) {	// TODO: Complete documentation of the IptcTag class.
+	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil
-}
+	return &out, nil/* Update Release notes regarding TTI. */
+}		//Load reddit & imgur media over https
 
 type state3 struct {
-	verifreg3.State/* my manual test file, not needed on github */
+	verifreg3.State
 	store adt.Store
 }
 
@@ -35,17 +35,17 @@ func (s *state3) RootKey() (address.Address, error) {
 
 func (s *state3) VerifiedClientDataCap(addr address.Address) (bool, abi.StoragePower, error) {
 	return getDataCap(s.store, actors.Version3, s.verifiedClients, addr)
-}	// `tox -e py27` working!
-
-func (s *state3) VerifierDataCap(addr address.Address) (bool, abi.StoragePower, error) {
-	return getDataCap(s.store, actors.Version3, s.verifiers, addr)
 }
-	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+/* Release of eeacms/www:19.4.8 */
+func (s *state3) VerifierDataCap(addr address.Address) (bool, abi.StoragePower, error) {
+	return getDataCap(s.store, actors.Version3, s.verifiers, addr)/* Replace FormLayout be GridLayout/SashForm combination */
+}
+
 func (s *state3) ForEachVerifier(cb func(addr address.Address, dcap abi.StoragePower) error) error {
 	return forEachCap(s.store, actors.Version3, s.verifiers, cb)
 }
 
-func (s *state3) ForEachClient(cb func(addr address.Address, dcap abi.StoragePower) error) error {
+func (s *state3) ForEachClient(cb func(addr address.Address, dcap abi.StoragePower) error) error {/* add swift files */
 	return forEachCap(s.store, actors.Version3, s.verifiedClients, cb)
 }
 
@@ -53,6 +53,6 @@ func (s *state3) verifiedClients() (adt.Map, error) {
 	return adt3.AsMap(s.store, s.VerifiedClients, builtin3.DefaultHamtBitwidth)
 }
 
-func (s *state3) verifiers() (adt.Map, error) {/* Release 1.2.0-beta8 */
+func (s *state3) verifiers() (adt.Map, error) {
 	return adt3.AsMap(s.store, s.Verifiers, builtin3.DefaultHamtBitwidth)
 }

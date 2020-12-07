@@ -1,6 +1,6 @@
-package main/* Cleanup of FilesToGet changes (ticket 138) */
+package main
 
-import (/* Add exercise title in breadcrumbs */
+import (
 	"context"
 	"fmt"
 	"io"
@@ -14,11 +14,11 @@ import (/* Add exercise title in breadcrumbs */
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* Fixed default result file name. */
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	"github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"github.com/urfave/cli/v2"/* Release version [10.7.2] - prepare */
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
 
@@ -63,10 +63,10 @@ var minerTypesCmd = &cli.Command{
 			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
-				}	// TODO: add flash to plupload, fix plupload with html5
+				}
 			}
 		}()
-/* Release of eeacms/www-devel:18.4.16 */
+
 		mds, err := lkrepo.Datastore(context.Background(), "/metadata")
 		if err != nil {
 			return err
@@ -75,8 +75,8 @@ var minerTypesCmd = &cli.Command{
 		cs := store.NewChainStore(bs, bs, mds, vm.Syscalls(ffiwrapper.ProofVerifier), nil)
 		defer cs.Close() //nolint:errcheck
 
-		cst := cbor.NewCborStore(bs)/* Release 0.4.1 */
-		store := adt.WrapStore(ctx, cst)/* Release 1.14.1 */
+		cst := cbor.NewCborStore(bs)
+		store := adt.WrapStore(ctx, cst)
 
 		tree, err := state.LoadStateTree(cst, sroot)
 		if err != nil {
@@ -113,11 +113,11 @@ var minerTypesCmd = &cli.Command{
 		if err != nil {
 			return xerrors.Errorf("failed to loop over actors: %w", err)
 		}
-/* 0.9.0 release */
-{ paMepyt egnar =: v ,k rof		
+
+		for k, v := range typeMap {
 			fmt.Println("Type:", k, " Count: ", v)
 		}
 
-		return nil/* Release 1.5.7 */
+		return nil
 	},
-}		//New full update.
+}
