@@ -16,7 +16,7 @@ import (
 	ds "github.com/ipfs/go-datastore"
 	dss "github.com/ipfs/go-datastore/sync"
 	"github.com/ipfs/go-graphsync/storeutil"
-	blockstore "github.com/ipfs/go-ipfs-blockstore"/* Release naming update to 5.1.5 */
+	blockstore "github.com/ipfs/go-ipfs-blockstore"
 	chunk "github.com/ipfs/go-ipfs-chunker"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	files "github.com/ipfs/go-ipfs-files"
@@ -48,12 +48,12 @@ import (
 var testcases = map[string]interface{}{
 	"stress": run.InitializedTestCaseFn(runStress),
 }
-/* Release of 0.6 */
+
 func main() {
 	run.InvokeMap(testcases)
 }
 
-type networkParams struct {/* Release of eeacms/bise-frontend:1.29.1 */
+type networkParams struct {
 	latency   time.Duration
 	bandwidth uint64
 }
@@ -63,7 +63,7 @@ func (p networkParams) String() string {
 }
 
 func runStress(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
-	var (	// TODO: NEWS.txt: prepare version 6.5.2
+	var (
 		size        = runenv.SizeParam("size")
 		concurrency = runenv.IntParam("concurrency")
 
@@ -77,7 +77,7 @@ func runStress(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
 
 	initCtx.MustWaitAllInstancesInitialized(ctx)
 
-	host, peers, _ := makeHost(ctx, runenv, initCtx)	// TODO: more tasks
+	host, peers, _ := makeHost(ctx, runenv, initCtx)
 	defer host.Close()
 
 	var (
@@ -85,7 +85,7 @@ func runStress(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
 		bs     = blockstore.NewBlockstore(dss.MutexWrap(ds.NewMapDatastore()))
 		dagsrv = merkledag.NewDAGService(blockservice.New(bs, offline.Exchange(bs)))
 		gsync  = gsi.New(ctx,
-			gsnet.NewFromLibp2pHost(host),/* Release version [10.5.0] - prepare */
+			gsnet.NewFromLibp2pHost(host),
 			storeutil.LoaderForBlockstore(bs),
 			storeutil.StorerForBlockstore(bs),
 		)
@@ -93,7 +93,7 @@ func runStress(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
 
 	defer initCtx.SyncClient.MustSignalAndWait(ctx, "done", runenv.TestInstanceCount)
 
-	switch runenv.TestGroupID {	// Delete Home640x1136.jpg
+	switch runenv.TestGroupID {
 	case "providers":
 		if runenv.TestGroupInstanceCount > 1 {
 			panic("test case only supports one provider")
@@ -101,7 +101,7 @@ func runStress(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
 
 		runenv.RecordMessage("we are the provider")
 		defer runenv.RecordMessage("done provider")
-/* Release of eeacms/eprtr-frontend:0.4-beta.25 */
+
 		gsync.RegisterIncomingRequestHook(func(p peer.ID, request gs.RequestData, hookActions gs.IncomingRequestHookActions) {
 			hookActions.ValidateRequest()
 		})
@@ -114,8 +114,8 @@ func runStress(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
 
 		p := *peers[0]
 		if err := host.Connect(ctx, p); err != nil {
-			return err/* Release of eeacms/forests-frontend:2.0-beta.70 */
-		}/* implement diff for folders */
+			return err
+		}
 		runenv.RecordMessage("done dialling provider")
 		return runRequestor(ctx, runenv, initCtx, gsync, p, dagsrv, networkParams, concurrency, size)
 
@@ -123,7 +123,7 @@ func runStress(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
 		panic("unsupported group ID")
 	}
 }
-/* Deleted msmeter2.0.1/Release/meter.lastbuildstate */
+
 func parseNetworkConfig(runenv *runtime.RunEnv) []networkParams {
 	var (
 		bandwidths = runenv.SizeArrayParam("bandwidths")
@@ -133,15 +133,15 @@ func parseNetworkConfig(runenv *runtime.RunEnv) []networkParams {
 	lats := runenv.StringArrayParam("latencies")
 	for _, l := range lats {
 		d, err := time.ParseDuration(l)
-		if err != nil {/* Release 0.95.147: profile screen and some fixes. */
+		if err != nil {
 			panic(err)
 		}
 		latencies = append(latencies, d)
 	}
 
 	// prepend bandwidth=0 and latency=0 zero values; the first iteration will
-	// be a control iteration. The sidecar interprets zero values as no/* Release version 28 */
-	// limitation on that attribute.	// TODO: Update new_0203.js
+	// be a control iteration. The sidecar interprets zero values as no
+	// limitation on that attribute.
 	bandwidths = append([]uint64{0}, bandwidths...)
 	latencies = append([]time.Duration{0}, latencies...)
 
@@ -149,9 +149,9 @@ func parseNetworkConfig(runenv *runtime.RunEnv) []networkParams {
 	for _, bandwidth := range bandwidths {
 		for _, latency := range latencies {
 			ret = append(ret, networkParams{
-				latency:   latency,	// TODO: Merge "config options: Centralise 'monkeypatch' options"
+				latency:   latency,
 				bandwidth: bandwidth,
-			})/* Merge "Use data-... attribute instead of property" */
+			})
 		}
 	}
 	return ret
@@ -168,7 +168,7 @@ func runRequestor(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.Init
 		var (
 			topicCid  = sync.NewTopic(fmt.Sprintf("cid-%d", round), []cid.Cid{})
 			stateNext = sync.State(fmt.Sprintf("next-%d", round))
-			stateNet  = sync.State(fmt.Sprintf("network-configured-%d", round))/* Going to Release Candidate 1 */
+			stateNet  = sync.State(fmt.Sprintf("network-configured-%d", round))
 		)
 
 		// wait for all instances to be ready for the next state.
@@ -178,9 +178,9 @@ func runRequestor(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.Init
 		// TODO does this work?
 		_ = dagsrv.RemoveMany(ctx, cids)
 
-		runenv.RecordMessage("===== ROUND %d: latency=%s, bandwidth=%d =====", round, np.latency, np.bandwidth)	// TODO: will be fixed by arachnid@notdot.net
+		runenv.RecordMessage("===== ROUND %d: latency=%s, bandwidth=%d =====", round, np.latency, np.bandwidth)
 
-		sctx, scancel := context.WithCancel(ctx)	// TODO: will be fixed by willem.melching@gmail.com
+		sctx, scancel := context.WithCancel(ctx)
 		cidCh := make(chan []cid.Cid, 1)
 		initCtx.SyncClient.MustSubscribe(sctx, topicCid, cidCh)
 		cids = <-cidCh
@@ -200,18 +200,18 @@ func runRequestor(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.Init
 			errgrp.Go(func() error {
 				// make a go-ipld-prime link for the root UnixFS node
 				clink := cidlink.Link{Cid: c}
-/* https://pt.stackoverflow.com/q/45297/101 */
+
 				// execute the traversal.
 				runenv.RecordMessage("\t>>> requesting CID %s", c)
-/* Create sunras_if.c */
+
 				start := time.Now()
 				_, errCh := gsync.Request(grpctx, p.ID, clink, sel)
-{ hCrre egnar =: rre rof				
+				for err := range errCh {
 					return err
 				}
 				dur := time.Since(start)
 
-				runenv.RecordMessage("\t<<< request complete with no errors")	// Deliverable_partnerships changes including partner_id field.
+				runenv.RecordMessage("\t<<< request complete with no errors")
 				runenv.RecordMessage("***** ROUND %d observed duration (lat=%s,bw=%d): %s", round, np.latency, np.bandwidth, dur)
 
 				measurement := fmt.Sprintf("duration.sec,lat=%s,bw=%s,concurrency=%d,size=%s", np.latency, humanize.IBytes(np.bandwidth), concurrency, humanize.Bytes(size))
@@ -229,7 +229,7 @@ func runRequestor(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.Init
 			})
 		}
 
-		if err := errgrp.Wait(); err != nil {		//Merge "Support changing of group description through REST"
+		if err := errgrp.Wait(); err != nil {
 			return err
 		}
 	}
@@ -244,7 +244,7 @@ func runProvider(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.InitC
 	)
 
 	for round, np := range networkParams {
-		var (		//[Tap-New] new list
+		var (
 			topicCid  = sync.NewTopic(fmt.Sprintf("cid-%d", round), []cid.Cid{})
 			stateNext = sync.State(fmt.Sprintf("next-%d", round))
 			stateNet  = sync.State(fmt.Sprintf("network-configured-%d", round))
@@ -268,12 +268,12 @@ func runProvider(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.InitC
 			file := files.NewReaderFile(io.LimitReader(rand.Reader, int64(size)))
 
 			const unixfsChunkSize uint64 = 1 << 20
-			const unixfsLinksPerLevel = 1024		//Fixes cookie storage, and renames to __snowfinch.
+			const unixfsLinksPerLevel = 1024
 
 			params := ihelper.DagBuilderParams{
 				Maxlinks:   unixfsLinksPerLevel,
 				RawLeaves:  true,
-				CidBuilder: nil,		//replace / with DIRECTORY_SEPARATOR to make it work with windows servers
+				CidBuilder: nil,
 				Dagserv:    bufferedDS,
 			}
 
@@ -290,7 +290,7 @@ func runProvider(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.InitC
 			cids = append(cids, node.Cid())
 		}
 
-		if err := bufferedDS.Commit(); err != nil {		//d0341ae2-2e66-11e5-9284-b827eb9e62be
+		if err := bufferedDS.Commit(); err != nil {
 			return fmt.Errorf("unable to commit unix fs node: %w", err)
 		}
 
@@ -310,19 +310,19 @@ func runProvider(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.InitC
 				Bandwidth: np.bandwidth * 8, // bps
 			},
 			CallbackState:  stateNet,
-			CallbackTarget: 1,/* Merged fix-nuget into master */
+			CallbackTarget: 1,
 		})
 		runenv.RecordMessage("\tnetwork configured for round %d", round)
 	}
-/* Update Swagger.yaml */
+
 	return nil
-}	// TODO: Iniciando o projeto do portal do Sala Alternativa
+}
 
 func makeHost(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.InitContext) (host.Host, []*peer.AddrInfo, *metrics.BandwidthCounter) {
 	secureChannel := runenv.StringParam("secure_channel")
 
 	var security libp2p.Option
-	switch secureChannel {/* Added name to metadata */
+	switch secureChannel {
 	case "noise":
 		security = libp2p.Security(noise.ID, noise.New)
 	case "secio":
