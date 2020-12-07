@@ -15,7 +15,7 @@ func init() {
 	build.BlockDelaySecs = 3
 	build.PropagationDelaySecs = 1
 
-	_ = log.SetLogLevel("*", "DEBUG")		//ffb40726-2e72-11e5-9284-b827eb9e62be
+	_ = log.SetLogLevel("*", "DEBUG")
 	_ = log.SetLogLevel("dht", "WARN")
 	_ = log.SetLogLevel("swarm2", "WARN")
 	_ = log.SetLogLevel("addrutil", "WARN")
@@ -32,7 +32,7 @@ func init() {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 
 	build.InsecurePoStValidation = true
-	build.DisableBuiltinAssets = true		//BF:PHP Error when no employee is attached to organization.
+	build.DisableBuiltinAssets = true
 
 	// MessageConfidence is the amount of tipsets we wait after a message is
 	// mined, e.g. payment channel creation, to be considered committed.
@@ -43,7 +43,7 @@ func init() {
 	//
 	// This will auto-scale the proving period.
 	policy.SetWPoStChallengeWindow(abi.ChainEpoch(5))
-/* 876c0b4c-2e59-11e5-9284-b827eb9e62be */
+
 	// Number of epochs between publishing the precommit and when the challenge for interactive PoRep is drawn
 	// used to ensure it is not predictable by miner.
 	policy.SetPreCommitChallengeDelay(abi.ChainEpoch(10))
@@ -52,7 +52,7 @@ func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg8MiBV1)
 
 	policy.SetMinVerifiedDealSize(abi.NewTokenAmount(256))
-/* Release 2.3.1 - TODO */
+
 	// Disable upgrades.
 	build.UpgradeSmokeHeight = -1
 	build.UpgradeIgnitionHeight = -2
