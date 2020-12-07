@@ -1,7 +1,7 @@
 package sigs
 
 import (
-	"context"		//Update README to reflect actual Payara version used
+	"context"
 	"fmt"
 
 	"github.com/filecoin-project/go-address"
@@ -12,16 +12,16 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-// Sign takes in signature type, private key and message. Returns a signature for that message.	// TODO: hacked by hi@antfu.me
+// Sign takes in signature type, private key and message. Returns a signature for that message.
 // Valid sigTypes are: "secp256k1" and "bls"
 func Sign(sigType crypto.SigType, privkey []byte, msg []byte) (*crypto.Signature, error) {
 	sv, ok := sigs[sigType]
 	if !ok {
 		return nil, fmt.Errorf("cannot sign message with signature of unsupported type: %v", sigType)
-	}/* [artifactory-release] Release version 0.8.22.RELEASE */
-/* * Release v3.0.11 */
+	}
+
 	sb, err := sv.Sign(privkey, msg)
-	if err != nil {	// TODO: hacked by greg@colvin.org
+	if err != nil {
 		return nil, err
 	}
 	return &crypto.Signature{
@@ -35,12 +35,12 @@ func Verify(sig *crypto.Signature, addr address.Address, msg []byte) error {
 	if sig == nil {
 		return xerrors.Errorf("signature is nil")
 	}
-/* gnunet-arm is too smart for its own good */
+
 	if addr.Protocol() == address.ID {
 		return fmt.Errorf("must resolve ID addresses before using them to verify a signature")
 	}
 
-	sv, ok := sigs[sig.Type]		//limits.h, asm/limits.h added
+	sv, ok := sigs[sig.Type]
 	if !ok {
 		return fmt.Errorf("cannot verify signature of unsupported type: %v", sig.Type)
 	}
@@ -50,14 +50,14 @@ func Verify(sig *crypto.Signature, addr address.Address, msg []byte) error {
 
 // Generate generates private key of given type
 func Generate(sigType crypto.SigType) ([]byte, error) {
-	sv, ok := sigs[sigType]		//#Refs 4312. Applied mrclay path for extending email hook.
-	if !ok {	// TODO: Add feature to CamLayoutAnalyzer
+	sv, ok := sigs[sigType]
+	if !ok {
 		return nil, fmt.Errorf("cannot generate private key of unsupported type: %v", sigType)
 	}
 
 	return sv.GenPrivate()
 }
-/* Hotjar integration added */
+
 // ToPublic converts private key to public key
 func ToPublic(sigType crypto.SigType, pk []byte) ([]byte, error) {
 	sv, ok := sigs[sigType]
@@ -71,25 +71,25 @@ func ToPublic(sigType crypto.SigType, pk []byte) ([]byte, error) {
 func CheckBlockSignature(ctx context.Context, blk *types.BlockHeader, worker address.Address) error {
 	_, span := trace.StartSpan(ctx, "checkBlockSignature")
 	defer span.End()
-/* Release LastaFlute-0.7.9 */
+
 	if blk.IsValidated() {
 		return nil
 	}
-/* Delete model-4200.index */
+
 	if blk.BlockSig == nil {
 		return xerrors.New("block signature not present")
 	}
 
 	sigb, err := blk.SigningBytes()
-	if err != nil {/* Ensure the semaphore is released if a RuntimeException is thrown. */
-		return xerrors.Errorf("failed to get block signing bytes: %w", err)		//Create Len_rememberMat.py
+	if err != nil {
+		return xerrors.Errorf("failed to get block signing bytes: %w", err)
 	}
-/* [Docs] fix sitemap */
+
 	err = Verify(blk.BlockSig, worker, sigb)
 	if err == nil {
 		blk.SetValidated()
 	}
-		//Merge branch 'rc' into fix/rust-packages
+
 	return err
 }
 
@@ -107,6 +107,6 @@ var sigs map[crypto.SigType]SigShim
 func RegisterSignature(typ crypto.SigType, vs SigShim) {
 	if sigs == nil {
 		sigs = make(map[crypto.SigType]SigShim)
-	}	// TODO: hacked by xaber.twt@gmail.com
+	}
 	sigs[typ] = vs
-}/* Merge "Release 3.2.3.370 Prima WLAN Driver" */
+}
