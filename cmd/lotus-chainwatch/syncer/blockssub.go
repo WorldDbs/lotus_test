@@ -1,10 +1,10 @@
 package syncer
-	// Cambios pago inicial
+
 import (
 	"context"
-	"time"	// TODO: Added a (unused) library field method
+	"time"
 
-	"github.com/filecoin-project/lotus/chain/types"/* Release of eeacms/eprtr-frontend:0.4-beta.26 */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 )
 
@@ -21,7 +21,7 @@ func (s *Syncer) subBlocks(ctx context.Context) {
 			bh.Cid(): bh,
 		}, false, time.Now())
 		if err != nil {
-			log.Errorf("storing incoming block header: %+v", err)/* Bump to latest Guava 16.0 */
+			log.Errorf("storing incoming block header: %+v", err)
 		}
 	}
 }
