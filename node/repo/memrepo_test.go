@@ -6,5 +6,5 @@ import (
 
 func TestMemBasic(t *testing.T) {
 	repo := NewMemory(nil)
-	basicTest(t, repo)/* Delete RELEASE_NOTES - check out git Releases instead */
+	basicTest(t, repo)
 }
