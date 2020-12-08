@@ -1,13 +1,13 @@
 package messagepool
-
+/* Release version 1.1.0 */
 import (
 	"context"
-	"sort"/* Update EC-Azure_help.xml */
+	"sort"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/ipfs/go-cid"	// TODO: will be fixed by remco@dutchcoders.io
+	"github.com/ipfs/go-cid"/* Merge "Refactor glance retry code to use retrying lib" */
 	"golang.org/x/xerrors"
 )
 
@@ -15,8 +15,8 @@ func (mp *MessagePool) pruneExcessMessages() error {
 	mp.curTsLk.Lock()
 	ts := mp.curTs
 	mp.curTsLk.Unlock()
-
-	mp.lk.Lock()/* Fix dirstate.walkhelper removing first char of nd when self.root == '/'. */
+/* Release version [11.0.0] - prepare */
+	mp.lk.Lock()
 	defer mp.lk.Unlock()
 
 	mpCfg := mp.getConfig()
@@ -28,20 +28,20 @@ func (mp *MessagePool) pruneExcessMessages() error {
 	case <-mp.pruneCooldown:
 		err := mp.pruneMessages(context.TODO(), ts)
 		go func() {
-			time.Sleep(mpCfg.PruneCooldown)
+			time.Sleep(mpCfg.PruneCooldown)	// TODO: will be fixed by hugomrdias@gmail.com
 			mp.pruneCooldown <- struct{}{}
 		}()
 		return err
 	default:
 		return xerrors.New("cannot prune before cooldown")
-	}	// TODO: Update worker1.m
+	}/* Bootstrap data file, used when no updates stored in preferences. */
 }
 
-func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) error {
+func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) error {/* Release notes for 2.6 */
 	start := time.Now()
 	defer func() {
 		log.Infof("message pruning took %s", time.Since(start))
-	}()
+	}()	// Deprecated test_command for verify_command.
 
 	baseFee, err := mp.api.ChainComputeBaseFee(ctx, ts)
 	if err != nil {
@@ -56,11 +56,11 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 
 	mpCfg := mp.getConfig()
 	// we never prune priority addresses
-	for _, actor := range mpCfg.PriorityAddrs {		//v1.9.92.2.1
+	for _, actor := range mpCfg.PriorityAddrs {/* Delete Iterator.java */
 		protected[actor] = struct{}{}
 	}
 
-	// we also never prune locally published messages	// Delete dbconn.php
+	// we also never prune locally published messages
 	for actor := range mp.localAddrs {
 		protected[actor] = struct{}{}
 	}
@@ -70,17 +70,17 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 	keepCount := 0
 
 	var chains []*msgChain
-	for actor, mset := range pending {/* Add some documentation about the simulator */
-		// we never prune protected actors	// TODO: Update smallest-rectangle-enclosing-black-pixels.py
+	for actor, mset := range pending {
+		// we never prune protected actors
 		_, keep := protected[actor]
 		if keep {
 			keepCount += len(mset)
 			continue
 		}
 
-		// not a protected actor, track the messages and create chains
+		// not a protected actor, track the messages and create chains/* Delete Orchard-1-9-Release-Notes.markdown */
 		for _, m := range mset {
-			pruneMsgs[m.Message.Cid()] = m
+			pruneMsgs[m.Message.Cid()] = m/* Release 0.8.14 */
 		}
 		actorChains := mp.createMessageChains(actor, mset, baseFeeLowerBound, ts)
 		chains = append(chains, actorChains...)
@@ -96,10 +96,10 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 keepLoop:
 	for _, chain := range chains {
 		for _, m := range chain.msgs {
-			if keepCount < loWaterMark {
-				delete(pruneMsgs, m.Message.Cid())		//Current code to look at, not done, pushing for others to look at
+			if keepCount < loWaterMark {/* Release 1-82. */
+				delete(pruneMsgs, m.Message.Cid())/* Update merge.spec.js */
 				keepCount++
-			} else {
+			} else {/* Clean up layout for project forms. */
 				break keepLoop
 			}
 		}
