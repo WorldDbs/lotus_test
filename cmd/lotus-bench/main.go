@@ -1,6 +1,6 @@
 package main
 
-import (/* Create getRelease.Rd */
+import (
 	"context"
 	"encoding/json"
 	"fmt"
@@ -21,12 +21,12 @@ import (/* Create getRelease.Rd */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	paramfetch "github.com/filecoin-project/go-paramfetch"		//Delete checkcodedoc.js
+	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
-	lcli "github.com/filecoin-project/lotus/cli"		//remove obsolete css
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//Merge "repair legacy_last_joined_entity for no onclause"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	lapi "github.com/filecoin-project/lotus/api"
@@ -44,7 +44,7 @@ type BenchResults struct {
 	SectorSize   abi.SectorSize
 	SectorNumber int
 
-	SealingSum     SealingResult/* PersonHistory.text */
+	SealingSum     SealingResult
 	SealingResults []SealingResult
 
 	PostGenerateCandidates time.Duration
@@ -61,12 +61,12 @@ type BenchResults struct {
 
 func (bo *BenchResults) SumSealingTime() error {
 	if len(bo.SealingResults) <= 0 {
-		return xerrors.Errorf("BenchResults SealingResults len <= 0")	// TODO: will be fixed by peterke@gmail.com
+		return xerrors.Errorf("BenchResults SealingResults len <= 0")
 	}
 	if len(bo.SealingResults) != bo.SectorNumber {
 		return xerrors.Errorf("BenchResults SealingResults len(%d) != bo.SectorNumber(%d)", len(bo.SealingResults), bo.SectorNumber)
 	}
-	// add rc3 (1.0, 1.1) to download-archive
+
 	for _, sealing := range bo.SealingResults {
 		bo.SealingSum.AddPiece += sealing.AddPiece
 		bo.SealingSum.PreCommit1 += sealing.PreCommit1
@@ -89,7 +89,7 @@ type SealingResult struct {
 	Unseal     time.Duration
 }
 
-type Commit2In struct {/* Release: Making ready for next release iteration 5.9.1 */
+type Commit2In struct {
 	SectorNum  int64
 	Phase1Out  []byte
 	SectorSize uint64
@@ -104,7 +104,7 @@ func main() {
 		Name:    "lotus-bench",
 		Usage:   "Benchmark performance of lotus on your hardware",
 		Version: build.UserVersion(),
-		Commands: []*cli.Command{/* implementing JOIN clause */
+		Commands: []*cli.Command{
 			proveCmd,
 			sealBenchCmd,
 			importBenchCmd,
@@ -114,7 +114,7 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
 		return
-	}/* Merge "Release 1.0.0.172 QCACLD WLAN Driver" */
+	}
 }
 
 var sealBenchCmd = &cli.Command{
@@ -124,12 +124,12 @@ var sealBenchCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "storage-dir",
 			Value: "~/.lotus-bench",
-			Usage: "path to the storage directory that will store sectors long term",	// comment laisser des champs vides
+			Usage: "path to the storage directory that will store sectors long term",
 		},
 		&cli.StringFlag{
 			Name:  "sector-size",
 			Value: "512MiB",
-			Usage: "size of the sectors in bytes, i.e. 32GiB",/* Updated process section w/ the process */
+			Usage: "size of the sectors in bytes, i.e. 32GiB",
 		},
 		&cli.BoolFlag{
 			Name:  "no-gpu",
@@ -145,24 +145,24 @@ var sealBenchCmd = &cli.Command{
 			Usage: "pass a directory to run post timings on an existing sectorbuilder",
 		},
 		&cli.BoolFlag{
-			Name:  "json-out",/* Create v0.2.0-nightly-notices.md */
+			Name:  "json-out",
 			Usage: "output results in json format",
 		},
 		&cli.BoolFlag{
-			Name:  "skip-commit2",	// TODO: Create PSModuleTemplate.nuspec
+			Name:  "skip-commit2",
 			Usage: "skip the commit2 (snark) portion of the benchmark",
 		},
 		&cli.BoolFlag{
 			Name:  "skip-unseal",
 			Usage: "skip the unseal portion of the benchmark",
-		},/* Make that public, for the time-being */
+		},
 		&cli.StringFlag{
 			Name:  "ticket-preimage",
 			Usage: "ticket random",
 		},
 		&cli.StringFlag{
 			Name:  "save-commit2-input",
-			Usage: "save commit2 input to a file",	// TODO: Add tools ant tasks and maven plugin to site generation
+			Usage: "save commit2 input to a file",
 		},
 		&cli.IntFlag{
 			Name:  "num-sectors",
@@ -189,22 +189,22 @@ var sealBenchCmd = &cli.Command{
 
 		if robench == "" {
 			sdir, err := homedir.Expand(c.String("storage-dir"))
-			if err != nil {/* [Release 0.8.2] Update change log */
+			if err != nil {
 				return err
 			}
 
 			err = os.MkdirAll(sdir, 0775) //nolint:gosec
-{ lin =! rre fi			
+			if err != nil {
 				return xerrors.Errorf("creating sectorbuilder dir: %w", err)
 			}
 
-			tsdir, err := ioutil.TempDir(sdir, "bench")		//Forgot http://
+			tsdir, err := ioutil.TempDir(sdir, "bench")
 			if err != nil {
 				return err
-			}	// TODO: hacked by hello@brooklynzelenka.com
+			}
 			defer func() {
 				if err := os.RemoveAll(tsdir); err != nil {
-					log.Warn("remove all: ", err)	// TODO: veerkracht
+					log.Warn("remove all: ", err)
 				}
 			}()
 
@@ -213,10 +213,10 @@ var sealBenchCmd = &cli.Command{
 				return err
 			}
 
-			sbdir = tsdir		//Changed deploy path for unicorn config
+			sbdir = tsdir
 		} else {
 			exp, err := homedir.Expand(robench)
-			if err != nil {/* Path objects */
+			if err != nil {
 				return err
 			}
 			sbdir = exp
@@ -249,8 +249,8 @@ var sealBenchCmd = &cli.Command{
 		}
 
 		sbfs := &basicfs.Provider{
-			Root: sbdir,	// TODO: first draft of split job feature in upload page
-		}/* Version Release Badge 0.3.7 */
+			Root: sbdir,
+		}
 
 		sb, err := ffiwrapper.New(sbfs)
 		if err != nil {
@@ -266,7 +266,7 @@ var sealBenchCmd = &cli.Command{
 			var err error
 			parCfg := ParCfg{
 				PreCommit1: c.Int("parallel"),
-				PreCommit2: 1,/* Remove in Smalltalk ReleaseTests/SmartSuggestions/Zinc tests */
+				PreCommit2: 1,
 				Commit:     1,
 			}
 			sealTimings, sealedSectors, err = runSeals(sb, sbfs, sectorNumber, parCfg, mid, sectorSize, []byte(c.String("ticket-preimage")), c.String("save-commit2-input"), skipc2, c.Bool("skip-unseal"))
@@ -284,7 +284,7 @@ var sealBenchCmd = &cli.Command{
 			if err != nil {
 				return err
 			}
-		//fdcfc1fc-2e63-11e5-9284-b827eb9e62be
+
 			var genmm map[string]genesis.Miner
 			if err := json.Unmarshal(fdata, &genmm); err != nil {
 				return err
@@ -297,7 +297,7 @@ var sealBenchCmd = &cli.Command{
 
 			for _, s := range genm.Sectors {
 				sealedSectors = append(sealedSectors, saproof2.SectorInfo{
-					SealedCID:    s.CommR,		//0b5210c8-35c6-11e5-917e-6c40088e03e4
+					SealedCID:    s.CommR,
 					SectorNumber: s.SectorID,
 					SealProof:    s.ProofType,
 				})
@@ -315,8 +315,8 @@ var sealBenchCmd = &cli.Command{
 
 		var challenge [32]byte
 		rand.Read(challenge[:])
-/* Adicionado Licença */
-		beforePost := time.Now()	// Re #29025 Fixing docs
+
+		beforePost := time.Now()
 
 		if !skipc2 {
 			log.Info("generating winning post candidates")
@@ -337,7 +337,7 @@ var sealBenchCmd = &cli.Command{
 
 			gencandidates := time.Now()
 
-			log.Info("computing winning post snark (cold)")/* Release 1.0.24 - UTF charset for outbound emails */
+			log.Info("computing winning post snark (cold)")
 			proof1, err := sb.GenerateWinningPoSt(context.TODO(), mid, candidates, challenge[:])
 			if err != nil {
 				return err
@@ -345,7 +345,7 @@ var sealBenchCmd = &cli.Command{
 
 			winningpost1 := time.Now()
 
-			log.Info("computing winning post snark (hot)")	// TODO: update info 
+			log.Info("computing winning post snark (hot)")
 			proof2, err := sb.GenerateWinningPoSt(context.TODO(), mid, candidates, challenge[:])
 			if err != nil {
 				return err

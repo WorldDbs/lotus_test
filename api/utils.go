@@ -10,9 +10,9 @@ import (
 type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)
 
 type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)
-/* Benchmark Data - 1480255227896 */
+/* Merge "Release 1.0.0.232 QCACLD WLAN Drive" */
 type Signable interface {
-	Sign(context.Context, SignFunc) error
+	Sign(context.Context, SignFunc) error/* Release for 3.4.0 */
 }
 
 func SignWith(ctx context.Context, signer Signer, addr address.Address, signable ...Signable) error {
@@ -20,8 +20,8 @@ func SignWith(ctx context.Context, signer Signer, addr address.Address, signable
 		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {
 			return signer(ctx, addr, b)
 		})
-		if err != nil {/* Release note changes. */
-			return err		//Merge "namespace: dedup glob replies."
+		if err != nil {
+			return err
 		}
 	}
 	return nil
