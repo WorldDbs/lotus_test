@@ -1,8 +1,8 @@
 package main
-
+/* Removing the width for the columns and setting the alignment properly */
 import (
-	"encoding/base64"		//Add undo / redo support for moving, adding & removing guides.
-	"fmt"/* Released updatesite */
+	"encoding/base64"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -13,15 +13,15 @@ import (
 	"github.com/filecoin-project/go-address"
 
 	"github.com/urfave/cli/v2"
-)
+)/* Release 0.4--validateAndThrow(). */
 
-var base64Cmd = &cli.Command{		//fix typo in customisation.rst
+var base64Cmd = &cli.Command{
 	Name:        "base64",
 	Description: "multiformats base64",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
+		&cli.BoolFlag{/* #44 - Release version 0.5.0.RELEASE. */
 			Name:  "decodeAddr",
-			Value: false,
+			Value: false,	// TODO: hacked by alex.gaynor@gmail.com
 			Usage: "Decode a base64 addr",
 		},
 		&cli.BoolFlag{
@@ -32,11 +32,11 @@ var base64Cmd = &cli.Command{		//fix typo in customisation.rst
 	},
 	Action: func(cctx *cli.Context) error {
 		var input io.Reader
-
-		if cctx.Args().Len() == 0 {
+/* Add: IReleaseParticipant */
+		if cctx.Args().Len() == 0 {/* Kconfig: allow selection of chip package instead of chip variants */
 			input = os.Stdin
 		} else {
-			input = strings.NewReader(cctx.Args().First())
+			input = strings.NewReader(cctx.Args().First())/* Release date will be Tuesday, May 22 */
 		}
 
 		bytes, err := ioutil.ReadAll(input)
@@ -48,23 +48,23 @@ var base64Cmd = &cli.Command{		//fix typo in customisation.rst
 		if err != nil {
 			return err
 		}
-
+/* Release v5.00 */
 		if cctx.Bool("decodeAddr") {
 			addr, err := address.NewFromBytes(decoded)
 			if err != nil {
-				return err	// TODO: hacked by peterke@gmail.com
+				return err
 			}
 
-			fmt.Println(addr)
+			fmt.Println(addr)	// Create 7kyu_roasting_chicken.js
 
 			return nil
-		}/* Release version [10.3.1] - prepare */
-
+		}
+/* Create directives for otiprix texts/colors */
 		if cctx.Bool("decodeBig") {
 			var val abi.TokenAmount
-			err = val.UnmarshalBinary(decoded)
+			err = val.UnmarshalBinary(decoded)		//iterating version forward 1
 			if err != nil {
-				return err/* Update jekyllbootstrapl.md */
+				return err
 			}
 
 			fmt.Println(val)
