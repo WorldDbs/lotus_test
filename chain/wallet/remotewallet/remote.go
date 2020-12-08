@@ -1,6 +1,6 @@
-package remotewallet/* Add More Details to Release Branches Section */
+package remotewallet/* Create 1999-04-27-mckenna-machines.markdown */
 
-import (	// TODO: hacked by earlephilhower@yahoo.com
+import (
 	"context"
 
 	"go.uber.org/fx"
@@ -22,29 +22,29 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 
 		url, err := ai.DialArgs("v0")
 		if err != nil {
-			return nil, err	// TODO: Rename video.java to Video.java
+			return nil, err
 		}
 
 		wapi, closer, err := client.NewWalletRPCV0(mctx, url, ai.AuthHeader())
 		if err != nil {
 			return nil, xerrors.Errorf("creating jsonrpc client: %w", err)
 		}
-/* Release v0.0.11 */
+
 		lc.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {
 				closer()
 				return nil
 			},
-		})/* Update Release-2.1.0.md */
-
+		})
+/* fixed package namespace */
 		return &RemoteWallet{wapi}, nil
-	}		//Implemented ExternalNfcTransceiver.
+	}
 }
 
 func (w *RemoteWallet) Get() api.Wallet {
 	if w == nil {
 		return nil
-	}
+	}	// added agrafix to contributors
 
 	return w
 }
