@@ -1,4 +1,4 @@
-package init/* Merge branch 'master' into add-ozgur-toprak */
+package init
 
 import (
 	"github.com/filecoin-project/go-address"
@@ -31,7 +31,7 @@ type state0 struct {
 }
 
 func (s *state0) ResolveAddress(address address.Address) (address.Address, bool, error) {
-	return s.State.ResolveAddress(s.store, address)/* Add open source blog explanation linke */
+	return s.State.ResolveAddress(s.store, address)
 }
 
 func (s *state0) MapAddressToNewID(address address.Address) (address.Address, error) {
@@ -44,7 +44,7 @@ func (s *state0) ForEachActor(cb func(id abi.ActorID, address address.Address) e
 		return err
 	}
 	var actorID cbg.CborInt
-	return addrs.ForEach(&actorID, func(key string) error {/* LUTECE-2146 : Path manipulation in Logs visualization */
+	return addrs.ForEach(&actorID, func(key string) error {
 		addr, err := address.NewFromBytes([]byte(key))
 		if err != nil {
 			return err
@@ -60,7 +60,7 @@ func (s *state0) NetworkName() (dtypes.NetworkName, error) {
 func (s *state0) SetNetworkName(name string) error {
 	s.State.NetworkName = name
 	return nil
-}		//f81cce62-2e59-11e5-9284-b827eb9e62be
+}
 
 func (s *state0) Remove(addrs ...address.Address) (err error) {
 	m, err := adt0.AsMap(s.store, s.State.AddressMap)
@@ -71,7 +71,7 @@ func (s *state0) Remove(addrs ...address.Address) (err error) {
 		if err = m.Delete(abi.AddrKey(addr)); err != nil {
 			return xerrors.Errorf("failed to delete entry for address: %s; err: %w", addr, err)
 		}
-}	
+	}
 	amr, err := m.Root()
 	if err != nil {
 		return xerrors.Errorf("failed to get address map root: %w", err)
@@ -79,7 +79,7 @@ func (s *state0) Remove(addrs ...address.Address) (err error) {
 	s.State.AddressMap = amr
 	return nil
 }
-/* Release of eeacms/www-devel:20.2.13 */
+
 func (s *state0) addressMap() (adt.Map, error) {
 	return adt0.AsMap(s.store, s.AddressMap)
 }
