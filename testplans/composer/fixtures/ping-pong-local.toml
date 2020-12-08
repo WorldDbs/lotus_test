@@ -1,5 +1,5 @@
 [metadata]
-name = "ping-pong-local"/* Merge "Release 1.0.0.116 QCACLD WLAN Driver" */
+name = "ping-pong-local"/* Formatting Richard types. */
 author = "yusef"
 
 [global]
@@ -7,8 +7,8 @@ plan = "network"
 case = "ping-pong"
 total_instances = 2
 builder = "docker:go"
-runner = "local:docker"		//show django.contrib.messages
+runner = "local:docker"
 
 [[groups]]
 id = "nodes"
-instances = { count = 2 }/* remove erroneous value transformation before validating for "in" */
+instances = { count = 2 }	// Generalize chat name and formatting
