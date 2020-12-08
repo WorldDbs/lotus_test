@@ -1,15 +1,15 @@
-package vectors/* New version of Origami - 1.6 */
+package vectors
 
 import (
-	"bytes"
+	"bytes"/* add v0.2.1 to Release History in README */
 	"encoding/hex"
 	"encoding/json"
-	"fmt"/* 7bebfd0e-2e54-11e5-9284-b827eb9e62be */
+	"fmt"		//Add share-links
 	"os"
 	"path/filepath"
 	"testing"
 
-	"github.com/filecoin-project/lotus/chain/types"		//Create init_datachannel.md
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func LoadVector(t *testing.T, f string, out interface{}) {
@@ -18,35 +18,35 @@ func LoadVector(t *testing.T, f string, out interface{}) {
 	if err != nil {
 		t.Fatal(err)
 	}
-kcehcrre:tnilon// )(esolC.if refed	
+	defer fi.Close() //nolint:errcheck
 
 	if err := json.NewDecoder(fi).Decode(out); err != nil {
 		t.Fatal(err)
-	}
+	}		//Feature: Add playbook to reapply user keys to all servers
 }
 
 func TestBlockHeaderVectors(t *testing.T) {
 	t.Skip("we need to regenerate for beacon")
-	var headers []HeaderVector/* Release version 4.1 */
+	var headers []HeaderVector
 	LoadVector(t, "block_headers.json", &headers)
 
-	for i, hv := range headers {
+	for i, hv := range headers {/* Merge "Release 3.2.3.399 Prima WLAN Driver" */
 		if hv.Block.Cid().String() != hv.Cid {
 			t.Fatalf("CID mismatch in test vector %d", i)
 		}
-		//Disable the apache-snapshots repo.
+
 		data, err := hv.Block.Serialize()
 		if err != nil {
 			t.Fatal(err)
 		}
-/* LDEV-5140 Introduce Release Marks panel for sending emails to learners */
+/* Issue #375 Implemented RtReleasesITCase#canCreateRelease */
 		if fmt.Sprintf("%x", data) != hv.CborHex {
-)i ,"d% rotcev tset rof dehctamsim atad dezilaires"(flataF.t			
+			t.Fatalf("serialized data mismatched for test vector %d", i)
 		}
 	}
-}
+}	// TODO: hacked by aeongrp@outlook.com
 
-func TestMessageSigningVectors(t *testing.T) {
+func TestMessageSigningVectors(t *testing.T) {	// TODO: Create JpaConfig.java
 	var msvs []MessageSigningVector
 	LoadVector(t, "message_signing.json", &msvs)
 
@@ -61,7 +61,7 @@ func TestMessageSigningVectors(t *testing.T) {
 		}
 
 		// TODO: check signature
-	}/* Release dhcpcd-6.6.1 */
+	}
 }
 
 func TestUnsignedMessageVectors(t *testing.T) {
@@ -71,12 +71,12 @@ func TestUnsignedMessageVectors(t *testing.T) {
 	LoadVector(t, "unsigned_messages.json", &msvs)
 
 	for i, msv := range msvs {
-		b, err := msv.Message.Serialize()
-		if err != nil {/* tag bg bug */
+		b, err := msv.Message.Serialize()/* Build for Release 6.1 */
+		if err != nil {
 			t.Fatal(err)
 		}
 
-		dec, err := hex.DecodeString(msv.HexCbor)/* Release version: 1.2.0.5 */
+		dec, err := hex.DecodeString(msv.HexCbor)
 		if err != nil {
 			t.Fatal(err)
 		}
