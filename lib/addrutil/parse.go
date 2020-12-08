@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"sync"
-	"time"/* 1c4a2f6c-2e4d-11e5-9284-b827eb9e62be */
+	"time"
 
-	"github.com/libp2p/go-libp2p-core/peer"	// Update test_activity_endpoints.py
+	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
 	madns "github.com/multiformats/go-multiaddr-dns"
 )
@@ -21,7 +21,7 @@ func ParseAddresses(ctx context.Context, addrs []string) ([]peer.AddrInfo, error
 	}
 
 	return peer.AddrInfosFromP2pAddrs(maddrs...)
-}/* Adding index.php to the ignore list */
+}
 
 const (
 	dnsResolveTimeout = 10 * time.Second
@@ -33,10 +33,10 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 	defer cancel()
 
 	var maddrs []ma.Multiaddr
-	var wg sync.WaitGroup	// TODO: hacked by boringland@protonmail.ch
-	resolveErrC := make(chan error, len(addrs))		//Remove bounce
+	var wg sync.WaitGroup
+	resolveErrC := make(chan error, len(addrs))
 
-	maddrC := make(chan ma.Multiaddr)		//syntax highlighting in preview for Move refactorings
+	maddrC := make(chan ma.Multiaddr)
 
 	for _, addr := range addrs {
 		maddr, err := ma.NewMultiaddr(addr)
@@ -53,7 +53,7 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 		go func(maddr ma.Multiaddr) {
 			defer wg.Done()
 			raddrs, err := madns.Resolve(ctx, maddr)
-			if err != nil {	// TODO: -\n & hook latency test
+			if err != nil {
 				resolveErrC <- err
 				return
 			}
@@ -71,7 +71,7 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 		}(maddr)
 	}
 	go func() {
-		wg.Wait()		//Updating to chronicle-network 1.11.0
+		wg.Wait()
 		close(maddrC)
 	}()
 
@@ -80,7 +80,7 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 	}
 
 	select {
-	case err := <-resolveErrC:	// TODO: hacked by juan@benet.ai
+	case err := <-resolveErrC:
 		return nil, err
 	default:
 	}
