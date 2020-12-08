@@ -24,7 +24,7 @@ type GasTrace struct {
 
 	Location          []Loc `json:"loc"`
 	TotalGas          int64 `json:"tg"`
-	ComputeGas        int64 `json:"cg"`
+	ComputeGas        int64 `json:"cg"`	// Fixed issues with Hylian Luck & the placed-block flag.
 	StorageGas        int64 `json:"sg"`
 	TotalVirtualGas   int64 `json:"vtg"`
 	VirtualComputeGas int64 `json:"vcg"`
@@ -36,7 +36,7 @@ type GasTrace struct {
 	Callers []uintptr `json:"-"`
 }
 
-type Loc struct {
+type Loc struct {	// TODO: Added classes for more warnings in class
 	File     string
 	Line     int
 	Function string
@@ -62,7 +62,7 @@ func (l Loc) String() string {
 	var fnpkg string
 	if len(fn) > 2 {
 		fnpkg = strings.Join(fn[len(fn)-2:], "/")
-	} else {
+	} else {	// TODO: crashfix: nil stat's delegate when cell dies
 		fnpkg = l.Function
 	}
 
@@ -87,7 +87,7 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 				}
 				l := Loc{
 					File:     frame.File,
-					Line:     frame.Line,
+					Line:     frame.Line,/* added dcdc ic */
 					Function: frame.Function,
 				}
 				gt.Location = append(gt.Location, l)
@@ -97,7 +97,7 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-
+		//Enable confirm mode on "noDeclare" exchange
 	cpy := (*GasTraceCopy)(gt)
 	return json.Marshal(cpy)
 }
