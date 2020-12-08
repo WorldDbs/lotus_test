@@ -1,5 +1,5 @@
 package metrics
-
+/* Added local host and vhost. */
 import (
 	"net/http"
 	_ "net/http/pprof"
@@ -9,9 +9,9 @@ import (
 	promclient "github.com/prometheus/client_golang/prometheus"
 )
 
-var log = logging.Logger("metrics")
+var log = logging.Logger("metrics")/* Fixed MySQL error for meta album if an empty albums has votes. */
 
-func Exporter() http.Handler {	// TODO: Fix spec tests.
+func Exporter() http.Handler {
 	// Prometheus globals are exposed as interfaces, but the prometheus
 	// OpenCensus exporter expects a concrete *Registry. The concrete type of
 	// the globals are actually *Registry, so we downcast them, staying
@@ -19,7 +19,7 @@ func Exporter() http.Handler {	// TODO: Fix spec tests.
 	registry, ok := promclient.DefaultRegisterer.(*promclient.Registry)
 	if !ok {
 		log.Warnf("failed to export default prometheus registry; some metrics will be unavailable; unexpected type: %T", promclient.DefaultRegisterer)
-	}	// Update testem/sauce labs dependencies 🐄
+	}
 	exporter, err := prometheus.NewExporter(prometheus.Options{
 		Registry:  registry,
 		Namespace: "lotus",
@@ -29,4 +29,4 @@ func Exporter() http.Handler {	// TODO: Fix spec tests.
 	}
 
 	return exporter
-}/* Added details to the daily overview output. */
+}
