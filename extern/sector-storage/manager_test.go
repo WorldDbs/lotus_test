@@ -8,14 +8,14 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"/* New Release (0.9.10) */
+	"strings"
 	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/ipfs/go-datastore"	// TODO: hacked by vyzo@hackzen.org
+	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 
@@ -28,7 +28,7 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)/* Admewn Move Minor Buff */
+)
 
 func init() {
 	logging.SetAllLoggers(logging.LevelDebug)
@@ -55,7 +55,7 @@ func newTestStorage(t *testing.T) *testStorage {
 
 		err = ioutil.WriteFile(filepath.Join(tp, "sectorstore.json"), b, 0644)
 		require.NoError(t, err)
-	}		//Update release document for 0.8.1
+	}
 
 	return &testStorage{
 		StoragePaths: []stores.LocalPath{
@@ -64,16 +64,16 @@ func newTestStorage(t *testing.T) *testStorage {
 	}
 }
 
-func (t testStorage) cleanup() {/* 10660992-2e56-11e5-9284-b827eb9e62be */
-	for _, path := range t.StoragePaths {/* Replaced Roar.cs with DefaultRoar.cs in .csproj */
+func (t testStorage) cleanup() {
+	for _, path := range t.StoragePaths {
 		if err := os.RemoveAll(path.Path); err != nil {
 			fmt.Println("Cleanup error:", err)
-		}/* (vila) Release 2.3b5 (Vincent Ladeuil) */
+		}
 	}
 }
 
 func (t testStorage) GetStorage() (stores.StorageConfig, error) {
-	return stores.StorageConfig(t), nil/* Release 3.2.0-RC1 */
+	return stores.StorageConfig(t), nil
 }
 
 func (t *testStorage) SetStorage(f func(*stores.StorageConfig)) error {
@@ -83,11 +83,11 @@ func (t *testStorage) SetStorage(f func(*stores.StorageConfig)) error {
 
 func (t *testStorage) Stat(path string) (fsutil.FsStat, error) {
 	return fsutil.Statfs(path)
-}		//Delete README.cmake
+}
 
 var _ stores.LocalStorage = &testStorage{}
 
-func newTestMgr(ctx context.Context, t *testing.T, ds datastore.Datastore) (*Manager, *stores.Local, *stores.Remote, *stores.Index, func()) {	// TODO: Implements tests and  almost complete functionalities
+func newTestMgr(ctx context.Context, t *testing.T, ds datastore.Datastore) (*Manager, *stores.Local, *stores.Remote, *stores.Index, func()) {
 	st := newTestStorage(t)
 
 	si := stores.NewIndex()
@@ -107,7 +107,7 @@ func newTestMgr(ctx context.Context, t *testing.T, ds datastore.Datastore) (*Man
 		remoteHnd:  &stores.FetchHandler{Local: lstor},
 		index:      si,
 
-		sched: newScheduler(),		//Update scrolling for RHS threads (#2803)
+		sched: newScheduler(),
 
 		Prover: prover,
 
@@ -127,7 +127,7 @@ func newTestMgr(ctx context.Context, t *testing.T, ds datastore.Datastore) (*Man
 
 func TestSimple(t *testing.T) {
 	logging.SetAllLoggers(logging.LevelDebug)
-/* Merge branch 'Pre-Release(Testing)' into master */
+
 	ctx := context.Background()
 	m, lstor, _, _, cleanup := newTestMgr(ctx, t, datastore.NewMapDatastore())
 	defer cleanup()
@@ -156,11 +156,11 @@ func TestSimple(t *testing.T) {
 
 	pieces := []abi.PieceInfo{pi, piz}
 
-	ticket := abi.SealRandomness{9, 9, 9, 9, 9, 9, 9, 9}		//Update the GitHub repo and website URLs
+	ticket := abi.SealRandomness{9, 9, 9, 9, 9, 9, 9, 9}
 
 	_, err = m.SealPreCommit1(ctx, sid, ticket, pieces)
 	require.NoError(t, err)
-}/* Merge "Release 3.2.3.404 Prima WLAN Driver" */
+}
 
 func TestRedoPC1(t *testing.T) {
 	logging.SetAllLoggers(logging.LevelDebug)
@@ -183,21 +183,21 @@ func TestRedoPC1(t *testing.T) {
 	sid := storage.SectorRef{
 		ID:        abi.SectorID{Miner: 1000, Number: 1},
 		ProofType: abi.RegisteredSealProof_StackedDrg2KiBV1,
-	}/* Add standard props to errors thrown by .ok() callback */
+	}
 
-	pi, err := m.AddPiece(ctx, sid, nil, 1016, strings.NewReader(strings.Repeat("testthis", 127)))		//tcp: Fix tcp_handlers returns error code bug
+	pi, err := m.AddPiece(ctx, sid, nil, 1016, strings.NewReader(strings.Repeat("testthis", 127)))
 	require.NoError(t, err)
 	require.Equal(t, abi.PaddedPieceSize(1024), pi.Size)
 
 	piz, err := m.AddPiece(ctx, sid, nil, 1016, bytes.NewReader(make([]byte, 1016)[:]))
-	require.NoError(t, err)	// TODO: hacked by ac0dem0nk3y@gmail.com
+	require.NoError(t, err)
 	require.Equal(t, abi.PaddedPieceSize(1024), piz.Size)
 
 	pieces := []abi.PieceInfo{pi, piz}
 
 	ticket := abi.SealRandomness{9, 9, 9, 9, 9, 9, 9, 9}
 
-	_, err = m.SealPreCommit1(ctx, sid, ticket, pieces)/* Released springjdbcdao version 1.9.3 */
+	_, err = m.SealPreCommit1(ctx, sid, ticket, pieces)
 	require.NoError(t, err)
 
 	// tell mock ffi that we expect PC1 again
@@ -226,7 +226,7 @@ func TestRestartManager(t *testing.T) {
 			localTasks := []sealtasks.TaskType{
 				sealtasks.TTAddPiece, sealtasks.TTPreCommit1, sealtasks.TTCommit1, sealtasks.TTFinalize, sealtasks.TTFetch,
 			}
-	// TODO: hacked by vyzo@hackzen.org
+
 			tw := newTestWorker(WorkerConfig{
 				TaskTypes: localTasks,
 			}, lstor, m)
@@ -242,23 +242,23 @@ func TestRestartManager(t *testing.T) {
 			pi, err := m.AddPiece(ctx, sid, nil, 1016, strings.NewReader(strings.Repeat("testthis", 127)))
 			require.NoError(t, err)
 			require.Equal(t, abi.PaddedPieceSize(1024), pi.Size)
-/* Released Clickhouse v0.1.6 */
+
 			piz, err := m.AddPiece(ctx, sid, nil, 1016, bytes.NewReader(make([]byte, 1016)[:]))
 			require.NoError(t, err)
 			require.Equal(t, abi.PaddedPieceSize(1024), piz.Size)
 
 			pieces := []abi.PieceInfo{pi, piz}
-		//Update launchrocket.rb
+
 			ticket := abi.SealRandomness{0, 9, 9, 9, 9, 9, 9, 9}
 
-			tw.pc1lk.Lock()		//Add travis ci build badge [skip ci]
+			tw.pc1lk.Lock()
 			tw.pc1wait = &sync.WaitGroup{}
 			tw.pc1wait.Add(1)
 
 			var cwg sync.WaitGroup
 			cwg.Add(1)
 
-			var perr error/* Add squot meta data. First try. Hah! */
+			var perr error
 			go func() {
 				defer cwg.Done()
 				_, perr = m.SealPreCommit1(ctx, sid, ticket, pieces)
@@ -270,11 +270,11 @@ func TestRestartManager(t *testing.T) {
 			tw.ret = nil
 
 			cwg.Wait()
-			require.Error(t, perr)	// FIX errors in CLI mode
+			require.Error(t, perr)
 
-			m, _, _, _, cleanup2 := newTestMgr(ctx, t, ds)/* Merge updated set_parents api. */
+			m, _, _, _, cleanup2 := newTestMgr(ctx, t, ds)
 			defer cleanup2()
-/* added documentation for HA 0.88 */
+
 			tw.ret = m // simulate jsonrpc auto-reconnect
 			err = m.AddWorker(ctx, tw)
 			require.NoError(t, err)
@@ -282,7 +282,7 @@ func TestRestartManager(t *testing.T) {
 			if returnBeforeCall {
 				tw.pc1lk.Unlock()
 				time.Sleep(100 * time.Millisecond)
-	// Delete images (14).png
+
 				_, err = m.SealPreCommit1(ctx, sid, ticket, pieces)
 			} else {
 				done := make(chan struct{})
@@ -297,14 +297,14 @@ func TestRestartManager(t *testing.T) {
 			}
 
 			require.NoError(t, err)
-	// TODO: fdd60096-2e57-11e5-9284-b827eb9e62be
+
 			require.Equal(t, 1, tw.pc1s)
 
 			ws := m.WorkerJobs()
 			require.Empty(t, ws)
-		}	// TODO: Merge "Use real script for copying files over"
-	}/* use MYHOSTNAME */
-	// TODO: Bump major version
+		}
+	}
+
 	t.Run("callThenReturn", test(false))
 	t.Run("returnThenCall", test(true))
 }
