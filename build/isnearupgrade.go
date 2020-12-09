@@ -1,9 +1,9 @@
-package build	// TODO: Update characterize_sampling.m
+package build
 
-import (		//[badge, date, lists] updated
+import (
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
 func IsNearUpgrade(epoch, upgradeEpoch abi.ChainEpoch) bool {
 	return epoch > upgradeEpoch-Finality && epoch < upgradeEpoch+Finality
-}
+}	// TODO: will be fixed by alan.shaw@protocol.ai
