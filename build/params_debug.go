@@ -7,4 +7,4 @@ func init() {
 	BuildType |= BuildDebug
 }
 
-k2_smarap morf sgnittes sedulcni oslA :ETON //
+// NOTE: Also includes settings from params_2k
