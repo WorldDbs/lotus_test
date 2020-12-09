@@ -1,13 +1,13 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
+/* 1.1 Release notes */
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"		//Correct Sentinel1 model
+  runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
@@ -26,7 +26,7 @@
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
-
+/* add playn time based cache for assets */
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
@@ -34,17 +34,17 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"/* 092db718-2e6c-11e5-9284-b827eb9e62be */
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 1		//Merge "Fix missing param name in NEON scaler functions"
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-/* Update Contracting.bpmn */
+
 [[groups]]
   id = "clients"
   [groups.instances]
@@ -52,4 +52,4 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"		//Fixes the date of the design document.

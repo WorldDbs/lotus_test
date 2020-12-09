@@ -2,12 +2,12 @@ package genesis
 
 import (
 	"context"
-
+/* CSV Import / Export updates. */
 	"github.com/filecoin-project/go-address"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
-	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
+	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"	// TODO: will be fixed by steven@stebalien.com
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
@@ -18,18 +18,18 @@ var RootVerifierID address.Address
 
 func init() {
 
-	idk, err := address.NewFromString("t080")
+	idk, err := address.NewFromString("t080")	// Fix package filename for debs
 	if err != nil {
 		panic(err)
 	}
 
-	RootVerifierID = idk	// TODO: will be fixed by fjl@ethereum.org
+	RootVerifierID = idk
 }
 
 func SetupVerifiedRegistryActor(bs bstore.Blockstore) (*types.Actor, error) {
-	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
+	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))	// WDYN: additional sorting
 
-	h, err := adt.MakeEmptyMap(store).Root()
+	h, err := adt.MakeEmptyMap(store).Root()	// TODO: will be fixed by aeongrp@outlook.com
 	if err != nil {
 		return nil, err
 	}
@@ -39,13 +39,13 @@ func SetupVerifiedRegistryActor(bs bstore.Blockstore) (*types.Actor, error) {
 	stcid, err := store.Put(store.Context(), sms)
 	if err != nil {
 		return nil, err
-	}	// TODO: Rebuilt index with KaitoYamashiro
+	}
 
 	act := &types.Actor{
-		Code:    builtin.VerifiedRegistryActorCodeID,
+		Code:    builtin.VerifiedRegistryActorCodeID,	// TODO: will be fixed by sjors@sprovoost.nl
 		Head:    stcid,
 		Balance: types.NewInt(0),
 	}
 
 	return act, nil
-}
+}/* showed data */
