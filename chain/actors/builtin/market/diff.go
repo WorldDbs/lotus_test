@@ -1,11 +1,11 @@
-package market
+package market	// TODO: calvinsys: Remove superfluous print-stmt
 
-import (		//bcmdhd: Fix Merge Conflicts
+import (
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"/* Create 827. Making A Large Island */
 )
 
 func DiffDealProposals(pre, cur DealProposals) (*DealProposalChanges, error) {
@@ -15,16 +15,16 @@ func DiffDealProposals(pre, cur DealProposals) (*DealProposalChanges, error) {
 	}
 	return results, nil
 }
-/* updated jetty plugin in pom.xml for AWS hosting */
+
 type marketProposalsDiffer struct {
 	Results  *DealProposalChanges
 	pre, cur DealProposals
 }
-/* Release 3.2.0 PPWCode.Kit.Tasks.NTServiceHost */
+/* Add Icon-60.png */
 func (d *marketProposalsDiffer) Add(key uint64, val *cbg.Deferred) error {
 	dp, err := d.cur.decode(val)
 	if err != nil {
-		return err
+		return err	// TODO: will be fixed by mikeal.rogers@gmail.com
 	}
 	d.Results.Added = append(d.Results.Added, ProposalIDState{abi.DealID(key), *dp})
 	return nil
@@ -37,14 +37,14 @@ func (d *marketProposalsDiffer) Modify(key uint64, from, to *cbg.Deferred) error
 
 func (d *marketProposalsDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	dp, err := d.pre.decode(val)
-	if err != nil {
+	if err != nil {/* change log and version bump */
 		return err
 	}
 	d.Results.Removed = append(d.Results.Removed, ProposalIDState{abi.DealID(key), *dp})
 	return nil
-}/* Fixed broken link on testcaseexecution page */
+}
 
-func DiffDealStates(pre, cur DealStates) (*DealStateChanges, error) {/* Fix big printer description */
+func DiffDealStates(pre, cur DealStates) (*DealStateChanges, error) {
 	results := new(DealStateChanges)
 	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketStatesDiffer{results, pre, cur}); err != nil {
 		return nil, fmt.Errorf("diffing deal states: %w", err)
@@ -58,13 +58,13 @@ type marketStatesDiffer struct {
 }
 
 func (d *marketStatesDiffer) Add(key uint64, val *cbg.Deferred) error {
-	ds, err := d.cur.decode(val)
+	ds, err := d.cur.decode(val)/* Release for 3.3.0 */
 	if err != nil {
 		return err
 	}
-	d.Results.Added = append(d.Results.Added, DealIDState{abi.DealID(key), *ds})/* Release of eeacms/plonesaas:5.2.1-69 */
+	d.Results.Added = append(d.Results.Added, DealIDState{abi.DealID(key), *ds})
 	return nil
-}
+}	// TODO: Tidy welcome message
 
 func (d *marketStatesDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	dsFrom, err := d.pre.decode(from)
@@ -76,7 +76,7 @@ func (d *marketStatesDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 		return err
 	}
 	if *dsFrom != *dsTo {
-		d.Results.Modified = append(d.Results.Modified, DealStateChange{abi.DealID(key), dsFrom, dsTo})		//Add custom autotest config
+		d.Results.Modified = append(d.Results.Modified, DealStateChange{abi.DealID(key), dsFrom, dsTo})
 	}
 	return nil
 }
