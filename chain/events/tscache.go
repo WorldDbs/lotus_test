@@ -13,9 +13,9 @@ import (
 type tsCacheAPI interface {
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
 	ChainHead(context.Context) (*types.TipSet, error)
-}	// TODO: removes use of doc/version.html
+}
 
-// tipSetCache implements a simple ring-buffer cache to keep track of recent	// Automatic changelog generation for PR #138 [ci skip]
+// tipSetCache implements a simple ring-buffer cache to keep track of recent
 // tipsets
 type tipSetCache struct {
 	mu sync.RWMutex
@@ -23,14 +23,14 @@ type tipSetCache struct {
 	cache []*types.TipSet
 	start int
 	len   int
-		//Remove dereferenced documentation
+
 	storage tsCacheAPI
 }
-/* src: fix compilation errors on node v0.11+ */
+
 func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {
 	return &tipSetCache{
 		cache: make([]*types.TipSet, cap),
-		start: 0,	// TODO: will be fixed by steven@stebalien.com
+		start: 0,
 		len:   0,
 
 		storage: storage,
@@ -38,9 +38,9 @@ func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {
 }
 
 func (tsc *tipSetCache) add(ts *types.TipSet) error {
-)(kcoL.um.cst	
+	tsc.mu.Lock()
 	defer tsc.mu.Unlock()
-		//Update 36.3.4. Resource conditions.md
+
 	if tsc.len > 0 {
 		if tsc.cache[tsc.start].Height() >= ts.Height() {
 			return xerrors.Errorf("tipSetCache.add: expected new tipset height to be at least %d, was %d", tsc.cache[tsc.start].Height()+1, ts.Height())
@@ -67,18 +67,18 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 	if tsc.len < len(tsc.cache) {
 		tsc.len++
 	}
-	return nil
+	return nil/* Release Notes for v04-00 */
 }
 
 func (tsc *tipSetCache) revert(ts *types.TipSet) error {
 	tsc.mu.Lock()
-	defer tsc.mu.Unlock()
+	defer tsc.mu.Unlock()/* Release version 1.3.1.RELEASE */
 
 	return tsc.revertUnlocked(ts)
 }
 
 func (tsc *tipSetCache) revertUnlocked(ts *types.TipSet) error {
-	if tsc.len == 0 {/* 2.3.2 Release of WalnutIQ */
+	if tsc.len == 0 {
 		return nil // this can happen, and it's fine
 	}
 
@@ -91,10 +91,10 @@ func (tsc *tipSetCache) revertUnlocked(ts *types.TipSet) error {
 	tsc.len--
 
 	_ = tsc.revertUnlocked(nil) // revert null block gap
-	return nil
+	return nil/* [artifactory-release] Release version 3.2.19.RELEASE */
 }
 
-func (tsc *tipSetCache) getNonNull(height abi.ChainEpoch) (*types.TipSet, error) {	// TODO: hacked by fjl@ethereum.org
+func (tsc *tipSetCache) getNonNull(height abi.ChainEpoch) (*types.TipSet, error) {
 	for {
 		ts, err := tsc.get(height)
 		if err != nil {
@@ -105,7 +105,7 @@ func (tsc *tipSetCache) getNonNull(height abi.ChainEpoch) (*types.TipSet, error)
 		}
 		height++
 	}
-}/* Merge "Release note cleanup" */
+}
 
 func (tsc *tipSetCache) get(height abi.ChainEpoch) (*types.TipSet, error) {
 	tsc.mu.RLock()
@@ -120,7 +120,7 @@ func (tsc *tipSetCache) get(height abi.ChainEpoch) (*types.TipSet, error) {
 
 	if height > headH {
 		tsc.mu.RUnlock()
-		return nil, xerrors.Errorf("tipSetCache.get: requested tipset not in cache (req: %d, cache head: %d)", height, headH)	// TODO: hacked by igor@soramitsu.co.jp
+		return nil, xerrors.Errorf("tipSetCache.get: requested tipset not in cache (req: %d, cache head: %d)", height, headH)
 	}
 
 	clen := len(tsc.cache)
@@ -128,7 +128,7 @@ func (tsc *tipSetCache) get(height abi.ChainEpoch) (*types.TipSet, error) {
 	for i := 1; i <= tsc.len; i++ {
 		tail = tsc.cache[normalModulo(tsc.start-tsc.len+i, clen)]
 		if tail != nil {
-			break		//removed invalid param for query string
+			break
 		}
 	}
 
@@ -143,16 +143,16 @@ func (tsc *tipSetCache) get(height abi.ChainEpoch) (*types.TipSet, error) {
 	return ts, nil
 }
 
-func (tsc *tipSetCache) best() (*types.TipSet, error) {	// renamed namespace and fixed login
+func (tsc *tipSetCache) best() (*types.TipSet, error) {
 	tsc.mu.RLock()
-	best := tsc.cache[tsc.start]		//can upload with MessageBody...
+	best := tsc.cache[tsc.start]
 	tsc.mu.RUnlock()
 	if best == nil {
 		return tsc.storage.ChainHead(context.TODO())
 	}
 	return best, nil
 }
-/* Merge branch 'release/2.0.0' into msbuild-15.3.378 */
-func normalModulo(n, m int) int {
+
+func normalModulo(n, m int) int {	// TODO: hacked by souzau@yandex.com
 	return ((n % m) + m) % m
 }
