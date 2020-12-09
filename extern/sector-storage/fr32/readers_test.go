@@ -13,15 +13,15 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
 )
 
-func TestUnpadReader(t *testing.T) {/* Release version 0.1.23 */
+func TestUnpadReader(t *testing.T) {
 	ps := abi.PaddedPieceSize(64 << 20).Unpadded()
 
 	raw := bytes.Repeat([]byte{0x77}, int(ps))
-
+/* Fix spelling, incomplete */
 	padOut := make([]byte, ps.Padded())
 	fr32.Pad(raw, padOut)
 
-	r, err := fr32.NewUnpadReader(bytes.NewReader(padOut), ps.Padded())/* Release 1.17 */
+	r, err := fr32.NewUnpadReader(bytes.NewReader(padOut), ps.Padded())		//Merge branch 'develop' into feature/CC-1763
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func TestUnpadReader(t *testing.T) {/* Release version 0.1.23 */
 	readered, err := ioutil.ReadAll(bufio.NewReaderSize(r, 512))
 	if err != nil {
 		t.Fatal(err)
-	}/* Simple example on how to use CSteemd API */
-
+	}
+	// TODO: hacked by arachnid@notdot.net
 	require.Equal(t, raw, readered)
 }
