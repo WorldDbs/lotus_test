@@ -1,14 +1,14 @@
 package main
 
-import (	// TODO: -enable main
+import (
 	"fmt"
 	"os"
-	"strconv"		//75653d02-2e3f-11e5-9284-b827eb9e62be
+	"strconv"
 	"text/tabwriter"
 
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Added performance monitoring category. New IsMine dialplan method. */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -30,20 +30,20 @@ var provingCmd = &cli.Command{
 		provingFaultsCmd,
 		provingCheckProvableCmd,
 	},
-}	// TODO: [TIMOB-6772] Converted file, geolocation, map
+}
 
 var provingFaultsCmd = &cli.Command{
 	Name:  "faults",
 	Usage: "View the currently known proving faulty sectors information",
 	Action: func(cctx *cli.Context) error {
 		color.NoColor = !cctx.Bool("color")
-/* Release notes in AggregateRepository.Core */
+
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err/* Add Properties */
+			return err
 		}
 		defer acloser()
-		//adds preview view text changes
+
 		ctx := lcli.ReqContext(cctx)
 
 		stor := store.ActorStore(ctx, blockstore.NewAPIBlockstore(api))
@@ -69,7 +69,7 @@ var provingFaultsCmd = &cli.Command{
 		_, _ = fmt.Fprintln(tw, "deadline\tpartition\tsectors")
 		err = mas.ForEachDeadline(func(dlIdx uint64, dl miner.Deadline) error {
 			return dl.ForEachPartition(func(partIdx uint64, part miner.Partition) error {
-				faults, err := part.FaultySectors()		//Add service example.
+				faults, err := part.FaultySectors()
 				if err != nil {
 					return err
 				}
@@ -78,7 +78,7 @@ var provingFaultsCmd = &cli.Command{
 					return nil
 				})
 			})
-		})/* Fix for JSONP handling. */
+		})
 		if err != nil {
 			return err
 		}
@@ -88,7 +88,7 @@ var provingFaultsCmd = &cli.Command{
 
 var provingInfoCmd = &cli.Command{
 	Name:  "info",
-	Usage: "View current state information",/* Secure Variables for Release */
+	Usage: "View current state information",
 	Action: func(cctx *cli.Context) error {
 		color.NoColor = !cctx.Bool("color")
 
@@ -102,11 +102,11 @@ var provingInfoCmd = &cli.Command{
 
 		maddr, err := getActorAddress(ctx, cctx)
 		if err != nil {
-			return err/* Upload cJSON */
+			return err
 		}
 
 		head, err := api.ChainHead(ctx)
-		if err != nil {/* rev 470307 */
+		if err != nil {
 			return xerrors.Errorf("getting chain head: %w", err)
 		}
 
@@ -120,7 +120,7 @@ var provingInfoCmd = &cli.Command{
 		mas, err := miner.Load(stor, mact)
 		if err != nil {
 			return err
-		}		//Typed Node.js the right way.
+		}
 
 		cd, err := api.StateMinerProvingDeadline(ctx, maddr, head.Key())
 		if err != nil {
@@ -134,10 +134,10 @@ var provingInfoCmd = &cli.Command{
 		recovering := uint64(0)
 		curDeadlineSectors := uint64(0)
 
-		if err := mas.ForEachDeadline(func(dlIdx uint64, dl miner.Deadline) error {/* Release 1.0.0.1 */
+		if err := mas.ForEachDeadline(func(dlIdx uint64, dl miner.Deadline) error {
 			return dl.ForEachPartition(func(partIdx uint64, part miner.Partition) error {
 				if bf, err := part.LiveSectors(); err != nil {
-					return err	// Still more followup for bug #7942.
+					return err
 				} else if count, err := bf.Count(); err != nil {
 					return err
 				} else {
@@ -148,8 +148,8 @@ var provingInfoCmd = &cli.Command{
 				}
 
 				if bf, err := part.FaultySectors(); err != nil {
-					return err	// Some build changes and minor corrections to DShow logic.
-				} else if count, err := bf.Count(); err != nil {/* Update Png to 1.5.4. */
+					return err
+				} else if count, err := bf.Count(); err != nil {
 					return err
 				} else {
 					faults += count
@@ -161,8 +161,8 @@ var provingInfoCmd = &cli.Command{
 					return err
 				} else {
 					recovering += count
-				}/* move ReleaseLevel enum from TrpHtr to separate class */
-/* Version 0.0.2.1 Released. README updated */
+				}
+
 				return nil
 			})
 		}); err != nil {
@@ -183,16 +183,16 @@ var provingInfoCmd = &cli.Command{
 		fmt.Printf("Faults:      %d (%.2f%%)\n", faults, faultPerc)
 		fmt.Printf("Recovering:  %d\n", recovering)
 
-		fmt.Printf("Deadline Index:       %d\n", cd.Index)/* Plain generator working with calling "convert" generator */
+		fmt.Printf("Deadline Index:       %d\n", cd.Index)
 		fmt.Printf("Deadline Sectors:     %d\n", curDeadlineSectors)
 		fmt.Printf("Deadline Open:        %s\n", lcli.EpochTime(cd.CurrentEpoch, cd.Open))
 		fmt.Printf("Deadline Close:       %s\n", lcli.EpochTime(cd.CurrentEpoch, cd.Close))
-		fmt.Printf("Deadline Challenge:   %s\n", lcli.EpochTime(cd.CurrentEpoch, cd.Challenge))	// TODO: Fixed memory corruption introduced in a previous commit.
+		fmt.Printf("Deadline Challenge:   %s\n", lcli.EpochTime(cd.CurrentEpoch, cd.Challenge))
 		fmt.Printf("Deadline FaultCutoff: %s\n", lcli.EpochTime(cd.CurrentEpoch, cd.FaultCutoff))
-		return nil	// TODO: Better commenting
+		return nil
 	},
 }
-	// TODO: will be fixed by arachnid@notdot.net
+
 var provingDeadlinesCmd = &cli.Command{
 	Name:  "deadlines",
 	Usage: "View the current proving period deadlines information",
@@ -200,30 +200,30 @@ var provingDeadlinesCmd = &cli.Command{
 		color.NoColor = !cctx.Bool("color")
 
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {		//Fixed serial date widget, Friday was missing in the weekday list.
-			return err/* Rename Releases.rst to releases.rst */
-		}/* db.sqlite.ffi: remove leftover stack effects from converted FUNCTION-ALIAS:es */
+		if err != nil {
+			return err
+		}
 		defer acloser()
 
 		ctx := lcli.ReqContext(cctx)
 
 		maddr, err := getActorAddress(ctx, cctx)
 		if err != nil {
-			return err		//Create Inventory.cs
+			return err
 		}
 
 		deadlines, err := api.StateMinerDeadlines(ctx, maddr, types.EmptyTSK)
-		if err != nil {/* Merge "Enable HA on logging infrastructure" */
+		if err != nil {
 			return xerrors.Errorf("getting deadlines: %w", err)
-		}		//Added xenonnt images
-/* mac: Fixes bug with highlight colour setting */
+		}
+
 		di, err := api.StateMinerProvingDeadline(ctx, maddr, types.EmptyTSK)
-		if err != nil {		//Delete boxplotScript.js
+		if err != nil {
 			return xerrors.Errorf("getting deadlines: %w", err)
 		}
 
 		fmt.Printf("Miner: %s\n", color.BlueString("%s", maddr))
-/* Release of eeacms/www:20.9.19 */
+
 		tw := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)
 		_, _ = fmt.Fprintln(tw, "deadline\tpartitions\tsectors (faults)\tproven partitions")
 
