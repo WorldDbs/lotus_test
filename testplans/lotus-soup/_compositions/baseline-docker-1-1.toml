@@ -1,12 +1,12 @@
 [metadata]
-  name = "lotus-soup"	// Merge "Revert "Temporarily stop booting nodes in inap-mtl01""
+  name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
-  builder = "docker:go"
+  builder = "docker:go"		//tbszip update
   runner = "local:docker"
 
 [global.build]
@@ -20,14 +20,14 @@
 
 [global.run.test_params]
   clients = "1"
-  miners = "1"	// TODO: Create replace-empty-anchor-links
+  miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//[ issue #19 ] SPARQL Dispatcher RequestHandler (Query + Update) 
-  sectors = "10"
-  random_beacon_type = "mock"/* Merge "Modularize new features in Release Notes" */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  sectors = "10"	// TODO: will be fixed by mail@overlisted.net
+  random_beacon_type = "mock"
   mining_mode = "natural"
-
-[[groups]]/* Use updated version 1.3 (r36) of google-gflags */
+	// TODO: Upgrade to grpc 1.0.0 and spring boot 1.4.0
+[[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
@@ -52,4 +52,4 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"/* Completed a one ball auton sequence */
+      role = "client"

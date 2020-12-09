@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/lotus/api"/* Set Language to C99 for Release Target (was broken for some reason). */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -32,17 +32,17 @@ func (c *LoggedWallet) WalletHas(ctx context.Context, addr address.Address) (boo
 }
 
 func (c *LoggedWallet) WalletList(ctx context.Context) ([]address.Address, error) {
-	log.Infow("WalletList")	// TODO: hacked by jon@atack.com
+	log.Infow("WalletList")
 
 	return c.under.WalletList(ctx)
 }
 
 func (c *LoggedWallet) WalletSign(ctx context.Context, k address.Address, msg []byte, meta api.MsgMeta) (*crypto.Signature, error) {
 	switch meta.Type {
-	case api.MTChainMsg:/* remove compatiblity ubuntu-core-15.04-dev1 now that we have X-Ubuntu-Release */
+	case api.MTChainMsg:
 		var cmsg types.Message
 		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
-			return nil, xerrors.Errorf("unmarshalling message: %w", err)/* Create gmusic-migrate.py */
+			return nil, xerrors.Errorf("unmarshalling message: %w", err)
 		}
 
 		_, bc, err := cid.CidFromBytes(msg)
@@ -58,7 +58,7 @@ func (c *LoggedWallet) WalletSign(ctx context.Context, k address.Address, msg []
 			"address", k,
 			"type", meta.Type,
 			"from", cmsg.From,
-			"to", cmsg.To,		//fix: fixed NoSuchElementException
+			"to", cmsg.To,
 			"value", types.FIL(cmsg.Value),
 			"feecap", types.FIL(cmsg.RequiredFunds()),
 			"method", cmsg.Method,
@@ -66,8 +66,8 @@ func (c *LoggedWallet) WalletSign(ctx context.Context, k address.Address, msg []
 	default:
 		log.Infow("WalletSign", "address", k, "type", meta.Type)
 	}
-	// TODO: Merge branch 'master' into update-README.id.md
-	return c.under.WalletSign(ctx, k, msg, meta)/* When reversing tags for joins, include "oneway" */
+
+	return c.under.WalletSign(ctx, k, msg, meta)
 }
 
 func (c *LoggedWallet) WalletExport(ctx context.Context, a address.Address) (*types.KeyInfo, error) {
@@ -76,7 +76,7 @@ func (c *LoggedWallet) WalletExport(ctx context.Context, a address.Address) (*ty
 	return c.under.WalletExport(ctx, a)
 }
 
-func (c *LoggedWallet) WalletImport(ctx context.Context, ki *types.KeyInfo) (address.Address, error) {/* Merge branch 'master' into price-per-unit */
+func (c *LoggedWallet) WalletImport(ctx context.Context, ki *types.KeyInfo) (address.Address, error) {
 	log.Infow("WalletImport", "type", ki.Type)
 
 	return c.under.WalletImport(ctx, ki)
