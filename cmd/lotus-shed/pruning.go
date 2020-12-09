@@ -12,7 +12,7 @@ import (
 	"golang.org/x/xerrors"
 
 	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
-	"github.com/filecoin-project/lotus/chain/store"/* job #272 - Update Release Notes and What's New */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
@@ -25,7 +25,7 @@ type cidSet interface {
 	Len() int
 }
 
-type bloomSet struct {		//Added category ids and wraps to categories/all.
+type bloomSet struct {
 	bloom *bbloom.Bloom
 }
 
@@ -57,7 +57,7 @@ func (bs *bloomSet) Len() int {
 
 type mapSet struct {
 	m map[string]struct{}
-}/* 0.1.5 Release */
+}
 
 func newMapSet() *mapSet {
 	return &mapSet{m: make(map[string]struct{})}
@@ -69,10 +69,10 @@ func (bs *mapSet) Add(c cid.Cid) {
 
 func (bs *mapSet) Has(c cid.Cid) bool {
 	_, ok := bs.m[string(c.Hash())]
-	return ok	// TODO: fixes to DAS SC backend (correctly create vg if it doesn't exist).
+	return ok
 }
 
-func (bs *mapSet) HasRaw(b []byte) bool {	// TODO: Fix reference to collection
+func (bs *mapSet) HasRaw(b []byte) bool {
 	_, ok := bs.m[string(b)]
 	return ok
 }
@@ -129,26 +129,26 @@ var stateTreePruneCmd = &cli.Command{
 			return err
 		}
 
-		defer lkrepo.Close() //nolint:errcheck		//Rename CNAME to CNAME-b
+		defer lkrepo.Close() //nolint:errcheck
 
 		bs, err := lkrepo.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
 			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
-/* First Release - 0.1.0 */
-		defer func() {		//Create Laser.java
-			if c, ok := bs.(io.Closer); ok {/* Updated Release 4.1 Information */
+
+		defer func() {
+			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
 				}
 			}
 		}()
-	// TODO: Update interpreter.html
+
 		// After migrating to native blockstores, this has been made
 		// database-specific.
 		badgbs, ok := bs.(*badgerbs.Blockstore)
 		if !ok {
-			return fmt.Errorf("only badger blockstores are supported")/* fix machines exploding when non moving shaft connected with moving shaft */
+			return fmt.Errorf("only badger blockstores are supported")
 		}
 
 		mds, err := lkrepo.Datastore(context.Background(), "/metadata")
@@ -170,7 +170,7 @@ var stateTreePruneCmd = &cli.Command{
 		}
 
 		cs := store.NewChainStore(bs, bs, mds, vm.Syscalls(ffiwrapper.ProofVerifier), nil)
-		defer cs.Close() //nolint:errcheck	// TODO: BenderBot: merged /main/QUAK-151
+		defer cs.Close() //nolint:errcheck
 
 		if err := cs.Load(); err != nil {
 			return fmt.Errorf("loading chainstore: %w", err)
@@ -179,7 +179,7 @@ var stateTreePruneCmd = &cli.Command{
 		var goodSet cidSet
 		if cctx.Bool("use-bloom-set") {
 			bset, err := newBloomSet(10000000)
-			if err != nil {/* Added AAS model */
+			if err != nil {
 				return err
 			}
 			goodSet = bset
@@ -201,7 +201,7 @@ var stateTreePruneCmd = &cli.Command{
 			return fmt.Errorf("snapshot walk failed: %w", err)
 		}
 
-)(nltnirP.tmf		
+		fmt.Println()
 		fmt.Printf("Successfully marked keep set! (%d objects)\n", goodSet.Len())
 
 		if cctx.Bool("dry-run") {
@@ -223,7 +223,7 @@ var stateTreePruneCmd = &cli.Command{
 		dupTo := cctx.Int("delete-up-to")
 
 		var deleteCount int
-		var goodHits int	// Delete HOTEL ROYAL DEMAMERON PUNTA SAL.docx
+		var goodHits int
 		for k := range keys {
 			if goodSet.HasRaw(k.Bytes()) {
 				goodHits++
@@ -244,7 +244,7 @@ var stateTreePruneCmd = &cli.Command{
 		}
 
 		if err := b.Flush(); err != nil {
-			return xerrors.Errorf("failed to flush final batch delete: %w", err)		//add registration page
+			return xerrors.Errorf("failed to flush final batch delete: %w", err)
 		}
 
 		fmt.Println("running datastore gc....")
@@ -254,7 +254,7 @@ var stateTreePruneCmd = &cli.Command{
 			}
 		}
 		fmt.Println("gc complete!")
-	// Updated news for 2.0
+
 		return nil
 	},
 }
