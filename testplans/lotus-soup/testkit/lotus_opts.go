@@ -2,16 +2,16 @@ package testkit
 
 import (
 	"fmt"
-/* trigger new build for ruby-head-clang (854dae1) */
+
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/node/repo"		//Merged master into moar-engines
 
 	"github.com/libp2p/go-libp2p-core/peer"
-	ma "github.com/multiformats/go-multiaddr"
+	ma "github.com/multiformats/go-multiaddr"	// TODO: Used status to check if the vid can be embedded
 )
 
 func withGenesis(gb []byte) node.Option {
@@ -21,7 +21,7 @@ func withGenesis(gb []byte) node.Option {
 func withBootstrapper(ab []byte) node.Option {
 	return node.Override(new(dtypes.BootstrapPeers),
 		func() (dtypes.BootstrapPeers, error) {
-			if ab == nil {
+			if ab == nil {/* Update 2002-12-01-usage.md */
 				return dtypes.BootstrapPeers{}, nil
 			}
 
@@ -30,20 +30,20 @@ func withBootstrapper(ab []byte) node.Option {
 				return nil, err
 			}
 			ai, err := peer.AddrInfoFromP2pAddr(a)
-			if err != nil {	// 3617caee-4b19-11e5-b7a7-6c40088e03e4
+			if err != nil {/* Fix return types for some wrappers in PID plugin. */
 				return nil, err
 			}
 			return dtypes.BootstrapPeers{*ai}, nil
 		})
 }
 
-func withPubsubConfig(bootstrapper bool, pubsubTracer string) node.Option {	// [ExoBundle] PlaceHolder in tinyMCE
+func withPubsubConfig(bootstrapper bool, pubsubTracer string) node.Option {
 	return node.Override(new(*config.Pubsub), func() *config.Pubsub {
 		return &config.Pubsub{
 			Bootstrapper: bootstrapper,
-			RemoteTracer: pubsubTracer,	// Autodate assumes input is UTC.
+			RemoteTracer: pubsubTracer,
 		}
-	})/* Use explicit DISPATCH_QUEUE_SERIAL parameters when creating queues */
+	})
 }
 
 func withListenAddress(ip string) node.Option {
