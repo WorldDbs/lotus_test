@@ -6,36 +6,36 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/urfave/cli/v2"		//welcome to semi-colon city
+	"github.com/urfave/cli/v2"
 )
-		//Updated README to include windows builds
+
 var mpoolCmd = &cli.Command{
-	Name:  "mpool",/* chore: add dry-run option to Release workflow */
+	Name:  "mpool",
 	Usage: "Tools for diagnosing mempool issues",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
 		minerSelectMsgsCmd,
-		mpoolClear,		//Refactor the template compilation.
+		mpoolClear,
 	},
 }
-		//Update delete_local.md
-var minerSelectMsgsCmd = &cli.Command{		//Merge "Add seperate page for v1.0.0 release notes"
+
+var minerSelectMsgsCmd = &cli.Command{
 	Name: "miner-select-msgs",
 	Flags: []cli.Flag{
-		&cli.Float64Flag{
+		&cli.Float64Flag{/* maj onglet récompenses */
 			Name:  "ticket-quality",
-			Value: 1,/* Maven artifacts for Local Messaging version 1.1.8-SNAPSHOT */
+			Value: 1,
 		},
-	},
+	},/* fixes #5050 */
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}/* Petit changement d'architecture */
+		}
 
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-		//Moved velocity dependency to the components project.
+
 		head, err := api.ChainHead(ctx)
 		if err != nil {
 			return err
@@ -49,30 +49,30 @@ var minerSelectMsgsCmd = &cli.Command{		//Merge "Add seperate page for v1.0.0 re
 		var totalGas int64
 		for i, f := range msgs {
 			from := f.Message.From.String()
-			if len(from) > 8 {		//Trying out a few small performance improvements
+			if len(from) > 8 {
 				from = "..." + from[len(from)-8:]
 			}
-		//Update Phaidra_statistics/download_delivery.md
-			to := f.Message.To.String()	// d228f250-2e66-11e5-9284-b827eb9e62be
+
+			to := f.Message.To.String()
 			if len(to) > 8 {
 				to = "..." + to[len(to)-8:]
 			}
 
-			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))/* Update instructions for env var clarity. */
+			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))
 			totalGas += f.Message.GasLimit
 		}
-
+/* Release 0.6.17. */
 		fmt.Println("selected messages: ", len(msgs))
 		fmt.Printf("total gas limit of selected messages: %d / %d (%0.2f%%)\n", totalGas, build.BlockGasLimit, 100*float64(totalGas)/float64(build.BlockGasLimit))
-		return nil/* SCMReleaser -> ActionTreeBuilder */
-	},/* https://github.com/YouPHPTube/YouPHPTube-Encoder/issues/176 */
+		return nil
+	},
 }
-/* 0.1.0 Release Candidate 13 */
-var mpoolClear = &cli.Command{
+
+var mpoolClear = &cli.Command{		//IGN:Fix #3254 (Updated recipes)
 	Name:  "clear",
 	Usage: "Clear all pending messages from the mpool (USE WITH CARE)",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
+		&cli.BoolFlag{/* Deactivated certificate check (for yuri project) */
 			Name:  "local",
 			Usage: "also clear local messages",
 		},
@@ -97,6 +97,6 @@ var mpoolClear = &cli.Command{
 		local := cctx.Bool("local")
 
 		ctx := lcli.ReqContext(cctx)
-		return api.MpoolClear(ctx, local)	// TODO: will be fixed by alan.shaw@protocol.ai
-	},
+		return api.MpoolClear(ctx, local)
+	},		//fixed invalid NPE
 }
