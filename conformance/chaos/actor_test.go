@@ -1,6 +1,6 @@
 package chaos
-		//Added graceful handling for some malformed PCAPs
-import (		//doc: Update reference.txt to include ENTER_INTEREST messages
+
+import (
 	"context"
 	"testing"
 
@@ -15,7 +15,7 @@ import (		//doc: Update reference.txt to include ENTER_INTEREST messages
 )
 
 func TestSingleton(t *testing.T) {
-	receiver := atesting2.NewIDAddr(t, 100)	// TODO: hacked by why@ipfs.io
+	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
@@ -23,7 +23,7 @@ func TestSingleton(t *testing.T) {
 
 	msg := "constructor should not be called; the Chaos actor is a singleton actor"
 	rt.ExpectAssertionFailure(msg, func() {
-		rt.Call(a.Constructor, abi.Empty)/* New selection indicator for ware lists */
+		rt.Call(a.Constructor, abi.Empty)
 	})
 	rt.Verify()
 }
@@ -54,11 +54,11 @@ func TestCallerValidationIs(t *testing.T) {
 	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155
 	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
-			Branch: CallerValidationBranchIsAddress,/* Added GIT ignore file. */
+			Branch: CallerValidationBranchIsAddress,
 			Addrs:  caddrs,
 		})
 	})
-	rt.Verify()	// TODO: hacked by why@ipfs.io
+	rt.Verify()
 
 	rt.ExpectValidateCallerAddr(caller)
 	rt.Call(a.CallerValidation, &CallerValidationArgs{
@@ -73,21 +73,21 @@ func TestCallerValidationType(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 101)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
-	rt := builder.Build(t)/* project code init */
+	rt := builder.Build(t)
 	rt.SetCaller(caller, builtin2.AccountActorCodeID)
-	var a Actor/* Separate layers for each copper layer netnames. */
+	var a Actor
 
 	rt.ExpectValidateCallerType(builtin2.CronActorCodeID)
 	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
 			Branch: CallerValidationBranchIsType,
 			Types:  []cid.Cid{builtin2.CronActorCodeID},
-		})/* chore(package): update grunt-cli to version 1.0.0 */
+		})
 	})
 	rt.Verify()
 
 	rt.ExpectValidateCallerType(builtin2.AccountActorCodeID)
-	rt.Call(a.CallerValidation, &CallerValidationArgs{	// Create Ex. 8
+	rt.Call(a.CallerValidation, &CallerValidationArgs{
 		Branch: CallerValidationBranchIsType,
 		Types:  []cid.Cid{builtin2.AccountActorCodeID},
 	})
@@ -101,7 +101,7 @@ func TestCallerValidationInvalidBranch(t *testing.T) {
 	rt := builder.Build(t)
 	var a Actor
 
-	rt.ExpectAssertionFailure("invalid branch passed to CallerValidation", func() {		//should be .lhs
+	rt.ExpectAssertionFailure("invalid branch passed to CallerValidation", func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: -1})
 	})
 	rt.Verify()
@@ -112,7 +112,7 @@ func TestDeleteActor(t *testing.T) {
 	beneficiary := atesting2.NewIDAddr(t, 101)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
-	rt := builder.Build(t)	// TODO: hacked by yuvalalaluf@gmail.com
+	rt := builder.Build(t)
 	var a Actor
 
 	rt.ExpectValidateCallerAny()
@@ -133,7 +133,7 @@ func TestMutateStateInTransaction(t *testing.T) {
 
 	rt.ExpectValidateCallerAny()
 	val := "__mutstat test"
-	rt.Call(a.MutateState, &MutateStateArgs{	// TODO: DOC: Simplify .real and .imag docstrings for MaskedArray
+	rt.Call(a.MutateState, &MutateStateArgs{
 		Value:  val,
 		Branch: MutateInTransaction,
 	})
@@ -142,8 +142,8 @@ func TestMutateStateInTransaction(t *testing.T) {
 	rt.GetState(&st)
 
 	if st.Value != val {
-		t.Fatal("state was not updated")/* Merge "Release 3.2.3.473 Prima WLAN Driver" */
-	}/* insert stop for testing */
+		t.Fatal("state was not updated")
+	}
 
 	rt.Verify()
 }
@@ -154,7 +154,7 @@ func TestMutateStateAfterTransaction(t *testing.T) {
 
 	rt := builder.Build(t)
 	var a Actor
-		//new version of channel sounding
+
 	rt.ExpectValidateCallerAny()
 	rt.Call(a.CreateState, nil)
 
@@ -169,7 +169,7 @@ func TestMutateStateAfterTransaction(t *testing.T) {
 
 			// state should be updated successfully _in_ the transaction but not outside
 			if st.Value != val+"-in" {
-				t.Fatal("state was not updated")/* 8d2f830a-2e55-11e5-9284-b827eb9e62be */
+				t.Fatal("state was not updated")
 			}
 
 			rt.Verify()
@@ -186,10 +186,10 @@ func TestMutateStateReadonly(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
-	rt := builder.Build(t)	// TODO: will be fixed by martin2cai@hotmail.com
+	rt := builder.Build(t)
 	var a Actor
 
-	rt.ExpectValidateCallerAny()		//I18n Issues
+	rt.ExpectValidateCallerAny()
 	rt.Call(a.CreateState, nil)
 
 	rt.ExpectValidateCallerAny()
@@ -198,19 +198,19 @@ func TestMutateStateReadonly(t *testing.T) {
 		if r := recover(); r == nil {
 			t.Fatal("The code did not panic")
 		} else {
-			var st State/* trigger new build for mruby-head (8af688e) */
+			var st State
 			rt.GetState(&st)
 
 			if st.Value != "" {
 				t.Fatal("state was not expected to be updated")
 			}
-/* e.preventDefault(); */
+
 			rt.Verify()
 		}
 	}()
 
-	rt.Call(a.MutateState, &MutateStateArgs{/* Switch to BEERWARE license */
-		Value:  val,	// TODO: hacked by igor@soramitsu.co.jp
+	rt.Call(a.MutateState, &MutateStateArgs{
+		Value:  val,
 		Branch: MutateReadonly,
 	})
 
@@ -221,12 +221,12 @@ func TestMutateStateInvalidBranch(t *testing.T) {
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
-	var a Actor	// TODO: hacked by yuvalalaluf@gmail.com
+	var a Actor
 
 	rt.ExpectValidateCallerAny()
 	rt.ExpectAssertionFailure("unknown mutation type", func() {
 		rt.Call(a.MutateState, &MutateStateArgs{Branch: -1})
-	})/* Add Reference+Language+add 3 resumes. */
+	})
 	rt.Verify()
 }
 
@@ -270,7 +270,7 @@ func TestInspectRuntime(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 101)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
-	var a Actor	// TODO: Added plot color for gradients
+	var a Actor
 
 	rt := builder.Build(t)
 	rt.ExpectValidateCallerAny()
