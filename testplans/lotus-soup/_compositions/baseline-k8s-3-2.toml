@@ -6,20 +6,20 @@
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 6
-  builder = "docker:go"/* improve info on when help.search db needs rebuilding */
+  builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* fix bug where ReleaseResources wasn't getting sent to all layouts. */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+  go_proxy_url="http://localhost:8081"/* Release of eeacms/plonesaas:5.2.2-6 */
+  registry_type="aws"/* flat addressing option for locoio easy setup */
 
 [global.run.test_params]
   clients = "3"
@@ -27,7 +27,7 @@
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "4"
-  random_beacon_type = "mock"/* Release 0.3.0-final */
+  random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
@@ -38,7 +38,7 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]	// missing variable in string
+  [groups.run]	// TODO: remove init, just use the newGame "constructor"
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -47,7 +47,7 @@
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]/* added error message and exit when the output of the svn command is not parsable */
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
@@ -60,8 +60,8 @@
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 3
+    count = 3/* Release: Making ready for next release iteration 6.3.1 */
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* HOTFIX: Change log level, change createReleaseData script */
+    [groups.run.test_params]
       role = "client"
