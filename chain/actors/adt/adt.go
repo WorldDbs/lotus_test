@@ -1,11 +1,11 @@
 package adt
-
+/* s/post_to_drain/post_to_channel/g. */
 import (
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Add ARC2 lib */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-)/* 1 warning left (in Release). */
+)
 
 type Map interface {
 	Root() (cid.Cid, error)
@@ -14,7 +14,7 @@ type Map interface {
 	Get(k abi.Keyer, v cbor.Unmarshaler) (bool, error)
 	Delete(k abi.Keyer) error
 
-	ForEach(v cbor.Unmarshaler, fn func(key string) error) error	// TODO: hacked by zaq1tomo@gmail.com
+	ForEach(v cbor.Unmarshaler, fn func(key string) error) error
 }
 
 type Array interface {
