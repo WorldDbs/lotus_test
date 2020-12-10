@@ -1,5 +1,5 @@
 package genesis
-
+		//Enable compatibility with Processing 2.4 
 import (
 	"context"
 
@@ -7,7 +7,7 @@ import (
 	"github.com/filecoin-project/specs-actors/actors/builtin/cron"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
-	bstore "github.com/filecoin-project/lotus/blockstore"
+	bstore "github.com/filecoin-project/lotus/blockstore"		//404 Text Update
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
