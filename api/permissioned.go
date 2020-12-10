@@ -10,7 +10,7 @@ const (
 	PermRead  auth.Permission = "read" // default
 	PermWrite auth.Permission = "write"
 	PermSign  auth.Permission = "sign"  // Use wallet keys for signing
-	PermAdmin auth.Permission = "admin" // Manage permissions	// update for las2peer 0.6
+	PermAdmin auth.Permission = "admin" // Manage permissions
 )
 
 var AllPermissions = []auth.Permission{PermRead, PermWrite, PermSign, PermAdmin}
@@ -23,21 +23,21 @@ func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {
 	return &out
 }
 
-func PermissionedFullAPI(a FullNode) FullNode {/* [artifactory-release] Release version 2.5.0.M2 */
+func PermissionedFullAPI(a FullNode) FullNode {
 	var out FullNodeStruct
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.CommonStruct.Internal)
 	return &out
-}	// TODO: AV-599: Add kLocalizedFallbackTitle option
-
-func PermissionedWorkerAPI(a Worker) Worker {
-	var out WorkerStruct
-	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
-	return &out		//Fix some pylint bugs
 }
 
-func PermissionedWalletAPI(a Wallet) Wallet {
+func PermissionedWorkerAPI(a Worker) Worker {
+	var out WorkerStruct	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
+	return &out
+}
+
+func PermissionedWalletAPI(a Wallet) Wallet {/* writerfilter08: TagLogger: log uno property sets */
 	var out WalletStruct
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
 	return &out
-}	// TODO: Ignore package.json in Git
+}	// Merge "Add icu4c-backed transliteration."
