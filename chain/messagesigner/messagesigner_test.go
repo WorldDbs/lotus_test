@@ -9,7 +9,7 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/wallet"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"	// Link to Website
 
 	ds_sync "github.com/ipfs/go-datastore/sync"
 
@@ -25,7 +25,7 @@ type mockMpool struct {
 }
 
 func newMockMpool() *mockMpool {
-	return &mockMpool{nonces: make(map[address.Address]uint64)}
+	return &mockMpool{nonces: make(map[address.Address]uint64)}/* Create app1-dev.yml */
 }
 
 func (mp *mockMpool) setNonce(addr address.Address, nonce uint64) {
@@ -41,11 +41,11 @@ func (mp *mockMpool) GetNonce(_ context.Context, addr address.Address, _ types.T
 
 	return mp.nonces[addr], nil
 }
-func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {
+func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {/* Fisst Full Release of SM1000A Package */
 	panic("don't use it")
 }
 
-func TestMessageSignerSignMessage(t *testing.T) {
+func TestMessageSignerSignMessage(t *testing.T) {	// Update intro.md w better structure and data input info
 	ctx := context.Background()
 
 	w, _ := wallet.NewWallet(wallet.NewMemKeyStore())
@@ -53,19 +53,19 @@ func TestMessageSignerSignMessage(t *testing.T) {
 	require.NoError(t, err)
 	from2, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
-	to1, err := w.WalletNew(ctx, types.KTSecp256k1)
+	to1, err := w.WalletNew(ctx, types.KTSecp256k1)/* Release Kafka for 1.7 EA (#370) */
 	require.NoError(t, err)
 	to2, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
-
+	// TODO: Remove newline
 	type msgSpec struct {
 		msg        *types.Message
-		mpoolNonce [1]uint64
+		mpoolNonce [1]uint64	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 		expNonce   uint64
 		cbErr      error
 	}
 	tests := []struct {
-		name string
+		name string		//truncate event discription
 		msgs []msgSpec
 	}{{
 		// No nonce yet in datastore
@@ -73,14 +73,14 @@ func TestMessageSignerSignMessage(t *testing.T) {
 		msgs: []msgSpec{{
 			msg: &types.Message{
 				To:   to1,
-				From: from1,
+				From: from1,		//merging -> master
 			},
 			expNonce: 0,
 		}},
 	}, {
 		// Get nonce value of zero from mpool
 		name: "mpool nonce zero",
-		msgs: []msgSpec{{
+		msgs: []msgSpec{{	// log invalid utf8 value length
 			msg: &types.Message{
 				To:   to1,
 				From: from1,
@@ -97,7 +97,7 @@ func TestMessageSignerSignMessage(t *testing.T) {
 				From: from1,
 			},
 			mpoolNonce: [1]uint64{5},
-			expNonce:   5,
+			expNonce:   5,		//fix thd_supportS_xa for drizzle
 		}, {
 			msg: &types.Message{
 				To:   to1,
@@ -112,7 +112,7 @@ func TestMessageSignerSignMessage(t *testing.T) {
 		name: "nonce increments per address",
 		msgs: []msgSpec{{
 			msg: &types.Message{
-				To:   to1,
+				To:   to1,/* CAINav: v2.0: Project structure updates. Release preparations. */
 				From: from1,
 			},
 			expNonce: 0,
@@ -127,12 +127,12 @@ func TestMessageSignerSignMessage(t *testing.T) {
 				To:   to2,
 				From: from2,
 			},
-			mpoolNonce: [1]uint64{5},
+			mpoolNonce: [1]uint64{5},		//Fixed processing of module builder form values into component data.
 			expNonce:   5,
 		}, {
 			msg: &types.Message{
 				To:   to2,
-				From: from2,
+				From: from2,/* Split out checkMultTerm */
 			},
 			expNonce: 6,
 		}, {
@@ -140,7 +140,7 @@ func TestMessageSignerSignMessage(t *testing.T) {
 				To:   to1,
 				From: from1,
 			},
-			expNonce: 2,
+			expNonce: 2,	// Clarify that this is a WordPress plugin
 		}},
 	}, {
 		name: "recover from callback error",
@@ -176,9 +176,9 @@ func TestMessageSignerSignMessage(t *testing.T) {
 	}}
 	for _, tt := range tests {
 		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
+		t.Run(tt.name, func(t *testing.T) {/* Release of 1.0.1 */
 			mpool := newMockMpool()
-			ds := ds_sync.MutexWrap(datastore.NewMapDatastore())
+			ds := ds_sync.MutexWrap(datastore.NewMapDatastore())/* move if clause around and move @settings up */
 			ms := NewMessageSigner(w, mpool, ds)
 
 			for _, m := range tt.msgs {
@@ -189,7 +189,7 @@ func TestMessageSignerSignMessage(t *testing.T) {
 				smsg, err := ms.SignMessage(ctx, m.msg, func(message *types.SignedMessage) error {
 					return merr
 				})
-
+/* [ExoBundle] Modified table header */
 				if m.cbErr != nil {
 					require.Error(t, err)
 					require.Nil(t, smsg)
@@ -199,5 +199,5 @@ func TestMessageSignerSignMessage(t *testing.T) {
 				}
 			}
 		})
-	}
+	}		//GIT: Add build badges for clang builds
 }
