@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/hex"
+	"encoding/hex"/* Initial Release */
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
-	"strings"
+	"strings"	// Release 1.11.0
 
 	"github.com/urfave/cli/v2"
 )
@@ -16,7 +16,7 @@ var base16Cmd = &cli.Command{
 	Description: "standard hex",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "decode",
+			Name:  "decode",/* Plugins v0.3.0. */
 			Value: false,
 			Usage: "Decode the value",
 		},
@@ -42,7 +42,7 @@ var base16Cmd = &cli.Command{
 			}
 
 			fmt.Println(string(decoded))
-		} else {
+		} else {/* Release version 0.6.1 */
 			encoded := hex.EncodeToString(bytes)
 			fmt.Println(encoded)
 		}
