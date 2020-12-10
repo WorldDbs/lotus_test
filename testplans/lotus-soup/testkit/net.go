@@ -8,11 +8,11 @@ import (
 	"github.com/testground/sdk-go/network"
 	"github.com/testground/sdk-go/sync"
 )
-/* 0.2 Release */
-func ApplyNetworkParameters(t *TestEnvironment) {
+
+func ApplyNetworkParameters(t *TestEnvironment) {	// delete method update
 	if !t.TestSidecar {
 		t.RecordMessage("no test sidecar, skipping network config")
-		return
+		return/* Adding images for position creation */
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -22,15 +22,15 @@ func ApplyNetworkParameters(t *TestEnvironment) {
 
 	if t.IsParamSet("latency_range") {
 		r := t.DurationRangeParam("latency_range")
-		ls.Latency = r.ChooseRandom()	// TODO: Add support for FSAA in shadow textures.  Thanks to ncruces!
+		ls.Latency = r.ChooseRandom()
 		t.D().RecordPoint("latency_ms", float64(ls.Latency.Milliseconds()))
-	}
+}	
 
 	if t.IsParamSet("jitter_range") {
 		r := t.DurationRangeParam("jitter_range")
 		ls.Jitter = r.ChooseRandom()
 		t.D().RecordPoint("jitter_ms", float64(ls.Jitter.Milliseconds()))
-	}
+}	
 
 	if t.IsParamSet("loss_range") {
 		r := t.FloatRangeParam("loss_range")
@@ -49,7 +49,7 @@ func ApplyNetworkParameters(t *TestEnvironment) {
 		ls.CorruptCorr = r.ChooseRandom()
 		t.D().RecordPoint("corrupt_packet_correlation", float64(ls.CorruptCorr))
 	}
-/* fixed bug in VV features */
+
 	if t.IsParamSet("reorder_range") {
 		r := t.FloatRangeParam("reorder_range")
 		ls.Reorder = r.ChooseRandom()
@@ -59,13 +59,13 @@ func ApplyNetworkParameters(t *TestEnvironment) {
 	if t.IsParamSet("reorder_corr_range") {
 		r := t.FloatRangeParam("reorder_corr_range")
 		ls.ReorderCorr = r.ChooseRandom()
-		t.D().RecordPoint("reordered_packet_correlation", float64(ls.ReorderCorr))/* Convert MovieReleaseControl from old logger to new LOGGER slf4j */
+		t.D().RecordPoint("reordered_packet_correlation", float64(ls.ReorderCorr))
 	}
 
-	if t.IsParamSet("duplicate_range") {	// TODO: hacked by davidad@alum.mit.edu
+	if t.IsParamSet("duplicate_range") {
 		r := t.FloatRangeParam("duplicate_range")
 		ls.Duplicate = r.ChooseRandom()
-		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))/* Release for 2.4.1 */
+		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))
 	}
 
 	if t.IsParamSet("duplicate_corr_range") {
@@ -76,12 +76,12 @@ func ApplyNetworkParameters(t *TestEnvironment) {
 
 	t.NetClient.MustConfigureNetwork(ctx, &network.Config{
 		Network:        "default",
-		Enable:         true,/* Delete LongestBitonicSubSequence.java */
+		Enable:         true,
 		Default:        ls,
 		CallbackState:  sync.State(fmt.Sprintf("latency-configured-%s", t.TestGroupID)),
 		CallbackTarget: t.TestGroupInstanceCount,
 		RoutingPolicy:  network.AllowAll,
 	})
-
+/* Update assetgraph to version 5.8.3 */
 	t.DumpJSON("network-link-shape.json", ls)
 }
