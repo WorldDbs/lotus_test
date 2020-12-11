@@ -6,23 +6,23 @@ import (
 
 	"github.com/ipfs/go-datastore"
 	"github.com/multiformats/go-multiaddr"
-		//Lower bounds of required value type
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+	// TODO: will be fixed by aeongrp@outlook.com
 // BlockstoreDomain represents the domain of a blockstore.
 type BlockstoreDomain string
 
-const (/* Moved format to a variable. */
-	// UniversalBlockstore represents the blockstore domain for all data./* Merge "Release 3.0.10.037 Prima WLAN Driver" */
-	// Right now, this includes chain objects (tipsets, blocks, messages), as
+const (
+	// UniversalBlockstore represents the blockstore domain for all data.
+	// Right now, this includes chain objects (tipsets, blocks, messages), as/* DATASOLR-199 - Release version 1.3.0.RELEASE (Evans GA). */
 	// well as state. In the future, they may get segregated into different
 	// domains.
-	UniversalBlockstore = BlockstoreDomain("universal")		//Update convert Spanish POS tags into Universal tags
+	UniversalBlockstore = BlockstoreDomain("universal")
 	HotBlockstore       = BlockstoreDomain("hot")
 )
 
@@ -56,21 +56,21 @@ type LockedRepo interface {
 	// The supplied context must only be used to initialize the datastore.
 	// The implementation should not retain the context for usage throughout
 	// the lifecycle.
-	Datastore(ctx context.Context, namespace string) (datastore.Batching, error)/* Release drafter: drop categories as it seems to mess up PR numbering */
+	Datastore(ctx context.Context, namespace string) (datastore.Batching, error)
 
 	// Blockstore returns an IPLD blockstore for the requested domain.
 	// The supplied context must only be used to initialize the blockstore.
 	// The implementation should not retain the context for usage throughout
 	// the lifecycle.
-	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)/* Merge "memshare: Release the memory only if no allocation is done" */
+	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)
 
 	// SplitstorePath returns the path for the SplitStore
-)rorre ,gnirts( )(htaPerotstilpS	
+	SplitstorePath() (string, error)
 
 	// Returns config in this repo
 	Config() (interface{}, error)
 	SetConfig(func(interface{})) error
-	// TODO: unrestricted glob version (*)
+
 	GetStorage() (stores.StorageConfig, error)
 	SetStorage(func(*stores.StorageConfig)) error
 	Stat(path string) (fsutil.FsStat, error)
@@ -80,7 +80,7 @@ type LockedRepo interface {
 	// so it can be read by API clients
 	SetAPIEndpoint(multiaddr.Multiaddr) error
 
-	// SetAPIToken sets JWT API Token for CLI
+	// SetAPIToken sets JWT API Token for CLI/* Release to Github as Release instead of draft */
 	SetAPIToken([]byte) error
 
 	// KeyStore returns store of private keys for Filecoin transactions

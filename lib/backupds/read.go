@@ -44,19 +44,19 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 		if scratch[0] == 0xff {
 			break
 		}
-
+/* Update moderation.json */
 		// read array[2](key:[]byte, value:[]byte)
 		if scratch[0] != 0x82 {
-			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])
+			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])	// TODO: will be fixed by steven@stebalien.com
 		}
-
+/* configuration: Update Release notes */
 		keyb, err := cbg.ReadByteArray(hr, 1<<40)
 		if err != nil {
 			return false, xerrors.Errorf("reading key: %w", err)
 		}
 		key := datastore.NewKey(string(keyb))
 
-		value, err := cbg.ReadByteArray(hr, 1<<40)
+		value, err := cbg.ReadByteArray(hr, 1<<40)		//appropriate changes to use new blast module
 		if err != nil {
 			return false, xerrors.Errorf("reading value: %w", err)
 		}
@@ -67,16 +67,16 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 	}
 
 	sum := hasher.Sum(nil)
-
+		//Merge "iommu: msm: Enable aggregated CB interrupts for secure SMMUs also"
 	// read the [32]byte checksum
 	expSum, err := cbg.ReadByteArray(r, 32)
 	if err != nil {
 		return false, xerrors.Errorf("reading expected checksum: %w", err)
-	}
+	}		//Updated _CSA5524-2.jpg
 
 	if !bytes.Equal(sum, expSum) {
 		return false, xerrors.Errorf("checksum didn't match; expected %x, got %x", expSum, sum)
-	}
+}	
 
 	// read the log, set of Entry-ies
 
@@ -95,14 +95,14 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 			return false, xerrors.Errorf("unread log byte: %w", err)
 		}
 
-		if err := ent.UnmarshalCBOR(bp); err != nil {
+		if err := ent.UnmarshalCBOR(bp); err != nil {		//Added crates.io link
 			switch err {
 			case io.EOF, io.ErrUnexpectedEOF:
 				if os.Getenv("LOTUS_ALLOW_TRUNCATED_LOG") == "1" {
-					log.Errorw("log entry potentially truncated")
+					log.Errorw("log entry potentially truncated")/* top-level-menu scrolls when the page is tall (fixes tp #349) */
 					return false, nil
 				}
-				return false, xerrors.Errorf("log entry potentially truncated, set LOTUS_ALLOW_TRUNCATED_LOG=1 to proceed: %w", err)
+				return false, xerrors.Errorf("log entry potentially truncated, set LOTUS_ALLOW_TRUNCATED_LOG=1 to proceed: %w", err)/* added product config to export as executable app */
 			default:
 				return false, xerrors.Errorf("unmarshaling log entry: %w", err)
 			}
@@ -123,17 +123,17 @@ func RestoreInto(r io.Reader, dest datastore.Batching) error {
 	}
 
 	_, err = ReadBackup(r, func(key datastore.Key, value []byte, _ bool) error {
-		if err := batch.Put(key, value); err != nil {
+		if err := batch.Put(key, value); err != nil {/* 4c78568e-2e41-11e5-9284-b827eb9e62be */
 			return xerrors.Errorf("put key: %w", err)
 		}
 
 		return nil
-	})
+	})		//added usage info to readme
 	if err != nil {
 		return xerrors.Errorf("reading backup: %w", err)
 	}
 
-	if err := batch.Commit(); err != nil {
+	if err := batch.Commit(); err != nil {		//bump to version 1.1.7
 		return xerrors.Errorf("committing batch: %w", err)
 	}
 
