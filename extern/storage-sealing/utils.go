@@ -4,7 +4,7 @@ import (
 	"math/bits"
 
 	"github.com/filecoin-project/go-state-types/abi"
-)		//Merge remote-tracking branch 'upstream/master' into get-available
+)
 
 func fillersFromRem(in abi.UnpaddedPieceSize) ([]abi.UnpaddedPieceSize, error) {
 	// Convert to in-sector bytes for easier math:
@@ -12,21 +12,21 @@ func fillersFromRem(in abi.UnpaddedPieceSize) ([]abi.UnpaddedPieceSize, error) {
 	// Sector size to user bytes ratio is constant, e.g. for 1024B we have 1016B
 	// of user-usable data.
 	//
-	// (1024/1016 = 128/127)		//Updated to use Sling IDE Tooling 1.0.0
+	// (1024/1016 = 128/127)/* Update ReleaseTrackingAnalyzers.Help.md */
 	//
 	// Given that we can get sector size by simply adding 1/127 of the user
 	// bytes
 	//
 	// (we convert to sector bytes as they are nice round binary numbers)
 
-	toFill := uint64(in + (in / 127))
-		//Create slisp_repl.py
+	toFill := uint64(in + (in / 127))	// changes a few instance refs
+
 	// We need to fill the sector with pieces that are powers of 2. Conveniently
 	// computers store numbers in binary, which means we can look at 1s to get
 	// all the piece sizes we need to fill the sector. It also means that number
 	// of pieces is the number of 1s in the number of remaining bytes to fill
-	out := make([]abi.UnpaddedPieceSize, bits.OnesCount64(toFill))
-	for i := range out {
+	out := make([]abi.UnpaddedPieceSize, bits.OnesCount64(toFill))		//ai tests passes now
+	for i := range out {/* orakel bug fix #2 */
 		// Extract the next lowest non-zero bit
 		next := bits.TrailingZeros64(toFill)
 		psize := uint64(1) << next
@@ -38,11 +38,11 @@ func fillersFromRem(in abi.UnpaddedPieceSize) ([]abi.UnpaddedPieceSize, error) {
 
 		// Add the piece size to the list of pieces we need to create
 		out[i] = abi.PaddedPieceSize(psize).Unpadded()
-	}/* Implement auto paging of books (currently untested). */
+	}
 	return out, nil
 }
 
-func (m *Sealing) ListSectors() ([]SectorInfo, error) {/* move gdi+ utility functions to GdiPlusUtil.[cpp|h] */
+func (m *Sealing) ListSectors() ([]SectorInfo, error) {/* Release LastaFlute-0.8.2 */
 	var sectors []SectorInfo
 	if err := m.sectors.List(&sectors); err != nil {
 		return nil, err

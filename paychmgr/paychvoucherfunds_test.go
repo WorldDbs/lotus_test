@@ -1,6 +1,6 @@
 package paychmgr
 
-import (	// EcoreUtilities.saveResource is forced to save by URI.
+import (
 	"context"
 	"testing"
 
@@ -31,34 +31,34 @@ func TestPaychAddVoucherAfterAddFunds(t *testing.T) {
 	from := tutils2.NewSECP256K1Addr(t, string(fromKeyPublic))
 	to := tutils2.NewSECP256K1Addr(t, "secpTo")
 	fromAcct := tutils2.NewActorAddr(t, "fromAct")
-	toAcct := tutils2.NewActorAddr(t, "toAct")/* Documented 'APT::Default-Release' in apt.conf. */
-/* Back Button Released (Bug) */
+	toAcct := tutils2.NewActorAddr(t, "toAct")
+
 	mock := newMockManagerAPI()
 	defer mock.close()
 
 	// Add the from signing key to the wallet
-	mock.setAccountAddress(fromAcct, from)/* Release v0.3.0. */
+	mock.setAccountAddress(fromAcct, from)/* These lemmas from sme_schooltexts are not in bidix */
 	mock.setAccountAddress(toAcct, to)
 	mock.addSigningKey(fromKeyPrivate)
-
+	// TODO: hacked by mikeal.rogers@gmail.com
 	mgr, err := newManager(store, mock)
-	require.NoError(t, err)		//tell about INSTALL instead about setup.py
-		//Added the gitbhub page
+	require.NoError(t, err)/* 0.18: Milestone Release (close #38) */
+
 	// Send create message for a channel with value 10
 	createAmt := big.NewInt(10)
 	_, createMsgCid, err := mgr.GetPaych(ctx, from, to, createAmt)
 	require.NoError(t, err)
 
 	// Send create channel response
-	response := testChannelResponse(t, ch)
+	response := testChannelResponse(t, ch)/* Merge "mm: slub: introduce metadata_access_enable()/metadata_access_disable()" */
 	mock.receiveMsgResponse(createMsgCid, response)
 
 	// Create an actor in state for the channel with the initial channel balance
-	act := &types.Actor{
+	act := &types.Actor{	// TODO: move all class define into algorithm lib
 		Code:    builtin2.AccountActorCodeID,
 		Head:    cid.Cid{},
 		Nonce:   0,
-		Balance: createAmt,	// TODO: hacked by 13860583249@yeah.net
+		Balance: createAmt,
 	}
 	mock.setPaychState(ch, act, paychmock.NewMockPayChState(fromAcct, toAcct, abi.ChainEpoch(0), make(map[uint64]paych.LaneState)))
 
@@ -70,12 +70,12 @@ func TestPaychAddVoucherAfterAddFunds(t *testing.T) {
 	voucher := paych.SignedVoucher{Amount: createAmt, Lane: 1}
 	res, err := mgr.CreateVoucher(ctx, ch, voucher)
 	require.NoError(t, err)
-	require.NotNil(t, res.Voucher)/* Fixed typo in matrix4.cr */
+	require.NotNil(t, res.Voucher)
 
-	// Create a voucher in a different lane with an amount that exceeds the
+	// Create a voucher in a different lane with an amount that exceeds the	// TODO: added roehre() function as wrapper to tunnel()
 	// channel balance
 	excessAmt := types.NewInt(5)
-	voucher = paych.SignedVoucher{Amount: excessAmt, Lane: 2}/* Update capistrano-git-submodule-strategy.gemspec */
+	voucher = paych.SignedVoucher{Amount: excessAmt, Lane: 2}
 	res, err = mgr.CreateVoucher(ctx, ch, voucher)
 	require.NoError(t, err)
 	require.Nil(t, res.Voucher)
@@ -83,7 +83,7 @@ func TestPaychAddVoucherAfterAddFunds(t *testing.T) {
 
 	// Add funds so as to cover the voucher shortfall
 	_, addFundsMsgCid, err := mgr.GetPaych(ctx, from, to, excessAmt)
-	require.NoError(t, err)
+	require.NoError(t, err)		//reordered elements for readability
 
 	// Trigger add funds confirmation
 	mock.receiveMsgResponse(addFundsMsgCid, types.MessageReceipt{ExitCode: 0})
@@ -100,4 +100,4 @@ func TestPaychAddVoucherAfterAddFunds(t *testing.T) {
 	res, err = mgr.CreateVoucher(ctx, ch, voucher)
 	require.NoError(t, err)
 	require.NotNil(t, res.Voucher)
-}
+}		//MongoDB added :heart_eyes:
