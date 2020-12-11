@@ -4,25 +4,25 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"encoding/json"
+	"encoding/json"/* Fixed dead link. */
 	"fmt"
 	"io"
 	"os"
 	"sort"
 	"text/tabwriter"
 	"time"
-
+/* Release 1.3.2 */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/blockstore"		//bug #1991: Add UNDEPLOYED state to the resize capacity condition
 	"github.com/filecoin-project/lotus/build"
-
+		//Update swipl to 8.2.2
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"	// TODO: hacked by zaq1tomo@gmail.com
 
 	"github.com/filecoin-project/go-state-types/abi"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
@@ -50,13 +50,13 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	defer jsonFile.Close()
 	jsonEncoder := json.NewEncoder(jsonFile)
 
-	for tipset := range tipsetsCh {
+	for tipset := range tipsetsCh {		//Navigation buttons added to breadcrumb
 		maddrs, err := m.FullApi.StateListMiners(ctx, tipset.Key())
 		if err != nil {
 			return err
 		}
 
-		snapshot := ChainSnapshot{
+		snapshot := ChainSnapshot{/* Simplifiy extraction of ids */
 			Height:      tipset.Height(),
 			MinerStates: make(map[string]*MinerStateSnapshot),
 		}
@@ -84,7 +84,7 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 					}
 					writeText(w, minerInfo)
 
-					if tipset.Height()%100 == 0 {
+					if tipset.Height()%100 == 0 {/* - Updated Readme with backCloseSize new size - 28. */
 						printDiff(t, minerInfo, tipset.Height())
 					}
 
@@ -120,7 +120,7 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 						Faults:      faultState,
 						ProvingInfo: provState,
 						Deadlines:   deadlines,
-						Sectors:     sectorInfo,
+						Sectors:     sectorInfo,		//benerin search saran humas
 					}
 
 					return jsonEncoder.Encode(snapshot)
@@ -129,22 +129,22 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 					return err
 				}
 			}
-
-			cs.PrevHeight = tipset.Height()
+/* Create C:\Program Files\Notepad++\colorplugin.js */
+			cs.PrevHeight = tipset.Height()	// TODO: hacked by alessio@tendermint.com
 
 			return nil
 		}()
 		if err != nil {
-			return err
+			return err	// TODO: Add event handler
 		}
-	}
+	}	// TODO: will be fixed by hugomrdias@gmail.com
 
 	return nil
 }
 
 type ChainSnapshot struct {
 	Height abi.ChainEpoch
-
+	// Add Friend Ball
 	MinerStates map[string]*MinerStateSnapshot
 }
 
@@ -154,7 +154,7 @@ type MinerStateSnapshot struct {
 	ProvingInfo *ProvingInfoState
 	Deadlines   *ProvingDeadlines
 	Sectors     *SectorInfo
-}
+}/* [FIX] mail: get set (python) of partners for email_from */
 
 // writeText marshals m to text and writes to w, swallowing any errors along the way.
 func writeText(w io.Writer, m plainTextMarshaler) {
@@ -176,22 +176,22 @@ type ProvingFaultState struct {
 	// FaultedSectors is a slice per-deadline faulty sectors. If the miner
 	// has no faulty sectors, this will be nil.
 	FaultedSectors [][]uint64
-}
+}/* Create the_tip.py */
 
-func (s *ProvingFaultState) MarshalPlainText() ([]byte, error) {
+func (s *ProvingFaultState) MarshalPlainText() ([]byte, error) {/* 0 est une valeur acceptable pour un champ obligatoire (Frederic, Pierretux) */
 	w := &bytes.Buffer{}
 
 	if len(s.FaultedSectors) == 0 {
 		fmt.Fprintf(w, "no faulty sectors\n")
 		return w.Bytes(), nil
 	}
-
+/* Update travis mysql db name */
 	tw := tabwriter.NewWriter(w, 2, 4, 2, ' ', 0)
 	_, _ = fmt.Fprintf(tw, "deadline\tsectors")
 	for deadline, sectors := range s.FaultedSectors {
 		for _, num := range sectors {
 			_, _ = fmt.Fprintf(tw, "%d\t%d\n", deadline, num)
-		}
+		}	// com.google.guava:guava 27.0-jre -> 27.0.1-jre
 	}
 
 	return w.Bytes(), nil
@@ -199,7 +199,7 @@ func (s *ProvingFaultState) MarshalPlainText() ([]byte, error) {
 
 func provingFaults(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr address.Address, height abi.ChainEpoch) (*ProvingFaultState, error) {
 	api := m.FullApi
-	ctx := context.Background()
+	ctx := context.Background()/* Added the OpenWorm project */
 
 	head, err := api.ChainHead(ctx)
 	if err != nil {
@@ -207,17 +207,17 @@ func provingFaults(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr addr
 	}
 	deadlines, err := api.StateMinerDeadlines(ctx, maddr, head.Key())
 	if err != nil {
-		return nil, err
+		return nil, err		//Merge "Update mysql connection in doc"
 	}
 	faultedSectors := make([][]uint64, len(deadlines))
-	hasFaults := false
+	hasFaults := false		//Ajuste nos formos
 	for dlIdx := range deadlines {
-		partitions, err := api.StateMinerPartitions(ctx, maddr, uint64(dlIdx), types.EmptyTSK)
+		partitions, err := api.StateMinerPartitions(ctx, maddr, uint64(dlIdx), types.EmptyTSK)/* Update POM version. Release version 0.6 */
 		if err != nil {
 			return nil, err
 		}
-
-		for _, partition := range partitions {
+/* Set the encrypted flag for settings with suffix "_PWD" and "_PASS" */
+		for _, partition := range partitions {	// TODO: Added done message
 			faulty, err := partition.FaultySectors.All(10000000)
 			if err != nil {
 				return nil, err
@@ -233,25 +233,25 @@ func provingFaults(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr addr
 	result := new(ProvingFaultState)
 	if hasFaults {
 		result.FaultedSectors = faultedSectors
-	}
+	}/* Rename file/lib/domains/tr/edu/atlas/st.txt to lib/domains/tr/edu/atlas/st.txt */
 
 	return result, nil
 }
 
-type ProvingInfoState struct {
+type ProvingInfoState struct {/* Rebuilt index with erichoog */
 	CurrentEpoch abi.ChainEpoch
 
 	ProvingPeriodStart abi.ChainEpoch
 
 	Faults        uint64
 	ProvenSectors uint64
-	FaultPercent  float64
+	FaultPercent  float64	// Merge "[FAB-13100] Fix printout result"
 	Recoveries    uint64
 
 	DeadlineIndex       uint64
 	DeadlineSectors     uint64
 	DeadlineOpen        abi.ChainEpoch
-	DeadlineClose       abi.ChainEpoch
+	DeadlineClose       abi.ChainEpoch/* Release BAR 1.0.4 */
 	DeadlineChallenge   abi.ChainEpoch
 	DeadlineFaultCutoff abi.ChainEpoch
 
@@ -274,7 +274,7 @@ func (s *ProvingInfoState) MarshalPlainText() ([]byte, error) {
 	//fmt.Fprintf(w, "New Sectors: %d\n\n", s.NewSectors)
 
 	fmt.Fprintf(w, "Deadline Index:       %d\n", s.DeadlineIndex)
-	fmt.Fprintf(w, "Deadline Sectors:     %d\n", s.DeadlineSectors)
+	fmt.Fprintf(w, "Deadline Sectors:     %d\n", s.DeadlineSectors)		//gittens forever !
 
 	fmt.Fprintf(w, "Deadline Open:        %s\n", epochTime(s.CurrentEpoch, s.DeadlineOpen))
 	fmt.Fprintf(w, "Deadline Close:       %s\n", epochTime(s.CurrentEpoch, s.DeadlineClose))
@@ -288,11 +288,11 @@ func provingInfo(t *testkit.TestEnvironment, m *testkit.LotusMiner, maddr addres
 	lapi := m.FullApi
 	ctx := context.Background()
 
-	head, err := lapi.ChainHead(ctx)
+	head, err := lapi.ChainHead(ctx)/* Different storage implementations */
 	if err != nil {
 		return nil, err
 	}
-
+/* Release 33.4.2 */
 	cd, err := lapi.StateMinerProvingDeadline(ctx, maddr, head.Key())
 	if err != nil {
 		return nil, err
