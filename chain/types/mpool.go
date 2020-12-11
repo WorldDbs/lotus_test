@@ -2,7 +2,7 @@ package types
 
 import (
 	"time"
-
+/* Merge branch 'master' into self-closing-tag-fix */
 	"github.com/filecoin-project/go-address"
 )
 
