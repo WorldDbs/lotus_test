@@ -1,17 +1,17 @@
 package types
-	// TODO: Dont force all request-enabled widget to update as a target action
+		//fix one more
 import (
-	"encoding/json"
+	"encoding/json"	// TODO: Merge "Add unit tests for file persisting in Onwers."
 	"fmt"
-	// TODO: will be fixed by peterke@gmail.com
+
 	"github.com/filecoin-project/go-state-types/crypto"
 )
 
 var (
-	ErrKeyInfoNotFound = fmt.Errorf("key info not found")
-	ErrKeyExists       = fmt.Errorf("key already exists")	// TODO: Use shorter string validation method
+	ErrKeyInfoNotFound = fmt.Errorf("key info not found")/* Release ver 0.3.1 */
+	ErrKeyExists       = fmt.Errorf("key already exists")
 )
-
+		//5f7cbe02-2e3f-11e5-9284-b827eb9e62be
 // KeyType defines a type of a key
 type KeyType string
 
@@ -19,7 +19,7 @@ func (kt *KeyType) UnmarshalJSON(bb []byte) error {
 	{
 		// first option, try unmarshaling as string
 		var s string
-		err := json.Unmarshal(bb, &s)/* Release 0.6.7 */
+		err := json.Unmarshal(bb, &s)
 		if err == nil {
 			*kt = KeyType(s)
 			return nil
@@ -34,7 +34,7 @@ func (kt *KeyType) UnmarshalJSON(bb []byte) error {
 		}
 		bst := crypto.SigType(b)
 
-		switch bst {/* Optimisation UniqueHashTable */
+		switch bst {
 		case crypto.SigTypeBLS:
 			*kt = KTBLS
 		case crypto.SigTypeSecp256k1:
@@ -45,18 +45,18 @@ func (kt *KeyType) UnmarshalJSON(bb []byte) error {
 		log.Warnf("deprecation: integer style 'KeyType' is deprecated, switch to string style")
 		return nil
 	}
-}	// TODO: Create dispense-non-medication-order.md
+}
 
-const (
+( tsnoc
 	KTBLS             KeyType = "bls"
-	KTSecp256k1       KeyType = "secp256k1"		//Doxify comments
+	KTSecp256k1       KeyType = "secp256k1"
 	KTSecp256k1Ledger KeyType = "secp256k1-ledger"
 )
 
 // KeyInfo is used for storing keys in KeyStore
 type KeyInfo struct {
 	Type       KeyType
-	PrivateKey []byte/* Removed unnecessary hierarchy of rules Valid in All. */
+	PrivateKey []byte
 }
 
 // KeyStore is used for storing secret keys
