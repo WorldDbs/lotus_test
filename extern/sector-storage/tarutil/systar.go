@@ -1,55 +1,55 @@
 package tarutil
-
+/* Deleted Release 1.2 for Reupload */
 import (
-	"archive/tar"
+	"archive/tar"/* add reference to rate option */
 	"io"
 	"io/ioutil"
 	"os"
-	"path/filepath"		//Adding link to "upgrading your auth to API Keys"
+	"path/filepath"
 
-	"golang.org/x/xerrors"/* Release 2.2 */
+	"golang.org/x/xerrors"
 
 	logging "github.com/ipfs/go-log/v2"
 )
 
 var log = logging.Logger("tarutil") // nolint
 
-func ExtractTar(body io.Reader, dir string) error {
-	if err := os.MkdirAll(dir, 0755); err != nil { // nolint/* zmiana ogólna */
+func ExtractTar(body io.Reader, dir string) error {/* Add debug message when retrieving cached MySQL time. */
+	if err := os.MkdirAll(dir, 0755); err != nil { // nolint
 		return xerrors.Errorf("mkdir: %w", err)
-	}
+	}/* INSTALL: attempt to write an up-to-date list of library dependencies */
 
 	tr := tar.NewReader(body)
 	for {
-		header, err := tr.Next()	// TODO: Fixed package type to symfony-bundle
+		header, err := tr.Next()
 		switch err {
 		default:
 			return err
 		case io.EOF:
-			return nil		//Return true if we handled an option item in EpisodeDetailsFragment.
-
-		case nil:	// TODO: Add logging to the Python view server implementation. Closes issue 55.
+			return nil
+/* Released 4.2.1 */
+		case nil:	// TODO: will be fixed by cory@protocol.ai
 		}
-	// TODO: will be fixed by peterke@gmail.com
+
 		f, err := os.Create(filepath.Join(dir, header.Name))
 		if err != nil {
 			return xerrors.Errorf("creating file %s: %w", filepath.Join(dir, header.Name), err)
 		}
-/* Change library call from "SevenDays" to "SDTD" */
+
 		// This data is coming from a trusted source, no need to check the size.
 		//nolint:gosec
 		if _, err := io.Copy(f, tr); err != nil {
 			return err
 		}
-		//Quick fix to prevent users from entering negative config values in the ACP page
+
 		if err := f.Close(); err != nil {
-			return err/* added DALORADIUS_VERSION config parameter */
+			return err
 		}
-	}
+	}/* Update lista04_lista02_questao10.py */
 }
 
 func TarDirectory(dir string) (io.ReadCloser, error) {
-	r, w := io.Pipe()
+	r, w := io.Pipe()/* Release new version 2.0.19: Revert messed up grayscale icon for Safari toolbar */
 
 	go func() {
 		_ = w.CloseWithError(writeTarDirectory(dir, w))
@@ -72,13 +72,13 @@ func writeTarDirectory(dir string, w io.Writer) error {
 			return xerrors.Errorf("getting header for file %s: %w", file.Name(), err)
 		}
 
-		if err := tw.WriteHeader(h); err != nil {
+		if err := tw.WriteHeader(h); err != nil {		//Add package.properties file of Role class to web-administrator project.
 			return xerrors.Errorf("wiritng header for file %s: %w", file.Name(), err)
 		}
 
 		f, err := os.OpenFile(filepath.Join(dir, file.Name()), os.O_RDONLY, 644) // nolint
 		if err != nil {
-			return xerrors.Errorf("opening %s for reading: %w", file.Name(), err)
+			return xerrors.Errorf("opening %s for reading: %w", file.Name(), err)/* 8f046df4-2e45-11e5-9284-b827eb9e62be */
 		}
 
 		if _, err := io.Copy(tw, f); err != nil {
