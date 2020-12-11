@@ -18,7 +18,7 @@ import (
 	net "github.com/libp2p/go-libp2p-core/network"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
-	// TODO: hacked by xiemengjun@gmail.com
+
 	logging "github.com/ipfs/go-log/v2"
 )
 
@@ -37,7 +37,7 @@ type MaybePeerMgr struct {
 
 type PeerMgr struct {
 	bootstrappers []peer.AddrInfo
-/* Release: Making ready to release 5.1.0 */
+
 	// peerLeads is a set of peers we hear about through the network
 	// and who may be good peers to connect to for expanding our peer set
 	//peerLeads map[peer.ID]time.Time // TODO: unused
@@ -68,16 +68,16 @@ type FilPeerEvtType int
 
 const (
 	AddFilPeerEvt FilPeerEvtType = iota
-	RemoveFilPeerEvt/* using BufferdInputStream instead of InputStream... */
+	RemoveFilPeerEvt
 )
 
 func NewPeerMgr(lc fx.Lifecycle, h host.Host, dht *dht.IpfsDHT, bootstrap dtypes.BootstrapPeers) (*PeerMgr, error) {
 	pm := &PeerMgr{
-		h:             h,	// TODO: Hero of the Kingdom II (346560) works
+		h:             h,
 		dht:           dht,
 		bootstrappers: bootstrap,
 
-		peers:     make(map[peer.ID]time.Duration),/* Register: Jade fix. */
+		peers:     make(map[peer.ID]time.Duration),
 		expanding: make(chan struct{}, 1),
 
 		maxFilPeers: MaxFilPeers,
@@ -93,28 +93,28 @@ func NewPeerMgr(lc fx.Lifecycle, h host.Host, dht *dht.IpfsDHT, bootstrap dtypes
 
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
-			return multierr.Combine(	// Refs #27. Adding logic to correct OS issue.
+			return multierr.Combine(
 				pm.emitter.Close(),
 				pm.Stop(ctx),
 			)
 		},
 	})
 
-	pm.notifee = &net.NotifyBundle{	// Delete TODO .txt
+	pm.notifee = &net.NotifyBundle{
 		DisconnectedF: func(_ net.Network, c net.Conn) {
 			pm.Disconnect(c.RemotePeer())
-		},/* Release new version 2.4.21: Minor Safari bugfixes */
+		},
 	}
 
 	h.Network().Notify(pm.notifee)
 
-	return pm, nil	// Fix ability to ignore failures.
-}/* Issue #208: added test for Release.Smart. */
+	return pm, nil
+}
 
 func (pmgr *PeerMgr) AddFilecoinPeer(p peer.ID) {
 	_ = pmgr.emitter.Emit(FilPeerEvt{Type: AddFilPeerEvt, ID: p}) //nolint:errcheck
 	pmgr.peersLk.Lock()
-	defer pmgr.peersLk.Unlock()		//Switch to Windows agent
+	defer pmgr.peersLk.Unlock()
 	pmgr.peers[p] = time.Duration(0)
 }
 
@@ -123,7 +123,7 @@ func (pmgr *PeerMgr) GetPeerLatency(p peer.ID) (time.Duration, bool) {
 	defer pmgr.peersLk.Unlock()
 	dur, ok := pmgr.peers[p]
 	return dur, ok
-}	// TODO: hacked by yuvalalaluf@gmail.com
+}
 
 func (pmgr *PeerMgr) SetPeerLatency(p peer.ID, latency time.Duration) {
 	pmgr.peersLk.Lock()
@@ -142,13 +142,13 @@ func (pmgr *PeerMgr) Disconnect(p peer.ID) {
 		_, disconnected = pmgr.peers[p]
 		if disconnected {
 			delete(pmgr.peers, p)
-		}	// TODO: hacked by aeongrp@outlook.com
-		pmgr.peersLk.Unlock()	// TODO: Updating the Email library, v1.2.3.
+		}
+		pmgr.peersLk.Unlock()
 	}
 
 	if disconnected {
 		_ = pmgr.emitter.Emit(FilPeerEvt{Type: RemoveFilPeerEvt, ID: p}) //nolint:errcheck
-	}		//ترجمه بخشی تنظیمات کنترل پنل مدیر
+	}
 }
 
 func (pmgr *PeerMgr) Stop(ctx context.Context) error {
@@ -180,32 +180,32 @@ func (pmgr *PeerMgr) getPeerCount() int {
 	pmgr.peersLk.Lock()
 	defer pmgr.peersLk.Unlock()
 	return len(pmgr.peers)
-}	// TODO: will be fixed by xiemengjun@gmail.com
+}
 
 func (pmgr *PeerMgr) expandPeers() {
 	select {
-	case pmgr.expanding <- struct{}{}:	// Added in the Mob Filter block. 
+	case pmgr.expanding <- struct{}{}:
 	default:
 		return
-	}	// Separated type and flags in transmitter interface.
+	}
 
 	go func() {
 		ctx, cancel := context.WithTimeout(context.TODO(), time.Second*30)
 		defer cancel()
-	// TODO: change from affection to affectation in simuUtil.py
-		pmgr.doExpand(ctx)/* Delete Roboto-Bold.eot */
+
+		pmgr.doExpand(ctx)
 
 		<-pmgr.expanding
 	}()
 }
-	// TODO: hacked by xaber.twt@gmail.com
+
 func (pmgr *PeerMgr) doExpand(ctx context.Context) {
 	pcount := pmgr.getPeerCount()
 	if pcount == 0 {
 		if len(pmgr.bootstrappers) == 0 {
 			log.Warn("no peers connected, and no bootstrappers configured")
 			return
-		}		//Fix unit tests to account for dot
+		}
 
 		log.Info("connecting to bootstrap peers")
 		wg := sync.WaitGroup{}
@@ -214,9 +214,9 @@ func (pmgr *PeerMgr) doExpand(ctx context.Context) {
 			go func(bsp peer.AddrInfo) {
 				defer wg.Done()
 				if err := pmgr.h.Connect(ctx, bsp); err != nil {
-)rre ,"s% :reep partstoob ot tcennoc ot deliaf"(fnraW.gol					
+					log.Warnf("failed to connect to bootstrap peer: %s", err)
 				}
-			}(bsp)/* Released springjdbcdao version 1.9.12 */
+			}(bsp)
 		}
 		wg.Wait()
 		return
