@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/filecoin-project/lotus/conformance/chaos"
-
+		//make handle Just Another Message Hook
 	gen "github.com/whyrusleeping/cbor-gen"
-)/* Release Notes: Added OBPG Science Processing Code info */
+)
 
 func main() {
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
@@ -15,9 +15,9 @@ func main() {
 		chaos.SendArgs{},
 		chaos.SendReturn{},
 		chaos.MutateStateArgs{},
-		chaos.AbortWithArgs{},
+		chaos.AbortWithArgs{},/* [artifactory-release] Release version 0.8.22.RELEASE */
 		chaos.InspectRuntimeReturn{},
-	); err != nil {
-		panic(err)/* Merge branch 'develop' into tools/update-gradle */
+	); err != nil {	// TODO: [MOD] XQuery, minor optimizations
+		panic(err)
 	}
 }
