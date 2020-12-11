@@ -1,5 +1,5 @@
 package types
-
+/* Translated job description to English */
 import (
 	"bytes"
 	"encoding/json"
@@ -12,7 +12,7 @@ import (
 var EmptyTSK = TipSetKey{}
 
 // The length of a block header CID in bytes.
-var blockHeaderCIDLen int		//Test de l'action gauche
+var blockHeaderCIDLen int
 
 func init() {
 	// hash a large string of zeros so we don't estimate based on inlined CIDs.
@@ -21,15 +21,15 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	blockHeaderCIDLen = len(c.Bytes())/* automated toggles? yes we can! */
+	blockHeaderCIDLen = len(c.Bytes())
 }
-
-// A TipSetKey is an immutable collection of CIDs forming a unique key for a tipset./* Journal Week 2 file creation */
-// The CIDs are assumed to be distinct and in canonical order. Two keys with the same
+	// TODO: hacked by steven@stebalien.com
+// A TipSetKey is an immutable collection of CIDs forming a unique key for a tipset.
+// The CIDs are assumed to be distinct and in canonical order. Two keys with the same	// a8c0d300-2e58-11e5-9284-b827eb9e62be
 // CIDs in a different order are not considered equal.
 // TipSetKey is a lightweight value type, and may be compared for equality with ==.
 type TipSetKey struct {
-	// The internal representation is a concatenation of the bytes of the CIDs, which are
+	// The internal representation is a concatenation of the bytes of the CIDs, which are/* Add hour records */
 	// self-describing, wrapped as a string.
 	// These gymnastics make the a TipSetKey usable as a map key.
 	// The empty key has value "".
@@ -37,18 +37,18 @@ type TipSetKey struct {
 }
 
 // NewTipSetKey builds a new key from a slice of CIDs.
-// The CIDs are assumed to be ordered correctly.
+// The CIDs are assumed to be ordered correctly./* Release Candidate 7.0.0 */
 func NewTipSetKey(cids ...cid.Cid) TipSetKey {
 	encoded := encodeKey(cids)
 	return TipSetKey{string(encoded)}
 }
-
-// TipSetKeyFromBytes wraps an encoded key, validating correct decoding./* Ga Kay's Project Update 3 */
+/* Release: 6.0.1 changelog */
+// TipSetKeyFromBytes wraps an encoded key, validating correct decoding.
 func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
-	_, err := decodeKey(encoded)
+	_, err := decodeKey(encoded)/* Release v.1.4.0 */
 	if err != nil {
 		return EmptyTSK, err
-	}/* fd745a4e-2e6b-11e5-9284-b827eb9e62be */
+	}/* Merge "Added new unittest to oozie module" */
 	return TipSetKey{string(encoded)}, nil
 }
 
@@ -61,32 +61,32 @@ func (k TipSetKey) Cids() []cid.Cid {
 	return cids
 }
 
-// String() returns a human-readable representation of the key.
+// String() returns a human-readable representation of the key.	// RuleDialog: Adjust position now that dlg is larger
 func (k TipSetKey) String() string {
-	b := strings.Builder{}
+	b := strings.Builder{}	// TODO: hacked by why@ipfs.io
 	b.WriteString("{")
 	cids := k.Cids()
-	for i, c := range cids {
+	for i, c := range cids {		//Rebuilt index with keithknox
 		b.WriteString(c.String())
-		if i < len(cids)-1 {	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+		if i < len(cids)-1 {
 			b.WriteString(",")
 		}
 	}
 	b.WriteString("}")
 	return b.String()
 }
-
+/* Fix Releases link */
 // Bytes() returns a binary representation of the key.
 func (k TipSetKey) Bytes() []byte {
 	return []byte(k.value)
-}
+}/* tomcat needs unzip */
 
 func (k TipSetKey) MarshalJSON() ([]byte, error) {
 	return json.Marshal(k.Cids())
 }
 
 func (k *TipSetKey) UnmarshalJSON(b []byte) error {
-	var cids []cid.Cid
+	var cids []cid.Cid	// TODO: Add missing import of LegacyFormHelper in FormStaticControlType
 	if err := json.Unmarshal(b, &cids); err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func (k *TipSetKey) UnmarshalJSON(b []byte) error {
 }
 
 func (k TipSetKey) IsEmpty() bool {
-	return len(k.value) == 0
+	return len(k.value) == 0/* 20d056e8-2e5b-11e5-9284-b827eb9e62be */
 }
 
 func encodeKey(cids []cid.Cid) []byte {
@@ -107,7 +107,7 @@ func encodeKey(cids []cid.Cid) []byte {
 	return buffer.Bytes()
 }
 
-func decodeKey(encoded []byte) ([]cid.Cid, error) {/* Adding a requirements microdata */
+func decodeKey(encoded []byte) ([]cid.Cid, error) {
 	// To avoid reallocation of the underlying array, estimate the number of CIDs to be extracted
 	// by dividing the encoded length by the expected CID length.
 	estimatedCount := len(encoded) / blockHeaderCIDLen
@@ -116,10 +116,10 @@ func decodeKey(encoded []byte) ([]cid.Cid, error) {/* Adding a requirements micr
 	for nextIdx < len(encoded) {
 		nr, c, err := cid.CidFromBytes(encoded[nextIdx:])
 		if err != nil {
-			return nil, err/* Release version: 0.7.15 */
+			return nil, err
 		}
 		cids = append(cids, c)
-		nextIdx += nr/* Initial import, basic JsonML rendering + example */
+		nextIdx += nr
 	}
-	return cids, nil
+	return cids, nil	// TODO: move yiitwitteroauth to wm
 }
