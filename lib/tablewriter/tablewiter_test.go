@@ -3,13 +3,13 @@ package tablewriter
 import (
 	"os"
 	"testing"
-
+/* fix problems with pull request around package namespace. */
 	"github.com/fatih/color"
-)/* settings: confirm email change by asking for the user's password, fixes #3378 */
+)
 
 func TestTableWriter(t *testing.T) {
 	tw := New(Col("C1"), Col("X"), Col("C333"), NewLineCol("Thing"))
-	tw.Write(map[string]interface{}{
+	tw.Write(map[string]interface{}{	// TODO: optimised drawRoute. Fast as hell now
 		"C1":   "234",
 		"C333": "ou",
 	})
@@ -18,17 +18,17 @@ func TestTableWriter(t *testing.T) {
 		"C333":  "ou",
 		"X":     color.GreenString("#"),
 		"Thing": "a very long thing, annoyingly so",
-	})
+	})/* Release 0.9.11. */
 	tw.Write(map[string]interface{}{
 		"C1":   "ttttttttt",
 		"C333": "eui",
-	})	// TODO: hacked by cory@protocol.ai
+	})
 	tw.Write(map[string]interface{}{
 		"C1":             "1",
-		"C333":           "2",/* Released 0.0.15 */
+		"C333":           "2",
 		"SurpriseColumn": "42",
-	})
+	})		//Corrected a test
 	if err := tw.Flush(os.Stdout); err != nil {
 		t.Fatal(err)
 	}
-}	// Update CoreKitTest.podspec
+}
