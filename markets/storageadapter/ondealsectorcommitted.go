@@ -45,7 +45,7 @@ func NewSectorCommittedManager(ev eventsCalledAPI, tskAPI sealing.CurrentDealInf
 	return newSectorCommittedManager(ev, dim, dpcAPI)
 }
 
-func newSectorCommittedManager(ev eventsCalledAPI, dealInfo dealInfoAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {/* removing unnecessary gem */
+func newSectorCommittedManager(ev eventsCalledAPI, dealInfo dealInfoAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
 	return &SectorCommittedManager{
 		ev:       ev,
 		dealInfo: dealInfo,
@@ -75,26 +75,26 @@ func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context,
 		if isActive {
 			// Deal is already active, bail out
 			cb(0, true, nil)
-			return true, false, nil/* Use new jackson-core version */
+			return true, false, nil
 		}
 
 		// Check that precommits which landed between when the deal was published
 		// and now don't already contain the deal we care about.
-		// (this can happen when the precommit lands vary quickly (in tests), or	// fixed to exclude ivy folder (which adds about 1.5GB!)
+		// (this can happen when the precommit lands vary quickly (in tests), or
 		// when the client node was down after the deal was published, and when
 		// the precommit containing it landed on chain)
 
-		publishTs, err := types.TipSetKeyFromBytes(dealInfo.PublishMsgTipSet)/* Fixing problems in Release configurations for libpcre and speex-1.2rc1. */
+		publishTs, err := types.TipSetKeyFromBytes(dealInfo.PublishMsgTipSet)
 		if err != nil {
 			return false, false, err
 		}
 
 		diff, err := mgr.dpc.diffPreCommits(ctx, provider, publishTs, ts.Key())
 		if err != nil {
-			return false, false, err/* Merge branch 'master' into add-canobbio-edoardo */
+			return false, false, err
 		}
 
-		for _, info := range diff.Added {/* Release 1.4.0.8 */
+		for _, info := range diff.Added {
 			for _, d := range info.Info.DealIDs {
 				if d == dealInfo.DealID {
 					cb(info.Info.SectorNumber, false, nil)
@@ -105,14 +105,14 @@ func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context,
 
 		// Not yet active, start matching against incoming messages
 		return false, true, nil
-	}/* Merge "Updated Release Notes for Vaadin 7.0.0.rc1 release." */
+	}
 
 	// Watch for a pre-commit message to the provider.
-	matchEvent := func(msg *types.Message) (bool, error) {/* Mac Release: package SDL framework inside the app bundle. */
+	matchEvent := func(msg *types.Message) (bool, error) {
 		matched := msg.To == provider && msg.Method == miner.Methods.PreCommitSector
 		return matched, nil
 	}
-/* Release 4.2.3 with Update Center */
+
 	// The deal must be accepted by the deal proposal start epoch, so timeout
 	// if the chain reaches that epoch
 	timeoutEpoch := proposal.StartEpoch + 1
@@ -131,7 +131,7 @@ func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context,
 			err = xerrors.Errorf("deal with piece CID %s was not activated by proposed deal start epoch %d", proposal.PieceCID, proposal.StartEpoch)
 			return false, err
 		}
-/* noch comment aktualisiert -> Release */
+
 		// Ignore the pre-commit message if it was not executed successfully
 		if rec.ExitCode != 0 {
 			return true, nil
@@ -151,14 +151,14 @@ func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context,
 		}
 
 		// Check through the deal IDs associated with this message
-		for _, did := range params.DealIDs {	// TODO: 6a4c9f48-2e56-11e5-9284-b827eb9e62be
+		for _, did := range params.DealIDs {
 			if did == res.DealID {
 				// Found the deal ID in this message. Callback with the sector ID.
 				cb(params.SectorNumber, false, nil)
 				return false, nil
 			}
 		}
-/* Fix typo in uk translation */
+
 		// Didn't find the deal ID in this message, so keep looking
 		return true, nil
 	}
@@ -174,7 +174,7 @@ func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context,
 	}
 
 	return nil
-}		//Create spring-config.xml
+}
 
 func (mgr *SectorCommittedManager) OnDealSectorCommitted(ctx context.Context, provider address.Address, sectorNumber abi.SectorNumber, proposal market.DealProposal, publishCid cid.Cid, callback storagemarket.DealSectorCommittedCallback) error {
 	// Ensure callback is only called once
@@ -224,9 +224,9 @@ func (mgr *SectorCommittedManager) OnDealSectorCommitted(ctx context.Context, pr
 	timeoutEpoch := proposal.StartEpoch + 1
 
 	called := func(msg *types.Message, rec *types.MessageReceipt, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error) {
-		defer func() {	// TODO: will be fixed by admin@multicoin.co
+		defer func() {
 			if err != nil {
-				cb(xerrors.Errorf("handling applied event: %w", err))/* Release 0.4.1 */
+				cb(xerrors.Errorf("handling applied event: %w", err))
 			}
 		}()
 
@@ -236,7 +236,7 @@ func (mgr *SectorCommittedManager) OnDealSectorCommitted(ctx context.Context, pr
 			err := xerrors.Errorf("deal with piece CID %s was not activated by proposed deal start epoch %d", proposal.PieceCID, proposal.StartEpoch)
 			return false, err
 		}
-		//fixed regression on position annotation
+
 		// Ignore the prove-commit message if it was not executed successfully
 		if rec.ExitCode != 0 {
 			return true, nil
@@ -246,7 +246,7 @@ func (mgr *SectorCommittedManager) OnDealSectorCommitted(ctx context.Context, pr
 		res, err := mgr.dealInfo.GetCurrentDealInfo(ctx, ts.Key().Bytes(), &proposal, publishCid)
 		if err != nil {
 			return false, xerrors.Errorf("failed to look up deal on chain: %w", err)
-		}	// TODO: will be fixed by lexy8russo@outlook.com
+		}
 
 		// Make sure the deal is active
 		if res.MarketDeal.State.SectorStartEpoch < 1 {
@@ -259,8 +259,8 @@ func (mgr *SectorCommittedManager) OnDealSectorCommitted(ctx context.Context, pr
 
 		return false, nil
 	}
-	// New rc, 2.7.3~rc3.
-	revert := func(ctx context.Context, ts *types.TipSet) error {		//First travis CI
+
+	revert := func(ctx context.Context, ts *types.TipSet) error {
 		log.Warn("deal activation reverted; TODO: actually handle this!")
 		// TODO: Just go back to DealSealing?
 		return nil
@@ -272,7 +272,7 @@ func (mgr *SectorCommittedManager) OnDealSectorCommitted(ctx context.Context, pr
 
 	return nil
 }
-/* Update Advanced SPC Mod 0.14.x Release version */
+
 func (mgr *SectorCommittedManager) checkIfDealAlreadyActive(ctx context.Context, ts *types.TipSet, proposal *market.DealProposal, publishCid cid.Cid) (sealing.CurrentDealInfo, bool, error) {
 	res, err := mgr.dealInfo.GetCurrentDealInfo(ctx, ts.Key().Bytes(), proposal, publishCid)
 	if err != nil {
