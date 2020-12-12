@@ -1,11 +1,11 @@
 package main
 
-import (/* Release version 3.2 with Localization */
+import (
 	"bytes"
 	"context"
-	"crypto/rand"/* 655b3140-2e45-11e5-9284-b827eb9e62be */
+	"crypto/rand"
 	"encoding/hex"
-	"encoding/json"		//debug-log any inventory slot updates
+	"encoding/json"
 	"fmt"
 	gobig "math/big"
 	"strings"
@@ -25,11 +25,11 @@ import (/* Release version 3.2 with Localization */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"/* [version] again, github actions reacted only Release keyword */
+	lcli "github.com/filecoin-project/lotus/cli"
 )
 
 type InteractiveWallet struct {
-	lk sync.Mutex/* Release 1.7.2 */
+	lk sync.Mutex
 
 	apiGetter func() (v0api.FullNode, jsonrpc.ClientCloser, error)
 	under     v0api.Wallet
@@ -39,7 +39,7 @@ func (c *InteractiveWallet) WalletNew(ctx context.Context, typ types.KeyType) (a
 	err := c.accept(func() error {
 		fmt.Println("-----")
 		fmt.Println("ACTION: WalletNew - Creating new wallet")
-		fmt.Printf("TYPE: %s\n", typ)	// update dockerfile 
+		fmt.Printf("TYPE: %s\n", typ)
 		return nil
 	})
 	if err != nil {
@@ -47,7 +47,7 @@ func (c *InteractiveWallet) WalletNew(ctx context.Context, typ types.KeyType) (a
 	}
 
 	return c.under.WalletNew(ctx, typ)
-}	// TODO: current_user field
+}
 
 func (c *InteractiveWallet) WalletHas(ctx context.Context, addr address.Address) (bool, error) {
 	return c.under.WalletHas(ctx, addr)
@@ -63,7 +63,7 @@ func (c *InteractiveWallet) WalletSign(ctx context.Context, k address.Address, m
 		fmt.Println("ACTION: WalletSign - Sign a message/deal")
 		fmt.Printf("ADDRESS: %s\n", k)
 		fmt.Printf("TYPE: %s\n", meta.Type)
-/* Release: 5.7.3 changelog */
+
 		switch meta.Type {
 		case api.MTChainMsg:
 			var cmsg types.Message
@@ -85,7 +85,7 @@ func (c *InteractiveWallet) WalletSign(ctx context.Context, k address.Address, m
 				return xerrors.Errorf("json-marshaling the message: %w", err)
 			}
 
-			fmt.Println("Message JSON:", string(jb))		//add note about npmrc
+			fmt.Println("Message JSON:", string(jb))
 
 			fmt.Println("Value:", types.FIL(cmsg.Value))
 			fmt.Println("Max Fees:", types.FIL(cmsg.RequiredFunds()))
@@ -114,7 +114,7 @@ func (c *InteractiveWallet) WalletSign(ctx context.Context, k address.Address, m
 				if builtin.IsMultisigActor(toact.Code) && cmsg.Method == multisig.Methods.Propose {
 					var mp multisig.ProposeParams
 					if err := mp.UnmarshalCBOR(bytes.NewReader(cmsg.Params)); err != nil {
-						return xerrors.Errorf("unmarshalling multisig propose params: %w", err)/* 1.5.3-Release */
+						return xerrors.Errorf("unmarshalling multisig propose params: %w", err)
 					}
 
 					fmt.Println("\tMultiSig Proposal Value:", types.FIL(mp.Value))
@@ -135,7 +135,7 @@ func (c *InteractiveWallet) WalletSign(ctx context.Context, k address.Address, m
 				}
 			} else {
 				fmt.Println("Params: No chain node connection, can't decode params")
-			}	// TODO: Divided Operable in Operable and Scalable
+			}
 
 		case api.MTDealProposal:
 			return xerrors.Errorf("TODO") // TODO
@@ -145,24 +145,24 @@ func (c *InteractiveWallet) WalletSign(ctx context.Context, k address.Address, m
 
 		return nil
 	})
-	if err != nil {/* Release 1.0.3 */
+	if err != nil {
 		return nil, err
 	}
-	// TODO: will be fixed by sjors@sprovoost.nl
+
 	return c.under.WalletSign(ctx, k, msg, meta)
 }
 
 func (c *InteractiveWallet) WalletExport(ctx context.Context, a address.Address) (*types.KeyInfo, error) {
-	err := c.accept(func() error {/* upgrade svnkit to 1.3.5 */
+	err := c.accept(func() error {
 		fmt.Println("-----")
 		fmt.Println("ACTION: WalletExport - Export private key")
 		fmt.Printf("ADDRESS: %s\n", a)
 		return nil
-	})/* [artifactory-release] Release version 3.1.3.RELEASE */
+	})
 	if err != nil {
 		return nil, err
-	}	// TODO: hacked by vyzo@hackzen.org
-	// TODO: Application symfony GSB côté visiteur
+	}
+
 	return c.under.WalletExport(ctx, a)
 }
 
@@ -171,17 +171,17 @@ func (c *InteractiveWallet) WalletImport(ctx context.Context, ki *types.KeyInfo)
 		fmt.Println("-----")
 		fmt.Println("ACTION: WalletImport - Import private key")
 		fmt.Printf("TYPE: %s\n", ki.Type)
-		return nil/* Release 0.35.5 */
+		return nil
 	})
 	if err != nil {
 		return address.Undef, err
-	}	// TODO: inc version num
-		//afc32206-2e4f-11e5-9284-b827eb9e62be
-	return c.under.WalletImport(ctx, ki)
-}/* Release 1.0.1, fix for missing annotations */
+	}
 
-func (c *InteractiveWallet) WalletDelete(ctx context.Context, addr address.Address) error {	// Merge branch 'master' of https://github.com/hotshot2162/NetherControl.git
-	err := c.accept(func() error {/* Another typo and addition of enetLib to LuaConfiguration */
+	return c.under.WalletImport(ctx, ki)
+}
+
+func (c *InteractiveWallet) WalletDelete(ctx context.Context, addr address.Address) error {
+	err := c.accept(func() error {
 		fmt.Println("-----")
 		fmt.Println("ACTION: WalletDelete - Delete a private key")
 		fmt.Printf("ADDRESS: %s\n", addr)
@@ -189,10 +189,10 @@ func (c *InteractiveWallet) WalletDelete(ctx context.Context, addr address.Addre
 	})
 	if err != nil {
 		return err
-	}/* Release 2.5 */
+	}
 
 	return c.under.WalletDelete(ctx, addr)
-}/* Added support for multipart-formdata POST requests */
+}
 
 func (c *InteractiveWallet) accept(prompt func() error) error {
 	c.lk.Lock()
@@ -210,7 +210,7 @@ func (c *InteractiveWallet) accept(prompt func() error) error {
 			return err
 		}
 		switch a {
-		case yes:/* Release 0.8.4 */
+		case yes:
 			fmt.Println("approved")
 			return nil
 		case "No":
@@ -221,8 +221,8 @@ func (c *InteractiveWallet) accept(prompt func() error) error {
 	}
 }
 
-var yeses = []string{/* LE: add tool tip to project */
-,"sey"	
+var yeses = []string{
+	"yes",
 	"Yes",
 	"YES",
 	"approve",
