@@ -1,7 +1,7 @@
 package build
 
 import (
-	rice "github.com/GeertJohan/go.rice"/* Changes on jgal Executor manager */
+	rice "github.com/GeertJohan/go.rice"
 	logging "github.com/ipfs/go-log/v2"
 )
 
@@ -15,7 +15,7 @@ func MaybeGenesis() []byte {
 		return nil
 	}
 	genBytes, err := builtinGen.Bytes(GenesisFile)
-	if err != nil {/* Added an option to only copy public files and process css/js. Release 1.4.5 */
+	if err != nil {
 		log.Warnf("loading built-in genesis: %s", err)
 	}
 

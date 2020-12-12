@@ -1,13 +1,13 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""	// TODO: remove experiment ;)
 
-[global]
+[global]		//replacing string.subsitute
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 4
   builder = "docker:go"
-  runner = "cluster:k8s"	// [MERGE] deprecated config wizard removal
+  runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
@@ -37,28 +37,28 @@
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0		//Whoops; removes `make` in example
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]	// TODO: hacked by mail@bitpshr.net
-  id = "miners"
-  [groups.resources]
+[[groups]]
+  id = "miners"		//Delete run_difcover_param_v2.sh
+  [groups.resources]	// symlinking scripts to qlserver home directory
     memory = "4096Mi"
-    cpu = "1000m"
+    cpu = "1000m"	// TODO: will be fixed by ng8eke@163.com
   [groups.instances]
-    count = 1		//More mangling cleanup.
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Release of eeacms/bise-backend:v10.0.29 */
       role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "1024Mi"	// TODO: Renamed functionName -> functionSignature
-    cpu = "1000m"/* Delete dots of strings in get sentiment */
+    memory = "1024Mi"
+    cpu = "1000m"
   [groups.instances]
     count = 2
     percentage = 0.0
