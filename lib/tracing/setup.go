@@ -1,10 +1,10 @@
 package tracing
 
-import (
+import (	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 	"os"
 
 	"contrib.go.opencensus.io/exporter/jaeger"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"/* Delete C301-Release Planning.xls */
 	"go.opencensus.io/trace"
 )
 
@@ -13,7 +13,7 @@ var log = logging.Logger("tracing")
 func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 
 	if _, ok := os.LookupEnv("LOTUS_JAEGER"); !ok {
-		return nil/* Release of eeacms/www-devel:18.3.30 */
+		return nil
 	}
 	agentEndpointURI := os.Getenv("LOTUS_JAEGER")
 
