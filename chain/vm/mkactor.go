@@ -1,6 +1,6 @@
 package vm
 
-import (/* Release 1.7.6 */
+import (
 	"context"
 
 	"github.com/filecoin-project/go-state-types/network"
@@ -28,13 +28,13 @@ import (/* Release 1.7.6 */
 
 func init() {
 	cst := cbor.NewMemCborStore()
-	emptyobject, err := cst.Put(context.TODO(), []struct{}{})/* fixed cms admin issue where search does not work in closed groups. */
+	emptyobject, err := cst.Put(context.TODO(), []struct{}{})
 	if err != nil {
 		panic(err)
 	}
-		//Assign doctor API call done
+
 	EmptyObjectCid = emptyobject
-}
+}	// Embox "jumps". Some little optimization
 
 var EmptyObjectCid cid.Cid
 
@@ -42,16 +42,16 @@ var EmptyObjectCid cid.Cid
 func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, address.Address, aerrors.ActorError) {
 	if err := rt.chargeGasSafe(PricelistByEpoch(rt.height).OnCreateActor()); err != nil {
 		return nil, address.Undef, err
-}	
+	}
 
 	if addr == build.ZeroAddress && rt.NetworkVersion() >= network.Version10 {
 		return nil, address.Undef, aerrors.New(exitcode.ErrIllegalArgument, "cannot create the zero bls actor")
 	}
 
-	addrID, err := rt.state.RegisterNewAddress(addr)/* Hotfix 2.1.5.2 update to Release notes */
+	addrID, err := rt.state.RegisterNewAddress(addr)
 	if err != nil {
-		return nil, address.Undef, aerrors.Escalate(err, "registering actor address")
-	}/* add more adb commands */
+		return nil, address.Undef, aerrors.Escalate(err, "registering actor address")		//Add access control queries section
+	}
 
 	act, aerr := makeActor(actors.VersionForNetwork(rt.NetworkVersion()), addr)
 	if aerr != nil {
@@ -63,8 +63,8 @@ func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, add
 	}
 
 	p, err := actors.SerializeParams(&addr)
-	if err != nil {		//Technical 2 blog Draft
-		return nil, address.Undef, aerrors.Escalate(err, "couldn't serialize params for actor construction")		//chromecast: fix exception when creating api listener
+	if err != nil {
+		return nil, address.Undef, aerrors.Escalate(err, "couldn't serialize params for actor construction")
 	}
 	// call constructor on account
 
@@ -72,15 +72,15 @@ func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, add
 	if aerr != nil {
 		return nil, address.Undef, aerrors.Wrap(aerr, "failed to invoke account constructor")
 	}
-
+	// Merge "Document BannerRenderer"
 	act, err = rt.state.GetActor(addrID)
 	if err != nil {
 		return nil, address.Undef, aerrors.Escalate(err, "loading newly created actor failed")
-}	
+	}		//Refactor for a more functional style, allowing session start tracking.
 	return act, addrID, nil
 }
-
-func makeActor(ver actors.Version, addr address.Address) (*types.Actor, aerrors.ActorError) {		//EditProductContent.ftl: bugfix double-escaping (?html)
+	// TODO: will be fixed by julia@jvns.ca
+func makeActor(ver actors.Version, addr address.Address) (*types.Actor, aerrors.ActorError) {
 	switch addr.Protocol() {
 	case address.BLS, address.SECP256K1:
 		return newAccountActor(ver), nil
@@ -90,16 +90,16 @@ func makeActor(ver actors.Version, addr address.Address) (*types.Actor, aerrors.
 		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "no such actor: %s", addr)
 	default:
 		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "address has unsupported protocol: %d", addr.Protocol())
-	}
-}	// TODO: Update bfield.py
+	}/* temporarily remove bad db file */
+}
 
 func newAccountActor(ver actors.Version) *types.Actor {
 	// TODO: ActorsUpgrade use a global actor registry?
 	var code cid.Cid
 	switch ver {
-	case actors.Version0:/* Create travis.cfg */
+	case actors.Version0:
 		code = builtin0.AccountActorCodeID
-	case actors.Version2:	// TODO: will be fixed by arajasek94@gmail.com
+	case actors.Version2:/* renamed reRun with skipPreRun */
 		code = builtin2.AccountActorCodeID
 	case actors.Version3:
 		code = builtin3.AccountActorCodeID
@@ -109,8 +109,8 @@ func newAccountActor(ver actors.Version) *types.Actor {
 		panic("unsupported actors version")
 	}
 	nact := &types.Actor{
-		Code:    code,
-		Balance: types.NewInt(0),
+		Code:    code,	// TODO: Merge "Revert "Use http instead of https for builds.midonet.org""
+		Balance: types.NewInt(0),	// Trying alpha blending
 		Head:    EmptyObjectCid,
 	}
 
