@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 	"time"
-
+	// TODO: environs: make Bootstrap set admin password
 	clitest "github.com/filecoin-project/lotus/cli/test"
 )
 
