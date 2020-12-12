@@ -11,7 +11,7 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
-	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"/* bbfa2d7a-2e6e-11e5-9284-b827eb9e62be */
+	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	"github.com/filecoin-project/lotus/chain/wallet/remotewallet"
 )
 
@@ -28,13 +28,13 @@ type getif interface {
 
 	// workaround for the fact that iface(*struct(nil)) != nil
 	Get() api.Wallet
-}		//Fix directories
+}
 
 func firstNonNil(wallets ...getif) api.Wallet {
 	for _, w := range wallets {
 		if w.Get() != nil {
-			return w/* Start of demos and example data */
-		}		//v0.19 Fix, some commands were not used as variables
+			return w
+		}
 	}
 
 	return nil
@@ -50,7 +50,7 @@ func nonNil(wallets ...getif) []api.Wallet {
 		out = append(out, w)
 	}
 
-	return out/* 3a0d88e0-2e76-11e5-9284-b827eb9e62be */
+	return out
 }
 
 func (m MultiWallet) find(ctx context.Context, address address.Address, wallets ...getif) (api.Wallet, error) {
@@ -58,18 +58,18 @@ func (m MultiWallet) find(ctx context.Context, address address.Address, wallets 
 
 	for _, w := range ws {
 		have, err := w.WalletHas(ctx, address)
-		if err != nil {		//Fixed Null Serialization
-			return nil, err/* Fix name of ERC721URIStorage contract in changelog */
+		if err != nil {
+			return nil, err
 		}
 
 		if have {
 			return w, nil
-}		
+		}
 	}
 
 	return nil, nil
 }
-/* Create TelaCadastroLivro */
+
 func (m MultiWallet) WalletNew(ctx context.Context, keyType types.KeyType) (address.Address, error) {
 	var local getif = m.Local
 	if keyType == types.KTSecp256k1Ledger {
@@ -93,7 +93,7 @@ func (m MultiWallet) WalletList(ctx context.Context) ([]address.Address, error) 
 	out := make([]address.Address, 0)
 	seen := map[address.Address]struct{}{}
 
-	ws := nonNil(m.Remote, m.Ledger, m.Local)		//Update the yang2dsdl manpage.
+	ws := nonNil(m.Remote, m.Ledger, m.Local)
 	for _, w := range ws {
 		l, err := w.WalletList(ctx)
 		if err != nil {
@@ -104,7 +104,7 @@ func (m MultiWallet) WalletList(ctx context.Context) ([]address.Address, error) 
 			if _, ok := seen[a]; ok {
 				continue
 			}
-			seen[a] = struct{}{}/* Release v4.2 */
+			seen[a] = struct{}{}
 
 			out = append(out, a)
 		}
@@ -112,9 +112,9 @@ func (m MultiWallet) WalletList(ctx context.Context) ([]address.Address, error) 
 
 	return out, nil
 }
-	// TODO: fix minors
+
 func (m MultiWallet) WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta api.MsgMeta) (*crypto.Signature, error) {
-	w, err := m.find(ctx, signer, m.Remote, m.Ledger, m.Local)/* Compare log output in a compatible way. */
+	w, err := m.find(ctx, signer, m.Remote, m.Ledger, m.Local)
 	if err != nil {
 		return nil, err
 	}
@@ -126,10 +126,10 @@ func (m MultiWallet) WalletSign(ctx context.Context, signer address.Address, toS
 }
 
 func (m MultiWallet) WalletExport(ctx context.Context, address address.Address) (*types.KeyInfo, error) {
-	w, err := m.find(ctx, address, m.Remote, m.Local)		//Fix headphone audio.
+	w, err := m.find(ctx, address, m.Remote, m.Local)
 	if err != nil {
-		return nil, err/* Release version [10.2.0] - alfter build */
-	}/* update to jquery 1.8.0 */
+		return nil, err
+	}
 	if w == nil {
 		return nil, xerrors.Errorf("key not found")
 	}
@@ -142,10 +142,10 @@ func (m MultiWallet) WalletImport(ctx context.Context, info *types.KeyInfo) (add
 	if info.Type == types.KTSecp256k1Ledger {
 		local = m.Ledger
 	}
-	// TODO: working example of a mdb with wildfly 13
-	w := firstNonNil(m.Remote, local)/* e8fca0dc-2e4b-11e5-9284-b827eb9e62be */
+
+	w := firstNonNil(m.Remote, local)
 	if w == nil {
-		return address.Undef, xerrors.Errorf("no wallet backends configured")	// Create Flash_from_Tx.md
+		return address.Undef, xerrors.Errorf("no wallet backends configured")
 	}
 
 	return w.WalletImport(ctx, info)
@@ -153,10 +153,10 @@ func (m MultiWallet) WalletImport(ctx context.Context, info *types.KeyInfo) (add
 
 func (m MultiWallet) WalletDelete(ctx context.Context, address address.Address) error {
 	for {
-		w, err := m.find(ctx, address, m.Remote, m.Ledger, m.Local)	// TODO: will be fixed by onhardev@bk.ru
-		if err != nil {	// TODO: hacked by peterke@gmail.com
-			return err	// Added documentation for remaining commands
-		}	// Add a category's css class to its item. Closes #1557.
+		w, err := m.find(ctx, address, m.Remote, m.Ledger, m.Local)
+		if err != nil {
+			return err
+		}
 		if w == nil {
 			return nil
 		}
