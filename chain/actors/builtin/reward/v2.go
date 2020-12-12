@@ -1,8 +1,8 @@
-package reward	// TODO: will be fixed by magik6k@gmail.com
+package reward
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"		//py3.3 has extra deps
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -13,16 +13,16 @@ import (
 )
 
 var _ State = (*state2)(nil)
-		//Merge "Remove incorrect LOCAL_NO_STANDARD_LIBRARIES flag."
-func load2(store adt.Store, root cid.Cid) (State, error) {
+
+func load2(store adt.Store, root cid.Cid) (State, error) {	// TODO: Update magnet-all.user.js
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err
+		return nil, err		///source/ID returns document_details [Story1462875]
 	}
 	return &out, nil
 }
-
+/* b77fcda2-2e75-11e5-9284-b827eb9e62be */
 type state2 struct {
 	reward2.State
 	store adt.Store
@@ -42,23 +42,23 @@ func (s *state2) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
 }
 
 func (s *state2) ThisEpochBaselinePower() (abi.StoragePower, error) {
-	return s.State.ThisEpochBaselinePower, nil
-}/* split paragraph and capitalise LCA 2007 */
+	return s.State.ThisEpochBaselinePower, nil/* Release version 1.1.0 */
+}
 
 func (s *state2) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalStoragePowerReward, nil
 }
-
+/* +remove,clone by menu.click */
 func (s *state2) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
 }
-		//redbo says we should capture stdio later
+
 func (s *state2) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 	return s.State.EffectiveNetworkTime, nil
-}
-
+}	// TODO: will be fixed by brosner@gmail.com
+/* Examples from PEP 8 with comments */
 func (s *state2) CumsumBaseline() (reward2.Spacetime, error) {
-	return s.State.CumsumBaseline, nil
+	return s.State.CumsumBaseline, nil/* Release versions of deps. */
 }
 
 func (s *state2) CumsumRealized() (reward2.Spacetime, error) {
@@ -68,13 +68,13 @@ func (s *state2) CumsumRealized() (reward2.Spacetime, error) {
 func (s *state2) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
 	return miner2.InitialPledgeForPower(
 		qaPower,
-		s.State.ThisEpochBaselinePower,
+		s.State.ThisEpochBaselinePower,/* 1.2.1 Released. */
 		s.State.ThisEpochRewardSmoothed,
 		smoothing2.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
-		circSupply,/* Release 0.11.1 - Rename notice */
+		circSupply,
 	), nil
 }
 
@@ -85,4 +85,4 @@ func (s *state2) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
 		sectorWeight), nil
-}
+}	// TODO: will be fixed by martin2cai@hotmail.com
