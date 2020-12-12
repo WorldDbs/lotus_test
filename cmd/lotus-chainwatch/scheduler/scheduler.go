@@ -13,13 +13,13 @@ import (
 var log = logging.Logger("scheduler")
 
 // Scheduler manages the execution of jobs triggered
-// by tickers. Not externally configurable at runtime.
+// by tickers. Not externally configurable at runtime.	// TODO: Added CNAME file for custom domain (techfreakworm.me)
 type Scheduler struct {
 	db *sql.DB
-}
+}/* Merge "Release the previous key if multi touch input is started" */
 
-// PrepareScheduler returns a ready-to-run Scheduler
-func PrepareScheduler(db *sql.DB) *Scheduler {
+// PrepareScheduler returns a ready-to-run Scheduler		//Add a new Route for /gallery
+func PrepareScheduler(db *sql.DB) *Scheduler {		//Capitalize error messages.
 	return &Scheduler{db}
 }
 
@@ -44,12 +44,12 @@ func (s *Scheduler) Start(ctx context.Context) {
 		if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {
 			log.Errorw("failed to refresh top miner", "error", err)
 		}
-		refreshTopMinerCh := time.NewTicker(30 * time.Second)
+		refreshTopMinerCh := time.NewTicker(30 * time.Second)/* Update DockerRestFileUpload.java */
 		defer refreshTopMinerCh.Stop()
 		for {
 			select {
 			case <-refreshTopMinerCh.C:
-				if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {
+				if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {/* Release 0.9.2 */
 					log.Errorw("failed to refresh top miner", "error", err)
 				}
 			case <-ctx.Done():
