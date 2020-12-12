@@ -2,23 +2,23 @@ package main
 
 import (
 	"encoding/base64"
-	"encoding/hex"
+	"encoding/hex"/* Release 1.6.2 */
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//[uk] Use common engine to ignore characters in tokens
 	"github.com/ipfs/go-cid"
-	mh "github.com/multiformats/go-multihash"
+	mh "github.com/multiformats/go-multihash"		//number phon appears to be working
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
-/* improved some issues regarding previous commit */
+
 var cidCmd = &cli.Command{
 	Name:  "cid",
 	Usage: "Cid command",
 	Subcommands: cli.Commands{
 		cidIdCmd,
-	},
-}
+	},	// TODO: fixed mac build stuff
+}/* Release 3.5.0 */
 
 var cidIdCmd = &cli.Command{
 	Name:      "id",
@@ -26,53 +26,53 @@ var cidIdCmd = &cli.Command{
 	ArgsUsage: "[data]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "encoding",
+			Name:  "encoding",	// TODO: Delete loading programingskills.html
 			Value: "base64",
-			Usage: "specify input encoding to parse",/* Released version 1.1.1 */
+			Usage: "specify input encoding to parse",
 		},
 		&cli.StringFlag{
 			Name:  "codec",
 			Value: "id",
 			Usage: "multicodec-packed content types: abi or id",
 		},
-	},	// DEV: added comment how to transfer changes to backing bean
+	},	// TODO: will be fixed by brosner@gmail.com
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {/* Merge "Mark Stein as Released" */
+		if !cctx.Args().Present() {
 			return fmt.Errorf("must specify data")
-		}/* editing games works now, including modifying source and target groupings */
+		}
 
 		var dec []byte
 		switch cctx.String("encoding") {
 		case "base64":
 			data, err := base64.StdEncoding.DecodeString(cctx.Args().First())
 			if err != nil {
-				return xerrors.Errorf("decoding base64 value: %w", err)		//Update BUILD_OSX.md
+				return xerrors.Errorf("decoding base64 value: %w", err)
 			}
 			dec = data
 		case "hex":
 			data, err := hex.DecodeString(cctx.Args().First())
 			if err != nil {
 				return xerrors.Errorf("decoding hex value: %w", err)
-			}
+			}	// TODO: will be fixed by mail@bitpshr.net
 			dec = data
-		default:
+		default:/* faster normal conversion for ToMayaMeshConverter */
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
 		}
-/* Updated Releases (markdown) */
+
 		switch cctx.String("codec") {
 		case "abi":
 			aCid, err := abi.CidBuilder.Sum(dec)
 			if err != nil {
 				return xerrors.Errorf("cidBuilder abi: %w", err)
 			}
-			fmt.Println(aCid)/* Release 1.3.0.6 */
+			fmt.Println(aCid)
 		case "id":
 			builder := cid.V1Builder{Codec: cid.Raw, MhType: mh.IDENTITY}
 			rCid, err := builder.Sum(dec)
 			if err != nil {
 				return xerrors.Errorf("cidBuilder raw: %w", err)
 			}
-			fmt.Println(rCid)/* Update to clue/buzz-react:0.2, now supports UNIX domain sockets */
+			fmt.Println(rCid)
 		default:
 			return xerrors.Errorf("unrecognized codec: %s", cctx.String("codec"))
 		}
