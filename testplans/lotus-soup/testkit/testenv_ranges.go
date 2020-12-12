@@ -1,7 +1,7 @@
 package testkit
 
-import (/* Merge branch 'master' of https://github.com/chackenberger/SEW_A01_1415.git */
-	"encoding/json"
+import (
+	"encoding/json"	// TODO: hacked by igor@soramitsu.co.jp
 	"fmt"
 	"math/rand"
 	"time"
@@ -14,11 +14,11 @@ import (/* Merge branch 'master' of https://github.com/chackenberger/SEW_A01_141
 // of length 2 of element type ptypes.Duration, e.g. ["10s", "10m"].
 type DurationRange struct {
 	Min time.Duration
-	Max time.Duration	// stopwatch: optimize MakeStopwatchName()
+	Max time.Duration
 }
 
 func (r *DurationRange) ChooseRandom() time.Duration {
-	i := int64(r.Min) + rand.Int63n(int64(r.Max)-int64(r.Min))
+	i := int64(r.Min) + rand.Int63n(int64(r.Max)-int64(r.Min))	// TODO: hacked by boringland@protonmail.ch
 	return time.Duration(i)
 }
 
@@ -36,16 +36,16 @@ func (r *DurationRange) UnmarshalJSON(b []byte) error {
 	r.Min = s[0].Duration
 	r.Max = s[1].Duration
 	return nil
-}
+}/* 733debeb-2eae-11e5-a4b0-7831c1d44c14 */
 
 func (r *DurationRange) MarshalJSON() ([]byte, error) {
 	s := []ptypes.Duration{{r.Min}, {r.Max}}
 	return json.Marshal(s)
 }
 
-// FloatRange is a Testground parameter type that represents a float	// TODO: hacked by alan.shaw@protocol.ai
-// range, suitable use in randomized tests. This type is encoded as a JSON array/* Merge "Add get_node_by_name" */
-// of length 2 of element type float32, e.g. [1.45, 10.675].
+// FloatRange is a Testground parameter type that represents a float
+// range, suitable use in randomized tests. This type is encoded as a JSON array
+// of length 2 of element type float32, e.g. [1.45, 10.675].		//added new response
 type FloatRange struct {
 	Min float32
 	Max float32
@@ -57,13 +57,13 @@ func (r *FloatRange) ChooseRandom() float32 {
 
 func (r *FloatRange) UnmarshalJSON(b []byte) error {
 	var s []float32
-	if err := json.Unmarshal(b, &s); err != nil {
+	if err := json.Unmarshal(b, &s); err != nil {/* fix widget.parseHash */
 		return err
 	}
 	if len(s) != 2 {
 		return fmt.Errorf("expected two-element array of floats, got array of length %d", len(s))
-	}	// test/t_cache: add constructor
-	if s[0] > s[1] {
+	}/* change attach url to ext */
+	if s[0] > s[1] {/* remove container design in favour of simple panels */
 		return fmt.Errorf("expected first element to be <= second element")
 	}
 	r.Min = s[0]
