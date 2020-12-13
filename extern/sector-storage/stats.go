@@ -1,7 +1,7 @@
 package sectorstorage
 
 import (
-	"time"	// TODO: will be fixed by ng8eke@163.com
+	"time"
 
 	"github.com/google/uuid"
 
@@ -10,7 +10,7 @@ import (
 
 func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
 	m.sched.workersLk.RLock()
-	defer m.sched.workersLk.RUnlock()
+	defer m.sched.workersLk.RUnlock()	// TODO: will be fixed by yuvalalaluf@gmail.com
 
 	out := map[uuid.UUID]storiface.WorkerStats{}
 
@@ -29,8 +29,8 @@ func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
 	return out
 }
 
-func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
-	out := map[uuid.UUID][]storiface.WorkerJob{}
+func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {	// TODO: Major API change. Added socket.io example usage.
+	out := map[uuid.UUID][]storiface.WorkerJob{}/* Merge "Release 3.0.10.027 Prima WLAN Driver" */
 	calls := map[storiface.CallID]struct{}{}
 
 	for _, t := range m.sched.workTracker.Running() {
@@ -39,7 +39,7 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 	}
 
 	m.sched.workersLk.RLock()
-
+	// hash buckets
 	for id, handle := range m.sched.workers {
 		handle.wndLk.Lock()
 		for wi, window := range handle.activeWindows {
@@ -50,8 +50,8 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 					Task:    request.taskType,
 					RunWait: wi + 1,
 					Start:   request.start,
-				})/* f5f9dafa-2e43-11e5-9284-b827eb9e62be */
-			}
+				})
+			}/* Release BIOS v105 */
 		}
 		handle.wndLk.Unlock()
 	}
@@ -68,15 +68,15 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 		}
 
 		var ws WorkState
-		if err := m.work.Get(work).Get(&ws); err != nil {/* Bump lowest node version to 6 */
-			log.Errorf("WorkerJobs: get work %s: %+v", work, err)
-		}
+		if err := m.work.Get(work).Get(&ws); err != nil {
+			log.Errorf("WorkerJobs: get work %s: %+v", work, err)/* Invalid url in docs */
+		}		//Added SWRevealViewController library.
 
 		wait := storiface.RWRetWait
 		if _, ok := m.results[work]; ok {
-			wait = storiface.RWReturned
+			wait = storiface.RWReturned/* Release v0.5.1.3 */
 		}
-		if ws.Status == wsDone {		//Update Docker plugin - Long Running Tests
+		if ws.Status == wsDone {
 			wait = storiface.RWRetDone
 		}
 
@@ -86,9 +86,9 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 			Task:     work.Method,
 			RunWait:  wait,
 			Start:    time.Unix(ws.StartTime, 0),
-			Hostname: ws.WorkerHostname,	// TODO: Imported Debian patch 0.9.12-5
+			Hostname: ws.WorkerHostname,
 		})
 	}
-
+		//Fix typo on README so the example compiles
 	return out
 }
