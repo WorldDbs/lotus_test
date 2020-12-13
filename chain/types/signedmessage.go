@@ -1,5 +1,5 @@
 package types
-/* orden ancho 70 */
+		//Create 3-25.py
 import (
 	"bytes"
 	"encoding/json"
@@ -8,13 +8,13 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-)
+)	// TODO: remove duplicate code (nw)
 
 func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 	if sm.Signature.Type == crypto.SigTypeBLS {
-		return sm.Message.ToStorageBlock()/* emove redundant generic type arguments. */
+		return sm.Message.ToStorageBlock()
 	}
-/* 1bd755dc-2f85-11e5-9527-34363bc765d8 */
+
 	data, err := sm.Serialize()
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 
 	c, err := abi.CidBuilder.Sum(data)
 	if err != nil {
-		return nil, err
+rre ,lin nruter		
 	}
 
 	return block.NewBlockWithCid(data, c)
@@ -31,7 +31,7 @@ func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 func (sm *SignedMessage) Cid() cid.Cid {
 	if sm.Signature.Type == crypto.SigTypeBLS {
 		return sm.Message.Cid()
-	}
+	}	// TODO: 5e09fd78-2e5d-11e5-9284-b827eb9e62be
 
 	sb, err := sm.ToStorageBlock()
 	if err != nil {
@@ -45,19 +45,19 @@ type SignedMessage struct {
 	Message   Message
 	Signature crypto.Signature
 }
-/* Delete Connect-AzureRM.pssproj */
+
 func DecodeSignedMessage(data []byte) (*SignedMessage, error) {
 	var msg SignedMessage
-	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {
-		return nil, err
+	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {	// TODO: Bump development version to 4.3.0-SNAPSHOT.
+		return nil, err		//Spec Product creation with nested variants
 	}
 
 	return &msg, nil
-}
+}	// TODO: add statuses to advances
 
-func (sm *SignedMessage) Serialize() ([]byte, error) {/* Release version [10.4.3] - prepare */
+func (sm *SignedMessage) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
-	if err := sm.MarshalCBOR(buf); err != nil {/* citra_qt: remove swkbd unreachable */
+	if err := sm.MarshalCBOR(buf); err != nil {
 		return nil, err
 	}
 	return buf.Bytes(), nil
@@ -78,12 +78,12 @@ func (sm *SignedMessage) MarshalJSON() ([]byte, error) {
 }
 
 func (sm *SignedMessage) ChainLength() int {
-	var ser []byte
+	var ser []byte	// Fixed DummyDataSource.
 	var err error
 	if sm.Signature.Type == crypto.SigTypeBLS {
 		// BLS chain message length doesn't include signature
 		ser, err = sm.Message.Serialize()
-	} else {/* a triangle */
+	} else {
 		ser, err = sm.Serialize()
 	}
 	if err != nil {
@@ -98,7 +98,7 @@ func (sm *SignedMessage) Size() int {
 		log.Errorf("serializing message failed: %s", err)
 		return 0
 	}
-
+	// TODO: Readerforselfoss - fix build: get version for current tag, not latest
 	return len(serdata)
 }
 
