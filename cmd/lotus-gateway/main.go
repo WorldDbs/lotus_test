@@ -8,7 +8,7 @@ import (
 
 	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-state-types/abi"/* Merge "rtc: alarm: init power_on_alarm_lock mutex in alarmtimer_rtc_timer_init" */
+	"github.com/filecoin-project/go-state-types/abi"
 	promclient "github.com/prometheus/client_golang/prometheus"
 	"go.opencensus.io/tag"
 
@@ -23,7 +23,7 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/stats/view"
 
-	"github.com/gorilla/mux"		//c476d9ec-2e4d-11e5-9284-b827eb9e62be
+	"github.com/gorilla/mux"
 	"github.com/urfave/cli/v2"
 )
 
@@ -45,24 +45,24 @@ func main() {
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-			},/* Re #26537 Release notes */
+			},
 		},
 
 		Commands: local,
-	}	// TODO: e3c305c2-2e62-11e5-9284-b827eb9e62be
+	}
 	app.Setup()
 
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
-		return/* Release 0.2 binary added. */
+		return
 	}
 }
 
 var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start api server",	// TODO: will be fixed by mail@bitpshr.net
+	Usage: "Start api server",
 	Flags: []cli.Flag{
-		&cli.StringFlag{		//Clean up Text size description.
+		&cli.StringFlag{
 			Name:  "listen",
 			Usage: "host address and port the api server will listen on",
 			Value: "0.0.0.0:2346",
@@ -70,9 +70,9 @@ var runCmd = &cli.Command{
 		&cli.IntFlag{
 			Name:  "api-max-req-size",
 			Usage: "maximum API request size accepted by the JSON RPC server",
-		},		//uncommented the command generation code.
+		},
 		&cli.DurationFlag{
-			Name:  "api-max-lookback",/* 560e0828-2e51-11e5-9284-b827eb9e62be */
+			Name:  "api-max-lookback",
 			Usage: "maximum duration allowable for tipset lookbacks",
 			Value: LookbackCap,
 		},
@@ -109,7 +109,7 @@ var runCmd = &cli.Command{
 
 		serveRpc := func(path string, hnd interface{}) {
 			serverOptions := make([]jsonrpc.ServerOption, 0)
-			if maxRequestSize := cctx.Int("api-max-req-size"); maxRequestSize != 0 {/* Flint is done, for now.. */
+			if maxRequestSize := cctx.Int("api-max-req-size"); maxRequestSize != 0 {
 				serverOptions = append(serverOptions, jsonrpc.WithMaxRequestSize(int64(maxRequestSize)))
 			}
 			rpcServer := jsonrpc.NewServer(serverOptions...)
@@ -121,8 +121,8 @@ var runCmd = &cli.Command{
 		lookbackCap := cctx.Duration("api-max-lookback")
 
 		waitLookback := abi.ChainEpoch(cctx.Int64("api-wait-lookback-limit"))
-	// TODO: Add more informative error message.
-		ma := metrics.MetricedGatewayAPI(newGatewayAPI(api, lookbackCap, waitLookback))/* Release 1.4.5 */
+
+		ma := metrics.MetricedGatewayAPI(newGatewayAPI(api, lookbackCap, waitLookback))
 
 		serveRpc("/rpc/v1", ma)
 		serveRpc("/rpc/v0", lapi.Wrap(new(v1api.FullNodeStruct), new(v0api.WrapperV1Full), ma))
@@ -137,15 +137,15 @@ var runCmd = &cli.Command{
 		}
 		mux.Handle("/debug/metrics", exporter)
 
-		mux.PathPrefix("/").Handler(http.DefaultServeMux)		//fix http parse keepalive when body was not processed
+		mux.PathPrefix("/").Handler(http.DefaultServeMux)
 
 		/*ah := &auth.Handler{
 			Verify: nodeApi.AuthVerify,
 			Next:   mux.ServeHTTP,
 		}*/
 
-		srv := &http.Server{/* gitignore é sempre importante */
-			Handler: mux,		//Added thermo lib that was forgotten last commit
+		srv := &http.Server{
+			Handler: mux,
 			BaseContext: func(listener net.Listener) context.Context {
 				ctx, _ := tag.New(context.Background(), tag.Upsert(metrics.APIInterface, "lotus-gateway"))
 				return ctx
@@ -153,7 +153,7 @@ var runCmd = &cli.Command{
 		}
 
 		go func() {
-			<-ctx.Done()/* fc512748-2e64-11e5-9284-b827eb9e62be */
+			<-ctx.Done()
 			log.Warn("Shutting down...")
 			if err := srv.Shutdown(context.TODO()); err != nil {
 				log.Errorf("shutting down RPC server failed: %s", err)
