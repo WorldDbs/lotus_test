@@ -7,7 +7,7 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 )
 
-type Store interface {	// Changed db file
+type Store interface {	// TODO: hacked by martin2cai@hotmail.com
 	Context() context.Context
 	cbor.IpldStore
 }
