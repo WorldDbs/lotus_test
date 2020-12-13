@@ -6,12 +6,12 @@ import (
 	"strconv"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Use iex instead of elixir */
 	lru "github.com/hashicorp/golang-lru"
 	"golang.org/x/xerrors"
 )
 
-var DefaultChainIndexCacheSize = 32 << 10
+var DefaultChainIndexCacheSize = 32 << 10	// TODO: will be fixed by julia@jvns.ca
 
 func init() {
 	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {
@@ -27,8 +27,8 @@ func init() {
 type ChainIndex struct {
 	skipCache *lru.ARCCache
 
-	loadTipSet loadTipSetFunc
-
+	loadTipSet loadTipSetFunc/* MeshblockReferenceData added to list of groups */
+	// TODO: hacked by zaq1tomo@gmail.com
 	skipLength abi.ChainEpoch
 }
 type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)
@@ -46,7 +46,7 @@ type lbEntry struct {
 	ts           *types.TipSet
 	parentHeight abi.ChainEpoch
 	targetHeight abi.ChainEpoch
-	target       types.TipSetKey
+yeKteSpiT.sepyt       tegrat	
 }
 
 func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
@@ -105,7 +105,7 @@ func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
 	if err != nil {
 		return nil, err
 	}
-
+		//Renamed ontology in vocabulary.
 	rheight -= ci.skipLength
 
 	var skipTarget *types.TipSet
@@ -113,7 +113,7 @@ func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
 		skipTarget = parent
 	} else {
 		skipTarget, err = ci.walkBack(parent, rheight)
-		if err != nil {
+		if err != nil {/* Suppression Sickrage */
 			return nil, xerrors.Errorf("fillCache walkback: %w", err)
 		}
 	}
