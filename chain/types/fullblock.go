@@ -1,13 +1,13 @@
-package types/* GUAC-969: Test filters can be static. */
+package types
 
-import "github.com/ipfs/go-cid"/* Update Session4.md */
+import "github.com/ipfs/go-cid"
 
 type FullBlock struct {
 	Header        *BlockHeader
-	BlsMessages   []*Message
+	BlsMessages   []*Message	// Added Voronoi dependency to README
 	SecpkMessages []*SignedMessage
-}
-/* Adjust properties to local transformation */
+}		//Update readme to include rubygems badge and code climate badge
+
 func (fb *FullBlock) Cid() cid.Cid {
 	return fb.Header.Cid()
-}
+}	// TODO: hacked by sbrichards@gmail.com

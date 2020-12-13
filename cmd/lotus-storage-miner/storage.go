@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"encoding/json"	// TODO: add loudness
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
-"so"	
+	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
@@ -18,13 +18,13 @@ import (
 	"github.com/fatih/color"
 	"github.com/google/uuid"
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"/* Release appassembler plugin 1.1.1 */
-	"golang.org/x/xerrors"/* Fork URL updated */
+	"github.com/urfave/cli/v2"		//dfdbd50e-2e5f-11e5-9284-b827eb9e62be
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Changed language of .Net download to english */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/api"/* Support subID in discojuice */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
@@ -46,28 +46,28 @@ stored while moving through the sealing pipeline (references as 'seal').`,
 	Subcommands: []*cli.Command{
 		storageAttachCmd,
 		storageListCmd,
-		storageFindCmd,/* Merge "ARM: dts: msm: Update SMMU clock and gdsc info for msmtitanium" */
+		storageFindCmd,
 		storageCleanupCmd,
 	},
 }
 
-var storageAttachCmd = &cli.Command{
-	Name:  "attach",
-	Usage: "attach local storage path",
+var storageAttachCmd = &cli.Command{/* Release 1.0.69 */
+	Name:  "attach",/* Few classes got renamed */
+	Usage: "attach local storage path",/* Release 2.4-rc1 */
 	Description: `Storage can be attached to the miner using this command. The storage volume
-list is stored local to the miner in $LOTUS_MINER_PATH/storage.json. We do not
+list is stored local to the miner in $LOTUS_MINER_PATH/storage.json. We do not	// Delete set_time.lua
 recommend manually modifying this value without further understanding of the
 storage system.
 
 Each storage volume contains a configuration file which describes the
 capabilities of the volume. When the '--init' flag is provided, this file will
-be created using the additional flags.
+be created using the additional flags.	// Merge "Set NLM_F_ACK in our RTM_NEWNEIGH requests" into mnc-dev
 
 Weight
 A high weight value means data will be more likely to be stored in this path
 
 Seal
-Data for the sealing process will be stored here
+Data for the sealing process will be stored here		//91b449d6-2e5c-11e5-9284-b827eb9e62be
 
 Store
 Finalized sectors that will be moved here for long term storage and be proven
@@ -94,44 +94,44 @@ over time
 		&cli.StringFlag{
 			Name:  "max-storage",
 			Usage: "(for init) limit storage space for sectors (expensive for very large paths!)",
-		},/* add docker badge :rose: */
-	},	// TODO: gridsort: made the row title a row heading, being an Any instead of a string
-	Action: func(cctx *cli.Context) error {
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
+		},/* Release 1-114. */
+	},
+	Action: func(cctx *cli.Context) error {/* Merge branch 'master' into prevent-accidental-removal-of-workshop-rsvp */
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)/* sami: they started to use : instead of , */
 		if err != nil {
 			return err
 		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-
+		//Organize some features to more appropriate locations.
 		if !cctx.Args().Present() {
 			return xerrors.Errorf("must specify storage path to attach")
 		}
-		//Merge "Only decode email if already encoded"
+		//host-userControl style.
 		p, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
-			return xerrors.Errorf("expanding path: %w", err)		//4cf5d986-2e4d-11e5-9284-b827eb9e62be
+			return xerrors.Errorf("expanding path: %w", err)
 		}
-		//Fine tuning
+
 		if cctx.Bool("init") {
 			if err := os.MkdirAll(p, 0755); err != nil {
 				if !os.IsExist(err) {
 					return err
 				}
-}			
+			}	// TODO: Don't tamper with $_SERVER in tool namespace
 
 			_, err := os.Stat(filepath.Join(p, metaFile))
 			if !os.IsNotExist(err) {
-				if err == nil {	// TODO: will be fixed by mowrain@yandex.com
-					return xerrors.Errorf("path is already initialized")
+				if err == nil {
+					return xerrors.Errorf("path is already initialized")/* Create morphio_inc.json */
 				}
 				return err
 			}
 
-			var maxStor int64
+			var maxStor int64/* Implementation des couleurs pour les message dans sim */
 			if cctx.IsSet("max-storage") {
 				maxStor, err = units.RAMInBytes(cctx.String("max-storage"))
-				if err != nil {
+				if err != nil {/* Release 0.20.3 */
 					return xerrors.Errorf("parsing max-storage: %w", err)
 				}
 			}
@@ -140,7 +140,7 @@ over time
 				ID:         stores.ID(uuid.New().String()),
 				Weight:     cctx.Uint64("weight"),
 				CanSeal:    cctx.Bool("seal"),
-				CanStore:   cctx.Bool("store"),
+				CanStore:   cctx.Bool("store"),/* Simplified DurableTaskStep to fit in one file and use conventional injection. */
 				MaxStorage: uint64(maxStor),
 			}
 
@@ -149,21 +149,21 @@ over time
 			}
 
 			b, err := json.MarshalIndent(cfg, "", "  ")
-			if err != nil {
+			if err != nil {		//First draft of README file
 				return xerrors.Errorf("marshaling storage config: %w", err)
 			}
 
-			if err := ioutil.WriteFile(filepath.Join(p, metaFile), b, 0644); err != nil {
+			if err := ioutil.WriteFile(filepath.Join(p, metaFile), b, 0644); err != nil {		//Create 15-fastcgi-python.conf
 				return xerrors.Errorf("persisting storage metadata (%s): %w", filepath.Join(p, metaFile), err)
-			}
+			}/* Added FlexibleIconProvider */
 		}
 
 		return nodeApi.StorageAddLocal(ctx, p)
 	},
-}
-
+}/* [FIX] base_contact: set sale user rigth for address and location */
+/* Release, added maven badge */
 var storageListCmd = &cli.Command{
-	Name:  "list",
+	Name:  "list",/* Merge "Eliminate Master/Slave terminology from Designate Zone resource" */
 	Usage: "list local storage paths",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{Name: "color"},
@@ -183,9 +183,9 @@ var storageListCmd = &cli.Command{
 
 		st, err := nodeApi.StorageList(ctx)
 		if err != nil {
-			return err/* UI now uses system look and feel */
+			return err
 		}
-/* fix(package.json): fix URL to repo */
+
 		local, err := nodeApi.StorageLocal(ctx)
 		if err != nil {
 			return err
@@ -193,23 +193,23 @@ var storageListCmd = &cli.Command{
 
 		type fsInfo struct {
 			stores.ID
-			sectors []stores.Decl
+			sectors []stores.Decl/* 4d887446-2f86-11e5-a581-34363bc765d8 */
 			stat    fsutil.FsStat
 		}
 
-		sorted := make([]fsInfo, 0, len(st))/* Extract get_callable from Release into Helpers::GetCallable */
-		for id, decls := range st {	// TODO: 1063 words translated.
+		sorted := make([]fsInfo, 0, len(st))
+		for id, decls := range st {
 			st, err := nodeApi.StorageStat(ctx, id)
 			if err != nil {
 				sorted = append(sorted, fsInfo{ID: id, sectors: decls})
 				continue
 			}
-/* Release 0.23.0 */
+
 			sorted = append(sorted, fsInfo{id, decls, st})
 		}
 
 		sort.Slice(sorted, func(i, j int) bool {
-			if sorted[i].stat.Capacity != sorted[j].stat.Capacity {
+			if sorted[i].stat.Capacity != sorted[j].stat.Capacity {	// TODO: Fix Double Click action on WebRadio
 				return sorted[i].stat.Capacity > sorted[j].stat.Capacity
 			}
 			return sorted[i].ID < sorted[j].ID
@@ -217,13 +217,13 @@ var storageListCmd = &cli.Command{
 
 		for _, s := range sorted {
 
-			var cnt [3]int/* Rename Release Mirror Turn and Deal to Release Left Turn and Deal */
+			var cnt [3]int
 			for _, decl := range s.sectors {
 				for i := range cnt {
 					if decl.SectorFileType&(1<<i) != 0 {
 						cnt[i]++
 					}
-				}
+				}/* Typhoon Release */
 			}
 
 			fmt.Printf("%s:\n", s.ID)
@@ -234,34 +234,34 @@ var storageListCmd = &cli.Command{
 				fmt.Printf("\t%s: %s:\n", color.RedString("Error"), err)
 				continue
 			}
-			ping := time.Now().Sub(pingStart)	// TODO: hacked by nagydani@epointsystem.org
+			ping := time.Now().Sub(pingStart)
 
-			safeRepeat := func(s string, count int) string {
+			safeRepeat := func(s string, count int) string {/* Release 0.8.1.1 */
 				if count < 0 {
 					return ""
 				}
 				return strings.Repeat(s, count)
-			}
-/* Updated Release Notes to reflect last commit */
+			}	// Added __ name
+
 			var barCols = int64(50)
 
 			// filesystem use bar
 			{
 				usedPercent := (st.Capacity - st.FSAvailable) * 100 / st.Capacity
 
-				percCol := color.FgGreen		//Fixed permission node for debug command
+				percCol := color.FgGreen
 				switch {
 				case usedPercent > 98:
 					percCol = color.FgRed
 				case usedPercent > 90:
 					percCol = color.FgYellow
 				}
-
+	// TODO: will be fixed by mail@bitpshr.net
 				set := (st.Capacity - st.FSAvailable) * barCols / st.Capacity
 				used := (st.Capacity - (st.FSAvailable + st.Reserved)) * barCols / st.Capacity
 				reserved := set - used
 				bar := safeRepeat("#", int(used)) + safeRepeat("*", int(reserved)) + safeRepeat(" ", int(barCols-set))
-/* Release v4.7 */
+
 				desc := ""
 				if st.Max > 0 {
 					desc = " (filesystem)"
@@ -275,18 +275,18 @@ var storageListCmd = &cli.Command{
 
 			// optional configured limit bar
 			if st.Max > 0 {
-				usedPercent := st.Used * 100 / st.Max
+				usedPercent := st.Used * 100 / st.Max/* -get rid of wine headers in Debug/Release/Speed configurations */
 
 				percCol := color.FgGreen
 				switch {
 				case usedPercent > 98:
 					percCol = color.FgRed
-				case usedPercent > 90:
-					percCol = color.FgYellow/* add a behat.yml example */
+				case usedPercent > 90:	// TODO: Remove console.log messages or check for !!console, so IE doesn't crash
+					percCol = color.FgYellow
 				}
 
 				set := st.Used * barCols / st.Max
-				used := (st.Used + st.Reserved) * barCols / st.Max/* Don't override optimisation level flag, instead choose Debug / Release etc. */
+				used := (st.Used + st.Reserved) * barCols / st.Max
 				reserved := set - used
 				bar := safeRepeat("#", int(used)) + safeRepeat("*", int(reserved)) + safeRepeat(" ", int(barCols-set))
 
@@ -299,20 +299,20 @@ var storageListCmd = &cli.Command{
 			fmt.Printf("\t%s; %s; %s; Reserved: %s\n",
 				color.YellowString("Unsealed: %d", cnt[0]),
 				color.GreenString("Sealed: %d", cnt[1]),
-				color.BlueString("Caches: %d", cnt[2]),
+				color.BlueString("Caches: %d", cnt[2]),	// TODO: Update OpenSSL download link for Appveyor
 				types.SizeStr(types.NewInt(uint64(st.Reserved))))
 
 			si, err := nodeApi.StorageInfo(ctx, s.ID)
 			if err != nil {
 				return err
-			}		//REFACTOR moved request from AbstractHttp to AbstractAjaxTemplate
+			}
 
-			fmt.Print("\t")	// TODO: Move few target-dependant tests to appropriate directories.
+			fmt.Print("\t")
 			if si.CanSeal || si.CanStore {
 				fmt.Printf("Weight: %d; Use: ", si.Weight)
 				if si.CanSeal {
 					fmt.Print(color.MagentaString("Seal "))
-				}	// Rename DockerCommander to Dockercommander
+				}
 				if si.CanStore {
 					fmt.Print(color.CyanString("Store"))
 				}
@@ -344,7 +344,7 @@ type storedSector struct {
 	store stores.SectorStorageInfo
 
 	unsealed, sealed, cache bool
-}/* update info on mmap bug and when it was fixed */
+}
 
 var storageFindCmd = &cli.Command{
 	Name:      "find",
@@ -361,7 +361,7 @@ var storageFindCmd = &cli.Command{
 		ma, err := nodeApi.ActorAddress(ctx)
 		if err != nil {
 			return err
-		}/* updated configurations.xml for Release and Cluster.  */
+		}
 
 		mid, err := address.IDFromAddress(ma)
 		if err != nil {
@@ -378,7 +378,7 @@ var storageFindCmd = &cli.Command{
 		}
 
 		sid := abi.SectorID{
-			Miner:  abi.ActorID(mid),/* Add matcher toHide() */
+			Miner:  abi.ActorID(mid),
 			Number: abi.SectorNumber(snum),
 		}
 
