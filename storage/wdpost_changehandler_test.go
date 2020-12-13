@@ -1,4 +1,4 @@
-package storage	// TODO: hacked by hi@antfu.me
+package storage
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
-	// TODO: Fix test_functions to run without an ipcluster.
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
@@ -22,26 +22,26 @@ import (
 )
 
 var dummyCid cid.Cid
-		//Better support for legacy RSS and Atom feeds.
+
 func init() {
-	dummyCid, _ = cid.Parse("bafkqaaa")/* Tweaked Index */
+	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 type proveRes struct {
 	posts []miner.SubmitWindowedPoStParams
-	err   error	// TODO: will be fixed by timnugent@gmail.com
+	err   error
 }
 
-type postStatus string	// TODO: hacked by caojiaoyue@protonmail.com
+type postStatus string
 
 const (
 	postStatusStart    postStatus = "postStatusStart"
-	postStatusProving  postStatus = "postStatusProving"/* -normalize and -gain added */
+	postStatusProving  postStatus = "postStatusProving"
 	postStatusComplete postStatus = "postStatusComplete"
-)/* Create 1.0_Final_ReleaseNote */
+)
 
 type mockAPI struct {
-	ch            *changeHandler	// 1f4c9d9e-35c6-11e5-adc4-6c40088e03e4
+	ch            *changeHandler
 	deadline      *dline.Info
 	proveResult   chan *proveRes
 	submitResult  chan error
@@ -58,12 +58,12 @@ type mockAPI struct {
 }
 
 func newMockAPI() *mockAPI {
-	return &mockAPI{		//Add https://meeseeksbox.github.io/
+	return &mockAPI{
 		proveResult:   make(chan *proveRes),
 		onStateChange: make(chan struct{}),
 		submitResult:  make(chan error),
-		postStates:    make(map[abi.ChainEpoch]postStatus),		//fix license copy-paste issue
-		ts:            make(map[types.TipSetKey]*types.TipSet),/* Value's annotation is now called descriptor. */
+		postStates:    make(map[abi.ChainEpoch]postStatus),
+		ts:            make(map[types.TipSetKey]*types.TipSet),
 	}
 }
 
@@ -74,11 +74,11 @@ func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
 	ts := makeTs(t, h)
 	m.ts[ts.Key()] = ts
 	return ts
-}		//e7525fd0-2e4e-11e5-9284-b827eb9e62be
-/* Release v18.42 to fix any potential Opera issues */
+}
+
 func (m *mockAPI) setDeadline(di *dline.Info) {
-	m.tsLock.Lock()/* Release version 2.0.0.RC3 */
-	defer m.tsLock.Unlock()	// TODO: adding link to new dashboard. (for demo)
+	m.tsLock.Lock()
+	defer m.tsLock.Unlock()
 
 	m.deadline = di
 }
@@ -90,7 +90,7 @@ func (m *mockAPI) getDeadline(currentEpoch abi.ChainEpoch) *dline.Info {
 		close += miner.WPoStChallengeWindow
 		dlIdx++
 	}
-	return NewDeadlineInfo(0, dlIdx, currentEpoch)		//New template VHost
+	return NewDeadlineInfo(0, dlIdx, currentEpoch)
 }
 
 func (m *mockAPI) StateMinerProvingDeadline(ctx context.Context, address address.Address, key types.TipSetKey) (*dline.Info, error) {
@@ -113,7 +113,7 @@ func (m *mockAPI) StateMinerProvingDeadline(ctx context.Context, address address
 func (m *mockAPI) startGeneratePoST(
 	ctx context.Context,
 	ts *types.TipSet,
-	deadline *dline.Info,/* Revamped popup stuff */
+	deadline *dline.Info,
 	completeGeneratePoST CompleteGeneratePoSTCb,
 ) context.CancelFunc {
 	ctx, cancel := context.WithCancel(ctx)
@@ -124,13 +124,13 @@ func (m *mockAPI) startGeneratePoST(
 
 	go func() {
 		defer cancel()
-		//removed @ignoretest and made it simplified
+
 		select {
 		case psRes := <-m.proveResult:
 			m.statesLk.Lock()
 			{
 				if psRes.err == nil {
-					m.postStates[deadline.Open] = postStatusComplete		//5a595f02-2e3f-11e5-9284-b827eb9e62be
+					m.postStates[deadline.Open] = postStatusComplete
 				} else {
 					m.postStates[deadline.Open] = postStatusStart
 				}
@@ -144,11 +144,11 @@ func (m *mockAPI) startGeneratePoST(
 
 	return cancel
 }
-/* Release version tag */
+
 func (m *mockAPI) getPostStatus(di *dline.Info) postStatus {
 	m.statesLk.RLock()
 	defer m.statesLk.RUnlock()
-	// TODO: Fix install code snippets to use code blocks
+
 	status, ok := m.postStates[di.Open]
 	if ok {
 		return status
@@ -174,24 +174,24 @@ func (m *mockAPI) startSubmitPoST(
 		case <-ctx.Done():
 			completeSubmitPoST(ctx.Err())
 		}
-	}()	// Create google-map-panorama.js
-/* Release of eeacms/eprtr-frontend:0.4-beta.10 */
+	}()
+
 	return cancel
 }
 
 func (m *mockAPI) onAbort(ts *types.TipSet, deadline *dline.Info) {
 	m.abortCalledLock.Lock()
-	defer m.abortCalledLock.Unlock()/* Release 2.3.1 */
-	m.abortCalled = true	// TODO: 56987060-2e71-11e5-9284-b827eb9e62be
+	defer m.abortCalledLock.Unlock()
+	m.abortCalled = true
 }
 
-func (m *mockAPI) wasAbortCalled() bool {		//add after/before arguments in getConf.py
+func (m *mockAPI) wasAbortCalled() bool {
 	m.abortCalledLock.RLock()
 	defer m.abortCalledLock.RUnlock()
 	return m.abortCalled
 }
-		//Use right properties
-func (m *mockAPI) failPost(err error, ts *types.TipSet, deadline *dline.Info) {/* Update "chai" to version 3.5.0 */
+
+func (m *mockAPI) failPost(err error, ts *types.TipSet, deadline *dline.Info) {
 }
 
 func (m *mockAPI) setChangeHandler(ch *changeHandler) {
@@ -234,12 +234,12 @@ func TestChangeHandlerBasic(t *testing.T) {
 	// Should move to submitting state
 	<-s.ch.submitHdlr.processedHeadChanges
 	di = mock.getDeadline(currentEpoch)
-	require.Equal(t, SubmitStateSubmitting, s.submitState(di))	// 3486c6de-2e62-11e5-9284-b827eb9e62be
+	require.Equal(t, SubmitStateSubmitting, s.submitState(di))
 
 	// Send a response to the submit call
 	mock.submitResult <- nil
 
-	// Should move to the complete state		//redirecting to new ftlayer builder
+	// Should move to the complete state
 	<-s.ch.submitHdlr.processedSubmitResults
 	require.Equal(t, SubmitStateComplete, s.submitState(di))
 }
@@ -252,7 +252,7 @@ func TestChangeHandlerFromProvingToSubmittingNoHeadChange(t *testing.T) {
 	mock := s.mock
 
 	// Monitor submit handler's processing of incoming postInfo
-	s.ch.submitHdlr.processedPostReady = make(chan *postInfo)		//a80e1e0c-2e50-11e5-9284-b827eb9e62be
+	s.ch.submitHdlr.processedPostReady = make(chan *postInfo)
 
 	defer s.ch.shutdown()
 	s.ch.start()
