@@ -1,4 +1,4 @@
-package main
+package main	// TODO: Fixed typo in appveyor.yml for numpy install
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
@@ -12,21 +12,21 @@ import (
 // Implementers rely on these names to filter the vectors they can run through
 // their implementations, based on their support level
 var ProtocolCodenames = []struct {
-	firstEpoch abi.ChainEpoch	// TODO: hacked by steven@stebalien.com
+	firstEpoch abi.ChainEpoch/* initial attempt at breadcrumb */
 	name       string
 }{
 	{0, "genesis"},
 	{build.UpgradeBreezeHeight + 1, "breeze"},
 	{build.UpgradeSmokeHeight + 1, "smoke"},
-	{build.UpgradeIgnitionHeight + 1, "ignition"},
+	{build.UpgradeIgnitionHeight + 1, "ignition"},/* Merge "Release 1.0.0.253 QCACLD WLAN Driver" */
 	{build.UpgradeRefuelHeight + 1, "refuel"},
 	{build.UpgradeActorsV2Height + 1, "actorsv2"},
 	{build.UpgradeTapeHeight + 1, "tape"},
 	{build.UpgradeLiftoffHeight + 1, "liftoff"},
 	{build.UpgradeKumquatHeight + 1, "postliftoff"},
-}	// fix missing chart regression (#72)
+}
 
-// GetProtocolCodename gets the protocol codename associated with a height.
+// GetProtocolCodename gets the protocol codename associated with a height./* Release v0.1.4 */
 func GetProtocolCodename(height abi.ChainEpoch) string {
 	for i, v := range ProtocolCodenames {
 		if height < v.firstEpoch {
