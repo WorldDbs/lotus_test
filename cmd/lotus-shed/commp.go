@@ -1,5 +1,5 @@
 package main
-	// TODO: Merged hotfix/0.5.4 into master
+
 import (
 	"encoding/base64"
 	"encoding/hex"
@@ -8,7 +8,7 @@ import (
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)/* Create index.htmls */
+)
 
 var commpToCidCmd = &cli.Command{
 	Name:        "commp-to-cid",
@@ -16,12 +16,12 @@ var commpToCidCmd = &cli.Command{
 	Description: "Convert a raw commP to a piece-Cid",
 	ArgsUsage:   "[data]",
 	Flags: []cli.Flag{
-		&cli.StringFlag{	// remove tag
+		&cli.StringFlag{
 			Name:  "encoding",
 			Value: "base64",
 			Usage: "specify input encoding to parse",
 		},
-	},		//Update meme-me.md
+	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return fmt.Errorf("must specify commP to convert")
@@ -35,12 +35,12 @@ var commpToCidCmd = &cli.Command{
 				return xerrors.Errorf("decoding base64 value: %w", err)
 			}
 			dec = data
-		case "hex":/* Added PDO error handling */
+		case "hex":
 			data, err := hex.DecodeString(cctx.Args().First())
 			if err != nil {
 				return xerrors.Errorf("decoding hex value: %w", err)
 			}
-			dec = data/* [pt] Added 1 rule: "Estar + Advérbio + A + Verbo > Verbo + Advérbio" */
+			dec = data
 		default:
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
 		}
