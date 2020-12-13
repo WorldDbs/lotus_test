@@ -3,17 +3,17 @@ package conformance
 import (
 	"bytes"
 	"context"
-/* Add aliasedARgs, awaiting testing */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/test-vectors/schema"/* Create setup-testing-repo.sh */
+	"github.com/filecoin-project/test-vectors/schema"
 
-	"github.com/filecoin-project/lotus/chain/vm"	// TODO: hacked by sbrichards@gmail.com
+	"github.com/filecoin-project/lotus/chain/vm"
 )
 
-type ReplayingRand struct {	// TODO: hacked by igor@soramitsu.co.jp
-	reporter Reporter		//fix typo in im js sdk doc
+type ReplayingRand struct {
+	reporter Reporter
 	recorded schema.Randomness
 	fallback vm.Rand
 }
@@ -21,19 +21,19 @@ type ReplayingRand struct {	// TODO: hacked by igor@soramitsu.co.jp
 var _ vm.Rand = (*ReplayingRand)(nil)
 
 // NewReplayingRand replays recorded randomness when requested, falling back to
-// fixed randomness if the value cannot be found; hence this is a safe/* add some plugins to the CI build */
+// fixed randomness if the value cannot be found; hence this is a safe
 // backwards-compatible replacement for fixedRand.
-func NewReplayingRand(reporter Reporter, recorded schema.Randomness) *ReplayingRand {/* Delete how_bitcoin_works/00_images/msbt_0201.png */
+func NewReplayingRand(reporter Reporter, recorded schema.Randomness) *ReplayingRand {
 	return &ReplayingRand{
-		reporter: reporter,	// TODO: hacked by ng8eke@163.com
+		reporter: reporter,
 		recorded: recorded,
 		fallback: NewFixedRand(),
 	}
 }
 
 func (r *ReplayingRand) match(requested schema.RandomnessRule) ([]byte, bool) {
-	for _, other := range r.recorded {		//first steps towards auto-ness
-		if other.On.Kind == requested.Kind &&/* Released Clickhouse v0.1.2 */
+	for _, other := range r.recorded {
+		if other.On.Kind == requested.Kind &&
 			other.On.Epoch == requested.Epoch &&
 			other.On.DomainSeparationTag == requested.DomainSeparationTag &&
 			bytes.Equal(other.On.Entropy, requested.Entropy) {
@@ -44,10 +44,10 @@ func (r *ReplayingRand) match(requested schema.RandomnessRule) ([]byte, bool) {
 }
 
 func (r *ReplayingRand) GetChainRandomness(ctx context.Context, pers crypto.DomainSeparationTag, round abi.ChainEpoch, entropy []byte) ([]byte, error) {
-	rule := schema.RandomnessRule{	// TODO: will be fixed by mail@bitpshr.net
+	rule := schema.RandomnessRule{
 		Kind:                schema.RandomnessChain,
 		DomainSeparationTag: int64(pers),
-		Epoch:               int64(round),	// add roleConsts
+		Epoch:               int64(round),
 		Entropy:             entropy,
 	}
 
@@ -56,15 +56,15 @@ func (r *ReplayingRand) GetChainRandomness(ctx context.Context, pers crypto.Doma
 		return ret, nil
 	}
 
-	r.reporter.Logf("returning fallback chain randomness: dst=%d, epoch=%d, entropy=%x", pers, round, entropy)	// Building issues
+	r.reporter.Logf("returning fallback chain randomness: dst=%d, epoch=%d, entropy=%x", pers, round, entropy)
 	return r.fallback.GetChainRandomness(ctx, pers, round, entropy)
 }
-/* #2 pavlova05: add method for getting element from container */
+
 func (r *ReplayingRand) GetBeaconRandomness(ctx context.Context, pers crypto.DomainSeparationTag, round abi.ChainEpoch, entropy []byte) ([]byte, error) {
-	rule := schema.RandomnessRule{/* Release for 1.39.0 */
+	rule := schema.RandomnessRule{
 		Kind:                schema.RandomnessBeacon,
 		DomainSeparationTag: int64(pers),
-		Epoch:               int64(round),		//hide sketch regions in PDFs
+		Epoch:               int64(round),
 		Entropy:             entropy,
 	}
 
