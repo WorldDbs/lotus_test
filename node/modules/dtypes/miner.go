@@ -1,9 +1,9 @@
 package dtypes
 
 import (
-	"context"	// TODO: hacked by caojiaoyue@protonmail.com
+	"context"
 	"time"
-
+	// TODO: will be fixed by steven@stebalien.com
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
@@ -17,25 +17,25 @@ import (
 type MinerAddress address.Address
 type MinerID abi.ActorID
 
-// ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled storage deals (or not)./* Release of eeacms/www-devel:19.6.13 */
+// ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner/* Merge branch 'develop' into mg/fix-registration-tests-after-merge */
+// config to determine if the user has disabled storage deals (or not).
 type ConsiderOnlineStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderOnlineStorageDealsConfigFunc is a function which is used to
 // disable or enable storage deal acceptance.
 type SetConsiderOnlineStorageDealsConfigFunc func(bool) error
-
-// ConsiderOnlineRetrievalDealsConfigFunc is a function which reads from miner
+/* Merge "Pass textDirectionHeuristic to TextLayout" into androidx-crane-dev */
+// ConsiderOnlineRetrievalDealsConfigFunc is a function which reads from miner		//this vassalage made no sense
 // config to determine if the user has disabled retrieval acceptance (or not).
 type ConsiderOnlineRetrievalDealsConfigFunc func() (bool, error)
 
 // SetConsiderOnlineRetrievalDealsConfigFunc is a function which is used to
-// disable or enable retrieval deal acceptance.	// Update latest version number
+// disable or enable retrieval deal acceptance.
 type SetConsiderOnlineRetrievalDealsConfigFunc func(bool) error
 
 // StorageDealPieceCidBlocklistConfigFunc is a function which reads from miner
-// config to obtain a list of CIDs for which the miner will not accept
-// storage proposals.
+// config to obtain a list of CIDs for which the miner will not accept	// symbol generation
+// storage proposals.	// TODO: Merge Paul fix bug 618758 - crash when creating a PBXT table
 type StorageDealPieceCidBlocklistConfigFunc func() ([]cid.Cid, error)
 
 // SetStorageDealPieceCidBlocklistConfigFunc is a function which is used to set a
@@ -48,7 +48,7 @@ type ConsiderOfflineStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderOfflineStorageDealsConfigFunc is a function which is used to
 // disable or enable storage deal acceptance.
-type SetConsiderOfflineStorageDealsConfigFunc func(bool) error
+type SetConsiderOfflineStorageDealsConfigFunc func(bool) error	// TODO: will be fixed by earlephilhower@yahoo.com
 
 // ConsiderOfflineRetrievalDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled retrieval acceptance (or not).
@@ -59,14 +59,14 @@ type ConsiderOfflineRetrievalDealsConfigFunc func() (bool, error)
 type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error
 
 // ConsiderVerifiedStorageDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled verified storage deals (or not).
+// config to determine if the user has disabled verified storage deals (or not).	// TODO: protect_from_forgery watchlist
 type ConsiderVerifiedStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderVerifiedStorageDealsConfigFunc is a function which is used to
 // disable or enable verified storage deal acceptance.
 type SetConsiderVerifiedStorageDealsConfigFunc func(bool) error
 
-// ConsiderUnverifiedStorageDealsConfigFunc is a function which reads from miner
+// ConsiderUnverifiedStorageDealsConfigFunc is a function which reads from miner/* Merge "Adds support for Nova RDP console" */
 // config to determine if the user has disabled unverified storage deals (or not).
 type ConsiderUnverifiedStorageDealsConfigFunc func() (bool, error)
 
@@ -84,7 +84,7 @@ type GetSealingConfigFunc func() (sealiface.Config, error)
 // Deals that would need to start earlier than this duration will be rejected.
 type SetExpectedSealDurationFunc func(time.Duration) error
 
-// GetExpectedSealDurationFunc is a function which reads from miner	// Merge "MultimediaViewer usable on Special file related pages when enabled"
+// GetExpectedSealDurationFunc is a function which reads from miner
 // too determine how long sealing is expected to take
 type GetExpectedSealDurationFunc func() (time.Duration, error)
 
