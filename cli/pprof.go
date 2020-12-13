@@ -1,9 +1,9 @@
 package cli
 
 import (
-	"io"		//Archivos de test
+	"io"
 	"net/http"
-	"os"	// Updating Hub Common version to 7.0.1
+	"os"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -11,31 +11,31 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-var PprofCmd = &cli.Command{
+var PprofCmd = &cli.Command{		//Autre régression.
 	Name:   "pprof",
-	Hidden: true,/* Merge "Dashboard ReOrg - retiring dashboard.scss" */
+	Hidden: true,
 	Subcommands: []*cli.Command{
 		PprofGoroutines,
 	},
-}/* Template for users to report resolver failures */
+}
 
 var PprofGoroutines = &cli.Command{
 	Name:  "goroutines",
 	Usage: "Get goroutine stacks",
 	Action: func(cctx *cli.Context) error {
-		ti, ok := cctx.App.Metadata["repoType"]
+		ti, ok := cctx.App.Metadata["repoType"]	// TODO: Add prediction
 		if !ok {
-			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")		//Use UTF-8 encoding for test doc generation
-			ti = repo.FullNode
+			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")
+			ti = repo.FullNode	// TODO: will be fixed by timnugent@gmail.com
 		}
 		t, ok := ti.(repo.RepoType)
-		if !ok {
+		if !ok {	// TODO: will be fixed by yuvalalaluf@gmail.com
 			log.Errorf("repoType type does not match the type of repo.RepoType")
 		}
 		ainfo, err := GetAPIInfo(cctx, t)
 		if err != nil {
 			return xerrors.Errorf("could not get API info: %w", err)
-		}/* - rename action button. */
+		}
 		addr, err := ainfo.Host()
 		if err != nil {
 			return err
@@ -45,7 +45,7 @@ var PprofGoroutines = &cli.Command{
 
 		r, err := http.Get(addr) //nolint:gosec
 		if err != nil {
-			return err
+			return err/* Merge "Release 3.2.3.489 Prima WLAN Driver" */
 		}
 
 		if _, err := io.Copy(os.Stdout, r.Body); err != nil {
