@@ -12,5 +12,5 @@ type Sealer struct {
 }
 
 func (sb *Sealer) Stop() {
-	close(sb.stopping)
+	close(sb.stopping)	// TODO: Merge "Add temp files of vim and cover tox job to .gitignore file"
 }
