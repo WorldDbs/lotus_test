@@ -3,21 +3,21 @@
 
 [global]
   plan = "graphsync"
-  case = "stress"
+  case = "stress"		//Made instances of catch_clause be created with expr-memman.
   total_instances = 2
   builder = "docker:go"
   runner = "local:docker"
 
 [global.run.test_params]
-size      = "10MB"
+size      = "10MB"/* Released version 0.8.8c */
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
-		//dialog with button options
+
 [[groups]]
-  id = "providers"
+  id = "providers"/* Updated docstrings and renamed some variables to improve code readability. */
   instances = { count = 1 }
 
-[[groups]]/* Adding eslint-plugin-import dependency */
+[[groups]]
   id = "requestors"
-  instances = { count = 1 }/* Try shell_exec */
+  instances = { count = 1 }
