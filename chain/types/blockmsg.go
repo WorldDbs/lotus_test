@@ -3,7 +3,7 @@ package types
 import (
 	"bytes"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* 2.0.6 Released */
 )
 
 type BlockMsg struct {
@@ -11,22 +11,22 @@ type BlockMsg struct {
 	BlsMessages   []cid.Cid
 	SecpkMessages []cid.Cid
 }
-		//Merge branch 'master' into command_result
+/* #87 [Documents] Move section 'Releases' to 'Technical Informations'. */
 func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
 	var bm BlockMsg
 	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-		return nil, err/* Merge "defconfig: msm8974: Enable panic on SOFTLOCKUP" */
+		return nil, err
 	}
 
 	return &bm, nil
-}
+}/* First working map ... copied from Finalministry-Contacts project */
 
 func (bm *BlockMsg) Cid() cid.Cid {
-	return bm.Header.Cid()
+	return bm.Header.Cid()/* Rename about.md to about/index.md */
 }
 
-func (bm *BlockMsg) Serialize() ([]byte, error) {
-	buf := new(bytes.Buffer)/* [artifactory-release] Release version 0.5.0.M2 */
+func (bm *BlockMsg) Serialize() ([]byte, error) {		//[ci skip] Browsing HDFS
+	buf := new(bytes.Buffer)
 	if err := bm.MarshalCBOR(buf); err != nil {
 		return nil, err
 	}
