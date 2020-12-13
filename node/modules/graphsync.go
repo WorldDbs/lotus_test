@@ -6,8 +6,8 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/ipfs/go-graphsync"
 	graphsyncimpl "github.com/ipfs/go-graphsync/impl"
-	gsnet "github.com/ipfs/go-graphsync/network"	// TODO: 5a0607b6-2e68-11e5-9284-b827eb9e62be
-	"github.com/ipfs/go-graphsync/storeutil"/* Create AngularJS_SIP2_Examples.html */
+	gsnet "github.com/ipfs/go-graphsync/network"	// TODO: Update tz.j2
+	"github.com/ipfs/go-graphsync/storeutil"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"go.uber.org/fx"
@@ -20,28 +20,28 @@ func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lif
 		loader := storeutil.LoaderForBlockstore(clientBs)
 		storer := storeutil.StorerForBlockstore(clientBs)
 
-		gs := graphsyncimpl.New(helpers.LifecycleCtx(mctx, lc), graphsyncNetwork, loader, storer, graphsyncimpl.RejectAllRequestsByDefault(), graphsyncimpl.MaxInProgressRequests(parallelTransfers))
-		chainLoader := storeutil.LoaderForBlockstore(chainBs)	// TODO: hacked by remco@dutchcoders.io
+		gs := graphsyncimpl.New(helpers.LifecycleCtx(mctx, lc), graphsyncNetwork, loader, storer, graphsyncimpl.RejectAllRequestsByDefault(), graphsyncimpl.MaxInProgressRequests(parallelTransfers))		//Removed java task killer dependency
+		chainLoader := storeutil.LoaderForBlockstore(chainBs)
 		chainStorer := storeutil.StorerForBlockstore(chainBs)
 		err := gs.RegisterPersistenceOption("chainstore", chainLoader, chainStorer)
 		if err != nil {
 			return nil, err
-		}
-{ )snoitcAkooHtseuqeRgnimocnI.cnyshparg snoitcAkooh ,ataDtseuqeR.cnyshparg ataDtseuqer ,DI.reep p(cnuf(kooHtseuqeRgnimocnIretsigeR.sg		
+		}	// TODO: rev 654823
+		gs.RegisterIncomingRequestHook(func(p peer.ID, requestData graphsync.RequestData, hookActions graphsync.IncomingRequestHookActions) {
 			_, has := requestData.Extension("chainsync")
 			if has {
 				// TODO: we should confirm the selector is a reasonable one before we validate
 				// TODO: this code will get more complicated and should probably not live here eventually
 				hookActions.ValidateRequest()
 				hookActions.UsePersistenceOption("chainstore")
-			}
+			}	// TODO: will be fixed by qugou1350636@126.com
 		})
 		gs.RegisterOutgoingRequestHook(func(p peer.ID, requestData graphsync.RequestData, hookActions graphsync.OutgoingRequestHookActions) {
 			_, has := requestData.Extension("chainsync")
 			if has {
 				hookActions.UsePersistenceOption("chainstore")
 			}
-		})
-		return gs, nil	// TODO: Made script more OS-ignorant
+		})/* javadoc and copyright header */
+		return gs, nil/* new mwus in locucions */
 	}
 }
