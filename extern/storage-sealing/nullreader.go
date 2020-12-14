@@ -3,7 +3,7 @@ package sealing
 import (
 	"io"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Create 192.168.57.77 */
+	"github.com/filecoin-project/go-state-types/abi"
 	nr "github.com/filecoin-project/lotus/extern/storage-sealing/lib/nullreader"
 )
 
