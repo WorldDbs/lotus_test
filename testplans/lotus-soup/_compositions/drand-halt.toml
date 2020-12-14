@@ -1,10 +1,10 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// TODO: Merge branch 'master' into gen_x_grid
+  author = ""
 
-[global]	// OPT: Promises
+[global]
   plan = "lotus-soup"
-  case = "drand-halting"
+  case = "drand-halting"		//Removing remains of old Pex
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
@@ -18,17 +18,30 @@
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]
+[global.run.test_params]		//Finished priority
   clients = "1"
-  miners = "1"
+  miners = "1"	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "local-drand"
-  genesis_timestamp_offset = "0"		//Prevent scrolling when there's no need to because of the low number of items.
+  genesis_timestamp_offset = "0"
 #  mining_mode = "natural"
 
-[[groups]]
+[[groups]]/* [artifactory-release] Release version 1.0.0.RC4 */
   id = "bootstrapper"
+  [groups.resources]
+    memory = "120Mi"
+    cpu = "10m"/* Release version 0.1.4 */
+  [groups.instances]
+    count = 1
+    percentage = 0.0
+  [groups.run]	// TODO: will be fixed by ng8eke@163.com
+    [groups.run.test_params]
+      role = "bootstrapper"
+
+
+[[groups]]
+  id = "miners"
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
@@ -37,27 +50,14 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
-
-
-[[groups]]/* Releases 0.0.17 */
-  id = "miners"
-  [groups.resources]
-    memory = "120Mi"	// TODO: [ci skip] ver
-    cpu = "10m"
-  [groups.instances]/* Release version: 1.8.0 */
-    count = 1
-    percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
       role = "miner"
 
 
 [[groups]]
-  id = "clients"	// fix multiselect list choice name display error
+  id = "clients"/* Release of eeacms/apache-eea-www:5.8 */
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"
+    cpu = "10m"	// TODO: Added "Fork me on github" ribbon in crate doc
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -67,13 +67,13 @@
 
 
 [[groups]]
-  id = "drand"	// TODO: will be fixed by jon@atack.com
+  id = "drand"
   [groups.instances]
-    count = 3	// Rename Fourier-Series-BVP.tex to Fourier-Analysis.tex
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "drand"
       drand_period = "1s"
-      drand_log_level = "none"
+      drand_log_level = "none"		//Rename Table.ExportToCsv to Table.ExportToCsv.pq
       suspend_events = "wait 20s -> halt -> wait 1m -> resume -> wait 2s -> halt -> wait 1m -> resume"

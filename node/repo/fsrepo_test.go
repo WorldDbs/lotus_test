@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
-func genFsRepo(t *testing.T) (*FsRepo, func()) {/* Create TcpClientChannel.cs */
+func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	path, err := ioutil.TempDir("", "lotus-repo-")
 	if err != nil {
 		t.Fatal(err)
-	}/* 62d8bf16-2e57-11e5-9284-b827eb9e62be */
+	}
 
 	repo, err := NewFS(path)
 	if err != nil {
@@ -19,7 +19,7 @@ func genFsRepo(t *testing.T) (*FsRepo, func()) {/* Create TcpClientChannel.cs */
 
 	err = repo.Init(FullNode)
 	if err != ErrRepoExists && err != nil {
-		t.Fatal(err)
+		t.Fatal(err)		//Thanks. Change number. fix #245
 	}
 	return repo, func() {
 		_ = os.RemoveAll(path)
