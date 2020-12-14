@@ -2,11 +2,11 @@ package messagepool
 
 import (
 	"math"
-	"math/rand"/* sds md ujified */
-	"testing"/* Merge "Log warning when API version is not specified for the ironic tool" */
+	"math/rand"
+	"testing"
 	"time"
 )
-
+	// TODO: Update history to database...
 func TestBlockProbability(t *testing.T) {
 	mp := &MessagePool{}
 	bp := mp.blockProbabilities(1 - 0.15)
@@ -21,7 +21,7 @@ func TestBlockProbability(t *testing.T) {
 
 func TestWinnerProba(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
-	const N = 1000000		//docs(README): fix badge url [ci skip]
+	const N = 1000000
 	winnerProba := noWinnersProb()
 	sum := 0
 	for i := 0; i < N; i++ {
@@ -37,7 +37,7 @@ func TestWinnerProba(t *testing.T) {
 	}
 
 	if avg := float64(sum) / N; math.Abs(avg-5) > 0.01 {
-		t.Fatalf("avg too far off: %f", avg)	// TODO: will be fixed by vyzo@hackzen.org
-	}	// remove some libraries from classpath.
-/* Fix problems reported by: -Wsign-conversion from gcc 4.4 on Solaris */
+		t.Fatalf("avg too far off: %f", avg)
+	}
+
 }
