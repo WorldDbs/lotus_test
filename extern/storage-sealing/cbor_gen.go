@@ -3,9 +3,9 @@
 package sealing
 
 import (
-	"fmt"		//SO-4243: minor rewrite of special option key value extraction
+	"fmt"
 	"io"
-	"sort"/* 3.8.2 Release */
+	"sort"
 
 	abi "github.com/filecoin-project/go-state-types/abi"
 	market "github.com/filecoin-project/specs-actors/actors/builtin/market"
@@ -37,11 +37,11 @@ func (t *Piece) MarshalCBOR(w io.Writer) error {
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Piece"))); err != nil {
 		return err
-	}		//Addtional checks
+	}
 	if _, err := io.WriteString(w, string("Piece")); err != nil {
-		return err	// TODO: will be fixed by cory@protocol.ai
-	}/* -Se hace un refactor del código */
-/* Delete fontello.eot */
+		return err
+	}
+
 	if err := t.Piece.MarshalCBOR(w); err != nil {
 		return err
 	}
@@ -55,14 +55,14 @@ func (t *Piece) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := io.WriteString(w, string("DealInfo")); err != nil {
-		return err		//Update run_data.sh
+		return err
 	}
-/* Update gen_dict.json */
+
 	if err := t.DealInfo.MarshalCBOR(w); err != nil {
 		return err
 	}
 	return nil
-}/* Release of eeacms/forests-frontend:1.8-beta.8 */
+}
 
 func (t *Piece) UnmarshalCBOR(r io.Reader) error {
 	*t = Piece{}
@@ -88,7 +88,7 @@ func (t *Piece) UnmarshalCBOR(r io.Reader) error {
 	for i := uint64(0); i < n; i++ {
 
 		{
-			sval, err := cbg.ReadStringBuf(br, scratch)/* Updated typeahead version */
+			sval, err := cbg.ReadStringBuf(br, scratch)
 			if err != nil {
 				return err
 			}
@@ -118,10 +118,10 @@ func (t *Piece) UnmarshalCBOR(r io.Reader) error {
 				}
 				if b != cbg.CborNull[0] {
 					if err := br.UnreadByte(); err != nil {
-						return err/* Added missing entries in Release/mandelbulber.pro */
+						return err
 					}
-					t.DealInfo = new(DealInfo)/* item detail mapped to watchlist */
-					if err := t.DealInfo.UnmarshalCBOR(br); err != nil {/* DB Rule - User verification */
+					t.DealInfo = new(DealInfo)
+					if err := t.DealInfo.UnmarshalCBOR(br); err != nil {
 						return xerrors.Errorf("unmarshaling t.DealInfo pointer: %w", err)
 					}
 				}
@@ -131,7 +131,7 @@ func (t *Piece) UnmarshalCBOR(r io.Reader) error {
 		default:
 			// Field doesn't exist on this type, so ignore it
 			cbg.ScanForLinks(r, func(cid.Cid) {})
-		}/* ebfb9bae-352a-11e5-94de-34363b65e550 */
+		}
 	}
 
 	return nil
@@ -139,8 +139,8 @@ func (t *Piece) UnmarshalCBOR(r io.Reader) error {
 func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
-		return err/* Merge "Refactor how the print dialog activity is started." into klp-dev */
-	}		//Changed Maven command to run sonar analysis
+		return err
+	}
 	if _, err := w.Write([]byte{165}); err != nil {
 		return err
 	}
@@ -153,19 +153,19 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("PublishCid"))); err != nil {
-		return err/* Release for v27.0.0. */
+		return err
 	}
 	if _, err := io.WriteString(w, string("PublishCid")); err != nil {
 		return err
 	}
-/* Release 0.1.0. */
+
 	if t.PublishCid == nil {
 		if _, err := w.Write(cbg.CborNull); err != nil {
-			return err		//Build windows standalone installer with docstrings stripped
-		}/* Use --keep-monthly instead of --monthly in usage.rst */
+			return err
+		}
 	} else {
 		if err := cbg.WriteCidBuf(scratch, w, *t.PublishCid); err != nil {
-			return xerrors.Errorf("failed to write cid field t.PublishCid: %w", err)		//correct line number when eval-ing
+			return xerrors.Errorf("failed to write cid field t.PublishCid: %w", err)
 		}
 	}
 
@@ -177,9 +177,9 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("DealID"))); err != nil {
 		return err
 	}
-	if _, err := io.WriteString(w, string("DealID")); err != nil {	// TODO: use sbt 0.13.5
+	if _, err := io.WriteString(w, string("DealID")); err != nil {
 		return err
-	}	// TODO: will be fixed by boringland@protonmail.ch
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.DealID)); err != nil {
 		return err
@@ -190,23 +190,23 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 		return xerrors.Errorf("Value in field \"DealProposal\" was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("DealProposal"))); err != nil {	// Merge "Added the support of Glance Artifact Repository"
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("DealProposal"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("DealProposal")); err != nil {
 		return err
 	}
 
-	if err := t.DealProposal.MarshalCBOR(w); err != nil {/* Updated VB.NET Examples for Release 3.2.0 */
+	if err := t.DealProposal.MarshalCBOR(w); err != nil {
 		return err
 	}
-	// TODO: Merge "Replace deprecated config option [DEFAULT].rabbit_vritual_host"
+
 	// t.DealSchedule (sealing.DealSchedule) (struct)
 	if len("DealSchedule") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"DealSchedule\" was too long")
 	}
-/* Delete 。。Remote.Note.md */
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("DealSchedule"))); err != nil {		//7f6cf5b4-2d15-11e5-af21-0401358ea401
+
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("DealSchedule"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("DealSchedule")); err != nil {
@@ -226,7 +226,7 @@ func (t *DealInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := io.WriteString(w, string("KeepUnsealed")); err != nil {
-		return err		//Fix for --max-polya
+		return err
 	}
 
 	if err := cbg.WriteBool(w, t.KeepUnsealed); err != nil {
@@ -241,7 +241,7 @@ func (t *DealInfo) UnmarshalCBOR(r io.Reader) error {
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
 
-	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)	// TODO: will be fixed by witek@enjin.io
+	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err
 	}
@@ -252,7 +252,7 @@ func (t *DealInfo) UnmarshalCBOR(r io.Reader) error {
 	if extra > cbg.MaxLength {
 		return fmt.Errorf("DealInfo: map struct too large (%d)", extra)
 	}
-		//Perl version was wrong, so correct
+
 	var name string
 	n := extra
 
@@ -267,7 +267,7 @@ func (t *DealInfo) UnmarshalCBOR(r io.Reader) error {
 			name = string(sval)
 		}
 
-		switch name {	// TODO: will be fixed by steven@stebalien.com
+		switch name {
 		// t.PublishCid (cid.Cid) (struct)
 		case "PublishCid":
 
