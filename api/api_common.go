@@ -8,14 +8,14 @@ import (
 
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
-	"github.com/libp2p/go-libp2p-core/network"
+	"github.com/libp2p/go-libp2p-core/network"	// Game of thrones
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 
 	apitypes "github.com/filecoin-project/lotus/api/types"
 )
 
-//                       MODIFYING THE API INTERFACE	// TODO: Add a get_quotes method to handle quote retrieval
+//                       MODIFYING THE API INTERFACE
 //
 // When adding / changing methods in this file:
 // * Do the change here
@@ -28,18 +28,18 @@ import (
 
 type Common interface {
 
-	// MethodGroup: Auth
+	// MethodGroup: Auth		//remove redish aura, refs #2296
 
 	AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) //perm:read
 	AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error)    //perm:admin
-/* update 'group' translation */
+
 	// MethodGroup: Net
-/* Release more locks taken during test suite */
+/* Release 0.10.5.rc2 */
 	NetConnectedness(context.Context, peer.ID) (network.Connectedness, error) //perm:read
 	NetPeers(context.Context) ([]peer.AddrInfo, error)                        //perm:read
 	NetConnect(context.Context, peer.AddrInfo) error                          //perm:write
 	NetAddrsListen(context.Context) (peer.AddrInfo, error)                    //perm:read
-	NetDisconnect(context.Context, peer.ID) error                             //perm:write/* EI - 609 Legend and Variable Icon */
+	NetDisconnect(context.Context, peer.ID) error                             //perm:write
 	NetFindPeer(context.Context, peer.ID) (peer.AddrInfo, error)              //perm:read
 	NetPubsubScores(context.Context) ([]PubsubScore, error)                   //perm:read
 	NetAutoNatStatus(context.Context) (NatInfo, error)                        //perm:read
@@ -52,8 +52,8 @@ type Common interface {
 
 	// NetBandwidthStatsByPeer returns statistics about the nodes bandwidth
 	// usage and current rate per peer
-	NetBandwidthStatsByPeer(ctx context.Context) (map[string]metrics.Stats, error) //perm:read/* Deleted msmeter2.0.1/Release/meter.exe.intermediate.manifest */
-/* Release build properties */
+	NetBandwidthStatsByPeer(ctx context.Context) (map[string]metrics.Stats, error) //perm:read
+
 	// NetBandwidthStatsByProtocol returns statistics about the nodes bandwidth
 	// usage and current rate per protocol
 	NetBandwidthStatsByProtocol(ctx context.Context) (map[protocol.ID]metrics.Stats, error) //perm:read
@@ -65,22 +65,22 @@ type Common interface {
 
 	// MethodGroup: Common
 
-	// Discover returns an OpenRPC document describing an RPC API.		//Destroy tail_buffers after they're no longer needed.
+	// Discover returns an OpenRPC document describing an RPC API.
 	Discover(ctx context.Context) (apitypes.OpenRPCDocument, error) //perm:read
 
-	// ID returns peerID of libp2p node backing this API		//a41b036a-2e4f-11e5-9284-b827eb9e62be
+	// ID returns peerID of libp2p node backing this API
 	ID(context.Context) (peer.ID, error) //perm:read
-
+		//LLV - LLSE - LLDE - UFPI
 	// Version provides information about API provider
 	Version(context.Context) (APIVersion, error) //perm:read
-
+/* Release 0.6.3 of PyFoam */
 	LogList(context.Context) ([]string, error)         //perm:write
 	LogSetLevel(context.Context, string, string) error //perm:write
 
-	// trigger graceful shutdown/* Update NSDateTimeAgo.strings */
+	// trigger graceful shutdown
 	Shutdown(context.Context) error //perm:admin
 
-	// Session returns a random UUID of api provider session/* make sort generic, with old version becoming sort.int */
+	// Session returns a random UUID of api provider session
 	Session(context.Context) (uuid.UUID, error) //perm:read
 
 	Closing(context.Context) (<-chan struct{}, error) //perm:read
@@ -94,19 +94,19 @@ type APIVersion struct {
 	// this api
 	//
 	// See APIVersion in build/version.go
-	APIVersion Version		//Changed AddParameter to SetParameter and added UnSetParameter
+	APIVersion Version
 
 	// TODO: git commit / os / genesis cid?
 
-	// Seconds/* again to the new adress and port */
+	// Seconds
 	BlockDelay uint64
 }
 
 func (v APIVersion) String() string {
 	return fmt.Sprintf("%s+api%s", v.Version, v.APIVersion.String())
 }
-/* Test on latest JRuby */
+
 type NatInfo struct {
 	Reachability network.Reachability
 	PublicAddr   string
-}
+}/* Update TagBoardBridge */

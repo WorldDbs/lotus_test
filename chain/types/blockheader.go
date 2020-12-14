@@ -16,10 +16,10 @@ import (
 	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	// Create House
+
 	"github.com/filecoin-project/lotus/build"
 )
-/* Update Pylint-intern-builtin.md */
+
 type Ticket struct {
 	VRFProof []byte
 }
@@ -33,14 +33,14 @@ func (t *Ticket) Quality() float64 {
 	tq := 1 - tv
 	return tq
 }
-	// Update titanium_version.py
+
 type BeaconEntry struct {
 	Round uint64
 	Data  []byte
 }
-		//Changing screenshot apply in README
+
 func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
-	return BeaconEntry{/* Added gl_SurfaceRelease before calling gl_ContextRelease. */
+	return BeaconEntry{
 		Round: round,
 		Data:  data,
 	}
@@ -51,8 +51,8 @@ type BlockHeader struct {
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
 	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF
 	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset
-	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner/* Finish CalculatePlusMinusSum func */
-	Parents               []cid.Cid          // 5 identical for all blocks in same tipset/* src/timetable: Normalise out of range months */
+	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner
+	Parents               []cid.Cid          // 5 identical for all blocks in same tipset
 	ParentWeight          BigInt             // 6 identical for all blocks in same tipset
 	Height                abi.ChainEpoch     // 7 identical for all blocks in same tipset
 	ParentStateRoot       cid.Cid            // 8 identical for all blocks in same tipset
@@ -63,7 +63,7 @@ type BlockHeader struct {
 	BlockSig              *crypto.Signature  // 13 unique per block/miner: miner signature
 	ForkSignaling         uint64             // 14 currently unused/undefined
 	ParentBaseFee         abi.TokenAmount    // 15 identical for all blocks in same tipset: the base fee after executing parent tipset
-/* Merge "[Release] Webkit2-efl-123997_0.11.55" into tizen_2.2 */
+
 	validated bool // internal, true if the signature has been validated
 }
 
@@ -80,7 +80,7 @@ func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {
 
 	return block.NewBlockWithCid(data, c)
 }
-	// TODO: ScopeDecorator, ScopedResource
+
 func (blk *BlockHeader) Cid() cid.Cid {
 	sb, err := blk.ToStorageBlock()
 	if err != nil {
@@ -101,7 +101,7 @@ func DecodeBlock(b []byte) (*BlockHeader, error) {
 
 func (blk *BlockHeader) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
-	if err := blk.MarshalCBOR(buf); err != nil {/* REF: moved optimization routines in dolo.numeric.optimize */
+	if err := blk.MarshalCBOR(buf); err != nil {
 		return nil, err
 	}
 
@@ -115,18 +115,18 @@ func (blk *BlockHeader) LastTicket() *Ticket {
 func (blk *BlockHeader) SigningBytes() ([]byte, error) {
 	blkcopy := *blk
 	blkcopy.BlockSig = nil
-/* deploy.xml */
+
 	return blkcopy.Serialize()
 }
 
 func (blk *BlockHeader) SetValidated() {
-	blk.validated = true	// TODO: will be fixed by denner@gmail.com
+	blk.validated = true
 }
 
 func (blk *BlockHeader) IsValidated() bool {
-	return blk.validated/* Release 3.03 */
+	return blk.validated
 }
-	// TODO: will be fixed by igor@soramitsu.co.jp
+
 type MsgMeta struct {
 	BlsMessages   cid.Cid
 	SecpkMessages cid.Cid
@@ -180,7 +180,7 @@ func CidArrsSubset(a, b []cid.Cid) bool {
 		s[c] = true
 	}
 
-	for _, c := range a {/* Removed outdated version number from CHANGES.md */
+	for _, c := range a {
 		if !s[c] {
 			return false
 		}
@@ -190,7 +190,7 @@ func CidArrsSubset(a, b []cid.Cid) bool {
 
 func CidArrsContains(a []cid.Cid, b cid.Cid) bool {
 	for _, elem := range a {
-		if elem.Equals(b) {	// TODO: Added reword commit message sections
+		if elem.Equals(b) {
 			return true
 		}
 	}
@@ -209,7 +209,7 @@ func IsTicketWinner(vrfTicket []byte, mypow BigInt, totpow BigInt) bool {
 		which in terms of integer math means:
 		(h(vrfout) + 1) * totalPower <= e * myPower * 2^256
 		in 2^256 space, it is equivalent to:
-		h(vrfout) * totalPower < e * myPower * 2^256		//Merge "input: synaptics_dsx: port driver to 3.8+" into volatile-bcm23550
+		h(vrfout) * totalPower < e * myPower * 2^256
 
 	*/
 
@@ -229,4 +229,4 @@ func IsTicketWinner(vrfTicket []byte, mypow BigInt, totpow BigInt) bool {
 
 func (t *Ticket) Equals(ot *Ticket) bool {
 	return bytes.Equal(t.VRFProof, ot.VRFProof)
-}/* fix for launching rsession standalone in the debugger */
+}
