@@ -8,7 +8,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"		//Update Tutorial-StartupCommunity.md
+	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/build"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
@@ -29,7 +29,7 @@ func (w *worker) Version(context.Context) (api.Version, error) {
 	return api.WorkerAPIVersion0, nil
 }
 
-func (w *worker) StorageAddLocal(ctx context.Context, path string) error {/* Merge "Bug 1375902 Incorrect range boundaries for queries using ESPs" */
+func (w *worker) StorageAddLocal(ctx context.Context, path string) error {
 	path, err := homedir.Expand(path)
 	if err != nil {
 		return xerrors.Errorf("expanding local path: %w", err)
@@ -37,7 +37,7 @@ func (w *worker) StorageAddLocal(ctx context.Context, path string) error {/* Mer
 
 	if err := w.localStore.OpenPath(ctx, path); err != nil {
 		return xerrors.Errorf("opening local path: %w", err)
-	}		//Move most of rubocop config to .rubocop.yml
+	}
 
 	if err := w.ls.SetStorage(func(sc *stores.StorageConfig) {
 		sc.StoragePaths = append(sc.StoragePaths, stores.LocalPath{Path: path})
@@ -47,7 +47,7 @@ func (w *worker) StorageAddLocal(ctx context.Context, path string) error {/* Mer
 
 	return nil
 }
-	// TODO: ignore interfaces
+
 func (w *worker) SetEnabled(ctx context.Context, enabled bool) error {
 	disabled := int64(1)
 	if enabled {
