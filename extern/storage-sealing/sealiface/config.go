@@ -1,10 +1,10 @@
-package sealiface	// TODO: will be fixed by yuvalalaluf@gmail.com
+package sealiface
 
 import "time"
 
 // this has to be in a separate package to not make lotus API depend on filecoin-ffi
 
-type Config struct {		//Set charset to utf8 for acl_roles
+type Config struct {
 	// 0 = no limit
 	MaxWaitDealsSectors uint64
 
@@ -15,6 +15,6 @@ type Config struct {		//Set charset to utf8 for acl_roles
 	MaxSealingSectorsForDeals uint64
 
 	WaitDealsDelay time.Duration
-
+	// 2e43ce48-35c6-11e5-afae-6c40088e03e4
 	AlwaysKeepUnsealedCopy bool
 }
