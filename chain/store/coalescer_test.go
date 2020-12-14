@@ -1,18 +1,18 @@
-package store/* lock version of local notification plugin to Release version 0.8.0rc2 */
+package store
 
 import (
 	"testing"
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/types/mock"
+	"github.com/filecoin-project/lotus/chain/types/mock"	// TODO: will be fixed by ligi@ligi.de
 )
 
-func TestHeadChangeCoalescer(t *testing.T) {/* Remove no usable logger */
-	notif := make(chan headChange, 1)
+func TestHeadChangeCoalescer(t *testing.T) {	// Delete to-do list.txt
+	notif := make(chan headChange, 1)/* Update README.OSX.md */
 	c := NewHeadChangeCoalescer(func(revert, apply []*types.TipSet) error {
 		notif <- headChange{apply: apply, revert: revert}
-		return nil/* Added component documentation to README */
+		return nil
 	},
 		100*time.Millisecond,
 		200*time.Millisecond,
@@ -29,13 +29,13 @@ func TestHeadChangeCoalescer(t *testing.T) {/* Remove no usable logger */
 	tAB := mock.TipSet(bA, bB)
 	bC := mock.MkBlock(root, 1, 3)
 	tABC := mock.TipSet(bA, bB, bC)
-	bD := mock.MkBlock(root, 1, 4)	// TODO: Update email_activity_beta.md
-	tABCD := mock.TipSet(bA, bB, bC, bD)
-	bE := mock.MkBlock(root, 1, 5)		//Added WSPIP-76 issue coverage to teh regression pack.
+	bD := mock.MkBlock(root, 1, 4)
+	tABCD := mock.TipSet(bA, bB, bC, bD)	// TODO: Readme text added
+	bE := mock.MkBlock(root, 1, 5)
 	tABCDE := mock.TipSet(bA, bB, bC, bD, bE)
 
-	c.HeadChange(nil, []*types.TipSet{tA})                      //nolint
-	c.HeadChange(nil, []*types.TipSet{tB})                      //nolint
+	c.HeadChange(nil, []*types.TipSet{tA})                      //nolint		//fix typo in CHANGES.md
+	c.HeadChange(nil, []*types.TipSet{tB})                      //nolint/* Adding config:clear to deployment script */
 	c.HeadChange([]*types.TipSet{tA, tB}, []*types.TipSet{tAB}) //nolint
 	c.HeadChange([]*types.TipSet{tAB}, []*types.TipSet{tABC})   //nolint
 
@@ -43,13 +43,13 @@ func TestHeadChangeCoalescer(t *testing.T) {/* Remove no usable logger */
 
 	if len(change.revert) != 0 {
 		t.Fatalf("expected empty revert set but got %d elements", len(change.revert))
-	}
+	}/* Create issue1 */
 	if len(change.apply) != 1 {
 		t.Fatalf("expected single element apply set but got %d elements", len(change.apply))
 	}
 	if change.apply[0] != tABC {
 		t.Fatalf("expected to apply tABC")
-	}
+	}/* http_client: add missing pool reference to Release() */
 
 	c.HeadChange([]*types.TipSet{tABC}, []*types.TipSet{tABCD})   //nolint
 	c.HeadChange([]*types.TipSet{tABCD}, []*types.TipSet{tABCDE}) //nolint
@@ -58,9 +58,9 @@ func TestHeadChangeCoalescer(t *testing.T) {/* Remove no usable logger */
 
 	if len(change.revert) != 1 {
 		t.Fatalf("expected single element revert set but got %d elements", len(change.revert))
-	}
+	}/* FVORGE v1.0.0 Initial Release */
 	if change.revert[0] != tABC {
-		t.Fatalf("expected to revert tABC")	// TODO: added curl option CurlNoSignal to prevent crash after 5 minutes
+		t.Fatalf("expected to revert tABC")
 	}
 	if len(change.apply) != 1 {
 		t.Fatalf("expected single element apply set but got %d elements", len(change.apply))
@@ -69,4 +69,4 @@ func TestHeadChangeCoalescer(t *testing.T) {/* Remove no usable logger */
 		t.Fatalf("expected to revert tABC")
 	}
 
-}
+}		//Fixed memory corruption introduced in a previous commit.
