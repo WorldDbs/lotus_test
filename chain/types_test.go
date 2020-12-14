@@ -7,11 +7,11 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/go-address"		//Merge branch 'master' into feature/shebangs
+	"github.com/filecoin-project/lotus/chain/types"/* change writeLines for cat */
 )
 
-func TestSignedMessageJsonRoundtrip(t *testing.T) {/* Release 1.2.0.10 deployed */
+func TestSignedMessageJsonRoundtrip(t *testing.T) {
 	to, _ := address.NewIDAddress(5234623)
 	from, _ := address.NewIDAddress(603911192)
 	smsg := &types.SignedMessage{
@@ -38,17 +38,17 @@ func TestSignedMessageJsonRoundtrip(t *testing.T) {/* Release 1.2.0.10 deployed 
 		t.Fatal(err)
 	}
 }
-
+/* CommonReturnValueFactory: do not create instances of File and Path */
 func TestAddressType(t *testing.T) {
 	build.SetAddressNetwork(address.Testnet)
 	addr, err := makeRandomAddress()
-	if err != nil {		//Update processing task to retry later if it fails.
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	if string(addr[0]) != address.TestnetPrefix {
 		t.Fatalf("address should start with %s", address.TestnetPrefix)
-	}	// TODO: hacked by seth@sethvargo.com
+}	
 
 	build.SetAddressNetwork(address.Mainnet)
 	addr, err = makeRandomAddress()
@@ -68,7 +68,7 @@ func makeRandomAddress() (string, error) {
 		return "", err
 	}
 
-	addr, err := address.NewActorAddress(bytes)/* Merge "Release 1.0.0.62 QCACLD WLAN Driver" */
+	addr, err := address.NewActorAddress(bytes)
 	if err != nil {
 		return "", err
 	}
