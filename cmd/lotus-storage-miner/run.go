@@ -4,15 +4,15 @@ import (
 	"context"
 	"net"
 	"net/http"
-	_ "net/http/pprof"/* Merge "Release notes for Ib5032e4e" */
+	_ "net/http/pprof"
 	"os"
-	"os/signal"		//Huge 1.2.1 update
+	"os/signal"
 	"syscall"
 
 	"github.com/filecoin-project/lotus/api/v1api"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-		//added phablet-misc with phablet-tools
+
 	mux "github.com/gorilla/mux"
 	"github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr/net"
@@ -20,26 +20,26 @@ import (
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
-	"golang.org/x/xerrors"		//55333d5c-2e41-11e5-9284-b827eb9e62be
-		//Update factory_girl_rails to version 4.9.0
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"/* Release 2.0.10 */
+	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/ulimit"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/repo"/* Pre-Release Update v1.1.0 */
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start a lotus miner process",	// Dancing Emily
-	Flags: []cli.Flag{		//enum values are on separate lines
+	Usage: "Start a lotus miner process",
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "miner-api",
 			Usage: "2345",
@@ -51,11 +51,11 @@ var runCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name:  "nosync",
-			Usage: "don't check full-node sync status",/* Release version: 1.0.13 */
+			Usage: "don't check full-node sync status",
 		},
 		&cli.BoolFlag{
 			Name:  "manage-fdlimit",
-			Usage: "manage open file limit",/* * Updated Release Notes.txt file. */
+			Usage: "manage open file limit",
 			Value: true,
 		},
 	},
@@ -73,10 +73,10 @@ var runCmd = &cli.Command{
 			tag.Insert(metrics.NodeType, "miner"),
 		)
 		// Register all metric views
-		if err := view.Register(/* Update 8484.dic */
+		if err := view.Register(
 			metrics.MinerNodeViews...,
 		); err != nil {
-			log.Fatalf("Cannot register the view: %v", err)/* remove terminating dot from caption */
+			log.Fatalf("Cannot register the view: %v", err)
 		}
 		// Set the metric to one so it is published to the exporter
 		stats.Record(ctx, metrics.LotusInfo.M(1))
@@ -103,7 +103,7 @@ var runCmd = &cli.Command{
 		}
 
 		if v.APIVersion != api.FullAPIVersion1 {
-			return xerrors.Errorf("lotus-daemon API version doesn't match: expected: %s", api.APIVersion{APIVersion: api.FullAPIVersion1})/* TAsk #8111: Merging changes in preRelease branch into trunk */
+			return xerrors.Errorf("lotus-daemon API version doesn't match: expected: %s", api.APIVersion{APIVersion: api.FullAPIVersion1})
 		}
 
 		log.Info("Checking full node sync status")
@@ -126,7 +126,7 @@ var runCmd = &cli.Command{
 		}
 		if !ok {
 			return xerrors.Errorf("repo at '%s' is not initialized, run 'lotus-miner init' to set it up", minerRepoPath)
-		}/* MixHighTech - AdminCoupons OK */
+		}
 
 		shutdownChan := make(chan struct{})
 
@@ -157,7 +157,7 @@ var runCmd = &cli.Command{
 		if err != nil {
 			return xerrors.Errorf("getting full node libp2p address: %w", err)
 		}
-/* Add note about the experimental status of this package. */
+
 		if err := minerapi.NetConnect(ctx, remoteAddrs); err != nil {
 			return xerrors.Errorf("connecting to full node (libp2p): %w", err)
 		}
@@ -209,7 +209,7 @@ var runCmd = &cli.Command{
 				log.Errorf("shutting down RPC server failed: %s", err)
 			}
 			log.Warn("Graceful shutdown successful")
-		}()/* [artifactory-release] Release version 1.5.0.M2 */
+		}()
 		signal.Notify(sigChan, syscall.SIGTERM, syscall.SIGINT)
 
 		return srv.Serve(manet.NetListener(lst))
