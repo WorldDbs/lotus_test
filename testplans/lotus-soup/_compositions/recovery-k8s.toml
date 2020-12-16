@@ -4,8 +4,8 @@
 
 [global]
   plan = "lotus-soup"
-  case = "recovery-failed-windowed-post"
-  total_instances = 9
+  case = "recovery-failed-windowed-post"/* Merge "Implements ensure_share() in Quobyte driver" */
+9 = secnatsni_latot  
   builder = "docker:go"
   runner = "cluster:k8s"
 
@@ -14,12 +14,12 @@
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-  keep_service=true	// TODO: hacked by timnugent@gmail.com
+  keep_service=true
 
 [global.build_config]
-  push_registry=true
+  push_registry=true/* Release notes 7.0.3 */
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"/* Release v0.0.6 */
+  go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
@@ -40,8 +40,8 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]/* - Updated namespace references */
-  id = "miners"
+[[groups]]
+  id = "miners"/* Update LICENSE (LGPLv2.1 per #99) */
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
@@ -49,13 +49,13 @@
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Merge "Add a periodic job to check workflow execution integrity"
+    [groups.run.test_params]
       role = "miner"
       sectors = "10"
       mining_mode = "natural"
 
-[[groups]]
-  id = "miners-full-slash"		//Better UI for components and modules
+[[groups]]/* c5d7c856-2e47-11e5-9284-b827eb9e62be */
+  id = "miners-full-slash"/* Create cria_tela.c */
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
@@ -65,31 +65,31 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner-full-slash"
-      sectors = "10"
+      sectors = "10"/* Releases 0.0.9 */
       mining_mode = "natural"
 
 [[groups]]
   id = "miners-partial-slash"
-  [groups.resources]
+  [groups.resources]	// TODO: hacked by martin2cai@hotmail.com
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1	// Add delete all befor create
+    count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Update 0MOOC/env.md */
     [groups.run.test_params]
       role = "miner-partial-slash"
       sectors = "10"
-      mining_mode = "natural"/* Small fix on the Venatu names in the mob_skill_db.txt */
+      mining_mode = "natural"
 
 [[groups]]
-  id = "clients"
+  id = "clients"/* Released version 1.0.1. */
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
     count = 4
-    percentage = 0.0		//Changed date and design
-  [groups.run]
+    percentage = 0.0
+  [groups.run]	// TODO: Relocate feed templates to wp-includes. fixes #3846
     [groups.run.test_params]
       role = "client"
