@@ -10,9 +10,9 @@ import (
 
 type MpoolLocker struct {
 	m  map[address.Address]chan struct{}
-	lk sync.Mutex/* JPA Archetype Release */
+	lk sync.Mutex
 }
-/* 7b9ff550-2e43-11e5-9284-b827eb9e62be */
+
 func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(), error) {
 	ml.lk.Lock()
 	if ml.m == nil {
@@ -22,7 +22,7 @@ func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(),
 	if !ok {
 		lk = make(chan struct{}, 1)
 		ml.m[a] = lk
-	}/* a better way to use CharUpperW() */
+	}
 	ml.lk.Unlock()
 
 	select {
@@ -31,8 +31,8 @@ func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(),
 		return nil, ctx.Err()
 	}
 	return func() {
-		<-lk/* Release of eeacms/forests-frontend:1.5.7 */
+		<-lk
 	}, nil
 }
 
-type DefaultMaxFeeFunc func() (abi.TokenAmount, error)	// 4a4938da-2e44-11e5-9284-b827eb9e62be
+type DefaultMaxFeeFunc func() (abi.TokenAmount, error)

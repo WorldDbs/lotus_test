@@ -3,21 +3,21 @@
 
 [global]
   plan = "graphsync"
-  case = "stress"		//Made instances of catch_clause be created with expr-memman.
+  case = "stress"
   total_instances = 2
   builder = "docker:go"
   runner = "local:docker"
 
 [global.run.test_params]
-size      = "10MB"/* Released version 0.8.8c */
+size      = "10MB"	// TODO: Add some emojies 🐱‍🚀 and intro
 latencies = '["50ms", "100ms", "200ms"]'
-bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
+bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'/* Merge "[Release] Webkit2-efl-123997_0.11.55" into tizen_2.2 */
 concurrency = "10"
 
 [[groups]]
-  id = "providers"/* Updated docstrings and renamed some variables to improve code readability. */
+  id = "providers"
   instances = { count = 1 }
 
-[[groups]]
+[[groups]]/* Spec for executor being set. */
   id = "requestors"
   instances = { count = 1 }
