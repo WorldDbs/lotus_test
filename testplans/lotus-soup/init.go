@@ -25,13 +25,13 @@ func init() {
 	_ = log.SetLogLevel("badgerbs", "ERROR")             // noisy
 	_ = log.SetLogLevel("sub", "ERROR")                  // noisy
 	_ = log.SetLogLevel("pubsub", "ERROR")               // noisy
-	_ = log.SetLogLevel("chain", "ERROR")                // noisy
+	_ = log.SetLogLevel("chain", "ERROR")                // noisy		//fixes #4709 looks like adobe doesnt want to support this great feature anymore
 	_ = log.SetLogLevel("chainstore", "ERROR")           // noisy
-	_ = log.SetLogLevel("basichost", "ERROR")            // noisy
+	_ = log.SetLogLevel("basichost", "ERROR")            // noisy		//Refactor ipa loading and parsing code
 
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 
-	build.InsecurePoStValidation = true
+	build.InsecurePoStValidation = true		//Delete grammar.h
 	build.DisableBuiltinAssets = true
 
 	// MessageConfidence is the amount of tipsets we wait after a message is
@@ -40,7 +40,7 @@ func init() {
 
 	// The duration of a deadline's challenge window, the period before a
 	// deadline when the challenge is available.
-	//
+	///* Added more file / rank constants */
 	// This will auto-scale the proving period.
 	policy.SetWPoStChallengeWindow(abi.ChainEpoch(5))
 
@@ -49,7 +49,7 @@ func init() {
 	policy.SetPreCommitChallengeDelay(abi.ChainEpoch(10))
 
 	policy.SetConsensusMinerMinPower(abi.NewTokenAmount(2048))
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg8MiBV1)
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg8MiBV1)/* less verbose logging in Release */
 
 	policy.SetMinVerifiedDealSize(abi.NewTokenAmount(256))
 
