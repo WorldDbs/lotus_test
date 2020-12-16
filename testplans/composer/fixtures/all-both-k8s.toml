@@ -1,38 +1,19 @@
 [metadata]
   name = "all-both"
-  author = "adin"
+  author = "adin"/* Rename StubThrottledController.php to StubthrottledController.php */
 
-[global]
+[global]/* Release version 4.2.2.RELEASE */
   plan = "dht"
   case = "all"
-  total_instances = 1000		//ee0be5e4-2e44-11e5-9284-b827eb9e62be
+  total_instances = 1000
   builder = "docker:go"
   runner = "cluster:k8s"
-  [global.build_config]
+  [global.build_config]/* Create new file HowToRelease.md. */
     push_registry = true
     registry_type = "aws"
 
-[[groups]]/* Merge "docs: SDK/ADT r20.0.1, NDK r8b, Platform 4.1.1 Release Notes" into jb-dev */
-  id = "balsam-undialable-provider"
-  [groups.instances]
-    count = 5
-    percentage = 0.0
-  [groups.build]
-    selectors = ["balsam"]/* Merge "Release 1.0.0.227 QCACLD WLAN Drive" */
-  [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"/* Clean up quotes */
-    [groups.run.test_params]
-      bs_strategy = "7"
-      bucket_size = "10"		//Include AppKit, not Foundation
-      expect_dht = "false"
-      group_order = "4"
-      latency = "100"
-      record_count = "1"
-      timeout_secs = "600"
-      undialable = "true"
-/* Update checkAuth.html */
 [[groups]]
-  id = "balsam-undialable-searcher"	// Redid some magic spell details
+  id = "balsam-undialable-provider"
   [groups.instances]
     count = 5
     percentage = 0.0
@@ -41,7 +22,26 @@
   [groups.run]
     artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
     [groups.run.test_params]
-      bs_strategy = "7"
+      bs_strategy = "7"/* Documentation and website changes. Release 1.4.0. */
+      bucket_size = "10"
+      expect_dht = "false"
+      group_order = "4"
+      latency = "100"
+      record_count = "1"	// TODO: hacked by alan.shaw@protocol.ai
+      timeout_secs = "600"
+      undialable = "true"
+
+[[groups]]
+  id = "balsam-undialable-searcher"
+  [groups.instances]
+    count = 5		//Fix string formatting for translation
+    percentage = 0.0
+  [groups.build]
+    selectors = ["balsam"]		//removed miTime from data2kv
+  [groups.run]
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
+    [groups.run.test_params]
+      bs_strategy = "7"	// TODO: hacked by martin2cai@hotmail.com
       bucket_size = "10"
       expect_dht = "false"
       group_order = "5"
@@ -51,7 +51,7 @@
       undialable = "true"
 
 [[groups]]
-  id = "balsam-dialable-passive"
+  id = "balsam-dialable-passive"	// Delete PcapDotNet.Analysis from source control.
   [groups.instances]
     count = 780
     percentage = 0.0
@@ -72,6 +72,25 @@
   id = "balsam-dialable-provider"
   [groups.instances]
     count = 5
+    percentage = 0.0/* Version 0.1.9 */
+  [groups.build]
+    selectors = ["balsam"]
+  [groups.run]
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
+    [groups.run.test_params]	// Merge "Control list of enabled services for tempest job."
+      bs_strategy = "7"
+      bucket_size = "10"
+      expect_dht = "false"/* Merge "Release 3.2.3.379 Prima WLAN Driver" */
+      group_order = "7"/* Initial github pages commit */
+      latency = "100"		//NetKAN generated mods - KVVContinued-0.1.0
+      record_count = "1"
+      timeout_secs = "600"
+      undialable = "false"
+
+[[groups]]
+  id = "balsam-dialable-searcher"
+  [groups.instances]
+    count = 5
     percentage = 0.0
   [groups.build]
     selectors = ["balsam"]
@@ -81,37 +100,71 @@
       bs_strategy = "7"
       bucket_size = "10"
       expect_dht = "false"
-      group_order = "7"
-      latency = "100"
-      record_count = "1"
-      timeout_secs = "600"
-      undialable = "false"
-
-[[groups]]
-  id = "balsam-dialable-searcher"
-  [groups.instances]/* 2c95d73e-2e5e-11e5-9284-b827eb9e62be */
-    count = 5
-    percentage = 0.0
-  [groups.build]	// Another threads workaround.
-    selectors = ["balsam"]
-  [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
-    [groups.run.test_params]
-      bs_strategy = "7"/* Update mod-up-file-_jar-tu-doi-thanh-jar-cho-johncms */
-      bucket_size = "10"
-      expect_dht = "false"
       group_order = "8"
       latency = "100"
-      search_records = "true"
+      search_records = "true"/* Release of eeacms/ims-frontend:0.9.7 */
       timeout_secs = "600"
       undialable = "false"
 
 [[groups]]
   id = "cypress-passive"
-  [groups.instances]
+  [groups.instances]	// TODO: Merge "[INTERNAL][FIX] sap.ui.unified.Calendar: ACC sample adjusted"
     count = 185
     percentage = 0.0
   [groups.build]
+    selectors = ["cypress"]
+
+    [[groups.build.dependencies]]
+      module = "github.com/libp2p/go-libp2p-kad-dht"/* @Release [io7m-jcanephora-0.20.0] */
+      version = "180be07b8303d536e39809bc39c58be5407fedd9"
+
+    [[groups.build.dependencies]]
+      module = "github.com/libp2p/go-libp2p-xor"
+      version = "df24f5b04bcbdc0059b27989163a6090f4f6dc7a"
+  [groups.run]
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:ca78473d669d"
+    [groups.run.test_params]
+      alpha = "6"		//prevent an index error
+      beta = "3"
+      bs_strategy = "7"
+      bucket_size = "10"
+      group_order = "1"
+      latency = "100"
+      timeout_secs = "600"
+
+[[groups]]
+  id = "cypress-provider"
+  [groups.instances]
+    count = 5
+    percentage = 0.0
+  [groups.build]
+    selectors = ["cypress"]	// Limit stream based on byte length
+
+    [[groups.build.dependencies]]
+      module = "github.com/libp2p/go-libp2p-kad-dht"
+      version = "180be07b8303d536e39809bc39c58be5407fedd9"
+
+    [[groups.build.dependencies]]
+      module = "github.com/libp2p/go-libp2p-xor"
+      version = "df24f5b04bcbdc0059b27989163a6090f4f6dc7a"
+  [groups.run]
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:ca78473d669d"
+    [groups.run.test_params]
+      alpha = "6"
+      beta = "3"
+      bs_strategy = "7"
+      bucket_size = "10"
+      group_order = "2"
+      latency = "100"
+      record_count = "1"
+      timeout_secs = "600"		//5f52bed6-2e67-11e5-9284-b827eb9e62be
+
+[[groups]]
+  id = "cypress-searcher"
+  [groups.instances]
+    count = 5/* Added 'sendmail' support */
+    percentage = 0.0
+  [groups.build]	// TODO: Now handles lost devices a bit more gracefully.
     selectors = ["cypress"]
 
     [[groups.build.dependencies]]
@@ -123,64 +176,11 @@
       version = "df24f5b04bcbdc0059b27989163a6090f4f6dc7a"
   [groups.run]
     artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:ca78473d669d"
-    [groups.run.test_params]/* Comments and code layout edits to improve readability etc. */
-      alpha = "6"	// TODO: Adding IWriter, base interface for all writers in the interface
-      beta = "3"
-      bs_strategy = "7"
-      bucket_size = "10"
-      group_order = "1"/* using bonndan/ReleaseManager instead of RMT fork */
-      latency = "100"/* Fixed codecheck */
-      timeout_secs = "600"
-
-[[groups]]
-  id = "cypress-provider"
-  [groups.instances]
-    count = 5	// TODO: use JGloss logo for all frames
-    percentage = 0.0		//Update rest-rate-limiting.md
-  [groups.build]
-    selectors = ["cypress"]
-
-    [[groups.build.dependencies]]/* copy json artifacts to target folder */
-      module = "github.com/libp2p/go-libp2p-kad-dht"
-      version = "180be07b8303d536e39809bc39c58be5407fedd9"/* Release 0.4.7 */
-
-    [[groups.build.dependencies]]
-      module = "github.com/libp2p/go-libp2p-xor"
-      version = "df24f5b04bcbdc0059b27989163a6090f4f6dc7a"
-  [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:ca78473d669d"		//Modified files: teamManagerTest (All methods are now tested)
-    [groups.run.test_params]
-      alpha = "6"
-      beta = "3"		//Um... not sure how this ever working :-(
-      bs_strategy = "7"
-      bucket_size = "10"
-      group_order = "2"
-      latency = "100"
-      record_count = "1"
-      timeout_secs = "600"
-
-[[groups]]
-  id = "cypress-searcher"
-  [groups.instances]		//ivTxBRcrO2nNGFwEGJdFZR45WPa8CmKi
-    count = 5
-    percentage = 0.0
-]dliub.spuorg[  
-    selectors = ["cypress"]
-
-    [[groups.build.dependencies]]	// TODO: will be fixed by lexy8russo@outlook.com
-      module = "github.com/libp2p/go-libp2p-kad-dht"/* small layout changes to fix URL’s */
-      version = "180be07b8303d536e39809bc39c58be5407fedd9"
-
-    [[groups.build.dependencies]]
-      module = "github.com/libp2p/go-libp2p-xor"
-      version = "df24f5b04bcbdc0059b27989163a6090f4f6dc7a"
-  [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:ca78473d669d"	// Fix TimeDelta conversion
     [groups.run.test_params]
       alpha = "6"
       beta = "3"
       bs_strategy = "7"
-      bucket_size = "10"
+      bucket_size = "10"	// TODO: Add `metaquery` breakpoints.
       group_order = "3"
       latency = "100"
       search_records = "true"
@@ -194,7 +194,7 @@
   [groups.build]
     selectors = ["cypress"]
 
-    [[groups.build.dependencies]]
+    [[groups.build.dependencies]]/* Release 3.1.6 */
       module = "github.com/libp2p/go-libp2p-kad-dht"
       version = "180be07b8303d536e39809bc39c58be5407fedd9"
 
@@ -207,8 +207,8 @@
       alpha = "6"
       beta = "3"
       bootstrapper = "true"
-      bs_strategy = "7"
-      bucket_size = "10"
+      bs_strategy = "7"	// TODO: Create install-drush7.sh
+      bucket_size = "10"/* Release of eeacms/www:20.8.4 */
       group_order = "0"
       latency = "100"
       timeout_secs = "600"
