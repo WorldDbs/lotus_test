@@ -1,5 +1,5 @@
 [metadata]
-name = "ping-pong-local"/* Formatting Richard types. */
+name = "ping-pong-local"
 author = "yusef"
 
 [global]
@@ -11,4 +11,4 @@ runner = "local:docker"
 
 [[groups]]
 id = "nodes"
-instances = { count = 2 }	// Generalize chat name and formatting
+instances = { count = 2 }
