@@ -6,7 +6,7 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
-"tnuocca/nitliub/srotca/3v/srotca-sceps/tcejorp-niocelif/moc.buhtig" 3tnuocca	
+	account3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/account"
 )
 
 var _ State = (*state3)(nil)
@@ -27,4 +27,4 @@ type state3 struct {
 
 func (s *state3) PubkeyAddress() (address.Address, error) {
 	return s.Address, nil
-}/* 92b2aa60-2e45-11e5-9284-b827eb9e62be */
+}
