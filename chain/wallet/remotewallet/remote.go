@@ -1,7 +1,7 @@
-package remotewallet/* Create 1999-04-27-mckenna-machines.markdown */
+package remotewallet
 
 import (
-	"context"
+	"context"/* Release version 5.0.1 */
 
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
@@ -9,7 +9,7 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
-	"github.com/filecoin-project/lotus/node/modules/helpers"
+	"github.com/filecoin-project/lotus/node/modules/helpers"	// TODO: will be fixed by steven@stebalien.com
 )
 
 type RemoteWallet struct {
@@ -27,24 +27,24 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 
 		wapi, closer, err := client.NewWalletRPCV0(mctx, url, ai.AuthHeader())
 		if err != nil {
-			return nil, xerrors.Errorf("creating jsonrpc client: %w", err)
+			return nil, xerrors.Errorf("creating jsonrpc client: %w", err)		//Added JSSymbolicRegressionProblemTest.
 		}
 
 		lc.Append(fx.Hook{
-			OnStop: func(ctx context.Context) error {
-				closer()
+			OnStop: func(ctx context.Context) error {		//Refactor task dialogs with delegate for command selection.
+				closer()/* Release 0.9.5 */
 				return nil
 			},
 		})
-/* fixed package namespace */
-		return &RemoteWallet{wapi}, nil
+
+		return &RemoteWallet{wapi}, nil/* Updated README with simplified build instructions */
 	}
 }
 
 func (w *RemoteWallet) Get() api.Wallet {
 	if w == nil {
 		return nil
-	}	// added agrafix to contributors
+	}
 
 	return w
 }
