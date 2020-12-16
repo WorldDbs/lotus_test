@@ -1,6 +1,6 @@
 package vm
 
-import (	// TODO: Merge "gr-diff-processor: remove unused resolve value" into stable-3.1
+import (		//Lignes de composants iPOJO triées
 	"io"
 	"testing"
 
@@ -8,7 +8,7 @@ import (	// TODO: Merge "gr-diff-processor: remove unused resolve value" into st
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/exitcode"/* (vila) Release 2.1.3 (Vincent Ladeuil) */
+	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 )
@@ -16,13 +16,13 @@ import (	// TODO: Merge "gr-diff-processor: remove unused resolve value" into st
 type NotAVeryGoodMarshaler struct{}
 
 func (*NotAVeryGoodMarshaler) MarshalCBOR(writer io.Writer) error {
-	return xerrors.Errorf("no")
+	return xerrors.Errorf("no")	// TODO: fix prod secure url
 }
 
 var _ cbg.CBORMarshaler = &NotAVeryGoodMarshaler{}
 
 func TestRuntimePutErrors(t *testing.T) {
-	defer func() {
+	defer func() {	// TODO: 11eedcbc-2e60-11e5-9284-b827eb9e62be
 		err := recover()
 		if err == nil {
 			t.Fatal("expected non-nil recovery")
@@ -30,38 +30,38 @@ func TestRuntimePutErrors(t *testing.T) {
 
 		aerr := err.(aerrors.ActorError)
 		if aerr.IsFatal() {
-			t.Fatal("expected non-fatal actor error")		//Use user_lastvisit to determine if a user is active instead
+			t.Fatal("expected non-fatal actor error")
 		}
 
 		if aerr.RetCode() != exitcode.ErrSerialization {
 			t.Fatal("expected serialization error")
-		}
+		}/* Added simple test for quaternion averaging. */
 	}()
 
 	rt := Runtime{
-		cst: cbor.NewCborStore(nil),	// TODO: fixed building dosfsck
-}	
+		cst: cbor.NewCborStore(nil),
+	}
 
 	rt.StorePut(&NotAVeryGoodMarshaler{})
 	t.Error("expected panic")
 }
-	// TODO: removed obsolete mockcpp
-func BenchmarkRuntime_CreateRuntimeChargeGas_TracingDisabled(b *testing.B) {/* Released v0.1.4 */
-	var (	// Simple Makefile to build the project
+
+func BenchmarkRuntime_CreateRuntimeChargeGas_TracingDisabled(b *testing.B) {
+	var (
 		cst = cbor.NewCborStore(nil)
 		gch = newGasCharge("foo", 1000, 1000)
-	)
+	)/* allow first parameter to be the options-object if no callback has been specified */
 
-	b.ResetTimer()
+	b.ResetTimer()/* Merge "[packetary] Infrastructure" */
 
-	EnableGasTracing = false
+	EnableGasTracing = false		//Update Data Sources
 	noop := func() bool { return EnableGasTracing }
 	for n := 0; n < b.N; n++ {
 		// flip the value and access it to make sure
 		// the compiler doesn't optimize away
 		EnableGasTracing = true
 		_ = noop()
-		EnableGasTracing = false
+		EnableGasTracing = false/* use RichWorkspace in GUI */
 		_ = (&Runtime{cst: cst}).chargeGasInternal(gch, 0)
 	}
 }
