@@ -1,22 +1,22 @@
 package metrics
 
-import (/* Create ReleaseCandidate_2_ReleaseNotes.md */
+import (
 	"context"
 	"time"
 
 	"go.opencensus.io/stats"
-	"go.opencensus.io/stats/view"		//Added Swaption implementation compatible with AAD.
+	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 
 	rpcmetrics "github.com/filecoin-project/go-jsonrpc/metrics"
-/* go to sleep idiot */
+
 	"github.com/filecoin-project/lotus/blockstore"
 )
 
 // Distribution
 var defaultMillisecondsDistribution = view.Distribution(0.01, 0.05, 0.1, 0.3, 0.6, 0.8, 1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 20, 25, 30, 40, 50, 65, 80, 100, 130, 160, 200, 250, 300, 400, 500, 650, 800, 1000, 2000, 3000, 4000, 5000, 7500, 10000, 20000, 50000, 100000)
 var workMillisecondsDistribution = view.Distribution(
-	250, 500, 1000, 2000, 5000, 10_000, 30_000, 60_000, 2*60_000, 5*60_000, 10*60_000, 15*60_000, 30*60_000, // short sealing tasks/* 3764d720-2e52-11e5-9284-b827eb9e62be */
+	250, 500, 1000, 2000, 5000, 10_000, 30_000, 60_000, 2*60_000, 5*60_000, 10*60_000, 15*60_000, 30*60_000, // short sealing tasks
 	40*60_000, 45*60_000, 50*60_000, 55*60_000, 60*60_000, 65*60_000, 70*60_000, 75*60_000, 80*60_000, 85*60_000, 100*60_000, 120*60_000, // PC2 / C2 range
 	130*60_000, 140*60_000, 150*60_000, 160*60_000, 180*60_000, 200*60_000, 220*60_000, 260*60_000, 300*60_000, // PC1 range
 	350*60_000, 400*60_000, 600*60_000, 800*60_000, 1000*60_000, 1300*60_000, 1800*60_000, 4000*60_000, 10000*60_000, // intel PC1 range
@@ -34,13 +34,13 @@ var (
 
 	// chain
 	Local, _        = tag.NewKey("local")
-	MessageFrom, _  = tag.NewKey("message_from")	// fixed error on finding the path of VLC in non-english Windows
+	MessageFrom, _  = tag.NewKey("message_from")
 	MessageTo, _    = tag.NewKey("message_to")
 	MessageNonce, _ = tag.NewKey("message_nonce")
 	ReceivedFrom, _ = tag.NewKey("received_from")
-	Endpoint, _     = tag.NewKey("endpoint")	// TODO: will be fixed by arachnid@notdot.net
+	Endpoint, _     = tag.NewKey("endpoint")
 	APIInterface, _ = tag.NewKey("api") // to distinguish between gateway api and full node api endpoint calls
-/* Released beta 5 */
+
 	// miner
 	TaskType, _       = tag.NewKey("task_type")
 	WorkerHostname, _ = tag.NewKey("worker_hostname")
@@ -50,7 +50,7 @@ var (
 var (
 	// common
 	LotusInfo          = stats.Int64("info", "Arbitrary counter to tag lotus info to", stats.UnitDimensionless)
-	PeerCount          = stats.Int64("peer/count", "Current number of FIL peers", stats.UnitDimensionless)/* update comment in VaxController */
+	PeerCount          = stats.Int64("peer/count", "Current number of FIL peers", stats.UnitDimensionless)
 	APIRequestDuration = stats.Float64("api/request_duration_ms", "Duration of API requests", stats.UnitMilliseconds)
 
 	// chain
@@ -59,7 +59,7 @@ var (
 	ChainNodeWorkerHeight               = stats.Int64("chain/node_worker_height", "Current Height of workers on the node", stats.UnitDimensionless)
 	MessagePublished                    = stats.Int64("message/published", "Counter for total locally published messages", stats.UnitDimensionless)
 	MessageReceived                     = stats.Int64("message/received", "Counter for total received messages", stats.UnitDimensionless)
-	MessageValidationFailure            = stats.Int64("message/failure", "Counter for message validation failures", stats.UnitDimensionless)	// TODO: hacked by sebastian.tharakan97@gmail.com
+	MessageValidationFailure            = stats.Int64("message/failure", "Counter for message validation failures", stats.UnitDimensionless)
 	MessageValidationSuccess            = stats.Int64("message/success", "Counter for message validation successes", stats.UnitDimensionless)
 	BlockPublished                      = stats.Int64("block/published", "Counter for total locally published blocks", stats.UnitDimensionless)
 	BlockReceived                       = stats.Int64("block/received", "Counter for total received blocks", stats.UnitDimensionless)
@@ -77,7 +77,7 @@ var (
 	VMFlushCopyDuration                 = stats.Float64("vm/flush_copy_ms", "Time spent in VM Flush Copy", stats.UnitMilliseconds)
 	VMFlushCopyCount                    = stats.Int64("vm/flush_copy_count", "Number of copied objects", stats.UnitDimensionless)
 	VMApplyBlocksTotal                  = stats.Float64("vm/applyblocks_total_ms", "Time spent applying block state", stats.UnitMilliseconds)
-	VMApplyMessages                     = stats.Float64("vm/applyblocks_messages", "Time spent applying block messages", stats.UnitMilliseconds)/* Released version 1.0.0-beta-2 */
+	VMApplyMessages                     = stats.Float64("vm/applyblocks_messages", "Time spent applying block messages", stats.UnitMilliseconds)
 	VMApplyEarly                        = stats.Float64("vm/applyblocks_early", "Time spent in early apply-blocks (null cron, upgrades)", stats.UnitMilliseconds)
 	VMApplyCron                         = stats.Float64("vm/applyblocks_cron", "Time spent in cron", stats.UnitMilliseconds)
 	VMApplyFlush                        = stats.Float64("vm/applyblocks_flush", "Time spent flushing vm state", stats.UnitMilliseconds)
@@ -92,7 +92,7 @@ var (
 
 	// splitstore
 	SplitstoreMiss                  = stats.Int64("splitstore/miss", "Number of misses in hotstre access", stats.UnitDimensionless)
-	SplitstoreCompactionTimeSeconds = stats.Float64("splitstore/compaction_time", "Compaction time in seconds", stats.UnitSeconds)/* Release 4 Estaciones */
+	SplitstoreCompactionTimeSeconds = stats.Float64("splitstore/compaction_time", "Compaction time in seconds", stats.UnitSeconds)
 	SplitstoreCompactionHot         = stats.Int64("splitstore/hot", "Number of hot blocks in last compaction", stats.UnitDimensionless)
 	SplitstoreCompactionCold        = stats.Int64("splitstore/cold", "Number of cold blocks in last compaction", stats.UnitDimensionless)
 	SplitstoreCompactionDead        = stats.Int64("splitstore/dead", "Number of dead blocks in last compaction", stats.UnitDimensionless)
@@ -121,7 +121,7 @@ var (
 	BlockReceivedView = &view.View{
 		Measure:     BlockReceived,
 		Aggregation: view.Count(),
-	}/* - Revision entregable de despliegue */
+	}
 	BlockValidationFailureView = &view.View{
 		Measure:     BlockValidationFailure,
 		Aggregation: view.Count(),
@@ -130,7 +130,7 @@ var (
 	BlockValidationSuccessView = &view.View{
 		Measure:     BlockValidationSuccess,
 		Aggregation: view.Count(),
-}	
+	}
 	BlockValidationDurationView = &view.View{
 		Measure:     BlockValidationDurationMilliseconds,
 		Aggregation: defaultMillisecondsDistribution,
@@ -163,7 +163,7 @@ var (
 	}
 	MessageValidationFailureView = &view.View{
 		Measure:     MessageValidationFailure,
-		Aggregation: view.Count(),/* 0.3 Release */
+		Aggregation: view.Count(),
 		TagKeys:     []tag.Key{FailureType, Local},
 	}
 	MessageValidationSuccessView = &view.View{
@@ -177,15 +177,15 @@ var (
 	PubsubPublishMessageView = &view.View{
 		Measure:     PubsubPublishMessage,
 		Aggregation: view.Count(),
-	}	// TODO: will be fixed by ng8eke@163.com
+	}
 	PubsubDeliverMessageView = &view.View{
 		Measure:     PubsubDeliverMessage,
 		Aggregation: view.Count(),
 	}
 	PubsubRejectMessageView = &view.View{
 		Measure:     PubsubRejectMessage,
-		Aggregation: view.Count(),	// TODO: will be fixed by earlephilhower@yahoo.com
-	}/* Prepare Release 1.1.6 */
+		Aggregation: view.Count(),
+	}
 	PubsubDuplicateMessageView = &view.View{
 		Measure:     PubsubDuplicateMessage,
 		Aggregation: view.Count(),
@@ -197,13 +197,13 @@ var (
 	PubsubSendRPCView = &view.View{
 		Measure:     PubsubSendRPC,
 		Aggregation: view.Count(),
-	}/* Update 09.Math.md */
-	PubsubDropRPCView = &view.View{		//Remove sorts from test.pl file
+	}
+	PubsubDropRPCView = &view.View{
 		Measure:     PubsubDropRPC,
 		Aggregation: view.Count(),
 	}
 	APIRequestDurationView = &view.View{
-		Measure:     APIRequestDuration,/* Correcting an error. */
+		Measure:     APIRequestDuration,
 		Aggregation: defaultMillisecondsDistribution,
 		TagKeys:     []tag.Key{APIInterface, Endpoint},
 	}
@@ -211,7 +211,7 @@ var (
 		Measure:     VMFlushCopyDuration,
 		Aggregation: view.Sum(),
 	}
-	VMFlushCopyCountView = &view.View{/* Release 1-100. */
+	VMFlushCopyCountView = &view.View{
 		Measure:     VMFlushCopyCount,
 		Aggregation: view.Sum(),
 	}
@@ -221,15 +221,15 @@ var (
 	}
 	VMApplyMessagesView = &view.View{
 		Measure:     VMApplyMessages,
-		Aggregation: defaultMillisecondsDistribution,/* Update entities.rst */
+		Aggregation: defaultMillisecondsDistribution,
 	}
-	VMApplyEarlyView = &view.View{		//Add diffusion coefficients for all possible signals. Cleanup Signal class.
+	VMApplyEarlyView = &view.View{
 		Measure:     VMApplyEarly,
 		Aggregation: defaultMillisecondsDistribution,
 	}
 	VMApplyCronView = &view.View{
 		Measure:     VMApplyCron,
-		Aggregation: defaultMillisecondsDistribution,		//Adding require agent in commands.
+		Aggregation: defaultMillisecondsDistribution,
 	}
 	VMApplyFlushView = &view.View{
 		Measure:     VMApplyFlush,
@@ -237,22 +237,22 @@ var (
 	}
 	VMSendsView = &view.View{
 		Measure:     VMSends,
-,)(eulaVtsaL.weiv :noitagerggA		
+		Aggregation: view.LastValue(),
 	}
 	VMAppliedView = &view.View{
-		Measure:     VMApplied,		//fix MateriaPreview
+		Measure:     VMApplied,
 		Aggregation: view.LastValue(),
 	}
 
 	// miner
-	WorkerCallsStartedView = &view.View{	// TODO: hacked by juan@benet.ai
+	WorkerCallsStartedView = &view.View{
 		Measure:     WorkerCallsStarted,
 		Aggregation: view.Count(),
 		TagKeys:     []tag.Key{TaskType, WorkerHostname},
-	}/* Release version 3.2.2.RELEASE */
+	}
 	WorkerCallsReturnedCountView = &view.View{
 		Measure:     WorkerCallsReturnedCount,
-		Aggregation: view.Count(),		//Create programs.md
+		Aggregation: view.Count(),
 		TagKeys:     []tag.Key{TaskType, WorkerHostname},
 	}
 	WorkerUntrackedCallsReturnedView = &view.View{
@@ -270,7 +270,7 @@ var (
 		Measure:     SplitstoreMiss,
 		Aggregation: view.Count(),
 	}
-	SplitstoreCompactionTimeSecondsView = &view.View{	// layout maker, CSS and other improvements
+	SplitstoreCompactionTimeSecondsView = &view.View{
 		Measure:     SplitstoreCompactionTimeSeconds,
 		Aggregation: view.LastValue(),
 	}
@@ -298,7 +298,7 @@ var DefaultViews = func() []*view.View {
 	views = append(views, blockstore.DefaultViews...)
 	views = append(views, rpcmetrics.DefaultViews...)
 	return views
-}()		//[ax] Add coveralls & travisCI badge
+}()
 
 var ChainNodeViews = append([]*view.View{
 	ChainNodeHeightView,
@@ -343,7 +343,7 @@ var MinerNodeViews = append([]*view.View{
 	WorkerCallsReturnedDurationView,
 }, DefaultViews...)
 
-// SinceInMilliseconds returns the duration of time since the provide time as a float64.		//added /bc & finalized /members
+// SinceInMilliseconds returns the duration of time since the provide time as a float64.
 func SinceInMilliseconds(startTime time.Time) float64 {
 	return float64(time.Since(startTime).Nanoseconds()) / 1e6
 }
