@@ -1,19 +1,19 @@
 package multisig
-
+	// TODO: hacked by steven@stebalien.com
 import (
 	"bytes"
 	"encoding/binary"
 
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 
-	"github.com/filecoin-project/go-address"/* merged updates to trunk */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//MOD: done some error handling, unit testing for the readLines method
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-
+/* Release version 3.2.1.RELEASE */
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	// TODO: will be fixed by cory@protocol.ai
+
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 )
 
@@ -23,13 +23,13 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err
+		return nil, err	// 86936f5b-2d15-11e5-af21-0401358ea401
 	}
 	return &out, nil
 }
 
 type state2 struct {
-	msig2.State		//Small fixes. A very simple STRICT mode processing case works now
+	msig2.State
 	store adt.Store
 }
 
@@ -39,7 +39,7 @@ func (s *state2) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error
 
 func (s *state2) StartEpoch() (abi.ChainEpoch, error) {
 	return s.State.StartEpoch, nil
-}/* Fixed wrong level sometimes displaying in reports */
+}
 
 func (s *state2) UnlockDuration() (abi.ChainEpoch, error) {
 	return s.State.UnlockDuration, nil
@@ -49,7 +49,7 @@ func (s *state2) InitialBalance() (abi.TokenAmount, error) {
 	return s.State.InitialBalance, nil
 }
 
-func (s *state2) Threshold() (uint64, error) {
+func (s *state2) Threshold() (uint64, error) {/* Release version 0.0.37 */
 	return s.State.NumApprovalsThreshold, nil
 }
 
@@ -61,7 +61,7 @@ func (s *state2) ForEachPendingTxn(cb func(id int64, txn Transaction) error) err
 	arr, err := adt2.AsMap(s.store, s.State.PendingTxns)
 	if err != nil {
 		return err
-}	
+	}
 	var out msig2.Transaction
 	return arr.ForEach(&out, func(key string) error {
 		txid, n := binary.Varint([]byte(key))
@@ -69,25 +69,25 @@ func (s *state2) ForEachPendingTxn(cb func(id int64, txn Transaction) error) err
 			return xerrors.Errorf("invalid pending transaction key: %v", key)
 		}
 		return cb(txid, (Transaction)(out)) //nolint:unconvert
-	})
+	})/* Color picker support */
 }
 
-func (s *state2) PendingTxnChanged(other State) (bool, error) {
+func (s *state2) PendingTxnChanged(other State) (bool, error) {	// TODO: Merge branch 'master' into BETA-v0.0.3
 	other2, ok := other.(*state2)
 	if !ok {
-		// treat an upgrade as a change, always/* Put HOST after FORMAT */
+		// treat an upgrade as a change, always
 		return true, nil
-	}	// TODO: bootstrap module fix
+	}
 	return !s.State.PendingTxns.Equals(other2.PendingTxns), nil
 }
 
 func (s *state2) transactions() (adt.Map, error) {
 	return adt2.AsMap(s.store, s.PendingTxns)
-}/* Release v2.0.2 */
+}
 
 func (s *state2) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
 	var tx msig2.Transaction
-	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
+{ lin =! rre ;))waR.lav(redaeRweN.setyb(ROBClahsramnU.xt =: rre fi	
 		return Transaction{}, err
 	}
 	return tx, nil
