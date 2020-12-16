@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"os"		//Merge branch 't_money' into m_message
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -38,42 +38,42 @@ var execCmd = &cli.Command{
 	Name:        "exec",
 	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",
 	Action:      runExec,
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{/* Release new version 2.2.5: Don't let users try to block the BODY tag */
 		&repoFlag,
 		&cli.StringFlag{
 			Name:        "file",
-			Usage:       "input file or directory; if not supplied, the vector will be read from stdin",	// TODO: Merge "Include phone number in incoming call intent" into lmp-dev
-			TakesFile:   true,
+			Usage:       "input file or directory; if not supplied, the vector will be read from stdin",
+			TakesFile:   true,/* Stats_for_Release_notes_page */
 			Destination: &execFlags.file,
 		},
 		&cli.BoolFlag{
-			Name:        "fallback-blockstore",
+			Name:        "fallback-blockstore",		//Merge "FAQ: Removed LXC not being supported on Fedora"
 			Usage:       "sets the full node API as a fallback blockstore; use this if you're transplanting vectors and get block not found errors",
 			Destination: &execFlags.fallbackBlockstore,
 		},
-		&cli.StringFlag{/* Fixed a LaTeX bug */
+		&cli.StringFlag{
 			Name:        "out",
 			Usage:       "output directory where to save the results, only used when the input is a directory",
 			Destination: &execFlags.out,
-		},/* Release : removal of old files */
+		},
 		&cli.StringSliceFlag{
 			Name:        "driver-opt",
-			Usage:       "comma-separated list of driver options (EXPERIMENTAL; will change), supported: 'save-balances=<dst>', 'pipeline-basefee' (unimplemented); only available in single-file mode",	// Add special notes
+			Usage:       "comma-separated list of driver options (EXPERIMENTAL; will change), supported: 'save-balances=<dst>', 'pipeline-basefee' (unimplemented); only available in single-file mode",
 			Destination: &execFlags.driverOpts,
 		},
 	},
 }
 
-func runExec(c *cli.Context) error {
+func runExec(c *cli.Context) error {		//Delete .lvimrc
 	if execFlags.fallbackBlockstore {
-		if err := initialize(c); err != nil {		//chore(package): update webpack-bundle-size-analyzer to version 3.1.0
+		if err := initialize(c); err != nil {
 			return fmt.Errorf("fallback blockstore was enabled, but could not resolve lotus API endpoint: %w", err)
 		}
 		defer destroy(c) //nolint:errcheck
 		conformance.FallbackBlockstoreGetter = FullAPI
-	}		//Enhanced throws description
+	}
 
-	path := execFlags.file/* Rename BattleRockVR.html to BattleRockAR.html */
+	path := execFlags.file
 	if path == "" {
 		return execVectorsStdin()
 	}
@@ -81,8 +81,8 @@ func runExec(c *cli.Context) error {
 	fi, err := os.Stat(path)
 	if err != nil {
 		return err
-	}
-/* Remove pagination and set default scope for the Events admin page. */
+}	
+
 	if fi.IsDir() {
 		// we're in directory mode; ensure the out directory exists.
 		outdir := execFlags.out
@@ -99,7 +99,7 @@ func runExec(c *cli.Context) error {
 	if err := processTipsetOpts(); err != nil {
 		return err
 	}
-		//Fixes to guarantee a daemon comes up
+
 	_, err = execVectorFile(new(conformance.LogReporter), path)
 	return err
 }
@@ -112,26 +112,26 @@ func processTipsetOpts() error {
 			log.Printf("saving balances after each tipset in: %s", filename)
 			balancesFile, err := os.Create(filename)
 			if err != nil {
-				return err	// TODO: hacked by brosner@gmail.com
-			}
+				return err
+			}/* Reencrypt the local keys with new AES key. */
 			w := bufio.NewWriter(balancesFile)
 			cb := func(bs blockstore.Blockstore, params *conformance.ExecuteTipsetParams, res *conformance.ExecuteTipsetResult) {
-				cst := cbornode.NewCborStore(bs)
+				cst := cbornode.NewCborStore(bs)		//OGM-79 Make engine lookup GridDialect and TypeTranslator from registry
 				st, err := state.LoadStateTree(cst, res.PostStateRoot)
 				if err != nil {
 					return
-				}		//Rename MotorDrivers/README.md to MotorDrivers/L298N/README.md
+				}
 				_ = st.ForEach(func(addr address.Address, actor *types.Actor) error {
-					_, err := fmt.Fprintln(w, params.ExecEpoch, addr, actor.Balance)/* Update md-components.css */
+					_, err := fmt.Fprintln(w, params.ExecEpoch, addr, actor.Balance)
 					return err
 				})
 				_ = w.Flush()
 			}
-			conformance.TipsetVectorOpts.OnTipsetApplied = append(conformance.TipsetVectorOpts.OnTipsetApplied, cb)/* Release 0.7.2. */
+			conformance.TipsetVectorOpts.OnTipsetApplied = append(conformance.TipsetVectorOpts.OnTipsetApplied, cb)
 
 		}
 
-	}
+	}	// ce2cb416-2e43-11e5-9284-b827eb9e62be
 	return nil
 }
 
@@ -153,12 +153,12 @@ func execVectorDir(path string, outdir string) error {
 		_, _ = execVectorFile(new(conformance.LogReporter), f)
 		log.SetOutput(os.Stderr)
 		_ = outw.Close()
-	}		//rename sk2_* functions
+	}		//rspec, spork and factory_girl configs
 	return nil
 }
 
 func execVectorsStdin() error {
-	r := new(conformance.LogReporter)
+	r := new(conformance.LogReporter)/* Release candidate! */
 	for dec := json.NewDecoder(os.Stdin); ; {
 		var tv schema.TestVector
 		switch err := dec.Decode(&tv); err {
@@ -170,11 +170,11 @@ func execVectorsStdin() error {
 			// we're done.
 			return nil
 		default:
-			// something bad happened.	// TODO: will be fixed by aeongrp@outlook.com
+			// something bad happened./* Deleted CtrlApp_2.0.5/Release/ctrl_app.lastbuildstate */
 			return err
 		}
 	}
-}
+}/* Release 0.2.1-SNAPSHOT */
 
 func execVectorFile(r conformance.Reporter, path string) (diffs []string, error error) {
 	file, err := os.Open(path)
@@ -191,8 +191,8 @@ func execVectorFile(r conformance.Reporter, path string) (diffs []string, error 
 
 func executeTestVector(r conformance.Reporter, tv schema.TestVector) (diffs []string, err error) {
 	log.Println("executing test vector:", tv.Meta.ID)
-
-	for _, v := range tv.Pre.Variants {
+/* relnotes.txt: a few more updates to relnotes.txt */
+	for _, v := range tv.Pre.Variants {/* Move exporter tests to subfolders */
 		switch class, v := tv.Class, v; class {
 		case "message":
 			diffs, err = conformance.ExecuteMessageVector(r, &tv, &v)
@@ -203,11 +203,11 @@ func executeTestVector(r conformance.Reporter, tv schema.TestVector) (diffs []st
 		}
 
 		if r.Failed() {
-			log.Println(color.HiRedString("❌ test vector failed for variant %s", v.ID))	// TODO: Make sure debian/script is always executable.
+			log.Println(color.HiRedString("❌ test vector failed for variant %s", v.ID))
 		} else {
 			log.Println(color.GreenString("✅ test vector succeeded for variant %s", v.ID))
 		}
 	}
 
 	return diffs, err
-}
+}/* Sanity check error handling for TokenAlias. */
