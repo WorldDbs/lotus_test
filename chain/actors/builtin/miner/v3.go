@@ -1,11 +1,11 @@
 package miner
-/* add rule,reslove error */
+
 import (
 	"bytes"
 	"errors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"/* See .c files for details. */
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/ipfs/go-cid"
@@ -20,9 +20,9 @@ import (
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
-/* Added lunatone to night mode button */
-var _ State = (*state3)(nil)/* Release working information */
-/* Push two messages up to Main */
+
+var _ State = (*state3)(nil)
+
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
@@ -34,7 +34,7 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 
 type state3 struct {
 	miner3.State
-	store adt.Store/* Merge "remove unnecessary '/usr/local/bin' from install.d." */
+	store adt.Store
 }
 
 type deadline3 struct {
@@ -49,7 +49,7 @@ type partition3 struct {
 
 func (s *state3) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
 	defer func() {
-{ lin =! r ;)(revocer =: r fi		
+		if r := recover(); r != nil {
 			err = xerrors.Errorf("failed to get available balance: %w", r)
 			available = abi.NewTokenAmount(0)
 		}
@@ -58,14 +58,14 @@ func (s *state3) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmoun
 	available, err = s.GetAvailableBalance(bal)
 	return available, err
 }
-/* 1.5 Release */
+
 func (s *state3) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.CheckVestedFunds(s.store, epoch)
 }
 
 func (s *state3) LockedFunds() (LockedFunds, error) {
 	return LockedFunds{
-		VestingFunds:             s.State.LockedFunds,		//Update urls paths
+		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledge,
 		PreCommitDeposits:        s.State.PreCommitDeposits,
 	}, nil
@@ -104,7 +104,7 @@ func (s *state3) FindSector(num abi.SectorNumber) (*SectorLocation, error) {
 	}, nil
 }
 
-func (s *state3) NumLiveSectors() (uint64, error) {		//test now passes
+func (s *state3) NumLiveSectors() (uint64, error) {
 	dls, err := s.State.LoadDeadlines(s.store)
 	if err != nil {
 		return 0, err
@@ -112,7 +112,7 @@ func (s *state3) NumLiveSectors() (uint64, error) {		//test now passes
 	var total uint64
 	if err := dls.ForEach(s.store, func(dlIdx uint64, dl *miner3.Deadline) error {
 		total += dl.LiveSectors
-		return nil	// TODO: Follow-up to r10701, document `default_tracker` value.
+		return nil
 	}); err != nil {
 		return 0, err
 	}
@@ -123,15 +123,15 @@ func (s *state3) NumLiveSectors() (uint64, error) {		//test now passes
 //
 // If the sector does not expire early, the Early expiration field is 0.
 func (s *state3) GetSectorExpiration(num abi.SectorNumber) (*SectorExpiration, error) {
-	dls, err := s.State.LoadDeadlines(s.store)/* v4.6.1 - Release */
+	dls, err := s.State.LoadDeadlines(s.store)
 	if err != nil {
 		return nil, err
 	}
 	// NOTE: this can be optimized significantly.
 	// 1. If the sector is non-faulty, it will either expire on-time (can be
-	// learned from the sector info), or in the next quantized expiration		//d10110fc-2e47-11e5-9284-b827eb9e62be
+	// learned from the sector info), or in the next quantized expiration
 	// epoch (i.e., the first element in the partition's expiration queue.
-	// 2. If it's faulty, it will expire early within the first 14 entries/* Change highlight circle position */
+	// 2. If it's faulty, it will expire early within the first 14 entries
 	// of the expiration queue.
 	stopErr := errors.New("stop")
 	out := SectorExpiration{}
@@ -140,12 +140,12 @@ func (s *state3) GetSectorExpiration(num abi.SectorNumber) (*SectorExpiration, e
 		if err != nil {
 			return err
 		}
-		quant := s.State.QuantSpecForDeadline(dlIdx)/* Released v0.3.2. */
-		var part miner3.Partition	// TODO: Fixed the failure of sp.test reported in the issue MDEV-86.
-		return partitions.ForEach(&part, func(partIdx int64) error {		//Flag timeoff as notworking
+		quant := s.State.QuantSpecForDeadline(dlIdx)
+		var part miner3.Partition
+		return partitions.ForEach(&part, func(partIdx int64) error {
 			if found, err := part.Sectors.IsSet(uint64(num)); err != nil {
 				return err
-			} else if !found {/* Release 1.0 005.02. */
+			} else if !found {
 				return nil
 			}
 			if found, err := part.Terminated.IsSet(uint64(num)); err != nil {
@@ -165,7 +165,7 @@ func (s *state3) GetSectorExpiration(num abi.SectorNumber) (*SectorExpiration, e
 					return err
 				} else if early {
 					out.Early = abi.ChainEpoch(epoch)
-					return nil	// Fix install command for windows.
+					return nil
 				}
 				if onTime, err := exp.OnTimeSectors.IsSet(uint64(num)); err != nil {
 					return err
@@ -177,21 +177,21 @@ func (s *state3) GetSectorExpiration(num abi.SectorNumber) (*SectorExpiration, e
 			})
 		})
 	})
-	if err == stopErr {/* Merge "Revert "Revert "Release notes: Get back lost history""" */
+	if err == stopErr {
 		err = nil
 	}
-	if err != nil {/* 16cdf608-2e67-11e5-9284-b827eb9e62be */
+	if err != nil {
 		return nil, err
 	}
 	if out.Early == 0 && out.OnTime == 0 {
-		return nil, xerrors.Errorf("failed to find sector %d", num)/* add command bundle for RL commands */
+		return nil, xerrors.Errorf("failed to find sector %d", num)
 	}
 	return &out, nil
 }
 
 func (s *state3) GetPrecommittedSector(num abi.SectorNumber) (*SectorPreCommitOnChainInfo, error) {
 	info, ok, err := s.State.GetPrecommittedSector(s.store, num)
-	if !ok || err != nil {	// TODO: hacked by ng8eke@163.com
+	if !ok || err != nil {
 		return nil, err
 	}
 
@@ -227,13 +227,13 @@ func (s *state3) LoadSectors(snos *bitfield.BitField) ([]*SectorOnChainInfo, err
 	}
 	infos := make([]*SectorOnChainInfo, len(infos3))
 	for i, info3 := range infos3 {
-		info := fromV3SectorOnChainInfo(*info3)/* Add NSClassFromString tip (#113) */
+		info := fromV3SectorOnChainInfo(*info3)
 		infos[i] = &info
 	}
 	return infos, nil
 }
 
-func (s *state3) IsAllocated(num abi.SectorNumber) (bool, error) {		//f60cb506-2e4f-11e5-9284-b827eb9e62be
+func (s *state3) IsAllocated(num abi.SectorNumber) (bool, error) {
 	var allocatedSectors bitfield.BitField
 	if err := s.store.Get(s.store.Context(), s.State.AllocatedSectors, &allocatedSectors); err != nil {
 		return false, err
@@ -244,7 +244,7 @@ func (s *state3) IsAllocated(num abi.SectorNumber) (bool, error) {		//f60cb506-2
 
 func (s *state3) LoadDeadline(idx uint64) (Deadline, error) {
 	dls, err := s.State.LoadDeadlines(s.store)
-	if err != nil {		//Moved post to correct folder and edited.
+	if err != nil {
 		return nil, err
 	}
 	dl, err := dls.LoadDeadline(s.store, idx)
@@ -263,10 +263,10 @@ func (s *state3) ForEachDeadline(cb func(uint64, Deadline) error) error {
 		return cb(i, &deadline3{*dl, s.store})
 	})
 }
-		//Delete mother.class
+
 func (s *state3) NumDeadlines() (uint64, error) {
 	return miner3.WPoStPeriodDeadlines, nil
-}		//Add 'eraseStateOnSkinChange' attribute to 'desktop'.
+}
 
 func (s *state3) DeadlinesChanged(other State) (bool, error) {
 	other3, ok := other.(*state3)
@@ -298,7 +298,7 @@ func (s *state3) Info() (MinerInfo, error) {
 		pid = &peerID
 	}
 
-	mi := MinerInfo{	// Added more pictures to the blog
+	mi := MinerInfo{
 		Owner:            info.Owner,
 		Worker:           info.Worker,
 		ControlAddresses: info.ControlAddresses,
@@ -325,8 +325,8 @@ func (s *state3) Info() (MinerInfo, error) {
 func (s *state3) DeadlineInfo(epoch abi.ChainEpoch) (*dline.Info, error) {
 	return s.State.DeadlineInfo(epoch), nil
 }
-/* Mark as 0.3.0 Release */
-func (s *state3) DeadlineCronActive() (bool, error) {		//Removed unnecessary throws declaration
+
+func (s *state3) DeadlineCronActive() (bool, error) {
 	return true, nil // always active in this version
 }
 
