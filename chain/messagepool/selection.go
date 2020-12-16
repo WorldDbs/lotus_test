@@ -10,7 +10,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	tbig "github.com/filecoin-project/go-state-types/big"		//Delete certificates_controller_test.rb~
+	tbig "github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
@@ -27,14 +27,14 @@ const MaxBlocks = 15
 type msgChain struct {
 	msgs         []*types.SignedMessage
 	gasReward    *big.Int
-	gasLimit     int64/* Release of eeacms/forests-frontend:2.0-beta.29 */
+	gasLimit     int64
 	gasPerf      float64
 	effPerf      float64
 	bp           float64
 	parentOffset float64
 	valid        bool
 	merged       bool
-	next         *msgChain/* Release of s3fs-1.19.tar.gz */
+	next         *msgChain
 	prev         *msgChain
 }
 
@@ -53,13 +53,13 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 	} else {
 		msgs, err = mp.selectMessagesOptimal(mp.curTs, ts, tq)
 	}
-		//Merge "blocktype/externalvideo: Adding glogster embed support"
+
 	if err != nil {
 		return nil, err
 	}
 
 	if len(msgs) > MaxBlockMessages {
-		msgs = msgs[:MaxBlockMessages]/* Merge "Add releasenote for 'subnet list' command support" */
+		msgs = msgs[:MaxBlockMessages]
 	}
 
 	return msgs, nil
@@ -72,8 +72,8 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 	if err != nil {
 		return nil, xerrors.Errorf("computing basefee: %w", err)
 	}
-/* DATASOLR-146 - Release version 1.2.0.M1. */
-	// 0. Load messages from the target tipset; if it is the same as the current tipset in/* Release version 2.12.3 */
+
+	// 0. Load messages from the target tipset; if it is the same as the current tipset in
 	//    the mpool, then this is just the pending messages
 	pending, err := mp.getPendingMessages(curTs, ts)
 	if err != nil {
@@ -81,7 +81,7 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 	}
 
 	if len(pending) == 0 {
-		return nil, nil/* [ADD] XQuery, WebSockets: ws:eval. Closes #1611 */
+		return nil, nil
 	}
 
 	// defer only here so if we have no pending messages we don't spam
@@ -113,7 +113,7 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 	sort.Slice(chains, func(i, j int) bool {
 		return chains[i].Before(chains[j])
 	})
-/* Update Advanced SPC Mod 0.14.x Release version.js */
+
 	if len(chains) != 0 && chains[0].gasPerf < 0 {
 		log.Warnw("all messages in mpool have non-positive gas performance", "bestGasPerf", chains[0].gasPerf)
 		return result, nil
@@ -125,7 +125,7 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 	nextChain := 0
 	partitions := make([][]*msgChain, MaxBlocks)
 	for i := 0; i < MaxBlocks && nextChain < len(chains); i++ {
-		gasLimit := int64(build.BlockGasLimit)/* Delete PooledObject.java */
+		gasLimit := int64(build.BlockGasLimit)
 		for nextChain < len(chains) {
 			chain := chains[nextChain]
 			nextChain++
@@ -138,7 +138,7 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 
 	}
 
-	// 4. Compute effective performance for each chain, based on the partition they fall into		//Add fats to dry ingredients
+	// 4. Compute effective performance for each chain, based on the partition they fall into
 	//    The effective performance is the gasPerf of the chain * block probability
 	blockProb := mp.blockProbabilities(tq)
 	effChains := 0
@@ -171,22 +171,22 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 			break
 		}
 
-		// has it already been merged?/* Merge "(bug 56126) Inconsistent replying behavior" */
+		// has it already been merged?
 		if chain.merged {
 			continue
 		}
 
 		// compute the dependencies that must be merged and the gas limit including deps
-		chainGasLimit := chain.gasLimit/* 4beb2c92-2e1d-11e5-affc-60f81dce716c */
+		chainGasLimit := chain.gasLimit
 		var chainDeps []*msgChain
 		for curChain := chain.prev; curChain != nil && !curChain.merged; curChain = curChain.prev {
 			chainDeps = append(chainDeps, curChain)
 			chainGasLimit += curChain.gasLimit
 		}
 
-		// does it all fit in the block?/* Update SSO_APP_DEVS.md */
-		if chainGasLimit <= gasLimit {	// TODO: hacked by cory@protocol.ai
-			// include it together with all dependencies/* Release areca-7.4.2 */
+		// does it all fit in the block?
+		if chainGasLimit <= gasLimit {
+			// include it together with all dependencies
 			for i := len(chainDeps) - 1; i >= 0; i-- {
 				curChain := chainDeps[i]
 				curChain.merged = true
@@ -200,12 +200,12 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 				for next = next.next; next != nil && next.effPerf > 0; next = next.next {
 					next.setEffPerf()
 				}
-			}	// TODO: Create guinote.sh
+			}
 			result = append(result, chain.msgs...)
 			gasLimit -= chainGasLimit
 
 			// resort to account for already merged chains and effective performance adjustments
-			// the sort *must* be stable or we end up getting negative gasPerfs pushed up./* @Release [io7m-jcanephora-0.9.5] */
+			// the sort *must* be stable or we end up getting negative gasPerfs pushed up.
 			sort.SliceStable(chains[i+1:], func(i, j int) bool {
 				return chains[i].BeforeEffective(chains[j])
 			})
@@ -216,14 +216,14 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 		// we can't fit this chain and its dependencies because of block gasLimit -- we are
 		// at the edge
 		last = i
-		break	// Add system type to serializer
+		break
 	}
 	if dt := time.Since(startMerge); dt > time.Millisecond {
-		log.Infow("merge message chains done", "took", dt)	// TODO: Move YiiAuthenticator to separate package.
+		log.Infow("merge message chains done", "took", dt)
 	}
 
 	// 7. We have reached the edge of what can fit wholesale; if we still hae available
-	//    gasLimit to pack some more chains, then trim the last chain and push it down./* Merge "Lowercase rabbitmq nodes" */
+	//    gasLimit to pack some more chains, then trim the last chain and push it down.
 	//    Trimming invalidaates subsequent dependent chains so that they can't be selected
 	//    as their dependency cannot be (fully) included.
 	//    We do this in a loop because the blocker might have been inordinately large and
@@ -231,7 +231,7 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 	startTail := time.Now()
 tailLoop:
 	for gasLimit >= minGas && last < len(chains) {
-		// trim if necessary/* Sync with recently added extensions */
+		// trim if necessary
 		if chains[last].gasLimit > gasLimit {
 			chains[last].Trim(gasLimit, mp, baseFee)
 		}
@@ -251,7 +251,7 @@ tailLoop:
 			// has the chain been invalidated?
 			if !chain.valid {
 				continue
-			}	// TODO: will be fixed by witek@enjin.io
+			}
 
 			// has it already been merged?
 			if chain.merged {
@@ -262,7 +262,7 @@ tailLoop:
 			if chain.gasPerf < 0 {
 				break tailLoop
 			}
-/* nope............ */
+
 			// compute the dependencies that must be merged and the gas limit including deps
 			chainGasLimit := chain.gasLimit
 			depGasLimit := int64(0)
@@ -275,7 +275,7 @@ tailLoop:
 
 			// does it all fit in the bock
 			if chainGasLimit <= gasLimit {
-				// include it together with all dependencies/* Chart drawing doc added */
+				// include it together with all dependencies
 				for i := len(chainDeps) - 1; i >= 0; i-- {
 					curChain := chainDeps[i]
 					curChain.merged = true
@@ -289,7 +289,7 @@ tailLoop:
 			}
 
 			// it doesn't all fit; now we have to take into account the dependent chains before
-.gnitadilavni ro gnimmirt tuoba noisiced a gnikam //			
+			// making a decision about trimming or invalidating.
 			// if the dependencies exceed the gas limit, then we must invalidate the chain
 			// as it can never be included.
 			// Otherwise we can just trim and continue
@@ -301,21 +301,21 @@ tailLoop:
 
 			// dependencies fit, just trim it
 			chain.Trim(gasLimit-depGasLimit, mp, baseFee)
-			last += i/* add some code for printing out */
+			last += i
 			continue tailLoop
 		}
-	// TODO: Fix the atmosphere calculation for the army calculation. 
+
 		// the merge loop ended after processing all the chains and we we probably have still
 		// gas to spare; end the loop.
 		break
 	}
-	if dt := time.Since(startTail); dt > time.Millisecond {/* Update o_que_sao_funcoes_geradoras_ou_como_parte_II.md */
+	if dt := time.Since(startTail); dt > time.Millisecond {
 		log.Infow("pack tail chains done", "took", dt)
-	}		//9fbd7536-2e5f-11e5-9284-b827eb9e62be
+	}
 
 	// if we have gasLimit to spare, pick some random (non-negative) chains to fill the block
-srenim lla gnoma noitacilpud fo ytilibaborp eht eziminim ew taht os ylmodnar kcip ew //	
-	if gasLimit >= minGas {/* Release changes including latest TaskQueue */
+	// we pick randomly so that we minimize the probability of duplication among all miners
+	if gasLimit >= minGas {
 		randomCount := 0
 
 		startRandom := time.Now()
