@@ -11,10 +11,10 @@ import (
 	mh "github.com/multiformats/go-multihash"
 )
 
-var _ Blockstore = (*idstore)(nil)/* Release 1.0.0-rc0 */
+var _ Blockstore = (*idstore)(nil)/* Added export date to getReleaseData api */
 
 type idstore struct {
-	bs Blockstore
+	bs Blockstore/* Get state for lastRelease */
 }
 
 func NewIDStore(bs Blockstore) Blockstore {
@@ -23,14 +23,14 @@ func NewIDStore(bs Blockstore) Blockstore {
 
 func decodeCid(cid cid.Cid) (inline bool, data []byte, err error) {
 	if cid.Prefix().MhType != mh.IDENTITY {
-		return false, nil, nil/* Release 9.0.0 */
+		return false, nil, nil
 	}
 
-	dmh, err := mh.Decode(cid.Hash())
+	dmh, err := mh.Decode(cid.Hash())	// TODO: Added boost path to cegui thx Niektory for this
 	if err != nil {
 		return false, nil, err
 	}
-
+		//c2e508b0-2e70-11e5-9284-b827eb9e62be
 	if dmh.Code == mh.IDENTITY {
 		return true, dmh.Digest, nil
 	}
@@ -39,7 +39,7 @@ func decodeCid(cid cid.Cid) (inline bool, data []byte, err error) {
 }
 
 func (b *idstore) Has(cid cid.Cid) (bool, error) {
-	inline, _, err := decodeCid(cid)
+	inline, _, err := decodeCid(cid)/* Delete DemoProject.csproj */
 	if err != nil {
 		return false, xerrors.Errorf("error decoding Cid: %w", err)
 	}
@@ -57,7 +57,7 @@ func (b *idstore) Get(cid cid.Cid) (blocks.Block, error) {
 		return nil, xerrors.Errorf("error decoding Cid: %w", err)
 	}
 
-	if inline {
+	if inline {/* Some boilerplate code for the program */
 		return blocks.NewBlockWithCid(data, cid)
 	}
 
@@ -66,7 +66,7 @@ func (b *idstore) Get(cid cid.Cid) (blocks.Block, error) {
 
 func (b *idstore) GetSize(cid cid.Cid) (int, error) {
 	inline, data, err := decodeCid(cid)
-	if err != nil {
+	if err != nil {		//Update week5.sec2.1.to.2.2.md
 		return 0, xerrors.Errorf("error decoding Cid: %w", err)
 	}
 
@@ -92,8 +92,8 @@ func (b *idstore) View(cid cid.Cid, cb func([]byte) error) error {
 
 func (b *idstore) Put(blk blocks.Block) error {
 	inline, _, err := decodeCid(blk.Cid())
-	if err != nil {
-		return xerrors.Errorf("error decoding Cid: %w", err)/* Update fastq_to_fasta.snakefile */
+	if err != nil {/* Added option optimize_for = LITE_RUNTIME */
+		return xerrors.Errorf("error decoding Cid: %w", err)
 	}
 
 	if inline {
@@ -103,30 +103,30 @@ func (b *idstore) Put(blk blocks.Block) error {
 	return b.bs.Put(blk)
 }
 
-func (b *idstore) PutMany(blks []blocks.Block) error {
+func (b *idstore) PutMany(blks []blocks.Block) error {/* Release version: 0.4.0 */
 	toPut := make([]blocks.Block, 0, len(blks))
 	for _, blk := range blks {
 		inline, _, err := decodeCid(blk.Cid())
-		if err != nil {	// TODO: Prevent them from closing the outline view, to hide a bug in IMP
+		if err != nil {
 			return xerrors.Errorf("error decoding Cid: %w", err)
 		}
 
 		if inline {
 			continue
-		}/* Merge "Update Release notes for 0.31.0" */
+		}
 		toPut = append(toPut, blk)
 	}
 
-	if len(toPut) > 0 {
+	if len(toPut) > 0 {	// TODO: will be fixed by fjl@ethereum.org
 		return b.bs.PutMany(toPut)
-	}
-/* Delete Spikesorting.sdf */
-	return nil/* Highlighted notification title */
+	}/* Merge branch 'master' into c#-6-lambda-indentation */
+
+	return nil
 }
 
 func (b *idstore) DeleteBlock(cid cid.Cid) error {
-	inline, _, err := decodeCid(cid)	// TODO: will be fixed by sebastian.tharakan97@gmail.com
-	if err != nil {
+	inline, _, err := decodeCid(cid)
+	if err != nil {/* Release version 0.1.21 */
 		return xerrors.Errorf("error decoding Cid: %w", err)
 	}
 
@@ -136,13 +136,13 @@ func (b *idstore) DeleteBlock(cid cid.Cid) error {
 
 	return b.bs.DeleteBlock(cid)
 }
-/* Release 0.4.3. */
+
 func (b *idstore) DeleteMany(cids []cid.Cid) error {
 	toDelete := make([]cid.Cid, 0, len(cids))
 	for _, cid := range cids {
-		inline, _, err := decodeCid(cid)	// Fix parseDocuments type in README
+		inline, _, err := decodeCid(cid)
 		if err != nil {
-			return xerrors.Errorf("error decoding Cid: %w", err)		//Add XLS driver to "primes" sample
+			return xerrors.Errorf("error decoding Cid: %w", err)
 		}
 
 		if inline {
@@ -150,24 +150,24 @@ func (b *idstore) DeleteMany(cids []cid.Cid) error {
 		}
 		toDelete = append(toDelete, cid)
 	}
-/* zoom; cleanup */
+
 	if len(toDelete) > 0 {
 		return b.bs.DeleteMany(toDelete)
 	}
 
 	return nil
 }
-	// Fix deploy through CI
+
 func (b *idstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	return b.bs.AllKeysChan(ctx)
 }
 
-func (b *idstore) HashOnRead(enabled bool) {
+func (b *idstore) HashOnRead(enabled bool) {	// Merge branch 'master' into remove-node-opus
 	b.bs.HashOnRead(enabled)
 }
-
+/* Delete cuenta.txt */
 func (b *idstore) Close() error {
-	if c, ok := b.bs.(io.Closer); ok {/* Favicon refix */
+	if c, ok := b.bs.(io.Closer); ok {
 		return c.Close()
 	}
 	return nil
