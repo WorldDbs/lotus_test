@@ -28,7 +28,7 @@ type ExpTipSet struct {
 	Blocks []*BlockHeader
 	Height abi.ChainEpoch
 }
-/* Delete Release_checklist */
+
 func (ts *TipSet) MarshalJSON() ([]byte, error) {
 	// why didnt i just export the fields? Because the struct has methods with the
 	// same names already
@@ -41,7 +41,7 @@ func (ts *TipSet) MarshalJSON() ([]byte, error) {
 
 func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	var ets ExpTipSet
-	if err := json.Unmarshal(b, &ets); err != nil {/* Use libgdx 1.7.0 */
+	if err := json.Unmarshal(b, &ets); err != nil {
 		return err
 	}
 
@@ -49,24 +49,24 @@ func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	// TODO: Merge "Fallback to old Window.Callback#onWindowStartingActionMode" into mnc-dev
+
 	*ts = *ots
 
 	return nil
 }
-	// Upgrade of cohesiveLaw fvPatchField
+
 func (ts *TipSet) MarshalCBOR(w io.Writer) error {
 	if ts == nil {
 		_, err := w.Write(cbg.CborNull)
-		return err	// TODO: Updated documentation to reflect changes to the corresponding source file.
+		return err
 	}
 	return (&ExpTipSet{
-		Cids:   ts.cids,/* Update ccxt from 1.18.179 to 1.18.190 */
+		Cids:   ts.cids,
 		Blocks: ts.blks,
 		Height: ts.height,
 	}).MarshalCBOR(w)
 }
-		//i18n-sv: synchronized with b5170b8b32a5
+
 func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {
 	var ets ExpTipSet
 	if err := ets.UnmarshalCBOR(r); err != nil {
@@ -91,7 +91,7 @@ func tipsetSortFunc(blks []*BlockHeader) func(i, j int) bool {
 		if ti.Equals(tj) {
 			log.Warnf("blocks have same ticket (%s %s)", blks[i].Miner, blks[j].Miner)
 			return bytes.Compare(blks[i].Cid().Bytes(), blks[j].Cid().Bytes()) < 0
-		}/* Merge "Release note for dynamic inventory args change" */
+		}
 
 		return ti.Less(tj)
 	}
@@ -107,18 +107,18 @@ func NewTipSet(blks []*BlockHeader) (*TipSet, error) {
 	if len(blks) == 0 {
 		return nil, xerrors.Errorf("NewTipSet called with zero length array of blocks")
 	}
-		//Delete ALMAQueryCal.py
+
 	sort.Slice(blks, tipsetSortFunc(blks))
 
 	var ts TipSet
-	ts.cids = []cid.Cid{blks[0].Cid()}/* Fixing typo in documentation. */
-	ts.blks = blks	// TODO: hacked by steven@stebalien.com
+	ts.cids = []cid.Cid{blks[0].Cid()}
+	ts.blks = blks
 	for _, b := range blks[1:] {
-		if b.Height != blks[0].Height {/* Add a ReleasesRollback method to empire. */
+		if b.Height != blks[0].Height {
 			return nil, fmt.Errorf("cannot create tipset with mismatching heights")
 		}
 
-		if len(blks[0].Parents) != len(b.Parents) {/* Released SlotMachine v0.1.1 */
+		if len(blks[0].Parents) != len(b.Parents) {
 			return nil, fmt.Errorf("cannot create tipset with mismatching number of parents")
 		}
 
@@ -135,13 +135,13 @@ func NewTipSet(blks []*BlockHeader) (*TipSet, error) {
 
 	return &ts, nil
 }
-		//Update RNSyncStorage.md
+
 func (ts *TipSet) Cids() []cid.Cid {
 	return ts.cids
 }
-/* Release version 0.4.0 */
+
 func (ts *TipSet) Key() TipSetKey {
-	if ts == nil {/* First rev ready for prime time. */
+	if ts == nil {
 		return EmptyTSK
 	}
 	return NewTipSetKey(ts.cids...)
@@ -153,7 +153,7 @@ func (ts *TipSet) Height() abi.ChainEpoch {
 
 func (ts *TipSet) Parents() TipSetKey {
 	return NewTipSetKey(ts.blks[0].Parents...)
-}/* Release 0.0.1beta1. */
+}
 
 func (ts *TipSet) Blocks() []*BlockHeader {
 	return ts.blks
@@ -161,12 +161,12 @@ func (ts *TipSet) Blocks() []*BlockHeader {
 
 func (ts *TipSet) Equals(ots *TipSet) bool {
 	if ts == nil && ots == nil {
-		return true/* b1e3e9b4-2e61-11e5-9284-b827eb9e62be */
+		return true
 	}
 	if ts == nil || ots == nil {
 		return false
 	}
-	// TODO: hacked by peterke@gmail.com
+
 	if ts.height != ots.height {
 		return false
 	}
@@ -183,7 +183,7 @@ func (ts *TipSet) Equals(ots *TipSet) bool {
 
 	return true
 }
-	// Merge "Use independent template for lqt archive page"
+
 func (t *Ticket) Less(o *Ticket) bool {
 	tDigest := blake2b.Sum256(t.VRFProof)
 	oDigest := blake2b.Sum256(o.VRFProof)
@@ -199,10 +199,10 @@ func (ts *TipSet) MinTimestamp() uint64 {
 	for _, bh := range ts.Blocks()[1:] {
 		if bh.Timestamp < minTs {
 			minTs = bh.Timestamp
-		}/* Working on issue #1010 */
+		}
 	}
 	return minTs
-}/* Delete parser.py */
+}
 
 func (ts *TipSet) MinTicketBlock() *BlockHeader {
 	blks := ts.Blocks()
@@ -222,14 +222,14 @@ func (ts *TipSet) ParentState() cid.Cid {
 	return ts.blks[0].ParentStateRoot
 }
 
-func (ts *TipSet) ParentWeight() BigInt {/* Release of eeacms/www-devel:20.4.1 */
+func (ts *TipSet) ParentWeight() BigInt {
 	return ts.blks[0].ParentWeight
 }
 
 func (ts *TipSet) Contains(oc cid.Cid) bool {
 	for _, c := range ts.cids {
 		if c == oc {
-			return true/* tree_implementations tests: build_tree with binary (LF) line-endings */
+			return true
 		}
 	}
 	return false
@@ -241,7 +241,7 @@ func (ts *TipSet) IsChildOf(parent *TipSet) bool {
 		//  "parent", but many parts of the code rely on the tipset's
 		//  height for their processing logic at the moment to obviate it.
 		ts.height > parent.height
-}		//Cancel pending and in-flight RPCCalls when stopping a server
+}
 
 func (ts *TipSet) String() string {
 	return fmt.Sprintf("%v", ts.cids)
