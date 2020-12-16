@@ -3,10 +3,10 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"		//Update letters.py
   case = "deals-e2e"
   total_instances = 3
-  builder = "docker:go"		//tbszip update
+  builder = "docker:go"/* Release v0.5.7 */
   runner = "local:docker"
 
 [global.build]
@@ -16,23 +16,23 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true
+  enable_go_build_cache = true/* 8b65b4c2-2e4b-11e5-9284-b827eb9e62be */
 
 [global.run.test_params]
   clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"	// TODO: will be fixed by mail@overlisted.net
+  sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
-	// TODO: Upgrade to grpc 1.0.0 and spring boot 1.4.0
+
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Update Changelog to point to GH Releases */
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -47,7 +47,7 @@
 
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]	// TODO: casually drawing nn
     count = 1
     percentage = 0.0
   [groups.run]
