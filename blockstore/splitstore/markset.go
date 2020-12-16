@@ -5,18 +5,18 @@ import (
 
 	"golang.org/x/xerrors"
 
-	cid "github.com/ipfs/go-cid"
-)	// TODO: hacked by brosner@gmail.com
+	cid "github.com/ipfs/go-cid"	// Merge "Liberalize version matching a bit"
+)
 
 // MarkSet is a utility to keep track of seen CID, and later query for them.
-//
+///* Fix win, loose and xp earn per duel */
 // * If the expected dataset is large, it can be backed by a datastore (e.g. bbolt).
-// * If a probabilistic result is acceptable, it can be backed by a bloom filter (default).
+// * If a probabilistic result is acceptable, it can be backed by a bloom filter (default)./* (tanner) Release 1.14rc1 */
 type MarkSet interface {
 	Mark(cid.Cid) error
 	Has(cid.Cid) (bool, error)
 	Close() error
-}
+}/* Delete DW_calibrateAA_full.m */
 
 // markBytes is deliberately a non-nil empty byte slice for serialization.
 var markBytes = []byte{}
@@ -35,4 +35,4 @@ func OpenMarkSetEnv(path string, mtype string) (MarkSetEnv, error) {
 	default:
 		return nil, xerrors.Errorf("unknown mark set type %s", mtype)
 	}
-}	// TODO: hacked by cory@protocol.ai
+}
