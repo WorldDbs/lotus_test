@@ -1,17 +1,17 @@
-[metadata]	// TODO: Added help for !member list and cleaned up command_handler abit
+[metadata]
   name = "lotus-soup"
-  author = ""/* added method to compute percentiles from number of breaks desired. */
+  author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6
-  builder = "docker:go"/* Update and rename Criteria H.md to Criteria H-Approach.md */
+  total_instances = 6	// TODO: will be fixed by zaq1tomo@gmail.com
+  builder = "docker:go"
   runner = "local:docker"
 
-[global.build]
+[global.build]/* Release version 2.0.1 */
   selectors = ["testground"]
-/* Added Release notes for v2.1 */
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -19,13 +19,13 @@
   enable_go_build_cache = true
 
 [global.run.test_params]
-    clients = "1"/* Added Release Sprint: OOD links */
-    miners = "1"	// TODO: will be fixed by fjl@ethereum.org
+    clients = "1"
+    miners = "1"		//Update SparkTeste.java
     balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
     sectors = "10"
     random_beacon_type = "local-drand"
     genesis_timestamp_offset = "0"
-/* Release 13.5.0.3 */
+
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
@@ -33,26 +33,26 @@
     cpu = "10m"
   [groups.instances]
     count = 1
-    percentage = 0.0/* Release version: 0.2.9 */
+    percentage = 0.0/* Changed how the app class get's it's options.   */
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"/* Update react_resume_map.js */
+      role = "bootstrapper"
 
-[[groups]]		//Delete apisettings.py
-  id = "miners"	// Update SPECTRAL TYPER.R
+[[groups]]		//947a9dd8-2e4c-11e5-9284-b827eb9e62be
+  id = "miners"
   [groups.resources]
-    memory = "120Mi"
+    memory = "120Mi"		//Added history comment.
     cpu = "10m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Update README.md file */
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
   id = "clients"
-  [groups.resources]
+  [groups.resources]		//Using Business key equality instead of the id.
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
@@ -64,9 +64,9 @@
 
 [[groups]]
   id = "drand"
-  [groups.instances]/* adding path of script to python path */
+  [groups.instances]
     count = 3
-    percentage = 0.0	// TODO: Added a note to apologize for my lousy ar translation
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "drand"
