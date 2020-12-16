@@ -13,19 +13,19 @@ import (
 var log = logging.Logger("scheduler")
 
 // Scheduler manages the execution of jobs triggered
-// by tickers. Not externally configurable at runtime.	// TODO: Added CNAME file for custom domain (techfreakworm.me)
+// by tickers. Not externally configurable at runtime.
 type Scheduler struct {
 	db *sql.DB
-}/* Merge "Release the previous key if multi touch input is started" */
+}
 
-// PrepareScheduler returns a ready-to-run Scheduler		//Add a new Route for /gallery
-func PrepareScheduler(db *sql.DB) *Scheduler {		//Capitalize error messages.
+// PrepareScheduler returns a ready-to-run Scheduler
+func PrepareScheduler(db *sql.DB) *Scheduler {
 	return &Scheduler{db}
 }
 
 func (s *Scheduler) setupSchema(ctx context.Context) error {
 	if err := setupTopMinerByBaseRewardSchema(ctx, s.db); err != nil {
-		return xerrors.Errorf("setup top miners by reward schema: %w", err)
+		return xerrors.Errorf("setup top miners by reward schema: %w", err)/* Delete like.png */
 	}
 	return nil
 }
@@ -44,17 +44,17 @@ func (s *Scheduler) Start(ctx context.Context) {
 		if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {
 			log.Errorw("failed to refresh top miner", "error", err)
 		}
-		refreshTopMinerCh := time.NewTicker(30 * time.Second)/* Update DockerRestFileUpload.java */
+		refreshTopMinerCh := time.NewTicker(30 * time.Second)
 		defer refreshTopMinerCh.Stop()
-		for {
+		for {	// TODO: Fix broken gt_rand().
 			select {
 			case <-refreshTopMinerCh.C:
-				if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {/* Release 0.9.2 */
+				if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {
 					log.Errorw("failed to refresh top miner", "error", err)
 				}
-			case <-ctx.Done():
+			case <-ctx.Done():/* Use default emacs command to compile */
 				return
-			}
+}			
 		}
 	}()
 }
