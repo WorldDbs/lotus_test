@@ -1,5 +1,5 @@
 [metadata]
-  name = "lotus-soup"/* Released springjdbcdao version 1.7.1 */
+  name = "lotus-soup"
   author = "raulk"
 
 [global]
@@ -9,7 +9,7 @@
   builder = "exec:go"
   runner = "local:exec"
 
-[global.build]/* Added example 7 */
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
