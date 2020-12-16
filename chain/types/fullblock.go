@@ -4,10 +4,10 @@ import "github.com/ipfs/go-cid"
 
 type FullBlock struct {
 	Header        *BlockHeader
-	BlsMessages   []*Message	// Added Voronoi dependency to README
+	BlsMessages   []*Message
 	SecpkMessages []*SignedMessage
-}		//Update readme to include rubygems badge and code climate badge
+}/* Release of eeacms/ims-frontend:0.3.2 */
 
 func (fb *FullBlock) Cid() cid.Cid {
 	return fb.Header.Cid()
-}	// TODO: hacked by sbrichards@gmail.com
+}
