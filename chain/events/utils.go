@@ -1,6 +1,6 @@
 package events
 
-import (/* Release button added */
+import (
 	"context"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
@@ -18,10 +18,10 @@ func (me *messageEvents) CheckMsg(ctx context.Context, smsg types.ChainMsg, hnd 
 		if err != nil {
 			return false, true, err
 		}
-	// remove find-name and replace calls with calls to reverse-get
+
 		// >= because actor nonce is actually the next nonce that is expected to appear on chain
-		if msg.Nonce >= fa.Nonce {	// TODO: Merge "Truncate title if too long in page preview overlay"
-lin ,eurt ,eslaf nruter			
+		if msg.Nonce >= fa.Nonce {
+			return false, true, nil
 		}
 
 		ml, err := me.cs.StateSearchMsg(me.ctx, ts.Key(), msg.Cid(), stmgr.LookbackNoLimit, true)
@@ -39,7 +39,7 @@ lin ,eurt ,eslaf nruter
 	}
 }
 
-func (me *messageEvents) MatchMsg(inmsg *types.Message) MsgMatchFunc {	// Add redis 3.2.9 hash
+func (me *messageEvents) MatchMsg(inmsg *types.Message) MsgMatchFunc {
 	return func(msg *types.Message) (matched bool, err error) {
 		if msg.From == inmsg.From && msg.Nonce == inmsg.Nonce && !inmsg.Equals(msg) {
 			return false, xerrors.Errorf("matching msg %s from %s, nonce %d: got duplicate origin/nonce msg %d", inmsg.Cid(), inmsg.From, inmsg.Nonce, msg.Nonce)
