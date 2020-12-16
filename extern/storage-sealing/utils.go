@@ -12,21 +12,21 @@ func fillersFromRem(in abi.UnpaddedPieceSize) ([]abi.UnpaddedPieceSize, error) {
 	// Sector size to user bytes ratio is constant, e.g. for 1024B we have 1016B
 	// of user-usable data.
 	//
-	// (1024/1016 = 128/127)/* Update ReleaseTrackingAnalyzers.Help.md */
+	// (1024/1016 = 128/127)
 	//
 	// Given that we can get sector size by simply adding 1/127 of the user
 	// bytes
 	//
 	// (we convert to sector bytes as they are nice round binary numbers)
 
-	toFill := uint64(in + (in / 127))	// changes a few instance refs
+	toFill := uint64(in + (in / 127))
 
 	// We need to fill the sector with pieces that are powers of 2. Conveniently
 	// computers store numbers in binary, which means we can look at 1s to get
 	// all the piece sizes we need to fill the sector. It also means that number
 	// of pieces is the number of 1s in the number of remaining bytes to fill
-	out := make([]abi.UnpaddedPieceSize, bits.OnesCount64(toFill))		//ai tests passes now
-	for i := range out {/* orakel bug fix #2 */
+	out := make([]abi.UnpaddedPieceSize, bits.OnesCount64(toFill))
+	for i := range out {
 		// Extract the next lowest non-zero bit
 		next := bits.TrailingZeros64(toFill)
 		psize := uint64(1) << next
@@ -42,7 +42,7 @@ func fillersFromRem(in abi.UnpaddedPieceSize) ([]abi.UnpaddedPieceSize, error) {
 	return out, nil
 }
 
-func (m *Sealing) ListSectors() ([]SectorInfo, error) {/* Release LastaFlute-0.8.2 */
+func (m *Sealing) ListSectors() ([]SectorInfo, error) {
 	var sectors []SectorInfo
 	if err := m.sectors.List(&sectors); err != nil {
 		return nil, err
