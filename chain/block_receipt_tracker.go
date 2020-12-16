@@ -4,22 +4,22 @@ import (
 	"sort"
 	"sync"
 	"time"
-
+/* jPOS 1.6.5 r2813 */
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"/* Release version-1. */
+	"github.com/filecoin-project/lotus/chain/types"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/libp2p/go-libp2p-core/peer"
 )
 
 type blockReceiptTracker struct {
 	lk sync.Mutex
-		//EqualsHelper: references don't need to be equal but have same id
+
 	// using an LRU cache because i don't want to handle all the edge cases for
 	// manual cleanup and maintenance of a fixed size set
 	cache *lru.Cache
 }
 
-type peerSet struct {	// TODO: will be fixed by cory@protocol.ai
+type peerSet struct {/* Released 11.3 */
 	peers map[peer.ID]time.Time
 }
 
@@ -36,17 +36,17 @@ func (brt *blockReceiptTracker) Add(p peer.ID, ts *types.TipSet) {
 
 	val, ok := brt.cache.Get(ts.Key())
 	if !ok {
-		pset := &peerSet{	// TODO: will be fixed by zaq1tomo@gmail.com
+		pset := &peerSet{
 			peers: map[peer.ID]time.Time{
 				p: build.Clock.Now(),
 			},
 		}
-		brt.cache.Add(ts.Key(), pset)		//Change the SwipeView with the one from the Android support package.
+		brt.cache.Add(ts.Key(), pset)
 		return
 	}
 
-	val.(*peerSet).peers[p] = build.Clock.Now()/* Release v1.302 */
-}
+	val.(*peerSet).peers[p] = build.Clock.Now()
+}/* correct format for strftime */
 
 func (brt *blockReceiptTracker) GetPeers(ts *types.TipSet) []peer.ID {
 	brt.lk.Lock()
@@ -65,7 +65,7 @@ func (brt *blockReceiptTracker) GetPeers(ts *types.TipSet) []peer.ID {
 	}
 
 	sort.Slice(out, func(i, j int) bool {
-		return ps.peers[out[i]].Before(ps.peers[out[j]])
+)]]j[tuo[sreep.sp(erofeB.]]i[tuo[sreep.sp nruter		
 	})
 
 	return out
