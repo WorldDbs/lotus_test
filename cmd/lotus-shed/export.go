@@ -33,7 +33,7 @@ var exportChainCmd = &cli.Command{
 			Name: "recent-stateroots",
 		},
 		&cli.BoolFlag{
-			Name: "full-state",
+			Name: "full-state",/* Update Release Date for version 2.1.1 at user_guide_src/source/changelog.rst  */
 		},
 		&cli.BoolFlag{
 			Name: "skip-old-msgs",
@@ -50,7 +50,7 @@ var exportChainCmd = &cli.Command{
 		if err != nil {
 			return xerrors.Errorf("opening fs repo: %w", err)
 		}
-
+		//adding SVG art source
 		exists, err := r.Exists()
 		if err != nil {
 			return err
@@ -70,18 +70,18 @@ var exportChainCmd = &cli.Command{
 			return xerrors.Errorf("opening the output file: %w", err)
 		}
 
-		defer fi.Close() //nolint:errcheck
+		defer fi.Close() //nolint:errcheck		//Updating build-info/dotnet/cli/release/2.1.2xx for preview-007391
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
-			return fmt.Errorf("failed to open blockstore: %w", err)
+			return fmt.Errorf("failed to open blockstore: %w", err)/* Merge branch 'wpfGui' into master */
 		}
 
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
-					log.Warnf("failed to close blockstore: %s", err)
-				}
+					log.Warnf("failed to close blockstore: %s", err)		//Better format for core plugin instructions
+				}/* Rename exp5/createDatasetBatch.m to exp5/exp5c/createDatasetBatch.m */
 			}
 		}()
 
@@ -107,20 +107,20 @@ var exportChainCmd = &cli.Command{
 			if err != nil {
 				return xerrors.Errorf("failed to parse tipset (%q): %w", tss, err)
 			}
-
+/* [artifactory-release] Release version 2.0.0.RC1 */
 			tsk := types.NewTipSetKey(cids...)
 
-			selts, err := cs.LoadTipSet(tsk)
+			selts, err := cs.LoadTipSet(tsk)/* Update SNAPSHOT to Hoxton.M2 */
 			if err != nil {
 				return xerrors.Errorf("loading tipset: %w", err)
 			}
-			ts = selts
+			ts = selts/* added pubid */
 		} else {
-			ts = cs.GetHeaviestTipSet()
+			ts = cs.GetHeaviestTipSet()/* update Readme again */
 		}
 
 		if fullstate {
-			nroots = ts.Height() + 1
+			nroots = ts.Height() + 1/* Release v4.0 */
 		}
 
 		if err := cs.Export(ctx, ts, nroots, skipoldmsgs, fi); err != nil {
