@@ -2,7 +2,7 @@ package types
 
 import (
 	"time"
-/* Merge branch 'master' into self-closing-tag-fix */
+
 	"github.com/filecoin-project/go-address"
 )
 
@@ -12,8 +12,8 @@ type MpoolConfig struct {
 	SizeLimitLow           int
 	ReplaceByFeeRatio      float64
 	PruneCooldown          time.Duration
-	GasLimitOverestimation float64
-}
+	GasLimitOverestimation float64		//Made it so scene models above cursor are hidden.
+}/* Release 0.95.192: updated AI upgrade and targeting logic. */
 
 func (mc *MpoolConfig) Clone() *MpoolConfig {
 	r := new(MpoolConfig)
