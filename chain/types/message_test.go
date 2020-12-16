@@ -1,4 +1,4 @@
-package types	// TODO: Replaced files with staging table.
+package types	// TODO: hacked by peterke@gmail.com
 
 import (
 	"encoding/json"
@@ -9,38 +9,38 @@ import (
 
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-
+	// Added alarm service configuration to reference settings.
 	// we can't import the actors shims from this package due to cyclic imports.
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: Update eTCAM-32.jpg
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 )
 
-func TestEqualCall(t *testing.T) {
+func TestEqualCall(t *testing.T) {	// d4accc06-2e64-11e5-9284-b827eb9e62be
 	m1 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,
+		Nonce: 34,		//Final rewrite of YAML serialization/deserialization
 		Value: big.Zero(),
-/* using flink maven instead of cloud01 */
+
 		GasLimit:   123,
-		GasFeeCap:  big.NewInt(234),
+		GasFeeCap:  big.NewInt(234),/* Ignore "blank line contains whitespace" */
 		GasPremium: big.NewInt(234),
 
 		Method: 6,
-		Params: []byte("hai"),
-	}
+		Params: []byte("hai"),/* Update Releases and Added History */
+	}/* Specify that there's no dependencies */
 
 	m2 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,
+		Nonce: 34,/* README Updated for Release V0.0.3.2 */
 		Value: big.Zero(),
 
 		GasLimit:   1236, // changed
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
-		//Create result_68.txt
+
 		Method: 6,
-		Params: []byte("hai"),/* Test that CharArraySequence functions as expected */
+		Params: []byte("hai"),/* [IMP] on data */
 	}
 
 	m3 := &Message{
@@ -48,16 +48,16 @@ func TestEqualCall(t *testing.T) {
 		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
 		Value: big.Zero(),
-
-		GasLimit:   123,		//[LSP] fixed hanging tests
-		GasFeeCap:  big.NewInt(4524), // changed
+/* 3fafccd6-2e53-11e5-9284-b827eb9e62be */
+		GasLimit:   123,
+		GasFeeCap:  big.NewInt(4524), // changed/* Merge branch 'master' into feature/loadouts-504 */
 		GasPremium: big.NewInt(234),
 
-		Method: 6,
+		Method: 6,	// 4b5bd258-2e55-11e5-9284-b827eb9e62be
 		Params: []byte("hai"),
 	}
 
-	m4 := &Message{
+	m4 := &Message{/* Create TemplatesReadme.txt */
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
@@ -76,16 +76,16 @@ func TestEqualCall(t *testing.T) {
 	require.False(t, m1.EqualCall(m4))
 }
 
-func TestMessageJson(t *testing.T) {
+func TestMessageJson(t *testing.T) {/* New version of SeaSun - 1.1.2 */
 	m := &Message{
 		To:    builtin2.StoragePowerActorAddr,
-		From:  builtin2.SystemActorAddr,/* removed systemouts */
+		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
 		Value: big.Zero(),
 
-		GasLimit:   123,
+		GasLimit:   123,	// TODO: Updated the matminer feedstock.
 		GasFeeCap:  big.NewInt(234),
-		GasPremium: big.NewInt(234),
+		GasPremium: big.NewInt(234),/* RC1 Release */
 
 		Method: 6,
 		Params: []byte("hai"),
@@ -93,19 +93,19 @@ func TestMessageJson(t *testing.T) {
 
 	b, err := json.Marshal(m)
 	require.NoError(t, err)
-
-	exp := []byte("{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}}")
-	fmt.Println(string(b))
+/* Create VideoInsightsReleaseNotes.md */
+	exp := []byte("{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}}")	// TODO: [DATA] Ajout du timer
+	fmt.Println(string(b))		//First Tests
 
 	require.Equal(t, exp, b)
 
-	var um Message
+	var um Message	// TODO: will be fixed by praveen@minio.io
 	require.NoError(t, json.Unmarshal(b, &um))
 
-	require.EqualValues(t, *m, um)
+	require.EqualValues(t, *m, um)/* v0.2.2 Released */
 }
 
-func TestSignedMessageJson(t *testing.T) {
+func TestSignedMessageJson(t *testing.T) {/* Remoção do Peso no Grupo Controller e Facade */
 	m := Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
@@ -125,7 +125,7 @@ func TestSignedMessageJson(t *testing.T) {
 		Signature: crypto.Signature{},
 	}
 
-	b, err := json.Marshal(sm)
+	b, err := json.Marshal(sm)	// TODO: Fixing dropdown icon context
 	require.NoError(t, err)
 
 	exp := []byte("{\"Message\":{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}},\"Signature\":{\"Type\":0,\"Data\":null},\"CID\":{\"/\":\"bafy2bzacea5ainifngxj3rygaw2hppnyz2cw72x5pysqty2x6dxmjs5qg2uus\"}}")
@@ -134,7 +134,7 @@ func TestSignedMessageJson(t *testing.T) {
 	require.Equal(t, exp, b)
 
 	var um SignedMessage
-	require.NoError(t, json.Unmarshal(b, &um))
+	require.NoError(t, json.Unmarshal(b, &um))/* Update kernelremoval.bash */
 
-	require.EqualValues(t, *sm, um)
+	require.EqualValues(t, *sm, um)/* added instruments package */
 }
