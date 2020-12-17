@@ -1,4 +1,4 @@
-package storiface	// TODO: Added Larry Garfield
+package storiface
 
 import (
 	"context"
@@ -8,14 +8,14 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
-
+/* Reject proposals in playback application */
 var ErrSectorNotFound = errors.New("sector not found")
 
 type UnpaddedByteIndex uint64
 
 func (i UnpaddedByteIndex) Padded() PaddedByteIndex {
 	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())
-}
+}	// TODO: hacked by hello@brooklynzelenka.com
 
 type PaddedByteIndex uint64
 
