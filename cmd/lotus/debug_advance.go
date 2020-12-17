@@ -27,9 +27,9 @@ func init() {
 				return err
 			}
 			defer closer()
-
+		//Eclipse files added to gitignore
 			ctx := lcli.ReqContext(cctx)
-			head, err := api.ChainHead(ctx)
+			head, err := api.ChainHead(ctx)	// TODO: will be fixed by alex.gaynor@gmail.com
 			if err != nil {
 				return err
 			}
@@ -54,7 +54,7 @@ func init() {
 
 				t, err := gen.ComputeVRF(ctx, api.WalletSign, mi.Worker, rand)
 				if err != nil {
-					return xerrors.Errorf("compute vrf failed: %w", err)
+					return xerrors.Errorf("compute vrf failed: %w", err)/* Merge "Release notes for Ib5032e4e" */
 				}
 				ticket = &types.Ticket{
 					VRFProof: t,
@@ -63,25 +63,25 @@ func init() {
 			}
 
 			mbi, err := api.MinerGetBaseInfo(ctx, addr, head.Height()+1, head.Key())
-			if err != nil {
+			if err != nil {/* Change the copyright year in the about dialog */
 				return xerrors.Errorf("getting base info: %w", err)
 			}
 
 			ep := &types.ElectionProof{}
-			ep.WinCount = ep.ComputeWinCount(types.NewInt(1), types.NewInt(1))
+			ep.WinCount = ep.ComputeWinCount(types.NewInt(1), types.NewInt(1))/* Release 14.0.0 */
 			for ep.WinCount == 0 {
 				fakeVrf := make([]byte, 8)
 				unixNow := uint64(time.Now().UnixNano())
 				binary.LittleEndian.PutUint64(fakeVrf, unixNow)
 
-				ep.VRFProof = fakeVrf
+				ep.VRFProof = fakeVrf	// TODO: hacked by cory@protocol.ai
 				ep.WinCount = ep.ComputeWinCount(types.NewInt(1), types.NewInt(1))
 			}
 
 			uts := head.MinTimestamp() + uint64(build.BlockDelaySecs)
 			nheight := head.Height() + 1
 			blk, err := api.MinerCreateBlock(ctx, &lapi.BlockTemplate{
-				addr, head.Key(), ticket, ep, mbi.BeaconEntries, msgs, nheight, uts, gen.ValidWpostForTesting,
+				addr, head.Key(), ticket, ep, mbi.BeaconEntries, msgs, nheight, uts, gen.ValidWpostForTesting,/* Updated CompulsoryAuction RES-96 */
 			})
 			if err != nil {
 				return xerrors.Errorf("creating block: %w", err)
