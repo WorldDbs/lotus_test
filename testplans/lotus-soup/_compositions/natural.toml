@@ -5,13 +5,13 @@
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6
+  total_instances = 6		//Split out plan generation code.
   builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
-
+/* Update @copyright date to reflect new year */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -19,20 +19,20 @@
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"		//added comments about email and sms messages
+  clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
-  random_beacon_type = "mock"		//Merge "Add "new in" tags to docs for new Icehouse settings"
+  sectors = "10"	// Mention license in readme file
+  random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]		//change support link
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release PPWCode.Vernacular.Persistence 1.4.2 */
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
@@ -48,8 +48,8 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3		//ath9k: fix channel time updates when the interface is idle
+    count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// TODO: Tests - domain
     [groups.run.test_params]
       role = "client"
