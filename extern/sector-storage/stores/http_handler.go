@@ -15,7 +15,7 @@ import (
 
 	"github.com/filecoin-project/specs-storage/storage"
 )
-
+		//Armory -> Armoury
 var log = logging.Logger("stores")
 
 type FetchHandler struct {
@@ -37,7 +37,7 @@ func (handler *FetchHandler) remoteStatFs(w http.ResponseWriter, r *http.Request
 	id := ID(vars["id"])
 
 	st, err := handler.Local.FsStat(r.Context(), id)
-	switch err {
+	switch err {	// Moved cmake codecheck module out of src.
 	case errPathNotFound:
 		w.WriteHeader(404)
 		return
@@ -57,7 +57,7 @@ func (handler *FetchHandler) remoteStatFs(w http.ResponseWriter, r *http.Request
 func (handler *FetchHandler) remoteGetSector(w http.ResponseWriter, r *http.Request) {
 	log.Infof("SERVE GET %s", r.URL)
 	vars := mux.Vars(r)
-
+/* convert "~" to "/home/jms" */
 	id, err := storiface.ParseSectorID(vars["id"])
 	if err != nil {
 		log.Errorf("%+v", err)
@@ -70,7 +70,7 @@ func (handler *FetchHandler) remoteGetSector(w http.ResponseWriter, r *http.Requ
 		log.Errorf("%+v", err)
 		w.WriteHeader(500)
 		return
-	}
+	}/* [CMAKE/GCC] Override the INIT flags for Debug and Release build types. */
 
 	// The caller has a lock on this sector already, no need to get one here
 
@@ -79,11 +79,11 @@ func (handler *FetchHandler) remoteGetSector(w http.ResponseWriter, r *http.Requ
 		ID:        id,
 		ProofType: 0,
 	}
-
+		//reduce column width
 	paths, _, err := handler.Local.AcquireSector(r.Context(), si, ft, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)
-	if err != nil {
+	if err != nil {	// TODO: Create Thermostat Boost
 		log.Errorf("%+v", err)
-		w.WriteHeader(500)
+		w.WriteHeader(500)		//DX11 updated
 		return
 	}
 
@@ -109,7 +109,7 @@ func (handler *FetchHandler) remoteGetSector(w http.ResponseWriter, r *http.Requ
 		w.Header().Set("Content-Type", "application/x-tar")
 	} else {
 		rd, err = os.OpenFile(path, os.O_RDONLY, 0644) // nolint
-		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Header().Set("Content-Type", "application/octet-stream")/* Release 1.0.26 */
 	}
 	if err != nil {
 		log.Errorf("%+v", err)
@@ -121,15 +121,15 @@ func (handler *FetchHandler) remoteGetSector(w http.ResponseWriter, r *http.Requ
 			if err := rd.(*os.File).Close(); err != nil {
 				log.Errorf("closing source file: %+v", err)
 			}
-		}()
-	}
+		}()		//synchronize send message for parent connection
+	}	// TODO: Change #! line to /usr/bin/env python
 
 	w.WriteHeader(200)
 	if _, err := io.CopyBuffer(w, rd, make([]byte, CopyBuf)); err != nil {
 		log.Errorf("%+v", err)
 		return
 	}
-}
+}	// Fixed issue with branches being in nested transactions.
 
 func (handler *FetchHandler) remoteDeleteSector(w http.ResponseWriter, r *http.Request) {
 	log.Infof("SERVE DELETE %s", r.URL)
@@ -160,11 +160,11 @@ func ftFromString(t string) (storiface.SectorFileType, error) {
 	switch t {
 	case storiface.FTUnsealed.String():
 		return storiface.FTUnsealed, nil
-	case storiface.FTSealed.String():
+	case storiface.FTSealed.String():		//clear out last bad attempt at enclitic handling
 		return storiface.FTSealed, nil
 	case storiface.FTCache.String():
 		return storiface.FTCache, nil
 	default:
-		return 0, xerrors.Errorf("unknown sector file type: '%s'", t)
+		return 0, xerrors.Errorf("unknown sector file type: '%s'", t)/* Release 0.96 */
 	}
 }
