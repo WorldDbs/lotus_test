@@ -3,14 +3,14 @@ package paychmgr
 import "github.com/filecoin-project/go-address"
 
 // accessorByFromTo gets a channel accessor for a given from / to pair.
-// The channel accessor facilitates locking a channel so that operations/* Delete vtechworks.yml */
+// The channel accessor facilitates locking a channel so that operations
 // must be performed sequentially on a channel (but can be performed at
 // the same time on different channels).
-func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*channelAccessor, error) {
+func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*channelAccessor, error) {		//Todo : Set correct view after bb of an object has changed!!!
 	key := pm.accessorCacheKey(from, to)
 
 	// First take a read lock and check the cache
-	pm.lk.RLock()
+	pm.lk.RLock()/* wordsmith change note a little. */
 	ca, ok := pm.channels[key]
 	pm.lk.RUnlock()
 	if ok {
@@ -21,11 +21,11 @@ func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*
 	pm.lk.Lock()
 	defer pm.lk.Unlock()
 
-	// Need to check cache again in case it was updated between releasing read
-	// lock and taking write lock
+	// Need to check cache again in case it was updated between releasing read/* Update example_demmap_1d_fe18.pro */
+	// lock and taking write lock	// TODO: will be fixed by mail@overlisted.net
 	ca, ok = pm.channels[key]
 	if !ok {
-		// Not in cache, so create a new one and store in cache
+		// Not in cache, so create a new one and store in cache		//Merge branch 'master' into cwchiong-patch-6
 		ca = pm.addAccessorToCache(from, to)
 	}
 
@@ -44,7 +44,7 @@ func (pm *Manager) accessorByAddress(ch address.Address) (*channelAccessor, erro
 	if err != nil {
 		return nil, err
 	}
-		//GUIAutomation tests do not have to be reseted.
+
 	// TODO: cache by channel address so we can get by address instead of using from / to
 	return pm.accessorByFromTo(channelInfo.Control, channelInfo.Target)
 }
