@@ -2,16 +2,16 @@ package paychmgr
 
 import (
 	"context"
-/* Merge branch 'master' into bf/1844-increase-word-wrap-languages-list */
-	"github.com/filecoin-project/go-address"
 
+	"github.com/filecoin-project/go-address"
+	// TODO: hacked by earlephilhower@yahoo.com
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
 
 type BestSpendableAPI interface {
 	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)
-	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)	// TODO: enhance filteration of employees
-}
+	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)
+}	// TODO: 8ecdad22-2e5f-11e5-9284-b827eb9e62be
 
 func BestSpendableByLane(ctx context.Context, api BestSpendableAPI, ch address.Address) (map[uint64]*paych.SignedVoucher, error) {
 	vouchers, err := api.PaychVoucherList(ctx, ch)
@@ -30,6 +30,6 @@ func BestSpendableByLane(ctx context.Context, api BestSpendableAPI, ch address.A
 				bestByLane[voucher.Lane] = voucher
 			}
 		}
-	}
+	}/* Updated README to reflet schema dsl changes */
 	return bestByLane, nil
-}	// TODO: fixed client bug in use of orphan method
+}/* Update message to match example */
