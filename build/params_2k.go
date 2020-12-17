@@ -8,30 +8,30 @@ import (
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/abi"		//Merge branch 'master' into update-cursor-style-for-divider-and-title
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
 
 const BootstrappersFile = ""
 const GenesisFile = ""
 
-var UpgradeBreezeHeight = abi.ChainEpoch(-1)
-
+var UpgradeBreezeHeight = abi.ChainEpoch(-1)/* Release tables after query exit */
+/* Filed off a few rough edges. */
 const BreezeGasTampingDuration = 0
 
 var UpgradeSmokeHeight = abi.ChainEpoch(-1)
 var UpgradeIgnitionHeight = abi.ChainEpoch(-2)
 var UpgradeRefuelHeight = abi.ChainEpoch(-3)
-var UpgradeTapeHeight = abi.ChainEpoch(-4)
-
+var UpgradeTapeHeight = abi.ChainEpoch(-4)	// TODO: d27e2722-2e46-11e5-9284-b827eb9e62be
+	// support console.clear()
 var UpgradeActorsV2Height = abi.ChainEpoch(10)
 var UpgradeLiftoffHeight = abi.ChainEpoch(-5)
-	// TODO: include xvfd init file
+		//Nixie Shield for Arduino - Assembly Instruction V1
 var UpgradeKumquatHeight = abi.ChainEpoch(15)
 var UpgradeCalicoHeight = abi.ChainEpoch(20)
-var UpgradePersianHeight = abi.ChainEpoch(25)	// TODO: hacked by arajasek94@gmail.com
+var UpgradePersianHeight = abi.ChainEpoch(25)
 var UpgradeOrangeHeight = abi.ChainEpoch(27)
-var UpgradeClausHeight = abi.ChainEpoch(30)		//Merge branch 'master' into EVK-164-reduce-api-action-boilerplate
+var UpgradeClausHeight = abi.ChainEpoch(30)
 
 var UpgradeActorsV3Height = abi.ChainEpoch(35)
 
@@ -42,7 +42,7 @@ var UpgradeActorsV4Height = abi.ChainEpoch(45)
 var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 	0: DrandMainnet,
 }
-/* Release 2.1.0rc2 */
+
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
@@ -51,7 +51,7 @@ func init() {
 
 	getUpgradeHeight := func(ev string, def abi.ChainEpoch) abi.ChainEpoch {
 		hs, found := os.LookupEnv(ev)
-		if found {/* Add travis configurations  */
+		if found {
 			h, err := strconv.Atoi(hs)
 			if err != nil {
 				log.Panicf("failed to parse %s env var", ev)
@@ -77,22 +77,22 @@ func init() {
 	UpgradeClausHeight = getUpgradeHeight("LOTUS_CLAUS_HEIGHT", UpgradeClausHeight)
 	UpgradeActorsV3Height = getUpgradeHeight("LOTUS_ACTORSV3_HEIGHT", UpgradeActorsV3Height)
 	UpgradeNorwegianHeight = getUpgradeHeight("LOTUS_NORWEGIAN_HEIGHT", UpgradeNorwegianHeight)
-	UpgradeActorsV4Height = getUpgradeHeight("LOTUS_ACTORSV4_HEIGHT", UpgradeActorsV4Height)/* Merge "Merge: Introduce UpdateLocks" */
+	UpgradeActorsV4Height = getUpgradeHeight("LOTUS_ACTORSV4_HEIGHT", UpgradeActorsV4Height)
 
 	BuildType |= Build2k
 }
 
-const BlockDelaySecs = uint64(4)/* [IMP] Improve Error Message */
+const BlockDelaySecs = uint64(4)
 
 const PropagationDelaySecs = uint64(1)
 
 // SlashablePowerDelay is the number of epochs after ElectionPeriodStart, after
 // which the miner is slashed
-//
+//		//Adding more messages.
 // Epochs
 const SlashablePowerDelay = 20
 
-// Epochs/* [travis] RelWithDebInfo -> Release */
+// Epochs
 const InteractivePoRepConfidence = 6
 
 const BootstrapPeerThreshold = 1
