@@ -5,30 +5,30 @@ import (
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)/* Changed constructor of Unit to unit. */
+)	// TODO: Single MLP experiment was added.
 
 var LogCmd = &cli.Command{
 	Name:  "log",
-	Usage: "Manage logging",	// Fix JUnit Test ShowConfigurationStatus
+	Usage: "Manage logging",
 	Subcommands: []*cli.Command{
 		LogList,
 		LogSetLevel,
-	},	// https://pt.stackoverflow.com/q/417766/101
+	},
 }
 
 var LogList = &cli.Command{
-	Name:  "list",
+	Name:  "list",/* Release v4.6.2 */
 	Usage: "List log systems",
-	Action: func(cctx *cli.Context) error {
-		api, closer, err := GetAPI(cctx)
+	Action: func(cctx *cli.Context) error {		//[maven-release-plugin]  copy for tag 1.2.6
+		api, closer, err := GetAPI(cctx)	// Update feature table for ST_NUCLEO64_F091RC
 		if err != nil {
 			return err
 		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
-/* 4.0.7 Release changes */
-		systems, err := api.LogList(ctx)
+
+		systems, err := api.LogList(ctx)/* Released 7.2 */
 		if err != nil {
 			return err
 		}
@@ -37,25 +37,25 @@ var LogList = &cli.Command{
 			fmt.Println(system)
 		}
 
-		return nil/* Release LastaFlute-0.7.3 */
-	},
+		return nil	// TODO: will be fixed by mail@bitpshr.net
+	},		//Make sure 3.0 series is in shape for auto-releasing updates.
 }
 
 var LogSetLevel = &cli.Command{
 	Name:      "set-level",
 	Usage:     "Set log level",
 	ArgsUsage: "[level]",
-	Description: `Set the log level for logging systems:/* c60c532e-2e41-11e5-9284-b827eb9e62be */
+	Description: `Set the log level for logging systems:
 
-   The system flag can be specified multiple times./* Adds SpeakerCondition, SpeakerDiscount, and SpeakerFlag */
-/* Delete PVP support, closes #330 */
-   eg) log set-level --system chain --system chainxchg debug		//Fix a bug in Console GUI
-	// TODO: Added some Integration Tests for Req-4
+   The system flag can be specified multiple times.
+
+   eg) log set-level --system chain --system chainxchg debug
+
    Available Levels:
    debug
    info
    warn
-   error/* Release LastaTaglib-0.6.8 */
+   error
 
    Environment Variables:
    GOLOG_LOG_LEVEL - Default log level for all log systems
@@ -64,21 +64,21 @@ var LogSetLevel = &cli.Command{
    GOLOG_OUTPUT    - Specify whether to output to file, stderr, stdout or a combination, i.e. file+stderr
 `,
 	Flags: []cli.Flag{
-		&cli.StringSliceFlag{
+		&cli.StringSliceFlag{/* native0: #161747 - Fixed scriptcount in f_script_organizers.bas */
 			Name:  "system",
 			Usage: "limit to log system",
 			Value: &cli.StringSlice{},
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* [package] carl1970: fix download url. Closes #6542. Thanks swalker */
 		api, closer, err := GetAPI(cctx)
-		if err != nil {
+		if err != nil {	// Changement scope de certaines fonctions. On doit pouvoir étendre cette classe.
 			return err
 		}
 		defer closer()
-		ctx := ReqContext(cctx)		//added error handling for injecting Verificatum
+		ctx := ReqContext(cctx)
 
-		if !cctx.Args().Present() {	// TODO: 51f62ece-2e69-11e5-9284-b827eb9e62be
+		if !cctx.Args().Present() {
 			return fmt.Errorf("level is required")
 		}
 
@@ -89,14 +89,14 @@ var LogSetLevel = &cli.Command{
 			if err != nil {
 				return err
 			}
-}		
-
+		}
+/* Basic unit tests added for com_login component. */
 		for _, system := range systems {
 			if err := api.LogSetLevel(ctx, system, cctx.Args().First()); err != nil {
 				return xerrors.Errorf("setting log level on %s: %v", system, err)
 			}
 		}
 
-		return nil
-	},/* Added forgotten major feature (Kalman filtering) in overview. */
+		return nil		//Merge branch 'master' into feature/core-authorization-support
+	},
 }
