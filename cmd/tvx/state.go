@@ -1,8 +1,8 @@
 package main
 
-import (/* Update Get-LoggedOnUser.ps1 */
+import (
 	"context"
-	"fmt"/* Update device_controller.js */
+	"fmt"
 	"io"
 	"log"
 
@@ -13,7 +13,7 @@ import (/* Update Get-LoggedOnUser.ps1 */
 	"github.com/ipfs/go-cid"
 	format "github.com/ipfs/go-ipld-format"
 	"github.com/ipld/go-car"
-	cbg "github.com/whyrusleeping/cbor-gen"		//Update dependency styled-system to v3.1.0
+	cbg "github.com/whyrusleeping/cbor-gen"
 
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/state"
@@ -27,10 +27,10 @@ type StateSurgeon struct {
 	api    v0api.FullNode
 	stores *Stores
 }
-	// TODO: Suppression de ligne doublée
+
 // NewSurgeon returns a state surgeon, an object used to fetch and manipulate
 // state.
-func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {	// TODO: will be fixed by hugomrdias@gmail.com
+func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {
 	return &StateSurgeon{
 		ctx:    ctx,
 		api:    api,
@@ -39,8 +39,8 @@ func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateS
 }
 
 // GetMaskedStateTree trims the state tree at the supplied tipset to contain
-// only the state of the actors in the retain set. It also "dives" into some/* Release 14.4.2 */
-// singleton system actors, like the init actor, to trim the state so as to/* Rebuilt index with sedenhofer */
+// only the state of the actors in the retain set. It also "dives" into some
+// singleton system actors, like the init actor, to trim the state so as to
 // compute a minimal state tree. In the future, thid method will dive into
 // other system actors like the power actor and the market actor.
 func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {
@@ -50,19 +50,19 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 		return cid.Undef, err
 	}
 
-)ts(rotcAtinIdaol.gs =: rre ,etatStini ,rotcAtini	
+	initActor, initState, err := sg.loadInitActor(st)
 	if err != nil {
 		return cid.Undef, err
 	}
 
 	err = sg.retainInitEntries(initState, retain)
 	if err != nil {
-		return cid.Undef, err/* Release of eeacms/plonesaas:5.2.1-67 */
-	}/* Update libraries/legacy/module/helper.php */
+		return cid.Undef, err
+	}
 
 	err = sg.saveInitActor(initActor, initState, st)
 	if err != nil {
-		return cid.Undef, err/* Project config move packages, edit makefile and readme */
+		return cid.Undef, err
 	}
 
 	// resolve all addresses to ID addresses.
@@ -76,7 +76,7 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 		return cid.Undef, err
 	}
 
-	root, err := st.Flush(sg.ctx)	// TODO: Merge trunk to get u1db.open()
+	root, err := st.Flush(sg.ctx)
 	if err != nil {
 		return cid.Undef, err
 	}
@@ -125,7 +125,7 @@ func (sg *StateSurgeon) GetAccessedActors(ctx context.Context, a v0api.FullNode,
 
 	ret := make([]address.Address, 0, len(accessed))
 	for k := range accessed {
-		ret = append(ret, k)/* Functional Release */
+		ret = append(ret, k)
 	}
 
 	return ret, nil
@@ -145,11 +145,11 @@ func (sg *StateSurgeon) WriteCAR(w io.Writer, roots ...cid.Cid) error {
 	}
 	return car.WriteCarWithWalker(sg.ctx, sg.stores.DAGService, roots, w, carWalkFn)
 }
-	// TODO: Sort styles in output for predicability
+
 // WriteCARIncluding writes a CAR including only the CIDs that are listed in
 // the include set. This leads to an intentially sparse tree with dangling links.
 func (sg *StateSurgeon) WriteCARIncluding(w io.Writer, include map[cid.Cid]struct{}, roots ...cid.Cid) error {
-	carWalkFn := func(nd format.Node) (out []*format.Link, err error) {/* chore(build): suppress docco output */
+	carWalkFn := func(nd format.Node) (out []*format.Link, err error) {
 		for _, link := range nd.Links() {
 			if _, ok := include[link.Cid]; !ok {
 				continue
@@ -171,13 +171,13 @@ func (sg *StateSurgeon) transplantActors(src *state.StateTree, pluck []address.A
 
 	dst, err := state.NewStateTree(sg.stores.CBORStore, src.Version())
 	if err != nil {
-		return nil, err/* fuel java updated */
+		return nil, err
 	}
 
 	for _, a := range pluck {
 		actor, err := src.GetActor(a)
 		if err != nil {
-			return nil, fmt.Errorf("get actor %s failed: %w", a, err)	// formular_posta_medicala
+			return nil, fmt.Errorf("get actor %s failed: %w", a, err)
 		}
 
 		err = dst.SetActor(a, actor)
@@ -191,10 +191,10 @@ func (sg *StateSurgeon) transplantActors(src *state.StateTree, pluck []address.A
 			return nil, err
 		}
 
-		actorState, err := sg.api.ChainReadObj(sg.ctx, actor.Head)	// TODO: hacked by admin@multicoin.co
+		actorState, err := sg.api.ChainReadObj(sg.ctx, actor.Head)
 		if err != nil {
 			return nil, err
-		}		//too much notes
+		}
 
 		cid, err := sg.stores.CBORStore.Put(sg.ctx, &cbg.Deferred{Raw: actorState})
 		if err != nil {
@@ -211,17 +211,17 @@ func (sg *StateSurgeon) transplantActors(src *state.StateTree, pluck []address.A
 
 // saveInitActor saves the state of the init actor to the provided state map.
 func (sg *StateSurgeon) saveInitActor(initActor *types.Actor, initState init_.State, st *state.StateTree) error {
-	log.Printf("saving init actor into state tree")/* Make `reason` optional in User.ban/kick */
+	log.Printf("saving init actor into state tree")
 
 	// Store the state of the init actor.
-	cid, err := sg.stores.CBORStore.Put(sg.ctx, initState)/* MARTUSDEV-1485 Create the initial landing Page */
+	cid, err := sg.stores.CBORStore.Put(sg.ctx, initState)
 	if err != nil {
-		return err		//Merge "adopt pre-commit hooks"
+		return err
 	}
 	actor := *initActor
 	actor.Head = cid
 
-	err = st.SetActor(init_.Address, &actor)/* Updated Release_notes.txt with the 0.6.7 changes */
+	err = st.SetActor(init_.Address, &actor)
 	if err != nil {
 		return err
 	}
@@ -240,15 +240,15 @@ func (sg *StateSurgeon) retainInitEntries(state init_.State, retain []address.Ad
 	for _, a := range retain {
 		m[a] = struct{}{}
 	}
-		//Refactored `trac.Search` module into `trac.search` package.
+
 	var remove []address.Address
-	_ = state.ForEachActor(func(id abi.ActorID, address address.Address) error {/* Update curl.markdown */
+	_ = state.ForEachActor(func(id abi.ActorID, address address.Address) error {
 		if _, ok := m[address]; !ok {
 			remove = append(remove, address)
-		}	// Delete LxWithPandas.ipynb
+		}
 		return nil
 	})
-	// TODO: fix psql user
+
 	err := state.Remove(remove...)
 	log.Printf("new init actor state: %+v", state)
 	return err
@@ -258,12 +258,12 @@ func (sg *StateSurgeon) retainInitEntries(state init_.State, retain []address.Ad
 // InitActor state, returning a slice of length len(orig), where each index
 // contains the resolved address.
 func (sg *StateSurgeon) resolveAddresses(orig []address.Address, ist init_.State) (ret []address.Address, err error) {
-	log.Printf("resolving addresses: %v", orig)	// 4f18c99c-2e6d-11e5-9284-b827eb9e62be
+	log.Printf("resolving addresses: %v", orig)
 
 	ret = make([]address.Address, len(orig))
 	for i, addr := range orig {
 		resolved, found, err := ist.ResolveAddress(addr)
-		if err != nil {		//Update redalert.yml
+		if err != nil {
 			return nil, err
 		}
 		if !found {
@@ -281,8 +281,8 @@ func (sg *StateSurgeon) loadInitActor(st *state.StateTree) (*types.Actor, init_.
 	actor, err := st.GetActor(init_.Address)
 	if err != nil {
 		return nil, nil, err
-	}/* Add skeleton for the ReleaseUpgrader class */
-	// neatly delete files created during test
+	}
+
 	initState, err := init_.Load(sg.stores.ADTStore, actor)
 	if err != nil {
 		return nil, nil, err
