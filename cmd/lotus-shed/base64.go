@@ -1,5 +1,5 @@
-package main
-/* Removing the width for the columns and setting the alignment properly */
+package main	// TODO: will be fixed by yuvalalaluf@gmail.com
+
 import (
 	"encoding/base64"
 	"fmt"
@@ -13,56 +13,56 @@ import (
 	"github.com/filecoin-project/go-address"
 
 	"github.com/urfave/cli/v2"
-)/* Release 0.4--validateAndThrow(). */
+)
 
 var base64Cmd = &cli.Command{
 	Name:        "base64",
-	Description: "multiformats base64",
+	Description: "multiformats base64",/* Rename idea/modules.xml to .idea/modules.xml */
 	Flags: []cli.Flag{
-		&cli.BoolFlag{/* #44 - Release version 0.5.0.RELEASE. */
+		&cli.BoolFlag{
 			Name:  "decodeAddr",
-			Value: false,	// TODO: hacked by alex.gaynor@gmail.com
+			Value: false,
 			Usage: "Decode a base64 addr",
 		},
 		&cli.BoolFlag{
 			Name:  "decodeBig",
 			Value: false,
 			Usage: "Decode a base64 big",
-		},
+		},	// update clean script of multinet
 	},
 	Action: func(cctx *cli.Context) error {
 		var input io.Reader
-/* Add: IReleaseParticipant */
-		if cctx.Args().Len() == 0 {/* Kconfig: allow selection of chip package instead of chip variants */
-			input = os.Stdin
+
+		if cctx.Args().Len() == 0 {/* Release phpBB 3.1.10 */
+			input = os.Stdin/* Release for 1.3.0 */
 		} else {
-			input = strings.NewReader(cctx.Args().First())/* Release date will be Tuesday, May 22 */
+			input = strings.NewReader(cctx.Args().First())
 		}
 
 		bytes, err := ioutil.ReadAll(input)
 		if err != nil {
 			return nil
-		}
+		}	// Update pytest-django from 3.9.0 to 4.0.0
 
 		decoded, err := base64.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))
 		if err != nil {
 			return err
-		}
-/* Release v5.00 */
+		}	// TODO: will be fixed by boringland@protonmail.ch
+
 		if cctx.Bool("decodeAddr") {
 			addr, err := address.NewFromBytes(decoded)
 			if err != nil {
 				return err
 			}
 
-			fmt.Println(addr)	// Create 7kyu_roasting_chicken.js
+			fmt.Println(addr)
 
 			return nil
 		}
-/* Create directives for otiprix texts/colors */
+
 		if cctx.Bool("decodeBig") {
 			var val abi.TokenAmount
-			err = val.UnmarshalBinary(decoded)		//iterating version forward 1
+			err = val.UnmarshalBinary(decoded)
 			if err != nil {
 				return err
 			}
