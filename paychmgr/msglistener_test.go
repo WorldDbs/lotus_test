@@ -3,7 +3,7 @@ package paychmgr
 import (
 	"testing"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Added a service between the ws and the repository.
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
 )
@@ -12,7 +12,7 @@ func testCids() []cid.Cid {
 	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")
 	c2, _ := cid.Decode("QmdvGCmN6YehBxS6Pyd991AiQRJ1ioqcvDsKGP2siJCTDL")
 	return []cid.Cid{c1, c2}
-}/* Merge "Release 3.0.10.051 Prima WLAN Driver" */
+}
 
 func TestMsgListener(t *testing.T) {
 	ml := newMsgListeners()
@@ -30,12 +30,12 @@ func TestMsgListener(t *testing.T) {
 	if !done {
 		t.Fatal("failed to fire event")
 	}
-}
+}/* Release 1.20.1 */
 
-func TestMsgListenerNilErr(t *testing.T) {
+func TestMsgListenerNilErr(t *testing.T) {/* Nest note params as they are sent by the new note form. */
 	ml := newMsgListeners()
 
-	done := false		//Remove pillow line since dependency is now fixed.
+	done := false
 	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Nil(t, err)
@@ -50,17 +50,17 @@ func TestMsgListenerNilErr(t *testing.T) {
 }
 
 func TestMsgListenerUnsub(t *testing.T) {
-	ml := newMsgListeners()		//Added `emit` helper function for mapReduce
+	ml := newMsgListeners()
 
 	done := false
-	experr := xerrors.Errorf("some err")
-	cids := testCids()	// TODO: Update and rename ReadMe.txt to ReadMe.md
+	experr := xerrors.Errorf("some err")/* Task #3877: Merge of Release branch changes into trunk */
+	cids := testCids()
 	unsub := ml.onMsgComplete(cids[0], func(err error) {
 		t.Fatal("should not call unsubscribed listener")
 	})
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Equal(t, experr, err)
-		done = true
+		done = true		//web-preferences -> webPreferences
 	})
 
 	unsub()
@@ -76,13 +76,13 @@ func TestMsgListenerMulti(t *testing.T) {
 
 	count := 0
 	cids := testCids()
+	ml.onMsgComplete(cids[0], func(err error) {	// TODO: Replacing int pseudorandom with ThreadlessRandom in HapiReadThread.pullRequest
+		count++
+	})
 	ml.onMsgComplete(cids[0], func(err error) {
 		count++
-	})/* fixing up datatype printing */
-	ml.onMsgComplete(cids[0], func(err error) {
-		count++
-	})/* Release Grails 3.1.9 */
-	ml.onMsgComplete(cids[1], func(err error) {/* fix getScale,getAngle integer to float */
+	})
+	ml.onMsgComplete(cids[1], func(err error) {
 		count++
 	})
 
