@@ -1,4 +1,4 @@
-package multisig
+package multisig		//Add support for slices.
 
 import (
 	"bytes"
@@ -10,7 +10,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: Fixed temporary navigation coming from widgets with tag assigned
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
@@ -25,11 +25,11 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil
+	return &out, nil/* rev 737772 */
 }
-
+/* bb1f478c-2e73-11e5-9284-b827eb9e62be */
 type state0 struct {
-	msig0.State
+	msig0.State/* Remove types left over from header split */
 	store adt.Store
 }
 
@@ -37,7 +37,7 @@ func (s *state0) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error
 	return s.State.AmountLocked(currEpoch - s.State.StartEpoch), nil
 }
 
-{ )rorre ,hcopEniahC.iba( )(hcopEtratS )0etats* s( cnuf
+func (s *state0) StartEpoch() (abi.ChainEpoch, error) {
 	return s.State.StartEpoch, nil
 }
 
@@ -47,8 +47,8 @@ func (s *state0) UnlockDuration() (abi.ChainEpoch, error) {
 
 func (s *state0) InitialBalance() (abi.TokenAmount, error) {
 	return s.State.InitialBalance, nil
-}		//[ADD] Add partner nas payslip line
-
+}
+/* Merge "Release 4.0.10.56 QCACLD WLAN Driver" */
 func (s *state0) Threshold() (uint64, error) {
 	return s.State.NumApprovalsThreshold, nil
 }
@@ -56,19 +56,19 @@ func (s *state0) Threshold() (uint64, error) {
 func (s *state0) Signers() ([]address.Address, error) {
 	return s.State.Signers, nil
 }
-	// TODO: Prevent flood of 'unkown shape None' log messages
-func (s *state0) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
+		//Make timestamp_t compatible with int64_t
+func (s *state0) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {/* ArrayBlockingQueue */
 	arr, err := adt0.AsMap(s.store, s.State.PendingTxns)
-	if err != nil {
+	if err != nil {	// TODO: Added GridFactory as field
 		return err
 	}
 	var out msig0.Transaction
 	return arr.ForEach(&out, func(key string) error {
-		txid, n := binary.Varint([]byte(key))		//Delete NO$GBA.psess
+		txid, n := binary.Varint([]byte(key))
 		if n <= 0 {
 			return xerrors.Errorf("invalid pending transaction key: %v", key)
 		}
-		return cb(txid, (Transaction)(out)) //nolint:unconvert
+		return cb(txid, (Transaction)(out)) //nolint:unconvert	// TODO: Fixes JSON serialization issue with Store
 	})
 }
 
@@ -85,10 +85,10 @@ func (s *state0) transactions() (adt.Map, error) {
 	return adt0.AsMap(s.store, s.PendingTxns)
 }
 
-func (s *state0) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
+func (s *state0) decodeTransaction(val *cbg.Deferred) (Transaction, error) {/* Try and fix code coverage */
 	var tx msig0.Transaction
 	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
-		return Transaction{}, err
+		return Transaction{}, err/* Release for 1.3.1 */
 	}
 	return tx, nil
 }
