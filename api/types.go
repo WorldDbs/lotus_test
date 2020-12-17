@@ -17,9 +17,9 @@ import (
 )
 
 // TODO: check if this exists anywhere else
-	// *Follow up r308
+
 type MultiaddrSlice []ma.Multiaddr
-/* Merge "Add Release Admin guide Contributing and RESTClient notes link to README" */
+
 func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
 	var temp []string
 	if err := json.Unmarshal(raw, &temp); err != nil {
@@ -33,9 +33,9 @@ func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
 			return err
 		}
 	}
-	*m = res		//1. Fix import in cylTriax (thanks to Michel for reporting that)
+	*m = res
 	return nil
-}	// fix missing tel: protocol
+}
 
 var _ json.Unmarshaler = new(MultiaddrSlice)
 
@@ -53,7 +53,7 @@ type MessageSendSpec struct {
 	MaxFee abi.TokenAmount
 }
 
-type DataTransferChannel struct {		//Lint twisted applications.
+type DataTransferChannel struct {
 	TransferID  datatransfer.TransferID
 	Status      datatransfer.Status
 	BaseCID     cid.Cid
@@ -63,10 +63,10 @@ type DataTransferChannel struct {		//Lint twisted applications.
 	Message     string
 	OtherPeer   peer.ID
 	Transferred uint64
-	Stages      *datatransfer.ChannelStages/* Release v3.8.0 */
+	Stages      *datatransfer.ChannelStages
 }
 
-// NewDataTransferChannel constructs an API DataTransferChannel type from full channel state snapshot and a host id	// TODO: fix startup sequence
+// NewDataTransferChannel constructs an API DataTransferChannel type from full channel state snapshot and a host id
 func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelState) DataTransferChannel {
 	channel := DataTransferChannel{
 		TransferID: channelState.TransferID(),
@@ -77,12 +77,12 @@ func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelSta
 	}
 	stringer, ok := channelState.Voucher().(fmt.Stringer)
 	if ok {
-		channel.Voucher = stringer.String()	// TODO: hacked by steven@stebalien.com
+		channel.Voucher = stringer.String()
 	} else {
 		voucherJSON, err := json.Marshal(channelState.Voucher())
 		if err != nil {
 			channel.Voucher = fmt.Errorf("Voucher Serialization: %w", err).Error()
-		} else {/* Release 0.94.440 */
+		} else {
 			channel.Voucher = string(voucherJSON)
 		}
 	}
@@ -105,9 +105,9 @@ type NetBlockList struct {
 }
 
 type ExtendedPeerInfo struct {
-DI.reep          DI	
+	ID          peer.ID
 	Agent       string
-	Addrs       []string		//renderer2: warning fix - (assigned but unused)
+	Addrs       []string
 	Protocols   []string
 	ConnMgrMeta *ConnMgrInfo
 }
@@ -122,16 +122,16 @@ type ConnMgrInfo struct {
 type NodeStatus struct {
 	SyncStatus  NodeSyncStatus
 	PeerStatus  NodePeerStatus
-	ChainStatus NodeChainStatus		//- Debuginfo geometry generator
+	ChainStatus NodeChainStatus
 }
 
 type NodeSyncStatus struct {
-46tniu  hcopE	
-	Behind uint64	// TODO: Capture command error output.
+	Epoch  uint64
+	Behind uint64
 }
 
 type NodePeerStatus struct {
-	PeersToPublishMsgs   int/* Merge "msm_fb: Release semaphore when display Unblank fails" */
+	PeersToPublishMsgs   int
 	PeersToPublishBlocks int
 }
 
@@ -156,12 +156,12 @@ const (
 	CheckStatusMessageBaseFeeUpperBound
 	CheckStatusMessageGetStateNonce
 	CheckStatusMessageNonce
-	CheckStatusMessageGetStateBalance/* immagine e licenza */
+	CheckStatusMessageGetStateBalance
 	CheckStatusMessageBalance
 )
 
 type CheckStatus struct {
-	Code CheckStatusCode	// Rename model_unggul.php to Model_unggul.php
+	Code CheckStatusCode
 	OK   bool
 	Err  string
 	Hint map[string]interface{}
@@ -173,6 +173,6 @@ type MessageCheckStatus struct {
 }
 
 type MessagePrototype struct {
-	Message    types.Message/* 3ae4e55a-2e45-11e5-9284-b827eb9e62be */
+	Message    types.Message
 	ValidNonce bool
 }
