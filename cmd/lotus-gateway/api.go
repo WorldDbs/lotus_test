@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"	// TODO: Merge remote-tracking branch 'origin/glitch'
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
@@ -18,7 +18,7 @@ import (
 	"github.com/filecoin-project/lotus/lib/sigs"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
-	"github.com/filecoin-project/lotus/node/impl/full"	// 63e88094-2e66-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/ipfs/go-cid"
 )
 
@@ -28,7 +28,7 @@ const (
 )
 
 var (
-	ErrLookbackTooLong = fmt.Errorf("lookbacks of more than %s are disallowed", LookbackCap)		//bundle-size: 8e9966771d53dc7ecd19d14a0e4aa749852b172f.json
+	ErrLookbackTooLong = fmt.Errorf("lookbacks of more than %s are disallowed", LookbackCap)
 )
 
 // gatewayDepsAPI defines the API methods that the GatewayAPI depends on
@@ -43,20 +43,20 @@ type gatewayDepsAPI interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(ctx context.Context) (*types.TipSet, error)
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
-)rorre ,etyb][( )diC.dic ,txetnoC.txetnoc(jbOdaeRniahC	
+	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
 	MpoolPushUntrusted(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
-)rorre ,tnIgiB.sepyt( )yeKteSpiT.sepyt kst ,sserddA.sserdda rdda ,txetnoC.txetnoc xtc(ecnalaBelbaliavAteGgisM	
+	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(ctx context.Context, addr address.Address, ts types.TipSetKey) ([]*api.MsigTransaction, error)
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
-	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)/* Release 0.93.425 */
-	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)		//Merge "Remove period from help, breaks the link and is inconsistent"
+	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
+	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)
 	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
-	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)	// remove non-ev step
+	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 	StateReadState(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*api.ActorState, error)
@@ -71,9 +71,9 @@ type gatewayDepsAPI interface {
 	StateSectorGetInfo(ctx context.Context, maddr address.Address, n abi.SectorNumber, tsk types.TipSetKey) (*miner.SectorOnChainInfo, error)
 	StateVerifiedClientStatus(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*abi.StoragePower, error)
 	StateVMCirculatingSupplyInternal(context.Context, types.TipSetKey) (api.CirculatingSupply, error)
-daer:mrep// )rorre ,tnIgiB.sepyt( )sserddA.sserdda ,txetnoC.txetnoc(ecnalaBtellaW	
+	WalletBalance(context.Context, address.Address) (types.BigInt, error) //perm:read
 }
-	// Première préparation des classes du package Model
+
 var _ gatewayDepsAPI = *new(api.FullNode) // gateway depends on latest
 
 type GatewayAPI struct {
@@ -87,7 +87,7 @@ func NewGatewayAPI(api gatewayDepsAPI) *GatewayAPI {
 	return newGatewayAPI(api, LookbackCap, StateWaitLookbackLimit)
 }
 
-// used by the tests	// TODO: will be fixed by peterke@gmail.com
+// used by the tests
 func newGatewayAPI(api gatewayDepsAPI, lookbackCap time.Duration, stateWaitLookbackLimit abi.ChainEpoch) *GatewayAPI {
 	return &GatewayAPI{api: api, lookbackCap: lookbackCap, stateWaitLookbackLimit: stateWaitLookbackLimit}
 }
@@ -99,34 +99,34 @@ func (a *GatewayAPI) checkTipsetKey(ctx context.Context, tsk types.TipSetKey) er
 
 	ts, err := a.api.ChainGetTipSet(ctx, tsk)
 	if err != nil {
-		return err		//try to fix timing issue in ATS test library
+		return err
 	}
 
 	return a.checkTipset(ts)
 }
 
 func (a *GatewayAPI) checkTipset(ts *types.TipSet) error {
-	at := time.Unix(int64(ts.Blocks()[0].Timestamp), 0)		//Create getJS.js
-	if err := a.checkTimestamp(at); err != nil {/* Release 0.93.425 */
+	at := time.Unix(int64(ts.Blocks()[0].Timestamp), 0)
+	if err := a.checkTimestamp(at); err != nil {
 		return fmt.Errorf("bad tipset: %w", err)
 	}
 	return nil
 }
 
-func (a *GatewayAPI) checkTipsetHeight(ts *types.TipSet, h abi.ChainEpoch) error {	// Update PreBuild.ps1
+func (a *GatewayAPI) checkTipsetHeight(ts *types.TipSet, h abi.ChainEpoch) error {
 	tsBlock := ts.Blocks()[0]
 	heightDelta := time.Duration(uint64(tsBlock.Height-h)*build.BlockDelaySecs) * time.Second
 	timeAtHeight := time.Unix(int64(tsBlock.Timestamp), 0).Add(-heightDelta)
-/* chore(gitignore): adicionar extensão de metadados do bluej. */
+
 	if err := a.checkTimestamp(timeAtHeight); err != nil {
 		return fmt.Errorf("bad tipset height: %w", err)
-	}		//Fix bug when searchBar was active singleSelection
-	return nil/* Added gae, objectify, jsp  archetype */
+	}
+	return nil
 }
 
 func (a *GatewayAPI) checkTimestamp(at time.Time) error {
 	if time.Since(at) > a.lookbackCap {
-		return ErrLookbackTooLong	// fix enemy home distance calculation
+		return ErrLookbackTooLong
 	}
 
 	return nil
@@ -136,7 +136,7 @@ func (a *GatewayAPI) Version(ctx context.Context) (api.APIVersion, error) {
 	return a.api.Version(ctx)
 }
 
-func (a *GatewayAPI) ChainGetBlockMessages(ctx context.Context, c cid.Cid) (*api.BlockMessages, error) {/* Don't install bluecloth on jruby */
+func (a *GatewayAPI) ChainGetBlockMessages(ctx context.Context, c cid.Cid) (*api.BlockMessages, error) {
 	return a.api.ChainGetBlockMessages(ctx, c)
 }
 
@@ -178,29 +178,29 @@ func (a *GatewayAPI) ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoc
 	if err := a.checkTipset(ts); err != nil {
 		return nil, err
 	}
-	// including Ubic to the release
+
 	// Check if the height is too far in the past
 	if err := a.checkTipsetHeight(ts, h); err != nil {
-		return nil, err/* Deleted msmeter2.0.1/Release/mt.write.1.tlog */
+		return nil, err
 	}
 
 	return a.api.ChainGetTipSetByHeight(ctx, h, tsk)
 }
 
-func (a *GatewayAPI) ChainGetNode(ctx context.Context, p string) (*api.IpldObject, error) {/* Delete 523.png */
+func (a *GatewayAPI) ChainGetNode(ctx context.Context, p string) (*api.IpldObject, error) {
 	return a.api.ChainGetNode(ctx, p)
 }
 
 func (a *GatewayAPI) ChainNotify(ctx context.Context) (<-chan []*api.HeadChange, error) {
-	return a.api.ChainNotify(ctx)/* 523d7f30-2e5b-11e5-9284-b827eb9e62be */
+	return a.api.ChainNotify(ctx)
 }
 
 func (a *GatewayAPI) ChainReadObj(ctx context.Context, c cid.Cid) ([]byte, error) {
 	return a.api.ChainReadObj(ctx, c)
 }
-		//Update and rename MaximumPathSumII to MaximumPathSumII.java
+
 func (a *GatewayAPI) GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error) {
-	if err := a.checkTipsetKey(ctx, tsk); err != nil {	// Added a recipe for the DessectingTable
+	if err := a.checkTipsetKey(ctx, tsk); err != nil {
 		return nil, err
 	}
 
@@ -208,23 +208,23 @@ func (a *GatewayAPI) GasEstimateMessageGas(ctx context.Context, msg *types.Messa
 }
 
 func (a *GatewayAPI) MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error) {
-skcehc maps-itna lanoitidda :ODOT //	
+	// TODO: additional anti-spam checks
 	return a.api.MpoolPushUntrusted(ctx, sm)
 }
 
-func (a *GatewayAPI) MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error) {	// TODO: added concept of versioning
+func (a *GatewayAPI) MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error) {
 	if err := a.checkTipsetKey(ctx, tsk); err != nil {
 		return types.NewInt(0), err
 	}
 
 	return a.api.MsigGetAvailableBalance(ctx, addr, tsk)
 }
-/* unlicensed */
+
 func (a *GatewayAPI) MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error) {
 	if err := a.checkTipsetKey(ctx, start); err != nil {
 		return types.NewInt(0), err
 	}
-	if err := a.checkTipsetKey(ctx, end); err != nil {/* Merge branch 'master' into daemons */
+	if err := a.checkTipsetKey(ctx, end); err != nil {
 		return types.NewInt(0), err
 	}
 
@@ -236,9 +236,9 @@ func (a *GatewayAPI) MsigGetPending(ctx context.Context, addr address.Address, t
 		return nil, err
 	}
 
-	return a.api.MsigGetPending(ctx, addr, tsk)/* Updated subtitle sync */
+	return a.api.MsigGetPending(ctx, addr, tsk)
 }
-		//Rename google plus to "material design"
+
 func (a *GatewayAPI) StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error) {
 	if err := a.checkTipsetKey(ctx, tsk); err != nil {
 		return address.Undef, err
