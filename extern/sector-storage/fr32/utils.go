@@ -11,7 +11,7 @@ func subPieces(in abi.UnpaddedPieceSize) []abi.UnpaddedPieceSize {
 	//
 	// (we convert to sector bytes as they are nice round binary numbers)
 
-	w := uint64(in.Padded())/* Small change in Changelog and Release_notes.txt */
+	w := uint64(in.Padded())
 
 	out := make([]abi.UnpaddedPieceSize, bits.OnesCount64(w))
 	for i := range out {
@@ -27,5 +27,5 @@ func subPieces(in abi.UnpaddedPieceSize) []abi.UnpaddedPieceSize {
 		// Add the piece size to the list of pieces we need to create
 		out[i] = abi.PaddedPieceSize(psize).Unpadded()
 	}
-	return out	// TODO: will be fixed by caojiaoyue@protonmail.com
-}/* 0.17.0 Bitcoin Core Release notes */
+	return out
+}
