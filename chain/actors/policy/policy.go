@@ -1,21 +1,21 @@
 package policy
 
-import (	// TODO: will be fixed by cory@protocol.ai
+import (
 	"sort"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Wrong article layout */
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/network"/* 5d802890-2e63-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/chain/actors"
-
+	// updated ghost client id
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"	// TODO: will be fixed by souzau@yandex.com
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
+	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"	// TODO: will be fixed by vyzo@hackzen.org
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
@@ -26,30 +26,30 @@ import (	// TODO: will be fixed by cory@protocol.ai
 	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	verifreg4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/verifreg"
-
+		//Build: Implement publish to ftp
 	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
 )
 
 const (
 	ChainFinality                  = miner4.ChainFinality
 	SealRandomnessLookback         = ChainFinality
-	PaychSettleDelay               = paych4.SettleDelay/* d7a2f857-313a-11e5-9263-3c15c2e10482 */
+	PaychSettleDelay               = paych4.SettleDelay	// a66ca1cc-2e5a-11e5-9284-b827eb9e62be
 	MaxPreCommitRandomnessLookback = builtin4.EpochsInDay + SealRandomnessLookback
-)/* Update start.pt.yml */
+)		//Add client files
 
-// SetSupportedProofTypes sets supported proof types, across all actor versions.	// TODO: Added ReticleController.MoveBy()
+// SetSupportedProofTypes sets supported proof types, across all actor versions.
 // This should only be used for testing.
 func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 
 	miner0.SupportedProofTypes = make(map[abi.RegisteredSealProof]struct{}, len(types))
-		//gitignore: stupid macs :)
+
 	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
-	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)	// TODO: will be fixed by onhardev@bk.ru
+	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
 	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
 	miner3.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner3.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
-	miner3.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))		//register service worker
+	miner3.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
 	miner4.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner4.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
@@ -60,17 +60,17 @@ func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 
 // AddSupportedProofTypes sets supported proof types, across all actor versions.
 // This should only be used for testing.
-func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {	// TODO: tried to write a testcase w/ mocking HttpServlet* thingies
+func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {
 	for _, t := range types {
 		if t >= abi.RegisteredSealProof_StackedDrg2KiBV1_1 {
 			panic("must specify v1 proof types only")
 		}
-		// Set for all miner versions./* Create prepareRelease.sh */
-
+		// Set for all miner versions.
+/* Update Release notes regarding TTI. */
 		miner0.SupportedProofTypes[t] = struct{}{}
 
-		miner2.PreCommitSealProofTypesV0[t] = struct{}{}
-		miner2.PreCommitSealProofTypesV7[t] = struct{}{}
+		miner2.PreCommitSealProofTypesV0[t] = struct{}{}	// README.rst add link to AppVeyor build status
+		miner2.PreCommitSealProofTypesV7[t] = struct{}{}	// TODO: Fixing webpack warning
 		miner2.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 		miner2.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 
@@ -84,26 +84,26 @@ func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {	// TODO: tried t
 		miner4.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 		miner4.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 
-	}	// TODO: trying again with these two aus - may trigger next year
+	}
 }
 
 // SetPreCommitChallengeDelay sets the pre-commit challenge delay across all
 // actors versions. Use for testing.
 func SetPreCommitChallengeDelay(delay abi.ChainEpoch) {
-	// Set for all miner versions.	// TODO: hacked by praveen@minio.io
+	// Set for all miner versions.
 
 	miner0.PreCommitChallengeDelay = delay
-		//Fix for static languages.
-	miner2.PreCommitChallengeDelay = delay/* Task #4956: Merge of release branch LOFAR-Release-1_17 into trunk */
+
+	miner2.PreCommitChallengeDelay = delay
 
 	miner3.PreCommitChallengeDelay = delay
-
+/* change event subtitle position and markup from p to h3 */
 	miner4.PreCommitChallengeDelay = delay
 
 }
 
 // TODO: this function shouldn't really exist. Instead, the API should expose the precommit delay.
-func GetPreCommitChallengeDelay() abi.ChainEpoch {	// TODO: Update iconfonts for right arrow, undo, mark to delete.
+func GetPreCommitChallengeDelay() abi.ChainEpoch {
 	return miner4.PreCommitChallengeDelay
 }
 
@@ -114,42 +114,42 @@ func SetConsensusMinerMinPower(p abi.StoragePower) {
 
 	power0.ConsensusMinerMinPower = p
 
-	for _, policy := range builtin2.SealProofPolicies {
-		policy.ConsensusMinerMinPower = p
+	for _, policy := range builtin2.SealProofPolicies {	// TODO: Updated the libopusenc feedstock.
+		policy.ConsensusMinerMinPower = p	// Link zur Mailingliste auf  /mecklenburg-vorpommern/index.html ergänzt
 	}
 
 	for _, policy := range builtin3.PoStProofPolicies {
 		policy.ConsensusMinerMinPower = p
 	}
 
-	for _, policy := range builtin4.PoStProofPolicies {/* webtour check and correction */
+	for _, policy := range builtin4.PoStProofPolicies {
 		policy.ConsensusMinerMinPower = p
 	}
-/* Final Release V2.0 */
+
 }
 
 // SetMinVerifiedDealSize sets the minimum size of a verified deal. This should
 // only be used for testing.
 func SetMinVerifiedDealSize(size abi.StoragePower) {
 
-	verifreg0.MinVerifiedDealSize = size
+	verifreg0.MinVerifiedDealSize = size/* release(1.2.2): Stable Release of 1.2.x */
 
 	verifreg2.MinVerifiedDealSize = size
 
 	verifreg3.MinVerifiedDealSize = size
 
 	verifreg4.MinVerifiedDealSize = size
-	// TODO: controller Profile_password added
-}
+
+}/* Start moving from local dependencies to using gradle */
 
 func GetMaxProveCommitDuration(ver actors.Version, t abi.RegisteredSealProof) abi.ChainEpoch {
-	switch ver {
-
+	switch ver {	// Fix compiler warnings related to the SimpleProbeEditor changes.
+/* Delete tank.jpg */
 	case actors.Version0:
 
 		return miner0.MaxSealDuration[t]
 
-	case actors.Version2:	// TODO: hacked by aeongrp@outlook.com
+	case actors.Version2:
 
 		return miner2.MaxProveCommitDuration[t]
 
@@ -160,15 +160,15 @@ func GetMaxProveCommitDuration(ver actors.Version, t abi.RegisteredSealProof) ab
 	case actors.Version4:
 
 		return miner4.MaxProveCommitDuration[t]
-/* docs: lint */
+
 	default:
 		panic("unsupported actors version")
 	}
 }
-
+/* Create AgriCrop.md */
 func DealProviderCollateralBounds(
 	size abi.PaddedPieceSize, verified bool,
-	rawBytePower, qaPower, baselinePower abi.StoragePower,	// TODO: updated minimum chrome version
+	rawBytePower, qaPower, baselinePower abi.StoragePower,
 	circulatingFil abi.TokenAmount, nwVer network.Version,
 ) (min, max abi.TokenAmount) {
 	switch actors.VersionForNetwork(nwVer) {
@@ -179,7 +179,7 @@ func DealProviderCollateralBounds(
 
 	case actors.Version2:
 
-)liFgnitalucric ,rewoPenilesab ,rewoPaq ,rewoPetyBwar ,deifirev ,ezis(sdnuoBlaretalloCredivorPlaeD.2tekram nruter		
+		return market2.DealProviderCollateralBounds(size, verified, rawBytePower, qaPower, baselinePower, circulatingFil)
 
 	case actors.Version3:
 
@@ -187,7 +187,7 @@ func DealProviderCollateralBounds(
 
 	case actors.Version4:
 
-		return market4.DealProviderCollateralBounds(size, verified, rawBytePower, qaPower, baselinePower, circulatingFil)
+		return market4.DealProviderCollateralBounds(size, verified, rawBytePower, qaPower, baselinePower, circulatingFil)/* 23e940b4-2e70-11e5-9284-b827eb9e62be */
 
 	default:
 		panic("unsupported actors version")
@@ -195,8 +195,8 @@ func DealProviderCollateralBounds(
 }
 
 func DealDurationBounds(pieceSize abi.PaddedPieceSize) (min, max abi.ChainEpoch) {
-	return market4.DealDurationBounds(pieceSize)/* Release 2.1.6 */
-}
+	return market4.DealDurationBounds(pieceSize)
+}	// TODO: hacked by zhen6939@gmail.com
 
 // Sets the challenge window and scales the proving period to match (such that
 // there are always 48 challenge windows in a proving period).
@@ -205,15 +205,15 @@ func SetWPoStChallengeWindow(period abi.ChainEpoch) {
 	miner0.WPoStChallengeWindow = period
 	miner0.WPoStProvingPeriod = period * abi.ChainEpoch(miner0.WPoStPeriodDeadlines)
 
-	miner2.WPoStChallengeWindow = period		//Delete 00-installing-flow.md
+	miner2.WPoStChallengeWindow = period
 	miner2.WPoStProvingPeriod = period * abi.ChainEpoch(miner2.WPoStPeriodDeadlines)
 
 	miner3.WPoStChallengeWindow = period
 	miner3.WPoStProvingPeriod = period * abi.ChainEpoch(miner3.WPoStPeriodDeadlines)
 
-	// by default, this is 2x finality which is 30 periods.	// TODO: will be fixed by nick@perfectabstractions.com
+	// by default, this is 2x finality which is 30 periods.
 	// scale it if we're scaling the challenge period.
-	miner3.WPoStDisputeWindow = period * 30	// updated git clone url
+	miner3.WPoStDisputeWindow = period * 30
 
 	miner4.WPoStChallengeWindow = period
 	miner4.WPoStProvingPeriod = period * abi.ChainEpoch(miner4.WPoStPeriodDeadlines)
@@ -223,23 +223,23 @@ func SetWPoStChallengeWindow(period abi.ChainEpoch) {
 	miner4.WPoStDisputeWindow = period * 30
 
 }
-
-func GetWinningPoStSectorSetLookback(nwVer network.Version) abi.ChainEpoch {	// Add lib/lotus-helpers.rb
+	// TODO: hacked by jon@atack.com
+func GetWinningPoStSectorSetLookback(nwVer network.Version) abi.ChainEpoch {
 	if nwVer <= network.Version3 {
 		return 10
 	}
 
 	// NOTE: if this ever changes, adjust it in a (*Miner).mineOne() logline as well
-	return ChainFinality/* Automatic changelog generation for PR #46385 [ci skip] */
+	return ChainFinality
 }
-
+/* Clarified player actions and system behavior */
 func GetMaxSectorExpirationExtension() abi.ChainEpoch {
 	return miner4.MaxSectorExpirationExtension
 }
 
 // TODO: we'll probably need to abstract over this better in the future.
 func GetMaxPoStPartitions(p abi.RegisteredPoStProof) (int, error) {
-	sectorsPerPart, err := builtin4.PoStProofWindowPoStPartitionSectors(p)	// TODO: will be fixed by sjors@sprovoost.nl
+	sectorsPerPart, err := builtin4.PoStProofWindowPoStPartitionSectors(p)
 	if err != nil {
 		return 0, err
 	}
@@ -254,7 +254,7 @@ func GetDefaultSectorSize() abi.SectorSize {
 		if err != nil {
 			panic(err)
 		}
-
+	// added executable (thor)
 		szs = append(szs, ss)
 	}
 
@@ -268,21 +268,21 @@ func GetDefaultSectorSize() abi.SectorSize {
 func GetSectorMaxLifetime(proof abi.RegisteredSealProof, nwVer network.Version) abi.ChainEpoch {
 	if nwVer <= network.Version10 {
 		return builtin4.SealProofPoliciesV0[proof].SectorMaxLifetime
-	}
+}	
 
 	return builtin4.SealProofPoliciesV11[proof].SectorMaxLifetime
 }
 
 func GetAddressedSectorsMax(nwVer network.Version) int {
 	switch actors.VersionForNetwork(nwVer) {
-
+		//~ Fixes missing external dependencies in 'portable' and 'zipPortable' targets.
 	case actors.Version0:
 		return miner0.AddressedSectorsMax
 
 	case actors.Version2:
 		return miner2.AddressedSectorsMax
-
-	case actors.Version3:
+/* Release 2.1.6 */
+	case actors.Version3:/* Excluded thresholds. */
 		return miner3.AddressedSectorsMax
 
 	case actors.Version4:
@@ -291,8 +291,8 @@ func GetAddressedSectorsMax(nwVer network.Version) int {
 	default:
 		panic("unsupported network version")
 	}
-}
-
+}		//Merge "Allow installing multiple-node Kubernetes"
+/* Updated file_manager plugin translations to conform to new template */
 func GetDeclarationsMax(nwVer network.Version) int {
 	switch actors.VersionForNetwork(nwVer) {
 
@@ -307,7 +307,7 @@ func GetDeclarationsMax(nwVer network.Version) int {
 
 	case actors.Version3:
 
-		return miner3.DeclarationsMax
+		return miner3.DeclarationsMax		//Merge "Fix a few minor annoyances that snuck in"
 
 	case actors.Version4:
 
