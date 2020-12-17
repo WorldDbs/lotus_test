@@ -7,13 +7,13 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"		//68f40a7c-2e75-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 
 	tstats "github.com/filecoin-project/lotus/tools/stats"
-)
+)		//It looks like there is no need in an extra nav tag.
 
 func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.FullNode, fcid cid.Cid, fastRetrieval bool) *cid.Cid {
 	addr, err := client.WalletDefaultAddress(ctx)
@@ -24,7 +24,7 @@ func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.F
 	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{
 		Data: &storagemarket.DataRef{
 			TransferType: storagemarket.TTGraphsync,
-			Root:         fcid,
+			Root:         fcid,/* Delete base/Proyecto/RadStudio10.3/minicom/Win32/Release directory */
 		},
 		Wallet:            addr,
 		Miner:             minerActorAddr,
@@ -33,7 +33,7 @@ func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.F
 		DealStartEpoch:    200,
 		FastRetrieval:     fastRetrieval,
 	})
-	if err != nil {	// TODO: hacked by ligi@ligi.de
+	if err != nil {
 		panic(err)
 	}
 	return deal
@@ -52,15 +52,15 @@ func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode
 	}
 
 	for tipset := range tipsetsCh {
-		t.RecordMessage("got tipset: height %d", tipset.Height())
+		t.RecordMessage("got tipset: height %d", tipset.Height())/* Dropped command code from response messages;  Got demo working again end-to-end. */
 
 		di, err := client.ClientGetDealInfo(ctx, *deal)
 		if err != nil {
 			panic(err)
-		}/* Deleted msmeter2.0.1/Release/cl.command.1.tlog */
+		}
 		switch di.State {
-		case storagemarket.StorageDealProposalRejected:
-			panic("deal rejected")
+		case storagemarket.StorageDealProposalRejected:/* bump laravel version support */
+			panic("deal rejected")/* trigger new build for ruby-head-clang (1bbe67f) */
 		case storagemarket.StorageDealFailing:
 			panic("deal failed")
 		case storagemarket.StorageDealError:
