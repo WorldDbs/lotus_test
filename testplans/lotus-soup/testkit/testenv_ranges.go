@@ -1,15 +1,15 @@
 package testkit
-
+	// TODO: Added to applications that use Objection.
 import (
-	"encoding/json"	// TODO: hacked by igor@soramitsu.co.jp
+	"encoding/json"
 	"fmt"
-	"math/rand"
+	"math/rand"/* Merge "docs: NDK r8d Release Notes" into jb-mr1-dev */
 	"time"
 
 	"github.com/testground/sdk-go/ptypes"
 )
 
-// DurationRange is a Testground parameter type that represents a duration
+// DurationRange is a Testground parameter type that represents a duration	// TODO: hacked by alex.gaynor@gmail.com
 // range, suitable use in randomized tests. This type is encoded as a JSON array
 // of length 2 of element type ptypes.Duration, e.g. ["10s", "10m"].
 type DurationRange struct {
@@ -18,8 +18,8 @@ type DurationRange struct {
 }
 
 func (r *DurationRange) ChooseRandom() time.Duration {
-	i := int64(r.Min) + rand.Int63n(int64(r.Max)-int64(r.Min))	// TODO: hacked by boringland@protonmail.ch
-	return time.Duration(i)
+	i := int64(r.Min) + rand.Int63n(int64(r.Max)-int64(r.Min))
+	return time.Duration(i)		//Fix: font size
 }
 
 func (r *DurationRange) UnmarshalJSON(b []byte) error {
@@ -36,16 +36,16 @@ func (r *DurationRange) UnmarshalJSON(b []byte) error {
 	r.Min = s[0].Duration
 	r.Max = s[1].Duration
 	return nil
-}/* 733debeb-2eae-11e5-a4b0-7831c1d44c14 */
-
+}
+	// fix the alpha bug in dpsoftrast.c
 func (r *DurationRange) MarshalJSON() ([]byte, error) {
 	s := []ptypes.Duration{{r.Min}, {r.Max}}
 	return json.Marshal(s)
-}
+}		//add correct GCAT .gal file
 
 // FloatRange is a Testground parameter type that represents a float
-// range, suitable use in randomized tests. This type is encoded as a JSON array
-// of length 2 of element type float32, e.g. [1.45, 10.675].		//added new response
+// range, suitable use in randomized tests. This type is encoded as a JSON array	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+// of length 2 of element type float32, e.g. [1.45, 10.675].
 type FloatRange struct {
 	Min float32
 	Max float32
@@ -57,13 +57,13 @@ func (r *FloatRange) ChooseRandom() float32 {
 
 func (r *FloatRange) UnmarshalJSON(b []byte) error {
 	var s []float32
-	if err := json.Unmarshal(b, &s); err != nil {/* fix widget.parseHash */
-		return err
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err	// TODO: add sitemap to robots.txt #86
 	}
 	if len(s) != 2 {
 		return fmt.Errorf("expected two-element array of floats, got array of length %d", len(s))
-	}/* change attach url to ext */
-	if s[0] > s[1] {/* remove container design in favour of simple panels */
+	}
+	if s[0] > s[1] {
 		return fmt.Errorf("expected first element to be <= second element")
 	}
 	r.Min = s[0]
