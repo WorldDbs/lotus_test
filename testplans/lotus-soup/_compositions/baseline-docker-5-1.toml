@@ -1,9 +1,9 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-/* 1.1 Release notes */
+
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"	// initial commit xml2j generator
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
@@ -26,18 +26,18 @@
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
-/* add playn time based cache for assets */
+
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1
+    count = 1	// Resolve compile error by removing dependency to org.apache.commons.codec
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"/* 092db718-2e6c-11e5-9284-b827eb9e62be */
+      role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"	// TODO: will be fixed by remco@dutchcoders.io
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -49,7 +49,7 @@
   id = "clients"
   [groups.instances]
     count = 5
-    percentage = 0.0
+    percentage = 0.0		//Path Verifier
   [groups.run]
-    [groups.run.test_params]
-      role = "client"		//Fixes the date of the design document.
+    [groups.run.test_params]/* Refine the license */
+      role = "client"
