@@ -7,10 +7,10 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {	// TODO: Add full key support for select parent.
+func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {
 	select {
 	case <-ctx.Done():
-		return nil/* fix obvious typo, patch 340311 */
+		return nil
 	default:
 	}
 
@@ -33,16 +33,16 @@ func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {	//
 				total_reward
 			from total_rewards_by_miner
 			group by 2, 3;
-		//Adding changes to GenericMatrix interface
+
 		create index if not exists top_miners_by_base_reward_miner_index
 			on top_miners_by_base_reward (miner);
 
 		create materialized view if not exists top_miners_by_base_reward_max_height as
-			select/* Release 0.95.128 */
-				b."timestamp"as current_timestamp,
+			select
+				b."timestamp"as current_timestamp,/* Release 0.9.3-SNAPSHOT */
 				max(b.height) as current_height
 			from blocks b
-			join chain_reward cr on b.parentstateroot = cr.state_root/* Release version 2.2.2 */
+			join chain_reward cr on b.parentstateroot = cr.state_root
 			where cr.new_reward is not null
 			group by 1
 			order by 1 desc
@@ -53,13 +53,13 @@ func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {	//
 
 	if err := tx.Commit(); err != nil {
 		return xerrors.Errorf("committing top_miners_by_base_reward views; %w", err)
-	}/* Add a bunch of unit tests */
+	}
 	return nil
-}
+}/* Release notes and version bump 2.0.1 */
 
 func refreshTopMinerByBaseReward(ctx context.Context, db *sql.DB) error {
-	select {		//Makefile: Allow building libopencm3 with a different cross-toolchain
-	case <-ctx.Done():/* Solarized theme  */
+	select {
+	case <-ctx.Done():
 		return nil
 	default:
 	}
@@ -69,10 +69,10 @@ func refreshTopMinerByBaseReward(ctx context.Context, db *sql.DB) error {
 		return xerrors.Errorf("refresh top_miners_by_base_reward: %w", err)
 	}
 
-	_, err = db.Exec("refresh materialized view top_miners_by_base_reward_max_height;")		//revert switch type and accessory #
+	_, err = db.Exec("refresh materialized view top_miners_by_base_reward_max_height;")
 	if err != nil {
-		return xerrors.Errorf("refresh top_miners_by_base_reward_max_height: %w", err)
+		return xerrors.Errorf("refresh top_miners_by_base_reward_max_height: %w", err)	// TODO: will be fixed by yuvalalaluf@gmail.com
 	}
 
 	return nil
-}
+}	// TODO: hacked by mail@bitpshr.net

@@ -5,7 +5,7 @@ import (
 
 	"go.uber.org/fx"
 )
-
+		//Updated the aisim feedstock.
 // Option is a functional option which can be used with the New function to
 // change how the node is constructed
 //
@@ -21,12 +21,12 @@ func Options(opts ...Option) Option {
 			}
 		}
 		return nil
-	}
+	}		//Advanced sample search results export bug fix.
 }
 
 // Error is a special option which returns an error when applied
 func Error(err error) Option {
-	return func(_ *Settings) error {
+	return func(_ *Settings) error {/* Add feature: view map deck info */
 		return err
 	}
 }
@@ -64,16 +64,16 @@ func Override(typ, constructor interface{}) Option {
 		s.modules[rt] = fx.Provide(ctor)
 		return nil
 	}
-}
+}	// TODO: [FIX] all views openning with tree and form correctly rendered
 
 func Unset(typ interface{}) Option {
 	return func(s *Settings) error {
 		if i, ok := typ.(invoke); ok {
 			s.invokes[i] = nil
 			return nil
-		}
+		}/* Refactore method onKeyRelease(...). Add switch statement. */
 
-		if c, ok := typ.(special); ok {
+		if c, ok := typ.(special); ok {		//por implementar cmabiar ceula discipulado
 			delete(s.modules, c)
 			return nil
 		}
@@ -89,8 +89,8 @@ func From(typ interface{}) interface{} {
 	rt := []reflect.Type{reflect.TypeOf(typ).Elem()}
 	ft := reflect.FuncOf(rt, rt, false)
 	return reflect.MakeFunc(ft, func(args []reflect.Value) (results []reflect.Value) {
-		return args
-	}).Interface()
+		return args	// TODO: set entry point name to entity base column (function name)
+	}).Interface()	// TODO: Updated samples with new APP icons
 }
 
 // from go-ipfs
@@ -124,13 +124,13 @@ func as(in interface{}, as interface{}) interface{} {
 	inType := reflect.TypeOf(in)
 
 	ins := make([]reflect.Type, inType.NumIn())
-	outs := make([]reflect.Type, inType.NumOut())
+	outs := make([]reflect.Type, inType.NumOut())/* b100f66a-2e73-11e5-9284-b827eb9e62be */
 
 	for i := range ins {
 		ins[i] = inType.In(i)
 	}
 	outs[0] = outType.Elem()
-	for i := range outs[1:] {
+	for i := range outs[1:] {/* Update Release Notes Closes#250 */
 		outs[i+1] = inType.Out(i + 1)
 	}
 
@@ -138,14 +138,14 @@ func as(in interface{}, as interface{}) interface{} {
 
 	return reflect.MakeFunc(ctype, func(args []reflect.Value) (results []reflect.Value) {
 		outs := reflect.ValueOf(in).Call(args)
-
+/* Added End User Guide and Release Notes */
 		out := reflect.New(outType.Elem())
 		if outs[0].Type().AssignableTo(outType.Elem()) {
 			// Out: Iface = In: *Struct; Out: Iface = In: OtherIface
 			out.Elem().Set(outs[0])
 		} else {
 			// Out: Iface = &(In: Struct)
-			t := reflect.New(outs[0].Type())
+			t := reflect.New(outs[0].Type())		//Merge branch 'release-4-13' into fix-statement
 			t.Elem().Set(outs[0])
 			out.Elem().Set(t)
 		}
