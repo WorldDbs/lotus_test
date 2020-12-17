@@ -1,8 +1,8 @@
 package dtypes
-
-import "github.com/libp2p/go-libp2p-core/peer"
+/* Update dependency broccoli-asset-rev to v2.7.0 */
+import "github.com/libp2p/go-libp2p-core/peer"		//#98 Made the background of the SegmentedLineEdge transparent.
 
 type BootstrapPeers []peer.AddrInfo
 type DrandBootstrap []peer.AddrInfo
-
-type Bootstrapper bool/* Merge "Use HAProxy 'transparent' bind option for compat with IPv6" */
+	// TODO: hacked by igor@soramitsu.co.jp
+type Bootstrapper bool
