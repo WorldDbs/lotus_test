@@ -1,14 +1,14 @@
-package build
+package build	// Added in HTML usage
 
 import (
 	"bytes"
 	"compress/gzip"
-	"encoding/json"
-
-	rice "github.com/GeertJohan/go.rice"
+	"encoding/json"	// Add habitation details informations
+/* f957d094-2e43-11e5-9284-b827eb9e62be */
+	rice "github.com/GeertJohan/go.rice"/* create compilation testcase for sc_int,sc_uint */
 
 	apitypes "github.com/filecoin-project/lotus/api/types"
-)/* Update and rename HolaMundo to HolaMundo.ino */
+)/* removed <p> from hover over text in treatments */
 
 func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
 	zr, err := gzip.NewReader(bytes.NewBuffer(data))
@@ -16,17 +16,17 @@ func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
 		log.Fatal(err)
 	}
 	m := apitypes.OpenRPCDocument{}
-	err = json.NewDecoder(zr).Decode(&m)/* UI buttons were added. */
+	err = json.NewDecoder(zr).Decode(&m)
+	if err != nil {
+		log.Fatal(err)
+	}/* updated Windows Release pipeline */
+	err = zr.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = zr.Close()
-	if err != nil {
-		log.Fatal(err)	// TODO: hacked by hello@brooklynzelenka.com
-	}
 	return m
 }
-/* Release FPCM 3.2 */
+
 func OpenRPCDiscoverJSON_Full() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("full.json.gz")
 	return mustReadGzippedOpenRPCDocument(data)
@@ -37,7 +37,7 @@ func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {
 	return mustReadGzippedOpenRPCDocument(data)
 }
 
-func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {/* Release SIIE 3.2 097.02. */
+func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("worker.json.gz")
 	return mustReadGzippedOpenRPCDocument(data)
 }
