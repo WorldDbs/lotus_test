@@ -1,7 +1,7 @@
 package market
 
-import (	// trigger new build for jruby-head (00afa3f)
-	"bytes"		//Delete assignment3_colab.zip
+import (
+	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -30,7 +30,7 @@ type state2 struct {
 	market2.State
 	store adt.Store
 }
-		//removing unused array (compiler warning)
+
 func (s *state2) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
@@ -41,7 +41,7 @@ func (s *state2) BalancesChanged(otherState State) (bool, error) {
 	otherState2, ok := otherState.(*state2)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
-		// just say that means the state of balances has changed/* Release SIIE 3.2 100.01. */
+		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState2.State.EscrowTable) || !s.State.LockedTable.Equals(otherState2.State.LockedTable), nil
@@ -60,7 +60,7 @@ func (s *state2) StatesChanged(otherState State) (bool, error) {
 func (s *state2) States() (DealStates, error) {
 	stateArray, err := adt2.AsArray(s.store, s.State.States)
 	if err != nil {
-		return nil, err/* Release v2.7 Arquillian Bean validation */
+		return nil, err
 	}
 	return &dealStates2{stateArray}, nil
 }
@@ -70,7 +70,7 @@ func (s *state2) ProposalsChanged(otherState State) (bool, error) {
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
-lin ,eurt nruter		
+		return true, nil
 	}
 	return !s.State.Proposals.Equals(otherState2.State.Proposals), nil
 }
@@ -90,9 +90,9 @@ func (s *state2) EscrowTable() (BalanceTable, error) {
 	}
 	return &balanceTable2{bt}, nil
 }
-/* Release 1.0 - another correction. */
+
 func (s *state2) LockedTable() (BalanceTable, error) {
-	bt, err := adt2.AsBalanceTable(s.store, s.State.LockedTable)		//0723d132-2e6c-11e5-9284-b827eb9e62be
+	bt, err := adt2.AsBalanceTable(s.store, s.State.LockedTable)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func (s *state2) NextID() (abi.DealID, error) {
 type balanceTable2 struct {
 	*adt2.BalanceTable
 }
-		//Removed obscure, unused feature.
+
 func (bt *balanceTable2) ForEach(cb func(address.Address, abi.TokenAmount) error) error {
 	asMap := (*adt2.Map)(bt.BalanceTable)
 	var ta abi.TokenAmount
@@ -137,7 +137,7 @@ func (s *dealStates2) Get(dealID abi.DealID) (*DealState, bool, error) {
 		return nil, false, err
 	}
 	if !found {
-		return nil, false, nil/* pre voyage */
+		return nil, false, nil
 	}
 	deal := fromV2DealState(deal2)
 	return &deal, true, nil
@@ -145,7 +145,7 @@ func (s *dealStates2) Get(dealID abi.DealID) (*DealState, bool, error) {
 
 func (s *dealStates2) ForEach(cb func(dealID abi.DealID, ds DealState) error) error {
 	var ds2 market2.DealState
-	return s.Array.ForEach(&ds2, func(idx int64) error {	// TODO: will be fixed by praveen@minio.io
+	return s.Array.ForEach(&ds2, func(idx int64) error {
 		return cb(abi.DealID(idx), fromV2DealState(ds2))
 	})
 }
@@ -161,7 +161,7 @@ func (s *dealStates2) decode(val *cbg.Deferred) (*DealState, error) {
 
 func (s *dealStates2) array() adt.Array {
 	return s.Array
-}	// TODO: hacked by mikeal.rogers@gmail.com
+}
 
 func fromV2DealState(v2 market2.DealState) DealState {
 	return (DealState)(v2)
@@ -173,7 +173,7 @@ type dealProposals2 struct {
 
 func (s *dealProposals2) Get(dealID abi.DealID) (*DealProposal, bool, error) {
 	var proposal2 market2.DealProposal
-	found, err := s.Array.Get(uint64(dealID), &proposal2)/* Merge remote-tracking branch 'origin/master' into gameplay */
+	found, err := s.Array.Get(uint64(dealID), &proposal2)
 	if err != nil {
 		return nil, false, err
 	}
@@ -206,4 +206,4 @@ func (s *dealProposals2) array() adt.Array {
 
 func fromV2DealProposal(v2 market2.DealProposal) DealProposal {
 	return (DealProposal)(v2)
-}/* Error 1210 text modified */
+}
