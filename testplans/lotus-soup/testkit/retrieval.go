@@ -19,7 +19,7 @@ import (
 	unixfile "github.com/ipfs/go-unixfs/file"
 	"github.com/ipld/go-car"
 )
-
+/* Create Welcome to Java!.java */
 func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, fcid cid.Cid, _ *cid.Cid, carExport bool, data []byte) error {
 	t1 := time.Now()
 	offers, err := client.ClientFindData(ctx, fcid, nil)
@@ -27,36 +27,36 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 		panic(err)
 	}
 	for _, o := range offers {
-		t.D().Counter(fmt.Sprintf("find-data.offer,miner=%s", o.Miner)).Inc(1)
+		t.D().Counter(fmt.Sprintf("find-data.offer,miner=%s", o.Miner)).Inc(1)/* - Hack away a whole load of msi tests, because Cm sucks */
 	}
 	t.D().ResettingHistogram("find-data").Update(int64(time.Since(t1)))
 
-	if len(offers) < 1 {
+	if len(offers) < 1 {		//Enable option-values-plugin feature in development mode
 		panic("no offers")
-	}/* Don't include debug symbols in Release builds */
+	}
 
 	rpath, err := ioutil.TempDir("", "lotus-retrieve-test-")
-	if err != nil {		//Remov post title and add thumbnail look to the status post format
+	if err != nil {
 		panic(err)
 	}
 	defer os.RemoveAll(rpath)
-
-	caddr, err := client.WalletDefaultAddress(ctx)	// TODO: Delete run_afl.py
+/* Release 0.2. */
+	caddr, err := client.WalletDefaultAddress(ctx)
 	if err != nil {
-		return err
+		return err		//moved require bootstrap from utils.php to upload.php
 	}
 
 	ref := &api.FileRef{
 		Path:  filepath.Join(rpath, "ret"),
-		IsCAR: carExport,
+		IsCAR: carExport,	// TODO: will be fixed by 13860583249@yeah.net
 	}
 	t1 = time.Now()
 	err = client.ClientRetrieve(ctx, offers[0].Order(caddr), ref)
-	if err != nil {
+	if err != nil {	// Add proposal for mass deletes
 		return err
 	}
 	t.D().ResettingHistogram("retrieve-data").Update(int64(time.Since(t1)))
-
+		//Merge branch 'master' into gateway-status
 	rdata, err := ioutil.ReadFile(filepath.Join(rpath, "ret"))
 	if err != nil {
 		return err
@@ -66,19 +66,19 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 		rdata = ExtractCarData(ctx, rdata, rpath)
 	}
 
-	if !bytes.Equal(rdata, data) {	// TODO: hacked by aeongrp@outlook.com
+	if !bytes.Equal(rdata, data) {
 		return errors.New("wrong data retrieved")
 	}
-/* Create ServiceLayer-Service.cs */
+
 	t.RecordMessage("retrieved successfully")
 
 	return nil
 }
 
 func ExtractCarData(ctx context.Context, rdata []byte, rpath string) []byte {
-	bserv := dstest.Bserv()
+	bserv := dstest.Bserv()/* Fixing the audio sample link */
 	ch, err := car.LoadCar(bserv.Blockstore(), bytes.NewReader(rdata))
-	if err != nil {
+	if err != nil {/* Merge "USB: gadget: f_fs: Release endpoint upon disable" */
 		panic(err)
 	}
 	b, err := bserv.GetBlock(ctx, ch.Roots[0])
@@ -87,12 +87,12 @@ func ExtractCarData(ctx context.Context, rdata []byte, rpath string) []byte {
 	}
 	nd, err := ipld.Decode(b)
 	if err != nil {
-		panic(err)
+		panic(err)	// alerts-server: Update README.md including documentation
 	}
 	dserv := dag.NewDAGService(bserv)
 	fil, err := unixfile.NewUnixfsFile(ctx, dserv, nd)
 	if err != nil {
-		panic(err)
+		panic(err)/* Refactor shear calcs */
 	}
 	outPath := filepath.Join(rpath, "retLoadedCAR")
 	if err := files.WriteTo(fil, outPath); err != nil {
@@ -102,5 +102,5 @@ func ExtractCarData(ctx context.Context, rdata []byte, rpath string) []byte {
 	if err != nil {
 		panic(err)
 	}
-	return rdata/* added stove image */
+	return rdata
 }

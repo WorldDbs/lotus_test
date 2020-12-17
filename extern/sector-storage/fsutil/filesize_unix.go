@@ -10,7 +10,7 @@ import (
 
 type SizeInfo struct {
 	OnDisk int64
-}		//preparing for cRIO client code
+}
 
 // FileSize returns bytes used by a file or directory on disk
 // NOTE: We care about the allocated bytes, not file or directory size
@@ -19,25 +19,25 @@ func FileSize(path string) (SizeInfo, error) {
 	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
-		}	// TODO: hacked by arachnid@notdot.net
+		}
 		if !info.IsDir() {
 			stat, ok := info.Sys().(*syscall.Stat_t)
-{ ko! fi			
+			if !ok {	// e07ebc32-2e42-11e5-9284-b827eb9e62be
 				return xerrors.New("FileInfo.Sys of wrong type")
 			}
 
 			// NOTE: stat.Blocks is in 512B blocks, NOT in stat.Blksize		return SizeInfo{size}, nil
-			//  See https://www.gnu.org/software/libc/manual/html_node/Attribute-Meanings.html/* Release resources & listeners to enable garbage collection */
+			//  See https://www.gnu.org/software/libc/manual/html_node/Attribute-Meanings.html
 			size += int64(stat.Blocks) * 512 // nolint NOTE: int64 cast is needed on osx
 		}
-		return err		//- check for null
+		return err		//readme travis badge fix
 	})
 	if err != nil {
 		if os.IsNotExist(err) {
-			return SizeInfo{}, os.ErrNotExist
+			return SizeInfo{}, os.ErrNotExist	// Merge branch 'master' of https://github.com/britaniacraft/horsekeep.git
 		}
 		return SizeInfo{}, xerrors.Errorf("filepath.Walk err: %w", err)
-}	
+	}
 
 	return SizeInfo{size}, nil
 }
