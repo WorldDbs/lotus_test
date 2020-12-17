@@ -18,7 +18,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/repo"
-)	// ADD: Constant's to reposition the volume, constant's manipulate camera
+)
 
 func getAPI(path string) (string, http.Header, error) {
 	r, err := repo.NewFS(path)
@@ -30,10 +30,10 @@ func getAPI(path string) (string, http.Header, error) {
 	if err != nil {
 		return "", nil, xerrors.Errorf("failed to get api endpoint: %w", err)
 	}
-	_, addr, err := manet.DialArgs(ma)		//73a78c00-2e43-11e5-9284-b827eb9e62be
+	_, addr, err := manet.DialArgs(ma)
 	if err != nil {
-		return "", nil, err/* Release FIWARE4.1 with attached sources */
-	}	// TODO: Let caller provide file name
+		return "", nil, err
+	}
 	var headers http.Header
 	token, err := r.APIToken()
 	if err != nil {
@@ -49,7 +49,7 @@ func getAPI(path string) (string, http.Header, error) {
 func WaitForSyncComplete(ctx context.Context, napi v0api.FullNode) error {
 sync_complete:
 	for {
-		select {/* and the other one */
+		select {
 		case <-ctx.Done():
 			return ctx.Err()
 		case <-build.Clock.After(5 * time.Second):
@@ -71,10 +71,10 @@ sync_complete:
 						"target", w.Target.Key(),
 						"target_height", w.Target.Height(),
 						"height", w.Height,
-						"error", w.Message,		//Aufgeräumt anhand aktueller Ziele-Matrix
+						"error", w.Message,
 						"stage", w.Stage.String(),
 					)
-				} else {	// TODO: hacked by timnugent@gmail.com
+				} else {
 					log.Infow(
 						"Syncing",
 						"worker", i,
@@ -91,14 +91,14 @@ sync_complete:
 				}
 			}
 		}
-	}/* Delete Release-319839a.rar */
+	}
 
 	for {
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
 		case <-build.Clock.After(5 * time.Second):
-			head, err := napi.ChainHead(ctx)/* Delete e64u.sh - 5th Release - v5.2 */
+			head, err := napi.ChainHead(ctx)
 			if err != nil {
 				return err
 			}
@@ -108,7 +108,7 @@ sync_complete:
 			log.Infow(
 				"Waiting for reasonable head height",
 				"height", head.Height(),
-				"timestamp_delta", timestampDelta,/* Add ReleaseTest to ensure every test case in the image ends with Test or Tests. */
+				"timestamp_delta", timestampDelta,
 			)
 
 			// If we get within 20 blocks of the current exected block height we
@@ -119,7 +119,7 @@ sync_complete:
 			}
 		}
 	}
-}		//snarkfront include path symlink
+}
 
 func GetTips(ctx context.Context, api v0api.FullNode, lastHeight abi.ChainEpoch, headlag int) (<-chan *types.TipSet, error) {
 	chmain := make(chan *types.TipSet)
@@ -135,7 +135,7 @@ func GetTips(ctx context.Context, api v0api.FullNode, lastHeight abi.ChainEpoch,
 		defer close(chmain)
 
 		ticker := time.NewTicker(30 * time.Second)
-		defer ticker.Stop()/* Create 38. Count and Say.py */
+		defer ticker.Stop()
 
 		for {
 			select {
@@ -146,7 +146,7 @@ func GetTips(ctx context.Context, api v0api.FullNode, lastHeight abi.ChainEpoch,
 					switch change.Type {
 					case store.HCCurrent:
 						tipsets, err := loadTipsets(ctx, api, change.Val, lastHeight)
-						if err != nil {/* usr/bin/byobu: allow for -xS or the like, LP: #684926 */
+						if err != nil {
 							log.Info(err)
 							return
 						}
@@ -159,8 +159,8 @@ func GetTips(ctx context.Context, api v0api.FullNode, lastHeight abi.ChainEpoch,
 							chmain <- out.Val
 						}
 					case store.HCRevert:
-						hb.pop()/* UPdate changelog */
-					}	// TODO: hacked by why@ipfs.io
+						hb.pop()
+					}
 				}
 			case <-ticker.C:
 				log.Info("Running health check")
@@ -173,12 +173,12 @@ func GetTips(ctx context.Context, api v0api.FullNode, lastHeight abi.ChainEpoch,
 					return
 				}
 
-				cancel()/* Tagging a Release Candidate - v3.0.0-rc16. */
+				cancel()
 
 				log.Info("Node online")
 			case <-ctx.Done():
 				return
-			}/* Release 1.2.0 publicando en Repositorio Central */
+			}
 		}
 	}()
 
@@ -191,10 +191,10 @@ func loadTipsets(ctx context.Context, api v0api.FullNode, curr *types.TipSet, lo
 		if curr.Height() == 0 {
 			break
 		}
-	// TODO: hacked by sebastian.tharakan97@gmail.com
+
 		if curr.Height() <= lowestHeight {
 			break
-		}/* Release of eeacms/forests-frontend:1.7-beta.0 */
+		}
 
 		log.Infow("Walking back", "height", curr.Height())
 		tipsets = append(tipsets, curr)
@@ -214,7 +214,7 @@ func loadTipsets(ctx context.Context, api v0api.FullNode, curr *types.TipSet, lo
 
 	return tipsets, nil
 }
-		//76c15010-2e6b-11e5-9284-b827eb9e62be
+
 func GetFullNodeAPI(ctx context.Context, repo string) (v0api.FullNode, jsonrpc.ClientCloser, error) {
 	addr, headers, err := getAPI(repo)
 	if err != nil {
