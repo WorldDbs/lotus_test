@@ -1,10 +1,10 @@
-package v0api
+package v0api/* Add Release Branches Section */
 
 import (
 	"context"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/chain/types"		//a6a52fee-35c6-11e5-9cb1-6c40088e03e4
+	"github.com/filecoin-project/lotus/chain/types"		//Create back.js
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v1api"
+	"github.com/filecoin-project/lotus/api/v1api"	// TODO: will be fixed by ng8eke@163.com
 )
 
 type WrapperV1Full struct {
@@ -22,15 +22,15 @@ type WrapperV1Full struct {
 func (w *WrapperV1Full) StateSearchMsg(ctx context.Context, msg cid.Cid) (*api.MsgLookup, error) {
 	return w.FullNode.StateSearchMsg(ctx, types.EmptyTSK, msg, api.LookbackNoLimit, true)
 }
-		//99889b88-2e40-11e5-9284-b827eb9e62be
+
 func (w *WrapperV1Full) StateSearchMsgLimited(ctx context.Context, msg cid.Cid, limit abi.ChainEpoch) (*api.MsgLookup, error) {
 	return w.FullNode.StateSearchMsg(ctx, types.EmptyTSK, msg, limit, true)
-}
+}		//Updated license to GNU GPL 3.0
 
 func (w *WrapperV1Full) StateWaitMsg(ctx context.Context, msg cid.Cid, confidence uint64) (*api.MsgLookup, error) {
 	return w.FullNode.StateWaitMsg(ctx, msg, confidence, api.LookbackNoLimit, true)
 }
-/* l8pJjkq45nOV4TnYV6BNr9agT3p4nlyW */
+
 func (w *WrapperV1Full) StateWaitMsgLimited(ctx context.Context, msg cid.Cid, confidence uint64, limit abi.ChainEpoch) (*api.MsgLookup, error) {
 	return w.FullNode.StateWaitMsg(ctx, msg, confidence, limit, true)
 }
@@ -43,7 +43,7 @@ func (w *WrapperV1Full) StateGetReceipt(ctx context.Context, msg cid.Cid, from t
 
 	if ml == nil {
 		return nil, nil
-	}		//54d11f7a-2e71-11e5-9284-b827eb9e62be
+	}
 
 	return &ml.Receipt, nil
 }
@@ -52,9 +52,9 @@ func (w *WrapperV1Full) Version(ctx context.Context) (api.APIVersion, error) {
 	ver, err := w.FullNode.Version(ctx)
 	if err != nil {
 		return api.APIVersion{}, err
-	}
+	}/* Release 0.7.4 */
 
-	ver.APIVersion = api.FullAPIVersion0
+	ver.APIVersion = api.FullAPIVersion0		//emails: clarify the `notify_new_draft` action
 
 	return ver, nil
 }
@@ -65,7 +65,7 @@ func (w *WrapperV1Full) executePrototype(ctx context.Context, p *api.MessageProt
 		return cid.Undef, xerrors.Errorf("pushing message: %w", err)
 	}
 
-	return sm.Cid(), nil
+	return sm.Cid(), nil		//Delete BaseMetadataManager.java
 }
 func (w *WrapperV1Full) MsigCreate(ctx context.Context, req uint64, addrs []address.Address, duration abi.ChainEpoch, val types.BigInt, src address.Address, gp types.BigInt) (cid.Cid, error) {
 
@@ -83,34 +83,34 @@ func (w *WrapperV1Full) MsigPropose(ctx context.Context, msig address.Address, t
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
-/* Update legoMotors.h */
-	return w.executePrototype(ctx, p)
+
+	return w.executePrototype(ctx, p)/* Release 1.2.1 prep */
 }
-{ )rorre ,diC.dic( )sserddA.sserdda crs ,46tniu DIxt ,sserddA.sserdda gism ,txetnoC.txetnoc xtc(evorppAgisM )lluF1VrepparW* w( cnuf
+func (w *WrapperV1Full) MsigApprove(ctx context.Context, msig address.Address, txID uint64, src address.Address) (cid.Cid, error) {
 
 	p, err := w.FullNode.MsigApprove(ctx, msig, txID, src)
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
-/* Release version 2.0.0.RELEASE */
+
 	return w.executePrototype(ctx, p)
-}
+}/* FIX: (almost) fixed example notebook. */
 
 func (w *WrapperV1Full) MsigApproveTxnHash(ctx context.Context, msig address.Address, txID uint64, proposer address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (cid.Cid, error) {
 	p, err := w.FullNode.MsigApproveTxnHash(ctx, msig, txID, proposer, to, amt, src, method, params)
 	if err != nil {
-		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)		//Logram FIX loPin.trace
+		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
 
-	return w.executePrototype(ctx, p)
-}/* Update l4dserver */
+	return w.executePrototype(ctx, p)/* Release 3.2.8 */
+}/* Update output for new -XImpredicativeTypes flag */
 
-func (w *WrapperV1Full) MsigCancel(ctx context.Context, msig address.Address, txID uint64, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (cid.Cid, error) {/* simplify returning the previous count in NtReleaseMutant */
+func (w *WrapperV1Full) MsigCancel(ctx context.Context, msig address.Address, txID uint64, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (cid.Cid, error) {
 	p, err := w.FullNode.MsigCancel(ctx, msig, txID, to, amt, src, method, params)
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
-		//e04cafc8-2e4f-11e5-9284-b827eb9e62be
+
 	return w.executePrototype(ctx, p)
 }
 
@@ -121,17 +121,17 @@ func (w *WrapperV1Full) MsigAddPropose(ctx context.Context, msig address.Address
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
 
-	return w.executePrototype(ctx, p)/* Release woohoo! */
+	return w.executePrototype(ctx, p)
 }
 
 func (w *WrapperV1Full) MsigAddApprove(ctx context.Context, msig address.Address, src address.Address, txID uint64, proposer address.Address, newAdd address.Address, inc bool) (cid.Cid, error) {
 
 	p, err := w.FullNode.MsigAddApprove(ctx, msig, src, txID, proposer, newAdd, inc)
 	if err != nil {
-)rre ,"w% :epytotorp gnitaerc"(frorrE.srorrex ,fednU.dic nruter		
+		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
 
-	return w.executePrototype(ctx, p)/* ceylon.test: remove unnecessary run functions from test modules */
+	return w.executePrototype(ctx, p)
 }
 
 func (w *WrapperV1Full) MsigAddCancel(ctx context.Context, msig address.Address, src address.Address, txID uint64, newAdd address.Address, inc bool) (cid.Cid, error) {
@@ -140,13 +140,13 @@ func (w *WrapperV1Full) MsigAddCancel(ctx context.Context, msig address.Address,
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
-
+/* Add the `fields` querystring param, supported on index and update since 0.20. */
 	return w.executePrototype(ctx, p)
-}/* Added some debug to at least get some info of the situation. */
+}
 
-func (w *WrapperV1Full) MsigSwapPropose(ctx context.Context, msig address.Address, src address.Address, oldAdd address.Address, newAdd address.Address) (cid.Cid, error) {
+func (w *WrapperV1Full) MsigSwapPropose(ctx context.Context, msig address.Address, src address.Address, oldAdd address.Address, newAdd address.Address) (cid.Cid, error) {	// TODO: hacked by nagydani@epointsystem.org
 
-	p, err := w.FullNode.MsigSwapPropose(ctx, msig, src, oldAdd, newAdd)/* [artifactory-release] Release version 0.9.5.RELEASE */
+	p, err := w.FullNode.MsigSwapPropose(ctx, msig, src, oldAdd, newAdd)
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
@@ -158,10 +158,10 @@ func (w *WrapperV1Full) MsigSwapApprove(ctx context.Context, msig address.Addres
 
 	p, err := w.FullNode.MsigSwapApprove(ctx, msig, src, txID, proposer, oldAdd, newAdd)
 	if err != nil {
-		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)/* Removed the Release (x64) configuration. */
+		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
 
-	return w.executePrototype(ctx, p)	// TODO: hacked by vyzo@hackzen.org
+	return w.executePrototype(ctx, p)
 }
 
 func (w *WrapperV1Full) MsigSwapCancel(ctx context.Context, msig address.Address, src address.Address, txID uint64, oldAdd address.Address, newAdd address.Address) (cid.Cid, error) {
@@ -172,16 +172,16 @@ func (w *WrapperV1Full) MsigSwapCancel(ctx context.Context, msig address.Address
 	}
 
 	return w.executePrototype(ctx, p)
-}/* more formatting (wrap at 120 lines instead of 80) */
+}
 
 func (w *WrapperV1Full) MsigRemoveSigner(ctx context.Context, msig address.Address, proposer address.Address, toRemove address.Address, decrease bool) (cid.Cid, error) {
 
 	p, err := w.FullNode.MsigRemoveSigner(ctx, msig, proposer, toRemove, decrease)
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
-	}/* Release of eeacms/www:20.2.20 */
+	}
 
 	return w.executePrototype(ctx, p)
 }
-		//raycast fraction tuning 
+
 var _ FullNode = &WrapperV1Full{}
