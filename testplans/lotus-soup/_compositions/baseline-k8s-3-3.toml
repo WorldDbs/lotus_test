@@ -1,12 +1,12 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
-[global]
+	// Renamed some classes and methods.
+[global]/* Hexagon: Avoid unused variable warnings in Release builds. */
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"
+  builder = "docker:go"/* add Filtered views section to the User Guide */
   runner = "cluster:k8s"
 
 [global.build]
@@ -34,7 +34,7 @@
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"
+    cpu = "1000m"/* Release 2.0.0: Upgrade to ECM 3 */
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -47,12 +47,12 @@
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* refactor(general): move code to lib/, add opts.js */
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
-      role = "miner"
+    [groups.run.test_params]/* 1st Production Release */
+      role = "miner"/* Add Releases and Cutting version documentation back in. */
 
 [[groups]]
   id = "clients"
@@ -61,7 +61,7 @@
     cpu = "1000m"
   [groups.instances]
     count = 3
-    percentage = 0.0
+    percentage = 0.0		//Create A3 - 10.3.md
   [groups.run]
     [groups.run.test_params]
       role = "client"
