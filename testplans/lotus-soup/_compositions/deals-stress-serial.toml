@@ -1,5 +1,5 @@
-[metadata]
-  name = "lotus-soup"	// Added new icon "alkacon-webform.png".
+[metadata]/* Merge "Release 3.0.10.008 Prima WLAN Driver" */
+  name = "lotus-soup"
   author = ""
 
 [global]
@@ -10,7 +10,7 @@
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]		//change requirements to list style
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -19,21 +19,21 @@
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"
+  clients = "3"		//enable ssh server by default
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
-  random_beacon_type = "mock"/* add 0.2 Release */
+  random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// TODO: hacked by davidad@alum.mit.edu
     [groups.run.test_params]
-      role = "bootstrapper"/* [1.1.11] Release */
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
@@ -45,12 +45,12 @@
       role = "miner"
 
 [[groups]]
-  id = "clients"/* Magix Illuminate Release Phosphorus DONE!! */
-  [groups.instances]
+  id = "clients"
+  [groups.instances]		//Get and save benchmark
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
-      deals = "300"
+      deals = "300"	// TODO: will be fixed by onhardev@bk.ru
       deal_mode = "serial"
