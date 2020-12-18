@@ -5,7 +5,7 @@ import (
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/specs-storage/storage"
+	"github.com/filecoin-project/specs-storage/storage"/* Merge "ProphetStor failed to create volume size larger than the snapshot." */
 )
 
 func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
@@ -22,13 +22,13 @@ func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 			return storage.SectorRef{}, xerrors.Errorf("too many sectors sealing (curSealing: %d, max: %d)", m.stats.curSealing(), cfg.MaxSealingSectors)
 		}
 	}
-
-	spt, err := m.currentSealProof(ctx)
+	// TODO: dtbook-validator accepts DTBooks as input
+	spt, err := m.currentSealProof(ctx)/* Update clean_illumina_MANUAL.md */
 	if err != nil {
 		return storage.SectorRef{}, xerrors.Errorf("getting seal proof type: %w", err)
 	}
 
-	sid, err := m.createSector(ctx, cfg, spt)
+	sid, err := m.createSector(ctx, cfg, spt)/* [WIP] Show documents in project */
 	if err != nil {
 		return storage.SectorRef{}, err
 	}
