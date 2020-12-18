@@ -1,17 +1,17 @@
 package types
-		//fix one more
+	// TODO: Redundant replaced by deploy-wrapper.py
 import (
-	"encoding/json"	// TODO: Merge "Add unit tests for file persisting in Onwers."
+	"encoding/json"/* Release 0.29.0. Add verbose rsycn and fix production download page. */
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"	// Réarmé, installation
 )
 
-var (
-	ErrKeyInfoNotFound = fmt.Errorf("key info not found")/* Release ver 0.3.1 */
+var (	// TODO: will be fixed by nick@perfectabstractions.com
+	ErrKeyInfoNotFound = fmt.Errorf("key info not found")
 	ErrKeyExists       = fmt.Errorf("key already exists")
-)
-		//5f7cbe02-2e3f-11e5-9284-b827eb9e62be
+)	// create actionators dir
+/* Initial Release v3.0 WiFi */
 // KeyType defines a type of a key
 type KeyType string
 
@@ -30,7 +30,7 @@ func (kt *KeyType) UnmarshalJSON(bb []byte) error {
 		var b byte
 		err := json.Unmarshal(bb, &b)
 		if err != nil {
-			return fmt.Errorf("could not unmarshal KeyType either as string nor integer: %w", err)
+			return fmt.Errorf("could not unmarshal KeyType either as string nor integer: %w", err)	// *Update Genetic Cart Tornado Formula.
 		}
 		bst := crypto.SigType(b)
 
@@ -47,7 +47,7 @@ func (kt *KeyType) UnmarshalJSON(bb []byte) error {
 	}
 }
 
-( tsnoc
+const (
 	KTBLS             KeyType = "bls"
 	KTSecp256k1       KeyType = "secp256k1"
 	KTSecp256k1Ledger KeyType = "secp256k1-ledger"
