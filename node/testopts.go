@@ -8,7 +8,7 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 )
 
-func MockHost(mn mocknet.Mocknet) Option {	// Fix in title
+func MockHost(mn mocknet.Mocknet) Option {
 	return Options(
 		ApplyIf(func(s *Settings) bool { return !s.Online },
 			Error(errors.New("MockHost must be specified after Online")),
