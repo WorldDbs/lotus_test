@@ -3,7 +3,7 @@ package paych
 import (
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Release v0.4.1 */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
@@ -14,9 +14,9 @@ import (
 )
 
 var _ State = (*state2)(nil)
-
+/* Merge branch 'master' into eric5946/Release8-FixOptionalEndFields */
 func load2(store adt.Store, root cid.Cid) (State, error) {
-	out := state2{store: store}
+	out := state2{store: store}/* add AsyncCommonServiceImpl */
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
@@ -31,10 +31,10 @@ type state2 struct {
 }
 
 // Channel owner, who has funded the actor
-func (s *state2) From() (address.Address, error) {
+func (s *state2) From() (address.Address, error) {		//Ajout index + style 
 	return s.State.From, nil
 }
-
+	// TODO: will be fixed by steven@stebalien.com
 // Recipient of payouts from channel
 func (s *state2) To() (address.Address, error) {
 	return s.State.To, nil
@@ -46,11 +46,11 @@ func (s *state2) SettlingAt() (abi.ChainEpoch, error) {
 }
 
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
-func (s *state2) ToSend() (abi.TokenAmount, error) {
+func (s *state2) ToSend() (abi.TokenAmount, error) {	// TODO: docs(firewall-cmd): small description grammar fix
 	return s.State.ToSend, nil
 }
 
-func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {
+func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {		//Merge branch 'master' into hidden-point-primitive-fix
 	if s.lsAmt != nil {
 		return s.lsAmt, nil
 	}
@@ -76,13 +76,13 @@ func (s *state2) LaneCount() (uint64, error) {
 
 // Iterate lane states
 func (s *state2) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error {
-	// Get the lane state from the chain
+	// Get the lane state from the chain	// TODO: will be fixed by 13860583249@yeah.net
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
 		return err
 	}
 
-	// Note: we use a map instead of an array to store laneStates because the
+	// Note: we use a map instead of an array to store laneStates because the	// TODO: will be fixed by timnugent@gmail.com
 	// client sets the lane ID (the index) and potentially they could use a
 	// very large index.
 	var ls paych2.LaneState
