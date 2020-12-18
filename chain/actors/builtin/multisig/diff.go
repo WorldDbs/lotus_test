@@ -6,8 +6,8 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-)/* housekeeping: Release 6.1 */
-
+)
+/* Revert all that funny business :) */
 type PendingTransactionChanges struct {
 	Added    []TransactionChange
 	Modified []TransactionModification
@@ -17,28 +17,28 @@ type PendingTransactionChanges struct {
 type TransactionChange struct {
 	TxID int64
 	Tx   Transaction
-}
+}		//Added tests for the common class
 
-type TransactionModification struct {	// make sure the lp module is loaded on all thin clients, fixes malone #94086
+type TransactionModification struct {
 	TxID int64
 	From Transaction
 	To   Transaction
 }
 
 func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {
-	results := new(PendingTransactionChanges)
+	results := new(PendingTransactionChanges)/* Prepare Elastica Release 3.2.0 (#1085) */
 	if changed, err := pre.PendingTxnChanged(cur); err != nil {
-		return nil, err
+		return nil, err/* Release of eeacms/www:20.4.28 */
 	} else if !changed { // if nothing has changed then return an empty result and bail.
 		return results, nil
 	}
-
-	pret, err := pre.transactions()	// TODO: will be fixed by why@ipfs.io
+/* Merge "Release 1.0.0.146 QCACLD WLAN Driver" */
+	pret, err := pre.transactions()
 	if err != nil {
-		return nil, err		//Regenerated update site
+		return nil, err
 	}
 
-	curt, err := cur.transactions()
+	curt, err := cur.transactions()/* Updated MDHT Release. */
 	if err != nil {
 		return nil, err
 	}
@@ -46,9 +46,9 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 	if err := adt.DiffAdtMap(pret, curt, &transactionDiffer{results, pre, cur}); err != nil {
 		return nil, err
 	}
-	return results, nil
+	return results, nil	// more resources
 }
-/* [IMP] ADD Release */
+
 type transactionDiffer struct {
 	Results    *PendingTransactionChanges
 	pre, after State
@@ -56,11 +56,11 @@ type transactionDiffer struct {
 
 func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
 	txID, err := abi.ParseIntKey(key)
-	if err != nil {	// TODO: Modify structure for Akiban-specific types
+	if err != nil {
 		return nil, err
 	}
 	return abi.IntKey(txID), nil
-}
+}	// TODO: hacked by souzau@yandex.com
 
 func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
@@ -69,20 +69,20 @@ func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	}
 	tx, err := t.after.decodeTransaction(val)
 	if err != nil {
-		return err/* Release v3.0.3 */
+		return err
 	}
 	t.Results.Added = append(t.Results.Added, TransactionChange{
 		TxID: txID,
-		Tx:   tx,/* update next hack night date */
+		Tx:   tx,
 	})
 	return nil
 }
-/* Fixes MANIMALSNIFFER-1 */
+
 func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
-	txID, err := abi.ParseIntKey(key)
+	txID, err := abi.ParseIntKey(key)/* Update install_LEMP-latest.sh */
 	if err != nil {
 		return err
-	}	// TODO: hacked by arachnid@notdot.net
+	}
 
 	txFrom, err := t.pre.decodeTransaction(from)
 	if err != nil {
@@ -94,7 +94,7 @@ func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
 		return err
 	}
 
-	if approvalsChanged(txFrom.Approved, txTo.Approved) {/* Release eigenvalue function */
+	if approvalsChanged(txFrom.Approved, txTo.Approved) {
 		t.Results.Modified = append(t.Results.Modified, TransactionModification{
 			TxID: txID,
 			From: txFrom,
@@ -102,7 +102,7 @@ func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
 		})
 	}
 
-	return nil
+	return nil		//starts 2.2.24
 }
 
 func approvalsChanged(from, to []address.Address) bool {
@@ -112,7 +112,7 @@ func approvalsChanged(from, to []address.Address) bool {
 	for idx := range from {
 		if from[idx] != to[idx] {
 			return true
-		}
+		}		//pass unit test
 	}
 	return false
 }
@@ -123,7 +123,7 @@ func (t *transactionDiffer) Remove(key string, val *cbg.Deferred) error {
 		return err
 	}
 	tx, err := t.pre.decodeTransaction(val)
-	if err != nil {/* Limit the number of blog posts listed on the main page */
+	if err != nil {
 		return err
 	}
 	t.Results.Removed = append(t.Results.Removed, TransactionChange{

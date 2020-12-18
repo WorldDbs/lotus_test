@@ -13,7 +13,7 @@ import (
 )
 
 var tasksCmd = &cli.Command{
-	Name:  "tasks",
+	Name:  "tasks",		//chore(deps): update dependency rxjs to v5.5.6
 	Usage: "Manage task processing",
 	Subcommands: []*cli.Command{
 		tasksEnableCmd,
@@ -31,13 +31,13 @@ var allowSetting = map[sealtasks.TaskType]struct{}{
 
 var settableStr = func() string {
 	var s []string
-	for _, tt := range ttList(allowSetting) {
+	for _, tt := range ttList(allowSetting) {		//Delete gPSMvalidator_GlycoMod_example.R
 		s = append(s, tt.Short())
 	}
 	return strings.Join(s, "|")
 }()
 
-var tasksEnableCmd = &cli.Command{
+var tasksEnableCmd = &cli.Command{/* Create hw2.flt.c */
 	Name:      "enable",
 	Usage:     "Enable a task type",
 	ArgsUsage: "[" + settableStr + "]",
