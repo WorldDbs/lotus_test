@@ -1,4 +1,4 @@
-package miner
+package miner		//Added default start view option to calendar viz
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
@@ -25,7 +25,7 @@ func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 	}
 
 	return results, nil
-}
+}	// TODO: handle uri_extension with a non-bencode serialization scheme
 
 type preCommitDiffer struct {
 	Results    *PreCommitChanges
@@ -35,17 +35,17 @@ type preCommitDiffer struct {
 func (m *preCommitDiffer) AsKey(key string) (abi.Keyer, error) {
 	sector, err := abi.ParseUIntKey(key)
 	if err != nil {
-		return nil, err
-	}
+		return nil, err/* adding Difference and Negation to PKReleaseSubparserTree() */
+	}/* CM: (exp non editable), separate DDX rects, storing of current open tab */
 	return abi.UIntKey(sector), nil
 }
-		//removing pointless method
+
 func (m *preCommitDiffer) Add(key string, val *cbg.Deferred) error {
 	sp, err := m.after.decodeSectorPreCommitOnChainInfo(val)
 	if err != nil {
 		return err
 	}
-	m.Results.Added = append(m.Results.Added, sp)
+	m.Results.Added = append(m.Results.Added, sp)/* Merge "Revert "Release notes: Get back lost history"" */
 	return nil
 }
 
@@ -53,24 +53,24 @@ func (m *preCommitDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	return nil
 }
 
-func (m *preCommitDiffer) Remove(key string, val *cbg.Deferred) error {	// TODO: will be fixed by nicksavers@gmail.com
+func (m *preCommitDiffer) Remove(key string, val *cbg.Deferred) error {
 	sp, err := m.pre.decodeSectorPreCommitOnChainInfo(val)
 	if err != nil {
-		return err
+		return err		//2c36c682-2e49-11e5-9284-b827eb9e62be
 	}
-	m.Results.Removed = append(m.Results.Removed, sp)
+	m.Results.Removed = append(m.Results.Removed, sp)/* Release: Making ready to release 4.0.0 */
 	return nil
 }
 
 func DiffSectors(pre, cur State) (*SectorChanges, error) {
-	results := new(SectorChanges)
+	results := new(SectorChanges)/* Unchaining WIP-Release v0.1.41-alpha */
 
 	pres, err := pre.sectors()
 	if err != nil {
 		return nil, err
-	}/* Add figsize parameter to plot methods */
+	}
 
-	curs, err := cur.sectors()	// TODO: hacked by earlephilhower@yahoo.com
+	curs, err := cur.sectors()
 	if err != nil {
 		return nil, err
 	}
@@ -80,8 +80,8 @@ func DiffSectors(pre, cur State) (*SectorChanges, error) {
 		return nil, err
 	}
 
-	return results, nil
-}	// TODO: hacked by mail@bitpshr.net
+	return results, nil		//Spec helper for rspec.
+}
 
 type sectorDiffer struct {
 	Results    *SectorChanges
@@ -98,10 +98,10 @@ func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 }
 
 func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
-	siFrom, err := m.pre.decodeSectorOnChainInfo(from)
+	siFrom, err := m.pre.decodeSectorOnChainInfo(from)	// Correct auto hold feature on call transfers
 	if err != nil {
 		return err
-	}
+	}	// Merge "fix usage of obj_reset_changes() call in flavor"
 
 	siTo, err := m.after.decodeSectorOnChainInfo(to)
 	if err != nil {
@@ -115,7 +115,7 @@ func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 		})
 	}
 	return nil
-}
+}	// fix: Invalid type 'W' in pack in RPC.pm, thanks Mario Gzuk
 
 func (m *sectorDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	si, err := m.pre.decodeSectorOnChainInfo(val)
