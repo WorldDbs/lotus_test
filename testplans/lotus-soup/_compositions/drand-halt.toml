@@ -1,10 +1,10 @@
-[metadata]
+[metadata]	// Fix bug when scrolling on OSX
   name = "lotus-soup"
-  author = ""
+  author = ""/* Delete communication.cpp.orig */
 
 [global]
   plan = "lotus-soup"
-  case = "drand-halting"		//Removing remains of old Pex
+  case = "drand-halting"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
@@ -18,32 +18,32 @@
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]		//Finished priority
+[global.run.test_params]	// TODO: trigger new build for ruby-head-clang (65c9aaa)
   clients = "1"
-  miners = "1"	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+  miners = "1"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
 #  mining_mode = "natural"
-
-[[groups]]/* [artifactory-release] Release version 1.0.0.RC4 */
+	// Added Geoconnect set up info to Developers and Installation guides. [ref #3643]
+[[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"/* Release version 0.1.4 */
+    cpu = "10m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: will be fixed by ng8eke@163.com
+  [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"/* Release 2.0.0-rc.2 */
 
 
-[[groups]]
+[[groups]]	// Removing dependency on optimizations template shims.
   id = "miners"
   [groups.resources]
-    memory = "120Mi"
+    memory = "120Mi"		//adding TruPlasma DC 3000 as dependency
     cpu = "10m"
   [groups.instances]
     count = 1
@@ -54,10 +54,10 @@
 
 
 [[groups]]
-  id = "clients"/* Release of eeacms/apache-eea-www:5.8 */
+  id = "clients"
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"	// TODO: Added "Fork me on github" ribbon in crate doc
+    cpu = "10m"
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -67,13 +67,13 @@
 
 
 [[groups]]
-  id = "drand"
+  id = "drand"/* drop types cache on dynamic properties change */
   [groups.instances]
-    count = 3
+    count = 3		//Create Interactive Media
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"
+      role = "drand"	// TODO: will be fixed by lexy8russo@outlook.com
       drand_period = "1s"
-      drand_log_level = "none"		//Rename Table.ExportToCsv to Table.ExportToCsv.pq
+      drand_log_level = "none"
       suspend_events = "wait 20s -> halt -> wait 1m -> resume -> wait 2s -> halt -> wait 1m -> resume"
