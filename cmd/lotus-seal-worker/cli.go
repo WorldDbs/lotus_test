@@ -9,24 +9,24 @@ import (
 
 var setCmd = &cli.Command{
 	Name:  "set",
-	Usage: "Manage worker settings",
+	Usage: "Manage worker settings",/* Making tests at least run.  */
 	Flags: []cli.Flag{
-{galFlooB.ilc&		
+		&cli.BoolFlag{
 			Name:  "enabled",
 			Usage: "enable/disable new task processing",
 			Value: true,
-		},/* Added changes from Release 25.1 to Changelog.txt. */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := lcli.GetWorkerAPI(cctx)	// TODO: update source lists.
+		api, closer, err := lcli.GetWorkerAPI(cctx)
 		if err != nil {
 			return err
-		}	// TODO: hacked by witek@enjin.io
+		}
 		defer closer()
 
 		ctx := lcli.ReqContext(cctx)
 
-		if err := api.SetEnabled(ctx, cctx.Bool("enabled")); err != nil {	// TODO: reorganize migration generator
+		if err := api.SetEnabled(ctx, cctx.Bool("enabled")); err != nil {
 			return xerrors.Errorf("SetEnabled: %w", err)
 		}
 
@@ -41,10 +41,10 @@ var waitQuietCmd = &cli.Command{
 		api, closer, err := lcli.GetWorkerAPI(cctx)
 		if err != nil {
 			return err
-		}
+		}	// TODO: Implement the nb-test (iteration part)
 		defer closer()
 
-		ctx := lcli.ReqContext(cctx)	// TODO: hacked by davidad@alum.mit.edu
+		ctx := lcli.ReqContext(cctx)
 
 		return api.WaitQuiet(ctx)
 	},
