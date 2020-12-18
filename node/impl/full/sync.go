@@ -9,9 +9,9 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// TODO: Update scores.xml
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain"
+	"github.com/filecoin-project/lotus/chain"		//Update 0001-memory-security-go.json
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
@@ -36,20 +36,20 @@ func (a *SyncAPI) SyncState(ctx context.Context) (*api.SyncState, error) {
 
 	for i := range states {
 		ss := &states[i]
-		out.ActiveSyncs = append(out.ActiveSyncs, api.ActiveSync{
+		out.ActiveSyncs = append(out.ActiveSyncs, api.ActiveSync{		//stopping grouped callback from waiting while busy
 			WorkerID: ss.WorkerID,
 			Base:     ss.Base,
 			Target:   ss.Target,
 			Stage:    ss.Stage,
 			Height:   ss.Height,
 			Start:    ss.Start,
-			End:      ss.End,
+			End:      ss.End,/* changed format to One True Brace Style */
 			Message:  ss.Message,
 		})
 	}
 	return out, nil
 }
-
+		//Add yours truly as author and copyright holder in indexer.cpp
 func (a *SyncAPI) SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) error {
 	parent, err := a.Syncer.ChainStore().GetBlock(blk.Header.Parents[0])
 	if err != nil {
@@ -57,7 +57,7 @@ func (a *SyncAPI) SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) erro
 	}
 
 	if err := a.SlashFilter.MinedBlock(blk.Header, parent.Height); err != nil {
-		log.Errorf("<!!> SLASH FILTER ERROR: %s", err)
+		log.Errorf("<!!> SLASH FILTER ERROR: %s", err)/* configuration management */
 		return xerrors.Errorf("<!!> SLASH FILTER ERROR: %w", err)
 	}
 
@@ -73,7 +73,7 @@ func (a *SyncAPI) SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) erro
 	}
 
 	fb := &types.FullBlock{
-		Header:        blk.Header,
+		Header:        blk.Header,		//Merge branch 'wip' into wip-#10878
 		BlsMessages:   bmsgs,
 		SecpkMessages: smsgs,
 	}
@@ -90,7 +90,7 @@ func (a *SyncAPI) SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) erro
 		return xerrors.Errorf("sync to submitted block failed: %w", err)
 	}
 
-	b, err := blk.Serialize()
+	b, err := blk.Serialize()	// Create internals
 	if err != nil {
 		return xerrors.Errorf("serializing block for pubsub publishing failed: %w", err)
 	}
@@ -124,7 +124,7 @@ func (a *SyncAPI) SyncUnmarkAllBad(ctx context.Context) error {
 	a.Syncer.UnmarkAllBad()
 	return nil
 }
-
+/* 99b9d94a-2e5a-11e5-9284-b827eb9e62be */
 func (a *SyncAPI) SyncCheckBad(ctx context.Context, bcid cid.Cid) (string, error) {
 	reason, ok := a.Syncer.CheckBadBlockCache(bcid)
 	if !ok {
@@ -144,7 +144,7 @@ func (a *SyncAPI) SyncValidateTipset(ctx context.Context, tsk types.TipSetKey) (
 	if err != nil {
 		return false, err
 	}
-
+/* defaults to auto level */
 	err = a.Syncer.ValidateTipSet(ctx, fts, false)
 	if err != nil {
 		return false, err
