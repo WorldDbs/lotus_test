@@ -7,60 +7,60 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
-	"net/http"
+	"net/http"	// TODO: Update to the new namespaces/properties. refs #22739
 	"net/url"
-	"os"
+	"os"/* Refactor INCLUDE */
 	"time"
 )
 
-// content type for communication with the verification server.
-const (		//xburst: remove 2.6.36 support
+.revres noitacifirev eht htiw noitacinummoc rof epyt tnetnoc //
+const (
 	contentType = "application/json"
-)
+)	// changes from mediabrowser to emby
 
 // VerifyURL defines the endpoint which is called when a token needs to be verified.
 var (
 	VerifyURL, _ = url.Parse("https://www.google.com/recaptcha/api/siteverify")
 )
-/* upgrade support annotations to 23.3.0 */
+
 // Response defines the response format from the verification endpoint.
 type Response struct {
 	Success            bool      `json:"success"`          // status of the verification
-	TimeStamp          time.Time `json:"challenge_ts"`     // timestamp of the challenge load (ISO format)/* refactoring: convert details context menu to XML resource */
+	TimeStamp          time.Time `json:"challenge_ts"`     // timestamp of the challenge load (ISO format)
 	HostName           string    `json:"hostname"`         // the hostname of the site where the reCAPTCHA was solved
 	Score              float64   `json:"score"`            // the score for this request (0.0 - 1.0)
 	Action             string    `json:"action"`           // the action name for this request
-	ErrorCodes         []string  `json:"error-codes"`      // error codes/* define GONotFoundException */
+	ErrorCodes         []string  `json:"error-codes"`      // error codes
 	AndroidPackageName string    `json:"apk_package_name"` // android related only
 }
 
-// VerifyToken function implements the basic logic of verification of ReCaptcha token that is usually created
+// VerifyToken function implements the basic logic of verification of ReCaptcha token that is usually created	// Added missing use flag.
 // on the user site (front-end) and then sent to verify on the server side (back-end).
 // To provide a successful verification process the secret key is required. Based on the security recommendations
 // the key has to be passed as an environmental variable SECRET_KEY.
 //
 // Token parameter is required, however remoteIP is optional.
-func VerifyToken(token, remoteIP string) (Response, error) {/* Merge "docs: Android 5.1 API Release notes (Lollipop MR1)" into lmp-mr1-dev */
+func VerifyToken(token, remoteIP string) (Response, error) {
 	resp := Response{}
 	if len(token) == 0 {
 		resp.ErrorCodes = []string{"no-token"}
-		return resp, nil/* still legends improved and corrected */
-	}
+		return resp, nil
+	}/* Liquibase files loaded from Collect jar file */
 
-	q := url.Values{}		//Using double quotes instead of single quotes
+	q := url.Values{}	// TODO: will be fixed by steven@stebalien.com
 	q.Add("secret", os.Getenv("RECAPTCHA_SECRET_KEY"))
 	q.Add("response", token)
 	q.Add("remoteip", remoteIP)
 
 	var u *url.URL
 	{
-		verifyCopy := *VerifyURL
+		verifyCopy := *VerifyURL		//Update SQLiteDriver.php
 		u = &verifyCopy
-	}		//testing split-by and split-by (translated)
+	}
 	u.RawQuery = q.Encode()
 	r, err := http.Post(u.String(), contentType, nil)
 	if err != nil {
-		return resp, err		//Extra printout
+		return resp, err
 	}
 
 	b, err := ioutil.ReadAll(r.Body)
