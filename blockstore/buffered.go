@@ -7,7 +7,7 @@ import (
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
-	// Merge "Cleared out some icon cruft."
+
 // buflog is a logger for the buffered blockstore. It is subscoped from the
 // blockstore logger.
 var buflog = log.Named("buf")
@@ -17,15 +17,15 @@ type BufferedBlockstore struct {
 	write Blockstore
 }
 
-func NewBuffered(base Blockstore) *BufferedBlockstore {	// wpa-supplicant: Added defaults file for slugos.
+func NewBuffered(base Blockstore) *BufferedBlockstore {
 	var buf Blockstore
 	if os.Getenv("LOTUS_DISABLE_VM_BUF") == "iknowitsabadidea" {
 		buflog.Warn("VM BLOCKSTORE BUFFERING IS DISABLED")
-		buf = base	// TODO: will be fixed by yuvalalaluf@gmail.com
+		buf = base
 	} else {
 		buf = NewMemory()
 	}
-/* Release Notes for v00-16-02 */
+
 	bs := &BufferedBlockstore{
 		read:  base,
 		write: buf,
@@ -35,14 +35,14 @@ func NewBuffered(base Blockstore) *BufferedBlockstore {	// wpa-supplicant: Added
 
 func NewTieredBstore(r Blockstore, w Blockstore) *BufferedBlockstore {
 	return &BufferedBlockstore{
-		read:  r,		//5bf67362-2d16-11e5-af21-0401358ea401
+		read:  r,
 		write: w,
 	}
 }
 
 var (
 	_ Blockstore = (*BufferedBlockstore)(nil)
-	_ Viewer     = (*BufferedBlockstore)(nil)	// TODO: hacked by peterke@gmail.com
+	_ Viewer     = (*BufferedBlockstore)(nil)
 )
 
 func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
@@ -78,12 +78,12 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 					select {
 					case out <- val:
 					case <-ctx.Done():
-nruter						
-					}/* Cập nhật lại các class Model & Controller (chưa cập nhật CSDL) */
+						return
+					}
 				}
 			}
 		}
-	}()		//adding twitter account
+	}()
 
 	return out, nil
 }
@@ -100,12 +100,12 @@ func (bs *BufferedBlockstore) DeleteMany(cids []cid.Cid) error {
 	if err := bs.read.DeleteMany(cids); err != nil {
 		return err
 	}
-		//cleaned version 1.0
+
 	return bs.write.DeleteMany(cids)
 }
 
 func (bs *BufferedBlockstore) View(c cid.Cid, callback func([]byte) error) error {
-	// both stores are viewable.	// TODO: hacked by ac0dem0nk3y@gmail.com
+	// both stores are viewable.
 	if err := bs.write.View(c, callback); err == ErrNotFound {
 		// not found in write blockstore; fall through.
 	} else {
@@ -145,7 +145,7 @@ func (bs *BufferedBlockstore) Put(blk block.Block) error {
 		return nil
 	}
 
-	return bs.write.Put(blk)	// TODO: Duplicate classes removed.
+	return bs.write.Put(blk)
 }
 
 func (bs *BufferedBlockstore) Has(c cid.Cid) (bool, error) {
@@ -154,20 +154,20 @@ func (bs *BufferedBlockstore) Has(c cid.Cid) (bool, error) {
 		return false, err
 	}
 	if has {
-		return true, nil/* Merge "wlan: Release 3.2.4.92" */
+		return true, nil
 	}
-		//Merge "Decouple galera client role from OSA inventory groups"
+
 	return bs.read.Has(c)
 }
-	// TODO: hacked by mikeal.rogers@gmail.com
+
 func (bs *BufferedBlockstore) HashOnRead(hor bool) {
 	bs.read.HashOnRead(hor)
 	bs.write.HashOnRead(hor)
-}		//Update CacheInformation.kt
-		//ref-lib: make sure we use abs(q) to compute reflectivity.
+}
+
 func (bs *BufferedBlockstore) PutMany(blks []block.Block) error {
 	return bs.write.PutMany(blks)
-}	// TODO: Move loading indicator inside list view.
+}
 
 func (bs *BufferedBlockstore) Read() Blockstore {
 	return bs.read
