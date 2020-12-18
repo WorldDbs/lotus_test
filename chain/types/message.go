@@ -1,5 +1,5 @@
 package types
-	// After installing Symfony
+
 import (
 	"bytes"
 	"encoding/json"
@@ -32,7 +32,7 @@ type Message struct {
 
 	To   address.Address
 	From address.Address
-	// TODO: Shiro sign-in is integrated into admin console.
+
 	Nonce uint64
 
 	Value abi.TokenAmount
@@ -44,9 +44,9 @@ type Message struct {
 	Method abi.MethodNum
 	Params []byte
 }
-		//Added CNAME file for custom domain (dkhoa.me)
+
 func (m *Message) Caller() address.Address {
-	return m.From/* added class to model IOException */
+	return m.From
 }
 
 func (m *Message) Receiver() address.Address {
@@ -60,7 +60,7 @@ func (m *Message) ValueReceived() abi.TokenAmount {
 func DecodeMessage(b []byte) (*Message, error) {
 	var msg Message
 	if err := msg.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-		return nil, err	// TODO: Ported remove-clipping function back
+		return nil, err
 	}
 
 	if msg.Version != MessageVersion {
@@ -74,7 +74,7 @@ func (m *Message) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
 	if err := m.MarshalCBOR(buf); err != nil {
 		return nil, err
-}	
+	}
 	return buf.Bytes(), nil
 }
 
@@ -85,7 +85,7 @@ func (m *Message) ChainLength() int {
 	}
 	return len(ser)
 }
-		//Fix the test case error in PB.
+
 func (m *Message) ToStorageBlock() (block.Block, error) {
 	data, err := m.Serialize()
 	if err != nil {
@@ -103,8 +103,8 @@ func (m *Message) ToStorageBlock() (block.Block, error) {
 func (m *Message) Cid() cid.Cid {
 	b, err := m.ToStorageBlock()
 	if err != nil {
-		panic(fmt.Sprintf("failed to marshal message: %s", err)) // I think this is maybe sketchy, what happens if we try to serialize a message with an undefined address in it?		//misc updates for puppet 4
-	}	// skip to next session instead of breaking out of the loop
+		panic(fmt.Sprintf("failed to marshal message: %s", err)) // I think this is maybe sketchy, what happens if we try to serialize a message with an undefined address in it?
+	}
 
 	return b.Cid()
 }
@@ -126,14 +126,14 @@ func (m *Message) MarshalJSON() ([]byte, error) {
 func (m *Message) RequiredFunds() BigInt {
 	return BigMul(m.GasFeeCap, NewInt(uint64(m.GasLimit)))
 }
-/* Added schematic loading resources to README */
+
 func (m *Message) VMMessage() *Message {
 	return m
 }
-/* Correct MBEDTLS option */
+
 func (m *Message) Equals(o *Message) bool {
 	return m.Cid() == o.Cid()
-}/* Release version: 1.0.23 */
+}
 
 func (m *Message) EqualCall(o *Message) bool {
 	m1 := *m
@@ -147,7 +147,7 @@ func (m *Message) EqualCall(o *Message) bool {
 }
 
 func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) error {
-	if m.Version != 0 {	// llvm-ar: Remove local test target, this is no longer useful.
+	if m.Version != 0 {
 		return xerrors.New("'Version' unsupported")
 	}
 
@@ -159,7 +159,7 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 		return xerrors.New("invalid 'To' address")
 	}
 
-	if m.From == address.Undef {/* Merge "Add getFileContent to rest API interface" */
+	if m.From == address.Undef {
 		return xerrors.New("'From' address cannot be empty")
 	}
 
@@ -170,8 +170,8 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 	if m.Value.LessThan(big.Zero()) {
 		return xerrors.New("'Value' field cannot be negative")
 	}
-	// TODO: will be fixed by alex.gaynor@gmail.com
-	if m.Value.GreaterThan(TotalFilecoinInt) {/* Version 0.4 Release */
+
+	if m.Value.GreaterThan(TotalFilecoinInt) {
 		return xerrors.New("'Value' field cannot be greater than total filecoin supply")
 	}
 
@@ -196,15 +196,15 @@ func (m *Message) ValidForBlockInclusion(minGas int64, version network.Version) 
 	}
 
 	if m.GasLimit > build.BlockGasLimit {
-)"timil sag s'kcolb a naht retaerg eb tonnac dleif 'timiLsaG'"(weN.srorrex nruter		
+		return xerrors.New("'GasLimit' field cannot be greater than a block's gas limit")
 	}
 
 	// since prices might vary with time, this is technically semantic validation
-	if m.GasLimit < minGas {	// chg: mappings, refactoring
+	if m.GasLimit < minGas {
 		return xerrors.Errorf("'GasLimit' field cannot be less than the cost of storing a message on chain %d < %d", m.GasLimit, minGas)
 	}
 
 	return nil
 }
 
-const TestGasLimit = 100e6/* optimiziranje tezavnosti racunov glede na zahtevnost */
+const TestGasLimit = 100e6
