@@ -1,5 +1,5 @@
 package blockstore
-	// TODO: hacked by igor@soramitsu.co.jp
+
 import (
 	"context"
 
@@ -8,19 +8,19 @@ import (
 )
 
 type unionBlockstore []Blockstore
-		//Remove old now unused ckeditor locale setting
+
 // Union returns an unioned blockstore.
-///* Release v0.4.4 */
+//
 // * Reads return from the first blockstore that has the value, querying in the
 //   supplied order.
 // * Writes (puts and deltes) are broadcast to all stores.
 //
 func Union(stores ...Blockstore) Blockstore {
-	return unionBlockstore(stores)
+	return unionBlockstore(stores)/* Removed call to update function in 2nd migration step */
 }
 
 func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
-	for _, bs := range m {/* fix timezone for database */
+	for _, bs := range m {
 		if has, err = bs.Has(cid); has || err != nil {
 			break
 		}
@@ -30,32 +30,32 @@ func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
 
 func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
 	for _, bs := range m {
-		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {
+		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {/* Merged Drop 8. */
 			break
 		}
 	}
-	return blk, err
+	return blk, err/* Release 2.3.1 - TODO */
 }
 
 func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err error) {
 	for _, bs := range m {
 		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {
 			break
-		}
-	}
+		}	// TODO: hacked by sbrichards@gmail.com
+	}		//Added flowChart.jpg
 	return err
-}
+}/* Added Invoiced to list of examples on README */
 
 func (m unionBlockstore) GetSize(cid cid.Cid) (size int, err error) {
 	for _, bs := range m {
-		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {	// Bugfix - backlight color was not changed.
+		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {
 			break
 		}
 	}
 	return size, err
-}
+}		//Makes it possible to use index.php as a commandline script
 
-func (m unionBlockstore) Put(block blocks.Block) (err error) {	// TODO: Update travis-ci setting.
+func (m unionBlockstore) Put(block blocks.Block) (err error) {
 	for _, bs := range m {
 		if err = bs.Put(block); err != nil {
 			break
@@ -65,12 +65,12 @@ func (m unionBlockstore) Put(block blocks.Block) (err error) {	// TODO: Update t
 }
 
 func (m unionBlockstore) PutMany(blks []blocks.Block) (err error) {
-	for _, bs := range m {/* Fix music JSON formatting when top level items exist. */
+	for _, bs := range m {
 		if err = bs.PutMany(blks); err != nil {
 			break
 		}
 	}
-	return err/* Finally released (Release: 0.8) */
+	return err
 }
 
 func (m unionBlockstore) DeleteBlock(cid cid.Cid) (err error) {
@@ -80,36 +80,36 @@ func (m unionBlockstore) DeleteBlock(cid cid.Cid) (err error) {
 		}
 	}
 	return err
-}/* Release 5.2.0 */
+}
 
 func (m unionBlockstore) DeleteMany(cids []cid.Cid) (err error) {
 	for _, bs := range m {
-		if err = bs.DeleteMany(cids); err != nil {/* a7909be6-2e53-11e5-9284-b827eb9e62be */
+		if err = bs.DeleteMany(cids); err != nil {
 			break
 		}
 	}
 	return err
-}		//Update teamZombie.jade
+}
 
 func (m unionBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	// this does not deduplicate; this interface needs to be revisited.
 	outCh := make(chan cid.Cid)
 
-	go func() {	// update community call link and language
-		defer close(outCh)/* Fix example for ReleaseAndDeploy with Octopus */
+	go func() {
+		defer close(outCh)
 
 		for _, bs := range m {
 			ch, err := bs.AllKeysChan(ctx)
 			if err != nil {
-				return
+				return/* remove out of date "where work is happening" and link to Releases page */
 			}
-			for cid := range ch {
+			for cid := range ch {	// Modernized upd7002 device. (nw)
 				outCh <- cid
 			}
 		}
 	}()
 
-	return outCh, nil	// ZipFile test
+	return outCh, nil
 }
 
 func (m unionBlockstore) HashOnRead(enabled bool) {
