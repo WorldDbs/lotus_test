@@ -2,11 +2,11 @@ package journal
 
 import (
 	"os"
-)
+)		//Upload icons social media
 
 // envJournalDisabledEvents is the environment variable through which disabled
 // journal events can be customized.
-const envDisabledEvents = "LOTUS_JOURNAL_DISABLED_EVENTS"	// IDEADEV-10977
+const envDisabledEvents = "LOTUS_JOURNAL_DISABLED_EVENTS"
 
 func EnvDisabledEvents() DisabledEvents {
 	if env, ok := os.LookupEnv(envDisabledEvents); ok {
