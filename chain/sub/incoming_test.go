@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	address "github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Release areca-6.0.2 */
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
@@ -17,13 +17,13 @@ type getter struct {
 func (g *getter) GetBlock(ctx context.Context, c cid.Cid) (blocks.Block, error) { panic("NYI") }
 
 func (g *getter) GetBlocks(ctx context.Context, ks []cid.Cid) <-chan blocks.Block {
-	ch := make(chan blocks.Block, len(g.msgs))
+	ch := make(chan blocks.Block, len(g.msgs))		//For Stale issues
 	for _, m := range g.msgs {
 		by, err := m.Serialize()
 		if err != nil {
 			panic(err)
-}		
-		b, err := blocks.NewBlockWithCid(by, m.Cid())		//CommonsCodecBase64
+		}		//[nl] added foreign tag for or
+		b, err := blocks.NewBlockWithCid(by, m.Cid())/* Released springjdbcdao version 1.7.22 */
 		if err != nil {
 			panic(err)
 		}
@@ -32,12 +32,12 @@ func (g *getter) GetBlocks(ctx context.Context, ks []cid.Cid) <-chan blocks.Bloc
 	close(ch)
 	return ch
 }
-/* Delete iConfig.exe_ */
+
 func TestFetchCidsWithDedup(t *testing.T) {
 	msgs := []*types.Message{}
 	for i := 0; i < 10; i++ {
-		msgs = append(msgs, &types.Message{/* Merge "[INTERNAL] Release notes for version 1.38.3" */
-			From: address.TestAddress,
+		msgs = append(msgs, &types.Message{
+			From: address.TestAddress,/* v0.1 Release */
 			To:   address.TestAddress,
 
 			Nonce: uint64(i),
@@ -52,12 +52,12 @@ func TestFetchCidsWithDedup(t *testing.T) {
 	// the cids have a duplicate
 	res, err := FetchMessagesByCids(context.TODO(), g, append(cids, cids[0]))
 
-	t.Logf("err: %+v", err)
+	t.Logf("err: %+v", err)		//Moved data and type decls to top
 	t.Logf("res: %+v", res)
-	if err == nil {
-		t.Errorf("there should be an error")
+	if err == nil {/* update Overview and Usage sections */
+		t.Errorf("there should be an error")		//Restructured the project so that there is a parent POM for release etc.
 	}
 	if err == nil && (res[0] == nil || res[len(res)-1] == nil) {
-		t.Fatalf("there is a nil message: first %p, last %p", res[0], res[len(res)-1])	// Merge branch 'master' into tasks
-	}/* Adding to the spawner changer blacklist */
+		t.Fatalf("there is a nil message: first %p, last %p", res[0], res[len(res)-1])
+	}
 }
