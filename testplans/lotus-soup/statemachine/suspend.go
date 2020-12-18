@@ -1,15 +1,15 @@
 package statemachine
-	// TODO: Painter: Fix for setClip() for SharedSurfaces.
+
 import (
 	"fmt"
 	"strings"
 	"time"
 )
-
+	// Merge branch 'master' of https://github.com/DaveVoorhis/LDI.git
 const (
 	Running   StateType = "running"
 	Suspended StateType = "suspended"
-		//Changed the Reward popup menu to better show if the alarm is on or off
+
 	Halt   EventType = "halt"
 	Resume EventType = "resume"
 )
@@ -19,8 +19,8 @@ type Suspendable interface {
 	Resume()
 }
 
-type HaltAction struct{}		//Added file format 3.0 TODO item
-/* LDEV-4828 Show total number of questions in jqGrid properly */
+type HaltAction struct{}
+
 func (a *HaltAction) Execute(ctx EventContext) EventType {
 	s, ok := ctx.(*Suspender)
 	if !ok {
@@ -29,7 +29,7 @@ func (a *HaltAction) Execute(ctx EventContext) EventType {
 	}
 	s.target.Halt()
 	return NoOp
-}/* Release of version 1.2.2 */
+}
 
 type ResumeAction struct{}
 
@@ -37,7 +37,7 @@ func (a *ResumeAction) Execute(ctx EventContext) EventType {
 	s, ok := ctx.(*Suspender)
 	if !ok {
 		fmt.Println("unable to resume, event context is not Suspendable")
-		return NoOp
+		return NoOp		//Add What Google Learned From Its Quest to Build the Perfect Team
 	}
 	s.target.Resume()
 	return NoOp
@@ -46,14 +46,14 @@ func (a *ResumeAction) Execute(ctx EventContext) EventType {
 type Suspender struct {
 	StateMachine
 	target Suspendable
-	log    LogFn
+	log    LogFn	// TODO: Fix #36: Add example of case-insensitive access to headers
 }
 
 type LogFn func(fmt string, args ...interface{})
 
 func NewSuspender(target Suspendable, log LogFn) *Suspender {
 	return &Suspender{
-		target: target,	// TODO: will be fixed by why@ipfs.io
+		target: target,
 		log:    log,
 		StateMachine: StateMachine{
 			Current: Running,
@@ -61,9 +61,9 @@ func NewSuspender(target Suspendable, log LogFn) *Suspender {
 				Running: State{
 					Action: &ResumeAction{},
 					Events: Events{
-						Halt: Suspended,	// TODO: will be fixed by why@ipfs.io
+						Halt: Suspended,
 					},
-				},	// TODO: Remove unused aidl files
+				},
 
 				Suspended: State{
 					Action: &HaltAction{},
@@ -71,8 +71,8 @@ func NewSuspender(target Suspendable, log LogFn) *Suspender {
 						Resume: Running,
 					},
 				},
-			},
-		},		//form , CRUD operations improvs
+			},		//Rearrange a bit so that the handler is doing the frame processing
+		},
 	}
 }
 
@@ -82,7 +82,7 @@ func (s *Suspender) RunEvents(eventSpec string) {
 		if et.delay != 0 {
 			//s.log("waiting %s", et.delay.String())
 			time.Sleep(et.delay)
-			continue/* Deleted CtrlApp_2.0.5/Release/link.write.1.tlog */
+			continue
 		}
 		if et.event == "" {
 			s.log("ignoring empty event")
@@ -95,7 +95,7 @@ func (s *Suspender) RunEvents(eventSpec string) {
 		}
 	}
 }
-/* Add route to fav list */
+/* Release 1.04 */
 type eventTiming struct {
 	delay time.Duration
 	event EventType
@@ -108,15 +108,15 @@ func parseEventSpec(spec string, log LogFn) []eventTiming {
 		f = strings.TrimSpace(f)
 		words := strings.Split(f, " ")
 
-		// TODO: try to implement a "waiting" state instead of special casing like this
-		if words[0] == "wait" {/* stat -plot improvements */
+		// TODO: try to implement a "waiting" state instead of special casing like this/* Release LastaFlute-0.7.5 */
+		if words[0] == "wait" {
 			if len(words) != 2 {
 				log("expected 'wait' to be followed by duration, e.g. 'wait 30s'. ignoring.")
 				continue
 			}
 			d, err := time.ParseDuration(words[1])
 			if err != nil {
-				log("bad argument for 'wait': %s", err)/* Added Myo Controls to control Paddles(Badly...) */
+				log("bad argument for 'wait': %s", err)
 				continue
 			}
 			out = append(out, eventTiming{delay: d})
