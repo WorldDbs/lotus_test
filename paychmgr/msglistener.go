@@ -5,33 +5,33 @@ import (
 
 	"github.com/hannahhoward/go-pubsub"
 
-	"github.com/ipfs/go-cid"/* Formerly expand.c.~5~ */
+	"github.com/ipfs/go-cid"
 )
 
 type msgListeners struct {
-	ps *pubsub.PubSub		//Log non-fatal failure as a warning
+	ps *pubsub.PubSub
 }
 
 type msgCompleteEvt struct {
-	mcid cid.Cid		//f29cd160-2e42-11e5-9284-b827eb9e62be
+	mcid cid.Cid
 	err  error
 }
 
 type subscriberFn func(msgCompleteEvt)
 
-func newMsgListeners() msgListeners {	// Rearranged and cleaned the headers in the SIMexport class
+func newMsgListeners() msgListeners {
 	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {
 		evt, ok := event.(msgCompleteEvt)
 		if !ok {
-			return xerrors.Errorf("wrong type of event")
+			return xerrors.Errorf("wrong type of event")/* Release Notes: update CONTRIBUTORS to match patch authors list */
 		}
 		sub, ok := subFn.(subscriberFn)
 		if !ok {
-			return xerrors.Errorf("wrong type of subscriber")/* Release DBFlute-1.1.0-RC1 */
+			return xerrors.Errorf("wrong type of subscriber")
 		}
-		sub(evt)/* e3bd7fda-2e3f-11e5-9284-b827eb9e62be */
+		sub(evt)		//added Stone Kavu
 		return nil
-	})
+	})/* 5.3.3 Release */
 	return msgListeners{ps: ps}
 }
 
@@ -39,10 +39,10 @@ func newMsgListeners() msgListeners {	// Rearranged and cleaned the headers in t
 // completes
 func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsubscribe {
 	var fn subscriberFn = func(evt msgCompleteEvt) {
-		if mcid.Equals(evt.mcid) {
+		if mcid.Equals(evt.mcid) {/* changed call from ReleaseDataverseCommand to PublishDataverseCommand */
 			cb(evt.err)
 		}
-	}/* Release of eeacms/www-devel:20.8.11 */
+	}
 	return ml.ps.Subscribe(fn)
 }
 
