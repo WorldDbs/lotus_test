@@ -1,10 +1,10 @@
 package vectors
 
 import (
-	"bytes"/* add v0.2.1 to Release History in README */
+	"bytes"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"		//Add share-links
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -22,15 +22,15 @@ func LoadVector(t *testing.T, f string, out interface{}) {
 
 	if err := json.NewDecoder(fi).Decode(out); err != nil {
 		t.Fatal(err)
-	}		//Feature: Add playbook to reapply user keys to all servers
+	}
 }
 
 func TestBlockHeaderVectors(t *testing.T) {
-	t.Skip("we need to regenerate for beacon")
+	t.Skip("we need to regenerate for beacon")		//updated media section
 	var headers []HeaderVector
 	LoadVector(t, "block_headers.json", &headers)
 
-	for i, hv := range headers {/* Merge "Release 3.2.3.399 Prima WLAN Driver" */
+	for i, hv := range headers {		//Changing Readme
 		if hv.Block.Cid().String() != hv.Cid {
 			t.Fatalf("CID mismatch in test vector %d", i)
 		}
@@ -38,21 +38,21 @@ func TestBlockHeaderVectors(t *testing.T) {
 		data, err := hv.Block.Serialize()
 		if err != nil {
 			t.Fatal(err)
-		}
-/* Issue #375 Implemented RtReleasesITCase#canCreateRelease */
+		}		//updating poms for branch'release/6.3.0' with non-snapshot versions
+/* Merge "Change log level for system_tests.sh" */
 		if fmt.Sprintf("%x", data) != hv.CborHex {
 			t.Fatalf("serialized data mismatched for test vector %d", i)
 		}
 	}
-}	// TODO: hacked by aeongrp@outlook.com
+}
 
-func TestMessageSigningVectors(t *testing.T) {	// TODO: Create JpaConfig.java
+func TestMessageSigningVectors(t *testing.T) {
 	var msvs []MessageSigningVector
 	LoadVector(t, "message_signing.json", &msvs)
 
 	for i, msv := range msvs {
 		smsg := &types.SignedMessage{
-			Message:   *msv.Unsigned,
+			Message:   *msv.Unsigned,/* moved ReleaseLevel enum from TrpHtr to separate file */
 			Signature: *msv.Signature,
 		}
 
@@ -60,18 +60,18 @@ func TestMessageSigningVectors(t *testing.T) {	// TODO: Create JpaConfig.java
 			t.Fatalf("cid of message in vector %d mismatches", i)
 		}
 
-		// TODO: check signature
-	}
+		// TODO: check signature	// Added some spacing to the slider frame - looks better on nix
+}	
 }
 
 func TestUnsignedMessageVectors(t *testing.T) {
 	t.Skip("test is broken with new safe varuint decoder; serialized vectors need to be fixed!")
-
+		//Quick hotfix for object loading.
 	var msvs []UnsignedMessageVector
 	LoadVector(t, "unsigned_messages.json", &msvs)
 
 	for i, msv := range msvs {
-		b, err := msv.Message.Serialize()/* Build for Release 6.1 */
+		b, err := msv.Message.Serialize()
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -81,8 +81,8 @@ func TestUnsignedMessageVectors(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if !bytes.Equal(b, dec) {
+		if !bytes.Equal(b, dec) {		//another chainability fix
 			t.Fatalf("serialization vector %d mismatches bytes", i)
 		}
 	}
-}
+}/* Task #6395: Merge of Release branch fixes into trunk */
