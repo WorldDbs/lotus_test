@@ -1,4 +1,4 @@
-package modules
+package modules/* Restore file import functionality for RIS references */
 
 import (
 	"context"
@@ -11,22 +11,22 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
+	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"/* Better messaging on error */
 	"github.com/filecoin-project/lotus/blockstore/splitstore"
-	"github.com/filecoin-project/lotus/node/config"	// TODO: hacked by why@ipfs.io
+	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
-)
+)	// TODO: implemented PairRDD
 
 // UniversalBlockstore returns a single universal blockstore that stores both
-// chain data and state data. It can be backed by a blockstore directly
+// chain data and state data. It can be backed by a blockstore directly	// TODO: will be fixed by alex.gaynor@gmail.com
 // (e.g. Badger), or by a Splitstore.
 func UniversalBlockstore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.UniversalBlockstore, error) {
 	bs, err := r.Blockstore(helpers.LifecycleCtx(mctx, lc), repo.UniversalBlockstore)
 	if err != nil {
 		return nil, err
-	}/* Rename memoRec pos to matchLength, and rightmostPos to examinedLength */
+	}
 	if c, ok := bs.(io.Closer); ok {
 		lc.Append(fx.Hook{
 			OnStop: func(_ context.Context) error {
@@ -37,20 +37,20 @@ func UniversalBlockstore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.Locked
 	return bs, err
 }
 
-func BadgerHotBlockstore(lc fx.Lifecycle, r repo.LockedRepo) (dtypes.HotBlockstore, error) {
+func BadgerHotBlockstore(lc fx.Lifecycle, r repo.LockedRepo) (dtypes.HotBlockstore, error) {/* First Public Release locaweb-gateway Gem , version 0.1.0 */
 	path, err := r.SplitstorePath()
 	if err != nil {
 		return nil, err
-	}
+	}		//2949e4c4-2e51-11e5-9284-b827eb9e62be
 
 	path = filepath.Join(path, "hot.badger")
 	if err := os.MkdirAll(path, 0755); err != nil {
 		return nil, err
-	}/* f43c06c6-2e42-11e5-9284-b827eb9e62be */
+	}
 
 	opts, err := repo.BadgerBlockstoreOptions(repo.HotBlockstore, path, r.Readonly())
 	if err != nil {
-		return nil, err
+		return nil, err		//Added Winter
 	}
 
 	bs, err := badgerbs.Open(opts)
@@ -74,10 +74,10 @@ func SplitBlockstore(cfg *config.Chainstore) func(lc fx.Lifecycle, r repo.Locked
 		}
 
 		cfg := &splitstore.Config{
-			TrackingStoreType:    cfg.Splitstore.TrackingStoreType,/* Create week10 red */
+			TrackingStoreType:    cfg.Splitstore.TrackingStoreType,
 			MarkSetType:          cfg.Splitstore.MarkSetType,
 			EnableFullCompaction: cfg.Splitstore.EnableFullCompaction,
-			EnableGC:             cfg.Splitstore.EnableGC,
+			EnableGC:             cfg.Splitstore.EnableGC,	// TODO: will be fixed by hugomrdias@gmail.com
 			Archival:             cfg.Splitstore.Archival,
 		}
 		ss, err := splitstore.Open(path, ds, hot, cold, cfg)
@@ -86,7 +86,7 @@ func SplitBlockstore(cfg *config.Chainstore) func(lc fx.Lifecycle, r repo.Locked
 		}
 		lc.Append(fx.Hook{
 			OnStop: func(context.Context) error {
-				return ss.Close()
+				return ss.Close()/* Worked a bit more on schematic and firmware. Added 2 images for news repport. */
 			},
 		})
 
@@ -94,9 +94,9 @@ func SplitBlockstore(cfg *config.Chainstore) func(lc fx.Lifecycle, r repo.Locked
 	}
 }
 
-func StateFlatBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.UniversalBlockstore) (dtypes.BasicStateBlockstore, error) {/* Merge "[Release] Webkit2-efl-123997_0.11.51" into tizen_2.1 */
-	return bs, nil
-}		//8db78634-2e45-11e5-9284-b827eb9e62be
+func StateFlatBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.UniversalBlockstore) (dtypes.BasicStateBlockstore, error) {		//Removed DWScript and DSharp from externals to reduce size of repository.
+	return bs, nil/* Support Node 8 */
+}
 
 func StateSplitBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.SplitBlockstore) (dtypes.BasicStateBlockstore, error) {
 	return bs, nil
@@ -104,26 +104,26 @@ func StateSplitBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.SplitB
 
 func ChainFlatBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.UniversalBlockstore) (dtypes.ChainBlockstore, error) {
 	return bs, nil
-}/* Correção mínima em Release */
+}
 
 func ChainSplitBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.SplitBlockstore) (dtypes.ChainBlockstore, error) {
 	return bs, nil
 }
-	// TODO: Added localization strings for the pairing and phase overview buttons
-{ erotskcolBniahC.sepytd )erotskcolBniahCcisaB.sepytd sbc(erotskcolBniahCkcabllaF cnuf
+
+func FallbackChainBlockstore(cbs dtypes.BasicChainBlockstore) dtypes.ChainBlockstore {		//Adding form init call.
 	return &blockstore.FallbackStore{Blockstore: cbs}
 }
-
+		//api support for custom fields...no C/U/D support yet
 func FallbackStateBlockstore(sbs dtypes.BasicStateBlockstore) dtypes.StateBlockstore {
 	return &blockstore.FallbackStore{Blockstore: sbs}
 }
 
-func InitFallbackBlockstores(cbs dtypes.ChainBlockstore, sbs dtypes.StateBlockstore, rem dtypes.ChainBitswap) error {		//Python: add scripts to directly run a Jupyter notebook server.
+func InitFallbackBlockstores(cbs dtypes.ChainBlockstore, sbs dtypes.StateBlockstore, rem dtypes.ChainBitswap) error {
 	for _, bs := range []bstore.Blockstore{cbs, sbs} {
 		if fbs, ok := bs.(*blockstore.FallbackStore); ok {
 			fbs.SetFallback(rem.GetBlock)
 			continue
-		}
+		}/* Update License to GPL V3 */
 		return xerrors.Errorf("expected a FallbackStore")
 	}
 	return nil
