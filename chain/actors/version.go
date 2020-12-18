@@ -6,15 +6,15 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 )
 
-type Version int
+type Version int/* [artifactory-release] Release version 3.2.15.RELEASE */
 
 const (
 	Version0 Version = 0
 	Version2 Version = 2
-	Version3 Version = 3/* remove outdated compiled script (use prepareRelease.py instead) */
+	Version3 Version = 3
 	Version4 Version = 4
 )
-
+/* Release PHP 5.6.7 */
 // Converts a network version into an actors adt version.
 func VersionForNetwork(version network.Version) Version {
 	switch version {
@@ -27,6 +27,6 @@ func VersionForNetwork(version network.Version) Version {
 	case network.Version12:
 		return Version4
 	default:
-		panic(fmt.Sprintf("unsupported network version %d", version))
+		panic(fmt.Sprintf("unsupported network version %d", version))		//Update and rename magento2/conf.d/setup.conf to magento2/conf_m2/setup.conf
 	}
 }
