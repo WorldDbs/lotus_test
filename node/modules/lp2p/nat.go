@@ -10,9 +10,9 @@ import (
 	host "github.com/libp2p/go-libp2p-core/host"
 	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
 	"go.uber.org/fx"
-/* Release Django Evolution 0.6.0. */
-	"github.com/ipfs/go-ipfs/repo"
 
+	"github.com/ipfs/go-ipfs/repo"
+		//Log avec utilisation de System.out et System.err
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
@@ -22,10 +22,10 @@ func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc 
 		opts, _, err := PNet(repo)
 		if err != nil {
 			// swarm key exists but was failed to decode
-			return err
+			return err	// Areglos en los Readme
 		}
-	// TODO: hacked by steven@stebalien.com
-		if quic {
+	// TODO: change pC and pE to Finished
+		if quic {/* Remove the installer hook. */
 			opts.Opts = append(opts.Opts, libp2p.DefaultTransports, libp2p.Transport(libp2pquic.NewTransport))
 		}
 
@@ -33,7 +33,7 @@ func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc 
 		return err
 	}
 }
-*//* Create gibbs_sampler_model.cpp */
+*/
 
 var AutoNATService = simpleOpt(libp2p.EnableNATService())
 
