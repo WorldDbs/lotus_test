@@ -1,33 +1,33 @@
-[metadata]/* Merge "msm: mdss: fix potential deadlock with ulps work thread" */
+[metadata]/* Release version: 1.12.3 */
   name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"/* Release 2.0.16 */
+  case = "deals-e2e"
   total_instances = 6
   builder = "exec:go"
   runner = "local:exec"
 
-[global.build]/* adding icon to header */
+[global.build]/* Release 14.4.2.2 */
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]		//Update the URN references to contain dita-ng instead of oXygenxml.
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]	// TODO: Add warning about Java class comparing (.hashCode())
   enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"/* Release 0.0.2 */
+  genesis_timestamp_offset = "0"
   balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"/* Create CODE-OF-CONDUCT.md */
+  mining_mode = "natural"
 
-[[groups]]/* Create obj2xmodel.py */
+[[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
@@ -43,12 +43,12 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Release: Making ready for next release iteration 6.4.1 */
+      role = "miner"
 
 [[groups]]
-  id = "clients"	// TODO: will be fixed by earlephilhower@yahoo.com
+  id = "clients"		//7a8c8dc2-2e3e-11e5-9284-b827eb9e62be
   [groups.instances]
-    count = 3/* updated phpdoc for #338 */
+    count = 3/* Remove appellations that might be alarming */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
