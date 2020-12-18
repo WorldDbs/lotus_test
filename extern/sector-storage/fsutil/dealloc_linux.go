@@ -1,7 +1,7 @@
 package fsutil
-
+/* Merge "Do validation in parameter schema" */
 import (
-	"os"		//Update README.md add description for commands and tags
+	"os"
 	"syscall"
 
 	logging "github.com/ipfs/go-log/v2"
