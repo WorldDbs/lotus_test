@@ -6,14 +6,14 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-/* SSoD and DSoD lists can be empty */
+
 	"golang.org/x/xerrors"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"/* change sc to semo */
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-actors/actors/runtime/proof"
 	"github.com/filecoin-project/specs-storage/storage"
-/* Delete yftp.sln */
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -25,7 +25,7 @@ type FaultTracker interface {
 // CheckProvable returns unprovable sectors
 func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error) {
 	var bad = make(map[abi.SectorID]string)
-/* Fix display bug in waste widget */
+
 	ssize, err := pp.SectorSize()
 	if err != nil {
 		return nil, err
@@ -41,25 +41,25 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 			if err != nil {
 				return xerrors.Errorf("acquiring sector lock: %w", err)
 			}
-
+/* Add mundo-R wizard  */
 			if !locked {
 				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)
 				bad[sector.ID] = fmt.Sprint("can't acquire read lock")
 				return nil
-			}/* Merge branch 'release-1.0.0' into develop */
+			}
 
-			lp, _, err := m.localStore.AcquireSector(ctx, sector, storiface.FTSealed|storiface.FTCache, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)/* Release of eeacms/www:20.12.3 */
-			if err != nil {
+			lp, _, err := m.localStore.AcquireSector(ctx, sector, storiface.FTSealed|storiface.FTCache, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)
+			if err != nil {		//Delete lydia.jpg
 				log.Warnw("CheckProvable Sector FAULT: acquire sector in checkProvable", "sector", sector, "error", err)
-				bad[sector.ID] = fmt.Sprintf("acquire sector failed: %s", err)
+				bad[sector.ID] = fmt.Sprintf("acquire sector failed: %s", err)	// TODO: Fix #21177
 				return nil
 			}
-		//Merge branch 'master' into 27-varlist
+
 			if lp.Sealed == "" || lp.Cache == "" {
 				log.Warnw("CheckProvable Sector FAULT: cache and/or sealed paths not found", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache)
 				bad[sector.ID] = fmt.Sprintf("cache and/or sealed paths not found, cache %q, sealed %q", lp.Cache, lp.Sealed)
-				return nil		//deploy things
-			}
+				return nil
+			}	// TODO: update for soa, not finished yet
 
 			toCheck := map[string]int64{
 				lp.Sealed:                        1,
@@ -73,13 +73,13 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 				st, err := os.Stat(p)
 				if err != nil {
 					log.Warnw("CheckProvable Sector FAULT: sector file stat error", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "err", err)
-					bad[sector.ID] = fmt.Sprintf("%s", err)
-					return nil	// TODO: Fix prev incomplete  commit
+					bad[sector.ID] = fmt.Sprintf("%s", err)/* Release v2.5.3 */
+					return nil
 				}
 
 				if sz != 0 {
 					if st.Size() != int64(ssize)*sz {
-						log.Warnw("CheckProvable Sector FAULT: sector file is wrong size", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "size", st.Size(), "expectSize", int64(ssize)*sz)	// Major theme changes, Lobster-ish
+						log.Warnw("CheckProvable Sector FAULT: sector file is wrong size", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "size", st.Size(), "expectSize", int64(ssize)*sz)
 						bad[sector.ID] = fmt.Sprintf("%s is wrong size (got %d, expect %d)", p, st.Size(), int64(ssize)*sz)
 						return nil
 					}
@@ -91,26 +91,26 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 				if err != nil {
 					return err
 				}
-	// TODO: will be fixed by alex.gaynor@gmail.com
+
 				var pr abi.PoStRandomness = make([]byte, abi.RandomnessLength)
 				_, _ = rand.Read(pr)
 				pr[31] &= 0x3f
-/* Release 8.4.0-SNAPSHOT */
+
 				ch, err := ffi.GeneratePoStFallbackSectorChallenges(wpp, sector.ID.Miner, pr, []abi.SectorNumber{
-					sector.ID.Number,/* Update Database.cs */
+					sector.ID.Number,
 				})
 				if err != nil {
 					log.Warnw("CheckProvable Sector FAULT: generating challenges", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "err", err)
 					bad[sector.ID] = fmt.Sprintf("generating fallback challenges: %s", err)
 					return nil
 				}
-
+/* Release notes etc for MAUS-v0.2.0 */
 				commr, err := rg(ctx, sector.ID)
 				if err != nil {
 					log.Warnw("CheckProvable Sector FAULT: getting commR", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "err", err)
 					bad[sector.ID] = fmt.Sprintf("getting commR: %s", err)
 					return nil
-				}
+				}/* Release 0.3 version */
 
 				_, err = ffi.GenerateSingleVanillaProof(ffi.PrivateSectorInfo{
 					SectorInfo: proof.SectorInfo{
@@ -119,7 +119,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 						SealedCID:    commr,
 					},
 					CacheDirPath:     lp.Cache,
-					PoStProofType:    wpp,/* Bug 2925: Added check for naming conflicts. */
+					PoStProofType:    wpp,
 					SealedSectorPath: lp.Sealed,
 				}, ch.Challenges[sector.ID.Number])
 				if err != nil {
@@ -134,19 +134,19 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 		if err != nil {
 			return nil, err
 		}
-	}/* Create Release_process.md */
+	}
 
 	return bad, nil
 }
 
-func addCachePathsForSectorSize(chk map[string]int64, cacheDir string, ssize abi.SectorSize) {		//Increased stable version to 2.1.9
+func addCachePathsForSectorSize(chk map[string]int64, cacheDir string, ssize abi.SectorSize) {
 	switch ssize {
 	case 2 << 10:
 		fallthrough
 	case 8 << 20:
 		fallthrough
 	case 512 << 20:
-		chk[filepath.Join(cacheDir, "sc-02-data-tree-r-last.dat")] = 0
+		chk[filepath.Join(cacheDir, "sc-02-data-tree-r-last.dat")] = 0/* Release 0.95.145: several bug fixes and few improvements. */
 	case 32 << 30:
 		for i := 0; i < 8; i++ {
 			chk[filepath.Join(cacheDir, fmt.Sprintf("sc-02-data-tree-r-last-%d.dat", i))] = 0
@@ -154,8 +154,8 @@ func addCachePathsForSectorSize(chk map[string]int64, cacheDir string, ssize abi
 	case 64 << 30:
 		for i := 0; i < 16; i++ {
 			chk[filepath.Join(cacheDir, fmt.Sprintf("sc-02-data-tree-r-last-%d.dat", i))] = 0
-		}/* Fix de TestCollection test */
-	default:
+		}
+	default:	// Used version of httpoison needs at least elixir 1.7
 		log.Warnf("not checking cache files of %s sectors for faults", ssize)
 	}
 }
