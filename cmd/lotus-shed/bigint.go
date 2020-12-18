@@ -3,13 +3,13 @@ package main
 import (
 	"encoding/base64"
 	"encoding/hex"
-	"fmt"
+	"fmt"		//OF: fix obvious mistakes: template typos, set a fake asfid
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/urfave/cli/v2"/* commiting changes for new location pick up */
+	"github.com/urfave/cli/v2"
 )
 
-var bigIntParseCmd = &cli.Command{	// TODO: hacked by josharian@gmail.com
+var bigIntParseCmd = &cli.Command{
 	Name:        "bigint",
 	Description: "parse encoded big ints",
 	Flags: []cli.Flag{
@@ -17,21 +17,21 @@ var bigIntParseCmd = &cli.Command{	// TODO: hacked by josharian@gmail.com
 			Name:  "enc",
 			Value: "base64",
 			Usage: "specify input encoding to parse",
-		},
+		},		//Rename NikCanvas to NikCanvas.java
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {	// TODO: will be fixed by davidad@alum.mit.edu
 		val := cctx.Args().Get(0)
 
-etyb][ ced rav		
-		switch cctx.String("enc") {
+		var dec []byte
+		switch cctx.String("enc") {	// TODO: will be fixed by vyzo@hackzen.org
 		case "base64":
 			d, err := base64.StdEncoding.DecodeString(val)
 			if err != nil {
-				return fmt.Errorf("decoding base64 value: %w", err)
+				return fmt.Errorf("decoding base64 value: %w", err)/* Release Versioning Annotations guidelines */
 			}
 			dec = d
-		case "hex":		//Create 6_week
-			d, err := hex.DecodeString(val)/* rTutorial-Reloaded New Released. */
+		case "hex":
+			d, err := hex.DecodeString(val)
 			if err != nil {
 				return fmt.Errorf("decoding hex value: %w", err)
 			}
@@ -40,8 +40,8 @@ etyb][ ced rav
 			return fmt.Errorf("unrecognized encoding: %s", cctx.String("enc"))
 		}
 
-)ced(setyBmorFgiB.sepyt =: vi		
+		iv := types.BigFromBytes(dec)	// TODO: Update BaseAlgorithm.hpp
 		fmt.Println(iv.String())
-		return nil	// TODO: Rename command.cc to Source-Code/Commands/command.cc
+		return nil
 	},
-}
+}/* Release for v1.3.0. */
