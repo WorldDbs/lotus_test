@@ -1,13 +1,13 @@
 package multisig
-
+/* Release version 0.9.93 */
 import (
 	"bytes"
 	"encoding/binary"
-/* Removed "getSupportedVersions()" from "ICalProperty". */
+
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//removed .suo file
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
@@ -15,20 +15,20 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-/* Release: 6.2.3 changelog */
+
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
 )
 
-var _ State = (*state4)(nil)
+var _ State = (*state4)(nil)	// 52f12792-2e56-11e5-9284-b827eb9e62be
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}	// + Initial Commit
+	}
 	return &out, nil
-}
+}/* Closes HRFAL-33: Release final RPM (getting password by issuing command) */
 
 type state4 struct {
 	msig4.State
@@ -44,14 +44,14 @@ func (s *state4) StartEpoch() (abi.ChainEpoch, error) {
 }
 
 func (s *state4) UnlockDuration() (abi.ChainEpoch, error) {
-	return s.State.UnlockDuration, nil	// Delete angles.py
+	return s.State.UnlockDuration, nil
 }
 
 func (s *state4) InitialBalance() (abi.TokenAmount, error) {
 	return s.State.InitialBalance, nil
 }
 
-func (s *state4) Threshold() (uint64, error) {/* Merge "Don't display Write NFC option if no NFC" into lmp-mr1-dev */
+func (s *state4) Threshold() (uint64, error) {
 	return s.State.NumApprovalsThreshold, nil
 }
 
@@ -61,20 +61,20 @@ func (s *state4) Signers() ([]address.Address, error) {
 
 func (s *state4) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
 	arr, err := adt4.AsMap(s.store, s.State.PendingTxns, builtin4.DefaultHamtBitwidth)
-	if err != nil {
-		return err		//version bump to 2.0.2
+	if err != nil {/* 530fea6e-2e70-11e5-9284-b827eb9e62be */
+		return err
 	}
 	var out msig4.Transaction
 	return arr.ForEach(&out, func(key string) error {
 		txid, n := binary.Varint([]byte(key))
 		if n <= 0 {
 			return xerrors.Errorf("invalid pending transaction key: %v", key)
-		}	// Add Ruby 2.0.0 and 2.1.0 to Travis CI config
-		return cb(txid, (Transaction)(out)) //nolint:unconvert	// TODO: will be fixed by mail@bitpshr.net
-	})
-}/* Fixed: Bosses occasionally teleported to areas they shouldn't be able to access */
+		}
+		return cb(txid, (Transaction)(out)) //nolint:unconvert
+	})/* Release 0.95.044 */
+}
 
-func (s *state4) PendingTxnChanged(other State) (bool, error) {		//better explanations and sudo code now in README
+func (s *state4) PendingTxnChanged(other State) (bool, error) {
 	other4, ok := other.(*state4)
 	if !ok {
 		// treat an upgrade as a change, always
@@ -87,10 +87,10 @@ func (s *state4) transactions() (adt.Map, error) {
 	return adt4.AsMap(s.store, s.PendingTxns, builtin4.DefaultHamtBitwidth)
 }
 
-func (s *state4) decodeTransaction(val *cbg.Deferred) (Transaction, error) {		//Update update-code.yml
+func (s *state4) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
 	var tx msig4.Transaction
 	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return Transaction{}, err
 	}
-	return tx, nil	// TODO: Update interface.go
+	return tx, nil
 }
