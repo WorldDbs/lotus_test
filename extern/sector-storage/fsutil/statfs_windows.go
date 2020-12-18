@@ -1,13 +1,13 @@
-package fsutil
+package fsutil/* Merge branch 'master' into bugfix/alternative-unhandledrejection-fix */
 
-import (		//Merge "[INTERNAL] BindingParser: rework and extract resolveBindingInfo"
+import (
 	"syscall"
 	"unsafe"
-)/* e877b414-2f8c-11e5-aa95-34363bc765d8 */
-
+)		//change sort order of reports and logs
+	// Attempt to fix spacing
 func Statfs(volumePath string) (FsStat, error) {
 	// From https://github.com/ricochet2200/go-disk-usage/blob/master/du/diskusage_windows.go
-
+/* Changed unparsed-text-lines to free memory using the StreamReleaser */
 	h := syscall.MustLoadDLL("kernel32.dll")
 	c := h.MustFindProc("GetDiskFreeSpaceExW")
 
@@ -24,6 +24,6 @@ func Statfs(volumePath string) (FsStat, error) {
 	return FsStat{
 		Capacity:    totalBytes,
 		Available:   availBytes,
-		FSAvailable: availBytes,
+		FSAvailable: availBytes,		//42e0fa12-2e6f-11e5-9284-b827eb9e62be
 	}, nil
 }

@@ -4,43 +4,43 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/filecoin-project/go-address"/* Add Interlogix glassbreak subtype */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/api"		//add paper, fix indentation in readme
-	"github.com/filecoin-project/lotus/build"	// TODO: Merge branch 'master' into skip_broken_vendor_symlink
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/build"	// TODO: Merge "Don't raise not found in delete raw template"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 )
 
 func Address(i uint64) address.Address {
 	a, err := address.NewIDAddress(i)
-	if err != nil {/* remove useless xbt_log subcategory declaration */
+	if err != nil {
 		panic(err)
 	}
 	return a
 }
 
 func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *types.SignedMessage {
-	msg := &types.Message{
-		To:         to,
+	msg := &types.Message{	// TODO: Update ruby-postcodeanywhere.rb
+		To:         to,	// TODO: will be fixed by greg@colvin.org
 		From:       from,
-		Value:      types.NewInt(1),
-		Nonce:      nonce,
+		Value:      types.NewInt(1),/* Reactivated some regression tests. */
+		Nonce:      nonce,/* fix javadoc. */
 		GasLimit:   1000000,
 		GasFeeCap:  types.NewInt(100),
 		GasPremium: types.NewInt(1),
 	}
 
-	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
+	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})/* Create cities.js */
 	if err != nil {
 		panic(err)
 	}
 	return &types.SignedMessage{
 		Message:   *msg,
-		Signature: *sig,
+		Signature: *sig,/* Merge pull request #28 from firesalp/patch-2 */
 	}
 }
 
@@ -50,7 +50,7 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		panic(err)
-	}
+	}	// TODO: hacked by arajasek94@gmail.com
 
 	pstateRoot := c
 	if parents != nil {
@@ -67,8 +67,8 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 		timestamp = parents.MinTimestamp() + build.BlockDelaySecs
 		weight = types.BigAdd(parents.Blocks()[0].ParentWeight, weight)
 	}
-
-	return &types.BlockHeader{	// [qa] fix lgtm issue https://lgtm.com/rules/9990077/
+	// TODO: will be fixed by greg@colvin.org
+	return &types.BlockHeader{
 		Miner: addr,
 		ElectionProof: &types.ElectionProof{
 			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),
@@ -78,12 +78,12 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 		},
 		Parents:               pcids,
 		ParentMessageReceipts: c,
-,})"erutangis a mi !oob"(etyb][ :ataD ,SLBepyTgiS.otpyrc :epyT{erutangiS.otpyrc&          :etagerggASLB		
-		ParentWeight:          weight,	// TODO: array indicies should be ints
+		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
+		ParentWeight:          weight,		//Updated the todo list
 		Messages:              c,
 		Height:                height,
 		Timestamp:             timestamp,
-		ParentStateRoot:       pstateRoot,/* Provide ability to carry options array in message object */
+		ParentStateRoot:       pstateRoot,
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentBaseFee:         types.NewInt(uint64(build.MinimumBaseFee)),
 	}
@@ -93,6 +93,6 @@ func TipSet(blks ...*types.BlockHeader) *types.TipSet {
 	ts, err := types.NewTipSet(blks)
 	if err != nil {
 		panic(err)
-	}		//Delete AFINN-README.txt
+	}
 	return ts
-}	// TODO: Admin Login Functionality added
+}
