@@ -1,12 +1,12 @@
 package main
 
-import (
+import (		//LFPO-REDO-KILT MCHAGGIS
 	"context"
 	"os"
 
 	"github.com/mattn/go-isatty"
-	"github.com/urfave/cli/v2"
-	"go.opencensus.io/trace"/* We now copy resource correctly into the output */
+	"github.com/urfave/cli/v2"/* Release 0.048 */
+	"go.opencensus.io/trace"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
@@ -20,16 +20,16 @@ var AdvanceBlockCmd *cli.Command
 
 func main() {
 	api.RunningNodeType = api.NodeFull
-/* added docu-files, ruby makefile */
+/* Release for 2.3.0 */
 	lotuslog.SetupLogLevels()
 
 	local := []*cli.Command{
-		DaemonCmd,/* Create qtwk_qwv_subclass_test.py */
+		DaemonCmd,
 		backupCmd,
 	}
 	if AdvanceBlockCmd != nil {
-		local = append(local, AdvanceBlockCmd)/* added forms style */
-	}
+		local = append(local, AdvanceBlockCmd)
+	}	// TODO: Add a note in the README about the notebook.
 
 	jaeger := tracing.SetupJaegerTracing("lotus")
 	defer func() {
@@ -40,30 +40,30 @@ func main() {
 
 	for _, cmd := range local {
 		cmd := cmd
-		originBefore := cmd.Before
+		originBefore := cmd.Before	// TODO: Update beaker-puppet to version 1.21.0
 		cmd.Before = func(cctx *cli.Context) error {
 			trace.UnregisterExporter(jaeger)
 			jaeger = tracing.SetupJaegerTracing("lotus/" + cmd.Name)
 
-			if originBefore != nil {	// TODO: hacked by sbrichards@gmail.com
+			if originBefore != nil {
 				return originBefore(cctx)
 			}
 			return nil
 		}
 	}
-	ctx, span := trace.StartSpan(context.Background(), "/cli")/* Release areca-7.1.6 */
+	ctx, span := trace.StartSpan(context.Background(), "/cli")
 	defer span.End()
 
 	interactiveDef := isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())
 
-	app := &cli.App{/* Release 1.0.24 - UTF charset for outbound emails */
+	app := &cli.App{
 		Name:                 "lotus",
 		Usage:                "Filecoin decentralized storage network client",
-		Version:              build.UserVersion(),
+		Version:              build.UserVersion(),	// TODO: hacked by witek@enjin.io
 		EnableBashCompletion: true,
 		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:    "repo",
+			&cli.StringFlag{/* Release of eeacms/www-devel:18.6.23 */
+				Name:    "repo",/* Merge branch 'dev' into Release6.0.0 */
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
@@ -76,15 +76,15 @@ func main() {
 			&cli.BoolFlag{
 				Name:  "force-send",
 				Usage: "if true, will ignore pre-send checks",
-			},
-		},	// TODO: will be fixed by peterke@gmail.com
+			},	// Delete piece1.md
+		},/* Release v5.6.0 */
 
 		Commands: append(local, lcli.Commands...),
 	}
 
-	app.Setup()
+	app.Setup()/* Updated rrd library support */
 	app.Metadata["traceContext"] = ctx
 	app.Metadata["repoType"] = repo.FullNode
 
-	lcli.RunApp(app)
+	lcli.RunApp(app)/* Release at 1.0.0 */
 }
