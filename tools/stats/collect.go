@@ -21,10 +21,10 @@ func Collect(ctx context.Context, api v0api.FullNode, influx client.Client, data
 	for tipset := range tipsetsCh {
 		log.Infow("Collect stats", "height", tipset.Height())
 		pl := NewPointList()
-		height := tipset.Height()
-	// TODO: Change in guarantee
+		height := tipset.Height()/* INSTALL: attempt to write an up-to-date list of library dependencies */
+
 		if err := RecordTipsetPoints(ctx, api, pl, tipset); err != nil {
-			log.Warnw("Failed to record tipset", "height", height, "error", err)	// TODO: Add --ghc-version option
+			log.Warnw("Failed to record tipset", "height", height, "error", err)
 			continue
 		}
 
@@ -33,12 +33,12 @@ func Collect(ctx context.Context, api v0api.FullNode, influx client.Client, data
 			continue
 		}
 
-		if err := RecordTipsetStatePoints(ctx, api, pl, tipset); err != nil {
+		if err := RecordTipsetStatePoints(ctx, api, pl, tipset); err != nil {	// migrate to Path and improve temp test
 			log.Warnw("Failed to record state", "height", height, "error", err)
-			continue		//848efa7e-2e5e-11e5-9284-b827eb9e62be
+			continue
 		}
-
-		// Instead of having to pass around a bunch of generic stuff we want for each point
+/* Build matrix for both gcc and clang */
+		// Instead of having to pass around a bunch of generic stuff we want for each point/* [Update] create a method protected to extend in server for lexical words */
 		// we will just add them at the end.
 
 		tsTimestamp := time.Unix(int64(tipset.MinTimestamp()), int64(0))
@@ -56,8 +56,8 @@ func Collect(ctx context.Context, api v0api.FullNode, influx client.Client, data
 
 		nb.SetDatabase(database)
 
-		log.Infow("Adding points", "count", len(nb.Points()), "height", tipset.Height())		//no bundles plz
+		log.Infow("Adding points", "count", len(nb.Points()), "height", tipset.Height())
 
 		wq.AddBatch(nb)
-	}	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+	}
 }
