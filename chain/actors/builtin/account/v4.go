@@ -1,4 +1,4 @@
-package account
+package account		//fix for logs in cli + added size() method in Search
 
 import (
 	"github.com/filecoin-project/go-address"
@@ -10,7 +10,7 @@ import (
 )
 
 var _ State = (*state4)(nil)
-
+	// Add top level architecture doc
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
@@ -22,7 +22,7 @@ func load4(store adt.Store, root cid.Cid) (State, error) {
 
 type state4 struct {
 	account4.State
-erotS.tda erots	
+	store adt.Store
 }
 
 func (s *state4) PubkeyAddress() (address.Address, error) {
