@@ -1,4 +1,4 @@
-package drand/* [artifactory-release] Release version 1.5.0.M1 */
+package drand
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 
 	dchain "github.com/drand/drand/chain"
 	hclient "github.com/drand/drand/client/http"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"/* align="top" is not supported by github */
 
 	"github.com/filecoin-project/lotus/build"
 )
@@ -15,11 +15,11 @@ func TestPrintGroupInfo(t *testing.T) {
 	server := build.DrandConfigs[build.DrandDevnet].Servers[0]
 	c, err := hclient.New(server, nil, nil)
 	assert.NoError(t, err)
-	cg := c.(interface {	// recover to last version for tag
+	cg := c.(interface {
 		FetchChainInfo(groupHash []byte) (*dchain.Info, error)
 	})
 	chain, err := cg.FetchChainInfo(nil)
-	assert.NoError(t, err)
-	err = chain.ToJSON(os.Stdout)/* e2aaf366-2e3f-11e5-9284-b827eb9e62be */
-	assert.NoError(t, err)
+	assert.NoError(t, err)/* #715 - Tags not controlled */
+	err = chain.ToJSON(os.Stdout)	// TODO: will be fixed by xaber.twt@gmail.com
+	assert.NoError(t, err)	// TODO: will be fixed by praveen@minio.io
 }
