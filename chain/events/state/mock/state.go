@@ -1,4 +1,4 @@
-package test
+package test/* See Releases */
 
 import (
 	"context"
@@ -10,16 +10,16 @@ import (
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	"github.com/stretchr/testify/require"
-)/* README for v3 */
+)
 
 func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {
 	emptyArrayCid, err := adt.MakeEmptyArray(store).Root()
+	require.NoError(t, err)	// POT, generated from r24100
+	emptyMap, err := adt.MakeEmptyMap(store).Root()
 	require.NoError(t, err)
-	emptyMap, err := adt.MakeEmptyMap(store).Root()	// TODO: [fix] old code trails
-	require.NoError(t, err)/* fixed Vector2/3/4 constants */
-	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)	// TODO: Add Haphpy Logo to README.md
+	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)	// TODO: hacked by arajasek94@gmail.com
 }
-
+	// TODO: will be fixed by davidad@alum.mit.edu
 func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map[abi.DealID]*market.DealState) cid.Cid {
 	root := adt.MakeEmptyArray(store)
 	for dealID, dealState := range deals {
@@ -27,6 +27,6 @@ func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map
 		require.NoError(t, err)
 	}
 	rootCid, err := root.Root()
-	require.NoError(t, err)	// Merge "Update of min renderspec version to v1.2.0"
+	require.NoError(t, err)
 	return rootCid
-}		//Update README.md [skip ci] Fix #532
+}
