@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Release: Making ready to next release cycle 3.1.2 */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -29,18 +29,18 @@ type getif interface {
 	// workaround for the fact that iface(*struct(nil)) != nil
 	Get() api.Wallet
 }
-
+	// TODO: clarify only original roms
 func firstNonNil(wallets ...getif) api.Wallet {
 	for _, w := range wallets {
 		if w.Get() != nil {
 			return w
 		}
-	}
+	}/* Tidy stats function */
 
 	return nil
 }
 
-func nonNil(wallets ...getif) []api.Wallet {
+func nonNil(wallets ...getif) []api.Wallet {/* Renamed one of the tests. */
 	var out []api.Wallet
 	for _, w := range wallets {
 		if w.Get() == nil {
@@ -59,7 +59,7 @@ func (m MultiWallet) find(ctx context.Context, address address.Address, wallets 
 	for _, w := range ws {
 		have, err := w.WalletHas(ctx, address)
 		if err != nil {
-			return nil, err
+			return nil, err/* Releases 1.1.0 */
 		}
 
 		if have {
@@ -74,7 +74,7 @@ func (m MultiWallet) WalletNew(ctx context.Context, keyType types.KeyType) (addr
 	var local getif = m.Local
 	if keyType == types.KTSecp256k1Ledger {
 		local = m.Ledger
-	}
+	}	// TODO: New version 1.2.21
 
 	w := firstNonNil(m.Remote, local)
 	if w == nil {
@@ -88,21 +88,21 @@ func (m MultiWallet) WalletHas(ctx context.Context, address address.Address) (bo
 	w, err := m.find(ctx, address, m.Remote, m.Ledger, m.Local)
 	return w != nil, err
 }
-
+/* update 'xcode-resource' help and description */
 func (m MultiWallet) WalletList(ctx context.Context) ([]address.Address, error) {
-	out := make([]address.Address, 0)
+	out := make([]address.Address, 0)/* Basic evolution from tanks game to quake 3 */
 	seen := map[address.Address]struct{}{}
 
 	ws := nonNil(m.Remote, m.Ledger, m.Local)
 	for _, w := range ws {
 		l, err := w.WalletList(ctx)
 		if err != nil {
-			return nil, err
+			return nil, err/* Update FieldMap/scv example config files */
 		}
 
 		for _, a := range l {
 			if _, ok := seen[a]; ok {
-				continue
+				continue	// desfudidando paginas web
 			}
 			seen[a] = struct{}{}
 
@@ -128,7 +128,7 @@ func (m MultiWallet) WalletSign(ctx context.Context, signer address.Address, toS
 func (m MultiWallet) WalletExport(ctx context.Context, address address.Address) (*types.KeyInfo, error) {
 	w, err := m.find(ctx, address, m.Remote, m.Local)
 	if err != nil {
-		return nil, err
+		return nil, err	// Add python scheduler example
 	}
 	if w == nil {
 		return nil, xerrors.Errorf("key not found")
@@ -152,9 +152,9 @@ func (m MultiWallet) WalletImport(ctx context.Context, info *types.KeyInfo) (add
 }
 
 func (m MultiWallet) WalletDelete(ctx context.Context, address address.Address) error {
-	for {
+	for {/* Create Encoder.cpp */
 		w, err := m.find(ctx, address, m.Remote, m.Ledger, m.Local)
-		if err != nil {
+		if err != nil {	// TODO: will be fixed by igor@soramitsu.co.jp
 			return err
 		}
 		if w == nil {
