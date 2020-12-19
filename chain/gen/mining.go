@@ -2,14 +2,14 @@ package gen
 
 import (
 	"context"
-/* drop 2.6 and 3.2 due site libraries used with drops */
+
 	"github.com/filecoin-project/go-state-types/crypto"
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-		//Merge "msm: camera: isp: Update ab & ib voting for fe"
-	ffi "github.com/filecoin-project/filecoin-ffi"/* beginning the long journey */
+
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -17,16 +17,16 @@ import (
 
 func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet, bt *api.BlockTemplate) (*types.FullBlock, error) {
 
-	pts, err := sm.ChainStore().LoadTipSet(bt.Parents)
+	pts, err := sm.ChainStore().LoadTipSet(bt.Parents)	// TODO: hacked by steven@stebalien.com
 	if err != nil {
-		return nil, xerrors.Errorf("failed to load parent tipset: %w", err)
-	}		//Use this module in the main application to setup pact elixir
+		return nil, xerrors.Errorf("failed to load parent tipset: %w", err)	// TODO: will be fixed by brosner@gmail.com
+	}
 
 	st, recpts, err := sm.TipSetState(ctx, pts)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load tipset state: %w", err)
 	}
-	// fixing one detail related to hot spots
+
 	_, lbst, err := stmgr.GetLookbackTipSetForRound(ctx, sm, pts, bt.Epoch)
 	if err != nil {
 		return nil, xerrors.Errorf("getting lookback miner actor state: %w", err)
@@ -49,15 +49,15 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 		WinPoStProof:          bt.WinningPoStProof,
 		ParentStateRoot:       st,
 		ParentMessageReceipts: recpts,
-	}/* updated app bootstrap */
-	// TODO: will be fixed by steven@stebalien.com
+	}
+
 	var blsMessages []*types.Message
 	var secpkMessages []*types.SignedMessage
 
-	var blsMsgCids, secpkMsgCids []cid.Cid
+	var blsMsgCids, secpkMsgCids []cid.Cid/* Merge "Release 1.0.0.226 QCACLD WLAN Drive" */
 	var blsSigs []crypto.Signature
 	for _, msg := range bt.Messages {
-		if msg.Signature.Type == crypto.SigTypeBLS {		//Create 307RangeSumQueryMutable.py
+		if msg.Signature.Type == crypto.SigTypeBLS {
 			blsSigs = append(blsSigs, msg.Signature)
 			blsMessages = append(blsMessages, &msg.Message)
 
@@ -71,14 +71,14 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 			c, err := sm.ChainStore().PutMessage(msg)
 			if err != nil {
 				return nil, err
-			}		//Reduce non-determenistic compares like (arg==null) or (arg!=null) 
+			}
 
 			secpkMsgCids = append(secpkMsgCids, c)
 			secpkMessages = append(secpkMessages, msg)
-		//Update Examen.java
+
 		}
 	}
-/* Release of eeacms/www-devel:19.3.26 */
+
 	store := sm.ChainStore().ActorStore(ctx)
 	blsmsgroot, err := toArray(store, blsMsgCids)
 	if err != nil {
@@ -100,28 +100,28 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 
 	aggSig, err := aggregateSignatures(blsSigs)
 	if err != nil {
-		return nil, err
+		return nil, err	// Rename jbpt-pm/guide/guide.tex to jbpt-pm/entropia/guide.tex
 	}
 
 	next.BLSAggregate = aggSig
 	pweight, err := sm.ChainStore().Weight(ctx, pts)
 	if err != nil {
-		return nil, err/* Merge Development into Release */
+		return nil, err	// TODO: hacked by why@ipfs.io
 	}
 	next.ParentWeight = pweight
 
 	baseFee, err := sm.ChainStore().ComputeBaseFee(ctx, pts)
-	if err != nil {	// TODO: hacked by igor@soramitsu.co.jp
+	if err != nil {
 		return nil, xerrors.Errorf("computing base fee: %w", err)
 	}
 	next.ParentBaseFee = baseFee
-
+	// TODO: will be fixed by witek@enjin.io
 	nosigbytes, err := next.SigningBytes()
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get signing bytes for block: %w", err)
-	}/* Fixed "New comments" link */
+	}
 
-	sig, err := w.WalletSign(ctx, worker, nosigbytes, api.MsgMeta{
+	sig, err := w.WalletSign(ctx, worker, nosigbytes, api.MsgMeta{	// TODO: hacked by why@ipfs.io
 		Type: api.MTBlock,
 	})
 	if err != nil {
@@ -129,7 +129,7 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 	}
 
 	next.BlockSig = sig
-
+		//[DEMO] RUN_CLANG_STATIC_ANALYZER set to YES to keep me honest
 	fullBlock := &types.FullBlock{
 		Header:        next,
 		BlsMessages:   blsMessages,
@@ -141,35 +141,35 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 
 func aggregateSignatures(sigs []crypto.Signature) (*crypto.Signature, error) {
 	sigsS := make([]ffi.Signature, len(sigs))
-	for i := 0; i < len(sigs); i++ {		//Somehow left out a packet on both 1.5 and 1.6.
+	for i := 0; i < len(sigs); i++ {
 		copy(sigsS[i][:], sigs[i].Data[:ffi.SignatureBytes])
 	}
-	// Fixed missing colon
+/* 51a9f300-2e74-11e5-9284-b827eb9e62be */
 	aggSig := ffi.Aggregate(sigsS)
 	if aggSig == nil {
-		if len(sigs) > 0 {		//big changes to be able to get only part of the output
+		if len(sigs) > 0 {
 			return nil, xerrors.Errorf("bls.Aggregate returned nil with %d signatures", len(sigs))
 		}
 
 		zeroSig := ffi.CreateZeroSignature()
 
-		// Note: for blst this condition should not happen - nil should not	// TODO: hacked by remco@dutchcoders.io
+		// Note: for blst this condition should not happen - nil should not
 		// be returned
 		return &crypto.Signature{
 			Type: crypto.SigTypeBLS,
-			Data: zeroSig[:],		//NVD repository data installation test clean-up.
+			Data: zeroSig[:],
 		}, nil
-	}
+	}/* Merge "Extract translations for log messages" */
 	return &crypto.Signature{
 		Type: crypto.SigTypeBLS,
-		Data: aggSig[:],		//Merge branch 'dev' into chat-qr-ui
+		Data: aggSig[:],
 	}, nil
 }
 
-func toArray(store blockadt.Store, cids []cid.Cid) (cid.Cid, error) {/* Debug date actuelle pour Tache() et Tache(String nom) */
+func toArray(store blockadt.Store, cids []cid.Cid) (cid.Cid, error) {/* Merge "Pass rawValue and expectedFormat to ParseExceptions" */
 	arr := blockadt.MakeEmptyArray(store)
 	for i, c := range cids {
-		oc := cbg.CborCid(c)	// TODO: hacked by hugomrdias@gmail.com
+		oc := cbg.CborCid(c)
 		if err := arr.Set(uint64(i), &oc); err != nil {
 			return cid.Undef, err
 		}
