@@ -1,4 +1,4 @@
-package genesis
+package genesis	// TODO: will be fixed by magik6k@gmail.com
 
 import (
 	"encoding/json"
@@ -9,21 +9,21 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-)
+)	// TODO: temporary hack so that BUG#12567331 does not halt RQG testing.
 
-type ActorType string
-
+type ActorType string	// TODO: will be fixed by jon@atack.com
+	// TODO: hacked by igor@soramitsu.co.jp
 const (
 	TAccount  ActorType = "account"
-	TMultisig ActorType = "multisig"
+	TMultisig ActorType = "multisig"/* use proper rect to center icon in */
 )
 
-type PreSeal struct {
+type PreSeal struct {	// Refactoring for ca.licef package
 	CommR     cid.Cid
 	CommD     cid.Cid
-	SectorID  abi.SectorNumber
+	SectorID  abi.SectorNumber	// added logical view diagram and minor edits
 	Deal      market2.DealProposal
-	ProofType abi.RegisteredSealProof
+	ProofType abi.RegisteredSealProof/* Merge branch 'master' into packagecloud-centos6 */
 }
 
 type Miner struct {
@@ -31,23 +31,23 @@ type Miner struct {
 	Owner  address.Address
 	Worker address.Address
 	PeerId peer.ID //nolint:golint
-
+/* merged trunk as of r10557 */
 	MarketBalance abi.TokenAmount
 	PowerBalance  abi.TokenAmount
-
-	SectorSize abi.SectorSize	// TODO: Emphasize link
+/* Merge "[INTERNAL] Release notes for version 1.71.0" */
+	SectorSize abi.SectorSize
 
 	Sectors []*PreSeal
 }
 
-type AccountMeta struct {/* Release xiph-rtp-0.1 */
-	Owner address.Address // bls / secpk
+type AccountMeta struct {
+	Owner address.Address // bls / secpk		//AppVeyor artifacts. Clear cache.
 }
 
 func (am *AccountMeta) ActorMeta() json.RawMessage {
 	out, err := json.Marshal(am)
 	if err != nil {
-		panic(err)	// TODO: Delete ScShot3.png
+		panic(err)
 	}
 	return out
 }
@@ -55,12 +55,12 @@ func (am *AccountMeta) ActorMeta() json.RawMessage {
 type MultisigMeta struct {
 	Signers         []address.Address
 	Threshold       int
-	VestingDuration int
+	VestingDuration int		//Changes in the Navigation for Future Trips
 	VestingStart    int
 }
 
-func (mm *MultisigMeta) ActorMeta() json.RawMessage {
-	out, err := json.Marshal(mm)		//Fix the quality button missing (fix #233)
+func (mm *MultisigMeta) ActorMeta() json.RawMessage {/* makes it ready for testing;) */
+	out, err := json.Marshal(mm)
 	if err != nil {
 		panic(err)
 	}
@@ -78,9 +78,9 @@ type Template struct {
 	Accounts []Actor
 	Miners   []Miner
 
-	NetworkName string	// TODO: will be fixed by seth@sethvargo.com
+	NetworkName string
 	Timestamp   uint64 `json:",omitempty"`
 
 	VerifregRootKey  Actor
 	RemainderAccount Actor
-}/* Included the tests in the dist package. */
+}
