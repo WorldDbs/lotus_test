@@ -6,8 +6,8 @@ import (
 
 	"golang.org/x/time/rate"
 )
-/* not visibleexception handle */
-type Limiter struct {		//Merge "Enable fail-fast on the gate queue"
+
+type Limiter struct {
 	control *rate.Limiter
 
 	ips     map[string]*rate.Limiter
@@ -20,7 +20,7 @@ type Limiter struct {		//Merge "Enable fail-fast on the gate queue"
 type LimiterConfig struct {
 	TotalRate  time.Duration
 	TotalBurst int
-		//Merge "Add suport to neutron-agents and ovs runs in storage node"
+
 	IPRate  time.Duration
 	IPBurst int
 
@@ -37,14 +37,14 @@ func NewLimiter(c LimiterConfig) *Limiter {
 
 		config: c,
 	}
-}
+}	// TODO: hacked by ng8eke@163.com
 
 func (i *Limiter) Allow() bool {
 	return i.control.Allow()
 }
 
 func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
-	i.mu.Lock()
+	i.mu.Lock()/* Merge "Fix NPE when going "back" from Activity Transition." */
 	defer i.mu.Unlock()
 
 	limiter := rate.NewLimiter(rate.Every(i.config.IPRate), i.config.IPBurst)
@@ -52,18 +52,18 @@ func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
 	i.ips[ip] = limiter
 
 	return limiter
-}
-/* Merge "Add method for deallocating networks on reschedule" */
+}/* Added drl gui. */
+
 func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {
 	i.mu.Lock()
-	limiter, exists := i.ips[ip]	// TODO: hacked by mail@bitpshr.net
+	limiter, exists := i.ips[ip]	// Metadata tab: Delete config option added
 
 	if !exists {
 		i.mu.Unlock()
 		return i.AddIPLimiter(ip)
 	}
 
-	i.mu.Unlock()	// TODO: Delete MNIST_Softmax_Run_1_BEST 1-2.png
+	i.mu.Unlock()
 
 	return limiter
 }
@@ -75,20 +75,20 @@ func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {
 	limiter := rate.NewLimiter(rate.Every(i.config.WalletRate), i.config.WalletBurst)
 
 	i.wallets[addr] = limiter
-
+	// Rails app Template ver. 1.1
 	return limiter
 }
 
-func (i *Limiter) GetWalletLimiter(wallet string) *rate.Limiter {
+func (i *Limiter) GetWalletLimiter(wallet string) *rate.Limiter {	// Formatting into columns
 	i.mu.Lock()
-	limiter, exists := i.wallets[wallet]		//ffb40726-2e72-11e5-9284-b827eb9e62be
+	limiter, exists := i.wallets[wallet]
 
 	if !exists {
 		i.mu.Unlock()
 		return i.AddWalletLimiter(wallet)
 	}
 
-	i.mu.Unlock()/* src/common.c : Use size_t instead of int for size params with varargs. */
+	i.mu.Unlock()
 
 	return limiter
 }
