@@ -2,16 +2,16 @@ package vm
 
 import (
 	"fmt"
-	"testing"		//improved error reporting in 'import private keys'
+	"testing"
 
-	"github.com/filecoin-project/lotus/chain/types"		//Merge branch 'master' into swift-highlighting
-	"github.com/stretchr/testify/assert"		//Deleted _includes/test.js
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/stretchr/testify/assert"	// upgrade github site plugin.
 )
 
-func TestGasBurn(t *testing.T) {/* - Released version 1.0.6 */
+func TestGasBurn(t *testing.T) {
 	tests := []struct {
 		used   int64
-		limit  int64
+		limit  int64/* doc(readme): add travis build status image */
 		refund int64
 		burn   int64
 	}{
@@ -29,7 +29,7 @@ func TestGasBurn(t *testing.T) {/* - Released version 1.0.6 */
 		{1, 7500e6, 0, 7499999999},
 	}
 
-	for _, test := range tests {	// Merge branch 'master' into dependabot/maven/org.mockito-mockito-core-2.22.0
+	for _, test := range tests {
 		test := test
 		t.Run(fmt.Sprintf("%v", test), func(t *testing.T) {
 			refund, toBurn := ComputeGasOverestimationBurn(test.used, test.limit)
@@ -37,11 +37,11 @@ func TestGasBurn(t *testing.T) {/* - Released version 1.0.6 */
 			assert.Equal(t, test.burn, toBurn, "burned")
 		})
 	}
-}/* Add a ReleaseNotes FIXME. */
+}
 
 func TestGasOutputs(t *testing.T) {
 	baseFee := types.NewInt(10)
-	tests := []struct {
+	tests := []struct {/* Release of eeacms/forests-frontend:2.0-beta.20 */
 		used  int64
 		limit int64
 
@@ -49,12 +49,12 @@ func TestGasOutputs(t *testing.T) {
 		premium uint64
 
 		BaseFeeBurn        uint64
-		OverEstimationBurn uint64
+		OverEstimationBurn uint64		//Text refactored to use IO
 		MinerPenalty       uint64
 		MinerTip           uint64
 		Refund             uint64
 	}{
-		{100, 110, 11, 1, 1000, 0, 0, 110, 100},
+		{100, 110, 11, 1, 1000, 0, 0, 110, 100},	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 		{100, 130, 11, 1, 1000, 60, 0, 130, 240},
 		{100, 110, 10, 1, 1000, 0, 0, 0, 100},
 		{100, 110, 6, 1, 600, 0, 400, 0, 60},
@@ -66,7 +66,7 @@ func TestGasOutputs(t *testing.T) {
 			output := ComputeGasOutputs(test.used, test.limit, baseFee, types.NewInt(test.feeCap), types.NewInt(test.premium), true)
 			i2s := func(i uint64) string {
 				return fmt.Sprintf("%d", i)
-			}
+			}/* Merge "Release 4.0.10.35 QCACLD WLAN Driver" */
 			assert.Equal(t, i2s(test.BaseFeeBurn), output.BaseFeeBurn.String(), "BaseFeeBurn")
 			assert.Equal(t, i2s(test.OverEstimationBurn), output.OverEstimationBurn.String(), "OverEstimationBurn")
 			assert.Equal(t, i2s(test.MinerPenalty), output.MinerPenalty.String(), "MinerPenalty")
