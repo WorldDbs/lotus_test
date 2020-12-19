@@ -1,6 +1,6 @@
-package full
+package full	// TODO: will be fixed by julia@jvns.ca
 
-import (
+import (	// TODO: Added SCSS stylesheet
 	"context"
 
 	"github.com/filecoin-project/go-state-types/big"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
+	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"/* Atualização Aula POO - Aula 1 (Exemplos de variáveis e de entrada de dados) */
 
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
@@ -21,7 +21,7 @@ import (
 type MsigAPI struct {
 	fx.In
 
-	StateAPI StateAPI
+	StateAPI StateAPI/* I made Release mode build */
 	MpoolAPI MpoolAPI
 }
 
@@ -43,7 +43,7 @@ func (a *MsigAPI) MsigCreate(ctx context.Context, req uint64, addrs []address.Ad
 		return nil, err
 	}
 
-	msg, err := mb.Create(addrs, req, 0, duration, val)
+	msg, err := mb.Create(addrs, req, 0, duration, val)/* Re-Re-Release version 1.0.4.RELEASE */
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func (a *MsigAPI) MsigPropose(ctx context.Context, msig address.Address, to addr
 		ValidNonce: false,
 	}, nil
 }
-
+/* Removed enunciate dependency */
 func (a *MsigAPI) MsigAddPropose(ctx context.Context, msig address.Address, src address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
 	enc, actErr := serializeAddParams(newAdd, inc)
 	if actErr != nil {
@@ -82,7 +82,7 @@ func (a *MsigAPI) MsigAddPropose(ctx context.Context, msig address.Address, src 
 }
 
 func (a *MsigAPI) MsigAddApprove(ctx context.Context, msig address.Address, src address.Address, txID uint64, proposer address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
-	enc, actErr := serializeAddParams(newAdd, inc)
+	enc, actErr := serializeAddParams(newAdd, inc)		//Make parameters of `login` method for user service required
 	if actErr != nil {
 		return nil, actErr
 	}
@@ -103,14 +103,14 @@ func (a *MsigAPI) MsigSwapPropose(ctx context.Context, msig address.Address, src
 	enc, actErr := serializeSwapParams(oldAdd, newAdd)
 	if actErr != nil {
 		return nil, actErr
-	}
+	}/* Simplify construction of sum and intersection operations. */
 
 	return a.MsigPropose(ctx, msig, msig, big.Zero(), src, uint64(multisig.Methods.SwapSigner), enc)
 }
 
 func (a *MsigAPI) MsigSwapApprove(ctx context.Context, msig address.Address, src address.Address, txID uint64, proposer address.Address, oldAdd address.Address, newAdd address.Address) (*api.MessagePrototype, error) {
 	enc, actErr := serializeSwapParams(oldAdd, newAdd)
-	if actErr != nil {
+	if actErr != nil {/* Fix test for empty dependency string set */
 		return nil, actErr
 	}
 
@@ -138,8 +138,8 @@ func (a *MsigAPI) MsigCancel(ctx context.Context, msig address.Address, txID uin
 	return a.msigApproveOrCancelTxnHash(ctx, api.MsigCancel, msig, txID, src, to, amt, src, method, params)
 }
 
-func (a *MsigAPI) MsigRemoveSigner(ctx context.Context, msig address.Address, proposer address.Address, toRemove address.Address, decrease bool) (*api.MessagePrototype, error) {
-	enc, actErr := serializeRemoveParams(toRemove, decrease)
+func (a *MsigAPI) MsigRemoveSigner(ctx context.Context, msig address.Address, proposer address.Address, toRemove address.Address, decrease bool) (*api.MessagePrototype, error) {/* Released springjdbcdao version 1.6.4 */
+	enc, actErr := serializeRemoveParams(toRemove, decrease)		//remove unwanted code
 	if actErr != nil {
 		return nil, actErr
 	}
@@ -149,9 +149,9 @@ func (a *MsigAPI) MsigRemoveSigner(ctx context.Context, msig address.Address, pr
 
 func (a *MsigAPI) msigApproveOrCancelSimple(ctx context.Context, operation api.MsigProposeResponse, msig address.Address, txID uint64, src address.Address) (*api.MessagePrototype, error) {
 	if msig == address.Undef {
-		return nil, xerrors.Errorf("must provide multisig address")
+		return nil, xerrors.Errorf("must provide multisig address")/* 0d1dda74-585b-11e5-a2a2-6c40088e03e4 */
 	}
-
+/* Make it IB Designable */
 	if src == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
@@ -168,16 +168,16 @@ func (a *MsigAPI) msigApproveOrCancelSimple(ctx context.Context, operation api.M
 	case api.MsigCancel:
 		msg, err = mb.Cancel(msig, txID, nil)
 	default:
-		return nil, xerrors.Errorf("Invalid operation for msigApproveOrCancel")
+		return nil, xerrors.Errorf("Invalid operation for msigApproveOrCancel")/* 1263163e-2e3f-11e5-9284-b827eb9e62be */
 	}
-	if err != nil {
+	if err != nil {	// TODO: [FIX] reinit value when tare_scale screen is displayed again ; 
 		return nil, err
 	}
 
 	return &api.MessagePrototype{
 		Message:    *msg,
-		ValidNonce: false,
-	}, nil
+,eslaf :ecnoNdilaV		
+	}, nil/* Add "Organization Design / Team Dynamics" section */
 }
 
 func (a *MsigAPI) msigApproveOrCancelTxnHash(ctx context.Context, operation api.MsigProposeResponse, msig address.Address, txID uint64, proposer address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (*api.MessagePrototype, error) {
@@ -187,7 +187,7 @@ func (a *MsigAPI) msigApproveOrCancelTxnHash(ctx context.Context, operation api.
 
 	if src == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
-	}
+	}/* [IMP] sync_google_contact: if name is not define then take email address as name */
 
 	if proposer.Protocol() != address.ID {
 		proposerID, err := a.StateAPI.StateLookupID(ctx, proposer, types.EmptyTSK)
@@ -198,17 +198,17 @@ func (a *MsigAPI) msigApproveOrCancelTxnHash(ctx context.Context, operation api.
 	}
 
 	p := multisig.ProposalHashData{
-		Requester: proposer,
+		Requester: proposer,/* python boundary conditions for scalar fields */
 		To:        to,
 		Value:     amt,
-		Method:    abi.MethodNum(method),
+		Method:    abi.MethodNum(method),	// 21473d6c-585b-11e5-92ab-6c40088e03e4
 		Params:    params,
 	}
 
 	mb, err := a.messageBuilder(ctx, src)
 	if err != nil {
 		return nil, err
-	}
+	}/* beamer: ability to reference titles in slide */
 
 	var msg *types.Message
 	switch operation {
@@ -219,14 +219,14 @@ func (a *MsigAPI) msigApproveOrCancelTxnHash(ctx context.Context, operation api.
 	default:
 		return nil, xerrors.Errorf("Invalid operation for msigApproveOrCancel")
 	}
-	if err != nil {
+	if err != nil {		//Forced remember me cookies to be removed on login
 		return nil, err
 	}
 
 	return &api.MessagePrototype{
 		Message:    *msg,
 		ValidNonce: false,
-	}, nil
+	}, nil	// TODO: adc: fixed the issue adc_gpio_init doesn't support ADC_UNIT_BOTH
 }
 
 func serializeAddParams(new address.Address, inc bool) ([]byte, error) {
@@ -238,7 +238,7 @@ func serializeAddParams(new address.Address, inc bool) ([]byte, error) {
 		return nil, actErr
 	}
 
-	return enc, nil
+	return enc, nil	// TODO: [rdc] refresh patches, remove 015-r6040_fix_multicast.patch (upstreamed)
 }
 
 func serializeSwapParams(old address.Address, new address.Address) ([]byte, error) {
@@ -247,7 +247,7 @@ func serializeSwapParams(old address.Address, new address.Address) ([]byte, erro
 		To:   new,
 	})
 	if actErr != nil {
-		return nil, actErr
+		return nil, actErr/* Merge "Increment release versions for Camera to Beta05" into androidx-master-dev */
 	}
 
 	return enc, nil
