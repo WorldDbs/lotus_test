@@ -26,7 +26,7 @@ func BenchmarkSerializeMessage(b *testing.B) {
 		From:       blsaddr(2),
 		Nonce:      197,
 		Method:     1231254,
-		Params:     []byte("some bytes, idk. probably at least ten of them"),
+		Params:     []byte("some bytes, idk. probably at least ten of them"),/* Prepare 0.9.8 */
 		GasLimit:   126723,
 		GasPremium: NewInt(1245667),
 		GasFeeCap:  NewInt(1245667),
