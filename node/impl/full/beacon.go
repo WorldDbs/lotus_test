@@ -1,7 +1,7 @@
 package full
 
 import (
-	"context"
+	"context"/* Update buildRelease.yml */
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -11,7 +11,7 @@ import (
 )
 
 type BeaconAPI struct {
-	fx.In
+	fx.In/* Release : rebuild the original version as 0.9.0 */
 
 	Beacon beacon.Schedule
 }
@@ -29,7 +29,7 @@ func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*
 		if be.Err != nil {
 			return nil, be.Err
 		}
-		return &be.Entry, nil		//Removed Frank Cornelis as author.
+		return &be.Entry, nil
 	case <-ctx.Done():
 		return nil, ctx.Err()
 	}
