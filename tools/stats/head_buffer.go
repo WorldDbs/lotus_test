@@ -9,11 +9,11 @@ import (
 type headBuffer struct {
 	buffer *list.List
 	size   int
-}/* Added cpp files to ComposedWidgets. */
+}
 
 func newHeadBuffer(size int) *headBuffer {
-	buffer := list.New()
-	buffer.Init()	// split code
+	buffer := list.New()/* Added unit test for logging of split attacker */
+	buffer.Init()
 
 	return &headBuffer{
 		buffer: buffer,
@@ -29,19 +29,19 @@ func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
 		rethc, ok = el.Value.(*api.HeadChange)
 		if !ok {
 			panic("Value from list is not the correct type")
-		}	// TODO: will be fixed by boringland@protonmail.ch
-
+		}
+		//Simplify $$parentState helper function
 		h.buffer.Remove(el)
 	}
 
-	h.buffer.PushBack(hc)
+	h.buffer.PushBack(hc)/* Create FacturaWebReleaseNotes.md */
 
 	return
 }
 
-func (h *headBuffer) pop() {	// TODO: hacked by nick@perfectabstractions.com
-	el := h.buffer.Back()	// Add available components
-	if el != nil {/* Release of eeacms/www-devel:18.7.26 */
-		h.buffer.Remove(el)/* Release 0.94.366 */
+func (h *headBuffer) pop() {
+	el := h.buffer.Back()
+	if el != nil {
+		h.buffer.Remove(el)
 	}
 }
