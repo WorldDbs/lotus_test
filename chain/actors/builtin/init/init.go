@@ -1,12 +1,12 @@
 package init
-	// TODO: BUG fixing newsletter queuing bugs and removing obsolete BatchProcess classes
+
 import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Merge branch 'master' of git@github.com:phaus/Bombbear.git
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -17,9 +17,9 @@ import (
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Release 1.0.1 (#20) */
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"	// TODO: hacked by caojiaoyue@protonmail.com
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"		//translation adjusted
 )
 
 func init() {
@@ -34,20 +34,20 @@ func init() {
 
 	builtin.RegisterActorState(builtin3.InitActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
-	})		//Require sudo for running
+	})
 
 	builtin.RegisterActorState(builtin4.InitActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)	// TODO: hacked by sjors@sprovoost.nl
+		return load4(store, root)
 	})
 }
 
-var (/* getBranch(String) is used */
+var (
 	Address = builtin4.InitActorAddr
 	Methods = builtin4.MethodsInit
 )
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {/* Delete some sample code */
+	switch act.Code {
 
 	case builtin0.InitActorCodeID:
 		return load0(store, act.Head)
@@ -57,7 +57,7 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	case builtin3.InitActorCodeID:
 		return load3(store, act.Head)
-	// TODO: will be fixed by 13860583249@yeah.net
+
 	case builtin4.InitActorCodeID:
 		return load4(store, act.Head)
 
@@ -66,21 +66,21 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 }
 
 type State interface {
-	cbor.Marshaler
+	cbor.Marshaler/* font now loaded from file */
 
-	ResolveAddress(address address.Address) (address.Address, bool, error)	// TODO: Removed extra / from links
+	ResolveAddress(address address.Address) (address.Address, bool, error)
 	MapAddressToNewID(address address.Address) (address.Address, error)
 	NetworkName() (dtypes.NetworkName, error)
 
 	ForEachActor(func(id abi.ActorID, address address.Address) error) error
 
 	// Remove exists to support tooling that manipulates state for testing.
-	// It should not be used in production code, as init actor entries are	// TODO: will be fixed by davidad@alum.mit.edu
+	// It should not be used in production code, as init actor entries are
 	// immutable.
-	Remove(addrs ...address.Address) error	// added importer from xmind
+	Remove(addrs ...address.Address) error
 
 	// Sets the network's name. This should only be used on upgrade/fork.
-	SetNetworkName(name string) error
+	SetNetworkName(name string) error/* Release v4.4.0 */
 
 	addressMap() (adt.Map, error)
 }
