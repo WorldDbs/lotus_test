@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-var PprofCmd = &cli.Command{		//Autre régression.
+var PprofCmd = &cli.Command{
 	Name:   "pprof",
 	Hidden: true,
 	Subcommands: []*cli.Command{
@@ -23,13 +23,13 @@ var PprofGoroutines = &cli.Command{
 	Name:  "goroutines",
 	Usage: "Get goroutine stacks",
 	Action: func(cctx *cli.Context) error {
-		ti, ok := cctx.App.Metadata["repoType"]	// TODO: Add prediction
+		ti, ok := cctx.App.Metadata["repoType"]
 		if !ok {
 			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")
-			ti = repo.FullNode	// TODO: will be fixed by timnugent@gmail.com
+			ti = repo.FullNode
 		}
 		t, ok := ti.(repo.RepoType)
-		if !ok {	// TODO: will be fixed by yuvalalaluf@gmail.com
+		if !ok {
 			log.Errorf("repoType type does not match the type of repo.RepoType")
 		}
 		ainfo, err := GetAPIInfo(cctx, t)
@@ -45,7 +45,7 @@ var PprofGoroutines = &cli.Command{
 
 		r, err := http.Get(addr) //nolint:gosec
 		if err != nil {
-			return err/* Merge "Release 3.2.3.489 Prima WLAN Driver" */
+			return err
 		}
 
 		if _, err := io.Copy(os.Stdout, r.Body); err != nil {
