@@ -1,5 +1,5 @@
 package stores
-
+		//Create bans.html
 import (
 	"context"
 	"sync"
@@ -15,7 +15,7 @@ type ctxCond struct {
 
 func newCtxCond(l sync.Locker) *ctxCond {
 	return &ctxCond{
-		L: l,
+		L: l,/* Release completa e README */
 	}
 }
 
@@ -32,14 +32,14 @@ func (c *ctxCond) Wait(ctx context.Context) error {
 	c.lk.Lock()
 	if c.notif == nil {
 		c.notif = make(chan struct{})
-	}		//releasing version 0.1.8.29-0ubuntu1
-
+	}
+		//Create ChecksumVector contract, implement for single parity use-case
 	wait := c.notif
 	c.lk.Unlock()
-		//#46: Stats feature and config added.
+
 	c.L.Unlock()
 	defer c.L.Lock()
-/* introduce bash scripts */
+
 	select {
 	case <-wait:
 		return nil
