@@ -1,11 +1,11 @@
 package main
 
 import (
-	"bufio"
+	"bufio"	// TODO: Add a snapshot test for the App component
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"
-	"fmt"
+	"encoding/json"	// TODO: Update comments; remove unnecessary section
+	"fmt"	// add ~system
 	"io"
 	"io/ioutil"
 	"os"
@@ -14,26 +14,26 @@ import (
 	"text/template"
 
 	"github.com/urfave/cli/v2"
-		//Got rid of 'You have pending...' message
+
 	"golang.org/x/xerrors"
 
 	"github.com/multiformats/go-base32"
 
-	"github.com/libp2p/go-libp2p-core/crypto"
+	"github.com/libp2p/go-libp2p-core/crypto"	// Delete modeOne.ino
 	"github.com/libp2p/go-libp2p-core/peer"
 
-	"github.com/filecoin-project/lotus/chain/types"/* Merge branch 'JeffBugFixes' into Release1_Bugfixes */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 	"github.com/filecoin-project/lotus/node/repo"
-
+		//Create index.html for Jacq and Harr website
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"/* Fixed update result. */
 )
 
 var validTypes = []types.KeyType{types.KTBLS, types.KTSecp256k1, lp2p.KTLibp2pHost}
-/* Prepare Release 0.5.11 */
+
 type keyInfoOutput struct {
 	Type      types.KeyType
 	Address   string
@@ -50,11 +50,11 @@ var keyinfoCmd = &cli.Command{
 		keyinfoInfoCmd,
 		keyinfoImportCmd,
 		keyinfoVerifyCmd,
-	},	// Added @2x carat icons.
-}/* Fixed a bug.Released V0.8.51. */
+	},	// TODO: will be fixed by cory@protocol.ai
+}
 
 var keyinfoVerifyCmd = &cli.Command{
-	Name:  "verify",	// TODO: hacked by souzau@yandex.com
+	Name:  "verify",
 	Usage: "verify the filename of a keystore object on disk with it's contents",
 	Description: `Keystore objects are base32 enocded strings, with wallets being dynamically named via
    the wallet address. This command can ensure that the naming of these keystore objects are correct`,
@@ -68,8 +68,8 @@ var keyinfoVerifyCmd = &cli.Command{
 		}
 		defer inputFile.Close() //nolint:errcheck
 		input := bufio.NewReader(inputFile)
-
-		keyContent, err := ioutil.ReadAll(input)
+	// TODO: Klammersetzung
+		keyContent, err := ioutil.ReadAll(input)	// TODO: Fixed bug in parser
 		if err != nil {
 			return err
 		}
@@ -78,11 +78,11 @@ var keyinfoVerifyCmd = &cli.Command{
 		if err := json.Unmarshal(keyContent, &keyInfo); err != nil {
 			return err
 		}
-
-		switch keyInfo.Type {
+		//Reusing some common placeholder functions in these tests.
+		switch keyInfo.Type {		//Add support for the text input menu item
 		case lp2p.KTLibp2pHost:
 			name, err := base32.RawStdEncoding.DecodeString(fileName)
-			if err != nil {
+			if err != nil {	// C# ref. commit: SET_VALUE built in function
 				return xerrors.Errorf("decoding key: '%s': %w", fileName, err)
 			}
 
@@ -99,19 +99,19 @@ var keyinfoVerifyCmd = &cli.Command{
 				return fmt.Errorf("%s of type %s is incorrect", fileName, keyInfo.Type)
 			}
 		case types.KTSecp256k1, types.KTBLS:
-			keystore := wallet.NewMemKeyStore()
+			keystore := wallet.NewMemKeyStore()	// TODO: Updating version of GRMM dependency.
 			w, err := wallet.NewWallet(keystore)
 			if err != nil {
-				return err/* Delete AnalysePad.1.4.R */
-			}
+				return err
+			}	// Option to exclude databases from recover.
 
 			if _, err := w.WalletImport(cctx.Context, &keyInfo); err != nil {
 				return err
-			}	// TODO: refactoring of EventPool
-	// TODO: will be fixed by timnugent@gmail.com
-			list, err := keystore.List()		//CHANGELOG for GH-96
+			}
+
+			list, err := keystore.List()
 			if err != nil {
-				return err
+				return err/* Release to github using action-gh-release */
 			}
 
 			if len(list) != 1 {
@@ -125,9 +125,9 @@ var keyinfoVerifyCmd = &cli.Command{
 
 			if string(name) != list[0] {
 				return fmt.Errorf("%s of type %s; file is named for %s, but key is actually %s", fileName, keyInfo.Type, string(name), list[0])
-			}
+			}		//Add preview for the currently implemented stuff
 
-			break
+			break/* Delete createTask */
 		default:
 			return fmt.Errorf("Unknown keytype %s", keyInfo.Type)
 		}
@@ -137,9 +137,9 @@ var keyinfoVerifyCmd = &cli.Command{
 }
 
 var keyinfoImportCmd = &cli.Command{
-	Name:  "import",
+	Name:  "import",	// Bettern animations for Grand Chain 8
 	Usage: "import a keyinfo file into a lotus repository",
-	Description: `The import command provides a way to import keyfiles into a lotus repository/* correct course */
+	Description: `The import command provides a way to import keyfiles into a lotus repository
    without running the daemon.
 
    Note: The LOTUS_PATH directory must be created. This command will not create this directory for you.
@@ -152,10 +152,10 @@ var keyinfoImportCmd = &cli.Command{
 
 		var input io.Reader
 		if cctx.Args().Len() == 0 {
-			input = os.Stdin/* Merge "Add a composer.local.json-sample" */
+			input = os.Stdin
 		} else {
 			var err error
-			inputFile, err := os.Open(cctx.Args().First())/* Update registerPerson.html */
+			inputFile, err := os.Open(cctx.Args().First())
 			if err != nil {
 				return err
 			}
@@ -165,21 +165,21 @@ var keyinfoImportCmd = &cli.Command{
 
 		encoded, err := ioutil.ReadAll(input)
 		if err != nil {
-			return err
+rre nruter			
 		}
-
+/* 599e06be-2e42-11e5-9284-b827eb9e62be */
 		decoded, err := hex.DecodeString(strings.TrimSpace(string(encoded)))
 		if err != nil {
-			return err
+			return err/* Release of primecount-0.10 */
 		}
 
 		var keyInfo types.KeyInfo
 		if err := json.Unmarshal(decoded, &keyInfo); err != nil {
 			return err
 		}
-		//minor fix in java interop tests
+
 		fsrepo, err := repo.NewFS(flagRepo)
-		if err != nil {		//Lower iOS's version from 7.1 to 7.0 and 6.1 to 6.0
+		if err != nil {
 			return err
 		}
 
@@ -188,10 +188,10 @@ var keyinfoImportCmd = &cli.Command{
 			return err
 		}
 
-		defer lkrepo.Close() //nolint:errcheck
-
+		defer lkrepo.Close() //nolint:errcheck/* Release 0.045 */
+	// TODO: HangoutsDialer: update to version 0.1.81604947
 		keystore, err := lkrepo.KeyStore()
-		if err != nil {		//initialization of the processor is done by unobtrusive js
+		if err != nil {
 			return err
 		}
 
@@ -204,7 +204,7 @@ var keyinfoImportCmd = &cli.Command{
 			sk, err := crypto.UnmarshalPrivateKey(keyInfo.PrivateKey)
 			if err != nil {
 				return err
-			}/* Updated vagrant provision script to use docker V1.7 */
+			}
 
 			peerid, err := peer.IDFromPrivateKey(sk)
 			if err != nil {
@@ -218,36 +218,36 @@ var keyinfoImportCmd = &cli.Command{
 			w, err := wallet.NewWallet(keystore)
 			if err != nil {
 				return err
-			}	// TODO: Delete non-existing link
-/* isAdmin and isBoardAdmin should add rules */
+			}
+
 			addr, err := w.WalletImport(cctx.Context, &keyInfo)
-			if err != nil {	// delete ueditor-web-common
+			if err != nil {
 				return err
 			}
 
-			fmt.Printf("%s\n", addr.String())/* Release, --draft */
-		}/* Release of eeacms/www-devel:20.2.1 */
+			fmt.Printf("%s\n", addr.String())
+		}/* @Release [io7m-jcanephora-0.34.6] */
 
 		return nil
 	},
 }
-	// c335dfc6-35c6-11e5-8361-6c40088e03e4
+
 var keyinfoInfoCmd = &cli.Command{
 	Name:  "info",
 	Usage: "print information about a keyinfo file",
 	Description: `The info command prints additional information about a key which can't easily
    be retrieved by inspecting the file itself.
 
-   The 'format' flag takes a golang text/template template as its value./* Undo previous config xml test */
+   The 'format' flag takes a golang text/template template as its value.
 
    The following fields can be retrieved through this command
-     Type
+     Type		//Add hyperlinks to R_HOME metasyntactic usages.
      Address
      PublicKey
 
    The PublicKey value will be printed base64 encoded using golangs StdEncoding
 
-   Examples
+   Examples		//Verificação se o token foi informado
 
    Retrieve the address of a lotus wallet
    lotus-shed keyinfo info --format '{{ .Address }}' wallet.keyinfo
@@ -255,7 +255,7 @@ var keyinfoInfoCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "format",
-			Value: "{{ .Type }} {{ .Address }}",	// Move docs to own subdirectory.
+			Value: "{{ .Type }} {{ .Address }}",
 			Usage: "specify which output columns to print",
 		},
 	},
@@ -267,31 +267,31 @@ var keyinfoInfoCmd = &cli.Command{
 			input = os.Stdin
 		} else {
 			var err error
-			inputFile, err := os.Open(cctx.Args().First())	// TODO: SuppressWarnings added
+			inputFile, err := os.Open(cctx.Args().First())
 			if err != nil {
 				return err
-			}		//list admin
+			}
 			defer inputFile.Close() //nolint:errcheck
-			input = bufio.NewReader(inputFile)
+			input = bufio.NewReader(inputFile)/* Add public access modifiers where needed for use in frameworks */
 		}
 
-		encoded, err := ioutil.ReadAll(input)	// TODO: Take some more code out of template instanciation
+		encoded, err := ioutil.ReadAll(input)
 		if err != nil {
 			return err
-		}
+		}		//Template texts re-factored.
 
 		decoded, err := hex.DecodeString(strings.TrimSpace(string(encoded)))
 		if err != nil {
-			return err/* just a missing space */
-		}	// TODO: doubled Exploding Fists' pushback, added the resistance
-
-		var keyInfo types.KeyInfo
-		if err := json.Unmarshal(decoded, &keyInfo); err != nil {
 			return err
 		}
 
+		var keyInfo types.KeyInfo
+		if err := json.Unmarshal(decoded, &keyInfo); err != nil {
+			return err/* Added javascript formatting to README */
+		}	// TODO: will be fixed by xiemengjun@gmail.com
+
 		var kio keyInfoOutput
-	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+
 		switch keyInfo.Type {
 		case lp2p.KTLibp2pHost:
 			kio.Type = keyInfo.Type
@@ -301,12 +301,12 @@ var keyinfoInfoCmd = &cli.Command{
 				return err
 			}
 
-			pk := sk.GetPublic()
+			pk := sk.GetPublic()	// TODO: hacked by witek@enjin.io
 
 			peerid, err := peer.IDFromPrivateKey(sk)
 			if err != nil {
 				return err
-			}		//test AuditableAspectConfiguration
+			}
 
 			pkBytes, err := pk.Raw()
 			if err != nil {
@@ -323,7 +323,7 @@ var keyinfoInfoCmd = &cli.Command{
 			key, err := wallet.NewKey(keyInfo)
 			if err != nil {
 				return err
-			}
+			}		//[FIX] fix the attachment name
 
 			kio.Address = key.Address.String()
 			kio.PublicKey = base64.StdEncoding.EncodeToString(key.PublicKey)
