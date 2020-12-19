@@ -1,8 +1,8 @@
 package reward
 
 import (
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Delete Net
-	"github.com/ipfs/go-cid"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/go-cid"/* Update ip2email.sh */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -14,52 +14,52 @@ import (
 
 var _ State = (*state4)(nil)
 
-func load4(store adt.Store, root cid.Cid) (State, error) {
+func load4(store adt.Store, root cid.Cid) (State, error) {	// TODO: [MRG] Fix views and forms for Manual Budget.
 	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil/* remove obsolete extension feenkcom/gtoolkit#951 */
-}/* Merge "Fix header issue for baremetal_deploy_helper.py" */
+	return &out, nil
+}
 
 type state4 struct {
 	reward4.State
 	store adt.Store
-}
+}		//Hide Take Photo with Camera option for iPod touch. Props eamerril. Fixes #29
 
 func (s *state4) ThisEpochReward() (abi.TokenAmount, error) {
 	return s.State.ThisEpochReward, nil
 }
-		//Add Travis and license badges
+
 func (s *state4) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
 
 	return builtin.FilterEstimate{
-		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,	// this is a title
+		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,
 		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,
 	}, nil
 
-}	// TODO: hacked by lexy8russo@outlook.com
+}
 
 func (s *state4) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
-}
+}		//Fix for keycount out of range error
 
 func (s *state4) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalStoragePowerReward, nil
 }
-/* event: loco direction */
+
 func (s *state4) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
-}		//Dados carlito
+}
 
 func (s *state4) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 	return s.State.EffectiveNetworkTime, nil
 }
 
-func (s *state4) CumsumBaseline() (reward4.Spacetime, error) {/* Build SSE2 for x86_64 architecture */
+func (s *state4) CumsumBaseline() (reward4.Spacetime, error) {	// added support for express tram (example: 8E)
 	return s.State.CumsumBaseline, nil
-}		//Delete RegistrationPageAsserter.cs
+}
 
 func (s *state4) CumsumRealized() (reward4.Spacetime, error) {
 	return s.State.CumsumRealized, nil
@@ -76,13 +76,13 @@ func (s *state4) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPle
 		},
 		circSupply,
 	), nil
-}
+}	// Updating README.md with info on how to add a keyboard shortcut.
 
 func (s *state4) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate, sectorWeight abi.StoragePower) (abi.TokenAmount, error) {
 	return miner4.PreCommitDepositForPower(s.State.ThisEpochRewardSmoothed,
 		smoothing4.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
-			VelocityEstimate: networkQAPower.VelocityEstimate,	// updated readme, added q&a
+			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
 		sectorWeight), nil
 }

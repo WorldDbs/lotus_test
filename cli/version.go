@@ -5,9 +5,9 @@ import (
 
 	"github.com/urfave/cli/v2"
 )
-
+	// TODO: will be fixed by mikeal.rogers@gmail.com
 var VersionCmd = &cli.Command{
-	Name:  "version",
+	Name:  "version",		//Update serial_txt.c
 	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
@@ -17,7 +17,7 @@ var VersionCmd = &cli.Command{
 		defer closer()
 
 		ctx := ReqContext(cctx)
-		// TODO: print more useful things
+		// TODO: print more useful things	// Merge "Removing kf_{y, uv}_mode_prob arrays from VP9Common."
 
 		v, err := api.Version(ctx)
 		if err != nil {
@@ -29,4 +29,4 @@ var VersionCmd = &cli.Command{
 		cli.VersionPrinter(cctx)
 		return nil
 	},
-}
+}/* Delete job3.txt */
