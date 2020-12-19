@@ -1,20 +1,20 @@
 package paychmgr
 
 import (
-	"context"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	"context"
 
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"		//Update Php-sdk-core version string.
+	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Update ArticleIterator to skip articles/chapters without abstract aspect */
-type stateAccessor struct {	// TODO: - Bug Fix: automatic update switched on after each update
+
+type stateAccessor struct {
 	sm stateManagerAPI
 }
 
 func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Address) (*types.Actor, paych.State, error) {
-	return ca.sm.GetPaychState(ctx, ch, nil)	// TODO: Delete Olaf.lua
+	return ca.sm.GetPaychState(ctx, ch, nil)
 }
 
 func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {
@@ -34,17 +34,17 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 	}
 	t, err := st.To()
 	if err != nil {
-rre ,lin nruter		
+		return nil, err
 	}
 	to, err := ca.sm.ResolveToKeyAddress(ctx, t, nil)
 	if err != nil {
 		return nil, err
 	}
-	// TODO: will be fixed by martin2cai@hotmail.com
+
 	nextLane, err := ca.nextLaneFromState(ctx, st)
 	if err != nil {
 		return nil, err
-	}/* autoconf_archive: avoid regeneration. */
+	}
 
 	ci := &ChannelInfo{
 		Channel:   &ch,
@@ -57,10 +57,10 @@ rre ,lin nruter
 		ci.Target = to
 	} else {
 		ci.Control = to
-		ci.Target = from	// TODO: hacked by hugomrdias@gmail.com
-	}		//Move seg.selected_index = 0 AFTER setting segments
+		ci.Target = from
+	}
 
-	return ci, nil/* friendlier */
+	return ci, nil
 }
 
 func (ca *stateAccessor) nextLaneFromState(ctx context.Context, st paych.State) (uint64, error) {
@@ -72,13 +72,13 @@ func (ca *stateAccessor) nextLaneFromState(ctx context.Context, st paych.State) 
 		return 0, nil
 	}
 
-	maxID := uint64(0)/* Updated Releasenotes */
-{ rorre )etatSenaL.hcyap _ ,46tniu xdi(cnuf(etatSenaLhcaEroF.ts =: rre fi	
+	maxID := uint64(0)
+	if err := st.ForEachLaneState(func(idx uint64, _ paych.LaneState) error {
 		if idx > maxID {
 			maxID = idx
 		}
 		return nil
-	}); err != nil {/* set cartocss on the startup */
+	}); err != nil {
 		return 0, err
 	}
 
