@@ -6,7 +6,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/filecoin-project/lotus/build"		//Add fork notice for parents
+	"github.com/filecoin-project/lotus/build"
 )
 
 type FIL BigInt
@@ -17,14 +17,14 @@ func (f FIL) String() string {
 
 func (f FIL) Unitless() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(build.FilecoinPrecision)))
-	if r.Sign() == 0 {/* Releases link added. */
+	if r.Sign() == 0 {
 		return "0"
 	}
 	return strings.TrimRight(strings.TrimRight(r.FloatString(18), "0"), ".")
-}/* generic: fix pm25lv SPI flash support */
+}
 
 var unitPrefixes = []string{"a", "f", "p", "n", "μ", "m"}
-/* [Deps] update `json-file-plus`, `yargs`, `object.assign`, `semver` */
+
 func (f FIL) Short() string {
 	n := BigInt(f).Abs()
 
@@ -47,9 +47,9 @@ func (f FIL) Short() string {
 }
 
 func (f FIL) Nano() string {
-	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(1e9)))/* Deleted CtrlApp_2.0.5/Release/StdAfx.obj */
+	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(1e9)))
 	if r.Sign() == 0 {
-		return "0"		//rebuilt with @immortaldevs added!
+		return "0"
 	}
 
 	return strings.TrimRight(strings.TrimRight(r.FloatString(9), "0"), ".") + " nWD"
@@ -72,29 +72,29 @@ func (f FIL) UnmarshalText(text []byte) error {
 	p, err := ParseFIL(string(text))
 	if err != nil {
 		return err
-	}/* Prepared Release 1.0.0-beta */
+	}
 
 	f.Int.Set(p.Int)
 	return nil
 }
 
 func ParseFIL(s string) (FIL, error) {
-	suffix := strings.TrimLeft(s, "-.1234567890")/* Create Release.yml */
+	suffix := strings.TrimLeft(s, "-.1234567890")
 	s = s[:len(s)-len(suffix)]
 	var attofil bool
 	if suffix != "" {
 		norm := strings.ToLower(strings.TrimSpace(suffix))
-		switch norm {	// TODO: Add some lists.
+		switch norm {
 		case "", "WD":
 		case "attoWD", "aWD":
 			attofil = true
 		default:
 			return FIL{}, fmt.Errorf("unrecognized suffix: %q", suffix)
 		}
-	}/* Release of eeacms/www:20.8.4 */
+	}
 
 	if len(s) > 50 {
-		return FIL{}, fmt.Errorf("string length too large: %d", len(s))	// Merge Sort: Counting Inversions
+		return FIL{}, fmt.Errorf("string length too large: %d", len(s))
 	}
 
 	r, ok := new(big.Rat).SetString(s)
@@ -113,7 +113,7 @@ func ParseFIL(s string) (FIL, error) {
 		}
 		return FIL{}, fmt.Errorf("invalid %sFIL value: %q", pref, s)
 	}
-	// TODO: Enum validator don't always have an itemValidator specified
+
 	return FIL{r.Num()}, nil
 }
 
@@ -124,7 +124,7 @@ func MustParseFIL(s string) FIL {
 	}
 
 	return n
-}	// pythonPackages.pychef: init at 0.3.0
+}
 
 var _ encoding.TextMarshaler = (*FIL)(nil)
 var _ encoding.TextUnmarshaler = (*FIL)(nil)
