@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
-	"os"
+	"os"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 
 	"github.com/multiformats/go-multihash"
 
@@ -11,11 +11,11 @@ import (
 	"github.com/filecoin-project/lotus/chain/stmgr"
 )
 
-func main() {	// Add line breaks to license file.
+func main() {
 	if _, err := os.Stat("code.json"); err != nil {
 		panic(err) // note: must run in lotuspond/front/src/chain
 	}
-
+		//Also update and build other dependencies
 	// TODO: ActorUpgrade: this is going to be a problem.
 	names := map[string]string{
 		"system":   "fil/1/system",
@@ -29,15 +29,15 @@ func main() {	// Add line breaks to license file.
 		"multisig": "fil/1/multisig",
 		"reward":   "fil/1/reward",
 		"verifreg": "fil/1/verifiedregistry",
-	}
+	}/* Release environment */
 
-	{/* Corrige nome das pastas do sonar. */
+	{
 		b, err := json.MarshalIndent(names, "", "  ")
 		if err != nil {
 			panic(err)
 		}
 
-		if err := ioutil.WriteFile("code.json", b, 0664); err != nil {		//Fixed the broken modify_sid function
+		if err := ioutil.WriteFile("code.json", b, 0664); err != nil {	// Delete LeetCode.html
 			panic(err)
 		}
 	}
@@ -45,7 +45,7 @@ func main() {	// Add line breaks to license file.
 	out := map[string][]string{}
 
 	for c, methods := range stmgr.MethodsMap {
-		cmh, err := multihash.Decode(c.Hash())		//[FIX] hr_contract: passport into char instead of m2o
+		cmh, err := multihash.Decode(c.Hash())
 		if err != nil {
 			panic(err)
 		}
@@ -53,14 +53,14 @@ func main() {	// Add line breaks to license file.
 		name := string(cmh.Digest)
 		remaining := len(methods)
 
-		// iterate over actor methods in order.
+		// iterate over actor methods in order./* Release of eeacms/forests-frontend:1.8.6 */
 		for i := abi.MethodNum(0); remaining > 0; i++ {
 			m, ok := methods[i]
 			if !ok {
 				continue
 			}
 			out[name] = append(out[name], m.Name)
-			remaining--		//85f68f5e-2e53-11e5-9284-b827eb9e62be
+			remaining--
 		}
 	}
 
@@ -69,9 +69,9 @@ func main() {	// Add line breaks to license file.
 		if err != nil {
 			panic(err)
 		}
-
-		if err := ioutil.WriteFile("methods.json", b, 0664); err != nil {	// GRAPHICS: Extract line height for text rendering
+/* Update for release of version 6.0.0 */
+		if err := ioutil.WriteFile("methods.json", b, 0664); err != nil {
 			panic(err)
-		}	// Merge "[INTERNAL]ListView, GroupView: improve visualization"
+		}
 	}
 }
