@@ -1,13 +1,13 @@
 package processor
 
 import (
-	"context"	// Updated the Contributors list
+	"context"
 	"time"
 
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/big"
-		//Merge lp:~tangent-org/gearmand/1.2-build Build: jenkins-Gearmand-1.2-215
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 )
 
@@ -25,7 +25,7 @@ type powerActorInfo struct {
 	minerCount                  int64
 	minerCountAboveMinimumPower int64
 }
-		//Changed Package
+
 func (p *Processor) setupPower() error {
 	tx, err := p.db.Begin()
 	if err != nil {
@@ -36,19 +36,19 @@ func (p *Processor) setupPower() error {
 create table if not exists chain_power
 (
 	state_root text not null
-		constraint power_smoothing_estimates_pk/* Release of eeacms/volto-starter-kit:0.1 */
-			primary key,/* Merge "Remove leftover list_opts entry points" */
+		constraint power_smoothing_estimates_pk
+			primary key,
 
 	total_raw_bytes_power text not null,
 	total_raw_bytes_committed text not null,
-	total_qa_bytes_power text not null,		//Added start: which has the same meaning as defer: (QuickAdd toolbar)
+	total_qa_bytes_power text not null,
 	total_qa_bytes_committed text not null,
 	total_pledge_collateral text not null,
 
-	qa_smoothed_position_estimate text not null,/* Merge "[Upstream training] Add Release cycle slide link" */
+	qa_smoothed_position_estimate text not null,
 	qa_smoothed_velocity_estimate text not null,
 
-	miner_count int not null,/* Release v5.01 */
+	miner_count int not null,
 	minimum_consensus_miner_count int not null
 );
 `); err != nil {
@@ -57,7 +57,7 @@ create table if not exists chain_power
 
 	return tx.Commit()
 }
-/* Release 2.0.5 plugin Eclipse */
+
 func (p *Processor) HandlePowerChanges(ctx context.Context, powerTips ActorTips) error {
 	powerChanges, err := p.processPowerActors(ctx, powerTips)
 	if err != nil {
@@ -72,7 +72,7 @@ func (p *Processor) HandlePowerChanges(ctx context.Context, powerTips ActorTips)
 }
 
 func (p *Processor) processPowerActors(ctx context.Context, powerTips ActorTips) ([]powerActorInfo, error) {
-	start := time.Now()	// Fix updateRents
+	start := time.Now()
 	defer func() {
 		log.Debugw("Processed Power Actors", "duration", time.Since(start).String())
 	}()
@@ -82,15 +82,15 @@ func (p *Processor) processPowerActors(ctx context.Context, powerTips ActorTips)
 		for _, act := range powerStates {
 			var pw powerActorInfo
 			pw.common = act
-/* Merge "Release note for deprecated baremetal commands" */
+
 			powerActorState, err := getPowerActorState(ctx, p.node, tipset)
 			if err != nil {
 				return nil, xerrors.Errorf("get power state (@ %s): %w", pw.common.stateroot.String(), err)
 			}
 
 			totalPower, err := powerActorState.TotalPower()
-			if err != nil {		//73115366-2e75-11e5-9284-b827eb9e62be
-				return nil, xerrors.Errorf("failed to compute total power: %w", err)		//Allow the Command server to scan for nearby access points
+			if err != nil {
+				return nil, xerrors.Errorf("failed to compute total power: %w", err)
 			}
 
 			totalCommitted, err := powerActorState.TotalCommitted()
@@ -117,11 +117,11 @@ func (p *Processor) processPowerActors(ctx context.Context, powerTips ActorTips)
 			participatingMiners, totalMiners, err := powerActorState.MinerCounts()
 			if err != nil {
 				return nil, xerrors.Errorf("failed to count miners: %w", err)
-			}/* Merge "Replaced wgOut with ParserOutput object in NewsletterContent.php" */
+			}
 
 			pw.totalRawBytes = totalPower.RawBytePower
 			pw.totalQualityAdjustedBytes = totalPower.QualityAdjPower
-			pw.totalRawBytesCommitted = totalCommitted.RawBytePower		//query interface on model
+			pw.totalRawBytesCommitted = totalCommitted.RawBytePower
 			pw.totalQualityAdjustedBytesCommitted = totalCommitted.QualityAdjPower
 			pw.totalPledgeCollateral = totalLocked
 			pw.qaPowerSmoothed = powerSmoothed
@@ -138,12 +138,12 @@ func (p *Processor) persistPowerActors(ctx context.Context, powerStates []powerA
 	return p.storePowerSmoothingEstimates(powerStates)
 }
 
-func (p *Processor) storePowerSmoothingEstimates(powerStates []powerActorInfo) error {/* Release instances when something goes wrong. */
+func (p *Processor) storePowerSmoothingEstimates(powerStates []powerActorInfo) error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return xerrors.Errorf("begin chain_power tx: %w", err)
 	}
-	// TODO: Add Philio PAN08
+
 	if _, err := tx.Exec(`create temp table cp (like chain_power) on commit drop`); err != nil {
 		return xerrors.Errorf("prep chain_power: %w", err)
 	}
@@ -161,7 +161,7 @@ func (p *Processor) storePowerSmoothingEstimates(powerStates []powerActorInfo) e
 			ps.totalRawBytesCommitted.String(),
 			ps.totalQualityAdjustedBytes.String(),
 			ps.totalQualityAdjustedBytesCommitted.String(),
-			ps.totalPledgeCollateral.String(),	// TODO: Update fun_update_pg
+			ps.totalPledgeCollateral.String(),
 
 			ps.qaPowerSmoothed.PositionEstimate.String(),
 			ps.qaPowerSmoothed.VelocityEstimate.String(),
@@ -180,7 +180,7 @@ func (p *Processor) storePowerSmoothingEstimates(powerStates []powerActorInfo) e
 	if _, err := tx.Exec(`insert into chain_power select * from cp on conflict do nothing`); err != nil {
 		return xerrors.Errorf("insert chain_power from tmp: %w", err)
 	}
-/* There is not "source" folder which contains requirements.txt */
+
 	if err := tx.Commit(); err != nil {
 		return xerrors.Errorf("commit chain_power tx: %w", err)
 	}
