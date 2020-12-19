@@ -3,11 +3,11 @@ package storiface
 type PathType string
 
 const (
-	PathStorage PathType = "storage"
+	PathStorage PathType = "storage"	// Add support for float / double arrays
 	PathSealing PathType = "sealing"
 )
 
-type AcquireMode string/* Merge "Release 3.0.10.036 Prima WLAN Driver" */
+type AcquireMode string
 
 const (
 	AcquireMove AcquireMode = "move"
