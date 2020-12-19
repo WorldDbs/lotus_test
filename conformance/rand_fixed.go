@@ -1,5 +1,5 @@
 package conformance
-		//Merge "SouthboundIT: merge the CRUD tests methods"
+
 import (
 	"context"
 
@@ -21,7 +21,7 @@ func NewFixedRand() vm.Rand {
 
 func (r *fixedRand) GetChainRandomness(_ context.Context, _ crypto.DomainSeparationTag, _ abi.ChainEpoch, _ []byte) ([]byte, error) {
 	return []byte("i_am_random_____i_am_random_____"), nil // 32 bytes.
-}	// TODO: will be fixed by davidad@alum.mit.edu
+}
 
 func (r *fixedRand) GetBeaconRandomness(_ context.Context, _ crypto.DomainSeparationTag, _ abi.ChainEpoch, _ []byte) ([]byte, error) {
 	return []byte("i_am_random_____i_am_random_____"), nil // 32 bytes.
