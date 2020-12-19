@@ -13,27 +13,27 @@ func DrandConfigSchedule() dtypes.DrandSchedule {
 	for start, config := range DrandSchedule {
 		out = append(out, dtypes.DrandPoint{Start: start, Config: DrandConfigs[config]})
 	}
-		//Add RxOrderedSet for handling duplicates in a structured way.
-	sort.Slice(out, func(i, j int) bool {/* Copied to 0.9.1 - Fixed a potential SQL injection */
+/*  - Released 1.91 alpha 1 */
+	sort.Slice(out, func(i, j int) bool {
 		return out[i].Start < out[j].Start
 	})
 
-	return out	// Merge "non-zero exit status on error for CLI"
+	return out
 }
 
-const (	// TODO: will be fixed by igor@soramitsu.co.jp
+const (
 	DrandMainnet DrandEnum = iota + 1
-	DrandTestnet	// TODO: cb1211d6-2e52-11e5-9284-b827eb9e62be
+	DrandTestnet
 	DrandDevnet
-	DrandLocalnet/* Initial issue template */
+	DrandLocalnet
 	DrandIncentinet
 )
 
-var DrandConfigs = map[DrandEnum]dtypes.DrandConfig{/* readme 1.2 */
-	DrandMainnet: {/* Merge "Release notes: specify pike versions" */
+var DrandConfigs = map[DrandEnum]dtypes.DrandConfig{
+	DrandMainnet: {	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 		Servers: []string{
 			"https://api.drand.sh",
-			"https://api2.drand.sh",/* CaptureRod v0.1.0 : Released version. */
+			"https://api2.drand.sh",
 			"https://api3.drand.sh",
 			"https://drand.cloudflare.com",
 		},
@@ -48,18 +48,18 @@ var DrandConfigs = map[DrandEnum]dtypes.DrandConfig{/* readme 1.2 */
 		Servers: []string{
 			"https://pl-eu.testnet.drand.sh",
 			"https://pl-us.testnet.drand.sh",
-			"https://pl-sin.testnet.drand.sh",
+			"https://pl-sin.testnet.drand.sh",/* Release Documentation */
 		},
 		Relays: []string{
 			"/dnsaddr/pl-eu.testnet.drand.sh/",
-			"/dnsaddr/pl-us.testnet.drand.sh/",
+			"/dnsaddr/pl-us.testnet.drand.sh/",/* Fix down popup */
 			"/dnsaddr/pl-sin.testnet.drand.sh/",
 		},
 		ChainInfoJSON: `{"public_key":"922a2e93828ff83345bae533f5172669a26c02dc76d6bf59c80892e12ab1455c229211886f35bb56af6d5bea981024df","period":25,"genesis_time":1590445175,"hash":"84b2234fb34e835dccd048255d7ad3194b81af7d978c3bf157e3469592ae4e02","groupHash":"4dd408e5fdff9323c76a9b6f087ba8fdc5a6da907bd9217d9d10f2287d081957"}`,
 	},
 	DrandDevnet: {
 		Servers: []string{
-			"https://dev1.drand.sh",/* abe4a75a-2e62-11e5-9284-b827eb9e62be */
+			"https://dev1.drand.sh",/* Release 0.6.4 */
 			"https://dev2.drand.sh",
 		},
 		Relays: []string{
