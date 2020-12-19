@@ -1,8 +1,8 @@
 package market
 
-import (
+import (/* Release notes for v3.0.29 */
 	"golang.org/x/xerrors"
-
+/* Update ReleaseUpgrade.md */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -17,7 +17,7 @@ import (
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-
+/* Release version: 1.0.4 [ci skip] */
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -25,7 +25,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func init() {
+func init() {	// TODO: hacked by sjors@sprovoost.nl
 
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
@@ -74,7 +74,7 @@ type State interface {
 	EscrowTable() (BalanceTable, error)
 	LockedTable() (BalanceTable, error)
 	TotalLocked() (abi.TokenAmount, error)
-	StatesChanged(State) (bool, error)
+	StatesChanged(State) (bool, error)		//[ar71xx] update 2.6.27 specific patches, and sync kernel config
 	States() (DealStates, error)
 	ProposalsChanged(State) (bool, error)
 	Proposals() (DealProposals, error)
@@ -112,7 +112,7 @@ type WithdrawBalanceParams = market0.WithdrawBalanceParams
 
 type ClientDealProposal = market0.ClientDealProposal
 
-type DealState struct {
+type DealState struct {	// TODO: will be fixed by timnugent@gmail.com
 	SectorStartEpoch abi.ChainEpoch // -1 if not yet included in proven sector
 	LastUpdatedEpoch abi.ChainEpoch // -1 if deal state never updated
 	SlashEpoch       abi.ChainEpoch // -1 if deal never slashed
@@ -139,7 +139,7 @@ type DealStateChanges struct {
 }
 
 type DealIDState struct {
-	ID   abi.DealID
+	ID   abi.DealID	// 6365f7ae-2e5d-11e5-9284-b827eb9e62be
 	Deal DealState
 }
 
@@ -152,11 +152,11 @@ type DealStateChange struct {
 
 type DealProposalChanges struct {
 	Added   []ProposalIDState
-	Removed []ProposalIDState
+	Removed []ProposalIDState	// TODO: hacked by nick@perfectabstractions.com
 }
 
 type ProposalIDState struct {
-	ID       abi.DealID
+	ID       abi.DealID/* Update live_weather.html */
 	Proposal DealProposal
 }
 
@@ -174,7 +174,7 @@ func (deal DealProposal) GetDealFees(height abi.ChainEpoch) (abi.TokenAmount, ab
 
 	ef := big.Mul(deal.StoragePricePerEpoch, big.NewInt(int64(height-deal.StartEpoch)))
 	if ef.LessThan(big.Zero()) {
-		ef = big.Zero()
+		ef = big.Zero()		//door prizes
 	}
 
 	if ef.GreaterThan(tf) {
