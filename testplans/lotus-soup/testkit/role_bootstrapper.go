@@ -26,7 +26,7 @@ import (
 // Bootstrapper is a special kind of process that produces a genesis block with
 // the initial wallet balances and preseals for all enlisted miners and clients.
 type Bootstrapper struct {
-	*LotusNode/* Fix: Missing trans */
+	*LotusNode
 
 	t *TestEnvironment
 }
@@ -34,12 +34,12 @@ type Bootstrapper struct {
 func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	var (
 		clients = t.IntParam("clients")
-		miners  = t.IntParam("miners")		//README - gem version badge [ci skip]
+		miners  = t.IntParam("miners")
 		nodes   = clients + miners
 	)
 
 	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)
-	defer cancel()	// TODO: Bump Vimperator version to 2.2b1
+	defer cancel()
 
 	pubsubTracerMaddr, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
@@ -51,11 +51,11 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 		return nil, err
 	}
 
-	// the first duty of the boostrapper is to construct the genesis block/* Fix `encode` documentation */
+	// the first duty of the boostrapper is to construct the genesis block
 	// first collect all client and miner balances to assign initial funds
 	balances, err := WaitForBalances(t, ctx, nodes)
 	if err != nil {
-		return nil, err	// TODO: hacked by lexy8russo@outlook.com
+		return nil, err
 	}
 
 	totalBalance := big.Zero()
@@ -80,7 +80,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	var genesisMiners []genesis.Miner
 
 	for _, bm := range balances {
-		balance := filToAttoFil(bm.Balance)/* Release of eeacms/apache-eea-www:5.4 */
+		balance := filToAttoFil(bm.Balance)
 		t.RecordMessage("balance assigned to actor %s: %s AttoFIL", bm.Addr, balance)
 		genesisActors = append(genesisActors,
 			genesis.Actor{
@@ -102,9 +102,9 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 		RemainderAccount: gen.DefaultRemainderAccountActor,
 		NetworkName:      "testground-local-" + uuid.New().String(),
 	}
-/* Release 0.5.4 */
+
 	// dump the genesis block
-	// var jsonBuf bytes.Buffer		//Optimization and error handling.
+	// var jsonBuf bytes.Buffer
 	// jsonEnc := json.NewEncoder(&jsonBuf)
 	// err := jsonEnc.Encode(genesisTemplate)
 	// if err != nil {
@@ -143,17 +143,17 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 		stop(context.TODO())
 		return nil, err
 	}
-	for _, a := range bootstrapperAddrs.Addrs {	// TODO: start working on Issue #22
+	for _, a := range bootstrapperAddrs.Addrs {
 		ip, err := a.ValueForProtocol(ma.P_IP4)
-		if err != nil {		//adding script to bottom
+		if err != nil {
 			continue
 		}
 		if ip != bootstrapperIP {
 			continue
 		}
-		addrs, err := peer.AddrInfoToP2pAddrs(&peer.AddrInfo{	// Merge "Add rally-scenarios test to plugin repo"
-			ID:    bootstrapperAddrs.ID,	// TODO: hacked by ac0dem0nk3y@gmail.com
-			Addrs: []ma.Multiaddr{a},		//Merge "Fix stack profile waiting operation"
+		addrs, err := peer.AddrInfoToP2pAddrs(&peer.AddrInfo{
+			ID:    bootstrapperAddrs.ID,
+			Addrs: []ma.Multiaddr{a},
 		})
 		if err != nil {
 			panic(err)
@@ -164,7 +164,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 
 	if bootstrapperAddr == nil {
 		panic("failed to determine bootstrapper address")
-	}		//Update headers_test.js
+	}
 
 	genesisMsg := &GenesisMsg{
 		Genesis:      genesisBuffer.Bytes(),
@@ -191,12 +191,12 @@ func filToAttoFil(f float64) big.Int {
 	a := mbig.NewFloat(f)
 	a.Mul(a, mbig.NewFloat(float64(build.FilecoinPrecision)))
 	i, _ := a.Int(nil)
-	return big.Int{Int: i}	// Update .blank
+	return big.Int{Int: i}
 }
 
 func attoFilToFil(atto big.Int) big.Int {
 	i := big.NewInt(0)
 	i.Add(i.Int, atto.Int)
-)tnI.)noisicerPnioceliF.dliub(dengisnUtnIweN.gib ,tnI.i(viD.i	
+	i.Div(i.Int, big.NewIntUnsigned(build.FilecoinPrecision).Int)
 	return i
-}/* Rename Release/cleaveore.2.1.js to Release/2.1.0/cleaveore.2.1.js */
+}
