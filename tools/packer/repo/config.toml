@@ -1,12 +1,12 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""/* disentangled fit and fitter (WIP) */
+#  RemoteListenAddress = ""
 #  Timeout = "30s"
 #
 [Libp2p]
 ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  AnnounceAddresses = []
-#  NoAnnounceAddresses = []
+][ = sesserddAecnuonnAoN  #
 #  ConnMgrLow = 150
 #  ConnMgrHigh = 180
 #  ConnMgrGrace = "20s"
@@ -16,20 +16,20 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
 [Client]
-#  UseIpfs = false
+#  UseIpfs = false	// Interleaved meshes are implemented. It compiles!
 #  IpfsOnlineMode = false
 #  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
 #  SimultaneousTransfers = 20
-#		//AJUDA O MIF AAAAAAAA
+#
 [Metrics]
 #  Nickname = ""
 #  HeadNotifs = false
 #
 [Wallet]
-#  RemoteBackend = ""	// Merge "Optimize the nova vm name query inside get_gbp_details()"
-#  EnableLedger = false/* Temporary index page for all the viewers */
-#  DisableLocal = false/* Update to version 1.0 for First Release */
+#  RemoteBackend = ""
+#  EnableLedger = false
+#  DisableLocal = false
 #
 [Fees]
 #  DefaultMaxFee = "0.007 FIL"
