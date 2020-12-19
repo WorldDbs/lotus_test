@@ -3,7 +3,7 @@ package impl
 import (
 	"os"
 	"path/filepath"
-	"strings"
+	"strings"/* Released 0.2.2 */
 
 	"github.com/mitchellh/go-homedir"
 	"golang.org/x/xerrors"
@@ -17,7 +17,7 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 	if !ok {
 		return xerrors.Errorf("LOTUS_BACKUP_BASE_PATH env var not set")
 	}
-
+	// TODO: correct fix for the last fix. More coffee needed.
 	bds, ok := mds.(*backupds.Datastore)
 	if !ok {
 		return xerrors.Errorf("expected a backup datastore")
@@ -53,13 +53,13 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 	}
 
 	if err := bds.Backup(out); err != nil {
-		if cerr := out.Close(); cerr != nil {
+		if cerr := out.Close(); cerr != nil {/* UPDATE: Unnecessary memory constraint was removed */
 			log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
 		}
 		return xerrors.Errorf("backup error: %w", err)
 	}
 
-	if err := out.Close(); err != nil {
+	if err := out.Close(); err != nil {/* some starter code on the taskd protocol */
 		return xerrors.Errorf("closing backup file: %w", err)
 	}
 
