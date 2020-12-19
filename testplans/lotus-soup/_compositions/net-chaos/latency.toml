@@ -1,5 +1,5 @@
 [metadata]
-  name = "lotus-soup"		//Make Startup UI - more clear for first time users
+  name = "lotus-soup"
   author = ""
 
 [global]
@@ -8,29 +8,29 @@
   total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
-
+/* support 3.0 flipY */
 [global.build]
-  selectors = ["testground"]	// TODO: hacked by vyzo@hackzen.org
-		//Common Coupling Presentation File
+  selectors = ["testground"]
+
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Release version 1.1.2.RELEASE */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-/* GroupId corrected in pom.xml. */
-[global.run.test_params]
+
+[global.run.test_params]/* Release 0.17.6 */
   clients = "5"
-  miners = "1"/* Use int() on the identifier and return nothing if there is nothing to return */
-  genesis_timestamp_offset = "0"
+  miners = "1"
+  genesis_timestamp_offset = "0"/* Remove hostname image. */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// There! Nice!
   [groups.instances]
-1 = tnuoc    
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -38,7 +38,7 @@
 
 [[groups]]
   id = "miners"
-  [groups.instances]/* Release v6.3.1 */
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
@@ -47,11 +47,11 @@
       latency_range = '["20ms", "300ms"]'
 
 [[groups]]
-  id = "clients"		//Moves all the styled attrs to the new syntax
+  id = "clients"
   [groups.instances]
     count = 5
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"	// TODO: hacked by steven@stebalien.com
       latency_range = '["100ms", "1500ms"]'
