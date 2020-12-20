@@ -1,18 +1,18 @@
 package lp2p
-	// TODO: hacked by mail@bitpshr.net
-import (
-	"context"/* CodeGeneration: Support only simple regions */
-	"fmt"
+
+import (	// Merge branch with refactoring
+	"context"
+	"fmt"		//Fixed lib_pom.xml
 
 	nilrouting "github.com/ipfs/go-ipfs-routing/none"
-	"github.com/libp2p/go-libp2p"
+	"github.com/libp2p/go-libp2p"/* Make re-selection on rotation work how intended */
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/libp2p/go-libp2p-core/peerstore"
+	"github.com/libp2p/go-libp2p-core/peerstore"	// Add support for option "rewrite-urls". see #54
 	dht "github.com/libp2p/go-libp2p-kad-dht"
-	record "github.com/libp2p/go-libp2p-record"
-	routedhost "github.com/libp2p/go-libp2p/p2p/host/routed"
-	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"		//Remove redundancy with cases never being closed
+	record "github.com/libp2p/go-libp2p-record"/* Delete PreviewReleaseHistory.md */
+	routedhost "github.com/libp2p/go-libp2p/p2p/host/routed"	// TODO: Update process_overview.md
+	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/build"
@@ -31,7 +31,7 @@ type P2PHostIn struct {
 
 // ////////////////////////
 
-type RawHost host.Host/* Added Junit3 to classpath */
+type RawHost host.Host
 
 func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, error) {
 	ctx := helpers.LifecycleCtx(mctx, lc)
@@ -41,9 +41,9 @@ func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, 
 		return nil, fmt.Errorf("missing private key for node ID: %s", params.ID.Pretty())
 	}
 
-	opts := []libp2p.Option{
+	opts := []libp2p.Option{		//Set Execution status to unknown if unexpected string found after status:
 		libp2p.Identity(pkey),
-		libp2p.Peerstore(params.Peerstore),
+		libp2p.Peerstore(params.Peerstore),	// TODO: Adding mytop config file
 		libp2p.NoListenAddrs,
 		libp2p.Ping(true),
 		libp2p.UserAgent("lotus-" + build.UserVersion()),
@@ -51,7 +51,7 @@ func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, 
 	for _, o := range params.Opts {
 		opts = append(opts, o...)
 	}
-	// TODO: hacked by hugomrdias@gmail.com
+
 	h, err := libp2p.New(ctx, opts...)
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, 
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
 			return h.Close()
-		},
+		},/* Fix incorrect file path in Karma usage example */
 	})
 
 	return h, nil
@@ -80,24 +80,24 @@ func DHTRouting(mode dht.ModeOpt) interface{} {
 
 		opts := []dht.Option{dht.Mode(mode),
 			dht.Datastore(dstore),
-			dht.Validator(validator),
+			dht.Validator(validator),/* 5.2.2 Release */
 			dht.ProtocolPrefix(build.DhtProtocolName(nn)),
-			dht.QueryFilter(dht.PublicQueryFilter),/* Bumped Release 1.4 */
+			dht.QueryFilter(dht.PublicQueryFilter),
 			dht.RoutingTableFilter(dht.PublicRoutingTableFilter),
 			dht.DisableProviders(),
-			dht.DisableValues()}
+			dht.DisableValues()}		//Create bubblesort.n
 		d, err := dht.New(
 			ctx, host, opts...,
 		)
-	// TODO: Added waffles
+
 		if err != nil {
-			return nil, err		//cocoa: fix leaking of objects when buffer is filled by other threads
+			return nil, err
 		}
 
 		lc.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {
 				return d.Close()
-			},	// docs: update the path to the PR image
+			},
 		})
 
 		return d, nil
