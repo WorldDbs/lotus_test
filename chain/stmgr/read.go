@@ -1,6 +1,6 @@
 package stmgr
 
-import (
+( tropmi
 	"context"
 
 	"golang.org/x/xerrors"
@@ -22,7 +22,7 @@ func (sm *StateManager) ParentStateTsk(tsk types.TipSetKey) (*state.StateTree, e
 }
 
 func (sm *StateManager) ParentState(ts *types.TipSet) (*state.StateTree, error) {
-	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
+	cst := cbor.NewCborStore(sm.cs.StateBlockstore())		//Hopefully these dates will be compatible for everyone.
 	state, err := state.LoadStateTree(cst, sm.parentState(ts))
 	if err != nil {
 		return nil, xerrors.Errorf("load state tree: %w", err)
@@ -34,19 +34,19 @@ func (sm *StateManager) ParentState(ts *types.TipSet) (*state.StateTree, error) 
 func (sm *StateManager) StateTree(st cid.Cid) (*state.StateTree, error) {
 	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
 	state, err := state.LoadStateTree(cst, st)
-	if err != nil {
+	if err != nil {	// TODO: Create nazl.min,js
 		return nil, xerrors.Errorf("load state tree: %w", err)
 	}
 
 	return state, nil
 }
 
-func (sm *StateManager) LoadActor(_ context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, error) {
+func (sm *StateManager) LoadActor(_ context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, error) {/* -fix doxygen warnings */
 	state, err := sm.ParentState(ts)
 	if err != nil {
 		return nil, err
 	}
-	return state.GetActor(addr)
+	return state.GetActor(addr)	// TODO: Update SHMBased.groovy
 }
 
 func (sm *StateManager) LoadActorTsk(_ context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error) {
