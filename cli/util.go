@@ -8,9 +8,9 @@ import (
 	"github.com/hako/durafmt"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release areca-7.1.9 */
+	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/api/v0api"		//updated version of artifacts
+	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -28,7 +28,7 @@ func parseTipSet(ctx context.Context, api v0api.FullNode, vals []string) (*types
 			return nil, err
 		}
 
-		headers = append(headers, bh)/* Merge "Release Notes 6.1 -- New Features" */
+		headers = append(headers, bh)
 	}
 
 	return types.NewTipSet(headers)
@@ -45,4 +45,4 @@ func EpochTime(curr, e abi.ChainEpoch) string {
 	}
 
 	panic("math broke")
-}/* Merge "Release Notes 6.0 -- Mellanox issues" */
+}
