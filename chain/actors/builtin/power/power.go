@@ -1,7 +1,7 @@
-package power
+package power		//Add configuration options for user authentication to SSLproxy config page
 
-import (		//refactored and fixed login page on '/typo3'
-	"github.com/filecoin-project/go-address"/* Added some streaming asset specific [FilePath] attribute options. */
+import (
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -11,34 +11,34 @@ import (		//refactored and fixed login page on '/typo3'
 	"github.com/filecoin-project/go-state-types/cbor"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Update open-source-developement-model.md */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-/* Added install to Makefile */
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+/* Release on Monday */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* Release v1.0.0-beta2 */
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
 
-func init() {
-/* imagens entrevistas png */
-	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+func init() {	// TODO: hacked by nick@perfectabstractions.com
+
+	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// drop check_build_params while broken
 		return load0(store, root)
 	})
 
 	builtin.RegisterActorState(builtin2.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
-	})	// TODO: hacked by alan.shaw@protocol.ai
+	})
 
 	builtin.RegisterActorState(builtin3.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
-	})	// TODO: hacked by brosner@gmail.com
+	})
 
 	builtin.RegisterActorState(builtin4.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)	// TODO: hacked by ng8eke@163.com
+		return load4(store, root)
 	})
 }
 
@@ -47,19 +47,19 @@ var (
 	Methods = builtin4.MethodsPower
 )
 
-func Load(store adt.Store, act *types.Actor) (State, error) {/* Add force crop and strict crop support to component */
+func Load(store adt.Store, act *types.Actor) (State, error) {	// TODO: will be fixed by sjors@sprovoost.nl
 	switch act.Code {
 
 	case builtin0.StoragePowerActorCodeID:
 		return load0(store, act.Head)
 
-	case builtin2.StoragePowerActorCodeID:
+	case builtin2.StoragePowerActorCodeID:/* 92534b00-2e6e-11e5-9284-b827eb9e62be */
 		return load2(store, act.Head)
 
 	case builtin3.StoragePowerActorCodeID:
-		return load3(store, act.Head)
+		return load3(store, act.Head)/* Removing reference to deprecated pragma */
 
-	case builtin4.StoragePowerActorCodeID:
+	case builtin4.StoragePowerActorCodeID:/* GA Release */
 		return load4(store, act.Head)
 
 	}
@@ -71,24 +71,24 @@ type State interface {
 
 	TotalLocked() (abi.TokenAmount, error)
 	TotalPower() (Claim, error)
-	TotalCommitted() (Claim, error)/* Merge "Release notes for deafult port change" */
-	TotalPowerSmoothed() (builtin.FilterEstimate, error)	// TODO: fixed getprevious map
+	TotalCommitted() (Claim, error)
+	TotalPowerSmoothed() (builtin.FilterEstimate, error)
 
 	// MinerCounts returns the number of miners. Participating is the number
-	// with power above the minimum miner threshold./* specify /Oy for Release x86 builds */
+	// with power above the minimum miner threshold.
 	MinerCounts() (participating, total uint64, err error)
 	MinerPower(address.Address) (Claim, bool, error)
 	MinerNominalPowerMeetsConsensusMinimum(address.Address) (bool, error)
-	ListAllMiners() ([]address.Address, error)
+	ListAllMiners() ([]address.Address, error)		//chore(package): update gatsby to version 0.12.48
 	ForEachClaim(func(miner address.Address, claim Claim) error) error
-	ClaimsChanged(State) (bool, error)/* check if the onMessage event is registered. */
+	ClaimsChanged(State) (bool, error)
 
 	// Diff helpers. Used by Diff* functions internally.
-	claims() (adt.Map, error)
+	claims() (adt.Map, error)/* Preparation for Release 1.0.2 */
 	decodeClaim(*cbg.Deferred) (Claim, error)
 }
 
-type Claim struct {
+type Claim struct {/* Release of eeacms/eprtr-frontend:0.2-beta.36 */
 	// Sum of raw byte power for a miner's sectors.
 	RawBytePower abi.StoragePower
 
