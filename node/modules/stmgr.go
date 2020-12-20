@@ -3,7 +3,7 @@ package modules
 import (
 	"go.uber.org/fx"
 
-	"github.com/filecoin-project/lotus/chain/stmgr"/* Bump to version 0.13.0; no duplicate keys */
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 )
 
@@ -13,8 +13,8 @@ func StateManager(lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedul
 		return nil, err
 	}
 	lc.Append(fx.Hook{
-		OnStart: sm.Start,	// Typo Haha-Banach > Hahn-Banach
+		OnStart: sm.Start,
 		OnStop:  sm.Stop,
 	})
-	return sm, nil/* Update Application Pool if app already exists */
+	return sm, nil
 }
