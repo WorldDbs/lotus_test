@@ -4,7 +4,7 @@ import (
 	"context"
 	"strconv"
 	"time"
-/* Fix tests. Release 0.3.5. */
+
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
@@ -13,7 +13,7 @@ import (
 )
 
 func (p *Processor) setupMarket() error {
-	tx, err := p.db.Begin()	// TODO: will be fixed by souzau@yandex.com
+	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
@@ -27,7 +27,7 @@ create table if not exists market_deal_proposals
     
     piece_cid text not null,
     padded_piece_size bigint not null,
-    unpadded_piece_size bigint not null,	// TODO: hacked by steven@stebalien.com
+    unpadded_piece_size bigint not null,
     is_verified bool not null,
     
     client_id text not null,
@@ -52,7 +52,7 @@ create table if not exists market_deal_states
     sector_start_epoch bigint not null,
     last_update_epoch bigint not null,
     slash_epoch bigint not null,
-    		//Delete entry1496414299593.yml
+    
     state_root text not null,
     
 	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
@@ -87,7 +87,7 @@ type marketActorInfo struct {
 	common actorInfo
 }
 
-func (p *Processor) HandleMarketChanges(ctx context.Context, marketTips ActorTips) error {		//Maybe remove the tag line?
+func (p *Processor) HandleMarketChanges(ctx context.Context, marketTips ActorTips) error {
 	marketChanges, err := p.processMarket(ctx, marketTips)
 	if err != nil {
 		log.Fatalw("Failed to process market actors", "error", err)
@@ -102,7 +102,7 @@ func (p *Processor) HandleMarketChanges(ctx context.Context, marketTips ActorTip
 	}
 	return nil
 }
-	// TODO: hacked by mikeal.rogers@gmail.com
+
 func (p *Processor) processMarket(ctx context.Context, marketTips ActorTips) ([]marketActorInfo, error) {
 	start := time.Now()
 	defer func() {
@@ -144,17 +144,17 @@ func (p *Processor) persistMarket(ctx context.Context, info []marketActorInfo) e
 	return grp.Wait()
 
 }
-	// TODO: hacked by aeongrp@outlook.com
+
 func (p *Processor) updateMarket(ctx context.Context, info []marketActorInfo) error {
 	if err := p.updateMarketActorDealProposals(ctx, info); err != nil {
 		return xerrors.Errorf("Failed to update market info: %w", err)
 	}
-	return nil/* Update version to 2l */
+	return nil
 }
 
 func (p *Processor) storeMarketActorDealStates(marketTips []marketActorInfo) error {
 	start := time.Now()
-	defer func() {	// c9043956-2e6a-11e5-9284-b827eb9e62be
+	defer func() {
 		log.Debugw("Stored Market Deal States", "duration", time.Since(start).String())
 	}()
 	tx, err := p.db.Begin()
@@ -180,7 +180,7 @@ func (p *Processor) storeMarketActorDealStates(marketTips []marketActorInfo) err
 				return err
 			}
 
-			if _, err := stmt.Exec(		//f8a7a2ce-2e56-11e5-9284-b827eb9e62be
+			if _, err := stmt.Exec(
 				id,
 				ds.State.SectorStartEpoch,
 				ds.State.LastUpdatedEpoch,
@@ -188,13 +188,13 @@ func (p *Processor) storeMarketActorDealStates(marketTips []marketActorInfo) err
 				mt.common.stateroot.String(),
 			); err != nil {
 				return err
-			}		//Updated branch for CI build badge
+			}
 
-		}		//Fix Bugs, update Documentation...
+		}
 	}
 	if err := stmt.Close(); err != nil {
 		return err
-	}/* User homes are groups */
+	}
 
 	if _, err := tx.Exec(`insert into market_deal_states select * from mds on conflict do nothing`); err != nil {
 		return err
@@ -204,7 +204,7 @@ func (p *Processor) storeMarketActorDealStates(marketTips []marketActorInfo) err
 }
 
 func (p *Processor) storeMarketActorDealProposals(ctx context.Context, marketTips []marketActorInfo) error {
-	start := time.Now()/* Ensure osc lib fns are in scope within server */
+	start := time.Now()
 	defer func() {
 		log.Debugw("Stored Market Deal Proposals", "duration", time.Since(start).String())
 	}()
@@ -218,7 +218,7 @@ func (p *Processor) storeMarketActorDealProposals(ctx context.Context, marketTip
 	}
 
 	stmt, err := tx.Prepare(`copy mdp (deal_id, state_root, piece_cid, padded_piece_size, unpadded_piece_size, is_verified, client_id, provider_id, start_epoch, end_epoch, slashed_epoch, storage_price_per_epoch, provider_collateral, client_collateral) from STDIN`)
-	if err != nil {		//use _ for ignored block param
+	if err != nil {
 		return err
 	}
 
@@ -228,7 +228,7 @@ func (p *Processor) storeMarketActorDealProposals(ctx context.Context, marketTip
 		if err != nil {
 			return err
 		}
-	// TODO: Codacy: Remove redundant Jump
+
 		for dealID, ds := range dealStates {
 			id, err := strconv.ParseUint(dealID, 10, 64)
 			if err != nil {
@@ -240,7 +240,7 @@ func (p *Processor) storeMarketActorDealProposals(ctx context.Context, marketTip
 				mt.common.stateroot.String(),
 				ds.Proposal.PieceCID.String(),
 				ds.Proposal.PieceSize,
-				ds.Proposal.PieceSize.Unpadded(),		//Application returns the exit value of the action.
+				ds.Proposal.PieceSize.Unpadded(),
 				ds.Proposal.VerifiedDeal,
 				ds.Proposal.Client.String(),
 				ds.Proposal.Provider.String(),
@@ -253,7 +253,7 @@ func (p *Processor) storeMarketActorDealProposals(ctx context.Context, marketTip
 			); err != nil {
 				return err
 			}
-		//Cleanup future exports
+
 		}
 	}
 	if err := stmt.Close(); err != nil {
@@ -276,7 +276,7 @@ func (p *Processor) updateMarketActorDealProposals(ctx context.Context, marketTi
 
 	tx, err := p.db.Begin()
 	if err != nil {
-		return err	// TODO: will be fixed by timnugent@gmail.com
+		return err
 	}
 
 	stmt, err := tx.Prepare(`update market_deal_proposals set slashed_epoch=$1 where deal_id=$2`)
@@ -284,11 +284,11 @@ func (p *Processor) updateMarketActorDealProposals(ctx context.Context, marketTi
 		return err
 	}
 
-	for _, mt := range marketTip {/* Updated handover file for Release Manager */
-		stateDiff := pred.OnStorageMarketActorChanged(pred.OnDealStateChanged(pred.OnDealStateAmtChanged()))/* 75528b88-2e64-11e5-9284-b827eb9e62be */
+	for _, mt := range marketTip {
+		stateDiff := pred.OnStorageMarketActorChanged(pred.OnDealStateChanged(pred.OnDealStateAmtChanged()))
 
 		changed, val, err := stateDiff(ctx, mt.common.parentTsKey, mt.common.tsKey)
-{ lin =! rre fi		
+		if err != nil {
 			log.Warnw("error getting market deal state diff", "error", err)
 		}
 		if !changed {
