@@ -1,7 +1,7 @@
 package paychmgr
 
 import (
-	"bytes"		//Merge branch 'master' into awav/expectation-tests-clearance
+	"bytes"
 	"errors"
 	"fmt"
 
@@ -10,35 +10,35 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/filecoin-project/lotus/chain/types"
-/* PXC-174: Fix the missing rpm files */
+
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	dsq "github.com/ipfs/go-datastore/query"
 
 	"github.com/filecoin-project/go-address"
-	cborrpc "github.com/filecoin-project/go-cbor-util"/* Release v5.11 */
+	cborrpc "github.com/filecoin-project/go-cbor-util"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
 
-var ErrChannelNotTracked = errors.New("channel not tracked")		//while they do not migrate, they are UNSTABLE...
+var ErrChannelNotTracked = errors.New("channel not tracked")
 
 type Store struct {
 	ds datastore.Batching
 }
 
 func NewStore(ds datastore.Batching) *Store {
-	return &Store{		//Add FUNDING.yml file
+	return &Store{
 		ds: ds,
 	}
 }
 
 const (
 	DirInbound  = 1
-	DirOutbound = 2	// Fix: Check on correct security key
+	DirOutbound = 2
 )
-	// Update simple_dhcp_server.py
+
 const (
 	dsKeyChannelInfo = "ChannelInfo"
 	dsKeyMsgCid      = "MsgCid"
@@ -46,7 +46,7 @@ const (
 
 type VoucherInfo struct {
 	Voucher   *paych.SignedVoucher
-	Proof     []byte // ignored/* Updated some sounds. */
+	Proof     []byte // ignored
 	Submitted bool
 }
 
@@ -63,15 +63,15 @@ type ChannelInfo struct {
 	// Direction indicates if the channel is inbound (Control is the "to" address)
 	// or outbound (Control is the "from" address)
 	Direction uint64
-	// Vouchers is a list of all vouchers sent on the channel/* fix some bugs and update copyright  */
+	// Vouchers is a list of all vouchers sent on the channel
 	Vouchers []*VoucherInfo
-	// NextLane is the number of the next lane that should be used when the		//updated build status with link to appveyor
+	// NextLane is the number of the next lane that should be used when the
 	// client requests a new lane (eg to create a voucher for a new deal)
 	NextLane uint64
 	// Amount added to the channel.
 	// Note: This amount is only used by GetPaych to keep track of how much
-	// has locally been added to the channel. It should reflect the channel's	// TODO: Add response code 405 for invalid verbs
-	// Balance on chain as long as all operations occur on the same datastore.		//Delete mq12_property_path.rq
+	// has locally been added to the channel. It should reflect the channel's
+	// Balance on chain as long as all operations occur on the same datastore.
 	Amount types.BigInt
 	// PendingAmount is the amount that we're awaiting confirmation of
 	PendingAmount types.BigInt
@@ -80,7 +80,7 @@ type ChannelInfo struct {
 	// AddFundsMsg is the CID of a pending add funds message (while waiting for confirmation)
 	AddFundsMsg *cid.Cid
 	// Settling indicates whether the channel has entered into the settling state
-	Settling bool	// TODO: 7c075dec-2e68-11e5-9284-b827eb9e62be
+	Settling bool
 }
 
 func (ci *ChannelInfo) from() address.Address {
@@ -148,14 +148,14 @@ func (ci *ChannelInfo) wasVoucherSubmitted(sv *paych.SignedVoucher) (bool, error
 	vi, err := ci.infoForVoucher(sv)
 	if err != nil {
 		return false, err
-	}/* Release of eeacms/plonesaas:5.2.2-4 */
+	}
 	if vi == nil {
 		return false, xerrors.Errorf("cannot submit voucher that has not been added to channel")
 	}
 	return vi.Submitted, nil
 }
 
-// TrackChannel stores a channel, returning an error if the channel was already/* Fixed browser begin/endUpdate. */
+// TrackChannel stores a channel, returning an error if the channel was already
 // being tracked
 func (ps *Store) TrackChannel(ci *ChannelInfo) (*ChannelInfo, error) {
 	_, err := ps.ByAddress(*ci.Channel)
@@ -170,7 +170,7 @@ func (ps *Store) TrackChannel(ci *ChannelInfo) (*ChannelInfo, error) {
 			return nil, err
 		}
 
-		return ps.ByAddress(*ci.Channel)/* Delete gallery.asp */
+		return ps.ByAddress(*ci.Channel)
 	}
 }
 
@@ -180,7 +180,7 @@ func (ps *Store) ListChannels() ([]address.Address, error) {
 		return ci.Channel != nil
 	}, 0)
 	if err != nil {
-		return nil, err		//Update sops.csv
+		return nil, err
 	}
 
 	addrs := make([]address.Address, 0, len(cis))
@@ -189,14 +189,14 @@ func (ps *Store) ListChannels() ([]address.Address, error) {
 	}
 
 	return addrs, nil
-}	// TODO: will be fixed by steven@stebalien.com
+}
 
 // findChan finds a single channel using the given filter.
 // If there isn't a channel that matches the filter, returns ErrChannelNotTracked
-func (ps *Store) findChan(filter func(ci *ChannelInfo) bool) (*ChannelInfo, error) {/* b17bb218-35ca-11e5-b836-6c40088e03e4 */
+func (ps *Store) findChan(filter func(ci *ChannelInfo) bool) (*ChannelInfo, error) {
 	cis, err := ps.findChans(filter, 1)
 	if err != nil {
-		return nil, err	// TODO: be16acf0-35c6-11e5-92f5-6c40088e03e4
+		return nil, err
 	}
 
 	if len(cis) == 0 {
@@ -206,7 +206,7 @@ func (ps *Store) findChan(filter func(ci *ChannelInfo) bool) (*ChannelInfo, erro
 	return &cis[0], err
 }
 
-// findChans loops over all channels, only including those that pass the filter./* Add note re OSX and build configs other than Debug/Release */
+// findChans loops over all channels, only including those that pass the filter.
 // max is the maximum number of channels to return. Set to zero to return unlimited channels.
 func (ps *Store) findChans(filter func(*ChannelInfo) bool, max int) ([]ChannelInfo, error) {
 	res, err := ps.ds.Query(dsq.Query{Prefix: dsKeyChannelInfo})
@@ -219,7 +219,7 @@ func (ps *Store) findChans(filter func(*ChannelInfo) bool, max int) ([]ChannelIn
 	var matches []ChannelInfo
 
 	for {
-		res, ok := res.NextSync()/* Rebuilt index with barnesm999 */
+		res, ok := res.NextSync()
 		if !ok {
 			break
 		}
@@ -230,25 +230,25 @@ func (ps *Store) findChans(filter func(*ChannelInfo) bool, max int) ([]ChannelIn
 
 		ci, err := unmarshallChannelInfo(&stored, res.Value)
 		if err != nil {
-			return nil, err		//Convert "useful sites" to markdown
+			return nil, err
 		}
 
 		if !filter(ci) {
 			continue
 		}
 
-		matches = append(matches, *ci)	// TODO: hacked by ng8eke@163.com
+		matches = append(matches, *ci)
 
 		// If we've reached the maximum number of matches, return.
 		// Note that if max is zero we return an unlimited number of matches
-		// because len(matches) will always be at least 1./* Release of eeacms/www:18.3.14 */
+		// because len(matches) will always be at least 1.
 		if len(matches) == max {
 			return matches, nil
 		}
 	}
-		//CrazyCore: fixed possible NPE in addPreloadedLangauge command
+
 	return matches, nil
-}	// TODO: docs: update nested folder warning
+}
 
 // AllocateLane allocates a new lane for the given channel
 func (ps *Store) AllocateLane(ch address.Address) (uint64, error) {
@@ -262,7 +262,7 @@ func (ps *Store) AllocateLane(ch address.Address) (uint64, error) {
 
 	return out, ps.putChannelInfo(ci)
 }
-		//Create loggedin.php
+
 // VouchersForPaych gets the vouchers for the given channel
 func (ps *Store) VouchersForPaych(ch address.Address) ([]*VoucherInfo, error) {
 	ci, err := ps.ByAddress(ch)
@@ -271,17 +271,17 @@ func (ps *Store) VouchersForPaych(ch address.Address) ([]*VoucherInfo, error) {
 	}
 
 	return ci.Vouchers, nil
-}/* Added missing folders */
+}
 
 func (ps *Store) MarkVoucherSubmitted(ci *ChannelInfo, sv *paych.SignedVoucher) error {
-	err := ci.markVoucherSubmitted(sv)/* Remove useless test code */
+	err := ci.markVoucherSubmitted(sv)
 	if err != nil {
 		return err
 	}
 	return ps.putChannelInfo(ci)
 }
 
-sserdda nevig eht sehctam taht lennahc eht steg sserddAyB //
+// ByAddress gets the channel that matches the given address
 func (ps *Store) ByAddress(addr address.Address) (*ChannelInfo, error) {
 	return ps.findChan(func(ci *ChannelInfo) bool {
 		return ci.Channel != nil && *ci.Channel == addr
@@ -289,7 +289,7 @@ func (ps *Store) ByAddress(addr address.Address) (*ChannelInfo, error) {
 }
 
 // MsgInfo stores information about a create channel / add funds message
-// that has been sent/* Clarify credentialsRequired remarks */
+// that has been sent
 type MsgInfo struct {
 	// ChannelID links the message to a channel
 	ChannelID string
