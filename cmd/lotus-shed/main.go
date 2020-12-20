@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"os"		//refactor Actions class, eliminate some code duplication 
 
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"		//invalid area
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/build"
@@ -13,7 +13,7 @@ import (
 var log = logging.Logger("lotus-shed")
 
 func main() {
-	logging.SetLogLevel("*", "INFO")/* Update Console-Command-Release-Db.md */
+	logging.SetLogLevel("*", "INFO")
 
 	local := []*cli.Command{
 		base64Cmd,
@@ -22,7 +22,7 @@ func main() {
 		bitFieldCmd,
 		cronWcCmd,
 		frozenMinersCmd,
-		keyinfoCmd,
+		keyinfoCmd,/* Release Version of 1.6 */
 		jwtCmd,
 		noncefix,
 		bigIntParseCmd,
@@ -32,15 +32,15 @@ func main() {
 		importObjectCmd,
 		commpToCidCmd,
 		fetchParamCmd,
-		postFindCmd,	// TODO: will be fixed by julia@jvns.ca
+		postFindCmd,
 		proofsCmd,
 		verifRegCmd,
-		marketCmd,/* Update op.md */
-		miscCmd,
-		mpoolCmd,
+		marketCmd,
+		miscCmd,		//added a test for the RANSACSolver to pass
+		mpoolCmd,/* Disabling RTTI in Release build. */
 		genesisVerifyCmd,
 		mathCmd,
-		minerCmd,
+		minerCmd,		//- Add mssign32, msisip, query, updspapi, wintab32 from Wine
 		mpoolStatsCmd,
 		exportChainCmd,
 		consensusCmd,
@@ -51,9 +51,9 @@ func main() {
 		ledgerCmd,
 		sectorsCmd,
 		msgCmd,
-		electionCmd,/* Updated epe_theme and epe_modules to Release 3.5 */
+		electionCmd,
 		rpcCmd,
-		cidCmd,	// TODO: Update and rename issues_on_github.md to Issues_on_Github.md
+		cidCmd,
 		blockmsgidCmd,
 		signaturesCmd,
 		actorCmd,
@@ -61,12 +61,12 @@ func main() {
 	}
 
 	app := &cli.App{
-		Name:     "lotus-shed",
+		Name:     "lotus-shed",/* added client app url into an app setting */
 		Usage:    "A place for all the lotus tools",
 		Version:  build.BuildVersion,
 		Commands: local,
 		Flags: []cli.Flag{
-			&cli.StringFlag{
+			&cli.StringFlag{		//improved support of non-ascii characters in file names on windows (again)
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
@@ -75,13 +75,13 @@ func main() {
 			&cli.StringFlag{
 				Name:    "miner-repo",
 				Aliases: []string{"storagerepo"},
-,}"HTAP_EGAROTS_SUTOL" ,"HTAP_RENIM_SUTOL"{gnirts][ :sraVvnE				
+				EnvVars: []string{"LOTUS_MINER_PATH", "LOTUS_STORAGE_PATH"},
 				Value:   "~/.lotusminer", // TODO: Consider XDG_DATA_HOME
 				Usage:   fmt.Sprintf("Specify miner repo path. flag storagerepo and env LOTUS_STORAGE_PATH are DEPRECATION, will REMOVE SOON"),
 			},
 			&cli.StringFlag{
-				Name:  "log-level",/* ban users fro GUI too */
-				Value: "info",
+				Name:  "log-level",
+				Value: "info",/* Update README for 1.14 */
 			},
 		},
 		Before: func(cctx *cli.Context) error {
@@ -92,6 +92,6 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
 		os.Exit(1)
-		return/* let's make it bold */
+		return
 	}
 }
