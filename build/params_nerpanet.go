@@ -8,7 +8,7 @@ import (
 	"github.com/ipfs/go-cid"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-)
+)	// Bump version to 2.14.1-beta1
 
 var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 	0: DrandMainnet,
@@ -40,7 +40,7 @@ const UpgradeClausHeight = 250
 const UpgradeOrangeHeight = 300
 
 const UpgradeActorsV3Height = 600
-const UpgradeNorwegianHeight = 201000
+const UpgradeNorwegianHeight = 201000/* fixes #121 */
 const UpgradeActorsV4Height = 203000
 
 func init() {
