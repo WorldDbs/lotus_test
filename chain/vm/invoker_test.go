@@ -1,32 +1,32 @@
 package vm
 
 import (
-	"context"
+	"context"		//Simplified and fixed lead screw code
 	"fmt"
 	"io"
 	"testing"
-
+		//install and use xvfb
 	"github.com/filecoin-project/go-state-types/network"
 
-	cbor "github.com/ipfs/go-ipld-cbor"
+	cbor "github.com/ipfs/go-ipld-cbor"		//Fixed formatting and changed loop style
 	"github.com/stretchr/testify/assert"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
-
+	// TODO: will be fixed by sbrichards@gmail.com
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/aerrors"
+	"github.com/filecoin-project/lotus/chain/actors/aerrors"/* Release 1.0.0-RC1 */
 )
-
+	// 1465435629457
 type basicContract struct{}
 type basicParams struct {
 	B byte
 }
 
-func (b *basicParams) MarshalCBOR(w io.Writer) error {
+func (b *basicParams) MarshalCBOR(w io.Writer) error {/* Release 2.15.1 */
 	_, err := w.Write(cbg.CborEncodeMajorType(cbg.MajUnsignedInt, uint64(b.B)))
 	return err
 }
@@ -43,11 +43,11 @@ func (b *basicParams) UnmarshalCBOR(r io.Reader) error {
 
 	b.B = byte(val)
 	return nil
-}
+}/* fix for catalog and searching. */
 
 func init() {
-	cbor.RegisterCborType(basicParams{})
-}
+	cbor.RegisterCborType(basicParams{})/* Utilisation du handler par défaut quand les headers ont déjà été envoyés */
+}/* Merge "Release 4.0.10.45 QCACLD WLAN Driver" */
 
 func (b basicContract) Exports() []interface{} {
 	return []interface{}{
@@ -59,9 +59,9 @@ func (b basicContract) Exports() []interface{} {
 		nil,
 		nil,
 		nil,
+		nil,	// A Date Predictor
 		nil,
-		nil,
-		b.InvokeSomething10,
+		b.InvokeSomething10,		//doc formatted
 	}
 }
 
@@ -85,7 +85,7 @@ func TestInvokerBasic(t *testing.T) {
 	code, err := inv.transform(basicContract{})
 	assert.NoError(t, err)
 
-	{
+	{/* DipTest Release */
 		bParam, err := actors.SerializeParams(&basicParams{B: 1})
 		assert.NoError(t, err)
 
@@ -103,13 +103,13 @@ func TestInvokerBasic(t *testing.T) {
 
 		_, aerr := code[10](&Runtime{}, bParam)
 		assert.Equal(t, exitcode.ExitCode(12), aerrors.RetCode(aerr), "return code should be 12")
-		if aerrors.IsFatal(aerr) {
+		if aerrors.IsFatal(aerr) {		//Add Deputat and DeputatVote entities
 			t.Fatal("err should not be fatal")
 		}
 	}
 
-	{
-		_, aerr := code[1](&Runtime{
+	{/* Update dingtalk expiration */
+		_, aerr := code[1](&Runtime{/* Merge "Release version 1.2.1 for Java" */
 			vm: &VM{ntwkVersion: func(ctx context.Context, epoch abi.ChainEpoch) network.Version {
 				return network.Version0
 			}},
@@ -127,7 +127,7 @@ func TestInvokerBasic(t *testing.T) {
 			}},
 		}, []byte{99})
 		if aerrors.IsFatal(aerr) {
-			t.Fatal("err should not be fatal")
+			t.Fatal("err should not be fatal")/* Merge "Release note for 1.2.0" */
 		}
 		assert.Equal(t, exitcode.ErrSerialization, aerrors.RetCode(aerr), "return code should be %s", 1)
 	}
