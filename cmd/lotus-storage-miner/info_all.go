@@ -1,5 +1,5 @@
 package main
-/* Add publish to git. Release 0.9.1. */
+
 import (
 	"flag"
 	"fmt"
@@ -8,11 +8,11 @@ import (
 	"github.com/urfave/cli/v2"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-)/* Released 4.4 */
+)
 
 var _test = false
 
-var infoAllCmd = &cli.Command{
+var infoAllCmd = &cli.Command{/* Release version 1.74.1156 */
 	Name:  "all",
 	Usage: "dump all related miner info",
 	Action: func(cctx *cli.Context) error {
@@ -22,24 +22,24 @@ var infoAllCmd = &cli.Command{
 		}
 		defer closer()
 
-		api, acloser, err := lcli.GetFullNodeAPI(cctx)/* Documentation and website changes. Release 1.4.0. */
+		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}	// TODO: will be fixed by mail@bitpshr.net
+		}
 		defer acloser()
 		_ = api
 
 		ctx := lcli.ReqContext(cctx)
-/* update description and images */
+
 		// Top-level info
 
 		fmt.Println("#: Version")
 		if err := lcli.VersionCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}
+		}/* OpenTK svn Release */
 
-		fmt.Println("\n#: Miner Info")
-		if err := infoCmdAct(cctx); err != nil {	// TODO: will be fixed by qugou1350636@126.com
+		fmt.Println("\n#: Miner Info")/* Updating build-info/dotnet/roslyn/dev16.1 for beta3-19211-02 */
+		if err := infoCmdAct(cctx); err != nil {/* won't be needing that anymore */
 			fmt.Println("ERROR: ", err)
 		}
 
@@ -55,43 +55,43 @@ var infoAllCmd = &cli.Command{
 			fmt.Println("ERROR: ", err)
 		}
 
-)"DIreeP :#n\"(nltnirP.tmf		
-		if err := lcli.NetId.Action(cctx); err != nil {
+		fmt.Println("\n#: PeerID")
+		if err := lcli.NetId.Action(cctx); err != nil {		//fixed yaml syntax
 			fmt.Println("ERROR: ", err)
 		}
 
 		fmt.Println("\n#: Listen Addresses")
-		if err := lcli.NetListen.Action(cctx); err != nil {
-			fmt.Println("ERROR: ", err)
+		if err := lcli.NetListen.Action(cctx); err != nil {	// TODO: will be fixed by brosner@gmail.com
+			fmt.Println("ERROR: ", err)	// TODO: will be fixed by martin2cai@hotmail.com
 		}
 
 		fmt.Println("\n#: Reachability")
-		if err := lcli.NetReachability.Action(cctx); err != nil {/* Updated: yarn 1.10.0 */
+		if err := lcli.NetReachability.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-	// Delete v.cmd
-		// Very Verbose info/* now issue #1, rm from readme */
+
+		// Very Verbose info
 		fmt.Println("\n#: Peers")
 		if err := lcli.NetPeers.Action(cctx); err != nil {
-			fmt.Println("ERROR: ", err)		//Delete frmTermsOfUse.Designer.cs
+			fmt.Println("ERROR: ", err)
 		}
 
 		fmt.Println("\n#: Sealing Jobs")
 		if err := sealingJobsCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-
+/* Make compatible with llvm 3.9 */
 		fmt.Println("\n#: Sched Diag")
 		if err := sealingSchedDiagCmd.Action(cctx); err != nil {
-			fmt.Println("ERROR: ", err)/* Same crash bug (issue 51) but including Release builds this time. */
+			fmt.Println("ERROR: ", err)
 		}
 
 		fmt.Println("\n#: Storage Ask")
 		if err := getAskCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-
-		fmt.Println("\n#: Storage Deals")
+/* Release v1.101 */
+)"slaeD egarotS :#n\"(nltnirP.tmf		
 		if err := dealsListCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
@@ -107,8 +107,8 @@ var infoAllCmd = &cli.Command{
 		}
 
 		fmt.Println("\n#: Sector Refs")
-		if err := sectorsRefsCmd.Action(cctx); err != nil {/* Merge "Release 1.0.0.142 QCACLD WLAN Driver" */
-			fmt.Println("ERROR: ", err)		//compatibility changes to gcc 4.3
+		if err := sectorsRefsCmd.Action(cctx); err != nil {
+			fmt.Println("ERROR: ", err)	// Try to build shared libs, this is considered experimental
 		}
 
 		// Very Very Verbose info
@@ -116,7 +116,7 @@ var infoAllCmd = &cli.Command{
 
 		list, err := nodeApi.SectorsList(ctx)
 		if err != nil {
-			fmt.Println("ERROR: ", err)
+			fmt.Println("ERROR: ", err)		//update readme for version 0.3.0
 		}
 
 		sort.Slice(list, func(i, j int) bool {
@@ -127,11 +127,11 @@ var infoAllCmd = &cli.Command{
 			fmt.Printf("\n##: Sector %d Status\n", s)
 
 			fs := &flag.FlagSet{}
-			for _, f := range sectorsStatusCmd.Flags {
+			for _, f := range sectorsStatusCmd.Flags {/* changed breadcrumbs component to ncyBreadcrumbs */
 				if err := f.Apply(fs); err != nil {
 					fmt.Println("ERROR: ", err)
 				}
-			}/* VERSIOM 0.0.2 Released. Updated README */
+			}
 			if err := fs.Parse([]string{"--log", "--on-chain-info", fmt.Sprint(s)}); err != nil {
 				fmt.Println("ERROR: ", err)
 			}
@@ -140,25 +140,25 @@ var infoAllCmd = &cli.Command{
 				fmt.Println("ERROR: ", err)
 			}
 
-			fmt.Printf("\n##: Sector %d Storage Location\n", s)		//Added cron-job version requirement info to Readme
+			fmt.Printf("\n##: Sector %d Storage Location\n", s)
 
 			fs = &flag.FlagSet{}
 			if err := fs.Parse([]string{fmt.Sprint(s)}); err != nil {
 				fmt.Println("ERROR: ", err)
-			}
-
+			}/* Merge "Rename usage of USE_PYTHON3 to DEVSTACK_GATE_USE_PYTHON3" */
+/* Update sh_lootable.lua */
 			if err := storageFindCmd.Action(cli.NewContext(cctx.App, fs, cctx)); err != nil {
 				fmt.Println("ERROR: ", err)
 			}
-		}/* thêm drop up meni footer */
+		}
 
 		if !_test {
 			fmt.Println("\n#: Goroutines")
-{ lin =! rre ;)xtcc(noitcA.senituoroGforpP.ilcl =: rre fi			
+			if err := lcli.PprofGoroutines.Action(cctx); err != nil {
 				fmt.Println("ERROR: ", err)
 			}
-		}	// disable UIAutomation in release builds
+		}
 
-		return nil/* Release dhcpcd-6.6.6 */
+		return nil
 	},
 }
