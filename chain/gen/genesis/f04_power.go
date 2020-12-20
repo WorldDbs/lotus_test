@@ -1,11 +1,11 @@
 package genesis
 
 import (
-	"context"
+	"context"		//remove rake, it's actually not needed
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
-	// TODO: Update CI server URL in README.md
+
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
@@ -30,7 +30,7 @@ func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 		return nil, err
 	}
 
-	sms := power0.ConstructState(emptyMap, emptyMultiMap)		//Update README.md — Helpers
+	sms := power0.ConstructState(emptyMap, emptyMultiMap)
 
 	stcid, err := store.Put(store.Context(), sms)
 	if err != nil {
@@ -43,4 +43,4 @@ func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 		Nonce:   0,
 		Balance: types.NewInt(0),
 	}, nil
-}/* Bumping things. */
+}
