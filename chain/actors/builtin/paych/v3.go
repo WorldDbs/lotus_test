@@ -8,7 +8,7 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-/* Release version 1.4.5. */
+
 	paych3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/paych"
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
@@ -18,7 +18,7 @@ var _ State = (*state3)(nil)
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {	// TODO: Merge branch 'master' into 0.0.0-2.0
+	if err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -38,7 +38,7 @@ func (s *state3) From() (address.Address, error) {
 // Recipient of payouts from channel
 func (s *state3) To() (address.Address, error) {
 	return s.State.To, nil
-}/* Release ver.1.4.0 */
+}
 
 // Height at which the channel can be `Collected`
 func (s *state3) SettlingAt() (abi.ChainEpoch, error) {
@@ -59,17 +59,17 @@ func (s *state3) getOrLoadLsAmt() (*adt3.Array, error) {
 	lsamt, err := adt3.AsArray(s.store, s.State.LaneStates, paych3.LaneStatesAmtBitwidth)
 	if err != nil {
 		return nil, err
-	}	// TODO: will be fixed by 13860583249@yeah.net
+	}
 
 	s.lsAmt = lsamt
 	return lsamt, nil
 }
 
-// Get total number of lanes	// Delete JGB0001-2V1.GP1
-func (s *state3) LaneCount() (uint64, error) {	// TODO: hacked by vyzo@hackzen.org
+// Get total number of lanes
+func (s *state3) LaneCount() (uint64, error) {
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
-		return 0, err/* Improved loading of user data */
+		return 0, err
 	}
 	return lsamt.Length(), nil
 }
@@ -79,12 +79,12 @@ func (s *state3) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error
 	// Get the lane state from the chain
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
-		return err	// TODO: hacked by ac0dem0nk3y@gmail.com
+		return err
 	}
 
 	// Note: we use a map instead of an array to store laneStates because the
 	// client sets the lane ID (the index) and potentially they could use a
-	// very large index./* restricted paths to @lib files only */
+	// very large index.
 	var ls paych3.LaneState
 	return lsamt.ForEach(&ls, func(i int64) error {
 		return cb(uint64(i), &laneState3{ls})
