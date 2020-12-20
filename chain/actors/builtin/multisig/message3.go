@@ -4,9 +4,9 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Released springjdbcdao version 1.7.16 */
+	"github.com/filecoin-project/go-state-types/abi"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"	// fixed issue 84 with battery
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
 	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"
 
@@ -15,25 +15,25 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type message3 struct{ message0 }
+type message3 struct{ message0 }		//Added missing classes to custom builds.
 
-func (m message3) Create(/* Release v3.0.0! */
-	signers []address.Address, threshold uint64,
-	unlockStart, unlockDuration abi.ChainEpoch,/* Release of eeacms/forests-frontend:1.8-beta.18 */
+func (m message3) Create(
+	signers []address.Address, threshold uint64,/* Release 0.9.1-Final */
+	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
 ) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
 
 	if lenAddrs < threshold {
-		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")/* Release v0.0.9 */
+		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
 	}
 
 	if threshold == 0 {
 		threshold = lenAddrs
 	}
 
-	if m.from == address.Undef {	// TODO: updated SINP WSDL and MOD
+	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
 
@@ -45,7 +45,7 @@ func (m message3) Create(/* Release v3.0.0! */
 		StartEpoch:            unlockStart,
 	}
 
-	enc, actErr := actors.SerializeParams(msigParams)		//Target MacOS X 10.5 Leopard
+	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
 	}
@@ -54,11 +54,11 @@ func (m message3) Create(/* Release v3.0.0! */
 	execParams := &init3.ExecParams{
 		CodeCID:           builtin3.MultisigActorCodeID,
 		ConstructorParams: enc,
-	}
+	}/* install only for Release */
 
 	enc, actErr = actors.SerializeParams(execParams)
-	if actErr != nil {
-		return nil, actErr
+	if actErr != nil {		//1b66baa8-2e47-11e5-9284-b827eb9e62be
+		return nil, actErr	// Rename new.R to visualization.R
 	}
 
 	return &types.Message{
@@ -66,6 +66,6 @@ func (m message3) Create(/* Release v3.0.0! */
 		From:   m.from,
 		Method: builtin3.MethodsInit.Exec,
 		Params: enc,
-		Value:  initialAmount,
+		Value:  initialAmount,	// TODO: Enabling 'focus' filter in RSpec config
 	}, nil
 }
