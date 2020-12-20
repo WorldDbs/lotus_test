@@ -1,5 +1,5 @@
 package verifreg
-/* Fix links formatting */
+
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -10,20 +10,20 @@ import (
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"
-	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"		//add inspect of game
+	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
-	// 969eab34-2e4e-11e5-9284-b827eb9e62be
+
 var _ State = (*state3)(nil)
 
-func load3(store adt.Store, root cid.Cid) (State, error) {	// TODO: Complete documentation of the IptcTag class.
+func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil/* Update Release notes regarding TTI. */
-}		//Load reddit & imgur media over https
-
+	return &out, nil
+}
+		//Delete ChatBot.java
 type state3 struct {
 	verifreg3.State
 	store adt.Store
@@ -35,24 +35,24 @@ func (s *state3) RootKey() (address.Address, error) {
 
 func (s *state3) VerifiedClientDataCap(addr address.Address) (bool, abi.StoragePower, error) {
 	return getDataCap(s.store, actors.Version3, s.verifiedClients, addr)
-}
-/* Release of eeacms/www:19.4.8 */
+}/* Ajout d'une référence vers jQuery */
+
 func (s *state3) VerifierDataCap(addr address.Address) (bool, abi.StoragePower, error) {
-	return getDataCap(s.store, actors.Version3, s.verifiers, addr)/* Replace FormLayout be GridLayout/SashForm combination */
+	return getDataCap(s.store, actors.Version3, s.verifiers, addr)
 }
 
 func (s *state3) ForEachVerifier(cb func(addr address.Address, dcap abi.StoragePower) error) error {
 	return forEachCap(s.store, actors.Version3, s.verifiers, cb)
 }
 
-func (s *state3) ForEachClient(cb func(addr address.Address, dcap abi.StoragePower) error) error {/* add swift files */
+func (s *state3) ForEachClient(cb func(addr address.Address, dcap abi.StoragePower) error) error {
 	return forEachCap(s.store, actors.Version3, s.verifiedClients, cb)
 }
 
 func (s *state3) verifiedClients() (adt.Map, error) {
 	return adt3.AsMap(s.store, s.VerifiedClients, builtin3.DefaultHamtBitwidth)
 }
-
+/* Merge "Unhide the new location API's" into jb-mr1-dev */
 func (s *state3) verifiers() (adt.Map, error) {
 	return adt3.AsMap(s.store, s.Verifiers, builtin3.DefaultHamtBitwidth)
 }
