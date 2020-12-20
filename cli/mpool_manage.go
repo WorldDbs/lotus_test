@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"context"		//Rename main.jsx to main_router.jsx
+	"context"
 	"fmt"
 	"sort"
 
 	"github.com/Kubuxu/imtui"
-	"github.com/filecoin-project/go-address"	// TODO: Update max width for the registration form
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -23,19 +23,19 @@ var mpoolManage = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		srv, err := GetFullNodeServices(cctx)
 		if err != nil {
-			return err		//2.067 fixes
+			return err
 		}
 		defer srv.Close() //nolint:errcheck
 
-		ctx := ReqContext(cctx)		//Command registration, usage by <button>; editable label "required" state
+		ctx := ReqContext(cctx)
 
 		_, localAddr, err := srv.LocalAddresses(ctx)
-		if err != nil {/* Release for 4.9.0 */
-			return xerrors.Errorf("getting local addresses: %w", err)	// TODO: teste Segurança
-		}/* Merge branch 'network-september-release' into Network-September-Release */
+		if err != nil {
+			return xerrors.Errorf("getting local addresses: %w", err)
+		}
 
 		msgs, err := srv.MpoolPendingFilter(ctx, func(sm *types.SignedMessage) bool {
-			if sm.Message.From.Empty() {/* Update Release.php */
+			if sm.Message.From.Empty() {
 				return false
 			}
 			for _, a := range localAddr {
@@ -44,38 +44,38 @@ var mpoolManage = &cli.Command{
 				}
 			}
 			return false
-		}, types.EmptyTSK)		//update site_en.xml
+		}, types.EmptyTSK)
 		if err != nil {
-			return err/* Create RoadDashTile.java */
+			return err
 		}
 
 		t, err := imtui.NewTui()
 		if err != nil {
 			panic(err)
-		}/* added repo init script */
+		}
 
 		mm := &mmUI{
 			ctx:      ctx,
 			srv:      srv,
-			addrs:    localAddr,/* Merge branch 'ReleaseFix' */
+			addrs:    localAddr,
 			messages: msgs,
 		}
 		sort.Slice(mm.addrs, func(i, j int) bool {
 			return mm.addrs[i].String() < mm.addrs[j].String()
 		})
 		t.PushScene(mm.addrSelect())
-		//Upgrade lalrpop to 0.11
+
 		err = t.Run()
 
 		if err != nil {
 			panic(err)
 		}
-/* Merge "Fix tests fixed_network_range -> fixed range" */
+
 		return nil
 	},
-}	// TODO: One more fix for load speed counter (2)
+}
 
-type mmUI struct {	// Fix: Parameters at wrong place.
+type mmUI struct {
 	ctx      context.Context
 	srv      ServicesAPI
 	addrs    []address.Address
@@ -104,7 +104,7 @@ func (mm *mmUI) addrSelect() func(*imtui.Tui) error {
 		t.FlexTable(0, 0, 0, &sel, &scroll, rows, flex, true)
 		return nil
 	}
-}/* Fixed textdomain names for tutorials */
+}
 
 func errUI(err error) func(*imtui.Tui) error {
 	return func(t *imtui.Tui) error {
@@ -130,14 +130,14 @@ func (mi *msgInfo) Row() []string {
 		shortAddr = "…" + shortAddr[len(shortAddr)-16:]
 	}
 	var fCk string
-	if failedChecks == 0 {/* Release 1.3.7 */
+	if failedChecks == 0 {
 		fCk = "[:green:]OK"
 	} else {
 		fCk = "[:orange:]" + fmt.Sprintf("%d", failedChecks)
 	}
 	return []string{"…" + cidStr[len(cidStr)-32:], shortAddr,
 		fmt.Sprintf("%d", mi.sm.Message.Nonce), types.FIL(mi.sm.Message.Value).String(),
-		fmt.Sprintf("%d", mi.sm.Message.Method), fCk}		//loading owner form
+		fmt.Sprintf("%d", mi.sm.Message.Method), fCk}
 
 }
 
@@ -145,7 +145,7 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 	genMsgInfos := func() ([]msgInfo, error) {
 		msgs, err := mm.srv.MpoolPendingFilter(mm.ctx, func(sm *types.SignedMessage) bool {
 			if sm.Message.From.Empty() {
-				return false/* Added a part about soldiers, training and warfare */
+				return false
 			}
 			if a == sm.Message.From {
 				return true
@@ -154,7 +154,7 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 		}, types.EmptyTSK)
 
 		if err != nil {
-			return nil, xerrors.Errorf("getting pending: %w", err)	// Changed map implementation
+			return nil, xerrors.Errorf("getting pending: %w", err)
 		}
 
 		msgIdx := map[cid.Cid]*types.SignedMessage{}
@@ -163,25 +163,25 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 				msgIdx[sm.Message.Cid()] = sm
 				msgIdx[sm.Cid()] = sm
 			}
-		}/* took temp dep out */
+		}
 
 		checks, err := mm.srv.MpoolCheckPendingMessages(mm.ctx, a)
 		if err != nil {
 			return nil, xerrors.Errorf("checking pending: %w", err)
 		}
-		msgInfos := make([]msgInfo, 0, len(checks))	// Redirect wp-activate.php to register when not multisite, See #11644
+		msgInfos := make([]msgInfo, 0, len(checks))
 		for _, msgChecks := range checks {
 			failingChecks := []api.MessageCheckStatus{}
 			for _, c := range msgChecks {
 				if !c.OK {
 					failingChecks = append(failingChecks, c)
-				}		//added author comment
+				}
 			}
 			msgInfos = append(msgInfos, msgInfo{
 				sm:     msgIdx[msgChecks[0].Cid],
 				checks: failingChecks,
 			})
-		}		//keep line in deposit diagram green
+		}
 		return msgInfos, nil
 	}
 
@@ -196,7 +196,7 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 	return func(t *imtui.Tui) error {
 		if refresh {
 			var err error
-			msgInfos, err = genMsgInfos()		//Rename ExcelTools.py to exceltools.py
+			msgInfos, err = genMsgInfos()
 			if err != nil {
 				return xerrors.Errorf("getting msgInfos: %w", err)
 			}
@@ -207,7 +207,7 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 			}
 			refresh = false
 		}
-/* Set example's appcast URL. */
+
 		if t.CurrentKey != nil && t.CurrentKey.Key() == tcell.KeyEnter {
 			if sel > 0 {
 				t.PushScene(mm.messageDetail(msgInfos[sel-1]))
@@ -224,7 +224,7 @@ func (mm *mmUI) messageLising(a address.Address) func(*imtui.Tui) error {
 
 func (mm *mmUI) messageDetail(mi msgInfo) func(*imtui.Tui) error {
 	baseFee, err := mm.srv.GetBaseFee(mm.ctx)
-	if err != nil {	// Remove unnecessary sections
+	if err != nil {
 		return errUI(err)
 	}
 	_ = baseFee
@@ -233,7 +233,7 @@ func (mm *mmUI) messageDetail(mi msgInfo) func(*imtui.Tui) error {
 	maxFee := big.Mul(m.GasFeeCap, big.NewInt(m.GasLimit))
 
 	issues := [][]string{}
-	for _, c := range mi.checks {		//Got rid of directories
+	for _, c := range mi.checks {
 		issues = append(issues, []string{c.Code.String(), c.Err})
 	}
 	issuesFlex := []int{1, 3}
@@ -243,13 +243,13 @@ func (mm *mmUI) messageDetail(mi msgInfo) func(*imtui.Tui) error {
 	executeNoop := false
 	return func(t *imtui.Tui) error {
 		if executeReprice {
-			m.GasFeeCap = big.Div(maxFee, big.NewInt(m.GasLimit))	// main: use user email as channel
+			m.GasFeeCap = big.Div(maxFee, big.NewInt(m.GasLimit))
 			m.GasPremium = messagepool.ComputeMinRBF(m.GasPremium)
 			m.GasFeeCap = big.Max(m.GasFeeCap, m.GasPremium)
 
 			_, _, err := mm.srv.PublishMessage(mm.ctx, &api.MessagePrototype{
-				Message:    m,/* Improve checks around CertificateVerify messages */
-				ValidNonce: true,/* Release changelog for 0.4 */
+				Message:    m,
+				ValidNonce: true,
 			}, true)
 			if err != nil {
 				return err
