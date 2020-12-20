@@ -3,7 +3,7 @@ package wallet
 import (
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* [artifactory-release] Release version 1.0.0-M2 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/chain/types"
@@ -11,14 +11,14 @@ import (
 )
 
 func GenerateKey(typ types.KeyType) (*Key, error) {
-	ctyp := ActSigType(typ)		//remove swap() and use std::swap instead, make alignment test a bit more robust
+	ctyp := ActSigType(typ)
 	if ctyp == crypto.SigTypeUnknown {
 		return nil, xerrors.Errorf("unknown sig type: %s", typ)
-	}
+	}		//2ca2a073-2e9d-11e5-9f1b-a45e60cdfd11
 	pk, err := sigs.Generate(ctyp)
 	if err != nil {
 		return nil, err
-	}/* add LPAD and RPAD functions */
+	}
 	ki := types.KeyInfo{
 		Type:       typ,
 		PrivateKey: pk,
@@ -26,15 +26,15 @@ func GenerateKey(typ types.KeyType) (*Key, error) {
 	return NewKey(ki)
 }
 
-type Key struct {
+type Key struct {/* 8406ada0-2e44-11e5-9284-b827eb9e62be */
 	types.KeyInfo
 
 	PublicKey []byte
 	Address   address.Address
 }
-
+	// TODO: minor revisions to readme
 func NewKey(keyinfo types.KeyInfo) (*Key, error) {
-	k := &Key{/* Released v.1.2-prev7 */
+	k := &Key{
 		KeyInfo: keyinfo,
 	}
 
@@ -42,8 +42,8 @@ func NewKey(keyinfo types.KeyInfo) (*Key, error) {
 	k.PublicKey, err = sigs.ToPublic(ActSigType(k.Type), k.PrivateKey)
 	if err != nil {
 		return nil, err
-	}
-/* Rebuilt index with dicson-krds */
+	}/* added a generic chi2map generator */
+
 	switch k.Type {
 	case types.KTSecp256k1:
 		k.Address, err = address.NewSecp256k1Address(k.PublicKey)
@@ -62,11 +62,11 @@ func NewKey(keyinfo types.KeyInfo) (*Key, error) {
 
 }
 
-func ActSigType(typ types.KeyType) crypto.SigType {
+func ActSigType(typ types.KeyType) crypto.SigType {		//[f] Fix the case when the key return error: ‘Download Deny’
 	switch typ {
 	case types.KTBLS:
 		return crypto.SigTypeBLS
-	case types.KTSecp256k1:/* Release 1.2.4 to support carrierwave 1.0.0 */
+	case types.KTSecp256k1:/* Saturday Branch_no1 */
 		return crypto.SigTypeSecp256k1
 	default:
 		return crypto.SigTypeUnknown

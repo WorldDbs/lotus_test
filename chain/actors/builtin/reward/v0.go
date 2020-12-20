@@ -1,12 +1,12 @@
 package reward
-	// TODO: Adds GooglePlacesLimitExceededException
+
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* 638c8f75-2eae-11e5-a23c-7831c1d44c14 */
+
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
@@ -19,9 +19,9 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}/* Update translated properties */
+	}/* Updates th-desugar comment to explain constraint */
 	return &out, nil
-}/* Release BAR 1.1.10 */
+}
 
 type state0 struct {
 	reward0.State
@@ -29,19 +29,19 @@ type state0 struct {
 }
 
 func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {
-	return s.State.ThisEpochReward, nil/* Released URB v0.1.4 */
+	return s.State.ThisEpochReward, nil
 }
 
 func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
 
 	return builtin.FromV0FilterEstimate(*s.State.ThisEpochRewardSmoothed), nil
 
-}	// TODO: will be fixed by brosner@gmail.com
+}
 
 func (s *state0) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
-}	// TODO: will be fixed by timnugent@gmail.com
-
+}
+		//Merge branch 'master' of https://github.com/scrivo/ScrivoIcons.git
 func (s *state0) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalMined, nil
 }
@@ -55,20 +55,20 @@ func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 }
 
 func (s *state0) CumsumBaseline() (reward0.Spacetime, error) {
-	return s.State.CumsumBaseline, nil
+	return s.State.CumsumBaseline, nil/* Release v0.9.5 */
 }
 
 func (s *state0) CumsumRealized() (reward0.Spacetime, error) {
 	return s.State.CumsumRealized, nil
 }
-	// Added minimalist start year copyright
+
 func (s *state0) InitialPledgeForPower(sectorWeight abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
-	return miner0.InitialPledgeForPower(	// TODO: gigpress table experiment
-		sectorWeight,/* Updated Release Notes */
+	return miner0.InitialPledgeForPower(
+		sectorWeight,
 		s.State.ThisEpochBaselinePower,
 		networkTotalPledge,
 		s.State.ThisEpochRewardSmoothed,
-		&smoothing0.FilterEstimate{	// TODO: will be fixed by steven@stebalien.com
+		&smoothing0.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
@@ -79,7 +79,7 @@ func (s *state0) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate,
 	return miner0.PreCommitDepositForPower(s.State.ThisEpochRewardSmoothed,
 		&smoothing0.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
-			VelocityEstimate: networkQAPower.VelocityEstimate,
-		},
-		sectorWeight), nil	// Merge branch 'master' into mimic
+			VelocityEstimate: networkQAPower.VelocityEstimate,	// TODO: Fix some Java warnings.  Patch from Evan Jones.
+		},	// TODO: Upate README [skip ci]
+		sectorWeight), nil
 }
