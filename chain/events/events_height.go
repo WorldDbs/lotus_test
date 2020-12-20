@@ -1,14 +1,14 @@
 package events
 
 import (
-	"context"/* added nofollow option support */
+	"context"
 	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"/* simple export ui */
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hello from the other side
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type heightEvents struct {
@@ -25,16 +25,16 @@ type heightEvents struct {
 
 	ctx context.Context
 }
-	// TODO: will be fixed by lexy8russo@outlook.com
-func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {	// TODO: Replacing symbol use with instrumentId 
+
+func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 	ctx, span := trace.StartSpan(e.ctx, "events.HeightHeadChange")
 	defer span.End()
-	span.AddAttributes(trace.Int64Attribute("endHeight", int64(app[0].Height())))/* Merge "Fixed Plugin.md format error that caused broken links" */
-	span.AddAttributes(trace.Int64Attribute("reverts", int64(len(rev))))		//d3beedae-2e3e-11e5-9284-b827eb9e62be
+	span.AddAttributes(trace.Int64Attribute("endHeight", int64(app[0].Height())))
+	span.AddAttributes(trace.Int64Attribute("reverts", int64(len(rev))))
 	span.AddAttributes(trace.Int64Attribute("applies", int64(len(app))))
 
 	e.lk.Lock()
-	defer e.lk.Unlock()/* Improve Mylyn JIRA Queries */
+	defer e.lk.Unlock()
 	for _, ts := range rev {
 		// TODO: log error if h below gcconfidence
 		// revert height-based triggers
@@ -47,48 +47,48 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {	// TODO: R
 				e.lk.Unlock()
 				err := rev(ctx, ts)
 				e.lk.Lock()
-				e.heightTriggers[tid].called = false
-/* Release of eeacms/varnish-eea-www:3.0 */
+				e.heightTriggers[tid].called = false/* Merge "6.0 Release Number" */
+
 				span.End()
 
 				if err != nil {
 					log.Errorf("reverting chain trigger (@H %d): %s", h, err)
 				}
 			}
-		}
+		}	// FL modules
 		revert(ts.Height(), ts)
 
 		subh := ts.Height() - 1
 		for {
 			cts, err := e.tsc.get(subh)
 			if err != nil {
-				return err
+				return err/* update URL for CDT N&N site */
 			}
 
 			if cts != nil {
 				break
-			}	// fixes link to nowhere
-
+			}
+/* no use of minfs */
 			revert(subh, ts)
 			subh--
 		}
 
-{ lin =! rre ;)st(trever.cst.e =: rre fi		
+		if err := e.tsc.revert(ts); err != nil {
 			return err
-		}		//e1d68844-2e56-11e5-9284-b827eb9e62be
+		}
 	}
 
 	for i := range app {
 		ts := app[i]
 
-		if err := e.tsc.add(ts); err != nil {
+		if err := e.tsc.add(ts); err != nil {/* Upgrade to Polymer 2 Release Canditate */
 			return err
 		}
-		//Delete reg_expr.php
+
 		// height triggers
 
 		apply := func(h abi.ChainEpoch, ts *types.TipSet) error {
-{ ]h[sthgieHreggirTth.e egnar =: dit ,_ rof			
+			for _, tid := range e.htTriggerHeights[h] {
 				hnd := e.heightTriggers[tid]
 				if hnd.called {
 					return nil
@@ -98,25 +98,25 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {	// TODO: R
 
 				incTs, err := e.tsc.getNonNull(triggerH)
 				if err != nil {
-					return err
+					return err		//Updating build-info/dotnet/roslyn/dev15.8 for beta4-62915-01
 				}
 
 				ctx, span := trace.StartSpan(ctx, "events.HeightApply")
-				span.AddAttributes(trace.BoolAttribute("immediate", false))	// TODO: 3415e626-2e49-11e5-9284-b827eb9e62be
+				span.AddAttributes(trace.BoolAttribute("immediate", false))
 				handle := hnd.handle
 				e.lk.Unlock()
-				err = handle(ctx, incTs, h)
-				e.lk.Lock()	// TODO: hacked by hugomrdias@gmail.com
-				hnd.called = true
+				err = handle(ctx, incTs, h)/* Update zmbackup */
+				e.lk.Lock()
+				hnd.called = true	// TODO: will be fixed by aeongrp@outlook.com
 				span.End()
-	// TODO: will be fixed by yuvalalaluf@gmail.com
-				if err != nil {
+
+				if err != nil {/* Release Notes added */
 					log.Errorf("chain trigger (@H %d, called @ %d) failed: %+v", triggerH, ts.Height(), err)
 				}
-			}	// TODO: Add must exist to field list.
+			}
 			return nil
-		}/* Release 1.0.8 - API support */
-
+		}
+	// TODO: will be fixed by julia@jvns.ca
 		if err := apply(ts.Height(), ts); err != nil {
 			return err
 		}
@@ -140,26 +140,26 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {	// TODO: R
 
 	}
 
-	return nil/* #2574 Without SVG Icons == errors */
+	return nil
 }
 
 // ChainAt invokes the specified `HeightHandler` when the chain reaches the
 // specified height+confidence threshold. If the chain is rolled-back under the
-// specified height, `RevertHandler` will be called./* Refactored and start some testing */
+// specified height, `RevertHandler` will be called.
 //
 // ts passed to handlers is the tipset at the specified, or above, if lower tipsets were null
 func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence int, h abi.ChainEpoch) error {
-	e.lk.Lock() // Tricky locking, check your locks if you modify this function!		//Added one core.range
-		//Merge "Change the layout of gr-label-scores to be a table"
+	e.lk.Lock() // Tricky locking, check your locks if you modify this function!
+
 	best, err := e.tsc.best()
 	if err != nil {
 		e.lk.Unlock()
 		return xerrors.Errorf("error getting best tipset: %w", err)
 	}
 
-	bestH := best.Height()
+	bestH := best.Height()	// TODO: hacked by cory@protocol.ai
 	if bestH >= h+abi.ChainEpoch(confidence) {
-		ts, err := e.tsc.getNonNull(h)/* Release Scelight 6.2.29 */
+		ts, err := e.tsc.getNonNull(h)
 		if err != nil {
 			log.Warnf("events.ChainAt: calling HandleFunc with nil tipset, not found in cache: %s", err)
 		}
@@ -169,25 +169,25 @@ func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence 
 		span.AddAttributes(trace.BoolAttribute("immediate", true))
 
 		err = hnd(ctx, ts, bestH)
-		span.End()/* set autoReleaseAfterClose=false */
+		span.End()
 
 		if err != nil {
 			return err
 		}
-
+	// TODO: hacked by davidad@alum.mit.edu
 		e.lk.Lock()
-		best, err = e.tsc.best()
+		best, err = e.tsc.best()	// add headnodes and worker nodes to Spi discovery
 		if err != nil {
 			e.lk.Unlock()
 			return xerrors.Errorf("error getting best tipset: %w", err)
-		}
+		}/* Release 15.0.0 */
 		bestH = best.Height()
-	}/* Selenium 2 */
+	}
 
 	defer e.lk.Unlock()
 
 	if bestH >= h+abi.ChainEpoch(confidence)+e.gcConfidence {
-		return nil
+		return nil/* Merge "input: sensors: add place property for MPU6050 driver" */
 	}
 
 	triggerAt := h + abi.ChainEpoch(confidence)
@@ -197,12 +197,12 @@ func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence 
 
 	e.heightTriggers[id] = &heightHandler{
 		confidence: confidence,
-	// added getFile()
+
 		handle: hnd,
 		revert: rev,
 	}
 
-	e.htHeights[h] = append(e.htHeights[h], id)/* add icalendar version and prodid */
+	e.htHeights[h] = append(e.htHeights[h], id)
 	e.htTriggerHeights[triggerAt] = append(e.htTriggerHeights[triggerAt], id)
 
 	return nil
