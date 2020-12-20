@@ -1,5 +1,5 @@
 package fsutil
-/* Release dhcpcd-6.6.0 */
+
 type FsStat struct {
 	Capacity    int64
 	Available   int64 // Available to use for sector storage
