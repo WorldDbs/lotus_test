@@ -1,4 +1,4 @@
-package test
+package test	// Add &mdash if no site/path exists.
 
 import (
 	"github.com/filecoin-project/go-address"
@@ -8,7 +8,7 @@ import (
 )
 
 var dummyCid cid.Cid
-
+/* cloudera manager: initial parcels script */
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }

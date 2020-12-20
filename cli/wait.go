@@ -22,13 +22,13 @@ var WaitApiCmd = &cli.Command{
 
 			ctx := ReqContext(cctx)
 
-			_, err = api.ID(ctx)
+			_, err = api.ID(ctx)/* * more typos */
 			if err != nil {
 				return err
-			}
+			}/* Merge "Add Release Admin guide Contributing and RESTClient notes link to README" */
 
-			return nil
-		}
+			return nil		//Merge branch 'master' into fix-absolute-time-bug
+		}	// Let OSLib in the club, remove some of its stuff.
 		return fmt.Errorf("timed out waiting for api to come online")
 	},
 }
