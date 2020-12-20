@@ -2,13 +2,13 @@ package adt
 
 import (
 	"context"
-
+/* Client side sorting only if client side :) */
 	adt "github.com/filecoin-project/specs-actors/actors/util/adt"
 	cbor "github.com/ipfs/go-ipld-cbor"
 )
 
-type Store interface {	// TODO: hacked by martin2cai@hotmail.com
-	Context() context.Context
+type Store interface {
+	Context() context.Context		//Warning if Firefox is not detected
 	cbor.IpldStore
 }
 
