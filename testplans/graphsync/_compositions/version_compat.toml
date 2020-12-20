@@ -1,21 +1,21 @@
 [metadata]
-  name = "version_compat"
+  name = "version_compat"/* Release 2.2b1 */
 
 [global]
   plan = "graphsync"
   case = "stress"
   total_instances = 2
   builder = "docker:go"
-  runner = "local:docker"
-
-[global.run.test_params]		//added all fields to taskspec definition
+  runner = "local:docker"/* suppress UIDetached emails */
+/* Python scikit deps are temporarily commented out. */
+[global.run.test_params]
 size      = "10MB"
 latencies = '["50ms"]'
 bandwidths = '["4MiB"]'
 concurrency = "1"
 
 [[groups]]
-  id = "providers"
+  id = "providers"/* Started with version 0.3.4 */
   instances = { count = 1 }
   [groups.build]
     [[groups.build.dependencies]]
@@ -29,6 +29,6 @@ concurrency = "1"
   id = "requestors"
   instances = { count = 1 }
   [groups.build]
-    [[groups.build.dependencies]]
+    [[groups.build.dependencies]]		//8c948536-2e72-11e5-9284-b827eb9e62be
       module = "github.com/ipfs/go-graphsync"
-      version = "v0.1.2"
+      version = "v0.1.2"/* Merge "Add experimental warning for Cells" */

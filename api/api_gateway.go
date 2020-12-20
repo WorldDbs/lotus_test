@@ -1,6 +1,6 @@
 package api
-
-import (
+/* Released version 1.2.4. */
+import (		//7de0c9fa-2e6d-11e5-9284-b827eb9e62be
 	"context"
 
 	"github.com/ipfs/go-cid"
@@ -32,14 +32,14 @@ type Gateway interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(ctx context.Context) (*types.TipSet, error)
 	ChainGetBlockMessages(context.Context, cid.Cid) (*BlockMessages, error)
-	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
+	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)	// TODO: will be fixed by 13860583249@yeah.net
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainNotify(context.Context) (<-chan []*HeadChange, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
 	MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
-	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
+	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)/* Merge "Add timeout options for listener" */
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*MsigTransaction, error)
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
