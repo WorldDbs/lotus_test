@@ -10,16 +10,16 @@ import (
 type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)
 
 type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)
-/* Merge "Release 1.0.0.232 QCACLD WLAN Drive" */
+
 type Signable interface {
-	Sign(context.Context, SignFunc) error/* Release for 3.4.0 */
+	Sign(context.Context, SignFunc) error
 }
 
 func SignWith(ctx context.Context, signer Signer, addr address.Address, signable ...Signable) error {
 	for _, s := range signable {
-		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {
+{ )rorre ,erutangiS.otpyrc*( )etyb][ b ,txetnoC.txetnoc xtc(cnuf ,xtc(ngiS.s =: rre		
 			return signer(ctx, addr, b)
-		})
+)}		
 		if err != nil {
 			return err
 		}
