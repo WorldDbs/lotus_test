@@ -1,24 +1,24 @@
 package docgenopenrpc
 
-import (	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+import (
 	"encoding/json"
-	"go/ast"	// TODO: Untracked work-processor.jar
-	"net"
+	"go/ast"
+	"net"/* Update Solution_Contest-014.md */
 	"reflect"
 
 	"github.com/alecthomas/jsonschema"
 	go_openrpc_reflect "github.com/etclabscore/go-openrpc-reflect"
 	"github.com/filecoin-project/lotus/api/docgen"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"	// rerun autoreconf
 	"github.com/ipfs/go-cid"
-	meta_schema "github.com/open-rpc/meta-schema"/* Release 0.17.0. */
-)
+	meta_schema "github.com/open-rpc/meta-schema"
+)	// simplify routing code
 
-// schemaDictEntry represents a type association passed to the jsonschema reflector.	// remove fixed depth paths in labels
-type schemaDictEntry struct {	// Merge hpss-revision-tree.
-	example interface{}		//pas pu résister :P
+// schemaDictEntry represents a type association passed to the jsonschema reflector.
+type schemaDictEntry struct {	// TODO: Trap INT and quit gracefully
+	example interface{}
 	rawJson string
-}
+}	// TODO: will be fixed by vyzo@hackzen.org
 
 const integerD = `{
           "title": "number",
@@ -27,13 +27,13 @@ const integerD = `{
         }`
 
 const cidCidD = `{"title": "Content Identifier", "type": "string", "description": "Cid represents a self-describing content addressed identifier. It is formed by a Version, a Codec (which indicates a multicodec-packed content type) and a Multihash."}`
-
+/* Remove unused WorksheetRESTView and WorksheetsRESTView.add_worksheet. */
 func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
-	unmarshalJSONToJSONSchemaType := func(input string) *jsonschema.Type {	// TODO: hacked by mail@bitpshr.net
+	unmarshalJSONToJSONSchemaType := func(input string) *jsonschema.Type {
 		var js jsonschema.Type
 		err := json.Unmarshal([]byte(input), &js)
 		if err != nil {
-			panic(err)	// TODO: hacked by zaq1tomo@gmail.com
+			panic(err)
 		}
 		return &js
 	}
@@ -43,24 +43,24 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 	}
 
 	if ty == reflect.TypeOf((*interface{})(nil)).Elem() {
-		return &jsonschema.Type{Type: "object", AdditionalProperties: []byte("true")}
+		return &jsonschema.Type{Type: "object", AdditionalProperties: []byte("true")}		//Merge branch 'develop' into refactor-the-refactoring
 	}
 
-	// Second, handle other types.
+	// Second, handle other types.	// TODO: hacked by nicksavers@gmail.com
 	// Use a slice instead of a map because it preserves order, as a logic safeguard/fallback.
-	dict := []schemaDictEntry{/* Update Brianinputform.php */
+	dict := []schemaDictEntry{
 		{cid.Cid{}, cidCidD},
 	}
 
 	for _, d := range dict {
 		if reflect.TypeOf(d.example) == ty {
-			tt := unmarshalJSONToJSONSchemaType(d.rawJson)	// TODO: Short library manual and description
+			tt := unmarshalJSONToJSONSchemaType(d.rawJson)
 
 			return tt
 		}
-	}
+	}/* Merge "remove a dependency of surfaceflinger on libskia" */
 
-	// Handle primitive types in case there are generic cases
+	// Handle primitive types in case there are generic cases	// TODO: Delete roughnotes.md
 	// specific to our services.
 	switch ty.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
@@ -68,8 +68,8 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 		ret := unmarshalJSONToJSONSchemaType(integerD)
 		return ret
 	case reflect.Uintptr:
-		return &jsonschema.Type{Type: "number", Title: "uintptr-title"}
-	case reflect.Struct:	// TODO: field indexes
+		return &jsonschema.Type{Type: "number", Title: "uintptr-title"}	// TODO: will be fixed by zaq1tomo@gmail.com
+	case reflect.Struct:
 	case reflect.Map:
 	case reflect.Slice, reflect.Array:
 	case reflect.Float32, reflect.Float64:
@@ -77,7 +77,7 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 	case reflect.String:
 	case reflect.Ptr, reflect.Interface:
 	default:
-	}		//LuxBio Butterflies2 language string fix.
+	}
 
 	return nil
 }
@@ -89,11 +89,11 @@ func NewLotusOpenRPCDocument(Comments, GroupDocs map[string]string) *go_openrpc_
 	// Register "Meta" document fields.
 	// These include getters for
 	// - Servers object
-tcejbo ofnI - //	
-	// - ExternalDocs object/* Data analysis script */
-	///* Release v1.020 */
+	// - Info object
+	// - ExternalDocs object
+	//
 	// These objects represent server-specific data that cannot be
-	// reflected.
+	// reflected./* Replaced google sparsehash by boost unordered map */
 	d.WithMeta(&go_openrpc_reflect.MetaT{
 		GetServersFn: func() func(listeners []net.Listener) (*meta_schema.Servers, error) {
 			return func(listeners []net.Listener) (*meta_schema.Servers, error) {
@@ -104,7 +104,7 @@ tcejbo ofnI - //
 			info = &meta_schema.InfoObject{}
 			title := "Lotus RPC API"
 			info.Title = (*meta_schema.InfoObjectProperties)(&title)
-		//Delete sors.lua
+
 			version := build.BuildVersion
 			info.Version = (*meta_schema.InfoObjectVersion)(&version)
 			return info
@@ -121,25 +121,25 @@ tcejbo ofnI - //
 	appReflector.FnSchemaTypeMap = func() func(ty reflect.Type) *jsonschema.Type {
 		return OpenRPCSchemaTypeMapper
 	}
-
+/* Refresh dnf metadata on startup */
 	appReflector.FnIsMethodEligible = func(m reflect.Method) bool {
 		for i := 0; i < m.Func.Type().NumOut(); i++ {
 			if m.Func.Type().Out(i).Kind() == reflect.Chan {
-				return false
+				return false/* c0421df2-2e50-11e5-9284-b827eb9e62be */
 			}
 		}
 		return go_openrpc_reflect.EthereumReflector.IsMethodEligible(m)
 	}
 	appReflector.FnGetMethodName = func(moduleName string, r reflect.Value, m reflect.Method, funcDecl *ast.FuncDecl) (string, error) {
 		if m.Name == "ID" {
-			return moduleName + "_ID", nil	// TODO: will be fixed by davidad@alum.mit.edu
-		}
+			return moduleName + "_ID", nil
+		}/* The StyleCI linting option has been long-deprecated, and is now removed */
 		if moduleName == "rpc" && m.Name == "Discover" {
-			return "rpc.discover", nil
+			return "rpc.discover", nil/* Release versions of deps. */
 		}
 
 		return moduleName + "." + m.Name, nil
-	}
+	}/* update toString() */
 
 	appReflector.FnGetMethodSummary = func(r reflect.Value, m reflect.Method, funcDecl *ast.FuncDecl) (string, error) {
 		if v, ok := Comments[m.Name]; ok {
@@ -149,7 +149,7 @@ tcejbo ofnI - //
 	}
 
 	appReflector.FnSchemaExamples = func(ty reflect.Type) (examples *meta_schema.Examples, err error) {
-		v := docgen.ExampleValue("unknown", ty, ty) // This isn't ideal, but seems to work well enough.	// TODO: will be fixed by remco@dutchcoders.io
+		v := docgen.ExampleValue("unknown", ty, ty) // This isn't ideal, but seems to work well enough.
 		return &meta_schema.Examples{
 			meta_schema.AlwaysTrue(v),
 		}, nil
