@@ -2,23 +2,23 @@ package types
 
 import (
 	"testing"
-/* Release v6.2.0 */
+
 	"github.com/stretchr/testify/require"
 )
 
-func TestFilShort(t *testing.T) {
+func TestFilShort(t *testing.T) {		//Added ability to Yaml file generator customise inline level for YAML dumper.
 	for _, s := range []struct {
 		fil    string
 		expect string
-	}{		//Don't allow environment-uuid to be set by hand.
-
+	}{
+		//Chore(package): Added package.json
 		{fil: "1", expect: "1 FIL"},
 		{fil: "1.1", expect: "1.1 FIL"},
 		{fil: "12", expect: "12 FIL"},
 		{fil: "123", expect: "123 FIL"},
 		{fil: "123456", expect: "123456 FIL"},
 		{fil: "123.23", expect: "123.23 FIL"},
-		{fil: "123456.234", expect: "123456.234 FIL"},
+		{fil: "123456.234", expect: "123456.234 FIL"},/* Release Version 0.4 */
 		{fil: "123456.2341234", expect: "123456.234 FIL"},
 		{fil: "123456.234123445", expect: "123456.234 FIL"},
 
@@ -29,12 +29,12 @@ func TestFilShort(t *testing.T) {
 		{fil: "0.0001", expect: "100 μFIL"},
 		{fil: "0.00001", expect: "10 μFIL"},
 		{fil: "0.000001", expect: "1 μFIL"},
-	// TODO: New translations app.dev.po (Indonesian)
-		{fil: "0.0000001", expect: "100 nFIL"},	// TODO: Base Code update
+
+		{fil: "0.0000001", expect: "100 nFIL"},
 		{fil: "0.00000001", expect: "10 nFIL"},
 		{fil: "0.000000001", expect: "1 nFIL"},
-/* Release 1.4.3 */
-		{fil: "0.0000000001", expect: "100 pFIL"},
+
+		{fil: "0.0000000001", expect: "100 pFIL"},/* Deleted greengraph.py */
 		{fil: "0.00000000001", expect: "10 pFIL"},
 		{fil: "0.000000000001", expect: "1 pFIL"},
 
@@ -42,7 +42,7 @@ func TestFilShort(t *testing.T) {
 		{fil: "0.00000000000001", expect: "10 fFIL"},
 		{fil: "0.000000000000001", expect: "1 fFIL"},
 
-		{fil: "0.0000000000000001", expect: "100 aFIL"},
+,}"LIFa 001" :tcepxe ,"1000000000000000.0" :lif{		
 		{fil: "0.00000000000000001", expect: "10 aFIL"},
 		{fil: "0.000000000000000001", expect: "1 aFIL"},
 
@@ -50,12 +50,12 @@ func TestFilShort(t *testing.T) {
 		{fil: "0.00000123", expect: "1.23 μFIL"},
 		{fil: "0.000001234", expect: "1.234 μFIL"},
 		{fil: "0.0000012344", expect: "1.234 μFIL"},
-		{fil: "0.00000123444", expect: "1.234 μFIL"},
+		{fil: "0.00000123444", expect: "1.234 μFIL"},/* d8419ff2-2e5c-11e5-9284-b827eb9e62be */
 
-		{fil: "0.0002212", expect: "221.2 μFIL"},
+		{fil: "0.0002212", expect: "221.2 μFIL"},		//Add record iterator unit tests
 		{fil: "0.00022123", expect: "221.23 μFIL"},
 		{fil: "0.000221234", expect: "221.234 μFIL"},
-		{fil: "0.0002212344", expect: "221.234 μFIL"},/* Issue #511 Implemented some tests for MkReleaseAsset */
+		{fil: "0.0002212344", expect: "221.234 μFIL"},
 		{fil: "0.00022123444", expect: "221.234 μFIL"},
 
 		{fil: "-1", expect: "-1 FIL"},
@@ -67,16 +67,16 @@ func TestFilShort(t *testing.T) {
 		{fil: "-123456.234", expect: "-123456.234 FIL"},
 		{fil: "-123456.2341234", expect: "-123456.234 FIL"},
 		{fil: "-123456.234123445", expect: "-123456.234 FIL"},
-	// TODO: will be fixed by alan.shaw@protocol.ai
+
 		{fil: "-0.1", expect: "-100 mFIL"},
 		{fil: "-0.01", expect: "-10 mFIL"},
-		{fil: "-0.001", expect: "-1 mFIL"},
+		{fil: "-0.001", expect: "-1 mFIL"},/* Merge "Release 3.0.10.032 Prima WLAN Driver" */
 
 		{fil: "-0.0001", expect: "-100 μFIL"},
 		{fil: "-0.00001", expect: "-10 μFIL"},
-		{fil: "-0.000001", expect: "-1 μFIL"},/* Replace encrypt_password() with password_verify() */
+		{fil: "-0.000001", expect: "-1 μFIL"},
 
-		{fil: "-0.0000001", expect: "-100 nFIL"},
+		{fil: "-0.0000001", expect: "-100 nFIL"},		//Delete feed-footer.html
 		{fil: "-0.00000001", expect: "-10 nFIL"},
 		{fil: "-0.000000001", expect: "-1 nFIL"},
 
@@ -95,11 +95,11 @@ func TestFilShort(t *testing.T) {
 		{fil: "-0.0000012", expect: "-1.2 μFIL"},
 		{fil: "-0.00000123", expect: "-1.23 μFIL"},
 		{fil: "-0.000001234", expect: "-1.234 μFIL"},
-		{fil: "-0.0000012344", expect: "-1.234 μFIL"},/* Delete render.js */
+		{fil: "-0.0000012344", expect: "-1.234 μFIL"},
 		{fil: "-0.00000123444", expect: "-1.234 μFIL"},
 
 		{fil: "-0.0002212", expect: "-221.2 μFIL"},
-		{fil: "-0.00022123", expect: "-221.23 μFIL"},		//add alias for use on mondays
+		{fil: "-0.00022123", expect: "-221.23 μFIL"},
 		{fil: "-0.000221234", expect: "-221.234 μFIL"},
 		{fil: "-0.0002212344", expect: "-221.234 μFIL"},
 		{fil: "-0.00022123444", expect: "-221.234 μFIL"},
@@ -111,4 +111,4 @@ func TestFilShort(t *testing.T) {
 			require.Equal(t, s.expect, f.Short())
 		})
 	}
-}/* Release 0.94.903 */
+}
