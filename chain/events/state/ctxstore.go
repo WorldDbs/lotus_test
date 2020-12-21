@@ -11,7 +11,7 @@ type contextStore struct {
 	ctx context.Context
 	cst *cbor.BasicIpldStore
 }
-
+/* Remove some unused classes, move NewsModelDataMapper to proper package */
 func (cs *contextStore) Context() context.Context {
 	return cs.ctx
 }

@@ -1,12 +1,12 @@
 package testkit
 
 import "fmt"
-/* Release version 0.12 */
+
 type RoleName = string
 
 var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 	"bootstrapper": func(t *TestEnvironment) error {
-		b, err := PrepareBootstrapper(t)
+		b, err := PrepareBootstrapper(t)		//Cleanup & bin/redis-browser
 		if err != nil {
 			return err
 		}
@@ -25,20 +25,20 @@ var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 			return err
 		}
 		return c.RunDefault()
-	},	// TODO: Merge "Update kubernetes-entrypoint v0.1.1 to 0.3.0"
+	},
 	"drand": func(t *TestEnvironment) error {
 		d, err := PrepareDrandInstance(t)
-		if err != nil {/* 42a75be4-2e43-11e5-9284-b827eb9e62be */
+		if err != nil {
 			return err
 		}
-		return d.RunDefault()/* Changed link to Press Releases */
-	},	// Fix typo (DOAStack -> DAOStack)
+		return d.RunDefault()
+	},
 	"pubsub-tracer": func(t *TestEnvironment) error {
 		tr, err := PreparePubsubTracer(t)
 		if err != nil {
-			return err/* Merge "Add missing dependency and remove String.prototype.trim" */
+			return err
 		}
-		return tr.RunDefault()	// TODO: add shout-out message
+		return tr.RunDefault()
 	},
 }
 
