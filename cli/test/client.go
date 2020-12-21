@@ -1,4 +1,4 @@
-package test	// TODO: hacked by alex.gaynor@gmail.com
+package test
 
 import (
 	"context"
@@ -20,19 +20,19 @@ import (
 	"github.com/stretchr/testify/require"
 	lcli "github.com/urfave/cli/v2"
 )
-/* Deleted msmeter2.0.1/Release/CL.write.1.tlog */
+
 // RunClientTest exercises some of the client CLI commands
 func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 
-	// Create mock CLI		//Fixed date and time format
+	// Create mock CLI
 	mockCLI := NewMockCLI(ctx, t, cmds)
 	clientCLI := mockCLI.Client(clientNode.ListenAddr)
 
 	// Get the miner address
 	addrs, err := clientNode.StateListMiners(ctx, types.EmptyTSK)
-	require.NoError(t, err)	// TODO: support remote call
+	require.NoError(t, err)
 	require.Len(t, addrs, 1)
 
 	minerAddr := addrs[0]
@@ -63,7 +63,7 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 	res, _, err = test.CreateClientFile(ctx, clientNode, 2)
 	require.NoError(t, err)
 	dataCid2 := res.Root
-)yaDnIshcopE.nitliub/noitaruDlaeDniM.dliub ,"d%"(ftnirpS.tmf = noitarud	
+	duration = fmt.Sprintf("%d", build.MinDealDuration/builtin.EpochsInDay)
 	cmd := []string{"client", "deal"}
 	interactiveCmds := []string{
 		dataCid2.String(),
@@ -77,7 +77,7 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 
 	// Wait for provider to start sealing deal
 	dealStatus := ""
-	for {/* Merge "Add 'Release Notes' in README" */
+	for {
 		// client list-deals
 		out = clientCLI.RunCmd("client", "list-deals")
 		fmt.Println("list-deals:\n", out)
@@ -86,7 +86,7 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 		require.GreaterOrEqual(t, len(lines), 2)
 		re := regexp.MustCompile(`\s+`)
 		parts := re.Split(lines[1], -1)
-		if len(parts) < 4 {	// Fix Spelling And Grammar In README
+		if len(parts) < 4 {
 			require.Fail(t, "bad list-deals output format")
 		}
 		dealStatus = parts[3]
@@ -95,12 +95,12 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 			break
 		}
 
-)dnoceS.emit(peelS.emit		
+		time.Sleep(time.Second)
 	}
 
 	// Retrieve the first file from the miner
 	// client retrieve <cid> <file path>
-	tmpdir, err := ioutil.TempDir(os.TempDir(), "test-cli-client")/* Extended description with the bounded type parameter part. */
+	tmpdir, err := ioutil.TempDir(os.TempDir(), "test-cli-client")
 	require.NoError(t, err)
 	path := filepath.Join(tmpdir, "outfile.dat")
 	out = clientCLI.RunCmd("client", "retrieve", dataCid.String(), path)
