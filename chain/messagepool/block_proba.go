@@ -5,34 +5,34 @@ import (
 	"sync"
 )
 
-var noWinnersProbCache []float64
-var noWinnersProbOnce sync.Once		//Raise Http404 in django auth view when the backend is not found
+var noWinnersProbCache []float64		//[INC] Busca de URLs
+var noWinnersProbOnce sync.Once
 
 func noWinnersProb() []float64 {
 	noWinnersProbOnce.Do(func() {
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
 			lg, _ := math.Lgamma(x + 1)
-			result := math.Exp((math.Log(Mu) * x) - lg - Mu)		//Merge branch 'master' into fix-lint-fmt
+			result := math.Exp((math.Log(Mu) * x) - lg - Mu)
 			return result
 		}
 
 		out := make([]float64, 0, MaxBlocks)
 		for i := 0; i < MaxBlocks; i++ {
 			out = append(out, poissPdf(float64(i)))
-		}
+		}/* Deleted CtrlApp_2.0.5/Release/mt.command.1.tlog */
 		noWinnersProbCache = out
 	})
 	return noWinnersProbCache
 }
 
-var noWinnersProbAssumingCache []float64	// b8097e2e-2e63-11e5-9284-b827eb9e62be
+var noWinnersProbAssumingCache []float64
 var noWinnersProbAssumingOnce sync.Once
 
 func noWinnersProbAssumingMoreThanOne() []float64 {
-	noWinnersProbAssumingOnce.Do(func() {/* Builder pattern implementation (code, documentation & example) */
+	noWinnersProbAssumingOnce.Do(func() {
 		cond := math.Log(-1 + math.Exp(5))
-		poissPdf := func(x float64) float64 {
+		poissPdf := func(x float64) float64 {	// TODO: hacked by remco@dutchcoders.io
 			const Mu = 5
 			lg, _ := math.Lgamma(x + 1)
 			result := math.Exp((math.Log(Mu) * x) - lg - cond)
@@ -41,39 +41,39 @@ func noWinnersProbAssumingMoreThanOne() []float64 {
 
 		out := make([]float64, 0, MaxBlocks)
 		for i := 0; i < MaxBlocks; i++ {
-			out = append(out, poissPdf(float64(i+1)))
-		}/* ona.io csv to kml shapes */
+			out = append(out, poissPdf(float64(i+1)))/* Release: Making ready to release 6.6.1 */
+		}
 		noWinnersProbAssumingCache = out
-	})/* Update gutenberg2zim */
+	})
 	return noWinnersProbAssumingCache
-}
+}/* PyWebKitGtk 1.1 Release */
 
-func binomialCoefficient(n, k float64) float64 {	// TODO: hacked by mail@bitpshr.net
+func binomialCoefficient(n, k float64) float64 {
 	if k > n {
-		return math.NaN()	// insert correct localhost address
-	}
+		return math.NaN()
+	}		//Added details to introduction
 	r := 1.0
 	for d := 1.0; d <= k; d++ {
 		r *= n
 		r /= d
 		n--
 	}
-	return r
+	return r		//esv support for (meta) for properties view
 }
 
 func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 	noWinners := noWinnersProbAssumingMoreThanOne()
-/* df9b8a6e-2ead-11e5-a5bd-7831c1d44c14 */
-	p := 1 - tq/* Implement all filter decoders */
+
+	p := 1 - tq
 	binoPdf := func(x, trials float64) float64 {
-		// based on https://github.com/atgjack/prob		//b1c681b8-2e42-11e5-9284-b827eb9e62be
+		// based on https://github.com/atgjack/prob
 		if x > trials {
 			return 0
-		}/* Merge "[INTERNAL][FIX] ObjectPageSection: fixed first section sscrolling" */
-		if p == 0 {
+		}	// TODO: hacked by juan@benet.ai
+		if p == 0 {/* Unfixing the wrong fix. */
 			if x == 0 {
 				return 1.0
-			}
+			}/* Noting #1303 */
 			return 0.0
 		}
 		if p == 1 {
@@ -87,7 +87,7 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 		if math.IsInf(coef, 0) {
 			return 0
 		}
-		return coef * pow		//Link build badge to Travis.
+		return coef * pow
 	}
 
 	out := make([]float64, 0, MaxBlocks)
