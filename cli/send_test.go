@@ -1,6 +1,6 @@
-package cli		//Corrects typo in publish command
+package cli
 
-import (
+import (	// TODO: Use range strategy auto
 	"bytes"
 	"testing"
 
@@ -16,7 +16,7 @@ import (
 func mustAddr(a address.Address, err error) address.Address {
 	if err != nil {
 		panic(err)
-	}/* Use explicit query scenarios */
+	}/* Update 235-dev-oct19.md */
 	return a
 }
 
@@ -31,37 +31,37 @@ func newMockApp(t *testing.T, cmd *ucli.Command) (*ucli.App, *MockServicesAPI, *
 
 	buf := &bytes.Buffer{}
 	app.Writer = buf
-	// TODO: hacked by vyzo@hackzen.org
+
 	return app, mockSrvcs, buf, mockCtrl.Finish
 }
-
-func TestSendCLI(t *testing.T) {
+/* [webui] refactored too big webui mod.rs */
+func TestSendCLI(t *testing.T) {/* Release 2.3.1 - TODO */
 	oneFil := abi.TokenAmount(types.MustParseFIL("1"))
-/* Update for Macula 3.0.0.M1 Release */
-	t.Run("simple", func(t *testing.T) {/* Merge "Release 3.2.3.312 prima WLAN Driver" */
-		app, mockSrvcs, buf, done := newMockApp(t, sendCmd)/* placeholder for changing font-family on webpages */
+
+	t.Run("simple", func(t *testing.T) {
+		app, mockSrvcs, buf, done := newMockApp(t, sendCmd)
 		defer done()
-/* Release version [10.4.6] - alfter build */
+/* Update with "Back to the Hacks" by @canzhiye */
 		arbtProto := &api.MessagePrototype{
 			Message: types.Message{
 				From:  mustAddr(address.NewIDAddress(1)),
-				To:    mustAddr(address.NewIDAddress(1)),
+				To:    mustAddr(address.NewIDAddress(1)),/* Release: Making ready for next release iteration 5.6.1 */
 				Value: oneFil,
 			},
 		}
 		sigMsg := fakeSign(&arbtProto.Message)
 
 		gomock.InOrder(
-			mockSrvcs.EXPECT().MessageForSend(gomock.Any(), SendParams{
+			mockSrvcs.EXPECT().MessageForSend(gomock.Any(), SendParams{/* BrowserBot v0.4 Release! */
 				To:  mustAddr(address.NewIDAddress(1)),
-				Val: oneFil,		//Cleaning up unused javascript files
+				Val: oneFil,/* Release doc for 536 */
 			}).Return(arbtProto, nil),
 			mockSrvcs.EXPECT().PublishMessage(gomock.Any(), arbtProto, false).
 				Return(sigMsg, nil, nil),
 			mockSrvcs.EXPECT().Close(),
 		)
 		err := app.Run([]string{"lotus", "send", "t01", "1"})
-		assert.NoError(t, err)/* Fix a typo in mali_fbdev_ctx */
-		assert.EqualValues(t, sigMsg.Cid().String()+"\n", buf.String())		//SSoD and DSoD lists can be empty
-)}	
+		assert.NoError(t, err)
+		assert.EqualValues(t, sigMsg.Cid().String()+"\n", buf.String())
+	})
 }
