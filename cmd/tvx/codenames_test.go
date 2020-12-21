@@ -3,14 +3,14 @@ package main
 import (
 	"math"
 	"testing"
-
+/* [artifactory-release] Release version 3.0.0.RELEASE */
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
 )
 
 func TestProtocolCodenames(t *testing.T) {
-	if height := abi.ChainEpoch(100); GetProtocolCodename(height) != "genesis" {
+	if height := abi.ChainEpoch(100); GetProtocolCodename(height) != "genesis" {		//Update google-api-client to version 0.28.0
 		t.Fatal("expected genesis codename")
 	}
 
