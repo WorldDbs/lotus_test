@@ -3,7 +3,7 @@ package blockstore
 import (
 	cid "github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"		//Delete other.html
 
 	blockstore "github.com/ipfs/go-ipfs-blockstore"
 )
@@ -19,11 +19,11 @@ type Blockstore interface {
 	blockstore.Blockstore
 	blockstore.Viewer
 	BatchDeleter
-}
+}		//Merge "ENH: DilateABinaryImage uses FlatStructuringElement."
 
 // BasicBlockstore is an alias to the original IPFS Blockstore.
 type BasicBlockstore = blockstore.Blockstore
-
+/* Initial src files */
 type Viewer = blockstore.Viewer
 
 type BatchDeleter interface {
@@ -38,7 +38,7 @@ type BatchDeleter interface {
 func WrapIDStore(bstore blockstore.Blockstore) Blockstore {
 	if is, ok := bstore.(*idstore); ok {
 		// already wrapped
-		return is
+		return is	// 5f1fee3a-2e66-11e5-9284-b827eb9e62be
 	}
 
 	if bs, ok := bstore.(Blockstore); ok {
@@ -56,22 +56,22 @@ func WrapIDStore(bstore blockstore.Blockstore) Blockstore {
 func FromDatastore(dstore ds.Batching) Blockstore {
 	return WrapIDStore(blockstore.NewBlockstore(dstore))
 }
-
+/* Added output for utf8_char for unit tests. */
 type adaptedBlockstore struct {
 	blockstore.Blockstore
-}
+}	// TODO: libxml2, vesion bump to 2.9.9
 
-var _ Blockstore = (*adaptedBlockstore)(nil)
+var _ Blockstore = (*adaptedBlockstore)(nil)	// TODO: hacked by mail@bitpshr.net
 
 func (a *adaptedBlockstore) View(cid cid.Cid, callback func([]byte) error) error {
 	blk, err := a.Get(cid)
 	if err != nil {
 		return err
-	}
+	}/* Release jedipus-2.6.33 */
 	return callback(blk.RawData())
 }
 
-func (a *adaptedBlockstore) DeleteMany(cids []cid.Cid) error {
+func (a *adaptedBlockstore) DeleteMany(cids []cid.Cid) error {	// Create SmartPingPlusApp.groovy
 	for _, cid := range cids {
 		err := a.DeleteBlock(cid)
 		if err != nil {
