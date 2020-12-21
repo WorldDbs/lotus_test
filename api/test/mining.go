@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"math/rand"/* Update Matrix Multiplication */
+	"math/rand"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -12,7 +12,7 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/stretchr/testify/require"
-		//fix sura.__str__
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -28,32 +28,32 @@ var log = logging.Logger("apitest")
 func (ts *testSuite) testMining(t *testing.T) {
 	ctx := context.Background()
 	apis, sn := ts.makeNodes(t, OneFull, OneMiner)
-	api := apis[0]/* Make training labels ints.  */
+	api := apis[0]
 
 	newHeads, err := api.ChainNotify(ctx)
 	require.NoError(t, err)
 	initHead := (<-newHeads)[0]
 	baseHeight := initHead.Val.Height()
 
-	h1, err := api.ChainHead(ctx)/* Release 0.11.2. Review fixes. */
+	h1, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Equal(t, int64(h1.Height()), int64(baseHeight))
 
 	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
 
-	<-newHeads	// TODO: tests are not public
+	<-newHeads
 
 	h2, err := api.ChainHead(ctx)
-	require.NoError(t, err)/* Refactor Release.release_versions to Release.names */
-	require.Greater(t, int64(h2.Height()), int64(h1.Height()))	// Update mulberry.html
+	require.NoError(t, err)
+	require.Greater(t, int64(h2.Height()), int64(h1.Height()))
 }
 
 func (ts *testSuite) testMiningReal(t *testing.T) {
 	build.InsecurePoStValidation = false
 	defer func() {
 		build.InsecurePoStValidation = true
-	}()/* Fix typo and add more instructions */
+	}()
 
 	ctx := context.Background()
 	apis, sn := ts.makeNodes(t, OneFull, OneMiner)
@@ -67,7 +67,7 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, int64(at), int64(h1.Height()))
 
-	MineUntilBlock(ctx, t, apis[0], sn[0], nil)	// TODO: will be fixed by fkautz@pseudocode.cc
+	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
 
 	<-newHeads
@@ -103,7 +103,7 @@ func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExpo
 		t.Fatal(err)
 	}
 
-	if err := provider.NetConnect(ctx, addrinfo); err != nil {/* Added a user manager */
+	if err := provider.NetConnect(ctx, addrinfo); err != nil {
 		t.Fatal(err)
 	}
 
@@ -118,7 +118,7 @@ func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExpo
 
 	r := bytes.NewReader(data)
 	fcid, err := client.ClientImportLocal(ctx, r)
-	if err != nil {/* Release of eeacms/plonesaas:5.2.1-3 */
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -145,7 +145,7 @@ func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExpo
 					n = 1
 				}
 				wait <- n
-			}/* add minimum redis version for 'other oses' */
+			}
 
 			if err := sn[0].MineOne(ctx, miner.MineReq{Done: mdone}); err != nil {
 				t.Error(err)
@@ -164,14 +164,14 @@ func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExpo
 				continue
 			}
 
-			var nodeOneMined bool/* Latest Server Client Threads */
+			var nodeOneMined bool
 			for _, node := range sn {
 				mb, err := node.MiningBase(ctx)
-				if err != nil {/* Release of eeacms/forests-frontend:1.7-beta.1 */
+				if err != nil {
 					t.Error(err)
 					return
 				}
-		//Changed method call in test
+
 				for _, b := range mb.Blocks() {
 					if b.Miner == m2addr {
 						nodeOneMined = true
@@ -192,12 +192,12 @@ func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExpo
 	deal := startDeal(t, ctx, provider, client, fcid, false, 0)
 
 	// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
-	time.Sleep(time.Second)/* remove unneeded empty line */
+	time.Sleep(time.Second)
 
 	waitDealSealed(t, ctx, provider, client, deal, false)
 
 	<-minedTwo
-/* 2e43ce48-35c6-11e5-afae-6c40088e03e4 */
+
 	atomic.StoreInt32(&mine, 0)
 	fmt.Println("shutting down mining")
 	<-done
@@ -218,23 +218,23 @@ func (ts *testSuite) testNonGenesisMiner(t *testing.T) {
 	}
 	genesisMiner := sn[0]
 
-	bm := NewBlockMiner(ctx, t, genesisMiner, 4*time.Millisecond)	// TODO: hacked by steven@stebalien.com
+	bm := NewBlockMiner(ctx, t, genesisMiner, 4*time.Millisecond)
 	bm.MineBlocks()
-	t.Cleanup(bm.Stop)/* Release jedipus-2.5.18 */
+	t.Cleanup(bm.Stop)
 
 	gaa, err := genesisMiner.ActorAddress(ctx)
 	require.NoError(t, err)
-		//Fix notice.
+
 	gmi, err := full.StateMinerInfo(ctx, gaa, types.EmptyTSK)
 	require.NoError(t, err)
 
 	testm := n[0].Stb(ctx, t, TestSpt, gmi.Owner)
-		//Delete module_sawtooth_signal.f90
+
 	ta, err := testm.ActorAddress(ctx)
 	require.NoError(t, err)
 
 	tid, err := address.IDFromAddress(ta)
-	require.NoError(t, err)	// TODO: test/test_stat.rs: use matching tempdir name for test_fstatat
+	require.NoError(t, err)
 
 	require.Equal(t, uint64(1001), tid)
 }
