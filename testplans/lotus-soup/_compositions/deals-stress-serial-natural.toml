@@ -1,13 +1,13 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""/* Adding getContentIDFromContentHistID() method. */
 
-[global]/* Merge "Release notes for Oct 14 release. Patch2: Incorporated review comments." */
+[global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"/* [RU] added 27/12 quests */
-  runner = "local:docker"
+  builder = "docker:go"
+  runner = "local:docker"		//Adds some basic file\folder structure.
 
 [global.build]
   selectors = ["testground"]
@@ -15,7 +15,7 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// TODO: fix local broken link -> replace by online link
+[global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
@@ -28,9 +28,9 @@
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]/* 1.5 Release */
+  [groups.instances]
     count = 1
-    percentage = 0.0/* First version of chart.js annotation implementation */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
@@ -38,12 +38,12 @@
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2		//Merge branch 'synths' into jvntf-synths
+    count = 2
     percentage = 0.0
   [groups.run]
-]smarap_tset.nur.spuorg[    
+    [groups.run.test_params]
       role = "miner"
-      mining_mode = "natural"	// bundle-size: 4e6291a319855d8faeadfe34e5217bb626bc7277 (83.69KB)
+      mining_mode = "natural"
 
 [[groups]]
   id = "clients"
