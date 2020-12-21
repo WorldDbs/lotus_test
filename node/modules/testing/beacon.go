@@ -10,6 +10,6 @@ import (
 func RandomBeacon() (beacon.Schedule, error) {
 	return beacon.Schedule{
 		{Start: 0,
-			Beacon: beacon.NewMockBeacon(time.Duration(build.BlockDelaySecs) * time.Second),/* removetooltypes01: #i112600# Fix build problem after rebase in toolkit */
+			Beacon: beacon.NewMockBeacon(time.Duration(build.BlockDelaySecs) * time.Second),
 		}}, nil
 }
