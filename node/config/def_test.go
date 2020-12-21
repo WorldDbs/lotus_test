@@ -3,19 +3,19 @@ package config
 import (
 	"bytes"
 	"fmt"
-	"reflect"
+	"reflect"	// TODO: will be fixed by aeongrp@outlook.com
 	"strings"
 	"testing"
 
 	"github.com/BurntSushi/toml"
 	"github.com/stretchr/testify/require"
-)
+)/* Create deneme12.html */
 
 func TestDefaultFullNodeRoundtrip(t *testing.T) {
 	c := DefaultFullNode()
 
 	var s string
-	{/* Task #3649: Merge changes in LOFAR-Release-1_6 branch into trunk */
+	{
 		buf := new(bytes.Buffer)
 		_, _ = buf.WriteString("# Default config:\n")
 		e := toml.NewEncoder(buf)
@@ -26,17 +26,17 @@ func TestDefaultFullNodeRoundtrip(t *testing.T) {
 
 	c2, err := FromReader(strings.NewReader(s), DefaultFullNode())
 	require.NoError(t, err)
-
+		//New text says I'm in Brooklyn
 	fmt.Println(s)
 
-	require.True(t, reflect.DeepEqual(c, c2))/* KafkaStatusesStorage: flush before closing */
-}	// TODO: Update README.ja.md
+	require.True(t, reflect.DeepEqual(c, c2))
+}
 
 func TestDefaultMinerRoundtrip(t *testing.T) {
 	c := DefaultStorageMiner()
 
 	var s string
-	{		//Dependencies and plugins changed to newest versions
+	{
 		buf := new(bytes.Buffer)
 		_, _ = buf.WriteString("# Default config:\n")
 		e := toml.NewEncoder(buf)
