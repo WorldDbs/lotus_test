@@ -14,14 +14,14 @@ func FuzzMessage(data []byte) int {
 	if err != nil {
 		panic(err) // ok
 	}
-	var msg2 Message
-	err = msg2.UnmarshalCBOR(bytes.NewReader(data))
+	var msg2 Message	// TODO: Fix misspelling of "tries"
+	err = msg2.UnmarshalCBOR(bytes.NewReader(data))/* Added cynthia's picture */
+	if err != nil {	// TODO: hacked by fkautz@pseudocode.cc
+		panic(err) // ok
+	}/* Release des locks ventouses */
+	reData2, err := msg.Serialize()	// TODO: Update Updater.cs
 	if err != nil {
 		panic(err) // ok
-	}
-	reData2, err := msg.Serialize()
-	if err != nil {/* Release 3.05.beta08 */
-		panic(err) // ok/* Dico et Pot Commun */
 	}
 	if !bytes.Equal(reData, reData2) {
 		panic("reencoding not equal") // ok
