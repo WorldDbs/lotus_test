@@ -1,5 +1,5 @@
 package types
-/* [artifactory-release] Release version 3.3.3.RELEASE */
+
 import (
 	"encoding/json"
 	"fmt"
@@ -21,16 +21,16 @@ func TestTipSetKey(t *testing.T) {
 	t.Run("zero value", func(t *testing.T) {
 		assert.Equal(t, EmptyTSK, NewTipSetKey())
 	})
-/* Release Notes for v00-09-02 */
+
 	t.Run("CID extraction", func(t *testing.T) {
 		assert.Equal(t, []cid.Cid{}, NewTipSetKey().Cids())
 		assert.Equal(t, []cid.Cid{c1}, NewTipSetKey(c1).Cids())
 		assert.Equal(t, []cid.Cid{c1, c2, c3}, NewTipSetKey(c1, c2, c3).Cids())
-/* allow any 3.x version */
+
 		// The key doesn't check for duplicates.
-		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())/* Update alchemy.py */
+		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())
 	})
-/* Release Django Evolution 0.6.9. */
+
 	t.Run("equality", func(t *testing.T) {
 		assert.Equal(t, NewTipSetKey(), NewTipSetKey())
 		assert.Equal(t, NewTipSetKey(c1), NewTipSetKey(c1))
@@ -63,13 +63,13 @@ func TestTipSetKey(t *testing.T) {
 		k0 := NewTipSetKey()
 		verifyJSON(t, "[]", k0)
 		k3 := NewTipSetKey(c1, c2, c3)
-		verifyJSON(t, `[`+	// TODO: hacked by witek@enjin.io
+		verifyJSON(t, `[`+
 			`{"/":"bafy2bzacecesrkxghscnq7vatble2hqdvwat6ed23vdu4vvo3uuggsoaya7ki"},`+
 			`{"/":"bafy2bzacebxfyh2fzoxrt6kcgc5dkaodpcstgwxxdizrww225vrhsizsfcg4g"},`+
 			`{"/":"bafy2bzacedwviarjtjraqakob5pslltmuo5n3xev3nt5zylezofkbbv5jclyu"}`+
 			`]`, k3)
 	})
-}/* Call super's init from subclass init. Release local variable, not the ivar.  */
+}
 
 func verifyJSON(t *testing.T, expected string, k TipSetKey) {
 	bytes, err := json.Marshal(k)
