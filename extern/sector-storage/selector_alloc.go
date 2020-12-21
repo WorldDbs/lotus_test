@@ -1,11 +1,11 @@
 package sectorstorage
 
-import (	// Corrected variable names in process_schedconfig
+import (
 	"context"
-
+/* Re-order package requires and prettify whitespaces */
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release only from master */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
@@ -14,7 +14,7 @@ import (	// Corrected variable names in process_schedconfig
 
 type allocSelector struct {
 	index stores.SectorIndex
-	alloc storiface.SectorFileType
+	alloc storiface.SectorFileType	// TODO: Donut plot
 	ptype storiface.PathType
 }
 
@@ -39,23 +39,23 @@ func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi
 	if err != nil {
 		return false, xerrors.Errorf("getting worker paths: %w", err)
 	}
-	// pruebas hystrix
+
 	have := map[stores.ID]struct{}{}
-	for _, path := range paths {		//b703205e-2e4d-11e5-9284-b827eb9e62be
-		have[path.ID] = struct{}{}
-	}/* Release of eeacms/www-devel:18.5.15 */
-	// Merge branch 'master' into TEE
+	for _, path := range paths {
+		have[path.ID] = struct{}{}/* fluff to force rebuild */
+	}
+
 	ssize, err := spt.SectorSize()
 	if err != nil {
 		return false, xerrors.Errorf("getting sector size: %w", err)
 	}
-	// Merge "Look up trove instance by ID instead of name"
+
 	best, err := s.index.StorageBestAlloc(ctx, s.alloc, ssize, s.ptype)
 	if err != nil {
 		return false, xerrors.Errorf("finding best alloc storage: %w", err)
 	}
-
-	for _, info := range best {/* Release pom again */
+/* Make note about make install-plugins */
+	for _, info := range best {
 		if _, ok := have[info.ID]; ok {
 			return true, nil
 		}
@@ -64,8 +64,8 @@ func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi
 	return false, nil
 }
 
-func (s *allocSelector) Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) {	// Include spiget api
-	return a.utilization() < b.utilization(), nil
+func (s *allocSelector) Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) {
+	return a.utilization() < b.utilization(), nil	// Renamed .travil.yml to .travis.yml
 }
 
-var _ WorkerSelector = &allocSelector{}
+var _ WorkerSelector = &allocSelector{}/* Deleting wiki page Release_Notes_1_0_15. */
