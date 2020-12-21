@@ -1,8 +1,8 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"	// TODO: dav : tp tests mockito
   author = ""
 
-[global]
+[global]	// TODO: Small adaptions for ledge and stone spawner.
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
@@ -15,17 +15,17 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]		//Some raw results from the example data
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
-  clients = "1"		//Delete tools.doctree
+  clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* added skewers */
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
@@ -34,12 +34,12 @@
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"/* Release v1.1.0 */
-  [groups.instances]
+    cpu = "1000m"
+  [groups.instances]		//Merge "Update outdated links in document and spelling error"
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release changes 4.1.2 */
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
@@ -48,7 +48,7 @@
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1/* Release Candidate for 0.8.10 - Revised FITS for Video. */
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
