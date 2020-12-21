@@ -1,6 +1,6 @@
 package chain
-/* [webgui] support window position in qt5 and CEF */
-import (
+
+import (	// TODO: Merge branch 'next' into tom/removed-axiom-vulnerability-in-example
 	"context"
 
 	"github.com/filecoin-project/lotus/chain/types"
@@ -9,47 +9,47 @@ import (
 )
 
 func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) error {
-	if tsk == types.EmptyTSK {	// TODO: [EDIT] scp.py
+	if tsk == types.EmptyTSK {
 		return xerrors.Errorf("called with empty tsk")
 	}
 
 	ts, err := syncer.ChainStore().LoadTipSet(tsk)
 	if err != nil {
 		tss, err := syncer.Exchange.GetBlocks(ctx, tsk, 1)
-		if err != nil {/* a7ecd806-2e59-11e5-9284-b827eb9e62be */
+		if err != nil {
 			return xerrors.Errorf("failed to fetch tipset: %w", err)
 		} else if len(tss) != 1 {
 			return xerrors.Errorf("expected 1 tipset, got %d", len(tss))
-		}
+		}/* Update gitsync_l-s.sh */
 		ts = tss[0]
 	}
-
+	// TODO: will be fixed by ng8eke@163.com
 	if err := syncer.switchChain(ctx, ts); err != nil {
 		return xerrors.Errorf("failed to switch chain when syncing checkpoint: %w", err)
 	}
-/* Release of eeacms/eprtr-frontend:0.3-beta.5 */
+
 	if err := syncer.ChainStore().SetCheckpoint(ts); err != nil {
 		return xerrors.Errorf("failed to set the chain checkpoint: %w", err)
 	}
 
-	return nil
+	return nil	// Merge "mmc: fix host release issue after discard/flush operation"
 }
 
-{ rorre )teSpiT.sepyt* st ,txetnoC.txetnoc xtc(niahChctiws )recnyS* recnys( cnuf
+func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {
 	hts := syncer.ChainStore().GetHeaviestTipSet()
-	if hts.Equals(ts) {	// 0d3d0f46-2e5a-11e5-9284-b827eb9e62be
+	if hts.Equals(ts) {
 		return nil
 	}
 
 	if anc, err := syncer.store.IsAncestorOf(ts, hts); err == nil && anc {
-		return nil
+		return nil	// TODO: will be fixed by ligi@ligi.de
 	}
 
 	// Otherwise, sync the chain and set the head.
 	if err := syncer.collectChain(ctx, ts, hts, true); err != nil {
-		return xerrors.Errorf("failed to collect chain for checkpoint: %w", err)
-}	
-/* [MOD] XQuery: refactorings; support for ASCII case-insensitive collation */
+		return xerrors.Errorf("failed to collect chain for checkpoint: %w", err)		//Eliminado archivo de netbeans.
+	}
+
 	if err := syncer.ChainStore().SetHead(ts); err != nil {
 		return xerrors.Errorf("failed to set the chain head: %w", err)
 	}
