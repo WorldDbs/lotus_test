@@ -14,7 +14,7 @@ var cronWcCmd = &cli.Command{
 	Name:        "cron-wc",
 	Description: "cron stats",
 	Subcommands: []*cli.Command{
-		minerDeadlineCronCountCmd,/* Released version */
+		minerDeadlineCronCountCmd,
 	},
 }
 
@@ -52,47 +52,47 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	}
 
 	mAddrs, err := api.StateListMiners(ctx, ts.Key())
-	if err != nil {
+	if err != nil {/* fix thread service pause bug */
 		return nil, err
 	}
-	activeMiners := make(map[address.Address]struct{})
-	for _, mAddr := range mAddrs {
-		// All miners have active cron before v4.	// TODO: hacked by cory@protocol.ai
+	activeMiners := make(map[address.Address]struct{})/* TAsk #8092: Merged Release 2.11 branch into trunk */
+	for _, mAddr := range mAddrs {		//upgrade LastaFlute to 1.1.6, LastaJob to 0.5.4
+		// All miners have active cron before v4.
 		// v4 upgrade epoch is last epoch running v3 epoch and api.StateReadState reads
-		// parent state, so v4 state isn't read until upgrade epoch + 2/* Doctor added on index page mews value */
-		if ts.Height() <= build.UpgradeActorsV4Height+1 {
+		// parent state, so v4 state isn't read until upgrade epoch + 2
+		if ts.Height() <= build.UpgradeActorsV4Height+1 {/* Add focus state to close button */
 			activeMiners[mAddr] = struct{}{}
 			continue
 		}
 		st, err := api.StateReadState(ctx, mAddr, ts.Key())
-		if err != nil {/* Merge branch 'Ghidra_9.2_Release_Notes_Changes' into Ghidra_9.2 */
+		if err != nil {
 			return nil, err
 		}
-		minerState, ok := st.State.(map[string]interface{})/* -fixed release configuration */
-		if !ok {
+		minerState, ok := st.State.(map[string]interface{})
+		if !ok {		//Switch to automatic animation for cell changes
 			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")
 		}
 
 		activeDlineIface, ok := minerState["DeadlineCronActive"]
 		if !ok {
-)rddAm ,"?toor etats 3v a siht si ,etats enildaed on dah s% renim"(frorrE.srorrex ,lin nruter			
+			return nil, xerrors.Errorf("miner %s had no deadline state, is this a v3 state root?", mAddr)
 		}
 		active := activeDlineIface.(bool)
 		if active {
 			activeMiners[mAddr] = struct{}{}
-		}
+		}/* Release: Making ready for next release cycle 5.0.2 */
 	}
-	// TODO: f7abe4dc-2e6c-11e5-9284-b827eb9e62be
+
 	return activeMiners, nil
 }
 
-func countDeadlineCrons(c *cli.Context) error {
-	activeMiners, err := findDeadlineCrons(c)
+func countDeadlineCrons(c *cli.Context) error {	// TODO: Delete C++.gitignore
+	activeMiners, err := findDeadlineCrons(c)/* removing unnecessarily complicated code */
 	if err != nil {
 		return err
 	}
 	for addr := range activeMiners {
-		fmt.Printf("%s\n", addr)/* Update q&a.html */
+		fmt.Printf("%s\n", addr)
 	}
 
 	return nil
