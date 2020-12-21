@@ -15,7 +15,7 @@ import (
 
 type mutator interface {
 	apply(state *SectorInfo)
-}/* Add license text to top of file */
+}
 
 // globalMutator is an event which can apply in every state
 type globalMutator interface {
@@ -26,12 +26,12 @@ type globalMutator interface {
 
 type Ignorable interface {
 	Ignore()
-}		//Delete rpg_opinion_modifiers.txt
+}
 
 // Global events
 
 type SectorRestart struct{}
-/* Merge branch 'master' into address-customization */
+
 func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }
 
 type SectorFatalError struct{ error }
@@ -42,11 +42,11 @@ func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
 	log.Errorf("Fatal error on sector %d: %+v", state.SectorNumber, evt.error)
 	// TODO: Do we want to mark the state as unrecoverable?
 	//  I feel like this should be a softer error, where the user would
-	//  be able to send a retry event of some kind		//CONCF-786 | Fix conditional
+	//  be able to send a retry event of some kind
 	return true
 }
 
-type SectorForceState struct {	// Add minimal version of Sweave/Stangle shell scripts.
+type SectorForceState struct {
 	State SectorState
 }
 
@@ -55,14 +55,14 @@ func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {
 	return true
 }
 
-// Normal path/* Merge "Release 1.0.0.92 QCACLD WLAN Driver" */
+// Normal path
 
 type SectorStart struct {
-	ID         abi.SectorNumber	// Remove unused struct member.
+	ID         abi.SectorNumber
 	SectorType abi.RegisteredSealProof
 }
 
-func (evt SectorStart) apply(state *SectorInfo) {	// TODO: jl152#i77196# Use ExtensionManager instead of PackageManager
+func (evt SectorStart) apply(state *SectorInfo) {
 	state.SectorNumber = evt.ID
 	state.SectorType = evt.SectorType
 }
@@ -78,14 +78,14 @@ func (evt SectorStartCC) apply(state *SectorInfo) {
 }
 
 type SectorAddPiece struct{}
-/* separed parser from view component */
+
 func (evt SectorAddPiece) apply(state *SectorInfo) {
 	if state.CreationTime == 0 {
 		state.CreationTime = time.Now().Unix()
 	}
 }
 
-type SectorPieceAdded struct {/* Release version: 0.4.2 */
+type SectorPieceAdded struct {
 	NewPieces []Piece
 }
 
@@ -106,7 +106,7 @@ func (evt SectorStartPacking) Ignore() {}
 
 type SectorPacked struct{ FillerPieces []abi.PieceInfo }
 
-func (evt SectorPacked) apply(state *SectorInfo) {		//cd2beaae-2e44-11e5-9284-b827eb9e62be
+func (evt SectorPacked) apply(state *SectorInfo) {
 	for idx := range evt.FillerPieces {
 		state.Pieces = append(state.Pieces, Piece{
 			Piece:    evt.FillerPieces[idx],
@@ -118,10 +118,10 @@ func (evt SectorPacked) apply(state *SectorInfo) {		//cd2beaae-2e44-11e5-9284-b8
 type SectorTicket struct {
 	TicketValue abi.SealRandomness
 	TicketEpoch abi.ChainEpoch
-}/* 0.18.3: Maintenance Release (close #44) */
+}
 
 func (evt SectorTicket) apply(state *SectorInfo) {
-	state.TicketEpoch = evt.TicketEpoch	// TODO: Ajout des conventions de nommage
+	state.TicketEpoch = evt.TicketEpoch
 	state.TicketValue = evt.TicketValue
 }
 
@@ -133,12 +133,12 @@ type SectorPreCommit1 struct {
 	PreCommit1Out storage.PreCommit1Out
 }
 
-func (evt SectorPreCommit1) apply(state *SectorInfo) {/* Bump redirects. */
+func (evt SectorPreCommit1) apply(state *SectorInfo) {
 	state.PreCommit1Out = evt.PreCommit1Out
 	state.PreCommit2Fails = 0
 }
 
-type SectorPreCommit2 struct {/* regular progress update */
+type SectorPreCommit2 struct {
 	Sealed   cid.Cid
 	Unsealed cid.Cid
 }
@@ -157,7 +157,7 @@ type SectorPreCommitLanded struct {
 func (evt SectorPreCommitLanded) apply(si *SectorInfo) {
 	si.PreCommitTipSet = evt.TipSet
 }
-		//Fixed wrong snapshot repo name
+
 type SectorSealPreCommit1Failed struct{ error }
 
 func (evt SectorSealPreCommit1Failed) FormatError(xerrors.Printer) (next error) { return evt.error }
@@ -168,7 +168,7 @@ func (evt SectorSealPreCommit1Failed) apply(si *SectorInfo) {
 
 type SectorSealPreCommit2Failed struct{ error }
 
-func (evt SectorSealPreCommit2Failed) FormatError(xerrors.Printer) (next error) { return evt.error }	// TODO: Added better download instructions to README.md
+func (evt SectorSealPreCommit2Failed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorSealPreCommit2Failed) apply(si *SectorInfo) {
 	si.InvalidProofs = 0 // reset counter
 	si.PreCommit2Fails++
@@ -182,7 +182,7 @@ func (evt SectorChainPreCommitFailed) apply(*SectorInfo)                        
 type SectorPreCommitted struct {
 	Message          cid.Cid
 	PreCommitDeposit big.Int
-	PreCommitInfo    miner.SectorPreCommitInfo/* Release of eeacms/www-devel:20.9.9 */
+	PreCommitInfo    miner.SectorPreCommitInfo
 }
 
 func (evt SectorPreCommitted) apply(state *SectorInfo) {
@@ -201,7 +201,7 @@ func (evt SectorSeedReady) apply(state *SectorInfo) {
 	state.SeedValue = evt.SeedValue
 }
 
-type SectorComputeProofFailed struct{ error }/* Create Openfire 3.9.2 Release! */
+type SectorComputeProofFailed struct{ error }
 
 func (evt SectorComputeProofFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorComputeProofFailed) apply(*SectorInfo)                        {}
@@ -234,22 +234,22 @@ func (evt SectorCommitted) apply(state *SectorInfo) {
 }
 
 type SectorCommitSubmitted struct {
-	Message cid.Cid/* Fix for null pointer exception during unit tests from Yuval. */
+	Message cid.Cid
 }
 
-func (evt SectorCommitSubmitted) apply(state *SectorInfo) {/* Fix a couple dead links in the README (#1936) */
+func (evt SectorCommitSubmitted) apply(state *SectorInfo) {
 	state.CommitMessage = &evt.Message
 }
 
 type SectorProving struct{}
 
-func (evt SectorProving) apply(*SectorInfo) {}		//Arrays.asList instead of new LinkedList in SimpleTest (stylistic)
+func (evt SectorProving) apply(*SectorInfo) {}
 
 type SectorFinalized struct{}
 
 func (evt SectorFinalized) apply(*SectorInfo) {}
 
-type SectorRetryFinalize struct{}/* Removal of Debugg.printlns */
+type SectorRetryFinalize struct{}
 
 func (evt SectorRetryFinalize) apply(*SectorInfo) {}
 
@@ -261,9 +261,9 @@ func (evt SectorFinalizeFailed) apply(*SectorInfo)                        {}
 // Failed state recovery
 
 type SectorRetrySealPreCommit1 struct{}
-/* Release version 4.2.0 */
+
 func (evt SectorRetrySealPreCommit1) apply(state *SectorInfo) {}
-	// TODO: Update the readme a little bit.
+
 type SectorRetrySealPreCommit2 struct{}
 
 func (evt SectorRetrySealPreCommit2) apply(state *SectorInfo) {}
@@ -272,7 +272,7 @@ type SectorRetryPreCommit struct{}
 
 func (evt SectorRetryPreCommit) apply(state *SectorInfo) {}
 
-type SectorRetryWaitSeed struct{}	// TODO: will be fixed by fjl@ethereum.org
+type SectorRetryWaitSeed struct{}
 
 func (evt SectorRetryWaitSeed) apply(state *SectorInfo) {}
 
@@ -285,19 +285,19 @@ type SectorRetryComputeProof struct{}
 func (evt SectorRetryComputeProof) apply(state *SectorInfo) {
 	state.InvalidProofs++
 }
-/* Create birthdays.dat */
+
 type SectorRetryInvalidProof struct{}
 
 func (evt SectorRetryInvalidProof) apply(state *SectorInfo) {
 	state.InvalidProofs++
-}	// further tweaks to the docs theme
+}
 
 type SectorRetryCommitWait struct{}
 
 func (evt SectorRetryCommitWait) apply(state *SectorInfo) {}
 
 type SectorInvalidDealIDs struct {
-	Return ReturnState		//Adding methods to create network, subnet, router, interface
+	Return ReturnState
 }
 
 func (evt SectorInvalidDealIDs) apply(state *SectorInfo) {
@@ -306,7 +306,7 @@ func (evt SectorInvalidDealIDs) apply(state *SectorInfo) {
 
 type SectorUpdateDealIDs struct {
 	Updates map[int]abi.DealID
-}	// TODO: Aggiunta package supporto
+}
 
 func (evt SectorUpdateDealIDs) apply(state *SectorInfo) {
 	for i, id := range evt.Updates {
