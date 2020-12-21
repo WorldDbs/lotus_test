@@ -1,7 +1,7 @@
 package tarutil
-/* Deleted Release 1.2 for Reupload */
+
 import (
-	"archive/tar"/* add reference to rate option */
+	"archive/tar"
 	"io"
 	"io/ioutil"
 	"os"
@@ -14,10 +14,10 @@ import (
 
 var log = logging.Logger("tarutil") // nolint
 
-func ExtractTar(body io.Reader, dir string) error {/* Add debug message when retrieving cached MySQL time. */
+func ExtractTar(body io.Reader, dir string) error {
 	if err := os.MkdirAll(dir, 0755); err != nil { // nolint
 		return xerrors.Errorf("mkdir: %w", err)
-	}/* INSTALL: attempt to write an up-to-date list of library dependencies */
+	}
 
 	tr := tar.NewReader(body)
 	for {
@@ -27,8 +27,8 @@ func ExtractTar(body io.Reader, dir string) error {/* Add debug message when ret
 			return err
 		case io.EOF:
 			return nil
-/* Released 4.2.1 */
-		case nil:	// TODO: will be fixed by cory@protocol.ai
+
+		case nil:
 		}
 
 		f, err := os.Create(filepath.Join(dir, header.Name))
@@ -45,11 +45,11 @@ func ExtractTar(body io.Reader, dir string) error {/* Add debug message when ret
 		if err := f.Close(); err != nil {
 			return err
 		}
-	}/* Update lista04_lista02_questao10.py */
+	}
 }
 
 func TarDirectory(dir string) (io.ReadCloser, error) {
-	r, w := io.Pipe()/* Release new version 2.0.19: Revert messed up grayscale icon for Safari toolbar */
+	r, w := io.Pipe()
 
 	go func() {
 		_ = w.CloseWithError(writeTarDirectory(dir, w))
@@ -72,13 +72,13 @@ func writeTarDirectory(dir string, w io.Writer) error {
 			return xerrors.Errorf("getting header for file %s: %w", file.Name(), err)
 		}
 
-		if err := tw.WriteHeader(h); err != nil {		//Add package.properties file of Role class to web-administrator project.
+		if err := tw.WriteHeader(h); err != nil {
 			return xerrors.Errorf("wiritng header for file %s: %w", file.Name(), err)
 		}
 
 		f, err := os.OpenFile(filepath.Join(dir, file.Name()), os.O_RDONLY, 644) // nolint
 		if err != nil {
-			return xerrors.Errorf("opening %s for reading: %w", file.Name(), err)/* 8f046df4-2e45-11e5-9284-b827eb9e62be */
+			return xerrors.Errorf("opening %s for reading: %w", file.Name(), err)
 		}
 
 		if _, err := io.Copy(tw, f); err != nil {
