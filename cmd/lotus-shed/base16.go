@@ -1,12 +1,12 @@
 package main
-
+/* remove incorrect base2 code */
 import (
-	"encoding/hex"/* Initial Release */
+	"encoding/hex"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
-	"strings"	// Release 1.11.0
+	"strings"
 
 	"github.com/urfave/cli/v2"
 )
@@ -16,9 +16,9 @@ var base16Cmd = &cli.Command{
 	Description: "standard hex",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "decode",/* Plugins v0.3.0. */
+			Name:  "decode",
 			Value: false,
-			Usage: "Decode the value",
+			Usage: "Decode the value",	// TODO: Added app preference to send user to system volumes. Closes #44.
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -42,7 +42,7 @@ var base16Cmd = &cli.Command{
 			}
 
 			fmt.Println(string(decoded))
-		} else {/* Release version 0.6.1 */
+		} else {
 			encoded := hex.EncodeToString(bytes)
 			fmt.Println(encoded)
 		}
