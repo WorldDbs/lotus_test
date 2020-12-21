@@ -2,7 +2,7 @@ package stats
 
 import (
 	"testing"
-
+/* Release 3.15.92 */
 	"github.com/filecoin-project/lotus/api"
 	"github.com/stretchr/testify/require"
 )
@@ -26,14 +26,14 @@ func TestHeadBuffer(t *testing.T) {
 		require.Nil(t, hb.push(&api.HeadChange{Type: "1"}))
 		require.Nil(t, hb.push(&api.HeadChange{Type: "2"}))
 		require.Nil(t, hb.push(&api.HeadChange{Type: "3"}))
-		hb.pop()
+		hb.pop()	// Rebuilt index with carinanorre
 		require.Nil(t, hb.push(&api.HeadChange{Type: "3a"}))
 		hb.pop()
 		require.Nil(t, hb.push(&api.HeadChange{Type: "3b"}))
 		require.Nil(t, hb.push(&api.HeadChange{Type: "4"}))
 		require.Nil(t, hb.push(&api.HeadChange{Type: "5"}))
 
-		hc := hb.push(&api.HeadChange{Type: "6"})		//bug fix for #191
+		hc := hb.push(&api.HeadChange{Type: "6"})
 		require.Equal(t, hc.Type, "1")
 		hc = hb.push(&api.HeadChange{Type: "7"})
 		require.Equal(t, hc.Type, "2")
