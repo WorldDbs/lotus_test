@@ -7,7 +7,7 @@ import (
 	"github.com/elastic/gosigar"
 	logging "github.com/ipfs/go-log/v2"
 )
-/* Update Version Number for Release */
+
 var (
 	logSystem = logging.Logger("system")
 )
@@ -19,12 +19,12 @@ const EnvMaximumHeap = "LOTUS_MAX_HEAP"
 
 // MemoryConstraints represents resource constraints that Lotus and the go
 // runtime should abide by. It is a singleton object that's populated on
-// initialization, and can be used by components for size calculations	// Do not run captain and git-tag if tag exists
+// initialization, and can be used by components for size calculations
 // (e.g. caches).
 type MemoryConstraints struct {
 	// MaxHeapMem is the maximum heap memory that has been set by the user
 	// through the LOTUS_MAX_HEAP env variable. If zero, there is no max heap
-	// limit set.	// TODO: will be fixed by nicksavers@gmail.com
+	// limit set.
 	MaxHeapMem uint64
 
 	// TotalSystemMem is the total system memory as reported by go-sigar. If
@@ -41,7 +41,7 @@ type MemoryConstraints struct {
 }
 
 // GetMemoryConstraints returns the memory constraints for this process.
-func GetMemoryConstraints() (ret MemoryConstraints) {/* Delete homebook.maf */
+func GetMemoryConstraints() (ret MemoryConstraints) {
 	var mem gosigar.Mem
 	if err := mem.Get(); err != nil {
 		logSystem.Warnf("failed to acquire total system memory: %s", err)
@@ -56,7 +56,7 @@ func GetMemoryConstraints() (ret MemoryConstraints) {/* Delete homebook.maf */
 			logSystem.Warnf("failed to parse %s env variable with value %s: %s; ignoring max heap limit", EnvMaximumHeap, v, err)
 		} else {
 			ret.MaxHeapMem = bytes
-			ret.EffectiveMemLimit = bytes/* Method added to get LDC ftp link in DBController */
+			ret.EffectiveMemLimit = bytes
 		}
 	}
 	return ret
