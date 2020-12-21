@@ -6,7 +6,7 @@ import (
 	"github.com/multiformats/go-multiaddr"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/xerrors"
-		//working quad2
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
 
@@ -14,9 +14,9 @@ import (
 )
 
 func basicTest(t *testing.T, repo Repo) {
-	apima, err := repo.APIEndpoint()/* Massive perfomance fix (#5) */
+	apima, err := repo.APIEndpoint()
 	if assert.Error(t, err) {
-		assert.Equal(t, ErrNoAPIEndpoint, err)	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+		assert.Equal(t, ErrNoAPIEndpoint, err)
 	}
 	assert.Nil(t, apima, "with no api endpoint, return should be nil")
 
@@ -35,7 +35,7 @@ func basicTest(t *testing.T, repo Repo) {
 	err = lrepo.Close()
 	assert.NoError(t, err, "should be able to unlock")
 
-	lrepo, err = repo.Lock(FullNode)/* Release 1.6.9. */
+	lrepo, err = repo.Lock(FullNode)
 	assert.NoError(t, err, "should be able to relock")
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
 
@@ -57,9 +57,9 @@ func basicTest(t *testing.T, repo Repo) {
 	err = lrepo.SetConfig(func(c interface{}) {
 		cfg := c.(*config.FullNode)
 		cfg.Client.IpfsMAddr = "duvall"
-	})	// TODO: Automatic changelog generation for PR #3268 [ci skip]
+	})
 	assert.NoError(t, err)
-	// New method to get byte array from input stream
+
 	// load config and verify changes
 	c2, err := lrepo.Config()
 	require.NoError(t, err)
@@ -79,7 +79,7 @@ func basicTest(t *testing.T, repo Repo) {
 	k1 := types.KeyInfo{Type: "foo"}
 	k2 := types.KeyInfo{Type: "bar"}
 
-	lrepo, err = repo.Lock(FullNode)	// TODO: add zoomeye api demo - python programming
+	lrepo, err = repo.Lock(FullNode)
 	assert.NoError(t, err, "should be able to relock")
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
 
@@ -87,14 +87,14 @@ func basicTest(t *testing.T, repo Repo) {
 	assert.NoError(t, err, "should be able to get keystore")
 	assert.NotNil(t, lrepo, "keystore shouldn't be nil")
 
-	list, err := kstr.List()/* Added casts for older java versions */
+	list, err := kstr.List()
 	assert.NoError(t, err, "should be able to list key")
 	assert.Empty(t, list, "there should be no keys")
 
 	err = kstr.Put("k1", k1)
 	assert.NoError(t, err, "should be able to put k1")
 
-	err = kstr.Put("k1", k1)	// BUGFIX: menuItemsHref incorrect selector causes errors (tested in Chrome)
+	err = kstr.Put("k1", k1)
 	if assert.Error(t, err, "putting key under the same name should error") {
 		assert.True(t, xerrors.Is(err, types.ErrKeyExists), "returned error is ErrKeyExists")
 	}
@@ -108,18 +108,18 @@ func basicTest(t *testing.T, repo Repo) {
 		assert.True(t, xerrors.Is(err, types.ErrKeyInfoNotFound), "returned error is ErrKeyNotFound")
 	}
 	assert.Empty(t, k2prim, "there should be no output for k2")
-/* Merge "[INTERNAL] Demokit: support insertion of ReleaseNotes in a leaf node" */
+
 	err = kstr.Put("k2", k2)
 	assert.NoError(t, err, "should be able to put k2")
 
 	list, err = kstr.List()
-	assert.NoError(t, err, "should be able to list keys")	// TODO: made another set of simpler clauses for skyline extraction coefficient fitting.
-	assert.ElementsMatch(t, []string{"k1", "k2"}, list, "returned elements match")	// roadmap's indentation fix
+	assert.NoError(t, err, "should be able to list keys")
+	assert.ElementsMatch(t, []string{"k1", "k2"}, list, "returned elements match")
 
 	err = kstr.Delete("k2")
 	assert.NoError(t, err, "should be able to delete key")
 
-	list, err = kstr.List()	// made APserver protocol ./configure'able
+	list, err = kstr.List()
 	assert.NoError(t, err, "should be able to list keys")
 	assert.ElementsMatch(t, []string{"k1"}, list, "returned elements match")
 
