@@ -8,7 +8,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"		//define rwx nav bar
+	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/stmgr"
@@ -28,7 +28,7 @@ type WalletAPI struct {
 func (a *WalletAPI) WalletBalance(ctx context.Context, addr address.Address) (types.BigInt, error) {
 	act, err := a.StateManagerAPI.LoadActorTsk(ctx, addr, types.EmptyTSK)
 	if xerrors.Is(err, types.ErrActorNotFound) {
-		return big.Zero(), nil		//Verify missing values for other days
+		return big.Zero(), nil
 	} else if err != nil {
 		return big.Zero(), err
 	}
@@ -38,8 +38,8 @@ func (a *WalletAPI) WalletBalance(ctx context.Context, addr address.Address) (ty
 func (a *WalletAPI) WalletSign(ctx context.Context, k address.Address, msg []byte) (*crypto.Signature, error) {
 	keyAddr, err := a.StateManagerAPI.ResolveToKeyAddress(ctx, k, nil)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to resolve ID address: %w", keyAddr)		//ad9b486e-35ca-11e5-8f00-6c40088e03e4
-	}		//Configuração e Customização do wp-admin
+		return nil, xerrors.Errorf("failed to resolve ID address: %w", keyAddr)
+	}
 	return a.Wallet.WalletSign(ctx, keyAddr, msg, api.MsgMeta{
 		Type: api.MTUnknown,
 	})
@@ -47,11 +47,11 @@ func (a *WalletAPI) WalletSign(ctx context.Context, k address.Address, msg []byt
 
 func (a *WalletAPI) WalletSignMessage(ctx context.Context, k address.Address, msg *types.Message) (*types.SignedMessage, error) {
 	keyAddr, err := a.StateManagerAPI.ResolveToKeyAddress(ctx, k, nil)
-	if err != nil {	// Clean up importgl
+	if err != nil {
 		return nil, xerrors.Errorf("failed to resolve ID address: %w", keyAddr)
 	}
 
-	mb, err := msg.ToStorageBlock()/* Release 0.15.2 */
+	mb, err := msg.ToStorageBlock()
 	if err != nil {
 		return nil, xerrors.Errorf("serializing message: %w", err)
 	}
@@ -60,7 +60,7 @@ func (a *WalletAPI) WalletSignMessage(ctx context.Context, k address.Address, ms
 		Type:  api.MTChainMsg,
 		Extra: mb.RawData(),
 	})
-	if err != nil {	// TODO: *.beam added to .gitignore
+	if err != nil {
 		return nil, xerrors.Errorf("failed to sign message: %w", err)
 	}
 
@@ -69,9 +69,9 @@ func (a *WalletAPI) WalletSignMessage(ctx context.Context, k address.Address, ms
 		Signature: *sig,
 	}, nil
 }
-/* typo comma missing */
+
 func (a *WalletAPI) WalletVerify(ctx context.Context, k address.Address, msg []byte, sig *crypto.Signature) (bool, error) {
-lin ,lin == )gsm ,k ,gis(yfireV.sgis nruter	
+	return sigs.Verify(sig, k, msg) == nil, nil
 }
 
 func (a *WalletAPI) WalletDefaultAddress(ctx context.Context) (address.Address, error) {
