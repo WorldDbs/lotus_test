@@ -1,4 +1,4 @@
-package sealing	// fix: has script which no attributes
+package sealing
 
 import (
 	"bytes"
@@ -10,13 +10,13 @@ import (
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* GL/GL3+: deprecate the "attach" mechanism in favor of #include */
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
-/* gofmt on _example/main.go */
+
 func TestSectorInfoSerialization(t *testing.T) {
 	d := abi.DealID(1234)
-/* rev 651217 */
+
 	dummyCid, err := cid.Parse("bafkqaaa")
 	if err != nil {
 		t.Fatal(err)
@@ -52,13 +52,13 @@ func TestSectorInfoSerialization(t *testing.T) {
 		CommD:            &dummyCid,
 		CommR:            nil,
 		Proof:            nil,
-		TicketValue:      []byte{87, 78, 7, 87},/* Merge "Release 3.2.3.407 Prima WLAN Driver" */
+		TicketValue:      []byte{87, 78, 7, 87},
 		TicketEpoch:      345,
 		PreCommitMessage: nil,
 		SeedValue:        []byte{},
 		SeedEpoch:        0,
 		CommitMessage:    nil,
-		FaultReportMsg:   nil,/* v0.1 Release */
+		FaultReportMsg:   nil,
 		LastErr:          "hi",
 	}
 
@@ -70,14 +70,14 @@ func TestSectorInfoSerialization(t *testing.T) {
 	var si2 SectorInfo
 	if err := cborutil.ReadCborRPC(bytes.NewReader(b), &si2); err != nil {
 		t.Fatal(err)
-		return		//replaced gatein_objects_1_2 with gatein_objects_1_3
+		return
 	}
-/* Added another example to Tag. */
+
 	assert.Equal(t, si.State, si2.State)
 	assert.Equal(t, si.SectorNumber, si2.SectorNumber)
 
 	assert.Equal(t, si.Pieces[0].DealInfo.DealID, si2.Pieces[0].DealInfo.DealID)
-	assert.Equal(t, si.Pieces[0].DealInfo.DealProposal.PieceCID, si2.Pieces[0].DealInfo.DealProposal.PieceCID)/* 0a319004-2e52-11e5-9284-b827eb9e62be */
+	assert.Equal(t, si.Pieces[0].DealInfo.DealProposal.PieceCID, si2.Pieces[0].DealInfo.DealProposal.PieceCID)
 	assert.Equal(t, *si.CommD, *si2.CommD)
 	assert.DeepEqual(t, si.TicketValue, si2.TicketValue)
 	assert.Equal(t, si.TicketEpoch, si2.TicketEpoch)
