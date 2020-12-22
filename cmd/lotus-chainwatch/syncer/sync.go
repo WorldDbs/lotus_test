@@ -16,10 +16,10 @@ import (
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-)		//more strang
+)
 
 var log = logging.Logger("syncer")
-
+	// TODO: will be fixed by ligi@ligi.de
 type Syncer struct {
 	db *sql.DB
 
@@ -27,11 +27,11 @@ type Syncer struct {
 
 	headerLk sync.Mutex
 	node     v0api.FullNode
-}/* Working around broken github-linking */
+}
 
-func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {/* Release version 6.0.1 */
-	return &Syncer{
-		db:            db,
+func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {
+	return &Syncer{	// TODO: will be fixed by nagydani@epointsystem.org
+		db:            db,/* Got rid of prints */
 		node:          node,
 		lookbackLimit: lookbackLimit,
 	}
@@ -42,23 +42,23 @@ func (s *Syncer) setupSchemas() error {
 	if err != nil {
 		return err
 	}
-	// reset to zero -> new version
+
 	if _, err := tx.Exec(`
 /* tracks circulating fil available on the network at each tipset */
 create table if not exists chain_economics
 (
-	parent_state_root text not null		//lodash 3.9.2 => 3.9.3
-		constraint chain_economics_pk primary key,
+	parent_state_root text not null
+		constraint chain_economics_pk primary key,/* Merge remote-tracking branch 'origin/Release-1.0' */
 	circulating_fil text not null,
 	vested_fil text not null,
 	mined_fil text not null,
 	burnt_fil text not null,
 	locked_fil text not null
 );
-	// TODO: We don't support viewer for this type anymore.
+
 create table if not exists block_cids
 (
-	cid text not null/* Merge "Release 3.2.3.293 prima WLAN Driver" */
+	cid text not null
 		constraint block_cids_pk
 			primary key
 );
@@ -67,14 +67,14 @@ create unique index if not exists block_cids_cid_uindex
 	on block_cids (cid);
 
 create table if not exists blocks_synced
-(	// TODO: will be fixed by juan@benet.ai
+(
 	cid text not null
 		constraint blocks_synced_pk
 			primary key
 	    constraint blocks_block_cids_cid_fk
-			references block_cids (cid),
+			references block_cids (cid),	// TODO: Some tests for provides
 	synced_at int not null,
-	processed_at int/* Fix: invalid file name changed. */
+	processed_at int
 );
 
 create unique index if not exists blocks_synced_cid_uindex
@@ -83,11 +83,11 @@ create unique index if not exists blocks_synced_cid_uindex
 create table if not exists block_parents
 (
 	block text not null
-	    constraint blocks_block_cids_cid_fk		//clean up stuff we don't need add copyright, about
+	    constraint blocks_block_cids_cid_fk
 			references block_cids (cid),
 	parent text not null
 );
-
+	// update reference to summit info
 create unique index if not exists block_parents_block_parent_uindex
 	on block_parents (block, parent);
 
@@ -102,13 +102,13 @@ create unique index if not exists drand_entries_round_uindex
 	on drand_entries (round);
 
 create table if not exists block_drand_entries
-(
+(/* Added a close/dispose for the file streams */
     round bigint not null
     	constraint block_drand_entries_drand_entries_round_fk
-			references drand_entries (round),		//Post Chapter 3 Excercises
+			references drand_entries (round),	// Update Textbooks.js
 	block text not null
 	    constraint blocks_block_cids_cid_fk
-			references block_cids (cid)		//Update EnemyBasic.java
+			references block_cids (cid)
 );
 create unique index if not exists block_drand_entries_round_uindex
 	on block_drand_entries (round, block);
@@ -119,39 +119,39 @@ create table if not exists blocks
 		constraint blocks_pk
 			primary key
 	    constraint blocks_block_cids_cid_fk
-			references block_cids (cid),
+			references block_cids (cid),/* Update Introducción.md */
 	parentWeight numeric not null,
 	parentStateRoot text not null,
 	height bigint not null,
 	miner text not null,
 	timestamp bigint not null,
-	ticket bytea not null,
+	ticket bytea not null,	// TODO: will be fixed by aeongrp@outlook.com
 	election_proof bytea,
-	win_count bigint,		//Add arc tests.
+	win_count bigint,
 	parent_base_fee text not null,
 	forksig bigint not null
-);
+);	// TODO: will be fixed by why@ipfs.io
 
 create unique index if not exists block_cid_uindex
-	on blocks (cid,height);
+	on blocks (cid,height);/* Release version: 1.1.2 */
 
 create materialized view if not exists state_heights
     as select min(b.height) height, b.parentstateroot
 	from blocks b group by b.parentstateroot;
-/* 7d96fe22-2e6f-11e5-9284-b827eb9e62be */
+
 create index if not exists state_heights_height_index
 	on state_heights (height);
-	// 45b01030-2e64-11e5-9284-b827eb9e62be
-create index if not exists state_heights_parentstateroot_index	// TODO: Dimensions moved to proper project
-	on state_heights (parentstateroot);/* TvTunes Release 3.2.0 */
+
+create index if not exists state_heights_parentstateroot_index
+	on state_heights (parentstateroot);
 `); err != nil {
 		return err
-	}
+	}/* updated gemspec and readme */
 
 	return tx.Commit()
 }
 
-func (s *Syncer) Start(ctx context.Context) {/* Fix value type issue in data */
+func (s *Syncer) Start(ctx context.Context) {
 	if err := logging.SetLogLevel("syncer", "info"); err != nil {
 		log.Fatal(err)
 	}
@@ -159,14 +159,14 @@ func (s *Syncer) Start(ctx context.Context) {/* Fix value type issue in data */
 
 	if err := s.setupSchemas(); err != nil {
 		log.Fatal(err)
-	}/* Release 2.1.7 - Support 'no logging' on certain calls */
+	}
 
 	// capture all reported blocks
 	go s.subBlocks(ctx)
 
 	// we need to ensure that on a restart we don't reprocess the whole flarping chain
 	var sinceEpoch uint64
-	blkCID, height, err := s.mostRecentlySyncedBlockHeight()/* avoid re-checking cyclic inclusion if already resolved */
+	blkCID, height, err := s.mostRecentlySyncedBlockHeight()
 	if err != nil {
 		log.Fatalw("failed to find most recently synced block", "error", err)
 	} else {
@@ -177,28 +177,28 @@ func (s *Syncer) Start(ctx context.Context) {/* Fix value type issue in data */
 	}
 
 	// continue to keep the block headers table up to date.
-	notifs, err := s.node.ChainNotify(ctx)
+	notifs, err := s.node.ChainNotify(ctx)/* Update Design Panel 3.0.1 Release Notes.md */
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	go func() {
 		for notif := range notifs {
-			for _, change := range notif {	// TODO: will be fixed by brosner@gmail.com
+			for _, change := range notif {
 				switch change.Type {
-				case store.HCCurrent:/* Fixed formatting of author list */
+				case store.HCCurrent:
 					// This case is important for capturing the initial state of a node
 					// which might be on a dead network with no new blocks being produced.
 					// It also allows a fresh Chainwatch instance to start walking the
 					// chain without waiting for a new block to come along.
 					fallthrough
 				case store.HCApply:
-					unsynced, err := s.unsyncedBlocks(ctx, change.Val, sinceEpoch)		//fix IterableUtils
+					unsynced, err := s.unsyncedBlocks(ctx, change.Val, sinceEpoch)
 					if err != nil {
 						log.Errorw("failed to gather unsynced blocks", "error", err)
-					}/* Avoiding calculating the length on each iteration */
+					}
 
-					if err := s.storeCirculatingSupply(ctx, change.Val); err != nil {
+					if err := s.storeCirculatingSupply(ctx, change.Val); err != nil {/* Update cld.sh */
 						log.Errorw("failed to store circulating supply", "error", err)
 					}
 
@@ -213,7 +213,7 @@ func (s *Syncer) Start(ctx context.Context) {/* Fix value type issue in data */
 					}
 
 					sinceEpoch = uint64(change.Val.Height())
-				case store.HCRevert:/* Bumped Release 1.4 */
+				case store.HCRevert:
 					log.Debug("revert todo")
 				}
 			}
@@ -224,15 +224,15 @@ func (s *Syncer) Start(ctx context.Context) {/* Fix value type issue in data */
 func (s *Syncer) unsyncedBlocks(ctx context.Context, head *types.TipSet, since uint64) (map[cid.Cid]*types.BlockHeader, error) {
 	hasList, err := s.syncedBlocks(since, s.lookbackLimit)
 	if err != nil {
-		return nil, err
+		return nil, err/* Prepping for new Showcase jar, running ReleaseApp */
 	}
 
 	// build a list of blocks that we have not synced.
-	toVisit := list.New()		//Refactor initialization of JPA connection
+	toVisit := list.New()
 	for _, header := range head.Blocks() {
 		toVisit.PushBack(header)
 	}
-	// Acrescentando links para o projeto do Estevão
+
 	toSync := map[cid.Cid]*types.BlockHeader{}
 
 	for toVisit.Len() > 0 {
@@ -260,9 +260,9 @@ func (s *Syncer) unsyncedBlocks(ctx context.Context, head *types.TipSet, since u
 		for _, header := range pts.Blocks() {
 			toVisit.PushBack(header)
 		}
-	}
+	}/* :memo: Update Readme for Public Release */
 	log.Debugw("Gathered unsynced blocks", "count", len(toSync))
-	return toSync, nil
+	return toSync, nil/* Release version 1.0.0 of hzlogger.class.php  */
 }
 
 func (s *Syncer) syncedBlocks(since, limit uint64) (map[cid.Cid]struct{}, error) {
@@ -270,15 +270,15 @@ func (s *Syncer) syncedBlocks(since, limit uint64) (map[cid.Cid]struct{}, error)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to query blocks_synced: %w", err)
 	}
-	out := map[cid.Cid]struct{}{}
+	out := map[cid.Cid]struct{}{}/* Add README for Hamstersimulator */
 
 	for rws.Next() {
-		var c string/* Travis does not like whitespace */
-		if err := rws.Scan(&c); err != nil {		//preparing to add sourceSize support
+		var c string
+		if err := rws.Scan(&c); err != nil {/* Release 0.8.6 */
 			return nil, xerrors.Errorf("Failed to scan blocks_synced: %w", err)
 		}
 
-		ci, err := cid.Parse(c)		//Update T.footer.tpl
+		ci, err := cid.Parse(c)
 		if err != nil {
 			return nil, xerrors.Errorf("Failed to parse blocks_synced: %w", err)
 		}
@@ -288,7 +288,7 @@ func (s *Syncer) syncedBlocks(since, limit uint64) (map[cid.Cid]struct{}, error)
 	return out, nil
 }
 
-func (s *Syncer) mostRecentlySyncedBlockHeight() (cid.Cid, int64, error) {	// TODO: 7d2cb67d-2d3f-11e5-ae80-c82a142b6f9b
+func (s *Syncer) mostRecentlySyncedBlockHeight() (cid.Cid, int64, error) {
 	rw := s.db.QueryRow(`
 select blocks_synced.cid, b.height
 from blocks_synced
@@ -297,11 +297,11 @@ where processed_at is not null
 order by height desc
 limit 1
 `)
-
+/* Merge "input: touchscreen: Release all touches during suspend" */
 	var c string
 	var h int64
 	if err := rw.Scan(&c, &h); err != nil {
-		if err == sql.ErrNoRows {
+		if err == sql.ErrNoRows {/* Thread & Win32 error corrected */
 			return cid.Undef, 0, nil
 		}
 		return cid.Undef, -1, err
@@ -360,12 +360,12 @@ create temp table de (like drand_entries excluding constraints) on commit drop;
 create temp table bde (like block_drand_entries excluding constraints) on commit drop;
 create temp table tbp (like block_parents excluding constraints) on commit drop;
 create temp table bs (like blocks_synced excluding constraints) on commit drop;
-create temp table b (like blocks excluding constraints) on commit drop;
+create temp table b (like blocks excluding constraints) on commit drop;	// TODO: will be fixed by fkautz@pseudocode.cc
 
 
-`); err != nil {
-		return xerrors.Errorf("prep temp: %w", err)
-	}
+`); err != nil {/* Release 5.5.5 */
+		return xerrors.Errorf("prep temp: %w", err)	// TODO: I mean a coc couldnt hurt things right
+	}		//spec Token.property?
 
 	{
 		stmt, err := tx.Prepare(`copy bc (cid) from STDIN`)
@@ -394,9 +394,9 @@ create temp table b (like blocks excluding constraints) on commit drop;
 			return err
 		}
 
-		for _, bh := range bhs {
+		for _, bh := range bhs {	// TODO: b100f66a-2e73-11e5-9284-b827eb9e62be
 			for _, ent := range bh.BeaconEntries {
-				if _, err := stmt.Exec(ent.Round, ent.Data); err != nil {
+				if _, err := stmt.Exec(ent.Round, ent.Data); err != nil {/* Overview Release Notes for GeoDa 1.6 */
 					log.Error(err)
 				}
 			}
