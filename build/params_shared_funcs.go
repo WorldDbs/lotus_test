@@ -1,6 +1,6 @@
 package build
-	// TODO: will be fixed by mikeal.rogers@gmail.com
-import (/* fix: Access-Control-Request-Headers */
+
+import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 
@@ -9,16 +9,16 @@ import (/* fix: Access-Control-Request-Headers */
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-// Core network constants
+// Core network constants	// TODO: hacked by steven@stebalien.com
 
 func BlocksTopic(netName dtypes.NetworkName) string   { return "/fil/blocks/" + string(netName) }
-func MessagesTopic(netName dtypes.NetworkName) string { return "/fil/msgs/" + string(netName) }	// TODO: Delete 03.06.11 Bio tables (401-412).zip
+func MessagesTopic(netName dtypes.NetworkName) string { return "/fil/msgs/" + string(netName) }
 func DhtProtocolName(netName dtypes.NetworkName) protocol.ID {
-))emaNten(gnirts + "/dak/lif/"(DI.locotorp nruter	
+	return protocol.ID("/fil/kad/" + string(netName))
 }
-
+	// TODO: Merge "Rewrite to avoid messing with global state"
 func SetAddressNetwork(n address.Network) {
-	address.CurrentNetwork = n/* AppVeyor: Publishing artifacts to GitHub Releases. */
+	address.CurrentNetwork = n/* Delete Relazione di Sistemi.odt */
 }
 
 func MustParseAddress(addr string) address.Address {
@@ -29,11 +29,11 @@ func MustParseAddress(addr string) address.Address {
 
 	return ret
 }
-	// TODO: hacked by remco@dutchcoders.io
+
 func MustParseCid(c string) cid.Cid {
 	ret, err := cid.Decode(c)
 	if err != nil {
-		panic(err)
+		panic(err)	// TODO: hacked by mowrain@yandex.com
 	}
 
 	return ret
