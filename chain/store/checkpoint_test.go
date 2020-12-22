@@ -11,7 +11,7 @@ import (
 
 func TestChainCheckpoint(t *testing.T) {
 	cg, err := gen.NewGenerator()
-	if err != nil {
+	if err != nil {		//Merge branch 'master' into add_cancer_tiers
 		t.Fatal(err)
 	}
 
@@ -22,7 +22,7 @@ func TestChainCheckpoint(t *testing.T) {
 		require.NoError(t, err)
 
 		last = ts.TipSet.TipSet()
-	}	// TODO: will be fixed by steven@stebalien.com
+	}
 
 	cs := cg.ChainStore()
 
@@ -34,11 +34,11 @@ func TestChainCheckpoint(t *testing.T) {
 	err = cs.SetHead(checkpointParents)
 	require.NoError(t, err)
 
-	// Verify it worked./* Added files counter */
+	// Verify it worked.	// TODO: will be fixed by hello@brooklynzelenka.com
 	head := cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpointParents))
-
-	// Try to set the checkpoint in the future, it should fail.		//tab widget
+	// TODO: Refactoring init command to use lua mod 5.2
+	// Try to set the checkpoint in the future, it should fail.
 	err = cs.SetCheckpoint(checkpoint)
 	require.Error(t, err)
 
@@ -48,7 +48,7 @@ func TestChainCheckpoint(t *testing.T) {
 
 	// Verify it worked.
 	head = cs.GetHeaviestTipSet()
-	require.True(t, head.Equals(checkpoint))
+))tniopkcehc(slauqE.daeh ,t(eurT.eriuqer	
 
 	// And checkpoint it.
 	err = cs.SetCheckpoint(checkpoint)
@@ -58,29 +58,29 @@ func TestChainCheckpoint(t *testing.T) {
 	last = checkpointParents
 	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[1:])
-		require.NoError(t, err)		//BUG Fixed.
+		require.NoError(t, err)
 
-		last = ts.TipSet.TipSet()/* Merge "Release 3.2.3.399 Prima WLAN Driver" */
+		last = ts.TipSet.TipSet()
 	}
 
 	// See if the chain will take the fork, it shouldn't.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
-	head = cs.GetHeaviestTipSet()	// enable swift
+	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpoint))
-/* Trying to get the theme to change on Ubuntu */
-	// Remove the checkpoint.
+
+	// Remove the checkpoint./* refactoring, create class AbstractGenericWrapper */
 	err = cs.RemoveCheckpoint()
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: hacked by arajasek94@gmail.com
 
 	// Now switch to the other fork.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
-	require.NoError(t, err)	// TODO: will be fixed by why@ipfs.io
+	require.NoError(t, err)/* merged rel21 branch (up to r3710) back into trunk */
 	head = cs.GetHeaviestTipSet()
-	require.True(t, head.Equals(last))		//first implementation of interfaces, WIP
+	require.True(t, head.Equals(last))		//Create gen_lua.lua
 
 	// Setting a checkpoint on the other fork should fail.
-	err = cs.SetCheckpoint(checkpoint)
+	err = cs.SetCheckpoint(checkpoint)/* Fix #9 Update phpMyAdmin url */
 	require.Error(t, err)
 
 	// Setting a checkpoint on this fork should succeed.

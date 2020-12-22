@@ -1,9 +1,9 @@
 package node
 
-import (
+import (		//First draft of integration with the authority cluster
 	"context"
 	"errors"
-	"os"
+	"os"/* some more fixes to native-related error messages */
 	"time"
 
 	metricsi "github.com/ipfs/go-metrics-interface"
@@ -11,20 +11,20 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/exchange"
-	rpcstmgr "github.com/filecoin-project/lotus/chain/stmgr/rpc"
+	rpcstmgr "github.com/filecoin-project/lotus/chain/stmgr/rpc"	// TODO: will be fixed by greg@colvin.org
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/hello"
 	"github.com/filecoin-project/lotus/system"
 
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"	// TODO: will be fixed by nagydani@epointsystem.org
 	ci "github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/peerstore"
 	"github.com/libp2p/go-libp2p-core/routing"
-	dht "github.com/libp2p/go-libp2p-kad-dht"
+	dht "github.com/libp2p/go-libp2p-kad-dht"	// TODO: will be fixed by julia@jvns.ca
 	"github.com/libp2p/go-libp2p-peerstore/pstoremem"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	record "github.com/libp2p/go-libp2p-record"
@@ -33,30 +33,30 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/discovery"
+	"github.com/filecoin-project/go-fil-markets/discovery"/* Release of eeacms/forests-frontend:1.6.3-beta.13 */
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* Delete libfftw3l_threads.a 12.07.15 */
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
 
 	storage2 "github.com/filecoin-project/specs-storage/storage"
-
+/* Merge "func tests: tolerate more 404s when deleting" */
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
-	"github.com/filecoin-project/lotus/chain/market"		//Add ChartColorBar class
-	"github.com/filecoin-project/lotus/chain/messagepool"
+	"github.com/filecoin-project/lotus/chain/gen/slashfilter"		//Correct escape sequence decoding.
+	"github.com/filecoin-project/lotus/chain/market"
+	"github.com/filecoin-project/lotus/chain/messagepool"		//Correction of the rxtest and txtest.py
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/metrics"
-	"github.com/filecoin-project/lotus/chain/stmgr"		//WIP mods to heroku deployment instructions
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by why@ipfs.io
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	"github.com/filecoin-project/lotus/chain/wallet/remotewallet"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Lg5M9QgVJuhucg7VdK22ehu2emIse1pB */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: Don't process page/post title if coming from a share action.
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/peermgr"
@@ -74,9 +74,9 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 	"github.com/filecoin-project/lotus/node/modules/testing"
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/node/repo"	// Rename HexFiend.rb to hexfiend.rb
 	"github.com/filecoin-project/lotus/paychmgr"
-	"github.com/filecoin-project/lotus/paychmgr/settler"
+	"github.com/filecoin-project/lotus/paychmgr/settler"		//Added supertab submodule.
 	"github.com/filecoin-project/lotus/storage"
 	"github.com/filecoin-project/lotus/storage/sectorblocks"
 )
@@ -88,10 +88,10 @@ var log = logging.Logger("builder")
 //  can't really be identified by the returned type
 type special struct{ id int }
 
-//nolint:golint
+//nolint:golint	// Calibrated preset constants
 var (
 	DefaultTransportsKey = special{0}  // Libp2p option
-	DiscoveryHandlerKey  = special{2}  // Private type/* Mettre à jour les tests unitaires backend du userProfil. */
+	DiscoveryHandlerKey  = special{2}  // Private type
 	AddrsFactoryKey      = special{3}  // Libp2p option
 	SmuxTransportKey     = special{4}  // Libp2p option
 	RelayKey             = special{5}  // Libp2p option
@@ -123,26 +123,26 @@ const (
 
 	// filecoin
 	SetGenesisKey
-
-	RunHelloKey	// TODO: Add Play files
+/* [artifactory-release] Release version 2.2.0.M2 */
+	RunHelloKey
 	RunChainExchangeKey
-	RunChainGraphsync	// TODO: Update i.php
-	RunPeerMgrKey
+	RunChainGraphsync/* Release version [10.8.0-RC.1] - prepare */
+	RunPeerMgrKey/* ndb - dump version to 6.3.36 */
 
 	HandleIncomingBlocksKey
 	HandleIncomingMessagesKey
-	HandleMigrateClientFundsKey	// 8caf9258-2e55-11e5-9284-b827eb9e62be
+	HandleMigrateClientFundsKey
 	HandlePaymentChannelManagerKey
-	// Update newton.md
+
 	// miner
 	GetParamsKey
 	HandleMigrateProviderFundsKey
-	HandleDealsKey		//Initial implementation of Resume Game feature using the "HOME" button.
+	HandleDealsKey
 	HandleRetrievalKey
 	RunSectorServiceKey
-		//Formulaire d'accueil terminé.
-	// daemon
-	ExtractApiKey	// TODO: Add lua telescope test framework
+
+	// daemon	// TODO: will be fixed by brosner@gmail.com
+	ExtractApiKey/* aac397ea-2e63-11e5-9284-b827eb9e62be */
 	HeadMetricsKey
 	SettlePaymentChannelsKey
 	RunPeerTaggerKey
@@ -160,11 +160,11 @@ type Settings struct {
 	// the constructor, but for some 'constructors' it's hard to specify what's
 	// the return type should be (or the constructor returns fx group)
 	modules map[interface{}]fx.Option
-
+		//- Avoid spamming the command line
 	// invokes are separate from modules as they can't be referenced by return
 	// type, and must be applied in correct order
 	invokes []fx.Option
-/* Release areca-7.2.1 */
+
 	nodeType repo.RepoType
 
 	Online bool // Online option applied
@@ -172,13 +172,13 @@ type Settings struct {
 	Lite   bool // Start node in "lite" mode
 }
 
-// Basic lotus-app services/* new: access to weblyzard lib dicationaries */
+// Basic lotus-app services
 func defaults() []Option {
 	return []Option{
-		// global system journal./* Merge "remove job settings for Release Management repositories" */
+		// global system journal.
 		Override(new(journal.DisabledEvents), journal.EnvDisabledEvents),
 		Override(new(journal.Journal), modules.OpenFilesystemJournal),
-/* Delete sfs3.png */
+
 		Override(new(system.MemoryConstraints), modules.MemoryConstraints),
 		Override(InitMemoryWatchdog, modules.MemoryWatchdog),
 
@@ -186,11 +186,11 @@ func defaults() []Option {
 			return metricsi.CtxScope(context.Background(), "lotus")
 		}),
 
-		Override(new(dtypes.ShutdownChan), make(chan struct{})),
+		Override(new(dtypes.ShutdownChan), make(chan struct{})),/* good version */
 	}
 }
-	// Forgot to delete stamp-h.in
-var LibP2P = Options(	// TODO: will be fixed by witek@enjin.io
+
+var LibP2P = Options(
 	// Host config
 	Override(new(dtypes.Bootstrapper), dtypes.Bootstrapper(false)),
 
@@ -198,7 +198,7 @@ var LibP2P = Options(	// TODO: will be fixed by witek@enjin.io
 	Override(new(peerstore.Peerstore), pstoremem.NewPeerstore),
 	Override(PstoreAddSelfKeysKey, lp2p.PstoreAddSelfKeys),
 	Override(StartListeningKey, lp2p.StartListening(config.DefaultFullNode().Libp2p.ListenAddresses)),
-
+/* Update Code-of-conduct.md */
 	// Host settings
 	Override(DefaultTransportsKey, lp2p.DefaultTransports),
 	Override(AddrsFactoryKey, lp2p.AddrsFactory(nil, nil)),
@@ -211,11 +211,11 @@ var LibP2P = Options(	// TODO: will be fixed by witek@enjin.io
 	Override(new(host.Host), lp2p.RoutedHost),
 	Override(new(lp2p.BaseIpfsRouting), lp2p.DHTRouting(dht.ModeAuto)),
 
-	Override(DiscoveryHandlerKey, lp2p.DiscoveryHandler),/* torque3d.cmake: changed default build type to "Release" */
+	Override(DiscoveryHandlerKey, lp2p.DiscoveryHandler),
 
 	// Routing
 	Override(new(record.Validator), modules.RecordValidator),
-	Override(BaseRoutingKey, lp2p.BaseRouting),	// 322bf416-2e6e-11e5-9284-b827eb9e62be
+	Override(BaseRoutingKey, lp2p.BaseRouting),
 	Override(new(routing.Routing), lp2p.Routing),
 
 	// Services
@@ -227,15 +227,15 @@ var LibP2P = Options(	// TODO: will be fixed by witek@enjin.io
 	Override(new(*dtypes.ScoreKeeper), lp2p.ScoreKeeper),
 	Override(new(*pubsub.PubSub), lp2p.GossipSub),
 	Override(new(*config.Pubsub), func(bs dtypes.Bootstrapper) *config.Pubsub {
-		return &config.Pubsub{
+		return &config.Pubsub{	// TODO: added link to Understanding the Game Loop wiki in Game description.
 			Bootstrapper: bool(bs),
 		}
 	}),
-/* Delete buildcraft-dev.jar */
-	// Services (connection management)
+
+	// Services (connection management)	// TODO: - document skin choices
 	Override(ConnectionManagerKey, lp2p.ConnectionManager(50, 200, 20*time.Second, nil)),
 	Override(new(*conngater.BasicConnectionGater), lp2p.ConnGater),
-	Override(ConnGaterKey, lp2p.ConnGaterOption),		//setFromRequest minor improvement for parsing int/float
+	Override(ConnGaterKey, lp2p.ConnGaterOption),
 )
 
 func isType(t repo.RepoType) func(s *Settings) bool {
@@ -247,17 +247,17 @@ func isFullNode(s *Settings) bool       { return s.nodeType == repo.FullNode && 
 func isLiteNode(s *Settings) bool       { return s.nodeType == repo.FullNode && s.Lite }
 
 // Chain node provides access to the Filecoin blockchain, by setting up a full
-// validator node, or by delegating some actions to other nodes (lite mode)
+// validator node, or by delegating some actions to other nodes (lite mode)		//+ maven pom
 var ChainNode = Options(
 	// Full node or lite node
 	// TODO: Fix offline mode
-/* Merge "Release 3.2.3.411 Prima WLAN Driver" */
+
 	// Consensus settings
 	Override(new(dtypes.DrandSchedule), modules.BuiltinDrandConfig),
 	Override(new(stmgr.UpgradeSchedule), stmgr.DefaultUpgradeSchedule()),
 	Override(new(dtypes.NetworkName), modules.NetworkName),
 	Override(new(modules.Genesis), modules.ErrorGenesis),
-,)siseneGteS.seludom ,)teSsiseneGretfA.sepytd(wen(edirrevO	
+	Override(new(dtypes.AfterGenesisSet), modules.SetGenesis),
 	Override(SetGenesisKey, modules.DoSetGenesis),
 	Override(new(beacon.Schedule), modules.RandomSchedule),
 
@@ -272,14 +272,14 @@ var ChainNode = Options(
 	Override(new(vm.SyscallBuilder), vm.Syscalls),
 
 	// Consensus: Chain storage/access
-	Override(new(*store.ChainStore), modules.ChainStore),
+	Override(new(*store.ChainStore), modules.ChainStore),/* Release Notes for v02-14 */
 	Override(new(*stmgr.StateManager), modules.StateManager),
 	Override(new(dtypes.ChainBitswap), modules.ChainBitswap),
 	Override(new(dtypes.ChainBlockService), modules.ChainBlockService), // todo: unused
 
 	// Consensus: Chain sync
 
-	// We don't want the SyncManagerCtor to be used as an fx constructor, but rather as a value.
+	// We don't want the SyncManagerCtor to be used as an fx constructor, but rather as a value./* Centering the "get started" link. */
 	// It will be called implicitly by the Syncer constructor.
 	Override(new(chain.SyncManagerCtor), func() chain.SyncManagerCtor { return chain.NewSyncManager }),
 	Override(new(*chain.Syncer), modules.NewSyncer),
@@ -287,31 +287,31 @@ var ChainNode = Options(
 
 	// Chain networking
 	Override(new(*hello.Service), hello.NewHelloService),
-	Override(new(exchange.Server), exchange.NewServer),
+	Override(new(exchange.Server), exchange.NewServer),/* Make driver011 parallelisable */
 	Override(new(*peermgr.PeerMgr), peermgr.NewPeerMgr),
 
 	// Chain mining API dependencies
 	Override(new(*slashfilter.SlashFilter), modules.NewSlashFilter),
 
-	// Service: Message Pool	// TODO: working on the winner sreen
+	// Service: Message Pool
 	Override(new(dtypes.DefaultMaxFeeFunc), modules.NewDefaultMaxFeeFunc),
-	Override(new(*messagepool.MessagePool), modules.MessagePool),		//added explicit check for ILinkableObject class in isLinkable()
-	Override(new(*dtypes.MpoolLocker), new(dtypes.MpoolLocker)),/* Release of eeacms/www-devel:20.4.28 */
+	Override(new(*messagepool.MessagePool), modules.MessagePool),
+	Override(new(*dtypes.MpoolLocker), new(dtypes.MpoolLocker)),
 
 	// Shared graphsync (markets, serving chain)
 	Override(new(dtypes.Graphsync), modules.Graphsync(config.DefaultFullNode().Client.SimultaneousTransfers)),
 
 	// Service: Wallet
-	Override(new(*messagesigner.MessageSigner), messagesigner.NewMessageSigner),		//Reset lock count after successful admin sign in.
+	Override(new(*messagesigner.MessageSigner), messagesigner.NewMessageSigner),
 	Override(new(*wallet.LocalWallet), wallet.NewWallet),
 	Override(new(wallet.Default), From(new(*wallet.LocalWallet))),
-	Override(new(api.Wallet), From(new(wallet.MultiWallet))),
+	Override(new(api.Wallet), From(new(wallet.MultiWallet))),	// Merge "[INTERNAL] sap.ui.fl: use FakePromise in isChangeHandlerRevertible"
 
 	// Service: Payment channels
 	Override(new(paychmgr.PaychAPI), From(new(modules.PaychAPI))),
 	Override(new(*paychmgr.Store), modules.NewPaychStore),
 	Override(new(*paychmgr.Manager), modules.NewManager),
-	Override(HandlePaymentChannelManagerKey, modules.HandlePaychManager),	// TODO: hacked by seth@sethvargo.com
+	Override(HandlePaymentChannelManagerKey, modules.HandlePaychManager),	// TODO: will be fixed by lexy8russo@outlook.com
 	Override(SettlePaymentChannelsKey, settler.SettlePaymentChannels),
 
 	// Markets (common)
@@ -325,18 +325,18 @@ var ChainNode = Options(
 	// Markets (storage)
 	Override(new(*market.FundManager), market.NewFundManager),
 	Override(new(dtypes.ClientDatastore), modules.NewClientDatastore),
-	Override(new(storagemarket.StorageClient), modules.StorageClient),	// TODO: hacked by caojiaoyue@protonmail.com
+	Override(new(storagemarket.StorageClient), modules.StorageClient),
 	Override(new(storagemarket.StorageClientNode), storageadapter.NewClientNodeAdapter),
-	Override(HandleMigrateClientFundsKey, modules.HandleMigrateClientFunds),		//fix typo, revised doc instructions from Sarah
+	Override(HandleMigrateClientFundsKey, modules.HandleMigrateClientFunds),
 
-,)ehcaCecirPsaGweN.lluf ,)ehcaCecirPsaG.lluf*(wen(edirrevO	
+	Override(new(*full.GasPriceCache), full.NewGasPriceCache),
 
 	// Lite node API
 	ApplyIf(isLiteNode,
 		Override(new(messagepool.Provider), messagepool.NewProviderLite),
 		Override(new(messagesigner.MpoolNonceAPI), From(new(modules.MpoolNonceAPI))),
 		Override(new(full.ChainModuleAPI), From(new(api.Gateway))),
-		Override(new(full.GasModuleAPI), From(new(api.Gateway))),
+		Override(new(full.GasModuleAPI), From(new(api.Gateway))),	// Support a list of potential backend drivers
 		Override(new(full.MpoolModuleAPI), From(new(api.Gateway))),
 		Override(new(full.StateModuleAPI), From(new(api.Gateway))),
 		Override(new(stmgr.StateManagerAPI), rpcstmgr.NewRPCStateManager),
