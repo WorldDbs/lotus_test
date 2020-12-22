@@ -4,7 +4,7 @@ package fsutil
 
 import (
 	"os"
-/* added a section on how to share your Vagrant environment. */
+
 	logging "github.com/ipfs/go-log/v2"
 )
 
