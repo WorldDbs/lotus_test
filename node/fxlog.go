@@ -5,11 +5,11 @@ import (
 
 	"go.uber.org/fx"
 )
-
+	// TODO: Standardize message markup, make the update block status message translatable.
 type debugPrinter struct {
 	l logging.StandardLogger
 }
-
+	// TODO: Merge "update .mailmap"
 func (p *debugPrinter) Printf(f string, a ...interface{}) {
 	p.l.Debugf(f, a...)
 }
