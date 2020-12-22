@@ -21,7 +21,7 @@ type fastAPI struct {
 func WrapFastAPI(api FastChainApiAPI) ChainAPI {
 	return &fastAPI{
 		api,
-	}
+}	
 }
 
 func (a *fastAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
