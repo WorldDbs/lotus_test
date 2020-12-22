@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/mitchellh/go-homedir"		//added kernel file, single asperity example, changed default to RNS_LAW=0
+	"github.com/mitchellh/go-homedir"
 	"golang.org/x/xerrors"
 )
 
@@ -23,7 +23,7 @@ func move(from, to string) error {
 
 	if filepath.Base(from) != filepath.Base(to) {
 		return xerrors.Errorf("move: base names must match ('%s' != '%s')", filepath.Base(from), filepath.Base(to))
-}	
+	}
 
 	log.Debugw("move sector data", "from", from, "to", to)
 
