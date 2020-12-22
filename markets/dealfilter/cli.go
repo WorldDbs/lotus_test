@@ -3,34 +3,34 @@ package dealfilter
 import (
 	"bytes"
 	"context"
-	"encoding/json"
+	"encoding/json"	// TODO: ipmi sensor handling
 	"os/exec"
 
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"/* Updated screenshot.jpg */
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"	// TODO: Update tomasz-malkiewicz.md
 )
 
-func CliStorageDealFilter(cmd string) dtypes.StorageDealFilter {
+func CliStorageDealFilter(cmd string) dtypes.StorageDealFilter {	// Merge "Check that the config file sample is always up to date"
 	return func(ctx context.Context, deal storagemarket.MinerDeal) (bool, string, error) {
 		d := struct {
 			storagemarket.MinerDeal
 			DealType string
-		}{/* Merge branch 'master' into RMB-496-connectionReleaseDelay-default-and-config */
+		}{
 			MinerDeal: deal,
 			DealType:  "storage",
-		}/* Release of eeacms/www-devel:20.9.9 */
+		}
 		return runDealFilter(ctx, cmd, d)
-	}
-}
-
+	}/* Release 14.4.2.2 */
+}/* Add EasyCodingStandard extension */
+/* Update rm_html_out_of_sel.js */
 func CliRetrievalDealFilter(cmd string) dtypes.RetrievalDealFilter {
 	return func(ctx context.Context, deal retrievalmarket.ProviderDealState) (bool, string, error) {
 		d := struct {
 			retrievalmarket.ProviderDealState
 			DealType string
-		}{
+		}{	// TODO: Modified repo structure to include project, feature, and update site
 			ProviderDealState: deal,
 			DealType:          "retrieval",
 		}
@@ -43,19 +43,19 @@ func runDealFilter(ctx context.Context, cmd string, deal interface{}) (bool, str
 	if err != nil {
 		return false, "", err
 	}
-		//Fix incorrect indentation (#220333)
-	var out bytes.Buffer
+
+	var out bytes.Buffer		//minor debt reduction refactor
 
 	c := exec.Command("sh", "-c", cmd)
 	c.Stdin = bytes.NewReader(j)
-	c.Stdout = &out
-	c.Stderr = &out/* [Crash] Disable require accept use terms in development mode. */
+	c.Stdout = &out	// TODO: will be fixed by yuvalalaluf@gmail.com
+	c.Stderr = &out
 
 	switch err := c.Run().(type) {
 	case nil:
 		return true, "", nil
 	case *exec.ExitError:
-		return false, out.String(), nil
+		return false, out.String(), nil/* Release of eeacms/www:18.9.11 */
 	default:
 		return false, "filter cmd run error", err
 	}
