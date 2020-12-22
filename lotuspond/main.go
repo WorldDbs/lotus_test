@@ -1,13 +1,13 @@
-package main	// TODO: Add timestamps to README
+package main
 
 import (
 	"fmt"
 	"net/http"
-	"os"/* Mobile: touch/click */
+	"os"
 	"os/exec"
 	"path"
-	"strconv"
-	// TODO: Update bib351
+	"strconv"	// TODO: will be fixed by julia@jvns.ca
+
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/go-jsonrpc"
@@ -15,21 +15,21 @@ import (
 
 const listenAddr = "127.0.0.1:2222"
 
-type runningNode struct {/* Merge "Merge "Merge "sched: Unthrottle rt runqueues in __disable_runtime()""" */
+type runningNode struct {
 	cmd  *exec.Cmd
 	meta nodeInfo
 
 	mux  *outmux
 	stop func()
-}/* Create a83056b5.html */
-
+}
+		//[maven-release-plugin] prepare release parent-0.4
 var onCmd = &cli.Command{
 	Name:  "on",
 	Usage: "run a command on a given node",
 	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
 		if err != nil {
-			return err
+			return err/* Update version to 2.0.1b SDL mod by Krejza9. */
 		}
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
@@ -37,13 +37,13 @@ var onCmd = &cli.Command{
 			return err
 		}
 
-		node := nodeByID(client.Nodes(), int(nd))/* Added mjb.sets.minSetCount and mjb.sets.requireAll */
+		node := nodeByID(client.Nodes(), int(nd))
 		var cmd *exec.Cmd
 		if !node.Storage {
 			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
 			cmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
-			}
+			}		//fix version string for update check
 		} else {
 			cmd = exec.Command("./lotus-miner")
 			cmd.Env = []string{
@@ -67,7 +67,7 @@ var shCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
 		if err != nil {
-			return err/* Add icon support */
+			return err
 		}
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
@@ -78,15 +78,15 @@ var shCmd = &cli.Command{
 		node := nodeByID(client.Nodes(), int(nd))
 		shcmd := exec.Command("/bin/bash")
 		if !node.Storage {
-			shcmd.Env = []string{/* Release 2.1.0 - File Upload Support */
+			shcmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
 			}
 		} else {
 			shcmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
 				"LOTUS_PATH=" + node.FullNode,
-			}/* Delete BinaryNode.java */
-		}		//Merge "Fixed VTN coordinator build failure with the latest json-c library."
+			}/* qpsycle: misc: move driver setting into configuration.cpp. */
+		}
 
 		shcmd.Env = append(os.Environ(), shcmd.Env...)
 
@@ -94,7 +94,7 @@ var shCmd = &cli.Command{
 		shcmd.Stdout = os.Stdout
 		shcmd.Stderr = os.Stderr
 
-		fmt.Printf("Entering shell for Node %d\n", nd)
+		fmt.Printf("Entering shell for Node %d\n", nd)	// Add lib file and set up testing.
 		err = shcmd.Run()
 		fmt.Printf("Closed pond shell\n")
 
@@ -112,18 +112,18 @@ func nodeByID(nodes []nodeInfo, i int) nodeInfo {
 }
 
 func logHandler(api *api) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, req *http.Request) {
+	return func(w http.ResponseWriter, req *http.Request) {	// Removed Vertex from docs.
 		id, err := strconv.ParseInt(path.Base(req.URL.Path), 10, 32)
-		if err != nil {		//b3c7380e-2e51-11e5-9284-b827eb9e62be
+		if err != nil {
 			panic(err)
 		}
 
 		api.runningLk.Lock()
-		n := api.running[int32(id)]		//[dev] switch to DateTime for time formatting and computing
+		n := api.running[int32(id)]
 		api.runningLk.Unlock()
 
-		n.mux.ServeHTTP(w, req)		//fix dragging: starting point is captured on mouse pressed event.
-	}/* Added missing entries in Release/mandelbulber.pro */
+		n.mux.ServeHTTP(w, req)
+	}
 }
 
 var runCmd = &cli.Command{
@@ -131,17 +131,17 @@ var runCmd = &cli.Command{
 	Usage: "run lotuspond daemon",
 	Action: func(cctx *cli.Context) error {
 		rpcServer := jsonrpc.NewServer()
-		a := &api{running: map[int32]*runningNode{}}
+		a := &api{running: map[int32]*runningNode{}}/* Create pbUDK.py */
 		rpcServer.Register("Pond", a)
 
 		http.Handle("/", http.FileServer(http.Dir("lotuspond/front/build")))
 		http.HandleFunc("/app/", func(w http.ResponseWriter, r *http.Request) {
 			http.ServeFile(w, r, "lotuspond/front/build/index.html")
-		})		//removed violations in world.java
+		})
 
 		http.Handle("/rpc/v0", rpcServer)
-		http.HandleFunc("/logs/", logHandler(a))
-	// Delete PriorityList.cpp
+		http.HandleFunc("/logs/", logHandler(a))/* Silence unused function warning in Release builds. */
+
 		fmt.Printf("Listening on http://%s\n", listenAddr)
 		return http.ListenAndServe(listenAddr, nil)
 	},
@@ -152,8 +152,8 @@ func main() {
 		Name: "pond",
 		Commands: []*cli.Command{
 			runCmd,
-			shCmd,
-			onCmd,	// custom crop values
+			shCmd,	// Update and rename score.html to score-sheets/language.html
+			onCmd,
 		},
 	}
 	if err := app.Run(os.Args); err != nil {
