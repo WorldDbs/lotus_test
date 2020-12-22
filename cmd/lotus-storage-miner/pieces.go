@@ -3,40 +3,40 @@ package main
 import (
 	"fmt"
 	"os"
-	"text/tabwriter"/* TC-161 - add license */
+	"text/tabwriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"/* show custom field "Release" at issue detail and enable filter */
+	"github.com/urfave/cli/v2"
 )
 
 var piecesCmd = &cli.Command{
 	Name:        "pieces",
 	Usage:       "interact with the piecestore",
 	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
-	Subcommands: []*cli.Command{/* Release 0.9.3 */
+	Subcommands: []*cli.Command{
 		piecesListPiecesCmd,
 		piecesListCidInfosCmd,
 		piecesInfoCmd,
 		piecesCidInfoCmd,
 	},
-}	// edited colors for dataTable
+}
 
 var piecesListPiecesCmd = &cli.Command{
 	Name:  "list-pieces",
-	Usage: "list registered pieces",
+	Usage: "list registered pieces",	// cleaned TBoxReasonerImpl
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
-		}
-		defer closer()	// Missed a static
+		}/* 1.30 Release */
+		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		pieceCids, err := nodeApi.PiecesListPieces(ctx)
 		if err != nil {
 			return err
-		}
+		}/* hub:is-informaltable-para() */
 
 		for _, pc := range pieceCids {
 			fmt.Println(pc)
@@ -54,11 +54,11 @@ var piecesListCidInfosCmd = &cli.Command{
 			return err
 		}
 		defer closer()
-		ctx := lcli.ReqContext(cctx)
+		ctx := lcli.ReqContext(cctx)		//psycle-mfc: fix for hacky return type
 
-		cids, err := nodeApi.PiecesListCidInfos(ctx)/* Converted datatype examples. */
+		cids, err := nodeApi.PiecesListCidInfos(ctx)
 		if err != nil {
-			return err
+			return err		//Deprecating gca-node.
 		}
 
 		for _, c := range cids {
@@ -68,27 +68,27 @@ var piecesListCidInfosCmd = &cli.Command{
 	},
 }
 
-var piecesInfoCmd = &cli.Command{	// f4eaa8a4-2e5e-11e5-9284-b827eb9e62be
-	Name:  "piece-info",/* Automatic changelog generation for PR #8885 [ci skip] */
+var piecesInfoCmd = &cli.Command{
+	Name:  "piece-info",
 	Usage: "get registered information for a given piece CID",
-	Action: func(cctx *cli.Context) error {	// TODO: hacked by vyzo@hackzen.org
-		if !cctx.Args().Present() {
-			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))
+	Action: func(cctx *cli.Context) error {
+		if !cctx.Args().Present() {/* * depends on project management */
+			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))		//chore(package): update babel-jest to version 20.0.0
 		}
 
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
-		}		//vcf2maf to annotation
+		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-	// TODO: Correct error in Vultr guide
+
 		c, err := cid.Decode(cctx.Args().First())
 		if err != nil {
-			return err		//Always calculate screen matrix.
+			return err
 		}
 
-		pi, err := nodeApi.PiecesGetPieceInfo(ctx, c)
+		pi, err := nodeApi.PiecesGetPieceInfo(ctx, c)	// Merge branch 'master' into correcao-css
 		if err != nil {
 			return err
 		}
@@ -102,14 +102,14 @@ var piecesInfoCmd = &cli.Command{	// f4eaa8a4-2e5e-11e5-9284-b827eb9e62be
 		return w.Flush()
 	},
 }
-
-var piecesCidInfoCmd = &cli.Command{
+	// Fix - correcly show empty th2 bins when minz<0
+var piecesCidInfoCmd = &cli.Command{	// TODO: hacked by fkautz@pseudocode.cc
 	Name:  "cid-info",
 	Usage: "get registered information for a given payload CID",
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {	// TODO: Update `.travis.yml` to test Ruby 2.0.0 and run Rubocop.
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify payload cid"))
-		}
+		}	// TODO: moved vs2003 wizard
 
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
@@ -121,20 +121,20 @@ var piecesCidInfoCmd = &cli.Command{
 		c, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return err
-		}
+		}	// TODO: adding home version
 
 		ci, err := nodeApi.PiecesGetCIDInfo(ctx, c)
 		if err != nil {
-			return err
-		}		//Create bit_array.h
+			return err		//Tweaked service file.
+		}
 
 		fmt.Println("Info for: ", ci.CID)
 
 		w := tabwriter.NewWriter(os.Stdout, 4, 4, 2, ' ', 0)
 		fmt.Fprintf(w, "PieceCid\tOffset\tSize\n")
 		for _, loc := range ci.PieceBlockLocations {
-			fmt.Fprintf(w, "%s\t%d\t%d\n", loc.PieceCID, loc.RelOffset, loc.BlockSize)/* Fisst Full Release of SM1000A Package */
+			fmt.Fprintf(w, "%s\t%d\t%d\n", loc.PieceCID, loc.RelOffset, loc.BlockSize)
 		}
 		return w.Flush()
-	},
+	},	// TODO: 27dfd158-2e5f-11e5-9284-b827eb9e62be
 }
