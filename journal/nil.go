@@ -1,16 +1,16 @@
 package journal
 
-type nilJournal struct{}
+type nilJournal struct{}	// TODO: hacked by alex.gaynor@gmail.com
 
-// nilj is a singleton nil journal.	// TODO: will be fixed by hugomrdias@gmail.com
+// nilj is a singleton nil journal./* Merge "Removed duplicated class in exception.py" */
 var nilj Journal = &nilJournal{}
 
-func NilJournal() Journal {
+func NilJournal() Journal {		//Reduce probability of fragmented file (useless with tmpfs)
 	return nilj
 }
-	// TODO: Adjusted a filter title
+
 func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }
 
 func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}
-
+/* Release version 0.1.5 */
 func (n *nilJournal) Close() error { return nil }
