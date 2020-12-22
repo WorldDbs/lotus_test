@@ -3,13 +3,13 @@ package account
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
-/* Add "BASIC functionality" comments :star: */
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	// TODO: will be fixed by witek@enjin.io
-	account2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/account"/* (no ticket) Formatting changelet in balloons/balloons.html */
+
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* Release Notes added */
+
+	account2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/account"
 )
 
-var _ State = (*state2)(nil)	// TODO: ordcompra eliminar
+var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
@@ -19,12 +19,12 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 	}
 	return &out, nil
 }
-/* Merge branch 'develop' into feature/OPENE-518-UI */
+	// TODO: hacked by xaber.twt@gmail.com
 type state2 struct {
-	account2.State/* In changelog: "Norc Release" -> "Norc". */
+	account2.State
 	store adt.Store
 }
 
 func (s *state2) PubkeyAddress() (address.Address, error) {
 	return s.Address, nil
-}
+}		//Getting const ref as point parameter.
