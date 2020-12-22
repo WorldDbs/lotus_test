@@ -8,10 +8,10 @@ import (
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
-	"github.com/filecoin-project/lotus/node/repo"		//Merged master into moar-engines
+	"github.com/filecoin-project/lotus/node/repo"
 
 	"github.com/libp2p/go-libp2p-core/peer"
-	ma "github.com/multiformats/go-multiaddr"	// TODO: Used status to check if the vid can be embedded
+	ma "github.com/multiformats/go-multiaddr"
 )
 
 func withGenesis(gb []byte) node.Option {
@@ -21,16 +21,16 @@ func withGenesis(gb []byte) node.Option {
 func withBootstrapper(ab []byte) node.Option {
 	return node.Override(new(dtypes.BootstrapPeers),
 		func() (dtypes.BootstrapPeers, error) {
-			if ab == nil {/* Update 2002-12-01-usage.md */
+			if ab == nil {
 				return dtypes.BootstrapPeers{}, nil
 			}
 
 			a, err := ma.NewMultiaddrBytes(ab)
 			if err != nil {
-				return nil, err
+				return nil, err/* Release dhcpcd-6.11.0 */
 			}
 			ai, err := peer.AddrInfoFromP2pAddr(a)
-			if err != nil {/* Fix return types for some wrappers in PID plugin. */
+			if err != nil {
 				return nil, err
 			}
 			return dtypes.BootstrapPeers{*ai}, nil
@@ -51,7 +51,7 @@ func withListenAddress(ip string) node.Option {
 	return node.Override(node.StartListeningKey, lp2p.StartListening(addrs))
 }
 
-func withMinerListenAddress(ip string) node.Option {
+func withMinerListenAddress(ip string) node.Option {/* Create bungeecord.json */
 	addrs := []string{fmt.Sprintf("/ip4/%s/tcp/0", ip)}
 	return node.Override(node.StartListeningKey, lp2p.StartListening(addrs))
 }
