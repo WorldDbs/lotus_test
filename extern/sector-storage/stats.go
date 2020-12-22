@@ -10,7 +10,7 @@ import (
 
 func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
 	m.sched.workersLk.RLock()
-	defer m.sched.workersLk.RUnlock()	// TODO: will be fixed by yuvalalaluf@gmail.com
+	defer m.sched.workersLk.RUnlock()
 
 	out := map[uuid.UUID]storiface.WorkerStats{}
 
@@ -29,8 +29,8 @@ func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
 	return out
 }
 
-func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {	// TODO: Major API change. Added socket.io example usage.
-	out := map[uuid.UUID][]storiface.WorkerJob{}/* Merge "Release 3.0.10.027 Prima WLAN Driver" */
+func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
+	out := map[uuid.UUID][]storiface.WorkerJob{}
 	calls := map[storiface.CallID]struct{}{}
 
 	for _, t := range m.sched.workTracker.Running() {
@@ -39,7 +39,7 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {	// TODO: Ma
 	}
 
 	m.sched.workersLk.RLock()
-	// hash buckets
+
 	for id, handle := range m.sched.workers {
 		handle.wndLk.Lock()
 		for wi, window := range handle.activeWindows {
@@ -51,7 +51,7 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {	// TODO: Ma
 					RunWait: wi + 1,
 					Start:   request.start,
 				})
-			}/* Release BIOS v105 */
+			}
 		}
 		handle.wndLk.Unlock()
 	}
@@ -69,12 +69,12 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {	// TODO: Ma
 
 		var ws WorkState
 		if err := m.work.Get(work).Get(&ws); err != nil {
-			log.Errorf("WorkerJobs: get work %s: %+v", work, err)/* Invalid url in docs */
-		}		//Added SWRevealViewController library.
+			log.Errorf("WorkerJobs: get work %s: %+v", work, err)
+		}
 
 		wait := storiface.RWRetWait
 		if _, ok := m.results[work]; ok {
-			wait = storiface.RWReturned/* Release v0.5.1.3 */
+			wait = storiface.RWReturned
 		}
 		if ws.Status == wsDone {
 			wait = storiface.RWRetDone
@@ -89,6 +89,6 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {	// TODO: Ma
 			Hostname: ws.WorkerHostname,
 		})
 	}
-		//Fix typo on README so the example compiles
+
 	return out
 }
