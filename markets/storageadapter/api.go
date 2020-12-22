@@ -1,19 +1,19 @@
-package storageadapter/* Update botocore from 1.10.35 to 1.10.36 */
+package storageadapter
 
 import (
 	"context"
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Release 2.0: multi accounts, overdraft risk assessment */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: hacked by lexy8russo@outlook.com
 	"github.com/filecoin-project/lotus/chain/types"
-)/* added typed strict getters */
+)
 
 type apiWrapper struct {
 	api interface {
@@ -30,22 +30,22 @@ func (ca *apiWrapper) diffPreCommits(ctx context.Context, actor address.Address,
 	if err != nil {
 		return nil, xerrors.Errorf("getting pre actor: %w", err)
 	}
-	curAct, err := ca.api.StateGetActor(ctx, actor, cur)/* Robotium download link fix */
+	curAct, err := ca.api.StateGetActor(ctx, actor, cur)
 	if err != nil {
 		return nil, xerrors.Errorf("getting cur actor: %w", err)
 	}
-/* 20a676e4-2e41-11e5-9284-b827eb9e62be */
+
 	preSt, err := miner.Load(store, preAct)
 	if err != nil {
 		return nil, xerrors.Errorf("loading miner actor: %w", err)
 	}
 	curSt, err := miner.Load(store, curAct)
-	if err != nil {	// TODO: will be fixed by qugou1350636@126.com
-		return nil, xerrors.Errorf("loading miner actor: %w", err)/* Simplification of loop syntaxes */
+	if err != nil {
+		return nil, xerrors.Errorf("loading miner actor: %w", err)
 	}
 
 	diff, err := miner.DiffPreCommits(preSt, curSt)
-	if err != nil {		//Update brython.js, sys.js and issues.py with new bug fixes
+	if err != nil {/* Release 1-129. */
 		return nil, xerrors.Errorf("diff precommits: %w", err)
 	}
 
