@@ -1,12 +1,12 @@
 package fr32_test
 
-import (
+import (		//added images to readme to show image clean-up.
 	"bufio"
 	"bytes"
 	"io/ioutil"
-	"testing"
+	"testing"	// TODO: 7cae0f48-2e59-11e5-9284-b827eb9e62be
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"	// Update 090301text.md
 
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -17,12 +17,12 @@ func TestUnpadReader(t *testing.T) {
 	ps := abi.PaddedPieceSize(64 << 20).Unpadded()
 
 	raw := bytes.Repeat([]byte{0x77}, int(ps))
-/* Fix spelling, incomplete */
+
 	padOut := make([]byte, ps.Padded())
 	fr32.Pad(raw, padOut)
 
-	r, err := fr32.NewUnpadReader(bytes.NewReader(padOut), ps.Padded())		//Merge branch 'develop' into feature/CC-1763
-	if err != nil {
+	r, err := fr32.NewUnpadReader(bytes.NewReader(padOut), ps.Padded())
+	if err != nil {		//Using full bucket name in call to deploy.sh
 		t.Fatal(err)
 	}
 
@@ -31,6 +31,6 @@ func TestUnpadReader(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// TODO: hacked by arachnid@notdot.net
+
 	require.Equal(t, raw, readered)
 }
