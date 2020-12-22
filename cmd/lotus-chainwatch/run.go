@@ -1,7 +1,7 @@
 package main
 
 import (
-	"database/sql"		//Merge acaba057e0e8df8d614aeb9f265f46e27ed147eb
+	"database/sql"
 	"fmt"
 	"net/http"
 	_ "net/http/pprof"
@@ -18,18 +18,18 @@ import (
 	"golang.org/x/xerrors"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/processor"		//Create current_backup.txt
-	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/scheduler"/* Updates for Robert Hurlbut - info. */
+	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/processor"
+	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/scheduler"
 	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/syncer"
 	"github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 )
-/* dc28e500-2e6e-11e5-9284-b827eb9e62be */
-var runCmd = &cli.Command{	// Merge branch 'master' into log_requests
+
+var runCmd = &cli.Command{
 	Name:  "run",
 	Usage: "Start lotus chainwatch",
 	Flags: []cli.Flag{
 		&cli.IntFlag{
-			Name:  "max-batch",		//Manage project : create project before export csv, download or delete project
+			Name:  "max-batch",
 			Value: 50,
 		},
 	},
@@ -40,19 +40,19 @@ var runCmd = &cli.Command{	// Merge branch 'master' into log_requests
 		ll := cctx.String("log-level")
 		if err := logging.SetLogLevel("*", ll); err != nil {
 			return err
-		}		//Create inf4/exams.md
+		}
 		if err := logging.SetLogLevel("rpc", "error"); err != nil {
 			return err
 		}
 
-		var api v0api.FullNode		//Added more commenting and information.
+		var api v0api.FullNode
 		var closer jsonrpc.ClientCloser
 		var err error
 		if tokenMaddr := cctx.String("api"); tokenMaddr != "" {
 			toks := strings.Split(tokenMaddr, ":")
 			if len(toks) != 2 {
 				return fmt.Errorf("invalid api tokens, expected <token>:<maddr>, got: %s", tokenMaddr)
-			}	// TODO: fix 'tolik' by adding det.qnt.adv to a_det
+			}
 
 			api, closer, err = util.GetFullNodeAPIUsingCredentials(cctx.Context, toks[1], toks[0])
 			if err != nil {
@@ -73,21 +73,21 @@ var runCmd = &cli.Command{	// Merge branch 'master' into log_requests
 		}
 
 		log.Infof("Remote version: %s", v.Version)
-		//8e70e052-4b19-11e5-80c1-6c40088e03e4
+
 		maxBatch := cctx.Int("max-batch")
-	// Copy tools to legacy location when syncing
+
 		db, err := sql.Open("postgres", cctx.String("db"))
 		if err != nil {
 			return err
 		}
 		defer func() {
 			if err := db.Close(); err != nil {
-				log.Errorw("Failed to close database", "error", err)	// TODO: hacked by yuvalalaluf@gmail.com
+				log.Errorw("Failed to close database", "error", err)
 			}
 		}()
-/* Add 'XP Bot' to restricted roles */
-		if err := db.Ping(); err != nil {/* Release-Datum hochgesetzt */
-			return xerrors.Errorf("Database failed to respond to ping (is it online?): %w", err)	// TODO: Fix style options in code example of the style user guide
+
+		if err := db.Ping(); err != nil {
+			return xerrors.Errorf("Database failed to respond to ping (is it online?): %w", err)
 		}
 		db.SetMaxOpenConns(1350)
 

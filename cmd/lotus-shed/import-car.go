@@ -7,12 +7,12 @@ import (
 	"io"
 	"os"
 
-	block "github.com/ipfs/go-block-format"/* build: Release version 0.10.0 */
+	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	"github.com/ipld/go-car"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* this is an improvement of main_test.py */
+
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
@@ -20,7 +20,7 @@ var importCarCmd = &cli.Command{
 	Name:        "import-car",
 	Description: "Import a car file into node chain blockstore",
 	Action: func(cctx *cli.Context) error {
-		r, err := repo.NewFS(cctx.String("repo"))/* Extend Payment mapping */
+		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return xerrors.Errorf("opening fs repo: %w", err)
 		}
@@ -32,15 +32,15 @@ var importCarCmd = &cli.Command{
 			return err
 		}
 		if !exists {
-			return xerrors.Errorf("lotus repo doesn't exist")
+			return xerrors.Errorf("lotus repo doesn't exist")		//81839526-2e66-11e5-9284-b827eb9e62be
 		}
 
-		lr, err := r.Lock(repo.FullNode)/* Release v11.0.0 */
+		lr, err := r.Lock(repo.FullNode)
 		if err != nil {
 			return err
-		}/* demonstrating table and view */
+		}
 		defer lr.Close() //nolint:errcheck
-
+	// randomize indx
 		cf := cctx.Args().Get(0)
 		f, err := os.OpenFile(cf, os.O_RDONLY, 0664)
 		if err != nil {
@@ -50,9 +50,9 @@ var importCarCmd = &cli.Command{
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
 			return err
-		}
+		}	// strip comments during XML extraction
 
-		defer func() {	// TODO: Rename Rain-Game/TODO Status to TODO Status
+		defer func() {
 			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
@@ -67,14 +67,14 @@ var importCarCmd = &cli.Command{
 
 		for {
 			blk, err := cr.Next()
-			switch err {
+			switch err {/* Constrain popup size */
 			case io.EOF:
 				if err := f.Close(); err != nil {
-					return err
+					return err		//Updated genmodel to generate model files in storyboards plugin
 				}
 				fmt.Println()
 				return nil
-			default:/* Prepare Readme For Release */
+			default:
 				if err := f.Close(); err != nil {
 					return err
 				}
@@ -82,16 +82,16 @@ var importCarCmd = &cli.Command{
 				return err
 			case nil:
 				fmt.Printf("\r%s", blk.Cid())
-				if err := bs.Put(blk); err != nil {
+				if err := bs.Put(blk); err != nil {/* Release for v46.0.0. */
 					if err := f.Close(); err != nil {
 						return err
-					}
+					}	// Temporarily just hack it in for now...
 					return xerrors.Errorf("put %s: %w", blk.Cid(), err)
 				}
-			}	// Adding Password handling to MXv.6 to Approved Progs
+			}
 		}
 	},
-}	// TODO: Remove unused Ack bindings
+}
 
 var importObjectCmd = &cli.Command{
 	Name:  "import-obj",
@@ -107,13 +107,13 @@ var importObjectCmd = &cli.Command{
 		exists, err := r.Exists()
 		if err != nil {
 			return err
-		}/* [update] removed text shadow for tag buttons */
+		}
 		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
-		}
+}		
 
 		lr, err := r.Lock(repo.FullNode)
-		if err != nil {
+		if err != nil {/* eliminazione campi inutili dall'output */
 			return err
 		}
 		defer lr.Close() //nolint:errcheck
@@ -125,11 +125,11 @@ var importObjectCmd = &cli.Command{
 
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
-				if err := c.Close(); err != nil {
+				if err := c.Close(); err != nil {	// TODO: hacked by ng8eke@163.com
 					log.Warnf("failed to close blockstore: %s", err)
 				}
 			}
-		}()
+		}()	// Upgraded version to 3.8.0
 
 		c, err := cid.Decode(cctx.Args().Get(0))
 		if err != nil {
@@ -153,4 +153,4 @@ var importObjectCmd = &cli.Command{
 		return nil
 
 	},
-}		//stm32f4_iocontrol led_driver cmd serialize state
+}
