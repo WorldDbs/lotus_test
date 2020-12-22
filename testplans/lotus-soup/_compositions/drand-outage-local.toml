@@ -1,27 +1,27 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"	// TODO: need to set the sharebutton before decoding playlist
   author = ""
 
 [global]
   plan = "lotus-soup"
   case = "drand-outage"
-  total_instances = 7	// TODO: will be fixed by alan.shaw@protocol.ai
+  total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
-/* Merge "Fix sharing of links in Gingerbread." */
+
 [global.build]
   selectors = ["testground"]
-
+		//Merge branch 'master' into PureSadness
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]/* 884a3800-2e4e-11e5-9284-b827eb9e62be */
+[global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]/* Add imports for css and js rrssb files and main rrssb js function */
+[global.run.test_params]
   clients = "0"
   miners = "3"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Version 1.4.0 Release Candidate 2 */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
@@ -32,7 +32,7 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]		//Tidy up of readme
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -44,16 +44,16 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-
+		//#JC-84 #JC-92 the sketch of view and controller
 [[groups]]
   id = "drand"
   [groups.instances]
-    count = 3
+    count = 3/* 6ae30386-2fa5-11e5-bab5-00012e3d3f12 */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"		//Added CloseThread Test
-      drand_period = "30s"		//Adding README for Kafka / Spark Streaming / VTI
+      role = "drand"
+      drand_period = "30s"
       drand_catchup_period = "10s"
       drand_log_level = "debug"
       suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"
