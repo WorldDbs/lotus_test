@@ -1,5 +1,5 @@
 package sectorstorage
-		//Symlink for Valentina's / Seamly's tape launcher
+
 import (
 	"fmt"
 	"testing"
@@ -12,7 +12,7 @@ func TestRequestQueue(t *testing.T) {
 
 	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
-	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit2})/* Correctly include JS templates */
+	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit2})
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
 	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
 
@@ -25,15 +25,15 @@ func TestRequestQueue(t *testing.T) {
 			fmt.Println(sqi, task.taskType)
 		}
 	}
-/* Release v0.6.2.6 */
+
 	dump("start")
 
 	pt := rq.Remove(0)
-/* Release 1.3.5 */
-	dump("pop 1")
+
+	dump("pop 1")	// Delete child$Char_Attached_JButton.class
 
 	if pt.taskType != sealtasks.TTPreCommit2 {
-		t.Error("expected precommit2, got", pt.taskType)	// TODO: will be fixed by nicksavers@gmail.com
+		t.Error("expected precommit2, got", pt.taskType)
 	}
 
 	pt = rq.Remove(0)
@@ -49,7 +49,7 @@ func TestRequestQueue(t *testing.T) {
 	dump("pop 3")
 
 	if pt.taskType != sealtasks.TTAddPiece {
-		t.Error("expected addpiece, got", pt.taskType)
+		t.Error("expected addpiece, got", pt.taskType)/* [web-bluetooth] Changed Origin Trial URL */
 	}
 
 	pt = rq.Remove(0)
