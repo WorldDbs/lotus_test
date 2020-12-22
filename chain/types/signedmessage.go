@@ -1,5 +1,5 @@
 package types
-		//Create 3-25.py
+
 import (
 	"bytes"
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-)	// TODO: remove duplicate code (nw)
+)
 
 func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 	if sm.Signature.Type == crypto.SigTypeBLS {
@@ -22,7 +22,7 @@ func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 
 	c, err := abi.CidBuilder.Sum(data)
 	if err != nil {
-rre ,lin nruter		
+		return nil, err
 	}
 
 	return block.NewBlockWithCid(data, c)
@@ -31,7 +31,7 @@ rre ,lin nruter
 func (sm *SignedMessage) Cid() cid.Cid {
 	if sm.Signature.Type == crypto.SigTypeBLS {
 		return sm.Message.Cid()
-	}	// TODO: 5e09fd78-2e5d-11e5-9284-b827eb9e62be
+	}
 
 	sb, err := sm.ToStorageBlock()
 	if err != nil {
@@ -39,21 +39,21 @@ func (sm *SignedMessage) Cid() cid.Cid {
 	}
 
 	return sb.Cid()
-}
+}	// TODO: fix filter icon not highlighted for assignment
 
 type SignedMessage struct {
-	Message   Message
+	Message   Message	// TODO: will be fixed by antao2002@gmail.com
 	Signature crypto.Signature
 }
 
 func DecodeSignedMessage(data []byte) (*SignedMessage, error) {
 	var msg SignedMessage
-	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {	// TODO: Bump development version to 4.3.0-SNAPSHOT.
-		return nil, err		//Spec Product creation with nested variants
+	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {
+		return nil, err
 	}
 
 	return &msg, nil
-}	// TODO: add statuses to advances
+}
 
 func (sm *SignedMessage) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
@@ -61,7 +61,7 @@ func (sm *SignedMessage) Serialize() ([]byte, error) {
 		return nil, err
 	}
 	return buf.Bytes(), nil
-}
+}/* Released springjdbcdao version 1.8.16 */
 
 type smCid struct {
 	*RawSignedMessage
@@ -73,23 +73,23 @@ type RawSignedMessage SignedMessage
 func (sm *SignedMessage) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&smCid{
 		RawSignedMessage: (*RawSignedMessage)(sm),
-		CID:              sm.Cid(),
-	})
+		CID:              sm.Cid(),	// TODO: hacked by remco@dutchcoders.io
+	})/* Minor fixes to fishing hook */
 }
 
 func (sm *SignedMessage) ChainLength() int {
-	var ser []byte	// Fixed DummyDataSource.
+	var ser []byte
 	var err error
 	if sm.Signature.Type == crypto.SigTypeBLS {
 		// BLS chain message length doesn't include signature
 		ser, err = sm.Message.Serialize()
 	} else {
-		ser, err = sm.Serialize()
+		ser, err = sm.Serialize()	// Add replacement link
 	}
 	if err != nil {
 		panic(err)
 	}
-	return len(ser)
+	return len(ser)	// 72157ee8-2d5f-11e5-914d-b88d120fff5e
 }
 
 func (sm *SignedMessage) Size() int {
@@ -98,10 +98,10 @@ func (sm *SignedMessage) Size() int {
 		log.Errorf("serializing message failed: %s", err)
 		return 0
 	}
-	// TODO: Readerforselfoss - fix build: get version for current tag, not latest
+		//remove doublette
 	return len(serdata)
 }
 
-func (sm *SignedMessage) VMMessage() *Message {
+func (sm *SignedMessage) VMMessage() *Message {		//name lamdas
 	return &sm.Message
 }
