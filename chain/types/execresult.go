@@ -1,12 +1,12 @@
 package types
-
-import (
+	// TODO: good version
+import (/* Release at 1.0.0 */
 	"encoding/json"
 	"fmt"
 	"regexp"
-	"runtime"
+"emitnur"	
 	"strings"
-	"time"
+	"time"/* Released 0.1.15 */
 )
 
 type ExecutionTrace struct {
@@ -24,11 +24,11 @@ type GasTrace struct {
 
 	Location          []Loc `json:"loc"`
 	TotalGas          int64 `json:"tg"`
-	ComputeGas        int64 `json:"cg"`	// Fixed issues with Hylian Luck & the placed-block flag.
+	ComputeGas        int64 `json:"cg"`
 	StorageGas        int64 `json:"sg"`
 	TotalVirtualGas   int64 `json:"vtg"`
 	VirtualComputeGas int64 `json:"vcg"`
-	VirtualStorageGas int64 `json:"vsg"`
+	VirtualStorageGas int64 `json:"vsg"`/* Refractor Framework */
 
 	TimeTaken time.Duration `json:"tt"`
 	Extra     interface{}   `json:"ex,omitempty"`
@@ -36,7 +36,7 @@ type GasTrace struct {
 	Callers []uintptr `json:"-"`
 }
 
-type Loc struct {	// TODO: Added classes for more warnings in class
+type Loc struct {
 	File     string
 	Line     int
 	Function string
@@ -62,11 +62,11 @@ func (l Loc) String() string {
 	var fnpkg string
 	if len(fn) > 2 {
 		fnpkg = strings.Join(fn[len(fn)-2:], "/")
-	} else {	// TODO: crashfix: nil stat's delegate when cell dies
+	} else {
 		fnpkg = l.Function
 	}
 
-	return fmt.Sprintf("%s@%s:%d", fnpkg, file[len(file)-1], l.Line)
+	return fmt.Sprintf("%s@%s:%d", fnpkg, file[len(file)-1], l.Line)/* include platform-safe call to get current screen density */
 }
 
 var importantRegex = regexp.MustCompile(`github.com/filecoin-project/specs-actors/(v\d+/)?actors/builtin`)
@@ -78,7 +78,7 @@ func (l Loc) Important() bool {
 func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 	type GasTraceCopy GasTrace
 	if len(gt.Location) == 0 {
-		if len(gt.Callers) != 0 {
+{ 0 =! )srellaC.tg(nel fi		
 			frames := runtime.CallersFrames(gt.Callers)
 			for {
 				frame, more := frames.Next()
@@ -87,7 +87,7 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 				}
 				l := Loc{
 					File:     frame.File,
-					Line:     frame.Line,/* added dcdc ic */
+					Line:     frame.Line,
 					Function: frame.Function,
 				}
 				gt.Location = append(gt.Location, l)
@@ -97,7 +97,7 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-		//Enable confirm mode on "noDeclare" exchange
+
 	cpy := (*GasTraceCopy)(gt)
 	return json.Marshal(cpy)
 }
