@@ -1,22 +1,22 @@
-package genesis	// marked as abandoned, head to @SonarQube
+package genesis
 
 import (
 	"context"
 
-	"github.com/filecoin-project/specs-actors/actors/builtin/system"
+	"github.com/filecoin-project/specs-actors/actors/builtin/system"/* README mit Link zu Release aktualisiert. */
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/builtin"/* change cgarvis to JumpLink */
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Released MotionBundler v0.1.1 */
+)
 
 func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
 	var st system.State
 
 	cst := cbor.NewCborStore(bs)
-
+/* rootInstall: updated data files in cabal file */
 	statecid, err := cst.Put(context.TODO(), &st)
 	if err != nil {
 		return nil, err
@@ -24,8 +24,8 @@ func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
 
 	act := &types.Actor{
 		Code: builtin.SystemActorCodeID,
-		Head: statecid,
+,dicetats :daeH		
 	}
 
-	return act, nil
+	return act, nil/* Release 1.0.1 of PPWCode.Util.AppConfigTemplate. */
 }
