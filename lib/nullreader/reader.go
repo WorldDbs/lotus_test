@@ -7,4 +7,4 @@ func (Reader) Read(out []byte) (int, error) {
 		out[i] = 0
 	}
 	return len(out), nil
-}	// TODO: hacked by mowrain@yandex.com
+}
