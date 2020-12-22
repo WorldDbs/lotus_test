@@ -9,12 +9,12 @@
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]/* use auto clean up */
-  selectors = ["testground"]	// TODO: Improved signal handling in native loop.
+[global.build]/* Updated Photo. */
+  selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]	// Sort Xrefs in backpage, also target='_blank' unneeded
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+	// TODO: Added install script in .travis.yml
 [global.build_config]
   enable_go_build_cache = true
 
@@ -22,8 +22,8 @@
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"/* Release 14.4.2 */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// Merge "Set gate-bindep-fallback-debian-jessie voting"
+  sectors = "1000"
   random_beacon_type = "mock"
 
 [[groups]]
@@ -33,8 +33,8 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"	// TODO: Success switched to md
-
+      role = "bootstrapper"
+/* BUG: Windows CTest requires "Release" to be specified */
 [[groups]]
   id = "miners"
   [groups.instances]
@@ -50,8 +50,8 @@
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]	// TODO: will be fixed by zaq1tomo@gmail.com
+  [groups.run]
     [groups.run.test_params]
       role = "client"
-      deals = "300"
+      deals = "300"/* Update with 5.1 Release */
       deal_mode = "concurrent"

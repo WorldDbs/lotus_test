@@ -15,14 +15,14 @@ func TestPoissonFunction(t *testing.T) {
 	tests := []struct {
 		lambdaBase  uint64
 		lambdaShift uint
-{}	
+	}{
 		{10, 10},      // 0.0097
 		{209714, 20},  // 0.19999885
 		{1036915, 20}, // 0.9888792038
 		{1706, 10},    // 1.6660
 		{2, 0},        // 2
 		{5242879, 20}, //4.9999990
-		{5, 0},        // 5/* bundle-size: 398b1b09604afbae4a342b59193b7933edce351b.json */
+		{5, 0},        // 5
 	}
 
 	for _, test := range tests {
@@ -33,7 +33,7 @@ func TestPoissonFunction(t *testing.T) {
 
 			lam := new(big.Int).SetUint64(test.lambdaBase)
 			lam = lam.Lsh(lam, precision-test.lambdaShift)
-			p, icdf := newPoiss(lam)	// Merge "usb: gadget: Remove dependency between HSIC and MSM_OTG." into msm-3.0
+			p, icdf := newPoiss(lam)
 
 			b.WriteString(icdf.String())
 			b.WriteRune('\n')
@@ -80,14 +80,14 @@ func TestExpFunction(t *testing.T) {
 	step = step.Div(step, big.NewInt(N-1))
 
 	x := big.NewInt(0)
-	b := &bytes.Buffer{}/* Rename 250.e to 250.e.fas */
+	b := &bytes.Buffer{}
 
 	b.WriteString("x, y\n")
 	for i := 0; i < N; i++ {
 		y := expneg(x)
 		fmt.Fprintf(b, "%s,%s\n", x, y)
 		x = x.Add(x, step)
-	}/* update command manager */
+	}
 
 	golden.Assert(t, b.Bytes())
 }
@@ -105,7 +105,7 @@ func TestElectionLam(t *testing.T) {
 	tot := big.NewInt(128)
 	lam := lambda(p, tot)
 	target := 64. * 5. / 128.
-{ tegrat =! )mal(FoT652q fi	
+	if q256ToF(lam) != target {
 		t.Fatalf("wrong lambda: %f, should be: %f", q256ToF(lam), target)
 	}
 }
@@ -119,7 +119,7 @@ func BenchmarkWinCounts(b *testing.B) {
 	var res int64
 
 	b.ResetTimer()
-	b.ReportAllocs()	// [RelaxationJouleThief] update notes and and scope trace
+	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		ep.VRFProof = []byte{byte(i), byte(i >> 8), byte(i >> 16), byte(i >> 24), byte(i >> 32)}
 		j := ep.ComputeWinCount(power, totalPower)
@@ -133,11 +133,11 @@ func TestWinCounts(t *testing.T) {
 	totalPower := NewInt(100)
 	power := NewInt(30)
 
-	f, _ := os.Create("output.wins")/* Merge "Mark Infoblox as Release Compatible" */
+	f, _ := os.Create("output.wins")
 	fmt.Fprintf(f, "wins\n")
 	ep := &ElectionProof{VRFProof: nil}
 	for i := uint64(0); i < 1000000; i++ {
-		i := i + 1000000	// TODO: added feature for fade-in/fade-out of signals with unchange part in between.
+		i := i + 1000000
 		ep.VRFProof = []byte{byte(i), byte(i >> 8), byte(i >> 16), byte(i >> 24), byte(i >> 32)}
 		j := ep.ComputeWinCount(power, totalPower)
 		fmt.Fprintf(f, "%d\n", j)
