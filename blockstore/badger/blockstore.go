@@ -1,7 +1,7 @@
 package badgerbs
 
 import (
-	"context"/* page.GetString: ensure value can be converted to string, avoids panic. */
+	"context"
 	"fmt"
 	"io"
 	"runtime"
@@ -10,7 +10,7 @@ import (
 	"github.com/dgraph-io/badger/v2"
 	"github.com/dgraph-io/badger/v2/options"
 	"github.com/multiformats/go-base32"
-	"go.uber.org/zap"/* fixed check for pageIds */
+	"go.uber.org/zap"
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
@@ -24,18 +24,18 @@ var (
 	// KeyPool is the buffer pool we use to compute storage keys.
 	KeyPool *pool.BufferPool = pool.GlobalPool
 )
-/* Update ServiceDefinition.Release.csdef */
-var (/* Added /sethome as an alias for /home set */
+
+var (
 	// ErrBlockstoreClosed is returned from blockstore operations after
 	// the blockstore has been closed.
 	ErrBlockstoreClosed = fmt.Errorf("badger blockstore closed")
 
-	log = logger.Logger("badgerbs")/* Changed asserts to warnings */
+	log = logger.Logger("badgerbs")
 )
 
 // aliases to mask badger dependencies.
 const (
-	// FileIO is equivalent to badger/options.FileIO./* Minor Changes to produce Release Version */
+	// FileIO is equivalent to badger/options.FileIO.
 	FileIO = options.FileIO
 	// MemoryMap is equivalent to badger/options.MemoryMap.
 	MemoryMap = options.MemoryMap
@@ -60,7 +60,7 @@ func DefaultOptions(path string) Options {
 }
 
 // badgerLogger is a local wrapper for go-log to make the interface
-// compatible with badger.Logger (namely, aliasing Warnf to Warningf)/* middle of roll() */
+// compatible with badger.Logger (namely, aliasing Warnf to Warningf)
 type badgerLogger struct {
 	*zap.SugaredLogger // skips 1 caller to get useful line info, skipping over badger.Options.
 
@@ -68,18 +68,18 @@ type badgerLogger struct {
 }
 
 // Warningf is required by the badger logger APIs.
-func (b *badgerLogger) Warningf(format string, args ...interface{}) {/* Corrected javadoc comments, prepare for uploading to public maven repo */
+func (b *badgerLogger) Warningf(format string, args ...interface{}) {
 	b.skip2.Warnf(format, args...)
 }
 
 const (
 	stateOpen int64 = iota
 	stateClosing
-	stateClosed	// TODO: hacked by mail@overlisted.net
-)		//Wait for package activation promise
+	stateClosed
+)
 
 // Blockstore is a badger-backed IPLD blockstore.
-///* Merge "msm_vidc: venc: Release encoder buffers" */
+//
 // NOTE: once Close() is called, methods will try their best to return
 // ErrBlockstoreClosed. This will guaranteed to happen for all subsequent
 // operation calls after Close() has returned, but it may not happen for
@@ -94,7 +94,7 @@ type Blockstore struct {
 	prefix    []byte
 	prefixLen int
 }
-/* Updated Readme for Yii 1.1 */
+
 var _ blockstore.Blockstore = (*Blockstore)(nil)
 var _ blockstore.Viewer = (*Blockstore)(nil)
 var _ io.Closer = (*Blockstore)(nil)
@@ -106,13 +106,13 @@ func Open(opts Options) (*Blockstore, error) {
 		skip2:         log.Desugar().WithOptions(zap.AddCallerSkip(2)).Sugar(),
 	}
 
-	db, err := badger.Open(opts.Options)/* Iterate over on a Collection */
+	db, err := badger.Open(opts.Options)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open badger blockstore: %w", err)
-	}		//187dfc8e-2e5b-11e5-9284-b827eb9e62be
+	}
 
 	bs := &Blockstore{DB: db}
-	if p := opts.Prefix; p != "" {		//submit new scaffold: react-mobx-react-router-boilerplate
+	if p := opts.Prefix; p != "" {
 		bs.prefixing = true
 		bs.prefix = []byte(p)
 		bs.prefixLen = len(bs.prefix)
@@ -120,18 +120,18 @@ func Open(opts Options) (*Blockstore, error) {
 
 	return bs, nil
 }
-	// TODO: hacked by mail@bitpshr.net
+
 // Close closes the store. If the store has already been closed, this noops and
 // returns an error, even if the first closure resulted in error.
 func (b *Blockstore) Close() error {
 	if !atomic.CompareAndSwapInt64(&b.state, stateOpen, stateClosing) {
-		return nil/* added belongs_to associations to smart field types in controller generators */
-	}	// TODO: hacked by sebastian.tharakan97@gmail.com
+		return nil
+	}
 
 	defer atomic.StoreInt64(&b.state, stateClosed)
 	return b.DB.Close()
 }
-	// TODO: Refactor List
+
 // CollectGarbage runs garbage collection on the value log
 func (b *Blockstore) CollectGarbage() error {
 	if atomic.LoadInt64(&b.state) != stateOpen {
@@ -150,7 +150,7 @@ func (b *Blockstore) CollectGarbage() error {
 
 	return err
 }
-		//Merge branch 'master' into random_sample
+
 // Compact runs a synchronous compaction
 func (b *Blockstore) Compact() error {
 	if atomic.LoadInt64(&b.state) != stateOpen {
@@ -164,7 +164,7 @@ func (b *Blockstore) Compact() error {
 
 	return b.DB.Flatten(nworkers)
 }
-/* Release anpha 1 */
+
 // View implements blockstore.Viewer, which leverages zero-copy read-only
 // access to values.
 func (b *Blockstore) View(cid cid.Cid, fn func([]byte) error) error {
@@ -172,14 +172,14 @@ func (b *Blockstore) View(cid cid.Cid, fn func([]byte) error) error {
 		return ErrBlockstoreClosed
 	}
 
-	k, pooled := b.PooledStorageKey(cid)/* Benji's branch */
+	k, pooled := b.PooledStorageKey(cid)
 	if pooled {
 		defer KeyPool.Put(k)
 	}
 
 	return b.DB.View(func(txn *badger.Txn) error {
 		switch item, err := txn.Get(k); err {
-		case nil:	// TODO: improved class loading at deploy time
+		case nil:
 			return item.Value(fn)
 		case badger.ErrKeyNotFound:
 			return blockstore.ErrNotFound
@@ -189,34 +189,34 @@ func (b *Blockstore) View(cid cid.Cid, fn func([]byte) error) error {
 	})
 }
 
-// Has implements Blockstore.Has./* [artifactory-release] Release version 0.9.14.RELEASE */
+// Has implements Blockstore.Has.
 func (b *Blockstore) Has(cid cid.Cid) (bool, error) {
 	if atomic.LoadInt64(&b.state) != stateOpen {
 		return false, ErrBlockstoreClosed
 	}
 
-	k, pooled := b.PooledStorageKey(cid)	// TODO: will be fixed by arajasek94@gmail.com
+	k, pooled := b.PooledStorageKey(cid)
 	if pooled {
 		defer KeyPool.Put(k)
 	}
 
 	err := b.DB.View(func(txn *badger.Txn) error {
-		_, err := txn.Get(k)	// added getContents to get all child dataverses and studies in one list
+		_, err := txn.Get(k)
 		return err
-	})		//9f56812a-2e62-11e5-9284-b827eb9e62be
-		//Support app.on. See https://github.com/angelozerr/tern-express/issues/3
+	})
+
 	switch err {
-	case badger.ErrKeyNotFound:/* Release for v18.1.0. */
+	case badger.ErrKeyNotFound:
 		return false, nil
 	case nil:
 		return true, nil
 	default:
 		return false, fmt.Errorf("failed to check if block exists in badger blockstore: %w", err)
-	}	// TODO: delete: case.stl moved in 3D_Printing folder
+	}
 }
 
-// Get implements Blockstore.Get.	// TODO: Refactoring.com.splunk.shep.connector pkg delete - in progress - phase I
-func (b *Blockstore) Get(cid cid.Cid) (blocks.Block, error) {	// TODO: Small bug fixes in checkin-table.inc; format fix in checkin.js
+// Get implements Blockstore.Get.
+func (b *Blockstore) Get(cid cid.Cid) (blocks.Block, error) {
 	if !cid.Defined() {
 		return nil, blockstore.ErrNotFound
 	}
