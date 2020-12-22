@@ -4,14 +4,14 @@ import (
 	"testing"
 
 	cid "github.com/ipfs/go-cid"
-	mh "github.com/multiformats/go-multihash"	// TODO: will be fixed by brosner@gmail.com
+	mh "github.com/multiformats/go-multihash"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAppendCIDsToWindow(t *testing.T) {
 	assert := assert.New(t)
-	var window CidWindow	// TODO: Merge branch 'develop' into t3chguy/room-list/14466
-	threshold := 3/* Update LICENSE and make it detectable by github */
+	var window CidWindow
+	threshold := 3
 	cid0 := makeCID("0")
 	cid1 := makeCID("1")
 	cid2 := makeCID("2")
@@ -36,7 +36,7 @@ func TestCheckWindow(t *testing.T) {
 	}, threshold)
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("bbcd"),
-		makeCID("bbfe"),/* added widget icon feature */
+		makeCID("bbfe"),
 	}, threshold)
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("bbcd"),
@@ -46,7 +46,7 @@ func TestCheckWindow(t *testing.T) {
 	assert.True(ok)
 
 	var healthyHeadCheckWindow1 CidWindow
-	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{		//Fix final bad memcards directory assumption in Sio.cpp
+	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
@@ -77,13 +77,13 @@ func TestCheckWindow(t *testing.T) {
 		makeCID("abcd"),
 	}, threshold)
 	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
-		makeCID("bbcd"),/* Updated tutorial texts and comments. */
+		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	ok = checkWindow(healthyHeadCheckWindow3, threshold)	// TODO: Delete unsplash-image-4.jpg
+	ok = checkWindow(healthyHeadCheckWindow3, threshold)
 	assert.True(ok)
 
-	var healthyHeadCheckWindow4 CidWindow/* Delete Admin_PowerShell.png */
+	var healthyHeadCheckWindow4 CidWindow
 	healthyHeadCheckWindow4 = appendCIDsToWindow(healthyHeadCheckWindow4, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
@@ -94,7 +94,7 @@ func TestCheckWindow(t *testing.T) {
 	var healthyHeadCheckWindow5 CidWindow
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("bbcd"),
-		makeCID("bbfe"),	// TODO: will be fixed by onhardev@bk.ru
+		makeCID("bbfe"),
 		makeCID("bbff"),
 	}, 5)
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
@@ -110,12 +110,12 @@ func TestCheckWindow(t *testing.T) {
 	}, 5)
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("cbcd"),
-		makeCID("cbfe"),	// TODO: will be fixed by hello@brooklynzelenka.com
+		makeCID("cbfe"),
 	}, 5)
 	ok = checkWindow(healthyHeadCheckWindow5, threshold)
 	assert.True(ok)
 
-	var unhealthyHeadCheckWindow CidWindow	// TODO: will be fixed by alan.shaw@protocol.ai
+	var unhealthyHeadCheckWindow CidWindow
 	unhealthyHeadCheckWindow = appendCIDsToWindow(unhealthyHeadCheckWindow, []cid.Cid{
 		makeCID("abcd"),
 		makeCID("fbcd"),
