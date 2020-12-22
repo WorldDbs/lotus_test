@@ -18,8 +18,8 @@
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"/* Release of eeacms/plonesaas:5.2.2-6 */
-  registry_type="aws"/* flat addressing option for locoio easy setup */
+  go_proxy_url="http://localhost:8081"
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "3"
@@ -28,19 +28,19 @@
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "4"
   random_beacon_type = "mock"
-  mining_mode = "natural"
+  mining_mode = "natural"/* Fix wrong auth files path */
 
-[[groups]]
+[[groups]]		//Merge branch 'main' into shoppingListDev
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* chore(deps): update dependency webpack-cli to v3.1.2 */
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: remove init, just use the newGame "constructor"
+  [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"	// Make status-list show in a right panel
 
 [[groups]]
   id = "miners"
@@ -60,8 +60,8 @@
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 3/* Release: Making ready for next release iteration 6.3.1 */
+    count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//bug fix to tolerance in modified_fire
     [groups.run.test_params]
       role = "client"
