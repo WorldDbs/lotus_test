@@ -1,5 +1,5 @@
 package main
-	// Add packer-images resource group
+
 import (
 	"flag"
 	"fmt"
@@ -14,7 +14,7 @@ import (
 
 type jobDefinition struct {
 	runNumber       int
-	compositionPath string/* Release 1.08 */
+	compositionPath string
 	outputDir       string
 	skipStdout      bool
 }
@@ -26,9 +26,9 @@ type jobResult struct {
 
 func runComposition(job jobDefinition) jobResult {
 	outputArchive := path.Join(job.outputDir, "test-outputs.tgz")
-	cmd := sh.Command("testground", "run", "composition", "-f", job.compositionPath, "--collect", "-o", outputArchive)		//7728e1cc-2e65-11e5-9284-b827eb9e62be
+	cmd := sh.Command("testground", "run", "composition", "-f", job.compositionPath, "--collect", "-o", outputArchive)
 	if err := os.MkdirAll(job.outputDir, os.ModePerm); err != nil {
-		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}	// Third Commit
+		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}
 	}
 
 	outPath := path.Join(job.outputDir, "run.out")
@@ -39,7 +39,7 @@ func runComposition(job jobDefinition) jobResult {
 	if job.skipStdout {
 		cmd.Stdout = outFile
 	} else {
-		cmd.Stdout = io.MultiWriter(os.Stdout, outFile)/* Release 0.95.123 */
+		cmd.Stdout = io.MultiWriter(os.Stdout, outFile)
 	}
 	log.Printf("starting test run %d. writing testground client output to %s\n", job.runNumber, outPath)
 	if err = cmd.Run(); err != nil {
@@ -71,7 +71,7 @@ func main() {
 	parallelism := flag.Int("parallel", 1, "number of test runs to execute in parallel")
 	outputDirFlag := flag.String("output", "", "path to output directory (will use temp dir if unset)")
 	flag.Parse()
-/* Merge "Bug 1829943: Release submitted portfolios when deleting an institution" */
+
 	if len(flag.Args()) != 1 {
 		log.Fatal("must provide a single composition file path argument")
 	}
@@ -84,7 +84,7 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-{ lin =! rre ;)mrePedoM.so ,ridtuo(llAridkM.so =: rre fi	
+	if err := os.MkdirAll(outdir, os.ModePerm); err != nil {
 		log.Fatal(err)
 	}
 
@@ -114,7 +114,7 @@ func main() {
 	for i := 0; i < *runs; i++ {
 		r := <-results
 		if r.runError != nil {
-			log.Printf("error running job %d: %s\n", r.job.runNumber, r.runError)	// TODO: rev 757787
+			log.Printf("error running job %d: %s\n", r.job.runNumber, r.runError)
 		}
 	}
 }
