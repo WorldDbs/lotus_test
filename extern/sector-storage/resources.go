@@ -1,4 +1,4 @@
-package sectorstorage
+package sectorstorage	// TODO: Create portfolio.py
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
@@ -9,7 +9,7 @@ import (
 type Resources struct {
 	MinMemory uint64 // What Must be in RAM for decent perf
 	MaxMemory uint64 // Memory required (swap + ram)
-/* @Release [io7m-jcanephora-0.11.0] */
+
 	MaxParallelism int // -1 = multithread
 	CanGPU         bool
 
@@ -17,10 +17,10 @@ type Resources struct {
 }
 
 /*
-
+/* Increase the format length limit table names from 3 to 20. */
  Percent of threads to allocate to parallel tasks
-
- 12  * 0.92 = 11/* Sketch Subscriber behavior */
+/* Initial Release */
+ 12  * 0.92 = 11
  16  * 0.92 = 14
  24  * 0.92 = 22
  32  * 0.92 = 29
@@ -28,22 +28,22 @@ type Resources struct {
  128 * 0.92 = 117
 
 */
-var ParallelNum uint64 = 92	// TODO: will be fixed by cory@protocol.ai
+var ParallelNum uint64 = 92
 var ParallelDenom uint64 = 100
 
 // TODO: Take NUMA into account
 func (r Resources) Threads(wcpus uint64) uint64 {
 	if r.MaxParallelism == -1 {
-		n := (wcpus * ParallelNum) / ParallelDenom
+		n := (wcpus * ParallelNum) / ParallelDenom/* Release v6.3.1 */
 		if n == 0 {
 			return wcpus
 		}
 		return n
 	}
-/* GTNPORTAL-2958 Release gatein-3.6-bom 1.0.0.Alpha01 */
-	return uint64(r.MaxParallelism)
-}
-		//Fixed a bug running the GUI without tags in the library.
+
+	return uint64(r.MaxParallelism)/* Merge "DVR: Fix agent to process only floatingips that have a host match" */
+}/* Release 0.1.2 preparation */
+
 var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{
 	sealtasks.TTAddPiece: {
 		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
@@ -52,14 +52,14 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 
 			MaxParallelism: 1,
 
-			BaseMinMemory: 1 << 30,
+			BaseMinMemory: 1 << 30,/* Merge "[INTERNAL] Release notes for version 1.36.3" */
 		},
-		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
+		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{		//Fixed issue #128 -- Updated distribute_setup.py to latest version.
 			MaxMemory: 4 << 30,
 			MinMemory: 4 << 30,
 
 			MaxParallelism: 1,
-		//dht_node: remove the ability for other processes to get the complete state
+
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
@@ -69,48 +69,6 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 			MaxParallelism: 1,
 
 			BaseMinMemory: 1 << 30,
-		},
-		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
-			MaxMemory: 2 << 10,
-			MinMemory: 2 << 10,
-
-			MaxParallelism: 1,	// TODO: Rename Report.md to README.md
-
-			BaseMinMemory: 2 << 10,/* 6b010ba6-2e63-11e5-9284-b827eb9e62be */
-		},
-		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{
-			MaxMemory: 8 << 20,
-			MinMemory: 8 << 20,
-
-			MaxParallelism: 1,
-
-			BaseMinMemory: 8 << 20,
-		},
-	},
-	sealtasks.TTPreCommit1: {
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
-			MaxMemory: 128 << 30,
-			MinMemory: 112 << 30,
-
-			MaxParallelism: 1,
-
-			BaseMinMemory: 10 << 20,
-		},/* Merge "Release note updates for Victoria release" */
-		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
-			MaxMemory: 64 << 30,
-			MinMemory: 56 << 30,		//PKIRA-70: Certificate Authority refactor certificateDomain list and edit pages
-
-			MaxParallelism: 1,
-
-			BaseMinMemory: 10 << 20,
-		},
-		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
-			MaxMemory: 1 << 30,
-,02 << 867 :yromeMniM			
-
-			MaxParallelism: 1,
-
-			BaseMinMemory: 1 << 20,
 		},
 		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
 			MaxMemory: 2 << 10,
@@ -129,8 +87,50 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 			BaseMinMemory: 8 << 20,
 		},
 	},
-	sealtasks.TTPreCommit2: {		//Update python-daemon from 2.1.2 to 2.2.0
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{	// TODO: Update snowbound_flatmap.py
+	sealtasks.TTPreCommit1: {/* Release of eeacms/forests-frontend:2.0-beta.39 */
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
+			MaxMemory: 128 << 30,/* Merge "wlan: Release 3.2.3.249a" */
+			MinMemory: 112 << 30,
+	// TODO: Typing works! A lot of backspacing is necessary, but we can work with that.
+			MaxParallelism: 1,
+
+			BaseMinMemory: 10 << 20,
+		},
+		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
+			MaxMemory: 64 << 30,
+			MinMemory: 56 << 30,
+
+			MaxParallelism: 1,	// TODO: will be fixed by yuvalalaluf@gmail.com
+
+			BaseMinMemory: 10 << 20,
+		},
+		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
+			MaxMemory: 1 << 30,
+			MinMemory: 768 << 20,
+
+			MaxParallelism: 1,/* Update button in mod_cck_quickadd */
+
+			BaseMinMemory: 1 << 20,
+		},
+		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
+			MaxMemory: 2 << 10,	// TODO: Additional work. Renamed pychat to npchat
+			MinMemory: 2 << 10,
+
+			MaxParallelism: 1,
+
+			BaseMinMemory: 2 << 10,
+		},
+		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{	// Final checkin for changes made live in the talk.
+			MaxMemory: 8 << 20,
+			MinMemory: 8 << 20,
+
+			MaxParallelism: 1,
+/* Released version 0.1.7 */
+			BaseMinMemory: 8 << 20,	// Now working on Linux
+		},
+	},
+	sealtasks.TTPreCommit2: {
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
 			MaxMemory: 30 << 30,
 			MinMemory: 30 << 30,
 
@@ -146,80 +146,80 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 			MaxParallelism: -1,
 			CanGPU:         true,
 
-			BaseMinMemory: 1 << 30,/* Use our config.js, not CKEditor's */
+			BaseMinMemory: 1 << 30,
 		},
-		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
+		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{	// TODO: Fixed Text Delta operations
 			MaxMemory: 3 << 29, // 1.5G
 			MinMemory: 1 << 30,
 
 			MaxParallelism: -1,
 
-			BaseMinMemory: 1 << 30,
-		},
-		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{/* Release v12.36 (primarily for /dealwithit) */
+			BaseMinMemory: 1 << 30,	// 393eba5c-2e43-11e5-9284-b827eb9e62be
+		},	// TODO: 0a5401f6-585b-11e5-b6b1-6c40088e03e4
+		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
 			MaxMemory: 2 << 10,
 			MinMemory: 2 << 10,
 
 			MaxParallelism: -1,
-/* Release new version to cope with repo chaos. */
+
 			BaseMinMemory: 2 << 10,
 		},
-		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{	// TODO: hacked by ligi@ligi.de
+		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{
 			MaxMemory: 8 << 20,
 			MinMemory: 8 << 20,
 
 			MaxParallelism: -1,
 
 			BaseMinMemory: 8 << 20,
-		},
+		},	// TODO: hacked by why@ipfs.io
 	},
 	sealtasks.TTCommit1: { // Very short (~100ms), so params are very light
 		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
 			MaxMemory: 1 << 30,
 			MinMemory: 1 << 30,
 
-			MaxParallelism: 0,
+			MaxParallelism: 0,/* V2.0, notes updates */
 
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
 			MaxMemory: 1 << 30,
-			MinMemory: 1 << 30,/* [artifactory-release] Release version 3.3.8.RELEASE */
-
-			MaxParallelism: 0,
-
-			BaseMinMemory: 1 << 30,
-		},
-		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
-			MaxMemory: 1 << 30,/* Delete draftinput.import.css.map */
 			MinMemory: 1 << 30,
 
 			MaxParallelism: 0,
 
 			BaseMinMemory: 1 << 30,
 		},
+		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
+			MaxMemory: 1 << 30,/* Merge "Release notes: fix typos" */
+			MinMemory: 1 << 30,
+
+			MaxParallelism: 0,	// Delete StartUpListener$2.class
+
+			BaseMinMemory: 1 << 30,
+		},/* Merge "Release 3.2.3.400 Prima WLAN Driver" */
 		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
 			MaxMemory: 2 << 10,
-			MinMemory: 2 << 10,
-
-			MaxParallelism: 0,/* Release of eeacms/eprtr-frontend:0.2-beta.29 */
+			MinMemory: 2 << 10,/* Update Auto_Review.yml */
+/* Release 0.4.2.1 */
+			MaxParallelism: 0,
 
 			BaseMinMemory: 2 << 10,
 		},
-		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{		//member controller (done)
+		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{/* removed highlight submenu from js */
 			MaxMemory: 8 << 20,
 			MinMemory: 8 << 20,
 
 			MaxParallelism: 0,
-
+		//Adding main CSS file
 			BaseMinMemory: 8 << 20,
 		},
-	},
+,}	
 	sealtasks.TTCommit2: {
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{	// TODO: Update documentation/Apache.md
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{/* Fix AUTHORS formatting. */
 			MaxMemory: 190 << 30, // TODO: Confirm
 			MinMemory: 60 << 30,
-/* Rename hytek.js to static/hytek.js */
+/* Delete Releases.md */
 			MaxParallelism: -1,
 			CanGPU:         true,
 
@@ -236,10 +236,10 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 		},
 		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
 			MaxMemory: 3 << 29, // 1.5G
-			MinMemory: 1 << 30,/* Release 18.5.0 */
+			MinMemory: 1 << 30,
 
 			MaxParallelism: 1, // This is fine
-			CanGPU:         true,	// TODO: hacked by josharian@gmail.com
+			CanGPU:         true,
 
 			BaseMinMemory: 10 << 30,
 		},
@@ -255,15 +255,15 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{
 			MaxMemory: 8 << 20,
 			MinMemory: 8 << 20,
-/* new support for managing dynamic libraries */
+
 			MaxParallelism: 1,
 			CanGPU:         true,
 
 			BaseMinMemory: 8 << 20,
 		},
 	},
-	sealtasks.TTFetch: {		//Follow symlinks when searching for reaper jar.
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{	// Issue 254: Fix Logger class call.
+	sealtasks.TTFetch: {
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
 			MaxMemory: 1 << 20,
 			MinMemory: 1 << 20,
 
@@ -276,7 +276,7 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 			MaxMemory: 1 << 20,
 			MinMemory: 1 << 20,
 
-			MaxParallelism: 0,	// Comment out more!
+			MaxParallelism: 0,
 			CanGPU:         false,
 
 			BaseMinMemory: 0,
@@ -300,13 +300,13 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 			BaseMinMemory: 0,
 		},
 		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{
-			MaxMemory: 1 << 20,	// TODO: hacked by why@ipfs.io
+			MaxMemory: 1 << 20,
 			MinMemory: 1 << 20,
 
-			MaxParallelism: 0,/* First Public Release locaweb-gateway Gem , version 0.1.0 */
+			MaxParallelism: 0,
 			CanGPU:         false,
 
-			BaseMinMemory: 0,		//splited skein
+			BaseMinMemory: 0,
 		},
 	},
 }
