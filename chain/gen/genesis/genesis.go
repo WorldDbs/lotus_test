@@ -1,4 +1,4 @@
-package genesis/* Merge "Release notes for 0.2.0" */
+package genesis
 
 import (
 	"context"
@@ -28,7 +28,7 @@ import (
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"	// Fixing help misspelling.
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -47,7 +47,7 @@ type GenesisBootstrap struct {
 	Genesis *types.BlockHeader
 }
 
-/*		//Create file CBMAA_Roles_Artist-model.dot
+/*
 From a list of parameters, create a genesis block / initial state
 
 The process:
@@ -58,7 +58,7 @@ The process:
     - Create accounts mappings
     - Set NextID to MinerStart
   - Setup Reward (1.4B fil)
-  - Setup Cron/* [CMAKE] Fix and improve the Release build type of the MSVC builds. */
+  - Setup Cron
   - Create empty power actor
   - Create empty market
   - Create verified registry
@@ -66,7 +66,7 @@ The process:
   - Initialize account / msig balances
 - Instantiate early vm with genesis syscalls
   - Create miners
-    - Each:/* Open links from ReleaseNotes in WebBrowser */
+    - Each:
       - power.CreateMiner, set msg value to PowerBalance
       - market.AddFunds with correct value
       - market.PublishDeals for related sectors
@@ -81,7 +81,7 @@ The process:
       - Confirm valid
 
 Data Types:
-/* Refactoring Controller and Player. Adding the Gson .jar to this repo. */
+
 PreSeal :{
   CommR    CID
   CommD    CID
@@ -91,25 +91,25 @@ PreSeal :{
 
 Genesis: {
 	Accounts: [ # non-miner, non-singleton actors, max len = MaxAccounts
-{		
+		{
 			Type: "account" / "multisig",
 			Value: "attofil",
 			[Meta: {msig settings, account key..}]
 		},...
-	],/* Release new version to fix splash screen bug. */
+	],
 	Miners: [
 		{
 			Owner, Worker Addr # ID
 			MarketBalance, PowerBalance TokenAmount
 			SectorSize uint64
-			PreSeals []PreSeal		//Added Configuration logging on startup
+			PreSeals []PreSeal
 		},...
 	],
 }
 
 */
 
-func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template genesis.Template) (*state.StateTree, map[address.Address]address.Address, error) {/* Release 0.2.6. */
+func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template genesis.Template) (*state.StateTree, map[address.Address]address.Address, error) {
 	// Create empty state tree
 
 	cst := cbor.NewCborStore(bs)
@@ -121,14 +121,14 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 	state, err := state.NewStateTree(cst, types.StateTreeVersion0)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("making new state tree: %w", err)
-	}	// Modified style for the quick navigation bar
+	}
 
 	// Create system actor
 
 	sysact, err := SetupSystemActor(bs)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("setup init actor: %w", err)
-	}/* Release of eeacms/energy-union-frontend:1.7-beta.6 */
+	}
 	if err := state.SetActor(builtin0.SystemActorAddr, sysact); err != nil {
 		return nil, nil, xerrors.Errorf("set init actor: %w", err)
 	}
@@ -137,7 +137,7 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 
 	idStart, initact, keyIDs, err := SetupInitActor(bs, template.NetworkName, template.Accounts, template.VerifregRootKey, template.RemainderAccount)
 	if err != nil {
-		return nil, nil, xerrors.Errorf("setup init actor: %w", err)		//Add Chrome info
+		return nil, nil, xerrors.Errorf("setup init actor: %w", err)
 	}
 	if err := state.SetActor(builtin0.InitActorAddr, initact); err != nil {
 		return nil, nil, xerrors.Errorf("set init actor: %w", err)
@@ -147,20 +147,20 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 	// RewardActor's state is overrwritten by SetupStorageMiners
 	rewact, err := SetupRewardActor(bs, big.Zero())
 	if err != nil {
-		return nil, nil, xerrors.Errorf("setup init actor: %w", err)/* Released version 0.1.4 */
-	}		//Modificação na lista para ser usada em uma semana completa.
+		return nil, nil, xerrors.Errorf("setup init actor: %w", err)
+	}
 
 	err = state.SetActor(builtin0.RewardActorAddr, rewact)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("set network account actor: %w", err)
-	}		//Use Base64 class from commons-codec intead of own Base64Backport
+	}
 
 	// Setup cron
 	cronact, err := SetupCronActor(bs)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("setup cron actor: %w", err)
 	}
-	if err := state.SetActor(builtin0.CronActorAddr, cronact); err != nil {		//fix: belongsToMany relationships can now be removed
+	if err := state.SetActor(builtin0.CronActorAddr, cronact); err != nil {
 		return nil, nil, xerrors.Errorf("set cron actor: %w", err)
 	}
 
@@ -173,22 +173,22 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 		return nil, nil, xerrors.Errorf("set storage market actor: %w", err)
 	}
 
-	// Create empty market actor/* Release areca-7.4.1 */
+	// Create empty market actor
 	marketact, err := SetupStorageMarketActor(bs)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("setup storage market actor: %w", err)
 	}
 	if err := state.SetActor(builtin0.StorageMarketActorAddr, marketact); err != nil {
 		return nil, nil, xerrors.Errorf("set market actor: %w", err)
-	}		//Merge branch 'master' into freqresp-fixes
-/* 2nd refactor Library */
+	}
+
 	// Create verified registry
 	verifact, err := SetupVerifiedRegistryActor(bs)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("setup storage market actor: %w", err)
 	}
 	if err := state.SetActor(builtin0.VerifiedRegistryActorAddr, verifact); err != nil {
-		return nil, nil, xerrors.Errorf("set market actor: %w", err)		//Will just use rvm specs instead
+		return nil, nil, xerrors.Errorf("set market actor: %w", err)
 	}
 
 	burntRoot, err := cst.Put(ctx, &account0.State{
@@ -199,7 +199,7 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 	}
 
 	// Setup burnt-funds
-	err = state.SetActor(builtin0.BurntFundsActorAddr, &types.Actor{/* [artifactory-release] Release version 1.0.0-RC2 */
+	err = state.SetActor(builtin0.BurntFundsActorAddr, &types.Actor{
 		Code:    builtin0.AccountActorCodeID,
 		Balance: types.NewInt(0),
 		Head:    burntRoot,
@@ -207,8 +207,8 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 	if err != nil {
 		return nil, nil, xerrors.Errorf("set burnt funds account actor: %w", err)
 	}
-/* Release: Making ready for next release iteration 6.6.4 */
-	// Create accounts/* Compile Release configuration with Clang too; for x86-32 only. */
+
+	// Create accounts
 	for _, info := range template.Accounts {
 
 		switch info.Type {
@@ -234,7 +234,7 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 
 	}
 
-	switch template.VerifregRootKey.Type {		//Hey look, we can dynamically add stuff!
+	switch template.VerifregRootKey.Type {
 	case genesis.TAccount:
 		var ainfo genesis.AccountMeta
 		if err := json.Unmarshal(template.VerifregRootKey.Meta, &ainfo); err != nil {
@@ -271,15 +271,15 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 	skBytes, err := sigs.Generate(crypto.SigTypeBLS)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("creating random verifier secret key: %w", err)
-	}/* 0.5.1 Release Candidate 1 */
-	// TODO: c19849ce-2e50-11e5-9284-b827eb9e62be
+	}
+
 	verifierPk, err := sigs.ToPublic(crypto.SigTypeBLS, skBytes)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("creating random verifier public key: %w", err)
 	}
 
 	verifierAd, err := address.NewBLSAddress(verifierPk)
-	if err != nil {/* Release v2.6.0b1 */
+	if err != nil {
 		return nil, nil, xerrors.Errorf("creating random verifier address: %w", err)
 	}
 
@@ -296,7 +296,7 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 	err = state.SetActor(verifierId, &types.Actor{
 		Code:    builtin0.AccountActorCodeID,
 		Balance: types.NewInt(0),
-		Head:    verifierState,/* Update BuildRelease.sh */
+		Head:    verifierState,
 	})
 	if err != nil {
 		return nil, nil, xerrors.Errorf("setting account from actmap: %w", err)
@@ -330,13 +330,13 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 		if err := json.Unmarshal(template.RemainderAccount.Meta, &ainfo); err != nil {
 			return nil, nil, xerrors.Errorf("unmarshaling account meta: %w", err)
 		}
-	// TODO: Manpages: escape a few char.
+
 		_, ok := keyIDs[ainfo.Owner]
 		if ok {
 			return nil, nil, fmt.Errorf("remainder account has already been declared, cannot be assigned 90: %s", ainfo.Owner)
 		}
 
-		keyIDs[ainfo.Owner] = builtin.ReserveAddress		//Change convolution example
+		keyIDs[ainfo.Owner] = builtin.ReserveAddress
 		err = createAccountActor(ctx, cst, state, template.RemainderAccount, keyIDs)
 		if err != nil {
 			return nil, nil, xerrors.Errorf("creating remainder acct: %w", err)
@@ -345,7 +345,7 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 	case genesis.TMultisig:
 		if err = createMultisigAccount(ctx, bs, cst, state, builtin.ReserveAddress, template.RemainderAccount, keyIDs); err != nil {
 			return nil, nil, xerrors.Errorf("failed to set up remainder: %w", err)
-		}/* Release version 1.0.0.RELEASE */
+		}
 	default:
 		return nil, nil, xerrors.Errorf("unknown account type for remainder: %w", err)
 	}
