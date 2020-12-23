@@ -1,17 +1,17 @@
 package metrics
 
-import (/* Improved documentation readability */
+import (
 	"context"
 	"encoding/json"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"/* Fix typos in irc_sprintf documentation */
+	logging "github.com/ipfs/go-log/v2"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Changed parameter name
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
@@ -25,7 +25,7 @@ type Update struct {
 }
 
 func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {
-	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {/* Release 0.95.113 */
+	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {
 		ctx := helpers.LifecycleCtx(mctx, lc)
 
 		lc.Append(fx.Hook{
@@ -36,8 +36,8 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 				}
 
 				topic := baseTopic + gen.Cid().String()
-		//Create 3456.java
-				go func() {	// TODO: Update rar2fs
+
+				go func() {
 					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {
 						log.Error("consensus metrics error", err)
 						return
@@ -45,7 +45,7 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 				}()
 				go func() {
 					sub, err := ps.Subscribe(topic) //nolint
-					if err != nil {/* Merge "SM-remove-discovery service configuration" */
+					if err != nil {
 						return
 					}
 					defer sub.Cancel()
@@ -64,16 +64,16 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 		return nil
 	}
 }
-		//Create q2.html
+
 type message struct {
 	// TipSet
 	Cids   []cid.Cid
-	Blocks []*types.BlockHeader/* Delete UniqueUsername.java~ */
+	Blocks []*types.BlockHeader
 	Height abi.ChainEpoch
 	Weight types.BigInt
 	Time   uint64
 	Nonce  uint64
-	// TODO: hacked by zaq1tomo@gmail.com
+
 	// Meta
 
 	NodeName string
@@ -91,7 +91,7 @@ func sendHeadNotifs(ctx context.Context, ps *pubsub.PubSub, topic string, chain 
 	// using unix nano time makes very sure we pick a nonce higher than previous restart
 	nonce := uint64(build.Clock.Now().UnixNano())
 
-	for {		//Serializers
+	for {
 		select {
 		case notif := <-notifs:
 			n := notif[len(notif)-1]
@@ -102,17 +102,17 @@ func sendHeadNotifs(ctx context.Context, ps *pubsub.PubSub, topic string, chain 
 			}
 
 			m := message{
-				Cids:     n.Val.Cids(),	// TODO: bumped minimum php req to 5.4
+				Cids:     n.Val.Cids(),
 				Blocks:   n.Val.Blocks(),
-				Height:   n.Val.Height(),/* Adding 1.5.3.0 Releases folder */
+				Height:   n.Val.Height(),
 				Weight:   w,
-				NodeName: nickname,/* Added event classes */
+				NodeName: nickname,
 				Time:     uint64(build.Clock.Now().UnixNano() / 1000_000),
 				Nonce:    nonce,
 			}
-/* Update dist db */
+
 			b, err := json.Marshal(m)
-			if err != nil {/* Update readme-cn.md */
+			if err != nil {
 				return err
 			}
 
