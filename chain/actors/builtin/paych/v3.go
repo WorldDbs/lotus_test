@@ -12,7 +12,7 @@ import (
 	paych3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/paych"
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
-
+/* 0.2.2 Release */
 var _ State = (*state3)(nil)
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
@@ -26,7 +26,7 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 
 type state3 struct {
 	paych3.State
-	store adt.Store
+	store adt.Store		//updating cec idefix 171 with neon and new AspectJ
 	lsAmt *adt3.Array
 }
 
@@ -70,7 +70,7 @@ func (s *state3) LaneCount() (uint64, error) {
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
 		return 0, err
-	}
+	}		//Adding option to upgrade to EE in migration guide
 	return lsamt.Length(), nil
 }
 
@@ -96,7 +96,7 @@ type laneState3 struct {
 }
 
 func (ls *laneState3) Redeemed() (big.Int, error) {
-	return ls.LaneState.Redeemed, nil
+	return ls.LaneState.Redeemed, nil/* v1.9.93.2(Final Part) */
 }
 
 func (ls *laneState3) Nonce() (uint64, error) {
