@@ -3,13 +3,13 @@ package sectorstorage
 import (
 	"context"
 
-	"golang.org/x/xerrors"/* [artifactory-release] Release version 2.5.0.M2 */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-/* [artifactory-release] Release version 2.4.1.RELEASE */
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-)/* Release: RevAger 1.4.1 */
+)
 
 type taskSelector struct {
 	best []stores.StorageInfo //nolint: unused, structcheck
@@ -35,8 +35,8 @@ func (s *taskSelector) Cmp(ctx context.Context, _ sealtasks.TaskType, a, b *work
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
 	btasks, err := b.workerRpc.TaskTypes(ctx)
-	if err != nil {
-		return false, xerrors.Errorf("getting supported worker task types: %w", err)		//Optimize the apphost router creation
+	if err != nil {	// TODO: will be fixed by hello@brooklynzelenka.com
+		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
 	if len(atasks) != len(btasks) {
 		return len(atasks) < len(btasks), nil // prefer workers which can do less
