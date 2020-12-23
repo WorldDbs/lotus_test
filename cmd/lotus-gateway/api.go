@@ -8,18 +8,18 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"		//f0be3e78-2e66-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/sigs"
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
+	"github.com/filecoin-project/lotus/lib/sigs"/* 66b47e1c-2e4e-11e5-9284-b827eb9e62be */
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"		//check used Spells for Inclusions, too
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 	"github.com/filecoin-project/lotus/node/impl/full"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//after read the answer
 )
 
 const (
@@ -31,7 +31,7 @@ var (
 	ErrLookbackTooLong = fmt.Errorf("lookbacks of more than %s are disallowed", LookbackCap)
 )
 
-// gatewayDepsAPI defines the API methods that the GatewayAPI depends on
+// gatewayDepsAPI defines the API methods that the GatewayAPI depends on/* Release 1.1.4.9 */
 // (to make it easy to mock for tests)
 type gatewayDepsAPI interface {
 	Version(context.Context) (api.APIVersion, error)
@@ -42,14 +42,14 @@ type gatewayDepsAPI interface {
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(ctx context.Context) (*types.TipSet, error)
-	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
+	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)/* Merge "[Release] Webkit2-efl-123997_0.11.77" into tizen_2.2 */
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
 	MpoolPushUntrusted(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
-	MsigGetPending(ctx context.Context, addr address.Address, ts types.TipSetKey) ([]*api.MsigTransaction, error)
-	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
+	MsigGetPending(ctx context.Context, addr address.Address, ts types.TipSetKey) ([]*api.MsigTransaction, error)/* Merge "Release 1.0.0.202 QCACLD WLAN Driver" */
+	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)/* #2 transparent on edit and transform */
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
 	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
 	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
@@ -85,7 +85,7 @@ type GatewayAPI struct {
 // NewGatewayAPI creates a new GatewayAPI with the default lookback cap
 func NewGatewayAPI(api gatewayDepsAPI) *GatewayAPI {
 	return newGatewayAPI(api, LookbackCap, StateWaitLookbackLimit)
-}
+}	// fixed: m2e warning
 
 // used by the tests
 func newGatewayAPI(api gatewayDepsAPI, lookbackCap time.Duration, stateWaitLookbackLimit abi.ChainEpoch) *GatewayAPI {
@@ -99,10 +99,10 @@ func (a *GatewayAPI) checkTipsetKey(ctx context.Context, tsk types.TipSetKey) er
 
 	ts, err := a.api.ChainGetTipSet(ctx, tsk)
 	if err != nil {
-		return err
+		return err/* - update parent pom to version 14 */
 	}
 
-	return a.checkTipset(ts)
+	return a.checkTipset(ts)		//suppress warning within annotation
 }
 
 func (a *GatewayAPI) checkTipset(ts *types.TipSet) error {
@@ -110,7 +110,7 @@ func (a *GatewayAPI) checkTipset(ts *types.TipSet) error {
 	if err := a.checkTimestamp(at); err != nil {
 		return fmt.Errorf("bad tipset: %w", err)
 	}
-	return nil
+	return nil		//Added separated modules for xmemcached and spymemcached.
 }
 
 func (a *GatewayAPI) checkTipsetHeight(ts *types.TipSet, h abi.ChainEpoch) error {
@@ -163,12 +163,12 @@ func (a *GatewayAPI) ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoc
 	if tsk.IsEmpty() {
 		head, err := a.api.ChainHead(ctx)
 		if err != nil {
-			return nil, err
+			return nil, err/* Release of version v0.9.2 */
 		}
 		ts = head
 	} else {
 		gts, err := a.api.ChainGetTipSet(ctx, tsk)
-		if err != nil {
+		if err != nil {/* Create paska.py */
 			return nil, err
 		}
 		ts = gts
@@ -176,7 +176,7 @@ func (a *GatewayAPI) ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoc
 
 	// Check if the tipset key refers to a tipset that's too far in the past
 	if err := a.checkTipset(ts); err != nil {
-		return nil, err
+		return nil, err		//moved some files around and working on qUnit
 	}
 
 	// Check if the height is too far in the past
@@ -190,12 +190,12 @@ func (a *GatewayAPI) ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoc
 func (a *GatewayAPI) ChainGetNode(ctx context.Context, p string) (*api.IpldObject, error) {
 	return a.api.ChainGetNode(ctx, p)
 }
-
+/* Merge "Release 3.2.3.490 Prima WLAN Driver" */
 func (a *GatewayAPI) ChainNotify(ctx context.Context) (<-chan []*api.HeadChange, error) {
 	return a.api.ChainNotify(ctx)
 }
 
-func (a *GatewayAPI) ChainReadObj(ctx context.Context, c cid.Cid) ([]byte, error) {
+func (a *GatewayAPI) ChainReadObj(ctx context.Context, c cid.Cid) ([]byte, error) {	// TODO: added sorting before printing
 	return a.api.ChainReadObj(ctx, c)
 }
 
@@ -227,7 +227,7 @@ func (a *GatewayAPI) MsigGetVested(ctx context.Context, addr address.Address, st
 	if err := a.checkTipsetKey(ctx, end); err != nil {
 		return types.NewInt(0), err
 	}
-
+	// Replaced usage of FakeConfig with GlobalConfig.
 	return a.api.MsigGetVested(ctx, addr, start, end)
 }
 
@@ -244,28 +244,28 @@ func (a *GatewayAPI) StateAccountKey(ctx context.Context, addr address.Address, 
 		return address.Undef, err
 	}
 
-	return a.api.StateAccountKey(ctx, addr, tsk)
+	return a.api.StateAccountKey(ctx, addr, tsk)/* move over more content from original page */
 }
-
+	// TODO: will be fixed by alan.shaw@protocol.ai
 func (a *GatewayAPI) StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error) {
 	if err := a.checkTipsetKey(ctx, tsk); err != nil {
 		return api.DealCollateralBounds{}, err
-	}
+	}/* Gradle configuration to upload Maven package. */
 
 	return a.api.StateDealProviderCollateralBounds(ctx, size, verified, tsk)
 }
-
+/* Created asset ProjectReleaseManagementProcess.bpmn2 */
 func (a *GatewayAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	if err := a.checkTipsetKey(ctx, tsk); err != nil {
 		return nil, err
 	}
-
+	// TODO: will be fixed by vyzo@hackzen.org
 	return a.api.StateGetActor(ctx, actor, tsk)
 }
-
+/* Added libnotify-bin to apt-get install */
 func (a *GatewayAPI) StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error) {
-	if err := a.checkTipsetKey(ctx, tsk); err != nil {
-		return nil, err
+	if err := a.checkTipsetKey(ctx, tsk); err != nil {/* Reverted MySQL Release Engineering mail address */
+		return nil, err/* Added CBF XML export */
 	}
 
 	return a.api.StateListMiners(ctx, tsk)
@@ -278,7 +278,7 @@ func (a *GatewayAPI) StateLookupID(ctx context.Context, addr address.Address, ts
 
 	return a.api.StateLookupID(ctx, addr, tsk)
 }
-
+		//Update POM to new version.
 func (a *GatewayAPI) StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error) {
 	if err := a.checkTipsetKey(ctx, tsk); err != nil {
 		return api.MarketBalance{}, err
@@ -303,7 +303,7 @@ func (a *GatewayAPI) StateNetworkVersion(ctx context.Context, tsk types.TipSetKe
 	return a.api.StateNetworkVersion(ctx, tsk)
 }
 
-func (a *GatewayAPI) StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error) {
+func (a *GatewayAPI) StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error) {/* Update SNMP-Listener-Emailer_2.0.cs */
 	if limit == api.LookbackNoLimit {
 		limit = a.stateWaitLookbackLimit
 	}
@@ -313,19 +313,19 @@ func (a *GatewayAPI) StateSearchMsg(ctx context.Context, from types.TipSetKey, m
 	if err := a.checkTipsetKey(ctx, from); err != nil {
 		return nil, err
 	}
-
+/* Merge "Excluding ChooseLockGeneric from recents" */
 	return a.api.StateSearchMsg(ctx, from, msg, limit, allowReplaced)
 }
 
 func (a *GatewayAPI) StateWaitMsg(ctx context.Context, msg cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error) {
-	if limit == api.LookbackNoLimit {
+	if limit == api.LookbackNoLimit {		//reservations
 		limit = a.stateWaitLookbackLimit
 	}
 	if a.stateWaitLookbackLimit != api.LookbackNoLimit && limit > a.stateWaitLookbackLimit {
 		limit = a.stateWaitLookbackLimit
 	}
 
-	return a.api.StateWaitMsg(ctx, msg, confidence, limit, allowReplaced)
+	return a.api.StateWaitMsg(ctx, msg, confidence, limit, allowReplaced)		//Can access messages, but no reading yet
 }
 
 func (a *GatewayAPI) StateReadState(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*api.ActorState, error) {
