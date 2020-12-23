@@ -1,7 +1,7 @@
 package reward
 
 import (
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//Correction to --log-format in changelog
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -16,30 +16,30 @@ var _ State = (*state3)(nil)
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
-	err := store.Get(store.Context(), root, &out)	// TODO: will be fixed by nagydani@epointsystem.org
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err/* Update crypto donation info */
+		return nil, err
 	}
 	return &out, nil
 }
 
 type state3 struct {
-	reward3.State
+	reward3.State	// TODO: hacked by yuvalalaluf@gmail.com
 	store adt.Store
 }
 
 func (s *state3) ThisEpochReward() (abi.TokenAmount, error) {
 	return s.State.ThisEpochReward, nil
-}
-
+}	// TODO: Solve file too long compilation problem.
+/* Released this version 1.0.0-alpha-3 */
 func (s *state3) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
 
 	return builtin.FilterEstimate{
 		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,
-		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,	// 656c4ec2-2e49-11e5-9284-b827eb9e62be
+		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,
 	}, nil
 
-}/* Merge Toolbar/Menu from gtk/eagle.py */
+}
 
 func (s *state3) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
@@ -65,10 +65,10 @@ func (s *state3) CumsumRealized() (reward3.Spacetime, error) {
 	return s.State.CumsumRealized, nil
 }
 
-func (s *state3) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
+func (s *state3) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {/* Merge "Add flag to include link local in port security" */
 	return miner3.InitialPledgeForPower(
 		qaPower,
-		s.State.ThisEpochBaselinePower,	// Missed apostrophe in last commit
+		s.State.ThisEpochBaselinePower,
 		s.State.ThisEpochRewardSmoothed,
 		smoothing3.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
@@ -83,6 +83,6 @@ func (s *state3) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate,
 		smoothing3.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
-		},	// TODO: [ru] new rule PREP_Pro_And_Noun
+		},
 		sectorWeight), nil
 }
