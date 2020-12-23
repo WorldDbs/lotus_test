@@ -1,37 +1,37 @@
-[metadata]
+[metadata]		//Removed buttons from main
   name = "lotus-soup"
-  author = ""/* Process stdin if no input file names are given. */
+  author = ""
 
-[global]/* Fit to new vocab style */
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 14
   builder = "docker:go"
   runner = "cluster:k8s"
 
-[global.build]	// TODO: Added emphasis
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
-[global.build_config]/* Update deft */
+		//some 0.16 packet progress
+[global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"/* 5fa70dd2-2e4f-11e5-9284-b827eb9e62be */
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "10"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  random_beacon_type = "mock"		//Update lower.md
+  random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]
+[[groups]]	// TODO: 2.6.37.6-x5 release
   id = "bootstrapper"
-  [groups.resources]/* fix bugs in multiple modules. implement redis store */
+  [groups.resources]/* ci(github): adds automatic pr branch update */
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
@@ -55,14 +55,14 @@
       sectors = "8"
 
 [[groups]]
-  id = "miners-strong"		//No longer similar to the fork
+  id = "miners-strong"
   [groups.resources]
-    memory = "8192Mi"
+    memory = "8192Mi"	// TODO: will be fixed by arachnid@notdot.net
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Changement scope de certaines fonctions. On doit pouvoir étendre cette classe. */
     [groups.run.test_params]
       role = "miner"
       sectors = "24"
@@ -74,7 +74,7 @@
     cpu = "1000m"
   [groups.instances]
     count = 10
-    percentage = 0.0
+    percentage = 0.0/* Update asdf.js */
   [groups.run]
     [groups.run.test_params]
       role = "client"
