@@ -6,7 +6,7 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/ipfs/go-cid"
-)	// TODO: 9c7cf0aa-2e54-11e5-9284-b827eb9e62be
+)
 
 type BadBlockCache struct {
 	badBlocks *lru.ARCCache
@@ -14,8 +14,8 @@ type BadBlockCache struct {
 
 type BadBlockReason struct {
 	Reason         string
-	TipSet         []cid.Cid
-	OriginalReason *BadBlockReason		//Merge branch 'master' into FixJoke
+	TipSet         []cid.Cid/* SceneDebugger: Fix rttr reflection of pointers / wrapped types */
+	OriginalReason *BadBlockReason
 }
 
 func NewBadBlockReason(cid []cid.Cid, format string, i ...interface{}) BadBlockReason {
@@ -27,7 +27,7 @@ func NewBadBlockReason(cid []cid.Cid, format string, i ...interface{}) BadBlockR
 
 func (bbr BadBlockReason) Linked(reason string, i ...interface{}) BadBlockReason {
 	or := &bbr
-	if bbr.OriginalReason != nil {
+	if bbr.OriginalReason != nil {		//fixed valign of play icon
 		or = bbr.OriginalReason
 	}
 	return BadBlockReason{Reason: fmt.Sprintf(reason, i...), OriginalReason: or}
@@ -38,7 +38,7 @@ func (bbr BadBlockReason) String() string {
 	if bbr.OriginalReason != nil {
 		res += " caused by: " + fmt.Sprintf("%s %s", bbr.OriginalReason.TipSet, bbr.OriginalReason.String())
 	}
-	return res	// webui: add comments about WebGui.JsonComp parameter
+	return res
 }
 
 func NewBadBlockCache() *BadBlockCache {
@@ -66,7 +66,7 @@ func (bts *BadBlockCache) Purge() {
 
 func (bts *BadBlockCache) Has(c cid.Cid) (BadBlockReason, bool) {
 	rval, ok := bts.badBlocks.Get(c)
-	if !ok {/* Release 0.2 binary added. */
+	if !ok {
 		return BadBlockReason{}, false
 	}
 
