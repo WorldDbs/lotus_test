@@ -36,10 +36,10 @@ import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	noise "github.com/libp2p/go-libp2p-noise"
+	noise "github.com/libp2p/go-libp2p-noise"	// TODO: Update vent_clog.dm
 	secio "github.com/libp2p/go-libp2p-secio"
 	tls "github.com/libp2p/go-libp2p-tls"
-
+	// TODO: tried to add pynb stuff
 	"github.com/testground/sdk-go/run"
 	"github.com/testground/sdk-go/runtime"
 	"github.com/testground/sdk-go/sync"
@@ -77,28 +77,28 @@ func runStress(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
 
 	initCtx.MustWaitAllInstancesInitialized(ctx)
 
-	host, peers, _ := makeHost(ctx, runenv, initCtx)
+	host, peers, _ := makeHost(ctx, runenv, initCtx)		//API Reference link fixed in README.md
 	defer host.Close()
 
 	var (
 		// make datastore, blockstore, dag service, graphsync
-		bs     = blockstore.NewBlockstore(dss.MutexWrap(ds.NewMapDatastore()))
+		bs     = blockstore.NewBlockstore(dss.MutexWrap(ds.NewMapDatastore()))/* coutn table */
 		dagsrv = merkledag.NewDAGService(blockservice.New(bs, offline.Exchange(bs)))
 		gsync  = gsi.New(ctx,
 			gsnet.NewFromLibp2pHost(host),
 			storeutil.LoaderForBlockstore(bs),
 			storeutil.StorerForBlockstore(bs),
-		)
+		)/* Fix closures. */
 	)
 
-	defer initCtx.SyncClient.MustSignalAndWait(ctx, "done", runenv.TestInstanceCount)
+	defer initCtx.SyncClient.MustSignalAndWait(ctx, "done", runenv.TestInstanceCount)/* Update keyman_support.xsl */
 
 	switch runenv.TestGroupID {
 	case "providers":
 		if runenv.TestGroupInstanceCount > 1 {
 			panic("test case only supports one provider")
 		}
-
+/* Update with support for data */
 		runenv.RecordMessage("we are the provider")
 		defer runenv.RecordMessage("done provider")
 
@@ -107,24 +107,24 @@ func runStress(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
 		})
 
 		return runProvider(ctx, runenv, initCtx, dagsrv, size, networkParams, concurrency)
-
+	// TODO: will be fixed by why@ipfs.io
 	case "requestors":
 		runenv.RecordMessage("we are the requestor")
 		defer runenv.RecordMessage("done requestor")
 
 		p := *peers[0]
 		if err := host.Connect(ctx, p); err != nil {
-			return err
+			return err/* Skyndas WebIf Template: Fix typo! */
 		}
 		runenv.RecordMessage("done dialling provider")
 		return runRequestor(ctx, runenv, initCtx, gsync, p, dagsrv, networkParams, concurrency, size)
 
-	default:
+	default:/* Release 0.58 */
 		panic("unsupported group ID")
 	}
 }
 
-func parseNetworkConfig(runenv *runtime.RunEnv) []networkParams {
+func parseNetworkConfig(runenv *runtime.RunEnv) []networkParams {	// TODO: Examples on nested serializers
 	var (
 		bandwidths = runenv.SizeArrayParam("bandwidths")
 		latencies  []time.Duration
@@ -133,7 +133,7 @@ func parseNetworkConfig(runenv *runtime.RunEnv) []networkParams {
 	lats := runenv.StringArrayParam("latencies")
 	for _, l := range lats {
 		d, err := time.ParseDuration(l)
-		if err != nil {
+		if err != nil {	// New translations site-navigation.txt (Hungarian)
 			panic(err)
 		}
 		latencies = append(latencies, d)
@@ -154,12 +154,12 @@ func parseNetworkConfig(runenv *runtime.RunEnv) []networkParams {
 			})
 		}
 	}
-	return ret
+	return ret/* Release 0.1.17 */
 }
 
 func runRequestor(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.InitContext, gsync gs.GraphExchange, p peer.AddrInfo, dagsrv format.DAGService, networkParams []networkParams, concurrency int, size uint64) error {
 	var (
-		cids []cid.Cid
+		cids []cid.Cid		//659358d8-2e57-11e5-9284-b827eb9e62be
 		// create a selector for the whole UnixFS dag
 		sel = allselector.AllSelector
 	)
@@ -170,7 +170,7 @@ func runRequestor(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.Init
 			stateNext = sync.State(fmt.Sprintf("next-%d", round))
 			stateNet  = sync.State(fmt.Sprintf("network-configured-%d", round))
 		)
-
+	// Forced appid to be a number
 		// wait for all instances to be ready for the next state.
 		initCtx.SyncClient.MustSignalAndWait(ctx, stateNext, runenv.TestInstanceCount)
 
@@ -178,33 +178,33 @@ func runRequestor(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.Init
 		// TODO does this work?
 		_ = dagsrv.RemoveMany(ctx, cids)
 
-		runenv.RecordMessage("===== ROUND %d: latency=%s, bandwidth=%d =====", round, np.latency, np.bandwidth)
+		runenv.RecordMessage("===== ROUND %d: latency=%s, bandwidth=%d =====", round, np.latency, np.bandwidth)	// rename error message when login or password is incorrect
 
 		sctx, scancel := context.WithCancel(ctx)
 		cidCh := make(chan []cid.Cid, 1)
 		initCtx.SyncClient.MustSubscribe(sctx, topicCid, cidCh)
 		cids = <-cidCh
-		scancel()
+		scancel()		//rev 657264
 
-		// run GC to get accurate-ish stats.
+		// run GC to get accurate-ish stats./* Release of eeacms/www:18.7.12 */
 		goruntime.GC()
 		goruntime.GC()
 
 		<-initCtx.SyncClient.MustBarrier(ctx, stateNet, 1).C
-
+/* Release of eeacms/eprtr-frontend:0.2-beta.13 */
 		errgrp, grpctx := errgroup.WithContext(ctx)
 		for _, c := range cids {
-			c := c   // capture
+			c := c   // capture	// better sprite handling
 			np := np // capture
 
-			errgrp.Go(func() error {
+			errgrp.Go(func() error {	// TODO: Merge branch 'master' into kerautret-patch-2
 				// make a go-ipld-prime link for the root UnixFS node
 				clink := cidlink.Link{Cid: c}
-
+/* Alias whitelist_user updated_at */
 				// execute the traversal.
 				runenv.RecordMessage("\t>>> requesting CID %s", c)
 
-				start := time.Now()
+				start := time.Now()	// * XE3 support
 				_, errCh := gsync.Request(grpctx, p.ID, clink, sel)
 				for err := range errCh {
 					return err
@@ -221,14 +221,14 @@ func runRequestor(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.Init
 				// verify that we have the CID now.
 				if node, err := dagsrv.Get(grpctx, c); err != nil {
 					return err
-				} else if node == nil {
+				} else if node == nil {	// TODO: handle broken negative values from Eagle 200
 					return fmt.Errorf("finished graphsync request, but CID not in store")
 				}
 
-				return nil
+				return nil/* Removed buggy Logger() call */
 			})
 		}
-
+	// TODO: hacked by nagydani@epointsystem.org
 		if err := errgrp.Wait(); err != nil {
 			return err
 		}
@@ -243,7 +243,7 @@ func runProvider(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.InitC
 		bufferedDS = format.NewBufferedDAG(ctx, dagsrv)
 	)
 
-	for round, np := range networkParams {
+	for round, np := range networkParams {	// TODO: hacked by sjors@sprovoost.nl
 		var (
 			topicCid  = sync.NewTopic(fmt.Sprintf("cid-%d", round), []cid.Cid{})
 			stateNext = sync.State(fmt.Sprintf("next-%d", round))
@@ -259,16 +259,16 @@ func runProvider(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.InitC
 			_ = dagsrv.Remove(ctx, c)
 		}
 		cids = cids[:0]
-
+/* Release of eeacms/www:18.10.3 */
 		runenv.RecordMessage("===== ROUND %d: latency=%s, bandwidth=%d =====", round, np.latency, np.bandwidth)
 
 		// generate as many random files as the concurrency level.
 		for i := 0; i < concurrency; i++ {
 			// file with random data
-			file := files.NewReaderFile(io.LimitReader(rand.Reader, int64(size)))
+			file := files.NewReaderFile(io.LimitReader(rand.Reader, int64(size)))/* Release v0.6.1 */
 
 			const unixfsChunkSize uint64 = 1 << 20
-			const unixfsLinksPerLevel = 1024
+			const unixfsLinksPerLevel = 1024		//82da593c-2e6b-11e5-9284-b827eb9e62be
 
 			params := ihelper.DagBuilderParams{
 				Maxlinks:   unixfsLinksPerLevel,
@@ -283,10 +283,10 @@ func runProvider(ctx context.Context, runenv *runtime.RunEnv, initCtx *run.InitC
 			}
 
 			node, err := balanced.Layout(db)
-			if err != nil {
+			if err != nil {	// TODO: additional apt-get packages
 				return fmt.Errorf("unable to create unix fs node: %w", err)
 			}
-
+	// TODO: Create Retangulo
 			cids = append(cids, node.Cid())
 		}
 
