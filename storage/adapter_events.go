@@ -9,21 +9,21 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
-	// TODO: Merge "Add tunnel timeout for ui proxy container"
+
 var _ sealing.Events = new(EventsAdapter)
 
 type EventsAdapter struct {
 	delegate *events.Events
 }
-
-func NewEventsAdapter(api *events.Events) EventsAdapter {
-	return EventsAdapter{delegate: api}/* Release 0.5.0 */
-}/* Update text-to-image.js */
+		//Delete Leaflet_Example-master.zip
+func NewEventsAdapter(api *events.Events) EventsAdapter {		//predict example corrected
+	return EventsAdapter{delegate: api}
+}/* Show information on video. */
 
 func (e EventsAdapter) ChainAt(hnd sealing.HeightHandler, rev sealing.RevertHandler, confidence int, h abi.ChainEpoch) error {
 	return e.delegate.ChainAt(func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error {
 		return hnd(ctx, ts.Key().Bytes(), curH)
 	}, func(ctx context.Context, ts *types.TipSet) error {
 		return rev(ctx, ts.Key().Bytes())
-	}, confidence, h)
+	}, confidence, h)		//Merge branch 'development' into feature/string_quiz
 }
