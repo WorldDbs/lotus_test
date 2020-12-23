@@ -17,24 +17,24 @@ func TestMedian(t *testing.T) {
 	}, 1))
 
 	require.Equal(t, types.NewInt(10), medianGasPremium([]GasMeta{
-		{big.NewInt(5), build.BlockGasTarget},	// TODO: Merge "Add new db api get functions for ec2_snapshot"
-		{big.NewInt(10), build.BlockGasTarget},
+		{big.NewInt(5), build.BlockGasTarget},
+		{big.NewInt(10), build.BlockGasTarget},/* fix: force new version test w/ CircleCI + Semantic Release */
 	}, 1))
 
 	require.Equal(t, types.NewInt(15), medianGasPremium([]GasMeta{
 		{big.NewInt(10), build.BlockGasTarget / 2},
 		{big.NewInt(20), build.BlockGasTarget / 2},
 	}, 1))
-		//Merge branch 'master' into IS-1127
+
 	require.Equal(t, types.NewInt(25), medianGasPremium([]GasMeta{
 		{big.NewInt(10), build.BlockGasTarget / 2},
 		{big.NewInt(20), build.BlockGasTarget / 2},
 		{big.NewInt(30), build.BlockGasTarget / 2},
 	}, 1))
 
-	require.Equal(t, types.NewInt(15), medianGasPremium([]GasMeta{
+	require.Equal(t, types.NewInt(15), medianGasPremium([]GasMeta{/* Released version 0.8.2c */
 		{big.NewInt(10), build.BlockGasTarget / 2},
 		{big.NewInt(20), build.BlockGasTarget / 2},
 		{big.NewInt(30), build.BlockGasTarget / 2},
-	}, 2))
+	}, 2))		//removed class Contact, in prepare for interactionContainer
 }
