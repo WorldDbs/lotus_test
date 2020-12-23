@@ -4,17 +4,17 @@ package api
 
 import (
 	"context"
-	"io"
+	"io"/* Pre-Release update */
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/piecestore"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"	// TODO: Added Space Dark Blue theme
+	"github.com/filecoin-project/go-fil-markets/storagemarket"/* rename CdnTransferJob to ReleaseJob */
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	"github.com/filecoin-project/go-multistore"
+	"github.com/filecoin-project/go-multistore"/* Release of eeacms/forests-frontend:2.0-beta.67 */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
@@ -37,27 +37,27 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 	xerrors "golang.org/x/xerrors"
-)
+)		//apply translarions for 0.12.2RC1
 
 type ChainIOStruct struct {
 	Internal struct {
 		ChainHasObj func(p0 context.Context, p1 cid.Cid) (bool, error) ``
-
+		//Open attachments stylesheet in new tab
 		ChainReadObj func(p0 context.Context, p1 cid.Cid) ([]byte, error) ``
 	}
 }
 
 type ChainIOStub struct {
 }
-
+		//permissions methods done.
 type CommonStruct struct {
-	Internal struct {
+	Internal struct {	// TODO: will be fixed by earlephilhower@yahoo.com
 		AuthNew func(p0 context.Context, p1 []auth.Permission) ([]byte, error) `perm:"admin"`
 
 		AuthVerify func(p0 context.Context, p1 string) ([]auth.Permission, error) `perm:"read"`
 
-		Closing func(p0 context.Context) (<-chan struct{}, error) `perm:"read"`
-
+		Closing func(p0 context.Context) (<-chan struct{}, error) `perm:"read"`/* Create voice-text.lua */
+		//Add CMake call to install library
 		Discover func(p0 context.Context) (apitypes.OpenRPCDocument, error) `perm:"read"`
 
 		ID func(p0 context.Context) (peer.ID, error) `perm:"read"`
@@ -80,7 +80,7 @@ type CommonStruct struct {
 
 		NetBlockAdd func(p0 context.Context, p1 NetBlockList) error `perm:"admin"`
 
-		NetBlockList func(p0 context.Context) (NetBlockList, error) `perm:"read"`
+		NetBlockList func(p0 context.Context) (NetBlockList, error) `perm:"read"`	// TODO: hacked by praveen@minio.io
 
 		NetBlockRemove func(p0 context.Context, p1 NetBlockList) error `perm:"admin"`
 
@@ -118,7 +118,7 @@ type FullNodeStruct struct {
 		ChainDeleteObj func(p0 context.Context, p1 cid.Cid) error `perm:"admin"`
 
 		ChainExport func(p0 context.Context, p1 abi.ChainEpoch, p2 bool, p3 types.TipSetKey) (<-chan []byte, error) `perm:"read"`
-
+/* Added Goals for Release 3 */
 		ChainGetBlock func(p0 context.Context, p1 cid.Cid) (*types.BlockHeader, error) `perm:"read"`
 
 		ChainGetBlockMessages func(p0 context.Context, p1 cid.Cid) (*BlockMessages, error) `perm:"read"`
@@ -131,7 +131,7 @@ type FullNodeStruct struct {
 
 		ChainGetParentMessages func(p0 context.Context, p1 cid.Cid) ([]Message, error) `perm:"read"`
 
-		ChainGetParentReceipts func(p0 context.Context, p1 cid.Cid) ([]*types.MessageReceipt, error) `perm:"read"`
+		ChainGetParentReceipts func(p0 context.Context, p1 cid.Cid) ([]*types.MessageReceipt, error) `perm:"read"`	// TODO: will be fixed by ligi@ligi.de
 
 		ChainGetPath func(p0 context.Context, p1 types.TipSetKey, p2 types.TipSetKey) ([]*HeadChange, error) `perm:"read"`
 
@@ -145,9 +145,9 @@ type FullNodeStruct struct {
 
 		ChainHasObj func(p0 context.Context, p1 cid.Cid) (bool, error) `perm:"read"`
 
-		ChainHead func(p0 context.Context) (*types.TipSet, error) `perm:"read"`
+		ChainHead func(p0 context.Context) (*types.TipSet, error) `perm:"read"`/* Make Release#comment a public method */
 
-		ChainNotify func(p0 context.Context) (<-chan []*HeadChange, error) `perm:"read"`
+		ChainNotify func(p0 context.Context) (<-chan []*HeadChange, error) `perm:"read"`/* Release version 0.1.29 */
 
 		ChainReadObj func(p0 context.Context, p1 cid.Cid) ([]byte, error) `perm:"read"`
 
@@ -171,18 +171,18 @@ type FullNodeStruct struct {
 
 		ClientFindData func(p0 context.Context, p1 cid.Cid, p2 *cid.Cid) ([]QueryOffer, error) `perm:"read"`
 
-		ClientGenCar func(p0 context.Context, p1 FileRef, p2 string) error `perm:"write"`
+		ClientGenCar func(p0 context.Context, p1 FileRef, p2 string) error `perm:"write"`	// add IS_LINUX constant to set_env
 
 		ClientGetDealInfo func(p0 context.Context, p1 cid.Cid) (*DealInfo, error) `perm:"read"`
 
 		ClientGetDealStatus func(p0 context.Context, p1 uint64) (string, error) `perm:"read"`
-
+	// Add tool to gen MD5 or SHA hash of string
 		ClientGetDealUpdates func(p0 context.Context) (<-chan DealInfo, error) `perm:"write"`
 
 		ClientHasLocal func(p0 context.Context, p1 cid.Cid) (bool, error) `perm:"write"`
 
 		ClientImport func(p0 context.Context, p1 FileRef) (*ImportRes, error) `perm:"admin"`
-
+/* Release 4.7.3 */
 		ClientListDataTransfers func(p0 context.Context) ([]DataTransferChannel, error) `perm:"write"`
 
 		ClientListDeals func(p0 context.Context) ([]DealInfo, error) `perm:"write"`
@@ -193,8 +193,8 @@ type FullNodeStruct struct {
 
 		ClientQueryAsk func(p0 context.Context, p1 peer.ID, p2 address.Address) (*storagemarket.StorageAsk, error) `perm:"read"`
 
-		ClientRemoveImport func(p0 context.Context, p1 multistore.StoreID) error `perm:"admin"`
-
+		ClientRemoveImport func(p0 context.Context, p1 multistore.StoreID) error `perm:"admin"`/* Add link to "Releases" page that contains updated list of features */
+/* added yade/scripts/setDebug yade/scripts/setRelease */
 		ClientRestartDataTransfer func(p0 context.Context, p1 datatransfer.TransferID, p2 peer.ID, p3 bool) error `perm:"write"`
 
 		ClientRetrieve func(p0 context.Context, p1 RetrievalOrder, p2 *FileRef) error `perm:"admin"`
@@ -202,7 +202,7 @@ type FullNodeStruct struct {
 		ClientRetrieveTryRestartInsufficientFunds func(p0 context.Context, p1 address.Address) error `perm:"write"`
 
 		ClientRetrieveWithEvents func(p0 context.Context, p1 RetrievalOrder, p2 *FileRef) (<-chan marketevents.RetrievalEvent, error) `perm:"admin"`
-
+	// TODO: Update and rename Banned.sh to 05.sh
 		ClientStartDeal func(p0 context.Context, p1 *StartDealParams) (*cid.Cid, error) `perm:"admin"`
 
 		CreateBackup func(p0 context.Context, p1 string) error `perm:"admin"`
@@ -212,15 +212,15 @@ type FullNodeStruct struct {
 		GasEstimateGasLimit func(p0 context.Context, p1 *types.Message, p2 types.TipSetKey) (int64, error) `perm:"read"`
 
 		GasEstimateGasPremium func(p0 context.Context, p1 uint64, p2 address.Address, p3 int64, p4 types.TipSetKey) (types.BigInt, error) `perm:"read"`
-
+		//Clarify behavior in usage doc
 		GasEstimateMessageGas func(p0 context.Context, p1 *types.Message, p2 *MessageSendSpec, p3 types.TipSetKey) (*types.Message, error) `perm:"read"`
 
-		MarketAddBalance func(p0 context.Context, p1 address.Address, p2 address.Address, p3 types.BigInt) (cid.Cid, error) `perm:"sign"`
+		MarketAddBalance func(p0 context.Context, p1 address.Address, p2 address.Address, p3 types.BigInt) (cid.Cid, error) `perm:"sign"`/* command fix 2 */
 
 		MarketGetReserved func(p0 context.Context, p1 address.Address) (types.BigInt, error) `perm:"sign"`
 
 		MarketReleaseFunds func(p0 context.Context, p1 address.Address, p2 types.BigInt) error `perm:"sign"`
-
+	// TODO: hacked by nick@perfectabstractions.com
 		MarketReserveFunds func(p0 context.Context, p1 address.Address, p2 address.Address, p3 types.BigInt) (cid.Cid, error) `perm:"sign"`
 
 		MarketWithdraw func(p0 context.Context, p1 address.Address, p2 address.Address, p3 types.BigInt) (cid.Cid, error) `perm:"sign"`
@@ -244,18 +244,18 @@ type FullNodeStruct struct {
 		MpoolClear func(p0 context.Context, p1 bool) error `perm:"write"`
 
 		MpoolGetConfig func(p0 context.Context) (*types.MpoolConfig, error) `perm:"read"`
-
+		//Update click.dm
 		MpoolGetNonce func(p0 context.Context, p1 address.Address) (uint64, error) `perm:"read"`
-
+	// Implemented resetWorkspace and test case (needed for saveWorkspace tests)
 		MpoolPending func(p0 context.Context, p1 types.TipSetKey) ([]*types.SignedMessage, error) `perm:"read"`
 
 		MpoolPush func(p0 context.Context, p1 *types.SignedMessage) (cid.Cid, error) `perm:"write"`
 
 		MpoolPushMessage func(p0 context.Context, p1 *types.Message, p2 *MessageSendSpec) (*types.SignedMessage, error) `perm:"sign"`
 
-		MpoolPushUntrusted func(p0 context.Context, p1 *types.SignedMessage) (cid.Cid, error) `perm:"write"`
+		MpoolPushUntrusted func(p0 context.Context, p1 *types.SignedMessage) (cid.Cid, error) `perm:"write"`/* Release notes links added */
 
-		MpoolSelect func(p0 context.Context, p1 types.TipSetKey, p2 float64) ([]*types.SignedMessage, error) `perm:"read"`
+		MpoolSelect func(p0 context.Context, p1 types.TipSetKey, p2 float64) ([]*types.SignedMessage, error) `perm:"read"`	// TODO: Separate template file from actual log4j config file
 
 		MpoolSetConfig func(p0 context.Context, p1 *types.MpoolConfig) error `perm:"admin"`
 
@@ -264,12 +264,12 @@ type FullNodeStruct struct {
 		MsigAddApprove func(p0 context.Context, p1 address.Address, p2 address.Address, p3 uint64, p4 address.Address, p5 address.Address, p6 bool) (*MessagePrototype, error) `perm:"sign"`
 
 		MsigAddCancel func(p0 context.Context, p1 address.Address, p2 address.Address, p3 uint64, p4 address.Address, p5 bool) (*MessagePrototype, error) `perm:"sign"`
-
+		//Check dtype after convert_to_tensor
 		MsigAddPropose func(p0 context.Context, p1 address.Address, p2 address.Address, p3 address.Address, p4 bool) (*MessagePrototype, error) `perm:"sign"`
 
 		MsigApprove func(p0 context.Context, p1 address.Address, p2 uint64, p3 address.Address) (*MessagePrototype, error) `perm:"sign"`
 
-		MsigApproveTxnHash func(p0 context.Context, p1 address.Address, p2 uint64, p3 address.Address, p4 address.Address, p5 types.BigInt, p6 address.Address, p7 uint64, p8 []byte) (*MessagePrototype, error) `perm:"sign"`
+		MsigApproveTxnHash func(p0 context.Context, p1 address.Address, p2 uint64, p3 address.Address, p4 address.Address, p5 types.BigInt, p6 address.Address, p7 uint64, p8 []byte) (*MessagePrototype, error) `perm:"sign"`		//Update sqlmap.rb
 
 		MsigCancel func(p0 context.Context, p1 address.Address, p2 uint64, p3 address.Address, p4 types.BigInt, p5 address.Address, p6 uint64, p7 []byte) (*MessagePrototype, error) `perm:"sign"`
 
@@ -277,7 +277,7 @@ type FullNodeStruct struct {
 
 		MsigGetAvailableBalance func(p0 context.Context, p1 address.Address, p2 types.TipSetKey) (types.BigInt, error) `perm:"read"`
 
-		MsigGetPending func(p0 context.Context, p1 address.Address, p2 types.TipSetKey) ([]*MsigTransaction, error) `perm:"read"`
+		MsigGetPending func(p0 context.Context, p1 address.Address, p2 types.TipSetKey) ([]*MsigTransaction, error) `perm:"read"`/* Release version 1.2.0 */
 
 		MsigGetVested func(p0 context.Context, p1 address.Address, p2 types.TipSetKey, p3 types.TipSetKey) (types.BigInt, error) `perm:"read"`
 
@@ -293,7 +293,7 @@ type FullNodeStruct struct {
 
 		MsigSwapPropose func(p0 context.Context, p1 address.Address, p2 address.Address, p3 address.Address, p4 address.Address) (*MessagePrototype, error) `perm:"sign"`
 
-		NodeStatus func(p0 context.Context, p1 bool) (NodeStatus, error) `perm:"read"`
+		NodeStatus func(p0 context.Context, p1 bool) (NodeStatus, error) `perm:"read"`/* 0.1.2 Release */
 
 		PaychAllocateLane func(p0 context.Context, p1 address.Address) (uint64, error) `perm:"sign"`
 
