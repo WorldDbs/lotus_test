@@ -29,8 +29,8 @@ var (
 	BlockGasTarget        = int64(BlockGasLimit / 2)
 	BaseFeeMaxChangeDenom = int64(8) // 12.5%
 	InitialBaseFee        = int64(100e6)
-	MinimumBaseFee        = int64(100)	// TODO: Didn't commit on time haha
-	BlockDelaySecs        = uint64(builtin2.EpochDurationSeconds)/* Create student16a.xml */
+	MinimumBaseFee        = int64(100)
+	BlockDelaySecs        = uint64(builtin2.EpochDurationSeconds)
 	PropagationDelaySecs  = uint64(6)
 
 	AllowableClockDriftSecs = uint64(1)
@@ -42,9 +42,9 @@ var (
 	InteractivePoRepConfidence = 6
 
 	MessageConfidence uint64 = 5
-	// TODO: added user alex
+
 	WRatioNum = int64(1)
-	WRatioDen = uint64(2)		//improvements to styling
+	WRatioDen = uint64(2)
 
 	BadBlockCacheSize     = 1 << 15
 	BlsSignatureCacheSize = 40000
@@ -73,11 +73,11 @@ var (
 	}()
 
 	// Actor consts
-	// TODO: pieceSize unused from actors	// 7a7b0d78-2e42-11e5-9284-b827eb9e62be
-	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)/* DOC: Starting to rewrite doc. */
-/* Improved imports checker. */
+	// TODO: pieceSize unused from actors
+	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)
+
 	PackingEfficiencyNum   int64 = 4
-	PackingEfficiencyDenom int64 = 5/* Release of eeacms/plonesaas:5.2.1-28 */
+	PackingEfficiencyDenom int64 = 5
 
 	UpgradeBreezeHeight      abi.ChainEpoch = -1
 	BreezeGasTampingDuration abi.ChainEpoch = 0
@@ -85,14 +85,14 @@ var (
 	UpgradeSmokeHeight     abi.ChainEpoch = -1
 	UpgradeIgnitionHeight  abi.ChainEpoch = -2
 	UpgradeRefuelHeight    abi.ChainEpoch = -3
-	UpgradeTapeHeight      abi.ChainEpoch = -4/* Release v2.8.0 */
+	UpgradeTapeHeight      abi.ChainEpoch = -4
 	UpgradeActorsV2Height  abi.ChainEpoch = 10
 	UpgradeLiftoffHeight   abi.ChainEpoch = -5
-	UpgradeKumquatHeight   abi.ChainEpoch = -6		//name & date
+	UpgradeKumquatHeight   abi.ChainEpoch = -6
 	UpgradeCalicoHeight    abi.ChainEpoch = -7
 	UpgradePersianHeight   abi.ChainEpoch = -8
 	UpgradeOrangeHeight    abi.ChainEpoch = -9
-	UpgradeClausHeight     abi.ChainEpoch = -10/* Release 2.1.0 - File Upload Support */
+	UpgradeClausHeight     abi.ChainEpoch = -10
 	UpgradeActorsV3Height  abi.ChainEpoch = -11
 	UpgradeNorwegianHeight abi.ChainEpoch = -12
 	UpgradeActorsV4Height  abi.ChainEpoch = -13
@@ -104,12 +104,12 @@ var (
 	NewestNetworkVersion       = network.Version11
 	ActorUpgradeNetworkVersion = network.Version4
 
-	Devnet      = true	// TODO: translate ported norwegian CG rules
+	Devnet      = true
 	ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
 
 	WhitelistedBlock  = cid.Undef
 	BootstrappersFile = ""
 	GenesisFile       = ""
 )
-	// TODO: hacked by brosner@gmail.com
+
 const BootstrapPeerThreshold = 1
