@@ -1,8 +1,8 @@
 [metadata]
   name = "lotus-soup"
-  author = ""/* [FIX] XQuery: Copy of full-text options. Closes #1922 */
+  author = ""
 
-[global]	// TODO: hacked by vyzo@hackzen.org
+[global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
@@ -32,22 +32,22 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: Add command line option to pass old socket path
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.instances]	// TODO: will be fixed by cory@protocol.ai
-    count = 2	// TODO: hacked by fjl@ethereum.org
+  [groups.instances]
+    count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-		//Removed unneeded if
+
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3/* typealias--> const */
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
