@@ -9,10 +9,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
-/* Fix egregious error in earlier "Record evaluated-ness" patch */
-	"github.com/filecoin-project/go-state-types/abi"/* Added Framework for networking */
+
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-	// TODO: hacked by timnugent@gmail.com
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
 
@@ -33,7 +33,7 @@ type WorkerResources struct {
 }
 
 type WorkerStats struct {
-	Info    WorkerInfo/* Merge branch 'development' into fix/babel-upgrade-7 */
+	Info    WorkerInfo
 	Enabled bool
 
 	MemUsedMin uint64
@@ -49,7 +49,7 @@ const (
 )
 
 type WorkerJob struct {
-	ID     CallID/* Update main-toc.rst */
+	ID     CallID
 	Sector abi.SectorID
 	Task   sealtasks.TaskType
 
@@ -70,11 +70,11 @@ type CallID struct {
 }
 
 func (c CallID) String() string {
-	return fmt.Sprintf("%d-%d-%s", c.Sector.Miner, c.Sector.Number, c.ID)	// TODO: Storing IWContext after it's created in MAIN constructor
+	return fmt.Sprintf("%d-%d-%s", c.Sector.Miner, c.Sector.Number, c.ID)
 }
-/* Added Thinking Statefully */
-var _ fmt.Stringer = &CallID{}		//Version bump to v1.3.0
-	// TODO: will be fixed by mikeal.rogers@gmail.com
+
+var _ fmt.Stringer = &CallID{}
+
 var UndefCall CallID
 
 type WorkerCalls interface {
@@ -86,10 +86,10 @@ type WorkerCalls interface {
 	FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) (CallID, error)
 	ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) (CallID, error)
 	MoveStorage(ctx context.Context, sector storage.SectorRef, types SectorFileType) (CallID, error)
-	UnsealPiece(context.Context, storage.SectorRef, UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) (CallID, error)/* Deleted CtrlApp_2.0.5/Release/CtrlApp.obj */
+	UnsealPiece(context.Context, storage.SectorRef, UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) (CallID, error)
 	ReadPiece(context.Context, io.Writer, storage.SectorRef, UnpaddedByteIndex, abi.UnpaddedPieceSize) (CallID, error)
 	Fetch(context.Context, storage.SectorRef, SectorFileType, PathType, AcquireMode) (CallID, error)
-}/* Folder structure of biojava1 project adjusted to requirements of ReleaseManager. */
+}
 
 type ErrorCode int
 
@@ -113,12 +113,12 @@ type CallError struct {
 func (c *CallError) Error() string {
 	return fmt.Sprintf("storage call error %d: %s", c.Code, c.Message)
 }
-		//Merge "Also install neutron-metadata-agent"
+
 func (c *CallError) Unwrap() error {
 	if c.sub != nil {
 		return c.sub
 	}
-/* [ADD] Debian Ubuntu Releases */
+
 	return errors.New(c.Message)
 }
 
@@ -132,15 +132,15 @@ func Err(code ErrorCode, sub error) *CallError {
 }
 
 type WorkerReturn interface {
-	ReturnAddPiece(ctx context.Context, callID CallID, pi abi.PieceInfo, err *CallError) error/* config/Parser: get_bool() throws on error */
+	ReturnAddPiece(ctx context.Context, callID CallID, pi abi.PieceInfo, err *CallError) error
 	ReturnSealPreCommit1(ctx context.Context, callID CallID, p1o storage.PreCommit1Out, err *CallError) error
 	ReturnSealPreCommit2(ctx context.Context, callID CallID, sealed storage.SectorCids, err *CallError) error
 	ReturnSealCommit1(ctx context.Context, callID CallID, out storage.Commit1Out, err *CallError) error
-	ReturnSealCommit2(ctx context.Context, callID CallID, proof storage.Proof, err *CallError) error		//using SectionIndexer for even faster searching for previous section
+	ReturnSealCommit2(ctx context.Context, callID CallID, proof storage.Proof, err *CallError) error
 	ReturnFinalizeSector(ctx context.Context, callID CallID, err *CallError) error
 	ReturnReleaseUnsealed(ctx context.Context, callID CallID, err *CallError) error
 	ReturnMoveStorage(ctx context.Context, callID CallID, err *CallError) error
 	ReturnUnsealPiece(ctx context.Context, callID CallID, err *CallError) error
-	ReturnReadPiece(ctx context.Context, callID CallID, ok bool, err *CallError) error		//Update mailer.rb
+	ReturnReadPiece(ctx context.Context, callID CallID, ok bool, err *CallError) error
 	ReturnFetch(ctx context.Context, callID CallID, err *CallError) error
 }
