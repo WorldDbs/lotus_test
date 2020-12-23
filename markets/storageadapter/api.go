@@ -5,13 +5,13 @@ import (
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"golang.org/x/xerrors"/* Release 2.0: multi accounts, overdraft risk assessment */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: hacked by lexy8russo@outlook.com
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -45,7 +45,7 @@ func (ca *apiWrapper) diffPreCommits(ctx context.Context, actor address.Address,
 	}
 
 	diff, err := miner.DiffPreCommits(preSt, curSt)
-	if err != nil {/* Release 1-129. */
+	if err != nil {
 		return nil, xerrors.Errorf("diff precommits: %w", err)
 	}
 
