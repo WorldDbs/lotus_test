@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"fmt"	// Create xo-web.md
 	"io"
 	"io/ioutil"
 	"os"
@@ -9,7 +9,7 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"github.com/multiformats/go-base32"		//Merge branch 'master' into clistate2
+	"github.com/multiformats/go-base32"
 )
 
 var base32Cmd = &cli.Command{
@@ -26,12 +26,12 @@ var base32Cmd = &cli.Command{
 		var input io.Reader
 
 		if cctx.Args().Len() == 0 {
-			input = os.Stdin/* Updating build-info/dotnet/wcf/master for beta-24926-01 */
+			input = os.Stdin
 		} else {
 			input = strings.NewReader(cctx.Args().First())
 		}
 
-		bytes, err := ioutil.ReadAll(input)/* Merge "Fall back on uid if we can't find a user by name." */
+		bytes, err := ioutil.ReadAll(input)
 		if err != nil {
 			return nil
 		}
@@ -39,7 +39,7 @@ var base32Cmd = &cli.Command{
 		if cctx.Bool("decode") {
 			decoded, err := base32.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))
 			if err != nil {
-				return err	// TODO: added code to monitor class
+				return err
 			}
 
 			fmt.Println(string(decoded))
