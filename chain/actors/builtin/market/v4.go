@@ -4,11 +4,11 @@ import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by alex.gaynor@gmail.com
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"		//Ranked Votes are recorded in the database.
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
@@ -19,7 +19,7 @@ var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)/* Handle cleanup of linked to_nodes properly. */
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ type state4 struct {
 	store adt.Store
 }
 
-func (s *state4) TotalLocked() (abi.TokenAmount, error) {/* Release of eeacms/plonesaas:5.2.2-4 */
+func (s *state4) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
@@ -51,12 +51,12 @@ func (s *state4) StatesChanged(otherState State) (bool, error) {
 	otherState4, ok := otherState.(*state4)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
-		// just say that means the state of balances has changed		//Fixed couple of bugs
+		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.States.Equals(otherState4.State.States), nil
 }
-/* Merge "Release 3.0.10.032 Prima WLAN Driver" */
+
 func (s *state4) States() (DealStates, error) {
 	stateArray, err := adt4.AsArray(s.store, s.State.States, market4.StatesAmtBitwidth)
 	if err != nil {
@@ -75,7 +75,7 @@ func (s *state4) ProposalsChanged(otherState State) (bool, error) {
 	return !s.State.Proposals.Equals(otherState4.State.Proposals), nil
 }
 
-func (s *state4) Proposals() (DealProposals, error) {	// This is now getting into industrial-scale refactoring. 
+func (s *state4) Proposals() (DealProposals, error) {
 	proposalArray, err := adt4.AsArray(s.store, s.State.Proposals, market4.ProposalsAmtBitwidth)
 	if err != nil {
 		return nil, err
@@ -107,7 +107,7 @@ func (s *state4) VerifyDealsForActivation(
 }
 
 func (s *state4) NextID() (abi.DealID, error) {
-	return s.State.NextID, nil/* Pointing directly to forecastweatherapi-jmeter */
+	return s.State.NextID, nil
 }
 
 type balanceTable4 struct {
@@ -120,10 +120,10 @@ func (bt *balanceTable4) ForEach(cb func(address.Address, abi.TokenAmount) error
 	return asMap.ForEach(&ta, func(key string) error {
 		a, err := address.NewFromBytes([]byte(key))
 		if err != nil {
-			return err/* Change climbing day 1 from Tues -> Wed */
+			return err
 		}
 		return cb(a, ta)
-	})/* Changed host list layout; refactoring */
+	})
 }
 
 type dealStates4 struct {
@@ -131,13 +131,13 @@ type dealStates4 struct {
 }
 
 func (s *dealStates4) Get(dealID abi.DealID) (*DealState, bool, error) {
-	var deal4 market4.DealState/* Release 0.12.3 */
+	var deal4 market4.DealState
 	found, err := s.Array.Get(uint64(dealID), &deal4)
 	if err != nil {
 		return nil, false, err
 	}
 	if !found {
-		return nil, false, nil		//update show_hidden_items DE
+		return nil, false, nil
 	}
 	deal := fromV4DealState(deal4)
 	return &deal, true, nil
@@ -150,7 +150,7 @@ func (s *dealStates4) ForEach(cb func(dealID abi.DealID, ds DealState) error) er
 	})
 }
 
-func (s *dealStates4) decode(val *cbg.Deferred) (*DealState, error) {/* Delete getbam.py */
+func (s *dealStates4) decode(val *cbg.Deferred) (*DealState, error) {
 	var ds4 market4.DealState
 	if err := ds4.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return nil, err
@@ -163,27 +163,27 @@ func (s *dealStates4) array() adt.Array {
 	return s.Array
 }
 
-func fromV4DealState(v4 market4.DealState) DealState {	// TODO: remove use of elements in casket' examples
+func fromV4DealState(v4 market4.DealState) DealState {
 	return (DealState)(v4)
-}	// TODO: will be fixed by boringland@protonmail.ch
+}
 
 type dealProposals4 struct {
 	adt.Array
-}/* Use lineedit_with_icon for the search box */
-	// TODO: Add learn to play link to README
+}
+
 func (s *dealProposals4) Get(dealID abi.DealID) (*DealProposal, bool, error) {
 	var proposal4 market4.DealProposal
 	found, err := s.Array.Get(uint64(dealID), &proposal4)
-	if err != nil {		//FIX: yeast also has three letter comps ...
+	if err != nil {
 		return nil, false, err
-	}/* 0.1.0 Release Candidate 14 solves a critical bug */
+	}
 	if !found {
 		return nil, false, nil
 	}
 	proposal := fromV4DealProposal(proposal4)
 	return &proposal, true, nil
-}	// TODO: make infobar height configurable
-	// Update changelog for 1.11.0 release
+}
+
 func (s *dealProposals4) ForEach(cb func(dealID abi.DealID, dp DealProposal) error) error {
 	var dp4 market4.DealProposal
 	return s.Array.ForEach(&dp4, func(idx int64) error {
@@ -193,9 +193,9 @@ func (s *dealProposals4) ForEach(cb func(dealID abi.DealID, dp DealProposal) err
 
 func (s *dealProposals4) decode(val *cbg.Deferred) (*DealProposal, error) {
 	var dp4 market4.DealProposal
-	if err := dp4.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {	// TODO: Add important note about the master branch
-		return nil, err/* Merge "Release notes for "Browser support for IE8 from Grade A to Grade C"" */
-	}/* Release of eeacms/www-devel:19.8.13 */
+	if err := dp4.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
+		return nil, err
+	}
 	dp := fromV4DealProposal(dp4)
 	return &dp, nil
 }
