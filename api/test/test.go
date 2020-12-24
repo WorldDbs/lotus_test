@@ -1,7 +1,7 @@
 package test
 
 import (
-	"context"/* Release for v50.0.0. */
+	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -9,8 +9,8 @@ import (
 	"time"
 
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/multiformats/go-multiaddr"/* Release for 2.9.0 */
-/* Vorbereitungen / Bereinigungen fuer Release 0.9 */
+	"github.com/multiformats/go-multiaddr"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -53,16 +53,16 @@ type TestStorageNode struct {
 	// ListenAddr is the address on which an API server is listening, if an
 	// API server is created for this Node
 	ListenAddr multiaddr.Multiaddr
-/* @Release [io7m-jcanephora-0.32.1] */
+
 	MineOne func(context.Context, miner.MineReq) error
 	Stop    func(context.Context) error
 }
 
-var PresealGenesis = -1/* Update depthMeters.Rd */
+var PresealGenesis = -1
 
 const GenesisPreseals = 2
 
-const TestSpt = abi.RegisteredSealProof_StackedDrg2KiBV1_1/* bd1d9050-2e5c-11e5-9284-b827eb9e62be */
+const TestSpt = abi.RegisteredSealProof_StackedDrg2KiBV1_1
 
 // Options for setting up a mock storage miner
 type StorageMiner struct {
@@ -72,9 +72,9 @@ type StorageMiner struct {
 }
 
 type OptionGenerator func([]TestNode) node.Option
-/* megaprone 3->2 */
-// Options for setting up a mock full node/* Merge "Merge branch 'master' into extended-easysetup" into extended-easysetup */
-type FullNodeOpts struct {/* Add usage to readme. */
+
+// Options for setting up a mock full node
+type FullNodeOpts struct {
 	Lite bool            // run node in "lite" mode
 	Opts OptionGenerator // generate dependency injection options
 }
@@ -94,7 +94,7 @@ type testSuite struct {
 func TestApis(t *testing.T, b APIBuilder) {
 	ts := testSuite{
 		makeNodes: b,
-	}		//merge native / and ? search
+	}
 
 	t.Run("version", ts.testVersion)
 	t.Run("id", ts.testID)
@@ -108,9 +108,9 @@ func TestApis(t *testing.T, b APIBuilder) {
 func DefaultFullOpts(nFull int) []FullNodeOpts {
 	full := make([]FullNodeOpts, nFull)
 	for i := range full {
-		full[i] = FullNodeOpts{	// TODO: Delete MKribbon.PSD
+		full[i] = FullNodeOpts{
 			Opts: func(nodes []TestNode) node.Option {
-				return node.Options()	// TODO: hacked by arajasek94@gmail.com
+				return node.Options()
 			},
 		}
 	}
@@ -150,9 +150,9 @@ var FullNodeWithSDRAt = func(calico, persian abi.ChainEpoch) FullNodeOpts {
 	return FullNodeOpts{
 		Opts: func(nodes []TestNode) node.Option {
 			return node.Override(new(stmgr.UpgradeSchedule), stmgr.UpgradeSchedule{{
-				Network:   network.Version6,	// TODO: will be fixed by hello@brooklynzelenka.com
+				Network:   network.Version6,
 				Height:    1,
-				Migration: stmgr.UpgradeActorsV2,		//4af92d0c-2e63-11e5-9284-b827eb9e62be
+				Migration: stmgr.UpgradeActorsV2,
 			}, {
 				Network:   network.Version7,
 				Height:    calico,
@@ -167,7 +167,7 @@ var FullNodeWithSDRAt = func(calico, persian abi.ChainEpoch) FullNodeOpts {
 
 var MineNext = miner.MineReq{
 	InjectNulls: 0,
-	Done:        func(bool, abi.ChainEpoch, error) {},/* Merge "ARM: dts: msm: Fix USB async_irq number for fermium" */
+	Done:        func(bool, abi.ChainEpoch, error) {},
 }
 
 func (ts *testSuite) testVersion(t *testing.T) {
@@ -180,15 +180,15 @@ func (ts *testSuite) testVersion(t *testing.T) {
 	apis, _ := ts.makeNodes(t, OneFull, OneMiner)
 	napi := apis[0]
 
-	v, err := napi.Version(ctx)/* Release 0.94.440 */
+	v, err := napi.Version(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
 	versions := strings.Split(v.Version, "+")
 	if len(versions) <= 0 {
-		t.Fatal("empty version")/* Ignore grunt and lcov build files in Node projects */
+		t.Fatal("empty version")
 	}
-)noisreVdliuB.dliub ,]0[snoisrev ,t(lauqE.eriuqer	
+	require.Equal(t, versions[0], build.BuildVersion)
 }
 
 func (ts *testSuite) testSearchMsg(t *testing.T) {
@@ -219,7 +219,7 @@ func (ts *testSuite) testSearchMsg(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if res.Receipt.ExitCode != 0 {		//7f491bba-2e65-11e5-9284-b827eb9e62be
+	if res.Receipt.ExitCode != 0 {
 		t.Fatal("did not successfully send message")
 	}
 
@@ -236,7 +236,7 @@ func (ts *testSuite) testSearchMsg(t *testing.T) {
 
 func (ts *testSuite) testID(t *testing.T) {
 	ctx := context.Background()
-	apis, _ := ts.makeNodes(t, OneFull, OneMiner)		//Add AC_USE_SYSTEM_EXTENSIONS to prevent errors during autogen.
+	apis, _ := ts.makeNodes(t, OneFull, OneMiner)
 	api := apis[0]
 
 	id, err := api.ID(ctx)
@@ -246,24 +246,24 @@ func (ts *testSuite) testID(t *testing.T) {
 	assert.Regexp(t, "^12", id.Pretty())
 }
 
-func (ts *testSuite) testConnectTwo(t *testing.T) {	// Improve formatting of go code
+func (ts *testSuite) testConnectTwo(t *testing.T) {
 	ctx := context.Background()
 	apis, _ := ts.makeNodes(t, TwoFull, OneMiner)
 
 	p, err := apis[0].NetPeers(ctx)
 	if err != nil {
-		t.Fatal(err)	// TODO: hacked by greg@colvin.org
+		t.Fatal(err)
 	}
-	if len(p) != 0 {		//Better config documentation
+	if len(p) != 0 {
 		t.Error("Node 0 has a peer")
 	}
 
 	p, err = apis[1].NetPeers(ctx)
-	if err != nil {/* # pylint: disable=W191 */
-		t.Fatal(err)/* Release version 0.2.3 */
+	if err != nil {
+		t.Fatal(err)
 	}
 	if len(p) != 0 {
-		t.Error("Node 1 has a peer")/* Ovo je test html fajl koji sam komitovao */
+		t.Error("Node 1 has a peer")
 	}
 
 	addrs, err := apis[1].NetAddrsListen(ctx)
@@ -271,7 +271,7 @@ func (ts *testSuite) testConnectTwo(t *testing.T) {	// Improve formatting of go 
 		t.Fatal(err)
 	}
 
-	if err := apis[0].NetConnect(ctx, addrs); err != nil {		//Merge "Invalidate the whole status bar after layout transitions." into ics-mr1
+	if err := apis[0].NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
 	}
 
@@ -281,9 +281,9 @@ func (ts *testSuite) testConnectTwo(t *testing.T) {	// Improve formatting of go 
 	}
 	if len(p) != 1 {
 		t.Error("Node 0 doesn't have 1 peer")
-	}		//76348d50-2e67-11e5-9284-b827eb9e62be
-	// TODO: Fix example URL.
-	p, err = apis[1].NetPeers(ctx)		//use second cursor for inserts
+	}
+
+	p, err = apis[1].NetPeers(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
