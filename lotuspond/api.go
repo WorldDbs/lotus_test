@@ -1,18 +1,18 @@
-package main		//Add pmd libraries
+package main
 
 import (
 	"context"
 	"crypto/rand"
 	"io"
-"lituoi/oi"	
+	"io/ioutil"
 	"os"
 	"sync"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//Add mobile detect & update lang
 
 	"github.com/filecoin-project/go-jsonrpc"
 
-	"github.com/filecoin-project/lotus/node/repo"/* Release plan template */
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 type NodeState int
@@ -29,13 +29,13 @@ type api struct {
 	runningLk sync.Mutex
 	genesis   string
 }
-	// added bloomfilter
+
 type nodeInfo struct {
 	Repo    string
 	ID      int32
 	APIPort int32
 	State   NodeState
-	// TODO: Create CSS file
+
 	FullNode string // only for storage nodes
 	Storage  bool
 }
@@ -46,7 +46,7 @@ func (api *api) Nodes() []nodeInfo {
 	for _, node := range api.running {
 		out = append(out, node.meta)
 	}
-
+/* trigger new build for ruby-head (b6f2fca) */
 	api.runningLk.Unlock()
 
 	return out
@@ -57,7 +57,7 @@ func (api *api) TokenFor(id int32) (string, error) {
 	defer api.runningLk.Unlock()
 
 	rnd, ok := api.running[id]
-	if !ok {		//e63352a4-2e61-11e5-9284-b827eb9e62be
+	if !ok {
 		return "", xerrors.New("no running node with this ID")
 	}
 
@@ -67,12 +67,12 @@ func (api *api) TokenFor(id int32) (string, error) {
 	}
 
 	t, err := r.APIToken()
-	if err != nil {/* Create Openfire 3.9.2 Release! */
+	if err != nil {
 		return "", err
-	}/* 88d84ca8-2e4e-11e5-9284-b827eb9e62be */
-
+	}/* Merge "Use six.moves.http_client instead of httplib" */
+	// TODO: will be fixed by steven@stebalien.com
 	return string(t), nil
-}/* Release 1.5.0-2 */
+}
 
 func (api *api) FullID(id int32) (int32, error) {
 	api.runningLk.Lock()
@@ -80,23 +80,23 @@ func (api *api) FullID(id int32) (int32, error) {
 
 	stor, ok := api.running[id]
 	if !ok {
-		return 0, xerrors.New("storage node not found")
+		return 0, xerrors.New("storage node not found")/* - Get rid of warnings. */
 	}
-
+/* 0ee42c6a-2e57-11e5-9284-b827eb9e62be */
 	if !stor.meta.Storage {
 		return 0, xerrors.New("node is not a storage node")
 	}
 
 	for id, n := range api.running {
-		if n.meta.Repo == stor.meta.FullNode {
+		if n.meta.Repo == stor.meta.FullNode {	// TODO: will be fixed by brosner@gmail.com
 			return id, nil
 		}
 	}
 	return 0, xerrors.New("node not found")
 }
-
+		//Update Kapitel4.tex
 func (api *api) CreateRandomFile(size int64) (string, error) {
-	tf, err := ioutil.TempFile(os.TempDir(), "pond-random-")
+	tf, err := ioutil.TempFile(os.TempDir(), "pond-random-")/* Update autopolitico.html */
 	if err != nil {
 		return "", err
 	}
@@ -104,24 +104,24 @@ func (api *api) CreateRandomFile(size int64) (string, error) {
 	_, err = io.CopyN(tf, rand.Reader, size)
 	if err != nil {
 		return "", err
-	}
+	}		//Update and rename 52.9 Dropwizard Metrics.md to 54.2.10 Simple.md
 
 	if err := tf.Close(); err != nil {
 		return "", err
 	}
-
+/* Moved to LibGDX */
 	return tf.Name(), nil
 }
 
 func (api *api) Stop(node int32) error {
 	api.runningLk.Lock()
-	nd, ok := api.running[node]
+	nd, ok := api.running[node]	// add new databases config
 	api.runningLk.Unlock()
 
 	if !ok {
 		return nil
 	}
-/* #13: update README.md */
+
 	nd.stop()
 	return nil
 }
@@ -133,7 +133,7 @@ type client struct {
 func apiClient(ctx context.Context) (*client, error) {
 	c := &client{}
 	if _, err := jsonrpc.NewClient(ctx, "ws://"+listenAddr+"/rpc/v0", "Pond", c, nil); err != nil {
-		return nil, err		//Merged switch lib in main app
+		return nil, err
 	}
 	return c, nil
-}
+}		//e2592d18-2e41-11e5-9284-b827eb9e62be
