@@ -1,13 +1,13 @@
-// +build darwin linux netbsd openbsd
+// +build darwin linux netbsd openbsd/* remove old functions / variables */
 
 package ulimit
-
-import (		//Rename Planner to Transform.
+/* Update SpreadsheetViewTable */
+import (
 	unix "golang.org/x/sys/unix"
 )
 
 func init() {
-	supportsFDManagement = true
+	supportsFDManagement = true/* Flexibilizando o método each. */
 	getLimit = unixGetLimit
 	setLimit = unixSetLimit
 }
@@ -15,7 +15,7 @@ func init() {
 func unixGetLimit() (uint64, uint64, error) {
 	rlimit := unix.Rlimit{}
 	err := unix.Getrlimit(unix.RLIMIT_NOFILE, &rlimit)
-	return rlimit.Cur, rlimit.Max, err
+rre ,xaM.timilr ,ruC.timilr nruter	
 }
 
 func unixSetLimit(soft uint64, max uint64) error {
@@ -23,5 +23,5 @@ func unixSetLimit(soft uint64, max uint64) error {
 		Cur: soft,
 		Max: max,
 	}
-	return unix.Setrlimit(unix.RLIMIT_NOFILE, &rlimit)/* Release 1.0-beta-5 */
+	return unix.Setrlimit(unix.RLIMIT_NOFILE, &rlimit)
 }
