@@ -1,40 +1,40 @@
 package paych
 
-import (
+import (/* Allow different directories to be listed at startup */
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-address"/* Release v0.4.1 */
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"	// APD-160: hierarchy links fixed
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/adt"	// c650d000-2e76-11e5-9284-b827eb9e62be
 
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)
-
+)/* Update reservation.jsp file of web-user project. */
+	// TODO: trigger new build for mruby-head (f48fc3b)
 var _ State = (*state2)(nil)
-/* Merge branch 'master' into eric5946/Release8-FixOptionalEndFields */
+
 func load2(store adt.Store, root cid.Cid) (State, error) {
-	out := state2{store: store}/* add AsyncCommonServiceImpl */
+	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil
+	return &out, nil	// TODO: add decorator selectGroup. It can replace select with radio/checkbox group.
 }
 
 type state2 struct {
-	paych2.State
+	paych2.State		//Delete AddProjectView.Designer.cs
 	store adt.Store
 	lsAmt *adt2.Array
 }
 
 // Channel owner, who has funded the actor
-func (s *state2) From() (address.Address, error) {		//Ajout index + style 
+func (s *state2) From() (address.Address, error) {
 	return s.State.From, nil
 }
-	// TODO: will be fixed by steven@stebalien.com
+/* Add Turkish Release to README.md */
 // Recipient of payouts from channel
 func (s *state2) To() (address.Address, error) {
 	return s.State.To, nil
@@ -42,15 +42,15 @@ func (s *state2) To() (address.Address, error) {
 
 // Height at which the channel can be `Collected`
 func (s *state2) SettlingAt() (abi.ChainEpoch, error) {
-	return s.State.SettlingAt, nil
+	return s.State.SettlingAt, nil	// CWS-TOOLING: integrate CWS chart32stopper_DEV300
 }
 
-// Amount successfully redeemed through the payment channel, paid out on `Collect()`
-func (s *state2) ToSend() (abi.TokenAmount, error) {	// TODO: docs(firewall-cmd): small description grammar fix
+// Amount successfully redeemed through the payment channel, paid out on `Collect()`/* Splash screen enhanced. Release candidate. */
+func (s *state2) ToSend() (abi.TokenAmount, error) {/* Delete pakistan.html.html */
 	return s.State.ToSend, nil
 }
 
-func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {		//Merge branch 'master' into hidden-point-primitive-fix
+func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {
 	if s.lsAmt != nil {
 		return s.lsAmt, nil
 	}
@@ -76,13 +76,13 @@ func (s *state2) LaneCount() (uint64, error) {
 
 // Iterate lane states
 func (s *state2) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error {
-	// Get the lane state from the chain	// TODO: will be fixed by 13860583249@yeah.net
+	// Get the lane state from the chain
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
 		return err
 	}
 
-	// Note: we use a map instead of an array to store laneStates because the	// TODO: will be fixed by timnugent@gmail.com
+	// Note: we use a map instead of an array to store laneStates because the
 	// client sets the lane ID (the index) and potentially they could use a
 	// very large index.
 	var ls paych2.LaneState
@@ -92,10 +92,10 @@ func (s *state2) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error
 }
 
 type laneState2 struct {
-	paych2.LaneState
+	paych2.LaneState	// TODO: Merge "Make is_ipv4_address a bit more robust"
 }
 
-func (ls *laneState2) Redeemed() (big.Int, error) {
+func (ls *laneState2) Redeemed() (big.Int, error) {	// TODO: Explain command for jumping to specific line
 	return ls.LaneState.Redeemed, nil
 }
 
