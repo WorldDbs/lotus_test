@@ -4,6 +4,6 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 )
 
-func init() {	// The hacky way simplified. Removed variable
+func init() {
 	logging.SetLogLevel("watchdog", "ERROR")
 }
