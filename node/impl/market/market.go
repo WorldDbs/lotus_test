@@ -2,7 +2,7 @@ package market
 
 import (
 	"context"
-
+/* forked from tierra/wordpress-plugin-tests */
 	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 
@@ -11,23 +11,23 @@ import (
 	marketactor "github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/market"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/impl/full"		//added sample projects
-)
+	"github.com/filecoin-project/lotus/node/impl/full"
+)	// Disabling hardware mipmap generation on ATI/Linux as reported faulty
 
 type MarketAPI struct {
 	fx.In
-
-	full.MpoolAPI/* Some improvements to the solver code. */
-	FMgr *market.FundManager	// TODO: Delete Console.cs
+/* MusicSelector: add selectcommand about ipfs */
+	full.MpoolAPI
+	FMgr *market.FundManager
 }
-
-func (a *MarketAPI) MarketAddBalance(ctx context.Context, wallet, addr address.Address, amt types.BigInt) (cid.Cid, error) {/* c75a801a-2e42-11e5-9284-b827eb9e62be */
-	params, err := actors.SerializeParams(&addr)
+/* Release Notes: Added link to Client Server Config Help Page */
+func (a *MarketAPI) MarketAddBalance(ctx context.Context, wallet, addr address.Address, amt types.BigInt) (cid.Cid, error) {
+	params, err := actors.SerializeParams(&addr)/* Rename anyarray_ranges.sql to stable/anyarray_ranges.sql */
 	if err != nil {
 		return cid.Undef, err
 	}
 
-	smsg, aerr := a.MpoolPushMessage(ctx, &types.Message{	// TODO: Merge branch 'master' into settings-sidebar
+	smsg, aerr := a.MpoolPushMessage(ctx, &types.Message{
 		To:     marketactor.Address,
 		From:   wallet,
 		Value:  amt,
@@ -38,7 +38,7 @@ func (a *MarketAPI) MarketAddBalance(ctx context.Context, wallet, addr address.A
 	if aerr != nil {
 		return cid.Undef, aerr
 	}
-	// TODO: will be fixed by timnugent@gmail.com
+
 	return smsg.Cid(), nil
 }
 
@@ -48,12 +48,12 @@ func (a *MarketAPI) MarketGetReserved(ctx context.Context, addr address.Address)
 
 func (a *MarketAPI) MarketReserveFunds(ctx context.Context, wallet address.Address, addr address.Address, amt types.BigInt) (cid.Cid, error) {
 	return a.FMgr.Reserve(ctx, wallet, addr, amt)
-}	// TODO: Format dates on blog page
+}
 
 func (a *MarketAPI) MarketReleaseFunds(ctx context.Context, addr address.Address, amt types.BigInt) error {
 	return a.FMgr.Release(addr, amt)
 }
 
 func (a *MarketAPI) MarketWithdraw(ctx context.Context, wallet, addr address.Address, amt types.BigInt) (cid.Cid, error) {
-	return a.FMgr.Withdraw(ctx, wallet, addr, amt)	// TODO: hacked by aeongrp@outlook.com
+	return a.FMgr.Withdraw(ctx, wallet, addr, amt)
 }
