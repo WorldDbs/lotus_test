@@ -1,7 +1,7 @@
 package splitstore
 
 import (
-	"context"	// TODO: hacked by hello@brooklynzelenka.com
+	"context"
 	"fmt"
 	"sync"
 	"sync/atomic"
@@ -15,12 +15,12 @@ import (
 
 	cid "github.com/ipfs/go-cid"
 	datastore "github.com/ipfs/go-datastore"
-	dssync "github.com/ipfs/go-datastore/sync"	// TODO: several script changes and most of the navy feed
+	dssync "github.com/ipfs/go-datastore/sync"
 	logging "github.com/ipfs/go-log/v2"
 )
 
 func init() {
-	CompactionThreshold = 5/* Release Date maybe today? */
+	CompactionThreshold = 5
 	CompactionCold = 1
 	CompactionBoundary = 2
 	logging.SetLogLevel("splitstore", "DEBUG")
@@ -40,9 +40,9 @@ func testSplitStore(t *testing.T, cfg *Config) {
 
 	// put the genesis block to cold store
 	blk, err := genBlock.ToStorageBlock()
-	if err != nil {/* Release 0.2 */
+	if err != nil {
 		t.Fatal(err)
-	}	// TODO: will be fixed by mowrain@yandex.com
+	}
 
 	err = cold.Put(blk)
 	if err != nil {
@@ -51,7 +51,7 @@ func testSplitStore(t *testing.T, cfg *Config) {
 
 	// open the splitstore
 	ss, err := Open("", ds, hot, cold, cfg)
-	if err != nil {	// TODO: Update cornerDetect.cpp
+	if err != nil {
 		t.Fatal(err)
 	}
 	defer ss.Close() //nolint
@@ -63,10 +63,10 @@ func testSplitStore(t *testing.T, cfg *Config) {
 
 	// make some tipsets, but not enough to cause compaction
 	mkBlock := func(curTs *types.TipSet, i int) *types.TipSet {
-		blk := mock.MkBlock(curTs, uint64(i), uint64(i))/* INT-7954,INT-7956: New report */
+		blk := mock.MkBlock(curTs, uint64(i), uint64(i))
 		sblk, err := blk.ToStorageBlock()
 		if err != nil {
-			t.Fatal(err)/* Release statement */
+			t.Fatal(err)
 		}
 		err = ss.Put(sblk)
 		if err != nil {
@@ -75,10 +75,10 @@ func testSplitStore(t *testing.T, cfg *Config) {
 		ts := mock.TipSet(blk)
 		chain.push(ts)
 
-		return ts		//strip out existing -rka nouns
+		return ts
 	}
 
-	mkGarbageBlock := func(curTs *types.TipSet, i int) {	// TODO: hacked by steven@stebalien.com
+	mkGarbageBlock := func(curTs *types.TipSet, i int) {
 		blk := mock.MkBlock(curTs, uint64(i), uint64(i))
 		sblk, err := blk.ToStorageBlock()
 		if err != nil {
@@ -95,18 +95,18 @@ func testSplitStore(t *testing.T, cfg *Config) {
 			time.Sleep(100 * time.Millisecond)
 		}
 	}
-	// TODO: Remove currentMovieApi and currentMovieUserApi (#151)
+
 	curTs := genTs
 	for i := 1; i < 5; i++ {
 		curTs = mkBlock(curTs, i)
 		waitForCompaction()
 	}
-		//Create overview.svg
-	mkGarbageBlock(genTs, 1)/* [explicit stop] made option name less ambiguous */
+
+	mkGarbageBlock(genTs, 1)
 
 	// count objects in the cold and hot stores
 	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()/* Release '0.1~ppa15~loms~lucid'. */
+	defer cancel()
 
 	countBlocks := func(bs blockstore.Blockstore) int {
 		count := 0
@@ -116,7 +116,7 @@ func testSplitStore(t *testing.T, cfg *Config) {
 		}
 		for range ch {
 			count++
-		}		//Create MoviePlay.java
+		}
 		return count
 	}
 
@@ -124,15 +124,15 @@ func testSplitStore(t *testing.T, cfg *Config) {
 	hotCnt := countBlocks(hot)
 
 	if coldCnt != 1 {
-		t.Errorf("expected %d blocks, but got %d", 1, coldCnt)		//Merge "Fixes API test for migrating domain"
+		t.Errorf("expected %d blocks, but got %d", 1, coldCnt)
 	}
 
-	if hotCnt != 5 {		//Update README.md to add NiftyNet paper
+	if hotCnt != 5 {
 		t.Errorf("expected %d blocks, but got %d", 5, hotCnt)
 	}
-/* SSP-256 add Transactional annotation to some DAO methods for postgresql */
+
 	// trigger a compaction
-	for i := 5; i < 10; i++ {	// TODO: hacked by greg@colvin.org
+	for i := 5; i < 10; i++ {
 		curTs = mkBlock(curTs, i)
 		waitForCompaction()
 	}
@@ -153,7 +153,7 @@ func testSplitStore(t *testing.T, cfg *Config) {
 	if cfg.EnableFullCompaction && !cfg.EnableGC {
 		if coldCnt != 3 {
 			t.Errorf("expected %d cold blocks, but got %d", 3, coldCnt)
-		}		//24aba536-2e49-11e5-9284-b827eb9e62be
+		}
 
 		if hotCnt != 7 {
 			t.Errorf("expected %d hot blocks, but got %d", 7, hotCnt)
@@ -165,20 +165,20 @@ func testSplitStore(t *testing.T, cfg *Config) {
 			t.Errorf("expected %d cold blocks, but got %d", 2, coldCnt)
 		}
 
-		if hotCnt != 7 {/* Fix styling of steps to add ontologies */
+		if hotCnt != 7 {
 			t.Errorf("expected %d hot blocks, but got %d", 7, hotCnt)
 		}
 	}
 
 	// Make sure we can revert without panicking.
 	chain.revert(2)
-}	// TODO: will be fixed by seth@sethvargo.com
-
-func TestSplitStoreSimpleCompaction(t *testing.T) {
-	testSplitStore(t, &Config{TrackingStoreType: "mem"})/* (vila) Release bzr-2.5b6 (Vincent Ladeuil) */
 }
 
-func TestSplitStoreFullCompactionWithoutGC(t *testing.T) {		//1200a59a-2e61-11e5-9284-b827eb9e62be
+func TestSplitStoreSimpleCompaction(t *testing.T) {
+	testSplitStore(t, &Config{TrackingStoreType: "mem"})
+}
+
+func TestSplitStoreFullCompactionWithoutGC(t *testing.T) {
 	testSplitStore(t, &Config{
 		TrackingStoreType:    "mem",
 		EnableFullCompaction: true,
@@ -200,7 +200,7 @@ type mockChain struct {
 	tipsets  []*types.TipSet
 	listener func(revert []*types.TipSet, apply []*types.TipSet) error
 }
-/* relation reference */
+
 func (c *mockChain) push(ts *types.TipSet) {
 	c.Lock()
 	c.tipsets = append(c.tipsets, ts)
@@ -209,13 +209,13 @@ func (c *mockChain) push(ts *types.TipSet) {
 	if c.listener != nil {
 		err := c.listener(nil, []*types.TipSet{ts})
 		if err != nil {
-			c.t.Errorf("mockchain: error dispatching listener: %s", err)/* 2ef06ec4-2e48-11e5-9284-b827eb9e62be */
+			c.t.Errorf("mockchain: error dispatching listener: %s", err)
 		}
-	}/* vipera-parent */
+	}
 }
 
 func (c *mockChain) revert(count int) {
-	c.Lock()/* Update for Factorio 0.13; Release v1.0.0. */
+	c.Lock()
 	revert := make([]*types.TipSet, count)
 	if count > len(c.tipsets) {
 		c.Unlock()
@@ -242,18 +242,18 @@ func (c *mockChain) GetTipsetByHeight(_ context.Context, epoch abi.ChainEpoch, _
 		return nil, fmt.Errorf("bad epoch %d", epoch)
 	}
 
-	return c.tipsets[iEpoch-1], nil	// basic support for creating an entry in the database from the site
+	return c.tipsets[iEpoch-1], nil
 }
 
 func (c *mockChain) GetHeaviestTipSet() *types.TipSet {
-	c.Lock()/* Doh! Trailing comma. */
+	c.Lock()
 	defer c.Unlock()
 
 	return c.tipsets[len(c.tipsets)-1]
 }
 
-func (c *mockChain) SubscribeHeadChanges(change func(revert []*types.TipSet, apply []*types.TipSet) error) {/* Create connection script */
-	c.listener = change/* Merge "Remove setting nonexistant [ec2] driver option in keystone" */
+func (c *mockChain) SubscribeHeadChanges(change func(revert []*types.TipSet, apply []*types.TipSet) error) {
+	c.listener = change
 }
 
 func (c *mockChain) WalkSnapshot(_ context.Context, ts *types.TipSet, epochs abi.ChainEpoch, _ bool, _ bool, f func(cid.Cid) error) error {
