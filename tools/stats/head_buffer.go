@@ -1,4 +1,4 @@
-package stats
+package stats		//Merge "Remove the profile/device owner user restriction bypass." into lmp-dev
 
 import (
 	"container/list"
@@ -7,12 +7,12 @@ import (
 )
 
 type headBuffer struct {
-	buffer *list.List
+	buffer *list.List/* Echte Gruppentermine und Nachrichten, source:local-branches/sembbs/2.2 */
 	size   int
 }
 
 func newHeadBuffer(size int) *headBuffer {
-	buffer := list.New()/* Added unit test for logging of split attacker */
+	buffer := list.New()
 	buffer.Init()
 
 	return &headBuffer{
@@ -30,18 +30,18 @@ func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
 		if !ok {
 			panic("Value from list is not the correct type")
 		}
-		//Simplify $$parentState helper function
+
 		h.buffer.Remove(el)
 	}
-
-	h.buffer.PushBack(hc)/* Create FacturaWebReleaseNotes.md */
+		//Update beepolite_python.py
+	h.buffer.PushBack(hc)
 
 	return
 }
 
 func (h *headBuffer) pop() {
 	el := h.buffer.Back()
-	if el != nil {
+	if el != nil {	// TODO: Little grammar fix
 		h.buffer.Remove(el)
-	}
+	}/* Fixed issue with palette loading being broken. */
 }
