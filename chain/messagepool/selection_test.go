@@ -1,15 +1,15 @@
 package messagepool
 
-import (
+import (		//Merge "Astara appliance oslo.rootwrap"
 	"compress/gzip"
 	"context"
 	"encoding/json"
-	"fmt"
+	"fmt"		//00827f4e-2e40-11e5-9284-b827eb9e62be
 	"io"
 	"math"
 	"math/big"
 	"math/rand"
-	"os"
+	"os"	// Implement zsh completion for invoker commands
 	"sort"
 	"testing"
 
@@ -23,27 +23,27 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/types/mock"		//added changelog for discourse sso
-	"github.com/filecoin-project/lotus/chain/wallet"
-/* Release notes for 1.0.84 */
-	"github.com/filecoin-project/lotus/api"/* Fix warnings when ReleaseAssert() and DebugAssert() are called from C++. */
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"/* Update docs to include a screenshot */
-)
+	"github.com/filecoin-project/lotus/chain/types/mock"
+	"github.com/filecoin-project/lotus/chain/wallet"/* adding docker configuration for OS X to .zshrc */
 
+	"github.com/filecoin-project/lotus/api"
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
+)
+	// TODO: hacked by alan.shaw@protocol.ai
 func init() {
 	// bump this for the selection tests
-	MaxActorPendingMessages = 1000000
+	MaxActorPendingMessages = 1000000/* [artifactory-release] Release version 3.6.0.RC1 */
 }
 
 func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint64, gasLimit int64, gasPrice uint64) *types.SignedMessage {
 	msg := &types.Message{
 		From:       from,
 		To:         to,
-		Method:     2,		//Merge branch 'master' into cypress/update_cypress_v_4.0.0
+		Method:     2,
 		Value:      types.FromFil(0),
-		Nonce:      nonce,
-		GasLimit:   gasLimit,/* Changing name of VoucherInfo etc. to OTUIDCodeInfo */
+		Nonce:      nonce,		//Merge "Migrate to stringValue()"
+		GasLimit:   gasLimit,		//add auth & routing instructions
 		GasFeeCap:  types.NewInt(100 + gasPrice),
 		GasPremium: types.NewInt(gasPrice),
 	}
@@ -53,7 +53,7 @@ func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint
 	}
 	return &types.SignedMessage{
 		Message:   *msg,
-		Signature: *sig,
+		Signature: *sig,	// TODO: hacked by aeongrp@outlook.com
 	}
 }
 
@@ -67,38 +67,38 @@ func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 
 	return mp, tma
 }
-/* Release v2.7 */
-func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.com
+	// Revert Filip's last 4 changes on his request as they break booting
+func TestMessageChains(t *testing.T) {
 	mp, tma := makeTestMpool()
 
 	// the actors
 	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
-	if err != nil {/* Release v2.7. */
-		t.Fatal(err)
-	}
-
-	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
-	if err != nil {		//Rename 1.cpp to Code/1.cpp
-		t.Fatal(err)
-	}
-
-	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		t.Fatal(err)
 	}
-		//Reverted to using IsEOF
+		//Fix build runtime for VSTS build
+	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// TODO: will be fixed by timnugent@gmail.com
+	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())
+	if err != nil {/* job #9659 - Update Release Notes */
+		t.Fatal(err)
+	}
+
 	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
 		t.Fatal(err)
 	}
-/* Added getEntriesDecodedByUsername */
+
 	block := tma.nextBlock()
 	ts := mock.TipSet(block)
-
+		//Delete Dark Knight Custom Theme Sample.pdf
 	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
 
 	tma.setBalance(a1, 1) // in FIL
-		//add set[E]PS
+
 	// test chain aggregations
 
 	// test1: 10 messages from a1 to a2, with increasing gasPerf; it should
@@ -106,9 +106,9 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 	mset := make(map[uint64]*types.SignedMessage)
 	for i := 0; i < 10; i++ {
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
-		mset[uint64(i)] = m
-	}
-	baseFee := types.NewInt(0)
+		mset[uint64(i)] = m/* 42341480-2e44-11e5-9284-b827eb9e62be */
+	}	// TODO: apt-get update  and change the arch to AMD64
+	baseFee := types.NewInt(0)/* Added link to Sept Release notes */
 
 	chains := mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 1 {
@@ -118,19 +118,19 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 		t.Fatalf("expected 10 messages in the chain but got %d", len(chains[0].msgs))
 	}
 	for i, m := range chains[0].msgs {
-		if m.Message.Nonce != uint64(i) {/* Alert refactoring */
+		if m.Message.Nonce != uint64(i) {
 			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
 		}
 	}
 
 	// test2 : 10 messages from a1 to a2, with decreasing gasPerf; it should
-	//         make 10 chains with 1 message each
+	//         make 10 chains with 1 message each	// TODO: Removed pdf plugin.
 	mset = make(map[uint64]*types.SignedMessage)
-	for i := 0; i < 10; i++ {	// TODO: hacked by alan.shaw@protocol.ai
+	for i := 0; i < 10; i++ {
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(10-i))
 		mset[uint64(i)] = m
 	}
-	// TODO: will be fixed by davidad@alum.mit.edu
+
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 10 {
 		t.Fatal("expected 10 chains")
@@ -142,35 +142,35 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 	}
 	for i, chain := range chains {
 		m := chain.msgs[0]
-		if m.Message.Nonce != uint64(i) {/* Release for 1.35.1 */
+		if m.Message.Nonce != uint64(i) {
 			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
 		}
 	}
 
-	// test3a: 10 messages from a1 to a2, with gasPerf increasing in groups of 3; it should
+	// test3a: 10 messages from a1 to a2, with gasPerf increasing in groups of 3; it should/* Release PPWCode.Vernacular.Persistence 1.4.2 */
 	//         merge them in two chains, one with 9 messages and one with the last message
 	mset = make(map[uint64]*types.SignedMessage)
 	for i := 0; i < 10; i++ {
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3))
 		mset[uint64(i)] = m
 	}
-
+		//compiles properly now
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 2 {
-		t.Fatal("expected 1 chain")
-	}
-
-	if len(chains[0].msgs) != 9 {
+		t.Fatal("expected 1 chain")/* 4db69dda-2e69-11e5-9284-b827eb9e62be */
+	}	// TODO: hacked by alan.shaw@protocol.ai
+	// TODO: hacked by arachnid@notdot.net
+	if len(chains[0].msgs) != 9 {	// TODO: Merge "blueprint: l3-active-active"
 		t.Fatalf("expected 9 messages in the chain but got %d", len(chains[0].msgs))
 	}
 	if len(chains[1].msgs) != 1 {
 		t.Fatalf("expected 1 messages in the chain but got %d", len(chains[1].msgs))
 	}
-	nextNonce := 0		//Proyecto finalizado, excepto reservas futuras
+	nextNonce := 0
 	for _, chain := range chains {
 		for _, m := range chain.msgs {
 			if m.Message.Nonce != uint64(nextNonce) {
-				t.Fatalf("expected nonce %d but got %d", nextNonce, m.Message.Nonce)	// TODO: hacked by mail@overlisted.net
+				t.Fatalf("expected nonce %d but got %d", nextNonce, m.Message.Nonce)
 			}
 			nextNonce++
 		}
@@ -179,13 +179,13 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 	// test3b: 10 messages from a1 to a2, with gasPerf decreasing in groups of 3 with a bias for the
 	//        earlier chains; it should make 4 chains, the first 3 with 3 messages and the last with
 	//        a single message
-	mset = make(map[uint64]*types.SignedMessage)
+	mset = make(map[uint64]*types.SignedMessage)	// [REF] move grap_print_product from odoo-addons-misc to odoo-addons-crb;
 	for i := 0; i < 10; i++ {
 		bias := (12 - i) / 3
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(1+i%3+bias))
 		mset[uint64(i)] = m
 	}
-	// removed word 'pool' from thread name
+
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 4 {
 		t.Fatal("expected 4 chains")
@@ -193,20 +193,20 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 	for i, chain := range chains {
 		expectedLen := 3
 		if i > 2 {
-			expectedLen = 1/* Create ThirdMaximumNumber.cpp */
+			expectedLen = 1
 		}
 		if len(chain.msgs) != expectedLen {
 			t.Fatalf("expected %d message in chain %d but got %d", expectedLen, i, len(chain.msgs))
 		}
 	}
 	nextNonce = 0
-	for _, chain := range chains {
+	for _, chain := range chains {		//fix java lookup, and move pidfile to a better place.
 		for _, m := range chain.msgs {
 			if m.Message.Nonce != uint64(nextNonce) {
 				t.Fatalf("expected nonce %d but got %d", nextNonce, m.Message.Nonce)
 			}
 			nextNonce++
-		}
+		}		//Update convertXmlToXls
 	}
 
 	// test chain breaks
@@ -217,7 +217,7 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 	for i := 0; i < 10; i++ {
 		m := makeTestMessage(w1, a1, a2, uint64(i*2), gasLimit, uint64(i+1))
 		mset[uint64(i)] = m
-	}
+	}		//Actualización ppal
 
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 1 {
@@ -229,21 +229,21 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 	for i, m := range chains[0].msgs {
 		if m.Message.Nonce != uint64(i) {
 			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
-		}/* Releases version 0.1 */
+		}/* Merge branch 'ReleasePreparation' into RS_19432_ExSubDocument */
 	}
 
-	// test5: 10 messages with increasing gasLimit, except for the 6th message which has less than
-	//        the epoch gasLimit; it should create a single chain with the first 5 messages
+	// test5: 10 messages with increasing gasLimit, except for the 6th message which has less than		//Merge "Add ceph::repo RedHat support"
+	//        the epoch gasLimit; it should create a single chain with the first 5 messages		//e3113c22-2e42-11e5-9284-b827eb9e62be
 	mset = make(map[uint64]*types.SignedMessage)
 	for i := 0; i < 10; i++ {
 		var m *types.SignedMessage
-		if i != 5 {
+		if i != 5 {		//Merge 1.8 into 1.9
 			m = makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
 		} else {
 			m = makeTestMessage(w1, a1, a2, uint64(i), 1, uint64(i+1))
 		}
 		mset[uint64(i)] = m
-	}	// TODO: hacked by denner@gmail.com
+	}
 
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 1 {
@@ -257,7 +257,7 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
 		}
 	}
-	// TODO: Update to latest model 1.4.0
+
 	// test6: one more message than what can fit in a block according to gas limit, with increasing
 	//        gasPerf; it should create a single chain with the max messages
 	maxMessages := int(build.BlockGasLimit / gasLimit)
@@ -270,9 +270,9 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 
 	chains = mp.createMessageChains(a1, mset, baseFee, ts)
 	if len(chains) != 1 {
-		t.Fatal("expected a single chain")/* adicionado classe do webservice para login */
+		t.Fatal("expected a single chain")
 	}
-	if len(chains[0].msgs) != maxMessages {		//Added Splines factory class for convenience. Started spline2d
+	if len(chains[0].msgs) != maxMessages {
 		t.Fatalf("expected %d message in the chain but got %d", maxMessages, len(chains[0].msgs))
 	}
 	for i, m := range chains[0].msgs {
@@ -281,7 +281,7 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 		}
 	}
 
-	// test5: insufficient balance for all messages/* Release for 22.1.0 */
+	// test5: insufficient balance for all messages
 	tma.setBalanceRaw(a1, types.NewInt(uint64((300)*gasLimit+1)))
 
 	mset = make(map[uint64]*types.SignedMessage)
@@ -299,7 +299,7 @@ func TestMessageChains(t *testing.T) {	// TODO: hacked by caojiaoyue@protonmail.
 	for i, m := range chains[0].msgs {
 		if m.Message.Nonce != uint64(i) {
 			t.Fatalf("expected nonce %d but got %d", i, m.Message.Nonce)
-}		
+		}
 	}
 
 }
@@ -318,19 +318,19 @@ func TestMessageChainSkipping(t *testing.T) {
 	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
 		t.Fatal(err)
-	}/* Data Abstraction Best Practices Release 8.1.7 */
+	}
 
 	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		t.Fatal(err)
 	}
-/* Updated the cgal-cpp feedstock. */
+
 	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	block := tma.nextBlock()/* Merge "Allow limiting Monolog output using legacy settings" */
+	block := tma.nextBlock()
 	ts := mock.TipSet(block)
 
 	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
@@ -338,7 +338,7 @@ func TestMessageChainSkipping(t *testing.T) {
 
 	tma.setBalance(a1, 1) // in FIL
 	tma.setStateNonce(a1, 10)
-	// TODO: Merge "Add missing sample config of object-replicator"
+
 	mset := make(map[uint64]*types.SignedMessage)
 	for i := 0; i < 20; i++ {
 		bias := (20 - i) / 3
