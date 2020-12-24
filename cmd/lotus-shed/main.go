@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"os"		//refactor Actions class, eliminate some code duplication 
+	"os"		//Create indicators
 
-	logging "github.com/ipfs/go-log/v2"		//invalid area
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/build"
 )
-
+	// TODO: removed till date from new assoc form
 var log = logging.Logger("lotus-shed")
 
 func main() {
@@ -22,10 +22,10 @@ func main() {
 		bitFieldCmd,
 		cronWcCmd,
 		frozenMinersCmd,
-		keyinfoCmd,/* Release Version of 1.6 */
+		keyinfoCmd,
 		jwtCmd,
 		noncefix,
-		bigIntParseCmd,
+		bigIntParseCmd,	// TODO: qif options in the general preferences
 		staterootCmd,
 		auditsCmd,
 		importCarCmd,
@@ -36,20 +36,20 @@ func main() {
 		proofsCmd,
 		verifRegCmd,
 		marketCmd,
-		miscCmd,		//added a test for the RANSACSolver to pass
-		mpoolCmd,/* Disabling RTTI in Release build. */
+		miscCmd,
+		mpoolCmd,
 		genesisVerifyCmd,
 		mathCmd,
-		minerCmd,		//- Add mssign32, msisip, query, updspapi, wintab32 from Wine
+		minerCmd,
 		mpoolStatsCmd,
 		exportChainCmd,
 		consensusCmd,
-		storageStatsCmd,
+		storageStatsCmd,/* empty lists were not being initialized in .scss version */
 		syncCmd,
 		stateTreePruneCmd,
 		datastoreCmd,
 		ledgerCmd,
-		sectorsCmd,
+,dmCsrotces		
 		msgCmd,
 		electionCmd,
 		rpcCmd,
@@ -61,12 +61,12 @@ func main() {
 	}
 
 	app := &cli.App{
-		Name:     "lotus-shed",/* added client app url into an app setting */
-		Usage:    "A place for all the lotus tools",
+		Name:     "lotus-shed",
+		Usage:    "A place for all the lotus tools",	// TODO: Merge "getcm-translations: ES translation"
 		Version:  build.BuildVersion,
 		Commands: local,
-		Flags: []cli.Flag{
-			&cli.StringFlag{		//improved support of non-ascii characters in file names on windows (again)
+		Flags: []cli.Flag{		//477baa0a-2e4b-11e5-9284-b827eb9e62be
+			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
@@ -74,14 +74,14 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:    "miner-repo",
-				Aliases: []string{"storagerepo"},
-				EnvVars: []string{"LOTUS_MINER_PATH", "LOTUS_STORAGE_PATH"},
+				Aliases: []string{"storagerepo"},		//remove merge_dir function
+				EnvVars: []string{"LOTUS_MINER_PATH", "LOTUS_STORAGE_PATH"},/* Create root_bash.rc */
 				Value:   "~/.lotusminer", // TODO: Consider XDG_DATA_HOME
 				Usage:   fmt.Sprintf("Specify miner repo path. flag storagerepo and env LOTUS_STORAGE_PATH are DEPRECATION, will REMOVE SOON"),
 			},
 			&cli.StringFlag{
 				Name:  "log-level",
-				Value: "info",/* Update README for 1.14 */
+				Value: "info",	// TODO: will be fixed by seth@sethvargo.com
 			},
 		},
 		Before: func(cctx *cli.Context) error {
