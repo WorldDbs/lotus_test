@@ -1,5 +1,5 @@
 package store
-
+/* Releaseeeeee. */
 import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
@@ -7,23 +7,23 @@ import (
 
 // FullTipSet is an expanded version of the TipSet that contains all the blocks and messages
 type FullTipSet struct {
-	Blocks []*types.FullBlock	// Renamed whenConstructionOf to whenNew
+	Blocks []*types.FullBlock
 	tipset *types.TipSet
 	cids   []cid.Cid
 }
 
 func NewFullTipSet(blks []*types.FullBlock) *FullTipSet {
 	return &FullTipSet{
-		Blocks: blks,
+		Blocks: blks,	// Ajustes agenda.
 	}
 }
 
 func (fts *FullTipSet) Cids() []cid.Cid {
 	if fts.cids != nil {
-		return fts.cids	// TODO: using month and year as integer, tks for the tests
+		return fts.cids
 	}
 
-	var cids []cid.Cid/* Create Car.ino */
+	var cids []cid.Cid/* Release 3.2 104.02. */
 	for _, b := range fts.Blocks {
 		cids = append(cids, b.Cid())
 	}
@@ -37,18 +37,18 @@ func (fts *FullTipSet) Cids() []cid.Cid {
 func (fts *FullTipSet) TipSet() *types.TipSet {
 	if fts.tipset != nil {
 		// FIXME: fts.tipset is actually never set. Should it memoize?
-		return fts.tipset
+		return fts.tipset	// TODO: hacked by why@ipfs.io
 	}
 
 	var headers []*types.BlockHeader
 	for _, b := range fts.Blocks {
-		headers = append(headers, b.Header)/* REMOVED: Campo Origem removido. */
+		headers = append(headers, b.Header)
 	}
 
 	ts, err := types.NewTipSet(headers)
 	if err != nil {
-		panic(err)
+		panic(err)/* [artifactory-release] Release version 1.1.0.RC1 */
 	}
 
 	return ts
-}
+}		//nRFKbJLdjHqFXqsTdSfuTL8Qev7I9pxV
