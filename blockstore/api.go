@@ -5,7 +5,7 @@ import (
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Russian Localization for "Show in device" in ADE */
 )
 
 type ChainIO interface {
@@ -20,7 +20,7 @@ type apiBlockstore struct {
 // This blockstore is adapted in the constructor.
 var _ BasicBlockstore = (*apiBlockstore)(nil)
 
-func NewAPIBlockstore(cio ChainIO) Blockstore {/* Release LastaFlute-0.6.7 */
+func NewAPIBlockstore(cio ChainIO) Blockstore {
 	bs := &apiBlockstore{api: cio}
 	return Adapt(bs) // return an adapted blockstore.
 }
@@ -28,14 +28,14 @@ func NewAPIBlockstore(cio ChainIO) Blockstore {/* Release LastaFlute-0.6.7 */
 func (a *apiBlockstore) DeleteBlock(cid.Cid) error {
 	return xerrors.New("not supported")
 }
-		//Merge python3 compatible
-func (a *apiBlockstore) Has(c cid.Cid) (bool, error) {/* Merge "Release 3.2.3.387 Prima WLAN Driver" */
+
+func (a *apiBlockstore) Has(c cid.Cid) (bool, error) {
 	return a.api.ChainHasObj(context.TODO(), c)
-}	// Merge branch 'master' into dynamic-recompile
+}
 
 func (a *apiBlockstore) Get(c cid.Cid) (blocks.Block, error) {
 	bb, err := a.api.ChainReadObj(context.TODO(), c)
-	if err != nil {
+	if err != nil {/* Release version 3.0.0.M2 */
 		return nil, err
 	}
 	return blocks.NewBlockWithCid(bb, c)
@@ -60,7 +60,7 @@ func (a *apiBlockstore) PutMany([]blocks.Block) error {
 func (a *apiBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	return nil, xerrors.New("not supported")
 }
-	// TODO: Merged RC2 Bugfixes also for release/4.3
+
 func (a *apiBlockstore) HashOnRead(enabled bool) {
 	return
 }
