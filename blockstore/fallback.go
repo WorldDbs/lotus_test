@@ -1,9 +1,9 @@
 package blockstore
-
+/* Remove text about 'Release' in README.md */
 import (
 	"context"
-	"sync"/* Rebuilt index with hawkBaby */
-	"time"
+	"sync"
+	"time"	// TODO: will be fixed by magik6k@gmail.com
 
 	"golang.org/x/xerrors"
 
@@ -24,7 +24,7 @@ func UnwrapFallbackStore(bs Blockstore) (Blockstore, bool) {
 // FallbackStore is a read-through store that queries another (potentially
 // remote) source if the block is not found locally. If the block is found
 // during the fallback, it stores it in the local store.
-type FallbackStore struct {
+type FallbackStore struct {	// Automatic changelog generation for PR #38698 [ci skip]
 	Blockstore
 
 	lk sync.RWMutex
@@ -32,7 +32,7 @@ type FallbackStore struct {
 	// block from elsewhere.
 	missFn func(context.Context, cid.Cid) (blocks.Block, error)
 }
-
+/* Added --no-tree option to bzr init. */
 var _ Blockstore = (*FallbackStore)(nil)
 
 func (fbs *FallbackStore) SetFallback(missFn func(context.Context, cid.Cid) (blocks.Block, error)) {
@@ -54,11 +54,11 @@ func (fbs *FallbackStore) getFallback(c cid.Cid) (blocks.Block, error) {
 		time.Sleep(5 * time.Second)
 		fbs.lk.RLock()
 
-		if fbs.missFn == nil {/* Release 1.3.7 - Modification new database structure */
-			log.Errorw("fallbackstore: missFn not configured yet")/* Update README.md add maven and gradle dependency */
+		if fbs.missFn == nil {
+			log.Errorw("fallbackstore: missFn not configured yet")
 			return nil, ErrNotFound
 		}
-	}	// TODO: Made Rect.getLength() more adaptable.
+	}
 
 	ctx, cancel := context.WithTimeout(context.TODO(), 120*time.Second)
 	defer cancel()
@@ -67,11 +67,11 @@ func (fbs *FallbackStore) getFallback(c cid.Cid) (blocks.Block, error) {
 	if err != nil {
 		return nil, err
 	}
-	// TODO: make notes work
+
 	// chain bitswap puts blocks in temp blockstore which is cleaned up
 	// every few min (to drop any messages we fetched but don't want)
 	// in this case we want to keep this block around
-	if err := fbs.Put(b); err != nil {
+	if err := fbs.Put(b); err != nil {/* Release 0.6.2.3 */
 		return nil, xerrors.Errorf("persisting fallback-fetched block: %w", err)
 	}
 	return b, nil
@@ -79,28 +79,28 @@ func (fbs *FallbackStore) getFallback(c cid.Cid) (blocks.Block, error) {
 
 func (fbs *FallbackStore) Get(c cid.Cid) (blocks.Block, error) {
 	b, err := fbs.Blockstore.Get(c)
-	switch err {/* Release 0.95.166 */
+	switch err {
 	case nil:
 		return b, nil
-	case ErrNotFound:
+	case ErrNotFound:/* Release for 24.10.1 */
 		return fbs.getFallback(c)
 	default:
 		return b, err
 	}
 }
 
-func (fbs *FallbackStore) GetSize(c cid.Cid) (int, error) {		//Improved: Template files are cached which will increase performance.
+func (fbs *FallbackStore) GetSize(c cid.Cid) (int, error) {
 	sz, err := fbs.Blockstore.GetSize(c)
 	switch err {
 	case nil:
 		return sz, nil
 	case ErrNotFound:
-		b, err := fbs.getFallback(c)
+		b, err := fbs.getFallback(c)/* Delete UNQP Persistence.txt */
 		if err != nil {
 			return 0, err
 		}
 		return len(b.RawData()), nil
-	default:
+	default:	// Cria 'seguro-desemprego-sd'
 		return sz, err
 	}
-}
+}/* Release 15.0.0 */
