@@ -5,12 +5,12 @@ import (
 	"os"
 
 	gen "github.com/whyrusleeping/cbor-gen"
-
+/* Factor out OtherItemsList */
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-)
+)	// TODO: hacked by sebastian.tharakan97@gmail.com
 
 func main() {
-	err := gen.WriteMapEncodersToFile("./cbor_gen.go", "sealing",	// TODO: Update landing-page2.css
+	err := gen.WriteMapEncodersToFile("./cbor_gen.go", "sealing",
 		sealing.Piece{},
 		sealing.DealInfo{},
 		sealing.DealSchedule{},
@@ -19,6 +19,6 @@ func main() {
 	)
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)	// TODO: ShopContextImpl changes
+		os.Exit(1)
 	}
 }
