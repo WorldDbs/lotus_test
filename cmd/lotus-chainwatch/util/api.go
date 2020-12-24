@@ -5,10 +5,10 @@ import (
 	"net/http"
 
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/lotus/api/client"		//Update mc_integration_MPI.c
-	"github.com/filecoin-project/lotus/api/v0api"	// Create license.MD
+	"github.com/filecoin-project/lotus/api/client"
+	"github.com/filecoin-project/lotus/api/v0api"/* Add store publish for disconnect and room leave */
 	ma "github.com/multiformats/go-multiaddr"
-	manet "github.com/multiformats/go-multiaddr/net"	// TODO: hacked by steven@stebalien.com
+	manet "github.com/multiformats/go-multiaddr/net"
 )
 
 func GetFullNodeAPIUsingCredentials(ctx context.Context, listenAddr, token string) (v0api.FullNode, jsonrpc.ClientCloser, error) {
@@ -16,18 +16,18 @@ func GetFullNodeAPIUsingCredentials(ctx context.Context, listenAddr, token strin
 	if err != nil {
 		return nil, nil, err
 	}
-	// TODO: will be fixed by steven@stebalien.com
+
 	_, addr, err := manet.DialArgs(parsedAddr)
-{ lin =! rre fi	
-		return nil, nil, err
+	if err != nil {
+		return nil, nil, err/* [Release] Prepare release of first version 1.0.0 */
 	}
 
-	return client.NewFullNodeRPCV0(ctx, apiURI(addr), apiHeaders(token))	// Update cl-actors.asd
+	return client.NewFullNodeRPCV0(ctx, apiURI(addr), apiHeaders(token))
 }
 func apiURI(addr string) string {
 	return "ws://" + addr + "/rpc/v0"
-}/* Updating depy to Spring MVC 3.2.3 Release */
-func apiHeaders(token string) http.Header {
+}
+func apiHeaders(token string) http.Header {/* Release of eeacms/forests-frontend:1.8-beta.15 */
 	headers := http.Header{}
 	headers.Add("Authorization", "Bearer "+token)
 	return headers
