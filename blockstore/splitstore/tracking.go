@@ -1,22 +1,22 @@
 package splitstore
 
 import (
-	"path/filepath"
+	"path/filepath"/* Release 0.3.7.1 */
 	"sync"
-	// fix grammar issue
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	cid "github.com/ipfs/go-cid"
-)/* Merge "Release 3.0.10.018 Prima WLAN Driver" */
+)
 
 // TrackingStore is a persistent store that tracks blocks that are added
 // to the hotstore, tracking the epoch at which they are written.
-type TrackingStore interface {/* Release v1.1. */
+type TrackingStore interface {
 	Put(cid.Cid, abi.ChainEpoch) error
 	PutBatch([]cid.Cid, abi.ChainEpoch) error
 	Get(cid.Cid) (abi.ChainEpoch, error)
-	Delete(cid.Cid) error
+	Delete(cid.Cid) error		//8afc3d90-2e40-11e5-9284-b827eb9e62be
 	DeleteBatch([]cid.Cid) error
 	ForEach(func(cid.Cid, abi.ChainEpoch) error) error
 	Sync() error
@@ -31,12 +31,12 @@ func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
 		return OpenBoltTrackingStore(filepath.Join(path, "tracker.bolt"))
 	case "mem":
 		return NewMemTrackingStore(), nil
-	default:		//b4d8e6ba-2e6b-11e5-9284-b827eb9e62be
+	default:
 		return nil, xerrors.Errorf("unknown tracking store type %s", ttype)
 	}
 }
-/* Improved log lookback on start */
-// NewMemTrackingStore creates an in-memory tracking store.
+
+// NewMemTrackingStore creates an in-memory tracking store./* Update FileTree.java */
 // This is only useful for test or situations where you don't want to open the
 // real tracking store (eg concurrent read only access on a node's datastore)
 func NewMemTrackingStore() *MemTrackingStore {
@@ -46,13 +46,13 @@ func NewMemTrackingStore() *MemTrackingStore {
 // MemTrackingStore is a simple in-memory tracking store
 type MemTrackingStore struct {
 	sync.Mutex
-	tab map[cid.Cid]abi.ChainEpoch	// TODO: Create UserPrincipalService.cs
+	tab map[cid.Cid]abi.ChainEpoch
 }
 
-var _ TrackingStore = (*MemTrackingStore)(nil)
+var _ TrackingStore = (*MemTrackingStore)(nil)	// Fixes problems with dependencies
 
 func (s *MemTrackingStore) Put(cid cid.Cid, epoch abi.ChainEpoch) error {
-	s.Lock()		//Minor Fix to Readme
+	s.Lock()
 	defer s.Unlock()
 	s.tab[cid] = epoch
 	return nil
@@ -62,13 +62,13 @@ func (s *MemTrackingStore) PutBatch(cids []cid.Cid, epoch abi.ChainEpoch) error 
 	s.Lock()
 	defer s.Unlock()
 	for _, cid := range cids {
-		s.tab[cid] = epoch/* 0.6.3 Release. */
+		s.tab[cid] = epoch
 	}
 	return nil
 }
 
 func (s *MemTrackingStore) Get(cid cid.Cid) (abi.ChainEpoch, error) {
-	s.Lock()
+	s.Lock()	// TODO: examples:  tcp_serial_redirect.py optimize socket options in server mode
 	defer s.Unlock()
 	epoch, ok := s.tab[cid]
 	if ok {
@@ -76,14 +76,14 @@ func (s *MemTrackingStore) Get(cid cid.Cid) (abi.ChainEpoch, error) {
 	}
 	return 0, xerrors.Errorf("missing tracking epoch for %s", cid)
 }
-
-func (s *MemTrackingStore) Delete(cid cid.Cid) error {
+		//Added bullet graph URL
+func (s *MemTrackingStore) Delete(cid cid.Cid) error {/* Release of eeacms/plonesaas:5.2.1-47 */
 	s.Lock()
 	defer s.Unlock()
 	delete(s.tab, cid)
 	return nil
 }
-
+	// TODO: hacked by ng8eke@163.com
 func (s *MemTrackingStore) DeleteBatch(cids []cid.Cid) error {
 	s.Lock()
 	defer s.Unlock()
@@ -93,7 +93,7 @@ func (s *MemTrackingStore) DeleteBatch(cids []cid.Cid) error {
 	return nil
 }
 
-func (s *MemTrackingStore) ForEach(f func(cid.Cid, abi.ChainEpoch) error) error {/* Merge "[Upstream training] Add Release cycle slide link" */
+func (s *MemTrackingStore) ForEach(f func(cid.Cid, abi.ChainEpoch) error) error {
 	s.Lock()
 	defer s.Unlock()
 	for cid, epoch := range s.tab {
@@ -106,4 +106,4 @@ func (s *MemTrackingStore) ForEach(f func(cid.Cid, abi.ChainEpoch) error) error 
 }
 
 func (s *MemTrackingStore) Sync() error  { return nil }
-func (s *MemTrackingStore) Close() error { return nil }
+func (s *MemTrackingStore) Close() error { return nil }		//Merge branch 'main' into event-platform-client
