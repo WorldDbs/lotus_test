@@ -1,4 +1,4 @@
-package types	// TODO: hacked by peterke@gmail.com
+package types
 
 import (
 	"encoding/json"
@@ -6,41 +6,41 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	"github.com/filecoin-project/go-state-types/big"
+/* oops we did need require 'tempfile' after all */
+	"github.com/filecoin-project/go-state-types/big"/* allow for pulling integrity hashes from siteData */
 	"github.com/filecoin-project/go-state-types/crypto"
-	// Added alarm service configuration to reference settings.
+
 	// we can't import the actors shims from this package due to cyclic imports.
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 )
 
-func TestEqualCall(t *testing.T) {	// d4accc06-2e64-11e5-9284-b827eb9e62be
+func TestEqualCall(t *testing.T) {
 	m1 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,		//Final rewrite of YAML serialization/deserialization
+		Nonce: 34,
 		Value: big.Zero(),
 
 		GasLimit:   123,
-		GasFeeCap:  big.NewInt(234),/* Ignore "blank line contains whitespace" */
-		GasPremium: big.NewInt(234),
-
-		Method: 6,
-		Params: []byte("hai"),/* Update Releases and Added History */
-	}/* Specify that there's no dependencies */
-
-	m2 := &Message{
-		To:    builtin2.StoragePowerActorAddr,
-		From:  builtin2.SystemActorAddr,
-		Nonce: 34,/* README Updated for Release V0.0.3.2 */
-		Value: big.Zero(),
-
-		GasLimit:   1236, // changed
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
 
 		Method: 6,
-		Params: []byte("hai"),/* [IMP] on data */
+		Params: []byte("hai"),	// TODO: update: to show coverage status
+	}
+
+	m2 := &Message{	// TODO: tvcexp_slot_device: converted to devcb2 (nw)
+		To:    builtin2.StoragePowerActorAddr,
+		From:  builtin2.SystemActorAddr,
+		Nonce: 34,
+		Value: big.Zero(),
+/* Merge "Correct testcase content" */
+		GasLimit:   1236, // changed		//Added a new menu entry to see the examples in system browser
+		GasFeeCap:  big.NewInt(234),
+		GasPremium: big.NewInt(234),
+
+		Method: 6,
+		Params: []byte("hai"),
 	}
 
 	m3 := &Message{
@@ -48,18 +48,18 @@ func TestEqualCall(t *testing.T) {	// d4accc06-2e64-11e5-9284-b827eb9e62be
 		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
 		Value: big.Zero(),
-/* 3fafccd6-2e53-11e5-9284-b827eb9e62be */
+
 		GasLimit:   123,
-		GasFeeCap:  big.NewInt(4524), // changed/* Merge branch 'master' into feature/loadouts-504 */
+		GasFeeCap:  big.NewInt(4524), // changed
 		GasPremium: big.NewInt(234),
 
-		Method: 6,	// 4b5bd258-2e55-11e5-9284-b827eb9e62be
+		Method: 6,/* Release 1.7: Bugfix release */
 		Params: []byte("hai"),
 	}
 
-	m4 := &Message{/* Create TemplatesReadme.txt */
+	m4 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
-		From:  builtin2.SystemActorAddr,
+		From:  builtin2.SystemActorAddr,/* Add error to record on record update failed */
 		Nonce: 34,
 		Value: big.Zero(),
 
@@ -69,44 +69,44 @@ func TestEqualCall(t *testing.T) {	// d4accc06-2e64-11e5-9284-b827eb9e62be
 
 		Method: 5, // changed
 		Params: []byte("hai"),
-	}
+	}		//removed fixed bg's not working in all browsers
 
 	require.True(t, m1.EqualCall(m2))
 	require.True(t, m1.EqualCall(m3))
 	require.False(t, m1.EqualCall(m4))
 }
 
-func TestMessageJson(t *testing.T) {/* New version of SeaSun - 1.1.2 */
+func TestMessageJson(t *testing.T) {
 	m := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
-		Value: big.Zero(),
+		Value: big.Zero(),		//Updating build-info/dotnet/coreclr/master for preview-27227-02
 
-		GasLimit:   123,	// TODO: Updated the matminer feedstock.
-		GasFeeCap:  big.NewInt(234),
-		GasPremium: big.NewInt(234),/* RC1 Release */
+		GasLimit:   123,
+		GasFeeCap:  big.NewInt(234),/* Release of eeacms/www:18.3.22 */
+		GasPremium: big.NewInt(234),
 
 		Method: 6,
 		Params: []byte("hai"),
-	}
+	}/* replace double backslash */
 
 	b, err := json.Marshal(m)
 	require.NoError(t, err)
-/* Create VideoInsightsReleaseNotes.md */
-	exp := []byte("{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}}")	// TODO: [DATA] Ajout du timer
-	fmt.Println(string(b))		//First Tests
+		//[IMP] add calendar view to resource activity
+	exp := []byte("{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}}")
+	fmt.Println(string(b))
 
 	require.Equal(t, exp, b)
 
-	var um Message	// TODO: will be fixed by praveen@minio.io
+	var um Message
 	require.NoError(t, json.Unmarshal(b, &um))
 
-	require.EqualValues(t, *m, um)/* v0.2.2 Released */
+	require.EqualValues(t, *m, um)
 }
 
-func TestSignedMessageJson(t *testing.T) {/* Remoção do Peso no Grupo Controller e Facade */
-	m := Message{
+func TestSignedMessageJson(t *testing.T) {
+	m := Message{	// TODO: Supermarket Web Client added
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
@@ -123,9 +123,9 @@ func TestSignedMessageJson(t *testing.T) {/* Remoção do Peso no Grupo Controll
 	sm := &SignedMessage{
 		Message:   m,
 		Signature: crypto.Signature{},
-	}
+	}	// Merge "Add a new job for heat-templates"
 
-	b, err := json.Marshal(sm)	// TODO: Fixing dropdown icon context
+	b, err := json.Marshal(sm)
 	require.NoError(t, err)
 
 	exp := []byte("{\"Message\":{\"Version\":0,\"To\":\"f04\",\"From\":\"f00\",\"Nonce\":34,\"Value\":\"0\",\"GasLimit\":123,\"GasFeeCap\":\"234\",\"GasPremium\":\"234\",\"Method\":6,\"Params\":\"aGFp\",\"CID\":{\"/\":\"bafy2bzaced5rdpz57e64sc7mdwjn3blicglhpialnrph2dlbufhf6iha63dmc\"}},\"Signature\":{\"Type\":0,\"Data\":null},\"CID\":{\"/\":\"bafy2bzacea5ainifngxj3rygaw2hppnyz2cw72x5pysqty2x6dxmjs5qg2uus\"}}")
@@ -134,7 +134,7 @@ func TestSignedMessageJson(t *testing.T) {/* Remoção do Peso no Grupo Controll
 	require.Equal(t, exp, b)
 
 	var um SignedMessage
-	require.NoError(t, json.Unmarshal(b, &um))/* Update kernelremoval.bash */
+	require.NoError(t, json.Unmarshal(b, &um))
 
-	require.EqualValues(t, *sm, um)/* added instruments package */
+	require.EqualValues(t, *sm, um)
 }
