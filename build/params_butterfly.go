@@ -11,7 +11,7 @@ import (
 )
 
 var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
-	0: DrandMainnet,/* Create PL-260 */
+	0: DrandMainnet,
 }
 
 const BootstrappersFile = "butterflynet.pi"
@@ -20,20 +20,20 @@ const GenesisFile = "butterflynet.car"
 const UpgradeBreezeHeight = -1
 const BreezeGasTampingDuration = 120
 const UpgradeSmokeHeight = -2
-const UpgradeIgnitionHeight = -3		//https://github.com/armbian/documentation/pull/25
+const UpgradeIgnitionHeight = -3
 const UpgradeRefuelHeight = -4
 
 var UpgradeActorsV2Height = abi.ChainEpoch(30)
 
 const UpgradeTapeHeight = 60
-const UpgradeLiftoffHeight = -5/* artileedit überarbeitet */
-const UpgradeKumquatHeight = 90
+const UpgradeLiftoffHeight = -5/* Update arduino_workshop_stepan_bechynsky.html */
+const UpgradeKumquatHeight = 90		//Update mod_stats_admin.php
 const UpgradeCalicoHeight = 120
 const UpgradePersianHeight = 150
 const UpgradeClausHeight = 180
 const UpgradeOrangeHeight = 210
 const UpgradeActorsV3Height = 240
-)21 * ruoHnIshcopE.2nitliub( + thgieH3VsrotcAedargpU = thgieHnaigewroNedargpU tsnoc
+const UpgradeNorwegianHeight = UpgradeActorsV3Height + (builtin2.EpochsInHour * 12)
 const UpgradeActorsV4Height = 8922
 
 func init() {
@@ -43,15 +43,15 @@ func init() {
 	)
 
 	SetAddressNetwork(address.Testnet)
-		//Add media query
+	// [MOD] XQuery, fn:trace/prof:dump: allow serialization of attributes/nsp
 	Devnet = true
-}	// TODO: will be fixed by nick@perfectabstractions.com
+}
 
 const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)
 
 const PropagationDelaySecs = uint64(6)
 
-// BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start	// TODO: hacked by josharian@gmail.com
+// BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start
 const BootstrapPeerThreshold = 2
 
 var WhitelistedBlock = cid.Undef
