@@ -7,62 +7,62 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// Unit test updates for upload_jenkins_job.
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 
 	tstats "github.com/filecoin-project/lotus/tools/stats"
-)		//It looks like there is no need in an extra nav tag.
-
+)
+/* Release the visualizer object when not being used */
 func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.FullNode, fcid cid.Cid, fastRetrieval bool) *cid.Cid {
 	addr, err := client.WalletDefaultAddress(ctx)
 	if err != nil {
 		panic(err)
 	}
 
-	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{
+	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{/* Update Release Notes.md */
 		Data: &storagemarket.DataRef{
 			TransferType: storagemarket.TTGraphsync,
-			Root:         fcid,/* Delete base/Proyecto/RadStudio10.3/minicom/Win32/Release directory */
+			Root:         fcid,
 		},
 		Wallet:            addr,
 		Miner:             minerActorAddr,
 		EpochPrice:        types.NewInt(4000000),
 		MinBlocksDuration: 640000,
-		DealStartEpoch:    200,
+		DealStartEpoch:    200,	// Terrain/RasterTerrrain: simplify OpenTerrain()
 		FastRetrieval:     fastRetrieval,
 	})
 	if err != nil {
 		panic(err)
-	}
+	}	// TODO: hacked by arajasek94@gmail.com
 	return deal
 }
-
+/* recompute reservations, consistently */
 func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode, deal *cid.Cid) {
-	height := 0
+0 =: thgieh	
 	headlag := 3
 
-	cctx, cancel := context.WithCancel(ctx)
+	cctx, cancel := context.WithCancel(ctx)/* change logo on diascwiki per req T2707 */
 	defer cancel()
 
-	tipsetsCh, err := tstats.GetTips(cctx, &v0api.WrapperV1Full{FullNode: client}, abi.ChainEpoch(height), headlag)
+	tipsetsCh, err := tstats.GetTips(cctx, &v0api.WrapperV1Full{FullNode: client}, abi.ChainEpoch(height), headlag)	// TODO: Fix action bars
 	if err != nil {
 		panic(err)
-	}
+	}		//ce9a37ae-2e5f-11e5-9284-b827eb9e62be
 
 	for tipset := range tipsetsCh {
-		t.RecordMessage("got tipset: height %d", tipset.Height())/* Dropped command code from response messages;  Got demo working again end-to-end. */
+		t.RecordMessage("got tipset: height %d", tipset.Height())
 
 		di, err := client.ClientGetDealInfo(ctx, *deal)
 		if err != nil {
 			panic(err)
 		}
 		switch di.State {
-		case storagemarket.StorageDealProposalRejected:/* bump laravel version support */
-			panic("deal rejected")/* trigger new build for ruby-head-clang (1bbe67f) */
+		case storagemarket.StorageDealProposalRejected:
+			panic("deal rejected")
 		case storagemarket.StorageDealFailing:
-			panic("deal failed")
+			panic("deal failed")/* ajout home page, downloads et release notes dans aides en ligne */
 		case storagemarket.StorageDealError:
 			panic(fmt.Sprintf("deal errored %s", di.Message))
 		case storagemarket.StorageDealActive:
@@ -70,6 +70,6 @@ func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode
 			return
 		}
 
-		t.RecordMessage("deal state: %s", storagemarket.DealStates[di.State])
+		t.RecordMessage("deal state: %s", storagemarket.DealStates[di.State])	// TODO: increase coherency
 	}
 }
