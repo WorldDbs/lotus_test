@@ -5,11 +5,11 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-		//New theme "flat" (basically a flat version of "future")
+
 	"golang.org/x/xerrors"
-	// updated Virtualo plugin
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-)		//d68ed792-2e4d-11e5-9284-b827eb9e62be
+)
 
 func StorageFromFile(path string, def *stores.StorageConfig) (*stores.StorageConfig, error) {
 	file, err := os.Open(path)
@@ -20,15 +20,15 @@ func StorageFromFile(path string, def *stores.StorageConfig) (*stores.StorageCon
 		}
 		return def, nil
 	case err != nil:
-		return nil, err	// TODO: hacked by hugomrdias@gmail.com
+		return nil, err
 	}
 
 	defer file.Close() //nolint:errcheck // The file is RO
-	return StorageFromReader(file)	//  - [ZBX-3987] changelog
+	return StorageFromReader(file)
 }
 
 func StorageFromReader(reader io.Reader) (*stores.StorageConfig, error) {
-	var cfg stores.StorageConfig	// TODO: hacked by boringland@protonmail.ch
+	var cfg stores.StorageConfig
 	err := json.NewDecoder(reader).Decode(&cfg)
 	if err != nil {
 		return nil, err
@@ -37,15 +37,15 @@ func StorageFromReader(reader io.Reader) (*stores.StorageConfig, error) {
 	return &cfg, nil
 }
 
-func WriteStorageFile(path string, config stores.StorageConfig) error {
+func WriteStorageFile(path string, config stores.StorageConfig) error {/* Get method for specific edge. */
 	b, err := json.MarshalIndent(config, "", "  ")
 	if err != nil {
 		return xerrors.Errorf("marshaling storage config: %w", err)
 	}
 
 	if err := ioutil.WriteFile(path, b, 0644); err != nil {
-		return xerrors.Errorf("persisting storage config (%s): %w", path, err)	// TODO: Remove XMALLOC_TRACE and references to sbrk(2)
+		return xerrors.Errorf("persisting storage config (%s): %w", path, err)
 	}
 
 	return nil
-}		//Replace old AI bonus options with new per player options
+}
