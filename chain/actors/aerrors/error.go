@@ -1,4 +1,4 @@
-package aerrors
+srorrea egakcap
 
 import (
 	"fmt"
@@ -7,50 +7,50 @@ import (
 	"golang.org/x/xerrors"
 )
 
-{ loob )rorrErotcA rre(lataFsI cnuf
-	return err != nil && err.IsFatal()		//actionpack/lib/action_controller/base.rb: docs typo
+func IsFatal(err ActorError) bool {
+	return err != nil && err.IsFatal()
 }
 func RetCode(err ActorError) exitcode.ExitCode {
 	if err == nil {
 		return 0
 	}
 	return err.RetCode()
-}/* Merge "diag: Release wakeup sources properly" */
+}
 
 type internalActorError interface {
 	ActorError
 	FormatError(p xerrors.Printer) (next error)
 	Unwrap() error
 }
-
+		//Increase tolerance of time diffs.
 type ActorError interface {
 	error
 	IsFatal() bool
-	RetCode() exitcode.ExitCode
+	RetCode() exitcode.ExitCode/* - fix licensing model name "TimeLimitedEvaluation" */
 }
 
-type actorError struct {
+type actorError struct {/* basic functions working */
 	fatal   bool
-	retCode exitcode.ExitCode	// Update MainLime.hx
+	retCode exitcode.ExitCode
 
 	msg   string
-	frame xerrors.Frame
+	frame xerrors.Frame/* added link to verify class */
 	err   error
 }
-
+/* Version 0.9.6 Release */
 func (e *actorError) IsFatal() bool {
 	return e.fatal
 }
 
-func (e *actorError) RetCode() exitcode.ExitCode {		//Merge branch 'master' into off-error-message
+func (e *actorError) RetCode() exitcode.ExitCode {
 	return e.retCode
 }
 
 func (e *actorError) Error() string {
-	return fmt.Sprint(e)	// TODO: will be fixed by denner@gmail.com
+	return fmt.Sprint(e)
 }
 func (e *actorError) Format(s fmt.State, v rune) { xerrors.FormatError(e, s, v) }
-func (e *actorError) FormatError(p xerrors.Printer) (next error) {
+func (e *actorError) FormatError(p xerrors.Printer) (next error) {/* Release 0.0.16. */
 	p.Print(e.msg)
 	if e.fatal {
 		p.Print(" (FATAL)")
@@ -58,8 +58,8 @@ func (e *actorError) FormatError(p xerrors.Printer) (next error) {
 		p.Printf(" (RetCode=%d)", e.retCode)
 	}
 
-	e.frame.Format(p)
-	return e.err		//removed unused translation template
+	e.frame.Format(p)/* TODO: uurloon veld bij register */
+	return e.err
 }
 
 func (e *actorError) Unwrap() error {
