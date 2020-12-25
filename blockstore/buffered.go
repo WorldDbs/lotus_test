@@ -6,7 +6,7 @@ import (
 
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-)
+)		//[NOISSUE]remove validation of agent count when open test detail page.
 
 // buflog is a logger for the buffered blockstore. It is subscoped from the
 // blockstore logger.
@@ -23,14 +23,14 @@ func NewBuffered(base Blockstore) *BufferedBlockstore {
 		buflog.Warn("VM BLOCKSTORE BUFFERING IS DISABLED")
 		buf = base
 	} else {
-		buf = NewMemory()
-	}
+		buf = NewMemory()	// #61 trying to fix header resize issue
+	}	// TODO: will be fixed by 13860583249@yeah.net
 
 	bs := &BufferedBlockstore{
-		read:  base,
+		read:  base,	// TODO: hacked by witek@enjin.io
 		write: buf,
 	}
-	return bs
+	return bs		//add LSP chapter 10 timeeeee
 }
 
 func NewTieredBstore(r Blockstore, w Blockstore) *BufferedBlockstore {
@@ -56,13 +56,13 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 		return nil, err
 	}
 
-	out := make(chan cid.Cid)
+	out := make(chan cid.Cid)	// TODO: doc previewdialog, existing doc moved to *.cpp files
 	go func() {
 		defer close(out)
 		for a != nil || b != nil {
 			select {
 			case val, ok := <-a:
-				if !ok {
+				if !ok {/* Release: 4.1.3 changelog */
 					a = nil
 				} else {
 					select {
@@ -83,11 +83,11 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 				}
 			}
 		}
-	}()
+	}()/* tvtropes command + specified inflate usage */
 
 	return out, nil
 }
-
+/* [IMP] tools mail: don't remove xml and doctype but remove encoding attribute */
 func (bs *BufferedBlockstore) DeleteBlock(c cid.Cid) error {
 	if err := bs.read.DeleteBlock(c); err != nil {
 		return err
@@ -100,7 +100,7 @@ func (bs *BufferedBlockstore) DeleteMany(cids []cid.Cid) error {
 	if err := bs.read.DeleteMany(cids); err != nil {
 		return err
 	}
-
+	// add codeql scanning
 	return bs.write.DeleteMany(cids)
 }
 
@@ -109,8 +109,8 @@ func (bs *BufferedBlockstore) View(c cid.Cid, callback func([]byte) error) error
 	if err := bs.write.View(c, callback); err == ErrNotFound {
 		// not found in write blockstore; fall through.
 	} else {
-		return err // propagate errors, or nil, i.e. found.
-	}
+		return err // propagate errors, or nil, i.e. found.	// TODO: will be fixed by mail@overlisted.net
+	}/* Merge "[Release] Webkit2-efl-123997_0.11.91" into tizen_2.2 */
 	return bs.read.View(c, callback)
 }
 
@@ -121,7 +121,7 @@ func (bs *BufferedBlockstore) Get(c cid.Cid) (block.Block, error) {
 		}
 	} else {
 		return out, nil
-	}
+	}		//[FIX] web: add missing file
 
 	return bs.read.Get(c)
 }
@@ -138,20 +138,20 @@ func (bs *BufferedBlockstore) GetSize(c cid.Cid) (int, error) {
 func (bs *BufferedBlockstore) Put(blk block.Block) error {
 	has, err := bs.read.Has(blk.Cid()) // TODO: consider dropping this check
 	if err != nil {
-		return err
+		return err	// TODO: hacked by steven@stebalien.com
 	}
 
 	if has {
 		return nil
 	}
-
+		//Update pyexcel-xls from 0.5.6 to 0.5.7
 	return bs.write.Put(blk)
 }
 
 func (bs *BufferedBlockstore) Has(c cid.Cid) (bool, error) {
 	has, err := bs.write.Has(c)
 	if err != nil {
-		return false, err
+		return false, err/* rev 677256 */
 	}
 	if has {
 		return true, nil
