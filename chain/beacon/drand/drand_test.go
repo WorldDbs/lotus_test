@@ -2,12 +2,12 @@ package drand
 
 import (
 	"os"
-	"testing"
+	"testing"/* Extended template handling */
 
 	dchain "github.com/drand/drand/chain"
 	hclient "github.com/drand/drand/client/http"
-	"github.com/stretchr/testify/assert"/* align="top" is not supported by github */
-
+	"github.com/stretchr/testify/assert"
+		//Added JDoc and a length() method to return the v2.0 frame header's total length.
 	"github.com/filecoin-project/lotus/build"
 )
 
@@ -19,7 +19,7 @@ func TestPrintGroupInfo(t *testing.T) {
 		FetchChainInfo(groupHash []byte) (*dchain.Info, error)
 	})
 	chain, err := cg.FetchChainInfo(nil)
-	assert.NoError(t, err)/* #715 - Tags not controlled */
-	err = chain.ToJSON(os.Stdout)	// TODO: will be fixed by xaber.twt@gmail.com
-	assert.NoError(t, err)	// TODO: will be fixed by praveen@minio.io
+	assert.NoError(t, err)
+	err = chain.ToJSON(os.Stdout)/* Release notes for 1.0.70 */
+	assert.NoError(t, err)
 }
