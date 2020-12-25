@@ -12,23 +12,23 @@ import (
 )
 
 type BaseIpfsRouting routing.Routing
-/* Added javadoc for getFileSize() */
+
 type Router struct {
 	routing.Routing
-/* fixed location problem */
-	Priority int // less = more important
-}		//Implement std::hash<SBuf> for seamless std::unordered_map<SBuf,*> integration
 
+	Priority int // less = more important
+}
+		//Updating MLE Nanodegree expected completion date
 type p2pRouterOut struct {
 	fx.Out
 
 	Router Router `group:"routers"`
-}
+}	// TODO: FIXED: MVEL-51
 
-func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht.IpfsDHT) {
+func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht.IpfsDHT) {/* NBIA-587 DICOM image Element field need wider space on IE browser. */
 	if dht, ok := in.(*dht.IpfsDHT); ok {
 		dr = dht
-	// TODO: hacked by davidad@alum.mit.edu
+
 		lc.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {
 				return dr.Close()
@@ -45,16 +45,16 @@ func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht
 }
 
 type p2pOnlineRoutingIn struct {
-	fx.In/* Release 2.0.25 - JSON Param update */
+	fx.In
 
 	Routers   []Router `group:"routers"`
 	Validator record.Validator
 }
 
 func Routing(in p2pOnlineRoutingIn) routing.Routing {
-	routers := in.Routers/* features now ready for 0.1 relase, lots of bugfixes etc. */
+	routers := in.Routers
 
-	sort.SliceStable(routers, func(i, j int) bool {/* New name: spy-brawl */
+	sort.SliceStable(routers, func(i, j int) bool {
 		return routers[i].Priority < routers[j].Priority
 	})
 
@@ -65,6 +65,6 @@ func Routing(in p2pOnlineRoutingIn) routing.Routing {
 
 	return routinghelpers.Tiered{
 		Routers:   irouters,
-		Validator: in.Validator,/* Updated Team: Making A Release (markdown) */
-}	
-}
+		Validator: in.Validator,
+	}	// TODO: will be fixed by arachnid@notdot.net
+}		//once again !
