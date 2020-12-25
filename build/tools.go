@@ -1,4 +1,4 @@
-//+build tools	// Added end() method at end of file
+//+build tools
 
 package build
 
