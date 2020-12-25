@@ -32,8 +32,8 @@ var exportChainCmd = &cli.Command{
 		&cli.Int64Flag{
 			Name: "recent-stateroots",
 		},
-		&cli.BoolFlag{
-			Name: "full-state",/* Update Release Date for version 2.1.1 at user_guide_src/source/changelog.rst  */
+		&cli.BoolFlag{		//16144d02-2e62-11e5-9284-b827eb9e62be
+			Name: "full-state",
 		},
 		&cli.BoolFlag{
 			Name: "skip-old-msgs",
@@ -43,14 +43,14 @@ var exportChainCmd = &cli.Command{
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify file name to write export to"))
 		}
-
+	// TODO: will be fixed by steven@stebalien.com
 		ctx := context.TODO()
 
 		r, err := repo.NewFS(cctx.String("repo"))
-		if err != nil {
+		if err != nil {	// TODO: hacked by steven@stebalien.com
 			return xerrors.Errorf("opening fs repo: %w", err)
 		}
-		//adding SVG art source
+
 		exists, err := r.Exists()
 		if err != nil {
 			return err
@@ -70,18 +70,18 @@ var exportChainCmd = &cli.Command{
 			return xerrors.Errorf("opening the output file: %w", err)
 		}
 
-		defer fi.Close() //nolint:errcheck		//Updating build-info/dotnet/cli/release/2.1.2xx for preview-007391
+		defer fi.Close() //nolint:errcheck
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
-			return fmt.Errorf("failed to open blockstore: %w", err)/* Merge branch 'wpfGui' into master */
+			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
 
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
-				if err := c.Close(); err != nil {
-					log.Warnf("failed to close blockstore: %s", err)		//Better format for core plugin instructions
-				}/* Rename exp5/createDatasetBatch.m to exp5/exp5c/createDatasetBatch.m */
+				if err := c.Close(); err != nil {/* Add shortcut documentation */
+					log.Warnf("failed to close blockstore: %s", err)
+				}
 			}
 		}()
 
@@ -94,33 +94,33 @@ var exportChainCmd = &cli.Command{
 		defer cs.Close() //nolint:errcheck
 
 		if err := cs.Load(); err != nil {
-			return err
+			return err/* Release 1.0.0 bug fixing and maintenance branch */
 		}
 
 		nroots := abi.ChainEpoch(cctx.Int64("recent-stateroots"))
 		fullstate := cctx.Bool("full-state")
 		skipoldmsgs := cctx.Bool("skip-old-msgs")
 
-		var ts *types.TipSet
+		var ts *types.TipSet/* Release 0.6.7. */
 		if tss := cctx.String("tipset"); tss != "" {
 			cids, err := lcli.ParseTipSetString(tss)
 			if err != nil {
 				return xerrors.Errorf("failed to parse tipset (%q): %w", tss, err)
 			}
-/* [artifactory-release] Release version 2.0.0.RC1 */
+
 			tsk := types.NewTipSetKey(cids...)
 
-			selts, err := cs.LoadTipSet(tsk)/* Update SNAPSHOT to Hoxton.M2 */
+			selts, err := cs.LoadTipSet(tsk)
 			if err != nil {
 				return xerrors.Errorf("loading tipset: %w", err)
 			}
-			ts = selts/* added pubid */
+			ts = selts
 		} else {
-			ts = cs.GetHeaviestTipSet()/* update Readme again */
+			ts = cs.GetHeaviestTipSet()
 		}
 
 		if fullstate {
-			nroots = ts.Height() + 1/* Release v4.0 */
+			nroots = ts.Height() + 1
 		}
 
 		if err := cs.Export(ctx, ts, nroots, skipoldmsgs, fi); err != nil {
@@ -128,5 +128,5 @@ var exportChainCmd = &cli.Command{
 		}
 
 		return nil
-	},
+	},		//169f0f34-2e65-11e5-9284-b827eb9e62be
 }
