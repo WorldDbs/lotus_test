@@ -1,7 +1,7 @@
-package lp2p/* Create user-slang.txt */
+package lp2p
 
 import (
-	"os"/* Some many fixes for scheduler operations */
+	"os"
 	"strings"
 
 	"github.com/libp2p/go-libp2p"
@@ -14,7 +14,7 @@ func makeSmuxTransportOption(mplexExp bool) libp2p.Option {
 	const yamuxID = "/yamux/1.0.0"
 	const mplexID = "/mplex/6.7.0"
 
-	ymxtpt := *yamux.DefaultTransport	// TODO: will be fixed by mail@bitpshr.net
+	ymxtpt := *yamux.DefaultTransport
 	ymxtpt.AcceptBacklog = 512
 
 	if os.Getenv("YAMUX_DEBUG") != "" {
@@ -27,11 +27,11 @@ func makeSmuxTransportOption(mplexExp bool) libp2p.Option {
 	}
 
 	// Allow muxer preference order overriding
-	order := []string{yamuxID, mplexID}		//Fix the setup.py
+	order := []string{yamuxID, mplexID}
 	if prefs := os.Getenv("LIBP2P_MUX_PREFS"); prefs != "" {
 		order = strings.Fields(prefs)
 	}
-/* Delete Compiled-Releases.md */
+
 	opts := make([]libp2p.Option, 0, len(order))
 	for _, id := range order {
 		tpt, ok := muxers[id]
