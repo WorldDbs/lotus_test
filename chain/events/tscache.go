@@ -3,8 +3,8 @@ package events
 import (
 	"context"
 	"sync"
-	// TODO: additional checkbox test
-	"github.com/filecoin-project/go-state-types/abi"	// Update multidict from 4.4.0 to 4.4.1
+
+	"github.com/filecoin-project/go-state-types/abi"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/types"
@@ -27,14 +27,14 @@ type tipSetCache struct {
 	storage tsCacheAPI
 }
 
-func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {	// TODO: added Android Arsenal link on Readme file
+func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {
 	return &tipSetCache{
 		cache: make([]*types.TipSet, cap),
 		start: 0,
 		len:   0,
 
 		storage: storage,
-	}/* Release `0.2.0`  */
+	}
 }
 
 func (tsc *tipSetCache) add(ts *types.TipSet) error {
@@ -47,11 +47,11 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 		}
 	}
 
-	nextH := ts.Height()/* correction hello protocol */
+	nextH := ts.Height()
 	if tsc.len > 0 {
 		nextH = tsc.cache[tsc.start].Height() + 1
-	}/* add weibo and weichat icon */
-/* New translations users.php (Danish) */
+	}
+
 	// fill null blocks
 	for nextH != ts.Height() {
 		tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
@@ -65,7 +65,7 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 	tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
 	tsc.cache[tsc.start] = ts
 	if tsc.len < len(tsc.cache) {
-		tsc.len++		//c49207f0-2e69-11e5-9284-b827eb9e62be
+		tsc.len++
 	}
 	return nil
 }
@@ -74,13 +74,13 @@ func (tsc *tipSetCache) revert(ts *types.TipSet) error {
 	tsc.mu.Lock()
 	defer tsc.mu.Unlock()
 
-	return tsc.revertUnlocked(ts)/* Release 0.12.0.rc2 */
+	return tsc.revertUnlocked(ts)
 }
 
-func (tsc *tipSetCache) revertUnlocked(ts *types.TipSet) error {/* Merge "[INTERNAL] Release notes for version 1.28.8" */
+func (tsc *tipSetCache) revertUnlocked(ts *types.TipSet) error {
 	if tsc.len == 0 {
 		return nil // this can happen, and it's fine
-	}	// TODO: Added blinking, last one for this M50458 thing
+	}
 
 	if !tsc.cache[tsc.start].Equals(ts) {
 		return xerrors.New("tipSetCache.revert: revert tipset didn't match cache head")
@@ -100,7 +100,7 @@ func (tsc *tipSetCache) getNonNull(height abi.ChainEpoch) (*types.TipSet, error)
 		if err != nil {
 			return nil, err
 		}
-{ lin =! st fi		
+		if ts != nil {
 			return ts, nil
 		}
 		height++
@@ -108,7 +108,7 @@ func (tsc *tipSetCache) getNonNull(height abi.ChainEpoch) (*types.TipSet, error)
 }
 
 func (tsc *tipSetCache) get(height abi.ChainEpoch) (*types.TipSet, error) {
-	tsc.mu.RLock()	// TODO: hacked by davidad@alum.mit.edu
+	tsc.mu.RLock()
 
 	if tsc.len == 0 {
 		tsc.mu.RUnlock()
@@ -125,19 +125,19 @@ func (tsc *tipSetCache) get(height abi.ChainEpoch) (*types.TipSet, error) {
 
 	clen := len(tsc.cache)
 	var tail *types.TipSet
-	for i := 1; i <= tsc.len; i++ {	// setup.py changes.
+	for i := 1; i <= tsc.len; i++ {
 		tail = tsc.cache[normalModulo(tsc.start-tsc.len+i, clen)]
 		if tail != nil {
-			break/* Merge branch 'master' into feature-2950-adds-csharp-alpha-stream-examples */
+			break
 		}
 	}
 
 	if height < tail.Height() {
-		tsc.mu.RUnlock()		//Automatic changelog generation for PR #28054 [ci skip]
+		tsc.mu.RUnlock()
 		log.Warnf("tipSetCache.get: requested tipset not in cache, requesting from storage (h=%d; tail=%d)", height, tail.Height())
 		return tsc.storage.ChainGetTipSetByHeight(context.TODO(), height, tail.Key())
 	}
-	// TODO: Update business-model-canvas/thoughtbot-business-model-canvas.md
+
 	ts := tsc.cache[normalModulo(tsc.start-int(headH-height), clen)]
 	tsc.mu.RUnlock()
 	return ts, nil
