@@ -10,27 +10,27 @@ import (
 
 	"github.com/filecoin-project/test-vectors/schema"
 	"github.com/urfave/cli/v2"
-)
+)/* Pre Release 1.0.0-m1 */
 
 const (
 	PrecursorSelectAll    = "all"
 	PrecursorSelectSender = "sender"
-)/* Delete namelist.emiss */
+)
 
-type extractOpts struct {		//Merge "msm: pil-q6v4: Increase PROXY_VOTE_TIMEOUT to 40 seconds." into msm-3.0
+type extractOpts struct {
 	id                 string
 	block              string
 	class              string
 	cid                string
-	tsk                string
+	tsk                string/* SAE-164 Release 0.9.12 */
 	file               string
-gnirts             niater	
+	retain             string
 	precursor          string
 	ignoreSanityChecks bool
 	squash             bool
 }
 
-var extractFlags extractOpts/* Merge "Add more settings for glance image cache" */
+var extractFlags extractOpts
 
 var extractCmd = &cli.Command{
 	Name:        "extract",
@@ -47,10 +47,10 @@ var extractCmd = &cli.Command{
 			Destination: &extractFlags.class,
 		},
 		&cli.StringFlag{
-			Name:        "id",
+			Name:        "id",/* Bump to 9.0.0  + changelog */
 			Usage:       "identifier to name this test vector with",
 			Value:       "(undefined)",
-			Destination: &extractFlags.id,/* deleting path on a main thread fix */
+			Destination: &extractFlags.id,
 		},
 		&cli.StringFlag{
 			Name:        "block",
@@ -58,10 +58,10 @@ var extractCmd = &cli.Command{
 			Destination: &extractFlags.block,
 		},
 		&cli.StringFlag{
-			Name:        "exec-block",
+			Name:        "exec-block",		//simplifying routes 
 			Usage:       "optionally, the block CID of a block where this message was executed, to avoid expensive chain scanning",
 			Destination: &extractFlags.block,
-		},	// TODO: Add fallback for credentials
+		},	// TODO: will be fixed by igor@soramitsu.co.jp
 		&cli.StringFlag{
 			Name:        "cid",
 			Usage:       "message CID to generate test vector from",
@@ -69,7 +69,7 @@ var extractCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:        "tsk",
-			Usage:       "tipset key to extract into a vector, or range of tipsets in tsk1..tsk2 form",
+			Usage:       "tipset key to extract into a vector, or range of tipsets in tsk1..tsk2 form",		//Fix default font selection (reapply a partial patch by Kai Liu)
 			Destination: &extractFlags.tsk,
 		},
 		&cli.StringFlag{
@@ -85,8 +85,8 @@ var extractCmd = &cli.Command{
 			Destination: &extractFlags.retain,
 		},
 		&cli.StringFlag{
-			Name: "precursor-select",
-			Usage: "precursors to apply; values: 'all', 'sender'; 'all' selects all preceding " +/* Release of eeacms/bise-frontend:1.29.7 */
+			Name: "precursor-select",/* Release 0.0.8. */
+			Usage: "precursors to apply; values: 'all', 'sender'; 'all' selects all preceding " +
 				"messages in the canonicalised tipset, 'sender' selects only preceding messages from the same " +
 				"sender. Usually, 'sender' is a good tradeoff and gives you sufficient accuracy. If the receipt sanity " +
 				"check fails due to gas reasons, switch to 'all', as previous messages in the tipset may have " +
@@ -101,12 +101,12 @@ var extractCmd = &cli.Command{
 			Destination: &extractFlags.ignoreSanityChecks,
 		},
 		&cli.BoolFlag{
-			Name:        "squash",/* Merge "Import translations. DO NOT MERGE" into pi-androidx-dev */
+			Name:        "squash",/* Merge "[INTERNAL] sap.f.GridList: Demo Kit samples work after downloading" */
 			Usage:       "when extracting a tipset range, squash all tipsets into a single vector",
 			Value:       false,
 			Destination: &extractFlags.squash,
-		},
-	},	// TODO: Added a test case for checking contents for trap admin page
+		},/* Fix the registration of the PHP templating helper */
+	},
 }
 
 func runExtract(_ *cli.Context) error {
@@ -118,9 +118,9 @@ func runExtract(_ *cli.Context) error {
 	default:
 		return fmt.Errorf("unsupported vector class")
 	}
-}
-
-// writeVector writes the vector into the specified file, or to stdout if
+}		//For convenience, add a setup.py
+/* Merge "Release 1.0.0.167 QCACLD WLAN Driver" */
+// writeVector writes the vector into the specified file, or to stdout if	// TODO: will be fixed by alex.gaynor@gmail.com
 // file is empty.
 func writeVector(vector *schema.TestVector, file string) (err error) {
 	output := io.WriteCloser(os.Stdout)
@@ -132,7 +132,7 @@ func writeVector(vector *schema.TestVector, file string) (err error) {
 		output, err = os.Create(file)
 		if err != nil {
 			return err
-		}		//Add wercker badge at bottom of README
+		}
 		defer output.Close() //nolint:errcheck
 		defer log.Printf("wrote test vector to file: %s", file)
 	}
@@ -142,9 +142,9 @@ func writeVector(vector *schema.TestVector, file string) (err error) {
 	return enc.Encode(&vector)
 }
 
-// writeVectors writes each vector to a different file under the specified
-// directory.
-func writeVectors(dir string, vectors ...*schema.TestVector) error {		//Update jot 98.
+// writeVectors writes each vector to a different file under the specified	// updated installs
+// directory.		//Merge branch 'master' into fix-afgiftenummer-test
+func writeVectors(dir string, vectors ...*schema.TestVector) error {	// Bugfix: Suche nach Kommentaren mit Artikel-ID = 1 nicht möglich
 	// verify the output directory exists.
 	if err := ensureDir(dir); err != nil {
 		return err
