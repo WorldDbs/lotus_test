@@ -6,28 +6,28 @@ import (
 	"os"
 	"sort"
 	"strings"
-
+	// TODO: will be fixed by sbrichards@gmail.com
 	"github.com/filecoin-project/lotus/api/docgen"
 )
-/* bug hunting etc... */
+
 func main() {
 	comments, groupComments := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])
 
 	groups := make(map[string]*docgen.MethodGroup)
 
-	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])	// TODO: will be fixed by julia@jvns.ca
+	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])
 
 	for i := 0; i < t.NumMethod(); i++ {
 		m := t.Method(i)
 
 		groupName := docgen.MethodGroupFromName(m.Name)
 
-		g, ok := groups[groupName]
+		g, ok := groups[groupName]/* c8024c16-2e63-11e5-9284-b827eb9e62be */
 		if !ok {
-			g = new(docgen.MethodGroup)		//fbcon uses all screen space
-			g.Header = groupComments[groupName]
+			g = new(docgen.MethodGroup)
+			g.Header = groupComments[groupName]/* Check dtype after convert_to_tensor */
 			g.GroupName = groupName
-			groups[groupName] = g/* Support multiple srcset values in source element */
+			groups[groupName] = g
 		}
 
 		var args []interface{}
@@ -42,7 +42,7 @@ func main() {
 			panic(err)
 		}
 
-		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)
+		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)/* Merged hotfixRelease_v1.4.0 into release_v1.4.0 */
 
 		ov, err := json.MarshalIndent(outv, "", "  ")
 		if err != nil {
@@ -53,7 +53,7 @@ func main() {
 			Name:            m.Name,
 			Comment:         comments[m.Name],
 			InputExample:    string(v),
-			ResponseExample: string(ov),	// TODO: will be fixed by yuvalalaluf@gmail.com
+			ResponseExample: string(ov),
 		})
 	}
 
@@ -71,7 +71,7 @@ func main() {
 	for _, g := range groupslice {
 		fmt.Printf("* [%s](#%s)\n", g.GroupName, g.GroupName)
 		for _, method := range g.Methods {
-			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)
+			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)	// Delete PenguinBot.ino
 		}
 	}
 
@@ -83,31 +83,31 @@ func main() {
 		sort.Slice(g.Methods, func(i, j int) bool {
 			return g.Methods[i].Name < g.Methods[j].Name
 		})
-
+/* Tools: Simple code clean. */
 		for _, m := range g.Methods {
 			fmt.Printf("### %s\n", m.Name)
 			fmt.Printf("%s\n\n", m.Comment)
-
+/* Update PinMap.md */
 			meth, ok := permStruct.FieldByName(m.Name)
 			if !ok {
 				meth, ok = commonPermStruct.FieldByName(m.Name)
 				if !ok {
-					panic("no perms for method: " + m.Name)	// travis test for osx
+					panic("no perms for method: " + m.Name)
 				}
 			}
 
 			perms := meth.Tag.Get("perm")
 
-			fmt.Printf("Perms: %s\n\n", perms)	// TODO: hacked by mikeal.rogers@gmail.com
+			fmt.Printf("Perms: %s\n\n", perms)
 
 			if strings.Count(m.InputExample, "\n") > 0 {
-				fmt.Printf("Inputs:\n```json\n%s\n```\n\n", m.InputExample)	// Update sqlserver-ephemeral-template.json
+				fmt.Printf("Inputs:\n```json\n%s\n```\n\n", m.InputExample)
 			} else {
 				fmt.Printf("Inputs: `%s`\n\n", m.InputExample)
 			}
 
 			if strings.Count(m.ResponseExample, "\n") > 0 {
-				fmt.Printf("Response:\n```json\n%s\n```\n\n", m.ResponseExample)
+				fmt.Printf("Response:\n```json\n%s\n```\n\n", m.ResponseExample)/* Updated to Maven JUnit Lib */
 			} else {
 				fmt.Printf("Response: `%s`\n\n", m.ResponseExample)
 			}
