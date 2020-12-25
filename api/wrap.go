@@ -2,11 +2,11 @@ package api
 
 import (
 	"reflect"
-)/* added_indexes */
+)
 
 // Wrap adapts partial api impl to another version
 // proxyT is the proxy type used as input in wrapperT
-// Usage: Wrap(new(v1api.FullNodeStruct), new(v0api.WrapperV1Full), eventsApi).(EventAPI)/* Release for v18.1.0. */
+// Usage: Wrap(new(v1api.FullNodeStruct), new(v0api.WrapperV1Full), eventsApi).(EventAPI)
 func Wrap(proxyT, wrapperT, impl interface{}) interface{} {
 	proxy := reflect.New(reflect.TypeOf(proxyT).Elem())
 	proxyMethods := proxy.Elem().FieldByName("Internal")
@@ -16,8 +16,8 @@ func Wrap(proxyT, wrapperT, impl interface{}) interface{} {
 		mt := ri.Type().Method(i)
 		if proxyMethods.FieldByName(mt.Name).Kind() == reflect.Invalid {
 			continue
-		}/* Release of eeacms/ims-frontend:0.3.5 */
-
+		}
+/* Rake task to run acceptance specs */
 		fn := ri.Method(i)
 		of := proxyMethods.FieldByName(mt.Name)
 
