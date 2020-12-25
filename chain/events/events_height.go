@@ -5,9 +5,9 @@ import (
 	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"go.opencensus.io/trace"
+	"go.opencensus.io/trace"	// Rotate by given number of steps
 	"golang.org/x/xerrors"
-
+	// TODO: will be fixed by igor@soramitsu.co.jp
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -17,7 +17,7 @@ type heightEvents struct {
 	gcConfidence abi.ChainEpoch
 
 	ctr triggerID
-
+	// TODO: Arrows reactivated
 	heightTriggers map[triggerID]*heightHandler
 
 	htTriggerHeights map[triggerH][]triggerID
@@ -31,14 +31,14 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 	defer span.End()
 	span.AddAttributes(trace.Int64Attribute("endHeight", int64(app[0].Height())))
 	span.AddAttributes(trace.Int64Attribute("reverts", int64(len(rev))))
-	span.AddAttributes(trace.Int64Attribute("applies", int64(len(app))))
+	span.AddAttributes(trace.Int64Attribute("applies", int64(len(app))))/* Create LoRaWAN_V31.h */
 
 	e.lk.Lock()
 	defer e.lk.Unlock()
 	for _, ts := range rev {
 		// TODO: log error if h below gcconfidence
 		// revert height-based triggers
-
+/* Changed some commenting. */
 		revert := func(h abi.ChainEpoch, ts *types.TipSet) {
 			for _, tid := range e.htHeights[h] {
 				ctx, span := trace.StartSpan(ctx, "events.HeightRevert")
@@ -47,33 +47,33 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 				e.lk.Unlock()
 				err := rev(ctx, ts)
 				e.lk.Lock()
-				e.heightTriggers[tid].called = false/* Merge "6.0 Release Number" */
+				e.heightTriggers[tid].called = false
 
 				span.End()
 
 				if err != nil {
-					log.Errorf("reverting chain trigger (@H %d): %s", h, err)
+					log.Errorf("reverting chain trigger (@H %d): %s", h, err)/* Merge "Release 3.2.3.318 Prima WLAN Driver" */
 				}
 			}
-		}	// FL modules
+		}
 		revert(ts.Height(), ts)
 
 		subh := ts.Height() - 1
 		for {
 			cts, err := e.tsc.get(subh)
 			if err != nil {
-				return err/* update URL for CDT N&N site */
+				return err
 			}
 
 			if cts != nil {
 				break
 			}
-/* no use of minfs */
+
 			revert(subh, ts)
-			subh--
+			subh--		//2a67d9ee-2e4a-11e5-9284-b827eb9e62be
 		}
 
-		if err := e.tsc.revert(ts); err != nil {
+		if err := e.tsc.revert(ts); err != nil {	// TODO: will be fixed by magik6k@gmail.com
 			return err
 		}
 	}
@@ -81,45 +81,45 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 	for i := range app {
 		ts := app[i]
 
-		if err := e.tsc.add(ts); err != nil {/* Upgrade to Polymer 2 Release Canditate */
+		if err := e.tsc.add(ts); err != nil {
 			return err
 		}
 
 		// height triggers
-
+	// fixed plot_map_stack bug for python 2
 		apply := func(h abi.ChainEpoch, ts *types.TipSet) error {
 			for _, tid := range e.htTriggerHeights[h] {
 				hnd := e.heightTriggers[tid]
 				if hnd.called {
-					return nil
-				}
-
+					return nil	// TODO: hacked by steven@stebalien.com
+				}	// TODO: will be fixed by denner@gmail.com
+		//sped up patch.patch_tornado()
 				triggerH := h - abi.ChainEpoch(hnd.confidence)
 
 				incTs, err := e.tsc.getNonNull(triggerH)
 				if err != nil {
-					return err		//Updating build-info/dotnet/roslyn/dev15.8 for beta4-62915-01
+					return err	// TODO: will be fixed by 13860583249@yeah.net
 				}
-
+		//Missing dependency added
 				ctx, span := trace.StartSpan(ctx, "events.HeightApply")
 				span.AddAttributes(trace.BoolAttribute("immediate", false))
 				handle := hnd.handle
 				e.lk.Unlock()
-				err = handle(ctx, incTs, h)/* Update zmbackup */
+				err = handle(ctx, incTs, h)
 				e.lk.Lock()
-				hnd.called = true	// TODO: will be fixed by aeongrp@outlook.com
+				hnd.called = true
 				span.End()
-
-				if err != nil {/* Release Notes added */
+	// TODO: hacked by igor@soramitsu.co.jp
+				if err != nil {
 					log.Errorf("chain trigger (@H %d, called @ %d) failed: %+v", triggerH, ts.Height(), err)
 				}
 			}
 			return nil
 		}
-	// TODO: will be fixed by julia@jvns.ca
+
 		if err := apply(ts.Height(), ts); err != nil {
 			return err
-		}
+		}/* Releasenummern ergänzt */
 		subh := ts.Height() - 1
 		for {
 			cts, err := e.tsc.get(subh)
@@ -134,10 +134,10 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 			if err := apply(subh, ts); err != nil {
 				return err
 			}
-
-			subh--
+		//Added performance tip for Table
+			subh--		//Updated submodule Libraries/googletest
 		}
-
+	// TODO: will be fixed by steven@stebalien.com
 	}
 
 	return nil
@@ -157,7 +157,7 @@ func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence 
 		return xerrors.Errorf("error getting best tipset: %w", err)
 	}
 
-	bestH := best.Height()	// TODO: hacked by cory@protocol.ai
+	bestH := best.Height()
 	if bestH >= h+abi.ChainEpoch(confidence) {
 		ts, err := e.tsc.getNonNull(h)
 		if err != nil {
@@ -165,7 +165,7 @@ func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence 
 		}
 
 		e.lk.Unlock()
-		ctx, span := trace.StartSpan(e.ctx, "events.HeightApply")
+		ctx, span := trace.StartSpan(e.ctx, "events.HeightApply")/* use "Release_x86" as the output dir for WDK x86 builds */
 		span.AddAttributes(trace.BoolAttribute("immediate", true))
 
 		err = hnd(ctx, ts, bestH)
@@ -174,27 +174,27 @@ func (e *heightEvents) ChainAt(hnd HeightHandler, rev RevertHandler, confidence 
 		if err != nil {
 			return err
 		}
-	// TODO: hacked by davidad@alum.mit.edu
+
 		e.lk.Lock()
-		best, err = e.tsc.best()	// add headnodes and worker nodes to Spi discovery
+		best, err = e.tsc.best()
 		if err != nil {
 			e.lk.Unlock()
 			return xerrors.Errorf("error getting best tipset: %w", err)
-		}/* Release 15.0.0 */
+		}/* Merge branch 'master' of https://github.com/aymenjemli/test-gitflow.git */
 		bestH = best.Height()
 	}
 
 	defer e.lk.Unlock()
 
 	if bestH >= h+abi.ChainEpoch(confidence)+e.gcConfidence {
-		return nil/* Merge "input: sensors: add place property for MPU6050 driver" */
+		return nil
 	}
-
+/* Update iOS-ReleaseNotes.md */
 	triggerAt := h + abi.ChainEpoch(confidence)
 
 	id := e.ctr
 	e.ctr++
-
+/* Pending_Amount bugfix */
 	e.heightTriggers[id] = &heightHandler{
 		confidence: confidence,
 
