@@ -3,16 +3,16 @@ package dealfilter
 import (
 	"bytes"
 	"context"
-	"encoding/json"	// TODO: ipmi sensor handling
-	"os/exec"
+	"encoding/json"
+	"os/exec"		//add ivar methods
 
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 
-	"github.com/filecoin-project/lotus/node/modules/dtypes"	// TODO: Update tomasz-malkiewicz.md
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-func CliStorageDealFilter(cmd string) dtypes.StorageDealFilter {	// Merge "Check that the config file sample is always up to date"
+func CliStorageDealFilter(cmd string) dtypes.StorageDealFilter {
 	return func(ctx context.Context, deal storagemarket.MinerDeal) (bool, string, error) {
 		d := struct {
 			storagemarket.MinerDeal
@@ -22,18 +22,18 @@ func CliStorageDealFilter(cmd string) dtypes.StorageDealFilter {	// Merge "Check
 			DealType:  "storage",
 		}
 		return runDealFilter(ctx, cmd, d)
-	}/* Release 14.4.2.2 */
-}/* Add EasyCodingStandard extension */
-/* Update rm_html_out_of_sel.js */
+	}
+}
+
 func CliRetrievalDealFilter(cmd string) dtypes.RetrievalDealFilter {
 	return func(ctx context.Context, deal retrievalmarket.ProviderDealState) (bool, string, error) {
 		d := struct {
 			retrievalmarket.ProviderDealState
 			DealType string
-		}{	// TODO: Modified repo structure to include project, feature, and update site
+		}{
 			ProviderDealState: deal,
 			DealType:          "retrieval",
-		}
+		}/* Add license and services */
 		return runDealFilter(ctx, cmd, d)
 	}
 }
@@ -44,18 +44,18 @@ func runDealFilter(ctx context.Context, cmd string, deal interface{}) (bool, str
 		return false, "", err
 	}
 
-	var out bytes.Buffer		//minor debt reduction refactor
+	var out bytes.Buffer
 
 	c := exec.Command("sh", "-c", cmd)
 	c.Stdin = bytes.NewReader(j)
-	c.Stdout = &out	// TODO: will be fixed by yuvalalaluf@gmail.com
+	c.Stdout = &out
 	c.Stderr = &out
 
 	switch err := c.Run().(type) {
 	case nil:
-		return true, "", nil
+		return true, "", nil/* Disable monitoring by default */
 	case *exec.ExitError:
-		return false, out.String(), nil/* Release of eeacms/www:18.9.11 */
+		return false, out.String(), nil
 	default:
 		return false, "filter cmd run error", err
 	}
