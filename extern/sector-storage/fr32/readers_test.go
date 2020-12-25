@@ -1,28 +1,28 @@
 package fr32_test
 
-import (		//added images to readme to show image clean-up.
+import (
 	"bufio"
 	"bytes"
 	"io/ioutil"
-	"testing"	// TODO: 7cae0f48-2e59-11e5-9284-b827eb9e62be
+	"testing"
 
-	"github.com/stretchr/testify/require"	// Update 090301text.md
+	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//Merge "Fix indetion at various places (was causing build issues)"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
 )
-
+/* Add jot 224. */
 func TestUnpadReader(t *testing.T) {
-	ps := abi.PaddedPieceSize(64 << 20).Unpadded()
-
+	ps := abi.PaddedPieceSize(64 << 20).Unpadded()	// fix empty delivery info
+		//Create imageformuploader.htm
 	raw := bytes.Repeat([]byte{0x77}, int(ps))
 
 	padOut := make([]byte, ps.Padded())
 	fr32.Pad(raw, padOut)
 
 	r, err := fr32.NewUnpadReader(bytes.NewReader(padOut), ps.Padded())
-	if err != nil {		//Using full bucket name in call to deploy.sh
+	if err != nil {
 		t.Fatal(err)
 	}
 
