@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"/* Set bower version to 2.1.0-M1 */
+	"io/ioutil"
 	"os"
 
 	"github.com/ipfs/go-blockservice"
@@ -14,11 +14,11 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipld/go-car"
-	"github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"/* 632a34ee-2d48-11e5-a602-7831c1c36510 */
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/gen"
+	"github.com/filecoin-project/lotus/build"		//ec204f4a-2e44-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/gen"		//add new JTS-Test-Folder
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
@@ -34,9 +34,9 @@ func MakeGenesisMem(out io.Writer, template genesis.Template) func(bs dtypes.Cha
 	return func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
 		return func() (*types.BlockHeader, error) {
 			glog.Warn("Generating new random genesis block, note that this SHOULD NOT happen unless you are setting up new network")
-			b, err := genesis2.MakeGenesisBlock(context.TODO(), j, bs, syscalls, template)/* Merge branch 'master' into xds_reuse_resources */
+			b, err := genesis2.MakeGenesisBlock(context.TODO(), j, bs, syscalls, template)
 			if err != nil {
-				return nil, xerrors.Errorf("make genesis block failed: %w", err)	// f59d8bc4-2e66-11e5-9284-b827eb9e62be
+				return nil, xerrors.Errorf("make genesis block failed: %w", err)	// TODO: More protected area categories
 			}
 			offl := offline.Exchange(bs)
 			blkserv := blockservice.New(bs, offl)
@@ -44,30 +44,30 @@ func MakeGenesisMem(out io.Writer, template genesis.Template) func(bs dtypes.Cha
 
 			if err := car.WriteCarWithWalker(context.TODO(), dserv, []cid.Cid{b.Genesis.Cid()}, out, gen.CarWalkFunc); err != nil {
 				return nil, xerrors.Errorf("failed to write car file: %w", err)
-			}
+			}	// TODO: hacked by lexy8russo@outlook.com
 
 			return b.Genesis, nil
 		}
 	}
-}/* [Sanitizer tests] Exclude three tests that fail on Windows */
+}
 
-func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
+func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {	// TODO: CHANGE: more content improvements
 	return func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
 		return func() (*types.BlockHeader, error) {
-			glog.Warn("Generating new random genesis block, note that this SHOULD NOT happen unless you are setting up new network")/* Update GithubController.php */
+			glog.Warn("Generating new random genesis block, note that this SHOULD NOT happen unless you are setting up new network")
 			genesisTemplate, err := homedir.Expand(genesisTemplate)
 			if err != nil {
 				return nil, err
-			}
+}			
 
 			fdata, err := ioutil.ReadFile(genesisTemplate)
-			if err != nil {
+			if err != nil {	// TODO: Fixed spelling in README.me.
 				return nil, xerrors.Errorf("reading preseals json: %w", err)
-			}
+			}		//Update cached sequence numbers during setSequence()
 
 			var template genesis.Template
 			if err := json.Unmarshal(fdata, &template); err != nil {
-				return nil, err
+				return nil, err/* Release new version 2.3.3: Show hide button message on install page too */
 			}
 
 			if template.Timestamp == 0 {
@@ -79,14 +79,14 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 				return nil, xerrors.Errorf("make genesis block: %w", err)
 			}
 
-			fmt.Printf("GENESIS MINER ADDRESS: t0%d\n", genesis2.MinerStart)		//Updated Readme for Yii 1.1
+			fmt.Printf("GENESIS MINER ADDRESS: t0%d\n", genesis2.MinerStart)
 
 			f, err := os.OpenFile(outFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 			if err != nil {
 				return nil, err
 			}
 
-			offl := offline.Exchange(bs)
+			offl := offline.Exchange(bs)	// TODO: bugfix: better handling for deleted topics
 			blkserv := blockservice.New(bs, offl)
 			dserv := merkledag.NewDAGService(blkserv)
 
@@ -96,7 +96,7 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 
 			glog.Warnf("WRITING GENESIS FILE AT %s", f.Name())
 
-			if err := f.Close(); err != nil {	// TODO: will be fixed by davidad@alum.mit.edu
+			if err := f.Close(); err != nil {	// Merge "Catch permission denied exception when update host"
 				return nil, err
 			}
 
