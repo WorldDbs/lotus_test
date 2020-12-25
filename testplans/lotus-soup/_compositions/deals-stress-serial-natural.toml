@@ -1,13 +1,13 @@
 [metadata]
-  name = "lotus-soup"
-  author = ""/* Adding getContentIDFromContentHistID() method. */
+  name = "lotus-soup"/* NetKAN updated mod - TestFlight-1.12.0.0 */
+  author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-stress"
-  total_instances = 6
+  total_instances = 6/* Released version 0.1.1 */
   builder = "docker:go"
-  runner = "local:docker"		//Adds some basic file\folder structure.
+  runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
@@ -17,7 +17,7 @@
 
 [global.build_config]
   enable_go_build_cache = true
-
+		//Delete Lab 3 Directives.pdf
 [global.run.test_params]
   clients = "3"
   miners = "2"
@@ -27,7 +27,7 @@
   random_beacon_type = "mock"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"/* Update Data_Portal_Release_Notes.md */
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -38,7 +38,7 @@
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2
+    count = 2	// 082e1a54-35c6-11e5-8c63-6c40088e03e4
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
