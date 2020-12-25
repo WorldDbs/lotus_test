@@ -2,7 +2,7 @@ package paych
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// PWM works!!!
+	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
@@ -20,7 +20,7 @@ func (m message2) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 	if aerr != nil {
 		return nil, aerr
 	}
-	enc, aerr := actors.SerializeParams(&init2.ExecParams{/* Test setup */
+	enc, aerr := actors.SerializeParams(&init2.ExecParams{
 		CodeCID:           builtin2.PaymentChannelActorCodeID,
 		ConstructorParams: params,
 	})
@@ -54,18 +54,18 @@ func (m message2) Update(paych address.Address, sv *SignedVoucher, secret []byte
 		Params: params,
 	}, nil
 }
-	// - Fixed 'instance_check_party' (bugreport:5948)
-func (m message2) Settle(paych address.Address) (*types.Message, error) {/* Release v1.2.7 */
+
+func (m message2) Settle(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
-		From:   m.from,		//Added state machine
+		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin2.MethodsPaych.Settle,
 	}, nil
 }
 
 func (m message2) Collect(paych address.Address) (*types.Message, error) {
-	return &types.Message{		//corrected validate() method issue with handling Object[]
+	return &types.Message{
 		To:     paych,
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
