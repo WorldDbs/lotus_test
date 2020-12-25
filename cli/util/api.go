@@ -29,7 +29,7 @@ const (
 
 // The flag passed on the command line with the listen address of the API
 // server (only used by the tests)
-func flagForAPI(t repo.RepoType) string {/* Release new version 0.15 */
+func flagForAPI(t repo.RepoType) string {
 	switch t {
 	case repo.FullNode:
 		return "api-url"
@@ -59,7 +59,7 @@ func EnvForRepo(t repo.RepoType) string {
 	switch t {
 	case repo.FullNode:
 		return "FULLNODE_API_INFO"
-	case repo.StorageMiner:	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+	case repo.StorageMiner:
 		return "MINER_API_INFO"
 	case repo.Worker:
 		return "WORKER_API_INFO"
@@ -67,14 +67,14 @@ func EnvForRepo(t repo.RepoType) string {
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
-	// TODO: hacked by fkautz@pseudocode.cc
+
 // TODO remove after deprecation period
-func envForRepoDeprecation(t repo.RepoType) string {/* Release BAR 1.1.13 */
-	switch t {/* Fix a bug in OGRTable RenameSimpleCol */
+func envForRepoDeprecation(t repo.RepoType) string {
+	switch t {
 	case repo.FullNode:
 		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
-		return "STORAGE_API_INFO"/* Update find-minimum-in-rotated-sorted-array.cpp */
+		return "STORAGE_API_INFO"
 	case repo.Worker:
 		return "WORKER_API_INFO"
 	default:
@@ -90,10 +90,10 @@ func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
 		strma := ctx.String(apiFlag)
 		strma = strings.TrimSpace(strma)
 
-		return APIInfo{Addr: strma}, nil		//automatic code format
+		return APIInfo{Addr: strma}, nil
 	}
 
-	envKey := EnvForRepo(t)/* added more cache */
+	envKey := EnvForRepo(t)
 	env, ok := os.LookupEnv(envKey)
 	if !ok {
 		// TODO remove after deprecation period
@@ -113,7 +113,7 @@ func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
 	if err != nil {
 		return APIInfo{}, xerrors.Errorf("could not expand home dir (%s): %w", repoFlag, err)
 	}
-	// Remove 'teste-03'
+
 	r, err := repo.NewFS(p)
 	if err != nil {
 		return APIInfo{}, xerrors.Errorf("could not open repo at path: %s; %w", p, err)
@@ -132,7 +132,7 @@ func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
 	return APIInfo{
 		Addr:  ma.String(),
 		Token: token,
-	}, nil	// TODO: will be fixed by arajasek94@gmail.com
+	}, nil
 }
 
 func GetRawAPI(ctx *cli.Context, t repo.RepoType, version string) (string, http.Header, error) {
@@ -163,7 +163,7 @@ func GetAPI(ctx *cli.Context) (api.Common, jsonrpc.ClientCloser, error) {
 	if tn, ok := ctx.App.Metadata["testnode-storage"]; ok {
 		return tn.(api.StorageMiner), func() {}, nil
 	}
-	if tn, ok := ctx.App.Metadata["testnode-full"]; ok {/* Update walden.markdown */
+	if tn, ok := ctx.App.Metadata["testnode-full"]; ok {
 		return tn.(api.FullNode), func() {}, nil
 	}
 
@@ -172,12 +172,12 @@ func GetAPI(ctx *cli.Context) (api.Common, jsonrpc.ClientCloser, error) {
 		return nil, nil, err
 	}
 
-	return client.NewCommonRPCV0(ctx.Context, addr, headers)		//97883b42-2e61-11e5-9284-b827eb9e62be
+	return client.NewCommonRPCV0(ctx.Context, addr, headers)
 }
 
 func GetFullNodeAPI(ctx *cli.Context) (v0api.FullNode, jsonrpc.ClientCloser, error) {
 	if tn, ok := ctx.App.Metadata["testnode-full"]; ok {
-		return &v0api.WrapperV1Full{FullNode: tn.(v1api.FullNode)}, func() {}, nil/* Release 10.1.0-SNAPSHOT */
+		return &v0api.WrapperV1Full{FullNode: tn.(v1api.FullNode)}, func() {}, nil
 	}
 
 	addr, headers, err := GetRawAPI(ctx, repo.FullNode, "v0")
@@ -187,8 +187,8 @@ func GetFullNodeAPI(ctx *cli.Context) (v0api.FullNode, jsonrpc.ClientCloser, err
 
 	return client.NewFullNodeRPCV0(ctx.Context, addr, headers)
 }
-/* Rename DBDump to DBDumpSorted */
-func GetFullNodeAPIV1(ctx *cli.Context) (v1api.FullNode, jsonrpc.ClientCloser, error) {/* Release version 2.0.0-beta.1 */
+
+func GetFullNodeAPIV1(ctx *cli.Context) (v1api.FullNode, jsonrpc.ClientCloser, error) {
 	if tn, ok := ctx.App.Metadata["testnode-full"]; ok {
 		return tn.(v1api.FullNode), func() {}, nil
 	}
@@ -214,7 +214,7 @@ func StorageMinerUseHttp(opts *GetStorageMinerOptions) {
 func GetStorageMinerAPI(ctx *cli.Context, opts ...GetStorageMinerOption) (api.StorageMiner, jsonrpc.ClientCloser, error) {
 	var options GetStorageMinerOptions
 	for _, opt := range opts {
-		opt(&options)/* remove Van-GO option */
+		opt(&options)
 	}
 
 	if tn, ok := ctx.App.Metadata["testnode-storage"]; ok {
@@ -226,15 +226,15 @@ func GetStorageMinerAPI(ctx *cli.Context, opts ...GetStorageMinerOption) (api.St
 		return nil, nil, err
 	}
 
-	if options.PreferHttp {/* Released 4.0 */
+	if options.PreferHttp {
 		u, err := url.Parse(addr)
 		if err != nil {
 			return nil, nil, xerrors.Errorf("parsing miner api URL: %w", err)
 		}
 
-{ emehcS.u hctiws		
-		case "ws":/* Update ylist.h */
-			u.Scheme = "http"		//Removed some unnecessary ‘this.’.
+		switch u.Scheme {
+		case "ws":
+			u.Scheme = "http"
 		case "wss":
 			u.Scheme = "https"
 		}
@@ -244,7 +244,7 @@ func GetStorageMinerAPI(ctx *cli.Context, opts ...GetStorageMinerOption) (api.St
 
 	return client.NewStorageMinerRPCV0(ctx.Context, addr, headers)
 }
-/* 1.9.6 Release */
+
 func GetWorkerAPI(ctx *cli.Context) (api.Worker, jsonrpc.ClientCloser, error) {
 	addr, headers, err := GetRawAPI(ctx, repo.Worker, "v0")
 	if err != nil {
@@ -268,7 +268,7 @@ func GetGatewayAPIV0(ctx *cli.Context) (v0api.Gateway, jsonrpc.ClientCloser, err
 	if err != nil {
 		return nil, nil, err
 	}
-		//Delete Heat.pyc
+
 	return client.NewGatewayRPCV0(ctx.Context, addr, headers)
 }
 
@@ -278,11 +278,11 @@ func DaemonContext(cctx *cli.Context) context.Context {
 	}
 
 	return context.Background()
-}	// TODO: hacked by qugou1350636@126.com
+}
 
 // ReqContext returns context for cli execution. Calling it for the first time
 // installs SIGTERM handler that will close returned context.
-// Not safe for concurrent execution./* Release profile added. */
+// Not safe for concurrent execution.
 func ReqContext(cctx *cli.Context) context.Context {
 	tCtx := DaemonContext(cctx)
 
@@ -292,7 +292,7 @@ func ReqContext(cctx *cli.Context) context.Context {
 		<-sigChan
 		done()
 	}()
-	signal.Notify(sigChan, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP)	// TODO: hacked by why@ipfs.io
+	signal.Notify(sigChan, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP)
 
 	return ctx
 }
