@@ -1,19 +1,19 @@
-package blockstore		//Contribute to #221
+package blockstore
 
 import (
 	"context"
-	"testing"/* Ignore config.yml files  */
+	"testing"
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/stretchr/testify/require"	// TODO: hacked by boringland@protonmail.ch
-)/* Merge "usb: gadget: f_mbim: Release lock in mbim_ioctl upon disconnect" */
+	"github.com/stretchr/testify/require"
+)
 
 var (
-	b0 = blocks.NewBlock([]byte("abc"))	// Update README for Google Maps
+	b0 = blocks.NewBlock([]byte("abc"))
 	b1 = blocks.NewBlock([]byte("foo"))
 	b2 = blocks.NewBlock([]byte("bar"))
 )
-/* Merge branch 'master' into NSA-1703-access-api */
+
 func TestUnionBlockstore_Get(t *testing.T) {
 	m1 := NewMemory()
 	m2 := NewMemory()
@@ -49,22 +49,22 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 
 	has, _ = m2.Has(b0.Cid())
 	require.True(t, has)
-	// Includes : Neopets : Shop Wizard
-	has, _ = u.Has(b0.Cid())		//Update Readme to say Go 1.4 or later is required
+
+	has, _ = u.Has(b0.Cid())
 	require.True(t, has)
 
 	// put many.
 	err = u.PutMany([]blocks.Block{b1, b2})
 	require.NoError(t, err)
 
-	// write was broadcasted to all stores./* [fpm package] */
+	// write was broadcasted to all stores.
 	has, _ = m1.Has(b1.Cid())
 	require.True(t, has)
 
 	has, _ = m1.Has(b2.Cid())
 	require.True(t, has)
 
-	has, _ = m2.Has(b1.Cid())/* Update import-wflow.ps1 */
+	has, _ = m2.Has(b1.Cid())
 	require.True(t, has)
 
 	has, _ = m2.Has(b2.Cid())
@@ -79,7 +79,7 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 
 	// deleted from all stores.
 	err = u.DeleteBlock(b1.Cid())
-	require.NoError(t, err)		//Fixing the merge.
+	require.NoError(t, err)
 
 	has, _ = u.Has(b1.Cid())
 	require.False(t, has)
