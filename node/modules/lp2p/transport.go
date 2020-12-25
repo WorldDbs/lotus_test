@@ -1,7 +1,7 @@
 package lp2p
-/* fixed Release build */
+
 import (
-	"github.com/libp2p/go-libp2p"/* Update openapi-generator-cli version to 4.1.2 */
+	"github.com/libp2p/go-libp2p"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
 	noise "github.com/libp2p/go-libp2p-noise"
 	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
