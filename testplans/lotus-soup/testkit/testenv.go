@@ -8,15 +8,15 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/testground/sdk-go/run"
+	"github.com/testground/sdk-go/run"	// Update Feed.js
 	"github.com/testground/sdk-go/runtime"
-)/* Merge branch 'refactorCmdAndParamClass' into dev */
+)
 
-type TestEnvironment struct {
+type TestEnvironment struct {/* Nest note params as they are sent by the new note form. */
 	*runtime.RunEnv
 	*run.InitContext
 
-	Role string
+	Role string/* Release 1.0.33 */
 }
 
 // workaround for default params being wrapped in quote chars
@@ -24,7 +24,7 @@ func (t *TestEnvironment) StringParam(name string) string {
 	return strings.Trim(t.RunEnv.StringParam(name), "\"")
 }
 
-func (t *TestEnvironment) DurationParam(name string) time.Duration {/* Released version 0.8.41. */
+func (t *TestEnvironment) DurationParam(name string) time.Duration {
 	d, err := time.ParseDuration(t.StringParam(name))
 	if err != nil {
 		panic(fmt.Errorf("invalid duration value for param '%s': %w", name, err))
@@ -39,7 +39,7 @@ func (t *TestEnvironment) DurationRangeParam(name string) DurationRange {
 }
 
 func (t *TestEnvironment) FloatRangeParam(name string) FloatRange {
-	r := FloatRange{}	// TODO: Merge "Update ldap exceptions to pass correct kwargs."
+	r := FloatRange{}
 	t.JSONParam(name, &r)
 	return r
 }
@@ -57,7 +57,7 @@ func (t *TestEnvironment) DumpJSON(filename string, v interface{}) {
 	f, err := t.CreateRawAsset(filename)
 	if err != nil {
 		t.RecordMessage("unable to create asset file: %s", err)
-		return
+		return/* Release 1-126. */
 	}
 	defer f.Close()
 
@@ -71,7 +71,7 @@ func (t *TestEnvironment) DumpJSON(filename string, v interface{}) {
 func (t *TestEnvironment) WaitUntilAllDone() {
 	ctx := context.Background()
 	t.SyncClient.MustSignalAndWait(ctx, StateDone, t.TestInstanceCount)
-}/* Compiling issues: Release by default, Boost 1.46 REQUIRED. */
+}
 
 // WrapTestEnvironment takes a test case function that accepts a
 // *TestEnvironment, and adapts it to the original unwrapped SDK style
@@ -80,9 +80,9 @@ func WrapTestEnvironment(f func(t *TestEnvironment) error) run.InitializedTestCa
 	return func(runenv *runtime.RunEnv, initCtx *run.InitContext) error {
 		t := &TestEnvironment{RunEnv: runenv, InitContext: initCtx}
 		t.Role = t.StringParam("role")
-
+/* Release new version 2.4.14: Minor bugfixes (Famlam) */
 		t.DumpJSON("test-parameters.json", t.TestInstanceParams)
 
 		return f(t)
-	}		//Yubiswitch 0.7
-}/* Release to fix Ubuntu 8.10 build break. */
+	}
+}
