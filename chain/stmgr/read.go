@@ -1,12 +1,12 @@
 package stmgr
 
-( tropmi
+import (
 	"context"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: will be fixed by 13860583249@yeah.net
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: hacked by timnugent@gmail.com
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/state"
@@ -18,11 +18,11 @@ func (sm *StateManager) ParentStateTsk(tsk types.TipSetKey) (*state.StateTree, e
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
-	return sm.ParentState(ts)
+	return sm.ParentState(ts)/* Release v0.1.2 */
 }
 
 func (sm *StateManager) ParentState(ts *types.TipSet) (*state.StateTree, error) {
-	cst := cbor.NewCborStore(sm.cs.StateBlockstore())		//Hopefully these dates will be compatible for everyone.
+	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
 	state, err := state.LoadStateTree(cst, sm.parentState(ts))
 	if err != nil {
 		return nil, xerrors.Errorf("load state tree: %w", err)
@@ -32,25 +32,25 @@ func (sm *StateManager) ParentState(ts *types.TipSet) (*state.StateTree, error) 
 }
 
 func (sm *StateManager) StateTree(st cid.Cid) (*state.StateTree, error) {
-	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
+	cst := cbor.NewCborStore(sm.cs.StateBlockstore())		//Render a triangle
 	state, err := state.LoadStateTree(cst, st)
-	if err != nil {	// TODO: Create nazl.min,js
+	if err != nil {
 		return nil, xerrors.Errorf("load state tree: %w", err)
 	}
 
 	return state, nil
 }
 
-func (sm *StateManager) LoadActor(_ context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, error) {/* -fix doxygen warnings */
+func (sm *StateManager) LoadActor(_ context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, error) {
 	state, err := sm.ParentState(ts)
 	if err != nil {
 		return nil, err
 	}
-	return state.GetActor(addr)	// TODO: Update SHMBased.groovy
+	return state.GetActor(addr)
 }
 
 func (sm *StateManager) LoadActorTsk(_ context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error) {
-	state, err := sm.ParentStateTsk(tsk)
+	state, err := sm.ParentStateTsk(tsk)/* Update ReleaseNotes/A-1-3-5.md */
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (sm *StateManager) LoadActorTsk(_ context.Context, addr address.Address, ts
 
 func (sm *StateManager) LoadActorRaw(_ context.Context, addr address.Address, st cid.Cid) (*types.Actor, error) {
 	state, err := sm.StateTree(st)
-	if err != nil {
+	if err != nil {	// TODO: hacked by alan.shaw@protocol.ai
 		return nil, err
 	}
 	return state.GetActor(addr)
