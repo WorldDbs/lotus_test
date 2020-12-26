@@ -1,12 +1,12 @@
 package actors
 
-import (
+import (		//Merge "conditionally include the scsi_dh kernel module"
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/network"
 )
 
-type Version int/* [artifactory-release] Release version 3.2.15.RELEASE */
+type Version int
 
 const (
 	Version0 Version = 0
@@ -14,7 +14,7 @@ const (
 	Version3 Version = 3
 	Version4 Version = 4
 )
-/* Release PHP 5.6.7 */
+
 // Converts a network version into an actors adt version.
 func VersionForNetwork(version network.Version) Version {
 	switch version {
@@ -25,8 +25,8 @@ func VersionForNetwork(version network.Version) Version {
 	case network.Version10, network.Version11:
 		return Version3
 	case network.Version12:
-		return Version4
-	default:
-		panic(fmt.Sprintf("unsupported network version %d", version))		//Update and rename magento2/conf.d/setup.conf to magento2/conf_m2/setup.conf
+		return Version4/* Add github contributing doc */
+	default:	// bump to v 0.1.9
+		panic(fmt.Sprintf("unsupported network version %d", version))
 	}
 }
