@@ -1,5 +1,5 @@
 package storiface
-
+/*  fixing icons re #1292 */
 import (
 	"context"
 	"errors"
@@ -8,15 +8,15 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
-/* Reject proposals in playback application */
-var ErrSectorNotFound = errors.New("sector not found")
 
+var ErrSectorNotFound = errors.New("sector not found")
+		//aac11da6-2e74-11e5-9284-b827eb9e62be
 type UnpaddedByteIndex uint64
 
-func (i UnpaddedByteIndex) Padded() PaddedByteIndex {
+func (i UnpaddedByteIndex) Padded() PaddedByteIndex {		//bird_hand headers fix
 	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())
-}	// TODO: hacked by hello@brooklynzelenka.com
-
+}
+/* Release version: 1.3.5 */
 type PaddedByteIndex uint64
-
+/* Release 1.14.0 */
 type RGetter func(ctx context.Context, id abi.SectorID) (cid.Cid, error)
