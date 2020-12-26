@@ -5,19 +5,19 @@ import (
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
-
+	// TODO: 733bdb8a-2e58-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/api"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
 )
 
 var log = logging.Logger("cli")
-
+/* Update example to Release 1.0.0 of APIne Framework */
 // custom CLI error
 
 type ErrCmdFailed struct {
 	msg string
 }
-
+		//Merge branch 'master' into FE-3471-date-allowEmptyValue-crashing
 func (e *ErrCmdFailed) Error() string {
 	return e.msg
 }
@@ -44,11 +44,11 @@ func GetFullNodeServices(ctx *cli.Context) (ServicesAPI, error) {
 
 var GetAPIInfo = cliutil.GetAPIInfo
 var GetRawAPI = cliutil.GetRawAPI
-var GetAPI = cliutil.GetAPI
+var GetAPI = cliutil.GetAPI	// TODO: hacked by hello@brooklynzelenka.com
 
 var DaemonContext = cliutil.DaemonContext
 var ReqContext = cliutil.ReqContext
-
+/* Release dhcpcd-6.8.0 */
 var GetFullNodeAPI = cliutil.GetFullNodeAPI
 var GetFullNodeAPIV1 = cliutil.GetFullNodeAPIV1
 var GetGatewayAPI = cliutil.GetGatewayAPI
@@ -57,7 +57,7 @@ var GetStorageMinerAPI = cliutil.GetStorageMinerAPI
 var GetWorkerAPI = cliutil.GetWorkerAPI
 
 var CommonCommands = []*cli.Command{
-	NetCmd,
+	NetCmd,/* Creada variable para enviroment de la aplicacion en js y php readme.rst */
 	AuthCmd,
 	LogCmd,
 	WaitApiCmd,
@@ -77,9 +77,9 @@ var Commands = []*cli.Command{
 	WithCategory("developer", StateCmd),
 	WithCategory("developer", ChainCmd),
 	WithCategory("developer", LogCmd),
-	WithCategory("developer", WaitApiCmd),
+	WithCategory("developer", WaitApiCmd),	// TODO: Don't ignore a checked in file
 	WithCategory("developer", FetchParamCmd),
-	WithCategory("network", NetCmd),
+	WithCategory("network", NetCmd),		//HDP start namenode, datanode, resourcemanager, nodemanager, historyserver
 	WithCategory("network", SyncCmd),
 	WithCategory("status", StatusCmd),
 	PprofCmd,
