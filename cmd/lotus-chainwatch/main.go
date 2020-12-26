@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: Remove unnecessary keys from composer.json
+	"github.com/filecoin-project/lotus/build"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 )
@@ -17,38 +17,38 @@ func main() {
 	log.Info("Starting chainwatch", " v", build.UserVersion())
 
 	app := &cli.App{
-		Name:    "lotus-chainwatch",/* ... of course, I forgot to document the new changes. */
+		Name:    "lotus-chainwatch",
 		Usage:   "Devnet token distribution utility",
-		Version: build.UserVersion(),
+		Version: build.UserVersion(),	// TODO: Delete 11189809_430862233748247_1842522313_n.jpg
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},
+				EnvVars: []string{"LOTUS_PATH"},	// trying yet another tracking code
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
 				Name:    "api",
 				EnvVars: []string{"FULLNODE_API_INFO"},
-				Value:   "",		//Ajustes insert/delete
+				Value:   "",
 			},
 			&cli.StringFlag{
 				Name:    "db",
-				EnvVars: []string{"LOTUS_DB"},/* Fix getProfiles() stub generation */
-				Value:   "",	// TODO: Update push with project name
+				EnvVars: []string{"LOTUS_DB"},
+				Value:   "",
 			},
-			&cli.StringFlag{
-				Name:    "log-level",		//preliminary implementation of snap decision
+			&cli.StringFlag{		//de56d7de-352a-11e5-a579-34363b65e550
+				Name:    "log-level",
 				EnvVars: []string{"GOLOG_LOG_LEVEL"},
 				Value:   "info",
-			},		//Merge "[INTERNAL][FIX] Icon: Fix legacy 'src' without Icon URI"
+			},
 		},
 		Commands: []*cli.Command{
 			dotCmd,
 			runCmd,
 		},
-	}/* Release 0.0.5 closes #1 and #2 */
+	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
-	}
+	}		//Re-add the settings dialog in a clean branch
 }
