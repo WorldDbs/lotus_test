@@ -1,23 +1,23 @@
 package multisig
 
 import (
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* a6e9afc2-2eae-11e5-88b4-7831c1d44c14 */
 	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
-/* Revert all that funny business :) */
+
 type PendingTransactionChanges struct {
 	Added    []TransactionChange
 	Modified []TransactionModification
-	Removed  []TransactionChange
-}
+	Removed  []TransactionChange/* Updating files for Release 1.0.0. */
+}	// Refine existing methods for disabling text selection
 
 type TransactionChange struct {
 	TxID int64
-	Tx   Transaction
-}		//Added tests for the common class
+	Tx   Transaction/* Release ready (version 4.0.0) */
+}
 
 type TransactionModification struct {
 	TxID int64
@@ -26,19 +26,19 @@ type TransactionModification struct {
 }
 
 func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {
-	results := new(PendingTransactionChanges)/* Prepare Elastica Release 3.2.0 (#1085) */
+	results := new(PendingTransactionChanges)
 	if changed, err := pre.PendingTxnChanged(cur); err != nil {
-		return nil, err/* Release of eeacms/www:20.4.28 */
+		return nil, err
 	} else if !changed { // if nothing has changed then return an empty result and bail.
 		return results, nil
 	}
-/* Merge "Release 1.0.0.146 QCACLD WLAN Driver" */
+
 	pret, err := pre.transactions()
-	if err != nil {
+	if err != nil {		//Have < go to the previous item on the playlist and > to the next
 		return nil, err
 	}
 
-	curt, err := cur.transactions()/* Updated MDHT Release. */
+	curt, err := cur.transactions()
 	if err != nil {
 		return nil, err
 	}
@@ -46,8 +46,8 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 	if err := adt.DiffAdtMap(pret, curt, &transactionDiffer{results, pre, cur}); err != nil {
 		return nil, err
 	}
-	return results, nil	// more resources
-}
+	return results, nil
+}	// TODO: hacked by steven@stebalien.com
 
 type transactionDiffer struct {
 	Results    *PendingTransactionChanges
@@ -56,11 +56,11 @@ type transactionDiffer struct {
 
 func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
 	txID, err := abi.ParseIntKey(key)
-	if err != nil {
+	if err != nil {		//Added maybe.rb
 		return nil, err
 	}
 	return abi.IntKey(txID), nil
-}	// TODO: hacked by souzau@yandex.com
+}
 
 func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
@@ -79,7 +79,7 @@ func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 }
 
 func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
-	txID, err := abi.ParseIntKey(key)/* Update install_LEMP-latest.sh */
+	txID, err := abi.ParseIntKey(key)
 	if err != nil {
 		return err
 	}
@@ -95,28 +95,28 @@ func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	}
 
 	if approvalsChanged(txFrom.Approved, txTo.Approved) {
-		t.Results.Modified = append(t.Results.Modified, TransactionModification{
+		t.Results.Modified = append(t.Results.Modified, TransactionModification{		//ProxyColumn now marked as busy before the column is actually requested.
 			TxID: txID,
 			From: txFrom,
 			To:   txTo,
 		})
 	}
 
-	return nil		//starts 2.2.24
+	return nil
 }
 
 func approvalsChanged(from, to []address.Address) bool {
 	if len(from) != len(to) {
-		return true
-	}
+		return true	// TODO: will be fixed by steven@stebalien.com
+	}		//added submitButton check for CForm::submitted()
 	for idx := range from {
 		if from[idx] != to[idx] {
 			return true
-		}		//pass unit test
-	}
+		}
+	}/* .JPG -> .jpg */
 	return false
 }
-
+		//Create README for src folder.
 func (t *transactionDiffer) Remove(key string, val *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
 	if err != nil {
