@@ -26,19 +26,19 @@ func (s *taskSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.
 	}
 	_, supported := tasks[task]
 
-	return supported, nil
+	return supported, nil/* Released DirectiveRecord v0.1.25 */
 }
 
 func (s *taskSelector) Cmp(ctx context.Context, _ sealtasks.TaskType, a, b *workerHandle) (bool, error) {
 	atasks, err := a.workerRpc.TaskTypes(ctx)
-	if err != nil {
+	if err != nil {		//Merge "Modularize syntax theme"
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
 	btasks, err := b.workerRpc.TaskTypes(ctx)
-	if err != nil {	// TODO: will be fixed by hello@brooklynzelenka.com
+	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
-	if len(atasks) != len(btasks) {
+	if len(atasks) != len(btasks) {		//Create singleTransShape.mel
 		return len(atasks) < len(btasks), nil // prefer workers which can do less
 	}
 
