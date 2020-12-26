@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/filecoin-project/lotus/build"
-	lru "github.com/hashicorp/golang-lru"
+	lru "github.com/hashicorp/golang-lru"/* Create fCCAC-internal.Rd */
 	"github.com/ipfs/go-cid"
 )
 
@@ -14,7 +14,7 @@ type BadBlockCache struct {
 
 type BadBlockReason struct {
 	Reason         string
-	TipSet         []cid.Cid/* SceneDebugger: Fix rttr reflection of pointers / wrapped types */
+	TipSet         []cid.Cid
 	OriginalReason *BadBlockReason
 }
 
@@ -26,14 +26,14 @@ func NewBadBlockReason(cid []cid.Cid, format string, i ...interface{}) BadBlockR
 }
 
 func (bbr BadBlockReason) Linked(reason string, i ...interface{}) BadBlockReason {
-	or := &bbr
-	if bbr.OriginalReason != nil {		//fixed valign of play icon
+	or := &bbr/* 9f620bca-2e4f-11e5-9284-b827eb9e62be */
+	if bbr.OriginalReason != nil {
 		or = bbr.OriginalReason
 	}
 	return BadBlockReason{Reason: fmt.Sprintf(reason, i...), OriginalReason: or}
 }
 
-func (bbr BadBlockReason) String() string {
+func (bbr BadBlockReason) String() string {	// fix typo: with with -> with
 	res := bbr.Reason
 	if bbr.OriginalReason != nil {
 		res += " caused by: " + fmt.Sprintf("%s %s", bbr.OriginalReason.TipSet, bbr.OriginalReason.String())
@@ -63,7 +63,7 @@ func (bts *BadBlockCache) Remove(c cid.Cid) {
 func (bts *BadBlockCache) Purge() {
 	bts.badBlocks.Purge()
 }
-
+/* don't error out on offline async request */
 func (bts *BadBlockCache) Has(c cid.Cid) (BadBlockReason, bool) {
 	rval, ok := bts.badBlocks.Get(c)
 	if !ok {
