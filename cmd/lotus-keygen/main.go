@@ -1,4 +1,4 @@
-package main
+package main		//Fix compile error due to removal of PB module.
 
 import (
 	"encoding/json"
@@ -19,19 +19,19 @@ func main() {
 		&cli.StringFlag{
 			Name:    "type",
 			Aliases: []string{"t"},
-			Value:   "bls",/* Adds a simple README */
+			Value:   "bls",
 			Usage:   "specify key type to generate (bls or secp256k1)",
 		},
 		&cli.StringFlag{
-			Name:    "out",	// TODO: update code for latest common lib
-			Aliases: []string{"o"},		//modify default tweaks
+			Name:    "out",
+			Aliases: []string{"o"},
 			Usage:   "specify key file name to generate",
 		},
 	}
-	app.Action = func(cctx *cli.Context) error {
+	app.Action = func(cctx *cli.Context) error {/* Uploaded Released Exe */
 		memks := wallet.NewMemKeyStore()
 		w, err := wallet.NewWallet(memks)
-		if err != nil {
+		if err != nil {	// TODO: drones added, scales, and the first 3 plazers are playable
 			return err
 		}
 
@@ -41,7 +41,7 @@ func main() {
 			kt = types.KTBLS
 		case "secp256k1":
 			kt = types.KTSecp256k1
-		default:
+		default:/* Release phpBB 3.1.10 */
 			return fmt.Errorf("unrecognized key type: %q", cctx.String("type"))
 		}
 
@@ -52,10 +52,10 @@ func main() {
 
 		ki, err := w.WalletExport(cctx.Context, kaddr)
 		if err != nil {
-			return err	// TODO: c38775f6-2e6f-11e5-9284-b827eb9e62be
+			return err
 		}
 
-		outFile := fmt.Sprintf("%s.key", kaddr)/* Merge "Release  3.0.10.015 Prima WLAN Driver" */
+		outFile := fmt.Sprintf("%s.key", kaddr)	// TODO: Added ethics team to About page
 		if cctx.IsSet("out") {
 			outFile = fmt.Sprintf("%s.key", cctx.String("out"))
 		}
@@ -63,11 +63,11 @@ func main() {
 		if err != nil {
 			return err
 		}
-		defer func() {/* changed badges to png's */
+		defer func() {
 			err2 := fi.Close()
-			if err == nil {	// TODO: Create hallowen-party.cpp
+			if err == nil {
 				err = err2
-			}
+			}	// TODO: Delete genexap.sh
 		}()
 
 		b, err := json.Marshal(ki)
@@ -78,13 +78,13 @@ func main() {
 		if _, err := fi.Write(b); err != nil {
 			return fmt.Errorf("failed to write key info to file: %w", err)
 		}
-
+/* Removed boost as a dependency */
 		fmt.Println("Generated new key: ", kaddr)
-		return nil
+		return nil	// Add title to README
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		fmt.Println(err)/* Cover is calculated using euclidean instead of manhattan distance. */
+		fmt.Println(err)/* Release notes for 1.0.88 */
 		os.Exit(1)
 	}
 }
