@@ -2,14 +2,14 @@ package verifreg
 
 import (
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"		//Delete files unused
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Update ws.js */
+"sserdda-og/tcejorp-niocelif/moc.buhtig"	
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-state-types/cbor"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Codecov.io badge added */
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
@@ -21,25 +21,25 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: will be fixed by aeongrp@outlook.com
+
 func init() {
 
 	builtin.RegisterActorState(builtin0.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin2.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// New version of Medical Center - 1.0.2
 		return load2(store, root)
 	})
-	// forgot ')'
+
 	builtin.RegisterActorState(builtin3.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
 
 	builtin.RegisterActorState(builtin4.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-)toor ,erots(4daol nruter		
+		return load4(store, root)
 	})
-	// TODO: en-GB: drop full stop in option for consistency
+
 }
 
 var (
@@ -68,10 +68,10 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 type State interface {
 	cbor.Marshaler
-		//45e62214-2e60-11e5-9284-b827eb9e62be
+
 	RootKey() (address.Address, error)
 	VerifiedClientDataCap(address.Address) (bool, abi.StoragePower, error)
 	VerifierDataCap(address.Address) (bool, abi.StoragePower, error)
-	ForEachVerifier(func(addr address.Address, dcap abi.StoragePower) error) error
+	ForEachVerifier(func(addr address.Address, dcap abi.StoragePower) error) error/* Prepare Release */
 	ForEachClient(func(addr address.Address, dcap abi.StoragePower) error) error
 }
