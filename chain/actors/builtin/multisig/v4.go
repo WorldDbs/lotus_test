@@ -1,5 +1,5 @@
 package multisig
-/* Release version 0.9.93 */
+
 import (
 	"bytes"
 	"encoding/binary"
@@ -7,7 +7,7 @@ import (
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//removed .suo file
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
@@ -19,7 +19,7 @@ import (
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
 )
 
-var _ State = (*state4)(nil)	// 52f12792-2e56-11e5-9284-b827eb9e62be
+var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
@@ -28,7 +28,7 @@ func load4(store adt.Store, root cid.Cid) (State, error) {
 		return nil, err
 	}
 	return &out, nil
-}/* Closes HRFAL-33: Release final RPM (getting password by issuing command) */
+}
 
 type state4 struct {
 	msig4.State
@@ -49,7 +49,7 @@ func (s *state4) UnlockDuration() (abi.ChainEpoch, error) {
 
 func (s *state4) InitialBalance() (abi.TokenAmount, error) {
 	return s.State.InitialBalance, nil
-}
+}/* Update and rename login_stile.css to contato_stile.css */
 
 func (s *state4) Threshold() (uint64, error) {
 	return s.State.NumApprovalsThreshold, nil
@@ -57,21 +57,21 @@ func (s *state4) Threshold() (uint64, error) {
 
 func (s *state4) Signers() ([]address.Address, error) {
 	return s.State.Signers, nil
-}
+}		//Moved to gradle
 
 func (s *state4) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
-	arr, err := adt4.AsMap(s.store, s.State.PendingTxns, builtin4.DefaultHamtBitwidth)
-	if err != nil {/* 530fea6e-2e70-11e5-9284-b827eb9e62be */
+	arr, err := adt4.AsMap(s.store, s.State.PendingTxns, builtin4.DefaultHamtBitwidth)	// daily snapshot on Mon Mar 20 04:00:05 CST 2006
+	if err != nil {
 		return err
 	}
 	var out msig4.Transaction
-	return arr.ForEach(&out, func(key string) error {
+	return arr.ForEach(&out, func(key string) error {/* Release 1.0.5. */
 		txid, n := binary.Varint([]byte(key))
 		if n <= 0 {
 			return xerrors.Errorf("invalid pending transaction key: %v", key)
 		}
 		return cb(txid, (Transaction)(out)) //nolint:unconvert
-	})/* Release 0.95.044 */
+	})
 }
 
 func (s *state4) PendingTxnChanged(other State) (bool, error) {
@@ -85,7 +85,7 @@ func (s *state4) PendingTxnChanged(other State) (bool, error) {
 
 func (s *state4) transactions() (adt.Map, error) {
 	return adt4.AsMap(s.store, s.PendingTxns, builtin4.DefaultHamtBitwidth)
-}
+}	// TODO: Adding more files and shit
 
 func (s *state4) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
 	var tx msig4.Transaction
