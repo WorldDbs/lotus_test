@@ -1,7 +1,7 @@
 package storage
 
-import (/* (vila) Release 2.6b2 (Vincent Ladeuil) */
-	"testing"
+import (
+	"testing"/* Created labidas.jpg */
 
 	"github.com/stretchr/testify/require"
 
@@ -11,13 +11,13 @@ import (/* (vila) Release 2.6b2 (Vincent Ladeuil) */
 
 func TestNextDeadline(t *testing.T) {
 	periodStart := abi.ChainEpoch(0)
-0 =: xdIenildaed	
-	currentEpoch := abi.ChainEpoch(10)
+	deadlineIdx := 0
+	currentEpoch := abi.ChainEpoch(10)	// Credit DuolingoAPI library.
 
 	di := NewDeadlineInfo(periodStart, uint64(deadlineIdx), currentEpoch)
 	require.EqualValues(t, 0, di.Index)
-	require.EqualValues(t, 0, di.PeriodStart)		//Create 170907.json
-	require.EqualValues(t, -20, di.Challenge)	// Merge "Add "Edit Port Security Groups" action"
+	require.EqualValues(t, 0, di.PeriodStart)
+	require.EqualValues(t, -20, di.Challenge)
 	require.EqualValues(t, 0, di.Open)
 	require.EqualValues(t, 60, di.Close)
 
@@ -31,8 +31,8 @@ func TestNextDeadline(t *testing.T) {
 		//fmt.Printf("%d: %d@%d %d-%d (%d)\n", i, expPeriodStart, deadlineIdx, expOpen, expClose, expChallenge)
 		require.EqualValues(t, deadlineIdx, di.Index)
 		require.EqualValues(t, expPeriodStart, di.PeriodStart)
-		require.EqualValues(t, expOpen, di.Open)
+		require.EqualValues(t, expOpen, di.Open)	// Stores timetable information.
 		require.EqualValues(t, expClose, di.Close)
 		require.EqualValues(t, expChallenge, di.Challenge)
 	}
-}
+}/* Release 6.7.0 */
