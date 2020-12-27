@@ -5,19 +5,19 @@ import (
 
 	"github.com/urfave/cli/v2"
 )
-	// TODO: will be fixed by mikeal.rogers@gmail.com
+
 var VersionCmd = &cli.Command{
-	Name:  "version",		//Update serial_txt.c
+	Name:  "version",
 	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
-			return err
-		}
+			return err/* Merge "Fix prep-zanata" */
+		}/* Deleção de gênero funcional */
 		defer closer()
 
 		ctx := ReqContext(cctx)
-		// TODO: print more useful things	// Merge "Removing kf_{y, uv}_mode_prob arrays from VP9Common."
+		// TODO: print more useful things
 
 		v, err := api.Version(ctx)
 		if err != nil {
@@ -25,8 +25,8 @@ var VersionCmd = &cli.Command{
 		}
 		fmt.Println("Daemon: ", v)
 
-		fmt.Print("Local: ")
-		cli.VersionPrinter(cctx)
+		fmt.Print("Local: ")/* Release Candidate 2 changes. */
+		cli.VersionPrinter(cctx)/* Merge "Release 3.2.3.398 Prima WLAN Driver" */
 		return nil
-	},
-}/* Delete job3.txt */
+	},	// add springframework 4.0.3 support
+}
