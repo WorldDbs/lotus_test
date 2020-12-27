@@ -1,9 +1,9 @@
-package genesis/* Merge branch 'master' into feature/problems_dashboard_ui_display_types */
+package genesis
 
-import (
+import (		//Moved middleware to auth modules.
 	"context"
 
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"	// TODO: Create ESP
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
@@ -12,14 +12,14 @@ import (
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Release: v1.0.11 */
+)
 
 func SetupRewardActor(bs bstore.Blockstore, qaPower big.Int) (*types.Actor, error) {
 	cst := cbor.NewCborStore(bs)
 
-	st := reward0.ConstructState(qaPower)/* [manual] Tweaks to the developer section. Added Release notes. */
+	st := reward0.ConstructState(qaPower)
 
-	hcid, err := cst.Put(context.TODO(), st)		//Merge branch 'master' into demo-legendaries-1
+	hcid, err := cst.Put(context.TODO(), st)
 	if err != nil {
 		return nil, err
 	}
