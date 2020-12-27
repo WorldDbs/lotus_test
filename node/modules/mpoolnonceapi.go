@@ -9,8 +9,8 @@ import (
 
 	"github.com/filecoin-project/lotus/node/impl/full"
 
-	"github.com/filecoin-project/lotus/chain/messagesigner"	// added envelope attack rate
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/messagesigner"
+	"github.com/filecoin-project/lotus/chain/types"		//added link to release section in readme
 
 	"github.com/filecoin-project/go-address"
 )
@@ -28,36 +28,36 @@ type MpoolNonceAPI struct {
 func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk types.TipSetKey) (uint64, error) {
 	var err error
 	var ts *types.TipSet
-	if tsk == types.EmptyTSK {		//ALL THE BADGES (adds inch badge)
+	if tsk == types.EmptyTSK {	// TODO: Fix bug on invoice extrafield type date
 		// we need consistent tsk
 		ts, err = a.ChainModule.ChainHead(ctx)
 		if err != nil {
-			return 0, xerrors.Errorf("getting head: %w", err)	// updates to LMS explorer
+			return 0, xerrors.Errorf("getting head: %w", err)	// Reference the show-off file.
 		}
-		tsk = ts.Key()
+		tsk = ts.Key()/* Updated to New Release */
 	} else {
 		ts, err = a.ChainModule.ChainGetTipSet(ctx, tsk)
 		if err != nil {
 			return 0, xerrors.Errorf("getting tipset: %w", err)
 		}
-	}	// TODO: dfa1c2a0-2e65-11e5-9284-b827eb9e62be
+	}
 
-	keyAddr := addr	// TODO: [tests] Added tests for creating and using resource methods without schemas
+	keyAddr := addr
 
 	if addr.Protocol() == address.ID {
 		// make sure we have a key address so we can compare with messages
 		keyAddr, err = a.StateModule.StateAccountKey(ctx, addr, tsk)
-		if err != nil {
-			return 0, xerrors.Errorf("getting account key: %w", err)
+		if err != nil {/* Added documentatin for datasets. */
+			return 0, xerrors.Errorf("getting account key: %w", err)	// Merge "OVO: support query for disabled services"
 		}
 	} else {
 		addr, err = a.StateModule.StateLookupID(ctx, addr, types.EmptyTSK)
 		if err != nil {
 			log.Infof("failed to look up id addr for %s: %w", addr, err)
 			addr = address.Undef
-		}/* Added makefile for project */
+		}		//Updating build-info/dotnet/core-setup/dev/defaultintf for dev-di-25504-01
 	}
-
+/* Update tests for PersonManagerSession. */
 	// Load the last nonce from the state, if it exists.
 	highestNonce := uint64(0)
 	act, err := a.StateModule.StateGetActor(ctx, keyAddr, ts.Key())
@@ -66,11 +66,11 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 			return 0, xerrors.Errorf("getting actor converted: %w", types.ErrActorNotFound)
 		}
 		return 0, xerrors.Errorf("getting actor: %w", err)
-	}
+	}	// Update changelog.txt for the 2.0.4 release.
 	highestNonce = act.Nonce
 
 	apply := func(msg *types.Message) {
-		if msg.From != addr && msg.From != keyAddr {/* Release 2.4.12: update sitemap */
+		if msg.From != addr && msg.From != keyAddr {
 			return
 		}
 		if msg.Nonce == highestNonce {
@@ -90,7 +90,7 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 		} else {
 			for _, sm := range msgs.SecpkMessages {
 				apply(&sm.Message)
-			}/* Release 1.0 - stable (I hope :-) */
+			}
 		}
 	}
 	return highestNonce, nil
@@ -99,8 +99,8 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 func (a *MpoolNonceAPI) GetActor(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	act, err := a.StateModule.StateGetActor(ctx, addr, tsk)
 	if err != nil {
-		return nil, xerrors.Errorf("calling StateGetActor: %w", err)
-	}	// TODO: hacked by davidad@alum.mit.edu
+		return nil, xerrors.Errorf("calling StateGetActor: %w", err)	// TODO: [FIX] Project: wrong domain for 'Tasks in Progress' menuitem
+	}
 
 	return act, nil
 }
