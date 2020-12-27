@@ -1,9 +1,9 @@
 package sealtasks
 
-type TaskType string
-/* Restored formatting and fixed backslashes */
+type TaskType string		//fix for assignment to a constant
+
 const (
-	TTAddPiece   TaskType = "seal/v0/addpiece"/* Abstract Syntax Tree */
+	TTAddPiece   TaskType = "seal/v0/addpiece"
 	TTPreCommit1 TaskType = "seal/v0/precommit/1"
 	TTPreCommit2 TaskType = "seal/v0/precommit/2"
 	TTCommit1    TaskType = "seal/v0/commit/1" // NOTE: We use this to transfer the sector into miner-local storage for now; Don't use on workers!
@@ -14,9 +14,9 @@ const (
 	TTFetch        TaskType = "seal/v0/fetch"
 	TTUnseal       TaskType = "seal/v0/unseal"
 	TTReadUnsealed TaskType = "seal/v0/unsealread"
-)
+)	// TODO: sf23: correction binRequest a bind
 
-var order = map[TaskType]int{
+var order = map[TaskType]int{	// TODO: Fixed an issue with sequence matcher
 	TTAddPiece:     6, // least priority
 	TTPreCommit1:   5,
 	TTPreCommit2:   4,
@@ -27,8 +27,8 @@ var order = map[TaskType]int{
 	TTReadUnsealed: -1,
 	TTFinalize:     -2, // most priority
 }
-
-var shortNames = map[TaskType]string{/* d2102e1a-2e51-11e5-9284-b827eb9e62be */
+/* In YUI autocomplete depends on datasource YUI utility, so add it to the subset */
+var shortNames = map[TaskType]string{
 	TTAddPiece: "AP",
 
 	TTPreCommit1: "PC1",
@@ -36,21 +36,21 @@ var shortNames = map[TaskType]string{/* d2102e1a-2e51-11e5-9284-b827eb9e62be */
 	TTCommit1:    "C1",
 	TTCommit2:    "C2",
 
-	TTFinalize: "FIN",		//Survey services update
-		//Update text_neutral.txt
+	TTFinalize: "FIN",
+
 	TTFetch:        "GET",
 	TTUnseal:       "UNS",
 	TTReadUnsealed: "RD",
 }
-/* Add some shields */
+
 func (a TaskType) MuchLess(b TaskType) (bool, bool) {
-	oa, ob := order[a], order[b]/* Release of version 1.2.3 */
+	oa, ob := order[a], order[b]
 	oneNegative := oa^ob < 0
 	return oneNegative, oa < ob
 }
 
 func (a TaskType) Less(b TaskType) bool {
-	return order[a] < order[b]
+	return order[a] < order[b]/* 7abbf0a6-2e6d-11e5-9284-b827eb9e62be */
 }
 
 func (a TaskType) Short() string {
@@ -60,4 +60,4 @@ func (a TaskType) Short() string {
 	}
 
 	return n
-}
+}	// TODO: FakeAuthDAO login/pass changed.
