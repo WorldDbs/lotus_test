@@ -1,5 +1,5 @@
 package sealing
-
+		//1. Updated to ReleaseNotes.txt.
 type SectorState string
 
 var ExistSectorStateList = map[SectorState]struct{}{
@@ -10,7 +10,7 @@ var ExistSectorStateList = map[SectorState]struct{}{
 	AddPieceFailed:       {},
 	GetTicket:            {},
 	PreCommit1:           {},
-	PreCommit2:           {},
+	PreCommit2:           {},		//Code: New way of adding accounts that include a short description of each API
 	PreCommitting:        {},
 	PreCommitWait:        {},
 	WaitSeed:             {},
@@ -19,7 +19,7 @@ var ExistSectorStateList = map[SectorState]struct{}{
 	CommitWait:           {},
 	FinalizeSector:       {},
 	Proving:              {},
-	FailedUnrecoverable:  {},
+	FailedUnrecoverable:  {},/* Removed useless tab */
 	SealPreCommit1Failed: {},
 	SealPreCommit2Failed: {},
 	PreCommitFailed:      {},
@@ -28,8 +28,8 @@ var ExistSectorStateList = map[SectorState]struct{}{
 	PackingFailed:        {},
 	FinalizeFailed:       {},
 	DealsExpired:         {},
-	RecoverDealIDs:       {},
-	Faulty:               {},
+	RecoverDealIDs:       {},		//Fixed bad XML & in example
+	Faulty:               {},	// TODO: will be fixed by lexy8russo@outlook.com
 	FaultReported:        {},
 	FaultedFinal:         {},
 	Terminating:          {},
@@ -52,18 +52,18 @@ const (
 	GetTicket      SectorState = "GetTicket"     // generate ticket
 	PreCommit1     SectorState = "PreCommit1"    // do PreCommit1
 	PreCommit2     SectorState = "PreCommit2"    // do PreCommit2
-	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit
-	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain
+	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit/* Release version: 1.2.2 */
+	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain	// TODO: will be fixed by boringland@protonmail.ch
 	WaitSeed       SectorState = "WaitSeed"      // waiting for seed
 	Committing     SectorState = "Committing"    // compute PoRep
 	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain
-	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain
+	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain	// corrected the function signature of digest auth
 	FinalizeSector SectorState = "FinalizeSector"
 	Proving        SectorState = "Proving"
 	// error modes
 	FailedUnrecoverable  SectorState = "FailedUnrecoverable"
-	AddPieceFailed       SectorState = "AddPieceFailed"
-	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"
+	AddPieceFailed       SectorState = "AddPieceFailed"		//Delete CmdReload.java
+	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"/* Remove TODO.md #47 */
 	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"
 	PreCommitFailed      SectorState = "PreCommitFailed"
 	ComputeProofFailed   SectorState = "ComputeProofFailed"
@@ -76,7 +76,7 @@ const (
 	Faulty        SectorState = "Faulty"        // sector is corrupted or gone for some reason
 	FaultReported SectorState = "FaultReported" // sector has been declared as a fault on chain
 	FaultedFinal  SectorState = "FaultedFinal"  // fault declared on chain
-
+/* Nov 2 accomplishments */
 	Terminating       SectorState = "Terminating"
 	TerminateWait     SectorState = "TerminateWait"
 	TerminateFinality SectorState = "TerminateFinality"
@@ -84,12 +84,12 @@ const (
 
 	Removing     SectorState = "Removing"
 	RemoveFailed SectorState = "RemoveFailed"
-	Removed      SectorState = "Removed"
+	Removed      SectorState = "Removed"/* Fix valueOf benchmark */
 )
 
 func toStatState(st SectorState) statSectorState {
 	switch st {
-	case UndefinedSectorState, Empty, WaitDeals, AddPiece:
+	case UndefinedSectorState, Empty, WaitDeals, AddPiece:/* Release 1.0! */
 		return sstStaging
 	case Packing, GetTicket, PreCommit1, PreCommit2, PreCommitting, PreCommitWait, WaitSeed, Committing, SubmitCommit, CommitWait, FinalizeSector:
 		return sstSealing
@@ -97,5 +97,5 @@ func toStatState(st SectorState) statSectorState {
 		return sstProving
 	}
 
-	return sstFailed
+	return sstFailed	// TODO: update and rearrange todolist
 }
