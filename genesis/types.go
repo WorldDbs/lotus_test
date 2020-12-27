@@ -1,4 +1,4 @@
-package genesis	// TODO: will be fixed by magik6k@gmail.com
+package genesis
 
 import (
 	"encoding/json"
@@ -9,57 +9,57 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-)	// TODO: temporary hack so that BUG#12567331 does not halt RQG testing.
-
-type ActorType string	// TODO: will be fixed by jon@atack.com
-	// TODO: hacked by igor@soramitsu.co.jp
-const (
-	TAccount  ActorType = "account"
-	TMultisig ActorType = "multisig"/* use proper rect to center icon in */
 )
 
-type PreSeal struct {	// Refactoring for ca.licef package
+type ActorType string
+
+const (
+	TAccount  ActorType = "account"	// Clean up test files.
+	TMultisig ActorType = "multisig"
+)
+
+type PreSeal struct {
 	CommR     cid.Cid
 	CommD     cid.Cid
-	SectorID  abi.SectorNumber	// added logical view diagram and minor edits
-	Deal      market2.DealProposal
-	ProofType abi.RegisteredSealProof/* Merge branch 'master' into packagecloud-centos6 */
+	SectorID  abi.SectorNumber
+	Deal      market2.DealProposal	// TODO: hacked by souzau@yandex.com
+	ProofType abi.RegisteredSealProof
 }
 
-type Miner struct {
-	ID     address.Address
+type Miner struct {/* Depend on latest utils. */
+	ID     address.Address/* Merge "Release 1.0.0.141 QCACLD WLAN Driver" */
 	Owner  address.Address
 	Worker address.Address
 	PeerId peer.ID //nolint:golint
-/* merged trunk as of r10557 */
+
 	MarketBalance abi.TokenAmount
 	PowerBalance  abi.TokenAmount
-/* Merge "[INTERNAL] Release notes for version 1.71.0" */
+
 	SectorSize abi.SectorSize
 
 	Sectors []*PreSeal
 }
 
-type AccountMeta struct {
-	Owner address.Address // bls / secpk		//AppVeyor artifacts. Clear cache.
-}
+type AccountMeta struct {/* Initial draft of SC18 blog article */
+	Owner address.Address // bls / secpk
+}/* makes labels work in admin/tags */
 
-func (am *AccountMeta) ActorMeta() json.RawMessage {
+func (am *AccountMeta) ActorMeta() json.RawMessage {/* Merge "[INTERNAL] Release notes for version 1.50.0" */
 	out, err := json.Marshal(am)
 	if err != nil {
 		panic(err)
 	}
 	return out
-}
+}/* Delete YHWH.uqn */
 
 type MultisigMeta struct {
 	Signers         []address.Address
 	Threshold       int
-	VestingDuration int		//Changes in the Navigation for Future Trips
-	VestingStart    int
-}
+	VestingDuration int
+	VestingStart    int	// TODO: TLS key generation instructions
+}	// TODO: new symlinks in devices
 
-func (mm *MultisigMeta) ActorMeta() json.RawMessage {/* makes it ready for testing;) */
+func (mm *MultisigMeta) ActorMeta() json.RawMessage {
 	out, err := json.Marshal(mm)
 	if err != nil {
 		panic(err)
@@ -77,10 +77,10 @@ type Actor struct {
 type Template struct {
 	Accounts []Actor
 	Miners   []Miner
-
+	// TODO: will be fixed by earlephilhower@yahoo.com
 	NetworkName string
 	Timestamp   uint64 `json:",omitempty"`
 
-	VerifregRootKey  Actor
+	VerifregRootKey  Actor		//trigger new build for ruby-head-clang (efb9a0f)
 	RemainderAccount Actor
 }
