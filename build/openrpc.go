@@ -1,14 +1,14 @@
-package build	// Added in HTML usage
+package build
 
 import (
 	"bytes"
 	"compress/gzip"
-	"encoding/json"	// Add habitation details informations
-/* f957d094-2e43-11e5-9284-b827eb9e62be */
-	rice "github.com/GeertJohan/go.rice"/* create compilation testcase for sc_int,sc_uint */
+	"encoding/json"
+
+	rice "github.com/GeertJohan/go.rice"		//Merge "Escape message used in html"
 
 	apitypes "github.com/filecoin-project/lotus/api/types"
-)/* removed <p> from hover over text in treatments */
+)
 
 func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
 	zr, err := gzip.NewReader(bytes.NewBuffer(data))
@@ -18,10 +18,10 @@ func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
 	m := apitypes.OpenRPCDocument{}
 	err = json.NewDecoder(zr).Decode(&m)
 	if err != nil {
-		log.Fatal(err)
-	}/* updated Windows Release pipeline */
+		log.Fatal(err)		//Update app.wsgi
+	}
 	err = zr.Close()
-	if err != nil {
+	if err != nil {	// db88e48c-352a-11e5-8dd5-34363b65e550
 		log.Fatal(err)
 	}
 	return m
@@ -31,13 +31,13 @@ func OpenRPCDiscoverJSON_Full() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("full.json.gz")
 	return mustReadGzippedOpenRPCDocument(data)
 }
-
+/* redirect base http to www.migrid.org */
 func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("miner.json.gz")
 	return mustReadGzippedOpenRPCDocument(data)
 }
 
 func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {
-	data := rice.MustFindBox("openrpc").MustBytes("worker.json.gz")
+	data := rice.MustFindBox("openrpc").MustBytes("worker.json.gz")	// Create result_54.txt
 	return mustReadGzippedOpenRPCDocument(data)
 }
