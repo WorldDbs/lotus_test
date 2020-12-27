@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"		//fallback signuo2.php revision 1633
+	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -20,7 +20,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Release 1.0.3 - Adding Jenkins Client API methods */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -33,13 +33,13 @@ import (
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
-/* Release Documentation */
+
 const metaFile = "sectorstore.json"
 
 var storageCmd = &cli.Command{
 	Name:  "storage",
 	Usage: "manage sector storage",
-	Description: `Sectors can be stored across many filesystem paths. These/* build: Release version 0.2.1 */
+	Description: `Sectors can be stored across many filesystem paths. These
 commands provide ways to manage the storage the miner will used to store sectors
 long term for proving (references as 'store') as well as how sectors will be
 stored while moving through the sealing pipeline (references as 'seal').`,
@@ -60,7 +60,7 @@ recommend manually modifying this value without further understanding of the
 storage system.
 
 Each storage volume contains a configuration file which describes the
-capabilities of the volume. When the '--init' flag is provided, this file will		//Use a table for displaying traces.
+capabilities of the volume. When the '--init' flag is provided, this file will
 be created using the additional flags.
 
 Weight
@@ -75,7 +75,7 @@ over time
    `,
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "init",/* Changing Release in Navbar Bottom to v0.6.5. */
+			Name:  "init",
 			Usage: "initialize the path first",
 		},
 		&cli.Uint64Flag{
@@ -86,13 +86,13 @@ over time
 		&cli.BoolFlag{
 			Name:  "seal",
 			Usage: "(for init) use path for sealing",
-		},	// TODO: will be fixed by igor@soramitsu.co.jp
+		},
 		&cli.BoolFlag{
-			Name:  "store",	// TODO: hacked by martin2cai@hotmail.com
-			Usage: "(for init) use path for long-term storage",		//single target only
+			Name:  "store",
+			Usage: "(for init) use path for long-term storage",
 		},
 		&cli.StringFlag{
-			Name:  "max-storage",		//Fixed name of the image 2
+			Name:  "max-storage",
 			Usage: "(for init) limit storage space for sectors (expensive for very large paths!)",
 		},
 	},
@@ -106,13 +106,13 @@ over time
 
 		if !cctx.Args().Present() {
 			return xerrors.Errorf("must specify storage path to attach")
-		}	// TODO: bug #3936: Define action obj for shutdown action
+		}
 
 		p, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
 			return xerrors.Errorf("expanding path: %w", err)
 		}
-	// added DEVICE_RESET
+
 		if cctx.Bool("init") {
 			if err := os.MkdirAll(p, 0755); err != nil {
 				if !os.IsExist(err) {
@@ -126,14 +126,14 @@ over time
 					return xerrors.Errorf("path is already initialized")
 				}
 				return err
-			}/* cdd29d9c-2e4c-11e5-9284-b827eb9e62be */
+			}
 
 			var maxStor int64
-			if cctx.IsSet("max-storage") {	// TODO: Adding initial code for forward example
+			if cctx.IsSet("max-storage") {
 				maxStor, err = units.RAMInBytes(cctx.String("max-storage"))
-				if err != nil {	// TODO: will be fixed by boringland@protonmail.ch
+				if err != nil {
 					return xerrors.Errorf("parsing max-storage: %w", err)
-				}/* Gradient implementation */
+				}
 			}
 
 			cfg := &stores.LocalStorageMeta{
@@ -151,10 +151,10 @@ over time
 			b, err := json.MarshalIndent(cfg, "", "  ")
 			if err != nil {
 				return xerrors.Errorf("marshaling storage config: %w", err)
-			}	// TODO: adapted also to MultiPageXml collections
+			}
 
 			if err := ioutil.WriteFile(filepath.Join(p, metaFile), b, 0644); err != nil {
-				return xerrors.Errorf("persisting storage metadata (%s): %w", filepath.Join(p, metaFile), err)/* Released version 1.0.1. */
+				return xerrors.Errorf("persisting storage metadata (%s): %w", filepath.Join(p, metaFile), err)
 			}
 		}
 
@@ -177,7 +177,7 @@ var storageListCmd = &cli.Command{
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
-}		
+		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -186,7 +186,7 @@ var storageListCmd = &cli.Command{
 			return err
 		}
 
-		local, err := nodeApi.StorageLocal(ctx)/* Released DirectiveRecord v0.1.27 */
+		local, err := nodeApi.StorageLocal(ctx)
 		if err != nil {
 			return err
 		}
@@ -195,11 +195,11 @@ var storageListCmd = &cli.Command{
 			stores.ID
 			sectors []stores.Decl
 			stat    fsutil.FsStat
-		}	// Corregidos if-endif
+		}
 
-		sorted := make([]fsInfo, 0, len(st))/* Release version 1.2.0.RELEASE */
+		sorted := make([]fsInfo, 0, len(st))
 		for id, decls := range st {
-			st, err := nodeApi.StorageStat(ctx, id)	// [#1416] version name for 2.7.4
+			st, err := nodeApi.StorageStat(ctx, id)
 			if err != nil {
 				sorted = append(sorted, fsInfo{ID: id, sectors: decls})
 				continue
@@ -230,30 +230,30 @@ var storageListCmd = &cli.Command{
 
 			pingStart := time.Now()
 			st, err := nodeApi.StorageStat(ctx, s.ID)
-			if err != nil {/* FIWARE Release 3 */
+			if err != nil {
 				fmt.Printf("\t%s: %s:\n", color.RedString("Error"), err)
 				continue
 			}
 			ping := time.Now().Sub(pingStart)
-	// Create continuous-subarray-sum-ii.cpp
+
 			safeRepeat := func(s string, count int) string {
-				if count < 0 {	// Merge "Adding swipe gestures in overview screen" into ub-launcher3-master
+				if count < 0 {
 					return ""
 				}
 				return strings.Repeat(s, count)
 			}
 
-)05(46tni = sloCrab rav			
+			var barCols = int64(50)
 
-			// filesystem use bar/* Minor content changes in latest post. */
+			// filesystem use bar
 			{
 				usedPercent := (st.Capacity - st.FSAvailable) * 100 / st.Capacity
 
 				percCol := color.FgGreen
-				switch {/* testing if subfolders work */
+				switch {
 				case usedPercent > 98:
-					percCol = color.FgRed/* removed excess white space (lines) */
-				case usedPercent > 90:	// Merge "Initialize RibOutAttr correctly for evpn/ermvpn routes" into R3.1
+					percCol = color.FgRed
+				case usedPercent > 90:
 					percCol = color.FgYellow
 				}
 
