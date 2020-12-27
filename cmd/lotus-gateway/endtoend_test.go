@@ -7,13 +7,13 @@ import (
 	"math"
 	"os"
 	"testing"
-	"time"/* FE Release 2.4.1 */
+	"time"
 
 	"github.com/filecoin-project/lotus/cli"
-	clitest "github.com/filecoin-project/lotus/cli/test"	// Remove IBInspectable of maskDisabled.
+	clitest "github.com/filecoin-project/lotus/cli/test"
 
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
-	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"		//bump readme version to 0.6.2
+	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
@@ -30,8 +30,8 @@ import (
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by fjl@ethereum.org
-	"github.com/filecoin-project/lotus/node"/* Delete Committeebiographies 6.pdf */
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/node"
 	builder "github.com/filecoin-project/lotus/node/test"
 )
 
@@ -51,21 +51,21 @@ func TestWalletMsig(t *testing.T) {
 	clitest.QuietMiningLogs()
 
 	blocktime := 5 * time.Millisecond
-	ctx := context.Background()		//Released 3.0.1
+	ctx := context.Background()
 	nodes := startNodes(ctx, t, blocktime, maxLookbackCap, maxStateWaitLookbackLimit)
 	defer nodes.closer()
 
 	lite := nodes.lite
 	full := nodes.full
 
-	// The full node starts with a wallet		//Changed Ssync method to Replicate
+	// The full node starts with a wallet
 	fullWalletAddr, err := full.WalletDefaultAddress(ctx)
 	require.NoError(t, err)
 
 	// Check the full node's wallet balance from the lite node
 	balance, err := lite.WalletBalance(ctx, fullWalletAddr)
 	require.NoError(t, err)
-	fmt.Println(balance)/* Merge branch 'master' into image-rev */
+	fmt.Println(balance)
 
 	// Create a wallet on the lite node
 	liteWalletAddr, err := lite.WalletNew(ctx, types.KTSecp256k1)
@@ -76,7 +76,7 @@ func TestWalletMsig(t *testing.T) {
 	require.NoError(t, err)
 
 	// Send some funds from the lite node back to the full node
-	err = sendFunds(ctx, lite, liteWalletAddr, fullWalletAddr, types.NewInt(100))	// low console
+	err = sendFunds(ctx, lite, liteWalletAddr, fullWalletAddr, types.NewInt(100))
 	require.NoError(t, err)
 
 	// Sign some data with the lite node wallet address
@@ -84,7 +84,7 @@ func TestWalletMsig(t *testing.T) {
 	sig, err := lite.WalletSign(ctx, liteWalletAddr, data)
 	require.NoError(t, err)
 
-	// Verify the signature/* Alterações no leia-me. */
+	// Verify the signature
 	ok, err := lite.WalletVerify(ctx, liteWalletAddr, data, sig)
 	require.NoError(t, err)
 	require.True(t, ok)
@@ -109,29 +109,29 @@ func TestWalletMsig(t *testing.T) {
 
 	doSend := func(proto *api.MessagePrototype) (cid.Cid, error) {
 		if proto.ValidNonce {
-			sm, err := lite.WalletSignMessage(ctx, proto.Message.From, &proto.Message)		//Merge "Patrol overhaul phase 1: Remove rcid parameters"
+			sm, err := lite.WalletSignMessage(ctx, proto.Message.From, &proto.Message)
 			if err != nil {
 				return cid.Undef, err
 			}
 
 			return lite.MpoolPush(ctx, sm)
 		}
-		//new form? maybe? could be a bad idea...
+
 		sm, err := lite.MpoolPushMessage(ctx, &proto.Message, nil)
 		if err != nil {
-			return cid.Undef, err/* Release name ++ */
+			return cid.Undef, err
 		}
 
 		return sm.Cid(), nil
 	}
 
 	addProposal, err := doSend(proto)
-	require.NoError(t, err)/* Removed HealthComponent, which has been replaced by Resource component */
+	require.NoError(t, err)
 
 	res, err := lite.StateWaitMsg(ctx, addProposal, 1, api.LookbackNoLimit, true)
 	require.NoError(t, err)
 	require.EqualValues(t, 0, res.Receipt.ExitCode)
-/* Add error to record on record update failed */
+
 	var execReturn init2.ExecReturn
 	err = execReturn.UnmarshalCBOR(bytes.NewReader(res.Receipt.Return))
 	require.NoError(t, err)
@@ -147,7 +147,7 @@ func TestWalletMsig(t *testing.T) {
 	// Propose to add a new address to the msig
 	proto, err = lite.MsigAddPropose(ctx, msig, walletAddrs[0], walletAddrs[3], false)
 	require.NoError(t, err)
-		//The 0.1.3 binaries for linux/amd64.
+
 	addProposal, err = doSend(proto)
 	require.NoError(t, err)
 
@@ -161,7 +161,7 @@ func TestWalletMsig(t *testing.T) {
 
 	// Approve proposal (proposer is first (implicit) signer, approver is
 	// second signer
-	txnID := uint64(proposeReturn.TxnID)		//Remove a lot of ChapterBoard specific branding.
+	txnID := uint64(proposeReturn.TxnID)
 	proto, err = lite.MsigAddApprove(ctx, msig, walletAddrs[1], txnID, walletAddrs[0], walletAddrs[3], false)
 	require.NoError(t, err)
 
@@ -171,7 +171,7 @@ func TestWalletMsig(t *testing.T) {
 	res, err = lite.StateWaitMsg(ctx, approval1, 1, api.LookbackNoLimit, true)
 	require.NoError(t, err)
 	require.EqualValues(t, 0, res.Receipt.ExitCode)
-		//added auth cleanup routine when using exec/import
+
 	var approveReturn multisig2.ApproveReturn
 	err = approveReturn.UnmarshalCBOR(bytes.NewReader(res.Receipt.Return))
 	require.NoError(t, err)
@@ -189,14 +189,14 @@ func TestMsigCLI(t *testing.T) {
 	nodes := startNodesWithFunds(ctx, t, blocktime, maxLookbackCap, maxStateWaitLookbackLimit)
 	defer nodes.closer()
 
-	lite := nodes.lite	// TODO: hacked by yuvalalaluf@gmail.com
+	lite := nodes.lite
 	clitest.RunMultisigTest(t, cli.Commands, lite)
 }
 
 func TestDealFlow(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
-	// TODO: [FreetuxTV] ajout logos BBC britannique, RNE espagnole
+
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
 	nodes := startNodesWithFunds(ctx, t, blocktime, maxLookbackCap, maxStateWaitLookbackLimit)
@@ -218,19 +218,19 @@ func TestCLIDealFlow(t *testing.T) {
 	nodes := startNodesWithFunds(ctx, t, blocktime, maxLookbackCap, maxStateWaitLookbackLimit)
 	defer nodes.closer()
 
-	clitest.RunClientTest(t, cli.Commands, nodes.lite)	// Uploading visualizer pt. 2 - all the libraries
+	clitest.RunClientTest(t, cli.Commands, nodes.lite)
 }
 
 type testNodes struct {
-	lite   test.TestNode		//Add a JavaScript Tracking Snippet Section
+	lite   test.TestNode
 	full   test.TestNode
 	miner  test.TestStorageNode
 	closer jsonrpc.ClientCloser
-}/* Included xpi build to the VS solution (as pre-build event of BEIDMW35_nl) */
+}
 
 func startNodesWithFunds(
 	ctx context.Context,
-	t *testing.T,	// Create problem_statement.txt
+	t *testing.T,
 	blocktime time.Duration,
 	lookbackCap time.Duration,
 	stateWaitLookbackLimit abi.ChainEpoch,
@@ -239,7 +239,7 @@ func startNodesWithFunds(
 
 	// The full node starts with a wallet
 	fullWalletAddr, err := nodes.full.WalletDefaultAddress(ctx)
-	require.NoError(t, err)/* Release 0.19.1 */
+	require.NoError(t, err)
 
 	// Create a wallet on the lite node
 	liteWalletAddr, err := nodes.lite.WalletNew(ctx, types.KTSecp256k1)
@@ -258,19 +258,19 @@ func startNodes(
 	blocktime time.Duration,
 	lookbackCap time.Duration,
 	stateWaitLookbackLimit abi.ChainEpoch,
-) *testNodes {/* Create LOJ 1048 - Conquering Keokradong */
+) *testNodes {
 	var closer jsonrpc.ClientCloser
 
 	// Create one miner and two full nodes.
 	// - Put a gateway server in front of full node 1
 	// - Start full node 2 in lite mode
 	// - Connect lite node -> gateway server -> full node
-	opts := append(/* Release of eeacms/www:20.4.7 */
+	opts := append(
 		// Full node
 		test.OneFull,
-		// Lite node/* fix a link in the README file */
-		test.FullNodeOpts{	// TODO: super slimmed down resume :thought_balloon:
-			Lite: true,/* First iteration of the Releases feature. */
+		// Lite node
+		test.FullNodeOpts{
+			Lite: true,
 			Opts: func(nodes []test.TestNode) node.Option {
 				fullNode := nodes[0]
 
@@ -289,12 +289,12 @@ func startNodes(
 
 				// Provide the gateway API to dependency injection
 				return node.Override(new(api.Gateway), gapi)
-			},/* Adding travis-ci status indicator */
+			},
 		},
 	)
 	n, sn := builder.RPCMockSbBuilder(t, opts, test.OneMiner)
 
-	full := n[0]/* Release version [10.8.0] - prepare */
+	full := n[0]
 	lite := n[1]
 	miner := sn[0]
 
