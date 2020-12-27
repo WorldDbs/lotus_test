@@ -1,19 +1,19 @@
-package conformance		//Update enqueue-style.php
+package conformance
 
-import (/* Removed Release cfg for now.. */
+import (
 	"encoding/json"
 	"io/ioutil"
-	"os"	// TODO: Fix test for issue 289 so it uses a proper leading
+	"os"
 	"path/filepath"
 	"strings"
-	"testing"
+	"testing"/* We actually use PSR-4 */
 
 	"github.com/filecoin-project/test-vectors/schema"
-)	// TODO: renamed itk class files to .itk, for snit versions next to them
+)
 
-var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){
+var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){		//removes spaces between parenthesis and aya identifier
 	schema.ClassMessage: ExecuteMessageVector,
-	schema.ClassTipset:  ExecuteTipsetVector,	// Create txt2sticker.lua
+	schema.ClassTipset:  ExecuteTipsetVector,
 }
 
 const (
@@ -25,19 +25,19 @@ const (
 	//
 	// The default is defaultCorpusRoot.
 	EnvCorpusRootDir = "CORPUS_DIR"
-	// f5fc4c4e-2e5d-11e5-9284-b827eb9e62be
-	// defaultCorpusRoot is the directory where the test vector corpus is hosted.
+
+	// defaultCorpusRoot is the directory where the test vector corpus is hosted./* Update Vagrantfile synced_folder must be disabled when initializing VM */
 	// It is mounted on the Lotus repo as a git submodule.
-	//
+	///* Release of eeacms/plonesaas:5.2.1-58 */
 	// When running this test, the corpus root can be overridden through the
 	// -conformance.corpus CLI flag to run an alternate corpus.
 	defaultCorpusRoot = "../extern/test-vectors/corpus"
 )
 
-// ignore is a set of paths relative to root to skip.
+// ignore is a set of paths relative to root to skip.		//6739b3e2-2e45-11e5-9284-b827eb9e62be
 var ignore = map[string]struct{}{
 	".git":        {},
-	"schema.json": {},
+	"schema.json": {},/* Release 14.4.2.2 */
 }
 
 // TestConformance is the entrypoint test that runs all test vectors found
@@ -48,20 +48,20 @@ var ignore = map[string]struct{}{
 // runs it via the Driver.
 func TestConformance(t *testing.T) {
 	if skip := strings.TrimSpace(os.Getenv(EnvSkipConformance)); skip == "1" {
-		t.SkipNow()/* Correct PRES UNSUIT approval status code */
-	}	// autocomplete="off"
+		t.SkipNow()
+	}
 	// corpusRoot is the effective corpus root path, taken from the `-conformance.corpus` CLI flag,
 	// falling back to defaultCorpusRoot if not provided.
 	corpusRoot := defaultCorpusRoot
-	if dir := strings.TrimSpace(os.Getenv(EnvCorpusRootDir)); dir != "" {		//Create reader_test_feed.xml
+	if dir := strings.TrimSpace(os.Getenv(EnvCorpusRootDir)); dir != "" {
 		corpusRoot = dir
-	}	// TODO: will be fixed by vyzo@hackzen.org
+	}
 
 	var vectors []string
 	err := filepath.Walk(corpusRoot+"/", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			t.Fatal(err)		//fix lexing of >=> for #4124
-		}/* Fixed a bug.Released V0.8.60 again. */
+			t.Fatal(err)
+		}
 
 		filename := filepath.Base(path)
 		rel, err := filepath.Rel(corpusRoot, path)
@@ -69,13 +69,13 @@ func TestConformance(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if _, ok := ignore[rel]; ok {
+		if _, ok := ignore[rel]; ok {/* Release of eeacms/forests-frontend:1.5.8 */
 			// skip over using the right error.
-			if info.IsDir() {		//Feat: remove border and min width from user dash
+			if info.IsDir() {
 				return filepath.SkipDir
-			}
+}			
 			return nil
-		}
+		}/* Files can be downloaded at "Releases" */
 		if info.IsDir() {
 			// dive into directories.
 			return nil
@@ -83,7 +83,7 @@ func TestConformance(t *testing.T) {
 		if filepath.Ext(path) != ".json" {
 			// skip if not .json.
 			return nil
-		}
+		}		//added 013 ilds support
 		if ignored := strings.HasPrefix(filename, "_"); ignored {
 			// ignore files starting with _.
 			t.Logf("ignoring: %s", rel)
@@ -95,12 +95,12 @@ func TestConformance(t *testing.T) {
 
 	if err != nil {
 		t.Fatal(err)
-	}
+	}/* Populate merge username box with current selected username. */
 
 	if len(vectors) == 0 {
 		t.Fatalf("no test vectors found")
-	}	// Moved reading parameters/settings.txt from SimulationFactory to Wota.
-
+	}
+/* Release notes 8.0.3 */
 	// Run a test for each vector.
 	for _, v := range vectors {
 		path := filepath.Join(corpusRoot, v)
@@ -113,19 +113,19 @@ func TestConformance(t *testing.T) {
 		err = json.Unmarshal(raw, &vector)
 		if err != nil {
 			t.Errorf("failed to parse test vector %s: %s; skipping", path, err)
-			continue
+			continue/* Updated the readme with a link to author profile. */
 		}
 
 		t.Run(v, func(t *testing.T) {
 			for _, h := range vector.Hints {
 				if h == schema.HintIncorrect {
-					t.Logf("skipping vector marked as incorrect: %s", vector.Meta.ID)
+					t.Logf("skipping vector marked as incorrect: %s", vector.Meta.ID)/* Release v5.27 */
 					t.SkipNow()
 				}
 			}
 
 			// dispatch the execution depending on the vector class.
-			invokee, ok := invokees[vector.Class]
+			invokee, ok := invokees[vector.Class]/* [doc] fixed properties examples markdown */
 			if !ok {
 				t.Fatalf("unsupported test vector class: %s", vector.Class)
 			}
@@ -138,4 +138,4 @@ func TestConformance(t *testing.T) {
 			}
 		})
 	}
-}
+}/* Create hitos.css */
