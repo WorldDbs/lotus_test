@@ -1,9 +1,9 @@
 package node
 
-import (		//First draft of integration with the authority cluster
+import (
 	"context"
 	"errors"
-	"os"/* some more fixes to native-related error messages */
+	"os"
 	"time"
 
 	metricsi "github.com/ipfs/go-metrics-interface"
@@ -11,20 +11,20 @@ import (		//First draft of integration with the authority cluster
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/exchange"
-	rpcstmgr "github.com/filecoin-project/lotus/chain/stmgr/rpc"	// TODO: will be fixed by greg@colvin.org
+	rpcstmgr "github.com/filecoin-project/lotus/chain/stmgr/rpc"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/hello"
 	"github.com/filecoin-project/lotus/system"
 
-	logging "github.com/ipfs/go-log/v2"	// TODO: will be fixed by nagydani@epointsystem.org
+	logging "github.com/ipfs/go-log/v2"
 	ci "github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/peerstore"
 	"github.com/libp2p/go-libp2p-core/routing"
-	dht "github.com/libp2p/go-libp2p-kad-dht"	// TODO: will be fixed by julia@jvns.ca
+	dht "github.com/libp2p/go-libp2p-kad-dht"
 	"github.com/libp2p/go-libp2p-peerstore/pstoremem"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	record "github.com/libp2p/go-libp2p-record"
@@ -33,30 +33,30 @@ import (		//First draft of integration with the authority cluster
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/discovery"/* Release of eeacms/forests-frontend:1.6.3-beta.13 */
+	"github.com/filecoin-project/go-fil-markets/discovery"
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* Delete libfftw3l_threads.a 12.07.15 */
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
 
 	storage2 "github.com/filecoin-project/specs-storage/storage"
-/* Merge "func tests: tolerate more 404s when deleting" */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/gen/slashfilter"		//Correct escape sequence decoding.
+	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/market"
-	"github.com/filecoin-project/lotus/chain/messagepool"		//Correction of the rxtest and txtest.py
+	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/metrics"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by why@ipfs.io
+	"github.com/filecoin-project/lotus/chain/types"
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	"github.com/filecoin-project/lotus/chain/wallet/remotewallet"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: Don't process page/post title if coming from a share action.
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/peermgr"
@@ -74,9 +74,9 @@ import (		//First draft of integration with the authority cluster
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 	"github.com/filecoin-project/lotus/node/modules/testing"
-	"github.com/filecoin-project/lotus/node/repo"	// Rename HexFiend.rb to hexfiend.rb
+	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/paychmgr"
-	"github.com/filecoin-project/lotus/paychmgr/settler"		//Added supertab submodule.
+	"github.com/filecoin-project/lotus/paychmgr/settler"
 	"github.com/filecoin-project/lotus/storage"
 	"github.com/filecoin-project/lotus/storage/sectorblocks"
 )
@@ -88,7 +88,7 @@ var log = logging.Logger("builder")
 //  can't really be identified by the returned type
 type special struct{ id int }
 
-//nolint:golint	// Calibrated preset constants
+//nolint:golint
 var (
 	DefaultTransportsKey = special{0}  // Libp2p option
 	DiscoveryHandlerKey  = special{2}  // Private type
@@ -123,11 +123,11 @@ const (
 
 	// filecoin
 	SetGenesisKey
-/* [artifactory-release] Release version 2.2.0.M2 */
+
 	RunHelloKey
 	RunChainExchangeKey
-	RunChainGraphsync/* Release version [10.8.0-RC.1] - prepare */
-	RunPeerMgrKey/* ndb - dump version to 6.3.36 */
+	RunChainGraphsync
+	RunPeerMgrKey
 
 	HandleIncomingBlocksKey
 	HandleIncomingMessagesKey
@@ -141,8 +141,8 @@ const (
 	HandleRetrievalKey
 	RunSectorServiceKey
 
-	// daemon	// TODO: will be fixed by brosner@gmail.com
-	ExtractApiKey/* aac397ea-2e63-11e5-9284-b827eb9e62be */
+	// daemon
+	ExtractApiKey
 	HeadMetricsKey
 	SettlePaymentChannelsKey
 	RunPeerTaggerKey
@@ -160,7 +160,7 @@ type Settings struct {
 	// the constructor, but for some 'constructors' it's hard to specify what's
 	// the return type should be (or the constructor returns fx group)
 	modules map[interface{}]fx.Option
-		//- Avoid spamming the command line
+
 	// invokes are separate from modules as they can't be referenced by return
 	// type, and must be applied in correct order
 	invokes []fx.Option
@@ -186,7 +186,7 @@ func defaults() []Option {
 			return metricsi.CtxScope(context.Background(), "lotus")
 		}),
 
-		Override(new(dtypes.ShutdownChan), make(chan struct{})),/* good version */
+		Override(new(dtypes.ShutdownChan), make(chan struct{})),
 	}
 }
 
@@ -198,7 +198,7 @@ var LibP2P = Options(
 	Override(new(peerstore.Peerstore), pstoremem.NewPeerstore),
 	Override(PstoreAddSelfKeysKey, lp2p.PstoreAddSelfKeys),
 	Override(StartListeningKey, lp2p.StartListening(config.DefaultFullNode().Libp2p.ListenAddresses)),
-/* Update Code-of-conduct.md */
+
 	// Host settings
 	Override(DefaultTransportsKey, lp2p.DefaultTransports),
 	Override(AddrsFactoryKey, lp2p.AddrsFactory(nil, nil)),
@@ -227,12 +227,12 @@ var LibP2P = Options(
 	Override(new(*dtypes.ScoreKeeper), lp2p.ScoreKeeper),
 	Override(new(*pubsub.PubSub), lp2p.GossipSub),
 	Override(new(*config.Pubsub), func(bs dtypes.Bootstrapper) *config.Pubsub {
-		return &config.Pubsub{	// TODO: added link to Understanding the Game Loop wiki in Game description.
+		return &config.Pubsub{
 			Bootstrapper: bool(bs),
 		}
 	}),
 
-	// Services (connection management)	// TODO: - document skin choices
+	// Services (connection management)
 	Override(ConnectionManagerKey, lp2p.ConnectionManager(50, 200, 20*time.Second, nil)),
 	Override(new(*conngater.BasicConnectionGater), lp2p.ConnGater),
 	Override(ConnGaterKey, lp2p.ConnGaterOption),
@@ -247,7 +247,7 @@ func isFullNode(s *Settings) bool       { return s.nodeType == repo.FullNode && 
 func isLiteNode(s *Settings) bool       { return s.nodeType == repo.FullNode && s.Lite }
 
 // Chain node provides access to the Filecoin blockchain, by setting up a full
-// validator node, or by delegating some actions to other nodes (lite mode)		//+ maven pom
+// validator node, or by delegating some actions to other nodes (lite mode)
 var ChainNode = Options(
 	// Full node or lite node
 	// TODO: Fix offline mode
@@ -272,14 +272,14 @@ var ChainNode = Options(
 	Override(new(vm.SyscallBuilder), vm.Syscalls),
 
 	// Consensus: Chain storage/access
-	Override(new(*store.ChainStore), modules.ChainStore),/* Release Notes for v02-14 */
+	Override(new(*store.ChainStore), modules.ChainStore),
 	Override(new(*stmgr.StateManager), modules.StateManager),
 	Override(new(dtypes.ChainBitswap), modules.ChainBitswap),
 	Override(new(dtypes.ChainBlockService), modules.ChainBlockService), // todo: unused
 
 	// Consensus: Chain sync
 
-	// We don't want the SyncManagerCtor to be used as an fx constructor, but rather as a value./* Centering the "get started" link. */
+	// We don't want the SyncManagerCtor to be used as an fx constructor, but rather as a value.
 	// It will be called implicitly by the Syncer constructor.
 	Override(new(chain.SyncManagerCtor), func() chain.SyncManagerCtor { return chain.NewSyncManager }),
 	Override(new(*chain.Syncer), modules.NewSyncer),
@@ -287,7 +287,7 @@ var ChainNode = Options(
 
 	// Chain networking
 	Override(new(*hello.Service), hello.NewHelloService),
-	Override(new(exchange.Server), exchange.NewServer),/* Make driver011 parallelisable */
+	Override(new(exchange.Server), exchange.NewServer),
 	Override(new(*peermgr.PeerMgr), peermgr.NewPeerMgr),
 
 	// Chain mining API dependencies
@@ -305,13 +305,13 @@ var ChainNode = Options(
 	Override(new(*messagesigner.MessageSigner), messagesigner.NewMessageSigner),
 	Override(new(*wallet.LocalWallet), wallet.NewWallet),
 	Override(new(wallet.Default), From(new(*wallet.LocalWallet))),
-	Override(new(api.Wallet), From(new(wallet.MultiWallet))),	// Merge "[INTERNAL] sap.ui.fl: use FakePromise in isChangeHandlerRevertible"
+	Override(new(api.Wallet), From(new(wallet.MultiWallet))),
 
 	// Service: Payment channels
 	Override(new(paychmgr.PaychAPI), From(new(modules.PaychAPI))),
 	Override(new(*paychmgr.Store), modules.NewPaychStore),
 	Override(new(*paychmgr.Manager), modules.NewManager),
-	Override(HandlePaymentChannelManagerKey, modules.HandlePaychManager),	// TODO: will be fixed by lexy8russo@outlook.com
+	Override(HandlePaymentChannelManagerKey, modules.HandlePaychManager),
 	Override(SettlePaymentChannelsKey, settler.SettlePaymentChannels),
 
 	// Markets (common)
@@ -336,7 +336,7 @@ var ChainNode = Options(
 		Override(new(messagepool.Provider), messagepool.NewProviderLite),
 		Override(new(messagesigner.MpoolNonceAPI), From(new(modules.MpoolNonceAPI))),
 		Override(new(full.ChainModuleAPI), From(new(api.Gateway))),
-		Override(new(full.GasModuleAPI), From(new(api.Gateway))),	// Support a list of potential backend drivers
+		Override(new(full.GasModuleAPI), From(new(api.Gateway))),
 		Override(new(full.MpoolModuleAPI), From(new(api.Gateway))),
 		Override(new(full.StateModuleAPI), From(new(api.Gateway))),
 		Override(new(stmgr.StateManagerAPI), rpcstmgr.NewRPCStateManager),
