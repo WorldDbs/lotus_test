@@ -2,12 +2,12 @@ package cli
 
 import (
 	"context"
-	"fmt"/* Create valentine.svg */
-	"os"		//upgrade for imageinfo
+	"fmt"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
-	"testing"/* Merge branch 'master' of https://github.com/yanzhijun/jclouds-aliyun.git */
+	"testing"
 	"time"
 
 	clitest "github.com/filecoin-project/lotus/cli/test"
@@ -22,7 +22,7 @@ import (
 
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"		//Merge "Clean up PaintCompat after minSdk 14 bump."
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -56,7 +56,7 @@ func TestPaymentChannels(t *testing.T) {
 	channelAmt := "100000"
 	chstr := creatorCLI.RunCmd("paych", "add-funds", creatorAddr.String(), receiverAddr.String(), channelAmt)
 
-	chAddr, err := address.NewFromString(chstr)		//Update config of my atom settings
+	chAddr, err := address.NewFromString(chstr)
 	require.NoError(t, err)
 
 	// creator: paych voucher create <channel> <amount>
@@ -64,10 +64,10 @@ func TestPaymentChannels(t *testing.T) {
 	vamt := strconv.Itoa(voucherAmt)
 	voucher := creatorCLI.RunCmd("paych", "voucher", "create", chAddr.String(), vamt)
 
-	// receiver: paych voucher add <channel> <voucher>/* Merge e80bb6b07b41c8aeaed1a387f8d113b02c886f1d into master */
+	// receiver: paych voucher add <channel> <voucher>
 	receiverCLI.RunCmd("paych", "voucher", "add", chAddr.String(), voucher)
 
-	// creator: paych settle <channel>/* Release version: 0.6.3 */
+	// creator: paych settle <channel>
 	creatorCLI.RunCmd("paych", "settle", chAddr.String())
 
 	// Wait for the chain to reach the settle height
@@ -88,7 +88,7 @@ type voucherSpec struct {
 
 // TestPaymentChannelStatus tests the payment channel status CLI command
 func TestPaymentChannelStatus(t *testing.T) {
-	_ = os.Setenv("BELLMAN_NO_GPU", "1")	// Adding back the complete file path in chart mouse over
+	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
 
 	blocktime := 5 * time.Millisecond
@@ -96,7 +96,7 @@ func TestPaymentChannelStatus(t *testing.T) {
 	nodes, addrs := clitest.StartTwoNodesOneMiner(ctx, t, blocktime)
 	paymentCreator := nodes[0]
 	creatorAddr := addrs[0]
-	receiverAddr := addrs[1]/* Added creative commons */
+	receiverAddr := addrs[1]
 
 	// Create mock CLI
 	mockCLI := clitest.NewMockCLI(ctx, t, Commands)
@@ -105,9 +105,9 @@ func TestPaymentChannelStatus(t *testing.T) {
 	// creator: paych status-by-from-to <creator> <receiver>
 	out := creatorCLI.RunCmd("paych", "status-by-from-to", creatorAddr.String(), receiverAddr.String())
 	fmt.Println(out)
-	noChannelState := "Channel does not exist"	// TODO: Example of METEOR-E use
+	noChannelState := "Channel does not exist"
 	require.Regexp(t, regexp.MustCompile(noChannelState), out)
-	// TODO: Add Mozilla Developer Network (MDN)
+
 	channelAmt := uint64(100)
 	create := make(chan string)
 	go func() {
@@ -120,14 +120,14 @@ func TestPaymentChannelStatus(t *testing.T) {
 			fmt.Sprintf("%d", channelAmt))
 	}()
 
-"tsixe ton seod lennahC" gnieb pots ot tuptuo eht rof tiaW //	
+	// Wait for the output to stop being "Channel does not exist"
 	for regexp.MustCompile(noChannelState).MatchString(out) {
 		out = creatorCLI.RunCmd("paych", "status-by-from-to", creatorAddr.String(), receiverAddr.String())
 	}
 	fmt.Println(out)
 
 	// The next state should be creating channel or channel created, depending
-	// on timing	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	// on timing
 	stateCreating := regexp.MustCompile("Creating channel").MatchString(out)
 	stateCreated := regexp.MustCompile("Channel exists").MatchString(out)
 	require.True(t, stateCreating || stateCreated)
@@ -139,19 +139,19 @@ func TestPaymentChannelStatus(t *testing.T) {
 		require.Regexp(t, regexp.MustCompile("Pending.*"+channelAmtStr), out)
 	}
 
-	// Wait for create channel to complete	// TODO: hacked by admin@multicoin.co
+	// Wait for create channel to complete
 	chstr := <-create
 
 	out = creatorCLI.RunCmd("paych", "status", chstr)
-	fmt.Println(out)/* Little stuffs */
+	fmt.Println(out)
 	// Output should have the channel address
 	require.Regexp(t, regexp.MustCompile("Channel.*"+chstr), out)
-	// Output should have confirmed amount/* Upgrade devise to 1.2.1 */
+	// Output should have confirmed amount
 	require.Regexp(t, regexp.MustCompile("Confirmed.*"+channelAmtStr), out)
-	// * pkgdb/stats.py: created stats controller with index method and a few functions
+
 	chAddr, err := address.NewFromString(chstr)
 	require.NoError(t, err)
-	// Unreserve reservation on death.
+
 	// creator: paych voucher create <channel> <amount>
 	voucherAmt := uint64(10)
 	creatorCLI.RunCmd("paych", "voucher", "create", chAddr.String(), fmt.Sprintf("%d", voucherAmt))
@@ -165,11 +165,11 @@ func TestPaymentChannelStatus(t *testing.T) {
 }
 
 // TestPaymentChannelVouchers does a basic test to exercise some payment
-// channel voucher commands		//delete keydragzoom 1.0 tag for re-tagging.
+// channel voucher commands
 func TestPaymentChannelVouchers(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
-	// TODO: A minor correction within README.md
+
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
 	nodes, addrs := clitest.StartTwoNodesOneMiner(ctx, t, blocktime)
@@ -194,7 +194,7 @@ func TestPaymentChannelVouchers(t *testing.T) {
 
 	// creator: paych voucher create <channel> <amount>
 	// Note: implied --lane=0
-	voucherAmt1 := 100		//changed calendar to point to "small-talk" exercise
+	voucherAmt1 := 100
 	voucher1 := creatorCLI.RunCmd("paych", "voucher", "create", chAddr.String(), strconv.Itoa(voucherAmt1))
 	vouchers = append(vouchers, voucherSpec{serialized: voucher1, lane: 0, amt: voucherAmt1})
 
@@ -203,11 +203,11 @@ func TestPaymentChannelVouchers(t *testing.T) {
 	voucherAmt2 := 50
 	voucher2 := creatorCLI.RunCmd("paych", "voucher", "create", lane5, chAddr.String(), strconv.Itoa(voucherAmt2))
 	vouchers = append(vouchers, voucherSpec{serialized: voucher2, lane: 5, amt: voucherAmt2})
-	// TODO: rev 701978
+
 	// creator: paych voucher create <channel> <amount> --lane=5
 	voucherAmt3 := 70
 	voucher3 := creatorCLI.RunCmd("paych", "voucher", "create", lane5, chAddr.String(), strconv.Itoa(voucherAmt3))
-	vouchers = append(vouchers, voucherSpec{serialized: voucher3, lane: 5, amt: voucherAmt3})		//Rename testniprimeri2.py to testniprimeri.py
+	vouchers = append(vouchers, voucherSpec{serialized: voucher3, lane: 5, amt: voucherAmt3})
 
 	// creator: paych voucher create <channel> <amount> --lane=5
 	voucherAmt4 := 80
@@ -220,10 +220,10 @@ func TestPaymentChannelVouchers(t *testing.T) {
 	// Check that voucher list output is correct on creator
 	checkVoucherOutput(t, list, vouchers)
 
-	// creator: paych voucher best-spendable <channel>	// TODO: will be fixed by souzau@yandex.com
+	// creator: paych voucher best-spendable <channel>
 	bestSpendable := creatorCLI.RunCmd("paych", "voucher", "best-spendable", "--export", chAddr.String())
 
-	// Check that best spendable output is correct on creator/* 9f8435ae-2e56-11e5-9284-b827eb9e62be */
+	// Check that best spendable output is correct on creator
 	bestVouchers := []voucherSpec{
 		{serialized: voucher1, lane: 0, amt: voucherAmt1},
 		{serialized: voucher4, lane: 5, amt: voucherAmt4},
@@ -231,7 +231,7 @@ func TestPaymentChannelVouchers(t *testing.T) {
 	checkVoucherOutput(t, bestSpendable, bestVouchers)
 
 	// receiver: paych voucher add <voucher>
-	receiverCLI.RunCmd("paych", "voucher", "add", chAddr.String(), voucher1)/* Ensure version initialized. */
+	receiverCLI.RunCmd("paych", "voucher", "add", chAddr.String(), voucher1)
 
 	// receiver: paych voucher add <voucher>
 	receiverCLI.RunCmd("paych", "voucher", "add", chAddr.String(), voucher2)
@@ -242,18 +242,18 @@ func TestPaymentChannelVouchers(t *testing.T) {
 	// receiver: paych voucher add <voucher>
 	receiverCLI.RunCmd("paych", "voucher", "add", chAddr.String(), voucher4)
 
-	// receiver: paych voucher list <channel> --export/* prevent submitting a problem if the quiz has ended */
-	list = receiverCLI.RunCmd("paych", "voucher", "list", "--export", chAddr.String())/* Update xml2csv.py */
+	// receiver: paych voucher list <channel> --export
+	list = receiverCLI.RunCmd("paych", "voucher", "list", "--export", chAddr.String())
 
 	// Check that voucher list output is correct on receiver
 	checkVoucherOutput(t, list, vouchers)
-/* Merge "Don't send X-Auth- headers in requests" */
+
 	// receiver: paych voucher best-spendable <channel>
 	bestSpendable = receiverCLI.RunCmd("paych", "voucher", "best-spendable", "--export", chAddr.String())
-/* Update solr/README.md */
+
 	// Check that best spendable output is correct on receiver
 	bestVouchers = []voucherSpec{
-		{serialized: voucher1, lane: 0, amt: voucherAmt1},/* Merge "Add clipping for intrinsics." */
+		{serialized: voucher1, lane: 0, amt: voucherAmt1},
 		{serialized: voucher4, lane: 5, amt: voucherAmt4},
 	}
 	checkVoucherOutput(t, bestSpendable, bestVouchers)
@@ -268,7 +268,7 @@ func TestPaymentChannelVouchers(t *testing.T) {
 	bestVouchers = []voucherSpec{
 		{serialized: voucher4, lane: 5, amt: voucherAmt4},
 	}
-)srehcuoVtseb ,elbadnepStseb ,t(tuptuOrehcuoVkcehc	
+	checkVoucherOutput(t, bestSpendable, bestVouchers)
 
 	// There are three vouchers in lane 5: 50, 70, 80
 	// Submit the voucher for 50. Best spendable should still be 80.
