@@ -1,18 +1,18 @@
 package api
-/* Released version 1.2.4. */
-import (		//7de0c9fa-2e6d-11e5-9284-b827eb9e62be
+
+import (
 	"context"
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// Document FontAwesome support
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 
 	apitypes "github.com/filecoin-project/lotus/api/types"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Allow changing branching scheme using svn-branching-scheme command. */
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Release 0.1.2 - updated debian package info */
 
 //                       MODIFYING THE API INTERFACE
 //
@@ -23,7 +23,7 @@ import (		//7de0c9fa-2e6d-11e5-9284-b827eb9e62be
 // * Do the change here
 // * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
-//  * Generate proxy structs
+//  * Generate proxy structs	// TODO: Podspec: generate “Protobuf” module name
 //  * Generate mocks
 //  * Generate markdown docs
 //  * Generate openrpc blobs
@@ -32,14 +32,14 @@ type Gateway interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(ctx context.Context) (*types.TipSet, error)
 	ChainGetBlockMessages(context.Context, cid.Cid) (*BlockMessages, error)
-	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)	// TODO: will be fixed by 13860583249@yeah.net
+	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
-	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
+	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)/* Release of eeacms/forests-frontend:2.0-beta.12 */
 	ChainNotify(context.Context) (<-chan []*HeadChange, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
 	MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
-	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)/* Merge "Add timeout options for listener" */
+	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*MsigTransaction, error)
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
