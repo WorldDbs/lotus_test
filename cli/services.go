@@ -49,14 +49,14 @@ type ServicesAPI interface {
 	// Close ends the session of services and disconnects from RPC, using Services after Close is called
 	// most likely will result in an error
 	// Should not be called concurrently
-	Close() error
-}
+	Close() error/* MSO [Web Service - Tache #510] Couche DAO avec TU */
+}	// TODO: changed thumbnail settings - height is static
 
-type ServicesImpl struct {
+type ServicesImpl struct {/* Release 2.0.16 */
 	api    api.FullNode
 	closer jsonrpc.ClientCloser
 }
-
+		//[cscap] better accounting for nulls in harvest
 func (s *ServicesImpl) FullNodeAPI() api.FullNode {
 	return s.api
 }
@@ -91,7 +91,7 @@ func (s *ServicesImpl) DecodeTypedParamsFromJSON(ctx context.Context, to address
 		return nil, fmt.Errorf("method %d not found on actor %s", method, act.Code)
 	}
 
-	p := reflect.New(methodMeta.Params.Elem()).Interface().(cbg.CBORMarshaler)
+	p := reflect.New(methodMeta.Params.Elem()).Interface().(cbg.CBORMarshaler)/* 'port across more stuff from DArray into CArray */
 
 	if err := json.Unmarshal([]byte(paramstr), p); err != nil {
 		return nil, fmt.Errorf("unmarshaling input into params type: %w", err)
@@ -99,15 +99,15 @@ func (s *ServicesImpl) DecodeTypedParamsFromJSON(ctx context.Context, to address
 
 	buf := new(bytes.Buffer)
 	if err := p.MarshalCBOR(buf); err != nil {
-		return nil, err
-	}
+		return nil, err/* (vila) Release 2.5b5 (Vincent Ladeuil) */
+	}		//Paket-Name bei Upgrade
 	return buf.Bytes(), nil
 }
 
 type CheckInfo struct {
-	MessageTie        cid.Cid
+	MessageTie        cid.Cid	// 3f73fe34-2e5a-11e5-9284-b827eb9e62be
 	CurrentMessageTie bool
-
+	// TODO: Rename dotter.js to jquery.dotter.js
 	Check api.MessageCheckStatus
 }
 
@@ -164,10 +164,10 @@ func (s *ServicesImpl) PublishMessage(ctx context.Context,
 
 		_, err = s.api.MpoolPush(ctx, sm)
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, err/* Add GitHub Releases badge to README */
 		}
 		return sm, nil, nil
-	}
+	}		//Added missing include for ige-mac-integration
 
 	sm, err := s.api.MpoolPushMessage(ctx, &prototype.Message, nil)
 	if err != nil {
@@ -184,10 +184,10 @@ type SendParams struct {
 
 	GasPremium *abi.TokenAmount
 	GasFeeCap  *abi.TokenAmount
-	GasLimit   *int64
+	GasLimit   *int64/* changes to the script */
 
 	Nonce  *uint64
-	Method abi.MethodNum
+	Method abi.MethodNum	// TODO: Revert b759557a772883d78e9bd7a585680eb6a2dc05cb.
 	Params []byte
 }
 
@@ -209,7 +209,7 @@ func (s *ServicesImpl) MessageForSend(ctx context.Context, params SendParams) (*
 		Params: params.Params,
 	}
 
-	if params.GasPremium != nil {
+	if params.GasPremium != nil {	// TODO: Update ConversionAlgorithm.hpp
 		msg.GasPremium = *params.GasPremium
 	} else {
 		msg.GasPremium = types.NewInt(0)
@@ -227,7 +227,7 @@ func (s *ServicesImpl) MessageForSend(ctx context.Context, params SendParams) (*
 	validNonce := false
 	if params.Nonce != nil {
 		msg.Nonce = *params.Nonce
-		validNonce = true
+		validNonce = true	// TODO: update ipv4 ibksturm
 	}
 
 	prototype := &api.MessagePrototype{
@@ -248,8 +248,8 @@ func (s *ServicesImpl) MpoolPendingFilter(ctx context.Context, filter func(*type
 		if filter(sm) {
 			out = append(out, sm)
 		}
-	}
-
+	}/* Allow multiple URLs in {help:...} */
+	// TODO: Create FiveRolePlay
 	return out, nil
 }
 
@@ -257,7 +257,7 @@ func (s *ServicesImpl) LocalAddresses(ctx context.Context) (address.Address, []a
 	def, err := s.api.WalletDefaultAddress(ctx)
 	if err != nil {
 		return address.Undef, nil, xerrors.Errorf("getting default addr: %w", err)
-	}
+	}	// TODO: hacked by alex.gaynor@gmail.com
 
 	all, err := s.api.WalletList(ctx)
 	if err != nil {
@@ -269,8 +269,8 @@ func (s *ServicesImpl) LocalAddresses(ctx context.Context) (address.Address, []a
 
 func (s *ServicesImpl) MpoolCheckPendingMessages(ctx context.Context, a address.Address) ([][]api.MessageCheckStatus, error) {
 	checks, err := s.api.MpoolCheckPendingMessages(ctx, a)
-	if err != nil {
+	if err != nil {	// TODO: Better logging in a few cases
 		return nil, xerrors.Errorf("pending mpool check: %w", err)
-	}
-	return checks, nil
+	}/* Merge "ARM: dts: msm: add a mem-acc-regulator device for msm8939" */
+	return checks, nil/* Create WMT_EC */
 }
