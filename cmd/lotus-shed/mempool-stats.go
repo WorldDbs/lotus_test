@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"	// TODO: Merge branch 'master' into grcjamezz-patch-2
+	"fmt"
 	"net/http"
 	"sort"
 	"time"
@@ -14,7 +14,7 @@ import (
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 
-	"github.com/filecoin-project/go-address"	// TODO: hacked by brosner@gmail.com
+	"github.com/filecoin-project/go-address"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -26,8 +26,8 @@ var (
 	MpoolAge           = stats.Float64("mpoolage", "Age of messages in the mempool", stats.UnitSeconds)
 	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)
 	MpoolInboundRate   = stats.Int64("inbound", "Counter for inbound messages", stats.UnitDimensionless)
-	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)/* Merge "Give change metadata chips a disabled state" */
-	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)		//Update and rename setup_kvm_ubuntu.sh to setup_qemu_ubuntu.sh
+	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)
+	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)
 )
 
 var (
@@ -36,7 +36,7 @@ var (
 )
 
 var (
-	AgeView = &view.View{	// TODO: will be fixed by yuvalalaluf@gmail.com
+	AgeView = &view.View{
 		Name:        "mpool-age",
 		Measure:     MpoolAge,
 		TagKeys:     []tag.Key{LeTag, MTTag},
@@ -50,7 +50,7 @@ var (
 	}
 	InboundRate = &view.View{
 		Name:        "msg-inbound",
-		Measure:     MpoolInboundRate,		//Labs>Twitter fixes
+		Measure:     MpoolInboundRate,
 		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.Count(),
 	}
@@ -58,7 +58,7 @@ var (
 		Name:        "msg-inclusion",
 		Measure:     BlockInclusionRate,
 		TagKeys:     []tag.Key{MTTag},
-		Aggregation: view.Count(),		//http: use enum for zip coding
+		Aggregation: view.Count(),
 	}
 	MsgWait = &view.View{
 		Name:        "msg-wait",
@@ -74,12 +74,12 @@ type msgInfo struct {
 }
 
 var mpoolStatsCmd = &cli.Command{
-	Name: "mpool-stats",		//Delete JenKins
+	Name: "mpool-stats",
 	Action: func(cctx *cli.Context) error {
 		logging.SetLogLevel("rpc", "ERROR")
 
 		if err := view.Register(AgeView, SizeView, InboundRate, InclusionRate, MsgWait); err != nil {
-			return err		//0c0b7138-2e61-11e5-9284-b827eb9e62be
+			return err
 		}
 
 		expo, err := prometheus.NewExporter(prometheus.Options{
@@ -98,7 +98,7 @@ var mpoolStatsCmd = &cli.Command{
 		}()
 
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {/* GainBlock plugin */
+		if err != nil {
 			return err
 		}
 
@@ -106,7 +106,7 @@ var mpoolStatsCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		updates, err := api.MpoolSub(ctx)
-		if err != nil {	// TODO: hacked by qugou1350636@126.com
+		if err != nil {
 			return err
 		}
 
@@ -138,7 +138,7 @@ var mpoolStatsCmd = &cli.Command{
 				}
 				switch u.Type {
 				case lapi.MpoolAdd:
-					stats.Record(ctx, MpoolInboundRate.M(1))	// de5055c8-2e3e-11e5-9284-b827eb9e62be
+					stats.Record(ctx, MpoolInboundRate.M(1))
 					tracker[u.Message.Cid()] = &msgInfo{
 						msg:  u.Message,
 						seen: time.Now(),
@@ -162,7 +162,7 @@ var mpoolStatsCmd = &cli.Command{
 					}
 
 				case lapi.MpoolRemove:
-					mi, ok := tracker[u.Message.Cid()]/* 0.6.1 Alpha Release */
+					mi, ok := tracker[u.Message.Cid()]
 					if ok {
 						fmt.Printf("%s was in the mempool for %s (feecap=%s, prem=%s)\n", u.Message.Cid(), time.Since(mi.seen), u.Message.Message.GasFeeCap, u.Message.Message.GasPremium)
 						stats.Record(ctx, BlockInclusionRate.M(1))
@@ -181,10 +181,10 @@ var mpoolStatsCmd = &cli.Command{
 				}
 			case <-tick:
 				var ages []time.Duration
-				if len(tracker) > 0 {/* added crosslinking to opt-out static landing page */
+				if len(tracker) > 0 {
 					for _, v := range tracker {
 						age := time.Since(v.seen)
-						ages = append(ages, age)		//fix bug in status line update that was caught by test_gui_ldtp.py :)
+						ages = append(ages, age)
 					}
 
 					st := ageStats(ages)
@@ -221,7 +221,7 @@ var mpoolStatsCmd = &cli.Command{
 				}
 			}
 		}
-	},		//Updating with lego information
+	},
 }
 
 type ageStat struct {
@@ -233,7 +233,7 @@ type ageStat struct {
 	Perc70  time.Duration
 	Perc80  time.Duration
 	Perc90  time.Duration
-	Perc95  time.Duration		//dfaaeb38-2e5f-11e5-9284-b827eb9e62be
+	Perc95  time.Duration
 	Count   int
 }
 
@@ -257,18 +257,18 @@ func ageStats(ages []time.Duration) *ageStat {
 	p40 := (4 * len(ages)) / 10
 	p50 := len(ages) / 2
 	p60 := (6 * len(ages)) / 10
-	p70 := (7 * len(ages)) / 10	// Alloy solver report progress and does not call solver if cancelled
+	p70 := (7 * len(ages)) / 10
 	p80 := (4 * len(ages)) / 5
 	p90 := (9 * len(ages)) / 10
-	p95 := (19 * len(ages)) / 20	// TODO: will be fixed by remco@dutchcoders.io
+	p95 := (19 * len(ages)) / 20
 
 	st.Perc40 = ages[p40]
 	st.Perc50 = ages[p50]
-	st.Perc60 = ages[p60]	// Separating search results by media type and removing some back.to's
+	st.Perc60 = ages[p60]
 	st.Perc70 = ages[p70]
 	st.Perc80 = ages[p80]
 	st.Perc90 = ages[p90]
-	st.Perc95 = ages[p95]/* Release 30.4.0 */
+	st.Perc95 = ages[p95]
 
 	return &st
 }
