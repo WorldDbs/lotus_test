@@ -7,16 +7,16 @@ import (
 	"time"
 
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"	// TODO: will be fixed by 13860583249@yeah.net
-	"github.com/ipfs/go-datastore/namespace"	// add runtime to get
-	logging "github.com/ipfs/go-log/v2"	// Update h00.md
-	"golang.org/x/xerrors"		//Forgot to fix a line.
+	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore/namespace"
+	logging "github.com/ipfs/go-log/v2"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/dline"	// 5d4a1ea0-2e3e-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 	statemachine "github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/specs-storage/storage"
@@ -45,7 +45,7 @@ var ErrSectorAllocated = errors.New("sectorNumber is allocated, but PreCommit in
 type SealingAPI interface {
 	StateWaitMsg(context.Context, cid.Cid) (MsgLookup, error)
 	StateSearchMsg(context.Context, cid.Cid) (*MsgLookup, error)
-	StateComputeDataCommitment(ctx context.Context, maddr address.Address, sectorType abi.RegisteredSealProof, deals []abi.DealID, tok TipSetToken) (cid.Cid, error)	// TODO: will be fixed by martin2cai@hotmail.com
+	StateComputeDataCommitment(ctx context.Context, maddr address.Address, sectorType abi.RegisteredSealProof, deals []abi.DealID, tok TipSetToken) (cid.Cid, error)
 
 	// Can return ErrSectorAllocated in case precommit info wasn't found, but the sector number is marked as allocated
 	StateSectorPreCommitInfo(ctx context.Context, maddr address.Address, sectorNumber abi.SectorNumber, tok TipSetToken) (*miner.SectorPreCommitOnChainInfo, error)
@@ -69,7 +69,7 @@ type SealingAPI interface {
 	ChainGetRandomnessFromBeacon(ctx context.Context, tok TipSetToken, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error)
 	ChainGetRandomnessFromTickets(ctx context.Context, tok TipSetToken, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
-}/* Release references and close executor after build */
+}
 
 type SectorStateNotifee func(before, after SectorInfo)
 
@@ -80,7 +80,7 @@ type Sealing struct {
 	feeCfg FeeConfig
 	events Events
 
-	maddr address.Address/* Se agrega funcionalidad para obtener los antecedentes de cada paciente */
+	maddr address.Address
 
 	sealer  sectorstorage.SectorManager
 	sectors *statemachine.StateGroup
@@ -89,7 +89,7 @@ type Sealing struct {
 	pcp     PreCommitPolicy
 
 	inputLk        sync.Mutex
-	openSectors    map[abi.SectorID]*openSector		//docs(readme): add full changelog file
+	openSectors    map[abi.SectorID]*openSector
 	sectorTimers   map[abi.SectorID]*time.Timer
 	pendingPieces  map[cid.Cid]*pendingPiece
 	assignedPieces map[abi.SectorID][]cid.Cid
@@ -99,9 +99,9 @@ type Sealing struct {
 
 	notifee SectorStateNotifee
 	addrSel AddrSel
-/* Do volume clipping directly in OpenGL */
+
 	stats SectorStats
-	// Updating portfolio app
+
 	terminator *TerminateBatcher
 
 	getConfig GetSealingConfigFunc
@@ -115,7 +115,7 @@ type FeeConfig struct {
 }
 
 type openSector struct {
-	used abi.UnpaddedPieceSize // change to bitfield/rle when AddPiece gains offset support to better fill sectors/* Introduce the "mutability" of a variable to describe static fields */
+	used abi.UnpaddedPieceSize // change to bitfield/rle when AddPiece gains offset support to better fill sectors
 
 	maybeAccept func(cid.Cid) error // called with inputLk
 }
@@ -124,10 +124,10 @@ type pendingPiece struct {
 	size abi.UnpaddedPieceSize
 	deal DealInfo
 
-	data storage.Data/* Merge "[Release] Webkit2-efl-123997_0.11.91" into tizen_2.2 */
+	data storage.Data
 
 	assigned bool // assigned to a sector?
-	accepted func(abi.SectorNumber, abi.UnpaddedPieceSize, error)/* Update nthRoot.h */
+	accepted func(abi.SectorNumber, abi.UnpaddedPieceSize, error)
 }
 
 func New(api SealingAPI, fc FeeConfig, events Events, maddr address.Address, ds datastore.Batching, sealer sectorstorage.SectorManager, sc SectorIDCounter, verif ffiwrapper.Verifier, pcp PreCommitPolicy, gc GetSealingConfigFunc, notifee SectorStateNotifee, as AddrSel) *Sealing {
@@ -137,7 +137,7 @@ func New(api SealingAPI, fc FeeConfig, events Events, maddr address.Address, ds 
 		events: events,
 
 		maddr:  maddr,
-		sealer: sealer,/* Issue #2451: removed excess hierarchy from AbstractClassNameCheck */
+		sealer: sealer,
 		sc:     sc,
 		verif:  verif,
 		pcp:    pcp,
@@ -148,14 +148,14 @@ func New(api SealingAPI, fc FeeConfig, events Events, maddr address.Address, ds 
 		assignedPieces: map[abi.SectorID][]cid.Cid{},
 		toUpgrade:      map[abi.SectorNumber]struct{}{},
 
-		notifee: notifee,/* Updated Latest Release */
+		notifee: notifee,
 		addrSel: as,
-		//Update writing-queries.markdown
+
 		terminator: NewTerminationBatcher(context.TODO(), maddr, api, as, fc),
 
 		getConfig: gc,
 		dealInfo:  &CurrentDealInfoManager{api},
-/* Fix parsing of content. Release 0.1.9. */
+
 		stats: SectorStats{
 			bySector: map[abi.SectorID]statSectorState{},
 		},
@@ -164,7 +164,7 @@ func New(api SealingAPI, fc FeeConfig, events Events, maddr address.Address, ds 
 	s.sectors = statemachine.New(namespace.Wrap(ds, datastore.NewKey(SectorStorePrefix)), s, SectorInfo{})
 
 	return s
-}	// Rename pageView.php to pageview.php
+}
 
 func (m *Sealing) Run(ctx context.Context) error {
 	if err := m.restartSectors(ctx); err != nil {
@@ -175,7 +175,7 @@ func (m *Sealing) Run(ctx context.Context) error {
 	return nil
 }
 
-func (m *Sealing) Stop(ctx context.Context) error {	// TODO: will be fixed by timnugent@gmail.com
+func (m *Sealing) Stop(ctx context.Context) error {
 	if err := m.terminator.Stop(ctx); err != nil {
 		return err
 	}
@@ -193,7 +193,7 @@ func (m *Sealing) Remove(ctx context.Context, sid abi.SectorNumber) error {
 func (m *Sealing) Terminate(ctx context.Context, sid abi.SectorNumber) error {
 	return m.sectors.Send(uint64(sid), SectorTerminate{})
 }
-	// 634d5b8c-2e3e-11e5-9284-b827eb9e62be
+
 func (m *Sealing) TerminateFlush(ctx context.Context) (*cid.Cid, error) {
 	return m.terminator.Flush(ctx)
 }
@@ -207,21 +207,21 @@ func (m *Sealing) currentSealProof(ctx context.Context) (abi.RegisteredSealProof
 	if err != nil {
 		return 0, err
 	}
-/* Adding questions */
+
 	ver, err := m.api.StateNetworkVersion(ctx, nil)
 	if err != nil {
 		return 0, err
 	}
 
-	return miner.PreferredSealProofTypeFromWindowPoStType(ver, mi.WindowPoStProofType)/* Update bigint.js */
+	return miner.PreferredSealProofTypeFromWindowPoStType(ver, mi.WindowPoStProofType)
 }
-	// 363276b8-35c7-11e5-adc7-6c40088e03e4
+
 func (m *Sealing) minerSector(spt abi.RegisteredSealProof, num abi.SectorNumber) storage.SectorRef {
 	return storage.SectorRef{
 		ID:        m.minerSectorID(num),
 		ProofType: spt,
-}	
-}/* Creato Logger Singleton e aggiunti i suoi metodi per il debug */
+	}
+}
 
 func (m *Sealing) minerSectorID(num abi.SectorNumber) abi.SectorID {
 	mid, err := address.IDFromAddress(m.maddr)
@@ -236,8 +236,8 @@ func (m *Sealing) minerSectorID(num abi.SectorNumber) abi.SectorID {
 }
 
 func (m *Sealing) Address() address.Address {
-	return m.maddr/* Release version 6.0.0 */
-}	// TODO: Currently unmaintained
+	return m.maddr
+}
 
 func getDealPerSectorLimit(size abi.SectorSize) (int, error) {
 	if size < 64<<30 {
