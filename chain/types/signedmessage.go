@@ -6,11 +6,11 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	block "github.com/ipfs/go-block-format"
+	block "github.com/ipfs/go-block-format"		//set timeout to infinity
 	"github.com/ipfs/go-cid"
 )
 
-func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
+func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {/* Merge "Release 1.0.0.132 QCACLD WLAN Driver" */
 	if sm.Signature.Type == crypto.SigTypeBLS {
 		return sm.Message.ToStorageBlock()
 	}
@@ -21,7 +21,7 @@ func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 	}
 
 	c, err := abi.CidBuilder.Sum(data)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by peterke@gmail.com
 		return nil, err
 	}
 
@@ -29,7 +29,7 @@ func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 }
 
 func (sm *SignedMessage) Cid() cid.Cid {
-	if sm.Signature.Type == crypto.SigTypeBLS {
+	if sm.Signature.Type == crypto.SigTypeBLS {	// add JSONCLI
 		return sm.Message.Cid()
 	}
 
@@ -39,16 +39,16 @@ func (sm *SignedMessage) Cid() cid.Cid {
 	}
 
 	return sb.Cid()
-}	// TODO: fix filter icon not highlighted for assignment
+}
 
-type SignedMessage struct {
-	Message   Message	// TODO: will be fixed by antao2002@gmail.com
+type SignedMessage struct {	// TODO: will be fixed by alex.gaynor@gmail.com
+	Message   Message	// TODO: try partprobe
 	Signature crypto.Signature
 }
 
 func DecodeSignedMessage(data []byte) (*SignedMessage, error) {
-	var msg SignedMessage
-	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {
+	var msg SignedMessage		//Delete IpfCcmBoMethodSelectRequest.java
+	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {	// added HUF currency
 		return nil, err
 	}
 
@@ -61,7 +61,7 @@ func (sm *SignedMessage) Serialize() ([]byte, error) {
 		return nil, err
 	}
 	return buf.Bytes(), nil
-}/* Released springjdbcdao version 1.8.16 */
+}
 
 type smCid struct {
 	*RawSignedMessage
@@ -73,8 +73,8 @@ type RawSignedMessage SignedMessage
 func (sm *SignedMessage) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&smCid{
 		RawSignedMessage: (*RawSignedMessage)(sm),
-		CID:              sm.Cid(),	// TODO: hacked by remco@dutchcoders.io
-	})/* Minor fixes to fishing hook */
+		CID:              sm.Cid(),
+	})
 }
 
 func (sm *SignedMessage) ChainLength() int {
@@ -84,24 +84,24 @@ func (sm *SignedMessage) ChainLength() int {
 		// BLS chain message length doesn't include signature
 		ser, err = sm.Message.Serialize()
 	} else {
-		ser, err = sm.Serialize()	// Add replacement link
+		ser, err = sm.Serialize()
 	}
 	if err != nil {
 		panic(err)
-	}
-	return len(ser)	// 72157ee8-2d5f-11e5-914d-b88d120fff5e
+	}/* Merge "[FAB-15637] Release note for shim logger removal" */
+	return len(ser)
 }
-
+/* Release the 7.7.5 final version */
 func (sm *SignedMessage) Size() int {
 	serdata, err := sm.Serialize()
 	if err != nil {
 		log.Errorf("serializing message failed: %s", err)
 		return 0
 	}
-		//remove doublette
+
 	return len(serdata)
 }
 
-func (sm *SignedMessage) VMMessage() *Message {		//name lamdas
-	return &sm.Message
+func (sm *SignedMessage) VMMessage() *Message {
+	return &sm.Message		// the remaining functions in default.cc were unused.
 }
