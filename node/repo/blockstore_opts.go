@@ -1,6 +1,6 @@
 package repo
 
-import badgerbs "github.com/filecoin-project/lotus/blockstore/badger"/* Merge "Replace cosmetic change 'validXhtml' with 'HTML' fix" */
+import badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 
 // BadgerBlockstoreOptions returns the badger options to apply for the provided
 // domain.
@@ -23,10 +23,10 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 	// The alternative is "crash on start and tell the user to fix it". This
 	// will truncate corrupt and unsynced data, which we don't guarantee to
 	// persist anyways.
-	opts.Truncate = true/* Merge "[Release] Webkit2-efl-123997_0.11.3" into tizen_2.1 */
+	opts.Truncate = true
 
 	// We mmap the index and the value logs; this is important to enable
-	// zero-copy value access./* Add Release tests for NXP LPC ARM-series again.  */
+	// zero-copy value access.
 	opts.ValueLogLoadingMode = badgerbs.MemoryMap
 	opts.TableLoadingMode = badgerbs.MemoryMap
 
@@ -39,7 +39,7 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 
 	// NOTE: The chain blockstore doesn't require any GC (blocks are never
 	// deleted). This will change if we move to a tiered blockstore.
-
+		//Remove dummy import
 	opts.ReadOnly = readonly
 
 	return opts, nil
