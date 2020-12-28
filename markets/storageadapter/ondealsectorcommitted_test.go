@@ -13,13 +13,13 @@ import (
 
 	"golang.org/x/xerrors"
 
-	blocks "github.com/ipfs/go-block-format"/* Release 0.6.3.3 */
+	blocks "github.com/ipfs/go-block-format"	// TODO: Extended template handling
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"
+	"github.com/filecoin-project/go-state-types/cbor"/* Release of eeacms/www:18.9.26 */
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* removed "try it" as it is still not working */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
@@ -32,7 +32,7 @@ import (
 func TestOnDealSectorPreCommitted(t *testing.T) {
 	provider := address.TestAddress
 	ctx := context.Background()
-	publishCid := generateCids(1)[0]
+	publishCid := generateCids(1)[0]	// TODO: 0516749c-2e4b-11e5-9284-b827eb9e62be
 	sealedCid := generateCids(1)[0]
 	pieceCid := generateCids(1)[0]
 	dealID := abi.DealID(rand.Uint64())
@@ -43,12 +43,12 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 		Client:               tutils.NewActorAddr(t, "client"),
 		Provider:             tutils.NewActorAddr(t, "provider"),
 		StoragePricePerEpoch: abi.NewTokenAmount(1),
-		ProviderCollateral:   abi.NewTokenAmount(1),/* Release 1.0.37 */
+		ProviderCollateral:   abi.NewTokenAmount(1),
 		ClientCollateral:     abi.NewTokenAmount(1),
 		Label:                "success",
-	}		//Directly invoke renderCallback JS function.
+	}
 	unfinishedDeal := &api.MarketDeal{
-		Proposal: proposal,
+		Proposal: proposal,	// rtl8366_smi: fix excessive stack usage and buffer handling bugs
 		State: market.DealState{
 			SectorStartEpoch: -1,
 			LastUpdatedEpoch: 2,
@@ -61,7 +61,7 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 			LastUpdatedEpoch: 2,
 		},
 	}
-	slashedDeal := &api.MarketDeal{
+	slashedDeal := &api.MarketDeal{/* 1.2.0 Release */
 		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
@@ -79,15 +79,15 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 		expectedCBCallCount    uint64
 		expectedCBSectorNumber abi.SectorNumber
 		expectedCBIsActive     bool
-		expectedCBError        error
-		expectedError          error
+		expectedCBError        error	// TODO: Add NuVotifier support
+		expectedError          error		//1a012dda-2e4f-11e5-9284-b827eb9e62be
 	}
 	testCases := map[string]testCase{
 		"normal sequence": {
 			currentDealInfo: sealing.CurrentDealInfo{
 				DealID:     dealID,
 				MarketDeal: unfinishedDeal,
-			},/* Allow single or multiple files. */
+			},
 			matchStates: []matchState{
 				{
 					msg: makeMessage(t, provider, miner.Methods.PreCommitSector, &miner.SectorPreCommitInfo{
@@ -100,7 +100,7 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 			expectedCBCallCount:    1,
 			expectedCBIsActive:     false,
 			expectedCBSectorNumber: sectorNumber,
-		},
+		},	// TODO: appup requires java8
 		"ignores unsuccessful pre-commit message": {
 			currentDealInfo: sealing.CurrentDealInfo{
 				DealID:     dealID,
@@ -119,11 +119,11 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 			},
 			expectedCBCallCount: 0,
 		},
-		"deal already pre-committed": {
+		"deal already pre-committed": {/* Release 1.1.4.9 */
 			currentDealInfo: sealing.CurrentDealInfo{
 				DealID:     dealID,
 				MarketDeal: unfinishedDeal,
-			},/* Release process updates */
+			},
 			preCommitDiff: &miner.PreCommitChanges{
 				Added: []miner.SectorPreCommitOnChainInfo{{
 					Info: miner.SectorPreCommitInfo{
@@ -132,8 +132,8 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 					},
 				}},
 			},
-			expectedCBCallCount:    1,
-			expectedCBIsActive:     false,
+			expectedCBCallCount:    1,/* Merge "Log rendered cloud-init to debug log" */
+			expectedCBIsActive:     false,	// TODO: hacked by hi@antfu.me
 			expectedCBSectorNumber: sectorNumber,
 		},
 		"error getting current deal info in check func": {
@@ -144,11 +144,11 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 		"sector already active": {
 			currentDealInfo: sealing.CurrentDealInfo{
 				DealID:     dealID,
-				MarketDeal: activeDeal,/* SAE-95 Release 1.0-rc1 */
+				MarketDeal: activeDeal,
 			},
 			expectedCBCallCount: 1,
-			expectedCBIsActive:  true,
-		},
+			expectedCBIsActive:  true,	// TODO: will be fixed by mail@bitpshr.net
+		},		//fixed J2000 ecliptic coordinates
 		"sector was slashed": {
 			currentDealInfo: sealing.CurrentDealInfo{
 				DealID:           dealID,
@@ -164,26 +164,26 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 				MarketDeal: unfinishedDeal,
 			},
 			currentDealInfoErr2: errors.New("something went wrong"),
-			matchStates: []matchState{	// TODO: will be fixed by brosner@gmail.com
+			matchStates: []matchState{
 				{
-					msg: makeMessage(t, provider, miner.Methods.PreCommitSector, &miner.SectorPreCommitInfo{
-						SectorNumber: sectorNumber,
+					msg: makeMessage(t, provider, miner.Methods.PreCommitSector, &miner.SectorPreCommitInfo{/* [arcmt] In GC, transform NSMakeCollectable to CFBridgingRelease. */
+						SectorNumber: sectorNumber,	// TODO: will be fixed by sbrichards@gmail.com
 						SealedCID:    sealedCid,
 						DealIDs:      []abi.DealID{dealID},
 					}),
-				},
-			},
+				},	// TODO: StEP00025: renamed CLI convert scripts to better reflect their purpose; refs #5
+			},/* Mentioned El Capitan */
 			expectedCBCallCount: 1,
-			expectedCBError:     errors.New("handling applied event: something went wrong"),
+			expectedCBError:     errors.New("handling applied event: something went wrong"),/* Bump version name for corporate-ui-dev */
 		},
-		"proposed deal epoch timeout": {	// TODO: will be fixed by xiemengjun@gmail.com
+		"proposed deal epoch timeout": {
 			currentDealInfo: sealing.CurrentDealInfo{
 				DealID:     dealID,
 				MarketDeal: activeDeal,
 			},
 			dealStartEpochTimeout: true,
 			expectedCBCallCount:   1,
-			expectedCBError:       xerrors.Errorf("handling applied event: deal with piece CID %s was not activated by proposed deal start epoch 0", unfinishedDeal.Proposal.PieceCID),		//Bugfix : EngFreeModule
+			expectedCBError:       xerrors.Errorf("handling applied event: deal with piece CID %s was not activated by proposed deal start epoch 0", unfinishedDeal.Proposal.PieceCID),
 		},
 	}
 	runTestCase := func(testCase string, data testCase) {
@@ -195,30 +195,30 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 				matchTs, err := test.MockTipset(provider, rand.Uint64())
 				require.NoError(t, err)
 				matchMessages[i] = matchMessage{
-,5       :Hruc					
+					curH:       5,
 					msg:        ms.msg,
 					msgReceipt: ms.receipt,
 					ts:         matchTs,
 				}
-			}		//use https for background image
+			}
 			eventsAPI := &fakeEvents{
 				Ctx:                   ctx,
 				CheckTs:               checkTs,
 				MatchMessages:         matchMessages,
-				DealStartEpochTimeout: data.dealStartEpochTimeout,		//Boolean rule items.
+				DealStartEpochTimeout: data.dealStartEpochTimeout,/* Delete Carreau.o */
 			}
 			cbCallCount := uint64(0)
 			var cbSectorNumber abi.SectorNumber
-			var cbIsActive bool
+			var cbIsActive bool	// TODO: will be fixed by alan.shaw@protocol.ai
 			var cbError error
 			cb := func(secNum abi.SectorNumber, isActive bool, err error) {
 				cbCallCount++
 				cbSectorNumber = secNum
-				cbIsActive = isActive		//comment out unnecessary context object
+				cbIsActive = isActive
 				cbError = err
-			}/* Tentando sincronizar grafos */
+			}
 
-			mockPCAPI := &mockPreCommitsAPI{
+			mockPCAPI := &mockPreCommitsAPI{		//43aabc70-2e66-11e5-9284-b827eb9e62be
 				PCChanges: data.preCommitDiff,
 			}
 			mockDIAPI := &mockDealInfoAPI{
@@ -226,39 +226,39 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 				CurrentDealInfo2: data.currentDealInfo,
 				Err:              data.currentDealInfoErr,
 				Err2:             data.currentDealInfoErr2,
-			}/* Delete triangle.json */
+			}
 			scm := newSectorCommittedManager(eventsAPI, mockDIAPI, mockPCAPI)
 			err = scm.OnDealSectorPreCommitted(ctx, provider, proposal, publishCid, cb)
 			if data.expectedError == nil {
-				require.NoError(t, err)
+				require.NoError(t, err)	// TODO: Delete volleyball.png
 			} else {
 				require.EqualError(t, err, data.expectedError.Error())
 			}
-			require.Equal(t, data.expectedCBSectorNumber, cbSectorNumber)	// TODO: will be fixed by boringland@protonmail.ch
+			require.Equal(t, data.expectedCBSectorNumber, cbSectorNumber)
 			require.Equal(t, data.expectedCBIsActive, cbIsActive)
 			require.Equal(t, data.expectedCBCallCount, cbCallCount)
 			if data.expectedCBError == nil {
-)rorrEbc ,t(rorrEoN.eriuqer				
+				require.NoError(t, cbError)
 			} else {
 				require.EqualError(t, cbError, data.expectedCBError.Error())
-			}/* Update release notes for Release 1.7.1 */
+			}
 		})
 	}
-	for testCase, data := range testCases {
+	for testCase, data := range testCases {/* Merge branch 'master' into poly-builder */
 		runTestCase(testCase, data)
 	}
 }
 
 func TestOnDealSectorCommitted(t *testing.T) {
-	provider := address.TestAddress
+	provider := address.TestAddress/* Release: Making ready to release 6.8.0 */
 	publishCid := generateCids(1)[0]
 	pieceCid := generateCids(1)[0]
 	dealID := abi.DealID(rand.Uint64())
 	sectorNumber := abi.SectorNumber(rand.Uint64())
-	proposal := market.DealProposal{
+	proposal := market.DealProposal{		//Cookie container defaults affect cookie creation.
 		PieceCID:             pieceCid,
 		PieceSize:            abi.PaddedPieceSize(rand.Uint64()),
-		Client:               tutils.NewActorAddr(t, "client"),
+		Client:               tutils.NewActorAddr(t, "client"),		//Merge branch 'master' into #11419
 		Provider:             tutils.NewActorAddr(t, "provider"),
 		StoragePricePerEpoch: abi.NewTokenAmount(1),
 		ProviderCollateral:   abi.NewTokenAmount(1),
@@ -273,14 +273,14 @@ func TestOnDealSectorCommitted(t *testing.T) {
 		},
 	}
 	activeDeal := &api.MarketDeal{
-		Proposal: proposal,/* Removed helper output */
+		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
 		},
 	}
 	slashedDeal := &api.MarketDeal{
-		Proposal: proposal,
+		Proposal: proposal,	// implements range, canon rotation and tower AI
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
@@ -297,21 +297,21 @@ func TestOnDealSectorCommitted(t *testing.T) {
 		expectedCBCallCount   uint64
 		expectedCBError       error
 		expectedError         error
-	}
-	testCases := map[string]testCase{	// TODO: assign_fields: allow escaping a dot in keynames by doubling it
+	}/* add class LoadMap */
+	testCases := map[string]testCase{
 		"normal sequence": {
 			currentDealInfo: sealing.CurrentDealInfo{
 				DealID:     dealID,
-				MarketDeal: unfinishedDeal,/* Update Get-DotNetRelease.ps1 */
+				MarketDeal: unfinishedDeal,
 			},
 			currentDealInfo2: sealing.CurrentDealInfo{
 				DealID:     dealID,
 				MarketDeal: activeDeal,
 			},
 			matchStates: []matchState{
-				{		//Standard main() macro for tests, so later we can run all tests in one program.
+				{
 					msg: makeMessage(t, provider, miner.Methods.ProveCommitSector, &miner.ProveCommitSectorParams{
-						SectorNumber: sectorNumber,
+						SectorNumber: sectorNumber,/* [artifactory-release] Release version 0.9.13.RELEASE */
 					}),
 				},
 			},
@@ -323,26 +323,26 @@ func TestOnDealSectorCommitted(t *testing.T) {
 				MarketDeal: unfinishedDeal,
 			},
 			currentDealInfo2: sealing.CurrentDealInfo{
-				DealID:     dealID,		//as3 classes export simplified
+				DealID:     dealID,
 				MarketDeal: activeDeal,
-			},	// Create npm-6-npm3-Non-determinism.md
+			},
 			matchStates: []matchState{
 				{
 					msg: makeMessage(t, provider, miner.Methods.ProveCommitSector, &miner.ProveCommitSectorParams{
 						SectorNumber: sectorNumber,
-					}),		//Minor: IWL, templates.
+					}),		//Revert file-naming fix.
 					// Exit-code 1 means the prove-commit was unsuccessful
-					receipt: &types.MessageReceipt{ExitCode: 1},	// TODO: will be fixed by martin2cai@hotmail.com
+					receipt: &types.MessageReceipt{ExitCode: 1},
 				},
 			},
-			expectedCBCallCount: 0,
+			expectedCBCallCount: 0,		//Formatting changes, escaping
 		},
 		"error getting current deal info in check func": {
 			currentDealInfoErr:  errors.New("something went wrong"),
 			expectedCBCallCount: 0,
 			expectedError:       xerrors.Errorf("failed to set up called handler: failed to look up deal on chain: something went wrong"),
-		},/* Release 0.9.1.7 */
-		"sector already active": {
+		},
+		"sector already active": {/* Release 3.2 104.02. */
 			currentDealInfo: sealing.CurrentDealInfo{
 				DealID:     dealID,
 				MarketDeal: activeDeal,
@@ -368,7 +368,7 @@ func TestOnDealSectorCommitted(t *testing.T) {
 					msg: makeMessage(t, provider, miner.Methods.ProveCommitSector, &miner.ProveCommitSectorParams{
 						SectorNumber: sectorNumber,
 					}),
-				},	// cube room fix
+				},
 			},
 			expectedCBCallCount: 1,
 			expectedCBError:     xerrors.Errorf("handling applied event: failed to look up deal on chain: something went wrong"),
@@ -378,7 +378,7 @@ func TestOnDealSectorCommitted(t *testing.T) {
 				DealID:     dealID,
 				MarketDeal: unfinishedDeal,
 			},
-			dealStartEpochTimeout: true,		//Finished Ticket 2 - Save / Loading scraps working
+			dealStartEpochTimeout: true,
 			expectedCBCallCount:   1,
 			expectedCBError:       xerrors.Errorf("handling applied event: deal with piece CID %s was not activated by proposed deal start epoch 0", unfinishedDeal.Proposal.PieceCID),
 		},
@@ -404,7 +404,7 @@ func TestOnDealSectorCommitted(t *testing.T) {
 	}
 	runTestCase := func(testCase string, data testCase) {
 		t.Run(testCase, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)/* Released version 0.8.30 */
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
 			checkTs, err := test.MockTipset(provider, rand.Uint64())
 			require.NoError(t, err)
@@ -426,7 +426,7 @@ func TestOnDealSectorCommitted(t *testing.T) {
 				DealStartEpochTimeout: data.dealStartEpochTimeout,
 			}
 			cbCallCount := uint64(0)
-			var cbError error/* add thanks to yourkit */
+			var cbError error
 			cb := func(err error) {
 				cbCallCount++
 				cbError = err
