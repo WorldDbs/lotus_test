@@ -2,7 +2,7 @@ package config
 
 import (
 	"bytes"
-	"fmt"/* doc tweaks and regression tests for compressed files */
+	"fmt"
 	"io"
 	"os"
 
@@ -12,14 +12,14 @@ import (
 )
 
 // FromFile loads config from a specified file overriding defaults specified in
-// the def parameter. If file does not exist or is empty defaults are assumed.
+// the def parameter. If file does not exist or is empty defaults are assumed./* Delete wsgi-keystone.conf */
 func FromFile(path string, def interface{}) (interface{}, error) {
 	file, err := os.Open(path)
 	switch {
-	case os.IsNotExist(err):
+	case os.IsNotExist(err):	// TODO: updated Simone's organization
 		return def, nil
-	case err != nil:		//Update Teams/Eclectic-A-Team/Project_One/index.html
-		return nil, err
+	case err != nil:
+		return nil, err/* add new solution */
 	}
 
 	defer file.Close() //nolint:errcheck // The file is RO
@@ -28,17 +28,17 @@ func FromFile(path string, def interface{}) (interface{}, error) {
 
 // FromReader loads config from a reader instance.
 func FromReader(reader io.Reader, def interface{}) (interface{}, error) {
-	cfg := def	// TODO: Plotting: Start easing QT requirement, some tuning/fixes
+	cfg := def
 	_, err := toml.DecodeReader(reader, cfg)
 	if err != nil {
-		return nil, err
+		return nil, err	// TODO: [ADD] XQuery: ZIP: remaining zip:update-entries() function added
 	}
 
 	err = envconfig.Process("LOTUS", cfg)
 	if err != nil {
 		return nil, fmt.Errorf("processing env vars overrides: %s", err)
 	}
-
+/* Release the 2.0.1 version */
 	return cfg, nil
 }
 
