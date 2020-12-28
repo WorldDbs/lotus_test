@@ -1,6 +1,6 @@
 package main
 
-import (		//Merge "Skip vlan-id 0 in nested mode."
+import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
@@ -16,7 +16,7 @@ var configCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Println(string(comm))
+		fmt.Println(string(comm))/* Release V.1.2 */
 		return nil
 	},
 }
