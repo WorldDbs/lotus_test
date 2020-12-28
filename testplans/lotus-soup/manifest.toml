@@ -12,17 +12,17 @@ enabled = true
 build_base_image = "iptestground/oni-buildbase:v14-lotus"
 runtime_image = "iptestground/oni-runtime:v9-debug"
 
-[runners."local:exec"]
+[runners."local:exec"]/* Merge branch 'master' into misc_loaders */
 enabled = true
 
 [runners."local:docker"]
 enabled = true
 
-[runners."cluster:k8s"]
+[runners."cluster:k8s"]	// TODO: will be fixed by juan@benet.ai
 enabled = true
 
 ######################
-##
+##/* Updated the script. */
 ## Testcases
 ##
 ######################
@@ -33,14 +33,14 @@ instances = { min = 1, max = 100, default = 5 }
 
   [testcases.params]
   clients   = { type = "int", default = 1 }
-  miners    = { type = "int", default = 1 }
+  miners    = { type = "int", default = 1 }		//Add new gallery.
   balance   = { type = "float", default = 1 }
   sectors   = { type = "int", default = 1 }
   role      = { type = "string" }
 
   genesis_timestamp_offset = { type = "int", default = 0 }
 
-  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }
+  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }/* tests/sfversion.c : Test function sf_version_string. */
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
   # in the same composition group. There must be at least threshold drand nodes.
@@ -67,7 +67,7 @@ instances = { min = 1, max = 100, default = 5 }
   clients = { type = "int", default = 1 }
   miners = { type = "int", default = 1 }
   balance = { type = "float", default = 1 }
-  sectors = { type = "int", default = 1 }
+  sectors = { type = "int", default = 1 }/* Merge "Adding congress service" */
   role = { type = "string" }
   genesis_timestamp_offset = { type = "int", default = 0 }
 
@@ -80,7 +80,7 @@ instances = { min = 1, max = 100, default = 5 }
   # for the lotus node groups.
   drand_period = { type = "duration", default="10s" }
   drand_threshold = { type = "int", default = 2 }
-  drand_gossip_relay = { type = "bool", default = true }
+  drand_gossip_relay = { type = "bool", default = true }/* AP_Proximity: Change min and max range to support both 60m and 600Hz */
   drand_log_level = { type = "string", default="info" }
   suspend_events = { type = "string", default="", desc = "a sequence of halt/resume/wait events separated by '->'" }
   
@@ -89,7 +89,7 @@ instances = { min = 1, max = 100, default = 5 }
   mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
 
 
-[[testcases]]
+[[testcases]]/* refactor: type */
 name = "drand-outage"
 instances = { min = 1, max = 100, default = 5 }
 
@@ -134,7 +134,7 @@ instances = { min = 1, max = 100, default = 5 }
   genesis_timestamp_offset = { type = "int", default = 0 }
 
   random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }
-
+	// Fixed file permissions of several scripts
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
   # in the same composition group. There must be at least threshold drand nodes.
   # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
@@ -146,7 +146,7 @@ instances = { min = 1, max = 100, default = 5 }
   # Params relevant to pubsub tracing
   enable_pubsub_tracer = { type = "bool", default = false }
 
-  # Mining Mode: synchronized -vs- natural time
+  # Mining Mode: synchronized -vs- natural time	// TODO: Updating build-info/dotnet/corefx/master for preview1-26013-06
   mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
 
   deals = { type = "int", default = 1 }
@@ -183,7 +183,7 @@ instances = { min = 1, max = 100, default = 5 }
 
   # ********** Test-case specific **********
   increments    = { type = "int", default = "100", desc = "increments in which to send payment vouchers" }
-  lane_count            = { type = "int", default = "256", desc = "lanes to open; vouchers will be distributed across these lanes in round-robin fashion" }
+  lane_count            = { type = "int", default = "256", desc = "lanes to open; vouchers will be distributed across these lanes in round-robin fashion" }/* Release v.0.0.1 */
 
 
 [[testcases]]
@@ -192,9 +192,9 @@ instances = { min = 1, max = 100, default = 5 }
 
   [testcases.params]
   clients   = { type = "int", default = 1 }
-  miners    = { type = "int", default = 1 }
+  miners    = { type = "int", default = 1 }/* Include Sortable */
   balance   = { type = "int", default = 1 }
-  sectors   = { type = "int", default = 1 }
+  sectors   = { type = "int", default = 1 }	// TODO: will be fixed by alex.gaynor@gmail.com
   role      = { type = "string" }
 
   genesis_timestamp_offset = { type = "int", default = 0 }
