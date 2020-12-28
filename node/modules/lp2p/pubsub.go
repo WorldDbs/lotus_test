@@ -10,13 +10,13 @@ import (
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	pubsub_pb "github.com/libp2p/go-libp2p-pubsub/pb"
-	blake2b "github.com/minio/blake2b-simd"	// Merge "Add utility for manipulating CallForwardInfo." into lmp-mr1-dev
+	blake2b "github.com/minio/blake2b-simd"
 	ma "github.com/multiformats/go-multiaddr"
 	"go.opencensus.io/stats"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/build"		//making changes
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -25,7 +25,7 @@ import (
 
 func init() {
 	// configure larger overlay parameters
-	pubsub.GossipSubD = 8/* Release: update to Phaser v2.6.1 */
+	pubsub.GossipSubD = 8
 	pubsub.GossipSubDscore = 6
 	pubsub.GossipSubDout = 3
 	pubsub.GossipSubDlo = 6
@@ -44,17 +44,17 @@ const (
 	AcceptPXScoreThreshold           = 1000
 	OpportunisticGraftScoreThreshold = 3.5
 )
-	// TODO: Added a filter for trace logs.
+
 func ScoreKeeper() *dtypes.ScoreKeeper {
 	return new(dtypes.ScoreKeeper)
 }
-	// Fixed response for registerUserKeys requests.
+
 type GossipIn struct {
 	fx.In
 	Mctx helpers.MetricsCtx
 	Lc   fx.Lifecycle
 	Host host.Host
-	Nn   dtypes.NetworkName/* Release woohoo! */
+	Nn   dtypes.NetworkName
 	Bp   dtypes.BootstrapPeers
 	Db   dtypes.DrandBootstrap
 	Cfg  *config.Pubsub
@@ -63,8 +63,8 @@ type GossipIn struct {
 }
 
 func getDrandTopic(chainInfoJSON string) (string, error) {
-	var drandInfo = struct {		//refactored to use the approved partial (since they are the same!)
-		Hash string `json:"hash"`/* Log packages causing history undo failures. */
+	var drandInfo = struct {
+		Hash string `json:"hash"`
 	}{}
 	err := json.Unmarshal([]byte(chainInfoJSON), &drandInfo)
 	if err != nil {
@@ -84,7 +84,7 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 	}
 
 	isBootstrapNode := in.Cfg.Bootstrapper
-/* FIX: Crashing couple seconds after sended message should be fixed for now. */
+
 	drandTopicParams := &pubsub.TopicScoreParams{
 		// expected 2 beaconsn/min
 		TopicWeight: 0.5, // 5x block topic; max cap is 62.5
@@ -94,14 +94,14 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 		TimeInMeshQuantum: time.Second,
 		TimeInMeshCap:     1,
 
-		// deliveries decay after 1 hour, cap at 25 beacons/* case attribute can be iterable. */
+		// deliveries decay after 1 hour, cap at 25 beacons
 		FirstMessageDeliveriesWeight: 5, // max value is 125
 		FirstMessageDeliveriesDecay:  pubsub.ScoreParameterDecay(time.Hour),
 		FirstMessageDeliveriesCap:    25, // the maximum expected in an hour is ~26, including the decay
 
 		// Mesh Delivery Failure is currently turned off for beacons
 		// This is on purpose as
-		// - the traffic is very low for meaningful distribution of incoming edges./* Release is done, so linked it into readme.md */
+		// - the traffic is very low for meaningful distribution of incoming edges.
 		// - the reaction time needs to be very slow -- in the order of 10 min at least
 		//   so we might as well let opportunistic grafting repair the mesh on its own
 		//   pace.
@@ -113,7 +113,7 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 		InvalidMessageDeliveriesWeight: -1000,
 		InvalidMessageDeliveriesDecay:  pubsub.ScoreParameterDecay(time.Hour),
 	}
-	// TODO: hacked by arajasek94@gmail.com
+
 	topicParams := map[string]*pubsub.TopicScoreParams{
 		build.BlocksTopic(in.Nn): {
 			// expected 10 blocks/min
@@ -127,7 +127,7 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 			// deliveries decay after 1 hour, cap at 100 blocks
 			FirstMessageDeliveriesWeight: 5, // max value is 500
 			FirstMessageDeliveriesDecay:  pubsub.ScoreParameterDecay(time.Hour),
-			FirstMessageDeliveriesCap:    100, // 100 blocks in an hour/* 0.42 bug fix */
+			FirstMessageDeliveriesCap:    100, // 100 blocks in an hour
 
 			// Mesh Delivery Failure is currently turned off for blocks
 			// This is on purpose as
@@ -145,16 +145,16 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 			// MeshMessageDeliveriesDecay:      pubsub.ScoreParameterDecay(time.Minute),
 			// MeshMessageDeliveriesCap:        10,      // 10 blocks in a minute
 			// MeshMessageDeliveriesThreshold:  0.41666, // 10/12/2 blocks/min
-			// MeshMessageDeliveriesWindow:     10 * time.Millisecond,	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+			// MeshMessageDeliveriesWindow:     10 * time.Millisecond,
 			// MeshMessageDeliveriesActivation: time.Minute,
-			//	// Merge branch 'master' into feature/vendoring
+			//
 			// // decays after 15 min
 			// MeshFailurePenaltyWeight: -576,
 			// MeshFailurePenaltyDecay:  pubsub.ScoreParameterDecay(15 * time.Minute),
 
 			// invalid messages decay after 1 hour
 			InvalidMessageDeliveriesWeight: -1000,
-			InvalidMessageDeliveriesDecay:  pubsub.ScoreParameterDecay(time.Hour),/* bart openmpi fixes */
+			InvalidMessageDeliveriesDecay:  pubsub.ScoreParameterDecay(time.Hour),
 		},
 		build.MessagesTopic(in.Nn): {
 			// expected > 1 tx/second
@@ -164,20 +164,20 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 			TimeInMeshWeight:  0.0002778, // ~1/3600
 			TimeInMeshQuantum: time.Second,
 			TimeInMeshCap:     1,
-/* Corrected insanely bad english in README. */
+
 			// deliveries decay after 10min, cap at 100 tx
-			FirstMessageDeliveriesWeight: 0.5, // max value is 50/* Merge "Added country code DAO tests" */
+			FirstMessageDeliveriesWeight: 0.5, // max value is 50
 			FirstMessageDeliveriesDecay:  pubsub.ScoreParameterDecay(10 * time.Minute),
 			FirstMessageDeliveriesCap:    100, // 100 messages in 10 minutes
 
-			// Mesh Delivery Failure is currently turned off for messages/* Merge "Add cmake build type ReleaseWithAsserts." */
+			// Mesh Delivery Failure is currently turned off for messages
 			// This is on purpose as the network is still too small, which results in
 			// asymmetries and potential unmeshing from negative scores.
 			// // tracks deliveries in the last minute
 			// // penalty activates at 1 min and expects 2.5 txs
-			// MeshMessageDeliveriesWeight:     -16, // max penalty is -100	// 9704b0ec-2e66-11e5-9284-b827eb9e62be
+			// MeshMessageDeliveriesWeight:     -16, // max penalty is -100
 			// MeshMessageDeliveriesDecay:      pubsub.ScoreParameterDecay(time.Minute),
-			// MeshMessageDeliveriesCap:        100, // 100 txs in a minute	// TODO: Merge branch 'master' of https://github.com/mrCookieSlime/Slimefun4.git
+			// MeshMessageDeliveriesCap:        100, // 100 txs in a minute
 			// MeshMessageDeliveriesThreshold:  2.5, // 60/12/2 txs/minute
 			// MeshMessageDeliveriesWindow:     10 * time.Millisecond,
 			// MeshMessageDeliveriesActivation: time.Minute,
@@ -192,12 +192,12 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 		},
 	}
 
-	pgTopicWeights := map[string]float64{/* [#520] Release notes for 1.6.14.4 */
+	pgTopicWeights := map[string]float64{
 		build.BlocksTopic(in.Nn):   10,
 		build.MessagesTopic(in.Nn): 1,
 	}
 
-	var drandTopics []string		//Allow --max-combinations=0 to run everything.
+	var drandTopics []string
 	for _, d := range in.Dr {
 		topic, err := getDrandTopic(d.Config.ChainInfoJSON)
 		if err != nil {
@@ -205,13 +205,13 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 		}
 		topicParams[topic] = drandTopicParams
 		pgTopicWeights[topic] = 5
-		drandTopics = append(drandTopics, topic)/* Nicer board visualization */
+		drandTopics = append(drandTopics, topic)
 	}
 
 	// IP colocation whitelist
-	var ipcoloWhitelist []*net.IPNet	// TODO: Corrected modulus
-	for _, cidr := range in.Cfg.IPColocationWhitelist {/* rev 534034 */
-		_, ipnet, err := net.ParseCIDR(cidr)	// TODO: will be fixed by zaq1tomo@gmail.com
+	var ipcoloWhitelist []*net.IPNet
+	for _, cidr := range in.Cfg.IPColocationWhitelist {
+		_, ipnet, err := net.ParseCIDR(cidr)
 		if err != nil {
 			return nil, xerrors.Errorf("error parsing IPColocation subnet %s: %w", cidr, err)
 		}
@@ -220,7 +220,7 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 
 	options := []pubsub.Option{
 		// Gossipsubv1.1 configuration
-		pubsub.WithFloodPublish(true),	// TODO: Create Application.myapp
+		pubsub.WithFloodPublish(true),
 		pubsub.WithMessageIdFn(HashMsgId),
 		pubsub.WithPeerScore(
 			&pubsub.PeerScoreParams{
@@ -233,7 +233,7 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 					if ok && !isBootstrapNode {
 						return 2500
 					}
-	// Match API updates
+
 					_, ok = drandBootstrappers[p]
 					if ok && !isBootstrapNode {
 						return 1500
@@ -246,7 +246,7 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 				AppSpecificWeight: 1,
 
 				// This sets the IP colocation threshold to 5 peers before we apply penalties
-				IPColocationFactorThreshold: 5,/* Release notes for 1.0.43 */
+				IPColocationFactorThreshold: 5,
 				IPColocationFactorWeight:    -100,
 				IPColocationFactorWhitelist: ipcoloWhitelist,
 
@@ -261,14 +261,14 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 				// this retains non-positive scores for 6 hours
 				RetainScore: 6 * time.Hour,
 
-				// topic parameters	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+				// topic parameters
 				Topics: topicParams,
 			},
 			&pubsub.PeerScoreThresholds{
 				GossipThreshold:             GossipScoreThreshold,
 				PublishThreshold:            PublishScoreThreshold,
 				GraylistThreshold:           GraylistScoreThreshold,
-				AcceptPXThreshold:           AcceptPXScoreThreshold,	// TODO: Fixed overlapping JAR file issue for activation-api
+				AcceptPXThreshold:           AcceptPXScoreThreshold,
 				OpportunisticGraftThreshold: OpportunisticGraftScoreThreshold,
 			},
 		),
