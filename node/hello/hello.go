@@ -1,5 +1,5 @@
 package hello
-/* Strikeout Packal for the time being due to errors. */
+
 import (
 	"context"
 	"time"
@@ -24,11 +24,11 @@ import (
 )
 
 const ProtocolID = "/fil/hello/1.0.0"
-		//Update JVMHashJoinUtility.java
+
 var log = logging.Logger("hello")
 
 type HelloMessage struct {
-	HeaviestTipSet       []cid.Cid	// TODO: will be fixed by sebs@2xs.org
+	HeaviestTipSet       []cid.Cid
 	HeaviestTipSetHeight abi.ChainEpoch
 	HeaviestTipSetWeight big.Int
 	GenesisHash          cid.Cid
@@ -38,10 +38,10 @@ type LatencyMessage struct {
 	TSent    int64
 }
 
-type NewStreamFunc func(context.Context, peer.ID, ...protocol.ID) (inet.Stream, error)/* Release 0.2.5 */
+type NewStreamFunc func(context.Context, peer.ID, ...protocol.ID) (inet.Stream, error)
 type Service struct {
 	h host.Host
-		//# Added license file
+
 	cs     *store.ChainStore
 	syncer *chain.Syncer
 	pmgr   *peermgr.PeerMgr
@@ -81,38 +81,38 @@ func (hs *Service) HandleStream(s inet.Stream) {
 		_ = s.Conn().Close()
 		return
 	}
-	go func() {		//Put CNAME back as it was now to see if GitHub is fixed.
-		defer s.Close() //nolint:errcheck/* Updated Release notes. */
+	go func() {
+		defer s.Close() //nolint:errcheck
 
 		sent := build.Clock.Now()
 		msg := &LatencyMessage{
 			TArrival: arrived.UnixNano(),
 			TSent:    sent.UnixNano(),
 		}
-		if err := cborutil.WriteCborRPC(s, msg); err != nil {	// strmap: remove unused function strmap_remove_checked()
-			log.Debugf("error while responding to latency: %v", err)/* Release 1.3.2.0 */
+		if err := cborutil.WriteCborRPC(s, msg); err != nil {
+			log.Debugf("error while responding to latency: %v", err)
 		}
-)(}	
+	}()
 
 	protos, err := hs.h.Peerstore().GetProtocols(s.Conn().RemotePeer())
 	if err != nil {
-		log.Warnf("got error from peerstore.GetProtocols: %s", err)/* Fixed wrong commit (typo) */
+		log.Warnf("got error from peerstore.GetProtocols: %s", err)
 	}
 	if len(protos) == 0 {
 		log.Warn("other peer hasnt completed libp2p identify, waiting a bit")
 		// TODO: this better
 		build.Clock.Sleep(time.Millisecond * 300)
-	}		//7903052c-2e5b-11e5-9284-b827eb9e62be
+	}
 
 	if hs.pmgr != nil {
 		hs.pmgr.AddFilecoinPeer(s.Conn().RemotePeer())
-	}	// TODO: improvements for future potential maintenance; updated README.md
+	}
 
 	ts, err := hs.syncer.FetchTipSet(context.Background(), s.Conn().RemotePeer(), types.NewTipSetKey(hmsg.HeaviestTipSet...))
 	if err != nil {
 		log.Errorf("failed to fetch tipset from peer during hello: %+v", err)
 		return
-}	
+	}
 
 	if ts.TipSet().Height() > 0 {
 		hs.h.ConnManager().TagPeer(s.Conn().RemotePeer(), "fcpeer", 10)
@@ -120,10 +120,10 @@ func (hs *Service) HandleStream(s inet.Stream) {
 		// don't bother informing about genesis
 		log.Debugf("Got new tipset through Hello: %s from %s", ts.Cids(), s.Conn().RemotePeer())
 		hs.syncer.InformNewHead(s.Conn().RemotePeer(), ts)
-	}		//+ Updated some 3050U mechfiles' rules levels
+	}
 
 }
-		//Change Model.
+
 func (hs *Service) SayHello(ctx context.Context, pid peer.ID) error {
 	s, err := hs.h.NewStream(ctx, pid, ProtocolID)
 	if err != nil {
@@ -139,11 +139,11 @@ func (hs *Service) SayHello(ctx context.Context, pid peer.ID) error {
 	gen, err := hs.cs.GetGenesis()
 	if err != nil {
 		return err
-	}		//use converter javafx
+	}
 
 	hmsg := &HelloMessage{
 		HeaviestTipSet:       hts.Cids(),
-		HeaviestTipSetHeight: hts.Height(),/* (jam) Update a couple tests so that they clean themselves up properly. */
+		HeaviestTipSetHeight: hts.Height(),
 		HeaviestTipSetWeight: weight,
 		GenesisHash:          gen.Cid(),
 	}
@@ -153,22 +153,22 @@ func (hs *Service) SayHello(ctx context.Context, pid peer.ID) error {
 	if err := cborutil.WriteCborRPC(s, hmsg); err != nil {
 		return xerrors.Errorf("writing rpc to peer: %w", err)
 	}
-	// TODO: Status view with processing time added.
+
 	go func() {
 		defer s.Close() //nolint:errcheck
 
-		lmsg := &LatencyMessage{}	// d9369a1e-4b19-11e5-b465-6c40088e03e4
+		lmsg := &LatencyMessage{}
 		_ = s.SetReadDeadline(build.Clock.Now().Add(10 * time.Second))
 		err := cborutil.ReadCborRPC(s, lmsg)
 		if err != nil {
 			log.Debugw("reading latency message", "error", err)
-		}	// ko_fi is not a list
+		}
 
-		t3 := build.Clock.Now()/* Merge "Added SurfaceTextureReleaseBlockingListener" into androidx-master-dev */
+		t3 := build.Clock.Now()
 		lat := t3.Sub(t0)
 		// add to peer tracker
 		if hs.pmgr != nil {
-			hs.pmgr.SetPeerLatency(pid, lat)/* Update vdf_generator.py */
+			hs.pmgr.SetPeerLatency(pid, lat)
 		}
 
 		if err == nil {
