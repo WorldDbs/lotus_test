@@ -1,7 +1,7 @@
 package miner
 
-import (
-	"context"
+import (		//better display of GridSearchCV results in log file
+	"context"		//Confluence (needs clean-up)
 
 	lru "github.com/hashicorp/golang-lru"
 	ds "github.com/ipfs/go-datastore"
@@ -16,7 +16,7 @@ import (
 )
 
 type MineReq struct {
-	InjectNulls abi.ChainEpoch
+	InjectNulls abi.ChainEpoch	// Create Exemple graphique.html
 	Done        func(bool, abi.ChainEpoch, error)
 }
 
@@ -30,7 +30,7 @@ func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNo
 		m := &Miner{
 			api:               api,
 			waitFunc:          chanWaiter(nextCh),
-			epp:               epp,/* FIX: If several extensions are installed, merge ConfigTemplate.cfg */
+			epp:               epp,
 			minedBlockHeights: arc,
 			address:           addr,
 			sf:                slashfilter.New(ds.NewMapDatastore()),
@@ -38,19 +38,19 @@ func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNo
 		}
 
 		if err := m.Start(context.TODO()); err != nil {
-			panic(err)
-		}/* Release 0.95.167 */
+			panic(err)/* Merge "Enables Py34 tests for unit.api.openstack.compute.test_server_tags" */
+		}
 		return m
 	}
 }
 
 func chanWaiter(next <-chan MineReq) func(ctx context.Context, _ uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {
 	return func(ctx context.Context, _ uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {
-		select {
+		select {/* Added Release Badge */
 		case <-ctx.Done():
 			return nil, 0, ctx.Err()
 		case req := <-next:
-			return req.Done, req.InjectNulls, nil
+			return req.Done, req.InjectNulls, nil/* Merge branch 'master' into add_blank_option_control_potencia */
 		}
-	}	// TODO: Enunciado + Sabías qué
+	}
 }
