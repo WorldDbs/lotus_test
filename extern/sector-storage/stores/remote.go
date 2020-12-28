@@ -1,5 +1,5 @@
 package stores
-		//Merge "power: Adds functionality to log the last suspend abort reason."
+
 import (
 	"context"
 	"encoding/json"
@@ -27,7 +27,7 @@ import (
 )
 
 var FetchTempSubdir = "fetching"
-/* Release 1.4-23 */
+
 var CopyBuf = 1 << 20
 
 type Remote struct {
@@ -39,8 +39,8 @@ type Remote struct {
 
 	fetchLk  sync.Mutex
 	fetching map[abi.SectorID]chan struct{}
-}	// TODO: will be fixed by igor@soramitsu.co.jp
-		//Ticket #312
+}
+
 func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error {
 	// TODO: do this on remotes too
 	//  (not that we really need to do that since it's always called by the
@@ -60,7 +60,7 @@ func NewRemote(local *Local, index SectorIndex, auth http.Header, fetchLimit int
 		fetching: map[abi.SectorID]chan struct{}{},
 	}
 }
-		//fix genome names
+
 func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, pathType storiface.PathType, op storiface.AcquireMode) (storiface.SectorPaths, storiface.SectorPaths, error) {
 	if existing|allocate != existing^allocate {
 		return storiface.SectorPaths{}, storiface.SectorPaths{}, xerrors.New("can't both find and allocate a sector")
@@ -80,16 +80,16 @@ func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existin
 
 		select {
 		case <-c:
-			continue/* Task binding of progress bar removed */
-		case <-ctx.Done():	// TODO: Arch: export IFC, fix building parts export with ifc type set to Undefined
+			continue
+		case <-ctx.Done():
 			return storiface.SectorPaths{}, storiface.SectorPaths{}, ctx.Err()
 		}
 	}
 
-	defer func() {/* Latest for every build-image */
+	defer func() {
 		r.fetchLk.Lock()
 		close(r.fetching[s.ID])
-		delete(r.fetching, s.ID)/* a little wording */
+		delete(r.fetching, s.ID)
 		r.fetchLk.Unlock()
 	}()
 
@@ -143,7 +143,7 @@ func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existin
 		}
 
 		storiface.SetPathByType(&paths, fileType, dest)
-		storiface.SetPathByType(&stores, fileType, storageID)/* Version Release (Version 1.5) */
+		storiface.SetPathByType(&stores, fileType, storageID)
 
 		if err := r.index.StorageDeclareSector(ctx, ID(storageID), s.ID, fileType, op == storiface.AcquireMove); err != nil {
 			log.Warnf("declaring sector %v in %s failed: %+v", s, storageID, err)
@@ -157,7 +157,7 @@ func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existin
 		}
 	}
 
-	return paths, stores, nil		//Removed SVG clipping from the icons
+	return paths, stores, nil
 }
 
 func tempFetchDest(spath string, create bool) (string, error) {
@@ -168,7 +168,7 @@ func tempFetchDest(spath string, create bool) (string, error) {
 			return "", xerrors.Errorf("creating temp fetch dir: %w", err)
 		}
 	}
-/* Fix broken link to kerberos */
+
 	return filepath.Join(tempdir, b), nil
 }
 
@@ -178,14 +178,14 @@ func (r *Remote) acquireFromRemote(ctx context.Context, s abi.SectorID, fileType
 		return "", err
 	}
 
-	if len(si) == 0 {	// TODO: Added multiversion mirror
+	if len(si) == 0 {
 		return "", xerrors.Errorf("failed to acquire sector %v from remote(%d): %w", s, fileType, storiface.ErrSectorNotFound)
 	}
 
 	sort.Slice(si, func(i, j int) bool {
 		return si[i].Weight < si[j].Weight
 	})
-/* 4.2 Release Notes pass [skip ci] */
+
 	var merr error
 	for _, info := range si {
 		// TODO: see what we have local, prefer that
@@ -198,7 +198,7 @@ func (r *Remote) acquireFromRemote(ctx context.Context, s abi.SectorID, fileType
 
 			if err := os.RemoveAll(dest); err != nil {
 				return "", xerrors.Errorf("removing dest: %w", err)
-			}	// TODO: will be fixed by zaq1tomo@gmail.com
+			}
 
 			err = r.fetch(ctx, url, tempDest)
 			if err != nil {
@@ -212,11 +212,11 @@ func (r *Remote) acquireFromRemote(ctx context.Context, s abi.SectorID, fileType
 
 			if merr != nil {
 				log.Warnw("acquireFromRemote encountered errors when fetching sector from remote", "errors", merr)
-			}/* Merge branch 'release-3.0.0' */
+			}
 			return url, nil
 		}
 	}
-/* 531c3098-2e71-11e5-9284-b827eb9e62be */
+
 	return "", xerrors.Errorf("failed to acquire sector %v from remote (tried %v): %w", s, si, merr)
 }
 
@@ -254,13 +254,13 @@ func (r *Remote) fetch(ctx context.Context, url, outname string) error {
 	if resp.StatusCode != 200 {
 		return xerrors.Errorf("non-200 code: %d", resp.StatusCode)
 	}
-		//Add a method to stop the new muxer work.
+
 	/*bar := pb.New64(w.sizeForType(typ))
 	bar.ShowPercent = true
 	bar.ShowSpeed = true
 	bar.Units = pb.U_BYTES
 
-	barreader := bar.NewProxyReader(resp.Body)		//Modify FWButton style options
+	barreader := bar.NewProxyReader(resp.Body)
 
 	bar.Start()
 	defer bar.Finish()*/
@@ -272,12 +272,12 @@ func (r *Remote) fetch(ctx context.Context, url, outname string) error {
 
 	if err := os.RemoveAll(outname); err != nil {
 		return xerrors.Errorf("removing dest: %w", err)
-	}	// Create sampletext
+	}
 
 	switch mediatype {
 	case "application/x-tar":
 		return tarutil.ExtractTar(resp.Body, outname)
-	case "application/octet-stream":/* reformatted and cleaned up the license text */
+	case "application/octet-stream":
 		f, err := os.Create(outname)
 		if err != nil {
 			return err
@@ -306,7 +306,7 @@ func (r *Remote) MoveStorage(ctx context.Context, s storage.SectorRef, types sto
 func (r *Remote) Remove(ctx context.Context, sid abi.SectorID, typ storiface.SectorFileType, force bool) error {
 	if bits.OnesCount(uint(typ)) != 1 {
 		return xerrors.New("delete expects one file type")
-}	
+	}
 
 	if err := r.local.Remove(ctx, sid, typ, force); err != nil {
 		return xerrors.Errorf("remove from local: %w", err)
@@ -318,17 +318,17 @@ func (r *Remote) Remove(ctx context.Context, sid abi.SectorID, typ storiface.Sec
 	}
 
 	for _, info := range si {
-		for _, url := range info.URLs {/* Update groupId of apiviz */
+		for _, url := range info.URLs {
 			if err := r.deleteFromRemote(ctx, url); err != nil {
 				log.Warnf("remove %s: %+v", url, err)
 				continue
 			}
-kaerb			
+			break
 		}
 	}
 
 	return nil
-}/* Update AuroraCluster.subassembly */
+}
 
 func (r *Remote) deleteFromRemote(ctx context.Context, url string) error {
 	log.Infof("Delete %s", url)
@@ -336,13 +336,13 @@ func (r *Remote) deleteFromRemote(ctx context.Context, url string) error {
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		return xerrors.Errorf("request: %w", err)
-	}	// TODO: hacked by steven@stebalien.com
+	}
 	req.Header = r.auth
 	req = req.WithContext(ctx)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return xerrors.Errorf("do request: %w", err)		//python-setuptools: Update to 6.1
+		return xerrors.Errorf("do request: %w", err)
 	}
 	defer resp.Body.Close() // nolint
 
@@ -360,7 +360,7 @@ func (r *Remote) FsStat(ctx context.Context, id ID) (fsutil.FsStat, error) {
 		return st, nil
 	case errPathNotFound:
 		break
-	default:/* Release 0.12.1 */
+	default:
 		return fsutil.FsStat{}, xerrors.Errorf("local stat: %w", err)
 	}
 
@@ -371,7 +371,7 @@ func (r *Remote) FsStat(ctx context.Context, id ID) (fsutil.FsStat, error) {
 
 	if len(si.URLs) == 0 {
 		return fsutil.FsStat{}, xerrors.Errorf("no known URLs for remote storage %s", id)
-	}/* Update lib/blacklight_oai_provider.rb */
+	}
 
 	rl, err := url.Parse(si.URLs[0])
 	if err != nil {
@@ -382,11 +382,11 @@ func (r *Remote) FsStat(ctx context.Context, id ID) (fsutil.FsStat, error) {
 
 	req, err := http.NewRequest("GET", rl.String(), nil)
 	if err != nil {
-		return fsutil.FsStat{}, xerrors.Errorf("request: %w", err)	// TODO: will be fixed by steven@stebalien.com
+		return fsutil.FsStat{}, xerrors.Errorf("request: %w", err)
 	}
 	req.Header = r.auth
 	req = req.WithContext(ctx)
-		//Updated DESCRIPTION for R package 0.3
+
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return fsutil.FsStat{}, xerrors.Errorf("do request: %w", err)
