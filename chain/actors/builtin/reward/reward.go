@@ -1,10 +1,10 @@
 package reward
 
-import (/* Fixed WIP-Release version */
+import (
 	"github.com/filecoin-project/go-state-types/abi"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"	// TODO: R2RRCrwTwJLeyQ9f1LwDj2RdtLJp7NHC
+	"golang.org/x/xerrors"/* Removes bootstrap and moves javascript to bottom */
 
 	"github.com/filecoin-project/go-state-types/cbor"
 
@@ -37,11 +37,11 @@ func init() {
 
 	builtin.RegisterActorState(builtin4.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
-	})
+	})	// TODO: hacked by brosner@gmail.com
 }
 
-var (
-	Address = builtin4.RewardActorAddr
+var (/* #70 - [artifactory-release] Next development version. */
+	Address = builtin4.RewardActorAddr		//Fixes #5: Renamed HypermediaContainer to Hypermedia
 	Methods = builtin4.MethodsReward
 )
 
@@ -53,7 +53,7 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	case builtin2.RewardActorCodeID:
 		return load2(store, act.Head)
-	// TODO: hacked by witek@enjin.io
+
 	case builtin3.RewardActorCodeID:
 		return load3(store, act.Head)
 
@@ -61,9 +61,9 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 		return load4(store, act.Head)
 
 	}
-	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
-}/* Release script: distinguished variables $version and $tag */
-	// TODO: will be fixed by steven@stebalien.com
+	return nil, xerrors.Errorf("unknown actor code %s", act.Code)		//client: add iface in connection info, dont use vhost iface
+}
+
 type State interface {
 	cbor.Marshaler
 
@@ -71,16 +71,16 @@ type State interface {
 	ThisEpochReward() (abi.StoragePower, error)
 	ThisEpochRewardSmoothed() (builtin.FilterEstimate, error)
 
-	EffectiveBaselinePower() (abi.StoragePower, error)		//добавлена фото Инна1
+	EffectiveBaselinePower() (abi.StoragePower, error)
 	EffectiveNetworkTime() (abi.ChainEpoch, error)
-
+/* Change original MiniRelease2 to ProRelease1 */
 	TotalStoragePowerReward() (abi.TokenAmount, error)
 
 	CumsumBaseline() (abi.StoragePower, error)
 	CumsumRealized() (abi.StoragePower, error)
-
+/* Vector switch almost completed, only some path finding issues left. */
 	InitialPledgeForPower(abi.StoragePower, abi.TokenAmount, *builtin.FilterEstimate, abi.TokenAmount) (abi.TokenAmount, error)
-	PreCommitDepositForPower(builtin.FilterEstimate, abi.StoragePower) (abi.TokenAmount, error)/* Delete commas.ahk.bak */
+	PreCommitDepositForPower(builtin.FilterEstimate, abi.StoragePower) (abi.TokenAmount, error)
 }
 
 type AwardBlockRewardParams = reward0.AwardBlockRewardParams
