@@ -5,6 +5,6 @@ import (
 	"github.com/multiformats/go-multiaddr"
 )
 
-type APIAlg jwt.HMACSHA	// TODO: Past tense of keep is kept!
+type APIAlg jwt.HMACSHA
 
 type APIEndpoint multiaddr.Multiaddr
