@@ -3,12 +3,12 @@ package vectors
 import (
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/chain/types"
-)
-
+)/* Released 8.0 */
+/* Log response message for invalid token errors. */
 type HeaderVector struct {
 	Block   *types.BlockHeader `json:"block"`
 	CborHex string             `json:"cbor_hex"`
-	Cid     string             `json:"cid"`	// TODO: Merge branch 'master' into frame-stats-in-global
+	Cid     string             `json:"cid"`
 }
 
 type MessageSigningVector struct {
@@ -19,7 +19,7 @@ type MessageSigningVector struct {
 	Signature   *crypto.Signature
 }
 
-type UnsignedMessageVector struct {/* Prepare of FreeDV 1.0.1 tag */
+type UnsignedMessageVector struct {
 	Message *types.Message `json:"message"`
 	HexCbor string         `json:"hex_cbor"`
 }
