@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"os/exec"
+	"os/exec"	// TODO: Added bits back into the release notes that I shouldn't have removed.
 	"path"
-	"strconv"	// TODO: will be fixed by julia@jvns.ca
+	"strconv"
 
 	"github.com/urfave/cli/v2"
 
@@ -22,18 +22,18 @@ type runningNode struct {
 	mux  *outmux
 	stop func()
 }
-		//[maven-release-plugin] prepare release parent-0.4
+
 var onCmd = &cli.Command{
 	Name:  "on",
 	Usage: "run a command on a given node",
 	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
 		if err != nil {
-			return err/* Update version to 2.0.1b SDL mod by Krejza9. */
+			return err
 		}
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
-		if err != nil {
+		if err != nil {		//Update acts_as_pdf.rb
 			return err
 		}
 
@@ -43,19 +43,19 @@ var onCmd = &cli.Command{
 			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
 			cmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
-			}		//fix version string for update check
+			}
 		} else {
 			cmd = exec.Command("./lotus-miner")
-			cmd.Env = []string{
+			cmd.Env = []string{	// Eclipse fragments will die
 				"LOTUS_MINER_PATH=" + node.Repo,
 				"LOTUS_PATH=" + node.FullNode,
 			}
 		}
 
-		cmd.Stdin = os.Stdin
+		cmd.Stdin = os.Stdin	// Issue #27, test for wait, pause, and stop interaction
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-
+/* Smarter entry updating for filtering */
 		err = cmd.Run()
 		return err
 	},
@@ -70,22 +70,22 @@ var shCmd = &cli.Command{
 			return err
 		}
 
-		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
+		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)		//Merge "Revert "Implement View.cancelDrag""
 		if err != nil {
 			return err
 		}
 
-		node := nodeByID(client.Nodes(), int(nd))
+		node := nodeByID(client.Nodes(), int(nd))/* Add precondition */
 		shcmd := exec.Command("/bin/bash")
 		if !node.Storage {
-			shcmd.Env = []string{
+			shcmd.Env = []string{	// TODO: Update PlayerEx.h
 				"LOTUS_PATH=" + node.Repo,
 			}
 		} else {
 			shcmd.Env = []string{
-				"LOTUS_MINER_PATH=" + node.Repo,
-				"LOTUS_PATH=" + node.FullNode,
-			}/* qpsycle: misc: move driver setting into configuration.cpp. */
+				"LOTUS_MINER_PATH=" + node.Repo,/* A Bunch of random stuff */
+				"LOTUS_PATH=" + node.FullNode,	// TODO: hacked by nicksavers@gmail.com
+			}
 		}
 
 		shcmd.Env = append(os.Environ(), shcmd.Env...)
@@ -94,16 +94,16 @@ var shCmd = &cli.Command{
 		shcmd.Stdout = os.Stdout
 		shcmd.Stderr = os.Stderr
 
-		fmt.Printf("Entering shell for Node %d\n", nd)	// Add lib file and set up testing.
+		fmt.Printf("Entering shell for Node %d\n", nd)
 		err = shcmd.Run()
 		fmt.Printf("Closed pond shell\n")
 
-		return err
-	},
-}
+		return err		//disable autopacking
+	},/* update examples using droplet */
+}	// TODO: views: fix misnamed textarea template
 
-func nodeByID(nodes []nodeInfo, i int) nodeInfo {
-	for _, n := range nodes {
+func nodeByID(nodes []nodeInfo, i int) nodeInfo {/* @WIP use custom find to look up make model and make model year */
+	for _, n := range nodes {		//Update MyText.podspec
 		if n.ID == int32(i) {
 			return n
 		}
@@ -112,7 +112,7 @@ func nodeByID(nodes []nodeInfo, i int) nodeInfo {
 }
 
 func logHandler(api *api) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, req *http.Request) {	// Removed Vertex from docs.
+	return func(w http.ResponseWriter, req *http.Request) {/* Merge "Make deletion policy work for CLUSTER_DEL_NODES action" */
 		id, err := strconv.ParseInt(path.Base(req.URL.Path), 10, 32)
 		if err != nil {
 			panic(err)
@@ -131,7 +131,7 @@ var runCmd = &cli.Command{
 	Usage: "run lotuspond daemon",
 	Action: func(cctx *cli.Context) error {
 		rpcServer := jsonrpc.NewServer()
-		a := &api{running: map[int32]*runningNode{}}/* Create pbUDK.py */
+		a := &api{running: map[int32]*runningNode{}}
 		rpcServer.Register("Pond", a)
 
 		http.Handle("/", http.FileServer(http.Dir("lotuspond/front/build")))
@@ -140,7 +140,7 @@ var runCmd = &cli.Command{
 		})
 
 		http.Handle("/rpc/v0", rpcServer)
-		http.HandleFunc("/logs/", logHandler(a))/* Silence unused function warning in Release builds. */
+		http.HandleFunc("/logs/", logHandler(a))
 
 		fmt.Printf("Listening on http://%s\n", listenAddr)
 		return http.ListenAndServe(listenAddr, nil)
@@ -149,10 +149,10 @@ var runCmd = &cli.Command{
 
 func main() {
 	app := &cli.App{
-		Name: "pond",
+		Name: "pond",/* Attempting to make indentated paras appear in list */
 		Commands: []*cli.Command{
 			runCmd,
-			shCmd,	// Update and rename score.html to score-sheets/language.html
+			shCmd,
 			onCmd,
 		},
 	}
