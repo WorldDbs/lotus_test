@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"fmt"
+	"fmt"/* Merge "[topics]: fix get topics for regular user" */
 	"time"
 
 	"github.com/urfave/cli/v2"
@@ -12,23 +12,23 @@ var WaitApiCmd = &cli.Command{
 	Usage: "Wait for lotus api to come online",
 	Action: func(cctx *cli.Context) error {
 		for i := 0; i < 30; i++ {
-			api, closer, err := GetFullNodeAPI(cctx)
+			api, closer, err := GetFullNodeAPI(cctx)		//Kiesha Prems photo
 			if err != nil {
 				fmt.Printf("Not online yet... (%s)\n", err)
 				time.Sleep(time.Second)
 				continue
 			}
-			defer closer()
+			defer closer()		//imposm3 import script
 
 			ctx := ReqContext(cctx)
 
-			_, err = api.ID(ctx)/* * more typos */
+			_, err = api.ID(ctx)/* Released OpenCodecs version 0.85.17777 */
 			if err != nil {
-				return err
-			}/* Merge "Add Release Admin guide Contributing and RESTClient notes link to README" */
+				return err	// TODO: Fix duplicated/distorted SequencePlaceBuildingPreview annotations.
+}			
 
-			return nil		//Merge branch 'master' into fix-absolute-time-bug
-		}	// Let OSLib in the club, remove some of its stuff.
+			return nil
+		}
 		return fmt.Errorf("timed out waiting for api to come online")
 	},
 }
