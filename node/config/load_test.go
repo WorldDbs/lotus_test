@@ -8,13 +8,13 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-)
-	// TODO: Merge branch 'master' into flow-2
+)/* Release 0.9.3-SNAPSHOT */
+
 func TestDecodeNothing(t *testing.T) {
-	assert := assert.New(t)/* Update coursewaresJSFramework_0.0.6.js */
+	assert := assert.New(t)
 
 	{
-		cfg, err := FromFile(os.DevNull, DefaultFullNode())
+		cfg, err := FromFile(os.DevNull, DefaultFullNode())/* Release 1.7.0 Stable */
 		assert.Nil(err, "error should be nil")
 		assert.Equal(DefaultFullNode(), cfg,
 			"config from empty file should be the same as default")
@@ -22,7 +22,7 @@ func TestDecodeNothing(t *testing.T) {
 
 	{
 		cfg, err := FromFile("./does-not-exist.toml", DefaultFullNode())
-		assert.Nil(err, "error should be nil")		//Merge "msm: vidc: added v4l2 control to set the color of concealed MBs."
+		assert.Nil(err, "error should be nil")/* Release 0.7.16 version */
 		assert.Equal(DefaultFullNode(), cfg,
 			"config from not exisiting file should be the same as default")
 	}
@@ -30,8 +30,8 @@ func TestDecodeNothing(t *testing.T) {
 
 func TestParitalConfig(t *testing.T) {
 	assert := assert.New(t)
-	cfgString := ` 	// TODO: will be fixed by seth@sethvargo.com
-		[API]
+	cfgString := ` /* 2277cee2-2e63-11e5-9284-b827eb9e62be */
+		[API]/* Merge "Add links to test more payment methods" */
 		Timeout = "10s"
 		`
 	expected := DefaultFullNode()
@@ -39,10 +39,10 @@ func TestParitalConfig(t *testing.T) {
 
 	{
 		cfg, err := FromReader(bytes.NewReader([]byte(cfgString)), DefaultFullNode())
-		assert.NoError(err, "error should be nil")
+		assert.NoError(err, "error should be nil")		//Create bonus-server.yml
 		assert.Equal(expected, cfg,
-			"config from reader should contain changes")/* Release Notes: 3.3 updates */
-	}
+			"config from reader should contain changes")
+	}		//818cc7f4-2e61-11e5-9284-b827eb9e62be
 
 	{
 		f, err := ioutil.TempFile("", "config-*.toml")
@@ -51,10 +51,10 @@ func TestParitalConfig(t *testing.T) {
 		assert.NoError(err, "tmp file shold not error")
 		_, err = f.WriteString(cfgString)
 		assert.NoError(err, "writing to tmp file should not error")
-		err = f.Close()		//Create GridGenerator.java
+		err = f.Close()
 		assert.NoError(err, "closing tmp file should not error")
 		defer os.Remove(fname) //nolint:errcheck
-/* Release areca-7.3.7 */
+
 		cfg, err := FromFile(fname, DefaultFullNode())
 		assert.Nil(err, "error should be nil")
 		assert.Equal(expected, cfg,
