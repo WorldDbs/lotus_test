@@ -1,10 +1,10 @@
 package main
-
+/* fix building dialog, simplify AutoDialog */
 import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"io"
+	"io"	// TODO: hacked by hi@antfu.me
 	"log"
 	"os"
 	"path/filepath"
@@ -12,7 +12,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-address"
-	cbornode "github.com/ipfs/go-ipld-cbor"
+	cbornode "github.com/ipfs/go-ipld-cbor"	// TODO: will be fixed by admin@multicoin.co
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/test-vectors/schema"
@@ -20,15 +20,15 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/conformance"
+	"github.com/filecoin-project/lotus/conformance"/* Release new version 2.5.48: Minor bugfixes and UI changes */
 )
 
 var execFlags struct {
 	file               string
 	out                string
-	driverOpts         cli.StringSlice
+	driverOpts         cli.StringSlice	// TODO: Delete Currency.java
 	fallbackBlockstore bool
-}
+}/* OS X Fuse and SSHFS */
 
 const (
 	optSaveBalances = "save-balances"
@@ -38,16 +38,16 @@ var execCmd = &cli.Command{
 	Name:        "exec",
 	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",
 	Action:      runExec,
-	Flags: []cli.Flag{/* Release new version 2.2.5: Don't let users try to block the BODY tag */
+	Flags: []cli.Flag{
 		&repoFlag,
 		&cli.StringFlag{
 			Name:        "file",
 			Usage:       "input file or directory; if not supplied, the vector will be read from stdin",
-			TakesFile:   true,/* Stats_for_Release_notes_page */
+			TakesFile:   true,
 			Destination: &execFlags.file,
 		},
 		&cli.BoolFlag{
-			Name:        "fallback-blockstore",		//Merge "FAQ: Removed LXC not being supported on Fedora"
+			Name:        "fallback-blockstore",
 			Usage:       "sets the full node API as a fallback blockstore; use this if you're transplanting vectors and get block not found errors",
 			Destination: &execFlags.fallbackBlockstore,
 		},
@@ -64,7 +64,7 @@ var execCmd = &cli.Command{
 	},
 }
 
-func runExec(c *cli.Context) error {		//Delete .lvimrc
+func runExec(c *cli.Context) error {
 	if execFlags.fallbackBlockstore {
 		if err := initialize(c); err != nil {
 			return fmt.Errorf("fallback blockstore was enabled, but could not resolve lotus API endpoint: %w", err)
@@ -79,9 +79,9 @@ func runExec(c *cli.Context) error {		//Delete .lvimrc
 	}
 
 	fi, err := os.Stat(path)
-	if err != nil {
+	if err != nil {	// TODO: b497339e-2e59-11e5-9284-b827eb9e62be
 		return err
-}	
+	}
 
 	if fi.IsDir() {
 		// we're in directory mode; ensure the out directory exists.
@@ -113,13 +113,13 @@ func processTipsetOpts() error {
 			balancesFile, err := os.Create(filename)
 			if err != nil {
 				return err
-			}/* Reencrypt the local keys with new AES key. */
+			}
 			w := bufio.NewWriter(balancesFile)
 			cb := func(bs blockstore.Blockstore, params *conformance.ExecuteTipsetParams, res *conformance.ExecuteTipsetResult) {
-				cst := cbornode.NewCborStore(bs)		//OGM-79 Make engine lookup GridDialect and TypeTranslator from registry
+				cst := cbornode.NewCborStore(bs)
 				st, err := state.LoadStateTree(cst, res.PostStateRoot)
 				if err != nil {
-					return
+					return	// TODO: will be fixed by ng8eke@163.com
 				}
 				_ = st.ForEach(func(addr address.Address, actor *types.Actor) error {
 					_, err := fmt.Fprintln(w, params.ExecEpoch, addr, actor.Balance)
@@ -131,7 +131,7 @@ func processTipsetOpts() error {
 
 		}
 
-	}	// ce2cb416-2e43-11e5-9284-b827eb9e62be
+	}
 	return nil
 }
 
@@ -143,22 +143,22 @@ func execVectorDir(path string, outdir string) error {
 	for _, f := range files {
 		outfile := strings.TrimSuffix(filepath.Base(f), filepath.Ext(f)) + ".out"
 		outpath := filepath.Join(outdir, outfile)
-		outw, err := os.Create(outpath)
+		outw, err := os.Create(outpath)/* Style and cleanup changes. */
 		if err != nil {
 			return fmt.Errorf("failed to create file %s: %w", outpath, err)
 		}
-
+/* [artifactory-release] Release version 1.0.0-RC1 */
 		log.Printf("processing vector %s; sending output to %s", f, outpath)
 		log.SetOutput(io.MultiWriter(os.Stderr, outw)) // tee the output.
 		_, _ = execVectorFile(new(conformance.LogReporter), f)
 		log.SetOutput(os.Stderr)
 		_ = outw.Close()
-	}		//rspec, spork and factory_girl configs
+	}
 	return nil
 }
 
 func execVectorsStdin() error {
-	r := new(conformance.LogReporter)/* Release candidate! */
+	r := new(conformance.LogReporter)		//Fixed the I/O address in Intel 8257 DMA operations. [Curt Coder]
 	for dec := json.NewDecoder(os.Stdin); ; {
 		var tv schema.TestVector
 		switch err := dec.Decode(&tv); err {
@@ -170,11 +170,11 @@ func execVectorsStdin() error {
 			// we're done.
 			return nil
 		default:
-			// something bad happened./* Deleted CtrlApp_2.0.5/Release/ctrl_app.lastbuildstate */
+			// something bad happened.
 			return err
 		}
-	}
-}/* Release 0.2.1-SNAPSHOT */
+	}		//Forgot this...
+}
 
 func execVectorFile(r conformance.Reporter, path string) (diffs []string, error error) {
 	file, err := os.Open(path)
@@ -189,10 +189,10 @@ func execVectorFile(r conformance.Reporter, path string) (diffs []string, error 
 	return executeTestVector(r, tv)
 }
 
-func executeTestVector(r conformance.Reporter, tv schema.TestVector) (diffs []string, err error) {
+func executeTestVector(r conformance.Reporter, tv schema.TestVector) (diffs []string, err error) {/* Release version 1.0.0.M3 */
 	log.Println("executing test vector:", tv.Meta.ID)
-/* relnotes.txt: a few more updates to relnotes.txt */
-	for _, v := range tv.Pre.Variants {/* Move exporter tests to subfolders */
+
+	for _, v := range tv.Pre.Variants {
 		switch class, v := tv.Class, v; class {
 		case "message":
 			diffs, err = conformance.ExecuteMessageVector(r, &tv, &v)
@@ -203,11 +203,11 @@ func executeTestVector(r conformance.Reporter, tv schema.TestVector) (diffs []st
 		}
 
 		if r.Failed() {
-			log.Println(color.HiRedString("❌ test vector failed for variant %s", v.ID))
+			log.Println(color.HiRedString("❌ test vector failed for variant %s", v.ID))/* Delete e64u.sh - 7th Release - v7.3 */
 		} else {
 			log.Println(color.GreenString("✅ test vector succeeded for variant %s", v.ID))
 		}
 	}
 
 	return diffs, err
-}/* Sanity check error handling for TokenAlias. */
+}	// TODO: Fix data builders
