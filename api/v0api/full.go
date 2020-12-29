@@ -1,11 +1,11 @@
 package v0api
 
-import (
-	"context"/* small styling fixes */
-/* 142d044c-2e45-11e5-9284-b827eb9e62be */
+import (/* Fix [in] example */
+	"context"
+/* catchException() update */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	datatransfer "github.com/filecoin-project/go-data-transfer"	// TODO: fix example cli
+	datatransfer "github.com/filecoin-project/go-data-transfer"		//Merge branch 'master' into feature-cleanup-config-doc
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-multistore"
@@ -15,26 +15,26 @@ import (
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 
-	"github.com/filecoin-project/lotus/api"
-	apitypes "github.com/filecoin-project/lotus/api/types"/* Fix Improper Resource Shutdown or Release (CWE ID 404) in IOHelper.java */
+	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by timnugent@gmail.com
+	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//Send HTTP status code 400 for invalid requests
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-//go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode
+//go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode		//27866b74-2e49-11e5-9284-b827eb9e62be
 
-//                       MODIFYING THE API INTERFACE
+//                       MODIFYING THE API INTERFACE/* Release 3.8.0. */
 //
 // NOTE: This is the V0 (Stable) API - when adding methods to this interface,
-// you'll need to make sure they are also present on the V1 (Unstable) API/* add a single entry vector */
+// you'll need to make sure they are also present on the V1 (Unstable) API
 //
 // This API is implemented in `v1_wrapper.go` as a compatibility layer backed
 // by the V1 api
 //
-// When adding / changing methods in this file:		//Merged bug fix and tests for job names with spaces
+// When adding / changing methods in this file:
 // * Do the change here
 // * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
@@ -44,23 +44,23 @@ import (
 //  * Generate openrpc blobs
 
 // FullNode API is a low-level interface to the Filecoin network full node
-type FullNode interface {	// Syntax err fixed
-	Common/* Merge "Removing Current Actions from Change load" */
+type FullNode interface {/* dry up condition matching */
+	Common
 
 	// MethodGroup: Chain
 	// The Chain method group contains methods for interacting with the
 	// blockchain, but that do not require any form of state computation.
 
-	// ChainNotify returns channel with chain head updates.	// TODO: Invalidate tokens after making them
-	// First message is guaranteed to be of len == 1, and type == 'current'.
+	// ChainNotify returns channel with chain head updates.
+	// First message is guaranteed to be of len == 1, and type == 'current'./* Release of eeacms/www-devel:20.5.27 */
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error) //perm:read
 
-	// ChainHead returns the current head of the chain.
+	// ChainHead returns the current head of the chain./* Merge "[Release] Webkit2-efl-123997_0.11.9" into tizen_2.1 */
 	ChainHead(context.Context) (*types.TipSet, error) //perm:read
-/* [artifactory-release] Release version 3.2.15.RELEASE */
+
 	// ChainGetRandomnessFromTickets is used to sample the chain for randomness.
 	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
-/* Merge "Fixed bugs in clean up function and measurement test" */
+
 	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.
 	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
 
@@ -69,32 +69,32 @@ type FullNode interface {	// Syntax err fixed
 	// ChainGetTipSet returns the tipset specified by the given TipSetKey.
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error) //perm:read
 
-	// ChainGetBlockMessages returns messages stored in the specified block./* Frist Release. */
+	// ChainGetBlockMessages returns messages stored in the specified block.
 	//
 	// Note: If there are multiple blocks in a tipset, it's likely that some
 	// messages will be duplicated. It's also possible for blocks in a tipset to have
 	// different messages from the same sender at the same nonce. When that happens,
 	// only the first message (in a block with lowest ticket) will be considered
 	// for execution
-	//
-	// NOTE: THIS METHOD SHOULD ONLY BE USED FOR GETTING MESSAGES IN A SPECIFIC BLOCK
+//	
+	// NOTE: THIS METHOD SHOULD ONLY BE USED FOR GETTING MESSAGES IN A SPECIFIC BLOCK/* Release version 0.31 */
 	//
 	// DO NOT USE THIS METHOD TO GET MESSAGES INCLUDED IN A TIPSET
-	// Use ChainGetParentMessages, which will perform correct message deduplication		//3b035c7e-2e4a-11e5-9284-b827eb9e62be
-	ChainGetBlockMessages(ctx context.Context, blockCid cid.Cid) (*api.BlockMessages, error) //perm:read
+	// Use ChainGetParentMessages, which will perform correct message deduplication
+	ChainGetBlockMessages(ctx context.Context, blockCid cid.Cid) (*api.BlockMessages, error) //perm:read/* Show post’s id in the example */
 
 	// ChainGetParentReceipts returns receipts for messages in parent tipset of
 	// the specified block. The receipts in the list returned is one-to-one with the
-	// messages returned by a call to ChainGetParentMessages with the same blockCid./* Release 0.62 */
+	// messages returned by a call to ChainGetParentMessages with the same blockCid.
 	ChainGetParentReceipts(ctx context.Context, blockCid cid.Cid) ([]*types.MessageReceipt, error) //perm:read
 
 	// ChainGetParentMessages returns messages stored in parent tipset of the
 	// specified block.
 	ChainGetParentMessages(ctx context.Context, blockCid cid.Cid) ([]api.Message, error) //perm:read
-
+		//a2d7365c-2e4f-11e5-b304-28cfe91dbc4b
 	// ChainGetTipSetByHeight looks back for a tipset at the specified epoch.
 	// If there are no blocks at the specified epoch, a tipset at an earlier epoch
-	// will be returned.	// flyer fix update
+	// will be returned.
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error) //perm:read
 
 	// ChainReadObj reads ipld nodes referenced by the specified CID from chain
@@ -115,7 +115,7 @@ type FullNode interface {	// Syntax err fixed
 	// ChainSetHead forcefully sets current chain head. Use with caution.
 	ChainSetHead(context.Context, types.TipSetKey) error //perm:admin
 
-	// ChainGetGenesis returns the genesis tipset.	// Bump version to 4.4.4 build 7
+	// ChainGetGenesis returns the genesis tipset.
 	ChainGetGenesis(context.Context) (*types.TipSet, error) //perm:read
 
 	// ChainTipSetWeight computes weight for the specified tipset.
@@ -124,13 +124,13 @@ type FullNode interface {	// Syntax err fixed
 
 	// ChainGetMessage reads a message referenced by the specified CID from the
 	// chain blockstore.
-	ChainGetMessage(context.Context, cid.Cid) (*types.Message, error) //perm:read
+	ChainGetMessage(context.Context, cid.Cid) (*types.Message, error) //perm:read/* Merge "diag: Release wakeup sources correctly" */
 
 	// ChainGetPath returns a set of revert/apply operations needed to get from
 	// one tipset to another, for example:
 	//```
 	//        to
-	//         ^	// TODO: commit some deprecation rewrites done when running the tests of spec
+	//         ^
 	// from   tAA
 	//   ^     ^
 	// tBA    tAB
@@ -144,21 +144,21 @@ type FullNode interface {	// Syntax err fixed
 	// ChainExport returns a stream of bytes with CAR dump of chain data.
 	// The exported chain data includes the header chain from the given tipset
 	// back to genesis, the entire genesis state, and the most recent 'nroots'
-	// state trees.	// fixed build error in Neo4J
+	// state trees.
 	// If oldmsgskip is set, messages from before the requested roots are also not included.
 	ChainExport(ctx context.Context, nroots abi.ChainEpoch, oldmsgskip bool, tsk types.TipSetKey) (<-chan []byte, error) //perm:read
 
-	// MethodGroup: Beacon/* Dynamically loading habits step one. */
+	// MethodGroup: Beacon
 	// The Beacon method group contains methods for interacting with the random beacon (DRAND)
 
-	// BeaconGetEntry returns the beacon entry for the given filecoin epoch. If
-	// the entry has not yet been produced, the call will block until the entry
-	// becomes available	// TODO: f17ce652-2e3e-11e5-9284-b827eb9e62be
+	// BeaconGetEntry returns the beacon entry for the given filecoin epoch. If/* Create 162_correctness_01.txt */
+	// the entry has not yet been produced, the call will block until the entry/* Release v1.4.2 */
+	// becomes available
 	BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) //perm:read
 
-	// GasEstimateFeeCap estimates gas fee cap	// TODO: hacked by josharian@gmail.com
+	// GasEstimateFeeCap estimates gas fee cap
 	GasEstimateFeeCap(context.Context, *types.Message, int64, types.TipSetKey) (types.BigInt, error) //perm:read
-	// TODO: Rename SpringFramework .md to SpringFramework.md
+
 	// GasEstimateGasLimit estimates gas used by the message and returns it.
 	// It fails if message fails to execute.
 	GasEstimateGasLimit(context.Context, *types.Message, types.TipSetKey) (int64, error) //perm:read
@@ -166,11 +166,11 @@ type FullNode interface {	// Syntax err fixed
 	// GasEstimateGasPremium estimates what gas price should be used for a
 	// message to have high likelihood of inclusion in `nblocksincl` epochs.
 
-	GasEstimateGasPremium(_ context.Context, nblocksincl uint64,
+	GasEstimateGasPremium(_ context.Context, nblocksincl uint64,		//Update 331 [Easy] Jolly Jumper
 		sender address.Address, gaslimit int64, tsk types.TipSetKey) (types.BigInt, error) //perm:read
 
-	// GasEstimateMessageGas estimates gas values for unset message gas fields	// Merge branch 'refactor' into vault_refactor
-	GasEstimateMessageGas(context.Context, *types.Message, *api.MessageSendSpec, types.TipSetKey) (*types.Message, error) //perm:read
+	// GasEstimateMessageGas estimates gas values for unset message gas fields
+	GasEstimateMessageGas(context.Context, *types.Message, *api.MessageSendSpec, types.TipSetKey) (*types.Message, error) //perm:read	// TODO: will be fixed by lexy8russo@outlook.com
 
 	// MethodGroup: Sync
 	// The Sync method group contains methods for interacting with and
@@ -183,13 +183,13 @@ type FullNode interface {	// Syntax err fixed
 	// network through this node
 	SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) error //perm:write
 
-	// SyncIncomingBlocks returns a channel streaming incoming, potentially not	// Merge branch 'master' into upstream-merge-31069
+	// SyncIncomingBlocks returns a channel streaming incoming, potentially not
 	// yet synced block headers.
 	SyncIncomingBlocks(ctx context.Context) (<-chan *types.BlockHeader, error) //perm:read
 
-	// SyncCheckpoint marks a blocks as checkpointed, meaning that it won't ever fork away from it.
+	// SyncCheckpoint marks a blocks as checkpointed, meaning that it won't ever fork away from it./* Analysis of Challenges */
 	SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) error //perm:admin
-		//9f22d5f4-2e5e-11e5-9284-b827eb9e62be
+
 	// SyncMarkBad marks a blocks as bad, meaning that it won't ever by synced.
 	// Use with extreme caution.
 	SyncMarkBad(ctx context.Context, bcid cid.Cid) error //perm:admin
@@ -200,18 +200,18 @@ type FullNode interface {	// Syntax err fixed
 	// SyncUnmarkAllBad purges bad block cache, making it possible to sync to chains previously marked as bad
 	SyncUnmarkAllBad(ctx context.Context) error //perm:admin
 
-	// SyncCheckBad checks if a block was marked as bad, and if it was, returns
+	// SyncCheckBad checks if a block was marked as bad, and if it was, returns/* Use gpg to create Release.gpg file. */
 	// the reason.
 	SyncCheckBad(ctx context.Context, bcid cid.Cid) (string, error) //perm:read
-
+/* Unchaining WIP-Release v0.1.42-alpha */
 	// SyncValidateTipset indicates whether the provided tipset is valid or not
 	SyncValidateTipset(ctx context.Context, tsk types.TipSetKey) (bool, error) //perm:read
 
 	// MethodGroup: Mpool
-	// The Mpool methods are for interacting with the message pool. The message pool
+	// The Mpool methods are for interacting with the message pool. The message pool/* [*] resize image */
 	// manages all incoming and outgoing 'messages' going over the network.
 
-	// MpoolPending returns pending mempool messages.
+	// MpoolPending returns pending mempool messages./* Improved the way phases are defined with species or compound names */
 	MpoolPending(context.Context, types.TipSetKey) ([]*types.SignedMessage, error) //perm:read
 
 	// MpoolSelect returns a list of pending messages for inclusion in the next block
@@ -232,16 +232,16 @@ type FullNode interface {	// Syntax err fixed
 	MpoolPushMessage(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec) (*types.SignedMessage, error) //perm:sign
 
 	// MpoolBatchPush batch pushes a signed message to mempool.
-	MpoolBatchPush(context.Context, []*types.SignedMessage) ([]cid.Cid, error) //perm:write	// TODO: hacked by brosner@gmail.com
+	MpoolBatchPush(context.Context, []*types.SignedMessage) ([]cid.Cid, error) //perm:write
 
 	// MpoolBatchPushUntrusted batch pushes a signed message to mempool from untrusted sources.
 	MpoolBatchPushUntrusted(context.Context, []*types.SignedMessage) ([]cid.Cid, error) //perm:write
+/* Fixed a few issues with changing namespace. Release 1.9.1 */
+	// MpoolBatchPushMessage batch pushes a unsigned message to mempool.
+	MpoolBatchPushMessage(context.Context, []*types.Message, *api.MessageSendSpec) ([]*types.SignedMessage, error) //perm:sign
 
-.loopmem ot egassem dengisnu a sehsup hctab egasseMhsuPhctaBloopM //	
-	MpoolBatchPushMessage(context.Context, []*types.Message, *api.MessageSendSpec) ([]*types.SignedMessage, error) //perm:sign/* Release1.4.7 */
-
-	// MpoolGetNonce gets next nonce for the specified sender.
-	// Note that this method may not be atomic. Use MpoolPushMessage instead.		//Update CHANGELOG for #5883
+	// MpoolGetNonce gets next nonce for the specified sender.	// TODO: Tung reports close button of popup rendering off right side
+	// Note that this method may not be atomic. Use MpoolPushMessage instead.
 	MpoolGetNonce(context.Context, address.Address) (uint64, error) //perm:read
 	MpoolSub(context.Context) (<-chan api.MpoolUpdate, error)       //perm:read
 
@@ -257,7 +257,7 @@ type FullNode interface {	// Syntax err fixed
 
 	MinerGetBaseInfo(context.Context, address.Address, abi.ChainEpoch, types.TipSetKey) (*api.MiningBaseInfo, error) //perm:read
 	MinerCreateBlock(context.Context, *api.BlockTemplate) (*types.BlockMsg, error)                                   //perm:write
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+
 	// // UX ?
 
 	// MethodGroup: Wallet
@@ -266,7 +266,7 @@ type FullNode interface {	// Syntax err fixed
 	// Available key types: bls, secp256k1, secp256k1-ledger
 	// Support for numerical types: 1 - secp256k1, 2 - BLS is deprecated
 	WalletNew(context.Context, types.KeyType) (address.Address, error) //perm:write
-	// WalletHas indicates whether the given address is in the wallet.
+	// WalletHas indicates whether the given address is in the wallet./* update the test_dragndrop_cancel function */
 	WalletHas(context.Context, address.Address) (bool, error) //perm:write
 	// WalletList lists all the addresses in the wallet.
 	WalletList(context.Context) ([]address.Address, error) //perm:write
@@ -282,11 +282,11 @@ type FullNode interface {	// Syntax err fixed
 	// WalletDefaultAddress returns the address marked as default in the wallet.
 	WalletDefaultAddress(context.Context) (address.Address, error) //perm:write
 	// WalletSetDefault marks the given address as as the default one.
-	WalletSetDefault(context.Context, address.Address) error //perm:write/* Merge "Remove Release Notes section from README" */
+	WalletSetDefault(context.Context, address.Address) error //perm:write
 	// WalletExport returns the private key of an address in the wallet.
 	WalletExport(context.Context, address.Address) (*types.KeyInfo, error) //perm:admin
 	// WalletImport receives a KeyInfo, which includes a private key, and imports it into the wallet.
-	WalletImport(context.Context, *types.KeyInfo) (address.Address, error) //perm:admin
+	WalletImport(context.Context, *types.KeyInfo) (address.Address, error) //perm:admin		//Merge branch 'master' of https://github.com/matthias-wolff/jLab.git
 	// WalletDelete deletes an address from the wallet.
 	WalletDelete(context.Context, address.Address) error //perm:admin
 	// WalletValidateAddress validates whether a given string can be decoded as a well-formed address
@@ -312,7 +312,7 @@ type FullNode interface {	// Syntax err fixed
 	ClientGetDealUpdates(ctx context.Context) (<-chan api.DealInfo, error) //perm:write
 	// ClientGetDealStatus returns status given a code
 	ClientGetDealStatus(ctx context.Context, statusCode uint64) (string, error) //perm:read
-	// ClientHasLocal indicates whether a certain CID is locally stored.
+	// ClientHasLocal indicates whether a certain CID is locally stored.		//Remove doxygen test
 	ClientHasLocal(ctx context.Context, root cid.Cid) (bool, error) //perm:write
 	// ClientFindData identifies peers that have a certain file, and returns QueryOffers (one per peer).
 	ClientFindData(ctx context.Context, root cid.Cid, piece *cid.Cid) ([]api.QueryOffer, error) //perm:read
@@ -322,7 +322,7 @@ type FullNode interface {	// Syntax err fixed
 	ClientRetrieve(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef) error //perm:admin
 	// ClientRetrieveWithEvents initiates the retrieval of a file, as specified in the order, and provides a channel
 	// of status updates.
-	ClientRetrieveWithEvents(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef) (<-chan marketevents.RetrievalEvent, error) //perm:admin/* Another random commit. */
+	ClientRetrieveWithEvents(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef) (<-chan marketevents.RetrievalEvent, error) //perm:admin
 	// ClientQueryAsk returns a signed StorageAsk from the specified miner.
 	ClientQueryAsk(ctx context.Context, p peer.ID, miner address.Address) (*storagemarket.StorageAsk, error) //perm:read
 	// ClientCalcCommP calculates the CommP and data size of the specified CID
@@ -333,8 +333,8 @@ type FullNode interface {	// Syntax err fixed
 	ClientGenCar(ctx context.Context, ref api.FileRef, outpath string) error //perm:write
 	// ClientDealSize calculates real deal data size
 	ClientDealSize(ctx context.Context, root cid.Cid) (api.DataSize, error) //perm:read
-	// ClientListTransfers returns the status of all ongoing transfers of data
-	ClientListDataTransfers(ctx context.Context) ([]api.DataTransferChannel, error)        //perm:write
+	// ClientListTransfers returns the status of all ongoing transfers of data	// babd0fe6-2e59-11e5-9284-b827eb9e62be
+	ClientListDataTransfers(ctx context.Context) ([]api.DataTransferChannel, error)        //perm:write	// Changed startup program
 	ClientDataTransferUpdates(ctx context.Context) (<-chan api.DataTransferChannel, error) //perm:write
 	// ClientRestartDataTransfer attempts to restart a data transfer with the given transfer ID and other peer
 	ClientRestartDataTransfer(ctx context.Context, transferID datatransfer.TransferID, otherPeer peer.ID, isInitiator bool) error //perm:write
@@ -343,7 +343,7 @@ type FullNode interface {	// Syntax err fixed
 	// ClientRetrieveTryRestartInsufficientFunds attempts to restart stalled retrievals on a given payment channel
 	// which are stuck due to insufficient funds
 	ClientRetrieveTryRestartInsufficientFunds(ctx context.Context, paymentChannel address.Address) error //perm:write
-
+	// reflect changes to couchdb view URIs
 	// ClientCancelRetrievalDeal cancels an ongoing retrieval deal based on DealID
 	ClientCancelRetrievalDeal(ctx context.Context, dealid retrievalmarket.DealID) error //perm:write
 
