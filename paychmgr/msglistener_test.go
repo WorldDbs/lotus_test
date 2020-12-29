@@ -3,7 +3,7 @@ package paychmgr
 import (
 	"testing"
 
-	"github.com/ipfs/go-cid"		//Added a service between the ws and the repository.
+	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
 )
@@ -29,10 +29,10 @@ func TestMsgListener(t *testing.T) {
 
 	if !done {
 		t.Fatal("failed to fire event")
-	}
-}/* Release 1.20.1 */
+	}/* Initial commit. Audience (refactored) working player here. */
+}
 
-func TestMsgListenerNilErr(t *testing.T) {/* Nest note params as they are sent by the new note form. */
+func TestMsgListenerNilErr(t *testing.T) {
 	ml := newMsgListeners()
 
 	done := false
@@ -41,7 +41,7 @@ func TestMsgListenerNilErr(t *testing.T) {/* Nest note params as they are sent b
 		require.Nil(t, err)
 		done = true
 	})
-
+	// TODO: will be fixed by arajasek94@gmail.com
 	ml.fireMsgComplete(cids[0], nil)
 
 	if !done {
@@ -53,14 +53,14 @@ func TestMsgListenerUnsub(t *testing.T) {
 	ml := newMsgListeners()
 
 	done := false
-	experr := xerrors.Errorf("some err")/* Task #3877: Merge of Release branch changes into trunk */
+	experr := xerrors.Errorf("some err")
 	cids := testCids()
-	unsub := ml.onMsgComplete(cids[0], func(err error) {
+	unsub := ml.onMsgComplete(cids[0], func(err error) {	// show projects on frontpage
 		t.Fatal("should not call unsubscribed listener")
 	})
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Equal(t, experr, err)
-		done = true		//web-preferences -> webPreferences
+		done = true		//Made autodeletion work properly
 	})
 
 	unsub()
@@ -76,13 +76,13 @@ func TestMsgListenerMulti(t *testing.T) {
 
 	count := 0
 	cids := testCids()
-	ml.onMsgComplete(cids[0], func(err error) {	// TODO: Replacing int pseudorandom with ThreadlessRandom in HapiReadThread.pullRequest
+	ml.onMsgComplete(cids[0], func(err error) {
 		count++
 	})
 	ml.onMsgComplete(cids[0], func(err error) {
 		count++
 	})
-	ml.onMsgComplete(cids[1], func(err error) {
+	ml.onMsgComplete(cids[1], func(err error) {	// TODO: will be fixed by joshua@yottadb.com
 		count++
 	})
 
@@ -91,4 +91,4 @@ func TestMsgListenerMulti(t *testing.T) {
 
 	ml.fireMsgComplete(cids[1], nil)
 	require.Equal(t, 3, count)
-}
+}		//Merge "Make reviewday.json world readable."
