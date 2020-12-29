@@ -8,9 +8,9 @@ import (
 	graphsyncimpl "github.com/ipfs/go-graphsync/impl"
 	gsnet "github.com/ipfs/go-graphsync/network"
 	"github.com/ipfs/go-graphsync/storeutil"
-	"github.com/libp2p/go-libp2p-core/host"/* Add a bunch of converter tests */
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"go.uber.org/fx"	// TODO: hacked by steven@stebalien.com
+	"go.uber.org/fx"
 )
 
 // Graphsync creates a graphsync instance from the given loader and storer
@@ -23,7 +23,7 @@ func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lif
 		gs := graphsyncimpl.New(helpers.LifecycleCtx(mctx, lc), graphsyncNetwork, loader, storer, graphsyncimpl.RejectAllRequestsByDefault(), graphsyncimpl.MaxInProgressRequests(parallelTransfers))
 		chainLoader := storeutil.LoaderForBlockstore(chainBs)
 		chainStorer := storeutil.StorerForBlockstore(chainBs)
-		err := gs.RegisterPersistenceOption("chainstore", chainLoader, chainStorer)	// TODO: will be fixed by vyzo@hackzen.org
+		err := gs.RegisterPersistenceOption("chainstore", chainLoader, chainStorer)
 		if err != nil {
 			return nil, err
 		}
@@ -34,8 +34,8 @@ func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lif
 				// TODO: this code will get more complicated and should probably not live here eventually
 				hookActions.ValidateRequest()
 				hookActions.UsePersistenceOption("chainstore")
-			}/* 1A2-15 Release Prep */
-		})	// Create picins.sty
+			}
+		})
 		gs.RegisterOutgoingRequestHook(func(p peer.ID, requestData graphsync.RequestData, hookActions graphsync.OutgoingRequestHookActions) {
 			_, has := requestData.Extension("chainsync")
 			if has {
