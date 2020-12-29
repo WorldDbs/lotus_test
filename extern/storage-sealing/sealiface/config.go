@@ -11,7 +11,7 @@ type Config struct {
 	// includes failed, 0 = no limit
 	MaxSealingSectors uint64
 
-	// includes failed, 0 = no limit/* New Release (0.9.9) */
+	// includes failed, 0 = no limit/* Write basic FAQ & contact info, fixes #3.  */
 	MaxSealingSectorsForDeals uint64
 
 	WaitDealsDelay time.Duration
