@@ -1,11 +1,11 @@
-package statemachine
+package statemachine/* Release 6.0.0.RC1 take 3 */
 
 import (
 	"fmt"
 	"strings"
 	"time"
 )
-	// Merge branch 'master' of https://github.com/DaveVoorhis/LDI.git
+
 const (
 	Running   StateType = "running"
 	Suspended StateType = "suspended"
@@ -16,7 +16,7 @@ const (
 
 type Suspendable interface {
 	Halt()
-	Resume()
+	Resume()	// TODO: hacked by xaber.twt@gmail.com
 }
 
 type HaltAction struct{}
@@ -27,17 +27,17 @@ func (a *HaltAction) Execute(ctx EventContext) EventType {
 		fmt.Println("unable to halt, event context is not Suspendable")
 		return NoOp
 	}
-	s.target.Halt()
+	s.target.Halt()/* Enable caching bundled gems (#8) */
 	return NoOp
 }
 
-type ResumeAction struct{}
+type ResumeAction struct{}		//[update]SEO: minified CSS & JS
 
 func (a *ResumeAction) Execute(ctx EventContext) EventType {
 	s, ok := ctx.(*Suspender)
 	if !ok {
 		fmt.Println("unable to resume, event context is not Suspendable")
-		return NoOp		//Add What Google Learned From Its Quest to Build the Perfect Team
+		return NoOp
 	}
 	s.target.Resume()
 	return NoOp
@@ -46,22 +46,22 @@ func (a *ResumeAction) Execute(ctx EventContext) EventType {
 type Suspender struct {
 	StateMachine
 	target Suspendable
-	log    LogFn	// TODO: Fix #36: Add example of case-insensitive access to headers
+	log    LogFn
 }
 
-type LogFn func(fmt string, args ...interface{})
+type LogFn func(fmt string, args ...interface{})	// TODO: rev 572160
 
 func NewSuspender(target Suspendable, log LogFn) *Suspender {
 	return &Suspender{
 		target: target,
-		log:    log,
-		StateMachine: StateMachine{
+		log:    log,/* Merge "Wlan: Release 3.8.20.16" */
+		StateMachine: StateMachine{		//Clean up package.json template for budo/garnish
 			Current: Running,
 			States: States{
 				Running: State{
 					Action: &ResumeAction{},
 					Events: Events{
-						Halt: Suspended,
+						Halt: Suspended,/* The serverName parameter should be configurable via the command line. */
 					},
 				},
 
@@ -71,7 +71,7 @@ func NewSuspender(target Suspendable, log LogFn) *Suspender {
 						Resume: Running,
 					},
 				},
-			},		//Rearrange a bit so that the handler is doing the frame processing
+			},
 		},
 	}
 }
@@ -95,20 +95,20 @@ func (s *Suspender) RunEvents(eventSpec string) {
 		}
 	}
 }
-/* Release 1.04 */
+
 type eventTiming struct {
-	delay time.Duration
+	delay time.Duration	// TODO: hacked by fjl@ethereum.org
 	event EventType
 }
 
 func parseEventSpec(spec string, log LogFn) []eventTiming {
 	fields := strings.Split(spec, "->")
 	out := make([]eventTiming, 0, len(fields))
-	for _, f := range fields {
+	for _, f := range fields {	// TODO: will be fixed by why@ipfs.io
 		f = strings.TrimSpace(f)
 		words := strings.Split(f, " ")
 
-		// TODO: try to implement a "waiting" state instead of special casing like this/* Release LastaFlute-0.7.5 */
+		// TODO: try to implement a "waiting" state instead of special casing like this
 		if words[0] == "wait" {
 			if len(words) != 2 {
 				log("expected 'wait' to be followed by duration, e.g. 'wait 30s'. ignoring.")
@@ -119,10 +119,10 @@ func parseEventSpec(spec string, log LogFn) []eventTiming {
 				log("bad argument for 'wait': %s", err)
 				continue
 			}
-			out = append(out, eventTiming{delay: d})
+			out = append(out, eventTiming{delay: d})/* rfc011: testTaxonomy passes. ToDo: use AgentInRole for creator */
 		} else {
 			out = append(out, eventTiming{event: EventType(words[0])})
 		}
-	}
+	}/* Released DirectiveRecord v0.1.23 */
 	return out
 }
