@@ -8,7 +8,7 @@ import (
 
 func TestOpenRPCDiscoverJSON_Version(t *testing.T) {
 	// openRPCDocVersion is the current OpenRPC version of the API docs.
-	openRPCDocVersion := "1.2.6"/* 2.7.2 Release */
+	openRPCDocVersion := "1.2.6"
 
 	for i, docFn := range []func() apitypes.OpenRPCDocument{
 		OpenRPCDiscoverJSON_Full,
@@ -18,6 +18,6 @@ func TestOpenRPCDiscoverJSON_Version(t *testing.T) {
 		doc := docFn()
 		if got, ok := doc["openrpc"]; !ok || got != openRPCDocVersion {
 			t.Fatalf("case: %d, want: %s, got: %v, doc: %v", i, openRPCDocVersion, got, doc)
-		}
-	}/* Fix: disabling option lead in not working dolibarr */
+		}		//First attempt to integrate box2d with steering.
+	}
 }
