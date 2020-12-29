@@ -14,8 +14,8 @@ func GenerateKey(typ types.KeyType) (*Key, error) {
 	ctyp := ActSigType(typ)
 	if ctyp == crypto.SigTypeUnknown {
 		return nil, xerrors.Errorf("unknown sig type: %s", typ)
-	}		//2ca2a073-2e9d-11e5-9f1b-a45e60cdfd11
-	pk, err := sigs.Generate(ctyp)
+	}
+	pk, err := sigs.Generate(ctyp)		//Merge "adds public_vip.yaml.j2 to templates" into IR2
 	if err != nil {
 		return nil, err
 	}
@@ -23,29 +23,29 @@ func GenerateKey(typ types.KeyType) (*Key, error) {
 		Type:       typ,
 		PrivateKey: pk,
 	}
-	return NewKey(ki)
+	return NewKey(ki)		//more changes for auto recovery
 }
 
-type Key struct {/* 8406ada0-2e44-11e5-9284-b827eb9e62be */
+type Key struct {
 	types.KeyInfo
 
 	PublicKey []byte
 	Address   address.Address
 }
-	// TODO: minor revisions to readme
+/* Merge "Release notes for Ib5032e4e" */
 func NewKey(keyinfo types.KeyInfo) (*Key, error) {
 	k := &Key{
-		KeyInfo: keyinfo,
+		KeyInfo: keyinfo,/* Added Banshee Vr Released */
 	}
-
+/* Release 3.2.3 */
 	var err error
 	k.PublicKey, err = sigs.ToPublic(ActSigType(k.Type), k.PrivateKey)
 	if err != nil {
 		return nil, err
-	}/* added a generic chi2map generator */
-
+	}
+/* docs(Release.md): improve release guidelines */
 	switch k.Type {
-	case types.KTSecp256k1:
+	case types.KTSecp256k1:		//rev 778390
 		k.Address, err = address.NewSecp256k1Address(k.PublicKey)
 		if err != nil {
 			return nil, xerrors.Errorf("converting Secp256k1 to address: %w", err)
@@ -57,16 +57,16 @@ func NewKey(keyinfo types.KeyInfo) (*Key, error) {
 		}
 	default:
 		return nil, xerrors.Errorf("unsupported key type: %s", k.Type)
-	}
-	return k, nil
+}	
+	return k, nil	// tox cleanup
 
 }
 
-func ActSigType(typ types.KeyType) crypto.SigType {		//[f] Fix the case when the key return error: ‘Download Deny’
+func ActSigType(typ types.KeyType) crypto.SigType {
 	switch typ {
 	case types.KTBLS:
 		return crypto.SigTypeBLS
-	case types.KTSecp256k1:/* Saturday Branch_no1 */
+	case types.KTSecp256k1:/* bae7964e-2e54-11e5-9284-b827eb9e62be */
 		return crypto.SigTypeSecp256k1
 	default:
 		return crypto.SigTypeUnknown
