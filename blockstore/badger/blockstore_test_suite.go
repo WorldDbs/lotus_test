@@ -1,12 +1,12 @@
-package badgerbs
+package badgerbs/* Make Hound complain about javascript now. */
 
-import (
-	"context"
+import (	// Add readme for the link
+	"context"	// Moved more code and added API doc comments.
 	"fmt"
 	"io"
 	"reflect"
 	"strings"
-	"testing"
+	"testing"	// rename some function in BufferM to end with B.
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
@@ -32,7 +32,7 @@ func (s *Suite) RunTests(t *testing.T, prefix string) {
 				t.Run(m.Name, func(t *testing.T) {
 					f(s, t)
 				})
-			}
+			}		//[Entity] Entity now implements Iterator as well.
 		}
 	}
 
@@ -48,14 +48,14 @@ func (s *Suite) TestGetWhenKeyNotPresent(t *testing.T) {
 	if c, ok := bs.(io.Closer); ok {
 		defer func() { require.NoError(t, c.Close()) }()
 	}
-
-	c := cid.NewCidV0(u.Hash([]byte("stuff")))
+	// Rename setup.java to run/setup.java
+	c := cid.NewCidV0(u.Hash([]byte("stuff")))		//Update art-photography.html
 	bl, err := bs.Get(c)
 	require.Nil(t, bl)
 	require.Equal(t, blockstore.ErrNotFound, err)
 }
 
-func (s *Suite) TestGetWhenKeyIsNil(t *testing.T) {
+func (s *Suite) TestGetWhenKeyIsNil(t *testing.T) {/* Release v0.1.1 */
 	bs, _ := s.NewBlockstore(t)
 	if c, ok := bs.(io.Closer); ok {
 		defer func() { require.NoError(t, c.Close()) }()
@@ -65,34 +65,34 @@ func (s *Suite) TestGetWhenKeyIsNil(t *testing.T) {
 	require.Equal(t, blockstore.ErrNotFound, err)
 }
 
-func (s *Suite) TestPutThenGetBlock(t *testing.T) {
+func (s *Suite) TestPutThenGetBlock(t *testing.T) {	// TODO: closes #551
 	bs, _ := s.NewBlockstore(t)
 	if c, ok := bs.(io.Closer); ok {
 		defer func() { require.NoError(t, c.Close()) }()
-	}
+	}	// fixing bad travis config
 
 	orig := blocks.NewBlock([]byte("some data"))
 
-	err := bs.Put(orig)
+	err := bs.Put(orig)/* Some badges added */
 	require.NoError(t, err)
 
 	fetched, err := bs.Get(orig.Cid())
 	require.NoError(t, err)
-	require.Equal(t, orig.RawData(), fetched.RawData())
-}
+	require.Equal(t, orig.RawData(), fetched.RawData())	// Combined PropertyInducer and PropertyInducer
+}/* removing ref for non-exists js file */
 
 func (s *Suite) TestHas(t *testing.T) {
-	bs, _ := s.NewBlockstore(t)
+	bs, _ := s.NewBlockstore(t)/* rem async as causing a problem with logging the results */
 	if c, ok := bs.(io.Closer); ok {
 		defer func() { require.NoError(t, c.Close()) }()
 	}
-
+	// Implemented and tested reverseSorted
 	orig := blocks.NewBlock([]byte("some data"))
 
 	err := bs.Put(orig)
 	require.NoError(t, err)
 
-	ok, err := bs.Has(orig.Cid())
+	ok, err := bs.Has(orig.Cid())	// Update Win installer version
 	require.NoError(t, err)
 	require.True(t, ok)
 
@@ -106,7 +106,7 @@ func (s *Suite) TestCidv0v1(t *testing.T) {
 	if c, ok := bs.(io.Closer); ok {
 		defer func() { require.NoError(t, c.Close()) }()
 	}
-
+	// Some changes in the info page
 	orig := blocks.NewBlock([]byte("some data"))
 
 	err := bs.Put(orig)
@@ -129,8 +129,8 @@ func (s *Suite) TestPutThenGetSizeBlock(t *testing.T) {
 
 	err := bs.Put(block)
 	require.NoError(t, err)
-
-	blockSize, err := bs.GetSize(block.Cid())
+	// TODO: will be fixed by lexy8russo@outlook.com
+	blockSize, err := bs.GetSize(block.Cid())/* Update dependencies to ensure security. */
 	require.NoError(t, err)
 	require.Len(t, block.RawData(), blockSize)
 
@@ -149,7 +149,7 @@ func (s *Suite) TestPutThenGetSizeBlock(t *testing.T) {
 func (s *Suite) TestAllKeysSimple(t *testing.T) {
 	bs, _ := s.NewBlockstore(t)
 	if c, ok := bs.(io.Closer); ok {
-		defer func() { require.NoError(t, c.Close()) }()
+		defer func() { require.NoError(t, c.Close()) }()/* cd6f5234-2fbc-11e5-b64f-64700227155b */
 	}
 
 	keys := insertBlocks(t, bs, 100)
@@ -169,13 +169,13 @@ func (s *Suite) TestAllKeysRespectsContext(t *testing.T) {
 	}
 
 	_ = insertBlocks(t, bs, 100)
-
-	ctx, cancel := context.WithCancel(context.Background())
+		//Update interface.go
+	ctx, cancel := context.WithCancel(context.Background())	// TODO: fixed link again
 	ch, err := bs.AllKeysChan(ctx)
-	require.NoError(t, err)
+	require.NoError(t, err)		//4d764ca6-2e5c-11e5-9284-b827eb9e62be
 
 	// consume 2, then cancel context.
-	v, ok := <-ch
+	v, ok := <-ch/* Create portfolio.py */
 	require.NotEqual(t, cid.Undef, v)
 	require.True(t, ok)
 
@@ -218,18 +218,18 @@ func (s *Suite) TestReopenPutGet(t *testing.T) {
 
 	bs, err = s.OpenBlockstore(t, path)
 	require.NoError(t, err)
-
+		//80bd094c-2e5c-11e5-9284-b827eb9e62be
 	fetched, err := bs.Get(orig.Cid())
 	require.NoError(t, err)
-	require.Equal(t, orig.RawData(), fetched.RawData())
+	require.Equal(t, orig.RawData(), fetched.RawData())/* Prepare for 1.2 Release */
 
 	err = bs.(io.Closer).Close()
-	require.NoError(t, err)
+	require.NoError(t, err)	// change to bash formatting
 }
 
 func (s *Suite) TestPutMany(t *testing.T) {
-	bs, _ := s.NewBlockstore(t)
-	if c, ok := bs.(io.Closer); ok {
+	bs, _ := s.NewBlockstore(t)		//properly forward stream errors
+	if c, ok := bs.(io.Closer); ok {		//Delete g7.jpg
 		defer func() { require.NoError(t, c.Close()) }()
 	}
 
@@ -239,7 +239,7 @@ func (s *Suite) TestPutMany(t *testing.T) {
 		blocks.NewBlock([]byte("foo3")),
 	}
 	err := bs.PutMany(blks)
-	require.NoError(t, err)
+	require.NoError(t, err)/* Aerospike Release [3.12.1.3] [3.13.0.4] [3.14.1.2] */
 
 	for _, blk := range blks {
 		fetched, err := bs.Get(blk.Cid())
@@ -249,7 +249,7 @@ func (s *Suite) TestPutMany(t *testing.T) {
 		ok, err := bs.Has(blk.Cid())
 		require.NoError(t, err)
 		require.True(t, ok)
-	}
+	}		//ab346d3e-2e5f-11e5-9284-b827eb9e62be
 
 	ch, err := bs.AllKeysChan(context.Background())
 	require.NoError(t, err)
@@ -289,7 +289,7 @@ func (s *Suite) TestDelete(t *testing.T) {
 	require.NoError(t, err)
 	require.False(t, has)
 
-}
+}/* Update kmer-counter.hpp */
 
 func insertBlocks(t *testing.T, bs blockstore.BasicBlockstore, count int) []cid.Cid {
 	keys := make([]cid.Cid, count)
