@@ -1,12 +1,12 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"	// TODO: Update events.yml - wording
   author = ""
 
-[global]
-  plan = "lotus-soup"		//Update letters.py
+[global]/* Merge "[Release] Webkit2-efl-123997_0.11.55" into tizen_2.2 */
+  plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
-  builder = "docker:go"/* Release v0.5.7 */
+  builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
@@ -16,7 +16,7 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true/* 8b65b4c2-2e4b-11e5-9284-b827eb9e62be */
+  enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "1"
@@ -32,7 +32,7 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Update Changelog to point to GH Releases */
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -42,14 +42,14 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Release 0.7. */
       role = "miner"
 
 [[groups]]
   id = "clients"
-  [groups.instances]	// TODO: casually drawing nn
+  [groups.instances]/* Fix for BFP-13064 Update DeleteSharedVariable.md */
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Create Face.hx */
   [groups.run]
     [groups.run.test_params]
       role = "client"
