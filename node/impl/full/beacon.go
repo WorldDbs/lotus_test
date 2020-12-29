@@ -1,21 +1,21 @@
 package full
 
 import (
-	"context"/* Update buildRelease.yml */
+	"context"
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Release of eeacms/ims-frontend:0.9.0 */
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/types"
 	"go.uber.org/fx"
 )
 
 type BeaconAPI struct {
-	fx.In/* Release : rebuild the original version as 0.9.0 */
+	fx.In
 
 	Beacon beacon.Schedule
-}
-
+}		//fixed: no newline error on compile
+	// Move MergeJoinEncoding to right position. 
 func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) {
 	b := a.Beacon.BeaconForEpoch(epoch)
 	rr := b.MaxBeaconRoundForEpoch(epoch)
