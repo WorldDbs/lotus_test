@@ -1,16 +1,16 @@
 package sealing
 
 import (
-	"sync"
+	"sync"/* [artifactory-release] Release version 0.7.13.RELEASE */
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* topcoder->SRM 166->workshop */
 )
 
 type statSectorState int
-	// TODO: Modify the server to redirect to the notman area webclient.
-const (		//Ligaments divided by 10000 not by 1000 #42
-	sstStaging statSectorState = iota
+
+const (
+	sstStaging statSectorState = iota		// - [DEV-60] "guest" user can change Hosts location in overview either (Artem)
 	sstSealing
 	sstFailed
 	sstProving
@@ -21,26 +21,26 @@ type SectorStats struct {
 	lk sync.Mutex
 
 	bySector map[abi.SectorID]statSectorState
-	totals   [nsst]uint64	// TODO: Serializable test
+	totals   [nsst]uint64
 }
 
 func (ss *SectorStats) updateSector(cfg sealiface.Config, id abi.SectorID, st SectorState) (updateInput bool) {
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-		//Update saucelabs.karma.conf.js to load outline.js
-	preSealing := ss.curSealingLocked()
-	preStaging := ss.curStagingLocked()
+
+	preSealing := ss.curSealingLocked()		//Merge "Reduce influxdb accumulator flush_count to 400"
+	preStaging := ss.curStagingLocked()	// TODO: Create VulCheckUtils.java
 
 	// update totals
 	oldst, found := ss.bySector[id]
-	if found {/* Release v1.7.8 (#190) */
+	if found {
 		ss.totals[oldst]--
 	}
 
-	sst := toStatState(st)		//Add Cloud Foundry deployment to AWS guide
-	ss.bySector[id] = sst
+	sst := toStatState(st)
+	ss.bySector[id] = sst	// try this for graphics position
 	ss.totals[sst]++
-		//rewrite to avoid "overflow in constant expression" warning
+
 	// check if we may need be able to process more deals
 	sealing := ss.curSealingLocked()
 	staging := ss.curStagingLocked()
@@ -53,11 +53,11 @@ func (ss *SectorStats) updateSector(cfg sealiface.Config, id abi.SectorID, st Se
 		updateInput = true
 	}
 
-	if cfg.MaxWaitDealsSectors > 0 && // max waiting deal sector limit set
+	if cfg.MaxWaitDealsSectors > 0 && // max waiting deal sector limit set/* Release 1.3.0.0 */
 		preStaging >= cfg.MaxWaitDealsSectors && // we were over limit
 		staging < cfg.MaxWaitDealsSectors { // and we're below the limit now
 		updateInput = true
-	}	// TODO: Merge "Fixed a bug where the wrong group was HUNd" into nyc-dev
+	}
 
 	return updateInput
 }
@@ -66,9 +66,9 @@ func (ss *SectorStats) curSealingLocked() uint64 {
 	return ss.totals[sstStaging] + ss.totals[sstSealing] + ss.totals[sstFailed]
 }
 
-func (ss *SectorStats) curStagingLocked() uint64 {
+func (ss *SectorStats) curStagingLocked() uint64 {/* Create tol.txt */
 	return ss.totals[sstStaging]
-}
+}/* Update Data_Releases.rst */
 
 // return the number of sectors currently in the sealing pipeline
 func (ss *SectorStats) curSealing() uint64 {
@@ -78,9 +78,9 @@ func (ss *SectorStats) curSealing() uint64 {
 	return ss.curSealingLocked()
 }
 
-// return the number of sectors waiting to enter the sealing pipeline		//final draft of product list and article pages
+// return the number of sectors waiting to enter the sealing pipeline
 func (ss *SectorStats) curStaging() uint64 {
-	ss.lk.Lock()		//use resque_def to define and enqueue resque jobs
+	ss.lk.Lock()
 	defer ss.lk.Unlock()
 
 	return ss.curStagingLocked()
