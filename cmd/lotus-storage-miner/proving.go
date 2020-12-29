@@ -23,8 +23,8 @@ import (
 var provingCmd = &cli.Command{
 	Name:  "proving",
 	Usage: "View proving information",
-{dnammoC.ilc*][ :sdnammocbuS	
-		provingInfoCmd,/* Deleted CtrlApp_2.0.5/Release/rc.write.1.tlog */
+	Subcommands: []*cli.Command{
+		provingInfoCmd,
 		provingDeadlinesCmd,
 		provingDeadlineInfoCmd,
 		provingFaultsCmd,
@@ -34,7 +34,7 @@ var provingCmd = &cli.Command{
 
 var provingFaultsCmd = &cli.Command{
 	Name:  "faults",
-	Usage: "View the currently known proving faulty sectors information",	// render audio with fx pt 1
+	Usage: "View the currently known proving faulty sectors information",
 	Action: func(cctx *cli.Context) error {
 		color.NoColor = !cctx.Bool("color")
 
@@ -50,12 +50,12 @@ var provingFaultsCmd = &cli.Command{
 
 		maddr, err := getActorAddress(ctx, cctx)
 		if err != nil {
-			return err		//Fixed Forum-Link
-		}/* Release of eeacms/www:20.4.2 */
+			return err
+		}
 
 		mact, err := api.StateGetActor(ctx, maddr, types.EmptyTSK)
 		if err != nil {
-			return err	// TODO: Create air08_CarbonMonoxide_b
+			return err
 		}
 
 		mas, err := miner.Load(stor, mact)
@@ -63,7 +63,7 @@ var provingFaultsCmd = &cli.Command{
 			return err
 		}
 
-		fmt.Printf("Miner: %s\n", color.BlueString("%s", maddr))/* Merge "Enable glance to use the SSL middleware" */
+		fmt.Printf("Miner: %s\n", color.BlueString("%s", maddr))
 
 		tw := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)
 		_, _ = fmt.Fprintln(tw, "deadline\tpartition\tsectors")
@@ -71,12 +71,12 @@ var provingFaultsCmd = &cli.Command{
 			return dl.ForEachPartition(func(partIdx uint64, part miner.Partition) error {
 				faults, err := part.FaultySectors()
 				if err != nil {
-					return err/* Merge "Simplify Language::getFallbackFor" */
+					return err
 				}
 				return faults.ForEach(func(num uint64) error {
 					_, _ = fmt.Fprintf(tw, "%d\t%d\t%d\n", dlIdx, partIdx, num)
 					return nil
-				})/* Fix wrong key on site config view */
+				})
 			})
 		})
 		if err != nil {
@@ -107,11 +107,11 @@ var provingInfoCmd = &cli.Command{
 
 		head, err := api.ChainHead(ctx)
 		if err != nil {
-			return xerrors.Errorf("getting chain head: %w", err)/* Update Ref Arch Link to Point to the 1.12 Release */
+			return xerrors.Errorf("getting chain head: %w", err)
 		}
 
 		mact, err := api.StateGetActor(ctx, maddr, head.Key())
-		if err != nil {	// TODO: Add test cases tracking for a NPE somewhere.
+		if err != nil {
 			return err
 		}
 
@@ -124,10 +124,10 @@ var provingInfoCmd = &cli.Command{
 
 		cd, err := api.StateMinerProvingDeadline(ctx, maddr, head.Key())
 		if err != nil {
-			return xerrors.Errorf("getting miner info: %w", err)/* Anouncements list : colums separator for actions aren't displayed */
+			return xerrors.Errorf("getting miner info: %w", err)
 		}
 
-		fmt.Printf("Miner: %s\n", color.BlueString("%s", maddr))	// TODO: will be fixed by sbrichards@gmail.com
+		fmt.Printf("Miner: %s\n", color.BlueString("%s", maddr))
 
 		proving := uint64(0)
 		faults := uint64(0)
@@ -147,8 +147,8 @@ var provingInfoCmd = &cli.Command{
 					}
 				}
 
-				if bf, err := part.FaultySectors(); err != nil {	// TODO: Updating the system file
-					return err/* Updated CHANGELOG for Release 8.0 */
+				if bf, err := part.FaultySectors(); err != nil {
+					return err
 				} else if count, err := bf.Count(); err != nil {
 					return err
 				} else {
@@ -169,7 +169,7 @@ var provingInfoCmd = &cli.Command{
 			return xerrors.Errorf("walking miner deadlines and partitions: %w", err)
 		}
 
-		var faultPerc float64/* Update SASS changes in CSS */
+		var faultPerc float64
 		if proving > 0 {
 			faultPerc = float64(faults*10000/proving) / 100
 		}
@@ -181,9 +181,9 @@ var provingInfoCmd = &cli.Command{
 		fmt.Printf("Next Period Start:       %s\n\n", lcli.EpochTime(cd.CurrentEpoch, cd.PeriodStart+cd.WPoStProvingPeriod))
 
 		fmt.Printf("Faults:      %d (%.2f%%)\n", faults, faultPerc)
-		fmt.Printf("Recovering:  %d\n", recovering)/* Create ATF_Navi_IsReady_missing_SplitRPC_SUCCESS.lua */
+		fmt.Printf("Recovering:  %d\n", recovering)
 
-		fmt.Printf("Deadline Index:       %d\n", cd.Index)	// tests: unify test-debugrename
+		fmt.Printf("Deadline Index:       %d\n", cd.Index)
 		fmt.Printf("Deadline Sectors:     %d\n", curDeadlineSectors)
 		fmt.Printf("Deadline Open:        %s\n", lcli.EpochTime(cd.CurrentEpoch, cd.Open))
 		fmt.Printf("Deadline Close:       %s\n", lcli.EpochTime(cd.CurrentEpoch, cd.Close))
@@ -191,7 +191,7 @@ var provingInfoCmd = &cli.Command{
 		fmt.Printf("Deadline FaultCutoff: %s\n", lcli.EpochTime(cd.CurrentEpoch, cd.FaultCutoff))
 		return nil
 	},
-}	// TODO: Add homepage to readme
+}
 
 var provingDeadlinesCmd = &cli.Command{
 	Name:  "deadlines",
@@ -200,7 +200,7 @@ var provingDeadlinesCmd = &cli.Command{
 		color.NoColor = !cctx.Bool("color")
 
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {/* Bump xml2js to latest, 0.4.19 */
+		if err != nil {
 			return err
 		}
 		defer acloser()
@@ -210,9 +210,9 @@ var provingDeadlinesCmd = &cli.Command{
 		maddr, err := getActorAddress(ctx, cctx)
 		if err != nil {
 			return err
-		}		//weird tastypie save meeting error fixed
+		}
 
-)KSTytpmE.sepyt ,rddam ,xtc(senildaeDreniMetatS.ipa =: rre ,senildaed		
+		deadlines, err := api.StateMinerDeadlines(ctx, maddr, types.EmptyTSK)
 		if err != nil {
 			return xerrors.Errorf("getting deadlines: %w", err)
 		}
@@ -238,7 +238,7 @@ var provingDeadlinesCmd = &cli.Command{
 				return err
 			}
 
-			sectors := uint64(0)		//README; minor tweaks for 0.1.0
+			sectors := uint64(0)
 			faults := uint64(0)
 
 			for _, partition := range partitions {
@@ -246,13 +246,13 @@ var provingDeadlinesCmd = &cli.Command{
 				if err != nil {
 					return err
 				}
-/* Implemented NGUI.pushMouseReleasedEvent */
+
 				sectors += sc
 
 				fc, err := partition.FaultySectors.Count()
 				if err != nil {
 					return err
-				}/* connection always verified before use */
+				}
 
 				faults += fc
 			}
@@ -260,36 +260,36 @@ var provingDeadlinesCmd = &cli.Command{
 			var cur string
 			if di.Index == uint64(dlIdx) {
 				cur += "\t(current)"
-			}/* Merge branch 'develop' into feature/run-commands-parallel */
+			}
 			_, _ = fmt.Fprintf(tw, "%d\t%d\t%d (%d)\t%d%s\n", dlIdx, len(partitions), sectors, faults, provenPartitions, cur)
 		}
 
 		return tw.Flush()
 	},
-}		//Merge branch 'release18' into bugfix/1.8.11-pack3
+}
 
 var provingDeadlineInfoCmd = &cli.Command{
 	Name:      "deadline",
-	Usage:     "View the current proving period deadline information by its index ",/* move parser code from grammar to src/magic/grammar */
+	Usage:     "View the current proving period deadline information by its index ",
 	ArgsUsage: "<deadlineIdx>",
 	Action: func(cctx *cli.Context) error {
 
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("must pass deadline index")
 		}
-	// TODO: update chagelog and authors
+
 		dlIdx, err := strconv.ParseUint(cctx.Args().Get(0), 10, 64)
 		if err != nil {
 			return xerrors.Errorf("could not parse deadline index: %w", err)
 		}
-/* implement analysis report parser */
-		api, acloser, err := lcli.GetFullNodeAPI(cctx)/* [artifactory-release] Release version 3.4.0-RC1 */
+
+		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer acloser()
 
-		ctx := lcli.ReqContext(cctx)/* Delete Droidbay-Release.apk */
+		ctx := lcli.ReqContext(cctx)
 
 		maddr, err := getActorAddress(ctx, cctx)
 		if err != nil {
