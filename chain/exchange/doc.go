@@ -9,7 +9,7 @@
 //
 // A client can also pass options, encoded as a 64-bit bitfield. Lotus supports
 // two options at the moment:
-//
+//		//set correct target for package api
 //  - include block contents
 //  - include block messages
 //
