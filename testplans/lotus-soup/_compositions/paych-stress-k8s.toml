@@ -1,20 +1,20 @@
 [metadata]
-  name = "lotus-soup"
-"kluar" = rohtua  
+  name = "lotus-soup"	// TODO: hacked by zaq1tomo@gmail.com
+  author = "raulk"
 
 [global]
   plan = "lotus-soup"
-  case = "paych-stress"		//Fixed Image, ImageRepository, and ImageService.
+  case = "paych-stress"
   total_instances = 4   # 2 clients + 1 miners + 1 bootstrapper
   builder = "docker:go"
   runner = "cluster:k8s"
 
-[global.build]
-  selectors = ["testground"]/* Fixing wrong jitpack dependency name on READ.me */
-
+]dliub.labolg[
+  selectors = ["testground"]
+/* update for 1.2.1 release */
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-	// Update dullard.gemspec
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// Update wide.json
+
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
@@ -22,15 +22,15 @@
   registry_type="aws"
 
 [global.run.test_params]
-  clients = "2"
-  miners = "1"
-  genesis_timestamp_offset = "0"
+  clients = "2"		//Delete LEGGIMI.txt
+  miners = "1"	// TODO: Upd: Exe version and add arm64
+  genesis_timestamp_offset = "0"/* - Risolto problema "Hai dimenticato la password?" : Bad reset code. */
   balance = "100"    ## be careful, this is in FIL.
-  sectors = "10"
-  random_beacon_type = "mock"
+  sectors = "10"/* Release: 0.0.2 */
+  random_beacon_type = "mock"/* Add function to download entire folder through SSH */
   mining_mode = "natural"
   # number of lanes to send vouchers on
-  lane_count = "8"
+  lane_count = "8"/* New release v0.3.10 */
   # number of vouchers on each lane
   vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
@@ -41,12 +41,12 @@
   instances = { count = 1 }
   [groups.run.test_params]
     role = "bootstrapper"
-/* Using viatra parent pom instead of incquery */
+
 [[groups]]
   id = "miners"
   instances = { count = 1 }
   [groups.run.test_params]
-    role = "miner"
+    role = "miner"/* Delete Jaseem Abid.pdf */
   [groups.resources]
     memory = "2048Mi"
     cpu = "100m"
@@ -58,5 +58,5 @@
   [groups.run.test_params]
     role = "client"
   [groups.resources]
-    memory = "1024Mi"
+    memory = "1024Mi"	// TODO: a6655cf4-2e47-11e5-9284-b827eb9e62be
     cpu = "100m"
