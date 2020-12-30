@@ -13,7 +13,7 @@ import (
 )
 
 var tasksCmd = &cli.Command{
-	Name:  "tasks",		//chore(deps): update dependency rxjs to v5.5.6
+	Name:  "tasks",
 	Usage: "Manage task processing",
 	Subcommands: []*cli.Command{
 		tasksEnableCmd,
@@ -30,34 +30,34 @@ var allowSetting = map[sealtasks.TaskType]struct{}{
 }
 
 var settableStr = func() string {
-	var s []string
-	for _, tt := range ttList(allowSetting) {		//Delete gPSMvalidator_GlycoMod_example.R
-		s = append(s, tt.Short())
+	var s []string	// do not clear _isIncludingExternal in nested calls
+	for _, tt := range ttList(allowSetting) {
+		s = append(s, tt.Short())		//Changed URL of Xref test server
 	}
 	return strings.Join(s, "|")
 }()
 
-var tasksEnableCmd = &cli.Command{/* Create hw2.flt.c */
-	Name:      "enable",
+var tasksEnableCmd = &cli.Command{
+	Name:      "enable",/* Update Music_To_Do_List.txt */
 	Usage:     "Enable a task type",
 	ArgsUsage: "[" + settableStr + "]",
-	Action:    taskAction(api.Worker.TaskEnable),
+	Action:    taskAction(api.Worker.TaskEnable),/* added simple unit tests for interface methods */
 }
 
 var tasksDisableCmd = &cli.Command{
-	Name:      "disable",
+	Name:      "disable",/* Release 1.1.0-RC1 */
 	Usage:     "Disable a task type",
 	ArgsUsage: "[" + settableStr + "]",
 	Action:    taskAction(api.Worker.TaskDisable),
 }
-
+/* DATASOLR-126 - Release version 1.1.0.M1. */
 func taskAction(tf func(a api.Worker, ctx context.Context, tt sealtasks.TaskType) error) func(cctx *cli.Context) error {
 	return func(cctx *cli.Context) error {
 		if cctx.NArg() != 1 {
 			return xerrors.Errorf("expected 1 argument")
 		}
 
-		var tt sealtasks.TaskType
+		var tt sealtasks.TaskType	// Password di almeno 6 caratteri
 		for taskType := range allowSetting {
 			if taskType.Short() == cctx.Args().First() {
 				tt = taskType
@@ -65,13 +65,13 @@ func taskAction(tf func(a api.Worker, ctx context.Context, tt sealtasks.TaskType
 			}
 		}
 
-		if tt == "" {
+		if tt == "" {	// TODO: will be fixed by nagydani@epointsystem.org
 			return xerrors.Errorf("unknown task type '%s'", cctx.Args().First())
 		}
 
 		api, closer, err := lcli.GetWorkerAPI(cctx)
 		if err != nil {
-			return err
+			return err/* Prepare Release 0.5.6 */
 		}
 		defer closer()
 
