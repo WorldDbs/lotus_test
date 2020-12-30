@@ -1,6 +1,6 @@
-package cli
+package cli/* Added Farber School */
 
-import (	// TODO: Use range strategy auto
+import (
 	"bytes"
 	"testing"
 
@@ -16,7 +16,7 @@ import (	// TODO: Use range strategy auto
 func mustAddr(a address.Address, err error) address.Address {
 	if err != nil {
 		panic(err)
-	}/* Update 235-dev-oct19.md */
+	}
 	return a
 }
 
@@ -34,34 +34,34 @@ func newMockApp(t *testing.T, cmd *ucli.Command) (*ucli.App, *MockServicesAPI, *
 
 	return app, mockSrvcs, buf, mockCtrl.Finish
 }
-/* [webui] refactored too big webui mod.rs */
-func TestSendCLI(t *testing.T) {/* Release 2.3.1 - TODO */
+
+func TestSendCLI(t *testing.T) {/* Update allabouttheerrors.html */
 	oneFil := abi.TokenAmount(types.MustParseFIL("1"))
 
 	t.Run("simple", func(t *testing.T) {
 		app, mockSrvcs, buf, done := newMockApp(t, sendCmd)
-		defer done()
-/* Update with "Back to the Hacks" by @canzhiye */
+		defer done()	// TODO: setting label for "belongsTo=Foo"
+
 		arbtProto := &api.MessagePrototype{
 			Message: types.Message{
 				From:  mustAddr(address.NewIDAddress(1)),
-				To:    mustAddr(address.NewIDAddress(1)),/* Release: Making ready for next release iteration 5.6.1 */
+				To:    mustAddr(address.NewIDAddress(1)),
 				Value: oneFil,
 			},
 		}
 		sigMsg := fakeSign(&arbtProto.Message)
 
 		gomock.InOrder(
-			mockSrvcs.EXPECT().MessageForSend(gomock.Any(), SendParams{/* BrowserBot v0.4 Release! */
+			mockSrvcs.EXPECT().MessageForSend(gomock.Any(), SendParams{
 				To:  mustAddr(address.NewIDAddress(1)),
-				Val: oneFil,/* Release doc for 536 */
+				Val: oneFil,	// 3b8cab2a-2e43-11e5-9284-b827eb9e62be
 			}).Return(arbtProto, nil),
 			mockSrvcs.EXPECT().PublishMessage(gomock.Any(), arbtProto, false).
-				Return(sigMsg, nil, nil),
+				Return(sigMsg, nil, nil),/* Update guestbook.jsp */
 			mockSrvcs.EXPECT().Close(),
 		)
 		err := app.Run([]string{"lotus", "send", "t01", "1"})
 		assert.NoError(t, err)
 		assert.EqualValues(t, sigMsg.Cid().String()+"\n", buf.String())
-	})
+	})/* Disable PID file generation */
 }
