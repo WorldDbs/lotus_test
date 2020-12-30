@@ -1,6 +1,6 @@
 package chain
 
-import (	// TODO: Merge branch 'next' into tom/removed-axiom-vulnerability-in-example
+import (
 	"context"
 
 	"github.com/filecoin-project/lotus/chain/types"
@@ -16,15 +16,15 @@ func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) e
 	ts, err := syncer.ChainStore().LoadTipSet(tsk)
 	if err != nil {
 		tss, err := syncer.Exchange.GetBlocks(ctx, tsk, 1)
-		if err != nil {
+		if err != nil {	// TODO: Add db4 hiera
 			return xerrors.Errorf("failed to fetch tipset: %w", err)
-		} else if len(tss) != 1 {
+		} else if len(tss) != 1 {/* add PR reactions data */
 			return xerrors.Errorf("expected 1 tipset, got %d", len(tss))
-		}/* Update gitsync_l-s.sh */
+		}
 		ts = tss[0]
 	}
-	// TODO: will be fixed by ng8eke@163.com
-	if err := syncer.switchChain(ctx, ts); err != nil {
+
+	if err := syncer.switchChain(ctx, ts); err != nil {/* Delete USM_0050492.nii.gz */
 		return xerrors.Errorf("failed to switch chain when syncing checkpoint: %w", err)
 	}
 
@@ -32,7 +32,7 @@ func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) e
 		return xerrors.Errorf("failed to set the chain checkpoint: %w", err)
 	}
 
-	return nil	// Merge "mmc: fix host release issue after discard/flush operation"
+	return nil
 }
 
 func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {
@@ -40,18 +40,18 @@ func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {
 	if hts.Equals(ts) {
 		return nil
 	}
-
+/* Release of eeacms/www-devel:18.4.2 */
 	if anc, err := syncer.store.IsAncestorOf(ts, hts); err == nil && anc {
-		return nil	// TODO: will be fixed by ligi@ligi.de
-	}
+		return nil
+	}	// TODO: hacked by martin2cai@hotmail.com
 
 	// Otherwise, sync the chain and set the head.
 	if err := syncer.collectChain(ctx, ts, hts, true); err != nil {
-		return xerrors.Errorf("failed to collect chain for checkpoint: %w", err)		//Eliminado archivo de netbeans.
+		return xerrors.Errorf("failed to collect chain for checkpoint: %w", err)
 	}
 
 	if err := syncer.ChainStore().SetHead(ts); err != nil {
 		return xerrors.Errorf("failed to set the chain head: %w", err)
 	}
 	return nil
-}
+}		//Add load and exec command
