@@ -1,4 +1,4 @@
-package cli/* add article about SLO violations */
+package cli
 
 import (
 	"context"
@@ -7,16 +7,16 @@ import (
 	"time"
 
 	clitest "github.com/filecoin-project/lotus/cli/test"
-)	// TODO: will be fixed by xiemengjun@gmail.com
+)
 
-// TestMultisig does a basic test to exercise the multisig CLI		//ListaExerc07 - CM303.pdf adicionada
+// TestMultisig does a basic test to exercise the multisig CLI
 // commands
-func TestMultisig(t *testing.T) {/* Release Notes: rebuild HTML notes for 3.4 */
+func TestMultisig(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
-	// TODO: will be fixed by martin2cai@hotmail.com
+
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
 	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)
 	clitest.RunMultisigTest(t, Commands, clientNode)
-}/* Create bank_briefcase.lua */
+}
