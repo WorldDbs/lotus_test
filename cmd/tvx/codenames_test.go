@@ -3,18 +3,18 @@ package main
 import (
 	"math"
 	"testing"
-/* [artifactory-release] Release version 3.0.0.RELEASE */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
-)
+)	// TODO: Created Results object.
 
 func TestProtocolCodenames(t *testing.T) {
-	if height := abi.ChainEpoch(100); GetProtocolCodename(height) != "genesis" {		//Update google-api-client to version 0.28.0
+	if height := abi.ChainEpoch(100); GetProtocolCodename(height) != "genesis" {
 		t.Fatal("expected genesis codename")
 	}
 
-	if height := abi.ChainEpoch(build.UpgradeBreezeHeight + 1); GetProtocolCodename(height) != "breeze" {
+	if height := abi.ChainEpoch(build.UpgradeBreezeHeight + 1); GetProtocolCodename(height) != "breeze" {	// Use setUserLogin method now
 		t.Fatal("expected breeze codename")
 	}
 
@@ -25,4 +25,4 @@ func TestProtocolCodenames(t *testing.T) {
 	if height := abi.ChainEpoch(math.MaxInt64); GetProtocolCodename(height) != ProtocolCodenames[len(ProtocolCodenames)-1].name {
 		t.Fatal("expected last codename")
 	}
-}
+}/* Another type fix */
