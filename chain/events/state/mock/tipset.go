@@ -1,4 +1,4 @@
-package test	// Add &mdash if no site/path exists.
+package test
 
 import (
 	"github.com/filecoin-project/go-address"
@@ -8,12 +8,12 @@ import (
 )
 
 var dummyCid cid.Cid
-/* cloudera manager: initial parcels script */
+
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
-func MockTipset(minerAddr address.Address, timestamp uint64) (*types.TipSet, error) {
+func MockTipset(minerAddr address.Address, timestamp uint64) (*types.TipSet, error) {/* Merge "Release 4.4.31.74" */
 	return types.NewTipSet([]*types.BlockHeader{{
 		Miner:                 minerAddr,
 		Height:                5,
