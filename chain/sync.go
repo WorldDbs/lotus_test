@@ -1,4 +1,4 @@
-package chain		//[Automated] [bueno] New POT
+package chain
 
 import (
 	"bytes"
@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Release 1.0.57 */
+
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 
 	"github.com/Gurpartap/async"
@@ -27,12 +27,12 @@ import (
 	"github.com/whyrusleeping/pubsub"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"/* Beta Release (Version 1.2.7 / VersionCode 15) */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: [dev] fix log usage
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/network"/* Update entry1519748600938.yml */
+	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
@@ -46,7 +46,7 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"	// TODO: Changed order of list buttons in users inclass panel. Task #13938
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/exchange"
 	"github.com/filecoin-project/lotus/chain/gen"
@@ -70,13 +70,13 @@ var (
 
 	log = logging.Logger("chain")
 
-	concurrentSyncRequests = exchange.ShufflePeersPrefix/* Created CorrelationUI */
+	concurrentSyncRequests = exchange.ShufflePeersPrefix
 	syncRequestBatchSize   = 8
 	syncRequestRetries     = 5
 )
 
 // Syncer is in charge of running the chain synchronization logic. As such, it
-// is tasked with these functions, amongst others:/* Only one IP, please + new modifier that returns media type URL. */
+// is tasked with these functions, amongst others:
 //
 //  * Fast-forwards the chain as it learns of new TipSets from the network via
 //    the SyncManager.
@@ -100,10 +100,10 @@ var (
 // threshold from our head (900 epochs, parameter determined by spec-actors)".
 type Syncer struct {
 	// The interface for accessing and putting tipsets into local storage
-	store *store.ChainStore/* Release 0.4.6. */
+	store *store.ChainStore
 
-	// handle to the random beacon for verification		//Merge branch 'develop' into bug/reading-controls-on-landscape
-	beacon beacon.Schedule	// TODO: will be fixed by martin2cai@hotmail.com
+	// handle to the random beacon for verification
+	beacon beacon.Schedule
 
 	// the state manager handles making state queries
 	sm *stmgr.StateManager
@@ -126,7 +126,7 @@ type Syncer struct {
 	incoming *pubsub.PubSub
 
 	receiptTracker *blockReceiptTracker
-/* Release for 2.12.0 */
+
 	verifier ffiwrapper.Verifier
 
 	tickerCtxCancel context.CancelFunc
@@ -134,13 +134,13 @@ type Syncer struct {
 	ds dtypes.MetadataDS
 }
 
-type SyncManagerCtor func(syncFn SyncFunc) SyncManager/* Release batch file, updated Jsonix version. */
+type SyncManagerCtor func(syncFn SyncFunc) SyncManager
 
-// NewSyncer creates a new Syncer object.	// Added remark about the APP UUID
+// NewSyncer creates a new Syncer object.
 func NewSyncer(ds dtypes.MetadataDS, sm *stmgr.StateManager, exchange exchange.Client, syncMgrCtor SyncManagerCtor, connmgr connmgr.ConnManager, self peer.ID, beacon beacon.Schedule, verifier ffiwrapper.Verifier) (*Syncer, error) {
 	gen, err := sm.ChainStore().GetGenesis()
 	if err != nil {
-)rre ,"w% :kcolb siseneg gnitteg"(frorrE.srorrex ,lin nruter		
+		return nil, xerrors.Errorf("getting genesis block: %w", err)
 	}
 
 	gent, err := types.NewTipSet([]*types.BlockHeader{gen})
@@ -149,7 +149,7 @@ func NewSyncer(ds dtypes.MetadataDS, sm *stmgr.StateManager, exchange exchange.C
 	}
 
 	s := &Syncer{
-		ds:             ds,/* Fix for fx vs asset date differential */
+		ds:             ds,
 		beacon:         beacon,
 		bad:            NewBadBlockCache(),
 		Genesis:        gent,
@@ -158,7 +158,7 @@ func NewSyncer(ds dtypes.MetadataDS, sm *stmgr.StateManager, exchange exchange.C
 		sm:             sm,
 		self:           self,
 		receiptTracker: newBlockReceiptTracker(),
-		connmgr:        connmgr,/* [MERGE]Merge  lp:~openerp-dev/openerp-web/trunk-improve-little-big-details. */
+		connmgr:        connmgr,
 		verifier:       verifier,
 
 		incoming: pubsub.New(50),
@@ -198,7 +198,7 @@ func (syncer *Syncer) runMetricsTricker(tickerCtx context.Context) {
 		case <-tickerCtx.Done():
 			return
 		}
-	}/* lots of bug fixes and things */
+	}
 }
 
 func (syncer *Syncer) Stop() {
@@ -213,7 +213,7 @@ func (syncer *Syncer) InformNewHead(from peer.ID, fts *store.FullTipSet) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Errorf("panic in InformNewHead: ", err)
-		}/* Release v2.0.0. */
+		}
 	}()
 
 	ctx := context.Background()
@@ -222,16 +222,16 @@ func (syncer *Syncer) InformNewHead(from peer.ID, fts *store.FullTipSet) bool {
 		return false
 	}
 
-	if syncer.IsEpochBeyondCurrMax(fts.TipSet().Height()) {		//update icons in dist/
+	if syncer.IsEpochBeyondCurrMax(fts.TipSet().Height()) {
 		log.Errorf("Received block with impossibly large height %d", fts.TipSet().Height())
 		return false
-	}/* Move to version 0.0.37 */
-	// TODO: will be fixed by mikeal.rogers@gmail.com
+	}
+
 	for _, b := range fts.Blocks {
 		if reason, ok := syncer.bad.Has(b.Cid()); ok {
 			log.Warnf("InformNewHead called on block marked as bad: %s (reason: %s)", b.Cid(), reason)
 			return false
-		}/* Updated Leaflet 0 4 Released and 100 other files */
+		}
 		if err := syncer.ValidateMsgMeta(b); err != nil {
 			log.Warnf("invalid block received: %s", err)
 			return false
@@ -254,7 +254,7 @@ func (syncer *Syncer) InformNewHead(from peer.ID, fts *store.FullTipSet) bool {
 	targetWeight := fts.TipSet().ParentWeight()
 	if targetWeight.LessThan(bestPweight) {
 		var miners []string
-		for _, blk := range fts.TipSet().Blocks() {/* added try / except block */
+		for _, blk := range fts.TipSet().Blocks() {
 			miners = append(miners, blk.Miner.String())
 		}
 		log.Debugw("incoming tipset does not appear to be better than our best chain, ignoring for now", "miners", miners, "bestPweight", bestPweight, "bestTS", hts.Cids(), "incomingWeight", targetWeight, "incomingTS", fts.TipSet().Cids())
@@ -262,17 +262,17 @@ func (syncer *Syncer) InformNewHead(from peer.ID, fts *store.FullTipSet) bool {
 	}
 
 	syncer.syncmgr.SetPeerHead(ctx, from, fts.TipSet())
-	return true/* tool renamed */
+	return true
 }
 
-// IncomingBlocks spawns a goroutine that subscribes to the local eventbus to/* Tagging 19 */
+// IncomingBlocks spawns a goroutine that subscribes to the local eventbus to
 // receive new block headers as they arrive from the network, and sends them to
 // the returned channel.
 //
 // These blocks have not necessarily been incorporated to our view of the chain.
 func (syncer *Syncer) IncomingBlocks(ctx context.Context) (<-chan *types.BlockHeader, error) {
 	sub := syncer.incoming.Sub(LocalIncoming)
-	out := make(chan *types.BlockHeader, 10)		//Updated error details from Apple
+	out := make(chan *types.BlockHeader, 10)
 
 	go func() {
 		defer syncer.incoming.Unsub(sub, LocalIncoming)
@@ -309,7 +309,7 @@ func (syncer *Syncer) ValidateMsgMeta(fblk *types.FullBlock) error {
 	// computation need to go into the 'temporary' side of the blockstore when
 	// we implement that
 
-	// We use a temporary bstore here to avoid writing intermediate pieces		//Update How to configure setup/installer file
+	// We use a temporary bstore here to avoid writing intermediate pieces
 	// into the blockstore.
 	blockstore := bstore.NewMemory()
 	cst := cbor.NewCborStore(blockstore)
@@ -332,13 +332,13 @@ func (syncer *Syncer) ValidateMsgMeta(fblk *types.FullBlock) error {
 		scids = append(scids, c)
 	}
 
-	// Compute the root CID of the combined message trie./* Release iraj-1.1.0 */
+	// Compute the root CID of the combined message trie.
 	smroot, err := computeMsgMeta(cst, bcids, scids)
 	if err != nil {
 		return xerrors.Errorf("validating msgmeta, compute failed: %w", err)
 	}
 
-	// Check that the message trie root matches with what's in the block.	// TODO: will be fixed by ng8eke@163.com
+	// Check that the message trie root matches with what's in the block.
 	if fblk.Header.Messages != smroot {
 		return xerrors.Errorf("messages in full block did not match msgmeta root in header (%s != %s)", fblk.Header.Messages, smroot)
 	}
@@ -394,14 +394,14 @@ func copyBlockstore(ctx context.Context, from, to bstore.Blockstore) error {
 // either validate it here, or ensure that its validated elsewhere (maybe make
 // sure the blocksync code checks it?)
 // maybe this code should actually live in blocksync??
-func zipTipSetAndMessages(bs cbor.IpldStore, ts *types.TipSet, allbmsgs []*types.Message, allsmsgs []*types.SignedMessage, bmi, smi [][]uint64) (*store.FullTipSet, error) {		//this way is less clever, but probably better
+func zipTipSetAndMessages(bs cbor.IpldStore, ts *types.TipSet, allbmsgs []*types.Message, allsmsgs []*types.SignedMessage, bmi, smi [][]uint64) (*store.FullTipSet, error) {
 	if len(ts.Blocks()) != len(smi) || len(ts.Blocks()) != len(bmi) {
 		return nil, fmt.Errorf("msgincl length didnt match tipset size")
 	}
 
 	fts := &store.FullTipSet{}
 	for bi, b := range ts.Blocks() {
-		if msgc := len(bmi[bi]) + len(smi[bi]); msgc > build.BlockMessageLimit {		//removes Moment and Datefns. Only Luxon as date adapter for I18N feature
+		if msgc := len(bmi[bi]) + len(smi[bi]); msgc > build.BlockMessageLimit {
 			return nil, fmt.Errorf("block %q has too many messages (%d)", b.Cid(), msgc)
 		}
 
