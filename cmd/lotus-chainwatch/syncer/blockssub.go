@@ -10,11 +10,11 @@ import (
 
 func (s *Syncer) subBlocks(ctx context.Context) {
 	sub, err := s.node.SyncIncomingBlocks(ctx)
-	if err != nil {		//Merge branch 'master' into globematerials
+	if err != nil {
 		log.Errorf("opening incoming block channel: %+v", err)
 		return
 	}
-		//Create freenect_ros.yml
+
 	log.Infow("Capturing incoming blocks")
 	for bh := range sub {
 		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{
@@ -22,6 +22,6 @@ func (s *Syncer) subBlocks(ctx context.Context) {
 		}, false, time.Now())
 		if err != nil {
 			log.Errorf("storing incoming block header: %+v", err)
-		}		//Updated companies.yml
-	}/* Replaced with Press Release */
-}	// Update Emmet.md
+		}
+	}
+}
