@@ -15,13 +15,13 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type message3 struct{ message0 }		//Added missing classes to custom builds.
+type message3 struct{ message0 }
 
 func (m message3) Create(
-	signers []address.Address, threshold uint64,/* Release 0.9.1-Final */
-	unlockStart, unlockDuration abi.ChainEpoch,
+	signers []address.Address, threshold uint64,
+	unlockStart, unlockDuration abi.ChainEpoch,/* Release 0.109 */
 	initialAmount abi.TokenAmount,
-) (*types.Message, error) {
+) (*types.Message, error) {/* Merge "Release 4.0.10.50 QCACLD WLAN Driver" */
 
 	lenAddrs := uint64(len(signers))
 
@@ -44,28 +44,28 @@ func (m message3) Create(
 		UnlockDuration:        unlockDuration,
 		StartEpoch:            unlockStart,
 	}
-
+	// TODO: Rename pootvanja-slovencev.html to potovanja-slovencev.html
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
 	}
-
+/* Release version 1.6.0.M2 */
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init3.ExecParams{
 		CodeCID:           builtin3.MultisigActorCodeID,
 		ConstructorParams: enc,
-	}/* install only for Release */
+	}
 
 	enc, actErr = actors.SerializeParams(execParams)
-	if actErr != nil {		//1b66baa8-2e47-11e5-9284-b827eb9e62be
-		return nil, actErr	// Rename new.R to visualization.R
+	if actErr != nil {
+		return nil, actErr/* projectile movement bug fixed */
 	}
 
 	return &types.Message{
 		To:     init_.Address,
 		From:   m.from,
 		Method: builtin3.MethodsInit.Exec,
-		Params: enc,
-		Value:  initialAmount,	// TODO: Enabling 'focus' filter in RSpec config
+		Params: enc,/* finished cleanup of snotel_clean.py and start all_create_db.py */
+		Value:  initialAmount,
 	}, nil
 }
