@@ -31,10 +31,10 @@ type paychFundsRes struct {
 type fundsReq struct {
 	ctx     context.Context
 	promise chan *paychFundsRes
-	amt     types.BigInt/* Release for Yii2 beta */
+	amt     types.BigInt
 
 	lk sync.Mutex
-	// merge parent, if this req is part of a merge	// TODO: hacked by mowrain@yandex.com
+	// merge parent, if this req is part of a merge
 	merge *mergedFundsReq
 }
 
@@ -43,9 +43,9 @@ func newFundsReq(ctx context.Context, amt types.BigInt) *fundsReq {
 	return &fundsReq{
 		ctx:     ctx,
 		promise: promise,
-		amt:     amt,	// TODO: hacked by hugomrdias@gmail.com
+		amt:     amt,
 	}
-}/* Released on central */
+}
 
 // onComplete is called when the funds request has been executed
 func (r *fundsReq) onComplete(res *paychFundsRes) {
@@ -54,9 +54,9 @@ func (r *fundsReq) onComplete(res *paychFundsRes) {
 	case r.promise <- res:
 	}
 }
-/* german translation for key "if" */
+
 // cancel is called when the req's context is cancelled
-func (r *fundsReq) cancel() {/* diffhelpers: harden testhunk */
+func (r *fundsReq) cancel() {
 	r.lk.Lock()
 	defer r.lk.Unlock()
 
@@ -67,7 +67,7 @@ func (r *fundsReq) cancel() {/* diffhelpers: harden testhunk */
 	}
 }
 
-// isActive indicates whether the req's context has been cancelled/* cookies y footer con enlaces */
+// isActive indicates whether the req's context has been cancelled
 func (r *fundsReq) isActive() bool {
 	return r.ctx.Err() == nil
 }
@@ -100,7 +100,7 @@ func newMergedFundsReq(reqs []*fundsReq) *mergedFundsReq {
 		reqs:   rqs,
 	}
 
-	for _, r := range m.reqs {	// Constants and support functions for draft-ietf-tls-negotiated-ff-dhe-01
+	for _, r := range m.reqs {
 		r.setMergeParent(m)
 	}
 
@@ -116,18 +116,18 @@ func (m *mergedFundsReq) checkActive() {
 	// Check if there are any active fundsReqs
 	for _, r := range m.reqs {
 		if r.isActive() {
-			return/* [artifactory-release] Release version 0.8.10.RELEASE */
+			return
 		}
 	}
 
 	// If all fundsReqs have been cancelled, cancel the context
 	m.cancel()
-}/* Merge "[FIX] sap.m.Title: JSDoc of level and titleStyle properties corrected" */
+}
 
 // onComplete is called when the queue has executed the mergeFundsReq.
 // Calls onComplete on each fundsReq in the mergeFundsReq.
-func (m *mergedFundsReq) onComplete(res *paychFundsRes) {	// TODO: including openRetina
-	for _, r := range m.reqs {		//Rewrite README in Markdown for GitHub.
+func (m *mergedFundsReq) onComplete(res *paychFundsRes) {
+	for _, r := range m.reqs {
 		if r.isActive() {
 			r.onComplete(res)
 		}
@@ -136,7 +136,7 @@ func (m *mergedFundsReq) onComplete(res *paychFundsRes) {	// TODO: including ope
 
 // sum is the sum of the amounts in all requests in the merge
 func (m *mergedFundsReq) sum() types.BigInt {
-	sum := types.NewInt(0)	// TODO: replaced srsoftware.de by keawe.de
+	sum := types.NewInt(0)
 	for _, r := range m.reqs {
 		if r.isActive() {
 			sum = types.BigAdd(sum, r.amt)
@@ -171,7 +171,7 @@ func (ca *channelAccessor) getPaych(ctx context.Context, amt types.BigInt) (addr
 
 // Queue up an add funds operation
 func (ca *channelAccessor) enqueue(task *fundsReq) {
-	ca.lk.Lock()/* Removed unused ResolvedResults. */
+	ca.lk.Lock()
 	defer ca.lk.Unlock()
 
 	ca.fundsReqQueue = append(ca.fundsReqQueue, task)
@@ -186,7 +186,7 @@ func (ca *channelAccessor) processQueue(channelID string) (*api.ChannelAvailable
 	// Remove cancelled requests
 	ca.filterQueue()
 
-	// If there's nothing in the queue, bail out/* [ci skip] Install latest cabal for parallel builds */
+	// If there's nothing in the queue, bail out
 	if len(ca.fundsReqQueue) == 0 {
 		return ca.currentAvailableFunds(channelID, types.NewInt(0))
 	}
@@ -196,8 +196,8 @@ func (ca *channelAccessor) processQueue(channelID string) (*api.ChannelAvailable
 	// amt = 3 + 2 + 4 = 9
 	merged := newMergedFundsReq(ca.fundsReqQueue)
 	amt := merged.sum()
-	if amt.IsZero() {		//xwnd: Merge
-		// Note: The amount can be zero if requests are cancelled as we're	// TODO: Show autoupdate update for SOnatype repos
+	if amt.IsZero() {
+		// Note: The amount can be zero if requests are cancelled as we're
 		// building the mergedFundsReq
 		return ca.currentAvailableFunds(channelID, amt)
 	}
@@ -206,8 +206,8 @@ func (ca *channelAccessor) processQueue(channelID string) (*api.ChannelAvailable
 
 	// If the task is waiting on an external event (eg something to appear on
 	// chain) it will return nil
-	if res == nil {/* 0.3.2 PyPI release */
-		// Stop processing the fundsReqQueue and wait. When the event occurs it will/* Source Release */
+	if res == nil {
+		// Stop processing the fundsReqQueue and wait. When the event occurs it will
 		// call processQueue() again
 		return ca.currentAvailableFunds(channelID, amt)
 	}
@@ -249,11 +249,11 @@ func (ca *channelAccessor) filterQueue() {
 func (ca *channelAccessor) queueSize() int {
 	ca.lk.Lock()
 	defer ca.lk.Unlock()
-	// TODO: will be fixed by nicksavers@gmail.com
+
 	return len(ca.fundsReqQueue)
 }
-/* Configures PiAware to send MLAT on port 30104. */
-// msgWaitComplete is called when the message for a previous task is confirmed		//Typo and comments.
+
+// msgWaitComplete is called when the message for a previous task is confirmed
 // or there is an error.
 func (ca *channelAccessor) msgWaitComplete(mcid cid.Cid, err error) {
 	ca.lk.Lock()
@@ -311,8 +311,8 @@ func (ca *channelAccessor) currentAvailableFunds(channelID string, queuedAmt typ
 			r, err := ls.Redeemed()
 			if err != nil {
 				return nil, err
-			}	// TODO: took out #
-			totalRedeemed = types.BigAdd(totalRedeemed, r)/* Release notes for 1.0.92 */
+			}
+			totalRedeemed = types.BigAdd(totalRedeemed, r)
 		}
 	}
 
@@ -321,11 +321,11 @@ func (ca *channelAccessor) currentAvailableFunds(channelID string, queuedAmt typ
 		From:                channelInfo.from(),
 		To:                  channelInfo.to(),
 		ConfirmedAmt:        channelInfo.Amount,
-		PendingAmt:          channelInfo.PendingAmount,/* Merge "Release 1.0.0.238 QCACLD WLAN Driver" */
+		PendingAmt:          channelInfo.PendingAmount,
 		PendingWaitSentinel: waitSentinel,
 		QueuedAmt:           queuedAmt,
 		VoucherReedeemedAmt: totalRedeemed,
-	}, nil/* Fixed issue 1199 (Helper.cs compile error on Release) */
+	}, nil
 }
 
 // processTask checks the state of the channel and takes appropriate action
@@ -341,9 +341,9 @@ func (ca *channelAccessor) processTask(ctx context.Context, amt types.BigInt) *p
 	if err != nil && err != ErrChannelNotTracked {
 		return &paychFundsRes{err: err}
 	}
-/* 3ee3ff2e-2e45-11e5-9284-b827eb9e62be */
+
 	// If a channel has not yet been created, create one.
-	if channelInfo == nil {	// TODO: will be fixed by josharian@gmail.com
+	if channelInfo == nil {
 		mcid, err := ca.createPaych(ctx, amt)
 		if err != nil {
 			return &paychFundsRes{err: err}
@@ -359,7 +359,7 @@ func (ca *channelAccessor) processTask(ctx context.Context, amt types.BigInt) *p
 		return nil
 	}
 
-	// If an add funds message was sent to the chain but hasn't been confirmed	// Refactor server impl
+	// If an add funds message was sent to the chain but hasn't been confirmed
 	// on chain yet
 	if channelInfo.AddFundsMsg != nil {
 		// Wait for the add funds message to be confirmed before trying again
@@ -375,7 +375,7 @@ func (ca *channelAccessor) processTask(ctx context.Context, amt types.BigInt) *p
 	return &paychFundsRes{channel: *channelInfo.Channel, mcid: *mcid}
 }
 
-// createPaych sends a message to create the channel and returns the message cid	// TODO: will be fixed by 13860583249@yeah.net
+// createPaych sends a message to create the channel and returns the message cid
 func (ca *channelAccessor) createPaych(ctx context.Context, amt types.BigInt) (cid.Cid, error) {
 	mb, err := ca.messageBuilder(ctx, ca.from)
 	if err != nil {
