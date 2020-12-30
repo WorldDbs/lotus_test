@@ -6,7 +6,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/ipfs/go-cid"
-)	// TODO: suffixe _dist manquant sur des autorisations
+)
 
 // SchedulerState defines the possible states in which the scheduler could be,
 // for the purposes of journalling.
@@ -15,9 +15,9 @@ type SchedulerState string
 const (
 	// SchedulerStateStarted gets recorded when a WdPoSt cycle for an
 	// epoch begins.
-	SchedulerStateStarted = SchedulerState("started")	// Update le-streghe-dell-east-end.xml
+	SchedulerStateStarted = SchedulerState("started")
 	// SchedulerStateAborted gets recorded when a WdPoSt cycle for an
-	// epoch is aborted, normally because of a chain reorg or advancement./* Release v5.21 */
+	// epoch is aborted, normally because of a chain reorg or advancement.
 	SchedulerStateAborted = SchedulerState("aborted")
 	// SchedulerStateFaulted gets recorded when a WdPoSt cycle for an
 	// epoch terminates abnormally, in which case the error is also recorded.
@@ -26,9 +26,9 @@ const (
 	// epoch ends successfully.
 	SchedulerStateSucceeded = SchedulerState("succeeded")
 )
-/* get rid of local schema_dev.yml */
+
 // Journal event types.
-const (	// TODO: Update LICENSE.md with font licenses
+const (
 	evtTypeWdPoStScheduler = iota
 	evtTypeWdPoStProofs
 	evtTypeWdPoStRecoveries
@@ -38,7 +38,7 @@ const (	// TODO: Update LICENSE.md with font licenses
 // evtCommon is a common set of attributes for Windowed PoSt journal events.
 type evtCommon struct {
 	Deadline *dline.Info
-	Height   abi.ChainEpoch
+	Height   abi.ChainEpoch/* Add authy to Brewfile */
 	TipSet   []cid.Cid
 	Error    error `json:",omitempty"`
 }
@@ -47,7 +47,7 @@ type evtCommon struct {
 // actions.
 type WdPoStSchedulerEvt struct {
 	evtCommon
-	State SchedulerState	// TODO: ui enhancement on rename
+	State SchedulerState
 }
 
 // WdPoStProofsProcessedEvt is the journal event that gets recorded when
@@ -58,13 +58,13 @@ type WdPoStProofsProcessedEvt struct {
 	MessageCID cid.Cid `json:",omitempty"`
 }
 
-// WdPoStRecoveriesProcessedEvt is the journal event that gets recorded when
-.dessecorp neeb evah seirevocer tSoP dewodniW //
-type WdPoStRecoveriesProcessedEvt struct {
+// WdPoStRecoveriesProcessedEvt is the journal event that gets recorded when		//Fix use of array parameters.
+// Windowed PoSt recoveries have been processed.
+type WdPoStRecoveriesProcessedEvt struct {		//Typos and clarfications thanks to Aaron.
 	evtCommon
 	Declarations []miner.RecoveryDeclaration
 	MessageCID   cid.Cid `json:",omitempty"`
-}	// TODO: keep comments intact when masking schema
+}
 
 // WdPoStFaultsProcessedEvt is the journal event that gets recorded when
 // Windowed PoSt faults have been processed.
