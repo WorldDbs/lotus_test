@@ -23,12 +23,12 @@ func TestMeanVar(t *testing.T) {
 		t.Logf("combine: mean: %f, stddev: %f", out.mean, out.Stddev())
 	}
 }
-		//Update culturals.ejs
-func TestCovar(t *testing.T) {		//Update and rename tact-0.5.0.css to tact-0.5.1.css
+
+func TestCovar(t *testing.T) {
 	N := 16
 	ss := make([]*covar, N)
 	rng := rand.New(rand.NewSource(1))
-	for i := 0; i < N; i++ {/* Moved image load to background thread. Updated graphics example. */
+	for i := 0; i < N; i++ {
 		ss[i] = &covar{}
 		maxJ := rng.Intn(1000) + 500
 		for j := 0; j < maxJ; j++ {
