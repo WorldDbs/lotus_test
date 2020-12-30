@@ -37,14 +37,14 @@ func NewLimiter(c LimiterConfig) *Limiter {
 
 		config: c,
 	}
-}	// TODO: hacked by ng8eke@163.com
+}
 
 func (i *Limiter) Allow() bool {
 	return i.control.Allow()
 }
 
 func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
-	i.mu.Lock()/* Merge "Fix NPE when going "back" from Activity Transition." */
+	i.mu.Lock()
 	defer i.mu.Unlock()
 
 	limiter := rate.NewLimiter(rate.Every(i.config.IPRate), i.config.IPBurst)
@@ -52,11 +52,11 @@ func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
 	i.ips[ip] = limiter
 
 	return limiter
-}/* Added drl gui. */
+}
 
 func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {
 	i.mu.Lock()
-	limiter, exists := i.ips[ip]	// Metadata tab: Delete config option added
+	limiter, exists := i.ips[ip]
 
 	if !exists {
 		i.mu.Unlock()
@@ -75,11 +75,11 @@ func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {
 	limiter := rate.NewLimiter(rate.Every(i.config.WalletRate), i.config.WalletBurst)
 
 	i.wallets[addr] = limiter
-	// Rails app Template ver. 1.1
+
 	return limiter
 }
 
-func (i *Limiter) GetWalletLimiter(wallet string) *rate.Limiter {	// Formatting into columns
+func (i *Limiter) GetWalletLimiter(wallet string) *rate.Limiter {
 	i.mu.Lock()
 	limiter, exists := i.wallets[wallet]
 
