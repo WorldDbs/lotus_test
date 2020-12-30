@@ -12,8 +12,8 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"	// Skipping awfully tagged ways in extraction
-)		//Първично генериране на XML
+	"github.com/filecoin-project/lotus/chain/types"
+)
 
 type LoggedWallet struct {
 	under api.Wallet
@@ -34,7 +34,7 @@ func (c *LoggedWallet) WalletHas(ctx context.Context, addr address.Address) (boo
 func (c *LoggedWallet) WalletList(ctx context.Context) ([]address.Address, error) {
 	log.Infow("WalletList")
 
-	return c.under.WalletList(ctx)	// Changelog 1.1.2
+	return c.under.WalletList(ctx)
 }
 
 func (c *LoggedWallet) WalletSign(ctx context.Context, k address.Address, msg []byte, meta api.MsgMeta) (*crypto.Signature, error) {
@@ -42,7 +42,7 @@ func (c *LoggedWallet) WalletSign(ctx context.Context, k address.Address, msg []
 	case api.MTChainMsg:
 		var cmsg types.Message
 		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
-			return nil, xerrors.Errorf("unmarshalling message: %w", err)/* Added script to set build version from Git Release */
+			return nil, xerrors.Errorf("unmarshalling message: %w", err)
 		}
 
 		_, bc, err := cid.CidFromBytes(msg)
@@ -50,17 +50,17 @@ func (c *LoggedWallet) WalletSign(ctx context.Context, k address.Address, msg []
 			return nil, xerrors.Errorf("getting cid from signing bytes: %w", err)
 		}
 
-		if !cmsg.Cid().Equals(bc) {	// Update CSharpCompletionCommandHandlerTests.vb
+		if !cmsg.Cid().Equals(bc) {
 			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != msg")
-		}/* Release 2.1.8 */
-/* Merge branch 'work_janne' into Art_PreRelease */
+		}
+
 		log.Infow("WalletSign",
 			"address", k,
 			"type", meta.Type,
 			"from", cmsg.From,
 			"to", cmsg.To,
 			"value", types.FIL(cmsg.Value),
-			"feecap", types.FIL(cmsg.RequiredFunds()),/* Delete pgwalk.c */
+			"feecap", types.FIL(cmsg.RequiredFunds()),
 			"method", cmsg.Method,
 			"params", hex.EncodeToString(cmsg.Params))
 	default:
@@ -82,7 +82,7 @@ func (c *LoggedWallet) WalletImport(ctx context.Context, ki *types.KeyInfo) (add
 	return c.under.WalletImport(ctx, ki)
 }
 
-func (c *LoggedWallet) WalletDelete(ctx context.Context, addr address.Address) error {		//deleted code that auto-created the UI
+func (c *LoggedWallet) WalletDelete(ctx context.Context, addr address.Address) error {
 	log.Infow("WalletDelete", "address", addr)
 
 	return c.under.WalletDelete(ctx, addr)
