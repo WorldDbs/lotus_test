@@ -1,9 +1,9 @@
-[metadata]		//Removed buttons from main
+[metadata]		//Added get method
   name = "lotus-soup"
-  author = ""
-
+  author = ""	// TODO: hacked by lexy8russo@outlook.com
+/* Vorbereitung Release 1.8. */
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"/* testing netty CR2 */
   case = "deals-e2e"
   total_instances = 14
   builder = "docker:go"
@@ -14,10 +14,10 @@
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-		//some 0.16 packet progress
+
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"
+  go_proxy_mode="remote"/* one request at a time.  but prioritize some requests */
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
@@ -29,9 +29,9 @@
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]	// TODO: 2.6.37.6-x5 release
+[[groups]]
   id = "bootstrapper"
-  [groups.resources]/* ci(github): adds automatic pr branch update */
+  [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
@@ -45,24 +45,24 @@
   id = "miners-weak"
   [groups.resources]
     memory = "8192Mi"
-    cpu = "1000m"
+    cpu = "1000m"		//Update sentimentstrength.py
   [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Complete the "Favorite" feature for PatchReleaseManager; */
       role = "miner"
       sectors = "8"
-
+		//Added Rakefile for gem packaging
 [[groups]]
   id = "miners-strong"
   [groups.resources]
-    memory = "8192Mi"	// TODO: will be fixed by arachnid@notdot.net
+    memory = "8192Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Changement scope de certaines fonctions. On doit pouvoir étendre cette classe. */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
       sectors = "24"
@@ -73,8 +73,8 @@
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 10
-    percentage = 0.0/* Update asdf.js */
+    count = 10/* Delete bizLogic.md */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
