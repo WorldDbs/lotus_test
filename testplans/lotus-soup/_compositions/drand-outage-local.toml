@@ -1,5 +1,5 @@
 [metadata]
-  name = "lotus-soup"	// TODO: need to set the sharebutton before decoding playlist
+  name = "lotus-soup"
   author = ""
 
 [global]
@@ -11,7 +11,7 @@
 
 [global.build]
   selectors = ["testground"]
-		//Merge branch 'master' into PureSadness
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -22,7 +22,7 @@
   clients = "0"
   miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "10"	// TODO: will be fixed by souzau@yandex.com
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
   mining_mode = "natural"
@@ -44,14 +44,14 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-		//#JC-84 #JC-92 the sketch of view and controller
+
 [[groups]]
   id = "drand"
   [groups.instances]
-    count = 3/* 6ae30386-2fa5-11e5-bab5-00012e3d3f12 */
+    count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Added creation methods for a bunch of D2D types. */
       role = "drand"
       drand_period = "30s"
       drand_catchup_period = "10s"
