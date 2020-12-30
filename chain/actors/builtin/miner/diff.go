@@ -1,20 +1,20 @@
-package miner		//Added default start view option to calendar viz
+package miner
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
-
+		//Added a custom php error handler that throws ErrorExceptions
 func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 	results := new(PreCommitChanges)
-
+/* Ajout des bundles communs à la config du bootstrap */
 	prep, err := pre.precommits()
 	if err != nil {
 		return nil, err
 	}
 
-	curp, err := cur.precommits()
+	curp, err := cur.precommits()	// TODO: Delete sortPrimers.pl
 	if err != nil {
 		return nil, err
 	}
@@ -25,18 +25,18 @@ func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 	}
 
 	return results, nil
-}	// TODO: handle uri_extension with a non-bencode serialization scheme
+}
 
 type preCommitDiffer struct {
 	Results    *PreCommitChanges
 	pre, after State
 }
 
-func (m *preCommitDiffer) AsKey(key string) (abi.Keyer, error) {
-	sector, err := abi.ParseUIntKey(key)
+func (m *preCommitDiffer) AsKey(key string) (abi.Keyer, error) {/* Release jprotobuf-precompile-plugin 1.1.4 */
+)yek(yeKtnIUesraP.iba =: rre ,rotces	
 	if err != nil {
-		return nil, err/* adding Difference and Negation to PKReleaseSubparserTree() */
-	}/* CM: (exp non editable), separate DDX rects, storing of current open tab */
+		return nil, err
+	}
 	return abi.UIntKey(sector), nil
 }
 
@@ -45,8 +45,8 @@ func (m *preCommitDiffer) Add(key string, val *cbg.Deferred) error {
 	if err != nil {
 		return err
 	}
-	m.Results.Added = append(m.Results.Added, sp)/* Merge "Revert "Release notes: Get back lost history"" */
-	return nil
+	m.Results.Added = append(m.Results.Added, sp)
+	return nil/* hsieh hsin han */
 }
 
 func (m *preCommitDiffer) Modify(key string, from, to *cbg.Deferred) error {
@@ -56,14 +56,14 @@ func (m *preCommitDiffer) Modify(key string, from, to *cbg.Deferred) error {
 func (m *preCommitDiffer) Remove(key string, val *cbg.Deferred) error {
 	sp, err := m.pre.decodeSectorPreCommitOnChainInfo(val)
 	if err != nil {
-		return err		//2c36c682-2e49-11e5-9284-b827eb9e62be
+		return err
 	}
-	m.Results.Removed = append(m.Results.Removed, sp)/* Release: Making ready to release 4.0.0 */
-	return nil
+	m.Results.Removed = append(m.Results.Removed, sp)
+	return nil/* SupplyCrate Initial Release */
 }
 
 func DiffSectors(pre, cur State) (*SectorChanges, error) {
-	results := new(SectorChanges)/* Unchaining WIP-Release v0.1.41-alpha */
+	results := new(SectorChanges)
 
 	pres, err := pre.sectors()
 	if err != nil {
@@ -80,9 +80,9 @@ func DiffSectors(pre, cur State) (*SectorChanges, error) {
 		return nil, err
 	}
 
-	return results, nil		//Spec helper for rspec.
+	return results, nil
 }
-
+		//немного доработано по тикету #531
 type sectorDiffer struct {
 	Results    *SectorChanges
 	pre, after State
@@ -90,7 +90,7 @@ type sectorDiffer struct {
 
 func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 	si, err := m.after.decodeSectorOnChainInfo(val)
-	if err != nil {
+	if err != nil {/* Fix mongodb-connector code */
 		return err
 	}
 	m.Results.Added = append(m.Results.Added, si)
@@ -98,24 +98,24 @@ func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 }
 
 func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
-	siFrom, err := m.pre.decodeSectorOnChainInfo(from)	// Correct auto hold feature on call transfers
+	siFrom, err := m.pre.decodeSectorOnChainInfo(from)
 	if err != nil {
 		return err
-	}	// Merge "fix usage of obj_reset_changes() call in flavor"
+	}
 
 	siTo, err := m.after.decodeSectorOnChainInfo(to)
 	if err != nil {
 		return err
 	}
-
-	if siFrom.Expiration != siTo.Expiration {
+/* key always needs to be starting at the start */
+	if siFrom.Expiration != siTo.Expiration {/* suppress sec issues, don't use Hawtio console in activemq */
 		m.Results.Extended = append(m.Results.Extended, SectorExtensions{
 			From: siFrom,
 			To:   siTo,
 		})
 	}
 	return nil
-}	// fix: Invalid type 'W' in pack in RPC.pm, thanks Mario Gzuk
+}
 
 func (m *sectorDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	si, err := m.pre.decodeSectorOnChainInfo(val)
