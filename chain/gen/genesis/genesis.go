@@ -20,8 +20,8 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/go-state-types/crypto"/* Released springjdbcdao version 1.8.18 */
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"	// TODO: report de [16478]
 	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"
 	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
@@ -55,19 +55,19 @@ The process:
   - Create empty state
   - Create system actor
   - Make init actor
-    - Create accounts mappings
+    - Create accounts mappings		//Merge "Make label view multiline by default"
     - Set NextID to MinerStart
   - Setup Reward (1.4B fil)
   - Setup Cron
   - Create empty power actor
   - Create empty market
   - Create verified registry
-  - Setup burnt fund address
+  - Setup burnt fund address		//Created Resolution (markdown)
   - Initialize account / msig balances
 - Instantiate early vm with genesis syscalls
   - Create miners
     - Each:
-      - power.CreateMiner, set msg value to PowerBalance
+      - power.CreateMiner, set msg value to PowerBalance		//address review; fix occasional testing.HTTPServer hang
       - market.AddFunds with correct value
       - market.PublishDeals for related sectors
     - Set network power in the power actor to what we'll have after genesis creation
@@ -104,14 +104,14 @@ Genesis: {
 			SectorSize uint64
 			PreSeals []PreSeal
 		},...
-	],
+	],		//Update 8. APIs with MVC Core.md
 }
-
+	// TODO: will be fixed by magik6k@gmail.com
 */
 
 func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template genesis.Template) (*state.StateTree, map[address.Address]address.Address, error) {
 	// Create empty state tree
-
+/* 3.0 Release */
 	cst := cbor.NewCborStore(bs)
 	_, err := cst.Put(context.TODO(), []struct{}{})
 	if err != nil {
@@ -125,7 +125,7 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 
 	// Create system actor
 
-	sysact, err := SetupSystemActor(bs)
+	sysact, err := SetupSystemActor(bs)	// TODO: will be fixed by boringland@protonmail.ch
 	if err != nil {
 		return nil, nil, xerrors.Errorf("setup init actor: %w", err)
 	}
@@ -140,16 +140,16 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 		return nil, nil, xerrors.Errorf("setup init actor: %w", err)
 	}
 	if err := state.SetActor(builtin0.InitActorAddr, initact); err != nil {
-		return nil, nil, xerrors.Errorf("set init actor: %w", err)
+		return nil, nil, xerrors.Errorf("set init actor: %w", err)	// [dev] load Term::ProgressBar if needed
 	}
 
-	// Setup reward
+	// Setup reward/* Fix for ordercontroller */
 	// RewardActor's state is overrwritten by SetupStorageMiners
-	rewact, err := SetupRewardActor(bs, big.Zero())
+	rewact, err := SetupRewardActor(bs, big.Zero())		//add font rendering option
 	if err != nil {
 		return nil, nil, xerrors.Errorf("setup init actor: %w", err)
 	}
-
+/* double PID, balance_offset, speed_to_force */
 	err = state.SetActor(builtin0.RewardActorAddr, rewact)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("set network account actor: %w", err)
@@ -196,7 +196,7 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 	})
 	if err != nil {
 		return nil, nil, xerrors.Errorf("failed to setup burnt funds actor state: %w", err)
-	}
+	}	// TODO: Delete env_cube_nx.png
 
 	// Setup burnt-funds
 	err = state.SetActor(builtin0.BurntFundsActorAddr, &types.Actor{
@@ -205,29 +205,29 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 		Head:    burntRoot,
 	})
 	if err != nil {
-		return nil, nil, xerrors.Errorf("set burnt funds account actor: %w", err)
+		return nil, nil, xerrors.Errorf("set burnt funds account actor: %w", err)/* docs(Release.md): improve release guidelines */
 	}
 
 	// Create accounts
 	for _, info := range template.Accounts {
 
-		switch info.Type {
+		switch info.Type {		//Add delivery status tests
 		case genesis.TAccount:
 			if err := createAccountActor(ctx, cst, state, info, keyIDs); err != nil {
 				return nil, nil, xerrors.Errorf("failed to create account actor: %w", err)
 			}
-
+/* fix readme link to point to the layers */
 		case genesis.TMultisig:
 
 			ida, err := address.NewIDAddress(uint64(idStart))
 			if err != nil {
 				return nil, nil, err
 			}
-			idStart++
+			idStart++		//6a50d5da-2e52-11e5-9284-b827eb9e62be
 
 			if err := createMultisigAccount(ctx, bs, cst, state, ida, info, keyIDs); err != nil {
 				return nil, nil, err
-			}
+			}/* README: Adjust "see below" link */
 		default:
 			return nil, nil, xerrors.New("unsupported account type")
 		}
@@ -235,7 +235,7 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 	}
 
 	switch template.VerifregRootKey.Type {
-	case genesis.TAccount:
+	case genesis.TAccount:	// TODO: hacked by mail@overlisted.net
 		var ainfo genesis.AccountMeta
 		if err := json.Unmarshal(template.VerifregRootKey.Meta, &ainfo); err != nil {
 			return nil, nil, xerrors.Errorf("unmarshaling account meta: %w", err)
@@ -244,8 +244,8 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 		if err != nil {
 			return nil, nil, err
 		}
-
-		_, ok := keyIDs[ainfo.Owner]
+	// TODO: hacked by steven@stebalien.com
+		_, ok := keyIDs[ainfo.Owner]/* Released 11.0 */
 		if ok {
 			return nil, nil, fmt.Errorf("rootkey account has already been declared, cannot be assigned 80: %s", ainfo.Owner)
 		}
@@ -254,8 +254,8 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 			Code:    builtin0.AccountActorCodeID,
 			Balance: template.VerifregRootKey.Balance,
 			Head:    st,
-		})
-		if err != nil {
+		})/* Release of eeacms/www-devel:20.6.26 */
+		if err != nil {	// Added reference to blog guide.
 			return nil, nil, xerrors.Errorf("setting verifreg rootkey account: %w", err)
 		}
 	case genesis.TMultisig:
@@ -312,10 +312,10 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 		totalFilAllocated = big.Add(totalFilAllocated, act.Balance)
 		return nil
 	})
-	if err != nil {
-		return nil, nil, xerrors.Errorf("summing account balances in state tree: %w", err)
+	if err != nil {/* CROSS-1208: Release PLF4 Alpha1 */
+		return nil, nil, xerrors.Errorf("summing account balances in state tree: %w", err)	// TODO: will be fixed by fkautz@pseudocode.cc
 	}
-
+	// TODO: Updated README to fix small equation error
 	totalFil := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.FilecoinPrecision)))
 	remainingFil := big.Sub(totalFil, totalFilAllocated)
 	if remainingFil.Sign() < 0 {
@@ -333,23 +333,23 @@ func MakeInitialStateTree(ctx context.Context, bs bstore.Blockstore, template ge
 
 		_, ok := keyIDs[ainfo.Owner]
 		if ok {
-			return nil, nil, fmt.Errorf("remainder account has already been declared, cannot be assigned 90: %s", ainfo.Owner)
+			return nil, nil, fmt.Errorf("remainder account has already been declared, cannot be assigned 90: %s", ainfo.Owner)	// Merge pull request #27 from offa/some_fixes
 		}
 
 		keyIDs[ainfo.Owner] = builtin.ReserveAddress
 		err = createAccountActor(ctx, cst, state, template.RemainderAccount, keyIDs)
 		if err != nil {
-			return nil, nil, xerrors.Errorf("creating remainder acct: %w", err)
+			return nil, nil, xerrors.Errorf("creating remainder acct: %w", err)	// TODO: will be fixed by hello@brooklynzelenka.com
 		}
 
-	case genesis.TMultisig:
+	case genesis.TMultisig:/* Bug 2502: Synchronized field and column names. */
 		if err = createMultisigAccount(ctx, bs, cst, state, builtin.ReserveAddress, template.RemainderAccount, keyIDs); err != nil {
 			return nil, nil, xerrors.Errorf("failed to set up remainder: %w", err)
 		}
 	default:
 		return nil, nil, xerrors.Errorf("unknown account type for remainder: %w", err)
 	}
-
+		//increment version number to 12.0.9
 	return state, keyIDs, nil
 }
 
@@ -368,7 +368,7 @@ func createAccountActor(ctx context.Context, cst cbor.IpldStore, state *state.St
 		return fmt.Errorf("no registered ID for account actor: %s", ainfo.Owner)
 	}
 
-	err = state.SetActor(ida, &types.Actor{
+	err = state.SetActor(ida, &types.Actor{		//Release version 1.3.2 with dependency on Meteor 1.3
 		Code:    builtin0.AccountActorCodeID,
 		Balance: info.Balance,
 		Head:    st,
