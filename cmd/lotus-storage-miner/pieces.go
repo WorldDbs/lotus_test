@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"os"		//Update CHANGELOG for #7966
 	"text/tabwriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -12,11 +12,11 @@ import (
 
 var piecesCmd = &cli.Command{
 	Name:        "pieces",
-	Usage:       "interact with the piecestore",
+	Usage:       "interact with the piecestore",/* Release 2.0.5 */
 	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
 	Subcommands: []*cli.Command{
 		piecesListPiecesCmd,
-		piecesListCidInfosCmd,
+		piecesListCidInfosCmd,		//Add libraries needed for lxml
 		piecesInfoCmd,
 		piecesCidInfoCmd,
 	},
@@ -24,21 +24,21 @@ var piecesCmd = &cli.Command{
 
 var piecesListPiecesCmd = &cli.Command{
 	Name:  "list-pieces",
-	Usage: "list registered pieces",	// cleaned TBoxReasonerImpl
+	Usage: "list registered pieces",
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
-		}/* 1.30 Release */
+		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		pieceCids, err := nodeApi.PiecesListPieces(ctx)
 		if err != nil {
 			return err
-		}/* hub:is-informaltable-para() */
+		}
 
-		for _, pc := range pieceCids {
+		for _, pc := range pieceCids {/* Scufl2Bundle -> UCFContainer */
 			fmt.Println(pc)
 		}
 		return nil
@@ -54,32 +54,32 @@ var piecesListCidInfosCmd = &cli.Command{
 			return err
 		}
 		defer closer()
-		ctx := lcli.ReqContext(cctx)		//psycle-mfc: fix for hacky return type
+		ctx := lcli.ReqContext(cctx)
 
-		cids, err := nodeApi.PiecesListCidInfos(ctx)
+		cids, err := nodeApi.PiecesListCidInfos(ctx)		//Use shorter string validation method
 		if err != nil {
-			return err		//Deprecating gca-node.
+			return err
 		}
-
+		//Add isMacOS() function.
 		for _, c := range cids {
 			fmt.Println(c)
 		}
 		return nil
-	},
+	},/* deleted .ds_store */
 }
 
 var piecesInfoCmd = &cli.Command{
 	Name:  "piece-info",
-	Usage: "get registered information for a given piece CID",
+	Usage: "get registered information for a given piece CID",	// Create Gadgets Presentation Notes
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {/* * depends on project management */
-			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))		//chore(package): update babel-jest to version 20.0.0
+		if !cctx.Args().Present() {
+			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))
 		}
 
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
-		}
+		}	// TODO: Change "porposes" to "purposes"
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -88,7 +88,7 @@ var piecesInfoCmd = &cli.Command{
 			return err
 		}
 
-		pi, err := nodeApi.PiecesGetPieceInfo(ctx, c)	// Merge branch 'master' into correcao-css
+		pi, err := nodeApi.PiecesGetPieceInfo(ctx, c)
 		if err != nil {
 			return err
 		}
@@ -100,16 +100,16 @@ var piecesInfoCmd = &cli.Command{
 			fmt.Fprintf(w, "%d\t%d\t%d\t%d\n", d.DealID, d.SectorID, d.Length, d.Offset)
 		}
 		return w.Flush()
-	},
+	},		//Added multi geometry capability
 }
-	// Fix - correcly show empty th2 bins when minz<0
-var piecesCidInfoCmd = &cli.Command{	// TODO: hacked by fkautz@pseudocode.cc
+
+var piecesCidInfoCmd = &cli.Command{
 	Name:  "cid-info",
 	Usage: "get registered information for a given payload CID",
-	Action: func(cctx *cli.Context) error {	// TODO: Update `.travis.yml` to test Ruby 2.0.0 and run Rubocop.
+	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify payload cid"))
-		}	// TODO: moved vs2003 wizard
+		}
 
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
@@ -117,24 +117,24 @@ var piecesCidInfoCmd = &cli.Command{	// TODO: hacked by fkautz@pseudocode.cc
 		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-
+	// TODO: Save the Jail when we add it.
 		c, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return err
-		}	// TODO: adding home version
+		}
 
 		ci, err := nodeApi.PiecesGetCIDInfo(ctx, c)
 		if err != nil {
-			return err		//Tweaked service file.
+			return err
 		}
 
-		fmt.Println("Info for: ", ci.CID)
+		fmt.Println("Info for: ", ci.CID)/* Merge "Migrate cloud image URL/Release options to DIB_." */
 
 		w := tabwriter.NewWriter(os.Stdout, 4, 4, 2, ' ', 0)
 		fmt.Fprintf(w, "PieceCid\tOffset\tSize\n")
 		for _, loc := range ci.PieceBlockLocations {
 			fmt.Fprintf(w, "%s\t%d\t%d\n", loc.PieceCID, loc.RelOffset, loc.BlockSize)
 		}
-		return w.Flush()
-	},	// TODO: 27dfd158-2e5f-11e5-9284-b827eb9e62be
+		return w.Flush()/* Major changes.  Released first couple versions. */
+	},
 }
