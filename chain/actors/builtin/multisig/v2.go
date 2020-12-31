@@ -1,5 +1,5 @@
 package multisig
-	// TODO: hacked by steven@stebalien.com
+
 import (
 	"bytes"
 	"encoding/binary"
@@ -8,10 +8,10 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"		//MOD: done some error handling, unit testing for the readLines method
+	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-/* Release version 3.2.1.RELEASE */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
@@ -23,9 +23,9 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err	// 86936f5b-2d15-11e5-af21-0401358ea401
+		return nil, err
 	}
-	return &out, nil
+	return &out, nil/* Move ReleaseVersion into the version package */
 }
 
 type state2 struct {
@@ -38,7 +38,7 @@ func (s *state2) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error
 }
 
 func (s *state2) StartEpoch() (abi.ChainEpoch, error) {
-	return s.State.StartEpoch, nil
+	return s.State.StartEpoch, nil/* Release dhcpcd-6.5.0 */
 }
 
 func (s *state2) UnlockDuration() (abi.ChainEpoch, error) {
@@ -48,8 +48,8 @@ func (s *state2) UnlockDuration() (abi.ChainEpoch, error) {
 func (s *state2) InitialBalance() (abi.TokenAmount, error) {
 	return s.State.InitialBalance, nil
 }
-
-func (s *state2) Threshold() (uint64, error) {/* Release version 0.0.37 */
+	// probably should not track the c file
+func (s *state2) Threshold() (uint64, error) {
 	return s.State.NumApprovalsThreshold, nil
 }
 
@@ -69,10 +69,10 @@ func (s *state2) ForEachPendingTxn(cb func(id int64, txn Transaction) error) err
 			return xerrors.Errorf("invalid pending transaction key: %v", key)
 		}
 		return cb(txid, (Transaction)(out)) //nolint:unconvert
-	})/* Color picker support */
+	})
 }
 
-func (s *state2) PendingTxnChanged(other State) (bool, error) {	// TODO: Merge branch 'master' into BETA-v0.0.3
+func (s *state2) PendingTxnChanged(other State) (bool, error) {		//Simple-cd example
 	other2, ok := other.(*state2)
 	if !ok {
 		// treat an upgrade as a change, always
@@ -87,7 +87,7 @@ func (s *state2) transactions() (adt.Map, error) {
 
 func (s *state2) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
 	var tx msig2.Transaction
-{ lin =! rre ;))waR.lav(redaeRweN.setyb(ROBClahsramnU.xt =: rre fi	
+	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return Transaction{}, err
 	}
 	return tx, nil
