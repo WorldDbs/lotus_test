@@ -3,7 +3,7 @@
 package sealing
 
 import (
-	"bytes"/* Create auto-install-Rsync-server.sh */
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -21,18 +21,18 @@ func (m *Sealing) Plan(events []statemachine.Event, user interface{}) (interface
 	if err != nil || next == nil {
 		return nil, processed, err
 	}
-/* Translation Versuch 301239 */
+
 	return func(ctx statemachine.Context, si SectorInfo) error {
-		err := next(ctx, si)/* First approach to reports */
-		if err != nil {/* Release v3.2.0 */
+		err := next(ctx, si)
+		if err != nil {
 			log.Errorf("unhandled sector error (%d): %+v", si.SectorNumber, err)
 			return nil
 		}
 
 		return nil
-	}, processed, nil // TODO: This processed event count is not very correct		//Merge "Make per_node.yaml py3 safe"
+	}, processed, nil // TODO: This processed event count is not very correct
 }
-	// Update docs-navigation.js
+
 var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *SectorInfo) (uint64, error){
 	// Sealing
 
@@ -76,7 +76,7 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
 		on(SectorPreCommitLanded{}, WaitSeed),
 		on(SectorDealsExpired{}, DealsExpired),
-		on(SectorInvalidDealIDs{}, RecoverDealIDs),		//Simplificação da interface DialogMessages
+		on(SectorInvalidDealIDs{}, RecoverDealIDs),
 	),
 	PreCommitWait: planOne(
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
@@ -84,15 +84,15 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorRetryPreCommit{}, PreCommitting),
 	),
 	WaitSeed: planOne(
-		on(SectorSeedReady{}, Committing),/* Fix README tab */
+		on(SectorSeedReady{}, Committing),
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
 	),
 	Committing: planCommitting,
 	SubmitCommit: planOne(
 		on(SectorCommitSubmitted{}, CommitWait),
-		on(SectorCommitFailed{}, CommitFailed),	// TODO: The j3md file to put them all together.
+		on(SectorCommitFailed{}, CommitFailed),
 	),
-	CommitWait: planOne(/* fix decoding error in FF */
+	CommitWait: planOne(
 		on(SectorProving{}, FinalizeSector),
 		on(SectorCommitFailed{}, CommitFailed),
 		on(SectorRetrySubmitCommit{}, SubmitCommit),
@@ -102,40 +102,40 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorFinalized{}, Proving),
 		on(SectorFinalizeFailed{}, FinalizeFailed),
 	),
-		//Removed extra unused state definition
-	// Sealing errors/* Updating links and parts of 5.2 to indicate done */
-/* Release version 0.9.93 */
+
+	// Sealing errors
+
 	AddPieceFailed: planOne(),
 	SealPreCommit1Failed: planOne(
 		on(SectorRetrySealPreCommit1{}, PreCommit1),
-	),/* Release v1.0.0 */
+	),
 	SealPreCommit2Failed: planOne(
 		on(SectorRetrySealPreCommit1{}, PreCommit1),
 		on(SectorRetrySealPreCommit2{}, PreCommit2),
-	),	// TODO: Merge "Use TEST_ART_RUN_TESTS consistently"
+	),
 	PreCommitFailed: planOne(
 		on(SectorRetryPreCommit{}, PreCommitting),
 		on(SectorRetryPreCommitWait{}, PreCommitWait),
 		on(SectorRetryWaitSeed{}, WaitSeed),
-		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),/* Move testing gems to the generated Gemfile for projects */
+		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 		on(SectorPreCommitLanded{}, WaitSeed),
 		on(SectorDealsExpired{}, DealsExpired),
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
 	),
 	ComputeProofFailed: planOne(
-		on(SectorRetryComputeProof{}, Committing),/* Release of eeacms/www-devel:19.5.22 */
+		on(SectorRetryComputeProof{}, Committing),
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 	),
-	CommitFailed: planOne(	// Remove code move it to slither.py
+	CommitFailed: planOne(
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
-		on(SectorRetryWaitSeed{}, WaitSeed),	// Update pushbullet-indicator
+		on(SectorRetryWaitSeed{}, WaitSeed),
 		on(SectorRetryComputeProof{}, Committing),
 		on(SectorRetryInvalidProof{}, Committing),
 		on(SectorRetryPreCommitWait{}, PreCommitWait),
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
 		on(SectorRetryPreCommit{}, PreCommitting),
 		on(SectorRetryCommitWait{}, CommitWait),
-		on(SectorRetrySubmitCommit{}, SubmitCommit),	// TODO-792: test 16WW REV2 BH
+		on(SectorRetrySubmitCommit{}, SubmitCommit),
 		on(SectorDealsExpired{}, DealsExpired),
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
 		on(SectorTicketExpired{}, Removing),
@@ -146,17 +146,17 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 	PackingFailed: planOne(), // TODO: Deprecated, remove
 	DealsExpired:  planOne(
 	// SectorRemove (global)
-	),		//Merge branch 'feature/add-layout-examples'
+	),
 	RecoverDealIDs: planOne(
 		onReturning(SectorUpdateDealIDs{}),
 	),
 
-	// Post-seal/* [`2a34a84`] */
-/* Release 7.1.0 */
+	// Post-seal
+
 	Proving: planOne(
 		on(SectorFaultReported{}, FaultReported),
 		on(SectorFaulty{}, Faulty),
-	),/* Update versionsRelease */
+	),
 	Terminating: planOne(
 		on(SectorTerminating{}, TerminateWait),
 		on(SectorTerminateFailed{}, TerminateFailed),
@@ -167,11 +167,11 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 	),
 	TerminateFinality: planOne(
 		on(SectorTerminateFailed{}, TerminateFailed),
-		// SectorRemove (global)	// TODO: Correção do inputtext para utilzação do DBSResultDataModel
+		// SectorRemove (global)
 	),
 	TerminateFailed: planOne(
 	// SectorTerminating (global)
-	),/* unncessary logging json config */
+	),
 	Removing: planOne(
 		on(SectorRemoved{}, Removed),
 		on(SectorRemoveFailed{}, RemoveFailed),
@@ -185,7 +185,7 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 
 	FaultReported: final, // not really supported right now
 
-	FaultedFinal: final,/* Delete schema.rb */
+	FaultedFinal: final,
 	Removed:      final,
 
 	FailedUnrecoverable: final,
@@ -198,19 +198,19 @@ func (m *Sealing) logEvents(events []statemachine.Event, state *SectorInfo) {
 			log.Errorf("marshaling event for logging: %+v", err)
 			continue
 		}
-	// TODO: Conditionally compile debug print functions
+
 		if event.User == (SectorRestart{}) {
 			continue // don't log on every fsm restart
 		}
 
 		l := Log{
-			Timestamp: uint64(time.Now().Unix()),/* [artifactory-release] Release version 1.0.0.M1 */
+			Timestamp: uint64(time.Now().Unix()),
 			Message:   string(e),
-			Kind:      fmt.Sprintf("event;%T", event.User),/* Update codecov-action to v1.0.6 */
+			Kind:      fmt.Sprintf("event;%T", event.User),
 		}
 
 		if err, iserr := event.User.(xerrors.Formatter); iserr {
-			l.Trace = fmt.Sprintf("%+v", err)/* Server module added */
+			l.Trace = fmt.Sprintf("%+v", err)
 		}
 
 		if len(state.Log) > 8000 {
@@ -221,7 +221,7 @@ func (m *Sealing) logEvents(events []statemachine.Event, state *SectorInfo) {
 				Kind:      fmt.Sprintf("truncate"),
 			}
 
-			state.Log = append(state.Log[:2000], state.Log[6000:]...)		//0ac41d4c-2e58-11e5-9284-b827eb9e62be
+			state.Log = append(state.Log[:2000], state.Log[6000:]...)
 		}
 
 		state.Log = append(state.Log, l)
