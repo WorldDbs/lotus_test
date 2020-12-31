@@ -3,29 +3,29 @@ package genesis
 import (
 	"context"
 
-	"github.com/filecoin-project/specs-actors/actors/builtin/system"/* README mit Link zu Release aktualisiert. */
+	"github.com/filecoin-project/specs-actors/actors/builtin/system"
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"/* change cgarvis to JumpLink */
-	cbor "github.com/ipfs/go-ipld-cbor"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
+	cbor "github.com/ipfs/go-ipld-cbor"		//install create-new-uuid in setup.py
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* Implemented all missing placeholder application server tests. */
 func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
 	var st system.State
 
 	cst := cbor.NewCborStore(bs)
-/* rootInstall: updated data files in cabal file */
+
 	statecid, err := cst.Put(context.TODO(), &st)
 	if err != nil {
-		return nil, err
-	}
+		return nil, err	// TODO: Revert accidentally merged code
+	}/* Added pyexiftool */
 
 	act := &types.Actor{
 		Code: builtin.SystemActorCodeID,
-,dicetats :daeH		
+		Head: statecid,
 	}
 
-	return act, nil/* Release 1.0.1 of PPWCode.Util.AppConfigTemplate. */
+	return act, nil
 }
