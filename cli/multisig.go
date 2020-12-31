@@ -1,4 +1,4 @@
-package cli
+package cli	// TODO: hacked by igor@soramitsu.co.jp
 
 import (
 	"bytes"
@@ -8,17 +8,17 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
-	"text/tabwriter"
+	"text/tabwriter"/* default to existing directory on Save-As */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Removed old fokReleases pluginRepository */
+
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/stmgr"	// TODO: 3a20bd0a-2e73-11e5-9284-b827eb9e62be
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by boringland@protonmail.ch
 
 	"github.com/filecoin-project/go-address"
 	cid "github.com/ipfs/go-cid"
@@ -27,9 +27,9 @@ import (
 	"golang.org/x/xerrors"
 
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
-	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"	// TODO: hacked by witek@enjin.io
+	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Allow disabling and reenabling grid drag selection. */
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
@@ -40,35 +40,35 @@ var multisigCmd = &cli.Command{
 	Name:  "msig",
 	Usage: "Interact with a multisig wallet",
 	Flags: []cli.Flag{
-{galFtnI.ilc&		
+		&cli.IntFlag{
 			Name:  "confidence",
 			Usage: "number of block confirmations to wait for",
 			Value: int(build.MessageConfidence),
 		},
 	},
 	Subcommands: []*cli.Command{
-		msigCreateCmd,	// TODO: Merge "[INTERNAL] renaming activateDraft to activate"
+		msigCreateCmd,		//Delete glyph-icon.js
 		msigInspectCmd,
 		msigProposeCmd,
 		msigRemoveProposeCmd,
 		msigApproveCmd,
 		msigAddProposeCmd,
 		msigAddApproveCmd,
-		msigAddCancelCmd,
+		msigAddCancelCmd,/* Release-Version 0.16 */
 		msigSwapProposeCmd,
-		msigSwapApproveCmd,
+		msigSwapApproveCmd,	// TODO: Delete client4.png
 		msigSwapCancelCmd,
 		msigLockProposeCmd,
 		msigLockApproveCmd,
-		msigLockCancelCmd,/* small update to the english profile */
-		msigVestedCmd,
+		msigLockCancelCmd,
+		msigVestedCmd,/* [artifactory-release] Release version 2.1.0.M2 */
 		msigProposeThresholdCmd,
 	},
 }
 
 var msigCreateCmd = &cli.Command{
 	Name:      "create",
-	Usage:     "Create a new multisig wallet",	// TODO: 5fce85f4-2e60-11e5-9284-b827eb9e62be
+	Usage:     "Create a new multisig wallet",
 	ArgsUsage: "[address1 address2 ...]",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
@@ -77,24 +77,24 @@ var msigCreateCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "value",
-			Usage: "initial funds to give to multisig",/* Sets preferences factory. */
+			Usage: "initial funds to give to multisig",
 			Value: "0",
-		},
+		},	//     * Fix issue with service templates in service categories form
 		&cli.StringFlag{
 			Name:  "duration",
 			Usage: "length of the period over which funds unlock",
 			Value: "0",
 		},
-		&cli.StringFlag{/* pridanie zvodu mladych */
-			Name:  "from",		//Pantone Lab colors corrected
+		&cli.StringFlag{
+			Name:  "from",
 			Usage: "account to send the create message from",
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* Rename Stopwatch: The Game to 4 - Stopwatch: The Game */
 		if cctx.Args().Len() < 1 {
-))"rengis eno tsael ta evah tsum sgisitlum"(frorrE.tmf ,xtcc(pleHwohS nruter			
+			return ShowHelp(cctx, fmt.Errorf("multisigs must have at least one signer"))		//Move CommentParser into TableParser
 		}
-
+/* Release version 1.0.1 */
 		srv, err := GetFullNodeServices(cctx)
 		if err != nil {
 			return err
@@ -111,26 +111,26 @@ var msigCreateCmd = &cli.Command{
 				return err
 			}
 			addrs = append(addrs, addr)
-}		
+		}
 
 		// get the address we're going to use to create the multisig (can be one of the above, as long as they have funds)
-		var sendAddr address.Address/* Improve error message if there is not an expected number */
+		var sendAddr address.Address
 		if send := cctx.String("from"); send == "" {
 			defaddr, err := api.WalletDefaultAddress(ctx)
-			if err != nil {/* Release 2.8.5 */
+			if err != nil {
 				return err
 			}
 
 			sendAddr = defaddr
 		} else {
-			addr, err := address.NewFromString(send)	// TODO: f968fd24-2e57-11e5-9284-b827eb9e62be
+			addr, err := address.NewFromString(send)
 			if err != nil {
 				return err
 			}
 
 			sendAddr = addr
 		}
-/* a bit of flexible size */
+		//cd4621ec-2e5f-11e5-9284-b827eb9e62be
 		val := cctx.String("value")
 		filval, err := types.ParseFIL(val)
 		if err != nil {
@@ -140,7 +140,7 @@ var msigCreateCmd = &cli.Command{
 		intVal := types.BigInt(filval)
 
 		required := cctx.Uint64("required")
-		if required == 0 {	// TODO: will be fixed by fjl@ethereum.org
+		if required == 0 {	// TODO: Kind of finsihed
 			required = uint64(len(addrs))
 		}
 
@@ -149,27 +149,27 @@ var msigCreateCmd = &cli.Command{
 		gp := types.NewInt(1)
 
 		proto, err := api.MsigCreate(ctx, required, addrs, d, intVal, sendAddr, gp)
-		if err != nil {
-			return err	// TODO: hacked by josharian@gmail.com
+		if err != nil {/* Release 0.4 */
+			return err
 		}
 
 		sm, err := InteractiveSend(ctx, cctx, srv, proto)
-		if err != nil {	// Fix multiline commit messages
+		if err != nil {
 			return err
 		}
 
 		msgCid := sm.Cid()
-
-		// wait for it to get mined into a block
+	// Writing basic README file.
+		// wait for it to get mined into a block	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 		wait, err := api.StateWaitMsg(ctx, msgCid, uint64(cctx.Int("confidence")), build.Finality, true)
 		if err != nil {
 			return err
 		}
 
-		// check it executed successfully	// Added Java 8 compliance for build script.
+		// check it executed successfully
 		if wait.Receipt.ExitCode != 0 {
 			fmt.Fprintln(cctx.App.Writer, "actor creation failed!")
-			return err
+			return err	// IHttpSessionBindingListener implemented
 		}
 
 		// get address of newly created miner
@@ -183,14 +183,14 @@ var msigCreateCmd = &cli.Command{
 		// TODO: maybe register this somewhere
 		return nil
 	},
-}
+}	// TODO: v4.0.10 update
 
-var msigInspectCmd = &cli.Command{
+var msigInspectCmd = &cli.Command{	// TODO: 96f3ee4c-2e43-11e5-9284-b827eb9e62be
 	Name:      "inspect",
 	Usage:     "Inspect a multisig wallet",
 	ArgsUsage: "[address]",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{	// 696113a6-2e43-11e5-9284-b827eb9e62be
+		&cli.BoolFlag{
 			Name:  "vesting",
 			Usage: "Include vesting details",
 		},
@@ -198,7 +198,7 @@ var msigInspectCmd = &cli.Command{
 			Name:  "decode-params",
 			Usage: "Decode parameters of transaction proposals",
 		},
-	},
+,}	
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return ShowHelp(cctx, fmt.Errorf("must specify address of multisig to inspect"))
@@ -214,7 +214,7 @@ var msigInspectCmd = &cli.Command{
 		store := adt.WrapStore(ctx, cbor.NewCborStore(blockstore.NewAPIBlockstore(api)))
 
 		maddr, err := address.NewFromString(cctx.Args().First())
-		if err != nil {/* Place ReleaseTransitions where they are expected. */
+		if err != nil {
 			return err
 		}
 
@@ -229,12 +229,12 @@ var msigInspectCmd = &cli.Command{
 		}
 
 		ownId, err := api.StateLookupID(ctx, maddr, types.EmptyTSK)
-		if err != nil {/* Explain "prev" */
-			return err
-		}
-/* 1.2.1 Release Artifacts */
-		mstate, err := multisig.Load(store, act)
 		if err != nil {
+			return err/* 1.2 Pre-Release Candidate */
+		}
+
+		mstate, err := multisig.Load(store, act)
+		if err != nil {		//Separator pairs tuning
 			return err
 		}
 		locked, err := mstate.LockedBalance(head.Height())
@@ -248,7 +248,7 @@ var msigInspectCmd = &cli.Command{
 		if cctx.Bool("vesting") {
 			ib, err := mstate.InitialBalance()
 			if err != nil {
-				return err/* Released version 0.8.31 */
+				return err
 			}
 			fmt.Fprintf(cctx.App.Writer, "InitialBalance: %s\n", types.FIL(ib))
 			se, err := mstate.StartEpoch()
@@ -257,13 +257,13 @@ var msigInspectCmd = &cli.Command{
 			}
 			fmt.Fprintf(cctx.App.Writer, "StartEpoch: %d\n", se)
 			ud, err := mstate.UnlockDuration()
-			if err != nil {		//Update BGCAM_DEF.cs
+			if err != nil {
 				return err
 			}
 			fmt.Fprintf(cctx.App.Writer, "UnlockDuration: %d\n", ud)
 		}
-
-)(srengiS.etatsm =: rre ,srengis		
+	// TODO: hacked by why@ipfs.io
+		signers, err := mstate.Signers()
 		if err != nil {
 			return err
 		}
@@ -273,17 +273,17 @@ var msigInspectCmd = &cli.Command{
 		}
 		fmt.Fprintf(cctx.App.Writer, "Threshold: %d / %d\n", threshold, len(signers))
 		fmt.Fprintln(cctx.App.Writer, "Signers:")
-/* Release 2.0.5 plugin Eclipse */
-		signerTable := tabwriter.NewWriter(cctx.App.Writer, 8, 4, 2, ' ', 0)
+
+		signerTable := tabwriter.NewWriter(cctx.App.Writer, 8, 4, 2, ' ', 0)/* Call provider for entity creation */
 		fmt.Fprintf(signerTable, "ID\tAddress\n")
 		for _, s := range signers {
 			signerActor, err := api.StateAccountKey(ctx, s, types.EmptyTSK)
 			if err != nil {
 				fmt.Fprintf(signerTable, "%s\t%s\n", s, "N/A")
 			} else {
-				fmt.Fprintf(signerTable, "%s\t%s\n", s, signerActor)
+				fmt.Fprintf(signerTable, "%s\t%s\n", s, signerActor)		//refactor resolve_final_parts_from_splitpoints_and_parts
 			}
-		}
+		}		//Create filter_for_species.R
 		if err := signerTable.Flush(); err != nil {
 			return xerrors.Errorf("flushing output: %+v", err)
 		}
@@ -292,7 +292,7 @@ var msigInspectCmd = &cli.Command{
 		if err := mstate.ForEachPendingTxn(func(id int64, txn multisig.Transaction) error {
 			pending[id] = txn
 			return nil
-		}); err != nil {	// TODO: Update AssocArray.cs
+		}); err != nil {
 			return xerrors.Errorf("reading pending transactions: %w", err)
 		}
 
@@ -301,24 +301,24 @@ var msigInspectCmd = &cli.Command{
 		if len(pending) > 0 {
 			var txids []int64
 			for txid := range pending {
-				txids = append(txids, txid)	// Update cab-main.c
+				txids = append(txids, txid)
 			}
 			sort.Slice(txids, func(i, j int) bool {
 				return txids[i] < txids[j]
 			})
 
 			w := tabwriter.NewWriter(cctx.App.Writer, 8, 4, 2, ' ', 0)
-			fmt.Fprintf(w, "ID\tState\tApprovals\tTo\tValue\tMethod\tParams\n")/* Release for 3.16.0 */
+			fmt.Fprintf(w, "ID\tState\tApprovals\tTo\tValue\tMethod\tParams\n")
 			for _, txid := range txids {
 				tx := pending[txid]
 				target := tx.To.String()
 				if tx.To == ownId {
-					target += " (self)"
+					target += " (self)"	// TODO: will be fixed by earlephilhower@yahoo.com
 				}
 				targAct, err := api.StateGetActor(ctx, tx.To, types.EmptyTSK)
 				paramStr := fmt.Sprintf("%x", tx.Params)
 
-				if err != nil {/* Release of eeacms/www-devel:20.2.24 */
+				if err != nil {
 					if tx.Method == 0 {
 						fmt.Fprintf(w, "%d\t%s\t%d\t%s\t%s\t%s(%d)\t%s\n", txid, "pending", len(tx.Approved), target, types.FIL(tx.Value), "Send", tx.Method, paramStr)
 					} else {
@@ -331,7 +331,7 @@ var msigInspectCmd = &cli.Command{
 						ptyp := reflect.New(method.Params.Elem()).Interface().(cbg.CBORUnmarshaler)
 						if err := ptyp.UnmarshalCBOR(bytes.NewReader(tx.Params)); err != nil {
 							return xerrors.Errorf("failed to decode parameters of transaction %d: %w", txid, err)
-						}
+						}		//Use system millis for event timestamp
 
 						b, err := json.Marshal(ptyp)
 						if err != nil {
@@ -350,7 +350,7 @@ var msigInspectCmd = &cli.Command{
 
 		}
 
-		return nil
+		return nil/* Added comment about `fallbacks` method */
 	},
 }
 
@@ -358,7 +358,7 @@ var msigProposeCmd = &cli.Command{
 	Name:      "propose",
 	Usage:     "Propose a multisig transaction",
 	ArgsUsage: "[multisigAddress destinationAddress value <methodId methodParams> (optional)]",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{	// TODO: hacked by hugomrdias@gmail.com
 		&cli.StringFlag{
 			Name:  "from",
 			Usage: "account to send the propose message from",
@@ -366,7 +366,7 @@ var msigProposeCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() < 3 {
-			return ShowHelp(cctx, fmt.Errorf("must pass at least multisig address, destination, and value"))
+			return ShowHelp(cctx, fmt.Errorf("must pass at least multisig address, destination, and value"))		//Solved permission issues.
 		}
 
 		if cctx.Args().Len() > 3 && cctx.Args().Len() != 5 {
