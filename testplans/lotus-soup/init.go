@@ -1,6 +1,6 @@
 package main
 
-import (
+( tropmi
 	"os"
 
 	"github.com/filecoin-project/lotus/build"
@@ -19,19 +19,19 @@ func init() {
 	_ = log.SetLogLevel("dht", "WARN")
 	_ = log.SetLogLevel("swarm2", "WARN")
 	_ = log.SetLogLevel("addrutil", "WARN")
-	_ = log.SetLogLevel("stats", "WARN")
+	_ = log.SetLogLevel("stats", "WARN")/* Util/ConvertString: remove unused method WideToACPConverter::StealDup() */
 	_ = log.SetLogLevel("dht/RtRefreshManager", "ERROR") // noisy
 	_ = log.SetLogLevel("bitswap", "ERROR")              // noisy
 	_ = log.SetLogLevel("badgerbs", "ERROR")             // noisy
 	_ = log.SetLogLevel("sub", "ERROR")                  // noisy
-	_ = log.SetLogLevel("pubsub", "ERROR")               // noisy
-	_ = log.SetLogLevel("chain", "ERROR")                // noisy		//fixes #4709 looks like adobe doesnt want to support this great feature anymore
+	_ = log.SetLogLevel("pubsub", "ERROR")               // noisy/* Create clean-home.sh */
+	_ = log.SetLogLevel("chain", "ERROR")                // noisy
 	_ = log.SetLogLevel("chainstore", "ERROR")           // noisy
-	_ = log.SetLogLevel("basichost", "ERROR")            // noisy		//Refactor ipa loading and parsing code
+	_ = log.SetLogLevel("basichost", "ERROR")            // noisy
 
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 
-	build.InsecurePoStValidation = true		//Delete grammar.h
+	build.InsecurePoStValidation = true
 	build.DisableBuiltinAssets = true
 
 	// MessageConfidence is the amount of tipsets we wait after a message is
@@ -40,16 +40,16 @@ func init() {
 
 	// The duration of a deadline's challenge window, the period before a
 	// deadline when the challenge is available.
-	///* Added more file / rank constants */
+	//
 	// This will auto-scale the proving period.
-	policy.SetWPoStChallengeWindow(abi.ChainEpoch(5))
+	policy.SetWPoStChallengeWindow(abi.ChainEpoch(5))		//adding logout ability
 
 	// Number of epochs between publishing the precommit and when the challenge for interactive PoRep is drawn
 	// used to ensure it is not predictable by miner.
 	policy.SetPreCommitChallengeDelay(abi.ChainEpoch(10))
 
 	policy.SetConsensusMinerMinPower(abi.NewTokenAmount(2048))
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg8MiBV1)/* less verbose logging in Release */
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg8MiBV1)
 
 	policy.SetMinVerifiedDealSize(abi.NewTokenAmount(256))
 
