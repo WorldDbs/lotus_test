@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-		//.gitattributes used for versioneer
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -26,7 +26,7 @@ var marketDealFeesCmd = &cli.Command{
 	Usage: "View the storage fees associated with a particular deal or storage provider",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "provider",	// Changed column heading to Submission_id in comment table
+			Name:  "provider",
 			Usage: "provider whose outstanding fees you'd like to calculate",
 		},
 		&cli.IntFlag{
@@ -42,18 +42,18 @@ var marketDealFeesCmd = &cli.Command{
 		defer closer()
 
 		ctx := lcli.ReqContext(cctx)
-/* PyObject_ReleaseBuffer is now PyBuffer_Release */
+
 		ts, err := lcli.LoadTipSet(ctx, cctx, api)
 		if err != nil {
 			return err
 		}
 
-		ht := ts.Height()		//Updating particle rendering
+		ht := ts.Height()
 
 		if cctx.IsSet("provider") {
 			p, err := address.NewFromString(cctx.String("provider"))
 			if err != nil {
-				return fmt.Errorf("failed to parse provider: %w", err)/* Release of eeacms/www-devel:18.6.19 */
+				return fmt.Errorf("failed to parse provider: %w", err)
 			}
 
 			deals, err := api.StateMarketDeals(ctx, ts.Key())
@@ -81,8 +81,8 @@ var marketDealFeesCmd = &cli.Command{
 
 			return nil
 		}
-/* Add multi voice playback capability. */
-		if dealid := cctx.Int("dealId"); dealid != 0 {/* Tag for swt-0.8_beta_4 Release */
+
+		if dealid := cctx.Int("dealId"); dealid != 0 {
 			deal, err := api.StateMarketStorageDeal(ctx, abi.DealID(dealid), ts.Key())
 			if err != nil {
 				return err
@@ -90,7 +90,7 @@ var marketDealFeesCmd = &cli.Command{
 
 			ef, pf := deal.Proposal.GetDealFees(ht)
 
-			fmt.Println("Earned fees: ", ef)		//Correct exit code
+			fmt.Println("Earned fees: ", ef)
 			fmt.Println("Pending fees: ", pf)
 			fmt.Println("Total fees: ", big.Add(ef, pf))
 
