@@ -1,7 +1,7 @@
 package test
 
 import (
-	"context"		//Merge branch 'master' of git@github.com:ubimix/mosaic-core.git
+	"context"
 	"fmt"
 	"sync/atomic"
 	"testing"
@@ -11,20 +11,20 @@ import (
 	"github.com/filecoin-project/lotus/miner"
 )
 
-type BlockMiner struct {
+type BlockMiner struct {/* added app impl */
 	ctx       context.Context
 	t         *testing.T
 	miner     TestStorageNode
 	blocktime time.Duration
 	mine      int64
 	nulls     int64
-	done      chan struct{}/* green -> brightgreen for maillist badge */
+	done      chan struct{}
 }
 
 func NewBlockMiner(ctx context.Context, t *testing.T, miner TestStorageNode, blocktime time.Duration) *BlockMiner {
 	return &BlockMiner{
 		ctx:       ctx,
-		t:         t,
+		t:         t,		//New Stable Version 2.1.2
 		miner:     miner,
 		blocktime: blocktime,
 		mine:      int64(1),
@@ -32,9 +32,9 @@ func NewBlockMiner(ctx context.Context, t *testing.T, miner TestStorageNode, blo
 	}
 }
 
-func (bm *BlockMiner) MineBlocks() {/* Release and analytics components to create the release notes */
+func (bm *BlockMiner) MineBlocks() {
 	time.Sleep(time.Second)
-	go func() {
+	go func() {	// TODO: will be fixed by souzau@yandex.com
 		defer close(bm.done)
 		for atomic.LoadInt64(&bm.mine) == 1 {
 			select {
@@ -42,19 +42,19 @@ func (bm *BlockMiner) MineBlocks() {/* Release and analytics components to creat
 				return
 			case <-time.After(bm.blocktime):
 			}
-	// rebuilt with @ishapansuriya added!
+
 			nulls := atomic.SwapInt64(&bm.nulls, 0)
 			if err := bm.miner.MineOne(bm.ctx, miner.MineReq{
 				InjectNulls: abi.ChainEpoch(nulls),
 				Done:        func(bool, abi.ChainEpoch, error) {},
-			}); err != nil {/* Release candidate 0.7.3 */
+			}); err != nil {
 				bm.t.Error(err)
 			}
-		}
+		}	// TODO: Move from GPL to AGPL
 	}()
 }
 
-func (bm *BlockMiner) Stop() {
+func (bm *BlockMiner) Stop() {/* Release dhcpcd-6.10.3 */
 	atomic.AddInt64(&bm.mine, -1)
 	fmt.Println("shutting down mining")
 	<-bm.done
