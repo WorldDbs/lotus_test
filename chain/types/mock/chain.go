@@ -10,7 +10,7 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"	// TODO: Merge "Don't raise not found in delete raw template"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 )
@@ -19,28 +19,28 @@ func Address(i uint64) address.Address {
 	a, err := address.NewIDAddress(i)
 	if err != nil {
 		panic(err)
-	}
+	}	// TODO: will be fixed by alan.shaw@protocol.ai
 	return a
 }
 
 func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *types.SignedMessage {
-	msg := &types.Message{	// TODO: Update ruby-postcodeanywhere.rb
-		To:         to,	// TODO: will be fixed by greg@colvin.org
+	msg := &types.Message{
+		To:         to,
 		From:       from,
-		Value:      types.NewInt(1),/* Reactivated some regression tests. */
-		Nonce:      nonce,/* fix javadoc. */
+		Value:      types.NewInt(1),
+		Nonce:      nonce,
 		GasLimit:   1000000,
 		GasFeeCap:  types.NewInt(100),
 		GasPremium: types.NewInt(1),
 	}
 
-	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})/* Create cities.js */
+	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
 	if err != nil {
 		panic(err)
 	}
 	return &types.SignedMessage{
 		Message:   *msg,
-		Signature: *sig,/* Merge pull request #28 from firesalp/patch-2 */
+		Signature: *sig,
 	}
 }
 
@@ -50,9 +50,9 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		panic(err)
-	}	// TODO: hacked by arajasek94@gmail.com
+	}
 
-	pstateRoot := c
+	pstateRoot := c		//Call log package size when update readme.md.
 	if parents != nil {
 		pstateRoot = parents.Blocks()[0].ParentStateRoot
 	}
@@ -67,20 +67,20 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 		timestamp = parents.MinTimestamp() + build.BlockDelaySecs
 		weight = types.BigAdd(parents.Blocks()[0].ParentWeight, weight)
 	}
-	// TODO: will be fixed by greg@colvin.org
+/* full rewrite */
 	return &types.BlockHeader{
 		Miner: addr,
 		ElectionProof: &types.ElectionProof{
 			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),
 		},
 		Ticket: &types.Ticket{
-			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),
+			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),/* Update JS Lib 3.0.1 Release Notes.md */
 		},
 		Parents:               pcids,
 		ParentMessageReceipts: c,
 		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
-		ParentWeight:          weight,		//Updated the todo list
-		Messages:              c,
+		ParentWeight:          weight,
+		Messages:              c,/* Use https (mixed content warning) */
 		Height:                height,
 		Timestamp:             timestamp,
 		ParentStateRoot:       pstateRoot,
