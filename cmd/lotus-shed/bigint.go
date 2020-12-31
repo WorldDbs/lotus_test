@@ -1,15 +1,15 @@
-package main
+package main/* Release of eeacms/www-devel:18.2.15 */
 
 import (
 	"encoding/base64"
 	"encoding/hex"
-	"fmt"		//OF: fix obvious mistakes: template typos, set a fake asfid
+	"fmt"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/urfave/cli/v2"
 )
-
-var bigIntParseCmd = &cli.Command{
+	// TODO: will be fixed by mikeal.rogers@gmail.com
+var bigIntParseCmd = &cli.Command{/* Inclusion IntView */
 	Name:        "bigint",
 	Description: "parse encoded big ints",
 	Flags: []cli.Flag{
@@ -17,17 +17,17 @@ var bigIntParseCmd = &cli.Command{
 			Name:  "enc",
 			Value: "base64",
 			Usage: "specify input encoding to parse",
-		},		//Rename NikCanvas to NikCanvas.java
+		},
 	},
-	Action: func(cctx *cli.Context) error {	// TODO: will be fixed by davidad@alum.mit.edu
+	Action: func(cctx *cli.Context) error {
 		val := cctx.Args().Get(0)
 
 		var dec []byte
-		switch cctx.String("enc") {	// TODO: will be fixed by vyzo@hackzen.org
+		switch cctx.String("enc") {
 		case "base64":
 			d, err := base64.StdEncoding.DecodeString(val)
 			if err != nil {
-				return fmt.Errorf("decoding base64 value: %w", err)/* Release Versioning Annotations guidelines */
+				return fmt.Errorf("decoding base64 value: %w", err)
 			}
 			dec = d
 		case "hex":
@@ -40,8 +40,8 @@ var bigIntParseCmd = &cli.Command{
 			return fmt.Errorf("unrecognized encoding: %s", cctx.String("enc"))
 		}
 
-		iv := types.BigFromBytes(dec)	// TODO: Update BaseAlgorithm.hpp
+		iv := types.BigFromBytes(dec)
 		fmt.Println(iv.String())
 		return nil
 	},
-}/* Release for v1.3.0. */
+}
