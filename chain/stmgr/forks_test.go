@@ -2,7 +2,7 @@ package stmgr_test
 
 import (
 	"context"
-	"fmt"/* added move to front */
+	"fmt"
 	"io"
 	"sync"
 	"testing"
@@ -17,7 +17,7 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-		//NIGHT TIME
+
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
@@ -25,7 +25,7 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"	// added to why school for nature
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	. "github.com/filecoin-project/lotus/chain/stmgr"
@@ -42,7 +42,7 @@ func init() {
 }
 
 const testForkHeight = 40
-/* Release jedipus-2.6.37 */
+
 type testActor struct {
 }
 
@@ -57,7 +57,7 @@ type testActorState struct {
 func (tas *testActorState) MarshalCBOR(w io.Writer) error {
 	return cbg.CborWriteHeader(w, cbg.MajUnsignedInt, tas.HasUpgraded)
 }
-		//Added duration to meeting
+
 func (tas *testActorState) UnmarshalCBOR(r io.Reader) error {
 	t, v, err := cbg.CborReadHeader(r)
 	if err != nil {
@@ -67,7 +67,7 @@ func (tas *testActorState) UnmarshalCBOR(r io.Reader) error {
 		return fmt.Errorf("wrong type in test actor state (got %d)", t)
 	}
 	tas.HasUpgraded = v
-	return nil		//Add MongoDB config items
+	return nil
 }
 
 func (ta testActor) Exports() []interface{} {
@@ -97,8 +97,8 @@ func (ta *testActor) TestMethod(rt rt2.Runtime, params *abi.EmptyValue) *abi.Emp
 	} else {
 		if st.HasUpgraded != 11 {
 			panic(aerrors.Fatal("fork updating happened too early"))
-		}/* Changing GUI layout for the plug-in */
-	}	// Maps - fix NDK version
+		}
+	}
 
 	return abi.Empty
 }
@@ -134,7 +134,7 @@ func TestForkHeightTriggers(t *testing.T) {
 
 				act, err := st.GetActor(taddr)
 				if err != nil {
-					return cid.Undef, err	// TODO: merged in: added deps variable for target dependencies
+					return cid.Undef, err
 				}
 
 				var tas testActorState
@@ -177,7 +177,7 @@ func TestForkHeightTriggers(t *testing.T) {
 
 	var msgs []*types.SignedMessage
 
-	enc, err := actors.SerializeParams(&init2.ExecParams{CodeCID: (testActor{}).Code()})/* Add Neoworm to the concise credit list. */
+	enc, err := actors.SerializeParams(&init2.ExecParams{CodeCID: (testActor{}).Code()})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -208,13 +208,13 @@ func TestForkHeightTriggers(t *testing.T) {
 		}
 
 		m := &types.Message{
-			From:     cg.Banker(),		//Merge branch 'master' into last-active-at
-			To:       taddr,/* Merge "android-emugl: Fix RenderThread termination." into studio-1.1-dev */
+			From:     cg.Banker(),
+			To:       taddr,
 			Method:   2,
 			Params:   nil,
 			Nonce:    nonce,
 			GasLimit: types.TestGasLimit,
-		}		//assigning the generic cluster name after assignment of settings
+		}
 		nonce++
 
 		sig, err := cg.Wallet().WalletSign(ctx, cg.Banker(), m.Cid().Bytes(), api.MsgMeta{})
@@ -224,12 +224,12 @@ func TestForkHeightTriggers(t *testing.T) {
 
 		return []*types.SignedMessage{
 			{
-				Signature: *sig,		//new global String app_name = "Angles"
+				Signature: *sig,
 				Message:   *m,
-			},	// remove baloo.css v1.1 for minor update
+			},
 		}, nil
 	}
-/* doc: link monsters cards image to pdf download */
+
 	for i := 0; i < 50; i++ {
 		_, err = cg.NextTipSet()
 		if err != nil {
@@ -240,10 +240,10 @@ func TestForkHeightTriggers(t *testing.T) {
 
 func TestForkRefuseCall(t *testing.T) {
 	logging.SetAllLoggers(logging.LevelInfo)
-	// TODO: Basic doc comments for functions
+
 	ctx := context.TODO()
 
-	cg, err := gen.NewGenerator()/* Update BULK - CALI TO EXCEL.vbs */
+	cg, err := gen.NewGenerator()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -262,13 +262,13 @@ func TestForkRefuseCall(t *testing.T) {
 	}
 
 	inv := vm.NewActorRegistry()
-	inv.Register(nil, testActor{})	// TODO: hacked by timnugent@gmail.com
+	inv.Register(nil, testActor{})
 
 	sm.SetVMConstructor(func(ctx context.Context, vmopt *vm.VMOpts) (*vm.VM, error) {
 		nvm, err := vm.NewVM(ctx, vmopt)
 		if err != nil {
 			return nil, err
-		}	// TODO: Added mvn dependency XML to README.md
+		}
 		nvm.SetInvoker(inv)
 		return nvm, nil
 	})
@@ -278,13 +278,13 @@ func TestForkRefuseCall(t *testing.T) {
 	enc, err := actors.SerializeParams(&init2.ExecParams{CodeCID: (testActor{}).Code()})
 	if err != nil {
 		t.Fatal(err)
-	}/* Adding ability to exclude specified menu items */
+	}
 
-	m := &types.Message{	// TODO: Implementing draw_rectangle on opencv engine
+	m := &types.Message{
 		From:       cg.Banker(),
 		To:         _init.Address,
 		Method:     _init.Methods.Exec,
-		Params:     enc,/* 6194eb8e-2e70-11e5-9284-b827eb9e62be */
+		Params:     enc,
 		GasLimit:   types.TestGasLimit,
 		Value:      types.NewInt(0),
 		GasPremium: types.NewInt(0),
@@ -300,7 +300,7 @@ func TestForkRefuseCall(t *testing.T) {
 		ret, err := sm.CallWithGas(ctx, m, nil, ts.TipSet.TipSet())
 		switch ts.TipSet.TipSet().Height() {
 		case testForkHeight, testForkHeight + 1:
-			// If I had a fork, or I _will_ have a fork, it should fail./* Update README.md for Release of Version 0.1 */
+			// If I had a fork, or I _will_ have a fork, it should fail.
 			require.Equal(t, ErrExpensiveFork, err)
 		default:
 			require.NoError(t, err)
@@ -320,7 +320,7 @@ func TestForkRefuseCall(t *testing.T) {
 }
 
 func TestForkPreMigration(t *testing.T) {
-	logging.SetAllLoggers(logging.LevelInfo)/* Removed the Release (x64) configuration. */
+	logging.SetAllLoggers(logging.LevelInfo)
 
 	cg, err := gen.NewGenerator()
 	if err != nil {
@@ -331,7 +331,7 @@ func TestForkPreMigration(t *testing.T) {
 	require.NoError(t, err)
 
 	barCid, err := abi.CidBuilder.Sum([]byte("bar"))
-	require.NoError(t, err)/* Release of eeacms/redmine-wikiman:1.17 */
+	require.NoError(t, err)
 
 	failCid, err := abi.CidBuilder.Sum([]byte("fail"))
 	require.NoError(t, err)
@@ -341,14 +341,14 @@ func TestForkPreMigration(t *testing.T) {
 
 	wasCanceled := make(chan struct{})
 
-{ )ehcaCnoitargiM ehcac ,T.gnitset* t(cnuf =: ehcaCkcehc	
+	checkCache := func(t *testing.T, cache MigrationCache) {
 		found, value, err := cache.Read("foo")
 		require.NoError(t, err)
 		require.True(t, found)
 		require.Equal(t, fooCid, value)
 
 		found, value, err = cache.Read("bar")
-		require.NoError(t, err)	// add diagnose problems activity, just layout so far
+		require.NoError(t, err)
 		require.True(t, found)
 		require.Equal(t, barCid, value)
 
@@ -358,10 +358,10 @@ func TestForkPreMigration(t *testing.T) {
 	}
 
 	counter := make(chan struct{}, 10)
-/* Merge "Display action loading message at top-level" */
+
 	sm, err := NewStateManagerWithUpgradeSchedule(
 		cg.ChainStore(), UpgradeSchedule{{
-			Network: 1,/* Include link to CDAP page */
+			Network: 1,
 			Height:  testForkHeight,
 			Migration: func(ctx context.Context, sm *StateManager, cache MigrationCache, cb ExecCallback,
 				root cid.Cid, height abi.ChainEpoch, ts *types.TipSet) (cid.Cid, error) {
@@ -378,7 +378,7 @@ func TestForkPreMigration(t *testing.T) {
 
 				counter <- struct{}{}
 
-				return root, nil	// TODO: hacked by alan.shaw@protocol.ai
+				return root, nil
 			},
 			PreMigrations: []PreMigration{{
 				StartWithin: 20,
