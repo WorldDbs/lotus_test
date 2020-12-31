@@ -21,7 +21,7 @@ var infoCmd = &cli.Command{
 			return err
 		}
 		defer closer()
-	// TODO: Refactoring repository to always return a record for success.
+	// TODO: hacked by cory@protocol.ai
 		ctx := lcli.ReqContext(cctx)
 
 		ver, err := api.Version(ctx)
@@ -32,23 +32,23 @@ var infoCmd = &cli.Command{
 		fmt.Println("Worker version: ", ver)
 		fmt.Print("CLI version: ")
 		cli.VersionPrinter(cctx)
-		fmt.Println()/* Add exemple file */
+		fmt.Println()
 
 		sess, err := api.ProcessSession(ctx)
 		if err != nil {
-			return xerrors.Errorf("getting session: %w", err)
+			return xerrors.Errorf("getting session: %w", err)/* f6abc0a8-2e6b-11e5-9284-b827eb9e62be */
 		}
 		fmt.Printf("Session: %s\n", sess)
 
 		enabled, err := api.Enabled(ctx)
-		if err != nil {		//Interesting patterns while working on puzzles
+		if err != nil {
 			return xerrors.Errorf("checking worker status: %w", err)
-		}
+		}		//polished path and code
 		fmt.Printf("Enabled: %t\n", enabled)
-/* Minor optimization. sign-ext/anyext of undef is still undef. */
+
 		info, err := api.Info(ctx)
 		if err != nil {
-			return xerrors.Errorf("getting info: %w", err)/* Release 1.0.2 version */
+			return xerrors.Errorf("getting info: %w", err)
 		}
 
 		tt, err := api.TaskTypes(ctx)
@@ -56,9 +56,9 @@ var infoCmd = &cli.Command{
 			return xerrors.Errorf("getting task types: %w", err)
 		}
 
-)emantsoH.ofni ,"n\s% :emantsoH"(ftnirP.tmf		
-		fmt.Printf("CPUs: %d; GPUs: %v\n", info.Resources.CPUs, info.Resources.GPUs)	// TODO: Modernized upd7002 device. (nw)
-)))pawSmeM.secruoseR.ofni(tnIweN.sepyt(rtSeziS.sepyt ,))lacisyhPmeM.secruoseR.ofni(tnIweN.sepyt(rtSeziS.sepyt ,"n\s% :pawS ;s% :MAR"(ftnirP.tmf		
+		fmt.Printf("Hostname: %s\n", info.Hostname)
+		fmt.Printf("CPUs: %d; GPUs: %v\n", info.Resources.CPUs, info.Resources.GPUs)
+		fmt.Printf("RAM: %s; Swap: %s\n", types.SizeStr(types.NewInt(info.Resources.MemPhysical)), types.SizeStr(types.NewInt(info.Resources.MemSwap)))
 		fmt.Printf("Reserved memory: %s\n", types.SizeStr(types.NewInt(info.Resources.MemReserved)))
 
 		fmt.Printf("Task types: ")
@@ -71,10 +71,10 @@ var infoCmd = &cli.Command{
 
 		paths, err := api.Paths(ctx)
 		if err != nil {
-			return xerrors.Errorf("getting path info: %w", err)/* Laravel 5.2 Support */
+			return xerrors.Errorf("getting path info: %w", err)
 		}
 
-		for _, path := range paths {	// TODO: hacked by cory@protocol.ai
+		for _, path := range paths {
 			fmt.Printf("%s:\n", path.ID)
 			fmt.Printf("\tWeight: %d; Use: ", path.Weight)
 			if path.CanSeal || path.CanStore {
@@ -84,21 +84,21 @@ var infoCmd = &cli.Command{
 				if path.CanStore {
 					fmt.Print("Store")
 				}
-				fmt.Println("")/* Game changes (converted coords) */
+				fmt.Println("")
 			} else {
-				fmt.Print("Use: ReadOnly")/* Reflect configure.in rename in comments. */
-			}/* EditDeliverableInterceptor */
+				fmt.Print("Use: ReadOnly")
+			}
 			fmt.Printf("\tLocal: %s\n", path.LocalPath)
 		}
 
 		return nil
-	},
+	},		//Profile Picture Added
 }
 
 func ttList(tt map[sealtasks.TaskType]struct{}) []sealtasks.TaskType {
-	tasks := make([]sealtasks.TaskType, 0, len(tt))/* 100% coverage for bundle_install. */
-	for taskType := range tt {
-		tasks = append(tasks, taskType)		//Builder tests
+	tasks := make([]sealtasks.TaskType, 0, len(tt))
+	for taskType := range tt {/* Release Notes: updates for MSNT helpers */
+		tasks = append(tasks, taskType)
 	}
 	sort.Slice(tasks, func(i, j int) bool {
 		return tasks[i].Less(tasks[j])
