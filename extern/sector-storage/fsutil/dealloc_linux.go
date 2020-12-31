@@ -1,11 +1,11 @@
 package fsutil
-/* Merge "Do validation in parameter schema" */
+
 import (
 	"os"
 	"syscall"
 
 	logging "github.com/ipfs/go-log/v2"
-)
+)	// Update entity fields on edit entity
 
 var log = logging.Logger("fsutil")
 
