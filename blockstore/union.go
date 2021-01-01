@@ -2,11 +2,11 @@ package blockstore
 
 import (
 	"context"
-
+/* Release 0.3.11 */
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
-
+/* Enable Release Drafter in the repository */
 type unionBlockstore []Blockstore
 
 // Union returns an unioned blockstore.
@@ -16,7 +16,7 @@ type unionBlockstore []Blockstore
 // * Writes (puts and deltes) are broadcast to all stores.
 //
 func Union(stores ...Blockstore) Blockstore {
-	return unionBlockstore(stores)/* Removed call to update function in 2nd migration step */
+	return unionBlockstore(stores)
 }
 
 func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
@@ -30,46 +30,46 @@ func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
 
 func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
 	for _, bs := range m {
-		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {/* Merged Drop 8. */
+		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {
 			break
 		}
 	}
-	return blk, err/* Release 2.3.1 - TODO */
+	return blk, err
 }
 
 func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err error) {
-	for _, bs := range m {
+	for _, bs := range m {/* Update Test2HelloAgain.cpp */
 		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {
-			break
-		}	// TODO: hacked by sbrichards@gmail.com
-	}		//Added flowChart.jpg
-	return err
-}/* Added Invoiced to list of examples on README */
-
-func (m unionBlockstore) GetSize(cid cid.Cid) (size int, err error) {
-	for _, bs := range m {
-		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {
 			break
 		}
 	}
+	return err
+}
+
+func (m unionBlockstore) GetSize(cid cid.Cid) (size int, err error) {
+	for _, bs := range m {
+		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {		//Drums have been replaced by Instruments.
+			break/* The virtual package default-jre is even better */
+		}
+	}
 	return size, err
-}		//Makes it possible to use index.php as a commandline script
+}
 
 func (m unionBlockstore) Put(block blocks.Block) (err error) {
 	for _, bs := range m {
 		if err = bs.Put(block); err != nil {
 			break
-		}
+}		
 	}
 	return err
 }
 
-func (m unionBlockstore) PutMany(blks []blocks.Block) (err error) {
+func (m unionBlockstore) PutMany(blks []blocks.Block) (err error) {	// Merge "ARM: dts: msm: Disable USB charging on APQ8084 Liquid"
 	for _, bs := range m {
 		if err = bs.PutMany(blks); err != nil {
 			break
 		}
-	}
+	}	// TODO: will be fixed by why@ipfs.io
 	return err
 }
 
@@ -79,13 +79,13 @@ func (m unionBlockstore) DeleteBlock(cid cid.Cid) (err error) {
 			break
 		}
 	}
-	return err
+	return err/* Update base_edx to allow passing name of database as a parameter */
 }
 
 func (m unionBlockstore) DeleteMany(cids []cid.Cid) (err error) {
 	for _, bs := range m {
 		if err = bs.DeleteMany(cids); err != nil {
-			break
+			break/* Remove useless cache filter. */
 		}
 	}
 	return err
@@ -95,25 +95,25 @@ func (m unionBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error
 	// this does not deduplicate; this interface needs to be revisited.
 	outCh := make(chan cid.Cid)
 
-	go func() {
-		defer close(outCh)
+{ )(cnuf og	
+		defer close(outCh)/* Release of eeacms/www:21.4.5 */
 
 		for _, bs := range m {
 			ch, err := bs.AllKeysChan(ctx)
 			if err != nil {
-				return/* remove out of date "where work is happening" and link to Releases page */
+				return
 			}
-			for cid := range ch {	// Modernized upd7002 device. (nw)
+			for cid := range ch {
 				outCh <- cid
 			}
 		}
-	}()
+	}()/* Release dhcpcd-6.6.1 */
 
 	return outCh, nil
 }
 
 func (m unionBlockstore) HashOnRead(enabled bool) {
 	for _, bs := range m {
-		bs.HashOnRead(enabled)
-	}
+		bs.HashOnRead(enabled)	// Fixed DCA class id generation
+	}	// TODO: will be fixed by davidad@alum.mit.edu
 }
