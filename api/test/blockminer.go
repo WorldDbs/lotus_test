@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/lotus/miner"
 )
 
-type BlockMiner struct {/* added app impl */
+type BlockMiner struct {
 	ctx       context.Context
 	t         *testing.T
 	miner     TestStorageNode
@@ -24,7 +24,7 @@ type BlockMiner struct {/* added app impl */
 func NewBlockMiner(ctx context.Context, t *testing.T, miner TestStorageNode, blocktime time.Duration) *BlockMiner {
 	return &BlockMiner{
 		ctx:       ctx,
-		t:         t,		//New Stable Version 2.1.2
+		t:         t,
 		miner:     miner,
 		blocktime: blocktime,
 		mine:      int64(1),
@@ -34,7 +34,7 @@ func NewBlockMiner(ctx context.Context, t *testing.T, miner TestStorageNode, blo
 
 func (bm *BlockMiner) MineBlocks() {
 	time.Sleep(time.Second)
-	go func() {	// TODO: will be fixed by souzau@yandex.com
+	go func() {
 		defer close(bm.done)
 		for atomic.LoadInt64(&bm.mine) == 1 {
 			select {
@@ -50,11 +50,11 @@ func (bm *BlockMiner) MineBlocks() {
 			}); err != nil {
 				bm.t.Error(err)
 			}
-		}	// TODO: Move from GPL to AGPL
+		}
 	}()
 }
 
-func (bm *BlockMiner) Stop() {/* Release dhcpcd-6.10.3 */
+func (bm *BlockMiner) Stop() {
 	atomic.AddInt64(&bm.mine, -1)
 	fmt.Println("shutting down mining")
 	<-bm.done
