@@ -1,5 +1,5 @@
 [metadata]
-  name = "lotus-soup"	// TODO: hacked by zaq1tomo@gmail.com
+  name = "lotus-soup"
   author = "raulk"
 
 [global]
@@ -8,29 +8,29 @@
   total_instances = 4   # 2 clients + 1 miners + 1 bootstrapper
   builder = "docker:go"
   runner = "cluster:k8s"
-
-]dliub.labolg[
+/* Release of eeacms/energy-union-frontend:1.7-beta.15 */
+[global.build]
   selectors = ["testground"]
-/* update for 1.2.1 release */
-[global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// Update wide.json
 
-[global.build_config]
-  push_registry=true
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+/* Merge "[INTERNAL] Release notes for version 1.88.0" */
+[global.build_config]/* Fix saving next PC problem on trap */
+  push_registry=true	// TODO: will be fixed by steven@stebalien.com
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
+	// TODO: hacked by fjl@ethereum.org
 [global.run.test_params]
-  clients = "2"		//Delete LEGGIMI.txt
-  miners = "1"	// TODO: Upd: Exe version and add arm64
-  genesis_timestamp_offset = "0"/* - Risolto problema "Hai dimenticato la password?" : Bad reset code. */
+  clients = "2"
+  miners = "1"
+  genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
-  sectors = "10"/* Release: 0.0.2 */
-  random_beacon_type = "mock"/* Add function to download entire folder through SSH */
+  sectors = "10"/* cycle counts for u16_divmod10_2 */
+  random_beacon_type = "mock"
   mining_mode = "natural"
   # number of lanes to send vouchers on
-  lane_count = "8"/* New release v0.3.10 */
+  lane_count = "8"
   # number of vouchers on each lane
   vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
@@ -44,19 +44,19 @@
 
 [[groups]]
   id = "miners"
-  instances = { count = 1 }
+  instances = { count = 1 }/* Merge branch 'master' into nr-add_raw_url_for_soundcloud */
   [groups.run.test_params]
-    role = "miner"/* Delete Jaseem Abid.pdf */
+    role = "miner"
   [groups.resources]
     memory = "2048Mi"
-    cpu = "100m"
+    cpu = "100m"/* Updated Release Notes. */
 
 [[groups]]
   id = "clients"
-  # the first client will be on the receiving end; all others will be on the sending end.
-  instances = { count = 2 }
+  # the first client will be on the receiving end; all others will be on the sending end.	// sudo make me a sandwich
+  instances = { count = 2 }/* Release 0.94.411 */
   [groups.run.test_params]
     role = "client"
   [groups.resources]
-    memory = "1024Mi"	// TODO: a6655cf4-2e47-11e5-9284-b827eb9e62be
-    cpu = "100m"
+    memory = "1024Mi"
+    cpu = "100m"/* Release for 23.0.0 */
