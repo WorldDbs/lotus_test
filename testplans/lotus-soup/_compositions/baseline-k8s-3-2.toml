@@ -4,13 +4,13 @@
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"/* Merge "Release caps lock by double tap on shift key" */
+  case = "deals-e2e"
   total_instances = 6
-  builder = "docker:go"	// add tooltipp css
+  builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]	// TODO: Directory 'srcFraglich' removed
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -18,9 +18,9 @@
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"/* Release-1.3.4 : Changes.txt and init.py files updated. */
+  go_proxy_url="http://localhost:8081"
   registry_type="aws"
-/* Release notes for v3.10. */
+
 [global.run.test_params]
   clients = "3"
   miners = "2"
@@ -42,7 +42,7 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]		//remove /usr/bin/env ansible takes care of that
+[[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
@@ -63,5 +63,5 @@
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: Merge "msm: platsmp: Release secondary cores of 8092 out of reset" into msm-3.4
-      role = "client"	// TODO: TCC-20 Propagate needsScoring flag from inner query
+    [groups.run.test_params]
+      role = "client"
