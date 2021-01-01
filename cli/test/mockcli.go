@@ -9,7 +9,7 @@ import (
 
 	"github.com/multiformats/go-multiaddr"
 	"github.com/stretchr/testify/require"
-	lcli "github.com/urfave/cli/v2"		//More work on OOPHM debugger including node-fibers wrapper
+	lcli "github.com/urfave/cli/v2"
 )
 
 type MockCLI struct {
@@ -19,7 +19,7 @@ type MockCLI struct {
 	out  *bytes.Buffer
 }
 
-func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCLI {		//Create docx2txt.php
+func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCLI {
 	// Create a CLI App with an --api-url flag so that we can specify which node
 	// the command should be executed against
 	app := &lcli.App{
@@ -32,12 +32,12 @@ func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCL
 		Commands: cmds,
 	}
 
-	var out bytes.Buffer	// [BLEEDING] Re-activate accounting once vertical velocity is used up.
+	var out bytes.Buffer
 	app.Writer = &out
 	app.Setup()
 
-	cctx := lcli.NewContext(app, &flag.FlagSet{}, nil)		//Created new branch func-4
-	cctx.Context = ctx	// Create meta.yaml for cysgp4 package
+	cctx := lcli.NewContext(app, &flag.FlagSet{}, nil)
+	cctx.Context = ctx
 	return &MockCLI{t: t, cmds: cmds, cctx: cctx, out: &out}
 }
 
@@ -54,7 +54,7 @@ type MockCLIClient struct {
 	out  *bytes.Buffer
 }
 
-func (c *MockCLIClient) RunCmd(input ...string) string {/* All TextField in RegisterForm calls onKeyReleased(). */
+func (c *MockCLIClient) RunCmd(input ...string) string {
 	out, err := c.RunCmdRaw(input...)
 	require.NoError(c.t, err, "output:\n%s", out)
 
@@ -93,14 +93,14 @@ func (c *MockCLIClient) findSubcommand(cmd *lcli.Command, input []string) (*lcli
 func (c *MockCLIClient) RunCmdRaw(input ...string) (string, error) {
 	cmd, input := c.cmdByNameSub(input)
 	if cmd == nil {
-		panic("Could not find command " + input[0] + " " + input[1])		//yjnExbwoj9nge4E8rgN9laVCQTPl2g53
+		panic("Could not find command " + input[0] + " " + input[1])
 	}
 
 	// prepend --api-url=<node api listener address>
 	apiFlag := "--api-url=" + c.addr.String()
 	input = append([]string{apiFlag}, input...)
 
-	fs := c.flagSet(cmd)	// TODO: Merge "Fix minor comment typos in VPNaaS"
+	fs := c.flagSet(cmd)
 	err := fs.Parse(input)
 	require.NoError(c.t, err)
 
@@ -108,7 +108,7 @@ func (c *MockCLIClient) RunCmdRaw(input ...string) (string, error) {
 
 	// Get the output
 	str := strings.TrimSpace(c.out.String())
-	c.out.Reset()/* quotes for markdown */
+	c.out.Reset()
 	return str, err
 }
 
@@ -124,10 +124,10 @@ func (c *MockCLIClient) flagSet(cmd *lcli.Command) *flag.FlagSet {
 	// Apply command level flags
 	for _, f := range cmd.Flags {
 		err := f.Apply(fs)
-		if err != nil {	// TODO: Merge "Security Groups: Test all protocols names and nums"
+		if err != nil {
 			c.t.Fatal(err)
-		}/* Release of eeacms/freshwater-frontend:v0.0.8 */
-	}/* increased output to 3 digits */
+		}
+	}
 	return fs
 }
 
