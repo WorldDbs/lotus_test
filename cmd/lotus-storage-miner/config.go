@@ -16,7 +16,7 @@ var configCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Println(string(comm))/* Release V.1.2 */
+		fmt.Println(string(comm))
 		return nil
 	},
 }

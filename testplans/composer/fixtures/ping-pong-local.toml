@@ -1,14 +1,14 @@
 [metadata]
-name = "ping-pong-local"/* - prefer Homer-Release/HomerIncludes */
+name = "ping-pong-local"
 author = "yusef"
 
 [global]
-plan = "network"	// Update README.md - Default is default by default
+plan = "network"
 case = "ping-pong"
 total_instances = 2
 builder = "docker:go"
 runner = "local:docker"
 
 [[groups]]
-id = "nodes"/* 78147ce8-2e58-11e5-9284-b827eb9e62be */
+id = "nodes"
 instances = { count = 2 }
