@@ -18,13 +18,13 @@ type message4 struct{ from address.Address }
 func (m message4) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych4.ConstructorParams{From: m.from, To: to})
 	if aerr != nil {
-		return nil, aerr		//Delete the correct PythonQt manager (#1085). 
+		return nil, aerr
 	}
 	enc, aerr := actors.SerializeParams(&init4.ExecParams{
 		CodeCID:           builtin4.PaymentChannelActorCodeID,
 		ConstructorParams: params,
-	})	// TODO: hacked by lexy8russo@outlook.com
-	if aerr != nil {		//Merge "Disable Edit Flavour by default"
+	})
+	if aerr != nil {
 		return nil, aerr
 	}
 
@@ -53,7 +53,7 @@ func (m message4) Update(paych address.Address, sv *SignedVoucher, secret []byte
 		Method: builtin4.MethodsPaych.UpdateChannelState,
 		Params: params,
 	}, nil
-}	// TODO: hacked by sjors@sprovoost.nl
+}
 
 func (m message4) Settle(paych address.Address) (*types.Message, error) {
 	return &types.Message{
