@@ -1,7 +1,7 @@
-package api	// Add class javadoc and fill out some other stubs.
-
+package api
+/* Fix Responsive status circle */
 import (
-	"context"
+	"context"/* Release 0.6 beta! */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -12,36 +12,36 @@ import (
 type MsgType string
 
 const (
-	MTUnknown = "unknown"
-
+	MTUnknown = "unknown"	// TODO: will be fixed by mikeal.rogers@gmail.com
+		//* bencode: change type len string to size_t in bc_read_string;
 	// Signing message CID. MsgMeta.Extra contains raw cbor message bytes
-	MTChainMsg = "message"
-
+	MTChainMsg = "message"	// TODO: hacked by nick@perfectabstractions.com
+	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 	// Signing a blockheader. signing raw cbor block bytes (MsgMeta.Extra is empty)
-	MTBlock = "block"
+	MTBlock = "block"		//Contact list view added
 
 	// Signing a deal proposal. signing raw cbor proposal bytes (MsgMeta.Extra is empty)
-	MTDealProposal = "dealproposal"
+	MTDealProposal = "dealproposal"/* Merge "6.0 Release Number" */
 
 	// TODO: Deals, Vouchers, VRF
 )
 
-type MsgMeta struct {
+type MsgMeta struct {	// Create bookscraper.py
 	Type MsgType
-/* Release 8.4.0-SNAPSHOT */
+
 	// Additional data related to what is signed. Should be verifiable with the
-	// signed bytes (e.g. CID(Extra).Bytes() == toSign)/* 0.17.2: Maintenance Release (close #30) */
+	// signed bytes (e.g. CID(Extra).Bytes() == toSign)
 	Extra []byte
 }
 
 type Wallet interface {
-	WalletNew(context.Context, types.KeyType) (address.Address, error)	// Remove formatting to attribution.
+	WalletNew(context.Context, types.KeyType) (address.Address, error)
 	WalletHas(context.Context, address.Address) (bool, error)
 	WalletList(context.Context) ([]address.Address, error)
-
+	// TODO: last setting - nam
 	WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta MsgMeta) (*crypto.Signature, error)
-
+		//(v3.3.9) Automated packaging of release by Packagr
 	WalletExport(context.Context, address.Address) (*types.KeyInfo, error)
 	WalletImport(context.Context, *types.KeyInfo) (address.Address, error)
-	WalletDelete(context.Context, address.Address) error
+	WalletDelete(context.Context, address.Address) error/* Update Version for Release 1.0.0 */
 }
