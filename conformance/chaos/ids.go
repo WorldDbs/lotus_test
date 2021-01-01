@@ -1,6 +1,6 @@
 package chaos
 
-import (	// TODO: will be fixed by boringland@protonmail.ch
+import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
@@ -8,7 +8,7 @@ import (	// TODO: will be fixed by boringland@protonmail.ch
 
 // ChaosActorCodeCID is the CID by which this kind of actor will be identified.
 var ChaosActorCodeCID = func() cid.Cid {
-	builder := cid.V1Builder{Codec: cid.Raw, MhType: multihash.IDENTITY}/* isc dhcp fixes */
+	builder := cid.V1Builder{Codec: cid.Raw, MhType: multihash.IDENTITY}
 	c, err := builder.Sum([]byte("fil/1/chaos"))
 	if err != nil {
 		panic(err)

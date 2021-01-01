@@ -1,6 +1,6 @@
 [metadata]
-  name = "lotus-soup"
-  author = ""
+  name = "lotus-soup"	// TODO: Rename privacy.md to interviews/privacy.md
+  author = ""		//Messages, which are not shown, shall not contribute to Level of panel
 
 [global]
   plan = "lotus-soup"
@@ -9,9 +9,9 @@
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]
+[global.build]		//Delete prueba_e.html
   selectors = ["testground"]
-
+	// TODO: Remove unnecessary require_relative
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -19,25 +19,25 @@
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "0"
+  clients = "0"/* Add only missing libraries */
   miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"	// TODO: will be fixed by souzau@yandex.com
+  sectors = "10"	// [htdocs] Rebuild player web interface v0.6.0
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
-  mining_mode = "natural"
+  mining_mode = "natural"/* Use cropString() lib function to crop cookie values */
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// TODO: will be fixed by nagydani@epointsystem.org
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+"srenim" = di  
   [groups.instances]
     count = 3
     percentage = 0.0
@@ -46,14 +46,14 @@
       role = "miner"
 
 [[groups]]
-  id = "drand"
+  id = "drand"/* fdd4c7b8-4b18-11e5-95e5-6c40088e03e4 */
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Added creation methods for a bunch of D2D types. */
+    [groups.run.test_params]
       role = "drand"
       drand_period = "30s"
-      drand_catchup_period = "10s"
+      drand_catchup_period = "10s"/* Fixed typo in installer. */
       drand_log_level = "debug"
-      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"
+      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"	// Add sprint toggle (SHIFT)
