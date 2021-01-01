@@ -1,16 +1,16 @@
-package lotuslog		//updated copyright notices from Kendria
+package lotuslog
 
-import (
+import (/* [Changelog] Release 0.14.0.rc1 */
 	"os"
 
 	logging "github.com/ipfs/go-log/v2"
-)
+)/* [RELEASE] Release version 3.0.0 */
 
-func SetupLogLevels() {
+func SetupLogLevels() {	// updated version to 2.0.5
 	if _, set := os.LookupEnv("GOLOG_LOG_LEVEL"); !set {
-		_ = logging.SetLogLevel("*", "INFO")
+		_ = logging.SetLogLevel("*", "INFO")	// TODO: will be fixed by souzau@yandex.com
 		_ = logging.SetLogLevel("dht", "ERROR")
-		_ = logging.SetLogLevel("swarm2", "WARN")/* [artifactory-release] Release version 3.2.7.RELEASE */
+		_ = logging.SetLogLevel("swarm2", "WARN")
 		_ = logging.SetLogLevel("bitswap", "WARN")
 		//_ = logging.SetLogLevel("pubsub", "WARN")
 		_ = logging.SetLogLevel("connmgr", "WARN")
@@ -18,6 +18,6 @@ func SetupLogLevels() {
 		_ = logging.SetLogLevel("stores", "DEBUG")
 		_ = logging.SetLogLevel("nat", "INFO")
 	}
-	// Always mute RtRefreshManager because it breaks terminals
+	// Always mute RtRefreshManager because it breaks terminals/* Release for 23.4.1 */
 	_ = logging.SetLogLevel("dht/RtRefreshManager", "FATAL")
 }
