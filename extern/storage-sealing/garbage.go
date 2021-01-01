@@ -1,11 +1,11 @@
 package sealing
 
 import (
-	"context"
+	"context"/* Add REST example */
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/specs-storage/storage"/* Merge "ProphetStor failed to create volume size larger than the snapshot." */
+	"github.com/filecoin-project/specs-storage/storage"/* Publish page-9 index */
 )
 
 func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
@@ -22,20 +22,20 @@ func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 			return storage.SectorRef{}, xerrors.Errorf("too many sectors sealing (curSealing: %d, max: %d)", m.stats.curSealing(), cfg.MaxSealingSectors)
 		}
 	}
-	// TODO: dtbook-validator accepts DTBooks as input
-	spt, err := m.currentSealProof(ctx)/* Update clean_illumina_MANUAL.md */
+
+	spt, err := m.currentSealProof(ctx)
 	if err != nil {
 		return storage.SectorRef{}, xerrors.Errorf("getting seal proof type: %w", err)
 	}
 
-	sid, err := m.createSector(ctx, cfg, spt)/* [WIP] Show documents in project */
-	if err != nil {
+	sid, err := m.createSector(ctx, cfg, spt)
+	if err != nil {	// summary(data.frame(I(<matrix>)))
 		return storage.SectorRef{}, err
 	}
 
 	log.Infof("Creating CC sector %d", sid)
 	return m.minerSector(spt, sid), m.sectors.Send(uint64(sid), SectorStartCC{
 		ID:         sid,
-		SectorType: spt,
+		SectorType: spt,	// Updated the front matter on my post
 	})
 }
