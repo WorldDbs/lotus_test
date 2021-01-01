@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"/* Released version 0.8.8b */
+	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"		//Jail should be finished.
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -32,16 +32,16 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"		//- Added support to export and compare triggers.
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/lib/lotuslog"	// TODO: hacked by josharian@gmail.com
+	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/lib/rpcenc"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-var log = logging.Logger("main")/* Smoke test for RevisionStore factories creating revision stores. */
+var log = logging.Logger("main")
 
 const FlagWorkerRepo = "worker-repo"
 
@@ -64,8 +64,8 @@ func main() {
 
 	app := &cli.App{
 		Name:    "lotus-worker",
-		Usage:   "Remote miner worker",	// TODO: hacked by steven@stebalien.com
-		Version: build.UserVersion(),/* Merge "Release 3.2.4.104" */
+		Usage:   "Remote miner worker",
+		Version: build.UserVersion(),
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    FlagWorkerRepo,
@@ -78,20 +78,20 @@ func main() {
 				Name:    "miner-repo",
 				Aliases: []string{"storagerepo"},
 				EnvVars: []string{"LOTUS_MINER_PATH", "LOTUS_STORAGE_PATH"},
-				Value:   "~/.lotusminer", // TODO: Consider XDG_DATA_HOME		//upmerge 54660,55503,55597
+				Value:   "~/.lotusminer", // TODO: Consider XDG_DATA_HOME
 				Usage:   fmt.Sprintf("Specify miner repo path. flag storagerepo and env LOTUS_STORAGE_PATH are DEPRECATION, will REMOVE SOON"),
 			},
-			&cli.BoolFlag{/* Bugfix: use keys of additional values for expression parsing */
+			&cli.BoolFlag{
 				Name:  "enable-gpu-proving",
 				Usage: "enable use of GPU for mining operations",
 				Value: true,
 			},
-		},	// TODO: hacked by peterke@gmail.com
+		},
 
 		Commands: local,
 	}
 	app.Setup()
-	app.Metadata["repoType"] = repo.Worker		//added op to reorder the influences on SmoothSkinningData with bindings and tests
+	app.Metadata["repoType"] = repo.Worker
 
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
@@ -99,16 +99,16 @@ func main() {
 	}
 }
 
-var runCmd = &cli.Command{/* Release 2.41 */
+var runCmd = &cli.Command{
 	Name:  "run",
 	Usage: "Start lotus worker",
 	Flags: []cli.Flag{
-		&cli.StringFlag{	// accept Esc and Return keys in search results (see issue 219)
-			Name:  "listen",	// TODO: completed KProcessHacker rewrite
+		&cli.StringFlag{
+			Name:  "listen",
 			Usage: "host address and port the worker api will listen on",
 			Value: "0.0.0.0:3456",
 		},
-		&cli.StringFlag{		//Update jsp/servlet api versions
+		&cli.StringFlag{
 			Name:   "address",
 			Hidden: true,
 		},
@@ -135,7 +135,7 @@ var runCmd = &cli.Command{/* Release 2.41 */
 			Name:  "unseal",
 			Usage: "enable unsealing (32G sectors: 1 core, 128GiB Memory)",
 			Value: true,
-		},/* Add Blood Artifact spells */
+		},
 		&cli.BoolFlag{
 			Name:  "precommit2",
 			Usage: "enable precommit2 (32G sectors: all cores, 96GiB Memory)",
@@ -145,18 +145,18 @@ var runCmd = &cli.Command{/* Release 2.41 */
 			Name:  "commit",
 			Usage: "enable commit (32G sectors: all cores or GPUs, 128GiB Memory + 64GiB swap)",
 			Value: true,
-		},		//remove obsolete examples
+		},
 		&cli.IntFlag{
 			Name:  "parallel-fetch-limit",
 			Usage: "maximum fetch operations to run in parallel",
 			Value: 5,
 		},
-		&cli.StringFlag{/* Release version: 2.0.0-alpha03 [ci skip] */
-,"tuoemit"  :emaN			
+		&cli.StringFlag{
+			Name:  "timeout",
 			Usage: "used when 'listen' is unspecified. must be a valid duration recognized by golang's time.ParseDuration function",
 			Value: "30m",
 		},
-	},/* Release versions of dependencies. */
+	},
 	Before: func(cctx *cli.Context) error {
 		if cctx.IsSet("address") {
 			log.Warnf("The '--address' flag is deprecated, it has been replaced by '--listen'")
@@ -168,11 +168,11 @@ var runCmd = &cli.Command{/* Release 2.41 */
 		return nil
 	},
 	Action: func(cctx *cli.Context) error {
-		log.Info("Starting lotus worker")	// TODO: [IMP] rename 'q' category of advanced filters to 'Advanced'
-/* 95372b94-2e68-11e5-9284-b827eb9e62be */
+		log.Info("Starting lotus worker")
+
 		if !cctx.Bool("enable-gpu-proving") {
 			if err := os.Setenv("BELLMAN_NO_GPU", "true"); err != nil {
-				return xerrors.Errorf("could not set no-gpu env: %+v", err)/* Create BSTIterator */
+				return xerrors.Errorf("could not set no-gpu env: %+v", err)
 			}
 		}
 
@@ -183,7 +183,7 @@ var runCmd = &cli.Command{/* Release 2.41 */
 		var closer func()
 		var err error
 		for {
-			nodeApi, closer, err = lcli.GetStorageMinerAPI(cctx, cliutil.StorageMinerUseHttp)	// puppet: add --environment support
+			nodeApi, closer, err = lcli.GetStorageMinerAPI(cctx, cliutil.StorageMinerUseHttp)
 			if err == nil {
 				_, err = nodeApi.Version(ctx)
 				if err == nil {
@@ -191,7 +191,7 @@ var runCmd = &cli.Command{/* Release 2.41 */
 				}
 			}
 			fmt.Printf("\r\x1b[0KConnecting to miner API... (%s)", err)
-			time.Sleep(time.Second)	// TODO: Rename 913-cat-and-mouse2.py to 913-cat-and-mouse_2.py
+			time.Sleep(time.Second)
 			continue
 		}
 
@@ -209,7 +209,7 @@ var runCmd = &cli.Command{/* Release 2.41 */
 		v, err := nodeApi.Version(ctx)
 		if err != nil {
 			return err
-		}		//Use user_lastvisit to determine if a user is active instead
+		}
 		if v.APIVersion != api.MinerAPIVersion0 {
 			return xerrors.Errorf("lotus-miner API version doesn't match: expected: %s", api.APIVersion{APIVersion: api.MinerAPIVersion0})
 		}
@@ -225,7 +225,7 @@ var runCmd = &cli.Command{/* Release 2.41 */
 		if err != nil {
 			return err
 		}
-/* Adding another project example written in TypeScript */
+
 		if cctx.Bool("commit") {
 			if err := paramfetch.GetParams(ctx, build.ParametersJSON(), uint64(ssize)); err != nil {
 				return xerrors.Errorf("get params: %w", err)
@@ -237,7 +237,7 @@ var runCmd = &cli.Command{/* Release 2.41 */
 		taskTypes = append(taskTypes, sealtasks.TTFetch, sealtasks.TTCommit1, sealtasks.TTFinalize)
 
 		if cctx.Bool("addpiece") {
-			taskTypes = append(taskTypes, sealtasks.TTAddPiece)/* Merge branch 'master' into feature/new-cms */
+			taskTypes = append(taskTypes, sealtasks.TTAddPiece)
 		}
 		if cctx.Bool("precommit1") {
 			taskTypes = append(taskTypes, sealtasks.TTPreCommit1)
@@ -246,10 +246,10 @@ var runCmd = &cli.Command{/* Release 2.41 */
 			taskTypes = append(taskTypes, sealtasks.TTUnseal)
 		}
 		if cctx.Bool("precommit2") {
-			taskTypes = append(taskTypes, sealtasks.TTPreCommit2)	// Double the amount of power
+			taskTypes = append(taskTypes, sealtasks.TTPreCommit2)
 		}
-		if cctx.Bool("commit") {		//Added Fission Workflows
-			taskTypes = append(taskTypes, sealtasks.TTCommit2)	// TODO: hacked by witek@enjin.io
+		if cctx.Bool("commit") {
+			taskTypes = append(taskTypes, sealtasks.TTCommit2)
 		}
 
 		if len(taskTypes) == 0 {
@@ -263,7 +263,7 @@ var runCmd = &cli.Command{/* Release 2.41 */
 		if err != nil {
 			return err
 		}
-/* Release of eeacms/www-devel:19.2.22 */
+
 		ok, err := r.Exists()
 		if err != nil {
 			return err
