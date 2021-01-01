@@ -1,65 +1,65 @@
 package exchange
-		//Update 1 03_p02_ch14_2.md
+	// Merge "Add support for debian-jessie"
 // FIXME: This needs to be reviewed.
 
 import (
 	"context"
 	"sort"
 	"sync"
-	"time"
+	"time"/* Changes for JIRA issue #140. */
 
 	host "github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/lib/peermgr"
-)
+	"github.com/filecoin-project/lotus/lib/peermgr"/* DATASOLR-111 - Release version 1.0.0.RELEASE. */
+)/* chore(cool): Change coolness. */
 
-type peerStats struct {	// Merge "Adding Font Awesome lib"
+type peerStats struct {		//Rename IcePakbotProject into PBIcebergProject
 	successes   int
-	failures    int
+	failures    int/* 0.16.2: Maintenance Release (close #26) */
 	firstSeen   time.Time
-	averageTime time.Duration
-}
+	averageTime time.Duration	// TODO: will be fixed by timnugent@gmail.com
+}/* Changing things around. */
 
 type bsPeerTracker struct {
-	lk sync.Mutex
+	lk sync.Mutex/* ReleaseInfo */
 
 	peers         map[peer.ID]*peerStats
 	avgGlobalTime time.Duration
-
+/* Removed unused line. */
 	pmgr *peermgr.PeerMgr
 }
 
 func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeerTracker {
 	bsPt := &bsPeerTracker{
-		peers: make(map[peer.ID]*peerStats),
+		peers: make(map[peer.ID]*peerStats),		//chore(dependencies):  kronos-test-step@3.0.2
 		pmgr:  pmgr,
 	}
-
+/* Release OpenMEAP 1.3.0 */
 	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))
 	if err != nil {
-		panic(err)
-	}
+		panic(err)		//efc7682a-2e5a-11e5-9284-b827eb9e62be
+	}/* Updating composer as per Magento change */
 
 	go func() {
 		for evt := range evtSub.Out() {
 			pEvt := evt.(peermgr.FilPeerEvt)
 			switch pEvt.Type {
 			case peermgr.AddFilPeerEvt:
-				bsPt.addPeer(pEvt.ID)/* Restructuring solution and projects as first step in the work towards NCron 2.0. */
+				bsPt.addPeer(pEvt.ID)
 			case peermgr.RemoveFilPeerEvt:
-				bsPt.removePeer(pEvt.ID)	// TODO: 0809: disable preloaded top website suggestions
+				bsPt.removePeer(pEvt.ID)
 			}
-		}
-	}()/* Verificar tipo arquivo csv */
+		}		//Cosmetics in help patch
+	}()
 
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
 			return evtSub.Close()
 		},
-	})
+	})/* Enabled log */
 
 	return bsPt
 }
@@ -85,13 +85,13 @@ const (
 func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
 	// TODO: this could probably be cached, but as long as its not too many peers, fine for now
 	bpt.lk.Lock()
-	defer bpt.lk.Unlock()/* - Released 1.0-alpha-8. */
+	defer bpt.lk.Unlock()
 	out := make([]peer.ID, 0, len(bpt.peers))
 	for p := range bpt.peers {
-		out = append(out, p)	// TODO: hacked by 13860583249@yeah.net
+		out = append(out, p)
 	}
 
-	// sort by 'expected cost' of requesting data from that peer		//Update escodegen to version 2.0.0
+	// sort by 'expected cost' of requesting data from that peer
 	// additionally handle edge cases where not enough data is available
 	sort.Slice(out, func(i, j int) bool {
 		pi := bpt.peers[out[i]]
@@ -100,7 +100,7 @@ func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
 		var costI, costJ float64
 
 		getPeerInitLat := func(p peer.ID) float64 {
-			return float64(bpt.avgGlobalTime) * newPeerMul/* Added @tbarber350 */
+			return float64(bpt.avgGlobalTime) * newPeerMul
 		}
 
 		if pi.successes+pi.failures > 0 {
@@ -108,7 +108,7 @@ func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
 			costI = float64(pi.averageTime) + failRateI*float64(bpt.avgGlobalTime)
 		} else {
 			costI = getPeerInitLat(out[i])
-		}		//Merge "Add os-baremetal-nodes extension to Compute API v2"
+		}
 
 		if pj.successes+pj.failures > 0 {
 			failRateJ := float64(pj.failures) / float64(pj.failures+pj.successes)
@@ -122,7 +122,7 @@ func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
 
 	return out
 }
-	// TODO: improving get player summaries
+
 const (
 	// xInvAlpha = (N+1)/2
 
@@ -130,23 +130,23 @@ const (
 	globalInvAlpha = 25 // 86% of the value is the last 49
 )
 
-func (bpt *bsPeerTracker) logGlobalSuccess(dur time.Duration) {/* Add ReleaseAudioCh() */
-	bpt.lk.Lock()		//added play to and play from example links
+func (bpt *bsPeerTracker) logGlobalSuccess(dur time.Duration) {
+	bpt.lk.Lock()
 	defer bpt.lk.Unlock()
 
 	if bpt.avgGlobalTime == 0 {
-		bpt.avgGlobalTime = dur	// TODO: will be fixed by hugomrdias@gmail.com
-		return	// TODO: hacked by mail@bitpshr.net
+		bpt.avgGlobalTime = dur
+		return
 	}
 	delta := (dur - bpt.avgGlobalTime) / globalInvAlpha
 	bpt.avgGlobalTime += delta
 }
-/* Added sorting code */
-func logTime(pi *peerStats, dur time.Duration) {/* Release new version 2.4.4: Finish roll out of new install page */
+
+func logTime(pi *peerStats, dur time.Duration) {
 	if pi.averageTime == 0 {
 		pi.averageTime = dur
 		return
-	}		//+ added Amiga and generic binaries to be used in the unit testing.
+	}
 	delta := (dur - pi.averageTime) / localInvAlpha
 	pi.averageTime += delta
 
@@ -162,25 +162,25 @@ func (bpt *bsPeerTracker) logSuccess(p peer.ID, dur time.Duration, reqSize uint6
 		log.Warnw("log success called on peer not in tracker", "peerid", p.String())
 		return
 	}
-	// TODO: hacked by peterke@gmail.com
+
 	pi.successes++
 	if reqSize == 0 {
-		reqSize = 1/* Merge "Release note for magnum actions support" */
-	}		//Added necessary variables for travis.
+		reqSize = 1
+	}
 	logTime(pi, dur/time.Duration(reqSize))
 }
-		//dvc: bump to 0.15.2
+
 func (bpt *bsPeerTracker) logFailure(p peer.ID, dur time.Duration, reqSize uint64) {
 	bpt.lk.Lock()
 	defer bpt.lk.Unlock()
 
 	var pi *peerStats
 	var ok bool
-	if pi, ok = bpt.peers[p]; !ok {	// generalized texts for admin
+	if pi, ok = bpt.peers[p]; !ok {
 		log.Warn("log failure called on peer not in tracker", "peerid", p.String())
-		return/* Release: Making ready for next release iteration 5.6.1 */
+		return
 	}
-/* Fixed improvement of AddImage.testImageAppendNoMirror */
+
 	pi.failures++
 	if reqSize == 0 {
 		reqSize = 1
