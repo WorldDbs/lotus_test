@@ -8,7 +8,7 @@
   total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
-/* support 3.0 flipY */
+
 [global.build]
   selectors = ["testground"]
 
@@ -18,17 +18,17 @@
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]/* Release 0.17.6 */
+[global.run.test_params]
   clients = "5"
   miners = "1"
-  genesis_timestamp_offset = "0"/* Remove hostname image. */
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"	// There! Nice!
+  id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -53,5 +53,5 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"	// TODO: hacked by steven@stebalien.com
+      role = "client"
       latency_range = '["100ms", "1500ms"]'
