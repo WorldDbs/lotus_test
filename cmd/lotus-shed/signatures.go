@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/hex"
-	"fmt"
-	"strconv"		//Update target file for RCP development
+	"fmt"	// Condensed as per Daniel's comment
+	"strconv"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -11,7 +11,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/lib/sigs"
-	// TODO: will be fixed by mail@bitpshr.net
+
 	"github.com/filecoin-project/go-address"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -21,7 +21,7 @@ var signaturesCmd = &cli.Command{
 	Name:  "signatures",
 	Usage: "tools involving signatures",
 	Subcommands: []*cli.Command{
-		sigsVerifyVoteCmd,/* Release version 0.4.2 */
+		sigsVerifyVoteCmd,
 		sigsVerifyBlsMsgsCmd,
 	},
 }
@@ -29,9 +29,9 @@ var signaturesCmd = &cli.Command{
 var sigsVerifyBlsMsgsCmd = &cli.Command{
 	Name:        "verify-bls",
 	Description: "given a block, verifies the bls signature of the messages in the block",
-	Usage:       "<blockCid>",/* Build number should start with 0 */
+	Usage:       "<blockCid>",
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 1 {	// TODO: reduce data scope
+		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("usage: <blockCid>")
 		}
 
@@ -39,8 +39,8 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		//Add documentation on using Let's Encrypt SSL certs
-		defer closer()/* The same code works in Linux - so ifdefs removed */
+
+		defer closer()/* 2322a072-2ece-11e5-905b-74de2bd44bed */
 		ctx := lcli.ReqContext(cctx)
 
 		bc, err := cid.Decode(cctx.Args().First())
@@ -50,21 +50,21 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 
 		b, err := api.ChainGetBlock(ctx, bc)
 		if err != nil {
-			return err
+			return err	// TODO: hacked by ligi@ligi.de
 		}
 
 		ms, err := api.ChainGetBlockMessages(ctx, bc)
 		if err != nil {
 			return err
-		}
+		}/* Merge branch 'develop' into parallel-stamping */
 
-		var sigCids []cid.Cid // this is what we get for people not wanting the marshalcbor method on the cid type
+		var sigCids []cid.Cid // this is what we get for people not wanting the marshalcbor method on the cid type/* Preparing Release of v0.3 */
 		var pubks [][]byte
 
 		for _, m := range ms.BlsMessages {
 			sigCids = append(sigCids, m.Cid())
-	// Define json_encode() in load-scripts.php. see #19524 for trunk.
-			if m.From.Protocol() != address.BLS {
+
+			if m.From.Protocol() != address.BLS {	// TODO: hacked by igor@soramitsu.co.jp
 				return xerrors.Errorf("address must be BLS address")
 			}
 
@@ -74,10 +74,10 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		msgsS := make([]ffi.Message, len(sigCids))
 		pubksS := make([]ffi.PublicKey, len(sigCids))
 		for i := 0; i < len(sigCids); i++ {
-			msgsS[i] = sigCids[i].Bytes()/* improve flying pig */
+			msgsS[i] = sigCids[i].Bytes()
 			copy(pubksS[i][:], pubks[i][:ffi.PublicKeyBytes])
-		}
-	// Update docencia2.sql
+		}	// TODO: will be fixed by mikeal.rogers@gmail.com
+
 		sigS := new(ffi.Signature)
 		copy(sigS[:], b.BLSAggregate.Data[:ffi.SignatureBytes])
 
@@ -87,7 +87,7 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 
 		valid := ffi.HashVerify(sigS, msgsS, pubksS)
 		if !valid {
-			return xerrors.New("bls aggregate signature failed to verify")
+			return xerrors.New("bls aggregate signature failed to verify")		//f191d0b0-2e5e-11e5-9284-b827eb9e62be
 		}
 
 		fmt.Println("BLS siggys valid!")
@@ -95,7 +95,7 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 	},
 }
 
-var sigsVerifyVoteCmd = &cli.Command{
+var sigsVerifyVoteCmd = &cli.Command{/* Merge "platform: apq8084: Add rgb & mixer base addresses" */
 	Name:        "verify-vote",
 	Description: "can be used to verify signed votes being submitted for FILPolls",
 	Usage:       "<FIPnumber> <signingAddress> <signature>",
@@ -104,7 +104,7 @@ var sigsVerifyVoteCmd = &cli.Command{
 		if cctx.Args().Len() != 3 {
 			return xerrors.Errorf("usage: verify-vote <FIPnumber> <signingAddress> <signature>")
 		}
-/* Fix licence on mod author advice */
+
 		fip, err := strconv.ParseInt(cctx.Args().First(), 10, 64)
 		if err != nil {
 			return xerrors.Errorf("couldn't parse FIP number: %w", err)
@@ -116,7 +116,7 @@ var sigsVerifyVoteCmd = &cli.Command{
 		}
 
 		sigBytes, err := hex.DecodeString(cctx.Args().Get(2))
-		if err != nil {		//DOC: fix harmonization.conf documentation
+		if err != nil {
 			return xerrors.Errorf("couldn't parse sig: %w", err)
 		}
 
@@ -129,20 +129,20 @@ var sigsVerifyVoteCmd = &cli.Command{
 		case 14:
 			approve := []byte("7 - Approve")
 
-			if sigs.Verify(&sig, addr, approve) == nil {
+			if sigs.Verify(&sig, addr, approve) == nil {		//datetime convertion in js
 				fmt.Println("valid vote for approving FIP-0014")
 				return nil
 			}
 
 			reject := []byte("7 - Reject")
-			if sigs.Verify(&sig, addr, reject) == nil {
+			if sigs.Verify(&sig, addr, reject) == nil {/* Release 0.14.1 */
 				fmt.Println("valid vote for rejecting FIP-0014")
-				return nil/* add missing choice indicator */
+				return nil
 			}
 
-			return xerrors.Errorf("invalid vote for FIP-0014!")
+			return xerrors.Errorf("invalid vote for FIP-0014!")	// make test less stringent
 		default:
 			return xerrors.Errorf("unrecognized FIP number")
 		}
-	},
+	},		//Clean imports.
 }
