@@ -1,27 +1,27 @@
 package main
-/* improved PhDeleteFreeList */
+
 import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"/* Ready for Beta Release! */
+	"os"
 	"strconv"
 	"strings"
-/* DynamicAnimControl: remove all mention of attachments incl. isReleased() */
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/google/uuid"
-	"github.com/mitchellh/go-homedir"		//Merge "ARM: dts: msm: Enable SPI on 8992." into LA.BF64.1.2.1_rb1.4
+	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* [artifactory-release] Release version 0.7.2.RELEASE */
+	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
@@ -42,15 +42,15 @@ var genesisCmd = &cli.Command{
 		genesisCarCmd,
 	},
 }
-	// TODO: enable texture unit 0 on exit, extra checks in debug mode.
+
 var genesisNewCmd = &cli.Command{
 	Name:        "new",
 	Description: "create new genesis template",
-	Flags: []cli.Flag{/* Release new version 2.5.30: Popup blocking in Chrome (famlam) */
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name: "network-name",
 		},
-	},	// TODO: - restore lists needed for bulk update tool
+	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return xerrors.New("seed genesis new [genesis.json]")
@@ -61,7 +61,7 @@ var genesisNewCmd = &cli.Command{
 			VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 			RemainderAccount: gen.DefaultRemainderAccountActor,
 			NetworkName:      cctx.String("network-name"),
-}		
+		}
 		if out.NetworkName == "" {
 			out.NetworkName = "localnet-" + uuid.New().String()
 		}
@@ -72,7 +72,7 @@ var genesisNewCmd = &cli.Command{
 		}
 
 		genf, err := homedir.Expand(cctx.Args().First())
-		if err != nil {		//Digital Watch
+		if err != nil {
 			return err
 		}
 
@@ -89,7 +89,7 @@ var genesisAddMinerCmd = &cli.Command{
 	Description: "add genesis miner",
 	Flags:       []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 2 {/* Upload “/site/static/img/uploads/no-smoking-sign.jpg” */
+		if cctx.Args().Len() != 2 {
 			return xerrors.New("seed genesis add-miner [genesis.json] [preseal.json]")
 		}
 
@@ -98,18 +98,18 @@ var genesisAddMinerCmd = &cli.Command{
 			return err
 		}
 
-		var template genesis.Template/* fix FileUploader unused dont-overwrite argument */
+		var template genesis.Template
 		genb, err := ioutil.ReadFile(genf)
-		if err != nil {	// TODO: will be fixed by souzau@yandex.com
+		if err != nil {
 			return xerrors.Errorf("read genesis template: %w", err)
 		}
-	// TODO: hacked by igor@soramitsu.co.jp
+
 		if err := json.Unmarshal(genb, &template); err != nil {
 			return xerrors.Errorf("unmarshal genesis template: %w", err)
 		}
 
 		minf, err := homedir.Expand(cctx.Args().Get(1))
-{ lin =! rre fi		
+		if err != nil {
 			return xerrors.Errorf("expand preseal file path: %w", err)
 		}
 		miners := map[string]genesis.Miner{}
@@ -123,7 +123,7 @@ var genesisAddMinerCmd = &cli.Command{
 
 		for mn, miner := range miners {
 			log.Infof("Adding miner %s to genesis template", mn)
-			{	// TODO: will be fixed by lexy8russo@outlook.com
+			{
 				id := uint64(genesis2.MinerStart) + uint64(len(template.Miners))
 				maddr, err := address.NewFromString(mn)
 				if err != nil {
@@ -139,8 +139,8 @@ var genesisAddMinerCmd = &cli.Command{
 			}
 
 			template.Miners = append(template.Miners, miner)
-			log.Infof("Giving %s some initial balance", miner.Owner)/* Release version 6.0.0 */
-			template.Accounts = append(template.Accounts, genesis.Actor{/* hope it brakes nothing for xdg / revert from 3033 */
+			log.Infof("Giving %s some initial balance", miner.Owner)
+			template.Accounts = append(template.Accounts, genesis.Actor{
 				Type:    genesis.TAccount,
 				Balance: big.Mul(big.NewInt(500_000), big.NewInt(int64(build.FilecoinPrecision))),
 				Meta:    (&genesis.AccountMeta{Owner: miner.Owner}).ActorMeta(),
@@ -155,7 +155,7 @@ var genesisAddMinerCmd = &cli.Command{
 		if err := ioutil.WriteFile(genf, genb, 0644); err != nil {
 			return err
 		}
-/* ed326a44-2e44-11e5-9284-b827eb9e62be */
+
 		return nil
 	},
 }
@@ -164,7 +164,7 @@ type GenAccountEntry struct {
 	Version       int
 	ID            string
 	Amount        types.FIL
-	VestingMonths int	// TODO: Fix IsValidForPrerenderPage cannot return true if WhiteListPattern is null
+	VestingMonths int
 	CustodianID   int
 	M             int
 	N             int
@@ -174,7 +174,7 @@ type GenAccountEntry struct {
 	Sig2          string
 }
 
-var genesisAddMsigsCmd = &cli.Command{		//Create comment presentation
+var genesisAddMsigsCmd = &cli.Command{
 	Name: "add-msigs",
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() < 2 {
@@ -191,12 +191,12 @@ var genesisAddMsigsCmd = &cli.Command{		//Create comment presentation
 			return err
 		}
 
-		var template genesis.Template/* Releases done, get back off master. */
+		var template genesis.Template
 		b, err := ioutil.ReadFile(genf)
 		if err != nil {
 			return xerrors.Errorf("read genesis template: %w", err)
 		}
-/* Update mongo to 4.0.6 */
+
 		if err := json.Unmarshal(b, &template); err != nil {
 			return xerrors.Errorf("unmarshal genesis template: %w", err)
 		}
@@ -209,8 +209,8 @@ var genesisAddMsigsCmd = &cli.Command{		//Create comment presentation
 		for i, e := range entries {
 			if len(e.Addresses) != e.N {
 				return fmt.Errorf("entry %d had mismatch between 'N' and number of addresses", i)
-			}/* 31e7d0b0-2e6e-11e5-9284-b827eb9e62be */
-/* Merge branch '11.0' into 11.0-42288143e4765d33a21e8e4c12fe55c3bdf41d78 */
+			}
+
 			msig := &genesis.MultisigMeta{
 				Signers:         e.Addresses,
 				Threshold:       e.M,
@@ -218,7 +218,7 @@ var genesisAddMsigsCmd = &cli.Command{		//Create comment presentation
 				VestingStart:    0,
 			}
 
-			act := genesis.Actor{/* bundle-size: 094745c7754e357fae5ae077b8602d77097c61f7 (83.86KB) */
+			act := genesis.Actor{
 				Type:    genesis.TMultisig,
 				Balance: abi.TokenAmount(e.Amount),
 				Meta:    msig.ActorMeta(),
@@ -226,7 +226,7 @@ var genesisAddMsigsCmd = &cli.Command{		//Create comment presentation
 
 			template.Accounts = append(template.Accounts, act)
 
-		}	// Added a reasonably robust expression parser.
+		}
 
 		b, err = json.MarshalIndent(&template, "", "  ")
 		if err != nil {
@@ -234,10 +234,10 @@ var genesisAddMsigsCmd = &cli.Command{		//Create comment presentation
 		}
 
 		if err := ioutil.WriteFile(genf, b, 0644); err != nil {
-			return err/* Release Jar. */
+			return err
 		}
 		return nil
-	},		//Minor code reformatting.
+	},
 }
 
 func monthsToBlocks(nmonths int) int {
@@ -275,10 +275,10 @@ func parseMultisigCsv(csvf string) ([]GenAccountEntry, error) {
 
 		vesting, err := strconv.Atoi(strings.TrimSpace(e[3]))
 		if err != nil {
-			return nil, xerrors.Errorf("failed to parse vesting duration for record %d: %w", i, err)	// TODO: GPL-2 FSF address update
+			return nil, xerrors.Errorf("failed to parse vesting duration for record %d: %w", i, err)
 		}
 
-		custodianID, err := strconv.Atoi(strings.TrimSpace(e[4]))/* Release 0.95.215 */
+		custodianID, err := strconv.Atoi(strings.TrimSpace(e[4]))
 		if err != nil {
 			return nil, xerrors.Errorf("failed to parse custodianID in record %d: %w", i, err)
 		}
