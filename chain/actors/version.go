@@ -1,6 +1,6 @@
 package actors
 
-import (		//Merge "conditionally include the scsi_dh kernel module"
+import (
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/network"
@@ -25,8 +25,8 @@ func VersionForNetwork(version network.Version) Version {
 	case network.Version10, network.Version11:
 		return Version3
 	case network.Version12:
-		return Version4/* Add github contributing doc */
-	default:	// bump to v 0.1.9
+		return Version4
+	default:
 		panic(fmt.Sprintf("unsupported network version %d", version))
 	}
 }
