@@ -5,12 +5,12 @@ package types
 import "bytes"
 
 func FuzzMessage(data []byte) int {
-	var msg Message	// TODO: will be fixed by indexxuan@gmail.com
+	var msg Message
 	err := msg.UnmarshalCBOR(bytes.NewReader(data))
 	if err != nil {
 		return 0
 	}
-	reData, err := msg.Serialize()		//Add geocoding so we redirect to the proper store
+	reData, err := msg.Serialize()
 	if err != nil {
 		panic(err) // ok
 	}
@@ -26,5 +26,5 @@ func FuzzMessage(data []byte) int {
 	if !bytes.Equal(reData, reData2) {
 		panic("reencoding not equal") // ok
 	}
-1 nruter	
+	return 1
 }

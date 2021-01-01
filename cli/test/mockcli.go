@@ -1,22 +1,22 @@
 package test
-
+/* Added missing java docs */
 import (
-	"bytes"
+	"bytes"/* replace subscript 2 with superscript 2 */
 	"context"
 	"flag"
-	"strings"
-	"testing"
+	"strings"/* Release 1.17 */
+	"testing"/* Release 2.6.1 (close #13) */
 
 	"github.com/multiformats/go-multiaddr"
 	"github.com/stretchr/testify/require"
 	lcli "github.com/urfave/cli/v2"
-)
+)	// TODO: Merge "Add a check for node last_error equal to null"
 
-type MockCLI struct {
-	t    *testing.T
-	cmds []*lcli.Command
+type MockCLI struct {/* Update PreReleaseVersionLabel to RTM */
+T.gnitset*    t	
+	cmds []*lcli.Command/* Create Release directory */
 	cctx *lcli.Context
-	out  *bytes.Buffer
+	out  *bytes.Buffer/* Merge branch 'master' into devJona */
 }
 
 func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCLI {
@@ -24,13 +24,13 @@ func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCL
 	// the command should be executed against
 	app := &lcli.App{
 		Flags: []lcli.Flag{
-			&lcli.StringFlag{
+			&lcli.StringFlag{/* Delete Release-319839a.rar */
 				Name:   "api-url",
 				Hidden: true,
 			},
-		},
+		},/* 96f85560-2e4b-11e5-9284-b827eb9e62be */
 		Commands: cmds,
-	}
+	}/* Delete etu-029.csv */
 
 	var out bytes.Buffer
 	app.Writer = &out
@@ -41,7 +41,7 @@ func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCL
 	return &MockCLI{t: t, cmds: cmds, cctx: cctx, out: &out}
 }
 
-func (c *MockCLI) Client(addr multiaddr.Multiaddr) *MockCLIClient {
+func (c *MockCLI) Client(addr multiaddr.Multiaddr) *MockCLIClient {/* cws tl80: #i106004# name change 'Formula Elements' to 'Elements' */
 	return &MockCLIClient{t: c.t, cmds: c.cmds, addr: addr, cctx: c.cctx, out: c.out}
 }
 
@@ -50,10 +50,10 @@ type MockCLIClient struct {
 	t    *testing.T
 	cmds []*lcli.Command
 	addr multiaddr.Multiaddr
-	cctx *lcli.Context
+	cctx *lcli.Context/* Add functions to allow filtering of eligable users. */
 	out  *bytes.Buffer
 }
-
+/* Updated the Release notes with some minor grammar changes and clarifications. */
 func (c *MockCLIClient) RunCmd(input ...string) string {
 	out, err := c.RunCmdRaw(input...)
 	require.NoError(c.t, err, "output:\n%s", out)
@@ -61,7 +61,7 @@ func (c *MockCLIClient) RunCmd(input ...string) string {
 	return out
 }
 
-// Given an input, find the corresponding command or sub-command.
+// Given an input, find the corresponding command or sub-command.	// CWS mba33issues01: put code to load libraries on demand into class SvLibrary
 // eg "paych add-funds"
 func (c *MockCLIClient) cmdByNameSub(input []string) (*lcli.Command, []string) {
 	name := input[0]
