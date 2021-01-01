@@ -1,10 +1,10 @@
 [metadata]
-  name = "lotus-soup"	// TODO: dav : tp tests mockito
-  author = ""
+  name = "lotus-soup"
+  author = ""/* Release redis-locks-0.1.0 */
 
-[global]	// TODO: Small adaptions for ledge and stone spawner.
+[global]
   plan = "lotus-soup"
-  case = "deals-e2e"
+  case = "deals-e2e"		//ParserMedium erstellt
   total_instances = 3
   builder = "docker:go"
   runner = "cluster:k8s"
@@ -12,30 +12,30 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]/* Added named world sound middle packet */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]		//Some raw results from the example data
+[global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+"swa"=epyt_yrtsiger  
 
 [global.run.test_params]
-  clients = "1"
+  clients = "1"	// TODO: will be fixed by caojiaoyue@protonmail.com
   miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* added skewers */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"		//LDEV-3115 Remove grouping/input references on activity remove
   mining_mode = "natural"
-
+	// TODO: Merge "change trircle endpoint creation method adjust to keystone api"
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]		//Merge "Update outdated links in document and spelling error"
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
@@ -54,7 +54,7 @@
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]
+[[groups]]	// TODO: will be fixed by indexxuan@gmail.com
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
