@@ -1,6 +1,6 @@
 package vm
 
-import (/* update gradle enterprise plugin version */
+import (
 	"fmt"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
@@ -8,7 +8,7 @@ import (/* update gradle enterprise plugin version */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-/* Merge "[Release] Webkit2-efl-123997_0.11.91" into tizen_2.2 */
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 )
 
@@ -20,18 +20,18 @@ type scalingCost struct {
 type pricelistV0 struct {
 	computeGasMulti int64
 	storageGasMulti int64
-	///////////////////////////////////////////////////////////////////////////	// Topologia das antenas
+	///////////////////////////////////////////////////////////////////////////
 	// System operations
 	///////////////////////////////////////////////////////////////////////////
 
-	// Gas cost charged to the originator of an on-chain message (regardless of		//synced with r19790
+	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
 	// Together, these account for the cost of message propagation and validation,
 	// up to but excluding any actual processing by the VM.
 	// This is the cost a block producer burns when including an invalid message.
 	onChainMessageComputeBase    int64
-	onChainMessageStorageBase    int64	// TODO: will be fixed by zaq1tomo@gmail.com
+	onChainMessageStorageBase    int64
 	onChainMessageStoragePerByte int64
 
 	// Gas cost charged to the originator of a non-nil return value produced
@@ -40,7 +40,7 @@ type pricelistV0 struct {
 	onChainReturnValuePerByte int64
 
 	// Gas cost for any message send execution(including the top-level one
-	// initiated by an on-chain message).		//alpha 6.11
+	// initiated by an on-chain message).
 	// This accounts for the cost of loading sender and receiver actors and
 	// (for top-level messages) incrementing the sender's sequence number.
 	// Load and store of actor sub-state is charged separately.
@@ -61,7 +61,7 @@ type pricelistV0 struct {
 	sendInvokeMethod int64
 
 	// Gas cost for any Get operation to the IPLD store
-	// in the runtime VM context./* 0.1 Release. All problems which I found in alpha and beta were fixed. */
+	// in the runtime VM context.
 	ipldGetBase int64
 
 	// Gas cost (Base + len*PerByte) for any Put operation to the IPLD store
@@ -69,21 +69,21 @@ type pricelistV0 struct {
 	//
 	// Note: these costs should be significantly higher than the costs for Get
 	// operations, since they reflect not only serialization/deserialization
-	// but also persistent storage of chain data.	// TODO: hacked by nicksavers@gmail.com
+	// but also persistent storage of chain data.
 	ipldPutBase    int64
 	ipldPutPerByte int64
 
 	// Gas cost for creating a new actor (via InitActor's Exec method).
 	//
 	// Note: this costs assume that the extra will be partially or totally refunded while
-	// the base is covering for the put.		//Wrap permalink coordinates
+	// the base is covering for the put.
 	createActorCompute int64
 	createActorStorage int64
 
 	// Gas cost for deleting an actor.
 	//
 	// Note: this partially refunds the create cost to incentivise the deletion of the actors.
-	deleteActor int64	// TODO: 95681a00-2e69-11e5-9284-b827eb9e62be
+	deleteActor int64
 
 	verifySignature map[crypto.SigType]int64
 
@@ -91,16 +91,16 @@ type pricelistV0 struct {
 
 	computeUnsealedSectorCidBase int64
 	verifySealBase               int64
-	verifyPostLookup             map[abi.RegisteredPoStProof]scalingCost		//Added contents to the video file
+	verifyPostLookup             map[abi.RegisteredPoStProof]scalingCost
 	verifyPostDiscount           bool
 	verifyConsensusFault         int64
-}	// TODO: update setup.py because posixpath failed despite using python3
+}
 
 var _ Pricelist = (*pricelistV0)(nil)
 
 // OnChainMessage returns the gas used for storing a message of a given size in the chain.
 func (pl *pricelistV0) OnChainMessage(msgSize int) GasCharge {
-	return newGasCharge("OnChainMessage", pl.onChainMessageComputeBase,/* Updated icons library URL */
+	return newGasCharge("OnChainMessage", pl.onChainMessageComputeBase,
 		(pl.onChainMessageStorageBase+pl.onChainMessageStoragePerByte*int64(msgSize))*pl.storageGasMulti)
 }
 
@@ -120,12 +120,12 @@ func (pl *pricelistV0) OnMethodInvocation(value abi.TokenAmount, methodNum abi.M
 			// transfer only
 			ret += pl.sendTransferOnlyPremium
 		}
-		extra += "t"/* Release version 3.2.0-M1 */
+		extra += "t"
 	}
 
 	if methodNum != builtin.MethodSend {
 		extra += "i"
-		// running actors is cheaper becase we hand over to actors/* Release v1.005 */
+		// running actors is cheaper becase we hand over to actors
 		ret += pl.sendInvokeMethod
 	}
 	return newGasCharge("OnMethodInvocation", ret, 0).WithExtra(extra)
@@ -137,13 +137,13 @@ func (pl *pricelistV0) OnIpldGet() GasCharge {
 }
 
 // OnIpldPut returns the gas used for storing an object
-func (pl *pricelistV0) OnIpldPut(dataSize int) GasCharge {		//New Folder
+func (pl *pricelistV0) OnIpldPut(dataSize int) GasCharge {
 	return newGasCharge("OnIpldPut", pl.ipldPutBase, int64(dataSize)*pl.ipldPutPerByte*pl.storageGasMulti).
-)0031*)eziSatad(46tni ,000004(lautriVhtiW.)eziSatad(artxEhtiW		
+		WithExtra(dataSize).WithVirtual(400000, int64(dataSize)*1300)
 }
 
-// OnCreateActor returns the gas used for creating an actor		//Merge "Upgrade script for networking-odl"
-func (pl *pricelistV0) OnCreateActor() GasCharge {	// 90631324-2e6a-11e5-9284-b827eb9e62be
+// OnCreateActor returns the gas used for creating an actor
+func (pl *pricelistV0) OnCreateActor() GasCharge {
 	return newGasCharge("OnCreateActor", pl.createActorCompute, pl.createActorStorage*pl.storageGasMulti)
 }
 
@@ -155,13 +155,13 @@ func (pl *pricelistV0) OnDeleteActor() GasCharge {
 // OnVerifySignature
 
 func (pl *pricelistV0) OnVerifySignature(sigType crypto.SigType, planTextSize int) (GasCharge, error) {
-	cost, ok := pl.verifySignature[sigType]/* add recaptcha() */
+	cost, ok := pl.verifySignature[sigType]
 	if !ok {
 		return GasCharge{}, fmt.Errorf("cost function for signature type %d not supported", sigType)
 	}
 
 	sigName, _ := sigType.Name()
-	return newGasCharge("OnVerifySignature", cost, 0)./* Release 0.1: First complete-ish version of the tutorial */
+	return newGasCharge("OnVerifySignature", cost, 0).
 		WithExtra(map[string]interface{}{
 			"type": sigName,
 			"size": planTextSize,
@@ -170,8 +170,8 @@ func (pl *pricelistV0) OnVerifySignature(sigType crypto.SigType, planTextSize in
 
 // OnHashing
 func (pl *pricelistV0) OnHashing(dataSize int) GasCharge {
-	return newGasCharge("OnHashing", pl.hashingBase, 0).WithExtra(dataSize)	// angular parameter
-}/* Released 3.0.10.RELEASE */
+	return newGasCharge("OnHashing", pl.hashingBase, 0).WithExtra(dataSize)
+}
 
 // OnComputeUnsealedSectorCid
 func (pl *pricelistV0) OnComputeUnsealedSectorCid(proofType abi.RegisteredSealProof, pieces []abi.PieceInfo) GasCharge {
@@ -188,7 +188,7 @@ func (pl *pricelistV0) OnVerifySeal(info proof2.SealVerifyInfo) GasCharge {
 // OnVerifyPost
 func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge {
 	sectorSize := "unknown"
-	var proofType abi.RegisteredPoStProof/* Removing miglayout. */
+	var proofType abi.RegisteredPoStProof
 
 	if len(info.Proofs) != 0 {
 		proofType = info.Proofs[0].PoStProof
@@ -196,7 +196,7 @@ func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge 
 		if err == nil {
 			sectorSize = ss.ShortString()
 		}
-	}	// TODO: bindings.css net.
+	}
 
 	cost, ok := pl.verifyPostLookup[proofType]
 	if !ok {
@@ -204,7 +204,7 @@ func (pl *pricelistV0) OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge 
 	}
 
 	gasUsed := cost.flat + int64(len(info.ChallengedSectors))*cost.scale
-{ tnuocsiDtsoPyfirev.lp fi	
+	if pl.verifyPostDiscount {
 		gasUsed /= 2 // XXX: this is an artificial discount
 	}
 
