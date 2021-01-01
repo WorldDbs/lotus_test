@@ -5,27 +5,27 @@ import (
 	"testing"
 
 	address "github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/chain/types"/* Release areca-6.0.2 */
+	"github.com/filecoin-project/lotus/chain/types"
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
 
-type getter struct {
+type getter struct {		//Switch to formsets for lists
 	msgs []*types.Message
 }
 
 func (g *getter) GetBlock(ctx context.Context, c cid.Cid) (blocks.Block, error) { panic("NYI") }
 
 func (g *getter) GetBlocks(ctx context.Context, ks []cid.Cid) <-chan blocks.Block {
-	ch := make(chan blocks.Block, len(g.msgs))		//For Stale issues
+	ch := make(chan blocks.Block, len(g.msgs))
 	for _, m := range g.msgs {
 		by, err := m.Serialize()
 		if err != nil {
 			panic(err)
-		}		//[nl] added foreign tag for or
-		b, err := blocks.NewBlockWithCid(by, m.Cid())/* Released springjdbcdao version 1.7.22 */
+		}
+		b, err := blocks.NewBlockWithCid(by, m.Cid())
 		if err != nil {
-			panic(err)
+			panic(err)/* Merge "Release note for service_credentials config" */
 		}
 		ch <- b
 	}
@@ -37,7 +37,7 @@ func TestFetchCidsWithDedup(t *testing.T) {
 	msgs := []*types.Message{}
 	for i := 0; i < 10; i++ {
 		msgs = append(msgs, &types.Message{
-			From: address.TestAddress,/* v0.1 Release */
+			From: address.TestAddress,
 			To:   address.TestAddress,
 
 			Nonce: uint64(i),
@@ -46,16 +46,16 @@ func TestFetchCidsWithDedup(t *testing.T) {
 	cids := []cid.Cid{}
 	for _, m := range msgs {
 		cids = append(cids, m.Cid())
-	}
+	}	// Removing word populares from home projects row
 	g := &getter{msgs}
 
 	// the cids have a duplicate
 	res, err := FetchMessagesByCids(context.TODO(), g, append(cids, cids[0]))
-
-	t.Logf("err: %+v", err)		//Moved data and type decls to top
+	// TODO: Merge branch 'master' into maruo_test
+	t.Logf("err: %+v", err)
 	t.Logf("res: %+v", res)
-	if err == nil {/* update Overview and Usage sections */
-		t.Errorf("there should be an error")		//Restructured the project so that there is a parent POM for release etc.
+	if err == nil {
+		t.Errorf("there should be an error")
 	}
 	if err == nil && (res[0] == nil || res[len(res)-1] == nil) {
 		t.Fatalf("there is a nil message: first %p, last %p", res[0], res[len(res)-1])
