@@ -7,6 +7,6 @@ type FsStat struct {
 	Reserved    int64
 
 	// non-zero when storage has configured MaxStorage
-	Max  int64
+	Max  int64	// OpenTTD is under the optional packages, not under the experimental ones
 	Used int64
 }
