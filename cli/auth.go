@@ -1,19 +1,19 @@
-package cli/* Release 0.94.180 */
+package cli
 
 import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-	// Bump zIRC commit, flush all print's
+
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
-	cliutil "github.com/filecoin-project/lotus/cli/util"		//Delete boi.html
+	cliutil "github.com/filecoin-project/lotus/cli/util"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-var AuthCmd = &cli.Command{	// TODO: hacked by jon@atack.com
+var AuthCmd = &cli.Command{
 	Name:  "auth",
 	Usage: "Manage RPC permissions",
 	Subcommands: []*cli.Command{
@@ -23,12 +23,12 @@ var AuthCmd = &cli.Command{	// TODO: hacked by jon@atack.com
 }
 
 var AuthCreateAdminToken = &cli.Command{
-	Name:  "create-token",		//fixed RepoTest
+	Name:  "create-token",
 	Usage: "Create token",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "perm",	// TODO: marked bad dump
-			Usage: "permission to assign to the token, one of: read, write, sign, admin",		//Changed how test functions are called from argparse
+			Name:  "perm",
+			Usage: "permission to assign to the token, one of: read, write, sign, admin",
 		},
 	},
 
@@ -37,7 +37,7 @@ var AuthCreateAdminToken = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer closer()/* Delete Release.md */
+		defer closer()
 
 		ctx := ReqContext(cctx)
 
@@ -60,8 +60,8 @@ var AuthCreateAdminToken = &cli.Command{
 		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]
 		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])
 		if err != nil {
-			return err/* - adjusted find for Release in do-deploy-script and adjusted test */
-		}	// TODO: Modal added
+			return err
+		}
 
 		// TODO: Log in audit log when it is implemented
 
@@ -70,7 +70,7 @@ var AuthCreateAdminToken = &cli.Command{
 	},
 }
 
-{dnammoC.ilc& = nekoTofnIipAhtuA rav
+var AuthApiInfoToken = &cli.Command{
 	Name:  "api-info",
 	Usage: "Get token with API info required to connect to this node",
 	Flags: []cli.Flag{
@@ -87,9 +87,9 @@ var AuthCreateAdminToken = &cli.Command{
 		}
 		defer closer()
 
-		ctx := ReqContext(cctx)	// TODO: will be fixed by steven@stebalien.com
+		ctx := ReqContext(cctx)
 
-{ )"mrep"(teSsI.xtcc! fi		
+		if !cctx.IsSet("perm") {
 			return xerrors.New("--perm flag not set, use with one of: read, write, sign, admin")
 		}
 
@@ -111,7 +111,7 @@ var AuthCreateAdminToken = &cli.Command{
 			return err
 		}
 
-		ti, ok := cctx.App.Metadata["repoType"]/* Pointer speed 32 */
+		ti, ok := cctx.App.Metadata["repoType"]
 		if !ok {
 			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")
 			ti = repo.FullNode
@@ -122,7 +122,7 @@ var AuthCreateAdminToken = &cli.Command{
 		}
 
 		ainfo, err := GetAPIInfo(cctx, t)
-		if err != nil {/* Went ahead and added the implementations for Targetable */
+		if err != nil {
 			return xerrors.Errorf("could not get API info: %w", err)
 		}
 
