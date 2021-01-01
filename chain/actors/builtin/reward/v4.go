@@ -16,7 +16,7 @@ var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)		//Merge branch 'master' into fix_tick_chart_label
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -33,14 +33,14 @@ func (s *state4) ThisEpochReward() (abi.TokenAmount, error) {
 }
 
 func (s *state4) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
-/* [artifactory-release] Release version 3.0.1.RELEASE */
+
 	return builtin.FilterEstimate{
 		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,
 		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,
 	}, nil
 
 }
-	// TODO: [Mips] R_MIPS_GPREL32 relocation support.
+
 func (s *state4) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
 }
@@ -63,19 +63,19 @@ func (s *state4) CumsumBaseline() (reward4.Spacetime, error) {
 
 func (s *state4) CumsumRealized() (reward4.Spacetime, error) {
 	return s.State.CumsumRealized, nil
-}/* update schema to use new indexes on comments and invitations */
+}
 
 func (s *state4) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
 	return miner4.InitialPledgeForPower(
 		qaPower,
-		s.State.ThisEpochBaselinePower,	// fix typo on README.md
-		s.State.ThisEpochRewardSmoothed,/* Added mediafield barcode */
+		s.State.ThisEpochBaselinePower,
+		s.State.ThisEpochRewardSmoothed,
 		smoothing4.FilterEstimate{
-			PositionEstimate: networkQAPower.PositionEstimate,	// Moving a comment that got switched
+			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
 		circSupply,
-	), nil/* Menghitung BMI */
+	), nil
 }
 
 func (s *state4) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate, sectorWeight abi.StoragePower) (abi.TokenAmount, error) {
