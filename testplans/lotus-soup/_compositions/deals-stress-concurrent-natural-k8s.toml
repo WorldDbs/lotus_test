@@ -22,18 +22,18 @@
   registry_type="aws"
 
 [global.run.test_params]
-  clients = "3"/* 31acd51e-2e64-11e5-9284-b827eb9e62be */
+  clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"	// TODO: Delete Miscellanea.java
-  balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Update calendar.rb
+  genesis_timestamp_offset = "0"
+  balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"	// Rename blacklist command (ref #305)
+  id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"/* SEMPERA-2846 Release PPWCode.Vernacular.Persistence 1.5.0 */
+    memory = "512Mi"
     cpu = "100m"
   [groups.instances]
     count = 1
