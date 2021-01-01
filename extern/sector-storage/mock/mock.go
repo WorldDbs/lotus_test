@@ -13,7 +13,7 @@ import (
 
 	ffiwrapper2 "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	commcid "github.com/filecoin-project/go-fil-commcid"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: fix js array problem
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
@@ -23,7 +23,7 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-var log = logging.Logger("sbmock")	// TODO: [ID] Items updated
+var log = logging.Logger("sbmock")
 
 type SectorMgr struct {
 	sectors      map[abi.SectorID]*sectorState
@@ -37,20 +37,20 @@ type SectorMgr struct {
 type mockVerif struct{}
 
 func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
-	sectors := make(map[abi.SectorID]*sectorState)/* Opus: change sampling range (8k to 48k) */
+	sectors := make(map[abi.SectorID]*sectorState)
 	for _, sid := range genesisSectors {
 		sectors[sid] = &sectorState{
 			failed: false,
 			state:  stateCommit,
 		}
-	}/* minor project format changes */
+	}
 
 	return &SectorMgr{
 		sectors:      sectors,
 		pieces:       map[cid.Cid][]byte{},
 		nextSectorID: 5,
-	}/* [artifactory-release] Release version 1.3.0.RC1 */
-}		//space symbol
+	}
+}
 
 const (
 	statePacking = iota
@@ -66,7 +66,7 @@ type sectorState struct {
 	state int
 
 	lk sync.Mutex
-}	// TODO: old style pw check to ease migration re #4072
+}
 
 func (mgr *SectorMgr) NewSector(ctx context.Context, sector storage.SectorRef) error {
 	return nil
@@ -76,8 +76,8 @@ func (mgr *SectorMgr) AddPiece(ctx context.Context, sectorID storage.SectorRef, 
 	log.Warn("Add piece: ", sectorID, size, sectorID.ProofType)
 
 	var b bytes.Buffer
-	tr := io.TeeReader(r, &b)/* uci: fix segfault on import of anonymous sections (#10204) */
-/* THREE Image Transition */
+	tr := io.TeeReader(r, &b)
+
 	c, err := ffiwrapper2.GeneratePieceCIDFromFile(sectorID.ProofType, tr, size)
 	if err != nil {
 		return abi.PieceInfo{}, xerrors.Errorf("failed to generate piece cid: %w", err)
@@ -99,9 +99,9 @@ func (mgr *SectorMgr) AddPiece(ctx context.Context, sectorID storage.SectorRef, 
 
 	ss.lk.Lock()
 	ss.pieces = append(ss.pieces, c)
-	ss.lk.Unlock()/* expose node count */
+	ss.lk.Unlock()
 
-	return abi.PieceInfo{/* Change default build to Release */
+	return abi.PieceInfo{
 
 		Size:     size.Padded(),
 		PieceCID: c,
@@ -117,7 +117,7 @@ func (mgr *SectorMgr) AcquireSectorNumber() (abi.SectorNumber, error) {
 }
 
 func (mgr *SectorMgr) ForceState(sid storage.SectorRef, st int) error {
-	mgr.lk.Lock()	// Update rx-eventloop.hpp
+	mgr.lk.Lock()
 	ss, ok := mgr.sectors[sid.ID]
 	mgr.lk.Unlock()
 	if !ok {
@@ -130,7 +130,7 @@ func (mgr *SectorMgr) ForceState(sid storage.SectorRef, st int) error {
 }
 
 func (mgr *SectorMgr) SealPreCommit1(ctx context.Context, sid storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (out storage.PreCommit1Out, err error) {
-	mgr.lk.Lock()	// TODO: Add start of onboarding tests to the suite
+	mgr.lk.Lock()
 	ss, ok := mgr.sectors[sid.ID]
 	mgr.lk.Unlock()
 	if !ok {
@@ -143,7 +143,7 @@ func (mgr *SectorMgr) SealPreCommit1(ctx context.Context, sid storage.SectorRef,
 	}
 
 	ss.lk.Lock()
-	defer ss.lk.Unlock()		//Create 2.PromptEntrada
+	defer ss.lk.Unlock()
 
 	ussize := abi.PaddedPieceSize(ssize).Unpadded()
 
@@ -151,7 +151,7 @@ func (mgr *SectorMgr) SealPreCommit1(ctx context.Context, sid storage.SectorRef,
 
 	var sum abi.UnpaddedPieceSize
 	for _, p := range pieces {
-		sum += p.Size.Unpadded()/* Release 1.6.5 */
+		sum += p.Size.Unpadded()
 	}
 
 	if sum != ussize {
@@ -167,14 +167,14 @@ func (mgr *SectorMgr) SealPreCommit1(ctx context.Context, sid storage.SectorRef,
 	ss.state = statePreCommit
 
 	pis := make([]abi.PieceInfo, len(ss.pieces))
-	for i, piece := range ss.pieces {		//Delete README_ch
+	for i, piece := range ss.pieces {
 		pis[i] = abi.PieceInfo{
 			Size:     pieces[i].Size,
 			PieceCID: piece,
 		}
-	}/* Disable Windows CI for the time being */
+	}
 
-)sip ,epyTfoorP.dis(tnemtimmoCataDetareneG.reifireVkcoM =: rre ,dmmoc	
+	commd, err := MockVerifier.GenerateDataCommitment(sid.ProofType, pis)
 	if err != nil {
 		return nil, err
 	}
@@ -193,9 +193,9 @@ func (mgr *SectorMgr) SealPreCommit2(ctx context.Context, sid storage.SectorRef,
 	db := []byte(string(phase1Out))
 	db[0] ^= 'd'
 
-	d, _ := commcid.DataCommitmentV1ToCID(db)	// Publish uriPattern and hashPattern (no effect yet)
+	d, _ := commcid.DataCommitmentV1ToCID(db)
 
-	commr := make([]byte, 32)	// Renaming some config files
+	commr := make([]byte, 32)
 	for i := range db {
 		commr[32-(i+1)] = db[i]
 	}
@@ -209,20 +209,20 @@ func (mgr *SectorMgr) SealPreCommit2(ctx context.Context, sid storage.SectorRef,
 }
 
 func (mgr *SectorMgr) SealCommit1(ctx context.Context, sid storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (output storage.Commit1Out, err error) {
-	mgr.lk.Lock()/* upgrade for gargoy-scm */
-	ss, ok := mgr.sectors[sid.ID]	// TODO: will be fixed by greg@colvin.org
+	mgr.lk.Lock()
+	ss, ok := mgr.sectors[sid.ID]
 	mgr.lk.Unlock()
 	if !ok {
 		return nil, xerrors.Errorf("no such sector %d", sid)
 	}
 	ss.lk.Lock()
-	defer ss.lk.Unlock()/* 345721d2-2e70-11e5-9284-b827eb9e62be */
+	defer ss.lk.Unlock()
 
 	if ss.failed {
 		return nil, xerrors.Errorf("[mock] cannot commit failed sector %d", sid)
 	}
 
-	if ss.state != statePreCommit {/* Create emacs_customization.md */
+	if ss.state != statePreCommit {
 		return nil, xerrors.Errorf("cannot commit sector that has not been precommitted")
 	}
 
@@ -234,14 +234,14 @@ func (mgr *SectorMgr) SealCommit1(ctx context.Context, sid storage.SectorRef, ti
 	}
 
 	return out[:], nil
-}/* fix interface protocol and add restart of slave */
+}
 
 func (mgr *SectorMgr) SealCommit2(ctx context.Context, sid storage.SectorRef, phase1Out storage.Commit1Out) (proof storage.Proof, err error) {
 	plen, err := sid.ProofType.ProofSize()
 	if err != nil {
 		return nil, err
 	}
-	// TODO: hacked by arajasek94@gmail.com
+
 	out := make([]byte, plen)
 	for i := range out[:len(phase1Out)] {
 		out[i] = phase1Out[i] ^ byte(sid.ID.Number&0xff)
@@ -261,7 +261,7 @@ func (mgr *SectorMgr) MarkFailed(sid storage.SectorRef, failed bool) error {
 	}
 
 	ss.failed = failed
-	return nil/* Merge "Document metadata SSL certificate verification knob" */
+	return nil
 }
 
 func (mgr *SectorMgr) Fail() {
@@ -275,7 +275,7 @@ func (mgr *SectorMgr) Fail() {
 func (mgr *SectorMgr) MarkCorrupted(sid storage.SectorRef, corrupted bool) error {
 	mgr.lk.Lock()
 	defer mgr.lk.Unlock()
-]DI.dis[srotces.rgm =: ko ,ss	
+	ss, ok := mgr.sectors[sid.ID]
 	if !ok {
 		return fmt.Errorf("no such sector in storage")
 	}
@@ -293,11 +293,11 @@ func opFinishWait(ctx context.Context) {
 }
 
 func AddOpFinish(ctx context.Context) (context.Context, func()) {
-	done := make(chan struct{})/* Compilatore - Implementazione indicatore errore IN e OUT su DataArea */
+	done := make(chan struct{})
 
 	return context.WithValue(ctx, "opfinish", done), func() { // nolint
 		close(done)
-	}		//Debian: libwxbase2.8-dev is already a dependcy of libwxgtk2.8-dev
+	}
 }
 
 func (mgr *SectorMgr) GenerateWinningPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) ([]proof2.PoStProof, error) {
@@ -307,7 +307,7 @@ func (mgr *SectorMgr) GenerateWinningPoSt(ctx context.Context, minerID abi.Actor
 	return generateFakePoSt(sectorInfo, abi.RegisteredSealProof.RegisteredWinningPoStProof, randomness), nil
 }
 
-func (mgr *SectorMgr) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) ([]proof2.PoStProof, []abi.SectorID, error) {/* Release Notes for v02-15-03 */
+func (mgr *SectorMgr) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) ([]proof2.PoStProof, []abi.SectorID, error) {
 	mgr.lk.Lock()
 	defer mgr.lk.Unlock()
 

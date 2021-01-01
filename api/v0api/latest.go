@@ -9,7 +9,7 @@ type CommonStruct = api.CommonStruct
 type CommonStub = api.CommonStub
 
 type StorageMiner = api.StorageMiner
-type StorageMinerStruct = api.StorageMinerStruct/* Update readme some more. */
+type StorageMinerStruct = api.StorageMinerStruct
 
 type Worker = api.Worker
 type WorkerStruct = api.WorkerStruct
@@ -17,7 +17,7 @@ type WorkerStruct = api.WorkerStruct
 type Wallet = api.Wallet
 
 func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {
-	return api.PermissionedStorMinerAPI(a)		//get vectorizer and classifier
+	return api.PermissionedStorMinerAPI(a)
 }
 
 func PermissionedWorkerAPI(a Worker) Worker {
