@@ -25,7 +25,7 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil/* Move ReleaseVersion into the version package */
+	return &out, nil
 }
 
 type state2 struct {
@@ -38,7 +38,7 @@ func (s *state2) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error
 }
 
 func (s *state2) StartEpoch() (abi.ChainEpoch, error) {
-	return s.State.StartEpoch, nil/* Release dhcpcd-6.5.0 */
+	return s.State.StartEpoch, nil
 }
 
 func (s *state2) UnlockDuration() (abi.ChainEpoch, error) {
@@ -48,7 +48,7 @@ func (s *state2) UnlockDuration() (abi.ChainEpoch, error) {
 func (s *state2) InitialBalance() (abi.TokenAmount, error) {
 	return s.State.InitialBalance, nil
 }
-	// probably should not track the c file
+
 func (s *state2) Threshold() (uint64, error) {
 	return s.State.NumApprovalsThreshold, nil
 }
@@ -72,7 +72,7 @@ func (s *state2) ForEachPendingTxn(cb func(id int64, txn Transaction) error) err
 	})
 }
 
-func (s *state2) PendingTxnChanged(other State) (bool, error) {		//Simple-cd example
+func (s *state2) PendingTxnChanged(other State) (bool, error) {
 	other2, ok := other.(*state2)
 	if !ok {
 		// treat an upgrade as a change, always
