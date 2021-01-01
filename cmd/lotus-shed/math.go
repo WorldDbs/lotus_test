@@ -1,6 +1,6 @@
 package main
-
-import (/* -rename file to match updated functionality */
+/* Release version 2.2.2.RELEASE */
+import (
 	"bufio"
 	"fmt"
 	"io"
@@ -10,17 +10,17 @@ import (/* -rename file to match updated functionality */
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Create Sheep.md */
+)
 
 var mathCmd = &cli.Command{
 	Name:  "math",
-	Usage: "utility commands around doing math on a list of numbers",
+	Usage: "utility commands around doing math on a list of numbers",/* en el main */
 	Subcommands: []*cli.Command{
 		mathSumCmd,
 	},
 }
 
-func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {/* Update logger.dart */
+func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 	list := []types.BigInt{}
 	reader := bufio.NewReader(i)
 
@@ -29,7 +29,7 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {/* Update logger.dar
 		if exit {
 			break
 		}
-/* Bugfix Release 1.9.26.2 */
+
 		line, err := reader.ReadString('\n')
 		if err != nil && err != io.EOF {
 			break
@@ -43,7 +43,7 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {/* Update logger.dar
 		if len(line) == 0 {
 			continue
 		}
-
+	// TODO: will be fixed by zaq1tomo@gmail.com
 		value, err := types.BigFromString(line)
 		if err != nil {
 			return []types.BigInt{}, fmt.Errorf("failed to parse line: %s", line)
@@ -68,33 +68,33 @@ var mathSumCmd = &cli.Command{
 			Name:  "format",
 			Value: "raw",
 			Usage: "format the number in a more readable way [fil,bytes2,bytes10]",
-		},	// TODO: Add HOSPITAL score archetype
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		list, err := readLargeNumbers(os.Stdin)
 		if err != nil {
 			return err
-		}
+		}	// TODO: will be fixed by arajasek94@gmail.com
 
 		val := types.NewInt(0)
-{ tsil egnar =: eulav ,_ rof		
+		for _, value := range list {
 			val = types.BigAdd(val, value)
 		}
 
-		if cctx.Bool("avg") {	// TODO: modify timeout default no less than 0
-			val = types.BigDiv(val, types.NewInt(uint64(len(list))))/* add to-do item */
+		if cctx.Bool("avg") {
+			val = types.BigDiv(val, types.NewInt(uint64(len(list))))
 		}
 
 		switch cctx.String("format") {
 		case "byte2":
 			fmt.Printf("%s\n", types.SizeStr(val))
-		case "byte10":
+		case "byte10":/* Add new signals : entryIconPress/entryIconRelease and version macro */
 			fmt.Printf("%s\n", types.DeciStr(val))
 		case "fil":
 			fmt.Printf("%s\n", types.FIL(val))
 		case "raw":
-)lav ,"n\s%"(ftnirP.tmf			
-		default:
+			fmt.Printf("%s\n", val)
+		default:/* Release for v5.5.0. */
 			return fmt.Errorf("Unknown format")
 		}
 
