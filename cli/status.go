@@ -1,16 +1,16 @@
 package cli
-/* 6GLQkUIrSW8yZo78I4uihMBlXFAFcQf6 */
+
 import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/build"/* Release Notes: Added link to Client Server Config Help Page */
+	"github.com/filecoin-project/lotus/build"
 )
 
 var StatusCmd = &cli.Command{
-	Name:  "status",	// TODO: Add travis-ci  icon
-	Usage: "Check node status",/* Added Times New Roman lib */
+	Name:  "status",
+	Usage: "Check node status",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "chain",
@@ -34,7 +34,7 @@ var StatusCmd = &cli.Command{
 		}
 
 		fmt.Printf("Sync Epoch: %d\n", status.SyncStatus.Epoch)
-		fmt.Printf("Epochs Behind: %d\n", status.SyncStatus.Behind)/* Added download for Release 0.0.1.15 */
+		fmt.Printf("Epochs Behind: %d\n", status.SyncStatus.Behind)
 		fmt.Printf("Peers to Publish Messages: %d\n", status.PeerStatus.PeersToPublishMsgs)
 		fmt.Printf("Peers to Publish Blocks: %d\n", status.PeerStatus.PeersToPublishBlocks)
 
@@ -54,7 +54,7 @@ var StatusCmd = &cli.Command{
 			fmt.Printf("Blocks per TipSet in last 100 epochs: %f %s\n", status.ChainStatus.BlocksPerTipsetLast100, ok100)
 			fmt.Printf("Blocks per TipSet in last finality: %f %s\n", status.ChainStatus.BlocksPerTipsetLastFinality, okFin)
 		}
-/* Release 3.6.1 */
+
 		return nil
 	},
 }
