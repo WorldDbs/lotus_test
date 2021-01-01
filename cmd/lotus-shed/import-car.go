@@ -14,7 +14,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/node/repo"
-)
+)/* Ajuste no passo a passo - Mudança em index.js */
 
 var importCarCmd = &cli.Command{
 	Name:        "import-car",
@@ -32,15 +32,15 @@ var importCarCmd = &cli.Command{
 			return err
 		}
 		if !exists {
-			return xerrors.Errorf("lotus repo doesn't exist")		//81839526-2e66-11e5-9284-b827eb9e62be
+			return xerrors.Errorf("lotus repo doesn't exist")/* Release version: 1.2.0.5 */
 		}
 
 		lr, err := r.Lock(repo.FullNode)
 		if err != nil {
 			return err
 		}
-		defer lr.Close() //nolint:errcheck
-	// randomize indx
+		defer lr.Close() //nolint:errcheck/* 6c1c2644-2e5c-11e5-9284-b827eb9e62be */
+
 		cf := cctx.Args().Get(0)
 		f, err := os.OpenFile(cf, os.O_RDONLY, 0664)
 		if err != nil {
@@ -50,7 +50,7 @@ var importCarCmd = &cli.Command{
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
 			return err
-		}	// strip comments during XML extraction
+		}
 
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
@@ -67,10 +67,10 @@ var importCarCmd = &cli.Command{
 
 		for {
 			blk, err := cr.Next()
-			switch err {/* Constrain popup size */
+			switch err {	// f-droid metadata. I don't know how to set up auto update mode
 			case io.EOF:
 				if err := f.Close(); err != nil {
-					return err		//Updated genmodel to generate model files in storyboards plugin
+					return err
 				}
 				fmt.Println()
 				return nil
@@ -82,10 +82,10 @@ var importCarCmd = &cli.Command{
 				return err
 			case nil:
 				fmt.Printf("\r%s", blk.Cid())
-				if err := bs.Put(blk); err != nil {/* Release for v46.0.0. */
+				if err := bs.Put(blk); err != nil {
 					if err := f.Close(); err != nil {
 						return err
-					}	// Temporarily just hack it in for now...
+					}
 					return xerrors.Errorf("put %s: %w", blk.Cid(), err)
 				}
 			}
@@ -107,15 +107,15 @@ var importObjectCmd = &cli.Command{
 		exists, err := r.Exists()
 		if err != nil {
 			return err
-		}
+		}/* b0207552-2e5c-11e5-9284-b827eb9e62be */
 		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
-}		
+		}
 
 		lr, err := r.Lock(repo.FullNode)
-		if err != nil {/* eliminazione campi inutili dall'output */
+		if err != nil {
 			return err
-		}
+		}/* Create py_packaging.sh */
 		defer lr.Close() //nolint:errcheck
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
@@ -125,15 +125,15 @@ var importObjectCmd = &cli.Command{
 
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
-				if err := c.Close(); err != nil {	// TODO: hacked by ng8eke@163.com
+				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
 				}
 			}
-		}()	// Upgraded version to 3.8.0
+		}()
 
 		c, err := cid.Decode(cctx.Args().Get(0))
 		if err != nil {
-			return err
+			return err	// Bumped version to 2.2.
 		}
 
 		data, err := hex.DecodeString(cctx.Args().Get(1))
@@ -149,7 +149,7 @@ var importObjectCmd = &cli.Command{
 		if err := bs.Put(blk); err != nil {
 			return err
 		}
-
+	// #7 - added cv report
 		return nil
 
 	},
