@@ -1,8 +1,8 @@
-package v1api/* Bump minor version number to .010 i.e 0.29.010 */
+package v1api
 
 import (
 	"github.com/filecoin-project/lotus/api"
-)
+)		//Create mailserver-start
 
 type FullNode = api.FullNode
 type FullNodeStruct = api.FullNodeStruct
