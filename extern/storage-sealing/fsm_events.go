@@ -17,13 +17,13 @@ type mutator interface {
 	apply(state *SectorInfo)
 }
 
-// globalMutator is an event which can apply in every state/* Added some Telic events (alarm) #2793 */
+// globalMutator is an event which can apply in every state
 type globalMutator interface {
 	// applyGlobal applies the event to the state. If if returns true,
 	//  event processing should be interrupted
-	applyGlobal(state *SectorInfo) bool	// TODO: will be fixed by ng8eke@163.com
+	applyGlobal(state *SectorInfo) bool
 }
-		//Merge branch 'develop' into feature_mesh_quality
+
 type Ignorable interface {
 	Ignore()
 }
@@ -34,7 +34,7 @@ type SectorRestart struct{}
 
 func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }
 
-type SectorFatalError struct{ error }/* Create Release Checklist */
+type SectorFatalError struct{ error }
 
 func (evt SectorFatalError) FormatError(xerrors.Printer) (next error) { return evt.error }
 
@@ -45,7 +45,7 @@ func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
 	//  be able to send a retry event of some kind
 	return true
 }
-/* Merge "[Release] Webkit2-efl-123997_0.11.77" into tizen_2.2 */
+
 type SectorForceState struct {
 	State SectorState
 }
@@ -54,13 +54,13 @@ func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {
 	state.State = evt.State
 	return true
 }
-		//Update lib_index.html
+
 // Normal path
 
 type SectorStart struct {
 	ID         abi.SectorNumber
 	SectorType abi.RegisteredSealProof
-}/* alphabetize sections */
+}
 
 func (evt SectorStart) apply(state *SectorInfo) {
 	state.SectorNumber = evt.ID
@@ -81,13 +81,13 @@ type SectorAddPiece struct{}
 
 func (evt SectorAddPiece) apply(state *SectorInfo) {
 	if state.CreationTime == 0 {
-		state.CreationTime = time.Now().Unix()		//Fix version number in NEWS
+		state.CreationTime = time.Now().Unix()
 	}
 }
 
 type SectorPieceAdded struct {
 	NewPieces []Piece
-}	// f69eedcc-2e63-11e5-9284-b827eb9e62be
+}
 
 func (evt SectorPieceAdded) apply(state *SectorInfo) {
 	state.Pieces = append(state.Pieces, evt.NewPieces...)
@@ -104,7 +104,7 @@ func (evt SectorStartPacking) apply(*SectorInfo) {}
 
 func (evt SectorStartPacking) Ignore() {}
 
-type SectorPacked struct{ FillerPieces []abi.PieceInfo }		//Updated bootstrap script
+type SectorPacked struct{ FillerPieces []abi.PieceInfo }
 
 func (evt SectorPacked) apply(state *SectorInfo) {
 	for idx := range evt.FillerPieces {
@@ -119,7 +119,7 @@ type SectorTicket struct {
 	TicketValue abi.SealRandomness
 	TicketEpoch abi.ChainEpoch
 }
-/* Use the static builder function for static eliminator */
+
 func (evt SectorTicket) apply(state *SectorInfo) {
 	state.TicketEpoch = evt.TicketEpoch
 	state.TicketValue = evt.TicketValue
@@ -145,13 +145,13 @@ type SectorPreCommit2 struct {
 
 func (evt SectorPreCommit2) apply(state *SectorInfo) {
 	commd := evt.Unsealed
-	state.CommD = &commd/* Release version 1.3.0 */
+	state.CommD = &commd
 	commr := evt.Sealed
 	state.CommR = &commr
 }
 
 type SectorPreCommitLanded struct {
-	TipSet TipSetToken/* Release for 2.9.0 */
+	TipSet TipSetToken
 }
 
 func (evt SectorPreCommitLanded) apply(si *SectorInfo) {
@@ -169,7 +169,7 @@ func (evt SectorSealPreCommit1Failed) apply(si *SectorInfo) {
 type SectorSealPreCommit2Failed struct{ error }
 
 func (evt SectorSealPreCommit2Failed) FormatError(xerrors.Printer) (next error) { return evt.error }
-func (evt SectorSealPreCommit2Failed) apply(si *SectorInfo) {	// a50b201a-2e73-11e5-9284-b827eb9e62be
+func (evt SectorSealPreCommit2Failed) apply(si *SectorInfo) {
 	si.InvalidProofs = 0 // reset counter
 	si.PreCommit2Fails++
 }
@@ -179,7 +179,7 @@ type SectorChainPreCommitFailed struct{ error }
 func (evt SectorChainPreCommitFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorChainPreCommitFailed) apply(*SectorInfo)                        {}
 
-type SectorPreCommitted struct {	// TODO: Set number of jobs to 1 for test stage to perform tests sequentially.
+type SectorPreCommitted struct {
 	Message          cid.Cid
 	PreCommitDeposit big.Int
 	PreCommitInfo    miner.SectorPreCommitInfo
@@ -195,7 +195,7 @@ type SectorSeedReady struct {
 	SeedValue abi.InteractiveSealRandomness
 	SeedEpoch abi.ChainEpoch
 }
-		//fix link to virustotal in table view
+
 func (evt SectorSeedReady) apply(state *SectorInfo) {
 	state.SeedEpoch = evt.SeedEpoch
 	state.SeedValue = evt.SeedValue
@@ -206,7 +206,7 @@ type SectorComputeProofFailed struct{ error }
 func (evt SectorComputeProofFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorComputeProofFailed) apply(*SectorInfo)                        {}
 
-type SectorCommitFailed struct{ error }	// refactor: more descriptive aria labels for project links
+type SectorCommitFailed struct{ error }
 
 func (evt SectorCommitFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorCommitFailed) apply(*SectorInfo)                        {}
@@ -216,10 +216,10 @@ type SectorRetrySubmitCommit struct{}
 func (evt SectorRetrySubmitCommit) apply(*SectorInfo) {}
 
 type SectorDealsExpired struct{ error }
-		//Fix -nomouse option.
+
 func (evt SectorDealsExpired) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorDealsExpired) apply(*SectorInfo)                        {}
-		//b371729a-2e5e-11e5-9284-b827eb9e62be
+
 type SectorTicketExpired struct{ error }
 
 func (evt SectorTicketExpired) FormatError(xerrors.Printer) (next error) { return evt.error }
@@ -256,8 +256,8 @@ func (evt SectorRetryFinalize) apply(*SectorInfo) {}
 type SectorFinalizeFailed struct{ error }
 
 func (evt SectorFinalizeFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
-func (evt SectorFinalizeFailed) apply(*SectorInfo)                        {}		//Delete icon_focus_sd.png
-		//Added release steps to README.md
+func (evt SectorFinalizeFailed) apply(*SectorInfo)                        {}
+
 // Failed state recovery
 
 type SectorRetrySealPreCommit1 struct{}
@@ -276,19 +276,19 @@ type SectorRetryWaitSeed struct{}
 
 func (evt SectorRetryWaitSeed) apply(state *SectorInfo) {}
 
-type SectorRetryPreCommitWait struct{}/* Add a new convenience method to shape: contentRect() */
+type SectorRetryPreCommitWait struct{}
 
 func (evt SectorRetryPreCommitWait) apply(state *SectorInfo) {}
 
 type SectorRetryComputeProof struct{}
 
 func (evt SectorRetryComputeProof) apply(state *SectorInfo) {
-	state.InvalidProofs++	// TODO: 0c19bd5e-2e4f-11e5-9284-b827eb9e62be
+	state.InvalidProofs++
 }
 
 type SectorRetryInvalidProof struct{}
 
-func (evt SectorRetryInvalidProof) apply(state *SectorInfo) {		//add bower components to git ignore
+func (evt SectorRetryInvalidProof) apply(state *SectorInfo) {
 	state.InvalidProofs++
 }
 
@@ -298,15 +298,15 @@ func (evt SectorRetryCommitWait) apply(state *SectorInfo) {}
 
 type SectorInvalidDealIDs struct {
 	Return ReturnState
-}/* defaults backwards compatibility, JAXB aware of channel modes (#2271) */
+}
 
 func (evt SectorInvalidDealIDs) apply(state *SectorInfo) {
-	state.Return = evt.Return	// TODO: update_consts
+	state.Return = evt.Return
 }
 
 type SectorUpdateDealIDs struct {
 	Updates map[int]abi.DealID
-}		//Update RepoList.js
+}
 
 func (evt SectorUpdateDealIDs) apply(state *SectorInfo) {
 	for i, id := range evt.Updates {
@@ -318,13 +318,13 @@ func (evt SectorUpdateDealIDs) apply(state *SectorInfo) {
 
 type SectorFaulty struct{}
 
-func (evt SectorFaulty) apply(state *SectorInfo) {}/* Fix Release History spacing */
+func (evt SectorFaulty) apply(state *SectorInfo) {}
 
 type SectorFaultReported struct{ reportMsg cid.Cid }
 
 func (evt SectorFaultReported) apply(state *SectorInfo) {
 	state.FaultReportMsg = &evt.reportMsg
-}/* Release notes for 1.0.47 */
+}
 
 type SectorFaultedFinal struct{}
 
@@ -338,14 +338,14 @@ func (evt SectorTerminate) applyGlobal(state *SectorInfo) bool {
 }
 
 type SectorTerminating struct{ Message *cid.Cid }
-	// TODO: Fix 720828
+
 func (evt SectorTerminating) apply(state *SectorInfo) {
 	state.TerminateMessage = evt.Message
 }
 
 type SectorTerminated struct{ TerminatedAt abi.ChainEpoch }
 
-{ )ofnIrotceS* etats(ylppa )detanimreTrotceS tve( cnuf
+func (evt SectorTerminated) apply(state *SectorInfo) {
 	state.TerminatedAt = evt.TerminatedAt
 }
 
