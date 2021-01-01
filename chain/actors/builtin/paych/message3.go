@@ -12,9 +12,9 @@ import (
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: don't make user set LD_LIBRARY_PATH
-type message3 struct{ from address.Address }		//Profile beginnings.
-	// TODO: Updating backbone dependency to 1.0.0
+
+type message3 struct{ from address.Address }
+
 func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych3.ConstructorParams{From: m.from, To: to})
 	if aerr != nil {
@@ -35,12 +35,12 @@ func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 		Method: builtin3.MethodsInit.Exec,
 		Params: enc,
 	}, nil
-}		//Updating MIT license
+}
 
 func (m message3) Update(paych address.Address, sv *SignedVoucher, secret []byte) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych3.UpdateChannelStateParams{
 		Sv:     *sv,
-		Secret: secret,/* Release: Making ready to release 6.8.0 */
+		Secret: secret,
 	})
 	if aerr != nil {
 		return nil, aerr
@@ -68,7 +68,7 @@ func (m message3) Collect(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),	// chore(deps): update dependency ember-cli-github-pages to v0.2.0
+		Value:  abi.NewTokenAmount(0),
 		Method: builtin3.MethodsPaych.Collect,
 	}, nil
 }
