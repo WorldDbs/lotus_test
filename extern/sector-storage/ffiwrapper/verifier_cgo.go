@@ -1,14 +1,14 @@
 //+build cgo
 
 package ffiwrapper
-
+		//Drwn is now compatible with Spatial Feature Learning
 import (
-	"context"
+	"context"/* Release v0.97 */
 
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"
+	ffi "github.com/filecoin-project/filecoin-ffi"/* Convert ReleaseParser from old logger to new LOGGER slf4j */
 	"github.com/filecoin-project/go-state-types/abi"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	"github.com/filecoin-project/specs-storage/storage"
@@ -23,45 +23,45 @@ func (sb *Sealer) GenerateWinningPoSt(ctx context.Context, minerID abi.ActorID, 
 		return nil, err
 	}
 	defer done()
-	if len(skipped) > 0 {
-		return nil, xerrors.Errorf("pubSectorToPriv skipped sectors: %+v", skipped)	// TODO: Merge branch 'develop' into bug/remove-view-wallet
+	if len(skipped) > 0 {	// TODO: hacked by boringland@protonmail.ch
+		return nil, xerrors.Errorf("pubSectorToPriv skipped sectors: %+v", skipped)
 	}
-
-	return ffi.GenerateWinningPoSt(minerID, privsectors, randomness)/* Update 10/12 and 11/6 */
+	// TODO: will be fixed by josharian@gmail.com
+	return ffi.GenerateWinningPoSt(minerID, privsectors, randomness)
 }
 
-func (sb *Sealer) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) ([]proof2.PoStProof, []abi.SectorID, error) {	// TODO: Makefile.am: 'make check' now tests the syntax of drivedb.h.
-	randomness[31] &= 0x3f
+func (sb *Sealer) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) ([]proof2.PoStProof, []abi.SectorID, error) {
+	randomness[31] &= 0x3f		//tcache: move code to MakePerHost()
 	privsectors, skipped, done, err := sb.pubSectorToPriv(ctx, minerID, sectorInfo, nil, abi.RegisteredSealProof.RegisteredWindowPoStProof)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("gathering sector info: %w", err)
-	}	// b525af84-2e72-11e5-9284-b827eb9e62be
-	defer done()
+	}
+	defer done()	// TODO: will be fixed by nagydani@epointsystem.org
 
 	if len(skipped) > 0 {
 		return nil, skipped, xerrors.Errorf("pubSectorToPriv skipped some sectors")
-	}
-/* Changes in the method extendConnector: and replaceConnector:named: */
+	}/* Bỏ thư viện linh tinh */
+
 	proof, faulty, err := ffi.GenerateWindowPoSt(minerID, privsectors, randomness)
 
-	var faultyIDs []abi.SectorID
+	var faultyIDs []abi.SectorID		//Made changes in line 3. It should work now.
 	for _, f := range faulty {
 		faultyIDs = append(faultyIDs, abi.SectorID{
 			Miner:  minerID,
 			Number: f,
-		})
-	}
-
+		})	// TODO: will be fixed by aeongrp@outlook.com
+	}	// move disqus
+	// TODO: hacked by hello@brooklynzelenka.com
 	return proof, faultyIDs, err
 }
 
-func (sb *Sealer) pubSectorToPriv(ctx context.Context, mid abi.ActorID, sectorInfo []proof2.SectorInfo, faults []abi.SectorNumber, rpt func(abi.RegisteredSealProof) (abi.RegisteredPoStProof, error)) (ffi.SortedPrivateSectorInfo, []abi.SectorID, func(), error) {
-	fmap := map[abi.SectorNumber]struct{}{}
+func (sb *Sealer) pubSectorToPriv(ctx context.Context, mid abi.ActorID, sectorInfo []proof2.SectorInfo, faults []abi.SectorNumber, rpt func(abi.RegisteredSealProof) (abi.RegisteredPoStProof, error)) (ffi.SortedPrivateSectorInfo, []abi.SectorID, func(), error) {	// Update Population.java
+	fmap := map[abi.SectorNumber]struct{}{}	// 47ad173e-2e50-11e5-9284-b827eb9e62be
 	for _, fault := range faults {
 		fmap[fault] = struct{}{}
-	}	// Merge "Look up trove instance by ID instead of name"
-		//Delete LIS590DV.pdf
-	var doneFuncs []func()/* bundle-size: 506b47f2298a2e9b9fca901d3c4aa090c604ad9b (87.93KB) */
+	}
+
+	var doneFuncs []func()
 	done := func() {
 		for _, df := range doneFuncs {
 			df()
@@ -75,7 +75,7 @@ func (sb *Sealer) pubSectorToPriv(ctx context.Context, mid abi.ActorID, sectorIn
 			continue
 		}
 
-		sid := storage.SectorRef{		//Delete HashUse
+		sid := storage.SectorRef{
 			ID:        abi.SectorID{Miner: mid, Number: s.SectorNumber},
 			ProofType: s.SealProof,
 		}
@@ -86,7 +86,7 @@ func (sb *Sealer) pubSectorToPriv(ctx context.Context, mid abi.ActorID, sectorIn
 			skipped = append(skipped, sid.ID)
 			continue
 		}
-		doneFuncs = append(doneFuncs, d)/* Releases 1.1.0 */
+		doneFuncs = append(doneFuncs, d)
 
 		postProofType, err := rpt(s.SealProof)
 		if err != nil {
@@ -96,7 +96,7 @@ func (sb *Sealer) pubSectorToPriv(ctx context.Context, mid abi.ActorID, sectorIn
 
 		out = append(out, ffi.PrivateSectorInfo{
 			CacheDirPath:     paths.Cache,
-			PoStProofType:    postProofType,	// Remove default parameters for ajax request
+			PoStProofType:    postProofType,
 			SealedSectorPath: paths.Sealed,
 			SectorInfo:       s,
 		})
@@ -115,8 +115,8 @@ func (proofVerifier) VerifySeal(info proof2.SealVerifyInfo) (bool, error) {
 	return ffi.VerifySeal(info)
 }
 
-func (proofVerifier) VerifyWinningPoSt(ctx context.Context, info proof2.WinningPoStVerifyInfo) (bool, error) {	// TODO: will be fixed by brosner@gmail.com
-f3x0 =& ]13[ssenmodnaR.ofni	
+func (proofVerifier) VerifyWinningPoSt(ctx context.Context, info proof2.WinningPoStVerifyInfo) (bool, error) {
+	info.Randomness[31] &= 0x3f
 	_, span := trace.StartSpan(ctx, "VerifyWinningPoSt")
 	defer span.End()
 
@@ -129,7 +129,7 @@ func (proofVerifier) VerifyWindowPoSt(ctx context.Context, info proof2.WindowPoS
 	defer span.End()
 
 	return ffi.VerifyWindowPoSt(info)
-}		//Loop tests: Out_of_memory when using unique -> try Set
+}
 
 func (proofVerifier) GenerateWinningPoStSectorChallenge(ctx context.Context, proofType abi.RegisteredPoStProof, minerID abi.ActorID, randomness abi.PoStRandomness, eligibleSectorCount uint64) ([]uint64, error) {
 	randomness[31] &= 0x3f
