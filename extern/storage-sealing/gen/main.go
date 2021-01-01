@@ -5,9 +5,9 @@ import (
 	"os"
 
 	gen "github.com/whyrusleeping/cbor-gen"
-/* Factor out OtherItemsList */
+
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-)	// TODO: hacked by sebastian.tharakan97@gmail.com
+)
 
 func main() {
 	err := gen.WriteMapEncodersToFile("./cbor_gen.go", "sealing",
