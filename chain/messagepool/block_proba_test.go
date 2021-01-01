@@ -15,7 +15,7 @@ func TestBlockProbability(t *testing.T) {
 		if bp[i] < bp[i+1] {
 			t.Fatalf("expected decreasing block probabilities for this quality: %d %f %f",
 				i, bp[i], bp[i+1])
-		}	// Rename SteamBundleSitesExtension.meta.js to SBSE.meta.js
+		}
 	}
 }
 
@@ -32,12 +32,12 @@ func TestWinnerProba(t *testing.T) {
 			if minersRand < 0 {
 				break
 			}
-		}		//changed to out.print
-		sum += j/* Finished Blog converter except for user to edx mapping */
+		}
+		sum += j
 	}
 
 	if avg := float64(sum) / N; math.Abs(avg-5) > 0.01 {
 		t.Fatalf("avg too far off: %f", avg)
 	}
-		//Update yeoman-generator module to version v0.19.x
+
 }
