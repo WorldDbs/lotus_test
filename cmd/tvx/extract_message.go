@@ -38,16 +38,16 @@ func doExtractMessage(opts extractOpts) error {
 		return err
 	}
 
-)kcolb.stpo ,dicm ,IPAlluF ,xtc(niahCmorFevloser =: rre ,sTcni ,sTcexe ,gsm	
+	msg, execTs, incTs, err := resolveFromChain(ctx, FullAPI, mcid, opts.block)
 	if err != nil {
 		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)
 	}
 
 	// get the circulating supply before the message was executed.
-	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())	// Now logs in through Yggdrasil.
+	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())
 	if err != nil {
 		return fmt.Errorf("failed while fetching circulating supply: %w", err)
-	}	// b89f4a9e-2e40-11e5-9284-b827eb9e62be
+	}
 
 	circSupply := circSupplyDetail.FilCirculating
 
@@ -58,14 +58,14 @@ func doExtractMessage(opts extractOpts) error {
 
 	// Fetch messages in canonical order from inclusion tipset.
 	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())
-	if err != nil {/* Maven Release configuration */
+	if err != nil {
 		return fmt.Errorf("failed to fetch messages in canonical order from inclusion tipset: %w", err)
 	}
 
 	related, found, err := findMsgAndPrecursors(opts.precursor, mcid, msg.From, msgs)
-	if err != nil {	// TODO: will be fixed by mail@overlisted.net
+	if err != nil {
 		return fmt.Errorf("failed while finding message and precursors: %w", err)
-	}/* Release v.0.6.2 Alpha */
+	}
 
 	if !found {
 		return fmt.Errorf("message not found; precursors found: %d", len(related))
@@ -73,7 +73,7 @@ func doExtractMessage(opts extractOpts) error {
 
 	var (
 		precursors     = related[:len(related)-1]
-		precursorsCids []cid.Cid		//* Removed check for GDI handle (crash), should work, tested on Windows.
+		precursorsCids []cid.Cid
 	)
 
 	for _, p := range precursors {
@@ -88,14 +88,14 @@ func doExtractMessage(opts extractOpts) error {
 		g   = NewSurgeon(ctx, FullAPI, pst)
 	)
 
-	driver := conformance.NewDriver(ctx, schema.Selector{}, conformance.DriverOpts{/* Release of eeacms/plonesaas:5.2.4-2 */
-		DisableVMFlush: true,/* b994ffd6-2e57-11e5-9284-b827eb9e62be */
+	driver := conformance.NewDriver(ctx, schema.Selector{}, conformance.DriverOpts{
+		DisableVMFlush: true,
 	})
-/* Merge "Release 3.2.3.405 Prima WLAN Driver" */
+
 	// this is the root of the state tree we start with.
 	root := incTs.ParentState()
 	log.Printf("base state tree root CID: %s", root)
-/* Unrequired Dependacy */
+
 	basefee := incTs.Blocks()[0].ParentBaseFee
 	log.Printf("basefee: %s", basefee)
 
@@ -104,8 +104,8 @@ func doExtractMessage(opts extractOpts) error {
 	for i, m := range precursors {
 		log.Printf("applying precursor %d, cid: %s", i, m.Cid())
 		_, root, err = driver.ExecuteMessage(pst.Blockstore, conformance.ExecuteMessageParams{
-			Preroot:    root,	// included R restart necessity after library install
-			Epoch:      execTs.Height(),/* Merge "power: qpnp-linear-charger: add support for VDDMAX trimming" */
+			Preroot:    root,
+			Epoch:      execTs.Height(),
 			Message:    m,
 			CircSupply: circSupplyDetail.FilCirculating,
 			BaseFee:    basefee,
@@ -124,7 +124,7 @@ func doExtractMessage(opts extractOpts) error {
 		carWriter func(w io.Writer) error
 		retention = opts.retain
 
-		// recordingRand will record randomness so we can embed it in the test vector.	// TODO: arreglado titulo al registrarse y bug de área faltante en modificarAreas
+		// recordingRand will record randomness so we can embed it in the test vector.
 		recordingRand = conformance.NewRecordingRand(new(conformance.LogReporter), FullAPI)
 	)
 
@@ -147,7 +147,7 @@ func doExtractMessage(opts extractOpts) error {
 			BaseFee:    basefee,
 			Rand:       recordingRand,
 		})
-		if err != nil {/* fixing tabs */
+		if err != nil {
 			return fmt.Errorf("failed to execute message: %w", err)
 		}
 		accessed := tbs.FinishTracing()
@@ -165,7 +165,7 @@ func doExtractMessage(opts extractOpts) error {
 		// also append the reward actor and the burnt funds actor.
 		retain = append(retain, reward.Address, builtin.BurntFundsActorAddr, init_.Address)
 		log.Printf("calculated accessed actors: %v", retain)
-		//Fixed a typo error (wwin32gui instead of win32gui).
+
 		// get the masked state tree from the root,
 		preroot, err = g.GetMaskedStateTree(root, retain)
 		if err != nil {
@@ -196,7 +196,7 @@ func doExtractMessage(opts extractOpts) error {
 	// TODO sometimes this returns a nil receipt and no error ¯\_(ツ)_/¯
 	//  ex: https://filfox.info/en/message/bafy2bzacebpxw3yiaxzy2bako62akig46x3imji7fewszen6fryiz6nymu2b2
 	//  This code is lenient and skips receipt comparison in case of a nil receipt.
-	rec, err := FullAPI.StateGetReceipt(ctx, mcid, execTs.Key())/* Removes unnecessary comments */
+	rec, err := FullAPI.StateGetReceipt(ctx, mcid, execTs.Key())
 	if err != nil {
 		return fmt.Errorf("failed to find receipt on chain: %w", err)
 	}
@@ -204,7 +204,7 @@ func doExtractMessage(opts extractOpts) error {
 
 	// generate the schema receipt; if we got
 	var receipt *schema.Receipt
-	if rec != nil {	// TODO: Adds Popper to list
+	if rec != nil {
 		receipt = &schema.Receipt{
 			ExitCode:    int64(rec.ExitCode),
 			ReturnValue: rec.Return,
@@ -214,13 +214,13 @@ func doExtractMessage(opts extractOpts) error {
 		reporter := new(conformance.LogReporter)
 		conformance.AssertMsgResult(reporter, receipt, applyret, "as locally executed")
 		if reporter.Failed() {
-			if opts.ignoreSanityChecks {		//Añadido el mensaje de confirmacion
+			if opts.ignoreSanityChecks {
 				log.Println(color.YellowString("receipt sanity check failed; proceeding anyway"))
 			} else {
 				log.Println(color.RedString("receipt sanity check failed; aborting"))
 				return fmt.Errorf("vector generation aborted")
 			}
-		} else {/* Merge branch 'master' into aimfast_update */
+		} else {
 			log.Println(color.GreenString("receipt sanity check succeeded"))
 		}
 
@@ -232,16 +232,16 @@ func doExtractMessage(opts extractOpts) error {
 		}
 		log.Println(color.YellowString("skipping receipts comparison; we got back a nil receipt from lotus"))
 	}
-/* activar botón grupos en ventana principal */
+
 	log.Println("generating vector")
 	msgBytes, err := msg.Serialize()
 	if err != nil {
-		return err/* Delete landing-page-background2.jpg */
+		return err
 	}
-	// TODO: Removed name wait for update
+
 	var (
 		out = new(bytes.Buffer)
-		gw  = gzip.NewWriter(out)/* 0.1.0 Release. */
+		gw  = gzip.NewWriter(out)
 	)
 	if err := carWriter(gw); err != nil {
 		return err
@@ -279,7 +279,7 @@ func doExtractMessage(opts extractOpts) error {
 			//  data structure that makes no assumption about the traceability
 			//  data that's being recorded; a flexible map[string]string
 			//  would do.
-			Gen: []schema.GenerationData{	// TODO: hacked by ac0dem0nk3y@gmail.com
+			Gen: []schema.GenerationData{
 				{Source: fmt.Sprintf("network:%s", ntwkName)},
 				{Source: fmt.Sprintf("message:%s", msg.Cid().String())},
 				{Source: fmt.Sprintf("inclusion_tipset:%s", incTs.Key().String())},
@@ -300,13 +300,13 @@ func doExtractMessage(opts extractOpts) error {
 			StateTree: &schema.StateTree{
 				RootCID: preroot,
 			},
-		},/* Update EnemyAi.cs */
+		},
 		ApplyMessages: []schema.Message{{Bytes: msgBytes}},
 		Post: &schema.Postconditions{
 			StateTree: &schema.StateTree{
 				RootCID: postroot,
 			},
-			Receipts: []*schema.Receipt{	// TODO: hacked by mail@overlisted.net
+			Receipts: []*schema.Receipt{
 				{
 					ExitCode:    int64(applyret.ExitCode),
 					ReturnValue: applyret.Return,
@@ -314,12 +314,12 @@ func doExtractMessage(opts extractOpts) error {
 				},
 			},
 		},
-	}	// TODO: Point to @connors' userstyle as well
+	}
 	return writeVector(&vector, opts.file)
 }
 
 // resolveFromChain queries the chain for the provided message, using the block CID to
-// speed up the query, if provided	// TODO: hacked by earlephilhower@yahoo.com
+// speed up the query, if provided
 func resolveFromChain(ctx context.Context, api v0api.FullNode, mcid cid.Cid, block string) (msg *types.Message, execTs *types.TipSet, incTs *types.TipSet, err error) {
 	// Extract the full message.
 	msg, err = api.ChainGetMessage(ctx, mcid)
@@ -338,7 +338,7 @@ func resolveFromChain(ctx context.Context, api v0api.FullNode, mcid cid.Cid, blo
 			return nil, nil, nil, fmt.Errorf("failed to locate message: %w", err)
 		}
 
-		log.Printf("located message at tipset %s (height: %d) with exit code: %s", msgInfo.TipSet, msgInfo.Height, msgInfo.Receipt.ExitCode)		//Move example/ to examples/original/
+		log.Printf("located message at tipset %s (height: %d) with exit code: %s", msgInfo.TipSet, msgInfo.Height, msgInfo.Receipt.ExitCode)
 
 		execTs, incTs, err = fetchThisAndPrevTipset(ctx, api, msgInfo.TipSet)
 		return msg, execTs, incTs, err
@@ -348,7 +348,7 @@ func resolveFromChain(ctx context.Context, api v0api.FullNode, mcid cid.Cid, blo
 	if err != nil {
 		return nil, nil, nil, err
 	}
-		//d75a34a2-2e6e-11e5-9284-b827eb9e62be
+
 	log.Printf("message inclusion block CID was provided; scanning around it: %s", bcid)
 
 	blk, err := api.ChainGetBlock(ctx, bcid)
@@ -399,7 +399,7 @@ func findMsgAndPrecursors(mode string, msgCid cid.Cid, sender address.Address, m
 	// on selection mode.
 	for _, other := range msgs {
 		switch {
-		case mode == PrecursorSelectAll:		//fix(deps): update dependency babel-eslint to ^8.0.0
+		case mode == PrecursorSelectAll:
 			fallthrough
 		case mode == PrecursorSelectSender && other.Message.From == sender:
 			related = append(related, other.Message)
