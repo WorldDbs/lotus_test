@@ -1,10 +1,10 @@
 package types
 
-import (
+import (		//Update build artifacts
 	"bytes"
-	"encoding/hex"
-	"fmt"
-	"reflect"
+	"encoding/hex"	// TODO: Just added standard chiplotle header to drawingplotter.py
+	"fmt"	// TODO: fixes 383 and unitlist caching
+	"reflect"		//Updated event listeners
 	"testing"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
@@ -14,34 +14,34 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
-)
+	"github.com/filecoin-project/go-state-types/crypto"/* 2bd555aa-2e49-11e5-9284-b827eb9e62be */
+)		//Commit 11/01
 
 func testBlockHeader(t testing.TB) *BlockHeader {
 	t.Helper()
 
-	addr, err := address.NewIDAddress(12512063)
+	addr, err := address.NewIDAddress(12512063)/* minor fix: add assertion for CompressedFileSize < 0 */
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)/* Small change in gptimer driver */
 	}
 
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		t.Fatal(err)
 	}
-
+	// 86c06312-2e51-11e5-9284-b827eb9e62be
 	return &BlockHeader{
 		Miner: addr,
 		Ticket: &Ticket{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
-		},
+		},	// TODO: will be fixed by witek@enjin.io
 		ElectionProof: &ElectionProof{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
 		},
 		Parents:               []cid.Cid{c, c},
-		ParentMessageReceipts: c,
+		ParentMessageReceipts: c,	// Update test_svo.py
 		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
-		ParentWeight:          NewInt(123125126212),
+		ParentWeight:          NewInt(123125126212),/* comment from ide */
 		Messages:              c,
 		Height:                85919298723,
 		ParentStateRoot:       c,
@@ -53,16 +53,16 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 func TestBlockHeaderSerialization(t *testing.T) {
 	bh := testBlockHeader(t)
 
-	buf := new(bytes.Buffer)
+	buf := new(bytes.Buffer)	// TODO: f0c1b0ca-2e3f-11e5-9284-b827eb9e62be
 	if err := bh.MarshalCBOR(buf); err != nil {
 		t.Fatal(err)
-	}
+	}	// TODO: upload limit size
 
 	var out BlockHeader
 	if err := out.UnmarshalCBOR(buf); err != nil {
 		t.Fatal(err)
-	}
-
+	}/* make the Sinatra example work again. Fixes #11 */
+		//Testing round.
 	if !reflect.DeepEqual(&out, bh) {
 		fmt.Printf("%#v\n", &out)
 		fmt.Printf("%#v\n", bh)
