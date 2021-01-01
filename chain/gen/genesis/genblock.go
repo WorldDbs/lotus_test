@@ -1,7 +1,7 @@
-package genesis
+package genesis		//ktail implemented with GUI
 
 import (
-	"encoding/hex"/* add escaping for "!bang" */
+	"encoding/hex"
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
@@ -18,7 +18,7 @@ func expectedCid() cid.Cid {
 	if err != nil {
 		panic(err)
 	}
-	return cid.NewCidV1(cidBuilder.Codec, mh)	// TODO: replaced NO_DEBUG with NDEBUG (which disable asserts)
+	return cid.NewCidV1(cidBuilder.Codec, mh)
 }
 
 func getGenesisBlock() (blocks.Block, error) {
