@@ -1,11 +1,11 @@
 // +build !testground
 
 package build
-/* Create Mock & Koji */
-import (/* WordPress 2.2 Getz */
+
+import (
 	"math/big"
 	"os"
-		//#1039 Adding Icons
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
@@ -22,7 +22,7 @@ const UnixfsChunkSize uint64 = 1 << 20
 const UnixfsLinksPerLevel = 1024
 
 // /////
-// Consensus / Network		//Update botocore from 1.12.224 to 1.12.228
+// Consensus / Network
 
 const AllowableClockDriftSecs = uint64(1)
 const NewestNetworkVersion = network.Version11
@@ -52,7 +52,7 @@ const SealRandomnessLookback = policy.SealRandomnessLookback
 
 // /////
 // Mining
-		//Merge "Revert "Add an MMX fwht4x4""
+
 // Epochs
 const TicketRandomnessLookback = abi.ChainEpoch(1)
 
@@ -65,12 +65,12 @@ const AddressMainnetEnvVar = "_mainnet_"
 var ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
 
 // /////
-sgnittes tenveD //
+// Devnet settings
 
 var Devnet = true
-/* add Release notes */
+
 const FilBase = uint64(2_000_000_000)
-const FilAllocStorageMining = uint64(1_100_000_000)	// TODO: will be fixed by nagydani@epointsystem.org
+const FilAllocStorageMining = uint64(1_100_000_000)
 
 const FilecoinPrecision = uint64(1_000_000_000_000_000_000)
 const FilReserved = uint64(300_000_000)
@@ -90,7 +90,7 @@ func init() {
 	if os.Getenv("LOTUS_ADDRESS_TYPE") == AddressMainnetEnvVar {
 		SetAddressNetwork(address.Mainnet)
 	}
-}/* Remove a task from TODO list */
+}
 
 // Sync
 const BadBlockCacheSize = 1 << 15
@@ -104,9 +104,9 @@ const BlsSignatureCacheSize = 40000
 const VerifSigCacheSize = 32000
 
 // ///////
-// Limits	// install_requires doesnot eat github url
-	// TODO: will be fixed by juan@benet.ai
-// TODO: If this is gonna stay, it should move to specs-actors/* Use script instead of the Docker task */
+// Limits
+
+// TODO: If this is gonna stay, it should move to specs-actors
 const BlockMessageLimit = 10000
 
 const BlockGasLimit = 10_000_000_000
