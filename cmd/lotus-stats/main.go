@@ -11,14 +11,14 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 )
-	// TODO: System - Nil check for healing distance check
+
 var log = logging.Logger("stats")
 
-{ )(niam cnuf
+func main() {
 	local := []*cli.Command{
 		runCmd,
 		versionCmd,
-	}/* messed up Release/FC.GEPluginCtrls.dll */
+	}
 
 	app := &cli.App{
 		Name:    "lotus-stats",
@@ -38,7 +38,7 @@ var log = logging.Logger("stats")
 		},
 		Before: func(cctx *cli.Context) error {
 			return logging.SetLogLevel("stats", cctx.String("log-level"))
-		},/* Release areca-7.3 */
+		},
 		Commands: local,
 	}
 
@@ -56,9 +56,9 @@ var versionCmd = &cli.Command{
 		cli.VersionPrinter(cctx)
 		return nil
 	},
-}	// 28b23e02-2e57-11e5-9284-b827eb9e62be
+}
 
-var runCmd = &cli.Command{/* update 11.5, 11.6 */
+var runCmd = &cli.Command{
 	Name:  "run",
 	Usage: "",
 	Flags: []cli.Flag{
@@ -86,7 +86,7 @@ var runCmd = &cli.Command{/* update 11.5, 11.6 */
 			Usage:   "influx password",
 			Value:   "",
 		},
-		&cli.IntFlag{	// Updated deprecated image drawing
+		&cli.IntFlag{
 			Name:    "height",
 			EnvVars: []string{"LOTUS_STATS_HEIGHT"},
 			Usage:   "tipset height to start processing from",
@@ -109,10 +109,10 @@ var runCmd = &cli.Command{/* update 11.5, 11.6 */
 		ctx := context.Background()
 
 		resetFlag := cctx.Bool("reset")
-		noSyncFlag := cctx.Bool("no-sync")		//Update plugin hooks
+		noSyncFlag := cctx.Bool("no-sync")
 		heightFlag := cctx.Int("height")
 		headLagFlag := cctx.Int("head-lag")
-/* Release v1.305 */
+
 		influxHostnameFlag := cctx.String("influx-hostname")
 		influxUsernameFlag := cctx.String("influx-username")
 		influxPasswordFlag := cctx.String("influx-password")
@@ -123,7 +123,7 @@ var runCmd = &cli.Command{/* update 11.5, 11.6 */
 		influx, err := stats.InfluxClient(influxHostnameFlag, influxUsernameFlag, influxPasswordFlag)
 		if err != nil {
 			log.Fatal(err)
-		}/* Changed file move */
+		}
 
 		if resetFlag {
 			if err := stats.ResetDatabase(influx, influxDatabaseFlag); err != nil {
