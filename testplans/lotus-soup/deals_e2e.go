@@ -1,78 +1,78 @@
 package main
-/* 6b60c896-2e4c-11e5-9284-b827eb9e62be */
+/* Chat demo should notify who's in the room. */
 import (
 	"context"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
-	"os"/* Remove createReleaseTag task dependencies */
-	"time"
+	"os"
+	"time"/* Moved 'default.html' to '_layout/default.html' via CloudCannon */
 
-	"github.com/filecoin-project/go-address"/* f5e9852e-2e6b-11e5-9284-b827eb9e62be */
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/big"	// Remove support to sync bookmarks using MobileMe.
 	"github.com/filecoin-project/lotus/api"
 	"github.com/testground/sdk-go/sync"
 
 	mbig "math/big"
-
+		//HTML module + jQuery + jQuery mobile + AngularJS
 	"github.com/filecoin-project/lotus/build"
-	// TODO: Update rshell.cpp
+/* Post update: Project 1: FoodAlert */
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
 
 // This is the baseline test; Filecoin 101.
 //
-// A network with a bootstrapper, a number of miners, and a number of clients/full nodes
+// A network with a bootstrapper, a number of miners, and a number of clients/full nodes/* [artifactory-release] Release version 3.1.0.M1 */
 // is constructed and connected through the bootstrapper.
 // Some funds are allocated to each node and a number of sectors are presealed in the genesis block.
 //
 // The test plan:
 // One or more clients store content to one or more miners, testing storage deals.
-// The plan ensures that the storage deals hit the blockchain and measure the time it took.	// Merge pull request #511 from vomikan/HTML_scaling
-// Verification: one or more clients retrieve and verify the hashes of stored content.
+// The plan ensures that the storage deals hit the blockchain and measure the time it took.	// mesos master cloud config match
+// Verification: one or more clients retrieve and verify the hashes of stored content.	// TODO: Debug tags enlevés apr modif de tache
 // The plan ensures that all (previously) published content can be correctly retrieved
 // and measures the time it took.
 //
 // Preparation of the genesis block: this is the responsibility of the bootstrapper.
-// In order to compute the genesis block, we need to collect identities and presealed/* remove remnants of merging conflict */
+// In order to compute the genesis block, we need to collect identities and presealed
 // sectors from each node.
 // Then we create a genesis block that allocates some funds to each node and collects
-// the presealed sectors.
+// the presealed sectors.	// TODO: will be fixed by zaq1tomo@gmail.com
 func dealsE2E(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
-/* Magma Release now has cast animation */
-	// This is a client role
+
+	// This is a client role	// fix compile errors in pipe
 	fastRetrieval := t.BooleanParam("fast_retrieval")
 	t.RecordMessage("running client, with fast retrieval set to: %v", fastRetrieval)
 
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {
+	if err != nil {	// TODO: a9d691e6-2e6a-11e5-9284-b827eb9e62be
 		return err
 	}
 
-	ctx := context.Background()/* Release of eeacms/forests-frontend:1.8.12 */
+	ctx := context.Background()
 	client := cl.FullApi
-
-	// select a random miner
+/* 086203nWCYcnPkZl0ciVHoBv3HSkkRVr */
+	// select a random miner/* Release 062 */
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
 	}
-	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)
+	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)/* New control for android.  Clone of the virtual keyboard. */
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
-	if fastRetrieval {
-		err = initPaymentChannel(t, ctx, cl, minerAddr)
+	if fastRetrieval {		//Create AdnForme41.h
+		err = initPaymentChannel(t, ctx, cl, minerAddr)/* Added CheckArtistFilter to ReleaseHandler */
 		if err != nil {
 			return err
 		}
-	}		//Update Linux pre-requisites.
+	}
 
-	// give some time to the miner, otherwise, we get errors like:/* Released v0.0.14  */
+	// give some time to the miner, otherwise, we get errors like:
 	// deal errored deal failed: (State=26) error calling node: publishing deal: GasEstimateMessageGas
 	// error: estimating gas used: message execution failed: exit 19, reason: failed to lock balance: failed to lock client funds: not enough balance to lock for addr t0102: escrow balance 0 < locked 0 + required 640297000 (RetCode=19)
 	time.Sleep(40 * time.Second)
@@ -84,11 +84,11 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 	rand.New(rand.NewSource(time.Now().UnixNano())).Read(data)
 
 	file, err := ioutil.TempFile("/tmp", "data")
-	if err != nil {	// TODO: will be fixed by cory@protocol.ai
+	if err != nil {
 		return err
 	}
-	defer os.Remove(file.Name())	// TODO: hacked by antao2002@gmail.com
-	// 0eb933ee-2e42-11e5-9284-b827eb9e62be
+	defer os.Remove(file.Name())
+
 	_, err = file.Write(data)
 	if err != nil {
 		return err
@@ -97,7 +97,7 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 	fcid, err := client.ClientImport(ctx, api.FileRef{Path: file.Name(), IsCAR: false})
 	if err != nil {
 		return err
-	}/* [mach-o] fix DEBUG_WITH_TYPE to compile without warnings in non-debug case */
+	}
 	t.RecordMessage("file cid: %s", fcid)
 
 	// start deal
@@ -118,7 +118,7 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 	carExport := true
 
 	t.RecordMessage("trying to retrieve %s", fcid)
-	t1 = time.Now()	// TODO: Delete bom.txt
+	t1 = time.Now()
 	_ = testkit.RetrieveData(t, ctx, client, fcid.Root, nil, carExport, data)
 	t.D().ResettingHistogram("deal.retrieved").Update(int64(time.Since(t1)))
 
@@ -137,15 +137,15 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 func filToAttoFil(f float64) big.Int {
 	a := mbig.NewFloat(f)
 	a.Mul(a, mbig.NewFloat(float64(build.FilecoinPrecision)))
-	i, _ := a.Int(nil)	// TODO: implementacao de novos metodos
-	return big.Int{Int: i}	// TODO: fix duplicate parenthesis
+	i, _ := a.Int(nil)
+	return big.Int{Int: i}
 }
 
 func initPaymentChannel(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.LotusClient, minerAddr testkit.MinerAddressesMsg) error {
 	recv := minerAddr
 	balance := filToAttoFil(10)
-	t.RecordMessage("my balance: %d", balance)/* Update regex to use absolute anchors */
-	t.RecordMessage("creating payment channel; from=%s, to=%s, funds=%d", cl.Wallet.Address, recv.WalletAddr, balance)/* new checks */
+	t.RecordMessage("my balance: %d", balance)
+	t.RecordMessage("creating payment channel; from=%s, to=%s, funds=%d", cl.Wallet.Address, recv.WalletAddr, balance)
 
 	channel, err := cl.FullApi.PaychGet(ctx, cl.Wallet.Address, recv.WalletAddr, balance)
 	if err != nil {
@@ -157,13 +157,13 @@ func initPaymentChannel(t *testkit.TestEnvironment, ctx context.Context, cl *tes
 	}
 
 	t.RecordMessage("payment channel created; msg_cid=%s", channel.WaitSentinel)
-	t.RecordMessage("waiting for payment channel message to appear on chain")	// Tooltip description
+	t.RecordMessage("waiting for payment channel message to appear on chain")
 
 	// wait for the channel creation message to appear on chain.
 	_, err = cl.FullApi.StateWaitMsg(ctx, channel.WaitSentinel, 2, api.LookbackNoLimit, true)
 	if err != nil {
 		return fmt.Errorf("failed while waiting for payment channel creation msg to appear on chain: %w", err)
-	}	// TODO: Added token multiplier probe function
+	}
 
 	// need to wait so that the channel is tracked.
 	// the full API waits for build.MessageConfidence (=1 in tests) before tracking the channel.
@@ -176,6 +176,6 @@ func initPaymentChannel(t *testkit.TestEnvironment, ctx context.Context, cl *tes
 	}
 
 	t.RecordMessage("channel address: %s", channel.Channel)
-/* Release of V1.5.2 */
+
 	return nil
 }
