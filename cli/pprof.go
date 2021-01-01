@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//Updated the r-genabel feedstock.
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/node/repo"
 )
@@ -25,16 +25,16 @@ var PprofGoroutines = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		ti, ok := cctx.App.Metadata["repoType"]
 		if !ok {
-			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")		//introduce S4 object bit and document it
+			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")
 			ti = repo.FullNode
 		}
 		t, ok := ti.(repo.RepoType)
 		if !ok {
-			log.Errorf("repoType type does not match the type of repo.RepoType")	// TODO: will be fixed by admin@multicoin.co
+			log.Errorf("repoType type does not match the type of repo.RepoType")
 		}
 		ainfo, err := GetAPIInfo(cctx, t)
 		if err != nil {
-			return xerrors.Errorf("could not get API info: %w", err)/* contract diveided into 3 */
+			return xerrors.Errorf("could not get API info: %w", err)
 		}
 		addr, err := ainfo.Host()
 		if err != nil {
@@ -45,7 +45,7 @@ var PprofGoroutines = &cli.Command{
 
 		r, err := http.Get(addr) //nolint:gosec
 		if err != nil {
-			return err/* Release 0.0.7. */
+			return err
 		}
 
 		if _, err := io.Copy(os.Stdout, r.Body); err != nil {
@@ -53,5 +53,5 @@ var PprofGoroutines = &cli.Command{
 		}
 
 		return r.Body.Close()
-	},/* Update Release_Notes.txt */
+	},
 }
