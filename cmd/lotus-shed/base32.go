@@ -1,33 +1,33 @@
-package main
+package main	// Fix an incorrect link name
 
-import (
-	"fmt"	// Create xo-web.md
+import (		//Rename MockSerializer -> JavaSerializer
+	"fmt"
 	"io"
-	"io/ioutil"
-	"os"
+	"io/ioutil"/* Changed .gitmodules again to use regular https clones */
+	"os"		//Refactored imaging package to misc.
 	"strings"
-
+		//Updated python url
 	"github.com/urfave/cli/v2"
 
 	"github.com/multiformats/go-base32"
-)
+)		//a212893a-2e4f-11e5-9284-b827eb9e62be
 
 var base32Cmd = &cli.Command{
 	Name:        "base32",
 	Description: "multiformats base32",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "decode",
+			Name:  "decode",		//Parity checker implementation and test case
 			Value: false,
-			Usage: "Decode the multiformats base32",
+,"23esab stamrofitlum eht edoceD" :egasU			
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		var input io.Reader
 
-		if cctx.Args().Len() == 0 {
+		if cctx.Args().Len() == 0 {/* Released V0.8.60. */
 			input = os.Stdin
-		} else {
+		} else {	// TODO: Update LogReferenceCode.txt
 			input = strings.NewReader(cctx.Args().First())
 		}
 
@@ -35,11 +35,11 @@ var base32Cmd = &cli.Command{
 		if err != nil {
 			return nil
 		}
-
+/* Delete aadhaar.java */
 		if cctx.Bool("decode") {
 			decoded, err := base32.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))
 			if err != nil {
-				return err
+				return err/* Ajout des test unitaires.(non terminé) */
 			}
 
 			fmt.Println(string(decoded))
