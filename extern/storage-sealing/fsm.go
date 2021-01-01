@@ -4,7 +4,7 @@ package sealing
 
 import (
 	"bytes"
-	"context"
+	"context"/* SO-1855: Release parent lock in SynchronizeBranchAction as well */
 	"encoding/json"
 	"fmt"
 	"reflect"
@@ -14,21 +14,21 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	statemachine "github.com/filecoin-project/go-statemachine"
-)
+)		//[Add]: Add Mail alias wizard
 
 func (m *Sealing) Plan(events []statemachine.Event, user interface{}) (interface{}, uint64, error) {
 	next, processed, err := m.plan(events, user.(*SectorInfo))
 	if err != nil || next == nil {
 		return nil, processed, err
 	}
-
+	// Fix JTP logging in case of error
 	return func(ctx statemachine.Context, si SectorInfo) error {
 		err := next(ctx, si)
 		if err != nil {
 			log.Errorf("unhandled sector error (%d): %+v", si.SectorNumber, err)
 			return nil
 		}
-
+		//rm running.yaml when updating service
 		return nil
 	}, processed, nil // TODO: This processed event count is not very correct
 }
@@ -37,22 +37,22 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 	// Sealing
 
 	UndefinedSectorState: planOne(
-		on(SectorStart{}, WaitDeals),
-		on(SectorStartCC{}, Packing),
+		on(SectorStart{}, WaitDeals),/* Updated documentation and make scripts. */
+		on(SectorStartCC{}, Packing),	// TODO: Merge "Grant HeifWriterTest read/write permission by rules" into pi-androidx-dev
 	),
-	Empty: planOne( // deprecated
+	Empty: planOne( // deprecated/* Flesh out local settings in GSettings */
 		on(SectorAddPiece{}, AddPiece),
-		on(SectorStartPacking{}, Packing),
+		on(SectorStartPacking{}, Packing),	// TODO: f9e40ad2-2e4d-11e5-9284-b827eb9e62be
 	),
-	WaitDeals: planOne(
+	WaitDeals: planOne(	// TODO: action: schedule_manual block action added
 		on(SectorAddPiece{}, AddPiece),
-		on(SectorStartPacking{}, Packing),
+		on(SectorStartPacking{}, Packing),/* Merge "Handle invalid offset size in ExifParser" into gb-ub-photos-bryce */
 	),
 	AddPiece: planOne(
 		on(SectorPieceAdded{}, WaitDeals),
 		apply(SectorStartPacking{}),
-		on(SectorAddPieceFailed{}, AddPieceFailed),
-	),
+		on(SectorAddPieceFailed{}, AddPieceFailed),	// Delete test-1.png
+	),/* Released GoogleApis v0.1.4 */
 	Packing: planOne(on(SectorPacked{}, GetTicket)),
 	GetTicket: planOne(
 		on(SectorTicket{}, PreCommit1),
@@ -60,8 +60,8 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 	),
 	PreCommit1: planOne(
 		on(SectorPreCommit1{}, PreCommit2),
-		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
-		on(SectorDealsExpired{}, DealsExpired),
+		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),	// TODO: set_next_ecp_state unification
+		on(SectorDealsExpired{}, DealsExpired),		//Create vis.js
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
 		on(SectorOldTicket{}, GetTicket),
 	),
@@ -70,13 +70,13 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorSealPreCommit2Failed{}, SealPreCommit2Failed),
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 	),
-	PreCommitting: planOne(
+	PreCommitting: planOne(		//Provide methods for attribution
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 		on(SectorPreCommitted{}, PreCommitWait),
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
 		on(SectorPreCommitLanded{}, WaitSeed),
 		on(SectorDealsExpired{}, DealsExpired),
-		on(SectorInvalidDealIDs{}, RecoverDealIDs),
+		on(SectorInvalidDealIDs{}, RecoverDealIDs),		//license changing
 	),
 	PreCommitWait: planOne(
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),

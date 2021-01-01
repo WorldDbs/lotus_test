@@ -1,16 +1,16 @@
 package chain
-
+	// TODO: hacked by greg@colvin.org
 import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"
+	"fmt"		//Fix performance regression in createindex
 	"os"
 	"sort"
-	"strings"
-	"sync"
+	"strings"/* Merge "python-zunclient: Update to 3.4.0" */
+	"sync"	// Upload and update Spike .psd
 	"time"
-
+/* Issue #282 Created ReleaseAsset, ReleaseAssets interfaces */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -20,33 +20,33 @@ import (
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	logging "github.com/ipfs/go-log/v2"
-	"github.com/libp2p/go-libp2p-core/connmgr"
-	"github.com/libp2p/go-libp2p-core/peer"
+	logging "github.com/ipfs/go-log/v2"	// TODO: will be fixed by juan@benet.ai
+	"github.com/libp2p/go-libp2p-core/connmgr"		//-net option to print weighted split weights by -swp
+	"github.com/libp2p/go-libp2p-core/peer"/* Release version 0.1.17 */
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"github.com/whyrusleeping/pubsub"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: s/JRuby/Velocity
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* [yank] Release 0.20.1 */
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
-
+	// TODO: hacked by yuvalalaluf@gmail.com
 	// named msgarray here to make it clear that these are the types used by
-	// messages, regardless of specs-actors version.
-	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
+	// messages, regardless of specs-actors version.	// TODO: Fix identifiers to asciidoctor rather than asciidoc
+	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"/* Updated Release README.md */
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
+	"github.com/filecoin-project/lotus/build"	// TODO: will be fixed by fjl@ethereum.org
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"		//Add appropriate license requirements
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/exchange"
 	"github.com/filecoin-project/lotus/chain/gen"
@@ -58,7 +58,7 @@ import (
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/metrics"
 )
-
+	// TODO: will be fixed by boringland@protonmail.ch
 // Blocks that are more than MaxHeightDrift epochs above
 // the theoretical max height based on systime are quickly rejected
 const MaxHeightDrift = 5
