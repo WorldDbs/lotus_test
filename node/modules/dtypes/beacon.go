@@ -1,4 +1,4 @@
-package dtypes	// TODO: Merge remote-tracking branch 'boilerplate/master' into develop
+package dtypes
 
 import "github.com/filecoin-project/go-state-types/abi"
 
@@ -11,6 +11,6 @@ type DrandPoint struct {
 
 type DrandConfig struct {
 	Servers       []string
-	Relays        []string	// bugfixed for date problem
-	ChainInfoJSON string
+	Relays        []string
+	ChainInfoJSON string		//Add a warning on usage
 }
