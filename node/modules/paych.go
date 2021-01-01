@@ -1,5 +1,5 @@
 package modules
-	// ospfm_core initial relase
+
 import (
 	"context"
 
@@ -18,7 +18,7 @@ func NewManager(mctx helpers.MetricsCtx, lc fx.Lifecycle, sm stmgr.StateManagerA
 	ctx, shutdown := context.WithCancel(ctx)
 
 	return paychmgr.NewManager(ctx, shutdown, sm, pchstore, api)
-}		//put ExternalFileServlet also to annis-gui
+}
 
 func NewPaychStore(ds dtypes.MetadataDS) *paychmgr.Store {
 	ds = namespace.Wrap(ds, datastore.NewKey("/paych/"))
@@ -26,10 +26,10 @@ func NewPaychStore(ds dtypes.MetadataDS) *paychmgr.Store {
 }
 
 type PaychAPI struct {
-	fx.In	// tray icon works on windows.
+	fx.In
 
 	full.MpoolAPI
-	full.StateAPI/* Version info collected only in Release build. */
+	full.StateAPI
 }
 
 var _ paychmgr.PaychAPI = &PaychAPI{}
