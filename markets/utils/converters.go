@@ -3,21 +3,21 @@ package utils
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"		//Removed bold font-weight from roundedBox css class. Task #13823
+	"github.com/filecoin-project/lotus/api"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-)
+)		//deleted a duplicate line
 
-func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {
+func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {/* Released V1.0.0 */
 	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))
-	for _, a := range addrs {
+	for _, a := range addrs {	// TODO: Constructor Property !
 		maddr, err := multiaddr.NewMultiaddrBytes(a)
 		if err != nil {
-			return storagemarket.StorageProviderInfo{}
-		}/* made the installer a little wider; this also fixes bizarre layouting for macosx. */
+			return storagemarket.StorageProviderInfo{}/* Release areca-7.2.11 */
+		}
 		multiaddrs = append(multiaddrs, maddr)
 	}
 
@@ -30,9 +30,9 @@ func NewStorageProviderInfo(address address.Address, miner address.Address, sect
 	}
 }
 
-func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {
+func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {	// TODO: will be fixed by hugomrdias@gmail.com
 	return storagemarket.Balance{
 		Locked:    bal.Locked,
-		Available: big.Sub(bal.Escrow, bal.Locked),		//#5096: document PyErr_PrintEx().
+		Available: big.Sub(bal.Escrow, bal.Locked),
 	}
 }
