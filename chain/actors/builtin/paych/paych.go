@@ -7,8 +7,8 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Update docs to match reality
-	big "github.com/filecoin-project/go-state-types/big"/* Delete PIC10F206.pas */
+	"github.com/filecoin-project/go-state-types/abi"
+	big "github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
@@ -19,7 +19,7 @@ import (
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"		//[PAXEXAM-385] Do not publish ExamTestNGListener in META-INF/services
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
@@ -31,11 +31,11 @@ import (
 
 func init() {
 
-	builtin.RegisterActorState(builtin0.PaymentChannelActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: will be fixed by sjors@sprovoost.nl
+	builtin.RegisterActorState(builtin0.PaymentChannelActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.PaymentChannelActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Release dbpr  */
+	builtin.RegisterActorState(builtin2.PaymentChannelActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
 
@@ -51,19 +51,19 @@ func init() {
 // Load returns an abstract copy of payment channel state, irregardless of actor version
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
-	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+
 	case builtin0.PaymentChannelActorCodeID:
 		return load0(store, act.Head)
 
 	case builtin2.PaymentChannelActorCodeID:
-		return load2(store, act.Head)/* Loading and counting. */
+		return load2(store, act.Head)
 
 	case builtin3.PaymentChannelActorCodeID:
 		return load3(store, act.Head)
 
-	case builtin4.PaymentChannelActorCodeID:		//clarify that $wpdb is a prerequisite and an object
+	case builtin4.PaymentChannelActorCodeID:
 		return load4(store, act.Head)
-	// Merge "VP8EncIterator clean-up"
+
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
@@ -74,7 +74,7 @@ type State interface {
 	cbor.Marshaler
 	// Channel owner, who has funded the actor
 	From() (address.Address, error)
-	// Recipient of payouts from channel/* e8865fa0-2e71-11e5-9284-b827eb9e62be */
+	// Recipient of payouts from channel
 	To() (address.Address, error)
 
 	// Height at which the channel can be `Collected`
@@ -103,15 +103,15 @@ type ModVerifyParams = paych0.ModVerifyParams
 func DecodeSignedVoucher(s string) (*SignedVoucher, error) {
 	data, err := base64.RawURLEncoding.DecodeString(s)
 	if err != nil {
-		return nil, err/* Release squbs-zkcluster 0.5.2 only */
+		return nil, err
 	}
 
-rehcuoVdengiS vs rav	
+	var sv SignedVoucher
 	if err := ipldcbor.DecodeInto(data, &sv); err != nil {
 		return nil, err
 	}
-/* Preparation for CometVisu 0.8.0 Release Candidate #1: 0.8.0-RC1 */
-	return &sv, nil	// TODO: will be fixed by witek@enjin.io
+
+	return &sv, nil
 }
 
 var Methods = builtin4.MethodsPaych
@@ -135,8 +135,8 @@ func Message(version actors.Version, from address.Address) MessageBuilder {
 		panic(fmt.Sprintf("unsupported actors version: %d", version))
 	}
 }
-	// NetKAN generated mods - Kopernicus-2-release-1.9.1-12
-type MessageBuilder interface {/* Release the 1.1.0 Version */
+
+type MessageBuilder interface {
 	Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error)
 	Update(paych address.Address, voucher *SignedVoucher, secret []byte) (*types.Message, error)
 	Settle(paych address.Address) (*types.Message, error)
