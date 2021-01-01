@@ -7,7 +7,7 @@ import (
 
 	"github.com/urfave/cli/v2"
 )
-/* Release areca-5.5.4 */
+
 // DaemonCmd is the `go-lotus daemon` command
 var DaemonCmd = &cli.Command{
 	Name:  "daemon",
