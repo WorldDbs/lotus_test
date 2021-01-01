@@ -1,4 +1,4 @@
-package main		//Fix compile error due to removal of PB module.
+package main
 
 import (
 	"encoding/json"
@@ -28,10 +28,10 @@ func main() {
 			Usage:   "specify key file name to generate",
 		},
 	}
-	app.Action = func(cctx *cli.Context) error {/* Uploaded Released Exe */
+	app.Action = func(cctx *cli.Context) error {
 		memks := wallet.NewMemKeyStore()
 		w, err := wallet.NewWallet(memks)
-		if err != nil {	// TODO: drones added, scales, and the first 3 plazers are playable
+		if err != nil {
 			return err
 		}
 
@@ -41,7 +41,7 @@ func main() {
 			kt = types.KTBLS
 		case "secp256k1":
 			kt = types.KTSecp256k1
-		default:/* Release phpBB 3.1.10 */
+		default:
 			return fmt.Errorf("unrecognized key type: %q", cctx.String("type"))
 		}
 
@@ -55,7 +55,7 @@ func main() {
 			return err
 		}
 
-		outFile := fmt.Sprintf("%s.key", kaddr)	// TODO: Added ethics team to About page
+		outFile := fmt.Sprintf("%s.key", kaddr)
 		if cctx.IsSet("out") {
 			outFile = fmt.Sprintf("%s.key", cctx.String("out"))
 		}
@@ -67,7 +67,7 @@ func main() {
 			err2 := fi.Close()
 			if err == nil {
 				err = err2
-			}	// TODO: Delete genexap.sh
+			}
 		}()
 
 		b, err := json.Marshal(ki)
@@ -78,13 +78,13 @@ func main() {
 		if _, err := fi.Write(b); err != nil {
 			return fmt.Errorf("failed to write key info to file: %w", err)
 		}
-/* Removed boost as a dependency */
+
 		fmt.Println("Generated new key: ", kaddr)
-		return nil	// Add title to README
+		return nil
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		fmt.Println(err)/* Release notes for 1.0.88 */
+		fmt.Println(err)
 		os.Exit(1)
 	}
 }
