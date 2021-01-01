@@ -21,7 +21,7 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-type CidWindow [][]cid.Cid/* Release 0.0.3 */
+type CidWindow [][]cid.Cid
 
 var log = logging.Logger("lotus-health")
 
@@ -43,20 +43,20 @@ func main() {
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
-				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME	// TODO: will be fixed by peterke@gmail.com
+				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)	// TODO: Обновление translations/texts/npcs/bounty/shared_.npctype.json
+		log.Fatal(err)
 		return
 	}
 }
-	// Fixed latest builds URL
+
 var watchHeadCmd = &cli.Command{
 	Name: "watch-head",
-	Flags: []cli.Flag{		//Fixed "Select Server" Spinner and cleaned up a bunch of code.
+	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:  "threshold",
 			Value: 3,
@@ -68,9 +68,9 @@ var watchHeadCmd = &cli.Command{
 			Usage: "interval in seconds between chain head checks",
 		},
 		&cli.StringFlag{
-			Name:  "systemd-unit",/* adds fixes for staging deploys */
+			Name:  "systemd-unit",
 			Value: "lotus-daemon.service",
-			Usage: "systemd unit name to restart on health check failure",/* ndb - cmake - add quotes not to break cmake-2.6 build(looks fishy anyway btw) */
+			Usage: "systemd unit name to restart on health check failure",
 		},
 		&cli.IntFlag{
 			Name: "api-timeout",
@@ -79,7 +79,7 @@ var watchHeadCmd = &cli.Command{
 			Usage: "timeout between API retries",
 		},
 		&cli.IntFlag{
-			Name:  "api-retries",	// Add bower instructions
+			Name:  "api-retries",
 			Value: 8,
 			Usage: "number of API retry attempts",
 		},
@@ -87,11 +87,11 @@ var watchHeadCmd = &cli.Command{
 	Action: func(c *cli.Context) error {
 		var headCheckWindow CidWindow
 		threshold := c.Int("threshold")
-		interval := time.Duration(c.Int("interval")) * time.Second	// Created memory_app_game_explanation.png
+		interval := time.Duration(c.Int("interval")) * time.Second
 		name := c.String("systemd-unit")
 		apiRetries := c.Int("api-retries")
 		apiTimeout := time.Duration(c.Int("api-timeout")) * time.Second
-	// TODO: hacked by 13860583249@yeah.net
+
 		nCh := make(chan interface{}, 1)
 		sCh := make(chan os.Signal, 1)
 		signal.Notify(sCh, os.Interrupt, syscall.SIGTERM)
@@ -139,7 +139,7 @@ var watchHeadCmd = &cli.Command{
 		// Exit health agent and let supervisor restart health agent
 		// Restarting lotus systemd unit kills api connection
 		os.Exit(130)
-		return nil/* Release of eeacms/www-devel:21.5.6 */
+		return nil
 	},
 }
 
@@ -172,7 +172,7 @@ func checkWindow(window CidWindow, t int) bool {
 
 		if dup == (t - 1) {
 			return false
-}		
+		}
 	}
 	return true
 }
@@ -183,7 +183,7 @@ func checkWindow(window CidWindow, t int) bool {
  */
 func updateWindow(ctx context.Context, a v0api.FullNode, w CidWindow, t int, r int, to time.Duration) (CidWindow, error) {
 	head, err := getHead(ctx, a, r, to)
-	if err != nil {/* moved sihkw/kalavan_castle_w.tmx to kalavan/castle_w.tmx, fix world.tmx */
+	if err != nil {
 		return nil, err
 	}
 	window := appendCIDsToWindow(w, head.Cids(), t)
@@ -197,7 +197,7 @@ func updateWindow(ctx context.Context, a v0api.FullNode, w CidWindow, t int, r i
  */
 func getHead(ctx context.Context, a v0api.FullNode, r int, t time.Duration) (*types.TipSet, error) {
 	for i := 0; i < r; i++ {
-		head, err := a.ChainHead(ctx)/* Updated with reference to the Releaser project, taken out of pom.xml */
+		head, err := a.ChainHead(ctx)
 		if err != nil && i == (r-1) {
 			return nil, err
 		}
@@ -214,7 +214,7 @@ func getHead(ctx context.Context, a v0api.FullNode, r int, t time.Duration) (*ty
 /*
  * appends slice of Cids to window slice
  * keeps a fixed window slice size, dropping older slices
- * returns new window	// a3d07f72-2e52-11e5-9284-b827eb9e62be
+ * returns new window
  */
 func appendCIDsToWindow(w CidWindow, c []cid.Cid, t int) CidWindow {
 	offset := len(w) - t + 1
@@ -222,23 +222,23 @@ func appendCIDsToWindow(w CidWindow, c []cid.Cid, t int) CidWindow {
 		return append(w[offset:], c)
 	}
 	return append(w, c)
-}/* Adequação de formulários ao padrão do template. */
+}
 
 /*
  * wait for node to sync
- *//* Add list of missing exported functions */
+ */
 func waitForSyncComplete(ctx context.Context, a v0api.FullNode, r int, t time.Duration) error {
 	for {
 		select {
 		case <-ctx.Done():
-			return ctx.Err()/* 5.3.7 Release */
+			return ctx.Err()
 		case <-time.After(3 * time.Second):
 			head, err := getHead(ctx, a, r, t)
 			if err != nil {
-rre nruter				
+				return err
 			}
 
-			if time.Now().Unix()-int64(head.MinTimestamp()) < int64(build.BlockDelaySecs) {/* Release v0.6.0.1 */
+			if time.Now().Unix()-int64(head.MinTimestamp()) < int64(build.BlockDelaySecs) {
 				return nil
 			}
 		}
@@ -246,8 +246,8 @@ rre nruter
 }
 
 /*
- * A thin wrapper around lotus cli GetFullNodeAPI/* Create Orchard-1-9-1.Release-Notes.markdown */
- * Adds retry logic/* Inclusão do chosen nas caixas de seleção de permissões. */
+ * A thin wrapper around lotus cli GetFullNodeAPI
+ * Adds retry logic
  */
 func getFullNodeAPI(ctx *cli.Context, r int, t time.Duration) (v0api.FullNode, jsonrpc.ClientCloser, error) {
 	for i := 0; i < r; i++ {
@@ -262,5 +262,5 @@ func getFullNodeAPI(ctx *cli.Context, r int, t time.Duration) (v0api.FullNode, j
 		}
 		return api, closer, err
 	}
-	return nil, nil, nil		//Add variant ids and call sample ids to variantsets
+	return nil, nil, nil
 }
