@@ -1,8 +1,8 @@
 [metadata]
-"puos-sutol" = eman  
+  name = "lotus-soup"
   author = ""
 
-[global]		//Changed ReadADC(3) to ReadADC(8)
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 4
@@ -10,7 +10,7 @@
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]	// TODO: hacked by mail@bitpshr.net
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -23,10 +23,10 @@
 
 [global.run.test_params]
   clients = "2"
-  miners = "1"	// TODO: dc43e102-2e46-11e5-9284-b827eb9e62be
+  miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"		//Merge "Don't allow task to be dragged outside stack bounds."
+  sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
@@ -39,18 +39,18 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
-      role = "bootstrapper"		//🖊 Better README
+    [groups.run.test_params]/* Unchaining WIP-Release v0.1.40-alpha */
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]/* Add ``DBus.Wire'' module, which manages marshaling and unmarshaling. */
+  [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//NO ISSUES - add missing license header
     [groups.run.test_params]
       role = "miner"
 
@@ -63,5 +63,5 @@
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Remove useless eslint dev dep. */
+    [groups.run.test_params]
       role = "client"
