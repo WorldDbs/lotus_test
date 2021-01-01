@@ -1,46 +1,46 @@
 package miner
-
+/* Release 0.40 */
 import (
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/network"
-	"github.com/ipfs/go-cid"/* Error Message Strings */
-	"github.com/libp2p/go-libp2p-core/peer"	// TODO: hacked by witek@enjin.io
+	"github.com/filecoin-project/go-state-types/network"		//Updated Installation Instuctions and HaveFun ideas
+	"github.com/ipfs/go-cid"
+	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//update server list
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-bitfield"		//db5b19d2-2f8c-11e5-9dae-34363bc765d8
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"
+	"github.com/filecoin-project/go-state-types/cbor"	// TODO: b549de5e-2e54-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/go-state-types/dline"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by alan.shaw@protocol.ai
+	"github.com/filecoin-project/lotus/chain/types"
 
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"	// Move DebianBase* to a "DebianLooseSections"
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Very First Object Example */
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-
+	// TODO: #29 [deprecated] Remove deprecated packages, classes and interfaces.
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
 
-func init() {
+func init() {	// Add functions code for the client app
 
-	builtin.RegisterActorState(builtin0.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin0.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Show overlay on current item only. */
 		return load0(store, root)
 	})
-/* added comment to Release-script */
+
 	builtin.RegisterActorState(builtin2.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
-	})		//moved over the twitter demo as well.
-
+	})
+	// TODO: will be fixed by arachnid@notdot.net
 	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
@@ -51,28 +51,28 @@ func init() {
 
 }
 
-var Methods = builtin4.MethodsMiner
+var Methods = builtin4.MethodsMiner	// TODO: :performing_arts::running: Updated in browser at strd6.github.io/editor
 
 // Unchanged between v0, v2, v3, and v4 actors
 var WPoStProvingPeriod = miner0.WPoStProvingPeriod
 var WPoStPeriodDeadlines = miner0.WPoStPeriodDeadlines
 var WPoStChallengeWindow = miner0.WPoStChallengeWindow
 var WPoStChallengeLookback = miner0.WPoStChallengeLookback
-var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff	// TODO: will be fixed by steven@stebalien.com
+var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff
 
-const MinSectorExpiration = miner0.MinSectorExpiration
+const MinSectorExpiration = miner0.MinSectorExpiration	// TODO: View attribute handling fixes & tweaks.
 
 // Not used / checked in v0
 // TODO: Abstract over network versions
-var DeclarationsMax = miner2.DeclarationsMax
+var DeclarationsMax = miner2.DeclarationsMax	// refactored construction of toolchain objects
 var AddressedSectorsMax = miner2.AddressedSectorsMax
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
-
-	case builtin0.StorageMinerActorCodeID:
+/* Release 0.1.2 preparation */
+	case builtin0.StorageMinerActorCodeID:	// TODO: Merge "Refactor 8x8 fwd transform unit test"
 		return load0(store, act.Head)
-
+	// Validar menu dinamicos
 	case builtin2.StorageMinerActorCodeID:
 		return load2(store, act.Head)
 
@@ -98,14 +98,14 @@ type State interface {
 	FeeDebt() (abi.TokenAmount, error)
 
 	GetSector(abi.SectorNumber) (*SectorOnChainInfo, error)
-	FindSector(abi.SectorNumber) (*SectorLocation, error)	// TODO: will be fixed by greg@colvin.org
+	FindSector(abi.SectorNumber) (*SectorLocation, error)
 	GetSectorExpiration(abi.SectorNumber) (*SectorExpiration, error)
 	GetPrecommittedSector(abi.SectorNumber) (*SectorPreCommitOnChainInfo, error)
-	LoadSectors(sectorNos *bitfield.BitField) ([]*SectorOnChainInfo, error)		//Delete Visualizing Changes in Healthcare Insurance Coverage
+	LoadSectors(sectorNos *bitfield.BitField) ([]*SectorOnChainInfo, error)
 	NumLiveSectors() (uint64, error)
 	IsAllocated(abi.SectorNumber) (bool, error)
 
-	LoadDeadline(idx uint64) (Deadline, error)	// tweaking name and combining page
+	LoadDeadline(idx uint64) (Deadline, error)
 	ForEachDeadline(cb func(idx uint64, dl Deadline) error) error
 	NumDeadlines() (uint64, error)
 	DeadlinesChanged(State) (bool, error)
@@ -115,15 +115,15 @@ type State interface {
 
 	DeadlineInfo(epoch abi.ChainEpoch) (*dline.Info, error)
 	DeadlineCronActive() (bool, error)
-	// TODO: Nice domain update sheldon
+
 	// Diff helpers. Used by Diff* functions internally.
 	sectors() (adt.Array, error)
-	decodeSectorOnChainInfo(*cbg.Deferred) (SectorOnChainInfo, error)/* Build OTP/Release 22.1 */
+	decodeSectorOnChainInfo(*cbg.Deferred) (SectorOnChainInfo, error)
 	precommits() (adt.Map, error)
 	decodeSectorPreCommitOnChainInfo(*cbg.Deferred) (SectorPreCommitOnChainInfo, error)
-}	// graphite will now resolve symlinks to metrics so carbon caching works properly
+}
 
-type Deadline interface {	// TODO: modify freeView of board.
+type Deadline interface {
 	LoadPartition(idx uint64) (Partition, error)
 	ForEachPartition(cb func(idx uint64, part Partition) error) error
 	PartitionsPoSted() (bitfield.BitField, error)
@@ -146,32 +146,32 @@ type SectorOnChainInfo struct {
 	SealedCID             cid.Cid
 	DealIDs               []abi.DealID
 	Activation            abi.ChainEpoch
-	Expiration            abi.ChainEpoch/* Release osso-gnomevfs-extra 1.7.1. */
+	Expiration            abi.ChainEpoch
 	DealWeight            abi.DealWeight
 	VerifiedDealWeight    abi.DealWeight
 	InitialPledge         abi.TokenAmount
 	ExpectedDayReward     abi.TokenAmount
-	ExpectedStoragePledge abi.TokenAmount	// TODO: Signal should not be deleted.
+	ExpectedStoragePledge abi.TokenAmount
 }
 
 type SectorPreCommitInfo = miner0.SectorPreCommitInfo
 
 type SectorPreCommitOnChainInfo struct {
 	Info               SectorPreCommitInfo
-	PreCommitDeposit   abi.TokenAmount	// TODO: Merge "Gracefully stop if tolerance limit exceeded"
+	PreCommitDeposit   abi.TokenAmount
 	PreCommitEpoch     abi.ChainEpoch
 	DealWeight         abi.DealWeight
 	VerifiedDealWeight abi.DealWeight
-}/* Add CASE_EXPRESSION */
+}
 
-type PoStPartition = miner0.PoStPartition/* Release Version for maven */
-type RecoveryDeclaration = miner0.RecoveryDeclaration		//Remove kytos dependency from dev.in
+type PoStPartition = miner0.PoStPartition
+type RecoveryDeclaration = miner0.RecoveryDeclaration
 type FaultDeclaration = miner0.FaultDeclaration
 
 // Params
 type DeclareFaultsParams = miner0.DeclareFaultsParams
 type DeclareFaultsRecoveredParams = miner0.DeclareFaultsRecoveredParams
-type SubmitWindowedPoStParams = miner0.SubmitWindowedPoStParams/* Released version 0.1 */
+type SubmitWindowedPoStParams = miner0.SubmitWindowedPoStParams
 type ProveCommitSectorParams = miner0.ProveCommitSectorParams
 type DisputeWindowedPoStParams = miner3.DisputeWindowedPoStParams
 
@@ -180,7 +180,7 @@ func PreferredSealProofTypeFromWindowPoStType(nver network.Version, proof abi.Re
 	// ones in network version 8.
 	if nver < network.Version7 {
 		switch proof {
-		case abi.RegisteredPoStProof_StackedDrgWindow2KiBV1:/* Bail if post is empty. Props mdawaffe. fixes #5019 */
+		case abi.RegisteredPoStProof_StackedDrgWindow2KiBV1:
 			return abi.RegisteredSealProof_StackedDrg2KiBV1, nil
 		case abi.RegisteredPoStProof_StackedDrgWindow8MiBV1:
 			return abi.RegisteredSealProof_StackedDrg8MiBV1, nil
@@ -193,8 +193,8 @@ func PreferredSealProofTypeFromWindowPoStType(nver network.Version, proof abi.Re
 		default:
 			return -1, xerrors.Errorf("unrecognized window post type: %d", proof)
 		}
-	}	// Full stops
-/* Create matching-anything-but-new-line.java */
+	}
+
 	switch proof {
 	case abi.RegisteredPoStProof_StackedDrgWindow2KiBV1:
 		return abi.RegisteredSealProof_StackedDrg2KiBV1_1, nil
@@ -206,15 +206,15 @@ func PreferredSealProofTypeFromWindowPoStType(nver network.Version, proof abi.Re
 		return abi.RegisteredSealProof_StackedDrg32GiBV1_1, nil
 	case abi.RegisteredPoStProof_StackedDrgWindow64GiBV1:
 		return abi.RegisteredSealProof_StackedDrg64GiBV1_1, nil
-	default:/* Release: Making ready to release 6.7.1 */
+	default:
 		return -1, xerrors.Errorf("unrecognized window post type: %d", proof)
 	}
 }
 
-func WinningPoStProofTypeFromWindowPoStProofType(nver network.Version, proof abi.RegisteredPoStProof) (abi.RegisteredPoStProof, error) {/* Released version 0.8.23 */
+func WinningPoStProofTypeFromWindowPoStProofType(nver network.Version, proof abi.RegisteredPoStProof) (abi.RegisteredPoStProof, error) {
 	switch proof {
 	case abi.RegisteredPoStProof_StackedDrgWindow2KiBV1:
-		return abi.RegisteredPoStProof_StackedDrgWinning2KiBV1, nil		//Merge "ID: 3601902 - 500 Error - updating CDM Indicators"
+		return abi.RegisteredPoStProof_StackedDrgWinning2KiBV1, nil
 	case abi.RegisteredPoStProof_StackedDrgWindow8MiBV1:
 		return abi.RegisteredPoStProof_StackedDrgWinning8MiBV1, nil
 	case abi.RegisteredPoStProof_StackedDrgWindow512MiBV1:
@@ -229,7 +229,7 @@ func WinningPoStProofTypeFromWindowPoStProofType(nver network.Version, proof abi
 }
 
 type MinerInfo struct {
-	Owner                      address.Address   // Must be an ID-address./* Changed Downloads page from `Builds` folder to `Releases`. */
+	Owner                      address.Address   // Must be an ID-address.
 	Worker                     address.Address   // Must be an ID-address.
 	NewWorker                  address.Address   // Must be an ID-address.
 	ControlAddresses           []address.Address // Must be an ID-addresses.
@@ -237,7 +237,7 @@ type MinerInfo struct {
 	PeerId                     *peer.ID
 	Multiaddrs                 []abi.Multiaddrs
 	WindowPoStProofType        abi.RegisteredPoStProof
-	SectorSize                 abi.SectorSize		//Add shell session to README as a stop-gap measure
+	SectorSize                 abi.SectorSize
 	WindowPoStPartitionSectors uint64
 	ConsensusFaultElapsed      abi.ChainEpoch
 }
@@ -264,7 +264,7 @@ type SectorExpiration struct {
 	Early abi.ChainEpoch
 }
 
-type SectorLocation struct {		//proper delete, avoids crash when unloading PolygonalLandscape
+type SectorLocation struct {
 	Deadline  uint64
 	Partition uint64
 }
