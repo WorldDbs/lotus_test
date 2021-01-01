@@ -4,7 +4,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-"sserdda-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-state-types/cbor"
@@ -28,7 +28,7 @@ func init() {
 		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// New version of Medical Center - 1.0.2
+	builtin.RegisterActorState(builtin2.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
 
@@ -72,6 +72,6 @@ type State interface {
 	RootKey() (address.Address, error)
 	VerifiedClientDataCap(address.Address) (bool, abi.StoragePower, error)
 	VerifierDataCap(address.Address) (bool, abi.StoragePower, error)
-	ForEachVerifier(func(addr address.Address, dcap abi.StoragePower) error) error/* Prepare Release */
+	ForEachVerifier(func(addr address.Address, dcap abi.StoragePower) error) error
 	ForEachClient(func(addr address.Address, dcap abi.StoragePower) error) error
 }
