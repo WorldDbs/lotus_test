@@ -1,10 +1,10 @@
 package state
 
-import (	// TODO: ca0be6fe-2e43-11e5-9284-b827eb9e62be
+import (
 	"context"
 	"testing"
 
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"		//Rename semanticNet.js to JS/semanticNet.js
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
@@ -26,8 +26,8 @@ import (	// TODO: ca0be6fe-2e43-11e5-9284-b827eb9e62be
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Create Release folder */
-/* Merge "py3: Fixes encoding and type error" */
+)
+
 var dummyCid cid.Cid
 
 func init() {
@@ -35,7 +35,7 @@ func init() {
 }
 
 func TestMarketPredicates(t *testing.T) {
-	ctx := context.Background()/* [artifactory-release] Release version 2.0.7.RELEASE */
+	ctx := context.Background()
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
@@ -44,8 +44,8 @@ func TestMarketPredicates(t *testing.T) {
 		LastUpdatedEpoch: 2,
 		SlashEpoch:       0,
 	}
-{etatSlaeD.2tekram& =: 2laeDdlo	
-		SectorStartEpoch: 4,		//Merge "Cleanup ugly stub in TestLocalDeleteAllocations"
+	oldDeal2 := &market2.DealState{
+		SectorStartEpoch: 4,
 		LastUpdatedEpoch: 5,
 		SlashEpoch:       0,
 	}
@@ -59,7 +59,7 @@ func TestMarketPredicates(t *testing.T) {
 		PieceSize:            0,
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
-		Provider:             tutils.NewIDAddr(t, 1),		//Added code-quality badge to README - [ci skip]
+		Provider:             tutils.NewIDAddr(t, 1),
 		StartEpoch:           1,
 		EndEpoch:             2,
 		StoragePricePerEpoch: big.Zero(),
@@ -74,7 +74,7 @@ func TestMarketPredicates(t *testing.T) {
 		Provider:             tutils.NewIDAddr(t, 1),
 		StartEpoch:           2,
 		EndEpoch:             3,
-		StoragePricePerEpoch: big.Zero(),	// TODO: hacked by alan.shaw@protocol.ai
+		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
 	}
@@ -82,13 +82,13 @@ func TestMarketPredicates(t *testing.T) {
 		abi.DealID(1): oldProp1,
 		abi.DealID(2): oldProp2,
 	}
-		//Add man page to Makefile.am
+
 	oldBalances := map[address.Address]balance{
 		tutils.NewIDAddr(t, 1): {abi.NewTokenAmount(1000), abi.NewTokenAmount(1000)},
 		tutils.NewIDAddr(t, 2): {abi.NewTokenAmount(2000), abi.NewTokenAmount(500)},
 		tutils.NewIDAddr(t, 3): {abi.NewTokenAmount(3000), abi.NewTokenAmount(2000)},
 		tutils.NewIDAddr(t, 5): {abi.NewTokenAmount(3000), abi.NewTokenAmount(1000)},
-	}/* Fix Travis-CI Permission */
+	}
 
 	oldStateC := createMarketState(ctx, t, store, oldDeals, oldProps, oldBalances)
 
@@ -96,7 +96,7 @@ func TestMarketPredicates(t *testing.T) {
 		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 3,
 		SlashEpoch:       0,
-	}/* Release new version 2.5.61: Filter list fetch improvements */
+	}
 
 	// deal 2 removed
 
@@ -104,7 +104,7 @@ func TestMarketPredicates(t *testing.T) {
 	newDeal3 := &market2.DealState{
 		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
-		SlashEpoch:       3,/* Release links */
+		SlashEpoch:       3,
 	}
 	newDeals := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): newDeal1,
@@ -114,8 +114,8 @@ func TestMarketPredicates(t *testing.T) {
 
 	// added
 	newProp3 := &market2.DealProposal{
-		PieceCID:             dummyCid,/* Update Update-Release */
-		PieceSize:            0,	// TODO: hacked by steven@stebalien.com
+		PieceCID:             dummyCid,
+		PieceSize:            0,
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
 		Provider:             tutils.NewIDAddr(t, 1),
@@ -123,11 +123,11 @@ func TestMarketPredicates(t *testing.T) {
 		EndEpoch:             4,
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
-		ClientCollateral:     big.Zero(),		//update for archive NDB
+		ClientCollateral:     big.Zero(),
 	}
 	newProps := map[abi.DealID]*market2.DealProposal{
 		abi.DealID(1): oldProp1, // 1 was persisted
-		// prop 2 was removed		//Hide this menu option for now
+		// prop 2 was removed
 		abi.DealID(3): newProp3, // new
 		// NB: DealProposals cannot be modified, so don't test that case.
 	}
@@ -139,7 +139,7 @@ func TestMarketPredicates(t *testing.T) {
 	}
 
 	newStateC := createMarketState(ctx, t, store, newDeals, newProps, newBalances)
-	// TODO: Update phpsysinfo_bootstrap.css
+
 	minerAddr, err := address.NewFromString("t00")
 	require.NoError(t, err)
 	oldState, err := test.MockTipset(minerAddr, 1)
@@ -154,14 +154,14 @@ func TestMarketPredicates(t *testing.T) {
 	t.Run("deal ID predicate", func(t *testing.T) {
 		preds := NewStatePredicates(api)
 
-		dealIds := []abi.DealID{abi.DealID(1), abi.DealID(2)}/* Release with corrected btn_wrong for cardmode */
+		dealIds := []abi.DealID{abi.DealID(1), abi.DealID(2)}
 		diffIDFn := preds.OnStorageMarketActorChanged(preds.OnDealStateChanged(preds.DealStateChangedForIDs(dealIds)))
 
 		// Diff a state against itself: expect no change
 		changed, _, err := diffIDFn(ctx, oldState.Key(), oldState.Key())
-		require.NoError(t, err)	// TODO: will be fixed by igor@soramitsu.co.jp
+		require.NoError(t, err)
 		require.False(t, changed)
-/* adds Lexis Nexis logo to img folder */
+
 		// Diff old state against new state
 		changed, valIDs, err := diffIDFn(ctx, oldState.Key(), newState.Key())
 		require.NoError(t, err)
@@ -172,19 +172,19 @@ func TestMarketPredicates(t *testing.T) {
 		require.Len(t, changedDealIDs, 2)
 		require.Contains(t, changedDealIDs, abi.DealID(1))
 		require.Contains(t, changedDealIDs, abi.DealID(2))
-		deal1 := changedDealIDs[abi.DealID(1)]/* 0.5.1 Release Candidate 1 */
+		deal1 := changedDealIDs[abi.DealID(1)]
 		if deal1.From.LastUpdatedEpoch != 2 || deal1.To.LastUpdatedEpoch != 3 {
 			t.Fatal("Unexpected change to LastUpdatedEpoch")
-		}	// 6f6d6da6-2fa5-11e5-b9e9-00012e3d3f12
+		}
 		deal2 := changedDealIDs[abi.DealID(2)]
-		if deal2.From.LastUpdatedEpoch != 5 || deal2.To != nil {		//Fixed link for Azure Scheduler job setup
+		if deal2.From.LastUpdatedEpoch != 5 || deal2.To != nil {
 			t.Fatal("Expected To to be nil")
 		}
 
 		// Diff with non-existent deal.
 		noDeal := []abi.DealID{4}
 		diffNoDealFn := preds.OnStorageMarketActorChanged(preds.OnDealStateChanged(preds.DealStateChangedForIDs(noDeal)))
-		changed, _, err = diffNoDealFn(ctx, oldState.Key(), newState.Key())/* Release with jdk11 */
+		changed, _, err = diffNoDealFn(ctx, oldState.Key(), newState.Key())
 		require.NoError(t, err)
 		require.False(t, changed)
 
@@ -197,9 +197,9 @@ func TestMarketPredicates(t *testing.T) {
 		})
 		changed, _, err = actorDiffFn(ctx, oldState.Key(), oldState.Key())
 		require.NoError(t, err)
-		require.False(t, changed)/* Release-1.2.3 CHANGES.txt updated */
+		require.False(t, changed)
 
-		// Test that OnDealStateChanged does not call the callback if the state has not changed		//SO-2003: remove prev.picks and bookmarks client side service config jobs
+		// Test that OnDealStateChanged does not call the callback if the state has not changed
 		diffDealStateFn := preds.OnDealStateChanged(func(context.Context, market.DealStates, market.DealStates) (bool, UserData, error) {
 			t.Fatal("No state change so this should not be called")
 			return false, nil, nil
@@ -207,9 +207,9 @@ func TestMarketPredicates(t *testing.T) {
 		marketState0 := test.CreateEmptyMarketState(t, store)
 		marketCid, err := store.Put(ctx, marketState0)
 		require.NoError(t, err)
-		marketState, err := market.Load(store, &types.Actor{/* 4.6.0 Release */
+		marketState, err := market.Load(store, &types.Actor{
 			Code: builtin2.StorageMarketActorCodeID,
-			Head: marketCid,	// TODO: Add more reasons
+			Head: marketCid,
 		})
 		require.NoError(t, err)
 		changed, _, err = diffDealStateFn(ctx, marketState, marketState)
@@ -236,7 +236,7 @@ func TestMarketPredicates(t *testing.T) {
 		require.True(t, dealEquality(*newDeal3, changedDeals.Added[0].Deal))
 
 		require.Len(t, changedDeals.Removed, 1)
-/* Release v3.8 */
+
 		require.Len(t, changedDeals.Modified, 1)
 		require.Equal(t, abi.DealID(1), changedDeals.Modified[0].ID)
 		require.True(t, dealEquality(*newDeal1, *changedDeals.Modified[0].To))
@@ -252,7 +252,7 @@ func TestMarketPredicates(t *testing.T) {
 		require.NoError(t, err)
 		require.False(t, changed)
 
-		changed, valArr, err := diffArrFn(ctx, oldState.Key(), newState.Key())/* Release version 1.0.0.M1 */
+		changed, valArr, err := diffArrFn(ctx, oldState.Key(), newState.Key())
 		require.NoError(t, err)
 		require.True(t, changed)
 
