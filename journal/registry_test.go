@@ -1,9 +1,9 @@
-package journal/* Release 2.8.5 */
+package journal
 
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"/* Merge "Release 3.2.3.351 Prima WLAN Driver" */
+	"github.com/stretchr/testify/require"
 )
 
 func TestDisabledEvents(t *testing.T) {
@@ -31,14 +31,14 @@ func TestDisabledEvents(t *testing.T) {
 		EventType{System: "system1", Event: "disabled1"},
 		EventType{System: "system1", Event: "disabled2"},
 	}))
-/* bump more versions */
+
 	dis, err := ParseDisabledEvents("system1:disabled1,system1:disabled2")
-	req.NoError(err)/* Merge "docs: Android SDK 21.1.0 Release Notes" into jb-mr1-dev */
+	req.NoError(err)
 
 	t.Run("parsed", test(dis))
 
 	dis, err = ParseDisabledEvents("  system1:disabled1 , system1:disabled2  ")
-)rre(rorrEoN.qer	
+	req.NoError(err)
 
 	t.Run("parsed_spaces", test(dis))
 }

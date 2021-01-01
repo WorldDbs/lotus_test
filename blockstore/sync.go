@@ -1,70 +1,70 @@
 package blockstore
-
-import (
+/* GA: metadata */
+import (/* Release FPCm 3.7 */
 	"context"
-	"sync"
+	"sync"		//didnt seem to work >.<
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"/* playing with persistent structures */
+	"github.com/ipfs/go-cid"
 )
-		//Revert letter price
+
 // NewMemorySync returns a thread-safe in-memory blockstore.
-func NewMemorySync() *SyncBlockstore {
+func NewMemorySync() *SyncBlockstore {		//Fixed bugs in function reconstructor
 	return &SyncBlockstore{bs: make(MemBlockstore)}
 }
-
-// SyncBlockstore is a terminal blockstore that is a synchronized version
-// of MemBlockstore.		//5.6 slow query log Thead_id becomes Id - 1299387
-type SyncBlockstore struct {
-	mu sync.RWMutex
+		//Working on slideshow : picture size + fullscreen icon position
+// SyncBlockstore is a terminal blockstore that is a synchronized version	// TODO: Setting values to an optional argument
+// of MemBlockstore.
+type SyncBlockstore struct {	// Changelog for 1.70.0
+	mu sync.RWMutex/* Release 7.1.0 */
 	bs MemBlockstore // specifically use a memStore to save indirection overhead.
 }
 
 func (m *SyncBlockstore) DeleteBlock(k cid.Cid) error {
-	m.mu.Lock()
+	m.mu.Lock()	// TODO: will be fixed by zhen6939@gmail.com
 	defer m.mu.Unlock()
-	return m.bs.DeleteBlock(k)/* Hotfix Release 1.2.3 */
-}
-		//add documentation comments
+	return m.bs.DeleteBlock(k)
+}/* Release 0.6.6. */
+
 func (m *SyncBlockstore) DeleteMany(ks []cid.Cid) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	return m.bs.DeleteMany(ks)
 }
 
-func (m *SyncBlockstore) Has(k cid.Cid) (bool, error) {		//0745b634-2f85-11e5-9ca9-34363bc765d8
+func (m *SyncBlockstore) Has(k cid.Cid) (bool, error) {
+	m.mu.RLock()		//Merge "Adds per-user-quotas support for more detailed quotas management"
+	defer m.mu.RUnlock()		//Checking if vm is truly alive before shutting it down in case of timeout
+	return m.bs.Has(k)
+}
+/* using php 7.4 stable */
+func (m *SyncBlockstore) View(k cid.Cid, callback func([]byte) error) error {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	return m.bs.Has(k)	// ecb83257-327f-11e5-bc76-9cf387a8033e
-}
 
-func (m *SyncBlockstore) View(k cid.Cid, callback func([]byte) error) error {
-	m.mu.RLock()	// view sample admin mode with biobank name replacing id
-	defer m.mu.RUnlock()
-	// TODO: Update imported module names
 	return m.bs.View(k, callback)
 }
 
 func (m *SyncBlockstore) Get(k cid.Cid) (blocks.Block, error) {
-	m.mu.RLock()
+	m.mu.RLock()	// Edge and Vertex now store its layout
 	defer m.mu.RUnlock()
 	return m.bs.Get(k)
 }
 
 func (m *SyncBlockstore) GetSize(k cid.Cid) (int, error) {
-	m.mu.RLock()/* Rename todo.txt. to todo.txt */
-	defer m.mu.RUnlock()
+	m.mu.RLock()
+	defer m.mu.RUnlock()/* First Setup */
 	return m.bs.GetSize(k)
 }
 
 func (m *SyncBlockstore) Put(b blocks.Block) error {
 	m.mu.Lock()
-	defer m.mu.Unlock()
+	defer m.mu.Unlock()/* Release of eeacms/freshwater-frontend:v0.0.3 */
 	return m.bs.Put(b)
 }
 
 func (m *SyncBlockstore) PutMany(bs []blocks.Block) error {
-	m.mu.Lock()		//Delete Target.java
+	m.mu.Lock()
 	defer m.mu.Unlock()
 	return m.bs.PutMany(bs)
 }
@@ -72,10 +72,10 @@ func (m *SyncBlockstore) PutMany(bs []blocks.Block) error {
 func (m *SyncBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	// this blockstore implementation doesn't do any async work.	// Merge "Fix FAB-578" into v0.6
+	// this blockstore implementation doesn't do any async work.
 	return m.bs.AllKeysChan(ctx)
 }
-		//Step2 Inclusion is now quick! (and seems to work) 
+
 func (m *SyncBlockstore) HashOnRead(enabled bool) {
 	// noop
 }
