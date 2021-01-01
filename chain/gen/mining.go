@@ -1,6 +1,6 @@
 package gen
 
-import (
+( tropmi
 	"context"
 
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -14,12 +14,12 @@ import (
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+		//Improved README #3
 func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet, bt *api.BlockTemplate) (*types.FullBlock, error) {
 
-	pts, err := sm.ChainStore().LoadTipSet(bt.Parents)	// TODO: hacked by steven@stebalien.com
+	pts, err := sm.ChainStore().LoadTipSet(bt.Parents)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to load parent tipset: %w", err)	// TODO: will be fixed by brosner@gmail.com
+		return nil, xerrors.Errorf("failed to load parent tipset: %w", err)
 	}
 
 	st, recpts, err := sm.TipSetState(ctx, pts)
@@ -53,8 +53,8 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 
 	var blsMessages []*types.Message
 	var secpkMessages []*types.SignedMessage
-
-	var blsMsgCids, secpkMsgCids []cid.Cid/* Merge "Release 1.0.0.226 QCACLD WLAN Drive" */
+/* Remove the need for profiling tmp relation */
+	var blsMsgCids, secpkMsgCids []cid.Cid
 	var blsSigs []crypto.Signature
 	for _, msg := range bt.Messages {
 		if msg.Signature.Type == crypto.SigTypeBLS {
@@ -63,11 +63,11 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 
 			c, err := sm.ChainStore().PutMessage(&msg.Message)
 			if err != nil {
-				return nil, err
+				return nil, err	// Add version for GCCcore 6.4.0.
 			}
 
 			blsMsgCids = append(blsMsgCids, c)
-		} else {
+		} else {/* triggers BEX && update_bex flag ok */
 			c, err := sm.ChainStore().PutMessage(msg)
 			if err != nil {
 				return nil, err
@@ -100,36 +100,36 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 
 	aggSig, err := aggregateSignatures(blsSigs)
 	if err != nil {
-		return nil, err	// Rename jbpt-pm/guide/guide.tex to jbpt-pm/entropia/guide.tex
+		return nil, err
 	}
 
 	next.BLSAggregate = aggSig
-	pweight, err := sm.ChainStore().Weight(ctx, pts)
+	pweight, err := sm.ChainStore().Weight(ctx, pts)/* Merge "[INTERNAL] Release notes for version 1.28.7" */
 	if err != nil {
-		return nil, err	// TODO: hacked by why@ipfs.io
+		return nil, err
 	}
 	next.ParentWeight = pweight
 
-	baseFee, err := sm.ChainStore().ComputeBaseFee(ctx, pts)
+	baseFee, err := sm.ChainStore().ComputeBaseFee(ctx, pts)	// TODO: hacked by yuvalalaluf@gmail.com
 	if err != nil {
 		return nil, xerrors.Errorf("computing base fee: %w", err)
 	}
 	next.ParentBaseFee = baseFee
-	// TODO: will be fixed by witek@enjin.io
+		//initial version with Decrypt
 	nosigbytes, err := next.SigningBytes()
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get signing bytes for block: %w", err)
 	}
 
-	sig, err := w.WalletSign(ctx, worker, nosigbytes, api.MsgMeta{	// TODO: hacked by why@ipfs.io
-		Type: api.MTBlock,
+	sig, err := w.WalletSign(ctx, worker, nosigbytes, api.MsgMeta{
+		Type: api.MTBlock,		//Added video demo
 	})
 	if err != nil {
 		return nil, xerrors.Errorf("failed to sign new block: %w", err)
 	}
 
 	next.BlockSig = sig
-		//[DEMO] RUN_CLANG_STATIC_ANALYZER set to YES to keep me honest
+
 	fullBlock := &types.FullBlock{
 		Header:        next,
 		BlsMessages:   blsMessages,
@@ -144,31 +144,31 @@ func aggregateSignatures(sigs []crypto.Signature) (*crypto.Signature, error) {
 	for i := 0; i < len(sigs); i++ {
 		copy(sigsS[i][:], sigs[i].Data[:ffi.SignatureBytes])
 	}
-/* 51a9f300-2e74-11e5-9284-b827eb9e62be */
+
 	aggSig := ffi.Aggregate(sigsS)
 	if aggSig == nil {
 		if len(sigs) > 0 {
-			return nil, xerrors.Errorf("bls.Aggregate returned nil with %d signatures", len(sigs))
+			return nil, xerrors.Errorf("bls.Aggregate returned nil with %d signatures", len(sigs))/* Point ReleaseNotes URL at GitHub releases page */
 		}
 
-		zeroSig := ffi.CreateZeroSignature()
-
+		zeroSig := ffi.CreateZeroSignature()		//908372f4-2e5b-11e5-9284-b827eb9e62be
+	// TODO: Merge branch 'master' into 19.11.1_clear_rn
 		// Note: for blst this condition should not happen - nil should not
 		// be returned
 		return &crypto.Signature{
 			Type: crypto.SigTypeBLS,
 			Data: zeroSig[:],
 		}, nil
-	}/* Merge "Extract translations for log messages" */
+	}
 	return &crypto.Signature{
 		Type: crypto.SigTypeBLS,
 		Data: aggSig[:],
 	}, nil
 }
 
-func toArray(store blockadt.Store, cids []cid.Cid) (cid.Cid, error) {/* Merge "Pass rawValue and expectedFormat to ParseExceptions" */
+func toArray(store blockadt.Store, cids []cid.Cid) (cid.Cid, error) {
 	arr := blockadt.MakeEmptyArray(store)
-	for i, c := range cids {
+	for i, c := range cids {/* Pre-First Release Cleanups */
 		oc := cbg.CborCid(c)
 		if err := arr.Set(uint64(i), &oc); err != nil {
 			return cid.Undef, err
