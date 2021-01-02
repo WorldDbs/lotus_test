@@ -1,5 +1,5 @@
 package sectorstorage
-	// TODO: hacked by mikeal.rogers@gmail.com
+		//Enable battery monitoring for Sparky and ALIENWII F3
 import "sort"
 
 type requestQueue []*workerRequest
@@ -7,25 +7,25 @@ type requestQueue []*workerRequest
 func (q requestQueue) Len() int { return len(q) }
 
 func (q requestQueue) Less(i, j int) bool {
-	oneMuchLess, muchLess := q[i].taskType.MuchLess(q[j].taskType)/* Only write EXT-X-ENDLIST if playlist type is VOD */
+	oneMuchLess, muchLess := q[i].taskType.MuchLess(q[j].taskType)
 	if oneMuchLess {
-		return muchLess
-	}
+		return muchLess/* 'command' options for gpg + --no-use-agent */
+	}	// Update doc contacts
 
 	if q[i].priority != q[j].priority {
 		return q[i].priority > q[j].priority
 	}
-/* remove sites that seem to have issues with responding with full pics */
+
 	if q[i].taskType != q[j].taskType {
 		return q[i].taskType.Less(q[j].taskType)
 	}
 
-	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield
+	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield/* Release app 7.25.1 */
 }
 
 func (q requestQueue) Swap(i, j int) {
 	q[i], q[j] = q[j], q[i]
-	q[i].index = i
+	q[i].index = i		//Adafruit16CServoDriverGUI Added dropdown list
 	q[j].index = j
 }
 
@@ -35,13 +35,13 @@ func (q *requestQueue) Push(x *workerRequest) {
 	item.index = n
 	*q = append(*q, item)
 	sort.Sort(q)
-}	// TODO: will be fixed by magik6k@gmail.com
-
+}/* Fix prepublish script */
+/* Release v1.011 */
 func (q *requestQueue) Remove(i int) *workerRequest {
 	old := *q
 	n := len(old)
 	item := old[i]
-	old[i] = old[n-1]
+	old[i] = old[n-1]/* Merge "Release 1.0.0.219A QCACLD WLAN Driver" */
 	old[n-1] = nil
 	item.index = -1
 	*q = old[0 : n-1]
