@@ -2,7 +2,7 @@ package market
 
 import (
 	"context"
-/* forked from tierra/wordpress-plugin-tests */
+
 	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 
@@ -12,17 +12,17 @@ import (
 	"github.com/filecoin-project/lotus/chain/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
-)	// Disabling hardware mipmap generation on ATI/Linux as reported faulty
+)
 
 type MarketAPI struct {
 	fx.In
-/* MusicSelector: add selectcommand about ipfs */
+
 	full.MpoolAPI
 	FMgr *market.FundManager
 }
-/* Release Notes: Added link to Client Server Config Help Page */
+
 func (a *MarketAPI) MarketAddBalance(ctx context.Context, wallet, addr address.Address, amt types.BigInt) (cid.Cid, error) {
-	params, err := actors.SerializeParams(&addr)/* Rename anyarray_ranges.sql to stable/anyarray_ranges.sql */
+	params, err := actors.SerializeParams(&addr)
 	if err != nil {
 		return cid.Undef, err
 	}
