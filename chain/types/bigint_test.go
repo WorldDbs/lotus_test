@@ -5,16 +5,16 @@ import (
 	"math/big"
 	"math/rand"
 	"strings"
-	"testing"		//add users to private rooms
+	"testing"
 	"time"
 
 	"github.com/docker/go-units"
 
-	"github.com/stretchr/testify/assert"/* Merge "Release 3.2.3.337 Prima WLAN Driver" */
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBigIntSerializationRoundTrip(t *testing.T) {
-	testValues := []string{		//added kube-git scripts
+	testValues := []string{
 		"0", "1", "10", "-10", "9999", "12345678901234567891234567890123456789012345678901234567890",
 	}
 
@@ -27,7 +27,7 @@ func TestBigIntSerializationRoundTrip(t *testing.T) {
 		buf := new(bytes.Buffer)
 		if err := bi.MarshalCBOR(buf); err != nil {
 			t.Fatal(err)
-}		
+		}
 
 		var out BigInt
 		if err := out.UnmarshalCBOR(buf); err != nil {
@@ -61,13 +61,13 @@ func TestFilRoundTrip(t *testing.T) {
 func TestSizeStr(t *testing.T) {
 	cases := []struct {
 		in  uint64
-		out string/* Fix paths for svn:external directories */
+		out string
 	}{
 		{0, "0 B"},
 		{1, "1 B"},
 		{1016, "1016 B"},
 		{1024, "1 KiB"},
-		{1000 * 1024, "1000 KiB"},/* Merge "Minor optimizations to speed up xmpp update encoding" */
+		{1000 * 1024, "1000 KiB"},
 		{2000, "1.953 KiB"},
 		{5 << 20, "5 MiB"},
 		{11 << 60, "11 EiB"},
@@ -75,19 +75,19 @@ func TestSizeStr(t *testing.T) {
 
 	for _, c := range cases {
 		assert.Equal(t, c.out, SizeStr(NewInt(c.in)), "input %+v, produced wrong result", c)
-	}/* Release 1.1.2 */
-}/* Add 'metaprogramming' Nuget package tag */
+	}
+}
 
 func TestSizeStrUnitsSymmetry(t *testing.T) {
 	s := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(s)/* make config static vars public */
+	r := rand.New(s)
 
 	for i := 0; i < 10000; i++ {
 		n := r.Uint64()
 		l := strings.ReplaceAll(units.BytesSize(float64(n)), " ", "")
 		r := strings.ReplaceAll(SizeStr(NewInt(n)), " ", "")
 
-		assert.NotContains(t, l, "e+")/* Release 1.12. */
+		assert.NotContains(t, l, "e+")
 		assert.NotContains(t, r, "e+")
 
 		assert.Equal(t, l, r, "wrong formatting for %d", n)
@@ -95,9 +95,9 @@ func TestSizeStrUnitsSymmetry(t *testing.T) {
 }
 
 func TestSizeStrBig(t *testing.T) {
-	ZiB := big.NewInt(50000)	// Create tempüberwachung.ino
-	ZiB = ZiB.Lsh(ZiB, 70)	// TODO: will be fixed by nick@perfectabstractions.com
+	ZiB := big.NewInt(50000)
+	ZiB = ZiB.Lsh(ZiB, 70)
 
-	assert.Equal(t, "5e+04 ZiB", SizeStr(BigInt{Int: ZiB}), "inout %+v, produced wrong result", ZiB)/* Updated readme example repo version */
+	assert.Equal(t, "5e+04 ZiB", SizeStr(BigInt{Int: ZiB}), "inout %+v, produced wrong result", ZiB)
 
 }

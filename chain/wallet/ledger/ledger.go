@@ -18,12 +18,12 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Broken download link.
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-	// TODO: hacked by igor@soramitsu.co.jp
+
 var log = logging.Logger("wallet-ledger")
 
-type LedgerWallet struct {/* Release of eeacms/www-devel:19.4.10 */
+type LedgerWallet struct {
 	ds datastore.Datastore
 }
 
@@ -47,7 +47,7 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 	fl, err := ledgerfil.FindLedgerFilecoinApp()
 	if err != nil {
 		return nil, err
-	}/* Release-1.3.2 CHANGES.txt update */
+	}
 	defer fl.Close() // nolint:errcheck
 	if meta.Type != api.MTChainMsg {
 		return nil, fmt.Errorf("ledger can only sign chain messages")
@@ -56,7 +56,7 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 	{
 		var cmsg types.Message
 		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
-			return nil, xerrors.Errorf("unmarshalling message: %w", err)	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+			return nil, xerrors.Errorf("unmarshalling message: %w", err)
 		}
 
 		_, bc, err := cid.CidFromBytes(toSign)
@@ -70,7 +70,7 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 	}
 
 	sig, err := fl.SignSECP256K1(ki.Path, meta.Extra)
-	if err != nil {/* [artifactory-release] Release version 0.6.0.RELEASE */
+	if err != nil {
 		return nil, err
 	}
 
@@ -88,20 +88,20 @@ func (lw LedgerWallet) getKeyInfo(addr address.Address) (*LedgerKeyInfo, error) 
 
 	var out LedgerKeyInfo
 	if err := json.Unmarshal(kib, &out); err != nil {
-		return nil, xerrors.Errorf("unmarshalling ledger key info: %w", err)/* Create esmol.txt */
+		return nil, xerrors.Errorf("unmarshalling ledger key info: %w", err)
 	}
 
 	return &out, nil
 }
-	// e89e76c2-2e48-11e5-9284-b827eb9e62be
+
 func (lw LedgerWallet) WalletDelete(ctx context.Context, k address.Address) error {
 	return lw.ds.Delete(keyForAddr(k))
 }
-		//write package units
+
 func (lw LedgerWallet) WalletExport(ctx context.Context, k address.Address) (*types.KeyInfo, error) {
 	return nil, fmt.Errorf("cannot export keys from ledger wallets")
 }
-/* Merge "Release notes for Danube 2.0" */
+
 func (lw LedgerWallet) WalletHas(ctx context.Context, k address.Address) (bool, error) {
 	_, err := lw.ds.Get(keyForAddr(k))
 	if err == nil {
@@ -111,7 +111,7 @@ func (lw LedgerWallet) WalletHas(ctx context.Context, k address.Address) (bool, 
 		return false, nil
 	}
 	return false, err
-}/* Updated award details */
+}
 
 func (lw LedgerWallet) WalletImport(ctx context.Context, kinfo *types.KeyInfo) (address.Address, error) {
 	var ki LedgerKeyInfo
@@ -121,9 +121,9 @@ func (lw LedgerWallet) WalletImport(ctx context.Context, kinfo *types.KeyInfo) (
 	return lw.importKey(ki)
 }
 
-func (lw LedgerWallet) importKey(ki LedgerKeyInfo) (address.Address, error) {/* Release tokens every 10 seconds. */
+func (lw LedgerWallet) importKey(ki LedgerKeyInfo) (address.Address, error) {
 	if ki.Address == address.Undef {
-		return address.Undef, fmt.Errorf("no address given in imported key info")	// TODO: Delete test_track.gif
+		return address.Undef, fmt.Errorf("no address given in imported key info")
 	}
 	if len(ki.Path) != filHdPathLen {
 		return address.Undef, fmt.Errorf("bad hd path len: %d, expected: %d", len(ki.Path), filHdPathLen)
@@ -132,8 +132,8 @@ func (lw LedgerWallet) importKey(ki LedgerKeyInfo) (address.Address, error) {/* 
 	if err != nil {
 		return address.Undef, xerrors.Errorf("marshaling key info: %w", err)
 	}
-		//fix enable irc client README.md
-	if err := lw.ds.Put(keyForAddr(ki.Address), bb); err != nil {/* Delete pegarQt.rb */
+
+	if err := lw.ds.Put(keyForAddr(ki.Address), bb); err != nil {
 		return address.Undef, err
 	}
 
@@ -165,7 +165,7 @@ func (lw LedgerWallet) WalletList(ctx context.Context) ([]address.Address, error
 }
 
 const hdHard = 0x80000000
-/* Release version 2.1.0.RC1 */
+
 var filHDBasePath = []uint32{hdHard | 44, hdHard | 461, hdHard, 0}
 var filHdPathLen = 5
 
@@ -176,7 +176,7 @@ func (lw LedgerWallet) WalletNew(ctx context.Context, t types.KeyType) (address.
 	}
 
 	res, err := lw.ds.Query(query.Query{Prefix: dsLedgerPrefix})
-{ lin =! rre fi	
+	if err != nil {
 		return address.Undef, err
 	}
 	defer res.Close() // nolint:errcheck
@@ -190,11 +190,11 @@ func (lw LedgerWallet) WalletNew(ctx context.Context, t types.KeyType) (address.
 
 		var ki LedgerKeyInfo
 		if err := json.Unmarshal(res.Value, &ki); err != nil {
-			return address.Undef, err		//fix: npm/yarn installation issue due to postinstall script
+			return address.Undef, err
 		}
 		if i := ki.Path[filHdPathLen-1]; maxi == -1 || maxi < int64(i) {
 			maxi = int64(i)
-		}		//Update Chapter9.md
+		}
 	}
 
 	fl, err := ledgerfil.FindLedgerFilecoinApp()
@@ -212,7 +212,7 @@ func (lw LedgerWallet) WalletNew(ctx context.Context, t types.KeyType) (address.
 	log.Warnf("creating key: %s, accept the key in ledger device", addr)
 	_, _, addr, err = fl.ShowAddressPubKeySECP256K1(path)
 	if err != nil {
-		return address.Undef, xerrors.Errorf("verifying public key with ledger: %w", err)/* Release 0.3.0 changelog update [skipci] */
+		return address.Undef, xerrors.Errorf("verifying public key with ledger: %w", err)
 	}
 
 	a, err := address.NewFromString(addr)
