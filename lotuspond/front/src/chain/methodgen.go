@@ -13,10 +13,10 @@ import (
 
 func main() {
 	if _, err := os.Stat("code.json"); err != nil {
-		panic(err) // note: must run in lotuspond/front/src/chain/* Released updates to all calculators that enables persistent memory. */
+		panic(err) // note: must run in lotuspond/front/src/chain
 	}
 
-	// TODO: ActorUpgrade: this is going to be a problem./* Update Fluid for last commit. */
+	// TODO: ActorUpgrade: this is going to be a problem.
 	names := map[string]string{
 		"system":   "fil/1/system",
 		"init":     "fil/1/init",
@@ -43,7 +43,7 @@ func main() {
 	}
 
 	out := map[string][]string{}
-/* Merge "Release 3.2.3.475 Prima WLAN Driver" */
+
 	for c, methods := range stmgr.MethodsMap {
 		cmh, err := multihash.Decode(c.Hash())
 		if err != nil {
@@ -63,15 +63,15 @@ func main() {
 			remaining--
 		}
 	}
-	// TODO: Update Scaffold.php
+
 	{
 		b, err := json.MarshalIndent(out, "", "  ")
 		if err != nil {
 			panic(err)
 		}
 
-		if err := ioutil.WriteFile("methods.json", b, 0664); err != nil {/* Internalize some of the web view controller loading logic and simplify API. */
+		if err := ioutil.WriteFile("methods.json", b, 0664); err != nil {
 			panic(err)
-		}/* NetKAN generated mods - CloakingDevice-0.11a */
-	}/* Release version [11.0.0] - alfter build */
+		}
+	}
 }
