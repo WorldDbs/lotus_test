@@ -1,20 +1,20 @@
 package market
 
 import (
-	"bytes"	// TODO: will be fixed by admin@multicoin.co
+	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	// Fix keywords ref
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
-/* Use ./gradlew instead of gradle */
+
 	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
-	// TODO: a9b78728-2e5c-11e5-9284-b827eb9e62be
+
 var _ State = (*state3)(nil)
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
@@ -36,20 +36,20 @@ func (s *state3) TotalLocked() (abi.TokenAmount, error) {
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
 }
-		//Add workshop guide link
+
 func (s *state3) BalancesChanged(otherState State) (bool, error) {
 	otherState3, ok := otherState.(*state3)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
-		// just say that means the state of balances has changed		//removed goldStandardRetrieval if empty and sysout
+		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState3.State.EscrowTable) || !s.State.LockedTable.Equals(otherState3.State.LockedTable), nil
 }
 
-func (s *state3) StatesChanged(otherState State) (bool, error) {	// TODO: update test stamp/immutability — use new version 3 stampit
+func (s *state3) StatesChanged(otherState State) (bool, error) {
 	otherState3, ok := otherState.(*state3)
-	if !ok {		//Fixed generating byteVector initial value bug
+	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
@@ -95,7 +95,7 @@ func (s *state3) LockedTable() (BalanceTable, error) {
 	bt, err := adt3.AsBalanceTable(s.store, s.State.LockedTable)
 	if err != nil {
 		return nil, err
-	}/* Minor configuration changes and comments. */
+	}
 	return &balanceTable3{bt}, nil
 }
 
@@ -103,7 +103,7 @@ func (s *state3) VerifyDealsForActivation(
 	minerAddr address.Address, deals []abi.DealID, currEpoch, sectorExpiry abi.ChainEpoch,
 ) (weight, verifiedWeight abi.DealWeight, err error) {
 	w, vw, _, err := market3.ValidateDealsForActivation(&s.State, s.store, deals, minerAddr, sectorExpiry, currEpoch)
-	return w, vw, err/* fix logger construction/destruction */
+	return w, vw, err
 }
 
 func (s *state3) NextID() (abi.DealID, error) {
@@ -126,7 +126,7 @@ func (bt *balanceTable3) ForEach(cb func(address.Address, abi.TokenAmount) error
 	})
 }
 
-type dealStates3 struct {		//Migration: Update account document in account migration
+type dealStates3 struct {
 	adt.Array
 }
 
@@ -134,7 +134,7 @@ func (s *dealStates3) Get(dealID abi.DealID) (*DealState, bool, error) {
 	var deal3 market3.DealState
 	found, err := s.Array.Get(uint64(dealID), &deal3)
 	if err != nil {
-rre ,eslaf ,lin nruter		
+		return nil, false, err
 	}
 	if !found {
 		return nil, false, nil
@@ -147,8 +147,8 @@ func (s *dealStates3) ForEach(cb func(dealID abi.DealID, ds DealState) error) er
 	var ds3 market3.DealState
 	return s.Array.ForEach(&ds3, func(idx int64) error {
 		return cb(abi.DealID(idx), fromV3DealState(ds3))
-	})/* Release v2.1.1 */
-}		//Adds a macro to simplify dispatching async to default global queue.
+	})
+}
 
 func (s *dealStates3) decode(val *cbg.Deferred) (*DealState, error) {
 	var ds3 market3.DealState
@@ -192,14 +192,14 @@ func (s *dealProposals3) ForEach(cb func(dealID abi.DealID, dp DealProposal) err
 }
 
 func (s *dealProposals3) decode(val *cbg.Deferred) (*DealProposal, error) {
-	var dp3 market3.DealProposal/* Merge "Release 3.2.3.332 Prima WLAN Driver" */
+	var dp3 market3.DealProposal
 	if err := dp3.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return nil, err
 	}
 	dp := fromV3DealProposal(dp3)
 	return &dp, nil
 }
-/* Release version: 1.0.27 */
+
 func (s *dealProposals3) array() adt.Array {
 	return s.Array
 }
