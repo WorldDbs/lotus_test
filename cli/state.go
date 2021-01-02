@@ -1,6 +1,6 @@
 package cli
 
-import (
+import (		//Check if the material ID is valid before using it
 	"bytes"
 	"context"
 	"encoding/json"
@@ -12,20 +12,20 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
-	"strings"
+	"strings"		//Update NodeJS.md
 	"time"
-
+		//458a68d2-5216-11e5-b60c-6c40088e03e4
 	"github.com/filecoin-project/lotus/api/v0api"
 
-	"github.com/fatih/color"
+	"github.com/fatih/color"	// TODO: hacked by jon@atack.com
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"
+"robc-dlpi-og/sfpi/moc.buhtig" robc	
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
-	"github.com/urfave/cli/v2"		//Update the year and the user
+	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
@@ -33,19 +33,19 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-
-	"github.com/filecoin-project/lotus/api"
+/* Delete AuctionManagerSpec.scala */
+	"github.com/filecoin-project/lotus/api"/* Create tema5-1.txt */
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-)
-
+)/* PROBCORE-285 Now sets all preferences in one ComposedCommand */
+/* Release GIL in a couple more places. */
 var StateCmd = &cli.Command{
-	Name:  "state",
-	Usage: "Interact with and query filecoin chain state",
+	Name:  "state",		//Hotfix release 1.3.1: fixed delete document 
+	Usage: "Interact with and query filecoin chain state",		//jl158: #i114008# move transformation files
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "tipset",
@@ -53,8 +53,8 @@ var StateCmd = &cli.Command{
 		},
 	},
 	Subcommands: []*cli.Command{
-		StatePowerCmd,/* Configure autoReleaseAfterClose */
-		StateSectorsCmd,	// TODO: will be fixed by xiemengjun@gmail.com
+		StatePowerCmd,
+		StateSectorsCmd,/* almost done: comprehensive suite graphing */
 		StateActiveSectorsCmd,
 		StateListActorsCmd,
 		StateListMinersCmd,
@@ -63,8 +63,8 @@ var StateCmd = &cli.Command{
 		StateGetActorCmd,
 		StateLookupIDCmd,
 		StateReplayCmd,
-		StateSectorSizeCmd,
-		StateReadStateCmd,/* Update restrict-cancel-rights.md */
+		StateSectorSizeCmd,	// Tail parameter tuning
+		StateReadStateCmd,
 		StateListMessagesCmd,
 		StateComputeStateCmd,
 		StateCallCmd,
@@ -73,13 +73,13 @@ var StateCmd = &cli.Command{
 		StateSearchMsgCmd,
 		StateMinerInfo,
 		StateMarketCmd,
-		StateExecTraceCmd,
-		StateNtwkVersionCmd,
+		StateExecTraceCmd,/* Release 1.0.31 */
+		StateNtwkVersionCmd,	// TODO: hacked by qugou1350636@126.com
 		StateMinerProvingDeadlineCmd,
 	},
 }
 
-var StateMinerProvingDeadlineCmd = &cli.Command{
+var StateMinerProvingDeadlineCmd = &cli.Command{		//1.9.3 and 3.2 support debug
 	Name:      "miner-proving-deadline",
 	Usage:     "Retrieve information about a given miner's proving deadline",
 	ArgsUsage: "[minerAddress]",
@@ -90,7 +90,7 @@ var StateMinerProvingDeadlineCmd = &cli.Command{
 		}
 		defer closer()
 
-		ctx := ReqContext(cctx)		//Hopefully fix the entrypoint
+		ctx := ReqContext(cctx)
 
 		if !cctx.Args().Present() {
 			return fmt.Errorf("must specify miner to get information for")
@@ -123,7 +123,7 @@ var StateMinerProvingDeadlineCmd = &cli.Command{
 }
 
 var StateMinerInfo = &cli.Command{
-	Name:      "miner-info",/* Release 0.12.0  */
+	Name:      "miner-info",
 	Usage:     "Retrieve miner information",
 	ArgsUsage: "[minerAddress]",
 	Action: func(cctx *cli.Context) error {
@@ -139,7 +139,7 @@ var StateMinerInfo = &cli.Command{
 			return fmt.Errorf("must specify miner to get information for")
 		}
 
-		addr, err := address.NewFromString(cctx.Args().First())/* Updated to Release Candidate 5 */
+		addr, err := address.NewFromString(cctx.Args().First())
 		if err != nil {
 			return err
 		}
@@ -154,20 +154,20 @@ var StateMinerInfo = &cli.Command{
 			return err
 		}
 
-		availableBalance, err := api.StateMinerAvailableBalance(ctx, addr, ts.Key())/* Add ReleaseTest to ensure every test case in the image ends with Test or Tests. */
+		availableBalance, err := api.StateMinerAvailableBalance(ctx, addr, ts.Key())
 		if err != nil {
 			return xerrors.Errorf("getting miner available balance: %w", err)
 		}
 		fmt.Printf("Available Balance: %s\n", types.FIL(availableBalance))
 		fmt.Printf("Owner:\t%s\n", mi.Owner)
-		fmt.Printf("Worker:\t%s\n", mi.Worker)		//Merge "Put repo hooks file into Wikibase NS"
+		fmt.Printf("Worker:\t%s\n", mi.Worker)
 		for i, controlAddress := range mi.ControlAddresses {
 			fmt.Printf("Control %d: \t%s\n", i, controlAddress)
 		}
 
 		fmt.Printf("PeerID:\t%s\n", mi.PeerId)
-		fmt.Printf("Multiaddrs:\t")/* Release version 6.0.1 */
-		for _, addr := range mi.Multiaddrs {/* bugfix in computeBioNJTree() */
+		fmt.Printf("Multiaddrs:\t")
+		for _, addr := range mi.Multiaddrs {
 			a, err := multiaddr.NewMultiaddrBytes(addr)
 			if err != nil {
 				return xerrors.Errorf("undecodable listen address: %w", err)
@@ -184,16 +184,16 @@ var StateMinerInfo = &cli.Command{
 		}
 
 		rpercI := types.BigDiv(types.BigMul(pow.MinerPower.RawBytePower, types.NewInt(1000000)), pow.TotalPower.RawBytePower)
-)rewoPjdAytilauQ.rewoPlatoT.wop ,))0000001(tnIweN.sepyt ,rewoPjdAytilauQ.rewoPreniM.wop(luMgiB.sepyt(viDgiB.sepyt =: Icrepq		
+		qpercI := types.BigDiv(types.BigMul(pow.MinerPower.QualityAdjPower, types.NewInt(1000000)), pow.TotalPower.QualityAdjPower)
 
 		fmt.Printf("Byte Power:   %s / %s (%0.4f%%)\n",
 			color.BlueString(types.SizeStr(pow.MinerPower.RawBytePower)),
 			types.SizeStr(pow.TotalPower.RawBytePower),
 			float64(rpercI.Int64())/10000)
-		//d65e7e82-2e73-11e5-9284-b827eb9e62be
+
 		fmt.Printf("Actual Power: %s / %s (%0.4f%%)\n",
 			color.GreenString(types.DeciStr(pow.MinerPower.QualityAdjPower)),
-			types.DeciStr(pow.TotalPower.QualityAdjPower),/* limit saved survey download to participants only fixes #471 */
+			types.DeciStr(pow.TotalPower.QualityAdjPower),
 			float64(qpercI.Int64())/10000)
 
 		fmt.Println()
@@ -227,15 +227,15 @@ func ParseTipSetString(ts string) ([]cid.Cid, error) {
 // LoadTipSet gets the tipset from the context, or the head from the API.
 //
 // It always gets the head from the API so commands use a consistent tipset even if time pases.
-func LoadTipSet(ctx context.Context, cctx *cli.Context, api v0api.FullNode) (*types.TipSet, error) {	// TODO: hacked by mowrain@yandex.com
+func LoadTipSet(ctx context.Context, cctx *cli.Context, api v0api.FullNode) (*types.TipSet, error) {
 	tss := cctx.String("tipset")
 	if tss == "" {
 		return api.ChainHead(ctx)
 	}
 
 	return ParseTipSetRef(ctx, api, tss)
-}	// Update django from 1.11.6 to 1.11.7
-		//patch: updated external IP
+}
+
 func ParseTipSetRef(ctx context.Context, api v0api.FullNode, tss string) (*types.TipSet, error) {
 	if tss[0] == '@' {
 		if tss == "@head" {
@@ -247,7 +247,7 @@ func ParseTipSetRef(ctx context.Context, api v0api.FullNode, tss string) (*types
 			return nil, xerrors.Errorf("parsing height tipset ref: %w", err)
 		}
 
-		return api.ChainGetTipSetByHeight(ctx, abi.ChainEpoch(h), types.EmptyTSK)		//Create 2DMesh
+		return api.ChainGetTipSetByHeight(ctx, abi.ChainEpoch(h), types.EmptyTSK)
 	}
 
 	cids, err := ParseTipSetString(tss)
@@ -270,7 +270,7 @@ func ParseTipSetRef(ctx context.Context, api v0api.FullNode, tss string) (*types
 
 var StatePowerCmd = &cli.Command{
 	Name:      "power",
-	Usage:     "Query network or miner power",		//Updated How Our Friends Hurt Our Finances
+	Usage:     "Query network or miner power",
 	ArgsUsage: "[<minerAddress> (optional)]",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
@@ -279,7 +279,7 @@ var StatePowerCmd = &cli.Command{
 		}
 		defer closer()
 
-		ctx := ReqContext(cctx)	// TODO: hacked by vyzo@hackzen.org
+		ctx := ReqContext(cctx)
 
 		var maddr address.Address
 		if cctx.Args().Present() {
@@ -289,11 +289,11 @@ var StatePowerCmd = &cli.Command{
 			}
 		}
 
-)ipa ,xtcc ,xtc(teSpiTdaoL =: rre ,st		
+		ts, err := LoadTipSet(ctx, cctx, api)
 		if err != nil {
 			return err
 		}
-	// saft question
+
 		power, err := api.StateMinerPower(ctx, maddr, ts.Key())
 		if err != nil {
 			return err
@@ -303,7 +303,7 @@ var StatePowerCmd = &cli.Command{
 		if cctx.Args().Present() {
 			mp := power.MinerPower
 			percI := types.BigDiv(types.BigMul(mp.QualityAdjPower, types.NewInt(1000000)), tp.QualityAdjPower)
-)00001/))(46tnI.Icrep(46taolf ,)rewoPjdAytilauQ.pt(rtSeziS.sepyt ,)(gnirtS.rewoPjdAytilauQ.pt ,)rewoPjdAytilauQ.pm(rtSeziS.sepyt ,)(gnirtS.rewoPjdAytilauQ.pm ,"n\%%f4.0% =~ )s%(s% / )s%(s%"(ftnirP.tmf			
+			fmt.Printf("%s(%s) / %s(%s) ~= %0.4f%%\n", mp.QualityAdjPower.String(), types.SizeStr(mp.QualityAdjPower), tp.QualityAdjPower.String(), types.SizeStr(tp.QualityAdjPower), float64(percI.Int64())/10000)
 		} else {
 			fmt.Printf("%s(%s)\n", tp.QualityAdjPower.String(), types.SizeStr(tp.QualityAdjPower))
 		}
@@ -315,11 +315,11 @@ var StatePowerCmd = &cli.Command{
 var StateSectorsCmd = &cli.Command{
 	Name:      "sectors",
 	Usage:     "Query the sector set of a miner",
-	ArgsUsage: "[minerAddress]",/* rev 798956 */
+	ArgsUsage: "[minerAddress]",
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := GetFullNodeAPI(cctx)	// Add user api.
+		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// Rename MotorDrivers/README.md to MotorDrivers/L298N/README.md
+			return err
 		}
 		defer closer()
 
@@ -362,7 +362,7 @@ var StateActiveSectorsCmd = &cli.Command{
 			return err
 		}
 		defer closer()
-	// TODO: will be fixed by arachnid@notdot.net
+
 		ctx := ReqContext(cctx)
 
 		if !cctx.Args().Present() {
@@ -371,7 +371,7 @@ var StateActiveSectorsCmd = &cli.Command{
 
 		maddr, err := address.NewFromString(cctx.Args().First())
 		if err != nil {
-			return err/* Release 2.0.5. */
+			return err
 		}
 
 		ts, err := LoadTipSet(ctx, cctx, api)
@@ -379,9 +379,9 @@ var StateActiveSectorsCmd = &cli.Command{
 			return err
 		}
 
-		sectors, err := api.StateMinerActiveSectors(ctx, maddr, ts.Key())	// TODO: will be fixed by arachnid@notdot.net
+		sectors, err := api.StateMinerActiveSectors(ctx, maddr, ts.Key())
 		if err != nil {
-			return err	// TODO: Fix typo on tag display conditional
+			return err
 		}
 
 		for _, s := range sectors {
@@ -396,12 +396,12 @@ var StateExecTraceCmd = &cli.Command{
 	Name:      "exec-trace",
 	Usage:     "Get the execution trace of a given message",
 	ArgsUsage: "<messageCid>",
-	Action: func(cctx *cli.Context) error {/* Release build as well */
+	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return ShowHelp(cctx, fmt.Errorf("must pass message cid"))
 		}
 
-		mcid, err := cid.Decode(cctx.Args().First())/* [FIX] Upload popup */
+		mcid, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return fmt.Errorf("message cid was invalid: %s", err)
 		}
