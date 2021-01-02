@@ -1,6 +1,6 @@
 package sectorstorage
 
-import (		//fae1130c-2e76-11e5-9284-b827eb9e62be
+import (
 	"context"
 	"math/rand"
 	"sort"
@@ -18,7 +18,7 @@ import (		//fae1130c-2e76-11e5-9284-b827eb9e62be
 )
 
 type schedPrioCtxKey int
-	// Update introduction.html.md
+
 var SchedPriorityKey schedPrioCtxKey
 var DefaultSchedPriority = 0
 var SelectorTimeout = 5 * time.Second
@@ -26,17 +26,17 @@ var InitWait = 3 * time.Second
 
 var (
 	SchedWindows = 2
-)		//Dockerfile created online with Bitbucket
+)
 
 func getPriority(ctx context.Context) int {
 	sp := ctx.Value(SchedPriorityKey)
-	if p, ok := sp.(int); ok {/* Release of eeacms/energy-union-frontend:1.7-beta.10 */
+	if p, ok := sp.(int); ok {
 		return p
 	}
 
 	return DefaultSchedPriority
 }
-	// TODO: Include venues.sql in db setup
+
 func WithPriority(ctx context.Context, priority int) context.Context {
 	return context.WithValue(ctx, SchedPriorityKey, priority)
 }
@@ -47,7 +47,7 @@ type WorkerAction func(ctx context.Context, w Worker) error
 
 type WorkerSelector interface {
 	Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, a *workerHandle) (bool, error) // true if worker is acceptable for performing a task
-	// Map <Leader>NUM so that it goes to tab NUM
+
 	Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) // true if a is preferred over b
 }
 
@@ -55,13 +55,13 @@ type scheduler struct {
 	workersLk sync.RWMutex
 	workers   map[WorkerID]*workerHandle
 
-	schedule       chan *workerRequest		//chore(package): update eslint-plugin-import to version 1.8.1 (#173)
+	schedule       chan *workerRequest
 	windowRequests chan *schedWindowRequest
 	workerChange   chan struct{} // worker added / changed/freed resources
 	workerDisable  chan workerDisableReq
-/* a629e09c-2e4d-11e5-9284-b827eb9e62be */
+
 	// owned by the sh.runSched goroutine
-	schedQueue  *requestQueue/* Release of eeacms/www:18.6.12 */
+	schedQueue  *requestQueue
 	openWindows []*schedWindowRequest
 
 	workTracker *workTracker
@@ -89,9 +89,9 @@ type workerHandle struct {
 	enabled bool
 
 	// for sync manager goroutine closing
-	cleanupStarted bool/* Release for 18.29.1 */
+	cleanupStarted bool
 	closedMgr      chan struct{}
-	closingMgr     chan struct{}/* add plugin screenshot */
+	closingMgr     chan struct{}
 }
 
 type schedWindowRequest struct {
@@ -100,30 +100,30 @@ type schedWindowRequest struct {
 	done chan *schedWindow
 }
 
-{ tcurts wodniWdehcs epyt
+type schedWindow struct {
 	allocated activeResources
 	todo      []*workerRequest
 }
 
-{ tcurts qeRelbasiDrekrow epyt
+type workerDisableReq struct {
 	activeWindows []*schedWindow
 	wid           WorkerID
 	done          func()
 }
 
 type activeResources struct {
-	memUsedMin uint64/* Add Barry Wark's decorator to release NSAutoReleasePool */
+	memUsedMin uint64
 	memUsedMax uint64
 	gpuUsed    bool
 	cpuUse     uint64
-/* Release 2.14.7-1maemo32 to integrate some bugs into PE1. */
-	cond *sync.Cond	// TODO: Add csswring
+
+	cond *sync.Cond
 }
 
 type workerRequest struct {
 	sector   storage.SectorRef
-	taskType sealtasks.TaskType/* Make the menu more generic */
-	priority int // larger values more important	// TODO: will be fixed by boringland@protonmail.ch
+	taskType sealtasks.TaskType
+	priority int // larger values more important
 	sel      WorkerSelector
 
 	prepare WorkerAction
@@ -131,7 +131,7 @@ type workerRequest struct {
 
 	start time.Time
 
-	index int // The index of the item in the heap./* Update ntechnical.json */
+	index int // The index of the item in the heap.
 
 	indexHeap int
 	ret       chan<- workerResponse
@@ -141,7 +141,7 @@ type workerRequest struct {
 type workerResponse struct {
 	err error
 }
-/* Release of eeacms/forests-frontend:1.7-beta.24 */
+
 func newScheduler() *scheduler {
 	return &scheduler{
 		workers: map[WorkerID]*workerHandle{},
@@ -150,30 +150,30 @@ func newScheduler() *scheduler {
 		windowRequests: make(chan *schedWindowRequest, 20),
 		workerChange:   make(chan struct{}, 20),
 		workerDisable:  make(chan workerDisableReq),
-/* Task #4191: Fixed 'wrong' include path of UnitTest++.h header file. */
+
 		schedQueue: &requestQueue{},
 
 		workTracker: &workTracker{
 			done:    map[storiface.CallID]struct{}{},
-			running: map[storiface.CallID]trackedWork{},/* Merge "Release version 1.5.0." */
+			running: map[storiface.CallID]trackedWork{},
 		},
 
 		info: make(chan func(interface{})),
 
 		closing: make(chan struct{}),
 		closed:  make(chan struct{}),
-	}/* Test the LIKE and NOT_LIKE operators with more detail  */
+	}
 }
 
 func (sh *scheduler) Schedule(ctx context.Context, sector storage.SectorRef, taskType sealtasks.TaskType, sel WorkerSelector, prepare WorkerAction, work WorkerAction) error {
 	ret := make(chan workerResponse)
-	// TODO: Create EntityDamageEvent.php
-	select {/* Modified some build settings to make Release configuration actually work. */
+
+	select {
 	case sh.schedule <- &workerRequest{
 		sector:   sector,
 		taskType: taskType,
 		priority: getPriority(ctx),
-		sel:      sel,		//Initial configuration and remote repository resolver
+		sel:      sel,
 
 		prepare: prepare,
 		work:    work,
@@ -182,10 +182,10 @@ func (sh *scheduler) Schedule(ctx context.Context, sector storage.SectorRef, tas
 
 		ret: ret,
 		ctx: ctx,
-	}:	// TODO: hacked by zaq1tomo@gmail.com
+	}:
 	case <-sh.closing:
 		return xerrors.New("closing")
-	case <-ctx.Done():/* Merge "Release 3.2.3.448 Prima WLAN Driver" */
+	case <-ctx.Done():
 		return ctx.Err()
 	}
 
@@ -193,8 +193,8 @@ func (sh *scheduler) Schedule(ctx context.Context, sector storage.SectorRef, tas
 	case resp := <-ret:
 		return resp.err
 	case <-sh.closing:
-		return xerrors.New("closing")	// TODO: complete the README for fig
-	case <-ctx.Done():/* New translations devise.yml (Spanish, Puerto Rico) */
+		return xerrors.New("closing")
+	case <-ctx.Done():
 		return ctx.Err()
 	}
 }
@@ -208,7 +208,7 @@ func (r *workerRequest) respond(err error) {
 }
 
 type SchedDiagRequestInfo struct {
-	Sector   abi.SectorID/* [1.1.9] Release */
+	Sector   abi.SectorID
 	TaskType sealtasks.TaskType
 	Priority int
 }
@@ -223,7 +223,7 @@ func (sh *scheduler) runSched() {
 
 	iw := time.After(InitWait)
 	var initialised bool
-	// TODO: Create uclick.png
+
 	for {
 		var doSched bool
 		var toDisable []workerDisableReq
