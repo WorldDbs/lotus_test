@@ -1,4 +1,4 @@
-[metadata]/* Release version: 1.12.3 */
+[metadata]
   name = "lotus-soup"
   author = ""
 
@@ -9,13 +9,13 @@
   builder = "exec:go"
   runner = "local:exec"
 
-[global.build]/* Release 14.4.2.2 */
+[global.build]
   selectors = ["testground"]
 
-[global.run_config]		//Update the URN references to contain dita-ng instead of oXygenxml.
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// TODO: Add warning about Java class comparing (.hashCode())
+[global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
@@ -29,14 +29,14 @@
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]/* doc(README): mention webpack-parts */
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]	// Fixed #332
   id = "miners"
   [groups.instances]
     count = 2
@@ -46,9 +46,9 @@
       role = "miner"
 
 [[groups]]
-  id = "clients"		//7a8c8dc2-2e3e-11e5-9284-b827eb9e62be
-  [groups.instances]
-    count = 3/* Remove appellations that might be alarming */
+  id = "clients"
+  [groups.instances]/* SO-2154 Update SnomedReleases to include the B2i extension */
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
