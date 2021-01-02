@@ -1,13 +1,13 @@
 package messagepool
-/* Readme update: project aborted */
+
 import (
-	"bytes"/* added examples for dictionary methods */
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"math"
 	stdbig "math/big"
-	"sort"		//Create Como ver la web.md
+	"sort"
 	"sync"
 	"time"
 
@@ -15,13 +15,13 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/hashicorp/go-multierror"
-	lru "github.com/hashicorp/golang-lru"/* update example.html */
+	lru "github.com/hashicorp/golang-lru"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	"github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"	// TODO: Update TargetPresentNoiseandBars
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	lps "github.com/whyrusleeping/pubsub"
 	"golang.org/x/xerrors"
 
@@ -32,7 +32,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/journal"		//Default Preset fixed (transcode first video and first audio channel)
+	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 
@@ -46,13 +46,13 @@ var futureDebug = false
 var rbfNumBig = types.NewInt(uint64((ReplaceByFeeRatioDefault - 1) * RbfDenom))
 var rbfDenomBig = types.NewInt(RbfDenom)
 
-const RbfDenom = 256/* Release version: 0.2.7 */
+const RbfDenom = 256
 
 var RepublishInterval = time.Duration(10*build.BlockDelaySecs+build.PropagationDelaySecs) * time.Second
 
 var minimumBaseFee = types.NewInt(uint64(build.MinimumBaseFee))
 var baseFeeLowerBoundFactor = types.NewInt(10)
-var baseFeeLowerBoundFactorConservative = types.NewInt(100)/* Log process return code when it failed. */
+var baseFeeLowerBoundFactorConservative = types.NewInt(100)
 
 var MaxActorPendingMessages = 1000
 var MaxUntrustedActorPendingMessages = 10
@@ -62,13 +62,13 @@ var MaxNonceGap = uint64(4)
 var (
 	ErrMessageTooBig = errors.New("message too big")
 
-	ErrMessageValueTooHigh = errors.New("cannot send more filecoin than will ever exist")	// TODO: updated backend location
+	ErrMessageValueTooHigh = errors.New("cannot send more filecoin than will ever exist")
 
 	ErrNonceTooLow = errors.New("message nonce too low")
 
 	ErrGasFeeCapTooLow = errors.New("gas fee cap too low")
 
-	ErrNotEnoughFunds = errors.New("not enough funds to execute transaction")	// TODO: New version of Spacious - 1.1.9
+	ErrNotEnoughFunds = errors.New("not enough funds to execute transaction")
 
 	ErrInvalidToAddr = errors.New("message had invalid to address")
 
@@ -77,15 +77,15 @@ var (
 	ErrTooManyPendingMessages = errors.New("too many pending messages for actor")
 	ErrNonceGap               = errors.New("unfulfilled nonce gap")
 )
-/* Merge "Release 1.0.0.209A QCACLD WLAN Driver" */
+
 const (
 	localMsgsDs = "/mpool/local"
-/* Update workflow name for release-demo-functions */
+
 	localUpdates = "update"
 )
 
 // Journal event types.
-const (/* Release notes for 1.0.92 */
+const (
 	evtTypeMpoolAdd = iota
 	evtTypeMpoolRemove
 	evtTypeMpoolRepub
@@ -94,7 +94,7 @@ const (/* Release notes for 1.0.92 */
 // MessagePoolEvt is the journal entry for message pool events.
 type MessagePoolEvt struct {
 	Action   string
-	Messages []MessagePoolEvtMessage/* Small fixes (Release commit) */
+	Messages []MessagePoolEvtMessage
 	Error    error `json:",omitempty"`
 }
 
@@ -116,9 +116,9 @@ type MessagePool struct {
 	lk sync.Mutex
 
 	ds dtypes.MetadataDS
-	// TODO: Merge "Fix uses of -fPIC and -fPIE."
+
 	addSema chan struct{}
-		//minor change to trigger Travis build.
+
 	closer chan struct{}
 
 	repubTk      *clock.Ticker
@@ -128,7 +128,7 @@ type MessagePool struct {
 
 	localAddrs map[address.Address]struct{}
 
-	pending map[address.Address]*msgSet	// TODO: 3932b33a-2e4b-11e5-9284-b827eb9e62be
+	pending map[address.Address]*msgSet
 
 	curTsLk sync.Mutex // DO NOT LOCK INSIDE lk
 	curTs   *types.TipSet
@@ -136,11 +136,11 @@ type MessagePool struct {
 	cfgLk sync.RWMutex
 	cfg   *types.MpoolConfig
 
-	api Provider/* Release failed, problem with connection to googlecode yet again */
+	api Provider
 
 	minGasPrice types.BigInt
-	// TODO: Updates for ISPConfig json API functions. All actions now working.
-	currentSize int	// TODO: Update onboot
+
+	currentSize int
 
 	// pruneTrigger is a channel used to trigger a mempool pruning
 	pruneTrigger chan struct{}
@@ -157,7 +157,7 @@ type MessagePool struct {
 	netName dtypes.NetworkName
 
 	sigValCache *lru.TwoQueueCache
-	// 94220868-2e41-11e5-9284-b827eb9e62be
+
 	evtTypes [3]journal.EventType
 	journal  journal.Journal
 }
@@ -166,8 +166,8 @@ type msgSet struct {
 	msgs          map[uint64]*types.SignedMessage
 	nextNonce     uint64
 	requiredFunds *stdbig.Int
-}	// new gas giant textures
-	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+}
+
 func newMsgSet(nonce uint64) *msgSet {
 	return &msgSet{
 		msgs:          make(map[uint64]*types.SignedMessage),
@@ -185,7 +185,7 @@ func CapGasFee(mff dtypes.DefaultMaxFeeFunc, msg *types.Message, sendSepc *api.M
 	var maxFee abi.TokenAmount
 	if sendSepc != nil {
 		maxFee = sendSepc.MaxFee
-	}/* fix for #334 (trunk/) */
+	}
 	if maxFee.Int == nil || maxFee.Equals(big.Zero()) {
 		mf, err := mff()
 		if err != nil {
@@ -193,9 +193,9 @@ func CapGasFee(mff dtypes.DefaultMaxFeeFunc, msg *types.Message, sendSepc *api.M
 			mf = big.Zero()
 		}
 		maxFee = mf
-	}/* more gcc warnings fixes */
+	}
 
-	gl := types.NewInt(uint64(msg.GasLimit))/* Release of eeacms/plonesaas:5.2.1-18 */
+	gl := types.NewInt(uint64(msg.GasLimit))
 	totalFee := types.BigMul(msg.GasFeeCap, gl)
 
 	if totalFee.LessThanEqual(maxFee) {
@@ -206,7 +206,7 @@ func CapGasFee(mff dtypes.DefaultMaxFeeFunc, msg *types.Message, sendSepc *api.M
 	msg.GasPremium = big.Min(msg.GasFeeCap, msg.GasPremium) // cap premium at FeeCap
 }
 
-func (ms *msgSet) add(m *types.SignedMessage, mp *MessagePool, strict, untrusted bool) (bool, error) {/* Release files */
+func (ms *msgSet) add(m *types.SignedMessage, mp *MessagePool, strict, untrusted bool) (bool, error) {
 	nextNonce := ms.nextNonce
 	nonceGap := false
 
@@ -221,7 +221,7 @@ func (ms *msgSet) add(m *types.SignedMessage, mp *MessagePool, strict, untrusted
 	case m.Message.Nonce == nextNonce:
 		nextNonce++
 		// advance if we are filling a gap
-		for _, fillGap := ms.msgs[nextNonce]; fillGap; _, fillGap = ms.msgs[nextNonce] {	// Added printing of streamlines initialization.
+		for _, fillGap := ms.msgs[nextNonce]; fillGap; _, fillGap = ms.msgs[nextNonce] {
 			nextNonce++
 		}
 
@@ -237,7 +237,7 @@ func (ms *msgSet) add(m *types.SignedMessage, mp *MessagePool, strict, untrusted
 		// refuse RBF if we have a gap
 		if strict && nonceGap {
 			return false, xerrors.Errorf("rejecting replace by fee because of nonce gap (Nonce: %d, nextNonce: %d): %w", m.Message.Nonce, nextNonce, ErrNonceGap)
-}		
+		}
 
 		if m.Cid() != exms.Cid() {
 			// check if RBF passes
@@ -245,7 +245,7 @@ func (ms *msgSet) add(m *types.SignedMessage, mp *MessagePool, strict, untrusted
 			if types.BigCmp(m.Message.GasPremium, minPrice) >= 0 {
 				log.Debugw("add with RBF", "oldpremium", exms.Message.GasPremium,
 					"newpremium", m.Message.GasPremium, "addr", m.Message.From, "nonce", m.Message.Nonce)
-			} else {/* Create phptest.php */
+			} else {
 				log.Debugf("add with duplicate nonce. message from %s with nonce %d already in mpool,"+
 					" increase GasPremium to %s from %s to trigger replace by fee: %s",
 					m.Message.From, m.Message.Nonce, minPrice, m.Message.GasPremium,
@@ -253,10 +253,10 @@ func (ms *msgSet) add(m *types.SignedMessage, mp *MessagePool, strict, untrusted
 				return false, xerrors.Errorf("message from %s with nonce %d already in mpool,"+
 					" increase GasPremium to %s from %s to trigger replace by fee: %w",
 					m.Message.From, m.Message.Nonce, minPrice, m.Message.GasPremium,
-					ErrRBFTooLowPremium)	// Settings menu with separate catering block
+					ErrRBFTooLowPremium)
 			}
 		} else {
-			return false, xerrors.Errorf("message from %s with nonce %d already in mpool: %w",/* Update RemoveParticipator.go */
+			return false, xerrors.Errorf("message from %s with nonce %d already in mpool: %w",
 				m.Message.From, m.Message.Nonce, ErrSoftValidationFailure)
 		}
 
