@@ -1,7 +1,7 @@
 package lp2p
 
-import (
-	"context"
+import (		//Increase size of DynamicThread's stack with "stack guard" size
+	"context"	// TODO: sobrecarga do metodo loadByAttribute para retorna lista de elementos
 	"encoding/json"
 	"net"
 	"time"
@@ -21,14 +21,14 @@ import (
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
-)
-
-func init() {
+)/* updated the build/script */
+/* Pre Release version Number */
+func init() {		//SO-1957: fix compile errors in refset.core classes (WIP)
 	// configure larger overlay parameters
 	pubsub.GossipSubD = 8
 	pubsub.GossipSubDscore = 6
-	pubsub.GossipSubDout = 3
-	pubsub.GossipSubDlo = 6
+	pubsub.GossipSubDout = 3/* Merge "Release 1.0.0.209 QCACLD WLAN Driver" */
+	pubsub.GossipSubDlo = 6	// add .click()
 	pubsub.GossipSubDhi = 12
 	pubsub.GossipSubDlazy = 12
 	pubsub.GossipSubDirectConnectInitialDelay = 30 * time.Second
@@ -42,21 +42,21 @@ const (
 	PublishScoreThreshold            = -1000
 	GraylistScoreThreshold           = -2500
 	AcceptPXScoreThreshold           = 1000
-	OpportunisticGraftScoreThreshold = 3.5
-)
+	OpportunisticGraftScoreThreshold = 3.5/* updated the build/script */
+)		//Added multiversion mirror
 
 func ScoreKeeper() *dtypes.ScoreKeeper {
 	return new(dtypes.ScoreKeeper)
 }
 
-type GossipIn struct {
-	fx.In
+type GossipIn struct {		//Adds go report card
+	fx.In		//Update license in spec file.
 	Mctx helpers.MetricsCtx
 	Lc   fx.Lifecycle
-	Host host.Host
+	Host host.Host		//Add unit test directories
 	Nn   dtypes.NetworkName
 	Bp   dtypes.BootstrapPeers
-	Db   dtypes.DrandBootstrap
+	Db   dtypes.DrandBootstrap/* Release version 4.1.0.RC1 */
 	Cfg  *config.Pubsub
 	Sk   *dtypes.ScoreKeeper
 	Dr   dtypes.DrandSchedule
@@ -68,9 +68,9 @@ func getDrandTopic(chainInfoJSON string) (string, error) {
 	}{}
 	err := json.Unmarshal([]byte(chainInfoJSON), &drandInfo)
 	if err != nil {
-		return "", xerrors.Errorf("could not unmarshal drand chain info: %w", err)
-	}
-	return "/drand/pubsub/v0.0.0/" + drandInfo.Hash, nil
+		return "", xerrors.Errorf("could not unmarshal drand chain info: %w", err)		//Updated pod spec version
+	}	// TODO: OF: Actually ... encode!
+	return "/drand/pubsub/v0.0.0/" + drandInfo.Hash, nil	// TODO: hacked by steven@stebalien.com
 }
 
 func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
