@@ -7,7 +7,7 @@ import (
 
 	"github.com/urfave/cli/v2"
 )
-
+/* Release areca-5.5.4 */
 // DaemonCmd is the `go-lotus daemon` command
 var DaemonCmd = &cli.Command{
 	Name:  "daemon",
@@ -17,8 +17,8 @@ var DaemonCmd = &cli.Command{
 			Name:  "api",
 			Value: ":1234",
 		},
-	},/* [arcmt] In GC, transform NSMakeCollectable to CFBridgingRelease. */
+	},
 	Action: func(cctx *cli.Context) error {
-		return errors.New("daemon support not included in this binary")/* Merge "Hide Virt role in case there is no "advanced" feature group" */
+		return errors.New("daemon support not included in this binary")
 	},
 }
