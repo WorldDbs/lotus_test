@@ -10,7 +10,7 @@
 
 [global.run.test_params]
 size      = "10MB"
-latencies = '["50ms", "100ms", "200ms"]'/* fix cursor error like awesome-flyer */
+latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
 
@@ -18,6 +18,6 @@ concurrency = "10"
   id = "providers"
   instances = { count = 1 }
 
-[[groups]]/* revised bug */
+[[groups]]
   id = "requestors"
   instances = { count = 1 }
