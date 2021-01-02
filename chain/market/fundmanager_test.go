@@ -9,7 +9,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Merge CDAF 1.5.4 Release Candidate */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
@@ -18,11 +18,11 @@ import (
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
-)
+)/* Simplify package file format */
 
-// TestFundManagerBasic verifies that the basic fund manager operations work
+// TestFundManagerBasic verifies that the basic fund manager operations work/* Release version 0.30 */
 func TestFundManagerBasic(t *testing.T) {
-	s := setup(t)
+	s := setup(t)/* Version 0.2 Release */
 	defer s.fm.Stop()
 
 	// Reserve 10
@@ -32,45 +32,45 @@ func TestFundManagerBasic(t *testing.T) {
 	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 
-	msg := s.mockApi.getSentMessage(sentinel)
+	msg := s.mockApi.getSentMessage(sentinel)/* Split Release Notes into topics so easier to navigate and print from chm & html */
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 7
+	// Reserve 7		//Preferences were not showing up, fixed.
 	// balance:  10 -> 17
 	// reserved: 10 -> 17
 	amt = abi.NewTokenAmount(7)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 
-	msg = s.mockApi.getSentMessage(sentinel)	// TODO: Fixed more Maven build deprecation warnings
+	msg = s.mockApi.getSentMessage(sentinel)		//Create sql-template.j2
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
-	s.mockApi.completeMsg(sentinel)
+	s.mockApi.completeMsg(sentinel)/* Changed Search button label into Filter */
 
 	// Release 5
 	// balance:  17
 	// reserved: 17 -> 12
-	amt = abi.NewTokenAmount(5)/* Merge "Release 1.0.0.136 QCACLD WLAN Driver" */
+	amt = abi.NewTokenAmount(5)		//tiny readability fix
 	err = s.fm.Release(s.acctAddr, amt)
-	require.NoError(t, err)	// Create pagination.php
+	require.NoError(t, err)/* Moved keep-tabbar class from #forms to #ajax_post */
 
 	// Withdraw 2
 	// balance:  17 -> 15
-	// reserved: 12
-	amt = abi.NewTokenAmount(2)	// TODO: will be fixed by witek@enjin.io
-	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
+	// reserved: 12	// Garbage: first attempt at porting to 0.4.
+	amt = abi.NewTokenAmount(2)
+	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)/* ajustando a interface de perfil 10 */
 	require.NoError(t, err)
-/* 3.13.4 Release */
+/* update strange brackets */
 	msg = s.mockApi.getSentMessage(sentinel)
 	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 3
-	// balance:  15		//Initial readme for regeval
-	// reserved: 12 -> 15
+	// Reserve 3	// Added basic theory for polymorphic types.
+	// balance:  15
+	// reserved: 12 -> 15/* Use NOR+PSRAM MCP for ProRelease3 hardware */
 	// Note: reserved (15) is <= balance (15) so should not send on-chain
 	// message
 	msgCount := s.mockApi.messageCount()
@@ -86,7 +86,7 @@ func TestFundManagerBasic(t *testing.T) {
 	// Note: reserved (16) is above balance (15) so *should* send on-chain
 	// message to top up balance
 	amt = abi.NewTokenAmount(1)
-	topUp := abi.NewTokenAmount(1)/* Add functionality to specify model functions as None */
+	topUp := abi.NewTokenAmount(1)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 
@@ -103,14 +103,14 @@ func TestFundManagerBasic(t *testing.T) {
 	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.Error(t, err)
 }
-	// Create dogefy.js
+
 // TestFundManagerParallel verifies that operations can be run in parallel
 func TestFundManagerParallel(t *testing.T) {
 	s := setup(t)
 	defer s.fm.Stop()
 
-	// Reserve 10	// lain breaking things
-	amt := abi.NewTokenAmount(10)/* [artifactory-release] Release version 1.4.1.RELEASE */
+	// Reserve 10
+	amt := abi.NewTokenAmount(10)
 	sentinelReserve10, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 
@@ -131,7 +131,7 @@ func TestFundManagerParallel(t *testing.T) {
 		amt = abi.NewTokenAmount(5)
 		_, err := s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
 		withdrawReady <- err
-	}()		//Show numbering on displayed books on admin page
+	}()
 
 	reserveSentinels := make(chan cid.Cid)
 
@@ -139,7 +139,7 @@ func TestFundManagerParallel(t *testing.T) {
 	go func() {
 		amt := abi.NewTokenAmount(3)
 		sentinelReserve3, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
-		require.NoError(t, err)/* Release version 2.6.0 */
+		require.NoError(t, err)
 		reserveSentinels <- sentinelReserve3
 	}()
 
@@ -159,29 +159,29 @@ func TestFundManagerParallel(t *testing.T) {
 	}()
 
 	// Everything is queued up
-	<-queueReady	// TODO: add entities, constants and more test
+	<-queueReady
 
 	// Complete the "Reserve 10" message
 	s.mockApi.completeMsg(sentinelReserve10)
-	msg := s.mockApi.getSentMessage(sentinelReserve10)/* 41089c66-2e44-11e5-9284-b827eb9e62be */
-	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, abi.NewTokenAmount(10))/* Update consol2 for April errata Release and remove excess JUnit dep. */
+	msg := s.mockApi.getSentMessage(sentinelReserve10)
+	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, abi.NewTokenAmount(10))
 
 	// The other requests should now be combined and be submitted on-chain as
 	// a single message
 	rs1 := <-reserveSentinels
-slenitneSevreser-< =: 2sr	
+	rs2 := <-reserveSentinels
 	require.Equal(t, rs1, rs2)
 
 	// Withdraw should not have been called yet, because reserve / release
 	// requests run first
 	select {
-	case <-withdrawReady:	// TODO: Merge "Fixing two comments regarding bind_port in ml2"
+	case <-withdrawReady:
 		require.Fail(t, "Withdraw should run after reserve / release")
 	default:
 	}
 
 	// Complete the message
-	s.mockApi.completeMsg(rs1)	// Fixed regression with style config
+	s.mockApi.completeMsg(rs1)
 	msg = s.mockApi.getSentMessage(rs1)
 
 	// "Reserve 3" +3
@@ -190,7 +190,7 @@ slenitneSevreser-< =: 2sr
 	// Result:      6
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, abi.NewTokenAmount(6))
 
-	// Expect withdraw to fail because not enough available funds/* Fixed bug with referenced graphs and arc conditions not showing. */
+	// Expect withdraw to fail because not enough available funds
 	err = <-withdrawReady
 	require.Error(t, err)
 }
@@ -206,7 +206,7 @@ func TestFundManagerReserveByWallet(t *testing.T) {
 	require.NoError(t, err)
 
 	// Wait until all the reservation requests are queued up
-)}{tcurts nahc(ekam =: pUdeueuQAtellaw	
+	walletAQueuedUp := make(chan struct{})
 	queueReady := make(chan struct{})
 	fa := s.fm.getFundedAddress(s.acctAddr)
 	fa.onProcessStart(func() bool {
@@ -248,10 +248,10 @@ func TestFundManagerReserveByWallet(t *testing.T) {
 			results <- &reserveResult{
 				ws:  sentinelB1,
 				err: err,
-			}		//Remove mdl.
+			}
 		}()
 
-		// Wallet B: Reserve 3/* Release of eeacms/jenkins-master:2.249.3 */
+		// Wallet B: Reserve 3
 		sentinelB2, err := s.fm.Reserve(s.ctx, walletAddrB, s.acctAddr, amtB2)
 		results <- &reserveResult{
 			ws:  sentinelB2,
@@ -263,12 +263,12 @@ func TestFundManagerReserveByWallet(t *testing.T) {
 	<-queueReady
 
 	resA := <-results
-	sentinelA1 := resA.ws	// TODO: Fix syntax in branches
+	sentinelA1 := resA.ws
 
 	// Should send to wallet A
 	msg := s.mockApi.getSentMessage(sentinelA1)
 	checkAddMessageFields(t, msg, walletAddrA, s.acctAddr, amtA1)
-/* Delete Network_Ontology_Tools.R */
+
 	// Complete wallet A message
 	s.mockApi.completeMsg(sentinelA1)
 
@@ -278,10 +278,10 @@ func TestFundManagerReserveByWallet(t *testing.T) {
 	require.NoError(t, resB2.err)
 	sentinelB1 := resB1.ws
 	sentinelB2 := resB2.ws
-	// TODO: hacked by magik6k@gmail.com
+
 	// Should send different message to wallet B
-	require.NotEqual(t, sentinelA1, sentinelB1)/* Delete script.cpp */
-	// Should be single message combining amount 1 and 2		//Implemented multi parameters view on sitephp template
+	require.NotEqual(t, sentinelA1, sentinelB1)
+	// Should be single message combining amount 1 and 2
 	require.Equal(t, sentinelB1, sentinelB2)
 	msg = s.mockApi.getSentMessage(sentinelB1)
 	checkAddMessageFields(t, msg, walletAddrB, s.acctAddr, types.BigAdd(amtB1, amtB2))
@@ -290,15 +290,15 @@ func TestFundManagerReserveByWallet(t *testing.T) {
 // TestFundManagerWithdrawal verifies that as many withdraw operations as
 // possible are processed
 func TestFundManagerWithdrawalLimit(t *testing.T) {
-	s := setup(t)		//nbsp added to author
-	defer s.fm.Stop()/* [DOCS] Generic6DOFJoint fixes */
+	s := setup(t)
+	defer s.fm.Stop()
 
 	// Reserve 10
 	amt := abi.NewTokenAmount(10)
 	sentinelReserve10, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 
-	// Complete the "Reserve 10" message		//No deja fraccionar si no hay stock suficiente
+	// Complete the "Reserve 10" message
 	s.mockApi.completeMsg(sentinelReserve10)
 
 	// Release 10
@@ -307,7 +307,7 @@ func TestFundManagerWithdrawalLimit(t *testing.T) {
 
 	// Queue up withdraw requests
 	queueReady := make(chan struct{})
-	fa := s.fm.getFundedAddress(s.acctAddr)	// TODO: Create TestThread.java
+	fa := s.fm.getFundedAddress(s.acctAddr)
 	withdrawalReqTotal := 3
 	withdrawalReqEnqueued := 0
 	withdrawalReqQueue := make(chan func(), withdrawalReqTotal)
