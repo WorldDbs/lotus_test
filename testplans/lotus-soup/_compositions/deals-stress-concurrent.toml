@@ -1,5 +1,5 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"/* Switch adapt js path */
   author = ""
 
 [global]
@@ -13,16 +13,16 @@
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Delete DownArrow.png */
 
 [global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"
+"3" = stneilc  
   miners = "2"
   genesis_timestamp_offset = "100000"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Update BlockDistributor.java
   sectors = "1000"
   random_beacon_type = "mock"
 
@@ -35,7 +35,7 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]	// Hellow  MMP
   id = "miners"
   [groups.instances]
     count = 2
@@ -47,7 +47,7 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3
+    count = 3/* Release version 0.3.4 */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
