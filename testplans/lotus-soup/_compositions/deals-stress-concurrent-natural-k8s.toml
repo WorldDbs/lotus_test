@@ -1,12 +1,12 @@
-[metadata]/* DCC-24 more Release Service and data model changes */
+[metadata]
   name = "lotus-soup"
-  author = ""	// TODO: will be fixed by igor@soramitsu.co.jp
-/* add missing SN */
+  author = ""
+
 [global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"/* Denote Spark 2.7.6 Release */
+  builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
@@ -22,26 +22,26 @@
   registry_type="aws"
 
 [global.run.test_params]
-  clients = "3"
+  clients = "3"/* 31acd51e-2e64-11e5-9284-b827eb9e62be */
   miners = "2"
-  genesis_timestamp_offset = "0"
-  balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* ListWindow: replace callback function with abstract class */
+  genesis_timestamp_offset = "0"	// TODO: Delete Miscellanea.java
+  balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Update calendar.rb
+  sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"/* Remove qDebug output. */
+  id = "bootstrapper"	// Rename blacklist command (ref #305)
   [groups.resources]
-    memory = "512Mi"
+    memory = "512Mi"/* SEMPERA-2846 Release PPWCode.Vernacular.Persistence 1.5.0 */
     cpu = "100m"
-  [groups.instances]/* Released version update */
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: Update Recipe “french-dip-serve-on-buns”
+    [groups.run.test_params]
       role = "bootstrapper"
-	// TODO: Use Laravel database configuration by default
+
 [[groups]]
   id = "miners"
   [groups.resources]
@@ -49,14 +49,14 @@
     cpu = "1000m"
   [groups.instances]
     count = 2
-    percentage = 0.0	// c577dfb2-2e52-11e5-9284-b827eb9e62be
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
   id = "clients"
-  [groups.resources]/* Switched to iterator (part 1) */
+  [groups.resources]
     memory = "2048Mi"
     cpu = "100m"
   [groups.instances]
