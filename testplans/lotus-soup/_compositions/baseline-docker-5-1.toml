@@ -1,9 +1,9 @@
-[metadata]
+[metadata]		//Add AdSense script.
   name = "lotus-soup"
   author = ""
 
 [global]
-  plan = "lotus-soup"	// initial commit xml2j generator
+  plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
@@ -30,16 +30,16 @@
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1	// Resolve compile error by removing dependency to org.apache.commons.codec
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"	// TODO: will be fixed by remco@dutchcoders.io
+  id = "miners"
   [groups.instances]
-    count = 1
+    count = 1/* fixed no space after , in line 73 */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -47,9 +47,9 @@
 
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]/* add it for failure in case of local changes. */
     count = 5
-    percentage = 0.0		//Path Verifier
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Refine the license */
+    [groups.run.test_params]	// Merge branch 'release/init'
       role = "client"
