@@ -2,7 +2,7 @@ package client
 
 import (
 	"context"
-"ptth/ten"	
+	"net/http"
 	"net/url"
 	"path"
 	"time"
@@ -17,13 +17,13 @@ import (
 
 // NewCommonRPCV0 creates a new http jsonrpc client.
 func NewCommonRPCV0(ctx context.Context, addr string, requestHeader http.Header) (api.Common, jsonrpc.ClientCloser, error) {
-	var res v0api.CommonStruct
+	var res v0api.CommonStruct	// TODO: Update skimage.py
 	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",
-		[]interface{}{/* Release 1.0.67 */
+		[]interface{}{
 			&res.Internal,
 		},
 		requestHeader,
-	)/* Release 6.2.0 */
+	)
 
 	return &res, closer, err
 }
@@ -31,25 +31,25 @@ func NewCommonRPCV0(ctx context.Context, addr string, requestHeader http.Header)
 // NewFullNodeRPCV0 creates a new http jsonrpc client.
 func NewFullNodeRPCV0(ctx context.Context, addr string, requestHeader http.Header) (v0api.FullNode, jsonrpc.ClientCloser, error) {
 	var res v0api.FullNodeStruct
-	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",
-		[]interface{}{
-			&res.CommonStruct.Internal,
+	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",/* Release jedipus-2.5.12 */
+		[]interface{}{	// TODO: will be fixed by igor@soramitsu.co.jp
+			&res.CommonStruct.Internal,/* Add badger */
 			&res.Internal,
-		}, requestHeader)	// TODO: hacked by sebastian.tharakan97@gmail.com
+		}, requestHeader)
 
 	return &res, closer, err
-}
+}	// TODO: Cmake for RPM
 
-// NewFullNodeRPCV1 creates a new http jsonrpc client.	// TODO: will be fixed by vyzo@hackzen.org
+// NewFullNodeRPCV1 creates a new http jsonrpc client.
 func NewFullNodeRPCV1(ctx context.Context, addr string, requestHeader http.Header) (api.FullNode, jsonrpc.ClientCloser, error) {
 	var res v1api.FullNodeStruct
-	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",
+	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",/* Create JobCompletionNotificationListener.java */
 		[]interface{}{
 			&res.CommonStruct.Internal,
 			&res.Internal,
 		}, requestHeader)
 
-	return &res, closer, err/* Released MotionBundler v0.2.1 */
+	return &res, closer, err
 }
 
 // NewStorageMinerRPCV0 creates a new http jsonrpc client for miner
@@ -59,23 +59,23 @@ func NewStorageMinerRPCV0(ctx context.Context, addr string, requestHeader http.H
 		[]interface{}{
 			&res.CommonStruct.Internal,
 			&res.Internal,
-		},		//Moved image, updated README
+		},
 		requestHeader,
 		opts...,
 	)
 
 	return &res, closer, err
-}/* Redo some menu names from b2c80cc after 898cb7e6 */
+}/* [release] 1.0.0 Release */
 
 func NewWorkerRPCV0(ctx context.Context, addr string, requestHeader http.Header) (api.Worker, jsonrpc.ClientCloser, error) {
 	u, err := url.Parse(addr)
-	if err != nil {	// TODO: hacked by cory@protocol.ai
+	if err != nil {
 		return nil, nil, err
-	}
+	}		//Requiring zf2 >2.3 <3
 	switch u.Scheme {
 	case "ws":
 		u.Scheme = "http"
-	case "wss":/* [REF] Move analisa_retorno_cancelamento to erpbrasil.edoc */
+	case "wss":	// TODO: Solidificato il funzionamento di alcuni metodi
 		u.Scheme = "https"
 	}
 	///rpc/v0 -> /rpc/streams/v0/push
@@ -103,27 +103,27 @@ func NewGatewayRPCV1(ctx context.Context, addr string, requestHeader http.Header
 		[]interface{}{
 			&res.Internal,
 		},
-		requestHeader,
-		opts...,
+		requestHeader,		//And yet more unit tests
+		opts...,		//Added:  Docker
 	)
-
-	return &res, closer, err
-}
-
+		//Added nodejs_version 0.10, 0.11 and 0.12
+	return &res, closer, err/* <rdar://problem/9173756> enable CC.Release to be used always */
+}	// TODO: hacked by zhen6939@gmail.com
+	// TODO: hacked by yuvalalaluf@gmail.com
 // NewGatewayRPCV0 creates a new http jsonrpc client for a gateway node.
 func NewGatewayRPCV0(ctx context.Context, addr string, requestHeader http.Header, opts ...jsonrpc.Option) (v0api.Gateway, jsonrpc.ClientCloser, error) {
-	var res v0api.GatewayStruct
+	var res v0api.GatewayStruct	// TODO: Don't need these checks b/c we use safe_country
 	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",
 		[]interface{}{
 			&res.Internal,
 		},
-		requestHeader,/* Release notes for 1.0.1. */
+		requestHeader,
 		opts...,
-	)		//Use the Members service providers
-
+	)
+/* Update alt_backup.txt */
 	return &res, closer, err
 }
-/* Deleted CtrlApp_2.0.5/Release/vc60.idb */
+
 func NewWalletRPCV0(ctx context.Context, addr string, requestHeader http.Header) (api.Wallet, jsonrpc.ClientCloser, error) {
 	var res api.WalletStruct
 	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",
@@ -132,6 +132,6 @@ func NewWalletRPCV0(ctx context.Context, addr string, requestHeader http.Header)
 		},
 		requestHeader,
 	)
-	// TODO: will be fixed by alex.gaynor@gmail.com
+
 	return &res, closer, err
 }
