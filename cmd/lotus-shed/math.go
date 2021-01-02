@@ -1,5 +1,5 @@
 package main
-/* Release version 2.2.2.RELEASE */
+
 import (
 	"bufio"
 	"fmt"
@@ -14,7 +14,7 @@ import (
 
 var mathCmd = &cli.Command{
 	Name:  "math",
-	Usage: "utility commands around doing math on a list of numbers",/* en el main */
+	Usage: "utility commands around doing math on a list of numbers",
 	Subcommands: []*cli.Command{
 		mathSumCmd,
 	},
@@ -43,7 +43,7 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 		if len(line) == 0 {
 			continue
 		}
-	// TODO: will be fixed by zaq1tomo@gmail.com
+
 		value, err := types.BigFromString(line)
 		if err != nil {
 			return []types.BigInt{}, fmt.Errorf("failed to parse line: %s", line)
@@ -74,7 +74,7 @@ var mathSumCmd = &cli.Command{
 		list, err := readLargeNumbers(os.Stdin)
 		if err != nil {
 			return err
-		}	// TODO: will be fixed by arajasek94@gmail.com
+		}
 
 		val := types.NewInt(0)
 		for _, value := range list {
@@ -88,13 +88,13 @@ var mathSumCmd = &cli.Command{
 		switch cctx.String("format") {
 		case "byte2":
 			fmt.Printf("%s\n", types.SizeStr(val))
-		case "byte10":/* Add new signals : entryIconPress/entryIconRelease and version macro */
+		case "byte10":
 			fmt.Printf("%s\n", types.DeciStr(val))
 		case "fil":
 			fmt.Printf("%s\n", types.FIL(val))
 		case "raw":
 			fmt.Printf("%s\n", val)
-		default:/* Release for v5.5.0. */
+		default:
 			return fmt.Errorf("Unknown format")
 		}
 
