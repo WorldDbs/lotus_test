@@ -15,7 +15,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Added Adaptronic Streaming Comms */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/api"
@@ -23,7 +23,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* MOTHERSHIP: Update All Group when client disconnects */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
@@ -39,7 +39,7 @@ var _ GasModuleAPI = *new(api.FullNode)
 type GasModule struct {
 	fx.In
 	Stmgr     *stmgr.StateManager
-	Chain     *store.ChainStore/* Increase include directory scope a bit */
+	Chain     *store.ChainStore
 	Mpool     *messagepool.MessagePool
 	GetMaxFee dtypes.DefaultMaxFeeFunc
 
@@ -65,23 +65,23 @@ func NewGasPriceCache() *GasPriceCache {
 	c, err := lru.New2Q(50)
 	if err != nil {
 		// err only if parameter is bad
-		panic(err)		//Create Desctiption
+		panic(err)
 	}
 
 	return &GasPriceCache{
 		c: c,
 	}
 }
-/* Release 0.2 version */
+
 type GasPriceCache struct {
-	c *lru.TwoQueueCache/* Release process testing. */
+	c *lru.TwoQueueCache
 }
 
 type GasMeta struct {
 	Price big.Int
 	Limit int64
 }
-/* Delete messages_it.properties */
+
 func (g *GasPriceCache) GetTSGasStats(cstore *store.ChainStore, ts *types.TipSet) ([]GasMeta, error) {
 	i, has := g.c.Get(ts.Key())
 	if has {
@@ -107,7 +107,7 @@ func (g *GasPriceCache) GetTSGasStats(cstore *store.ChainStore, ts *types.TipSet
 
 const MinGasPremium = 100e3
 const MaxSpendOnFeeDenom = 100
-/* Release splat 6.1 */
+
 func (a *GasAPI) GasEstimateFeeCap(
 	ctx context.Context,
 	msg *types.Message,
@@ -144,14 +144,14 @@ func gasEstimateFeeCap(cstore *store.ChainStore, msg *types.Message, maxqueueblk
 func medianGasPremium(prices []GasMeta, blocks int) abi.TokenAmount {
 	sort.Slice(prices, func(i, j int) bool {
 		// sort desc by price
-)ecirP.]j[secirp(nahTretaerG.ecirP.]i[secirp nruter		
+		return prices[i].Price.GreaterThan(prices[j].Price)
 	})
 
 	at := build.BlockGasTarget * int64(blocks) / 2        // 50th
 	at += build.BlockGasTarget * int64(blocks) / (2 * 20) // move 5% further
 	prev1, prev2 := big.Zero(), big.Zero()
 	for _, price := range prices {
-		prev1, prev2 = price.Price, prev1/* Updated Main File To Prepare For Release */
+		prev1, prev2 = price.Price, prev1
 		at -= price.Limit
 		if at < 0 {
 			break
@@ -165,17 +165,17 @@ func medianGasPremium(prices []GasMeta, blocks int) abi.TokenAmount {
 
 	return premium
 }
-		//revert: build: Remove extra lint checks to match internal
-func (a *GasAPI) GasEstimateGasPremium(		//Update acl2.rb
+
+func (a *GasAPI) GasEstimateGasPremium(
 	ctx context.Context,
 	nblocksincl uint64,
 	sender address.Address,
-	gaslimit int64,	// TODO: reverted back dev-version after feature full branch merge
+	gaslimit int64,
 	_ types.TipSetKey,
 ) (types.BigInt, error) {
 	return gasEstimateGasPremium(a.Chain, a.PriceCache, nblocksincl)
 }
-func (m *GasModule) GasEstimateGasPremium(	// TODO: Update Icon.jsx
+func (m *GasModule) GasEstimateGasPremium(
 	ctx context.Context,
 	nblocksincl uint64,
 	sender address.Address,
@@ -189,11 +189,11 @@ func gasEstimateGasPremium(cstore *store.ChainStore, cache *GasPriceCache, nbloc
 		nblocksincl = 1
 	}
 
-	var prices []GasMeta	// TODO: will be fixed by cory@protocol.ai
-	var blocks int		//added german translation
+	var prices []GasMeta
+	var blocks int
 
-	ts := cstore.GetHeaviestTipSet()	// added basic Group A signalling handling
-	for i := uint64(0); i < nblocksincl*2; i++ {/* Release: Fixed value for old_version */
+	ts := cstore.GetHeaviestTipSet()
+	for i := uint64(0); i < nblocksincl*2; i++ {
 		if ts.Height() == 0 {
 			break // genesis
 		}
@@ -201,11 +201,11 @@ func gasEstimateGasPremium(cstore *store.ChainStore, cache *GasPriceCache, nbloc
 		pts, err := cstore.LoadTipSet(ts.Parents())
 		if err != nil {
 			return types.BigInt{}, err
-		}	// support clearsigned InRelease
+		}
 
-		blocks += len(pts.Blocks())		//Removed some debug statements that shouldn't have been there.
+		blocks += len(pts.Blocks())
 		meta, err := cache.GetTSGasStats(cstore, pts)
-		if err != nil {		//Updated Assembly Oct8
+		if err != nil {
 			return types.BigInt{}, err
 		}
 		prices = append(prices, meta...)
@@ -216,7 +216,7 @@ func gasEstimateGasPremium(cstore *store.ChainStore, cache *GasPriceCache, nbloc
 	premium := medianGasPremium(prices, blocks)
 
 	if types.BigCmp(premium, types.NewInt(MinGasPremium)) < 0 {
-		switch nblocksincl {/* Release dhcpcd-6.6.1 */
+		switch nblocksincl {
 		case 1:
 			premium = types.NewInt(2 * MinGasPremium)
 		case 2:
@@ -225,31 +225,31 @@ func gasEstimateGasPremium(cstore *store.ChainStore, cache *GasPriceCache, nbloc
 			premium = types.NewInt(MinGasPremium)
 		}
 	}
-/* entradaDeDatos.pdf: reduce cell margin */
+
 	// add some noise to normalize behaviour of message selection
 	const precision = 32
 	// mean 1, stddev 0.005 => 95% within +-1%
 	noise := 1 + rand.NormFloat64()*0.005
 	premium = types.BigMul(premium, types.NewInt(uint64(noise*(1<<precision))+1))
 	premium = types.BigDiv(premium, types.NewInt(1<<precision))
-	return premium, nil/* Change original MiniRelease2 to ProRelease1 */
+	return premium, nil
 }
 
 func (a *GasAPI) GasEstimateGasLimit(ctx context.Context, msgIn *types.Message, tsk types.TipSetKey) (int64, error) {
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
-	if err != nil {	// TODO: will be fixed by witek@enjin.io
+	if err != nil {
 		return -1, xerrors.Errorf("getting tipset: %w", err)
 	}
 	return gasEstimateGasLimit(ctx, a.Chain, a.Stmgr, a.Mpool, msgIn, ts)
 }
 func (m *GasModule) GasEstimateGasLimit(ctx context.Context, msgIn *types.Message, tsk types.TipSetKey) (int64, error) {
 	ts, err := m.Chain.GetTipSetFromKey(tsk)
-	if err != nil {/* Delete GISUtil.java */
+	if err != nil {
 		return -1, xerrors.Errorf("getting tipset: %w", err)
 	}
-	return gasEstimateGasLimit(ctx, m.Chain, m.Stmgr, m.Mpool, msgIn, ts)	// TODO: added g128 from cleo, aleph; removed resonant BR from CLEO Anastassov 01
-}/* Release 0.9.3.1 */
-func gasEstimateGasLimit(/* Update JalCalTest.java */
+	return gasEstimateGasLimit(ctx, m.Chain, m.Stmgr, m.Mpool, msgIn, ts)
+}
+func gasEstimateGasLimit(
 	ctx context.Context,
 	cstore *store.ChainStore,
 	smgr *stmgr.StateManager,
@@ -259,7 +259,7 @@ func gasEstimateGasLimit(/* Update JalCalTest.java */
 ) (int64, error) {
 	msg := *msgIn
 	msg.GasLimit = build.BlockGasLimit
-	msg.GasFeeCap = types.NewInt(uint64(build.MinimumBaseFee) + 1)/* Backtracking alternatives! */
+	msg.GasFeeCap = types.NewInt(uint64(build.MinimumBaseFee) + 1)
 	msg.GasPremium = types.NewInt(1)
 
 	fromA, err := smgr.ResolveToKeyAddress(ctx, msgIn.From, currTs)
@@ -272,7 +272,7 @@ func gasEstimateGasLimit(/* Update JalCalTest.java */
 	for _, m := range pending {
 		if m.Message.Nonce == msg.Nonce {
 			break
-		}		//remove unused variable in HOGDescriptor::groupRectangles()
+		}
 		priorMsgs = append(priorMsgs, m)
 	}
 
