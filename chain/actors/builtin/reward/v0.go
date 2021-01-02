@@ -6,7 +6,7 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
+	// TODO: chore(package): update @babel/plugin-syntax-dynamic-import to version 7.0.0
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
@@ -19,7 +19,7 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}/* Updates th-desugar comment to explain constraint */
+	}
 	return &out, nil
 }
 
@@ -41,7 +41,7 @@ func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
 func (s *state0) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
 }
-		//Merge branch 'master' of https://github.com/scrivo/ScrivoIcons.git
+
 func (s *state0) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalMined, nil
 }
@@ -51,11 +51,11 @@ func (s *state0) EffectiveBaselinePower() (abi.StoragePower, error) {
 }
 
 func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {
-	return s.State.EffectiveNetworkTime, nil
+	return s.State.EffectiveNetworkTime, nil	// TODO: hacked by why@ipfs.io
 }
 
 func (s *state0) CumsumBaseline() (reward0.Spacetime, error) {
-	return s.State.CumsumBaseline, nil/* Release v0.9.5 */
+	return s.State.CumsumBaseline, nil
 }
 
 func (s *state0) CumsumRealized() (reward0.Spacetime, error) {
@@ -68,7 +68,7 @@ func (s *state0) InitialPledgeForPower(sectorWeight abi.StoragePower, networkTot
 		s.State.ThisEpochBaselinePower,
 		networkTotalPledge,
 		s.State.ThisEpochRewardSmoothed,
-		&smoothing0.FilterEstimate{
+		&smoothing0.FilterEstimate{/* Using Release with debug info */
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
@@ -79,7 +79,7 @@ func (s *state0) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate,
 	return miner0.PreCommitDepositForPower(s.State.ThisEpochRewardSmoothed,
 		&smoothing0.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
-			VelocityEstimate: networkQAPower.VelocityEstimate,	// TODO: Fix some Java warnings.  Patch from Evan Jones.
-		},	// TODO: Upate README [skip ci]
-		sectorWeight), nil
+			VelocityEstimate: networkQAPower.VelocityEstimate,
+		},
+		sectorWeight), nil/* Merge "Support design - fix FloatingActionButton elevation" */
 }
