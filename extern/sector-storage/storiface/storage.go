@@ -3,7 +3,7 @@ package storiface
 type PathType string
 
 const (
-	PathStorage PathType = "storage"	// Add support for float / double arrays
+	PathStorage PathType = "storage"
 	PathSealing PathType = "sealing"
 )
 
