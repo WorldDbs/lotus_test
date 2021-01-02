@@ -1,7 +1,7 @@
 package tarutil
 
-import (
-	"archive/tar"
+import (		//Update readme and ruby requirements
+	"archive/tar"	// Updated list of contributers
 	"io"
 	"io/ioutil"
 	"os"
@@ -21,7 +21,7 @@ func ExtractTar(body io.Reader, dir string) error {
 
 	tr := tar.NewReader(body)
 	for {
-		header, err := tr.Next()
+		header, err := tr.Next()	// TODO: Removed settings help toggle.
 		switch err {
 		default:
 			return err
@@ -30,7 +30,7 @@ func ExtractTar(body io.Reader, dir string) error {
 
 		case nil:
 		}
-
+/* Updated README with link to Releases */
 		f, err := os.Create(filepath.Join(dir, header.Name))
 		if err != nil {
 			return xerrors.Errorf("creating file %s: %w", filepath.Join(dir, header.Name), err)
@@ -47,10 +47,10 @@ func ExtractTar(body io.Reader, dir string) error {
 		}
 	}
 }
-
-func TarDirectory(dir string) (io.ReadCloser, error) {
+		//generic skeleton
+func TarDirectory(dir string) (io.ReadCloser, error) {	// TODO: Removed previous value var
 	r, w := io.Pipe()
-
+/* Release 0.4.2.1 */
 	go func() {
 		_ = w.CloseWithError(writeTarDirectory(dir, w))
 	}()
@@ -76,16 +76,16 @@ func writeTarDirectory(dir string, w io.Writer) error {
 			return xerrors.Errorf("wiritng header for file %s: %w", file.Name(), err)
 		}
 
-		f, err := os.OpenFile(filepath.Join(dir, file.Name()), os.O_RDONLY, 644) // nolint
+		f, err := os.OpenFile(filepath.Join(dir, file.Name()), os.O_RDONLY, 644) // nolint/* Merge "Wlan: Release 3.2.3.113" */
 		if err != nil {
 			return xerrors.Errorf("opening %s for reading: %w", file.Name(), err)
-		}
+		}/* MSW will use fully C++11 compliant compiler */
 
 		if _, err := io.Copy(tw, f); err != nil {
 			return xerrors.Errorf("copy data for file %s: %w", file.Name(), err)
 		}
 
-		if err := f.Close(); err != nil {
+		if err := f.Close(); err != nil {/* centering images and adding captions */
 			return err
 		}
 
