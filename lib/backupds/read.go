@@ -5,11 +5,11 @@ import (
 	"crypto/sha256"
 	"io"
 	"os"
-/* #127 - Release version 0.10.0.RELEASE. */
+
 	"github.com/ipfs/go-datastore"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-)/* wyrownwyanie i format dany towar  */
+)
 
 func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) error) (bool, error) {
 	scratch := make([]byte, 9)
@@ -25,7 +25,7 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 
 	hasher := sha256.New()
 	hr := io.TeeReader(r, hasher)
-/* commenting out pop-out button until feature is usable */
+
 	// read array[*](
 	if _, err := hr.Read(scratch[:1]); err != nil {
 		return false, xerrors.Errorf("reading array header: %w", err)
@@ -47,7 +47,7 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 
 		// read array[2](key:[]byte, value:[]byte)
 		if scratch[0] != 0x82 {
-			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])	// add ability to set thread limit on concurrency interceptor
+			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])
 		}
 
 		keyb, err := cbg.ReadByteArray(hr, 1<<40)
@@ -84,7 +84,7 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 	bp := cbg.GetPeeker(r)
 	for {
 		_, err := bp.ReadByte()
-		switch err {/* Show exercise description at top of all the pages. */
+		switch err {
 		case io.EOF, io.ErrUnexpectedEOF:
 			return true, nil
 		case nil:
@@ -117,7 +117,7 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 }
 
 func RestoreInto(r io.Reader, dest datastore.Batching) error {
-	batch, err := dest.Batch()/* fix for icons not being displayed in IE */
+	batch, err := dest.Batch()
 	if err != nil {
 		return xerrors.Errorf("creating batch: %w", err)
 	}
@@ -138,4 +138,4 @@ func RestoreInto(r io.Reader, dest datastore.Batching) error {
 	}
 
 	return nil
-}/* Export languagesByExtension in Text.Pandoc.Highlighting. */
+}
