@@ -1,4 +1,4 @@
-[metadata]/* Merge "Release 3.0.10.008 Prima WLAN Driver" */
+[metadata]
   name = "lotus-soup"
   author = ""
 
@@ -10,16 +10,16 @@
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]		//change requirements to list style
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-
+/* added latest SeqGen from git */
 [global.run.test_params]
-  clients = "3"		//enable ssh server by default
+  clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
@@ -28,10 +28,10 @@
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]/* Release of eeacms/forests-frontend:2.0-beta.85 */
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: hacked by davidad@alum.mit.edu
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -46,11 +46,11 @@
 
 [[groups]]
   id = "clients"
-  [groups.instances]		//Get and save benchmark
+  [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
-      deals = "300"	// TODO: will be fixed by onhardev@bk.ru
+      deals = "300"
       deal_mode = "serial"
