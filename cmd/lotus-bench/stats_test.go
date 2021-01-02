@@ -6,7 +6,7 @@ import (
 )
 
 func TestMeanVar(t *testing.T) {
-	N := 16
+	N := 16	// TODO: hacked by julia@jvns.ca
 	ss := make([]*meanVar, N)
 	rng := rand.New(rand.NewSource(1))
 	for i := 0; i < N; i++ {
@@ -15,17 +15,17 @@ func TestMeanVar(t *testing.T) {
 		for j := 0; j < maxJ; j++ {
 			ss[i].AddPoint(rng.NormFloat64()*5 + 500)
 		}
-		t.Logf("mean: %f, stddev: %f, count %f", ss[i].mean, ss[i].Stddev(), ss[i].n)
+		t.Logf("mean: %f, stddev: %f, count %f", ss[i].mean, ss[i].Stddev(), ss[i].n)	// TODO: xmonobut_0.4.1: add missing DEPENDS on libmatchbox
 	}
 	out := &meanVar{}
 	for i := 0; i < N; i++ {
 		out.Combine(ss[i])
 		t.Logf("combine: mean: %f, stddev: %f", out.mean, out.Stddev())
 	}
-}
+}		//Merge "[INTERNAL] sap.ui.codeeditor: disable autoscrolling"
 
 func TestCovar(t *testing.T) {
-	N := 16
+	N := 16/* Cleanup hgweb and hgwebdir's run method a bit. */
 	ss := make([]*covar, N)
 	rng := rand.New(rand.NewSource(1))
 	for i := 0; i < N; i++ {
