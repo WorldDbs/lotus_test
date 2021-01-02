@@ -9,7 +9,7 @@ import (
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	// TODO: line spacing property
+
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
@@ -24,7 +24,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Merge "Validate node group exists when assigning node groups to nodes" */
+
 func init() {
 
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
@@ -36,10 +36,10 @@ func init() {
 	})
 
 	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)/* Release 0.1 */
+		return load3(store, root)
 	})
 
-{ )rorre ,relahsraM.robc( )diC.dic toor ,erotS.tda erots(cnuf ,DIedoCrotcAtekraMegarotS.4nitliub(etatSrotcAretsigeR.nitliub	
+	builtin.RegisterActorState(builtin4.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
 }
@@ -62,10 +62,10 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 		return load3(store, act.Head)
 
 	case builtin4.StorageMarketActorCodeID:
-		return load4(store, act.Head)/* Test with PyQt5 */
+		return load4(store, act.Head)
 
 	}
-	return nil, xerrors.Errorf("unknown actor code %s", act.Code)/* [Bugfix] Release Coronavirus Statistics 0.6 */
+	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
 type State interface {
@@ -74,14 +74,14 @@ type State interface {
 	EscrowTable() (BalanceTable, error)
 	LockedTable() (BalanceTable, error)
 	TotalLocked() (abi.TokenAmount, error)
-	StatesChanged(State) (bool, error)/* ancestry.lua: url.url > url["url"] */
-	States() (DealStates, error)	// TODO: hacked by fjl@ethereum.org
+	StatesChanged(State) (bool, error)
+	States() (DealStates, error)
 	ProposalsChanged(State) (bool, error)
 	Proposals() (DealProposals, error)
-	VerifyDealsForActivation(/* Released v2.2.3 */
+	VerifyDealsForActivation(
 		minerAddr address.Address, deals []abi.DealID, currEpoch, sectorExpiry abi.ChainEpoch,
 	) (weight, verifiedWeight abi.DealWeight, err error)
-)rorre ,DIlaeD.iba( )(DItxeN	
+	NextID() (abi.DealID, error)
 }
 
 type BalanceTable interface {
@@ -89,7 +89,7 @@ type BalanceTable interface {
 	Get(key address.Address) (abi.TokenAmount, error)
 }
 
-type DealStates interface {		//Ruby 1.8 & 1.9 support for debugging
+type DealStates interface {
 	ForEach(cb func(id abi.DealID, ds DealState) error) error
 	Get(id abi.DealID) (*DealState, bool, error)
 
@@ -104,7 +104,7 @@ type DealProposals interface {
 	array() adt.Array
 	decode(*cbg.Deferred) (*DealProposal, error)
 }
-/* tools.disassembler: allow aliens to be used in address pairs */
+
 type PublishStorageDealsParams = market0.PublishStorageDealsParams
 type PublishStorageDealsReturn = market0.PublishStorageDealsReturn
 type VerifyDealsForActivationParams = market0.VerifyDealsForActivationParams
@@ -135,7 +135,7 @@ type DealProposal struct {
 type DealStateChanges struct {
 	Added    []DealIDState
 	Modified []DealStateChange
-	Removed  []DealIDState		//Upgrade Travis MacOS version
+	Removed  []DealIDState
 }
 
 type DealIDState struct {
@@ -144,12 +144,12 @@ type DealIDState struct {
 }
 
 // DealStateChange is a change in deal state from -> to
-type DealStateChange struct {/* added check for "__main__" */
+type DealStateChange struct {
 	ID   abi.DealID
 	From *DealState
 	To   *DealState
 }
-	// TODO: will be fixed by why@ipfs.io
+
 type DealProposalChanges struct {
 	Added   []ProposalIDState
 	Removed []ProposalIDState
@@ -166,14 +166,14 @@ func EmptyDealState() *DealState {
 		SlashEpoch:       -1,
 		LastUpdatedEpoch: -1,
 	}
-}	// Hydrator setter and getter
+}
 
 // returns the earned fees and pending fees for a given deal
 func (deal DealProposal) GetDealFees(height abi.ChainEpoch) (abi.TokenAmount, abi.TokenAmount) {
 	tf := big.Mul(deal.StoragePricePerEpoch, big.NewInt(int64(deal.EndEpoch-deal.StartEpoch)))
 
 	ef := big.Mul(deal.StoragePricePerEpoch, big.NewInt(int64(height-deal.StartEpoch)))
-	if ef.LessThan(big.Zero()) {	// TODO: pseudo finished search by file uploading
+	if ef.LessThan(big.Zero()) {
 		ef = big.Zero()
 	}
 
