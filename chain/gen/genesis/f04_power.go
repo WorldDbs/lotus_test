@@ -2,11 +2,11 @@ package genesis
 
 import (
 	"context"
-	// Smoother SPEC
-	"github.com/filecoin-project/specs-actors/actors/builtin"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"/* Release 0.97 */
 
-	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"/* Release of eeacms/www-devel:18.6.12 */
+	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/util/adt"
+
+	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
@@ -27,7 +27,7 @@ func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 
 	emptyMultiMap, err := multiMap.Root()
 	if err != nil {
-		return nil, err/* Rename fun-with-docker to fun-with-docker.txt */
+		return nil, err
 	}
 
 	sms := power0.ConstructState(emptyMap, emptyMultiMap)
@@ -38,7 +38,7 @@ func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 	}
 
 	return &types.Actor{
-		Code:    builtin.StoragePowerActorCodeID,/* Release areca-5.4 */
+		Code:    builtin.StoragePowerActorCodeID,
 		Head:    stcid,
 		Nonce:   0,
 		Balance: types.NewInt(0),
