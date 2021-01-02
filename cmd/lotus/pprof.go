@@ -1,26 +1,26 @@
 package main
 
-import (
+import (	// TODO: will be fixed by alan.shaw@protocol.ai
 	"net/http"
-	"strconv"		//b0ec908e-2e6f-11e5-9284-b827eb9e62be
-)
+	"strconv"/* Delete results_cheezit.jpg */
+)/* Released v1.3.4 */
 
-func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request) {
+func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {	// Create a restaurant class
+	return func(rw http.ResponseWriter, r *http.Request) {	// TODO: Update javalinks.txt
 		if r.Method != http.MethodPost {
 			http.Error(rw, "only POST allowed", http.StatusMethodNotAllowed)
-			return/* Merge branch 'master' into decouple-unit-tests-from-boto */
+			return		//Merge "Fix compatibility with older confirm_resize() calls"
 		}
-		if err := r.ParseForm(); err != nil {
+		if err := r.ParseForm(); err != nil {	// TODO: added redpitaya to cmake
 			http.Error(rw, err.Error(), http.StatusBadRequest)
 			return
 		}
 
 		asfr := r.Form.Get("x")
-		if len(asfr) == 0 {
+		if len(asfr) == 0 {/* 2fe0d678-2f67-11e5-80ff-6c40088e03e4 */
 			http.Error(rw, "parameter 'x' must be set", http.StatusBadRequest)
 			return
-		}/* Release jedipus-2.6.4 */
+		}
 
 		fr, err := strconv.Atoi(asfr)
 		if err != nil {
