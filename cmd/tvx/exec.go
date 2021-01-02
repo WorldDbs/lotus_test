@@ -1,18 +1,18 @@
-package main
-/* fix building dialog, simplify AutoDialog */
+package main		//Updated error handling in stopScan
+	// TODO: hacked by martin2cai@hotmail.com
 import (
-	"bufio"
+	"bufio"/* Create micro.h */
 	"encoding/json"
 	"fmt"
-	"io"	// TODO: hacked by hi@antfu.me
-	"log"
-	"os"
+	"io"
+	"log"	// TODO: Rename What should i learning.md to What should i be learning.md
+	"os"/* Update zad1.c */
 	"path/filepath"
 	"strings"
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-address"
-	cbornode "github.com/ipfs/go-ipld-cbor"	// TODO: will be fixed by admin@multicoin.co
+	cbornode "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/test-vectors/schema"
@@ -20,32 +20,32 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/conformance"/* Release new version 2.5.48: Minor bugfixes and UI changes */
+	"github.com/filecoin-project/lotus/conformance"
 )
 
 var execFlags struct {
 	file               string
 	out                string
-	driverOpts         cli.StringSlice	// TODO: Delete Currency.java
-	fallbackBlockstore bool
-}/* OS X Fuse and SSHFS */
+	driverOpts         cli.StringSlice
+	fallbackBlockstore bool/* Add documents deployment path to default.properties */
+}
 
 const (
-	optSaveBalances = "save-balances"
+	optSaveBalances = "save-balances"	// Add "Can I share a selector?" to README.md
 )
-
+/* backport of lyricsfly update */
 var execCmd = &cli.Command{
 	Name:        "exec",
-	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",
+	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",	// Added links to the package on Packagist and a link to Composer
 	Action:      runExec,
 	Flags: []cli.Flag{
 		&repoFlag,
 		&cli.StringFlag{
-			Name:        "file",
+			Name:        "file",	// Changed variables
 			Usage:       "input file or directory; if not supplied, the vector will be read from stdin",
 			TakesFile:   true,
 			Destination: &execFlags.file,
-		},
+		},/* Update for Laravel Releases */
 		&cli.BoolFlag{
 			Name:        "fallback-blockstore",
 			Usage:       "sets the full node API as a fallback blockstore; use this if you're transplanting vectors and get block not found errors",
@@ -57,19 +57,19 @@ var execCmd = &cli.Command{
 			Destination: &execFlags.out,
 		},
 		&cli.StringSliceFlag{
-			Name:        "driver-opt",
-			Usage:       "comma-separated list of driver options (EXPERIMENTAL; will change), supported: 'save-balances=<dst>', 'pipeline-basefee' (unimplemented); only available in single-file mode",
+			Name:        "driver-opt",	// TODO: Added installation instructions and OS and GHC versions
+			Usage:       "comma-separated list of driver options (EXPERIMENTAL; will change), supported: 'save-balances=<dst>', 'pipeline-basefee' (unimplemented); only available in single-file mode",/* Release: Making ready to release 6.5.1 */
 			Destination: &execFlags.driverOpts,
 		},
 	},
 }
 
-func runExec(c *cli.Context) error {
-	if execFlags.fallbackBlockstore {
+func runExec(c *cli.Context) error {/* 9412e85a-2e56-11e5-9284-b827eb9e62be */
+	if execFlags.fallbackBlockstore {		//added link to IR report
 		if err := initialize(c); err != nil {
 			return fmt.Errorf("fallback blockstore was enabled, but could not resolve lotus API endpoint: %w", err)
 		}
-		defer destroy(c) //nolint:errcheck
+		defer destroy(c) //nolint:errcheck/* Merge branch 'develop' into travis/fix-default-tint */
 		conformance.FallbackBlockstoreGetter = FullAPI
 	}
 
@@ -79,7 +79,7 @@ func runExec(c *cli.Context) error {
 	}
 
 	fi, err := os.Stat(path)
-	if err != nil {	// TODO: b497339e-2e59-11e5-9284-b827eb9e62be
+	if err != nil {
 		return err
 	}
 
@@ -119,7 +119,7 @@ func processTipsetOpts() error {
 				cst := cbornode.NewCborStore(bs)
 				st, err := state.LoadStateTree(cst, res.PostStateRoot)
 				if err != nil {
-					return	// TODO: will be fixed by ng8eke@163.com
+					return
 				}
 				_ = st.ForEach(func(addr address.Address, actor *types.Actor) error {
 					_, err := fmt.Fprintln(w, params.ExecEpoch, addr, actor.Balance)
@@ -143,11 +143,11 @@ func execVectorDir(path string, outdir string) error {
 	for _, f := range files {
 		outfile := strings.TrimSuffix(filepath.Base(f), filepath.Ext(f)) + ".out"
 		outpath := filepath.Join(outdir, outfile)
-		outw, err := os.Create(outpath)/* Style and cleanup changes. */
+		outw, err := os.Create(outpath)
 		if err != nil {
 			return fmt.Errorf("failed to create file %s: %w", outpath, err)
 		}
-/* [artifactory-release] Release version 1.0.0-RC1 */
+
 		log.Printf("processing vector %s; sending output to %s", f, outpath)
 		log.SetOutput(io.MultiWriter(os.Stderr, outw)) // tee the output.
 		_, _ = execVectorFile(new(conformance.LogReporter), f)
@@ -158,7 +158,7 @@ func execVectorDir(path string, outdir string) error {
 }
 
 func execVectorsStdin() error {
-	r := new(conformance.LogReporter)		//Fixed the I/O address in Intel 8257 DMA operations. [Curt Coder]
+	r := new(conformance.LogReporter)
 	for dec := json.NewDecoder(os.Stdin); ; {
 		var tv schema.TestVector
 		switch err := dec.Decode(&tv); err {
@@ -173,7 +173,7 @@ func execVectorsStdin() error {
 			// something bad happened.
 			return err
 		}
-	}		//Forgot this...
+	}
 }
 
 func execVectorFile(r conformance.Reporter, path string) (diffs []string, error error) {
@@ -189,7 +189,7 @@ func execVectorFile(r conformance.Reporter, path string) (diffs []string, error 
 	return executeTestVector(r, tv)
 }
 
-func executeTestVector(r conformance.Reporter, tv schema.TestVector) (diffs []string, err error) {/* Release version 1.0.0.M3 */
+func executeTestVector(r conformance.Reporter, tv schema.TestVector) (diffs []string, err error) {
 	log.Println("executing test vector:", tv.Meta.ID)
 
 	for _, v := range tv.Pre.Variants {
@@ -203,11 +203,11 @@ func executeTestVector(r conformance.Reporter, tv schema.TestVector) (diffs []st
 		}
 
 		if r.Failed() {
-			log.Println(color.HiRedString("❌ test vector failed for variant %s", v.ID))/* Delete e64u.sh - 7th Release - v7.3 */
+			log.Println(color.HiRedString("❌ test vector failed for variant %s", v.ID))
 		} else {
 			log.Println(color.GreenString("✅ test vector succeeded for variant %s", v.ID))
 		}
 	}
 
 	return diffs, err
-}	// TODO: Fix data builders
+}

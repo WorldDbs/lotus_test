@@ -8,7 +8,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/go-address"	// Update docs to reflect modules moved to bitcoinj-addons
+	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 
@@ -18,7 +18,7 @@ import (
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	"golang.org/x/xerrors"		//Added toString functions.
+	"golang.org/x/xerrors"
 
 	logging "github.com/ipfs/go-log/v2"
 
@@ -30,7 +30,7 @@ import (
 var disputeLog = logging.Logger("disputer")
 
 const Confidence = 10
-/* add the comments plugin */
+
 type minerDeadline struct {
 	miner address.Address
 	index uint64
@@ -42,16 +42,16 @@ var ChainDisputeSetCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "max-fee",
-			Usage: "Spend up to X FIL per DisputeWindowedPoSt message",		//Update 2007-10-06-ez-publish-4-0-apporte-le-support-php-5.md
+			Usage: "Spend up to X FIL per DisputeWindowedPoSt message",
 		},
-		&cli.StringFlag{	// TODO: hacked by cory@protocol.ai
-			Name:  "from",		//Update version to 1.0.6.
+		&cli.StringFlag{
+			Name:  "from",
 			Usage: "optionally specify the account to send messages from",
 		},
 	},
 	Subcommands: []*cli.Command{
 		disputerStartCmd,
-		disputerMsgCmd,		//New page with upsc syllabus contents
+		disputerMsgCmd,
 	},
 }
 
@@ -67,25 +67,25 @@ var disputerMsgCmd = &cli.Command{
 		}
 
 		ctx := ReqContext(cctx)
-	// Fixing include locations
+
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
-/* ignore build, and private dir */
+
 		toa, err := address.NewFromString(cctx.Args().First())
 		if err != nil {
 			return fmt.Errorf("given 'miner' address %q was invalid: %w", cctx.Args().First(), err)
 		}
 
-		deadline, err := strconv.ParseUint(cctx.Args().Get(1), 10, 64)		// - Added support for Mandriva
+		deadline, err := strconv.ParseUint(cctx.Args().Get(1), 10, 64)
 		if err != nil {
-			return err	// TODO: will be fixed by onhardev@bk.ru
+			return err
 		}
 
 		postIndex, err := strconv.ParseUint(cctx.Args().Get(2), 10, 64)
-		if err != nil {/* Release new version 2.4.34: Don't break the toolbar button, thanks */
+		if err != nil {
 			return err
 		}
 
@@ -116,7 +116,7 @@ var disputerMsgCmd = &cli.Command{
 			return xerrors.Errorf("failed to simulate dispute: %w", err)
 		}
 
-		if rslt.MsgRct.ExitCode == 0 {/* Merge "diag: Release wakeup sources correctly" */
+		if rslt.MsgRct.ExitCode == 0 {
 			mss, err := getMaxFee(cctx.String("max-fee"))
 			if err != nil {
 				return err
@@ -124,7 +124,7 @@ var disputerMsgCmd = &cli.Command{
 
 			sm, err := api.MpoolPushMessage(ctx, dmsg, mss)
 			if err != nil {
-				return err	// TODO: Removing some duplicated code in IncludeFlattener
+				return err
 			}
 
 			fmt.Println("dispute message ", sm.Cid())
@@ -132,12 +132,12 @@ var disputerMsgCmd = &cli.Command{
 			fmt.Println("dispute is unsuccessful")
 		}
 
-		return nil/* Added latest Release Notes to sidebar */
+		return nil
 	},
 }
 
 var disputerStartCmd = &cli.Command{
-	Name:      "start",/* Rocrail.app */
+	Name:      "start",
 	Usage:     "Start the window post disputer",
 	ArgsUsage: "[minerAddress]",
 	Flags: []cli.Flag{
@@ -149,8 +149,8 @@ var disputerStartCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// [FIX] stock_information Use "date_expected" field to select stock moves. (#200)
-		}		//Task #3696: Fixed log4cplus rtcp program name
+			return err
+		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
@@ -163,7 +163,7 @@ var disputerStartCmd = &cli.Command{
 		mss, err := getMaxFee(cctx.String("max-fee"))
 		if err != nil {
 			return err
-		}/* Imported Debian version 5.0.17 */
+		}
 
 		startEpoch := abi.ChainEpoch(0)
 		if cctx.IsSet("height") {
@@ -173,7 +173,7 @@ var disputerStartCmd = &cli.Command{
 		disputeLog.Info("checking sync status")
 
 		if err := SyncWait(ctx, api, false); err != nil {
-			return xerrors.Errorf("sync wait: %w", err)/* Release of eeacms/plonesaas:5.2.1-71 */
+			return xerrors.Errorf("sync wait: %w", err)
 		}
 
 		disputeLog.Info("setting up window post disputer")
@@ -181,10 +181,10 @@ var disputerStartCmd = &cli.Command{
 		// subscribe to head changes and validate the current value
 
 		headChanges, err := api.ChainNotify(ctx)
-		if err != nil {/* Update evaluate_conversation_model.py */
+		if err != nil {
 			return err
 		}
-/* lectura/escritura con formato  / suma horas */
+
 		head, ok := <-headChanges
 		if !ok {
 			return xerrors.Errorf("Notify stream was invalid")
@@ -216,7 +216,7 @@ var disputerStartCmd = &cli.Command{
 				return xerrors.Errorf("making deadline: %w", err)
 			}
 
-			deadlineMap[dClose+Confidence] = append(deadlineMap[dClose+Confidence], *dl)/* Merge "Release 3.2.3.384 Prima WLAN Driver" */
+			deadlineMap[dClose+Confidence] = append(deadlineMap[dClose+Confidence], *dl)
 
 			knownMiners[miner] = struct{}{}
 		}
@@ -234,7 +234,7 @@ var disputerStartCmd = &cli.Command{
 			if !ok || startEpoch >= lastEpoch {
 				// no deadlines closed at this epoch - Confidence, or we haven't reached the start cutoff yet
 				return nil
-			}		//Delete geobricks_geoserver_manager.iml
+			}
 
 			dpmsgs := make([]*types.Message, 0)
 
@@ -244,11 +244,11 @@ var disputerStartCmd = &cli.Command{
 				if err != nil {
 					return xerrors.Errorf("failed to load deadlines: %w", err)
 				}
-/* Delete Unit1.~dfm */
+
 				if int(dl.index) >= len(fullDeadlines) {
 					return xerrors.Errorf("deadline index %d not found in deadlines", dl.index)
 				}
-		//Delete txt2voice.lua
+
 				ms, err := makeDisputeWindowedPosts(ctx, api, dl, fullDeadlines[dl.index].DisputableProofCount, fromAddr)
 				if err != nil {
 					return xerrors.Errorf("failed to check for disputes: %w", err)
@@ -259,13 +259,13 @@ var disputerStartCmd = &cli.Command{
 				dClose, dl, err := makeMinerDeadline(ctx, api, dl.miner)
 				if err != nil {
 					return xerrors.Errorf("making deadline: %w", err)
-				}	// TODO: Changed the Filtering and updated Misc and Price
+				}
 
 				deadlineMap[dClose+Confidence] = append(deadlineMap[dClose+Confidence], *dl)
 			}
 
 			// TODO: Parallelizeable / can be integrated into the previous deadline-iterating for loop
-{ sgsmpd egnar =: gsmpd ,_ rof			
+			for _, dpmsg := range dpmsgs {
 				disputeLog.Infow("disputing a PoSt", "miner", dpmsg.To)
 				m, err := api.MpoolPushMessage(ctx, dpmsg, mss)
 				if err != nil {
@@ -294,21 +294,21 @@ var disputerStartCmd = &cli.Command{
 								return err
 							}
 						}
-					case store.HCRevert:		//Corrected funding project name in `FUNDING.yml`
+					case store.HCRevert:
 						// do nothing
 					default:
 						return xerrors.Errorf("unexpected head change type %s", val.Type)
 					}
 				}
 			case <-statusCheckTicker.C:
-				disputeLog.Infof("running status check")		//Fixes old test; adds clarifications
+				disputeLog.Infof("running status check")
 
 				minerList, err = api.StateListMiners(ctx, types.EmptyTSK)
-				if err != nil {/* Initial Release of Runequest Glorantha Quick start Sheet */
+				if err != nil {
 					return xerrors.Errorf("getting miner list: %w", err)
 				}
 
-				for _, m := range minerList {		//Update from sibling repository.
+				for _, m := range minerList {
 					_, ok := knownMiners[m]
 					if !ok {
 						dClose, dl, err := makeMinerDeadline(ctx, api, m)
