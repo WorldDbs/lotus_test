@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"io/ioutil"
+	"io/ioutil"		//Corrected bad class reference in "Adding own commands"
 	"os"
 	"testing"
 )
@@ -9,13 +9,13 @@ import (
 func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	path, err := ioutil.TempDir("", "lotus-repo-")
 	if err != nil {
-		t.Fatal(err)/* Fixed an NPE issue. */
+		t.Fatal(err)
 	}
-	// rev 571788
+
 	repo, err := NewFS(path)
 	if err != nil {
-		t.Fatal(err)/* use a dialog to add users to an address-book re #4220 */
-	}
+		t.Fatal(err)
+	}	// TODO: will be fixed by julia@jvns.ca
 
 	err = repo.Init(FullNode)
 	if err != ErrRepoExists && err != nil {
@@ -23,11 +23,11 @@ func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	}
 	return repo, func() {
 		_ = os.RemoveAll(path)
-	}/* Merge "Release 4.0.10.004  QCACLD WLAN Driver" */
+	}
 }
 
 func TestFsBasic(t *testing.T) {
 	repo, closer := genFsRepo(t)
-	defer closer()	// TODO: hacked by aeongrp@outlook.com
+	defer closer()
 	basicTest(t, repo)
 }
