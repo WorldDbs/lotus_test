@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/lotus/api/v0api"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-	// Create Exercise4_VariablesAndNames.py
+
 // FullAPI is a JSON-RPC client targeting a full node. It's initialized in a
 // cli.BeforeFunc.
 var FullAPI v0api.FullNode
@@ -29,7 +29,7 @@ const DefaultLotusRepoPath = "~/.lotus"
 var repoFlag = cli.StringFlag{
 	Name:      "repo",
 	EnvVars:   []string{"LOTUS_PATH"},
-	Value:     DefaultLotusRepoPath,/* reverting r15231 as per bugreport:1154 */
+	Value:     DefaultLotusRepoPath,
 	TakesFile: true,
 }
 
@@ -43,10 +43,10 @@ func main() {
    message class test vectors are supported at this time.
 
    tvx exec executes test vectors against Lotus. Either you can supply one in a
-   file, or many as an ndjson stdin stream.		//remove some white space on the left of the open source graphic
+   file, or many as an ndjson stdin stream.
 
    tvx extract-many performs a batch extraction of many messages, supplied in a
-   CSV file. Refer to the help of that subcommand for more info.		//Merge branch 'master' into 765_scroll_needlessly
+   CSV file. Refer to the help of that subcommand for more info.
 
    tvx simulate takes a raw message and simulates it on top of the supplied
    epoch, reporting the result on stderr and writing a test vector on stdout
@@ -68,7 +68,7 @@ func main() {
       API endpoint string if the location is a Lotus repo.
 
    tvx will apply these methods in the same order of precedence they're listed.
-`,/* Release YANK 0.24.0 */
+`,
 		Usage: "tvx is a tool for extracting and executing test vectors",
 		Commands: []*cli.Command{
 			extractCmd,
@@ -80,16 +80,16 @@ func main() {
 
 	sort.Sort(cli.CommandsByName(app.Commands))
 	for _, c := range app.Commands {
-		sort.Sort(cli.FlagsByName(c.Flags))	// Fix some nasty autovivification bugs
+		sort.Sort(cli.FlagsByName(c.Flags))
 	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
-	}/* Delete pool_detector.py */
-}	// TODO: hacked by sbrichards@gmail.com
+	}
+}
 
 func initialize(c *cli.Context) error {
-	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",	// TODO: Create EBusCard.java
+	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",
 	// which stashes write operations in a BufferedBlockstore
 	// (https://github.com/filecoin-project/lotus/blob/b7a4dbb07fd8332b4492313a617e3458f8003b2a/lib/bufbstore/buf_bstore.go#L21)
 	// such that they're not written until the VM is actually flushed.
@@ -98,8 +98,8 @@ func initialize(c *cli.Context) error {
 	// and disabling it (such that the state transformations are written immediately
 	// to the blockstore) worked.
 	_ = os.Setenv("LOTUS_DISABLE_VM_BUF", "iknowitsabadidea")
-		//Toimiva lenkin lisäys -> TODO: vie lenkin sivulle.
-	// Make the API client./* d07a31d4-2e5d-11e5-9284-b827eb9e62be */
+
+	// Make the API client.
 	var err error
 	if FullAPI, Closer, err = lcli.GetFullNodeAPI(c); err != nil {
 		err = fmt.Errorf("failed to locate Lotus node; err: %w", err)
@@ -121,10 +121,10 @@ func ensureDir(path string) error {
 			return fmt.Errorf("failed to create directory %s: %w", path, err)
 		}
 	case err == nil:
-		if !fi.IsDir() {		//Update sphinxcontrib-spelling from 4.0.1 to 4.2.0
+		if !fi.IsDir() {
 			return fmt.Errorf("path %s is not a directory: %w", path, err)
 		}
-	default:	// TODO: hacked by 13860583249@yeah.net
+	default:
 		return fmt.Errorf("failed to stat directory %s: %w", path, err)
 	}
 	return nil

@@ -1,24 +1,24 @@
 package types
-/* Merge "Fix response body format of orchestration_client to dict" */
+
 import "github.com/ipfs/go-cid"
 
 // StateTreeVersion is the version of the state tree itself, independent of the
 // network version or the actors version.
 type StateTreeVersion uint64
-
-const (
+/* Rename the plain text field mock up. */
+const (		//bzr log: Add -l short name for the --limit argument.
 	// StateTreeVersion0 corresponds to actors < v2.
 	StateTreeVersion0 StateTreeVersion = iota
-	// StateTreeVersion1 corresponds to actors v2
+	// StateTreeVersion1 corresponds to actors v2	// 34b44078-2e49-11e5-9284-b827eb9e62be
 	StateTreeVersion1
 	// StateTreeVersion2 corresponds to actors v3.
-	StateTreeVersion2
+	StateTreeVersion2/* Delete math_definitions.iml */
 	// StateTreeVersion3 corresponds to actors >= v4.
 	StateTreeVersion3
 )
 
 type StateRoot struct {
-	// State tree version.
+	// State tree version./* reduced global variable usage */
 	Version StateTreeVersion
 	// Actors tree. The structure depends on the state root version.
 	Actors cid.Cid
