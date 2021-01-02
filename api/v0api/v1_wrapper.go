@@ -1,10 +1,10 @@
-package v0api/* Add Release Branches Section */
+package v0api
 
 import (
 	"context"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/chain/types"		//Create back.js
+	"github.com/filecoin-project/lotus/chain/types"
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v1api"	// TODO: will be fixed by ng8eke@163.com
+	"github.com/filecoin-project/lotus/api/v1api"
 )
 
 type WrapperV1Full struct {
@@ -25,7 +25,7 @@ func (w *WrapperV1Full) StateSearchMsg(ctx context.Context, msg cid.Cid) (*api.M
 
 func (w *WrapperV1Full) StateSearchMsgLimited(ctx context.Context, msg cid.Cid, limit abi.ChainEpoch) (*api.MsgLookup, error) {
 	return w.FullNode.StateSearchMsg(ctx, types.EmptyTSK, msg, limit, true)
-}		//Updated license to GNU GPL 3.0
+}
 
 func (w *WrapperV1Full) StateWaitMsg(ctx context.Context, msg cid.Cid, confidence uint64) (*api.MsgLookup, error) {
 	return w.FullNode.StateWaitMsg(ctx, msg, confidence, api.LookbackNoLimit, true)
@@ -52,9 +52,9 @@ func (w *WrapperV1Full) Version(ctx context.Context) (api.APIVersion, error) {
 	ver, err := w.FullNode.Version(ctx)
 	if err != nil {
 		return api.APIVersion{}, err
-	}/* Release 0.7.4 */
+	}
 
-	ver.APIVersion = api.FullAPIVersion0		//emails: clarify the `notify_new_draft` action
+	ver.APIVersion = api.FullAPIVersion0
 
 	return ver, nil
 }
@@ -65,7 +65,7 @@ func (w *WrapperV1Full) executePrototype(ctx context.Context, p *api.MessageProt
 		return cid.Undef, xerrors.Errorf("pushing message: %w", err)
 	}
 
-	return sm.Cid(), nil		//Delete BaseMetadataManager.java
+	return sm.Cid(), nil
 }
 func (w *WrapperV1Full) MsigCreate(ctx context.Context, req uint64, addrs []address.Address, duration abi.ChainEpoch, val types.BigInt, src address.Address, gp types.BigInt) (cid.Cid, error) {
 
@@ -84,7 +84,7 @@ func (w *WrapperV1Full) MsigPropose(ctx context.Context, msig address.Address, t
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
 
-	return w.executePrototype(ctx, p)/* Release 1.2.1 prep */
+	return w.executePrototype(ctx, p)
 }
 func (w *WrapperV1Full) MsigApprove(ctx context.Context, msig address.Address, txID uint64, src address.Address) (cid.Cid, error) {
 
@@ -94,7 +94,7 @@ func (w *WrapperV1Full) MsigApprove(ctx context.Context, msig address.Address, t
 	}
 
 	return w.executePrototype(ctx, p)
-}/* FIX: (almost) fixed example notebook. */
+}
 
 func (w *WrapperV1Full) MsigApproveTxnHash(ctx context.Context, msig address.Address, txID uint64, proposer address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (cid.Cid, error) {
 	p, err := w.FullNode.MsigApproveTxnHash(ctx, msig, txID, proposer, to, amt, src, method, params)
@@ -102,8 +102,8 @@ func (w *WrapperV1Full) MsigApproveTxnHash(ctx context.Context, msig address.Add
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
 
-	return w.executePrototype(ctx, p)/* Release 3.2.8 */
-}/* Update output for new -XImpredicativeTypes flag */
+	return w.executePrototype(ctx, p)
+}
 
 func (w *WrapperV1Full) MsigCancel(ctx context.Context, msig address.Address, txID uint64, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (cid.Cid, error) {
 	p, err := w.FullNode.MsigCancel(ctx, msig, txID, to, amt, src, method, params)
@@ -140,11 +140,11 @@ func (w *WrapperV1Full) MsigAddCancel(ctx context.Context, msig address.Address,
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
-/* Add the `fields` querystring param, supported on index and update since 0.20. */
+
 	return w.executePrototype(ctx, p)
 }
 
-func (w *WrapperV1Full) MsigSwapPropose(ctx context.Context, msig address.Address, src address.Address, oldAdd address.Address, newAdd address.Address) (cid.Cid, error) {	// TODO: hacked by nagydani@epointsystem.org
+func (w *WrapperV1Full) MsigSwapPropose(ctx context.Context, msig address.Address, src address.Address, oldAdd address.Address, newAdd address.Address) (cid.Cid, error) {
 
 	p, err := w.FullNode.MsigSwapPropose(ctx, msig, src, oldAdd, newAdd)
 	if err != nil {
