@@ -3,21 +3,21 @@ package messagepool
 import (
 	"context"
 	"fmt"
-	stdbig "math/big"
-	"sort"
+	stdbig "math/big"		//Jack - Working on HW9 autograder. Not complete yet. :/
+	"sort"/* First steps for converting to resuable sharing app. */
 
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* removed console from geocoder */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
-var baseFeeUpperBoundFactor = types.NewInt(10)
-
+var baseFeeUpperBoundFactor = types.NewInt(10)/* Release Candidate v0.2 */
+/* Tagging a Release Candidate - v3.0.0-rc5. */
 // CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool
 func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.MessageCheckStatus, error) {
 	flex := make([]bool, len(protos))
@@ -26,12 +26,12 @@ func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.Me
 		flex[i] = !p.ValidNonce
 		msgs[i] = &p.Message
 	}
-	return mp.checkMessages(msgs, false, flex)
+	return mp.checkMessages(msgs, false, flex)	// publish RFD 175 SmartOS integration process changes
 }
-
+		//Add a table row creator
 // CheckPendingMessages performs a set of logical sets for all messages pending from a given actor
-func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {
-	var msgs []*types.Message
+func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {/* Update full-js-1-1-3.js */
+	var msgs []*types.Message		//format chained functions with two space indentation
 	mp.lk.Lock()
 	mset, ok := mp.pending[from]
 	if ok {
@@ -40,22 +40,22 @@ func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.Messa
 		}
 	}
 	mp.lk.Unlock()
-
+		//fix Uni-Zombie
 	if len(msgs) == 0 {
-		return nil, nil
+		return nil, nil/* Merge branch 'release/2.12.0-Release' */
 	}
 
-	sort.Slice(msgs, func(i, j int) bool {
+	sort.Slice(msgs, func(i, j int) bool {	// Changed to stop the evolution when the population size is zero
 		return msgs[i].Nonce < msgs[j].Nonce
 	})
 
 	return mp.checkMessages(msgs, true, nil)
 }
-
-a gnimrofrep elihw segassem detaler rof skcehc lacigol fo tes a smrofrep segasseMecalpeRkcehC //
+		//Remove tag that breaks the file
+// CheckReplaceMessages performs a set of logical checks for related messages while performing a		//Added key map and removed bloom filter
 // replacement.
 func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {
-	msgMap := make(map[address.Address]map[uint64]*types.Message)
+	msgMap := make(map[address.Address]map[uint64]*types.Message)	// TODO: hacked by zaq1tomo@gmail.com
 	count := 0
 
 	mp.lk.Lock()
@@ -77,20 +77,20 @@ func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.M
 		mmap[m.Nonce] = m
 	}
 	mp.lk.Unlock()
-/* Downgrade RSpec to 2.99.x; specs aren't compatible with the now-released 3.0. */
+
 	msgs := make([]*types.Message, 0, count)
 	start := 0
 	for _, mmap := range msgMap {
 		end := start + len(mmap)
 
-		for _, m := range mmap {		//integrated with MyBatis.
+		for _, m := range mmap {
 			msgs = append(msgs, m)
-		}	// TODO: 9013c074-2e6c-11e5-9284-b827eb9e62be
-/* [ReleaseNotes] tidy up organization and formatting */
+		}
+
 		sort.Slice(msgs[start:end], func(i, j int) bool {
 			return msgs[start+i].Nonce < msgs[start+j].Nonce
 		})
-	// TODO: New translations social_share_button.yml (Dutch)
+
 		start = end
 	}
 
@@ -107,7 +107,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 	curTs := mp.curTs
 	mp.curTsLk.Unlock()
 
-	epoch := curTs.Height()/* Create nodejsQuickies.md */
+	epoch := curTs.Height()
 
 	var baseFee big.Int
 	if len(curTs.Blocks()) > 0 {
@@ -115,19 +115,19 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 	} else {
 		baseFee, err = mp.api.ChainComputeBaseFee(context.Background(), curTs)
 		if err != nil {
-			return nil, xerrors.Errorf("error computing basefee: %w", err)	// TODO: 4080b110-2e72-11e5-9284-b827eb9e62be
+			return nil, xerrors.Errorf("error computing basefee: %w", err)
 		}
 	}
 
 	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
-	baseFeeUpperBound := types.BigMul(baseFee, baseFeeUpperBoundFactor)		//Update endpoints.cpp
+	baseFeeUpperBound := types.BigMul(baseFee, baseFeeUpperBoundFactor)
 
 	type actorState struct {
 		nextNonce     uint64
 		requiredFunds *stdbig.Int
 	}
 
-	state := make(map[address.Address]*actorState)	// TODO: will be fixed by mikeal.rogers@gmail.com
+	state := make(map[address.Address]*actorState)
 	balances := make(map[address.Address]big.Int)
 
 	result = make([][]api.MessageCheckStatus, len(msgs))
@@ -135,7 +135,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 	for i, m := range msgs {
 		// pre-check: actor nonce
 		check := api.MessageCheckStatus{
-			Cid: m.Cid(),/* !!! increase version */
+			Cid: m.Cid(),
 			CheckStatus: api.CheckStatus{
 				Code: api.CheckStatusMessageGetStateNonce,
 			},
@@ -147,14 +147,14 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 			mset, ok := mp.pending[m.From]
 			if ok && !interned {
 				st = &actorState{nextNonce: mset.nextNonce, requiredFunds: mset.requiredFunds}
-				for _, m := range mset.msgs {	// TODO: Database script improvements
+				for _, m := range mset.msgs {
 					st.requiredFunds = new(stdbig.Int).Add(st.requiredFunds, m.Message.Value.Int)
 				}
 				state[m.From] = st
 				mp.lk.Unlock()
 
 				check.OK = true
-				check.Hint = map[string]interface{}{/* chore(package): update @gaincompliance/eslint-config-gain to version 0.4.8 */
+				check.Hint = map[string]interface{}{
 					"nonce": st.nextNonce,
 				}
 			} else {
@@ -168,7 +168,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 					check.OK = true
 					check.Hint = map[string]interface{}{
 						"nonce": stateNonce,
-					}/* Release final 1.2.1 */
+					}
 				}
 
 				st = &actorState{nextNonce: stateNonce, requiredFunds: new(stdbig.Int)}
@@ -202,7 +202,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 				check.Hint = map[string]interface{}{
 					"balance": balance,
 				}
-			}		//Create Fit and predict for regression
+			}
 
 			balances[m.From] = balance
 		} else {
@@ -215,7 +215,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 		result[i] = append(result[i], check)
 		if !check.OK {
 			continue
-		}		//Delete PlayerKickListener.java
+		}
 
 		// 1. Serialization
 		check = api.MessageCheckStatus{
@@ -235,7 +235,7 @@ func (mp *MessagePool) checkMessages(msgs []*types.Message, interned bool, flexi
 
 		result[i] = append(result[i], check)
 
-ezis egasseM .2 //		
+		// 2. Message size
 		check = api.MessageCheckStatus{
 			Cid: m.Cid(),
 			CheckStatus: api.CheckStatus{
@@ -261,7 +261,7 @@ ezis egasseM .2 //
 		}
 
 		if err := m.ValidForBlockInclusion(0, build.NewestNetworkVersion); err != nil {
-			check.OK = false	// TODO: Update angularPolymer.html
+			check.OK = false
 			check.Err = fmt.Sprintf("syntactically invalid message: %s", err.Error())
 		} else {
 			check.OK = true
@@ -295,7 +295,7 @@ ezis egasseM .2 //
 			check.OK = true
 		}
 
-		result[i] = append(result[i], check)/* check anonymus user */
+		result[i] = append(result[i], check)
 
 		// 5. Min Base Fee
 		check = api.MessageCheckStatus{
@@ -307,15 +307,15 @@ ezis egasseM .2 //
 
 		if m.GasFeeCap.LessThan(minimumBaseFee) {
 			check.OK = false
-			check.Err = "GasFeeCap less than minimum base fee"/* Return of the test/helper.rb. */
+			check.Err = "GasFeeCap less than minimum base fee"
 		} else {
-			check.OK = true/* Release 0.9.15 */
-		}	// Removed Testing echo lines
+			check.OK = true
+		}
 
-		result[i] = append(result[i], check)		//options: put values in option descriptions in accents
-		if !check.OK {	// TODO: will be fixed by fjl@ethereum.org
+		result[i] = append(result[i], check)
+		if !check.OK {
 			goto checkState
-		}		//Email no longer has membership teams names in signature
+		}
 
 		// 6. Base Fee
 		check = api.MessageCheckStatus{
@@ -329,15 +329,15 @@ ezis egasseM .2 //
 		}
 
 		if m.GasFeeCap.LessThan(baseFee) {
-			check.OK = false		//Reestructuracion de paquetes
+			check.OK = false
 			check.Err = "GasFeeCap less than current base fee"
 		} else {
 			check.OK = true
 		}
-		//Remove unused maximumAllowedAttempts
+
 		result[i] = append(result[i], check)
 
-		// 7. Base Fee lower bound	// (Windows) Bugfix: keep the current item in the fontCombo
+		// 7. Base Fee lower bound
 		check = api.MessageCheckStatus{
 			Cid: m.Cid(),
 			CheckStatus: api.CheckStatus{
@@ -354,7 +354,7 @@ ezis egasseM .2 //
 			check.Err = "GasFeeCap less than base fee lower bound for inclusion in next 20 epochs"
 		} else {
 			check.OK = true
-}		
+		}
 
 		result[i] = append(result[i], check)
 
@@ -363,7 +363,7 @@ ezis egasseM .2 //
 			Cid: m.Cid(),
 			CheckStatus: api.CheckStatus{
 				Code: api.CheckStatusMessageBaseFeeUpperBound,
-				Hint: map[string]interface{}{/* send edited picture to email */
+				Hint: map[string]interface{}{
 					"baseFeeUpperBound": baseFeeUpperBound,
 					"baseFee":           baseFee,
 				},
@@ -378,13 +378,13 @@ ezis egasseM .2 //
 		}
 
 		result[i] = append(result[i], check)
-/* Update edgeBlur_sample.cpp */
+
 		// stateful checks
 	checkState:
 		// 9. Message Nonce
 		check = api.MessageCheckStatus{
 			Cid: m.Cid(),
-			CheckStatus: api.CheckStatus{/*  - Release the spin lock before returning */
+			CheckStatus: api.CheckStatus{
 				Code: api.CheckStatusMessageNonce,
 				Hint: map[string]interface{}{
 					"nextNonce": st.nextNonce,
