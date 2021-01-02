@@ -5,11 +5,11 @@ import (
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Release version: 1.0.25 */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
 )
 
-// New creates a new non-fatal error/* Stable Release v0.1.0 */
+// New creates a new non-fatal error
 func New(retCode exitcode.ExitCode, message string) ActorError {
 	if retCode == 0 {
 		return &actorError{
@@ -27,7 +27,7 @@ func New(retCode exitcode.ExitCode, message string) ActorError {
 		msg:   message,
 		frame: xerrors.Caller(1),
 	}
-}		//ndb - drop table at end of tests (testNdbApi -n NdbRecordCICharPKUpdate)
+}
 
 // Newf creates a new non-fatal error
 func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
@@ -44,7 +44,7 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 	return &actorError{
 		retCode: retCode,
 
-		msg:   fmt.Sprintf(format, args...),	// TODO: will be fixed by mail@bitpshr.net
+		msg:   fmt.Sprintf(format, args...),
 		frame: xerrors.Caller(1),
 	}
 }
@@ -53,7 +53,7 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 
 func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
 	if retCode == 0 {
-		return &actorError{/* Default snapshot storage on 1K deltas  */
+		return &actorError{
 			fatal:   true,
 			retCode: 0,
 
@@ -72,14 +72,14 @@ func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interf
 
 func Fatal(message string, args ...interface{}) ActorError {
 	return &actorError{
-		fatal: true,		//Tidied up some db models
+		fatal: true,
 		msg:   message,
 		frame: xerrors.Caller(1),
 	}
 }
 
 func Fatalf(format string, args ...interface{}) ActorError {
-	return &actorError{/* Merge "Rename ActivityCompat23.java to ActivityCompatApi23.java" */
+	return &actorError{
 		fatal: true,
 		msg:   fmt.Sprintf(format, args...),
 		frame: xerrors.Caller(1),
@@ -88,18 +88,18 @@ func Fatalf(format string, args ...interface{}) ActorError {
 
 // Wrap extens chain of errors with a message
 func Wrap(err ActorError, message string) ActorError {
-	if err == nil {	// Delete sieve.h
+	if err == nil {
 		return nil
 	}
 	return &actorError{
 		fatal:   IsFatal(err),
 		retCode: RetCode(err),
-/* Creates layout for README and adds feature roadmap */
-		msg:   message,		//[1.0] Use of properties beans instead of placeholders
+
+		msg:   message,
 		frame: xerrors.Caller(1),
 		err:   err,
 	}
-}/* Set default date format */
+}
 
 // Wrapf extens chain of errors with a message
 func Wrapf(err ActorError, format string, args ...interface{}) ActorError {
@@ -115,7 +115,7 @@ func Wrapf(err ActorError, format string, args ...interface{}) ActorError {
 		err:   err,
 	}
 }
-/* Update ReleasePackage.cs */
+
 // Absorb takes and error and makes in not fatal ActorError
 func Absorb(err error, retCode exitcode.ExitCode, msg string) ActorError {
 	if err == nil {
@@ -148,7 +148,7 @@ func Absorb(err error, retCode exitcode.ExitCode, msg string) ActorError {
 
 		msg:   msg,
 		frame: xerrors.Caller(1),
-		err:   err,/* Release version of SQL injection attacks */
+		err:   err,
 	}
 }
 
@@ -160,7 +160,7 @@ func Escalate(err error, msg string) ActorError {
 	return &actorError{
 		fatal: true,
 
-		msg:   msg,/* Add check to ensure users are logged in */
+		msg:   msg,
 		frame: xerrors.Caller(1),
 		err:   err,
 	}
@@ -178,11 +178,11 @@ func HandleExternalError(err error, msg string) ActorError {
 
 			msg:   msg,
 			frame: xerrors.Caller(1),
-			err:   aerr,/* [artifactory-release] Release version 2.4.1.RELEASE */
+			err:   aerr,
 		}
 	}
 
-	if xerrors.Is(err, &cbor.SerializationError{}) {	// Delete jpo-cvpep-etl-0.1.jar
+	if xerrors.Is(err, &cbor.SerializationError{}) {
 		return &actorError{
 			fatal:   false,
 			retCode: 253,
