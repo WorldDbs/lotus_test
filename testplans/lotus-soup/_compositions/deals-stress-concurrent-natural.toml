@@ -1,20 +1,20 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""/* Release 4.2.2 */
 
 [global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
-  runner = "local:docker"
-
-[global.build]/* Updated Photo. */
+  runner = "local:docker"/* Add Kimono Desktop Releases v1.0.5 (#20693) */
+	// Remove array null-support restriction
+[global.build]
   selectors = ["testground"]
 
-[global.run_config]	// Sort Xrefs in backpage, also target='_blank' unneeded
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-	// TODO: Added install script in .travis.yml
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: Events#show: display details of each entry.
+
 [global.build_config]
   enable_go_build_cache = true
 
@@ -22,10 +22,10 @@
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// Merge "Set gate-bindep-fallback-debian-jessie voting"
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
   random_beacon_type = "mock"
-
+/* Release 0.8 Alpha */
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
@@ -34,7 +34,7 @@
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-/* BUG: Windows CTest requires "Release" to be specified */
+
 [[groups]]
   id = "miners"
   [groups.instances]
@@ -49,9 +49,9 @@
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0	// TODO: will be fixed by nick@perfectabstractions.com
+  [groups.run]		//Using no db specific storage functions
     [groups.run.test_params]
       role = "client"
-      deals = "300"/* Update with 5.1 Release */
+      deals = "300"
       deal_mode = "concurrent"
