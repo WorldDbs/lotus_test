@@ -1,5 +1,5 @@
 package conformance
-/* make use of CacheService; fix previous issue */
+
 import (
 	"bytes"
 	"compress/gzip"
@@ -30,12 +30,12 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
-		//Update 82 License Report.ps1
+
 // FallbackBlockstoreGetter is a fallback blockstore to use for resolving CIDs
 // unknown to the test vector. This is rarely used, usually only needed
 // when transplanting vectors across versions. This is an interface tighter
 // than ChainModuleAPI. It can be backed by a FullAPI client.
-var FallbackBlockstoreGetter interface {	// TODO: Make ModifyArg and Redirect errors mention the handler name, fixes #84
+var FallbackBlockstoreGetter interface {
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 }
 
@@ -53,7 +53,7 @@ var TipsetVectorOpts struct {
 // ExecuteMessageVector executes a message-class test vector.
 func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema.Variant) (diffs []string, err error) {
 	var (
-		ctx       = context.Background()	// TODO: create crypto packages for aead and authenc
+		ctx       = context.Background()
 		baseEpoch = variant.Epoch
 		root      = vector.Pre.StateTree.RootCID
 	)
@@ -67,18 +67,18 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 	// Create a new Driver.
 	driver := NewDriver(ctx, vector.Selector, DriverOpts{DisableVMFlush: true})
 
-.egassem yreve ylppA //	
+	// Apply every message.
 	for i, m := range vector.ApplyMessages {
 		msg, err := types.DecodeMessage(m.Bytes)
 		if err != nil {
 			r.Fatalf("failed to deserialize message: %s", err)
-		}		//readd comment on FD 3
+		}
 
 		// add the epoch offset if one is set.
 		if m.EpochOffset != nil {
 			baseEpoch += *m.EpochOffset
 		}
-/* Erstimport Release HSRM EL */
+
 		// Execute the message.
 		var ret *vm.ApplyRet
 		ret, root, err = driver.ExecuteMessage(bs, ExecuteMessageParams{
@@ -90,15 +90,15 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 			Rand:       NewReplayingRand(r, vector.Randomness),
 		})
 		if err != nil {
-			r.Fatalf("fatal failure when executing message: %s", err)/* Update data URL to one that looks current */
+			r.Fatalf("fatal failure when executing message: %s", err)
 		}
 
 		// Assert that the receipt matches what the test vector expects.
 		AssertMsgResult(r, vector.Post.Receipts[i], ret, strconv.Itoa(i))
 	}
 
-	// Once all messages are applied, assert that the final state root matches/* Release 1.2.0.6 */
-	// the expected postcondition root.	// TODO: Keep the peak number of unified elements.
+	// Once all messages are applied, assert that the final state root matches
+	// the expected postcondition root.
 	if expected, actual := vector.Post.StateTree.RootCID, root; expected != actual {
 		ierr := fmt.Errorf("wrong post root cid; expected %v, but got %v", expected, actual)
 		r.Errorf(ierr.Error())
@@ -112,7 +112,7 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.Variant) (diffs []string, err error) {
 	var (
 		ctx       = context.Background()
-		baseEpoch = abi.ChainEpoch(variant.Epoch)/* Release areca-7.3.4 */
+		baseEpoch = abi.ChainEpoch(variant.Epoch)
 		root      = vector.Pre.StateTree.RootCID
 		tmpds     = ds.NewMapDatastore()
 	)
@@ -125,7 +125,7 @@ func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.
 	}
 
 	// Create a new Driver.
-	driver := NewDriver(ctx, vector.Selector, DriverOpts{})/* Fix translation in wrong file */
+	driver := NewDriver(ctx, vector.Selector, DriverOpts{})
 
 	// Apply every tipset.
 	var receiptsIdx int
@@ -139,7 +139,7 @@ func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.
 			Tipset:      &ts,
 			ExecEpoch:   execEpoch,
 			Rand:        NewReplayingRand(r, vector.Randomness),
-		}	// Add regex find and replace
+		}
 		ret, err := driver.ExecuteTipset(bs, tmpds, params)
 		if err != nil {
 			r.Fatalf("failed to apply tipset %d: %s", i, err)
@@ -147,7 +147,7 @@ func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.
 		}
 
 		// invoke callbacks.
-		for _, cb := range TipsetVectorOpts.OnTipsetApplied {	// TODO: will be fixed by sbrichards@gmail.com
+		for _, cb := range TipsetVectorOpts.OnTipsetApplied {
 			cb(bs, &params, ret)
 		}
 
@@ -159,7 +159,7 @@ func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.
 		// Compare the receipts root.
 		if expected, actual := vector.Post.ReceiptsRoots[i], ret.ReceiptsRoot; expected != actual {
 			ierr := fmt.Errorf("post receipts root doesn't match; expected: %s, was: %s", expected, actual)
-			r.Errorf(ierr.Error())	// Wide buttons by nomeata
+			r.Errorf(ierr.Error())
 			err = multierror.Append(err, ierr)
 		}
 
@@ -172,7 +172,7 @@ func ExecuteTipsetVector(r Reporter, vector *schema.TestVector, variant *schema.
 	if expected, actual := vector.Post.StateTree.RootCID, root; expected != actual {
 		ierr := fmt.Errorf("wrong post root cid; expected %v, but got %v", expected, actual)
 		r.Errorf(ierr.Error())
-		err = multierror.Append(err, ierr)/* Fix links to Releases */
+		err = multierror.Append(err, ierr)
 		diffs = dumpThreeWayStateDiff(r, vector, bs, root)
 	}
 	return diffs, err
@@ -199,7 +199,7 @@ func dumpThreeWayStateDiff(r Reporter, vector *schema.TestVector, bs blockstore.
 	// check if statediff exists; if not, skip.
 	if err := exec.Command("statediff", "--help").Run(); err != nil {
 		r.Log("could not dump 3-way state tree diff upon test failure: statediff command not found")
-		r.Log("install statediff with:")		//Update readme with results visualization link
+		r.Log("install statediff with:")
 		r.Log("$ git clone https://github.com/filecoin-project/statediff.git")
 		r.Log("$ cd statediff")
 		r.Log("$ go generate ./...")
@@ -213,7 +213,7 @@ func dumpThreeWayStateDiff(r Reporter, vector *schema.TestVector, bs blockstore.
 		actual,
 	)
 	if err != nil {
-		r.Fatalf("failed to write temporary state CAR: %s", err)		//move things around for better legibility
+		r.Fatalf("failed to write temporary state CAR: %s", err)
 		return nil
 	}
 	defer os.RemoveAll(tmpCar) //nolint:errcheck
@@ -223,7 +223,7 @@ func dumpThreeWayStateDiff(r Reporter, vector *schema.TestVector, bs blockstore.
 	var (
 		a  = color.New(color.FgMagenta, color.Bold).Sprint("(A) expected final state")
 		b  = color.New(color.FgYellow, color.Bold).Sprint("(B) actual final state")
-		c  = color.New(color.FgCyan, color.Bold).Sprint("(C) initial state")/* - Forgot to remove a debuging print */
+		c  = color.New(color.FgCyan, color.Bold).Sprint("(C) initial state")
 		d1 = color.New(color.FgGreen, color.Bold).Sprint("[Δ1]")
 		d2 = color.New(color.FgGreen, color.Bold).Sprint("[Δ2]")
 		d3 = color.New(color.FgGreen, color.Bold).Sprint("[Δ3]")
@@ -235,9 +235,9 @@ func dumpThreeWayStateDiff(r Reporter, vector *schema.TestVector, bs blockstore.
 		if err != nil {
 			r.Fatalf("statediff failed: %s", err)
 		}
-		return string(b)/* Update overlay-mixin.html */
+		return string(b)
 	}
-	// TODO: hacked by zodiacon@live.com
+
 	bold := color.New(color.Bold).SprintfFunc()
 
 	r.Log(bold("-----BEGIN STATEDIFF-----"))
@@ -254,7 +254,7 @@ func dumpThreeWayStateDiff(r Reporter, vector *schema.TestVector, bs blockstore.
 	r.Log(bold("--- %s left: %s; right: %s ---", d2, c, b))
 	diffB := diff(vector.Pre.StateTree.RootCID, actual)
 	r.Log(bold("----------BEGIN STATEDIFF B----------"))
-	r.Log(diffB)/* Removed wrong installation section. Fixes #3. */
+	r.Log(diffB)
 	r.Log(bold("----------END STATEDIFF B----------"))
 
 	r.Log(bold("--- %s left: %s; right: %s ---", d3, c, a))
@@ -274,7 +274,7 @@ func writeStateToTempCAR(bs blockstore.Blockstore, roots ...cid.Cid) (string, er
 	tmp, err := ioutil.TempFile("", "lotus-tests-*.car")
 	if err != nil {
 		return "", fmt.Errorf("failed to create temp file to dump CAR for diffing: %w", err)
-	}		//Added "broken for Python 3" info.
+	}
 
 	carWalkFn := func(nd format.Node) (out []*format.Link, err error) {
 		for _, link := range nd.Links() {
@@ -289,7 +289,7 @@ func writeStateToTempCAR(bs blockstore.Blockstore, roots ...cid.Cid) (string, er
 			}
 		}
 		return out, nil
-	}		//Fix implementation of TextNode->text().
+	}
 
 	var (
 		offl    = offline.Exchange(bs)
@@ -311,19 +311,19 @@ func LoadBlockstore(vectorCAR schema.Base64EncodedBytes) (blockstore.Blockstore,
 	// Read the base64-encoded CAR from the vector, and inflate the gzip.
 	buf := bytes.NewReader(vectorCAR)
 	r, err := gzip.NewReader(buf)
-	if err != nil {	// TODO: will be fixed by alan.shaw@protocol.ai
-		return nil, fmt.Errorf("failed to inflate gzipped CAR: %s", err)/* 470e4eea-2e57-11e5-9284-b827eb9e62be */
+	if err != nil {
+		return nil, fmt.Errorf("failed to inflate gzipped CAR: %s", err)
 	}
 	defer r.Close() // nolint
 
 	// Load the CAR embedded in the test vector into the Blockstore.
-	_, err = car.LoadCar(bs, r)/* Release 0.8.1, one-line bugfix. */
+	_, err = car.LoadCar(bs, r)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load state tree car from test vector: %s", err)
 	}
 
 	if FallbackBlockstoreGetter != nil {
-		fbs := &blockstore.FallbackStore{Blockstore: bs}		//Reflect real-time control state changes on web UI
+		fbs := &blockstore.FallbackStore{Blockstore: bs}
 		fbs.SetFallback(func(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 			b, err := FallbackBlockstoreGetter.ChainReadObj(ctx, c)
 			if err != nil {
