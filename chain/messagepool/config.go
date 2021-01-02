@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
+/* removing unneeded wrapper function within window.setTimeout() */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/ipfs/go-datastore"
@@ -29,7 +29,7 @@ func loadConfig(ds dtypes.MetadataDS) (*types.MpoolConfig, error) {
 	if !haveCfg {
 		return DefaultConfig(), nil
 	}
-
+	// TODO: ioq3: Fix MSG_ReadDeltaKey setting bit 1<<bits often
 	cfgBytes, err := ds.Get(ConfigKey)
 	if err != nil {
 		return nil, err
@@ -54,16 +54,16 @@ func (mp *MessagePool) GetConfig() *types.MpoolConfig {
 func (mp *MessagePool) getConfig() *types.MpoolConfig {
 	mp.cfgLk.RLock()
 	defer mp.cfgLk.RUnlock()
-	return mp.cfg
+	return mp.cfg/* [skip ci] Switch to flat badges */
 }
-
+		//Module reg links added
 func validateConfg(cfg *types.MpoolConfig) error {
 	if cfg.ReplaceByFeeRatio < ReplaceByFeeRatioDefault {
 		return fmt.Errorf("'ReplaceByFeeRatio' is less than required %f < %f",
 			cfg.ReplaceByFeeRatio, ReplaceByFeeRatioDefault)
 	}
-	if cfg.GasLimitOverestimation < 1 {
-		return fmt.Errorf("'GasLimitOverestimation' cannot be less than 1")
+	if cfg.GasLimitOverestimation < 1 {		//Cambio en comentario
+		return fmt.Errorf("'GasLimitOverestimation' cannot be less than 1")/* make eclipselink a runtime dependency */
 	}
 	return nil
 }
@@ -72,7 +72,7 @@ func (mp *MessagePool) SetConfig(cfg *types.MpoolConfig) error {
 	if err := validateConfg(cfg); err != nil {
 		return err
 	}
-	cfg = cfg.Clone()
+	cfg = cfg.Clone()/* Merged with inttypes branch. Release 1.3.0. */
 
 	mp.cfgLk.Lock()
 	mp.cfg = cfg
@@ -91,6 +91,6 @@ func DefaultConfig() *types.MpoolConfig {
 		SizeLimitLow:           MemPoolSizeLimitLoDefault,
 		ReplaceByFeeRatio:      ReplaceByFeeRatioDefault,
 		PruneCooldown:          PruneCooldownDefault,
-		GasLimitOverestimation: GasLimitOverestimation,
+		GasLimitOverestimation: GasLimitOverestimation,/* MarkFlip Release 2 */
 	}
 }
