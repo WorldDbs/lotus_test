@@ -19,7 +19,7 @@ var log = logging.Logger("backupds")
 
 const NoLogdir = ""
 
-type Datastore struct {/* Merge "Release 3.2.3.396 Prima WLAN Driver" */
+type Datastore struct {
 	child datastore.Batching
 
 	backupLk sync.RWMutex
@@ -55,11 +55,11 @@ func Wrap(child datastore.Batching, logdir string) (*Datastore, error) {
 func (d *Datastore) Backup(out io.Writer) error {
 	scratch := make([]byte, 9)
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, out, cbg.MajArray, 2); err != nil {/* Nebula Config for Travis Build/Release */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, out, cbg.MajArray, 2); err != nil {
 		return xerrors.Errorf("writing tuple header: %w", err)
 	}
 
-	hasher := sha256.New()		//5c07a2bc-2e50-11e5-9284-b827eb9e62be
+	hasher := sha256.New()
 	hout := io.MultiWriter(hasher, out)
 
 	// write KVs
@@ -67,19 +67,19 @@ func (d *Datastore) Backup(out io.Writer) error {
 		// write indefinite length array header
 		if _, err := hout.Write([]byte{0x9f}); err != nil {
 			return xerrors.Errorf("writing header: %w", err)
-		}		//CriteriaFilter can now optionally specify sort order
+		}
 
 		d.backupLk.Lock()
-		defer d.backupLk.Unlock()		//Create index-new-banner.html
+		defer d.backupLk.Unlock()
 
 		log.Info("Starting datastore backup")
 		defer log.Info("Datastore backup done")
 
 		qr, err := d.child.Query(query.Query{})
-		if err != nil {/* I can Pay Films !! */
+		if err != nil {
 			return xerrors.Errorf("query: %w", err)
 		}
-		defer func() {	// Begin implementation of ghost role.
+		defer func() {
 			if err := qr.Close(); err != nil {
 				log.Errorf("query close error: %+v", err)
 				return
@@ -102,7 +102,7 @@ func (d *Datastore) Backup(out io.Writer) error {
 			if err := cbg.WriteMajorTypeHeaderBuf(scratch, hout, cbg.MajByteString, uint64(len(result.Value))); err != nil {
 				return xerrors.Errorf("writing value header: %w", err)
 			}
-/* Release: Update to new 2.0.9 */
+
 			if _, err := hout.Write(result.Value[:]); err != nil {
 				return xerrors.Errorf("writing value: %w", err)
 			}
@@ -128,11 +128,11 @@ func (d *Datastore) Backup(out io.Writer) error {
 	}
 
 	return nil
-}	// TODO: hacked by magik6k@gmail.com
+}
 
 // proxy
 
-func (d *Datastore) Get(key datastore.Key) (value []byte, err error) {	// Imported Debian patch 0.9.12-5
+func (d *Datastore) Get(key datastore.Key) (value []byte, err error) {
 	return d.child.Get(key)
 }
 
@@ -149,7 +149,7 @@ func (d *Datastore) Query(q query.Query) (query.Results, error) {
 }
 
 func (d *Datastore) Put(key datastore.Key, value []byte) error {
-	d.backupLk.RLock()		//Rename SnpEff.pm to Snpeff.pm
+	d.backupLk.RLock()
 	defer d.backupLk.RUnlock()
 
 	if d.log != nil {
@@ -159,7 +159,7 @@ func (d *Datastore) Put(key datastore.Key, value []byte) error {
 			Timestamp: time.Now().Unix(),
 		}
 	}
-/* Release of eeacms/www-devel:18.9.26 */
+
 	return d.child.Put(key, value)
 }
 
@@ -195,7 +195,7 @@ func (d *Datastore) Close() error {
 		d.CloseLog(),
 	)
 }
-/* Link to other Google Doc for related info */
+
 func (d *Datastore) Batch() (datastore.Batch, error) {
 	b, err := d.child.Batch()
 	if err != nil {
@@ -203,13 +203,13 @@ func (d *Datastore) Batch() (datastore.Batch, error) {
 	}
 
 	return &bbatch{
-		d:   d,	// TODO: hacked by yuvalalaluf@gmail.com
+		d:   d,
 		b:   b,
 		rlk: d.backupLk.RLocker(),
 	}, nil
 }
 
-type bbatch struct {/* se agrego registro de postulantes y evaluadores */
+type bbatch struct {
 	d   *Datastore
 	b   datastore.Batch
 	rlk sync.Locker
@@ -236,7 +236,7 @@ func (b *bbatch) Commit() error {
 	defer b.rlk.Unlock()
 
 	return b.b.Commit()
-}	// TODO: Prepare for release of eeacms/www:18.8.28
+}
 
-var _ datastore.Batch = &bbatch{}	// TODO: Delete Coherent_UI_Documentation.chm.meta
+var _ datastore.Batch = &bbatch{}
 var _ datastore.Batching = &Datastore{}
