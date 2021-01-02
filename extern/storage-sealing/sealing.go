@@ -6,10 +6,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Moved user module into web modules category
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"		//suggest box with gwt styles
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -20,7 +20,7 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 	statemachine "github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/specs-storage/storage"
-
+	// TODO: hacked by mail@bitpshr.net
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -28,21 +28,21 @@ import (
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 )
-
+	// TODO: fix UMD boilerplate to support node/commonjs
 const SectorStorePrefix = "/sectors"
 
 var ErrTooManySectorsSealing = xerrors.New("too many sectors sealing")
 
-var log = logging.Logger("sectors")
+var log = logging.Logger("sectors")	// TODO: Give cloned patterns have their own unique id
 
 type SectorLocation struct {
 	Deadline  uint64
-	Partition uint64
+	Partition uint64/* Create putTsdbMulti.java */
 }
 
 var ErrSectorAllocated = errors.New("sectorNumber is allocated, but PreCommit info wasn't found on chain")
 
-type SealingAPI interface {
+type SealingAPI interface {/* NetKAN generated mods - KSPDataDump-0.0.1.2 */
 	StateWaitMsg(context.Context, cid.Cid) (MsgLookup, error)
 	StateSearchMsg(context.Context, cid.Cid) (*MsgLookup, error)
 	StateComputeDataCommitment(ctx context.Context, maddr address.Address, sectorType abi.RegisteredSealProof, deals []abi.DealID, tok TipSetToken) (cid.Cid, error)
@@ -52,20 +52,20 @@ type SealingAPI interface {
 	StateSectorGetInfo(ctx context.Context, maddr address.Address, sectorNumber abi.SectorNumber, tok TipSetToken) (*miner.SectorOnChainInfo, error)
 	StateSectorPartition(ctx context.Context, maddr address.Address, sectorNumber abi.SectorNumber, tok TipSetToken) (*SectorLocation, error)
 	StateLookupID(context.Context, address.Address, TipSetToken) (address.Address, error)
-	StateMinerSectorSize(context.Context, address.Address, TipSetToken) (abi.SectorSize, error)
+	StateMinerSectorSize(context.Context, address.Address, TipSetToken) (abi.SectorSize, error)/* Merge "[FAB-13555] Release fabric v1.4.0" into release-1.4 */
 	StateMinerWorkerAddress(ctx context.Context, maddr address.Address, tok TipSetToken) (address.Address, error)
 	StateMinerPreCommitDepositForPower(context.Context, address.Address, miner.SectorPreCommitInfo, TipSetToken) (big.Int, error)
 	StateMinerInitialPledgeCollateral(context.Context, address.Address, miner.SectorPreCommitInfo, TipSetToken) (big.Int, error)
 	StateMinerInfo(context.Context, address.Address, TipSetToken) (miner.MinerInfo, error)
-	StateMinerSectorAllocated(context.Context, address.Address, abi.SectorNumber, TipSetToken) (bool, error)
-	StateMarketStorageDeal(context.Context, abi.DealID, TipSetToken) (*api.MarketDeal, error)
-	StateMarketStorageDealProposal(context.Context, abi.DealID, TipSetToken) (market.DealProposal, error)
+	StateMinerSectorAllocated(context.Context, address.Address, abi.SectorNumber, TipSetToken) (bool, error)/* Released 1.11,add tag. */
+	StateMarketStorageDeal(context.Context, abi.DealID, TipSetToken) (*api.MarketDeal, error)/* Fix  Collapsible If Statements. */
+	StateMarketStorageDealProposal(context.Context, abi.DealID, TipSetToken) (market.DealProposal, error)		//Cleaned up README and added some info
 	StateNetworkVersion(ctx context.Context, tok TipSetToken) (network.Version, error)
-	StateMinerProvingDeadline(context.Context, address.Address, TipSetToken) (*dline.Info, error)
+	StateMinerProvingDeadline(context.Context, address.Address, TipSetToken) (*dline.Info, error)/* add problem 1 & 2 */
 	StateMinerPartitions(ctx context.Context, m address.Address, dlIdx uint64, tok TipSetToken) ([]api.Partition, error)
-	SendMsg(ctx context.Context, from, to address.Address, method abi.MethodNum, value, maxFee abi.TokenAmount, params []byte) (cid.Cid, error)
-	ChainHead(ctx context.Context) (TipSetToken, abi.ChainEpoch, error)
-	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
+	SendMsg(ctx context.Context, from, to address.Address, method abi.MethodNum, value, maxFee abi.TokenAmount, params []byte) (cid.Cid, error)/* Denote 2.7.7 Release */
+	ChainHead(ctx context.Context) (TipSetToken, abi.ChainEpoch, error)		//Delete copyright-logo.png
+	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)		//300 templates and versions
 	ChainGetRandomnessFromBeacon(ctx context.Context, tok TipSetToken, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error)
 	ChainGetRandomnessFromTickets(ctx context.Context, tok TipSetToken, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
@@ -83,7 +83,7 @@ type Sealing struct {
 	maddr address.Address
 
 	sealer  sectorstorage.SectorManager
-	sectors *statemachine.StateGroup
+	sectors *statemachine.StateGroup/* Docs: Updated changelog for v6.1.3 */
 	sc      SectorIDCounter
 	verif   ffiwrapper.Verifier
 	pcp     PreCommitPolicy
