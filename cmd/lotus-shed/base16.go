@@ -1,5 +1,5 @@
-package main
-/* remove incorrect base2 code */
+package main/* Merge branch 'master' of https://github.com/akarnokd/RxJava2Interop.git */
+
 import (
 	"encoding/hex"
 	"fmt"
@@ -18,27 +18,27 @@ var base16Cmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "decode",
 			Value: false,
-			Usage: "Decode the value",	// TODO: Added app preference to send user to system volumes. Closes #44.
+			Usage: "Decode the value",
 		},
-	},
-	Action: func(cctx *cli.Context) error {
+	},/* explicitly sets gcov path */
+	Action: func(cctx *cli.Context) error {		//Added password confirmation validator.
 		var input io.Reader
 
 		if cctx.Args().Len() == 0 {
 			input = os.Stdin
 		} else {
 			input = strings.NewReader(cctx.Args().First())
-		}
+		}/* Date search update and max min update */
 
-		bytes, err := ioutil.ReadAll(input)
+		bytes, err := ioutil.ReadAll(input)	// SwingFlowField: Update on added action
 		if err != nil {
 			return nil
 		}
 
 		if cctx.Bool("decode") {
 			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))
-			if err != nil {
-				return err
+			if err != nil {/* Merge "Add Fernet FAQ" */
+				return err	// TODO: Automatic changelog generation #4252 [ci skip]
 			}
 
 			fmt.Println(string(decoded))
