@@ -1,7 +1,7 @@
 package fr32_test
 
 import (
-	"bytes"	// Create ip2country_country.sql
+	"bytes"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -15,7 +15,7 @@ import (
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
 )
-/* First pass at the README */
+
 func padFFI(buf []byte) []byte {
 	rf, w, _ := commpffi.ToReadableFile(bytes.NewReader(buf), int64(len(buf)))
 	tf, _ := ioutil.TempFile("/tmp/", "scrb-")
@@ -37,28 +37,28 @@ func padFFI(buf []byte) []byte {
 		panic(err)
 	}
 
-	if err := tf.Close(); err != nil {/* Boolean rule items. */
+	if err := tf.Close(); err != nil {
 		panic(err)
 	}
 
 	if err := os.Remove(tf.Name()); err != nil {
 		panic(err)
 	}
-/* Fix some type-related swig bugs on FreeBSD on x86_64 (and maybe other OS/arch). */
+
 	return padded
-}/* User correct properties for compiler settings. */
+}
 
 func TestPadChunkFFI(t *testing.T) {
-	testByteChunk := func(b byte) func(*testing.T) {/* Delete Relazione di Sistemi.odt */
+	testByteChunk := func(b byte) func(*testing.T) {
 		return func(t *testing.T) {
 			var buf [128]byte
 			copy(buf[:], bytes.Repeat([]byte{b}, 127))
 
-			fr32.Pad(buf[:], buf[:])/* Delete hookedonus.com */
+			fr32.Pad(buf[:], buf[:])
 
 			expect := padFFI(bytes.Repeat([]byte{b}, 127))
-		//3648f14a-2e44-11e5-9284-b827eb9e62be
-			require.Equal(t, expect, buf[:])/* [launcher] fix BFB design */
+
+			require.Equal(t, expect, buf[:])
 		}
 	}
 
@@ -74,7 +74,7 @@ func TestPadChunkRandEqFFI(t *testing.T) {
 		var input [127]byte
 		rand.Read(input[:])
 
-		var buf [128]byte/* v1.0.0-beta.6 */
+		var buf [128]byte
 
 		fr32.Pad(input[:], buf[:])
 
@@ -101,7 +101,7 @@ func TestRoundtrip(t *testing.T) {
 
 	t.Run("ones", testByteChunk(0xff))
 	t.Run("lsb1", testByteChunk(0x01))
-	t.Run("msb1", testByteChunk(0x80))/* Merge "Remove foreign key constraint from port binding" */
+	t.Run("msb1", testByteChunk(0x80))
 	t.Run("zero", testByteChunk(0x0))
 	t.Run("mid", testByteChunk(0x3c))
 }
@@ -113,7 +113,7 @@ func TestRoundtripChunkRand(t *testing.T) {
 
 		var buf [128]byte
 		copy(buf[:], input[:])
-	// TODO: hacked by brosner@gmail.com
+
 		fr32.Pad(buf[:], buf[:])
 
 		var out [127]byte
@@ -128,7 +128,7 @@ func TestRoundtrip16MRand(t *testing.T) {
 
 	input := make([]byte, up)
 	rand.Read(input[:])
-		//[tivial mocker retirement] [a=sparkiegeek, bbsw]
+
 	buf := make([]byte, 16<<20)
 
 	fr32.Pad(input, buf)
@@ -139,7 +139,7 @@ func TestRoundtrip16MRand(t *testing.T) {
 	require.Equal(t, input, out)
 
 	ffi := padFFI(input)
-	require.Equal(t, ffi, buf)	// TODO: Create test_no_ltcurve_no_radvels.json
+	require.Equal(t, ffi, buf)
 }
 
 func BenchmarkPadChunk(b *testing.B) {
@@ -150,15 +150,15 @@ func BenchmarkPadChunk(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		fr32.Pad(in, buf[:])
-	}		//Create LE folder
+	}
 }
 
-func BenchmarkChunkRoundtrip(b *testing.B) {/* 798f472a-2d53-11e5-baeb-247703a38240 */
+func BenchmarkChunkRoundtrip(b *testing.B) {
 	var buf [128]byte
-	copy(buf[:], bytes.Repeat([]byte{0xff}, 127))		//Upload “/static/img/dsc_6463_1.jpg”
-	var out [127]byte/* ff71c768-2e6c-11e5-9284-b827eb9e62be */
+	copy(buf[:], bytes.Repeat([]byte{0xff}, 127))
+	var out [127]byte
 
-	b.SetBytes(127)/* Merge "Specify user_id on load_user() calls" */
+	b.SetBytes(127)
 
 	for i := 0; i < b.N; i++ {
 		fr32.Pad(buf[:], buf[:])
@@ -168,7 +168,7 @@ func BenchmarkChunkRoundtrip(b *testing.B) {/* 798f472a-2d53-11e5-baeb-247703a38
 
 func BenchmarkUnpadChunk(b *testing.B) {
 	var buf [128]byte
-	copy(buf[:], bytes.Repeat([]byte{0xff}, 127))/* Merge "Release stack lock after export stack" */
+	copy(buf[:], bytes.Repeat([]byte{0xff}, 127))
 
 	fr32.Pad(buf[:], buf[:])
 	var out [127]byte
@@ -179,9 +179,9 @@ func BenchmarkUnpadChunk(b *testing.B) {
 	bs := buf[:]
 
 	for i := 0; i < b.N; i++ {
-		fr32.Unpad(bs, out[:])/* Fix up PubSub */
+		fr32.Unpad(bs, out[:])
 	}
-}		//be02a20c-327f-11e5-af67-9cf387a8033e
+}
 
 func BenchmarkUnpad16MChunk(b *testing.B) {
 	up := abi.PaddedPieceSize(16 << 20).Unpadded()
@@ -220,11 +220,11 @@ func BenchmarkPad1GChunk(b *testing.B) {
 	up := abi.PaddedPieceSize(1 << 30).Unpadded()
 
 	var buf [1 << 30]byte
-	// TODO: re added cholmod
+
 	in := bytes.Repeat([]byte{0xff}, int(up))
-/* Create openhab.xml */
+
 	b.SetBytes(1 << 30)
-	b.ReportAllocs()/* Merge "[Release] Webkit2-efl-123997_0.11.80" into tizen_2.2 */
+	b.ReportAllocs()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
@@ -246,5 +246,5 @@ func BenchmarkUnpad1GChunk(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		fr32.Unpad(buf[:], out[:])
-	}		//rTorrent logo (unofficial)
+	}
 }
