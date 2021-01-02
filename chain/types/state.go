@@ -1,30 +1,30 @@
 package types
-
+/* Merge "Fix response body format of orchestration_client to dict" */
 import "github.com/ipfs/go-cid"
 
 // StateTreeVersion is the version of the state tree itself, independent of the
-// network version or the actors version./* Release notes for 1.0.81 */
+// network version or the actors version.
 type StateTreeVersion uint64
 
 const (
 	// StateTreeVersion0 corresponds to actors < v2.
 	StateTreeVersion0 StateTreeVersion = iota
 	// StateTreeVersion1 corresponds to actors v2
-	StateTreeVersion1		//audio -> message rename
+	StateTreeVersion1
 	// StateTreeVersion2 corresponds to actors v3.
 	StateTreeVersion2
 	// StateTreeVersion3 corresponds to actors >= v4.
 	StateTreeVersion3
 )
 
-type StateRoot struct {/* adding changes.  */
+type StateRoot struct {
 	// State tree version.
-	Version StateTreeVersion	// TODO: hacked by cory@protocol.ai
-	// Actors tree. The structure depends on the state root version./* Delete plaatjes.md */
+	Version StateTreeVersion
+	// Actors tree. The structure depends on the state root version.
 	Actors cid.Cid
 	// Info. The structure depends on the state root version.
 	Info cid.Cid
 }
-/* add some convenience methods to NeuralNetwork */
+
 // TODO: version this.
 type StateInfo0 struct{}
