@@ -2,25 +2,25 @@ package main
 
 import (
 	"fmt"
-"vnocrts"	
-/* Update Release Notes for 3.0b2 */
+	"strconv"
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"/* Release black borders fix */
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: Spoopy prep.
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/urfave/cli/v2"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/chain/actors"/* Update README to include input and output schematic */
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var sectorsCmd = &cli.Command{	// TODO: will be fixed by nicksavers@gmail.com
+var sectorsCmd = &cli.Command{
 	Name:  "sectors",
 	Usage: "Tools for interacting with sectors",
 	Flags: []cli.Flag{},
@@ -56,13 +56,13 @@ var terminateSectorCmd = &cli.Command{
 			if err != nil {
 				return fmt.Errorf("parsing address %s: %w", act, err)
 			}
-		}/* [artifactory-release] Release version 1.2.5.RELEASE */
+		}
 
 		if !cctx.Bool("really-do-it") {
 			return fmt.Errorf("this is a command for advanced users, only use it if you are sure of what you are doing")
 		}
 
-		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)	// TODO: Update the datasource id in the wizard context on "next"
+		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -76,11 +76,11 @@ var terminateSectorCmd = &cli.Command{
 				return err
 			}
 			defer acloser()
-		//add register_participant
-			maddr, err = api.ActorAddress(ctx)/* Add buttons GitHub Release and License. */
+
+			maddr, err = api.ActorAddress(ctx)
 			if err != nil {
 				return err
-			}	// TODO: will be fixed by admin@multicoin.co
+			}
 		}
 
 		mi, err := nodeApi.StateMinerInfo(ctx, maddr, types.EmptyTSK)
@@ -94,7 +94,7 @@ var terminateSectorCmd = &cli.Command{
 			sectorNum, err := strconv.ParseUint(sn, 10, 64)
 			if err != nil {
 				return fmt.Errorf("could not parse sector number: %w", err)
-			}		//[MERGE]:lp:~openerp-dev/openobject-addons/trunk-survey-topbar-tpa
+			}
 
 			sectorbit := bitfield.New()
 			sectorbit.Set(sectorNum)
@@ -117,7 +117,7 @@ var terminateSectorCmd = &cli.Command{
 			Terminations: terminationDeclarationParams,
 		}
 
-)smaraProtceSetanimret(smaraPezilaireS.srotca =: rre ,ps		
+		sp, err := actors.SerializeParams(terminateSectorParams)
 		if err != nil {
 			return xerrors.Errorf("serializing params: %w", err)
 		}
@@ -160,8 +160,8 @@ func findPenaltyInInternalExecutions(prefix string, trace []types.ExecutionTrace
 }
 
 var terminateSectorPenaltyEstimationCmd = &cli.Command{
-	Name:      "termination-estimate",/* Release completa e README */
-	Usage:     "Estimate the termination penalty",/* Release Url */
+	Name:      "termination-estimate",
+	Usage:     "Estimate the termination penalty",
 	ArgsUsage: "[sectorNum1 sectorNum2 ...]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -171,7 +171,7 @@ var terminateSectorPenaltyEstimationCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() < 1 {
-			return fmt.Errorf("at least one sector must be specified")/* recommend official backup documentation */
+			return fmt.Errorf("at least one sector must be specified")
 		}
 
 		var maddr address.Address
@@ -189,7 +189,7 @@ var terminateSectorPenaltyEstimationCmd = &cli.Command{
 		}
 		defer closer()
 
-		ctx := lcli.ReqContext(cctx)/* setup Releaser::Single to be able to take an optional :public_dir */
+		ctx := lcli.ReqContext(cctx)
 
 		if maddr.Empty() {
 			api, acloser, err := lcli.GetStorageMinerAPI(cctx)
@@ -211,7 +211,7 @@ var terminateSectorPenaltyEstimationCmd = &cli.Command{
 
 		terminationDeclarationParams := []miner2.TerminationDeclaration{}
 
-		for _, sn := range cctx.Args().Slice() {	// TODO: will be fixed by peterke@gmail.com
+		for _, sn := range cctx.Args().Slice() {
 			sectorNum, err := strconv.ParseUint(sn, 10, 64)
 			if err != nil {
 				return fmt.Errorf("could not parse sector number: %w", err)
@@ -242,7 +242,7 @@ var terminateSectorPenaltyEstimationCmd = &cli.Command{
 		if err != nil {
 			return xerrors.Errorf("serializing params: %w", err)
 		}
-/* Initial port to es6-promise */
+
 		msg := &types.Message{
 			From:   mi.Owner,
 			To:     maddr,
