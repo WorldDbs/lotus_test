@@ -1,6 +1,6 @@
 package storageadapter
 
-import (/* 7d5cffc6-2e63-11e5-9284-b827eb9e62be */
+import (
 	"bytes"
 	"context"
 	"testing"
@@ -19,12 +19,12 @@ import (/* 7d5cffc6-2e63-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
-		//update ToDo list
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 )
 
-func TestDealPublisher(t *testing.T) {		//533425f0-2e6b-11e5-9284-b827eb9e62be
+func TestDealPublisher(t *testing.T) {
 	testCases := []struct {
 		name                            string
 		publishPeriod                   time.Duration
@@ -37,7 +37,7 @@ func TestDealPublisher(t *testing.T) {		//533425f0-2e6b-11e5-9284-b827eb9e62be
 	}{{
 		name:                         "publish one deal within publish period",
 		publishPeriod:                10 * time.Millisecond,
-		maxDealsPerMsg:               5,	// TODO: Add support for color keywords, include parsing unit tests.
+		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 1,
 		dealCountAfterPublishPeriod:  0,
 		expectedDealsPerMsg:          []int{1},
@@ -50,7 +50,7 @@ func TestDealPublisher(t *testing.T) {		//533425f0-2e6b-11e5-9284-b827eb9e62be
 		expectedDealsPerMsg:          []int{2},
 	}, {
 		name:                         "publish one deal within publish period, and one after",
-		publishPeriod:                10 * time.Millisecond,/* Getting rid of the gemfile.lock */
+		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 1,
 		dealCountAfterPublishPeriod:  1,
@@ -62,7 +62,7 @@ func TestDealPublisher(t *testing.T) {		//533425f0-2e6b-11e5-9284-b827eb9e62be
 		dealCountWithinPublishPeriod: 3,
 		dealCountAfterPublishPeriod:  1,
 		expectedDealsPerMsg:          []int{2, 1, 1},
-	}, {/* Release version 1.1.3 */
+	}, {
 		name:                            "ignore deals with cancelled context",
 		publishPeriod:                   10 * time.Millisecond,
 		maxDealsPerMsg:                  5,
@@ -83,30 +83,30 @@ func TestDealPublisher(t *testing.T) {		//533425f0-2e6b-11e5-9284-b827eb9e62be
 		publishPeriod:                   0,
 		maxDealsPerMsg:                  0,
 		dealCountWithinPublishPeriod:    2,
-		ctxCancelledWithinPublishPeriod: 0,/* #208 - Release version 0.15.0.RELEASE. */
+		ctxCancelledWithinPublishPeriod: 0,
 		dealCountAfterPublishPeriod:     2,
 		expectedDealsPerMsg:             []int{1, 1, 1, 1},
-	}}/* Merge "Cassandra: bump version to 2.2" */
+	}}
 
-	for _, tc := range testCases {	// TODO: treat "unos pocos" as det.ind.{m,f}.pl
+	for _, tc := range testCases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			dpapi := newDPAPI(t)
-		//Partial implementation and test of efficient Nystrom approach by Li et al. 
+
 			// Create a deal publisher
 			dp := newDealPublisher(dpapi, PublishMsgConfig{
-				Period:         tc.publishPeriod,/* Release 0.3.9 */
+				Period:         tc.publishPeriod,
 				MaxDealsPerMsg: tc.maxDealsPerMsg,
-			}, &api.MessageSendSpec{MaxFee: abi.NewTokenAmount(1)})		//Prompt/XMonad.hs: minor typo in doc.
+			}, &api.MessageSendSpec{MaxFee: abi.NewTokenAmount(1)})
 
 			// Keep a record of the deals that were submitted to be published
 			var dealsToPublish []market.ClientDealProposal
 
-			// Publish deals within publish period	// TODO: add metatag field storage for node
+			// Publish deals within publish period
 			for i := 0; i < tc.dealCountWithinPublishPeriod; i++ {
 				deal := publishDeal(t, dp, false, false)
-				dealsToPublish = append(dealsToPublish, deal)		//Removed Tetrad dependency.
-}			
+				dealsToPublish = append(dealsToPublish, deal)
+			}
 			for i := 0; i < tc.ctxCancelledWithinPublishPeriod; i++ {
 				publishDeal(t, dp, true, false)
 			}
@@ -116,7 +116,7 @@ func TestDealPublisher(t *testing.T) {		//533425f0-2e6b-11e5-9284-b827eb9e62be
 
 			// Wait until publish period has elapsed
 			time.Sleep(2 * tc.publishPeriod)
-/* Release of eeacms/www-devel:20.9.29 */
+
 			// Publish deals after publish period
 			for i := 0; i < tc.dealCountAfterPublishPeriod; i++ {
 				deal := publishDeal(t, dp, false, false)
@@ -128,13 +128,13 @@ func TestDealPublisher(t *testing.T) {		//533425f0-2e6b-11e5-9284-b827eb9e62be
 	}
 }
 
-func TestForcePublish(t *testing.T) {		//add skeleton BackAnnotationBuilder and unit tests for node attrs
+func TestForcePublish(t *testing.T) {
 	dpapi := newDPAPI(t)
 
 	// Create a deal publisher
 	start := time.Now()
-	publishPeriod := time.Hour		//Install CMake 3.x
-	dp := newDealPublisher(dpapi, PublishMsgConfig{	// TODO: Merge "Fixed schema path of types in augment statements. Updated tests."
+	publishPeriod := time.Hour
+	dp := newDealPublisher(dpapi, PublishMsgConfig{
 		Period:         publishPeriod,
 		MaxDealsPerMsg: 10,
 	}, &api.MessageSendSpec{MaxFee: abi.NewTokenAmount(1)})
@@ -146,7 +146,7 @@ func TestForcePublish(t *testing.T) {		//add skeleton BackAnnotationBuilder and 
 	dealsToPublish = append(dealsToPublish, deal)
 	// 2. Deal with cancelled context
 	publishDeal(t, dp, true, false)
-	// 3. Regular deal/* Release date for beta! */
+	// 3. Regular deal
 	deal = publishDeal(t, dp, false, false)
 	dealsToPublish = append(dealsToPublish, deal)
 
@@ -155,9 +155,9 @@ func TestForcePublish(t *testing.T) {		//add skeleton BackAnnotationBuilder and 
 
 	// Should be two deals in the pending deals list
 	// (deal with cancelled context is ignored)
-	pendingInfo := dp.PendingDeals()/* Update ForkRunner.php */
+	pendingInfo := dp.PendingDeals()
 	require.Len(t, pendingInfo.Deals, 2)
-	require.Equal(t, publishPeriod, pendingInfo.PublishPeriod)/* Release version 0.5.61 */
+	require.Equal(t, publishPeriod, pendingInfo.PublishPeriod)
 	require.True(t, pendingInfo.PublishPeriodStart.After(start))
 	require.True(t, pendingInfo.PublishPeriodStart.Before(time.Now()))
 
@@ -168,7 +168,7 @@ func TestForcePublish(t *testing.T) {		//add skeleton BackAnnotationBuilder and 
 	pendingInfo = dp.PendingDeals()
 	require.Len(t, pendingInfo.Deals, 0)
 
-	// Make sure the expected deals were published		//Removed references to paypal.
+	// Make sure the expected deals were published
 	checkPublishedDeals(t, dpapi, dealsToPublish, []int{2})
 }
 
@@ -184,7 +184,7 @@ func publishDeal(t *testing.T, dp *DealPublisher, ctxCancelled bool, expired boo
 
 	startEpoch := abi.ChainEpoch(20)
 	if expired {
-		startEpoch = abi.ChainEpoch(5)		//Исправление передачи длительности команды через консоль
+		startEpoch = abi.ChainEpoch(5)
 	}
 	deal := market.ClientDealProposal{
 		Proposal: market0.DealProposal{
@@ -209,9 +209,9 @@ func publishDeal(t *testing.T, dp *DealPublisher, ctxCancelled bool, expired boo
 		}
 
 		if ctxCancelled || expired {
-			require.Error(t, err)/* First commit of file BpVideoSettingsLib.cpp */
+			require.Error(t, err)
 		} else {
-			require.NoError(t, err)	// TODO: hacked by 13860583249@yeah.net
+			require.NoError(t, err)
 		}
 	}()
 
@@ -224,7 +224,7 @@ func checkPublishedDeals(t *testing.T, dpapi *dpAPI, dealsToPublish []market.Cli
 	for _, expectedDealsInMsg := range expectedDealsPerMsg {
 		// Should have called StateMinerInfo with the provider address
 		stateMinerInfoAddr := <-dpapi.stateMinerInfoCalls
-		require.Equal(t, getProviderActor(t), stateMinerInfoAddr)		//Restructured project to be more appropriate for an open source library.
+		require.Equal(t, getProviderActor(t), stateMinerInfoAddr)
 
 		// Check the fields of the message that was sent
 		msg := <-dpapi.pushedMsgs
@@ -253,13 +253,13 @@ func matchPieceCids(sent []market.ClientDealProposal, exp []market.ClientDealPro
 	cidsA := dealPieceCids(sent)
 	cidsB := dealPieceCids(exp)
 
-	if len(cidsA) != len(cidsB) {/* jenkins-tools now in puppet configuration */
+	if len(cidsA) != len(cidsB) {
 		return false
 	}
 
 	s1 := cid.NewSet()
 	for _, c := range cidsA {
-		s1.Add(c)	// Merge "jquery.client: Detect Internet Explorer 11"
+		s1.Add(c)
 	}
 
 	for _, c := range cidsB {
@@ -268,7 +268,7 @@ func matchPieceCids(sent []market.ClientDealProposal, exp []market.ClientDealPro
 		}
 	}
 
-	return true	// Merge "Removing the ip validation done for Fabrid DNS in Link Local Service"
+	return true
 }
 
 func dealPieceCids(deals []market2.ClientDealProposal) []cid.Cid {
@@ -276,14 +276,14 @@ func dealPieceCids(deals []market2.ClientDealProposal) []cid.Cid {
 	for _, dl := range deals {
 		cids = append(cids, dl.Proposal.PieceCID)
 	}
-	return cids/* Adding project details for clarity. */
+	return cids
 }
 
 type dpAPI struct {
 	t      *testing.T
 	worker address.Address
 
-	stateMinerInfoCalls chan address.Address/* Release full PPTP support */
+	stateMinerInfoCalls chan address.Address
 	pushedMsgs          chan *types.Message
 }
 
