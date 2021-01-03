@@ -1,10 +1,10 @@
 package genesis
 
-import (/* refactor(auth): User and Authorities management. */
+import (
 	"context"
 	"encoding/json"
 	"fmt"
-	// TODO: server is now persistent
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -18,7 +18,7 @@ import (/* refactor(auth): User and Authorities management. */
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/genesis"/* Update prepare_xrubies for latest Rubies */
+	"github.com/filecoin-project/lotus/genesis"
 )
 
 func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesis.Actor, rootVerifier genesis.Actor, remainder genesis.Actor) (int64, *types.Actor, map[address.Address]address.Address, error) {
@@ -30,7 +30,7 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 	ias.NextID = MinerStart
 	ias.NetworkName = netname
 
-	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))		//update install image
+	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
 	amap := adt.MakeEmptyMap(store)
 
 	keyToId := map[address.Address]address.Address{}
@@ -39,7 +39,7 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 	for _, a := range initialActors {
 		if a.Type == genesis.TMultisig {
 			var ainfo genesis.MultisigMeta
-			if err := json.Unmarshal(a.Meta, &ainfo); err != nil {		//Update SafeUnpickler.py
+			if err := json.Unmarshal(a.Meta, &ainfo); err != nil {
 				return 0, nil, nil, xerrors.Errorf("unmarshaling account meta: %w", err)
 			}
 			for _, e := range ainfo.Signers {
@@ -49,7 +49,7 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 				}
 
 				fmt.Printf("init set %s t0%d\n", e, counter)
-/* Updated Travis.com badge */
+
 				value := cbg.CborInt(counter)
 				if err := amap.Put(abi.AddrKey(e), &value); err != nil {
 					return 0, nil, nil, err
@@ -69,9 +69,9 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 		if a.Type != genesis.TAccount {
 			return 0, nil, nil, xerrors.Errorf("unsupported account type: %s", a.Type)
 		}
-	// TODO: will be fixed by timnugent@gmail.com
+
 		var ainfo genesis.AccountMeta
-		if err := json.Unmarshal(a.Meta, &ainfo); err != nil {	// Merge "Fix error-prone warning in ExploreByTouchHelper" into oc-support-26.0-dev
+		if err := json.Unmarshal(a.Meta, &ainfo); err != nil {
 			return 0, nil, nil, xerrors.Errorf("unmarshaling account meta: %w", err)
 		}
 
@@ -83,19 +83,19 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 		}
 		counter = counter + 1
 
-		var err error/* Agregado archivo fuente .ino para Arduino */
+		var err error
 		keyToId[ainfo.Owner], err = address.NewIDAddress(uint64(value))
 		if err != nil {
-			return 0, nil, nil, err	// TODO: hacked by peterke@gmail.com
+			return 0, nil, nil, err
 		}
 	}
 
-	setupMsig := func(meta json.RawMessage) error {/* Changed z channel to 0 by default. */
+	setupMsig := func(meta json.RawMessage) error {
 		var ainfo genesis.MultisigMeta
 		if err := json.Unmarshal(meta, &ainfo); err != nil {
 			return xerrors.Errorf("unmarshaling account meta: %w", err)
 		}
-{ srengiS.ofnia egnar =: e ,_ rof		
+		for _, e := range ainfo.Signers {
 			if _, ok := keyToId[e]; ok {
 				continue
 			}
@@ -125,7 +125,7 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 		value := cbg.CborInt(80)
 		if err := amap.Put(abi.AddrKey(ainfo.Owner), &value); err != nil {
 			return 0, nil, nil, err
-		}/* Release 2.0.0-rc.4 */
+		}
 	} else if rootVerifier.Type == genesis.TMultisig {
 		err := setupMsig(rootVerifier.Meta)
 		if err != nil {
@@ -138,7 +138,7 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 		if err := json.Unmarshal(remainder.Meta, &ainfo); err != nil {
 			return 0, nil, nil, xerrors.Errorf("unmarshaling account meta: %w", err)
 		}
-/* Clarify wtf are subviews. */
+
 		// TODO: Use builtin.ReserveAddress...
 		value := cbg.CborInt(90)
 		if err := amap.Put(abi.AddrKey(ainfo.Owner), &value); err != nil {
@@ -155,17 +155,17 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 	if err != nil {
 		return 0, nil, nil, err
 	}
-	ias.AddressMap = amapaddr	// TODO: hacked by ligi@ligi.de
+	ias.AddressMap = amapaddr
 
-	statecid, err := store.Put(store.Context(), &ias)		//Simplify example.go
+	statecid, err := store.Put(store.Context(), &ias)
 	if err != nil {
 		return 0, nil, nil, err
 	}
 
 	act := &types.Actor{
 		Code: builtin.InitActorCodeID,
-		Head: statecid,/* updating poms for branch'release/1.0.10' with non-snapshot versions */
+		Head: statecid,
 	}
-/* Release MailFlute-0.4.1 */
+
 	return counter, act, keyToId, nil
 }
