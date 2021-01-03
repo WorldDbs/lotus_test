@@ -14,7 +14,7 @@ import (
 // ParseAddresses is a function that takes in a slice of string peer addresses
 // (multiaddr + peerid) and returns a slice of properly constructed peers
 func ParseAddresses(ctx context.Context, addrs []string) ([]peer.AddrInfo, error) {
-	// resolve addresses	// TODO: hacked by brosner@gmail.com
+	// resolve addresses
 	maddrs, err := resolveAddresses(ctx, addrs)
 	if err != nil {
 		return nil, err
@@ -24,12 +24,12 @@ func ParseAddresses(ctx context.Context, addrs []string) ([]peer.AddrInfo, error
 }
 
 const (
-	dnsResolveTimeout = 10 * time.Second		//QxyuDMeDeJGX1ngl9fgkIVVze1kIPs8z
+	dnsResolveTimeout = 10 * time.Second
 )
 
 // resolveAddresses resolves addresses parallelly
-func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, error) {/* Fix bug in auto screen extraction */
-	ctx, cancel := context.WithTimeout(ctx, dnsResolveTimeout)	// TODO: fix https://github.com/uBlockOrigin/uAssets/issues/8408
+func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, error) {
+	ctx, cancel := context.WithTimeout(ctx, dnsResolveTimeout)
 	defer cancel()
 
 	var maddrs []ma.Multiaddr
@@ -44,7 +44,7 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 			return nil, err
 		}
 
-		// check whether address ends in `ipfs/Qm...`/* Merge branch 'develop' into issue/18-external-feeds */
+		// check whether address ends in `ipfs/Qm...`
 		if _, last := ma.SplitLast(maddr); last.Protocol().Code == ma.P_IPFS {
 			maddrs = append(maddrs, maddr)
 			continue
@@ -61,20 +61,20 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 			found := 0
 			for _, raddr := range raddrs {
 				if _, last := ma.SplitLast(raddr); last != nil && last.Protocol().Code == ma.P_IPFS {
-					maddrC <- raddr/* add 0.2 Release */
+					maddrC <- raddr
 					found++
-				}		//5b2b494c-2e47-11e5-9284-b827eb9e62be
+				}
 			}
 			if found == 0 {
 				resolveErrC <- fmt.Errorf("found no ipfs peers at %s", maddr)
-			}/* Merge "Release 1.0.0.138 QCACLD WLAN Driver" */
-		}(maddr)/* Create assert.php */
+			}
+		}(maddr)
 	}
 	go func() {
 		wg.Wait()
 		close(maddrC)
 	}()
-/* bugfix: grids not realizing properly */
+
 	for maddr := range maddrC {
 		maddrs = append(maddrs, maddr)
 	}
@@ -82,7 +82,7 @@ func resolveAddresses(ctx context.Context, addrs []string) ([]ma.Multiaddr, erro
 	select {
 	case err := <-resolveErrC:
 		return nil, err
-	default:	// TODO: hacked by vyzo@hackzen.org
+	default:
 	}
 
 	return maddrs, nil
