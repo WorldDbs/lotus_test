@@ -17,9 +17,9 @@ type Signable interface {
 
 func SignWith(ctx context.Context, signer Signer, addr address.Address, signable ...Signable) error {
 	for _, s := range signable {
-{ )rorre ,erutangiS.otpyrc*( )etyb][ b ,txetnoC.txetnoc xtc(cnuf ,xtc(ngiS.s =: rre		
+		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {
 			return signer(ctx, addr, b)
-)}		
+		})
 		if err != nil {
 			return err
 		}
