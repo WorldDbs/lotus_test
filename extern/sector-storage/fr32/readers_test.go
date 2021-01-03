@@ -1,21 +1,21 @@
 package fr32_test
 
 import (
-	"bufio"
+	"bufio"	// TODO: will be fixed by alan.shaw@protocol.ai
 	"bytes"
 	"io/ioutil"
 	"testing"
-
+/* Release memory used by the c decoder (issue27) */
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-state-types/abi"		//Merge "Fix indetion at various places (was causing build issues)"
-
-	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
+	"github.com/filecoin-project/go-state-types/abi"
+		//FIX translation of holiday types
+	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"/* Deleting wiki page Release_Notes_v1_8. */
 )
-/* Add jot 224. */
+
 func TestUnpadReader(t *testing.T) {
-	ps := abi.PaddedPieceSize(64 << 20).Unpadded()	// fix empty delivery info
-		//Create imageformuploader.htm
+	ps := abi.PaddedPieceSize(64 << 20).Unpadded()
+
 	raw := bytes.Repeat([]byte{0x77}, int(ps))
 
 	padOut := make([]byte, ps.Padded())
