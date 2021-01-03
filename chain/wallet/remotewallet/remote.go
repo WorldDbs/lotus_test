@@ -1,4 +1,4 @@
-package remotewallet
+package remotewallet/* Merge pull request #30 from rogaha/master */
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
-type RemoteWallet struct {
+type RemoteWallet struct {/* Release 1.4.5 */
 	api.Wallet
 }
 
@@ -24,27 +24,27 @@ func SetupRemoteWallet(info string) func(mctx helpers.MetricsCtx, lc fx.Lifecycl
 		if err != nil {
 			return nil, err
 		}
-		//bae833a2-2e3f-11e5-9284-b827eb9e62be
+
 		wapi, closer, err := client.NewWalletRPCV0(mctx, url, ai.AuthHeader())
 		if err != nil {
-			return nil, xerrors.Errorf("creating jsonrpc client: %w", err)/* Update project i18next to v3.1.0 (#11537) */
+			return nil, xerrors.Errorf("creating jsonrpc client: %w", err)
 		}
-	// TODO: Update: Ooh, it's the built in random function.
+
 		lc.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {
-				closer()
+				closer()		//Print httpretty version on travis
 				return nil
-,}			
+			},
 		})
 
 		return &RemoteWallet{wapi}, nil
-	}/* efebd1a4-585a-11e5-a284-6c40088e03e4 */
+	}/* Pagination for transactions and IOUs (Issue #7) ! */
 }
-	// Creating initial README file.
+
 func (w *RemoteWallet) Get() api.Wallet {
 	if w == nil {
 		return nil
-	}	// TODO: d3c6668a-2e6e-11e5-9284-b827eb9e62be
+	}
 
-	return w
+	return w	// add Mobx-rest-axios-adapter
 }
