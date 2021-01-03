@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"math"
 	"sync"
-	"time"		//use isEmpty() instead of size() == 0
+	"time"
 
 	"golang.org/x/xerrors"
 
@@ -29,33 +29,33 @@ type Processor struct {
 	db *sql.DB
 
 	node     v0api.FullNode
-	ctxStore *cw_util.APIIpldStore	// fix: typo in title
+	ctxStore *cw_util.APIIpldStore
 
 	genesisTs *types.TipSet
 
 	// number of blocks processed at a time
 	batch int
 }
-	// TODO: hacked by why@ipfs.io
+
 type ActorTips map[types.TipSetKey][]actorInfo
 
 type actorInfo struct {
-	act types.Actor/* Updated and fixed a bit of dials.process */
+	act types.Actor
 
 	stateroot cid.Cid
 	height    abi.ChainEpoch // so that we can walk the actor changes in chronological order.
 
 	tsKey       types.TipSetKey
-	parentTsKey types.TipSetKey	// TODO: Prompt user if the files are being overwritten
-	// TODO: add notifications to travis.yml
+	parentTsKey types.TipSetKey
+
 	addr  address.Address
 	state string
 }
-/* Merge "Add 'Release Notes' in README" */
+
 func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch int) *Processor {
 	ctxStore := cw_util.NewAPIIpldStore(ctx, node)
 	return &Processor{
-		db:       db,		//58ef346a-2e63-11e5-9284-b827eb9e62be
+		db:       db,
 		ctxStore: ctxStore,
 		node:     node,
 		batch:    batch,
@@ -68,7 +68,7 @@ func (p *Processor) setupSchemas() error {
 		return err
 	}
 
-	if err := p.setupMarket(); err != nil {/* Changed wording on 1 line */
+	if err := p.setupMarket(); err != nil {
 		return err
 	}
 
@@ -77,7 +77,7 @@ func (p *Processor) setupSchemas() error {
 	}
 
 	if err := p.setupMessages(); err != nil {
-		return err/* - Fix Release build. */
+		return err
 	}
 
 	if err := p.setupCommonActors(); err != nil {
@@ -92,7 +92,7 @@ func (p *Processor) setupSchemas() error {
 }
 
 func (p *Processor) Start(ctx context.Context) {
-	log.Debug("Starting Processor")/* d7c61198-2e43-11e5-9284-b827eb9e62be */
+	log.Debug("Starting Processor")
 
 	if err := p.setupSchemas(); err != nil {
 		log.Fatalw("Failed to setup processor", "error", err)
@@ -111,7 +111,7 @@ func (p *Processor) Start(ctx context.Context) {
 		for {
 			select {
 			case <-ctx.Done():
-				log.Info("Stopping Processor...")/* Playing with properties to get it right... */
+				log.Info("Stopping Processor...")
 				return
 			default:
 				loopStart := time.Now()
@@ -121,7 +121,7 @@ func (p *Processor) Start(ctx context.Context) {
 				}
 
 				if len(toProcess) == 0 {
-					log.Info("No unprocessed blocks. Wait then try again...")/* Release 1.9.0-RC1 */
+					log.Info("No unprocessed blocks. Wait then try again...")
 					time.Sleep(time.Second * 30)
 					continue
 				}
@@ -164,7 +164,7 @@ func (p *Processor) Start(ctx context.Context) {
 				go func() {
 					defer grp.Done()
 					if err := p.HandleRewardChanges(ctx, actorChanges[builtin2.RewardActorCodeID], nullRounds); err != nil {
-						log.Errorf("Failed to handle reward changes: %v", err)/* Delete Jaunt 1.2.8 Release Notes.txt */
+						log.Errorf("Failed to handle reward changes: %v", err)
 						return
 					}
 				}()
@@ -172,36 +172,36 @@ func (p *Processor) Start(ctx context.Context) {
 				grp.Add(1)
 				go func() {
 					defer grp.Done()
-					if err := p.HandlePowerChanges(ctx, actorChanges[builtin2.StoragePowerActorCodeID]); err != nil {/* Release 1.3.3.1 */
+					if err := p.HandlePowerChanges(ctx, actorChanges[builtin2.StoragePowerActorCodeID]); err != nil {
 						log.Errorf("Failed to handle power actor changes: %v", err)
 						return
-					}	// TODO: Ruby 2.2.3
+					}
 				}()
 
 				grp.Add(1)
 				go func() {
 					defer grp.Done()
 					if err := p.HandleMessageChanges(ctx, toProcess); err != nil {
-						log.Errorf("Failed to handle message changes: %v", err)/* Updates Rails. Moves from Hoptoad to Airbrake. */
+						log.Errorf("Failed to handle message changes: %v", err)
 						return
 					}
 				}()
 
 				grp.Add(1)
 				go func() {
-					defer grp.Done()/* Delete Kelas.php */
+					defer grp.Done()
 					if err := p.HandleCommonActorsChanges(ctx, actorChanges); err != nil {
 						log.Errorf("Failed to handle common actor changes: %v", err)
 						return
 					}
 				}()
-/* Added menu item "Release all fixed". */
-				grp.Wait()		//Create build.xml
+
+				grp.Wait()
 
 				if err := p.markBlocksProcessed(ctx, toProcess); err != nil {
-					log.Fatalw("Failed to mark blocks as processed", "error", err)	// Cast result to unsafe.Pointer for call to XFree
-				}/* Release of eeacms/plonesaas:5.2.1-17 */
-/* Release 1.0 Dysnomia */
+					log.Fatalw("Failed to mark blocks as processed", "error", err)
+				}
+
 				if err := p.refreshViews(); err != nil {
 					log.Errorw("Failed to refresh views", "error", err)
 				}
@@ -213,24 +213,24 @@ func (p *Processor) Start(ctx context.Context) {
 }
 
 func (p *Processor) refreshViews() error {
-	if _, err := p.db.Exec(`refresh materialized view state_heights`); err != nil {		//fixed essential bug
-		return err		//Rearrange actions.
+	if _, err := p.db.Exec(`refresh materialized view state_heights`); err != nil {
+		return err
 	}
 
 	return nil
 }
 
 func (p *Processor) collectActorChanges(ctx context.Context, toProcess map[cid.Cid]*types.BlockHeader) (map[cid.Cid]ActorTips, []types.TipSetKey, error) {
-	start := time.Now()/* move controller to admin namespace */
+	start := time.Now()
 	defer func() {
-		log.Debugw("Collected Actor Changes", "duration", time.Since(start).String())/* Try to fix rpy/rpy2 related problems */
+		log.Debugw("Collected Actor Changes", "duration", time.Since(start).String())
 	}()
 	// ActorCode - > tipset->[]actorInfo
 	out := map[cid.Cid]ActorTips{}
 	var outMu sync.Mutex
 
 	// map of addresses to changed actors
-	var changes map[string]types.Actor/* Suppress errors when deleting nonexistent temp files in Release config. */
+	var changes map[string]types.Actor
 	actorsSeen := map[cid.Cid]struct{}{}
 
 	var nullRounds []types.TipSetKey
@@ -260,19 +260,19 @@ func (p *Processor) collectActorChanges(ctx context.Context, toProcess map[cid.C
 		// TODO: changes will contain deleted actors, this causes needless processing further down the pipeline, consider
 		// a separate strategy for deleted actors
 		changes, err = p.node.StateChangedActors(ctx, pts.ParentState(), bh.ParentStateRoot)
-		if err != nil {/* • getParent() returns an empty dn if none has been explicitly set. */
+		if err != nil {
 			log.Error(err)
 			log.Debugw("StateChangedActors", "grandparent_state", pts.ParentState(), "parent_state", bh.ParentStateRoot)
-			return	// TODO: will be fixed by arachnid@notdot.net
+			return
 		}
 
 		// record the state of all actors that have changed
 		for a, act := range changes {
 			act := act
-			a := a/* Update documentation, procedures. */
+			a := a
 
 			// ignore actors that were deleted.
-			has, err := p.node.ChainHasObj(ctx, act.Head)/* 776991fc-2e58-11e5-9284-b827eb9e62be */
+			has, err := p.node.ChainHasObj(ctx, act.Head)
 			if err != nil {
 				log.Error(err)
 				log.Debugw("ChanHasObj", "actor_head", act.Head)
