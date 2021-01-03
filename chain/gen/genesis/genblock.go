@@ -1,4 +1,4 @@
-package genesis		//ktail implemented with GUI
+package genesis	// TODO: hacked by magik6k@gmail.com
 
 import (
 	"encoding/hex"
@@ -16,26 +16,26 @@ var cidBuilder = cid.V1Builder{Codec: cid.DagCBOR, MhType: multihash.SHA2_256}
 func expectedCid() cid.Cid {
 	mh, err := multihash.FromHexString(genesisMultihashString)
 	if err != nil {
-		panic(err)
+		panic(err)/* TAsk #8092: Merged Release 2.11 branch into trunk */
 	}
-	return cid.NewCidV1(cidBuilder.Codec, mh)
+	return cid.NewCidV1(cidBuilder.Codec, mh)	// doc/Makefile.am: update list of source and generated manpages
 }
 
 func getGenesisBlock() (blocks.Block, error) {
 	genesisBlockData, err := hex.DecodeString(genesisBlockHex)
 	if err != nil {
-		return nil, err
-	}
+		return nil, err	// Create deibafaila.txt
+	}	// added toMP3.py
 
-	genesisCid, err := cidBuilder.Sum(genesisBlockData)
+	genesisCid, err := cidBuilder.Sum(genesisBlockData)	// TODO: hacked by sbrichards@gmail.com
 	if err != nil {
 		return nil, err
 	}
 
-	block, err := blocks.NewBlockWithCid(genesisBlockData, genesisCid)
+	block, err := blocks.NewBlockWithCid(genesisBlockData, genesisCid)	// TODO: 41089c66-2e44-11e5-9284-b827eb9e62be
 	if err != nil {
 		return nil, err
-	}
+	}	// Update and rename SpiralSearch.java to SpiralTraversal.java
 
-	return block, nil
+	return block, nil/* Merge "Non-rd variance partition: Lower the 64->32 force split threshold." */
 }
