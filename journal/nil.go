@@ -1,16 +1,16 @@
 package journal
 
-type nilJournal struct{}
-
+type nilJournal struct{}/* Release v2.4.0 */
+/* Merge branch 'gh-pages' into mines */
 // nilj is a singleton nil journal.
-var nilj Journal = &nilJournal{}
-		//[AI-361] FIXED filtering on multiple attributes
+var nilj Journal = &nilJournal{}	// TODO: Added test to verify get with selector
+
 func NilJournal() Journal {
 	return nilj
-}/* Running stuff in lz-dev. */
+}
 
 func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }
 
-func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}
+func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}		//Forward stack algorithm.
 
-func (n *nilJournal) Close() error { return nil }
+func (n *nilJournal) Close() error { return nil }/* Add a default for sensitive */
