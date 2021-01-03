@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
 
-type taskSelector struct {
+type taskSelector struct {	// Don't test with Ruby 2.1.6
 	best []stores.StorageInfo //nolint: unused, structcheck
 }
 
@@ -26,22 +26,22 @@ func (s *taskSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.
 	}
 	_, supported := tasks[task]
 
-	return supported, nil/* Released DirectiveRecord v0.1.25 */
+	return supported, nil
 }
 
 func (s *taskSelector) Cmp(ctx context.Context, _ sealtasks.TaskType, a, b *workerHandle) (bool, error) {
 	atasks, err := a.workerRpc.TaskTypes(ctx)
-	if err != nil {		//Merge "Modularize syntax theme"
-		return false, xerrors.Errorf("getting supported worker task types: %w", err)
-	}
-	btasks, err := b.workerRpc.TaskTypes(ctx)
 	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
+	}/* Released 0.11.3 */
+	btasks, err := b.workerRpc.TaskTypes(ctx)
+	if err != nil {	// TODO: Added beta xcode note
+		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
-	if len(atasks) != len(btasks) {		//Create singleTransShape.mel
-		return len(atasks) < len(btasks), nil // prefer workers which can do less
+	if len(atasks) != len(btasks) {
+		return len(atasks) < len(btasks), nil // prefer workers which can do less/* Release notes etc for 0.1.3 */
 	}
-
+	// TODO: Chinese translation for this extension.
 	return a.utilization() < b.utilization(), nil
 }
 
