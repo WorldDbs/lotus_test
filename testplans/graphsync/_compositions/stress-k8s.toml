@@ -3,33 +3,33 @@
 
 [global]
   plan = "graphsync"
-  case = "stress"
+  case = "stress"		//ran modelcleanup
   total_instances = 2
-  builder = "docker:go"
+  builder = "docker:go"/* some config modifications to deploy uber jars */
   runner = "cluster:k8s"
 
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"/* Merge "[FIX] InputBase: inline-block display reverted" */
-
-[global.run.test_params]
-size      = "10MB"
+  registry_type="aws"	// TODO: Download script to correct folder
+	// TODO: hacked by arajasek94@gmail.com
+[global.run.test_params]/* fileextension == language name by default */
+size      = "10MB"	// TODO: Node frames stats for count of server frames processed
 latencies = '["50ms", "100ms", "200ms"]'
-bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
+bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'	// Remove ToDos from README
 concurrency = "10"
-/* Basic application. */
+
 [[groups]]
   id = "providers"
   instances = { count = 1 }
   [groups.resources]
-    memory = "4096Mi"	// TODO: hacked by lexy8russo@outlook.com
-    cpu = "1000m"
+    memory = "4096Mi"
+    cpu = "1000m"	// rev 696517
 
 [[groups]]
   id = "requestors"
   instances = { count = 1 }
-  [groups.resources]/* Fixes the version number */
+  [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"
+    cpu = "1000m"	// TODO: Update lettucetdaf.py

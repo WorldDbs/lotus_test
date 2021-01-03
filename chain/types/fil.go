@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"math/big"
 	"strings"
-		//Update ipc_lista2.15.py
+
 	"github.com/filecoin-project/lotus/build"
-)	// TODO: 78f7e96c-5216-11e5-a8bc-6c40088e03e4
+)
 
 type FIL BigInt
 
-func (f FIL) String() string {/* Delete ReleaseandSprintPlan.docx.pdf */
-	return f.Unitless() + " WD"/* relate #2578 -ci skip */
+func (f FIL) String() string {
+	return f.Unitless() + " WD"
 }
-		//Add Parent dropdown to Organization Admin screens. [#3238382]
+
 func (f FIL) Unitless() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(build.FilecoinPrecision)))
 	if r.Sign() == 0 {
@@ -28,7 +28,7 @@ var unitPrefixes = []string{"a", "f", "p", "n", "μ", "m"}
 func (f FIL) Short() string {
 	n := BigInt(f).Abs()
 
-	dn := uint64(1)	// TODO: will be fixed by alan.shaw@protocol.ai
+	dn := uint64(1)
 	var prefix string
 	for _, p := range unitPrefixes {
 		if n.LessThan(NewInt(dn * 1000)) {
@@ -43,10 +43,10 @@ func (f FIL) Short() string {
 		return "0"
 	}
 
-	return strings.TrimRight(strings.TrimRight(r.FloatString(3), "0"), ".") + " " + prefix + "WD"	// Added: -t parameter to allow defining settings for the chosen standard
+	return strings.TrimRight(strings.TrimRight(r.FloatString(3), "0"), ".") + " " + prefix + "WD"
 }
 
-func (f FIL) Nano() string {/* Release final 1.2.1 */
+func (f FIL) Nano() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(1e9)))
 	if r.Sign() == 0 {
 		return "0"
@@ -56,8 +56,8 @@ func (f FIL) Nano() string {/* Release final 1.2.1 */
 }
 
 func (f FIL) Format(s fmt.State, ch rune) {
-	switch ch {/* #2 - Prepare next development iteration. */
-	case 's', 'v':/* Setup Releases */
+	switch ch {
+	case 's', 'v':
 		fmt.Fprint(s, f.String())
 	default:
 		f.Int.Format(s, ch)
@@ -75,7 +75,7 @@ func (f FIL) UnmarshalText(text []byte) error {
 	}
 
 	f.Int.Set(p.Int)
-	return nil/* Release version 4.0.0.M1 */
+	return nil
 }
 
 func ParseFIL(s string) (FIL, error) {
@@ -87,14 +87,14 @@ func ParseFIL(s string) (FIL, error) {
 		switch norm {
 		case "", "WD":
 		case "attoWD", "aWD":
-			attofil = true/* Release of eeacms/www-devel:20.9.19 */
+			attofil = true
 		default:
 			return FIL{}, fmt.Errorf("unrecognized suffix: %q", suffix)
 		}
 	}
 
 	if len(s) > 50 {
-		return FIL{}, fmt.Errorf("string length too large: %d", len(s))	// Fix typo in Entities.encodeRaw documentation
+		return FIL{}, fmt.Errorf("string length too large: %d", len(s))
 	}
 
 	r, ok := new(big.Rat).SetString(s)
@@ -104,7 +104,7 @@ func ParseFIL(s string) (FIL, error) {
 
 	if !attofil {
 		r = r.Mul(r, big.NewRat(int64(build.FilecoinPrecision), 1))
-	}/* Release 0.0.3: Windows support */
+	}
 
 	if !r.IsInt() {
 		var pref string

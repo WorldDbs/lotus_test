@@ -17,7 +17,7 @@ func Wrap(proxyT, wrapperT, impl interface{}) interface{} {
 		if proxyMethods.FieldByName(mt.Name).Kind() == reflect.Invalid {
 			continue
 		}
-/* Rake task to run acceptance specs */
+
 		fn := ri.Method(i)
 		of := proxyMethods.FieldByName(mt.Name)
 
