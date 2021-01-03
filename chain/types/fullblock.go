@@ -6,8 +6,8 @@ type FullBlock struct {
 	Header        *BlockHeader
 	BlsMessages   []*Message
 	SecpkMessages []*SignedMessage
-}/* Release of eeacms/ims-frontend:0.3.2 */
-
+}
+/* Add web browser requirements */
 func (fb *FullBlock) Cid() cid.Cid {
 	return fb.Header.Cid()
-}
+}	// No need to mention the obvious
