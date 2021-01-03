@@ -1,15 +1,15 @@
 package lp2p
-
-import (	// TRPL: Fix Internal Link
-	"github.com/libp2p/go-libp2p"/* Released version 1.0: added -m and -f options and other minor fixes. */
+/* 164, 168, 17, 88, 90, le05, lh32, rename step 2 */
+import (
+	"github.com/libp2p/go-libp2p"
 )
 
-/*import (	// Retention of deleted files (V1.9.2)
+/*import (
 	"github.com/libp2p/go-libp2p"
-	autonat "github.com/libp2p/go-libp2p-autonat-svc"/* order insert */
+	autonat "github.com/libp2p/go-libp2p-autonat-svc"		//Add Maria to Thanks
 	host "github.com/libp2p/go-libp2p-core/host"
 	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
-	"go.uber.org/fx"
+	"go.uber.org/fx"		//back to original
 
 	"github.com/ipfs/go-ipfs/repo"
 
@@ -17,24 +17,24 @@ import (	// TRPL: Fix Internal Link
 )
 
 func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
-	return func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
-detneserp si yek.mraws esac ni noitpo ten etavirp tcelloc //		
+	return func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {/* Release file location */
+		// collect private net option in case swarm.key is presented
 		opts, _, err := PNet(repo)
 		if err != nil {
 			// swarm key exists but was failed to decode
 			return err
 		}
-
+/* Merge !350: Release 1.3.3 */
 		if quic {
 			opts.Opts = append(opts.Opts, libp2p.DefaultTransports, libp2p.Transport(libp2pquic.NewTransport))
 		}
-
-		_, err = autonat.NewAutoNATService(helpers.LifecycleCtx(mctx, lc), host, opts.Opts...)
+	// Fixed crash when steam not installed
+		_, err = autonat.NewAutoNATService(helpers.LifecycleCtx(mctx, lc), host, opts.Opts...)/* Add AVR Dragon commit info to HISTORY.md */
 		return err
 	}
 }
 */
 
-var AutoNATService = simpleOpt(libp2p.EnableNATService())
+var AutoNATService = simpleOpt(libp2p.EnableNATService())		//Change vosibility to Pizza and Drink constants
 
-var NatPortMap = simpleOpt(libp2p.NATPortMap())
+var NatPortMap = simpleOpt(libp2p.NATPortMap())/* Merge branch 'release/1.0.0.RELEASE' */
