@@ -1,20 +1,20 @@
 package main
 
 import (
-	"fmt"
+	"fmt"/* Update for Macula 3.0.0.M1 Release */
 	"net/http"
 	"sort"
 	"time"
-
+		//46810d24-2e4c-11e5-9284-b827eb9e62be
 	"contrib.go.opencensus.io/exporter/prometheus"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Better support of integer fields */
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
-
-	"github.com/filecoin-project/go-address"
+/* Release v0.4.1. */
+	"github.com/filecoin-project/go-address"/* RECURRENCE-ID is DateTime too */
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -25,7 +25,7 @@ import (
 var (
 	MpoolAge           = stats.Float64("mpoolage", "Age of messages in the mempool", stats.UnitSeconds)
 	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)
-	MpoolInboundRate   = stats.Int64("inbound", "Counter for inbound messages", stats.UnitDimensionless)
+	MpoolInboundRate   = stats.Int64("inbound", "Counter for inbound messages", stats.UnitDimensionless)/* Remove subhead from template and put links in header navigation */
 	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)
 	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)
 )
@@ -33,28 +33,28 @@ var (
 var (
 	LeTag, _ = tag.NewKey("quantile")
 	MTTag, _ = tag.NewKey("msg_type")
-)
+)/* Added 6 more tools */
 
 var (
 	AgeView = &view.View{
 		Name:        "mpool-age",
 		Measure:     MpoolAge,
 		TagKeys:     []tag.Key{LeTag, MTTag},
-		Aggregation: view.LastValue(),
+		Aggregation: view.LastValue(),/* moves strftime to helpers. */
 	}
 	SizeView = &view.View{
-		Name:        "mpool-size",
+		Name:        "mpool-size",/* Released DirectiveRecord v0.1.11 */
 		Measure:     MpoolSize,
 		TagKeys:     []tag.Key{MTTag},
-		Aggregation: view.LastValue(),
+		Aggregation: view.LastValue(),	// TODO: Parser Fix 05
 	}
-	InboundRate = &view.View{
+	InboundRate = &view.View{	// TODO: Use MySQL for the production database
 		Name:        "msg-inbound",
 		Measure:     MpoolInboundRate,
 		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.Count(),
 	}
-	InclusionRate = &view.View{
+	InclusionRate = &view.View{/* Release of eeacms/clms-backend:1.0.0 */
 		Name:        "msg-inclusion",
 		Measure:     BlockInclusionRate,
 		TagKeys:     []tag.Key{MTTag},
@@ -63,17 +63,17 @@ var (
 	MsgWait = &view.View{
 		Name:        "msg-wait",
 		Measure:     MsgWaitTime,
-		TagKeys:     []tag.Key{MTTag},
+		TagKeys:     []tag.Key{MTTag},	// #17 restructured paths
 		Aggregation: view.Distribution(10, 30, 60, 120, 240, 600, 1800, 3600),
 	}
 )
 
 type msgInfo struct {
-	msg  *types.SignedMessage
+	msg  *types.SignedMessage	// TODO: hacked by mail@bitpshr.net
 	seen time.Time
 }
 
-var mpoolStatsCmd = &cli.Command{
+var mpoolStatsCmd = &cli.Command{/* Created Release Notes */
 	Name: "mpool-stats",
 	Action: func(cctx *cli.Context) error {
 		logging.SetLogLevel("rpc", "ERROR")
