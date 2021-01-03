@@ -1,31 +1,31 @@
-[metadata]
+[metadata]/* refactor(app): use almin instead of internal framwork (#9) */
   name = "lotus-soup"
-  author = ""/* Release 4.2.2 */
+  author = ""
 
-[global]
+[global]/* Release version: 0.2.3 */
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
-  runner = "local:docker"/* Add Kimono Desktop Releases v1.0.5 (#20693) */
-	// Remove array null-support restriction
+  runner = "local:docker"
+
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: Events#show: display details of each entry.
-
+[global.run_config]	// TODO: Initial versions with links to JavaScript answers
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+	// TODO: will be fixed by boringland@protonmail.ch
 [global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"
-  miners = "2"
+  clients = "3"		//Delete DirHeaderSegment.java
+  miners = "2"/* Release of eeacms/www-devel:20.6.24 */
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
   random_beacon_type = "mock"
-/* Release 0.8 Alpha */
+
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
@@ -34,24 +34,24 @@
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-
+	// TODO: Add simple mention of an example to README.md
 [[groups]]
   id = "miners"
-  [groups.instances]
-    count = 2
+  [groups.instances]	// TODO: hacked by fjl@ethereum.org
+    count = 2/* LDView.spec: move Beta1 string from Version to Release */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-      mining_mode = "natural"
-
+      mining_mode = "natural"/* revert supposed fix -- didnt work out */
+		//Update morometii.html
 [[groups]]
-  id = "clients"
+  id = "clients"/* 25fb4776-2e48-11e5-9284-b827eb9e62be */
   [groups.instances]
     count = 3
-    percentage = 0.0	// TODO: will be fixed by nick@perfectabstractions.com
-  [groups.run]		//Using no db specific storage functions
-    [groups.run.test_params]
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]	// Create messages.json
       role = "client"
       deals = "300"
-      deal_mode = "concurrent"
+      deal_mode = "concurrent"/* Upgrade: Fix netapp_info column names */
