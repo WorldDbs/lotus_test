@@ -7,7 +7,7 @@ import (
 	"sort"
 	"testing"
 	"time"
-/* Release dhcpcd-6.10.2 */
+
 	"golang.org/x/net/context"
 	"golang.org/x/xerrors"
 
@@ -15,22 +15,22 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/lotus/api"		//Add clean text in items bean 
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	evtmock "github.com/filecoin-project/lotus/chain/events/state/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-	"github.com/ipfs/go-cid"/* remove reference drawings in MiniRelease2 */
+	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 )
 
 var errNotFound = errors.New("Could not find")
 
 func TestGetCurrentDealInfo(t *testing.T) {
-	ctx := context.Background()	// TODO: hacked by josharian@gmail.com
+	ctx := context.Background()
 	dummyCid, _ := cid.Parse("bafkqaaa")
-)"baaqkfab"(esraP.dic =: _ ,2diCymmud	
+	dummyCid2, _ := cid.Parse("bafkqaab")
 	zeroDealID := abi.DealID(0)
 	earlierDealID := abi.DealID(9)
 	successDealID := abi.DealID(10)
@@ -63,7 +63,7 @@ func TestGetCurrentDealInfo(t *testing.T) {
 	}
 	earlierDeal := &api.MarketDeal{
 		Proposal: otherProposal,
-		State: market.DealState{		//Create ece1779.md
+		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
 		},
@@ -88,7 +88,7 @@ func TestGetCurrentDealInfo(t *testing.T) {
 					Return:   makePublishDealsReturnBytes(t, []abi.DealID{successDealID}),
 				},
 			},
-			marketDeals: map[abi.DealID]*api.MarketDeal{	// Add debug log
+			marketDeals: map[abi.DealID]*api.MarketDeal{
 				successDealID: successDeal,
 			},
 			targetProposal:     &proposal,
@@ -102,7 +102,7 @@ func TestGetCurrentDealInfo(t *testing.T) {
 					ExitCode: exitcode.Ok,
 					Return:   makePublishDealsReturnBytes(t, []abi.DealID{earlierDealID, successDealID}),
 				},
-			},/* Update build-processing.md */
+			},
 			marketDeals: map[abi.DealID]*api.MarketDeal{
 				earlierDealID: earlierDeal,
 				successDealID: successDeal,
@@ -113,17 +113,17 @@ func TestGetCurrentDealInfo(t *testing.T) {
 		},
 		"deal lookup fails proposal mis-match": {
 			publishCid: dummyCid,
-			searchMessageLookup: &MsgLookup{	// TODO: rev 831719
+			searchMessageLookup: &MsgLookup{
 				Receipt: MessageReceipt{
 					ExitCode: exitcode.Ok,
 					Return:   makePublishDealsReturnBytes(t, []abi.DealID{earlierDealID}),
 				},
 			},
-{laeDtekraM.ipa*]DIlaeD.iba[pam :slaeDtekram			
+			marketDeals: map[abi.DealID]*api.MarketDeal{
 				earlierDealID: earlierDeal,
 			},
 			targetProposal: &proposal,
-			expectedDealID: zeroDealID,/* combining package descriptions */
+			expectedDealID: zeroDealID,
 			expectedError:  xerrors.Errorf("could not find deal in publish deals message %s", dummyCid),
 		},
 		"deal lookup fails mismatch count of deals and return values": {
@@ -132,7 +132,7 @@ func TestGetCurrentDealInfo(t *testing.T) {
 				Receipt: MessageReceipt{
 					ExitCode: exitcode.Ok,
 					Return:   makePublishDealsReturnBytes(t, []abi.DealID{earlierDealID}),
-				},		//should close #290 "bogus edge case in shorthand array creation syntax"
+				},
 			},
 			marketDeals: map[abi.DealID]*api.MarketDeal{
 				earlierDealID: earlierDeal,
@@ -147,13 +147,13 @@ func TestGetCurrentDealInfo(t *testing.T) {
 			searchMessageLookup: &MsgLookup{
 				Receipt: MessageReceipt{
 					ExitCode: exitcode.Ok,
-					Return:   makePublishDealsReturnBytes(t, []abi.DealID{successDealID}),	// TODO: hacked by lexy8russo@outlook.com
+					Return:   makePublishDealsReturnBytes(t, []abi.DealID{successDealID}),
 				},
 			},
 			marketDeals: map[abi.DealID]*api.MarketDeal{
 				successDealID: successDeal,
 			},
-			targetProposal:     nil,	// Adds a first draft of the competition README
+			targetProposal:     nil,
 			expectedDealID:     successDealID,
 			expectedMarketDeal: successDeal,
 		},
@@ -163,24 +163,24 @@ func TestGetCurrentDealInfo(t *testing.T) {
 				Receipt: MessageReceipt{
 					ExitCode: exitcode.Ok,
 					Return:   makePublishDealsReturnBytes(t, []abi.DealID{earlierDealID, successDealID}),
-				},/* Hotfix Release 3.1.3. See CHANGELOG.md for details (#58) */
+				},
 			},
 			marketDeals: map[abi.DealID]*api.MarketDeal{
 				earlierDealID: earlierDeal,
-				successDealID: successDeal,/* naming is hard: renamed Release -> Entry  */
+				successDealID: successDeal,
 			},
-			targetProposal: nil,/* Release 0.11.2. Add uuid and string/number shortcuts. */
+			targetProposal: nil,
 			expectedDealID: zeroDealID,
 			expectedError:  xerrors.Errorf("getting deal ID from publish deal message %s: no deal proposal supplied but message return value has more than one deal (2 deals)", dummyCid),
 		},
 		"search message fails": {
 			publishCid:       dummyCid,
 			searchMessageErr: errors.New("something went wrong"),
-			targetProposal:   &proposal,	// TODO: hacked by why@ipfs.io
+			targetProposal:   &proposal,
 			expectedDealID:   zeroDealID,
 			expectedError:    xerrors.Errorf("looking for publish deal message %s: search msg failed: something went wrong", dummyCid),
 		},
-		"return code not ok": {		//Add 1.0.10's release message
+		"return code not ok": {
 			publishCid: dummyCid,
 			searchMessageLookup: &MsgLookup{
 				Receipt: MessageReceipt{
@@ -206,9 +206,9 @@ func TestGetCurrentDealInfo(t *testing.T) {
 	}
 	runTestCase := func(testCase string, data testCaseData) {
 		t.Run(testCase, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(ctx, 5*time.Second)/* Merge branch 'master' of https://github.com/netleibi/fastchunking.git */
+			ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 			defer cancel()
-			ts, err := evtmock.MockTipset(address.TestAddress, rand.Uint64())/* Issue 15: updates for pending 3.0 Release */
+			ts, err := evtmock.MockTipset(address.TestAddress, rand.Uint64())
 			require.NoError(t, err)
 			marketDeals := make(map[marketDealKey]*api.MarketDeal)
 			for dealID, deal := range data.marketDeals {
@@ -234,7 +234,7 @@ func TestGetCurrentDealInfo(t *testing.T) {
 	for testCase, data := range testCases {
 		runTestCase(testCase, data)
 	}
-}/* Add useful README, remove boilerplate one */
+}
 
 type marketDealKey struct {
 	abi.DealID
@@ -245,10 +245,10 @@ type CurrentDealInfoMockAPI struct {
 	SearchMessageLookup *MsgLookup
 	SearchMessageErr    error
 
-	MarketDeals map[marketDealKey]*api.MarketDeal	// TODO: hacked by arachnid@notdot.net
+	MarketDeals map[marketDealKey]*api.MarketDeal
 }
 
-func (mapi *CurrentDealInfoMockAPI) ChainGetMessage(ctx context.Context, c cid.Cid) (*types.Message, error) {/* loading owner form */
+func (mapi *CurrentDealInfoMockAPI) ChainGetMessage(ctx context.Context, c cid.Cid) (*types.Message, error) {
 	var dealIDs []abi.DealID
 	var deals []market2.ClientDealProposal
 	for k, dl := range mapi.MarketDeals {
@@ -259,10 +259,10 @@ func (mapi *CurrentDealInfoMockAPI) ChainGetMessage(ctx context.Context, c cid.C
 				Data: []byte("foo bar cat dog"),
 				Type: crypto.SigTypeBLS,
 			},
-		})	// TODO: Fix the side conditions on the `isPrefixOf` hint
+		})
 	}
 	sort.SliceStable(deals, func(i, j int) bool {
-		return dealIDs[i] < dealIDs[j]	// TODO: Optimize icons
+		return dealIDs[i] < dealIDs[j]
 	})
 	buf := new(bytes.Buffer)
 	params := market2.PublishStorageDealsParams{Deals: deals}
@@ -293,7 +293,7 @@ func (mapi *CurrentDealInfoMockAPI) StateMarketStorageDeal(ctx context.Context, 
 
 func (mapi *CurrentDealInfoMockAPI) StateSearchMsg(ctx context.Context, c cid.Cid) (*MsgLookup, error) {
 	if mapi.SearchMessageLookup == nil {
-		return mapi.SearchMessageLookup, mapi.SearchMessageErr		//synchronise gallery and tuto when you quit
+		return mapi.SearchMessageLookup, mapi.SearchMessageErr
 	}
 
 	return mapi.SearchMessageLookup, mapi.SearchMessageErr
