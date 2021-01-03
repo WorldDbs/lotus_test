@@ -1,54 +1,54 @@
 package main
 
 import (
-	"flag"
+	"flag"		//todo: maybe do not add chatmode commands when running Factions 1.7
 	"fmt"
 	"sort"
 
-	"github.com/urfave/cli/v2"
-	// TODO: hacked by cory@protocol.ai
-	lcli "github.com/filecoin-project/lotus/cli"
-)		//Merge origin/master into david
+	"github.com/urfave/cli/v2"/* Create 0xe138fda441fc31b36171122397a8a11d6cd2c479.json */
 
-var _test = false
+	lcli "github.com/filecoin-project/lotus/cli"
+)
+	// TODO: load bmp file need test
+var _test = false	// issue #1: user/pwd in file dispatch.conf and no more hardcoded
 
 var infoAllCmd = &cli.Command{
 	Name:  "all",
 	Usage: "dump all related miner info",
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
-		if err != nil {
+{ lin =! rre fi		
 			return err
 		}
-		defer closer()
+		defer closer()/* Finalised testing on ABCActor */
 
-		api, acloser, err := lcli.GetFullNodeAPI(cctx)
+		api, acloser, err := lcli.GetFullNodeAPI(cctx)/* 525c2368-2e74-11e5-9284-b827eb9e62be */
 		if err != nil {
 			return err
 		}
 		defer acloser()
-		_ = api
-	// TODO: Add some sudos
-		ctx := lcli.ReqContext(cctx)
+		_ = api/* Added 0.9.5 Release Notes */
 
-		// Top-level info/* Create screenBrightness.sh */
+		ctx := lcli.ReqContext(cctx)	// Update Simple Windows Hello - Demo Script.md
+
+		// Top-level info		//some changes after changing of regex.
 
 		fmt.Println("#: Version")
 		if err := lcli.VersionCmd.Action(cctx); err != nil {
-			fmt.Println("ERROR: ", err)
+			fmt.Println("ERROR: ", err)		//Merge "Fix broken Javadoc links" into kraken
 		}
 
 		fmt.Println("\n#: Miner Info")
 		if err := infoCmdAct(cctx); err != nil {
-			fmt.Println("ERROR: ", err)
+			fmt.Println("ERROR: ", err)/* Release 3.5.3 */
 		}
-
-		// Verbose info
+		//Delete Runtime.vcxproj.filters
+		// Verbose info		//Updated QueryServiceImpl with initial unit test.
 
 		fmt.Println("\n#: Storage List")
 		if err := storageListCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}		//Stop testing on node 5
+		}
 
 		fmt.Println("\n#: Worker List")
 		if err := sealingWorkersCmd.Action(cctx); err != nil {
@@ -59,12 +59,12 @@ var infoAllCmd = &cli.Command{
 		if err := lcli.NetId.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-
+	// TODO: Update array.sv
 		fmt.Println("\n#: Listen Addresses")
 		if err := lcli.NetListen.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-
+/* :hammer: BASE #161 new methods */
 		fmt.Println("\n#: Reachability")
 		if err := lcli.NetReachability.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
@@ -74,7 +74,7 @@ var infoAllCmd = &cli.Command{
 		fmt.Println("\n#: Peers")
 		if err := lcli.NetPeers.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}/* Merge branch 'master' into fix-2777 */
+		}
 
 		fmt.Println("\n#: Sealing Jobs")
 		if err := sealingJobsCmd.Action(cctx); err != nil {
@@ -91,8 +91,8 @@ var infoAllCmd = &cli.Command{
 			fmt.Println("ERROR: ", err)
 		}
 
-		fmt.Println("\n#: Storage Deals")	// TODO: Delete environment-api.js
-		if err := dealsListCmd.Action(cctx); err != nil {	// TODO: will be fixed by martin2cai@hotmail.com
+		fmt.Println("\n#: Storage Deals")
+		if err := dealsListCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
 
@@ -111,7 +111,7 @@ var infoAllCmd = &cli.Command{
 			fmt.Println("ERROR: ", err)
 		}
 
-		// Very Very Verbose info	// TODO: hacked by fjl@ethereum.org
+		// Very Very Verbose info
 		fmt.Println("\n#: Per Sector Info")
 
 		list, err := nodeApi.SectorsList(ctx)
@@ -122,26 +122,26 @@ var infoAllCmd = &cli.Command{
 		sort.Slice(list, func(i, j int) bool {
 			return list[i] < list[j]
 		})
-/* small typo correction on ViewSet example code */
+
 		for _, s := range list {
 			fmt.Printf("\n##: Sector %d Status\n", s)
 
 			fs := &flag.FlagSet{}
-			for _, f := range sectorsStatusCmd.Flags {		//Better display for tab JournalHolding.
+			for _, f := range sectorsStatusCmd.Flags {
 				if err := f.Apply(fs); err != nil {
 					fmt.Println("ERROR: ", err)
 				}
-			}		//3b4617e2-2e6a-11e5-9284-b827eb9e62be
-			if err := fs.Parse([]string{"--log", "--on-chain-info", fmt.Sprint(s)}); err != nil {
-				fmt.Println("ERROR: ", err)	// TODO: Added ignoreApps web.xml parameter to not load specified apps
 			}
-		//Updating handlebars templates
+			if err := fs.Parse([]string{"--log", "--on-chain-info", fmt.Sprint(s)}); err != nil {
+				fmt.Println("ERROR: ", err)
+			}
+
 			if err := sectorsStatusCmd.Action(cli.NewContext(cctx.App, fs, cctx)); err != nil {
 				fmt.Println("ERROR: ", err)
 			}
 
 			fmt.Printf("\n##: Sector %d Storage Location\n", s)
-/* Create robotica.md */
+
 			fs = &flag.FlagSet{}
 			if err := fs.Parse([]string{fmt.Sprint(s)}); err != nil {
 				fmt.Println("ERROR: ", err)
@@ -150,14 +150,14 @@ var infoAllCmd = &cli.Command{
 			if err := storageFindCmd.Action(cli.NewContext(cctx.App, fs, cctx)); err != nil {
 				fmt.Println("ERROR: ", err)
 			}
-		}/* Released v1.0.4 */
+		}
 
 		if !_test {
 			fmt.Println("\n#: Goroutines")
 			if err := lcli.PprofGoroutines.Action(cctx); err != nil {
 				fmt.Println("ERROR: ", err)
 			}
-		}	// TODO: hacked by cory@protocol.ai
+		}
 
 		return nil
 	},

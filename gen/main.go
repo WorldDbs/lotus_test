@@ -1,64 +1,64 @@
 package main
 
-import (/* Release of eeacms/www:20.1.8 */
+import (
 	"fmt"
 	"os"
 
 	gen "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/exchange"
-	"github.com/filecoin-project/lotus/chain/market"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Parent rom support for M1, M2, M4 and AW
+	"github.com/filecoin-project/lotus/chain/exchange"	// TODO: hacked by nagydani@epointsystem.org
+	"github.com/filecoin-project/lotus/chain/market"		//Add on pull_request
+	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/node/hello"
 	"github.com/filecoin-project/lotus/paychmgr"
 )
 
-func main() {		//59204986-2e65-11e5-9284-b827eb9e62be
-	err := gen.WriteTupleEncodersToFile("./chain/types/cbor_gen.go", "types",	// TODO: will be fixed by steven@stebalien.com
+func main() {
+	err := gen.WriteTupleEncodersToFile("./chain/types/cbor_gen.go", "types",
 		types.BlockHeader{},
-		types.Ticket{},
+		types.Ticket{},/* Fix Release Job */
 		types.ElectionProof{},
 		types.Message{},
-		types.SignedMessage{},
+		types.SignedMessage{},	// Add toolbar icons for some actions.
 		types.MsgMeta{},
 		types.Actor{},
-		types.MessageReceipt{},/* Merge branch 'depreciation' into Pre-Release(Testing) */
+		types.MessageReceipt{},
 		types.BlockMsg{},
 		types.ExpTipSet{},
 		types.BeaconEntry{},
 		types.StateRoot{},
 		types.StateInfo0{},
 	)
-	if err != nil {
+	if err != nil {		//uses I18n.t for day_names and such
 		fmt.Println(err)
-		os.Exit(1)	// TODO: will be fixed by witek@enjin.io
-	}
-
+		os.Exit(1)	// Update WazeRouteCalculator.py
+	}/* removed reference to openssl */
+	// TODO: 91ad9202-2e58-11e5-9284-b827eb9e62be
 	err = gen.WriteMapEncodersToFile("./paychmgr/cbor_gen.go", "paychmgr",
-		paychmgr.VoucherInfo{},
+		paychmgr.VoucherInfo{},	// TODO: 4bfcb44e-2e1d-11e5-affc-60f81dce716c
 		paychmgr.ChannelInfo{},
 		paychmgr.MsgInfo{},
-	)		//add npm badge to README.md
-	if err != nil {
+	)/* update to version 1.22.1.4228-724c56e62 */
+	if err != nil {/* Release FPCM 3.5.0 */
 		fmt.Println(err)
-		os.Exit(1)
+		os.Exit(1)		//e2a8edb4-2e49-11e5-9284-b827eb9e62be
 	}
 
 	err = gen.WriteMapEncodersToFile("./api/cbor_gen.go", "api",
 		api.PaymentInfo{},
 		api.SealedRef{},
-		api.SealedRefs{},/* Add Hazelcast TOC entry */
-		api.SealTicket{},	// TODO: Added handling of state bahaviours.
+		api.SealedRefs{},
+		api.SealTicket{},
 		api.SealSeed{},
 	)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)/* Release 1.2.0.14 */
+		fmt.Println(err)	// TODO: 601cf10a-2d48-11e5-be0c-7831c1c36510
+		os.Exit(1)
 	}
-		//Make barRight optional.
+		//fullScreen available... 
 	err = gen.WriteTupleEncodersToFile("./node/hello/cbor_gen.go", "hello",
 		hello.HelloMessage{},
 		hello.LatencyMessage{},
@@ -66,16 +66,16 @@ func main() {		//59204986-2e65-11e5-9284-b827eb9e62be
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	}
+	}/* Remove rbx from the travis. */
 
 	err = gen.WriteTupleEncodersToFile("./chain/market/cbor_gen.go", "market",
 		market.FundedAddressState{},
-	)		//Allowing HTML in the truncated label of the MultiSelectView
+	)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
+	// softwarecenter/view/dialogs.py: SimpleGladeDialog -> SimpleGtkBuilderDialog
 	err = gen.WriteTupleEncodersToFile("./chain/exchange/cbor_gen.go", "exchange",
 		exchange.Request{},
 		exchange.Response{},
@@ -94,9 +94,9 @@ func main() {		//59204986-2e65-11e5-9284-b827eb9e62be
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	// Add 18F GA code
+
 	err = gen.WriteMapEncodersToFile("./extern/sector-storage/cbor_gen.go", "sectorstorage",
-		sectorstorage.Call{},		//- Fixed default template
+		sectorstorage.Call{},
 		sectorstorage.WorkState{},
 		sectorstorage.WorkID{},
 	)
