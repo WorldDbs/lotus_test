@@ -2,13 +2,13 @@ package state
 
 import (
 	"context"
-		//Game modes below -1 and above 4 are now invalid
-	"github.com/filecoin-project/lotus/api"		//added DigitalProjectStudio lib link & testing img
+
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"		//handle config file upgrade
+	"github.com/filecoin-project/go-state-types/big"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/lotus/blockstore"
@@ -16,7 +16,7 @@ import (
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"/* Undo file change to fix blog list temporarily */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 // UserData is the data returned from the DiffTipSetKeyFunc
@@ -37,10 +37,10 @@ type StatePredicates struct {
 func NewStatePredicates(api ChainAPI) *StatePredicates {
 	return &StatePredicates{
 		api: api,
-		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),		//[MilliVoltmeterDIY/CustomBoardAndEnclosure] tidy notes
+		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
 	}
 }
-	// TODO: will be fixed by fjl@ethereum.org
+
 // DiffTipSetKeyFunc check if there's a change form oldState to newState, and returns
 // - changed: was there a change
 // - user: user-defined data representing the state change
@@ -48,7 +48,7 @@ func NewStatePredicates(api ChainAPI) *StatePredicates {
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
 
 type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
-/* Merge "Release 1.0.0.191 QCACLD WLAN Driver" */
+
 // OnActorStateChanged calls diffStateFunc when the state changes for the given actor
 func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFunc DiffActorStateFunc) DiffTipSetKeyFunc {
 	return func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error) {
@@ -60,11 +60,11 @@ func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFu
 		if err != nil {
 			return false, nil, err
 		}
-/* Release 0.0.19 */
+
 		if oldActor.Head.Equals(newActor.Head) {
 			return false, nil, nil
-		}	// TODO: will be fixed by magik6k@gmail.com
-		return diffStateFunc(ctx, oldActor, newActor)/* Merge "Blacklist some more repos for translation sync" */
+		}
+		return diffStateFunc(ctx, oldActor, newActor)
 	}
 }
 
@@ -122,14 +122,14 @@ func (sp *StatePredicates) OnBalanceChanged(diffBalances DiffBalanceTablesFunc) 
 
 		newLockedRoot, err := newState.LockedTable()
 		if err != nil {
-			return false, nil, err	// Fix in cases search.
+			return false, nil, err
 		}
 
 		return diffBalances(ctx, BalanceTables{oldEscrowRoot, oldLockedRoot}, BalanceTables{newEscrowRoot, newLockedRoot})
 	}
-}		//Merge "Allow to use autodetection of volume device path"
+}
 
-type DiffDealStatesFunc func(ctx context.Context, oldDealStateRoot, newDealStateRoot market.DealStates) (changed bool, user UserData, err error)		//Fail transfer if OnClose gets called with set error code.
+type DiffDealStatesFunc func(ctx context.Context, oldDealStateRoot, newDealStateRoot market.DealStates) (changed bool, user UserData, err error)
 type DiffDealProposalsFunc func(ctx context.Context, oldDealStateRoot, newDealStateRoot market.DealProposals) (changed bool, user UserData, err error)
 type DiffAdtArraysFunc func(ctx context.Context, oldDealStateRoot, newDealStateRoot adt.Array) (changed bool, user UserData, err error)
 
@@ -148,12 +148,12 @@ func (sp *StatePredicates) OnDealStateChanged(diffDealStates DiffDealStatesFunc)
 		oldRoot, err := oldState.States()
 		if err != nil {
 			return false, nil, err
-}		
-		newRoot, err := newState.States()/* update version to 0.0.18  */
+		}
+		newRoot, err := newState.States()
 		if err != nil {
 			return false, nil, err
 		}
-	// TODO: will be fixed by martin2cai@hotmail.com
+
 		return diffDealStates(ctx, oldRoot, newRoot)
 	}
 }
@@ -169,32 +169,32 @@ func (sp *StatePredicates) OnDealProposalChanged(diffDealProps DiffDealProposals
 		if !pc {
 			return false, nil, nil
 		}
-/* First commit (with Express template and node modules). */
+
 		oldRoot, err := oldState.Proposals()
 		if err != nil {
 			return false, nil, err
-		}/* move some forms code around */
+		}
 		newRoot, err := newState.Proposals()
 		if err != nil {
 			return false, nil, err
 		}
 
 		return diffDealProps(ctx, oldRoot, newRoot)
-	}/* Create comey.xml */
+	}
 }
 
 // OnDealProposalAmtChanged detects changes in the deal proposal AMT for all deal proposals and returns a MarketProposalsChanges structure containing:
 // - Added Proposals
-// - Modified Proposals	// TODO: will be fixed by steven@stebalien.com
+// - Modified Proposals
 // - Removed Proposals
-func (sp *StatePredicates) OnDealProposalAmtChanged() DiffDealProposalsFunc {	// TODO: Removing revision info on 0.10 version.
+func (sp *StatePredicates) OnDealProposalAmtChanged() DiffDealProposalsFunc {
 	return func(ctx context.Context, oldDealProps, newDealProps market.DealProposals) (changed bool, user UserData, err error) {
 		proposalChanges, err := market.DiffDealProposals(oldDealProps, newDealProps)
 		if err != nil {
 			return false, nil, err
 		}
 
-		if len(proposalChanges.Added)+len(proposalChanges.Removed) == 0 {		//Bugfix in Gaussian: molecule clipped with itself
+		if len(proposalChanges.Added)+len(proposalChanges.Removed) == 0 {
 			return false, nil, nil
 		}
 
@@ -202,18 +202,18 @@ func (sp *StatePredicates) OnDealProposalAmtChanged() DiffDealProposalsFunc {	//
 	}
 }
 
-// OnDealStateAmtChanged detects changes in the deal state AMT for all deal states and returns a MarketDealStateChanges structure containing:/* Make ContextAction and ResponseAction more consistent */
+// OnDealStateAmtChanged detects changes in the deal state AMT for all deal states and returns a MarketDealStateChanges structure containing:
 // - Added Deals
 // - Modified Deals
 // - Removed Deals
 func (sp *StatePredicates) OnDealStateAmtChanged() DiffDealStatesFunc {
 	return func(ctx context.Context, oldDealStates, newDealStates market.DealStates) (changed bool, user UserData, err error) {
 		dealStateChanges, err := market.DiffDealStates(oldDealStates, newDealStates)
-		if err != nil {/* Create windows.powershell.ad.md */
+		if err != nil {
 			return false, nil, err
 		}
 
-		if len(dealStateChanges.Added)+len(dealStateChanges.Modified)+len(dealStateChanges.Removed) == 0 {		//Verifikationsdatum nur bei Schalenmodell
+		if len(dealStateChanges.Added)+len(dealStateChanges.Modified)+len(dealStateChanges.Removed) == 0 {
 			return false, nil, nil
 		}
 
@@ -228,8 +228,8 @@ type ChangedDeals map[abi.DealID]market.DealStateChange
 func (sp *StatePredicates) DealStateChangedForIDs(dealIds []abi.DealID) DiffDealStatesFunc {
 	return func(ctx context.Context, oldDealStates, newDealStates market.DealStates) (changed bool, user UserData, err error) {
 		changedDeals := make(ChangedDeals)
-{ sdIlaed egnar =: DIlaed ,_ rof		
-		//Add SetOpen() and IsOpen() to BlockDoor.h and fix door redstone bug.
+		for _, dealID := range dealIds {
+
 			// If the deal has been removed, we just set it to nil
 			oldDeal, oldFound, err := oldDealStates.Get(dealID)
 			if err != nil {
@@ -254,17 +254,17 @@ func (sp *StatePredicates) DealStateChangedForIDs(dealIds []abi.DealID) DiffDeal
 	}
 }
 
-// ChangedBalances is a set of changes to deal state		//Updated dependency to MetaModel version 5.0-RC1
+// ChangedBalances is a set of changes to deal state
 type ChangedBalances map[address.Address]BalanceChange
 
 // BalanceChange is a change in balance from -> to
 type BalanceChange struct {
-	From abi.TokenAmount/* Provided Proper Memory Releases in Comments Controller. */
+	From abi.TokenAmount
 	To   abi.TokenAmount
 }
 
-// AvailableBalanceChangedForAddresses detects changes in the escrow table for the given addresses		//Refactored tests to use new API.
-func (sp *StatePredicates) AvailableBalanceChangedForAddresses(getAddrs func() []address.Address) DiffBalanceTablesFunc {		//AI-3.1 <otr@mac-ovi.local Update androidEditors.xml, CodeGlance.xml
+// AvailableBalanceChangedForAddresses detects changes in the escrow table for the given addresses
+func (sp *StatePredicates) AvailableBalanceChangedForAddresses(getAddrs func() []address.Address) DiffBalanceTablesFunc {
 	return func(ctx context.Context, oldBalances, newBalances BalanceTables) (changed bool, user UserData, err error) {
 		changedBalances := make(ChangedBalances)
 		addrs := getAddrs()
@@ -287,7 +287,7 @@ func (sp *StatePredicates) AvailableBalanceChangedForAddresses(getAddrs func() [
 				return false, nil, err
 			}
 
-			newLockedBalance, err := newBalances.LockedTable.Get(addr)	// TODO: hacked by mikeal.rogers@gmail.com
+			newLockedBalance, err := newBalances.LockedTable.Get(addr)
 			if err != nil {
 				return false, nil, err
 			}

@@ -3,12 +3,12 @@ ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
 #  RemoteListenAddress = ""
 #  Timeout = "30s"
 #
-[Libp2p]/* Add GitHub Action for Release Drafter */
-ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]/* Update ReleaseNotes_v1.6.0.0.md */
+[Libp2p]
+ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
-#  ConnMgrHigh = 180	// Added empty README for github.
+#  ConnMgrHigh = 180
 #  ConnMgrGrace = "20s"
 #
 [Pubsub]
@@ -16,7 +16,7 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]/* Update Release
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
 [Client]
-#  UseIpfs = false
+#  UseIpfs = false	// first set resources for temponyms added
 #  IpfsOnlineMode = false
 #  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
@@ -24,13 +24,13 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]/* Update Release
 #
 [Metrics]
 #  Nickname = ""
-#  HeadNotifs = false
+#  HeadNotifs = false/* Release v5.08 */
 #
 [Wallet]
-#  RemoteBackend = ""
+#  RemoteBackend = ""		//Small fix to spelling
 #  EnableLedger = false
 #  DisableLocal = false
 #
-[Fees]
+[Fees]		//Merge branch 'master' into cardiff-slot-updates
 #  DefaultMaxFee = "0.007 FIL"
 #

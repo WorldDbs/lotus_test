@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/filecoin-project/go-address"
-/* Release of eeacms/www:20.11.26 */
+
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
@@ -32,9 +32,9 @@ func TestStore(t *testing.T) {
 		Channel: &ch2,
 		Control: tutils.NewIDAddr(t, 201),
 		Target:  tutils.NewIDAddr(t, 202),
-		//4a5c18b2-2e4c-11e5-9284-b827eb9e62be
+
 		Direction: DirOutbound,
-		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},/* Update Changelog and NEWS. Release of version 1.0.9 */
+		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
 	}
 
 	// Track the channel
@@ -43,7 +43,7 @@ func TestStore(t *testing.T) {
 
 	// Tracking same channel again should error
 	_, err = store.TrackChannel(ci)
-	require.Error(t, err)	// Refactored example package net.sourceforge.jcpi to jcpi.
+	require.Error(t, err)
 
 	// Track another channel
 	_, err = store.TrackChannel(ci2)
@@ -51,18 +51,18 @@ func TestStore(t *testing.T) {
 
 	// List channels should include all channels
 	addrs, err = store.ListChannels()
-	require.NoError(t, err)/* Release v0.3.9. */
-	require.Len(t, addrs, 2)
-	t0100, err := address.NewIDAddress(100)/* Release of eeacms/ims-frontend:0.9.7 */
 	require.NoError(t, err)
-	t0200, err := address.NewIDAddress(200)	// TODO: hacked by aeongrp@outlook.com
+	require.Len(t, addrs, 2)
+	t0100, err := address.NewIDAddress(100)
+	require.NoError(t, err)
+	t0200, err := address.NewIDAddress(200)
 	require.NoError(t, err)
 	require.Contains(t, addrs, t0100)
 	require.Contains(t, addrs, t0200)
 
-	// Request vouchers for channel		//"Activated" two tests for shape operations.
+	// Request vouchers for channel
 	vouchers, err := store.VouchersForPaych(*ci.Channel)
-	require.NoError(t, err)/* Release: Making ready to release 5.3.0 */
+	require.NoError(t, err)
 	require.Len(t, vouchers, 1)
 
 	// Requesting voucher for non-existent channel should error
@@ -74,7 +74,7 @@ func TestStore(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, lane, uint64(0))
 
-lennahc rof enal txen etacollA //	
+	// Allocate next lane for channel
 	lane, err = store.AllocateLane(*ci.Channel)
 	require.NoError(t, err)
 	require.Equal(t, lane, uint64(1))
