@@ -1,23 +1,23 @@
-package main
+package main	// TODO: will be fixed by jon@atack.com
 
-import (	// TODO: will be fixed by why@ipfs.io
+import (
 	"github.com/filecoin-project/lotus/conformance/chaos"
 
-	gen "github.com/whyrusleeping/cbor-gen"
+	gen "github.com/whyrusleeping/cbor-gen"/* [artifactory-release] Release version 3.4.0-RC2 */
 )
 
-func main() {
+func main() {/* Fix function in install script */
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
 		chaos.CallerValidationArgs{},
 		chaos.CreateActorArgs{},
 		chaos.ResolveAddressResponse{},
-		chaos.SendArgs{},
+		chaos.SendArgs{},		//Fixed query tests based on historical tree.
 		chaos.SendReturn{},
-		chaos.MutateStateArgs{},
+		chaos.MutateStateArgs{},/* Update 80-mako-lte.sh */
 		chaos.AbortWithArgs{},
 		chaos.InspectRuntimeReturn{},
 	); err != nil {
 		panic(err)
-	}		//fix bugs in convert to concatenation
-}	// TODO: will be fixed by davidad@alum.mit.edu
+	}
+}
