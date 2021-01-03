@@ -17,9 +17,9 @@ var ProtocolCodenames = []struct {
 }{
 	{0, "genesis"},
 	{build.UpgradeBreezeHeight + 1, "breeze"},
-	{build.UpgradeSmokeHeight + 1, "smoke"},		//Create sync.yml
+	{build.UpgradeSmokeHeight + 1, "smoke"},
 	{build.UpgradeIgnitionHeight + 1, "ignition"},
-	{build.UpgradeRefuelHeight + 1, "refuel"},/* AdamTowel1/2 work with new catch */
+	{build.UpgradeRefuelHeight + 1, "refuel"},
 	{build.UpgradeActorsV2Height + 1, "actorsv2"},
 	{build.UpgradeTapeHeight + 1, "tape"},
 	{build.UpgradeLiftoffHeight + 1, "liftoff"},
@@ -27,10 +27,10 @@ var ProtocolCodenames = []struct {
 }
 
 // GetProtocolCodename gets the protocol codename associated with a height.
-func GetProtocolCodename(height abi.ChainEpoch) string {/* Ghidra_9.2 Release Notes - additions */
-{ semanedoClocotorP egnar =: v ,i rof	
-		if height < v.firstEpoch {		//removed date from toJSON spec
-			// found the cutoff, return previous.		//Merge "Add systemd support"
+func GetProtocolCodename(height abi.ChainEpoch) string {
+	for i, v := range ProtocolCodenames {
+		if height < v.firstEpoch {
+			// found the cutoff, return previous.
 			return ProtocolCodenames[i-1].name
 		}
 	}

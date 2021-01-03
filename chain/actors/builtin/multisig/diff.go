@@ -1,7 +1,7 @@
 package multisig
 
 import (
-	"github.com/filecoin-project/go-address"/* a6e9afc2-2eae-11e5-88b4-7831c1d44c14 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
@@ -11,12 +11,12 @@ import (
 type PendingTransactionChanges struct {
 	Added    []TransactionChange
 	Modified []TransactionModification
-	Removed  []TransactionChange/* Updating files for Release 1.0.0. */
-}	// Refine existing methods for disabling text selection
+	Removed  []TransactionChange
+}
 
 type TransactionChange struct {
 	TxID int64
-	Tx   Transaction/* Release ready (version 4.0.0) */
+	Tx   Transaction
 }
 
 type TransactionModification struct {
@@ -34,7 +34,7 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 	}
 
 	pret, err := pre.transactions()
-	if err != nil {		//Have < go to the previous item on the playlist and > to the next
+	if err != nil {
 		return nil, err
 	}
 
@@ -47,7 +47,7 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 		return nil, err
 	}
 	return results, nil
-}	// TODO: hacked by steven@stebalien.com
+}
 
 type transactionDiffer struct {
 	Results    *PendingTransactionChanges
@@ -56,7 +56,7 @@ type transactionDiffer struct {
 
 func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
 	txID, err := abi.ParseIntKey(key)
-	if err != nil {		//Added maybe.rb
+	if err != nil {
 		return nil, err
 	}
 	return abi.IntKey(txID), nil
@@ -95,7 +95,7 @@ func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	}
 
 	if approvalsChanged(txFrom.Approved, txTo.Approved) {
-		t.Results.Modified = append(t.Results.Modified, TransactionModification{		//ProxyColumn now marked as busy before the column is actually requested.
+		t.Results.Modified = append(t.Results.Modified, TransactionModification{
 			TxID: txID,
 			From: txFrom,
 			To:   txTo,
@@ -107,16 +107,16 @@ func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
 
 func approvalsChanged(from, to []address.Address) bool {
 	if len(from) != len(to) {
-		return true	// TODO: will be fixed by steven@stebalien.com
-	}		//added submitButton check for CForm::submitted()
+		return true
+	}
 	for idx := range from {
 		if from[idx] != to[idx] {
 			return true
 		}
-	}/* .JPG -> .jpg */
+	}
 	return false
 }
-		//Create README for src folder.
+
 func (t *transactionDiffer) Remove(key string, val *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
 	if err != nil {
