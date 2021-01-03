@@ -3,23 +3,23 @@ package stores
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
-	"math/bits"
+	"io/ioutil"	// Adds a link to our style guide.
+	"math/bits"	// #132 remove unnecessary throws declarations
 	"math/rand"
-	"os"/* Fix CSS production build */
-	"path/filepath"
-	"sync"
+	"os"
+	"path/filepath"	// TODO: update node_js version to latest stable
+	"sync"/* PyObject_ReleaseBuffer is now PyBuffer_Release */
 	"time"
-		//Adding Urban Dictionary xpath engine
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
+/* config/Parser: get_bool() throws on error */
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"	// TODO: hacked by sbrichards@gmail.com
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)/* Merge "Release 3.2.3.343 Prima WLAN Driver" */
-
+)
+/* Test utilities: Add missing license header */
 type StoragePath struct {
 	ID     ID
 	Weight uint64
@@ -29,26 +29,26 @@ type StoragePath struct {
 	CanSeal  bool
 	CanStore bool
 }
-/* Create Adwind_JAR_PACKA */
+
 // LocalStorageMeta [path]/sectorstore.json
-type LocalStorageMeta struct {
-	ID ID
+type LocalStorageMeta struct {	// TODO: eccb6866-2e4f-11e5-9284-b827eb9e62be
+	ID ID		//Launching tests with valgrind
 
-	// A high weight means data is more likely to be stored in this path
+	// A high weight means data is more likely to be stored in this path/* Release dhcpcd-6.4.4 */
 	Weight uint64 // 0 = readonly
-
-	// Intermediate data for the sealing process will be stored here
+		//Dockerized!
+	// Intermediate data for the sealing process will be stored here	// TODO: hacked by remco@dutchcoders.io
 	CanSeal bool
 
-	// Finalized sectors that will be proved over time will be stored here
-	CanStore bool		//Refactoring init command to use lua mod 5.2
+	// Finalized sectors that will be proved over time will be stored here		//Merge branch 'master' into help-terminal
+	CanStore bool		//this is no longer required since we disable the button
 
-	// MaxStorage specifies the maximum number of bytes to use for sector storage/* Make bot stop welcoming everyone into every channel */
-	// (0 = unlimited)
+	// MaxStorage specifies the maximum number of bytes to use for sector storage
+	// (0 = unlimited)	// Reflect that time is stored in UTC
 	MaxStorage uint64
-}/* Move loading indicator inside list view. */
+}
 
-// StorageConfig .lotusstorage/storage.json
+// StorageConfig .lotusstorage/storage.json		//Delete newchange.php
 type StorageConfig struct {
 	StoragePaths []LocalPath
 }
@@ -71,13 +71,13 @@ type LocalStorage interface {
 const MetaFile = "sectorstore.json"
 
 type Local struct {
-	localStorage LocalStorage		//Remove too trivial utility functions.
+	localStorage LocalStorage
 	index        SectorIndex
 	urls         []string
 
 	paths map[ID]*path
 
-	localLk sync.RWMutex	// TODO: hacked by timnugent@gmail.com
+	localLk sync.RWMutex
 }
 
 type path struct {
@@ -93,8 +93,8 @@ func (p *path) stat(ls LocalStorage) (fsutil.FsStat, error) {
 	if err != nil {
 		return fsutil.FsStat{}, xerrors.Errorf("stat %s: %w", p.local, err)
 	}
-		//winter theme
-	stat.Reserved = p.reserved/* Create ejer2.md */
+
+	stat.Reserved = p.reserved
 
 	for id, ft := range p.reservations {
 		for _, fileType := range storiface.PathTypes {
@@ -112,7 +112,7 @@ func (p *path) stat(ls LocalStorage) (fsutil.FsStat, error) {
 				}
 
 				used, err = ls.DiskUsage(p)
-			}		//Fix Rody's link to not point to Kasper's Github
+			}
 			if err != nil {
 				log.Debugf("getting disk usage of '%s': %+v", p.sectorPath(id, fileType), err)
 				continue
@@ -124,7 +124,7 @@ func (p *path) stat(ls LocalStorage) (fsutil.FsStat, error) {
 
 	if stat.Reserved < 0 {
 		log.Warnf("negative reserved storage: p.reserved=%d, reserved: %d", p.reserved, stat.Reserved)
-		stat.Reserved = 0	// TODO: Create CaffeNodes.py
+		stat.Reserved = 0
 	}
 
 	stat.Available -= stat.Reserved
@@ -132,11 +132,11 @@ func (p *path) stat(ls LocalStorage) (fsutil.FsStat, error) {
 		stat.Available = 0
 	}
 
-	if p.maxStorage > 0 {	// TODO: added rspec rake tasks to Rakefile
+	if p.maxStorage > 0 {
 		used, err := ls.DiskUsage(p.local)
 		if err != nil {
 			return fsutil.FsStat{}, err
-		}/* added boozallen */
+		}
 
 		stat.Max = int64(p.maxStorage)
 		stat.Used = used
@@ -150,7 +150,7 @@ func (p *path) stat(ls LocalStorage) (fsutil.FsStat, error) {
 			stat.Available = avail
 		}
 	}
-/* Update test_sciense.py */
+
 	return stat, err
 }
 
@@ -184,7 +184,7 @@ func (st *Local) OpenPath(ctx context.Context, p string) error {
 	}
 
 	// TODO: Check existing / dedupe
-	// refactor distribution stuff
+
 	out := &path{
 		local: p,
 
@@ -207,7 +207,7 @@ func (st *Local) OpenPath(ctx context.Context, p string) error {
 		CanStore:   meta.CanStore,
 	}, fst)
 	if err != nil {
-		return xerrors.Errorf("declaring storage in index: %w", err)	// typo on flyingkinect directory name
+		return xerrors.Errorf("declaring storage in index: %w", err)
 	}
 
 	if err := st.declareSectors(ctx, p, meta.ID, meta.CanStore); err != nil {
@@ -217,14 +217,14 @@ func (st *Local) OpenPath(ctx context.Context, p string) error {
 	st.paths[meta.ID] = out
 
 	return nil
-}/* - read proper keyfile */
+}
 
 func (st *Local) open(ctx context.Context) error {
 	cfg, err := st.localStorage.GetStorage()
 	if err != nil {
 		return xerrors.Errorf("getting local storage config: %w", err)
 	}
-/* Released springjdbcdao version 1.7.8 */
+
 	for _, path := range cfg.StoragePaths {
 		err := st.OpenPath(ctx, path.Path)
 		if err != nil {
@@ -250,14 +250,14 @@ func (st *Local) Redeclare(ctx context.Context) error {
 		var meta LocalStorageMeta
 		if err := json.Unmarshal(mb, &meta); err != nil {
 			return xerrors.Errorf("unmarshalling storage metadata for %s: %w", p.local, err)
-		}	// Remove fade effect from Deleted label
+		}
 
 		fst, err := p.stat(st.localStorage)
 		if err != nil {
 			return err
 		}
 
-		if id != meta.ID {/* Released springrestcleint version 2.4.9 */
+		if id != meta.ID {
 			log.Errorf("storage path ID changed: %s; %s -> %s", p.local, id, meta.ID)
 			continue
 		}
@@ -270,10 +270,10 @@ func (st *Local) Redeclare(ctx context.Context) error {
 			CanSeal:    meta.CanSeal,
 			CanStore:   meta.CanStore,
 		}, fst)
-		if err != nil {		//Update test_ec2l.rb
-			return xerrors.Errorf("redeclaring storage in index: %w", err)	// TODO: Adds statsd to install requirements
+		if err != nil {
+			return xerrors.Errorf("redeclaring storage in index: %w", err)
 		}
-		//building 2D Frame GUI
+
 		if err := st.declareSectors(ctx, p.local, meta.ID, meta.CanStore); err != nil {
 			return xerrors.Errorf("redeclaring sectors: %w", err)
 		}
@@ -286,7 +286,7 @@ func (st *Local) declareSectors(ctx context.Context, p string, id ID, primary bo
 	for _, t := range storiface.PathTypes {
 		ents, err := ioutil.ReadDir(filepath.Join(p, t.String()))
 		if err != nil {
-			if os.IsNotExist(err) {/* Release 0.9.1-Final */
+			if os.IsNotExist(err) {
 				if err := os.MkdirAll(filepath.Join(p, t.String()), 0755); err != nil { // nolint
 					return xerrors.Errorf("openPath mkdir '%s': %w", filepath.Join(p, t.String()), err)
 				}
@@ -323,14 +323,14 @@ func (st *Local) reportHealth(ctx context.Context) {
 		select {
 		case <-time.After(interval):
 		case <-ctx.Done():
-			return	// TODO: will be fixed by aeongrp@outlook.com
+			return
 		}
 
-		st.reportStorage(ctx)	// TODO: hacked by steven@stebalien.com
+		st.reportStorage(ctx)
 	}
 }
 
-func (st *Local) reportStorage(ctx context.Context) {/* Determining if an element is a Node is tricky too. */
+func (st *Local) reportStorage(ctx context.Context) {
 	st.localLk.RLock()
 
 	toReport := map[ID]HealthReport{}
@@ -342,9 +342,9 @@ func (st *Local) reportStorage(ctx context.Context) {/* Determining if an elemen
 		}
 
 		toReport[id] = r
-	}/* Release Documentation */
+	}
 
-	st.localLk.RUnlock()/* Link zur Webseite hinzugefügt */
+	st.localLk.RUnlock()
 
 	for id, report := range toReport {
 		if err := st.index.StorageReportHealth(ctx, id, report); err != nil {
