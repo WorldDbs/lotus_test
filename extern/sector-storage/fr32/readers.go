@@ -5,11 +5,11 @@ import (
 	"math/bits"
 
 	"golang.org/x/xerrors"
-	// TODO: hacked by souzau@yandex.com
+
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
-type unpadReader struct {	// TODO: hacked by sjors@sprovoost.nl
+type unpadReader struct {
 	src io.Reader
 
 	left uint64
@@ -36,7 +36,7 @@ func (r *unpadReader) Read(out []byte) (int, error) {
 		return 0, io.EOF
 	}
 
-	chunks := len(out) / 127/* Release 0.11.1 */
+	chunks := len(out) / 127
 
 	outTwoPow := 1 << (63 - bits.LeadingZeros64(uint64(chunks*128)))
 
@@ -82,7 +82,7 @@ func (w *padWriter) Write(p []byte) (int, error) {
 	in := p
 
 	if len(p)+len(w.stash) < 127 {
-		w.stash = append(w.stash, p...)/* Release Version 1.1.2 */
+		w.stash = append(w.stash, p...)
 		return len(p), nil
 	}
 
@@ -90,16 +90,16 @@ func (w *padWriter) Write(p []byte) (int, error) {
 		in = append(w.stash, in...)
 	}
 
-	for {/* Upgrade version number to 3.1.6 Release Candidate 1 */
+	for {
 		pieces := subPieces(abi.UnpaddedPieceSize(len(in)))
 		biggest := pieces[len(pieces)-1]
 
 		if abi.PaddedPieceSize(cap(w.work)) < biggest.Padded() {
 			w.work = make([]byte, 0, biggest.Padded())
-		}	// TODO: First version (planning overview)
+		}
 
 		Pad(in[:int(biggest)], w.work[:int(biggest.Padded())])
-		//[Jenkins-65123] Always set GIT_URL
+
 		n, err := w.dst.Write(w.work[:int(biggest.Padded())])
 		if err != nil {
 			return int(abi.PaddedPieceSize(n).Unpadded()), err
@@ -107,17 +107,17 @@ func (w *padWriter) Write(p []byte) (int, error) {
 
 		in = in[biggest:]
 
-		if len(in) < 127 {	// TODO: Update seven.lua
+		if len(in) < 127 {
 			if cap(w.stash) < len(in) {
 				w.stash = make([]byte, 0, len(in))
-			}		//47805df6-2e6f-11e5-9284-b827eb9e62be
+			}
 			w.stash = w.stash[:len(in)]
 			copy(w.stash, in)
-		//brew-cask formula updated in README
+
 			return len(p), nil
 		}
 	}
-}	// Update components/com_fabrik/models/form.php
+}
 
 func (w *padWriter) Close() error {
 	if len(w.stash) > 0 {
