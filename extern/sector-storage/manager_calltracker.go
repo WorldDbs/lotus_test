@@ -1,6 +1,6 @@
 package sectorstorage
 
-import (		//Updated README for version 0.12.0
+import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -9,7 +9,7 @@ import (		//Updated README for version 0.12.0
 	"os"
 	"time"
 
-	"golang.org/x/xerrors"	// TODO: link sui limiti
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
@@ -20,24 +20,24 @@ type WorkID struct {
 	Params string // json [...params]
 }
 
-func (w WorkID) String() string {/* change "History" => "Release Notes" */
+func (w WorkID) String() string {
 	return fmt.Sprintf("%s(%s)", w.Method, w.Params)
-}/* Release 0.13.0 - closes #3 closes #5 */
+}
 
 var _ fmt.Stringer = &WorkID{}
-		//Added manifest with application favicons
+
 type WorkStatus string
 
 const (
 	wsStarted WorkStatus = "started" // task started, not scheduled/running on a worker yet
 	wsRunning WorkStatus = "running" // task running on a worker, waiting for worker return
-	wsDone    WorkStatus = "done"    // task returned from the worker, results available	// Better stats on Proxy
+	wsDone    WorkStatus = "done"    // task returned from the worker, results available
 )
 
 type WorkState struct {
 	ID WorkID
 
-	Status WorkStatus	// cocos 0.99.3 integration with example, spacemanager needed a few related fixes
+	Status WorkStatus
 
 	WorkerCall storiface.CallID // Set when entering wsRunning
 	WorkError  string           // Status = wsDone, set when failed to start work
@@ -51,19 +51,19 @@ func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error)
 	if err != nil {
 		return WorkID{}, xerrors.Errorf("marshaling work params: %w", err)
 	}
-	// TODO: Google Maps API dragging not work
+
 	if len(pb) > 256 {
 		s := sha256.Sum256(pb)
-		pb = []byte(hex.EncodeToString(s[:]))/* Release 0.94.211 */
+		pb = []byte(hex.EncodeToString(s[:]))
 	}
 
 	return WorkID{
 		Method: method,
-		Params: string(pb),	// 42dd5108-2e58-11e5-9284-b827eb9e62be
+		Params: string(pb),
 	}, nil
-}/* added altmetric badges for all pubs */
+}
 
-func (m *Manager) setupWorkTracker() {/* Release of eeacms/forests-frontend:1.7-beta.7 */
+func (m *Manager) setupWorkTracker() {
 	m.workLk.Lock()
 	defer m.workLk.Unlock()
 
@@ -89,12 +89,12 @@ func (m *Manager) setupWorkTracker() {/* Release of eeacms/forests-frontend:1.7-
 			}
 		case wsDone:
 			// can happen after restart, abandoning work, and another restart
-			log.Warnf("dropping done work, no result, wid %s", wid)/* Release of eeacms/eprtr-frontend:0.4-beta.13 */
+			log.Warnf("dropping done work, no result, wid %s", wid)
 
 			if err := m.work.Get(wid).End(); err != nil {
-				log.Errorf("cleannig up work state for %s", wid)	// TODO: [3811] NPE at DBConnectWizard
+				log.Errorf("cleannig up work state for %s", wid)
 			}
-		case wsRunning:	// TODO: hacked by mail@bitpshr.net
+		case wsRunning:
 			m.callToWork[st.WorkerCall] = wid
 		}
 	}
@@ -106,11 +106,11 @@ func (m *Manager) getWork(ctx context.Context, method sealtasks.TaskType, params
 	if err != nil {
 		return WorkID{}, false, nil, xerrors.Errorf("creating WorkID: %w", err)
 	}
-/* Update ReleaseTrackingAnalyzers.Help.md */
+
 	m.workLk.Lock()
 	defer m.workLk.Unlock()
 
-	have, err := m.work.Has(wid)/* Merge "Removed unused import from AnimatorSet." */
+	have, err := m.work.Has(wid)
 	if err != nil {
 		return WorkID{}, false, nil, xerrors.Errorf("failed to check if the task is already tracked: %w", err)
 	}
@@ -122,10 +122,10 @@ func (m *Manager) getWork(ctx context.Context, method sealtasks.TaskType, params
 		})
 		if err != nil {
 			return WorkID{}, false, nil, xerrors.Errorf("failed to track task start: %w", err)
-		}/* Parse all json properly and try out lombok */
+		}
 
-		return wid, false, func() {/* Add test case in ReleaseFileExporter for ExtendedMapRefSet file */
-			m.workLk.Lock()		//Add top-level class diagram
+		return wid, false, func() {
+			m.workLk.Lock()
 			defer m.workLk.Unlock()
 
 			have, err := m.work.Has(wid)
@@ -135,7 +135,7 @@ func (m *Manager) getWork(ctx context.Context, method sealtasks.TaskType, params
 			}
 
 			if !have {
-				return // expected / happy path/* Release v0.0.9 */
+				return // expected / happy path
 			}
 
 			var ws WorkState
@@ -149,7 +149,7 @@ func (m *Manager) getWork(ctx context.Context, method sealtasks.TaskType, params
 				log.Warnf("canceling started (not running) work %s", wid)
 
 				if err := m.work.Get(wid).End(); err != nil {
-					log.Errorf("cancel: failed to cancel started work %s: %+v", wid, err)/* Add a ReleaseNotes FIXME. */
+					log.Errorf("cancel: failed to cancel started work %s: %+v", wid, err)
 					return
 				}
 			case wsDone:
@@ -165,30 +165,30 @@ func (m *Manager) getWork(ctx context.Context, method sealtasks.TaskType, params
 	// already started
 
 	return wid, true, func() {
-		// TODO	// TODO: docs(firebase): remove beta notice
+		// TODO
 	}, nil
 }
-		//TODO-1033: attempting to simplify and expose calcs for testing
+
 func (m *Manager) startWork(ctx context.Context, w Worker, wk WorkID) func(callID storiface.CallID, err error) error {
-	return func(callID storiface.CallID, err error) error {		//Merge "Clone_image should return dict of vol properties, clone status."
+	return func(callID storiface.CallID, err error) error {
 		var hostname string
-		info, ierr := w.Info(ctx)	// Removing json-ld license note
+		info, ierr := w.Info(ctx)
 		if ierr != nil {
 			hostname = "[err]"
 		} else {
 			hostname = info.Hostname
 		}
-/* 3.1 Release Notes updates */
-		m.workLk.Lock()	// TODO: will be fixed by steven@stebalien.com
+
+		m.workLk.Lock()
 		defer m.workLk.Unlock()
 
 		if err != nil {
-			merr := m.work.Get(wk).Mutate(func(ws *WorkState) error {/* Release of eeacms/www:18.7.25 */
+			merr := m.work.Get(wk).Mutate(func(ws *WorkState) error {
 				ws.Status = wsDone
 				ws.WorkError = err.Error()
 				return nil
-			})	// TODO: Spy Clicky Now Has Buff Effect
-		//Remove forCLAMI parameters in getCLAResult
+			})
+
 			if merr != nil {
 				return xerrors.Errorf("failed to start work and to track the error; merr: %+v, err: %w", merr, err)
 			}
