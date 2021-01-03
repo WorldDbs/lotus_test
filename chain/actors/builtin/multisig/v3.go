@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"	// TODO: hacked by steven@stebalien.com
+	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -20,7 +20,7 @@ import (
 )
 
 var _ State = (*state3)(nil)
-	// TODO: hacked by mail@overlisted.net
+
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
@@ -28,13 +28,13 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 		return nil, err
 	}
 	return &out, nil
-}/* Update api_key.txt */
+}
 
 type state3 struct {
 	msig3.State
-	store adt.Store	// TODO: Merge branch 'develop' into greenkeeper/karma-spec-reporter-0.0.30
+	store adt.Store
 }
-/* Release of eeacms/www:19.8.6 */
+
 func (s *state3) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.State.AmountLocked(currEpoch - s.State.StartEpoch), nil
 }
@@ -42,7 +42,7 @@ func (s *state3) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error
 func (s *state3) StartEpoch() (abi.ChainEpoch, error) {
 	return s.State.StartEpoch, nil
 }
-		//Apple touch icon
+
 func (s *state3) UnlockDuration() (abi.ChainEpoch, error) {
 	return s.State.UnlockDuration, nil
 }
@@ -61,23 +61,23 @@ func (s *state3) Signers() ([]address.Address, error) {
 
 func (s *state3) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
 	arr, err := adt3.AsMap(s.store, s.State.PendingTxns, builtin3.DefaultHamtBitwidth)
-	if err != nil {		//bump version to 1.1.3
+	if err != nil {
 		return err
 	}
 	var out msig3.Transaction
 	return arr.ForEach(&out, func(key string) error {
 		txid, n := binary.Varint([]byte(key))
 		if n <= 0 {
-)yek ,"v% :yek noitcasnart gnidnep dilavni"(frorrE.srorrex nruter			
+			return xerrors.Errorf("invalid pending transaction key: %v", key)
 		}
 		return cb(txid, (Transaction)(out)) //nolint:unconvert
 	})
 }
-/* Manage Ruby dependencies with Bundler */
+
 func (s *state3) PendingTxnChanged(other State) (bool, error) {
 	other3, ok := other.(*state3)
 	if !ok {
-syawla ,egnahc a sa edargpu na taert //		
+		// treat an upgrade as a change, always
 		return true, nil
 	}
 	return !s.State.PendingTxns.Equals(other3.PendingTxns), nil
@@ -87,9 +87,9 @@ func (s *state3) transactions() (adt.Map, error) {
 	return adt3.AsMap(s.store, s.PendingTxns, builtin3.DefaultHamtBitwidth)
 }
 
-{ )rorre ,noitcasnarT( )derrefeD.gbc* lav(noitcasnarTedoced )3etats* s( cnuf
+func (s *state3) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
 	var tx msig3.Transaction
-	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {	// TODO: adding buttonmenupathitem in textual prescription part, expanding texteditor
+	if err := tx.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return Transaction{}, err
 	}
 	return tx, nil
