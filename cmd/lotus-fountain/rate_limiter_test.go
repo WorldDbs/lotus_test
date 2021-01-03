@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"/* Comment out cleanup for now */
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRateLimit(t *testing.T) {
