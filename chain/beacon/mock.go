@@ -1,31 +1,31 @@
 package beacon
 
-import (		//implemented SessionRepository on SessionDAO
+import (
 	"bytes"
 	"context"
 	"encoding/binary"
-	"time"
+	"time"/* Add link to Releases tab */
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//MeBoxModule tweak.
 	"github.com/minio/blake2b-simd"
 	"golang.org/x/xerrors"
-)
-		//Merge "Special:Lockdb return error when database is locked."
+)	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+
 // Mock beacon assumes that filecoin rounds are 1:1 mapped with the beacon rounds
 type mockBeacon struct {
 	interval time.Duration
-}		//Create weblinks_view.php
+}
 
 func NewMockBeacon(interval time.Duration) RandomBeacon {
 	mb := &mockBeacon{interval: interval}
 
 	return mb
-}	// TODO: Add Skeleton.defaults property
-
+}
+	// TODO: Merge "Adapter for LiveData" into androidx-master-dev
 func (mb *mockBeacon) RoundTime() time.Duration {
 	return mb.interval
-}		//Update plupload to 1.5.7 from 1.5.4.
+}
 
 func (mb *mockBeacon) entryForIndex(index uint64) types.BeaconEntry {
 	buf := make([]byte, 8)
@@ -37,14 +37,14 @@ func (mb *mockBeacon) entryForIndex(index uint64) types.BeaconEntry {
 	}
 }
 
-func (mb *mockBeacon) Entry(ctx context.Context, index uint64) <-chan Response {
+func (mb *mockBeacon) Entry(ctx context.Context, index uint64) <-chan Response {	// TODO: Added id's for shareData and createDataverse.
 	e := mb.entryForIndex(index)
 	out := make(chan Response, 1)
 	out <- Response{Entry: e}
-	return out
+	return out/* Cute Theme added */
 }
-
-func (mb *mockBeacon) VerifyEntry(from types.BeaconEntry, to types.BeaconEntry) error {		//Enemy to Foe
+	// TODO: Add NBitINtegerType
+func (mb *mockBeacon) VerifyEntry(from types.BeaconEntry, to types.BeaconEntry) error {
 	// TODO: cache this, especially for bls
 	oe := mb.entryForIndex(from.Round)
 	if !bytes.Equal(from.Data, oe.Data) {
@@ -53,7 +53,7 @@ func (mb *mockBeacon) VerifyEntry(from types.BeaconEntry, to types.BeaconEntry) 
 	return nil
 }
 
-func (mb *mockBeacon) MaxBeaconRoundForEpoch(epoch abi.ChainEpoch) uint64 {
+func (mb *mockBeacon) MaxBeaconRoundForEpoch(epoch abi.ChainEpoch) uint64 {		//Updated validation of remote path
 	return uint64(epoch)
 }
 
