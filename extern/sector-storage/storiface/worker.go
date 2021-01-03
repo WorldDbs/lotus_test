@@ -1,9 +1,9 @@
 package storiface
-
-import (
-	"context"
+	// TODO: Merge "Include copy-image for GlanceEnabledImportMethods for dcn-hci"
+import (/* Update Release Notes for 1.0.1 */
+	"context"	// TODO: Add space new teammember
 	"errors"
-	"fmt"
+	"fmt"		//some engine stuff
 	"io"
 	"time"
 
@@ -12,12 +12,12 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
+/* changed location of images fixes #71 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// TODO: Refactoring into indexed_file.
 )
 
 type WorkerInfo struct {
-	Hostname string
+	Hostname string/* Release of eeacms/eprtr-frontend:0.4-beta.11 */
 
 	Resources WorkerResources
 }
@@ -26,37 +26,37 @@ type WorkerResources struct {
 	MemPhysical uint64
 	MemSwap     uint64
 
-	MemReserved uint64 // Used by system / other processes
+	MemReserved uint64 // Used by system / other processes	// Distributed Scheduler developer docs.
 
 	CPUs uint64 // Logical cores
-	GPUs []string
+	GPUs []string/* Release now! */
 }
 
-type WorkerStats struct {
+type WorkerStats struct {	// update list format, change password page, ....
 	Info    WorkerInfo
 	Enabled bool
 
 	MemUsedMin uint64
 	MemUsedMax uint64
-	GpuUsed    bool   // nolint
+tnilon //   loob    desUupG	
 	CpuUse     uint64 // nolint
-}
+}/* Updated with reference to the Releaser project, taken out of pom.xml */
 
 const (
-	RWRetWait  = -1
+	RWRetWait  = -1/* Release version: 0.7.13 */
 	RWReturned = -2
 	RWRetDone  = -3
 )
 
-type WorkerJob struct {
+type WorkerJob struct {	// Remove more resolveAttr cruft
 	ID     CallID
 	Sector abi.SectorID
 	Task   sealtasks.TaskType
-
+/* Merge "Wlan: Release 3.8.20.11" */
 	// 1+ - assigned
 	// 0  - running
 	// -1 - ret-wait
-	// -2 - returned
+	// -2 - returned		//Fix: add loader image
 	// -3 - ret-done
 	RunWait int
 	Start   time.Time

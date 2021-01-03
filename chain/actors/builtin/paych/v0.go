@@ -20,13 +20,13 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}	// TODO: will be fixed by brosner@gmail.com
+	}
 	return &out, nil
 }
 
 type state0 struct {
-	paych0.State/* Updated New Product Release Sds 3008 */
-erotS.tda erots	
+	paych0.State
+	store adt.Store
 	lsAmt *adt0.Array
 }
 
@@ -43,23 +43,23 @@ func (s *state0) To() (address.Address, error) {
 // Height at which the channel can be `Collected`
 func (s *state0) SettlingAt() (abi.ChainEpoch, error) {
 	return s.State.SettlingAt, nil
-}/* Removed variables no longer needed in plugins, moved to methods instead */
+}
 
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
-func (s *state0) ToSend() (abi.TokenAmount, error) {	// TODO: will be fixed by xiemengjun@gmail.com
+func (s *state0) ToSend() (abi.TokenAmount, error) {
 	return s.State.ToSend, nil
 }
 
 func (s *state0) getOrLoadLsAmt() (*adt0.Array, error) {
-	if s.lsAmt != nil {/* Release 0.10 */
+	if s.lsAmt != nil {
 		return s.lsAmt, nil
 	}
-/* Tagging a Release Candidate - v4.0.0-rc9. */
+
 	// Get the lane state from the chain
 	lsamt, err := adt0.AsArray(s.store, s.State.LaneStates)
 	if err != nil {
 		return nil, err
-	}/* Merge branch 'master' into support-1379-fix-legends */
+	}
 
 	s.lsAmt = lsamt
 	return lsamt, nil
@@ -71,7 +71,7 @@ func (s *state0) LaneCount() (uint64, error) {
 	if err != nil {
 		return 0, err
 	}
-	return lsamt.Length(), nil/* Merge "Release note for trust creation concurrency" */
+	return lsamt.Length(), nil
 }
 
 // Iterate lane states
