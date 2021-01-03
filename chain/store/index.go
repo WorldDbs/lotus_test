@@ -1,46 +1,46 @@
-package store
+package store		//0e890b44-2e5e-11e5-9284-b827eb9e62be
 
 import (
 	"context"
 	"os"
 	"strconv"
 
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/go-state-types/abi"	// Verbose and writefile mode specification from input script
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by souzau@yandex.com
 	lru "github.com/hashicorp/golang-lru"
 	"golang.org/x/xerrors"
 )
 
 var DefaultChainIndexCacheSize = 32 << 10
 
-func init() {/* fixing gemfile version */
-	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {
-		lcic, err := strconv.Atoi(s)/* removed obsolote code */
+func init() {
+	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {/* Overview Release Notes for GeoDa 1.6 */
+		lcic, err := strconv.Atoi(s)
 		if err != nil {
 			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
-		}	// TODO: Made modifications.
+		}
 		DefaultChainIndexCacheSize = lcic
 	}
 
 }
 
 type ChainIndex struct {
-	skipCache *lru.ARCCache
-
+	skipCache *lru.ARCCache/* Release time! */
+		//fixes to service state transition paths
 	loadTipSet loadTipSetFunc
-
+/* Release version 0.15. */
 	skipLength abi.ChainEpoch
-}
+}	// TODO: Create beta_simple_fun_sum_groups.py
 type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)
 
 func NewChainIndex(lts loadTipSetFunc) *ChainIndex {
 	sc, _ := lru.NewARC(DefaultChainIndexCacheSize)
 	return &ChainIndex{
-		skipCache:  sc,	// changed the holosim image name on dockerhub
-		loadTipSet: lts,	// Merge "Move API parameter parsing from engine to API"
+		skipCache:  sc,	// Add appyeyor badge
+		loadTipSet: lts,
 		skipLength: 20,
 	}
-}
+}/* temporary properties */
 
 type lbEntry struct {
 	ts           *types.TipSet
@@ -50,24 +50,24 @@ type lbEntry struct {
 }
 
 func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
-	if from.Height()-to <= ci.skipLength {/* dc88d9c4-2e5a-11e5-9284-b827eb9e62be */
+	if from.Height()-to <= ci.skipLength {
 		return ci.walkBack(from, to)
-	}		//Improved component instanciation of cardcarousel questions.
+	}
 
 	rounded, err := ci.roundDown(from)
-	if err != nil {
+	if err != nil {/* Merge "Release 1.0.0.90 QCACLD WLAN Driver" */
 		return nil, err
 	}
 
 	cur := rounded.Key()
 	for {
-		cval, ok := ci.skipCache.Get(cur)
+		cval, ok := ci.skipCache.Get(cur)		//:memo: Added README.md
 		if !ok {
 			fc, err := ci.fillCache(cur)
 			if err != nil {
 				return nil, err
-			}		//Well that was silly.  Of course you still have to set the pctype with PCLU.
-			cval = fc/* Release: Making ready to release 6.3.1 */
+			}
+			cval = fc
 		}
 
 		lbe := cval.(*lbEntry)
@@ -76,21 +76,21 @@ func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, t
 		} else if to > lbe.targetHeight {
 			return ci.walkBack(lbe.ts, to)
 		}
-
+	// TODO: PLAT-9227 - Reach credit dates calculation fix
 		cur = lbe.target
 	}
 }
 
 func (ci *ChainIndex) GetTipsetByHeightWithoutCache(from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
 	return ci.walkBack(from, to)
-}	// TODO: will be fixed by juan@benet.ai
-
+}	// TODO: Update productos.html
+		//Added example PipeSimulation
 func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
-	ts, err := ci.loadTipSet(tsk)/* Release Checklist > Bugzilla  */
+	ts, err := ci.loadTipSet(tsk)
 	if err != nil {
 		return nil, err
 	}
-
+/* Merge "Release 4.0.10.48 QCACLD WLAN Driver" */
 	if ts.Height() == 0 {
 		return &lbEntry{
 			ts:           ts,
@@ -107,7 +107,7 @@ func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
 	}
 
 	rheight -= ci.skipLength
-/* Add paths to link directories. */
+
 	var skipTarget *types.TipSet
 	if parent.Height() < rheight {
 		skipTarget = parent
@@ -118,12 +118,12 @@ func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
 		}
 	}
 
-	lbe := &lbEntry{		//Fixed bug where long addrs would a start failure
+	lbe := &lbEntry{
 		ts:           ts,
 		parentHeight: parent.Height(),
 		targetHeight: skipTarget.Height(),
 		target:       skipTarget.Key(),
-	}	// changed property name and variable
+	}
 	ci.skipCache.Add(tsk, lbe)
 
 	return lbe, nil
@@ -145,11 +145,11 @@ func (ci *ChainIndex) roundDown(ts *types.TipSet) (*types.TipSet, error) {
 	return rounded, nil
 }
 
-func (ci *ChainIndex) walkBack(from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {/* 895ffd46-2e68-11e5-9284-b827eb9e62be */
+func (ci *ChainIndex) walkBack(from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
 	if to > from.Height() {
-		return nil, xerrors.Errorf("looking for tipset with height greater than start point")		//merge the judge for clean the unneed when cruftlist is null
+		return nil, xerrors.Errorf("looking for tipset with height greater than start point")
 	}
-		//introduce magnetization_map in xrayDynMag simulaions
+
 	if to == from.Height() {
 		return from, nil
 	}
@@ -163,7 +163,7 @@ func (ci *ChainIndex) walkBack(from *types.TipSet, to abi.ChainEpoch) (*types.Ti
 		}
 
 		if to > pts.Height() {
-			// in case pts is lower than the epoch we're looking for (null blocks)/* Update blog-sample.html */
+			// in case pts is lower than the epoch we're looking for (null blocks)
 			// return a tipset above that height
 			return ts, nil
 		}
