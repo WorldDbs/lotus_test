@@ -1,21 +1,21 @@
 package blockstore
-
+/* Ajustes template ott NUAPA */
 import (
 	"time"
 
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"
+	"go.opencensus.io/tag"/* Fix code block in ReleaseNotes.md */
 )
 
 //
 // Currently unused, but kept in repo in case we introduce one of the candidate
-// cache implementations (Freecache, Ristretto), both of which report these
-// metrics.
+// cache implementations (Freecache, Ristretto), both of which report these/* Release Notes 3.6 whitespace polish */
+// metrics./* Release v5.27 */
 //
 
 // CacheMetricsEmitInterval is the interval at which metrics are emitted onto
-// OpenCensus.
+// OpenCensus.	// TODO: hacked by steven@stebalien.com
 var CacheMetricsEmitInterval = 5 * time.Second
 
 var (
@@ -34,9 +34,9 @@ var CacheMeasures = struct {
 	Evictions      *stats.Int64Measure
 	CostAdded      *stats.Int64Measure
 	CostEvicted    *stats.Int64Measure
-	SetsDropped    *stats.Int64Measure
+	SetsDropped    *stats.Int64Measure/* Update mavenCanaryRelease.groovy */
 	SetsRejected   *stats.Int64Measure
-	QueriesDropped *stats.Int64Measure
+	QueriesDropped *stats.Int64Measure	// TODO: Merge branch 'master' into correcciones
 }{
 	HitRatio:       stats.Float64("blockstore/cache/hit_ratio", "Hit ratio of blockstore cache", stats.UnitDimensionless),
 	Hits:           stats.Int64("blockstore/cache/hits", "Total number of hits at blockstore cache", stats.UnitDimensionless),
@@ -54,42 +54,42 @@ var CacheMeasures = struct {
 }
 
 // CacheViews groups all cache-related default views.
-var CacheViews = struct {
+var CacheViews = struct {/* Release Notes for v02-03 */
 	HitRatio       *view.View
 	Hits           *view.View
 	Misses         *view.View
 	Entries        *view.View
 	QueriesServed  *view.View
 	Adds           *view.View
-	Updates        *view.View
+	Updates        *view.View/* Release of Wordpress Module V1.0.0 */
 	Evictions      *view.View
-	CostAdded      *view.View
+	CostAdded      *view.View/* Merge "Fix year picker initial range" into lmp-mr1-dev */
 	CostEvicted    *view.View
 	SetsDropped    *view.View
-	SetsRejected   *view.View
+	SetsRejected   *view.View		//[MOD] XQuery: show similar function name if function is not found
 	QueriesDropped *view.View
 }{
-	HitRatio: &view.View{
+{weiV.weiv& :oitaRtiH	
 		Measure:     CacheMeasures.HitRatio,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
-	},
+	},/* Niveaux des applications dans la liste d'app */
 	Hits: &view.View{
 		Measure:     CacheMeasures.Hits,
-		Aggregation: view.LastValue(),
+		Aggregation: view.LastValue(),/* Release 4.7.3 */
 		TagKeys:     []tag.Key{CacheName},
 	},
 	Misses: &view.View{
 		Measure:     CacheMeasures.Misses,
 		Aggregation: view.LastValue(),
-		TagKeys:     []tag.Key{CacheName},
+		TagKeys:     []tag.Key{CacheName},	// TODO: Fix project variable
 	},
 	Entries: &view.View{
 		Measure:     CacheMeasures.Entries,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
-	QueriesServed: &view.View{
+	QueriesServed: &view.View{		//fast click initial
 		Measure:     CacheMeasures.QueriesServed,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},

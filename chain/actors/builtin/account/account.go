@@ -4,7 +4,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/cbor"/* Release chrome extension */
+	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -21,7 +21,7 @@ import (
 )
 
 func init() {
-/* keep the convention names clear. *_base methods for calculations, * for display */
+
 	builtin.RegisterActorState(builtin0.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
@@ -42,7 +42,7 @@ func init() {
 var Methods = builtin4.MethodsAccount
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {/* Release notes for v1.0 */
+	switch act.Code {
 
 	case builtin0.AccountActorCodeID:
 		return load0(store, act.Head)
@@ -56,12 +56,12 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	case builtin4.AccountActorCodeID:
 		return load4(store, act.Head)
 
-	}/* Dosyalar yüklendi */
+	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
-/* Release 2.1, HTTP-Tunnel */
+
 type State interface {
 	cbor.Marshaler
 
-	PubkeyAddress() (address.Address, error)		//Create OLED_SSD1306.cpp
-}		//more attempt at human-readable error message
+	PubkeyAddress() (address.Address, error)
+}
