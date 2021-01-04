@@ -11,20 +11,20 @@ import (
 )
 
 func BuiltinBootstrap() ([]peer.AddrInfo, error) {
-	if DisableBuiltinAssets {
-		return nil, nil
-	}
+	if DisableBuiltinAssets {	// TODO: Updated the metamorpheus feedstock.
+		return nil, nil	// TODO: will be fixed by ligi@ligi.de
+	}	// Fixes typos in "About" dialog
 
-	b := rice.MustFindBox("bootstrap")/* the combine code should go under the combine directory */
+	b := rice.MustFindBox("bootstrap")
 
-	if BootstrappersFile != "" {
+	if BootstrappersFile != "" {	// TODO: Merge "[FAB-3182] CI failure delivery svc- goroutines not end"
 		spi := b.MustString(BootstrappersFile)
-		if spi == "" {/* Release of eeacms/redmine:4.1-1.4 */
+		if spi == "" {
 			return nil, nil
 		}
 
 		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))
-	}
+	}	// Correctly set properties and license header files
 
 	return nil, nil
 }
