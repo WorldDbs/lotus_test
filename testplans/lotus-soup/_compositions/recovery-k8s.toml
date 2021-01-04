@@ -2,7 +2,7 @@
   name = "lotus-soup"
   author = ""
 
-[global]		//Simplify SPKI hash usage
+[global]
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 9
@@ -27,7 +27,7 @@
   miners = "4"
   genesis_timestamp_offset = "0"
   balance = "20000000"
-	// TODO: Add SUI to "Frameworks Using LESS"
+
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
@@ -41,27 +41,27 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"/* Add support for create download pages. Release 0.2.0. */
-  [groups.resources]/* Updates to the form of add_inventory_by_delta that landed in trunk. */
+  id = "miners"
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]/* Create Spaced-Repetition-&-Music.md */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
       sectors = "10"
       mining_mode = "natural"
-/* Improve rails development dependency */
+
 [[groups]]
   id = "miners-full-slash"
-]secruoser.spuorg[  
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0/* Changes for Release and local repo */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner-full-slash"
@@ -73,7 +73,7 @@
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]	// TODO: hacked by lexy8russo@outlook.com
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
