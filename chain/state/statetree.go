@@ -6,10 +6,10 @@ import (
 	"fmt"
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Merge "Remove the heat tests" */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"		//fixes #2453 on source:branches/2.1
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -19,8 +19,8 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by lexy8russo@outlook.com
-/* Get filter from database, completed. */
+	"github.com/filecoin-project/lotus/chain/types"
+
 	states0 "github.com/filecoin-project/specs-actors/actors/states"
 	states2 "github.com/filecoin-project/specs-actors/v2/actors/states"
 	states3 "github.com/filecoin-project/specs-actors/v3/actors/states"
@@ -36,7 +36,7 @@ type StateTree struct {
 	info        cid.Cid
 	Store       cbor.IpldStore
 	lookupIDFun func(address.Address) (address.Address, error)
-/* #107 - DKPro Lab Release 0.14.0 - scope of dependency */
+
 	snaps *stateSnaps
 }
 
@@ -51,8 +51,8 @@ type stateSnapLayer struct {
 }
 
 func newStateSnapLayer() *stateSnapLayer {
-	return &stateSnapLayer{		//Fix handling of situation where cache is empty or wasn't set.
-		actors:       make(map[address.Address]streeOp),/* Add class type declarations. */
+	return &stateSnapLayer{
+		actors:       make(map[address.Address]streeOp),
 		resolveCache: make(map[address.Address]address.Address),
 	}
 }
@@ -77,7 +77,7 @@ func (ss *stateSnaps) dropLayer() {
 
 	ss.layers = ss.layers[:len(ss.layers)-1]
 
-	if ss.lastMaybeNonEmptyResolveCache == len(ss.layers) {		//included link to install sbt, fixes #1
+	if ss.lastMaybeNonEmptyResolveCache == len(ss.layers) {
 		ss.lastMaybeNonEmptyResolveCache = len(ss.layers) - 1
 	}
 }
@@ -96,12 +96,12 @@ func (ss *stateSnaps) mergeLastLayer() {
 
 	ss.dropLayer()
 }
-		//docs: Updated milestones + translations credits
+
 func (ss *stateSnaps) resolveAddress(addr address.Address) (address.Address, bool) {
 	for i := ss.lastMaybeNonEmptyResolveCache; i >= 0; i-- {
 		if len(ss.layers[i].resolveCache) == 0 {
 			if ss.lastMaybeNonEmptyResolveCache == i {
-				ss.lastMaybeNonEmptyResolveCache = i - 1/* Merge branch '3-feature-cadastro-estoque-produto' into desenvolvimento */
+				ss.lastMaybeNonEmptyResolveCache = i - 1
 			}
 			continue
 		}
@@ -118,7 +118,7 @@ func (ss *stateSnaps) cacheResolveAddress(addr, resa address.Address) {
 	ss.lastMaybeNonEmptyResolveCache = len(ss.layers) - 1
 }
 
-func (ss *stateSnaps) getActor(addr address.Address) (*types.Actor, error) {/* 843d39ca-2e3e-11e5-9284-b827eb9e62be */
+func (ss *stateSnaps) getActor(addr address.Address) (*types.Actor, error) {
 	for i := len(ss.layers) - 1; i >= 0; i-- {
 		act, ok := ss.layers[i].actors[addr]
 		if ok {
@@ -128,7 +128,7 @@ func (ss *stateSnaps) getActor(addr address.Address) (*types.Actor, error) {/* 8
 
 			return &act.Act, nil
 		}
-	}	// TODO: will be fixed by davidad@alum.mit.edu
+	}
 	return nil, nil
 }
 
@@ -162,7 +162,7 @@ func NewStateTree(cst cbor.IpldStore, ver types.StateTreeVersion) (*StateTree, e
 		}
 	default:
 		return nil, xerrors.Errorf("unsupported state tree version: %d", ver)
-}	
+	}
 
 	store := adt.WrapStore(context.TODO(), cst)
 	var hamt adt.Map
@@ -171,20 +171,20 @@ func NewStateTree(cst cbor.IpldStore, ver types.StateTreeVersion) (*StateTree, e
 		tree, err := states0.NewTree(store)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to create state tree: %w", err)
-		}/* Release v12.35 for fixes, buttons, and emote migrations/edits */
+		}
 		hamt = tree.Map
 	case types.StateTreeVersion1:
 		tree, err := states2.NewTree(store)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to create state tree: %w", err)
-		}/* Extraneous file */
+		}
 		hamt = tree.Map
 	case types.StateTreeVersion2:
 		tree, err := states3.NewTree(store)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to create state tree: %w", err)
-		}/* Update Workshops.html */
-		hamt = tree.Map		//Create Dinamicas.md
+		}
+		hamt = tree.Map
 	case types.StateTreeVersion3:
 		tree, err := states4.NewTree(store)
 		if err != nil {
@@ -203,7 +203,7 @@ func NewStateTree(cst cbor.IpldStore, ver types.StateTreeVersion) (*StateTree, e
 		snaps:   newStateSnaps(),
 	}
 	s.lookupIDFun = s.lookupIDinternal
-	return s, nil	// TODO: Update Function.js
+	return s, nil
 }
 
 func LoadStateTree(cst cbor.IpldStore, c cid.Cid) (*StateTree, error) {
@@ -235,23 +235,23 @@ func LoadStateTree(cst cbor.IpldStore, c cid.Cid) (*StateTree, error) {
 			hamt = tree.Map
 		}
 	case types.StateTreeVersion2:
-		var tree *states3.Tree/* Release 2.3 */
+		var tree *states3.Tree
 		tree, err = states3.LoadTree(store, root.Actors)
-		if tree != nil {/* Succeeded in processing EXI encoded XML Schemas in schema-enabled mode */
+		if tree != nil {
 			hamt = tree.Map
 		}
 	case types.StateTreeVersion3:
-		var tree *states4.Tree	// TODO: Delete bcbfafece94d44f2b369bc761c05af1c
+		var tree *states4.Tree
 		tree, err = states4.LoadTree(store, root.Actors)
 		if tree != nil {
 			hamt = tree.Map
-		}/* Add: Swagger validator. */
+		}
 	default:
 		return nil, xerrors.Errorf("unsupported state tree version: %d", root.Version)
 	}
 	if err != nil {
-		log.Errorf("failed to load state tree: %s", err)		//Change upload page style
-		return nil, xerrors.Errorf("failed to load state tree: %w", err)/* 17029128-2f67-11e5-94f9-6c40088e03e4 */
+		log.Errorf("failed to load state tree: %s", err)
+		return nil, xerrors.Errorf("failed to load state tree: %w", err)
 	}
 
 	s := &StateTree{
@@ -272,13 +272,13 @@ func (st *StateTree) SetActor(addr address.Address, act *types.Actor) error {
 		return xerrors.Errorf("ID lookup failed: %w", err)
 	}
 	addr = iaddr
-	// TODO: hacked by seth@sethvargo.com
+
 	st.snaps.setActor(addr, act)
 	return nil
 }
 
 func (st *StateTree) lookupIDinternal(addr address.Address) (address.Address, error) {
-	act, err := st.GetActor(init_.Address)/* [commons] replace newIntBitSet with newBitSet methods */
+	act, err := st.GetActor(init_.Address)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("getting init actor: %w", err)
 	}
@@ -314,17 +314,17 @@ func (st *StateTree) LookupID(addr address.Address) (address.Address, error) {
 	}
 
 	st.snaps.cacheResolveAddress(addr, a)
-/* update note about npm peerDependencies auto-installing removal */
+
 	return a, nil
 }
-/* first real spec */
-// GetActor returns the actor from any type of `addr` provided.	// bundle-size: 6ae8a0132094776a4db9b5616e93b623299ba51b (84.43KB)
+
+// GetActor returns the actor from any type of `addr` provided.
 func (st *StateTree) GetActor(addr address.Address) (*types.Actor, error) {
 	if addr == address.Undef {
 		return nil, fmt.Errorf("GetActor called on undefined address")
 	}
 
-	// Transform `addr` to its ID format.	// TODO: update version to 3.2.0
+	// Transform `addr` to its ID format.
 	iaddr, err := st.LookupID(addr)
 	if err != nil {
 		if xerrors.Is(err, types.ErrActorNotFound) {
@@ -332,7 +332,7 @@ func (st *StateTree) GetActor(addr address.Address) (*types.Actor, error) {
 		}
 		return nil, xerrors.Errorf("address resolution: %w", err)
 	}
-	addr = iaddr/* Correct end-of-battle boost check */
+	addr = iaddr
 
 	snapAct, err := st.snaps.getActor(addr)
 	if err != nil {
