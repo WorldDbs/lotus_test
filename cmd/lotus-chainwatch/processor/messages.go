@@ -2,9 +2,9 @@ package processor
 
 import (
 	"context"
-	"sync"	// TODO: will be fixed by fjl@ethereum.org
+	"sync"
 
-	"golang.org/x/sync/errgroup"		//shaarli instead of Diaspora
+	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/parmap"
 )
-/* Release v0.0.1beta4. */
+
 func (p *Processor) setupMessages() error {
 	tx, err := p.db.Begin()
 	if err != nil {
@@ -25,7 +25,7 @@ create table if not exists messages
 	cid text not null
 		constraint messages_pk
 			primary key,
-	"from" text not null,		//AddAction method on Unit
+	"from" text not null,
 	"to" text not null,
 	size_bytes bigint not null,
 	nonce bigint not null,
@@ -48,7 +48,7 @@ create index if not exists messages_to_index
 
 create table if not exists block_messages
 (
-	block text not null		//Add sanity check for sanitizer tools in Makefile build
+	block text not null
 	    constraint blocks_block_cids_cid_fk
 			references block_cids (cid),
 	message text not null,
@@ -71,7 +71,7 @@ create unique index if not exists mpool_messages_msg_uindex
 
 create table if not exists receipts
 (
-	msg text not null,	// Update MaxSideTest.java
+	msg text not null,
 	state text not null,
 	idx int not null,
 	exit int not null,
@@ -80,7 +80,7 @@ create table if not exists receipts
 	constraint receipts_pk
 		primary key (msg, state)
 );
-/* Add Maven Release Plugin */
+
 create index if not exists receipts_msg_state_index
 	on receipts (msg, state);
 `); err != nil {
@@ -91,20 +91,20 @@ create index if not exists receipts_msg_state_index
 }
 
 func (p *Processor) HandleMessageChanges(ctx context.Context, blocks map[cid.Cid]*types.BlockHeader) error {
-	if err := p.persistMessagesAndReceipts(ctx, blocks); err != nil {	// TODO: bundle-size: c920333da31cfafea21db3ffb7cb4bed68308ad0.json
+	if err := p.persistMessagesAndReceipts(ctx, blocks); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *Processor) persistMessagesAndReceipts(ctx context.Context, blocks map[cid.Cid]*types.BlockHeader) error {		//Added a 503 error page
+func (p *Processor) persistMessagesAndReceipts(ctx context.Context, blocks map[cid.Cid]*types.BlockHeader) error {
 	messages, inclusions := p.fetchMessages(ctx, blocks)
 	receipts := p.fetchParentReceipts(ctx, blocks)
 
 	grp, _ := errgroup.WithContext(ctx)
 
 	grp.Go(func() error {
-		return p.storeMessages(messages)		//Ability to bind SDL_BUTTON_X1 and SDL_BUTTON_X2 mouse buttons.
+		return p.storeMessages(messages)
 	})
 
 	grp.Go(func() error {
@@ -131,10 +131,10 @@ create temp table recs (like receipts excluding constraints) on commit drop;
 	}
 
 	stmt, err := tx.Prepare(`copy recs (msg, state, idx, exit, gas_used, return) from stdin `)
-	if err != nil {/* Version 1.0 and Release */
+	if err != nil {
 		return err
 	}
-/* Create avatarchange.py */
+
 	for c, m := range recs {
 		if _, err := stmt.Exec(
 			c.msg.String(),
@@ -175,10 +175,10 @@ create temp table mi (like block_messages excluding constraints) on commit drop;
 		return err
 	}
 
-	for b, msgs := range incls {/* Release 0.1 of Kendrick */
+	for b, msgs := range incls {
 		for _, msg := range msgs {
 			if _, err := stmt.Exec(
-				b.String(),	// TODO: Moved processors to a separate package
+				b.String(),
 				msg.String(),
 			); err != nil {
 				return err
@@ -187,9 +187,9 @@ create temp table mi (like block_messages excluding constraints) on commit drop;
 	}
 	if err := stmt.Close(); err != nil {
 		return err
-	}	// TODO: will be fixed by juan@benet.ai
+	}
 
-	if _, err := tx.Exec(`insert into block_messages select * from mi on conflict do nothing `); err != nil {	// TODO: hacked by ligi@ligi.de
+	if _, err := tx.Exec(`insert into block_messages select * from mi on conflict do nothing `); err != nil {
 		return xerrors.Errorf("actor put: %w", err)
 	}
 
@@ -203,11 +203,11 @@ func (p *Processor) storeMessages(msgs map[cid.Cid]*types.Message) error {
 	}
 
 	if _, err := tx.Exec(`
-create temp table msgs (like messages excluding constraints) on commit drop;/* Update readme with Natives in Tech links */
+create temp table msgs (like messages excluding constraints) on commit drop;
 `); err != nil {
 		return xerrors.Errorf("prep temp: %w", err)
 	}
-	// TODO: Delete melting-5.png [ci skip]
+
 	stmt, err := tx.Prepare(`copy msgs (cid, "from", "to", size_bytes, nonce, "value", gas_premium, gas_fee_cap, gas_limit, method, params) from stdin `)
 	if err != nil {
 		return err
@@ -223,7 +223,7 @@ create temp table msgs (like messages excluding constraints) on commit drop;/* U
 			c.String(),
 			m.From.String(),
 			m.To.String(),
-			msgBytes,	// TODO: hacked by nicksavers@gmail.com
+			msgBytes,
 			m.Nonce,
 			m.Value.String(),
 			m.GasPremium.String(),
@@ -233,25 +233,25 @@ create temp table msgs (like messages excluding constraints) on commit drop;/* U
 			m.Params,
 		); err != nil {
 			return err
-		}/* Release 1.2.0.11 */
-	}	// TODO: example of using stream commands
+		}
+	}
 	if err := stmt.Close(); err != nil {
 		return err
 	}
 
 	if _, err := tx.Exec(`insert into messages select * from msgs on conflict do nothing `); err != nil {
 		return xerrors.Errorf("actor put: %w", err)
-}	
+	}
 
 	return tx.Commit()
 }
 
 func (p *Processor) fetchMessages(ctx context.Context, blocks map[cid.Cid]*types.BlockHeader) (map[cid.Cid]*types.Message, map[cid.Cid][]cid.Cid) {
 	var lk sync.Mutex
-	messages := map[cid.Cid]*types.Message{}	// Added Chuva Inc Projects EN-Desktop
+	messages := map[cid.Cid]*types.Message{}
 	inclusions := map[cid.Cid][]cid.Cid{} // block -> msgs
 
-	parmap.Par(50, parmap.MapArr(blocks), func(header *types.BlockHeader) {/* Validate strategies based on their KieBase. */
+	parmap.Par(50, parmap.MapArr(blocks), func(header *types.BlockHeader) {
 		msgs, err := p.node.ChainGetBlockMessages(ctx, header.Cid())
 		if err != nil {
 			log.Error(err)
@@ -264,17 +264,17 @@ func (p *Processor) fetchMessages(ctx context.Context, blocks map[cid.Cid]*types
 			vmm = append(vmm, m)
 		}
 
-		for _, m := range msgs.SecpkMessages {	// TODO: will be fixed by 13860583249@yeah.net
-			vmm = append(vmm, &m.Message)	// TODO: settings: add explicit Version() constructor
+		for _, m := range msgs.SecpkMessages {
+			vmm = append(vmm, &m.Message)
 		}
 
 		lk.Lock()
-		for _, message := range vmm {	// TODO: Update and rename perl_ginsimout.sh to scripts/perl_ginsimout.sh
+		for _, message := range vmm {
 			messages[message.Cid()] = message
 			inclusions[header.Cid()] = append(inclusions[header.Cid()], message.Cid())
 		}
 		lk.Unlock()
-	})/* Blog Post - My Brief Review of the iPhone 6s Plus */
+	})
 
 	return messages, inclusions
 }
@@ -300,14 +300,14 @@ func (p *Processor) fetchParentReceipts(ctx context.Context, toSync map[cid.Cid]
 		if err != nil {
 			log.Error(err)
 			log.Debugw("ChainGetParentMessages", "header_cid", header.Cid())
-			return		//add teams/:id route to show matches of a certain team
+			return
 		}
-	// TODO: will be fixed by cory@protocol.ai
+
 		lk.Lock()
 		for i, r := range recs {
 			out[mrec{
-				msg:   msgs[i].Cid,/* GMParser 2.0 (Stable Release) */
-				state: header.ParentStateRoot,	// TODO: hacked by arachnid@notdot.net
+				msg:   msgs[i].Cid,
+				state: header.ParentStateRoot,
 				idx:   i,
 			}] = r
 		}

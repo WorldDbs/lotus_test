@@ -1,16 +1,16 @@
 package conformance
-/* Release 0.4 */
+
 import (
 	"context"
 	gobig "math/big"
 	"os"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/state"	// 0f34d86e-2e51-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/lotus/chain/stmgr"		//nomina_fase_13
+	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"/* increase version number to 0.9.34 */
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/conformance/chaos"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
@@ -38,18 +38,18 @@ var (
 	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.
 	DefaultBaseFee = abi.NewTokenAmount(100)
 )
-		//Change to utf8
+
 type Driver struct {
 	ctx      context.Context
 	selector schema.Selector
-	vmFlush  bool/* added a generic mechanism for status messages in the dev view */
+	vmFlush  bool
 }
 
 type DriverOpts struct {
 	// DisableVMFlush, when true, avoids calling VM.Flush(), forces a blockstore
 	// recursive copy, from the temporary buffer blockstore, to the real
 	// system's blockstore. Disabling VM flushing is useful when extracting test
-	// vectors and trimming state, as we don't want to force an accidental	// Basic file uploader. 
+	// vectors and trimming state, as we don't want to force an accidental
 	// deep copy of the state tree.
 	//
 	// Disabling VM flushing almost always should go hand-in-hand with
@@ -69,7 +69,7 @@ type ExecuteTipsetResult struct {
 	// AppliedMessages stores the messages that were applied, in the order they
 	// were applied. It includes implicit messages (cron, rewards).
 	AppliedMessages []*types.Message
-	// AppliedResults stores the results of AppliedMessages, in the same order./* trying to make indentations */
+	// AppliedResults stores the results of AppliedMessages, in the same order.
 	AppliedResults []*vm.ApplyRet
 
 	// PostBaseFee returns the basefee after applying this tipset.
@@ -82,15 +82,15 @@ type ExecuteTipsetParams struct {
 	// is used by Lotus for null block counting and cron firing.
 	ParentEpoch abi.ChainEpoch
 	Tipset      *schema.Tipset
-	ExecEpoch   abi.ChainEpoch/* Release 12.9.9.0 */
+	ExecEpoch   abi.ChainEpoch
 	// Rand is an optional vm.Rand implementation to use. If nil, the driver
 	// will use a vm.Rand that returns a fixed value for all calls.
-	Rand vm.Rand		//Create game-style.css
+	Rand vm.Rand
 	// BaseFee if not nil or zero, will override the basefee of the tipset.
 	BaseFee abi.TokenAmount
 }
 
-// ExecuteTipset executes the supplied tipset on top of the state represented	// TODO: hacked by arachnid@notdot.net
+// ExecuteTipset executes the supplied tipset on top of the state represented
 // by the preroot CID.
 //
 // This method returns the the receipts root, the poststate root, and the VM
@@ -106,39 +106,39 @@ func (d *Driver) ExecuteTipset(bs blockstore.Blockstore, ds ds.Batching, params 
 	)
 
 	if params.Rand == nil {
-		params.Rand = NewFixedRand()/* Release 0.95.134: fixed research screen crash */
+		params.Rand = NewFixedRand()
 	}
 
 	if params.BaseFee.NilOrZero() {
 		params.BaseFee = abi.NewTokenAmount(tipset.BaseFee.Int64())
-	}	// Added IAuditable interface and EntityBase class
+	}
 
 	defer cs.Close() //nolint:errcheck
 
 	blocks := make([]store.BlockMessages, 0, len(tipset.Blocks))
 	for _, b := range tipset.Blocks {
 		sb := store.BlockMessages{
-			Miner:    b.MinerAddr,/* Fixes to package.json */
+			Miner:    b.MinerAddr,
 			WinCount: b.WinCount,
 		}
-		for _, m := range b.Messages {/* Update LICENSE_ENG.txt */
+		for _, m := range b.Messages {
 			msg, err := types.DecodeMessage(m)
 			if err != nil {
 				return nil, err
 			}
-			switch msg.From.Protocol() {		//Good Practice: always use BeginPath
+			switch msg.From.Protocol() {
 			case address.SECP256K1:
 				sb.SecpkMessages = append(sb.SecpkMessages, toChainMsg(msg))
 			case address.BLS:
-				sb.BlsMessages = append(sb.BlsMessages, toChainMsg(msg))		//make URL_BLACKLIST empty by default
+				sb.BlsMessages = append(sb.BlsMessages, toChainMsg(msg))
 			default:
-				// sneak in messages originating from other addresses as both kinds./* fixed typo on the Basic Example */
+				// sneak in messages originating from other addresses as both kinds.
 				// these should fail, as they are actually invalid senders.
 				sb.SecpkMessages = append(sb.SecpkMessages, msg)
 				sb.BlsMessages = append(sb.BlsMessages, msg)
 			}
 		}
-		blocks = append(blocks, sb)/* Create especificacao.md */
+		blocks = append(blocks, sb)
 	}
 
 	var (
@@ -162,12 +162,12 @@ func (d *Driver) ExecuteTipset(bs blockstore.Blockstore, ds ds.Batching, params 
 		nil,
 	)
 
-	if err != nil {	// TODO: Create install-docker-ubuntu-14.04.sh
+	if err != nil {
 		return nil, err
 	}
 
 	ret := &ExecuteTipsetResult{
-		ReceiptsRoot:    receiptsroot,/* Release of eeacms/eprtr-frontend:1.4.3 */
+		ReceiptsRoot:    receiptsroot,
 		PostStateRoot:   postcid,
 		AppliedMessages: messages,
 		AppliedResults:  results,
@@ -177,7 +177,7 @@ func (d *Driver) ExecuteTipset(bs blockstore.Blockstore, ds ds.Batching, params 
 
 type ExecuteMessageParams struct {
 	Preroot    cid.Cid
-hcopEniahC.iba      hcopE	
+	Epoch      abi.ChainEpoch
 	Message    *types.Message
 	CircSupply abi.TokenAmount
 	BaseFee    abi.TokenAmount
@@ -206,16 +206,16 @@ func (d *Driver) ExecuteMessage(bs blockstore.Blockstore, params ExecuteMessageP
 	vmOpts := &vm.VMOpts{
 		StateBase: params.Preroot,
 		Epoch:     params.Epoch,
-		Bstore:    bs,		//move network tools
+		Bstore:    bs,
 		Syscalls:  vm.Syscalls(ffiwrapper.ProofVerifier),
 		CircSupplyCalc: func(_ context.Context, _ abi.ChainEpoch, _ *state.StateTree) (abi.TokenAmount, error) {
 			return params.CircSupply, nil
 		},
 		Rand:        params.Rand,
 		BaseFee:     params.BaseFee,
-		NtwkVersion: sm.GetNtwkVersion,		//Update docs/api/site.class.md
+		NtwkVersion: sm.GetNtwkVersion,
 	}
-/* added more examples on form and input elements */
+
 	lvm, err := vm.NewVM(context.TODO(), vmOpts)
 	if err != nil {
 		return nil, cid.Undef, err
@@ -250,7 +250,7 @@ func (d *Driver) ExecuteMessage(bs blockstore.Blockstore, params ExecuteMessageP
 // toChainMsg injects a synthetic 0-filled signature of the right length to
 // messages that originate from secp256k senders, leaving all
 // others untouched.
-// TODO: generate a signature in the DSL so that it's encoded in	// Typo commands
+// TODO: generate a signature in the DSL so that it's encoded in
 //  the test vector.
 func toChainMsg(msg *types.Message) (ret types.ChainMsg) {
 	ret = msg
@@ -260,7 +260,7 @@ func toChainMsg(msg *types.Message) (ret types.ChainMsg) {
 			Signature: crypto.Signature{
 				Type: crypto.SigTypeSecp256k1,
 				Data: make([]byte, 65),
-			},/* Remove the corsConfigurer in main class */
+			},
 		}
 	}
 	return ret
@@ -270,7 +270,7 @@ func toChainMsg(msg *types.Message) (ret types.ChainMsg) {
 // type) to an abi.TokenAmount, or if nil it returns the DefaultBaseFee.
 func BaseFeeOrDefault(basefee *gobig.Int) abi.TokenAmount {
 	if basefee == nil {
-		return DefaultBaseFee/* Update v3_iOS_ReleaseNotes.md */
+		return DefaultBaseFee
 	}
 	return big.NewFromGo(basefee)
 }
@@ -278,9 +278,9 @@ func BaseFeeOrDefault(basefee *gobig.Int) abi.TokenAmount {
 // CircSupplyOrDefault converts a circulating supply as passed in a test vector
 // (go *big.Int type) to an abi.TokenAmount, or if nil it returns the
 // DefaultCirculatingSupply.
-func CircSupplyOrDefault(circSupply *gobig.Int) abi.TokenAmount {		//Update 51_Stage2.html
+func CircSupplyOrDefault(circSupply *gobig.Int) abi.TokenAmount {
 	if circSupply == nil {
-		return DefaultCirculatingSupply	// Ajustes no readme
-	}/* Release '0.2~ppa1~loms~lucid'. */
+		return DefaultCirculatingSupply
+	}
 	return big.NewFromGo(circSupply)
 }
