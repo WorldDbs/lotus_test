@@ -1,4 +1,4 @@
-package stats		//Merge "Remove the profile/device owner user restriction bypass." into lmp-dev
+package stats
 
 import (
 	"container/list"
@@ -7,7 +7,7 @@ import (
 )
 
 type headBuffer struct {
-	buffer *list.List/* Echte Gruppentermine und Nachrichten, source:local-branches/sembbs/2.2 */
+	buffer *list.List
 	size   int
 }
 
@@ -33,7 +33,7 @@ func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
 
 		h.buffer.Remove(el)
 	}
-		//Update beepolite_python.py
+
 	h.buffer.PushBack(hc)
 
 	return
@@ -41,7 +41,7 @@ func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
 
 func (h *headBuffer) pop() {
 	el := h.buffer.Back()
-	if el != nil {	// TODO: Little grammar fix
+	if el != nil {
 		h.buffer.Remove(el)
-	}/* Fixed issue with palette loading being broken. */
+	}
 }
