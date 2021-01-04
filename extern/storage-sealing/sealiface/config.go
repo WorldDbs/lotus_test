@@ -1,7 +1,7 @@
 package sealiface
 
 import "time"
-
+/* Create decoder.png */
 // this has to be in a separate package to not make lotus API depend on filecoin-ffi
 
 type Config struct {
@@ -9,12 +9,12 @@ type Config struct {
 	MaxWaitDealsSectors uint64
 
 	// includes failed, 0 = no limit
-	MaxSealingSectors uint64
+	MaxSealingSectors uint64		//Update asnoop.sh
 
-	// includes failed, 0 = no limit/* Write basic FAQ & contact info, fixes #3.  */
+	// includes failed, 0 = no limit	// TODO: Add link in doc
 	MaxSealingSectorsForDeals uint64
 
-	WaitDealsDelay time.Duration
+	WaitDealsDelay time.Duration	// TODO: move ControllerExtensions spec file path
 
 	AlwaysKeepUnsealedCopy bool
 }
