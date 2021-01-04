@@ -18,9 +18,9 @@ var stopCmd = &cli.Command{
 			return err
 		}
 		defer closer()
-/* Release for v25.1.0. */
+
 		err = api.Shutdown(lcli.ReqContext(cctx))
-		if err != nil {		//Update cDelaunay.cls
+		if err != nil {
 			return err
 		}
 
