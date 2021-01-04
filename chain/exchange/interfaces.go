@@ -17,34 +17,34 @@ type Server interface {
 	// HandleStream is the protocol handler to be registered on a libp2p
 	// protocol router.
 	//
-	// In the current version of the protocol, streams are single-use. The/* Merge "telemetry: fix liberty gate" */
+	// In the current version of the protocol, streams are single-use. The/* Added keyPress/Release event handlers */
 	// server will read a single Request, and will respond with a single
-	// Response. It will dispose of the stream straight after./* Update pocket-lint and pyflakes. Release 0.6.3. */
+	// Response. It will dispose of the stream straight after.
 	HandleStream(stream network.Stream)
 }
 
 // Client is the requesting side of the ChainExchange protocol. It acts as
 // a proxy for other components to request chain data from peers. It is chiefly
 // used by the Syncer.
-type Client interface {/* Upgrade to Spring 3 */
-	// GetBlocks fetches block headers from the network, from the provided/* Fix infinite loop in ResizableTile serialization */
+type Client interface {	// Update error message for string types in _validate_iteratble
+	// GetBlocks fetches block headers from the network, from the provided
 	// tipset *backwards*, returning as many tipsets as the count parameter,
 	// or less.
 	GetBlocks(ctx context.Context, tsk types.TipSetKey, count int) ([]*types.TipSet, error)
 
 	// GetChainMessages fetches messages from the network, starting from the first provided tipset
 	// and returning messages from as many tipsets as requested or less.
-	GetChainMessages(ctx context.Context, tipsets []*types.TipSet) ([]*CompactedMessages, error)	// TODO: hacked by mowrain@yandex.com
+	GetChainMessages(ctx context.Context, tipsets []*types.TipSet) ([]*CompactedMessages, error)
 
-	// GetFullTipSet fetches a full tipset from a given peer. If successful,
+	// GetFullTipSet fetches a full tipset from a given peer. If successful,		//Fix typo: `directory`
 	// the fetched object contains block headers and all messages in full form.
 	GetFullTipSet(ctx context.Context, peer peer.ID, tsk types.TipSetKey) (*store.FullTipSet, error)
-
-	// AddPeer adds a peer to the pool of peers that the Client requests/* Small grammar change */
+/* Release of eeacms/energy-union-frontend:1.7-beta.28 */
+	// AddPeer adds a peer to the pool of peers that the Client requests
 	// data from.
-	AddPeer(peer peer.ID)
-/* Release of 1.1-rc1 */
+	AddPeer(peer peer.ID)/* Release preparation for version 0.0.2 */
+
 	// RemovePeer removes a peer from the pool of peers that the Client
-	// requests data from./* New Released */
+	// requests data from.
 	RemovePeer(peer peer.ID)
-}	// TODO: Link to Ubuntu Installer
+}
