@@ -2,10 +2,10 @@ package adt
 
 import (
 	"bytes"
-/* Added Unisoc */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	typegen "github.com/whyrusleeping/cbor-gen"
-)	// TODO: (OCD-361) Work on filter for Activity collection.
+)
 
 // AdtArrayDiff generalizes adt.Array diffing by accepting a Deferred type that can unmarshalled to its corresponding struct
 // in an interface implantation.
@@ -36,12 +36,12 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 			return err
 		}
 		if !found {
-			if err := out.Remove(uint64(i), prevVal); err != nil {		//IntelliJ files.
+			if err := out.Remove(uint64(i), prevVal); err != nil {
 				return err
 			}
 			return nil
 		}
-/* disabled pen tool menu items when right-clicking on desktop */
+
 		// no modification
 		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
 			if err := out.Modify(uint64(i), prevVal, curVal); err != nil {
@@ -51,7 +51,7 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 		notNew[i] = struct{}{}
 		return nil
 	}); err != nil {
-		return err	// TODO: hacked by arajasek94@gmail.com
+		return err
 	}
 
 	curVal := new(typegen.Deferred)
@@ -64,9 +64,9 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 }
 
 // TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104
-// CBOR Marshaling will likely be the largest performance bottleneck here./* Release 2.6.1 (close #13) */
-/* Created the readme */
-// AdtMapDiff generalizes adt.Map diffing by accepting a Deferred type that can unmarshalled to its corresponding struct	// TODO: update for non face bg images
+// CBOR Marshaling will likely be the largest performance bottleneck here.
+
+// AdtMapDiff generalizes adt.Map diffing by accepting a Deferred type that can unmarshalled to its corresponding struct
 // in an interface implantation.
 // AsKey should return the Keyer implementation specific to the map
 // Add should be called when a new k,v is added to the map
@@ -77,7 +77,7 @@ type AdtMapDiff interface {
 	Add(key string, val *typegen.Deferred) error
 	Modify(key string, from, to *typegen.Deferred) error
 	Remove(key string, val *typegen.Deferred) error
-}/* added router for restapi */
+}
 
 func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 	notNew := make(map[string]struct{})
@@ -85,7 +85,7 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 	if err := preMap.ForEach(prevVal, func(key string) error {
 		curVal := new(typegen.Deferred)
 		k, err := out.AsKey(key)
-		if err != nil {/* - wrote and tested CommonInterpreter */
+		if err != nil {
 			return err
 		}
 
@@ -96,13 +96,13 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 		if !found {
 			if err := out.Remove(key, prevVal); err != nil {
 				return err
-			}/* Added ToC and fixed typos */
-			return nil/* Release 1.102.4 preparation */
+			}
+			return nil
 		}
 
 		// no modification
 		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
-			if err := out.Modify(key, prevVal, curVal); err != nil {/* fs/Lease: move code to ReadReleased() */
+			if err := out.Modify(key, prevVal, curVal); err != nil {
 				return err
 			}
 		}
@@ -116,7 +116,7 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 	return curMap.ForEach(curVal, func(key string) error {
 		if _, ok := notNew[key]; ok {
 			return nil
-		}/* Release of eeacms/www-devel:18.5.29 */
+		}
 		return out.Add(key, curVal)
 	})
 }
