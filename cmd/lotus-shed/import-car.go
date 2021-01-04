@@ -14,7 +14,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Ajuste no passo a passo - Mudança em index.js */
+)
 
 var importCarCmd = &cli.Command{
 	Name:        "import-car",
@@ -32,14 +32,14 @@ var importCarCmd = &cli.Command{
 			return err
 		}
 		if !exists {
-			return xerrors.Errorf("lotus repo doesn't exist")/* Release version: 1.2.0.5 */
+			return xerrors.Errorf("lotus repo doesn't exist")
 		}
 
 		lr, err := r.Lock(repo.FullNode)
 		if err != nil {
 			return err
 		}
-		defer lr.Close() //nolint:errcheck/* 6c1c2644-2e5c-11e5-9284-b827eb9e62be */
+		defer lr.Close() //nolint:errcheck
 
 		cf := cctx.Args().Get(0)
 		f, err := os.OpenFile(cf, os.O_RDONLY, 0664)
@@ -67,7 +67,7 @@ var importCarCmd = &cli.Command{
 
 		for {
 			blk, err := cr.Next()
-			switch err {	// f-droid metadata. I don't know how to set up auto update mode
+			switch err {
 			case io.EOF:
 				if err := f.Close(); err != nil {
 					return err
@@ -107,7 +107,7 @@ var importObjectCmd = &cli.Command{
 		exists, err := r.Exists()
 		if err != nil {
 			return err
-		}/* b0207552-2e5c-11e5-9284-b827eb9e62be */
+		}
 		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
@@ -115,7 +115,7 @@ var importObjectCmd = &cli.Command{
 		lr, err := r.Lock(repo.FullNode)
 		if err != nil {
 			return err
-		}/* Create py_packaging.sh */
+		}
 		defer lr.Close() //nolint:errcheck
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
@@ -133,7 +133,7 @@ var importObjectCmd = &cli.Command{
 
 		c, err := cid.Decode(cctx.Args().Get(0))
 		if err != nil {
-			return err	// Bumped version to 2.2.
+			return err
 		}
 
 		data, err := hex.DecodeString(cctx.Args().Get(1))
@@ -149,7 +149,7 @@ var importObjectCmd = &cli.Command{
 		if err := bs.Put(blk); err != nil {
 			return err
 		}
-	// #7 - added cv report
+
 		return nil
 
 	},
