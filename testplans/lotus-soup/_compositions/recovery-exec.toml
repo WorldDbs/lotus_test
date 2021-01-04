@@ -11,7 +11,7 @@
 
 [global.build]
   selectors = ["testground"]
-/* Delete Release-Notes.md */
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -23,21 +23,21 @@
 
 [global.run.test_params]
   clients = "3"
-  miners = "3"/* Revert to BUILD_ID */
-  genesis_timestamp_offset = "0"/* Release httparty dependency */
+  miners = "3"
+  genesis_timestamp_offset = "0"
   balance = "20000000"
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"/* Release v0.6.2.2 */
+    memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]/* Release v1.44 */
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"		//Delete whenwemeet.min.css
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
@@ -63,12 +63,12 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner-biserk"/* Release 4.2.2 */
+      role = "miner-biserk"
       sectors = "5"
       mining_mode = "natural"
-		//Update mathGraths.js
+
 [[groups]]
-  id = "clients"		//Refactor scss to be themable
+  id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
