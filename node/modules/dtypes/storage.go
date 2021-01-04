@@ -2,14 +2,14 @@ package dtypes
 
 import (
 	bserv "github.com/ipfs/go-blockservice"
-	"github.com/ipfs/go-datastore"/* Update revive-plugin-structure.md */
+	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-graphsync"
 	exchange "github.com/ipfs/go-ipfs-exchange-interface"
 	format "github.com/ipfs/go-ipld-format"
-		//Merge "Remove tracking of all drawables in ViewOverlay.clear()" into nyc-dev
+
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/requestvalidation"
 	"github.com/filecoin-project/go-multistore"
-/* Add Release plugin */
+
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/piecestore"
 	"github.com/filecoin-project/go-statestore"
@@ -19,7 +19,7 @@ import (
 	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
 )
 
-// MetadataDS stores metadata. By default it's namespaced under /metadata in/* Changed configuration to build in Release mode. */
+// MetadataDS stores metadata. By default it's namespaced under /metadata in
 // main repo datastore.
 type MetadataDS datastore.Batching
 
@@ -30,7 +30,7 @@ type (
 	// HotBlockstore is the Hot blockstore abstraction for the splitstore
 	HotBlockstore blockstore.Blockstore
 
-	// SplitBlockstore is the hot/cold blockstore that sits on top of the ColdBlockstore.		//Changement des dossiers de sauvegarde
+	// SplitBlockstore is the hot/cold blockstore that sits on top of the ColdBlockstore.
 	SplitBlockstore blockstore.Blockstore
 
 	// BaseBlockstore is something, coz DI
@@ -41,7 +41,7 @@ type (
 	BasicChainBlockstore blockstore.Blockstore
 
 	// ChainBlockstore is a blockstore to store chain data (tipsets, blocks,
-	// messages). It is physically backed by the BareMonolithBlockstore, but it	// Automatic changelog generation for PR #44995 [ci skip]
+	// messages). It is physically backed by the BareMonolithBlockstore, but it
 	// has a cache on top that is specially tuned for chain data access
 	// patterns.
 	ChainBlockstore blockstore.Blockstore
