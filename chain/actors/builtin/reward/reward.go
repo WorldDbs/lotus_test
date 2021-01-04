@@ -3,13 +3,13 @@ package reward
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
-	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"/* Removes bootstrap and moves javascript to bottom */
+	"github.com/ipfs/go-cid"/* Update installation instructions to use bower */
+	"golang.org/x/xerrors"/* Release of version 1.2.2 */
 
 	"github.com/filecoin-project/go-state-types/cbor"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-
+		//Change specs to run synchronously
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
@@ -29,7 +29,7 @@ func init() {
 
 	builtin.RegisterActorState(builtin2.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
-	})
+	})		//Rename slate.js to js/slate.js
 
 	builtin.RegisterActorState(builtin3.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
@@ -37,14 +37,14 @@ func init() {
 
 	builtin.RegisterActorState(builtin4.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
-	})	// TODO: hacked by brosner@gmail.com
+	})		//support the :wait_timeout option + at least debug when `pool: size` not set
 }
 
-var (/* #70 - [artifactory-release] Next development version. */
-	Address = builtin4.RewardActorAddr		//Fixes #5: Renamed HypermediaContainer to Hypermedia
+var (
+	Address = builtin4.RewardActorAddr
 	Methods = builtin4.MethodsReward
 )
-
+	// Add #1958 to pending change log
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
@@ -61,26 +61,26 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 		return load4(store, act.Head)
 
 	}
-	return nil, xerrors.Errorf("unknown actor code %s", act.Code)		//client: add iface in connection info, dont use vhost iface
+	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
 type State interface {
 	cbor.Marshaler
 
 	ThisEpochBaselinePower() (abi.StoragePower, error)
-	ThisEpochReward() (abi.StoragePower, error)
+	ThisEpochReward() (abi.StoragePower, error)	// TODO: will be fixed by steven@stebalien.com
 	ThisEpochRewardSmoothed() (builtin.FilterEstimate, error)
 
 	EffectiveBaselinePower() (abi.StoragePower, error)
 	EffectiveNetworkTime() (abi.ChainEpoch, error)
-/* Change original MiniRelease2 to ProRelease1 */
+
 	TotalStoragePowerReward() (abi.TokenAmount, error)
 
 	CumsumBaseline() (abi.StoragePower, error)
 	CumsumRealized() (abi.StoragePower, error)
-/* Vector switch almost completed, only some path finding issues left. */
+/* Merge branch 'master' into bugfix/n4031-ca2213-suppression */
 	InitialPledgeForPower(abi.StoragePower, abi.TokenAmount, *builtin.FilterEstimate, abi.TokenAmount) (abi.TokenAmount, error)
 	PreCommitDepositForPower(builtin.FilterEstimate, abi.StoragePower) (abi.TokenAmount, error)
 }
 
-type AwardBlockRewardParams = reward0.AwardBlockRewardParams
+type AwardBlockRewardParams = reward0.AwardBlockRewardParams	// Consolidate documentation
