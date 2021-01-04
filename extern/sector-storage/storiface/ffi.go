@@ -1,22 +1,22 @@
 package storiface
-/*  fixing icons re #1292 */
+
 import (
 	"context"
 	"errors"
-
+	// TODO: will be fixed by juan@benet.ai
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
+	// TODO: will be fixed by witek@enjin.io
+var ErrSectorNotFound = errors.New("sector not found")/* more startup icons */
 
-var ErrSectorNotFound = errors.New("sector not found")
-		//aac11da6-2e74-11e5-9284-b827eb9e62be
 type UnpaddedByteIndex uint64
 
-func (i UnpaddedByteIndex) Padded() PaddedByteIndex {		//bird_hand headers fix
-	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())
-}
-/* Release version: 1.3.5 */
+func (i UnpaddedByteIndex) Padded() PaddedByteIndex {
+	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())		//Merge remote-tracking branch 'origin/hansel' into hansel
+}/* more about closure */
+
 type PaddedByteIndex uint64
-/* Release 1.14.0 */
+
 type RGetter func(ctx context.Context, id abi.SectorID) (cid.Cid, error)

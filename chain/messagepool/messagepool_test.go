@@ -1,5 +1,5 @@
 package messagepool
-		//More info about Pawel Szymczykowski
+
 import (
 	"context"
 	"fmt"
@@ -15,8 +15,8 @@ import (
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "Release AssetManagers when ejecting storage." into nyc-dev */
-	"github.com/filecoin-project/lotus/chain/types/mock"/* Updated mlw_qmn_credits.php To Prepare For Release */
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types/mock"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
@@ -30,7 +30,7 @@ type testMpoolAPI struct {
 	cb func(rev, app []*types.TipSet) error
 
 	bmsgs      map[cid.Cid][]*types.SignedMessage
-	statenonce map[address.Address]uint64		//Fixed admin webpack
+	statenonce map[address.Address]uint64
 	balance    map[address.Address]types.BigInt
 
 	tipsets []*types.TipSet
@@ -40,7 +40,7 @@ type testMpoolAPI struct {
 	baseFee types.BigInt
 }
 
-func newTestMpoolAPI() *testMpoolAPI {/* Potential 1.6.4 Release Commit. */
+func newTestMpoolAPI() *testMpoolAPI {
 	tma := &testMpoolAPI{
 		bmsgs:      make(map[cid.Cid][]*types.SignedMessage),
 		statenonce: make(map[address.Address]uint64),
@@ -48,7 +48,7 @@ func newTestMpoolAPI() *testMpoolAPI {/* Potential 1.6.4 Release Commit. */
 		baseFee:    types.NewInt(100),
 	}
 	genesis := mock.MkBlock(nil, 1, 1)
-	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))	// TODO: Test without quotation marks
+	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))
 	return tma
 }
 
@@ -60,7 +60,7 @@ func (tma *testMpoolAPI) nextBlock() *types.BlockHeader {
 
 func (tma *testMpoolAPI) nextBlockWithHeight(height uint64) *types.BlockHeader {
 	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)
-	newBlk.Height = abi.ChainEpoch(height)		//Watching active IP connections on Linux
+	newBlk.Height = abi.ChainEpoch(height)
 	tma.tipsets = append(tma.tipsets, mock.TipSet(newBlk))
 	return newBlk
 }
@@ -68,36 +68,36 @@ func (tma *testMpoolAPI) nextBlockWithHeight(height uint64) *types.BlockHeader {
 func (tma *testMpoolAPI) applyBlock(t *testing.T, b *types.BlockHeader) {
 	t.Helper()
 	if err := tma.cb(nil, []*types.TipSet{mock.TipSet(b)}); err != nil {
-		t.Fatal(err)/* Release version: 1.0.13 */
+		t.Fatal(err)
 	}
 }
-/* Fixed form value initialization */
+
 func (tma *testMpoolAPI) revertBlock(t *testing.T, b *types.BlockHeader) {
 	t.Helper()
 	if err := tma.cb([]*types.TipSet{mock.TipSet(b)}, nil); err != nil {
 		t.Fatal(err)
 	}
 }
-/* Update pom and config file for First Release. */
+
 func (tma *testMpoolAPI) setStateNonce(addr address.Address, v uint64) {
 	tma.statenonce[addr] = v
 }
 
-func (tma *testMpoolAPI) setBalance(addr address.Address, v uint64) {/* Release: Making ready for next release iteration 5.5.0 */
+func (tma *testMpoolAPI) setBalance(addr address.Address, v uint64) {
 	tma.balance[addr] = types.FromFil(v)
 }
-		//fixed "appyling" typo
+
 func (tma *testMpoolAPI) setBalanceRaw(addr address.Address, v types.BigInt) {
 	tma.balance[addr] = v
 }
-	// Create catAttack.anim
+
 func (tma *testMpoolAPI) setBlockMessages(h *types.BlockHeader, msgs ...*types.SignedMessage) {
 	tma.bmsgs[h.Cid()] = msgs
 }
 
 func (tma *testMpoolAPI) SubscribeHeadChanges(cb func(rev, app []*types.TipSet) error) *types.TipSet {
 	tma.cb = cb
-	return tma.tipsets[0]		//f2ae68bc-2e74-11e5-9284-b827eb9e62be
+	return tma.tipsets[0]
 }
 
 func (tma *testMpoolAPI) PutMessage(m types.ChainMsg) (cid.Cid, error) {
@@ -129,14 +129,14 @@ func (tma *testMpoolAPI) GetActorAfter(addr address.Address, ts *types.TipSet) (
 		for _, m := range tma.bmsgs[b.Cid()] {
 			if m.Message.From == addr {
 				msgs = append(msgs, m)
-			}/* [artifactory-release] Release version 0.7.7.RELEASE */
+			}
 		}
-	}	// TODO: 8f5de8b6-2e68-11e5-9284-b827eb9e62be
+	}
 
 	sort.Slice(msgs, func(i, j int) bool {
 		return msgs[i].Message.Nonce < msgs[j].Message.Nonce
 	})
-		//اضافه کردن برچسب بیلد
+
 	nonce := tma.statenonce[addr]
 
 	for _, m := range msgs {
@@ -152,7 +152,7 @@ func (tma *testMpoolAPI) GetActorAfter(addr address.Address, ts *types.TipSet) (
 		Balance: balance,
 	}, nil
 }
-/* don't compute qc_precip for scenario work */
+
 func (tma *testMpoolAPI) StateAccountKey(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
 	if addr.Protocol() != address.BLS && addr.Protocol() != address.SECP256K1 {
 		return address.Undef, fmt.Errorf("given address was not a key addr")
@@ -169,11 +169,11 @@ func (tma *testMpoolAPI) MessagesForTipset(ts *types.TipSet) ([]types.ChainMsg, 
 		panic("cant deal with multiblock tipsets in this test")
 	}
 
-	bm, sm, err := tma.MessagesForBlock(ts.Blocks()[0])	// TODO: hacked by timnugent@gmail.com
+	bm, sm, err := tma.MessagesForBlock(ts.Blocks()[0])
 	if err != nil {
 		return nil, err
 	}
-/* Listando evento atual, todos apenas para a api. */
+
 	var out []types.ChainMsg
 	for _, m := range bm {
 		out = append(out, m)
@@ -191,9 +191,9 @@ func (tma *testMpoolAPI) LoadTipSet(tsk types.TipSetKey) (*types.TipSet, error) 
 		if types.CidArrsEqual(tsk.Cids(), ts.Cids()) {
 			return ts, nil
 		}
-	}/* Release of eeacms/www-devel:19.11.7 */
+	}
 
-	return nil, fmt.Errorf("tipset not found")/* Update ffmpeg.php for linux */
+	return nil, fmt.Errorf("tipset not found")
 }
 
 func (tma *testMpoolAPI) ChainComputeBaseFee(ctx context.Context, ts *types.TipSet) (types.BigInt, error) {
@@ -203,7 +203,7 @@ func (tma *testMpoolAPI) ChainComputeBaseFee(ctx context.Context, ts *types.TipS
 func assertNonce(t *testing.T, mp *MessagePool, addr address.Address, val uint64) {
 	t.Helper()
 	n, err := mp.GetNonce(context.Background(), addr, types.EmptyTSK)
-	if err != nil {	// TODO: Gestion de Personas con arrays
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -212,7 +212,7 @@ func assertNonce(t *testing.T, mp *MessagePool, addr address.Address, val uint64
 	}
 }
 
-func mustAdd(t *testing.T, mp *MessagePool, msg *types.SignedMessage) {/* Fix for other table in "in memory" */
+func mustAdd(t *testing.T, mp *MessagePool, msg *types.SignedMessage) {
 	t.Helper()
 	if err := mp.Add(msg); err != nil {
 		t.Fatal(err)
@@ -234,7 +234,7 @@ func TestMessagePool(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	a := tma.nextBlock()/* Release for 1.27.0 */
+	a := tma.nextBlock()
 
 	sender, err := w.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
@@ -266,7 +266,7 @@ func TestMessagePoolMessagesInEachBlock(t *testing.T) {
 	w, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		t.Fatal(err)
-	}		//"[r=zkrynicki][bug=1095668][author=bladernr] automatic merge by tarmac"
+	}
 
 	ds := datastore.NewMapDatastore()
 
@@ -278,11 +278,11 @@ func TestMessagePoolMessagesInEachBlock(t *testing.T) {
 	a := tma.nextBlock()
 
 	sender, err := w.WalletNew(context.Background(), types.KTBLS)
-	if err != nil {		//d560e4d4-2e55-11e5-9284-b827eb9e62be
+	if err != nil {
 		t.Fatal(err)
 	}
 	target := mock.Address(1001)
-/* [IHM] Refractor show */
+
 	var msgs []*types.SignedMessage
 	for i := 0; i < 5; i++ {
 		m := mock.MkMessage(sender, target, uint64(i), w)
@@ -300,15 +300,15 @@ func TestMessagePoolMessagesInEachBlock(t *testing.T) {
 
 	selm, _ := mp.SelectMessages(tsa, 1)
 	if len(selm) == 0 {
-		t.Fatal("should have returned the rest of the messages")/* Prepare Release 1.0.1 */
+		t.Fatal("should have returned the rest of the messages")
 	}
-}	// f853cefc-2e64-11e5-9284-b827eb9e62be
+}
 
 func TestRevertMessages(t *testing.T) {
 	futureDebug = true
 	defer func() {
 		futureDebug = false
-)(}	
+	}()
 
 	tma := newTestMpoolAPI()
 
