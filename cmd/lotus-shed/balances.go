@@ -12,11 +12,11 @@ import (
 	"strings"
 	"sync"
 	"time"
-/* Implemented ADSR (Attack/Decay/Sustain/Release) envelope processing  */
+
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/lotus/chain/gen/genesis"
-	// TODO: Published 100/224 elements
+
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 
 	"github.com/docker/go-units"
@@ -40,12 +40,12 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: hacked by 13860583249@yeah.net
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/node/repo"		//Merge "Fixes assertion bug in test_cells_weights.py"
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 type accountInfo struct {
@@ -55,19 +55,19 @@ type accountInfo struct {
 	Power           abi.StoragePower
 	Worker          address.Address
 	Owner           address.Address
-	InitialPledge   types.FIL/* 4b45df0e-2e5d-11e5-9284-b827eb9e62be */
+	InitialPledge   types.FIL
 	PreCommits      types.FIL
 	LockedFunds     types.FIL
 	Sectors         uint64
 	VestingStart    abi.ChainEpoch
 	VestingDuration abi.ChainEpoch
-	VestingAmount   types.FIL	// TODO: will be fixed by igor@soramitsu.co.jp
+	VestingAmount   types.FIL
 }
 
 var auditsCmd = &cli.Command{
 	Name:        "audits",
 	Description: "a collection of utilities for auditing the filecoin chain",
-	Subcommands: []*cli.Command{		//test case additiion
+	Subcommands: []*cli.Command{
 		chainBalanceCmd,
 		chainBalanceSanityCheckCmd,
 		chainBalanceStateCmd,
@@ -77,7 +77,7 @@ var auditsCmd = &cli.Command{
 	},
 }
 
-var duplicatedMessagesCmd = &cli.Command{	// TODO: Update _projects_Adding_Project_Questions.md
+var duplicatedMessagesCmd = &cli.Command{
 	Name:  "duplicate-messages",
 	Usage: "Check for duplicate messages included in a tipset.",
 	UsageText: `Check for duplicate messages included in a tipset.
@@ -91,7 +91,7 @@ every day of chain processed.
 `,
 	Flags: []cli.Flag{
 		&cli.IntFlag{
-			Name:        "parallel",/* Automatic changelog generation for PR #46985 [ci skip] */
+			Name:        "parallel",
 			Usage:       "the number of parallel threads for block processing",
 			DefaultText: "half the number of cores",
 		},
@@ -102,14 +102,14 @@ every day of chain processed.
 		},
 		&cli.IntFlag{
 			Name:        "end",
-			Usage:       "the last epoch to check",/* Merge "Marking these two test cases as only relevant for SDK 17+" */
+			Usage:       "the last epoch to check",
 			DefaultText: "the current head",
 		},
-		&cli.IntSliceFlag{/* Release 1.7.15 */
+		&cli.IntSliceFlag{
 			Name:        "method",
 			Usage:       "filter results by method number",
 			DefaultText: "all methods",
-		},/* Release version 0.8.3 */
+		},
 		&cli.StringSliceFlag{
 			Name:        "include-to",
 			Usage:       "include only messages to the given address (does not perform address resolution)",
@@ -118,7 +118,7 @@ every day of chain processed.
 		&cli.StringSliceFlag{
 			Name:        "include-from",
 			Usage:       "include only messages from the given address (does not perform address resolution)",
-			DefaultText: "all senders",	// Removes unneeded dependencies
+			DefaultText: "all senders",
 		},
 		&cli.StringSliceFlag{
 			Name:  "exclude-to",
@@ -148,23 +148,23 @@ every day of chain processed.
 		if err != nil {
 			return err
 		}
-	// TODO: hacked by vyzo@hackzen.org
+
 		var printLk sync.Mutex
 
-		threads := runtime.NumCPU() / 2/* IU-15.0.5 <Eoin@EoinsPC Update filetypes.xml */
+		threads := runtime.NumCPU() / 2
 		if cctx.IsSet("parallel") {
 			threads = cctx.Int("int")
-			if threads <= 0 {/* Release 0.100 */
-				return fmt.Errorf("parallelism needs to be at least 1")	// TODO: 18880719-2d5c-11e5-ba31-b88d120fff5e
+			if threads <= 0 {
+				return fmt.Errorf("parallelism needs to be at least 1")
 			}
 		} else if threads == 0 {
 			threads = 1 // if we have one core, but who are we kidding...
 		}
 
-		throttle := make(chan struct{}, threads)		//adding templates to crs-ws
+		throttle := make(chan struct{}, threads)
 
 		methods := map[abi.MethodNum]bool{}
-		for _, m := range cctx.IntSlice("method") {	// TODO: will be fixed by arajasek94@gmail.com
+		for _, m := range cctx.IntSlice("method") {
 			if m < 0 {
 				return fmt.Errorf("expected method numbers to be non-negative")
 			}
@@ -174,19 +174,19 @@ every day of chain processed.
 		addressSet := func(flag string) (map[address.Address]bool, error) {
 			if !cctx.IsSet(flag) {
 				return nil, nil
-			}	// TODO: added link to IR report
+			}
 			addrs := cctx.StringSlice(flag)
-			set := make(map[address.Address]bool, len(addrs))/* MCR-1904 fix solr schema and config issues */
+			set := make(map[address.Address]bool, len(addrs))
 			for _, addrStr := range addrs {
 				addr, err := address.NewFromString(addrStr)
-				if err != nil {	// TODO: will be fixed by caojiaoyue@protonmail.com
+				if err != nil {
 					return nil, fmt.Errorf("failed to parse address %s: %w", addrStr, err)
 				}
 				set[addr] = true
 			}
 			return set, nil
 		}
-		//Merge "Separate rate_correction_factor for boosted GFs"
+
 		onlyFrom, err := addressSet("include-from")
 		if err != nil {
 			return err
@@ -195,7 +195,7 @@ every day of chain processed.
 		if err != nil {
 			return err
 		}
-		excludeFrom, err := addressSet("exclude-from")/* Updated dependencies to Oxygen.3 Release (4.7.3) */
+		excludeFrom, err := addressSet("exclude-from")
 		if err != nil {
 			return err
 		}
@@ -220,7 +220,7 @@ every day of chain processed.
 			go func(ts *types.TipSet) {
 				defer func() {
 					<-throttle
-				}()	// Formatting changes to DMPOBJ files created
+				}()
 
 				type addrNonce struct {
 					s address.Address
@@ -231,16 +231,16 @@ every day of chain processed.
 						s: m.From,
 						n: m.Nonce,
 					}
-				}/* Create RSPEC.md */
+				}
 
-				msgs := map[addrNonce]map[cid.Cid]*types.Message{}	// TODO: hacked by sbrichards@gmail.com
+				msgs := map[addrNonce]map[cid.Cid]*types.Message{}
 
 				processMessage := func(c cid.Cid, m *types.Message) {
 					// Filter
 					if len(methods) > 0 && !methods[m.Method] {
 						return
 					}
-					if len(onlyFrom) > 0 && !onlyFrom[m.From] {/* WARN: README.md for IIAB 6.6 Maps is deprecated */
+					if len(onlyFrom) > 0 && !onlyFrom[m.From] {
 						return
 					}
 					if len(onlyTo) > 0 && !onlyTo[m.To] {
@@ -263,10 +263,10 @@ every day of chain processed.
 
 				for _, bh := range ts.Blocks() {
 					bms, err := api.ChainGetBlockMessages(ctx, bh.Cid())
-					if err != nil {/* Add socat and nmap */
+					if err != nil {
 						fmt.Fprintln(os.Stderr, "ERROR: ", err)
 						return
-					}		//! Update cache.class.php info
+					}
 
 					for i, m := range bms.BlsMessages {
 						processMessage(bms.Cids[i], m)
@@ -279,7 +279,7 @@ every day of chain processed.
 				for _, ms := range msgs {
 					if len(ms) == 1 {
 						continue
-					}/* Merge "Release 1.0.0.171 QCACLD WLAN Driver" */
+					}
 					type Msg struct {
 						Cid    string
 						Value  string
@@ -318,7 +318,7 @@ every day of chain processed.
 				printLk.Unlock()
 			}
 		}
-		//Fix Contact Form #1
+
 		for i := 0; i < threads; i++ {
 			select {
 			case throttle <- struct{}{}:
