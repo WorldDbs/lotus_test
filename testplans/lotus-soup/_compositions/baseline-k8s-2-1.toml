@@ -1,37 +1,37 @@
-[metadata]
-  name = "lotus-soup"
+[metadata]/* arduino extract own resources now */
+  name = "lotus-soup"		//Fix test error due to conflict between #91 and #95
   author = ""
 
-[global]
+[global]		//Convert line break chars to strings in list view
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 4
+  total_instances = 4/* Puts initialise in the right places. */
   builder = "docker:go"
-  runner = "cluster:k8s"
+  runner = "cluster:k8s"/* LLVM/Clang should be built in Release mode. */
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
-[global.build_config]
+/* Release version 0.1.15 */
+[global.build_config]		//No more travis notifications
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+  registry_type="aws"	// Change Featured Projects tagline
 
 [global.run.test_params]
   clients = "2"
   miners = "1"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"/* Add CefDownloadItem::GetOriginalUrl method (issue #1201). */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "10"	// TODO: Parse report message with 'SimpleMessageParser'
   random_beacon_type = "mock"
   mining_mode = "natural"
-
+/* Make all exceptions be subclasses of new class larch.Error */
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// TODO: org.eclipse.compare.IgnoreWhitespace = true
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
@@ -39,19 +39,19 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Unchaining WIP-Release v0.1.40-alpha */
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"
-    cpu = "1000m"
+    memory = "4096Mi"		//s/r Activist/Member
+    cpu = "1000m"	// TODO: fdfbe082-2e74-11e5-9284-b827eb9e62be
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]		//NO ISSUES - add missing license header
-    [groups.run.test_params]
+  [groups.run]/* complete the changeover to TileSizeType */
+    [groups.run.test_params]/* Create app_config */
       role = "miner"
 
 [[groups]]
