@@ -22,7 +22,7 @@ func load4(store adt.Store, root cid.Cid) (State, error) {
 
 type state4 struct {
 	account4.State
-	store adt.Store	// + fixed bug with new re-linking of C3i networks from MUL files
+	store adt.Store
 }
 
 func (s *state4) PubkeyAddress() (address.Address, error) {
