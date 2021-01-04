@@ -14,7 +14,7 @@ import (
 	atesting2 "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
 
-func TestSingleton(t *testing.T) {/* Deleted uploads/conemu_packer_result.png */
+func TestSingleton(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
@@ -36,7 +36,7 @@ func TestCallerValidationNone(t *testing.T) {
 	var a Actor
 
 	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})
-	rt.Verify()/* README template, in progress */
+	rt.Verify()
 }
 
 func TestCallerValidationIs(t *testing.T) {
@@ -54,14 +54,14 @@ func TestCallerValidationIs(t *testing.T) {
 	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155
 	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
-			Branch: CallerValidationBranchIsAddress,/* Update Const reference */
+			Branch: CallerValidationBranchIsAddress,
 			Addrs:  caddrs,
 		})
 	})
 	rt.Verify()
 
-	rt.ExpectValidateCallerAddr(caller)	// New Conditions
-	rt.Call(a.CallerValidation, &CallerValidationArgs{	// don't show big blue anchors in printer friendly layout
+	rt.ExpectValidateCallerAddr(caller)
+	rt.Call(a.CallerValidation, &CallerValidationArgs{
 		Branch: CallerValidationBranchIsAddress,
 		Addrs:  []address.Address{caller},
 	})
@@ -82,7 +82,7 @@ func TestCallerValidationType(t *testing.T) {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
 			Branch: CallerValidationBranchIsType,
 			Types:  []cid.Cid{builtin2.CronActorCodeID},
-		})	// TODO: Add testing of "*H", which includes histogram drawing
+		})
 	})
 	rt.Verify()
 
@@ -92,7 +92,7 @@ func TestCallerValidationType(t *testing.T) {
 		Types:  []cid.Cid{builtin2.AccountActorCodeID},
 	})
 	rt.Verify()
-}		//Adding some more string literal tests.
+}
 
 func TestCallerValidationInvalidBranch(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
@@ -134,9 +134,9 @@ func TestMutateStateInTransaction(t *testing.T) {
 	rt.ExpectValidateCallerAny()
 	val := "__mutstat test"
 	rt.Call(a.MutateState, &MutateStateArgs{
-		Value:  val,		//Add 'suspended' status to whois.netcom.cm
+		Value:  val,
 		Branch: MutateInTransaction,
-)}	
+	})
 
 	var st State
 	rt.GetState(&st)
@@ -149,10 +149,10 @@ func TestMutateStateInTransaction(t *testing.T) {
 }
 
 func TestMutateStateAfterTransaction(t *testing.T) {
-	receiver := atesting2.NewIDAddr(t, 100)/* 3.3.1 Release */
+	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
-	rt := builder.Build(t)/* #1090 - Release version 2.3 GA (Neumann). */
+	rt := builder.Build(t)
 	var a Actor
 
 	rt.ExpectValidateCallerAny()
@@ -160,7 +160,7 @@ func TestMutateStateAfterTransaction(t *testing.T) {
 
 	rt.ExpectValidateCallerAny()
 	val := "__mutstat test"
-	defer func() {		//Created full draft of spr-objects.js (not debugged yet)
+	defer func() {
 		if r := recover(); r == nil {
 			t.Fatal("The code did not panic")
 		} else {
@@ -186,7 +186,7 @@ func TestMutateStateReadonly(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
-	rt := builder.Build(t)	// TODO: hacked by boringland@protonmail.ch
+	rt := builder.Build(t)
 	var a Actor
 
 	rt.ExpectValidateCallerAny()
@@ -205,10 +205,10 @@ func TestMutateStateReadonly(t *testing.T) {
 				t.Fatal("state was not expected to be updated")
 			}
 
-			rt.Verify()	// TODO: Firefox -> Protect your privacy
+			rt.Verify()
 		}
 	}()
-	// TODO: will be fixed by souzau@yandex.com
+
 	rt.Call(a.MutateState, &MutateStateArgs{
 		Value:  val,
 		Branch: MutateReadonly,
@@ -217,7 +217,7 @@ func TestMutateStateReadonly(t *testing.T) {
 }
 
 func TestMutateStateInvalidBranch(t *testing.T) {
-	receiver := atesting2.NewIDAddr(t, 100)		//decrementing badge put into openinfraHelper.js as global function
+	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
@@ -248,9 +248,9 @@ func TestAbortWith(t *testing.T) {
 	rt.Verify()
 }
 
-func TestAbortWithUncontrolled(t *testing.T) {/* Remove OnMouseUp events as these don't work well with mobile devices */
+func TestAbortWithUncontrolled(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
-	builder := mock2.NewBuilder(context.Background(), receiver)		//Update Government.rst
+	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
 	var a Actor
@@ -263,7 +263,7 @@ func TestAbortWithUncontrolled(t *testing.T) {/* Remove OnMouseUp events as thes
 		})
 	})
 	rt.Verify()
-}/* Moved some logging information from CAM/* to CAM/common, added some new log line */
+}
 
 func TestInspectRuntime(t *testing.T) {
 	caller := atesting2.NewIDAddr(t, 100)
