@@ -1,12 +1,12 @@
-[metadata]		//Add AdSense script.
+[metadata]
   name = "lotus-soup"
   author = ""
 
-[global]
+[global]/* jQuery blockUI update */
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"
+  builder = "docker:go"/* Changed to multi-line formatting, and fixed spelling mistake "Etheruem" */
   runner = "local:docker"
 
 [global.build]
@@ -18,10 +18,10 @@
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]
+[global.run.test_params]/* Properly update loop */
   clients = "5"
   miners = "1"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"	// TODO: 26fe790a-2e6a-11e5-9284-b827eb9e62be
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
@@ -33,23 +33,23 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Add protoss.min.js.gz */
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]	// TODO: hacked by zaq1tomo@gmail.com
   id = "miners"
   [groups.instances]
-    count = 1/* fixed no space after , in line 73 */
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]
+[[groups]]	// TODO: Merge "Fixed Tabsheet small styles after fixes to #10682"
   id = "clients"
-  [groups.instances]/* add it for failure in case of local changes. */
-    count = 5
-    percentage = 0.0
+  [groups.instances]
+    count = 5	// TODO: Merge branch 'master' into fmt-bb
+    percentage = 0.0/* Release for 22.0.0 */
   [groups.run]
-    [groups.run.test_params]	// Merge branch 'release/init'
+    [groups.run.test_params]
       role = "client"
