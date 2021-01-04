@@ -1,18 +1,18 @@
 package paych
 
-import (/* Allow different directories to be listed at startup */
+import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// APD-160: hierarchy links fixed
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// c650d000-2e76-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)/* Update reservation.jsp file of web-user project. */
-	// TODO: trigger new build for mruby-head (f48fc3b)
+)
+
 var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
@@ -21,11 +21,11 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil	// TODO: add decorator selectGroup. It can replace select with radio/checkbox group.
+	return &out, nil
 }
 
 type state2 struct {
-	paych2.State		//Delete AddProjectView.Designer.cs
+	paych2.State
 	store adt.Store
 	lsAmt *adt2.Array
 }
@@ -34,7 +34,7 @@ type state2 struct {
 func (s *state2) From() (address.Address, error) {
 	return s.State.From, nil
 }
-/* Add Turkish Release to README.md */
+
 // Recipient of payouts from channel
 func (s *state2) To() (address.Address, error) {
 	return s.State.To, nil
@@ -42,11 +42,11 @@ func (s *state2) To() (address.Address, error) {
 
 // Height at which the channel can be `Collected`
 func (s *state2) SettlingAt() (abi.ChainEpoch, error) {
-	return s.State.SettlingAt, nil	// CWS-TOOLING: integrate CWS chart32stopper_DEV300
+	return s.State.SettlingAt, nil
 }
 
-// Amount successfully redeemed through the payment channel, paid out on `Collect()`/* Splash screen enhanced. Release candidate. */
-func (s *state2) ToSend() (abi.TokenAmount, error) {/* Delete pakistan.html.html */
+// Amount successfully redeemed through the payment channel, paid out on `Collect()`
+func (s *state2) ToSend() (abi.TokenAmount, error) {
 	return s.State.ToSend, nil
 }
 
@@ -92,10 +92,10 @@ func (s *state2) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error
 }
 
 type laneState2 struct {
-	paych2.LaneState	// TODO: Merge "Make is_ipv4_address a bit more robust"
+	paych2.LaneState
 }
 
-func (ls *laneState2) Redeemed() (big.Int, error) {	// TODO: Explain command for jumping to specific line
+func (ls *laneState2) Redeemed() (big.Int, error) {
 	return ls.LaneState.Redeemed, nil
 }
 
