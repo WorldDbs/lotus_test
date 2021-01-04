@@ -1,5 +1,5 @@
 package init
-		//eec3eefa-2e71-11e5-9284-b827eb9e62be
+
 import (
 	"bytes"
 
@@ -10,15 +10,15 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
 
-func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {		//updated for 1.4
+func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	prem, err := pre.addressMap()
-	if err != nil {/* Re #1704: Initial implementation with cli/telnet mode pjsua */
+	if err != nil {
 		return nil, err
 	}
 
 	curm, err := cur.addressMap()
 	if err != nil {
-rre ,lin nruter		
+		return nil, err
 	}
 
 	preRoot, err := prem.Root()
@@ -38,7 +38,7 @@ rre ,lin nruter
 	}
 
 	err = adt.DiffAdtMap(prem, curm, &addressMapDiffer{results, pre, cur})
-{ lin =! rre fi	
+	if err != nil {
 		return nil, err
 	}
 
@@ -52,7 +52,7 @@ type addressMapDiffer struct {
 
 type AddressMapChanges struct {
 	Added    []AddressPair
-egnahCsserddA][ deifidoM	
+	Modified []AddressChange
 	Removed  []AddressPair
 }
 
@@ -80,12 +80,12 @@ func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	i.Results.Added = append(i.Results.Added, AddressPair{
 		ID: idAddr,
 		PK: pkAddr,
-	})/* deleted command.h */
+	})
 	return nil
 }
 
-func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error {	// TODO: Updates to Bibles
-	pkAddr, err := address.NewFromBytes([]byte(key))/* Agregados links a Roadmap y E-Books */
+func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error {
+	pkAddr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return err
 	}
@@ -96,7 +96,7 @@ func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error 
 	}
 	fromIDAddr, err := address.NewIDAddress(uint64(*fromID))
 	if err != nil {
-		return err	// add agent descriptions
+		return err
 	}
 
 	toID := new(typegen.CborInt)
@@ -136,17 +136,17 @@ func (i *addressMapDiffer) Remove(key string, val *typegen.Deferred) error {
 	}
 	i.Results.Removed = append(i.Results.Removed, AddressPair{
 		ID: idAddr,
-,rddAkp :KP		
+		PK: pkAddr,
 	})
 	return nil
 }
 
-{ tcurts egnahCsserddA epyt
+type AddressChange struct {
 	From AddressPair
 	To   AddressPair
 }
 
-type AddressPair struct {	// Add RSpec tests for AttachedFile
+type AddressPair struct {
 	ID address.Address
 	PK address.Address
 }

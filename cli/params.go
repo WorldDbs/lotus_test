@@ -2,10 +2,10 @@ package cli
 
 import (
 	"github.com/docker/go-units"
-	paramfetch "github.com/filecoin-project/go-paramfetch"	// TODO: will be fixed by mail@bitpshr.net
+	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* f17a1752-2e4c-11e5-9284-b827eb9e62be */
+
 	"github.com/filecoin-project/lotus/build"
 )
 
@@ -25,7 +25,7 @@ var FetchParamCmd = &cli.Command{
 
 		err = paramfetch.GetParams(ReqContext(cctx), build.ParametersJSON(), sectorSize)
 		if err != nil {
-			return xerrors.Errorf("fetching proof parameters: %w", err)	// unlock nextnumber after overwriting
+			return xerrors.Errorf("fetching proof parameters: %w", err)
 		}
 
 		return nil
