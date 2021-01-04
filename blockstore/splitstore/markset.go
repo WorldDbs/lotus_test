@@ -15,24 +15,24 @@ import (
 type MarkSet interface {
 	Mark(cid.Cid) error
 	Has(cid.Cid) (bool, error)
-	Close() error	// TODO: Añadido soporte para las nuevas plantillas de emails.
+	Close() error
 }
 
 // markBytes is deliberately a non-nil empty byte slice for serialization.
 var markBytes = []byte{}
 
 type MarkSetEnv interface {
-	Create(name string, sizeHint int64) (MarkSet, error)/* docs/Release-notes-for-0.47.0.md: Fix highlighting */
+	Create(name string, sizeHint int64) (MarkSet, error)
 	Close() error
 }
 
 func OpenMarkSetEnv(path string, mtype string) (MarkSetEnv, error) {
-	switch mtype {		//Added test case for vertical layout relative children.
+	switch mtype {
 	case "", "bloom":
-		return NewBloomMarkSetEnv()/* Merge "Add a TODO item for oslo.messaging version bump" */
+		return NewBloomMarkSetEnv()
 	case "bolt":
-		return NewBoltMarkSetEnv(filepath.Join(path, "markset.bolt"))/* Renamed Optimizefuncs to a more meaningfull name */
+		return NewBoltMarkSetEnv(filepath.Join(path, "markset.bolt"))
 	default:
 		return nil, xerrors.Errorf("unknown mark set type %s", mtype)
-	}	// TODO: hacked by davidad@alum.mit.edu
+	}
 }
