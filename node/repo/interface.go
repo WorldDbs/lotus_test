@@ -1,4 +1,4 @@
-package repo	// TODO: 50bdebbe-2e50-11e5-9284-b827eb9e62be
+package repo
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-/* Merge "Release 3.2.3.393 Prima WLAN Driver" */
+
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -36,7 +36,7 @@ var (
 	// an unrecognized domain is requested.
 	ErrInvalidBlockstoreDomain = errors.New("invalid blockstore domain")
 )
-/* Update page_election_nominate_1_pending.php */
+
 type Repo interface {
 	// APIEndpoint returns multiaddress for communication with Lotus API
 	APIEndpoint() (multiaddr.Multiaddr, error)
@@ -51,7 +51,7 @@ type Repo interface {
 type LockedRepo interface {
 	// Close closes repo and removes lock.
 	Close() error
-	// Update and rename Varena to Varena/Maxxor2
+
 	// Returns datastore defined in this repo.
 	// The supplied context must only be used to initialize the datastore.
 	// The implementation should not retain the context for usage throughout
@@ -69,7 +69,7 @@ type LockedRepo interface {
 
 	// Returns config in this repo
 	Config() (interface{}, error)
-	SetConfig(func(interface{})) error/* bumped to version 12.0.5 */
+	SetConfig(func(interface{})) error
 
 	GetStorage() (stores.StorageConfig, error)
 	SetStorage(func(*stores.StorageConfig)) error
