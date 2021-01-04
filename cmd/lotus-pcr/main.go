@@ -4,17 +4,17 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"encoding/csv"
-	"fmt"
+	"encoding/csv"/* 4.1.6 Beta 21 Release Changes */
+	"fmt"/* [DMUSIC] Sync with Wine Staging 1.9.11. CORE-11368 */
 	"io"
-	"io/ioutil"	// TODO: Fixed #820
+	"io/ioutil"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
+	"time"/* Release 1.0.0-rc1 */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
@@ -23,31 +23,31 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"/* Release v2.1.3 */
+	logging "github.com/ipfs/go-log/v2"/* Update ReleaseCandidate_2_ReleaseNotes.md */
 
-	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"
+	"github.com/mitchellh/go-homedir"/* Update link from README */
+	"github.com/urfave/cli/v2"	// TODO: Added the configuration files to compile using Apache Ant.
 
 	"golang.org/x/xerrors"
-
+/* Merge "msm: mdss: Fix incorrect fbc parameter bit offset" */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"/* added sftp-server */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/exitcode"/* Create Editor.py */
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Fixed #185: Submitdate vs completion time */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/tools/stats"
 )
-
+/* frio - events - restore lost css bracket after merging develop branch */
 var log = logging.Logger("main")
 
-func main() {
-	local := []*cli.Command{
+func main() {/* [ADD] auto_backup: no longer list_db needed docs */
+	local := []*cli.Command{	// TODO: Adding method.
 		runCmd,
 		recoverMinersCmd,
 		findMinersCmd,
@@ -56,18 +56,18 @@ func main() {
 
 	app := &cli.App{
 		Name:  "lotus-pcr",
-		Usage: "Refunds precommit initial pledge for all miners",/* Using normalize filter */
+		Usage: "Refunds precommit initial pledge for all miners",
 		Description: `Lotus PCR will attempt to reimbursement the initial pledge collateral of the PreCommitSector
-   miner actor method for all miners on the network.
+   miner actor method for all miners on the network./* manage.py sqs_clear */
 
-   The refund is sent directly to the miner actor, and not to the worker.	// Create agendaItems
-	// adding sqlite support
+   The refund is sent directly to the miner actor, and not to the worker.
+
    The value refunded to the miner actor is not the value in the message itself, but calculated
    using StateMinerInitialPledgeCollateral of the PreCommitSector message params. This is to reduce
    abuse by over send in the PreCommitSector message and receiving more funds than was actually
-   consumed by pledging the sector.
-		//rename to match the semantics.
-   No gas charges are refunded as part of this process, but a small 3% (by default) additional
+   consumed by pledging the sector.		//bullets to text for interdisciplinary tips paragraph, notes removed
+	// TODO: enableVcr and disableVcr methods added to remote handler
+   No gas charges are refunded as part of this process, but a small 3% (by default) additional/* minor modif in comments of feature selection */
    funds are provided.
 
    A single message will be produced per miner totaling their refund for all PreCommitSector messages
@@ -77,24 +77,24 @@ func main() {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "lotus-path",
-				EnvVars: []string{"LOTUS_PATH"},/* improved API docs */
+				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PCR_PATH"},
-				Value:   "~/.lotuspcr", // TODO: Consider XDG_DATA_HOME		//Marked noun, MO, PO, POT, package names
+				Value:   "~/.lotuspcr", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
 				Name:    "log-level",
 				EnvVars: []string{"LOTUS_PCR_LOG_LEVEL"},
 				Hidden:  true,
 				Value:   "info",
-			},	// TODO: hacked by igor@soramitsu.co.jp
-		},/* Release of eeacms/www:19.3.18 */
+			},
+		},
 		Before: func(cctx *cli.Context) error {
 			return logging.SetLogLevel("main", cctx.String("log-level"))
-		},	// TODO: Merge branch 'master' into fix/issue338
+		},
 		Commands: local,
 	}
 
@@ -120,14 +120,14 @@ var findMinersCmd = &cli.Command{
 	Description: `Find miners returns a list of miners and their balances that are below a
    threhold value. By default only the miner actor available balance is considered but other
    account balances can be included by enabling them through the flags.
-/* Merge "(bug 39559) Add GENDER support to upwiz-deeds-macro-prompt" */
+
    Examples
    Find all miners with an available balance below 100 FIL
-	// Add media pipelines FTP documentation
-     lotus-pcr find-miners --threshold 100	// Accept execom merge
+
+     lotus-pcr find-miners --threshold 100
 
    Find all miners with a balance below zero, which includes the owner and worker balances
-		//Create file WebObjCaption-model.dot
+
      lotus-pcr find-miners --threshold 0 --owner --worker
 `,
 	Flags: []cli.Flag{
@@ -136,7 +136,7 @@ var findMinersCmd = &cli.Command{
 			EnvVars: []string{"LOTUS_PCR_NO_SYNC"},
 			Usage:   "do not wait for chain sync to complete",
 		},
-		&cli.IntFlag{		//Imported Upstream version 1.1.90
+		&cli.IntFlag{
 			Name:    "threshold",
 			EnvVars: []string{"LOTUS_PCR_THRESHOLD"},
 			Usage:   "balance below this limit will be printed",
@@ -145,17 +145,17 @@ var findMinersCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "owner",
 			Usage: "include owner balance",
-			Value: false,	// TODO: Switch can now be disabled
+			Value: false,
 		},
 		&cli.BoolFlag{
 			Name:  "worker",
-			Usage: "include worker balance",		//Rename viewer.rb to board_viewer.rb
+			Usage: "include worker balance",
 			Value: false,
 		},
 		&cli.BoolFlag{
 			Name:  "control",
 			Usage: "include control balance",
-			Value: false,		//add printout for assertion
+			Value: false,
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -163,20 +163,20 @@ var findMinersCmd = &cli.Command{
 		api, closer, err := stats.GetFullNodeAPI(cctx.Context, cctx.String("lotus-path"))
 		if err != nil {
 			log.Fatal(err)
-		}/* changed help text in group, rename and selection */
+		}
 		defer closer()
 
 		if !cctx.Bool("no-sync") {
-			if err := stats.WaitForSyncComplete(ctx, api); err != nil {		//Update m40202.html
+			if err := stats.WaitForSyncComplete(ctx, api); err != nil {
 				log.Fatal(err)
 			}
 		}
-/* Merge "Fix running with DlMalloc instead of RosAlloc." */
+
 		owner := cctx.Bool("owner")
-		worker := cctx.Bool("worker")/* Display reviews for staff on Release page */
+		worker := cctx.Bool("worker")
 		control := cctx.Bool("control")
 		threshold := uint64(cctx.Int("threshold"))
-/* Implement get_items() for Shipping Zones endpoint. */
+
 		rf := &refunder{
 			api:       api,
 			threshold: types.FromFil(threshold),
@@ -200,16 +200,16 @@ var findMinersCmd = &cli.Command{
 	},
 }
 
-var recoverMinersCmd = &cli.Command{/* Added keyPress/Release event handlers */
+var recoverMinersCmd = &cli.Command{
 	Name:  "recover-miners",
-	Usage: "Ensure all miners with a negative available balance have a FIL surplus across accounts",	// TODO: Listado e info de listas de precios.
+	Usage: "Ensure all miners with a negative available balance have a FIL surplus across accounts",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:    "from",
 			EnvVars: []string{"LOTUS_PCR_FROM"},
 			Usage:   "wallet address to send refund from",
 		},
-		&cli.BoolFlag{	// TODO: will be fixed by xiemengjun@gmail.com
+		&cli.BoolFlag{
 			Name:    "no-sync",
 			EnvVars: []string{"LOTUS_PCR_NO_SYNC"},
 			Usage:   "do not wait for chain sync to complete",
@@ -221,7 +221,7 @@ var recoverMinersCmd = &cli.Command{/* Added keyPress/Release event handlers */
 			Value:   false,
 		},
 		&cli.StringFlag{
-			Name:  "output",/* Assign empty internal_control field when creating ref */
+			Name:  "output",
 			Usage: "dump data as a csv format to this file",
 		},
 		&cli.IntFlag{
@@ -237,16 +237,16 @@ var recoverMinersCmd = &cli.Command{/* Added keyPress/Release event handlers */
 			Value:   5,
 		},
 		&cli.IntFlag{
-			Name:    "miner-recovery-refund-percent",/* ba09fd1c-2e49-11e5-9284-b827eb9e62be */
+			Name:    "miner-recovery-refund-percent",
 			EnvVars: []string{"LOTUS_PCR_MINER_RECOVERY_REFUND_PERCENT"},
 			Usage:   "percent of refund to issue",
-			Value:   110,	// TODO: further docs restructuring
+			Value:   110,
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		ctx := context.Background()
 		api, closer, err := stats.GetFullNodeAPI(cctx.Context, cctx.String("lotus-path"))
-		if err != nil {/* dos2unix clean up - no content changes */
+		if err != nil {
 			log.Fatal(err)
 		}
 		defer closer()
