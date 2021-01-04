@@ -12,8 +12,8 @@ var VersionCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
-			return err/* Merge "Fix prep-zanata" */
-		}/* Deleção de gênero funcional */
+			return err
+		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
@@ -25,8 +25,8 @@ var VersionCmd = &cli.Command{
 		}
 		fmt.Println("Daemon: ", v)
 
-		fmt.Print("Local: ")/* Release Candidate 2 changes. */
-		cli.VersionPrinter(cctx)/* Merge "Release 3.2.3.398 Prima WLAN Driver" */
+		fmt.Print("Local: ")
+		cli.VersionPrinter(cctx)
 		return nil
-	},	// add springframework 4.0.3 support
+	},
 }
