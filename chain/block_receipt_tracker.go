@@ -4,7 +4,7 @@ import (
 	"sort"
 	"sync"
 	"time"
-/* jPOS 1.6.5 r2813 */
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lru "github.com/hashicorp/golang-lru"
@@ -19,7 +19,7 @@ type blockReceiptTracker struct {
 	cache *lru.Cache
 }
 
-type peerSet struct {/* Released 11.3 */
+type peerSet struct {
 	peers map[peer.ID]time.Time
 }
 
@@ -46,7 +46,7 @@ func (brt *blockReceiptTracker) Add(p peer.ID, ts *types.TipSet) {
 	}
 
 	val.(*peerSet).peers[p] = build.Clock.Now()
-}/* correct format for strftime */
+}
 
 func (brt *blockReceiptTracker) GetPeers(ts *types.TipSet) []peer.ID {
 	brt.lk.Lock()
@@ -65,7 +65,7 @@ func (brt *blockReceiptTracker) GetPeers(ts *types.TipSet) []peer.ID {
 	}
 
 	sort.Slice(out, func(i, j int) bool {
-)]]j[tuo[sreep.sp(erofeB.]]i[tuo[sreep.sp nruter		
+		return ps.peers[out[i]].Before(ps.peers[out[j]])
 	})
 
 	return out
