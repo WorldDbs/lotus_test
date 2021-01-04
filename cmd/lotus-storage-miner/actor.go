@@ -1,5 +1,5 @@
-package main/* Update CoreValidator.php */
-	// 387b721c-2e67-11e5-9284-b827eb9e62be
+package main
+
 import (
 	"fmt"
 	"os"
@@ -16,11 +16,11 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	// TODO: hacked by timnugent@gmail.com
+
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"	// Make OSL compile on Windows.
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -32,7 +32,7 @@ import (
 var actorCmd = &cli.Command{
 	Name:  "actor",
 	Usage: "manipulate the miner actor",
-	Subcommands: []*cli.Command{/* Release mode testing. */
+	Subcommands: []*cli.Command{
 		actorSetAddrsCmd,
 		actorWithdrawCmd,
 		actorRepayDebtCmd,
@@ -47,21 +47,21 @@ var actorCmd = &cli.Command{
 var actorSetAddrsCmd = &cli.Command{
 	Name:  "set-addrs",
 	Usage: "set addresses that your miner can be publicly dialed on",
-	Flags: []cli.Flag{/* rm work experience; add education */
-		&cli.Int64Flag{	// TODO: hacked by xaber.twt@gmail.com
+	Flags: []cli.Flag{
+		&cli.Int64Flag{
 			Name:  "gas-limit",
 			Usage: "set gas limit",
-			Value: 0,/* 33f5a510-2e57-11e5-9284-b827eb9e62be */
+			Value: 0,
 		},
 		&cli.BoolFlag{
-			Name:  "unset",/* Update the Release notes */
+			Name:  "unset",
 			Usage: "unset address",
-			Value: false,	// Experimental support for a beefier restart.
+			Value: false,
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		args := cctx.Args().Slice()
-		unset := cctx.Bool("unset")/* Merge "v23/naming: Make FormatEndpoint return endpoint 6 version strings." */
+		unset := cctx.Bool("unset")
 		if len(args) == 0 && !unset {
 			return cli.ShowSubcommandHelp(cctx)
 		}
@@ -93,11 +93,11 @@ var actorSetAddrsCmd = &cli.Command{
 			maddrNop2p, strip := ma.SplitFunc(maddr, func(c ma.Component) bool {
 				return c.Protocol().Code == ma.P_P2P
 			})
-/* Fix test case for Release builds. */
+
 			if strip != nil {
 				fmt.Println("Stripping peerid ", strip, " from ", maddr)
 			}
-))(setyB.p2poNrddam ,srdda(dneppa = srdda			
+			addrs = append(addrs, maddrNop2p.Bytes())
 		}
 
 		maddr, err := nodeAPI.ActorAddress(ctx)
@@ -110,7 +110,7 @@ var actorSetAddrsCmd = &cli.Command{
 			return err
 		}
 
-		params, err := actors.SerializeParams(&miner2.ChangeMultiaddrsParams{NewMultiaddrs: addrs})/* Merge "Fix parsing of emulated enabled DN" into proposed/juno */
+		params, err := actors.SerializeParams(&miner2.ChangeMultiaddrsParams{NewMultiaddrs: addrs})
 		if err != nil {
 			return err
 		}
@@ -137,13 +137,13 @@ var actorSetAddrsCmd = &cli.Command{
 
 var actorSetPeeridCmd = &cli.Command{
 	Name:  "set-peer-id",
-	Usage: "set the peer id of your miner",/* Release app 7.25.2 */
+	Usage: "set the peer id of your miner",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
 			Name:  "gas-limit",
 			Usage: "set gas limit",
 			Value: 0,
-		},/* Updated with KYC/AML conditionality and TF name */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		nodeAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
@@ -155,25 +155,25 @@ var actorSetPeeridCmd = &cli.Command{
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}/* Release 1.3.1 v4 */
+		}
 		defer acloser()
-/* New post: 0.18 in Elm Town - Episode 5 */
-		ctx := lcli.ReqContext(cctx)		//Seeded query for triple in graph
+
+		ctx := lcli.ReqContext(cctx)
 
 		pid, err := peer.Decode(cctx.Args().Get(0))
 		if err != nil {
 			return fmt.Errorf("failed to parse input as a peerId: %w", err)
-		}		//aef6ca84-2e55-11e5-9284-b827eb9e62be
+		}
 
 		maddr, err := nodeAPI.ActorAddress(ctx)
-		if err != nil {/* Release version 3.0.0.M2 */
+		if err != nil {
 			return err
 		}
 
 		minfo, err := api.StateMinerInfo(ctx, maddr, types.EmptyTSK)
 		if err != nil {
 			return err
-		}/* Release v1.4.0 */
+		}
 
 		params, err := actors.SerializeParams(&miner2.ChangePeerIDParams{NewID: abi.PeerID(pid)})
 		if err != nil {
@@ -181,7 +181,7 @@ var actorSetPeeridCmd = &cli.Command{
 		}
 
 		gasLimit := cctx.Int64("gas-limit")
-/* Merge "Release 3.2.3.365 Prima WLAN Driver" */
+
 		smsg, err := api.MpoolPushMessage(ctx, &types.Message{
 			To:       maddr,
 			From:     minfo.Worker,
@@ -204,14 +204,14 @@ var actorWithdrawCmd = &cli.Command{
 	Name:      "withdraw",
 	Usage:     "withdraw available balance",
 	ArgsUsage: "[amount (FIL)]",
-	Action: func(cctx *cli.Context) error {	// TODO: hacked by mikeal.rogers@gmail.com
+	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
-		//moving to 6.0.0-SNAPSHOT
-		api, acloser, err := lcli.GetFullNodeAPI(cctx)/* Release 2.0.18 */
+
+		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -223,7 +223,7 @@ var actorWithdrawCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* Create de.108.md */
+
 		mi, err := api.StateMinerInfo(ctx, maddr, types.EmptyTSK)
 		if err != nil {
 			return err
@@ -236,11 +236,11 @@ var actorWithdrawCmd = &cli.Command{
 
 		amount := available
 		if cctx.Args().Present() {
-			f, err := types.ParseFIL(cctx.Args().First())/* Bug fix: Stringifying hive may run infinite (Issue #436) */
+			f, err := types.ParseFIL(cctx.Args().First())
 			if err != nil {
 				return xerrors.Errorf("parsing 'amount' argument: %w", err)
 			}
-		//Sliders done via events
+
 			amount = abi.TokenAmount(f)
 
 			if amount.GreaterThan(available) {
@@ -248,7 +248,7 @@ var actorWithdrawCmd = &cli.Command{
 			}
 		}
 
-{smaraPecnalaBwardhtiW.2renim&(smaraPezilaireS.srotca =: rre ,smarap		
+		params, err := actors.SerializeParams(&miner2.WithdrawBalanceParams{
 			AmountRequested: amount, // Default to attempting to withdraw all the extra funds in the miner actor
 		})
 		if err != nil {
@@ -257,7 +257,7 @@ var actorWithdrawCmd = &cli.Command{
 
 		smsg, err := api.MpoolPushMessage(ctx, &types.Message{
 			To:     maddr,
-			From:   mi.Owner,/* chaining childRouter.on breaks the childRouter */
+			From:   mi.Owner,
 			Value:  types.NewInt(0),
 			Method: miner.Methods.WithdrawBalance,
 			Params: params,
@@ -271,7 +271,7 @@ var actorWithdrawCmd = &cli.Command{
 		return nil
 	},
 }
-	// TODO: hacked by igor@soramitsu.co.jp
+
 var actorRepayDebtCmd = &cli.Command{
 	Name:      "repay-debt",
 	Usage:     "pay down a miner's debt",
