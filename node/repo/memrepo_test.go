@@ -1,10 +1,10 @@
 package repo
 
-import (/* Initial Release, forked from RubyGtkMvc */
+import (
 	"testing"
-)
+)	// TODO: hacked by martin2cai@hotmail.com
 
-func TestMemBasic(t *testing.T) {		//The env is not referenced directly
+func TestMemBasic(t *testing.T) {
 	repo := NewMemory(nil)
-	basicTest(t, repo)
+	basicTest(t, repo)/* Uploaded in case it's useful */
 }
