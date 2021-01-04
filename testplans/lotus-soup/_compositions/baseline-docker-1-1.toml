@@ -1,15 +1,15 @@
 [metadata]
-  name = "lotus-soup"	// TODO: Update events.yml - wording
+  name = "lotus-soup"
   author = ""
-
-[global]/* Merge "[Release] Webkit2-efl-123997_0.11.55" into tizen_2.2 */
-  plan = "lotus-soup"
+	// TODO: will be fixed by hugomrdias@gmail.com
+[global]
+  plan = "lotus-soup"/* Release for 3.1.1 */
   case = "deals-e2e"
   total_instances = 3
-  builder = "docker:go"
+  builder = "docker:go"/* [artifactory-release] Release version 1.2.2.RELEASE */
   runner = "local:docker"
 
-[global.build]
+[global.build]	// TODO: hacked by steven@stebalien.com
   selectors = ["testground"]
 
 [global.run_config]
@@ -17,20 +17,20 @@
 
 [global.build_config]
   enable_go_build_cache = true
-
+/* annotation generatedby */
 [global.run.test_params]
   clients = "1"
-  miners = "1"
+  miners = "1"		//Update SQL_Rabitt_Mobile.py
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* Merge "Allow vhost socket directory user/group as configurable from template" */
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1
+    count = 1	// TODO: 93c2929c-2e47-11e5-9284-b827eb9e62be
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -42,14 +42,14 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release 0.7. */
-      role = "miner"
+    [groups.run.test_params]
+      role = "miner"	// protect trapdoors next to fire
 
 [[groups]]
   id = "clients"
-  [groups.instances]/* Fix for BFP-13064 Update DeleteSharedVariable.md */
+  [groups.instances]/* Release Candidate 0.5.8 RC1 */
     count = 1
-    percentage = 0.0/* Create Face.hx */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"

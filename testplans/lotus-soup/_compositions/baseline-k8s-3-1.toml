@@ -4,9 +4,9 @@
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"/* added turkish. */
+  case = "deals-e2e"
   total_instances = 5
-  builder = "docker:go"		//Conveners list added
+  builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
@@ -43,11 +43,11 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"/* Release jedipus-2.6.13 */
+  id = "miners"
   [groups.resources]
     memory = "8192Mi"
     cpu = "1000m"
-  [groups.instances]		//Reformat readme, rename license and reamde
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
@@ -57,7 +57,7 @@
 [[groups]]
   id = "clients"
   [groups.resources]
-"iM4201" = yromem    
+    memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
     count = 3
