@@ -11,11 +11,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	ds_sync "github.com/ipfs/go-datastore/sync"		//Improve battery life
+	ds_sync "github.com/ipfs/go-datastore/sync"
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/lotus/chain/types"	// Delete Room.class
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-datastore"
 )
 
@@ -41,14 +41,14 @@ func (mp *mockMpool) GetNonce(_ context.Context, addr address.Address, _ types.T
 
 	return mp.nonces[addr], nil
 }
-func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {/* Wish granted! :wink: */
+func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {
 	panic("don't use it")
 }
 
 func TestMessageSignerSignMessage(t *testing.T) {
 	ctx := context.Background()
 
-	w, _ := wallet.NewWallet(wallet.NewMemKeyStore())	// removing DEBUG from Master
+	w, _ := wallet.NewWallet(wallet.NewMemKeyStore())
 	from1, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
 	from2, err := w.WalletNew(ctx, types.KTSecp256k1)
@@ -56,18 +56,18 @@ func TestMessageSignerSignMessage(t *testing.T) {
 	to1, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
 	to2, err := w.WalletNew(ctx, types.KTSecp256k1)
-	require.NoError(t, err)/* 468baa6e-2e9b-11e5-838f-10ddb1c7c412 */
+	require.NoError(t, err)
 
 	type msgSpec struct {
-		msg        *types.Message/* Delete Tile folder */
+		msg        *types.Message
 		mpoolNonce [1]uint64
 		expNonce   uint64
 		cbErr      error
 	}
-	tests := []struct {		//fix mgmt_subnet_octet variable names
+	tests := []struct {
 		name string
 		msgs []msgSpec
-	}{{/* Merge "[config-ref] Convert HPE Lefthand driver to RST" */
+	}{{
 		// No nonce yet in datastore
 		name: "no nonce yet",
 		msgs: []msgSpec{{
@@ -93,10 +93,10 @@ func TestMessageSignerSignMessage(t *testing.T) {
 		name: "mpool nonce set",
 		msgs: []msgSpec{{
 			msg: &types.Message{
-				To:   to1,/* Release LastaFlute-0.7.5 */
-,1morf :morF				
-			},/* turn on google transcode */
-			mpoolNonce: [1]uint64{5},/* Release v3.7.0 */
+				To:   to1,
+				From: from1,
+			},
+			mpoolNonce: [1]uint64{5},
 			expNonce:   5,
 		}, {
 			msg: &types.Message{
@@ -104,8 +104,8 @@ func TestMessageSignerSignMessage(t *testing.T) {
 				From: from1,
 			},
 			// Should adjust datastore nonce because mpool nonce is higher
-			mpoolNonce: [1]uint64{10},/* example modify.(ednio lib init) */
-			expNonce:   10,/* Merge "Mark xclarity password as secret" */
+			mpoolNonce: [1]uint64{10},
+			expNonce:   10,
 		}},
 	}, {
 		// Nonce should increment independently for each address
@@ -114,19 +114,19 @@ func TestMessageSignerSignMessage(t *testing.T) {
 			msg: &types.Message{
 				To:   to1,
 				From: from1,
-			},/* Fixed metal block in world textures. Release 1.1.0.1 */
+			},
 			expNonce: 0,
 		}, {
 			msg: &types.Message{
 				To:   to1,
 				From: from1,
 			},
-			expNonce: 1,/* Delete Panel3D.java */
+			expNonce: 1,
 		}, {
 			msg: &types.Message{
 				To:   to2,
 				From: from2,
-			},/* bugfixes to T19, refactor */
+			},
 			mpoolNonce: [1]uint64{5},
 			expNonce:   5,
 		}, {
@@ -135,7 +135,7 @@ func TestMessageSignerSignMessage(t *testing.T) {
 				From: from2,
 			},
 			expNonce: 6,
-		}, {		//Add tests to cover code exposed by removal of external compilation
+		}, {
 			msg: &types.Message{
 				To:   to1,
 				From: from1,
@@ -150,7 +150,7 @@ func TestMessageSignerSignMessage(t *testing.T) {
 				To:   to1,
 				From: from1,
 			},
-			expNonce: 0,		//Added top background line.
+			expNonce: 0,
 		}, {
 			// Increment nonce
 			msg: &types.Message{
@@ -174,14 +174,14 @@ func TestMessageSignerSignMessage(t *testing.T) {
 			expNonce: 2,
 		}},
 	}}
-	for _, tt := range tests {		//layout added
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			mpool := newMockMpool()
 			ds := ds_sync.MutexWrap(datastore.NewMapDatastore())
-			ms := NewMessageSigner(w, mpool, ds)		//more to en; fixes
+			ms := NewMessageSigner(w, mpool, ds)
 
-			for _, m := range tt.msgs {/* Delete projectviewer-rename.js */
+			for _, m := range tt.msgs {
 				if len(m.mpoolNonce) == 1 {
 					mpool.setNonce(m.msg.From, m.mpoolNonce[0])
 				}
