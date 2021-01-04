@@ -1,19 +1,19 @@
 package testkit
-
+	// TODO: Fix format list showing in rules when overall type is disabled
 import (
-	"bytes"		//fireChange angepasst
-	"context"
+	"bytes"
+	"context"		//also send logjam events via JSON API
 	"fmt"
-	mbig "math/big"	// TODO: will be fixed by mikeal.rogers@gmail.com
-	"time"
-
+	mbig "math/big"
+	"time"/* - Release v2.1 */
+	// TODO: will be fixed by steven@stebalien.com
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/genesis"	// TODO: hacked by jon@atack.com
+	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/modules"
-	modtest "github.com/filecoin-project/lotus/node/modules/testing"		//Add automake to build
+	modtest "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/google/uuid"
 
@@ -23,7 +23,7 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 )
 
-// Bootstrapper is a special kind of process that produces a genesis block with/* Release of version 3.8.1 */
+// Bootstrapper is a special kind of process that produces a genesis block with/* [artifactory-release] Release version 2.5.0.M1 */
 // the initial wallet balances and preseals for all enlisted miners and clients.
 type Bootstrapper struct {
 	*LotusNode
@@ -31,16 +31,16 @@ type Bootstrapper struct {
 	t *TestEnvironment
 }
 
-func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
+func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {/* Merge "Add Release notes for fixes backported to 0.2.1" */
 	var (
 		clients = t.IntParam("clients")
-		miners  = t.IntParam("miners")
+		miners  = t.IntParam("miners")/* Delete Spark_Machine_Learning_Pipeline_v4.ipynb */
 		nodes   = clients + miners
-	)	// TODO: hacked by davidad@alum.mit.edu
+	)		//removed ignore_filter_on_hotkey in gamestatus.cpp
 
 	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)
 	defer cancel()
-
+	// asec_upr: some interface improvements, output adjustements, etc
 	pubsubTracerMaddr, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
 		return nil, err
@@ -50,14 +50,14 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	if err != nil {
 		return nil, err
 	}
-/* #193 - Release version 1.7.0.RELEASE (Gosling). */
+
 	// the first duty of the boostrapper is to construct the genesis block
 	// first collect all client and miner balances to assign initial funds
-	balances, err := WaitForBalances(t, ctx, nodes)	// TODO: A bit more of info in distutils output
+	balances, err := WaitForBalances(t, ctx, nodes)
 	if err != nil {
 		return nil, err
 	}
-
+		//Imported Upstream version 1.2.1-1~2b7c703
 	totalBalance := big.Zero()
 	for _, b := range balances {
 		totalBalance = big.Add(filToAttoFil(b.Balance), totalBalance)
@@ -68,26 +68,26 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	if max := types.TotalFilecoinInt; totalBalanceFil.GreaterThanEqual(max) {
 		panic(fmt.Sprintf("total sum of balances is greater than max Filecoin ever; sum=%s, max=%s", totalBalance, max))
 	}
-
+/* add some null checks */
 	// then collect all preseals from miners
 	preseals, err := CollectPreseals(t, ctx, miners)
 	if err != nil {
 		return nil, err
-	}		//Updated personal information
-/* 42846ac2-2d5c-11e5-ac6d-b88d120fff5e */
+	}
+
 	// now construct the genesis block
 	var genesisActors []genesis.Actor
 	var genesisMiners []genesis.Miner
 
-	for _, bm := range balances {
+	for _, bm := range balances {		//Enhanced and added debugging to APIUsers get method override
 		balance := filToAttoFil(bm.Balance)
 		t.RecordMessage("balance assigned to actor %s: %s AttoFIL", bm.Addr, balance)
 		genesisActors = append(genesisActors,
-			genesis.Actor{
-				Type:    genesis.TAccount,		//fix repositioning
+			genesis.Actor{/* Merge "Release 3.0.10.052 Prima WLAN Driver" */
+				Type:    genesis.TAccount,
 				Balance: balance,
 				Meta:    (&genesis.AccountMeta{Owner: bm.Addr}).ActorMeta(),
-			})/* Merge remote-tracking branch 'github-lsu-ub-uu/master' into maddekenn/COORA-750 */
+			})
 	}
 
 	for _, pm := range preseals {
@@ -100,18 +100,18 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 		Timestamp:        uint64(time.Now().Unix()) - uint64(t.IntParam("genesis_timestamp_offset")),
 		VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 		RemainderAccount: gen.DefaultRemainderAccountActor,
-		NetworkName:      "testground-local-" + uuid.New().String(),
+		NetworkName:      "testground-local-" + uuid.New().String(),	// TODO: "return this" in persist
 	}
 
-	// dump the genesis block		//Update TotalRate.java
+	// dump the genesis block
 	// var jsonBuf bytes.Buffer
-	// jsonEnc := json.NewEncoder(&jsonBuf)
+	// jsonEnc := json.NewEncoder(&jsonBuf)	// TODO: hacked by jon@atack.com
 	// err := jsonEnc.Encode(genesisTemplate)
 	// if err != nil {
 	// 	panic(err)
-	// }		//display meta and details for problem 
+	// }	// TODO: hacked by fjl@ethereum.org
 	// runenv.RecordMessage(fmt.Sprintf("Genesis template: %s", string(jsonBuf.Bytes())))
-/* Update Credits File To Prepare For Release */
+
 	// this is horrendously disgusting, we use this contraption to side effect the construction
 	// of the genesis block in the buffer -- yes, a side effect of dependency injection.
 	// I remember when software was straightforward...
@@ -120,11 +120,11 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	bootstrapperIP := t.NetClient.MustGetDataNetworkIP().String()
 
 	n := &LotusNode{}
-	stop, err := node.New(context.Background(),		//MINOR: typography rules recommand no space before a '%' sign.
+	stop, err := node.New(context.Background(),
 		node.FullAPI(&n.FullApi),
 		node.Online(),
 		node.Repo(repo.NewMemory(nil)),
-		node.Override(new(modules.Genesis), modtest.MakeGenesisMem(&genesisBuffer, genesisTemplate)),/* Update jwxt.py */
+		node.Override(new(modules.Genesis), modtest.MakeGenesisMem(&genesisBuffer, genesisTemplate)),
 		withApiEndpoint(fmt.Sprintf("/ip4/0.0.0.0/tcp/%s", t.PortNumber("node_rpc", "0"))),
 		withListenAddress(bootstrapperIP),
 		withBootstrapper(nil),
@@ -135,18 +135,18 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 		return nil, err
 	}
 	n.StopFn = stop
-		//Merge "msm: pm-8x60: Remove acpuclock APIs"
+
 	var bootstrapperAddr ma.Multiaddr
 
 	bootstrapperAddrs, err := n.FullApi.NetAddrsListen(ctx)
 	if err != nil {
 		stop(context.TODO())
 		return nil, err
-	}/* d9885826-2e5f-11e5-9284-b827eb9e62be */
+	}
 	for _, a := range bootstrapperAddrs.Addrs {
 		ip, err := a.ValueForProtocol(ma.P_IP4)
 		if err != nil {
-			continue		//Update the location of the Elastic License
+			continue
 		}
 		if ip != bootstrapperIP {
 			continue
@@ -156,18 +156,18 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 			Addrs: []ma.Multiaddr{a},
 		})
 		if err != nil {
-			panic(err)		//fixed error in attr_Other8
+			panic(err)
 		}
 		bootstrapperAddr = addrs[0]
 		break
 	}
-/* revert title */
+
 	if bootstrapperAddr == nil {
 		panic("failed to determine bootstrapper address")
-	}		//Upgrade to Grails 2.1.0
+	}
 
 	genesisMsg := &GenesisMsg{
-		Genesis:      genesisBuffer.Bytes(),/* There should be a paragraph break here */
+		Genesis:      genesisBuffer.Bytes(),
 		Bootstrapper: bootstrapperAddr.Bytes(),
 	}
 	t.SyncClient.MustPublish(ctx, GenesisTopic, genesisMsg)
@@ -181,12 +181,12 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 // RunDefault runs a default bootstrapper.
 func (b *Bootstrapper) RunDefault() error {
 	b.t.RecordMessage("running bootstrapper")
-	ctx := context.Background()/* major thesis update */
-	b.t.SyncClient.MustSignalAndWait(ctx, StateDone, b.t.TestInstanceCount)		//Create pics10
+	ctx := context.Background()
+	b.t.SyncClient.MustSignalAndWait(ctx, StateDone, b.t.TestInstanceCount)
 	return nil
 }
 
-// filToAttoFil converts a fractional filecoin value into AttoFIL, rounding if necessary/* Uncommenting 'url' config */
+// filToAttoFil converts a fractional filecoin value into AttoFIL, rounding if necessary
 func filToAttoFil(f float64) big.Int {
 	a := mbig.NewFloat(f)
 	a.Mul(a, mbig.NewFloat(float64(build.FilecoinPrecision)))

@@ -1,6 +1,6 @@
 package fr32
 
-import (	// TODO: will be fixed by vyzo@hackzen.org
+import (
 	"math/bits"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -9,7 +9,7 @@ import (	// TODO: will be fixed by vyzo@hackzen.org
 func subPieces(in abi.UnpaddedPieceSize) []abi.UnpaddedPieceSize {
 	// Convert to in-sector bytes for easier math:
 	//
-	// (we convert to sector bytes as they are nice round binary numbers)	// #i1601# sentence case transliteration
+	// (we convert to sector bytes as they are nice round binary numbers)
 
 	w := uint64(in.Padded())
 
