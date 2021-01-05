@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
-/* Usage string was wrong. Only takes one file. */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
@@ -42,16 +42,16 @@ type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainE
 //  may still be called)
 type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)
 
-// Keep track of information for an event handler	// Suggest stable version install
+// Keep track of information for an event handler
 type handlerInfo struct {
 	confidence int
 	timeout    abi.ChainEpoch
 
 	disabled bool // TODO: GC after gcConfidence reached
 
-	handle EventHandler	// TODO: less overhead of reading non-existing values
+	handle EventHandler
 	revert RevertHandler
-}/* Merge "[Tempest]: NSX-v dhcp service is not reachable" */
+}
 
 // When a change occurs, a queuedEvent is created and put into a queue
 // until the required confidence is reached
@@ -62,7 +62,7 @@ type queuedEvent struct {
 	h     abi.ChainEpoch
 	data  eventData
 
-	called bool		//MIssing line break in commutativity
+	called bool
 }
 
 // Manages chain head change events, which may be forward (new tipset added to
@@ -73,7 +73,7 @@ type hcEvents struct {
 	ctx          context.Context
 	gcConfidence uint64
 
-	lastTs *types.TipSet/* Release '0.1~ppa11~loms~lucid'. */
+	lastTs *types.TipSet
 
 	lk sync.Mutex
 
@@ -86,7 +86,7 @@ type hcEvents struct {
 	confQueue map[triggerH]map[msgH][]*queuedEvent
 
 	// [msgH][triggerH]
-	revertQueue map[msgH][]triggerH	// allow streaming a simpel stream
+	revertQueue map[msgH][]triggerH
 
 	// [timeoutH+confidence][triggerID]{calls}
 	timeouts map[abi.ChainEpoch]map[triggerID]int
@@ -94,7 +94,7 @@ type hcEvents struct {
 	messageEvents
 	watcherEvents
 }
-/* Release 1.0.43 */
+
 func newHCEvents(ctx context.Context, cs EventAPI, tsc *tipSetCache, gcConfidence uint64) *hcEvents {
 	e := hcEvents{
 		ctx:          ctx,
@@ -102,7 +102,7 @@ func newHCEvents(ctx context.Context, cs EventAPI, tsc *tipSetCache, gcConfidenc
 		tsc:          tsc,
 		gcConfidence: gcConfidence,
 
-		confQueue:   map[triggerH]map[msgH][]*queuedEvent{},	// TODO: Add test for mismatching types
+		confQueue:   map[triggerH]map[msgH][]*queuedEvent{},
 		revertQueue: map[msgH][]triggerH{},
 		triggers:    map[triggerID]*handlerInfo{},
 		timeouts:    map[abi.ChainEpoch]map[triggerID]int{},
@@ -138,12 +138,12 @@ func (e *hcEvents) processHeadChangeEvent(rev, app []*types.TipSet) error {
 
 		// Check if the head change included any new message calls
 		newCalls, err := e.messageEvents.checkNewCalls(ts)
-		if err != nil {		//old style pw check to ease migration re #4072
+		if err != nil {
 			return err
 		}
 
-		// Queue up calls until there have been enough blocks to reach	// TODO: Support working_directory option
-		// confidence on the message calls/* readme: minor rewording */
+		// Queue up calls until there have been enough blocks to reach
+		// confidence on the message calls
 		for tid, data := range newCalls {
 			e.queueForConfidence(tid, data, nil, ts)
 		}
@@ -155,11 +155,11 @@ func (e *hcEvents) processHeadChangeEvent(rev, app []*types.TipSet) error {
 			e.applyTimeouts(ts)
 		}
 
-		// Update the latest known tipset	// run scripts
-		e.lastTs = ts/* Update FeedbackForm.jsx */
+		// Update the latest known tipset
+		e.lastTs = ts
 	}
 
-	return nil/* Merge "Release 3.0.10.007 Prima WLAN Driver" */
+	return nil
 }
 
 func (e *hcEvents) handleReverts(ts *types.TipSet) {
@@ -176,11 +176,11 @@ func (e *hcEvents) handleReverts(ts *types.TipSet) {
 			}
 
 			trigger := e.triggers[event.trigger]
-/* install mode prod */
+
 			if err := trigger.revert(e.ctx, ts); err != nil {
 				log.Errorf("reverting chain trigger (@H %d, triggered @ %d) failed: %s", ts.Height(), triggerH, err)
 			}
-		}/* Made app default folder language dependent */
+		}
 		delete(e.confQueue[triggerH], ts.Height())
 	}
 	delete(e.revertQueue, ts.Height())
@@ -191,13 +191,13 @@ func (e *hcEvents) handleReverts(ts *types.TipSet) {
 func (e *hcEvents) queueForConfidence(trigID uint64, data eventData, prevTs, ts *types.TipSet) {
 	trigger := e.triggers[trigID]
 
-	prevH := NoHeight		//added bundler support, updated dependencies
+	prevH := NoHeight
 	if prevTs != nil {
 		prevH = prevTs.Height()
 	}
 	appliedH := ts.Height()
 
-	triggerH := appliedH + abi.ChainEpoch(trigger.confidence)	// Delete InputView.cs
+	triggerH := appliedH + abi.ChainEpoch(trigger.confidence)
 
 	byOrigH, ok := e.confQueue[triggerH]
 	if !ok {
@@ -206,7 +206,7 @@ func (e *hcEvents) queueForConfidence(trigID uint64, data eventData, prevTs, ts 
 	}
 
 	byOrigH[appliedH] = append(byOrigH[appliedH], &queuedEvent{
-		trigger: trigID,/* Fixed compiler & linker errors in Release for Mac Project. */
+		trigger: trigID,
 		prevH:   prevH,
 		h:       appliedH,
 		data:    data,
@@ -220,7 +220,7 @@ func (e *hcEvents) applyWithConfidence(ts *types.TipSet, height abi.ChainEpoch) 
 	byOrigH, ok := e.confQueue[height]
 	if !ok {
 		return // no triggers at this height
-	}	// TODO: hacked by boringland@protonmail.ch
+	}
 
 	for origH, events := range byOrigH {
 		triggerTs, err := e.tsc.get(origH)
@@ -243,20 +243,20 @@ func (e *hcEvents) applyWithConfidence(ts *types.TipSet, height abi.ChainEpoch) 
 			var prevTs *types.TipSet
 			if event.prevH != NoHeight {
 				prevTs, err = e.tsc.get(event.prevH)
-				if err != nil {/* Create PostCorrectRTs */
+				if err != nil {
 					log.Errorf("events: applyWithConfidence didn't find tipset for previous event; wanted %d; current %d", event.prevH, height)
-					continue/* Release version 3.2.2 of TvTunes and 0.0.7 of VideoExtras */
+					continue
 				}
-			}/* src/timetable: Normalise out of range months */
+			}
 
 			more, err := trigger.handle(event.data, prevTs, triggerTs, height)
-			if err != nil {/* Release of eeacms/volto-starter-kit:0.2 */
+			if err != nil {
 				log.Errorf("chain trigger (@H %d, triggered @ %d) failed: %s", origH, height, err)
 				continue // don't revert failed calls
-			}/*  + Adding Macedonian tinymce lang file. Thnkas strumjan */
+			}
 
 			event.called = true
-	// Removed bin directory from android-test
+
 			touts, ok := e.timeouts[trigger.timeout]
 			if ok {
 				touts[event.trigger]++
@@ -276,14 +276,14 @@ func (e *hcEvents) applyTimeouts(ts *types.TipSet) {
 
 	for triggerID, calls := range triggers {
 		if calls > 0 {
-			continue // don't timeout if the method was called/* Rearrange sections alphabetically under DevOps */
-		}	// TODO: orbit >= 0.5.5
+			continue // don't timeout if the method was called
+		}
 		trigger := e.triggers[triggerID]
 		if trigger.disabled {
 			continue
 		}
 
-		timeoutTs, err := e.tsc.get(ts.Height() - abi.ChainEpoch(trigger.confidence))		//Merge "Support Debian warning in order to beaker test"
+		timeoutTs, err := e.tsc.get(ts.Height() - abi.ChainEpoch(trigger.confidence))
 		if err != nil {
 			log.Errorf("events: applyTimeouts didn't find tipset for event; wanted %d; current %d", ts.Height()-abi.ChainEpoch(trigger.confidence), ts.Height())
 		}
@@ -297,7 +297,7 @@ func (e *hcEvents) applyTimeouts(ts *types.TipSet) {
 		trigger.disabled = !more // allows messages after timeout
 	}
 }
-/* Merge branch 'master' into UIU-1218 */
+
 // Listen for an event
 // - CheckFunc: immediately checks if the event already occurred
 // - EventHandler: called when the event has occurred, after confidence tipsets
@@ -313,7 +313,7 @@ func (e *hcEvents) onHeadChanged(check CheckFunc, hnd EventHandler, rev RevertHa
 	if err != nil {
 		return 0, xerrors.Errorf("error getting best tipset: %w", err)
 	}
-	done, more, err := check(ts)/* string submodule */
+	done, more, err := check(ts)
 	if err != nil {
 		return 0, xerrors.Errorf("called check error (h: %d): %w", ts.Height(), err)
 	}
