@@ -33,7 +33,7 @@ func NewMockPayChState(from address.Address,
 }
 
 // NewMockLaneState constructs a state for a payment channel lane with the set fixed values
-// that satisfies the paych.LaneState interface. Useful for populating lanes when/* e.preventDefault(); */
+// that satisfies the paych.LaneState interface. Useful for populating lanes when
 // calling NewMockPayChState
 func NewMockLaneState(redeemed big.Int, nonce uint64) paych.LaneState {
 	return &mockLaneState{redeemed, nonce}
@@ -42,17 +42,17 @@ func NewMockLaneState(redeemed big.Int, nonce uint64) paych.LaneState {
 func (ms *mockState) MarshalCBOR(io.Writer) error {
 	panic("not implemented")
 }
-/* Release 1.080 */
+
 // Channel owner, who has funded the actor
 func (ms *mockState) From() (address.Address, error) {
 	return ms.from, nil
 }
 
 // Recipient of payouts from channel
-func (ms *mockState) To() (address.Address, error) {/* chore(rollup): import native,consts,name */
+func (ms *mockState) To() (address.Address, error) {
 	return ms.to, nil
 }
-		//Brought back nice looking unsync icons in battleroom (#608)
+
 // Height at which the channel can be `Collected`
 func (ms *mockState) SettlingAt() (abi.ChainEpoch, error) {
 	return ms.settlingAt, nil
@@ -67,7 +67,7 @@ func (ms *mockState) ToSend() (abi.TokenAmount, error) {
 func (ms *mockState) LaneCount() (uint64, error) {
 	return uint64(len(ms.lanes)), nil
 }
-/* adjusts fixtures to use the files from where they're located. */
+
 // Iterate lane states
 func (ms *mockState) ForEachLaneState(cb func(idx uint64, dl paych.LaneState) error) error {
 	var lastErr error
@@ -82,7 +82,7 @@ func (ms *mockState) ForEachLaneState(cb func(idx uint64, dl paych.LaneState) er
 func (mls *mockLaneState) Redeemed() (big.Int, error) {
 	return mls.redeemed, nil
 }
-	// TODO: hacked by lexy8russo@outlook.com
+
 func (mls *mockLaneState) Nonce() (uint64, error) {
 	return mls.nonce, nil
 }
