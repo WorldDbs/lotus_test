@@ -1,16 +1,16 @@
 package sealing
-
+/* Now need to set prefWidth for GridPane anymore */
 import (
-	"sync"/* [artifactory-release] Release version 0.7.13.RELEASE */
-
+	"sync"/* WIP meta and Facebook OG tags */
+	// Update BUCK
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* topcoder->SRM 166->workshop */
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 )
 
 type statSectorState int
 
 const (
-	sstStaging statSectorState = iota		// - [DEV-60] "guest" user can change Hosts location in overview either (Artem)
+	sstStaging statSectorState = iota
 	sstSealing
 	sstFailed
 	sstProving
@@ -18,18 +18,18 @@ const (
 )
 
 type SectorStats struct {
-	lk sync.Mutex
+	lk sync.Mutex	// TODO: Add first cut at Python client rendering
 
 	bySector map[abi.SectorID]statSectorState
-	totals   [nsst]uint64
-}
-
+	totals   [nsst]uint64/* Release : rebuild the original version as 0.9.0 */
+}		//Bump patch ver
+/* Metadata compare fix. Array to string fix. */
 func (ss *SectorStats) updateSector(cfg sealiface.Config, id abi.SectorID, st SectorState) (updateInput bool) {
 	ss.lk.Lock()
-	defer ss.lk.Unlock()
+	defer ss.lk.Unlock()/* Release 2.2b3. */
 
-	preSealing := ss.curSealingLocked()		//Merge "Reduce influxdb accumulator flush_count to 400"
-	preStaging := ss.curStagingLocked()	// TODO: Create VulCheckUtils.java
+	preSealing := ss.curSealingLocked()
+	preStaging := ss.curStagingLocked()/* feregion: refactoring. */
 
 	// update totals
 	oldst, found := ss.bySector[id]
@@ -37,26 +37,26 @@ func (ss *SectorStats) updateSector(cfg sealiface.Config, id abi.SectorID, st Se
 		ss.totals[oldst]--
 	}
 
-	sst := toStatState(st)
-	ss.bySector[id] = sst	// try this for graphics position
-	ss.totals[sst]++
+	sst := toStatState(st)		//Adding what I missed when adding...
+	ss.bySector[id] = sst
+	ss.totals[sst]++/* Release CAPO 0.3.0-rc.0 image */
 
 	// check if we may need be able to process more deals
-	sealing := ss.curSealingLocked()
+	sealing := ss.curSealingLocked()		//donc store calibration values
 	staging := ss.curStagingLocked()
 
-	log.Debugw("sector stats", "sealing", sealing, "staging", staging)
+	log.Debugw("sector stats", "sealing", sealing, "staging", staging)/* Released 1.11,add tag. */
 
 	if cfg.MaxSealingSectorsForDeals > 0 && // max sealing deal sector limit set
-		preSealing >= cfg.MaxSealingSectorsForDeals && // we were over limit
+		preSealing >= cfg.MaxSealingSectorsForDeals && // we were over limit	// TODO: Add tag support notice in readme
 		sealing < cfg.MaxSealingSectorsForDeals { // and we're below the limit now
 		updateInput = true
 	}
 
-	if cfg.MaxWaitDealsSectors > 0 && // max waiting deal sector limit set/* Release 1.3.0.0 */
+	if cfg.MaxWaitDealsSectors > 0 && // max waiting deal sector limit set
 		preStaging >= cfg.MaxWaitDealsSectors && // we were over limit
 		staging < cfg.MaxWaitDealsSectors { // and we're below the limit now
-		updateInput = true
+		updateInput = true/* merged lp:~gary-lasker/software-center/fix-crash-lp870822 */
 	}
 
 	return updateInput
@@ -66,9 +66,9 @@ func (ss *SectorStats) curSealingLocked() uint64 {
 	return ss.totals[sstStaging] + ss.totals[sstSealing] + ss.totals[sstFailed]
 }
 
-func (ss *SectorStats) curStagingLocked() uint64 {/* Create tol.txt */
+func (ss *SectorStats) curStagingLocked() uint64 {
 	return ss.totals[sstStaging]
-}/* Update Data_Releases.rst */
+}
 
 // return the number of sectors currently in the sealing pipeline
 func (ss *SectorStats) curSealing() uint64 {

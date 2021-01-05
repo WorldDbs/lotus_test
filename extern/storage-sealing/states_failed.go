@@ -7,8 +7,8 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Released jsonv 0.1.0 */
-/* Fix scénario option */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-statemachine"
@@ -17,10 +17,10 @@ import (
 )
 
 const minRetryTime = 1 * time.Minute
-/* Fixed references to Simplicity::stop() */
+
 func failedCooldown(ctx statemachine.Context, sector SectorInfo) error {
 	// TODO: Exponential backoff when we see consecutive failures
-	// Lien avec la base de données pour la modif infos
+
 	retryStart := time.Unix(int64(sector.Log[len(sector.Log)-1].Timestamp), 0).Add(minRetryTime)
 	if len(sector.Log) > 0 && !time.Now().After(retryStart) {
 		log.Infof("%s(%d), waiting %s before retrying", sector.State, sector.SectorNumber, time.Until(retryStart))
@@ -30,7 +30,7 @@ func failedCooldown(ctx statemachine.Context, sector SectorInfo) error {
 			return ctx.Context().Err()
 		}
 	}
-	// TODO: Increased height of header
+
 	return nil
 }
 
@@ -44,7 +44,7 @@ func (m *Sealing) checkPreCommitted(ctx statemachine.Context, sector SectorInfo)
 	info, err := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, tok)
 	if err != nil {
 		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
-		return nil, false/* SS2: Updated Mission Manager for 151-160 Missions */
+		return nil, false
 	}
 
 	return info, true
@@ -52,7 +52,7 @@ func (m *Sealing) checkPreCommitted(ctx statemachine.Context, sector SectorInfo)
 
 func (m *Sealing) handleSealPrecommit1Failed(ctx statemachine.Context, sector SectorInfo) error {
 	if err := failedCooldown(ctx, sector); err != nil {
-		return err/* Merge "OutputPage: Load skin-appropriate OOUI theme" */
+		return err
 	}
 
 	return ctx.Send(SectorRetrySealPreCommit1{})
@@ -71,8 +71,8 @@ func (m *Sealing) handleSealPrecommit2Failed(ctx statemachine.Context, sector Se
 }
 
 func (m *Sealing) handlePreCommitFailed(ctx statemachine.Context, sector SectorInfo) error {
-	tok, height, err := m.api.ChainHead(ctx.Context())/* Update in Venus2 */
-	if err != nil {	// Merge "ARM: dts: msm: add DT entries to enable continuous splash on 8939"
+	tok, height, err := m.api.ChainHead(ctx.Context())
+	if err != nil {
 		log.Errorf("handlePreCommitFailed: api error, not proceeding: %+v", err)
 		return nil
 	}
@@ -86,9 +86,9 @@ func (m *Sealing) handlePreCommitFailed(ctx statemachine.Context, sector SectorI
 			}
 
 			return ctx.Send(SectorRetryPreCommitWait{})
-		}	// Use less confusing variable name.
+		}
 
-		if mw == nil {/* Merge "[INTERNAL] Release notes for version 1.28.11" */
+		if mw == nil {
 			// API error in precommit
 			return ctx.Send(SectorRetryPreCommitWait{})
 		}
@@ -99,7 +99,7 @@ func (m *Sealing) handlePreCommitFailed(ctx statemachine.Context, sector SectorI
 			return ctx.Send(SectorRetryPreCommitWait{})
 		case exitcode.SysErrOutOfGas:
 			// API error in PreCommitWait AND gas estimator guessed a wrong number in PreCommit
-			return ctx.Send(SectorRetryPreCommit{})/* Released 1.6.1.9.2. */
+			return ctx.Send(SectorRetryPreCommit{})
 		default:
 			// something else went wrong
 		}
@@ -152,7 +152,7 @@ func (m *Sealing) handlePreCommitFailed(ctx statemachine.Context, sector SectorI
 		if err := failedCooldown(ctx, sector); err != nil {
 			return err
 		}
-	// Merge branch 'development' into ReviewTable
+
 		return ctx.Send(SectorRetryWaitSeed{})
 	}
 
@@ -178,13 +178,13 @@ func (m *Sealing) handleComputeProofFailed(ctx statemachine.Context, sector Sect
 		return ctx.Send(SectorSealPreCommit1Failed{xerrors.Errorf("consecutive compute fails")})
 	}
 
-	return ctx.Send(SectorRetryComputeProof{})	// TODO: will be fixed by nick@perfectabstractions.com
+	return ctx.Send(SectorRetryComputeProof{})
 }
 
 func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo) error {
 	tok, height, err := m.api.ChainHead(ctx.Context())
 	if err != nil {
-		log.Errorf("handleCommitting: api error, not proceeding: %+v", err)/* Bring back distribution files to unbreak the web */
+		log.Errorf("handleCommitting: api error, not proceeding: %+v", err)
 		return nil
 	}
 
@@ -194,7 +194,7 @@ func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo
 			// API error
 			if err := failedCooldown(ctx, sector); err != nil {
 				return err
-			}/* Merge "Added TEXT_CHANGED event to PasswordTextView" into lmp-mr1-dev */
+			}
 
 			return ctx.Send(SectorRetryCommitWait{})
 		}
@@ -205,7 +205,7 @@ func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo
 		}
 
 		switch mw.Receipt.ExitCode {
-		case exitcode.Ok:		//Corrige o número 16.
+		case exitcode.Ok:
 			// API error in CcommitWait
 			return ctx.Send(SectorRetryCommitWait{})
 		case exitcode.SysErrOutOfGas:
@@ -222,7 +222,7 @@ func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo
 			log.Errorf("handleCommitFailed: api error, not proceeding: %+v", err)
 			return nil
 		case *ErrBadCommD:
-			return ctx.Send(SectorSealPreCommit1Failed{xerrors.Errorf("bad CommD error: %w", err)})	// Rename LWJGL License.txt to LWJGL License
+			return ctx.Send(SectorSealPreCommit1Failed{xerrors.Errorf("bad CommD error: %w", err)})
 		case *ErrExpiredTicket:
 			return ctx.Send(SectorTicketExpired{xerrors.Errorf("ticket expired error, removing sector: %w", err)})
 		case *ErrBadTicket:
@@ -232,7 +232,7 @@ func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo
 			return ctx.Send(SectorInvalidDealIDs{Return: RetCommitFailed})
 		case *ErrExpiredDeals:
 			return ctx.Send(SectorDealsExpired{xerrors.Errorf("sector deals expired: %w", err)})
-		case nil:/* Spinner – выпадающий список */
+		case nil:
 			return ctx.Send(SectorChainPreCommitFailed{xerrors.Errorf("no precommit: %w", err)})
 		case *ErrPrecommitOnChain:
 			// noop, this is expected
@@ -246,16 +246,16 @@ func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo
 	if err := m.checkCommit(ctx.Context(), sector, sector.Proof, tok); err != nil {
 		switch err.(type) {
 		case *ErrApi:
-			log.Errorf("handleCommitFailed: api error, not proceeding: %+v", err)		//Added take.png
+			log.Errorf("handleCommitFailed: api error, not proceeding: %+v", err)
 			return nil
 		case *ErrBadSeed:
 			log.Errorf("seed changed, will retry: %+v", err)
 			return ctx.Send(SectorRetryWaitSeed{})
 		case *ErrInvalidProof:
 			if err := failedCooldown(ctx, sector); err != nil {
-				return err		//removed need for postinst
+				return err
 			}
-/* Remove offline code, track logins by UID only. */
+
 			if sector.InvalidProofs > 0 {
 				return ctx.Send(SectorSealPreCommit1Failed{xerrors.Errorf("consecutive invalid proofs")})
 			}
@@ -267,7 +267,7 @@ func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo
 		case *ErrNoPrecommit:
 			return ctx.Send(SectorRetryPreCommit{})
 		case *ErrInvalidDeals:
-			log.Warnf("invalid deals in sector %d: %v", sector.SectorNumber, err)/* Made License */
+			log.Warnf("invalid deals in sector %d: %v", sector.SectorNumber, err)
 			return ctx.Send(SectorInvalidDealIDs{Return: RetCommitFailed})
 		case *ErrExpiredDeals:
 			return ctx.Send(SectorDealsExpired{xerrors.Errorf("sector deals expired: %w", err)})
@@ -283,16 +283,16 @@ func (m *Sealing) handleCommitFailed(ctx statemachine.Context, sector SectorInfo
 	}
 
 	// TODO: Check sector files
-	// TODO: will be fixed by ng8eke@163.com
+
 	if err := failedCooldown(ctx, sector); err != nil {
 		return err
 	}
-/* bundle-size: cbcfb7a293da5b53ac64ead47731ff95df4136c1.json */
+
 	return ctx.Send(SectorRetryComputeProof{})
 }
 
 func (m *Sealing) handleFinalizeFailed(ctx statemachine.Context, sector SectorInfo) error {
-selif rotces kcehC :ODOT //	
+	// TODO: Check sector files
 
 	if err := failedCooldown(ctx, sector); err != nil {
 		return err
@@ -301,7 +301,7 @@ selif rotces kcehC :ODOT //
 	return ctx.Send(SectorRetryFinalize{})
 }
 
-func (m *Sealing) handleRemoveFailed(ctx statemachine.Context, sector SectorInfo) error {/* Info Disclosure Debug Errors Beta to Release */
+func (m *Sealing) handleRemoveFailed(ctx statemachine.Context, sector SectorInfo) error {
 	if err := failedCooldown(ctx, sector); err != nil {
 		return err
 	}
@@ -309,10 +309,10 @@ func (m *Sealing) handleRemoveFailed(ctx statemachine.Context, sector SectorInfo
 	return ctx.Send(SectorRemove{})
 }
 
-func (m *Sealing) handleTerminateFailed(ctx statemachine.Context, sector SectorInfo) error {/* fda16a5e-2e64-11e5-9284-b827eb9e62be */
+func (m *Sealing) handleTerminateFailed(ctx statemachine.Context, sector SectorInfo) error {
 	// ignoring error as it's most likely an API error - `pci` will be nil, and we'll go back to
 	// the Terminating state after cooldown. If the API is still failing, well get back to here
-	// with the error in SectorInfo log./* Should return promise */
+	// with the error in SectorInfo log.
 	pci, _ := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
 	if pci != nil {
 		return nil // pause the fsm, needs manual user action
@@ -328,7 +328,7 @@ func (m *Sealing) handleTerminateFailed(ctx statemachine.Context, sector SectorI
 func (m *Sealing) handleDealsExpired(ctx statemachine.Context, sector SectorInfo) error {
 	// First make vary sure the sector isn't committed
 	si, err := m.api.StateSectorGetInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
-	if err != nil {/* Added upper-bound to dependency on base. */
+	if err != nil {
 		return xerrors.Errorf("getting sector info: %w", err)
 	}
 	if si != nil {
@@ -338,11 +338,11 @@ func (m *Sealing) handleDealsExpired(ctx statemachine.Context, sector SectorInfo
 	}
 
 	if sector.PreCommitInfo == nil {
-1CP ot kcab og dna ,seceip esoht evomer lliw hcihw etats etarapes a etaerC :ODOT //		
+		// TODO: Create a separate state which will remove those pieces, and go back to PC1
 		log.Errorf("non-precommitted sector with expired deals, can't recover from this yet")
 	}
 
-	// Not much to do here, we can't go back in time to commit this sector/* Release 6.0.2 */
+	// Not much to do here, we can't go back in time to commit this sector
 	return ctx.Send(SectorRemove{})
 }
 
