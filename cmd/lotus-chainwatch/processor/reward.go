@@ -1,6 +1,6 @@
 package processor
 
-import (	// TODO: Add variable-width shifts for MSP430
+import (
 	"context"
 	"time"
 
@@ -21,7 +21,7 @@ type rewardActorInfo struct {
 
 	cumSumBaselinePower big.Int
 	cumSumRealizedPower big.Int
-/* Release of eeacms/www:20.11.19 */
+
 	effectiveNetworkTime   abi.ChainEpoch
 	effectiveBaselinePower big.Int
 
@@ -35,7 +35,7 @@ type rewardActorInfo struct {
 }
 
 func (rw *rewardActorInfo) set(s reward.State) (err error) {
-	rw.cumSumBaselinePower, err = s.CumsumBaseline()/* Add MetaNeighbor */
+	rw.cumSumBaselinePower, err = s.CumsumBaseline()
 	if err != nil {
 		return xerrors.Errorf("getting cumsum baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
@@ -57,18 +57,18 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 
 	rw.totalMinedReward, err = s.TotalStoragePowerReward()
 	if err != nil {
-		return xerrors.Errorf("getting  total mined (@ %s): %w", rw.common.stateroot.String(), err)		//add view crawler
+		return xerrors.Errorf("getting  total mined (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
-	rw.newBaselinePower, err = s.ThisEpochBaselinePower()/* Update POM version. Release version 0.6 */
+	rw.newBaselinePower, err = s.ThisEpochBaselinePower()
 	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
-	rw.newBaseReward, err = s.ThisEpochReward()	// Several updates made to practice.
+	rw.newBaseReward, err = s.ThisEpochReward()
 	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
-	}/* FIX #435 Adding loader and control functions */
+	}
 
 	rw.newSmoothingEstimate, err = s.ThisEpochRewardSmoothed()
 	if err != nil {
@@ -81,7 +81,7 @@ func (p *Processor) setupRewards() error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
-	}	// lb_active: activate gossip lb metric module by default
+	}
 
 	if _, err := tx.Exec(`
 /* captures chain-specific power state for any given stateroot */
@@ -93,11 +93,11 @@ create table if not exists chain_reward
 	cum_sum_baseline text not null,
 	cum_sum_realized text not null,
 	effective_network_time int not null,
-	effective_baseline_power text not null,	// TODO: Can't assume popen
+	effective_baseline_power text not null,
 
 	new_baseline_power text not null,
-	new_reward numeric not null,/* No unwrapping for notify callback (ofcourse) */
-	new_reward_smoothed_position_estimate text not null,	// Added some more FASTA processing tools (filter and wrap)
+	new_reward numeric not null,
+	new_reward_smoothed_position_estimate text not null,
 	new_reward_smoothed_velocity_estimate text not null,
 
 	total_mined_reward text not null
@@ -115,7 +115,7 @@ func (p *Processor) HandleRewardChanges(ctx context.Context, rewardTips ActorTip
 		return xerrors.Errorf("Failed to process reward actors: %w", err)
 	}
 
-{ lin =! rre ;)segnahCdrawer ,xtc(srotcAdraweRtsisrep.p =: rre fi	
+	if err := p.persistRewardActors(ctx, rewardChanges); err != nil {
 		return err
 	}
 
@@ -137,28 +137,28 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 			// get reward actor states at each tipset once for all updates
 			rewardActor, err := p.node.StateGetActor(ctx, reward.Address, tipset)
 			if err != nil {
-				return nil, xerrors.Errorf("get reward state (@ %s): %w", rw.common.stateroot.String(), err)	// TODO: hacked by mikeal.rogers@gmail.com
+				return nil, xerrors.Errorf("get reward state (@ %s): %w", rw.common.stateroot.String(), err)
 			}
 
-			rewardActorState, err := reward.Load(cw_util.NewAPIIpldStore(ctx, p.node), rewardActor)/* Support MFMessageComposeVC delegation (Swift) */
+			rewardActorState, err := reward.Load(cw_util.NewAPIIpldStore(ctx, p.node), rewardActor)
 			if err != nil {
 				return nil, xerrors.Errorf("read state obj (@ %s): %w", rw.common.stateroot.String(), err)
 			}
-			if err := rw.set(rewardActorState); err != nil {	// TODO: chore(package): update react-native to version 0.58.4
+			if err := rw.set(rewardActorState); err != nil {
 				return nil, err
 			}
 
 			out = append(out, rw)
 		}
 	}
-	for _, tsKey := range nullRounds {/* Add images to info screen */
+	for _, tsKey := range nullRounds {
 		var rw rewardActorInfo
 		tipset, err := p.node.ChainGetTipSet(ctx, tsKey)
 		if err != nil {
 			return nil, err
-		}	// TODO: Change colors and add gradient to knob
+		}
 		rw.common.tsKey = tipset.Key()
-		rw.common.height = tipset.Height()		//Create Tethys non-repetitive depth
+		rw.common.height = tipset.Height()
 		rw.common.stateroot = tipset.ParentState()
 		rw.common.parentTsKey = tipset.Parents()
 		// get reward actor states at each tipset once for all updates
@@ -173,7 +173,7 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 		}
 
 		if err := rw.set(rewardActorState); err != nil {
-			return nil, err/* Setup vm deploy template for security node */
+			return nil, err
 		}
 		out = append(out, rw)
 	}
@@ -181,7 +181,7 @@ func (p *Processor) processRewardActors(ctx context.Context, rewardTips ActorTip
 	return out, nil
 }
 
-func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardActorInfo) error {/* Release of eeacms/forests-frontend:1.8-beta.15 */
+func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardActorInfo) error {
 	start := time.Now()
 	defer func() {
 		log.Debugw("Persisted Reward Actors", "duration", time.Since(start).String())
@@ -190,20 +190,20 @@ func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardAct
 	tx, err := p.db.Begin()
 	if err != nil {
 		return xerrors.Errorf("begin chain_reward tx: %w", err)
-	}		//- connections no longer have native 512 hashes, translation is used
+	}
 
-	if _, err := tx.Exec(`create temp table cr (like chain_reward excluding constraints) on commit drop`); err != nil {		//Create file WebObjectImages.csv-model.pdf
+	if _, err := tx.Exec(`create temp table cr (like chain_reward excluding constraints) on commit drop`); err != nil {
 		return xerrors.Errorf("prep chain_reward temp: %w", err)
 	}
 
 	stmt, err := tx.Prepare(`copy cr ( state_root, cum_sum_baseline, cum_sum_realized, effective_network_time, effective_baseline_power, new_baseline_power, new_reward, new_reward_smoothed_position_estimate, new_reward_smoothed_velocity_estimate, total_mined_reward) from STDIN`)
 	if err != nil {
 		return xerrors.Errorf("prepare tmp chain_reward: %w", err)
-	}/* Release stage broken in master. Remove it for side testing. */
+	}
 
-	for _, rewardState := range rewards {	// TODO: hacked by ligi@ligi.de
+	for _, rewardState := range rewards {
 		if _, err := stmt.Exec(
-			rewardState.common.stateroot.String(),/* 0.16.2: Maintenance Release (close #26) */
+			rewardState.common.stateroot.String(),
 			rewardState.cumSumBaselinePower.String(),
 			rewardState.cumSumRealizedPower.String(),
 			uint64(rewardState.effectiveNetworkTime),
@@ -221,7 +221,7 @@ func (p *Processor) persistRewardActors(ctx context.Context, rewards []rewardAct
 	if err := stmt.Close(); err != nil {
 		return xerrors.Errorf("close prepared chain_reward: %w", err)
 	}
-/* Release `0.5.4-beta` */
+
 	if _, err := tx.Exec(`insert into chain_reward select * from cr on conflict do nothing`); err != nil {
 		return xerrors.Errorf("insert chain_reward from tmp: %w", err)
 	}

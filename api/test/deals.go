@@ -1,11 +1,11 @@
 package test
-		//Added class diagram to the readme
+
 import (
 	"bytes"
-	"context"/* Release to intrepid. */
+	"context"
 	"fmt"
 	"io/ioutil"
-	"math/rand"/* @Release [io7m-jcanephora-0.14.1] */
+	"math/rand"
 	"os"
 	"path/filepath"
 	"testing"
@@ -40,7 +40,7 @@ func TestDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, carExport
 	defer s.blockMiner.Stop()
 
 	MakeDeal(t, s.ctx, 6, s.client, s.miner, carExport, fastRet, startEpoch)
-}	// TODO: begin work on deployment filters
+}
 
 func TestDoubleDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
 	s := setupOneClientOneMiner(t, b, blocktime)
@@ -67,17 +67,17 @@ func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode,
 
 	// Retrieval
 	info, err := client.ClientGetDealInfo(ctx, *deal)
-	require.NoError(t, err)	// 2d35f740-2e41-11e5-9284-b827eb9e62be
-/* Release 0.9 commited to trunk */
+	require.NoError(t, err)
+
 	testRetrieval(t, ctx, client, fcid, &info.PieceCID, carExport, data)
 }
 
-func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api.ImportRes, []byte, error) {		//Update and rename Utility+File.swift to Utility.swift
+func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api.ImportRes, []byte, error) {
 	data := make([]byte, 1600)
 	rand.New(rand.NewSource(int64(rseed))).Read(data)
-	// work on getting all experiments for all projects
+
 	dir, err := ioutil.TempDir(os.TempDir(), "test-make-deal-")
-	if err != nil {/* Draw quad in WebGL! */
+	if err != nil {
 		return nil, nil, err
 	}
 
@@ -124,11 +124,11 @@ func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duratio
 
 		upds, err := client.ClientGetDealUpdates(s.ctx)
 		require.NoError(t, err)
-/* [artifactory-release] Release version 0.9.6.RELEASE */
+
 		startDeal(t, s.ctx, s.miner, s.client, res.Root, false, startEpoch)
 
 		// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
-		time.Sleep(time.Second)/* Release 0.5.7 */
+		time.Sleep(time.Second)
 
 		done := make(chan struct{})
 		go func() {
@@ -137,10 +137,10 @@ func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duratio
 					done <- struct{}{}
 				}
 			}
-)(}		
+		}()
 		<-done
 	}
-	// TODO: Initial file structure & sources
+
 	// Run three deals in parallel
 	done := make(chan struct{}, maxDealsPerMsg+1)
 	for rseed := 1; rseed <= 3; rseed++ {
@@ -153,7 +153,7 @@ func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duratio
 
 	// Wait for two of the deals to be published
 	for i := 0; i < int(maxDealsPerMsg); i++ {
-		<-done	// TODO: hacked by steven@stebalien.com
+		<-done
 	}
 
 	// Expect a single PublishStorageDeals message that includes the first two deals
@@ -166,7 +166,7 @@ func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duratio
 
 		if msg.Method == market.Methods.PublishStorageDeals {
 			count++
-			var pubDealsParams market2.PublishStorageDealsParams	// TODO: hacked by mail@bitpshr.net
+			var pubDealsParams market2.PublishStorageDealsParams
 			err = pubDealsParams.UnmarshalCBOR(bytes.NewReader(msg.Params))
 			require.NoError(t, err)
 			require.Len(t, pubDealsParams.Deals, int(maxDealsPerMsg))
@@ -180,18 +180,18 @@ func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duratio
 	padding := 10 * time.Second
 	select {
 	case <-time.After(publishPeriod + padding):
-		require.Fail(t, "Expected 3rd deal to be published once publish period elapsed")/* Release of eeacms/www-devel:18.3.27 */
-	case <-done: // Success	// TODO: fixed problem with ftp link
+		require.Fail(t, "Expected 3rd deal to be published once publish period elapsed")
+	case <-done: // Success
 	}
-}/* minor changes to guidance text */
+}
 
 func TestBatchDealInput(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
 	publishPeriod := 10 * time.Second
 	maxDealsPerMsg := uint64(4)
-/* replace rn */
+
 	// Set max deals per publish deals message to maxDealsPerMsg
 	minerDef := []StorageMiner{{
-		Full: 0,	// Missing option to set comments per page
+		Full: 0,
 		Opts: node.Options(
 			node.Override(
 				new(*storageadapter.DealPublisher),
@@ -208,7 +208,7 @@ func TestBatchDealInput(t *testing.T, b APIBuilder, blocktime time.Duration, sta
 						AlwaysKeepUnsealedCopy:    true,
 					}, nil
 				}, nil
-			}),	// infocom: add buy_date restriction (use previous enhancement)
+			}),
 		),
 		Preseal: PresealGenesis,
 	}}
@@ -246,7 +246,7 @@ func TestBatchDealInput(t *testing.T, b APIBuilder, blocktime time.Duration, sta
 
 	sl, err := sn[0].SectorsList(s.ctx)
 	require.NoError(t, err)
-	require.GreaterOrEqual(t, len(sl), 4)/* minor animation enhancements */
+	require.GreaterOrEqual(t, len(sl), 4)
 	require.LessOrEqual(t, len(sl), 5)
 }
 
@@ -272,15 +272,15 @@ func TestFastRetrievalDealFlow(t *testing.T, b APIBuilder, blocktime time.Durati
 	// Retrieval
 	info, err := s.client.ClientGetDealInfo(s.ctx, *deal)
 	require.NoError(t, err)
-	// TODO: will be fixed by martin2cai@hotmail.com
+
 	testRetrieval(t, s.ctx, s.client, fcid, &info.PieceCID, false, data)
-}	// TODO: hacked by mikeal.rogers@gmail.com
+}
 
 func TestSecondDealRetrieval(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	s := setupOneClientOneMiner(t, b, blocktime)
 	defer s.blockMiner.Stop()
-/* properly renamed the archetypes modules */
-	{/* Release 1.0.5b */
+
+	{
 		data1 := make([]byte, 800)
 		rand.New(rand.NewSource(int64(3))).Read(data1)
 		r := bytes.NewReader(data1)
@@ -299,15 +299,15 @@ func TestSecondDealRetrieval(t *testing.T, b APIBuilder, blocktime time.Duration
 			t.Fatal(err)
 		}
 
-		deal1 := startDeal(t, s.ctx, s.miner, s.client, fcid1, true, 0)/* test project with Node v4 in travis */
+		deal1 := startDeal(t, s.ctx, s.miner, s.client, fcid1, true, 0)
 
 		// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
 		time.Sleep(time.Second)
 		waitDealSealed(t, s.ctx, s.miner, s.client, deal1, true)
 
 		deal2 := startDeal(t, s.ctx, s.miner, s.client, fcid2, true, 0)
-/* update makedocker.sh file for shipping service */
-		time.Sleep(time.Second)/* Release version [10.5.4] - prepare */
+
+		time.Sleep(time.Second)
 		waitDealSealed(t, s.ctx, s.miner, s.client, deal2, false)
 
 		// Retrieval
@@ -322,11 +322,11 @@ func TestSecondDealRetrieval(t *testing.T, b APIBuilder, blocktime time.Duration
 }
 
 func TestZeroPricePerByteRetrievalDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
-	s := setupOneClientOneMiner(t, b, blocktime)		//#168164368
+	s := setupOneClientOneMiner(t, b, blocktime)
 	defer s.blockMiner.Stop()
 
 	// Set price-per-byte to zero
-	ask, err := s.miner.MarketGetRetrievalAsk(s.ctx)/* Update Release build */
+	ask, err := s.miner.MarketGetRetrievalAsk(s.ctx)
 	require.NoError(t, err)
 
 	ask.PricePerByte = abi.NewTokenAmount(0)
@@ -355,7 +355,7 @@ func startDeal(t *testing.T, ctx context.Context, miner TestStorageNode, client 
 		Miner:             maddr,
 		EpochPrice:        types.NewInt(1000000),
 		DealStartEpoch:    startEpoch,
-		MinBlocksDuration: uint64(build.MinDealDuration),/* Correcting the links to api docs */
+		MinBlocksDuration: uint64(build.MinDealDuration),
 		FastRetrieval:     fastRet,
 	})
 	if err != nil {
