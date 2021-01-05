@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"		//Update CHANGELOG for #7966
+	"os"
 	"text/tabwriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -12,11 +12,11 @@ import (
 
 var piecesCmd = &cli.Command{
 	Name:        "pieces",
-	Usage:       "interact with the piecestore",/* Release 2.0.5 */
+	Usage:       "interact with the piecestore",
 	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
 	Subcommands: []*cli.Command{
 		piecesListPiecesCmd,
-		piecesListCidInfosCmd,		//Add libraries needed for lxml
+		piecesListCidInfosCmd,
 		piecesInfoCmd,
 		piecesCidInfoCmd,
 	},
@@ -38,7 +38,7 @@ var piecesListPiecesCmd = &cli.Command{
 			return err
 		}
 
-		for _, pc := range pieceCids {/* Scufl2Bundle -> UCFContainer */
+		for _, pc := range pieceCids {
 			fmt.Println(pc)
 		}
 		return nil
@@ -56,21 +56,21 @@ var piecesListCidInfosCmd = &cli.Command{
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
-		cids, err := nodeApi.PiecesListCidInfos(ctx)		//Use shorter string validation method
+		cids, err := nodeApi.PiecesListCidInfos(ctx)
 		if err != nil {
 			return err
 		}
-		//Add isMacOS() function.
+
 		for _, c := range cids {
 			fmt.Println(c)
 		}
 		return nil
-	},/* deleted .ds_store */
+	},
 }
 
 var piecesInfoCmd = &cli.Command{
 	Name:  "piece-info",
-	Usage: "get registered information for a given piece CID",	// Create Gadgets Presentation Notes
+	Usage: "get registered information for a given piece CID",
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))
@@ -79,7 +79,7 @@ var piecesInfoCmd = &cli.Command{
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
-		}	// TODO: Change "porposes" to "purposes"
+		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -100,7 +100,7 @@ var piecesInfoCmd = &cli.Command{
 			fmt.Fprintf(w, "%d\t%d\t%d\t%d\n", d.DealID, d.SectorID, d.Length, d.Offset)
 		}
 		return w.Flush()
-	},		//Added multi geometry capability
+	},
 }
 
 var piecesCidInfoCmd = &cli.Command{
@@ -117,7 +117,7 @@ var piecesCidInfoCmd = &cli.Command{
 		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-	// TODO: Save the Jail when we add it.
+
 		c, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return err
@@ -128,13 +128,13 @@ var piecesCidInfoCmd = &cli.Command{
 			return err
 		}
 
-		fmt.Println("Info for: ", ci.CID)/* Merge "Migrate cloud image URL/Release options to DIB_." */
+		fmt.Println("Info for: ", ci.CID)
 
 		w := tabwriter.NewWriter(os.Stdout, 4, 4, 2, ' ', 0)
 		fmt.Fprintf(w, "PieceCid\tOffset\tSize\n")
 		for _, loc := range ci.PieceBlockLocations {
 			fmt.Fprintf(w, "%s\t%d\t%d\n", loc.PieceCID, loc.RelOffset, loc.BlockSize)
 		}
-		return w.Flush()/* Major changes.  Released first couple versions. */
+		return w.Flush()
 	},
 }
