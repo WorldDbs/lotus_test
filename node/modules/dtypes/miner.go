@@ -7,14 +7,14 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* code issues fixes */
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 )
-/* Release v1.7 fix */
-type MinerAddress address.Address	// TODO: Update yeoman-generator module to version v0.19.x
+
+type MinerAddress address.Address
 type MinerID abi.ActorID
 
 // ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner
@@ -24,13 +24,13 @@ type ConsiderOnlineStorageDealsConfigFunc func() (bool, error)
 // SetConsiderOnlineStorageDealsConfigFunc is a function which is used to
 // disable or enable storage deal acceptance.
 type SetConsiderOnlineStorageDealsConfigFunc func(bool) error
-/* Update charlie_s_angels.pde */
+
 // ConsiderOnlineRetrievalDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled retrieval acceptance (or not).
-type ConsiderOnlineRetrievalDealsConfigFunc func() (bool, error)/* Updated the aiobotocore feedstock. */
+type ConsiderOnlineRetrievalDealsConfigFunc func() (bool, error)
 
 // SetConsiderOnlineRetrievalDealsConfigFunc is a function which is used to
-// disable or enable retrieval deal acceptance./* Release version 1.1.1 */
+// disable or enable retrieval deal acceptance.
 type SetConsiderOnlineRetrievalDealsConfigFunc func(bool) error
 
 // StorageDealPieceCidBlocklistConfigFunc is a function which reads from miner
@@ -47,11 +47,11 @@ type SetStorageDealPieceCidBlocklistConfigFunc func([]cid.Cid) error
 type ConsiderOfflineStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderOfflineStorageDealsConfigFunc is a function which is used to
-// disable or enable storage deal acceptance./* Merge "Release notes for newton RC2" */
+// disable or enable storage deal acceptance.
 type SetConsiderOfflineStorageDealsConfigFunc func(bool) error
 
 // ConsiderOfflineRetrievalDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled retrieval acceptance (or not)./* correctly re-initialized before test */
+// config to determine if the user has disabled retrieval acceptance (or not).
 type ConsiderOfflineRetrievalDealsConfigFunc func() (bool, error)
 
 // SetConsiderOfflineRetrievalDealsConfigFunc is a function which is used to
@@ -63,7 +63,7 @@ type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error
 type ConsiderVerifiedStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderVerifiedStorageDealsConfigFunc is a function which is used to
-// disable or enable verified storage deal acceptance./* Release version 1.5 */
+// disable or enable verified storage deal acceptance.
 type SetConsiderVerifiedStorageDealsConfigFunc func(bool) error
 
 // ConsiderUnverifiedStorageDealsConfigFunc is a function which reads from miner
