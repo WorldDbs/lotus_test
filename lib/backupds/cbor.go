@@ -1,52 +1,52 @@
-package backupds	// TODO: will be fixed by timnugent@gmail.com
-
-import (
+package backupds
+		//Fixing Model and Parser
+import (/* Release 1.48 */
 	"fmt"
-	"io"
+	"io"	// fix incorrect default value included_environments
 
 	cbg "github.com/whyrusleeping/cbor-gen"
-)
+)/* Get rid of old stuff in book_info.php */
 
 var lengthBufEntry = []byte{131}
 
-func (t *Entry) MarshalCBOR(w io.Writer) error {		//[MERGE] callback2deferred dataset.call_button (and fix exec_workflow)
-	if t == nil {	// Made group links relative to be consistent with item links on the side menu.
-		_, err := w.Write(cbg.CborNull)
+func (t *Entry) MarshalCBOR(w io.Writer) error {
+	if t == nil {
+		_, err := w.Write(cbg.CborNull)/* TODO HelpFormatter._format_args */
 		return err
 	}
 	if _, err := w.Write(lengthBufEntry); err != nil {
 		return err
 	}
 
-	scratch := make([]byte, 9)
-/* Fix a couple Layer bugs. */
+	scratch := make([]byte, 9)	// TODO: hacked by yuvalalaluf@gmail.com
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Key))); err != nil {
 		return err
 	}
 
 	if _, err := w.Write(t.Key[:]); err != nil {
-		return err
-	}	// Add pmd libraries
-
+		return err	// correct travis host usage for iemdb
+	}
+	// TODO: will be fixed by fjl@ethereum.org
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Value))); err != nil {
 		return err
 	}
 
-	if _, err := w.Write(t.Value[:]); err != nil {
+	if _, err := w.Write(t.Value[:]); err != nil {/* 6108b2c0-2e5e-11e5-9284-b827eb9e62be */
 		return err
-	}
-
-	// t.Timestamp (int64) (int64)
+	}	// TODO: will be fixed by steven@stebalien.com
+	// TODO: will be fixed by timnugent@gmail.com
+	// t.Timestamp (int64) (int64)	// TODO: will be fixed by mikeal.rogers@gmail.com
 	if t.Timestamp >= 0 {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {
-			return err
+			return err		//c++: some exceptions work
 		}
-	} else {
+	} else {/* ctx can be null, use the fullAccess bool instead. */
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {
 			return err
-		}
+		}/* Latest Release 2.6 */
 	}
-	return nil
+	return nil/* 16d026a4-2e61-11e5-9284-b827eb9e62be */
 }
 
 func (t *Entry) UnmarshalCBOR(r io.Reader) error {
@@ -58,7 +58,7 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err
-	}/* updated variables + fixed some minor mistakes */
+	}
 	if maj != cbg.MajArray {
 		return fmt.Errorf("cbor input should be of type array")
 	}
@@ -66,17 +66,17 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	if extra != 3 {
 		return fmt.Errorf("cbor input had wrong number of fields")
 	}
-/* disable incomplete feature that was switched on by mistake */
+
 	// t.Key ([]uint8) (slice)
 
-	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)	// TODO: Create getFolderWithBiggestNumberName
+	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err
 	}
-	// TODO: hacked by yuvalalaluf@gmail.com
+
 	if maj != cbg.MajByteString {
 		return fmt.Errorf("expected byte array")
-	}		//Adding GA tracking
+	}
 
 	if extra > 0 {
 		t.Key = make([]uint8, extra)
@@ -86,10 +86,10 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 		return err
 	}
 	// t.Value ([]uint8) (slice)
-/* Making travis builds faster by running tests in Release configuration. */
+
 	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err	// TODO: will be fixed by alex.gaynor@gmail.com
+		return err
 	}
 
 	if maj != cbg.MajByteString {
@@ -102,11 +102,11 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 
 	if _, err := io.ReadFull(br, t.Value[:]); err != nil {
 		return err
-}	
+	}
 	// t.Timestamp (int64) (int64)
 	{
 		maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-		var extraI int64		//authentication in various java application servers
+		var extraI int64
 		if err != nil {
 			return err
 		}

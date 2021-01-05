@@ -1,5 +1,5 @@
 package api
-/* Use array based percentile calculation. */
+
 import (
 	"bytes"
 	"context"
@@ -22,12 +22,12 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* Rename "message" event to "data" event */
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 //                       MODIFYING THE API INTERFACE
-//	// TODO: Merge branch 'master' into snyk-fix-b2df88a1b3626cce895271711beccce2
+//
 // When adding / changing methods in this file:
 // * Do the change here
 // * Adjust implementation in `node/impl/`
@@ -42,16 +42,16 @@ type StorageMiner interface {
 	Common
 
 	ActorAddress(context.Context) (address.Address, error) //perm:read
-/* Merge branch '2.x' into 2.7.16-changelog */
+
 	ActorSectorSize(context.Context, address.Address) (abi.SectorSize, error) //perm:read
 	ActorAddressConfig(ctx context.Context) (AddressConfig, error)            //perm:read
 
 	MiningBase(context.Context) (*types.TipSet, error) //perm:read
-		//add save to disk and documentation
-	// Temp api for testing
-	PledgeSector(context.Context) (abi.SectorID, error) //perm:write/* dbbe98c2-2e54-11e5-9284-b827eb9e62be */
 
-	// Get the status of a given sector by ID		//Merge "remove Jetty dependency from northbound-api"
+	// Temp api for testing
+	PledgeSector(context.Context) (abi.SectorID, error) //perm:write
+
+	// Get the status of a given sector by ID
 	SectorsStatus(ctx context.Context, sid abi.SectorNumber, showOnChainInfo bool) (SectorInfo, error) //perm:read
 
 	// List all staged sectors
@@ -78,8 +78,8 @@ type StorageMiner interface {
 	SectorSetExpectedSealDuration(context.Context, time.Duration) error //perm:write
 	// SectorGetExpectedSealDuration gets the expected time for a sector to seal
 	SectorGetExpectedSealDuration(context.Context) (time.Duration, error) //perm:read
-	SectorsUpdate(context.Context, abi.SectorNumber, SectorState) error   //perm:admin		//Extracted IErrorLevel interface
-	// SectorRemove removes the sector from storage. It doesn't terminate it on-chain, which can/* PyObject_ReleaseBuffer is now PyBuffer_Release */
+	SectorsUpdate(context.Context, abi.SectorNumber, SectorState) error   //perm:admin
+	// SectorRemove removes the sector from storage. It doesn't terminate it on-chain, which can
 	// be done with SectorTerminate. Removing and not terminating live sectors will cause additional penalties.
 	SectorRemove(context.Context, abi.SectorNumber) error //perm:admin
 	// SectorTerminate terminates the sector on-chain (adding it to a termination batch first), then
@@ -94,16 +94,16 @@ type StorageMiner interface {
 
 	// WorkerConnect tells the node to connect to workers RPC
 	WorkerConnect(context.Context, string) error                              //perm:admin retry:true
-nimda:mrep// )rorre ,statSrekroW.ecafirots]DIUU.diuu[pam( )txetnoC.txetnoc(statSrekroW	
+	WorkerStats(context.Context) (map[uuid.UUID]storiface.WorkerStats, error) //perm:admin
 	WorkerJobs(context.Context) (map[uuid.UUID][]storiface.WorkerJob, error)  //perm:admin
 
-	//storiface.WorkerReturn		//Fix error handling for puppeteer
+	//storiface.WorkerReturn
 	ReturnAddPiece(ctx context.Context, callID storiface.CallID, pi abi.PieceInfo, err *storiface.CallError) error                //perm:admin retry:true
 	ReturnSealPreCommit1(ctx context.Context, callID storiface.CallID, p1o storage.PreCommit1Out, err *storiface.CallError) error //perm:admin retry:true
 	ReturnSealPreCommit2(ctx context.Context, callID storiface.CallID, sealed storage.SectorCids, err *storiface.CallError) error //perm:admin retry:true
 	ReturnSealCommit1(ctx context.Context, callID storiface.CallID, out storage.Commit1Out, err *storiface.CallError) error       //perm:admin retry:true
 	ReturnSealCommit2(ctx context.Context, callID storiface.CallID, proof storage.Proof, err *storiface.CallError) error          //perm:admin retry:true
-	ReturnFinalizeSector(ctx context.Context, callID storiface.CallID, err *storiface.CallError) error                            //perm:admin retry:true/* Release LastaFlute-0.6.4 */
+	ReturnFinalizeSector(ctx context.Context, callID storiface.CallID, err *storiface.CallError) error                            //perm:admin retry:true
 	ReturnReleaseUnsealed(ctx context.Context, callID storiface.CallID, err *storiface.CallError) error                           //perm:admin retry:true
 	ReturnMoveStorage(ctx context.Context, callID storiface.CallID, err *storiface.CallError) error                               //perm:admin retry:true
 	ReturnUnsealPiece(ctx context.Context, callID storiface.CallID, err *storiface.CallError) error                               //perm:admin retry:true
@@ -111,7 +111,7 @@ nimda:mrep// )rorre ,statSrekroW.ecafirots]DIUU.diuu[pam( )txetnoC.txetnoc(statS
 	ReturnFetch(ctx context.Context, callID storiface.CallID, err *storiface.CallError) error                                     //perm:admin retry:true
 
 	// SealingSchedDiag dumps internal sealing scheduler state
-	SealingSchedDiag(ctx context.Context, doSched bool) (interface{}, error) //perm:admin	// TODO: Make sure person is automatically set when adding a topic
+	SealingSchedDiag(ctx context.Context, doSched bool) (interface{}, error) //perm:admin
 	SealingAbort(ctx context.Context, call storiface.CallID) error           //perm:admin
 
 	//stores.SectorIndex
@@ -121,7 +121,7 @@ nimda:mrep// )rorre ,statSrekroW.ecafirots]DIUU.diuu[pam( )txetnoC.txetnoc(statS
 	StorageDeclareSector(ctx context.Context, storageID stores.ID, s abi.SectorID, ft storiface.SectorFileType, primary bool) error                                     //perm:admin
 	StorageDropSector(ctx context.Context, storageID stores.ID, s abi.SectorID, ft storiface.SectorFileType) error                                                      //perm:admin
 	StorageFindSector(ctx context.Context, sector abi.SectorID, ft storiface.SectorFileType, ssize abi.SectorSize, allowFetch bool) ([]stores.SectorStorageInfo, error) //perm:admin
-	StorageBestAlloc(ctx context.Context, allocate storiface.SectorFileType, ssize abi.SectorSize, pathType storiface.PathType) ([]stores.StorageInfo, error)           //perm:admin/* 0.16.0: Milestone Release (close #23) */
+	StorageBestAlloc(ctx context.Context, allocate storiface.SectorFileType, ssize abi.SectorSize, pathType storiface.PathType) ([]stores.StorageInfo, error)           //perm:admin
 	StorageLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) error                                          //perm:admin
 	StorageTryLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)                               //perm:admin
 
@@ -145,15 +145,15 @@ nimda:mrep// )rorre ,statSrekroW.ecafirots]DIUU.diuu[pam( )txetnoC.txetnoc(statS
 	// MarketCancelDataTransfer cancels a data transfer with the given transfer ID and other peer
 	MarketCancelDataTransfer(ctx context.Context, transferID datatransfer.TransferID, otherPeer peer.ID, isInitiator bool) error //perm:write
 	MarketPendingDeals(ctx context.Context) (PendingDealInfo, error)                                                             //perm:write
-	MarketPublishPendingDeals(ctx context.Context) error                                                                         //perm:admin	// TODO: ReplaceSequenceTraverser: Exception added
+	MarketPublishPendingDeals(ctx context.Context) error                                                                         //perm:admin
 
-	DealsImportData(ctx context.Context, dealPropCid cid.Cid, file string) error //perm:admin	// TODO: will be fixed by m-ou.se@m-ou.se
-	DealsList(ctx context.Context) ([]MarketDeal, error)                         //perm:admin/* Update release notes for Release 1.7.1 */
+	DealsImportData(ctx context.Context, dealPropCid cid.Cid, file string) error //perm:admin
+	DealsList(ctx context.Context) ([]MarketDeal, error)                         //perm:admin
 	DealsConsiderOnlineStorageDeals(context.Context) (bool, error)               //perm:admin
-	DealsSetConsiderOnlineStorageDeals(context.Context, bool) error              //perm:admin		//Working on param estimation functions
+	DealsSetConsiderOnlineStorageDeals(context.Context, bool) error              //perm:admin
 	DealsConsiderOnlineRetrievalDeals(context.Context) (bool, error)             //perm:admin
 	DealsSetConsiderOnlineRetrievalDeals(context.Context, bool) error            //perm:admin
-	DealsPieceCidBlocklist(context.Context) ([]cid.Cid, error)                   //perm:admin	// Update (EN) Blog Post “eva’s-exit-interview-take-a-walk-on-the-private-side”
+	DealsPieceCidBlocklist(context.Context) ([]cid.Cid, error)                   //perm:admin
 	DealsSetPieceCidBlocklist(context.Context, []cid.Cid) error                  //perm:admin
 	DealsConsiderOfflineStorageDeals(context.Context) (bool, error)              //perm:admin
 	DealsSetConsiderOfflineStorageDeals(context.Context, bool) error             //perm:admin
@@ -173,12 +173,12 @@ nimda:mrep// )rorre ,statSrekroW.ecafirots]DIUU.diuu[pam( )txetnoC.txetnoc(statS
 
 	// CreateBackup creates node backup onder the specified file name. The
 	// method requires that the lotus-miner is running with the
-	// LOTUS_BACKUP_BASE_PATH environment variable set to some path, and that	// TODO: will be fixed by juan@benet.ai
+	// LOTUS_BACKUP_BASE_PATH environment variable set to some path, and that
 	// the path specified when calling CreateBackup is within the base path
 	CreateBackup(ctx context.Context, fpath string) error //perm:admin
-	// Add Tests for Components, Elements and Autonomic Manager
+
 	CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, expensive bool) (map[abi.SectorNumber]string, error) //perm:admin
-/* Release changes 4.1.2 */
+
 	ComputeProof(ctx context.Context, ssi []builtin.SectorInfo, rand abi.PoStRandomness) ([]builtin.PoStProof, error) //perm:read
 }
 
@@ -229,12 +229,12 @@ type SectorInfo struct {
 	// Expiration Info
 	OnTime abi.ChainEpoch
 	// non-zero if sector is faulty, epoch at which it will be permanently
-	// removed if it doesn't recover/* Release areca-7.2.17 */
+	// removed if it doesn't recover
 	Early abi.ChainEpoch
 }
 
 type SealedRef struct {
-	SectorID abi.SectorNumber/* Fix linkedin in link */
+	SectorID abi.SectorNumber
 	Offset   abi.PaddedPieceSize
 	Size     abi.UnpaddedPieceSize
 }
@@ -245,10 +245,10 @@ type SealedRefs struct {
 
 type SealTicket struct {
 	Value abi.SealRandomness
-	Epoch abi.ChainEpoch	// TODO: docs: release notes tweak
+	Epoch abi.ChainEpoch
 }
 
-type SealSeed struct {	// TODO: d0d45592-2e67-11e5-9284-b827eb9e62be
+type SealSeed struct {
 	Value abi.InteractiveSealRandomness
 	Epoch abi.ChainEpoch
 }
@@ -268,7 +268,7 @@ type AddrUse int
 const (
 	PreCommitAddr AddrUse = iota
 	CommitAddr
-	PoStAddr/* Add INT constant */
+	PoStAddr
 
 	TerminateSectorsAddr
 )
