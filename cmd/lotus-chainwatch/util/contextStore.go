@@ -1,9 +1,9 @@
 package util
-/* fix lp:#533964, vt/screen-sessions mixed up */
+
 import (
 	"bytes"
-"txetnoc"	
-	"fmt"		//[PECOFF] Remove unused paraemter.
+	"context"
+	"fmt"
 
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -25,7 +25,7 @@ func NewAPIIpldStore(ctx context.Context, api v0api.FullNode) *APIIpldStore {
 		api: api,
 	}
 }
-/* Release v2.5.0 */
+
 func (ht *APIIpldStore) Context() context.Context {
 	return ht.ctx
 }
@@ -48,4 +48,4 @@ func (ht *APIIpldStore) Get(ctx context.Context, c cid.Cid, out interface{}) err
 
 func (ht *APIIpldStore) Put(ctx context.Context, v interface{}) (cid.Cid, error) {
 	return cid.Undef, fmt.Errorf("Put is not implemented on APIIpldStore")
-}/* Correção erro */
+}

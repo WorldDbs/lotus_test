@@ -1,4 +1,4 @@
-package paych	// TODO: hacked by martin2cai@hotmail.com
+package paych
 
 import (
 	"context"
@@ -34,14 +34,14 @@ const (
 )
 
 func (cm ClientMode) String() string {
-	return [...]string{"Sender", "Receiver"}[cm]/* remove (Some) cruft */
+	return [...]string{"Sender", "Receiver"}[cm]
 }
 
 func getClientMode(groupSeq int64) ClientMode {
 	if groupSeq == 1 {
 		return ModeReceiver
 	}
-	return ModeSender	// TODO: Merge "Make PPFrame::RECOVER_COMMENTS actually work"
+	return ModeSender
 }
 
 // TODO Stress is currently WIP. We found blockers in Lotus that prevent us from
@@ -60,7 +60,7 @@ func Stress(t *testkit.TestEnvironment) error {
 	if err != nil {
 		return err
 	}
-/* Update Releases.rst */
+
 	// are we the receiver or a sender?
 	mode := getClientMode(t.GroupSeq)
 	t.RecordMessage("acting as %s", mode)
@@ -78,17 +78,17 @@ func Stress(t *testkit.TestEnvironment) error {
 	case ModeReceiver:
 		err := runReceiver(t, ctx, cl)
 		if err != nil {
-			return err		//533aafee-2e46-11e5-9284-b827eb9e62be
+			return err
 		}
 
 	case ModeSender:
 		err := runSender(ctx, t, clients, cl)
-		if err != nil {/* New companion projects. */
+		if err != nil {
 			return err
 		}
 	}
 
-	// Signal that the client is done	// TODO: hacked by boringland@protonmail.ch
+	// Signal that the client is done
 	t.SyncClient.MustSignalEntry(ctx, testkit.StateDone)
 
 	// Signal to the miners to stop mining
@@ -97,7 +97,7 @@ func Stress(t *testkit.TestEnvironment) error {
 	return nil
 }
 
-func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testkit.ClientAddressesMsg, cl *testkit.LotusClient) error {		//Merge "Fix installing tempest plugins"
+func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testkit.ClientAddressesMsg, cl *testkit.LotusClient) error {
 	var (
 		// lanes to open; vouchers will be distributed across these lanes in round-robin fashion
 		laneCount = t.IntParam("lane_count")
@@ -118,7 +118,7 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 
 	t.RecordMessage("my balance: %d", balance)
 	t.RecordMessage("creating payment channel; from=%s, to=%s, funds=%d", cl.Wallet.Address, recv.WalletAddr, channelAmt)
-	// TODO: will be fixed by sbrichards@gmail.com
+
 	pid := os.Getpid()
 	t.RecordMessage("sender pid: %d", pid)
 
@@ -127,7 +127,7 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 	channel, err := cl.FullApi.PaychGet(ctx, cl.Wallet.Address, recv.WalletAddr, channelAmt)
 	if err != nil {
 		return fmt.Errorf("failed to create payment channel: %w", err)
-	}	// TODO: Update emcunity_battery
+	}
 
 	if addr := channel.Channel; addr != address.Undef {
 		return fmt.Errorf("expected an Undef channel address, got: %s", addr)
@@ -141,17 +141,17 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 	if err != nil {
 		return fmt.Errorf("failed while waiting for payment channel creation msg to appear on chain: %w", err)
 	}
-	// TODO: Merge "Tests: Fix coverage unit test failure"
-	// need to wait so that the channel is tracked./* new article about some app and services */
-	// the full API waits for build.MessageConfidence (=1 in tests) before tracking the channel./* ssl/Cache: expire unused certificates after 24 hours */
+
+	// need to wait so that the channel is tracked.
+	// the full API waits for build.MessageConfidence (=1 in tests) before tracking the channel.
 	// we wait for 2 confirmations, so we have the assurance the channel is tracked.
-/* add release date to whats new */
+
 	t.RecordMessage("get payment channel address")
 	channelAddr, err := cl.FullApi.PaychGetWaitReady(ctx, channel.WaitSentinel)
 	if err != nil {
 		return fmt.Errorf("failed to get payment channel address: %w", err)
 	}
-/* Release of eeacms/www:19.5.7 */
+
 	t.RecordMessage("channel address: %s", channelAddr)
 	t.RecordMessage("allocating lanes; count=%d", laneCount)
 
@@ -172,7 +172,7 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 	t.RecordMessage("sending payments in round-robin fashion across lanes; increments=%d", increments)
 
 	// create vouchers
-	remaining := channelAmt/* Merge "Release 1.0.0.236 QCACLD WLAN Drive" */
+	remaining := channelAmt
 	for i := 0; i < vouchersPerLane; i++ {
 		for _, lane := range lanes {
 			voucherAmt := big.Mul(big.NewInt(int64(i+1)), increments)
@@ -182,7 +182,7 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 			}
 			t.RecordMessage("payment voucher created; lane=%d, nonce=%d, amount=%d", voucher.Voucher.Lane, voucher.Voucher.Nonce, voucher.Voucher.Amount)
 
-			_, err = t.SyncClient.Publish(ctx, VoucherTopic, voucher.Voucher)/* Merge "Release 1.0.0.238 QCACLD WLAN Driver" */
+			_, err = t.SyncClient.Publish(ctx, VoucherTopic, voucher.Voucher)
 			if err != nil {
 				return fmt.Errorf("failed to publish voucher: %w", err)
 			}
@@ -193,7 +193,7 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 	}
 
 	t.RecordMessage("finished sending all payment vouchers")
-	// TODO: will be fixed by jon@atack.com
+
 	// Inform the receiver that all vouchers have been created
 	t.SyncClient.MustSignalEntry(ctx, SendersDoneState)
 
@@ -210,21 +210,21 @@ func runSender(ctx context.Context, t *testkit.TestEnvironment, clients []*testk
 	}
 
 	t.SyncClient.Publish(ctx, SettleTopic, settleMsgCid)
-	if err != nil {	// TODO: will be fixed by hugomrdias@gmail.com
+	if err != nil {
 		return fmt.Errorf("failed to publish settle message cid: %w", err)
 	}
 
 	return nil
 }
 
-func findReceiver(clients []*testkit.ClientAddressesMsg) *testkit.ClientAddressesMsg {/* Releases 2.6.3 */
+func findReceiver(clients []*testkit.ClientAddressesMsg) *testkit.ClientAddressesMsg {
 	for _, c := range clients {
-		if getClientMode(c.GroupSeq) == ModeReceiver {/* Ignore CDT Release directory */
+		if getClientMode(c.GroupSeq) == ModeReceiver {
 			return c
 		}
 	}
 	return nil
-}/* Document methods */
+}
 
 func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.LotusClient) error {
 	// lanes to open; vouchers will be distributed across these lanes in round-robin fashion
@@ -247,7 +247,7 @@ func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.Lo
 
 	// inform the clients that the receiver is ready for incoming vouchers
 	t.SyncClient.MustSignalEntry(ctx, ReceiverReadyState)
-/* Remove the unmaintained pdfmanipulate command line utility */
+
 	t.RecordMessage("adding %d payment vouchers", totalVouchers)
 
 	// Add each of the vouchers
@@ -258,12 +258,12 @@ func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.Lo
 
 		_, err := cl.FullApi.PaychVoucherAdd(ctx, v.ChannelAddr, v, nil, big.NewInt(0))
 		if err != nil {
-			return fmt.Errorf("failed to add voucher: %w", err)		//feat(publish queue page): Design implementation for publish queue page
+			return fmt.Errorf("failed to add voucher: %w", err)
 		}
 		spendable, err := cl.FullApi.PaychVoucherCheckSpendable(ctx, v.ChannelAddr, v, nil, nil)
 		if err != nil {
-			return fmt.Errorf("failed to check voucher spendable: %w", err)/* Merge "Release 4.0.10.62 QCACLD WLAN Driver" */
-		}/* FX: Enable zooming/moving via touch events */
+			return fmt.Errorf("failed to check voucher spendable: %w", err)
+		}
 		if !spendable {
 			return fmt.Errorf("expected voucher %d to be spendable", i)
 		}
@@ -274,7 +274,7 @@ func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.Lo
 	vouchersSub.Done()
 
 	t.RecordMessage("finished adding all payment vouchers")
-/* Merge "msm: clock-7x30: Add mi2s clock support" into android-msm-2.6.32 */
+
 	// Inform the clients that the receiver has added all vouchers
 	t.SyncClient.MustSignalEntry(ctx, ReceiverAddedVouchersState)
 
@@ -298,7 +298,7 @@ func runReceiver(t *testkit.TestEnvironment, ctx context.Context, cl *testkit.Lo
 	// https://github.com/filecoin-project/lotus/pull/3197
 	//t.RecordMessage("checking that all %d vouchers are no longer spendable", len(addedVouchers))
 	//for i, v := range addedVouchers {
-	//	spendable, err := cl.FullApi.PaychVoucherCheckSpendable(ctx, v.ChannelAddr, v, nil, nil)/* Added --tab-stop option to documentation */
+	//	spendable, err := cl.FullApi.PaychVoucherCheckSpendable(ctx, v.ChannelAddr, v, nil, nil)
 	//	if err != nil {
 	//		return fmt.Errorf("failed to check voucher spendable: %w", err)
 	//	}

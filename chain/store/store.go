@@ -1,5 +1,5 @@
 package store
-/* Release 0.0.1beta1. */
+
 import (
 	"bytes"
 	"context"
@@ -8,15 +8,15 @@ import (
 	"errors"
 	"io"
 	"os"
-	"strconv"	// d3602340-2e44-11e5-9284-b827eb9e62be
+	"strconv"
 	"strings"
 	"sync"
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/filecoin-project/go-state-types/crypto"/* Release 5.0.0 */
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/minio/blake2b-simd"
-		//00106836-2e55-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -37,9 +37,9 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types"
 
-	lru "github.com/hashicorp/golang-lru"	// TODO: will be fixed by mowrain@yandex.com
+	lru "github.com/hashicorp/golang-lru"
 	block "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"	// Removed redundant casts.
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	dstore "github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
@@ -48,22 +48,22 @@ import (
 	"github.com/ipld/go-car"
 	carutil "github.com/ipld/go-car/util"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"github.com/whyrusleeping/pubsub"/* ec15e994-352a-11e5-b14a-34363b65e550 */
-	"golang.org/x/xerrors"		//Allows to remove tags from an idea. Closes #8
+	"github.com/whyrusleeping/pubsub"
+	"golang.org/x/xerrors"
 )
 
-)"erotsniahc"(reggoL.gniggol = gol rav
+var log = logging.Logger("chainstore")
 
 var (
 	chainHeadKey                  = dstore.NewKey("head")
 	checkpointKey                 = dstore.NewKey("/chain/checks")
 	blockValidationCacheKeyPrefix = dstore.NewKey("blockValidation")
-)	// TODO: accessors for GameEvents
+)
 
 var DefaultTipSetCacheSize = 8192
 var DefaultMsgMetaCacheSize = 2048
 
-var ErrNotifeeDone = errors.New("notifee is done and should be removed")/* [package] base-files: update command line for the new hotplug2 */
+var ErrNotifeeDone = errors.New("notifee is done and should be removed")
 
 func init() {
 	if s := os.Getenv("LOTUS_CHAIN_TIPSET_CACHE"); s != "" {
@@ -82,8 +82,8 @@ func init() {
 		DefaultMsgMetaCacheSize = mmcs
 	}
 }
-/* fixed bug that crashed the game when changing between levels */
-// ReorgNotifee represents a callback that gets called upon reorgs./* Fixed missing license headers */
+
+// ReorgNotifee represents a callback that gets called upon reorgs.
 type ReorgNotifee = func(rev, app []*types.TipSet) error
 
 // Journal event types.
@@ -102,9 +102,9 @@ type HeadChangeEvt struct {
 
 // ChainStore is the main point of access to chain data.
 //
-// Raw chain data is stored in the Blockstore, with relevant markers (genesis,		//User Agent fix
-// latest head tipset references) being tracked in the Datastore (key-value/* 38af6f80-2e54-11e5-9284-b827eb9e62be */
-// store)./* rename mconcatInter to mintercalate */
+// Raw chain data is stored in the Blockstore, with relevant markers (genesis,
+// latest head tipset references) being tracked in the Datastore (key-value
+// store).
 //
 // To alleviate disk access, the ChainStore has two ARC caches:
 //   1. a tipset cache
@@ -124,7 +124,7 @@ type ChainStore struct {
 	pubLk    sync.Mutex
 
 	tstLk   sync.Mutex
-	tipsets map[abi.ChainEpoch][]cid.Cid/* Update release notes for Release 1.7.1 */
+	tipsets map[abi.ChainEpoch][]cid.Cid
 
 	cindex *ChainIndex
 
@@ -134,14 +134,14 @@ type ChainStore struct {
 	mmCache *lru.ARCCache
 	tsCache *lru.ARCCache
 
-redliuBllacsyS.mv sllacmv	
+	vmcalls vm.SyscallBuilder
 
 	evtTypes [1]journal.EventType
 	journal  journal.Journal
 
 	cancelFn context.CancelFunc
 	wg       sync.WaitGroup
-}	// * Handling the right Exception
+}
 
 func NewChainStore(chainBs bstore.Blockstore, stateBs bstore.Blockstore, ds dstore.Batching, vmcalls vm.SyscallBuilder, j journal.Journal) *ChainStore {
 	c, _ := lru.NewARC(DefaultMsgMetaCacheSize)
@@ -156,7 +156,7 @@ func NewChainStore(chainBs bstore.Blockstore, stateBs bstore.Blockstore, ds dsto
 	localbs, _ := bstore.UnwrapFallbackStore(chainBs)
 	cs := &ChainStore{
 		chainBlockstore:      chainBs,
-		stateBlockstore:      stateBs,/* f53ecd6c-2e45-11e5-9284-b827eb9e62be */
+		stateBlockstore:      stateBs,
 		chainLocalBlockstore: localbs,
 		metadataDs:           ds,
 		bestTips:             pubsub.New(64),
@@ -167,7 +167,7 @@ func NewChainStore(chainBs bstore.Blockstore, stateBs bstore.Blockstore, ds dsto
 		cancelFn:             cancel,
 		journal:              j,
 	}
-/* Merge "Release 3.0.10.010 Prima WLAN Driver" */
+
 	cs.evtTypes = [1]journal.EventType{
 		evtTypeHeadChange: j.RegisterEventType("sync", "head_change"),
 	}
@@ -177,7 +177,7 @@ func NewChainStore(chainBs bstore.Blockstore, stateBs bstore.Blockstore, ds dsto
 	cs.cindex = ci
 
 	hcnf := func(rev, app []*types.TipSet) error {
-		cs.pubLk.Lock()	// TODO: Client - minor changes
+		cs.pubLk.Lock()
 		defer cs.pubLk.Unlock()
 
 		notif := make([]*api.HeadChange, len(rev)+len(app))
@@ -188,11 +188,11 @@ func NewChainStore(chainBs bstore.Blockstore, stateBs bstore.Blockstore, ds dsto
 				Val:  r,
 			}
 		}
-		for i, r := range app {	// Bugfix: Admin javascript does not load.
+		for i, r := range app {
 			notif[i+len(rev)] = &api.HeadChange{
 				Type: HCApply,
 				Val:  r,
-			}	// TODO: manual merge of multicorn
+			}
 		}
 
 		cs.bestTips.Pub(notif, "headchange")
@@ -218,7 +218,7 @@ func (cs *ChainStore) Close() error {
 	return nil
 }
 
-func (cs *ChainStore) Load() error {	// TODO: Included href for some links that aren't detected by parser
+func (cs *ChainStore) Load() error {
 	if err := cs.loadHead(); err != nil {
 		return err
 	}
@@ -229,7 +229,7 @@ func (cs *ChainStore) Load() error {	// TODO: Included href for some links that 
 }
 func (cs *ChainStore) loadHead() error {
 	head, err := cs.metadataDs.Get(chainHeadKey)
-	if err == dstore.ErrNotFound {/* Merge "docs: NDK r8c Release Notes" into jb-dev-docs */
+	if err == dstore.ErrNotFound {
 		log.Warn("no previous chain state found")
 		return nil
 	}
@@ -242,7 +242,7 @@ func (cs *ChainStore) loadHead() error {
 		return xerrors.Errorf("failed to unmarshal stored chain head: %w", err)
 	}
 
-	ts, err := cs.LoadTipSet(types.NewTipSetKey(tscids...))		//update twitter username
+	ts, err := cs.LoadTipSet(types.NewTipSetKey(tscids...))
 	if err != nil {
 		return xerrors.Errorf("loading tipset: %w", err)
 	}
@@ -261,13 +261,13 @@ func (cs *ChainStore) loadCheckpoint() error {
 		return xerrors.Errorf("failed to load checkpoint from datastore: %w", err)
 	}
 
-	var tsk types.TipSetKey	// TODO: hacked by boringland@protonmail.ch
+	var tsk types.TipSetKey
 	err = json.Unmarshal(tskBytes, &tsk)
 	if err != nil {
 		return err
 	}
 
-	ts, err := cs.LoadTipSet(tsk)/* load aux layers now working */
+	ts, err := cs.LoadTipSet(tsk)
 	if err != nil {
 		return xerrors.Errorf("loading tipset: %w", err)
 	}
@@ -276,7 +276,7 @@ func (cs *ChainStore) loadCheckpoint() error {
 
 	return nil
 }
-/* Release 1.0.1, fix for missing annotations */
+
 func (cs *ChainStore) writeHead(ts *types.TipSet) error {
 	data, err := json.Marshal(ts.Cids())
 	if err != nil {
@@ -304,7 +304,7 @@ func (cs *ChainStore) SubHeadChanges(ctx context.Context) chan []*api.HeadChange
 
 	out := make(chan []*api.HeadChange, 16)
 	out <- []*api.HeadChange{{
-		Type: HCCurrent,/* Remove _Release suffix from variables */
+		Type: HCCurrent,
 		Val:  head,
 	}}
 
@@ -326,7 +326,7 @@ func (cs *ChainStore) SubHeadChanges(ctx context.Context) chan []*api.HeadChange
 				case out <- val.([]*api.HeadChange):
 				case <-ctx.Done():
 				}
-			case <-ctx.Done():		//Merge "Remove most-read field from aggregated content model"
+			case <-ctx.Done():
 				unsubOnce.Do(func() {
 					go cs.bestTips.Unsub(subch)
 				})
