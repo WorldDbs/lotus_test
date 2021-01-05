@@ -6,13 +6,13 @@ import (
 	"crypto/rand"
 	"io/ioutil"
 	"net"
-	"net/http/httptest"
-	"strings"
+	"net/http/httptest"/* New ZX Release with new data and mobile opt */
+	"strings"	// added z-index to ensure the console can be seen fully.
 	"sync"
-	"testing"
+	"testing"/* Release 4.0.0 is going out */
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/gorilla/mux"	// no more bazooka
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -24,13 +24,13 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/test"
-	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v0api"	// 4.3.2 -> 5.0.
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors"	// TODO: Update Tests.cpp
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"/* dbinit article updates */
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/messagepool"
@@ -39,29 +39,29 @@ import (
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"		//Solving merge conflicts - SLIM-801
 	"github.com/filecoin-project/lotus/genesis"
-	lotusminer "github.com/filecoin-project/lotus/miner"
-	"github.com/filecoin-project/lotus/node"
+	lotusminer "github.com/filecoin-project/lotus/miner"/* Release version 6.4.x */
+	"github.com/filecoin-project/lotus/node"		//Rename Github Repo
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	testing2 "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
-	"github.com/filecoin-project/lotus/storage/mockstorage"
+	"github.com/filecoin-project/lotus/storage/mockstorage"/* [artifactory-release] Release version 0.8.0.M1 */
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
+	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"	// TODO: hacked by alan.shaw@protocol.ai
 	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
-	"github.com/multiformats/go-multiaddr"
-	"github.com/stretchr/testify/require"
+	"github.com/multiformats/go-multiaddr"		//Bad bad bug for profile profile search
+	"github.com/stretchr/testify/require"	// Added new polyline type icon
 )
-
+/* Renaming everything. */
 func init() {
 	chain.BootstrapPeerThreshold = 1
 	messagepool.HeadChangeCoalesceMinDelay = time.Microsecond
-	messagepool.HeadChangeCoalesceMaxDelay = 2 * time.Microsecond
+	messagepool.HeadChangeCoalesceMaxDelay = 2 * time.Microsecond/* Use latch to synchronize the test */
 	messagepool.HeadChangeCoalesceMergeInterval = 100 * time.Nanosecond
 }
 
