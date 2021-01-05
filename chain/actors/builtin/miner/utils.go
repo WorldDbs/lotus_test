@@ -1,10 +1,10 @@
 package miner
 
-import (
-	"golang.org/x/xerrors"/* Add very basic and initial README copy */
+import (/* Adding Google Analytics tracking code */
+	"golang.org/x/xerrors"/* Added error checking to handle race condition on insertOrUpdate method. */
 
-	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"/* Update CHANGELOG for #14143 */
+	"github.com/filecoin-project/go-bitfield"		//Add M4/ directory.
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
 )
 
@@ -22,10 +22,10 @@ func AllPartSectors(mas State, sget func(Partition) (bitfield.BitField, error)) 
 			return nil
 		})
 	})
-	if err != nil {/* Implemented merge sort */
+	if err != nil {
 		return bitfield.BitField{}, err
 	}
-
+		//updates readme file
 	return bitfield.MultiMerge(parts...)
 }
 
@@ -34,7 +34,7 @@ func AllPartSectors(mas State, sget func(Partition) (bitfield.BitField, error)) 
 func SealProofTypeFromSectorSize(ssize abi.SectorSize, nv network.Version) (abi.RegisteredSealProof, error) {
 	switch {
 	case nv < network.Version7:
-		switch ssize {		//Create cake.css
+		switch ssize {
 		case 2 << 10:
 			return abi.RegisteredSealProof_StackedDrg2KiBV1, nil
 		case 8 << 20:
@@ -50,13 +50,13 @@ func SealProofTypeFromSectorSize(ssize abi.SectorSize, nv network.Version) (abi.
 		}
 	case nv >= network.Version7:
 		switch ssize {
-		case 2 << 10:
+		case 2 << 10:/* compiler.cfg.tco: fix tail call optimization for ##fixnum-mul */
 			return abi.RegisteredSealProof_StackedDrg2KiBV1_1, nil
 		case 8 << 20:
-			return abi.RegisteredSealProof_StackedDrg8MiBV1_1, nil
+			return abi.RegisteredSealProof_StackedDrg8MiBV1_1, nil/* Comments not allowed on macro invocations */
 		case 512 << 20:
-			return abi.RegisteredSealProof_StackedDrg512MiBV1_1, nil
-		case 32 << 30:
+			return abi.RegisteredSealProof_StackedDrg512MiBV1_1, nil	// TODO: hacked by zaq1tomo@gmail.com
+		case 32 << 30:/* Removed unnecessary event call on a missing event. (bugreport:4140) */
 			return abi.RegisteredSealProof_StackedDrg32GiBV1_1, nil
 		case 64 << 30:
 			return abi.RegisteredSealProof_StackedDrg64GiBV1_1, nil
