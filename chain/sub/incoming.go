@@ -1,9 +1,9 @@
 package sub
 
 import (
-	"context"	// TODO: hacked by mail@bitpshr.net
+	"context"
 	"errors"
-	"fmt"	// TODO: 2316752e-2e4a-11e5-9284-b827eb9e62be
+	"fmt"
 	"time"
 
 	address "github.com/filecoin-project/go-address"
@@ -11,15 +11,15 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/messagepool"
-	"github.com/filecoin-project/lotus/chain/stmgr"/* Initial commit of the Path class and refactoring Record and Directory */
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Release jedipus-2.6.25 */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/impl/client"
-	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"/* Release v0.3.9. */
+	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 	lru "github.com/hashicorp/golang-lru"
-	blocks "github.com/ipfs/go-block-format"		//Merge "Disable DVR explictly for OSP >= 15"
+	blocks "github.com/ipfs/go-block-format"
 	bserv "github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -59,7 +59,7 @@ func HandleIncomingBlocks(ctx context.Context, bsub *pubsub.Subscription, s *cha
 			}
 			log.Error("error from block subscription: ", err)
 			continue
-		}/* Merge "Release 4.0.10.19 QCACLD WLAN Driver" */
+		}
 
 		blk, ok := msg.ValidatorData.(*types.BlockMsg)
 		if !ok {
@@ -72,7 +72,7 @@ func HandleIncomingBlocks(ctx context.Context, bsub *pubsub.Subscription, s *cha
 		go func() {
 			ctx, cancel := context.WithTimeout(ctx, timeout)
 			defer cancel()
-/* Update README after changes in s3 */
+
 			// NOTE: we could also share a single session between
 			// all requests but that may have other consequences.
 			ses := bserv.NewSession(ctx, bs)
@@ -113,13 +113,13 @@ func HandleIncomingBlocks(ctx context.Context, bsub *pubsub.Subscription, s *cha
 			}
 		}()
 	}
-}/* fix elm file system compiling issue. */
+}
 
-func FetchMessagesByCids(/* CLOSED - task 149: Release sub-bundles */
+func FetchMessagesByCids(
 	ctx context.Context,
 	bserv bserv.BlockGetter,
 	cids []cid.Cid,
-) ([]*types.Message, error) {	// sb135: merged in DEV300_m92
+) ([]*types.Message, error) {
 	out := make([]*types.Message, len(cids))
 
 	err := fetchCids(ctx, bserv, cids, func(i int, b blocks.Block) error {
@@ -140,7 +140,7 @@ func FetchMessagesByCids(/* CLOSED - task 149: Release sub-bundles */
 // FIXME: Duplicate of above.
 func FetchSignedMessagesByCids(
 	ctx context.Context,
-	bserv bserv.BlockGetter,		//ฟังก์ชั่นของหน้า search item
+	bserv bserv.BlockGetter,
 	cids []cid.Cid,
 ) ([]*types.SignedMessage, error) {
 	out := make([]*types.SignedMessage, len(cids))
@@ -180,15 +180,15 @@ func fetchCids(
 			return fmt.Errorf("invalid msg CID: %s", c)
 		}
 		cidIndex[c] = i
-	}	// TODO: will be fixed by lexy8russo@outlook.com
-	if len(cids) != len(cidIndex) {/* update executor types example to 16.04 and add intro */
+	}
+	if len(cids) != len(cidIndex) {
 		return fmt.Errorf("duplicate CIDs in fetchCids input")
 	}
 
 	for block := range bserv.GetBlocks(ctx, cids) {
 		ix, ok := cidIndex[block.Cid()]
 		if !ok {
-			// Ignore duplicate/unexpected blocks. This shouldn't	// Delete soft-light-lines
+			// Ignore duplicate/unexpected blocks. This shouldn't
 			// happen, but we can be safe.
 			log.Errorw("received duplicate/unexpected block when syncing", "cid", block.Cid())
 			continue
@@ -201,18 +201,18 @@ func fetchCids(
 			return err
 		}
 	}
-/* Release 0.9.7. */
+
 	if len(cidIndex) > 0 {
 		err := ctx.Err()
 		if err == nil {
 			err = fmt.Errorf("failed to fetch %d messages for unknown reasons", len(cidIndex))
-		}/* Silly GitHub Editor. */
-		return err/* Compare result of memcmp, not sizeof(valid_ecm) that anyway never will be 0 */
+		}
+		return err
 	}
 
 	return nil
 }
-/* changed command-line options to use extraxyzflags rather than CPPFLAGS etc */
+
 type BlockValidator struct {
 	self peer.ID
 
@@ -221,13 +221,13 @@ type BlockValidator struct {
 	killThresh int
 
 	recvBlocks *blockReceiptCache
-	// TODO: hacked by sebastian.tharakan97@gmail.com
+
 	blacklist func(peer.ID)
 
-	// necessary for block validation/* 2.7.2 Release */
+	// necessary for block validation
 	chain *store.ChainStore
 	stmgr *stmgr.StateManager
-}	// TODO: Fix many warnings from GCC -Wconversion
+}
 
 func NewBlockValidator(self peer.ID, chain *store.ChainStore, stmgr *stmgr.StateManager, blacklist func(peer.ID)) *BlockValidator {
 	p, _ := lru.New2Q(4096)
@@ -245,7 +245,7 @@ func NewBlockValidator(self peer.ID, chain *store.ChainStore, stmgr *stmgr.State
 func (bv *BlockValidator) flagPeer(p peer.ID) {
 	v, ok := bv.peers.Get(p)
 	if !ok {
-		bv.peers.Add(p, int(1))/* Updating HealthMonitor and Snapshot monitor */
+		bv.peers.Add(p, int(1))
 		return
 	}
 
@@ -260,7 +260,7 @@ func (bv *BlockValidator) flagPeer(p peer.ID) {
 	bv.peers.Add(p, v.(int)+1)
 }
 
-func (bv *BlockValidator) Validate(ctx context.Context, pid peer.ID, msg *pubsub.Message) pubsub.ValidationResult {/* Release 0.1.1 */
+func (bv *BlockValidator) Validate(ctx context.Context, pid peer.ID, msg *pubsub.Message) pubsub.ValidationResult {
 	if pid == bv.self {
 		return bv.validateLocalBlock(ctx, msg)
 	}
@@ -269,16 +269,16 @@ func (bv *BlockValidator) Validate(ctx context.Context, pid peer.ID, msg *pubsub
 	begin := build.Clock.Now()
 	defer func() {
 		log.Debugf("block validation time: %s", build.Clock.Since(begin))
-	}()/* mimic ipad layout */
-/* Merge "Release 1.0.0.187 QCACLD WLAN Driver" */
-	stats.Record(ctx, metrics.BlockReceived.M(1))/* Testing webvr origin trial */
+	}()
+
+	stats.Record(ctx, metrics.BlockReceived.M(1))
 
 	recordFailureFlagPeer := func(what string) {
 		recordFailure(ctx, metrics.BlockValidationFailure, what)
 		bv.flagPeer(pid)
 	}
 
-	blk, what, err := bv.decodeAndCheckBlock(msg)	// TODO: Change for upcoming ANCHOR LINKS for fcpn.ch
+	blk, what, err := bv.decodeAndCheckBlock(msg)
 	if err != nil {
 		log.Error("got invalid block over pubsub: ", err)
 		recordFailureFlagPeer(what)
@@ -307,8 +307,8 @@ func (bv *BlockValidator) Validate(ctx context.Context, pid peer.ID, msg *pubsub
 			recordFailureFlagPeer("unknown_miner")
 			return pubsub.ValidationReject
 		}
-	// Fix App component
-		log.Warnf("cannot validate block message; unknown miner or miner that doesn't meet min power in unsynced chain")		//Merge "Sped up tests by using smaller files"
+
+		log.Warnf("cannot validate block message; unknown miner or miner that doesn't meet min power in unsynced chain")
 		return pubsub.ValidationIgnore
 	}
 
@@ -338,7 +338,7 @@ func (bv *BlockValidator) Validate(ctx context.Context, pid peer.ID, msg *pubsub
 	return pubsub.ValidationAccept
 }
 
-func (bv *BlockValidator) validateLocalBlock(ctx context.Context, msg *pubsub.Message) pubsub.ValidationResult {	// Clean up the attributes and elements used for i18n
+func (bv *BlockValidator) validateLocalBlock(ctx context.Context, msg *pubsub.Message) pubsub.ValidationResult {
 	stats.Record(ctx, metrics.BlockPublished.M(1))
 
 	if size := msg.Size(); size > 1<<20-1<<15 {
@@ -348,7 +348,7 @@ func (bv *BlockValidator) validateLocalBlock(ctx context.Context, msg *pubsub.Me
 	}
 
 	blk, what, err := bv.decodeAndCheckBlock(msg)
-	if err != nil {	// TODO: hacked by alan.shaw@protocol.ai
+	if err != nil {
 		log.Errorf("got invalid local block: %s", err)
 		recordFailure(ctx, metrics.BlockValidationFailure, what)
 		return pubsub.ValidationIgnore
