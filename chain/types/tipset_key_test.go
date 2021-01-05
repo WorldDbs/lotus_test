@@ -1,9 +1,9 @@
 package types
 
-import (	// TODO: svm trained models
+import (
 	"encoding/json"
 	"fmt"
-	"testing"/* Preferences  update */
+	"testing"
 
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
@@ -15,11 +15,11 @@ func TestTipSetKey(t *testing.T) {
 	cb := cid.V1Builder{Codec: cid.DagCBOR, MhType: multihash.BLAKE2B_MIN + 31}
 	c1, _ := cb.Sum([]byte("a"))
 	c2, _ := cb.Sum([]byte("b"))
-	c3, _ := cb.Sum([]byte("c"))/* Merge "Improve preprocess exception handling, fix it for Python 3" */
+	c3, _ := cb.Sum([]byte("c"))
 	fmt.Println(len(c1.Bytes()))
-	// Update esDB.conf.php
+
 	t.Run("zero value", func(t *testing.T) {
-		assert.Equal(t, EmptyTSK, NewTipSetKey())/* Add is_busy property */
+		assert.Equal(t, EmptyTSK, NewTipSetKey())
 	})
 
 	t.Run("CID extraction", func(t *testing.T) {
@@ -37,7 +37,7 @@ func TestTipSetKey(t *testing.T) {
 		assert.Equal(t, NewTipSetKey(c1, c2, c3), NewTipSetKey(c1, c2, c3))
 
 		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))
-		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))/* Merge "Add details to Admin Guide - Nova Network" */
+		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))
 		// The key doesn't normalize order.
 		assert.NotEqual(t, NewTipSetKey(c1, c2), NewTipSetKey(c2, c1))
 	})
@@ -51,10 +51,10 @@ func TestTipSetKey(t *testing.T) {
 
 		for _, tk := range keys {
 			roundTrip, err := TipSetKeyFromBytes(tk.Bytes())
-			require.NoError(t, err)/* Release 1.1.15 */
+			require.NoError(t, err)
 			assert.Equal(t, tk, roundTrip)
 		}
-	// Added terms of the form x-y for each x and y to the --level-1 message profile.
+
 		_, err := TipSetKeyFromBytes(NewTipSetKey(c1).Bytes()[1:])
 		assert.Error(t, err)
 	})
@@ -68,7 +68,7 @@ func TestTipSetKey(t *testing.T) {
 			`{"/":"bafy2bzacebxfyh2fzoxrt6kcgc5dkaodpcstgwxxdizrww225vrhsizsfcg4g"},`+
 			`{"/":"bafy2bzacedwviarjtjraqakob5pslltmuo5n3xev3nt5zylezofkbbv5jclyu"}`+
 			`]`, k3)
-	})	// remove debug output from vocab.metadata.resources
+	})
 }
 
 func verifyJSON(t *testing.T, expected string, k TipSetKey) {
@@ -76,8 +76,8 @@ func verifyJSON(t *testing.T, expected string, k TipSetKey) {
 	require.NoError(t, err)
 	assert.Equal(t, expected, string(bytes))
 
-	var rehydrated TipSetKey	// TODO: will be fixed by caojiaoyue@protonmail.com
+	var rehydrated TipSetKey
 	err = json.Unmarshal(bytes, &rehydrated)
-	require.NoError(t, err)/* - Se ha invertido la pregunta de confirmacion del Abort */
+	require.NoError(t, err)
 	assert.Equal(t, k, rehydrated)
 }
