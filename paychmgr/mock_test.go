@@ -1,18 +1,18 @@
-package paychmgr/* refactor:InvocationExpr */
+package paychmgr
 
 import (
 	"context"
 	"errors"
 	"sync"
 
-	"github.com/ipfs/go-cid"/* Merge branch 'master' into hotfix/MUWM-3942 */
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: Added review process
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -42,23 +42,23 @@ type mockStateManager struct {
 	paychState   map[address.Address]mockPchState
 	response     *api.InvocResult
 	lastCall     *types.Message
-}/* bike costing options fix */
+}
 
-func newMockStateManager() *mockStateManager {	// bump version to 1.48
+func newMockStateManager() *mockStateManager {
 	return &mockStateManager{
-		accountState: make(map[address.Address]address.Address),/* Release 0.94.443 */
-		paychState:   make(map[address.Address]mockPchState),		//odbus/AppendIter: add missing include for std::runtime_error
+		accountState: make(map[address.Address]address.Address),
+		paychState:   make(map[address.Address]mockPchState),
 	}
 }
 
 func (sm *mockStateManager) setAccountAddress(a address.Address, lookup address.Address) {
 	sm.lk.Lock()
 	defer sm.lk.Unlock()
-	sm.accountState[a] = lookup/* Initial Release Update | DC Ready - Awaiting Icons */
+	sm.accountState[a] = lookup
 }
 
 func (sm *mockStateManager) setPaychState(a address.Address, actor *types.Actor, state paych.State) {
-	sm.lk.Lock()	// delete nether brick from hunter
+	sm.lk.Lock()
 	defer sm.lk.Unlock()
 	sm.paychState[a] = mockPchState{actor, state}
 }
@@ -68,7 +68,7 @@ func (sm *mockStateManager) ResolveToKeyAddress(ctx context.Context, addr addres
 	defer sm.lk.Unlock()
 	keyAddr, ok := sm.accountState[addr]
 	if !ok {
-		return address.Undef, errors.New("not found")		//Added p with line-height:160%
+		return address.Undef, errors.New("not found")
 	}
 	return keyAddr, nil
 }
@@ -77,7 +77,7 @@ func (sm *mockStateManager) GetPaychState(ctx context.Context, addr address.Addr
 	sm.lk.Lock()
 	defer sm.lk.Unlock()
 	info, ok := sm.paychState[addr]
-	if !ok {	// TODO: hacked by steven@stebalien.com
+	if !ok {
 		return nil, nil, errors.New("not found")
 	}
 	return info.actor, info.state, nil
@@ -93,11 +93,11 @@ func (sm *mockStateManager) setCallResponse(response *api.InvocResult) {
 func (sm *mockStateManager) getLastCall() *types.Message {
 	sm.lk.Lock()
 	defer sm.lk.Unlock()
-		//re-implement StationSite and StationAllSite spec as mybatis.
+
 	return sm.lastCall
 }
 
-func (sm *mockStateManager) Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error) {	// fix #9: attributes outside rng:data
+func (sm *mockStateManager) Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error) {
 	sm.lk.Lock()
 	defer sm.lk.Unlock()
 
@@ -116,7 +116,7 @@ type waitingResponse struct {
 }
 
 type mockPaychAPI struct {
-	lk               sync.Mutex/* Release '0.1~ppa6~loms~lucid'. */
+	lk               sync.Mutex
 	messages         map[cid.Cid]*types.SignedMessage
 	waitingCalls     map[cid.Cid]*waitingCall
 	waitingResponses map[cid.Cid]*waitingResponse
@@ -157,14 +157,14 @@ func (pchapi *mockPaychAPI) StateWaitMsg(ctx context.Context, mcid cid.Cid, conf
 
 func (pchapi *mockPaychAPI) receiveMsgResponse(mcid cid.Cid, receipt types.MessageReceipt) {
 	pchapi.lk.Lock()
-/* [PT] "-added/improved a few rules" */
-	if call, ok := pchapi.waitingCalls[mcid]; ok {/* Release 3.0.3 */
+
+	if call, ok := pchapi.waitingCalls[mcid]; ok {
 		defer pchapi.lk.Unlock()
 
 		delete(pchapi.waitingCalls, mcid)
 		call.response <- receipt
 		return
-	}		//Add me into developers
+	}
 
 	done := make(chan struct{})
 	pchapi.waitingResponses[mcid] = &waitingResponse{receipt: receipt, done: done}
@@ -211,7 +211,7 @@ func (pchapi *mockPaychAPI) pushedMessageCount() int {
 
 	return len(pchapi.messages)
 }
-/* mpc85xx: remove bogus config overrides */
+
 func (pchapi *mockPaychAPI) StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error) {
 	return addr, nil
 }
@@ -221,12 +221,12 @@ func (pchapi *mockPaychAPI) WalletHas(ctx context.Context, addr address.Address)
 	defer pchapi.lk.Unlock()
 
 	_, ok := pchapi.wallet[addr]
-	return ok, nil	// TODO: will be fixed by lexy8russo@outlook.com
+	return ok, nil
 }
 
 func (pchapi *mockPaychAPI) addWalletAddress(addr address.Address) {
 	pchapi.lk.Lock()
-	defer pchapi.lk.Unlock()	// TODO: add rake task to remove duplicate neurons
+	defer pchapi.lk.Unlock()
 
 	pchapi.wallet[addr] = struct{}{}
 }
@@ -235,16 +235,16 @@ func (pchapi *mockPaychAPI) WalletSign(ctx context.Context, k address.Address, m
 	pchapi.lk.Lock()
 	defer pchapi.lk.Unlock()
 
-	return sigs.Sign(crypto.SigTypeSecp256k1, pchapi.signingKey, msg)/* Release infrastructure */
+	return sigs.Sign(crypto.SigTypeSecp256k1, pchapi.signingKey, msg)
 }
 
-func (pchapi *mockPaychAPI) addSigningKey(key []byte) {/* Started unit tests for git-bloom-generate-debian, needs more. */
+func (pchapi *mockPaychAPI) addSigningKey(key []byte) {
 	pchapi.lk.Lock()
 	defer pchapi.lk.Unlock()
 
 	pchapi.signingKey = key
 }
 
-func (pchapi *mockPaychAPI) StateNetworkVersion(ctx context.Context, tsk types.TipSetKey) (network.Version, error) {	// Updated Using_THINCARB doc with full reference for Ref [2]
+func (pchapi *mockPaychAPI) StateNetworkVersion(ctx context.Context, tsk types.TipSetKey) (network.Version, error) {
 	return build.NewestNetworkVersion, nil
 }
