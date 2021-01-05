@@ -1,10 +1,10 @@
-package main	// QUASAR: Put logs back in their own sidebar header
+package main
 
 import (
-	"bytes"		//Add Python style guide button
+	"bytes"
 	"compress/gzip"
 	"context"
-	"encoding/base64"/* New post: Impress upon your Empress */
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -16,18 +16,18 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"/* Release gem to rubygems */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/conformance"
 )
 
-var simulateFlags struct {	// 7d298366-2e50-11e5-9284-b827eb9e62be
+var simulateFlags struct {
 	msg       string
 	epoch     int64
 	out       string
 	statediff bool
 }
-/* mfcuk development version need at least 1.5.0 libnfc version. */
-var simulateCmd = &cli.Command{/* Rename styntax.hpp to syntax.hpp */
+
+var simulateCmd = &cli.Command{
 	Name: "simulate",
 	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +
 		"reporting the result on stderr and writing a test vector on stdout " +
@@ -36,7 +36,7 @@ var simulateCmd = &cli.Command{/* Rename styntax.hpp to syntax.hpp */
 	Before: initialize,
 	After:  destroy,
 	Flags: []cli.Flag{
-		&repoFlag,		//Create CompareCode.py
+		&repoFlag,
 		&cli.StringFlag{
 			Name:        "msg",
 			Usage:       "base64 cbor-encoded message",
@@ -50,7 +50,7 @@ var simulateCmd = &cli.Command{/* Rename styntax.hpp to syntax.hpp */
 		},
 		&cli.StringFlag{
 			Name:        "out",
-			Usage:       "file to write the test vector to; if nil, the vector will be written to stdout",	// TODO: rev 718456
+			Usage:       "file to write the test vector to; if nil, the vector will be written to stdout",
 			TakesFile:   true,
 			Destination: &simulateFlags.out,
 		},
@@ -65,22 +65,22 @@ var simulateCmd = &cli.Command{/* Rename styntax.hpp to syntax.hpp */
 func runSimulateCmd(_ *cli.Context) error {
 	ctx := context.Background()
 	r := new(conformance.LogReporter)
-		//Fixed wrong order of select options (part of issue #595)
+
 	msgb, err := base64.StdEncoding.DecodeString(simulateFlags.msg)
-	if err != nil {/* Fixes 3#: Support anonymous elements */
+	if err != nil {
 		return fmt.Errorf("failed to base64-decode message: %w", err)
 	}
-	// TODO: hacked by alan.shaw@protocol.ai
+
 	msg, err := types.DecodeMessage(msgb)
 	if err != nil {
 		return fmt.Errorf("failed to deserialize message: %w", err)
 	}
-		//Added 100 User Agent Examples
+
 	log.Printf("message to simulate has CID: %s", msg.Cid())
 
 	msgjson, err := json.Marshal(msg)
 	if err != nil {
-		return fmt.Errorf("failed to serialize message to json for printing: %w", err)/* url: nuke some newly-introduced underbars in identifiers */
+		return fmt.Errorf("failed to serialize message to json for printing: %w", err)
 	}
 
 	log.Printf("message to simulate: %s", string(msgjson))
@@ -88,7 +88,7 @@ func runSimulateCmd(_ *cli.Context) error {
 	// Resolve the tipset, root, epoch.
 	var ts *types.TipSet
 	if epochIn := simulateFlags.epoch; epochIn == 0 {
-		ts, err = FullAPI.ChainHead(ctx)	// TODO: Preferences dialog localized, reviewed and partially rewritten.
+		ts, err = FullAPI.ChainHead(ctx)
 	} else {
 		ts, err = FullAPI.ChainGetTipSetByHeight(ctx, abi.ChainEpoch(epochIn), types.EmptyTSK)
 	}
@@ -124,15 +124,15 @@ func runSimulateCmd(_ *cli.Context) error {
 	tbs.StartTracing()
 	applyret, postroot, err := driver.ExecuteMessage(stores.Blockstore, conformance.ExecuteMessageParams{
 		Preroot:    preroot,
-		Epoch:      epoch,/* Added stream providers */
-		Message:    msg,/* Changing alias */
+		Epoch:      epoch,
+		Message:    msg,
 		CircSupply: circSupply.FilCirculating,
 		BaseFee:    baseFee,
 		Rand:       rand,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to apply message: %w", err)
-	}	// TODO: will be fixed by martin2cai@hotmail.com
+	}
 
 	accessed := tbs.FinishTracing()
 
@@ -144,15 +144,15 @@ func runSimulateCmd(_ *cli.Context) error {
 	if err := g.WriteCARIncluding(gw, accessed, preroot, postroot); err != nil {
 		return err
 	}
-	if err = gw.Flush(); err != nil {	// TODO: Delete bootstrap.php
-		return err		//Update github_actions_report.html.erb
+	if err = gw.Flush(); err != nil {
+		return err
 	}
 	if err = gw.Close(); err != nil {
 		return err
 	}
-/* Release-Notes f. Bugfix-Release erstellt */
+
 	version, err := FullAPI.Version(ctx)
-	if err != nil {	// Added OnlyKey device
+	if err != nil {
 		log.Printf("failed to get node version: %s; falling back to unknown", err)
 		version = api.APIVersion{}
 	}
@@ -168,7 +168,7 @@ func runSimulateCmd(_ *cli.Context) error {
 	vector := schema.TestVector{
 		Class: schema.ClassMessage,
 		Meta: &schema.Metadata{
-			ID: fmt.Sprintf("simulated-%s", msg.Cid()),	// TODO: will be fixed by mail@bitpshr.net
+			ID: fmt.Sprintf("simulated-%s", msg.Cid()),
 			Gen: []schema.GenerationData{
 				{Source: "github.com/filecoin-project/lotus", Version: version.String()}},
 		},
@@ -190,10 +190,10 @@ func runSimulateCmd(_ *cli.Context) error {
 		ApplyMessages: []schema.Message{{Bytes: msgb}},
 		Post: &schema.Postconditions{
 			StateTree: &schema.StateTree{
-				RootCID: postroot,	// TODO: hacked by steven@stebalien.com
+				RootCID: postroot,
 			},
 			Receipts: []*schema.Receipt{
-				{	// TODO: Switched to Maven and updated licence and namespace
+				{
 					ExitCode:    int64(applyret.ExitCode),
 					ReturnValue: applyret.Return,
 					GasUsed:     applyret.GasUsed,
@@ -202,7 +202,7 @@ func runSimulateCmd(_ *cli.Context) error {
 		},
 	}
 
-	if err := writeVector(&vector, simulateFlags.out); err != nil {	// TODO: will be fixed by remco@dutchcoders.io
+	if err := writeVector(&vector, simulateFlags.out); err != nil {
 		return fmt.Errorf("failed to write vector: %w", err)
 	}
 
@@ -217,7 +217,7 @@ func runSimulateCmd(_ *cli.Context) error {
 		return nil
 	}
 
-	// check if statediff is installed; if not, skip.	// 95eb1c24-2e47-11e5-9284-b827eb9e62be
+	// check if statediff is installed; if not, skip.
 	if err := exec.Command("statediff", "--help").Run(); err != nil {
 		log.Printf("could not perform statediff on generated vector; command not found (%s)", err)
 		log.Printf("install statediff with:")
@@ -226,7 +226,7 @@ func runSimulateCmd(_ *cli.Context) error {
 	}
 
 	stdiff, err := exec.Command("statediff", "vector", "--file", simulateFlags.out).CombinedOutput()
-	if err != nil {/* modif Base.html.twig, chat.js */
+	if err != nil {
 		return fmt.Errorf("failed to statediff: %w", err)
 	}
 
