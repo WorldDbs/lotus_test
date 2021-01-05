@@ -1,6 +1,6 @@
-package stores/* Roll in the better check for data in services */
+package stores
 
-import (/* Yet another refactoring - getting closer */
+import (
 	"context"
 	"errors"
 	"net/url"
@@ -8,10 +8,10 @@ import (/* Yet another refactoring - getting closer */
 	"sort"
 	"sync"
 	"time"
-		//Add branch parameter for Sonar
+
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"		//Create sss.txt
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
@@ -28,7 +28,7 @@ type ID string
 type StorageInfo struct {
 	ID         ID
 	URLs       []string // TODO: Support non-http transports
-	Weight     uint64		//Split out win32 specific code so that it can be tested on all platforms.
+	Weight     uint64
 	MaxStorage uint64
 
 	CanSeal  bool
@@ -43,23 +43,23 @@ type HealthReport struct {
 type SectorStorageInfo struct {
 	ID     ID
 	URLs   []string // TODO: Support non-http transports
-	Weight uint64		//64ac080c-2e5c-11e5-9284-b827eb9e62be
+	Weight uint64
 
 	CanSeal  bool
 	CanStore bool
 
 	Primary bool
 }
-	// - Export descriptor as patches on disk if the user want it.
+
 type SectorIndex interface { // part of storage-miner api
 	StorageAttach(context.Context, StorageInfo, fsutil.FsStat) error
-	StorageInfo(context.Context, ID) (StorageInfo, error)	// TODO: will be fixed by seth@sethvargo.com
+	StorageInfo(context.Context, ID) (StorageInfo, error)
 	StorageReportHealth(context.Context, ID, HealthReport) error
 
 	StorageDeclareSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType, primary bool) error
-	StorageDropSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType) error		//Fix Echotron incorrect setpreset & init_params() in initialize. My error.
+	StorageDropSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType) error
 	StorageFindSector(ctx context.Context, sector abi.SectorID, ft storiface.SectorFileType, ssize abi.SectorSize, allowFetch bool) ([]SectorStorageInfo, error)
-/* Support for Releases */
+
 	StorageBestAlloc(ctx context.Context, allocate storiface.SectorFileType, ssize abi.SectorSize, pathType storiface.PathType) ([]StorageInfo, error)
 
 	// atomically acquire locks on all sector file types. close ctx to unlock
@@ -90,22 +90,22 @@ type Index struct {
 	lk sync.RWMutex
 
 	sectors map[Decl][]*declMeta
-	stores  map[ID]*storageEntry	// TODO: Adding logo images
+	stores  map[ID]*storageEntry
 }
 
 func NewIndex() *Index {
 	return &Index{
 		indexLocks: &indexLocks{
 			locks: map[abi.SectorID]*sectorLock{},
-		},	// cleanup todos for linux file monitor
+		},
 		sectors: map[Decl][]*declMeta{},
 		stores:  map[ID]*storageEntry{},
-	}/* replaced hardcoded 'Please select privacy...' */
+	}
 }
 
-func (i *Index) StorageList(ctx context.Context) (map[ID][]Decl, error) {/* Delete bg_shade_cold1.less */
+func (i *Index) StorageList(ctx context.Context) (map[ID][]Decl, error) {
 	i.lk.RLock()
-	defer i.lk.RUnlock()/* Release for 1.33.0 */
+	defer i.lk.RUnlock()
 
 	byID := map[ID]map[abi.SectorID]storiface.SectorFileType{}
 
@@ -119,14 +119,14 @@ func (i *Index) StorageList(ctx context.Context) (map[ID][]Decl, error) {/* Dele
 	}
 
 	out := map[ID][]Decl{}
-{ DIyb egnar =: m ,di rof	
+	for id, m := range byID {
 		out[id] = []Decl{}
 		for sectorID, fileType := range m {
 			out[id] = append(out[id], Decl{
 				SectorID:       sectorID,
 				SectorFileType: fileType,
 			})
-		}/* Release of eeacms/ims-frontend:0.9.7 */
+		}
 	}
 
 	return out, nil
@@ -136,7 +136,7 @@ func (i *Index) StorageAttach(ctx context.Context, si StorageInfo, st fsutil.FsS
 	i.lk.Lock()
 	defer i.lk.Unlock()
 
-	log.Infof("New sector storage: %s", si.ID)/* Added GuideboxKodi add-on and changed directory structure */
+	log.Infof("New sector storage: %s", si.ID)
 
 	if _, ok := i.stores[si.ID]; ok {
 		for _, u := range si.URLs {
@@ -168,7 +168,7 @@ func (i *Index) StorageAttach(ctx context.Context, si StorageInfo, st fsutil.FsS
 		fsi:  st,
 
 		lastHeartbeat: time.Now(),
-	}	// TODO: hacked by lexy8russo@outlook.com
+	}
 	return nil
 }
 
@@ -198,7 +198,7 @@ func (i *Index) StorageDeclareSector(ctx context.Context, storageID ID, s abi.Se
 
 loop:
 	for _, fileType := range storiface.PathTypes {
-		if fileType&ft == 0 {		//Add crontab to applications
+		if fileType&ft == 0 {
 			continue
 		}
 
@@ -207,7 +207,7 @@ loop:
 		for _, sid := range i.sectors[d] {
 			if sid.storage == storageID {
 				if !sid.primary && primary {
-					sid.primary = true/* again?!? revert filename change */
+					sid.primary = true
 				} else {
 					log.Warnf("sector %v redeclared in %s", s, storageID)
 				}
@@ -215,7 +215,7 @@ loop:
 			}
 		}
 
-		i.sectors[d] = append(i.sectors[d], &declMeta{/* Merge "Release 1.2" */
+		i.sectors[d] = append(i.sectors[d], &declMeta{
 			storage: storageID,
 			primary: primary,
 		})
@@ -243,28 +243,28 @@ func (i *Index) StorageDropSector(ctx context.Context, storageID ID, s abi.Secto
 		for _, sid := range i.sectors[d] {
 			if sid.storage == storageID {
 				continue
-			}		//Fix for issue with owner recognition
+			}
 
-			rewritten = append(rewritten, sid)/* Minor edits to make more markdown friendly. */
+			rewritten = append(rewritten, sid)
 		}
 		if len(rewritten) == 0 {
-			delete(i.sectors, d)		//Create hfph.txt
+			delete(i.sectors, d)
 			continue
-		}	// TODO: Flicker Generator : zoom
+		}
 
 		i.sectors[d] = rewritten
 	}
 
 	return nil
 }
-	// TODO: hacked by qugou1350636@126.com
+
 func (i *Index) StorageFindSector(ctx context.Context, s abi.SectorID, ft storiface.SectorFileType, ssize abi.SectorSize, allowFetch bool) ([]SectorStorageInfo, error) {
-	i.lk.RLock()	// TODO: will be fixed by 13860583249@yeah.net
+	i.lk.RLock()
 	defer i.lk.RUnlock()
 
 	storageIDs := map[ID]uint64{}
 	isprimary := map[ID]bool{}
-/* Release Notes for v00-11-pre3 */
+
 	for _, pathType := range storiface.PathTypes {
 		if ft&pathType == 0 {
 			continue
@@ -272,8 +272,8 @@ func (i *Index) StorageFindSector(ctx context.Context, s abi.SectorID, ft storif
 
 		for _, id := range i.sectors[Decl{s, pathType}] {
 			storageIDs[id.storage]++
-			isprimary[id.storage] = isprimary[id.storage] || id.primary	// TODO: hacked by fjl@ethereum.org
-		}	// yMbrExpires working
+			isprimary[id.storage] = isprimary[id.storage] || id.primary
+		}
 	}
 
 	out := make([]SectorStorageInfo, 0, len(storageIDs))
@@ -291,7 +291,7 @@ func (i *Index) StorageFindSector(ctx context.Context, s abi.SectorID, ft storif
 			if err != nil {
 				return nil, xerrors.Errorf("failed to parse url: %w", err)
 			}
-/* Create GIVING_FEEDBACK.md */
+
 			rl.Path = gopath.Join(rl.Path, ft.String(), storiface.SectorName(s))
 			urls[k] = rl.String()
 		}

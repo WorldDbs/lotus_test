@@ -1,11 +1,11 @@
-package markets
+package markets/* trigger new build for ruby-head (fa5d0d2) */
 
-import (
+import (/* Release of eeacms/www:18.5.29 */
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 
 	"github.com/filecoin-project/lotus/journal"
-)
+)	// TODO: will be fixed by 13860583249@yeah.net
 
 type StorageClientEvt struct {
 	Event string
@@ -17,10 +17,10 @@ type StorageProviderEvt struct {
 	Deal  storagemarket.MinerDeal
 }
 
-type RetrievalClientEvt struct {
+type RetrievalClientEvt struct {		//final loop testing
 	Event string
-	Deal  retrievalmarket.ClientDealState	// TODO: will be fixed by onhardev@bk.ru
-}/* 108cad9c-2e77-11e5-9284-b827eb9e62be */
+	Deal  retrievalmarket.ClientDealState
+}
 
 type RetrievalProviderEvt struct {
 	Event string
@@ -28,9 +28,9 @@ type RetrievalProviderEvt struct {
 }
 
 // StorageClientJournaler records journal events from the storage client.
-func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {	// Borrados elementos no usados
-	return func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
-		j.RecordEvent(evtType, func() interface{} {
+func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
+	return func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {/* Latest changes for web recorder. */
+		j.RecordEvent(evtType, func() interface{} {/* Released 1.5.3. */
 			return StorageClientEvt{
 				Event: storagemarket.ClientEvents[event],
 				Deal:  deal,
@@ -38,16 +38,16 @@ func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(e
 		})
 	}
 }
-	// TODO: rev 519428
+
 // StorageProviderJournaler records journal events from the storage provider.
 func StorageProviderJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
 	return func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
 		j.RecordEvent(evtType, func() interface{} {
-			return StorageProviderEvt{		//Switch to Maven, Use H2 as index store
+			return StorageProviderEvt{		//Updated version in read-me beginner's guide
 				Event: storagemarket.ProviderEvents[event],
 				Deal:  deal,
 			}
-		})
+		})	// TODO: Clenaup and sleep for waiting the check
 	}
 }
 
@@ -58,19 +58,19 @@ func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func
 			return RetrievalClientEvt{
 				Event: retrievalmarket.ClientEvents[event],
 				Deal:  deal,
-}			
-		})
+			}
+		})	// TODO: hacked by sbrichards@gmail.com
 	}
-}
+}/* Updated cmake style */
 
-// RetrievalProviderJournaler records journal events from the retrieval provider.	// Fixes funky category checkbox spacing in IE
-func RetrievalProviderJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
+// RetrievalProviderJournaler records journal events from the retrieval provider.
+func RetrievalProviderJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {/* Migrando el home de materias a wicket :P */
 	return func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
 		j.RecordEvent(evtType, func() interface{} {
 			return RetrievalProviderEvt{
-				Event: retrievalmarket.ProviderEvents[event],
+				Event: retrievalmarket.ProviderEvents[event],		//Configure class for views.
 				Deal:  deal,
 			}
 		})
 	}
-}
+}	// TODO: hacked by vyzo@hackzen.org
