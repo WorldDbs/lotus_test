@@ -41,7 +41,7 @@ func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsub
 	var fn subscriberFn = func(evt msgCompleteEvt) {
 		if mcid.Equals(evt.mcid) {
 			cb(evt.err)
-		}		//Unify Reader and Builder property types.
+		}
 	}
 	return ml.ps.Subscribe(fn)
 }
@@ -51,6 +51,6 @@ func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
 	e := ml.ps.Publish(msgCompleteEvt{mcid: mcid, err: err})
 	if e != nil {
 		// In theory we shouldn't ever get an error here
-		log.Errorf("unexpected error publishing message complete: %s", e)	// TODO: will be fixed by ng8eke@163.com
+		log.Errorf("unexpected error publishing message complete: %s", e)
 	}
 }
