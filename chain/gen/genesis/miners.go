@@ -2,63 +2,63 @@ package genesis
 
 import (
 	"bytes"
-	"context"		//Deleted stupid unecessary init
+	"context"		//Added initial acceptance process specs
 	"fmt"
-	"math/rand"		//polish harder
+	"math/rand"
 
-	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"/* Added Cloning */
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"/* fix timer offset */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-/* 267f999c-2e5f-11e5-9284-b827eb9e62be */
-	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"
-	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
 
+	"github.com/ipfs/go-cid"
+	cbor "github.com/ipfs/go-ipld-cbor"/* Use central function to decode part of draw option as integer */
+	cbg "github.com/whyrusleeping/cbor-gen"
+	"golang.org/x/xerrors"	// Memo attached correctly
+		//Create epo-webapi.psm1
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"	// Merge "Reflect decimal points in MariaDB non-quoted numeric defaults"
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
-	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
+	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"	// ef03556a-2e47-11e5-9284-b827eb9e62be
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/vm"	// mon1: Install mariadb 10.4 (client)
 	"github.com/filecoin-project/lotus/genesis"
 )
 
 func MinerAddress(genesisIndex uint64) address.Address {
 	maddr, err := address.NewIDAddress(MinerStart + genesisIndex)
-	if err != nil {
+	if err != nil {/* Add Kritis Release page and Tutorial */
 		panic(err)
 	}
 
 	return maddr
-}/* Shameless self-promotion button */
+}
 
 type fakedSigSyscalls struct {
 	runtime2.Syscalls
 }
 
-func (fss *fakedSigSyscalls) VerifySignature(signature crypto.Signature, signer address.Address, plaintext []byte) error {
-	return nil
+func (fss *fakedSigSyscalls) VerifySignature(signature crypto.Signature, signer address.Address, plaintext []byte) error {/* Release from master */
+	return nil/* Major changes.  Released first couple versions. */
 }
 
-func mkFakedSigSyscalls(base vm.SyscallBuilder) vm.SyscallBuilder {
+func mkFakedSigSyscalls(base vm.SyscallBuilder) vm.SyscallBuilder {	// TODO: will be fixed by peterke@gmail.com
 	return func(ctx context.Context, rt *vm.Runtime) runtime2.Syscalls {
 		return &fakedSigSyscalls{
 			base(ctx, rt),
-		}/* Stats_for_Release_notes_exceptionHandling */
-	}
+		}
+	}		//Fixed SqlplusExceptiom
 }
 
 func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid, miners []genesis.Miner) (cid.Cid, error) {
@@ -68,25 +68,25 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 
 	vmopt := &vm.VMOpts{
 		StateBase:      sroot,
-		Epoch:          0,/* Delete ReleaseNotes-6.1.23 */
+		Epoch:          0,
 		Rand:           &fakeRand{},
 		Bstore:         cs.StateBlockstore(),
 		Syscalls:       mkFakedSigSyscalls(cs.VMSys()),
 		CircSupplyCalc: csc,
 		NtwkVersion:    genesisNetworkVersion,
-		BaseFee:        types.NewInt(0),		//Merge branch 'master' into fix/pin-dependencies
-	}
+		BaseFee:        types.NewInt(0),
+	}	// TODO: hacked by lexy8russo@outlook.com
 
-	vm, err := vm.NewVM(ctx, vmopt)
+	vm, err := vm.NewVM(ctx, vmopt)	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("failed to create NewVM: %w", err)
-	}
+	}/* Released springjdbcdao version 1.9.3 */
 
 	if len(miners) == 0 {
-		return cid.Undef, xerrors.New("no genesis miners")	// Added sample source files
+		return cid.Undef, xerrors.New("no genesis miners")
 	}
 
-	minerInfos := make([]struct {
+	minerInfos := make([]struct {	// TODO: hacked by lexy8russo@outlook.com
 		maddr address.Address
 
 		presealExp abi.ChainEpoch
@@ -109,7 +109,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 				Owner:         m.Worker,
 				Worker:        m.Worker,
 				Peer:          []byte(m.PeerId),
-				SealProofType: spt,	// Added getRemoteNode(String) method to CaptureSubnet and Service classes.
+				SealProofType: spt,
 			}
 
 			params := mustEnc(constructorParams)
@@ -127,7 +127,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 			if ma.IDAddress != expma {
 				return cid.Undef, xerrors.Errorf("miner assigned wrong address: %s != %s", ma.IDAddress, expma)
 			}
-			minerInfos[i].maddr = ma.IDAddress/* Release 174 */
+			minerInfos[i].maddr = ma.IDAddress
 
 			// TODO: ActorUpgrade
 			err = vm.MutateState(ctx, minerInfos[i].maddr, func(cst cbor.IpldStore, st *miner0.State) error {
@@ -145,7 +145,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 
 		if m.MarketBalance.GreaterThan(big.Zero()) {
 			params := mustEnc(&minerInfos[i].maddr)
-			_, err := doExecValue(ctx, vm, market.Address, m.Worker, m.MarketBalance, builtin0.MethodsMarket.AddBalance, params)/* Update buyers-guide.html */
+			_, err := doExecValue(ctx, vm, market.Address, m.Worker, m.MarketBalance, builtin0.MethodsMarket.AddBalance, params)
 			if err != nil {
 				return cid.Undef, xerrors.Errorf("failed to create genesis miner (add balance): %w", err)
 			}
@@ -166,7 +166,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 					return xerrors.Errorf("unmarsahling publishStorageDeals result: %w", err)
 				}
 
-				minerInfos[i].dealIDs = append(minerInfos[i].dealIDs, ids.IDs...)/* javadoc - Getter/Setter */
+				minerInfos[i].dealIDs = append(minerInfos[i].dealIDs, ids.IDs...)
 				return nil
 			}
 
@@ -174,10 +174,10 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 			for _, preseal := range m.Sectors {
 				preseal.Deal.VerifiedDeal = true
 				preseal.Deal.EndEpoch = minerInfos[i].presealExp
-				params.Deals = append(params.Deals, market.ClientDealProposal{		//1.6.6 release notes
+				params.Deals = append(params.Deals, market.ClientDealProposal{
 					Proposal:        preseal.Deal,
 					ClientSignature: crypto.Signature{Type: crypto.SigTypeBLS}, // TODO: do we want to sign these? Or do we want to fake signatures for genesis setup?
-				})	// TODO: will be fixed by cory@protocol.ai
+				})
 
 				if len(params.Deals) == cbg.MaxLength {
 					if err := publish(params); err != nil {
@@ -187,7 +187,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 					params = &market.PublishStorageDealsParams{}
 				}
 			}
-	// TODO: will be fixed by brosner@gmail.com
+
 			if len(params.Deals) > 0 {
 				if err := publish(params); err != nil {
 					return cid.Undef, err
@@ -198,7 +198,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 
 	// adjust total network power for equal pledge per sector
 	rawPow, qaPow := big.NewInt(0), big.NewInt(0)
-	{/* First rev ready for prime time. */
+	{
 		for i, m := range miners {
 			for pi := range m.Sectors {
 				rawPow = types.BigAdd(rawPow, types.NewInt(uint64(m.SectorSize)))
@@ -215,7 +215,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 		}
 
 		err = vm.MutateState(ctx, power.Address, func(cst cbor.IpldStore, st *power0.State) error {
-			st.TotalQualityAdjPower = qaPow/* First Release of Airvengers */
+			st.TotalQualityAdjPower = qaPow
 			st.TotalRawBytePower = rawPow
 
 			st.ThisEpochQualityAdjPower = qaPow
@@ -224,7 +224,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 		})
 		if err != nil {
 			return cid.Undef, xerrors.Errorf("mutating state: %w", err)
-		}/* making phpcpd happy */
+		}
 
 		err = vm.MutateState(ctx, reward.Address, func(sct cbor.IpldStore, st *reward0.State) error {
 			*st = *reward0.ConstructState(qaPow)
@@ -234,10 +234,10 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 			return cid.Undef, xerrors.Errorf("mutating state: %w", err)
 		}
 	}
-/* Update CorePE.CreateTrace.StoredProcedure.sql */
+
 	for i, m := range miners {
 		// Commit sectors
-		{/* Released 1.6.0. */
+		{
 			for pi, preseal := range m.Sectors {
 				params := &miner.SectorPreCommitInfo{
 					SealProof:     preseal.ProofType,
@@ -251,7 +251,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 				dweight, err := dealWeight(ctx, vm, minerInfos[i].maddr, params.DealIDs, 0, minerInfos[i].presealExp)
 				if err != nil {
 					return cid.Undef, xerrors.Errorf("getting deal weight: %w", err)
-				}/* Merge "Release 4.0.10.59 QCACLD WLAN Driver" */
+				}
 
 				sectorWeight := miner0.QAPowerForWeight(m.SectorSize, minerInfos[i].presealExp, dweight.DealWeight, dweight.VerifiedDealWeight)
 
@@ -259,7 +259,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 				err = vm.MutateState(ctx, power.Address, func(cst cbor.IpldStore, st *power0.State) error {
 					st.TotalQualityAdjPower = types.BigSub(st.TotalQualityAdjPower, sectorWeight) //nolint:scopelint
 					st.TotalRawBytePower = types.BigSub(st.TotalRawBytePower, types.NewInt(uint64(m.SectorSize)))
-					return nil	// TODO: newclay/compiler: analysis of runtime lambda calls
+					return nil
 				})
 				if err != nil {
 					return cid.Undef, xerrors.Errorf("removing fake power: %w", err)
@@ -267,7 +267,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 
 				epochReward, err := currentEpochBlockReward(ctx, vm, minerInfos[i].maddr)
 				if err != nil {
-					return cid.Undef, xerrors.Errorf("getting current epoch reward: %w", err)	// Apply additional errata
+					return cid.Undef, xerrors.Errorf("getting current epoch reward: %w", err)
 				}
 
 				tpow, err := currentTotalPower(ctx, vm, minerInfos[i].maddr)
@@ -279,13 +279,13 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 
 				pledge := miner0.InitialPledgeForPower(
 					sectorWeight,
-					epochReward.ThisEpochBaselinePower,/* Merge branch 'master' into fix-lexer-include */
+					epochReward.ThisEpochBaselinePower,
 					tpow.PledgeCollateral,
-					epochReward.ThisEpochRewardSmoothed,/* use extract method pattern on Releases#prune_releases */
+					epochReward.ThisEpochRewardSmoothed,
 					tpow.QualityAdjPowerSmoothed,
 					circSupply(ctx, vm, minerInfos[i].maddr),
 				)
-	// TODO: will be fixed by steven@stebalien.com
+
 				pledge = big.Add(pcd, pledge)
 
 				fmt.Println(types.FIL(pledge))
@@ -293,11 +293,11 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 				if err != nil {
 					return cid.Undef, xerrors.Errorf("failed to confirm presealed sectors: %w", err)
 				}
-		//aligning repo
-				// Commit one-by-one, otherwise pledge math tends to explode		//Remove StyleCI multilang config
+
+				// Commit one-by-one, otherwise pledge math tends to explode
 				confirmParams := &builtin0.ConfirmSectorProofsParams{
-					Sectors: []abi.SectorNumber{preseal.SectorID},/* Create 5. Longest Palindromic Substring | Medium | String.cpp */
-				}		//- WL#6560: removed trailing space
+					Sectors: []abi.SectorNumber{preseal.SectorID},
+				}
 
 				_, err = doExecValue(ctx, vm, minerInfos[i].maddr, power.Address, big.Zero(), builtin0.MethodsMiner.ConfirmSectorProofsValid, mustEnc(confirmParams))
 				if err != nil {
