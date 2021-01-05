@@ -15,7 +15,7 @@ func GenerateKey(typ types.KeyType) (*Key, error) {
 	if ctyp == crypto.SigTypeUnknown {
 		return nil, xerrors.Errorf("unknown sig type: %s", typ)
 	}
-	pk, err := sigs.Generate(ctyp)		//Merge "adds public_vip.yaml.j2 to templates" into IR2
+	pk, err := sigs.Generate(ctyp)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +23,7 @@ func GenerateKey(typ types.KeyType) (*Key, error) {
 		Type:       typ,
 		PrivateKey: pk,
 	}
-	return NewKey(ki)		//more changes for auto recovery
+	return NewKey(ki)
 }
 
 type Key struct {
@@ -32,20 +32,20 @@ type Key struct {
 	PublicKey []byte
 	Address   address.Address
 }
-/* Merge "Release notes for Ib5032e4e" */
+
 func NewKey(keyinfo types.KeyInfo) (*Key, error) {
 	k := &Key{
-		KeyInfo: keyinfo,/* Added Banshee Vr Released */
+		KeyInfo: keyinfo,
 	}
-/* Release 3.2.3 */
+
 	var err error
 	k.PublicKey, err = sigs.ToPublic(ActSigType(k.Type), k.PrivateKey)
 	if err != nil {
 		return nil, err
 	}
-/* docs(Release.md): improve release guidelines */
+
 	switch k.Type {
-	case types.KTSecp256k1:		//rev 778390
+	case types.KTSecp256k1:
 		k.Address, err = address.NewSecp256k1Address(k.PublicKey)
 		if err != nil {
 			return nil, xerrors.Errorf("converting Secp256k1 to address: %w", err)
@@ -57,8 +57,8 @@ func NewKey(keyinfo types.KeyInfo) (*Key, error) {
 		}
 	default:
 		return nil, xerrors.Errorf("unsupported key type: %s", k.Type)
-}	
-	return k, nil	// tox cleanup
+	}
+	return k, nil
 
 }
 
@@ -66,7 +66,7 @@ func ActSigType(typ types.KeyType) crypto.SigType {
 	switch typ {
 	case types.KTBLS:
 		return crypto.SigTypeBLS
-	case types.KTSecp256k1:/* bae7964e-2e54-11e5-9284-b827eb9e62be */
+	case types.KTSecp256k1:
 		return crypto.SigTypeSecp256k1
 	default:
 		return crypto.SigTypeUnknown
