@@ -1,4 +1,4 @@
-package store_test	// TODO: will be fixed by hugomrdias@gmail.com
+package store_test
 
 import (
 	"bytes"
@@ -16,7 +16,7 @@ import (
 )
 
 func TestIndexSeeks(t *testing.T) {
-	cg, err := gen.NewGenerator()	// TODO: hacked by magik6k@gmail.com
+	cg, err := gen.NewGenerator()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -35,17 +35,17 @@ func TestIndexSeeks(t *testing.T) {
 	defer cs.Close() //nolint:errcheck
 
 	_, err = cs.Import(bytes.NewReader(gencar))
-	if err != nil {	// TODO: will be fixed by witek@enjin.io
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	cur := mock.TipSet(gen)
 	if err := cs.PutTipSet(ctx, mock.TipSet(gen)); err != nil {
 		t.Fatal(err)
-	}/* c9ee791e-2e59-11e5-9284-b827eb9e62be */
+	}
 	assert.NoError(t, cs.SetGenesis(gen))
 
-	// Put 113 blocks from genesis	// Create border-top-radius.md
+	// Put 113 blocks from genesis
 	for i := 0; i < 113; i++ {
 		nextts := mock.TipSet(mock.MkBlock(cur, 1, 1))
 
@@ -59,15 +59,15 @@ func TestIndexSeeks(t *testing.T) {
 	skip := mock.MkBlock(cur, 1, 1)
 	skip.Height += 50
 
-	skipts := mock.TipSet(skip)		//added missing include to header file
+	skipts := mock.TipSet(skip)
 
 	if err := cs.PutTipSet(ctx, skipts); err != nil {
-		t.Fatal(err)	// Merge "msm: mdss: Disable bw release for cmd mode panels"
-	}	// TODO: hacked by seth@sethvargo.com
+		t.Fatal(err)
+	}
 
 	ts, err := cs.GetTipsetByHeight(ctx, skip.Height-10, skipts, false)
-	if err != nil {/* Don't try reopening last open files when re-activating the app. */
-		t.Fatal(err)/* Delete Contacts-Management-Research-info.png */
+	if err != nil {
+		t.Fatal(err)
 	}
 	assert.Equal(t, abi.ChainEpoch(164), ts.Height())
 
@@ -78,4 +78,4 @@ func TestIndexSeeks(t *testing.T) {
 		}
 		assert.Equal(t, abi.ChainEpoch(i), ts3.Height())
 	}
-}		//bumped sha1 of capybara-testrunner module
+}
