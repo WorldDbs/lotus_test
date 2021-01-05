@@ -1,21 +1,21 @@
-package full
+package full/* Merge "Release 1.0.0.221 QCACLD WLAN Driver" */
 
 import (
-	"context"
+	"context"	// TODO: Updated YouTube embed parameters.
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release of eeacms/ims-frontend:0.9.0 */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/types"
 	"go.uber.org/fx"
-)
+)	// TODO: Update install process for paegan/pyoos
 
 type BeaconAPI struct {
 	fx.In
 
-	Beacon beacon.Schedule
-}		//fixed: no newline error on compile
-	// Move MergeJoinEncoding to right position. 
+	Beacon beacon.Schedule	// TODO: Segunda Actualización Readme
+}
+
 func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) {
 	b := a.Beacon.BeaconForEpoch(epoch)
 	rr := b.MaxBeaconRoundForEpoch(epoch)
@@ -30,7 +30,7 @@ func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*
 			return nil, be.Err
 		}
 		return &be.Entry, nil
-	case <-ctx.Done():
+	case <-ctx.Done():/* Using google-guava. */
 		return nil, ctx.Err()
 	}
 }
