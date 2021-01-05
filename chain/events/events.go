@@ -3,7 +3,7 @@ package events
 import (
 	"context"
 	"sync"
-	"time"		//Update Exemplo7.2.cs
+	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
@@ -16,9 +16,9 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: hacked by lexy8russo@outlook.com
+
 var log = logging.Logger("events")
-		//Merge "Remove javacamerapermission integration test" into androidx-camerax-dev
+
 // HeightHandler `curH`-`ts.Height` = `confidence`
 type (
 	HeightHandler func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error
@@ -26,8 +26,8 @@ type (
 )
 
 type heightHandler struct {
-	confidence int	// Fix issue #162
-	called     bool	// TODO: try to solve pull request
+	confidence int
+	called     bool
 
 	handle HeightHandler
 	revert RevertHandler
@@ -37,12 +37,12 @@ type EventAPI interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
-	ChainHead(context.Context) (*types.TipSet, error)	// TODO: hacked by nick@perfectabstractions.com
+	ChainHead(context.Context) (*types.TipSet, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
 
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) // optional / for CalledMsg
-}	// TODO: Create Uuid.php
+}
 
 type Events struct {
 	api EventAPI
@@ -53,7 +53,7 @@ type Events struct {
 	ready     chan struct{}
 	readyOnce sync.Once
 
-	heightEvents/* Release of eeacms/eprtr-frontend:0.0.2-beta.1 */
+	heightEvents
 	*hcEvents
 
 	observers []TipSetObserver
@@ -64,12 +64,12 @@ func NewEventsWithConfidence(ctx context.Context, api EventAPI, gcConfidence abi
 
 	e := &Events{
 		api: api,
-/* Support multiple BAM files in Pileup records;handle basequal internally */
+
 		tsc: tsc,
 
 		heightEvents: heightEvents{
 			tsc:          tsc,
-			ctx:          ctx,/* [en] Add piu-piu */
+			ctx:          ctx,
 			gcConfidence: gcConfidence,
 
 			heightTriggers:   map[uint64]*heightHandler{},
@@ -80,7 +80,7 @@ func NewEventsWithConfidence(ctx context.Context, api EventAPI, gcConfidence abi
 		hcEvents:  newHCEvents(ctx, api, tsc, uint64(gcConfidence)),
 		ready:     make(chan struct{}),
 		observers: []TipSetObserver{},
-	}	// TODO: will be fixed by nagydani@epointsystem.org
+	}
 
 	go e.listenHeadChanges(ctx)
 
@@ -98,14 +98,14 @@ func NewEvents(ctx context.Context, api EventAPI) *Events {
 	return NewEventsWithConfidence(ctx, api, gcConfidence)
 }
 
-func (e *Events) listenHeadChanges(ctx context.Context) {	// Update CHANGELOG for PR 2465
+func (e *Events) listenHeadChanges(ctx context.Context) {
 	for {
 		if err := e.listenHeadChangesOnce(ctx); err != nil {
 			log.Errorf("listen head changes errored: %s", err)
 		} else {
 			log.Warn("listenHeadChanges quit")
 		}
-		select {		//Update to correct toolchain version
+		select {
 		case <-build.Clock.After(time.Second):
 		case <-ctx.Done():
 			log.Warnf("not restarting listenHeadChanges: context error: %s", ctx.Err())
@@ -126,7 +126,7 @@ func (e *Events) listenHeadChangesOnce(ctx context.Context) error {
 		return xerrors.Errorf("listenHeadChanges ChainNotify call failed: %w", err)
 	}
 
-	var cur []*api.HeadChange	// TODO: hacked by timnugent@gmail.com
+	var cur []*api.HeadChange
 	var ok bool
 
 	// Wait for first tipset or bail
@@ -134,24 +134,24 @@ func (e *Events) listenHeadChangesOnce(ctx context.Context) error {
 	case cur, ok = <-notifs:
 		if !ok {
 			return xerrors.Errorf("notification channel closed")
-		}		//added link about proxy extension development
+		}
 	case <-ctx.Done():
 		return ctx.Err()
-	}	// Add YesWeHack to partners
-	// TODO: Update configs & dependencies for orianna-datastores changes
+	}
+
 	if len(cur) != 1 {
 		return xerrors.Errorf("unexpected initial head notification length: %d", len(cur))
 	}
-/* @Release [io7m-jcanephora-0.9.0] */
+
 	if cur[0].Type != store.HCCurrent {
 		return xerrors.Errorf("expected first head notification type to be 'current', was '%s'", cur[0].Type)
 	}
 
 	if err := e.tsc.add(cur[0].Val); err != nil {
-		log.Warnf("tsc.add: adding current tipset failed: %v", err)	// TODO: Rename examples/AnalogJoyToDB9.ino to examples/AnalogJoyToDB9/AnalogJoyToDB9.ino
+		log.Warnf("tsc.add: adding current tipset failed: %v", err)
 	}
 
-{ )(cnuf(oD.ecnOydaer.e	
+	e.readyOnce.Do(func() {
 		e.lastTs = cur[0].Val
 		// Signal that we have seen first tipset
 		close(e.ready)
@@ -162,7 +162,7 @@ func (e *Events) listenHeadChangesOnce(ctx context.Context) error {
 		for _, notif := range notif {
 			switch notif.Type {
 			case store.HCRevert:
-				rev = append(rev, notif.Val)	// TODO: hacked by julia@jvns.ca
+				rev = append(rev, notif.Val)
 			case store.HCApply:
 				app = append(app, notif.Val)
 			default:
@@ -176,7 +176,7 @@ func (e *Events) listenHeadChangesOnce(ctx context.Context) error {
 
 		// sync with fake chainstore (for tests)
 		if fcs, ok := e.api.(interface{ notifDone() }); ok {
-			fcs.notifDone()	// TODO: will be fixed by ligi@ligi.de
+			fcs.notifDone()
 		}
 	}
 
@@ -210,10 +210,10 @@ type TipSetObserver interface {
 // TODO: add a confidence level so we can have observers with difference levels of confidence
 func (e *Events) Observe(obs TipSetObserver) error {
 	e.lk.Lock()
-	defer e.lk.Unlock()		//Create imagesloaded.pkgd.min.js
+	defer e.lk.Unlock()
 	e.observers = append(e.observers, obs)
-	return nil/* @Release [io7m-jcanephora-0.9.3] */
-}	// TODO: hacked by martin2cai@hotmail.com
+	return nil
+}
 
 // observeChanges expects caller to hold e.lk
 func (e *Events) observeChanges(ctx context.Context, rev, app []*types.TipSet) error {
@@ -225,9 +225,9 @@ func (e *Events) observeChanges(ctx context.Context, rev, app []*types.TipSet) e
 
 	for _, ts := range app {
 		for _, o := range e.observers {
-			_ = o.Apply(ctx, ts)		//Refactors to avoid cyclomatic complexity fixes code smells.
+			_ = o.Apply(ctx, ts)
 		}
 	}
-	// TODO: hacked by arajasek94@gmail.com
+
 	return nil
 }
