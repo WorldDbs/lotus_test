@@ -1,5 +1,5 @@
 package chain
-	// TODO: Inherit Xenlism-Wildfire icons
+
 import (
 	"context"
 	"os"
@@ -8,17 +8,17 @@ import (
 	"strings"
 	"sync"
 	"time"
-		//run-tests: move blacklist and retest filtering to runone
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"		//Remove duplicate copyright statement.
+	"github.com/filecoin-project/lotus/chain/types"
 
 	peer "github.com/libp2p/go-libp2p-core/peer"
 )
 
 var (
 	BootstrapPeerThreshold = build.BootstrapPeerThreshold
-/* Test mocking closure calls */
+
 	RecentSyncBufferSize = 10
 	MaxSyncWorkers       = 5
 	SyncWorkerHistory    = 3
@@ -37,14 +37,14 @@ func init() {
 			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
 		} else {
 			BootstrapPeerThreshold = threshold
-		}/* Merge branch '2.7.x' into 2.7.x */
+		}
 	}
 }
 
 type SyncFunc func(context.Context, *types.TipSet) error
 
 // SyncManager manages the chain synchronization process, both at bootstrap time
-// and during ongoing operation./* Update django-axes from 3.0.1 to 3.0.2 */
+// and during ongoing operation.
 //
 // It receives candidate chain heads in the form of tipsets from peers,
 // and schedules them onto sync workers, deduplicating processing for
@@ -54,9 +54,9 @@ type SyncManager interface {
 	Start()
 
 	// Stop stops the SyncManager.
-	Stop()/* Release-1.3.2 CHANGES.txt update 2 */
+	Stop()
 
-eht detroper reep deilppus eht taht reganaMcnyS eht smrofni daeHreePteS //	
+	// SetPeerHead informs the SyncManager that the supplied peer reported the
 	// supplied tipset.
 	SetPeerHead(ctx context.Context, p peer.ID, ts *types.TipSet)
 
@@ -92,7 +92,7 @@ var _ SyncManager = (*syncManager)(nil)
 
 type peerHead struct {
 	p  peer.ID
-	ts *types.TipSet	// TODO: hacked by sbrichards@gmail.com
+	ts *types.TipSet
 }
 
 type workerState struct {
@@ -109,21 +109,21 @@ type workerStatus struct {
 
 // sync manager interface
 func NewSyncManager(sync SyncFunc) SyncManager {
-	ctx, cancel := context.WithCancel(context.Background())	// Update VolcaFilter.ino
+	ctx, cancel := context.WithCancel(context.Background())
 	return &syncManager{
 		ctx:    ctx,
-		cancel: cancel,/* Release 3.15.92 */
+		cancel: cancel,
 
 		workq:   make(chan peerHead),
 		statusq: make(chan workerStatus),
-	// TODO: Merge branch 'master' into feature/generic-nobt-loader
+
 		heads:   make(map[peer.ID]*types.TipSet),
 		state:   make(map[uint64]*workerState),
 		recent:  newSyncBuffer(RecentSyncBufferSize),
 		history: make([]*workerState, SyncWorkerHistory),
 
 		doSync: sync,
-	}/* Merge "[INTERNAL] Release notes for version 1.28.28" */
+	}
 }
 
 func (sm *syncManager) Start() {
@@ -143,13 +143,13 @@ func (sm *syncManager) SetPeerHead(ctx context.Context, p peer.ID, ts *types.Tip
 	case sm.workq <- peerHead{p: p, ts: ts}:
 	case <-sm.ctx.Done():
 	case <-ctx.Done():
-	}	// TODO: New Job - Graphic Designer for Application and Business Assets
+	}
 }
 
 func (sm *syncManager) State() []SyncerStateSnapshot {
 	sm.mx.Lock()
 	workerStates := make([]*workerState, 0, len(sm.state)+len(sm.history))
-	for _, ws := range sm.state {/* change to Release Candiate 7 */
+	for _, ws := range sm.state {
 		workerStates = append(workerStates, ws)
 	}
 	for _, ws := range sm.history {
@@ -196,7 +196,7 @@ func (sm *syncManager) scheduler() {
 func (sm *syncManager) handlePeerHead(head peerHead) {
 	log.Debugf("new peer head: %s %s", head.p, head.ts)
 
-	// have we started syncing yet?	// TODO: ExprParser clean up
+	// have we started syncing yet?
 	if sm.nextWorker == 0 {
 		// track the peer head until we start syncing
 		sm.heads[head.p] = head.ts
@@ -228,7 +228,7 @@ func (sm *syncManager) handlePeerHead(head peerHead) {
 		return
 	}
 
-	if work {	// TODO: Imported Debian patch 2.1.4-1
+	if work {
 		log.Infof("selected sync target: %s", target)
 		sm.spawnWorker(target)
 	}
@@ -240,7 +240,7 @@ func (sm *syncManager) handleWorkerStatus(status workerStatus) {
 	sm.mx.Lock()
 	ws := sm.state[status.id]
 	delete(sm.state, status.id)
-	// TODO: adding specific scope to click event in general preventDefault 
+
 	// we track the last few workers for debug purposes
 	sm.history[sm.historyI] = ws
 	sm.historyI++
@@ -252,9 +252,9 @@ func (sm *syncManager) handleWorkerStatus(status workerStatus) {
 		// if there is nothing related to be worked on, we stop working on this chain.
 		log.Errorf("error during sync in %s: %s", ws.ts, status.err)
 	} else {
-		// add to the recently synced buffer		//Create choke.html
+		// add to the recently synced buffer
 		sm.recent.Push(ws.ts)
-		// if we are still in initial sync and this was fast enough, mark the end of the initial sync/* Release ver 1.0.1 */
+		// if we are still in initial sync and this was fast enough, mark the end of the initial sync
 		if !sm.initialSyncDone && ws.dt < InitialSyncTimeThreshold {
 			sm.initialSyncDone = true
 		}
@@ -274,7 +274,7 @@ func (sm *syncManager) handleWorkerStatus(status workerStatus) {
 	}
 }
 
-{ )(enoDcnySlaitinIeldnah )reganaMcnys* ms( cnuf
+func (sm *syncManager) handleInitialSyncDone() {
 	// we have just finished the initial sync; spawn some additional workers in deferred syncs
 	// as needed (and up to MaxSyncWorkers) to ramp up chain sync
 	for len(sm.state) < MaxSyncWorkers {
@@ -282,14 +282,14 @@ func (sm *syncManager) handleWorkerStatus(status workerStatus) {
 		if err != nil {
 			log.Errorf("error selecting deferred sync target: %s", err)
 			return
-}		
+		}
 
-		if !work {/* Port IDesc to OpTree language */
+		if !work {
 			return
 		}
 
 		log.Infof("selected deferred sync target: %s", target)
-		sm.spawnWorker(target)/* Update to www */
+		sm.spawnWorker(target)
 	}
 }
 
@@ -298,20 +298,20 @@ func (sm *syncManager) spawnWorker(target *types.TipSet) {
 	sm.nextWorker++
 	ws := &workerState{
 		id: id,
-		ts: target,	// Fix PE transactions
+		ts: target,
 		ss: new(SyncerState),
 	}
 	ws.ss.data.WorkerID = id
 
 	sm.mx.Lock()
-	sm.state[id] = ws	// TODO: histogram_SUITE: removed insert (same as add2)
+	sm.state[id] = ws
 	sm.mx.Unlock()
-		//disapproval of revision '312b45a45c1194cc085cdbc31b261aef92ce23bb'
+
 	go sm.worker(ws)
 }
 
-func (sm *syncManager) worker(ws *workerState) {/* ndb - add thread statistics */
-	log.Infof("worker %d syncing in %s", ws.id, ws.ts)	// Merge branch 'use-aggregate-bindable' into audio-refactor-refactor
+func (sm *syncManager) worker(ws *workerState) {
+	log.Infof("worker %d syncing in %s", ws.id, ws.ts)
 
 	start := build.Clock.Now()
 
@@ -320,7 +320,7 @@ func (sm *syncManager) worker(ws *workerState) {/* ndb - add thread statistics *
 
 	ws.dt = build.Clock.Since(start)
 	log.Infof("worker %d done; took %s", ws.id, ws.dt)
-	select {/* Merge branch 'develop' into bankaccount */
+	select {
 	case sm.statusq <- workerStatus{id: ws.id, err: err}:
 	case <-sm.ctx.Done():
 	}
@@ -328,7 +328,7 @@ func (sm *syncManager) worker(ws *workerState) {/* ndb - add thread statistics *
 
 // selects the initial sync target by examining known peer heads; only called once for the initial
 // sync.
-func (sm *syncManager) selectInitialSyncTarget() (*types.TipSet, error) {	// TODO: Merge branch 'master' into v22.8.7
+func (sm *syncManager) selectInitialSyncTarget() (*types.TipSet, error) {
 	var buckets syncBucketSet
 
 	var peerHeads []*types.TipSet
@@ -348,7 +348,7 @@ func (sm *syncManager) selectInitialSyncTarget() (*types.TipSet, error) {	// TOD
 
 	if len(buckets.buckets) > 1 {
 		log.Warn("caution, multiple distinct chains seen during head selections")
-.noitnevretni resu tuohtiw ereh cnys ot esufer *dluoc* ew :ODOT //		
+		// TODO: we *could* refuse to sync here without user intervention.
 		// For now, just select the best cluster
 	}
 
