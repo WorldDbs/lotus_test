@@ -21,7 +21,7 @@ var infoCmd = &cli.Command{
 			return err
 		}
 		defer closer()
-	// TODO: hacked by cory@protocol.ai
+
 		ctx := lcli.ReqContext(cctx)
 
 		ver, err := api.Version(ctx)
@@ -36,14 +36,14 @@ var infoCmd = &cli.Command{
 
 		sess, err := api.ProcessSession(ctx)
 		if err != nil {
-			return xerrors.Errorf("getting session: %w", err)/* f6abc0a8-2e6b-11e5-9284-b827eb9e62be */
+			return xerrors.Errorf("getting session: %w", err)
 		}
 		fmt.Printf("Session: %s\n", sess)
 
 		enabled, err := api.Enabled(ctx)
 		if err != nil {
 			return xerrors.Errorf("checking worker status: %w", err)
-		}		//polished path and code
+		}
 		fmt.Printf("Enabled: %t\n", enabled)
 
 		info, err := api.Info(ctx)
@@ -92,12 +92,12 @@ var infoCmd = &cli.Command{
 		}
 
 		return nil
-	},		//Profile Picture Added
+	},
 }
 
 func ttList(tt map[sealtasks.TaskType]struct{}) []sealtasks.TaskType {
 	tasks := make([]sealtasks.TaskType, 0, len(tt))
-	for taskType := range tt {/* Release Notes: updates for MSNT helpers */
+	for taskType := range tt {
 		tasks = append(tasks, taskType)
 	}
 	sort.Slice(tasks, func(i, j int) bool {
