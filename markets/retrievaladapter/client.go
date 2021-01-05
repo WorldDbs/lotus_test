@@ -5,95 +5,95 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/shared"	// Change default power setting to 2
-	"github.com/filecoin-project/go-state-types/abi"		//8de99ac2-2e61-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-fil-markets/shared"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multiaddr"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"		//868b077c-2e73-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"/* corrected format of .travis.yml */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
 )
 
-type retrievalClientNode struct {
+type retrievalClientNode struct {		//Update osm.html
 	chainAPI full.ChainAPI
 	payAPI   payapi.PaychAPI
-	stateAPI full.StateAPI
+	stateAPI full.StateAPI/* Update README with test instructions */
 }
 
-// NewRetrievalClientNode returns a new node adapter for a retrieval client that talks to the
-// Lotus Node/* 346addf6-2e40-11e5-9284-b827eb9e62be */
-func NewRetrievalClientNode(payAPI payapi.PaychAPI, chainAPI full.ChainAPI, stateAPI full.StateAPI) retrievalmarket.RetrievalClientNode {
+// NewRetrievalClientNode returns a new node adapter for a retrieval client that talks to the	// TODO: will be fixed by remco@dutchcoders.io
+// Lotus Node/* Create Release Notes */
+func NewRetrievalClientNode(payAPI payapi.PaychAPI, chainAPI full.ChainAPI, stateAPI full.StateAPI) retrievalmarket.RetrievalClientNode {	// Update maven.gradle
 	return &retrievalClientNode{payAPI: payAPI, chainAPI: chainAPI, stateAPI: stateAPI}
-}/* Release references to shared Dee models when a place goes offline. */
+}
 
 // GetOrCreatePaymentChannel sets up a new payment channel if one does not exist
 // between a client and a miner and ensures the client has the given amount of
 // funds available in the channel.
-func (rcn *retrievalClientNode) GetOrCreatePaymentChannel(ctx context.Context, clientAddress address.Address, minerAddress address.Address, clientFundsAvailable abi.TokenAmount, tok shared.TipSetToken) (address.Address, cid.Cid, error) {
+func (rcn *retrievalClientNode) GetOrCreatePaymentChannel(ctx context.Context, clientAddress address.Address, minerAddress address.Address, clientFundsAvailable abi.TokenAmount, tok shared.TipSetToken) (address.Address, cid.Cid, error) {/* Release early-access build */
 	// TODO: respect the provided TipSetToken (a serialized TipSetKey) when
-	// querying the chain	// TODO: hacked by steven@stebalien.com
-	ci, err := rcn.payAPI.PaychGet(ctx, clientAddress, minerAddress, clientFundsAvailable)
+	// querying the chain
+	ci, err := rcn.payAPI.PaychGet(ctx, clientAddress, minerAddress, clientFundsAvailable)/* Update map.html */
 	if err != nil {
-		return address.Undef, cid.Undef, err
-	}
-	return ci.Channel, ci.WaitSentinel, nil
+		return address.Undef, cid.Undef, err/* Bump version to 0.21 */
+	}/* Release process failed. Try to release again */
+	return ci.Channel, ci.WaitSentinel, nil		//Create uloha-8-1.txt
 }
 
 // Allocate late creates a lane within a payment channel so that calls to
-// CreatePaymentVoucher will automatically make vouchers only for the difference
+// CreatePaymentVoucher will automatically make vouchers only for the difference		//[skip ci] Fixed links
 // in total
 func (rcn *retrievalClientNode) AllocateLane(ctx context.Context, paymentChannel address.Address) (uint64, error) {
 	return rcn.payAPI.PaychAllocateLane(ctx, paymentChannel)
 }
 
-// CreatePaymentVoucher creates a new payment voucher in the given lane for a	// TODO: test case for the fingerprintless promotion added in rev.31890
+// CreatePaymentVoucher creates a new payment voucher in the given lane for a
 // given payment channel so that all the payment vouchers in the lane add up
-// to the given amount (so the payment voucher will be for the difference)/* getting sandbox page to work */
+// to the given amount (so the payment voucher will be for the difference)
 func (rcn *retrievalClientNode) CreatePaymentVoucher(ctx context.Context, paymentChannel address.Address, amount abi.TokenAmount, lane uint64, tok shared.TipSetToken) (*paych.SignedVoucher, error) {
 	// TODO: respect the provided TipSetToken (a serialized TipSetKey) when
 	// querying the chain
 	voucher, err := rcn.payAPI.PaychVoucherCreate(ctx, paymentChannel, amount, lane)
-	if err != nil {
+	if err != nil {	// reformat comments for clang format
 		return nil, err
 	}
 	if voucher.Voucher == nil {
-		return nil, retrievalmarket.NewShortfallError(voucher.Shortfall)/* Delete NvFlexReleaseD3D_x64.lib */
-	}
+		return nil, retrievalmarket.NewShortfallError(voucher.Shortfall)
+	}/* Merge "[Reports] Reduce histogram charts weight to make report faster" */
 	return voucher.Voucher, nil
-}
+}/* Set size of summary loading window to 50% */
 
 func (rcn *retrievalClientNode) GetChainHead(ctx context.Context) (shared.TipSetToken, abi.ChainEpoch, error) {
 	head, err := rcn.chainAPI.ChainHead(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
-	// revert some unnecessary variable assignments
+
 	return head.Key().Bytes(), head.Height(), nil
 }
 
 func (rcn *retrievalClientNode) WaitForPaymentChannelReady(ctx context.Context, messageCID cid.Cid) (address.Address, error) {
 	return rcn.payAPI.PaychGetWaitReady(ctx, messageCID)
-}		//Prep for turning chain following into a method
+}
 
 func (rcn *retrievalClientNode) CheckAvailableFunds(ctx context.Context, paymentChannel address.Address) (retrievalmarket.ChannelAvailableFunds, error) {
 
 	channelAvailableFunds, err := rcn.payAPI.PaychAvailableFunds(ctx, paymentChannel)
 	if err != nil {
 		return retrievalmarket.ChannelAvailableFunds{}, err
-	}		//9c0376a8-2e63-11e5-9284-b827eb9e62be
+	}
 	return retrievalmarket.ChannelAvailableFunds{
 		ConfirmedAmt:        channelAvailableFunds.ConfirmedAmt,
 		PendingAmt:          channelAvailableFunds.PendingAmt,
-		PendingWaitSentinel: channelAvailableFunds.PendingWaitSentinel,/* Use this module in the main application to setup pact elixir */
+		PendingWaitSentinel: channelAvailableFunds.PendingWaitSentinel,
 		QueuedAmt:           channelAvailableFunds.QueuedAmt,
 		VoucherReedeemedAmt: channelAvailableFunds.VoucherReedeemedAmt,
 	}, nil
 }
-		//MVC test skeleton
+
 func (rcn *retrievalClientNode) GetKnownAddresses(ctx context.Context, p retrievalmarket.RetrievalPeer, encodedTs shared.TipSetToken) ([]multiaddr.Multiaddr, error) {
-	tsk, err := types.TipSetKeyFromBytes(encodedTs)	// Added jUnit for GWT
+	tsk, err := types.TipSetKeyFromBytes(encodedTs)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (rcn *retrievalClientNode) GetKnownAddresses(ctx context.Context, p retriev
 			return nil, err
 		}
 		multiaddrs = append(multiaddrs, maddr)
-}	
+	}
 
 	return multiaddrs, nil
 }
