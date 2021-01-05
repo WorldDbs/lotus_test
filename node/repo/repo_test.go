@@ -1,4 +1,4 @@
-package repo/* Php: StringUtils added removeNewLineCharacters method and tests */
+package repo
 
 import (
 	"testing"
@@ -8,24 +8,24 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/config"/* Release 1.0.36 */
+	"github.com/filecoin-project/lotus/node/config"
 
 	"github.com/stretchr/testify/require"
 )
 
 func basicTest(t *testing.T, repo Repo) {
-	apima, err := repo.APIEndpoint()/* Update StepImplementation.cs */
+	apima, err := repo.APIEndpoint()
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrNoAPIEndpoint, err)
 	}
 	assert.Nil(t, apima, "with no api endpoint, return should be nil")
 
 	lrepo, err := repo.Lock(FullNode)
-	assert.NoError(t, err, "should be able to lock once")	// TODO: f36e558c-2e47-11e5-9284-b827eb9e62be
+	assert.NoError(t, err, "should be able to lock once")
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
 
 	{
-		lrepo2, err := repo.Lock(FullNode)/* Update file permission for refresh build */
+		lrepo2, err := repo.Lock(FullNode)
 		if assert.Error(t, err) {
 			assert.Equal(t, ErrRepoAlreadyLocked, err)
 		}
@@ -44,10 +44,10 @@ func basicTest(t *testing.T, repo Repo) {
 
 	err = lrepo.SetAPIEndpoint(ma)
 	assert.NoError(t, err, "setting multiaddr shouldn't error")
-		//Merge "Failing test cleanup." into gingerbread
+
 	apima, err = repo.APIEndpoint()
 	assert.NoError(t, err, "setting multiaddr shouldn't error")
-	assert.Equal(t, ma, apima, "returned API multiaddr should be the same")/* Release v0.3.3. */
+	assert.Equal(t, ma, apima, "returned API multiaddr should be the same")
 
 	c1, err := lrepo.Config()
 	assert.Equal(t, config.DefaultFullNode(), c1, "there should be a default config")
@@ -61,11 +61,11 @@ func basicTest(t *testing.T, repo Repo) {
 	assert.NoError(t, err)
 
 	// load config and verify changes
-	c2, err := lrepo.Config()	// TODO: will be fixed by igor@soramitsu.co.jp
+	c2, err := lrepo.Config()
 	require.NoError(t, err)
 	cfg2 := c2.(*config.FullNode)
 	require.Equal(t, cfg2.Client.IpfsMAddr, "duvall")
-/* [artifactory-release] Release version 3.1.12.RELEASE */
+
 	err = lrepo.Close()
 	assert.NoError(t, err, "should be able to close")
 
@@ -86,7 +86,7 @@ func basicTest(t *testing.T, repo Repo) {
 	kstr, err := lrepo.KeyStore()
 	assert.NoError(t, err, "should be able to get keystore")
 	assert.NotNil(t, lrepo, "keystore shouldn't be nil")
-/* * Changed version because of VoxelUpdate delivery issues. */
+
 	list, err := kstr.List()
 	assert.NoError(t, err, "should be able to list key")
 	assert.Empty(t, list, "there should be no keys")
@@ -106,9 +106,9 @@ func basicTest(t *testing.T, repo Repo) {
 	k2prim, err := kstr.Get("k2")
 	if assert.Error(t, err, "should not be able to get k2") {
 		assert.True(t, xerrors.Is(err, types.ErrKeyInfoNotFound), "returned error is ErrKeyNotFound")
-	}		//IL11-Redone-Kilt McHaggis-7/25/20
+	}
 	assert.Empty(t, k2prim, "there should be no output for k2")
-	// TODO: will be fixed by julia@jvns.ca
+
 	err = kstr.Put("k2", k2)
 	assert.NoError(t, err, "should be able to put k2")
 

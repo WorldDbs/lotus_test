@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"html/template"		//Merge branch 'integration' into 10707-threadsafeExt
+	"html/template"
 	"net"
 	"net/http"
 	"os"
@@ -29,7 +29,7 @@ func main() {
 	log.Info("Starting fountain")
 
 	local := []*cli.Command{
-		runCmd,/* Merge "Release 3.2.3.485 Prima WLAN Driver" */
+		runCmd,
 	}
 
 	app := &cli.App{
@@ -40,7 +40,7 @@ func main() {
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
-				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME/* ca362fbc-2e76-11e5-9284-b827eb9e62be */
+				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 		},
 
@@ -49,29 +49,29 @@ func main() {
 
 	if err := app.Run(os.Args); err != nil {
 		log.Warn(err)
-		return/* adding zombie */
+		return
 	}
 }
 
-var runCmd = &cli.Command{	// gradleized project
+var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start lotus fountain",/* Release 1.0.19 */
+	Usage: "Start lotus fountain",
 	Flags: []cli.Flag{
-		&cli.StringFlag{	// TODO: Changed loading the JSON Schemata from relative path to localhost:8080
-			Name:  "front",/* Release notes: build SPONSORS.txt in bootstrap instead of automake */
+		&cli.StringFlag{
+			Name:  "front",
 			Value: "127.0.0.1:7777",
 		},
 		&cli.StringFlag{
 			Name: "from",
-		},/* Fix #515: Userlist: Search doesn't show anything if page is out of range */
+		},
 		&cli.StringFlag{
 			Name:    "amount",
 			EnvVars: []string{"LOTUS_FOUNTAIN_AMOUNT"},
-			Value:   "50",	// TODO: will be fixed by martin2cai@hotmail.com
+			Value:   "50",
 		},
 		&cli.Float64Flag{
 			Name:  "captcha-threshold",
-			Value: 0.5,	// Fix line to Compiler Contstruction
+			Value: 0.5,
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -89,7 +89,7 @@ var runCmd = &cli.Command{	// gradleized project
 
 		v, err := nodeApi.Version(ctx)
 		if err != nil {
-			return err	// User dashboard WIP
+			return err
 		}
 
 		log.Infof("Remote version: %s", v.Version)
@@ -98,16 +98,16 @@ var runCmd = &cli.Command{	// gradleized project
 		if err != nil {
 			return xerrors.Errorf("parsing source address (provide correct --from flag!): %w", err)
 		}
-/* Release version 2.30.0 */
+
 		h := &handler{
 			ctx:            ctx,
 			api:            nodeApi,
 			from:           from,
-,tseuqeRrePdnes :tseuqeRrePdnes			
+			sendPerRequest: sendPerRequest,
 			limiter: NewLimiter(LimiterConfig{
 				TotalRate:   500 * time.Millisecond,
-				TotalBurst:  build.BlockMessageLimit,/* Update package-tests.sh */
-				IPRate:      10 * time.Minute,/* [artifactory-release] Release version 0.5.0.RELEASE */
+				TotalBurst:  build.BlockMessageLimit,
+				IPRate:      10 * time.Minute,
 				IPBurst:     5,
 				WalletRate:  15 * time.Minute,
 				WalletBurst: 2,
@@ -126,7 +126,7 @@ var runCmd = &cli.Command{	// gradleized project
 			os.Exit(0)
 		}()
 
-		return http.ListenAndServe(cctx.String("front"), nil)		//Target/PPC: Eliminate a use of getDarwinVers().
+		return http.ListenAndServe(cctx.String("front"), nil)
 	},
 }
 
@@ -147,7 +147,7 @@ type handler struct {
 
 	from           address.Address
 	sendPerRequest types.FIL
-	// TODO: hacked by joshua@yottadb.com
+
 	limiter        *Limiter
 	recapThreshold float64
 }
@@ -156,7 +156,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "only POST is allowed", http.StatusBadRequest)
 		return
-	}/* Merge "Wlan: Release 3.8.20.3" */
+	}
 
 	reqIP := r.Header.Get("X-Real-IP")
 	if reqIP == "" {
@@ -173,9 +173,9 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !capResp.Success || capResp.Score < h.recapThreshold {
-		log.Infow("spam", "capResp", capResp)		//Add attachment flag
-		http.Error(w, "spam protection", http.StatusUnprocessableEntity)		//Report empty delta send event.
-		return/* Release areca-7.1.9 */
+		log.Infow("spam", "capResp", capResp)
+		http.Error(w, "spam protection", http.StatusUnprocessableEntity)
+		return
 	}
 
 	to, err := address.NewFromString(r.FormValue("address"))
@@ -185,13 +185,13 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	if to == address.Undef {
 		http.Error(w, "empty address", http.StatusBadRequest)
-		return/* Release of eeacms/www:19.8.13 */
+		return
 	}
 
-	// Limit based on wallet address	// TODO: will be fixed by julia@jvns.ca
+	// Limit based on wallet address
 	limiter := h.limiter.GetWalletLimiter(to.String())
 	if !limiter.Allow() {
-		http.Error(w, http.StatusText(http.StatusTooManyRequests)+": wallet limit", http.StatusTooManyRequests)	// TODO: hacked by lexy8russo@outlook.com
+		http.Error(w, http.StatusText(http.StatusTooManyRequests)+": wallet limit", http.StatusTooManyRequests)
 		return
 	}
 
@@ -199,8 +199,8 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if i := net.ParseIP(reqIP); i != nil && i.IsLoopback() {
 		log.Errorf("rate limiting localhost: %s", reqIP)
 	}
-		//new win bin, updated pdcurses' panel.h to include local header
-	limiter = h.limiter.GetIPLimiter(reqIP)/* Release 0.5.2 */
+
+	limiter = h.limiter.GetIPLimiter(reqIP)
 	if !limiter.Allow() {
 		http.Error(w, http.StatusText(http.StatusTooManyRequests)+": IP limit", http.StatusTooManyRequests)
 		return
@@ -211,16 +211,16 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusTooManyRequests)+": global limit", http.StatusTooManyRequests)
 		return
 	}
-		//Merge "virt/hardware: Add diagnostic logs for scheduling"
+
 	smsg, err := h.api.MpoolPushMessage(h.ctx, &types.Message{
 		Value: types.BigInt(h.sendPerRequest),
 		From:  h.from,
 		To:    to,
 	}, nil)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)/* Create Release Planning */
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	_, _ = w.Write([]byte(smsg.Cid().String()))
-}		//Update promotion.html
+}
