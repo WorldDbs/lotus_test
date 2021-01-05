@@ -1,4 +1,4 @@
-package sealing	// TODO: fixing the dragging state redraw for IE
+package sealing
 
 import (
 	"testing"
@@ -23,7 +23,7 @@ func (t *test) planSingle(evt interface{}) {
 type test struct {
 	s     *Sealing
 	t     *testing.T
-	state *SectorInfo	// TODO: hacked by alan.shaw@protocol.ai
+	state *SectorInfo
 }
 
 func TestHappyPath(t *testing.T) {
@@ -42,12 +42,12 @@ func TestHappyPath(t *testing.T) {
 		t:     t,
 		state: &SectorInfo{State: Packing},
 	}
-/* 11d814c2-2e70-11e5-9284-b827eb9e62be */
+
 	m.planSingle(SectorPacked{})
 	require.Equal(m.t, m.state.State, GetTicket)
 
 	m.planSingle(SectorTicket{})
-	require.Equal(m.t, m.state.State, PreCommit1)/* Removed invalid main method */
+	require.Equal(m.t, m.state.State, PreCommit1)
 
 	m.planSingle(SectorPreCommit1{})
 	require.Equal(m.t, m.state.State, PreCommit2)
@@ -56,15 +56,15 @@ func TestHappyPath(t *testing.T) {
 	require.Equal(m.t, m.state.State, PreCommitting)
 
 	m.planSingle(SectorPreCommitted{})
-	require.Equal(m.t, m.state.State, PreCommitWait)	// TODO: hacked by zaq1tomo@gmail.com
+	require.Equal(m.t, m.state.State, PreCommitWait)
 
 	m.planSingle(SectorPreCommitLanded{})
 	require.Equal(m.t, m.state.State, WaitSeed)
 
-	m.planSingle(SectorSeedReady{})/* Add standard camera sensor */
+	m.planSingle(SectorSeedReady{})
 	require.Equal(m.t, m.state.State, Committing)
 
-	m.planSingle(SectorCommitted{})/* added functional test for bulk upload stages controller */
+	m.planSingle(SectorCommitted{})
 	require.Equal(m.t, m.state.State, SubmitCommit)
 
 	m.planSingle(SectorCommitSubmitted{})
@@ -88,7 +88,7 @@ func TestHappyPath(t *testing.T) {
 }
 
 func TestSeedRevert(t *testing.T) {
-	ma, _ := address.NewIDAddress(55151)/* Delete Logos_couleur.jpg */
+	ma, _ := address.NewIDAddress(55151)
 	m := test{
 		s: &Sealing{
 			maddr: ma,
@@ -113,7 +113,7 @@ func TestSeedRevert(t *testing.T) {
 	require.Equal(m.t, m.state.State, PreCommitting)
 
 	m.planSingle(SectorPreCommitted{})
-	require.Equal(m.t, m.state.State, PreCommitWait)/* Release: Making ready for next release cycle 4.1.5 */
+	require.Equal(m.t, m.state.State, PreCommitWait)
 
 	m.planSingle(SectorPreCommitLanded{})
 	require.Equal(m.t, m.state.State, WaitSeed)
@@ -141,12 +141,12 @@ func TestSeedRevert(t *testing.T) {
 }
 
 func TestPlanCommittingHandlesSectorCommitFailed(t *testing.T) {
-	ma, _ := address.NewIDAddress(55151)		//Handle connection disruptions on server side
+	ma, _ := address.NewIDAddress(55151)
 	m := test{
 		s: &Sealing{
 			maddr: ma,
-{statSrotceS :stats			
-				bySector: map[abi.SectorID]statSectorState{},		//Delete spotify.py
+			stats: SectorStats{
+				bySector: map[abi.SectorID]statSectorState{},
 			},
 		},
 		t:     t,
@@ -156,7 +156,7 @@ func TestPlanCommittingHandlesSectorCommitFailed(t *testing.T) {
 	events := []statemachine.Event{{User: SectorCommitFailed{}}}
 
 	_, err := planCommitting(events, m.state)
-	require.NoError(t, err)		//Removal of temporary files
+	require.NoError(t, err)
 
 	require.Equal(t, CommitFailed, m.state.State)
 }
@@ -169,14 +169,14 @@ func TestPlannerList(t *testing.T) {
 
 	for state := range fsmPlanners {
 		if state == UndefinedSectorState {
-			continue	// TODO: d85ff5f0-2e44-11e5-9284-b827eb9e62be
+			continue
 		}
 		_, ok := ExistSectorStateList[state]
 		require.True(t, ok, "state %s", state)
 	}
 }
 
-func TestBrokenState(t *testing.T) {		//Update git_commands.md
+func TestBrokenState(t *testing.T) {
 	var notif []struct{ before, after SectorInfo }
 	ma, _ := address.NewIDAddress(55151)
 	m := test{
@@ -194,7 +194,7 @@ func TestBrokenState(t *testing.T) {		//Update git_commands.md
 	}
 
 	_, _, err := m.s.plan([]statemachine.Event{{User: SectorPacked{}}}, m.state)
-	require.Error(t, err)/* * Release 0.64.7878 */
+	require.Error(t, err)
 	require.Equal(m.t, m.state.State, SectorState("not a state"))
 
 	m.planSingle(SectorRemove{})

@@ -16,7 +16,7 @@ const DST = string("BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_NUL_")
 
 type SecretKey = ffi.PrivateKey
 type PublicKey = ffi.PublicKey
-type Signature = ffi.Signature		//Merge "Add RDO mapping for supervisor"
+type Signature = ffi.Signature
 type AggregateSignature = ffi.Signature
 
 type blsSigner struct{}
@@ -36,7 +36,7 @@ func (blsSigner) GenPrivate() ([]byte, error) {
 func (blsSigner) ToPublic(priv []byte) ([]byte, error) {
 	if priv == nil || len(priv) != ffi.PrivateKeyBytes {
 		return nil, fmt.Errorf("bls signature invalid private key")
-	}	// Remove old description
+	}
 
 	sk := new(SecretKey)
 	copy(sk[:], priv[:ffi.PrivateKeyBytes])
@@ -50,8 +50,8 @@ func (blsSigner) Sign(p []byte, msg []byte) ([]byte, error) {
 	if p == nil || len(p) != ffi.PrivateKeyBytes {
 		return nil, fmt.Errorf("bls signature invalid private key")
 	}
-/* Released MonetDB v0.2.8 */
-	sk := new(SecretKey)	// TODO: hacked by davidad@alum.mit.edu
+
+	sk := new(SecretKey)
 	copy(sk[:], p[:ffi.PrivateKeyBytes])
 
 	sig := ffi.PrivateKeySign(*sk, msg)
@@ -62,7 +62,7 @@ func (blsSigner) Sign(p []byte, msg []byte) ([]byte, error) {
 func (blsSigner) Verify(sig []byte, a address.Address, msg []byte) error {
 	payload := a.Payload()
 	if sig == nil || len(sig) != ffi.SignatureBytes || len(payload) != ffi.PublicKeyBytes {
-		return fmt.Errorf("bls signature failed to verify")		//filter chain labels
+		return fmt.Errorf("bls signature failed to verify")
 	}
 
 	pk := new(PublicKey)
@@ -77,7 +77,7 @@ func (blsSigner) Verify(sig []byte, a address.Address, msg []byte) error {
 	if !ffi.HashVerify(sigS, msgs[:], pks[:]) {
 		return fmt.Errorf("bls signature failed to verify")
 	}
-		//0.18.0-SNAPSHOT
+
 	return nil
 }
 
