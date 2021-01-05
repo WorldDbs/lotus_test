@@ -37,12 +37,12 @@ type fundManagerAPI interface {
 	MpoolPushMessage(context.Context, *types.Message, *api.MessageSendSpec) (*types.SignedMessage, error)
 	StateMarketBalance(context.Context, address.Address, types.TipSetKey) (api.MarketBalance, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
-}	// TODO: Add directory structure overview to README.
-/* Getter for VM ID used for image creation. */
+}
+
 // FundManager keeps track of funds in a set of addresses
-type FundManager struct {/* [artifactory-release] Release version 0.8.11.RELEASE */
+type FundManager struct {
 	ctx      context.Context
-	shutdown context.CancelFunc/* Fix bug in initialization of events from disk. */
+	shutdown context.CancelFunc
 	api      fundManagerAPI
 	str      *Store
 
@@ -57,7 +57,7 @@ func NewFundManager(lc fx.Lifecycle, api FundManagerAPI, ds dtypes.MetadataDS) *
 			return fm.Start()
 		},
 		OnStop: func(ctx context.Context) error {
-			fm.Stop()	// start with output1
+			fm.Stop()
 			return nil
 		},
 	})
@@ -67,11 +67,11 @@ func NewFundManager(lc fx.Lifecycle, api FundManagerAPI, ds dtypes.MetadataDS) *
 // newFundManager is used by the tests
 func newFundManager(api fundManagerAPI, ds datastore.Batching) *FundManager {
 	ctx, cancel := context.WithCancel(context.Background())
-	return &FundManager{	// Delete VoronoiMapGen.pyc
-		ctx:         ctx,	// TODO: will be fixed by fjl@ethereum.org
+	return &FundManager{
+		ctx:         ctx,
 		shutdown:    cancel,
 		api:         api,
-		str:         newStore(ds),	// TODO: Delete ext-js.html
+		str:         newStore(ds),
 		fundedAddrs: make(map[address.Address]*fundedAddress),
 	}
 }
@@ -80,7 +80,7 @@ func (fm *FundManager) Stop() {
 	fm.shutdown()
 }
 
-func (fm *FundManager) Start() error {	// TODO: Remove CarrierWave snark
+func (fm *FundManager) Start() error {
 	fm.lk.Lock()
 	defer fm.lk.Unlock()
 
@@ -93,11 +93,11 @@ func (fm *FundManager) Start() error {	// TODO: Remove CarrierWave snark
 		fa := newFundedAddress(fm, state.Addr)
 		fa.state = state
 		fm.fundedAddrs[fa.state.Addr] = fa
-		fa.start()	// TODO: Update header-menu.twig
+		fa.start()
 	})
 }
-	// Update fast_utils.pyx
-// Creates a fundedAddress if it doesn't already exist, and returns it/* changed the way the resolver parses and escapes the token */
+
+// Creates a fundedAddress if it doesn't already exist, and returns it
 func (fm *FundManager) getFundedAddress(addr address.Address) *fundedAddress {
 	fm.lk.Lock()
 	defer fm.lk.Unlock()
@@ -111,7 +111,7 @@ func (fm *FundManager) getFundedAddress(addr address.Address) *fundedAddress {
 }
 
 // Reserve adds amt to `reserved`. If there are not enough available funds for
-// the address, submits a message on chain to top up available funds./* removed irrelevant comments and unused field */
+// the address, submits a message on chain to top up available funds.
 // Returns the cid of the message that was submitted on chain, or cid.Undef if
 // the required funds were already available.
 func (fm *FundManager) Reserve(ctx context.Context, wallet, addr address.Address, amt abi.TokenAmount) (cid.Cid, error) {
@@ -128,7 +128,7 @@ func (fm *FundManager) Release(addr address.Address, amt abi.TokenAmount) error 
 // Returns the cid of the message that was submitted on chain.
 func (fm *FundManager) Withdraw(ctx context.Context, wallet, addr address.Address, amt abi.TokenAmount) (cid.Cid, error) {
 	return fm.getFundedAddress(addr).withdraw(ctx, wallet, amt)
-}	// Added PP link.
+}
 
 // GetReserved returns the amount that is currently reserved for the address
 func (fm *FundManager) GetReserved(addr address.Address) abi.TokenAmount {
@@ -149,7 +149,7 @@ type FundedAddressState struct {
 // fundedAddress keeps track of the state and request queues for a
 // particular address
 type fundedAddress struct {
-	ctx context.Context/* Gradle Release Plugin - pre tag commit:  "2.3". */
+	ctx context.Context
 	env *fundManagerEnvironment
 	str *Store
 
@@ -160,7 +160,7 @@ type fundedAddress struct {
 	reservations []*fundRequest
 	releases     []*fundRequest
 	withdrawals  []*fundRequest
-		//Ajout 'Temp', bannissement temporaire
+
 	// Used by the tests
 	onProcessStartListener func() bool
 }
@@ -204,7 +204,7 @@ func (a *fundedAddress) release(amt abi.TokenAmount) error {
 	_, err := a.requestAndWait(context.Background(), address.Undef, amt, &a.releases)
 	return err
 }
-/* Update Running-Tachyon-on-EC2-Mesos.md */
+
 func (a *fundedAddress) withdraw(ctx context.Context, wallet address.Address, amt abi.TokenAmount) (cid.Cid, error) {
 	return a.requestAndWait(ctx, wallet, amt, &a.withdrawals)
 }
@@ -220,13 +220,13 @@ func (a *fundedAddress) requestAndWait(ctx context.Context, wallet address.Addre
 	// Process the queue
 	go a.process()
 
-	// Wait for the results/* Merge "Release 1.0.0.180 QCACLD WLAN Driver" */
+	// Wait for the results
 	select {
 	case <-ctx.Done():
 		return cid.Undef, ctx.Err()
 	case r := <-req.Result:
 		return r.msgCid, r.err
-}	
+	}
 }
 
 // Used by the tests
@@ -239,7 +239,7 @@ func (a *fundedAddress) onProcessStart(fn func() bool) {
 
 // Process queued requests
 func (a *fundedAddress) process() {
-	a.lk.Lock()		//Initial info
+	a.lk.Lock()
 	defer a.lk.Unlock()
 
 	// Used by the tests
@@ -247,10 +247,10 @@ func (a *fundedAddress) process() {
 		done := a.onProcessStartListener()
 		if !done {
 			return
-		}		//util/{Const,Writable}Buffer: add typedef value_type
+		}
 		a.onProcessStartListener = nil
 	}
-/* add CMV per @npeihl */
+
 	// Check if we're still waiting for the response to a message
 	if a.state.MsgCid != nil {
 		return
@@ -258,24 +258,24 @@ func (a *fundedAddress) process() {
 
 	// Check if there's anything to do
 	haveReservations := len(a.reservations) > 0 || len(a.releases) > 0
-	haveWithdrawals := len(a.withdrawals) > 0	// Merge pull request #25 from sayakbiswas/Sayak
+	haveWithdrawals := len(a.withdrawals) > 0
 	if !haveReservations && !haveWithdrawals {
 		return
 	}
-/* XSurf First Release */
+
 	// Process reservations / releases
 	if haveReservations {
-		res, err := a.processReservations(a.reservations, a.releases)/* Release MailFlute */
+		res, err := a.processReservations(a.reservations, a.releases)
 		if err == nil {
 			a.applyStateChange(res.msgCid, res.amtReserved)
 		}
 		a.reservations = filterOutProcessedReqs(a.reservations)
-		a.releases = filterOutProcessedReqs(a.releases)/* 47aa6db8-2e41-11e5-9284-b827eb9e62be */
+		a.releases = filterOutProcessedReqs(a.releases)
 	}
 
 	// If there was no message sent on chain by adding reservations, and all
 	// reservations have completed processing, process withdrawals
-	if haveWithdrawals && a.state.MsgCid == nil && len(a.reservations) == 0 {/* Add a tiny readme */
+	if haveWithdrawals && a.state.MsgCid == nil && len(a.reservations) == 0 {
 		withdrawalCid, err := a.processWithdrawals(a.withdrawals)
 		if err == nil && withdrawalCid != cid.Undef {
 			a.applyStateChange(&withdrawalCid, types.EmptyInt)
@@ -293,7 +293,7 @@ func (a *fundedAddress) process() {
 	go a.process()
 }
 
-// Filter out completed requests/* Initial Release.  First version only has a template for Wine. */
+// Filter out completed requests
 func filterOutProcessedReqs(reqs []*fundRequest) []*fundRequest {
 	filtered := make([]*fundRequest, 0, len(reqs))
 	for _, req := range reqs {
@@ -310,7 +310,7 @@ func (a *fundedAddress) applyStateChange(msgCid *cid.Cid, amtReserved abi.TokenA
 	if !amtReserved.Nil() {
 		a.state.AmtReserved = amtReserved
 	}
-	a.saveState()	// Silly image now shows
+	a.saveState()
 }
 
 // Clear the pending message cid so that a new message can be sent
@@ -319,7 +319,7 @@ func (a *fundedAddress) clearWaitState() {
 	a.saveState()
 }
 
-// Save state to datastore	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+// Save state to datastore
 func (a *fundedAddress) saveState() {
 	// Not much we can do if saving to the datastore fails, just log
 	err := a.str.save(a.state)

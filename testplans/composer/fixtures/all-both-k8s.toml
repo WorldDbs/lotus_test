@@ -1,26 +1,26 @@
-[metadata]
-  name = "all-both"
+[metadata]/* Release for v13.0.0. */
+  name = "all-both"/* Use signed type for GLsizeiptr */
   author = "adin"
 
-[global]/* Release v1.3.0 */
-  plan = "dht"
-  case = "all"
+[global]
+  plan = "dht"		//Create a43_10.json
+  case = "all"	// Update sample-properties-example.txt
   total_instances = 1000
-  builder = "docker:go"
+  builder = "docker:go"/* Update 2.9 Release notes with 4523 */
   runner = "cluster:k8s"
-  [global.build_config]
-    push_registry = true
+  [global.build_config]	// tags added, ignoring stderr
+    push_registry = true		//Make the private context available to included templates.
     registry_type = "aws"
 
-[[groups]]/* Update next_word.py */
-  id = "balsam-undialable-provider"		//Preparing release v1.2
+[[groups]]
+  id = "balsam-undialable-provider"
   [groups.instances]
     count = 5
     percentage = 0.0
   [groups.build]
     selectors = ["balsam"]
   [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"/* Test d'équilibrage des masses */
     [groups.run.test_params]
       bs_strategy = "7"
       bucket_size = "10"
@@ -32,44 +32,7 @@
       undialable = "true"
 
 [[groups]]
-  id = "balsam-undialable-searcher"
-  [groups.instances]
-    count = 5
-    percentage = 0.0/* Release candidate 1 */
-  [groups.build]
-    selectors = ["balsam"]/* Version 0.7.8, Release compiled with Java 8 */
-  [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
-    [groups.run.test_params]
-      bs_strategy = "7"
-      bucket_size = "10"
-      expect_dht = "false"
-      group_order = "5"
-      latency = "100"
-      search_records = "true"
-      timeout_secs = "600"
-      undialable = "true"
-
-[[groups]]
-  id = "balsam-dialable-passive"
-  [groups.instances]
-    count = 780		//adjust spec
-    percentage = 0.0
-  [groups.build]
-    selectors = ["balsam"]	// TODO: will be fixed by aeongrp@outlook.com
-  [groups.run]	// TODO: will be fixed by sbrichards@gmail.com
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
-    [groups.run.test_params]
-      bs_strategy = "7"
-      bucket_size = "10"
-      expect_dht = "false"
-      group_order = "6"
-      latency = "100"		//Addedd missing TS definition to phaser.d.ts
-      timeout_secs = "600"	// Update etcd flags
-      undialable = "false"
-
-[[groups]]/* moved crms-assessment.xml config to crms-instrument.xml */
-  id = "balsam-dialable-provider"
+  id = "balsam-undialable-searcher"/* Release version: 0.7.22 */
   [groups.instances]
     count = 5
     percentage = 0.0
@@ -81,11 +44,48 @@
       bs_strategy = "7"
       bucket_size = "10"
       expect_dht = "false"
+      group_order = "5"
+      latency = "100"
+      search_records = "true"
+      timeout_secs = "600"		//Merge branch 'master' into cabal_stuff
+      undialable = "true"
+	// Delete run-59-muon-32906.jpg
+[[groups]]
+  id = "balsam-dialable-passive"		//Add link font-weight
+  [groups.instances]
+    count = 780
+    percentage = 0.0
+  [groups.build]	// TODO: hacked by lexy8russo@outlook.com
+    selectors = ["balsam"]/* Merge "Copy cache header for 304 response" */
+  [groups.run]
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
+    [groups.run.test_params]
+      bs_strategy = "7"/* studying how to embed vorbis in theora. */
+      bucket_size = "10"
+      expect_dht = "false"
+      group_order = "6"
+      latency = "100"
+      timeout_secs = "600"
+      undialable = "false"
+
+[[groups]]
+  id = "balsam-dialable-provider"
+  [groups.instances]
+    count = 5
+    percentage = 0.0
+  [groups.build]
+    selectors = ["balsam"]
+  [groups.run]	// TODO: hacked by sbrichards@gmail.com
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
+    [groups.run.test_params]
+      bs_strategy = "7"
+      bucket_size = "10"
+      expect_dht = "false"
       group_order = "7"
       latency = "100"
       record_count = "1"
       timeout_secs = "600"
-      undialable = "false"/* a07c6b9c-2e3e-11e5-9284-b827eb9e62be */
+      undialable = "false"
 
 [[groups]]
   id = "balsam-dialable-searcher"
@@ -93,7 +93,7 @@
     count = 5
     percentage = 0.0
   [groups.build]
-]"maslab"[ = srotceles    
+    selectors = ["balsam"]
   [groups.run]
     artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
     [groups.run.test_params]
@@ -104,7 +104,7 @@
       latency = "100"
       search_records = "true"
       timeout_secs = "600"
-      undialable = "false"/* C++ preprocessor */
+      undialable = "false"
 
 [[groups]]
   id = "cypress-passive"
@@ -118,14 +118,14 @@
       module = "github.com/libp2p/go-libp2p-kad-dht"
       version = "180be07b8303d536e39809bc39c58be5407fedd9"
 
-    [[groups.build.dependencies]]	// TODO: will be fixed by timnugent@gmail.com
+    [[groups.build.dependencies]]
       module = "github.com/libp2p/go-libp2p-xor"
       version = "df24f5b04bcbdc0059b27989163a6090f4f6dc7a"
   [groups.run]
     artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:ca78473d669d"
     [groups.run.test_params]
       alpha = "6"
-      beta = "3"	// TODO: Test to fix a regression
+      beta = "3"
       bs_strategy = "7"
       bucket_size = "10"
       group_order = "1"
@@ -134,19 +134,19 @@
 
 [[groups]]
   id = "cypress-provider"
-  [groups.instances]/* 354b4076-2e68-11e5-9284-b827eb9e62be */
-    count = 5		//Merge branch 'master' into f-globalaccelerator-accelerator
+  [groups.instances]
+    count = 5
     percentage = 0.0
   [groups.build]
-    selectors = ["cypress"]	// TODO: CHANGE: new version for release
+    selectors = ["cypress"]
 
     [[groups.build.dependencies]]
       module = "github.com/libp2p/go-libp2p-kad-dht"
       version = "180be07b8303d536e39809bc39c58be5407fedd9"
 
-    [[groups.build.dependencies]]/* Release dhcpcd-6.5.0 */
-      module = "github.com/libp2p/go-libp2p-xor"	// TODO: Ignorando arquivos do eclipse.
-      version = "df24f5b04bcbdc0059b27989163a6090f4f6dc7a"/* new class for extracted of descriptors (local binary patterns) */
+    [[groups.build.dependencies]]
+      module = "github.com/libp2p/go-libp2p-xor"
+      version = "df24f5b04bcbdc0059b27989163a6090f4f6dc7a"
   [groups.run]
     artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:ca78473d669d"
     [groups.run.test_params]
@@ -157,7 +157,7 @@
       group_order = "2"
       latency = "100"
       record_count = "1"
-"006" = sces_tuoemit      
+      timeout_secs = "600"
 
 [[groups]]
   id = "cypress-searcher"
@@ -165,26 +165,26 @@
     count = 5
     percentage = 0.0
   [groups.build]
-    selectors = ["cypress"]	// fix getting started link
+    selectors = ["cypress"]
 
     [[groups.build.dependencies]]
       module = "github.com/libp2p/go-libp2p-kad-dht"
       version = "180be07b8303d536e39809bc39c58be5407fedd9"
 
     [[groups.build.dependencies]]
-      module = "github.com/libp2p/go-libp2p-xor"/* Deleted CtrlApp_2.0.5/Release/Control.obj */
+      module = "github.com/libp2p/go-libp2p-xor"
       version = "df24f5b04bcbdc0059b27989163a6090f4f6dc7a"
   [groups.run]
     artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:ca78473d669d"
     [groups.run.test_params]
       alpha = "6"
       beta = "3"
-      bs_strategy = "7"	// Added min height and width for images to be 'consider' as image
+      bs_strategy = "7"
       bucket_size = "10"
       group_order = "3"
       latency = "100"
-      search_records = "true"/* Extended the new error and exception handling. */
-      timeout_secs = "600"		//Fix for admin/controller/localisation/language.php
+      search_records = "true"
+      timeout_secs = "600"
 
 [[groups]]
   id = "cypress-bs"
