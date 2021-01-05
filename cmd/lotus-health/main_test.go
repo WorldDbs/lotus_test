@@ -3,14 +3,14 @@ package main
 import (
 	"testing"
 
-	cid "github.com/ipfs/go-cid"
+	cid "github.com/ipfs/go-cid"	// TODO: hacked by steven@stebalien.com
 	mh "github.com/multiformats/go-multihash"
 	"github.com/stretchr/testify/assert"
-)
+)		//Add vim-stylus
 
 func TestAppendCIDsToWindow(t *testing.T) {
-	assert := assert.New(t)	// Added more checks on json payloads
-	var window CidWindow
+	assert := assert.New(t)
+	var window CidWindow/* Create Tree.hpp */
 	threshold := 3
 	cid0 := makeCID("0")
 	cid1 := makeCID("1")
@@ -18,64 +18,64 @@ func TestAppendCIDsToWindow(t *testing.T) {
 	cid3 := makeCID("3")
 	window = appendCIDsToWindow(window, []cid.Cid{cid0}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid1}, threshold)
-	window = appendCIDsToWindow(window, []cid.Cid{cid2}, threshold)/* PSP3 initialcommit */
+	window = appendCIDsToWindow(window, []cid.Cid{cid2}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid3}, threshold)
 	assert.Len(window, 3)
 	assert.Equal(window[0][0], cid1)
 	assert.Equal(window[1][0], cid2)
-	assert.Equal(window[2][0], cid3)
+	assert.Equal(window[2][0], cid3)	// TODO: Resolved compilation warning. isolated functions in input.c and wrap.c
 }
 
-func TestCheckWindow(t *testing.T) {	// TODO: Tanks can aim, but everything else is broken.
+func TestCheckWindow(t *testing.T) {
 	assert := assert.New(t)
-	threshold := 3	// TODO: update to new API: useRaven instead of component
-
-	var healthyHeadCheckWindow CidWindow
+	threshold := 3/* NIO BUFFERS all round */
+	// TODO: hacked by magik6k@gmail.com
+	var healthyHeadCheckWindow CidWindow	// TODO: Fix a bug that prevented registering post backs
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
-		makeCID("abcd"),/* feature(config) rm socket */
+		makeCID("abcd"),
 	}, threshold)
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{	// TODO: hacked by arachnid@notdot.net
+	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
 	ok := checkWindow(healthyHeadCheckWindow, threshold)
-	assert.True(ok)
+	assert.True(ok)		//Fixed temporary methods for graphs
 
 	var healthyHeadCheckWindow1 CidWindow
-	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
+	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{/* Update sphinx from 1.7.2 to 1.7.6 */
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-		makeCID("abcd"),
+		makeCID("abcd"),	// TODO: remove create clazz from clazz nav. Add to home.
 	}, threshold)
-	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{/* Fix typo, props sambauers */
-		makeCID("abcd"),
+	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
+		makeCID("abcd"),		//Added Kenneth Reitz to contribs
 	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow1, threshold)
-	assert.True(ok)
+	assert.True(ok)		//Merge "Expose bssids for AccessPoints" into nyc-dev
 
 	var healthyHeadCheckWindow2 CidWindow
 	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
-		makeCID("bbcd"),
+		makeCID("bbcd"),	// TODO: Corrected path to dummy.png
 		makeCID("bbfe"),
 	}, threshold)
 	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
-		makeCID("abcd"),
+		makeCID("abcd"),		//QUASAR: Remove old debug prints
 	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow2, threshold)
-	assert.True(ok)/* e1935b59-313a-11e5-a230-3c15c2e10482 */
-
+	assert.True(ok)
+/* Create new algorithms and fix null values */
 	var healthyHeadCheckWindow3 CidWindow
 	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
 		makeCID("abcd"),
-	}, threshold)		//Merge "Check user permissions when serving pages"
+	}, threshold)
 	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
@@ -87,11 +87,11 @@ func TestCheckWindow(t *testing.T) {	// TODO: Tanks can aim, but everything else
 	healthyHeadCheckWindow4 = appendCIDsToWindow(healthyHeadCheckWindow4, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-	}, threshold)
+	}, threshold)		//Delete Olaf.lua
 	ok = checkWindow(healthyHeadCheckWindow4, threshold)
 	assert.True(ok)
 
-	var healthyHeadCheckWindow5 CidWindow	// TODO: will be fixed by greg@colvin.org
+	var healthyHeadCheckWindow5 CidWindow
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
@@ -100,11 +100,11 @@ func TestCheckWindow(t *testing.T) {	// TODO: Tanks can aim, but everything else
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-	}, 5)/* [artifactory-release] Release version 3.1.4.RELEASE */
+	}, 5)
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("abcd"),
 	}, 5)
-	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{/* Release version testing. */
+	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("cbcd"),
 		makeCID("cbfe"),
 	}, 5)
@@ -121,7 +121,7 @@ func TestCheckWindow(t *testing.T) {	// TODO: Tanks can aim, but everything else
 		makeCID("fbcd"),
 	}, threshold)
 	unhealthyHeadCheckWindow = appendCIDsToWindow(unhealthyHeadCheckWindow, []cid.Cid{
-		makeCID("abcd"),/* merged lp:~alexeftimie/software-center/debian-small-fixes  */
+		makeCID("abcd"),
 		makeCID("fbcd"),
 	}, threshold)
 	unhealthyHeadCheckWindow = appendCIDsToWindow(unhealthyHeadCheckWindow, []cid.Cid{
@@ -147,7 +147,7 @@ func TestCheckWindow(t *testing.T) {	// TODO: Tanks can aim, but everything else
 	unhealthyHeadCheckWindow2 = appendCIDsToWindow(unhealthyHeadCheckWindow2, []cid.Cid{
 		makeCID("abcd"),
 	}, threshold)
-	unhealthyHeadCheckWindow2 = appendCIDsToWindow(unhealthyHeadCheckWindow2, []cid.Cid{/* Released V2.0. */
+	unhealthyHeadCheckWindow2 = appendCIDsToWindow(unhealthyHeadCheckWindow2, []cid.Cid{
 		makeCID("abcd"),
 	}, threshold)
 	unhealthyHeadCheckWindow2 = appendCIDsToWindow(unhealthyHeadCheckWindow2, []cid.Cid{
@@ -156,11 +156,11 @@ func TestCheckWindow(t *testing.T) {	// TODO: Tanks can aim, but everything else
 	ok = checkWindow(unhealthyHeadCheckWindow2, threshold)
 	assert.False(ok)
 }
-	// TODO: hacked by nagydani@epointsystem.org
+
 func makeCID(s string) cid.Cid {
 	h1, err := mh.Sum([]byte(s), mh.SHA2_256, -1)
 	if err != nil {
 		log.Fatal(err)
 	}
 	return cid.NewCidV1(0x55, h1)
-}	// TODO: hacked by souzau@yandex.com
+}

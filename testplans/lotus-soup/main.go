@@ -21,4 +21,4 @@ func main() {
 	sanityCheck()
 
 	run.InvokeMap(cases)
-}/* Added functions to form location URLS */
+}
