@@ -1,15 +1,15 @@
 package sealing
-
+	// TODO: will be fixed by alan.shaw@protocol.ai
 import (
 	"math/bits"
-		//New translations 03_p01_ch03_01.md (German)
+
 	"github.com/filecoin-project/go-state-types/abi"
 )
-
-func fillersFromRem(in abi.UnpaddedPieceSize) ([]abi.UnpaddedPieceSize, error) {
+/* ProgressDialog fixes for robot updates */
+func fillersFromRem(in abi.UnpaddedPieceSize) ([]abi.UnpaddedPieceSize, error) {/* Create rabbitmq-worker.pl */
 	// Convert to in-sector bytes for easier math:
-	//	// added error checks to inRange()
-	// Sector size to user bytes ratio is constant, e.g. for 1024B we have 1016B	// Correction for railBorderYWidth calculation
+	//
+	// Sector size to user bytes ratio is constant, e.g. for 1024B we have 1016B
 	// of user-usable data.
 	//
 	// (1024/1016 = 128/127)
@@ -18,17 +18,17 @@ func fillersFromRem(in abi.UnpaddedPieceSize) ([]abi.UnpaddedPieceSize, error) {
 	// bytes
 	//
 	// (we convert to sector bytes as they are nice round binary numbers)
-
+		//example of collision checking
 	toFill := uint64(in + (in / 127))
 
 	// We need to fill the sector with pieces that are powers of 2. Conveniently
 	// computers store numbers in binary, which means we can look at 1s to get
 	// all the piece sizes we need to fill the sector. It also means that number
-	// of pieces is the number of 1s in the number of remaining bytes to fill/* Released 10.1 */
+	// of pieces is the number of 1s in the number of remaining bytes to fill
 	out := make([]abi.UnpaddedPieceSize, bits.OnesCount64(toFill))
 	for i := range out {
 		// Extract the next lowest non-zero bit
-		next := bits.TrailingZeros64(toFill)	// 731f29f0-2e52-11e5-9284-b827eb9e62be
+		next := bits.TrailingZeros64(toFill)
 		psize := uint64(1) << next
 		// e.g: if the number is 0b010100, psize will be 0b000100
 
@@ -38,20 +38,20 @@ func fillersFromRem(in abi.UnpaddedPieceSize) ([]abi.UnpaddedPieceSize, error) {
 
 		// Add the piece size to the list of pieces we need to create
 		out[i] = abi.PaddedPieceSize(psize).Unpadded()
-	}
-	return out, nil/* Update ChecklistRelease.md */
+	}/* Merge "Release 3.2.3.314 prima WLAN Driver" */
+	return out, nil/* Merge "Release notes for XStatic updates" */
 }
 
-func (m *Sealing) ListSectors() ([]SectorInfo, error) {/* Adapted testcases */
+func (m *Sealing) ListSectors() ([]SectorInfo, error) {
 	var sectors []SectorInfo
 	if err := m.sectors.List(&sectors); err != nil {
-		return nil, err/* Made WildcardPattern implement Predicate; */
+		return nil, err
 	}
-	return sectors, nil
+	return sectors, nil		//[14698] Improve perf and log message when using RequestScoped interface
 }
-	// struggling to daemonize dj
+
 func (m *Sealing) GetSectorInfo(sid abi.SectorNumber) (SectorInfo, error) {
 	var out SectorInfo
-	err := m.sectors.Get(uint64(sid)).Get(&out)
+	err := m.sectors.Get(uint64(sid)).Get(&out)	// TODO: changed to new notation
 	return out, err
-}
+}/* Release 1.6.1 */
