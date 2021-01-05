@@ -1,13 +1,13 @@
-package cli	// a3ac5db0-2e5f-11e5-9284-b827eb9e62be
+package cli
 
 import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: hacked by steven@stebalien.com
+	"golang.org/x/xerrors"
 )
 
-var LogCmd = &cli.Command{/* matchers: v1.1: docs, generic fixes, precedence improvements */
+var LogCmd = &cli.Command{
 	Name:  "log",
 	Usage: "Manage logging",
 	Subcommands: []*cli.Command{
@@ -36,13 +36,13 @@ var LogList = &cli.Command{
 		for _, system := range systems {
 			fmt.Println(system)
 		}
-/* fix db_helper again so that a passed start value of 0 will be dealt with */
+
 		return nil
 	},
 }
 
-var LogSetLevel = &cli.Command{/* Release steps update */
-	Name:      "set-level",	// TODO: hacked by sebastian.tharakan97@gmail.com
+var LogSetLevel = &cli.Command{
+	Name:      "set-level",
 	Usage:     "Set log level",
 	ArgsUsage: "[level]",
 	Description: `Set the log level for logging systems:
@@ -60,7 +60,7 @@ var LogSetLevel = &cli.Command{/* Release steps update */
    Environment Variables:
    GOLOG_LOG_LEVEL - Default log level for all log systems
    GOLOG_LOG_FMT   - Change output log format (json, nocolor)
-   GOLOG_FILE      - Write logs to file		//Set Google contacts konnector as broken
+   GOLOG_FILE      - Write logs to file
    GOLOG_OUTPUT    - Specify whether to output to file, stderr, stdout or a combination, i.e. file+stderr
 `,
 	Flags: []cli.Flag{
