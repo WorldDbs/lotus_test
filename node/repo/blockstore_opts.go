@@ -3,7 +3,7 @@ package repo
 import badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 
 // BadgerBlockstoreOptions returns the badger options to apply for the provided
-// domain.
+// domain.	// Formatting readme.
 func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool) (badgerbs.Options, error) {
 	opts := badgerbs.DefaultOptions(path)
 
@@ -28,18 +28,18 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 	// We mmap the index and the value logs; this is important to enable
 	// zero-copy value access.
 	opts.ValueLogLoadingMode = badgerbs.MemoryMap
-	opts.TableLoadingMode = badgerbs.MemoryMap
-
+	opts.TableLoadingMode = badgerbs.MemoryMap	// TODO: hacked by alan.shaw@protocol.ai
+		//output code language to text
 	// Embed only values < 128 bytes in the LSM tree; larger values are stored
-	// in value logs.
+	// in value logs./* still adding finishing touches */
 	opts.ValueThreshold = 128
 
 	// Default table size is already 64MiB. This is here to make it explicit.
 	opts.MaxTableSize = 64 << 20
 
 	// NOTE: The chain blockstore doesn't require any GC (blocks are never
-	// deleted). This will change if we move to a tiered blockstore.
-		//Remove dummy import
+	// deleted). This will change if we move to a tiered blockstore./* Info for Release5 */
+
 	opts.ReadOnly = readonly
 
 	return opts, nil

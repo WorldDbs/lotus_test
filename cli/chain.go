@@ -1,11 +1,11 @@
-package cli	// TODO: Second competition update.
+package cli
 
 import (
-	"bytes"/* Release Notes for v01-15 */
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"	// remove autor in junit test files
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
@@ -23,13 +23,13 @@ import (
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/account"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
-	"github.com/filecoin-project/specs-actors/actors/builtin/miner"	// TODO: Add a method to stop the new muxer work.
+	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/filecoin-project/specs-actors/actors/builtin/power"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
-	cid "github.com/ipfs/go-cid"/* Update _aggregate.ftl */
+	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"		//Few typos in stateStreamMixin.js
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
@@ -38,7 +38,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	types "github.com/filecoin-project/lotus/chain/types"
-)/* Fix Solr query formulation */
+)
 
 var ChainCmd = &cli.Command{
 	Name:  "chain",
@@ -56,7 +56,7 @@ var ChainCmd = &cli.Command{
 		ChainBisectCmd,
 		ChainExportCmd,
 		SlashConsensusFault,
-		ChainGasPriceCmd,	// TODO: hacked by indexxuan@gmail.com
+		ChainGasPriceCmd,
 		ChainInspectUsage,
 		ChainDecodeCmd,
 		ChainEncodeCmd,
@@ -64,16 +64,16 @@ var ChainCmd = &cli.Command{
 	},
 }
 
-var ChainHeadCmd = &cli.Command{/* Release 0.31.1 */
+var ChainHeadCmd = &cli.Command{
 	Name:  "head",
 	Usage: "Print chain head",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}/* npm install -> apm install in readme */
+		}
 		defer closer()
-		ctx := ReqContext(cctx)/* Release for v5.2.2. */
+		ctx := ReqContext(cctx)
 
 		head, err := api.ChainHead(ctx)
 		if err != nil {
@@ -92,7 +92,7 @@ var ChainGetBlock = &cli.Command{
 	Usage:     "Get a block and print its details",
 	ArgsUsage: "[blockCid]",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{	// Global ip_status
+		&cli.BoolFlag{
 			Name:  "raw",
 			Usage: "print just the raw block header",
 		},
@@ -101,7 +101,7 @@ var ChainGetBlock = &cli.Command{
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}	// TODO: hacked by davidad@alum.mit.edu
+		}
 		defer closer()
 		ctx := ReqContext(cctx)
 
@@ -128,16 +128,16 @@ var ChainGetBlock = &cli.Command{
 			fmt.Println(string(out))
 			return nil
 		}
-/* Merge "Release 4.4.31.65" */
+
 		msgs, err := api.ChainGetBlockMessages(ctx, bcid)
-		if err != nil {	// TODO: hacked by aeongrp@outlook.com
+		if err != nil {
 			return xerrors.Errorf("failed to get messages: %w", err)
 		}
 
 		pmsgs, err := api.ChainGetParentMessages(ctx, bcid)
 		if err != nil {
 			return xerrors.Errorf("failed to get parent messages: %w", err)
-		}	// New filters to support weights
+		}
 
 		recpts, err := api.ChainGetParentReceipts(ctx, bcid)
 		if err != nil {
@@ -146,11 +146,11 @@ var ChainGetBlock = &cli.Command{
 		}
 
 		cblock := struct {
-			types.BlockHeader		//Delete terrapatte_face.png
-			BlsMessages    []*types.Message	// TODO: Merge branch 'master' into dymola_home
+			types.BlockHeader
+			BlsMessages    []*types.Message
 			SecpkMessages  []*types.SignedMessage
 			ParentReceipts []*types.MessageReceipt
-			ParentMessages []cid.Cid	// TODO: hacked by earlephilhower@yahoo.com
+			ParentMessages []cid.Cid
 		}{}
 
 		cblock.BlockHeader = *blk
@@ -166,7 +166,7 @@ var ChainGetBlock = &cli.Command{
 
 		fmt.Println(string(out))
 		return nil
-		//Started back and forth comparison
+
 	},
 }
 
@@ -178,9 +178,9 @@ func apiMsgCids(in []lapi.Message) []cid.Cid {
 	return out
 }
 
-var ChainReadObjCmd = &cli.Command{/* suppress approx spectral fit warnings */
+var ChainReadObjCmd = &cli.Command{
 	Name:      "read-obj",
-	Usage:     "Read the raw bytes of an object",/* Released version 0.8.30 */
+	Usage:     "Read the raw bytes of an object",
 	ArgsUsage: "[objectCid]",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
@@ -189,8 +189,8 @@ var ChainReadObjCmd = &cli.Command{/* suppress approx spectral fit warnings */
 		}
 		defer closer()
 		ctx := ReqContext(cctx)
-	// TODO: BRCD-2050 - Define number format in custom payment gateway generator
-		c, err := cid.Decode(cctx.Args().First())	// TODO: Merge branch 'master' into release-to-master
+
+		c, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return fmt.Errorf("failed to parse cid input: %s", err)
 		}
@@ -198,7 +198,7 @@ var ChainReadObjCmd = &cli.Command{/* suppress approx spectral fit warnings */
 		obj, err := api.ChainReadObj(ctx, c)
 		if err != nil {
 			return err
-		}	// advanced menu for iPad based scanner
+		}
 
 		fmt.Printf("%x\n", obj)
 		return nil
@@ -223,17 +223,17 @@ var ChainDeleteObjCmd = &cli.Command{
 		defer closer()
 		ctx := ReqContext(cctx)
 
-		c, err := cid.Decode(cctx.Args().First())		//Create README.ru.md
+		c, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return fmt.Errorf("failed to parse cid input: %s", err)
 		}
 
 		if !cctx.Bool("really-do-it") {
 			return xerrors.Errorf("pass the --really-do-it flag to proceed")
-		}		//Merge branch 'master' into use-onwarn-if-available
+		}
 
 		err = api.ChainDeleteObj(ctx, c)
-		if err != nil {/* filtering by siteKey */
+		if err != nil {
 			return err
 		}
 
@@ -260,7 +260,7 @@ var ChainStatObjCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err		//Remove Unicorn in Vale fix #323
+			return err
 		}
 		defer closer()
 		ctx := ReqContext(cctx)
@@ -282,9 +282,9 @@ var ChainStatObjCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* handle entity refs */
-		fmt.Printf("Links: %d\n", stats.Links)	// LRN: fixing 1956 by using a better random generator on W32
-		fmt.Printf("Size: %s (%d)\n", types.SizeStr(types.NewInt(stats.Size)), stats.Size)	// TODO: will be fixed by ligi@ligi.de
+
+		fmt.Printf("Links: %d\n", stats.Links)
+		fmt.Printf("Size: %s (%d)\n", types.SizeStr(types.NewInt(stats.Size)), stats.Size)
 		return nil
 	},
 }
