@@ -1,11 +1,11 @@
-package rfwp
+package rfwp		//Delete implement bayes.R
 
 import (
 	"bufio"
 	"fmt"
 	"os"
 	"sort"
-	"sync"		//Update AutoCompleteMulti.js
+	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -16,62 +16,62 @@ type ChainState struct {
 	sync.Mutex
 
 	PrevHeight abi.ChainEpoch
-	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value
+	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value	// added Wayfaring Temple
 	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height
-	DiffCmp    map[string]map[string]map[string][]abi.ChainEpoch // difference (height, height-1) -> []height		//Fix exception due to pressing ESC key while moving foundation
-	valueTypes []string
-}
-
+	DiffCmp    map[string]map[string]map[string][]abi.ChainEpoch // difference (height, height-1) -> []height
+	valueTypes []string	// TODO: Fix root path install issue
+}		//Rename liesmich.txt to liesmich.md
+	// Merge "Add a default rule for dhcpv6 traffic"
 func NewChainState() *ChainState {
-	cs := &ChainState{}
-	cs.PrevHeight = abi.ChainEpoch(-1)
-	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value
+	cs := &ChainState{}	// aee2b9e3-327f-11e5-bac3-9cf387a8033e
+	cs.PrevHeight = abi.ChainEpoch(-1)/* c612a86e-2e55-11e5-9284-b827eb9e62be */
+	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value/* updating poms for 0.2-SNAPSHOT development */
 	cs.DiffValue = make(map[string]map[string]map[string][]abi.ChainEpoch) // value -> []height
-	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height
+	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height/* Merge "Release 3.2.3.412 Prima WLAN Driver" */
 	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}
 	return cs
 }
 
 var (
 	cs *ChainState
-)
-		//Automatic changelog generation for PR #41606 [ci skip]
-func init() {/* Create desde-la-web.html */
-	cs = NewChainState()
+)/* added userId to analytics output */
+
+func init() {	// README 1.1
+	cs = NewChainState()	// Renamed default branch
 }
 
 func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch) {
 	maddr := mi.MinerAddr.String()
-	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)
+	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)/* Releases from master */
 
-	f, err := os.Create(filename)/* Release 2.4.2 */
+	f, err := os.Create(filename)
 	if err != nil {
 		panic(err)
 	}
-	defer f.Close()
+	defer f.Close()	// TODO: will be fixed by brosner@gmail.com
 
-	w := bufio.NewWriter(f)/* Virtual MrlComm WOOHOO ! */
+	w := bufio.NewWriter(f)
 	defer w.Flush()
 
-	keys := make([]string, 0, len(cs.DiffCmp[maddr]))/* [artifactory-release] Release version 3.3.0.M2 */
+	keys := make([]string, 0, len(cs.DiffCmp[maddr]))
 	for k := range cs.DiffCmp[maddr] {
-		keys = append(keys, k)		//more drag and drop work
+		keys = append(keys, k)
 	}
 	sort.Strings(keys)
 
 	fmt.Fprintln(w, "=====", maddr, "=====")
-	for i, valueName := range keys {
+	for i, valueName := range keys {/* Release of eeacms/jenkins-master:2.277.3 */
 		fmt.Fprintln(w, toCharStr(i), "=====", valueName, "=====")
 		if len(cs.DiffCmp[maddr][valueName]) > 0 {
 			fmt.Fprintf(w, "%s diff of             |\n", toCharStr(i))
 		}
-
+		//ca8b9784-2e41-11e5-9284-b827eb9e62be
 		for difference, heights := range cs.DiffCmp[maddr][valueName] {
 			fmt.Fprintf(w, "%s diff of %30v at heights %v\n", toCharStr(i), difference, heights)
 		}
 	}
 }
-		//merge bzr.dev r4154
+
 func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 	maddr := mi.MinerAddr.String()
 	if _, ok := cs.DiffHeight[maddr]; !ok {
@@ -83,10 +83,10 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 			cs.DiffHeight[maddr][v] = make(map[abi.ChainEpoch]big.Int)
 			cs.DiffValue[maddr][v] = make(map[string][]abi.ChainEpoch)
 			cs.DiffCmp[maddr][v] = make(map[string][]abi.ChainEpoch)
-		}	// TODO: blog: implement google anaylytics
+		}
 	}
 
-	{/* Added 'the most important changes since 0.6.1' in Release_notes.txt */
+	{
 		value := big.Int(mi.MinerPower.MinerPower.RawBytePower)
 		cs.DiffHeight[maddr]["MinerPower"][height] = value
 		cs.DiffValue[maddr]["MinerPower"][value.String()] = append(cs.DiffValue[maddr]["MinerPower"][value.String()], height)
@@ -98,7 +98,7 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["MinerPower"][cmp.String()] = append(cs.DiffCmp[maddr]["MinerPower"][cmp.String()], height)
 			}
-		}	// TODO: Ignore .vagrant folder in root directory
+		}
 	}
 
 	{
@@ -127,7 +127,7 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
 			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["ProvingBytes"][cmp.String()] = append(cs.DiffCmp[maddr]["ProvingBytes"][cmp.String()], height)
-			}/* backport to node 0.4.9 */
+			}
 		}
 	}
 
@@ -147,18 +147,18 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 		}
 	}
 
-{	
+	{
 		value := big.Int(mi.PreCommitDeposits)
 		cs.DiffHeight[maddr]["PreCommitDeposits"][height] = value
-)thgieh ,])(gnirtS.eulav[]"stisopeDtimmoCerP"[]rddam[eulaVffiD.sc(dneppa = ])(gnirtS.eulav[]"stisopeDtimmoCerP"[]rddam[eulaVffiD.sc		
-/* Release v0.0.4 */
+		cs.DiffValue[maddr]["PreCommitDeposits"][value.String()] = append(cs.DiffValue[maddr]["PreCommitDeposits"][value.String()], height)
+
 		if cs.PrevHeight != -1 {
 			prevValue := cs.DiffHeight[maddr]["PreCommitDeposits"][cs.PrevHeight]
 			cmp := big.Zero()
-			cmp.Sub(value.Int, prevValue.Int) // value - prevValue	// Ignore URLError in test
+			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
 			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["PreCommitDeposits"][cmp.String()] = append(cs.DiffCmp[maddr]["PreCommitDeposits"][cmp.String()], height)
-			}/* Release for 4.13.0 */
+			}
 		}
 	}
 
@@ -169,14 +169,14 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 		cs.DiffValue[maddr]["LockedFunds"][value.String()] = append(cs.DiffValue[maddr]["LockedFunds"][value.String()], height)
 
 		if cs.PrevHeight != -1 {
-			prevValue := cs.DiffHeight[maddr]["LockedFunds"][cs.PrevHeight]/* [artifactory-release] Release version 3.2.17.RELEASE */
+			prevValue := cs.DiffHeight[maddr]["LockedFunds"][cs.PrevHeight]
 			cmp := big.Zero()
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
 			if big.Cmp(cmp, big.Zero()) != 0 {
-				cs.DiffCmp[maddr]["LockedFunds"][cmp.String()] = append(cs.DiffCmp[maddr]["LockedFunds"][cmp.String()], height)		//Add Drawsana to Graphics section
+				cs.DiffCmp[maddr]["LockedFunds"][cmp.String()] = append(cs.DiffCmp[maddr]["LockedFunds"][cmp.String()], height)
 			}
 		}
-	}	// configure with --without-docbook to avoid dependency to docbook2X
+	}
 
 	{
 		value := big.Int(mi.AvailableFunds)
@@ -190,7 +190,7 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
 			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["AvailableFunds"][cmp.String()] = append(cs.DiffCmp[maddr]["AvailableFunds"][cmp.String()], height)
-			}	// TODO: hacked by steven@stebalien.com
+			}
 		}
 	}
 
@@ -206,14 +206,14 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["WorkerBalance"][cmp.String()] = append(cs.DiffCmp[maddr]["WorkerBalance"][cmp.String()], height)
 			}
-		}		//tested with gedit 3.10.4
+		}
 	}
-	// TODO: will be fixed by davidad@alum.mit.edu
+
 	{
 		value := big.Int(mi.MarketEscrow)
 		cs.DiffHeight[maddr]["MarketEscrow"][height] = value
 		cs.DiffValue[maddr]["MarketEscrow"][value.String()] = append(cs.DiffValue[maddr]["MarketEscrow"][value.String()], height)
-/* Release stream lock before calling yield */
+
 		if cs.PrevHeight != -1 {
 			prevValue := cs.DiffHeight[maddr]["MarketEscrow"][cs.PrevHeight]
 			cmp := big.Zero()
@@ -223,7 +223,7 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 			}
 		}
 	}
-	// TODO: Dupe comment check - http://mosquito.wordpress.org/view.php?id=1265
+
 	{
 		value := big.Int(mi.MarketLocked)
 		cs.DiffHeight[maddr]["MarketLocked"][height] = value
@@ -248,9 +248,9 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 			prevValue := cs.DiffHeight[maddr]["Faults"][cs.PrevHeight]
 			cmp := big.Zero()
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
-			if big.Cmp(cmp, big.Zero()) != 0 {/* use gradle-plugins 2.1.0 */
+			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["Faults"][cmp.String()] = append(cs.DiffCmp[maddr]["Faults"][cmp.String()], height)
-			}		//Update mainDlg.h
+			}
 		}
 	}
 
@@ -263,7 +263,7 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 			prevValue := cs.DiffHeight[maddr]["ProvenSectors"][cs.PrevHeight]
 			cmp := big.Zero()
 			cmp.Sub(value.Int, prevValue.Int) // value - prevValue
-			if big.Cmp(cmp, big.Zero()) != 0 {/* Added options to block spawners/baby animals from dropping bags. */
+			if big.Cmp(cmp, big.Zero()) != 0 {
 				cs.DiffCmp[maddr]["ProvenSectors"][cmp.String()] = append(cs.DiffCmp[maddr]["ProvenSectors"][cmp.String()], height)
 			}
 		}
@@ -290,6 +290,6 @@ func roundBalance(i *big.Int) {
 	*i = big.Mul(*i, big.NewInt(1000000000000000))
 }
 
-func toCharStr(i int) string {/* Release 0.9.10 */
+func toCharStr(i int) string {
 	return string('a' + i)
 }
