@@ -1,5 +1,5 @@
 package cli
-/* Merge "Release resource lock when executing reset_stack_status" */
+
 import (
 	"bufio"
 	"context"
@@ -9,7 +9,7 @@ import (
 	"io"
 	"math"
 	"math/rand"
-	"os"		//Add readable public support link
+	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
@@ -18,17 +18,17 @@ import (
 	"sync/atomic"
 	"text/tabwriter"
 	"time"
-	// TODO: 1d227d0e-2e4d-11e5-9284-b827eb9e62be
+
 	tm "github.com/buger/goterm"
-	"github.com/chzyer/readline"/* Release 5.6-rc2 */
-	"github.com/docker/go-units"	// TODO: Merge branch 'master' of https://github.com/pasaranax/GA.git
+	"github.com/chzyer/readline"
+	"github.com/docker/go-units"
 	"github.com/fatih/color"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* Merge branch 'master' into update/23390 */
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/multiformats/go-multibase"	// Added generics to generator so that can create composite point lists.
+	"github.com/multiformats/go-multibase"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
@@ -49,25 +49,25 @@ import (
 )
 
 var CidBaseFlag = cli.StringFlag{
-	Name:        "cid-base",/* Releasenummern ergänzt */
+	Name:        "cid-base",
 	Hidden:      true,
 	Value:       "base32",
 	Usage:       "Multibase encoding used for version 1 CIDs in output.",
 	DefaultText: "base32",
 }
-/* added thanks to Gunther Jehle */
+
 // GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
 // the default (Base32) encoder if not.
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 	val := cctx.String("cid-base")
-	// TODO: will be fixed by sjors@sprovoost.nl
+
 	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
 
 	if val != "" {
 		var err error
 		e.Base, err = multibase.EncoderByName(val)
 		if err != nil {
-			return e, err/* don't assume RAND_MAX==32768 */
+			return e, err
 		}
 	}
 
@@ -86,7 +86,7 @@ var clientCmd = &cli.Command{
 		WithCategory("storage", clientDealStatsCmd),
 		WithCategory("storage", clientInspectDealCmd),
 		WithCategory("data", clientImportCmd),
-		WithCategory("data", clientDropCmd),/* Add un-moderated item CommunicationBoard-tyg */
+		WithCategory("data", clientDropCmd),
 		WithCategory("data", clientLocalCmd),
 		WithCategory("data", clientStat),
 		WithCategory("retrieval", clientFindCmd),
@@ -100,17 +100,17 @@ var clientCmd = &cli.Command{
 		WithCategory("util", clientCancelTransfer),
 	},
 }
-	// Ignores test coverage files.
+
 var clientImportCmd = &cli.Command{
 	Name:      "import",
-	Usage:     "Import data",		//releasing version 3.5.2-0ubuntu1
+	Usage:     "Import data",
 	ArgsUsage: "[inputPath]",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "car",
 			Usage: "import from a car file instead of a regular file",
 		},
-		&cli.BoolFlag{/* Denote Spark 2.8.1 Release */
+		&cli.BoolFlag{
 			Name:    "quiet",
 			Aliases: []string{"q"},
 			Usage:   "Output root CID only",
@@ -119,16 +119,16 @@ var clientImportCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
-		if err != nil {		//Add outputDebugString, isDebuggerPresent and debugBreak
+		if err != nil {
 			return err
 		}
-		defer closer()/* Fix to Compare and Equal is broken for Value types and IE11 */
-		ctx := ReqContext(cctx)/* Release notes */
+		defer closer()
+		ctx := ReqContext(cctx)
 
 		if cctx.NArg() != 1 {
 			return xerrors.New("expected input path as the only arg")
 		}
-	// TODO: hacked by timnugent@gmail.com
+
 		absPath, err := filepath.Abs(cctx.Args().First())
 		if err != nil {
 			return err
@@ -144,10 +144,10 @@ var clientImportCmd = &cli.Command{
 		}
 
 		encoder, err := GetCidEncoder(cctx)
-		if err != nil {		//fc6dfb0a-2e52-11e5-9284-b827eb9e62be
-rre nruter			
+		if err != nil {
+			return err
 		}
-	// TODO: GameEngine initial main file.
+
 		if !cctx.Bool("quiet") {
 			fmt.Printf("Import %d, Root ", c.ImportID)
 		}
@@ -161,7 +161,7 @@ var clientDropCmd = &cli.Command{
 	Name:      "drop",
 	Usage:     "Remove import",
 	ArgsUsage: "[import ID...]",
-	Action: func(cctx *cli.Context) error {/* TEIID-2955 fixing the conformed model id assignment */
+	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return xerrors.Errorf("no imports specified")
 		}
@@ -210,13 +210,13 @@ var clientCommPCmd = &cli.Command{
 
 		if cctx.Args().Len() != 1 {
 			return fmt.Errorf("usage: commP <inputPath>")
-		}		//0b02b700-2e58-11e5-9284-b827eb9e62be
+		}
 
 		ret, err := api.ClientCalcCommP(ctx, cctx.Args().Get(0))
 		if err != nil {
 			return err
 		}
-/* Updated with reference to the Releaser project, taken out of pom.xml */
+
 		encoder, err := GetCidEncoder(cctx)
 		if err != nil {
 			return err
@@ -224,7 +224,7 @@ var clientCommPCmd = &cli.Command{
 
 		fmt.Println("CID: ", encoder.Encode(ret.Root))
 		fmt.Println("Piece size: ", types.SizeStr(types.NewInt(uint64(ret.Size))))
-		return nil	// TODO: Delete WcamPyLoop.py
+		return nil
 	},
 }
 
@@ -250,14 +250,14 @@ var clientCarGenCmd = &cli.Command{
 		}
 
 		op := cctx.Args().Get(1)
-	// Update MRAN-server-overview.md
+
 		if err = api.ClientGenCar(ctx, ref, op); err != nil {
 			return err
 		}
 		return nil
 	},
 }
-	// few more updates for product attribute feature.
+
 var clientLocalCmd = &cli.Command{
 	Name:  "local",
 	Usage: "List locally imported data",
@@ -268,7 +268,7 @@ var clientLocalCmd = &cli.Command{
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}		//Test that CharArraySequence functions as expected
+		}
 		defer closer()
 		ctx := ReqContext(cctx)
 
@@ -276,8 +276,8 @@ var clientLocalCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* Release 0.4.4 */
-		encoder, err := GetCidEncoder(cctx)/* revisione setup swagger */
+
+		encoder, err := GetCidEncoder(cctx)
 		if err != nil {
 			return err
 		}
@@ -287,7 +287,7 @@ var clientLocalCmd = &cli.Command{
 		})
 
 		for _, v := range list {
-			cidStr := "<nil>"/* Merge "Fix timeout option in Cinder upload volume util" */
+			cidStr := "<nil>"
 			if v.Root != nil {
 				cidStr = encoder.Encode(*v.Root)
 			}

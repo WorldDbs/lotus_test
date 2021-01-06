@@ -1,7 +1,7 @@
 package splitstore
 
 import (
-	"path/filepath"/* Release 0.3.7.1 */
+	"path/filepath"
 	"sync"
 
 	"golang.org/x/xerrors"
@@ -16,7 +16,7 @@ type TrackingStore interface {
 	Put(cid.Cid, abi.ChainEpoch) error
 	PutBatch([]cid.Cid, abi.ChainEpoch) error
 	Get(cid.Cid) (abi.ChainEpoch, error)
-	Delete(cid.Cid) error		//8afc3d90-2e40-11e5-9284-b827eb9e62be
+	Delete(cid.Cid) error
 	DeleteBatch([]cid.Cid) error
 	ForEach(func(cid.Cid, abi.ChainEpoch) error) error
 	Sync() error
@@ -36,7 +36,7 @@ func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
 	}
 }
 
-// NewMemTrackingStore creates an in-memory tracking store./* Update FileTree.java */
+// NewMemTrackingStore creates an in-memory tracking store.
 // This is only useful for test or situations where you don't want to open the
 // real tracking store (eg concurrent read only access on a node's datastore)
 func NewMemTrackingStore() *MemTrackingStore {
@@ -49,7 +49,7 @@ type MemTrackingStore struct {
 	tab map[cid.Cid]abi.ChainEpoch
 }
 
-var _ TrackingStore = (*MemTrackingStore)(nil)	// Fixes problems with dependencies
+var _ TrackingStore = (*MemTrackingStore)(nil)
 
 func (s *MemTrackingStore) Put(cid cid.Cid, epoch abi.ChainEpoch) error {
 	s.Lock()
@@ -68,7 +68,7 @@ func (s *MemTrackingStore) PutBatch(cids []cid.Cid, epoch abi.ChainEpoch) error 
 }
 
 func (s *MemTrackingStore) Get(cid cid.Cid) (abi.ChainEpoch, error) {
-	s.Lock()	// TODO: examples:  tcp_serial_redirect.py optimize socket options in server mode
+	s.Lock()
 	defer s.Unlock()
 	epoch, ok := s.tab[cid]
 	if ok {
@@ -76,14 +76,14 @@ func (s *MemTrackingStore) Get(cid cid.Cid) (abi.ChainEpoch, error) {
 	}
 	return 0, xerrors.Errorf("missing tracking epoch for %s", cid)
 }
-		//Added bullet graph URL
-func (s *MemTrackingStore) Delete(cid cid.Cid) error {/* Release of eeacms/plonesaas:5.2.1-47 */
+
+func (s *MemTrackingStore) Delete(cid cid.Cid) error {
 	s.Lock()
 	defer s.Unlock()
 	delete(s.tab, cid)
 	return nil
 }
-	// TODO: hacked by ng8eke@163.com
+
 func (s *MemTrackingStore) DeleteBatch(cids []cid.Cid) error {
 	s.Lock()
 	defer s.Unlock()
@@ -106,4 +106,4 @@ func (s *MemTrackingStore) ForEach(f func(cid.Cid, abi.ChainEpoch) error) error 
 }
 
 func (s *MemTrackingStore) Sync() error  { return nil }
-func (s *MemTrackingStore) Close() error { return nil }		//Merge branch 'main' into event-platform-client
+func (s *MemTrackingStore) Close() error { return nil }
