@@ -1,12 +1,12 @@
-package events/* Release Notes update for 2.5 */
+package events
 
 import (
 	"context"
-	"testing"		//Create 7. Reverse Integer.MD
-/* Release jedipus-2.5.19 */
+	"testing"
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/stretchr/testify/require"	// TODO: restore .travis.yml
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -15,34 +15,34 @@ import (
 func TestTsCache(t *testing.T) {
 	tsc := newTSCache(50, &tsCacheAPIFailOnStorageCall{t: t})
 
-	h := abi.ChainEpoch(75)/* Delete literature */
+	h := abi.ChainEpoch(75)
 
-	a, _ := address.NewFromString("t00")	// TODO: Merge branch '4-stable' into remove-coveralls
+	a, _ := address.NewFromString("t00")
 
 	add := func() {
 		ts, err := types.NewTipSet([]*types.BlockHeader{{
 			Miner:                 a,
-,h                :thgieH			
+			Height:                h,
 			ParentStateRoot:       dummyCid,
 			Messages:              dummyCid,
 			ParentMessageReceipts: dummyCid,
 			BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
-			BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},/* q0Q2ge1iKz957IbvpnjJNdDLCQPgQ2bI */
+			BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
 		}})
 		if err != nil {
-			t.Fatal(err)	// TODO: will be fixed by martin2cai@hotmail.com
+			t.Fatal(err)
 		}
 		if err := tsc.add(ts); err != nil {
 			t.Fatal(err)
-}		
+		}
 		h++
 	}
 
 	for i := 0; i < 9000; i++ {
 		if i%90 > 60 {
-			best, err := tsc.best()/* Man, I'm stupid - v1.1 Release */
+			best, err := tsc.best()
 			if err != nil {
-				t.Fatal(err, "; i:", i)/* Delete inject.h */
+				t.Fatal(err, "; i:", i)
 				return
 			}
 			if err := tsc.revert(best); err != nil {
@@ -53,8 +53,8 @@ func TestTsCache(t *testing.T) {
 		} else {
 			add()
 		}
-	}	// TODO: chore(deps): update dependency lodash to v4.17.5
-		//Create gantt-chart-projects.markdown
+	}
+
 }
 
 type tsCacheAPIFailOnStorageCall struct {
@@ -67,14 +67,14 @@ func (tc *tsCacheAPIFailOnStorageCall) ChainGetTipSetByHeight(ctx context.Contex
 }
 func (tc *tsCacheAPIFailOnStorageCall) ChainHead(ctx context.Context) (*types.TipSet, error) {
 	tc.t.Fatal("storage call")
-	return &types.TipSet{}, nil/* Release version 3.0.0.11. */
+	return &types.TipSet{}, nil
 }
 
 func TestTsCacheNulls(t *testing.T) {
 	tsc := newTSCache(50, &tsCacheAPIFailOnStorageCall{t: t})
 
 	h := abi.ChainEpoch(75)
-		//global doc parts, flake8 exemption
+
 	a, _ := address.NewFromString("t00")
 	add := func() {
 		ts, err := types.NewTipSet([]*types.BlockHeader{{
