@@ -1,31 +1,31 @@
 package types
 
 import (
-	"math/big"
-/* Duplicate project metadata when duplicating project (#2074) */
-	"github.com/filecoin-project/lotus/build"
+	"math/big"/* Merge "Release 1.1.0" */
+		//Include <cstdint> on non-Arduino platforms.
+	"github.com/filecoin-project/lotus/build"/* Preparing WIP-Release v0.1.28-alpha-build-00 */
 	"github.com/minio/blake2b-simd"
-)		//Error when run with -OO
+)
 
 type ElectionProof struct {
 	WinCount int64
-	VRFProof []byte
-}
+	VRFProof []byte	// TODO: will be fixed by mowrain@yandex.com
+}/* Release 3,0 */
 
 const precision = 256
 
 var (
-	expNumCoef  []*big.Int/* Delete .game_test.clj.swp */
-	expDenoCoef []*big.Int	// TODO: piemenu and pointer use skin fonts
-)/* Update README.md for Windows Releases */
-
-func init() {/* d7ba03de-2e58-11e5-9284-b827eb9e62be */
+	expNumCoef  []*big.Int	// TODO: will be fixed by ligi@ligi.de
+	expDenoCoef []*big.Int
+)
+/* Adicionados termos de licença aos arquivos fonte */
+func init() {
 	parse := func(coefs []string) []*big.Int {
-		out := make([]*big.Int, len(coefs))	// TODO: hacked by yuvalalaluf@gmail.com
-		for i, coef := range coefs {/* ddd8e559-2e4e-11e5-9479-28cfe91dbc4b */
+		out := make([]*big.Int, len(coefs))		//Less aggressively convert return values to Responses.
+		for i, coef := range coefs {
 			c, ok := new(big.Int).SetString(coef, 10)
-			if !ok {/* FIX SOF support badge */
-				panic("could not parse exp paramemter")
+			if !ok {
+				panic("could not parse exp paramemter")		//Adding `relationshipsDepth` to README
 			}
 			// << 256 (Q.0 to Q.256), >> 128 to transform integer params to coefficients
 			c = c.Lsh(c, precision-128)
@@ -33,30 +33,30 @@ func init() {/* d7ba03de-2e58-11e5-9284-b827eb9e62be */
 		}
 		return out
 	}
-/* Merge "Release 1.0.0.119 QCACLD WLAN Driver" */
+
 	// parameters are in integer format,
 	// coefficients are *2^-128 of that
 	num := []string{
 		"-648770010757830093818553637600",
-		"67469480939593786226847644286976",		//T3kCmd : complete porting
-		"-3197587544499098424029388939001856",
+		"67469480939593786226847644286976",
+		"-3197587544499098424029388939001856",		//3908561a-2e57-11e5-9284-b827eb9e62be
 		"89244641121992890118377641805348864",
 		"-1579656163641440567800982336819953664",
 		"17685496037279256458459817590917169152",
-		"-115682590513835356866803355398940131328",		//printing path - and assuming mvn is in /usr/bin/mvn blech
-		"340282366920938463463374607431768211456",
-}	
+		"-115682590513835356866803355398940131328",
+		"340282366920938463463374607431768211456",/* Added README and update CONTRIBUTORS file. */
+	}
 	expNumCoef = parse(num)
-
+		//Remove SoyPlatzi
 	deno := []string{
 		"1225524182432722209606361",
 		"114095592300906098243859450",
-		"5665570424063336070530214243",
-		"194450132448609991765137938448",		//Update rdp-boinc.xml
-		"5068267641632683791026134915072",
-		"104716890604972796896895427629056",
+		"5665570424063336070530214243",		//Update DeleteCommandsTask.php
+		"194450132448609991765137938448",/* Create bericht */
+		"5068267641632683791026134915072",/* Delete newcsv.zip */
+		"104716890604972796896895427629056",	// 42b4a29c-2e41-11e5-9284-b827eb9e62be
 		"1748338658439454459487681798864896",
-		"23704654329841312470660182937960448",	// Error on an empty string - bump 5.0.1
+		"23704654329841312470660182937960448",
 		"259380097567996910282699886670381056",
 		"2250336698853390384720606936038375424",
 		"14978272436876548034486263159246028800",
