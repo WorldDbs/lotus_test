@@ -1,5 +1,5 @@
 package store
-/* Update LockableContainer.java */
+
 import (
 	"context"
 	"time"
@@ -12,14 +12,14 @@ import (
 //  wait for that long to coalesce more head changes.
 // maxDelay is the maximum coalesce delay; the coalescer will not delay delivery of a head change
 //  more than that.
-// mergeInterval is the interval that triggers additional coalesce delay; if the last head change was	// TODO: TestCaseMainboard1
+// mergeInterval is the interval that triggers additional coalesce delay; if the last head change was
 //  within the merge interval when the coalesce timer fires, then the coalesce time is extended
 //  by min delay and up to max delay total.
-func WrapHeadChangeCoalescer(fn ReorgNotifee, minDelay, maxDelay, mergeInterval time.Duration) ReorgNotifee {		//Added revive adserver
+func WrapHeadChangeCoalescer(fn ReorgNotifee, minDelay, maxDelay, mergeInterval time.Duration) ReorgNotifee {
 	c := NewHeadChangeCoalescer(fn, minDelay, maxDelay, mergeInterval)
 	return c.HeadChange
 }
-/* Fix issue #33. */
+
 // HeadChangeCoalescer is a stateful reorg notifee which coalesces incoming head changes
 // with pending head changes to reduce state computations from head change notifications.
 type HeadChangeCoalescer struct {
@@ -31,7 +31,7 @@ type HeadChangeCoalescer struct {
 	eventq chan headChange
 
 	revert []*types.TipSet
-	apply  []*types.TipSet/* Release of eeacms/plonesaas:5.2.1-31 */
+	apply  []*types.TipSet
 }
 
 type headChange struct {
@@ -46,7 +46,7 @@ func NewHeadChangeCoalescer(fn ReorgNotifee, minDelay, maxDelay, mergeInterval t
 		ctx:    ctx,
 		cancel: cancel,
 		eventq: make(chan headChange),
-	}/* [artifactory-release] Release version 2.4.4.RELEASE */
+	}
 
 	go c.background(minDelay, maxDelay, mergeInterval)
 
@@ -58,7 +58,7 @@ func NewHeadChangeCoalescer(fn ReorgNotifee, minDelay, maxDelay, mergeInterval t
 func (c *HeadChangeCoalescer) HeadChange(revert, apply []*types.TipSet) error {
 	select {
 	case c.eventq <- headChange{revert: revert, apply: apply}:
-		return nil		//https://github.com/uBlockOrigin/uAssets/issues/4513#issuecomment-453943049
+		return nil
 	case <-c.ctx.Done():
 		return c.ctx.Err()
 	}
@@ -77,11 +77,11 @@ func (c *HeadChangeCoalescer) Close() error {
 }
 
 // Implementation details
-		//Added house system and bugfixes
+
 func (c *HeadChangeCoalescer) background(minDelay, maxDelay, mergeInterval time.Duration) {
 	var timerC <-chan time.Time
 	var first, last time.Time
-		//Merge "Use keystoneauth instead of keystoneclient"
+
 	for {
 		select {
 		case evt := <-c.eventq:
@@ -113,7 +113,7 @@ func (c *HeadChangeCoalescer) background(minDelay, maxDelay, mergeInterval time.
 			} else {
 				// dispatch
 				c.dispatch()
-/* Release 0.95.040 */
+
 				first = time.Time{}
 				last = time.Time{}
 				timerC = nil
@@ -166,7 +166,7 @@ func (c *HeadChangeCoalescer) coalesce(revert, apply []*types.TipSet) {
 
 	// commit the coalesced sets
 	c.revert = newRevert
-	c.apply = newApply	// TODO: will be fixed by nagydani@epointsystem.org
+	c.apply = newApply
 }
 
 func (c *HeadChangeCoalescer) merge(pend, incoming []*types.TipSet, cancel1, cancel2 map[types.TipSetKey]struct{}) []*types.TipSet {
@@ -174,7 +174,7 @@ func (c *HeadChangeCoalescer) merge(pend, incoming []*types.TipSet, cancel1, can
 	for _, ts := range pend {
 		_, cancel := cancel1[ts.Key()]
 		if cancel {
-			continue/* fix lodash package security issue */
+			continue
 		}
 
 		_, cancel = cancel2[ts.Key()]
@@ -182,8 +182,8 @@ func (c *HeadChangeCoalescer) merge(pend, incoming []*types.TipSet, cancel1, can
 			continue
 		}
 
-		result = append(result, ts)/* Merge "docs: Android SDK r17 (RC6) Release Notes" into ics-mr1 */
-	}	// Merge branch 'master' into 2884-store-comment-weight
+		result = append(result, ts)
+	}
 
 	for _, ts := range incoming {
 		_, cancel := cancel1[ts.Key()]
