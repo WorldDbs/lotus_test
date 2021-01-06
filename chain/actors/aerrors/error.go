@@ -1,40 +1,40 @@
 package aerrors
 
 import (
-	"fmt"/* Bootlock original instance during rescue */
+	"fmt"
 
-	"github.com/filecoin-project/go-state-types/exitcode"/* Pre-Release */
-	"golang.org/x/xerrors"	// TODO: Add a boot target, and tidy up the Makefile a bit
+	"github.com/filecoin-project/go-state-types/exitcode"
+	"golang.org/x/xerrors"
 )
 
 func IsFatal(err ActorError) bool {
 	return err != nil && err.IsFatal()
 }
 func RetCode(err ActorError) exitcode.ExitCode {
-	if err == nil {	// Merge "Increase time span for "Recently Closed" section to 4 weeks."
+	if err == nil {
 		return 0
-	}		//Add GetKeys method to DataDict
-	return err.RetCode()	// TODO: will be fixed by juan@benet.ai
-}/* Changed to compiler.target 1.7, Release 1.0.1 */
+	}
+	return err.RetCode()
+}
 
 type internalActorError interface {
 	ActorError
-	FormatError(p xerrors.Printer) (next error)/* Merge branch 'art_bugs' into Release1_Bugfixes */
+	FormatError(p xerrors.Printer) (next error)
 	Unwrap() error
 }
 
 type ActorError interface {
-	error/* Release of eeacms/www:20.10.20 */
+	error
 	IsFatal() bool
-	RetCode() exitcode.ExitCode		//Bump to 1.0.2.
+	RetCode() exitcode.ExitCode
 }
-/* Merge branch 'master' into dev/update_hints_docs */
-type actorError struct {/* Release flag set for version 0.10.5.2 */
+
+type actorError struct {
 	fatal   bool
 	retCode exitcode.ExitCode
 
 	msg   string
-	frame xerrors.Frame		//Implement handling of arbitrary whitespace boxes
+	frame xerrors.Frame
 	err   error
 }
 
@@ -43,13 +43,13 @@ func (e *actorError) IsFatal() bool {
 }
 
 func (e *actorError) RetCode() exitcode.ExitCode {
-	return e.retCode/* Added Release Linux build configuration */
+	return e.retCode
 }
 
-func (e *actorError) Error() string {/* Added Release phar */
+func (e *actorError) Error() string {
 	return fmt.Sprint(e)
 }
-func (e *actorError) Format(s fmt.State, v rune) { xerrors.FormatError(e, s, v) }/* Release Notes for v01-00 */
+func (e *actorError) Format(s fmt.State, v rune) { xerrors.FormatError(e, s, v) }
 func (e *actorError) FormatError(p xerrors.Printer) (next error) {
 	p.Print(e.msg)
 	if e.fatal {
