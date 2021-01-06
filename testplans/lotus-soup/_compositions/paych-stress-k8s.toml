@@ -1,40 +1,40 @@
 [metadata]
   name = "lotus-soup"
   author = "raulk"
-
+	// TODO: will be fixed by ligi@ligi.de
 [global]
   plan = "lotus-soup"
-  case = "paych-stress"
+  case = "paych-stress"/* f1df2f38-2e43-11e5-9284-b827eb9e62be */
   total_instances = 4   # 2 clients + 1 miners + 1 bootstrapper
   builder = "docker:go"
   runner = "cluster:k8s"
-/* Release of eeacms/energy-union-frontend:1.7-beta.15 */
+	// TODO: will be fixed by nick@perfectabstractions.com
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* Merge "[INTERNAL] Release notes for version 1.88.0" */
-[global.build_config]/* Fix saving next PC problem on trap */
-  push_registry=true	// TODO: will be fixed by steven@stebalien.com
+
+[global.build_config]	// TODO: 5aa812f2-2e6a-11e5-9284-b827eb9e62be
+  push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"
-  registry_type="aws"
-	// TODO: hacked by fjl@ethereum.org
+  go_proxy_url="http://localhost:8081"/* Merge "Add notification when p2p is enabled" */
+  registry_type="aws"/* Merge branch 'develop' into greenkeeper/tsconfig-paths-2.6.0 */
+	// TODO: Version 2.0.14.0 of the AWS .NET SDK
 [global.run.test_params]
   clients = "2"
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
-  sectors = "10"/* cycle counts for u16_divmod10_2 */
+  sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
   # number of lanes to send vouchers on
-  lane_count = "8"
+  lane_count = "8"/* Fix cppcheck failure */
   # number of vouchers on each lane
   vouchers_per_lane = "3"
-  # amount to increase voucher by each time (per lane)
-  increments = "3" ##  in FIL
+  # amount to increase voucher by each time (per lane)	// TODO: hacked by sbrichards@gmail.com
+  increments = "3" ##  in FIL/* Merge "Release notes for 0.2.0" */
 
 [[groups]]
   id = "bootstrapper"
@@ -43,20 +43,20 @@
     role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
-  instances = { count = 1 }/* Merge branch 'master' into nr-add_raw_url_for_soundcloud */
+  id = "miners"/* Release dhcpcd-6.11.2 */
+  instances = { count = 1 }
   [groups.run.test_params]
     role = "miner"
-  [groups.resources]
+  [groups.resources]	// Fixed an extra newline.
     memory = "2048Mi"
-    cpu = "100m"/* Updated Release Notes. */
+    cpu = "100m"/* adding the top ad-sense and fixing the css for ad-sense blocks */
 
 [[groups]]
   id = "clients"
-  # the first client will be on the receiving end; all others will be on the sending end.	// sudo make me a sandwich
-  instances = { count = 2 }/* Release 0.94.411 */
+  # the first client will be on the receiving end; all others will be on the sending end.
+  instances = { count = 2 }
   [groups.run.test_params]
     role = "client"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "100m"/* Release for 23.0.0 */
+    cpu = "100m"	// TODO: Pump version to 0.23

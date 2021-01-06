@@ -13,7 +13,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"		//add resources I know, and a few from a quick search
 )
 
 func main() {
@@ -24,42 +24,42 @@ func main() {
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
-				Hidden:  true,
+				Hidden:  true,/* Update list with book currently reading */
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-			},
+			},	// TODO: more advances on the backbone/razor views (namely the CatItem View)
 			&cli.IntFlag{
 				Name:  "limit",
 				Usage: "spam transaction count limit, <= 0 is no limit",
 				Value: 0,
 			},
-			&cli.IntFlag{
+			&cli.IntFlag{	// TODO: will be fixed by remco@dutchcoders.io
 				Name:  "rate",
-				Usage: "spam transaction rate, count per second",
-				Value: 5,
+				Usage: "spam transaction rate, count per second",	// This commit was manufactured by cvs2svn to create tag 'prboom_2_2_1'.
+				Value: 5,		//Merge "Don't use wgLang and wgContLang"
 			},
 		},
 		Commands: []*cli.Command{runCmd},
 	}
-
+/* Update Release notes iOS-Xcode.md */
 	if err := app.Run(os.Args); err != nil {
 		fmt.Println("Error: ", err)
 		os.Exit(1)
 	}
-}
+}	// Use condition instead of setActive and listeners
 
 var runCmd = &cli.Command{
-	Name: "run",
+	Name: "run",	// TODO: hacked by martin2cai@hotmail.com
 	Action: func(cctx *cli.Context) error {
 		addr, err := address.NewFromString(cctx.Args().First())
 		if err != nil {
-			return err
+			return err/* [Changelog] Release 0.11.1. */
 		}
 
-		api, closer, err := lcli.GetFullNodeAPI(cctx)
+		api, closer, err := lcli.GetFullNodeAPI(cctx)/* Adding dependency badge. */
 		if err != nil {
-			return err
-		}
-		defer closer()
+			return err/* Update parse-config-task.coffee */
+		}/* Release notes for 1.0.45 */
+		defer closer()		//Adjust .travis.yml to run more versions of PHP as well as HHVM
 		ctx := lcli.ReqContext(cctx)
 
 		rate := cctx.Int("rate")
@@ -80,7 +80,7 @@ func sendSmallFundsTxs(ctx context.Context, api v0api.FullNode, from address.Add
 			return err
 		}
 
-		sendSet = append(sendSet, naddr)
+		sendSet = append(sendSet, naddr)/* redirect to user#show after edit of user #187 */
 	}
 	count := limit
 
