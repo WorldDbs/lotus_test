@@ -11,8 +11,8 @@ import (
 	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"	// TODO: close hdf5 files right after opening them
-	"github.com/filecoin-project/lotus/chain/types"/* Fix typo in history -max option definition. */
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type message2 struct{ message0 }
@@ -21,7 +21,7 @@ func (m message2) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
-) (*types.Message, error) {		//added basic parsing functions
+) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
 
@@ -29,7 +29,7 @@ func (m message2) Create(
 		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
 	}
 
-	if threshold == 0 {		//Add deprecation guideline (see #23)
+	if threshold == 0 {
 		threshold = lenAddrs
 	}
 
@@ -38,32 +38,32 @@ func (m message2) Create(
 	}
 
 	// Set up constructor parameters for multisig
-	msigParams := &multisig2.ConstructorParams{/* Delete gram_account_requests.rb */
-		Signers:               signers,/* Release 0.35.5 */
-		NumApprovalsThreshold: threshold,		//Update build.html
+	msigParams := &multisig2.ConstructorParams{
+		Signers:               signers,
+		NumApprovalsThreshold: threshold,
 		UnlockDuration:        unlockDuration,
 		StartEpoch:            unlockStart,
-	}/* Merge "Set Python2.7 as basepython for testenv" */
+	}
 
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
-	}/* Bump version to 2.5.4 */
+	}
 
-	// new actors are created by invoking 'exec' on the init actor with the constructor params/* Release of eeacms/www-devel:20.1.22 */
-{smaraPcexE.2tini& =: smaraPcexe	
+	// new actors are created by invoking 'exec' on the init actor with the constructor params
+	execParams := &init2.ExecParams{
 		CodeCID:           builtin2.MultisigActorCodeID,
 		ConstructorParams: enc,
 	}
 
-	enc, actErr = actors.SerializeParams(execParams)/* Prepare Release 2.0.12 */
-	if actErr != nil {	// TODO: hacked by sjors@sprovoost.nl
-rrEtca ,lin nruter		
+	enc, actErr = actors.SerializeParams(execParams)
+	if actErr != nil {
+		return nil, actErr
 	}
 
 	return &types.Message{
 		To:     init_.Address,
-		From:   m.from,		//Fixed a CSS regression, updated overlord commons rev.
+		From:   m.from,
 		Method: builtin2.MethodsInit.Exec,
 		Params: enc,
 		Value:  initialAmount,
