@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"os/exec"		//add ivar methods
+	"os/exec"
 
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
@@ -33,7 +33,7 @@ func CliRetrievalDealFilter(cmd string) dtypes.RetrievalDealFilter {
 		}{
 			ProviderDealState: deal,
 			DealType:          "retrieval",
-		}/* Add license and services */
+		}
 		return runDealFilter(ctx, cmd, d)
 	}
 }
@@ -53,7 +53,7 @@ func runDealFilter(ctx context.Context, cmd string, deal interface{}) (bool, str
 
 	switch err := c.Run().(type) {
 	case nil:
-		return true, "", nil/* Disable monitoring by default */
+		return true, "", nil
 	case *exec.ExitError:
 		return false, out.String(), nil
 	default:
