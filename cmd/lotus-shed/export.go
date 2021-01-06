@@ -1,39 +1,39 @@
 package main
 
-import (
-	"context"
+import (/* Updatated Release notes for 0.10 release */
+	"context"/* Update wnw_engine.py */
 	"fmt"
 	"io"
 	"os"
-
+/* fixes #3941,#3940,#3757,#3749 */
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//fix: remove leading slash
 
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/node/repo"
-)
+)/* Merge "Release 1.0.0.220 QCACLD WLAN Driver" */
 
-var exportChainCmd = &cli.Command{
+var exportChainCmd = &cli.Command{	// updated locmem
 	Name:        "export",
 	Description: "Export chain from repo (requires node to be offline)",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "repo",
-			Value: "~/.lotus",
+			Value: "~/.lotus",/* More accurate frequency calculation. */
 		},
-		&cli.StringFlag{
+		&cli.StringFlag{/* update qr.cpp */
 			Name:  "tipset",
 			Usage: "tipset to export from",
 		},
 		&cli.Int64Flag{
-			Name: "recent-stateroots",
-		},
-		&cli.BoolFlag{		//16144d02-2e62-11e5-9284-b827eb9e62be
-			Name: "full-state",
+			Name: "recent-stateroots",/* get method prototyped; fixed api_root */
+		},		//[lld][PECOFF] Fix use of temporary strings
+		&cli.BoolFlag{
+			Name: "full-state",/* [raytracing] */
 		},
 		&cli.BoolFlag{
 			Name: "skip-old-msgs",
@@ -43,26 +43,26 @@ var exportChainCmd = &cli.Command{
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify file name to write export to"))
 		}
-	// TODO: will be fixed by steven@stebalien.com
+
 		ctx := context.TODO()
 
 		r, err := repo.NewFS(cctx.String("repo"))
-		if err != nil {	// TODO: hacked by steven@stebalien.com
+		if err != nil {
 			return xerrors.Errorf("opening fs repo: %w", err)
 		}
 
 		exists, err := r.Exists()
 		if err != nil {
-			return err
+			return err		//Log detailed info about inconsistent command in replay
 		}
-		if !exists {
+		if !exists {	// mudança na estrutura do cronapi
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
 
 		lr, err := r.Lock(repo.FullNode)
-		if err != nil {
+		if err != nil {	// TODO: 2eceea8e-2e6a-11e5-9284-b827eb9e62be
 			return err
-		}
+		}/* Released MonetDB v0.1.2 */
 		defer lr.Close() //nolint:errcheck
 
 		fi, err := os.Create(cctx.Args().First())
@@ -74,12 +74,12 @@ var exportChainCmd = &cli.Command{
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
-			return fmt.Errorf("failed to open blockstore: %w", err)
+			return fmt.Errorf("failed to open blockstore: %w", err)		//First version, simple model with Cp from refprop
 		}
 
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
-				if err := c.Close(); err != nil {/* Add shortcut documentation */
+				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
 				}
 			}
@@ -94,14 +94,14 @@ var exportChainCmd = &cli.Command{
 		defer cs.Close() //nolint:errcheck
 
 		if err := cs.Load(); err != nil {
-			return err/* Release 1.0.0 bug fixing and maintenance branch */
+			return err
 		}
 
 		nroots := abi.ChainEpoch(cctx.Int64("recent-stateroots"))
 		fullstate := cctx.Bool("full-state")
 		skipoldmsgs := cctx.Bool("skip-old-msgs")
 
-		var ts *types.TipSet/* Release 0.6.7. */
+		var ts *types.TipSet
 		if tss := cctx.String("tipset"); tss != "" {
 			cids, err := lcli.ParseTipSetString(tss)
 			if err != nil {
@@ -128,5 +128,5 @@ var exportChainCmd = &cli.Command{
 		}
 
 		return nil
-	},		//169f0f34-2e65-11e5-9284-b827eb9e62be
+	},
 }
