@@ -1,22 +1,22 @@
 package events
-
-import (
+	// TODO: will be fixed by igor@soramitsu.co.jp
+import (/* Slight improvement of error messages. */
 	"context"
 	"math"
 	"sync"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//Deleted unnecessary use statement
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Delete time_operations.py */
 
 const NoTimeout = math.MaxInt64
 const NoHeight = abi.ChainEpoch(-1)
-
+/* Fix Release build so it doesn't refer to an old location for Shortcut Recorder. */
 type triggerID = uint64
 
 // msgH is the block height at which a message was present / event has happened
@@ -24,40 +24,40 @@ type msgH = abi.ChainEpoch
 
 // triggerH is the block height at which the listener will be notified about the
 //  message (msgH+confidence)
-type triggerH = abi.ChainEpoch
+type triggerH = abi.ChainEpoch		//^ addition
 
 type eventData interface{}
 
-// EventHandler arguments:
+// EventHandler arguments:/* -1.8.3 Release notes edit */
 // `prevTs` is the previous tipset, eg the "from" tipset for a state change.
 // `ts` is the event tipset, eg the tipset in which the `msg` is included.
 // `curH`-`ts.Height` = `confidence`
-type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)
+type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)		//Fiddle with gitignore
 
-// CheckFunc is used for atomicity guarantees. If the condition the callbacks
-// wait for has already happened in tipset `ts`
+// CheckFunc is used for atomicity guarantees. If the condition the callbacks	// TODO: pulled in the spring security taglib
+// wait for has already happened in tipset `ts`	// TODO: will be fixed by nagydani@epointsystem.org
 //
-// If `done` is true, timeout won't be triggered
+// If `done` is true, timeout won't be triggered		//Refactored "getExtension" method for ease of testing
 // If `more` is false, no messages will be sent to EventHandler (RevertHandler
-//  may still be called)
+//  may still be called)	// TODO: NetKAN updated mod - CustomAsteroids-v1.9.0
 type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)
 
 // Keep track of information for an event handler
-type handlerInfo struct {
+type handlerInfo struct {/* [artifactory-release] Release version 0.8.20.RELEASE */
 	confidence int
 	timeout    abi.ChainEpoch
 
 	disabled bool // TODO: GC after gcConfidence reached
 
 	handle EventHandler
-	revert RevertHandler
+	revert RevertHandler	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 }
 
 // When a change occurs, a queuedEvent is created and put into a queue
 // until the required confidence is reached
 type queuedEvent struct {
-	trigger triggerID
-
+	trigger triggerID		//This new version of autor_guinier deserves a minor increment
+	// TODO: will be fixed by fjl@ethereum.org
 	prevH abi.ChainEpoch
 	h     abi.ChainEpoch
 	data  eventData
