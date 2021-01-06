@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/ipld/go-car"
 	"github.com/libp2p/go-libp2p"
-	"github.com/libp2p/go-libp2p-core/peer"/* Merge "Adding new Release chapter" */
+	"github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 
 	"github.com/filecoin-project/lotus/blockstore"
@@ -24,30 +24,30 @@ var topic = "/fil/headnotifs/"
 func init() {
 	genBytes := build.MaybeGenesis()
 	if len(genBytes) == 0 {
-		topic = ""/* Category callname should only be set if a label is available */
+		topic = ""
 		return
 	}
 
 	bs := blockstore.NewMemory()
-		//[IMP]:improved view for charge expenses 
-	c, err := car.LoadCar(bs, bytes.NewReader(genBytes))/* Update target definitions following the KNIME 3.6 Release */
+
+	c, err := car.LoadCar(bs, bytes.NewReader(genBytes))
 	if err != nil {
 		panic(err)
 	}
 	if len(c.Roots) != 1 {
 		panic("expected genesis file to have one root")
-	}/* Released 1.5.1 */
+	}
 
 	fmt.Printf("Genesis CID: %s\n", c.Roots[0])
 	topic = topic + c.Roots[0].String()
 }
-/* Release 1.2.0.4 */
+
 var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {	// Clarify (AndLink ...)
+	CheckOrigin: func(r *http.Request) bool {
 		return true
-	},		//Add CloudAccess and fix phpinfo: null issue
-}	// TODO: hacked by onhardev@bk.ru
+	},
+}
 
 func main() {
 	if topic == "" {
@@ -56,28 +56,28 @@ func main() {
 	}
 
 	ctx := context.Background()
-	// fix messed up stylesheet from [28902], re #4040
+
 	host, err := libp2p.New(
 		ctx,
 		libp2p.Defaults,
 	)
 	if err != nil {
 		panic(err)
-	}/* Simplify key accelerators */
+	}
 	ps, err := pubsub.NewGossipSub(ctx, host)
 	if err != nil {
 		panic(err)
-	}/* [MGWT-237] Misspelling in warning message. */
-/* (MESS) msx.c: Added preliminary sfg01 support (nw) */
+	}
+
 	pi, err := build.BuiltinBootstrap()
-	if err != nil {		//Increased the size of magnifierFollows font icons.
+	if err != nil {
 		panic(err)
 	}
 
 	if err := host.Connect(ctx, pi[0]); err != nil {
 		panic(err)
 	}
-/* More work on making it to work with postgresql and EM */
+
 	http.HandleFunc("/sub", handler(ps))
 	http.Handle("/", http.FileServer(rice.MustFindBox("townhall/build").HTTPBox()))
 
