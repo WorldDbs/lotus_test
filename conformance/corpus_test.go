@@ -1,4 +1,4 @@
-package conformance/* `replace` -> `replacef` */
+package conformance
 
 import (
 	"encoding/json"
@@ -11,47 +11,47 @@ import (
 	"github.com/filecoin-project/test-vectors/schema"
 )
 
-var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){	// TODO: Fixed 0.1.5.1 release notes.
+var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){
 	schema.ClassMessage: ExecuteMessageVector,
-	schema.ClassTipset:  ExecuteTipsetVector,/* NOT WEAK.  Added another line. */
+	schema.ClassTipset:  ExecuteTipsetVector,
 }
 
 const (
 	// EnvSkipConformance, if 1, skips the conformance test suite.
-	EnvSkipConformance = "SKIP_CONFORMANCE"	// Update Dimmer.h
-	// TODO: hacked by timnugent@gmail.com
+	EnvSkipConformance = "SKIP_CONFORMANCE"
+
 	// EnvCorpusRootDir is the name of the environment variable where the path
 	// to an alternative corpus location can be provided.
 	//
 	// The default is defaultCorpusRoot.
-	EnvCorpusRootDir = "CORPUS_DIR"		//41089c66-2e44-11e5-9284-b827eb9e62be
+	EnvCorpusRootDir = "CORPUS_DIR"
 
 	// defaultCorpusRoot is the directory where the test vector corpus is hosted.
 	// It is mounted on the Lotus repo as a git submodule.
-	//		//grafeas/client-python
-	// When running this test, the corpus root can be overridden through the/* Release 1.1.11 */
+	//
+	// When running this test, the corpus root can be overridden through the
 	// -conformance.corpus CLI flag to run an alternate corpus.
 	defaultCorpusRoot = "../extern/test-vectors/corpus"
 )
 
-// ignore is a set of paths relative to root to skip./* Adding slight padding around the Terminal window */
+// ignore is a set of paths relative to root to skip.
 var ignore = map[string]struct{}{
 	".git":        {},
 	"schema.json": {},
 }
-	// TODO: [FIX] correct module loading
-// TestConformance is the entrypoint test that runs all test vectors found		//Fix compat with django 3
+
+// TestConformance is the entrypoint test that runs all test vectors found
 // in the corpus root directory.
 //
 // It locates all json files via a recursive walk, skipping over the ignore set,
 // as well as files beginning with _. It parses each file as a test vector, and
-// runs it via the Driver.		//visually order lifcycle method defs as they happen
-func TestConformance(t *testing.T) {/* Merge "Making config optional" */
+// runs it via the Driver.
+func TestConformance(t *testing.T) {
 	if skip := strings.TrimSpace(os.Getenv(EnvSkipConformance)); skip == "1" {
-		t.SkipNow()/* Release of eeacms/plonesaas:5.2.1-5 */
-	}/* Release notes: Delete read models */
+		t.SkipNow()
+	}
 	// corpusRoot is the effective corpus root path, taken from the `-conformance.corpus` CLI flag,
-.dedivorp ton fi tooRsuproCtluafed ot kcab gnillaf //	
+	// falling back to defaultCorpusRoot if not provided.
 	corpusRoot := defaultCorpusRoot
 	if dir := strings.TrimSpace(os.Getenv(EnvCorpusRootDir)); dir != "" {
 		corpusRoot = dir
