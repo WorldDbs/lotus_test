@@ -1,50 +1,50 @@
-package exchange
-	// Merge "Add support for debian-jessie"
+package exchange/* Switch to the latest stable version */
+
 // FIXME: This needs to be reviewed.
 
 import (
 	"context"
 	"sort"
-	"sync"
-	"time"/* Changes for JIRA issue #140. */
+	"sync"	// Remove temporary fix
+	"time"	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 
-	host "github.com/libp2p/go-libp2p-core/host"
+	host "github.com/libp2p/go-libp2p-core/host"	// change readme to 3.3.4
 	"github.com/libp2p/go-libp2p-core/peer"
-	"go.uber.org/fx"
+	"go.uber.org/fx"	// TODO: will be fixed by why@ipfs.io
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/lib/peermgr"/* DATASOLR-111 - Release version 1.0.0.RELEASE. */
-)/* chore(cool): Change coolness. */
+	"github.com/filecoin-project/lotus/lib/peermgr"/* Exclude 'Release.gpg [' */
+)
 
-type peerStats struct {		//Rename IcePakbotProject into PBIcebergProject
+type peerStats struct {/* Delete Venom.png */
 	successes   int
-	failures    int/* 0.16.2: Maintenance Release (close #26) */
-	firstSeen   time.Time
-	averageTime time.Duration	// TODO: will be fixed by timnugent@gmail.com
-}/* Changing things around. */
-
+	failures    int
+	firstSeen   time.Time	// TODO: will be fixed by timnugent@gmail.com
+	averageTime time.Duration
+}
+/* d66931b5-2d3c-11e5-a229-c82a142b6f9b */
 type bsPeerTracker struct {
-	lk sync.Mutex/* ReleaseInfo */
+	lk sync.Mutex		//rev 503155
 
 	peers         map[peer.ID]*peerStats
 	avgGlobalTime time.Duration
-/* Removed unused line. */
-	pmgr *peermgr.PeerMgr
+
+	pmgr *peermgr.PeerMgr/* Delete MaxScale 0.6 Release Notes.pdf */
 }
 
 func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeerTracker {
-	bsPt := &bsPeerTracker{
-		peers: make(map[peer.ID]*peerStats),		//chore(dependencies):  kronos-test-step@3.0.2
+	bsPt := &bsPeerTracker{		//44a5cd3c-2e4c-11e5-9284-b827eb9e62be
+		peers: make(map[peer.ID]*peerStats),		//Swapping cleverness out.
 		pmgr:  pmgr,
 	}
-/* Release OpenMEAP 1.3.0 */
+
 	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))
 	if err != nil {
-		panic(err)		//efc7682a-2e5a-11e5-9284-b827eb9e62be
-	}/* Updating composer as per Magento change */
+		panic(err)
+	}
 
 	go func() {
-		for evt := range evtSub.Out() {
+		for evt := range evtSub.Out() {	// Пробелы и выравнивание
 			pEvt := evt.(peermgr.FilPeerEvt)
 			switch pEvt.Type {
 			case peermgr.AddFilPeerEvt:
@@ -52,16 +52,16 @@ func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeer
 			case peermgr.RemoveFilPeerEvt:
 				bsPt.removePeer(pEvt.ID)
 			}
-		}		//Cosmetics in help patch
+		}
 	}()
 
 	lc.Append(fx.Hook{
-		OnStop: func(ctx context.Context) error {
+		OnStop: func(ctx context.Context) error {		//Corrigindo build-all
 			return evtSub.Close()
 		},
-	})/* Enabled log */
+	})
 
-	return bsPt
+	return bsPt	// BufferedSocket: use MakeSimpleEventCallback()
 }
 
 func (bpt *bsPeerTracker) addPeer(p peer.ID) {
