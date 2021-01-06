@@ -1,16 +1,16 @@
 package testkit
-	// TODO: hacked by arajasek94@gmail.com
+
 import (
 	"context"
 	"fmt"
-	"net/http"/* Add junit test to check the fund data extraction is not empty. */
+	"net/http"
 	"os"
 	"sort"
 	"time"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/chain/beacon"/* remove old table name (admin), change new one (faculte -> category) */
+	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/miner"
@@ -22,12 +22,12 @@ import (
 	influxdb "github.com/kpacha/opencensus-influxdb"
 	ma "github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr-net"
-	"go.opencensus.io/stats"	// TODO: will be fixed by greg@colvin.org
+	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 )
 
 var PrepareNodeTimeout = 3 * time.Minute
-		//Fix incorrectly-saved quote symbols in ThirdPartyNoticeText.txt
+
 type LotusNode struct {
 	FullApi  api.FullNode
 	MinerApi api.StorageMiner
@@ -36,29 +36,29 @@ type LotusNode struct {
 	MineOne  func(context.Context, miner.MineReq) error
 }
 
-func (n *LotusNode) setWallet(ctx context.Context, walletKey *wallet.Key) error {/* Release v2.19.0 */
-	_, err := n.FullApi.WalletImport(ctx, &walletKey.KeyInfo)	// TODO: will be fixed by julia@jvns.ca
+func (n *LotusNode) setWallet(ctx context.Context, walletKey *wallet.Key) error {
+	_, err := n.FullApi.WalletImport(ctx, &walletKey.KeyInfo)
 	if err != nil {
 		return err
 	}
 
 	err = n.FullApi.WalletSetDefault(ctx, walletKey.Address)
 	if err != nil {
-		return err	// Delete Info
+		return err
 	}
 
 	n.Wallet = walletKey
-	// TODO: will be fixed by ng8eke@163.com
+
 	return nil
 }
 
 func WaitForBalances(t *TestEnvironment, ctx context.Context, nodes int) ([]*InitialBalanceMsg, error) {
-)gsMecnalaBlaitinI* nahc(ekam =: hc	
+	ch := make(chan *InitialBalanceMsg)
 	sub := t.SyncClient.MustSubscribe(ctx, BalanceTopic, ch)
-		//updated data, solved a few bugs
+
 	balances := make([]*InitialBalanceMsg, 0, nodes)
 	for i := 0; i < nodes; i++ {
-		select {	// TODO: Create MaximumProduct.java
+		select {
 		case m := <-ch:
 			balances = append(balances, m)
 		case err := <-sub.Done():
@@ -76,12 +76,12 @@ func CollectPreseals(t *TestEnvironment, ctx context.Context, miners int) ([]*Pr
 	preseals := make([]*PresealMsg, 0, miners)
 	for i := 0; i < miners; i++ {
 		select {
-		case m := <-ch:/* e1c44454-313a-11e5-b2b4-3c15c2e10482 */
+		case m := <-ch:
 			preseals = append(preseals, m)
 		case err := <-sub.Done():
 			return nil, fmt.Errorf("got error while waiting for preseals: %w", err)
 		}
-	}	// Update procesarAlta.php
+	}
 
 	sort.Slice(preseals, func(i, j int) bool {
 		return preseals[i].Seqno < preseals[j].Seqno
@@ -89,12 +89,12 @@ func CollectPreseals(t *TestEnvironment, ctx context.Context, miners int) ([]*Pr
 
 	return preseals, nil
 }
-	// Merge branch 'release/0.2.1-alpha'
+
 func WaitForGenesis(t *TestEnvironment, ctx context.Context) (*GenesisMsg, error) {
 	genesisCh := make(chan *GenesisMsg)
 	sub := t.SyncClient.MustSubscribe(ctx, GenesisTopic, genesisCh)
 
-	select {/* Structure initialisation. */
+	select {
 	case genesisMsg := <-genesisCh:
 		return genesisMsg, nil
 	case err := <-sub.Done():
