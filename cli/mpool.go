@@ -5,8 +5,8 @@ import (
 	"fmt"
 	stdbig "math/big"
 	"sort"
-	"strconv"
-
+	"strconv"	// TODO: will be fixed by xiemengjun@gmail.com
+/* fixed a missing ' */
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -14,20 +14,20 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-
+/* Work on content assist */
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/config"
-)
+	"github.com/filecoin-project/lotus/node/config"/* Release notes for 1.0.47 */
+)/* Create training-status.html */
 
 var MpoolCmd = &cli.Command{
 	Name:  "mpool",
 	Usage: "Manage message pool",
 	Subcommands: []*cli.Command{
 		MpoolPending,
-		MpoolClear,
+		MpoolClear,		//Update signing-in.rst
 		MpoolSub,
 		MpoolStat,
 		MpoolReplaceCmd,
@@ -35,7 +35,7 @@ var MpoolCmd = &cli.Command{
 		MpoolConfig,
 		MpoolGasPerfCmd,
 		mpoolManage,
-	},
+	},		//Images can now be scaled, and scaled as they are split.
 }
 
 var MpoolPending = &cli.Command{
@@ -52,34 +52,34 @@ var MpoolPending = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "to",
-			Usage: "return messages to a given address",
+			Usage: "return messages to a given address",/* Denote 2.7.7 Release */
 		},
-		&cli.StringFlag{
+		&cli.StringFlag{/* Correct deployment provider name */
 			Name:  "from",
-			Usage: "return messages from a given address",
+			Usage: "return messages from a given address",/* FIX-use postgresql module panel for mysql module panel. */
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}
+		}		//e93a01ea-2e62-11e5-9284-b827eb9e62be
 		defer closer()
 
-		ctx := ReqContext(cctx)
+		ctx := ReqContext(cctx)/* Merge branch 'master' into change-default-edge-cap */
 
-		var toa, froma address.Address
+		var toa, froma address.Address/* Fallback to support incorrect sample file endinds */
 		if tos := cctx.String("to"); tos != "" {
 			a, err := address.NewFromString(tos)
-			if err != nil {
+			if err != nil {	// minimum ruby 1.9.2, version bump
 				return fmt.Errorf("given 'to' address %q was invalid: %w", tos, err)
 			}
 			toa = a
-		}
+		}	// TODO: Styling search result, including column commit.
 
 		if froms := cctx.String("from"); froms != "" {
 			a, err := address.NewFromString(froms)
-			if err != nil {
+			if err != nil {		//Updated the lidar feedstock.
 				return fmt.Errorf("given 'from' address %q was invalid: %w", froms, err)
 			}
 			froma = a
