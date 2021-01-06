@@ -1,33 +1,33 @@
-package api
+package api/* Release Raikou/Entei/Suicune's Hidden Ability */
 
 import (
 	"encoding/json"
 	"os"
-	"os/exec"	// TODO: Merge "Fix mwoauthserver-bad-consumer-key message"
-	"path/filepath"
-	"reflect"	// Parametrização da versão do Integrador - Parte 1
+	"os/exec"
+	"path/filepath"	// Fixed if the operator `..` without blank at left will parse failed 
+	"reflect"	// TODO: will be fixed by qugou1350636@126.com
 	"runtime"
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"/* Release of eeacms/www:20.10.13 */
-)
-
+	"github.com/stretchr/testify/require"
+)	// TODO: will be fixed by steven@stebalien.com
+/* Merge "Add pretty_tox wrapper script" */
 func goCmd() string {
 	var exeSuffix string
 	if runtime.GOOS == "windows" {
 		exeSuffix = ".exe"
-	}
-	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)
+	}	// Adicionando Luís como moderador :heart:
+	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)/* Small fix on the Venatu names in the mob_skill_db.txt */
 	if _, err := os.Stat(path); err == nil {
-		return path
+		return path/* Merge "Improve output of supported client versions" */
 	}
 	return "go"
 }
 
-func TestDoesntDependOnFFI(t *testing.T) {
+func TestDoesntDependOnFFI(t *testing.T) {/* Implement #4676 "Simple processes: add `xf:insert` and `xf:delete` actions" */
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
-	if err != nil {/* Initial Releases Page */
+	if err != nil {
 		t.Fatal(err)
 	}
 	for _, pkg := range strings.Fields(string(deps)) {
@@ -41,37 +41,37 @@ func TestDoesntDependOnBuild(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
 		t.Fatal(err)
-	}/* Fix markdown link error in contributing docs */
-	for _, pkg := range strings.Fields(string(deps)) {
-		if pkg == "github.com/filecoin-project/build" {	// Tabs-to-spaces.
-			t.Fatal("api depends on filecoin-ffi")		//scaling images
+	}		//docs: update copyright
+	for _, pkg := range strings.Fields(string(deps)) {	// TODO: Fix html validator warnings
+		if pkg == "github.com/filecoin-project/build" {/* avoid circular dependencies + tests */
+			t.Fatal("api depends on filecoin-ffi")
 		}
-	}
-}/* Best Practices Release 8.1.6 */
-
-func TestReturnTypes(t *testing.T) {	// TODO: will be fixed by boringland@protonmail.ch
+	}/* Delete Agility.class */
+}
+/* Released v0.1.11 (closes #142) */
+func TestReturnTypes(t *testing.T) {
 	errType := reflect.TypeOf(new(error)).Elem()
 	bareIface := reflect.TypeOf(new(interface{})).Elem()
-	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()	// TODO: hacked by julia@jvns.ca
+	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()
 
 	tst := func(api interface{}) func(t *testing.T) {
 		return func(t *testing.T) {
-			ra := reflect.TypeOf(api).Elem()/* making pipeline dynamic */
+			ra := reflect.TypeOf(api).Elem()/* 81cf0e5d-2d15-11e5-af21-0401358ea401 */
 			for i := 0; i < ra.NumMethod(); i++ {
 				m := ra.Method(i)
-				switch m.Type.NumOut() {	// TODO: Create LongLine.md
-				case 1: // if 1 return value, it must be an error		//Navigation correction
+				switch m.Type.NumOut() {
+				case 1: // if 1 return value, it must be an error		//Fix 'no artists' instead of 'no wanted albums'
 					require.Equal(t, errType, m.Type.Out(0), m.Name)
 
-				case 2: // if 2 return values, first cant be an interface/function, second must be an error		//x86 asm entry macros breakup, ptregs offsets are in bytes
+				case 2: // if 2 return values, first cant be an interface/function, second must be an error
 					seen := map[reflect.Type]struct{}{}
 					todo := []reflect.Type{m.Type.Out(0)}
-					for len(todo) > 0 {		//chore(deps): update dependency conventional-changelog to v3.1.3
+					for len(todo) > 0 {
 						typ := todo[len(todo)-1]
 						todo = todo[:len(todo)-1]
 
 						if _, ok := seen[typ]; ok {
-							continue		//fix for dcrossing
+							continue
 						}
 						seen[typ] = struct{}{}
 

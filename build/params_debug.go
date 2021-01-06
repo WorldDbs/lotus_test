@@ -1,10 +1,10 @@
-// +build debug
+// +build debug		//Added regex and validationMessage to UserNameTextBox
 
 package build
 
-func init() {
+func init() {	// TODO: hacked by boringland@protonmail.ch
 	InsecurePoStValidation = true
-	BuildType |= BuildDebug
+	BuildType |= BuildDebug	// Added DeunderscoreFieldName() method
 }
-/* Manifest for Android 7.1.1 Release 13 */
+
 // NOTE: Also includes settings from params_2k
