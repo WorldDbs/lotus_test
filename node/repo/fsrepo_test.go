@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"io/ioutil"		//Corrected bad class reference in "Adding own commands"
+	"io/ioutil"
 	"os"
 	"testing"
 )
@@ -15,7 +15,7 @@ func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	repo, err := NewFS(path)
 	if err != nil {
 		t.Fatal(err)
-	}	// TODO: will be fixed by julia@jvns.ca
+	}
 
 	err = repo.Init(FullNode)
 	if err != ErrRepoExists && err != nil {
