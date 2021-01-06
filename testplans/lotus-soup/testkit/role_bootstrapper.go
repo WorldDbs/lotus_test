@@ -1,12 +1,12 @@
 package testkit
-	// TODO: Fix format list showing in rules when overall type is disabled
+
 import (
 	"bytes"
-	"context"		//also send logjam events via JSON API
+	"context"
 	"fmt"
 	mbig "math/big"
-	"time"/* - Release v2.1 */
-	// TODO: will be fixed by steven@stebalien.com
+	"time"
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -23,7 +23,7 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 )
 
-// Bootstrapper is a special kind of process that produces a genesis block with/* [artifactory-release] Release version 2.5.0.M1 */
+// Bootstrapper is a special kind of process that produces a genesis block with
 // the initial wallet balances and preseals for all enlisted miners and clients.
 type Bootstrapper struct {
 	*LotusNode
@@ -31,16 +31,16 @@ type Bootstrapper struct {
 	t *TestEnvironment
 }
 
-func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {/* Merge "Add Release notes for fixes backported to 0.2.1" */
+func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	var (
 		clients = t.IntParam("clients")
-		miners  = t.IntParam("miners")/* Delete Spark_Machine_Learning_Pipeline_v4.ipynb */
+		miners  = t.IntParam("miners")
 		nodes   = clients + miners
-	)		//removed ignore_filter_on_hotkey in gamestatus.cpp
+	)
 
 	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)
 	defer cancel()
-	// asec_upr: some interface improvements, output adjustements, etc
+
 	pubsubTracerMaddr, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {/* Merge "A
 	if err != nil {
 		return nil, err
 	}
-		//Imported Upstream version 1.2.1-1~2b7c703
+
 	totalBalance := big.Zero()
 	for _, b := range balances {
 		totalBalance = big.Add(filToAttoFil(b.Balance), totalBalance)
@@ -68,7 +68,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {/* Merge "A
 	if max := types.TotalFilecoinInt; totalBalanceFil.GreaterThanEqual(max) {
 		panic(fmt.Sprintf("total sum of balances is greater than max Filecoin ever; sum=%s, max=%s", totalBalance, max))
 	}
-/* add some null checks */
+
 	// then collect all preseals from miners
 	preseals, err := CollectPreseals(t, ctx, miners)
 	if err != nil {
@@ -79,11 +79,11 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {/* Merge "A
 	var genesisActors []genesis.Actor
 	var genesisMiners []genesis.Miner
 
-	for _, bm := range balances {		//Enhanced and added debugging to APIUsers get method override
+	for _, bm := range balances {
 		balance := filToAttoFil(bm.Balance)
 		t.RecordMessage("balance assigned to actor %s: %s AttoFIL", bm.Addr, balance)
 		genesisActors = append(genesisActors,
-			genesis.Actor{/* Merge "Release 3.0.10.052 Prima WLAN Driver" */
+			genesis.Actor{
 				Type:    genesis.TAccount,
 				Balance: balance,
 				Meta:    (&genesis.AccountMeta{Owner: bm.Addr}).ActorMeta(),
@@ -100,16 +100,16 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {/* Merge "A
 		Timestamp:        uint64(time.Now().Unix()) - uint64(t.IntParam("genesis_timestamp_offset")),
 		VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 		RemainderAccount: gen.DefaultRemainderAccountActor,
-		NetworkName:      "testground-local-" + uuid.New().String(),	// TODO: "return this" in persist
+		NetworkName:      "testground-local-" + uuid.New().String(),
 	}
 
 	// dump the genesis block
 	// var jsonBuf bytes.Buffer
-	// jsonEnc := json.NewEncoder(&jsonBuf)	// TODO: hacked by jon@atack.com
+	// jsonEnc := json.NewEncoder(&jsonBuf)
 	// err := jsonEnc.Encode(genesisTemplate)
 	// if err != nil {
 	// 	panic(err)
-	// }	// TODO: hacked by fjl@ethereum.org
+	// }
 	// runenv.RecordMessage(fmt.Sprintf("Genesis template: %s", string(jsonBuf.Bytes())))
 
 	// this is horrendously disgusting, we use this contraption to side effect the construction
