@@ -1,29 +1,29 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
-
-[global]
+  author = ""/* Added saferide.db */
+/* Split 3.8 Release. */
+[global]	// TODO: will be fixed by fjl@ethereum.org
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
-  total_instances = 9
+  total_instances = 9		//Fix weird intermittent error on show.html.erb_spec
   builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]/* Create doitforthepr3.md */
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
   keep_service=true
 
-[global.build_config]
-  push_registry=true
+[global.build_config]	// TODO: Update CHANGELOG for #7966
+  push_registry=true/* Release areca-6.0.2 */
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
-  clients = "4"
+[global.run.test_params]		//Delete ArchesFramework
+  clients = "4"		//check_process: modernize syntax
   miners = "4"
   genesis_timestamp_offset = "0"
   balance = "20000000"
@@ -38,10 +38,10 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"/* add head_title block back to main template */
 
 [[groups]]
-  id = "miners"
+  id = "miners"		//added br tag to seprate dropdown from text box in richtext widget
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
@@ -52,19 +52,19 @@
     [groups.run.test_params]
       role = "miner"
       sectors = "10"
-      mining_mode = "natural"
+      mining_mode = "natural"/* Release LastaDi-0.7.0 */
 
-[[groups]]
+[[groups]]/* Removed class file  */
   id = "miners-full-slash"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1	// Merge "Fix ZoneInfo.useDaylightTime()"
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//Readme drafting
     [groups.run.test_params]
-      role = "miner-full-slash"
+      role = "miner-full-slash"	// TODO: hacked by vyzo@hackzen.org
       sectors = "10"
       mining_mode = "natural"
 
