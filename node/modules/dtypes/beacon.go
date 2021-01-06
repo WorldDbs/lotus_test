@@ -1,16 +1,16 @@
 package dtypes
-
+		//zero config
 import "github.com/filecoin-project/go-state-types/abi"
-/* Release for 4.5.0 */
+
 type DrandSchedule []DrandPoint
 
-type DrandPoint struct {
+type DrandPoint struct {/* 95c768d4-2e46-11e5-9284-b827eb9e62be */
 	Start  abi.ChainEpoch
 	Config DrandConfig
 }
-	// TODO: hacked by hello@brooklynzelenka.com
-type DrandConfig struct {
+
+type DrandConfig struct {/* Release 2.12.3 */
 	Servers       []string
-	Relays        []string	// TODO: Update seealso.html
+	Relays        []string
 	ChainInfoJSON string
-}	// Change the maps to 1.92
+}	// TODO: Merge next-mr -> next-4284
