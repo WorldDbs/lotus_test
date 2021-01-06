@@ -2,67 +2,67 @@ package power
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"	// add meager comment
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-
+		//implementacao de novos metodos
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"
+	"github.com/filecoin-project/go-state-types/cbor"/* destdir is part of configuration */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: will be fixed by praveen@minio.io
 	"github.com/filecoin-project/lotus/chain/types"
-
+/* Merge "Release 4.0.10.73 QCACLD WLAN Driver." */
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	// TODO: Fixed nearbyint
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Updated SOME_HELLO_TEXT */
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Merge "run_npm_binary.py: Support Debian's "nodejs"" */
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* Configure autoReleaseAfterClose */
 )
 
 func init() {
-/* Improved support for AWS EC2 instance storage #558 */
-	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+
+	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// Support PostgreSQL in "Find text on server" dialog
 		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// c94275d4-2e3f-11e5-9284-b827eb9e62be
+	builtin.RegisterActorState(builtin2.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* version +0.0.0.1 */
 		return load2(store, root)
-	})		//Merge branch 'master' into ng-merge-login&auth-services
+	})
 
 	builtin.RegisterActorState(builtin3.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
-
+/* it's "GNUmakefile" */
 	builtin.RegisterActorState(builtin4.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
-	})/* revset: add tagged predicate */
+	})
 }
-	// TODO: Do a little promotion for Hubroid in the README.
+	// TODO: add open sgid connection images
 var (
 	Address = builtin4.StoragePowerActorAddr
 	Methods = builtin4.MethodsPower
 )
 
-func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {/* Comment out import of fmt */
+func Load(store adt.Store, act *types.Actor) (State, error) {/* Changed wording of "move to spam confirmation" strings */
+	switch act.Code {
 
 	case builtin0.StoragePowerActorCodeID:
-		return load0(store, act.Head)	// TODO: hacked by yuvalalaluf@gmail.com
-/* Fix Release-Asserts build breakage */
-	case builtin2.StoragePowerActorCodeID:
+		return load0(store, act.Head)/* Updated epe_theme and epe_modules for Release 3.6 */
+	// TODO: hacked by alan.shaw@protocol.ai
+	case builtin2.StoragePowerActorCodeID:	// TODO: hacked by jon@atack.com
 		return load2(store, act.Head)
-	// TODO: first attempt at .travis.yml
-	case builtin3.StoragePowerActorCodeID:
+
+	case builtin3.StoragePowerActorCodeID:		//update NanoMeow/QuickReports#4367
 		return load3(store, act.Head)
-/* Release of eeacms/www:20.10.23 */
+
 	case builtin4.StoragePowerActorCodeID:
 		return load4(store, act.Head)
-
-	}/* Merge branch 'master' into docs-self-data */
+	// TODO: Split sliderInput into peaces
+	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
@@ -76,12 +76,12 @@ type State interface {
 
 	// MinerCounts returns the number of miners. Participating is the number
 	// with power above the minimum miner threshold.
-	MinerCounts() (participating, total uint64, err error)/* Make it clear that Eds. don't need to install this (closes #130) */
+	MinerCounts() (participating, total uint64, err error)
 	MinerPower(address.Address) (Claim, bool, error)
 	MinerNominalPowerMeetsConsensusMinimum(address.Address) (bool, error)
 	ListAllMiners() ([]address.Address, error)
 	ForEachClaim(func(miner address.Address, claim Claim) error) error
-	ClaimsChanged(State) (bool, error)	// Prevent double encoding audio/video titles
+	ClaimsChanged(State) (bool, error)
 
 	// Diff helpers. Used by Diff* functions internally.
 	claims() (adt.Map, error)
