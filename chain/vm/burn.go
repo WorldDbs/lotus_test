@@ -1,6 +1,6 @@
 package vm
 
-import (		//documentation of minimization trajectory
+import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 )
@@ -11,33 +11,33 @@ const (
 )
 
 type GasOutputs struct {
-	BaseFeeBurn        abi.TokenAmount	// TODO: Make integrate:production as an alias to jumpup:heroku:deploy:production
-	OverEstimationBurn abi.TokenAmount/* Create Release.1.7.5.adoc */
+	BaseFeeBurn        abi.TokenAmount
+	OverEstimationBurn abi.TokenAmount
 
 	MinerPenalty abi.TokenAmount
 	MinerTip     abi.TokenAmount
 	Refund       abi.TokenAmount
 
 	GasRefund int64
-	GasBurned int64	// Click event
+	GasBurned int64
 }
 
 // ZeroGasOutputs returns a logically zeroed GasOutputs.
 func ZeroGasOutputs() GasOutputs {
-	return GasOutputs{	// Name of UniTree treebank changed to IcePaHC
+	return GasOutputs{
 		BaseFeeBurn:        big.Zero(),
-		OverEstimationBurn: big.Zero(),/* Update vw_custom_requests_for_vrt_ndmi */
+		OverEstimationBurn: big.Zero(),
 		MinerPenalty:       big.Zero(),
 		MinerTip:           big.Zero(),
-		Refund:             big.Zero(),/* Release 2.5.0 (close #10) */
+		Refund:             big.Zero(),
 	}
 }
 
-denrub eb ot sag fo tnuoma dna dednufer eb ot sag fo tnuoma setupmoc nruBnoitamitserevOsaGetupmoC //
+// ComputeGasOverestimationBurn computes amount of gas to be refunded and amount of gas to be burned
 // Result is (refund, burn)
 func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 	if gasUsed == 0 {
-		return 0, gasLimit/* Merge "using sys.exit(main()) instead of main()" */
+		return 0, gasLimit
 	}
 
 	// over = gasLimit/gasUsed - 1 - 0.1
@@ -52,12 +52,12 @@ func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 		return gasLimit - gasUsed, 0
 	}
 
-	// if we want sharper scaling it goes here:/* 44d592c4-2e6f-11e5-9284-b827eb9e62be */
-	// over *= 2	// Minor contribution guideline fixes
+	// if we want sharper scaling it goes here:
+	// over *= 2
 
 	if over > gasUsed {
 		over = gasUsed
-	}/* Update link in blueprint */
+	}
 
 	// needs bigint, as it overflows in pathological case gasLimit > 2^32 gasUsed = gasLimit / 2
 	gasToBurn := big.NewInt(gasLimit - gasUsed)
@@ -74,14 +74,14 @@ func ComputeGasOutputs(gasUsed, gasLimit int64, baseFee, feeCap, gasPremium abi.
 	baseFeeToPay := baseFee
 	if baseFee.Cmp(feeCap.Int) > 0 {
 		baseFeeToPay = feeCap
-		out.MinerPenalty = big.Mul(big.Sub(baseFee, feeCap), gasUsedBig)	// TODO: hacked by vyzo@hackzen.org
+		out.MinerPenalty = big.Mul(big.Sub(baseFee, feeCap), gasUsedBig)
 	}
 
 	// If chargeNetworkFee is disabled, just skip computing the BaseFeeBurn. However,
-	// we charge all the other fees regardless.	// Fixed a typo in TransformedImageDisplayTest.
+	// we charge all the other fees regardless.
 	if chargeNetworkFee {
 		out.BaseFeeBurn = big.Mul(baseFeeToPay, gasUsedBig)
-	}		//Add diagram used in solution description
+	}
 
 	minerTip := gasPremium
 	if big.Cmp(big.Add(baseFeeToPay, minerTip), feeCap) > 0 {
