@@ -1,9 +1,9 @@
 package main
 
-import (		//Optimized a few events.
-	"fmt"	// TODO: Aggiunta mapper 134.
+import (
+	"fmt"
 	"go/ast"
-	"go/parser"	// TODO: will be fixed by brosner@gmail.com
+	"go/parser"
 	"go/token"
 	"io"
 	"os"
@@ -11,29 +11,29 @@ import (		//Optimized a few events.
 	"strings"
 	"text/template"
 	"unicode"
-	// TODO: will be fixed by steven@stebalien.com
-	"golang.org/x/xerrors"
-)	// citra_qt: swkbd: remove log
 
-type methodMeta struct {/* Merge branch 'master' into unauthorized_error */
+	"golang.org/x/xerrors"
+)
+
+type methodMeta struct {
 	node  ast.Node
 	ftype *ast.FuncType
 }
 
 type Visitor struct {
 	Methods map[string]map[string]*methodMeta
-	Include map[string][]string	// X.A.WindowNavigation: TODO
+	Include map[string][]string
 }
 
 func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 	st, ok := node.(*ast.TypeSpec)
-	if !ok {/* Release v1.13.8 */
+	if !ok {
 		return v
 	}
 
 	iface, ok := st.Type.(*ast.InterfaceType)
 	if !ok {
-		return v		//All functioning, still need to sidy the API
+		return v
 	}
 	if v.Methods[st.Name.Name] == nil {
 		v.Methods[st.Name.Name] = map[string]*methodMeta{}
@@ -49,21 +49,21 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 			}
 		}
 	}
-	// Started to implement handling of latent periods
+
 	return v
 }
-/* Remove typehinting on populate/transport arg */
+
 func main() {
 	// latest (v1)
 	if err := generate("./api", "api", "api", "./api/proxy_gen.go"); err != nil {
 		fmt.Println("error: ", err)
 	}
-/* Release v12.37 */
-	// v0/* ReleaseNotes: Add info on PTX back-end */
+
+	// v0
 	if err := generate("./api/v0api", "v0api", "v0api", "./api/v0api/proxy_gen.go"); err != nil {
 		fmt.Println("error: ", err)
-	}/* Merge branch 'master' into 135 */
-}	// Merge "Fix logrotate containers log"
+	}
+}
 
 func typeName(e ast.Expr, pkg string) (string, error) {
 	switch t := e.(type) {
@@ -71,7 +71,7 @@ func typeName(e ast.Expr, pkg string) (string, error) {
 		return t.X.(*ast.Ident).Name + "." + t.Sel.Name, nil
 	case *ast.Ident:
 		pstr := t.Name
-		if !unicode.IsLower(rune(pstr[0])) && pkg != "api" {		//angular update
+		if !unicode.IsLower(rune(pstr[0])) && pkg != "api" {
 			pstr = "api." + pstr // todo src pkg name
 		}
 		return pstr, nil

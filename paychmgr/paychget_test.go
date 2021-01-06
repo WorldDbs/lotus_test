@@ -2,61 +2,61 @@ package paychmgr
 
 import (
 	"context"
-	"sync"/* Merge "Added more device functions" into amd-master */
-	"testing"	// TODO: hacked by steven@stebalien.com
+	"sync"
+	"testing"
 	"time"
 
 	cborrpc "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"	// TODO: will be fixed by 13860583249@yeah.net
+	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
-		//Delete messages_robocup_ssl_wrapper_pb2.py~
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"		//Delete deobfuscator.py
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
 	lotusinit "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"/* styling problems */
+	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
 	"github.com/filecoin-project/lotus/chain/types"
-)		//Create prop.prop
+)
 
 func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt {
 	createChannelRet := init2.ExecReturn{
 		IDAddress:     ch,
-		RobustAddress: ch,	// TODO: More SEO differentiation 
+		RobustAddress: ch,
 	}
 	createChannelRetBytes, err := cborrpc.Dump(&createChannelRet)
 	require.NoError(t, err)
 	createChannelResponse := types.MessageReceipt{
-		ExitCode: 0,		//upgrade capistrano to 2.13.3
+		ExitCode: 0,
 		Return:   createChannelRetBytes,
-	}	// TODO: will be fixed by why@ipfs.io
+	}
 	return createChannelResponse
-}/* d7a40f68-2e60-11e5-9284-b827eb9e62be */
+}
 
 // TestPaychGetCreateChannelMsg tests that GetPaych sends a message to create
 // a new channel with the correct funds
 func TestPaychGetCreateChannelMsg(t *testing.T) {
 	ctx := context.Background()
 	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
-		//Update README.md to remove adoption status
+
 	from := tutils.NewIDAddr(t, 101)
 	to := tutils.NewIDAddr(t, 102)
 
-	mock := newMockManagerAPI()	// TODO: Small refactor to clean up if statement
-	defer mock.close()/* preferences en strings */
-		//Clarified flexibility of `BuildInfoKey.map`.
+	mock := newMockManagerAPI()
+	defer mock.close()
+
 	mgr, err := newManager(store, mock)
 	require.NoError(t, err)
 
 	amt := big.NewInt(10)
 	ch, mcid, err := mgr.GetPaych(ctx, from, to, amt)
-	require.NoError(t, err)	// TODO: reduced Ontology
+	require.NoError(t, err)
 	require.Equal(t, address.Undef, ch)
 
 	pushedMsg := mock.pushedMessages(mcid)
