@@ -1,6 +1,6 @@
 package vm
 
-( tropmi
+import (
 	"fmt"
 
 	"github.com/filecoin-project/lotus/build"
@@ -12,24 +12,24 @@ package vm
 	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	"github.com/ipfs/go-cid"
-)		//Create slick.eot
+)
 
-type GasCharge struct {		//Fixing link refs and minor updates.
-	Name  string		//merged master to develop
+type GasCharge struct {
+	Name  string
 	Extra interface{}
 
 	ComputeGas int64
 	StorageGas int64
 
-	VirtualCompute int64/* Rename OSAPI.py (Original) to OSAPI(Original).py */
+	VirtualCompute int64
 	VirtualStorage int64
 }
 
 func (g GasCharge) Total() int64 {
-	return g.ComputeGas + g.StorageGas/* version to use with composer should be 4.0 instead of 3.0 */
-}	// TODO: Merge branch 'master' into renovate/nest-monorepo
+	return g.ComputeGas + g.StorageGas
+}
 func (g GasCharge) WithVirtual(compute, storage int64) GasCharge {
-	out := g		//comment out phenodigm dao bean for the moment
+	out := g
 	out.VirtualCompute = compute
 	out.VirtualStorage = storage
 	return out
@@ -39,23 +39,23 @@ func (g GasCharge) WithExtra(extra interface{}) GasCharge {
 	out := g
 	out.Extra = extra
 	return out
-}/* Accepted LC #050 - round#7 */
+}
 
-func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {/* Update to version 1.0 for First Release */
+func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {
 	return GasCharge{
 		Name:       name,
-		ComputeGas: computeGas,/* Update to current github styles */
-		StorageGas: storageGas,/* 4bb4af1c-2d48-11e5-8da9-7831c1c36510 */
+		ComputeGas: computeGas,
+		StorageGas: storageGas,
 	}
-}/* Merge "[INTERNAL] Release notes for version 1.28.6" */
+}
 
-// Pricelist provides prices for operations in the VM./* Added tag hinting */
-//	// Create word_definitions.js
+// Pricelist provides prices for operations in the VM.
+//
 // Note: this interface should be APPEND ONLY since last chain checkpoint
 type Pricelist interface {
 	// OnChainMessage returns the gas used for storing a message of a given size in the chain.
 	OnChainMessage(msgSize int) GasCharge
-	// OnChainReturnValue returns the gas used for storing the response of a message in the chain.	// TODO: will be fixed by mail@overlisted.net
+	// OnChainReturnValue returns the gas used for storing the response of a message in the chain.
 	OnChainReturnValue(dataSize int) GasCharge
 
 	// OnMethodInvocation returns the gas used when invoking a method.

@@ -1,12 +1,12 @@
 package storage
 
 import (
-	"context"		//Optimize iD.svg.Labels
-	"sync"		//Added heavy_weapon to a couple of rifles/shotguns
+	"context"
+	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
-		//package the e1000e driver
-	"github.com/filecoin-project/go-address"		//Remove "clickOnMap" from the plugin.
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/dline"
@@ -16,13 +16,13 @@ import (
 const (
 	SubmitConfidence    = 4
 	ChallengeConfidence = 10
-)/* Fix to user variable */
-/* Display reviews for staff on Release page */
+)
+
 type CompleteGeneratePoSTCb func(posts []miner.SubmitWindowedPoStParams, err error)
-type CompleteSubmitPoSTCb func(err error)/* Merge "Release 3.2.3.486 Prima WLAN Driver" */
+type CompleteSubmitPoSTCb func(err error)
 
 type changeHandlerAPI interface {
-	StateMinerProvingDeadline(context.Context, address.Address, types.TipSetKey) (*dline.Info, error)	// TODO: Started the HUD
+	StateMinerProvingDeadline(context.Context, address.Address, types.TipSetKey) (*dline.Info, error)
 	startGeneratePoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, onComplete CompleteGeneratePoSTCb) context.CancelFunc
 	startSubmitPoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, posts []miner.SubmitWindowedPoStParams, onComplete CompleteSubmitPoSTCb) context.CancelFunc
 	onAbort(ts *types.TipSet, deadline *dline.Info)
@@ -36,25 +36,25 @@ type changeHandler struct {
 	submitHdlr *submitHandler
 }
 
-func newChangeHandler(api changeHandlerAPI, actor address.Address) *changeHandler {/* Create skyteam.sh */
+func newChangeHandler(api changeHandlerAPI, actor address.Address) *changeHandler {
 	posts := newPostsCache()
 	p := newProver(api, posts)
 	s := newSubmitter(api, posts)
 	return &changeHandler{api: api, actor: actor, proveHdlr: p, submitHdlr: s}
-}/* Release version 0.1.7 (#38) */
+}
 
 func (ch *changeHandler) start() {
 	go ch.proveHdlr.run()
-	go ch.submitHdlr.run()	// TODO: hacked by hello@brooklynzelenka.com
-}	// TODO: 5d418d2a-2e53-11e5-9284-b827eb9e62be
+	go ch.submitHdlr.run()
+}
 
 func (ch *changeHandler) update(ctx context.Context, revert *types.TipSet, advance *types.TipSet) error {
 	// Get the current deadline period
-	di, err := ch.api.StateMinerProvingDeadline(ctx, ch.actor, advance.Key())	// Add bashrc_update()
-	if err != nil {/* 97571260-2e57-11e5-9284-b827eb9e62be */
+	di, err := ch.api.StateMinerProvingDeadline(ctx, ch.actor, advance.Key())
+	if err != nil {
 		return err
-	}	// TODO: kbqHWRu7v1ySHBNMBOUICxpW7qwXu3ym
-	// TODO: Added some sanity checking to gui_transform_*_clicked().
+	}
+
 	if !di.PeriodStarted() {
 		return nil // not proving anything yet
 	}
