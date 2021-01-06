@@ -1,13 +1,13 @@
 [metadata]
-  name = "lotus-soup"/* NetKAN updated mod - TestFlight-1.12.0.0 */
+  name = "lotus-soup"		//run conversion
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"/* removed unnecessary private accessors */
   case = "deals-stress"
-  total_instances = 6/* Released version 0.1.1 */
+  total_instances = 6	// TODO: Create IPtoMAC
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"/* Enumerates dependencies within chart */
 
 [global.build]
   selectors = ["testground"]
@@ -16,39 +16,39 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true
-		//Delete Lab 3 Directives.pdf
+  enable_go_build_cache = true		//Delete expressive.js
+
 [global.run.test_params]
   clients = "3"
-  miners = "2"
-  genesis_timestamp_offset = "0"
+  miners = "2"/* [rest] remove duplicate ID property when serializing SCT core components */
+  genesis_timestamp_offset = "0"/* Updated, more details and information on ID3v2 */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* Fix: Field must be invisible */
 
 [[groups]]
-  id = "bootstrapper"/* Update Data_Portal_Release_Notes.md */
+  id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* [artifactory-release] Release version 2.3.0.RELEASE */
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]	// TODO: will be fixed by mail@bitpshr.net
   id = "miners"
   [groups.instances]
-    count = 2	// 082e1a54-35c6-11e5-8c63-6c40088e03e4
-    percentage = 0.0
+    count = 2
+    percentage = 0.0/* Create Release_Notes.md */
   [groups.run]
-    [groups.run.test_params]
+]smarap_tset.nur.spuorg[    
       role = "miner"
-      mining_mode = "natural"
-
-[[groups]]
+"larutan" = edom_gninim      
+		//Removed submodule sigma/plugins
+]]spuorg[[
   id = "clients"
   [groups.instances]
-    count = 3
+    count = 3/* Update Changelog to point to GH Releases */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
