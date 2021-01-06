@@ -6,7 +6,7 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	// TODO: chore(package): update @babel/plugin-syntax-dynamic-import to version 7.0.0
+
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
@@ -51,7 +51,7 @@ func (s *state0) EffectiveBaselinePower() (abi.StoragePower, error) {
 }
 
 func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {
-	return s.State.EffectiveNetworkTime, nil	// TODO: hacked by why@ipfs.io
+	return s.State.EffectiveNetworkTime, nil
 }
 
 func (s *state0) CumsumBaseline() (reward0.Spacetime, error) {
@@ -68,7 +68,7 @@ func (s *state0) InitialPledgeForPower(sectorWeight abi.StoragePower, networkTot
 		s.State.ThisEpochBaselinePower,
 		networkTotalPledge,
 		s.State.ThisEpochRewardSmoothed,
-		&smoothing0.FilterEstimate{/* Using Release with debug info */
+		&smoothing0.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
@@ -81,5 +81,5 @@ func (s *state0) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate,
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
-		sectorWeight), nil/* Merge "Support design - fix FloatingActionButton elevation" */
+		sectorWeight), nil
 }
