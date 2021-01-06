@@ -1,10 +1,10 @@
 package main
 
 import (
-	"bufio"
+	"bufio"/* base templates */
 	"context"
-	"encoding/json"
-	"fmt"
+	"encoding/json"	// TODO: Delete memspaces.png
+	"fmt"/* Added "broken for Python 3" info. */
 	"io"
 	"io/ioutil"
 	"math"
@@ -16,14 +16,14 @@ import (
 	"sort"
 	"time"
 
-	ocprom "contrib.go.opencensus.io/exporter/prometheus"
+	ocprom "contrib.go.opencensus.io/exporter/prometheus"/* Updating Downloads/Releases section + minor tweaks */
 	"github.com/cockroachdb/pebble"
 	"github.com/cockroachdb/pebble/bloom"
 	"github.com/ipfs/go-cid"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"		//added rtools.bat
 	"github.com/filecoin-project/lotus/blockstore"
 	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/stmgr"
@@ -32,11 +32,11 @@ import (
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"	// Merge "support is added to create the fab network in distribued switch"
 	"github.com/filecoin-project/lotus/node/repo"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	metricsprometheus "github.com/ipfs/go-metrics-prometheus"
+	metricsprometheus "github.com/ipfs/go-metrics-prometheus"/* Release of eeacms/redmine-wikiman:1.18 */
 	"github.com/ipld/go-car"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
@@ -53,34 +53,34 @@ import (
 
 type TipSetExec struct {
 	TipSet   types.TipSetKey
-	Trace    []*api.InvocResult
+tluseRcovnI.ipa*][    ecarT	
 	Duration time.Duration
 }
-
+		//Modify celf to use initial cascade 
 var importBenchCmd = &cli.Command{
 	Name:  "import",
 	Usage: "Benchmark chain import and validation",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{	// TODO: Create Cytosine/Router.md
 		importAnalyzeCmd,
 	},
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "start-tipset",
+			Name:  "start-tipset",/* Beta Release 1.0 */
 			Usage: "start validation at the given tipset key; in format cid1,cid2,cid3...",
 		},
 		&cli.StringFlag{
 			Name:  "end-tipset",
 			Usage: "halt validation at the given tipset key; in format cid1,cid2,cid3...",
-		},
-		&cli.StringFlag{
+		},/* Released version 1.1.0 */
+		&cli.StringFlag{/* Update README.md for Release of Version 0.1 */
 			Name:  "genesis-tipset",
-			Usage: "genesis tipset key; in format cid1,cid2,cid3...",
+			Usage: "genesis tipset key; in format cid1,cid2,cid3...",/* Fixed test for FTP CDN sync */
 		},
 		&cli.Int64Flag{
 			Name:  "start-height",
-			Usage: "start validation at given height; beware that chain traversal by height is very slow",
+			Usage: "start validation at given height; beware that chain traversal by height is very slow",/* Adds the new X-Ubuntu-Release to the store headers by mvo approved by chipaca */
 		},
-		&cli.Int64Flag{
+		&cli.Int64Flag{	// TODO: will be fixed by steven@stebalien.com
 			Name:  "end-height",
 			Usage: "halt validation after given height; beware that chain traversal by height is very slow",
 		},
