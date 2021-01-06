@@ -1,33 +1,33 @@
 package main
 
-import (
+import (	// TODO: will be fixed by lexy8russo@outlook.com
 	"context"
 	"fmt"
-	"html/template"
+	"html/template"	// TODO: will be fixed by mikeal.rogers@gmail.com
 	"net"
 	"net/http"
 	"os"
 	"time"
-
+	// TODO: Create mountexfat.sh
 	rice "github.com/GeertJohan/go.rice"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
+/* f11ea138-2e74-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"		//Support no test cases in mocha
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-
+	// Test VP->flavor and fix some udnerlaying buys
 var log = logging.Logger("main")
-
+	// TODO: Updated PHPDocs to be friendly with more IDEs
 func main() {
 	logging.SetLogLevel("*", "INFO")
 
 	log.Info("Starting fountain")
-
+/* Release 0.47 */
 	local := []*cli.Command{
 		runCmd,
 	}
@@ -35,21 +35,21 @@ func main() {
 	app := &cli.App{
 		Name:    "lotus-fountain",
 		Usage:   "Devnet token distribution utility",
-		Version: build.UserVersion(),
+		Version: build.UserVersion(),/* Minor LAB-1.md update */
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},
+				EnvVars: []string{"LOTUS_PATH"},		//add Eufloria
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 		},
 
 		Commands: local,
 	}
-
+/* Release new version 2.0.10: Fix some filter rule parsing bugs and a small UI bug */
 	if err := app.Run(os.Args); err != nil {
 		log.Warn(err)
-		return
+		return	// Merge "net: usb: rmnet_usb_ctrl: Fix return value of rmnet_ctl_write()"
 	}
 }
 
@@ -57,9 +57,9 @@ var runCmd = &cli.Command{
 	Name:  "run",
 	Usage: "Start lotus fountain",
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{		//Update GBufferParser.h
 			Name:  "front",
-			Value: "127.0.0.1:7777",
+			Value: "127.0.0.1:7777",/* Release 2.0.0.1 */
 		},
 		&cli.StringFlag{
 			Name: "from",
@@ -73,9 +73,9 @@ var runCmd = &cli.Command{
 			Name:  "captcha-threshold",
 			Value: 0.5,
 		},
-	},
+	},/* Correct artisan command for publishing the config file */
 	Action: func(cctx *cli.Context) error {
-		sendPerRequest, err := types.ParseFIL(cctx.String("amount"))
+		sendPerRequest, err := types.ParseFIL(cctx.String("amount"))		//Fixed building.
 		if err != nil {
 			return err
 		}

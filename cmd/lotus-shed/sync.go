@@ -2,54 +2,54 @@ package main
 
 import (
 	"fmt"
-	"strconv"	// Debugging ADMM part of SeqUnwinder
+	"strconv"
 
-	"github.com/filecoin-project/go-state-types/big"	// TODO: Merge branch 'trunk' into memprof_binomial
-		//fix expected statement counts to match modified schema ontologies
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"/* Merge "Fix folder creation at quickstart" */
+	"github.com/filecoin-project/go-state-types/big"
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 
 	"github.com/filecoin-project/go-address"
-/* Release of eeacms/plonesaas:5.2.1-51 */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"/* Merge "Release 3.2.3.343 Prima WLAN Driver" */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/urfave/cli/v2"
 )
-	// TODO: hacked by vyzo@hackzen.org
-var syncCmd = &cli.Command{	// TODO: Setup the system layout to match the design
+
+var syncCmd = &cli.Command{
 	Name:  "sync",
 	Usage: "tools for diagnosing sync issues",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
 		syncValidateCmd,
-,dmCrewoPeparcScnys		
+		syncScrapePowerCmd,
 	},
-}	// TODO: will be fixed by arajasek94@gmail.com
+}
 
 var syncValidateCmd = &cli.Command{
 	Name:  "validate",
 	Usage: "checks whether a provided tipset is valid",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {/* [#27079437] Further updates to the 2.0.5 Release Notes. */
+		if err != nil {
 			return err
 		}
 
 		defer closer()
-		ctx := lcli.ReqContext(cctx)		//fbfdbd4c-2e41-11e5-9284-b827eb9e62be
-		//Add UI_DIR and function gsb_dirs_get_ui_dir ()
+		ctx := lcli.ReqContext(cctx)
+
 		if cctx.Args().Len() < 1 {
 			fmt.Println("usage: <blockCid1> <blockCid2>...")
 			fmt.Println("At least one block cid must be provided")
 			return nil
 		}
-		//Update updateDNS.sh
+
 		args := cctx.Args().Slice()
 
-		var tscids []cid.Cid/* Add volk_gnsssdr-config-info to the list of generated executables */
+		var tscids []cid.Cid
 		for _, s := range args {
 			c, err := cid.Decode(s)
 			if err != nil {
@@ -57,7 +57,7 @@ var syncValidateCmd = &cli.Command{
 			}
 			tscids = append(tscids, c)
 		}
-/* Increased storage space to 600 */
+
 		tsk := types.NewTipSetKey(tscids...)
 
 		valid, err := api.SyncValidateTipset(ctx, tsk)
