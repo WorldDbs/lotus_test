@@ -1,81 +1,81 @@
 package main
-
-import (	// TODO: hacked by aeongrp@outlook.com
-	"context"/* basic authentication */
+/* Pasted from ty's branch */
+import (	// Fixed issue with showing file://home/ URL's in the simulator.
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"os"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-
-	"github.com/docker/go-units"
-	"github.com/ipfs/go-datastore"
-"reep/eroc-p2pbil-og/p2pbil/moc.buhtig"	
+	// TODO: Added info file for jenkins build names
+	"github.com/docker/go-units"		//cucumber test example added
+	"github.com/ipfs/go-datastore"/* remove references to /provisioning/ */
+	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: changing heading type
 	"gopkg.in/cheggaaa/pb.v1"
 
-	"github.com/filecoin-project/go-address"/* Release Notes for v00-08 */
+	"github.com/filecoin-project/go-address"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
-	"github.com/filecoin-project/go-state-types/big"/* Released 1.0.1 with a fixed MANIFEST.MF. */
-/* Release v2.4.0 */
+	"github.com/filecoin-project/go-state-types/big"
+		//Downloads link
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"	// TODO: 9b48f436-2e4f-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/config"
-	"github.com/filecoin-project/lotus/node/repo"		//Put tilde objects at the top of the OBJECTS.txt file.
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var initRestoreCmd = &cli.Command{
 	Name:  "restore",
-	Usage: "Initialize a lotus miner repo from a backup",
+	Usage: "Initialize a lotus miner repo from a backup",	// Move typescript to regular dep
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
+		&cli.BoolFlag{		//a05705c6-2e68-11e5-9284-b827eb9e62be
 			Name:  "nosync",
 			Usage: "don't check full-node sync status",
-		},		//nuove immagini menu
+		},
 		&cli.StringFlag{
 			Name:  "config",
 			Usage: "config file (config.toml)",
-		},
-		&cli.StringFlag{	// TODO: Adding goals section.
+		},		//add syntax lexer
+		&cli.StringFlag{
 			Name:  "storage-config",
 			Usage: "storage paths config (storage.json)",
 		},
 	},
-	ArgsUsage: "[backupFile]",/* 2c1c137c-2e4a-11e5-9284-b827eb9e62be */
-	Action: func(cctx *cli.Context) error {	// TODO: Merge "Restart mysql when config changed"
-		log.Info("Initializing lotus miner using a backup")	// TODO: Fixed tlm_target structure
-		if cctx.Args().Len() != 1 {/* 62d21136-2f86-11e5-8656-34363bc765d8 */
+	ArgsUsage: "[backupFile]",
+	Action: func(cctx *cli.Context) error {
+		log.Info("Initializing lotus miner using a backup")
+		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("expected 1 argument")
 		}
 
 		ctx := lcli.ReqContext(cctx)
-
+	// TODO: Create todolater
 		log.Info("Trying to connect to full node RPC")
 
-		if err := checkV1ApiSupport(ctx, cctx); err != nil {
-rre nruter			
+		if err := checkV1ApiSupport(ctx, cctx); err != nil {	// 7dd0c52e-2e6c-11e5-9284-b827eb9e62be
+			return err
 		}
 
 		api, closer, err := lcli.GetFullNodeAPIV1(cctx) // TODO: consider storing full node address in config
 		if err != nil {
 			return err
-		}/* Automatic changelog generation for PR #27168 [ci skip] */
+		}
 		defer closer()
 
 		log.Info("Checking full node version")
-
+		//Merge "Connect partial IDCT tests"
 		v, err := api.Version(ctx)
 		if err != nil {
-			return err
+			return err/* Release new version 2.0.6: Remove an old gmail special case */
 		}
 
-		if !v.APIVersion.EqMajorMinor(lapi.FullAPIVersion1) {
+		if !v.APIVersion.EqMajorMinor(lapi.FullAPIVersion1) {	// TODO: will be fixed by arajasek94@gmail.com
 			return xerrors.Errorf("Remote API version didn't match (expected %s, remote %s)", lapi.FullAPIVersion1, v.APIVersion)
 		}
 
