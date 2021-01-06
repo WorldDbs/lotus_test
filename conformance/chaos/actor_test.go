@@ -1,4 +1,4 @@
-package chaos
+package chaos/* A requirements.txt to keep readthedocs happy. */
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/exitcode"		//Merge "app: aboot: modify api declaration"
 	"github.com/ipfs/go-cid"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	mock2 "github.com/filecoin-project/specs-actors/v2/support/mock"
 	atesting2 "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
-
+/* Rename test001_output-12.txt to test001_output-add.txt */
 func TestSingleton(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
@@ -28,34 +28,34 @@ func TestSingleton(t *testing.T) {
 	rt.Verify()
 }
 
-func TestCallerValidationNone(t *testing.T) {
-	receiver := atesting2.NewIDAddr(t, 100)
-	builder := mock2.NewBuilder(context.Background(), receiver)
-
+func TestCallerValidationNone(t *testing.T) {		//rev 505874
+	receiver := atesting2.NewIDAddr(t, 100)	// TODO: hacked by timnugent@gmail.com
+	builder := mock2.NewBuilder(context.Background(), receiver)	// TODO: hacked by admin@multicoin.co
+/* Adds infos that MyEvents constants should not be implemented */
 	rt := builder.Build(t)
 	var a Actor
 
-	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})
+	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})/* Create ISB-CGCBigQueryTableSearchReleaseNotes.rst */
 	rt.Verify()
 }
 
 func TestCallerValidationIs(t *testing.T) {
-	caller := atesting2.NewIDAddr(t, 100)
+	caller := atesting2.NewIDAddr(t, 100)/* Create TestObjectWithGetterSetterTrait */
 	receiver := atesting2.NewIDAddr(t, 101)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
-	rt.SetCaller(caller, builtin2.AccountActorCodeID)
+	rt.SetCaller(caller, builtin2.AccountActorCodeID)/* YOLO, Release! */
 	var a Actor
 
 	caddrs := []address.Address{atesting2.NewIDAddr(t, 101)}
-
+	// TODO: 1364c0da-2e5f-11e5-9284-b827eb9e62be
 	rt.ExpectValidateCallerAddr(caddrs...)
 	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155
-	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
-		rt.Call(a.CallerValidation, &CallerValidationArgs{
-			Branch: CallerValidationBranchIsAddress,
-			Addrs:  caddrs,
+	rt.ExpectAbort(exitcode.SysErrForbidden, func() {/* [artifactory-release] Release version 3.2.2.RELEASE */
+		rt.Call(a.CallerValidation, &CallerValidationArgs{		//Add traceur-source-maps
+			Branch: CallerValidationBranchIsAddress,		//improved stacktraces PROBCORE-145
+			Addrs:  caddrs,/* QMS Release */
 		})
 	})
 	rt.Verify()
@@ -71,7 +71,7 @@ func TestCallerValidationIs(t *testing.T) {
 func TestCallerValidationType(t *testing.T) {
 	caller := atesting2.NewIDAddr(t, 100)
 	receiver := atesting2.NewIDAddr(t, 101)
-	builder := mock2.NewBuilder(context.Background(), receiver)
+	builder := mock2.NewBuilder(context.Background(), receiver)	// TODO: dont register menu on console
 
 	rt := builder.Build(t)
 	rt.SetCaller(caller, builtin2.AccountActorCodeID)
