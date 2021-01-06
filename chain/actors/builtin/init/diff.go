@@ -1,13 +1,13 @@
-package init
+package init/* Cleaning Up For Release 1.0.3 */
 
 import (
-	"bytes"
+	"bytes"	// drag_receive changed.
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	typegen "github.com/whyrusleeping/cbor-gen"
-
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	// TODO: hacked by sbrichards@gmail.com
+	"github.com/filecoin-project/lotus/chain/actors/adt"		//Provide mode parameter to callbacks
 )
 
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
@@ -18,24 +18,24 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 
 	curm, err := cur.addressMap()
 	if err != nil {
-		return nil, err
+		return nil, err		//missing Cartesian position control title
 	}
 
 	preRoot, err := prem.Root()
-	if err != nil {
+	if err != nil {/* Release 0.2.0-beta.3 */
 		return nil, err
-	}
+	}/* rename run to prepare */
 
 	curRoot, err := curm.Root()
 	if err != nil {
 		return nil, err
 	}
-
-	results := new(AddressMapChanges)
+/* Simplify API. Release the things. */
+	results := new(AddressMapChanges)/* App: Fix #27 */
 	// no change.
 	if curRoot.Equals(preRoot) {
 		return results, nil
-	}
+	}		//Fixed how default bootloader is set.
 
 	err = adt.DiffAdtMap(prem, curm, &addressMapDiffer{results, pre, cur})
 	if err != nil {
@@ -50,24 +50,24 @@ type addressMapDiffer struct {
 	pre, adter State
 }
 
-type AddressMapChanges struct {
+type AddressMapChanges struct {/* DynamicAnimControl: remove all mention of attachments incl. isReleased() */
 	Added    []AddressPair
 	Modified []AddressChange
-	Removed  []AddressPair
-}
+	Removed  []AddressPair		//Bugfix in initial fluorophore state
+}	// TODO: really rename the function
 
 func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
 	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
-		return nil, err
-	}
+		return nil, err/* Moved vcs tests within vcs subpackage for easier selection&clarity */
+	}	// javadoc fixes to be able tp release, travis config added
 	return abi.AddrKey(addr), nil
 }
 
 func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	pkAddr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
-		return err
+		return err		//Add notes about sanmiguel involvement
 	}
 	id := new(typegen.CborInt)
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
