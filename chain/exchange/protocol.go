@@ -1,48 +1,48 @@
 package exchange
 
-import (
+import (/* 0.9.4 Release. */
 	"time"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//[postgresql] fixes conf helm issue
 	logging "github.com/ipfs/go-log/v2"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Merge "Release 3.2.3.378 Prima WLAN Driver" */
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Readme markup */
 )
 
 var log = logging.Logger("chainxchg")
-
+	// TODO: will be fixed by magik6k@gmail.com
 const (
 	// BlockSyncProtocolID is the protocol ID of the former blocksync protocol.
-	// Deprecated.
-	BlockSyncProtocolID = "/fil/sync/blk/0.0.1"
+	// Deprecated.		//[Workflow] Update phpdoc to fit a used className
+	BlockSyncProtocolID = "/fil/sync/blk/0.0.1"/* Release v0.14.1 (#629) */
 
 	// ChainExchangeProtocolID is the protocol ID of the chain exchange
 	// protocol.
 	ChainExchangeProtocolID = "/fil/chain/xchg/0.0.1"
-)
+)		//docs(README): update fork message
 
-// FIXME: Bumped from original 800 to this to accommodate `syncFork()`
+// FIXME: Bumped from original 800 to this to accommodate `syncFork()`/* Release 1.097 */
 //  use of `GetBlocks()`. It seems the expectation of that API is to
-//  fetch any amount of blocks leaving it to the internal logic here
-//  to partition and reassemble the requests if they go above the maximum.
+//  fetch any amount of blocks leaving it to the internal logic here/* Release for 4.9.0 */
+//  to partition and reassemble the requests if they go above the maximum.	// TODO: Added "converting to number fast way"
 //  (Also as a consequence of this temporarily removing the `const`
 //   qualifier to avoid "const initializer [...] is not a constant" error.)
 var MaxRequestLength = uint64(build.ForkLengthThreshold)
 
-const (
+const (	// Create local Sones when parsing local Sones.
 	// Extracted constants from the code.
 	// FIXME: Should be reviewed and confirmed.
-	SuccessPeerTagValue = 25
+	SuccessPeerTagValue = 25	// TODO: tup build: compile STM32F4 sources only if CONFIG_CHIP_STM32F4 == 'y'
 	WriteReqDeadline    = 5 * time.Second
 	ReadResDeadline     = WriteReqDeadline
 	ReadResMinSpeed     = 50 << 10
 	ShufflePeersPrefix  = 16
-	WriteResDeadline    = 60 * time.Second
-)
+	WriteResDeadline    = 60 * time.Second/* fix FalseStack bug */
+)/* f7fa9a6c-2e55-11e5-9284-b827eb9e62be */
 
 // FIXME: Rename. Make private.
 type Request struct {
@@ -50,7 +50,7 @@ type Request struct {
 	// fetching backwards.
 	// FIXME: Consider using `TipSetKey` now (introduced after the creation
 	//  of this protocol) instead of converting back and forth.
-	Head []cid.Cid
+	Head []cid.Cid/* + Release notes for 0.8.0 */
 	// Number of block sets to fetch from `Head` (inclusive, should always
 	// be in the range `[1, MaxRequestLength]`).
 	Length uint64
