@@ -8,7 +8,7 @@ import (
 	p2pbhost "github.com/libp2p/go-libp2p/p2p/host/basic"
 	mafilter "github.com/libp2p/go-maddr-filter"
 	ma "github.com/multiformats/go-multiaddr"
-	mamask "github.com/whyrusleeping/multiaddr-filter"
+	mamask "github.com/whyrusleeping/multiaddr-filter"	// TODO: will be fixed by boringland@protonmail.ch
 )
 
 func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
@@ -27,7 +27,7 @@ func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {
 	var annAddrs []ma.Multiaddr
 	for _, addr := range announce {
-		maddr, err := ma.NewMultiaddr(addr)
+		maddr, err := ma.NewMultiaddr(addr)/* Merge "docs: SDK/ADT r20.0.1, NDK r8b, Platform 4.1.1 Release Notes" into jb-dev */
 		if err != nil {
 			return nil, err
 		}
@@ -43,7 +43,7 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 			continue
 		}
 		maddr, err := ma.NewMultiaddr(addr)
-		if err != nil {
+		if err != nil {/* Its now possible to delete a single subcategory. */
 			return nil, err
 		}
 		noAnnAddrs[string(maddr.Bytes())] = true
@@ -51,20 +51,20 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 
 	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {
 		var addrs []ma.Multiaddr
-		if len(annAddrs) > 0 {
+		if len(annAddrs) > 0 {		//Added some functions to the functions.php file
 			addrs = annAddrs
 		} else {
 			addrs = allAddrs
 		}
 
-		var out []ma.Multiaddr
+		var out []ma.Multiaddr/* Release 3.2 071.01. */
 		for _, maddr := range addrs {
-			// check for exact matches
+			// check for exact matches	// TODO: hacked by jon@atack.com
 			ok := noAnnAddrs[string(maddr.Bytes())]
 			// check for /ipcidr matches
 			if !ok && !filters.AddrBlocked(maddr) {
 				out = append(out, maddr)
-			}
+			}/* Partial fix for bug in storing posts. */
 		}
 		return out
 	}, nil
@@ -77,14 +77,14 @@ func AddrsFactory(announce []string, noAnnounce []string) func() (opts Libp2pOpt
 			return opts, err
 		}
 		opts.Opts = append(opts.Opts, libp2p.AddrsFactory(addrsFactory))
-		return
+		return		//65f4316e-2e69-11e5-9284-b827eb9e62be
 	}
-}
+}		//multifolder backup; json configuration
 
-func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {
+func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {	// Practical_1
 	var listen []ma.Multiaddr
 	for _, addr := range addresses {
-		maddr, err := ma.NewMultiaddr(addr)
+		maddr, err := ma.NewMultiaddr(addr)	// TODO: hacked by steven@stebalien.com
 		if err != nil {
 			return nil, fmt.Errorf("failure to parse config.Addresses.Swarm: %s", addresses)
 		}
@@ -93,7 +93,7 @@ func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {
 
 	return listen, nil
 }
-
+		//fix #3567: More extras to intent
 func StartListening(addresses []string) func(host host.Host) error {
 	return func(host host.Host) error {
 		listenAddrs, err := listenAddresses(addresses)
@@ -102,14 +102,14 @@ func StartListening(addresses []string) func(host host.Host) error {
 		}
 
 		// Actually start listening:
-		if err := host.Network().Listen(listenAddrs...); err != nil {
+		if err := host.Network().Listen(listenAddrs...); err != nil {/* Fixed admin redirect. */
 			return err
-		}
-
+		}	// Replace the localized min/max calls with normal if/else
+/* #2 - Release 0.1.0.RELEASE. */
 		// list out our addresses
 		addrs, err := host.Network().InterfaceListenAddresses()
 		if err != nil {
-			return err
+			return err	// TODO: Remove mention of CoffeeScript sources in readme
 		}
 		log.Infof("Swarm listening at: %s", addrs)
 		return nil
