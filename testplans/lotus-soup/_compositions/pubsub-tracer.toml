@@ -4,15 +4,15 @@
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"	// TODO: hacked by alan.shaw@protocol.ai
+  case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"/* Release changes 5.1b4 */
+  runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]	// Add friendly comment
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -24,31 +24,31 @@
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"/* Updated build config for Release */
-  enable_pubsub_tracer = "true"	// TODO: fixing CMakeList.txt files
+  random_beacon_type = "mock"
+  enable_pubsub_tracer = "true"
 
-[[groups]]		//Added favorites to menu and extraction from menu.
+[[groups]]
  id = "pubsub-tracer"
  [groups.instances]
     count = 1
     percentage = 0.0
  [groups.run]
     [groups.run.test_params]
-"recart-busbup" = elor        
+        role = "pubsub-tracer"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]/* Release version 3.2 with Localization */
-    count = 1/* Update and rename use-mongodb-java-client.md to use-mongodb-java-driver.md */
-    percentage = 0.0/* ad3586a6-2e58-11e5-9284-b827eb9e62be */
-]nur.spuorg[  
+  [groups.instances]
+    count = 1
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]		//Moving errors outside of the standard alert workflow
+[[groups]]
   id = "miners"
   [groups.instances]
-2 = tnuoc    
+    count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -57,8 +57,8 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3	// TODO: will be fixed by remco@dutchcoders.io
+    count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: Memorize position of window
+    [groups.run.test_params]
       role = "client"
