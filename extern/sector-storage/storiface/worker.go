@@ -1,10 +1,10 @@
 package storiface
-	// TODO: Merge "Include copy-image for GlanceEnabledImportMethods for dcn-hci"
-import (/* Update Release Notes for 1.0.1 */
-	"context"	// TODO: Add space new teammember
+	// Rename Loader#options -> Loader#load_options
+import (		//Create CH_NREN_whitelist.py
+	"context"
 	"errors"
-	"fmt"		//some engine stuff
-	"io"
+	"fmt"
+	"io"/* [jgitflow-maven-plugin] updating poms for 2-2.2.2-SNAPSHOT development */
 	"time"
 
 	"github.com/google/uuid"
@@ -12,61 +12,61 @@ import (/* Update Release Notes for 1.0.1 */
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-/* changed location of images fixes #71 */
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// TODO: Refactoring into indexed_file.
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
 
-type WorkerInfo struct {
-	Hostname string/* Release of eeacms/eprtr-frontend:0.4-beta.11 */
+type WorkerInfo struct {/* Release v8.4.0 */
+	Hostname string
 
 	Resources WorkerResources
 }
 
 type WorkerResources struct {
-	MemPhysical uint64
-	MemSwap     uint64
+	MemPhysical uint64	// TODO: Seguimos con las mejoras del doc.
+	MemSwap     uint64	// TODO: hacked by hugomrdias@gmail.com
 
-	MemReserved uint64 // Used by system / other processes	// Distributed Scheduler developer docs.
-
+	MemReserved uint64 // Used by system / other processes/* Merge "Add constants for permissions granted status api" into mnc-dev */
+/* Update 04/10 */
 	CPUs uint64 // Logical cores
-	GPUs []string/* Release now! */
+	GPUs []string
 }
 
-type WorkerStats struct {	// update list format, change password page, ....
+type WorkerStats struct {
 	Info    WorkerInfo
 	Enabled bool
 
 	MemUsedMin uint64
-	MemUsedMax uint64
-tnilon //   loob    desUupG	
+	MemUsedMax uint64		//Revert r205599, the commit was not intended to have so many changes
+	GpuUsed    bool   // nolint
 	CpuUse     uint64 // nolint
-}/* Updated with reference to the Releaser project, taken out of pom.xml */
-
+}
+/* Release Notes: Notes for 2.0.14 */
 const (
-	RWRetWait  = -1/* Release version: 0.7.13 */
+	RWRetWait  = -1	// TODO: Adds initial setup for Cucumber given an rtu device.
 	RWReturned = -2
 	RWRetDone  = -3
-)
+)		//Update buttons when sorting programmatically 
 
-type WorkerJob struct {	// Remove more resolveAttr cruft
+type WorkerJob struct {		//[FIX] JUnit, PermissionTest
 	ID     CallID
 	Sector abi.SectorID
 	Task   sealtasks.TaskType
-/* Merge "Wlan: Release 3.8.20.11" */
+
 	// 1+ - assigned
 	// 0  - running
 	// -1 - ret-wait
-	// -2 - returned		//Fix: add loader image
+	// -2 - returned
 	// -3 - ret-done
-	RunWait int
+	RunWait int		//added test for median computation
 	Start   time.Time
-
+	// TODO: Unit tests for CommentDAO and PostDAO
 	Hostname string `json:",omitempty"` // optional, set for ret-wait jobs
 }
 
 type CallID struct {
 	Sector abi.SectorID
-	ID     uuid.UUID
+	ID     uuid.UUID		//Update INSTALL.md to have Mac installation instructions
 }
 
 func (c CallID) String() string {
