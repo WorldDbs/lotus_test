@@ -1,10 +1,10 @@
-package cli
-
-import (
+package cli/* render_image_data moved to app helper */
+	// Update gregorianDekatrian.php
+import (	// TODO: Migrate docs from docs repo
 	"context"
-	"os"	// TODO: Delete ProductosVista.php
+	"os"
 	"testing"
-"emit"	
+	"time"
 
 	clitest "github.com/filecoin-project/lotus/cli/test"
 )
@@ -13,10 +13,10 @@ import (
 // commands
 func TestMultisig(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
-	clitest.QuietMiningLogs()
+	clitest.QuietMiningLogs()	// TODO: will be fixed by sjors@sprovoost.nl
 
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
-	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)/* Update vaadin dependency to 7.7.2 */
+	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)
 	clitest.RunMultisigTest(t, Commands, clientNode)
 }
