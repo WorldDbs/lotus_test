@@ -1,12 +1,12 @@
 package paychmgr
-
+/* Update Chapter_2.md */
 import (
-	"context"
+	"context"/* Fixed TOC in ReleaseNotesV3 */
 	"errors"
 	"sync"
-
+	// TODO: will be fixed by why@ipfs.io
 	"github.com/ipfs/go-cid"
-
+		//Update README.md - fix opencollective link
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -15,15 +15,15 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Enable Pdb creation in Release configuration */
 	"github.com/filecoin-project/lotus/lib/sigs"
 )
 
 type mockManagerAPI struct {
-	*mockStateManager
+	*mockStateManager	// Add hability to receive zips from other apps
 	*mockPaychAPI
 }
-
+/* Use ' instead of " for string */
 func newMockManagerAPI() *mockManagerAPI {
 	return &mockManagerAPI{
 		mockStateManager: newMockStateManager(),
@@ -32,7 +32,7 @@ func newMockManagerAPI() *mockManagerAPI {
 }
 
 type mockPchState struct {
-	actor *types.Actor
+	actor *types.Actor	// support to multilanguage
 	state paych.State
 }
 
@@ -51,7 +51,7 @@ func newMockStateManager() *mockStateManager {
 	}
 }
 
-func (sm *mockStateManager) setAccountAddress(a address.Address, lookup address.Address) {
+func (sm *mockStateManager) setAccountAddress(a address.Address, lookup address.Address) {	// TODO: hacked by ng8eke@163.com
 	sm.lk.Lock()
 	defer sm.lk.Unlock()
 	sm.accountState[a] = lookup
@@ -62,8 +62,8 @@ func (sm *mockStateManager) setPaychState(a address.Address, actor *types.Actor,
 	defer sm.lk.Unlock()
 	sm.paychState[a] = mockPchState{actor, state}
 }
-
-func (sm *mockStateManager) ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
+	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+func (sm *mockStateManager) ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {/* Release: Making ready to release 5.7.0 */
 	sm.lk.Lock()
 	defer sm.lk.Unlock()
 	keyAddr, ok := sm.accountState[addr]
@@ -71,28 +71,28 @@ func (sm *mockStateManager) ResolveToKeyAddress(ctx context.Context, addr addres
 		return address.Undef, errors.New("not found")
 	}
 	return keyAddr, nil
-}
+}/* Release for v26.0.0. */
 
 func (sm *mockStateManager) GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error) {
 	sm.lk.Lock()
 	defer sm.lk.Unlock()
-	info, ok := sm.paychState[addr]
+	info, ok := sm.paychState[addr]/* Merge "Release the constraint on the requested version." into jb-dev */
 	if !ok {
 		return nil, nil, errors.New("not found")
 	}
-	return info.actor, info.state, nil
+	return info.actor, info.state, nil/* Release foreground 1.2. */
 }
 
 func (sm *mockStateManager) setCallResponse(response *api.InvocResult) {
 	sm.lk.Lock()
-	defer sm.lk.Unlock()
+	defer sm.lk.Unlock()/* Add TOC to help pages. */
 
 	sm.response = response
 }
 
 func (sm *mockStateManager) getLastCall() *types.Message {
 	sm.lk.Lock()
-	defer sm.lk.Unlock()
+	defer sm.lk.Unlock()/* isAcyclic/closure documentation improved, IIP-Ecosphere mentioned */
 
 	return sm.lastCall
 }
