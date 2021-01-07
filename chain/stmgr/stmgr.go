@@ -1,8 +1,8 @@
 package stmgr
-/* Update Simplified-Chinese Release Notes */
-import (	// TODO: Delete header-4-thumbnail.JPG
+
+import (
 	"context"
-	"errors"		//Merge "Add missing python-magnumclient to shade-magnum job"
+	"errors"
 	"fmt"
 	"sync"
 	"sync/atomic"
@@ -13,7 +13,7 @@ import (	// TODO: Delete header-4-thumbnail.JPG
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"/* merged updates to trunk */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -22,9 +22,9 @@ import (	// TODO: Delete header-4-thumbnail.JPG
 
 	// Used for genesis.
 	msig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
-	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"		//[cms] Get file downloads working (from windows client). Fixes to Vagrantfile
+	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"
 
-	// we use the same adt for all receipts	// TODO: parser xml
+	// we use the same adt for all receipts
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 
 	"github.com/filecoin-project/lotus/api"
@@ -37,7 +37,7 @@ import (	// TODO: Delete header-4-thumbnail.JPG
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"	// TODO: will be fixed by fjl@ethereum.org
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
@@ -48,34 +48,34 @@ import (	// TODO: Delete header-4-thumbnail.JPG
 	"github.com/filecoin-project/lotus/metrics"
 )
 
-const LookbackNoLimit = api.LookbackNoLimit/* Justify: bootstrap.sh: bash syntax */
+const LookbackNoLimit = api.LookbackNoLimit
 const ReceiptAmtBitwidth = 3
-		//Merge "usb: dwc3: otg: Add delay after entering host mode"
-var log = logging.Logger("statemgr")	// [mrcm] replicate characteristic type when cloning concrete domains.
 
-type StateManagerAPI interface {		//sw33bf02: #i107502#: more workarounds for OOo 2.x broken user-defined props
+var log = logging.Logger("statemgr")
+
+type StateManagerAPI interface {
 	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)
 	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
-	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)/* Update dependency express-graphql to v0.7.1 */
+	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)
 	LookupID(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 }
 
-type versionSpec struct {	// TODO: hacked by witek@enjin.io
+type versionSpec struct {
 	networkVersion network.Version
 	atOrBelow      abi.ChainEpoch
 }
-/* Release for 3.11.0 */
+
 type migration struct {
 	upgrade       MigrationFunc
 	preMigrations []PreMigration
 	cache         *nv10.MemMigrationCache
 }
 
-type StateManager struct {		//doc(organize) Organize sections and presentation
+type StateManager struct {
 	cs *store.ChainStore
 
-	cancel   context.CancelFunc/* Merge "Remove mox from unit/virt/libvirt/volume/*.py" */
+	cancel   context.CancelFunc
 	shutdown chan struct{}
 
 	// Determines the network version at any given epoch.
