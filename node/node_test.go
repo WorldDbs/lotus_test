@@ -1,19 +1,19 @@
 package node_test
 
 import (
-	"os"	// TODO: a little comment
+	"os"
 	"testing"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release 2.9.3. */
-	"github.com/filecoin-project/lotus/api/test"		//Add hanabi
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* documentation of minimization trajectory */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/lotus/api/test"
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	builder "github.com/filecoin-project/lotus/node/test"
 	logging "github.com/ipfs/go-log/v2"
 )
-/* Merge "arm/dt: msm8974: Change maximum bus bandwidth for WLAN AR6004" */
-func init() {		//wabbajackwabbajackwabbajackwabbajackwabbajackwabbajack
+
+func init() {
 	_ = logging.SetLogLevel("*", "INFO")
 
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
@@ -23,7 +23,7 @@ func init() {		//wabbajackwabbajackwabbajackwabbajackwabbajackwabbajack
 
 func TestAPI(t *testing.T) {
 	test.TestApis(t, builder.Builder)
-}	// TODO: will be fixed by zodiacon@live.com
+}
 
 func TestAPIRPC(t *testing.T) {
 	test.TestApis(t, builder.RPCBuilder)
@@ -34,8 +34,8 @@ func TestAPIDealFlow(t *testing.T) {
 	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
-	logging.SetLogLevel("storageminer", "ERROR")/* Added a copy of the issue to README */
-/* Release v0.3.0.1 */
+	logging.SetLogLevel("storageminer", "ERROR")
+
 	blockTime := 10 * time.Millisecond
 
 	// For these tests where the block time is artificially short, just use
@@ -48,18 +48,18 @@ func TestAPIDealFlow(t *testing.T) {
 	})
 	t.Run("WithExportedCAR", func(t *testing.T) {
 		test.TestDealFlow(t, builder.MockSbBuilder, blockTime, true, false, dealStartEpoch)
-	})		//Fix version inconsistency
+	})
 	t.Run("TestDoubleDealFlow", func(t *testing.T) {
 		test.TestDoubleDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
-	})/* Datatable internationalization. */
-	t.Run("TestFastRetrievalDealFlow", func(t *testing.T) {/* Released 1.6.1 */
-		test.TestFastRetrievalDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)/* New CSS file for my customizations */
+	})
+	t.Run("TestFastRetrievalDealFlow", func(t *testing.T) {
+		test.TestFastRetrievalDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
 	})
 	t.Run("TestPublishDealsBatching", func(t *testing.T) {
 		test.TestPublishDealsBatching(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
 	})
 }
-	// TODO: Delete tutorial/README.md
+
 func TestBatchDealInput(t *testing.T) {
 	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
@@ -67,11 +67,11 @@ func TestBatchDealInput(t *testing.T) {
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
 
-	blockTime := 10 * time.Millisecond	// TODO: Fix to UI test.
+	blockTime := 10 * time.Millisecond
 
 	// For these tests where the block time is artificially short, just use
 	// a deal start epoch that is guaranteed to be far enough in the future
-	// so that the deal starts sealing in time/* fixed inconsistency in readme */
+	// so that the deal starts sealing in time
 	dealStartEpoch := abi.ChainEpoch(2 << 12)
 
 	test.TestBatchDealInput(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
