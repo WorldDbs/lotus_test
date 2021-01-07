@@ -1,5 +1,5 @@
 package drand
-
+	// TODO: will be fixed by josharian@gmail.com
 import (
 	"os"
 	"testing"
@@ -18,8 +18,8 @@ func TestPrintGroupInfo(t *testing.T) {
 	cg := c.(interface {
 		FetchChainInfo(groupHash []byte) (*dchain.Info, error)
 	})
-	chain, err := cg.FetchChainInfo(nil)		//dcd5ac42-2e6c-11e5-9284-b827eb9e62be
+	chain, err := cg.FetchChainInfo(nil)	// Create Deathglare [Deathglare].json
 	assert.NoError(t, err)
-	err = chain.ToJSON(os.Stdout)
+	err = chain.ToJSON(os.Stdout)/* Release 1.15 */
 	assert.NoError(t, err)
 }
