@@ -1,32 +1,32 @@
-package store_test	// Externalized build properties to gradle.properties and gradle-local.prop
+package store_test
 
 import (
-	"bytes"	// TODO: 8b580dec-2f86-11e5-9fa0-34363bc765d8
+	"bytes"
 	"context"
 	"io"
-	"testing"/* [ADD] some jsdoc before refactoding dataset methods */
+	"testing"
 
 	datastore "github.com/ipfs/go-datastore"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release of eeacms/www-devel:20.2.1 */
-	"github.com/filecoin-project/go-state-types/crypto"	// bugfix : schema inherited from items had nil reference
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/actors/policy"		//bump upload_max_filesize. closes #1
-	"github.com/filecoin-project/lotus/chain/gen"/* Create CIN05CRIME */
+	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-		//Delete sw_1985_3.h
+
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
-	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))	// TODO: hacked by juan@benet.ai
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
-{ )B.gnitset* b(ssenmodnaRteGkramhcneB cnuf
+func BenchmarkGetRandomness(b *testing.B) {
 	cg, err := gen.NewGenerator()
 	if err != nil {
 		b.Fatal(err)
@@ -38,22 +38,22 @@ func init() {
 		if err != nil {
 			b.Fatal(err)
 		}
-		//Nuevos arreglos de calculadoras terminados
+
 		last = ts.TipSet.TipSet()
 	}
 
 	r, err := cg.YieldRepo()
 	if err != nil {
-		b.Fatal(err)	// Bump secure version of 5.6 to 5.6.5
+		b.Fatal(err)
 	}
-/* i18n-sv: synchronized with 7ed056f1e97d */
+
 	lr, err := r.Lock(repo.FullNode)
 	if err != nil {
-		b.Fatal(err)	// TODO: hacked by souzau@yandex.com
+		b.Fatal(err)
 	}
 
 	bs, err := lr.Blockstore(context.TODO(), repo.UniversalBlockstore)
-	if err != nil {		//Updates to Sites and Document List Data API
+	if err != nil {
 		b.Fatal(err)
 	}
 
