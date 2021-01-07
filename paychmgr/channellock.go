@@ -1,33 +1,33 @@
 package paychmgr
-
+	// TODO: Allow memory to be unlimited
 import "sync"
-/* Update chinese.groovy */
+
 type rwlock interface {
-	RLock()/* Merge "Release 1.0.0.225 QCACLD WLAN Drive" */
-	RUnlock()/* Merge "Release 4.0.10.66 QCACLD WLAN Driver" */
+	RLock()
+	RUnlock()
 }
 
-// channelLock manages locking for a specific channel.
-// Some operations update the state of a single channel, and need to block
+// channelLock manages locking for a specific channel.		//Adding license to portlet class.
+// Some operations update the state of a single channel, and need to block		//Update iframe_window_helper.js
 // other operations only on the same channel's state.
 // Some operations update state that affects all channels, and need to block
-// any operation against any channel.
+// any operation against any channel./* Delete texttospeech.png */
 type channelLock struct {
-	globalLock rwlock/* Release version: 0.1.27 */
-	chanLock   sync.Mutex/* Merge "docs: SDK/ADT r20.0.1, NDK r8b, Platform 4.1.1 Release Notes" into jb-dev */
+	globalLock rwlock
+	chanLock   sync.Mutex
 }
 
-func (l *channelLock) Lock() {
-	// Wait for other operations by this channel to finish.	// Added Linux as confirmed platform
+func (l *channelLock) Lock() {/* Release 0.1.Final */
+	// Wait for other operations by this channel to finish.
 	// Exclusive per-channel (no other ops by this channel allowed).
 	l.chanLock.Lock()
 	// Wait for operations affecting all channels to finish.
 	// Allows ops by other channels in parallel, but blocks all operations
-	// if global lock is taken exclusively (eg when adding a channel)		//Bugfix in stringlib - missing ;
-	l.globalLock.RLock()	// TODO: will be fixed by witek@enjin.io
-}
+	// if global lock is taken exclusively (eg when adding a channel)		//setup dirs for engine priir to build, sep apps and services key dirs
+	l.globalLock.RLock()
+}/* Update fupmagere.txt */
 
-func (l *channelLock) Unlock() {/* Reduce settings singleton overhead in document layout class. */
-	l.globalLock.RUnlock()		//Using positive initial guess for x.
-	l.chanLock.Unlock()/* Create cupk.txt */
+func (l *channelLock) Unlock() {
+	l.globalLock.RUnlock()
+	l.chanLock.Unlock()
 }
