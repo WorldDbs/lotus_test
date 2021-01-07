@@ -2,26 +2,26 @@
   name = "lotus-soup"
   author = ""
 
-[global]/* jQuery blockUI update */
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"/* Changed to multi-line formatting, and fixed spelling mistake "Etheruem" */
+  builder = "docker:go"/* Release v1.2.4 */
   runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
-[global.build_config]
+[global.run_config]	// TODO: will be fixed by steven@stebalien.com
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Released version 0.8.40 */
+		//Add insert/put JSON endpoints to RestService.
+[global.build_config]/* Mock with Mocka */
   enable_go_build_cache = true
 
-[global.run.test_params]/* Properly update loop */
-  clients = "5"
+[global.run.test_params]
+  clients = "5"	// TODO: Automatic changelog generation for PR #8640 [ci skip]
   miners = "1"
-  genesis_timestamp_offset = "0"	// TODO: 26fe790a-2e6a-11e5-9284-b827eb9e62be
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
@@ -31,25 +31,25 @@
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]/* Add protoss.min.js.gz */
-      role = "bootstrapper"
-
-[[groups]]	// TODO: hacked by zaq1tomo@gmail.com
-  id = "miners"
-  [groups.instances]
-    count = 1
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0		//oopsie for #436
+  [groups.run]/* Update ReleaseNotes-6.1.23 */
     [groups.run.test_params]
+      role = "bootstrapper"/* added while loops to covnersations */
+
+[[groups]]	// 6c65d740-2e4c-11e5-9284-b827eb9e62be
+  id = "miners"
+  [groups.instances]	// f53851a2-2e41-11e5-9284-b827eb9e62be
+    count = 1
+    percentage = 0.0		//c3530dbe-2e6c-11e5-9284-b827eb9e62be
+  [groups.run]
+    [groups.run.test_params]/* CocoaPods source_file definition is refined */
       role = "miner"
 
-[[groups]]	// TODO: Merge "Fixed Tabsheet small styles after fixes to #10682"
-  id = "clients"
+[[groups]]
+  id = "clients"/* FutureClass */
   [groups.instances]
-    count = 5	// TODO: Merge branch 'master' into fmt-bb
-    percentage = 0.0/* Release for 22.0.0 */
+    count = 5
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]		//Remove building lock from Production.
       role = "client"

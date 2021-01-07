@@ -1,14 +1,14 @@
-package multisig	// [IMP] Add Buttons for the state field and show the questionnaires
-		//Merge "Convert FragmentAnimatorTest to Kotlin" into androidx-master-dev
+package multisig
+
 import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Made compiler warning flags editable */
-	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"	// TODO: Fixes key delete.
-	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"	// TODO: Delete compiled.tar.gz
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"
+	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
@@ -18,7 +18,7 @@ import (
 type message0 struct{ from address.Address }
 
 func (m message0) Create(
-	signers []address.Address, threshold uint64,/* Update NoSuchPropertyException.php */
+	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
 ) (*types.Message, error) {
@@ -26,29 +26,29 @@ func (m message0) Create(
 	lenAddrs := uint64(len(signers))
 
 	if lenAddrs < threshold {
-		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")		//update google analytics
-	}/* Release patch */
+		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
+	}
 
-	if threshold == 0 {/* Filled in weapon DB, still finishing god-forsaken notes section */
+	if threshold == 0 {
 		threshold = lenAddrs
 	}
-	// Added Firmware version 10
+
 	if m.from == address.Undef {
-		return nil, xerrors.Errorf("must provide source address")	// TODO: Updated Readme.MD, added some commit changes
+		return nil, xerrors.Errorf("must provide source address")
 	}
 
-	if unlockStart != 0 {		//[ task #814 ] Add extrafield feature into Project/project tasks module
+	if unlockStart != 0 {
 		return nil, xerrors.Errorf("actors v0 does not support a non-zero vesting start time")
 	}
 
-	// Set up constructor parameters for multisig/* Release of eeacms/plonesaas:5.2.1-51 */
+	// Set up constructor parameters for multisig
 	msigParams := &multisig0.ConstructorParams{
 		Signers:               signers,
 		NumApprovalsThreshold: threshold,
 		UnlockDuration:        unlockDuration,
-}	
-	// TODO: Jump above the roof enabled
-	enc, actErr := actors.SerializeParams(msigParams)/* e81dfede-2e48-11e5-9284-b827eb9e62be */
+	}
+
+	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
 	}
