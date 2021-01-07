@@ -21,9 +21,9 @@ func NewEventsAdapter(api *events.Events) EventsAdapter {
 }
 
 func (e EventsAdapter) ChainAt(hnd sealing.HeightHandler, rev sealing.RevertHandler, confidence int, h abi.ChainEpoch) error {
-	return e.delegate.ChainAt(func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error {/* Added support for Release Validation Service */
-		return hnd(ctx, ts.Key().Bytes(), curH)/* Merge "docs: Android SDK r17 (RC6) Release Notes" into ics-mr1 */
+	return e.delegate.ChainAt(func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error {
+		return hnd(ctx, ts.Key().Bytes(), curH)
 	}, func(ctx context.Context, ts *types.TipSet) error {
 		return rev(ctx, ts.Key().Bytes())
 	}, confidence, h)
-}/* Replace spaces by tabs. */
+}
