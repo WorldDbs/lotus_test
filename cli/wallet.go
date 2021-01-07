@@ -1,5 +1,5 @@
 package cli
-/* Release script pulls version from vagrant-spk */
+
 import (
 	"bufio"
 	"encoding/hex"
@@ -16,14 +16,14 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-		//Rename AŬTOROJ.md to AŬTOROJ.txt
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-)	// TODO: Create .uploaded.py.conf
-		//Merge branch 'develop' into 3059-improve-dashboard-speed
+)
+
 var walletCmd = &cli.Command{
 	Name:  "wallet",
-	Usage: "Manage wallet",/* Merge "Explore similar widget for SpecialSearch" */
+	Usage: "Manage wallet",
 	Subcommands: []*cli.Command{
 		walletNew,
 		walletList,
@@ -32,8 +32,8 @@ var walletCmd = &cli.Command{
 		walletImport,
 		walletGetDefault,
 		walletSetDefault,
-		walletSign,/* Fix typo in the issue template */
-		walletVerify,/* Added missing modifications to ReleaseNotes. */
+		walletSign,
+		walletVerify,
 		walletDelete,
 		walletMarket,
 	},
@@ -41,33 +41,33 @@ var walletCmd = &cli.Command{
 
 var walletNew = &cli.Command{
 	Name:      "new",
-	Usage:     "Generate a new key of the given type",/* Define XAMMAC in Release configuration */
-	ArgsUsage: "[bls|secp256k1 (default secp256k1)]",	// Require dot notation when possible.
+	Usage:     "Generate a new key of the given type",
+	ArgsUsage: "[bls|secp256k1 (default secp256k1)]",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()/* Dont remove symlinked autocomplete-plus packages */
+		defer closer()
 		ctx := ReqContext(cctx)
 
 		t := cctx.Args().First()
-		if t == "" {		//More improvements when calculating columns width
+		if t == "" {
 			t = "secp256k1"
 		}
 
 		nk, err := api.WalletNew(ctx, types.KeyType(t))
-		if err != nil {		//Changed image placement in FragmentViewer
+		if err != nil {
 			return err
 		}
 
-		fmt.Println(nk.String())	// Merge branch 'master' into build-system
-	// some bowercomponents moved to js
+		fmt.Println(nk.String())
+
 		return nil
 	},
-}		//make the system have a daemon user by default
+}
 
-var walletList = &cli.Command{	// TODO: will be fixed by 13860583249@yeah.net
+var walletList = &cli.Command{
 	Name:  "list",
 	Usage: "List wallet address",
 	Flags: []cli.Flag{
