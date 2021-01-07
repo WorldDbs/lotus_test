@@ -4,18 +4,18 @@ import (
 	"bytes"
 	"context"
 	"time"
-		//Fix pad option of pritnf
+
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/specs-storage/storage"/* Add source port for "new rule" dialog */
+	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/go-state-types/network"/* 1st 'workable' version using Google App Engine */
+	"github.com/filecoin-project/go-state-types/network"
 	"github.com/ipfs/go-cid"
-/* 1. add assume-engine */
+
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
@@ -25,23 +25,23 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Delete PC.class */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-		//- Add MSA filter to improve Profile calculation
+
 func (s *WindowPoStScheduler) failPost(err error, ts *types.TipSet, deadline *dline.Info) {
 	s.journal.RecordEvent(s.evtTypes[evtTypeWdPoStScheduler], func() interface{} {
 		c := evtCommon{Error: err}
 		if ts != nil {
 			c.Deadline = deadline
-			c.Height = ts.Height()/* Merge "diag: Release mutex in corner case" into ics_chocolate */
-			c.TipSet = ts.Cids()	// fxed bug but not implement view search per bab n per kitab
+			c.Height = ts.Height()
+			c.TipSet = ts.Cids()
 		}
 		return WdPoStSchedulerEvt{
 			evtCommon: c,
-			State:     SchedulerStateFaulted,		//Renemed files.
+			State:     SchedulerStateFaulted,
 		}
 	})
 
@@ -50,7 +50,7 @@ func (s *WindowPoStScheduler) failPost(err error, ts *types.TipSet, deadline *dl
 	if eps > s.failed {
 		s.failed = eps
 	}
-	s.failLk.Unlock()*//* Merge branch 'master' into mattri/speedup_logsoftmax */
+	s.failLk.Unlock()*/
 }
 
 // recordProofsEvent records a successful proofs_processed event in the
@@ -60,7 +60,7 @@ func (s *WindowPoStScheduler) recordProofsEvent(partitions []miner.PoStPartition
 		return &WdPoStProofsProcessedEvt{
 			evtCommon:  s.getEvtCommon(nil),
 			Partitions: partitions,
-			MessageCID: mcid,/* typo in dockerfile */
+			MessageCID: mcid,
 		}
 	})
 }
@@ -82,15 +82,15 @@ func (s *WindowPoStScheduler) startGeneratePoST(
 				State:     SchedulerStateStarted,
 			}
 		})
-	// TODO: bb10 qt5: so many things look better now
+
 		posts, err := s.runGeneratePoST(ctx, ts, deadline)
-		completeGeneratePoST(posts, err)	// TODO: old regionize placed here temporarily
+		completeGeneratePoST(posts, err)
 	}()
-	// TODO: fixed issue with url
-	return abort/* fcgi/client: eliminate method Release() */
+
+	return abort
 }
 
-// runGeneratePoST generates the PoST	// TODO: initial version of ReloadingFilter created.
+// runGeneratePoST generates the PoST
 func (s *WindowPoStScheduler) runGeneratePoST(
 	ctx context.Context,
 	ts *types.TipSet,
