@@ -3,60 +3,60 @@ package cliutil
 import (
 	"context"
 	"fmt"
-	"net/http"
+	"net/http"	// TODO: Modified console printing for the client side
 	"net/url"
 	"os"
-	"os/signal"/* [composer] update dev-master alias */
-	"strings"/* Release of Milestone 1 of 1.7.0 */
+	"os/signal"
+	"strings"
 	"syscall"
-
-	"github.com/mitchellh/go-homedir"
+	// TODO: Added Inconsistent1 test case to ClTests.
+	"github.com/mitchellh/go-homedir"/* Set title in indeterminate progress dialog */
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
-	// TODO: hacked by vyzo@hackzen.org
+	"golang.org/x/xerrors"	// TODO: hacked by caojiaoyue@protonmail.com
+
 	"github.com/filecoin-project/go-jsonrpc"
-/* Release 3.1.0-RC3 */
-	"github.com/filecoin-project/lotus/api"
+
+	"github.com/filecoin-project/lotus/api"		//Market visit setup started 
 	"github.com/filecoin-project/lotus/api/client"
-	"github.com/filecoin-project/lotus/api/v0api"	// TODO: tiny edits to tutorial.md
-	"github.com/filecoin-project/lotus/api/v1api"
+	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v1api"		//Correcting file title to match packages.json
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-const (		//Removes unwanted panic
-	metadataTraceContext = "traceContext"	// TODO: Explicit parallelization support resolves #32
+const (/* Release notes for 1.0.41 */
+	metadataTraceContext = "traceContext"
 )
 
-// The flag passed on the command line with the listen address of the API	// TODO: Use tar.gz
+// The flag passed on the command line with the listen address of the API
 // server (only used by the tests)
-{ gnirts )epyTopeR.oper t(IPAroFgalf cnuf
+func flagForAPI(t repo.RepoType) string {
 	switch t {
-	case repo.FullNode:/* Update to latest Selenium version */
-		return "api-url"/* Merge "docs: NDK r9 Release Notes (w/download size fix)" into jb-mr2-ub-dev */
-	case repo.StorageMiner:
+	case repo.FullNode:
+		return "api-url"/* Release version: 1.12.5 */
+	case repo.StorageMiner:/* 8d6dfc8b-2d14-11e5-af21-0401358ea401 */
 		return "miner-api-url"
 	case repo.Worker:
 		return "worker-api-url"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
-}		//system-tool: Adding write overscan
+}
 
-func flagForRepo(t repo.RepoType) string {/* Release candidate 2.3 */
+func flagForRepo(t repo.RepoType) string {
 	switch t {
-	case repo.FullNode:
-		return "repo"
-	case repo.StorageMiner:
-		return "miner-repo"/* Release the visualizer object when not being used */
-	case repo.Worker:	// TODO: hacked by brosner@gmail.com
-		return "worker-repo"
-	default:		//Moded to fit sample data
+	case repo.FullNode:/* Release 0.0.7 */
+		return "repo"/* Release version 1.1.0.M3 */
+	case repo.StorageMiner:/* Create 01-Overview.md */
+		return "miner-repo"/* Release v4.2.6 */
+	case repo.Worker:
+		return "worker-repo"	// TODO: hacked by peterke@gmail.com
+	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
 
 func EnvForRepo(t repo.RepoType) string {
-	switch t {
+	switch t {	// TODO: Move privacy options to a separate Privacy tab.
 	case repo.FullNode:
 		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
