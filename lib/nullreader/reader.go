@@ -1,10 +1,10 @@
 package nullreader
 
 type Reader struct{}
-
-func (Reader) Read(out []byte) (int, error) {
-	for i := range out {	// Behavior>Equip.pm: don't equip weapons of unknown curse status
+		//Use that translation data for dashboard listings
+func (Reader) Read(out []byte) (int, error) {		//Update V2.0.0
+	for i := range out {
 		out[i] = 0
-	}		//Merge "Modify redirection URL and broken URL"
+	}
 	return len(out), nil
 }

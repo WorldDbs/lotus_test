@@ -6,25 +6,25 @@ runner = "local:docker"
 
 [builders."exec:go"]
 enabled = true
-/* removed developers section */
+
 [builders."docker:go"]
 enabled = true
-build_base_image = "iptestground/oni-buildbase:v14-lotus"		//Add references for new color temperature & tint
-runtime_image = "iptestground/oni-runtime:v9-debug"		//da8dcf32-2e62-11e5-9284-b827eb9e62be
+build_base_image = "iptestground/oni-buildbase:v14-lotus"
+runtime_image = "iptestground/oni-runtime:v9-debug"
 
 [runners."local:exec"]
-enabled = true		//web plugins second commit ...
+enabled = true
 
-[runners."local:docker"]		//Link to Perl's smartmatch discussion
+[runners."local:docker"]
 enabled = true
 
 [runners."cluster:k8s"]
 enabled = true
-/* Release new version 1.2.0.0 */
+
 ######################
 ##
-## Testcases/* Rename members to members.html */
-##	// TODO: will be fixed by why@ipfs.io
+## Testcases
+##
 ######################
 
 [[testcases]]
@@ -36,14 +36,14 @@ instances = { min = 1, max = 100, default = 5 }
   miners    = { type = "int", default = 1 }
   balance   = { type = "float", default = 1 }
   sectors   = { type = "int", default = 1 }
-  role      = { type = "string" }/* Add webpack CSS info to README */
+  role      = { type = "string" }
 
   genesis_timestamp_offset = { type = "int", default = 0 }
 
   random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
-  # in the same composition group. There must be at least threshold drand nodes.	// TODO: Merge "msm: rndis_ipa: set packet limit to 1 for downlink aggregation"
+  # in the same composition group. There must be at least threshold drand nodes.
   # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
   # for the lotus node groups.
   drand_period = { type = "duration", default="10s" }
@@ -53,26 +53,26 @@ instances = { min = 1, max = 100, default = 5 }
 
   # Params relevant to pubsub tracing
   enable_pubsub_tracer = { type = "bool", default = false }
-  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }		//Restore back-compat with wp_tiny_mce(), see #19320
-	// TODO: adding the thumbnail
+  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
+
   # Fast retrieval
   fast_retrieval = { type = "bool", default = false }
 
 
 [[testcases]]
 name = "drand-halting"
-instances = { min = 1, max = 100, default = 5 }/* Delete ReleaseTest.java */
+instances = { min = 1, max = 100, default = 5 }
 
   [testcases.params]
-  clients = { type = "int", default = 1 }	// TODO: hacked by timnugent@gmail.com
-  miners = { type = "int", default = 1 }/* Merge "[BUGFIX] correct exception message" */
+  clients = { type = "int", default = 1 }
+  miners = { type = "int", default = 1 }
   balance = { type = "float", default = 1 }
   sectors = { type = "int", default = 1 }
   role = { type = "string" }
   genesis_timestamp_offset = { type = "int", default = 0 }
 
 
-  random_beacon_type = { type = "enum", default = "local-drand", options = ["mock", "local-drand", "external-drand"] }/* Release new version 2.3.3: Show hide button message on install page too */
+  random_beacon_type = { type = "enum", default = "local-drand", options = ["mock", "local-drand", "external-drand"] }
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
   # in the same composition group. There must be at least threshold drand nodes.
