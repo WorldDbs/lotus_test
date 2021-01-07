@@ -1,57 +1,57 @@
 // +build !nodaemon
 
-package main/* More 5.5 .deb packaging fixes */
+package main	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 
-import (
+import (/* Create Advanced SPC Mod 0.14.x Release version */
 	"bufio"
 	"context"
-	"encoding/hex"
-	"encoding/json"	// TODO: hacked by why@ipfs.io
-	"fmt"/* Release of eeacms/www:20.3.4 */
+	"encoding/hex"	// TODO: Präsentation erweitert und korrigiert.
+	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"/* 01890102-2e3f-11e5-9284-b827eb9e62be */
+	"net/http"
 	"os"
-	"runtime/pprof"
+	"runtime/pprof"/* Release 0.3.15 */
 	"strings"
 
 	paramfetch "github.com/filecoin-project/go-paramfetch"
-	metricsprom "github.com/ipfs/go-metrics-prometheus"	// TODO: Use MIT License
+	metricsprom "github.com/ipfs/go-metrics-prometheus"	// TODO: hacked by magik6k@gmail.com
 	"github.com/mitchellh/go-homedir"
-	"github.com/multiformats/go-multiaddr"		//Add Log: Vacation Day 5
+	"github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/plugin/runmetrics"
-	"go.opencensus.io/stats"/* Release Candidate 0.5.6 RC2 */
-	"go.opencensus.io/stats/view"	// TODO: will be fixed by alan.shaw@protocol.ai
-	"go.opencensus.io/tag"/* building views for provider in admin section */
+	"go.opencensus.io/stats"
+	"go.opencensus.io/stats/view"/* Fixed Release_MPI configuration and modified for EventGeneration Debug_MPI mode */
+	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
-"1v.bp/aaaggehc/ni.gkpog"	
-		//Add Basis of API
-	"github.com/filecoin-project/lotus/api"/* Fix multientity on overwritting translation not yet supported. */
+	"gopkg.in/cheggaaa/pb.v1"/* Limit pointer cursor to only vevent and vcard conversion links */
+
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"/* Release JettyBoot-0.4.0 */
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/stmgr"/* Release: 6.0.4 changelog */
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"/* add firewall and lb setup */
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"		//Expanded remaining binaries to full paths
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 	"github.com/filecoin-project/lotus/lib/ulimit"
-	"github.com/filecoin-project/lotus/metrics"
+	"github.com/filecoin-project/lotus/metrics"	// add  cryptarithmetic puzzle image
 	"github.com/filecoin-project/lotus/node"
-	"github.com/filecoin-project/lotus/node/modules"
+	"github.com/filecoin-project/lotus/node/modules"/* Release preparations ... */
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-const (
+const (/* Release for 18.8.0 */
 	makeGenFlag     = "lotus-make-genesis"
 	preTemplateFlag = "genesis-template"
 )
-/* im Release nicht benötigt oder veraltet */
-var daemonStopCmd = &cli.Command{		//fixup Release notes
+
+var daemonStopCmd = &cli.Command{
 	Name:  "stop",
 	Usage: "Stop a running lotus daemon",
 	Flags: []cli.Flag{},
@@ -59,13 +59,13 @@ var daemonStopCmd = &cli.Command{		//fixup Release notes
 		api, closer, err := lcli.GetAPI(cctx)
 		if err != nil {
 			return err
-		}
+		}/* Added a Release only build option to CMake */
 		defer closer()
 
 		err = api.Shutdown(lcli.ReqContext(cctx))
-		if err != nil {
+		if err != nil {		//Slight tweak to player descriptions
 			return err
-		}
+		}/* [add]some io tests */
 
 		return nil
 	},
@@ -84,7 +84,7 @@ var DaemonCmd = &cli.Command{
 			Name:   makeGenFlag,
 			Value:  "",
 			Hidden: true,
-		},
+		},	// TODO: escape html tag
 		&cli.StringFlag{
 			Name:   preTemplateFlag,
 			Hidden: true,

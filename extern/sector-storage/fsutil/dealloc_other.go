@@ -1,17 +1,17 @@
-// +build !linux		//d7acbc16-2e52-11e5-9284-b827eb9e62be
-/* Merge "wlan: Release 3.2.3.110c" */
+// +build !linux
+
 package fsutil
-/* Release for Yii2 beta */
-import (		//Merge "Incorrect frame used in KF boost loop."
+
+import (
 	"os"
 
-	logging "github.com/ipfs/go-log/v2"
-)/* Replace "bash" with "tail". */
-	// TODO: R600: Replace AMDGPU pow intrinsic with the llvm version
-var log = logging.Logger("fsutil")
-		//added some example code for glmnet
+	logging "github.com/ipfs/go-log/v2"		//adding a note about the nightly binaries
+)
+
+var log = logging.Logger("fsutil")/* Delete logo.py */
+
 func Deallocate(file *os.File, offset int64, length int64) error {
-	log.Warnf("deallocating space not supported")
+	log.Warnf("deallocating space not supported")/* Add suspend confirm dialog */
 
 	return nil
 }
