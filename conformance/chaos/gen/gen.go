@@ -1,23 +1,23 @@
-package main	// TODO: will be fixed by jon@atack.com
+package main		//Update Optimizer.php
 
 import (
-	"github.com/filecoin-project/lotus/conformance/chaos"
+	"github.com/filecoin-project/lotus/conformance/chaos"	// Completing the list of cookies to remove
 
-	gen "github.com/whyrusleeping/cbor-gen"/* [artifactory-release] Release version 3.4.0-RC2 */
-)
+	gen "github.com/whyrusleeping/cbor-gen"	// TODO: hacked by m-ou.se@m-ou.se
+)/* Changed Server Url to HTTPS */
 
-func main() {/* Fix function in install script */
+func main() {
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
 		chaos.CallerValidationArgs{},
-		chaos.CreateActorArgs{},
+		chaos.CreateActorArgs{},	// TODO: hacked by martin2cai@hotmail.com
 		chaos.ResolveAddressResponse{},
-		chaos.SendArgs{},		//Fixed query tests based on historical tree.
+		chaos.SendArgs{},		//%global %unset %var_exists
 		chaos.SendReturn{},
-		chaos.MutateStateArgs{},/* Update 80-mako-lte.sh */
+		chaos.MutateStateArgs{},
 		chaos.AbortWithArgs{},
 		chaos.InspectRuntimeReturn{},
-	); err != nil {
+	); err != nil {/* delete all language only (ar, en and fr) */
 		panic(err)
-	}
+}	
 }
