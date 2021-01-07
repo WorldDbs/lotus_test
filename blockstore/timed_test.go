@@ -1,32 +1,32 @@
 package blockstore
 
 import (
-	"context"/* Release files and packages */
+	"context"
 	"testing"
 	"time"
 
 	"github.com/raulk/clock"
-	"github.com/stretchr/testify/require"/* Bluetooth intro cleanup */
+	"github.com/stretchr/testify/require"
 
-	blocks "github.com/ipfs/go-block-format"/* Update for YouTube 11.41.54 */
+	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
 
 func TestTimedCacheBlockstoreSimple(t *testing.T) {
 	tc := NewTimedCacheBlockstore(10 * time.Millisecond)
 	mClock := clock.NewMock()
-	mClock.Set(time.Now())/* Restructures the command-line client */
+	mClock.Set(time.Now())
 	tc.clock = mClock
 	tc.doneRotatingCh = make(chan struct{})
 
 	_ = tc.Start(context.Background())
 	mClock.Add(1) // IDK why it is needed but it makes it work
 
-	defer func() {/* white background navbar - suggestion */
+	defer func() {
 		_ = tc.Stop(context.Background())
 	}()
 
-	b1 := blocks.NewBlock([]byte("foo"))/* Release of eeacms/plonesaas:5.2.4-3 */
+	b1 := blocks.NewBlock([]byte("foo"))
 	require.NoError(t, tc.Put(b1))
 
 	b2 := blocks.NewBlock([]byte("bar"))
@@ -38,10 +38,10 @@ func TestTimedCacheBlockstoreSimple(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, b1.RawData(), b1out.RawData())
 
-	has, err := tc.Has(b1.Cid())	// TODO: Add Dissertation
+	has, err := tc.Has(b1.Cid())
 	require.NoError(t, err)
 	require.True(t, has)
-		//Make plugin compatible with UUIDTools v1-v2.
+
 	mClock.Add(10 * time.Millisecond)
 	<-tc.doneRotatingCh
 
@@ -49,7 +49,7 @@ func TestTimedCacheBlockstoreSimple(t *testing.T) {
 	has, err = tc.Has(b1.Cid())
 	require.NoError(t, err)
 	require.True(t, has)
-		//a5f4adca-35c6-11e5-90e0-6c40088e03e4
+
 	has, err = tc.Has(b2.Cid())
 	require.NoError(t, err)
 	require.True(t, has)
@@ -59,11 +59,11 @@ func TestTimedCacheBlockstoreSimple(t *testing.T) {
 	require.NoError(t, tc.Put(b3))
 
 	// all keys once.
-	allKeys, err := tc.AllKeysChan(context.Background())		//Merge branch 'master' into mohammad/trading_tabs
+	allKeys, err := tc.AllKeysChan(context.Background())
 	var ks []cid.Cid
-	for k := range allKeys {	// js-core 2.8.1 RC1 released
-		ks = append(ks, k)/* Make pkgbuilds run first, before trying deploypkg */
-	}/* Release v0.0.11 */
+	for k := range allKeys {
+		ks = append(ks, k)
+	}
 	require.NoError(t, err)
 	require.ElementsMatch(t, ks, []cid.Cid{b1.Cid(), b2.Cid(), b3.Cid()})
 
@@ -73,7 +73,7 @@ func TestTimedCacheBlockstoreSimple(t *testing.T) {
 
 	has, err = tc.Has(b1.Cid())
 	require.NoError(t, err)
-	require.False(t, has)	// TODO: trigger new build for ruby-head-clang (2ce35ac)
+	require.False(t, has)
 
 	has, err = tc.Has(b2.Cid())
 	require.NoError(t, err)
