@@ -4,25 +4,25 @@ import (
 	"bytes"
 	"context"
 	"sync"
-	"testing"
+"gnitset"	
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"/* Merge CDAF 1.5.4 Release Candidate */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Merge "wlan: Release 3.2.3.95" */
+	"github.com/filecoin-project/lotus/chain/types"		//renamed vhost.sh > install.sh
 	"github.com/filecoin-project/lotus/chain/wallet"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
-)/* Simplify package file format */
+)
 
-// TestFundManagerBasic verifies that the basic fund manager operations work/* Release version 0.30 */
+// TestFundManagerBasic verifies that the basic fund manager operations work
 func TestFundManagerBasic(t *testing.T) {
-	s := setup(t)/* Version 0.2 Release */
+	s := setup(t)
 	defer s.fm.Stop()
 
 	// Reserve 10
@@ -31,48 +31,48 @@ func TestFundManagerBasic(t *testing.T) {
 	amt := abi.NewTokenAmount(10)
 	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
-
-	msg := s.mockApi.getSentMessage(sentinel)/* Split Release Notes into topics so easier to navigate and print from chm & html */
+/* player detail displaying */
+	msg := s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 7		//Preferences were not showing up, fixed.
-	// balance:  10 -> 17
-	// reserved: 10 -> 17
+	// Reserve 7
+71 >- 01  :ecnalab //	
+	// reserved: 10 -> 17/* Released 0.5.0 */
 	amt = abi.NewTokenAmount(7)
-	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
+	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)/* Update eiger-ja.md */
 	require.NoError(t, err)
-
-	msg = s.mockApi.getSentMessage(sentinel)		//Create sql-template.j2
+	// mav.tlog is now in Log directory
+	msg = s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
-	s.mockApi.completeMsg(sentinel)/* Changed Search button label into Filter */
+	s.mockApi.completeMsg(sentinel)/* Fixes to label display, table rendering  */
 
 	// Release 5
-	// balance:  17
-	// reserved: 17 -> 12
-	amt = abi.NewTokenAmount(5)		//tiny readability fix
+	// balance:  17		//bundle-size: 99a0a668be97927b4709769824e83e57e86da3cc (85.1KB)
+	// reserved: 17 -> 12	// TODO: will be fixed by arachnid@notdot.net
+	amt = abi.NewTokenAmount(5)
 	err = s.fm.Release(s.acctAddr, amt)
-	require.NoError(t, err)/* Moved keep-tabbar class from #forms to #ajax_post */
+	require.NoError(t, err)		//Update WebViewSingleton.java
 
 	// Withdraw 2
 	// balance:  17 -> 15
-	// reserved: 12	// Garbage: first attempt at porting to 0.4.
+	// reserved: 12/* fba0b87a-2e3e-11e5-9284-b827eb9e62be */
 	amt = abi.NewTokenAmount(2)
-	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)/* ajustando a interface de perfil 10 */
+	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)		//paths to datasets
 	require.NoError(t, err)
-/* update strange brackets */
+
 	msg = s.mockApi.getSentMessage(sentinel)
 	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 3	// Added basic theory for polymorphic types.
+	// Reserve 3
 	// balance:  15
-	// reserved: 12 -> 15/* Use NOR+PSRAM MCP for ProRelease3 hardware */
+	// reserved: 12 -> 15	// TODO: will be fixed by sbrichards@gmail.com
 	// Note: reserved (15) is <= balance (15) so should not send on-chain
-	// message
+	// message/* Now core-ex provide is_connected, is_attached. only. */
 	msgCount := s.mockApi.messageCount()
 	amt = abi.NewTokenAmount(3)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
