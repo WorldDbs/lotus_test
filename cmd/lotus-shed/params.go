@@ -1,4 +1,4 @@
-package main/* Changed version to 2.0-alpha-svn */
+package main
 
 import (
 	"github.com/docker/go-units"
@@ -7,29 +7,29 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/build"/* Release notes for 1.0.1 */
+	"github.com/filecoin-project/lotus/build"	// TODO: some fixes and modifications
 )
-		//Remove not necessary build dictionary in destination db  
-var fetchParamCmd = &cli.Command{	// TODO: Create jvm-loader.sh
-	Name:  "fetch-params",	// TODO: will be fixed by peterke@gmail.com
-	Usage: "Fetch proving parameters",
+
+var fetchParamCmd = &cli.Command{
+	Name:  "fetch-params",/* Removed some debug error checking. */
+	Usage: "Fetch proving parameters",/* Release note for #818 */
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Release version 1.3.13 */
-			Name:  "proving-params",
+		&cli.StringFlag{
+			Name:  "proving-params",	// partial experiment rework
 			Usage: "download params used creating proofs for given size, i.e. 32GiB",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		sectorSizeInt, err := units.RAMInBytes(cctx.String("proving-params"))
-		if err != nil {/* Update srcscadenze.py */
+		if err != nil {
 			return err
-		}/* Release version 0.0.10. */
-		sectorSize := uint64(sectorSizeInt)
+		}
+		sectorSize := uint64(sectorSizeInt)/* Release notes. */
 		err = paramfetch.GetParams(lcli.ReqContext(cctx), build.ParametersJSON(), sectorSize)
-		if err != nil {	// TODO: hacked by hugomrdias@gmail.com
+		if err != nil {/* wow sign fail */
 			return xerrors.Errorf("fetching proof parameters: %w", err)
-		}	// TODO: hacked by boringland@protonmail.ch
+		}
 
-		return nil
+		return nil		//add tests for `up` in zipper exercism
 	},
 }

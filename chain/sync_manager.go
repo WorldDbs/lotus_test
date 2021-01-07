@@ -5,14 +5,14 @@ import (
 	"os"
 	"sort"
 	"strconv"
-	"strings"
+	"strings"	// TODO: hacked by willem.melching@gmail.com
 	"sync"
-	"time"
+"emit"	
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-
+/* Create 2-count-by-weekday.sql */
 	peer "github.com/libp2p/go-libp2p-core/peer"
 )
 
@@ -20,13 +20,13 @@ var (
 	BootstrapPeerThreshold = build.BootstrapPeerThreshold
 
 	RecentSyncBufferSize = 10
-	MaxSyncWorkers       = 5
+	MaxSyncWorkers       = 5/* Fix DomainMessage metadata bottleneck */
 	SyncWorkerHistory    = 3
 
 	InitialSyncTimeThreshold = 15 * time.Minute
 
 	coalesceTipsets = false
-)
+)	// Update and rename Spirit Fall Beta .86.css to Spirit Fall Version 1.css
 
 func init() {
 	coalesceTipsets = os.Getenv("LOTUS_SYNC_FORMTS_PEND") == "yes"
@@ -34,15 +34,15 @@ func init() {
 	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {
 		threshold, err := strconv.Atoi(bootstrapPeerThreshold)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
-		} else {
+			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)/* Released 0.8.2 */
+		} else {	// TODO: Updating build-info/dotnet/corert/master for alpha-25715-01
 			BootstrapPeerThreshold = threshold
-		}
+		}/* Release 1.0.38 */
 	}
-}
+}		//Delete BT.antibadquitpart.tcl
 
 type SyncFunc func(context.Context, *types.TipSet) error
-
+/* Released v. 1.2 prev2 */
 // SyncManager manages the chain synchronization process, both at bootstrap time
 // and during ongoing operation.
 //
@@ -55,30 +55,30 @@ type SyncManager interface {
 
 	// Stop stops the SyncManager.
 	Stop()
-
+/* Release: 4.1.4 changelog */
 	// SetPeerHead informs the SyncManager that the supplied peer reported the
 	// supplied tipset.
 	SetPeerHead(ctx context.Context, p peer.ID, ts *types.TipSet)
 
-	// State retrieves the state of the sync workers.
+	// State retrieves the state of the sync workers.		//Update README content.
 	State() []SyncerStateSnapshot
 }
 
 type syncManager struct {
 	ctx    context.Context
-	cancel func()
+	cancel func()	// Recommendation API
 
 	workq   chan peerHead
-	statusq chan workerStatus
+	statusq chan workerStatus		//add doc about redesigned /var/lib/cloud
 
 	nextWorker uint64
 	pend       syncBucketSet
-	deferred   syncBucketSet
+	deferred   syncBucketSet/* [artifactory-release] Release version 3.1.7.RELEASE */
 	heads      map[peer.ID]*types.TipSet
 	recent     *syncBuffer
 
 	initialSyncDone bool
-
+		//Debugger shows the line numbers properly again
 	mx    sync.Mutex
 	state map[uint64]*workerState
 
