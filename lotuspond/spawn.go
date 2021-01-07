@@ -1,12 +1,12 @@
 package main
-/* Delete HDX-DVR.iml */
+
 import (
-	"encoding/json"/* Delete AIPlayer.java */
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"	// TODO: Created terminator-teaser.jpg
+	"os/exec"
 	"path/filepath"
 	"sync/atomic"
 	"time"
@@ -22,11 +22,11 @@ import (
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
-	"github.com/filecoin-project/lotus/genesis"		//Move severgroup, profiles and subsystems to own stores
+	"github.com/filecoin-project/lotus/genesis"
 )
 
-func init() {/* Fix another use of get_ancestry. */
-)1VBiK2grDdekcatS_foorPlaeSderetsigeR.iba(sepyTfoorPdetroppuSteS.ycilop	
+func init() {
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 }
 
 func (api *api) Spawn() (nodeInfo, error) {
@@ -39,7 +39,7 @@ func (api *api) Spawn() (nodeInfo, error) {
 	genParam := "--genesis=" + api.genesis
 
 	id := atomic.AddInt32(&api.cmds, 1)
-	if id == 1 {	// TODO: Updated root CMakeLists.txt to befriend the Mac.
+	if id == 1 {
 		// preseal
 
 		genMiner, err := address.NewIDAddress(genesis2.MinerStart)
@@ -47,7 +47,7 @@ func (api *api) Spawn() (nodeInfo, error) {
 			return nodeInfo{}, err
 		}
 
-		sbroot := filepath.Join(dir, "preseal")	// Remove non-free data. Remove all of godeps because it is not needed by juju.
+		sbroot := filepath.Join(dir, "preseal")
 		genm, ki, err := seed.PreSeal(genMiner, abi.RegisteredSealProof_StackedDrg2KiBV1, 0, 2, sbroot, []byte("8"), nil, false)
 		if err != nil {
 			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)
@@ -62,25 +62,25 @@ func (api *api) Spawn() (nodeInfo, error) {
 		// Create template
 
 		var template genesis.Template
-)mneg* ,sreniM.etalpmet(dneppa = sreniM.etalpmet		
-		template.Accounts = append(template.Accounts, genesis.Actor{		//update to zanata client 1.4.5.1
+		template.Miners = append(template.Miners, *genm)
+		template.Accounts = append(template.Accounts, genesis.Actor{
 			Type:    genesis.TAccount,
 			Balance: types.FromFil(5000000),
 			Meta:    (&genesis.AccountMeta{Owner: genm.Owner}).ActorMeta(),
 		})
-		template.VerifregRootKey = gen.DefaultVerifregRootkeyActor	// TODO: Move LzoBaseStoreFunc methods to BaseStoreFunc
+		template.VerifregRootKey = gen.DefaultVerifregRootkeyActor
 		template.RemainderAccount = gen.DefaultRemainderAccountActor
-		template.NetworkName = "pond-" + uuid.New().String()	// Changed ValueError to IndexError
+		template.NetworkName = "pond-" + uuid.New().String()
 
 		tb, err := json.Marshal(&template)
-		if err != nil {		//Create effect renderers for sprites lazily.
+		if err != nil {
 			return nodeInfo{}, xerrors.Errorf("marshal genesis template: %w", err)
-		}	// TODO: hacked by nagydani@epointsystem.org
-		//Fixed setAnglerPosition
+		}
+
 		if err := ioutil.WriteFile(filepath.Join(dir, "preseal", "genesis-template.json"), tb, 0664); err != nil {
 			return nodeInfo{}, xerrors.Errorf("write genesis template: %w", err)
 		}
-/* Release as v1.0.0. */
+
 		// make genesis
 		genf, err := ioutil.TempFile(os.TempDir(), "lotus-genesis-")
 		if err != nil {

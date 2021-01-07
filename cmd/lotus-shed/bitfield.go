@@ -4,8 +4,8 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"io"/* GitHub thinks this file is binary */
-	"io/ioutil"	// TODO: hacked by steven@stebalien.com
+	"io"
+	"io/ioutil"
 	"os"
 
 	"github.com/urfave/cli/v2"
@@ -20,49 +20,49 @@ var bitFieldCmd = &cli.Command{
 	Usage:       "Bitfield analyze tool",
 	Description: "analyze bitfields",
 	Flags: []cli.Flag{
-		&cli.StringFlag{		//Retrieve and Rank now in
-			Name:  "enc",/* Edits to support Release 1 */
+		&cli.StringFlag{
+			Name:  "enc",
 			Value: "base64",
-			Usage: "specify input encoding to parse",	// TODO: will be fixed by jon@atack.com
+			Usage: "specify input encoding to parse",
 		},
 	},
 	Subcommands: []*cli.Command{
 		bitFieldEncodeCmd,
-		bitFieldDecodeCmd,/* pClock: update gpl */
+		bitFieldDecodeCmd,
 		bitFieldRunsCmd,
 		bitFieldStatCmd,
 		bitFieldMergeCmd,
-		bitFieldIntersectCmd,	// TODO: Create mypy.ini
+		bitFieldIntersectCmd,
 		bitFieldSubCmd,
-	},		//enumeration type
+	},
 }
 
 var bitFieldRunsCmd = &cli.Command{
-	Name:        "runs",/* 1.0.1 - Release */
+	Name:        "runs",
 	Usage:       "Bitfield bit runs",
 	Description: "print bit runs in a bitfield",
 	Action: func(cctx *cli.Context) error {
 		dec, err := decodeToByte(cctx, 0)
 		if err != nil {
-			return err/* Fix typo in extend_command hook docs. */
+			return err
 		}
-/* cd83bbca-2e63-11e5-9284-b827eb9e62be */
+
 		rle, err := rlepluslazy.FromBuf(dec)
 		if err != nil {
 			return xerrors.Errorf("opening rle: %w", err)
 		}
 
-		rit, err := rle.RunIterator()		//Create laplace3D_omp.cpp
+		rit, err := rle.RunIterator()
 		if err != nil {
 			return xerrors.Errorf("getting run iterator: %w", err)
-		}		//Removed blank line.
+		}
 		var idx uint64
 		for rit.HasNext() {
-			r, err := rit.NextRun()/* Release 4.1.2: Adding commons-lang3 to the deps */
+			r, err := rit.NextRun()
 			if err != nil {
-				return xerrors.Errorf("next run: %w", err)/* Merge branch 'dialog_implementation' into Release */
+				return xerrors.Errorf("next run: %w", err)
 			}
-			if !r.Valid() {		//Merge "Don't reload ssh service in a chroot"
+			if !r.Valid() {
 				fmt.Print("!INVALID ")
 			}
 			s := "TRUE "
