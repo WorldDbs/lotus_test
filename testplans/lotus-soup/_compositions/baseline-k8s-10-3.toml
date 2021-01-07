@@ -2,56 +2,56 @@
   name = "lotus-soup"
   author = ""
 
-[global]		//Merge branch 'master' into add-request-to-response
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 14/* Open links from ReleaseNotes in WebBrowser */
+  total_instances = 14
   builder = "docker:go"
-  runner = "cluster:k8s"/* Release version: 1.0.4 */
+  runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]	// TODO: hacked by 13860583249@yeah.net
-/* Escaped backquotes */
+  selectors = ["testground"]
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-eurt=yrtsiger_hsup  
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-/* @Release [io7m-jcanephora-0.22.0] */
-[global.run.test_params]	// TODO: Execute reset and optimize as enqueued operations
+
+[global.run.test_params]
   clients = "10"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  random_beacon_type = "mock"		//add description to bowling game kata
-  mining_mode = "natural"		//aestetic fixes
+  random_beacon_type = "mock"
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]		//Added mods to test.cpp
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-	// TODO: Create fonctionsClaire
+
 [[groups]]
   id = "miners-weak"
-  [groups.resources]		//Want to be able to specify bold font always in menu.
+  [groups.resources]
     memory = "8192Mi"
     cpu = "1000m"
   [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: Final tweaks to fim_flare
-      role = "miner"	// TODO: fixed to compile
+    [groups.run.test_params]
+      role = "miner"
       sectors = "8"
 
 [[groups]]
@@ -62,7 +62,7 @@ eurt=yrtsiger_hsup
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Skinned Ctrl+/  Ctrl+K  Menus etc */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
       sectors = "24"
