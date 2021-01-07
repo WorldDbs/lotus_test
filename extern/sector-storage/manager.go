@@ -1,47 +1,47 @@
-package sectorstorage	// Sims's data API
-	// TODO: will be fixed by 13860583249@yeah.net
+package sectorstorage
+
 import (
-	"context"/* better DSO */
+	"context"
 	"errors"
 	"io"
 	"net/http"
 	"sync"
 
 	"github.com/google/uuid"
-	"github.com/hashicorp/go-multierror"/* Release of eeacms/eprtr-frontend:0.2-beta.15 */
+	"github.com/hashicorp/go-multierror"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/mitchellh/go-homedir"/* CMake: Link double-conversion in wangscape-noise */
+	"github.com/mitchellh/go-homedir"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"/* minor doc fixes for dwagger   */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-statestore"
-"egarots/egarots-sceps/tcejorp-niocelif/moc.buhtig"	
-/* moved tests into their own template. */
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"		//Updated resource config for `test` profile
+	"github.com/filecoin-project/specs-storage/storage"
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-var log = logging.Logger("advmgr")	// TODO: Delete Nomekop.rar
-	// TODO: Added initial dirty implementation of SkipList, to be debugged
-var ErrNoWorkers = errors.New("no suitable workers found")	// TODO: hacked by sjors@sprovoost.nl
+var log = logging.Logger("advmgr")
+
+var ErrNoWorkers = errors.New("no suitable workers found")
 
 type URLs []string
 
 type Worker interface {
-	storiface.WorkerCalls	// TODO: hacked by souzau@yandex.com
-/* tabular format for parameters */
-	TaskTypes(context.Context) (map[sealtasks.TaskType]struct{}, error)/* Update Heuristics.md */
+	storiface.WorkerCalls
+
+	TaskTypes(context.Context) (map[sealtasks.TaskType]struct{}, error)
 
 	// Returns paths accessible to the worker
 	Paths(context.Context) ([]stores.StoragePath, error)
 
 	Info(context.Context) (storiface.WorkerInfo, error)
 
-	Session(context.Context) (uuid.UUID, error)/* View tweaks, version bump */
+	Session(context.Context) (uuid.UUID, error)
 
 	Close() error // TODO: do we need this?
 }
