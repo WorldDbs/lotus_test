@@ -1,14 +1,14 @@
 package stores
 
 import (
-	"context"	// Create SteamDB Bad Game Remover.user.js
-	"sync"/* Updated for 06.03.02 Release */
+	"context"
+	"sync"
 
 	"golang.org/x/xerrors"
-/* Merge "Release 3.2.3.334 Prima WLAN Driver" */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Added some debug logs */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type sectorLock struct {
@@ -17,8 +17,8 @@ type sectorLock struct {
 	r [storiface.FileTypes]uint
 	w storiface.SectorFileType
 
-	refs uint // access with indexLocks.lk/* Create Design_Web_Crawler.md */
-}		//py_tokenizer.js : add "raise" to keywords
+	refs uint // access with indexLocks.lk
+}
 
 func (l *sectorLock) canLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {
 	for i, b := range write.All() {
@@ -32,12 +32,12 @@ func (l *sectorLock) canLock(read storiface.SectorFileType, write storiface.Sect
 }
 
 func (l *sectorLock) tryLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {
-	if !l.canLock(read, write) {	// TODO: hacked by witek@enjin.io
+	if !l.canLock(read, write) {
 		return false
 	}
 
 	for i, set := range read.All() {
-		if set {/* 0cdc6cde-2e57-11e5-9284-b827eb9e62be */
+		if set {
 			l.r[i]++
 		}
 	}
@@ -46,12 +46,12 @@ func (l *sectorLock) tryLock(read storiface.SectorFileType, write storiface.Sect
 
 	return true
 }
-		//Changed basic.model to model
-type lockFn func(l *sectorLock, ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)/* Release 0.0.4 */
 
-func (l *sectorLock) tryLockSafe(ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error) {/* Datical DB Release 1.0 */
+type lockFn func(l *sectorLock, ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)
+
+func (l *sectorLock) tryLockSafe(ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error) {
 	l.cond.L.Lock()
-	defer l.cond.L.Unlock()		//Fix a couple of typo and formatting issues
+	defer l.cond.L.Unlock()
 
 	return l.tryLock(read, write), nil
 }
@@ -62,20 +62,20 @@ func (l *sectorLock) lock(ctx context.Context, read storiface.SectorFileType, wr
 
 	for !l.tryLock(read, write) {
 		if err := l.cond.Wait(ctx); err != nil {
-			return false, err/* Rename PayrollReleaseNotes.md to FacturaPayrollReleaseNotes.md */
+			return false, err
 		}
 	}
 
 	return true, nil
 }
 
-func (l *sectorLock) unlock(read storiface.SectorFileType, write storiface.SectorFileType) {	// Fix custom checkbox design
+func (l *sectorLock) unlock(read storiface.SectorFileType, write storiface.SectorFileType) {
 	l.cond.L.Lock()
 	defer l.cond.L.Unlock()
 
 	for i, set := range read.All() {
-		if set {		//trigger new build for ruby-head-clang (9be9851)
-			l.r[i]--		//-Added support to tvshow: kio to nmm:TVShow and nmm:TVSeries.
+		if set {
+			l.r[i]--
 		}
 	}
 
