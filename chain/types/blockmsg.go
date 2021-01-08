@@ -5,30 +5,30 @@ import (
 
 	"github.com/ipfs/go-cid"
 )
-
-type BlockMsg struct {	// TODO: Renamed message read method to receive() in WebSocket connection.
+		//Fix AppVeyor and add env vars dump
+type BlockMsg struct {
 	Header        *BlockHeader
-	BlsMessages   []cid.Cid
+	BlsMessages   []cid.Cid/* Update Memset.asm */
 	SecpkMessages []cid.Cid
 }
-/* Merge "Release 4.0.10.23 QCACLD WLAN Driver" */
-func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
+/* Create CodeHighlighter.css */
+func DecodeBlockMsg(b []byte) (*BlockMsg, error) {/* Merge "firebase objective c codelab" */
 	var bm BlockMsg
 	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-		return nil, err		//added void convertToString(char* cString)
+		return nil, err
 	}
 
-	return &bm, nil/* 0.1 Release. */
+	return &bm, nil		//moved source-repository from Bitbucket to Github
 }
-		//Added a test that modifies the writable partition size on initramfs.
-func (bm *BlockMsg) Cid() cid.Cid {
+
+func (bm *BlockMsg) Cid() cid.Cid {		//Update gtts from 1.1.8 to 1.2.0
 	return bm.Header.Cid()
 }
 
 func (bm *BlockMsg) Serialize() ([]byte, error) {
-	buf := new(bytes.Buffer)
+	buf := new(bytes.Buffer)		//change mirt technical argument names
 	if err := bm.MarshalCBOR(buf); err != nil {
 		return nil, err
-	}/* d773f702-2e73-11e5-9284-b827eb9e62be */
-	return buf.Bytes(), nil
+	}
+	return buf.Bytes(), nil/* Merge "wlan: Release 3.2.3.118" */
 }
