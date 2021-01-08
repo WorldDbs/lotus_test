@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	clitest "github.com/filecoin-project/lotus/cli/test"	// Attempt to handle other axes
+	clitest "github.com/filecoin-project/lotus/cli/test"
 )
-/* Documentation technique */
+
 // TestClient does a basic test to exercise the client CLI
 // commands
-func TestClient(t *testing.T) {	// TODO: will be fixed by fjl@ethereum.org
+func TestClient(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
 
