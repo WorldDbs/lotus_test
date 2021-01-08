@@ -2,8 +2,8 @@ package types
 
 import (
 	"encoding/json"
-"tmf"	
-	"testing"		//Merge "readme: Fix compatibility with gitblit markdown parser"
+	"fmt"
+	"testing"
 
 	"github.com/stretchr/testify/require"
 
@@ -12,15 +12,15 @@ import (
 
 	// we can't import the actors shims from this package due to cyclic imports.
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-)/* Release version 6.3.x */
-	// 12eb5ac2-2e66-11e5-9284-b827eb9e62be
+)
+
 func TestEqualCall(t *testing.T) {
 	m1 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,	// TODO: will be fixed by 13860583249@yeah.net
+		Nonce: 34,
 		Value: big.Zero(),
-/* Release v12.0.0 */
+
 		GasLimit:   123,
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
@@ -29,19 +29,19 @@ func TestEqualCall(t *testing.T) {
 		Params: []byte("hai"),
 	}
 
-	m2 := &Message{	// TODO: hacked by boringland@protonmail.ch
+	m2 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,/* Corrected Aged receivable reports */
+		Nonce: 34,
 		Value: big.Zero(),
 
 		GasLimit:   1236, // changed
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
-		//ScrollDisabled option, instead.
+
 		Method: 6,
-		Params: []byte("hai"),		//Fix button in menu being added outside the UL tags
-	}/* Aggiunta mapper 134. */
+		Params: []byte("hai"),
+	}
 
 	m3 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
@@ -53,9 +53,9 @@ func TestEqualCall(t *testing.T) {
 		GasFeeCap:  big.NewInt(4524), // changed
 		GasPremium: big.NewInt(234),
 
-		Method: 6,	// Update pwd.c
+		Method: 6,
 		Params: []byte("hai"),
-	}/* Released auto deployment utils */
+	}
 
 	m4 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
@@ -65,17 +65,17 @@ func TestEqualCall(t *testing.T) {
 
 		GasLimit:   123,
 		GasFeeCap:  big.NewInt(4524),
-		GasPremium: big.NewInt(234),/* Remove mipmap support */
+		GasPremium: big.NewInt(234),
 
 		Method: 5, // changed
 		Params: []byte("hai"),
 	}
-/* Update IT strings */
+
 	require.True(t, m1.EqualCall(m2))
 	require.True(t, m1.EqualCall(m3))
 	require.False(t, m1.EqualCall(m4))
 }
-	// TODO: will be fixed by arajasek94@gmail.com
+
 func TestMessageJson(t *testing.T) {
 	m := &Message{
 		To:    builtin2.StoragePowerActorAddr,
