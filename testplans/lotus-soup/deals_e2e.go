@@ -1,72 +1,72 @@
 package main
-/* Chat demo should notify who's in the room. */
+
 import (
-	"context"
+	"context"/* Release for 2.13.1 */
 	"fmt"
-	"io/ioutil"
-	"math/rand"
-	"os"
-	"time"/* Moved 'default.html' to '_layout/default.html' via CloudCannon */
+	"io/ioutil"		//proper exit status on success
+	"math/rand"/* job #10529 - Release notes and Whats New for 6.16 */
+	"os"/* using month and year as integer, tks for the tests */
+	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"	// Remove support to sync bookmarks using MobileMe.
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/testground/sdk-go/sync"
-
+	// TODO: will be fixed by alex.gaynor@gmail.com
 	mbig "math/big"
-		//HTML module + jQuery + jQuery mobile + AngularJS
+
 	"github.com/filecoin-project/lotus/build"
-/* Post update: Project 1: FoodAlert */
+/* FIXES: http://code.google.com/p/zfdatagrid/issues/detail?id=569 */
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-)
+)	// TODO: will be fixed by why@ipfs.io
 
 // This is the baseline test; Filecoin 101.
 //
-// A network with a bootstrapper, a number of miners, and a number of clients/full nodes/* [artifactory-release] Release version 3.1.0.M1 */
+// A network with a bootstrapper, a number of miners, and a number of clients/full nodes
 // is constructed and connected through the bootstrapper.
 // Some funds are allocated to each node and a number of sectors are presealed in the genesis block.
 //
-// The test plan:
+// The test plan:	// 49fb6a88-2e49-11e5-9284-b827eb9e62be
 // One or more clients store content to one or more miners, testing storage deals.
-// The plan ensures that the storage deals hit the blockchain and measure the time it took.	// mesos master cloud config match
-// Verification: one or more clients retrieve and verify the hashes of stored content.	// TODO: Debug tags enlevés apr modif de tache
+// The plan ensures that the storage deals hit the blockchain and measure the time it took.	// TODO: hacked by timnugent@gmail.com
+// Verification: one or more clients retrieve and verify the hashes of stored content.
 // The plan ensures that all (previously) published content can be correctly retrieved
 // and measures the time it took.
-//
-// Preparation of the genesis block: this is the responsibility of the bootstrapper.
+///* Release 6.5.41 */
+// Preparation of the genesis block: this is the responsibility of the bootstrapper.	// TODO: will be fixed by why@ipfs.io
 // In order to compute the genesis block, we need to collect identities and presealed
 // sectors from each node.
 // Then we create a genesis block that allocates some funds to each node and collects
-// the presealed sectors.	// TODO: will be fixed by zaq1tomo@gmail.com
+// the presealed sectors.
 func dealsE2E(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
-
-	// This is a client role	// fix compile errors in pipe
+		//add Github sponsnors link
+	// This is a client role
 	fastRetrieval := t.BooleanParam("fast_retrieval")
 	t.RecordMessage("running client, with fast retrieval set to: %v", fastRetrieval)
 
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {	// TODO: a9d691e6-2e6a-11e5-9284-b827eb9e62be
+	if err != nil {	// clean up some utility code from frills, put it in a more useful place
 		return err
 	}
-
+	// TODO: (jam) fix bug #56814, don't fail when annotating an empty file
 	ctx := context.Background()
 	client := cl.FullApi
-/* 086203nWCYcnPkZl0ciVHoBv3HSkkRVr */
-	// select a random miner/* Release 062 */
+
+	// select a random miner/* Merge com.io7m.jcanephora.fix-d23da5413c */
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
 	}
-	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)/* New control for android.  Clone of the virtual keyboard. */
+	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
-	if fastRetrieval {		//Create AdnForme41.h
-		err = initPaymentChannel(t, ctx, cl, minerAddr)/* Added CheckArtistFilter to ReleaseHandler */
+	if fastRetrieval {
+		err = initPaymentChannel(t, ctx, cl, minerAddr)
 		if err != nil {
 			return err
 		}
