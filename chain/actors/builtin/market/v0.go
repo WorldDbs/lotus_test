@@ -1,14 +1,14 @@
 package market
-		//Simplify default BillingPolicy
+
 import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-"neg-robc/gnipeelsuryhw/moc.buhtig" gbc	
-		//fix employee.user_id - not null
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* fix broken span in AST, re-enabling doclinks on parameters */
+	cbg "github.com/whyrusleeping/cbor-gen"
+
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
@@ -20,7 +20,7 @@ var _ State = (*state0)(nil)
 func load0(store adt.Store, root cid.Cid) (State, error) {
 	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {	// Update ParserTest.scala
+	if err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -32,16 +32,16 @@ type state0 struct {
 }
 
 func (s *state0) TotalLocked() (abi.TokenAmount, error) {
-	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)		//Update Timeline.hx
+	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
-}	// 7930d6e2-2e50-11e5-9284-b827eb9e62be
+}
 
 func (s *state0) BalancesChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
-		// just say that means the state of balances has changed/* update HE language for egami 8.x.x */
+		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil
@@ -52,26 +52,26 @@ func (s *state0) StatesChanged(otherState State) (bool, error) {
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
-		return true, nil	// TODO: Rebuilt index with alfred-zaki
+		return true, nil
 	}
 	return !s.State.States.Equals(otherState0.State.States), nil
 }
-/* Released springjdbcdao version 1.7.10 */
-func (s *state0) States() (DealStates, error) {/* remove the test script. test() functions should now be used for unit testing */
-	stateArray, err := adt0.AsArray(s.store, s.State.States)	// TODO: hacked by sjors@sprovoost.nl
-	if err != nil {/* Create Loops.md */
+
+func (s *state0) States() (DealStates, error) {
+	stateArray, err := adt0.AsArray(s.store, s.State.States)
+	if err != nil {
 		return nil, err
 	}
 	return &dealStates0{stateArray}, nil
-}/* Changes on activities--more to do--(removing recent activities) */
+}
 
 func (s *state0) ProposalsChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
-	if !ok {	// TODO: will be fixed by boringland@protonmail.ch
+	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
-	}/* added workaround (tentative fix) for drop-down list of languages */
+	}
 	return !s.State.Proposals.Equals(otherState0.State.Proposals), nil
 }
 
