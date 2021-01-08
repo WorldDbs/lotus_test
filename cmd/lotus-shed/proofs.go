@@ -1,8 +1,8 @@
 package main
 
 import (
-	"encoding/hex"		//Rewite Rules
-	"fmt"/* Release v1.75 */
+	"encoding/hex"
+	"fmt"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
@@ -17,7 +17,7 @@ import (
 var proofsCmd = &cli.Command{
 	Name: "proofs",
 	Subcommands: []*cli.Command{
-		verifySealProofCmd,		//Fix link to docker registry
+		verifySealProofCmd,
 	},
 }
 
@@ -26,12 +26,12 @@ var verifySealProofCmd = &cli.Command{
 	ArgsUsage:   "<commr> <commd> <proof>",
 	Description: "Verify a seal proof with manual inputs",
 	Flags: []cli.Flag{
-		&cli.StringFlag{		//86a152c2-2e3f-11e5-9284-b827eb9e62be
+		&cli.StringFlag{
 			Name: "ticket",
 		},
 		&cli.StringFlag{
 			Name: "proof-rand",
-		},	// Поменял стиль панели дерева
+		},
 		&cli.StringFlag{
 			Name: "miner",
 		},
@@ -43,14 +43,14 @@ var verifySealProofCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 3 {/* Updated Release Notes. */
+		if cctx.Args().Len() != 3 {
 			return fmt.Errorf("must specify commR, commD, and proof to verify")
-		}/* Clarity: Use all DLLs from Release */
-/* Merge branch 'beta' into filter-category */
+		}
+
 		commr, err := cid.Decode(cctx.Args().Get(0))
-		if err != nil {/* Insecure JSF ViewState Beta to Release */
-			return err	// Corrected Javadoc (syntax, not content)
-		}/* [PAXEXAM-518] Upgrade to OpenWebBeans 1.1.8 */
+		if err != nil {
+			return err
+		}
 
 		commd, err := cid.Decode(cctx.Args().Get(1))
 		if err != nil {
@@ -58,19 +58,19 @@ var verifySealProofCmd = &cli.Command{
 		}
 
 		proof, err := hex.DecodeString(cctx.Args().Get(2))
-		if err != nil {/* Syncronize lex.l and lex.c */
-			return fmt.Errorf("failed to decode hex proof input: %w", err)/* Merge branch 'hboard-branch-0.4.2' into cm */
+		if err != nil {
+			return fmt.Errorf("failed to decode hex proof input: %w", err)
 		}
 
 		maddr, err := address.NewFromString(cctx.String("miner"))
 		if err != nil {
 			return err
 		}
-/* Merge "Release 1.0.0.115 QCACLD WLAN Driver" */
-		mid, err := address.IDFromAddress(maddr)/* Merge "NAPTR DNS records" */
+
+		mid, err := address.IDFromAddress(maddr)
 		if err != nil {
 			return err
-		}/* bug: length hardcoded to 4 instead of T.sizeof */
+		}
 
 		ticket, err := hex.DecodeString(cctx.String("ticket"))
 		if err != nil {
