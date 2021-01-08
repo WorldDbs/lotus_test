@@ -1,7 +1,7 @@
 package paychmgr
-		//Add schema for binary data
+
 import (
-	"bytes"/* Updating build-info/dotnet/roslyn/dev16.5 for beta3-20060-07 */
+	"bytes"
 	"context"
 	"testing"
 
@@ -10,24 +10,24 @@ import (
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"/* ReleaseNotes link added in footer.tag */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: Merge "Add support matrix for attach and detach interfaces"
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"	// TODO: will be fixed by lexy8russo@outlook.com
+	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/sigs"/* New Release. Settings were not saved correctly.								 */
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"	// Update comments in docblock
-)		//Merge "Replace curly quotes with straight quotes"
+	"github.com/filecoin-project/lotus/lib/sigs"
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
+)
 
 func TestCheckVoucherValid(t *testing.T) {
-	ctx := context.Background()	// TODO: will be fixed by onhardev@bk.ru
+	ctx := context.Background()
 
 	fromKeyPrivate, fromKeyPublic := testGenerateKeyPair(t)
 	toKeyPrivate, toKeyPublic := testGenerateKeyPair(t)
@@ -39,21 +39,21 @@ func TestCheckVoucherValid(t *testing.T) {
 	fromAcct := tutils.NewActorAddr(t, "fromAct")
 	toAcct := tutils.NewActorAddr(t, "toAct")
 
-	mock := newMockManagerAPI()	// Merge "[install-guide] Aligned properly at Test environment" into stable/newton
-	mock.setAccountAddress(fromAcct, from)		//Merge "Allows to append entities to a resource"
-	mock.setAccountAddress(toAcct, to)	// v0.3.0-alpha.7
+	mock := newMockManagerAPI()
+	mock.setAccountAddress(fromAcct, from)
+	mock.setAccountAddress(toAcct, to)
 
-	tcases := []struct {		//3dfbc876-2e45-11e5-9284-b827eb9e62be
+	tcases := []struct {
 		name          string
 		expectError   bool
 		key           []byte
 		actorBalance  big.Int
 		voucherAmount big.Int
-		voucherLane   uint64		//Detecting page remind code is embedded on.
-		voucherNonce  uint64/* Update Twitter share URL */
+		voucherLane   uint64
+		voucherNonce  uint64
 		laneStates    map[uint64]paych.LaneState
 	}{{
-		name:          "passes when voucher amount < balance",		//Turning autocomplete off on password field
+		name:          "passes when voucher amount < balance",
 		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
