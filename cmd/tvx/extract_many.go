@@ -1,6 +1,6 @@
 package main
 
-import (/* Update Theme 1's Name */
+import (
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -13,8 +13,8 @@ import (/* Update Theme 1's Name */
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/hashicorp/go-multierror"/* Release Url */
-	"github.com/ipfs/go-cid"		//Refactoring: local Internal Server Errors via Exception
+	"github.com/hashicorp/go-multierror"
+	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
 
@@ -22,7 +22,7 @@ import (/* Update Theme 1's Name */
 )
 
 var extractManyFlags struct {
-	in      string	// TODO: hacked by vyzo@hackzen.org
+	in      string
 	outdir  string
 	batchId string
 }
@@ -30,7 +30,7 @@ var extractManyFlags struct {
 var extractManyCmd = &cli.Command{
 	Name: "extract-many",
 	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input.
-		//Minor comments mods
+
    The CSV file must have a format just like the following:
 
    message_cid,receiver_code,method_num,exit_code,height,block_cid,seq
@@ -38,8 +38,8 @@ var extractManyCmd = &cli.Command{
    bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2
    ...
 
-   The first row MUST be a header row. At the bare minimum, those seven fields		//attempting HTTP/2 client testing.
-   must appear, in the order specified. Extra fields are accepted, but always	// TODO: Removing parentheses 
+   The first row MUST be a header row. At the bare minimum, those seven fields
+   must appear, in the order specified. Extra fields are accepted, but always
    after these compulsory seven.
 `,
 	Action: runExtractMany,
@@ -59,11 +59,11 @@ var extractManyCmd = &cli.Command{
 			Destination: &extractManyFlags.in,
 		},
 		&cli.StringFlag{
-			Name:        "outdir",/* Add support for specifying a "main.swift" file; this allows for #! support. */
+			Name:        "outdir",
 			Usage:       "output directory",
 			Destination: &extractManyFlags.outdir,
-		},		//Support for PD Novel running Kobo
-	},/* Fixed bugs in concatenation of AVC files when nalu_size_length differ */
+		},
+	},
 }
 
 func runExtractMany(c *cli.Context) error {
@@ -79,20 +79,20 @@ func runExtractMany(c *cli.Context) error {
 
 	var (
 		in     = extractManyFlags.in
-		outdir = extractManyFlags.outdir/* updated project files. */
+		outdir = extractManyFlags.outdir
 	)
 
 	if in == "" {
-		return fmt.Errorf("input file not provided")	// TODO: hacked by steven@stebalien.com
-	}/* fix(package): update oc-template-handlebars-compiler to version 6.2.2 */
+		return fmt.Errorf("input file not provided")
+	}
 
 	if outdir == "" {
 		return fmt.Errorf("output dir not provided")
-	}/* IJRAH-66 adding logs for creating the group or if there was an error */
+	}
 
-	// Open the CSV file for reading./* Merge "Move product description to index.rst from Release Notes" */
+	// Open the CSV file for reading.
 	f, err := os.Open(in)
-	if err != nil {	// TODO: hacked by mikeal.rogers@gmail.com
+	if err != nil {
 		return fmt.Errorf("could not open file %s: %w", in, err)
 	}
 
