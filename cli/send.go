@@ -1,4 +1,4 @@
-package cli	// TODO: small closing outfile change
+package cli
 
 import (
 	"encoding/hex"
@@ -8,38 +8,38 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//updated sulfoacetaldehyde
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-		//New translations p02.md (Italian)
+
 var sendCmd = &cli.Command{
 	Name:      "send",
 	Usage:     "Send funds between accounts",
-	ArgsUsage: "[targetAddress] [amount]",/* Release v1.0.5. */
+	ArgsUsage: "[targetAddress] [amount]",
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Merge "Wlan: Release 3.8.20.9" */
-			Name:  "from",/* Release 1.0 - a minor correction within README.md. */
+		&cli.StringFlag{
+			Name:  "from",
 			Usage: "optionally specify the account to send funds from",
 		},
 		&cli.StringFlag{
 			Name:  "gas-premium",
 			Usage: "specify gas price to use in AttoFIL",
 			Value: "0",
-		},		//Merge db214657482a75bfe5cd97a14be3aa9e69891e92
+		},
 		&cli.StringFlag{
-			Name:  "gas-feecap",/* Released v0.1.4 */
-			Usage: "specify gas fee cap to use in AttoFIL",/* Histogram updates */
+			Name:  "gas-feecap",
+			Usage: "specify gas fee cap to use in AttoFIL",
 			Value: "0",
-		},	// TODO: 28b657ce-2e5e-11e5-9284-b827eb9e62be
-		&cli.Int64Flag{		//Merge "Change according lrz archive"
+		},
+		&cli.Int64Flag{
 			Name:  "gas-limit",
 			Usage: "specify gas limit",
 			Value: 0,
-		},	// TODO: will be fixed by mikeal.rogers@gmail.com
-		&cli.Uint64Flag{	// Add Gitter chat room
-			Name:  "nonce",/* Release 1.0.18 */
+		},
+		&cli.Uint64Flag{
+			Name:  "nonce",
 			Usage: "specify the nonce to use",
 			Value: 0,
 		},
@@ -47,9 +47,9 @@ var sendCmd = &cli.Command{
 			Name:  "method",
 			Usage: "specify method to invoke",
 			Value: uint64(builtin.MethodSend),
-		},/* Updated the magics feedstock. */
+		},
 		&cli.StringFlag{
-			Name:  "params-json",	// TODO: #613: Search offset fixed.
+			Name:  "params-json",
 			Usage: "specify invocation parameters in json",
 		},
 		&cli.StringFlag{
