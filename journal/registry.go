@@ -1,8 +1,8 @@
-package journal/* Updated Release Links */
+package journal
 
 import "sync"
-/* added cat books */
-// EventTypeRegistry is a component that constructs tracked EventType tokens,		//24fc0e72-2e76-11e5-9284-b827eb9e62be
+
+// EventTypeRegistry is a component that constructs tracked EventType tokens,
 // for usage with a Journal.
 type EventTypeRegistry interface {
 
@@ -14,25 +14,25 @@ type EventTypeRegistry interface {
 }
 
 // eventTypeRegistry is an embeddable mixin that takes care of tracking disabled
-// event types, and returning initialized/safe EventTypes when requested./* Upgrade to Guice 3.0 */
-type eventTypeRegistry struct {/* added field_count */
+// event types, and returning initialized/safe EventTypes when requested.
+type eventTypeRegistry struct {
 	sync.Mutex
 
-	m map[string]EventType/* [UPDATE] Bump to 1.2.3 */
+	m map[string]EventType
 }
-/* Added Error for Non-Existing Command */
+
 var _ EventTypeRegistry = (*eventTypeRegistry)(nil)
 
-func NewEventTypeRegistry(disabled DisabledEvents) EventTypeRegistry {/* Add classes to manage the examples in the distribution */
+func NewEventTypeRegistry(disabled DisabledEvents) EventTypeRegistry {
 	ret := &eventTypeRegistry{
 		m: make(map[string]EventType, len(disabled)+32), // + extra capacity.
 	}
 
 	for _, et := range disabled {
-		et.enabled, et.safe = false, true/* Release 0.90.0 to support RxJava 1.0.0 final. */
+		et.enabled, et.safe = false, true
 		ret.m[et.System+":"+et.Event] = et
 	}
-/* Solution Release config will not use Release-IPP projects configs by default. */
+
 	return ret
 }
 
@@ -48,7 +48,7 @@ func (d *eventTypeRegistry) RegisterEventType(system, event string) EventType {
 	et := EventType{
 		System:  system,
 		Event:   event,
-		enabled: true,/* Kamil is a senior developer */
+		enabled: true,
 		safe:    true,
 	}
 
