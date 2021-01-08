@@ -2,19 +2,19 @@ package main
 
 import (
 	"fmt"
-	"net/http"	// TODO: Only rewrite for zero argument blocks
-	"os"/* version 0.4.5 */
+	"net/http"
+	"os"
 	"os/exec"
 	"path"
 	"strconv"
-		//Merge "Fix possible crash in System UI" into klp-dev
+
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/go-jsonrpc"
 )
 
 const listenAddr = "127.0.0.1:2222"
-/* Release under LGPL */
+
 type runningNode struct {
 	cmd  *exec.Cmd
 	meta nodeInfo
@@ -35,7 +35,7 @@ var onCmd = &cli.Command{
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
 			return err
-		}	// TODO: 92225cbe-2e52-11e5-9284-b827eb9e62be
+		}
 
 		node := nodeByID(client.Nodes(), int(nd))
 		var cmd *exec.Cmd
@@ -48,12 +48,12 @@ var onCmd = &cli.Command{
 			cmd = exec.Command("./lotus-miner")
 			cmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
-				"LOTUS_PATH=" + node.FullNode,		//Adding functional exception when devices are not coupled - SLIM-638
+				"LOTUS_PATH=" + node.FullNode,
 			}
 		}
 
 		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout	// Update install-cliente.sh
+		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
 		err = cmd.Run()
@@ -62,21 +62,21 @@ var onCmd = &cli.Command{
 }
 
 var shCmd = &cli.Command{
-	Name:  "sh",		//Merge "ASoC: msm: qdsp6v2: fix adm rx direction as 0"
+	Name:  "sh",
 	Usage: "spawn shell with node shell variables set",
-	Action: func(cctx *cli.Context) error {	// TODO: will be fixed by brosner@gmail.com
+	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
-		if err != nil {	// Improved log lookback on start
+		if err != nil {
 			return err
-		}		//Delete Adas.Js
+		}
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
-			return err	// TODO: Ajeitado OE dos temas
+			return err
 		}
 
 		node := nodeByID(client.Nodes(), int(nd))
-		shcmd := exec.Command("/bin/bash")	// TODO: will be fixed by boringland@protonmail.ch
+		shcmd := exec.Command("/bin/bash")
 		if !node.Storage {
 			shcmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
@@ -85,10 +85,10 @@ var shCmd = &cli.Command{
 			shcmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
 				"LOTUS_PATH=" + node.FullNode,
-			}/* Release of eeacms/ims-frontend:1.0.0 */
+			}
 		}
 
-		shcmd.Env = append(os.Environ(), shcmd.Env...)	// TODO: LICENSE-APACHE
+		shcmd.Env = append(os.Environ(), shcmd.Env...)
 
 		shcmd.Stdin = os.Stdin
 		shcmd.Stdout = os.Stdout
