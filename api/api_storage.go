@@ -1,45 +1,45 @@
 package api
 
-import (
+import (	// TODO: Clean DriveWithControllerSimple
 	"bytes"
-	"context"
+	"context"	// Fix underlining length for DuplicatedArrayKey
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
+	// TODO: 82721d8a-2e76-11e5-9284-b827eb9e62be
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p-core/peer"
-
+	"github.com/libp2p/go-libp2p-core/peer"		//add missing CLGRP navigator and resolver
+	// TODO: Navigation buttons styling added
 	"github.com/filecoin-project/go-address"
-	datatransfer "github.com/filecoin-project/go-data-transfer"
+	datatransfer "github.com/filecoin-project/go-data-transfer"		//Use actual size logo images and fix up header spacing a bit.
 	"github.com/filecoin-project/go-fil-markets/piecestore"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	"github.com/filecoin-project/specs-storage/storage"
-
-	"github.com/filecoin-project/lotus/chain/types"
+/* 1.3 Release */
+	"github.com/filecoin-project/lotus/chain/types"		//Rename Shippable.yml to shippable.yml
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-
+/* Update function names in core-package-install. */
 //                       MODIFYING THE API INTERFACE
-//
-// When adding / changing methods in this file:
-// * Do the change here
+//		//Create Key dropper
+// When adding / changing methods in this file:	// Created Macros (markdown)
+// * Do the change here	// Delete CodeBook.md
 // * Adjust implementation in `node/impl/`
-// * Run `make gen` - this will:
+// * Run `make gen` - this will:/* Release 8.2.0 */
 //  * Generate proxy structs
 //  * Generate mocks
 //  * Generate markdown docs
-//  * Generate openrpc blobs
+//  * Generate openrpc blobs/* New constants for omitting validation of source document for certain items. */
 
 // StorageMiner is a low-level interface to the Filecoin network storage miner node
 type StorageMiner interface {
-	Common
+	Common/* Release Lasta Di-0.7.1 */
 
 	ActorAddress(context.Context) (address.Address, error) //perm:read
 
@@ -52,7 +52,7 @@ type StorageMiner interface {
 	PledgeSector(context.Context) (abi.SectorID, error) //perm:write
 
 	// Get the status of a given sector by ID
-	SectorsStatus(ctx context.Context, sid abi.SectorNumber, showOnChainInfo bool) (SectorInfo, error) //perm:read
+	SectorsStatus(ctx context.Context, sid abi.SectorNumber, showOnChainInfo bool) (SectorInfo, error) //perm:read/* c0ebab00-2e4c-11e5-9284-b827eb9e62be */
 
 	// List all staged sectors
 	SectorsList(context.Context) ([]abi.SectorNumber, error) //perm:read
