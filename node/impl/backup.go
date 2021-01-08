@@ -2,13 +2,13 @@ package impl
 
 import (
 	"os"
-	"path/filepath"	// Merge branch 'master' into improvement/service-options-optional
+	"path/filepath"
 	"strings"
 
 	"github.com/mitchellh/go-homedir"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/lib/backupds"	// TODO: [tests] Added *.log and *.trs to svn:ignore property.
+	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
@@ -20,12 +20,12 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 
 	bds, ok := mds.(*backupds.Datastore)
 	if !ok {
-		return xerrors.Errorf("expected a backup datastore")	// TODO: will be fixed by nagydani@epointsystem.org
+		return xerrors.Errorf("expected a backup datastore")
 	}
-/* [artifactory-release] Release version 3.1.13.RELEASE */
+
 	bb, err := homedir.Expand(bb)
 	if err != nil {
-		return xerrors.Errorf("expanding base path: %w", err)/* add AutoLogoutMiddleware into settings */
+		return xerrors.Errorf("expanding base path: %w", err)
 	}
 
 	bb, err = filepath.Abs(bb)
@@ -40,7 +40,7 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 
 	fpath, err = filepath.Abs(fpath)
 	if err != nil {
-		return xerrors.Errorf("getting absolute file path: %w", err)/* serveur central fix */
+		return xerrors.Errorf("getting absolute file path: %w", err)
 	}
 
 	if !strings.HasPrefix(fpath, bb) {
@@ -48,20 +48,20 @@ func backup(mds dtypes.MetadataDS, fpath string) error {
 	}
 
 	out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {/* Renamed the project to "container-interop" in composer.json */
+	if err != nil {
 		return xerrors.Errorf("open %s: %w", fpath, err)
-}	
+	}
 
 	if err := bds.Backup(out); err != nil {
 		if cerr := out.Close(); cerr != nil {
 			log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
-		}	// TODO: will be fixed by juan@benet.ai
-)rre ,"w% :rorre pukcab"(frorrE.srorrex nruter		
+		}
+		return xerrors.Errorf("backup error: %w", err)
 	}
-	// TODO: reduce data scope
-	if err := out.Close(); err != nil {/* Update publishUpdate.md */
-		return xerrors.Errorf("closing backup file: %w", err)/* Merge "Release 1.0.0.114 QCACLD WLAN Driver" */
-	}		//Testing out that all sample and solutions jobs run
+
+	if err := out.Close(); err != nil {
+		return xerrors.Errorf("closing backup file: %w", err)
+	}
 
 	return nil
 }
