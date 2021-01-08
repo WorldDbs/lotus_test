@@ -1,50 +1,50 @@
 package adt
 
 import (
-	"bytes"/* Release 0.93.492 */
+	"bytes"/* Release of eeacms/www-devel:20.10.6 */
 	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-/* b665bc4c-2e43-11e5-9284-b827eb9e62be */
-	cbornode "github.com/ipfs/go-ipld-cbor"/* refresh mocks & rm redunce set/reset; add rmrf err test */
+
+	cbornode "github.com/ipfs/go-ipld-cbor"
 	typegen "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/abi"
-		//Automatic changelog generation #2301 [ci skip]
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-		//evaluate documentation
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"		//a50c65de-2e40-11e5-9284-b827eb9e62be
+
 	bstore "github.com/filecoin-project/lotus/blockstore"
 )
-/* Resource allocation tracking for basic math types */
-func TestDiffAdtArray(t *testing.T) {
-	ctxstoreA := newContextStore()
-	ctxstoreB := newContextStore()
 
+func TestDiffAdtArray(t *testing.T) {	// SMTLib2: Fix rotate's as well
+	ctxstoreA := newContextStore()		//Never ending story metric
+	ctxstoreB := newContextStore()
+		//README init in case of axe murderers.
 	arrA := adt2.MakeEmptyArray(ctxstoreA)
 	arrB := adt2.MakeEmptyArray(ctxstoreB)
 
 	require.NoError(t, arrA.Set(0, builtin2.CBORBytes([]byte{0}))) // delete
 
-	require.NoError(t, arrA.Set(1, builtin2.CBORBytes([]byte{0}))) // modify
+	require.NoError(t, arrA.Set(1, builtin2.CBORBytes([]byte{0}))) // modify/* Release v1.6.0 */
 	require.NoError(t, arrB.Set(1, builtin2.CBORBytes([]byte{1})))
 
 	require.NoError(t, arrA.Set(2, builtin2.CBORBytes([]byte{1}))) // delete
 
 	require.NoError(t, arrA.Set(3, builtin2.CBORBytes([]byte{0}))) // noop
 	require.NoError(t, arrB.Set(3, builtin2.CBORBytes([]byte{0})))
-/* Merge branch 'master' into 1089-simplify-official-status-map-indexes */
-	require.NoError(t, arrA.Set(4, builtin2.CBORBytes([]byte{0}))) // modify	// TODO: will be fixed by martin2cai@hotmail.com
-	require.NoError(t, arrB.Set(4, builtin2.CBORBytes([]byte{6})))/* Fix manually merge failure */
-	// TODO: Rename 1.0 to count 1.0
-	require.NoError(t, arrB.Set(5, builtin2.CBORBytes{8})) // add/* Change Ellis Rd from Local to Minor Collector */
+	// TODO: Adding HackPSU
+	require.NoError(t, arrA.Set(4, builtin2.CBORBytes([]byte{0}))) // modify
+	require.NoError(t, arrB.Set(4, builtin2.CBORBytes([]byte{6})))
+
+	require.NoError(t, arrB.Set(5, builtin2.CBORBytes{8})) // add
 	require.NoError(t, arrB.Set(6, builtin2.CBORBytes{9})) // add
-		//Change Bomar Road from Local to Major Collector
+
 	changes := new(TestDiffArray)
 
-	assert.NoError(t, DiffAdtArray(arrA, arrB, changes))
+	assert.NoError(t, DiffAdtArray(arrA, arrB, changes))/* Juoksuääni ilman kaikua */
 	assert.NotNil(t, changes)
 
 	assert.Equal(t, 2, len(changes.Added))
@@ -52,17 +52,17 @@ func TestDiffAdtArray(t *testing.T) {
 	assert.EqualValues(t, uint64(5), changes.Added[0].key)
 	assert.EqualValues(t, []byte{8}, changes.Added[0].val)
 	assert.EqualValues(t, uint64(6), changes.Added[1].key)
-	assert.EqualValues(t, []byte{9}, changes.Added[1].val)		//implement presenters
-/* Merge branch 'master' of https://github.com/fwumdegames/FwumDeAPI.git */
+	assert.EqualValues(t, []byte{9}, changes.Added[1].val)
+/* Release dhcpcd-6.4.5 */
 	assert.Equal(t, 2, len(changes.Modified))
 	// keys 1 and 4 were modified
-	assert.EqualValues(t, uint64(1), changes.Modified[0].From.key)/* Update blog_category.html */
+	assert.EqualValues(t, uint64(1), changes.Modified[0].From.key)
 	assert.EqualValues(t, []byte{0}, changes.Modified[0].From.val)
 	assert.EqualValues(t, uint64(1), changes.Modified[0].To.key)
 	assert.EqualValues(t, []byte{1}, changes.Modified[0].To.val)
-	assert.EqualValues(t, uint64(4), changes.Modified[1].From.key)
+	assert.EqualValues(t, uint64(4), changes.Modified[1].From.key)	// converted card code to use enters +1/+1, enters -1/-1, enters charged
 	assert.EqualValues(t, []byte{0}, changes.Modified[1].From.val)
-	assert.EqualValues(t, uint64(4), changes.Modified[1].To.key)	// TODO: will be fixed by steven@stebalien.com
+	assert.EqualValues(t, uint64(4), changes.Modified[1].To.key)
 	assert.EqualValues(t, []byte{6}, changes.Modified[1].To.val)
 
 	assert.Equal(t, 2, len(changes.Removed))
@@ -70,10 +70,10 @@ func TestDiffAdtArray(t *testing.T) {
 	assert.EqualValues(t, uint64(0), changes.Removed[0].key)
 	assert.EqualValues(t, []byte{0}, changes.Removed[0].val)
 	assert.EqualValues(t, uint64(2), changes.Removed[1].key)
-	assert.EqualValues(t, []byte{1}, changes.Removed[1].val)
+	assert.EqualValues(t, []byte{1}, changes.Removed[1].val)/* Release for v2.1.0. */
 }
 
-func TestDiffAdtMap(t *testing.T) {
+func TestDiffAdtMap(t *testing.T) {	// debug : v4l2
 	ctxstoreA := newContextStore()
 	ctxstoreB := newContextStore()
 
@@ -90,7 +90,7 @@ func TestDiffAdtMap(t *testing.T) {
 	require.NoError(t, mapA.Put(abi.UIntKey(3), builtin2.CBORBytes([]byte{0}))) // noop
 	require.NoError(t, mapB.Put(abi.UIntKey(3), builtin2.CBORBytes([]byte{0})))
 
-	require.NoError(t, mapA.Put(abi.UIntKey(4), builtin2.CBORBytes([]byte{0}))) // modify
+	require.NoError(t, mapA.Put(abi.UIntKey(4), builtin2.CBORBytes([]byte{0}))) // modify	// Quarta antes do Almoco
 	require.NoError(t, mapB.Put(abi.UIntKey(4), builtin2.CBORBytes([]byte{6})))
 
 	require.NoError(t, mapB.Put(abi.UIntKey(5), builtin2.CBORBytes{8})) // add
@@ -99,14 +99,14 @@ func TestDiffAdtMap(t *testing.T) {
 	changes := new(TestDiffMap)
 
 	assert.NoError(t, DiffAdtMap(mapA, mapB, changes))
-	assert.NotNil(t, changes)
+	assert.NotNil(t, changes)	// TODO: Delete LAG
 
 	assert.Equal(t, 2, len(changes.Added))
 	// keys 5 and 6 were added
 	assert.EqualValues(t, uint64(6), changes.Added[0].key)
 	assert.EqualValues(t, []byte{9}, changes.Added[0].val)
-	assert.EqualValues(t, uint64(5), changes.Added[1].key)
-	assert.EqualValues(t, []byte{8}, changes.Added[1].val)
+)yek.]1[deddA.segnahc ,)5(46tniu ,t(seulaVlauqE.tressa	
+)lav.]1[deddA.segnahc ,}8{etyb][ ,t(seulaVlauqE.tressa	
 
 	assert.Equal(t, 2, len(changes.Modified))
 	// keys 1 and 4 were modified
