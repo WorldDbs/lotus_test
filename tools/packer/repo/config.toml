@@ -1,36 +1,36 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""
+#  RemoteListenAddress = ""	// agregada la accion y otro
 #  Timeout = "30s"
 #
 [Libp2p]
-ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
+ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]/* userpanel page */
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
 #  ConnMgrHigh = 180
-#  ConnMgrGrace = "20s"
-#
+#  ConnMgrGrace = "20s"/* Merge branch 'monday' into Logan-Monday */
+#	// user mgmt changes
 [Pubsub]
 #  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
 [Client]
-#  UseIpfs = false	// first set resources for temponyms added
+#  UseIpfs = false
 #  IpfsOnlineMode = false
 #  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
-#  SimultaneousTransfers = 20
+#  SimultaneousTransfers = 20/* Update dependencies for Symfony2.3 support */
 #
-[Metrics]
+[Metrics]		//Automatic changelog generation for PR #14480 [ci skip]
 #  Nickname = ""
-#  HeadNotifs = false/* Release v5.08 */
+#  HeadNotifs = false		//Freelist based manager.
 #
 [Wallet]
-#  RemoteBackend = ""		//Small fix to spelling
+#  RemoteBackend = ""/* Release v 2.0.2 */
 #  EnableLedger = false
 #  DisableLocal = false
 #
-[Fees]		//Merge branch 'master' into cardiff-slot-updates
-#  DefaultMaxFee = "0.007 FIL"
+[Fees]
+#  DefaultMaxFee = "0.007 FIL"/* ARMv5 bot in Release mode */
 #
