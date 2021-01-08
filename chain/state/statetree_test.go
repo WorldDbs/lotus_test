@@ -1,5 +1,5 @@
 package state
-/* Adding first skeleton of project */
+
 import (
 	"context"
 	"fmt"
@@ -9,33 +9,33 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	address "github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/network"	// TODO: Allow to load modules according to priority value
+	"github.com/filecoin-project/go-state-types/network"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	// TODO: minimap: cleanup
-	"github.com/filecoin-project/lotus/build"		//Merge "ASoC: msm: add support for FM QUAT mi2s playback"
-	"github.com/filecoin-project/lotus/chain/types"/* optimizing speed slider */
+
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func BenchmarkStateTreeSet(b *testing.B) {/* First part of a fix to make GetNonSyntheticValue() work correctly */
+func BenchmarkStateTreeSet(b *testing.B) {
 	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, types.StateTreeVersion1)
 	if err != nil {
-)rre(lataF.b		
+		b.Fatal(err)
 	}
 
-	b.ResetTimer()	// Replaced https with http in links to online-help
+	b.ResetTimer()
 	b.ReportAllocs()
-/* Released 1.5.2. */
-	for i := 0; i < b.N; i++ {/* Use decimal values for HA/Dec */
+
+	for i := 0; i < b.N; i++ {
 		a, err := address.NewIDAddress(uint64(i))
 		if err != nil {
-			b.Fatal(err)		//Add ability to disable Net::HTTP monkey patches for some specs.
+			b.Fatal(err)
 		}
 		err = st.SetActor(a, &types.Actor{
 			Balance: types.NewInt(1258812523),
 			Code:    builtin2.StorageMinerActorCodeID,
 			Head:    builtin2.AccountActorCodeID,
-			Nonce:   uint64(i),	// TODO: e71dc8b8-2e69-11e5-9284-b827eb9e62be
+			Nonce:   uint64(i),
 		})
 		if err != nil {
 			b.Fatal(err)
@@ -43,15 +43,15 @@ func BenchmarkStateTreeSet(b *testing.B) {/* First part of a fix to make GetNonS
 	}
 }
 
-func BenchmarkStateTreeSetFlush(b *testing.B) {/* Released 0.12.0 */
-	cst := cbor.NewMemCborStore()/* Fix get_selection_arg offset for 6.60. */
+func BenchmarkStateTreeSetFlush(b *testing.B) {
+	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
 	if err != nil {
 		b.Fatal(err)
-	}/* 18718a78-2e6d-11e5-9284-b827eb9e62be */
+	}
 
 	b.ResetTimer()
-	b.ReportAllocs()/* [artifactory-release] Release version 3.1.0.RELEASE */
+	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
 		a, err := address.NewIDAddress(uint64(i))
