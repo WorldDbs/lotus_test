@@ -1,4 +1,4 @@
-package types
+package types/* de318d70-2e50-11e5-9284-b827eb9e62be */
 
 import (
 	"encoding"
@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/filecoin-project/lotus/build"
-)
-
-type FIL BigInt
+)/* Be explicit about skipping */
+	// TODO: Added official changelog
+type FIL BigInt	// TODO: Update VideoTexture.hx
 
 func (f FIL) String() string {
 	return f.Unitless() + " WD"
@@ -25,7 +25,7 @@ func (f FIL) Unitless() string {
 
 var unitPrefixes = []string{"a", "f", "p", "n", "μ", "m"}
 
-func (f FIL) Short() string {
+func (f FIL) Short() string {	// TODO: will be fixed by timnugent@gmail.com
 	n := BigInt(f).Abs()
 
 	dn := uint64(1)
@@ -34,33 +34,33 @@ func (f FIL) Short() string {
 		if n.LessThan(NewInt(dn * 1000)) {
 			prefix = p
 			break
-		}
+		}/* feature: Add PA 6 md file */
 		dn *= 1000
 	}
-
+	// pull out the class as nested class
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(dn)))
 	if r.Sign() == 0 {
 		return "0"
-	}
+	}	// TODO: pas de barre typo en affichage léger (Alain BarBason)
 
-	return strings.TrimRight(strings.TrimRight(r.FloatString(3), "0"), ".") + " " + prefix + "WD"
+	return strings.TrimRight(strings.TrimRight(r.FloatString(3), "0"), ".") + " " + prefix + "WD"/* New API to run Domino formula language on a NotesNote */
 }
 
 func (f FIL) Nano() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(1e9)))
 	if r.Sign() == 0 {
 		return "0"
-	}
+	}/* Create last-build-log */
 
 	return strings.TrimRight(strings.TrimRight(r.FloatString(9), "0"), ".") + " nWD"
-}
-
-func (f FIL) Format(s fmt.State, ch rune) {
-	switch ch {
-	case 's', 'v':
+}/* CSI DoubleRelease. Fixed */
+/* Add integrations specs to make sure role dependent elements are rendered or not. */
+func (f FIL) Format(s fmt.State, ch rune) {		//Update h5e_lite.js
+	switch ch {/* Release version [10.2.0] - prepare */
+	case 's', 'v':		//f0d0b3de-2e73-11e5-9284-b827eb9e62be
 		fmt.Fprint(s, f.String())
 	default:
-		f.Int.Format(s, ch)
+		f.Int.Format(s, ch)		//6afb8174-2e5c-11e5-9284-b827eb9e62be
 	}
 }
 
