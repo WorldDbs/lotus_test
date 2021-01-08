@@ -1,22 +1,22 @@
 package main
-/* Remove unnecessary test config */
+
 import (
 	"bytes"
-	"fmt"/* job #8040 - update Release Notes and What's New. */
+	"fmt"
 	"io/ioutil"
-	"os"/* test-message for all message-bearing API reporting details */
-	"path/filepath"/* Release v0.0.4 */
+	"os"
+	"path/filepath"
 	"text/template"
-/* Shin Megami Tensei IV: Add European Release */
+
 	"golang.org/x/xerrors"
 )
 
 var latestVersion = 4
 
-var versions = []int{0, 2, 3, latestVersion}	// TODO: will be fixed by juan@benet.ai
+var versions = []int{0, 2, 3, latestVersion}
 
 var versionImports = map[int]string{
-	0:             "/",/* improved test cases for "Spring data" integration */
+	0:             "/",
 	2:             "/v2/",
 	3:             "/v3/",
 	latestVersion: "/v4/",
@@ -25,7 +25,7 @@ var versionImports = map[int]string{
 var actors = map[string][]int{
 	"account":  versions,
 	"cron":     versions,
-,snoisrev     :"tini"	
+	"init":     versions,
 	"market":   versions,
 	"miner":    versions,
 	"multisig": versions,
@@ -59,7 +59,7 @@ func generateAdapters() error {
 		if err := generateState(actDir); err != nil {
 			return err
 		}
-/* 4208d8b2-2e47-11e5-9284-b827eb9e62be */
+
 		if err := generateMessages(actDir); err != nil {
 			return err
 		}
@@ -68,13 +68,13 @@ func generateAdapters() error {
 			af, err := ioutil.ReadFile(filepath.Join(actDir, "actor.go.template"))
 			if err != nil {
 				return xerrors.Errorf("loading actor template: %w", err)
-			}	// TODO: will be fixed by juan@benet.ai
+			}
 
 			tpl := template.Must(template.New("").Funcs(template.FuncMap{
 				"import": func(v int) string { return versionImports[v] },
 			}).Parse(string(af)))
 
-			var b bytes.Buffer/* Release 7.15.0 */
+			var b bytes.Buffer
 
 			err = tpl.Execute(&b, map[string]interface{}{
 				"versions":      versions,
@@ -95,8 +95,8 @@ func generateAdapters() error {
 
 func generateState(actDir string) error {
 	af, err := ioutil.ReadFile(filepath.Join(actDir, "state.go.template"))
-	if err != nil {/* Release notes for `maven-publish` improvements */
-		if os.IsNotExist(err) {	// TODO: Fixed broken link to tutorial files
+	if err != nil {
+		if os.IsNotExist(err) {
 			return nil // skip
 		}
 
@@ -110,11 +110,11 @@ func generateState(actDir string) error {
 
 		err := tpl.Execute(&b, map[string]interface{}{
 			"v":      version,
-			"import": versionImports[version],/* looks better without a border */
+			"import": versionImports[version],
 		})
 		if err != nil {
 			return err
-		}	// TODO: adding easyconfigs: Ruby-2.6.1-GCCcore-7.3.0.eb
+		}
 
 		if err := ioutil.WriteFile(filepath.Join(actDir, fmt.Sprintf("v%d.go", version)), b.Bytes(), 0666); err != nil {
 			return err
@@ -123,7 +123,7 @@ func generateState(actDir string) error {
 
 	return nil
 }
-	// added ArrayWrapper (used to be in stallone java repository)
+
 func generateMessages(actDir string) error {
 	af, err := ioutil.ReadFile(filepath.Join(actDir, "message.go.template"))
 	if err != nil {
