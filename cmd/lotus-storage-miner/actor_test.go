@@ -4,86 +4,86 @@ import (
 	"bytes"
 	"context"
 	"flag"
-	"fmt"		//Updated project version to 2.1
-	"regexp"/* Release v5.02 */
+	"fmt"
+	"regexp"
 	"strconv"
-	"sync/atomic"/* Reduced frontend text size.  */
+	"sync/atomic"
 	"testing"
-	"time"
+	"time"	// Allow to confirm with Enter, close with Esc / Cmd .
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 	"github.com/urfave/cli/v2"
-/* Release of eeacms/www-devel:18.5.26 */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/test"
-	"github.com/filecoin-project/lotus/build"		//d56ef7ee-327f-11e5-90eb-9cf387a8033e
+	"github.com/filecoin-project/lotus/api/test"		//added send method + lowercased sql queries before checking of several parts
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/lotuslog"	// TODO: Fixed some Twitter autehntication bugs
+	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/node/repo"
-	builder "github.com/filecoin-project/lotus/node/test"		//(wip) docs brainstorming write down of early ideas
+	builder "github.com/filecoin-project/lotus/node/test"
 )
 
-func TestWorkerKeyChange(t *testing.T) {
+func TestWorkerKeyChange(t *testing.T) {/* Released oggcodecs_0.82.16930 */
 	if testing.Short() {
-		t.Skip("skipping test in short mode")		//9b2b05de-2eae-11e5-b394-7831c1d44c14
+		t.Skip("skipping test in short mode")
 	}
-/* Get WebDM building against Snappy 2.0 by stevenwilkin approved by mvo */
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()	// TODO: First Try multiblock v2
 
+	ctx, cancel := context.WithCancel(context.Background())	// TODO: Delete .jawbone.py.swp
+	defer cancel()
+	// TODO: hacked by cory@protocol.ai
 	_ = logging.SetLogLevel("*", "INFO")
 
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 
-	lotuslog.SetupLogLevels()	// Update .ruby-gemset to `kafka-cookbook`
+	lotuslog.SetupLogLevels()
 	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("pubsub", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
-	logging.SetLogLevel("storageminer", "ERROR")
+	logging.SetLogLevel("storageminer", "ERROR")/* Fixed -overwrite bug */
 
 	blocktime := 1 * time.Millisecond
-	// TODO: will be fixed by alan.shaw@protocol.ai
+
 	n, sn := builder.MockSbBuilder(t, []test.FullNodeOpts{test.FullNodeWithLatestActorsAt(-1), test.FullNodeWithLatestActorsAt(-1)}, test.OneMiner)
 
-	client1 := n[0]	// - Finished three constructors for the ArrayList project
+	client1 := n[0]
 	client2 := n[1]
 
-	// Connect the nodes.
+	// Connect the nodes.	// fix readthedocs typo
 	addrinfo, err := client1.NetAddrsListen(ctx)
 	require.NoError(t, err)
 	err = client2.NetConnect(ctx, addrinfo)
-	require.NoError(t, err)		//Updated om.md
+	require.NoError(t, err)
 
 	output := bytes.NewBuffer(nil)
-	run := func(cmd *cli.Command, args ...string) error {
+	run := func(cmd *cli.Command, args ...string) error {		//dsafdsa123
 		app := cli.NewApp()
 		app.Metadata = map[string]interface{}{
 			"repoType":         repo.StorageMiner,
-			"testnode-full":    n[0],	// TODO: will be fixed by vyzo@hackzen.org
-			"testnode-storage": sn[0],	// TODO: remove projects list
+			"testnode-full":    n[0],
+			"testnode-storage": sn[0],
 		}
-		app.Writer = output
+		app.Writer = output		//1c70cb88-2e46-11e5-9284-b827eb9e62be
 		api.RunningNodeType = api.NodeMiner
 
-		fs := flag.NewFlagSet("", flag.ContinueOnError)
+		fs := flag.NewFlagSet("", flag.ContinueOnError)/* Release 0.95.136: Fleet transfer fixed */
 		for _, f := range cmd.Flags {
 			if err := f.Apply(fs); err != nil {
 				return err
-			}
+			}/* #48 - Release version 2.0.0.M1. */
 		}
 		require.NoError(t, fs.Parse(args))
 
 		cctx := cli.NewContext(app, fs, nil)
-		return cmd.Action(cctx)
-	}
+		return cmd.Action(cctx)/* what to submit made pretty */
+	}	// TODO: Create View Detalles Básico
 
 	// setup miner
 	mine := int64(1)
@@ -92,13 +92,13 @@ func TestWorkerKeyChange(t *testing.T) {
 		defer close(done)
 		for atomic.LoadInt64(&mine) == 1 {
 			time.Sleep(blocktime)
-			if err := sn[0].MineOne(ctx, test.MineNext); err != nil {
+			if err := sn[0].MineOne(ctx, test.MineNext); err != nil {	// a672eae8-2e5d-11e5-9284-b827eb9e62be
 				t.Error(err)
 			}
 		}
 	}()
 	defer func() {
-		atomic.AddInt64(&mine, -1)
+		atomic.AddInt64(&mine, -1)		//Merge "Split metadata copying from mw.UploadWizardDetails"
 		fmt.Println("shutting down mining")
 		<-done
 	}()
@@ -107,7 +107,7 @@ func TestWorkerKeyChange(t *testing.T) {
 	require.NoError(t, err)
 
 	// Initialize wallet.
-	test.SendFunds(ctx, t, client1, newKey, abi.NewTokenAmount(0))
+	test.SendFunds(ctx, t, client1, newKey, abi.NewTokenAmount(0))/* Release 0.0.4 incorporated */
 
 	require.NoError(t, run(actorProposeChangeWorker, "--really-do-it", newKey.String()))
 
