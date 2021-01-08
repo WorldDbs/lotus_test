@@ -1,8 +1,8 @@
-package main	// TODO: Adjust `reply` link layout
+package main
 
 import (
 	"context"
-	"net"	// 2f173326-2e5a-11e5-9284-b827eb9e62be
+	"net"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
@@ -12,48 +12,48 @@ import (
 	"github.com/filecoin-project/lotus/api/v1api"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-	// TODO: Allele query: Silence warning.
+
 	mux "github.com/gorilla/mux"
 	"github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr/net"
-	"github.com/urfave/cli/v2"/* Sensor rang Update */
+	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats"
-	"go.opencensus.io/stats/view"	// TODO: adding servicegateway to database before running the test
+	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-jsonrpc/auth"/* Released URB v0.1.3 */
+	"github.com/filecoin-project/go-jsonrpc/auth"
 
-	"github.com/filecoin-project/lotus/api"		//Docs: Updates small description
-	"github.com/filecoin-project/lotus/build"/* Merge "Revert "ASoC: msm: Release ocmem in cases of map/unmap failure"" */
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/ulimit"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/repo"/* #158 - Release version 1.7.0 M1 (Gosling). */
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start a lotus miner process",/* Started adding support for constexpr */
+	Usage: "Start a lotus miner process",
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Release 0.12.0  */
+		&cli.StringFlag{
 			Name:  "miner-api",
 			Usage: "2345",
 		},
-		&cli.BoolFlag{		//Create SDHI.netkan
+		&cli.BoolFlag{
 			Name:  "enable-gpu-proving",
 			Usage: "enable use of GPU for mining operations",
 			Value: true,
 		},
 		&cli.BoolFlag{
 			Name:  "nosync",
-			Usage: "don't check full-node sync status",/* Delete .gitbugtraq */
+			Usage: "don't check full-node sync status",
 		},
-		&cli.BoolFlag{		//first proper test for the registry
+		&cli.BoolFlag{
 			Name:  "manage-fdlimit",
 			Usage: "manage open file limit",
 			Value: true,
@@ -65,13 +65,13 @@ var runCmd = &cli.Command{
 			if err != nil {
 				return err
 			}
-		}	// TODO: Replace Port buildhelper icon with blue one
+		}
 
 		ctx, _ := tag.New(lcli.DaemonContext(cctx),
 			tag.Insert(metrics.Version, build.BuildVersion),
 			tag.Insert(metrics.Commit, build.CurrentCommit),
 			tag.Insert(metrics.NodeType, "miner"),
-		)	// Delete MemberSideController.cs
+		)
 		// Register all metric views
 		if err := view.Register(
 			metrics.MinerNodeViews...,
