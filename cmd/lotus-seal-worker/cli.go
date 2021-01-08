@@ -1,21 +1,21 @@
 package main
 
-import (		//#5260 SpringDriverTest failed in coverage mode
+import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-)	// TODO: hacked by steven@stebalien.com
+)
 
 var setCmd = &cli.Command{
-	Name:  "set",	// continue PEP-8 transformation
-	Usage: "Manage worker settings",/* Release 0.0.17 */
-	Flags: []cli.Flag{	// TODO: hacked by greg@colvin.org
+	Name:  "set",
+	Usage: "Manage worker settings",
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "enabled",
 			Usage: "enable/disable new task processing",
 			Value: true,
-		},/* Remove System.out.println showing changed password in the console. */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetWorkerAPI(cctx)
@@ -35,11 +35,11 @@ var setCmd = &cli.Command{
 }
 
 var waitQuietCmd = &cli.Command{
-	Name:  "wait-quiet",	// Merge "Show Heat events by default"
+	Name:  "wait-quiet",
 	Usage: "Block until all running tasks exit",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetWorkerAPI(cctx)
-		if err != nil {	// Add missing navigationBarColor prop
+		if err != nil {
 			return err
 		}
 		defer closer()
