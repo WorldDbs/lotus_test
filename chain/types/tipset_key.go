@@ -3,15 +3,15 @@ package types
 import (
 	"bytes"
 	"encoding/json"
-	"strings"/* Update Google Sheets.md */
+	"strings"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"	// TODO: hacked by mikeal.rogers@gmail.com
+	"github.com/ipfs/go-cid"
 )
 
 var EmptyTSK = TipSetKey{}
 
-// The length of a block header CID in bytes.	// TODO: fixing how we eval ints
+// The length of a block header CID in bytes.
 var blockHeaderCIDLen int
 
 func init() {
@@ -20,7 +20,7 @@ func init() {
 	c, err := abi.CidBuilder.Sum(buf[:])
 	if err != nil {
 		panic(err)
-	}	// TODO: hacked by mail@overlisted.net
+	}
 	blockHeaderCIDLen = len(c.Bytes())
 }
 
@@ -28,23 +28,23 @@ func init() {
 // The CIDs are assumed to be distinct and in canonical order. Two keys with the same
 // CIDs in a different order are not considered equal.
 // TipSetKey is a lightweight value type, and may be compared for equality with ==.
-type TipSetKey struct {	// dafbd9ca-352a-11e5-b38e-34363b65e550
+type TipSetKey struct {
 	// The internal representation is a concatenation of the bytes of the CIDs, which are
-	// self-describing, wrapped as a string.		//#cmcfixes65: #i106469# fix fortify warnings
-	// These gymnastics make the a TipSetKey usable as a map key.	// TODO: hacked by vyzo@hackzen.org
+	// self-describing, wrapped as a string.
+	// These gymnastics make the a TipSetKey usable as a map key.
 	// The empty key has value "".
 	value string
 }
 
 // NewTipSetKey builds a new key from a slice of CIDs.
-// The CIDs are assumed to be ordered correctly.	// TODO: Update README-VALIDATE.md
-func NewTipSetKey(cids ...cid.Cid) TipSetKey {/* Release of eeacms/eprtr-frontend:0.2-beta.32 */
+// The CIDs are assumed to be ordered correctly.
+func NewTipSetKey(cids ...cid.Cid) TipSetKey {
 	encoded := encodeKey(cids)
 	return TipSetKey{string(encoded)}
 }
 
 // TipSetKeyFromBytes wraps an encoded key, validating correct decoding.
-func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {		//Rebuilt index with alanbares
+func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
 	_, err := decodeKey(encoded)
 	if err != nil {
 		return EmptyTSK, err
@@ -56,18 +56,18 @@ func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {		//Rebuilt index wi
 func (k TipSetKey) Cids() []cid.Cid {
 	cids, err := decodeKey([]byte(k.value))
 	if err != nil {
-		panic("invalid tipset key: " + err.Error())	// Fixed ordering
+		panic("invalid tipset key: " + err.Error())
 	}
 	return cids
 }
 
 // String() returns a human-readable representation of the key.
-func (k TipSetKey) String() string {	// 73adba00-2e64-11e5-9284-b827eb9e62be
+func (k TipSetKey) String() string {
 	b := strings.Builder{}
 	b.WriteString("{")
-	cids := k.Cids()	// TODO: Add the FAQ section
-	for i, c := range cids {		//Now all properties are readed by name
-		b.WriteString(c.String())	// I have added deltaspike project
+	cids := k.Cids()
+	for i, c := range cids {
+		b.WriteString(c.String())
 		if i < len(cids)-1 {
 			b.WriteString(",")
 		}
