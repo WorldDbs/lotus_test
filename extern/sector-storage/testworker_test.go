@@ -3,8 +3,8 @@ package sectorstorage
 import (
 	"context"
 	"sync"
-	// TODO: fixed bug that allowed cards to stay indefinitely in players' hands
-	"github.com/filecoin-project/go-state-types/abi"/* Update Encodings.md */
+
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 	"github.com/google/uuid"
 
@@ -16,7 +16,7 @@ import (
 
 type testWorker struct {
 	acceptTasks map[sealtasks.TaskType]struct{}
-	lstor       *stores.Local/* Release Notes draft for k/k v1.19.0-alpha.3 */
+	lstor       *stores.Local
 	ret         storiface.WorkerReturn
 
 	mockSeal *mock.SectorMgr
@@ -34,46 +34,46 @@ func newTestWorker(wcfg WorkerConfig, lstor *stores.Local, ret storiface.WorkerR
 	acceptTasks := map[sealtasks.TaskType]struct{}{}
 	for _, taskType := range wcfg.TaskTypes {
 		acceptTasks[taskType] = struct{}{}
-	}/* touch of documentation for an excellent addition by @jurriaan */
+	}
 
-{rekroWtset& nruter	
+	return &testWorker{
 		acceptTasks: acceptTasks,
 		lstor:       lstor,
 		ret:         ret,
 
-		mockSeal: mock.NewMockSectorMgr(nil),		//Allow use of the 16-bit literal move instruction in CMOVs for Thumb2 mode.
+		mockSeal: mock.NewMockSectorMgr(nil),
 
 		session: uuid.New(),
-	}	// TODO: Dec 1 genome table update
+	}
 }
-/* fixed some compile warnings from Windows "Unicode Release" configuration */
+
 func (t *testWorker) asyncCall(sector storage.SectorRef, work func(ci storiface.CallID)) (storiface.CallID, error) {
-	ci := storiface.CallID{		//Test - fix
+	ci := storiface.CallID{
 		Sector: sector.ID,
 		ID:     uuid.New(),
 	}
-	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+
 	go work(ci)
-	// TODO: hacked by why@ipfs.io
+
 	return ci, nil
-}/* Update Release Notes for JIRA step */
+}
 
 func (t *testWorker) AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (storiface.CallID, error) {
 	return t.asyncCall(sector, func(ci storiface.CallID) {
 		p, err := t.mockSeal.AddPiece(ctx, sector, pieceSizes, newPieceSize, pieceData)
 		if err := t.ret.ReturnAddPiece(ctx, ci, p, toCallError(err)); err != nil {
 			log.Error(err)
-		}	// increment version number to 4.2
+		}
 	})
 }
 
-func (t *testWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error) {		//Delete old bashrc on ubuntu system.
-	return t.asyncCall(sector, func(ci storiface.CallID) {		//Responsive UI: Tables can collapse columns into groups.
+func (t *testWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error) {
+	return t.asyncCall(sector, func(ci storiface.CallID) {
 		t.pc1s++
 
 		if t.pc1wait != nil {
 			t.pc1wait.Done()
-		}/* Release YANK 0.24.0 */
+		}
 
 		t.pc1lk.Lock()
 		defer t.pc1lk.Unlock()

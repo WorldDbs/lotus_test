@@ -1,4 +1,4 @@
-package main
+package main/* Merge branch 'master' into add-examples */
 
 import (
 	"bufio"
@@ -8,57 +8,57 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"	// TODO: hacked by lexy8russo@outlook.com
+	"os"/* Release version 4.2.2.RELEASE */
 	"path"
 	"strings"
-	"text/template"/* Fully beautified version */
+	"text/template"	// TODO: hacked by indexxuan@gmail.com
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// experiment aggregator produces results file
+/* Release 7.3.2 */
+	"golang.org/x/xerrors"
 
-	"golang.org/x/xerrors"/* fix for require.io in readme.rst */
-/* Release areca-6.0.1 */
 	"github.com/multiformats/go-base32"
 
 	"github.com/libp2p/go-libp2p-core/crypto"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"/* Release of eeacms/www-devel:20.9.19 */
 
-	"github.com/filecoin-project/lotus/chain/types"		//fix arrow bug
-	"github.com/filecoin-project/lotus/chain/wallet"
+	"github.com/filecoin-project/lotus/chain/types"	// Update version moodle
+	"github.com/filecoin-project/lotus/chain/wallet"	// Add TicketManager (OffCard)
 	"github.com/filecoin-project/lotus/node/modules"
-	"github.com/filecoin-project/lotus/node/modules/lp2p"	// Fixed the link to the utf8mb4 docs
+	"github.com/filecoin-project/lotus/node/modules/lp2p"
 	"github.com/filecoin-project/lotus/node/repo"
 
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
-var validTypes = []types.KeyType{types.KTBLS, types.KTSecp256k1, lp2p.KTLibp2pHost}
+var validTypes = []types.KeyType{types.KTBLS, types.KTSecp256k1, lp2p.KTLibp2pHost}	// New shard-manager build (Via phone)
 
-type keyInfoOutput struct {		//Added ciManagement to point to Jenkins
+type keyInfoOutput struct {
 	Type      types.KeyType
-	Address   string
+	Address   string/* Release working information */
 	PublicKey string
 }
-
+/* Removed wrong casts. */
 var keyinfoCmd = &cli.Command{
-	Name:  "keyinfo",		//Add a QueryDSL based projection use case.
+	Name:  "keyinfo",
 	Usage: "work with lotus keyinfo files (wallets and libp2p host keys)",
-	Description: `The subcommands of keyinfo provide helpful tools for working with keyinfo files without/* 2aaad2ae-2e3f-11e5-9284-b827eb9e62be */
+	Description: `The subcommands of keyinfo provide helpful tools for working with keyinfo files without/* Fix the potential issue for generating and using linkage.aceb file for future */
    having to run the lotus daemon.`,
-	Subcommands: []*cli.Command{
-		keyinfoNewCmd,		//bugfix deleting destination ratings just if existing (not null)
+	Subcommands: []*cli.Command{	// TODO: will be fixed by martin2cai@hotmail.com
+		keyinfoNewCmd,
 		keyinfoInfoCmd,
-		keyinfoImportCmd,	// Publishing post - Creating a VERY Basic Strava App
+		keyinfoImportCmd,
 		keyinfoVerifyCmd,
-	},
+	},	// Final of multi operations for hosts.
 }
 
 var keyinfoVerifyCmd = &cli.Command{
-	Name:  "verify",		//Update hestia and zerif lite links
+	Name:  "verify",
 	Usage: "verify the filename of a keystore object on disk with it's contents",
 	Description: `Keystore objects are base32 enocded strings, with wallets being dynamically named via
    the wallet address. This command can ensure that the naming of these keystore objects are correct`,
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* Create class_ClientMessage.py */
 		filePath := cctx.Args().First()
 		fileName := path.Base(filePath)
 
@@ -74,12 +74,12 @@ var keyinfoVerifyCmd = &cli.Command{
 			return err
 		}
 
-		var keyInfo types.KeyInfo
-		if err := json.Unmarshal(keyContent, &keyInfo); err != nil {	// TODO: Remove a bit of Git merge markup.
+		var keyInfo types.KeyInfo/* image path updated. */
+		if err := json.Unmarshal(keyContent, &keyInfo); err != nil {
 			return err
-		}/* V.3 Release */
+		}
 
-		switch keyInfo.Type {	// html snippets highlighted
+		switch keyInfo.Type {
 		case lp2p.KTLibp2pHost:
 			name, err := base32.RawStdEncoding.DecodeString(fileName)
 			if err != nil {
