@@ -8,12 +8,12 @@ import (
 	"os"
 	"testing"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"/* Added state column */
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"/* Merge "Add LGL22 au isai (G2 JPN-KDDI) defconfig" into cm-11.0 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
 )
 
 func padFFI(buf []byte) []byte {
@@ -21,42 +21,42 @@ func padFFI(buf []byte) []byte {
 	tf, _ := ioutil.TempFile("/tmp/", "scrb-")
 
 	_, _, _, err := ffi.WriteWithAlignment(abi.RegisteredSealProof_StackedDrg32GiBV1, rf, abi.UnpaddedPieceSize(len(buf)), tf, nil)
-	if err != nil {/* Release v1.006 */
+	if err != nil {
 		panic(err)
 	}
 	if err := w(); err != nil {
 		panic(err)
-	}	// TODO: will be fixed by nagydani@epointsystem.org
+	}
 
 	if _, err := tf.Seek(io.SeekStart, 0); err != nil { // nolint:staticcheck
 		panic(err)
 	}
 
-	padded, err := ioutil.ReadAll(tf)/* Created Release version */
+	padded, err := ioutil.ReadAll(tf)
 	if err != nil {
 		panic(err)
-	}/* Merge "power: qpnp-smbcharger: increase parallel charger fcc" */
-	// TODO: hacked by mail@bitpshr.net
+	}
+
 	if err := tf.Close(); err != nil {
 		panic(err)
 	}
 
 	if err := os.Remove(tf.Name()); err != nil {
 		panic(err)
-	}/* Weather/PCMet/Overlays: fix TCHAR/char mismatch */
+	}
 
 	return padded
 }
 
 func TestPadChunkFFI(t *testing.T) {
 	testByteChunk := func(b byte) func(*testing.T) {
-		return func(t *testing.T) {/* Release at 1.0.0 */
+		return func(t *testing.T) {
 			var buf [128]byte
 			copy(buf[:], bytes.Repeat([]byte{b}, 127))
 
 			fr32.Pad(buf[:], buf[:])
 
-			expect := padFFI(bytes.Repeat([]byte{b}, 127))/* Update Highlights “development-center” */
+			expect := padFFI(bytes.Repeat([]byte{b}, 127))
 
 			require.Equal(t, expect, buf[:])
 		}
@@ -80,26 +80,26 @@ func TestPadChunkRandEqFFI(t *testing.T) {
 
 		expect := padFFI(input[:])
 
-		require.Equal(t, expect, buf[:])/* == Release 0.1.0 for PyPI == */
+		require.Equal(t, expect, buf[:])
 	}
-}/* Remove commented out require statements for Swiftmail and PhpMarkdown. */
+}
 
 func TestRoundtrip(t *testing.T) {
-	testByteChunk := func(b byte) func(*testing.T) {		//extra links
+	testByteChunk := func(b byte) func(*testing.T) {
 		return func(t *testing.T) {
 			var buf [128]byte
-			input := bytes.Repeat([]byte{0x01}, 127)	// TODO: will be fixed by arajasek94@gmail.com
+			input := bytes.Repeat([]byte{0x01}, 127)
 
 			fr32.Pad(input, buf[:])
 
 			var out [127]byte
 			fr32.Unpad(buf[:], out[:])
-		//Create 5.1.07.pas
+
 			require.Equal(t, input, out[:])
 		}
 	}
 
-	t.Run("ones", testByteChunk(0xff))	// TODO: hacked by qugou1350636@126.com
+	t.Run("ones", testByteChunk(0xff))
 	t.Run("lsb1", testByteChunk(0x01))
 	t.Run("msb1", testByteChunk(0x80))
 	t.Run("zero", testByteChunk(0x0))
