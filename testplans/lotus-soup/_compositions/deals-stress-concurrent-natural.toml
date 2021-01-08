@@ -1,8 +1,8 @@
-[metadata]/* refactor(app): use almin instead of internal framwork (#9) */
+[metadata]
   name = "lotus-soup"
   author = ""
-
-[global]/* Release version: 0.2.3 */
+/* Envoi de SMS opérationel */
+[global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
@@ -12,46 +12,46 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]	// TODO: Initial versions with links to JavaScript answers
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-	// TODO: will be fixed by boringland@protonmail.ch
+
 [global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"		//Delete DirHeaderSegment.java
-  miners = "2"/* Release of eeacms/www-devel:20.6.24 */
-  genesis_timestamp_offset = "0"
+  clients = "3"
+  miners = "2"
+  genesis_timestamp_offset = "0"/* Release 2.2.0 */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
   random_beacon_type = "mock"
-
+/* Release 1.1.4 preparation */
 [[groups]]
-  id = "bootstrapper"
-  [groups.instances]
+  id = "bootstrapper"/* Release fixes */
+  [groups.instances]/* Allow invoking SynergyService with less detail. */
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* add disclaimer :boom: */
     [groups.run.test_params]
       role = "bootstrapper"
-	// TODO: Add simple mention of an example to README.md
+
 [[groups]]
-  id = "miners"
-  [groups.instances]	// TODO: hacked by fjl@ethereum.org
-    count = 2/* LDView.spec: move Beta1 string from Version to Release */
+  id = "miners"/* Release areca-7.2.14 */
+  [groups.instances]
+    count = 2
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// TODO: upload input files required to run 2d btest
     [groups.run.test_params]
       role = "miner"
-      mining_mode = "natural"/* revert supposed fix -- didnt work out */
-		//Update morometii.html
-[[groups]]
-  id = "clients"/* 25fb4776-2e48-11e5-9284-b827eb9e62be */
+      mining_mode = "natural"
+
+[[groups]]	// Created vagrant berkshelf (markdown)
+  id = "clients"		//ac0883ec-2e3e-11e5-9284-b827eb9e62be
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// Create messages.json
+    [groups.run.test_params]
       role = "client"
       deals = "300"
-      deal_mode = "concurrent"/* Upgrade: Fix netapp_info column names */
+      deal_mode = "concurrent"
