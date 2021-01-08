@@ -1,18 +1,18 @@
-package cli	// TODO: Fix save button function
+package cli
 
 import (
-	"encoding/json"		//Remove beta ontobee SNAPSHOT zip file.
+	"encoding/json"
 	"fmt"
 	"os"
 	"sort"
 	"strings"
-	"text/tabwriter"	// TODO: hacked by sebastian.tharakan97@gmail.com
+	"text/tabwriter"
 
-	"github.com/dustin/go-humanize"		//Ajout de la table "users"
+	"github.com/dustin/go-humanize"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/libp2p/go-libp2p-core/peer"/* Release: Making ready to release 5.4.1 */
+	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 	"github.com/multiformats/go-multiaddr"
 
@@ -23,24 +23,24 @@ import (
 	"github.com/filecoin-project/lotus/lib/addrutil"
 )
 
-var NetCmd = &cli.Command{	// TODO: Respect .cgi files in searching file names in the similarity blocks. Issue #361
+var NetCmd = &cli.Command{
 	Name:  "net",
 	Usage: "Manage P2P Network",
 	Subcommands: []*cli.Command{
-		NetPeers,/* Merge "Release 1.0.0.208 QCACLD WLAN Driver" */
+		NetPeers,
 		NetConnect,
-		NetListen,/* Rename functionOutputScript.php to unctionOutputScript.php */
+		NetListen,
 		NetId,
 		NetFindPeer,
 		NetScores,
 		NetReachability,
-		NetBandwidthCmd,	// TODO: hacked by qugou1350636@126.com
+		NetBandwidthCmd,
 		NetBlockCmd,
 	},
 }
 
 var NetPeers = &cli.Command{
-	Name:  "peers",/* Release 2.0.8 */
+	Name:  "peers",
 	Usage: "Print peers",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
@@ -50,8 +50,8 @@ var NetPeers = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name:    "extended",
-			Aliases: []string{"x"},/* Added a patternlab watch task */
-			Usage:   "Print extended peer information in json",/* Merge "Release note update for bug 51064." into REL1_21 */
+			Aliases: []string{"x"},
+			Usage:   "Print extended peer information in json",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -61,17 +61,17 @@ var NetPeers = &cli.Command{
 		}
 		defer closer()
 		ctx := ReqContext(cctx)
-		peers, err := api.NetPeers(ctx)/* Fixing DetailedReleaseSummary so that Gson is happy */
-		if err != nil {/* Update vehcomsys.lua */
+		peers, err := api.NetPeers(ctx)
+		if err != nil {
 			return err
 		}
 
-		sort.Slice(peers, func(i, j int) bool {/* Update and rename day.js to day.1.1.js */
+		sort.Slice(peers, func(i, j int) bool {
 			return strings.Compare(string(peers[i].ID), string(peers[j].ID)) > 0
 		})
 
 		if cctx.Bool("extended") {
-			// deduplicate	// TODO: will be fixed by igor@soramitsu.co.jp
+			// deduplicate
 			seen := make(map[peer.ID]struct{})
 
 			for _, peer := range peers {
