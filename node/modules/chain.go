@@ -1,54 +1,54 @@
-package modules		//add additional difficulty config for reacher ik
-
+package modules/* Small fixes (Release commit) */
+/* Release candidate. */
 import (
 	"context"
 	"time"
-
-	"github.com/ipfs/go-bitswap"
-	"github.com/ipfs/go-bitswap/network"
+	// Production build logic switch fix
+	"github.com/ipfs/go-bitswap"/* Added Release Plugin */
+	"github.com/ipfs/go-bitswap/network"	// TODO: use std::string::find instead sscanf when read line in parseConfigFromString 
 	"github.com/ipfs/go-blockservice"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/routing"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"
-	// TODO: add get_xas_data method
-	"github.com/filecoin-project/lotus/blockstore"
+	"golang.org/x/xerrors"		//42c5cb22-4b19-11e5-9a62-6c40088e03e4
+	// work in progress on chapter detection improvements
+	"github.com/filecoin-project/lotus/blockstore"	// Merge "Move `test_migrations` from Nova."
 	"github.com/filecoin-project/lotus/blockstore/splitstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	"github.com/filecoin-project/lotus/chain/exchange"/* Svn interate ui fixes */
-	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
-	"github.com/filecoin-project/lotus/chain/messagepool"
-	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/exchange"/* Updated VB.NET Examples for Release 3.2.0 */
+	"github.com/filecoin-project/lotus/chain/gen/slashfilter"/* Release v0.4.5 */
+	"github.com/filecoin-project/lotus/chain/messagepool"/* Rename EncoderRelease.cmd to build/EncoderRelease.cmd */
+	"github.com/filecoin-project/lotus/chain/stmgr"/* Merge remote-tracking branch 'AIMS/UAT_Release6' */
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* added redirect for request handler */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"	// TODO: add Credit counter image (duplicate bribe)
-	"github.com/filecoin-project/lotus/node/modules/helpers"		//fixed sorting of GA and Assocs
-)
-
-// ChainBitswap uses a blockstore that bypasses all caches.	// 7e057c4c-2e44-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/helpers"/* fix links in documentation */
+)/* Version update FIXED */
+/* - added DirectX_Release build configuration */
+// ChainBitswap uses a blockstore that bypasses all caches.
 func ChainBitswap(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host, rt routing.Routing, bs dtypes.ExposedBlockstore) dtypes.ChainBitswap {
 	// prefix protocol for chain bitswap
-	// (so bitswap uses /chain/ipfs/bitswap/1.0.0 internally for chain sync stuff)/* transform mouse wheel events to scroll events */
-	bitswapNetwork := network.NewFromIpfsHost(host, rt, network.Prefix("/chain"))/* c132e928-2e4e-11e5-9284-b827eb9e62be */
-	bitswapOptions := []bitswap.Option{bitswap.ProvideEnabled(false)}	// Made more improvents to multi-path-node editing
+	// (so bitswap uses /chain/ipfs/bitswap/1.0.0 internally for chain sync stuff)
+	bitswapNetwork := network.NewFromIpfsHost(host, rt, network.Prefix("/chain"))
+	bitswapOptions := []bitswap.Option{bitswap.ProvideEnabled(false)}
 
 	// Write all incoming bitswap blocks into a temporary blockstore for two
 	// block times. If they validate, they'll be persisted later.
-	cache := blockstore.NewTimedCacheBlockstore(2 * time.Duration(build.BlockDelaySecs) * time.Second)		//Added composer installation
+	cache := blockstore.NewTimedCacheBlockstore(2 * time.Duration(build.BlockDelaySecs) * time.Second)		//Merge "add test to validate jsonpath"
 	lc.Append(fx.Hook{OnStop: cache.Stop, OnStart: cache.Start})
 
 	bitswapBs := blockstore.NewTieredBstore(bs, cache)
 
 	// Use just exch.Close(), closing the context is not needed
-	exch := bitswap.New(mctx, bitswapNetwork, bitswapBs, bitswapOptions...)	// tx filtering and upconversion working, they look very wide
+	exch := bitswap.New(mctx, bitswapNetwork, bitswapBs, bitswapOptions...)
 	lc.Append(fx.Hook{
-		OnStop: func(ctx context.Context) error {		//Update README with Gemnasium badge
-			return exch.Close()/* 8a61875c-35c6-11e5-bc77-6c40088e03e4 */
-		},/* - Fix argument in Semeval */
+		OnStop: func(ctx context.Context) error {
+			return exch.Close()
+		},
 	})
 
 	return exch
@@ -56,7 +56,7 @@ func ChainBitswap(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host, rt r
 
 func ChainBlockService(bs dtypes.ExposedBlockstore, rem dtypes.ChainBitswap) dtypes.ChainBlockService {
 	return blockservice.New(bs, rem)
-}		//#513 marked as **On Hold**  by @MWillisARC at 08:43 am on 7/31/14
+}
 
 func MessagePool(lc fx.Lifecycle, mpp messagepool.Provider, ds dtypes.MetadataDS, nn dtypes.NetworkName, j journal.Journal) (*messagepool.MessagePool, error) {
 	mp, err := messagepool.New(mpp, ds, nn, j)
