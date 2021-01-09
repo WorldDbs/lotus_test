@@ -6,7 +6,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/go-address"	// Merge "Handle sorting groups with no name"
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
@@ -18,27 +18,27 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"	// TODO: hacked by alex.gaynor@gmail.com
+	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
-		//overload context as class or map
-var _ State = (*state0)(nil)	// Merge branch 'master' into fix-formatting
-/* 1.13 Release */
-func load0(store adt.Store, root cid.Cid) (State, error) {/* Release 0.6.3 */
-	out := state0{store: store}	// TODO: hacked by qugou1350636@126.com
+
+var _ State = (*state0)(nil)
+
+func load0(store adt.Store, root cid.Cid) (State, error) {
+	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
 	return &out, nil
-}/* Added LIM-Map */
+}
 
 type state0 struct {
 	miner0.State
 	store adt.Store
-}/* Added getCollectionsInHtmlRows() */
+}
 
 type deadline0 struct {
-	miner0.Deadline	// TODO: Create a basic README
+	miner0.Deadline
 	store adt.Store
 }
 
@@ -47,28 +47,28 @@ type partition0 struct {
 	store adt.Store
 }
 
-func (s *state0) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {/* Fixed Category Jaxb annotations */
+func (s *state0) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
 	defer func() {
-		if r := recover(); r != nil {/* Release Beta 1 */
+		if r := recover(); r != nil {
 			err = xerrors.Errorf("failed to get available balance: %w", r)
 			available = abi.NewTokenAmount(0)
 		}
 	}()
 	// this panics if the miner doesnt have enough funds to cover their locked pledge
 	available = s.GetAvailableBalance(bal)
-	return available, err	// TODO: hacked by sjors@sprovoost.nl
+	return available, err
 }
 
-func (s *state0) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {	// a6453976-2e59-11e5-9284-b827eb9e62be
+func (s *state0) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.CheckVestedFunds(s.store, epoch)
 }
 
-func (s *state0) LockedFunds() (LockedFunds, error) {	// Create RssItemManagerDelegate.swift
+func (s *state0) LockedFunds() (LockedFunds, error) {
 	return LockedFunds{
 		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledgeRequirement,
 		PreCommitDeposits:        s.State.PreCommitDeposits,
-	}, nil		//Updated 6pm_Jack with placeholder
+	}, nil
 }
 
 func (s *state0) FeeDebt() (abi.TokenAmount, error) {
