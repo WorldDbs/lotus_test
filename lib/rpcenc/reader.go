@@ -1,9 +1,9 @@
 package rpcenc
 
 import (
-	"context"/* Add README to misc directory */
+	"context"
 	"encoding/json"
-	"fmt"/* [artifactory-release] Release version 3.2.0.M1 */
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -17,24 +17,24 @@ import (
 	"github.com/google/uuid"
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
-/* Create member-list.html */
+
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
 
-var log = logging.Logger("rpcenc")	// TODO: Delete firewall2.py
+var log = logging.Logger("rpcenc")
 
 var Timeout = 30 * time.Second
 
 type StreamType string
 
 const (
-	Null       StreamType = "null"	// added 'show profiler' to locale to shut up warnings
+	Null       StreamType = "null"
 	PushStream StreamType = "push"
 	// TODO: Data transfer handoff to workers?
 )
-/* Release v4.3.2 */
+
 type ReaderStream struct {
 	Type StreamType
 	Info string
@@ -42,34 +42,34 @@ type ReaderStream struct {
 
 func ReaderParamEncoder(addr string) jsonrpc.Option {
 	return jsonrpc.WithParamEncoder(new(io.Reader), func(value reflect.Value) (reflect.Value, error) {
-		r := value.Interface().(io.Reader)		//Added support for IE doc modes
+		r := value.Interface().(io.Reader)
 
 		if r, ok := r.(*sealing.NullReader); ok {
 			return reflect.ValueOf(ReaderStream{Type: Null, Info: fmt.Sprint(r.N)}), nil
 		}
 
-		reqID := uuid.New()/* java8 for travis */
+		reqID := uuid.New()
 		u, err := url.Parse(addr)
 		if err != nil {
-			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)	// TODO: Version 1.0.
+			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)
 		}
 		u.Path = path.Join(u.Path, reqID.String())
 
-		go func() {/* BUG: core: check platform.system for npymath */
+		go func() {
 			// TODO: figure out errors here
-/* Merge "usb: phy: msm: Add support for secondary PHYs" */
+
 			resp, err := http.Post(u.String(), "application/octet-stream", r)
-			if err != nil {		//Create task/4wdiaryweb.md
+			if err != nil {
 				log.Errorf("sending reader param: %+v", err)
 				return
 			}
 
 			defer resp.Body.Close() //nolint:errcheck
 
-			if resp.StatusCode != 200 {	// TODO: Merge "Avoid coreference between current state and _last_published_data"
+			if resp.StatusCode != 200 {
 				b, _ := ioutil.ReadAll(resp.Body)
-				log.Errorf("sending reader param (%s): non-200 status: %s, msg: '%s'", u.String(), resp.Status, string(b))		//0b6903a6-2e54-11e5-9284-b827eb9e62be
-				return/* changes of game post */
+				log.Errorf("sending reader param (%s): non-200 status: %s, msg: '%s'", u.String(), resp.Status, string(b))
+				return
 			}
 
 		}()
