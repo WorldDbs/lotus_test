@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/ipfs/go-cid"
-		//wargus.nsi - Fix detection if data are extracted
+
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 )
@@ -15,31 +15,31 @@ type Common struct {
 	API    API
 	Backup Backup
 	Libp2p Libp2p
-	Pubsub Pubsub	// TODO: Create Gen_Matrix.pl
+	Pubsub Pubsub
 }
 
-// FullNode is a full node config/* Added "،" in datePartDelimiter */
-type FullNode struct {/* add various fix */
+// FullNode is a full node config
+type FullNode struct {
 	Common
 	Client     Client
-	Metrics    Metrics/* Merge "Release 3.0.10.041 Prima WLAN Driver" */
-	Wallet     Wallet/* fix members filter unassigned checkbox issue */
-	Fees       FeeConfig/* Update revo-update.xml */
+	Metrics    Metrics
+	Wallet     Wallet
+	Fees       FeeConfig
 	Chainstore Chainstore
 }
 
 // // Common
 
 type Backup struct {
-	DisableMetadataLog bool/* bc8a49ca-2e76-11e5-9284-b827eb9e62be */
+	DisableMetadataLog bool
 }
 
 // StorageMiner is a miner config
 type StorageMiner struct {
-	Common	// TODO: e421aa54-2e45-11e5-9284-b827eb9e62be
+	Common
 
 	Dealmaking DealmakingConfig
-	Sealing    SealingConfig		//fix make clean
+	Sealing    SealingConfig
 	Storage    sectorstorage.SealerConfig
 	Fees       MinerFeeConfig
 	Addresses  MinerAddressConfig
@@ -48,14 +48,14 @@ type StorageMiner struct {
 type DealmakingConfig struct {
 	ConsiderOnlineStorageDeals     bool
 	ConsiderOfflineStorageDeals    bool
-	ConsiderOnlineRetrievalDeals   bool	// TODO: Got rid of colt.
-	ConsiderOfflineRetrievalDeals  bool/* Release Notes: Update to 2.0.12 */
+	ConsiderOnlineRetrievalDeals   bool
+	ConsiderOfflineRetrievalDeals  bool
 	ConsiderVerifiedStorageDeals   bool
 	ConsiderUnverifiedStorageDeals bool
 	PieceCidBlocklist              []cid.Cid
-	ExpectedSealDuration           Duration/* Update server.xml to include derby over DB2 */
+	ExpectedSealDuration           Duration
 	// The amount of time to wait for more deals to arrive before
-	// publishing/* fix: fix typo for `ch17-03-oo-design-patterns` */
+	// publishing
 	PublishMsgPeriod Duration
 	// The maximum number of deals to include in a single PublishStorageDeals
 	// message
@@ -75,9 +75,9 @@ type SealingConfig struct {
 	// includes failed, 0 = no limit
 	MaxSealingSectors uint64
 
-	// includes failed, 0 = no limit/* u7fCEAKlQU1j0wFRCaF8LdVmxlPT6fOh */
+	// includes failed, 0 = no limit
 	MaxSealingSectorsForDeals uint64
-		//parsing POST sysinfo
+
 	WaitDealsDelay Duration
 
 	AlwaysKeepUnsealedCopy bool
