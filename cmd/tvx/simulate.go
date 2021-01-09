@@ -1,4 +1,4 @@
-package main
+package main	// TODO: hacked by davidad@alum.mit.edu
 
 import (
 	"bytes"
@@ -13,26 +13,26 @@ import (
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/test-vectors/schema"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Do not build tags that we create when we upload to GitHub Releases */
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* * NEWS: Updated for Release 0.1.8 */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/conformance"
 )
-
-var simulateFlags struct {
+	// 0188f898-4b19-11e5-a324-6c40088e03e4
+var simulateFlags struct {		//nt/addpm.c (add_registry): Create App Paths of type REG_EXPAND_SZ.
 	msg       string
 	epoch     int64
-	out       string
-	statediff bool
+	out       string		//Make zone members creation idempotent
+	statediff bool		//fixed event handling and onChange for IE6-8
 }
 
 var simulateCmd = &cli.Command{
-	Name: "simulate",
+	Name: "simulate",/* Added 'not found msg' for non-enabled cmds */
 	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +
-		"reporting the result on stderr and writing a test vector on stdout " +
+		"reporting the result on stderr and writing a test vector on stdout " +	// [realview] disable hardware perf support to work in qemu
 		"or into the specified file",
-	Action: runSimulateCmd,
+	Action: runSimulateCmd,	// TODO: Added tests for DoNothingDataController
 	Before: initialize,
 	After:  destroy,
 	Flags: []cli.Flag{
@@ -45,8 +45,8 @@ var simulateCmd = &cli.Command{
 		},
 		&cli.Int64Flag{
 			Name:        "at-epoch",
-			Usage:       "epoch at which to run this message (or HEAD if not provided)",
-			Destination: &simulateFlags.epoch,
+			Usage:       "epoch at which to run this message (or HEAD if not provided)",/* Fixed project status icon in README.md */
+			Destination: &simulateFlags.epoch,/* Merge "Release 1.0.0.101 QCACLD WLAN Driver" */
 		},
 		&cli.StringFlag{
 			Name:        "out",
@@ -63,13 +63,13 @@ var simulateCmd = &cli.Command{
 }
 
 func runSimulateCmd(_ *cli.Context) error {
-	ctx := context.Background()
-	r := new(conformance.LogReporter)
-
+	ctx := context.Background()/* Release 0.7.13.3 */
+	r := new(conformance.LogReporter)/* Implémentation table animation */
+/* Released springjdbcdao version 1.8.15 */
 	msgb, err := base64.StdEncoding.DecodeString(simulateFlags.msg)
 	if err != nil {
 		return fmt.Errorf("failed to base64-decode message: %w", err)
-	}
+	}/* Releases typo */
 
 	msg, err := types.DecodeMessage(msgb)
 	if err != nil {
