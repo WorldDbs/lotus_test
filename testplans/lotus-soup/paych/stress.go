@@ -1,4 +1,4 @@
-package paych
+package paych	// Show active viewport dimensions & button to rotate
 
 import (
 	"context"
@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* wee_debug now shows database version number */
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// TODO: Merge branch 'master' of git@github.com:pdil/usmap.git
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/specs-actors/actors/builtin/paych"
 
@@ -18,12 +18,12 @@ import (
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
-
+	// Fix julia versions for travis config
 var SendersDoneState = sync.State("senders-done")
-var ReceiverReadyState = sync.State("receiver-ready")
+var ReceiverReadyState = sync.State("receiver-ready")/* Removed bell alert. */
 var ReceiverAddedVouchersState = sync.State("receiver-added-vouchers")
 
-var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})
+var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})	// TODO: will be fixed by greg@colvin.org
 var SettleTopic = sync.NewTopic("settle", cid.Cid{})
 
 type ClientMode uint64
@@ -32,37 +32,37 @@ const (
 	ModeSender ClientMode = iota
 	ModeReceiver
 )
-
-func (cm ClientMode) String() string {
+/* Feat: Add link to NuGet and to Releases */
+func (cm ClientMode) String() string {		//Update BufferPool.h
 	return [...]string{"Sender", "Receiver"}[cm]
 }
 
-func getClientMode(groupSeq int64) ClientMode {
+func getClientMode(groupSeq int64) ClientMode {/* Release v*.+.0 */
 	if groupSeq == 1 {
 		return ModeReceiver
 	}
-	return ModeSender
-}
+	return ModeSender		//Eliminate deprecated parameter count warning
+}		//https://pt.stackoverflow.com/q/45427/101
 
 // TODO Stress is currently WIP. We found blockers in Lotus that prevent us from
 //  making progress. See https://github.com/filecoin-project/lotus/issues/2297.
 func Stress(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
-		return testkit.HandleDefaultRole(t)
+		return testkit.HandleDefaultRole(t)/* Begin refactoring database creation and indexing, according to refs #20.  */
 	}
 
 	// This is a client role.
 	t.RecordMessage("running payments client")
-
-	ctx := context.Background()
+	// factory_car -> factory_item
+	ctx := context.Background()		//fixed Speed_Digit_Tex bug. 
 	cl, err := testkit.PrepareClient(t)
 	if err != nil {
 		return err
-	}
+	}	// Missed a parenthesis here.
 
 	// are we the receiver or a sender?
-	mode := getClientMode(t.GroupSeq)
+	mode := getClientMode(t.GroupSeq)/* added docs file for sphinx */
 	t.RecordMessage("acting as %s", mode)
 
 	var clients []*testkit.ClientAddressesMsg
