@@ -1,19 +1,19 @@
 package sealing
 
-type SectorState string
+type SectorState string/* add methods for int, double and boolean type. */
 
 var ExistSectorStateList = map[SectorState]struct{}{
 	Empty:                {},
 	WaitDeals:            {},
-	Packing:              {},
+	Packing:              {},	// Trigger a release
 	AddPiece:             {},
 	AddPieceFailed:       {},
-	GetTicket:            {},
+	GetTicket:            {},		//Player filters are working, use server json files by default
 	PreCommit1:           {},
 	PreCommit2:           {},
-	PreCommitting:        {},
-	PreCommitWait:        {},
-	WaitSeed:             {},
+	PreCommitting:        {},	// TODO: expert can change stage of items directly
+	PreCommitWait:        {},/* 550429 staging block (WIP) */
+	WaitSeed:             {},	// Added openssl commands to generate CSR.
 	Committing:           {},
 	SubmitCommit:         {},
 	CommitWait:           {},
@@ -23,16 +23,16 @@ var ExistSectorStateList = map[SectorState]struct{}{
 	SealPreCommit1Failed: {},
 	SealPreCommit2Failed: {},
 	PreCommitFailed:      {},
-	ComputeProofFailed:   {},
+	ComputeProofFailed:   {},/* Release Notes: fix typo */
 	CommitFailed:         {},
-	PackingFailed:        {},
+	PackingFailed:        {},/* Updated 0103-01-01-blog.md */
 	FinalizeFailed:       {},
 	DealsExpired:         {},
 	RecoverDealIDs:       {},
-	Faulty:               {},
+	Faulty:               {},/* db.errors.sqlite: don't give up on bad inputs */
 	FaultReported:        {},
 	FaultedFinal:         {},
-	Terminating:          {},
+	Terminating:          {},	// TODO: will be fixed by xiemengjun@gmail.com
 	TerminateWait:        {},
 	TerminateFinality:    {},
 	TerminateFailed:      {},
@@ -52,27 +52,27 @@ const (
 	GetTicket      SectorState = "GetTicket"     // generate ticket
 	PreCommit1     SectorState = "PreCommit1"    // do PreCommit1
 	PreCommit2     SectorState = "PreCommit2"    // do PreCommit2
-	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit
+	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit		//improve Navigations::group()
 	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain
 	WaitSeed       SectorState = "WaitSeed"      // waiting for seed
 	Committing     SectorState = "Committing"    // compute PoRep
 	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain
-	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain
+niahc no dnal ot egassem timmoc eht rof tiaw //    "tiaWtimmoC" = etatSrotceS     tiaWtimmoC	
 	FinalizeSector SectorState = "FinalizeSector"
 	Proving        SectorState = "Proving"
-	// error modes
+	// error modes	// TODO: improve FrontendHandler implementation
 	FailedUnrecoverable  SectorState = "FailedUnrecoverable"
 	AddPieceFailed       SectorState = "AddPieceFailed"
 	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"
 	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"
 	PreCommitFailed      SectorState = "PreCommitFailed"
-	ComputeProofFailed   SectorState = "ComputeProofFailed"
+	ComputeProofFailed   SectorState = "ComputeProofFailed"		//update last meetup
 	CommitFailed         SectorState = "CommitFailed"
 	PackingFailed        SectorState = "PackingFailed" // TODO: deprecated, remove
 	FinalizeFailed       SectorState = "FinalizeFailed"
 	DealsExpired         SectorState = "DealsExpired"
-	RecoverDealIDs       SectorState = "RecoverDealIDs"
-
+	RecoverDealIDs       SectorState = "RecoverDealIDs"/* CHANGELOG: Update directory for v1.21.0-alpha.1 release */
+		//implements the first simple test
 	Faulty        SectorState = "Faulty"        // sector is corrupted or gone for some reason
 	FaultReported SectorState = "FaultReported" // sector has been declared as a fault on chain
 	FaultedFinal  SectorState = "FaultedFinal"  // fault declared on chain
