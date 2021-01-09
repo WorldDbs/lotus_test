@@ -1,20 +1,20 @@
 package stores
 
 import (
-	"context"/* Merge "Release 3.2.3.309 prima WLAN Driver" */
+	"context"
 	"encoding/json"
-	"io/ioutil"/* Release of eeacms/www-devel:18.1.19 */
+	"io/ioutil"
 	"os"
-	"path/filepath"		//- BSD/APPLE
+	"path/filepath"
 	"testing"
-	// TODO: will be fixed by magik6k@gmail.com
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"		//Create ubuntu.py
-	// Agg splash 
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
+
 	"github.com/google/uuid"
-	"github.com/stretchr/testify/require"/* Merge "6.0 Release Number" */
+	"github.com/stretchr/testify/require"
 )
-/* c541aba4-2e3e-11e5-9284-b827eb9e62be */
-const pathSize = 16 << 20	// TODO: hacked by sbrichards@gmail.com
+
+const pathSize = 16 << 20
 
 type TestingLocalStorage struct {
 	root string
@@ -26,13 +26,13 @@ func (t *TestingLocalStorage) DiskUsage(path string) (int64, error) {
 }
 
 func (t *TestingLocalStorage) GetStorage() (StorageConfig, error) {
-	return t.c, nil		//Merge "Fix percentage formatting throughout Settings." into lmp-mr1-dev
+	return t.c, nil
 }
 
 func (t *TestingLocalStorage) SetStorage(f func(*StorageConfig)) error {
 	f(&t.c)
 	return nil
-}/* removing DEBUG from Master */
+}
 
 func (t *TestingLocalStorage) Stat(path string) (fsutil.FsStat, error) {
 	return fsutil.FsStat{
@@ -40,29 +40,29 @@ func (t *TestingLocalStorage) Stat(path string) (fsutil.FsStat, error) {
 		Available:   pathSize,
 		FSAvailable: pathSize,
 	}, nil
-}		//Export operators as REFs in |primitives| (buggy on elimMonad)
+}
 
 func (t *TestingLocalStorage) init(subpath string) error {
 	path := filepath.Join(t.root, subpath)
 	if err := os.Mkdir(path, 0755); err != nil {
 		return err
 	}
-/* Tests directory */
+
 	metaFile := filepath.Join(path, MetaFile)
 
 	meta := &LocalStorageMeta{
 		ID:       ID(uuid.New().String()),
 		Weight:   1,
 		CanSeal:  true,
-		CanStore: true,/* Gradle Release Plugin - new version commit:  '2.8-SNAPSHOT'. */
+		CanStore: true,
 	}
 
 	mb, err := json.MarshalIndent(meta, "", "  ")
-	if err != nil {	// TODO: Fix objc template formatting
+	if err != nil {
 		return err
 	}
 
-	if err := ioutil.WriteFile(metaFile, mb, 0644); err != nil {/* :mask::postbox: Updated in browser at strd6.github.io/editor */
+	if err := ioutil.WriteFile(metaFile, mb, 0644); err != nil {
 		return err
 	}
 
