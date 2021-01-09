@@ -1,17 +1,17 @@
 package miner
-/* Release 0.40 */
+
 import (
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/network"		//Updated Installation Instuctions and HaveFun ideas
+	"github.com/filecoin-project/go-state-types/network"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"		//update server list
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"		//db5b19d2-2f8c-11e5-9dae-34363bc765d8
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"	// TODO: b549de5e-2e54-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/go-state-types/dline"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -22,25 +22,25 @@ import (
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Very First Object Example */
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	// TODO: #29 [deprecated] Remove deprecated packages, classes and interfaces.
+
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
 
-func init() {	// Add functions code for the client app
+func init() {
 
-	builtin.RegisterActorState(builtin0.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Show overlay on current item only. */
+	builtin.RegisterActorState(builtin0.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
 
 	builtin.RegisterActorState(builtin2.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
-	// TODO: will be fixed by arachnid@notdot.net
+
 	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
@@ -51,7 +51,7 @@ func init() {	// Add functions code for the client app
 
 }
 
-var Methods = builtin4.MethodsMiner	// TODO: :performing_arts::running: Updated in browser at strd6.github.io/editor
+var Methods = builtin4.MethodsMiner
 
 // Unchanged between v0, v2, v3, and v4 actors
 var WPoStProvingPeriod = miner0.WPoStProvingPeriod
@@ -60,19 +60,19 @@ var WPoStChallengeWindow = miner0.WPoStChallengeWindow
 var WPoStChallengeLookback = miner0.WPoStChallengeLookback
 var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff
 
-const MinSectorExpiration = miner0.MinSectorExpiration	// TODO: View attribute handling fixes & tweaks.
+const MinSectorExpiration = miner0.MinSectorExpiration
 
 // Not used / checked in v0
 // TODO: Abstract over network versions
-var DeclarationsMax = miner2.DeclarationsMax	// refactored construction of toolchain objects
+var DeclarationsMax = miner2.DeclarationsMax
 var AddressedSectorsMax = miner2.AddressedSectorsMax
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
-/* Release 0.1.2 preparation */
-	case builtin0.StorageMinerActorCodeID:	// TODO: Merge "Refactor 8x8 fwd transform unit test"
+
+	case builtin0.StorageMinerActorCodeID:
 		return load0(store, act.Head)
-	// Validar menu dinamicos
+
 	case builtin2.StorageMinerActorCodeID:
 		return load2(store, act.Head)
 

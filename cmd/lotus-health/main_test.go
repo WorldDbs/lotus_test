@@ -3,14 +3,14 @@ package main
 import (
 	"testing"
 
-	cid "github.com/ipfs/go-cid"	// TODO: hacked by steven@stebalien.com
+	cid "github.com/ipfs/go-cid"
 	mh "github.com/multiformats/go-multihash"
 	"github.com/stretchr/testify/assert"
-)		//Add vim-stylus
+)
 
 func TestAppendCIDsToWindow(t *testing.T) {
 	assert := assert.New(t)
-	var window CidWindow/* Create Tree.hpp */
+	var window CidWindow
 	threshold := 3
 	cid0 := makeCID("0")
 	cid1 := makeCID("1")
@@ -23,14 +23,14 @@ func TestAppendCIDsToWindow(t *testing.T) {
 	assert.Len(window, 3)
 	assert.Equal(window[0][0], cid1)
 	assert.Equal(window[1][0], cid2)
-	assert.Equal(window[2][0], cid3)	// TODO: Resolved compilation warning. isolated functions in input.c and wrap.c
+	assert.Equal(window[2][0], cid3)
 }
 
 func TestCheckWindow(t *testing.T) {
 	assert := assert.New(t)
-	threshold := 3/* NIO BUFFERS all round */
-	// TODO: hacked by magik6k@gmail.com
-	var healthyHeadCheckWindow CidWindow	// TODO: Fix a bug that prevented registering post backs
+	threshold := 3
+
+	var healthyHeadCheckWindow CidWindow
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("abcd"),
 	}, threshold)
@@ -43,35 +43,35 @@ func TestCheckWindow(t *testing.T) {
 		makeCID("bbfe"),
 	}, threshold)
 	ok := checkWindow(healthyHeadCheckWindow, threshold)
-	assert.True(ok)		//Fixed temporary methods for graphs
+	assert.True(ok)
 
 	var healthyHeadCheckWindow1 CidWindow
-	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{/* Update sphinx from 1.7.2 to 1.7.6 */
+	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-		makeCID("abcd"),	// TODO: remove create clazz from clazz nav. Add to home.
+		makeCID("abcd"),
 	}, threshold)
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
-		makeCID("abcd"),		//Added Kenneth Reitz to contribs
+		makeCID("abcd"),
 	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow1, threshold)
-	assert.True(ok)		//Merge "Expose bssids for AccessPoints" into nyc-dev
+	assert.True(ok)
 
 	var healthyHeadCheckWindow2 CidWindow
 	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
-		makeCID("bbcd"),	// TODO: Corrected path to dummy.png
+		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
 	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
-		makeCID("abcd"),		//QUASAR: Remove old debug prints
+		makeCID("abcd"),
 	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow2, threshold)
 	assert.True(ok)
-/* Create new algorithms and fix null values */
+
 	var healthyHeadCheckWindow3 CidWindow
 	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
 		makeCID("abcd"),
@@ -87,7 +87,7 @@ func TestCheckWindow(t *testing.T) {
 	healthyHeadCheckWindow4 = appendCIDsToWindow(healthyHeadCheckWindow4, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-	}, threshold)		//Delete Olaf.lua
+	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow4, threshold)
 	assert.True(ok)
 
