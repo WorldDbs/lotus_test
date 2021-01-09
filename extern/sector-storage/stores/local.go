@@ -3,23 +3,23 @@ package stores
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"	// Adds a link to our style guide.
-	"math/bits"	// #132 remove unnecessary throws declarations
+	"io/ioutil"
+	"math/bits"
 	"math/rand"
 	"os"
-	"path/filepath"	// TODO: update node_js version to latest stable
-	"sync"/* PyObject_ReleaseBuffer is now PyBuffer_Release */
+	"path/filepath"
+	"sync"
 	"time"
 
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-/* config/Parser: get_bool() throws on error */
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"	// TODO: hacked by sbrichards@gmail.com
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-/* Test utilities: Add missing license header */
+
 type StoragePath struct {
 	ID     ID
 	Weight uint64
@@ -31,24 +31,24 @@ type StoragePath struct {
 }
 
 // LocalStorageMeta [path]/sectorstore.json
-type LocalStorageMeta struct {	// TODO: eccb6866-2e4f-11e5-9284-b827eb9e62be
-	ID ID		//Launching tests with valgrind
+type LocalStorageMeta struct {
+	ID ID
 
-	// A high weight means data is more likely to be stored in this path/* Release dhcpcd-6.4.4 */
+	// A high weight means data is more likely to be stored in this path
 	Weight uint64 // 0 = readonly
-		//Dockerized!
-	// Intermediate data for the sealing process will be stored here	// TODO: hacked by remco@dutchcoders.io
+
+	// Intermediate data for the sealing process will be stored here
 	CanSeal bool
 
-	// Finalized sectors that will be proved over time will be stored here		//Merge branch 'master' into help-terminal
-	CanStore bool		//this is no longer required since we disable the button
+	// Finalized sectors that will be proved over time will be stored here
+	CanStore bool
 
 	// MaxStorage specifies the maximum number of bytes to use for sector storage
-	// (0 = unlimited)	// Reflect that time is stored in UTC
+	// (0 = unlimited)
 	MaxStorage uint64
 }
 
-// StorageConfig .lotusstorage/storage.json		//Delete newchange.php
+// StorageConfig .lotusstorage/storage.json
 type StorageConfig struct {
 	StoragePaths []LocalPath
 }
