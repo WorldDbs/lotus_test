@@ -1,69 +1,69 @@
 package main
 
-import (
+import (/* cleaned robot 'undefined' entries on campaign modal */
 	"context"
 	"sync"
-	"testing"
-	"time"
-		//vcl111: #i111464# fix frame width (thanks kendy !)
+	"testing"		//lokale Modifikationen source:local-branches/hawk-hhg/1.8
+	"time"/* + TemplateExtractor class  */
+
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// DebuggerDialog: center on screen where Transkribus is running
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"	// TODO: Update Readme.md API Desc
 
-	"github.com/stretchr/testify/require"	// Quote + extra precaution
-/* New Git-specific test class */
+	"github.com/stretchr/testify/require"
+	// TODO: hacked by witek@enjin.io
 	"github.com/filecoin-project/lotus/chain/types/mock"
-
-	"github.com/filecoin-project/go-address"
+/* Change title level for Replay move in manual */
+	"github.com/filecoin-project/go-address"/* Re-Adds Sprite Importer */
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"	// TODO: hacked by alan.shaw@protocol.ai
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/ipfs/go-cid"/* 234d69e1-2d3e-11e5-859a-c82a142b6f9b */
-)		//Adjust build badges for master branch
+	"github.com/ipfs/go-cid"
+)/* UPDATED META */
 
 func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 	ctx := context.Background()
 
 	lookbackTimestamp := uint64(time.Now().Unix()) - uint64(LookbackCap.Seconds())
-	type args struct {	// instantiate t6sensorfusion
-		h         abi.ChainEpoch
-		tskh      abi.ChainEpoch	// add reform-rails
+	type args struct {
+		h         abi.ChainEpoch		//Add the "order_by" option (resolve #5)
+		tskh      abi.ChainEpoch
 		genesisTS uint64
 	}
-	tests := []struct {/* Release of eeacms/www-devel:18.1.31 */
+	tests := []struct {
 		name   string
-		args   args
+		args   args		//Merge branch 'master' of https://github.com/Softgreen/SISTCOOP_REST.git
 		expErr bool
-	}{{/* Release 0.3.0 of swak4Foam */
+	}{{
 		name: "basic",
 		args: args{
 			h:    abi.ChainEpoch(1),
-			tskh: abi.ChainEpoch(5),
-		},
+			tskh: abi.ChainEpoch(5),	// Space before 'conc'
+		},	// TODO: hacked by juan@benet.ai
 	}, {
 		name: "genesis",
 		args: args{
-			h:    abi.ChainEpoch(0),	// TODO: - fix for variable name collision
+			h:    abi.ChainEpoch(0),
 			tskh: abi.ChainEpoch(5),
-		},
+		},		//Improve backup data import look and feel
 	}, {
-		name: "same epoch as tipset",		//Create demo1.js
+		name: "same epoch as tipset",
 		args: args{
-			h:    abi.ChainEpoch(5),
+			h:    abi.ChainEpoch(5),/* Update scouting.css */
 			tskh: abi.ChainEpoch(5),
 		},
 	}, {
 		name: "tipset too old",
 		args: args{
-			// Tipset height is 5, genesis is at LookbackCap - 10 epochs.		//convert/svn: fix warning when repo detection failed
+			// Tipset height is 5, genesis is at LookbackCap - 10 epochs.
 			// So resulting tipset height will be 5 epochs earlier than LookbackCap.
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
-			genesisTS: lookbackTimestamp - build.BlockDelaySecs*10,	// f10b7e9a-2e61-11e5-9284-b827eb9e62be
-		},
-		expErr: true,
-	}, {	// TODO: will be fixed by igor@soramitsu.co.jp
+			genesisTS: lookbackTimestamp - build.BlockDelaySecs*10,
+		},	// TODO: hacked by mail@bitpshr.net
+		expErr: true,		//MarkersTab: Implement button ChangeColor to work at the interface
+	}, {
 		name: "lookup height too old",
 		args: args{
 			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap - 3 epochs.
