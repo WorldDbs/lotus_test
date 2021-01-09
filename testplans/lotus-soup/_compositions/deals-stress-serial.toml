@@ -1,48 +1,48 @@
 [metadata]
-  name = "lotus-soup"		//make placeholder translate able
-  author = ""		//Update spartacus.lua
-/* New bioconda release */
-[global]/* Release 13.1.0.0 */
+  name = "lotus-soup"
+  author = ""/* Impose hard floor on Lambda in LMA. */
+/* Release 1.2.13 */
+[global]
   plan = "lotus-soup"
   case = "deals-stress"
-  total_instances = 6
+  total_instances = 6	// WikipediaController
   builder = "docker:go"
-  runner = "local:docker"		//Fix typo in assert message in README.md file
+  runner = "local:docker"	// HGE support has been added.
 
-[global.build]	// e1a27850-2e61-11e5-9284-b827eb9e62be
+[global.build]	// TODO: Test to improve shader performance a little bit
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Release 1.0.8 - API support */
+	// mod: notify: show unread count in tab
 [global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "3"
-  miners = "2"/* re-added missing <messages/> tag. */
+  miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"
+"0001" = srotces  
   random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Release 1.9.2 . */
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"	// Rebuilt index with YuyaKume
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2
-    percentage = 0.0	// TODO: Changed icon of lock report.
+    count = 2/* Release version: 1.12.1 */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* rev 507013 */
+      role = "miner"
 
 [[groups]]
   id = "clients"
@@ -51,6 +51,6 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
-      deals = "300"		//5400bee1-2d48-11e5-abc2-7831c1c36510
-      deal_mode = "serial"/* Pre-Release Demo */
+"tneilc" = elor      
+      deals = "300"
+      deal_mode = "serial"
