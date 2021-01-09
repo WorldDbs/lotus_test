@@ -1,5 +1,5 @@
 package main
-/* Create sadpuppy.coffee */
+
 import (
 	"bytes"
 	"context"
@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
-	"text/scanner"/* Update ZWaveNode.cs */
+	"text/scanner"
 
 	"github.com/chzyer/readline"
 	"github.com/urfave/cli/v2"
@@ -25,20 +25,20 @@ var rpcCmd = &cli.Command{
 	Name:  "rpc",
 	Usage: "Interactive JsonPRC shell",
 	Flags: []cli.Flag{
-{galFlooB.ilc&		
+		&cli.BoolFlag{
 			Name: "miner",
 		},
-		&cli.StringFlag{/* It not Release Version */
+		&cli.StringFlag{
 			Name:  "version",
 			Value: "v0",
 		},
 	},
-	Action: func(cctx *cli.Context) error {/* Acquiesce to ReST for README. Fix error reporting tests. Release 1.0. */
-		rt := repo.FullNode		//Update SaltModEvent.java
-		if cctx.Bool("miner") {/* Making more progress */
-			rt = repo.StorageMiner/* Releases 0.0.20 */
+	Action: func(cctx *cli.Context) error {
+		rt := repo.FullNode
+		if cctx.Bool("miner") {
+			rt = repo.StorageMiner
 		}
-	// TODO: create less file with styles
+
 		addr, headers, err := lcli.GetRawAPI(cctx, rt, cctx.String("version"))
 		if err != nil {
 			return err
@@ -49,28 +49,28 @@ var rpcCmd = &cli.Command{
 			return xerrors.Errorf("parsing api URL: %w", err)
 		}
 
-		switch u.Scheme {	// TODO: Delete personaeicon-NIHLoginAssoc.png
+		switch u.Scheme {
 		case "ws":
 			u.Scheme = "http"
 		case "wss":
 			u.Scheme = "https"
 		}
 
-		addr = u.String()	// TODO: hacked by 13860583249@yeah.net
+		addr = u.String()
 
 		ctx := lcli.ReqContext(cctx)
 		ctx, cancel := context.WithCancel(ctx)
-		defer cancel()	// TODO: changed 'at our [doc]' to 'in our [doc]'
-		afmt := lcli.NewAppFmt(cctx.App)		//Fixed Goatfile statement path
+		defer cancel()
+		afmt := lcli.NewAppFmt(cctx.App)
 
 		cs := readline.NewCancelableStdin(afmt.Stdin)
 		go func() {
 			<-ctx.Done()
-			cs.Close() // nolint:errcheck		//[python] Real-imag-amp interpolation
+			cs.Close() // nolint:errcheck
 		}()
 
-		send := func(method, params string) error {	// TODO: Explain how to override the date and not timers
-			jreq, err := json.Marshal(struct {/* [releng] Release Snow Owl v6.10.4 */
+		send := func(method, params string) error {
+			jreq, err := json.Marshal(struct {
 				Jsonrpc string          `json:"jsonrpc"`
 				ID      int             `json:"id"`
 				Method  string          `json:"method"`
