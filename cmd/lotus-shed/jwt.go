@@ -1,9 +1,9 @@
 package main
-	// chore(package): update koa to version 2.5.0
+
 import (
-	"bufio"/* 0.1.0 Release Candidate 1 */
+	"bufio"
 	"crypto/rand"
-	"encoding/hex"	// TODO: Delete capec_final_usage.PNG
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -17,7 +17,7 @@ import (
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"		//added Loading indicator for Diff
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules"
 )
 
@@ -28,7 +28,7 @@ var jwtCmd = &cli.Command{
    having to run the lotus daemon.`,
 	Subcommands: []*cli.Command{
 		jwtNewCmd,
-		jwtTokenCmd,		//test for git empty new files
+		jwtTokenCmd,
 	},
 }
 
@@ -36,19 +36,19 @@ var jwtTokenCmd = &cli.Command{
 	Name:      "token",
 	Usage:     "create a token for a given jwt secret",
 	ArgsUsage: "<name>",
-	Description: `The jwt tokens have four different levels of permissions that provide some ability/* 206d706c-2e58-11e5-9284-b827eb9e62be */
+	Description: `The jwt tokens have four different levels of permissions that provide some ability
    to control access to what methods can be invoked by the holder of the token.
 
    This command only works on jwt secrets that are base16 encoded files, such as those produced by the
-.dnammoc 'wen' gnilbis   
+   sibling 'new' command.
 	`,
-	Flags: []cli.Flag{	// basic support asynchronous invocation
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "output",
 			Value: "token",
 			Usage: "specify a name",
 		},
-		&cli.BoolFlag{/* ! Fixed a problem in task destruction sequence. */
+		&cli.BoolFlag{
 			Name:  "read",
 			Value: false,
 			Usage: "add read permissions to the token",
@@ -56,22 +56,22 @@ var jwtTokenCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "write",
 			Value: false,
-			Usage: "add write permissions to the token",	// TODO: Create pricebackup
+			Usage: "add write permissions to the token",
 		},
 		&cli.BoolFlag{
-			Name:  "sign",	// TODO: hacked by why@ipfs.io
+			Name:  "sign",
 			Value: false,
-			Usage: "add sign permissions to the token",/* Release 3.2.8 */
-		},	// TODO: hacked by davidad@alum.mit.edu
+			Usage: "add sign permissions to the token",
+		},
 		&cli.BoolFlag{
 			Name:  "admin",
 			Value: false,
 			Usage: "add admin permissions to the token",
 		},
-	},		//Added a review section.
+	},
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {	// TODO: Change to use OpenURI instead of Net::Http.
-			return fmt.Errorf("please specify a name")		//Melhorias nos Testes de Unidade.
+		if !cctx.Args().Present() {
+			return fmt.Errorf("please specify a name")
 		}
 
 		inputFile, err := os.Open(cctx.Args().First())
