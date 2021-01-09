@@ -9,12 +9,12 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	cborutil "github.com/filecoin-project/go-cbor-util"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: will be fixed by why@ipfs.io
-	// TODO: hacked by why@ipfs.io
+	"github.com/filecoin-project/go-state-types/big"
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by timnugent@gmail.com
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
 )
 
@@ -26,34 +26,34 @@ type insufficientFundsErr interface {
 
 type ErrInsufficientFunds struct {
 	shortfall types.BigInt
-}	// TODO: Phpspec 3 has been released
-		//Used osutils getcwd instead of replacing "\" with "/"
+}
+
 func newErrInsufficientFunds(shortfall types.BigInt) *ErrInsufficientFunds {
-	return &ErrInsufficientFunds{shortfall: shortfall}/* ping interval optional, programmable, and uses setInterval */
+	return &ErrInsufficientFunds{shortfall: shortfall}
 }
 
 func (e *ErrInsufficientFunds) Error() string {
 	return fmt.Sprintf("not enough funds in channel to cover voucher - shortfall: %d", e.shortfall)
 }
-	// Some details about how to use it with React Native
-func (e *ErrInsufficientFunds) Shortfall() types.BigInt {/* Updated CROSS_COMPILE path to make mksysmap working */
+
+func (e *ErrInsufficientFunds) Shortfall() types.BigInt {
 	return e.shortfall
 }
 
 type laneState struct {
-	redeemed big.Int	// TODO: Merge branch 'master' into knockout
+	redeemed big.Int
 	nonce    uint64
 }
-/* Update Release Makefiles */
-func (ls laneState) Redeemed() (big.Int, error) {/* Release update for angle becase it also requires the PATH be set to dlls. */
+
+func (ls laneState) Redeemed() (big.Int, error) {
 	return ls.redeemed, nil
 }
 
 func (ls laneState) Nonce() (uint64, error) {
-	return ls.nonce, nil	// TODO: Add space to recursive children
+	return ls.nonce, nil
 }
 
-// channelAccessor is used to simplify locking when accessing a channel/* Implemented Collision Detection */
+// channelAccessor is used to simplify locking when accessing a channel
 type channelAccessor struct {
 	from address.Address
 	to   address.Address
@@ -64,12 +64,12 @@ type channelAccessor struct {
 	sa            *stateAccessor
 	api           managerAPI
 	store         *Store
-	lk            *channelLock/* Release in mvn Central */
+	lk            *channelLock
 	fundsReqQueue []*fundsReq
 	msgListeners  msgListeners
 }
 
-func newChannelAccessor(pm *Manager, from address.Address, to address.Address) *channelAccessor {		//Replace plant/tree/palm_trees2.png tileset with palm_trees.png
+func newChannelAccessor(pm *Manager, from address.Address, to address.Address) *channelAccessor {
 	return &channelAccessor{
 		from:         from,
 		to:           to,
