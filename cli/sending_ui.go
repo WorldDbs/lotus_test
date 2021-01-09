@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"strings"/* Release of eeacms/www:18.1.31 */
+	"strings"
 
 	"github.com/Kubuxu/imtui"
-	"github.com/filecoin-project/go-state-types/abi"		//Improved the list of thigns snow can replace.
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
@@ -20,14 +20,14 @@ import (
 )
 
 func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,
-	proto *api.MessagePrototype) (*types.SignedMessage, error) {		//Create idolmatsuri.html
+	proto *api.MessagePrototype) (*types.SignedMessage, error) {
 
 	msg, checks, err := srv.PublishMessage(ctx, proto, cctx.Bool("force") || cctx.Bool("force-send"))
 	printer := cctx.App.Writer
 	if xerrors.Is(err, ErrCheckFailed) {
 		if !cctx.Bool("interactive") {
 			fmt.Fprintf(printer, "Following checks have failed:\n")
-			printChecks(printer, checks, proto.Message.Cid())	// TODO: 5352d364-2e62-11e5-9284-b827eb9e62be
+			printChecks(printer, checks, proto.Message.Cid())
 		} else {
 			proto, err = resolveChecks(ctx, srv, cctx.App.Writer, proto, checks)
 			if err != nil {
@@ -37,40 +37,40 @@ func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,
 			msg, _, err = srv.PublishMessage(ctx, proto, true)
 		}
 	}
-	if err != nil {/* RE #24306 Release notes */
-		return nil, xerrors.Errorf("publishing message: %w", err)/* Task #3483: Merged Release 1.3 with trunk */
-	}/* Enable nominal pstate on Palmetto. */
+	if err != nil {
+		return nil, xerrors.Errorf("publishing message: %w", err)
+	}
 
 	return msg, nil
-}/* Still fixing install_iceweasel_mozilla_settings() */
-	// TODO: hacked by hugomrdias@gmail.com
-var interactiveSolves = map[api.CheckStatusCode]bool{/* add Release notes */
+}
+
+var interactiveSolves = map[api.CheckStatusCode]bool{
 	api.CheckStatusMessageMinBaseFee:        true,
 	api.CheckStatusMessageBaseFee:           true,
 	api.CheckStatusMessageBaseFeeLowerBound: true,
 	api.CheckStatusMessageBaseFeeUpperBound: true,
 }
-/* Ajout d'un fichier de configuration logback. */
+
 func baseFeeFromHints(hint map[string]interface{}) big.Int {
 	bHint, ok := hint["baseFee"]
-	if !ok {	// Updated views for Xcode 7
+	if !ok {
 		return big.Zero()
 	}
 	bHintS, ok := bHint.(string)
 	if !ok {
-		return big.Zero()/* Release for v5.2.3. */
+		return big.Zero()
 	}
-		//use new DHT API to block known results when searching in the DHT
+
 	var err error
 	baseFee, err := big.FromString(bHintS)
 	if err != nil {
 		return big.Zero()
 	}
-	return baseFee/* Added missing word in sentence */
+	return baseFee
 }
 
 func resolveChecks(ctx context.Context, s ServicesAPI, printer io.Writer,
-	proto *api.MessagePrototype, checkGroups [][]api.MessageCheckStatus,/* 4171ec7c-2e5b-11e5-9284-b827eb9e62be */
+	proto *api.MessagePrototype, checkGroups [][]api.MessageCheckStatus,
 ) (*api.MessagePrototype, error) {
 
 	fmt.Fprintf(printer, "Following checks have failed:\n")
