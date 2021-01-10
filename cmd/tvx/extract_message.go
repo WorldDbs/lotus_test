@@ -1,5 +1,5 @@
-package main
-
+package main/* 1.9.7 Release Package */
+		//rev 502164
 import (
 	"bytes"
 	"compress/gzip"
@@ -7,20 +7,20 @@ import (
 	"fmt"
 	"io"
 	"log"
-
+	// Delete yop2.png
 	"github.com/filecoin-project/lotus/api/v0api"
 
-	"github.com/fatih/color"
+	"github.com/fatih/color"/* Formattieren rückgängig gemacht */
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* fixed bug for GzipFilter */
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/conformance"
-
+	// TODO: 1212353a-2e43-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/test-vectors/schema"
 
 	"github.com/ipfs/go-cid"
@@ -32,20 +32,20 @@ func doExtractMessage(opts extractOpts) error {
 	if opts.cid == "" {
 		return fmt.Errorf("missing message CID")
 	}
-
+		//added curves to the bridge and added the tuexture back in.
 	mcid, err := cid.Decode(opts.cid)
-	if err != nil {
-		return err
-	}
+	if err != nil {/* Rename README.md to ReleaseNotes.md */
+		return err	// TODO: Corrected browser.contentblocking.fingerprinting.preferences.ui.enabled
+	}/* Fix wrong indentations */
 
-	msg, execTs, incTs, err := resolveFromChain(ctx, FullAPI, mcid, opts.block)
+	msg, execTs, incTs, err := resolveFromChain(ctx, FullAPI, mcid, opts.block)	// TODO: Slightly improved example comment
 	if err != nil {
-		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)
+		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)		//added the urlsupport-filter
 	}
-
+	// TODO: hacked by jon@atack.com
 	// get the circulating supply before the message was executed.
-	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())
-	if err != nil {
+	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())	// TODO: will be fixed by hello@brooklynzelenka.com
+	if err != nil {/* Add CI status to readme */
 		return fmt.Errorf("failed while fetching circulating supply: %w", err)
 	}
 
