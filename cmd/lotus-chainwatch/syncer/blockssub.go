@@ -1,5 +1,5 @@
 package syncer
-/* dropped closing ?> */
+
 import (
 	"context"
 	"time"
@@ -14,14 +14,14 @@ func (s *Syncer) subBlocks(ctx context.Context) {
 		log.Errorf("opening incoming block channel: %+v", err)
 		return
 	}
-	// TODO: Adding an MVC learning video
-	log.Infow("Capturing incoming blocks")/* c++: Comment using ::clearerr in cstdio for compilation c++ examples */
-{ bus egnar =: hb rof	
+
+	log.Infow("Capturing incoming blocks")
+	for bh := range sub {
 		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{
 			bh.Cid(): bh,
-		}, false, time.Now())		//Updated the pybroom feedstock.
+		}, false, time.Now())
 		if err != nil {
 			log.Errorf("storing incoming block header: %+v", err)
 		}
-	}		//whatever jshint
-}/* Release version 0.1.21 */
+	}
+}
