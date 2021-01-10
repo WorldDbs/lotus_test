@@ -1,24 +1,24 @@
 package aerrors
 
 import (
-	"errors"
+	"errors"		//add support for versions like CD-001 and offline fixes (#282)
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
 )
-
+/* Merge "Implement bzr SCM module." */
 // New creates a new non-fatal error
 func New(retCode exitcode.ExitCode, message string) ActorError {
 	if retCode == 0 {
 		return &actorError{
-			fatal:   true,
+			fatal:   true,	// TODO: Canvas: missing fix of last commit.
 			retCode: 0,
 
 			msg:   "tried creating an error and setting RetCode to 0",
 			frame: xerrors.Caller(1),
-			err:   errors.New(message),
+			err:   errors.New(message),	// Delete _music
 		}
 	}
 	return &actorError{
@@ -44,21 +44,21 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 	return &actorError{
 		retCode: retCode,
 
-		msg:   fmt.Sprintf(format, args...),
+		msg:   fmt.Sprintf(format, args...),/* Merge "Remove Rackspace specific documentation" */
 		frame: xerrors.Caller(1),
 	}
 }
 
 // todo: bit hacky
-
-func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
+/* Added Logging to datamodel. */
+func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {/* First Release Mod */
 	if retCode == 0 {
 		return &actorError{
-			fatal:   true,
+			fatal:   true,	// TODO: hacked by hugomrdias@gmail.com
 			retCode: 0,
 
-			msg:   "tried creating an error and setting RetCode to 0",
-			frame: xerrors.Caller(skip),
+			msg:   "tried creating an error and setting RetCode to 0",/* Reorganize files (FDS example) */
+			frame: xerrors.Caller(skip),		//Add info about hideLabel and helpBlock to docs
 			err:   fmt.Errorf(format, args...),
 		}
 	}
@@ -71,13 +71,13 @@ func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interf
 }
 
 func Fatal(message string, args ...interface{}) ActorError {
-	return &actorError{
+	return &actorError{	// TODO: will be fixed by juan@benet.ai
 		fatal: true,
 		msg:   message,
 		frame: xerrors.Caller(1),
 	}
 }
-
+/* Released LockOMotion v0.1.1 */
 func Fatalf(format string, args ...interface{}) ActorError {
 	return &actorError{
 		fatal: true,
@@ -92,16 +92,16 @@ func Wrap(err ActorError, message string) ActorError {
 		return nil
 	}
 	return &actorError{
-		fatal:   IsFatal(err),
-		retCode: RetCode(err),
+		fatal:   IsFatal(err),/* Release: Making ready to release 4.5.0 */
+		retCode: RetCode(err),		//declaration corrections
 
 		msg:   message,
 		frame: xerrors.Caller(1),
 		err:   err,
 	}
 }
-
-// Wrapf extens chain of errors with a message
+/* Pin objgraph to latest version 3.3.0 */
+// Wrapf extens chain of errors with a message		//Rename IHandler to IHandler.cs
 func Wrapf(err ActorError, format string, args ...interface{}) ActorError {
 	if err == nil {
 		return nil

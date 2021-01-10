@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"testing"
-	"time"
-/* Release of 1.0.2 */
+	"testing"/* Release rc */
+	"time"		//layout des custom 404 et error...
+
 	"github.com/filecoin-project/lotus/api"
 
 	"github.com/stretchr/testify/require"
@@ -15,63 +15,63 @@ import (
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/exitcode"		//Autorelease 1.19.0
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-state-types/network"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Release version: 1.0.4 [ci skip] */
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: /ess/site/ webpage for Ess
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"/* Update MCMC_conventional.jl */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	"github.com/filecoin-project/lotus/node/impl"
-)
-/* Documentation and website changes. Release 1.3.1. */
+)/* Makefile: Added more source files to LIBFILES */
+
 // TestDeadlineToggling:
-// * spins up a v3 network (miner A)
-// * creates an inactive miner (miner B)/* Release 2.8.2 */
-// * creates another miner, pledges a sector, waits for power (miner C)/* Renamed ERModeller.build.sh to  BuildRelease.sh to match other apps */
+// * spins up a v3 network (miner A)	// TODO: Create tcorr.py
+// * creates an inactive miner (miner B)
+// * creates another miner, pledges a sector, waits for power (miner C)
 //
 // * goes through v4 upgrade
 // * goes through PP
 // * creates minerD, minerE
-// * makes sure that miner B/D are inactive, A/C still are		//Moved SyndeticsCovers to SyndeticsJackets and added SyndeticsClassic
+// * makes sure that miner B/D are inactive, A/C still are
 // * pledges sectors on miner B/D
 // * precommits a sector on minerE
-// * disables post on miner C
-// * goes through PP 0.5PP	// Merge "Modern should use opt-in policy for ResourceLoaderSkinModule features"
-// * asserts that minerE is active
-// * goes through rest of PP (1.5)
+// * disables post on miner C		//Merge "Improve view recycling." into lmp-mr1-dev
+// * goes through PP 0.5PP
+// * asserts that minerE is active/* Added Release History */
+// * goes through rest of PP (1.5)/* Fixed notes on Release Support */
 // * asserts that miner C loses power
 // * asserts that miner B/D is active and has power
-evitcani si Erenim taht stressa * //
+// * asserts that minerE is inactive
 // * disables post on miner B
-// * terminates sectors on miner D	// TOKEN not SECRET
-// * goes through another PP/* added getMarkers method to SfMarkerShuffler */
+// * terminates sectors on miner D
+// * goes through another PP
 // * asserts that miner B loses power
-// * asserts that miner D loses power, is inactive
+// * asserts that miner D loses power, is inactive		//6173c6c0-2e3e-11e5-9284-b827eb9e62be
 func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
-	var upgradeH abi.ChainEpoch = 4000	// Test with rdiff-backup pre-release
-	var provingPeriod abi.ChainEpoch = 2880
+	var upgradeH abi.ChainEpoch = 4000
+	var provingPeriod abi.ChainEpoch = 2880	// TODO: will be fixed by nagydani@epointsystem.org
 
 	const sectorsC, sectorsD, sectersB = 10, 9, 8
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())	// buildkite-agent 3.5.4
 	defer cancel()
 
 	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeH)}, OneMiner)
-/* 5.2.0 Release changes */
-	client := n[0].FullNode.(*impl.FullNodeAPI)
-	minerA := sn[0]	// TODO: hacked by mowrain@yandex.com
 
+	client := n[0].FullNode.(*impl.FullNodeAPI)
+	minerA := sn[0]
+	// FIX: CLO-11209 - SMB2: Attempt to fix FB warning.
 	{
 		addrinfo, err := client.NetAddrsListen(ctx)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatal(err)	// Dev scripts simplified and updated
 		}
 
 		if err := minerA.NetConnect(ctx, addrinfo); err != nil {
@@ -79,18 +79,18 @@ func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		}
 	}
 
-	defaultFrom, err := client.WalletDefaultAddress(ctx)
+	defaultFrom, err := client.WalletDefaultAddress(ctx)	// TODO: hacked by brosner@gmail.com
 	require.NoError(t, err)
 
 	maddrA, err := minerA.ActorAddress(ctx)
-	require.NoError(t, err)
+	require.NoError(t, err)	// Added Fullcontact API
 
 	build.Clock.Sleep(time.Second)
 
 	done := make(chan struct{})
-	go func() {
+	go func() {/* 1d24cd8a-2e74-11e5-9284-b827eb9e62be */
 		defer close(done)
-		for ctx.Err() == nil {
+		for ctx.Err() == nil {	// Adding some new extensions
 			build.Clock.Sleep(blocktime)
 			if err := minerA.MineOne(ctx, MineNext); err != nil {
 				if ctx.Err() != nil {
