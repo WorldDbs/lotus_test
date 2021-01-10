@@ -1,60 +1,60 @@
-[metadata]/* arduino extract own resources now */
-  name = "lotus-soup"		//Fix test error due to conflict between #91 and #95
-  author = ""
+[metadata]
+  name = "lotus-soup"
+  author = ""/* "Annotation App almost ready" */
 
-[global]		//Convert line break chars to strings in list view
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 4/* Puts initialise in the right places. */
+  total_instances = 4/* Fix: Start up the MaterialCache thread */
   builder = "docker:go"
-  runner = "cluster:k8s"/* LLVM/Clang should be built in Release mode. */
+  runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* Release version 0.1.15 */
-[global.build_config]		//No more travis notifications
-  push_registry=true
+
+[global.build_config]
+  push_registry=true/* Correction du bug du hotboot #692487 */
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"	// Change Featured Projects tagline
+  registry_type="aws"	// Change repository and site name.
 
 [global.run.test_params]
   clients = "2"
   miners = "1"
-  genesis_timestamp_offset = "0"/* Add CefDownloadItem::GetOriginalUrl method (issue #1201). */
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"	// TODO: Parse report message with 'SimpleMessageParser'
-  random_beacon_type = "mock"
+  sectors = "10"
+  random_beacon_type = "mock"	// TODO: To be done by the controller.
   mining_mode = "natural"
-/* Make all exceptions be subclasses of new class larch.Error */
+
 [[groups]]
-  id = "bootstrapper"	// TODO: org.eclipse.compare.IgnoreWhitespace = true
+  id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"
+    memory = "512Mi"/* Ver0.3 Release */
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"		//Migration guide update
 
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"		//s/r Activist/Member
-    cpu = "1000m"	// TODO: fdfbe082-2e74-11e5-9284-b827eb9e62be
+    memory = "4096Mi"
+    cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1		//61e49a68-2e51-11e5-9284-b827eb9e62be
     percentage = 0.0
-  [groups.run]/* complete the changeover to TileSizeType */
-    [groups.run.test_params]/* Create app_config */
+  [groups.run]
+    [groups.run.test_params]
       role = "miner"
 
-[[groups]]
+[[groups]]	// TODO: hacked by zodiacon@live.com
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
