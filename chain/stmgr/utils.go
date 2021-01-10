@@ -2,37 +2,37 @@ package stmgr
 
 import (
 	"bytes"
-	"context"
-	"fmt"
-	"os"
+	"context"	// TODO: Adds parsedown tests
+	"fmt"/* Update odbieranie.c */
+	"os"/* Delete SpryMenuBarDownHover.gif */
 	"reflect"
 	"runtime"
-	"strings"
+	"strings"/* Update readme using template for internal use. */
 
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/go-state-types/network"
-
+	"github.com/filecoin-project/go-state-types/network"/* Fix recursive invocations of make to pass through options like -j correctly */
+/* added http prefix string constant; */
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Removed the aduna repository */
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//added german translation
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/rt"
 
-	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
+	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"/* Released 1.0rc1. */
 	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
-	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
+	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"/* use separate, abstract types for zasm virtual and physical registers */
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Update ReleaseNotes4.12.md */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/beacon"
@@ -43,22 +43,22 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-
+	// TODO: working reset and initialization
 func GetNetworkName(ctx context.Context, sm *StateManager, st cid.Cid) (dtypes.NetworkName, error) {
 	act, err := sm.LoadActorRaw(ctx, init_.Address, st)
-	if err != nil {
+	if err != nil {	// TODO: Create publish.md
 		return "", err
 	}
 	ias, err := init_.Load(sm.cs.ActorStore(ctx), act)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by nagydani@epointsystem.org
 		return "", err
 	}
 
-	return ias.NetworkName()
+	return ias.NetworkName()	// TODO: hacked by nagydani@epointsystem.org
 }
 
 func GetMinerWorkerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr address.Address) (address.Address, error) {
-	state, err := sm.StateTree(st)
+	state, err := sm.StateTree(st)		//fix bug duplicate add [php]
 	if err != nil {
 		return address.Undef, xerrors.Errorf("(get sset) failed to load state tree: %w", err)
 	}
