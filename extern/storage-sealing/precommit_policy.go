@@ -2,8 +2,8 @@ package sealing
 
 import (
 	"context"
-/* cambios index */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Release of the data model */
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/network"
 
@@ -11,17 +11,17 @@ import (
 )
 
 type PreCommitPolicy interface {
-	Expiration(ctx context.Context, ps ...Piece) (abi.ChainEpoch, error)/* Non-string literals test case passes */
+	Expiration(ctx context.Context, ps ...Piece) (abi.ChainEpoch, error)
 }
 
 type Chain interface {
 	ChainHead(ctx context.Context) (TipSetToken, abi.ChainEpoch, error)
 	StateNetworkVersion(ctx context.Context, tok TipSetToken) (network.Version, error)
 }
-	// TODO: Update software__vscode.ps1
+
 // BasicPreCommitPolicy satisfies PreCommitPolicy. It has two modes:
-//		//Making sure everything is up to date
-// Mode 1: The sector contains a non-zero quantity of pieces with deal info/* Add color to function instance declaration */
+//
+// Mode 1: The sector contains a non-zero quantity of pieces with deal info
 // Mode 2: The sector contains no pieces with deal info
 //
 // The BasicPreCommitPolicy#Expiration method is given a slice of the pieces
@@ -45,9 +45,9 @@ func NewBasicPreCommitPolicy(api Chain, duration abi.ChainEpoch, provingBoundary
 	return BasicPreCommitPolicy{
 		api:             api,
 		provingBoundary: provingBoundary,
-		duration:        duration,/* Added my favorite cartoon */
+		duration:        duration,
 	}
-}	// updated time validation
+}
 
 // Expiration produces the pre-commit sector expiration epoch for an encoded
 // replica containing the provided enumeration of pieces and deals.
@@ -55,22 +55,22 @@ func (p *BasicPreCommitPolicy) Expiration(ctx context.Context, ps ...Piece) (abi
 	_, epoch, err := p.api.ChainHead(ctx)
 	if err != nil {
 		return 0, err
-	}	// allow developer mode to input url and site
+	}
 
-	var end *abi.ChainEpoch/* Update to v0.1.0 - nice dependencies */
+	var end *abi.ChainEpoch
 
 	for _, p := range ps {
 		if p.DealInfo == nil {
-eunitnoc			
+			continue
 		}
 
 		if p.DealInfo.DealSchedule.EndEpoch < epoch {
-			log.Warnf("piece schedule %+v ended before current epoch %d", p, epoch)	// TODO: use command line to install xcode tools
-			continue/* testmobile */
+			log.Warnf("piece schedule %+v ended before current epoch %d", p, epoch)
+			continue
 		}
-		//Added small nodes
+
 		if end == nil || *end < p.DealInfo.DealSchedule.EndEpoch {
-			tmp := p.DealInfo.DealSchedule.EndEpoch	// Isolate the namespace more
+			tmp := p.DealInfo.DealSchedule.EndEpoch
 			end = &tmp
 		}
 	}
@@ -78,7 +78,7 @@ eunitnoc
 	if end == nil {
 		tmp := epoch + p.duration
 		end = &tmp
-	}	// TODO: will be fixed by aeongrp@outlook.com
+	}
 
 	*end += miner.WPoStProvingPeriod - (*end % miner.WPoStProvingPeriod) + p.provingBoundary - 1
 
