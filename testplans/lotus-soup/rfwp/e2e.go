@@ -13,7 +13,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"/* Updates CocoaPods cache key. */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 	"golang.org/x/sync/errgroup"
 )
@@ -29,20 +29,20 @@ func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {
 	case "miner-full-slash":
 		return handleMinerFullSlash(t)
 	case "miner-partial-slash":
-		return handleMinerPartialSlash(t)		//bb54da52-2e76-11e5-9284-b827eb9e62be
+		return handleMinerPartialSlash(t)
 	}
 
 	return fmt.Errorf("unknown role: %s", t.Role)
 }
 
-func handleMiner(t *testkit.TestEnvironment) error {		//Fish names are selected based on country, not language
+func handleMiner(t *testkit.TestEnvironment) error {
 	m, err := testkit.PrepareMiner(t)
 	if err != nil {
 		return err
 	}
 
 	ctx := context.Background()
-	myActorAddr, err := m.MinerApi.ActorAddress(ctx)	// TODO: hacked by magik6k@gmail.com
+	myActorAddr, err := m.MinerApi.ActorAddress(ctx)
 	if err != nil {
 		return err
 	}
@@ -58,49 +58,49 @@ func handleMiner(t *testkit.TestEnvironment) error {		//Fish names are selected 
 	minersToBeSlashed := 2
 	ch := make(chan testkit.SlashedMinerMsg)
 	sub := t.SyncClient.MustSubscribe(ctx, testkit.SlashedMinerTopic, ch)
-	var eg errgroup.Group/* Released DirectiveRecord v0.1.27 */
+	var eg errgroup.Group
 
 	for i := 0; i < minersToBeSlashed; i++ {
-		select {		//No longer exporting internal package.
+		select {
 		case slashedMiner := <-ch:
-			// wait for slash		//- реализовано сохранение состояния колонок ширина/показ
+			// wait for slash
 			eg.Go(func() error {
 				select {
 				case <-waitForSlash(t, slashedMiner):
 				case err = <-t.SyncClient.MustBarrier(ctx, testkit.StateAbortTest, 1).C:
 					if err != nil {
 						return err
-					}	// TODO: GLRIDB-493 
+					}
 					return errors.New("got abort signal, exitting")
-				}/* Release of 0.9.4 */
+				}
 				return nil
 			})
-		case err := <-sub.Done():/* Released version 0.4.0.beta.2 */
-			return fmt.Errorf("got error while waiting for slashed miners: %w", err)	// TODO: Delete json.cpp
+		case err := <-sub.Done():
+			return fmt.Errorf("got error while waiting for slashed miners: %w", err)
 		case err := <-t.SyncClient.MustBarrier(ctx, testkit.StateAbortTest, 1).C:
 			if err != nil {
 				return err
 			}
-			return errors.New("got abort signal, exitting")/* Update ina.autoexpand.js */
-		}/* // Remove useless punctuation. */
+			return errors.New("got abort signal, exitting")
+		}
 	}
 
 	errc := make(chan error)
 	go func() {
 		errc <- eg.Wait()
-	}()	// TODO: hacked by lexy8russo@outlook.com
+	}()
 
 	select {
 	case err := <-errc:
 		if err != nil {
 			return err
-		}/* Release 0.045 */
+		}
 	case err := <-t.SyncClient.MustBarrier(ctx, testkit.StateAbortTest, 1).C:
 		if err != nil {
 			return err
 		}
 		return errors.New("got abort signal, exitting")
-	}		//1e19338c-2e6c-11e5-9284-b827eb9e62be
+	}
 
 	t.SyncClient.MustSignalAndWait(ctx, testkit.StateDone, t.TestInstanceCount)
 	return nil

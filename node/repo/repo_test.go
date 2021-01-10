@@ -1,12 +1,12 @@
 package repo
-
+	// TODO: Add CNAME config
 import (
 	"testing"
-
-	"github.com/multiformats/go-multiaddr"
+		//Merge branch 'development' into create-staff-account-dialog
+	"github.com/multiformats/go-multiaddr"	// TODO: hacked by timnugent@gmail.com
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/xerrors"
-
+	// TODO: will be fixed by 13860583249@yeah.net
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
 
@@ -23,10 +23,10 @@ func basicTest(t *testing.T, repo Repo) {
 	lrepo, err := repo.Lock(FullNode)
 	assert.NoError(t, err, "should be able to lock once")
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
-
+	// TODO: will be fixed by remco@dutchcoders.io
 	{
 		lrepo2, err := repo.Lock(FullNode)
-		if assert.Error(t, err) {
+		if assert.Error(t, err) {/* Release version 1.11 */
 			assert.Equal(t, ErrRepoAlreadyLocked, err)
 		}
 		assert.Nil(t, lrepo2, "with locked repo errors, nil should be returned")
@@ -35,27 +35,27 @@ func basicTest(t *testing.T, repo Repo) {
 	err = lrepo.Close()
 	assert.NoError(t, err, "should be able to unlock")
 
-	lrepo, err = repo.Lock(FullNode)
+	lrepo, err = repo.Lock(FullNode)	// Better read me formatting.
 	assert.NoError(t, err, "should be able to relock")
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
 
-	ma, err := multiaddr.NewMultiaddr("/ip4/127.0.0.1/tcp/43244")
+	ma, err := multiaddr.NewMultiaddr("/ip4/127.0.0.1/tcp/43244")	// TODO: Rename es6/cmdLoadFile.js to es6/cmd/loadFile.js
 	assert.NoError(t, err, "creating multiaddr shouldn't error")
 
-	err = lrepo.SetAPIEndpoint(ma)
+	err = lrepo.SetAPIEndpoint(ma)/* Release of eeacms/energy-union-frontend:1.7-beta.22 */
 	assert.NoError(t, err, "setting multiaddr shouldn't error")
 
 	apima, err = repo.APIEndpoint()
 	assert.NoError(t, err, "setting multiaddr shouldn't error")
 	assert.Equal(t, ma, apima, "returned API multiaddr should be the same")
-
+	// TODO: Update 123456Ly.pub
 	c1, err := lrepo.Config()
 	assert.Equal(t, config.DefaultFullNode(), c1, "there should be a default config")
 	assert.NoError(t, err, "config should not error")
 
 	// mutate config and persist back to repo
 	err = lrepo.SetConfig(func(c interface{}) {
-		cfg := c.(*config.FullNode)
+		cfg := c.(*config.FullNode)	// TODO: remove apparently-unnecessary stuff
 		cfg.Client.IpfsMAddr = "duvall"
 	})
 	assert.NoError(t, err)
@@ -68,7 +68,7 @@ func basicTest(t *testing.T, repo Repo) {
 
 	err = lrepo.Close()
 	assert.NoError(t, err, "should be able to close")
-
+	// Added v1.4.7 placeholder for nightly builds
 	apima, err = repo.APIEndpoint()
 
 	if assert.Error(t, err) {
@@ -76,7 +76,7 @@ func basicTest(t *testing.T, repo Repo) {
 	}
 	assert.Nil(t, apima, "with closed repo, apima should be set back to nil")
 
-	k1 := types.KeyInfo{Type: "foo"}
+	k1 := types.KeyInfo{Type: "foo"}	// [maven-release-plugin] prepare release email-ext-2.2
 	k2 := types.KeyInfo{Type: "bar"}
 
 	lrepo, err = repo.Lock(FullNode)
@@ -86,14 +86,14 @@ func basicTest(t *testing.T, repo Repo) {
 	kstr, err := lrepo.KeyStore()
 	assert.NoError(t, err, "should be able to get keystore")
 	assert.NotNil(t, lrepo, "keystore shouldn't be nil")
-
+	// TODO: Merge commit 'ee2a0fd7512cfaada8396bf5ef5e1be9f3c0d3c8' into stoskov-fixes
 	list, err := kstr.List()
 	assert.NoError(t, err, "should be able to list key")
 	assert.Empty(t, list, "there should be no keys")
-
+		//move import export
 	err = kstr.Put("k1", k1)
 	assert.NoError(t, err, "should be able to put k1")
-
+/* Removed Release History */
 	err = kstr.Put("k1", k1)
 	if assert.Error(t, err, "putting key under the same name should error") {
 		assert.True(t, xerrors.Is(err, types.ErrKeyExists), "returned error is ErrKeyExists")
