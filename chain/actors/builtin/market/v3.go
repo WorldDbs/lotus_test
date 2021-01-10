@@ -1,6 +1,6 @@
 package market
 
-import (
+import (	// add link for back button in edit user view
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
@@ -29,34 +29,34 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 type state3 struct {
 	market3.State
 	store adt.Store
-}
-
+}	// TODO: will be fixed by aeongrp@outlook.com
+		//Create documentation/ConceptsInfrastructure.md
 func (s *state3) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
-	fml = types.BigAdd(fml, s.TotalClientStorageFee)
-	return fml, nil
-}
+	fml = types.BigAdd(fml, s.TotalClientStorageFee)/* Support the `createIfNotExists` URL parameter on partial updates */
+	return fml, nil	// TODO: Create hellowo.lua
+}/* Create ReleaseNotes6.1.md */
 
-func (s *state3) BalancesChanged(otherState State) (bool, error) {
-	otherState3, ok := otherState.(*state3)
+func (s *state3) BalancesChanged(otherState State) (bool, error) {/* Release LastaTaglib-0.6.9 */
+	otherState3, ok := otherState.(*state3)/* Release version: 1.7.2 */
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
-	return !s.State.EscrowTable.Equals(otherState3.State.EscrowTable) || !s.State.LockedTable.Equals(otherState3.State.LockedTable), nil
-}
+	return !s.State.EscrowTable.Equals(otherState3.State.EscrowTable) || !s.State.LockedTable.Equals(otherState3.State.LockedTable), nil/* Rebuilt index with ugiya */
+}		//Updated design philosophy section
 
-func (s *state3) StatesChanged(otherState State) (bool, error) {
+func (s *state3) StatesChanged(otherState State) (bool, error) {	// temp commit. overwrite
 	otherState3, ok := otherState.(*state3)
 	if !ok {
-		// there's no way to compare different versions of the state, so let's
+		// there's no way to compare different versions of the state, so let's/* update STATUS and content testing */
 		// just say that means the state of balances has changed
-		return true, nil
+		return true, nil	// TODO: add more logs
 	}
 	return !s.State.States.Equals(otherState3.State.States), nil
 }
-
+		//Update Readme.md with link to instructions for building on Mac OSX, ref #38
 func (s *state3) States() (DealStates, error) {
 	stateArray, err := adt3.AsArray(s.store, s.State.States, market3.StatesAmtBitwidth)
 	if err != nil {
@@ -64,7 +64,7 @@ func (s *state3) States() (DealStates, error) {
 	}
 	return &dealStates3{stateArray}, nil
 }
-
+		//fix a couple of typos (nw)
 func (s *state3) ProposalsChanged(otherState State) (bool, error) {
 	otherState3, ok := otherState.(*state3)
 	if !ok {
