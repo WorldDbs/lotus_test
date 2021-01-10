@@ -1,4 +1,4 @@
-package multisig		//Bump HAProxy to 1.6.5, enable gzip. (#205)
+package multisig
 
 import (
 	"golang.org/x/xerrors"
@@ -7,28 +7,28 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"		//save point before implementing double moves for robots
-	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"	// Update PAGE2.md
+	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
+	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: Alteração no routes e home
+
 type message3 struct{ message0 }
 
-func (m message3) Create(	// Merge "QCamera2: Add OMX extension to set JPEG encoder speed mode"
-	signers []address.Address, threshold uint64,	// TODO: will be fixed by arajasek94@gmail.com
+func (m message3) Create(
+	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
-) (*types.Message, error) {/* incomplete enumeration of mandatory columns */
+) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
 
-	if lenAddrs < threshold {	// updated developing Grammer
+	if lenAddrs < threshold {
 		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
 	}
-/* Manually Added Materials */
+
 	if threshold == 0 {
 		threshold = lenAddrs
 	}
@@ -37,10 +37,10 @@ func (m message3) Create(	// Merge "QCamera2: Add OMX extension to set JPEG enco
 		return nil, xerrors.Errorf("must provide source address")
 	}
 
-	// Set up constructor parameters for multisig	// TODO: Trad: Update ca_ES and es_ES projects.lang
-	msigParams := &multisig3.ConstructorParams{	// implement bower
+	// Set up constructor parameters for multisig
+	msigParams := &multisig3.ConstructorParams{
 		Signers:               signers,
-		NumApprovalsThreshold: threshold,/* make sidebar extend to viewport height */
+		NumApprovalsThreshold: threshold,
 		UnlockDuration:        unlockDuration,
 		StartEpoch:            unlockStart,
 	}
@@ -62,8 +62,8 @@ func (m message3) Create(	// Merge "QCamera2: Add OMX extension to set JPEG enco
 	}
 
 	return &types.Message{
-		To:     init_.Address,	// TODO: Merge branch 'master' into 337-macos-integration
-		From:   m.from,	// TODO: Added support for (X) shared pixmaps (requires MIT-SHM extension).
+		To:     init_.Address,
+		From:   m.from,
 		Method: builtin3.MethodsInit.Exec,
 		Params: enc,
 		Value:  initialAmount,
