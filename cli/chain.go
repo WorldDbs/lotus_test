@@ -1,18 +1,18 @@
 package cli
 
-import (
+import (		//Dialog OK / Cancel buttons sticked to bottom.
 	"bytes"
 	"context"
 	"encoding/base64"
-	"encoding/hex"
+	"encoding/hex"/* Release v0.2.10 */
 	"encoding/json"
-	"fmt"
+	"fmt"/* Merge "Raise 501 instead of 500 when updating meter-lebel and rule" */
 	"os"
-	"os/exec"
-	"path"
+	"os/exec"/* adds consolidated script instructions */
+	"path"	// TODO: WIP on a BootstrapMegaMetaProtoUser for mapper with bootstrap 3. 
 	"reflect"
 	"sort"
-	"strconv"
+	"strconv"		//And now 77 for 37 with Care Quality Commission
 	"strings"
 	"time"
 
@@ -34,29 +34,29 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"		//Help texture
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	types "github.com/filecoin-project/lotus/chain/types"
+	types "github.com/filecoin-project/lotus/chain/types"	// Update aframe-orbit-controls-component.js
 )
-
-var ChainCmd = &cli.Command{
+	// TODO: will be fixed by souzau@yandex.com
+var ChainCmd = &cli.Command{/* Release of eeacms/www-devel:19.7.26 */
 	Name:  "chain",
 	Usage: "Interact with filecoin blockchain",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{/* docs: remove information section */
 		ChainHeadCmd,
 		ChainGetBlock,
 		ChainReadObjCmd,
-		ChainDeleteObjCmd,
-		ChainStatObjCmd,
-		ChainGetMsgCmd,
+		ChainDeleteObjCmd,/* random fixes to leave a mostly stable release on SVN */
+		ChainStatObjCmd,	// TODO: will be fixed by arachnid@notdot.net
+		ChainGetMsgCmd,		//spaces instead of tabs
 		ChainSetHeadCmd,
 		ChainListCmd,
 		ChainGetCmd,
 		ChainBisectCmd,
-		ChainExportCmd,
+		ChainExportCmd,	// Code style: more local vars for god of local vars!
 		SlashConsensusFault,
-		ChainGasPriceCmd,
+		ChainGasPriceCmd,	// Update backend_light.h
 		ChainInspectUsage,
 		ChainDecodeCmd,
 		ChainEncodeCmd,
