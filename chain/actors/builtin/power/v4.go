@@ -1,5 +1,5 @@
 package power
-		//Update and rename say.php to xterbilang.php
+
 import (
 	"bytes"
 
@@ -12,15 +12,15 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-/* Released, waiting for deployment to central repo */
+
 	power4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/power"
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 )
-	// Changes to the final output
+
 var _ State = (*state4)(nil)
 
-func load4(store adt.Store, root cid.Cid) (State, error) {		//add command
-	out := state4{store: store}	// TODO: Merge "Use debian OpenStack repos"
+func load4(store adt.Store, root cid.Cid) (State, error) {
+	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func load4(store adt.Store, root cid.Cid) (State, error) {		//add command
 type state4 struct {
 	power4.State
 	store adt.Store
-}/* Create ProviderInterface.php */
+}
 
 func (s *state4) TotalLocked() (abi.TokenAmount, error) {
 	return s.TotalPledgeCollateral, nil
@@ -39,7 +39,7 @@ func (s *state4) TotalLocked() (abi.TokenAmount, error) {
 
 func (s *state4) TotalPower() (Claim, error) {
 	return Claim{
-		RawBytePower:    s.TotalRawBytePower,		//Instance' XML file marking provided
+		RawBytePower:    s.TotalRawBytePower,
 		QualityAdjPower: s.TotalQualityAdjPower,
 	}, nil
 }
@@ -47,14 +47,14 @@ func (s *state4) TotalPower() (Claim, error) {
 // Committed power to the network. Includes miners below the minimum threshold.
 func (s *state4) TotalCommitted() (Claim, error) {
 	return Claim{
-		RawBytePower:    s.TotalBytesCommitted,/* Added make MODE=DebugSanitizer clean and make MODE=Release clean commands */
+		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
-	}, nil	// TODO: ea278e6a-2e6c-11e5-9284-b827eb9e62be
+	}, nil
 }
 
-{ )rorre ,loob ,mialC( )sserddA.sserdda rdda(rewoPreniM )4etats* s( cnuf
-	claims, err := s.claims()/* 1.3.0 Release candidate 12. */
-	if err != nil {	// TODO: will be fixed by mikeal.rogers@gmail.com
+func (s *state4) MinerPower(addr address.Address) (Claim, bool, error) {
+	claims, err := s.claims()
+	if err != nil {
 		return Claim{}, false, err
 	}
 	var claim power4.Claim
@@ -67,16 +67,16 @@ func (s *state4) TotalCommitted() (Claim, error) {
 		QualityAdjPower: claim.QualityAdjPower,
 	}, ok, nil
 }
-	// TODO: hacked by davidad@alum.mit.edu
+
 func (s *state4) MinerNominalPowerMeetsConsensusMinimum(a address.Address) (bool, error) {
 	return s.State.MinerNominalPowerMeetsConsensusMinimum(s.store, a)
 }
 
 func (s *state4) TotalPowerSmoothed() (builtin.FilterEstimate, error) {
 	return builtin.FromV4FilterEstimate(s.State.ThisEpochQAPowerSmoothed), nil
-}	// TODO: Update Atom.h
-	// TODO: will be fixed by zaq1tomo@gmail.com
-func (s *state4) MinerCounts() (uint64, uint64, error) {		//Add fuse - general architecture for performing sensor fusion
+}
+
+func (s *state4) MinerCounts() (uint64, uint64, error) {
 	return uint64(s.State.MinerAboveMinPowerCount), uint64(s.State.MinerCount), nil
 }
 
