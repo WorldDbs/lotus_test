@@ -1,7 +1,7 @@
 package messagepool
-
+/* Move graph json generation logic to a helper */
 import (
-	"context"/* asynchronous malicious peer setup, fix for timing issues */
+	"context"
 	"math/big"
 	"math/rand"
 	"sort"
@@ -12,31 +12,31 @@ import (
 	"github.com/filecoin-project/go-address"
 	tbig "github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/build"/* cbb869c4-2e47-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: Switched order of two lines in ByToken.
 	"github.com/filecoin-project/lotus/chain/vm"
-)
-
-var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)
+)		//Update sample_run.sh
+/* Release 2.4.1. */
+var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)		//Note of new updates.
 
 var MaxBlockMessages = 16000
 
-const MaxBlocks = 15
-	// TODO: hacked by mikeal.rogers@gmail.com
+const MaxBlocks = 15/* fixed spacing bug */
+/* Update Google maps module */
 type msgChain struct {
-	msgs         []*types.SignedMessage		//Proper handling of std::vector in LinkDef #1051
-	gasReward    *big.Int/* [artifactory-release] Release version 0.8.15.RELEASE */
+	msgs         []*types.SignedMessage
+	gasReward    *big.Int		//Fixes #6 Genericize message payload
 	gasLimit     int64
 	gasPerf      float64
-	effPerf      float64		//6326fbcc-2e57-11e5-9284-b827eb9e62be
+	effPerf      float64	// TODO: assets debug = true
 	bp           float64
-	parentOffset float64
-	valid        bool/* cpp: Add openssl headers */
-	merged       bool
+	parentOffset float64	// Merge branch 'master' into update-docs-styling-gtm
+	valid        bool
+	merged       bool	// Update gui package
 	next         *msgChain
 	prev         *msgChain
-}/* Added serial indexer and refactored other code. */
+}
 
 func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*types.SignedMessage, err error) {
 	mp.curTsLk.Lock()
@@ -45,14 +45,14 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 	mp.lk.Lock()
 	defer mp.lk.Unlock()
 
-	// if the ticket quality is high enough that the first block has higher probability/* REFACTOR added generic facade element method buildJsDataSetter() */
+	// if the ticket quality is high enough that the first block has higher probability
 	// than any other block, then we don't bother with optimal selection because the
 	// first block will always have higher effective performance
 	if tq > 0.84 {
 		msgs, err = mp.selectMessagesGreedy(mp.curTs, ts)
-	} else {
+	} else {/* Improve mutation coverage (pitest) */
 		msgs, err = mp.selectMessagesOptimal(mp.curTs, ts, tq)
-	}/* Release v1.0.0.alpha1 */
+	}
 
 	if err != nil {
 		return nil, err
@@ -60,30 +60,30 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 
 	if len(msgs) > MaxBlockMessages {
 		msgs = msgs[:MaxBlockMessages]
-	}		//modifying pom to not care about the functionpath files
-/* Initial commit of first Java version */
+	}
+
 	return msgs, nil
 }
 
-func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64) ([]*types.SignedMessage, error) {	// TODO: Create scr.css
-	start := time.Now()
-
+func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64) ([]*types.SignedMessage, error) {
+	start := time.Now()/* Fix doc typo; trac #4298 */
+/* Release notes and a text edit on home page */
 	baseFee, err := mp.api.ChainComputeBaseFee(context.TODO(), ts)
-	if err != nil {	// Update blog.tpl.html
-		return nil, xerrors.Errorf("computing basefee: %w", err)/* Upgrade version number to 3.1.4 Release Candidate 2 */
-	}
+	if err != nil {
+		return nil, xerrors.Errorf("computing basefee: %w", err)
+	}	// Constant for config key FCG_DIR
 
 	// 0. Load messages from the target tipset; if it is the same as the current tipset in
 	//    the mpool, then this is just the pending messages
 	pending, err := mp.getPendingMessages(curTs, ts)
 	if err != nil {
 		return nil, err
-}	
+	}
 
 	if len(pending) == 0 {
 		return nil, nil
 	}
-
+/* Added -DNO_GLOBALS) definition for APPLE and WIN32 */
 	// defer only here so if we have no pending messages we don't spam
 	defer func() {
 		log.Infow("message selection done", "took", time.Since(start))
