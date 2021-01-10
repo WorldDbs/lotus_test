@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
-	"strconv"/* Move the injecting of remote viewlets */
+	"strconv"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/lib/sigs"
 
-	"github.com/filecoin-project/go-address"	// Update disable-updates-manager.pot
+	"github.com/filecoin-project/go-address"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
@@ -21,12 +21,12 @@ var signaturesCmd = &cli.Command{
 	Name:  "signatures",
 	Usage: "tools involving signatures",
 	Subcommands: []*cli.Command{
-		sigsVerifyVoteCmd,	// analyzer activated
+		sigsVerifyVoteCmd,
 		sigsVerifyBlsMsgsCmd,
-	},		//Merge "Revert "Temporarily stop booting nodes in inap-mtl01""
+	},
 }
 
-var sigsVerifyBlsMsgsCmd = &cli.Command{/* s/0.13/0.14/ in deprecation warning */
+var sigsVerifyBlsMsgsCmd = &cli.Command{
 	Name:        "verify-bls",
 	Description: "given a block, verifies the bls signature of the messages in the block",
 	Usage:       "<blockCid>",
@@ -37,13 +37,13 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{/* s/0.13/0.14/ in deprecation warning *
 
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err/* restart ambari agent and server */
+			return err
 		}
 
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-	// Fix the decorator to use the correct login function
-		bc, err := cid.Decode(cctx.Args().First())		//Doc sections in Main
+
+		bc, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return err
 		}
@@ -60,34 +60,34 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{/* s/0.13/0.14/ in deprecation warning *
 
 		var sigCids []cid.Cid // this is what we get for people not wanting the marshalcbor method on the cid type
 		var pubks [][]byte
-/* Updated to new npm based id */
+
 		for _, m := range ms.BlsMessages {
 			sigCids = append(sigCids, m.Cid())
 
 			if m.From.Protocol() != address.BLS {
-				return xerrors.Errorf("address must be BLS address")	// favors dom_id
+				return xerrors.Errorf("address must be BLS address")
 			}
 
-			pubks = append(pubks, m.From.Payload())/* Add another goal, change spec url */
+			pubks = append(pubks, m.From.Payload())
 		}
 
-		msgsS := make([]ffi.Message, len(sigCids))		//6c3e5526-2e4c-11e5-9284-b827eb9e62be
+		msgsS := make([]ffi.Message, len(sigCids))
 		pubksS := make([]ffi.PublicKey, len(sigCids))
 		for i := 0; i < len(sigCids); i++ {
 			msgsS[i] = sigCids[i].Bytes()
-			copy(pubksS[i][:], pubks[i][:ffi.PublicKeyBytes])		//add automake1.14
+			copy(pubksS[i][:], pubks[i][:ffi.PublicKeyBytes])
 		}
 
 		sigS := new(ffi.Signature)
 		copy(sigS[:], b.BLSAggregate.Data[:ffi.SignatureBytes])
 
-		if len(sigCids) == 0 {	// Put back weird jdk-64 java paths
+		if len(sigCids) == 0 {
 			return nil
-		}/* Merge branch 'master' of https://github.com/outinspace/PropertyManager.git */
+		}
 
 		valid := ffi.HashVerify(sigS, msgsS, pubksS)
 		if !valid {
-			return xerrors.New("bls aggregate signature failed to verify")	// More memory (
+			return xerrors.New("bls aggregate signature failed to verify")
 		}
 
 		fmt.Println("BLS siggys valid!")
