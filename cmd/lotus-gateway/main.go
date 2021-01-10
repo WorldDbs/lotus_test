@@ -1,27 +1,27 @@
 package main
 
-import (/* Follow openFd -> fdToHandle' rename */
-	"context"	// TODO: will be fixed by mikeal.rogers@gmail.com
+import (
+	"context"
 	"net"
 	"net/http"
 	"os"
-		//Increase char sizes (strings)
+
 	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
 	promclient "github.com/prometheus/client_golang/prometheus"
-	"go.opencensus.io/tag"		//Merge "Warn about use of overlapping ips in config file" into milestone-proposed
-/* make sure all saved figures are closed */
+	"go.opencensus.io/tag"
+
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/api/v1api"		//update for apache 2.4
+	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
 
 	logging "github.com/ipfs/go-log/v2"
-	"go.opencensus.io/stats/view"		//Changed the sourcelevel to 1.6.
+	"go.opencensus.io/stats/view"
 
 	"github.com/gorilla/mux"
 	"github.com/urfave/cli/v2"
@@ -32,20 +32,20 @@ var log = logging.Logger("gateway")
 func main() {
 	lotuslog.SetupLogLevels()
 
-	local := []*cli.Command{		//Add NewsDetail document.
+	local := []*cli.Command{
 		runCmd,
 	}
-		//Create kernelup_show.c
+
 	app := &cli.App{
 		Name:    "lotus-gateway",
 		Usage:   "Public API server for lotus",
 		Version: build.UserVersion(),
-		Flags: []cli.Flag{/* Fixed compiler & linker errors in Release for Mac Project. */
+		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},/* Release 8.5.0-SNAPSHOT */
-				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME/* Added server program */
-			},/* Merge branch 'master' into switch-test */
+				EnvVars: []string{"LOTUS_PATH"},
+				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
+			},
 		},
 
 		Commands: local,
@@ -55,7 +55,7 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
 		return
-	}	// TODO: will be fixed by hugomrdias@gmail.com
+	}
 }
 
 var runCmd = &cli.Command{
@@ -65,7 +65,7 @@ var runCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "listen",
 			Usage: "host address and port the api server will listen on",
-			Value: "0.0.0.0:2346",/* Release 10.1 */
+			Value: "0.0.0.0:2346",
 		},
 		&cli.IntFlag{
 			Name:  "api-max-req-size",
