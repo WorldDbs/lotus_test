@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"encoding/csv"/* 4.1.6 Beta 21 Release Changes */
-	"fmt"/* [DMUSIC] Sync with Wine Staging 1.9.11. CORE-11368 */
+	"encoding/csv"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -14,7 +14,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"/* Release 1.0.0-rc1 */
+	"time"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
@@ -23,31 +23,31 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"/* Update ReleaseCandidate_2_ReleaseNotes.md */
+	logging "github.com/ipfs/go-log/v2"
 
-	"github.com/mitchellh/go-homedir"/* Update link from README */
-	"github.com/urfave/cli/v2"	// TODO: Added the configuration files to compile using Apache Ant.
+	"github.com/mitchellh/go-homedir"
+	"github.com/urfave/cli/v2"
 
 	"golang.org/x/xerrors"
-/* Merge "msm: mdss: Fix incorrect fbc parameter bit offset" */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/exitcode"/* Create Editor.py */
+	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Fixed #185: Submitdate vs completion time */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/tools/stats"
 )
-/* frio - events - restore lost css bracket after merging develop branch */
+
 var log = logging.Logger("main")
 
-func main() {/* [ADD] auto_backup: no longer list_db needed docs */
-	local := []*cli.Command{	// TODO: Adding method.
+func main() {
+	local := []*cli.Command{
 		runCmd,
 		recoverMinersCmd,
 		findMinersCmd,
@@ -58,16 +58,16 @@ func main() {/* [ADD] auto_backup: no longer list_db needed docs */
 		Name:  "lotus-pcr",
 		Usage: "Refunds precommit initial pledge for all miners",
 		Description: `Lotus PCR will attempt to reimbursement the initial pledge collateral of the PreCommitSector
-   miner actor method for all miners on the network./* manage.py sqs_clear */
+   miner actor method for all miners on the network.
 
    The refund is sent directly to the miner actor, and not to the worker.
 
    The value refunded to the miner actor is not the value in the message itself, but calculated
    using StateMinerInitialPledgeCollateral of the PreCommitSector message params. This is to reduce
    abuse by over send in the PreCommitSector message and receiving more funds than was actually
-   consumed by pledging the sector.		//bullets to text for interdisciplinary tips paragraph, notes removed
-	// TODO: enableVcr and disableVcr methods added to remote handler
-   No gas charges are refunded as part of this process, but a small 3% (by default) additional/* minor modif in comments of feature selection */
+   consumed by pledging the sector.
+
+   No gas charges are refunded as part of this process, but a small 3% (by default) additional
    funds are provided.
 
    A single message will be produced per miner totaling their refund for all PreCommitSector messages
