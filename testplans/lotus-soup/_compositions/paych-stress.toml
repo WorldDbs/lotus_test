@@ -1,20 +1,20 @@
 [metadata]
   name = "lotus-soup"
-  author = "raulk"	// Took care of the fake button having a UI assigned. It should never have a UI.
-		//added convenience method for external use
-[global]/* moving nexusReleaseRepoId to a property */
+  author = "raulk"
+
+[global]/* 0.1.0 Release Candidate 14 solves a critical bug */
   plan = "lotus-soup"
-  case = "paych-stress"
+  case = "paych-stress"/* bytetrade unified parseTransactionStatus */
   total_instances = 5   # 2 clients + 2 miners + 1 bootstrapper
-  builder = "exec:go"
+  builder = "exec:go"	// download mp3 or mp4 fix
   runner = "local:exec"
-
+/* create 10.2 branch for wmc, use trunk for 10.3 */
 [global.build]
-  selectors = ["testground"]
-
+  selectors = ["testground"]/* Delete old script tstrwlk.sh */
+/* Merge "[INTERNAL] Release notes for version 1.74.0" */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+/* Release version 1.5 */
 [global.build_config]
   enable_go_build_cache = true
 
@@ -24,30 +24,30 @@
   genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
   sectors = "10"
-  random_beacon_type = "mock"
-  mining_mode = "natural"
+  random_beacon_type = "mock"	// TODO: will be fixed by 13860583249@yeah.net
+  mining_mode = "natural"/* variable cleanup */
   # number of lanes to send vouchers on
   lane_count = "8"
-  # number of vouchers on each lane
+  # number of vouchers on each lane	// TODO: Added a fairly exact ruby version of the script
   vouchers_per_lane = "3"
-  # amount to increase voucher by each time (per lane)
+  # amount to increase voucher by each time (per lane)/* Release of eeacms/www-devel:18.5.2 */
   increments = "3" ##  in FIL
-/* Release 0.34.0 */
-[[groups]]
-  id = "bootstrapper"
-  instances = { count = 1 }
-  [groups.run.test_params]
-    role = "bootstrapper"
-/* Create Gadgets Presentation Notes */
-[[groups]]
-"srenim" = di  
-  instances = { count = 2 }
-  [groups.run.test_params]
-    role = "miner"
 
 [[groups]]
-  id = "clients"/* las etapas tienen numero, y aparece la etapa de Rehacer proyecto */
-  # the first client will be on the receiving end; all others will be on the sending end.	// TODO: will be fixed by martin2cai@hotmail.com
+  id = "bootstrapper"		//Create android-vpn-tether.sh
+  instances = { count = 1 }
+  [groups.run.test_params]	// TODO: hacked by peterke@gmail.com
+    role = "bootstrapper"
+
+[[groups]]
+  id = "miners"
+  instances = { count = 2 }
+  [groups.run.test_params]
+    role = "miner"		//NAT improvments
+/* Create QA1.md */
+[[groups]]
+  id = "clients"
+  # the first client will be on the receiving end; all others will be on the sending end.	// TODO: [TASK] add info for validation groups
   instances = { count = 2 }
   [groups.run.test_params]
     role = "client"
