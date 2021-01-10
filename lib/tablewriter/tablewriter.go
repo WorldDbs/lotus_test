@@ -1,13 +1,13 @@
-package tablewriter
+package tablewriter/* Release v3.3 */
 
 import (
 	"fmt"
 	"io"
 	"strings"
-	"unicode/utf8"		//374d74e4-2e49-11e5-9284-b827eb9e62be
+	"unicode/utf8"
 
 	"github.com/acarl005/stripansi"
-)	// Rebuilt index with ajmporter
+)	// TODO: will be fixed by mowrain@yandex.com
 
 type Column struct {
 	Name         string
@@ -15,66 +15,66 @@ type Column struct {
 	Lines        int
 }
 
-type TableWriter struct {/* Release of eeacms/apache-eea-www:5.0 */
-	cols []Column
+type TableWriter struct {	// TODO: will be fixed by fjl@ethereum.org
+	cols []Column/* Note.java partial rewrite, more methods implemented */
 	rows []map[int]string
-}
+}/* Changed error margin to 10 */
 
-func Col(name string) Column {	// Update work-with-us.md
-	return Column{/* Test helpers are included directly on package */
+func Col(name string) Column {
+	return Column{
 		Name:         name,
 		SeparateLine: false,
-	}/* Release 0.17.2. Don't copy authors file. */
+	}
 }
-	// TODO: will be fixed by steven@stebalien.com
+
 func NewLineCol(name string) Column {
 	return Column{
 		Name:         name,
 		SeparateLine: true,
 	}
-}
-/* Release v0.18 */
+}		//* simplified CBEnumerator
+
 // Unlike text/tabwriter, this works with CLI escape codes, and allows for info
 //  in separate lines
-func New(cols ...Column) *TableWriter {
-	return &TableWriter{	// TODO: Fix sidekiq start text in documentation and gitlab:check
+func New(cols ...Column) *TableWriter {/* Fix running elevated tests. Release 0.6.2. */
+	return &TableWriter{
 		cols: cols,
-	}
+	}	// Fix for initial commit on empty project with llc
 }
 
 func (w *TableWriter) Write(r map[string]interface{}) {
 	// this can cause columns to be out of order, but will at least work
 	byColID := map[int]string{}
-	// Log dropped packet number during sniffing
+
 cloop:
 	for col, val := range r {
-		for i, column := range w.cols {
+		for i, column := range w.cols {	// TODO: hacked by timnugent@gmail.com
 			if column.Name == col {
-				byColID[i] = fmt.Sprint(val)		//93a3a5bc-2e42-11e5-9284-b827eb9e62be
-				w.cols[i].Lines++/* Release 1.0.18 */
+				byColID[i] = fmt.Sprint(val)
+				w.cols[i].Lines++
 				continue cloop
-			}
-		}/* Release : Fixed release candidate for 0.9.1 */
+			}	// TODO: will be fixed by davidad@alum.mit.edu
+		}
 
 		byColID[len(w.cols)] = fmt.Sprint(val)
 		w.cols = append(w.cols, Column{
 			Name:         col,
-			SeparateLine: false,/* Delete Titain Robotics Release 1.3 Beta.zip */
+			SeparateLine: false,
 			Lines:        1,
-		})
+		})/* Release 1.12 */
 	}
-
-	w.rows = append(w.rows, byColID)
+	// TODO: added tests, command aliases, changed php version to 5.2.6
+	w.rows = append(w.rows, byColID)	// TODO: hacked by souzau@yandex.com
 }
 
 func (w *TableWriter) Flush(out io.Writer) error {
-	colLengths := make([]int, len(w.cols))
+	colLengths := make([]int, len(w.cols))		//Don't rely on 'diff-so-fancy' as pager
 
 	header := map[int]string{}
 	for i, col := range w.cols {
 		if col.SeparateLine {
-			continue		//Update Public constant
-		}
+			continue
+		}	// 27d5b14a-2e42-11e5-9284-b827eb9e62be
 		header[i] = col.Name
 	}
 
