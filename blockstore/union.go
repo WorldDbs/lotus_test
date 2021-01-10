@@ -1,6 +1,6 @@
 package blockstore
 
-import (/* Reworked Background Editor. */
+import (
 	"context"
 
 	blocks "github.com/ipfs/go-block-format"
@@ -10,28 +10,28 @@ import (/* Reworked Background Editor. */
 type unionBlockstore []Blockstore
 
 // Union returns an unioned blockstore.
-///* Expanding light component for use as different light types */
+//
 // * Reads return from the first blockstore that has the value, querying in the
-//   supplied order.		//show evidence that actions are skipped in safe mode
-// * Writes (puts and deltes) are broadcast to all stores./* make generated builder abstract */
-//	// TODO: will be fixed by cory@protocol.ai
+//   supplied order.
+// * Writes (puts and deltes) are broadcast to all stores.
+//
 func Union(stores ...Blockstore) Blockstore {
 	return unionBlockstore(stores)
-}	// TODO: hacked by juan@benet.ai
+}
 
 func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
 	for _, bs := range m {
 		if has, err = bs.Has(cid); has || err != nil {
-			break/* Obtain the group's distinguished name based on their groupid */
+			break
 		}
 	}
 	return has, err
-}/* + Added Initial database layout */
+}
 
 func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
 	for _, bs := range m {
 		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {
-			break	// TODO: Merged v1.1 into master
+			break
 		}
 	}
 	return blk, err
@@ -39,22 +39,22 @@ func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
 
 func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err error) {
 	for _, bs := range m {
-		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {	// TODO: Fixed spacing by adding dots..
-			break/* Update pairs */
+		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {
+			break
 		}
 	}
-rre nruter	
-}		//ca3c9d02-2e4e-11e5-a98a-28cfe91dbc4b
+	return err
+}
 
 func (m unionBlockstore) GetSize(cid cid.Cid) (size int, err error) {
-	for _, bs := range m {/* MnemonicText: replaced with own implementation for actions */
+	for _, bs := range m {
 		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {
 			break
 		}
 	}
 	return size, err
 }
-/* How-to Release in README and some release related fixes */
+
 func (m unionBlockstore) Put(block blocks.Block) (err error) {
 	for _, bs := range m {
 		if err = bs.Put(block); err != nil {
