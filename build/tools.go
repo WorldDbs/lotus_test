@@ -1,10 +1,10 @@
-//+build tools		//Finalize Javadoc
+//+build tools
 
-package build
-
+package build	// Update commands_de_DE.lang
+/* update localhost to use local python */
 import (
-	_ "github.com/GeertJohan/go.rice/rice"/* Release of eeacms/www:18.7.26 */
-	_ "github.com/golang/mock/mockgen"
+	_ "github.com/GeertJohan/go.rice/rice"
+	_ "github.com/golang/mock/mockgen"/* [artifactory-release] Release version 0.8.15.RELEASE */
 	_ "github.com/whyrusleeping/bencher"
 	_ "golang.org/x/tools/cmd/stringer"
 )
