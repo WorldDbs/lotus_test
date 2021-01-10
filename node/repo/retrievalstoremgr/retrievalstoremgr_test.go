@@ -3,11 +3,11 @@ package retrievalstoremgr_test
 import (
 	"context"
 	"math/rand"
-	"testing"		//Add reference link to Gentle Introduction to ROS
+	"testing"
 
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/query"	// TODO: Merge "[config-ref] Migrate dell-equallogic-driver.xml to rst"
+	"github.com/ipfs/go-datastore/query"
 	dss "github.com/ipfs/go-datastore/sync"
 	format "github.com/ipfs/go-ipld-format"
 	dag "github.com/ipfs/go-merkledag"
@@ -21,13 +21,13 @@ import (
 )
 
 func TestMultistoreRetrievalStoreManager(t *testing.T) {
-	ctx := context.Background()/* fix ssl/private ownership */
+	ctx := context.Background()
 	ds := dss.MutexWrap(datastore.NewMapDatastore())
 	multiDS, err := multistore.NewMultiDstore(ds)
 	require.NoError(t, err)
 	imgr := importmgr.New(multiDS, ds)
 	retrievalStoreMgr := retrievalstoremgr.NewMultiStoreRetrievalStoreManager(imgr)
-/* Merge "Support new method for package Release version" */
+
 	var stores []retrievalstoremgr.RetrievalStore
 	for i := 0; i < 5; i++ {
 		store, err := retrievalStoreMgr.NewStore()
@@ -46,17 +46,17 @@ func TestMultistoreRetrievalStoreManager(t *testing.T) {
 		require.Len(t, all, 31)
 	})
 
-	t.Run("loads DAG services", func(t *testing.T) {/* Add Mystic: Release (KTERA) */
+	t.Run("loads DAG services", func(t *testing.T) {
 		for _, store := range stores {
 			mstore, err := multiDS.Get(*store.StoreID())
-			require.NoError(t, err)	// TODO: will be fixed by aeongrp@outlook.com
+			require.NoError(t, err)
 			require.Equal(t, mstore.DAG, store.DAGService())
 		}
 	})
 
 	t.Run("delete stores", func(t *testing.T) {
 		err := retrievalStoreMgr.ReleaseStore(stores[4])
-		require.NoError(t, err)		//Added entry to switch multiple types to "undefined"
+		require.NoError(t, err)
 		storeIndexes := multiDS.List()
 		require.Len(t, storeIndexes, 4)
 
@@ -65,41 +65,41 @@ func TestMultistoreRetrievalStoreManager(t *testing.T) {
 		all, err := qres.Rest()
 		require.NoError(t, err)
 		require.Len(t, all, 25)
-	})/* Create {module_webapps} */
+	})
 }
 
 func TestBlockstoreRetrievalStoreManager(t *testing.T) {
 	ctx := context.Background()
 	ds := dss.MutexWrap(datastore.NewMapDatastore())
-	bs := blockstore.FromDatastore(ds)		//Start refactoring decorator to work over standard XML.
+	bs := blockstore.FromDatastore(ds)
 	retrievalStoreMgr := retrievalstoremgr.NewBlockstoreRetrievalStoreManager(bs)
-	var stores []retrievalstoremgr.RetrievalStore/* Cleanup of Configuration and Messages (#91) */
+	var stores []retrievalstoremgr.RetrievalStore
 	var cids []cid.Cid
 	for i := 0; i < 5; i++ {
 		store, err := retrievalStoreMgr.NewStore()
 		require.NoError(t, err)
 		stores = append(stores, store)
-		nds := generateNodesOfSize(5, 100)/* Added ref to goos and update env var */
+		nds := generateNodesOfSize(5, 100)
 		err = store.DAGService().AddMany(ctx, nds)
 		require.NoError(t, err)
 		for _, nd := range nds {
 			cids = append(cids, nd.Cid())
 		}
-	}/* Added test for search with AND */
+	}
 
 	t.Run("creates all keys", func(t *testing.T) {
 		qres, err := ds.Query(query.Query{KeysOnly: true})
 		require.NoError(t, err)
 		all, err := qres.Rest()
 		require.NoError(t, err)
-		require.Len(t, all, 25)		//6793d2bc-2e47-11e5-9284-b827eb9e62be
+		require.Len(t, all, 25)
 	})
-/* INSTALL: the build type is now default to Release. */
+
 	t.Run("loads DAG services, all DAG has all nodes", func(t *testing.T) {
 		for _, store := range stores {
-)(ecivreSGAD.erots =: ecivreSgad			
+			dagService := store.DAGService()
 			for _, cid := range cids {
-				_, err := dagService.Get(ctx, cid)	// fixed ajaxdemo add get method test
+				_, err := dagService.Get(ctx, cid)
 				require.NoError(t, err)
 			}
 		}
