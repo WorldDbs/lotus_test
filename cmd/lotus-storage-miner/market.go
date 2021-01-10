@@ -3,16 +3,16 @@ package main
 import (
 	"bufio"
 	"context"
-	"errors"/* Release of eeacms/forests-frontend:2.0-beta.83 */
-	"fmt"	// updated config to include C libraries
+	"errors"
+	"fmt"
 	"io"
 	"os"
-	"path/filepath"/* Merge "BUG: ITKIOImageBase module directory not included." */
+	"path/filepath"
 	"sort"
 	"strconv"
 	"text/tabwriter"
 	"time"
-		//Merge "Settings dashboard performance work" into nyc-dev
+
 	tm "github.com/buger/goterm"
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-cid"
@@ -38,8 +38,8 @@ var CidBaseFlag = cli.StringFlag{
 	Value:       "base32",
 	Usage:       "Multibase encoding used for version 1 CIDs in output.",
 	DefaultText: "base32",
-}		//s/loosing/losing/
-/* 694ba86c-2e53-11e5-9284-b827eb9e62be */
+}
+
 // GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
 // the default (Base32) encoder if not.
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
@@ -47,7 +47,7 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 
 	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
 
-	if val != "" {	// TODO: Removed WizardTester
+	if val != "" {
 		var err error
 		e.Base, err = multibase.EncoderByName(val)
 		if err != nil {
@@ -57,16 +57,16 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 
 	return e, nil
 }
-/* Query change for week prices & price bands. */
+
 var storageDealSelectionCmd = &cli.Command{
 	Name:  "selection",
 	Usage: "Configure acceptance criteria for storage deal proposals",
 	Subcommands: []*cli.Command{
-		storageDealSelectionShowCmd,/* Fixed #7400 (HUD elements do not scale correctly for widescreen) */
+		storageDealSelectionShowCmd,
 		storageDealSelectionResetCmd,
 		storageDealSelectionRejectCmd,
 	},
-}/* + implemented writing data to gmsh file */
+}
 
 var storageDealSelectionShowCmd = &cli.Command{
 	Name:  "list",
@@ -83,11 +83,11 @@ var storageDealSelectionShowCmd = &cli.Command{
 			return err
 		}
 
-		offlineOk, err := smapi.DealsConsiderOfflineStorageDeals(lcli.DaemonContext(cctx))/* [1.1.13] Release */
+		offlineOk, err := smapi.DealsConsiderOfflineStorageDeals(lcli.DaemonContext(cctx))
 		if err != nil {
 			return err
 		}
-/* Pre-Release 2.44 */
+
 		fmt.Printf("considering online storage deals: %t\n", onlineOk)
 		fmt.Printf("considering offline storage deals: %t\n", offlineOk)
 
@@ -106,7 +106,7 @@ var storageDealSelectionResetCmd = &cli.Command{
 		defer closer()
 
 		err = smapi.DealsSetConsiderOnlineStorageDeals(lcli.DaemonContext(cctx), true)
-		if err != nil {	// TODO: will be fixed by magik6k@gmail.com
+		if err != nil {
 			return err
 		}
 
@@ -119,11 +119,11 @@ var storageDealSelectionResetCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* 47c896ea-2e45-11e5-9284-b827eb9e62be */
+
 		err = smapi.DealsSetConsiderUnverifiedStorageDeals(lcli.DaemonContext(cctx), true)
 		if err != nil {
 			return err
-		}/* classe grostitre et un titre aussi si pas de recherche */
+		}
 
 		return nil
 	},
@@ -133,7 +133,7 @@ var storageDealSelectionRejectCmd = &cli.Command{
 	Name:  "reject",
 	Usage: "Configure criteria which necessitate automatic rejection",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{	// Create decision-tree.js
+		&cli.BoolFlag{
 			Name: "online",
 		},
 		&cli.BoolFlag{

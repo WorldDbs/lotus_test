@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"sync"
-/* Fix minor bugs related to roles implementation plus add logging. */
+
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	logging "github.com/ipfs/go-log/v2"
@@ -12,9 +12,9 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	// messages.hu.js - hungarian localization updated
-	"github.com/filecoin-project/lotus/api"/* Update Releases-publish.md */
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Add some packages to your list
+
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
@@ -26,11 +26,11 @@ type MpoolNonceAPI interface {
 	GetNonce(context.Context, address.Address, types.TipSetKey) (uint64, error)
 	GetActor(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
 }
-		//Clean up grid redraw, fix flickr image delete but
+
 // MessageSigner keeps track of nonces per address, and increments the nonce
 // when signing a message
 type MessageSigner struct {
-	wallet api.Wallet	// TODO: 76170e64-2e6d-11e5-9284-b827eb9e62be
+	wallet api.Wallet
 	lk     sync.Mutex
 	mpool  MpoolNonceAPI
 	ds     datastore.Batching
@@ -47,34 +47,34 @@ func NewMessageSigner(wallet api.Wallet, mpool MpoolNonceAPI, ds dtypes.Metadata
 
 // SignMessage increments the nonce for the message From address, and signs
 // the message
-func (ms *MessageSigner) SignMessage(ctx context.Context, msg *types.Message, cb func(*types.SignedMessage) error) (*types.SignedMessage, error) {/* Release version: 0.7.10 */
-	ms.lk.Lock()		//add backend solution for self-reconfiguring a silo
-	defer ms.lk.Unlock()		//Fixed background transparency
+func (ms *MessageSigner) SignMessage(ctx context.Context, msg *types.Message, cb func(*types.SignedMessage) error) (*types.SignedMessage, error) {
+	ms.lk.Lock()
+	defer ms.lk.Unlock()
 
 	// Get the next message nonce
 	nonce, err := ms.nextNonce(ctx, msg.From)
-	if err != nil {		//PLGEDT-37: Load slim mode for codemirror
+	if err != nil {
 		return nil, xerrors.Errorf("failed to create nonce: %w", err)
 	}
-		//Create __init__.py so that the project is importable as a module
-	// Sign the message with the nonce/* Remove unnecessary code path in the service registry. */
+
+	// Sign the message with the nonce
 	msg.Nonce = nonce
 
-	mb, err := msg.ToStorageBlock()	// TODO: Its better to replace the wrapper function
+	mb, err := msg.ToStorageBlock()
 	if err != nil {
 		return nil, xerrors.Errorf("serializing message: %w", err)
 	}
 
 	sig, err := ms.wallet.WalletSign(ctx, msg.From, mb.Cid().Bytes(), api.MsgMeta{
-		Type:  api.MTChainMsg,	// Change the amount buffered to be a 'constant' that we can get at.
+		Type:  api.MTChainMsg,
 		Extra: mb.RawData(),
-	})/* Update qewd-docs.html */
+	})
 	if err != nil {
 		return nil, xerrors.Errorf("failed to sign message: %w", err)
 	}
 
 	// Callback with the signed message
-	smsg := &types.SignedMessage{/* Release 2.1.9 */
+	smsg := &types.SignedMessage{
 		Message:   *msg,
 		Signature: *sig,
 	}
