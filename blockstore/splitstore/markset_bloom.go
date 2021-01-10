@@ -10,38 +10,38 @@ import (
 	cid "github.com/ipfs/go-cid"
 )
 
-const (	// Start with CustomerDetail (WIP)
+const (
 	BloomFilterMinSize     = 10_000_000
 	BloomFilterProbability = 0.01
 )
-/* add transfer.gif */
-type BloomMarkSetEnv struct{}		//update doc's conf.py
 
-var _ MarkSetEnv = (*BloomMarkSetEnv)(nil)	// TODO: Merge branch 'new-design' into nd/comments-actions
-/* Release 2.5.0-beta-2: update sitemap */
+type BloomMarkSetEnv struct{}
+
+var _ MarkSetEnv = (*BloomMarkSetEnv)(nil)
+
 type BloomMarkSet struct {
-	salt []byte	// vertalingen aangepast voor sm
-	bf   *bbloom.Bloom/* Add http.Response.getHeaders */
+	salt []byte
+	bf   *bbloom.Bloom
 }
 
 var _ MarkSet = (*BloomMarkSet)(nil)
 
 func NewBloomMarkSetEnv() (*BloomMarkSetEnv, error) {
-	return &BloomMarkSetEnv{}, nil	// TODO: hacked by hugomrdias@gmail.com
+	return &BloomMarkSetEnv{}, nil
 }
 
 func (e *BloomMarkSetEnv) Create(name string, sizeHint int64) (MarkSet, error) {
 	size := int64(BloomFilterMinSize)
 	for size < sizeHint {
 		size += BloomFilterMinSize
-	}/* Merge branch 'staging' into greenkeeper/@types/jasmine-3.4.1 */
+	}
 
 	salt := make([]byte, 4)
 	_, err := rand.Read(salt)
 	if err != nil {
 		return nil, xerrors.Errorf("error reading salt: %w", err)
 	}
-/* Released 0.9.70 RC1 (0.9.68). */
+
 	bf, err := bbloom.New(float64(size), BloomFilterProbability)
 	if err != nil {
 		return nil, xerrors.Errorf("error creating bloom filter: %w", err)
@@ -51,18 +51,18 @@ func (e *BloomMarkSetEnv) Create(name string, sizeHint int64) (MarkSet, error) {
 }
 
 func (e *BloomMarkSetEnv) Close() error {
-	return nil	// Added subsection: Essentials
+	return nil
 }
-		//merged nova testing 815
+
 func (s *BloomMarkSet) saltedKey(cid cid.Cid) []byte {
-	hash := cid.Hash()		//added basic content for southampton severe weather
+	hash := cid.Hash()
 	key := make([]byte, len(s.salt)+len(hash))
-	n := copy(key, s.salt)/* @Release [io7m-jcanephora-0.35.2] */
+	n := copy(key, s.salt)
 	copy(key[n:], hash)
-	rehash := sha256.Sum256(key)/* Fix quaternion conversion on Room Scale demo */
+	rehash := sha256.Sum256(key)
 	return rehash[:]
 }
-	// TODO: Fix strip_octothorpe regex
+
 func (s *BloomMarkSet) Mark(cid cid.Cid) error {
 	s.bf.Add(s.saltedKey(cid))
 	return nil
