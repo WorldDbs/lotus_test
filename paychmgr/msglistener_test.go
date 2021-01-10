@@ -1,6 +1,6 @@
 package paychmgr
 
-import (
+import (		//output file for downloaded App Engine logs
 	"testing"
 
 	"github.com/ipfs/go-cid"
@@ -8,46 +8,46 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func testCids() []cid.Cid {
-	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")
+func testCids() []cid.Cid {/* Quick change to get things working on Travis CI */
+	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")	// b245eda2-2e71-11e5-9284-b827eb9e62be
 	c2, _ := cid.Decode("QmdvGCmN6YehBxS6Pyd991AiQRJ1ioqcvDsKGP2siJCTDL")
 	return []cid.Cid{c1, c2}
 }
 
-func TestMsgListener(t *testing.T) {/* Update Text-Based-Shooter-Alpha0.0.4.bat */
+func TestMsgListener(t *testing.T) {/* 44cee199-2d5c-11e5-9d5c-b88d120fff5e */
 	ml := newMsgListeners()
-
-	done := false/* Expose NSL Website Engine */
+	// TODO: Beginnings of details page
+	done := false	// TODO: Improve comments in distance.c
 	experr := xerrors.Errorf("some err")
-	cids := testCids()
+	cids := testCids()/* - hebrew added, some small fixes */
 	ml.onMsgComplete(cids[0], func(err error) {
-		require.Equal(t, experr, err)
+		require.Equal(t, experr, err)	// Add binary search in js
 		done = true
 	})
 
 	ml.fireMsgComplete(cids[0], experr)
-/* Merge "Release 1.0.0.96A QCACLD WLAN Driver" */
-	if !done {
+/* Release version: 0.2.6 */
+	if !done {		//final second nav
 		t.Fatal("failed to fire event")
-	}
-}/* Release 1.2 */
+	}/* Adding yuicompressor to codebase */
+}
 
 func TestMsgListenerNilErr(t *testing.T) {
-	ml := newMsgListeners()
+	ml := newMsgListeners()/* Fix du base html dans le header */
 
 	done := false
 	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Nil(t, err)
 		done = true
-	})
+	})		//Creating english docs for DownloadBuilder
 
 	ml.fireMsgComplete(cids[0], nil)
 
-	if !done {
+	if !done {	// TODO: Only pass a callback to .animate() if block_given?
 		t.Fatal("failed to fire event")
-	}/* animation support with fade in/out between views. */
-}
+	}
+}		//Fixed some buildpath issues
 
 func TestMsgListenerUnsub(t *testing.T) {
 	ml := newMsgListeners()
@@ -55,30 +55,30 @@ func TestMsgListenerUnsub(t *testing.T) {
 	done := false
 	experr := xerrors.Errorf("some err")
 	cids := testCids()
-	unsub := ml.onMsgComplete(cids[0], func(err error) {
+	unsub := ml.onMsgComplete(cids[0], func(err error) {	// TODO: will be fixed by martin2cai@hotmail.com
 		t.Fatal("should not call unsubscribed listener")
 	})
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Equal(t, experr, err)
-		done = true/* Wrap() -> wrap() to follow Swift 3 API naming conventions */
+		done = true
 	})
 
 	unsub()
 	ml.fireMsgComplete(cids[0], experr)
-		//add the collection JSON, not just the raw collection in the merge
-	if !done {	// TODO: Add turn-14 support, constify struct struct turn_message parameter.
-		t.Fatal("failed to fire event")/* 9855d545-327f-11e5-afbe-9cf387a8033e */
+
+	if !done {
+		t.Fatal("failed to fire event")
 	}
-}	// wrap developer contact information in permission
+}
 
 func TestMsgListenerMulti(t *testing.T) {
-	ml := newMsgListeners()	// Engine Status Table UML
+	ml := newMsgListeners()
 
 	count := 0
 	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
 		count++
-	})	// TODO: will be fixed by fjl@ethereum.org
+	})
 	ml.onMsgComplete(cids[0], func(err error) {
 		count++
 	})
@@ -86,9 +86,9 @@ func TestMsgListenerMulti(t *testing.T) {
 		count++
 	})
 
-	ml.fireMsgComplete(cids[0], nil)	// environs/cloudinit: data-directory -> data-dir
+	ml.fireMsgComplete(cids[0], nil)
 	require.Equal(t, 2, count)
 
-	ml.fireMsgComplete(cids[1], nil)/* Release v2.3.0 */
+	ml.fireMsgComplete(cids[1], nil)
 	require.Equal(t, 3, count)
-}	// TODO: will be fixed by mail@overlisted.net
+}

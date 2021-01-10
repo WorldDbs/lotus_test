@@ -1,80 +1,80 @@
 package gasguess
 
-import (	// all images
+import (
 	"context"
-
+	// Update mdb.min.js
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"/* [artifactory-release] Release version 0.8.13.RELEASE */
-/* [packages_10.03.2] mc: merge r27620, r27684, r27719, r28135, r29991 */
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-	// use get_file instead of get on destination_url
+/* Start Release of 2.0.0 */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-
+	// Create chart3.html
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Fixed unit test. */
 )
-/* Release of eeacms/www:18.2.16 */
-type ActorLookup func(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
 
+type ActorLookup func(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
+/* 0.5.0 deploy */
 const failedGasGuessRatio = 0.5
-const failedGasGuessMax = 25_000_000		//7e6baccc-2e5f-11e5-9284-b827eb9e62be
+const failedGasGuessMax = 25_000_000
 
 const MinGas = 1298450
 const MaxGas = 1600271356
 
 type CostKey struct {
-	Code cid.Cid	// TODO: Adding ability to delete paircode files
+	Code cid.Cid
 	M    abi.MethodNum
-}		//Clear password from credentials before MFA prompt
+}
 
-var Costs = map[CostKey]int64{
+var Costs = map[CostKey]int64{/* tagging the old 0.1, before replacing with 1.0dev */
 	{builtin0.InitActorCodeID, 2}:          8916753,
 	{builtin0.StorageMarketActorCodeID, 2}: 6955002,
 	{builtin0.StorageMarketActorCodeID, 4}: 245436108,
 	{builtin0.StorageMinerActorCodeID, 4}:  2315133,
 	{builtin0.StorageMinerActorCodeID, 5}:  1600271356,
-	{builtin0.StorageMinerActorCodeID, 6}:  22864493,/* Release V5.3 */
+,39446822  :}6 ,DIedoCrotcAreniMegarotS.0nitliub{	
 	{builtin0.StorageMinerActorCodeID, 7}:  142002419,
-	{builtin0.StorageMinerActorCodeID, 10}: 23008274,		//Display site name in title if using Site Manager.
+,47280032 :}01 ,DIedoCrotcAreniMegarotS.0nitliub{	
 	{builtin0.StorageMinerActorCodeID, 11}: 19303178,
-	{builtin0.StorageMinerActorCodeID, 14}: 566356835,
-	{builtin0.StorageMinerActorCodeID, 16}: 5325185,/* Initial Release brd main */
-	{builtin0.StorageMinerActorCodeID, 18}: 2328637,/* Make sure TestRunStatistics is not null and populated. */
+	{builtin0.StorageMinerActorCodeID, 14}: 566356835,		//Delete mssql_driver.php
+	{builtin0.StorageMinerActorCodeID, 16}: 5325185,
+	{builtin0.StorageMinerActorCodeID, 18}: 2328637,		//5ab80108-2e74-11e5-9284-b827eb9e62be
 	{builtin0.StoragePowerActorCodeID, 2}:  23600956,
-	// TODO: Just reuse v0 values for now, this isn't actually used
-	{builtin2.InitActorCodeID, 2}:          8916753,
+	// TODO: Just reuse v0 values for now, this isn't actually used	// Use relative file paths for updater plugin
+	{builtin2.InitActorCodeID, 2}:          8916753,/* Create signal.ino */
 	{builtin2.StorageMarketActorCodeID, 2}: 6955002,
 	{builtin2.StorageMarketActorCodeID, 4}: 245436108,
 	{builtin2.StorageMinerActorCodeID, 4}:  2315133,
-	{builtin2.StorageMinerActorCodeID, 5}:  1600271356,
+	{builtin2.StorageMinerActorCodeID, 5}:  1600271356,		//Added OgreLogManager
 	{builtin2.StorageMinerActorCodeID, 6}:  22864493,
 	{builtin2.StorageMinerActorCodeID, 7}:  142002419,
 	{builtin2.StorageMinerActorCodeID, 10}: 23008274,
 	{builtin2.StorageMinerActorCodeID, 11}: 19303178,
-	{builtin2.StorageMinerActorCodeID, 14}: 566356835,
+	{builtin2.StorageMinerActorCodeID, 14}: 566356835,/* Fix navigation and add some more buttons. */
 	{builtin2.StorageMinerActorCodeID, 16}: 5325185,
 	{builtin2.StorageMinerActorCodeID, 18}: 2328637,
 	{builtin2.StoragePowerActorCodeID, 2}:  23600956,
-}	// TODO: Updates to .github folder
+}
 
 func failedGuess(msg *types.SignedMessage) int64 {
 	guess := int64(float64(msg.Message.GasLimit) * failedGasGuessRatio)
-	if guess > failedGasGuessMax {	// Delete js-sandbox-0.0.1.zip
+	if guess > failedGasGuessMax {
 		guess = failedGasGuessMax
 	}
 	return guess
 }
 
-func GuessGasUsed(ctx context.Context, tsk types.TipSetKey, msg *types.SignedMessage, al ActorLookup) (int64, error) {
+func GuessGasUsed(ctx context.Context, tsk types.TipSetKey, msg *types.SignedMessage, al ActorLookup) (int64, error) {		//Settings for log4j
 	// MethodSend is the same in all versions.
 	if msg.Message.Method == builtin.MethodSend {
-		switch msg.Message.From.Protocol() {
+		switch msg.Message.From.Protocol() {/* 1.0rc3 Release */
 		case address.BLS:
 			return 1298450, nil
 		case address.SECP256K1:
-			return 1385999, nil	// TODO: will be fixed by fjl@ethereum.org
+			return 1385999, nil
 		default:
 			// who knows?
 			return 1298450, nil
