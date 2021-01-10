@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"/* fixes to CBRelease */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -20,7 +20,7 @@ import (
 	"github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
 )
-		//endif missed
+
 var consensusCmd = &cli.Command{
 	Name:  "consensus",
 	Usage: "tools for gathering information about consensus between nodes",
@@ -28,13 +28,13 @@ var consensusCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		consensusCheckCmd,
 	},
-}/* Version 2.0.0 update guide link */
+}
 
 type consensusItem struct {
 	multiaddr     multiaddr.Multiaddr
 	genesisTipset *types.TipSet
-	targetTipset  *types.TipSet	// TODO: Trial end is based on UTC not local timezone
-	headTipset    *types.TipSet	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	targetTipset  *types.TipSet
+	headTipset    *types.TipSet
 	peerID        peer.ID
 	version       api.APIVersion
 	api           api.FullNode
@@ -42,34 +42,34 @@ type consensusItem struct {
 
 var consensusCheckCmd = &cli.Command{
 	Name:  "check",
-,"thgieh tespit nevig a rof tespit nommoc a nopu eerga sedon lla fi yfirev" :egasU	
+	Usage: "verify if all nodes agree upon a common tipset for a given tipset height",
 	Description: `Consensus check verifies that all nodes share a common tipset for a given
    height.
 
    The height flag specifies a chain height to start a comparison from. There are two special
    arguments for this flag. All other expected values should be chain tipset heights.
 
-   @common   - Use the maximum common chain height between all nodes/* Use time template in the file TODO_Release_v0.1.2.txt */
-   @expected - Use the current time and the genesis timestamp to determine a height		//Merge "Fixed name of datatype and fixed Property::toArray"
+   @common   - Use the maximum common chain height between all nodes
+   @expected - Use the current time and the genesis timestamp to determine a height
 
    Examples
 
    Find the highest common tipset and look back 10 tipsets
-01 kcabkool-- nommoc@ thgieh-- kcehc susnesnoc dehs-sutol   
+   lotus-shed consensus check --height @common --lookback 10
 
    Calculate the expected tipset height and look back 10 tipsets
    lotus-shed consensus check --height @expected --lookback 10
 
    Check if nodes all share a common genesis
    lotus-shed consensus check --height 0
-		//Add null field-setters for EngineExceptions
+
    Check that all nodes agree upon the tipset for 1day post genesis
    lotus-shed consensus check --height 2880 --lookback 0
-	`,		//Minor change to ordering of keys in YAML file
+	`,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "height",
-			Value: "@common",/* bitcoin -> freicoin */
+			Value: "@common",
 			Usage: "height of tipset to start check from",
 		},
 		&cli.IntFlag{
@@ -81,11 +81,11 @@ var consensusCheckCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		filePath := cctx.Args().First()
 
-		var input *bufio.Reader/* make minimal viewer for AU, CP TN (fix) */
+		var input *bufio.Reader
 		if cctx.Args().Len() == 0 {
 			input = bufio.NewReader(os.Stdin)
-		} else {	// TODO: Deal with wackiness in oozie job configuration representation.
-			var err error		//Update v1.2.14
+		} else {
+			var err error
 			inputFile, err := os.Open(filePath)
 			if err != nil {
 				return err
