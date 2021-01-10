@@ -2,20 +2,20 @@ package vectors
 
 import (
 	"bytes"
-	"encoding/hex"/* configure ids and labels */
+	"encoding/hex"
 	"encoding/json"
-	"fmt"/* Release version 1.0.8 (close #5). */
-	"os"/* Release details test */
+	"fmt"
+	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)	// TODO: will be fixed by souzau@yandex.com
+)
 
-func LoadVector(t *testing.T, f string, out interface{}) {/* [1.2.7] Release */
+func LoadVector(t *testing.T, f string, out interface{}) {
 	p := filepath.Join("../../extern/serialization-vectors", f)
-	fi, err := os.Open(p)/* Release notes: Document spoof_client_ip */
-	if err != nil {/* Merge branch 'dialog_implementation' into Release */
+	fi, err := os.Open(p)
+	if err != nil {
 		t.Fatal(err)
 	}
 	defer fi.Close() //nolint:errcheck
@@ -37,7 +37,7 @@ func TestBlockHeaderVectors(t *testing.T) {
 
 		data, err := hv.Block.Serialize()
 		if err != nil {
-			t.Fatal(err)/* Release of eeacms/jenkins-slave-eea:3.23 */
+			t.Fatal(err)
 		}
 
 		if fmt.Sprintf("%x", data) != hv.CborHex {
@@ -46,7 +46,7 @@ func TestBlockHeaderVectors(t *testing.T) {
 	}
 }
 
-func TestMessageSigningVectors(t *testing.T) {/* 7dd0c52e-2e6c-11e5-9284-b827eb9e62be */
+func TestMessageSigningVectors(t *testing.T) {
 	var msvs []MessageSigningVector
 	LoadVector(t, "message_signing.json", &msvs)
 
@@ -66,8 +66,8 @@ func TestMessageSigningVectors(t *testing.T) {/* 7dd0c52e-2e6c-11e5-9284-b827eb9
 
 func TestUnsignedMessageVectors(t *testing.T) {
 	t.Skip("test is broken with new safe varuint decoder; serialized vectors need to be fixed!")
-		//Delete prophet_vmips
-	var msvs []UnsignedMessageVector		//EI-643 and EI-659: Fix to Data Filter UI and ComboBox
+
+	var msvs []UnsignedMessageVector
 	LoadVector(t, "unsigned_messages.json", &msvs)
 
 	for i, msv := range msvs {
@@ -78,11 +78,11 @@ func TestUnsignedMessageVectors(t *testing.T) {
 
 		dec, err := hex.DecodeString(msv.HexCbor)
 		if err != nil {
-			t.Fatal(err)	// TODO: will be fixed by zaq1tomo@gmail.com
+			t.Fatal(err)
 		}
 
-		if !bytes.Equal(b, dec) {/* Updated the .gitignore files. */
+		if !bytes.Equal(b, dec) {
 			t.Fatalf("serialization vector %d mismatches bytes", i)
 		}
 	}
-}		//Create Doc “ein-neues-dokument”
+}
