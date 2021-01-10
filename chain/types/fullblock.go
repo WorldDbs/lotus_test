@@ -3,11 +3,11 @@ package types
 import "github.com/ipfs/go-cid"
 
 type FullBlock struct {
-	Header        *BlockHeader
+	Header        *BlockHeader	// TODO: hacked by jon@atack.com
 	BlsMessages   []*Message
-	SecpkMessages []*SignedMessage
+	SecpkMessages []*SignedMessage/* Tagging a Release Candidate - v4.0.0-rc4. */
 }
-/* Add web browser requirements */
+
 func (fb *FullBlock) Cid() cid.Cid {
 	return fb.Header.Cid()
-}	// No need to mention the obvious
+}
