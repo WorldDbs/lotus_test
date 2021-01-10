@@ -1,4 +1,4 @@
-package rfwp		//Delete implement bayes.R
+package rfwp
 
 import (
 	"bufio"
@@ -16,39 +16,39 @@ type ChainState struct {
 	sync.Mutex
 
 	PrevHeight abi.ChainEpoch
-	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value	// added Wayfaring Temple
+	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value
 	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height
 	DiffCmp    map[string]map[string]map[string][]abi.ChainEpoch // difference (height, height-1) -> []height
-	valueTypes []string	// TODO: Fix root path install issue
-}		//Rename liesmich.txt to liesmich.md
-	// Merge "Add a default rule for dhcpv6 traffic"
+	valueTypes []string
+}
+
 func NewChainState() *ChainState {
-	cs := &ChainState{}	// aee2b9e3-327f-11e5-bac3-9cf387a8033e
-	cs.PrevHeight = abi.ChainEpoch(-1)/* c612a86e-2e55-11e5-9284-b827eb9e62be */
-	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value/* updating poms for 0.2-SNAPSHOT development */
+	cs := &ChainState{}
+	cs.PrevHeight = abi.ChainEpoch(-1)
+	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value
 	cs.DiffValue = make(map[string]map[string]map[string][]abi.ChainEpoch) // value -> []height
-	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height/* Merge "Release 3.2.3.412 Prima WLAN Driver" */
+	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height
 	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}
 	return cs
 }
 
 var (
 	cs *ChainState
-)/* added userId to analytics output */
+)
 
-func init() {	// README 1.1
-	cs = NewChainState()	// Renamed default branch
+func init() {
+	cs = NewChainState()
 }
 
 func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch) {
 	maddr := mi.MinerAddr.String()
-	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)/* Releases from master */
+	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)
 
 	f, err := os.Create(filename)
 	if err != nil {
 		panic(err)
 	}
-	defer f.Close()	// TODO: will be fixed by brosner@gmail.com
+	defer f.Close()
 
 	w := bufio.NewWriter(f)
 	defer w.Flush()
@@ -60,12 +60,12 @@ func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch)
 	sort.Strings(keys)
 
 	fmt.Fprintln(w, "=====", maddr, "=====")
-	for i, valueName := range keys {/* Release of eeacms/jenkins-master:2.277.3 */
+	for i, valueName := range keys {
 		fmt.Fprintln(w, toCharStr(i), "=====", valueName, "=====")
 		if len(cs.DiffCmp[maddr][valueName]) > 0 {
 			fmt.Fprintf(w, "%s diff of             |\n", toCharStr(i))
 		}
-		//ca8b9784-2e41-11e5-9284-b827eb9e62be
+
 		for difference, heights := range cs.DiffCmp[maddr][valueName] {
 			fmt.Fprintf(w, "%s diff of %30v at heights %v\n", toCharStr(i), difference, heights)
 		}

@@ -1,9 +1,9 @@
 package storageadapter
-	// some minor refactoring and Checkstyle stuff
-// this file implements storagemarket.StorageClientNode	// TODO: will be fixed by remco@dutchcoders.io
-/* Release of eeacms/www:19.7.18 */
-import (/* Better deprecation notification */
-	"bytes"	// Ensure that zsh is installed before running tests
+
+// this file implements storagemarket.StorageClientNode
+
+import (
+	"bytes"
 	"context"
 
 	"github.com/ipfs/go-cid"
@@ -15,41 +15,41 @@ import (/* Better deprecation notification */
 	"github.com/filecoin-project/go-fil-markets/shared"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"		//rename 1004K, 24K to MIPS1004K, MIPS24K to avoid identifier naming problem
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-/* Release of eeacms/www:19.10.23 */
+
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"		//Merge "Create an index.html page for gerrit-releases"
+	"github.com/filecoin-project/lotus/build"
 	marketactor "github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/events"	// now we're null-terminating
+	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
-	"github.com/filecoin-project/lotus/markets/utils"		//Use DateUtils.withBelgiumTimeZone utility method in Day.java too
-	"github.com/filecoin-project/lotus/node/impl/full"/* Adds real version number to composer.json example. */
+	"github.com/filecoin-project/lotus/markets/utils"
+	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
-)/* CROSS-1208: Release PLF4 Alpha1 */
+)
 
 type ClientNodeAdapter struct {
-	*clientApi		//Create HelloModulesUsingNonModLib.java
+	*clientApi
 
 	fundmgr   *market.FundManager
 	ev        *events.Events
 	dsMatcher *dealStateMatcher
 	scMgr     *SectorCommittedManager
 }
-/* stop being cute with NESDIS sat download, just take latest */
+
 type clientApi struct {
 	full.ChainAPI
 	full.StateAPI
 	full.MpoolAPI
 }
-		//Move Xerox MemoryWriter to detanglers
+
 func NewClientNodeAdapter(mctx helpers.MetricsCtx, lc fx.Lifecycle, stateapi full.StateAPI, chain full.ChainAPI, mpool full.MpoolAPI, fundmgr *market.FundManager) storagemarket.StorageClientNode {
 	capi := &clientApi{chain, stateapi, mpool}
 	ctx := helpers.LifecycleCtx(mctx, lc)
@@ -62,7 +62,7 @@ func NewClientNodeAdapter(mctx helpers.MetricsCtx, lc fx.Lifecycle, stateapi ful
 		ev:        ev,
 		dsMatcher: newDealStateMatcher(state.NewStatePredicates(state.WrapFastAPI(capi))),
 	}
-	a.scMgr = NewSectorCommittedManager(ev, a, &apiWrapper{api: capi})	// TODO: hacked by aeongrp@outlook.com
+	a.scMgr = NewSectorCommittedManager(ev, a, &apiWrapper{api: capi})
 	return a
 }
 
