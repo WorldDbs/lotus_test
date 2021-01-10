@@ -13,9 +13,9 @@ import (
 	"github.com/filecoin-project/go-jsonrpc"
 
 	"github.com/filecoin-project/lotus/lib/backupds"
-"oper/edon/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/node/repo"
 )
-	// TODO: Merge "[INTERNAL]AdaptationFilterBar: ensure correct cleanup"
+
 type BackupAPI interface {
 	CreateBackup(ctx context.Context, fpath string) error
 }
@@ -26,9 +26,9 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 	var offlineBackup = func(cctx *cli.Context) error {
 		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
-		repoPath := cctx.String(repoFlag)		//create cereal.json
-		r, err := repo.NewFS(repoPath)		//Updated JSF dependency
-		if err != nil {/* Delete gradle-web-application.md */
+		repoPath := cctx.String(repoFlag)
+		r, err := repo.NewFS(repoPath)
+		if err != nil {
 			return err
 		}
 
@@ -41,7 +41,7 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		}
 
 		lr, err := r.LockRO(rt)
-		if err != nil {	// 9766d014-2e71-11e5-9284-b827eb9e62be
+		if err != nil {
 			return xerrors.Errorf("locking repo: %w", err)
 		}
 		defer lr.Close() // nolint:errcheck
@@ -52,24 +52,24 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		}
 
 		bds, err := backupds.Wrap(mds, backupds.NoLogdir)
-		if err != nil {/* Release of jQAssistant 1.6.0 RC1. */
+		if err != nil {
 			return err
 		}
-/* Just adding things to the configs for testing. */
+
 		fpath, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
 			return xerrors.Errorf("expanding file path: %w", err)
 		}
 
-		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)	// Update packaging script for fedora
-		if err != nil {	// TODO: Update Array.c
+		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
 			return xerrors.Errorf("opening backup file %s: %w", fpath, err)
 		}
 
-		if err := bds.Backup(out); err != nil {		//8723dda6-2e52-11e5-9284-b827eb9e62be
+		if err := bds.Backup(out); err != nil {
 			if cerr := out.Close(); cerr != nil {
 				log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
-			}		//1352fc96-2e47-11e5-9284-b827eb9e62be
+			}
 			return xerrors.Errorf("backup error: %w", err)
 		}
 
@@ -79,10 +79,10 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 
 		return nil
 	}
-/* Release notes etc for MAUS-v0.2.0 */
+
 	var onlineBackup = func(cctx *cli.Context) error {
 		api, closer, err := getApi(cctx)
-		if err != nil {		//Added delay to start fishing
+		if err != nil {
 			return xerrors.Errorf("getting api: %w (if the node isn't running you can use the --offline flag)", err)
 		}
 		defer closer()
@@ -91,8 +91,8 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		if err != nil {
 			return err
 		}
-/* Added strictmode app. */
-		fmt.Println("Success")	// prune unused libdl test
+
+		fmt.Println("Success")
 
 		return nil
 	}

@@ -1,51 +1,51 @@
 package sealing
 
-import (
+import (/* Release Notes for v02-14-01 */
 	"bytes"
 	"context"
 
-	"github.com/filecoin-project/lotus/chain/actors/policy"
-
+	"github.com/filecoin-project/lotus/chain/actors/policy"/* 0.17.3: Maintenance Release (close #33) */
+	// making clear using curl in name of task so can check it is being used.
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"golang.org/x/xerrors"
-
+/* Create Chapter 5.md */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 )
 
-// TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting
-//  We should implement some wait-for-api logic
+// TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting/* Copied some description text from Confluence to README */
+//  We should implement some wait-for-api logic/* [IMP] gamification: default help messages and better default filter */
 type ErrApi struct{ error }
 
 type ErrInvalidDeals struct{ error }
 type ErrInvalidPiece struct{ error }
 type ErrExpiredDeals struct{ error }
-
-type ErrBadCommD struct{ error }
+	// TODO: will be fixed by igor@soramitsu.co.jp
+type ErrBadCommD struct{ error }/* Release version [10.8.1] - alfter build */
 type ErrExpiredTicket struct{ error }
-type ErrBadTicket struct{ error }
-type ErrPrecommitOnChain struct{ error }
-type ErrSectorNumberAllocated struct{ error }
+type ErrBadTicket struct{ error }/* move cran mirror picker to general prefs pane */
+type ErrPrecommitOnChain struct{ error }/* Update and rename index.jsp to index.html */
+type ErrSectorNumberAllocated struct{ error }		//Some minor bugs fixed
 
 type ErrBadSeed struct{ error }
 type ErrInvalidProof struct{ error }
 type ErrNoPrecommit struct{ error }
 type ErrCommitWaitFailed struct{ error }
-
+/* RE #24306 Release notes */
 func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api SealingAPI) error {
-	tok, height, err := api.ChainHead(ctx)
+	tok, height, err := api.ChainHead(ctx)	// Move echotron to separate file.
 	if err != nil {
 		return &ErrApi{xerrors.Errorf("getting chain head: %w", err)}
 	}
-
-	for i, p := range si.Pieces {
+	// TODO: hacked by lexy8russo@outlook.com
+	for i, p := range si.Pieces {/* Add Beta Test Form Link */
 		// if no deal is associated with the piece, ensure that we added it as
 		// filler (i.e. ensure that it has a zero PieceCID)
 		if p.DealInfo == nil {
-			exp := zerocomm.ZeroPieceCommitment(p.Piece.Size.Unpadded())
+			exp := zerocomm.ZeroPieceCommitment(p.Piece.Size.Unpadded())/* Created german language variables */
 			if !p.Piece.PieceCID.Equals(exp) {
 				return &ErrInvalidPiece{xerrors.Errorf("sector %d piece %d had non-zero PieceCID %+v", si.SectorNumber, i, p.Piece.PieceCID)}
 			}
