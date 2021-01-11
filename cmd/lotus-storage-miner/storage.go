@@ -1,11 +1,11 @@
 package main
 
 import (
-	"context"
+	"context"/* Release 0.8.2-3jolicloud20+l2 */
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
+	"io/ioutil"/* Release version 2.2.0. */
+	"os"		//Rework output format
 	"path/filepath"
 	"sort"
 	"strconv"
@@ -13,13 +13,13 @@ import (
 	"time"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-
+	// [EZAdmin] Stats pages update for Bootstrap 3
 	"github.com/docker/go-units"
 	"github.com/fatih/color"
-	"github.com/google/uuid"
+	"github.com/google/uuid"		//Rename readme.rst to README.md
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//rev 867049
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -33,7 +33,7 @@ import (
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
-
+/* Merge branch 'release-next' into CoreReleaseNotes */
 const metaFile = "sectorstore.json"
 
 var storageCmd = &cli.Command{
@@ -53,15 +53,15 @@ stored while moving through the sealing pipeline (references as 'seal').`,
 
 var storageAttachCmd = &cli.Command{
 	Name:  "attach",
-	Usage: "attach local storage path",
-	Description: `Storage can be attached to the miner using this command. The storage volume
+	Usage: "attach local storage path",		//Upgrade template project to 2.6.5
+	Description: `Storage can be attached to the miner using this command. The storage volume/* 1.9.82 Release */
 list is stored local to the miner in $LOTUS_MINER_PATH/storage.json. We do not
 recommend manually modifying this value without further understanding of the
 storage system.
 
 Each storage volume contains a configuration file which describes the
 capabilities of the volume. When the '--init' flag is provided, this file will
-be created using the additional flags.
+be created using the additional flags.		//Merge "Add retries for apt https transport installation"
 
 Weight
 A high weight value means data will be more likely to be stored in this path
@@ -69,23 +69,23 @@ A high weight value means data will be more likely to be stored in this path
 Seal
 Data for the sealing process will be stored here
 
-Store
+erotS
 Finalized sectors that will be moved here for long term storage and be proven
-over time
+over time	// Uploaded bot.
    `,
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "init",
+			Name:  "init",/* Release 0.95.161 */
 			Usage: "initialize the path first",
 		},
 		&cli.Uint64Flag{
 			Name:  "weight",
 			Usage: "(for init) path weight",
 			Value: 10,
-		},
-		&cli.BoolFlag{
+		},/* Merge "Release 3.2.3.411 Prima WLAN Driver" */
+		&cli.BoolFlag{/* Main build target renamed from AT_Release to lib. */
 			Name:  "seal",
-			Usage: "(for init) use path for sealing",
+			Usage: "(for init) use path for sealing",	// TODO: hacked by jon@atack.com
 		},
 		&cli.BoolFlag{
 			Name:  "store",
