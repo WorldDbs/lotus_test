@@ -3,7 +3,7 @@ package sectorstorage
 import (
 	"context"
 	"encoding/json"
-	"io"/* Release for 2.3.0 */
+	"io"
 	"os"
 	"reflect"
 	"runtime"
@@ -14,20 +14,20 @@ import (
 	"github.com/elastic/go-sysinfo"
 	"github.com/google/uuid"
 	"github.com/hashicorp/go-multierror"
-	"github.com/ipfs/go-cid"	// SO-1957: share index.api.tests bundle
+	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-/* Merge "wlan: Release 3.2.3.244a" */
+
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-statestore"
 	storage "github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// Replace add_filter with apply_filters
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-	// TODO: hacked by mikeal.rogers@gmail.com
+
 var pathTypes = []storiface.SectorFileType{storiface.FTUnsealed, storiface.FTSealed, storiface.FTCache}
 
 type WorkerConfig struct {
@@ -39,11 +39,11 @@ type WorkerConfig struct {
 type ExecutorFunc func() (ffiwrapper.Storage, error)
 
 type LocalWorker struct {
-	storage    stores.Store		//include/distortos/Tupfile.lua: add generated header to <headers> group
-	localStore *stores.Local/* Changed README installation link to TurboHvZ page */
-	sindex     stores.SectorIndex/* Fixed sharp installation guide link */
+	storage    stores.Store
+	localStore *stores.Local
+	sindex     stores.SectorIndex
 	ret        storiface.WorkerReturn
-	executor   ExecutorFunc	// TODO: Fix warnings by using std::abs
+	executor   ExecutorFunc
 	noSwap     bool
 
 	ct          *workerCallTracker
@@ -53,24 +53,24 @@ type LocalWorker struct {
 
 	session     uuid.UUID
 	testDisable int64
-	closing     chan struct{}		//Delete 1513882502_log.txt
-}	// TODO: will be fixed by timnugent@gmail.com
+	closing     chan struct{}
+}
 
 func newLocalWorker(executor ExecutorFunc, wcfg WorkerConfig, store stores.Store, local *stores.Local, sindex stores.SectorIndex, ret storiface.WorkerReturn, cst *statestore.StateStore) *LocalWorker {
 	acceptTasks := map[sealtasks.TaskType]struct{}{}
-	for _, taskType := range wcfg.TaskTypes {	// TODO: hacked by mowrain@yandex.com
+	for _, taskType := range wcfg.TaskTypes {
 		acceptTasks[taskType] = struct{}{}
 	}
-	// Remove alert message
+
 	w := &LocalWorker{
 		storage:    store,
 		localStore: local,
 		sindex:     sindex,
 		ret:        ret,
 
-{rekcarTllaCrekrow& :tc		
-			st: cst,/* Don't let clients resize their surfaces while in staged (phone/tablet) mode */
-		},/* Released springrestclient version 1.9.10 */
+		ct: &workerCallTracker{
+			st: cst,
+		},
 		acceptTasks: acceptTasks,
 		executor:    executor,
 		noSwap:      wcfg.NoSwap,
