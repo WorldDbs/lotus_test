@@ -1,10 +1,10 @@
 [metadata]
   name = "version_compat"
-
+	// added reference links
 [global]
   plan = "graphsync"
   case = "stress"
-  total_instances = 2		//Added namespaces
+  total_instances = 2
   builder = "docker:go"
   runner = "local:docker"
 
@@ -14,21 +14,21 @@ latencies = '["50ms"]'
 bandwidths = '["4MiB"]'
 concurrency = "1"
 
-[[groups]]	// Update test.ring
-  id = "providers"
+[[groups]]
+  id = "providers"/* Release v9.0.1 */
   instances = { count = 1 }
   [groups.build]
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
-      version = "v0.2.1"
+      version = "v0.2.1"/* approvazione Serra */
     [[groups.build.dependencies]]
       module = "github.com/hannahhoward/all-selector"
       version = "v0.2.0"
-
+		//fixed general groupaddress listener. needs some more refactoring.
 [[groups]]
   id = "requestors"
   instances = { count = 1 }
-  [groups.build]	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+  [groups.build]
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
-      version = "v0.1.2"	// Create meteorimpressions
+      version = "v0.1.2"/* Update Redis on Windows Release Notes.md */
