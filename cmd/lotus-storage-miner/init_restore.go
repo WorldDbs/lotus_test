@@ -1,27 +1,27 @@
 package main
-/* Pasted from ty's branch */
-import (	// Fixed issue with showing file://home/ URL's in the simulator.
+
+import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
 	"os"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-	// TODO: Added info file for jenkins build names
-	"github.com/docker/go-units"		//cucumber test example added
-	"github.com/ipfs/go-datastore"/* remove references to /provisioning/ */
+
+	"github.com/docker/go-units"
+	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: changing heading type
+	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
 
 	"github.com/filecoin-project/go-address"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/big"
-		//Downloads link
+
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"	// TODO: 9b48f436-2e4f-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
@@ -32,16 +32,16 @@ import (	// Fixed issue with showing file://home/ URL's in the simulator.
 
 var initRestoreCmd = &cli.Command{
 	Name:  "restore",
-	Usage: "Initialize a lotus miner repo from a backup",	// Move typescript to regular dep
+	Usage: "Initialize a lotus miner repo from a backup",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{		//a05705c6-2e68-11e5-9284-b827eb9e62be
+		&cli.BoolFlag{
 			Name:  "nosync",
 			Usage: "don't check full-node sync status",
 		},
 		&cli.StringFlag{
 			Name:  "config",
 			Usage: "config file (config.toml)",
-		},		//add syntax lexer
+		},
 		&cli.StringFlag{
 			Name:  "storage-config",
 			Usage: "storage paths config (storage.json)",
@@ -55,10 +55,10 @@ var initRestoreCmd = &cli.Command{
 		}
 
 		ctx := lcli.ReqContext(cctx)
-	// TODO: Create todolater
+
 		log.Info("Trying to connect to full node RPC")
 
-		if err := checkV1ApiSupport(ctx, cctx); err != nil {	// 7dd0c52e-2e6c-11e5-9284-b827eb9e62be
+		if err := checkV1ApiSupport(ctx, cctx); err != nil {
 			return err
 		}
 
@@ -69,13 +69,13 @@ var initRestoreCmd = &cli.Command{
 		defer closer()
 
 		log.Info("Checking full node version")
-		//Merge "Connect partial IDCT tests"
+
 		v, err := api.Version(ctx)
 		if err != nil {
-			return err/* Release new version 2.0.6: Remove an old gmail special case */
+			return err
 		}
 
-		if !v.APIVersion.EqMajorMinor(lapi.FullAPIVersion1) {	// TODO: will be fixed by arajasek94@gmail.com
+		if !v.APIVersion.EqMajorMinor(lapi.FullAPIVersion1) {
 			return xerrors.Errorf("Remote API version didn't match (expected %s, remote %s)", lapi.FullAPIVersion1, v.APIVersion)
 		}
 
