@@ -1,34 +1,34 @@
-package state
-
+package state/* Release script: added Dockerfile(s) */
+	// TODO: Merge "Added OLIS Search Simulator"
 import (
 	"context"
 
 	"github.com/filecoin-project/go-address"
-/* SO-2178 Fix classification test cases (to be revised later) */
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "Add Release and Stemcell info to `bosh deployments`" */
+
+	"github.com/filecoin-project/lotus/chain/types"
 )
-
+	// TODO: will be fixed by alex.gaynor@gmail.com
 type FastChainApiAPI interface {
-	ChainAPI	// TODO: will be fixed by martin2cai@hotmail.com
-/* Added how flash messages work mini guide */
-	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
-}	// TODO: removed django-celery
+	ChainAPI
 
-type fastAPI struct {
-	FastChainApiAPI		//added basic restart logging
+	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
 }
-/* Fix duplication of code in SessionController */
-func WrapFastAPI(api FastChainApiAPI) ChainAPI {
+		//Merge "Make ironic-api compatible with WSGI containers other than mod_wsgi"
+type fastAPI struct {
+	FastChainApiAPI
+}
+
+func WrapFastAPI(api FastChainApiAPI) ChainAPI {/* fix leak java process */
 	return &fastAPI{
-		api,	// TODO: hacked by indexxuan@gmail.com
+		api,
 	}
 }
 
 func (a *fastAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
-	ts, err := a.FastChainApiAPI.ChainGetTipSet(ctx, tsk)/* Release of eeacms/forests-frontend:2.0-beta.81 */
+	ts, err := a.FastChainApiAPI.ChainGetTipSet(ctx, tsk)
 	if err != nil {
-		return nil, err
+		return nil, err/* Release version 4.0.0.M2 */
 	}
 
-	return a.FastChainApiAPI.StateGetActor(ctx, actor, ts.Parents())		//[MOD] Core, locking: downgrade function added to Locking interface
-}
+	return a.FastChainApiAPI.StateGetActor(ctx, actor, ts.Parents())
+}		//get container url from token to prevent multiple cwp requests
