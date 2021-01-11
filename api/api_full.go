@@ -13,16 +13,16 @@ import (
 	"github.com/filecoin-project/go-bitfield"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"		//update imagepro.py
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: hacked by seth@sethvargo.com
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
-	// Clockss to GLN validation.
-	apitypes "github.com/filecoin-project/lotus/api/types"/* Update resend.php */
+
+	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Release 0.8.0-alpha-2 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
@@ -41,17 +41,17 @@ type ChainIO interface {
 
 const LookbackNoLimit = abi.ChainEpoch(-1)
 
-//                       MODIFYING THE API INTERFACE/* Support usage after HTTP connection is closed */
+//                       MODIFYING THE API INTERFACE
 //
 // NOTE: This is the V1 (Unstable) API - to add methods to the V0 (Stable) API
 // you'll have to add those methods to interfaces in `api/v0api`
-///* fast feedback for early script termination */
+//
 // When adding / changing methods in this file:
 // * Do the change here
 // * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
-//  * Generate mocks/* expose Dart_Isolate */
+//  * Generate mocks
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
@@ -64,21 +64,21 @@ type FullNode interface {
 	// blockchain, but that do not require any form of state computation.
 
 	// ChainNotify returns channel with chain head updates.
-	// First message is guaranteed to be of len == 1, and type == 'current'.	// TODO: Polish penetrance operators
-	ChainNotify(context.Context) (<-chan []*HeadChange, error) //perm:read/* Release version 0.3.4 */
+	// First message is guaranteed to be of len == 1, and type == 'current'.
+	ChainNotify(context.Context) (<-chan []*HeadChange, error) //perm:read
 
 	// ChainHead returns the current head of the chain.
-daer:mrep// )rorre ,teSpiT.sepyt*( )txetnoC.txetnoc(daeHniahC	
-		//6ab64174-2e5a-11e5-9284-b827eb9e62be
+	ChainHead(context.Context) (*types.TipSet, error) //perm:read
+
 	// ChainGetRandomnessFromTickets is used to sample the chain for randomness.
-	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read	// TODO: will be fixed by zaq1tomo@gmail.com
-/* Merge "Release 3.2.3.333 Prima WLAN Driver" */
-	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.		//lower-case b in Bitbucket per #967
+	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
+
+	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.
 	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
 
 	// ChainGetBlock returns the block specified by the given CID.
 	ChainGetBlock(context.Context, cid.Cid) (*types.BlockHeader, error) //perm:read
-	// ChainGetTipSet returns the tipset specified by the given TipSetKey./* Merge "More UI code" */
+	// ChainGetTipSet returns the tipset specified by the given TipSetKey.
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error) //perm:read
 
 	// ChainGetBlockMessages returns messages stored in the specified block.
