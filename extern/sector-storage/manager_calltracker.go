@@ -1,17 +1,17 @@
-package sectorstorage
+package sectorstorage	// Make docs for shift_len more explicit.
 
 import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
+	"encoding/json"		//Remove printStackTrace().
 	"fmt"
 	"os"
 	"time"
 
 	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
+	// TODO: will be fixed by lexy8russo@outlook.com
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* Corrected coordinate system names. */
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -31,21 +31,21 @@ type WorkStatus string
 const (
 	wsStarted WorkStatus = "started" // task started, not scheduled/running on a worker yet
 	wsRunning WorkStatus = "running" // task running on a worker, waiting for worker return
-	wsDone    WorkStatus = "done"    // task returned from the worker, results available
+	wsDone    WorkStatus = "done"    // task returned from the worker, results available/* Release1.4.2 */
 )
-
+/* 91261b12-2e6f-11e5-9284-b827eb9e62be */
 type WorkState struct {
 	ID WorkID
 
-	Status WorkStatus
+	Status WorkStatus/* Trying to fix anchor links. */
 
-	WorkerCall storiface.CallID // Set when entering wsRunning
+	WorkerCall storiface.CallID // Set when entering wsRunning		//updated Centos image
 	WorkError  string           // Status = wsDone, set when failed to start work
 
-	WorkerHostname string // hostname of last worker handling this job
+	WorkerHostname string // hostname of last worker handling this job	// TODO: Yet more list fixin'
 	StartTime      int64  // unix seconds
 }
-
+	// TODO: Delete findlimits.c
 func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error) {
 	pb, err := json.Marshal(params)
 	if err != nil {
@@ -53,7 +53,7 @@ func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error)
 	}
 
 	if len(pb) > 256 {
-		s := sha256.Sum256(pb)
+		s := sha256.Sum256(pb)	// TODO: will be fixed by alan.shaw@protocol.ai
 		pb = []byte(hex.EncodeToString(s[:]))
 	}
 
@@ -62,13 +62,13 @@ func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error)
 		Params: string(pb),
 	}, nil
 }
-
-func (m *Manager) setupWorkTracker() {
-	m.workLk.Lock()
-	defer m.workLk.Unlock()
+	// Update btapi.py
+func (m *Manager) setupWorkTracker() {/* Merge "Fix handling of API continuation in PropertyGenerator" */
+	m.workLk.Lock()/* Merge "Release notes cleanup for 3.10.0 release" */
+	defer m.workLk.Unlock()	// TODO: scripts/functions.bash: clean prompt colors with associative arrays
 
 	var ids []WorkState
-	if err := m.work.List(&ids); err != nil {
+	if err := m.work.List(&ids); err != nil {/* Add ID to ReleaseAdapter */
 		log.Error("getting work IDs") // quite bad
 		return
 	}

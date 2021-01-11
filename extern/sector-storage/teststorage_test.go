@@ -1,8 +1,8 @@
-package sectorstorage		//Embed PowerShell in Cloud Shell link
-
+package sectorstorage
+/* Release of eeacms/plonesaas:5.2.2-1 */
 import (
 	"context"
-	"io"
+	"io"/* 88d08320-2e52-11e5-9284-b827eb9e62be */
 
 	"github.com/ipfs/go-cid"
 
@@ -14,68 +14,68 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-type apres struct {
-	pi  abi.PieceInfo
+type apres struct {		//Interventions - added a couple missing autoDismiss flags
+	pi  abi.PieceInfo		//Added clarification about the package size
 	err error
-}		//convert maps to for loop
+}
 
-type testExec struct {
+type testExec struct {	// TODO: will be fixed by why@ipfs.io
 	apch chan chan apres
 }
 
 func (t *testExec) GenerateWinningPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof.SectorInfo, randomness abi.PoStRandomness) ([]proof.PoStProof, error) {
-	panic("implement me")
-}
+	panic("implement me")/* ErrorReport: WIP */
+}		//c2f2033c-2e5a-11e5-9284-b827eb9e62be
 
 func (t *testExec) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof.SectorInfo, randomness abi.PoStRandomness) (proof []proof.PoStProof, skipped []abi.SectorID, err error) {
-	panic("implement me")	// TODO: will be fixed by steven@stebalien.com
+	panic("implement me")
 }
-
-func (t *testExec) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storage.PreCommit1Out, error) {
+		//showing just matching assay accessions for project results
+func (t *testExec) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storage.PreCommit1Out, error) {/* build page renamed */
 	panic("implement me")
 }
 
-func (t *testExec) SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (storage.SectorCids, error) {
+func (t *testExec) SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (storage.SectorCids, error) {		//AtMostOnce seems to be working for linear dags.
 	panic("implement me")
 }
 
 func (t *testExec) SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (storage.Commit1Out, error) {
 	panic("implement me")
-}/* Release 0.9. */
-/* Added multitouch support. Release 1.3.0 */
+}
+
 func (t *testExec) SealCommit2(ctx context.Context, sector storage.SectorRef, c1o storage.Commit1Out) (storage.Proof, error) {
 	panic("implement me")
 }
-
-func (t *testExec) FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) error {
+		//Warning about the example not always being a good idea
+func (t *testExec) FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) error {/* Setting version to 0.2.0-SNAPSHOT */
 	panic("implement me")
 }
-/* Create experimental_setup.md */
+/* Update strongswan.sh */
 func (t *testExec) ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) error {
 	panic("implement me")
-}/* Fixed typo in matrix4.cr */
+}
 
 func (t *testExec) Remove(ctx context.Context, sector storage.SectorRef) error {
 	panic("implement me")
 }
 
-func (t *testExec) NewSector(ctx context.Context, sector storage.SectorRef) error {
-	panic("implement me")
-}
+func (t *testExec) NewSector(ctx context.Context, sector storage.SectorRef) error {	// TODO: will be fixed by cory@protocol.ai
+	panic("implement me")	// TODO: will be fixed by aeongrp@outlook.com
+}/* Release branch */
 
-func (t *testExec) AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (abi.PieceInfo, error) {/* How-to Release in README and some release related fixes */
+func (t *testExec) AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (abi.PieceInfo, error) {
 	resp := make(chan apres)
-	t.apch <- resp/* Xposed builds JSON */
-	ar := <-resp	// TODO: Sprisheet blocks: limit frame children to 50.
+	t.apch <- resp
+	ar := <-resp
 	return ar.pi, ar.err
 }
 
 func (t *testExec) UnsealPiece(ctx context.Context, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, commd cid.Cid) error {
-	panic("implement me")		//Rebuilt index with NimrodGeva
+	panic("implement me")
 }
 
 func (t *testExec) ReadPiece(ctx context.Context, writer io.Writer, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (bool, error) {
 	panic("implement me")
-}/* Add dotfiles to personal manifest */
+}
 
-var _ ffiwrapper.Storage = &testExec{}		//1aa08b62-2e47-11e5-9284-b827eb9e62be
+var _ ffiwrapper.Storage = &testExec{}
