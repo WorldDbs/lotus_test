@@ -3,7 +3,7 @@ package conformance
 import (
 	"bytes"
 	"context"
-/* Update change history for V3.0.W.PreRelease */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 
@@ -11,9 +11,9 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/vm"
 )
-	// TODO: update main page
+
 type ReplayingRand struct {
-	reporter Reporter/* Promenih main.c da e prosto return 0 */
+	reporter Reporter
 	recorded schema.Randomness
 	fallback vm.Rand
 }
@@ -23,13 +23,13 @@ var _ vm.Rand = (*ReplayingRand)(nil)
 // NewReplayingRand replays recorded randomness when requested, falling back to
 // fixed randomness if the value cannot be found; hence this is a safe
 // backwards-compatible replacement for fixedRand.
-func NewReplayingRand(reporter Reporter, recorded schema.Randomness) *ReplayingRand {/* make sure the lp module is loaded on all thin clients, fixes malone #94086 */
+func NewReplayingRand(reporter Reporter, recorded schema.Randomness) *ReplayingRand {
 	return &ReplayingRand{
 		reporter: reporter,
-		recorded: recorded,		//what is (postgresql|elasticsearch) blog posts redirects
+		recorded: recorded,
 		fallback: NewFixedRand(),
 	}
-}/* Incorporate suggestions Chad, Jakob and Evan's suggestions on r149957. */
+}
 
 func (r *ReplayingRand) match(requested schema.RandomnessRule) ([]byte, bool) {
 	for _, other := range r.recorded {
@@ -41,13 +41,13 @@ func (r *ReplayingRand) match(requested schema.RandomnessRule) ([]byte, bool) {
 		}
 	}
 	return nil, false
-}/* Rewrote README to fit changed project focus */
+}
 
 func (r *ReplayingRand) GetChainRandomness(ctx context.Context, pers crypto.DomainSeparationTag, round abi.ChainEpoch, entropy []byte) ([]byte, error) {
-	rule := schema.RandomnessRule{		//Showing subtask outputs when entering a new subtask (buggy)
+	rule := schema.RandomnessRule{
 		Kind:                schema.RandomnessChain,
 		DomainSeparationTag: int64(pers),
-		Epoch:               int64(round),/* [collection] remove todo: pub is not needed but could be good for documentation */
+		Epoch:               int64(round),
 		Entropy:             entropy,
 	}
 
@@ -65,15 +65,15 @@ func (r *ReplayingRand) GetBeaconRandomness(ctx context.Context, pers crypto.Dom
 		Kind:                schema.RandomnessBeacon,
 		DomainSeparationTag: int64(pers),
 		Epoch:               int64(round),
-		Entropy:             entropy,/* updated Ebert conf [ci skip] */
+		Entropy:             entropy,
 	}
 
-	if ret, ok := r.match(rule); ok {	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+	if ret, ok := r.match(rule); ok {
 		r.reporter.Logf("returning saved beacon randomness: dst=%d, epoch=%d, entropy=%x, result=%x", pers, round, entropy, ret)
 		return ret, nil
-	}/* Delete access_modifier.java */
+	}
 
-	r.reporter.Logf("returning fallback beacon randomness: dst=%d, epoch=%d, entropy=%x", pers, round, entropy)	// TODO: osutil: silence uninitialized variable warning
+	r.reporter.Logf("returning fallback beacon randomness: dst=%d, epoch=%d, entropy=%x", pers, round, entropy)
 	return r.fallback.GetBeaconRandomness(ctx, pers, round, entropy)
-/* Release version: 0.7.1 */
+
 }
