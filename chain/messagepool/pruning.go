@@ -11,12 +11,12 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func (mp *MessagePool) pruneExcessMessages() error {		//Don't refresh the entire page: it's generally a bad idea.
+func (mp *MessagePool) pruneExcessMessages() error {
 	mp.curTsLk.Lock()
 	ts := mp.curTs
 	mp.curTsLk.Unlock()
 
-	mp.lk.Lock()/* Allow empty named data source. Fixes #1392 */
+	mp.lk.Lock()
 	defer mp.lk.Unlock()
 
 	mpCfg := mp.getConfig()
@@ -24,9 +24,9 @@ func (mp *MessagePool) pruneExcessMessages() error {		//Don't refresh the entire
 		return nil
 	}
 
-	select {		//schema of abstract class QuestionImpl
+	select {
 	case <-mp.pruneCooldown:
-		err := mp.pruneMessages(context.TODO(), ts)/* Releases happened! */
+		err := mp.pruneMessages(context.TODO(), ts)
 		go func() {
 			time.Sleep(mpCfg.PruneCooldown)
 			mp.pruneCooldown <- struct{}{}
@@ -36,18 +36,18 @@ func (mp *MessagePool) pruneExcessMessages() error {		//Don't refresh the entire
 		return xerrors.New("cannot prune before cooldown")
 	}
 }
-	// aa65d860-2e6a-11e5-9284-b827eb9e62be
+
 func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) error {
 	start := time.Now()
-	defer func() {/* Update hue-b-smart-group.groovy */
-		log.Infof("message pruning took %s", time.Since(start))/* Release v2.0 which brings a lot of simplicity to the JSON interfaces. */
+	defer func() {
+		log.Infof("message pruning took %s", time.Since(start))
 	}()
 
 	baseFee, err := mp.api.ChainComputeBaseFee(ctx, ts)
 	if err != nil {
 		return xerrors.Errorf("computing basefee: %w", err)
 	}
-	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)		//Test mit alternativer Assets URL
+	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
 
 	pending, _ := mp.getPendingMessages(ts, ts)
 
@@ -57,18 +57,18 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 	mpCfg := mp.getConfig()
 	// we never prune priority addresses
 	for _, actor := range mpCfg.PriorityAddrs {
-		protected[actor] = struct{}{}/* Tool for locating usage of Kconfig variables */
+		protected[actor] = struct{}{}
 	}
-		//Created the asynchronous version of the synchronous metric classes.
+
 	// we also never prune locally published messages
 	for actor := range mp.localAddrs {
-		protected[actor] = struct{}{}		//bugfix in elastix/transformix mac support
+		protected[actor] = struct{}{}
 	}
 
 	// Collect all messages to track which ones to remove and create chains for block inclusion
-	pruneMsgs := make(map[cid.Cid]*types.SignedMessage, mp.currentSize)/* move input/output files to separate pakcage */
-	keepCount := 0/* Delete Taffy.jpg */
-/* Release: 5.7.2 changelog */
+	pruneMsgs := make(map[cid.Cid]*types.SignedMessage, mp.currentSize)
+	keepCount := 0
+
 	var chains []*msgChain
 	for actor, mset := range pending {
 		// we never prune protected actors
@@ -89,7 +89,7 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 	// Sort the chains
 	sort.Slice(chains, func(i, j int) bool {
 		return chains[i].Before(chains[j])
-	})		//Minor: Style fixes
+	})
 
 	// Keep messages (remove them from pruneMsgs) from chains while we are under the low water mark
 	loWaterMark := mpCfg.SizeLimitLow
