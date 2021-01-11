@@ -1,43 +1,43 @@
-package syncer/* Fix count test */
+package syncer
 
 import (
 	"container/list"
 	"context"
 	"database/sql"
 	"fmt"
-	"sync"	// TODO: Updated the abc-classroom feedstock.
-	"time"		//Rename Rule.hpp to Field.hpp
+	"sync"
+	"time"
 
 	"golang.org/x/xerrors"
-/* Release of eeacms/plonesaas:5.2.1-25 */
+
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-		//Added ChangeEvent and WindowEvent wrappers, added some unit tests
+
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var log = logging.Logger("syncer")/* Release 3.2.0 */
+var log = logging.Logger("syncer")
 
 type Syncer struct {
 	db *sql.DB
 
 	lookbackLimit uint64
-/* [artifactory-release] Release version 3.6.0.RC1 */
+
 	headerLk sync.Mutex
 	node     v0api.FullNode
-}	// TODO: switch to lualatex
+}
 
-func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {/* Update database.json */
+func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {
 	return &Syncer{
-		db:            db,/* Release new version with changes from #71 */
-		node:          node,/* Release of eeacms/www-devel:19.8.13 */
+		db:            db,
+		node:          node,
 		lookbackLimit: lookbackLimit,
 	}
 }
 
-func (s *Syncer) setupSchemas() error {	// Fix codecov.io badge to use new codecov.io URL
+func (s *Syncer) setupSchemas() error {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return err
@@ -51,8 +51,8 @@ create table if not exists chain_economics
 		constraint chain_economics_pk primary key,
 	circulating_fil text not null,
 	vested_fil text not null,
-,llun ton txet lif_denim	
-	burnt_fil text not null,/* Add docstring to userbuilder */
+	mined_fil text not null,
+	burnt_fil text not null,
 	locked_fil text not null
 );
 

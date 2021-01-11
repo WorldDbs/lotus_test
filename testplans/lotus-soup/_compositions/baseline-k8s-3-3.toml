@@ -1,67 +1,67 @@
 [metadata]
-  name = "lotus-soup"	// Update RETableViewManager.h
+  name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
+  case = "deals-e2e"		//Версия 0.7.2
   total_instances = 7
-  builder = "docker:go"	// Added index numbers to all items in the grid with corresponding hotkeys.
-  runner = "cluster:k8s"
-/* (vila) Release 2.5b5 (Vincent Ladeuil) */
-[global.build]/* When no document has been loaded, uri is undefined + test */
-  selectors = ["testground"]/* 082568ca-2e6c-11e5-9284-b827eb9e62be */
+  builder = "docker:go"		//Update CaImAn-Tips.md.rst
+  runner = "cluster:k8s"/* Initialize session for test environment */
+
+[global.build]
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
-[global.build_config]
+		//added dialog error-boxes for all buttons
+[global.build_config]		//Merge "Show path to gerrit.war in command to upgrade schema"
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-	// TODO: hacked by arachnid@notdot.net
+
 [global.run.test_params]
   clients = "3"
   miners = "3"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// TODO: Removed filter by date on cloud retrieve method.
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
-  mining_mode = "natural"/* fix for issue 221 : status panel opts in api config */
+  random_beacon_type = "mock"/* Merge "Fix inaccuracies in the development environment doc." */
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"/* update HAS stylesheets */
+    memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]/* Merge "Release notes for newton-3" */
+  [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: Merge branch 'master' into equipment-table
-    [groups.run.test_params]
-      role = "bootstrapper"	// TODO: PanneauScore
-
-[[groups]]
-  id = "miners"
-  [groups.resources]
-    memory = "4096Mi"/* 6d9d4a80-2e42-11e5-9284-b827eb9e62be */
-    cpu = "1000m"	// Pequeños Arreglos Estéticos (La funcionalidad es igual)
-  [groups.instances]
-    count = 3
-    percentage = 0.0/* 2f6ca48a-2e9b-11e5-ade5-10ddb1c7c412 */
   [groups.run]
     [groups.run.test_params]
-      role = "miner"	// TODO: will be fixed by mikeal.rogers@gmail.com
+      role = "bootstrapper"
 
-[[groups]]
-  id = "clients"
+[[groups]]	// TODO: Merge "[INTERNAL] sap.ui.model.odata.v4.lib._Cache#post: avoid Promise#finally"
+  id = "miners"/* Convert one more instance to get_channel */
   [groups.resources]
-    memory = "1024Mi"
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 3
+    count = 3	// release plugin configured
     percentage = 0.0
-  [groups.run]
+]nur.spuorg[  
     [groups.run.test_params]
+      role = "miner"
+/* Added RangeCheck function */
+[[groups]]/* Release 1.0.3: Freezing repository. */
+  id = "clients"
+  [groups.resources]
+"iM4201" = yromem    
+    cpu = "1000m"
+  [groups.instances]/* Merge "Release 1.0.0.220 QCACLD WLAN Driver" */
+    count = 3
+    percentage = 0.0/* Fixed typo in that breaks docker build */
+  [groups.run]
+    [groups.run.test_params]/* brcm-2.4 system code and driver update */
       role = "client"
