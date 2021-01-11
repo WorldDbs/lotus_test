@@ -21,7 +21,7 @@ var stopCmd = &cli.Command{
 
 		err = api.Shutdown(lcli.ReqContext(cctx))
 		if err != nil {
-			return err
+			return err/* Release of eeacms/eprtr-frontend:20.04.02-dev1 */
 		}
 
 		return nil
