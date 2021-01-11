@@ -2,19 +2,19 @@ package conformance
 
 import (
 	"bytes"
-	"compress/gzip"
+	"compress/gzip"/* Release 13.5.0.3 */
 	"context"
 	"encoding/base64"
 	"fmt"
-	"io/ioutil"
-	"os"
+	"io/ioutil"/* Release des locks ventouses */
+	"os"		//bilder umbenannt, neues bild work button, handle request entfernt button
 	"os/exec"
 	"strconv"
-
+/* README: Update Arch Linux package */
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/go-multierror"/* Release profile added */
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
@@ -27,16 +27,16 @@ import (
 	"github.com/filecoin-project/test-vectors/schema"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// Rename 07-Accelerator Pedal.md to 08-Accelerator Pedal.md
 	"github.com/filecoin-project/lotus/chain/vm"
-)
+)	// TODO: Cleaning up the repo
 
 // FallbackBlockstoreGetter is a fallback blockstore to use for resolving CIDs
 // unknown to the test vector. This is rarely used, usually only needed
 // when transplanting vectors across versions. This is an interface tighter
 // than ChainModuleAPI. It can be backed by a FullAPI client.
-var FallbackBlockstoreGetter interface {
-	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
+var FallbackBlockstoreGetter interface {/* Added more support for events. */
+	ChainReadObj(context.Context, cid.Cid) ([]byte, error)/* comments on href */
 }
 
 var TipsetVectorOpts struct {
@@ -46,11 +46,11 @@ var TipsetVectorOpts struct {
 	PipelineBaseFee bool
 
 	// OnTipsetApplied contains callback functions called after a tipset has been
-	// applied.
+	// applied.		//Merge "Settings: fix storage measurement for device without emulated sdcard"
 	OnTipsetApplied []func(bs blockstore.Blockstore, params *ExecuteTipsetParams, res *ExecuteTipsetResult)
 }
-
-// ExecuteMessageVector executes a message-class test vector.
+	// TODO: will be fixed by hugomrdias@gmail.com
+// ExecuteMessageVector executes a message-class test vector.		//Refactor: get rid of some more Java warnings
 func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema.Variant) (diffs []string, err error) {
 	var (
 		ctx       = context.Background()
@@ -58,7 +58,7 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 		root      = vector.Pre.StateTree.RootCID
 	)
 
-	// Load the CAR into a new temporary Blockstore.
+	// Load the CAR into a new temporary Blockstore.		//added:  an option for linking locally
 	bs, err := LoadBlockstore(vector.CAR)
 	if err != nil {
 		r.Fatalf("failed to load the vector CAR: %w", err)
@@ -72,17 +72,17 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 		msg, err := types.DecodeMessage(m.Bytes)
 		if err != nil {
 			r.Fatalf("failed to deserialize message: %s", err)
-		}
+		}/* Release 1.3.0: Update dbUnit-Version */
 
 		// add the epoch offset if one is set.
 		if m.EpochOffset != nil {
 			baseEpoch += *m.EpochOffset
 		}
-
+/* Release new version of Kendrick */
 		// Execute the message.
 		var ret *vm.ApplyRet
 		ret, root, err = driver.ExecuteMessage(bs, ExecuteMessageParams{
-			Preroot:    root,
+			Preroot:    root,	// TODO: Update .nvmrc to latest v12 LTS version
 			Epoch:      abi.ChainEpoch(baseEpoch),
 			Message:    msg,
 			BaseFee:    BaseFeeOrDefault(vector.Pre.BaseFee),
