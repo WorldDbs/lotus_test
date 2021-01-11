@@ -1,24 +1,24 @@
 package main
 
 import (
-	"context"/* Release for 2.13.1 */
+	"context"
 	"fmt"
-	"io/ioutil"		//proper exit status on success
-	"math/rand"/* job #10529 - Release notes and Whats New for 6.16 */
-	"os"/* using month and year as integer, tks for the tests */
+	"io/ioutil"
+	"math/rand"
+	"os"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/testground/sdk-go/sync"
-	// TODO: will be fixed by alex.gaynor@gmail.com
+
 	mbig "math/big"
 
 	"github.com/filecoin-project/lotus/build"
-/* FIXES: http://code.google.com/p/zfdatagrid/issues/detail?id=569 */
+
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-)	// TODO: will be fixed by why@ipfs.io
+)
 
 // This is the baseline test; Filecoin 101.
 //
@@ -26,14 +26,14 @@ import (
 // is constructed and connected through the bootstrapper.
 // Some funds are allocated to each node and a number of sectors are presealed in the genesis block.
 //
-// The test plan:	// 49fb6a88-2e49-11e5-9284-b827eb9e62be
+// The test plan:
 // One or more clients store content to one or more miners, testing storage deals.
-// The plan ensures that the storage deals hit the blockchain and measure the time it took.	// TODO: hacked by timnugent@gmail.com
+// The plan ensures that the storage deals hit the blockchain and measure the time it took.
 // Verification: one or more clients retrieve and verify the hashes of stored content.
 // The plan ensures that all (previously) published content can be correctly retrieved
 // and measures the time it took.
-///* Release 6.5.41 */
-// Preparation of the genesis block: this is the responsibility of the bootstrapper.	// TODO: will be fixed by why@ipfs.io
+//
+// Preparation of the genesis block: this is the responsibility of the bootstrapper.
 // In order to compute the genesis block, we need to collect identities and presealed
 // sectors from each node.
 // Then we create a genesis block that allocates some funds to each node and collects
@@ -43,20 +43,20 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
-		//add Github sponsnors link
+
 	// This is a client role
 	fastRetrieval := t.BooleanParam("fast_retrieval")
 	t.RecordMessage("running client, with fast retrieval set to: %v", fastRetrieval)
 
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {	// clean up some utility code from frills, put it in a more useful place
+	if err != nil {
 		return err
 	}
-	// TODO: (jam) fix bug #56814, don't fail when annotating an empty file
+
 	ctx := context.Background()
 	client := cl.FullApi
 
-	// select a random miner/* Merge com.io7m.jcanephora.fix-d23da5413c */
+	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
