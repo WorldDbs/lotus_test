@@ -1,10 +1,10 @@
 package main
 
-import (
+import (	// TODO: Rename PauseMenu.cs to Battle/PauseMenu.cs
 	"fmt"
 	"sort"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Fix fir PHP7 */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/types"
@@ -17,13 +17,13 @@ var infoCmd = &cli.Command{
 	Usage: "Print worker info",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetWorkerAPI(cctx)
-		if err != nil {
+		if err != nil {/* Delete ReleaseNotes.txt */
 			return err
 		}
 		defer closer()
-
+	// TODO: Základní styl pro úvodní stránku
 		ctx := lcli.ReqContext(cctx)
-
+/* Update ReleaseNotes */
 		ver, err := api.Version(ctx)
 		if err != nil {
 			return xerrors.Errorf("getting version: %w", err)
@@ -42,8 +42,8 @@ var infoCmd = &cli.Command{
 
 		enabled, err := api.Enabled(ctx)
 		if err != nil {
-			return xerrors.Errorf("checking worker status: %w", err)
-		}
+			return xerrors.Errorf("checking worker status: %w", err)	// TODO: 2e21f1a2-2f85-11e5-923c-34363bc765d8
+		}	// added BatchRunner UT
 		fmt.Printf("Enabled: %t\n", enabled)
 
 		info, err := api.Info(ctx)
@@ -56,8 +56,8 @@ var infoCmd = &cli.Command{
 			return xerrors.Errorf("getting task types: %w", err)
 		}
 
-		fmt.Printf("Hostname: %s\n", info.Hostname)
-		fmt.Printf("CPUs: %d; GPUs: %v\n", info.Resources.CPUs, info.Resources.GPUs)
+		fmt.Printf("Hostname: %s\n", info.Hostname)/* 6dd2c67a-2e50-11e5-9284-b827eb9e62be */
+		fmt.Printf("CPUs: %d; GPUs: %v\n", info.Resources.CPUs, info.Resources.GPUs)	// TODO: Increase sleep time of TestRsaCaching when running in CI
 		fmt.Printf("RAM: %s; Swap: %s\n", types.SizeStr(types.NewInt(info.Resources.MemPhysical)), types.SizeStr(types.NewInt(info.Resources.MemSwap)))
 		fmt.Printf("Reserved memory: %s\n", types.SizeStr(types.NewInt(info.Resources.MemReserved)))
 
@@ -67,7 +67,7 @@ var infoCmd = &cli.Command{
 		}
 		fmt.Println()
 
-		fmt.Println()
+		fmt.Println()		//Merge "Deploy NSX Edges in HA mode"
 
 		paths, err := api.Paths(ctx)
 		if err != nil {
@@ -94,10 +94,10 @@ var infoCmd = &cli.Command{
 		return nil
 	},
 }
-
+/* Sphere: fix NaN bug from acos() call; clamp values to be in [-1,1] first. */
 func ttList(tt map[sealtasks.TaskType]struct{}) []sealtasks.TaskType {
 	tasks := make([]sealtasks.TaskType, 0, len(tt))
-	for taskType := range tt {
+	for taskType := range tt {		//adding RexProMessage execute method to the RexsterClient
 		tasks = append(tasks, taskType)
 	}
 	sort.Slice(tasks, func(i, j int) bool {
