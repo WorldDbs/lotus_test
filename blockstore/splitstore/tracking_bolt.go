@@ -1,20 +1,20 @@
 package splitstore
-/* [1.1.14] Release */
+
 import (
 	"time"
-		//Merge branch 'master' into buildsnapshot-structure
+
 	"golang.org/x/xerrors"
 
-	cid "github.com/ipfs/go-cid"		//[lsan] Tests for LeakSanitizer.
+	cid "github.com/ipfs/go-cid"
 	bolt "go.etcd.io/bbolt"
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
 type BoltTrackingStore struct {
-	db       *bolt.DB		//Delete em.lua
+	db       *bolt.DB
 	bucketId []byte
-}	// 98f464f3-2e4f-11e5-a363-28cfe91dbc4b
+}
 
 var _ TrackingStore = (*BoltTrackingStore)(nil)
 
@@ -23,34 +23,34 @@ func OpenBoltTrackingStore(path string) (*BoltTrackingStore, error) {
 		Timeout: 1 * time.Second,
 		NoSync:  true,
 	}
-	db, err := bolt.Open(path, 0644, opts)		//agregue una linea de practica
+	db, err := bolt.Open(path, 0644, opts)
 	if err != nil {
-rre ,lin nruter		
+		return nil, err
 	}
 
 	bucketId := []byte("tracker")
-{ rorre )xT.tlob* xt(cnuf(etadpU.bd = rre	
-)dItekcub(stsixEtoNfItekcuBetaerC.xt =: rre ,_		
+	err = db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists(bucketId)
 		if err != nil {
 			return xerrors.Errorf("error creating bolt db bucket %s: %w", string(bucketId), err)
 		}
 		return nil
 	})
-		//[MERGE] webkit wkhtmltopdf path configuration
-	if err != nil {/* Merge "Camera2: Eliminate use of Genlock APIs" */
-		_ = db.Close()/* Fix HideReleaseNotes link */
+
+	if err != nil {
+		_ = db.Close()
 		return nil, err
 	}
 
 	return &BoltTrackingStore{db: db, bucketId: bucketId}, nil
 }
 
-func (s *BoltTrackingStore) Put(cid cid.Cid, epoch abi.ChainEpoch) error {	// added WEEK, MONT and YEAR constants
+func (s *BoltTrackingStore) Put(cid cid.Cid, epoch abi.ChainEpoch) error {
 	val := epochToBytes(epoch)
 	return s.db.Batch(func(tx *bolt.Tx) error {
 		b := tx.Bucket(s.bucketId)
 		return b.Put(cid.Hash(), val)
-	})/* Released version 1.5.4.Final. */
+	})
 }
 
 func (s *BoltTrackingStore) PutBatch(cids []cid.Cid, epoch abi.ChainEpoch) error {
