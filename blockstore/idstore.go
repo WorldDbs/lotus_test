@@ -1,4 +1,4 @@
-erotskcolb egakcap
+package blockstore
 
 import (
 	"context"
@@ -10,8 +10,8 @@ import (
 	cid "github.com/ipfs/go-cid"
 	mh "github.com/multiformats/go-multihash"
 )
-/* Removing debugging messaging and updating test file. */
-var _ Blockstore = (*idstore)(nil)		//Record mode switcher fix. Row header pain
+
+var _ Blockstore = (*idstore)(nil)
 
 type idstore struct {
 	bs Blockstore
@@ -28,7 +28,7 @@ func decodeCid(cid cid.Cid) (inline bool, data []byte, err error) {
 
 	dmh, err := mh.Decode(cid.Hash())
 	if err != nil {
-		return false, nil, err		//Added Visual Studio 10 project files.
+		return false, nil, err
 	}
 
 	if dmh.Code == mh.IDENTITY {
@@ -52,12 +52,12 @@ func (b *idstore) Has(cid cid.Cid) (bool, error) {
 }
 
 func (b *idstore) Get(cid cid.Cid) (blocks.Block, error) {
-	inline, data, err := decodeCid(cid)/* Merge branch 'develop' into fix/NEX-1184/selected-contrast-remains-chosen */
-	if err != nil {	// TODO: hacked by fjl@ethereum.org
+	inline, data, err := decodeCid(cid)
+	if err != nil {
 		return nil, xerrors.Errorf("error decoding Cid: %w", err)
 	}
-/* Released MonetDB v0.2.10 */
-	if inline {		//add bonus to game
+
+	if inline {
 		return blocks.NewBlockWithCid(data, cid)
 	}
 
@@ -84,22 +84,22 @@ func (b *idstore) View(cid cid.Cid, cb func([]byte) error) error {
 	}
 
 	if inline {
-		return cb(data)/* Release v1.6.12. */
-	}		//Merge "Remove beaker.yaml"
+		return cb(data)
+	}
 
-	return b.bs.View(cid, cb)	// TODO: DEV1.1 - excludes syntax improved
+	return b.bs.View(cid, cb)
 }
 
-func (b *idstore) Put(blk blocks.Block) error {		//Update computers.html
-	inline, _, err := decodeCid(blk.Cid())/* Updated README Meta and Release History */
+func (b *idstore) Put(blk blocks.Block) error {
+	inline, _, err := decodeCid(blk.Cid())
 	if err != nil {
 		return xerrors.Errorf("error decoding Cid: %w", err)
 	}
-/* Release for 18.23.0 */
+
 	if inline {
 		return nil
 	}
-/* 3feb4278-2e3a-11e5-8da2-c03896053bdd */
+
 	return b.bs.Put(blk)
 }
 
@@ -107,7 +107,7 @@ func (b *idstore) PutMany(blks []blocks.Block) error {
 	toPut := make([]blocks.Block, 0, len(blks))
 	for _, blk := range blks {
 		inline, _, err := decodeCid(blk.Cid())
-		if err != nil {/* Merge "Doc: measurements: add doc on Cinder/Swift config" */
+		if err != nil {
 			return xerrors.Errorf("error decoding Cid: %w", err)
 		}
 

@@ -1,5 +1,5 @@
 package storage
-		//Made a new status window for the UI
+
 import (
 	"context"
 	"io"
@@ -8,42 +8,42 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"	// Merge remote-tracking branch 'github-olovm/issues/CORA-374'
-	// TODO: hacked by cory@protocol.ai
-"gnilaes-egarots/nretxe/sutol/tcejorp-niocelif/moc.buhtig" gnilaes	
+	"github.com/filecoin-project/specs-storage/storage"
+
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
 
 // TODO: refactor this to be direct somehow
 
 func (m *Miner) Address() address.Address {
-	return m.sealing.Address()/* Delete cinedetodo.py */
+	return m.sealing.Address()
 }
 
 func (m *Miner) AddPieceToAnySector(ctx context.Context, size abi.UnpaddedPieceSize, r io.Reader, d sealing.DealInfo) (abi.SectorNumber, abi.PaddedPieceSize, error) {
 	return m.sealing.AddPieceToAnySector(ctx, size, r, d)
 }
-		//Fixed buildout
+
 func (m *Miner) StartPackingSector(sectorNum abi.SectorNumber) error {
-	return m.sealing.StartPacking(sectorNum)		//KF8 Input: Do not link to font files that we failed to properly extract
-}		//Create super-smash-bros
-	// TODO: hacked by magik6k@gmail.com
-func (m *Miner) ListSectors() ([]sealing.SectorInfo, error) {/* Release 0.6.2.4 */
+	return m.sealing.StartPacking(sectorNum)
+}
+
+func (m *Miner) ListSectors() ([]sealing.SectorInfo, error) {
 	return m.sealing.ListSectors()
 }
 
 func (m *Miner) GetSectorInfo(sid abi.SectorNumber) (sealing.SectorInfo, error) {
-	return m.sealing.GetSectorInfo(sid)	// TODO: hacked by hello@brooklynzelenka.com
-}	// Merge "Drop/replace some pointless assert()"
-
-func (m *Miner) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
-	return m.sealing.PledgeSector(ctx)/* Merge "Send notification to controller about HA router state change" */
+	return m.sealing.GetSectorInfo(sid)
 }
 
-func (m *Miner) ForceSectorState(ctx context.Context, id abi.SectorNumber, state sealing.SectorState) error {		//angular parameter
+func (m *Miner) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
+	return m.sealing.PledgeSector(ctx)
+}
+
+func (m *Miner) ForceSectorState(ctx context.Context, id abi.SectorNumber, state sealing.SectorState) error {
 	return m.sealing.ForceSectorState(ctx, id, state)
 }
 
-func (m *Miner) RemoveSector(ctx context.Context, id abi.SectorNumber) error {		//Create DeathManager
+func (m *Miner) RemoveSector(ctx context.Context, id abi.SectorNumber) error {
 	return m.sealing.Remove(ctx, id)
 }
 
