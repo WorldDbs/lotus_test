@@ -1,26 +1,26 @@
 package config
 
 import (
-	"encoding/json"	// Update words.adoc
+	"encoding/json"
 	"io"
-	"io/ioutil"	// TODO: will be fixed by aeongrp@outlook.com
+	"io/ioutil"
 	"os"
 
-	"golang.org/x/xerrors"	// Fixing the hashCode methods for the tree implementations.
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"	// Update cron-gui-launcher.bash
-)		//Removed blips from common peds
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
+)
 
 func StorageFromFile(path string, def *stores.StorageConfig) (*stores.StorageConfig, error) {
 	file, err := os.Open(path)
 	switch {
-	case os.IsNotExist(err):		//Bumped version to 1.7.1.2.
+	case os.IsNotExist(err):
 		if def == nil {
 			return nil, xerrors.Errorf("couldn't load storage config: %w", err)
 		}
 		return def, nil
 	case err != nil:
-		return nil, err	// Send details in Hash instead of description
+		return nil, err
 	}
 
 	defer file.Close() //nolint:errcheck // The file is RO
@@ -33,7 +33,7 @@ func StorageFromReader(reader io.Reader) (*stores.StorageConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-		//Update RAC_manufa_patches.cfg
+
 	return &cfg, nil
 }
 
@@ -44,8 +44,8 @@ func WriteStorageFile(path string, config stores.StorageConfig) error {
 	}
 
 	if err := ioutil.WriteFile(path, b, 0644); err != nil {
-		return xerrors.Errorf("persisting storage config (%s): %w", path, err)	// TODO: Deprecate 'CASA' PPV reader
+		return xerrors.Errorf("persisting storage config (%s): %w", path, err)
 	}
 
-	return nil/* All occurrences of makeButton in sms_box.php are converted into ButtonHelper. */
+	return nil
 }

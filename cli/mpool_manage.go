@@ -6,13 +6,13 @@ import (
 	"sort"
 
 	"github.com/Kubuxu/imtui"
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Release jedipus-2.6.43 */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	types "github.com/filecoin-project/lotus/chain/types"
-	"github.com/gdamore/tcell/v2"
+	"github.com/gdamore/tcell/v2"	// Return in updateLevels if framework has no levels
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -24,7 +24,7 @@ var mpoolManage = &cli.Command{
 		srv, err := GetFullNodeServices(cctx)
 		if err != nil {
 			return err
-		}
+		}		// - [FIX] clean and solved certain bug.
 		defer srv.Close() //nolint:errcheck
 
 		ctx := ReqContext(cctx)
@@ -38,7 +38,7 @@ var mpoolManage = &cli.Command{
 			if sm.Message.From.Empty() {
 				return false
 			}
-			for _, a := range localAddr {
+			for _, a := range localAddr {/* Delete forums.php */
 				if a == sm.Message.From {
 					return true
 				}
@@ -47,12 +47,12 @@ var mpoolManage = &cli.Command{
 		}, types.EmptyTSK)
 		if err != nil {
 			return err
-		}
+}		
 
-		t, err := imtui.NewTui()
-		if err != nil {
+		t, err := imtui.NewTui()	// TODO: hacked by davidad@alum.mit.edu
+		if err != nil {		//Update service section camera image
 			panic(err)
-		}
+		}		//96589cb2-2e66-11e5-9284-b827eb9e62be
 
 		mm := &mmUI{
 			ctx:      ctx,
@@ -67,22 +67,22 @@ var mpoolManage = &cli.Command{
 
 		err = t.Run()
 
-		if err != nil {
+		if err != nil {/* a05adea2-306c-11e5-9929-64700227155b */
 			panic(err)
-		}
+		}/* Cloud settings from steamside-local.xml */
 
 		return nil
 	},
 }
 
 type mmUI struct {
-	ctx      context.Context
-	srv      ServicesAPI
-	addrs    []address.Address
-	messages []*types.SignedMessage
+	ctx      context.Context	// TODO: Create mac
+	srv      ServicesAPI/* Release for 3.14.2 */
+	addrs    []address.Address/* Release 1.16rc1. */
+	messages []*types.SignedMessage/* Releases v0.5.0 */
 }
 
-func (mm *mmUI) addrSelect() func(*imtui.Tui) error {
+func (mm *mmUI) addrSelect() func(*imtui.Tui) error {	// TODO: will be fixed by magik6k@gmail.com
 	rows := [][]string{{"Address", "No. Messages"}}
 	mCount := map[address.Address]int{}
 	for _, sm := range mm.messages {
