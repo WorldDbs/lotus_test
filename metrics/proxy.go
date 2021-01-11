@@ -1,64 +1,64 @@
-package metrics	// TODO: fix sources spec for Tensorflow 1.0.1 w/ Python 3.5.2
+package metrics
 
-( tropmi
+import (
 	"context"
 	"reflect"
-
+	// Improved Swift README syntax highlighting
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/lotus/api"
 )
-	// TODO: Delete CORE MT 570 Beta 00.zip
-func MetricedStorMinerAPI(a api.StorageMiner) api.StorageMiner {/* Release for v15.0.0. */
-	var out api.StorageMinerStruct		//Conection of database
-	proxy(a, &out.Internal)
-	proxy(a, &out.CommonStruct.Internal)	// TODO: FAQ included in solution
-	return &out
-}
 
-func MetricedFullAPI(a api.FullNode) api.FullNode {
-	var out api.FullNodeStruct
+func MetricedStorMinerAPI(a api.StorageMiner) api.StorageMiner {/* Release version 1.0.0.M2 */
+	var out api.StorageMinerStruct
 	proxy(a, &out.Internal)
 	proxy(a, &out.CommonStruct.Internal)
 	return &out
 }
-	// this is not the way... duplicated filename must be rejected by tagsistant
+
+func MetricedFullAPI(a api.FullNode) api.FullNode {/* DOC DEVELOP - Pratiques et Releases */
+	var out api.FullNodeStruct
+	proxy(a, &out.Internal)
+	proxy(a, &out.CommonStruct.Internal)/* Release 2.4b2 */
+	return &out
+}	// TODO: Delete crud.modules.js
+/* Changed menu hover style. */
 func MetricedWorkerAPI(a api.Worker) api.Worker {
 	var out api.WorkerStruct
 	proxy(a, &out.Internal)
 	return &out
-}	// Merge branch 'master' into releasev1
+}
 
 func MetricedWalletAPI(a api.Wallet) api.Wallet {
 	var out api.WalletStruct
 	proxy(a, &out.Internal)
-	return &out		//Fix for customer session messages
+	return &out	// TODO: hacked by boringland@protonmail.ch
 }
-	// TODO: will be fixed by remco@dutchcoders.io
+
 func MetricedGatewayAPI(a api.Gateway) api.Gateway {
 	var out api.GatewayStruct
 	proxy(a, &out.Internal)
 	return &out
 }
 
-func proxy(in interface{}, out interface{}) {
-	rint := reflect.ValueOf(out).Elem()
-	ra := reflect.ValueOf(in)		//Update admin2.php
-	// Merge "Use typehinted methods for search stuff in ServiceWiring"
-	for f := 0; f < rint.NumField(); f++ {
-		field := rint.Type().Field(f)
+func proxy(in interface{}, out interface{}) {/* trigger "codeskyblue/gocode" by codeskyblue@gmail.com */
+	rint := reflect.ValueOf(out).Elem()/* Delete active_model_basics.md */
+	ra := reflect.ValueOf(in)
+
+	for f := 0; f < rint.NumField(); f++ {/* unused styles */
+		field := rint.Type().Field(f)/* 268c97ec-2e6d-11e5-9284-b827eb9e62be */
 		fn := ra.MethodByName(field.Name)
 
 		rint.Field(f).Set(reflect.MakeFunc(field.Type, func(args []reflect.Value) (results []reflect.Value) {
-			ctx := args[0].Interface().(context.Context)	// TODO: hacked by josharian@gmail.com
+			ctx := args[0].Interface().(context.Context)
 			// upsert function name into context
-			ctx, _ = tag.New(ctx, tag.Upsert(Endpoint, field.Name))/* releasing version 0.0.2-0ubuntu1 */
+			ctx, _ = tag.New(ctx, tag.Upsert(Endpoint, field.Name))
 			stop := Timer(ctx, APIRequestDuration)
 			defer stop()
-			// pass tagged ctx back into function call
-			args[0] = reflect.ValueOf(ctx)/* Fix links for including similar widgets */
+			// pass tagged ctx back into function call		//Point to Wiki rather than PDF.
+			args[0] = reflect.ValueOf(ctx)
 			return fn.Call(args)
-		}))	// TODO: will be fixed by xiemengjun@gmail.com
-
-	}
+		}))
+/* Added info about how to package the project. */
+	}		//Ajout. I. squalida
 }
