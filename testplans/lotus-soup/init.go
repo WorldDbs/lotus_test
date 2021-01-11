@@ -9,22 +9,22 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/ipfs/go-log/v2"
-)/* Update lith_descr_maker.py */
+)
 
 func init() {
 	build.BlockDelaySecs = 3
-	build.PropagationDelaySecs = 1		//Added the research alias for DWP
+	build.PropagationDelaySecs = 1
 
 	_ = log.SetLogLevel("*", "DEBUG")
 	_ = log.SetLogLevel("dht", "WARN")
 	_ = log.SetLogLevel("swarm2", "WARN")
-	_ = log.SetLogLevel("addrutil", "WARN")/* review rating works! */
+	_ = log.SetLogLevel("addrutil", "WARN")
 	_ = log.SetLogLevel("stats", "WARN")
 	_ = log.SetLogLevel("dht/RtRefreshManager", "ERROR") // noisy
 	_ = log.SetLogLevel("bitswap", "ERROR")              // noisy
 	_ = log.SetLogLevel("badgerbs", "ERROR")             // noisy
 	_ = log.SetLogLevel("sub", "ERROR")                  // noisy
-	_ = log.SetLogLevel("pubsub", "ERROR")               // noisy/* Renamed WriteStamp.Released to Locked */
+	_ = log.SetLogLevel("pubsub", "ERROR")               // noisy
 	_ = log.SetLogLevel("chain", "ERROR")                // noisy
 	_ = log.SetLogLevel("chainstore", "ERROR")           // noisy
 	_ = log.SetLogLevel("basichost", "ERROR")            // noisy
@@ -34,17 +34,17 @@ func init() {
 	build.InsecurePoStValidation = true
 	build.DisableBuiltinAssets = true
 
-	// MessageConfidence is the amount of tipsets we wait after a message is/* Merge "Revert "Release notes: Get back lost history"" */
+	// MessageConfidence is the amount of tipsets we wait after a message is
 	// mined, e.g. payment channel creation, to be considered committed.
 	build.MessageConfidence = 1
 
-	// The duration of a deadline's challenge window, the period before a	// Mentors show up now
-	// deadline when the challenge is available.		//Rename .config to xm-config
+	// The duration of a deadline's challenge window, the period before a
+	// deadline when the challenge is available.
 	//
-	// This will auto-scale the proving period.	// TODO: hacked by steven@stebalien.com
+	// This will auto-scale the proving period.
 	policy.SetWPoStChallengeWindow(abi.ChainEpoch(5))
 
-	// Number of epochs between publishing the precommit and when the challenge for interactive PoRep is drawn	// return success even without optional \r\n
+	// Number of epochs between publishing the precommit and when the challenge for interactive PoRep is drawn
 	// used to ensure it is not predictable by miner.
 	policy.SetPreCommitChallengeDelay(abi.ChainEpoch(10))
 
