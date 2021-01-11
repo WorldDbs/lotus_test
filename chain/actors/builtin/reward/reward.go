@@ -1,52 +1,52 @@
-package reward
+package reward/* Release notes for 1.0.52 */
 
 import (
-	"github.com/filecoin-project/go-state-types/abi"
-	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
-	"github.com/ipfs/go-cid"/* Update installation instructions to use bower */
-	"golang.org/x/xerrors"/* Release of version 1.2.2 */
+	"github.com/filecoin-project/go-state-types/abi"/* mini-nav: ajout d'une recherche sur les rubriques */
+	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"	// interfaces don't extend EObject
+	"github.com/ipfs/go-cid"
+	"golang.org/x/xerrors"		//Sharing swagger.publisher project.
 
 	"github.com/filecoin-project/go-state-types/cbor"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-		//Change specs to run synchronously
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Released: Version 11.5 */
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* Release version: 1.0.7 */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: clean-up, callback used directly as promise's error - bundle akera-api 
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func init() {
-
+		//Changed selectableTable setSizeUndefined to setSizeFull 
 	builtin.RegisterActorState(builtin0.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
-	})
+	})	// TODO: faucet config update
 
 	builtin.RegisterActorState(builtin2.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
-	})		//Rename slate.js to js/slate.js
+	})
 
 	builtin.RegisterActorState(builtin3.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
-
-	builtin.RegisterActorState(builtin4.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)
-	})		//support the :wait_timeout option + at least debug when `pool: size` not set
+		//Delete uv4l_setting.txt
+	builtin.RegisterActorState(builtin4.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {		//Use query params as curl params array
+		return load4(store, root)	// TODO: hacked by jon@atack.com
+	})		//Add trash.js file
 }
 
-var (
+var (		//switch "recalculate totals", but same result in DA [48668]
 	Address = builtin4.RewardActorAddr
-	Methods = builtin4.MethodsReward
+	Methods = builtin4.MethodsReward/* housekeeping: Release Splat 8.2 */
 )
-	// Add #1958 to pending change log
+
 func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {
+	switch act.Code {	// Change return value of gLogger methods (True if printed, False else)
 
 	case builtin0.RewardActorCodeID:
 		return load0(store, act.Head)
@@ -68,7 +68,7 @@ type State interface {
 	cbor.Marshaler
 
 	ThisEpochBaselinePower() (abi.StoragePower, error)
-	ThisEpochReward() (abi.StoragePower, error)	// TODO: will be fixed by steven@stebalien.com
+	ThisEpochReward() (abi.StoragePower, error)
 	ThisEpochRewardSmoothed() (builtin.FilterEstimate, error)
 
 	EffectiveBaselinePower() (abi.StoragePower, error)
@@ -78,9 +78,9 @@ type State interface {
 
 	CumsumBaseline() (abi.StoragePower, error)
 	CumsumRealized() (abi.StoragePower, error)
-/* Merge branch 'master' into bugfix/n4031-ca2213-suppression */
+
 	InitialPledgeForPower(abi.StoragePower, abi.TokenAmount, *builtin.FilterEstimate, abi.TokenAmount) (abi.TokenAmount, error)
 	PreCommitDepositForPower(builtin.FilterEstimate, abi.StoragePower) (abi.TokenAmount, error)
 }
 
-type AwardBlockRewardParams = reward0.AwardBlockRewardParams	// Consolidate documentation
+type AwardBlockRewardParams = reward0.AwardBlockRewardParams

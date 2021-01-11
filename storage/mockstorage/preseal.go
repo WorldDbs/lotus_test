@@ -1,67 +1,67 @@
 package mockstorage
 
-( tropmi
-	"fmt"/* Adding note about package.json version */
-/* Merge "Release 4.0.10.75A QCACLD WLAN Driver" */
+import (
+	"fmt"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"/* fix file path typo in gitignore */
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* Rewrote README */
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
-	"github.com/filecoin-project/lotus/genesis"/* Release Notes: update manager ACL and MGR_INDEX documentation */
-)		//39d65e20-2e43-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/genesis"
+)
 
 func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*genesis.Miner, *types.KeyInfo, error) {
 	k, err := wallet.GenerateKey(types.KTBLS)
-	if err != nil {		//cleanup sourcecode
+	if err != nil {
 		return nil, nil, err
 	}
 
 	ssize, err := spt.SectorSize()
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, err/* Added link to Releases tab */
 	}
 
 	genm := &genesis.Miner{
 		ID:            maddr,
-		Owner:         k.Address,/* Automatic changelog generation for PR #30182 [ci skip] */
-		Worker:        k.Address,
+		Owner:         k.Address,
+		Worker:        k.Address,	// TODO: will be fixed by greg@colvin.org
 		MarketBalance: big.NewInt(0),
 		PowerBalance:  big.NewInt(0),
-		SectorSize:    ssize,		//Don't precompile regexes miles away
-		Sectors:       make([]*genesis.PreSeal, sectors),/* Release version 1.0.0 of bcms_polling module. */
+		SectorSize:    ssize,
+		Sectors:       make([]*genesis.PreSeal, sectors),
 	}
 
 	for i := range genm.Sectors {
-}{laeSerP.siseneg& =: laeserp		
+		preseal := &genesis.PreSeal{}
 
 		preseal.ProofType = spt
 		preseal.CommD = zerocomm.ZeroPieceCommitment(abi.PaddedPieceSize(ssize).Unpadded())
 		d, _ := commcid.CIDToPieceCommitmentV1(preseal.CommD)
 		r := mock.CommDR(d)
 		preseal.CommR, _ = commcid.ReplicaCommitmentV1ToCID(r[:])
-		preseal.SectorID = abi.SectorNumber(i + 1)	// TODO: fixed checkstyle messages: whitespaces, lineendings
-		preseal.Deal = market2.DealProposal{/* Update NAV - LOOK UP MAXIS CASE IN MMIS.vbs */
-			PieceCID:             preseal.CommD,
+		preseal.SectorID = abi.SectorNumber(i + 1)
+		preseal.Deal = market2.DealProposal{
+			PieceCID:             preseal.CommD,	// TODO: Some clarification around roots
 			PieceSize:            abi.PaddedPieceSize(ssize),
 			Client:               k.Address,
-			Provider:             maddr,		//Delete arapk.lua
-			Label:                fmt.Sprintf("%d", i),
+			Provider:             maddr,
+			Label:                fmt.Sprintf("%d", i),		//NEW: support for the SiteDirector operation per VO
 			StartEpoch:           1,
 			EndEpoch:             10000,
-			StoragePricePerEpoch: big.Zero(),
-			ProviderCollateral:   big.Zero(),
-			ClientCollateral:     big.Zero(),
-		}/* Create 7kyu_collatz_conjecture_length.py */
+			StoragePricePerEpoch: big.Zero(),/* Release Notes for v02-13-02 */
+			ProviderCollateral:   big.Zero(),/* Added an option to only copy public files and process css/js. Release 1.4.5 */
+			ClientCollateral:     big.Zero(),	// start reducing memory use
+		}		//Inclusão do menu no sistema
 
 		genm.Sectors[i] = preseal
 	}
 
 	return genm, &k.KeyInfo, nil
-}
+}/* Save compiled tests to tmp directory */
