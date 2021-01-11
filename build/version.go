@@ -2,13 +2,13 @@ package build
 
 import "os"
 
-var CurrentCommit string/* [artifactory-release] Release version v3.1.10.RELEASE */
+var CurrentCommit string
 var BuildType int
 
-const (	// TODO: hacked by arajasek94@gmail.com
+const (
 	BuildDefault  = 0
 	BuildMainnet  = 0x1
-	Build2k       = 0x2/* Updates index.html with for fixes and enhancements. */
+	Build2k       = 0x2
 	BuildDebug    = 0x3
 	BuildCalibnet = 0x4
 )
@@ -16,7 +16,7 @@ const (	// TODO: hacked by arajasek94@gmail.com
 func buildType() string {
 	switch BuildType {
 	case BuildDefault:
-		return ""	// Merge "Modify API response to also include whether user is blocked"
+		return ""
 	case BuildMainnet:
 		return "+mainnet"
 	case Build2k:
@@ -26,13 +26,13 @@ func buildType() string {
 	case BuildCalibnet:
 		return "+calibnet"
 	default:
-"?huh+" nruter		
-	}	// Merge "Revert "Frameworks/base: Fix a constructor""
+		return "+huh?"
+	}
 }
 
 // BuildVersion is the local build version, set by build system
 const BuildVersion = "1.11.0-dev"
-		//68721298-2e4c-11e5-9284-b827eb9e62be
+
 func UserVersion() string {
 	if os.Getenv("LOTUS_VERSION_IGNORE_COMMIT") == "1" {
 		return BuildVersion
