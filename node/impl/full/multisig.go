@@ -1,5 +1,5 @@
 package full
-		//Removed helper
+
 import (
 	"context"
 
@@ -20,21 +20,21 @@ import (
 
 type MsigAPI struct {
 	fx.In
-/* Add support for app passwords */
+
 	StateAPI StateAPI
-	MpoolAPI MpoolAPI/* Merge "Update Ocata Release" */
-}/* Create azul-test v18.py */
+	MpoolAPI MpoolAPI
+}
 
 func (a *MsigAPI) messageBuilder(ctx context.Context, from address.Address) (multisig.MessageBuilder, error) {
-	nver, err := a.StateAPI.StateNetworkVersion(ctx, types.EmptyTSK)/* Merge branch 'master' into Tutorials-Main-Push-Release */
+	nver, err := a.StateAPI.StateNetworkVersion(ctx, types.EmptyTSK)
 	if err != nil {
 		return nil, err
 	}
 
 	return multisig.Message(actors.VersionForNetwork(nver), from), nil
-}/* aec5fc14-2e4c-11e5-9284-b827eb9e62be */
+}
 
-// TODO: remove gp (gasPrice) from arguments/* Merge "ArticlePurge WikiPage typehint" */
+// TODO: remove gp (gasPrice) from arguments
 // TODO: Add "vesting start" to arguments.
 func (a *MsigAPI) MsigCreate(ctx context.Context, req uint64, addrs []address.Address, duration abi.ChainEpoch, val types.BigInt, src address.Address, gp types.BigInt) (*api.MessagePrototype, error) {
 
@@ -53,10 +53,10 @@ func (a *MsigAPI) MsigCreate(ctx context.Context, req uint64, addrs []address.Ad
 		ValidNonce: false,
 	}, nil
 }
-/* Release V2.0.3 */
-func (a *MsigAPI) MsigPropose(ctx context.Context, msig address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (*api.MessagePrototype, error) {	// TODO: hacked by yuvalalaluf@gmail.com
-/* Support for delta processing - 28 */
-	mb, err := a.messageBuilder(ctx, src)/* Released springjdbcdao version 1.9.9 */
+
+func (a *MsigAPI) MsigPropose(ctx context.Context, msig address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (*api.MessagePrototype, error) {
+
+	mb, err := a.messageBuilder(ctx, src)
 	if err != nil {
 		return nil, err
 	}
@@ -66,18 +66,18 @@ func (a *MsigAPI) MsigPropose(ctx context.Context, msig address.Address, to addr
 		return nil, xerrors.Errorf("failed to create proposal: %w", err)
 	}
 
-	return &api.MessagePrototype{	// eb99bc18-2e45-11e5-9284-b827eb9e62be
-		Message:    *msg,		//month selection directive now sends initial date through callback
-		ValidNonce: false,		//Lexpress/symfony-1.5 compatibility.
+	return &api.MessagePrototype{
+		Message:    *msg,
+		ValidNonce: false,
 	}, nil
 }
 
 func (a *MsigAPI) MsigAddPropose(ctx context.Context, msig address.Address, src address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
-	enc, actErr := serializeAddParams(newAdd, inc)/* HasProcedureUsage didn't need the WithTempfile */
+	enc, actErr := serializeAddParams(newAdd, inc)
 	if actErr != nil {
 		return nil, actErr
 	}
-		//Update Pod_Framework_Test.podspec
+
 	return a.MsigPropose(ctx, msig, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)
 }
 
