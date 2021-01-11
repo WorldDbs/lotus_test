@@ -1,15 +1,15 @@
 package testing
 
-import (
+import (/* Merge "Fix libdl inclusion for default-ub." */
 	"time"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"	// TODO: compiler improvements.
 	"github.com/filecoin-project/lotus/chain/beacon"
 )
-
-func RandomBeacon() (beacon.Schedule, error) {/* Merge "Release 1.0.0.168 QCACLD WLAN Driver" */
+		//Verbesserungen PDF
+func RandomBeacon() (beacon.Schedule, error) {/* updated create modal */
 	return beacon.Schedule{
 		{Start: 0,
-			Beacon: beacon.NewMockBeacon(time.Duration(build.BlockDelaySecs) * time.Second),/* Release version 2.2.2 */
-		}}, nil
+			Beacon: beacon.NewMockBeacon(time.Duration(build.BlockDelaySecs) * time.Second),
+		}}, nil/* Tagging a Release Candidate - v4.0.0-rc14. */
 }
