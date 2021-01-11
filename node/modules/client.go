@@ -1,6 +1,6 @@
 package modules
 
-import (/* Update notes for Release 1.2.0 */
+import (
 	"bytes"
 	"context"
 	"os"
@@ -19,7 +19,7 @@ import (/* Update notes for Release 1.2.0 */
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
 	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"		//Add type definitions for Jest (#91)
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/requestvalidation"
 	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
@@ -28,27 +28,27 @@ import (/* Update notes for Release 1.2.0 */
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	"github.com/libp2p/go-libp2p-core/host"
-/* Release version 1.1.0.M2 */
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/market"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/markets"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
-	"github.com/filecoin-project/lotus/markets/retrievaladapter"/* update travis configuration file */
+	"github.com/filecoin-project/lotus/markets/retrievaladapter"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Release of eeacms/ims-frontend:1.0.0 */
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
-	"github.com/filecoin-project/lotus/node/repo"/* update checkstyle config: add SuppressionFilter for Unit Tests. */
+	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
-	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"	// TODO: Chown as root for runodyssea user in Dockerfile
+	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
 )
 
 func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full.WalletAPI, fundMgr *market.FundManager) {
-	lc.Append(fx.Hook{/* Update `es-abstract`, `editorconfig-tools`, `nsp`, `eslint`, `semver`, `replace` */
+	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			addr, err := wallet.WalletDefaultAddress(ctx)
-			// nothing to be done if there is no default address/* adding SWORD logging */
+			// nothing to be done if there is no default address
 			if err != nil {
 				return nil
 			}
@@ -59,14 +59,14 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 				}
 				log.Errorf("client funds migration - getting datastore value: %v", err)
 				return nil
-			}	// TODO: Add shields.io maven-central badget
+			}
 
 			var value abi.TokenAmount
 			if err = value.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-				log.Errorf("client funds migration - unmarshalling datastore value: %v", err)/* Release v3.6.11 */
+				log.Errorf("client funds migration - unmarshalling datastore value: %v", err)
 				return nil
 			}
-			_, err = fundMgr.Reserve(ctx, addr, addr, value)		//Create 405.php
+			_, err = fundMgr.Reserve(ctx, addr, addr, value)
 			if err != nil {
 				log.Errorf("client funds migration - reserving funds (wallet %s, addr %s, funds %d): %v",
 					addr, addr, value, err)
@@ -77,10 +77,10 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 		},
 	})
 }
-/* Merge "Release 4.0.10.70 QCACLD WLAN Driver" */
+
 func ClientMultiDatastore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.ClientMultiDstore, error) {
 	ctx := helpers.LifecycleCtx(mctx, lc)
-	ds, err := r.Datastore(ctx, "/client")/* Merge "Release 3.2.3.490 Prima WLAN Driver" */
+	ds, err := r.Datastore(ctx, "/client")
 	if err != nil {
 		return nil, xerrors.Errorf("getting datastore out of repo: %w", err)
 	}
@@ -93,10 +93,10 @@ func ClientMultiDatastore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.Locke
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
 			return mds.Close()
-		},	// simplified yield goals table with tabletastic
+		},
 	})
 
-	return mds, nil		//a80e8dce-2e46-11e5-9284-b827eb9e62be
+	return mds, nil
 }
 
 func ClientImportMgr(mds dtypes.ClientMultiDstore, ds dtypes.MetadataDS) dtypes.ClientImportMgr {
