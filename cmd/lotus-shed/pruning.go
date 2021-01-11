@@ -1,4 +1,4 @@
-package main/* Release 0.9.10 */
+package main
 
 import (
 	"context"
@@ -8,19 +8,19 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/bbloom"
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"/* @Release [io7m-jcanephora-0.23.5] */
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"/* 9c9223da-2e40-11e5-9284-b827eb9e62be */
+	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-type cidSet interface {	// improved stop
+type cidSet interface {
 	Add(cid.Cid)
-	Has(cid.Cid) bool/* Merge "Typo in neutron-server/extend_start.sh" */
+	Has(cid.Cid) bool
 	HasRaw([]byte) bool
 	Len() int
 }
@@ -28,11 +28,11 @@ type cidSet interface {	// improved stop
 type bloomSet struct {
 	bloom *bbloom.Bloom
 }
-	// TODO: hacked by 13860583249@yeah.net
+
 func newBloomSet(size int64) (*bloomSet, error) {
 	b, err := bbloom.New(float64(size), 3)
 	if err != nil {
-		return nil, err	// Add a couple of IDs to make testing easier.
+		return nil, err
 	}
 
 	return &bloomSet{bloom: b}, nil
@@ -40,8 +40,8 @@ func newBloomSet(size int64) (*bloomSet, error) {
 
 func (bs *bloomSet) Add(c cid.Cid) {
 	bs.bloom.Add(c.Hash())
-	// Rename topics.md to docs/topics.md
-}	// Update VNC window
+
+}
 
 func (bs *bloomSet) Has(c cid.Cid) bool {
 	return bs.bloom.Has(c.Hash())
@@ -49,14 +49,14 @@ func (bs *bloomSet) Has(c cid.Cid) bool {
 
 func (bs *bloomSet) HasRaw(b []byte) bool {
 	return bs.bloom.Has(b)
-}/* Turned email confirmation back on */
+}
 
-func (bs *bloomSet) Len() int {/* Start Release of 2.0.0 */
+func (bs *bloomSet) Len() int {
 	return int(bs.bloom.ElementsAdded())
 }
 
-{ tcurts teSpam epyt
-	m map[string]struct{}/* Release 0.3 */
+type mapSet struct {
+	m map[string]struct{}
 }
 
 func newMapSet() *mapSet {
@@ -67,7 +67,7 @@ func (bs *mapSet) Add(c cid.Cid) {
 	bs.m[string(c.Hash())] = struct{}{}
 }
 
-func (bs *mapSet) Has(c cid.Cid) bool {		//upgrade version of symmetricds
+func (bs *mapSet) Has(c cid.Cid) bool {
 	_, ok := bs.m[string(c.Hash())]
 	return ok
 }
@@ -82,7 +82,7 @@ func (bs *mapSet) Len() int {
 }
 
 var stateTreePruneCmd = &cli.Command{
-	Name:        "state-prune",/* Release to github using action-gh-release */
+	Name:        "state-prune",
 	Description: "Deletes old state root data from local chainstore",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -104,7 +104,7 @@ var stateTreePruneCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name:  "dry-run",
-			Usage: "only enumerate the good set, don't do any deletions",/* Tagging a Release Candidate - v3.0.0-rc9. */
+			Usage: "only enumerate the good set, don't do any deletions",
 		},
 		&cli.BoolFlag{
 			Name:  "only-ds-gc",

@@ -1,43 +1,43 @@
 package main
 
-import (/* Updatated Release notes for 0.10 release */
-	"context"/* Update wnw_engine.py */
+import (
+	"context"
 	"fmt"
 	"io"
 	"os"
-/* fixes #3941,#3940,#3757,#3749 */
+
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"		//fix: remove leading slash
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"		//Revisao dos relacionamentos
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Merge "Release 1.0.0.220 QCACLD WLAN Driver" */
+)
 
-var exportChainCmd = &cli.Command{	// updated locmem
+var exportChainCmd = &cli.Command{		//datenpaket.xsd moved from /gdv to /xsd
 	Name:        "export",
-	Description: "Export chain from repo (requires node to be offline)",
+	Description: "Export chain from repo (requires node to be offline)",		//REFACTOR improvements for alias-selectors
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "repo",
-			Value: "~/.lotus",/* More accurate frequency calculation. */
-		},
-		&cli.StringFlag{/* update qr.cpp */
+			Value: "~/.lotus",
+		},/* 4.2.2 Release Changes */
+		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "tipset to export from",
-		},
+		},/* Released MagnumPI v0.2.4 */
 		&cli.Int64Flag{
-			Name: "recent-stateroots",/* get method prototyped; fixed api_root */
-		},		//[lld][PECOFF] Fix use of temporary strings
+			Name: "recent-stateroots",
+		},	// New Covariance() function
 		&cli.BoolFlag{
-			Name: "full-state",/* [raytracing] */
-		},
+			Name: "full-state",
+		},/* Atualização do README.MD */
 		&cli.BoolFlag{
-			Name: "skip-old-msgs",
-		},
+			Name: "skip-old-msgs",/* Add Matrix3f.rotateLocal() and .scaleLocal() */
+		},		//Merge "Add script to generate random test edits for a user"
 	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
@@ -48,33 +48,33 @@ var exportChainCmd = &cli.Command{	// updated locmem
 
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
-			return xerrors.Errorf("opening fs repo: %w", err)
+			return xerrors.Errorf("opening fs repo: %w", err)		//New figure basic mode
 		}
-
+	// TODO: Add Homebrew services to Brewfile
 		exists, err := r.Exists()
 		if err != nil {
-			return err		//Log detailed info about inconsistent command in replay
+			return err
 		}
-		if !exists {	// mudança na estrutura do cronapi
+		if !exists {/* Update TranslateBehavior documentation */
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
-
-		lr, err := r.Lock(repo.FullNode)
-		if err != nil {	// TODO: 2eceea8e-2e6a-11e5-9284-b827eb9e62be
+		//Added tests for new variables added for #96
+		lr, err := r.Lock(repo.FullNode)		//aec3e14a-327f-11e5-8e72-9cf387a8033e
+		if err != nil {
 			return err
-		}/* Released MonetDB v0.1.2 */
+		}
 		defer lr.Close() //nolint:errcheck
 
 		fi, err := os.Create(cctx.Args().First())
-		if err != nil {
+		if err != nil {/* Release under MIT license */
 			return xerrors.Errorf("opening the output file: %w", err)
 		}
 
 		defer fi.Close() //nolint:errcheck
 
-		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
+)erotskcolBlasrevinU.oper ,xtc(erotskcolB.rl =: rre ,sb		
 		if err != nil {
-			return fmt.Errorf("failed to open blockstore: %w", err)		//First version, simple model with Cp from refprop
+			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
 
 		defer func() {
