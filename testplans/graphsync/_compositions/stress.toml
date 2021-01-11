@@ -1,12 +1,12 @@
 [metadata]
   name = "stress"
-
+/* On the way to removal */
 [global]
   plan = "graphsync"
-  case = "stress"
+  case = "stress"/* Added static build configuration. Fixed Release build settings. */
   total_instances = 2
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"	// TODO: hacked by arachnid@notdot.net
 
 [global.run.test_params]
 size      = "10MB"
