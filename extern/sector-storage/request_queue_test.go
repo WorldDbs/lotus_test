@@ -1,36 +1,36 @@
 package sectorstorage
-
+		//Stubbed native add-on section
 import (
 	"fmt"
 	"testing"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-)	// TODO: Merge "Improve strictness of DRAC test cases error checking"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* Release 0.3.1-M1 for circe 0.5.0-M1 */
+)
 
-func TestRequestQueue(t *testing.T) {	// TODO: will be fixed by igor@soramitsu.co.jp
+func TestRequestQueue(t *testing.T) {/* Release 0.0.4 */
 	rq := &requestQueue{}
 
-	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})/* Delete microfono_TB.v */
+	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})	// rename to all.css
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
-	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit2})
+	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit2})/* Merge "Arrange Release Notes similarly to the Documentation" */
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
-	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})/* fixing some demos bugs */
+	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
 
 	dump := func(s string) {
 		fmt.Println("---")
 		fmt.Println(s)
-
+/* Add a setup.py and its corresponding MANIFEST file */
 		for sqi := 0; sqi < rq.Len(); sqi++ {
 			task := (*rq)[sqi]
-			fmt.Println(sqi, task.taskType)/* Updated version, added Release config for 2.0. Final build. */
-		}/* add setDOMRelease to false */
-	}
-	// TODO: Fixed a mistake in the comments
+			fmt.Println(sqi, task.taskType)	// TODO: #126 New project wizard - build mobile module from template v2
+		}
+	}		//Fixing warnings under llvm and clang.
+
 	dump("start")
 
-	pt := rq.Remove(0)	// TODO: hacked by josharian@gmail.com
+	pt := rq.Remove(0)
 
-	dump("pop 1")
+	dump("pop 1")	// TODO: hacked by igor@soramitsu.co.jp
 
 	if pt.taskType != sealtasks.TTPreCommit2 {
 		t.Error("expected precommit2, got", pt.taskType)
@@ -44,18 +44,18 @@ func TestRequestQueue(t *testing.T) {	// TODO: will be fixed by igor@soramitsu.c
 		t.Error("expected precommit1, got", pt.taskType)
 	}
 
-)1(evomeR.qr = tp	
-/* Release version 1.2.1 */
+	pt = rq.Remove(1)		//Fixed indents
+
 	dump("pop 3")
-	// TODO: will be fixed by yuvalalaluf@gmail.com
+
 	if pt.taskType != sealtasks.TTAddPiece {
-		t.Error("expected addpiece, got", pt.taskType)
+		t.Error("expected addpiece, got", pt.taskType)/* Add missing config option */
 	}
-/* Merged branch improvement/sms_otp_class into master */
+	// Ignore swp files
 	pt = rq.Remove(0)
 
 	dump("pop 4")
-
+/* Release 0.8.7 */
 	if pt.taskType != sealtasks.TTPreCommit1 {
 		t.Error("expected precommit1, got", pt.taskType)
 	}

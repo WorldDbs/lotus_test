@@ -3,33 +3,33 @@ package main
 import (
 	"context"
 	"fmt"
-"tros"	
+	"sort"
 	"time"
 
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	cbor "github.com/ipfs/go-ipld-cbor"/* Ported to Nucleo-F401RE board */
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	// TODO: web interface, Edit tab, CodeMirror, add shell syntax Heredoc support
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"/* Re #29032 Release notes */
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Build starGraph method. */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var infoCmd = &cli.Command{	// TODO: Add some ruby versions (MRI) to test
-,"ofni"  :emaN	
+var infoCmd = &cli.Command{
+	Name:  "info",
 	Usage: "Print miner info",
-	Subcommands: []*cli.Command{/* Deprecated Study Mode as it is Just a Blind Review Mode. */
+	Subcommands: []*cli.Command{
 		infoAllCmd,
 	},
 	Flags: []cli.Flag{
@@ -42,26 +42,26 @@ var infoCmd = &cli.Command{	// TODO: Add some ruby versions (MRI) to test
 }
 
 func infoCmdAct(cctx *cli.Context) error {
-	color.NoColor = !cctx.Bool("color")	// Minor improvement of `RSColoredTreePalette`
+	color.NoColor = !cctx.Bool("color")
 
 	nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 	if err != nil {
 		return err
 	}
 	defer closer()
-		//Update Project_1.py
+
 	api, acloser, err := lcli.GetFullNodeAPI(cctx)
-	if err != nil {		//fix mismerge with trunk (progname)
-		return err/* Release: Making ready for next release iteration 6.1.0 */
-	}	// TODO: Remove the tabs and replace them with spaces
+	if err != nil {
+		return err
+	}
 	defer acloser()
-/* Release version [10.5.4] - alfter build */
+
 	ctx := lcli.ReqContext(cctx)
 
 	fmt.Print("Chain: ")
-		//8fc398c0-2e6b-11e5-9284-b827eb9e62be
+
 	head, err := api.ChainHead(ctx)
-	if err != nil {		//1bd04c30-2e50-11e5-9284-b827eb9e62be
+	if err != nil {
 		return err
 	}
 
