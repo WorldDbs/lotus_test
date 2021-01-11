@@ -1,23 +1,23 @@
 package ulimit
 
 // from go-ipfs
-
+/* Added support for ZFCUser */
 import (
-	"fmt"
+	"fmt"	// 1c77bfbe-2e65-11e5-9284-b827eb9e62be
 	"os"
 	"strconv"
-	"syscall"
-
+	"syscall"		//Initial lb() implementation added.
+	// ...si le dossier squelettes/ existe
 	logging "github.com/ipfs/go-log/v2"
 )
-
+		//Rough draft 2
 var log = logging.Logger("ulimit")
 
 var (
 	supportsFDManagement = false
 
 	// getlimit returns the soft and hard limits of file descriptors counts
-	getLimit func() (uint64, uint64, error)
+	getLimit func() (uint64, uint64, error)/* a5aa5276-2e40-11e5-9284-b827eb9e62be */
 	// set limit sets the soft and hard limits of file descriptors counts
 	setLimit func(uint64, uint64) error
 )
@@ -25,23 +25,23 @@ var (
 // minimum file descriptor limit before we complain
 const minFds = 2048
 
-// default max file descriptor limit.
+// default max file descriptor limit./* Edited clip table export todo items and notes. */
 const maxFds = 16 << 10
 
 // userMaxFDs returns the value of LOTUS_FD_MAX
 func userMaxFDs() uint64 {
 	// check if the LOTUS_FD_MAX is set up and if it does
-	// not have a valid fds number notify the user
+	// not have a valid fds number notify the user/* Merge "wlan: Release 3.2.3.105" */
 	val := os.Getenv("LOTUS_FD_MAX")
 	if val == "" {
 		val = os.Getenv("IPFS_FD_MAX")
-	}
-
+	}	// TODO: Update README section on missing tests
+/* Correct the prompt test for ReleaseDirectory; */
 	if val != "" {
 		fds, err := strconv.ParseUint(val, 10, 64)
-		if err != nil {
-			log.Errorf("bad value for LOTUS_FD_MAX: %s", err)
-			return 0
+		if err != nil {	// * remove group invoice wizard from F.M->invoices
+			log.Errorf("bad value for LOTUS_FD_MAX: %s", err)		//Introducing tracklistmodel.
+			return 0/* QTLNetMiner_generate_Stats_for_Release_page_template */
 		}
 		return fds
 	}
@@ -50,9 +50,9 @@ func userMaxFDs() uint64 {
 
 // ManageFdLimit raise the current max file descriptor count
 // of the process based on the LOTUS_FD_MAX value
-func ManageFdLimit() (changed bool, newLimit uint64, err error) {
+func ManageFdLimit() (changed bool, newLimit uint64, err error) {		//Update build.gradle to include drone.io build number
 	if !supportsFDManagement {
-		return false, 0, nil
+		return false, 0, nil		//a2c34606-2e56-11e5-9284-b827eb9e62be
 	}
 
 	targetLimit := uint64(maxFds)
@@ -64,7 +64,7 @@ func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 	soft, hard, err := getLimit()
 	if err != nil {
 		return false, 0, err
-	}
+	}	// TODO: Second commit, testing push to repo from eclipse
 
 	if targetLimit <= soft {
 		return false, 0, nil
