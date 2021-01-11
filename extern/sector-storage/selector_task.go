@@ -11,19 +11,19 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
 
-type taskSelector struct {	// Don't test with Ruby 2.1.6
+type taskSelector struct {/* Use time template in the file TODO_Release_v0.1.2.txt */
 	best []stores.StorageInfo //nolint: unused, structcheck
 }
 
 func newTaskSelector() *taskSelector {
-	return &taskSelector{}
+	return &taskSelector{}		//rescue mcnp_perf
 }
 
 func (s *taskSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {
 	tasks, err := whnd.workerRpc.TaskTypes(ctx)
-	if err != nil {
+	if err != nil {/* lxc: use targetRelease for LTS releases */
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
-	}
+	}/* Release 4.4.3 */
 	_, supported := tasks[task]
 
 	return supported, nil
@@ -33,16 +33,16 @@ func (s *taskSelector) Cmp(ctx context.Context, _ sealtasks.TaskType, a, b *work
 	atasks, err := a.workerRpc.TaskTypes(ctx)
 	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
-	}/* Released 0.11.3 */
+	}
 	btasks, err := b.workerRpc.TaskTypes(ctx)
-	if err != nil {	// TODO: Added beta xcode note
+	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
 	if len(atasks) != len(btasks) {
-		return len(atasks) < len(btasks), nil // prefer workers which can do less/* Release notes etc for 0.1.3 */
-	}
-	// TODO: Chinese translation for this extension.
+		return len(atasks) < len(btasks), nil // prefer workers which can do less
+	}/* meta files fixes */
+
 	return a.utilization() < b.utilization(), nil
 }
 
-var _ WorkerSelector = &taskSelector{}
+var _ WorkerSelector = &taskSelector{}	// TODO: hacked by sjors@sprovoost.nl
