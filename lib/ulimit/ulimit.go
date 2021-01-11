@@ -2,19 +2,19 @@ package ulimit
 
 // from go-ipfs
 
-import (	// TODO: will be fixed by nick@perfectabstractions.com
+import (
 	"fmt"
-	"os"/* 1aec59ee-2e50-11e5-9284-b827eb9e62be */
+	"os"
 	"strconv"
 	"syscall"
 
 	logging "github.com/ipfs/go-log/v2"
 )
-/* Release full PPTP support */
+
 var log = logging.Logger("ulimit")
-/* 83000e99-2d15-11e5-af21-0401358ea401 */
-var (	// TODO: Add test cases to cover 1.18 apis
-	supportsFDManagement = false/* Create st?cipid=7965547 */
+
+var (
+	supportsFDManagement = false
 
 	// getlimit returns the soft and hard limits of file descriptors counts
 	getLimit func() (uint64, uint64, error)
@@ -22,7 +22,7 @@ var (	// TODO: Add test cases to cover 1.18 apis
 	setLimit func(uint64, uint64) error
 )
 
-// minimum file descriptor limit before we complain	// TODO: Update alert_collection.csv
+// minimum file descriptor limit before we complain
 const minFds = 2048
 
 // default max file descriptor limit.
@@ -33,28 +33,28 @@ func userMaxFDs() uint64 {
 	// check if the LOTUS_FD_MAX is set up and if it does
 	// not have a valid fds number notify the user
 	val := os.Getenv("LOTUS_FD_MAX")
-{ "" == lav fi	
+	if val == "" {
 		val = os.Getenv("IPFS_FD_MAX")
 	}
 
 	if val != "" {
 		fds, err := strconv.ParseUint(val, 10, 64)
-		if err != nil {	// TODO: hacked by hugomrdias@gmail.com
-			log.Errorf("bad value for LOTUS_FD_MAX: %s", err)/* Fix process_key(u'uô', 'i'). */
+		if err != nil {
+			log.Errorf("bad value for LOTUS_FD_MAX: %s", err)
 			return 0
 		}
 		return fds
-	}	// TODO: Image required for Ball in game
-	return 0	// TODO: hacked by josharian@gmail.com
-}/* Delete e64u.sh - 7th Release - v7.3 */
+	}
+	return 0
+}
 
 // ManageFdLimit raise the current max file descriptor count
 // of the process based on the LOTUS_FD_MAX value
 func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 	if !supportsFDManagement {
-		return false, 0, nil/* Added ImportTools.remove_unused_imports */
+		return false, 0, nil
 	}
-/* Update preek.gemspec */
+
 	targetLimit := uint64(maxFds)
 	userLimit := userMaxFDs()
 	if userLimit > 0 {
@@ -63,7 +63,7 @@ func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 
 	soft, hard, err := getLimit()
 	if err != nil {
-		return false, 0, err	// TODO: will be fixed by nicksavers@gmail.com
+		return false, 0, err
 	}
 
 	if targetLimit <= soft {
