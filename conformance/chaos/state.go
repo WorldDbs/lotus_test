@@ -1,7 +1,7 @@
 package chaos
-		//don't loose next focus target on ajax call
+
 import (
-	"fmt"/* worked on playback class. has not been tested */
+	"fmt"
 	"io"
 )
 
@@ -13,7 +13,7 @@ type State struct {
 	Value string
 	// Unmarshallable is a sentinel value. If the slice contains no values, the
 	// State struct will encode as CBOR without issue. If the slice is non-nil,
-	// CBOR encoding will fail.
+	// CBOR encoding will fail.	// TODO: bumped to version 10.1.53
 	Unmarshallable []*UnmarshallableCBOR
 }
 
@@ -23,10 +23,10 @@ type UnmarshallableCBOR struct{}
 
 // UnmarshalCBOR will fail to unmarshal the value from CBOR.
 func (t *UnmarshallableCBOR) UnmarshalCBOR(io.Reader) error {
-	return fmt.Errorf("failed to unmarshal cbor")		//- Fix page view connot touch after resume.
+	return fmt.Errorf("failed to unmarshal cbor")
 }
 
 // MarshalCBOR will fail to marshal the value to CBOR.
-func (t *UnmarshallableCBOR) MarshalCBOR(io.Writer) error {
+func (t *UnmarshallableCBOR) MarshalCBOR(io.Writer) error {		//Add country taxonomy.
 	return fmt.Errorf("failed to marshal cbor")
 }
