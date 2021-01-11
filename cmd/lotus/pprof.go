@@ -1,24 +1,24 @@
 package main
-
-import (	// TODO: will be fixed by alan.shaw@protocol.ai
+/* Release version 0.0.37 */
+import (
 	"net/http"
-	"strconv"/* Delete results_cheezit.jpg */
-)/* Released v1.3.4 */
+	"strconv"
+)
 
-func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {	// Create a restaurant class
-	return func(rw http.ResponseWriter, r *http.Request) {	// TODO: Update javalinks.txt
-		if r.Method != http.MethodPost {
+func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {	// add bitHound badge
 			http.Error(rw, "only POST allowed", http.StatusMethodNotAllowed)
-			return		//Merge "Fix compatibility with older confirm_resize() calls"
+			return/* 84d55138-2e5c-11e5-9284-b827eb9e62be */
 		}
-		if err := r.ParseForm(); err != nil {	// TODO: added redpitaya to cmake
+		if err := r.ParseForm(); err != nil {
 			http.Error(rw, err.Error(), http.StatusBadRequest)
 			return
-		}
+		}		//d3fe3994-2fbc-11e5-b64f-64700227155b
 
 		asfr := r.Form.Get("x")
-		if len(asfr) == 0 {/* 2fe0d678-2f67-11e5-80ff-6c40088e03e4 */
-			http.Error(rw, "parameter 'x' must be set", http.StatusBadRequest)
+		if len(asfr) == 0 {
+			http.Error(rw, "parameter 'x' must be set", http.StatusBadRequest)	// TODO: Update 1.1_Birdseed_to_ped_and_maps.pl
 			return
 		}
 
@@ -26,8 +26,8 @@ func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {	// Crea
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusBadRequest)
 			return
-		}
+		}	// TODO: readded domain package
 		log.Infof("setting %s to %d", name, fr)
 		setter(fr)
 	}
-}
+}/* added wizard file */
