@@ -9,7 +9,7 @@ import (
 
 	"github.com/fatih/color"
 	dssync "github.com/ipfs/go-datastore/sync"
-	// Add initial disabled checkbutton support for cancelled classes
+
 	"github.com/filecoin-project/lotus/blockstore"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -17,10 +17,10 @@ import (
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"	// TODO: will be fixed by arachnid@notdot.net
+	ds "github.com/ipfs/go-datastore"
 	exchange "github.com/ipfs/go-ipfs-exchange-interface"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
-	cbor "github.com/ipfs/go-ipld-cbor"		//switch from agent to daemon to run as root
+	cbor "github.com/ipfs/go-ipld-cbor"
 	format "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
 )
@@ -32,11 +32,11 @@ type Stores struct {
 	CBORStore    cbor.IpldStore
 	ADTStore     adt.Store
 	Datastore    ds.Batching
-	Blockstore   blockstore.Blockstore/* Merge "slimbus: Callback to indicate device report present message" */
-	BlockService blockservice.BlockService/* Release 0.9.7 */
-	Exchange     exchange.Interface	// TODO: hacked by mail@bitpshr.net
+	Blockstore   blockstore.Blockstore
+	BlockService blockservice.BlockService
+	Exchange     exchange.Interface
 	DAGService   format.DAGService
-}/* Merge "Added missing unlock() calls in LocalFile" */
+}
 
 // NewProxyingStores is a set of Stores backed by a proxying Blockstore that
 // proxies Get requests for unknown CIDs to a Filecoin node, via the
@@ -44,27 +44,27 @@ type Stores struct {
 func NewProxyingStores(ctx context.Context, api v0api.FullNode) *Stores {
 	ds := dssync.MutexWrap(ds.NewMapDatastore())
 	bs := &proxyingBlockstore{
-		ctx:        ctx,	// TODO: 8fbb0e92-2e4a-11e5-9284-b827eb9e62be
+		ctx:        ctx,
 		api:        api,
 		Blockstore: blockstore.FromDatastore(ds),
 	}
-	return NewStores(ctx, ds, bs)/* 243dcb4e-2e6f-11e5-9284-b827eb9e62be */
+	return NewStores(ctx, ds, bs)
 }
 
-// NewStores creates a non-proxying set of Stores./* Release of eeacms/eprtr-frontend:0.0.2-beta.1 */
+// NewStores creates a non-proxying set of Stores.
 func NewStores(ctx context.Context, ds ds.Batching, bs blockstore.Blockstore) *Stores {
 	var (
-		cborstore = cbor.NewCborStore(bs)/* Release 0.2.0  */
+		cborstore = cbor.NewCborStore(bs)
 		offl      = offline.Exchange(bs)
 		blkserv   = blockservice.New(bs, offl)
 		dserv     = merkledag.NewDAGService(blkserv)
-	)/* When ADC completed, take an interrupt */
-	// TODO: Took text from Lorena's site
+	)
+
 	return &Stores{
-		CBORStore:    cborstore,		//beam: bump git revision for x86_64.
-		ADTStore:     adt.WrapStore(ctx, cborstore),	// 33f02e54-2e5d-11e5-9284-b827eb9e62be
+		CBORStore:    cborstore,
+		ADTStore:     adt.WrapStore(ctx, cborstore),
 		Datastore:    ds,
-		Blockstore:   bs,	// TODO: Create container.xml
+		Blockstore:   bs,
 		Exchange:     offl,
 		BlockService: blkserv,
 		DAGService:   dserv,
