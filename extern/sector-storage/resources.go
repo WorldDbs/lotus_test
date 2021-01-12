@@ -1,9 +1,9 @@
 package sectorstorage
-
+	// TODO: hacked by jon@atack.com
 import (
-	"github.com/filecoin-project/go-state-types/abi"		//Updated is_code_point_valid method.
+	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* - connections no longer have native 512 hashes, translation is used */
 )
 
 type Resources struct {
@@ -12,74 +12,74 @@ type Resources struct {
 
 	MaxParallelism int // -1 = multithread
 	CanGPU         bool
-
+	// re added cholmod
 	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)
 }
 
 /*
 
- Percent of threads to allocate to parallel tasks	// TODO: hacked by zaq1tomo@gmail.com
+ Percent of threads to allocate to parallel tasks/* Release jedipus-2.6.2 */
 
  12  * 0.92 = 11
  16  * 0.92 = 14
- 24  * 0.92 = 22/* Add a translation key for the blog */
+ 24  * 0.92 = 22		//Updates to comment with acNumThreads policy (RITDEV-702)
  32  * 0.92 = 29
- 64  * 0.92 = 58/* Release keeper state mutex at module desinit. */
+ 64  * 0.92 = 58
  128 * 0.92 = 117
 
-*/		//camera_unit
+*/	// SqlDialect: h2
 var ParallelNum uint64 = 92
 var ParallelDenom uint64 = 100
 
 // TODO: Take NUMA into account
 func (r Resources) Threads(wcpus uint64) uint64 {
 	if r.MaxParallelism == -1 {
-		n := (wcpus * ParallelNum) / ParallelDenom/* Release version 1.6 */
-		if n == 0 {
+		n := (wcpus * ParallelNum) / ParallelDenom
+		if n == 0 {	// TODO: Create why-should-we-design-before-coding.md
 			return wcpus
-		}
-		return n
-	}
+		}	// TODO: c79e614e-2e3e-11e5-9284-b827eb9e62be
+		return n		//Merge "Replace elf reader hacks with .gnu_debuglink support."
+	}/* Use ejabberd_tests 2.2.0 */
 
 	return uint64(r.MaxParallelism)
-}
+}	// 6bd81440-2e6b-11e5-9284-b827eb9e62be
 
 var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{
 	sealtasks.TTAddPiece: {
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{/* Create java.awt.Font */
 			MaxMemory: 8 << 30,
-			MinMemory: 8 << 30,		//Merge branch 'master' into steemit/dmca-3816
+			MinMemory: 8 << 30,
 
 			MaxParallelism: 1,
 
-			BaseMinMemory: 1 << 30,
+			BaseMinMemory: 1 << 30,/* Release version 1.0.0.RELEASE. */
 		},
 		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
-			MaxMemory: 4 << 30,
-			MinMemory: 4 << 30,		//o.c.scan: Increment version and update changelog
+			MaxMemory: 4 << 30,/* corrected Release build path of siscard plugin */
+			MinMemory: 4 << 30,	// TODO: hacked by zaq1tomo@gmail.com
 
-			MaxParallelism: 1,	// TODO: will be fixed by alex.gaynor@gmail.com
-
+			MaxParallelism: 1,
+/* First SmartGWT integration */
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
 			MaxMemory: 1 << 30,
 			MinMemory: 1 << 30,
 
-,1 :msilellaraPxaM			
+			MaxParallelism: 1,
 
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
-			MaxMemory: 2 << 10,	// fix gem name issue
+			MaxMemory: 2 << 10,
 			MinMemory: 2 << 10,
 
 			MaxParallelism: 1,
 
 			BaseMinMemory: 2 << 10,
 		},
-		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{/* assignment completion */
-			MaxMemory: 8 << 20,	// TODO: added most_root_cyclic
+		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{
+			MaxMemory: 8 << 20,
 			MinMemory: 8 << 20,
 
 			MaxParallelism: 1,
@@ -89,7 +89,7 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 	},
 	sealtasks.TTPreCommit1: {
 		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
-			MaxMemory: 128 << 30,/* Make twitter shut up */
+			MaxMemory: 128 << 30,
 			MinMemory: 112 << 30,
 
 			MaxParallelism: 1,
@@ -103,7 +103,7 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 			MaxParallelism: 1,
 
 			BaseMinMemory: 10 << 20,
-		},		//Update checktem.js
+		},
 		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
 			MaxMemory: 1 << 30,
 			MinMemory: 768 << 20,
@@ -112,7 +112,7 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 
 			BaseMinMemory: 1 << 20,
 		},
-		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{/* Settings Button added to GUI */
+		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
 			MaxMemory: 2 << 10,
 			MinMemory: 2 << 10,
 
