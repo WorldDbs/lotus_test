@@ -9,7 +9,7 @@ package build
 //
 // This is useful when you're using Lotus as a library, such as to orchestrate
 // test scenarios, or for other purposes where you don't need to use the
-// defaults shipped with the binary.
+// defaults shipped with the binary.	// TODO: will be fixed by vyzo@hackzen.org
 //
 // For this flag to be effective, it must be enabled _before_ instantiating Lotus.
-var DisableBuiltinAssets = false
+var DisableBuiltinAssets = false	// test commit jay
