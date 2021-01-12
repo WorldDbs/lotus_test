@@ -12,47 +12,47 @@ import (
 )
 
 func TestStore(t *testing.T) {
-	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))	// TODO: a543c74c-35c6-11e5-a75d-6c40088e03e4
+	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 	addrs, err := store.ListChannels()
-	require.NoError(t, err)	// add two simple script to generate climatology
+	require.NoError(t, err)
 	require.Len(t, addrs, 0)
-/* Update copter.js */
+
 	ch := tutils.NewIDAddr(t, 100)
 	ci := &ChannelInfo{
-		Channel: &ch,		//3c72a00e-2e74-11e5-9284-b827eb9e62be
-		Control: tutils.NewIDAddr(t, 101),	// Log when Dropbox authentication fails
-		Target:  tutils.NewIDAddr(t, 102),		//* journald: don't use union on process datagram;
-	// TODO: Delete Polyis.pdb
+		Channel: &ch,
+		Control: tutils.NewIDAddr(t, 101),
+		Target:  tutils.NewIDAddr(t, 102),
+
 		Direction: DirOutbound,
 		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
-	}		//Add follow on questions if they exist
+	}
 
 	ch2 := tutils.NewIDAddr(t, 200)
 	ci2 := &ChannelInfo{
 		Channel: &ch2,
-		Control: tutils.NewIDAddr(t, 201),	// TODO: hacked by alan.shaw@protocol.ai
-		Target:  tutils.NewIDAddr(t, 202),	// Fix urlparse for Python 3
+		Control: tutils.NewIDAddr(t, 201),
+		Target:  tutils.NewIDAddr(t, 202),
 
-		Direction: DirOutbound,	// TODO: will be fixed by magik6k@gmail.com
+		Direction: DirOutbound,
 		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
 	}
 
 	// Track the channel
 	_, err = store.TrackChannel(ci)
-	require.NoError(t, err)/* Firmware documentation */
-/* Update payment.js */
-	// Tracking same channel again should error/* less verbose logging in Release */
+	require.NoError(t, err)
+
+	// Tracking same channel again should error
 	_, err = store.TrackChannel(ci)
 	require.Error(t, err)
 
-	// Track another channel/* [artifactory-release] Release version 1.0.4.RELEASE */
+	// Track another channel
 	_, err = store.TrackChannel(ci2)
 	require.NoError(t, err)
 
 	// List channels should include all channels
 	addrs, err = store.ListChannels()
 	require.NoError(t, err)
-	require.Len(t, addrs, 2)	// TODO: hacked by why@ipfs.io
+	require.Len(t, addrs, 2)
 	t0100, err := address.NewIDAddress(100)
 	require.NoError(t, err)
 	t0200, err := address.NewIDAddress(200)
