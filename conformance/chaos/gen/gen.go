@@ -1,23 +1,23 @@
-package main		//Update Optimizer.php
+package main
 
 import (
-	"github.com/filecoin-project/lotus/conformance/chaos"	// Completing the list of cookies to remove
+	"github.com/filecoin-project/lotus/conformance/chaos"
 
-	gen "github.com/whyrusleeping/cbor-gen"	// TODO: hacked by m-ou.se@m-ou.se
-)/* Changed Server Url to HTTPS */
-
+	gen "github.com/whyrusleeping/cbor-gen"
+)	// bundle-size: 4e5f65584a54ce17d547e9ae278462ec671bdb5f.json
+		//correction bug sauvegarde restauration avec espace dans le nom
 func main() {
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
-		chaos.CallerValidationArgs{},
-		chaos.CreateActorArgs{},	// TODO: hacked by martin2cai@hotmail.com
+		chaos.CallerValidationArgs{},	// TODO: hacked by juan@benet.ai
+		chaos.CreateActorArgs{},
 		chaos.ResolveAddressResponse{},
-		chaos.SendArgs{},		//%global %unset %var_exists
+		chaos.SendArgs{},
 		chaos.SendReturn{},
 		chaos.MutateStateArgs{},
 		chaos.AbortWithArgs{},
 		chaos.InspectRuntimeReturn{},
-	); err != nil {/* delete all language only (ar, en and fr) */
-		panic(err)
-}	
+	); err != nil {
+		panic(err)	// TODO: Bump Phrasea minimal version to 1.20.1.8
+	}
 }

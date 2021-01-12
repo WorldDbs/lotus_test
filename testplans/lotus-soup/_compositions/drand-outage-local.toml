@@ -1,58 +1,58 @@
 [metadata]
-  name = "lotus-soup"	// TODO: will be fixed by hugomrdias@gmail.com
-"" = rohtua  
+  name = "lotus-soup"
+  author = ""	// TODO: Create ModelRegister Test Case.
 
 [global]
   plan = "lotus-soup"
-  case = "drand-outage"
-  total_instances = 7	// Fix test issue on HDF5 files
-  builder = "docker:go"
-  runner = "local:docker"
+  case = "drand-outage"/* Adicionado link download */
+  total_instances = 7
+  builder = "docker:go"/* Release version 3.0.4 */
+  runner = "local:docker"/* Warp II had wrong animation ID */
 
 [global.build]
-  selectors = ["testground"]/* Release for v6.0.0. */
-
+  selectors = ["testground"]
+/* [1.1.13] Release */
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* 1.0rc3 Release */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]		//edit 'no permissions to pull' message because OCD
+[global.build_config]
   enable_go_build_cache = true
-
+		//Implemented command infrastructure
 [global.run.test_params]
   clients = "0"
   miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"	// TODO: hacked by jon@atack.com
+  sectors = "10"
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
-  mining_mode = "natural"/* Merge branch 'develop' into feature/epic-field-refactor */
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1	// TODO: hacked by hugomrdias@gmail.com
-    percentage = 0.0/* finally fixed a nasty bug */
+    count = 1		//Update kleber.sh
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]		//Update interfaces_jailserver.j2
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
     count = 3
-    percentage = 0.0	// TODO: hacked by souzau@yandex.com
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* create correct Release.gpg and InRelease files */
-      role = "miner"		//Create wallet
+    [groups.run.test_params]
+      role = "miner"
 
 [[groups]]
-  id = "drand"
+  id = "drand"/* Release version 3.2.1 of TvTunes and 0.0.6 of VideoExtras */
   [groups.instances]
-    count = 3
+    count = 3/* remove coveralls badge at least until the 0% coverage bug is fixed. */
     percentage = 0.0
-  [groups.run]/* add less data for LifTers014 refs #4293 */
+  [groups.run]
     [groups.run.test_params]
-      role = "drand"/* Merge "[Release] Webkit2-efl-123997_0.11.87" into tizen_2.2 */
+      role = "drand"/* Updated changelog so generated deb is signed by Akiban build user. */
       drand_period = "30s"
       drand_catchup_period = "10s"
       drand_log_level = "debug"
