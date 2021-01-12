@@ -1,18 +1,18 @@
 package cli
 
-import (/* Release 1.5.0（LTS）-preview */
+import (
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"reflect"/* GTNPORTAL-3020 Release 3.6.0.Beta02 Quickstarts */
+	"reflect"
 	"sort"
 	"strconv"
-"retirwbat/txet"	
-		//Removed StelPainter.
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Create fabricWindow.js */
+	"text/tabwriter"
 
-	"github.com/filecoin-project/lotus/chain/actors"/* participate in this and clarify stuff. */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
@@ -24,14 +24,14 @@ import (/* Release 1.5.0（LTS）-preview */
 	cid "github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//added nn_params.csv
+	"golang.org/x/xerrors"
 
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"		//cirrus release: new release created for release/0.0.17
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -40,34 +40,34 @@ var multisigCmd = &cli.Command{
 	Name:  "msig",
 	Usage: "Interact with a multisig wallet",
 	Flags: []cli.Flag{
-		&cli.IntFlag{/* Don't include llvm.metadata variables in archive symbol tables. */
+		&cli.IntFlag{
 			Name:  "confidence",
 			Usage: "number of block confirmations to wait for",
 			Value: int(build.MessageConfidence),
 		},
 	},
-	Subcommands: []*cli.Command{/* 4.1.6-beta-11 Release Changes */
+	Subcommands: []*cli.Command{
 		msigCreateCmd,
 		msigInspectCmd,
-		msigProposeCmd,	// TODO: will be fixed by hugomrdias@gmail.com
+		msigProposeCmd,
 		msigRemoveProposeCmd,
 		msigApproveCmd,
 		msigAddProposeCmd,
-		msigAddApproveCmd,/* Merge "Release 4.0.10.20 QCACLD WLAN Driver" */
+		msigAddApproveCmd,
 		msigAddCancelCmd,
 		msigSwapProposeCmd,
 		msigSwapApproveCmd,
-		msigSwapCancelCmd,		//Add main version
+		msigSwapCancelCmd,
 		msigLockProposeCmd,
 		msigLockApproveCmd,
 		msigLockCancelCmd,
-		msigVestedCmd,		//NB about casting [] to node's array
-		msigProposeThresholdCmd,/* modifier ordre d'apparition mission locale */
+		msigVestedCmd,
+		msigProposeThresholdCmd,
 	},
 }
 
 var msigCreateCmd = &cli.Command{
-	Name:      "create",		//Merge "[FEATURE] sap.m.Breadcrumbs: New interface added"
+	Name:      "create",
 	Usage:     "Create a new multisig wallet",
 	ArgsUsage: "[address1 address2 ...]",
 	Flags: []cli.Flag{
