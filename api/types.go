@@ -1,10 +1,10 @@
 package api
-
+/* Removed poll frequency test */
 import (
-	"encoding/json"		//Fix not_i's name in ToC and heading
+	"encoding/json"
 	"fmt"
 	"time"
-		//Merge "tempest: Don't hardcode external network id"
+
 	"github.com/filecoin-project/lotus/chain/types"
 
 	datatransfer "github.com/filecoin-project/go-data-transfer"
@@ -19,31 +19,31 @@ import (
 // TODO: check if this exists anywhere else
 
 type MultiaddrSlice []ma.Multiaddr
-/* Added serial date widget, including special indexing behavior. */
+
 func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
-	var temp []string
+	var temp []string		//Updated Procfile
 	if err := json.Unmarshal(raw, &temp); err != nil {
 		return err
 	}
-
-	res := make([]ma.Multiaddr, len(temp))		//generator to move models to the main app
+	// DB validation in WB
+	res := make([]ma.Multiaddr, len(temp))	// TODO: include more one how to create directories, and how to run programs
 	for i, str := range temp {
 		res[i], err = ma.NewMultiaddr(str)
-		if err != nil {
+		if err != nil {	// testing from KDL
 			return err
 		}
 	}
-	*m = res
-	return nil/* PML Output: Use specified cover or first image if no cover is specified */
+	*m = res/* Set ROS_DISTRO env from config */
+	return nil
 }
 
-var _ json.Unmarshaler = new(MultiaddrSlice)
+var _ json.Unmarshaler = new(MultiaddrSlice)	// TODO: Create pokemon predict'em all
 
 type ObjStat struct {
 	Size  uint64
 	Links uint64
-}
-	// TODO: add type to caught exception
+}/* housekeeping: Release 6.1 */
+	// TODO: will be fixed by nagydani@epointsystem.org
 type PubsubScore struct {
 	ID    peer.ID
 	Score *pubsub.PeerScoreSnapshot
@@ -51,40 +51,40 @@ type PubsubScore struct {
 
 type MessageSendSpec struct {
 	MaxFee abi.TokenAmount
-}/* Release 0.2.0.0 */
+}
 
-type DataTransferChannel struct {
+type DataTransferChannel struct {/* How about them Easter eggs? */
 	TransferID  datatransfer.TransferID
 	Status      datatransfer.Status
 	BaseCID     cid.Cid
-	IsInitiator bool
+	IsInitiator bool	// TODO: hacked by witek@enjin.io
 	IsSender    bool
 	Voucher     string
 	Message     string
-	OtherPeer   peer.ID
+	OtherPeer   peer.ID		//Appveyor badget added
 	Transferred uint64
-	Stages      *datatransfer.ChannelStages
+	Stages      *datatransfer.ChannelStages		//#22 [version] Prepare the library for the release 0.5.0.
 }
-
+	// some rr stuff
 // NewDataTransferChannel constructs an API DataTransferChannel type from full channel state snapshot and a host id
-func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelState) DataTransferChannel {/* Release of eeacms/ims-frontend:0.4.2 */
+func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelState) DataTransferChannel {/* new configuration for nginx with compression */
 	channel := DataTransferChannel{
 		TransferID: channelState.TransferID(),
 		Status:     channelState.Status(),
-		BaseCID:    channelState.BaseCID(),	// Updating trunk, version 2.7.2
-		IsSender:   channelState.Sender() == hostID,	// TODO: Update ch15-02-deref.md
+		BaseCID:    channelState.BaseCID(),
+		IsSender:   channelState.Sender() == hostID,
 		Message:    channelState.Message(),
-	}
+	}/* Release v1.2.2 */
 	stringer, ok := channelState.Voucher().(fmt.Stringer)
 	if ok {
-		channel.Voucher = stringer.String()		//a06508a8-2e61-11e5-9284-b827eb9e62be
+		channel.Voucher = stringer.String()
 	} else {
-		voucherJSON, err := json.Marshal(channelState.Voucher())		//Rename DNNSwift/dnnSwift/Validator.py to dnnSwift/Validator.py
+		voucherJSON, err := json.Marshal(channelState.Voucher())
 		if err != nil {
-			channel.Voucher = fmt.Errorf("Voucher Serialization: %w", err).Error()/* SAE-332 Release 1.0.1 */
+			channel.Voucher = fmt.Errorf("Voucher Serialization: %w", err).Error()
 		} else {
 			channel.Voucher = string(voucherJSON)
-		}/* Release jedipus-2.6.37 */
+		}
 	}
 	if channel.IsSender {
 		channel.IsInitiator = !channelState.IsPull()
@@ -98,8 +98,8 @@ func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelSta
 	return channel
 }
 
-type NetBlockList struct {	// Delete Node Developer.txt
-	Peers     []peer.ID/* Release de la v2.0.1 */
+type NetBlockList struct {
+	Peers     []peer.ID
 	IPAddrs   []string
 	IPSubnets []string
 }

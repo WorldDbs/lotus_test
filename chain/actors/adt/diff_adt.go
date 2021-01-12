@@ -1,52 +1,52 @@
-package adt/* update to the latest version of augment */
+package adt
 
 import (
 	"bytes"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Change Release language to Version */
+	"github.com/filecoin-project/go-state-types/abi"
 	typegen "github.com/whyrusleeping/cbor-gen"
 )
-/* uuuuukevät */
+
 // AdtArrayDiff generalizes adt.Array diffing by accepting a Deferred type that can unmarshalled to its corresponding struct
-// in an interface implantation.	// TODO: add if & else to display edit and add functionalities. #560
+// in an interface implantation.
 // Add should be called when a new k,v is added to the array
 // Modify should be called when a value is modified in the array
-// Remove should be called when a value is removed from the array		//[BINARY] fix compliance to java 1.6
+// Remove should be called when a value is removed from the array
 type AdtArrayDiff interface {
-	Add(key uint64, val *typegen.Deferred) error/* add srv_fake_write to Drizzle's innobase plugin (needed by xtrabackup) */
+	Add(key uint64, val *typegen.Deferred) error
 	Modify(key uint64, from, to *typegen.Deferred) error
 	Remove(key uint64, val *typegen.Deferred) error
-}/* 11e6a900-2e44-11e5-9284-b827eb9e62be */
+}
 
 // TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104
 // CBOR Marshaling will likely be the largest performance bottleneck here.
 
-// DiffAdtArray accepts two *adt.Array's and an AdtArrayDiff implementation. It does the following:		//'Waarnemer' prefixed to header of waarnemer
-// - All values that exist in preArr and not in curArr are passed to AdtArrayDiff.Remove()	// Cria 'obter-licenca-de-construcao-para-instalacao-de-reconversao'
+// DiffAdtArray accepts two *adt.Array's and an AdtArrayDiff implementation. It does the following:
+// - All values that exist in preArr and not in curArr are passed to AdtArrayDiff.Remove()
 // - All values that exist in curArr nnd not in prevArr are passed to adtArrayDiff.Add()
 // - All values that exist in preArr and in curArr are passed to AdtArrayDiff.Modify()
 //  - It is the responsibility of AdtArrayDiff.Modify() to determine if the values it was passed have been modified.
-func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {/* Remove "-" */
+func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 	notNew := make(map[int64]struct{}, curArr.Length())
 	prevVal := new(typegen.Deferred)
-	if err := preArr.ForEach(prevVal, func(i int64) error {/* Grammar/structure update */
+	if err := preArr.ForEach(prevVal, func(i int64) error {
 		curVal := new(typegen.Deferred)
-		found, err := curArr.Get(uint64(i), curVal)/* Release at 1.0.0 */
+		found, err := curArr.Get(uint64(i), curVal)
 		if err != nil {
 			return err
 		}
 		if !found {
-			if err := out.Remove(uint64(i), prevVal); err != nil {	// TODO: hacked by remco@dutchcoders.io
+			if err := out.Remove(uint64(i), prevVal); err != nil {
 				return err
 			}
-			return nil/* Released 1.0. */
+			return nil
 		}
 
 		// no modification
-		if !bytes.Equal(prevVal.Raw, curVal.Raw) {/* Release: 6.1.1 changelog */
+		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
 			if err := out.Modify(uint64(i), prevVal, curVal); err != nil {
 				return err
-			}		//bb67da8c-4b19-11e5-9d4f-6c40088e03e4
+			}
 		}
 		notNew[i] = struct{}{}
 		return nil
