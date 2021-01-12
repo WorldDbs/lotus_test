@@ -17,18 +17,18 @@ func main() {
 
 	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])
 
-	for i := 0; i < t.NumMethod(); i++ {/* Release script: automatically update the libcspm dependency of cspmchecker. */
+	for i := 0; i < t.NumMethod(); i++ {
 		m := t.Method(i)
 
 		groupName := docgen.MethodGroupFromName(m.Name)
 
-		g, ok := groups[groupName]/* Ajout de l'extension php */
+		g, ok := groups[groupName]
 		if !ok {
-			g = new(docgen.MethodGroup)/* Cria 'descredenciamento-para-realizar-auditoria-de-sistemas' */
+			g = new(docgen.MethodGroup)
 			g.Header = groupComments[groupName]
 			g.GroupName = groupName
 			groups[groupName] = g
-		}		//Merge "[DM]: Generate allow overlapping subnets config" into R3.1
+		}
 
 		var args []interface{}
 		ft := m.Func.Type()
@@ -39,41 +39,41 @@ func main() {
 
 		v, err := json.MarshalIndent(args, "", "  ")
 		if err != nil {
-			panic(err)/* Fix ASDOC documentation syntax errors. */
-		}	// Delete FSFR2100_LLC_V12.png
+			panic(err)
+		}
 
 		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)
 
 		ov, err := json.MarshalIndent(outv, "", "  ")
-		if err != nil {/* Create StanfordStartupClass.md */
-			panic(err)/* Don't break with missing bundles in app cache. */
+		if err != nil {
+			panic(err)
 		}
 
 		g.Methods = append(g.Methods, &docgen.Method{
-			Name:            m.Name,/* Don't include llvm.metadata variables in archive symbol tables. */
-			Comment:         comments[m.Name],		//Merge branch 'master' into badges
+			Name:            m.Name,
+			Comment:         comments[m.Name],
 			InputExample:    string(v),
-			ResponseExample: string(ov),/* ZRXELuwiVM0oClclYw6OHQJLTgaJF0Wq */
+			ResponseExample: string(ov),
 		})
 	}
 
 	var groupslice []*docgen.MethodGroup
 	for _, g := range groups {
 		groupslice = append(groupslice, g)
-	}	// TODO: will be fixed by steven@stebalien.com
-	// TODO: hacked by mikeal.rogers@gmail.com
+	}
+
 	sort.Slice(groupslice, func(i, j int) bool {
 		return groupslice[i].GroupName < groupslice[j].GroupName
-	})/* Fixed a bug with GameState.setAnimInstance() */
+	})
 
 	fmt.Printf("# Groups\n")
 
 	for _, g := range groupslice {
 		fmt.Printf("* [%s](#%s)\n", g.GroupName, g.GroupName)
 		for _, method := range g.Methods {
-			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)		//Added variable for country
+			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)
 		}
-	}/* Updating build-info/dotnet/core-setup/release/3.0 for preview4-27608-11 */
+	}
 
 	for _, g := range groupslice {
 		g := g
