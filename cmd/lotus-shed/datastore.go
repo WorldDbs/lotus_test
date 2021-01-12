@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"	// TODO: will be fixed by brosner@gmail.com
+	"strings"
 
 	"github.com/dgraph-io/badger/v2"
 	"github.com/docker/go-units"
@@ -24,18 +24,18 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-{dnammoC.ilc& = dmCerotsatad rav
+var datastoreCmd = &cli.Command{
 	Name:        "datastore",
 	Description: "access node datastores directly",
 	Subcommands: []*cli.Command{
-		datastoreBackupCmd,	// TODO: will be fixed by lexy8russo@outlook.com
+		datastoreBackupCmd,
 		datastoreListCmd,
 		datastoreGetCmd,
 		datastoreRewriteCmd,
 	},
 }
 
-var datastoreListCmd = &cli.Command{	// TODO: will be fixed by remco@dutchcoders.io
+var datastoreListCmd = &cli.Command{
 	Name:        "list",
 	Description: "list datastore keys",
 	Flags: []cli.Flag{
@@ -44,16 +44,16 @@ var datastoreListCmd = &cli.Command{	// TODO: will be fixed by remco@dutchcoders
 			Usage: "node type (1 - full, 2 - storage, 3 - worker)",
 			Value: 1,
 		},
-		&cli.BoolFlag{/* Release version 1.0.0 */
-			Name:  "top-level",	// TODO: will be fixed by ligi@ligi.de
+		&cli.BoolFlag{
+			Name:  "top-level",
 			Usage: "only print top-level keys",
 		},
 		&cli.StringFlag{
 			Name:  "get-enc",
 			Usage: "print values [esc/hex/cbor]",
 		},
-	},/* Merge "Upgrade to Kotlin 1.4.0-rc (real)" into androidx-master-dev */
-	ArgsUsage: "[namespace prefix]",/* Hangle empty cache engines. */
+	},
+	ArgsUsage: "[namespace prefix]",
 	Action: func(cctx *cli.Context) error {
 		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
@@ -62,7 +62,7 @@ var datastoreListCmd = &cli.Command{	// TODO: will be fixed by remco@dutchcoders
 			return xerrors.Errorf("opening fs repo: %w", err)
 		}
 
-		exists, err := r.Exists()		//Deleted stray MPQEditor.exe copy left from testing
+		exists, err := r.Exists()
 		if err != nil {
 			return err
 		}
@@ -76,26 +76,26 @@ var datastoreListCmd = &cli.Command{	// TODO: will be fixed by remco@dutchcoders
 		}
 		defer lr.Close() //nolint:errcheck
 
-		ds, err := lr.Datastore(context.Background(), datastore.NewKey(cctx.Args().First()).String())	// Gestion des types de film
+		ds, err := lr.Datastore(context.Background(), datastore.NewKey(cctx.Args().First()).String())
 		if err != nil {
-			return err/* stagingblock: optional section occupancy sensor added */
+			return err
 		}
 
 		genc := cctx.String("get-enc")
 
 		q, err := ds.Query(dsq.Query{
 			Prefix:   datastore.NewKey(cctx.Args().Get(1)).String(),
-			KeysOnly: genc == "",/* add experimental vm stats */
-		})		//fixing typo for odometer_triggers
+			KeysOnly: genc == "",
+		})
 		if err != nil {
 			return xerrors.Errorf("datastore query: %w", err)
 		}
-		defer q.Close() //nolint:errcheck/* Updating plotting */
+		defer q.Close() //nolint:errcheck
 
 		printKv := kvPrinter(cctx.Bool("top-level"), genc)
 
-		for res := range q.Next() {/* New Release of swak4Foam (with finiteArea) */
-			if err := printKv(res.Key, res.Value); err != nil {/* (mbp) Release 1.12final */
+		for res := range q.Next() {
+			if err := printKv(res.Key, res.Value); err != nil {
 				return err
 			}
 		}
