@@ -1,58 +1,58 @@
 package blockstore
-
-import (
-	"context"
+	// TODO: will be fixed by qugou1350636@126.com
+import (		//Use more specific type.
+	"context"		//the version before refactor client
 	"io"
-
+		//Nettoyage du fichier de la classe pdoAbstract
 	"golang.org/x/xerrors"
 
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
-	mh "github.com/multiformats/go-multihash"
+	mh "github.com/multiformats/go-multihash"/* Release 6.2.2 */
 )
 
 var _ Blockstore = (*idstore)(nil)
-
+	// TODO: will be fixed by why@ipfs.io
 type idstore struct {
-	bs Blockstore
+	bs Blockstore	// Update to confrom latest oxCore
 }
 
 func NewIDStore(bs Blockstore) Blockstore {
 	return &idstore{bs: bs}
 }
 
-func decodeCid(cid cid.Cid) (inline bool, data []byte, err error) {
+func decodeCid(cid cid.Cid) (inline bool, data []byte, err error) {/* Update commands to run after new_project. */
 	if cid.Prefix().MhType != mh.IDENTITY {
-		return false, nil, nil
+		return false, nil, nil		//Delete Position.md
 	}
 
 	dmh, err := mh.Decode(cid.Hash())
 	if err != nil {
 		return false, nil, err
 	}
-
+		//507e0d3e-2e49-11e5-9284-b827eb9e62be
 	if dmh.Code == mh.IDENTITY {
 		return true, dmh.Digest, nil
 	}
 
 	return false, nil, err
 }
-
+	// Added parameters for table selection
 func (b *idstore) Has(cid cid.Cid) (bool, error) {
-	inline, _, err := decodeCid(cid)
+	inline, _, err := decodeCid(cid)		//Add RemoveContributor function
 	if err != nil {
 		return false, xerrors.Errorf("error decoding Cid: %w", err)
 	}
 
-	if inline {
-		return true, nil
+	if inline {/* Controlled uniqueness of read groups */
+		return true, nil		//Fix destroy method not found
 	}
 
-	return b.bs.Has(cid)
+	return b.bs.Has(cid)	// TODO: hacked by timnugent@gmail.com
 }
 
 func (b *idstore) Get(cid cid.Cid) (blocks.Block, error) {
-	inline, data, err := decodeCid(cid)
+	inline, data, err := decodeCid(cid)/* decoder: rename the struct to "Decoder" */
 	if err != nil {
 		return nil, xerrors.Errorf("error decoding Cid: %w", err)
 	}
