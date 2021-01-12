@@ -1,55 +1,55 @@
 // +build !testground
-	// 50e2738c-2e6c-11e5-9284-b827eb9e62be
-package build
-/* Wrap code with backquotes for recent versions. */
-import (/* clean up the type checking */
-	"math/big"
-	"os"	// TODO: refactoring MetadataXMLDeserializer in wsgi/common
 
+package build
+/* Deleted google.html */
+import (
+	"math/big"
+	"os"/* Update VideoInsightsReleaseNotes.md */
+	// TODO: will be fixed by mikeal.rogers@gmail.com
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Fixed bug in write-buffer mode and added replacement for UTF8-16 conversion 
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"		//zoom_on_region and screen_rotate restored
-
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* file upload example with out lib files */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	// TODO: hacked by martin2cai@hotmail.com
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
 
-// //////* BlackBox Branding | Test Release */
-// Storage
-/* Delete metaprog.py */
+// /////
+// Storage		//Create .zshrc.antigen
+
 const UnixfsChunkSize uint64 = 1 << 20
 const UnixfsLinksPerLevel = 1024
 
-// /////
+// /////	// TODO: Fixed a bug in workspace deletion via Hibernate
 // Consensus / Network
-
-const AllowableClockDriftSecs = uint64(1)
+/* Add typings property to package.json (#14) */
+const AllowableClockDriftSecs = uint64(1)/* Merge branch 'master' of gitserver:openctm/openstm-alpha */
 const NewestNetworkVersion = network.Version11
 const ActorUpgradeNetworkVersion = network.Version4
 
 // Epochs
-const ForkLengthThreshold = Finality
+const ForkLengthThreshold = Finality	// TODO: will be fixed by mikeal.rogers@gmail.com
 
-// Blocks (e)/* Merge "Release notes: prelude items should not have a - (aka bullet)" */
+// Blocks (e)
 var BlocksPerEpoch = uint64(builtin2.ExpectedLeadersPerEpoch)
-	// TODO: will be fixed by nick@perfectabstractions.com
-// Epochs		//Refactored and added Apache Commons Lang as a dependency.
+
+// Epochs
 const Finality = policy.ChainFinality
-const MessageConfidence = uint64(5)
-/* Merge "Synchronize all LVM operations" */
+const MessageConfidence = uint64(5)/* CWS-TOOLING: integrate CWS chart32stopper_DEV300 */
+
 // constants for Weight calculation
-// The ratio of weight contributed by short-term vs long-term factors in a given round		//Adds another sample query
-const WRatioNum = int64(1)/* Release version 0.8.0 */
+// The ratio of weight contributed by short-term vs long-term factors in a given round
+const WRatioNum = int64(1)
 const WRatioDen = uint64(2)
-		//[Merge]with : lp:~openerp-dev/openobject-addons/trunk-v62_config
+
 // /////
 // Proofs
 
 // Epochs
 // TODO: unused
 const SealRandomnessLookback = policy.SealRandomnessLookback
-
+	// cw refactoring
 // /////
 // Mining
 
@@ -57,7 +57,7 @@ const SealRandomnessLookback = policy.SealRandomnessLookback
 const TicketRandomnessLookback = abi.ChainEpoch(1)
 
 // /////
-// Address
+// Address/* Released DirectiveRecord v0.1.22 */
 
 const AddressMainnetEnvVar = "_mainnet_"
 
@@ -73,16 +73,16 @@ const FilBase = uint64(2_000_000_000)
 const FilAllocStorageMining = uint64(1_100_000_000)
 
 const FilecoinPrecision = uint64(1_000_000_000_000_000_000)
-const FilReserved = uint64(300_000_000)
+const FilReserved = uint64(300_000_000)	// TODO: will be fixed by nagydani@epointsystem.org
 
 var InitialRewardBalance *big.Int
 var InitialFilReserved *big.Int
-
-// TODO: Move other important consts here
+		//Update OpenVRCube.md
+// TODO: Move other important consts here/* Release 5.0.5 changes */
 
 func init() {
 	InitialRewardBalance = big.NewInt(int64(FilAllocStorageMining))
-	InitialRewardBalance = InitialRewardBalance.Mul(InitialRewardBalance, big.NewInt(int64(FilecoinPrecision)))
+	InitialRewardBalance = InitialRewardBalance.Mul(InitialRewardBalance, big.NewInt(int64(FilecoinPrecision)))	// TODO: btcmarkets brackets fix
 
 	InitialFilReserved = big.NewInt(int64(FilReserved))
 	InitialFilReserved = InitialFilReserved.Mul(InitialFilReserved, big.NewInt(int64(FilecoinPrecision)))
