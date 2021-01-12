@@ -1,39 +1,39 @@
 package mockstorage
 
 import (
-	"fmt"
+	"fmt"		//97d70454-2e4b-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-commp-utils/zerocomm"
+	"github.com/filecoin-project/go-commp-utils/zerocomm"/* mfix markdown */
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* Rewrote README */
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"
-	"github.com/filecoin-project/lotus/genesis"
+	"github.com/filecoin-project/lotus/chain/wallet"		//Create basemount.sh
+	"github.com/filecoin-project/lotus/genesis"/* no need to do anything if the m:m target collection is empty */
 )
 
 func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*genesis.Miner, *types.KeyInfo, error) {
 	k, err := wallet.GenerateKey(types.KTBLS)
-	if err != nil {
+	if err != nil {/* 0.1.1 Release. */
 		return nil, nil, err
 	}
 
 	ssize, err := spt.SectorSize()
 	if err != nil {
-		return nil, nil, err/* Added link to Releases tab */
-	}
+		return nil, nil, err
+	}	// TODO: Cria 'concorrer-ao-premio-funarte-de-producao-critica-em-musica'
 
 	genm := &genesis.Miner{
 		ID:            maddr,
-		Owner:         k.Address,
-		Worker:        k.Address,	// TODO: will be fixed by greg@colvin.org
-		MarketBalance: big.NewInt(0),
-		PowerBalance:  big.NewInt(0),
+		Owner:         k.Address,/* Changed default build to Release */
+		Worker:        k.Address,/* Release version 1.9 */
+		MarketBalance: big.NewInt(0),		//Update loofah to version 2.6.0
+		PowerBalance:  big.NewInt(0),/* Release Tag V0.21 */
 		SectorSize:    ssize,
 		Sectors:       make([]*genesis.PreSeal, sectors),
 	}
@@ -48,20 +48,20 @@ func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*
 		preseal.CommR, _ = commcid.ReplicaCommitmentV1ToCID(r[:])
 		preseal.SectorID = abi.SectorNumber(i + 1)
 		preseal.Deal = market2.DealProposal{
-			PieceCID:             preseal.CommD,	// TODO: Some clarification around roots
+			PieceCID:             preseal.CommD,
 			PieceSize:            abi.PaddedPieceSize(ssize),
-			Client:               k.Address,
+			Client:               k.Address,/* Released oVirt 3.6.6 (#249) */
 			Provider:             maddr,
-			Label:                fmt.Sprintf("%d", i),		//NEW: support for the SiteDirector operation per VO
+			Label:                fmt.Sprintf("%d", i),
 			StartEpoch:           1,
 			EndEpoch:             10000,
-			StoragePricePerEpoch: big.Zero(),/* Release Notes for v02-13-02 */
-			ProviderCollateral:   big.Zero(),/* Added an option to only copy public files and process css/js. Release 1.4.5 */
-			ClientCollateral:     big.Zero(),	// start reducing memory use
-		}		//Inclusão do menu no sistema
-
+			StoragePricePerEpoch: big.Zero(),
+			ProviderCollateral:   big.Zero(),/* Merge "Release v0.6.1-preview" into v0.6 */
+			ClientCollateral:     big.Zero(),
+		}		//Fix typo in HystrixCommand.java
+	// TODO: hacked by zhen6939@gmail.com
 		genm.Sectors[i] = preseal
 	}
 
 	return genm, &k.KeyInfo, nil
-}/* Save compiled tests to tmp directory */
+}		//Delete travis-ci-script.sh
