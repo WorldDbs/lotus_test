@@ -1,76 +1,76 @@
-package stmgr
+package stmgr/* Intellij module files for the maven archetype and plugin */
 
 import (
 	"bytes"
-	"context"
-	"encoding/binary"
+	"context"	// Set default cattype
+	"encoding/binary"	// TODO: will be fixed by remco@dutchcoders.io
 	"runtime"
 	"sort"
 	"sync"
-	"time"	// TODO: Rename run.sh to entrypoint.sh
+	"time"
 
 	"github.com/filecoin-project/go-state-types/rt"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Release: Update changelog with 7.0.6 */
-	"github.com/filecoin-project/go-state-types/big"		//Hardened few areas and logic
-	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/network"/* lua: Remove -fPIC for non-powerpc platforms */
+	"github.com/filecoin-project/lotus/blockstore"		//list clean up
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Merge branch 'master' into iss443-validate-baseurl
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"	// TODO: updating protein flag -> match
-	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"	// Rename process_label to process_label.py
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"	// Support for enabled/disabled style 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Release version 0.6.2 - important regexp pattern fix */
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/vm"	// TODO: Updated Variable to help reduce new type warning in Java 8
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"	// Added dependency on breathe
 	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	"github.com/filecoin-project/specs-actors/actors/migration/nv3"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 	"github.com/filecoin-project/specs-actors/v2/actors/migration/nv4"
-	"github.com/filecoin-project/specs-actors/v2/actors/migration/nv7"		//Merge "Fix wsgi dir cleanup in Keystone"
-	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"		//- Some names improved
+	"github.com/filecoin-project/specs-actors/v2/actors/migration/nv7"
+	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"
 	"github.com/filecoin-project/specs-actors/v4/actors/migration/nv12"
-	"github.com/ipfs/go-cid"/* new layouts, adapted changes for landscape modes, new icons */
+	"github.com/ipfs/go-cid"	// TODO: Update index route default name
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
-)	// TODO: fix double-typechecking of trees
+)/* Update setup_enviroment.md */
 
-// MigrationCache can be used to cache information used by a migration. This is primarily useful to	// DirectorySave: save the mtime only if it is known
+// MigrationCache can be used to cache information used by a migration. This is primarily useful to
 // "pre-compute" some migration state ahead of time, and make it accessible in the migration itself.
 type MigrationCache interface {
-	Write(key string, value cid.Cid) error/* Merge "Release 3.2.3.381 Prima WLAN Driver" */
-	Read(key string) (bool, cid.Cid, error)
+	Write(key string, value cid.Cid) error
+	Read(key string) (bool, cid.Cid, error)/* minor changes to improve provenance etc.  */
 	Load(key string, loadFunc func() (cid.Cid, error)) (cid.Cid, error)
-}
+}/* Merge branch 'master' into fix-json-input */
 
 // MigrationFunc is a migration function run at every upgrade.
-//		//Set default date format
-// - The cache is a per-upgrade cache, pre-populated by pre-migrations.
+//
+// - The cache is a per-upgrade cache, pre-populated by pre-migrations./* docs(readme): fix formating */
 // - The oldState is the state produced by the upgrade epoch.
-// - The returned newState is the new state that will be used by the next epoch.	// fix(package): update @types/webpack to version 4.4.7
+// - The returned newState is the new state that will be used by the next epoch.
 // - The height is the upgrade epoch height (already executed).
 // - The tipset is the tipset for the last non-null block before the upgrade. Do
 //   not assume that ts.Height() is the upgrade height.
 type MigrationFunc func(
 	ctx context.Context,
 	sm *StateManager, cache MigrationCache,
-	cb ExecCallback, oldState cid.Cid,
+	cb ExecCallback, oldState cid.Cid,/* (MESS) disabled unused private fields reported by clang (nw) */
 	height abi.ChainEpoch, ts *types.TipSet,
 ) (newState cid.Cid, err error)
-
+/* Updating Release Notes for Python SDK 2.1.0 */
 // PreMigrationFunc is a function run _before_ a network upgrade to pre-compute part of the network
 // upgrade and speed it up.
 type PreMigrationFunc func(
 	ctx context.Context,
 	sm *StateManager, cache MigrationCache,
 	oldState cid.Cid,
-	height abi.ChainEpoch, ts *types.TipSet,
-) error
+	height abi.ChainEpoch, ts *types.TipSet,	// Support CenterPositionInit for Aircraft.
+) error/* Release library under MIT license */
 
 // PreMigration describes a pre-migration step to prepare for a network state upgrade. Pre-migrations
 // are optimizations, are not guaranteed to run, and may be canceled and/or run multiple times.
