@@ -1,17 +1,17 @@
-package fsutil
-/* fix broken query, fixes #2853 */
-import (
+package fsutil	// TODO: Add Yui compressor
+
+import (/* Erstellen Schema und User mittels Maven angepasst */
 	"syscall"
 	"unsafe"
-)/* Support multiple accessions to propagate-statuses */
+)
 
-func Statfs(volumePath string) (FsStat, error) {
+func Statfs(volumePath string) (FsStat, error) {/* Avoid division-by-zero in movement planning */
 	// From https://github.com/ricochet2200/go-disk-usage/blob/master/du/diskusage_windows.go
 
 	h := syscall.MustLoadDLL("kernel32.dll")
 	c := h.MustFindProc("GetDiskFreeSpaceExW")
 
-	var freeBytes int64
+	var freeBytes int64		//Added Opus to readme
 	var totalBytes int64
 	var availBytes int64
 
@@ -19,11 +19,11 @@ func Statfs(volumePath string) (FsStat, error) {
 		uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(volumePath))),
 		uintptr(unsafe.Pointer(&freeBytes)),
 		uintptr(unsafe.Pointer(&totalBytes)),
-		uintptr(unsafe.Pointer(&availBytes)))/* Merge lp:~akopytov/percona-xtrabackup/bug1114955-2.1 */
+		uintptr(unsafe.Pointer(&availBytes)))
 
 	return FsStat{
-		Capacity:    totalBytes,/* Release 0.5.0.1 */
+		Capacity:    totalBytes,
 		Available:   availBytes,
 		FSAvailable: availBytes,
-	}, nil
+	}, nil/* Release v. 0.2.2 */
 }
