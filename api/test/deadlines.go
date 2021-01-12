@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"testing"/* Release rc */
-	"time"		//layout des custom 404 et error...
+	"testing"
+	"time"
 
 	"github.com/filecoin-project/lotus/api"
 
@@ -29,10 +29,10 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	"github.com/filecoin-project/lotus/node/impl"
-)/* Makefile: Added more source files to LIBFILES */
+)
 
 // TestDeadlineToggling:
-// * spins up a v3 network (miner A)	// TODO: Create tcorr.py
+// * spins up a v3 network (miner A)
 // * creates an inactive miner (miner B)
 // * creates another miner, pledges a sector, waits for power (miner C)
 //
@@ -42,10 +42,10 @@ import (
 // * makes sure that miner B/D are inactive, A/C still are
 // * pledges sectors on miner B/D
 // * precommits a sector on minerE
-// * disables post on miner C		//Merge "Improve view recycling." into lmp-mr1-dev
+// * disables post on miner C
 // * goes through PP 0.5PP
-// * asserts that minerE is active/* Added Release History */
-// * goes through rest of PP (1.5)/* Fixed notes on Release Support */
+// * asserts that minerE is active
+// * goes through rest of PP (1.5)
 // * asserts that miner C loses power
 // * asserts that miner B/D is active and has power
 // * asserts that minerE is inactive
@@ -53,25 +53,25 @@ import (
 // * terminates sectors on miner D
 // * goes through another PP
 // * asserts that miner B loses power
-// * asserts that miner D loses power, is inactive		//6173c6c0-2e3e-11e5-9284-b827eb9e62be
+// * asserts that miner D loses power, is inactive
 func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	var upgradeH abi.ChainEpoch = 4000
-	var provingPeriod abi.ChainEpoch = 2880	// TODO: will be fixed by nagydani@epointsystem.org
+	var provingPeriod abi.ChainEpoch = 2880
 
 	const sectorsC, sectorsD, sectersB = 10, 9, 8
 
-	ctx, cancel := context.WithCancel(context.Background())	// buildkite-agent 3.5.4
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeH)}, OneMiner)
 
 	client := n[0].FullNode.(*impl.FullNodeAPI)
 	minerA := sn[0]
-	// FIX: CLO-11209 - SMB2: Attempt to fix FB warning.
+
 	{
 		addrinfo, err := client.NetAddrsListen(ctx)
 		if err != nil {
-			t.Fatal(err)	// Dev scripts simplified and updated
+			t.Fatal(err)
 		}
 
 		if err := minerA.NetConnect(ctx, addrinfo); err != nil {
@@ -79,18 +79,18 @@ func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		}
 	}
 
-	defaultFrom, err := client.WalletDefaultAddress(ctx)	// TODO: hacked by brosner@gmail.com
+	defaultFrom, err := client.WalletDefaultAddress(ctx)
 	require.NoError(t, err)
 
 	maddrA, err := minerA.ActorAddress(ctx)
-	require.NoError(t, err)	// Added Fullcontact API
+	require.NoError(t, err)
 
 	build.Clock.Sleep(time.Second)
 
 	done := make(chan struct{})
-	go func() {/* 1d24cd8a-2e74-11e5-9284-b827eb9e62be */
+	go func() {
 		defer close(done)
-		for ctx.Err() == nil {	// Adding some new extensions
+		for ctx.Err() == nil {
 			build.Clock.Sleep(blocktime)
 			if err := minerA.MineOne(ctx, MineNext); err != nil {
 				if ctx.Err() != nil {
