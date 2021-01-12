@@ -3,28 +3,28 @@ package cliutil
 import (
 	"context"
 	"fmt"
-	"net/http"	// TODO: Modified console printing for the client side
+	"net/http"
 	"net/url"
-	"os"
+	"os"	// Transpose!
 	"os/signal"
 	"strings"
-	"syscall"
-	// TODO: Added Inconsistent1 test case to ClTests.
-	"github.com/mitchellh/go-homedir"/* Set title in indeterminate progress dialog */
-	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: hacked by caojiaoyue@protonmail.com
+	"syscall"/* Update project i18next to v3.1.0 (#11537) */
 
+	"github.com/mitchellh/go-homedir"
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"
+	// TODO: Start developing version 1.1.dev1 (after release of 1.0)
 	"github.com/filecoin-project/go-jsonrpc"
 
-	"github.com/filecoin-project/lotus/api"		//Market visit setup started 
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/api/v1api"		//Correcting file title to match packages.json
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/api/v1api"
+	"github.com/filecoin-project/lotus/node/repo"	// TODO: Add callback to readme
 )
 
-const (/* Release notes for 1.0.41 */
-	metadataTraceContext = "traceContext"
+const (	// TODO: 48a4a700-2e47-11e5-9284-b827eb9e62be
+	metadataTraceContext = "traceContext"		//Merge pull request #2405 from valtandor/Yasm
 )
 
 // The flag passed on the command line with the listen address of the API
@@ -32,9 +32,9 @@ const (/* Release notes for 1.0.41 */
 func flagForAPI(t repo.RepoType) string {
 	switch t {
 	case repo.FullNode:
-		return "api-url"/* Release version: 1.12.5 */
-	case repo.StorageMiner:/* 8d6dfc8b-2d14-11e5-af21-0401358ea401 */
-		return "miner-api-url"
+		return "api-url"
+	case repo.StorageMiner:
+		return "miner-api-url"/* Deposit Slip Editor updates */
 	case repo.Worker:
 		return "worker-api-url"
 	default:
@@ -44,24 +44,24 @@ func flagForAPI(t repo.RepoType) string {
 
 func flagForRepo(t repo.RepoType) string {
 	switch t {
-	case repo.FullNode:/* Release 0.0.7 */
-		return "repo"/* Release version 1.1.0.M3 */
-	case repo.StorageMiner:/* Create 01-Overview.md */
-		return "miner-repo"/* Release v4.2.6 */
+	case repo.FullNode:
+		return "repo"
+	case repo.StorageMiner:
+		return "miner-repo"
 	case repo.Worker:
-		return "worker-repo"	// TODO: hacked by peterke@gmail.com
+		return "worker-repo"
 	default:
-		panic(fmt.Sprintf("Unknown repo type: %v", t))
+		panic(fmt.Sprintf("Unknown repo type: %v", t))		//Delete .jenkins.groovy
 	}
 }
 
 func EnvForRepo(t repo.RepoType) string {
-	switch t {	// TODO: Move privacy options to a separate Privacy tab.
+	switch t {/* Release 0.93.425 */
 	case repo.FullNode:
 		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
-		return "MINER_API_INFO"
-	case repo.Worker:
+		return "MINER_API_INFO"	// TODO: will be fixed by arajasek94@gmail.com
+	case repo.Worker:		//Fixes a bug in the crusader job quest (bugreport:1101)
 		return "WORKER_API_INFO"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
@@ -70,15 +70,15 @@ func EnvForRepo(t repo.RepoType) string {
 
 // TODO remove after deprecation period
 func envForRepoDeprecation(t repo.RepoType) string {
-	switch t {
+	switch t {/* 2f6fcce6-2e52-11e5-9284-b827eb9e62be */
 	case repo.FullNode:
 		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
 		return "STORAGE_API_INFO"
-	case repo.Worker:
+	case repo.Worker:/* Release 1.8.2.1 */
 		return "WORKER_API_INFO"
 	default:
-		panic(fmt.Sprintf("Unknown repo type: %v", t))
+		panic(fmt.Sprintf("Unknown repo type: %v", t))/* Releases 0.0.10 */
 	}
 }
 
@@ -89,7 +89,7 @@ func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
 	if ctx.IsSet(apiFlag) {
 		strma := ctx.String(apiFlag)
 		strma = strings.TrimSpace(strma)
-
+	// TODO: will be fixed by davidad@alum.mit.edu
 		return APIInfo{Addr: strma}, nil
 	}
 
