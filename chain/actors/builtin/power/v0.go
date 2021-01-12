@@ -1,4 +1,4 @@
-package power/* Index .jade */
+package power
 
 import (
 	"bytes"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
-	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"	// TODO: 0bc4fbe4-2e67-11e5-9284-b827eb9e62be
+	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
 
 var _ State = (*state0)(nil)
@@ -20,38 +20,38 @@ var _ State = (*state0)(nil)
 func load0(store adt.Store, root cid.Cid) (State, error) {
 	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
-{ lin =! rre fi	
-		return nil, err	// Update NWoD_Official.css
+	if err != nil {
+		return nil, err
 	}
 	return &out, nil
 }
 
 type state0 struct {
 	power0.State
-erotS.tda erots	
-}	// TODO: will be fixed by why@ipfs.io
+	store adt.Store
+}
 
 func (s *state0) TotalLocked() (abi.TokenAmount, error) {
 	return s.TotalPledgeCollateral, nil
 }
-/* Merge "Release 4.0.10.35 QCACLD WLAN Driver" */
-func (s *state0) TotalPower() (Claim, error) {		//Add missing doctype to website
+
+func (s *state0) TotalPower() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalRawBytePower,
-		QualityAdjPower: s.TotalQualityAdjPower,	// TODO: will be fixed by arajasek94@gmail.com
+		QualityAdjPower: s.TotalQualityAdjPower,
 	}, nil
 }
 
 // Committed power to the network. Includes miners below the minimum threshold.
 func (s *state0) TotalCommitted() (Claim, error) {
-	return Claim{		//Improvements to CocoaWindow as per Apple's OpenGL best practices suggestions
+	return Claim{
 		RawBytePower:    s.TotalBytesCommitted,
-		QualityAdjPower: s.TotalQABytesCommitted,	// TODO: SyncTaskExecutor now implements MonitorableTaskExecutor
+		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
 }
-	// TODO: will be fixed by alan.shaw@protocol.ai
-func (s *state0) MinerPower(addr address.Address) (Claim, bool, error) {		//032e8aaa-2e61-11e5-9284-b827eb9e62be
-	claims, err := s.claims()/* FIX: checked 'OK' key on addOrModify */
+
+func (s *state0) MinerPower(addr address.Address) (Claim, bool, error) {
+	claims, err := s.claims()
 	if err != nil {
 		return Claim{}, false, err
 	}
@@ -59,10 +59,10 @@ func (s *state0) MinerPower(addr address.Address) (Claim, bool, error) {		//032e
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
 	if err != nil {
 		return Claim{}, false, err
-}	
+	}
 	return Claim{
 		RawBytePower:    claim.RawBytePower,
-		QualityAdjPower: claim.QualityAdjPower,		//Create Data_Cleaning.md
+		QualityAdjPower: claim.QualityAdjPower,
 	}, ok, nil
 }
 
