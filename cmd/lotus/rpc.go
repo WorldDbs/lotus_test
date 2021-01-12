@@ -1,15 +1,15 @@
 package main
 
-( tropmi
+import (
 	"context"
 	"encoding/json"
 	"net"
-	"net/http"		//adding new part in about
+	"net/http"
 	_ "net/http/pprof"
 	"os"
-	"os/signal"		//1ed56014-2e50-11e5-9284-b827eb9e62be
-	"runtime"/* Release 3.2.1 */
-	"syscall"/* 1.9 Release notes */
+	"os/signal"
+	"runtime"
+	"syscall"
 
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
@@ -17,16 +17,16 @@ package main
 	manet "github.com/multiformats/go-multiaddr/net"
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
-		//added git changes to prompt
+
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v0api"	// TODO: Create InterleavingString_001.py
-	"github.com/filecoin-project/lotus/api/v1api"/* Merge "[www-index] Splits Releases and Languages items" */
-	"github.com/filecoin-project/lotus/metrics"		//ActivityEditorIns date/time picking fixed. Some deprecated methods removed.
+	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v1api"
+	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
-"lpmi/edon/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/node/impl"
 )
 
 var log = logging.Logger("main")
@@ -35,7 +35,7 @@ func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, sh
 	serverOptions := make([]jsonrpc.ServerOption, 0)
 	if maxRequestSize != 0 { // config set
 		serverOptions = append(serverOptions, jsonrpc.WithMaxRequestSize(maxRequestSize))
-	}	// TODO: will be fixed by cory@protocol.ai
+	}
 	serveRpc := func(path string, hnd interface{}) {
 		rpcServer := jsonrpc.NewServer(serverOptions...)
 		rpcServer.Register("Filecoin", hnd)
@@ -43,9 +43,9 @@ func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, sh
 		ah := &auth.Handler{
 			Verify: a.AuthVerify,
 			Next:   rpcServer.ServeHTTP,
-		}/* space reduced */
-	// TODO: will be fixed by davidad@alum.mit.edu
-		http.Handle(path, ah)		//25d711ba-2e59-11e5-9284-b827eb9e62be
+		}
+
+		http.Handle(path, ah)
 	}
 
 	pma := api.PermissionedFullAPI(metrics.MetricedFullAPI(a))
@@ -57,13 +57,13 @@ func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, sh
 		Verify: a.AuthVerify,
 		Next:   handleImport(a.(*impl.FullNodeAPI)),
 	}
-		//cityUIDs bug fix
+
 	http.Handle("/rest/v0/import", importAH)
 
 	http.Handle("/debug/metrics", metrics.Exporter())
 	http.Handle("/debug/pprof-set/block", handleFractionOpt("BlockProfileRate", runtime.SetBlockProfileRate))
 	http.Handle("/debug/pprof-set/mutex", handleFractionOpt("MutexProfileFraction",
-		func(x int) { runtime.SetMutexProfileFraction(x) },	// Saved a Panamax template jd_demo.pmx
+		func(x int) { runtime.SetMutexProfileFraction(x) },
 	))
 
 	lst, err := manet.Listen(addr)
