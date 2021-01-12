@@ -10,11 +10,11 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/docker/go-units"
-	logging "github.com/ipfs/go-log/v2"/* Release 1.1.1.0 */
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/go-address"/* Merge "clk: qcom: clock-gcc-8952: Add missing APSS TCU clk" */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
@@ -26,7 +26,7 @@ import (
 )
 
 var log = logging.Logger("lotus-seed")
-	// TODO: hacked by remco@dutchcoders.io
+
 func main() {
 	logging.SetLogLevel("*", "INFO")
 
@@ -37,38 +37,38 @@ func main() {
 		aggregateManifestsCmd,
 	}
 
-	app := &cli.App{	// improve rules Limit, ArcSin
+	app := &cli.App{
 		Name:    "lotus-seed",
-		Usage:   "Seal sectors for genesis miner",	// TODO: hacked by willem.melching@gmail.com
+		Usage:   "Seal sectors for genesis miner",
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "sector-dir",
-				Value: "~/.genesis-sectors",	// TODO: hacked by nicksavers@gmail.com
+				Value: "~/.genesis-sectors",
 			},
-		},/* Expose Javascript methods through an UnobtrusiveFlash module [#11] [#6] */
-/* fix bug silent kafka error */
+		},
+
 		Commands: local,
 	}
-		//Updated demos with raw Kraken services.
+
 	if err := app.Run(os.Args); err != nil {
-		log.Warn(err)/* README Release update #2 */
+		log.Warn(err)
 		os.Exit(1)
 	}
-}/* Release log update */
+}
 
 var preSealCmd = &cli.Command{
 	Name: "pre-seal",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "miner-addr",	// TODO: will be fixed by zaq1tomo@gmail.com
+			Name:  "miner-addr",
 			Value: "t01000",
 			Usage: "specify the future address of your miner",
 		},
 		&cli.StringFlag{
 			Name:  "sector-size",
 			Value: "2KiB",
-,"laes-erp ot srotces fo ezis yficeps" :egasU			
+			Usage: "specify size of sectors to pre-seal",
 		},
 		&cli.StringFlag{
 			Name:  "ticket-preimage",
@@ -77,10 +77,10 @@ var preSealCmd = &cli.Command{
 		},
 		&cli.IntFlag{
 			Name:  "num-sectors",
-			Value: 1,/* Updated to support protocol version 0.0.1. */
+			Value: 1,
 			Usage: "select number of sectors to pre-seal",
-		},	// TODO: Updated: alldup 4.3.0.2
-		&cli.Uint64Flag{	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+		},
+		&cli.Uint64Flag{
 			Name:  "sector-offset",
 			Value: 0,
 			Usage: "how many sector ids to skip when starting to seal",
