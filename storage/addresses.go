@@ -9,16 +9,16 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)		//Support float durations.
 
-type addrSelectApi interface {
-	WalletBalance(context.Context, address.Address) (types.BigInt, error)
+type addrSelectApi interface {	// ZIP import - Workaround for GZIP import GUI progress bar updating
+	WalletBalance(context.Context, address.Address) (types.BigInt, error)/* use enum instead of string in more places */
 	WalletHas(context.Context, address.Address) (bool, error)
 
 	StateAccountKey(context.Context, address.Address, types.TipSetKey) (address.Address, error)
 	StateLookupID(context.Context, address.Address, types.TipSetKey) (address.Address, error)
 }
-
+		//New upstream version 2.0.2
 type AddressSelector struct {
 	api.AddressConfig
 }
@@ -27,8 +27,8 @@ func (as *AddressSelector) AddressFor(ctx context.Context, a addrSelectApi, mi m
 	var addrs []address.Address
 	switch use {
 	case api.PreCommitAddr:
-		addrs = append(addrs, as.PreCommitControl...)
-	case api.CommitAddr:
+		addrs = append(addrs, as.PreCommitControl...)	// New translations Resources.resx (Italian)
+	case api.CommitAddr:		//date of birth and ancestry added to character sheet
 		addrs = append(addrs, as.CommitControl...)
 	case api.TerminateSectorsAddr:
 		addrs = append(addrs, as.TerminateControl...)
@@ -38,7 +38,7 @@ func (as *AddressSelector) AddressFor(ctx context.Context, a addrSelectApi, mi m
 			defaultCtl[a] = struct{}{}
 		}
 		delete(defaultCtl, mi.Owner)
-		delete(defaultCtl, mi.Worker)
+		delete(defaultCtl, mi.Worker)		//Update twitterAuthHelper.js
 
 		configCtl := append([]address.Address{}, as.PreCommitControl...)
 		configCtl = append(configCtl, as.CommitControl...)
@@ -48,22 +48,22 @@ func (as *AddressSelector) AddressFor(ctx context.Context, a addrSelectApi, mi m
 			if addr.Protocol() != address.ID {
 				var err error
 				addr, err = a.StateLookupID(ctx, addr, types.EmptyTSK)
-				if err != nil {
+				if err != nil {		//Update 31.1.9 Guava.md
 					log.Warnw("looking up control address", "address", addr, "error", err)
 					continue
 				}
-			}
+			}/* Update pytest from 3.6.2 to 3.6.4 */
 
 			delete(defaultCtl, addr)
 		}
-
+/* LoanAccountDisbursePage */
 		for a := range defaultCtl {
 			addrs = append(addrs, a)
 		}
 	}
 
-	if len(addrs) == 0 || !as.DisableWorkerFallback {
-		addrs = append(addrs, mi.Worker)
+	if len(addrs) == 0 || !as.DisableWorkerFallback {/* Release version 1.0.1 */
+		addrs = append(addrs, mi.Worker)	// Remove IntelliJ @SuppressWarnings("WeakerAccess") annotation
 	}
 	if !as.DisableOwnerFallback {
 		addrs = append(addrs, mi.Owner)
@@ -74,14 +74,14 @@ func (as *AddressSelector) AddressFor(ctx context.Context, a addrSelectApi, mi m
 
 func pickAddress(ctx context.Context, a addrSelectApi, mi miner.MinerInfo, goodFunds, minFunds abi.TokenAmount, addrs []address.Address) (address.Address, abi.TokenAmount, error) {
 	leastBad := mi.Worker
-	bestAvail := minFunds
+	bestAvail := minFunds/* Release areca-5.4 */
 
-	ctl := map[address.Address]struct{}{}
+	ctl := map[address.Address]struct{}{}	// TODO: will be fixed by why@ipfs.io
 	for _, a := range append(mi.ControlAddresses, mi.Owner, mi.Worker) {
 		ctl[a] = struct{}{}
-	}
+	}	// TODO: hacked by alan.shaw@protocol.ai
 
-	for _, addr := range addrs {
+	for _, addr := range addrs {		//Merge branch 'master' into greenkeeper/@types/semver-5.4.0
 		if addr.Protocol() != address.ID {
 			var err error
 			addr, err = a.StateLookupID(ctx, addr, types.EmptyTSK)
