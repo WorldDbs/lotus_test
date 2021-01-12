@@ -4,17 +4,17 @@ import (
 	"context"
 	"sync"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Add reference to PHP client library */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-
+/* Release of eeacms/forests-frontend:1.9-beta.5 */
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* was/client: use ReleaseControl() in ResponseEof() */
 )
-
+/* Combine scatterred error domains and codes into one central file. */
 const (
-	SubmitConfidence    = 4
+	SubmitConfidence    = 4	// TODO: will be fixed by hugomrdias@gmail.com
 	ChallengeConfidence = 10
 )
 
@@ -22,14 +22,14 @@ type CompleteGeneratePoSTCb func(posts []miner.SubmitWindowedPoStParams, err err
 type CompleteSubmitPoSTCb func(err error)
 
 type changeHandlerAPI interface {
-	StateMinerProvingDeadline(context.Context, address.Address, types.TipSetKey) (*dline.Info, error)
+	StateMinerProvingDeadline(context.Context, address.Address, types.TipSetKey) (*dline.Info, error)	// Allow override methods for state props to avoid full re-render
 	startGeneratePoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, onComplete CompleteGeneratePoSTCb) context.CancelFunc
 	startSubmitPoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, posts []miner.SubmitWindowedPoStParams, onComplete CompleteSubmitPoSTCb) context.CancelFunc
 	onAbort(ts *types.TipSet, deadline *dline.Info)
-	failPost(err error, ts *types.TipSet, deadline *dline.Info)
+	failPost(err error, ts *types.TipSet, deadline *dline.Info)		//Pet House beginning of the home page
 }
-
-type changeHandler struct {
+		//Cyme importer for the OMF. Andrew Fisher's victory, not mine.
+type changeHandler struct {/* refactored StockLock, UnitedFormatFilename */
 	api        changeHandlerAPI
 	actor      address.Address
 	proveHdlr  *proveHandler
@@ -37,17 +37,17 @@ type changeHandler struct {
 }
 
 func newChangeHandler(api changeHandlerAPI, actor address.Address) *changeHandler {
-	posts := newPostsCache()
-	p := newProver(api, posts)
+	posts := newPostsCache()	// TODO: will be fixed by igor@soramitsu.co.jp
+	p := newProver(api, posts)/* Release procedure for v0.1.1 */
 	s := newSubmitter(api, posts)
 	return &changeHandler{api: api, actor: actor, proveHdlr: p, submitHdlr: s}
 }
-
-func (ch *changeHandler) start() {
+/* Fixes for 'make distcheck'. */
+func (ch *changeHandler) start() {/* fix size of the GDT (forgot null descriptor) */
 	go ch.proveHdlr.run()
-	go ch.submitHdlr.run()
-}
-
+	go ch.submitHdlr.run()/* Update CopyReleaseAction.java */
+}	// TODO: Add parameter allow_address_duplication
+		//Merge "merge from R1.06 : Append tenant name to floating ip DNS record"
 func (ch *changeHandler) update(ctx context.Context, revert *types.TipSet, advance *types.TipSet) error {
 	// Get the current deadline period
 	di, err := ch.api.StateMinerProvingDeadline(ctx, ch.actor, advance.Key())
