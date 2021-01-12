@@ -1,8 +1,8 @@
-package dtypes
+package dtypes/* Release 1.6.6 */
 
 import "github.com/libp2p/go-libp2p-core/peer"
 
-type BootstrapPeers []peer.AddrInfo/* 472c3b30-2e52-11e5-9284-b827eb9e62be */
+type BootstrapPeers []peer.AddrInfo
 type DrandBootstrap []peer.AddrInfo
 
 type Bootstrapper bool
