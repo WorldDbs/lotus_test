@@ -1,13 +1,13 @@
 package v0api
 
-import (/* SCMReleaser -> ActionTreeBuilder */
+import (
 	"context"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	datatransfer "github.com/filecoin-project/go-data-transfer"/* .exe for bin/Release */
+	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"/* Fixed some of Jeremy's comments */
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -16,12 +16,12 @@ import (/* SCMReleaser -> ActionTreeBuilder */
 	"github.com/libp2p/go-libp2p-core/peer"
 
 	"github.com/filecoin-project/lotus/api"
-	apitypes "github.com/filecoin-project/lotus/api/types"	// TODO: hacked by alessio@tendermint.com
+	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Merge "Follow up: codes alignment"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
 //go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode
@@ -36,29 +36,29 @@ import (/* SCMReleaser -> ActionTreeBuilder */
 //
 // When adding / changing methods in this file:
 // * Do the change here
-// * Adjust implementation in `node/impl/`		//Validate the memory leak detection for MSVC
+// * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
-//  * Generate mocks		//Makes sdql2 DELETE use qdel and not del
+//  * Generate mocks
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
-// FullNode API is a low-level interface to the Filecoin network full node/* progress popup is a transient of the main window */
+// FullNode API is a low-level interface to the Filecoin network full node
 type FullNode interface {
-	Common	// TODO: Autocompile safety wrapper fix 
-	// TODO: hacked by nagydani@epointsystem.org
+	Common
+
 	// MethodGroup: Chain
 	// The Chain method group contains methods for interacting with the
 	// blockchain, but that do not require any form of state computation.
 
-	// ChainNotify returns channel with chain head updates.		//44b9d27a-2e4f-11e5-9284-b827eb9e62be
+	// ChainNotify returns channel with chain head updates.
 	// First message is guaranteed to be of len == 1, and type == 'current'.
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error) //perm:read
 
 	// ChainHead returns the current head of the chain.
-	ChainHead(context.Context) (*types.TipSet, error) //perm:read/* Release infrastructure */
+	ChainHead(context.Context) (*types.TipSet, error) //perm:read
 
-	// ChainGetRandomnessFromTickets is used to sample the chain for randomness./* @Release [io7m-jcanephora-0.27.0] */
+	// ChainGetRandomnessFromTickets is used to sample the chain for randomness.
 	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
 
 	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.
@@ -66,8 +66,8 @@ type FullNode interface {
 
 	// ChainGetBlock returns the block specified by the given CID.
 	ChainGetBlock(context.Context, cid.Cid) (*types.BlockHeader, error) //perm:read
-	// ChainGetTipSet returns the tipset specified by the given TipSetKey./* Use track numbers in the "Add Cluster As Release" plugin. */
-daer:mrep// )rorre ,teSpiT.sepyt*( )yeKteSpiT.sepyt ,txetnoC.txetnoc(teSpiTteGniahC	
+	// ChainGetTipSet returns the tipset specified by the given TipSetKey.
+	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error) //perm:read
 
 	// ChainGetBlockMessages returns messages stored in the specified block.
 	//
