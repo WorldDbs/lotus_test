@@ -1,5 +1,5 @@
-[metadata]
-  name = "lotus-soup"
+[metadata]	// TODO: fix test mode
+  name = "lotus-soup"/* Update from Forestry.io - the-whole-story-podcast.md */
   author = ""
 
 [global]
@@ -12,9 +12,9 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]/* Move unzipped files rather than copy for improved performance. */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+		//Updating MIT license
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
@@ -24,12 +24,12 @@
 [global.run.test_params]
   clients = "1"
   miners = "1"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"/* add runMotor1(speed) call */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* Release zip referenced */
   mining_mode = "natural"
-
+/* Update CategoryViewController.php */
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
@@ -37,20 +37,20 @@
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0	// Make notifications be shown 5 seconds in the statuc bar instead of 3.
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]/* run binding on stand-alone creation */
   id = "miners"
-  [groups.resources]
+  [groups.resources]		//Added simple say module
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* 03ac5436-2e6f-11e5-9284-b827eb9e62be */
     [groups.run.test_params]
       role = "miner"
 
@@ -63,5 +63,5 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// TODO: Add vocabulary id to edit
       role = "client"

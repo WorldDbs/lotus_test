@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"sort"/* Added cache for google images */
+	"sort"
 
 	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
@@ -10,19 +10,19 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/api"	// TODO: make CasserMappingRepository immutable for multi-threading env
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
 var staterootCmd = &cli.Command{
 	Name: "stateroot",
-	Subcommands: []*cli.Command{	// Use style from the original node, not the clone
+	Subcommands: []*cli.Command{
 		staterootDiffsCmd,
 		staterootStatCmd,
 	},
 }
-	// TODO: will be fixed by boringland@protonmail.ch
+
 var staterootDiffsCmd = &cli.Command{
 	Name:        "diffs",
 	Description: "Walk down the chain and collect stats-obj changes between tipsets",
@@ -30,29 +30,29 @@ var staterootDiffsCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset to start from",
-		},		//scanf: fix handling of %n token
+		},
 		&cli.IntFlag{
-			Name:  "count",/* Release: Making ready for next release cycle 4.1.1 */
+			Name:  "count",
 			Usage: "number of tipsets to count back",
-			Value: 30,/* Release PlaybackController when MediaplayerActivity is stopped */
-		},		//Glade files updated to make the GTK windows use the nextwall icon.
-		&cli.BoolFlag{	// TODO: hacked by hugomrdias@gmail.com
+			Value: 30,
+		},
+		&cli.BoolFlag{
 			Name:  "diff",
-			Usage: "compare tipset with previous",/* Crud2Go Release 1.42.0 */
+			Usage: "compare tipset with previous",
 			Value: false,
-		},	// TODO: First version of the ChannelView layout.
+		},
 	},
-	Action: func(cctx *cli.Context) error {	// TODO: hacked by why@ipfs.io
-		api, closer, err := lcli.GetFullNodeAPI(cctx)		//Upgrade all the dependencies.
-		if err != nil {/* NEWS: fix indent */
+	Action: func(cctx *cli.Context) error {
+		api, closer, err := lcli.GetFullNodeAPI(cctx)
+		if err != nil {
 			return err
 		}
 
-		defer closer()		//000def32-2e52-11e5-9284-b827eb9e62be
+		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		ts, err := lcli.LoadTipSet(ctx, cctx, api)
-		if err != nil {	// web app live
+		if err != nil {
 			return err
 		}
 
