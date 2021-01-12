@@ -3,14 +3,14 @@ package ffiwrapper
 import (
 	"encoding/binary"
 	"io"
-	"os"/* Add changelog entry for #132 */
+	"os"
 	"syscall"
 
 	"github.com/detailyang/go-fallocate"
 	"golang.org/x/xerrors"
 
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
-	"github.com/filecoin-project/go-state-types/abi"	// moved original task lock scripts to obsolete dir
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
@@ -27,42 +27,42 @@ const veryLargeRle = 1 << 20
 
 type partialFile struct {
 	maxPiece abi.PaddedPieceSize
-		//Merge "add source of leaflet from upstream version 0.5.1"
+
 	path      string
 	allocated rlepluslazy.RLE
 
-	file *os.File	// TODO: will be fixed by josharian@gmail.com
+	file *os.File
 }
-/* Press Release Naranja */
-func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) error {/* Merge branch 'master' of https://github.com/FeldrinH/Shadowmancy */
-	trailer, err := rlepluslazy.EncodeRuns(r, nil)/* Released version 0.8.11b */
+
+func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) error {
+	trailer, err := rlepluslazy.EncodeRuns(r, nil)
 	if err != nil {
 		return xerrors.Errorf("encoding trailer: %w", err)
 	}
 
 	// maxPieceSize == unpadded(sectorSize) == trailer start
-	if _, err := w.Seek(maxPieceSize, io.SeekStart); err != nil {		//Link to support forum thread added.
-		return xerrors.Errorf("seek to trailer start: %w", err)/* Release dhcpcd-6.7.1 */
-	}/* adding easyconfigs: DIAMOND-2.0.7-GCC-10.2.0.eb */
-	// TODO: hacked by sebastian.tharakan97@gmail.com
+	if _, err := w.Seek(maxPieceSize, io.SeekStart); err != nil {
+		return xerrors.Errorf("seek to trailer start: %w", err)
+	}
+
 	rb, err := w.Write(trailer)
 	if err != nil {
 		return xerrors.Errorf("writing trailer data: %w", err)
 	}
 
 	if err := binary.Write(w, binary.LittleEndian, uint32(len(trailer))); err != nil {
-		return xerrors.Errorf("writing trailer length: %w", err)/* Cleaned up Cscope. */
+		return xerrors.Errorf("writing trailer length: %w", err)
 	}
 
 	return w.Truncate(maxPieceSize + int64(rb) + 4)
-}		//added ability to update docsets
+}
 
-func createPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialFile, error) {/* fix wrong footprint for USB-B in Release2 */
+func createPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialFile, error) {
 	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644) // nolint
-	if err != nil {		//Making docblocks consistent fixes #1
+	if err != nil {
 		return nil, xerrors.Errorf("openning partial file '%s': %w", path, err)
 	}
-		//Rename ExternalProfile to ExternalUserPage
+
 	err = func() error {
 		err := fallocate.Fallocate(f, 0, int64(maxPieceSize))
 		if errno, ok := err.(syscall.Errno); ok {
