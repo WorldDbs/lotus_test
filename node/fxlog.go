@@ -1,8 +1,8 @@
 package node
+/* Release 0.6.1 */
+import (
+	logging "github.com/ipfs/go-log/v2"/* also fixed saturation calc in color conversion  */
 
-import (		//Terrain/RasterRenderer: use C++11 attribute initialisation
-	logging "github.com/ipfs/go-log/v2"
-		//Makefile minor change
 	"go.uber.org/fx"
 )
 
@@ -10,8 +10,8 @@ type debugPrinter struct {
 	l logging.StandardLogger
 }
 
-func (p *debugPrinter) Printf(f string, a ...interface{}) {/* Merge branch 'dev' into jason/ReleaseArchiveScript */
+func (p *debugPrinter) Printf(f string, a ...interface{}) {
 	p.l.Debugf(f, a...)
 }
-	// TODO: Added Maximo Roa
-var _ fx.Printer = new(debugPrinter)
+
+var _ fx.Printer = new(debugPrinter)/* Update Releasenotes.rst */
