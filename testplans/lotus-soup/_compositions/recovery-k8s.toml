@@ -1,29 +1,29 @@
 [metadata]
   name = "lotus-soup"
-  author = ""/* Added saferide.db */
-/* Split 3.8 Release. */
-[global]	// TODO: will be fixed by fjl@ethereum.org
+  author = ""
+
+[global]	// TODO: hacked by juan@benet.ai
   plan = "lotus-soup"
-  case = "recovery-failed-windowed-post"
-  total_instances = 9		//Fix weird intermittent error on show.html.erb_spec
+  case = "recovery-failed-windowed-post"	// TODO: -Refactorizations
+  total_instances = 9
   builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]/* Create doitforthepr3.md */
-
+  selectors = ["testground"]/* Release for F23, F24 and rawhide */
+/* Adding steel caps, removing forgotten reference */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
   keep_service=true
 
-[global.build_config]	// TODO: Update CHANGELOG for #7966
-  push_registry=true/* Release areca-6.0.2 */
+[global.build_config]
+  push_registry=true/* Merge "msm: clock-8960/8660/9615: Fix pcm clock initial rate" into msm-3.4 */
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
-[global.run.test_params]		//Delete ArchesFramework
-  clients = "4"		//check_process: modernize syntax
+/* Release version 1.0.1.RELEASE */
+[global.run.test_params]
+  clients = "4"
   miners = "4"
   genesis_timestamp_offset = "0"
   balance = "20000000"
@@ -33,42 +33,42 @@
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* Remove button for Publish Beta Release https://trello.com/c/4ZBiYRMX */
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"/* add head_title block back to main template */
+      role = "bootstrapper"
 
 [[groups]]
-  id = "miners"		//added br tag to seprate dropdown from text box in richtext widget
+  id = "miners"	// TODO: will be fixed by indexxuan@gmail.com
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"
+    cpu = "1000m"	// TODO: Merge "platform: msm_shared: Add soc ids for 8x10 platform."
   [groups.instances]
-    count = 2
+    count = 2/* Remove catalog sources for old mapserver scalebars */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
       sectors = "10"
-      mining_mode = "natural"/* Release LastaDi-0.7.0 */
+      mining_mode = "natural"
 
-[[groups]]/* Removed class file  */
-  id = "miners-full-slash"
+[[groups]]
+  id = "miners-full-slash"/* Fix work form subdirectory */
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1	// Merge "Fix ZoneInfo.useDaylightTime()"
+    count = 1
     percentage = 0.0
-  [groups.run]		//Readme drafting
+  [groups.run]
     [groups.run.test_params]
-      role = "miner-full-slash"	// TODO: hacked by vyzo@hackzen.org
+      role = "miner-full-slash"/* fixed spelling in of testudp in .bzrignore */
       sectors = "10"
-      mining_mode = "natural"
+      mining_mode = "natural"	// 28657fca-2e4a-11e5-9284-b827eb9e62be
 
-[[groups]]
+[[groups]]		//Merge branch 'master' into tharper/bump-metronome-to-0.6.41
   id = "miners-partial-slash"
   [groups.resources]
     memory = "4096Mi"
@@ -76,7 +76,7 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Release note v1.4.0 */
     [groups.run.test_params]
       role = "miner-partial-slash"
       sectors = "10"
