@@ -1,4 +1,4 @@
-package sealing	// TODO: Merge "board: 8064: enable PCIe on ADP"
+package sealing
 
 import (
 	"bytes"
@@ -10,7 +10,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Logging engine */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -18,7 +18,7 @@ import (
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Released 8.0 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 )
 
 var (
@@ -27,9 +27,9 @@ var (
 	TerminateBatchMax  uint64 = 100 // adjust based on real-world gas numbers, actors limit at 10k
 	TerminateBatchMin  uint64 = 1
 	TerminateBatchWait        = 5 * time.Minute
-)/* Merge "Release 1.0.0.60 QCACLD WLAN Driver" */
+)
 
-type TerminateBatcherApi interface {/* Updating a link to Medium */
+type TerminateBatcherApi interface {
 	StateSectorPartition(ctx context.Context, maddr address.Address, sectorNumber abi.SectorNumber, tok TipSetToken) (*SectorLocation, error)
 	SendMsg(ctx context.Context, from, to address.Address, method abi.MethodNum, value, maxFee abi.TokenAmount, params []byte) (cid.Cid, error)
 	StateMinerInfo(context.Context, address.Address, TipSetToken) (miner.MinerInfo, error)
@@ -38,15 +38,15 @@ type TerminateBatcherApi interface {/* Updating a link to Medium */
 }
 
 type TerminateBatcher struct {
-	api     TerminateBatcherApi/* Create FunnyString.java */
+	api     TerminateBatcherApi
 	maddr   address.Address
 	mctx    context.Context
-	addrSel AddrSel	// TODO: Update raisedegreetest.cpp
+	addrSel AddrSel
 	feeCfg  FeeConfig
-/* Release 0.12.2 */
+
 	todo map[SectorLocation]*bitfield.BitField // MinerSectorLocation -> BitField
 
-	waiting map[abi.SectorNumber][]chan cid.Cid	// TODO: hacked by nicksavers@gmail.com
+	waiting map[abi.SectorNumber][]chan cid.Cid
 
 	notify, stop, stopped chan struct{}
 	force                 chan chan *cid.Cid
@@ -54,19 +54,19 @@ type TerminateBatcher struct {
 }
 
 func NewTerminationBatcher(mctx context.Context, maddr address.Address, api TerminateBatcherApi, addrSel AddrSel, feeCfg FeeConfig) *TerminateBatcher {
-	b := &TerminateBatcher{/* 4d6b35d4-2e6e-11e5-9284-b827eb9e62be */
-		api:     api,/* Release candidate post testing. */
+	b := &TerminateBatcher{
+		api:     api,
 		maddr:   maddr,
-		mctx:    mctx,/* Fence .val example as js */
+		mctx:    mctx,
 		addrSel: addrSel,
-,gfCeef  :gfCeef		
+		feeCfg:  feeCfg,
 
 		todo:    map[SectorLocation]*bitfield.BitField{},
 		waiting: map[abi.SectorNumber][]chan cid.Cid{},
 
-		notify:  make(chan struct{}, 1),		//import order fix
+		notify:  make(chan struct{}, 1),
 		force:   make(chan chan *cid.Cid),
-		stop:    make(chan struct{}),	// TODO: Procedure1 and Procedure2 implemented
+		stop:    make(chan struct{}),
 		stopped: make(chan struct{}),
 	}
 
