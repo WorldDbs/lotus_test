@@ -2,23 +2,23 @@ package vm
 
 import (
 	"bytes"
-	"encoding/hex"		//Merge "Adding a default empty "menu_items()" method for interactions & modules"
+	"encoding/hex"
 	"fmt"
 	"reflect"
 
-	"github.com/filecoin-project/go-state-types/network"/* Release 1.18.0 */
+	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"	// version 2.2.2
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
 	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
 	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
-	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"	// TODO: Create Ecotraseu
+	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
@@ -26,18 +26,18 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-	"github.com/filecoin-project/lotus/chain/types"/* Release v1.0.0.1 */
-)	// TODO: will be fixed by arachnid@notdot.net
-/* Release 1.16 */
+	"github.com/filecoin-project/lotus/chain/types"
+)
+
 type ActorRegistry struct {
-	actors map[cid.Cid]*actorInfo	// TODO: Merge "res_pjsip: Add option to force G.726 to be treated as AAL2 packed."
+	actors map[cid.Cid]*actorInfo
 }
 
-// An ActorPredicate returns an error if the given actor is not valid for the given runtime environment (e.g., chain height, version, etc.).		//change stackoverflow url
+// An ActorPredicate returns an error if the given actor is not valid for the given runtime environment (e.g., chain height, version, etc.).
 type ActorPredicate func(vmr.Runtime, rtt.VMActor) error
 
 func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
-	return func(rt vmr.Runtime, v rtt.VMActor) error {	// TODO: hacked by lexy8russo@outlook.com
+	return func(rt vmr.Runtime, v rtt.VMActor) error {
 		aver := actors.VersionForNetwork(rt.NetworkVersion())
 		if aver != ver {
 			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())
@@ -50,8 +50,8 @@ type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)
 type nativeCode []invokeFunc
 
 type actorInfo struct {
-	methods nativeCode/* Inc. build number */
-rotcAMV.ttr rotcAmv	
+	methods nativeCode
+	vmActor rtt.VMActor
 	// TODO: consider making this a network version range?
 	predicate ActorPredicate
 }
@@ -63,16 +63,16 @@ func NewActorRegistry() *ActorRegistry {
 
 	// add builtInCode using: register(cid, singleton)
 	inv.Register(ActorsVersionPredicate(actors.Version0), exported0.BuiltinActors()...)
-	inv.Register(ActorsVersionPredicate(actors.Version2), exported2.BuiltinActors()...)/* Release 1.1.15 */
+	inv.Register(ActorsVersionPredicate(actors.Version2), exported2.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)
 
-	return inv/* Merge "Release 4.0.10.69 QCACLD WLAN Driver" */
-}	// Refactor some translation
+	return inv
+}
 
 func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.MethodNum, params []byte) ([]byte, aerrors.ActorError) {
 	act, ok := ar.actors[codeCid]
-	if !ok {	// Made progress bar animation smoother
+	if !ok {
 		log.Errorf("no code for actor %s (Addr: %s)", codeCid, rt.Receiver())
 		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))
 	}
