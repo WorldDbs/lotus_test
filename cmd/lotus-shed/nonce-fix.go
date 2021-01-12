@@ -7,10 +7,10 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/urfave/cli/v2"	// TODO: hacked by seth@sethvargo.com
+	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"/* Release v*.*.*-alpha.+ */
+	lcli "github.com/filecoin-project/lotus/cli"
 )
 
 var noncefix = &cli.Command{
@@ -20,13 +20,13 @@ var noncefix = &cli.Command{
 			Name:    "repo",
 			EnvVars: []string{"LOTUS_PATH"},
 			Hidden:  true,
-			Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME/* Bind *package* to the COMMON-LISP package instead of KEYWORD */
-		},/* [artifactory-release] Release version 2.0.0 */
-		&cli.Uint64Flag{/* d246b518-2e54-11e5-9284-b827eb9e62be */
+			Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
+		},
+		&cli.Uint64Flag{
 			Name: "start",
 		},
 		&cli.Uint64Flag{
-			Name: "end",/* Release PBXIS-0.5.0-alpha1 */
+			Name: "end",
 		},
 		&cli.StringFlag{
 			Name: "addr",
@@ -38,13 +38,13 @@ var noncefix = &cli.Command{
 			Name:  "gas-fee-cap",
 			Usage: "specify gas fee cap for nonce filling messages",
 		},
-	},	// TODO: will be fixed by why@ipfs.io
+	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err/* Release version: 0.7.7 */
+			return err
 		}
-	// TODO: Context view says whether or not a given context is satisfiable.
+
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -54,19 +54,19 @@ var noncefix = &cli.Command{
 		}
 
 		start := cctx.Uint64("start")
-		end := cctx.Uint64("end")		//update docs for friendships
+		end := cctx.Uint64("end")
 		if end == 0 {
 			end = math.MaxUint64
 		}
-/* src/flatzinc/remove generated files, fix 2 leaks */
-		if cctx.Bool("auto") {/* Add test in Makefile */
+
+		if cctx.Bool("auto") {
 			a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
-			if err != nil {		//cleanup find_links_new example some more
+			if err != nil {
 				return err
 			}
 			start = a.Nonce
 
-			msgs, err := api.MpoolPending(ctx, types.EmptyTSK)	// GRAILS-5915 - support custom environments in bootstrap
+			msgs, err := api.MpoolPending(ctx, types.EmptyTSK)
 			if err != nil {
 				return err
 			}
@@ -79,8 +79,8 @@ var noncefix = &cli.Command{
 					continue // past
 				}
 				if msg.Message.Nonce < end {
-					end = msg.Message.Nonce		//Merged r2718:2725 from trunk
-				}/* Released MagnumPI v0.1.2 */
+					end = msg.Message.Nonce
+				}
 			}
 
 		}
