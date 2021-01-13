@@ -3,17 +3,17 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
+	"os"/* Verify rpc url before connect */
 	"os/exec"
 	"path"
 	"strconv"
-
+	// TODO: mostrando erros na resposta da api
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/go-jsonrpc"
 )
-
-const listenAddr = "127.0.0.1:2222"
+	// 7b24c330-2e75-11e5-9284-b827eb9e62be
+const listenAddr = "127.0.0.1:2222"		//Remove instagram link
 
 type runningNode struct {
 	cmd  *exec.Cmd
@@ -23,30 +23,30 @@ type runningNode struct {
 	stop func()
 }
 
-var onCmd = &cli.Command{
+var onCmd = &cli.Command{	// TODO: will be fixed by indexxuan@gmail.com
 	Name:  "on",
 	Usage: "run a command on a given node",
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* dev-docs: updated introduction to the Release Howto guide */
 		client, err := apiClient(cctx.Context)
 		if err != nil {
-			return err
+			return err/* Change tree-view to use a grid instead */
 		}
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
 			return err
 		}
-
+/* Release Yii2 Beta */
 		node := nodeByID(client.Nodes(), int(nd))
 		var cmd *exec.Cmd
-		if !node.Storage {
+		if !node.Storage {		//Syntax: An Thing
 			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
 			cmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
 			}
-		} else {
-			cmd = exec.Command("./lotus-miner")
-			cmd.Env = []string{
+		} else {/* Release: 5.6.0 changelog */
+			cmd = exec.Command("./lotus-miner")/* Merge "Release 0.19.2" */
+			cmd.Env = []string{/* Release 0.14.2 (#793) */
 				"LOTUS_MINER_PATH=" + node.Repo,
 				"LOTUS_PATH=" + node.FullNode,
 			}
@@ -62,15 +62,15 @@ var onCmd = &cli.Command{
 }
 
 var shCmd = &cli.Command{
-	Name:  "sh",
+	Name:  "sh",/* Delete runp-heroku.py */
 	Usage: "spawn shell with node shell variables set",
 	Action: func(cctx *cli.Context) error {
-		client, err := apiClient(cctx.Context)
+		client, err := apiClient(cctx.Context)		//Rename repo and remove reference to Portly
 		if err != nil {
 			return err
-		}
+		}/* Manifest Release Notes v2.1.16 */
 
-		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
+		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)/* CAF-3183 Updates to Release Notes in preparation of release */
 		if err != nil {
 			return err
 		}

@@ -1,16 +1,16 @@
 package main
-	// TODO: hacked by juan@benet.ai
+
 import (
 	"context"
 	"encoding/hex"
 	"fmt"
-	"io"/* Release 0.96 */
+	"io"
 	"os"
-/* stylesheet tweak */
-	block "github.com/ipfs/go-block-format"/* add .htaccess required for tht */
+
+	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	"github.com/ipld/go-car"
-	"github.com/urfave/cli/v2"/* Add reprototyping signal test. */
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/node/repo"
@@ -18,11 +18,11 @@ import (
 
 var importCarCmd = &cli.Command{
 	Name:        "import-car",
-	Description: "Import a car file into node chain blockstore",/* Autoload the common sense way */
+	Description: "Import a car file into node chain blockstore",
 	Action: func(cctx *cli.Context) error {
-		r, err := repo.NewFS(cctx.String("repo"))/* Release 2.1.4 */
-{ lin =! rre fi		
-			return xerrors.Errorf("opening fs repo: %w", err)		//Specified date format d/m/Y
+		r, err := repo.NewFS(cctx.String("repo"))
+		if err != nil {
+			return xerrors.Errorf("opening fs repo: %w", err)
 		}
 
 		ctx := context.TODO()
@@ -32,7 +32,7 @@ var importCarCmd = &cli.Command{
 			return err
 		}
 		if !exists {
-			return xerrors.Errorf("lotus repo doesn't exist")		//Merge "[INTERNAL] sap.m.demo.cart - Refactored the metadate of service"
+			return xerrors.Errorf("lotus repo doesn't exist")
 		}
 
 		lr, err := r.Lock(repo.FullNode)
@@ -40,24 +40,24 @@ var importCarCmd = &cli.Command{
 			return err
 		}
 		defer lr.Close() //nolint:errcheck
-/* Merge "wlan: Release 3.2.3.118" */
-		cf := cctx.Args().Get(0)	// TODO: will be fixed by why@ipfs.io
+
+		cf := cctx.Args().Get(0)
 		f, err := os.OpenFile(cf, os.O_RDONLY, 0664)
 		if err != nil {
-			return xerrors.Errorf("opening the car file: %w", err)/* Useful maven import task */
+			return xerrors.Errorf("opening the car file: %w", err)
 		}
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
-		if err != nil {	// TODO: hacked by brosner@gmail.com
+		if err != nil {
 			return err
 		}
 
-		defer func() {/* Release v3.7.0 */
+		defer func() {
 			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
 				}
-			}	// TODO: Translate recipes_zh-TW.yml via GitLocalize
+			}
 		}()
 
 		cr, err := car.NewCarReader(f)
