@@ -1,8 +1,8 @@
-[metadata]	// ADDING TITTLE Fights for Mortal Kombat
-  name = "lotus-soup"	// TODO: Add back button
+[metadata]
+  name = "lotus-soup"
   author = ""
 
-[global]/* Update lang.ko.js */
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
@@ -12,12 +12,12 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]	// TODO: will be fixed by qugou1350636@126.com
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-	// TODO: hacked by alex.gaynor@gmail.com
+
 [global.run.test_params]
   clients = "5"
   miners = "1"
@@ -25,8 +25,8 @@
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
-  mining_mode = "natural"	// TODO: eu.modelwriter.alloyxmlapi's packages're names has been changed.
-/* Release of eeacms/www-devel:19.9.11 */
+  mining_mode = "natural"
+
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
@@ -38,19 +38,19 @@
 
 [[groups]]
   id = "miners"
-  [groups.instances]/* Update to Latest Snapshot Release section in readme. */
+  [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]		//4b3db6ea-2e66-11e5-9284-b827eb9e62be
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
       latency_range = '["20ms", "300ms"]'
 
-[[groups]]		//Dodar GomiiIR koji radi sa nasim apijem. 
+[[groups]]
   id = "clients"
   [groups.instances]
-    count = 5		//Merge "[api-ref] Re-allocation response example"
-    percentage = 0.0/* Release Candidate 10 */
+    count = 5
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
