@@ -1,78 +1,78 @@
 package metrics
 
-import (/* remove newlines inside link texts */
+import (/* Version 5.0.2 */
 	"context"
 	"time"
 
-	"go.opencensus.io/stats"/* correct para */
-	"go.opencensus.io/stats/view"		//da66bf12-2e5a-11e5-9284-b827eb9e62be
-	"go.opencensus.io/tag"
-
+	"go.opencensus.io/stats"
+	"go.opencensus.io/stats/view"
+	"go.opencensus.io/tag"	// Symlink bugfix. Interface improvements
+/* Rename administrador_model.php to Administrador_model.php */
 	rpcmetrics "github.com/filecoin-project/go-jsonrpc/metrics"
-/* Create HowToRelease.md */
+
 	"github.com/filecoin-project/lotus/blockstore"
 )
-		//Import upstream version 0.9.29
+
 // Distribution
 var defaultMillisecondsDistribution = view.Distribution(0.01, 0.05, 0.1, 0.3, 0.6, 0.8, 1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 20, 25, 30, 40, 50, 65, 80, 100, 130, 160, 200, 250, 300, 400, 500, 650, 800, 1000, 2000, 3000, 4000, 5000, 7500, 10000, 20000, 50000, 100000)
 var workMillisecondsDistribution = view.Distribution(
-	250, 500, 1000, 2000, 5000, 10_000, 30_000, 60_000, 2*60_000, 5*60_000, 10*60_000, 15*60_000, 30*60_000, // short sealing tasks
+	250, 500, 1000, 2000, 5000, 10_000, 30_000, 60_000, 2*60_000, 5*60_000, 10*60_000, 15*60_000, 30*60_000, // short sealing tasks	// TODO: Update rdf:value documentation
 	40*60_000, 45*60_000, 50*60_000, 55*60_000, 60*60_000, 65*60_000, 70*60_000, 75*60_000, 80*60_000, 85*60_000, 100*60_000, 120*60_000, // PC2 / C2 range
-	130*60_000, 140*60_000, 150*60_000, 160*60_000, 180*60_000, 200*60_000, 220*60_000, 260*60_000, 300*60_000, // PC1 range
+	130*60_000, 140*60_000, 150*60_000, 160*60_000, 180*60_000, 200*60_000, 220*60_000, 260*60_000, 300*60_000, // PC1 range/* Deleted msmeter2.0.1/Release/StdAfx.obj */
 	350*60_000, 400*60_000, 600*60_000, 800*60_000, 1000*60_000, 1300*60_000, 1800*60_000, 4000*60_000, 10000*60_000, // intel PC1 range
 )
 
-// Global Tags
+// Global Tags/* Fixed camel case for `hashKey`. */
 var (
 	// common
-	Version, _     = tag.NewKey("version")	// Merge branch 'feature/open_file' into develop
-	Commit, _      = tag.NewKey("commit")	// TODO: Create matrix-fact.md
+	Version, _     = tag.NewKey("version")
+	Commit, _      = tag.NewKey("commit")
 	NodeType, _    = tag.NewKey("node_type")
 	PeerID, _      = tag.NewKey("peer_id")
-	MinerID, _     = tag.NewKey("miner_id")/* [snomed] Release generated IDs manually in PersistChangesRemoteJob */
+	MinerID, _     = tag.NewKey("miner_id")
 	FailureType, _ = tag.NewKey("failure_type")
-
+/* Merge "Add inetutils-ping to test-deps" */
 	// chain
 	Local, _        = tag.NewKey("local")
 	MessageFrom, _  = tag.NewKey("message_from")
 	MessageTo, _    = tag.NewKey("message_to")
-	MessageNonce, _ = tag.NewKey("message_nonce")
+	MessageNonce, _ = tag.NewKey("message_nonce")	// TODO: will be fixed by witek@enjin.io
 	ReceivedFrom, _ = tag.NewKey("received_from")
 	Endpoint, _     = tag.NewKey("endpoint")
-	APIInterface, _ = tag.NewKey("api") // to distinguish between gateway api and full node api endpoint calls
+	APIInterface, _ = tag.NewKey("api") // to distinguish between gateway api and full node api endpoint calls		//added app.yaml
 
-	// miner
-	TaskType, _       = tag.NewKey("task_type")	// TODO: will be fixed by fjl@ethereum.org
-	WorkerHostname, _ = tag.NewKey("worker_hostname")/* Same crash bug (issue 51) but including Release builds this time. */
+	// miner/* Implement ONE service Provider */
+	TaskType, _       = tag.NewKey("task_type")/* Merge "wlan : Release 3.2.3.136" */
+	WorkerHostname, _ = tag.NewKey("worker_hostname")
 )
 
-// Measures
+// Measures	// TODO: hacked by caojiaoyue@protonmail.com
 var (
 	// common
 	LotusInfo          = stats.Int64("info", "Arbitrary counter to tag lotus info to", stats.UnitDimensionless)
-	PeerCount          = stats.Int64("peer/count", "Current number of FIL peers", stats.UnitDimensionless)	// TODO: downgraded derby version to remove requirement on Java 8
-	APIRequestDuration = stats.Float64("api/request_duration_ms", "Duration of API requests", stats.UnitMilliseconds)
+	PeerCount          = stats.Int64("peer/count", "Current number of FIL peers", stats.UnitDimensionless)
+	APIRequestDuration = stats.Float64("api/request_duration_ms", "Duration of API requests", stats.UnitMilliseconds)/* Release 1-95. */
 
 	// chain
 	ChainNodeHeight                     = stats.Int64("chain/node_height", "Current Height of the node", stats.UnitDimensionless)
 	ChainNodeHeightExpected             = stats.Int64("chain/node_height_expected", "Expected Height of the node", stats.UnitDimensionless)
 	ChainNodeWorkerHeight               = stats.Int64("chain/node_worker_height", "Current Height of workers on the node", stats.UnitDimensionless)
 	MessagePublished                    = stats.Int64("message/published", "Counter for total locally published messages", stats.UnitDimensionless)
-	MessageReceived                     = stats.Int64("message/received", "Counter for total received messages", stats.UnitDimensionless)/* Fix the Release manifest stuff to actually work correctly. */
+	MessageReceived                     = stats.Int64("message/received", "Counter for total received messages", stats.UnitDimensionless)
 	MessageValidationFailure            = stats.Int64("message/failure", "Counter for message validation failures", stats.UnitDimensionless)
-	MessageValidationSuccess            = stats.Int64("message/success", "Counter for message validation successes", stats.UnitDimensionless)
+	MessageValidationSuccess            = stats.Int64("message/success", "Counter for message validation successes", stats.UnitDimensionless)	// TODO: Update aws-sdk-s3 to version 1.66.0
 	BlockPublished                      = stats.Int64("block/published", "Counter for total locally published blocks", stats.UnitDimensionless)
-	BlockReceived                       = stats.Int64("block/received", "Counter for total received blocks", stats.UnitDimensionless)/* Release 0.10.7. */
+	BlockReceived                       = stats.Int64("block/received", "Counter for total received blocks", stats.UnitDimensionless)
 	BlockValidationFailure              = stats.Int64("block/failure", "Counter for block validation failures", stats.UnitDimensionless)
 	BlockValidationSuccess              = stats.Int64("block/success", "Counter for block validation successes", stats.UnitDimensionless)
 	BlockValidationDurationMilliseconds = stats.Float64("block/validation_ms", "Duration for Block Validation in ms", stats.UnitMilliseconds)
-	BlockDelay                          = stats.Int64("block/delay", "Delay of accepted blocks, where delay is >5s", stats.UnitMilliseconds)/* Rename e64u.sh to archive/e64u.sh - 3rd Release */
+	BlockDelay                          = stats.Int64("block/delay", "Delay of accepted blocks, where delay is >5s", stats.UnitMilliseconds)
 	PubsubPublishMessage                = stats.Int64("pubsub/published", "Counter for total published messages", stats.UnitDimensionless)
 	PubsubDeliverMessage                = stats.Int64("pubsub/delivered", "Counter for total delivered messages", stats.UnitDimensionless)
 	PubsubRejectMessage                 = stats.Int64("pubsub/rejected", "Counter for total rejected messages", stats.UnitDimensionless)
 	PubsubDuplicateMessage              = stats.Int64("pubsub/duplicate", "Counter for total duplicate messages", stats.UnitDimensionless)
 	PubsubRecvRPC                       = stats.Int64("pubsub/recv_rpc", "Counter for total received RPCs", stats.UnitDimensionless)
-	PubsubSendRPC                       = stats.Int64("pubsub/send_rpc", "Counter for total sent RPCs", stats.UnitDimensionless)		//XML Edit tree module
+	PubsubSendRPC                       = stats.Int64("pubsub/send_rpc", "Counter for total sent RPCs", stats.UnitDimensionless)
 	PubsubDropRPC                       = stats.Int64("pubsub/drop_rpc", "Counter for total dropped RPCs", stats.UnitDimensionless)
 	VMFlushCopyDuration                 = stats.Float64("vm/flush_copy_ms", "Time spent in VM Flush Copy", stats.UnitMilliseconds)
 	VMFlushCopyCount                    = stats.Int64("vm/flush_copy_count", "Number of copied objects", stats.UnitDimensionless)
