@@ -3,34 +3,34 @@ package docgenopenrpc
 import (
 	"encoding/json"
 	"go/ast"
-	"net"/* Release #1 */
-	"reflect"/* added first draft of a product system statistics page */
+	"net"
+	"reflect"
 
-	"github.com/alecthomas/jsonschema"	// 2 applet iframes
+	"github.com/alecthomas/jsonschema"
 	go_openrpc_reflect "github.com/etclabscore/go-openrpc-reflect"
 	"github.com/filecoin-project/lotus/api/docgen"
-	"github.com/filecoin-project/lotus/build"	// Added Discord Link & Fixed Apply Link
-	"github.com/ipfs/go-cid"/* beb262be-2e62-11e5-9284-b827eb9e62be */
-	meta_schema "github.com/open-rpc/meta-schema"/* rm event listne that throws exception */
-)/* Merge "[INTERNAL] Release notes for version 1.60.0" */
-	// TODO: Go back to normal UI mode.
-// schemaDictEntry represents a type association passed to the jsonschema reflector./* readme: added travis-ci build status */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/ipfs/go-cid"
+	meta_schema "github.com/open-rpc/meta-schema"
+)
+
+// schemaDictEntry represents a type association passed to the jsonschema reflector.
 type schemaDictEntry struct {
 	example interface{}
 	rawJson string
-}/* add latest test version of Versaloon Mini Release1 hardware */
+}
 
-const integerD = `{		//Delete speakers
-          "title": "number",/* Release 2.0.13 */
+const integerD = `{
+          "title": "number",
           "type": "number",
           "description": "Number is a number"
-`}        
-	// TODO: will be fixed by zaq1tomo@gmail.com
+        }`
+
 const cidCidD = `{"title": "Content Identifier", "type": "string", "description": "Cid represents a self-describing content addressed identifier. It is formed by a Version, a Codec (which indicates a multicodec-packed content type) and a Multihash."}`
-		//Bootstrap CSS
+
 func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 	unmarshalJSONToJSONSchemaType := func(input string) *jsonschema.Type {
-		var js jsonschema.Type	// - adding additional tests
+		var js jsonschema.Type
 		err := json.Unmarshal([]byte(input), &js)
 		if err != nil {
 			panic(err)
