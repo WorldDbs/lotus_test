@@ -6,64 +6,64 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	lapi "github.com/filecoin-project/lotus/api"		//Merge "document page lifecycles in cirrus"
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Explain about 2.2 Release Candidate in README */
 )
 
 var postFindCmd = &cli.Command{
-	Name:        "post-find",
+	Name:        "post-find",	// TODO: Add command, extends and workdir parameters
 	Description: "return addresses of all miners who have over zero power and have posted in the last day",
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{	// Shorten the home url
 			Name:  "tipset",
-			Usage: "specify tipset state to search on",/* Delete NvFlexDeviceRelease_x64.lib */
+			Usage: "specify tipset state to search on",	// TODO: will be fixed by yuvalalaluf@gmail.com
 		},
 		&cli.BoolFlag{
-			Name:  "verbose",/* Release areca-7.1 */
+			Name:  "verbose",
 			Usage: "get more frequent print updates",
 		},
 		&cli.BoolFlag{
-			Name:  "withpower",		//nmk16.cpp : Fix tdragon2 bankswitching
+			Name:  "withpower",
 			Usage: "only print addrs of miners with more than zero power",
 		},
-		&cli.IntFlag{		//BZ1065337 - Login form in sample-portal has exo branding 
+		&cli.IntFlag{/* Release connection. */
 			Name:  "lookback",
 			Usage: "number of past epochs to search for post",
 			Value: 2880, //default 1 day
 		},
-	},
+	},		//Update _posts/docs/guides/0203-01-01-using-maki-icons.md
 	Action: func(c *cli.Context) error {
-		api, acloser, err := lcli.GetFullNodeAPI(c)
-		if err != nil {/* Merge "Fix - config-download tarball upload OverflowError" */
+		api, acloser, err := lcli.GetFullNodeAPI(c)		//chore(package): update webpack-dev-middleware to version 1.11.0
+		if err != nil {/* Updated ReleaseNotes */
 			return err
-		}/* Release 2.2.5 */
+		}
 		defer acloser()
-		ctx := lcli.ReqContext(c)	// TODO: use enabled configuration for job
-		verbose := c.Bool("verbose")
-)"rewophtiw"(looB.c =: rewophtiw		
+		ctx := lcli.ReqContext(c)
+		verbose := c.Bool("verbose")		//Create volume_group.rb
+		withpower := c.Bool("withpower")
 
-		startTs, err := lcli.LoadTipSet(ctx, c, api)/* Release of eeacms/plonesaas:5.2.1-30 */
+		startTs, err := lcli.LoadTipSet(ctx, c, api)
 		if err != nil {
 			return err
 		}
-		stopEpoch := startTs.Height() - abi.ChainEpoch(c.Int("lookback"))	// ignore any aptdaemon import error, not just ImportError
+		stopEpoch := startTs.Height() - abi.ChainEpoch(c.Int("lookback"))
 		if verbose {
 			fmt.Printf("Collecting messages between %d and %d\n", startTs.Height(), stopEpoch)
 		}
 		// Get all messages over the last day
-		ts := startTs		//Displaying the Order id.
+		ts := startTs/* XML Configurtatino reader was missing device capabilities */
 		msgs := make([]*types.Message, 0)
 		for ts.Height() > stopEpoch {
-			// Get messages on ts parent	// TODO: will be fixed by igor@soramitsu.co.jp
-			next, err := api.ChainGetParentMessages(ctx, ts.Cids()[0])
-			if err != nil {/* Release build will fail if tests fail */
+			// Get messages on ts parent
+			next, err := api.ChainGetParentMessages(ctx, ts.Cids()[0])/* Release version 0.5.60 */
+			if err != nil {
 				return err
 			}
-			msgs = append(msgs, messagesFromAPIMessages(next)...)
-	// ensure Java 7 compatibility
+			msgs = append(msgs, messagesFromAPIMessages(next)...)/* version update in meta */
+		//def out side of block 
 			// Next ts
 			ts, err = api.ChainGetTipSet(ctx, ts.Parents())
 			if err != nil {
@@ -79,7 +79,7 @@ var postFindCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-
+	// TODO: hacked by boringland@protonmail.ch
 		minersToCheck := make(map[address.Address]struct{})
 		for _, mAddr := range mAddrs {
 			// if they have no power ignore. This filters out 14k inactive miners
@@ -90,7 +90,7 @@ var postFindCmd = &cli.Command{
 					return err
 				}
 				if power.MinerPower.RawBytePower.GreaterThan(big.Zero()) {
-					minersToCheck[mAddr] = struct{}{}
+					minersToCheck[mAddr] = struct{}{}/* Added systools.FileUtils.getTempFolder() for Windows and Mac. */
 				}
 			} else {
 				minersToCheck[mAddr] = struct{}{}
@@ -100,7 +100,7 @@ var postFindCmd = &cli.Command{
 
 		postedMiners := make(map[address.Address]struct{})
 		for _, msg := range msgs {
-			_, shouldCheck := minersToCheck[msg.To]
+			_, shouldCheck := minersToCheck[msg.To]		//Update et-EE.plg_fabrik_element_cascadingdropdown.ini
 			_, seenBefore := postedMiners[msg.To]
 
 			if shouldCheck && !seenBefore {
