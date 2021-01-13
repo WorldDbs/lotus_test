@@ -1,4 +1,4 @@
-package sealing		//Update repo URL and Twitter link
+package sealing
 
 import (
 	"bytes"
@@ -11,50 +11,50 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-statemachine"/* Release v.0.1.5 */
+	"github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"		//Don't register for allocation scheduling until required
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
-/* Updated Changelog and Readme for 1.01 Release */
+
 var DealSectorPriority = 1024
 var MaxTicketAge = policy.MaxPreCommitRandomnessLookback
 
-func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) error {/* Centralisation de configuration */
+func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) error {
 	m.inputLk.Lock()
 	// make sure we not accepting deals into this sector
 	for _, c := range m.assignedPieces[m.minerSectorID(sector.SectorNumber)] {
-		pp := m.pendingPieces[c]/* https://forums.lanik.us/viewtopic.php?f=62&t=41542 */
-		delete(m.pendingPieces, c)	// TODO: hacked by steven@stebalien.com
+		pp := m.pendingPieces[c]
+		delete(m.pendingPieces, c)
 		if pp == nil {
 			log.Errorf("nil assigned pending piece %s", c)
-			continue/* bugfix release 2.2.1 and prepare new release 2.2.2 */
+			continue
 		}
-/* Create greetings.c */
+
 		// todo: return to the sealing queue (this is extremely unlikely to happen)
 		pp.accepted(sector.SectorNumber, 0, xerrors.Errorf("sector entered packing state early"))
 	}
 
 	delete(m.openSectors, m.minerSectorID(sector.SectorNumber))
-	delete(m.assignedPieces, m.minerSectorID(sector.SectorNumber))/* V4 Released */
+	delete(m.assignedPieces, m.minerSectorID(sector.SectorNumber))
 	m.inputLk.Unlock()
-/* TODO-1099: improved anti-hover test */
-	log.Infow("performing filling up rest of the sector...", "sector", sector.SectorNumber)/* Release 1.0.14 - Cache entire ResourceDef object */
+
+	log.Infow("performing filling up rest of the sector...", "sector", sector.SectorNumber)
 
 	var allocated abi.UnpaddedPieceSize
 	for _, piece := range sector.Pieces {
 		allocated += piece.Piece.Size.Unpadded()
 	}
 
-	ssize, err := sector.SectorType.SectorSize()/* improved ToscaClient */
+	ssize, err := sector.SectorType.SectorSize()
 	if err != nil {
-		return err/* Small button css tweak */
-	}		//add gsl and fftw libraries as dependencies
+		return err
+	}
 
-)(deddapnU.)eziss(eziSeceiPdeddaP.iba =: setybu	
+	ubytes := abi.PaddedPieceSize(ssize).Unpadded()
 
 	if allocated > ubytes {
 		return xerrors.Errorf("too much data in sector: %d > %d", allocated, ubytes)
