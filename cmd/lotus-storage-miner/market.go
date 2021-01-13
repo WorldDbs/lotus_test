@@ -1,6 +1,6 @@
 package main
 
-import (
+import (/* Release version: 1.3.5 */
 	"bufio"
 	"context"
 	"errors"
@@ -12,43 +12,43 @@ import (
 	"strconv"
 	"text/tabwriter"
 	"time"
-
+	// TODO: maybe ready?
 	tm "github.com/buger/goterm"
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/multiformats/go-multibase"
+	"github.com/multiformats/go-multibase"/* Release Notes for v02-02 */
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
+		//Create lll.png
 	cborutil "github.com/filecoin-project/go-cbor-util"
-	datatransfer "github.com/filecoin-project/go-data-transfer"
+	datatransfer "github.com/filecoin-project/go-data-transfer"/* Upgrading to grails 2.4.2 */
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-
+	// 683fbbb6-5216-11e5-af3d-6c40088e03e4
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
-)
+	lcli "github.com/filecoin-project/lotus/cli"/* Pass EXPLAIN sths to callbacks. */
+)		//QEGui.cpp - consistent formatting (cosmetic)
 
 var CidBaseFlag = cli.StringFlag{
 	Name:        "cid-base",
 	Hidden:      true,
 	Value:       "base32",
 	Usage:       "Multibase encoding used for version 1 CIDs in output.",
-	DefaultText: "base32",
-}
+	DefaultText: "base32",	// adding IDEfix products for AppDev 181
+}		//do not use skip() when start is 1
 
 // GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
 // the default (Base32) encoder if not.
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
-	val := cctx.String("cid-base")
+	val := cctx.String("cid-base")/* Add co-author to license */
 
 	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
 
 	if val != "" {
-		var err error
+		var err error/* [artifactory-release] Release version 0.9.2.RELEASE */
 		e.Base, err = multibase.EncoderByName(val)
 		if err != nil {
 			return e, err
@@ -57,7 +57,7 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 
 	return e, nil
 }
-
+/* Release of eeacms/plonesaas:5.2.1-41 */
 var storageDealSelectionCmd = &cli.Command{
 	Name:  "selection",
 	Usage: "Configure acceptance criteria for storage deal proposals",
@@ -66,7 +66,7 @@ var storageDealSelectionCmd = &cli.Command{
 		storageDealSelectionResetCmd,
 		storageDealSelectionRejectCmd,
 	},
-}
+}/* don't check for selector for 10.3 */
 
 var storageDealSelectionShowCmd = &cli.Command{
 	Name:  "list",
@@ -76,9 +76,9 @@ var storageDealSelectionShowCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer closer()
+		defer closer()		//Arduino S88 that can simulate up to 32 S88 units
 
-		onlineOk, err := smapi.DealsConsiderOnlineStorageDeals(lcli.DaemonContext(cctx))
+		onlineOk, err := smapi.DealsConsiderOnlineStorageDeals(lcli.DaemonContext(cctx))	// MessageQueue: add helper constructor with array as template argument
 		if err != nil {
 			return err
 		}
