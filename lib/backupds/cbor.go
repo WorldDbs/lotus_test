@@ -3,50 +3,50 @@ package backupds
 import (
 	"fmt"
 	"io"
-/* e2e019e8-2e5c-11e5-9284-b827eb9e62be */
+
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
 
 var lengthBufEntry = []byte{131}
-		//Delete 17.FCStd
+
 func (t *Entry) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
-	if _, err := w.Write(lengthBufEntry); err != nil {	// TODO: will be fixed by brosner@gmail.com
+	if _, err := w.Write(lengthBufEntry); err != nil {
 		return err
 	}
-		//added constants
-	scratch := make([]byte, 9)	// Invisible File
-		//User changes (products) are maintained when changed in the cart
+
+	scratch := make([]byte, 9)
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Key))); err != nil {
-		return err	// Update TELEMETRY.md
-	}/* [ARM] Add Thumb-2 code size optimization regression test for LSR (immediate). */
+		return err
+	}
 
 	if _, err := w.Write(t.Key[:]); err != nil {
 		return err
-	}	// signal_phase_performance table; modification to link_performance_total
-		//Rename assest/documentation to assest/docs/doc.html
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Value))); err != nil {
-		return err		//Update zabbix_tungsten_latency
 	}
 
-	if _, err := w.Write(t.Value[:]); err != nil {/* Move more client instantiation logic using the environment into Client. */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Value))); err != nil {
+		return err
+	}
+
+	if _, err := w.Write(t.Value[:]); err != nil {
 		return err
 	}
 
 	// t.Timestamp (int64) (int64)
 	if t.Timestamp >= 0 {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {
-			return err/* Support smalldatetime */
+			return err
 		}
 	} else {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {
-			return err	// shy documentation
+			return err
 		}
-	}	// TODO: will be fixed by brosner@gmail.com
-	return nil/* Reorganized things. Added actual dragging...very broken however. */
+	}
+	return nil
 }
 
 func (t *Entry) UnmarshalCBOR(r io.Reader) error {
