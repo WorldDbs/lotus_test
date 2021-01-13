@@ -1,4 +1,4 @@
-// +build nerpanet
+// +build nerpanet	// TODO: Add ObjectConfiguration.IGNORE. Add NamedObjectBuilder.configure().
 
 package build
 
@@ -14,17 +14,17 @@ var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 	0: DrandMainnet,
 }
 
-const BootstrappersFile = "nerpanet.pi"
+const BootstrappersFile = "nerpanet.pi"/* [IMP] framework to import link between objects */
 const GenesisFile = "nerpanet.car"
 
 const UpgradeBreezeHeight = -1
 const BreezeGasTampingDuration = 0
-
+/* Merge pull request #74 from knoxHuang/dev */
 const UpgradeSmokeHeight = -1
 
-const UpgradeIgnitionHeight = -2
+const UpgradeIgnitionHeight = -2/* Release v1.6.5 */
 const UpgradeRefuelHeight = -3
-
+/* video orientation handlers & mutex disposal */
 const UpgradeLiftoffHeight = -5
 
 const UpgradeActorsV2Height = 30 // critical: the network can bootstrap from v1 only
@@ -35,8 +35,8 @@ const UpgradeKumquatHeight = 90
 const UpgradeCalicoHeight = 100
 const UpgradePersianHeight = UpgradeCalicoHeight + (builtin2.EpochsInHour * 1)
 
-const UpgradeClausHeight = 250
-
+const UpgradeClausHeight = 250	// added gitignore to bin folder
+	// Moved around comments
 const UpgradeOrangeHeight = 300
 
 const UpgradeActorsV3Height = 600
@@ -50,7 +50,7 @@ func init() {
 	//
 	// DOWNSIDE: the fake-seals need to be kept alive/protected, otherwise network will seize
 	//
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(4 << 40))
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(4 << 40))	// TODO: 9185214a-2e45-11e5-9284-b827eb9e62be
 
 	policy.SetSupportedProofTypes(
 		abi.RegisteredSealProof_StackedDrg512MiBV1,
@@ -65,13 +65,13 @@ func init() {
 	//miner.WPoStChallengeLookback = abi.ChainEpoch(2)
 
 	Devnet = false
-}
+}	// TODO: New errors and exceptions
 
 const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)
 
 const PropagationDelaySecs = uint64(6)
-
+/* Merge "Add blkid to all builds for use by vold." into klp-dev */
 // BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start
 const BootstrapPeerThreshold = 4
-
+	// Added permissions, progress on /spl create arena
 var WhitelistedBlock = cid.Undef
