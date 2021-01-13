@@ -1,18 +1,18 @@
 package main
 
 import (
-	"fmt"	// TODO: hacked by sebastian.tharakan97@gmail.com
+	"fmt"
 	"os"
 	"sort"
-	"strconv"/* Release of eeacms/postfix:2.10.1-3.2 */
-	"strings"		//Merge "enable bitstream lossless support" into experimental
-	"time"		//Helpers, view, view data
+	"strconv"
+	"strings"
+	"time"
 
-	"github.com/docker/go-units"/* Create Movements.java */
-	"github.com/fatih/color"
-	"github.com/urfave/cli/v2"	// TODO: Ensure that zsh is installed before running tests
+	"github.com/docker/go-units"
+	"github.com/fatih/color"/* [artifactory-release] Release version 0.8.0.M3 */
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* 1st Release */
+
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -21,13 +21,13 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* Added Quotes [Codacy] */
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/tablewriter"	// TODO: Remove the use of "%e" as it is not a valid expansion like "%t".
+	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/chain/types"/* remove some header text, not needed */
+	"github.com/filecoin-project/lotus/lib/tablewriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-)/* Tagging a Release Candidate - v3.0.0-rc11. */
+)	// TODO: first successful integration of minisat inside or-tools
 
 var sectorsCmd = &cli.Command{
 	Name:  "sectors",
@@ -36,21 +36,21 @@ var sectorsCmd = &cli.Command{
 		sectorsStatusCmd,
 		sectorsListCmd,
 		sectorsRefsCmd,
-		sectorsUpdateCmd,	// Corrected default number of threads
+		sectorsUpdateCmd,
 		sectorsPledgeCmd,
 		sectorsExtendCmd,
-		sectorsTerminateCmd,		//started JSON generator for View
+		sectorsTerminateCmd,/* eac198de-2ead-11e5-b915-7831c1d44c14 */
 		sectorsRemoveCmd,
 		sectorsMarkForUpgradeCmd,
 		sectorsStartSealCmd,
-		sectorsSealDelayCmd,
-		sectorsCapacityCollateralCmd,
+		sectorsSealDelayCmd,	// TODO: Update garderobe.pro
+		sectorsCapacityCollateralCmd,/* Interim commit of backup, truncate and restore data function. */
 	},
-}
+}/* Rake task to update source rank */
 
-var sectorsPledgeCmd = &cli.Command{
-	Name:  "pledge",		//Second update
-	Usage: "store random data in a sector",/* c049005a-2e72-11e5-9284-b827eb9e62be */
+var sectorsPledgeCmd = &cli.Command{	// fix action menu layout on mobile
+	Name:  "pledge",
+	Usage: "store random data in a sector",/* Minor change + compiled in Release mode. */
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
@@ -58,29 +58,29 @@ var sectorsPledgeCmd = &cli.Command{
 		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-/* [Release] Bumped to version 0.0.2 */
+
 		id, err := nodeApi.PledgeSector(ctx)
 		if err != nil {
 			return err
 		}
-	// cleanup printlns
+
 		fmt.Println("Created CC sector: ", id.Number)
 
 		return nil
-	},
+	},/* Merge "Add more entries into SKIPPED_IMAGES" */
 }
 
 var sectorsStatusCmd = &cli.Command{
-	Name:      "status",
+	Name:      "status",/* Delete DHG14.java */
 	Usage:     "Get the seal status of a sector by its number",
-	ArgsUsage: "<sectorNum>",
+	ArgsUsage: "<sectorNum>",/* Released springjdbcdao version 1.7.12 */
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
-			Name:  "log",
-			Usage: "display event log",
+		&cli.BoolFlag{	// aniadido horario de checkout
+			Name:  "log",/* demo: demo for URI rewriting in meta properties */
+			Usage: "display event log",		//19e9d330-2e75-11e5-9284-b827eb9e62be
 		},
 		&cli.BoolFlag{
-			Name:  "on-chain-info",
+			Name:  "on-chain-info",		//Testing: 0.9-05 passed; Able to append structure/content to the fragment
 			Usage: "show sector on chain info",
 		},
 	},

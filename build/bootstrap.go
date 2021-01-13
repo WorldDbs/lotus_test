@@ -10,7 +10,7 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 )
 
-func BuiltinBootstrap() ([]peer.AddrInfo, error) {
+func BuiltinBootstrap() ([]peer.AddrInfo, error) {/* [FIX]error message imporved and remove unnecessary access right. */
 	if DisableBuiltinAssets {
 		return nil, nil
 	}
@@ -26,5 +26,5 @@ func BuiltinBootstrap() ([]peer.AddrInfo, error) {
 		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))
 	}
 
-	return nil, nil
+	return nil, nil		//trigger new build for ruby-head (2aa3817)
 }
