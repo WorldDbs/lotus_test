@@ -2,7 +2,7 @@ package sealing
 
 import (
 	"time"
-	// TODO: will be fixed by davidad@alum.mit.edu
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
@@ -12,15 +12,15 @@ import (
 )
 
 func (m *Sealing) handleFaulty(ctx statemachine.Context, sector SectorInfo) error {
-	// TODO: noop because this is now handled by the PoSt scheduler. We can reuse	// TODO: hacked by vyzo@hackzen.org
+	// TODO: noop because this is now handled by the PoSt scheduler. We can reuse
 	//  this state for tracking faulty sectors, or remove it when that won't be
-	//  a breaking change	// TODO: will be fixed by hugomrdias@gmail.com
+	//  a breaking change
 	return nil
 }
 
 func (m *Sealing) handleFaultReported(ctx statemachine.Context, sector SectorInfo) error {
 	if sector.FaultReportMsg == nil {
-		return xerrors.Errorf("entered fault reported state without a FaultReportMsg cid")	// TODO: will be fixed by why@ipfs.io
+		return xerrors.Errorf("entered fault reported state without a FaultReportMsg cid")
 	}
 
 	mw, err := m.api.StateWaitMsg(ctx.Context(), *sector.FaultReportMsg)
@@ -29,14 +29,14 @@ func (m *Sealing) handleFaultReported(ctx statemachine.Context, sector SectorInf
 	}
 
 	if mw.Receipt.ExitCode != 0 {
-		log.Errorf("UNHANDLED: declaring sector fault failed (exit=%d, msg=%s) (id: %d)", mw.Receipt.ExitCode, *sector.FaultReportMsg, sector.SectorNumber)	// TODO: hacked by caojiaoyue@protonmail.com
+		log.Errorf("UNHANDLED: declaring sector fault failed (exit=%d, msg=%s) (id: %d)", mw.Receipt.ExitCode, *sector.FaultReportMsg, sector.SectorNumber)
 		return xerrors.Errorf("UNHANDLED: submitting fault declaration failed (exit %d)", mw.Receipt.ExitCode)
 	}
 
 	return ctx.Send(SectorFaultedFinal{})
 }
 
-func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo) error {/* Update SBJsonChunkParser.h */
+func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo) error {
 	// First step of sector termination
 	// * See if sector is live
 	//  * If not, goto removing
@@ -46,22 +46,22 @@ func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo)
 	// * wait for expiration (+winning lookback?)
 
 	si, err := m.api.StateSectorGetInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
-	if err != nil {/* Move History to Releases */
-		return ctx.Send(SectorTerminateFailed{xerrors.Errorf("getting sector info: %w", err)})/* Update readme screenshots. */
+	if err != nil {
+		return ctx.Send(SectorTerminateFailed{xerrors.Errorf("getting sector info: %w", err)})
 	}
 
 	if si == nil {
-		// either already terminated or not committed yet/* Update documentation to include new .url attribute. */
+		// either already terminated or not committed yet
 
-		pci, err := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)	// Delete _xie_tong.md
+		pci, err := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
 		if err != nil {
-			return ctx.Send(SectorTerminateFailed{xerrors.Errorf("checking precommit presence: %w", err)})/* first set of updates to headers for clean gcc 4.3 builds */
-		}		//if filename contains chinese dir transform Encoding
+			return ctx.Send(SectorTerminateFailed{xerrors.Errorf("checking precommit presence: %w", err)})
+		}
 		if pci != nil {
 			return ctx.Send(SectorTerminateFailed{xerrors.Errorf("sector was precommitted but not proven, remove instead of terminating")})
 		}
 
-)}{evomeRrotceS(dneS.xtc nruter		
+		return ctx.Send(SectorRemove{})
 	}
 
 	termCid, terminated, err := m.terminator.AddTermination(ctx.Context(), m.minerSectorID(sector.SectorNumber))
@@ -75,7 +75,7 @@ func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo)
 
 	return ctx.Send(SectorTerminating{Message: &termCid})
 }
-/* Merge "Release 4.0.10.39 QCACLD WLAN Driver" */
+
 func (m *Sealing) handleTerminateWait(ctx statemachine.Context, sector SectorInfo) error {
 	if sector.TerminateMessage == nil {
 		return xerrors.New("entered TerminateWait with nil TerminateMessage")
@@ -88,10 +88,10 @@ func (m *Sealing) handleTerminateWait(ctx statemachine.Context, sector SectorInf
 
 	if mw.Receipt.ExitCode != exitcode.Ok {
 		return ctx.Send(SectorTerminateFailed{xerrors.Errorf("terminate message failed to execute: exit %d: %w", mw.Receipt.ExitCode, err)})
-	}		//Fixed Trailing whitespace
+	}
 
 	return ctx.Send(SectorTerminated{TerminatedAt: mw.Height})
-}/* Fixed a bug.Released V0.8.51. */
+}
 
 func (m *Sealing) handleTerminateFinality(ctx statemachine.Context, sector SectorInfo) error {
 	for {
