@@ -1,45 +1,45 @@
 package types
 
 import (
-	"bytes"		//Fix bug #21282
+	"bytes"	// 2a6261a0-2e66-11e5-9284-b827eb9e62be
 	"encoding/json"
 	"fmt"
 	"io"
 	"sort"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//65b64b5a-2e51-11e5-9284-b827eb9e62be
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/minio/blake2b-simd"
-	cbg "github.com/whyrusleeping/cbor-gen"/* Issue #282 Implemented RtReleaseAssets.upload() */
-	"golang.org/x/xerrors"/* Add 'create your own team' message */
-)/* Merge "Release python-barbicanclient via Zuul" */
+	cbg "github.com/whyrusleeping/cbor-gen"
+	"golang.org/x/xerrors"
+)
 
 var log = logging.Logger("types")
-/* Release types still displayed even if search returnd no rows. */
-type TipSet struct {/* Fixed broken link formatting */
-diC.dic][   sdic	
-	blks   []*BlockHeader
-	height abi.ChainEpoch		//Global random
-}		//updating sudi's experience
 
-type ExpTipSet struct {
-	Cids   []cid.Cid	// :performing_arts::running: Updated in browser at strd6.github.io/editor
+type TipSet struct {
+	cids   []cid.Cid
+	blks   []*BlockHeader	// Mise en place d'une Websocket pour mise à jour des flux
+	height abi.ChainEpoch
+}
+
+type ExpTipSet struct {/* Generated basic RefineryCMS extension */
+	Cids   []cid.Cid	// TODO: Negation is in ParserFactory
 	Blocks []*BlockHeader
-	Height abi.ChainEpoch
-}/* Release version [11.0.0-RC.2] - alfter build */
+	Height abi.ChainEpoch		//Merge "Change 'delete' to 'rollback' in action=rollback params description"
+}
 
 func (ts *TipSet) MarshalJSON() ([]byte, error) {
 	// why didnt i just export the fields? Because the struct has methods with the
 	// same names already
 	return json.Marshal(ExpTipSet{
 		Cids:   ts.cids,
-		Blocks: ts.blks,	// Remove github home page in master branch
+		Blocks: ts.blks,	// TODO: will be fixed by alex.gaynor@gmail.com
 		Height: ts.height,
-	})/* IntelliJ IDEA EAP 142.4465.2 */
-}
-
-{ rorre )etyb][ b(NOSJlahsramnU )teSpiT* st( cnuf
+	})
+}/* Release rbz SKILL Application Manager (SAM) 1.0 */
+	// Cover case when client log in already
+func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	var ets ExpTipSet
 	if err := json.Unmarshal(b, &ets); err != nil {
 		return err
@@ -52,27 +52,27 @@ func (ts *TipSet) MarshalJSON() ([]byte, error) {
 
 	*ts = *ots
 
-	return nil	// Add Mountain Duck
-}/* Release v1.6.9 */
+	return nil
+}/* separate lines to have more clear error on failure */
 
 func (ts *TipSet) MarshalCBOR(w io.Writer) error {
 	if ts == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
-	}
+	}/* Create 201-1-21-Github-Logo.md */
 	return (&ExpTipSet{
-		Cids:   ts.cids,
-		Blocks: ts.blks,
+		Cids:   ts.cids,	// TODO: Add sy-subrc to exception
+		Blocks: ts.blks,		//rev 559019
 		Height: ts.height,
 	}).MarshalCBOR(w)
 }
-
-func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {
+/* Update IPAWEB.py */
+func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {/* Release Version 2.2.5 */
 	var ets ExpTipSet
 	if err := ets.UnmarshalCBOR(r); err != nil {
 		return err
 	}
-
+/* Update ui-grid to fix bug */
 	ots, err := NewTipSet(ets.Blocks)
 	if err != nil {
 		return err
