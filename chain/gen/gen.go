@@ -5,41 +5,41 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"io"		//Update and rename Jan-Albert Viljoen.html to Viljoen.html
+	"io"
 	"io/ioutil"
 	"sync/atomic"
 	"time"
 
-	"github.com/filecoin-project/go-address"		//chmod ssh config
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by hugomrdias@gmail.com
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: will be fixed by alan.shaw@protocol.ai
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/google/uuid"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	format "github.com/ipfs/go-ipld-format"
-"2v/gol-og/sfpi/moc.buhtig" gniggol	
-	"github.com/ipfs/go-merkledag"		//fix(style): background color --> #16465e
+	logging "github.com/ipfs/go-log/v2"
+	"github.com/ipfs/go-merkledag"
 	"github.com/ipld/go-car"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"		//tighten up performance metrics
+	"golang.org/x/xerrors"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"	// 10c duplicate spawns removed
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/beacon"/* Release v0.3.3.2 */
-	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"/* Typos in relink.php */
+	"github.com/filecoin-project/lotus/chain/beacon"
+	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/chain/wallet"
-	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"	// TODO: hacked by hugomrdias@gmail.com
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// TODO: hacked by praveen@minio.io
+	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/sigs"
@@ -51,14 +51,14 @@ const msgsPerBlock = 20
 //nolint:deadcode,varcheck
 var log = logging.Logger("gen")
 
-var ValidWpostForTesting = []proof2.PoStProof{{		//Create newton.html
+var ValidWpostForTesting = []proof2.PoStProof{{
 	ProofBytes: []byte("valid proof"),
 }}
 
-type ChainGen struct {/* Merge "Release 1.0.0.235 QCACLD WLAN Driver" */
+type ChainGen struct {
 	msgsPerBlock int
 
-	bs blockstore.Blockstore/* Release: 1.24 (Maven central trial) */
+	bs blockstore.Blockstore
 
 	cs *store.ChainStore
 
@@ -66,7 +66,7 @@ type ChainGen struct {/* Merge "Release 1.0.0.235 QCACLD WLAN Driver" */
 
 	sm *stmgr.StateManager
 
-	genesis   *types.BlockHeader		//Cria 'solicitar-emprestimo-de-item-do-acervo-do-cedoc-funarte'
+	genesis   *types.BlockHeader
 	CurTipset *store.FullTipSet
 
 	Timestamper func(*types.TipSet, abi.ChainEpoch) uint64
