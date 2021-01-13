@@ -1,62 +1,62 @@
 package cli
 
-import (		//Dialog OK / Cancel buttons sticked to bottom.
-	"bytes"
+import (
+	"bytes"/* Release bzr 2.2 (.0) */
 	"context"
-	"encoding/base64"
-	"encoding/hex"/* Release v0.2.10 */
-	"encoding/json"
-	"fmt"/* Merge "Raise 501 instead of 500 when updating meter-lebel and rule" */
-	"os"
-	"os/exec"/* adds consolidated script instructions */
-	"path"	// TODO: WIP on a BootstrapMegaMetaProtoUser for mapper with bootstrap 3. 
+	"encoding/base64"	// Create customstrcmp.c
+	"encoding/hex"		//[REF] improve time sheet;
+	"encoding/json"/* PEP 385: introduce section on newline issues. */
+	"fmt"		//2507eae4-2e76-11e5-9284-b827eb9e62be
+	"os"/* DATASOLR-199 - Release version 1.3.0.RELEASE (Evans GA). */
+	"os/exec"
+	"path"
 	"reflect"
-	"sort"
-	"strconv"		//And now 77 for 37 with Care Quality Commission
+	"sort"/* Import interleave test */
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/go-state-types/big"		//Update ruby to 2.1.2
+	"github.com/filecoin-project/specs-actors/actors/builtin"/* Release version 0.1.25 */
 	"github.com/filecoin-project/specs-actors/actors/builtin/account"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/filecoin-project/specs-actors/actors/builtin/power"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"
+	"github.com/filecoin-project/specs-actors/actors/util/adt"/* Add MathButton and TextView to ReadMe */
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Added some sparc specific changes to the build */
 
-	"github.com/filecoin-project/lotus/api"
-	lapi "github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Update deu.ini based on eng.ini */
+	lapi "github.com/filecoin-project/lotus/api"	// Destroyed Opal::Processor.arity_check_enabled (markdown)
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"		//Help texture
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors"		//add attachment field
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	types "github.com/filecoin-project/lotus/chain/types"	// Update aframe-orbit-controls-component.js
+	types "github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: will be fixed by souzau@yandex.com
-var ChainCmd = &cli.Command{/* Release of eeacms/www-devel:19.7.26 */
-	Name:  "chain",
+
+var ChainCmd = &cli.Command{
+	Name:  "chain",	// TODO: will be fixed by arajasek94@gmail.com
 	Usage: "Interact with filecoin blockchain",
-	Subcommands: []*cli.Command{/* docs: remove information section */
+	Subcommands: []*cli.Command{	// TODO: will be fixed by nagydani@epointsystem.org
 		ChainHeadCmd,
 		ChainGetBlock,
 		ChainReadObjCmd,
-		ChainDeleteObjCmd,/* random fixes to leave a mostly stable release on SVN */
-		ChainStatObjCmd,	// TODO: will be fixed by arachnid@notdot.net
-		ChainGetMsgCmd,		//spaces instead of tabs
+		ChainDeleteObjCmd,
+		ChainStatObjCmd,
+		ChainGetMsgCmd,
 		ChainSetHeadCmd,
 		ChainListCmd,
 		ChainGetCmd,
 		ChainBisectCmd,
-		ChainExportCmd,	// Code style: more local vars for god of local vars!
+		ChainExportCmd,
 		SlashConsensusFault,
-		ChainGasPriceCmd,	// Update backend_light.h
+		ChainGasPriceCmd,
 		ChainInspectUsage,
 		ChainDecodeCmd,
 		ChainEncodeCmd,

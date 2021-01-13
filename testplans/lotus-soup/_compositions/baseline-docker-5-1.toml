@@ -1,55 +1,55 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
-
-[global]
+  author = ""/* Deleted GithubReleaseUploader.dll */
+		//python-magic 5.29 paketlendi.
+[global]	// TODO: complete data source logic
   plan = "lotus-soup"
-  case = "deals-e2e"
-  total_instances = 7
-  builder = "docker:go"/* Release v1.2.4 */
+  case = "deals-e2e"		//first site checkin
+  total_instances = 7	// TODO: Updating build-info/dotnet/corert/master for alpha-26821-02
+  builder = "docker:go"
   runner = "local:docker"
-
+/* Merge "Release note for mysql 8 support" */
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]	// TODO: will be fixed by steven@stebalien.com
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Released version 0.8.40 */
-		//Add insert/put JSON endpoints to RestService.
-[global.build_config]/* Mock with Mocka */
-  enable_go_build_cache = true
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
+[global.build_config]
+  enable_go_build_cache = true
+/* added Apache Releases repository */
 [global.run.test_params]
-  clients = "5"	// TODO: Automatic changelog generation for PR #8640 [ci skip]
+  clients = "5"
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "5"
+  sectors = "5"/* Correção de erros Sonar. */
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]
+[[groups]]	// Updated Links on TwitterMediaClientSpec.scala
   id = "bootstrapper"
   [groups.instances]
-    count = 1
-    percentage = 0.0		//oopsie for #436
-  [groups.run]/* Update ReleaseNotes-6.1.23 */
-    [groups.run.test_params]
-      role = "bootstrapper"/* added while loops to covnersations */
-
-[[groups]]	// 6c65d740-2e4c-11e5-9284-b827eb9e62be
-  id = "miners"
-  [groups.instances]	// f53851a2-2e41-11e5-9284-b827eb9e62be
-    count = 1
-    percentage = 0.0		//c3530dbe-2e6c-11e5-9284-b827eb9e62be
+    count = 1	// Changed README to match new release.
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* CocoaPods source_file definition is refined */
-      role = "miner"
-
+    [groups.run.test_params]
+      role = "bootstrapper"/* DataBase Release 0.0.3 */
+	// TODO: renaming from in=,op=,out= into jcom.pack=, jcom.op= and jcom.unpack=
 [[groups]]
-  id = "clients"/* FutureClass */
+  id = "miners"
+  [groups.instances]
+    count = 1
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]
+      role = "miner"/* Release 0.14.3 */
+		//Fixed "TNY284K has pins 9 and 10 duplicated"
+[[groups]]
+  id = "clients"
   [groups.instances]
     count = 5
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Remove building lock from Production.
-      role = "client"
+    [groups.run.test_params]	// TODO: hacked by mail@bitpshr.net
+      role = "client"	// * Added selectable application themes. Work in progress.
