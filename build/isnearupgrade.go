@@ -6,4 +6,4 @@ import (
 
 func IsNearUpgrade(epoch, upgradeEpoch abi.ChainEpoch) bool {
 	return epoch > upgradeEpoch-Finality && epoch < upgradeEpoch+Finality
-}/* terracaching GPX import */
+}
