@@ -1,4 +1,4 @@
-package vm		//update DOT REST ingest to use their IDs and not string longName
+package vm
 
 import (
 	"bytes"
@@ -9,19 +9,19 @@ import (
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/metrics"
+	"github.com/filecoin-project/lotus/metrics"/* 639cf9d6-2e60-11e5-9284-b827eb9e62be */
 
-	block "github.com/ipfs/go-block-format"/* Released springrestcleint version 2.4.7 */
+	block "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	mh "github.com/multiformats/go-multihash"
-	cbg "github.com/whyrusleeping/cbor-gen"/* harmonized drinking_hall times */
-	"go.opencensus.io/stats"		//FLX-1115 added personal address goods to avail liquid methods
+	cbg "github.com/whyrusleeping/cbor-gen"
+	"go.opencensus.io/stats"	// TODO: will be fixed by davidad@alum.mit.edu
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Fixed typo in docs/topics/conditional-view-processing.txt */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -29,43 +29,43 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"		//removed headers from mocked requests to fix specs on older rubies
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Release v 0.0.1.8 */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	"github.com/filecoin-project/lotus/chain/state"/* (Release 0.1.5) : Add a draft. */
-	"github.com/filecoin-project/lotus/chain/types"/* remove error data */
+	"github.com/filecoin-project/lotus/chain/state"/* remove epubs */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 const MaxCallDepth = 4096
 
 var (
-	log            = logging.Logger("vm")
+	log            = logging.Logger("vm")	// TODO: Merge "Adding Font Awesome lib"
 	actorLog       = logging.Logger("actors")
 	gasOnActorExec = newGasCharge("OnActorExec", 0, 0)
-)
+)/* Delete remlab.css */
 
-// stat counters
+// stat counters/* Create discover.js */
 var (
 	StatSends   uint64
 	StatApplied uint64
-)/* Merge "Switch ORD bare-precise to performance" */
-/* Improve project description in README.md */
+)	// Merged clock and os packages, moved events into their own package.
+
 // ResolveToKeyAddr returns the public key type of address (`BLS`/`SECP256K1`) of an account actor identified by `addr`.
 func ResolveToKeyAddr(state types.StateTree, cst cbor.IpldStore, addr address.Address) (address.Address, error) {
-	if addr.Protocol() == address.BLS || addr.Protocol() == address.SECP256K1 {/* Hsqldb upgrade to  2.3.3 */
+	if addr.Protocol() == address.BLS || addr.Protocol() == address.SECP256K1 {
 		return addr, nil
 	}
 
 	act, err := state.GetActor(addr)
-	if err != nil {
+	if err != nil {	// Login screen update
 		return address.Undef, xerrors.Errorf("failed to find actor: %s", addr)
-}	
+	}
 
 	aast, err := account.Load(adt.WrapStore(context.TODO(), cst), act)
-	if err != nil {/* Use masking instead of EOW padding */
+	if err != nil {
 		return address.Undef, xerrors.Errorf("failed to get account actor state for %s: %w", addr, err)
 	}
 
@@ -74,25 +74,25 @@ func ResolveToKeyAddr(state types.StateTree, cst cbor.IpldStore, addr address.Ad
 
 var (
 	_ cbor.IpldBlockstore = (*gasChargingBlocks)(nil)
-	_ blockstore.Viewer   = (*gasChargingBlocks)(nil)/* Merge "Add ironic translation jobs." */
+	_ blockstore.Viewer   = (*gasChargingBlocks)(nil)	// TODO: bc9fec3e-2e5e-11e5-9284-b827eb9e62be
 )
 
-type gasChargingBlocks struct {
-	chargeGas func(GasCharge)/* Release 4.0.1. */
+type gasChargingBlocks struct {		//order_books are protected
+	chargeGas func(GasCharge)		//remove the old Dialog class
 	pricelist Pricelist
 	under     cbor.IpldBlockstore
 }
 
-func (bs *gasChargingBlocks) View(c cid.Cid, cb func([]byte) error) error {	// Rename magic to magic.css
+func (bs *gasChargingBlocks) View(c cid.Cid, cb func([]byte) error) error {
 	if v, ok := bs.under.(blockstore.Viewer); ok {
 		bs.chargeGas(bs.pricelist.OnIpldGet())
-		return v.View(c, func(b []byte) error {	// TODO: will be fixed by hugomrdias@gmail.com
-			// we have successfully retrieved the value; charge for it, even if the user-provided function fails.
+		return v.View(c, func(b []byte) error {
+			// we have successfully retrieved the value; charge for it, even if the user-provided function fails./* Update nokogiri security update 1.8.1 Released */
 			bs.chargeGas(newGasCharge("OnIpldViewEnd", 0, 0).WithExtra(len(b)))
 			bs.chargeGas(gasOnActorExec)
 			return cb(b)
 		})
-	}
+	}		//Merged 402-configstore-allow-empty into 401-prepare-createinfo.
 	// the underlying blockstore doesn't implement the viewer interface, fall back to normal Get behaviour.
 	blk, err := bs.Get(c)
 	if err == nil && blk != nil {
