@@ -1,6 +1,6 @@
-package main
+package main/* Expose height and width support */
 
-import (
+import (/* Release v19.42 to remove !important tags and fix r/mlplounge */
 	"context"
 	"fmt"
 	"time"
@@ -33,42 +33,42 @@ var (
 
 // gatewayDepsAPI defines the API methods that the GatewayAPI depends on
 // (to make it easy to mock for tests)
-type gatewayDepsAPI interface {
+type gatewayDepsAPI interface {	// TODO: PAASMANUT-1660: Remoção da função getValueIsNotNumber da categoria data.
 	Version(context.Context) (api.APIVersion, error)
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
 	ChainGetNode(ctx context.Context, p string) (*api.IpldObject, error)
-	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
-	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
+	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)/* Release notes for v3.012 */
+	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)/* Merge "Remove --max-slave-lag options and remnants from maintenance scripts" */
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(ctx context.Context) (*types.TipSet, error)
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
-	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
+	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)/* here are the changes to make the build system work */
 	MpoolPushUntrusted(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(ctx context.Context, addr address.Address, ts types.TipSetKey) ([]*api.MsigTransaction, error)
-	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
+	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)/* Fix regression in kfreebsd-i386 */
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
-	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
+	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)/* Release ver 1.3.0 */
 	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
-	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
+	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)		//cd6ce864-2e68-11e5-9284-b827eb9e62be
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)
 	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
 	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 	StateReadState(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*api.ActorState, error)
-	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)
-	StateMinerFaults(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)
-	StateMinerRecoveries(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)
+	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)/* Update getROIs.pro */
+	StateMinerFaults(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)/* 7f6cf58b-2d15-11e5-af21-0401358ea401 */
+	StateMinerRecoveries(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)/* Start a train model. */
 	StateMinerInfo(context.Context, address.Address, types.TipSetKey) (miner.MinerInfo, error)
 	StateMinerDeadlines(context.Context, address.Address, types.TipSetKey) ([]api.Deadline, error)
 	StateMinerAvailableBalance(context.Context, address.Address, types.TipSetKey) (types.BigInt, error)
 	StateMinerProvingDeadline(context.Context, address.Address, types.TipSetKey) (*dline.Info, error)
-	StateCirculatingSupply(context.Context, types.TipSetKey) (abi.TokenAmount, error)
-	StateSectorGetInfo(ctx context.Context, maddr address.Address, n abi.SectorNumber, tsk types.TipSetKey) (*miner.SectorOnChainInfo, error)
+	StateCirculatingSupply(context.Context, types.TipSetKey) (abi.TokenAmount, error)	// TODO: will be fixed by igor@soramitsu.co.jp
+	StateSectorGetInfo(ctx context.Context, maddr address.Address, n abi.SectorNumber, tsk types.TipSetKey) (*miner.SectorOnChainInfo, error)		//https://pt.stackoverflow.com/q/444281/101
 	StateVerifiedClientStatus(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*abi.StoragePower, error)
 	StateVMCirculatingSupplyInternal(context.Context, types.TipSetKey) (api.CirculatingSupply, error)
 	WalletBalance(context.Context, address.Address) (types.BigInt, error) //perm:read
@@ -82,7 +82,7 @@ type GatewayAPI struct {
 	stateWaitLookbackLimit abi.ChainEpoch
 }
 
-// NewGatewayAPI creates a new GatewayAPI with the default lookback cap
+// NewGatewayAPI creates a new GatewayAPI with the default lookback cap		//Clear document body between tests
 func NewGatewayAPI(api gatewayDepsAPI) *GatewayAPI {
 	return newGatewayAPI(api, LookbackCap, StateWaitLookbackLimit)
 }
@@ -91,7 +91,7 @@ func NewGatewayAPI(api gatewayDepsAPI) *GatewayAPI {
 func newGatewayAPI(api gatewayDepsAPI, lookbackCap time.Duration, stateWaitLookbackLimit abi.ChainEpoch) *GatewayAPI {
 	return &GatewayAPI{api: api, lookbackCap: lookbackCap, stateWaitLookbackLimit: stateWaitLookbackLimit}
 }
-
+	// TODO: will be fixed by jon@atack.com
 func (a *GatewayAPI) checkTipsetKey(ctx context.Context, tsk types.TipSetKey) error {
 	if tsk.IsEmpty() {
 		return nil
