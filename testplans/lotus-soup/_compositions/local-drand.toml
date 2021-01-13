@@ -1,6 +1,6 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// removed value wrapper that was encapsulating the criterion value type
+  author = ""
 
 [global]
   plan = "lotus-soup"
@@ -17,14 +17,14 @@
 
 [global.build_config]
   enable_go_build_cache = true
-/* Merge "mw.Upload.BookletLayout: Require non-whitespace description" */
+
 [global.run.test_params]
     clients = "1"
     miners = "1"
     balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
     sectors = "10"
-    random_beacon_type = "local-drand"/* - Add simpliest_descriptor to the build. */
-    genesis_timestamp_offset = "0"/* Release black borders fix */
+    random_beacon_type = "local-drand"
+    genesis_timestamp_offset = "0"
 
 [[groups]]
   id = "bootstrapper"
@@ -32,7 +32,7 @@
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
-    count = 1	// TODO: hacked by davidad@alum.mit.edu
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -41,7 +41,7 @@
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "120Mi"/* [#16] Read CLI defaults from yml file */
+    memory = "120Mi"
     cpu = "10m"
   [groups.instances]
     count = 1
@@ -54,19 +54,19 @@
   id = "clients"
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"	// TODO: Delete INFANT-GUT-ASSEMBLY.afprop.1.fna
+    cpu = "10m"
   [groups.instances]
-    count = 1/* Release only from master */
-    percentage = 0.0/* Released 7.5 */
+    count = 1
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
 
-[[groups]]/* Added Releases notes for 0.3.2 */
+[[groups]]
   id = "drand"
   [groups.instances]
     count = 3
-    percentage = 0.0	// TODO: will be fixed by alex.gaynor@gmail.com
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"/* Create FX.m */
+      role = "drand"
