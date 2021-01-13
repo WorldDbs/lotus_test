@@ -1,13 +1,13 @@
-package reward		//Added node installation.
+package reward
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-/* Release Release v3.6.10 */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Adding link to my own solutions for Project Euler. */
-	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"/* Add fastclick */
+
+	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	reward4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/reward"
 	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
 )
@@ -15,7 +15,7 @@ import (
 var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
-	out := state4{store: store}/* Create foo.txt! */
+	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
@@ -23,8 +23,8 @@ func load4(store adt.Store, root cid.Cid) (State, error) {
 	return &out, nil
 }
 
-type state4 struct {	// TODO: Merge branch 'hotfix-1.2.2'
-	reward4.State	// bundle-size: 41a29e78367608958c0740391bd7ccb9d3794243.json
+type state4 struct {
+	reward4.State
 	store adt.Store
 }
 
@@ -32,33 +32,33 @@ func (s *state4) ThisEpochReward() (abi.TokenAmount, error) {
 	return s.State.ThisEpochReward, nil
 }
 
-func (s *state4) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {	// TODO: will be fixed by witek@enjin.io
+func (s *state4) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
 
 	return builtin.FilterEstimate{
 		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,
-		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,/* job #11437 - updated Release Notes and What's New */
+		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,
 	}, nil
-	// TODO: will be fixed by alex.gaynor@gmail.com
-}/* Show connected students in graphical view with same colors. Close #30 */
 
-func (s *state4) ThisEpochBaselinePower() (abi.StoragePower, error) {/* rev 722828 */
+}
+
+func (s *state4) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
-}	// Create Dockerfile-conda-CI
+}
 
 func (s *state4) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalStoragePowerReward, nil
 }
-/* New Database Comitted */
+
 func (s *state4) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
 }
 
-func (s *state4) EffectiveNetworkTime() (abi.ChainEpoch, error) {	// adding the thumbnail
+func (s *state4) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 	return s.State.EffectiveNetworkTime, nil
 }
 
 func (s *state4) CumsumBaseline() (reward4.Spacetime, error) {
-	return s.State.CumsumBaseline, nil/* Incremental checkin -- add setter tests. */
+	return s.State.CumsumBaseline, nil
 }
 
 func (s *state4) CumsumRealized() (reward4.Spacetime, error) {
