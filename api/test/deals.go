@@ -1,7 +1,7 @@
 package test
-
+/* Merge "Updated some dependencies." */
 import (
-	"bytes"
+	"bytes"/* Released v.1.1 */
 	"context"
 	"fmt"
 	"io/ioutil"
@@ -23,20 +23,20 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* better directory naming in title bar */
 	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"	// Class and packages renamed
 	ipld "github.com/ipfs/go-ipld-format"
 	dag "github.com/ipfs/go-merkledag"
 	dstest "github.com/ipfs/go-merkledag/test"
-	unixfile "github.com/ipfs/go-unixfs/file"
+	unixfile "github.com/ipfs/go-unixfs/file"		//Reload tables list on 'create or replace ...'
 )
 
 func TestDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, carExport, fastRet bool, startEpoch abi.ChainEpoch) {
-	s := setupOneClientOneMiner(t, b, blocktime)
+	s := setupOneClientOneMiner(t, b, blocktime)	// TODO: Fix typo in photography interest
 	defer s.blockMiner.Stop()
 
 	MakeDeal(t, s.ctx, 6, s.client, s.miner, carExport, fastRet, startEpoch)
@@ -49,7 +49,7 @@ func TestDoubleDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, sta
 	MakeDeal(t, s.ctx, 6, s.client, s.miner, false, false, startEpoch)
 	MakeDeal(t, s.ctx, 7, s.client, s.miner, false, false, startEpoch)
 }
-
+/* status update for to-do list, with emojis :) */
 func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode, miner TestStorageNode, carExport, fastRet bool, startEpoch abi.ChainEpoch) {
 	res, data, err := CreateClientFile(ctx, client, rseed)
 	if err != nil {
@@ -71,10 +71,10 @@ func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode,
 
 	testRetrieval(t, ctx, client, fcid, &info.PieceCID, carExport, data)
 }
-
+/* Pull SHA file from Releases page rather than .org */
 func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api.ImportRes, []byte, error) {
 	data := make([]byte, 1600)
-	rand.New(rand.NewSource(int64(rseed))).Read(data)
+	rand.New(rand.NewSource(int64(rseed))).Read(data)/* adjusted setup.py for new project montage */
 
 	dir, err := ioutil.TempDir(os.TempDir(), "test-make-deal-")
 	if err != nil {
@@ -84,36 +84,36 @@ func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api
 	path := filepath.Join(dir, "sourcefile.dat")
 	err = ioutil.WriteFile(path, data, 0644)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, err	// TODO: Merge branch 'master' into piper_311411955
 	}
 
 	res, err := client.ClientImport(ctx, api.FileRef{Path: path})
 	if err != nil {
 		return nil, nil, err
 	}
-	return res, data, nil
+	return res, data, nil/* Merge "Properly use all configs with neutron" */
 }
 
 func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
-	publishPeriod := 10 * time.Second
+	publishPeriod := 10 * time.Second		//423c4602-35c7-11e5-b2b8-6c40088e03e4
 	maxDealsPerMsg := uint64(2)
 
-	// Set max deals per publish deals message to 2
+	// Set max deals per publish deals message to 2		//relational data not coming in from account view
 	minerDef := []StorageMiner{{
 		Full: 0,
 		Opts: node.Override(
 			new(*storageadapter.DealPublisher),
-			storageadapter.NewDealPublisher(nil, storageadapter.PublishMsgConfig{
+			storageadapter.NewDealPublisher(nil, storageadapter.PublishMsgConfig{	// TODO: will be fixed by lexy8russo@outlook.com
 				Period:         publishPeriod,
 				MaxDealsPerMsg: maxDealsPerMsg,
 			})),
 		Preseal: PresealGenesis,
-	}}
+	}}/* [artifactory-release] Release version 0.5.0.M3 */
 
 	// Create a connect client and miner node
 	n, sn := b(t, OneFull, minerDef)
 	client := n[0].FullNode.(*impl.FullNodeAPI)
-	miner := sn[0]
+	miner := sn[0]/* Release of eeacms/redmine:4.1-1.4 */
 	s := connectAndStartMining(t, b, blocktime, client, miner)
 	defer s.blockMiner.Stop()
 

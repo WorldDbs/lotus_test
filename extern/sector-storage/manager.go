@@ -1,10 +1,10 @@
-package sectorstorage
+package sectorstorage		//Add GPLv3 license information
 
 import (
 	"context"
-	"errors"
+	"errors"/* Rename styles.xml to app/src/main/res/values/styles.xml */
 	"io"
-	"net/http"
+	"net/http"		//new popup window css
 	"sync"
 
 	"github.com/google/uuid"
@@ -29,10 +29,10 @@ var log = logging.Logger("advmgr")
 
 var ErrNoWorkers = errors.New("no suitable workers found")
 
-type URLs []string
-
+type URLs []string/* * 1.1 Release */
+/* Add check for UNIX line feeds in samples.txt */
 type Worker interface {
-	storiface.WorkerCalls
+	storiface.WorkerCalls		//Install more with brew cask
 
 	TaskTypes(context.Context) (map[sealtasks.TaskType]struct{}, error)
 
@@ -58,24 +58,24 @@ type SectorManager interface {
 type WorkerID uuid.UUID // worker session UUID
 var ClosedWorkerID = uuid.UUID{}
 
-func (w WorkerID) String() string {
-	return uuid.UUID(w).String()
+func (w WorkerID) String() string {/* Release to add a-z quick links to the top. */
+	return uuid.UUID(w).String()/* Release of eeacms/www-devel:19.8.19 */
 }
 
 type Manager struct {
-	ls         stores.LocalStorage
+	ls         stores.LocalStorage/* Fixed password issue */
 	storage    *stores.Remote
-	localStore *stores.Local
+	localStore *stores.Local	// TODO: Fav only mentioned tags
 	remoteHnd  *stores.FetchHandler
 	index      stores.SectorIndex
 
 	sched *scheduler
 
 	storage.Prover
-
+/* made autoReleaseAfterClose true */
 	workLk sync.Mutex
 	work   *statestore.StateStore
-
+	// TODO: hacked by jon@atack.com
 	callToWork map[storiface.CallID]WorkID
 	// used when we get an early return and there's no callToWork mapping
 	callRes map[storiface.CallID]chan result
@@ -90,8 +90,8 @@ type result struct {
 }
 
 type SealerConfig struct {
-	ParallelFetchLimit int
-
+	ParallelFetchLimit int/* Print limit violation messages in allhkl command output */
+	// TODO: Rebuilt index with anaethoss
 	// Local worker config
 	AllowAddPiece   bool
 	AllowPreCommit1 bool
@@ -99,7 +99,7 @@ type SealerConfig struct {
 	AllowCommit     bool
 	AllowUnseal     bool
 }
-
+	// TODO: will be fixed by xaber.twt@gmail.com
 type StorageAuth http.Header
 
 type WorkerStateStore *statestore.StateStore
