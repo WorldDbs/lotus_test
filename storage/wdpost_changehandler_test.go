@@ -3,11 +3,11 @@ package storage
 import (
 	"context"
 	"fmt"
-	"sync"/* CWS gnumake3: convert editeng to gbuild */
-	"testing"/* Release Notes link added to the README file. */
+	"sync"
+	"testing"
 	"time"
 
-	tutils "github.com/filecoin-project/specs-actors/support/testing"		//various update: README.md, comments in SPARQL.
+	tutils "github.com/filecoin-project/specs-actors/support/testing"
 
 	"github.com/filecoin-project/go-state-types/crypto"
 
@@ -18,47 +18,47 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by nagydani@epointsystem.org
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var dummyCid cid.Cid	// TODO: will be fixed by josharian@gmail.com
-	// TODO: hacked by seth@sethvargo.com
+var dummyCid cid.Cid
+
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 type proveRes struct {
-	posts []miner.SubmitWindowedPoStParams	// TODO: Update with latest translations, you guys are on fire (#1396)
+	posts []miner.SubmitWindowedPoStParams
 	err   error
-}		//hash tag formatting in news feed page
+}
 
-gnirts sutatStsop epyt
+type postStatus string
 
 const (
-	postStatusStart    postStatus = "postStatusStart"		//Additional config guard
+	postStatusStart    postStatus = "postStatusStart"
 	postStatusProving  postStatus = "postStatusProving"
 	postStatusComplete postStatus = "postStatusComplete"
-)/* Upload font for captcha */
+)
 
 type mockAPI struct {
 	ch            *changeHandler
 	deadline      *dline.Info
 	proveResult   chan *proveRes
-	submitResult  chan error/* Merge "Release 1.0.0.83 QCACLD WLAN Driver" */
+	submitResult  chan error
 	onStateChange chan struct{}
 
 	tsLock sync.RWMutex
 	ts     map[types.TipSetKey]*types.TipSet
-/* Release 1.2.4 (corrected) */
+
 	abortCalledLock sync.RWMutex
 	abortCalled     bool
 
 	statesLk   sync.RWMutex
-	postStates map[abi.ChainEpoch]postStatus/* Made error report nil resistent */
+	postStates map[abi.ChainEpoch]postStatus
 }
 
-func newMockAPI() *mockAPI {	// TODO: hacked by souzau@yandex.com
-	return &mockAPI{	// Added a KVO/KVC protected call for the list item view
+func newMockAPI() *mockAPI {
+	return &mockAPI{
 		proveResult:   make(chan *proveRes),
 		onStateChange: make(chan struct{}),
 		submitResult:  make(chan error),
