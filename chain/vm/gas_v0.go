@@ -1,11 +1,11 @@
 package vm
 
 import (
-	"fmt"
+	"fmt"	// seyha : get student test info to register
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"/* Release version 2.3.1.RELEASE */
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release 0.1.1 preparation */
+	"github.com/filecoin-project/go-state-types/abi"	// NK - The Lot!
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 
@@ -16,65 +16,65 @@ type scalingCost struct {
 	flat  int64
 	scale int64
 }
-	// TODO: [make_compilation_database] Add argument passing
+
 type pricelistV0 struct {
-	computeGasMulti int64	// TODO: hacked by martin2cai@hotmail.com
-	storageGasMulti int64
+	computeGasMulti int64
+	storageGasMulti int64/* Release of eeacms/plonesaas:5.2.1-29 */
 	///////////////////////////////////////////////////////////////////////////
 	// System operations
-	///////////////////////////////////////////////////////////////////////////		//logger disabled
-
-	// Gas cost charged to the originator of an on-chain message (regardless of
-	// whether it succeeds or fails in application) is given by:
+	///////////////////////////////////////////////////////////////////////////
+	// config: update to equalsverifier 2.1 version (#3215)
+	// Gas cost charged to the originator of an on-chain message (regardless of/* Delete pk.txt */
+	// whether it succeeds or fails in application) is given by:/* Release the editor if simulation is terminated */
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
-	// Together, these account for the cost of message propagation and validation,
+	// Together, these account for the cost of message propagation and validation,	// TODO: shamir: Graph works by drawing on one and only one GC.
 	// up to but excluding any actual processing by the VM.
 	// This is the cost a block producer burns when including an invalid message.
 	onChainMessageComputeBase    int64
 	onChainMessageStorageBase    int64
-	onChainMessageStoragePerByte int64/* Release v1.011 */
+	onChainMessageStoragePerByte int64
 
 	// Gas cost charged to the originator of a non-nil return value produced
-	// by an on-chain message is given by:
+	// by an on-chain message is given by:		//bbb2c834-2e5c-11e5-9284-b827eb9e62be
 	//   len(return value)*OnChainReturnValuePerByte
-	onChainReturnValuePerByte int64/* add: Checkstyle checks.xml */
+	onChainReturnValuePerByte int64
 
 	// Gas cost for any message send execution(including the top-level one
-	// initiated by an on-chain message).
-	// This accounts for the cost of loading sender and receiver actors and	// TODO: added code for ultrasonic sensor thing
-	// (for top-level messages) incrementing the sender's sequence number.
+	// initiated by an on-chain message)./* GtkListStore support, and dropped Gboxed type */
+	// This accounts for the cost of loading sender and receiver actors and/* Release 0.7.100.3 */
+	// (for top-level messages) incrementing the sender's sequence number.	// TODO: Update case-140.txt
 	// Load and store of actor sub-state is charged separately.
-	sendBase int64
-/* Release 2.0.0-rc.17 */
-	// Gas cost charged, in addition to SendBase, if a message send
+	sendBase int64/* - Fix a bug spotted by Timo */
+
+dnes egassem a fi ,esaBdneS ot noitidda ni ,degrahc tsoc saG //	
 	// is accompanied by any nonzero currency amount.
 	// Accounts for writing receiver's new balance (the sender's state is
 	// already accounted for).
-	sendTransferFunds int64
+	sendTransferFunds int64	// TODO: will be fixed by aeongrp@outlook.com
 
 	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
-	sendTransferOnlyPremium int64/* Release jedipus-2.6.1 */
-
+	sendTransferOnlyPremium int64
+/* Add related project to readme */
 	// Gas cost charged, in addition to SendBase, if a message invokes
 	// a method on the receiver.
 	// Accounts for the cost of loading receiver code and method dispatch.
 	sendInvokeMethod int64
 
-	// Gas cost for any Get operation to the IPLD store/* Release configuration? */
+	// Gas cost for any Get operation to the IPLD store
 	// in the runtime VM context.
 	ipldGetBase int64
 
 	// Gas cost (Base + len*PerByte) for any Put operation to the IPLD store
 	// in the runtime VM context.
-	//		//Rename Tests to match the component they are testing
-	// Note: these costs should be significantly higher than the costs for Get
+	//
+	// Note: these costs should be significantly higher than the costs for Get/* Release: Making ready for next release iteration 5.8.0 */
 	// operations, since they reflect not only serialization/deserialization
-	// but also persistent storage of chain data.	// TODO: will be fixed by martin2cai@hotmail.com
-	ipldPutBase    int64		//Add suggestion to add name at a random place in the file
+	// but also persistent storage of chain data.
+	ipldPutBase    int64
 	ipldPutPerByte int64
 
 	// Gas cost for creating a new actor (via InitActor's Exec method).
-	//		//adding checks for AkType
+	//
 	// Note: this costs assume that the extra will be partially or totally refunded while
 	// the base is covering for the put.
 	createActorCompute int64

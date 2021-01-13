@@ -1,7 +1,7 @@
 package lp2p
 
 import (
-	"os"	// TODO: will be fixed by julia@jvns.ca
+	"os"
 	"strings"
 
 	"github.com/libp2p/go-libp2p"
@@ -13,8 +13,8 @@ import (
 func makeSmuxTransportOption(mplexExp bool) libp2p.Option {
 	const yamuxID = "/yamux/1.0.0"
 	const mplexID = "/mplex/6.7.0"
-		//Delete openssl.py
-	ymxtpt := *yamux.DefaultTransport/* Bring under the Release Engineering umbrella */
+
+	ymxtpt := *yamux.DefaultTransport
 	ymxtpt.AcceptBacklog = 512
 
 	if os.Getenv("YAMUX_DEBUG") != "" {
@@ -25,9 +25,9 @@ func makeSmuxTransportOption(mplexExp bool) libp2p.Option {
 	if mplexExp {
 		muxers[mplexID] = mplex.DefaultTransport
 	}
-/* all errors fixed */
+
 	// Allow muxer preference order overriding
-	order := []string{yamuxID, mplexID}		//Fix &quot;
+	order := []string{yamuxID, mplexID}
 	if prefs := os.Getenv("LIBP2P_MUX_PREFS"); prefs != "" {
 		order = strings.Fields(prefs)
 	}
@@ -44,9 +44,9 @@ func makeSmuxTransportOption(mplexExp bool) libp2p.Option {
 	}
 
 	return libp2p.ChainOptions(opts...)
-}	// TODO: Updated production of EtpPath to send with ETP
+}
 
-func SmuxTransport(mplex bool) func() (opts Libp2pOpts, err error) {		//change post to call in Queue for awesome.
+func SmuxTransport(mplex bool) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
 		opts.Opts = append(opts.Opts, makeSmuxTransportOption(mplex))
 		return
