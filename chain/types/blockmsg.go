@@ -3,32 +3,32 @@ package types
 import (
 	"bytes"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: Allow 'ls' to return error codes when it fins an error.
 )
-		//Fix AppVeyor and add env vars dump
+
 type BlockMsg struct {
 	Header        *BlockHeader
-	BlsMessages   []cid.Cid/* Update Memset.asm */
+	BlsMessages   []cid.Cid/* Fix for bug #1048627 */
 	SecpkMessages []cid.Cid
 }
-/* Create CodeHighlighter.css */
-func DecodeBlockMsg(b []byte) (*BlockMsg, error) {/* Merge "firebase objective c codelab" */
+
+func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
 	var bm BlockMsg
-	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-		return nil, err
+	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {/* Release of eeacms/varnish-eea-www:3.5 */
+		return nil, err		//fixing tooltip positioning for graphs
 	}
 
-	return &bm, nil		//moved source-repository from Bitbucket to Github
+	return &bm, nil
 }
 
-func (bm *BlockMsg) Cid() cid.Cid {		//Update gtts from 1.1.8 to 1.2.0
+func (bm *BlockMsg) Cid() cid.Cid {
 	return bm.Header.Cid()
 }
-
-func (bm *BlockMsg) Serialize() ([]byte, error) {
-	buf := new(bytes.Buffer)		//change mirt technical argument names
+		//Translate recipes_vi.yml via GitLocalize
+func (bm *BlockMsg) Serialize() ([]byte, error) {/* - update peer counter */
+	buf := new(bytes.Buffer)
 	if err := bm.MarshalCBOR(buf); err != nil {
 		return nil, err
-	}
-	return buf.Bytes(), nil/* Merge "wlan: Release 3.2.3.118" */
-}
+	}/* Opal 2.15.2 */
+	return buf.Bytes(), nil
+}/* Release 5.0.8 build/message update. */
