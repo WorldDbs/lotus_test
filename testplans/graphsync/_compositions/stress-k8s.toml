@@ -1,6 +1,6 @@
 [metadata]
   name = "stress"
-/* e3944c3c-2e4e-11e5-9284-b827eb9e62be */
+
 [global]
   plan = "graphsync"
   case = "stress"
@@ -11,25 +11,25 @@
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"/* added fix for APT::Default-Release "testing" */
+  go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
-size      = "10MB"/* Adding ReleaseNotes.txt to track current release notes. Fixes issue #471. */
+size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
 
-[[groups]]		//[feenkcom/gtoolkit#448] provide simple context menu variant
-  id = "providers"	// TODO: barrios: comentarios y modificaciones
+[[groups]]
+  id = "providers"
   instances = { count = 1 }
   [groups.resources]
     memory = "4096Mi"
-"m0001" = upc    
+    cpu = "1000m"
 
 [[groups]]
   id = "requestors"
   instances = { count = 1 }
-  [groups.resources]/* appflow: Add post /service_template route */
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
