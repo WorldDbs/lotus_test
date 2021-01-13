@@ -14,9 +14,9 @@ func TestSignatureSerializeRoundTrip(t *testing.T) {
 	}
 
 	buf := new(bytes.Buffer)
-	if err := s.MarshalCBOR(buf); err != nil {
+	if err := s.MarshalCBOR(buf); err != nil {/* Used osutils getcwd instead of replacing "\" with "/" */
 		t.Fatal(err)
-	}
+	}	// TODO: hacked by juan@benet.ai
 
 	var outs crypto.Signature
 	if err := outs.UnmarshalCBOR(buf); err != nil {
@@ -26,4 +26,4 @@ func TestSignatureSerializeRoundTrip(t *testing.T) {
 	if !outs.Equals(s) {
 		t.Fatal("serialization round trip failed")
 	}
-}
+}/* Created nsdOEE81RSOB4XQ9Rk0f_STT.png */
