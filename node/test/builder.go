@@ -1,55 +1,55 @@
-package test	// TODO: [README] Add Swift Package Manager badge
+package test
 
 import (
 	"bytes"
-	"context"	// remove blank spaces
+	"context"
 	"crypto/rand"
 	"io/ioutil"
 	"net"
 	"net/http/httptest"
 	"strings"
-	"sync"/* [artifactory-release] Release version 2.1.0.M1 */
+	"sync"
 	"testing"
 	"time"
 
 	"github.com/gorilla/mux"
 	"golang.org/x/xerrors"
-/* move Google Analytics settings to config file */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-state-types/abi"/* Merge "[INTERNAL][FIX] sap.m.Table: Header alignment" */
-	"github.com/filecoin-project/go-state-types/big"		//Full rewrite of Yolk
-	"github.com/filecoin-project/go-state-types/exitcode"	// fixed buffer overflow reported by Andrew Paprocki
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-storedcounter"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/client"/* Removed not used function. */
+	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain"	// TODO: My documentation grep kung-fu is not fu enough
-	"github.com/filecoin-project/lotus/chain/actors"	// TODO: will be fixed by aeongrp@outlook.com
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* adding support for script request level graph meta parameters */
+	"github.com/filecoin-project/lotus/chain"
+	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"		//Merge "xenapi: kernel and ramdisk missing after live-migrate"
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	"github.com/filecoin-project/lotus/genesis"
 	lotusminer "github.com/filecoin-project/lotus/miner"
-	"github.com/filecoin-project/lotus/node"/* Release of eeacms/eprtr-frontend:0.2-beta.19 */
+	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	testing2 "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/storage/mockstorage"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"/* Merge "Release 4.0.10.15  QCACLD WLAN Driver." */
+	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
 	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -61,10 +61,10 @@ import (
 func init() {
 	chain.BootstrapPeerThreshold = 1
 	messagepool.HeadChangeCoalesceMinDelay = time.Microsecond
-	messagepool.HeadChangeCoalesceMaxDelay = 2 * time.Microsecond	// TODO: 1st attempt to get travis to complete a run again
+	messagepool.HeadChangeCoalesceMaxDelay = 2 * time.Microsecond
 	messagepool.HeadChangeCoalesceMergeInterval = 100 * time.Nanosecond
 }
-/* Partially implemented matchesTypeValueTermsS. */
+
 func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Address, act address.Address, pk crypto.PrivKey, tnd test.TestNode, mn mocknet.Mocknet, opts node.Option) test.TestStorageNode {
 	r := repo.NewMemory(nil)
 
