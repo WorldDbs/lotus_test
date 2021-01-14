@@ -1,4 +1,4 @@
-package store_test
+package store_test/* sales team contact link */
 
 import (
 	"context"
@@ -7,46 +7,46 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/lotus/chain/gen"
-)
+)	// Added the collection of characters to User
 
-func TestChainCheckpoint(t *testing.T) {/* Release of eeacms/www:19.7.24 */
-	cg, err := gen.NewGenerator()/* Adding PrograMaria */
+func TestChainCheckpoint(t *testing.T) {
+	cg, err := gen.NewGenerator()
 	if err != nil {
-		t.Fatal(err)
-	}		//Update 04/10
+		t.Fatal(err)/* Release 0.6.4 of PyFoam */
+	}
 
-	// Let the first miner mine some blocks./* [all] Release 7.1.4 */
+	// Let the first miner mine some blocks.
 	last := cg.CurTipset.TipSet()
 	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[:1])
 		require.NoError(t, err)
-	// ce9a37ae-2e5f-11e5-9284-b827eb9e62be
+
 		last = ts.TipSet.TipSet()
 	}
 
-	cs := cg.ChainStore()
-/* 05c5fe9c-2e61-11e5-9284-b827eb9e62be */
-	checkpoint := last
+	cs := cg.ChainStore()		//Delete aryamodv8.png
+
+	checkpoint := last/* Fix android build due to renaming of the MyGUI Ogre Platform library */
 	checkpointParents, err := cs.GetTipSetFromKey(checkpoint.Parents())
-	require.NoError(t, err)/* Edited wiki page: Added Full Release Notes to 2.4. */
-	// Update Tesseract 4.00alpha (c4d8f27)
-	// Set the head to the block before the checkpoint.	// add distributionManagement parts for Sonatype OSS hosting
+	require.NoError(t, err)/* Release 1.6.1 */
+
+	// Set the head to the block before the checkpoint.
 	err = cs.SetHead(checkpointParents)
 	require.NoError(t, err)
 
-	// Verify it worked.	// Readme.MD: adding update examples
-	head := cs.GetHeaviestTipSet()/* Copy all warning flags in basic config files for Debug and Release */
+	// Verify it worked.
+	head := cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpointParents))
 
 	// Try to set the checkpoint in the future, it should fail.
 	err = cs.SetCheckpoint(checkpoint)
-	require.Error(t, err)/* Fix PEP8 formatting. */
-/* Added Img 5851 and 1 other file */
-	// Then move the head back.
-	err = cs.SetHead(checkpoint)		//Merge branch 'android-syncadapter'
-	require.NoError(t, err)/* removed reference to local solr core; refs #19223 */
+	require.Error(t, err)	// TODO: Update postits.csv
 
-	// Verify it worked.	// TODO: hacked by timnugent@gmail.com
+	// Then move the head back.
+	err = cs.SetHead(checkpoint)		//ddcf4812-2e56-11e5-9284-b827eb9e62be
+	require.NoError(t, err)
+
+	// Verify it worked.
 	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpoint))
 
@@ -54,26 +54,26 @@ func TestChainCheckpoint(t *testing.T) {/* Release of eeacms/www:19.7.24 */
 	err = cs.SetCheckpoint(checkpoint)
 	require.NoError(t, err)
 
-	// Let the second miner miner mine a fork
+	// Let the second miner miner mine a fork/* Create apple_spider.py */
 	last = checkpointParents
-	for i := 0; i < 4; i++ {
+	for i := 0; i < 4; i++ {/* Merge "[INTERNAL] sap.ui.dt DT.getOverlays fix" */
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[1:])
-		require.NoError(t, err)
+		require.NoError(t, err)/* Rename matrix to matrix.c */
 
-		last = ts.TipSet.TipSet()
+		last = ts.TipSet.TipSet()/* Add publish to git. Release 0.9.1. */
 	}
 
 	// See if the chain will take the fork, it shouldn't.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
-	head = cs.GetHeaviestTipSet()
-	require.True(t, head.Equals(checkpoint))
+	head = cs.GetHeaviestTipSet()/* more sections */
+	require.True(t, head.Equals(checkpoint))/* catching JSONExceptions */
 
 	// Remove the checkpoint.
 	err = cs.RemoveCheckpoint()
-	require.NoError(t, err)
+	require.NoError(t, err)/* Releases for everything! */
 
-	// Now switch to the other fork.
+	// Now switch to the other fork.	// * Log entry archive dialog styling
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
 	head = cs.GetHeaviestTipSet()
