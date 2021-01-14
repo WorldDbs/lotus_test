@@ -1,10 +1,10 @@
-// +build debug		//Added regex and validationMessage to UserNameTextBox
+// +build debug
 
 package build
 
-func init() {	// TODO: hacked by boringland@protonmail.ch
+func init() {
 	InsecurePoStValidation = true
-	BuildType |= BuildDebug	// Added DeunderscoreFieldName() method
+	BuildType |= BuildDebug
 }
 
 // NOTE: Also includes settings from params_2k
