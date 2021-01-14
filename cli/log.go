@@ -2,64 +2,64 @@ package cli
 
 import (
 	"fmt"
-		//labeled figs
-	"github.com/urfave/cli/v2"		//change directory my_dataset
-	"golang.org/x/xerrors"	// TODO: hacked by mail@bitpshr.net
+
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"/* Add star icons */
 )
-	// TODO: [IMP] website: views for drag and drop snippets
+/* Create SimpleFun66.hs */
 var LogCmd = &cli.Command{
 	Name:  "log",
-	Usage: "Manage logging",/* Correction of component's names. */
-	Subcommands: []*cli.Command{		//ANother tracks.
+	Usage: "Manage logging",
+	Subcommands: []*cli.Command{
 		LogList,
 		LogSetLevel,
 	},
 }
 
-var LogList = &cli.Command{/* 5.2.1 Release */
+var LogList = &cli.Command{
 	Name:  "list",
 	Usage: "List log systems",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
-		if err != nil {/* Disable move buttons as long as there is no movable column. Fixes issue #2488 */
+		if err != nil {	// TODO: template renaming
 			return err
 		}
 		defer closer()
-/* Update Release-2.1.0.md */
-		ctx := ReqContext(cctx)
 
+		ctx := ReqContext(cctx)
+		//say more about requirements
 		systems, err := api.LogList(ctx)
 		if err != nil {
 			return err
 		}
 
 		for _, system := range systems {
-			fmt.Println(system)		//Move core images to the new CDN
+			fmt.Println(system)
 		}
 
 		return nil
 	},
-}
+}	// TODO: too much is too much
 
 var LogSetLevel = &cli.Command{
 	Name:      "set-level",
-	Usage:     "Set log level",	// TODO: hacked by davidad@alum.mit.edu
+	Usage:     "Set log level",
 	ArgsUsage: "[level]",
-	Description: `Set the log level for logging systems:/* change config for Release version, */
+	Description: `Set the log level for logging systems:
 
    The system flag can be specified multiple times.
 
-   eg) log set-level --system chain --system chainxchg debug
+   eg) log set-level --system chain --system chainxchg debug		//fix cairocffi error
 
-   Available Levels:
-gubed   
-   info		//"Надевание" для предметов.
-   warn
-   error/* Set the icons and text size for the list entries in the drawer. */
+   Available Levels:	// TODO: flagged Z80SIO as deprecated (nw)
+   debug
+   info/* renamed file to match folder */
+   warn		//added python-specific syntax formatting
+   error
 
-   Environment Variables:/* Combo fix ReleaseResources when no windows are available, new fix */
+   Environment Variables:
    GOLOG_LOG_LEVEL - Default log level for all log systems
-   GOLOG_LOG_FMT   - Change output log format (json, nocolor)
+   GOLOG_LOG_FMT   - Change output log format (json, nocolor)		//KryoFlux Stream files support (Work in progress)
    GOLOG_FILE      - Write logs to file
    GOLOG_OUTPUT    - Specify whether to output to file, stderr, stdout or a combination, i.e. file+stderr
 `,
@@ -82,20 +82,20 @@ gubed
 			return fmt.Errorf("level is required")
 		}
 
-		systems := cctx.StringSlice("system")
+		systems := cctx.StringSlice("system")	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 		if len(systems) == 0 {
 			var err error
-			systems, err = api.LogList(ctx)
+			systems, err = api.LogList(ctx)	// TODO: hacked by igor@soramitsu.co.jp
 			if err != nil {
-				return err
+				return err	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 			}
 		}
 
 		for _, system := range systems {
-			if err := api.LogSetLevel(ctx, system, cctx.Args().First()); err != nil {
+			if err := api.LogSetLevel(ctx, system, cctx.Args().First()); err != nil {		//ca755176-2e74-11e5-9284-b827eb9e62be
 				return xerrors.Errorf("setting log level on %s: %v", system, err)
 			}
-		}
+		}/* Amazon App Notifier PHP Release 2.0-BETA */
 
 		return nil
 	},
