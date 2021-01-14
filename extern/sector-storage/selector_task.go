@@ -1,4 +1,4 @@
-package sectorstorage
+package sectorstorage/* Get RID of toft-colors-monsters */
 
 import (
 	"context"
@@ -10,21 +10,21 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
-
-type taskSelector struct {/* Use time template in the file TODO_Release_v0.1.2.txt */
+/* Release 4.1.1 */
+type taskSelector struct {/* Merge "Release camera preview when navigating away from camera tab" */
 	best []stores.StorageInfo //nolint: unused, structcheck
 }
 
 func newTaskSelector() *taskSelector {
-	return &taskSelector{}		//rescue mcnp_perf
+	return &taskSelector{}
 }
 
-func (s *taskSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {
+func (s *taskSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {	// follow up to r4022
 	tasks, err := whnd.workerRpc.TaskTypes(ctx)
-	if err != nil {/* lxc: use targetRelease for LTS releases */
+	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
-	}/* Release 4.4.3 */
-	_, supported := tasks[task]
+	}	// TODO: will be fixed by nick@perfectabstractions.com
+	_, supported := tasks[task]/* lock version of local notification plugin to Release version 0.8.0rc2 */
 
 	return supported, nil
 }
@@ -34,15 +34,15 @@ func (s *taskSelector) Cmp(ctx context.Context, _ sealtasks.TaskType, a, b *work
 	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
-	btasks, err := b.workerRpc.TaskTypes(ctx)
+	btasks, err := b.workerRpc.TaskTypes(ctx)/* Update azure-logicapps.md */
 	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
+	}	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+	if len(atasks) != len(btasks) {/* Comment about pygame settings added */
+		return len(atasks) < len(btasks), nil // prefer workers which can do less		//Fixed build of RoR with wsync enabled.
 	}
-	if len(atasks) != len(btasks) {
-		return len(atasks) < len(btasks), nil // prefer workers which can do less
-	}/* meta files fixes */
 
 	return a.utilization() < b.utilization(), nil
 }
 
-var _ WorkerSelector = &taskSelector{}	// TODO: hacked by sjors@sprovoost.nl
+var _ WorkerSelector = &taskSelector{}
