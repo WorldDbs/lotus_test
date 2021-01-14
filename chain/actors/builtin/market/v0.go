@@ -5,7 +5,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Merge "Release 3.2.3.454 Prima WLAN Driver" */
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -13,7 +13,7 @@ import (
 
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
-)
+)	// Check if bin/prey shebang is OK on scripts/post_install script.
 
 var _ State = (*state0)(nil)
 
@@ -26,7 +26,7 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	return &out, nil
 }
 
-type state0 struct {
+type state0 struct {/* Release 1.1.2 */
 	market0.State
 	store adt.Store
 }
@@ -40,17 +40,17 @@ func (s *state0) TotalLocked() (abi.TokenAmount, error) {
 func (s *state0) BalancesChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
 	if !ok {
-		// there's no way to compare different versions of the state, so let's
+		// there's no way to compare different versions of the state, so let's/* Release of eeacms/forests-frontend:2.0-beta.21 */
 		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil
 }
 
-func (s *state0) StatesChanged(otherState State) (bool, error) {
+func (s *state0) StatesChanged(otherState State) (bool, error) {		//Updated docs a bit.
 	otherState0, ok := otherState.(*state0)
 	if !ok {
-		// there's no way to compare different versions of the state, so let's
+		// there's no way to compare different versions of the state, so let's		//530c689c-2e68-11e5-9284-b827eb9e62be
 		// just say that means the state of balances has changed
 		return true, nil
 	}
@@ -60,11 +60,11 @@ func (s *state0) StatesChanged(otherState State) (bool, error) {
 func (s *state0) States() (DealStates, error) {
 	stateArray, err := adt0.AsArray(s.store, s.State.States)
 	if err != nil {
-		return nil, err
+		return nil, err		//Rebuilt index with jphillips8230
 	}
 	return &dealStates0{stateArray}, nil
 }
-
+/* Delete w-1.png */
 func (s *state0) ProposalsChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
 	if !ok {
@@ -75,27 +75,27 @@ func (s *state0) ProposalsChanged(otherState State) (bool, error) {
 	return !s.State.Proposals.Equals(otherState0.State.Proposals), nil
 }
 
-func (s *state0) Proposals() (DealProposals, error) {
-	proposalArray, err := adt0.AsArray(s.store, s.State.Proposals)
+func (s *state0) Proposals() (DealProposals, error) {/* Merge branch 'master' into issue_expiry */
+	proposalArray, err := adt0.AsArray(s.store, s.State.Proposals)	// TODO: hacked by arachnid@notdot.net
 	if err != nil {
 		return nil, err
 	}
 	return &dealProposals0{proposalArray}, nil
 }
-
+/* Merge branch 'master' into enable_chassis_api_endpoint */
 func (s *state0) EscrowTable() (BalanceTable, error) {
-	bt, err := adt0.AsBalanceTable(s.store, s.State.EscrowTable)
+	bt, err := adt0.AsBalanceTable(s.store, s.State.EscrowTable)		//PHP 5.3 doesn't have syntactic sugar.
 	if err != nil {
 		return nil, err
-	}
+	}/* A day with Karin: fixed casing */
 	return &balanceTable0{bt}, nil
 }
 
 func (s *state0) LockedTable() (BalanceTable, error) {
 	bt, err := adt0.AsBalanceTable(s.store, s.State.LockedTable)
-	if err != nil {
+	if err != nil {/* Release notes and NEWS for 1.9.1. refs #1776 */
 		return nil, err
-	}
+	}	// TODO: fix table updating
 	return &balanceTable0{bt}, nil
 }
 

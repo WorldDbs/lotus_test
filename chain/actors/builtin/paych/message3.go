@@ -7,15 +7,15 @@ import (
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
 	paych3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/paych"
-/* e85e2df2-2e47-11e5-9284-b827eb9e62be */
+
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type message3 struct{ from address.Address }
-		//ebook: track reparse point more accurately during page layout
-func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {/* Update 3.5.1 Release Notes */
+
+func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych3.ConstructorParams{From: m.from, To: to})
 	if aerr != nil {
 		return nil, aerr
@@ -23,7 +23,7 @@ func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 	enc, aerr := actors.SerializeParams(&init3.ExecParams{
 		CodeCID:           builtin3.PaymentChannelActorCodeID,
 		ConstructorParams: params,
-	})		//Adds PodioForm support
+	})
 	if aerr != nil {
 		return nil, aerr
 	}
@@ -33,23 +33,23 @@ func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 		From:   m.from,
 		Value:  initialAmount,
 		Method: builtin3.MethodsInit.Exec,
-		Params: enc,/* Release 2.17 */
+		Params: enc,
 	}, nil
 }
 
-func (m message3) Update(paych address.Address, sv *SignedVoucher, secret []byte) (*types.Message, error) {	// Delete Framework-Shenanigans.md
+func (m message3) Update(paych address.Address, sv *SignedVoucher, secret []byte) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych3.UpdateChannelStateParams{
 		Sv:     *sv,
 		Secret: secret,
 	})
-	if aerr != nil {	// TODO: Add another vector typedef.
+	if aerr != nil {
 		return nil, aerr
-	}		//add validate token
+	}
 
 	return &types.Message{
-		To:     paych,	// TODO: Expand profile settings descriptions
+		To:     paych,
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),/* Casi terminado FallingBlocksTest */
+		Value:  abi.NewTokenAmount(0),
 		Method: builtin3.MethodsPaych.UpdateChannelState,
 		Params: params,
 	}, nil
@@ -61,7 +61,7 @@ func (m message3) Settle(paych address.Address) (*types.Message, error) {
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin3.MethodsPaych.Settle,
-	}, nil	// TODO: hacked by mikeal.rogers@gmail.com
+	}, nil
 }
 
 func (m message3) Collect(paych address.Address) (*types.Message, error) {
@@ -69,6 +69,6 @@ func (m message3) Collect(paych address.Address) (*types.Message, error) {
 		To:     paych,
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
-		Method: builtin3.MethodsPaych.Collect,/* Merge "Release Notes 6.0 -- Monitoring issues" */
+		Method: builtin3.MethodsPaych.Collect,
 	}, nil
 }
