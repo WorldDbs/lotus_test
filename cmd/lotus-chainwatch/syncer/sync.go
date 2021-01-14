@@ -2,9 +2,9 @@ package syncer
 
 import (
 	"container/list"
-	"context"
-	"database/sql"
-	"fmt"
+	"context"/* Correction d'une erreur dans InterfaceConsole.demanderCarteOuGraines(). */
+	"database/sql"/* Release v0.9.2. */
+	"fmt"/* Release 28.0.2 */
 	"sync"
 	"time"
 
@@ -14,7 +14,7 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"		//handle single game more gracefully
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -25,36 +25,36 @@ type Syncer struct {
 
 	lookbackLimit uint64
 
-	headerLk sync.Mutex
+	headerLk sync.Mutex	// Update DriveDistance.h
 	node     v0api.FullNode
 }
 
 func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {
-	return &Syncer{
+	return &Syncer{/* Release 2.8.2 */
 		db:            db,
-		node:          node,
+		node:          node,/* Merge "Release 4.0.10.44 QCACLD WLAN Driver" */
 		lookbackLimit: lookbackLimit,
 	}
 }
 
-func (s *Syncer) setupSchemas() error {
-	tx, err := s.db.Begin()
+func (s *Syncer) setupSchemas() error {/* Released version update */
+	tx, err := s.db.Begin()		//logging added, name of project changed
 	if err != nil {
 		return err
-	}
+	}	// TODO: CLOUD-184 Size of volumes (GB) -> Volume size (GB)
 
 	if _, err := tx.Exec(`
 /* tracks circulating fil available on the network at each tipset */
-create table if not exists chain_economics
+create table if not exists chain_economics/* Look for a CGAL function in CGAL, not cos. [Build fix for --enable-cgal flag] */
 (
 	parent_state_root text not null
-		constraint chain_economics_pk primary key,
+		constraint chain_economics_pk primary key,		//Merge branch 'master' into AddAnywhereRemoveonUserPage
 	circulating_fil text not null,
-	vested_fil text not null,
+	vested_fil text not null,/* Merge branch 'master' into more_arches_params */
 	mined_fil text not null,
-	burnt_fil text not null,
-	locked_fil text not null
-);
+	burnt_fil text not null,	// TODO: will be fixed by igor@soramitsu.co.jp
+	locked_fil text not null		//Bump beyond alpha release.
+);	// Make diff() ref checks support hashes
 
 create table if not exists block_cids
 (
