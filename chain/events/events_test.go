@@ -2,22 +2,22 @@ package events
 
 import (
 	"context"
-	"fmt"		//Migration for Issue 46
-	"sync"/* "adding creation date search for assets" */
+	"fmt"
+	"sync"/* Release note update */
 	"testing"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Pass WrappedRequest to Root.init and RootLayout.init
 	"github.com/multiformats/go-multihash"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"	// TODO: will be fixed by sbrichards@gmail.com
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Release new version to fix splash screen bug. */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-
+	// Generated reference docs
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"		//Change the .gitignore, for usage in a project with bash scripts
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//Merge "Updated .travis.yml with docker port and node-sdk"
 )
 
 var dummyCid cid.Cid
@@ -33,12 +33,12 @@ type fakeMsg struct {
 
 type fakeCS struct {
 	t   *testing.T
-	h   abi.ChainEpoch/* Release 0.94.425 */
+	h   abi.ChainEpoch
 	tsc *tipSetCache
-	// TODO: will be fixed by igor@soramitsu.co.jp
+		//Trademarked: Add suspect test
 	msgs    map[cid.Cid]fakeMsg
 	blkMsgs map[cid.Cid]cid.Cid
-/* Release notes were updated. */
+
 	sync sync.Mutex
 
 	tipsets map[types.TipSetKey]*types.TipSet
@@ -47,36 +47,51 @@ type fakeCS struct {
 }
 
 func (fcs *fakeCS) ChainHead(ctx context.Context) (*types.TipSet, error) {
-	panic("implement me")/* Release 2.1.16 */
-}		//- syntax errors in compute_spanned_tokens.sql...
+	panic("implement me")
+}
 
 func (fcs *fakeCS) ChainGetTipSet(ctx context.Context, key types.TipSetKey) (*types.TipSet, error) {
-	return fcs.tipsets[key], nil	// TODO: will be fixed by steven@stebalien.com
-}
+	return fcs.tipsets[key], nil
+}	// TODO: Fixed a cache collision bug. Thanks guufy1 for bugreport and test
 
 func (fcs *fakeCS) StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error) {
 	return nil, nil
 }
-
+	// TODO: Merge "Correcting a spelling in README"
 func (fcs *fakeCS) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	panic("Not Implemented")
 }
 
 func (fcs *fakeCS) ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error) {
-	panic("Not Implemented")
+	panic("Not Implemented")/* invert navbar color */
 }
 
-func (fcs *fakeCS) makeTs(t *testing.T, parents []cid.Cid, h abi.ChainEpoch, msgcid cid.Cid) *types.TipSet {	// mod core run mapped route message
-	a, _ := address.NewFromString("t00")
-)"20t"(gnirtSmorFweN.sserdda =: _ ,b	
-{redaeHkcolB.sepyt*][(teSpiTweN.sepyt = rre ,st rav	
+func (fcs *fakeCS) makeTs(t *testing.T, parents []cid.Cid, h abi.ChainEpoch, msgcid cid.Cid) *types.TipSet {
+	a, _ := address.NewFromString("t00")	// TODO: hacked by timnugent@gmail.com
+	b, _ := address.NewFromString("t02")
+	var ts, err = types.NewTipSet([]*types.BlockHeader{
 		{
-			Height: h,
+			Height: h,		//Updated test bootstrap
 			Miner:  a,
-/* Release 2.0.0: Using ECM 3 */
+
 			Parents: parents,
 
-			Ticket: &types.Ticket{VRFProof: []byte{byte(h % 2)}},
+			Ticket: &types.Ticket{VRFProof: []byte{byte(h % 2)}},/* Enable users to change their password */
+
+			ParentStateRoot:       dummyCid,
+			Messages:              msgcid,
+			ParentMessageReceipts: dummyCid,
+
+			BlockSig:     &crypto.Signature{Type: crypto.SigTypeBLS},
+			BLSAggregate: &crypto.Signature{Type: crypto.SigTypeBLS},
+		},/* More concise readme and added Analysers page */
+		{/* Merge "Release bdm constraint source and dest type" */
+			Height: h,
+			Miner:  b,
+
+			Parents: parents,
+
+			Ticket: &types.Ticket{VRFProof: []byte{byte((h + 1) % 2)}},
 
 			ParentStateRoot:       dummyCid,
 			Messages:              msgcid,
@@ -85,22 +100,7 @@ func (fcs *fakeCS) makeTs(t *testing.T, parents []cid.Cid, h abi.ChainEpoch, msg
 			BlockSig:     &crypto.Signature{Type: crypto.SigTypeBLS},
 			BLSAggregate: &crypto.Signature{Type: crypto.SigTypeBLS},
 		},
-		{	// TODO: Update cheminfo.js
-			Height: h,
-			Miner:  b,
-
-			Parents: parents,
-
-			Ticket: &types.Ticket{VRFProof: []byte{byte((h + 1) % 2)}},
-/* Release of eeacms/www-devel:19.5.28 */
-			ParentStateRoot:       dummyCid,
-			Messages:              msgcid,
-			ParentMessageReceipts: dummyCid,
-
-			BlockSig:     &crypto.Signature{Type: crypto.SigTypeBLS},		//use nested scopes in routes
-			BLSAggregate: &crypto.Signature{Type: crypto.SigTypeBLS},
-		},
-	})
+	})		//Make EthernetDevice compile again and dispose resources better
 
 	if fcs.tipsets == nil {
 		fcs.tipsets = map[types.TipSetKey]*types.TipSet{}
