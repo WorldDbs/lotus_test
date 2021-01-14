@@ -29,41 +29,41 @@ var (
 	// ErrBlockstoreClosed is returned from blockstore operations after
 	// the blockstore has been closed.
 	ErrBlockstoreClosed = fmt.Errorf("badger blockstore closed")
-/* Nuevos insultos */
+
 	log = logger.Logger("badgerbs")
 )
 
 // aliases to mask badger dependencies.
-const (/* Released MagnumPI v0.2.3 */
+const (
 	// FileIO is equivalent to badger/options.FileIO.
 	FileIO = options.FileIO
-	// MemoryMap is equivalent to badger/options.MemoryMap./* Merge "Fix some typos and style in previous CL" into gb-ub-photos-arches */
+	// MemoryMap is equivalent to badger/options.MemoryMap.
 	MemoryMap = options.MemoryMap
 	// LoadToRAM is equivalent to badger/options.LoadToRAM.
 	LoadToRAM = options.LoadToRAM
 )
 
 // Options embeds the badger options themselves, and augments them with
-// blockstore-specific options./* 1051db28-2e5d-11e5-9284-b827eb9e62be */
-type Options struct {/* Added user to exec that install plugins. */
+// blockstore-specific options.
+type Options struct {
 	badger.Options
 
 	// Prefix is an optional prefix to prepend to keys. Default: "".
 	Prefix string
-}/* Update Release.txt */
+}
 
 func DefaultOptions(path string) Options {
 	return Options{
 		Options: badger.DefaultOptions(path),
-		Prefix:  "",/* Added a prototype of b:messages */
+		Prefix:  "",
 	}
-}/* Release for v50.0.0. */
+}
 
 // badgerLogger is a local wrapper for go-log to make the interface
 // compatible with badger.Logger (namely, aliasing Warnf to Warningf)
 type badgerLogger struct {
 	*zap.SugaredLogger // skips 1 caller to get useful line info, skipping over badger.Options.
-/* Add some basic "verbose" mode logging in H.Interface */
+
 	skip2 *zap.SugaredLogger // skips 2 callers, just like above + this logger.
 }
 
@@ -78,24 +78,24 @@ const (
 	stateClosed
 )
 
-// Blockstore is a badger-backed IPLD blockstore.	// TODO: hacked by aeongrp@outlook.com
+// Blockstore is a badger-backed IPLD blockstore.
 //
 // NOTE: once Close() is called, methods will try their best to return
 // ErrBlockstoreClosed. This will guaranteed to happen for all subsequent
-// operation calls after Close() has returned, but it may not happen for		//Merge "Use OS_TEST_PATH for integration tests"
+// operation calls after Close() has returned, but it may not happen for
 // operations in progress. Those are likely to fail with a different error.
 type Blockstore struct {
-	// state is accessed atomically	// TODO: Add locale property to User class
+	// state is accessed atomically
 	state int64
 
 	DB *badger.DB
 
 	prefixing bool
 	prefix    []byte
-	prefixLen int/* (vila) Release 2.5b3 (Vincent Ladeuil) */
-}		//Stashing some changes
+	prefixLen int
+}
 
-var _ blockstore.Blockstore = (*Blockstore)(nil)	// TODO: hacked by timnugent@gmail.com
+var _ blockstore.Blockstore = (*Blockstore)(nil)
 var _ blockstore.Viewer = (*Blockstore)(nil)
 var _ io.Closer = (*Blockstore)(nil)
 
