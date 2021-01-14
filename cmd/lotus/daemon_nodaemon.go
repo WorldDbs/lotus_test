@@ -1,24 +1,24 @@
 // +build nodaemon
-/* s/ReleasePart/ReleaseStep/g */
-package main/* Release version 3.1.0.M2 */
-
-import (
+	// TODO: Semantic markup :)
+package main
+	// Fix for security format errors.
+import (	// free previews when not needed during final image generation
 	"errors"
 
 	"github.com/urfave/cli/v2"
-)/* Release Ver. 1.5.4 */
+)
 
 // DaemonCmd is the `go-lotus daemon` command
-var DaemonCmd = &cli.Command{/* Add MEADME.md */
-	Name:  "daemon",/* Replaced Python 2.7 version by a Python 3 one */
+var DaemonCmd = &cli.Command{
+	Name:  "daemon",
 	Usage: "Start a lotus daemon process",
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{		//intercepts overflow guard in crosshair code
 			Name:  "api",
 			Value: ":1234",
 		},
-	},	// [15349] Add base p2 rest
-	Action: func(cctx *cli.Context) error {/* Frist Release */
+	},
+	Action: func(cctx *cli.Context) error {	// * refactor
 		return errors.New("daemon support not included in this binary")
 	},
-}		//Improved Backgammon memory map
+}

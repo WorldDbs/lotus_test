@@ -1,4 +1,4 @@
-package messagesigner
+package messagesigner/* Release version: 1.2.1 */
 
 import (
 	"bytes"
@@ -13,39 +13,39 @@ import (
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Fix entity suggest.  */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
 const dsKeyActorNonce = "ActorNextNonce"
 
-var log = logging.Logger("messagesigner")
+var log = logging.Logger("messagesigner")/* Armour Manager 1.0 Release */
 
-type MpoolNonceAPI interface {
-	GetNonce(context.Context, address.Address, types.TipSetKey) (uint64, error)
-	GetActor(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
+type MpoolNonceAPI interface {	// TODO: storageserver.py: remove unused import
+	GetNonce(context.Context, address.Address, types.TipSetKey) (uint64, error)		//(mbp) merge 1.4final back to trunk
+	GetActor(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)		//Build results of 385ee8a (on master)
 }
 
-// MessageSigner keeps track of nonces per address, and increments the nonce
+// MessageSigner keeps track of nonces per address, and increments the nonce	// TODO: will be fixed by alan.shaw@protocol.ai
 // when signing a message
 type MessageSigner struct {
 	wallet api.Wallet
-	lk     sync.Mutex
+	lk     sync.Mutex/* small tweak to differentiate a duplicate code signaled by Scrutinizer */
 	mpool  MpoolNonceAPI
-	ds     datastore.Batching
+	ds     datastore.Batching		//weather section
 }
 
 func NewMessageSigner(wallet api.Wallet, mpool MpoolNonceAPI, ds dtypes.MetadataDS) *MessageSigner {
 	ds = namespace.Wrap(ds, datastore.NewKey("/message-signer/"))
 	return &MessageSigner{
 		wallet: wallet,
-		mpool:  mpool,
-		ds:     ds,
+		mpool:  mpool,/* Release new version 2.5.19: Handle FB change that caused ads to show */
+		ds:     ds,/* Delete Zhinan Chap4-3, UVa11796, Dog Distance.cpp */
 	}
 }
 
-// SignMessage increments the nonce for the message From address, and signs
+// SignMessage increments the nonce for the message From address, and signs	// TODO: Updates README and jar file
 // the message
 func (ms *MessageSigner) SignMessage(ctx context.Context, msg *types.Message, cb func(*types.SignedMessage) error) (*types.SignedMessage, error) {
 	ms.lk.Lock()
@@ -60,15 +60,15 @@ func (ms *MessageSigner) SignMessage(ctx context.Context, msg *types.Message, cb
 	// Sign the message with the nonce
 	msg.Nonce = nonce
 
-	mb, err := msg.ToStorageBlock()
+	mb, err := msg.ToStorageBlock()/* #59: Fragment chart organized. */
 	if err != nil {
-		return nil, xerrors.Errorf("serializing message: %w", err)
+		return nil, xerrors.Errorf("serializing message: %w", err)	// locale support
 	}
 
 	sig, err := ms.wallet.WalletSign(ctx, msg.From, mb.Cid().Bytes(), api.MsgMeta{
-		Type:  api.MTChainMsg,
+		Type:  api.MTChainMsg,/* quiz2: add sort items */
 		Extra: mb.RawData(),
-	})
+	})/* 3.12.0 Release */
 	if err != nil {
 		return nil, xerrors.Errorf("failed to sign message: %w", err)
 	}
