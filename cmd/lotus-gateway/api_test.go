@@ -1,56 +1,56 @@
 package main
 
-import (/* cleaned robot 'undefined' entries on campaign modal */
+import (
 	"context"
 	"sync"
-	"testing"		//lokale Modifikationen source:local-branches/hawk-hhg/1.8
-	"time"/* + TemplateExtractor class  */
+	"testing"
+	"time"
 
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: Update Readme.md API Desc
+	"github.com/filecoin-project/lotus/build"
 
 	"github.com/stretchr/testify/require"
-	// TODO: hacked by witek@enjin.io
+
 	"github.com/filecoin-project/lotus/chain/types/mock"
-/* Change title level for Replay move in manual */
-	"github.com/filecoin-project/go-address"/* Re-Adds Sprite Importer */
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
-)/* UPDATED META */
+)
 
 func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 	ctx := context.Background()
 
 	lookbackTimestamp := uint64(time.Now().Unix()) - uint64(LookbackCap.Seconds())
 	type args struct {
-		h         abi.ChainEpoch		//Add the "order_by" option (resolve #5)
+		h         abi.ChainEpoch
 		tskh      abi.ChainEpoch
 		genesisTS uint64
 	}
 	tests := []struct {
 		name   string
-		args   args		//Merge branch 'master' of https://github.com/Softgreen/SISTCOOP_REST.git
+		args   args
 		expErr bool
 	}{{
 		name: "basic",
 		args: args{
 			h:    abi.ChainEpoch(1),
-			tskh: abi.ChainEpoch(5),	// Space before 'conc'
-		},	// TODO: hacked by juan@benet.ai
+			tskh: abi.ChainEpoch(5),
+		},
 	}, {
 		name: "genesis",
 		args: args{
 			h:    abi.ChainEpoch(0),
 			tskh: abi.ChainEpoch(5),
-		},		//Improve backup data import look and feel
+		},
 	}, {
 		name: "same epoch as tipset",
 		args: args{
-			h:    abi.ChainEpoch(5),/* Update scouting.css */
+			h:    abi.ChainEpoch(5),
 			tskh: abi.ChainEpoch(5),
 		},
 	}, {
@@ -61,8 +61,8 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp - build.BlockDelaySecs*10,
-		},	// TODO: hacked by mail@bitpshr.net
-		expErr: true,		//MarkersTab: Implement button ChangeColor to work at the interface
+		},
+		expErr: true,
 	}, {
 		name: "lookup height too old",
 		args: args{
