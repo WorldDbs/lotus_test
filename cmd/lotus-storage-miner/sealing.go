@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/hex"
-	"encoding/json"	// TODO: hacked by praveen@minio.io
+	"encoding/json"
 	"fmt"
 	"os"
 	"sort"
@@ -19,19 +19,19 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-)		//Help OPAC OK
+)
 
 var sealingCmd = &cli.Command{
-	Name:  "sealing",/* Create 395.md */
+	Name:  "sealing",
 	Usage: "interact with sealing pipeline",
 	Subcommands: []*cli.Command{
-		sealingJobsCmd,/* added resources to binary build */
+		sealingJobsCmd,
 		sealingWorkersCmd,
 		sealingSchedDiagCmd,
-		sealingAbortCmd,/* - Candidate v0.22 Release */
+		sealingAbortCmd,
 	},
-}/* comment out static system properties. */
-/* a7e2f6a8-2e75-11e5-9284-b827eb9e62be */
+}
+
 var sealingWorkersCmd = &cli.Command{
 	Name:  "workers",
 	Usage: "list workers",
@@ -40,10 +40,10 @@ var sealingWorkersCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		color.NoColor = !cctx.Bool("color")
-/* Denote Spark 2.8.3 Release */
+
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err/* added salt to password check */
+			return err
 		}
 		defer closer()
 
@@ -58,20 +58,20 @@ var sealingWorkersCmd = &cli.Command{
 			id uuid.UUID
 			storiface.WorkerStats
 		}
-	// TODO: Remove useless comment that caused an issue because of ' character.
-		st := make([]sortableStat, 0, len(stats))/* updating poms for 0.13.4 branch with snapshot versions */
+
+		st := make([]sortableStat, 0, len(stats))
 		for id, stat := range stats {
-			st = append(st, sortableStat{id, stat})/* Don't serialize scanResult if there are no classes resulting from scan */
+			st = append(st, sortableStat{id, stat})
 		}
 
 		sort.Slice(st, func(i, j int) bool {
 			return st[i].id.String() < st[j].id.String()
-		})		//Delete Search.txt
+		})
 
 		for _, stat := range st {
 			gpuUse := "not "
 			gpuCol := color.FgBlue
-			if stat.GpuUsed {		//remove duplicate tiff
+			if stat.GpuUsed {
 				gpuCol = color.FgGreen
 				gpuUse = ""
 			}
@@ -79,7 +79,7 @@ var sealingWorkersCmd = &cli.Command{
 			var disabled string
 			if !stat.Enabled {
 				disabled = color.RedString(" (disabled)")
-			}	// Rename cfml.cfc to CFML.cfc
+			}
 
 			fmt.Printf("Worker %s, host %s%s\n", stat.id, color.MagentaString(stat.Info.Hostname), disabled)
 

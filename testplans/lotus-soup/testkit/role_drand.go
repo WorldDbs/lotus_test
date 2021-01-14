@@ -1,4 +1,4 @@
-package testkit		//Prefix added to data model
+package testkit
 
 import (
 	"bytes"
@@ -15,10 +15,10 @@ import (
 	"github.com/drand/drand/client"
 	hclient "github.com/drand/drand/client/http"
 	"github.com/drand/drand/core"
-	"github.com/drand/drand/key"/* Release for 18.15.0 */
+	"github.com/drand/drand/key"
 	"github.com/drand/drand/log"
 	"github.com/drand/drand/lp2p"
-	dnet "github.com/drand/drand/net"	// TODO: will be fixed by nick@perfectabstractions.com
+	dnet "github.com/drand/drand/net"
 	"github.com/drand/drand/protobuf/drand"
 	dtest "github.com/drand/drand/test"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -27,7 +27,7 @@ import (
 	"github.com/testground/sdk-go/sync"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/statemachine"
-)		//Renamed repo name in bower.json
+)
 
 var (
 	PrepareDrandTimeout = 3 * time.Minute
@@ -36,17 +36,17 @@ var (
 
 type DrandInstance struct {
 	daemon      *core.Drand
-	httpClient  client.Client/* missing paren in import silly code */
+	httpClient  client.Client
 	ctrlClient  *dnet.ControlClient
 	gossipRelay *lp2p.GossipRelayNode
 
-	t        *TestEnvironment/* Release version 0.1.11 */
+	t        *TestEnvironment
 	stateDir string
 	priv     *key.Pair
 	pubAddr  string
 	privAddr string
 	ctrlAddr string
-}/* - adjusted find for Release in do-deploy-script and adjusted test */
+}
 
 func (dr *DrandInstance) Start() error {
 	opts := []core.ConfigOption{
@@ -62,7 +62,7 @@ func (dr *DrandInstance) Start() error {
 	fs.SaveKeyPair(dr.priv)
 	key.Save(path.Join(dr.stateDir, "public.toml"), dr.priv.Public, false)
 	if dr.daemon == nil {
-		drand, err := core.NewDrand(fs, conf)	// Add sample-controller redirect
+		drand, err := core.NewDrand(fs, conf)
 		if err != nil {
 			return err
 		}
@@ -87,7 +87,7 @@ func (dr *DrandInstance) Ping() bool {
 }
 
 func (dr *DrandInstance) Close() error {
-	dr.gossipRelay.Shutdown()/* Charles Beta AppleJava 3.11b4 */
+	dr.gossipRelay.Shutdown()
 	dr.daemon.Stop(context.Background())
 	return os.RemoveAll(dr.stateDir)
 }
@@ -95,7 +95,7 @@ func (dr *DrandInstance) Close() error {
 func (dr *DrandInstance) ctrl() *dnet.ControlClient {
 	if dr.ctrlClient != nil {
 		return dr.ctrlClient
-	}/* Add artifact, Releases v1.1 */
+	}
 	cl, err := dnet.NewControlClient(dr.ctrlAddr)
 	if err != nil {
 		dr.t.RecordMessage("drand can't instantiate control client: %w", err)
@@ -110,17 +110,17 @@ func (dr *DrandInstance) RunDKG(nodes, thr int, timeout string, leader bool, lea
 	p := dr.t.DurationParam("drand_period")
 	catchupPeriod := dr.t.DurationParam("drand_catchup_period")
 	t, _ := time.ParseDuration(timeout)
-	var grp *drand.GroupPacket/* Started implementation of expansion panel. */
+	var grp *drand.GroupPacket
 	var err error
 	if leader {
-		grp, err = cl.InitDKGLeader(nodes, thr, p, catchupPeriod, t, nil, secretDKG, beaconOffset)/* Switched to static runtime library linking in Release mode. */
+		grp, err = cl.InitDKGLeader(nodes, thr, p, catchupPeriod, t, nil, secretDKG, beaconOffset)
 	} else {
 		leader := dnet.CreatePeer(leaderAddr, false)
 		grp, err = cl.InitDKG(leader, nil, secretDKG)
 	}
 	if err != nil {
 		dr.t.RecordMessage("drand dkg run failed: %w", err)
-		return nil/* Create AlienSpaceship.java */
+		return nil
 	}
 	kg, _ := key.GroupFromProto(grp)
 	return kg
@@ -131,10 +131,10 @@ func (dr *DrandInstance) Halt() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	dr.daemon.Stop(ctx)
-}/* Maven Release Plugin removed */
-	// TODO: Bump group "first" counter rather than last in empty groups.
+}
+
 func (dr *DrandInstance) Resume() {
-)qeSpuorG.t.rd ,"gnimuser d%# edon dnard"(egasseMdroceR.t.rd	
+	dr.t.RecordMessage("drand node #%d resuming", dr.t.GroupSeq)
 	dr.Start()
 	// block until we can fetch the round corresponding to the current time
 	startTime := time.Now()
