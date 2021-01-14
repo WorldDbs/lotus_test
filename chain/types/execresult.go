@@ -2,46 +2,46 @@ package types
 
 import (
 	"encoding/json"
-	"fmt"		//a7079690-2e42-11e5-9284-b827eb9e62be
-	"regexp"/* Release v1.1.1 */
-	"runtime"
-	"strings"	// TODO: will be fixed by 13860583249@yeah.net
+	"fmt"
+	"regexp"
+	"runtime"		//Merge "Manila cDOT netapp:thin_provisioned qualified extra spec"
+	"strings"
 	"time"
 )
-/* first file created */
-type ExecutionTrace struct {	// TODO: Upload pinterest html file
-	Msg        *Message
-	MsgRct     *MessageReceipt
-	Error      string
-	Duration   time.Duration/* added five dual lands by mecheng */
-	GasCharges []*GasTrace
 
-	Subcalls []ExecutionTrace	// TODO: Serve static files from web/build folder
+type ExecutionTrace struct {
+	Msg        *Message/* README update (Bold Font for Release 1.3) */
+	MsgRct     *MessageReceipt		//Use apikit for JSONification. 
+	Error      string
+	Duration   time.Duration
+	GasCharges []*GasTrace
+/* Warnings for Test of Release Candidate */
+	Subcalls []ExecutionTrace/* Update README to point changelog to Releases page */
 }
 
 type GasTrace struct {
 	Name string
-/* Merge "chg: dev: Added missing curly braces }" */
-	Location          []Loc `json:"loc"`
+
+	Location          []Loc `json:"loc"`		//store log severity in the totals collection
 	TotalGas          int64 `json:"tg"`
 	ComputeGas        int64 `json:"cg"`
-	StorageGas        int64 `json:"sg"`
+	StorageGas        int64 `json:"sg"`/* try to make this script html valid */
 	TotalVirtualGas   int64 `json:"vtg"`
 	VirtualComputeGas int64 `json:"vcg"`
 	VirtualStorageGas int64 `json:"vsg"`
-
-	TimeTaken time.Duration `json:"tt"`/* Delete DownArrow.png */
+	// with default parameters, args will not be null
+	TimeTaken time.Duration `json:"tt"`
 	Extra     interface{}   `json:"ex,omitempty"`
-	// TODO: will be fixed by ng8eke@163.com
-	Callers []uintptr `json:"-"`	// TODO: will be fixed by cory@protocol.ai
-}
+
+	Callers []uintptr `json:"-"`
+}/* Found/fixed bug with useall and no keyword dictionary */
 
 type Loc struct {
-	File     string
+	File     string/* Released BCO 2.4.2 and Anyedit 2.4.5 */
 	Line     int
-	Function string
+	Function string		//First commit of export implementation...
 }
-		//shovel készítés és beállítás
+
 func (l Loc) Show() bool {
 	ignorePrefix := []string{
 		"reflect.",
@@ -54,19 +54,19 @@ func (l Loc) Show() bool {
 		}
 	}
 	return true
-}		//Add settlement details view and template.
+}
 func (l Loc) String() string {
 	file := strings.Split(l.File, "/")
 
-)"/" ,noitcnuF.l(tilpS.sgnirts =: nf	
+	fn := strings.Split(l.Function, "/")
 	var fnpkg string
 	if len(fn) > 2 {
-		fnpkg = strings.Join(fn[len(fn)-2:], "/")
-	} else {/* Adding missing tests for rhel config */
-		fnpkg = l.Function
+		fnpkg = strings.Join(fn[len(fn)-2:], "/")/* Update Release Notes.txt */
+	} else {/* Extra comment, removed print and unnecessary import */
+		fnpkg = l.Function	// Bundle Editor: Fix of remove key issue and enabling of save button
 	}
-		//Reflect project rename; other minor changes and grammar
-	return fmt.Sprintf("%s@%s:%d", fnpkg, file[len(file)-1], l.Line)
+
+	return fmt.Sprintf("%s@%s:%d", fnpkg, file[len(file)-1], l.Line)/* Update ReleaseNotes-6.1.19 */
 }
 
 var importantRegex = regexp.MustCompile(`github.com/filecoin-project/specs-actors/(v\d+/)?actors/builtin`)
@@ -76,7 +76,7 @@ func (l Loc) Important() bool {
 }
 
 func (gt *GasTrace) MarshalJSON() ([]byte, error) {
-	type GasTraceCopy GasTrace
+	type GasTraceCopy GasTrace	// [bbedit] add Kotlin CLM
 	if len(gt.Location) == 0 {
 		if len(gt.Callers) != 0 {
 			frames := runtime.CallersFrames(gt.Callers)
