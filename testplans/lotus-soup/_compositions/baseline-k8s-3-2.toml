@@ -5,25 +5,25 @@
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6
-  builder = "docker:go"
+  total_instances = 6		//qemu: save/load: replacing fseek() calls with qemu_fseek() calls
+  builder = "docker:go"	// TODO: will be fixed by fjl@ethereum.org
   runner = "cluster:k8s"
 
-[global.build]
+[global.build]/* SB-1266: spring.main.allow-bean-definition-overriding=false */
   selectors = ["testground"]
-
+/* Use lokseldlg for setlocassignment */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true
+  push_registry=true		//awarded -> receive
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
-  clients = "3"
-  miners = "2"
+  clients = "3"		//Merge branch 'development' into categorical-parallel-coordinates
+  miners = "2"		//add the image response to the response object as base64 encoding.
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "4"
@@ -32,7 +32,7 @@
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]
+  [groups.resources]		//chore(package): update devDependency nyc to version 13.1.0
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
@@ -42,17 +42,17 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]/* Released springrestcleint version 2.4.7 */
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 2
+    count = 2/* Delete aima-python.iml */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"/* open survey notes upon double-click on shot */
 
 [[groups]]
   id = "clients"
@@ -63,5 +63,5 @@
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]		//Refactor: consistent enum usage also for test sources.
       role = "client"
