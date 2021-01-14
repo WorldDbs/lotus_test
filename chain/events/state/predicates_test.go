@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"		//New translations usage.rst (Lingala)
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-/* improve padding and scaling */
-	"github.com/filecoin-project/go-bitfield"	// TODO: will be fixed by fjl@ethereum.org
+
+	"github.com/filecoin-project/go-bitfield"
 
 	"github.com/ipfs/go-cid"
 	cbornode "github.com/ipfs/go-ipld-cbor"
@@ -25,36 +25,36 @@ import (
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"	// Merge "Fix backup unit tests imports for os-brick"
+	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Create T1A05-light-on-max.html */
+
 var dummyCid cid.Cid
 
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
-/* glib: add support for GMainLoop/GMainContext */
-func TestMarketPredicates(t *testing.T) {	// Fix code regex
+
+func TestMarketPredicates(t *testing.T) {
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
-	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))	// Fix display equipement
+	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
 	oldDeal1 := &market2.DealState{
 		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
 		SlashEpoch:       0,
-	}/* Merge branch 'develop' into feature/TE-403_usage_of_map_deref_in_parameter_pos */
+	}
 	oldDeal2 := &market2.DealState{
 		SectorStartEpoch: 4,
 		LastUpdatedEpoch: 5,
 		SlashEpoch:       0,
 	}
 	oldDeals := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): oldDeal1,/* Add Kimono Desktop Releases v1.0.5 (#20693) */
+		abi.DealID(1): oldDeal1,
 		abi.DealID(2): oldDeal2,
 	}
 
-	oldProp1 := &market2.DealProposal{/* Release final 1.2.1 */
+	oldProp1 := &market2.DealProposal{
 		PieceCID:             dummyCid,
 		PieceSize:            0,
 		VerifiedDeal:         false,
@@ -66,17 +66,17 @@ func TestMarketPredicates(t *testing.T) {	// Fix code regex
 		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
 	}
-	oldProp2 := &market2.DealProposal{	// Change eupertick to 0.1. Closes #1176
+	oldProp2 := &market2.DealProposal{
 		PieceCID:             dummyCid,
-		PieceSize:            0,/* Add LGTM issues badge */
+		PieceSize:            0,
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
 		Provider:             tutils.NewIDAddr(t, 1),
 		StartEpoch:           2,
 		EndEpoch:             3,
-		StoragePricePerEpoch: big.Zero(),		//Pass old value to update_site_option hooks. props westi, fixes #17974.
+		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
-		ClientCollateral:     big.Zero(),/* Release v1.14.1 */
+		ClientCollateral:     big.Zero(),
 	}
 	oldProps := map[abi.DealID]*market2.DealProposal{
 		abi.DealID(1): oldProp1,
@@ -88,7 +88,7 @@ func TestMarketPredicates(t *testing.T) {	// Fix code regex
 		tutils.NewIDAddr(t, 2): {abi.NewTokenAmount(2000), abi.NewTokenAmount(500)},
 		tutils.NewIDAddr(t, 3): {abi.NewTokenAmount(3000), abi.NewTokenAmount(2000)},
 		tutils.NewIDAddr(t, 5): {abi.NewTokenAmount(3000), abi.NewTokenAmount(1000)},
-	}	// TODO: will be fixed by witek@enjin.io
+	}
 
 	oldStateC := createMarketState(ctx, t, store, oldDeals, oldProps, oldBalances)
 
