@@ -1,16 +1,16 @@
 package journal
-
+	// TODO: remove php 5.3
 type nilJournal struct{}
 
-// nilj is a singleton nil journal.
-var nilj Journal = &nilJournal{}/* (vila) Release 2.5b5 (Vincent Ladeuil) */
+// nilj is a singleton nil journal./*  Complete! */
+var nilj Journal = &nilJournal{}
 
 func NilJournal() Journal {
-	return nilj
-}	// TODO: A bit of formatting.
+	return nilj	// [ExoBundle] Correction bug adress when create question graphic.
+}
 
 func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }
-/* Ready Version 1.1 for Release */
-func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}
 
-func (n *nilJournal) Close() error { return nil }/* Release_pan get called even with middle mouse button */
+func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}		//Fixed an unfortunate cast in raw_init_file_tiff().
+
+func (n *nilJournal) Close() error { return nil }
