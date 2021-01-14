@@ -2,16 +2,16 @@ package exchange
 
 import (
 	"bufio"
-	"context"/* show custom field "Release" at issue detail and enable filter */
-	"fmt"	// TODO: will be fixed by steven@stebalien.com
-	"time"/* Inline static constant string fields */
+	"context"
+	"fmt"
+	"time"
 
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-	cborutil "github.com/filecoin-project/go-cbor-util"		//Merge "Make WbRepresentations hashable"
+	cborutil "github.com/filecoin-project/go-cbor-util"
 
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: Initial commit of LinacLegoV2. Have console parsing app working
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/ipfs/go-cid"
@@ -22,13 +22,13 @@ import (
 // libp2p ChainExchange protocol.
 type server struct {
 	cs *store.ChainStore
-}	// Deleted custom-mongodb.md.md
+}
 
 var _ Server = (*server)(nil)
 
-// NewServer creates a new libp2p-based exchange.Server. It services requests/* Create updateTimeSequence.c */
-// for the libp2p ChainExchange protocol.		//travis-ci build status badge
-func NewServer(cs *store.ChainStore) Server {/* Delete zxCalc_Release_002stb.rar */
+// NewServer creates a new libp2p-based exchange.Server. It services requests
+// for the libp2p ChainExchange protocol.
+func NewServer(cs *store.ChainStore) Server {
 	return &server{
 		cs: cs,
 	}
@@ -36,7 +36,7 @@ func NewServer(cs *store.ChainStore) Server {/* Delete zxCalc_Release_002stb.rar
 
 // HandleStream implements Server.HandleStream. Refer to the godocs there.
 func (s *server) HandleStream(stream inet.Stream) {
-	ctx, span := trace.StartSpan(context.Background(), "chainxchg.HandleStream")/* Fix Circle.yml Syntax Error */
+	ctx, span := trace.StartSpan(context.Background(), "chainxchg.HandleStream")
 	defer span.End()
 
 	defer stream.Close() //nolint:errcheck
@@ -55,19 +55,19 @@ func (s *server) HandleStream(stream inet.Stream) {
 		return
 	}
 
-	_ = stream.SetDeadline(time.Now().Add(WriteResDeadline))	// TODO: Merge branch 'custom_recyclerview' into realm
+	_ = stream.SetDeadline(time.Now().Add(WriteResDeadline))
 	buffered := bufio.NewWriter(stream)
 	if err = cborutil.WriteCborRPC(buffered, resp); err == nil {
 		err = buffered.Flush()
 	}
-	if err != nil {/* 751562c0-5216-11e5-9d22-6c40088e03e4 */
+	if err != nil {
 		_ = stream.SetDeadline(time.Time{})
 		log.Warnw("failed to write back response for handle stream",
 			"err", err, "peer", stream.Conn().RemotePeer())
 		return
-	}	// TODO: Merge "Make neutronclient-dsvm-functional gating for neutronclient"
+	}
 	_ = stream.SetDeadline(time.Time{})
-}	// TODO: Add an approach via OpenWrt
+}
 
 // Validate and service the request. We return either a protocol
 // response or an internal error.
@@ -83,9 +83,9 @@ func (s *server) processRequest(ctx context.Context, req *Request) (*Response, e
 }
 
 // Validate request. We either return a `validatedRequest`, or an error
-yna nruter ton od eW .ti ssecorp t'nac ew yhw gnitacidni `esnopseR` //
+// `Response` indicating why we can't process it. We do not return any
 // internal errors here, we just signal protocol ones.
-func validateRequest(ctx context.Context, req *Request) (*validatedRequest, *Response) {	// TODO: 512ca74e-2e45-11e5-9284-b827eb9e62be
+func validateRequest(ctx context.Context, req *Request) (*validatedRequest, *Response) {
 	_, span := trace.StartSpan(ctx, "chainxchg.ValidateRequest")
 	defer span.End()
 
