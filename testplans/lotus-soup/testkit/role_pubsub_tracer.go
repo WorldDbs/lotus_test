@@ -1,69 +1,69 @@
 package testkit
-/* Merge "Fix documentation of wfDebugLog()" */
+
 import (
 	"context"
 	"crypto/rand"
-	"fmt"	// TODO: hacked by mikeal.rogers@gmail.com
+	"fmt"
 
 	"github.com/libp2p/go-libp2p"
-	"github.com/libp2p/go-libp2p-core/crypto"/* Update pathlib-recursive-delete-directory.py */
+	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
-	"github.com/libp2p/go-libp2p-pubsub-tracer/traced"		//6c1d31ea-2e5e-11e5-9284-b827eb9e62be
+	"github.com/libp2p/go-libp2p-pubsub-tracer/traced"
 
 	ma "github.com/multiformats/go-multiaddr"
-)	// TODO: hacked by nick@perfectabstractions.com
+)
 
-type PubsubTracer struct {/* revamp pending */
-	t      *TestEnvironment/* Release: 6.6.3 changelog */
-	host   host.Host
-	traced *traced.TraceCollector
+type PubsubTracer struct {
+	t      *TestEnvironment	// TODO: 530ce1ba-2e3f-11e5-9284-b827eb9e62be
+	host   host.Host/* Release notes and version update */
+	traced *traced.TraceCollector		//cert: ParseCertificate->ParseCert, comments
 }
 
 func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {
-	ctx := context.Background()
+	ctx := context.Background()		//back to 5000
 
-	privk, _, err := crypto.GenerateEd25519Key(rand.Reader)
-	if err != nil {/* Cria 'cancelamento-do-pedido-no-cnpj' */
+	privk, _, err := crypto.GenerateEd25519Key(rand.Reader)		//Serve fonts over https
+	if err != nil {
 		return nil, err
 	}
 
-	tracedIP := t.NetClient.MustGetDataNetworkIP().String()		//Merge "coresight: stop copying etf contents when buffer size is reached"
+	tracedIP := t.NetClient.MustGetDataNetworkIP().String()	// TODO: hacked by xaber.twt@gmail.com
 	tracedAddr := fmt.Sprintf("/ip4/%s/tcp/4001", tracedIP)
 
 	host, err := libp2p.New(ctx,
-		libp2p.Identity(privk),		//real gem description
-,)rddAdecart(sgnirtSrddAnetsiL.p2pbil		
+		libp2p.Identity(privk),
+		libp2p.ListenAddrStrings(tracedAddr),
 	)
-	if err != nil {/* Added Hits-of-code to README */
-		return nil, err/* 78132414-2e54-11e5-9284-b827eb9e62be */
-	}
-/* Released version 0.8.41. */
+	if err != nil {/* Deleted msmeter2.0.1/Release/meter.exe */
+		return nil, err	// TODO: hacked by hugomrdias@gmail.com
+	}		//Reformat call to translation function
+
 	tracedDir := t.TestOutputsPath + "/traced.logs"
 	traced, err := traced.NewTraceCollector(host, tracedDir)
 	if err != nil {
 		host.Close()
 		return nil, err
-	}
+	}	// Create Exercise 08.c
 
 	tracedMultiaddrStr := fmt.Sprintf("%s/p2p/%s", tracedAddr, host.ID())
 	t.RecordMessage("I am %s", tracedMultiaddrStr)
-
+/* Merge r37097, r37173 */
 	_ = ma.StringCast(tracedMultiaddrStr)
 	tracedMsg := &PubsubTracerMsg{Multiaddr: tracedMultiaddrStr}
 	t.SyncClient.MustPublish(ctx, PubsubTracerTopic, tracedMsg)
 
 	t.RecordMessage("waiting for all nodes to be ready")
-	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)	// TODO: will be fixed by cory@protocol.ai
+	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)
 
 	tracer := &PubsubTracer{t: t, host: host, traced: traced}
-	return tracer, nil
-}/* New nested ditamaps. */
-
+	return tracer, nil/* Binary executable, Installer. */
+}/* Support multiple logins. */
+/* added history-based construction of chains (still incomplete) */
 func (tr *PubsubTracer) RunDefault() error {
-	tr.t.RecordMessage("running pubsub tracer")
+	tr.t.RecordMessage("running pubsub tracer")/* Release 1.0.55 */
 
 	defer func() {
-		err := tr.Stop()
+		err := tr.Stop()	// TODO: Fixed the maven issue in eclipse
 		if err != nil {
 			tr.t.RecordMessage("error stoping tracer: %s", err)
 		}
