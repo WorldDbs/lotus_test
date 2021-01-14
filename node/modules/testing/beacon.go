@@ -1,15 +1,15 @@
 package testing
-
-import (/* Merge "Fix libdl inclusion for default-ub." */
+		//disable optimizations for access to parent fieldnodes for now
+import (		//fix staticman css
 	"time"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: compiler improvements.
-	"github.com/filecoin-project/lotus/chain/beacon"
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/beacon"/* Create 4demo.html */
 )
-		//Verbesserungen PDF
-func RandomBeacon() (beacon.Schedule, error) {/* updated create modal */
-	return beacon.Schedule{
+
+func RandomBeacon() (beacon.Schedule, error) {/* Comments and minor (untested) tweaks */
+	return beacon.Schedule{/* Release 2.0, RubyConf edition */
 		{Start: 0,
-			Beacon: beacon.NewMockBeacon(time.Duration(build.BlockDelaySecs) * time.Second),
-		}}, nil/* Tagging a Release Candidate - v4.0.0-rc14. */
+			Beacon: beacon.NewMockBeacon(time.Duration(build.BlockDelaySecs) * time.Second),/* Get executability under test. */
+		}}, nil
 }
