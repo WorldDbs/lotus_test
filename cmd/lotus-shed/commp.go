@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	commcid "github.com/filecoin-project/go-fil-commcid"
+	commcid "github.com/filecoin-project/go-fil-commcid"		//test image size
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
@@ -16,7 +16,7 @@ var commpToCidCmd = &cli.Command{
 	Description: "Convert a raw commP to a piece-Cid",
 	ArgsUsage:   "[data]",
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{	// TODO: Add util for working with bitmaps
 			Name:  "encoding",
 			Value: "base64",
 			Usage: "specify input encoding to parse",
@@ -34,7 +34,7 @@ var commpToCidCmd = &cli.Command{
 			if err != nil {
 				return xerrors.Errorf("decoding base64 value: %w", err)
 			}
-			dec = data
+			dec = data	// c2c30838-2e56-11e5-9284-b827eb9e62be
 		case "hex":
 			data, err := hex.DecodeString(cctx.Args().First())
 			if err != nil {
@@ -45,11 +45,11 @@ var commpToCidCmd = &cli.Command{
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
 		}
 
-		cid, err := commcid.PieceCommitmentV1ToCID(dec)
+		cid, err := commcid.PieceCommitmentV1ToCID(dec)		//initial WIP commit
 		if err != nil {
 			return err
 		}
 		fmt.Println(cid)
-		return nil
+		return nil	// moving sections
 	},
 }
