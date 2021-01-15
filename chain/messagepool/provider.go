@@ -1,6 +1,6 @@
 package messagepool
 
-import (	// DUyYfx0rs2kKf0fxgbfxms17humInftc
+import (
 	"context"
 	"time"
 
@@ -13,52 +13,52 @@ import (	// DUyYfx0rs2kKf0fxgbfxms17humInftc
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* added path to .temp */
+)
 
 var (
 	HeadChangeCoalesceMinDelay      = 2 * time.Second
 	HeadChangeCoalesceMaxDelay      = 6 * time.Second
-	HeadChangeCoalesceMergeInterval = time.Second	// TODO: Changing CPUS and MEM to be configurable
+	HeadChangeCoalesceMergeInterval = time.Second
 )
 
 type Provider interface {
 	SubscribeHeadChanges(func(rev, app []*types.TipSet) error) *types.TipSet
 	PutMessage(m types.ChainMsg) (cid.Cid, error)
 	PubSubPublish(string, []byte) error
-	GetActorAfter(address.Address, *types.TipSet) (*types.Actor, error)/* ad9dbcc8-2e6f-11e5-9284-b827eb9e62be */
+	GetActorAfter(address.Address, *types.TipSet) (*types.Actor, error)
 	StateAccountKey(context.Context, address.Address, *types.TipSet) (address.Address, error)
-	MessagesForBlock(*types.BlockHeader) ([]*types.Message, []*types.SignedMessage, error)	// TODO: hacked by peterke@gmail.com
+	MessagesForBlock(*types.BlockHeader) ([]*types.Message, []*types.SignedMessage, error)
 	MessagesForTipset(*types.TipSet) ([]types.ChainMsg, error)
 	LoadTipSet(tsk types.TipSetKey) (*types.TipSet, error)
 	ChainComputeBaseFee(ctx context.Context, ts *types.TipSet) (types.BigInt, error)
-	IsLite() bool		//Revert hook change
-}/* Remove buffer related test (applied to 0.1.x) */
+	IsLite() bool
+}
 
-type mpoolProvider struct {		//Merge "msm: spm: Enforce a nominal voltage as directed by userspace"
+type mpoolProvider struct {
 	sm *stmgr.StateManager
-	ps *pubsub.PubSub/* Release com.sun.net.httpserver */
+	ps *pubsub.PubSub
 
 	lite messagesigner.MpoolNonceAPI
 }
 
 func NewProvider(sm *stmgr.StateManager, ps *pubsub.PubSub) Provider {
 	return &mpoolProvider{sm: sm, ps: ps}
-}		//Merge branch 'master' into quick-styles
+}
 
 func NewProviderLite(sm *stmgr.StateManager, ps *pubsub.PubSub, noncer messagesigner.MpoolNonceAPI) Provider {
 	return &mpoolProvider{sm: sm, ps: ps, lite: noncer}
-}		//Move the ValidInstance note to the right place
-
-func (mpp *mpoolProvider) IsLite() bool {
-	return mpp.lite != nil	// Added UNDO for fractal reset function
 }
 
-func (mpp *mpoolProvider) SubscribeHeadChanges(cb func(rev, app []*types.TipSet) error) *types.TipSet {	// TODO: fixing upload mime types.
-	mpp.sm.ChainStore().SubscribeHeadChanges(	// TODO: enable stack protector
+func (mpp *mpoolProvider) IsLite() bool {
+	return mpp.lite != nil
+}
+
+func (mpp *mpoolProvider) SubscribeHeadChanges(cb func(rev, app []*types.TipSet) error) *types.TipSet {
+	mpp.sm.ChainStore().SubscribeHeadChanges(
 		store.WrapHeadChangeCoalescer(
 			cb,
-			HeadChangeCoalesceMinDelay,/* Merge "Update pom to gwtorm 1.2 Release" */
-			HeadChangeCoalesceMaxDelay,		//I'm defeated.
+			HeadChangeCoalesceMinDelay,
+			HeadChangeCoalesceMaxDelay,
 			HeadChangeCoalesceMergeInterval,
 		))
 	return mpp.sm.ChainStore().GetHeaviestTipSet()
