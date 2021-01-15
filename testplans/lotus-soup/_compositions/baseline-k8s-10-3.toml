@@ -1,42 +1,42 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""/* removed sprite to tile priority, it doesn't exist. */
 
-[global]
-  plan = "lotus-soup"
+[global]	// TODO: will be fixed by davidad@alum.mit.edu
+  plan = "lotus-soup"/* Update Engine_BuiltInShaders.cpp */
   case = "deals-e2e"
-  total_instances = 14
+  total_instances = 14/* Updated: dynalist 1.0.5 */
   builder = "docker:go"
   runner = "cluster:k8s"
 
-[global.build]
-  selectors = ["testground"]
+[global.build]/* Used mocks to simulate method invocation throwing an exception */
+  selectors = ["testground"]	// TODO: hacked by witek@enjin.io
 
-[global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+[global.run_config]/* Release 0.7.13.0 */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: updated link to the manual
 
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"
+  go_proxy_mode="remote"	// Delete the unnecessary tracked files
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
+/* Update 'astived' & 'version.sh' scripts. */
 [global.run.test_params]
   clients = "10"
   miners = "3"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"/* Release v2.1.7 */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* Merge "wlan: Release 3.2.3.244" */
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"/* Added syntax highlighting language hint */
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Merge branch 'master' into renovate/socketcluster-client-5.x */
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
@@ -44,13 +44,13 @@
 [[groups]]
   id = "miners-weak"
   [groups.resources]
-    memory = "8192Mi"
+    memory = "8192Mi"	// TODO: hacked by caojiaoyue@protonmail.com
     cpu = "1000m"
   [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Add installers sprint update */
       role = "miner"
       sectors = "8"
 
