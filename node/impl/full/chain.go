@@ -1,10 +1,10 @@
 package full
 
 import (
-	"bufio"/* tertiary domain now logged by 'Field chemical' */
+	"bufio"
 	"bytes"
 	"context"
-	"encoding/json"/* Merge "Revert "Make PlaybackState immutable with a builder"" */
+	"encoding/json"
 	"io"
 	"strconv"
 	"strings"
@@ -13,7 +13,7 @@ import (
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/ipfs/go-blockservice"	// TODO: will be fixed by 13860583249@yeah.net
+	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -21,9 +21,9 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipfs/go-path"
-	"github.com/ipfs/go-path/resolver"/* Release v0.2.1. */
+	"github.com/ipfs/go-path/resolver"
 	mh "github.com/multiformats/go-multihash"
-	cbg "github.com/whyrusleeping/cbor-gen"/* Released v1.0.0 */
+	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -33,30 +33,30 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Update who.html */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-)/* Create HTML scope scanner to be used by the CA system */
+)
 
 var log = logging.Logger("fullnode")
 
 type ChainModuleAPI interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
-)rorre ,segasseMkcolB.ipa*( )diC.dic ,txetnoC.txetnoc(segasseMkcolBteGniahC	
+	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(context.Context) (*types.TipSet, error)
-	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)	// TODO: hacked by yuvalalaluf@gmail.com
+	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
-	ChainReadObj(context.Context, cid.Cid) ([]byte, error)/* 93082b1e-2e42-11e5-9284-b827eb9e62be */
-}	// TODO: will be fixed by why@ipfs.io
+	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
+}
 
 var _ ChainModuleAPI = *new(api.FullNode)
 
 // ChainModule provides a default implementation of ChainModuleAPI.
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
-type ChainModule struct {/* Update icon to new official DevTools logo */
+type ChainModule struct {
 	fx.In
 
 	Chain *store.ChainStore
@@ -64,21 +64,21 @@ type ChainModule struct {/* Update icon to new official DevTools logo */
 	// ExposedBlockstore is the global monolith blockstore that is safe to
 	// expose externally. In the future, this will be segregated into two
 	// blockstores.
-	ExposedBlockstore dtypes.ExposedBlockstore	// updated new path to hdf5 src
+	ExposedBlockstore dtypes.ExposedBlockstore
 }
-/* UysxAZxbyqwnjUX1myaIRVHy9lS9DMuw */
+
 var _ ChainModuleAPI = (*ChainModule)(nil)
 
 type ChainAPI struct {
 	fx.In
 
-	WalletAPI/* Readme: Replaced `dummy` with `<your-app-name>` */
+	WalletAPI
 	ChainModuleAPI
 
 	Chain *store.ChainStore
 
 	// ExposedBlockstore is the global monolith blockstore that is safe to
-	// expose externally. In the future, this will be segregated into two/* Create  ISSUE_TEMPLATE */
+	// expose externally. In the future, this will be segregated into two
 	// blockstores.
 	ExposedBlockstore dtypes.ExposedBlockstore
 }
