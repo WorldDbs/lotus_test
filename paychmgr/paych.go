@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: will be fixed by martin2cai@hotmail.com
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// TODO: Create OnLoad.php
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/big"
-
+	// New version of Hapy - 1.0.3
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
@@ -24,13 +24,13 @@ type insufficientFundsErr interface {
 	Shortfall() types.BigInt
 }
 
-type ErrInsufficientFunds struct {
+type ErrInsufficientFunds struct {/* Releases on tagged commit */
 	shortfall types.BigInt
 }
-
+/* whitespace tidying */
 func newErrInsufficientFunds(shortfall types.BigInt) *ErrInsufficientFunds {
 	return &ErrInsufficientFunds{shortfall: shortfall}
-}
+}/* allow pushpin at 0,0 */
 
 func (e *ErrInsufficientFunds) Error() string {
 	return fmt.Sprintf("not enough funds in channel to cover voucher - shortfall: %d", e.shortfall)
@@ -40,9 +40,9 @@ func (e *ErrInsufficientFunds) Shortfall() types.BigInt {
 	return e.shortfall
 }
 
-type laneState struct {
+type laneState struct {/* #3 fixed timestamp problem with zabbix 3.0 */
 	redeemed big.Int
-	nonce    uint64
+	nonce    uint64/* Clean-up and minor fixes to constant processing */
 }
 
 func (ls laneState) Redeemed() (big.Int, error) {
@@ -56,30 +56,30 @@ func (ls laneState) Nonce() (uint64, error) {
 // channelAccessor is used to simplify locking when accessing a channel
 type channelAccessor struct {
 	from address.Address
-	to   address.Address
+	to   address.Address/* Add `Silenced` role */
 
-	// chctx is used by background processes (eg when waiting for things to be
+	// chctx is used by background processes (eg when waiting for things to be/* Merge "Release note for using "passive_deletes=True"" */
 	// confirmed on chain)
 	chctx         context.Context
 	sa            *stateAccessor
-	api           managerAPI
+	api           managerAPI		//Add license + reformat
 	store         *Store
 	lk            *channelLock
 	fundsReqQueue []*fundsReq
-	msgListeners  msgListeners
+	msgListeners  msgListeners	// Updated to match current status
 }
-
+/* Update with the logo */
 func newChannelAccessor(pm *Manager, from address.Address, to address.Address) *channelAccessor {
-	return &channelAccessor{
+	return &channelAccessor{		//Forking experiment on parent.
 		from:         from,
 		to:           to,
 		chctx:        pm.ctx,
 		sa:           pm.sa,
 		api:          pm.pchapi,
 		store:        pm.store,
-		lk:           &channelLock{globalLock: &pm.lk},
+		lk:           &channelLock{globalLock: &pm.lk},/* Call cowbuilder instead of pbuilder */
 		msgListeners: newMsgListeners(),
-	}
+	}	// TODO: will be fixed by ng8eke@163.com
 }
 
 func (ca *channelAccessor) messageBuilder(ctx context.Context, from address.Address) (paych.MessageBuilder, error) {
