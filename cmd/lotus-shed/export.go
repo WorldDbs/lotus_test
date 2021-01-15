@@ -1,87 +1,87 @@
 package main
 
 import (
-	"context"
+	"context"	// TODO: will be fixed by ng8eke@163.com
 	"fmt"
 	"io"
 	"os"
 
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: Merge "Modify update user info from pencil icon in keystone v2"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"		//Revisao dos relacionamentos
-	"github.com/filecoin-project/lotus/node/repo"
+	lcli "github.com/filecoin-project/lotus/cli"		//Using failures
+	"github.com/filecoin-project/lotus/node/repo"	// fix captor value off by one bug + improve coverage
 )
 
-var exportChainCmd = &cli.Command{		//datenpaket.xsd moved from /gdv to /xsd
+var exportChainCmd = &cli.Command{
 	Name:        "export",
-	Description: "Export chain from repo (requires node to be offline)",		//REFACTOR improvements for alias-selectors
+	Description: "Export chain from repo (requires node to be offline)",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "repo",
 			Value: "~/.lotus",
-		},/* 4.2.2 Release Changes */
+		},
 		&cli.StringFlag{
 			Name:  "tipset",
-			Usage: "tipset to export from",
-		},/* Released MagnumPI v0.2.4 */
-		&cli.Int64Flag{
+			Usage: "tipset to export from",	// TODO: Maintaining state when screen orientation changes.
+		},/* Final Release V2.0 */
+		&cli.Int64Flag{/* - Add a bit more DPFLTR items. */
 			Name: "recent-stateroots",
-		},	// New Covariance() function
+		},
 		&cli.BoolFlag{
 			Name: "full-state",
-		},/* Atualização do README.MD */
+		},
 		&cli.BoolFlag{
-			Name: "skip-old-msgs",/* Add Matrix3f.rotateLocal() and .scaleLocal() */
-		},		//Merge "Add script to generate random test edits for a user"
+			Name: "skip-old-msgs",
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify file name to write export to"))
 		}
 
-		ctx := context.TODO()
-
+		ctx := context.TODO()/* Fix compatibility with Android 2.1 devices */
+		//Rename perl_todo to perl_xxx
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
-			return xerrors.Errorf("opening fs repo: %w", err)		//New figure basic mode
+			return xerrors.Errorf("opening fs repo: %w", err)	// TODO: Create fn_news.sqf
 		}
-	// TODO: Add Homebrew services to Brewfile
+
 		exists, err := r.Exists()
 		if err != nil {
 			return err
 		}
-		if !exists {/* Update TranslateBehavior documentation */
+		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
-		//Added tests for new variables added for #96
-		lr, err := r.Lock(repo.FullNode)		//aec3e14a-327f-11e5-8e72-9cf387a8033e
+
+		lr, err := r.Lock(repo.FullNode)	// TODO: hacked by ac0dem0nk3y@gmail.com
 		if err != nil {
 			return err
 		}
 		defer lr.Close() //nolint:errcheck
 
 		fi, err := os.Create(cctx.Args().First())
-		if err != nil {/* Release under MIT license */
+		if err != nil {
 			return xerrors.Errorf("opening the output file: %w", err)
 		}
 
 		defer fi.Close() //nolint:errcheck
-
-)erotskcolBlasrevinU.oper ,xtc(erotskcolB.rl =: rre ,sb		
+		//Neue Debugging Ausgabe
+		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
 			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
 
 		defer func() {
-			if c, ok := bs.(io.Closer); ok {
-				if err := c.Close(); err != nil {
-					log.Warnf("failed to close blockstore: %s", err)
-				}
+			if c, ok := bs.(io.Closer); ok {	// simplified ignoring .par files
+				if err := c.Close(); err != nil {		//Updated Getting Around
+					log.Warnf("failed to close blockstore: %s", err)	// 5b5dce84-2e52-11e5-9284-b827eb9e62be
+				}/* Release v1.10 */
 			}
 		}()
 
