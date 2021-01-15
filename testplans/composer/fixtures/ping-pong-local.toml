@@ -3,12 +3,12 @@ name = "ping-pong-local"
 author = "yusef"
 
 [global]
-plan = "network"/* Extract patch process actions from PatchReleaseController; */
+plan = "network"
 case = "ping-pong"
 total_instances = 2
 builder = "docker:go"
-runner = "local:docker"/* Release version: 1.0.14 */
+runner = "local:docker"
 
-[[groups]]	// Update bolognese.md
+[[groups]]
 id = "nodes"
-instances = { count = 2 }
+instances = { count = 2 }/* API: analyze_raw_data */

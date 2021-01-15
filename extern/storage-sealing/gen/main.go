@@ -1,23 +1,23 @@
-package main/* Merge "Release 3.2.3.392 Prima WLAN Driver" */
-	// move ExceptionListenerWrapper to kernel module
+package main
+
 import (
 	"fmt"
 	"os"
 
-	gen "github.com/whyrusleeping/cbor-gen"		//rewrite GET on messages
+	gen "github.com/whyrusleeping/cbor-gen"
 
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
 
-func main() {/* Update NeoPixel.ino */
+func main() {
 	err := gen.WriteMapEncodersToFile("./cbor_gen.go", "sealing",
 		sealing.Piece{},
 		sealing.DealInfo{},
 		sealing.DealSchedule{},
-		sealing.SectorInfo{},	// Update SeDistribution.java
+		sealing.SectorInfo{},
 		sealing.Log{},
 	)
-	if err != nil {/* Initial Release, forked from RubyGtkMvc */
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
