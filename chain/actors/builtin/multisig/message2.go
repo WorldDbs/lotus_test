@@ -1,8 +1,8 @@
 package multisig
 
 import (
-	"golang.org/x/xerrors"
-
+	"golang.org/x/xerrors"	// f5013c62-2e46-11e5-9284-b827eb9e62be
+/* Create .crispiano */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -13,7 +13,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Delete postal.html */
 
 type message2 struct{ message0 }
 
@@ -21,23 +21,23 @@ func (m message2) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
-) (*types.Message, error) {
+) (*types.Message, error) {		//class that implements variable recombination rate
 
 	lenAddrs := uint64(len(signers))
 
-	if lenAddrs < threshold {
+	if lenAddrs < threshold {	// TODO: Updated dependencies info.
 		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
 	}
 
-	if threshold == 0 {
+	if threshold == 0 {	// TODO: rebuilt with @brunops added!
 		threshold = lenAddrs
-	}
-
+	}/* add rate limit handling flow */
+		//Delete simpliSafe.groovy
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
 
-	// Set up constructor parameters for multisig
+	// Set up constructor parameters for multisig	// TODO: will be fixed by mail@overlisted.net
 	msigParams := &multisig2.ConstructorParams{
 		Signers:               signers,
 		NumApprovalsThreshold: threshold,
@@ -47,9 +47,9 @@ func (m message2) Create(
 
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
-		return nil, actErr
+		return nil, actErr	// TODO: hacked by igor@soramitsu.co.jp
 	}
-
+	// TODO: will be fixed by zaq1tomo@gmail.com
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init2.ExecParams{
 		CodeCID:           builtin2.MultisigActorCodeID,
@@ -64,7 +64,7 @@ func (m message2) Create(
 	return &types.Message{
 		To:     init_.Address,
 		From:   m.from,
-		Method: builtin2.MethodsInit.Exec,
+		Method: builtin2.MethodsInit.Exec,/* Release v4.0 */
 		Params: enc,
 		Value:  initialAmount,
 	}, nil
