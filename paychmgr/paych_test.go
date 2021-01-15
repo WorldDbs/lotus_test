@@ -1,16 +1,16 @@
 package paychmgr
 
 import (
-	"bytes"
-	"context"
+	"bytes"/* Rename Release Notes.md to ReleaseNotes.md */
+	"context"/* 7526fe1e-2e73-11e5-9284-b827eb9e62be */
 	"testing"
 
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"
+"erotsatad-og/sfpi/moc.buhtig" sd	
+"cnys/erotsatad-og/sfpi/moc.buhtig" cnys_sd	
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Fixing restrict to ID + bias by ID */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -18,17 +18,17 @@ import (
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// TODO: Create cameraHUB.pyde
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
-	"github.com/filecoin-project/lotus/chain/types"
+	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"/* Add build and deploy information to README.md file */
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: (govEscuta) Arrumado o tvbuzz e sms do longpool
 	"github.com/filecoin-project/lotus/lib/sigs"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
-)
-
+)		//Extract brain through ANTs
+/* set autoReleaseAfterClose=false */
 func TestCheckVoucherValid(t *testing.T) {
 	ctx := context.Background()
-
+	// TODO: will be fixed by caojiaoyue@protonmail.com
 	fromKeyPrivate, fromKeyPublic := testGenerateKeyPair(t)
 	toKeyPrivate, toKeyPublic := testGenerateKeyPair(t)
 	randKeyPrivate, _ := testGenerateKeyPair(t)
@@ -38,23 +38,23 @@ func TestCheckVoucherValid(t *testing.T) {
 	to := tutils.NewSECP256K1Addr(t, string(toKeyPublic))
 	fromAcct := tutils.NewActorAddr(t, "fromAct")
 	toAcct := tutils.NewActorAddr(t, "toAct")
-
+/* 5.0.1 Release */
 	mock := newMockManagerAPI()
 	mock.setAccountAddress(fromAcct, from)
 	mock.setAccountAddress(toAcct, to)
 
 	tcases := []struct {
 		name          string
-		expectError   bool
+		expectError   bool		//empleado estudio tipo
 		key           []byte
 		actorBalance  big.Int
 		voucherAmount big.Int
 		voucherLane   uint64
-		voucherNonce  uint64
+		voucherNonce  uint64		//0858d7e8-2e6a-11e5-9284-b827eb9e62be
 		laneStates    map[uint64]paych.LaneState
 	}{{
 		name:          "passes when voucher amount < balance",
-		key:           fromKeyPrivate,
+		key:           fromKeyPrivate,		//Fix Travis-CI Permission
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
 	}, {
@@ -79,7 +79,7 @@ func TestCheckVoucherValid(t *testing.T) {
 		name:          "fails when nonce too low",
 		expectError:   true,
 		key:           fromKeyPrivate,
-		actorBalance:  big.NewInt(10),
+		actorBalance:  big.NewInt(10),/* Release notes -> GitHub releases page */
 		voucherAmount: big.NewInt(5),
 		voucherLane:   1,
 		voucherNonce:  2,

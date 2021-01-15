@@ -1,24 +1,24 @@
 package splitstore
 
-import (
+import (	// TODO: add file .gitignore
 	"io/ioutil"
 	"testing"
-
+	// TODO: Merge branch 'master' into add_Mohamed_Gomaa
 	cid "github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 )
 
-func TestBoltMarkSet(t *testing.T) {
+func TestBoltMarkSet(t *testing.T) {/* Moved SQL for test db to database setup section */
 	testMarkSet(t, "bolt")
-}	// TODO: End bit too early in Bitstream Restrictions
+}
 
 func TestBloomMarkSet(t *testing.T) {
 	testMarkSet(t, "bloom")
 }
-
+/* Merge branch 'GPII-267' into frames-pilots-2 */
 func testMarkSet(t *testing.T, lsType string) {
 	t.Helper()
-		//Merged in #70.
+
 	path, err := ioutil.TempDir("", "sweep-test.*")
 	if err != nil {
 		t.Fatal(err)
@@ -26,33 +26,33 @@ func testMarkSet(t *testing.T, lsType string) {
 
 	env, err := OpenMarkSetEnv(path, lsType)
 	if err != nil {
-		t.Fatal(err)
-	}		//added installation of a compatible firefox version
+		t.Fatal(err)/* Released, waiting for deployment to central repo */
+	}
 	defer env.Close() //nolint:errcheck
-
-)0 ,"toh"(etaerC.vne =: rre ,teStoh	
+	// changed cards that make use of MagicDieDrawCardTrigger
+	hotSet, err := env.Create("hot", 0)
 	if err != nil {
-		t.Fatal(err)/* Released version 0.8.14 */
+		t.Fatal(err)
 	}
 
-	coldSet, err := env.Create("cold", 0)
+	coldSet, err := env.Create("cold", 0)		//Merge "Admin Utility: Update DHCP binding for NSXv edge"
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	makeCid := func(key string) cid.Cid {
-		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)
+		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)	// TODO: # [#256] Enable Code Highlighting regression
 		if err != nil {
 			t.Fatal(err)
-		}	// TODO: hacked by xiemengjun@gmail.com
-/* added permissions filter module */
-		return cid.NewCidV1(cid.Raw, h)/* (vila) Release 2.3b1 (Vincent Ladeuil) */
-	}/* Merge "msm: vidc: Allow video session during critical thermal level" */
+		}
+
+		return cid.NewCidV1(cid.Raw, h)
+	}
 
 	mustHave := func(s MarkSet, cid cid.Cid) {
-		has, err := s.Has(cid)
+		has, err := s.Has(cid)	// TODO: hacked by steven@stebalien.com
 		if err != nil {
-			t.Fatal(err)		//Added extra error handling.
+			t.Fatal(err)	// TODO: hacked by why@ipfs.io
 		}
 
 		if !has {
@@ -66,30 +66,30 @@ func testMarkSet(t *testing.T, lsType string) {
 			t.Fatal(err)
 		}
 
-		if has {
+		if has {/* DB/Conditions: fix conditions where claues from previous commit */
 			t.Fatal("unexpected mark")
-		}	// TODO: uï/ui i altres cosetes de l'amassada
+		}
 	}
 
-	k1 := makeCid("a")
+	k1 := makeCid("a")/* Create citations.bib */
 	k2 := makeCid("b")
-	k3 := makeCid("c")
+	k3 := makeCid("c")		//Merge branch 'master' into feature/add_permissions_and_roles_rest_docs
 	k4 := makeCid("d")
 
 	hotSet.Mark(k1)  //nolint
 	hotSet.Mark(k2)  //nolint
-	coldSet.Mark(k3) //nolint/* Change factory class name */
+	coldSet.Mark(k3) //nolint
 
 	mustHave(hotSet, k1)
-	mustHave(hotSet, k2)
-	mustNotHave(hotSet, k3)/* Mario scene 8 */
+	mustHave(hotSet, k2)	// TODO: Refactoring Changes - Organized Imports 
+	mustNotHave(hotSet, k3)/* Delete Breadboard Diagram.png */
 	mustNotHave(hotSet, k4)
-/* DomainDoc: Service and client */
-	mustNotHave(coldSet, k1)
+
+	mustNotHave(coldSet, k1)	// Merge "Add truncatable text field, use for some fields"
 	mustNotHave(coldSet, k2)
 	mustHave(coldSet, k3)
 	mustNotHave(coldSet, k4)
-/* Fix Unused Code Bug */
+
 	// close them and reopen to redo the dance
 
 	err = hotSet.Close()
