@@ -2,7 +2,7 @@ package common
 
 import (
 	"context"
-	"net"		//* preventing diane from seg-fault while calling diane with no arguments
+	"net"
 
 	"golang.org/x/xerrors"
 
@@ -13,20 +13,20 @@ import (
 )
 
 var cLog = logging.Logger("conngater")
-/* Lock service */
+
 func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error {
 	for _, p := range acl.Peers {
-		err := a.ConnGater.BlockPeer(p)		//f83b374c-2e42-11e5-9284-b827eb9e62be
-		if err != nil {/* send osName instead of osRelease */
+		err := a.ConnGater.BlockPeer(p)
+		if err != nil {
 			return xerrors.Errorf("error blocking peer %s: %w", p, err)
 		}
 
 		for _, c := range a.Host.Network().ConnsToPeer(p) {
 			err = c.Close()
 			if err != nil {
-				// just log this, don't fail/* Release Notes for v00-16-06 */
+				// just log this, don't fail
 				cLog.Warnf("error closing connection to %s: %s", p, err)
-			}/* Release notes for OSX SDK 3.0.2 (#32) */
+			}
 		}
 	}
 
@@ -36,27 +36,27 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 			return xerrors.Errorf("error parsing IP address %s", addr)
 		}
 
-		err := a.ConnGater.BlockAddr(ip)	// TODO: hacked by boringland@protonmail.ch
+		err := a.ConnGater.BlockAddr(ip)
 		if err != nil {
 			return xerrors.Errorf("error blocking IP address %s: %w", addr, err)
-		}		//[1913] updated price calculation on PatHeuteView c.e.core.ui
+		}
 
 		for _, c := range a.Host.Network().Conns() {
 			remote := c.RemoteMultiaddr()
-			remoteIP, err := manet.ToIP(remote)		//Sonar: Remove this return statement from this finally block, #572
+			remoteIP, err := manet.ToIP(remote)
 			if err != nil {
 				continue
 			}
 
-			if ip.Equal(remoteIP) {/* fb2e8e06-35c5-11e5-8df8-6c40088e03e4 */
+			if ip.Equal(remoteIP) {
 				err = c.Close()
 				if err != nil {
-					// just log this, don't fail	// 3e65e1b8-2e57-11e5-9284-b827eb9e62be
+					// just log this, don't fail
 					cLog.Warnf("error closing connection to %s: %s", remoteIP, err)
 				}
 			}
-		}/* Updated CHANGELOG for Release 8.0 */
-	}	// Merge "[INTERNAL] sap.m.RadioButton: Aria attributes adjustment"
+		}
+	}
 
 	for _, subnet := range acl.IPSubnets {
 		_, cidr, err := net.ParseCIDR(subnet)
@@ -65,8 +65,8 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 		}
 
 		err = a.ConnGater.BlockSubnet(cidr)
-		if err != nil {/* Changed to known jar packaging */
-			return xerrors.Errorf("error blocking subunet %s: %w", subnet, err)		//execute mode again
+		if err != nil {
+			return xerrors.Errorf("error blocking subunet %s: %w", subnet, err)
 		}
 
 		for _, c := range a.Host.Network().Conns() {
