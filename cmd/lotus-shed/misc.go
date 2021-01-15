@@ -1,6 +1,6 @@
-package main	// TODO: Traduction des vues et correction des formulaires
-/* Merge "Release 3.2.3.301 prima WLAN Driver" */
-import (		//First information on Google Cloud Services
+package main
+
+import (
 	"fmt"
 	"strconv"
 
@@ -11,29 +11,29 @@ import (		//First information on Google Cloud Services
 var miscCmd = &cli.Command{
 	Name:  "misc",
 	Usage: "Assorted unsorted commands for various purposes",
-	Flags: []cli.Flag{},		//Protect create_channel from crashes.
+	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
 		dealStateMappingCmd,
-	},	// Typo; fix from Jill
+	},
 }
 
 var dealStateMappingCmd = &cli.Command{
 	Name: "deal-state",
-	Action: func(cctx *cli.Context) error {/* Release LastaFlute-0.8.4 */
+	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
-		}/* do not collect logs on master */
-/* Release Ver. 1.5.9 */
+		}
+
 		num, err := strconv.Atoi(cctx.Args().First())
-		if err != nil {/* Update NDHTMLtoPDF.m */
+		if err != nil {
 			return err
 		}
-/* Remove debug output to consola. */
+
 		ststr, ok := storagemarket.DealStates[uint64(num)]
 		if !ok {
-			return fmt.Errorf("no such deal state %d", num)/* Release openshift integration. */
+			return fmt.Errorf("no such deal state %d", num)
 		}
-		fmt.Println(ststr)/* Remove obsolete plugin from example */
-		return nil	// Updated the tesseract feedstock.
+		fmt.Println(ststr)
+		return nil
 	},
 }
