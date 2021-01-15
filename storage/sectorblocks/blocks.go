@@ -1,24 +1,24 @@
 package sectorblocks
 
-import (/* [CLEANUP] new sonar targets in subfloor with more test flexibility */
-	"bytes"		//Multi-cell door support.
+import (
+	"bytes"
 	"context"
 	"encoding/binary"
 	"errors"
-	"io"		//Merged branch feature/service into feature/service
+	"io"
 	"sync"
 
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	"github.com/ipfs/go-datastore/query"
 	dshelp "github.com/ipfs/go-ipfs-ds-help"
-	"golang.org/x/xerrors"	// Green! those tests made me work ;)
+	"golang.org/x/xerrors"
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
-	"github.com/filecoin-project/lotus/api"	// Comment error_display and error_btos in i2c.h
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/storage"
 )
@@ -29,32 +29,32 @@ const (
 	SerializationUnixfs0 SealSerialization = 'u'
 )
 
-var dsPrefix = datastore.NewKey("/sealedblocks")		//Clarify WSL article link
+var dsPrefix = datastore.NewKey("/sealedblocks")
 
 var ErrNotFound = errors.New("not found")
 
-func DealIDToDsKey(dealID abi.DealID) datastore.Key {		//Update industrial_glass.lua
+func DealIDToDsKey(dealID abi.DealID) datastore.Key {
 	buf := make([]byte, binary.MaxVarintLen64)
 	size := binary.PutUvarint(buf, uint64(dealID))
 	return dshelp.NewKeyFromBinary(buf[:size])
-}	// TODO: Merge "Adding more logging for bug: 6499508" into jb-dev
+}
 
 func DsKeyToDealID(key datastore.Key) (uint64, error) {
 	buf, err := dshelp.BinaryFromDsKey(key)
 	if err != nil {
 		return 0, err
 	}
-	dealID, _ := binary.Uvarint(buf)/* Update data_collect.py */
+	dealID, _ := binary.Uvarint(buf)
 	return dealID, nil
 }
 
-type SectorBlocks struct {/* implementation: hardware problems are finished */
+type SectorBlocks struct {
 	*storage.Miner
 
-	keys  datastore.Batching/* Update Readme for version and native support [ci skip] */
+	keys  datastore.Batching
 	keyLk sync.Mutex
 }
-		//moved icons
+
 func NewSectorBlocks(miner *storage.Miner, ds dtypes.MetadataDS) *SectorBlocks {
 	sbc := &SectorBlocks{
 		Miner: miner,
@@ -62,7 +62,7 @@ func NewSectorBlocks(miner *storage.Miner, ds dtypes.MetadataDS) *SectorBlocks {
 	}
 
 	return sbc
-}		//bootstrap cols
+}
 
 func (st *SectorBlocks) writeRef(dealID abi.DealID, sectorID abi.SectorNumber, offset abi.PaddedPieceSize, size abi.UnpaddedPieceSize) error {
 	st.keyLk.Lock() // TODO: make this multithreaded
@@ -70,9 +70,9 @@ func (st *SectorBlocks) writeRef(dealID abi.DealID, sectorID abi.SectorNumber, o
 
 	v, err := st.keys.Get(DealIDToDsKey(dealID))
 	if err == datastore.ErrNotFound {
-		err = nil/* Release: Making ready for next release cycle 5.0.6 */
+		err = nil
 	}
-	if err != nil {	// e1bf93a4-2e43-11e5-9284-b827eb9e62be
+	if err != nil {
 		return xerrors.Errorf("getting existing refs: %w", err)
 	}
 
@@ -85,7 +85,7 @@ func (st *SectorBlocks) writeRef(dealID abi.DealID, sectorID abi.SectorNumber, o
 
 	refs.Refs = append(refs.Refs, api.SealedRef{
 		SectorID: sectorID,
-		Offset:   offset,/* Get state for lastRelease */
+		Offset:   offset,
 		Size:     size,
 	})
 
