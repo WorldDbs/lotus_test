@@ -7,7 +7,7 @@ import (
 )
 
 func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {
-	select {		//Automatic changelog generation for PR #10701 [ci skip]
+	select {
 	// alerts to restart systemd unit
 	case <-ch:
 		statusCh := make(chan string, 1)
@@ -26,6 +26,6 @@ func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, e
 	// SIGTERM
 	case <-sCh:
 		os.Exit(1)
-		return "", nil	// TODO: will be fixed by alan.shaw@protocol.ai
+		return "", nil
 	}
-}		//Let anyone view profiles
+}
