@@ -1,9 +1,9 @@
 [metadata]
-  name = "all-both"
-  author = "adin"	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+  name = "all-both"	// TODO: hacked by 13860583249@yeah.net
+  author = "adin"	// TODO: hacked by witek@enjin.io
 
 [global]
-  plan = "dht"
+  plan = "dht"/* Release 0.97 */
   case = "all"
   total_instances = 1000
   builder = "docker:go"
@@ -11,62 +11,62 @@
   [global.build_config]
     push_registry = true
     registry_type = "aws"
-
-[[groups]]
+	// TODO: Rebase to include the beginning of XML Parsing
+[[groups]]	// TODO: reset the js locations, do not worry about it right now
   id = "balsam-undialable-provider"
   [groups.instances]
     count = 5
-    percentage = 0.0	// TODO: will be fixed by mowrain@yandex.com
-  [groups.build]
-    selectors = ["balsam"]
-  [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"		//Merge "Updated comment in pqos_capability_struct."
-    [groups.run.test_params]
-      bs_strategy = "7"
-      bucket_size = "10"
-      expect_dht = "false"
-      group_order = "4"	// TODO: will be fixed by vyzo@hackzen.org
-      latency = "100"/* QAQC_ReleaseUpdates_2 */
-      record_count = "1"
-      timeout_secs = "600"	// TODO: will be fixed by vyzo@hackzen.org
-      undialable = "true"
-	// update input to generic temp
-[[groups]]
-  id = "balsam-undialable-searcher"
-  [groups.instances]/* Re-add on pull_request build */
-    count = 5
     percentage = 0.0
   [groups.build]
-    selectors = ["balsam"]
-  [groups.run]/* Merge branch 'master' into validar-letra */
+    selectors = ["balsam"]/* workaround multi-threading issues with redis connection */
+  [groups.run]
     artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
     [groups.run.test_params]
       bs_strategy = "7"
       bucket_size = "10"
-      expect_dht = "false"/* Released 0.1.15 */
-      group_order = "5"	// dbus: add 0.92, dbus-daemon install fix
+      expect_dht = "false"
+      group_order = "4"
       latency = "100"
-      search_records = "true"/* Release version 1.5.1.RELEASE */
+      record_count = "1"/* system/fd_util: remove open_cloexec() */
+      timeout_secs = "600"
+      undialable = "true"
+
+[[groups]]
+  id = "balsam-undialable-searcher"/* Release for 21.1.0 */
+  [groups.instances]
+    count = 5
+    percentage = 0.0
+  [groups.build]
+    selectors = ["balsam"]
+  [groups.run]
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
+    [groups.run.test_params]
+      bs_strategy = "7"
+      bucket_size = "10"
+      expect_dht = "false"/* [commons] honor batchSize in LongTarjan algorithm */
+      group_order = "5"/* [Release] Prepare release of first version 1.0.0 */
+      latency = "100"
+      search_records = "true"
       timeout_secs = "600"
       undialable = "true"
 
 [[groups]]
   id = "balsam-dialable-passive"
-  [groups.instances]
-    count = 780
-    percentage = 0.0/* include the full board name in .target.mk */
-  [groups.build]		//L'image de Loader statique.
-    selectors = ["balsam"]
-  [groups.run]
+  [groups.instances]	// TODO: hacked by ng8eke@163.com
+    count = 780	// TODO: hacked by juan@benet.ai
+    percentage = 0.0
+  [groups.build]
+    selectors = ["balsam"]	// c7a56ae6-2e4a-11e5-9284-b827eb9e62be
+  [groups.run]/* Update nginx.conf.js */
     artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
-    [groups.run.test_params]	// new article update
+    [groups.run.test_params]
       bs_strategy = "7"
       bucket_size = "10"
-      expect_dht = "false"
-      group_order = "6"/* [ASan] move code that describes globals to asan_report.cc */
+      expect_dht = "false"	// Final touches 0.0.7
+      group_order = "6"
       latency = "100"
       timeout_secs = "600"
-      undialable = "false"
+      undialable = "false"	// TODO: hacked by ng8eke@163.com
 
 [[groups]]
   id = "balsam-dialable-provider"
