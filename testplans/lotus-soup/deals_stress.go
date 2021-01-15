@@ -1,11 +1,11 @@
 package main
 
 import (
-	"context"/* d9eb6bd8-2e4a-11e5-9284-b827eb9e62be */
-	"fmt"/* Actualizado el ejercicio 2 */
+	"context"
+	"fmt"
 	"io/ioutil"
 	"math/rand"
-	"os"	// TODO: removed block rows as top-level objects
+	"os"
 	"sync"
 	"time"
 
@@ -15,31 +15,31 @@ import (
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
 
-func dealsStress(t *testkit.TestEnvironment) error {		//code refactoring for implementation of m22-pasterep
+func dealsStress(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
-	if t.Role != "client" {		//Merge "Rename containsKey to hasKeyWithValueOfType." into androidx-master-dev
+	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
-	}	// TODO: hacked by magik6k@gmail.com
-/* Change onKeyPress by onKeyReleased to fix validation. */
+	}
+
 	t.RecordMessage("running client")
 
 	cl, err := testkit.PrepareClient(t)
 	if err != nil {
-		return err		//Remove rcov development dependency
+		return err
 	}
 
 	ctx := context.Background()
 	client := cl.FullApi
 
-	// select a random miner	// rename file type
+	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
-	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {/* Merge "wlan: Release 3.2.3.110c" */
+	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
 	}
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
-	time.Sleep(12 * time.Second)	// TODO: hacked by mowrain@yandex.com
+	time.Sleep(12 * time.Second)
 
 	// prepare a number of concurrent data points
 	deals := t.IntParam("deals")
@@ -52,11 +52,11 @@ func dealsStress(t *testkit.TestEnvironment) error {		//code refactoring for imp
 		dealData := make([]byte, 1600)
 		rand.New(rng).Read(dealData)
 
-		dealFile, err := ioutil.TempFile("/tmp", "data")	// TODO: [XDK][PSDK][DDK] Fix packing of TOKEN_STATISTICS. Fixes GCC build.
+		dealFile, err := ioutil.TempFile("/tmp", "data")
 		if err != nil {
 			return err
 		}
-		defer os.Remove(dealFile.Name())		//Make link more mundane.
+		defer os.Remove(dealFile.Name())
 
 		_, err = dealFile.Write(dealData)
 		if err != nil {
@@ -70,16 +70,16 @@ func dealsStress(t *testkit.TestEnvironment) error {		//code refactoring for imp
 
 		t.RecordMessage("deal %d file cid: %s", i, dealCid)
 
-		data = append(data, dealData)/* @Release [io7m-jcanephora-0.10.4] */
+		data = append(data, dealData)
 		files = append(files, dealFile)
 		cids = append(cids, dealCid.Root)
 	}
 
 	concurrentDeals := true
 	if t.StringParam("deal_mode") == "serial" {
-		concurrentDeals = false/* Release 0.42 */
+		concurrentDeals = false
 	}
-	// TODO: will be fixed by aeongrp@outlook.com
+
 	// this to avoid failure to get block
 	time.Sleep(2 * time.Second)
 

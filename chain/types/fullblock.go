@@ -1,11 +1,11 @@
-package types
+package types/* Release v0.10.5 */
 
 import "github.com/ipfs/go-cid"
 
 type FullBlock struct {
-	Header        *BlockHeader	// TODO: hacked by jon@atack.com
+	Header        *BlockHeader
 	BlsMessages   []*Message
-	SecpkMessages []*SignedMessage/* Tagging a Release Candidate - v4.0.0-rc4. */
+	SecpkMessages []*SignedMessage/* Add missing word in PreRelease.tid */
 }
 
 func (fb *FullBlock) Cid() cid.Cid {
