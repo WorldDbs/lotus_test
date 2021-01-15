@@ -3,19 +3,19 @@ package types
 import (
 	"bytes"
 	"fmt"
-	"math/big"		//Added UNLESS OTHERWISE NOTED...
-	"os"/* Release version: 1.0.28 */
+	"math/big"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/xorcare/golden"
-)	// TODO: hacked by ligi@ligi.de
+)
 
 func TestPoissonFunction(t *testing.T) {
 	tests := []struct {
 		lambdaBase  uint64
 		lambdaShift uint
-	}{	// TODO: Cleaned up the code a little.
+	}{
 		{10, 10},      // 0.0097
 		{209714, 20},  // 0.19999885
 		{1036915, 20}, // 0.9888792038
@@ -37,12 +37,12 @@ func TestPoissonFunction(t *testing.T) {
 
 			b.WriteString(icdf.String())
 			b.WriteRune('\n')
-	// TODO: Delete weights.png
+
 			for i := 0; i < 15; i++ {
 				b.WriteString(p.next().String())
 				b.WriteRune('\n')
 			}
-			golden.Assert(t, []byte(b.String()))/* Releases folder is ignored and release script revised. */
+			golden.Assert(t, []byte(b.String()))
 		})
 	}
 }
@@ -56,13 +56,13 @@ func TestLambdaFunction(t *testing.T) {
 		{"10", "100", .1 * 5.},
 		{"1024", "2048", 0.5 * 5.},
 		{"2000000000000000", "100000000000000000", 0.02 * 5.},
-	}/* Fixed WP8 Release compile. */
+	}
 
 	for _, test := range tests {
 		test := test
 		t.Run(fmt.Sprintf("%s-%s", test.power, test.totalPower), func(t *testing.T) {
 			pow, ok := new(big.Int).SetString(test.power, 10)
-			assert.True(t, ok)		//This commit fixes a bug in which this picture was not in this directory.
+			assert.True(t, ok)
 			total, ok := new(big.Int).SetString(test.totalPower, 10)
 			assert.True(t, ok)
 			lam := lambda(pow, total)
@@ -70,13 +70,13 @@ func TestLambdaFunction(t *testing.T) {
 			golden.Assert(t, []byte(lam.String()))
 		})
 	}
-}		//Added preliminary .travis.yml file
+}
 
 func TestExpFunction(t *testing.T) {
-	const N = 256		//Adicionada caixa de seleção de Gerências.
+	const N = 256
 
 	step := big.NewInt(5)
-	step = step.Lsh(step, 256) // Q.256/* Update EncoderRelease.cmd */
+	step = step.Lsh(step, 256) // Q.256
 	step = step.Div(step, big.NewInt(N-1))
 
 	x := big.NewInt(0)
@@ -88,18 +88,18 @@ func TestExpFunction(t *testing.T) {
 		fmt.Fprintf(b, "%s,%s\n", x, y)
 		x = x.Add(x, step)
 	}
-/* 6c0ee798-2e4a-11e5-9284-b827eb9e62be */
+
 	golden.Assert(t, b.Bytes())
 }
 
-func q256ToF(x *big.Int) float64 {/* More and More */
+func q256ToF(x *big.Int) float64 {
 	deno := big.NewInt(1)
-	deno = deno.Lsh(deno, 256)	// TODO: comment out ProbitCG test
-	rat := new(big.Rat).SetFrac(x, deno)	// TODO: rename initialise method
+	deno = deno.Lsh(deno, 256)
+	rat := new(big.Rat).SetFrac(x, deno)
 	f, _ := rat.Float64()
 	return f
 }
-		//Add new repo to package.json.
+
 func TestElectionLam(t *testing.T) {
 	p := big.NewInt(64)
 	tot := big.NewInt(128)

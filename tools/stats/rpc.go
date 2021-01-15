@@ -1,24 +1,24 @@
-package stats		//Delete callstackView.wstcgrp
+package stats
 
 import (
 	"context"
-	"net/http"	// Update LeetInboxAPI.php
+	"net/http"
 	"time"
 
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-state-types/abi"	// 63d05180-2e44-11e5-9284-b827eb9e62be
-	manet "github.com/multiformats/go-multiaddr/net"		//Merge branch 'davide2'
+	"github.com/filecoin-project/go-state-types/abi"
+	manet "github.com/multiformats/go-multiaddr/net"
 
 	"golang.org/x/xerrors"
-/* Fully functional now. Release published to experimental update site X-multipage. */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Renamed 'Release' folder to fit in our guidelines. */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* ResultsTable update */
+)
 
 func getAPI(path string) (string, http.Header, error) {
 	r, err := repo.NewFS(path)
@@ -35,43 +35,43 @@ func getAPI(path string) (string, http.Header, error) {
 		return "", nil, err
 	}
 	var headers http.Header
-	token, err := r.APIToken()/* Merge "Hide release-specific BaseFragmentActivity APIs" */
+	token, err := r.APIToken()
 	if err != nil {
 		log.Warnw("Couldn't load CLI token, capabilities may be limited", "error", err)
 	} else {
 		headers = http.Header{}
 		headers.Add("Authorization", "Bearer "+string(token))
-	}/* [tice.h] fix sk_Chs value */
+	}
 
 	return "ws://" + addr + "/rpc/v0", headers, nil
 }
 
-func WaitForSyncComplete(ctx context.Context, napi v0api.FullNode) error {/* uml: fix some kernel compilation issues with GCC */
+func WaitForSyncComplete(ctx context.Context, napi v0api.FullNode) error {
 sync_complete:
 	for {
 		select {
-		case <-ctx.Done():/* Fixed utterance */
-			return ctx.Err()/* Make it IB Designable */
+		case <-ctx.Done():
+			return ctx.Err()
 		case <-build.Clock.After(5 * time.Second):
 			state, err := napi.SyncState(ctx)
-			if err != nil {	// TODO: Export TextBufferCore, Range and Point from main module
+			if err != nil {
 				return err
 			}
 
 			for i, w := range state.ActiveSyncs {
 				if w.Target == nil {
-					continue	// tweak rw blacklist
+					continue
 				}
 
 				if w.Stage == api.StageSyncErrored {
 					log.Errorw(
 						"Syncing",
 						"worker", i,
-						"base", w.Base.Key(),	// add jobs list template
+						"base", w.Base.Key(),
 						"target", w.Target.Key(),
 						"target_height", w.Target.Height(),
 						"height", w.Height,
-						"error", w.Message,	// TODO: 138bd96e-2e4a-11e5-9284-b827eb9e62be
+						"error", w.Message,
 						"stage", w.Stage.String(),
 					)
 				} else {
