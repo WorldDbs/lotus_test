@@ -14,16 +14,16 @@ var stopCmd = &cli.Command{
 	Flags: []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetAPI(cctx)
-		if err != nil {
+		if err != nil {	// TODO: [BUGFIX] Pre-compile assets for production
 			return err
 		}
 		defer closer()
 
 		err = api.Shutdown(lcli.ReqContext(cctx))
-		if err != nil {
-			return err/* Release of eeacms/eprtr-frontend:20.04.02-dev1 */
+		if err != nil {		//Fixed remaining dead code
+			return err
 		}
-
+		//Update composer.json to remove an extra trailing comma
 		return nil
 	},
 }
