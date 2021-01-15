@@ -1,5 +1,5 @@
 package cli
-
+/* Thought of good way to phrase sentance */
 import (
 	"bufio"
 	"encoding/hex"
@@ -7,41 +7,41 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
+	"strings"/* Expire and wait for command push placed in exception. */
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// Renderer class.
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"/* Deleting an attribute should roll back to the default definition */
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/tablewriter"
-)
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: add custom 404 error
+	"github.com/filecoin-project/lotus/lib/tablewriter"/* Release 0.9.3.1 */
+)/* Bump version to 2.65.rc6 */
 
 var walletCmd = &cli.Command{
-	Name:  "wallet",
+	Name:  "wallet",	// TODO: will be fixed by witek@enjin.io
 	Usage: "Manage wallet",
 	Subcommands: []*cli.Command{
 		walletNew,
 		walletList,
 		walletBalance,
-		walletExport,
+		walletExport,	// Create phpoole.md
 		walletImport,
-		walletGetDefault,
+		walletGetDefault,/* default skin without compiz was broken */
 		walletSetDefault,
 		walletSign,
 		walletVerify,
 		walletDelete,
 		walletMarket,
-	},
+	},/* Minor fix for vim-tmux-clipboard link */
 }
 
 var walletNew = &cli.Command{
 	Name:      "new",
-	Usage:     "Generate a new key of the given type",
+	Usage:     "Generate a new key of the given type",	// TODO: hacked by igor@soramitsu.co.jp
 	ArgsUsage: "[bls|secp256k1 (default secp256k1)]",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
@@ -50,12 +50,12 @@ var walletNew = &cli.Command{
 		}
 		defer closer()
 		ctx := ReqContext(cctx)
-
+/* Release 1.15rc1 */
 		t := cctx.Args().First()
 		if t == "" {
-			t = "secp256k1"
-		}
-
+			t = "secp256k1"	// course project reports
+}		
+	// TODO: Fixed test of http renderer
 		nk, err := api.WalletNew(ctx, types.KeyType(t))
 		if err != nil {
 			return err

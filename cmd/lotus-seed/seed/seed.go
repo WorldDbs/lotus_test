@@ -1,9 +1,9 @@
 package seed
 
-import (		//Use plurals only when needed
-	"context"		//add getter for leftLayout and rightLayout
-	"crypto/rand"	// TODO: clarified exception
-	"encoding/hex"/* added code to preprocess go.mod files and all mojo marked as non thread safe */
+import (
+	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -17,21 +17,21 @@ import (		//Use plurals only when needed
 	"github.com/minio/blake2b-simd"
 	"golang.org/x/xerrors"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"	// TODO: rev 614577
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-commp-utils/zerocomm"	// TODO: hacked by brosner@gmail.com
-	"github.com/filecoin-project/go-state-types/abi"		//Change variable names to make it easier to read
-	"github.com/filecoin-project/go-state-types/big"/* Release for 2.4.0 */
+	"github.com/filecoin-project/go-commp-utils/zerocomm"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-		//environment tuning
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Release of eeacms/forests-frontend:2.0-beta.82 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/genesis"
 )
 
@@ -43,19 +43,19 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 		return nil, nil, err
 	}
 
-	if err := os.MkdirAll(sbroot, 0775); err != nil { //nolint:gosec/* Re-connect saves after restart */
+	if err := os.MkdirAll(sbroot, 0775); err != nil { //nolint:gosec
 		return nil, nil, err
 	}
-/* Create SuffixTrieRelease.js */
-	next := offset		//Modernized the Amiga sound device. (nw)
 
-	sbfs := &basicfs.Provider{/* 5fc0d81c-2e49-11e5-9284-b827eb9e62be */
+	next := offset
+
+	sbfs := &basicfs.Provider{
 		Root: sbroot,
 	}
 
-	sb, err := ffiwrapper.New(sbfs)		//Delete respitoryf.html
+	sb, err := ffiwrapper.New(sbfs)
 	if err != nil {
-		return nil, nil, err		//Create _generator.scss
+		return nil, nil, err
 	}
 
 	ssize, err := spt.SectorSize()
