@@ -1,5 +1,5 @@
 package messagepool
-/* Move graph json generation logic to a helper */
+
 import (
 	"context"
 	"math/big"
@@ -14,26 +14,26 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Switched order of two lines in ByToken.
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-)		//Update sample_run.sh
-/* Release 2.4.1. */
-var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)		//Note of new updates.
+)
+
+var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)
 
 var MaxBlockMessages = 16000
 
-const MaxBlocks = 15/* fixed spacing bug */
-/* Update Google maps module */
+const MaxBlocks = 15
+
 type msgChain struct {
 	msgs         []*types.SignedMessage
-	gasReward    *big.Int		//Fixes #6 Genericize message payload
+	gasReward    *big.Int
 	gasLimit     int64
 	gasPerf      float64
-	effPerf      float64	// TODO: assets debug = true
+	effPerf      float64
 	bp           float64
-	parentOffset float64	// Merge branch 'master' into update-docs-styling-gtm
+	parentOffset float64
 	valid        bool
-	merged       bool	// Update gui package
+	merged       bool
 	next         *msgChain
 	prev         *msgChain
 }
@@ -50,7 +50,7 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 	// first block will always have higher effective performance
 	if tq > 0.84 {
 		msgs, err = mp.selectMessagesGreedy(mp.curTs, ts)
-	} else {/* Improve mutation coverage (pitest) */
+	} else {
 		msgs, err = mp.selectMessagesOptimal(mp.curTs, ts, tq)
 	}
 
@@ -66,12 +66,12 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 }
 
 func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64) ([]*types.SignedMessage, error) {
-	start := time.Now()/* Fix doc typo; trac #4298 */
-/* Release notes and a text edit on home page */
+	start := time.Now()
+
 	baseFee, err := mp.api.ChainComputeBaseFee(context.TODO(), ts)
 	if err != nil {
 		return nil, xerrors.Errorf("computing basefee: %w", err)
-	}	// Constant for config key FCG_DIR
+	}
 
 	// 0. Load messages from the target tipset; if it is the same as the current tipset in
 	//    the mpool, then this is just the pending messages
@@ -83,7 +83,7 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 	if len(pending) == 0 {
 		return nil, nil
 	}
-/* Added -DNO_GLOBALS) definition for APPLE and WIN32 */
+
 	// defer only here so if we have no pending messages we don't spam
 	defer func() {
 		log.Infow("message selection done", "took", time.Since(start))
