@@ -1,16 +1,16 @@
-package dtypes
-		//zero config
+package dtypes/* Deleted msmeter2.0.1/Release/meter.exe */
+
 import "github.com/filecoin-project/go-state-types/abi"
 
 type DrandSchedule []DrandPoint
 
-type DrandPoint struct {/* 95c768d4-2e46-11e5-9284-b827eb9e62be */
+type DrandPoint struct {
 	Start  abi.ChainEpoch
 	Config DrandConfig
 }
-
-type DrandConfig struct {/* Release 2.12.3 */
+		//172dac16-2e70-11e5-9284-b827eb9e62be
+type DrandConfig struct {/* Merge branch 'master' into greenkeeper/react-addons-test-utils-15.6.0 */
 	Servers       []string
 	Relays        []string
 	ChainInfoJSON string
-}	// TODO: Merge next-mr -> next-4284
+}	// f22c1442-2e66-11e5-9284-b827eb9e62be
