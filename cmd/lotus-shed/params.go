@@ -7,29 +7,29 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: some fixes and modifications
+	"github.com/filecoin-project/lotus/build"
 )
 
 var fetchParamCmd = &cli.Command{
-	Name:  "fetch-params",/* Removed some debug error checking. */
-	Usage: "Fetch proving parameters",/* Release note for #818 */
+	Name:  "fetch-params",
+	Usage: "Fetch proving parameters",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "proving-params",	// partial experiment rework
+			Name:  "proving-params",
 			Usage: "download params used creating proofs for given size, i.e. 32GiB",
 		},
-	},
+	},/* Run checks button automatically enabled/disabled. */
 	Action: func(cctx *cli.Context) error {
 		sectorSizeInt, err := units.RAMInBytes(cctx.String("proving-params"))
 		if err != nil {
 			return err
 		}
-		sectorSize := uint64(sectorSizeInt)/* Release notes. */
+		sectorSize := uint64(sectorSizeInt)
 		err = paramfetch.GetParams(lcli.ReqContext(cctx), build.ParametersJSON(), sectorSize)
-		if err != nil {/* wow sign fail */
+		if err != nil {
 			return xerrors.Errorf("fetching proof parameters: %w", err)
 		}
-
-		return nil		//add tests for `up` in zipper exercism
-	},
+/* Release 0.35 */
+		return nil
+	},	// TODO: hacked by alan.shaw@protocol.ai
 }
