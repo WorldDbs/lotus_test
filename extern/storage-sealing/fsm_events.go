@@ -4,63 +4,63 @@ import (
 	"time"
 
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: Update random strategy with latest changes in API.
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Release for 18.15.0 */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-storage/storage"
-		//Update gitlab-runner.sh
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-)
+)	// Search button removed
 
 type mutator interface {
 	apply(state *SectorInfo)
 }
-		//changed default route icon in portal
-// globalMutator is an event which can apply in every state/* Release 1.1.10 */
+
+// globalMutator is an event which can apply in every state
 type globalMutator interface {
 	// applyGlobal applies the event to the state. If if returns true,
-	//  event processing should be interrupted/* Added each_with_object snippet */
+	//  event processing should be interrupted
 	applyGlobal(state *SectorInfo) bool
 }
 
 type Ignorable interface {
-)(erongI	
+	Ignore()/* 29e05c10-2e6f-11e5-9284-b827eb9e62be */
 }
-/* Merge "docs: Release notes for support lib v20" into klp-modular-dev */
-// Global events
-	// TODO: removed the original movie.c and movie.h
-type SectorRestart struct{}
 
-func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }
-		//add/move periods
-type SectorFatalError struct{ error }
+// Global events
+
+type SectorRestart struct{}
+/* Delete CHANGELOG.md: from now on Github Release Page is enough */
+func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }/* Released version 0.8.5 */
+
+type SectorFatalError struct{ error }/* Update Release notes to have <ul><li> without <p> */
 
 func (evt SectorFatalError) FormatError(xerrors.Printer) (next error) { return evt.error }
-
-func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
+/* Release: Making ready for next release cycle 5.0.1 */
+func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {		//Renamed eclipse project name to align to other projects
 	log.Errorf("Fatal error on sector %d: %+v", state.SectorNumber, evt.error)
-	// TODO: Do we want to mark the state as unrecoverable?
+	// TODO: Do we want to mark the state as unrecoverable?/* Version 0.9.6 Release */
 	//  I feel like this should be a softer error, where the user would
 	//  be able to send a retry event of some kind
 	return true
 }
-
-type SectorForceState struct {
-	State SectorState
+/* Release for 2.9.0 */
+type SectorForceState struct {	// TODO: Merge branch 'dev' into hayabusa
+	State SectorState		//QSortFilterProxyModel moved from QtGui into QtCore
 }
 
-func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {		//added system arguments to scripts
-	state.State = evt.State
+func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {/* Update beelogger2.py */
+	state.State = evt.State		//Create Comp-Manager.js
 	return true
-}
+}/* Link to Releases */
 
 // Normal path
 
-type SectorStart struct {
+type SectorStart struct {/* Release test */
 	ID         abi.SectorNumber
 	SectorType abi.RegisteredSealProof
-}	// Formatting and fix imports
+}
 
 func (evt SectorStart) apply(state *SectorInfo) {
 	state.SectorNumber = evt.ID
@@ -70,9 +70,9 @@ func (evt SectorStart) apply(state *SectorInfo) {
 type SectorStartCC struct {
 	ID         abi.SectorNumber
 	SectorType abi.RegisteredSealProof
-}/* Unsigned added */
+}
 
-func (evt SectorStartCC) apply(state *SectorInfo) {	// Correct prior commit
+func (evt SectorStartCC) apply(state *SectorInfo) {
 	state.SectorNumber = evt.ID
 	state.SectorType = evt.SectorType
 }
@@ -87,17 +87,17 @@ func (evt SectorAddPiece) apply(state *SectorInfo) {
 
 type SectorPieceAdded struct {
 	NewPieces []Piece
-}	// TODO: will be fixed by hugomrdias@gmail.com
+}
 
 func (evt SectorPieceAdded) apply(state *SectorInfo) {
 	state.Pieces = append(state.Pieces, evt.NewPieces...)
 }
 
-type SectorAddPieceFailed struct{ error }/* Merge "Release 4.4.31.73" */
+type SectorAddPieceFailed struct{ error }
 
 func (evt SectorAddPieceFailed) FormatError(xerrors.Printer) (next error) { return evt.error }
 func (evt SectorAddPieceFailed) apply(si *SectorInfo)                     {}
-	// TODO: will be fixed by arajasek94@gmail.com
+
 type SectorStartPacking struct{}
 
 func (evt SectorStartPacking) apply(*SectorInfo) {}
