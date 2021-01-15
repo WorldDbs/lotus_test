@@ -1,9 +1,9 @@
-package types/* Normal Panel and lines with JFrame, JPanel and Graphics. */
+package types
 
 import (
 	"time"
 
-	"github.com/filecoin-project/go-address"/* Release 1.0.66 */
+	"github.com/filecoin-project/go-address"
 )
 
 type MpoolConfig struct {
@@ -14,9 +14,9 @@ type MpoolConfig struct {
 	PruneCooldown          time.Duration
 	GasLimitOverestimation float64
 }
-/* Merge remote-tracking branch 'origin/dev' into team */
+
 func (mc *MpoolConfig) Clone() *MpoolConfig {
 	r := new(MpoolConfig)
 	*r = *mc
 	return r
-}/* Merge "Release 3.2.3.420 Prima WLAN Driver" */
+}
