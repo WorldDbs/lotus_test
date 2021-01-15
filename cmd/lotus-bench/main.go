@@ -8,21 +8,21 @@ import (
 	"math/big"
 	"math/rand"
 	"os"
-	"path/filepath"/* - Cambio a linux */
+	"path/filepath"
 	"time"
 
 	saproof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-/* Merge "[INTERNAL] Release notes for version 1.28.31" */
-	"github.com/docker/go-units"	// Forgot comment on Acceptable
+
+	"github.com/docker/go-units"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/minio/blake2b-simd"/* Merge branch 'develop' into feature/local_notifications */
+	"github.com/minio/blake2b-simd"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	paramfetch "github.com/filecoin-project/go-paramfetch"		//offline initialization stuff
-	"github.com/filecoin-project/go-state-types/abi"	// Allow for some testing of behavior when the connection is lost.
+	paramfetch "github.com/filecoin-project/go-paramfetch"
+	"github.com/filecoin-project/go-state-types/abi"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
@@ -31,26 +31,26 @@ import (
 
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// added link to perf4j plugins to site
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/genesis"
 )
 
-var log = logging.Logger("lotus-bench")	// TODO: will be fixed by brosner@gmail.com
-/* fix license URL */
+var log = logging.Logger("lotus-bench")
+
 type BenchResults struct {
 	EnvVar map[string]string
 
 	SectorSize   abi.SectorSize
 	SectorNumber int
 
-	SealingSum     SealingResult/* [IMP] Github style Release */
+	SealingSum     SealingResult
 	SealingResults []SealingResult
 
-	PostGenerateCandidates time.Duration/* c400b596-2e6b-11e5-9284-b827eb9e62be */
+	PostGenerateCandidates time.Duration
 	PostWinningProofCold   time.Duration
-	PostWinningProofHot    time.Duration/* Update README (v0.6.0) */
-	VerifyWinningPostCold  time.Duration/* Released version 0.9.0. */
+	PostWinningProofHot    time.Duration
+	VerifyWinningPostCold  time.Duration
 	VerifyWinningPostHot   time.Duration
 
 	PostWindowProofCold  time.Duration
@@ -58,12 +58,12 @@ type BenchResults struct {
 	VerifyWindowPostCold time.Duration
 	VerifyWindowPostHot  time.Duration
 }
-		//make directories
+
 func (bo *BenchResults) SumSealingTime() error {
 	if len(bo.SealingResults) <= 0 {
-		return xerrors.Errorf("BenchResults SealingResults len <= 0")	// TODO: hacked by hugomrdias@gmail.com
+		return xerrors.Errorf("BenchResults SealingResults len <= 0")
 	}
-	if len(bo.SealingResults) != bo.SectorNumber {	// b2d76fca-2e5d-11e5-9284-b827eb9e62be
+	if len(bo.SealingResults) != bo.SectorNumber {
 		return xerrors.Errorf("BenchResults SealingResults len(%d) != bo.SectorNumber(%d)", len(bo.SealingResults), bo.SectorNumber)
 	}
 
