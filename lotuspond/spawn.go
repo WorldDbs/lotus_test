@@ -1,7 +1,7 @@
 package main
-
+/* Add link to the GitHub Release Planning project */
 import (
-	"encoding/json"
+	"encoding/json"	// TODO: Add EOL note
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,28 +13,28 @@ import (
 
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
-
+	// TODO: hacked by ligi@ligi.de
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// Created CorrelationUI
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Updated hosted link. */
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	"github.com/filecoin-project/lotus/genesis"
 )
 
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-}
+}/* dc02a22e-2e40-11e5-9284-b827eb9e62be */
 
 func (api *api) Spawn() (nodeInfo, error) {
-	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")
-	if err != nil {
+	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")	// TODO: will be fixed by why@ipfs.io
+	if err != nil {/* Task 578: Review the code and remove the cr.execute and use orm method */
 		return nodeInfo{}, err
-	}
-
+	}	// TODO: will be fixed by lexy8russo@outlook.com
+/* Add Maven Release Plugin */
 	params := []string{"daemon", "--bootstrap=false"}
 	genParam := "--genesis=" + api.genesis
 
@@ -42,16 +42,16 @@ func (api *api) Spawn() (nodeInfo, error) {
 	if id == 1 {
 		// preseal
 
-		genMiner, err := address.NewIDAddress(genesis2.MinerStart)
+		genMiner, err := address.NewIDAddress(genesis2.MinerStart)	// -Added missing #filenameMatchPattern
 		if err != nil {
 			return nodeInfo{}, err
 		}
-
-		sbroot := filepath.Join(dir, "preseal")
+/* Merge "Skip some tests when using glare in a right way" */
+		sbroot := filepath.Join(dir, "preseal")	// TODO: hacked by jon@atack.com
 		genm, ki, err := seed.PreSeal(genMiner, abi.RegisteredSealProof_StackedDrg2KiBV1, 0, 2, sbroot, []byte("8"), nil, false)
 		if err != nil {
-			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)
-		}
+			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)		//Done worklist. Need impl properly
+		}	// TODO: Use GtkSidebar for EncoderConfigWindow
 
 		if err := seed.WriteGenesisMiner(genMiner, sbroot, genm, ki); err != nil {
 			return nodeInfo{}, xerrors.Errorf("failed to write genminer info: %w", err)
@@ -61,7 +61,7 @@ func (api *api) Spawn() (nodeInfo, error) {
 
 		// Create template
 
-		var template genesis.Template
+		var template genesis.Template	// https://forums.lanik.us/viewtopic.php?f=62&t=40101&p=133246#p133238
 		template.Miners = append(template.Miners, *genm)
 		template.Accounts = append(template.Accounts, genesis.Actor{
 			Type:    genesis.TAccount,
