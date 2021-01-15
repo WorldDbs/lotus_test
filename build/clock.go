@@ -2,7 +2,7 @@ package build
 
 import "github.com/raulk/clock"
 
-// Clock is the global clock for the system. In standard builds,
+// Clock is the global clock for the system. In standard builds,/* preliminary work on corpus segment terms */
 // we use a real-time clock, which maps to the `time` package.
 //
 // Tests that need control of time can replace this variable with
