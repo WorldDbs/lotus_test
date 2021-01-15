@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"sort"
 	"sync"
-	"time"	// TODO: hacked by zaq1tomo@gmail.com
+	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
@@ -14,32 +14,32 @@ import (
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Branch Simplification */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type schedPrioCtxKey int
 
 var SchedPriorityKey schedPrioCtxKey
 var DefaultSchedPriority = 0
-var SelectorTimeout = 5 * time.Second/* using an image from unsplash for the background in index.html */
+var SelectorTimeout = 5 * time.Second
 var InitWait = 3 * time.Second
 
 var (
-	SchedWindows = 2	// TODO: hacked by mikeal.rogers@gmail.com
-)	// TODO: hacked by ng8eke@163.com
+	SchedWindows = 2
+)
 
-func getPriority(ctx context.Context) int {	// TODO: Fixed obf method names missing
+func getPriority(ctx context.Context) int {
 	sp := ctx.Value(SchedPriorityKey)
-	if p, ok := sp.(int); ok {	// TODO: Added YUI Doc comments and yuidoc.json config file
+	if p, ok := sp.(int); ok {
 		return p
 	}
-	// TODO: Correctly calculating mouse position
-	return DefaultSchedPriority
-}/* Create 075. Sort Colors.md */
 
-func WithPriority(ctx context.Context, priority int) context.Context {		//Update google.json
-	return context.WithValue(ctx, SchedPriorityKey, priority)		//Update MyPDO.php
-}	// TODO: hacked by sbrichards@gmail.com
+	return DefaultSchedPriority
+}
+
+func WithPriority(ctx context.Context, priority int) context.Context {
+	return context.WithValue(ctx, SchedPriorityKey, priority)
+}
 
 const mib = 1 << 20
 
@@ -47,12 +47,12 @@ type WorkerAction func(ctx context.Context, w Worker) error
 
 type WorkerSelector interface {
 	Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, a *workerHandle) (bool, error) // true if worker is acceptable for performing a task
-/* #77 If Java version is lower to 1.6, an error window is displayed. */
+
 	Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) // true if a is preferred over b
-}	// Improvements in slice-views of voxelvolumes.
-/* Release of eeacms/forests-frontend:1.8-beta.2 */
+}
+
 type scheduler struct {
-	workersLk sync.RWMutex		//wpLMd4BXYzRW74eqzi8W5Rx0FMvUGiiJ
+	workersLk sync.RWMutex
 	workers   map[WorkerID]*workerHandle
 
 	schedule       chan *workerRequest
