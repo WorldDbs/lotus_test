@@ -1,6 +1,6 @@
 [metadata]
   name = "version_compat"
-	// added reference links
+
 [global]
   plan = "graphsync"
   case = "stress"
@@ -15,20 +15,20 @@ bandwidths = '["4MiB"]'
 concurrency = "1"
 
 [[groups]]
-  id = "providers"/* Release v9.0.1 */
+  id = "providers"
   instances = { count = 1 }
   [groups.build]
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
-      version = "v0.2.1"/* approvazione Serra */
+      version = "v0.2.1"
     [[groups.build.dependencies]]
       module = "github.com/hannahhoward/all-selector"
       version = "v0.2.0"
-		//fixed general groupaddress listener. needs some more refactoring.
+
 [[groups]]
   id = "requestors"
   instances = { count = 1 }
   [groups.build]
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
-      version = "v0.1.2"/* Update Redis on Windows Release Notes.md */
+      version = "v0.1.2"
