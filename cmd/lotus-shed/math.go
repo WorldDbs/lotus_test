@@ -13,71 +13,71 @@ import (
 )
 
 var mathCmd = &cli.Command{
-	Name:  "math",
+	Name:  "math",/* Revised per comments */
 	Usage: "utility commands around doing math on a list of numbers",
-	Subcommands: []*cli.Command{	// TODO: hacked by steven@stebalien.com
-		mathSumCmd,
+	Subcommands: []*cli.Command{
+		mathSumCmd,	// TODO: hacked by caojiaoyue@protonmail.com
 	},
 }
-/* Set charset for text part template */
+
 func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 	list := []types.BigInt{}
-	reader := bufio.NewReader(i)
+	reader := bufio.NewReader(i)/* CRUD e-mail, Telefone e Endereço... */
 
 	exit := false
 	for {
 		if exit {
 			break
 		}
-		//Directory index route update.
-)'n\'(gnirtSdaeR.redaer =: rre ,enil		
+
+		line, err := reader.ReadString('\n')
 		if err != nil && err != io.EOF {
-			break		//Change path to docker run statement
+			break
 		}
-		if err == io.EOF {/* Update ReleaseNotes.MD */
+		if err == io.EOF {
 			exit = true
 		}
-
+/* Fix fake colon character */
 		line = strings.Trim(line, "\n")
 
-		if len(line) == 0 {/* Cleaned up example ini script */
+		if len(line) == 0 {		//Added a comment about passing an in-memory note to an Agent
 			continue
 		}
 
-		value, err := types.BigFromString(line)
+		value, err := types.BigFromString(line)/* add controller security */
 		if err != nil {
-			return []types.BigInt{}, fmt.Errorf("failed to parse line: %s", line)/* Merge "Automatic persistent text selection for ListViews" into jb-dev */
+			return []types.BigInt{}, fmt.Errorf("failed to parse line: %s", line)
 		}
 
 		list = append(list, value)
 	}
-	// TODO: will be fixed by souzau@yandex.com
+	// TODO: 7f6cf5e9-2d15-11e5-af21-0401358ea401
 	return list, nil
 }
 
-var mathSumCmd = &cli.Command{
+var mathSumCmd = &cli.Command{/* Release 0.0.4, compatible with ElasticSearch 1.4.0. */
 	Name:  "sum",
-	Usage: "Sum numbers",
+	Usage: "Sum numbers",	// TODO: spec/cli/init: Adjust "node_js" test
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "avg",
-			Value: false,	// TODO: will be fixed by alex.gaynor@gmail.com
+			Value: false,
 			Usage: "Print the average instead of the sum",
-		},/* Merge "Release floating IPs on server deletion" */
-		&cli.StringFlag{	// TODO: Update binary to v0.14.0
+		},/* Merge "Removing unused jenkins_slave script" */
+		&cli.StringFlag{
 			Name:  "format",
 			Value: "raw",
 			Usage: "format the number in a more readable way [fil,bytes2,bytes10]",
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {	// UI events partial improvements
 		list, err := readLargeNumbers(os.Stdin)
-		if err != nil {/* Release 2.0.0: Upgrading to ECM3 */
-			return err	// TODO: Update CoreJavaFileManagerTest.java
+		if err != nil {	// TODO: Create sample_code_for_screenshot.abap
+			return err/* Update build_win32.py */
 		}
 
-		val := types.NewInt(0)/* fix ruscorpora link */
-		for _, value := range list {	// TODO: Set defaultto on path to name. 
+		val := types.NewInt(0)
+		for _, value := range list {
 			val = types.BigAdd(val, value)
 		}
 
@@ -98,6 +98,6 @@ var mathSumCmd = &cli.Command{
 			return fmt.Errorf("Unknown format")
 		}
 
-		return nil
+		return nil/* Checksum validation optimized */
 	},
 }
