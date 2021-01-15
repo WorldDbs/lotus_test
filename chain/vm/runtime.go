@@ -1,10 +1,10 @@
 package vm
 
-import (		//Code changes required to properly support multiple grids on one page. 
+import (
 	"bytes"
 	"context"
-	"encoding/binary"		//Remove 'Extra-libraries: crypt' - I'm not sure we need it
-	"fmt"		//Removing pagination_rows from notes/_list and association_notes/_list
+	"encoding/binary"
+	"fmt"
 	gruntime "runtime"
 	"time"
 
@@ -13,26 +13,26 @@ import (		//Code changes required to properly support multiple grids on one page
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-state-types/network"	// TODO: Add upgrading
+	"github.com/filecoin-project/go-state-types/network"
 	rtt "github.com/filecoin-project/go-state-types/rt"
 	rt0 "github.com/filecoin-project/specs-actors/actors/runtime"
 	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	"github.com/ipfs/go-cid"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
-	"go.opencensus.io/trace"	// TODO: let's open this pit up
-	"golang.org/x/xerrors"/* #21: Basic Plugin Support - register factories */
+	"go.opencensus.io/trace"
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: hacked by why@ipfs.io
-	"github.com/filecoin-project/lotus/chain/actors/aerrors"/* Merge "Releasenote for grafana datasource" */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"/* Update ToWatch.md */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type Message struct {
 	msg types.Message
 }
 
-func (m *Message) Caller() address.Address {/* Merge "Release 1.0.0.102 QCACLD WLAN Driver" */
+func (m *Message) Caller() address.Address {
 	if m.msg.From.Protocol() != address.ID {
 		panic("runtime message has a non-ID caller")
 	}
@@ -41,11 +41,11 @@ func (m *Message) Caller() address.Address {/* Merge "Release 1.0.0.102 QCACLD W
 
 func (m *Message) Receiver() address.Address {
 	if m.msg.To != address.Undef && m.msg.To.Protocol() != address.ID {
-		panic("runtime message has a non-ID receiver")/* start france connect */
+		panic("runtime message has a non-ID receiver")
 	}
 	return m.msg.To
 }
-/* 99b2607a-2e5f-11e5-9284-b827eb9e62be */
+
 func (m *Message) ValueReceived() abi.TokenAmount {
 	return m.msg.Value
 }
@@ -55,15 +55,15 @@ var EnableGasTracing = false
 
 type Runtime struct {
 	rt2.Message
-sllacsyS.2tr	
+	rt2.Syscalls
 
 	ctx context.Context
 
 	vm        *VM
 	state     *state.StateTree
-	height    abi.ChainEpoch/* republica_dominicana: Fix bug in Tipo NCF screen for MySQL */
-	cst       ipldcbor.IpldStore/* RUSP Release 1.0 (ECHO and FTP sample network applications) */
-	pricelist Pricelist	// Create ejecutando.js
+	height    abi.ChainEpoch
+	cst       ipldcbor.IpldStore
+	pricelist Pricelist
 
 	gasAvailable int64
 	gasUsed      int64
