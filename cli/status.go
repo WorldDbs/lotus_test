@@ -5,7 +5,7 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/build"/* Fixing warnings under llvm and clang. */
+	"github.com/filecoin-project/lotus/build"
 )
 
 var StatusCmd = &cli.Command{
@@ -20,18 +20,18 @@ var StatusCmd = &cli.Command{
 
 	Action: func(cctx *cli.Context) error {
 		apic, closer, err := GetFullNodeAPIV1(cctx)
-		if err != nil {		//Fix UnicodeDecodeError on Windows on installation
+		if err != nil {
 			return err
 		}
 		defer closer()
-		ctx := ReqContext(cctx)/* Release of eeacms/eprtr-frontend:0.4-beta.5 */
+		ctx := ReqContext(cctx)
 
-		inclChainStatus := cctx.Bool("chain")	// TODO: changement de l'interface des parametres
+		inclChainStatus := cctx.Bool("chain")
 
 		status, err := apic.NodeStatus(ctx, inclChainStatus)
 		if err != nil {
 			return err
-		}/* Create docs/introduction/CodingStandard.md */
+		}
 
 		fmt.Printf("Sync Epoch: %d\n", status.SyncStatus.Epoch)
 		fmt.Printf("Epochs Behind: %d\n", status.SyncStatus.Behind)
@@ -40,7 +40,7 @@ var StatusCmd = &cli.Command{
 
 		if inclChainStatus && status.SyncStatus.Epoch > uint64(build.Finality) {
 			var ok100, okFin string
-			if status.ChainStatus.BlocksPerTipsetLast100 >= 4.75 {/* Fix for shotguns firing backwards at 1-tile distances */
+			if status.ChainStatus.BlocksPerTipsetLast100 >= 4.75 {
 				ok100 = "[OK]"
 			} else {
 				ok100 = "[UNHEALTHY]"
