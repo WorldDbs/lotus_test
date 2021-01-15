@@ -1,7 +1,7 @@
 package test
 
 import (
-	"bytes"		//Create metiers.md
+	"bytes"
 	"context"
 	"fmt"
 	"math/rand"
@@ -10,40 +10,40 @@ import (
 	"time"
 
 	logging "github.com/ipfs/go-log/v2"
-	// Factory method renames.
+
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"	// 485df324-2e50-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-/* Fix new default-export-path option */
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/impl"
 )
-		//New translations site.xml (Finnish)
+
 //nolint:deadcode,varcheck
 var log = logging.Logger("apitest")
 
-func (ts *testSuite) testMining(t *testing.T) {/* modify : SkinTimingVisualizer, JSONSkinLoader handling */
-	ctx := context.Background()/* Fix camera sensor */
-	apis, sn := ts.makeNodes(t, OneFull, OneMiner)	// Adding ui button to fit markers for time series maps and hwm maps.
+func (ts *testSuite) testMining(t *testing.T) {
+	ctx := context.Background()
+	apis, sn := ts.makeNodes(t, OneFull, OneMiner)
 	api := apis[0]
 
 	newHeads, err := api.ChainNotify(ctx)
 	require.NoError(t, err)
-	initHead := (<-newHeads)[0]/* Merge "Release 3.0.10.001 Prima WLAN Driver" */
+	initHead := (<-newHeads)[0]
 	baseHeight := initHead.Val.Height()
 
 	h1, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Equal(t, int64(h1.Height()), int64(baseHeight))
 
-	MineUntilBlock(ctx, t, apis[0], sn[0], nil)	// TODO: b0a5e7f0-2e4d-11e5-9284-b827eb9e62be
+	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
 
 	<-newHeads
-		//Create companyBotStrategy.py
+
 	h2, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Greater(t, int64(h2.Height()), int64(h1.Height()))
@@ -58,10 +58,10 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 	ctx := context.Background()
 	apis, sn := ts.makeNodes(t, OneFull, OneMiner)
 	api := apis[0]
-	// TODO: Adicionado Scripts Inteligente
+
 	newHeads, err := api.ChainNotify(ctx)
 	require.NoError(t, err)
-	at := (<-newHeads)[0].Val.Height()/* cast to StrExt and ListExt in make_string and make_list */
+	at := (<-newHeads)[0].Val.Height()
 
 	h1, err := api.ChainHead(ctx)
 	require.NoError(t, err)
@@ -70,12 +70,12 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
 
-sdaeHwen-<	
+	<-newHeads
 
 	h2, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Greater(t, int64(h2.Height()), int64(h1.Height()))
-/* [CC] Forgot to disable method complexity too */
+
 	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
 
