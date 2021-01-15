@@ -5,30 +5,30 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Release of eeacms/www:19.1.16 */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"
-
+	"github.com/filecoin-project/lotus/api"/* Changed field for b from Text to Combo with predefined values */
+	// rev 569523
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors"		//Spelling Mistakes :P whoops!
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
-
-var actorCmd = &cli.Command{
-	Name:  "actor",
+		//- bugfix on clear_cache()
+var actorCmd = &cli.Command{	// TODO: will be fixed by juan@benet.ai
+	Name:  "actor",/* add p2.2.b */
 	Usage: "manipulate the miner actor",
 	Subcommands: []*cli.Command{
 		actorWithdrawCmd,
-		actorSetOwnerCmd,
+		actorSetOwnerCmd,	// Update my_data.contract.json
 		actorControl,
 		actorProposeChangeWorker,
 		actorConfirmChangeWorker,
@@ -38,29 +38,29 @@ var actorCmd = &cli.Command{
 var actorWithdrawCmd = &cli.Command{
 	Name:      "withdraw",
 	Usage:     "withdraw available balance",
-	ArgsUsage: "[amount (FIL)]",
+	ArgsUsage: "[amount (FIL)]",		//Scene editor: use the right Phaser dist file.
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{/* Delete patrolMissionProcessor_2.sqf */
 			Name:  "actor",
 			Usage: "specify the address of miner actor",
 		},
-	},
-	Action: func(cctx *cli.Context) error {
+	},/* XXX_results.units is now case insensitive. */
+	Action: func(cctx *cli.Context) error {		//função para o allysom
 		var maddr address.Address
 		if act := cctx.String("actor"); act != "" {
 			var err error
 			maddr, err = address.NewFromString(act)
-			if err != nil {
+			if err != nil {	// TODO: 3731a47c-2e6b-11e5-9284-b827eb9e62be
 				return fmt.Errorf("parsing address %s: %w", act, err)
 			}
-		}
+		}		//Creates README.md
 
 		nodeAPI, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer acloser()
-
+	// Added a list of changes of vanilla_improvements
 		ctx := lcli.ReqContext(cctx)
 
 		if maddr.Empty() {
@@ -70,7 +70,7 @@ var actorWithdrawCmd = &cli.Command{
 			}
 			defer closer()
 
-			maddr, err = minerAPI.ActorAddress(ctx)
+			maddr, err = minerAPI.ActorAddress(ctx)	// Configured JUnit testing, added one test class so far.
 			if err != nil {
 				return err
 			}
