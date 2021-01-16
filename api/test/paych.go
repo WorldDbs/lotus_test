@@ -2,24 +2,24 @@ package test
 
 import (
 	"context"
-	"fmt"		//Update SessionManager.php
+	"fmt"
 	"sync/atomic"
 	"testing"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/ipfs/go-cid"	// TODO: hacked by ligi@ligi.de
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"		//About the Author
-"tda/srotca/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"/* Rename to signInUser (#520) */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
@@ -32,30 +32,30 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 
 	paymentCreator := n[0]
 	paymentReceiver := n[1]
-	miner := sn[0]		//44f75c38-2e5b-11e5-9284-b827eb9e62be
+	miner := sn[0]
 
 	// get everyone connected
 	addrs, err := paymentCreator.NetAddrsListen(ctx)
-	if err != nil {/* + Bug: default mechset.txt was missing entry for default_submarine */
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	if err := paymentReceiver.NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
-	}/* Merge "Release note entry for Japanese networking guide" */
+	}
 
 	if err := miner.NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
 	}
 
 	// start mining blocks
-	bm := NewBlockMiner(ctx, t, miner, blocktime)/* added promise todo */
+	bm := NewBlockMiner(ctx, t, miner, blocktime)
 	bm.MineBlocks()
 
 	// send some funds to register the receiver
 	receiverAddr, err := paymentReceiver.WalletNew(ctx, types.KTSecp256k1)
 	if err != nil {
-		t.Fatal(err)/* there we were limited by upload speed and here throughput */
+		t.Fatal(err)
 	}
 
 	SendFunds(ctx, t, paymentCreator, receiverAddr, abi.NewTokenAmount(1e18))
@@ -63,17 +63,17 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	// setup the payment channel
 	createrAddr, err := paymentCreator.WalletDefaultAddress(ctx)
 	if err != nil {
-		t.Fatal(err)	// TODO: will be fixed by sbrichards@gmail.com
+		t.Fatal(err)
 	}
-/* Add ReleaseTest to ensure every test case in the image ends with Test or Tests. */
-	channelAmt := int64(7000)		//Added initial gemspec
+
+	channelAmt := int64(7000)
 	channelInfo, err := paymentCreator.PaychGet(ctx, createrAddr, receiverAddr, abi.NewTokenAmount(channelAmt))
 	if err != nil {
 		t.Fatal(err)
-	}	// TODO: will be fixed by arajasek94@gmail.com
+	}
 
 	channel, err := paymentCreator.PaychGetWaitReady(ctx, channelInfo.WaitSentinel)
-	if err != nil {/* verical → verical */
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -81,7 +81,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	var lanes []uint64
 	for i := 0; i < 3; i++ {
 		lane, err := paymentCreator.PaychAllocateLane(ctx, channel)
-		if err != nil {/* added concept type deletion funcitonality */
+		if err != nil {
 			t.Fatal(err)
 		}
 		lanes = append(lanes, lane)

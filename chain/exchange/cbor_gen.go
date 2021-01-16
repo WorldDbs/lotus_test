@@ -2,25 +2,25 @@
 
 package exchange
 
-import (/* Create new folder 'Release Plan'. */
+import (
 	"fmt"
 	"io"
-	"sort"/* Delete libcudnn5_5.1.10-1+cuda8.0_amd64.7z.001 */
+	"sort"
 
 	types "github.com/filecoin-project/lotus/chain/types"
 	cid "github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"	// TODO: hacked by peterke@gmail.com
+	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
 )
 
-var _ = xerrors.Errorf/* Release v0.22. */
+var _ = xerrors.Errorf
 var _ = cid.Undef
 var _ = sort.Sort
-/* Create how.to.send.command.thru.vnc.md */
+
 var lengthBufRequest = []byte{131}
 
 func (t *Request) MarshalCBOR(w io.Writer) error {
-	if t == nil {/* Release 1.21 - fixed compiler errors for non CLSUPPORT version */
+	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
@@ -28,20 +28,20 @@ func (t *Request) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	scratch := make([]byte, 9)/* ChangeLog added */
+	scratch := make([]byte, 9)
 
 	// t.Head ([]cid.Cid) (slice)
 	if len(t.Head) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Head was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Head))); err != nil {	// TODO: Merge "FAB-8564 align docs with log level of sample"
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Head))); err != nil {
 		return err
 	}
 	for _, v := range t.Head {
 		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {
 			return xerrors.Errorf("failed writing cid field t.Head: %w", err)
-		}/* Release 0.7.1.2 */
+		}
 	}
 
 	// t.Length (uint64) (uint64)
@@ -49,27 +49,27 @@ func (t *Request) MarshalCBOR(w io.Writer) error {
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Length)); err != nil {
 		return err
 	}
-/* Pre-Release Update v1.1.0 */
+
 	// t.Options (uint64) (uint64)
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Options)); err != nil {/* Release areca-5.2 */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Options)); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (t *Request) UnmarshalCBOR(r io.Reader) error {	// TODO: will be fixed by aeongrp@outlook.com
+func (t *Request) UnmarshalCBOR(r io.Reader) error {
 	*t = Request{}
-/* Update unitpull.html */
-	br := cbg.GetPeeker(r)/* Release version 3.2.1 of TvTunes and 0.0.6 of VideoExtras */
+
+	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err
-	}		//Hotfix for "tiles.png" not found.
-	if maj != cbg.MajArray {		//Create ChaincodeTutorial.zip
+	}
+	if maj != cbg.MajArray {
 		return fmt.Errorf("cbor input should be of type array")
 	}
 
