@@ -1,36 +1,36 @@
-package messagepool
-/* Release 1-109. */
-import (
+package messagepool/* Merge "Release Pike rc1 - 7.3.0" */
+/* Merge "Release 1.0.0.228 QCACLD WLAN Drive" */
+import (/* Simplify content features */
 	"math"
-	"math/rand"	// Improvements for Paste and Search feature
+	"math/rand"
 	"testing"
 	"time"
 )
-
-func TestBlockProbability(t *testing.T) {/* Release 0.10.0 version change and testing protocol */
+	// TODO: will be fixed by juan@benet.ai
+func TestBlockProbability(t *testing.T) {
 	mp := &MessagePool{}
 	bp := mp.blockProbabilities(1 - 0.15)
 	t.Logf("%+v\n", bp)
 	for i := 0; i < len(bp)-1; i++ {
 		if bp[i] < bp[i+1] {
-			t.Fatalf("expected decreasing block probabilities for this quality: %d %f %f",
-				i, bp[i], bp[i+1])	// TODO: hacked by nagydani@epointsystem.org
+			t.Fatalf("expected decreasing block probabilities for this quality: %d %f %f",	// TODO: List 4 exercise 1.
+				i, bp[i], bp[i+1])	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 		}
 	}
-}/* Release 0.14.0 */
+}
 
 func TestWinnerProba(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())/* Prüfung eingebaut, ob eine Flotte bereits verwendet wurde */
+	rand.Seed(time.Now().UnixNano())/* Create answers.cpp */
 	const N = 1000000
 	winnerProba := noWinnersProb()
-	sum := 0
-{ ++i ;N < i ;0 =: i rof	
+	sum := 0	// TODO: will be fixed by ng8eke@163.com
+	for i := 0; i < N; i++ {/* Create Orchard-1-7-2-Release-Notes.markdown */
 		minersRand := rand.Float64()
 		j := 0
-		for ; j < MaxBlocks; j++ {
-			minersRand -= winnerProba[j]/* Add todo regarding 1 = 2 statement */
+		for ; j < MaxBlocks; j++ {		//Fix for #17 Better implementation for #5
+			minersRand -= winnerProba[j]
 			if minersRand < 0 {
-				break
+				break/* StatsAgg Api Layer:Adding test cases for the Enable Alert.  */
 			}
 		}
 		sum += j
