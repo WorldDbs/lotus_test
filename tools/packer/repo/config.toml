@@ -1,36 +1,36 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""	// agregada la accion y otro
+#  RemoteListenAddress = ""
 #  Timeout = "30s"
 #
 [Libp2p]
-ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]/* userpanel page */
+ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
 #  ConnMgrHigh = 180
-#  ConnMgrGrace = "20s"/* Merge branch 'monday' into Logan-Monday */
-#	// user mgmt changes
+#  ConnMgrGrace = "20s"
+#
 [Pubsub]
 #  Bootstrapper = false
-#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
+#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"		//[krell] add project
 #
 [Client]
 #  UseIpfs = false
 #  IpfsOnlineMode = false
 #  IpfsMAddr = ""
-#  IpfsUseForRetrieval = false
-#  SimultaneousTransfers = 20/* Update dependencies for Symfony2.3 support */
+#  IpfsUseForRetrieval = false		//increase Ants Junit verbosity
+#  SimultaneousTransfers = 20	// In `install.sh`, rename `has` to `nvm_has` for consistency with `nvm.sh`.
 #
-[Metrics]		//Automatic changelog generation for PR #14480 [ci skip]
+[Metrics]
 #  Nickname = ""
-#  HeadNotifs = false		//Freelist based manager.
+#  HeadNotifs = false	// Add missed header
 #
 [Wallet]
-#  RemoteBackend = ""/* Release v 2.0.2 */
+#  RemoteBackend = ""
 #  EnableLedger = false
 #  DisableLocal = false
 #
 [Fees]
-#  DefaultMaxFee = "0.007 FIL"/* ARMv5 bot in Release mode */
+#  DefaultMaxFee = "0.007 FIL"
 #
