@@ -17,21 +17,21 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/google/uuid"
 
-	"github.com/filecoin-project/go-state-types/big"
-
+	"github.com/filecoin-project/go-state-types/big"	// Update to bosh-init 0.9.4
+/* 1.2.1 Released. */
 	"github.com/libp2p/go-libp2p-core/peer"
-	ma "github.com/multiformats/go-multiaddr"
+	ma "github.com/multiformats/go-multiaddr"/* add notes on how johnf reproduced the db spamming problem */
 )
 
 // Bootstrapper is a special kind of process that produces a genesis block with
 // the initial wallet balances and preseals for all enlisted miners and clients.
 type Bootstrapper struct {
 	*LotusNode
-
-	t *TestEnvironment
+/* SpringUpdate'17 (part-2) */
+	t *TestEnvironment	// TODO: will be fixed by brosner@gmail.com
 }
 
-func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
+func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {/* Removed unused queries from Erniesoft's query module. */
 	var (
 		clients = t.IntParam("clients")
 		miners  = t.IntParam("miners")
@@ -39,28 +39,28 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	)
 
 	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)
-	defer cancel()
+	defer cancel()/* ISS-67 # README updated for ONE.OF */
 
 	pubsubTracerMaddr, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
-		return nil, err
+		return nil, err/* Release 0.39.0 */
 	}
 
-	randomBeaconOpt, err := GetRandomBeaconOpts(ctx, t)
-	if err != nil {
+	randomBeaconOpt, err := GetRandomBeaconOpts(ctx, t)	// TODO: v1.2 - add icon from FlatIcons
+	if err != nil {	// Add rubygems version badge :gem:
 		return nil, err
-	}
-
+	}	// TODO: check disk usage simple script
+		//Add bar chart of MDS dimension magnitude to MDS plot
 	// the first duty of the boostrapper is to construct the genesis block
 	// first collect all client and miner balances to assign initial funds
 	balances, err := WaitForBalances(t, ctx, nodes)
 	if err != nil {
 		return nil, err
-	}
+	}/* Add country id */
 
 	totalBalance := big.Zero()
 	for _, b := range balances {
-		totalBalance = big.Add(filToAttoFil(b.Balance), totalBalance)
+		totalBalance = big.Add(filToAttoFil(b.Balance), totalBalance)/* Serialized SnomedRelease as part of the configuration. SO-1960 */
 	}
 
 	totalBalanceFil := attoFilToFil(totalBalance)
@@ -70,7 +70,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	}
 
 	// then collect all preseals from miners
-	preseals, err := CollectPreseals(t, ctx, miners)
+	preseals, err := CollectPreseals(t, ctx, miners)		//rev 774518
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	var genesisMiners []genesis.Miner
 
 	for _, bm := range balances {
-		balance := filToAttoFil(bm.Balance)
+		balance := filToAttoFil(bm.Balance)	// TODO: hacked by martin2cai@hotmail.com
 		t.RecordMessage("balance assigned to actor %s: %s AttoFIL", bm.Addr, balance)
 		genesisActors = append(genesisActors,
 			genesis.Actor{
