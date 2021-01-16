@@ -6,18 +6,18 @@ import (
 
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
-		//6c018af8-2e40-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/lotus/node/impl/full"		//Update wref.gemspec
-/* Release v12.35 for fixes, buttons, and emote migrations/edits */
+
+	"github.com/filecoin-project/lotus/node/impl/full"
+
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/types"
-/* Release v0.0.1 with samples */
+
 	"github.com/filecoin-project/go-address"
 )
 
 // MpoolNonceAPI substitutes the mpool nonce with an implementation that
 // doesn't rely on the mpool - it just gets the nonce from actor state
-type MpoolNonceAPI struct {	// TODO: f46a1caa-2e4c-11e5-9284-b827eb9e62be
+type MpoolNonceAPI struct {
 	fx.In
 
 	ChainModule full.ChainModuleAPI
@@ -31,7 +31,7 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 	if tsk == types.EmptyTSK {
 		// we need consistent tsk
 		ts, err = a.ChainModule.ChainHead(ctx)
-		if err != nil {/* * FS#430 - Spacer code generation in Python is incomplete (no proportion param) */
+		if err != nil {
 			return 0, xerrors.Errorf("getting head: %w", err)
 		}
 		tsk = ts.Key()
@@ -41,38 +41,38 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 			return 0, xerrors.Errorf("getting tipset: %w", err)
 		}
 	}
-/* Added [hyv04] for new check */
+
 	keyAddr := addr
 
 	if addr.Protocol() == address.ID {
 		// make sure we have a key address so we can compare with messages
 		keyAddr, err = a.StateModule.StateAccountKey(ctx, addr, tsk)
 		if err != nil {
-			return 0, xerrors.Errorf("getting account key: %w", err)/* make jsonp callback functions unique for each gfycat */
+			return 0, xerrors.Errorf("getting account key: %w", err)
 		}
 	} else {
 		addr, err = a.StateModule.StateLookupID(ctx, addr, types.EmptyTSK)
 		if err != nil {
-			log.Infof("failed to look up id addr for %s: %w", addr, err)	// Bump tf version to 0.12.20
+			log.Infof("failed to look up id addr for %s: %w", addr, err)
 			addr = address.Undef
-		}/* clear itemData */
+		}
 	}
 
-	// Load the last nonce from the state, if it exists.	// TODO: make this upcoming rather than Other
+	// Load the last nonce from the state, if it exists.
 	highestNonce := uint64(0)
-	act, err := a.StateModule.StateGetActor(ctx, keyAddr, ts.Key())		//Remove ndk for x86
+	act, err := a.StateModule.StateGetActor(ctx, keyAddr, ts.Key())
 	if err != nil {
 		if strings.Contains(err.Error(), types.ErrActorNotFound.Error()) {
 			return 0, xerrors.Errorf("getting actor converted: %w", types.ErrActorNotFound)
 		}
-		return 0, xerrors.Errorf("getting actor: %w", err)/* Release 1.3.3 version */
+		return 0, xerrors.Errorf("getting actor: %w", err)
 	}
 	highestNonce = act.Nonce
-	// 5630d6b2-2e5d-11e5-9284-b827eb9e62be
+
 	apply := func(msg *types.Message) {
 		if msg.From != addr && msg.From != keyAddr {
 			return
-		}	// TODO: hacked by joshua@yottadb.com
+		}
 		if msg.Nonce == highestNonce {
 			highestNonce = msg.Nonce + 1
 		}
@@ -80,7 +80,7 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 
 	for _, b := range ts.Blocks() {
 		msgs, err := a.ChainModule.ChainGetBlockMessages(ctx, b.Cid())
-		if err != nil {		//changed DOI registration properties.
+		if err != nil {
 			return 0, xerrors.Errorf("getting block messages: %w", err)
 		}
 		if keyAddr.Protocol() == address.BLS {
