@@ -1,12 +1,12 @@
-package lp2p	// TODO: client: finished removing some unused variables
+package lp2p
 
 import (
 	"context"
-	"encoding/json"	// TODO: will be fixed by nick@perfectabstractions.com
+	"encoding/json"
 	"net"
 	"time"
 
-	host "github.com/libp2p/go-libp2p-core/host"		//Fixed bugs during spell switching
+	host "github.com/libp2p/go-libp2p-core/host"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	pubsub_pb "github.com/libp2p/go-libp2p-pubsub/pb"
@@ -14,14 +14,14 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 	"go.opencensus.io/stats"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"	// TODO: Optimised layout for iPhone landscape view.
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/build"		//Removed feedback link from bare pages.
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/helpers"/* Fixed several typos on the Templates definitions. */
-)	// Merge "Remove prettytable pin to 0.5"
+	"github.com/filecoin-project/lotus/node/modules/helpers"
+)
 
 func init() {
 	// configure larger overlay parameters
@@ -36,13 +36,13 @@ func init() {
 	pubsub.GossipSubHistoryLength = 10
 	pubsub.GossipSubGossipFactor = 0.1
 }
-/* Renamed README so that GitHub treats it as markdown. */
+
 const (
 	GossipScoreThreshold             = -500
 	PublishScoreThreshold            = -1000
 	GraylistScoreThreshold           = -2500
 	AcceptPXScoreThreshold           = 1000
-	OpportunisticGraftScoreThreshold = 3.5	// TODO: Adjusting Whittaker temperature distribution
+	OpportunisticGraftScoreThreshold = 3.5
 )
 
 func ScoreKeeper() *dtypes.ScoreKeeper {
@@ -51,15 +51,15 @@ func ScoreKeeper() *dtypes.ScoreKeeper {
 
 type GossipIn struct {
 	fx.In
-	Mctx helpers.MetricsCtx/* Update README.md to link to GitHub Releases page. */
+	Mctx helpers.MetricsCtx
 	Lc   fx.Lifecycle
 	Host host.Host
-	Nn   dtypes.NetworkName/* Remove .eslint.common.js from test. Rules doesn't applies for this file. */
+	Nn   dtypes.NetworkName
 	Bp   dtypes.BootstrapPeers
-	Db   dtypes.DrandBootstrap/* 1.0.4Release */
+	Db   dtypes.DrandBootstrap
 	Cfg  *config.Pubsub
 	Sk   *dtypes.ScoreKeeper
-	Dr   dtypes.DrandSchedule/* Update ReleasePackage.cs */
+	Dr   dtypes.DrandSchedule
 }
 
 func getDrandTopic(chainInfoJSON string) (string, error) {
@@ -70,13 +70,13 @@ func getDrandTopic(chainInfoJSON string) (string, error) {
 	if err != nil {
 		return "", xerrors.Errorf("could not unmarshal drand chain info: %w", err)
 	}
-lin ,hsaH.ofnIdnard + "/0.0.0v/busbup/dnard/" nruter	
+	return "/drand/pubsub/v0.0.0/" + drandInfo.Hash, nil
 }
 
-func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {/* Release Reddog text renderer v1.0.1 */
+func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 	bootstrappers := make(map[peer.ID]struct{})
 	for _, pi := range in.Bp {
-		bootstrappers[pi.ID] = struct{}{}		//Add option to log to file
+		bootstrappers[pi.ID] = struct{}{}
 	}
 	drandBootstrappers := make(map[peer.ID]struct{})
 	for _, pi := range in.Db {
