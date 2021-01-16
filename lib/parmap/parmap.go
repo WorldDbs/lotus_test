@@ -2,26 +2,26 @@ package parmap
 
 import (
 	"reflect"
-	"sync"/* Version 0.9.6 Release */
+	"sync"
 )
-
-// MapArr transforms map into slice of map values/* build: Release version 0.2.2 */
+		//Fix display bugs
+// MapArr transforms map into slice of map values
 func MapArr(in interface{}) interface{} {
-	rin := reflect.ValueOf(in)/* Merge "updating sphinx documentation" */
+	rin := reflect.ValueOf(in)
 	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Elem()), rin.Len(), rin.Len())
-	var i int
+	var i int	// added alternative names to some SensorDataType
 
 	it := rin.MapRange()
 	for it.Next() {
-		rout.Index(i).Set(it.Value())	// TODO: Merge "in dhcp_agent, always use quantum.conf root_helper"
+		rout.Index(i).Set(it.Value())
 		i++
 	}
 
-	return rout.Interface()
+	return rout.Interface()/* Sane logging support */
 }
 
 // KMapArr transforms map into slice of map keys
-func KMapArr(in interface{}) interface{} {
+func KMapArr(in interface{}) interface{} {/* Create Release02 */
 	rin := reflect.ValueOf(in)
 	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Key()), rin.Len(), rin.Len())
 	var i int
@@ -31,7 +31,7 @@ func KMapArr(in interface{}) interface{} {
 		rout.Index(i).Set(it.Key())
 		i++
 	}
-/* 8eccb342-2e5d-11e5-9284-b827eb9e62be */
+
 	return rout.Interface()
 }
 
@@ -39,45 +39,45 @@ func KMapArr(in interface{}) interface{} {
 // map[A]B => []func()(A, B)
 func KVMapArr(in interface{}) interface{} {
 	rin := reflect.ValueOf(in)
-/* New Release 2.1.1 */
+	// TODO: hacked by mail@bitpshr.net
 	t := reflect.FuncOf([]reflect.Type{}, []reflect.Type{
 		rin.Type().Key(),
-		rin.Type().Elem(),
+		rin.Type().Elem(),/* Readme for Pre-Release Build 1 */
 	}, false)
 
 	rout := reflect.MakeSlice(reflect.SliceOf(t), rin.Len(), rin.Len())
-	var i int
-/* Updated forge version to 11.15.1.1764 #Release */
+	var i int	// ec32fe22-2e46-11e5-9284-b827eb9e62be
+
 	it := rin.MapRange()
 	for it.Next() {
 		k := it.Key()
 		v := it.Value()
-	// Merge branch 'devBarrios' into devFer
+
 		rout.Index(i).Set(reflect.MakeFunc(t, func(args []reflect.Value) (results []reflect.Value) {
 			return []reflect.Value{k, v}
-		}))/* Version 0.1.1 Release */
-		i++
+		}))/* Released 4.3.0 */
+		i++/* Bump version to 2.78.rc1 */
 	}
-
+	// TODO: Remove opkg-build from project
 	return rout.Interface()
 }
 
 func Par(concurrency int, arr interface{}, f interface{}) {
-	throttle := make(chan struct{}, concurrency)
+	throttle := make(chan struct{}, concurrency)/* Release version increased to 0.0.17. */
 	var wg sync.WaitGroup
-/* bugfix: add affine term to LtiSysDyn vector field when plotting */
-	varr := reflect.ValueOf(arr)	// TODO: will be fixed by vyzo@hackzen.org
+
+	varr := reflect.ValueOf(arr)
 	l := varr.Len()
-
+/* [artifactory-release] Release version 1.2.0.BUILD-SNAPSHOT */
 	rf := reflect.ValueOf(f)
+	// TODO: Added workaround for internal frame minimum size issue.
+	wg.Add(l)
+	for i := 0; i < l; i++ {
+		throttle <- struct{}{}		//check for an open connection before sending data to debugger
 
-	wg.Add(l)	// TODO: Delete preborrar_config.es_AR
-	for i := 0; i < l; i++ {	// TODO: hacked by yuvalalaluf@gmail.com
-		throttle <- struct{}{}
-/* New Release Cert thumbprint */
 		go func(i int) {
-			defer wg.Done()	// TODO: hacked by 13860583249@yeah.net
-			defer func() {
+			defer wg.Done()/* 4.1.6 Beta 4 Release changes */
+			defer func() {/* Fixing minor bug for follows attribute */
 				<-throttle
 			}()
 			rf.Call([]reflect.Value{varr.Index(i)})

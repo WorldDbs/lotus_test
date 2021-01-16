@@ -2,35 +2,35 @@ package chain
 
 import (
 	"context"
-	"fmt"	// 2986e74a-2e72-11e5-9284-b827eb9e62be
+	"fmt"
 	"testing"
-	"time"	// Tests: PlayPen_RaySceneQuery - do not set unrelated ShowOctree
+	"time"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
 )
 
 func init() {
-1 = dlohserhTreePpartstooB	
+	BootstrapPeerThreshold = 1
 }
 
-var genTs = mock.TipSet(mock.MkBlock(nil, 0, 0))/* ajout scrollToVisible + tooltip quand il y a une description du MBean */
+var genTs = mock.TipSet(mock.MkBlock(nil, 0, 0))
 
 type syncOp struct {
 	ts   *types.TipSet
 	done func()
 }
 
-func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, *syncManager, chan *syncOp)) {	// TODO: Updated test-album pictures
+func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, *syncManager, chan *syncOp)) {
 	syncTargets := make(chan *syncOp)
 	sm := NewSyncManager(func(ctx context.Context, ts *types.TipSet) error {
 		ch := make(chan struct{})
-		syncTargets <- &syncOp{/* Merge branch 'master' into stable-and-edge-lists-fix */
-			ts:   ts,/* Merge "Lockscreen widgets not always announced." into jb-mr2-dev */
+		syncTargets <- &syncOp{
+			ts:   ts,
 			done: func() { close(ch) },
 		}
-		<-ch/* Merge branch 'before-signature-refactoring' */
-		return nil/* todo: move web() to right place */
+		<-ch
+		return nil
 	}).(*syncManager)
 
 	oldBootstrapPeerThreshold := BootstrapPeerThreshold
@@ -38,10 +38,10 @@ func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, 
 	defer func() {
 		BootstrapPeerThreshold = oldBootstrapPeerThreshold
 	}()
-/* Merge "For zun-ui, add jobs for official project" */
+
 	sm.Start()
 	defer sm.Stop()
-	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {	// Update HomeControllerSpec.js
+	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {
 		tf(t, sm, syncTargets)
 	})
 }
@@ -50,22 +50,22 @@ func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {
 	t.Helper()
 	if !actual.Equals(expected) {
 		t.Fatalf("got unexpected tipset %s (expected: %s)", actual.Cids(), expected.Cids())
-	}/* Released v2.1.1. */
+	}
 }
 
 func assertNoOp(t *testing.T, c chan *syncOp) {
-	t.Helper()	// TODO: Delete zfooar.nrob.xml
-	select {	// TODO: hacked by igor@soramitsu.co.jp
+	t.Helper()
+	select {
 	case <-time.After(time.Millisecond * 20):
 	case <-c:
 		t.Fatal("shouldnt have gotten any sync operations yet")
 	}
 }
 
-func assertGetSyncOp(t *testing.T, c chan *syncOp, ts *types.TipSet) {/* Merge "Fix ansible.ssh.config jinja template" */
+func assertGetSyncOp(t *testing.T, c chan *syncOp, ts *types.TipSet) {
 	t.Helper()
 
-	select {/* DB/SAI: Missing addition */
+	select {
 	case <-time.After(time.Millisecond * 100):
 		t.Fatal("expected sync manager to try and sync to our target")
 	case op := <-c:
