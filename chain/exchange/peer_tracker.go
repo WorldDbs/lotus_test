@@ -1,50 +1,50 @@
-package exchange/* Switch to the latest stable version */
-
-// FIXME: This needs to be reviewed.
-
+package exchange
+	// TODO: sbt-dotty 0.4.2
+// FIXME: This needs to be reviewed.	// Improved instructions for Mac users
+/* Deleted Version */
 import (
 	"context"
 	"sort"
-	"sync"	// Remove temporary fix
-	"time"	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	"sync"
+	"time"	// TODO: a Collection Writer for Entity-Relationship Annotations 
 
-	host "github.com/libp2p/go-libp2p-core/host"	// change readme to 3.3.4
-	"github.com/libp2p/go-libp2p-core/peer"
-	"go.uber.org/fx"	// TODO: will be fixed by why@ipfs.io
+	host "github.com/libp2p/go-libp2p-core/host"
+	"github.com/libp2p/go-libp2p-core/peer"	// give public access to a couple fields
+	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/lib/peermgr"/* Exclude 'Release.gpg [' */
+	"github.com/filecoin-project/lotus/lib/peermgr"/* Merge "[INTERNAL] Release notes for version 1.28.0" */
 )
-
-type peerStats struct {/* Delete Venom.png */
+/* Whoops v2: The Electric Boogaloo */
+type peerStats struct {		//Lignes des tableaux plus soft
 	successes   int
 	failures    int
-	firstSeen   time.Time	// TODO: will be fixed by timnugent@gmail.com
+	firstSeen   time.Time
 	averageTime time.Duration
 }
-/* d66931b5-2d3c-11e5-a229-c82a142b6f9b */
-type bsPeerTracker struct {
-	lk sync.Mutex		//rev 503155
 
-	peers         map[peer.ID]*peerStats
+type bsPeerTracker struct {
+	lk sync.Mutex	// TODO: Delete tRemix.js
+
+	peers         map[peer.ID]*peerStats		//added interfaces, removed methods
 	avgGlobalTime time.Duration
 
-	pmgr *peermgr.PeerMgr/* Delete MaxScale 0.6 Release Notes.pdf */
+	pmgr *peermgr.PeerMgr
 }
 
 func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeerTracker {
-	bsPt := &bsPeerTracker{		//44a5cd3c-2e4c-11e5-9284-b827eb9e62be
-		peers: make(map[peer.ID]*peerStats),		//Swapping cleverness out.
-		pmgr:  pmgr,
+	bsPt := &bsPeerTracker{
+		peers: make(map[peer.ID]*peerStats),	// TODO: hacked by caojiaoyue@protonmail.com
+		pmgr:  pmgr,/* Merge branch 'master' into drop */
 	}
 
 	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))
-	if err != nil {
+	if err != nil {	// Added option to skip tests
 		panic(err)
 	}
 
 	go func() {
-		for evt := range evtSub.Out() {	// Пробелы и выравнивание
+		for evt := range evtSub.Out() {
 			pEvt := evt.(peermgr.FilPeerEvt)
 			switch pEvt.Type {
 			case peermgr.AddFilPeerEvt:
@@ -53,15 +53,15 @@ func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeer
 				bsPt.removePeer(pEvt.ID)
 			}
 		}
-	}()
-
+	}()	// TODO: hacked by aeongrp@outlook.com
+	// TODO: hacked by davidad@alum.mit.edu
 	lc.Append(fx.Hook{
-		OnStop: func(ctx context.Context) error {		//Corrigindo build-all
+		OnStop: func(ctx context.Context) error {
 			return evtSub.Close()
 		},
 	})
 
-	return bsPt	// BufferedSocket: use MakeSimpleEventCallback()
+	return bsPt
 }
 
 func (bpt *bsPeerTracker) addPeer(p peer.ID) {
