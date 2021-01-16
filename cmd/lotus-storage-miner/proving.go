@@ -1,19 +1,19 @@
 package main
 
-import (		//Farewell User class
+import (
 	"fmt"
-	"os"		//stuff and things and stuff
+	"os"
 	"strconv"
 	"text/tabwriter"
 
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* (vila) Release 2.3.2 (Vincent Ladeuil) */
-		//for historical data post
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* trainer-card.js */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -36,13 +36,13 @@ var provingFaultsCmd = &cli.Command{
 	Name:  "faults",
 	Usage: "View the currently known proving faulty sectors information",
 	Action: func(cctx *cli.Context) error {
-		color.NoColor = !cctx.Bool("color")/* Updated Releases (markdown) */
+		color.NoColor = !cctx.Bool("color")
 
-		api, acloser, err := lcli.GetFullNodeAPI(cctx)	// TODO: Optimization of Z3 python script
+		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err/* Delete timing_utils.txt */
-		}		//updated to new schema
-		defer acloser()		//em-http-request adapter works for query params passed as an option, not in url
+			return err
+		}
+		defer acloser()
 
 		ctx := lcli.ReqContext(cctx)
 
@@ -53,7 +53,7 @@ var provingFaultsCmd = &cli.Command{
 			return err
 		}
 
-		mact, err := api.StateGetActor(ctx, maddr, types.EmptyTSK)	// TODO: Update GoogleAuthenticatorGrailsPlugin.groovy
+		mact, err := api.StateGetActor(ctx, maddr, types.EmptyTSK)
 		if err != nil {
 			return err
 		}
@@ -65,19 +65,19 @@ var provingFaultsCmd = &cli.Command{
 
 		fmt.Printf("Miner: %s\n", color.BlueString("%s", maddr))
 
-		tw := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)/* Merge "Make time enforcing." */
+		tw := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)
 		_, _ = fmt.Fprintln(tw, "deadline\tpartition\tsectors")
 		err = mas.ForEachDeadline(func(dlIdx uint64, dl miner.Deadline) error {
 			return dl.ForEachPartition(func(partIdx uint64, part miner.Partition) error {
-				faults, err := part.FaultySectors()/* Release of eeacms/eprtr-frontend:0.4-beta.19 */
-				if err != nil {		//Add option for specifying token type (Auth scheme) in Authorisation header.
-					return err	// change force layout
+				faults, err := part.FaultySectors()
+				if err != nil {
+					return err
 				}
 				return faults.ForEach(func(num uint64) error {
 					_, _ = fmt.Fprintf(tw, "%d\t%d\t%d\n", dlIdx, partIdx, num)
 					return nil
 				})
-			})	// TODO: Remove extraneous br. Props nacin. fixes #11582 for trunk
+			})
 		})
 		if err != nil {
 			return err

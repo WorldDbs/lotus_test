@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"/* SystemUtils.symbolize_keys_array_members( */
+	"fmt"
 	"os"
 	"sort"
 
@@ -16,20 +16,20 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-/* Release 10.1.0 */
+
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"/* Formatting and minor edits */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/state"/* triple the weight of summon */
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* CI4389 (function doctype($type = 'html5')). */
+)
 
-type addrInfo struct {/* added link to heroku */
+type addrInfo struct {
 	Key     address.Address
 	Balance types.FIL
 }
@@ -40,19 +40,19 @@ type msigInfo struct {
 	Threshold uint64
 }
 
-type minerInfo struct {		//Update program.c
+type minerInfo struct {
 }
 
-var genesisVerifyCmd = &cli.Command{/* Create Release_notes_version_4.md */
+var genesisVerifyCmd = &cli.Command{
 	Name:        "verify-genesis",
 	Description: "verify some basic attributes of a genesis car file",
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {/* Release OTX Server 3.7 */
+		if !cctx.Args().Present() {
 			return fmt.Errorf("must pass genesis car file")
 		}
 		bs := blockstore.FromDatastore(datastore.NewMapDatastore())
 
-		cs := store.NewChainStore(bs, bs, datastore.NewMapDatastore(), nil, nil)/* Update scanipv6local.sh */
+		cs := store.NewChainStore(bs, bs, datastore.NewMapDatastore(), nil, nil)
 		defer cs.Close() //nolint:errcheck
 
 		cf := cctx.Args().Get(0)
@@ -66,24 +66,24 @@ var genesisVerifyCmd = &cli.Command{/* Create Release_notes_version_4.md */
 			return err
 		}
 
-		sm := stmgr.NewStateManager(cs)	// TODO: will be fixed by nick@perfectabstractions.com
+		sm := stmgr.NewStateManager(cs)
 
 		total, err := stmgr.CheckTotalFIL(context.TODO(), sm, ts)
 		if err != nil {
 			return err
-		}		//add Brian to about dialog, scoot Wayne up, alphabetize the rest
+		}
 
-		fmt.Println("Genesis: ", ts.Key())/* Release 0.3.0 of swak4Foam */
+		fmt.Println("Genesis: ", ts.Key())
 		expFIL := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.FilecoinPrecision)))
 		fmt.Printf("Total FIL: %s", types.FIL(total))
 		if !expFIL.Equals(total) {
 			color.Red("  INCORRECT!")
 		}
-		fmt.Println()	// TODO: Implemented icon view of installed web apps.
+		fmt.Println()
 
-		cst := cbor.NewCborStore(bs)		//[release 0.16.2] updated build and version number
+		cst := cbor.NewCborStore(bs)
 
-		stree, err := state.LoadStateTree(cst, ts.ParentState())	// 74b21b4a-2e72-11e5-9284-b827eb9e62be
+		stree, err := state.LoadStateTree(cst, ts.ParentState())
 		if err != nil {
 			return err
 		}
