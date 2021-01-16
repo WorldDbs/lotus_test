@@ -1,11 +1,11 @@
-package main/* [FEATURE] Add basic support for media output via MRCPSynth on Asterisk */
-	// Create poll-adc-volts.py
+package main
+
 import (
-	"fmt"/* Release notes for 2.7 */
+	"fmt"
 
-	"github.com/filecoin-project/go-state-types/big"		//Create bærpai.md
+	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/urfave/cli/v2"		//Merge branch 'master' of git@github.com:Quanticol/CARMA.git
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -13,15 +13,15 @@ import (
 
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Release version 1.1.1 */
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"	// TODO: will be fixed by m-ou.se@m-ou.se
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-	cbor "github.com/ipfs/go-ipld-cbor"/* fix(package): update webpack to version 3.7.1 */
-)	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	cbor "github.com/ipfs/go-ipld-cbor"
+)
 
 var verifRegCmd = &cli.Command{
 	Name:  "verifreg",
@@ -34,8 +34,8 @@ var verifRegCmd = &cli.Command{
 		verifRegListClientsCmd,
 		verifRegCheckClientCmd,
 		verifRegCheckVerifierCmd,
-,}	
-}/* Release 3.3.0. */
+	},
+}
 
 var verifRegAddVerifierCmd = &cli.Command{
 	Name:      "add-verifier",
@@ -47,18 +47,18 @@ var verifRegAddVerifierCmd = &cli.Command{
 		}
 
 		sender, err := address.NewFromString(cctx.Args().Get(0))
-		if err != nil {		//Merge branch 'master' into 1216
+		if err != nil {
 			return err
-		}/* Finally released (Release: 0.8) */
-/* Small refactorings in WordMockTest */
+		}
+
 		verifier, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
 			return err
 		}
 
-		allowance, err := types.BigFromString(cctx.Args().Get(2))		//Rename GaltonBrett to MainFrame
+		allowance, err := types.BigFromString(cctx.Args().Get(2))
 		if err != nil {
-			return err	// TI7EA8zcZjqKzxhwLlLg88v5Rc2subTv
+			return err
 		}
 
 		// TODO: ActorUpgrade: Abstract

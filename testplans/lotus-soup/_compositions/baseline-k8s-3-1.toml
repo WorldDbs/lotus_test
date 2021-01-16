@@ -1,18 +1,18 @@
-[metadata]		//f1b88fa8-2e49-11e5-9284-b827eb9e62be
+[metadata]
   name = "lotus-soup"
   author = ""
-/* Fix typo in Fastfile */
-[global]/* Additional development instructions */
+
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 5
-"og:rekcod" = redliub  
+  builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
-/* Merge branch 'master' into update-storybook-config */
-[global.run_config]	// TODO: fix db edit
+
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -21,10 +21,10 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]	// TODO: first version of the theme
-  clients = "3"/* Delete breakfastflowersdetailstwo800x600.JPG */
+[global.run.test_params]
+  clients = "3"
   miners = "1"
-  genesis_timestamp_offset = "0"/* square thumbs! */
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
@@ -34,15 +34,15 @@
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"/* Formerly compatMakefile.~45~ */
+    cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0/* Update to vellum:eb02c7f95 */
-  [groups.run]		//Add pagination in index.html
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]/* Version 3.7.1 Release Candidate 1 */
+[[groups]]
   id = "miners"
   [groups.resources]
     memory = "8192Mi"
@@ -60,8 +60,8 @@
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 3		//Create member-list.html
-    percentage = 0.0/* Work on navbar and lower documents */
+    count = 3
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
