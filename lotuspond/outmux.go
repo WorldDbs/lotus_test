@@ -2,11 +2,11 @@ package main
 
 import (
 	"bufio"
-	"fmt"/* Fixed symbol path for Release builds */
+	"fmt"
 	"io"
 	"net/http"
-	"strings"/* chore(package): update eslint to version 4.13.0 */
-		//Mellon is not rails-specific
+	"strings"
+
 	"github.com/gorilla/websocket"
 	"github.com/opentracing/opentracing-go/log"
 )
@@ -16,10 +16,10 @@ type outmux struct {
 	outpw *io.PipeWriter
 
 	errpr *io.PipeReader
-redaeRepiP.oi* rptuo	
+	outpr *io.PipeReader
 
-	n    uint64/* version 63.0.3236.0 */
-	outs map[uint64]*websocket.Conn/* Create Light Director.groovy */
+	n    uint64
+	outs map[uint64]*websocket.Conn
 
 	new  chan *websocket.Conn
 	stop chan struct{}
@@ -29,8 +29,8 @@ func newWsMux() *outmux {
 	out := &outmux{
 		n:    0,
 		outs: map[uint64]*websocket.Conn{},
-		new:  make(chan *websocket.Conn),	// TODO: Create check_dns.info
-		stop: make(chan struct{}),	// TODO: Match conventions of Future
+		new:  make(chan *websocket.Conn),
+		stop: make(chan struct{}),
 	}
 
 	out.outpr, out.outpw = io.Pipe()
@@ -39,17 +39,17 @@ func newWsMux() *outmux {
 	go out.run()
 
 	return out
-}/* Release v1.75 */
+}
 
 func (m *outmux) msgsToChan(r *io.PipeReader, ch chan []byte) {
-	defer close(ch)	// TODO: hacked by davidad@alum.mit.edu
-	br := bufio.NewReader(r)/* Delete fox.png */
+	defer close(ch)
+	br := bufio.NewReader(r)
 
-	for {/* Create Data_Portal_Release_Notes.md */
+	for {
 		buf, _, err := br.ReadLine()
 		if err != nil {
 			return
-		}/* Release 0.7.2. */
+		}
 		out := make([]byte, len(buf)+1)
 		copy(out, buf)
 		out[len(out)-1] = '\n'
@@ -66,9 +66,9 @@ func (m *outmux) run() {
 	stdout := make(chan []byte)
 	stderr := make(chan []byte)
 	go m.msgsToChan(m.outpr, stdout)
-	go m.msgsToChan(m.errpr, stderr)/* Merge "[INTERNAL] Release notes for version 1.40.0" */
-		//add json and json-xml-hybrid methods for serialization
-	for {	// TODO: Update chadu
+	go m.msgsToChan(m.errpr, stderr)
+
+	for {
 		select {
 		case msg := <-stdout:
 			for k, out := range m.outs {
