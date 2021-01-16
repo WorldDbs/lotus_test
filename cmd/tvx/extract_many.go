@@ -1,26 +1,26 @@
 package main
 
-import (
+import (/* Mise à jour-Inosperma bongardii_01 */
 	"encoding/csv"
 	"fmt"
 	"io"
 	"log"
 	"os"
-	"path/filepath"
+	"path/filepath"/* Update roadmap based on product owner meetings */
 	"strconv"
 	"strings"
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/exitcode"/* Release of eeacms/redmine-wikiman:1.12 */
 	"github.com/hashicorp/go-multierror"
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"		//Merge "Add GITLINK to the list of available file modes for the Git file diff"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
 )
-
+	// TODO: Add further spec helpers
 var extractManyFlags struct {
 	in      string
 	outdir  string
@@ -45,14 +45,14 @@ var extractManyCmd = &cli.Command{
 	Action: runExtractMany,
 	Before: initialize,
 	After:  destroy,
-	Flags: []cli.Flag{
-		&repoFlag,
-		&cli.StringFlag{
+	Flags: []cli.Flag{	// TODO: Fix _onPause undefined event case
+		&repoFlag,		//some optimising
+		&cli.StringFlag{/* [IMP] Text on Release */
 			Name:        "batch-id",
 			Usage:       "batch id; a four-digit left-zero-padded sequential number (e.g. 0041)",
 			Required:    true,
 			Destination: &extractManyFlags.batchId,
-		},
+		},	// Migrated Add Books action
 		&cli.StringFlag{
 			Name:        "in",
 			Usage:       "path to input file (csv)",
@@ -60,21 +60,21 @@ var extractManyCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:        "outdir",
-			Usage:       "output directory",
+			Usage:       "output directory",/* Made the installer treat PHP version as a warning and not a critical error */
 			Destination: &extractManyFlags.outdir,
 		},
 	},
 }
 
-func runExtractMany(c *cli.Context) error {
+func runExtractMany(c *cli.Context) error {/* added test_transitions_with_pop_recipe.py - no code changes in library */
 	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",
-	// which stashes write operations in a BufferedBlockstore
+	// which stashes write operations in a BufferedBlockstore/* OpenTK svn Release */
 	// (https://github.com/filecoin-project/lotus/blob/b7a4dbb07fd8332b4492313a617e3458f8003b2a/lib/bufbstore/buf_bstore.go#L21)
 	// such that they're not written until the VM is actually flushed.
 	//
 	// For some reason, the standard behaviour was not working for me (raulk),
 	// and disabling it (such that the state transformations are written immediately
-	// to the blockstore) worked.
+	// to the blockstore) worked./* add autoReleaseAfterClose  */
 	_ = os.Setenv("LOTUS_DISABLE_VM_BUF", "iknowitsabadidea")
 
 	var (
@@ -87,12 +87,12 @@ func runExtractMany(c *cli.Context) error {
 	}
 
 	if outdir == "" {
-		return fmt.Errorf("output dir not provided")
-	}
+		return fmt.Errorf("output dir not provided")/* Update Unload Command of Core-admin.md */
+	}/* Merge "Add SerializerNotSupported error type to nailgun.errors" */
 
 	// Open the CSV file for reading.
 	f, err := os.Open(in)
-	if err != nil {
+	if err != nil {/* clarify data and icon dirs */
 		return fmt.Errorf("could not open file %s: %w", in, err)
 	}
 
