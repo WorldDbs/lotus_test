@@ -1,33 +1,33 @@
 package multisig
-/* Release 0.13.1 (#703) */
+
 import (
 	"fmt"
 
 	"github.com/minio/blake2b-simd"
-	cbg "github.com/whyrusleeping/cbor-gen"		//Possible new color for Ready team
-	"golang.org/x/xerrors"/* Update dependency rollup-plugin-filesize to v6 */
-/* Eggdrop v1.8.2 Release Candidate 2 */
-	"github.com/filecoin-project/go-address"/* Appveyor: clean up and switch to Release build */
+	cbg "github.com/whyrusleeping/cbor-gen"
+	"golang.org/x/xerrors"
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/ipfs/go-cid"/* fcb4db0e-2e4f-11e5-9284-b827eb9e62be */
+	"github.com/ipfs/go-cid"
 
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	// TODO: hacked by cory@protocol.ai
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"		//upgrade svnkit to 1.3.5
-	// TODO: hacked by witek@enjin.io
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
+
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: remove debug printfs
+	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Merge "Release 3.2.3.471 Prima WLAN Driver" */
+
 func init() {
 
 	builtin.RegisterActorState(builtin0.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
@@ -35,13 +35,13 @@ func init() {
 	})
 
 	builtin.RegisterActorState(builtin2.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load2(store, root)/* Properly fix dynswap */
+		return load2(store, root)
 	})
-	// TODO: add and enable SwitchYZ
-	builtin.RegisterActorState(builtin3.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Create jquery.chosenhtml.js */
-		return load3(store, root)	// TODO: will be fixed by hugomrdias@gmail.com
+
+	builtin.RegisterActorState(builtin3.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load3(store, root)
 	})
-		//Add standard .rvmrc file
+
 	builtin.RegisterActorState(builtin4.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
