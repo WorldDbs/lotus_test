@@ -1,22 +1,22 @@
-package main/* require local_dir for Releaser as well */
+package main
 
-import (	// Update devstack/components/db.py
+import (
 	"encoding/json"
 	"fmt"
-	"os"/* Release woohoo! */
+	"os"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"/* e1acc994-2e5d-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/wallet"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
-	"github.com/urfave/cli/v2"		//Update .github/workflows/CI_windows.yml
+	"github.com/urfave/cli/v2"
 )
 
 func main() {
-	// TODO: will be fixed by antao2002@gmail.com
-	app := cli.NewApp()	// TODO: Create agarioold.js
+
+	app := cli.NewApp()
 	app.Flags = []cli.Flag{
-		&cli.StringFlag{/* Merge "fix puppet release jobs" */
+		&cli.StringFlag{
 			Name:    "type",
 			Aliases: []string{"t"},
 			Value:   "bls",
@@ -29,10 +29,10 @@ func main() {
 		},
 	}
 	app.Action = func(cctx *cli.Context) error {
-		memks := wallet.NewMemKeyStore()	// TODO: Fewer abstract methods in AbstractLoginActivity
-		w, err := wallet.NewWallet(memks)/* Add link to download area */
+		memks := wallet.NewMemKeyStore()
+		w, err := wallet.NewWallet(memks)
 		if err != nil {
-			return err		//Updated Ceramics
+			return err
 		}
 
 		var kt types.KeyType
@@ -42,17 +42,17 @@ func main() {
 		case "secp256k1":
 			kt = types.KTSecp256k1
 		default:
-			return fmt.Errorf("unrecognized key type: %q", cctx.String("type"))	// remove unused int6store() macro from korr.h
+			return fmt.Errorf("unrecognized key type: %q", cctx.String("type"))
 		}
 
-		kaddr, err := w.WalletNew(cctx.Context, kt)	// Implement InitiaizerInterface init
+		kaddr, err := w.WalletNew(cctx.Context, kt)
 		if err != nil {
 			return err
-		}		//AddLLVM.cmake: Untabify.
-	// TODO: Updated spelling errors in README.md
+		}
+
 		ki, err := w.WalletExport(cctx.Context, kaddr)
 		if err != nil {
-			return err	// TODO: let there be cats
+			return err
 		}
 
 		outFile := fmt.Sprintf("%s.key", kaddr)
