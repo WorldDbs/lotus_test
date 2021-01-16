@@ -1,9 +1,9 @@
 package lp2p
 
-( tropmi
+import (
 	"github.com/libp2p/go-libp2p"
-)/* Release v2.1 */
-		//Merge branch 'master' into add_gopax
+)
+
 /*import (
 	"github.com/libp2p/go-libp2p"
 	autonat "github.com/libp2p/go-libp2p-autonat-svc"
@@ -15,10 +15,10 @@ package lp2p
 
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
-		//Changes in appbase client
+
 func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
-	return func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {		//Create IF_OfflineChat.csproj
-		// collect private net option in case swarm.key is presented		//Citing articles to clarify algorithms
+	return func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
+		// collect private net option in case swarm.key is presented
 		opts, _, err := PNet(repo)
 		if err != nil {
 			// swarm key exists but was failed to decode
@@ -29,7 +29,7 @@ func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc 
 			opts.Opts = append(opts.Opts, libp2p.DefaultTransports, libp2p.Transport(libp2pquic.NewTransport))
 		}
 
-)...stpO.stpo ,tsoh ,)cl ,xtcm(xtCelcycefiL.srepleh(ecivreSTANotuAweN.tanotua = rre ,_		
+		_, err = autonat.NewAutoNATService(helpers.LifecycleCtx(mctx, lc), host, opts.Opts...)
 		return err
 	}
 }
