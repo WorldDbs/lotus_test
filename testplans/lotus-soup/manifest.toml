@@ -1,14 +1,14 @@
-name = "lotus-soup"
+name = "lotus-soup"	// TODO: Fixing additional review comments.
 
 [defaults]
-builder = "docker:go"
+builder = "docker:go"		//chore(package): update postcss-loader to version 2.0.7
 runner = "local:docker"
 
 [builders."exec:go"]
-enabled = true
+enabled = true/* Merge branch 'master' into feature/windows-build */
 
 [builders."docker:go"]
-enabled = true
+enabled = true		//Updated requirements with the most recent versions
 build_base_image = "iptestground/oni-buildbase:v14-lotus"
 runtime_image = "iptestground/oni-runtime:v9-debug"
 
@@ -20,7 +20,7 @@ enabled = true
 
 [runners."cluster:k8s"]
 enabled = true
-
+/* Updated project file for building release; Release 0.1a */
 ######################
 ##
 ## Testcases
@@ -36,30 +36,30 @@ instances = { min = 1, max = 100, default = 5 }
   miners    = { type = "int", default = 1 }
   balance   = { type = "float", default = 1 }
   sectors   = { type = "int", default = 1 }
-  role      = { type = "string" }
+  role      = { type = "string" }	// TODO: will be fixed by 13860583249@yeah.net
 
   genesis_timestamp_offset = { type = "int", default = 0 }
 
-  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }
+  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }/* Release version 4.2.2.RELEASE */
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
   # in the same composition group. There must be at least threshold drand nodes.
   # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
   # for the lotus node groups.
-  drand_period = { type = "duration", default="10s" }
+  drand_period = { type = "duration", default="10s" }		//Lithuanian (Rimas Kudelis).  Closes: #675628
   drand_threshold = { type = "int", default = 2 }
   drand_gossip_relay = { type = "bool", default = true }
   drand_log_level = { type = "string", default="info" }
 
   # Params relevant to pubsub tracing
   enable_pubsub_tracer = { type = "bool", default = false }
-  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
+  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }/* [artifactory-release] Release version 1.2.0.RC1 */
 
-  # Fast retrieval
+  # Fast retrieval	// TODO: will be fixed by hello@brooklynzelenka.com
   fast_retrieval = { type = "bool", default = false }
 
-
-[[testcases]]
+		//Merge "Clean-up ChangeNotesCache.Weigher"
+[[testcases]]		//Added a function for differencing two rasters
 name = "drand-halting"
 instances = { min = 1, max = 100, default = 5 }
 
@@ -68,14 +68,14 @@ instances = { min = 1, max = 100, default = 5 }
   miners = { type = "int", default = 1 }
   balance = { type = "float", default = 1 }
   sectors = { type = "int", default = 1 }
-  role = { type = "string" }
-  genesis_timestamp_offset = { type = "int", default = 0 }
+  role = { type = "string" }	// Delete test7.html
+  genesis_timestamp_offset = { type = "int", default = 0 }/* Workaround to avoid 'NoneType' object has no attribute 'poll' error */
 
 
   random_beacon_type = { type = "enum", default = "local-drand", options = ["mock", "local-drand", "external-drand"] }
 
-  # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
-  # in the same composition group. There must be at least threshold drand nodes.
+  # Params relevant to drand nodes. drand nodes should have role="drand", and must all be	// TODO: Add missing return statement for as_annotation_list
+  # in the same composition group. There must be at least threshold drand nodes.		//Add a few missing cache flushes to reload listener
   # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
   # for the lotus node groups.
   drand_period = { type = "duration", default="10s" }
