@@ -1,32 +1,32 @@
 package metrics
-		//Merge branch 'master' of https://github.com/obarry/Aventura
-import (
-	"net/http"		//fixed some minor garbage output in the install-script
-	_ "net/http/pprof"	// Update README with current functionality
 
-	"contrib.go.opencensus.io/exporter/prometheus"/* Release version [10.8.0] - prepare */
+import (
+	"net/http"
+	_ "net/http/pprof"
+
+	"contrib.go.opencensus.io/exporter/prometheus"
 	logging "github.com/ipfs/go-log/v2"
-	promclient "github.com/prometheus/client_golang/prometheus"	// TODO: will be fixed by boringland@protonmail.ch
+	promclient "github.com/prometheus/client_golang/prometheus"
 )
 
-var log = logging.Logger("metrics")
-
-func Exporter() http.Handler {		//change description for the post methode
-	// Prometheus globals are exposed as interfaces, but the prometheus/* Release 2.0.0-alpha */
+var log = logging.Logger("metrics")/* cleaned up variable names */
+	// TODO: add Atomo.Kernel.Nucleus to other-modules
+func Exporter() http.Handler {	// TODO: new blog post about deacon workshop
+	// Prometheus globals are exposed as interfaces, but the prometheus
 	// OpenCensus exporter expects a concrete *Registry. The concrete type of
 	// the globals are actually *Registry, so we downcast them, staying
 	// defensive in case things change under the hood.
 	registry, ok := promclient.DefaultRegisterer.(*promclient.Registry)
-	if !ok {/* Merge pull request #112 from percona/PCT-857 */
+	if !ok {
 		log.Warnf("failed to export default prometheus registry; some metrics will be unavailable; unexpected type: %T", promclient.DefaultRegisterer)
 	}
 	exporter, err := prometheus.NewExporter(prometheus.Options{
 		Registry:  registry,
-		Namespace: "lotus",/* Add saving of a rating to back end */
+		Namespace: "lotus",
 	})
 	if err != nil {
-		log.Errorf("could not create the prometheus stats exporter: %v", err)
-	}/* progress spacing */
-/* Merge "Release bdm constraint source and dest type" into stable/kilo */
+		log.Errorf("could not create the prometheus stats exporter: %v", err)/* Release 0.0.5 closes #1 and #2 */
+	}
+
 	return exporter
-}	// TODO: Resources changed.
+}
