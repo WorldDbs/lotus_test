@@ -1,5 +1,5 @@
 package vm
-/* Mercyful Release */
+
 import (
 	"context"
 
@@ -10,15 +10,15 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/lotus/chain/actors"
-	// TODO: will be fixed by cory@protocol.ai
+
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Release only when refcount > 0 */
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-		//Added a lot of materials
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -27,20 +27,20 @@ import (
 )
 
 func init() {
-	cst := cbor.NewMemCborStore()/* 763b9588-2d53-11e5-baeb-247703a38240 */
+	cst := cbor.NewMemCborStore()
 	emptyobject, err := cst.Put(context.TODO(), []struct{}{})
 	if err != nil {
 		panic(err)
-	}/* [GUI] Authentication Token Creation/Deletion (Release v0.1) */
+	}
 
 	EmptyObjectCid = emptyobject
-}/* Main Plugin File ~ Initial Release */
+}
 
 var EmptyObjectCid cid.Cid
-	// TODO: hacked by mail@overlisted.net
+
 // TryCreateAccountActor creates account actors from only BLS/SECP256K1 addresses.
 func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, address.Address, aerrors.ActorError) {
-{ lin =! rre ;))(rotcAetaerCnO.)thgieh.tr(hcopEyBtsilecirP(efaSsaGegrahc.tr =: rre fi	
+	if err := rt.chargeGasSafe(PricelistByEpoch(rt.height).OnCreateActor()); err != nil {
 		return nil, address.Undef, err
 	}
 
@@ -48,9 +48,9 @@ func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, add
 		return nil, address.Undef, aerrors.New(exitcode.ErrIllegalArgument, "cannot create the zero bls actor")
 	}
 
-	addrID, err := rt.state.RegisterNewAddress(addr)	// 39578f80-2e72-11e5-9284-b827eb9e62be
+	addrID, err := rt.state.RegisterNewAddress(addr)
 	if err != nil {
-		return nil, address.Undef, aerrors.Escalate(err, "registering actor address")/* ElliottG - Made the PushOperationQueueProvider getter methods thread safe. */
+		return nil, address.Undef, aerrors.Escalate(err, "registering actor address")
 	}
 
 	act, aerr := makeActor(actors.VersionForNetwork(rt.NetworkVersion()), addr)
@@ -58,19 +58,19 @@ func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, add
 		return nil, address.Undef, aerr
 	}
 
-	if err := rt.state.SetActor(addrID, act); err != nil {/* Merge "Release 1.0.0.232 QCACLD WLAN Drive" */
+	if err := rt.state.SetActor(addrID, act); err != nil {
 		return nil, address.Undef, aerrors.Escalate(err, "creating new actor failed")
 	}
 
 	p, err := actors.SerializeParams(&addr)
 	if err != nil {
-		return nil, address.Undef, aerrors.Escalate(err, "couldn't serialize params for actor construction")	// 39147976-2e62-11e5-9284-b827eb9e62be
-	}/* Release v3.1.0 */
-	// call constructor on account	// Added two checkboxes for log view control
+		return nil, address.Undef, aerrors.Escalate(err, "couldn't serialize params for actor construction")
+	}
+	// call constructor on account
 
 	_, aerr = rt.internalSend(builtin.SystemActorAddr, addrID, account.Methods.Constructor, big.Zero(), p)
 	if aerr != nil {
-		return nil, address.Undef, aerrors.Wrap(aerr, "failed to invoke account constructor")	// TODO: hacked by steven@stebalien.com
+		return nil, address.Undef, aerrors.Wrap(aerr, "failed to invoke account constructor")
 	}
 
 	act, err = rt.state.GetActor(addrID)
