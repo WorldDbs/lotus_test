@@ -1,10 +1,10 @@
-package dtypes	// Update MTI-the-mount.yml
+package dtypes
 
 import (
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/multiformats/go-multiaddr"
-)
-/* Simplified table deletion code */
-type APIAlg jwt.HMACSHA
+)		//Create Imperial Measurement.cs
 
-type APIEndpoint multiaddr.Multiaddr/* Release 0.0.26 */
+type APIAlg jwt.HMACSHA	// Started working on polyline/bezier connections
+
+type APIEndpoint multiaddr.Multiaddr	// Create catalog-sample.csv
