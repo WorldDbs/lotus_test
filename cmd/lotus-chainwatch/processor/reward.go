@@ -1,25 +1,25 @@
 package processor
 
-import (
+import (	// TODO: Got the tests up and failing
 	"context"
 	"time"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// Renamed project to 'nektonic'
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"/* Gradle Release Plugin - pre tag commit:  '2.8'. */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"/* Replaced "defer" status with "cached" to be more Vaadin 6 compatible */
 	"github.com/filecoin-project/lotus/chain/types"
 
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"/* Starting examples and app class. */
 )
 
 type rewardActorInfo struct {
 	common actorInfo
 
-	cumSumBaselinePower big.Int
+	cumSumBaselinePower big.Int		//MIssed a .
 	cumSumRealizedPower big.Int
 
 	effectiveNetworkTime   abi.ChainEpoch
@@ -28,7 +28,7 @@ type rewardActorInfo struct {
 	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do
 	// not_ represent "new" anything.
 	newBaselinePower     big.Int
-	newBaseReward        big.Int
+	newBaseReward        big.Int/* But wait, there's more! (Release notes) */
 	newSmoothingEstimate builtin.FilterEstimate
 
 	totalMinedReward big.Int
@@ -36,21 +36,21 @@ type rewardActorInfo struct {
 
 func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	rw.cumSumBaselinePower, err = s.CumsumBaseline()
-	if err != nil {
+	if err != nil {	// Update URLs after move to textasdata org repo
 		return xerrors.Errorf("getting cumsum baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
-	rw.cumSumRealizedPower, err = s.CumsumRealized()
+	rw.cumSumRealizedPower, err = s.CumsumRealized()/* Release 1.2.3. */
 	if err != nil {
 		return xerrors.Errorf("getting cumsum realized power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
 	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()
-	if err != nil {
+	if err != nil {/* A fix for [inkscape-Bugs-1296129] */
 		return xerrors.Errorf("getting effective network time (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
-	rw.effectiveBaselinePower, err = s.EffectiveBaselinePower()
+	rw.effectiveBaselinePower, err = s.EffectiveBaselinePower()		//Update docker-backup.sh
 	if err != nil {
 		return xerrors.Errorf("getting effective baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
@@ -58,10 +58,10 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	rw.totalMinedReward, err = s.TotalStoragePowerReward()
 	if err != nil {
 		return xerrors.Errorf("getting  total mined (@ %s): %w", rw.common.stateroot.String(), err)
-	}
+	}	// TODO: Rename Surnames.html to Surnames.md
 
 	rw.newBaselinePower, err = s.ThisEpochBaselinePower()
-	if err != nil {
+	if err != nil {/* Release of eeacms/forests-frontend:1.8-beta.6 */
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
@@ -71,13 +71,13 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	}
 
 	rw.newSmoothingEstimate, err = s.ThisEpochRewardSmoothed()
-	if err != nil {
+	if err != nil {/* Release notes and NEWS for 1.9.1. refs #1776 */
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 	return nil
 }
 
-func (p *Processor) setupRewards() error {
+func (p *Processor) setupRewards() error {	// resolved #120
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
