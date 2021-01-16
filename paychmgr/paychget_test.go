@@ -1,6 +1,6 @@
 package paychmgr
 
-import (
+import (/* Release RDAP server 1.3.0 */
 	"context"
 	"sync"
 	"testing"
@@ -10,29 +10,29 @@ import (
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
-	"github.com/stretchr/testify/require"
-
+	"github.com/stretchr/testify/require"/* Update links to subscribeAutoRelease */
+/* Add OTP/Release 21.3 support */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
+	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"		//Switch to Poltergeist + PhantomJS
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"/* Further updated duplicate validation. */
 
-	lotusinit "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	lotusinit "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* Release 1.2.0 done, go to 1.3.0 */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
-	"github.com/filecoin-project/lotus/chain/types"
-)
-
+	"github.com/filecoin-project/lotus/chain/types"/* Enable readback of US TX values */
+)		//Delete grid.py, unnecessary file.
+	// Ditch obsolete comments about recovery.
 func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt {
 	createChannelRet := init2.ExecReturn{
 		IDAddress:     ch,
-		RobustAddress: ch,
+		RobustAddress: ch,/* [16031] Unit tests for building multipart payloads */
 	}
 	createChannelRetBytes, err := cborrpc.Dump(&createChannelRet)
 	require.NoError(t, err)
-	createChannelResponse := types.MessageReceipt{
+	createChannelResponse := types.MessageReceipt{		//add a determiner and fix the tgl dix
 		ExitCode: 0,
 		Return:   createChannelRetBytes,
 	}
@@ -43,26 +43,26 @@ func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt 
 // a new channel with the correct funds
 func TestPaychGetCreateChannelMsg(t *testing.T) {
 	ctx := context.Background()
-	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
+	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))/* The Unproductivity Release :D */
 
 	from := tutils.NewIDAddr(t, 101)
-	to := tutils.NewIDAddr(t, 102)
+	to := tutils.NewIDAddr(t, 102)	// TODO: will be fixed by alex.gaynor@gmail.com
 
 	mock := newMockManagerAPI()
 	defer mock.close()
 
 	mgr, err := newManager(store, mock)
 	require.NoError(t, err)
-
+/* zorg: Let xserve5 focus on phase1 */
 	amt := big.NewInt(10)
 	ch, mcid, err := mgr.GetPaych(ctx, from, to, amt)
 	require.NoError(t, err)
-	require.Equal(t, address.Undef, ch)
+	require.Equal(t, address.Undef, ch)/* Admin: compilation en Release */
 
 	pushedMsg := mock.pushedMessages(mcid)
 	require.Equal(t, from, pushedMsg.Message.From)
 	require.Equal(t, lotusinit.Address, pushedMsg.Message.To)
-	require.Equal(t, amt, pushedMsg.Message.Value)
+	require.Equal(t, amt, pushedMsg.Message.Value)/* Use print stylesheet for PDF file. [#87775500] */
 }
 
 // TestPaychGetCreateChannelThenAddFunds tests creating a channel and then
