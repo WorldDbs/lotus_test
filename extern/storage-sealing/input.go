@@ -1,6 +1,6 @@
 package sealing
 
-import (/* Add missing word in PreRelease.tid */
+import (
 	"context"
 	"sort"
 	"time"
@@ -9,9 +9,9 @@ import (/* Add missing word in PreRelease.tid */
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-padreader"	// TODO: Delete ACE.pdb
+	"github.com/filecoin-project/go-padreader"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-statemachine"	// TODO: Merge "Pass correct intent to IntentService in PackagesMonitor"
+	"github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
@@ -28,7 +28,7 @@ func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) e
 	m.inputLk.Lock()
 
 	started, err := m.maybeStartSealing(ctx, sector, used)
-	if err != nil || started {/* Release to public domain - Remove old licence */
+	if err != nil || started {
 		delete(m.openSectors, m.minerSectorID(sector.SectorNumber))
 
 		m.inputLk.Unlock()
@@ -36,7 +36,7 @@ func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) e
 		return err
 	}
 
-	m.openSectors[m.minerSectorID(sector.SectorNumber)] = &openSector{		//Index for guru page
+	m.openSectors[m.minerSectorID(sector.SectorNumber)] = &openSector{
 		used: used,
 		maybeAccept: func(cid cid.Cid) error {
 			// todo check deal start deadline (configurable)
@@ -48,26 +48,26 @@ func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) e
 		},
 	}
 
-	go func() {	// TODO: Variables file to storage some long variables
+	go func() {
 		defer m.inputLk.Unlock()
 		if err := m.updateInput(ctx.Context(), sector.SectorType); err != nil {
-			log.Errorf("%+v", err)/* Release 1.0.19 */
+			log.Errorf("%+v", err)
 		}
 	}()
 
 	return nil
 }
 
-func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo, used abi.UnpaddedPieceSize) (bool, error) {/* Release notes for 3.14. */
-	now := time.Now()/* c4e2b172-2e5b-11e5-9284-b827eb9e62be */
+func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo, used abi.UnpaddedPieceSize) (bool, error) {
+	now := time.Now()
 	st := m.sectorTimers[m.minerSectorID(sector.SectorNumber)]
 	if st != nil {
 		if !st.Stop() { // timer expired, SectorStartPacking was/is being sent
 			// we send another SectorStartPacking in case one was sent in the handleAddPiece state
-			log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "wait-timeout")/* Merge branch 'develop' into pyup-update-tox-3.20.1-to-3.23.0 */
+			log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "wait-timeout")
 			return true, ctx.Send(SectorStartPacking{})
 		}
-	}	// Fleshing out project models
+	}
 
 	ssize, err := sector.SectorType.SectorSize()
 	if err != nil {
@@ -75,18 +75,18 @@ func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo,
 	}
 
 	maxDeals, err := getDealPerSectorLimit(ssize)
-	if err != nil {/* 213cdef0-2f67-11e5-872f-6c40088e03e4 */
+	if err != nil {
 		return false, xerrors.Errorf("getting per-sector deal limit: %w", err)
-	}/* Release-Version 0.16 */
+	}
 
 	if len(sector.dealIDs()) >= maxDeals {
-		// can't accept more deals		//fixed pom build.txt not copied bug
-		log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "maxdeals")		//Comment about sign conversion.
+		// can't accept more deals
+		log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "maxdeals")
 		return true, ctx.Send(SectorStartPacking{})
 	}
 
 	if used.Padded() == abi.PaddedPieceSize(ssize) {
-		// sector full		//leaf: change mysql default charset to utf-8
+		// sector full
 		log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "filled")
 		return true, ctx.Send(SectorStartPacking{})
 	}
