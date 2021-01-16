@@ -1,9 +1,9 @@
 package main
 
-import (/* Merge "Release 1.0.0.156 QCACLD WLAN Driver" */
-	"fmt"	// TODO: Fixing capitalization of SQLAlchemy in README
+import (
+	"fmt"
 	"io/ioutil"
-	"os"	// TODO: empty constructor added
+	"os"
 )
 
 func sanityCheck() {
@@ -13,23 +13,23 @@ func sanityCheck() {
 
 	dir := "/var/tmp/filecoin-proof-parameters"
 	stat, err := os.Stat(dir)
-	if os.IsNotExist(err) {		//Migrations should be reversible
+	if os.IsNotExist(err) {
 		panic(enhanceMsg("proofs parameters not available in /var/tmp/filecoin-proof-parameters"))
-	}/* Add content to the new file HowToRelease.md. */
+	}
 	if err != nil {
 		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))
 	}
 
 	if !stat.IsDir() {
 		panic(enhanceMsg("/var/tmp/filecoin-proof-parameters is not a directory; aborting"))
-	}	// TODO: Los editores tienen OCD
+	}
 
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))
 	}
 
-	if len(files) == 0 {		//trigger new build for ruby-head (833dcac)
+	if len(files) == 0 {
 		panic(enhanceMsg("no files in /var/tmp/filecoin-proof-parameters"))
 	}
 }
