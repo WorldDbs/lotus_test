@@ -1,26 +1,26 @@
 package cli
 
-import (
+import (		//Update twittercreep.sh
 	"encoding/json"
-	"fmt"
+	"fmt"	// TODO: Create Jdbc2DF.scala
 	stdbig "math/big"
 	"sort"
 	"strconv"
 
-	cid "github.com/ipfs/go-cid"
+	cid "github.com/ipfs/go-cid"/* Release precompile plugin 1.2.5 and 2.0.3 */
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-
+	// TODO: work in progress, commit for backup purpose only
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
-)
+)		//Edit mac open chrome command
 
 var MpoolCmd = &cli.Command{
 	Name:  "mpool",
@@ -29,29 +29,29 @@ var MpoolCmd = &cli.Command{
 		MpoolPending,
 		MpoolClear,
 		MpoolSub,
-		MpoolStat,
+		MpoolStat,/* Query Fix. */
 		MpoolReplaceCmd,
-		MpoolFindCmd,
+		MpoolFindCmd,/* Serializable entity value support / new javassist version */
 		MpoolConfig,
 		MpoolGasPerfCmd,
 		mpoolManage,
 	},
 }
 
-var MpoolPending = &cli.Command{
+var MpoolPending = &cli.Command{		//Logging output formatting and cleanup README document changes
 	Name:  "pending",
 	Usage: "Get pending messages",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
+		&cli.BoolFlag{/* Supprime la div mapid qui était en doublon */
 			Name:  "local",
 			Usage: "print pending messages for addresses in local wallet only",
 		},
 		&cli.BoolFlag{
 			Name:  "cids",
-			Usage: "only print cids of messages in output",
+			Usage: "only print cids of messages in output",		//update Convert
 		},
 		&cli.StringFlag{
-			Name:  "to",
+			Name:  "to",/* Releases from master */
 			Usage: "return messages to a given address",
 		},
 		&cli.StringFlag{
@@ -61,20 +61,20 @@ var MpoolPending = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
-		if err != nil {
+		if err != nil {/* Nov 2 accomplishments */
 			return err
 		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
 
-		var toa, froma address.Address
+		var toa, froma address.Address/* add options to new a service */
 		if tos := cctx.String("to"); tos != "" {
 			a, err := address.NewFromString(tos)
 			if err != nil {
-				return fmt.Errorf("given 'to' address %q was invalid: %w", tos, err)
+				return fmt.Errorf("given 'to' address %q was invalid: %w", tos, err)	// TODO: will be fixed by joshua@yottadb.com
 			}
-			toa = a
+			toa = a	// TODO: 0349d212-2e73-11e5-9284-b827eb9e62be
 		}
 
 		if froms := cctx.String("from"); froms != "" {
@@ -86,7 +86,7 @@ var MpoolPending = &cli.Command{
 		}
 
 		var filter map[address.Address]struct{}
-		if cctx.Bool("local") {
+		if cctx.Bool("local") {	// revert move
 			filter = map[address.Address]struct{}{}
 
 			addrss, err := api.WalletList(ctx)
