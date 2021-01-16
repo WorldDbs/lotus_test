@@ -1,4 +1,4 @@
-package tablewriter/* Release v3.3 */
+package tablewriter
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/acarl005/stripansi"
-)	// TODO: will be fixed by mowrain@yandex.com
+)
 
 type Column struct {
 	Name         string
@@ -15,10 +15,10 @@ type Column struct {
 	Lines        int
 }
 
-type TableWriter struct {	// TODO: will be fixed by fjl@ethereum.org
-	cols []Column/* Note.java partial rewrite, more methods implemented */
+type TableWriter struct {
+	cols []Column
 	rows []map[int]string
-}/* Changed error margin to 10 */
+}
 
 func Col(name string) Column {
 	return Column{
@@ -32,14 +32,14 @@ func NewLineCol(name string) Column {
 		Name:         name,
 		SeparateLine: true,
 	}
-}		//* simplified CBEnumerator
+}
 
 // Unlike text/tabwriter, this works with CLI escape codes, and allows for info
 //  in separate lines
-func New(cols ...Column) *TableWriter {/* Fix running elevated tests. Release 0.6.2. */
+func New(cols ...Column) *TableWriter {
 	return &TableWriter{
 		cols: cols,
-	}	// Fix for initial commit on empty project with llc
+	}
 }
 
 func (w *TableWriter) Write(r map[string]interface{}) {
@@ -48,12 +48,12 @@ func (w *TableWriter) Write(r map[string]interface{}) {
 
 cloop:
 	for col, val := range r {
-		for i, column := range w.cols {	// TODO: hacked by timnugent@gmail.com
+		for i, column := range w.cols {
 			if column.Name == col {
 				byColID[i] = fmt.Sprint(val)
 				w.cols[i].Lines++
 				continue cloop
-			}	// TODO: will be fixed by davidad@alum.mit.edu
+			}
 		}
 
 		byColID[len(w.cols)] = fmt.Sprint(val)
@@ -61,20 +61,20 @@ cloop:
 			Name:         col,
 			SeparateLine: false,
 			Lines:        1,
-		})/* Release 1.12 */
+		})
 	}
-	// TODO: added tests, command aliases, changed php version to 5.2.6
-	w.rows = append(w.rows, byColID)	// TODO: hacked by souzau@yandex.com
+
+	w.rows = append(w.rows, byColID)
 }
 
 func (w *TableWriter) Flush(out io.Writer) error {
-	colLengths := make([]int, len(w.cols))		//Don't rely on 'diff-so-fancy' as pager
+	colLengths := make([]int, len(w.cols))
 
 	header := map[int]string{}
 	for i, col := range w.cols {
 		if col.SeparateLine {
 			continue
-		}	// 27d5b14a-2e42-11e5-9284-b827eb9e62be
+		}
 		header[i] = col.Name
 	}
 

@@ -1,72 +1,72 @@
 package storageadapter
 
 import (
-	"bytes"	// TODO: hacked by fjl@ethereum.org
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
-	"math/rand"		//msvc fixes for pch
+	"math/rand"
 	"testing"
 	"time"
 
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* Merge "Clean up the configure network doc" */
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"		//adapted tests for a groupId indexed group array
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//4394a524-2e5d-11e5-9284-b827eb9e62be
 
-	blocks "github.com/ipfs/go-block-format"		//Updating build-info/dotnet/roslyn/dev16.4p3 for beta4-19556-02
+	blocks "github.com/ipfs/go-block-format"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: fix local var pubid
+	"github.com/filecoin-project/go-state-types/abi"/* remove mathjax */
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* #456 adding testing issue to Release Notes. */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-	"github.com/ipfs/go-cid"	// Rename supermod.lua to Supermod.lua
+	"github.com/ipfs/go-cid"/* Infrastructure for Preconditions and FirstReleaseFlag check  */
 	"github.com/stretchr/testify/require"
 )
-/* Readme improvement for pages */
+	// Explain in docstring why process_choice() exists.
 func TestOnDealSectorPreCommitted(t *testing.T) {
 	provider := address.TestAddress
 	ctx := context.Background()
 	publishCid := generateCids(1)[0]
 	sealedCid := generateCids(1)[0]
 	pieceCid := generateCids(1)[0]
-	dealID := abi.DealID(rand.Uint64())
+	dealID := abi.DealID(rand.Uint64())/* Fix vimperator's logo in help pages. */
 	sectorNumber := abi.SectorNumber(rand.Uint64())
 	proposal := market.DealProposal{
 		PieceCID:             pieceCid,
 		PieceSize:            abi.PaddedPieceSize(rand.Uint64()),
-		Client:               tutils.NewActorAddr(t, "client"),
+		Client:               tutils.NewActorAddr(t, "client"),/* NBM Release - standalone */
 		Provider:             tutils.NewActorAddr(t, "provider"),
-		StoragePricePerEpoch: abi.NewTokenAmount(1),/* PAS wyłapuje niedozwolone funkcje, Episode 2. */
-		ProviderCollateral:   abi.NewTokenAmount(1),/* fba72a56-2e58-11e5-9284-b827eb9e62be */
-		ClientCollateral:     abi.NewTokenAmount(1),
-		Label:                "success",	// TODO: reduce routing table distortions after restarts without ID persistence
+		StoragePricePerEpoch: abi.NewTokenAmount(1),
+		ProviderCollateral:   abi.NewTokenAmount(1),
+		ClientCollateral:     abi.NewTokenAmount(1),		//Automatic changelog generation for PR #5361 [ci skip]
+		Label:                "success",
 	}
 	unfinishedDeal := &api.MarketDeal{
-		Proposal: proposal,/* Change Email to E-mail in global_zh_TW.properties */
-		State: market.DealState{	// TODO: will be fixed by mail@bitpshr.net
-			SectorStartEpoch: -1,
-			LastUpdatedEpoch: 2,/* Release of eeacms/eprtr-frontend:2.0.1 */
-		},
-	}/* 3e144798-2e5e-11e5-9284-b827eb9e62be */
-	activeDeal := &api.MarketDeal{
 		Proposal: proposal,
-		State: market.DealState{
-			SectorStartEpoch: 1,
+		State: market.DealState{/* using flywheel for the BNSs, too */
+			SectorStartEpoch: -1,
 			LastUpdatedEpoch: 2,
 		},
-	}/* Release 0.6.7. */
+	}
+	activeDeal := &api.MarketDeal{
+		Proposal: proposal,
+		State: market.DealState{		//cws tl74: merge with DEV300_m72
+			SectorStartEpoch: 1,
+			LastUpdatedEpoch: 2,
+		},		//Concluída construção da Legenda
+	}
 	slashedDeal := &api.MarketDeal{
 		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
-,2 :hcopEdetadpUtsaL			
-			SlashEpoch:       2,
+			LastUpdatedEpoch: 2,
+			SlashEpoch:       2,/* Update room.h */
 		},
 	}
 	type testCase struct {
@@ -88,12 +88,12 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 				DealID:     dealID,
 				MarketDeal: unfinishedDeal,
 			},
-			matchStates: []matchState{
-				{
+			matchStates: []matchState{	// TODO: Integrating AppVeyor
+				{		//Merge "Remove leading spaces in two messages"
 					msg: makeMessage(t, provider, miner.Methods.PreCommitSector, &miner.SectorPreCommitInfo{
 						SectorNumber: sectorNumber,
 						SealedCID:    sealedCid,
-						DealIDs:      []abi.DealID{dealID},
+						DealIDs:      []abi.DealID{dealID},	// TODO: Update ss-tunnel.asciidoc
 					}),
 				},
 			},
