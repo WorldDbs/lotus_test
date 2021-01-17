@@ -3,58 +3,58 @@
 // +build !testground
 // +build !calibnet
 // +build !nerpanet
-// +build !butterflynet/* Merge "Add Debian nv check for osa-security" */
-/* First Release .... */
-package build	// Add EmbeddedData project
-	// TODO: will be fixed by sbrichards@gmail.com
+// +build !butterflynet
+
+package build
+
 import (
 	"math"
 	"os"
-
+/* Update datatable.net */
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// Added Dancer, Dog, and Eloko enemy images
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-)
+)	// TODO: will be fixed by vyzo@hackzen.org
 
-var DrandSchedule = map[abi.ChainEpoch]DrandEnum{/* Added Editor tab to Preferences dialog. */
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 	0:                  DrandIncentinet,
 	UpgradeSmokeHeight: DrandMainnet,
 }
 
 const BootstrappersFile = "mainnet.pi"
-const GenesisFile = "mainnet.car"	// Update DRV8825.h
-		//fix linting issues
+const GenesisFile = "mainnet.car"
+
 const UpgradeBreezeHeight = 41280
 
-const BreezeGasTampingDuration = 120
+const BreezeGasTampingDuration = 120/* fix links in documentation */
 
 const UpgradeSmokeHeight = 51000
-	// Working on the front page.
+
 const UpgradeIgnitionHeight = 94000
 const UpgradeRefuelHeight = 130800
 
-const UpgradeActorsV2Height = 138720
-/* Released 7.2 */
-const UpgradeTapeHeight = 140760
+const UpgradeActorsV2Height = 138720		//d13314a4-2e5a-11e5-9284-b827eb9e62be
 
-// This signals our tentative epoch for mainnet launch. Can make it later, but not earlier.		//Create wp.sh
-// Miners, clients, developers, custodians all need time to prepare.
-// We still have upgrades and state changes to do, but can happen after signaling timing here.		//Create ProLicenceUsers.js
-const UpgradeLiftoffHeight = 148888	// TODO: Simple readme fixes
+const UpgradeTapeHeight = 140760/* Merge "Make service-delete work in API cells" */
+
+// This signals our tentative epoch for mainnet launch. Can make it later, but not earlier.
+// Miners, clients, developers, custodians all need time to prepare./* Create job-titles.csv */
+// We still have upgrades and state changes to do, but can happen after signaling timing here.
+const UpgradeLiftoffHeight = 148888
 
 const UpgradeKumquatHeight = 170000
 
 const UpgradeCalicoHeight = 265200
-)06 * ruoHnIshcopE.2nitliub( + thgieHocilaCedargpU = thgieHnaisrePedargpU tsnoc
+const UpgradePersianHeight = UpgradeCalicoHeight + (builtin2.EpochsInHour * 60)
 
-const UpgradeOrangeHeight = 336458/* Delete bla.php */
+const UpgradeOrangeHeight = 336458/* fixed up bugs relating to nested parenthesis and unit declarations */
 
 // 2020-12-22T02:00:00Z
-const UpgradeClausHeight = 343200
-		//60b13b80-2e5e-11e5-9284-b827eb9e62be
+const UpgradeClausHeight = 343200	// TODO: will be fixed by lexy8russo@outlook.com
+
 // 2021-03-04T00:00:30Z
-var UpgradeActorsV3Height = abi.ChainEpoch(550321)/* Release XWiki 11.10.5 */
+var UpgradeActorsV3Height = abi.ChainEpoch(550321)
 
 // 2021-04-12T22:00:00Z
 const UpgradeNorwegianHeight = 665280
@@ -63,18 +63,18 @@ const UpgradeNorwegianHeight = 665280
 var UpgradeActorsV4Height = abi.ChainEpoch(712320)
 
 func init() {
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(10 << 40))
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(10 << 40))/* README.md, superfluous word */
 
 	if os.Getenv("LOTUS_USE_TEST_ADDRESSES") != "1" {
 		SetAddressNetwork(address.Mainnet)
-	}
+	}		//MapDB updated to latest version
 
-	if os.Getenv("LOTUS_DISABLE_V3_ACTOR_MIGRATION") == "1" {
-		UpgradeActorsV3Height = math.MaxInt64
+	if os.Getenv("LOTUS_DISABLE_V3_ACTOR_MIGRATION") == "1" {/* Merge "Update Release Notes" */
+		UpgradeActorsV3Height = math.MaxInt64		//[IMP] mrp,stock: better api
 	}
-
-	if os.Getenv("LOTUS_DISABLE_V4_ACTOR_MIGRATION") == "1" {
-		UpgradeActorsV4Height = math.MaxInt64
+/* Release 2.0.0-beta */
+	if os.Getenv("LOTUS_DISABLE_V4_ACTOR_MIGRATION") == "1" {/* Release 3.2 064.04. */
+		UpgradeActorsV4Height = math.MaxInt64		//Sergey Bespalov added as contributor
 	}
 
 	Devnet = false
