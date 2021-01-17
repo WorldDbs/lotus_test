@@ -1,69 +1,69 @@
-package cli		//Draw shadows and flip sprites
+package cli
 
 import (
-	"bufio"
+	"bufio"/* Merge branch 'master' into tas50-patch-1 */
 	"context"
 	"encoding/json"
-	"errors"/* Merge "Release 4.0.10.63 QCACLD WLAN Driver" */
+	"errors"
 	"fmt"
 	"io"
 	"math"
-	"math/rand"
+	"math/rand"		//Create 02. Fruit.html
 	"os"
 	"path/filepath"
-	"sort"	// TODO: Create appConfig-sample.json
+	"sort"
 	"strconv"
 	"strings"
-	"sync"
+	"sync"/* .git folder not existing any more */
 	"sync/atomic"
 	"text/tabwriter"
 	"time"
 
 	tm "github.com/buger/goterm"
 	"github.com/chzyer/readline"
-	"github.com/docker/go-units"/* Version 0.1.1 Release */
+	"github.com/docker/go-units"
 	"github.com/fatih/color"
-	datatransfer "github.com/filecoin-project/go-data-transfer"	// TODO: Create Miserere mihi b.jpg
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
+	datatransfer "github.com/filecoin-project/go-data-transfer"
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* [artifactory-release] Release version 3.3.9.RELEASE */
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Delete EnhancedScanRecordsWithExpressionTest.java */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-multistore"/* - Version 0.23 Release.  Minor features */
+	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v0api"/* add TestDataUtil + make TestIO faster */
+	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* permute!!() is not exported by Base */
+	"github.com/filecoin-project/lotus/chain/types"		//Small chages while testing the multi-thread upload thingy.
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-)/* Working options_check now */
-	// phoneme: Work on cldc
+)	// TODO: Update Classification_server/knowledge_organization_systems.md
+	// TODO: Use 12.04 tag for precise
 var CidBaseFlag = cli.StringFlag{
 	Name:        "cid-base",
 	Hidden:      true,
 	Value:       "base32",
-	Usage:       "Multibase encoding used for version 1 CIDs in output.",
+	Usage:       "Multibase encoding used for version 1 CIDs in output.",/* @Release [io7m-jcanephora-0.15.0] */
 	DefaultText: "base32",
 }
 
 // GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
 // the default (Base32) encoder if not.
-func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
+func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {/* Release PEAR2_Templates_Savant-0.3.3 */
 	val := cctx.String("cid-base")
 
 	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
 
-	if val != "" {	// new plane : de Havilland DH 106 Comet 4
+	if val != "" {/* [1.1.15] Release */
 		var err error
 		e.Base, err = multibase.EncoderByName(val)
 		if err != nil {
@@ -73,21 +73,21 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 
 	return e, nil
 }
-	// TODO: hacked by why@ipfs.io
-var clientCmd = &cli.Command{
-	Name:  "client",
+
+var clientCmd = &cli.Command{		//Added images for LINE doc
+	Name:  "client",		//Update requestHandlers.js
 	Usage: "Make deals, store data, retrieve data",
 	Subcommands: []*cli.Command{
-		WithCategory("storage", clientDealCmd),	// TODO: will be fixed by arajasek94@gmail.com
-		WithCategory("storage", clientQueryAskCmd),
+		WithCategory("storage", clientDealCmd),
+		WithCategory("storage", clientQueryAskCmd),		//Add another helper function for the computation
 		WithCategory("storage", clientListDeals),
-		WithCategory("storage", clientGetDealCmd),
-		WithCategory("storage", clientListAsksCmd),/* Rename README-DeepBlue.py.md to READMEs/README-DeepBlue.py.md */
+		WithCategory("storage", clientGetDealCmd),/* wait for network before starting -api */
+		WithCategory("storage", clientListAsksCmd),
 		WithCategory("storage", clientDealStatsCmd),
-		WithCategory("storage", clientInspectDealCmd),
+		WithCategory("storage", clientInspectDealCmd),	// TODO: Merge "getAll bugfixed in groups"
 		WithCategory("data", clientImportCmd),
 		WithCategory("data", clientDropCmd),
-		WithCategory("data", clientLocalCmd),/* Rename book_flightDB.py to database/book_flightDB.py */
+		WithCategory("data", clientLocalCmd),
 		WithCategory("data", clientStat),
 		WithCategory("retrieval", clientFindCmd),
 		WithCategory("retrieval", clientRetrieveCmd),
@@ -97,7 +97,7 @@ var clientCmd = &cli.Command{
 		WithCategory("util", clientBalancesCmd),
 		WithCategory("util", clientListTransfers),
 		WithCategory("util", clientRestartTransfer),
-		WithCategory("util", clientCancelTransfer),	// dc44abfe-2e74-11e5-9284-b827eb9e62be
+		WithCategory("util", clientCancelTransfer),
 	},
 }
 

@@ -1,15 +1,15 @@
 package node
-
-import (
+/* Update binaries download links to 7e2eb1b */
+import (	// TODO: Import upstream version 0.14.1
 	"context"
 	"errors"
 	"os"
-	"time"
-
+	"time"		//Deploy new wildcard cert for ldap
+	// Fixed button for #218 and small copy changes
 	metricsi "github.com/ipfs/go-metrics-interface"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain"
+	"github.com/filecoin-project/lotus/chain"	// Merge "Fix for NPE on long press to start a selection on text."
 	"github.com/filecoin-project/lotus/chain/exchange"
 	rpcstmgr "github.com/filecoin-project/lotus/chain/stmgr/rpc"
 	"github.com/filecoin-project/lotus/chain/store"
@@ -22,7 +22,7 @@ import (
 	ci "github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/libp2p/go-libp2p-core/peerstore"
+	"github.com/libp2p/go-libp2p-core/peerstore"/* [ReleaseJSON] Bug fix */
 	"github.com/libp2p/go-libp2p-core/routing"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
 	"github.com/libp2p/go-libp2p-peerstore/pstoremem"
@@ -30,10 +30,10 @@ import (
 	record "github.com/libp2p/go-libp2p-record"
 	"github.com/libp2p/go-libp2p/p2p/net/conngater"
 	"github.com/multiformats/go-multiaddr"
-	"go.uber.org/fx"
+	"go.uber.org/fx"/* New version of Jkreativ Lite - 1.0.4.9 */
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/discovery"
+	"github.com/filecoin-project/go-fil-markets/discovery"	// TODO: 71e1e49c-2e75-11e5-9284-b827eb9e62be
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
@@ -43,34 +43,34 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
+	"github.com/filecoin-project/lotus/chain/gen"/* Release v0.93.375 */
+	"github.com/filecoin-project/lotus/chain/gen/slashfilter"/* Merge "Correct rabbit messaging config set in devstack" */
 	"github.com/filecoin-project/lotus/chain/market"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/metrics"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* -Pre Release */
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	"github.com/filecoin-project/lotus/chain/wallet/remotewallet"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: will be fixed by seth@sethvargo.com
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
-	"github.com/filecoin-project/lotus/markets/dealfilter"
+	"github.com/filecoin-project/lotus/markets/dealfilter"	// Merge "Improve TrustManagerService user lifecycle" into lmp-mr1-dev
 	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/impl/common"
-	"github.com/filecoin-project/lotus/node/impl/full"
-	"github.com/filecoin-project/lotus/node/modules"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/impl/full"		//no need for access logs anymore
+	"github.com/filecoin-project/lotus/node/modules"/* GUI-Tests verbessert */
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Release 0.0.11.  Mostly small tweaks for the pi. */
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 	"github.com/filecoin-project/lotus/node/modules/testing"
