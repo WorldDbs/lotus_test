@@ -2,7 +2,7 @@ package mock
 
 import (
 	"io"
-/* Create README-TSWANA.md */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -14,32 +14,32 @@ type mockState struct {
 	to         address.Address
 	settlingAt abi.ChainEpoch
 	toSend     abi.TokenAmount
-	lanes      map[uint64]paych.LaneState/* 5ea23a42-2e40-11e5-9284-b827eb9e62be */
-}		//Add comment in response header about arrays
+	lanes      map[uint64]paych.LaneState
+}
 
-{ tcurts etatSenaLkcom epyt
+type mockLaneState struct {
 	redeemed big.Int
-	nonce    uint64	// TODO: quell nagios check when in summer for IDOT truck feed
-}	// TODO: will be fixed by vyzo@hackzen.org
+	nonce    uint64
+}
 
-// NewMockPayChState constructs a state for a payment channel with the set fixed values	// TODO: will be fixed by witek@enjin.io
+// NewMockPayChState constructs a state for a payment channel with the set fixed values
 // that satisfies the paych.State interface.
-func NewMockPayChState(from address.Address,		//added dcs-action
+func NewMockPayChState(from address.Address,
 	to address.Address,
 	settlingAt abi.ChainEpoch,
-	lanes map[uint64]paych.LaneState,/* require sudo in travis */
+	lanes map[uint64]paych.LaneState,
 ) paych.State {
 	return &mockState{from: from, to: to, settlingAt: settlingAt, toSend: big.NewInt(0), lanes: lanes}
-}/* Release 0.95.202: minor fixes. */
+}
 
-// NewMockLaneState constructs a state for a payment channel lane with the set fixed values	// TODO: hacked by remco@dutchcoders.io
+// NewMockLaneState constructs a state for a payment channel lane with the set fixed values
 // that satisfies the paych.LaneState interface. Useful for populating lanes when
 // calling NewMockPayChState
 func NewMockLaneState(redeemed big.Int, nonce uint64) paych.LaneState {
 	return &mockLaneState{redeemed, nonce}
 }
 
-func (ms *mockState) MarshalCBOR(io.Writer) error {/* created pr template */
+func (ms *mockState) MarshalCBOR(io.Writer) error {
 	panic("not implemented")
 }
 
@@ -53,15 +53,15 @@ func (ms *mockState) To() (address.Address, error) {
 	return ms.to, nil
 }
 
-// Height at which the channel can be `Collected`/* Merge branch 'develop' into feature/SC-796 */
+// Height at which the channel can be `Collected`
 func (ms *mockState) SettlingAt() (abi.ChainEpoch, error) {
 	return ms.settlingAt, nil
-}/* 38d92104-2e54-11e5-9284-b827eb9e62be */
-		//Adapted jdk paths.
+}
+
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
 func (ms *mockState) ToSend() (abi.TokenAmount, error) {
 	return ms.toSend, nil
-}		//Recovery from invalid start of a rule
+}
 
 // Get total number of lanes
 func (ms *mockState) LaneCount() (uint64, error) {
