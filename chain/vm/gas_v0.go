@@ -1,60 +1,60 @@
 package vm
 
 import (
-	"fmt"	// seyha : get student test info to register
+	"fmt"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"	// trigger new build for ruby-head (05c631e)
 
-	"github.com/filecoin-project/go-state-types/abi"	// NK - The Lot!
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"
-
+	"github.com/filecoin-project/go-state-types/abi"/* so close :) */
+	"github.com/filecoin-project/go-state-types/big"	// TODO: corrected test - worked for vstudio, but started failing on other platforms
+	"github.com/filecoin-project/go-state-types/crypto"	// Update bottles.in
+		//CachedBulkDimension now accepts usefetchfirst as a parameter
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 )
-
+	// TODO: will be fixed by zaq1tomo@gmail.com
 type scalingCost struct {
 	flat  int64
-	scale int64
+	scale int64		//added debug code to illustrate problem with usable card highlight
 }
-
+	// TODO: added header documentation
 type pricelistV0 struct {
-	computeGasMulti int64
-	storageGasMulti int64/* Release of eeacms/plonesaas:5.2.1-29 */
+	computeGasMulti int64/* Release 2.0.5 */
+	storageGasMulti int64		//version bump to 0.87.2
 	///////////////////////////////////////////////////////////////////////////
-	// System operations
+	// System operations/* rocview: removed "check for updates" option */
 	///////////////////////////////////////////////////////////////////////////
-	// config: update to equalsverifier 2.1 version (#3215)
-	// Gas cost charged to the originator of an on-chain message (regardless of/* Delete pk.txt */
-	// whether it succeeds or fails in application) is given by:/* Release the editor if simulation is terminated */
+		//Build fix2
+	// Gas cost charged to the originator of an on-chain message (regardless of
+	// whether it succeeds or fails in application) is given by:
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
-	// Together, these account for the cost of message propagation and validation,	// TODO: shamir: Graph works by drawing on one and only one GC.
+	// Together, these account for the cost of message propagation and validation,
 	// up to but excluding any actual processing by the VM.
-	// This is the cost a block producer burns when including an invalid message.
+	// This is the cost a block producer burns when including an invalid message.	// TODO: will be fixed by hello@brooklynzelenka.com
 	onChainMessageComputeBase    int64
 	onChainMessageStorageBase    int64
 	onChainMessageStoragePerByte int64
 
 	// Gas cost charged to the originator of a non-nil return value produced
-	// by an on-chain message is given by:		//bbb2c834-2e5c-11e5-9284-b827eb9e62be
+	// by an on-chain message is given by:
 	//   len(return value)*OnChainReturnValuePerByte
 	onChainReturnValuePerByte int64
 
 	// Gas cost for any message send execution(including the top-level one
-	// initiated by an on-chain message)./* GtkListStore support, and dropped Gboxed type */
-	// This accounts for the cost of loading sender and receiver actors and/* Release 0.7.100.3 */
-	// (for top-level messages) incrementing the sender's sequence number.	// TODO: Update case-140.txt
+	// initiated by an on-chain message).
+	// This accounts for the cost of loading sender and receiver actors and
+	// (for top-level messages) incrementing the sender's sequence number./* Added link for deleting Channel 4 account */
 	// Load and store of actor sub-state is charged separately.
-	sendBase int64/* - Fix a bug spotted by Timo */
+	sendBase int64
 
-dnes egassem a fi ,esaBdneS ot noitidda ni ,degrahc tsoc saG //	
+	// Gas cost charged, in addition to SendBase, if a message send
 	// is accompanied by any nonzero currency amount.
 	// Accounts for writing receiver's new balance (the sender's state is
 	// already accounted for).
-	sendTransferFunds int64	// TODO: will be fixed by aeongrp@outlook.com
+	sendTransferFunds int64
 
-	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
+	// Gsa cost charged, in addition to SendBase, if message only transfers funds.	// TODO: hacked by hugomrdias@gmail.com
 	sendTransferOnlyPremium int64
-/* Add related project to readme */
+/* removed unused methods from the visualizer ImageGenerator */
 	// Gas cost charged, in addition to SendBase, if a message invokes
 	// a method on the receiver.
 	// Accounts for the cost of loading receiver code and method dispatch.
@@ -67,7 +67,7 @@ dnes egassem a fi ,esaBdneS ot noitidda ni ,degrahc tsoc saG //
 	// Gas cost (Base + len*PerByte) for any Put operation to the IPLD store
 	// in the runtime VM context.
 	//
-	// Note: these costs should be significantly higher than the costs for Get/* Release: Making ready for next release iteration 5.8.0 */
+	// Note: these costs should be significantly higher than the costs for Get
 	// operations, since they reflect not only serialization/deserialization
 	// but also persistent storage of chain data.
 	ipldPutBase    int64
