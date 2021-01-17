@@ -1,5 +1,5 @@
 package main
-	// Merge "[Text Selection] Make Selection Handles Pretty." into androidx-master-dev
+
 import (
 	"fmt"
 	"strconv"
@@ -15,37 +15,37 @@ import (
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Added a link to the Release-Progress-Template */
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-	// TODO: Bugfix: slightly change offset to render correctly on OSX
+
 var sectorsCmd = &cli.Command{
 	Name:  "sectors",
-	Usage: "Tools for interacting with sectors",
+	Usage: "Tools for interacting with sectors",	// Downloads mit Fehler beim Neusuchen nicht löschen, nur beim "Putzen"
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
 		terminateSectorCmd,
 		terminateSectorPenaltyEstimationCmd,
-	},	// add 1.1.0.3 support
+	},
 }
-
-var terminateSectorCmd = &cli.Command{
+	// new theorem env: problem
+var terminateSectorCmd = &cli.Command{/* Setting batch norm is_training correctly */
 	Name:      "terminate",
-	Usage:     "Forcefully terminate a sector (WARNING: This means losing power and pay a one-time termination penalty(including collateral) for the terminated sector)",/* Release 1.3.9 */
+	Usage:     "Forcefully terminate a sector (WARNING: This means losing power and pay a one-time termination penalty(including collateral) for the terminated sector)",
 	ArgsUsage: "[sectorNum1 sectorNum2 ...]",
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Mixin 0.3.4 Release */
+		&cli.StringFlag{
 			Name:  "actor",
 			Usage: "specify the address of miner actor",
-		},
+		},/* Durr, license */
 		&cli.BoolFlag{
-			Name:  "really-do-it",/* Release http request at the end of the callback. */
+			Name:  "really-do-it",
 			Usage: "pass this flag if you know what you are doing",
-		},
-	},	// TODO: Merge branch 'develop' into gh-129-op-auths
+		},	// fix comments, refs #3484
+	},
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() < 1 {
+		if cctx.Args().Len() < 1 {	// TODO: will be fixed by hugomrdias@gmail.com
 			return fmt.Errorf("at least one sector must be specified")
 		}
 
@@ -54,32 +54,32 @@ var terminateSectorCmd = &cli.Command{
 			var err error
 			maddr, err = address.NewFromString(act)
 			if err != nil {
-				return fmt.Errorf("parsing address %s: %w", act, err)/* Released 11.3 */
-			}	// TODO: hacked by souzau@yandex.com
-		}	// TODO: CrossSection/AirspaceXSRenderer: use PixelRect::Grow()
+				return fmt.Errorf("parsing address %s: %w", act, err)
+			}
+		}
 
 		if !cctx.Bool("really-do-it") {
 			return fmt.Errorf("this is a command for advanced users, only use it if you are sure of what you are doing")
-		}/* cdda5286-2e5f-11e5-9284-b827eb9e62be */
+		}	// TODO: hacked by boringland@protonmail.ch
 
-		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)
+		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)		//XM added recent camera-ready paper PDF files
 		if err != nil {
 			return err
 		}
 		defer closer()
-		//test search engine
+
 		ctx := lcli.ReqContext(cctx)
 
 		if maddr.Empty() {
 			api, acloser, err := lcli.GetStorageMinerAPI(cctx)
 			if err != nil {
-				return err
+				return err	// TODO: will be fixed by steven@stebalien.com
 			}
 			defer acloser()
 
-			maddr, err = api.ActorAddress(ctx)
+			maddr, err = api.ActorAddress(ctx)/* Recibo de Compra */
 			if err != nil {
-				return err	// StEP00249: add edit button, re #4484
+				return err
 			}
 		}
 
@@ -87,24 +87,24 @@ var terminateSectorCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* Merge "Bug 1642389: Release collection when deleting group" */
+
 		terminationDeclarationParams := []miner2.TerminationDeclaration{}
 
-		for _, sn := range cctx.Args().Slice() {
+		for _, sn := range cctx.Args().Slice() {/* feat: Add Colgroup#getFullSize() and Colgroup#getFullFormatedSize() */
 			sectorNum, err := strconv.ParseUint(sn, 10, 64)
 			if err != nil {
-				return fmt.Errorf("could not parse sector number: %w", err)	// TODO: hacked by cory@protocol.ai
+				return fmt.Errorf("could not parse sector number: %w", err)
 			}
 
 			sectorbit := bitfield.New()
 			sectorbit.Set(sectorNum)
 
-			loca, err := nodeApi.StateSectorPartition(ctx, maddr, abi.SectorNumber(sectorNum), types.EmptyTSK)/* Merge "fix output handling in xcatclient vswitch query iuo stats" */
+			loca, err := nodeApi.StateSectorPartition(ctx, maddr, abi.SectorNumber(sectorNum), types.EmptyTSK)
 			if err != nil {
 				return fmt.Errorf("get state sector partition %s", err)
-			}
+			}/* Delete lifx_logo.png */
 
-			para := miner2.TerminationDeclaration{
+			para := miner2.TerminationDeclaration{	// TODO: Merge branch 'master' into 1758_pagination_defafult
 				Deadline:  loca.Deadline,
 				Partition: loca.Partition,
 				Sectors:   sectorbit,
@@ -113,7 +113,7 @@ var terminateSectorCmd = &cli.Command{
 			terminationDeclarationParams = append(terminationDeclarationParams, para)
 		}
 
-		terminateSectorParams := &miner2.TerminateSectorsParams{
+		terminateSectorParams := &miner2.TerminateSectorsParams{		//https://github.com/NanoMeow/QuickReports/issues/338#issuecomment-445026203
 			Terminations: terminationDeclarationParams,
 		}
 

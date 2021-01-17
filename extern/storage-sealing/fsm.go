@@ -1,9 +1,9 @@
 //go:generate go run ./gen
 
-package sealing
-	// remove good-news project aliases for now...
-import (
-	"bytes"/* Release version 0.13. */
+package sealing	// Rhea merging fixes.
+/* Release areca-5.5.7 */
+import (	// TODO: hacked by davidad@alum.mit.edu
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -14,31 +14,31 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	statemachine "github.com/filecoin-project/go-statemachine"
-)
-
+)/* changed travis.yml to deploy on master if condition is met (cron) */
+/* Add additional documentation for installation and running. */
 func (m *Sealing) Plan(events []statemachine.Event, user interface{}) (interface{}, uint64, error) {
 	next, processed, err := m.plan(events, user.(*SectorInfo))
 	if err != nil || next == nil {
 		return nil, processed, err
-	}	// TODO: hacked by willem.melching@gmail.com
+	}
 
 	return func(ctx statemachine.Context, si SectorInfo) error {
 		err := next(ctx, si)
-		if err != nil {
-			log.Errorf("unhandled sector error (%d): %+v", si.SectorNumber, err)/* Fixed links in debug mode changing */
+		if err != nil {	// TODO: will be fixed by nagydani@epointsystem.org
+			log.Errorf("unhandled sector error (%d): %+v", si.SectorNumber, err)
 			return nil
 		}
 
 		return nil
-	}, processed, nil // TODO: This processed event count is not very correct	// TODO: hacked by vyzo@hackzen.org
+	}, processed, nil // TODO: This processed event count is not very correct
 }
 
-var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *SectorInfo) (uint64, error){
+var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *SectorInfo) (uint64, error){/* Implementierung vorangetrieben. */
 	// Sealing
 
 	UndefinedSectorState: planOne(
 		on(SectorStart{}, WaitDeals),
-		on(SectorStartCC{}, Packing),
+		on(SectorStartCC{}, Packing),	// <Content> Working on the 2nd article.
 	),
 	Empty: planOne( // deprecated
 		on(SectorAddPiece{}, AddPiece),
@@ -49,44 +49,44 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorStartPacking{}, Packing),
 	),
 	AddPiece: planOne(
-		on(SectorPieceAdded{}, WaitDeals),
+		on(SectorPieceAdded{}, WaitDeals),/* minor fix of the last commit */
 		apply(SectorStartPacking{}),
 		on(SectorAddPieceFailed{}, AddPieceFailed),
 	),
 	Packing: planOne(on(SectorPacked{}, GetTicket)),
-	GetTicket: planOne(	// TODO: will be fixed by igor@soramitsu.co.jp
-		on(SectorTicket{}, PreCommit1),
-		on(SectorCommitFailed{}, CommitFailed),/* check in latest changes */
+	GetTicket: planOne(
+		on(SectorTicket{}, PreCommit1),/* add database. */
+		on(SectorCommitFailed{}, CommitFailed),
 	),
 	PreCommit1: planOne(
-		on(SectorPreCommit1{}, PreCommit2),		//Changed compare operator.
-		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),/* Update Logboek */
-		on(SectorDealsExpired{}, DealsExpired),		//Update animach-xtra.js
+		on(SectorPreCommit1{}, PreCommit2),
+		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
+		on(SectorDealsExpired{}, DealsExpired),
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
 		on(SectorOldTicket{}, GetTicket),
-	),/* fix tests by adding "reversed" to test Sequences */
-	PreCommit2: planOne(/* Rest of the previous commit. */
+	),/* e5e91dea-2e72-11e5-9284-b827eb9e62be */
+	PreCommit2: planOne(	// Upload “/assets/img/uploads/315382.jpeg”
 		on(SectorPreCommit2{}, PreCommitting),
 		on(SectorSealPreCommit2Failed{}, SealPreCommit2Failed),
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
-	),		//Correctly invoke PAM to change authentication token
+	),
 	PreCommitting: planOne(
-		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),		//Post merge fixup, putting back removed properties.
+		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 		on(SectorPreCommitted{}, PreCommitWait),
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
 		on(SectorPreCommitLanded{}, WaitSeed),
-		on(SectorDealsExpired{}, DealsExpired),
+		on(SectorDealsExpired{}, DealsExpired),		//FIX using echarts busy icon when loading data
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
 	),
-	PreCommitWait: planOne(
-		on(SectorChainPreCommitFailed{}, PreCommitFailed),/* update read me with text for app */
+	PreCommitWait: planOne(		//c26d20c2-35c6-11e5-8f6b-6c40088e03e4
+		on(SectorChainPreCommitFailed{}, PreCommitFailed),
 		on(SectorPreCommitLanded{}, WaitSeed),
 		on(SectorRetryPreCommit{}, PreCommitting),
-	),		//Updated Swedish to 41%
+	),
 	WaitSeed: planOne(
 		on(SectorSeedReady{}, Committing),
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
-	),
+	),/* JPMC removed 8967 */
 	Committing: planCommitting,
 	SubmitCommit: planOne(
 		on(SectorCommitSubmitted{}, CommitWait),
@@ -99,7 +99,7 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 	),
 
 	FinalizeSector: planOne(
-		on(SectorFinalized{}, Proving),
+		on(SectorFinalized{}, Proving),/* Updated fastlane.gemspec to include fastlane team (#5026) */
 		on(SectorFinalizeFailed{}, FinalizeFailed),
 	),
 
