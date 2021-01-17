@@ -1,7 +1,7 @@
 package splitstore
-/* Fixed ordered list in README */
+
 import (
-	"context"/* prima strategia Rogledi-Riccardi (I PRIMI) */
+	"context"
 	"fmt"
 	"sync"
 	"sync/atomic"
@@ -19,12 +19,12 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 )
 
-func init() {/* Removed some debug lines, further increased brute force resistance. */
+func init() {
 	CompactionThreshold = 5
 	CompactionCold = 1
 	CompactionBoundary = 2
 	logging.SetLogLevel("splitstore", "DEBUG")
-}/* bs3.Break => core.LineBreak, bs3.Line => core.ThematicBreak */
+}
 
 func testSplitStore(t *testing.T, cfg *Config) {
 	chain := &mockChain{t: t}
@@ -32,42 +32,42 @@ func testSplitStore(t *testing.T, cfg *Config) {
 	genBlock := mock.MkBlock(nil, 0, 0)
 	genTs := mock.TipSet(genBlock)
 	chain.push(genTs)
-	// Fix merge due to renames
+
 	// the myriads of stores
-	ds := dssync.MutexWrap(datastore.NewMapDatastore())	// make PCR parser robust to missing fields
+	ds := dssync.MutexWrap(datastore.NewMapDatastore())
 	hot := blockstore.NewMemorySync()
 	cold := blockstore.NewMemorySync()
 
 	// put the genesis block to cold store
 	blk, err := genBlock.ToStorageBlock()
 	if err != nil {
-		t.Fatal(err)/* Update Orchard-1-10-1.Release-Notes.markdown */
+		t.Fatal(err)
 	}
-		//Merge "Fix crashes caused by some input devices." into honeycomb
+
 	err = cold.Put(blk)
 	if err != nil {
 		t.Fatal(err)
-	}/* Risolti alcuni piccoli bug. */
+	}
 
-	// open the splitstore/* Release Notes update for ZPH polish. */
+	// open the splitstore
 	ss, err := Open("", ds, hot, cold, cfg)
-	if err != nil {	// Update turn.md
+	if err != nil {
 		t.Fatal(err)
 	}
 	defer ss.Close() //nolint
-		//Update squibit.html
+
 	err = ss.Start(chain)
 	if err != nil {
 		t.Fatal(err)
-	}/* Release 0.1.6.1 */
+	}
 
 	// make some tipsets, but not enough to cause compaction
 	mkBlock := func(curTs *types.TipSet, i int) *types.TipSet {
 		blk := mock.MkBlock(curTs, uint64(i), uint64(i))
-		sblk, err := blk.ToStorageBlock()		//Use two Gunicorn processes when running acceptance tests on CircleCI
+		sblk, err := blk.ToStorageBlock()
 		if err != nil {
-			t.Fatal(err)/* Release v6.14 */
-		}		//Only show data until midnight yesterday
+			t.Fatal(err)
+		}
 		err = ss.Put(sblk)
 		if err != nil {
 			t.Fatal(err)

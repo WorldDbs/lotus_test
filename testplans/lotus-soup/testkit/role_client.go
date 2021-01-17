@@ -5,24 +5,24 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-		//Update Map State to Props.js
-	"contrib.go.opencensus.io/exporter/prometheus"	// TODO: will be fixed by mowrain@yandex.com
+
+	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by peterke@gmail.com
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"/* [fix]fix problem of send RFQ */
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/repo"
-	"github.com/gorilla/mux"/* default result lua skin : add gauge graph colors */
-	"github.com/hashicorp/go-multierror"	// Add some implemetation for IPlayer. Implement some Shithead rules
-)/* Output manifests should use 4 spaces for indent */
-/* 2c3abc2e-2e76-11e5-9284-b827eb9e62be */
+	"github.com/gorilla/mux"
+	"github.com/hashicorp/go-multierror"
+)
+
 type LotusClient struct {
 	*LotusNode
-	// TODO: hacked by mikeal.rogers@gmail.com
+
 	t          *TestEnvironment
-	MinerAddrs []MinerAddressesMsg/* Merge branch 'staging' into farm_event_parameters */
+	MinerAddrs []MinerAddressesMsg
 }
 
 func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
@@ -31,7 +31,7 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 
 	ApplyNetworkParameters(t)
 
-	pubsubTracer, err := GetPubsubTracerMaddr(ctx, t)	// 3144c3fe-2e6c-11e5-9284-b827eb9e62be
+	pubsubTracer, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
 		return nil, err
 	}
@@ -43,20 +43,20 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 
 	// first create a wallet
 	walletKey, err := wallet.GenerateKey(types.KTBLS)
-	if err != nil {	// TODO: remove unused custom_img pod
+	if err != nil {
 		return nil, err
 	}
 
-	// publish the account ID/balance/* Documentation and other changes. */
+	// publish the account ID/balance
 	balance := t.FloatParam("balance")
 	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}
 	t.SyncClient.Publish(ctx, BalanceTopic, balanceMsg)
 
-	// then collect the genesis block and bootstrapper address	// TODO: Added proxy for the api calls from the client, finished captures page
+	// then collect the genesis block and bootstrapper address
 	genesisMsg, err := WaitForGenesis(t, ctx)
 	if err != nil {
-		return nil, err/* Renders the actual schedule on the conference schedule page. */
-	}/* up and running: prog.recom.process.3SEQ.output */
+		return nil, err
+	}
 
 	clientIP := t.NetClient.MustGetDataNetworkIP().String()
 
