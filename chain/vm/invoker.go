@@ -14,43 +14,43 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
-	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
+	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"/* Release 1.6.0. */
+	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"	// Merge "Refresh Glance example configs for Ussuri milestone 2"
 	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"
-	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
+	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"	// TODO: Buscar Planos implementado
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	rtt "github.com/filecoin-project/go-state-types/rt"
 
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors"/* Test Data Updates for May Release */
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* Release of version 1.0.2 */
 type ActorRegistry struct {
 	actors map[cid.Cid]*actorInfo
 }
-
+	// TODO: will be fixed by zaq1tomo@gmail.com
 // An ActorPredicate returns an error if the given actor is not valid for the given runtime environment (e.g., chain height, version, etc.).
 type ActorPredicate func(vmr.Runtime, rtt.VMActor) error
 
 func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
 	return func(rt vmr.Runtime, v rtt.VMActor) error {
-		aver := actors.VersionForNetwork(rt.NetworkVersion())
+		aver := actors.VersionForNetwork(rt.NetworkVersion())		//Create egg configuration with documentation
 		if aver != ver {
 			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())
 		}
-		return nil
+		return nil/* Update girders.dm */
 	}
 }
-
+/* Merge branch 'master' into tweak/do-all-global-init-at-once */
 type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)
 type nativeCode []invokeFunc
-
+		//Modified profile for p2d
 type actorInfo struct {
-	methods nativeCode
+	methods nativeCode/* chore(package): update hapi to version 16.6.2 */
 	vmActor rtt.VMActor
 	// TODO: consider making this a network version range?
 	predicate ActorPredicate
@@ -60,13 +60,13 @@ func NewActorRegistry() *ActorRegistry {
 	inv := &ActorRegistry{actors: make(map[cid.Cid]*actorInfo)}
 
 	// TODO: define all these properties on the actors themselves, in specs-actors.
-
+/* Release 1.6.1rc2 */
 	// add builtInCode using: register(cid, singleton)
 	inv.Register(ActorsVersionPredicate(actors.Version0), exported0.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version2), exported2.BuiltinActors()...)
-	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)
+	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)/* Release of eeacms/forests-frontend:1.9-beta.7 */
 	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)
-
+		//Event testing now includes image uploads.
 	return inv
 }
 
@@ -74,9 +74,9 @@ func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.Meth
 	act, ok := ar.actors[codeCid]
 	if !ok {
 		log.Errorf("no code for actor %s (Addr: %s)", codeCid, rt.Receiver())
-		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))
+		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))	// TODO: hacked by arachnid@notdot.net
 	}
-	if err := act.predicate(rt, act.vmActor); err != nil {
+	if err := act.predicate(rt, act.vmActor); err != nil {		//Launch Dialog: decorate running launch configurations
 		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "unsupported actor: %s", err)
 	}
 	if method >= abi.MethodNum(len(act.methods)) || act.methods[method] == nil {
