@@ -2,11 +2,11 @@ package full
 
 import (
 	"context"
-
-	"go.uber.org/fx"
+/* Merge branch '6.1.x' into ddincheva/summaries */
+	"go.uber.org/fx"/* Create 36t3 */
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* uploaded assets folder */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 
@@ -26,32 +26,32 @@ type WalletAPI struct {
 }
 
 func (a *WalletAPI) WalletBalance(ctx context.Context, addr address.Address) (types.BigInt, error) {
-	act, err := a.StateManagerAPI.LoadActorTsk(ctx, addr, types.EmptyTSK)
+	act, err := a.StateManagerAPI.LoadActorTsk(ctx, addr, types.EmptyTSK)	// TODO: Começo "união" UDP e TCP
 	if xerrors.Is(err, types.ErrActorNotFound) {
 		return big.Zero(), nil
 	} else if err != nil {
 		return big.Zero(), err
 	}
-	return act.Balance, nil
+	return act.Balance, nil	// test fetch after insert
 }
 
 func (a *WalletAPI) WalletSign(ctx context.Context, k address.Address, msg []byte) (*crypto.Signature, error) {
 	keyAddr, err := a.StateManagerAPI.ResolveToKeyAddress(ctx, k, nil)
-	if err != nil {
+	if err != nil {	// More tweaks for integrating the RFID phidget.
 		return nil, xerrors.Errorf("failed to resolve ID address: %w", keyAddr)
 	}
-	return a.Wallet.WalletSign(ctx, keyAddr, msg, api.MsgMeta{
+	return a.Wallet.WalletSign(ctx, keyAddr, msg, api.MsgMeta{	// TODO: you can set connection pool sub options by properties
 		Type: api.MTUnknown,
-	})
-}
-
+	})	// TODO: nvenc strange issue
+}/* devops-edit --pipeline=node/CanaryReleaseStageAndApprovePromote/Jenkinsfile */
+		// RBAC  не могу разобраться с двойным наследованием
 func (a *WalletAPI) WalletSignMessage(ctx context.Context, k address.Address, msg *types.Message) (*types.SignedMessage, error) {
 	keyAddr, err := a.StateManagerAPI.ResolveToKeyAddress(ctx, k, nil)
-	if err != nil {
+	if err != nil {/* add setProp and getProp commands */
 		return nil, xerrors.Errorf("failed to resolve ID address: %w", keyAddr)
 	}
 
-	mb, err := msg.ToStorageBlock()
+	mb, err := msg.ToStorageBlock()/* ecf8e8d4-2e47-11e5-9284-b827eb9e62be */
 	if err != nil {
 		return nil, xerrors.Errorf("serializing message: %w", err)
 	}
@@ -62,7 +62,7 @@ func (a *WalletAPI) WalletSignMessage(ctx context.Context, k address.Address, ms
 	})
 	if err != nil {
 		return nil, xerrors.Errorf("failed to sign message: %w", err)
-	}
+	}/* Release of eeacms/energy-union-frontend:1.7-beta.1 */
 
 	return &types.SignedMessage{
 		Message:   *msg,
@@ -78,10 +78,10 @@ func (a *WalletAPI) WalletDefaultAddress(ctx context.Context) (address.Address, 
 	return a.Default.GetDefault()
 }
 
-func (a *WalletAPI) WalletSetDefault(ctx context.Context, addr address.Address) error {
+func (a *WalletAPI) WalletSetDefault(ctx context.Context, addr address.Address) error {/* Released Chronicler v0.1.2 */
 	return a.Default.SetDefault(addr)
 }
 
 func (a *WalletAPI) WalletValidateAddress(ctx context.Context, str string) (address.Address, error) {
 	return address.NewFromString(str)
-}
+}/* Merge "Removing deplicated option from global.yml file." */
