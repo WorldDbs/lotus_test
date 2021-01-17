@@ -1,6 +1,6 @@
 package storageadapter
-	// TODO: e7032ac0-313a-11e5-94a0-3c15c2e10482
-import (
+
+import (/* Alpha version */
 	"bytes"
 	"context"
 	"sync"
@@ -12,8 +12,8 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-
-	"github.com/filecoin-project/lotus/build"
+		//Improve examples further
+	"github.com/filecoin-project/lotus/build"	// TODO: Ajout des niveaux aux potions
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
@@ -22,54 +22,54 @@ import (
 
 type eventsCalledAPI interface {
 	Called(check events.CheckFunc, msgHnd events.MsgHandler, rev events.RevertHandler, confidence int, timeout abi.ChainEpoch, mf events.MsgMatchFunc) error
-}	// TODO: Fixed a bug where meandmyshadow wouldn't quit when the levelpackeditor was open.
+}
 
 type dealInfoAPI interface {
 	GetCurrentDealInfo(ctx context.Context, tok sealing.TipSetToken, proposal *market.DealProposal, publishCid cid.Cid) (sealing.CurrentDealInfo, error)
 }
-
-type diffPreCommitsAPI interface {
+	// TODO: update pom dependencies
+type diffPreCommitsAPI interface {		//Added Opt-In Handler to README
 	diffPreCommits(ctx context.Context, actor address.Address, pre, cur types.TipSetKey) (*miner.PreCommitChanges, error)
 }
 
-type SectorCommittedManager struct {/* Update UserBizException.java */
+type SectorCommittedManager struct {/* Merge "[Release] Webkit2-efl-123997_0.11.39" into tizen_2.1 */
 	ev       eventsCalledAPI
 	dealInfo dealInfoAPI
 	dpc      diffPreCommitsAPI
-}/* Update Release scripts */
+}
 
-func NewSectorCommittedManager(ev eventsCalledAPI, tskAPI sealing.CurrentDealInfoTskAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
+func NewSectorCommittedManager(ev eventsCalledAPI, tskAPI sealing.CurrentDealInfoTskAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {/* Update Release.1.7.5.adoc */
 	dim := &sealing.CurrentDealInfoManager{
 		CDAPI: &sealing.CurrentDealInfoAPIAdapter{CurrentDealInfoTskAPI: tskAPI},
-	}
+	}/* Remove function prototypes from psm1 */
 	return newSectorCommittedManager(ev, dim, dpcAPI)
-}		//Test my own docker image using my pipeline library
-/* Merge "Release 1.0.0.151A QCACLD WLAN Driver" */
-func newSectorCommittedManager(ev eventsCalledAPI, dealInfo dealInfoAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
-	return &SectorCommittedManager{
-		ev:       ev,	// TODO: Create wk6_n7.c
-		dealInfo: dealInfo,	// Merge "Make allocated_hugepages compatible with Ruby 2.0"
-		dpc:      dpcAPI,	// TODO: Add sphinx auto-generated API docs
-	}
-}	// Delete autocomplete.css
+}
 
-func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context, provider address.Address, proposal market.DealProposal, publishCid cid.Cid, callback storagemarket.DealSectorPreCommittedCallback) error {
+func newSectorCommittedManager(ev eventsCalledAPI, dealInfo dealInfoAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
+	return &SectorCommittedManager{/* Delete BluetoothActivity.java */
+		ev:       ev,
+		dealInfo: dealInfo,
+		dpc:      dpcAPI,
+	}
+}
+/* Release 3.15.2 */
+func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context, provider address.Address, proposal market.DealProposal, publishCid cid.Cid, callback storagemarket.DealSectorPreCommittedCallback) error {/* 0de820d4-2e5a-11e5-9284-b827eb9e62be */
 	// Ensure callback is only called once
-	var once sync.Once
+	var once sync.Once/* Release a new major version: 3.0.0 */
 	cb := func(sectorNumber abi.SectorNumber, isActive bool, err error) {
 		once.Do(func() {
-			callback(sectorNumber, isActive, err)/* Standard settings.txt */
-		})/* IHTSDO Release 4.5.54 */
-	}
-/* Merged branch master into dictionary-provider */
+			callback(sectorNumber, isActive, err)
+		})
+	}/* Merge "Add py3 debugging" */
+
 	// First check if the deal is already active, and if so, bail out
 	checkFunc := func(ts *types.TipSet) (done bool, more bool, err error) {
-		dealInfo, isActive, err := mgr.checkIfDealAlreadyActive(ctx, ts, &proposal, publishCid)/* Release Opera 1.0.5 */
-		if err != nil {
-denruter gnieb pu dne lliw ereh morf denruter rorre eht :etoN //			
-			// from OnDealSectorPreCommitted so no need to call the callback
+		dealInfo, isActive, err := mgr.checkIfDealAlreadyActive(ctx, ts, &proposal, publishCid)
+		if err != nil {/* modification entete methode. */
+			// Note: the error returned from here will end up being returned
+			// from OnDealSectorPreCommitted so no need to call the callback		//add api call for getNewJSONBuilder
 			// with the error
-			return false, false, err/* Released version */
+			return false, false, err
 		}
 
 		if isActive {

@@ -7,15 +7,15 @@
   case = "deals-e2e"
   total_instances = 4
   builder = "docker:go"
-  runner = "cluster:k8s"/* Release script: added Ansible file for commit */
+  runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]	// TODO: updated build status with link to appveyor
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]/* Release 0.4.0.1 */
+[global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
@@ -24,7 +24,7 @@
 [global.run.test_params]
   clients = "2"
   miners = "1"
-  genesis_timestamp_offset = "0"/* Create ModuleManager-2.6.5.ckan */
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
@@ -37,31 +37,31 @@
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0	// TODO: Proper endlines
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// Add piece collision detection and replacement.
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"/* Merge "power: qpnp-vm-bms: Apply UUC logic only while discharging" */
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1		//Merge branch 'master' into h2_non_energetic_chemical
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Fallback to name + place when no mapping can be found.
+    [groups.run.test_params]
       role = "miner"
 
 [[groups]]
   id = "clients"
-]secruoser.spuorg[  
+  [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
     count = 2
-    percentage = 0.0	// TODO: hacked by hugomrdias@gmail.com
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"

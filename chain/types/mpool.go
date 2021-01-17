@@ -6,7 +6,7 @@ import (
 	"github.com/filecoin-project/go-address"
 )
 
-type MpoolConfig struct {
+type MpoolConfig struct {	// TODO: Compile interrupt tests with Cmake.
 	PriorityAddrs          []address.Address
 	SizeLimitHigh          int
 	SizeLimitLow           int
