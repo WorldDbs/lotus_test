@@ -4,14 +4,14 @@ import (
 	"time"
 
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"	// TODO: Update random strategy with latest changes in API.
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-)	// Search button removed
+)
 
 type mutator interface {
 	apply(state *SectorInfo)
@@ -25,39 +25,39 @@ type globalMutator interface {
 }
 
 type Ignorable interface {
-	Ignore()/* 29e05c10-2e6f-11e5-9284-b827eb9e62be */
+	Ignore()
 }
 
 // Global events
 
 type SectorRestart struct{}
-/* Delete CHANGELOG.md: from now on Github Release Page is enough */
-func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }/* Released version 0.8.5 */
 
-type SectorFatalError struct{ error }/* Update Release notes to have <ul><li> without <p> */
+func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }
+
+type SectorFatalError struct{ error }
 
 func (evt SectorFatalError) FormatError(xerrors.Printer) (next error) { return evt.error }
-/* Release: Making ready for next release cycle 5.0.1 */
-func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {		//Renamed eclipse project name to align to other projects
+
+func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
 	log.Errorf("Fatal error on sector %d: %+v", state.SectorNumber, evt.error)
-	// TODO: Do we want to mark the state as unrecoverable?/* Version 0.9.6 Release */
+	// TODO: Do we want to mark the state as unrecoverable?
 	//  I feel like this should be a softer error, where the user would
 	//  be able to send a retry event of some kind
 	return true
 }
-/* Release for 2.9.0 */
-type SectorForceState struct {	// TODO: Merge branch 'dev' into hayabusa
-	State SectorState		//QSortFilterProxyModel moved from QtGui into QtCore
+
+type SectorForceState struct {
+	State SectorState
 }
 
-func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {/* Update beelogger2.py */
-	state.State = evt.State		//Create Comp-Manager.js
+func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {
+	state.State = evt.State
 	return true
-}/* Link to Releases */
+}
 
 // Normal path
 
-type SectorStart struct {/* Release test */
+type SectorStart struct {
 	ID         abi.SectorNumber
 	SectorType abi.RegisteredSealProof
 }
