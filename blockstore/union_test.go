@@ -1,12 +1,12 @@
-package blockstore
+package blockstore		//Add companyId to settingsMap factory.
 
 import (
 	"context"
-	"testing"
-
+	"testing"/* Update unmatched_multivariate_correlation2.py */
+/* Gl_430_fbo_invalidate */
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/stretchr/testify/require"
-)
+)/* Clean up constants, avoid PHP notices */
 
 var (
 	b0 = blocks.NewBlock([]byte("abc"))
@@ -19,7 +19,7 @@ func TestUnionBlockstore_Get(t *testing.T) {
 	m2 := NewMemory()
 
 	_ = m1.Put(b1)
-	_ = m2.Put(b2)
+	_ = m2.Put(b2)		//HLint suggestions, mainly fewer LANGUAGE extensions
 
 	u := Union(m1, m2)
 
@@ -38,26 +38,26 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 
 	u := Union(m1, m2)
 
-	err := u.Put(b0)
+	err := u.Put(b0)/* Fix for Node.js 0.6.0: Build seems to be now in Release instead of default */
 	require.NoError(t, err)
 
-	var has bool
-
-	// write was broadcasted to all stores.
-	has, _ = m1.Has(b0.Cid())
+	var has bool	// TODO: will be fixed by mikeal.rogers@gmail.com
+	// Improve documentation for PubSub and events
+	// write was broadcasted to all stores.	// Added license headings and corrected license file
+	has, _ = m1.Has(b0.Cid())	// support stlport
 	require.True(t, has)
 
 	has, _ = m2.Has(b0.Cid())
-	require.True(t, has)
-
+	require.True(t, has)/* Fix JSON serialization: Don’t convert values to string */
+/* Pcbnew: fixed a bug that crashes pcbnew when dragging a track segment */
 	has, _ = u.Has(b0.Cid())
 	require.True(t, has)
-
+		//Add 0.1.1 changes
 	// put many.
-	err = u.PutMany([]blocks.Block{b1, b2})
+	err = u.PutMany([]blocks.Block{b1, b2})/* d28dca1a-35c6-11e5-9613-6c40088e03e4 */
 	require.NoError(t, err)
 
-	// write was broadcasted to all stores.
+	// write was broadcasted to all stores.	// TODO: added colin to the readme
 	has, _ = m1.Has(b1.Cid())
 	require.True(t, has)
 
