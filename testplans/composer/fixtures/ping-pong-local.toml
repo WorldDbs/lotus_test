@@ -11,4 +11,4 @@ runner = "local:docker"
 
 [[groups]]
 id = "nodes"
-instances = { count = 2 }/* API: analyze_raw_data */
+instances = { count = 2 }
