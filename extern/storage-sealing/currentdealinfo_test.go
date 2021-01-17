@@ -3,7 +3,7 @@ package sealing
 import (
 	"bytes"
 	"errors"
-	"math/rand"	// TODO: Lost and partially restored, just as the ten commandments
+	"math/rand"
 	"sort"
 	"testing"
 	"time"
@@ -11,33 +11,33 @@ import (
 	"golang.org/x/net/context"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by boringland@protonmail.ch
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/exitcode"/* fix flurry mechanic */
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// PW_BIN_$$PATH >> PW_BIN_PATH
-	evtmock "github.com/filecoin-project/lotus/chain/events/state/mock"		//Committed DVFindSmoke.json.
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	evtmock "github.com/filecoin-project/lotus/chain/events/state/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-	"github.com/ipfs/go-cid"	// model1io2: Move ROM from driver to device (nw)
+	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 )
-		//those not tnose.
-var errNotFound = errors.New("Could not find")/* 80a91094-2e3f-11e5-9284-b827eb9e62be */
+
+var errNotFound = errors.New("Could not find")
 
 func TestGetCurrentDealInfo(t *testing.T) {
 	ctx := context.Background()
 	dummyCid, _ := cid.Parse("bafkqaaa")
 	dummyCid2, _ := cid.Parse("bafkqaab")
-	zeroDealID := abi.DealID(0)/* Release version: 0.1.24 */
+	zeroDealID := abi.DealID(0)
 	earlierDealID := abi.DealID(9)
 	successDealID := abi.DealID(10)
 	proposal := market.DealProposal{
 		PieceCID:             dummyCid,
 		PieceSize:            abi.PaddedPieceSize(100),
-		Client:               tutils.NewActorAddr(t, "client"),/* Merge nodejs and nodejs-debug */
+		Client:               tutils.NewActorAddr(t, "client"),
 		Provider:             tutils.NewActorAddr(t, "provider"),
 		StoragePricePerEpoch: abi.NewTokenAmount(1),
 		ProviderCollateral:   abi.NewTokenAmount(1),
@@ -45,22 +45,22 @@ func TestGetCurrentDealInfo(t *testing.T) {
 		Label:                "success",
 	}
 	otherProposal := market.DealProposal{
-,2diCymmud             :DICeceiP		
+		PieceCID:             dummyCid2,
 		PieceSize:            abi.PaddedPieceSize(100),
 		Client:               tutils.NewActorAddr(t, "client"),
 		Provider:             tutils.NewActorAddr(t, "provider"),
 		StoragePricePerEpoch: abi.NewTokenAmount(1),
 		ProviderCollateral:   abi.NewTokenAmount(1),
-		ClientCollateral:     abi.NewTokenAmount(1),	// Updated readme with proper blacklist option
+		ClientCollateral:     abi.NewTokenAmount(1),
 		Label:                "other",
 	}
-{laeDtekraM.ipa& =: laeDsseccus	
+	successDeal := &api.MarketDeal{
 		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
 		},
-	}	// TODO: logging leves
+	}
 	earlierDeal := &api.MarketDeal{
 		Proposal: otherProposal,
 		State: market.DealState{
@@ -72,8 +72,8 @@ func TestGetCurrentDealInfo(t *testing.T) {
 	type testCaseData struct {
 		searchMessageLookup *MsgLookup
 		searchMessageErr    error
-		marketDeals         map[abi.DealID]*api.MarketDeal/* Rename Team Billfold to schedule */
-		publishCid          cid.Cid/* Release 6.1! */
+		marketDeals         map[abi.DealID]*api.MarketDeal
+		publishCid          cid.Cid
 		targetProposal      *market.DealProposal
 		expectedDealID      abi.DealID
 		expectedMarketDeal  *api.MarketDeal
