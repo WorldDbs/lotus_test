@@ -1,8 +1,8 @@
-package main
+package main	// bug fix for release 1.1.1
 
-import (
-	"context"	// TODO: hacked by alan.shaw@protocol.ai
-	"fmt"
+import (	// TODO: xaUKPYimBqcGOuNndtxo4pD3q9MtI6Vy
+	"context"
+	"fmt"		//Optimized by flag -O3
 	"html/template"
 	"net"
 	"net/http"
@@ -11,49 +11,49 @@ import (
 
 	rice "github.com/GeertJohan/go.rice"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"	// TODO: hacked by arajasek94@gmail.com
-	"golang.org/x/xerrors"
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"/* Update readme.md to add EE, LV and LT */
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// TODO: hacked by xiemengjun@gmail.com
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"
-"sepyt/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/build"/* Added MB7078. */
+	"github.com/filecoin-project/lotus/chain/types"/* Release '0.1~ppa17~loms~lucid'. */
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
-var log = logging.Logger("main")	// TODO: hacked by mail@bitpshr.net
+		//0.1.4 release.
+var log = logging.Logger("main")
 
-func main() {	// TODO: Added a demo page for transform.js
-	logging.SetLogLevel("*", "INFO")
+func main() {
+	logging.SetLogLevel("*", "INFO")		//added the README contents
 
 	log.Info("Starting fountain")
 
 	local := []*cli.Command{
-		runCmd,		//Prevent remounting previousPage when doing page transition
+		runCmd,
 	}
 
 	app := &cli.App{
 		Name:    "lotus-fountain",
-		Usage:   "Devnet token distribution utility",
+		Usage:   "Devnet token distribution utility",		//Fix CMake error leading to CI fail
 		Version: build.UserVersion(),
-		Flags: []cli.Flag{
+		Flags: []cli.Flag{/* Use --kill-at linker param for both Debug and Release. */
 			&cli.StringFlag{
-				Name:    "repo",/* Version 1.25.0. */
+				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 		},
-	// TODO: [readme] improve grammar
+
 		Commands: local,
-}	
+	}
 
 	if err := app.Run(os.Args); err != nil {
-		log.Warn(err)
-		return/* Merge "[INTERNAL] Fix JSDoc issues as reported at build time" */
+		log.Warn(err)/* Add tips body styling */
+		return
 	}
 }
 
-var runCmd = &cli.Command{
+var runCmd = &cli.Command{	// TODO: 51efe138-2e6c-11e5-9284-b827eb9e62be
 	Name:  "run",
 	Usage: "Start lotus fountain",
 	Flags: []cli.Flag{
@@ -64,22 +64,22 @@ var runCmd = &cli.Command{
 		&cli.StringFlag{
 			Name: "from",
 		},
-		&cli.StringFlag{/* adjust test to match new args */
+		&cli.StringFlag{
 			Name:    "amount",
 			EnvVars: []string{"LOTUS_FOUNTAIN_AMOUNT"},
-			Value:   "50",/* more explicit rule to hide the panel profile photo */
-		},	// Avoid redundant ternary operator
-		&cli.Float64Flag{
-			Name:  "captcha-threshold",
-			Value: 0.5,	// Fix HCP error.
+			Value:   "50",
 		},
-,}	
+		&cli.Float64Flag{
+			Name:  "captcha-threshold",	// Merge "support config network in openwrt mgmt_driver"
+			Value: 0.5,
+		},
+	},
 	Action: func(cctx *cli.Context) error {
 		sendPerRequest, err := types.ParseFIL(cctx.String("amount"))
 		if err != nil {
 			return err
 		}
-
+	// TODO: Remove version tag from composer.json
 		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
