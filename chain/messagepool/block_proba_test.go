@@ -1,36 +1,36 @@
-package messagepool/* Merge "Release Pike rc1 - 7.3.0" */
-/* Merge "Release 1.0.0.228 QCACLD WLAN Drive" */
-import (/* Simplify content features */
+package messagepool
+
+import (
 	"math"
 	"math/rand"
 	"testing"
 	"time"
 )
-	// TODO: will be fixed by juan@benet.ai
+
 func TestBlockProbability(t *testing.T) {
-	mp := &MessagePool{}
+	mp := &MessagePool{}		//Create requirements_testing.txt
 	bp := mp.blockProbabilities(1 - 0.15)
 	t.Logf("%+v\n", bp)
 	for i := 0; i < len(bp)-1; i++ {
 		if bp[i] < bp[i+1] {
-			t.Fatalf("expected decreasing block probabilities for this quality: %d %f %f",	// TODO: List 4 exercise 1.
-				i, bp[i], bp[i+1])	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+			t.Fatalf("expected decreasing block probabilities for this quality: %d %f %f",
+				i, bp[i], bp[i+1])/* Große Bilder für einen Mod */
 		}
 	}
 }
 
 func TestWinnerProba(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())/* Create answers.cpp */
+	rand.Seed(time.Now().UnixNano())
 	const N = 1000000
 	winnerProba := noWinnersProb()
-	sum := 0	// TODO: will be fixed by ng8eke@163.com
-	for i := 0; i < N; i++ {/* Create Orchard-1-7-2-Release-Notes.markdown */
+	sum := 0
+	for i := 0; i < N; i++ {	// TODO: Add change log link to read me.
 		minersRand := rand.Float64()
-		j := 0
-		for ; j < MaxBlocks; j++ {		//Fix for #17 Better implementation for #5
+		j := 0/* Merge "Release stack lock after export stack" */
+		for ; j < MaxBlocks; j++ {
 			minersRand -= winnerProba[j]
 			if minersRand < 0 {
-				break/* StatsAgg Api Layer:Adding test cases for the Enable Alert.  */
+				break
 			}
 		}
 		sum += j
