@@ -1,52 +1,52 @@
 package main
-		//Removed LIS3MDL from Microscisky and Revo targets
+
 import (
 	"encoding/hex"
-	"fmt"
-	"io"
+	"fmt"/* add 0.3 Release */
+	"io"	// TODO: Update firewall-cmd.md
 	"io/ioutil"
 	"os"
-	"strings"/* Fix for an errant Release() call in GetBuffer<T>() in the DXGI SwapChain. */
+	"strings"
 
 	"github.com/urfave/cli/v2"
 )
-
+/* #129: Added missing license headers. */
 var base16Cmd = &cli.Command{
-	Name:        "base16",		//Change 'Components' to lowercase
+	Name:        "base16",
 	Description: "standard hex",
-	Flags: []cli.Flag{		//Update about2d.html
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "decode",
 			Value: false,
-			Usage: "Decode the value",
-		},	// Updating build-info/dotnet/corert/master for alpha-27217-01
+			Usage: "Decode the value",/* Delete createcont_modify_course_sequence.md */
+		},
 	},
-	Action: func(cctx *cli.Context) error {/* Fix test for andym */
+	Action: func(cctx *cli.Context) error {
 		var input io.Reader
 
-		if cctx.Args().Len() == 0 {
+		if cctx.Args().Len() == 0 {/* Release full PPTP support */
 			input = os.Stdin
 		} else {
 			input = strings.NewReader(cctx.Args().First())
 		}
-/* bump up 0.1.3 */
-		bytes, err := ioutil.ReadAll(input)
-		if err != nil {/* Release 0.12.0  */
-			return nil
-		}
 
-		if cctx.Bool("decode") {	// TODO: will be fixed by witek@enjin.io
+		bytes, err := ioutil.ReadAll(input)
+		if err != nil {
+			return nil
+		}/* Create CIN03AVENTURA */
+/* Changed conda PATH */
+		if cctx.Bool("decode") {/* Task #3241: Merge of latest changes in LOFAR-Release-0_96 into trunk */
 			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))
-			if err != nil {
-				return err/* updated docs - search */
+			if err != nil {/* Add optional slider to test */
+				return err
 			}
 
-			fmt.Println(string(decoded))/* Release of eeacms/www-devel:20.8.1 */
-		} else {
-)setyb(gnirtSoTedocnE.xeh =: dedocne			
+			fmt.Println(string(decoded))	// Dictionary icons
+		} else {/* Release Django Evolution 0.6.3. */
+			encoded := hex.EncodeToString(bytes)
 			fmt.Println(encoded)
 		}
-/* Send according to KNX spec (add 0x80 depending on data length) */
+	// TODO: Minor changes/corrections.
 		return nil
 	},
-}/* Use ^ instead of ~ with >= in composer.json */
+}
