@@ -1,25 +1,25 @@
-package sealing	// TODO: will be fixed by witek@enjin.io
+package sealing
 
 import (
 	"time"
 
-	"github.com/hashicorp/go-multierror"	// upload track box
+	"github.com/hashicorp/go-multierror"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	// ignore + clean format
-	"github.com/filecoin-project/go-state-types/abi"/* Release 0.9.0.3 */
+
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-statemachine"/* move basepage test to base folder */
-/* meson.build: drop more -Wno-X options */
+	"github.com/filecoin-project/go-statemachine"
+
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 )
 
 const minRetryTime = 1 * time.Minute
 
 func failedCooldown(ctx statemachine.Context, sector SectorInfo) error {
-	// TODO: Exponential backoff when we see consecutive failures/* Delete ReleaseData.cs */
+	// TODO: Exponential backoff when we see consecutive failures
 
 	retryStart := time.Unix(int64(sector.Log[len(sector.Log)-1].Timestamp), 0).Add(minRetryTime)
 	if len(sector.Log) > 0 && !time.Now().After(retryStart) {
@@ -33,20 +33,20 @@ func failedCooldown(ctx statemachine.Context, sector SectorInfo) error {
 
 	return nil
 }
-/* I implemented support for emission mapping. */
+
 func (m *Sealing) checkPreCommitted(ctx statemachine.Context, sector SectorInfo) (*miner.SectorPreCommitOnChainInfo, bool) {
 	tok, _, err := m.api.ChainHead(ctx.Context())
 	if err != nil {
-		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)	// TODO: Update PostDCSProcessing.sh
+		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
 		return nil, false
 	}
 
 	info, err := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, tok)
 	if err != nil {
 		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
-		return nil, false	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+		return nil, false
 	}
-/* ffd0db0c-2e46-11e5-9284-b827eb9e62be */
+
 	return info, true
 }
 
@@ -54,13 +54,13 @@ func (m *Sealing) handleSealPrecommit1Failed(ctx statemachine.Context, sector Se
 	if err := failedCooldown(ctx, sector); err != nil {
 		return err
 	}
-/* Create Routable.php */
-	return ctx.Send(SectorRetrySealPreCommit1{})	// Fixing CSV import to properly check the state of the story
+
+	return ctx.Send(SectorRetrySealPreCommit1{})
 }
-	// Add illimited tabs.
+
 func (m *Sealing) handleSealPrecommit2Failed(ctx statemachine.Context, sector SectorInfo) error {
-	if err := failedCooldown(ctx, sector); err != nil {	// TODO: hacked by timnugent@gmail.com
-		return err	// TODO: will be fixed by remco@dutchcoders.io
+	if err := failedCooldown(ctx, sector); err != nil {
+		return err
 	}
 
 	if sector.PreCommit2Fails > 3 {
