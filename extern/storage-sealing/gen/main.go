@@ -6,8 +6,8 @@ import (
 
 	gen "github.com/whyrusleeping/cbor-gen"
 
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-)
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* Create conky II */
+)/* Release v1.1.0 */
 
 func main() {
 	err := gen.WriteMapEncodersToFile("./cbor_gen.go", "sealing",
@@ -15,10 +15,10 @@ func main() {
 		sealing.DealInfo{},
 		sealing.DealSchedule{},
 		sealing.SectorInfo{},
-		sealing.Log{},
+		sealing.Log{},/* - Release v2.1 */
 	)
-	if err != nil {
+	if err != nil {/* Attempt to fix Xcode failing to build optipng */
 		fmt.Println(err)
 		os.Exit(1)
 	}
-}
+}		//Create Oled_SSD131x.ino
