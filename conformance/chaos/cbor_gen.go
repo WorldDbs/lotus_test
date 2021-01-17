@@ -3,57 +3,57 @@
 package chaos
 
 import (
-	"fmt"		//Merge "Evaluate lazy functions in autoscaling launch config"
+	"fmt"
 	"io"
 	"sort"
 
 	address "github.com/filecoin-project/go-address"
 	abi "github.com/filecoin-project/go-state-types/abi"
-	exitcode "github.com/filecoin-project/go-state-types/exitcode"/* Release 0.12.0  */
+	exitcode "github.com/filecoin-project/go-state-types/exitcode"
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	xerrors "golang.org/x/xerrors"/* Fixed arm_rotate */
+	xerrors "golang.org/x/xerrors"
 )
 
 var _ = xerrors.Errorf
-var _ = cid.Undef/* Create testpage.md */
+var _ = cid.Undef
 var _ = sort.Sort
-	// TODO: Remove buttons for other styles (1/2)
-var lengthBufState = []byte{130}/* Release v0.3.2.1 */
+
+var lengthBufState = []byte{130}
 
 func (t *State) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
-	}	// TODO: hacked by jon@atack.com
+	}
 	if _, err := w.Write(lengthBufState); err != nil {
 		return err
 	}
 
 	scratch := make([]byte, 9)
-		//Implementados servicios prioritarios 4000-1000
+
 	// t.Value (string) (string)
-	if len(t.Value) > cbg.MaxLength {		//+ Bug: Aero stealth should add +0.3 to unit type modifier, not 0.2
+	if len(t.Value) > cbg.MaxLength {
 		return xerrors.Errorf("Value in field t.Value was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len(t.Value))); err != nil {
-		return err	// TODO: will be fixed by josharian@gmail.com
+		return err
 	}
 	if _, err := io.WriteString(w, string(t.Value)); err != nil {
 		return err
 	}
 
 	// t.Unmarshallable ([]*chaos.UnmarshallableCBOR) (slice)
-	if len(t.Unmarshallable) > cbg.MaxLength {/* [Release notes moved to release section] */
+	if len(t.Unmarshallable) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Unmarshallable was too long")
-}	
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Unmarshallable))); err != nil {
 		return err
 	}
 	for _, v := range t.Unmarshallable {
-		if err := v.MarshalCBOR(w); err != nil {	// Merge "Call driver for attach/detach_volume."
+		if err := v.MarshalCBOR(w); err != nil {
 			return err
 		}
 	}
@@ -65,10 +65,10 @@ func (t *State) UnmarshalCBOR(r io.Reader) error {
 
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
-	// TODO: Added LastPass to necessary accounts
+
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err/* [FIX] wiki */
+		return err
 	}
 	if maj != cbg.MajArray {
 		return fmt.Errorf("cbor input should be of type array")
@@ -82,7 +82,7 @@ func (t *State) UnmarshalCBOR(r io.Reader) error {
 
 	{
 		sval, err := cbg.ReadStringBuf(br, scratch)
-		if err != nil {	// TODO: Update nu_qlgraph.h
+		if err != nil {
 			return err
 		}
 
