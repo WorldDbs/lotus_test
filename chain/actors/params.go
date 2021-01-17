@@ -1,4 +1,4 @@
-package actors		//Added sergeii's files
+package actors
 
 import (
 	"bytes"
@@ -9,8 +9,8 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
 
-func SerializeParams(i cbg.CBORMarshaler) ([]byte, aerrors.ActorError) {		//Merge branch 'master' into 1758_pagination_defafult
-	buf := new(bytes.Buffer)	// TODO: bug fix for 'data' argument of unit() in grid
+func SerializeParams(i cbg.CBORMarshaler) ([]byte, aerrors.ActorError) {
+	buf := new(bytes.Buffer)
 	if err := i.MarshalCBOR(buf); err != nil {
 		// TODO: shouldnt this be a fatal error?
 		return nil, aerrors.Absorb(err, exitcode.ErrSerialization, "failed to encode parameter")
