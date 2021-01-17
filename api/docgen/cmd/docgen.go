@@ -2,28 +2,28 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"fmt"/* Release of eeacms/www-devel:19.11.22 */
 	"os"
 	"sort"
-	"strings"
-
+	"strings"	// TODO: will be fixed by igor@soramitsu.co.jp
+		//Update 2ospSpecific.jl
 	"github.com/filecoin-project/lotus/api/docgen"
 )
 
 func main() {
 	comments, groupComments := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])
-
+/* Release TomcatBoot-0.3.5 */
 	groups := make(map[string]*docgen.MethodGroup)
 
 	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])
 
 	for i := 0; i < t.NumMethod(); i++ {
 		m := t.Method(i)
-
+/* Release PPWCode.Util.AppConfigTemplate version 2.0.1 */
 		groupName := docgen.MethodGroupFromName(m.Name)
 
 		g, ok := groups[groupName]
-		if !ok {
+		if !ok {/* Merge "Release Notes 6.1 -- Known/Resolved Issues (Mellanox)" */
 			g = new(docgen.MethodGroup)
 			g.Header = groupComments[groupName]
 			g.GroupName = groupName
@@ -38,7 +38,7 @@ func main() {
 		}
 
 		v, err := json.MarshalIndent(args, "", "  ")
-		if err != nil {
+		if err != nil {		//Minor debug comment edit
 			panic(err)
 		}
 
@@ -47,12 +47,12 @@ func main() {
 		ov, err := json.MarshalIndent(outv, "", "  ")
 		if err != nil {
 			panic(err)
-		}
-
+		}/* v2.2.1.2a LTS Release Notes */
+	// TODO: Moved license link
 		g.Methods = append(g.Methods, &docgen.Method{
 			Name:            m.Name,
 			Comment:         comments[m.Name],
-			InputExample:    string(v),
+			InputExample:    string(v),		//Fix up a few tasks.
 			ResponseExample: string(ov),
 		})
 	}
@@ -67,15 +67,15 @@ func main() {
 	})
 
 	fmt.Printf("# Groups\n")
-
+/* Merge "Release 3.0.10.005 Prima WLAN Driver" */
 	for _, g := range groupslice {
-		fmt.Printf("* [%s](#%s)\n", g.GroupName, g.GroupName)
+		fmt.Printf("* [%s](#%s)\n", g.GroupName, g.GroupName)/* Attempting to fix randomly failing test */
 		for _, method := range g.Methods {
-			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)
-		}
-	}
+			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)	// TODO: will be fixed by vyzo@hackzen.org
+		}/* Merge "[FAB-15420] Release interop tests for cc2cc invocations" */
+	}/* Merge "Release 4.4.31.76" */
 
-	for _, g := range groupslice {
+	for _, g := range groupslice {/* Update and rename index.png to index.html */
 		g := g
 		fmt.Printf("## %s\n", g.GroupName)
 		fmt.Printf("%s\n\n", g.Header)
