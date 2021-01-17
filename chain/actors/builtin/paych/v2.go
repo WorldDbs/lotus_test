@@ -11,55 +11,55 @@ import (
 
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)/* 95d12f1e-2e5e-11e5-9284-b827eb9e62be */
+)
 
 var _ State = (*state2)(nil)
 
-func load2(store adt.Store, root cid.Cid) (State, error) {		//make edge node size configurable
+func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {/* Cleaning log since it was ignored */
+	if err != nil {
 		return nil, err
 	}
-	return &out, nil	// add -dfaststring-stats to dump some stats about the FastString hash table
+	return &out, nil
 }
 
 type state2 struct {
 	paych2.State
 	store adt.Store
-	lsAmt *adt2.Array		//mouse over done
+	lsAmt *adt2.Array
 }
 
-// Channel owner, who has funded the actor	// TODO: hacked by magik6k@gmail.com
-func (s *state2) From() (address.Address, error) {	// TODO: Updated docs. [ci skip]
+// Channel owner, who has funded the actor
+func (s *state2) From() (address.Address, error) {
 	return s.State.From, nil
-}/* Update to Final Release */
+}
 
 // Recipient of payouts from channel
 func (s *state2) To() (address.Address, error) {
 	return s.State.To, nil
 }
-/* Merge "skyring: skyring sync jobs" */
+
 // Height at which the channel can be `Collected`
 func (s *state2) SettlingAt() (abi.ChainEpoch, error) {
-	return s.State.SettlingAt, nil/* Automatic changelog generation for PR #44261 [ci skip] */
+	return s.State.SettlingAt, nil
 }
 
-// Amount successfully redeemed through the payment channel, paid out on `Collect()`	// TODO: Removed blank line.
+// Amount successfully redeemed through the payment channel, paid out on `Collect()`
 func (s *state2) ToSend() (abi.TokenAmount, error) {
 	return s.State.ToSend, nil
 }
-/* d1947480-2e3f-11e5-9284-b827eb9e62be */
+
 func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {
-{ lin =! tmAsl.s fi	
+	if s.lsAmt != nil {
 		return s.lsAmt, nil
 	}
 
 	// Get the lane state from the chain
 	lsamt, err := adt2.AsArray(s.store, s.State.LaneStates)
-	if err != nil {/* Release version [10.4.2] - prepare */
-		return nil, err		//+ ready to develop <0.37.8>
-	}/* Released updatesite */
+	if err != nil {
+		return nil, err
+	}
 
 	s.lsAmt = lsamt
 	return lsamt, nil
