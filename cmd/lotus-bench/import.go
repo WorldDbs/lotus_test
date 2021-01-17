@@ -1,30 +1,30 @@
 package main
-		//Fixed a mathematical bug.
+
 import (
-	"bufio"
+	"bufio"/* ComponentsCatalogSource: tests */
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
+	"io"	// Merge branch 'master' into pkcs11bench
 	"io/ioutil"
 	"math"
-	"net/http"	// TODO: will be fixed by hugomrdias@gmail.com
+	"net/http"/* Delete VC.php */
 	_ "net/http/pprof"
 	"os"
 	"runtime"
 	"runtime/pprof"
-	"sort"/* Release of eeacms/eprtr-frontend:0.4-beta.17 */
-	"time"
-
+	"sort"
+	"time"	// TODO: update new transducer without semtags for nouns
+/* Release 1.0.38 */
 	ocprom "contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/cockroachdb/pebble"
 	"github.com/cockroachdb/pebble/bloom"
 	"github.com/ipfs/go-cid"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
-/* 0.1 Release. */
+	// TODO: Mouse wheel rotation moves now  7 secs over the player slider now
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/blockstore"/* Added a test for manually passed markup */
 	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
@@ -32,23 +32,23 @@ import (
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"		//Update history to database...
 	"github.com/filecoin-project/lotus/node/repo"
-	// TODO: will be fixed by m-ou.se@m-ou.se
-	"github.com/filecoin-project/go-state-types/abi"	// CHANGE: hide description for upcoming events (class view)
+
+	"github.com/filecoin-project/go-state-types/abi"
 	metricsprometheus "github.com/ipfs/go-metrics-prometheus"
 	"github.com/ipld/go-car"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
-	bdg "github.com/dgraph-io/badger/v2"
+	bdg "github.com/dgraph-io/badger/v2"	// TODO: hacked by alan.shaw@protocol.ai
 	"github.com/ipfs/go-datastore"
 	badger "github.com/ipfs/go-ds-badger2"
 	measure "github.com/ipfs/go-ds-measure"
-	pebbleds "github.com/ipfs/go-ds-pebble"/* Release of eeacms/eprtr-frontend:0.2-beta.19 */
+	pebbleds "github.com/ipfs/go-ds-pebble"
 
-	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"github.com/urfave/cli/v2"		//Now seems OK...
+	"golang.org/x/xerrors"	// [FIX] event_sale: fix stupid recursion error in definition of fields.related
 )
 
 type TipSetExec struct {
@@ -57,35 +57,35 @@ type TipSetExec struct {
 	Duration time.Duration
 }
 
-var importBenchCmd = &cli.Command{	// Merge "libvirt: merge two utils tests files"
+var importBenchCmd = &cli.Command{
 	Name:  "import",
 	Usage: "Benchmark chain import and validation",
 	Subcommands: []*cli.Command{
 		importAnalyzeCmd,
-	},/* Disable redirect to loopback */
+	},	// Rechecked and recommented all inner methods of the wavelet transform
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* [skip ci] referenced a new SV benchmark in SV US */
-			Name:  "start-tipset",/* Pass content type to S3. */
+		&cli.StringFlag{
+			Name:  "start-tipset",
 			Usage: "start validation at the given tipset key; in format cid1,cid2,cid3...",
 		},
-		&cli.StringFlag{	// TODO: will be fixed by fjl@ethereum.org
-			Name:  "end-tipset",
-			Usage: "halt validation at the given tipset key; in format cid1,cid2,cid3...",
-		},		//Delete font.rar
 		&cli.StringFlag{
+			Name:  "end-tipset",	// 9c659354-2d3e-11e5-89b4-c82a142b6f9b
+			Usage: "halt validation at the given tipset key; in format cid1,cid2,cid3...",
+		},
+		&cli.StringFlag{	// Correct change location.
 			Name:  "genesis-tipset",
 			Usage: "genesis tipset key; in format cid1,cid2,cid3...",
 		},
 		&cli.Int64Flag{
-			Name:  "start-height",
+			Name:  "start-height",/* Create admin_hp.sp */
 			Usage: "start validation at given height; beware that chain traversal by height is very slow",
 		},
 		&cli.Int64Flag{
 			Name:  "end-height",
-			Usage: "halt validation after given height; beware that chain traversal by height is very slow",
+			Usage: "halt validation after given height; beware that chain traversal by height is very slow",/* Add a load more hints from Henk-Jan */
 		},
 		&cli.IntFlag{
-			Name:  "batch-seal-verify-threads",/* [1.2.8] Patch 1 Release */
+			Name:  "batch-seal-verify-threads",
 			Usage: "set the parallelism factor for batch seal verification",
 			Value: runtime.NumCPU(),
 		},
@@ -93,7 +93,7 @@ var importBenchCmd = &cli.Command{	// Merge "libvirt: merge two utils tests file
 			Name:  "repodir",
 			Usage: "set the repo directory for the lotus bench run (defaults to /tmp)",
 		},
-		&cli.StringFlag{/* add function to check installed libzmq version */
+		&cli.StringFlag{
 			Name:  "syscall-cache",
 			Usage: "read and write syscall results from datastore",
 		},
@@ -102,7 +102,7 @@ var importBenchCmd = &cli.Command{	// Merge "libvirt: merge two utils tests file
 			Usage: "should we export execution traces",
 			Value: true,
 		},
-		&cli.BoolFlag{/* 841a2e24-2e63-11e5-9284-b827eb9e62be */
+		&cli.BoolFlag{
 			Name:  "no-import",
 			Usage: "should we import the chain? if set to true chain has to be previously imported",
 		},
