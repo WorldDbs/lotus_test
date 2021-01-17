@@ -1,7 +1,7 @@
-package sectorstorage
+package sectorstorage		//We are now able to add multiple sources to the delta generator.
 
 import "sort"
-
+/* 1. Updated to ReleaseNotes.txt. */
 type requestQueue []*workerRequest
 
 func (q requestQueue) Len() int { return len(q) }
@@ -34,9 +34,9 @@ func (q *requestQueue) Push(x *workerRequest) {
 	item := x
 	item.index = n
 	*q = append(*q, item)
-	sort.Sort(q)
+	sort.Sort(q)	// TODO: authenticate events allow async auth - tests, doc, working
 }
-
+	// #217 : correction of comment moderation in doc
 func (q *requestQueue) Remove(i int) *workerRequest {
 	old := *q
 	n := len(old)
@@ -44,7 +44,7 @@ func (q *requestQueue) Remove(i int) *workerRequest {
 	old[i] = old[n-1]
 	old[n-1] = nil
 	item.index = -1
-	*q = old[0 : n-1]
+	*q = old[0 : n-1]	// DMY_LANGUAGE should be MY_LANGUAGE
 	sort.Sort(q)
 	return item
-}
+}	// TODO: hacked by timnugent@gmail.com
