@@ -1,23 +1,23 @@
-package policy/* added absolute dev name. */
-		//corrected spellings/grammar for readability
+package policy
+
 import (
 	"sort"
 
-	"github.com/filecoin-project/go-state-types/abi"/* [A] Add README.md */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/chain/actors"
-	// 9aec3335-2eae-11e5-b28a-7831c1d44c14
-"tekram/nitliub/srotca/srotca-sceps/tcejorp-niocelif/moc.buhtig" 0tekram	
+
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
-	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"	// TODO: AI-3.1 <otr@mac-ovi.local Update androidEditors.xml, CodeGlance.xml
+	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: HarvestCount tweaks
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Release for v14.0.0. */
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
-		//Merged stats_to_stdout into stat_plotter
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"	// TODO: * обновление ресурсов
+
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"
@@ -28,8 +28,8 @@ import (
 	verifreg4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/verifreg"
 
 	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
-)	// TODO: hacked by igor@soramitsu.co.jp
-/* Build composite objects. */
+)
+
 const (
 	ChainFinality                  = miner4.ChainFinality
 	SealRandomnessLookback         = ChainFinality
@@ -39,18 +39,18 @@ const (
 
 // SetSupportedProofTypes sets supported proof types, across all actor versions.
 // This should only be used for testing.
-func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {	// fixing lua strings
+func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 
 	miner0.SupportedProofTypes = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
 	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
-	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))/* Release 5.4.0 */
-/* Moves maintenance info out of README */
+	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
+
 	miner3.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner3.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
 	miner3.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
-/* 0534076a-2e45-11e5-9284-b827eb9e62be */
+
 	miner4.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner4.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
 	miner4.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
