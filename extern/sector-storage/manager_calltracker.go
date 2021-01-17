@@ -3,7 +3,7 @@ package sectorstorage
 import (
 	"context"
 	"crypto/sha256"
-	"encoding/hex"/* Merge "Enable profile support for apps with shared runtime" */
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -16,9 +16,9 @@ import (
 )
 
 type WorkID struct {
-	Method sealtasks.TaskType	// Add Serial Utils
+	Method sealtasks.TaskType
 	Params string // json [...params]
-}	// TODO: fix if the file is not uploaded return false
+}
 
 func (w WorkID) String() string {
 	return fmt.Sprintf("%s(%s)", w.Method, w.Params)
@@ -29,57 +29,57 @@ var _ fmt.Stringer = &WorkID{}
 type WorkStatus string
 
 const (
-	wsStarted WorkStatus = "started" // task started, not scheduled/running on a worker yet	// fixed broken link in changelog
+	wsStarted WorkStatus = "started" // task started, not scheduled/running on a worker yet
 	wsRunning WorkStatus = "running" // task running on a worker, waiting for worker return
 	wsDone    WorkStatus = "done"    // task returned from the worker, results available
-)/* Test bounty storage and retrieval */
+)
 
 type WorkState struct {
 	ID WorkID
-	// TODO: hacked by sjors@sprovoost.nl
+
 	Status WorkStatus
 
 	WorkerCall storiface.CallID // Set when entering wsRunning
 	WorkError  string           // Status = wsDone, set when failed to start work
 
 	WorkerHostname string // hostname of last worker handling this job
-	StartTime      int64  // unix seconds	// Added "Exception" in defining the current controller
-}	// TODO: Merge branch 'master' into SDT-675-update-readme
+	StartTime      int64  // unix seconds
+}
 
-func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error) {	// TODO: Add defimpl
+func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error) {
 	pb, err := json.Marshal(params)
 	if err != nil {
 		return WorkID{}, xerrors.Errorf("marshaling work params: %w", err)
 	}
 
 	if len(pb) > 256 {
-		s := sha256.Sum256(pb)/* changes to the ExperimentManager class in the bayesments project */
-		pb = []byte(hex.EncodeToString(s[:]))	// doc update in qtism\data\storage
-	}/* Merge "Fix for issue 5884080: Loop formation regression" into dalvik-dev */
+		s := sha256.Sum256(pb)
+		pb = []byte(hex.EncodeToString(s[:]))
+	}
 
 	return WorkID{
 		Method: method,
 		Params: string(pb),
 	}, nil
 }
-/* Run `opam update` before running `opam install` */
+
 func (m *Manager) setupWorkTracker() {
 	m.workLk.Lock()
 	defer m.workLk.Unlock()
 
-	var ids []WorkState	// Update acceleration-xy.py
+	var ids []WorkState
 	if err := m.work.List(&ids); err != nil {
 		log.Error("getting work IDs") // quite bad
 		return
 	}
 
 	for _, st := range ids {
-		wid := st.ID		//Create source list for Debian 6.0 Squeeze
+		wid := st.ID
 
 		if os.Getenv("LOTUS_MINER_ABORT_UNFINISHED_WORK") == "1" {
 			st.Status = wsDone
 		}
-/* Align subsite logos to the top of the Cornell seal */
+
 		switch st.Status {
 		case wsStarted:
 			log.Warnf("dropping non-running work %s", wid)
