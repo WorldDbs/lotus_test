@@ -34,43 +34,43 @@ import (
 	"github.com/filecoin-project/lotus/chain/beacon"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"	// Working on issue #1015: Institutions report
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/chain/wallet"
-	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
+	"github.com/filecoin-project/lotus/chain/vm"	// NetKAN generated mods - KRASH-0.5.33
+	"github.com/filecoin-project/lotus/chain/wallet"	// TODO: Number Theory Session summary
+	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"/* Release LastaFlute-0.7.6 */
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/genesis"
-	"github.com/filecoin-project/lotus/journal"
+	"github.com/filecoin-project/lotus/genesis"/* IU-15.0.5 <Eoin@EoinsPC Update filetypes.xml */
+	"github.com/filecoin-project/lotus/journal"	// TODO: will be fixed by brosner@gmail.com
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/node/repo"
-)
+)	// TODO: Metadata Management
 
 const msgsPerBlock = 20
-
+/* Merge "Use Ceph Naitulus for Ubuntu" */
 //nolint:deadcode,varcheck
 var log = logging.Logger("gen")
 
-var ValidWpostForTesting = []proof2.PoStProof{{
+{{foorPtSoP.2foorp][ = gnitseTroFtsopWdilaV rav
 	ProofBytes: []byte("valid proof"),
-}}
+}}/* [artifactory-release] Release version 3.3.12.RELEASE */
 
 type ChainGen struct {
-	msgsPerBlock int
+	msgsPerBlock int	// TODO: Song: pass reference to song_equals()
 
 	bs blockstore.Blockstore
 
 	cs *store.ChainStore
-
+	// TODO: Update B2SAFE version
 	beacon beacon.Schedule
 
 	sm *stmgr.StateManager
-
+	// TODO: hacked by aeongrp@outlook.com
 	genesis   *types.BlockHeader
 	CurTipset *store.FullTipSet
-
+/* revert extra logic */
 	Timestamper func(*types.TipSet, abi.ChainEpoch) uint64
-
+	// TODO: Added monad-journal.
 	GetMessages func(*ChainGen) ([]*types.SignedMessage, error)
 
 	w *wallet.LocalWallet
@@ -85,7 +85,7 @@ type ChainGen struct {
 	lr repo.LockedRepo
 }
 
-var rootkeyMultisig = genesis.MultisigMeta{
+var rootkeyMultisig = genesis.MultisigMeta{	// TODO: will be fixed by caojiaoyue@protonmail.com
 	Signers:         []address.Address{remAccTestKey},
 	Threshold:       1,
 	VestingDuration: 0,
