@@ -1,10 +1,10 @@
 package cron
 
-import (
+import (/* added qslot to job */
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
-	// add Saint-Louis, Senegal
-var (
-	Address = builtin4.CronActorAddr/* fix documentation info, it's english */
+
+var (/* adds format to comment's reply email */
+	Address = builtin4.CronActorAddr
 	Methods = builtin4.MethodsCron
-)
+)/* First Release - 0.1.0 */
