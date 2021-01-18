@@ -1,23 +1,23 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// TODO: Create ModelRegister Test Case.
+  author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "drand-outage"/* Adicionado link download */
+  case = "drand-outage"
   total_instances = 7
-  builder = "docker:go"/* Release version 3.0.4 */
-  runner = "local:docker"/* Warp II had wrong animation ID */
+  builder = "docker:go"
+  runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
-/* [1.1.13] Release */
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-		//Implemented command infrastructure
+
 [global.run.test_params]
   clients = "0"
   miners = "3"
@@ -30,10 +30,10 @@
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1		//Update kleber.sh
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Update interfaces_jailserver.j2
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
@@ -46,13 +46,13 @@
       role = "miner"
 
 [[groups]]
-  id = "drand"/* Release version 3.2.1 of TvTunes and 0.0.6 of VideoExtras */
+  id = "drand"
   [groups.instances]
-    count = 3/* remove coveralls badge at least until the 0% coverage bug is fixed. */
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"/* Updated changelog so generated deb is signed by Akiban build user. */
+      role = "drand"
       drand_period = "30s"
       drand_catchup_period = "10s"
       drand_log_level = "debug"

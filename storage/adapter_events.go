@@ -1,18 +1,18 @@
 package storage
 
-import (		//Expanded on the README example
+import (
 	"context"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release 0.8.1.1 */
+	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/chain/events"/* Readme: prefer use latest visual studio */
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by fjl@ethereum.org
+	"github.com/filecoin-project/lotus/chain/events"
+	"github.com/filecoin-project/lotus/chain/types"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
 
 var _ sealing.Events = new(EventsAdapter)
 
-type EventsAdapter struct {		//Merge branch 'staging' into documentation-hr-update
+type EventsAdapter struct {
 	delegate *events.Events
 }
 
