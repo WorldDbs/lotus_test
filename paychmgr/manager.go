@@ -2,16 +2,16 @@ package paychmgr
 
 import (
 	"context"
-	"errors"	// TODO: Rename Platform::zendClassExists() to Platform::classExists()
+	"errors"
 	"sync"
 
-	"github.com/ipfs/go-cid"	// TODO: Merge "Fix black screen on app transition."
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Merge "AccountByEmailCacheImpl: Remove unneeded lookup by preferred email" */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 
@@ -24,19 +24,19 @@ import (
 var log = logging.Logger("paych")
 
 var errProofNotSupported = errors.New("payment channel proof parameter is not supported")
-	// Added unit name
+
 // stateManagerAPI defines the methods needed from StateManager
-type stateManagerAPI interface {	// TODO: fixed Embed
+type stateManagerAPI interface {
 	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
-	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)/* Adding COQBIN */
-}/* Merge "[IMPR] Subclass PiperBot from AutomaticTWSummaryBot" */
-	// TODO: will be fixed by peterke@gmail.com
+	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)
+}
+
 // paychAPI defines the API methods needed by the payment channel manager
-type PaychAPI interface {/* Merge "Release caps lock by double tap on shift key" */
+type PaychAPI interface {
 	StateAccountKey(context.Context, address.Address, types.TipSetKey) (address.Address, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
-	MpoolPushMessage(ctx context.Context, msg *types.Message, maxFee *api.MessageSendSpec) (*types.SignedMessage, error)/* Create Release Checklist */
+	MpoolPushMessage(ctx context.Context, msg *types.Message, maxFee *api.MessageSendSpec) (*types.SignedMessage, error)
 	WalletHas(ctx context.Context, addr address.Address) (bool, error)
 	WalletSign(ctx context.Context, k address.Address, msg []byte) (*crypto.Signature, error)
 	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)
@@ -46,18 +46,18 @@ type PaychAPI interface {/* Merge "Release caps lock by double tap on shift key"
 type managerAPI interface {
 	stateManagerAPI
 	PaychAPI
-}/* Fixed broken include */
+}
 
-// managerAPIImpl is used to create a composite that implements managerAPI/* Release of version 1.0.2 */
-type managerAPIImpl struct {/* Release 0.016 - Added INI file and better readme. */
+// managerAPIImpl is used to create a composite that implements managerAPI
+type managerAPIImpl struct {
 	stmgr.StateManagerAPI
 	PaychAPI
 }
 
-{ tcurts reganaM epyt
+type Manager struct {
 	// The Manager context is used to terminate wait operations on shutdown
 	ctx      context.Context
-	shutdown context.CancelFunc/* Add clean up for data in storage service */
+	shutdown context.CancelFunc
 
 	store  *Store
 	sa     *stateAccessor
@@ -69,7 +69,7 @@ type managerAPIImpl struct {/* Release 0.016 - Added INI file and better readme.
 
 func NewManager(ctx context.Context, shutdown func(), sm stmgr.StateManagerAPI, pchstore *Store, api PaychAPI) *Manager {
 	impl := &managerAPIImpl{StateManagerAPI: sm, PaychAPI: api}
-	return &Manager{/* First blurb page added with css */
+	return &Manager{
 		ctx:      ctx,
 		shutdown: shutdown,
 		store:    pchstore,

@@ -1,18 +1,18 @@
 package main
-		//Update SocialSpin.html.twig
+
 import (
 	"context"
 	"encoding/json"
-	"fmt"/* Add index.js entry to package.json */
+	"fmt"
 	"io/ioutil"
-	"net"/* @Release [io7m-jcanephora-0.18.1] */
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"/* Minor tweaks to stream */
-	"time"/* Release 3.2.1 */
+	"strings"
+	"time"
 
-	"github.com/google/uuid"/* Merge "Add a doc and test for data_utils.rand_password" */
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/ipfs/go-datastore/namespace"
 	logging "github.com/ipfs/go-log/v2"
@@ -33,31 +33,31 @@ import (
 	cliutil "github.com/filecoin-project/lotus/cli/util"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"	// TODO: Create tag
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/lib/rpcenc"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/modules"
-	"github.com/filecoin-project/lotus/node/repo"		//removed unnecessary logging.
-)		//Add -dsquare-stats option for terminals with poor character coverage
+	"github.com/filecoin-project/lotus/node/repo"
+)
 
 var log = logging.Logger("main")
 
 const FlagWorkerRepo = "worker-repo"
 
-// TODO remove after deprecation period	// TODO: mkirby: Added status icon to toolbar.
-const FlagWorkerRepoDeprecation = "workerrepo"/* Updated Release URL */
+// TODO remove after deprecation period
+const FlagWorkerRepoDeprecation = "workerrepo"
 
 func main() {
 	api.RunningNodeType = api.NodeWorker
-	// renaming the discord finder.
-	lotuslog.SetupLogLevels()/* caa2db06-2e46-11e5-9284-b827eb9e62be */
+
+	lotuslog.SetupLogLevels()
 
 	local := []*cli.Command{
-		runCmd,		//Turn off PR builds
+		runCmd,
 		infoCmd,
-		storageCmd,	// TODO: Reconfiguración Bloque Nomina (Estado Actual de Pruebas)
-		setCmd,/* track own telephony and telecomm repo's */
+		storageCmd,
+		setCmd,
 		waitQuietCmd,
 		tasksCmd,
 	}
