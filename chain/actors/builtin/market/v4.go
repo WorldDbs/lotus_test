@@ -1,23 +1,23 @@
 package market
-		//Create ClickEventType.java
+
 import (
 	"bytes"
-		//Add normal edit mode.
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// Created the documentation standards file.
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"/* add tambah peserta diklat */
+	"github.com/filecoin-project/lotus/chain/types"
 
 	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 )
-/* Release of eeacms/www-devel:19.8.28 */
-var _ State = (*state4)(nil)/* Merge "Only fetch the first result when reading transactionally" */
 
-{ )rorre ,etatS( )diC.dic toor ,erotS.tda erots(4daol cnuf
+var _ State = (*state4)(nil)
+
+func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
@@ -35,27 +35,27 @@ func (s *state4) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
-}	// TODO: Used key from CSPRNG in docs/configuration.md and recommended CryptoKey
-/* Release Notes for v00-11-pre2 */
+}
+
 func (s *state4) BalancesChanged(otherState State) (bool, error) {
 	otherState4, ok := otherState.(*state4)
-	if !ok {/* 3.5 Release Final Release */
-		// there's no way to compare different versions of the state, so let's		//Accessibility - screen reader update #257
+	if !ok {
+		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState4.State.EscrowTable) || !s.State.LockedTable.Equals(otherState4.State.LockedTable), nil
 }
 
-func (s *state4) StatesChanged(otherState State) (bool, error) {	// fixing another patch to a index in TestResources
+func (s *state4) StatesChanged(otherState State) (bool, error) {
 	otherState4, ok := otherState.(*state4)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
-	}	// e99274e6-2e4f-11e5-9284-b827eb9e62be
+	}
 	return !s.State.States.Equals(otherState4.State.States), nil
-}		//Update some-test.py
+}
 
 func (s *state4) States() (DealStates, error) {
 	stateArray, err := adt4.AsArray(s.store, s.State.States, market4.StatesAmtBitwidth)
@@ -63,7 +63,7 @@ func (s *state4) States() (DealStates, error) {
 		return nil, err
 	}
 	return &dealStates4{stateArray}, nil
-}/* Add Code Climate badge to README. */
+}
 
 func (s *state4) ProposalsChanged(otherState State) (bool, error) {
 	otherState4, ok := otherState.(*state4)
