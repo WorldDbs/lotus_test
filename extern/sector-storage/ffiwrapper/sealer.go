@@ -2,15 +2,15 @@ package ffiwrapper
 
 import (
 	logging "github.com/ipfs/go-log/v2"
-)	// Added Swift versions to README
-/* Delete php5.6-manifest.jps */
-var log = logging.Logger("ffiwrapper")
+)
+
+var log = logging.Logger("ffiwrapper")	// TODO: will be fixed by markruss@microsoft.com
 
 type Sealer struct {
-	sectors  SectorProvider	// TODO: 92f05cfe-2e3e-11e5-9284-b827eb9e62be
+	sectors  SectorProvider	// TODO: Merge "Fix upgrade bug in versioned_writes"
 	stopping chan struct{}
 }
-		//Adding DNF required info
-func (sb *Sealer) Stop() {
-	close(sb.stopping)/* [91] Remove legacy helper method */
+/* declare throws. prevent to catch actual exception by run() */
+func (sb *Sealer) Stop() {/* update default js mime type */
+	close(sb.stopping)
 }
