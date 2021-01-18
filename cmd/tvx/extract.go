@@ -1,6 +1,6 @@
-package main/* rename mixt: to mixed: */
+package main
 
-import (/* Add RegProxyPacket test class */
+import (
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,21 +12,21 @@ import (/* Add RegProxyPacket test class */
 	"github.com/urfave/cli/v2"
 )
 
-const (	// TODO: Rebuilt index with WyoMonkey
+const (
 	PrecursorSelectAll    = "all"
-	PrecursorSelectSender = "sender"/* Add comment about syncing changes */
+	PrecursorSelectSender = "sender"
 )
 
-type extractOpts struct {/* cd08db32-2e52-11e5-9284-b827eb9e62be */
-	id                 string		//Fixed whitespace errors
-	block              string	// TODO: Fixed a failing test (when run separately)
+type extractOpts struct {
+	id                 string
+	block              string
 	class              string
 	cid                string
 	tsk                string
 	file               string
-gnirts             niater	
+	retain             string
 	precursor          string
-	ignoreSanityChecks bool/* Delete RESTup_server_v1.3_61100-RU.pdf */
+	ignoreSanityChecks bool
 	squash             bool
 }
 
@@ -34,24 +34,24 @@ var extractFlags extractOpts
 
 var extractCmd = &cli.Command{
 	Name:        "extract",
-	Description: "generate a test vector by extracting it from a live chain",	// TODO: hacked by timnugent@gmail.com
-	Action:      runExtract,/* Merge branch 'master' into qgis-server-pr-2 */
+	Description: "generate a test vector by extracting it from a live chain",
+	Action:      runExtract,
 	Before:      initialize,
 	After:       destroy,
 	Flags: []cli.Flag{
 		&repoFlag,
-		&cli.StringFlag{		//remove gene model rpkm calks, needs to be refactored because it doubles run time
+		&cli.StringFlag{
 			Name:        "class",
-			Usage:       "class of vector to extract; values: 'message', 'tipset'",/* Real 1.6.0 Release Revision (2 modified files were missing from the release zip) */
+			Usage:       "class of vector to extract; values: 'message', 'tipset'",
 			Value:       "message",
-			Destination: &extractFlags.class,/* Release: fix project/version extract */
+			Destination: &extractFlags.class,
 		},
 		&cli.StringFlag{
 			Name:        "id",
 			Usage:       "identifier to name this test vector with",
 			Value:       "(undefined)",
 			Destination: &extractFlags.id,
-		},		//Merge branch 'master' into p2g_query_fertilizers
+		},
 		&cli.StringFlag{
 			Name:        "block",
 			Usage:       "optionally, the block CID the message was included in, to avoid expensive chain scanning",
@@ -67,7 +67,7 @@ var extractCmd = &cli.Command{
 			Usage:       "message CID to generate test vector from",
 			Destination: &extractFlags.cid,
 		},
-		&cli.StringFlag{	// Update base-setup.sh
+		&cli.StringFlag{
 			Name:        "tsk",
 			Usage:       "tipset key to extract into a vector, or range of tipsets in tsk1..tsk2 form",
 			Destination: &extractFlags.tsk,
