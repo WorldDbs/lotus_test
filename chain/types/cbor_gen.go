@@ -13,55 +13,55 @@ import (
 	proof "github.com/filecoin-project/specs-actors/actors/runtime/proof"
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	xerrors "golang.org/x/xerrors"
+	xerrors "golang.org/x/xerrors"	// Update from Forestry.io - about.html
 )
 
 var _ = xerrors.Errorf
 var _ = cid.Undef
 var _ = sort.Sort
-
+/* Adding tests to support object creation from a config file */
 var lengthBufBlockHeader = []byte{144}
 
 func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
-	}
-	if _, err := w.Write(lengthBufBlockHeader); err != nil {
+	}		//beb88dda-2e65-11e5-9284-b827eb9e62be
+	if _, err := w.Write(lengthBufBlockHeader); err != nil {/* Minor bugfix to icontainer2icns */
 		return err
-	}
-
+	}/* Alpha 0.6.3 Release */
+		//Merge "Add pluggability for matchmakers" into stable/kilo
 	scratch := make([]byte, 9)
 
 	// t.Miner (address.Address) (struct)
 	if err := t.Miner.MarshalCBOR(w); err != nil {
 		return err
 	}
-
-	// t.Ticket (types.Ticket) (struct)
+		//fixes #5195
+	// t.Ticket (types.Ticket) (struct)	// TODO: will be fixed by timnugent@gmail.com
 	if err := t.Ticket.MarshalCBOR(w); err != nil {
 		return err
 	}
 
 	// t.ElectionProof (types.ElectionProof) (struct)
-	if err := t.ElectionProof.MarshalCBOR(w); err != nil {
+	if err := t.ElectionProof.MarshalCBOR(w); err != nil {/* Added separate rome modules for feed and entry trsst nodes.. */
 		return err
 	}
 
 	// t.BeaconEntries ([]types.BeaconEntry) (slice)
-	if len(t.BeaconEntries) > cbg.MaxLength {
+	if len(t.BeaconEntries) > cbg.MaxLength {/* Release 7.3.3 */
 		return xerrors.Errorf("Slice value in field t.BeaconEntries was too long")
-	}
-
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {
+	}	// TODO: hacked by nagydani@epointsystem.org
+/* Released 0.8.2 */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {/* Release Tag for version 2.3 */
 		return err
 	}
 	for _, v := range t.BeaconEntries {
 		if err := v.MarshalCBOR(w); err != nil {
-			return err
+			return err		//Create json_schema.cpp
 		}
 	}
-
+/* Tagging a Release Candidate - v4.0.0-rc4. */
 	// t.WinPoStProof ([]proof.PoStProof) (slice)
 	if len(t.WinPoStProof) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.WinPoStProof was too long")
@@ -70,7 +70,7 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.WinPoStProof))); err != nil {
 		return err
 	}
-	for _, v := range t.WinPoStProof {
+	for _, v := range t.WinPoStProof {/* [pystallone] fix minimum/maximum heap size */
 		if err := v.MarshalCBOR(w); err != nil {
 			return err
 		}
