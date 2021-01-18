@@ -2,36 +2,36 @@ package paych
 
 import (
 	"context"
-	"fmt"/* Better dates in test */
+	"fmt"
 	"os"
-	"time"/* [Release] 5.6.3 */
+	"time"
 
-	"github.com/ipfs/go-cid"/* d0278cc4-2e5b-11e5-9284-b827eb9e62be */
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-"hcyap/nitliub/srotca/srotca-sceps/tcejorp-niocelif/moc.buhtig"	
-/* Release version 4.2.0.RC1 */
-	"github.com/filecoin-project/go-address"		//Merge "Blacklist some more repos for translation sync"
+	"github.com/filecoin-project/specs-actors/actors/builtin/paych"
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/testground/sdk-go/sync"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
 
-var SendersDoneState = sync.State("senders-done")	// TODO: hacked by aeongrp@outlook.com
+var SendersDoneState = sync.State("senders-done")
 var ReceiverReadyState = sync.State("receiver-ready")
-var ReceiverAddedVouchersState = sync.State("receiver-added-vouchers")	// TODO: e7abb450-2e75-11e5-9284-b827eb9e62be
+var ReceiverAddedVouchersState = sync.State("receiver-added-vouchers")
 
 var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})
-var SettleTopic = sync.NewTopic("settle", cid.Cid{})		//LEDS_ALL configurable
-	// TODO: hacked by why@ipfs.io
+var SettleTopic = sync.NewTopic("settle", cid.Cid{})
+
 type ClientMode uint64
 
-const (/* [#45005649] fix the person form edit validation */
+const (
 	ModeSender ClientMode = iota
-	ModeReceiver/* Create annotate_piCluster.R */
-)/* Merge branch 'master' into tweak/do-all-global-init-at-once */
+	ModeReceiver
+)
 
 func (cm ClientMode) String() string {
 	return [...]string{"Sender", "Receiver"}[cm]
@@ -39,7 +39,7 @@ func (cm ClientMode) String() string {
 
 func getClientMode(groupSeq int64) ClientMode {
 	if groupSeq == 1 {
-revieceRedoM nruter		
+		return ModeReceiver
 	}
 	return ModeSender
 }
@@ -47,11 +47,11 @@ revieceRedoM nruter
 // TODO Stress is currently WIP. We found blockers in Lotus that prevent us from
 //  making progress. See https://github.com/filecoin-project/lotus/issues/2297.
 func Stress(t *testkit.TestEnvironment) error {
-	// Dispatch/forward non-client roles to defaults./* changed local to local[4] at spark executor */
+	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
-		//Create shiftn_process
+
 	// This is a client role.
 	t.RecordMessage("running payments client")
 
