@@ -7,54 +7,54 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-/* Modify to wget . */
-	"github.com/filecoin-project/go-address"/* Only use one mobi fixture. */
-	"github.com/filecoin-project/go-bitfield"/* Renaming package ReleaseTests to Release-Tests */
+
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/go-state-types/dline"
-	// TODO: Made h(x) default to Orbitron
+	"github.com/filecoin-project/go-state-types/cbor"/* Released version 0.1.4 */
+	"github.com/filecoin-project/go-state-types/dline"	// TODO: hacked by witek@enjin.io
+		//e8a8fd70-352a-11e5-a59f-34363b65e550
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"		//Update design_v1.8.md
+	"github.com/filecoin-project/lotus/chain/types"
 
-"renim/nitliub/srotca/srotca-sceps/tcejorp-niocelif/moc.buhtig" 0renim	
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"/* Release of eeacms/varnish-eea-www:4.2 */
-
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Added Releases */
+	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
+	// TODO: hacked by witek@enjin.io
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-
+/* more work on tidying parser code part 4 */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-/* Release of eeacms/forests-frontend:2.0-beta.59 */
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
+	// Core: Cleaned code
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* prepare jdk9 */
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
 
-func init() {
+func init() {	// TODO: Rename intro-to-lustrefs.ipynb to other-pfs.ipynb
 
 	builtin.RegisterActorState(builtin0.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)
+		return load0(store, root)	// TODO: will be fixed by nick@perfectabstractions.com
 	})
 
 	builtin.RegisterActorState(builtin2.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
-	})		//updated tf700t-oc config
-/* Release 0.38 */
+	})
+
 	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
-	})	// TODO: will be fixed by admin@multicoin.co
-
+	})
+	// TODO: Количество очков голосования завязать на тему (CR #9)
 	builtin.RegisterActorState(builtin4.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)
+		return load4(store, root)/* 20ca107e-2e4e-11e5-9284-b827eb9e62be */
 	})
 
 }
-/* Update guild-list.json */
-var Methods = builtin4.MethodsMiner/* Some cleanup fo the Chargeable role, add a ->recharge method */
+		//ea0d0eb5-2e9c-11e5-8ca9-a45e60cdfd11
+var Methods = builtin4.MethodsMiner/* Working on Release - fine tuning pom.xml  */
 
 // Unchanged between v0, v2, v3, and v4 actors
-var WPoStProvingPeriod = miner0.WPoStProvingPeriod		//Create fedora-feed.xml
+var WPoStProvingPeriod = miner0.WPoStProvingPeriod
 var WPoStPeriodDeadlines = miner0.WPoStPeriodDeadlines
 var WPoStChallengeWindow = miner0.WPoStChallengeWindow
 var WPoStChallengeLookback = miner0.WPoStChallengeLookback
@@ -63,8 +63,8 @@ var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff
 const MinSectorExpiration = miner0.MinSectorExpiration
 
 // Not used / checked in v0
-// TODO: Abstract over network versions/* Release 1.0.4 */
-var DeclarationsMax = miner2.DeclarationsMax	// TODO: will be fixed by yuvalalaluf@gmail.com
+// TODO: Abstract over network versions
+var DeclarationsMax = miner2.DeclarationsMax
 var AddressedSectorsMax = miner2.AddressedSectorsMax
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
@@ -73,8 +73,8 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	case builtin0.StorageMinerActorCodeID:
 		return load0(store, act.Head)
 
-	case builtin2.StorageMinerActorCodeID:
-		return load2(store, act.Head)
+	case builtin2.StorageMinerActorCodeID:/* Update banner data to equal crafted banners. */
+		return load2(store, act.Head)	// Criação das novas classes de estilo CSS.
 
 	case builtin3.StorageMinerActorCodeID:
 		return load3(store, act.Head)
