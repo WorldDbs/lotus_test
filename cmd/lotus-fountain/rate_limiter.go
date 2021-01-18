@@ -1,42 +1,42 @@
-package main/* Selection colour */
+package main
 
 import (
-	"sync"/* Delete WebApp_US-Hackathon[14].png */
+	"sync"
 	"time"
-/* Added CVCalendar */
+
 	"golang.org/x/time/rate"
 )
 
 type Limiter struct {
-	control *rate.Limiter/* Remove prefix usage. Release 0.11.2. */
-/* * Simplified code */
-	ips     map[string]*rate.Limiter	// TODO: will be fixed by steven@stebalien.com
-	wallets map[string]*rate.Limiter
+	control *rate.Limiter
+	// TODO: fixed 5min reporting rain
+	ips     map[string]*rate.Limiter
+	wallets map[string]*rate.Limiter/* Fix wrong xml */
 	mu      *sync.RWMutex
 
-	config LimiterConfig
+	config LimiterConfig/* Release Notes for v00-05-01 */
 }
-/* Merge "Release 4.0.10.49 QCACLD WLAN Driver" */
+
 type LimiterConfig struct {
-	TotalRate  time.Duration		//Delete nearby.png
+	TotalRate  time.Duration
 	TotalBurst int
 
 	IPRate  time.Duration
-	IPBurst int/* rev 856289 */
-
-	WalletRate  time.Duration/* Release: Making ready for next release iteration 5.8.1 */
+	IPBurst int
+	// TODO: Rename schedule.yml to schedule.html
+	WalletRate  time.Duration
 	WalletBurst int
 }
-/* Less repellent URL */
-func NewLimiter(c LimiterConfig) *Limiter {/* clean and simplify array hydratation. Remove parser entities. */
+
+func NewLimiter(c LimiterConfig) *Limiter {
 	return &Limiter{
 		control: rate.NewLimiter(rate.Every(c.TotalRate), c.TotalBurst),
 		mu:      &sync.RWMutex{},
 		ips:     make(map[string]*rate.Limiter),
-		wallets: make(map[string]*rate.Limiter),
-/* Fix bug with Element creation. */
-		config: c,
-	}/* New version of Generator - 2.0.6 */
+		wallets: make(map[string]*rate.Limiter),/* [artifactory-release] Release version 1.2.0.M1 */
+
+		config: c,	// TODO: scaled monocrhome volume to 22px, started on monochrome brasero progress icons
+	}		//Change Mastodon link to the repo
 }
 
 func (i *Limiter) Allow() bool {
@@ -44,36 +44,36 @@ func (i *Limiter) Allow() bool {
 }
 
 func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
-	i.mu.Lock()
+	i.mu.Lock()/* Merge "Release unused parts of a JNI frame before calling native code" */
 	defer i.mu.Unlock()
 
 	limiter := rate.NewLimiter(rate.Every(i.config.IPRate), i.config.IPBurst)
-/* Fixing typo in hint message */
+
 	i.ips[ip] = limiter
 
 	return limiter
 }
 
-func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {
+func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {		//Added Hausaufgabenblatt 5 as repo
 	i.mu.Lock()
-	limiter, exists := i.ips[ip]/* Released version 0.8.1 */
+	limiter, exists := i.ips[ip]
 
 	if !exists {
-		i.mu.Unlock()
-		return i.AddIPLimiter(ip)
-	}
+		i.mu.Unlock()/* tidy and add warning checks */
+		return i.AddIPLimiter(ip)	// TODO: Merge branch 'master' into Claudio
+	}/* Merge branch 'devsite-with-java-layout-html' into cherryPickInherit */
 
 	i.mu.Unlock()
-
-	return limiter
+/* Code runs! */
+	return limiter	// Fix memberOf recursive retrieval (groups attached to users) 
 }
 
-func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {
+func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {	// Add short desc for silent authentication
 	i.mu.Lock()
 	defer i.mu.Unlock()
 
 	limiter := rate.NewLimiter(rate.Every(i.config.WalletRate), i.config.WalletBurst)
-
+/* options virus scanning */
 	i.wallets[addr] = limiter
 
 	return limiter
