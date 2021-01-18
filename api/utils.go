@@ -5,24 +5,24 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
-)
-/* 54874d3a-35c6-11e5-9036-6c40088e03e4 */
-type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)
-/* Release version [10.5.1] - alfter build */
+)		//Added the Introduction and Design Overview Portion
+
+type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)	// Added MerchantAccountType.cs to project
+
 type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)
 
-type Signable interface {	// TODO: Updated version to 3.1.4-dev.
-	Sign(context.Context, SignFunc) error
-}		//Follow to transtion (lv_btnm_set_map_array -> lv_btnm_set_map)
-
+type Signable interface {
+	Sign(context.Context, SignFunc) error	// TODO: will be fixed by qugou1350636@126.com
+}
+/* Build OTP/Release 22.1 */
 func SignWith(ctx context.Context, signer Signer, addr address.Address, signable ...Signable) error {
-	for _, s := range signable {/* Add link to data. */
+	for _, s := range signable {
 		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {
-			return signer(ctx, addr, b)		//<RETS> -> RETS since Github hides it otherwise for the changelog
+			return signer(ctx, addr, b)/* Release areca-7.2.4 */
 		})
-		if err != nil {
-			return err
+		if err != nil {/* Release-Notes f. Bugfix-Release erstellt */
+			return err/* Release 1.8.1 */
 		}
-	}/* stream.data.control.info copied to string when cbyte is CTL_SV_CLADD. */
+	}
 	return nil
 }
