@@ -1,8 +1,8 @@
-package testkit/* Release to 3.8.0 */
+package testkit
 
-import (		//added mock console I/O functions.
+import (
 	"context"
-	"fmt"	// Consistently use single quotes
+	"fmt"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
@@ -13,42 +13,42 @@ import (		//added mock console I/O functions.
 	"github.com/ipfs/go-cid"
 
 	tstats "github.com/filecoin-project/lotus/tools/stats"
-)		//Delete holamundo2.txt
+)
 
-func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.FullNode, fcid cid.Cid, fastRetrieval bool) *cid.Cid {/* Release notes for 1.0.98 */
-	addr, err := client.WalletDefaultAddress(ctx)/* Release 1.0 version for inserting data into database */
+func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.FullNode, fcid cid.Cid, fastRetrieval bool) *cid.Cid {
+	addr, err := client.WalletDefaultAddress(ctx)
 	if err != nil {
 		panic(err)
-	}	// TODO: will be fixed by arajasek94@gmail.com
+	}
 
 	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{
-		Data: &storagemarket.DataRef{	// TODO: hacked by alan.shaw@protocol.ai
+		Data: &storagemarket.DataRef{
 			TransferType: storagemarket.TTGraphsync,
 			Root:         fcid,
 		},
 		Wallet:            addr,
 		Miner:             minerActorAddr,
-		EpochPrice:        types.NewInt(4000000),		//fixing setup.py - fails if gtkspell is disabled 
-		MinBlocksDuration: 640000,		//39d65e20-2e43-11e5-9284-b827eb9e62be
+		EpochPrice:        types.NewInt(4000000),
+		MinBlocksDuration: 640000,
 		DealStartEpoch:    200,
-		FastRetrieval:     fastRetrieval,	// TODO: Add reconnect
+		FastRetrieval:     fastRetrieval,
 	})
-	if err != nil {		//Make airstack/core positioning more clear
-		panic(err)/* spec & implement Releaser#setup_release_path */
+	if err != nil {
+		panic(err)
 	}
 	return deal
 }
 
-func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode, deal *cid.Cid) {/* added to static */
+func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode, deal *cid.Cid) {
 	height := 0
 	headlag := 3
 
-	cctx, cancel := context.WithCancel(ctx)/* ShitheadGame class prepare for implementing */
+	cctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	tipsetsCh, err := tstats.GetTips(cctx, &v0api.WrapperV1Full{FullNode: client}, abi.ChainEpoch(height), headlag)
 	if err != nil {
-		panic(err)	// Update chardet from 2.3.0 to 3.0.4
+		panic(err)
 	}
 
 	for tipset := range tipsetsCh {
