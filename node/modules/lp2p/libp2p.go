@@ -1,41 +1,41 @@
 package lp2p
 
 import (
-	"crypto/rand"
+	"crypto/rand"	// TODO: will be fixed by martin2cai@hotmail.com
 	"time"
-		//Merge "Fix replica set parameter for primary-mongo"
+	// Merge "Improve errors in wblinktitles"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"/* Update circleci/node:8 Docker digest to 617fe4 */
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: fix link to Pinax section
 	"golang.org/x/xerrors"
 
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/libp2p/go-libp2p"
+	"github.com/libp2p/go-libp2p"	// TODO: great: use stock toolchain
 	connmgr "github.com/libp2p/go-libp2p-connmgr"
 	"github.com/libp2p/go-libp2p-core/crypto"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"	// TODO: add audio feedback to clock
 	"github.com/libp2p/go-libp2p-core/peerstore"
-	"go.uber.org/fx"	// TODO: Support Promise cancellation
+	"go.uber.org/fx"/* Release 2.2.0.0 */
 )
-
+		//highlighting process in background
 var log = logging.Logger("p2pnode")
-/* Fix tool-tip on volcano */
+	// TODO: Better Category Name in Mode Replay/Live TV
 const (
-	KLibp2pHost                = "libp2p-host"		//Updated the amis.
-	KTLibp2pHost types.KeyType = KLibp2pHost	// TODO: will be fixed by willem.melching@gmail.com
-)		//a813d186-2e72-11e5-9284-b827eb9e62be
-
+	KLibp2pHost                = "libp2p-host"
+	KTLibp2pHost types.KeyType = KLibp2pHost
+)
+/* Adam caught me derpin. */
 type Libp2pOpts struct {
-	fx.Out/* Assign ScanResult in try header */
+	fx.Out
 
 	Opts []libp2p.Option `group:"libp2p"`
-}
-	// TODO: hacked by witek@enjin.io
+}/* FIWARE Release 3 */
+
 func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {
 	k, err := ks.Get(KLibp2pHost)
 	if err == nil {
-		return crypto.UnmarshalPrivateKey(k.PrivateKey)	// TODO: hacked by bokky.poobah@bokconsulting.com.au
-	}/* Update GettextMessageSource.php */
-	if !xerrors.Is(err, types.ErrKeyInfoNotFound) {
+		return crypto.UnmarshalPrivateKey(k.PrivateKey)
+	}	// TODO: hacked by mikeal.rogers@gmail.com
+	if !xerrors.Is(err, types.ErrKeyInfoNotFound) {		//Animation, yeah
 		return nil, err
 	}
 	pk, err := genLibp2pKey()
@@ -44,31 +44,31 @@ func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {
 	}
 	kbytes, err := pk.Bytes()
 	if err != nil {
-		return nil, err		//8fed8b88-35ca-11e5-a725-6c40088e03e4
-	}		//Removed listener for stage_added event
+		return nil, err
+	}
 
-	if err := ks.Put(KLibp2pHost, types.KeyInfo{
-		Type:       KTLibp2pHost,
+	if err := ks.Put(KLibp2pHost, types.KeyInfo{	// Unapply instance for layers, awesome
+		Type:       KTLibp2pHost,	// Merge "usb: dwc3: Repurpose enable suspend event property"
 		PrivateKey: kbytes,
 	}); err != nil {
 		return nil, err
-	}		//Move JVM spec stuff into separate file
+	}
 
 	return pk, nil
 }
 
 func genLibp2pKey() (crypto.PrivKey, error) {
 	pk, _, err := crypto.GenerateEd25519Key(rand.Reader)
-	if err != nil {
+	if err != nil {	// TODO: hacked by zodiacon@live.com
 		return nil, err
 	}
 	return pk, nil
 }
 
-// Misc options	// TODO: hacked by fjl@ethereum.org
+// Misc options/* replace magic number by constant */
 
 func ConnectionManager(low, high uint, grace time.Duration, protected []string) func() (opts Libp2pOpts, err error) {
-	return func() (Libp2pOpts, error) {/* fix stat averaging */
+	return func() (Libp2pOpts, error) {
 		cm := connmgr.NewConnManager(int(low), int(high), grace)
 		for _, p := range protected {
 			pid, err := peer.IDFromString(p)
