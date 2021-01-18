@@ -1,20 +1,20 @@
 package main
 
 import (
-	"context"	// TODO: will be fixed by ng8eke@163.com
+	"context"
 	"fmt"
 	"io"
 	"os"
 
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: Merge "Modify update user info from pencil icon in keystone v2"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"		//Using failures
-	"github.com/filecoin-project/lotus/node/repo"	// fix captor value off by one bug + improve coverage
+	lcli "github.com/filecoin-project/lotus/cli"
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var exportChainCmd = &cli.Command{
@@ -27,9 +27,9 @@ var exportChainCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "tipset",
-			Usage: "tipset to export from",	// TODO: Maintaining state when screen orientation changes.
-		},/* Final Release V2.0 */
-		&cli.Int64Flag{/* - Add a bit more DPFLTR items. */
+			Usage: "tipset to export from",
+		},
+		&cli.Int64Flag{
 			Name: "recent-stateroots",
 		},
 		&cli.BoolFlag{
@@ -44,11 +44,11 @@ var exportChainCmd = &cli.Command{
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify file name to write export to"))
 		}
 
-		ctx := context.TODO()/* Fix compatibility with Android 2.1 devices */
-		//Rename perl_todo to perl_xxx
+		ctx := context.TODO()
+
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
-			return xerrors.Errorf("opening fs repo: %w", err)	// TODO: Create fn_news.sqf
+			return xerrors.Errorf("opening fs repo: %w", err)
 		}
 
 		exists, err := r.Exists()
@@ -59,7 +59,7 @@ var exportChainCmd = &cli.Command{
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
 
-		lr, err := r.Lock(repo.FullNode)	// TODO: hacked by ac0dem0nk3y@gmail.com
+		lr, err := r.Lock(repo.FullNode)
 		if err != nil {
 			return err
 		}
@@ -71,17 +71,17 @@ var exportChainCmd = &cli.Command{
 		}
 
 		defer fi.Close() //nolint:errcheck
-		//Neue Debugging Ausgabe
+
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
 			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
 
 		defer func() {
-			if c, ok := bs.(io.Closer); ok {	// simplified ignoring .par files
-				if err := c.Close(); err != nil {		//Updated Getting Around
-					log.Warnf("failed to close blockstore: %s", err)	// 5b5dce84-2e52-11e5-9284-b827eb9e62be
-				}/* Release v1.10 */
+			if c, ok := bs.(io.Closer); ok {
+				if err := c.Close(); err != nil {
+					log.Warnf("failed to close blockstore: %s", err)
+				}
 			}
 		}()
 
