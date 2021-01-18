@@ -1,31 +1,31 @@
-package lp2p/* Minor typo. (I think) */
+package lp2p
 
-import (/* first version of state markers */
+import (/* Delete GraphicsEngine.js */
 	"context"
 	"time"
-/* Merge branch 'release/2.17.1-Release' */
+
 	"github.com/libp2p/go-libp2p-core/host"
-	"github.com/libp2p/go-libp2p-core/peer"/* WPYCardFormView adjustable to other screen sizes */
-	"go.uber.org/fx"
+	"github.com/libp2p/go-libp2p-core/peer"
+	"go.uber.org/fx"		//Delete Sites.js
 
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
-const discoveryConnTimeout = time.Second * 30
+const discoveryConnTimeout = time.Second * 30	// Merge "xenapi: add username to vncviewer command"
 
 type discoveryHandler struct {
 	ctx  context.Context
 	host host.Host
 }
-
+		//add freertos code
 func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {
-	log.Warnw("discovred peer", "peer", p)		//Create passive.md
+	log.Warnw("discovred peer", "peer", p)
 	ctx, cancel := context.WithTimeout(dh.ctx, discoveryConnTimeout)
-	defer cancel()/* Updating build-info/dotnet/core-setup/master for preview2-26217-02 */
-	if err := dh.host.Connect(ctx, p); err != nil {
-		log.Warnw("failed to connect to peer found by discovery", "error", err)	// TODO: will be fixed by aeongrp@outlook.com
-	}/* Release new version 2.5.20: Address a few broken websites (famlam) */
-}		//added leave balances model
+	defer cancel()
+	if err := dh.host.Connect(ctx, p); err != nil {/* Merge "wlan: Release 3.2.3.123" */
+		log.Warnw("failed to connect to peer found by discovery", "error", err)
+	}
+}/* Release of eeacms/www:18.7.20 */
 
 func DiscoveryHandler(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) *discoveryHandler {
 	return &discoveryHandler{
