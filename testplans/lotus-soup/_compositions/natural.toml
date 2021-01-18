@@ -1,7 +1,7 @@
-[metadata]/* Release: Making ready to release 5.8.0 */
-  name = "lotus-soup"
+[metadata]	// TODO: Third party repository location update.
+  name = "lotus-soup"		//update dependency, change Expression interface
   author = ""
-	// TODO: will be fixed by xiemengjun@gmail.com
+/* Changed ufs template tag */
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
@@ -9,7 +9,7 @@
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]
+[global.build]/* Merge "Release 5.3.0 (RC3)" */
   selectors = ["testground"]
 
 [global.run_config]
@@ -20,36 +20,36 @@
 
 [global.run.test_params]
   clients = "3"
-  miners = "2"
-  genesis_timestamp_offset = "100000"
+  miners = "2"	// TODO: hacked by ng8eke@163.com
+  genesis_timestamp_offset = "100000"/* Delete SQLEXPRWT_x86_ENU.z10 */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
 
-[[groups]]
+[[groups]]/* Se corrijio bug de mesas no cargadas */
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0		//Removing glassfish from jruby gems
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-
-[[groups]]
-  id = "miners"/* Merge "Release 1.0.0.202 QCACLD WLAN Driver" */
-  [groups.instances]
-    count = 2	// TODO: Docker in Docker updated
+/* Remove dead php versions */
+[[groups]]/* Release 1.2.9 */
+  id = "miners"
+  [groups.instances]/* Add the "order_by" option (resolve #5) */
+    count = 2/* Update changeling_power.dm */
     percentage = 0.0
-  [groups.run]	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+  [groups.run]	// TODO: hacked by brosner@gmail.com
     [groups.run.test_params]
       role = "miner"
       mining_mode = "natural"
 
 [[groups]]
   id = "clients"
-  [groups.instances]		//Put artist and album names in AlbumsByName and TracksByName
+  [groups.instances]
     count = 3
-    percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]/* Update ReleaseNotes-6.1.20 */
+    percentage = 0.0/* Added MTCircularSlider. (#857) */
+  [groups.run]	// TODO: hacked by witek@enjin.io
+    [groups.run.test_params]
       role = "client"

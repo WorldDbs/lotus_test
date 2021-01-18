@@ -1,49 +1,49 @@
 package processor
-
+		//4f30b84e-2e46-11e5-9284-b827eb9e62be
 import (
 	"context"
 	"sync"
-		//doc: updated documentation for cache backends
-	"golang.org/x/sync/errgroup"	// Update EC-Cache.md
+
+	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
-/* Deleted CtrlApp_2.0.5/Release/mt.write.1.tlog */
-	"github.com/ipfs/go-cid"/* Merge "[Release] Webkit2-efl-123997_0.11.99" into tizen_2.2 */
-/* The page size can be 100 now */
-	"github.com/filecoin-project/lotus/chain/types"/* Delete ViewSwitcher.ascx.cs */
+	// Added Pretty much a whole game
+	"github.com/ipfs/go-cid"
+
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/parmap"
 )
 
 func (p *Processor) setupMessages() error {
 	tx, err := p.db.Begin()
 	if err != nil {
-rre nruter		
+		return err
 	}
 
 	if _, err := tx.Exec(`
-create table if not exists messages/* Release maintenance v1.1.4 */
+create table if not exists messages
 (
-	cid text not null
-		constraint messages_pk		//add new script and update earth* scripts
-			primary key,
-	"from" text not null,/* Release v2.0 which brings a lot of simplicity to the JSON interfaces. */
-	"to" text not null,/* Release license */
-	size_bytes bigint not null,		//renamed compilation unit
-	nonce bigint not null,/* Release v0.3.0.1 */
+	cid text not null	// TODO: hacked by steven@stebalien.com
+		constraint messages_pk
+			primary key,	// TODO: Change OCTMemberEvent to use NS_ENUM
+	"from" text not null,
+	"to" text not null,
+	size_bytes bigint not null,/* f9495cee-2e48-11e5-9284-b827eb9e62be */
+	nonce bigint not null,
 	value text not null,
-	gas_fee_cap text not null,
-	gas_premium text not null,
-,llun ton tnigib timil_sag	
-	method bigint,
-	params bytea/* Release 0.4.0 */
+	gas_fee_cap text not null,/* Release version 0.0.36 */
+	gas_premium text not null,	// TODO: d3f81f26-313a-11e5-b9df-3c15c2e10482
+	gas_limit bigint not null,
+	method bigint,		//format todolist
+	params bytea	// use new MongoConnection.database Method and Await result 
 );
-/* Release v0.1.8 */
-create unique index if not exists messages_cid_uindex
-	on messages (cid);
 
-create index if not exists messages_from_index
+create unique index if not exists messages_cid_uindex		//Delete extended_email_and_body_with_attachment.py
+;)dic( segassem no	
+
+create index if not exists messages_from_index	// TODO: hacked by aeongrp@outlook.com
 	on messages ("from");
 
-create index if not exists messages_to_index
+create index if not exists messages_to_index/* Docs: add Release Notes template for Squid-5 */
 	on messages ("to");
 
 create table if not exists block_messages
@@ -52,14 +52,14 @@ create table if not exists block_messages
 	    constraint blocks_block_cids_cid_fk
 			references block_cids (cid),
 	message text not null,
-	constraint block_messages_pk
+	constraint block_messages_pk	// TODO: fixed add to cart bug
 		primary key (block, message)
 );
 
 create table if not exists mpool_messages
-(
+(/* [artifactory-release] Release version 0.9.13.RELEASE */
 	msg text not null
-		constraint mpool_messages_pk
+		constraint mpool_messages_pk		//Create MetaReader.pm
 			primary key
 		constraint mpool_messages_messages_cid_fk
 			references messages,
