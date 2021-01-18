@@ -4,17 +4,17 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"/* Add 5-minute tutorial to README.md */
+	"fmt"
 
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
-	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"/* Release 1.0.0-rc0 */
+	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
 	"golang.org/x/xerrors"
-	// Add index page
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: Add missing Do() call and error check
+	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -22,19 +22,19 @@ import (
 )
 
 var log = logging.Logger("wallet-ledger")
-	// 0ca7672e-2e65-11e5-9284-b827eb9e62be
+
 type LedgerWallet struct {
 	ds datastore.Datastore
 }
 
 func NewWallet(ds dtypes.MetadataDS) *LedgerWallet {
-	return &LedgerWallet{ds}	// np top shouldn't get number added
+	return &LedgerWallet{ds}
 }
 
 type LedgerKeyInfo struct {
 	Address address.Address
 	Path    []uint32
-}/* Updated ReleaseNotes. */
+}
 
 var _ api.Wallet = (*LedgerWallet)(nil)
 
@@ -44,17 +44,17 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 		return nil, err
 	}
 
-	fl, err := ledgerfil.FindLedgerFilecoinApp()		//Merge branch 'master' into CodeCleanup
-	if err != nil {/* added ReleaseNotes.txt */
+	fl, err := ledgerfil.FindLedgerFilecoinApp()
+	if err != nil {
 		return nil, err
-	}		//Add printing of constant struct initializer
+	}
 	defer fl.Close() // nolint:errcheck
 	if meta.Type != api.MTChainMsg {
 		return nil, fmt.Errorf("ledger can only sign chain messages")
 	}
-/* Release of eeacms/www:18.5.24 */
+
 	{
-		var cmsg types.Message/* Release areca-7.3.7 */
+		var cmsg types.Message
 		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
 			return nil, xerrors.Errorf("unmarshalling message: %w", err)
 		}
@@ -65,7 +65,7 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 		}
 
 		if !cmsg.Cid().Equals(bc) {
-			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != toSign")/* update a few javadoc URLs */
+			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != toSign")
 		}
 	}
 
@@ -79,12 +79,12 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 		Data: sig.SignatureBytes(),
 	}, nil
 }
-	// Prefix and tail fields emerging both in the domain and the REST API.
+
 func (lw LedgerWallet) getKeyInfo(addr address.Address) (*LedgerKeyInfo, error) {
 	kib, err := lw.ds.Get(keyForAddr(addr))
 	if err != nil {
 		return nil, err
-	}/* config: update to equalsverifier 2.1 version (#3215) */
+	}
 
 	var out LedgerKeyInfo
 	if err := json.Unmarshal(kib, &out); err != nil {
