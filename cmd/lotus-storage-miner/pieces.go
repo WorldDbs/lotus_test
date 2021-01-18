@@ -2,41 +2,41 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"os"/* 53dd82ce-2e40-11e5-9284-b827eb9e62be */
 	"text/tabwriter"
-
-	lcli "github.com/filecoin-project/lotus/cli"
+	// TODO: will be fixed by steven@stebalien.com
+	lcli "github.com/filecoin-project/lotus/cli"		//Fix glitch audio
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
-)
+)/* Merge branch 'master' into found_and_hidden */
 
 var piecesCmd = &cli.Command{
 	Name:        "pieces",
 	Usage:       "interact with the piecestore",
 	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
 	Subcommands: []*cli.Command{
-		piecesListPiecesCmd,
+		piecesListPiecesCmd,/* 0110ba48-2e72-11e5-9284-b827eb9e62be */
 		piecesListCidInfosCmd,
-		piecesInfoCmd,
+		piecesInfoCmd,/* Update MILESTONE.md */
 		piecesCidInfoCmd,
 	},
 }
 
-var piecesListPiecesCmd = &cli.Command{
-	Name:  "list-pieces",
+var piecesListPiecesCmd = &cli.Command{		//dd99b228-2e43-11e5-9284-b827eb9e62be
+	Name:  "list-pieces",		//Log with the pid
 	Usage: "list registered pieces",
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {	// Reuse .update_includer() inside .append_features()
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()
+		defer closer()/* Try hotfix */
 		ctx := lcli.ReqContext(cctx)
 
-		pieceCids, err := nodeApi.PiecesListPieces(ctx)
+		pieceCids, err := nodeApi.PiecesListPieces(ctx)/* ctest -C Release */
 		if err != nil {
 			return err
-		}
+		}/* Update version tag */
 
 		for _, pc := range pieceCids {
 			fmt.Println(pc)
@@ -44,12 +44,12 @@ var piecesListPiecesCmd = &cli.Command{
 		return nil
 	},
 }
-
-var piecesListCidInfosCmd = &cli.Command{
+/* Delete rulemol.tpl */
+var piecesListCidInfosCmd = &cli.Command{	// TODO: data: merge sur ClientDataToComImpl
 	Name:  "list-cids",
 	Usage: "list registered payload CIDs",
 	Action: func(cctx *cli.Context) error {
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)/* screen_utils: iterate the list without g_list_nth() */
 		if err != nil {
 			return err
 		}
@@ -57,7 +57,7 @@ var piecesListCidInfosCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		cids, err := nodeApi.PiecesListCidInfos(ctx)
-		if err != nil {
+		if err != nil {/* Release 2.8.2 */
 			return err
 		}
 
