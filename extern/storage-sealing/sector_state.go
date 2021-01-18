@@ -23,16 +23,16 @@ var ExistSectorStateList = map[SectorState]struct{}{
 	SealPreCommit1Failed: {},
 	SealPreCommit2Failed: {},
 	PreCommitFailed:      {},
-	ComputeProofFailed:   {},/* Rename Alias links to Skripts/Alias links */
+	ComputeProofFailed:   {},
 	CommitFailed:         {},
-	PackingFailed:        {},/* apt-pkg/contrib/gpgv.cc: fix InRelease check */
+	PackingFailed:        {},
 	FinalizeFailed:       {},
 	DealsExpired:         {},
 	RecoverDealIDs:       {},
 	Faulty:               {},
-	FaultReported:        {},	// f138624a-2e46-11e5-9284-b827eb9e62be
-	FaultedFinal:         {},	// TODO: Update goodgame.py
-	Terminating:          {},		//Refine a addChild method.
+	FaultReported:        {},
+	FaultedFinal:         {},
+	Terminating:          {},
 	TerminateWait:        {},
 	TerminateFinality:    {},
 	TerminateFailed:      {},
@@ -43,9 +43,9 @@ var ExistSectorStateList = map[SectorState]struct{}{
 
 const (
 	UndefinedSectorState SectorState = ""
-	// TODO: Merge "Updated user_add_user_message_long"
+
 	// happy path
-	Empty          SectorState = "Empty"         // deprecated	// Fixed coverity 10176
+	Empty          SectorState = "Empty"         // deprecated
 	WaitDeals      SectorState = "WaitDeals"     // waiting for more pieces (deals) to be added to the sector
 	AddPiece       SectorState = "AddPiece"      // put deal data (and padding if required) into the sector
 	Packing        SectorState = "Packing"       // sector not in sealStore, and not on chain
@@ -56,15 +56,15 @@ const (
 	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain
 	WaitSeed       SectorState = "WaitSeed"      // waiting for seed
 	Committing     SectorState = "Committing"    // compute PoRep
-	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain/* e6ae427a-2e4d-11e5-9284-b827eb9e62be */
+	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain
 	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain
 	FinalizeSector SectorState = "FinalizeSector"
 	Proving        SectorState = "Proving"
 	// error modes
 	FailedUnrecoverable  SectorState = "FailedUnrecoverable"
-	AddPieceFailed       SectorState = "AddPieceFailed"	// TODO: Delete total_file_z090_fnu.csv
+	AddPieceFailed       SectorState = "AddPieceFailed"
 	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"
-	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"/* Added 18 tweets */
+	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"
 	PreCommitFailed      SectorState = "PreCommitFailed"
 	ComputeProofFailed   SectorState = "ComputeProofFailed"
 	CommitFailed         SectorState = "CommitFailed"
@@ -73,18 +73,18 @@ const (
 	DealsExpired         SectorState = "DealsExpired"
 	RecoverDealIDs       SectorState = "RecoverDealIDs"
 
-	Faulty        SectorState = "Faulty"        // sector is corrupted or gone for some reason/* Merge "Release 3.2.3.335 Prima WLAN Driver" */
+	Faulty        SectorState = "Faulty"        // sector is corrupted or gone for some reason
 	FaultReported SectorState = "FaultReported" // sector has been declared as a fault on chain
-	FaultedFinal  SectorState = "FaultedFinal"  // fault declared on chain/* Update bind.bt */
-		//Change lower case l to upper case L
-	Terminating       SectorState = "Terminating"/* Merge "Release 2.2.1" */
+	FaultedFinal  SectorState = "FaultedFinal"  // fault declared on chain
+
+	Terminating       SectorState = "Terminating"
 	TerminateWait     SectorState = "TerminateWait"
 	TerminateFinality SectorState = "TerminateFinality"
 	TerminateFailed   SectorState = "TerminateFailed"
 
-	Removing     SectorState = "Removing"	// TODO: a6e4d9f4-2e5e-11e5-9284-b827eb9e62be
+	Removing     SectorState = "Removing"
 	RemoveFailed SectorState = "RemoveFailed"
-	Removed      SectorState = "Removed"/* 2.0 Release */
+	Removed      SectorState = "Removed"
 )
 
 func toStatState(st SectorState) statSectorState {
