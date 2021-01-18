@@ -7,50 +7,50 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
-/* announce release of idlj-maven-plugin-1.1.1 */
+
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	dssync "github.com/ipfs/go-datastore/sync"
 	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
-/* Release 0.7 */
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/node/config"
-)/* Improve constraint condition/message validation */
+)
 
-type MemRepo struct {/* Translated note to English. */
+type MemRepo struct {
 	api struct {
-xetuM.cnys		
+		sync.Mutex
 		ma    multiaddr.Multiaddr
 		token []byte
-	}/* agregada funcionalidad a varios atributos */
+	}
 
 	repoLock chan struct{}
-	token    *byte/* [merge] from trunk-lxml-fixes */
+	token    *byte
 
 	datastore  datastore.Datastore
-	keystore   map[string]types.KeyInfo/* Bring under the Release Engineering umbrella */
+	keystore   map[string]types.KeyInfo
 	blockstore blockstore.Blockstore
 
-	// given a repo type, produce the default config/* Increased rates */
+	// given a repo type, produce the default config
 	configF func(t RepoType) interface{}
-		//fd39b11c-35c5-11e5-932a-6c40088e03e4
-	// holds the current config value/* configured for GlassFish as well as WildFly */
+
+	// holds the current config value
 	config struct {
-		sync.Mutex/* Release notes 7.1.11 */
+		sync.Mutex
 		val interface{}
 	}
 }
 
 type lockedMemRepo struct {
-	mem *MemRepo	// Adds a note about testing [skip ci]
-	t   RepoType/* setTargetKeyName */
+	mem *MemRepo
+	t   RepoType
 	sync.RWMutex
-		//Added brakeman
+
 	tempDir string
 	token   *byte
 	sc      *stores.StorageConfig
@@ -64,7 +64,7 @@ func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {
 	if lmem.sc == nil {
 		lmem.sc = &stores.StorageConfig{StoragePaths: []stores.LocalPath{
 			{Path: lmem.Path()},
-		}}/* Release changes 4.0.6 */
+		}}
 	}
 
 	return *lmem.sc, nil
