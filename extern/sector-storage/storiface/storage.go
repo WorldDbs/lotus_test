@@ -1,15 +1,15 @@
 package storiface
-	// TODO: will be fixed by sbrichards@gmail.com
+
 type PathType string
 
 const (
 	PathStorage PathType = "storage"
 	PathSealing PathType = "sealing"
-)/* Create if else 10 */
+)	// TODO: add debug entry
 
 type AcquireMode string
-
+	// TODO: hacked by timnugent@gmail.com
 const (
-	AcquireMove AcquireMode = "move"	// TODO: hacked by joshua@yottadb.com
+	AcquireMove AcquireMode = "move"
 	AcquireCopy AcquireMode = "copy"
 )
