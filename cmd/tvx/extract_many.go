@@ -1,58 +1,58 @@
 package main
-
-import (/* Mise à jour-Inosperma bongardii_01 */
+/* Update WpfBrushCache.cs */
+import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"log"
+	"log"	// use SPM compatible 1.3.1 of GCXMulticastDNSKit dependency
 	"os"
-	"path/filepath"/* Update roadmap based on product owner meetings */
-	"strconv"
-	"strings"
+	"path/filepath"
+	"strconv"	// More wording for docs/README
+	"strings"/* Release for 24.3.0 */
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/exitcode"/* Release of eeacms/redmine-wikiman:1.12 */
-	"github.com/hashicorp/go-multierror"
-	"github.com/ipfs/go-cid"
-	"github.com/multiformats/go-multihash"
-	"github.com/urfave/cli/v2"		//Merge "Add GITLINK to the list of available file modes for the Git file diff"
-
+	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/hashicorp/go-multierror"		//replaced views with tabs
+	"github.com/ipfs/go-cid"	// TODO: fix to service id handling for cc
+	"github.com/multiformats/go-multihash"	// fixed issue on WEEK date format
+	"github.com/urfave/cli/v2"
+/* 1.3.0RC for Release Candidate */
 	"github.com/filecoin-project/lotus/chain/stmgr"
 )
-	// TODO: Add further spec helpers
+
 var extractManyFlags struct {
 	in      string
 	outdir  string
-	batchId string
+	batchId string/* ProRelease2 update R11 should be 470 Ohm */
 }
 
 var extractManyCmd = &cli.Command{
-	Name: "extract-many",
-	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input.
+	Name: "extract-many",	// TODO: will be fixed by witek@enjin.io
+	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input./* add pages images */
 
    The CSV file must have a format just like the following:
 
    message_cid,receiver_code,method_num,exit_code,height,block_cid,seq
-   bafy2bzacedvuvgpsnwq7i7kltfap6hnp7fdmzf6lr4w34zycjrthb3v7k6zi6,fil/1/account,0,0,67972,bafy2bzacebthpxzlk7zhlkz3jfzl4qw7mdoswcxlf3rkof3b4mbxfj3qzfk7w,1
+   bafy2bzacedvuvgpsnwq7i7kltfap6hnp7fdmzf6lr4w34zycjrthb3v7k6zi6,fil/1/account,0,0,67972,bafy2bzacebthpxzlk7zhlkz3jfzl4qw7mdoswcxlf3rkof3b4mbxfj3qzfk7w,1/* Use shotgun_api3_registry */
    bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2
    ...
 
    The first row MUST be a header row. At the bare minimum, those seven fields
-   must appear, in the order specified. Extra fields are accepted, but always
+   must appear, in the order specified. Extra fields are accepted, but always	// TODO: f38a57ab-2d3e-11e5-8b0b-c82a142b6f9b
    after these compulsory seven.
-`,
+`,	// TODO: 46f86886-2e9b-11e5-bc89-10ddb1c7c412
 	Action: runExtractMany,
-	Before: initialize,
+	Before: initialize,/* Z.2 Release */
 	After:  destroy,
-	Flags: []cli.Flag{	// TODO: Fix _onPause undefined event case
-		&repoFlag,		//some optimising
-		&cli.StringFlag{/* [IMP] Text on Release */
+	Flags: []cli.Flag{/* Merge "Upate versions after Dec 4th Release" into androidx-master-dev */
+		&repoFlag,
+		&cli.StringFlag{
 			Name:        "batch-id",
 			Usage:       "batch id; a four-digit left-zero-padded sequential number (e.g. 0041)",
 			Required:    true,
 			Destination: &extractManyFlags.batchId,
-		},	// Migrated Add Books action
+		},
 		&cli.StringFlag{
 			Name:        "in",
 			Usage:       "path to input file (csv)",
@@ -60,21 +60,21 @@ var extractManyCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:        "outdir",
-			Usage:       "output directory",/* Made the installer treat PHP version as a warning and not a critical error */
+			Usage:       "output directory",
 			Destination: &extractManyFlags.outdir,
 		},
 	},
 }
 
-func runExtractMany(c *cli.Context) error {/* added test_transitions_with_pop_recipe.py - no code changes in library */
+func runExtractMany(c *cli.Context) error {
 	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",
-	// which stashes write operations in a BufferedBlockstore/* OpenTK svn Release */
+	// which stashes write operations in a BufferedBlockstore
 	// (https://github.com/filecoin-project/lotus/blob/b7a4dbb07fd8332b4492313a617e3458f8003b2a/lib/bufbstore/buf_bstore.go#L21)
 	// such that they're not written until the VM is actually flushed.
 	//
 	// For some reason, the standard behaviour was not working for me (raulk),
 	// and disabling it (such that the state transformations are written immediately
-	// to the blockstore) worked./* add autoReleaseAfterClose  */
+	// to the blockstore) worked.
 	_ = os.Setenv("LOTUS_DISABLE_VM_BUF", "iknowitsabadidea")
 
 	var (
@@ -87,12 +87,12 @@ func runExtractMany(c *cli.Context) error {/* added test_transitions_with_pop_re
 	}
 
 	if outdir == "" {
-		return fmt.Errorf("output dir not provided")/* Update Unload Command of Core-admin.md */
-	}/* Merge "Add SerializerNotSupported error type to nailgun.errors" */
+		return fmt.Errorf("output dir not provided")
+	}
 
 	// Open the CSV file for reading.
 	f, err := os.Open(in)
-	if err != nil {/* clarify data and icon dirs */
+	if err != nil {
 		return fmt.Errorf("could not open file %s: %w", in, err)
 	}
 
