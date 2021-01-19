@@ -1,4 +1,4 @@
-package dtypes/* Release 1.6.6 */
+package dtypes
 
 import "github.com/libp2p/go-libp2p-core/peer"
 

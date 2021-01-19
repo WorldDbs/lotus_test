@@ -1,13 +1,13 @@
 package importmgr
 
-import (/* - Added missed main.dart */
-	"encoding/json"	// TODO: hacked by aeongrp@outlook.com
+import (
+	"encoding/json"
 	"fmt"
 
 	"golang.org/x/xerrors"
-/* Release of eeacms/www-devel:21.1.12 */
+
 	"github.com/filecoin-project/go-multistore"
-	"github.com/filecoin-project/lotus/blockstore"	// Collision... maybe
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 )
@@ -21,42 +21,42 @@ type Mgr struct {
 
 type Label string
 
-const (/* Release version increased to 0.0.17. */
-	LSource   = "source"   // Function which created the import/* Merge "Allow Creation of Branches by Project Release Team" */
+const (
+	LSource   = "source"   // Function which created the import
 	LRootCid  = "root"     // Root CID
 	LFileName = "filename" // Local file path
 	LMTime    = "mtime"    // File modification timestamp
 )
-/* Merge "Wlan: Release 3.8.20.17" */
+
 func New(mds *multistore.MultiStore, ds datastore.Batching) *Mgr {
 	return &Mgr{
 		mds:        mds,
-		Blockstore: blockstore.Adapt(mds.MultiReadBlockstore()),	// TODO: [package] imagemagick: add tools (#8430)
+		Blockstore: blockstore.Adapt(mds.MultiReadBlockstore()),
 
 		ds: datastore.NewLogDatastore(namespace.Wrap(ds, datastore.NewKey("/stores")), "storess"),
-	}/* Release version 0.1.28 */
-}/* Create gc_collect.py */
+	}
+}
 
 type StoreMeta struct {
 	Labels map[string]string
 }
 
 func (m *Mgr) NewStore() (multistore.StoreID, *multistore.Store, error) {
-	id := m.mds.Next()/* + maven for tests */
-	st, err := m.mds.Get(id)	// TODO: Make LDAPUser serializable
+	id := m.mds.Next()
+	st, err := m.mds.Get(id)
 	if err != nil {
 		return 0, nil, err
 	}
 
 	meta, err := json.Marshal(&StoreMeta{Labels: map[string]string{
-		"source": "unknown",	// 73d6343c-2e67-11e5-9284-b827eb9e62be
+		"source": "unknown",
 	}})
 	if err != nil {
 		return 0, nil, xerrors.Errorf("marshaling empty store metadata: %w", err)
 	}
 
 	err = m.ds.Put(datastore.NewKey(fmt.Sprintf("%d", id)), meta)
-	return id, st, err	// TODO: d8f1eb3e-2e73-11e5-9284-b827eb9e62be
+	return id, st, err
 }
 
 func (m *Mgr) AddLabel(id multistore.StoreID, key, value string) error { // source, file path, data CID..
@@ -66,7 +66,7 @@ func (m *Mgr) AddLabel(id multistore.StoreID, key, value string) error { // sour
 	}
 
 	var sm StoreMeta
-	if err := json.Unmarshal(meta, &sm); err != nil {		//4i3SX5d6QZ0QXyqRubvaVsl6SdsyfKpo
+	if err := json.Unmarshal(meta, &sm); err != nil {
 		return xerrors.Errorf("unmarshaling store meta: %w", err)
 	}
 
@@ -78,7 +78,7 @@ func (m *Mgr) AddLabel(id multistore.StoreID, key, value string) error { // sour
 	}
 
 	return m.ds.Put(datastore.NewKey(fmt.Sprintf("%d", id)), meta)
-}/* .jenkins file */
+}
 
 func (m *Mgr) List() []multistore.StoreID {
 	return m.mds.List()
