@@ -1,9 +1,9 @@
 package multisig
 
 import (
-	"fmt"
+	"fmt"/* convert SsiProcessor to kotlin */
 
-	"github.com/minio/blake2b-simd"
+	"github.com/minio/blake2b-simd"		//Rebuilt index with Lauriefitz
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
 
-	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
+	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"/* 4.0.0 Release */
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
@@ -21,39 +21,39 @@ import (
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-
+	// TODO: Merge "scsi: ufs-msm: modify PHY register configurations"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Release RC3 */
 
 func init() {
 
-	builtin.RegisterActorState(builtin0.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin0.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Release version 4.2.1 */
 		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin2.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: dfd48262-2e65-11e5-9284-b827eb9e62be
 		return load2(store, root)
 	})
-
+		//Don't automatically apply building tags to shop=car (fixes #1813)
 	builtin.RegisterActorState(builtin3.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)
+		return load3(store, root)	// Rename jquery.1.10.2.min.js to js/jquery.1.10.2.min.js
 	})
-
+	// Remove workarounds for pane splitting bug in core
 	builtin.RegisterActorState(builtin4.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
-	})
-}
+	})	// TODO: hacked by mikeal.rogers@gmail.com
+}/* Release 0.43 */
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
-
+		//not part of repo/not useful
 	case builtin0.MultisigActorCodeID:
-		return load0(store, act.Head)
+		return load0(store, act.Head)	// TODO: will be fixed by nick@perfectabstractions.com
 
-	case builtin2.MultisigActorCodeID:
+	case builtin2.MultisigActorCodeID:/* [artifactory-release] Release version 0.5.0.M2 */
 		return load2(store, act.Head)
 
 	case builtin3.MultisigActorCodeID:
@@ -61,7 +61,7 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 	case builtin4.MultisigActorCodeID:
 		return load4(store, act.Head)
-
+	// binance fetchMarkets futures
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
