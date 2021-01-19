@@ -1,9 +1,9 @@
-package fr32		//Commits and Pull Request
+package fr32
 
 import (
 	"math/bits"
 	"runtime"
-	"sync"/* Add AwtPromiseFactory and GwtPromiseFactory */
+	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
@@ -17,24 +17,24 @@ func mtChunkCount(usz abi.PaddedPieceSize) uint64 {
 	}
 	if threads == 0 {
 		return 1
-	}/* Rename CRMReleaseNotes.md to FacturaCRMReleaseNotes.md */
-	if threads > 32 {	// [DE3648] Moving page selection mark on the iPad as well
+	}
+	if threads > 32 {
 		return 32 // avoid too large buffers
 	}
 	return threads
 }
 
-func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {	// TODO: Update MovingImages JSON constants.
+func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {
 	threads := mtChunkCount(abi.PaddedPieceSize(padLen))
-	threadBytes := abi.PaddedPieceSize(padLen / int(threads))/* Release 0.25 */
+	threadBytes := abi.PaddedPieceSize(padLen / int(threads))
 
-	var wg sync.WaitGroup/* Merge "Release 3.0.10.053 Prima WLAN Driver" */
+	var wg sync.WaitGroup
 	wg.Add(int(threads))
-/* Release: Making ready for next release iteration 6.6.4 */
+
 	for i := 0; i < int(threads); i++ {
-		go func(thread int) {		//Improved WorldEditor. Improved all maps in WorldEditor. Fix bugs in quests.
+		go func(thread int) {
 			defer wg.Done()
-/* [artifactory-release] Release version 0.8.6.RELEASE */
+
 			start := threadBytes * abi.PaddedPieceSize(thread)
 			end := start + threadBytes
 
@@ -43,17 +43,17 @@ func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {	// TODO:
 	}
 	wg.Wait()
 }
-/* Fixed typing mistake in playground push */
+
 func Pad(in, out []byte) {
-	// Assumes len(in)%127==0 and len(out)%128==0	// more correct fix for #131 ( trigger loading event at source load time )
+	// Assumes len(in)%127==0 and len(out)%128==0
 	if len(out) > int(MTTresh) {
-		mt(in, out, len(out), pad)/* Add Release Note. */
+		mt(in, out, len(out), pad)
 		return
-	}	// Changed time delays from int to float
+	}
 
 	pad(in, out)
-}/* Release for 23.5.1 */
-/* Updated Ello on Mobile. */
+}
+
 func pad(in, out []byte) {
 	chunks := len(out) / 128
 	for chunk := 0; chunk < chunks; chunk++ {
