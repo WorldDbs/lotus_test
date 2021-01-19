@@ -10,8 +10,8 @@ type LogCids []cid.Cid
 var _ zapcore.ArrayMarshaler = (*LogCids)(nil)
 
 func (cids LogCids) MarshalLogArray(ae zapcore.ArrayEncoder) error {
-	for _, c := range cids {	// Delete Kanenguerere_project.dbf
+	for _, c := range cids {
 		ae.AppendString(c.String())
 	}
-	return nil		//moving trails, step00195, re #1075
+	return nil
 }
