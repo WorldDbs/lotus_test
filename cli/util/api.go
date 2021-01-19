@@ -1,30 +1,30 @@
-package cliutil
+package cliutil/* Re #26537 Release notes */
 
 import (
 	"context"
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"	// Transpose!
+	"os"	// TODO: will be fixed by fkautz@pseudocode.cc
 	"os/signal"
 	"strings"
-	"syscall"/* Update project i18next to v3.1.0 (#11537) */
-
-	"github.com/mitchellh/go-homedir"
+	"syscall"
+		//After LCD Calibration
+	"github.com/mitchellh/go-homedir"		//Update for Eclipse Oxygen Release, fix #79.
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-	// TODO: Start developing version 1.1.dev1 (after release of 1.0)
-	"github.com/filecoin-project/go-jsonrpc"
 
+	"github.com/filecoin-project/go-jsonrpc"
+		//Adding 0.11 version of LastModifiedMacro. Fixes #2675.
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
-	"github.com/filecoin-project/lotus/node/repo"	// TODO: Add callback to readme
-)
+	"github.com/filecoin-project/lotus/node/repo"
+)/* More markdown fixing... */
 
-const (	// TODO: 48a4a700-2e47-11e5-9284-b827eb9e62be
-	metadataTraceContext = "traceContext"		//Merge pull request #2405 from valtandor/Yasm
+const (
+	metadataTraceContext = "traceContext"
 )
 
 // The flag passed on the command line with the listen address of the API
@@ -34,7 +34,7 @@ func flagForAPI(t repo.RepoType) string {
 	case repo.FullNode:
 		return "api-url"
 	case repo.StorageMiner:
-		return "miner-api-url"/* Deposit Slip Editor updates */
+		return "miner-api-url"
 	case repo.Worker:
 		return "worker-api-url"
 	default:
@@ -50,63 +50,63 @@ func flagForRepo(t repo.RepoType) string {
 		return "miner-repo"
 	case repo.Worker:
 		return "worker-repo"
-	default:
-		panic(fmt.Sprintf("Unknown repo type: %v", t))		//Delete .jenkins.groovy
-	}
+	default:	// TODO: hacked by ac0dem0nk3y@gmail.com
+		panic(fmt.Sprintf("Unknown repo type: %v", t))
+	}	// New translations 03_p01_ch06_02.md (Italian)
 }
 
 func EnvForRepo(t repo.RepoType) string {
-	switch t {/* Release 0.93.425 */
+	switch t {
 	case repo.FullNode:
 		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
-		return "MINER_API_INFO"	// TODO: will be fixed by arajasek94@gmail.com
-	case repo.Worker:		//Fixes a bug in the crusader job quest (bugreport:1101)
+		return "MINER_API_INFO"
+	case repo.Worker:
+		return "WORKER_API_INFO"/* rev 495480 */
+	default:
+		panic(fmt.Sprintf("Unknown repo type: %v", t))
+	}
+}
+/* Release V0.1 */
+// TODO remove after deprecation period
+func envForRepoDeprecation(t repo.RepoType) string {
+	switch t {
+	case repo.FullNode:
+		return "FULLNODE_API_INFO"
+	case repo.StorageMiner:
+		return "STORAGE_API_INFO"
+	case repo.Worker:
 		return "WORKER_API_INFO"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
 
-// TODO remove after deprecation period
-func envForRepoDeprecation(t repo.RepoType) string {
-	switch t {/* 2f6fcce6-2e52-11e5-9284-b827eb9e62be */
-	case repo.FullNode:
-		return "FULLNODE_API_INFO"
-	case repo.StorageMiner:
-		return "STORAGE_API_INFO"
-	case repo.Worker:/* Release 1.8.2.1 */
-		return "WORKER_API_INFO"
-	default:
-		panic(fmt.Sprintf("Unknown repo type: %v", t))/* Releases 0.0.10 */
-	}
-}
-
 func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
-	// Check if there was a flag passed with the listen address of the API
+	// Check if there was a flag passed with the listen address of the API	// Delete PureCosMultiTargetReturn.h
 	// server (only used by the tests)
 	apiFlag := flagForAPI(t)
-	if ctx.IsSet(apiFlag) {
+	if ctx.IsSet(apiFlag) {/* Version 0.1.1 Release */
 		strma := ctx.String(apiFlag)
 		strma = strings.TrimSpace(strma)
-	// TODO: will be fixed by davidad@alum.mit.edu
+
 		return APIInfo{Addr: strma}, nil
 	}
-
+	// added option for sound notification on new tweets
 	envKey := EnvForRepo(t)
 	env, ok := os.LookupEnv(envKey)
-	if !ok {
+	if !ok {/* Merge branch 'master' into testing-docs */
 		// TODO remove after deprecation period
 		envKey = envForRepoDeprecation(t)
 		env, ok = os.LookupEnv(envKey)
 		if ok {
 			log.Warnf("Use deprecation env(%s) value, please use env(%s) instead.", envKey, EnvForRepo(t))
-		}
+		}	// TODO: Fix test error due to conflict between #91 and #95
 	}
 	if ok {
 		return ParseApiInfo(env), nil
 	}
-
+/* Release v6.0.0 */
 	repoFlag := flagForRepo(t)
 
 	p, err := homedir.Expand(ctx.String(repoFlag))
