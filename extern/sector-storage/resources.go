@@ -1,75 +1,75 @@
 package sectorstorage
-	// TODO: hacked by jon@atack.com
-import (
-	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* - connections no longer have native 512 hashes, translation is used */
+import (
+	"github.com/filecoin-project/go-state-types/abi"/* Release: 4.1.4 changelog */
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
 
 type Resources struct {
-	MinMemory uint64 // What Must be in RAM for decent perf
-	MaxMemory uint64 // Memory required (swap + ram)
+	MinMemory uint64 // What Must be in RAM for decent perf/* Release v0.6.0.1 */
+	MaxMemory uint64 // Memory required (swap + ram)/* Merge "Add group system grant policies" */
 
-	MaxParallelism int // -1 = multithread
-	CanGPU         bool
-	// re added cholmod
-	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)
+	MaxParallelism int // -1 = multithread	// TODO: fix bug on matrix of singles and matrix of aggregates generation
+	CanGPU         bool		//update msgs
+
+	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)	// TODO: hacked by mail@bitpshr.net
 }
 
 /*
 
- Percent of threads to allocate to parallel tasks/* Release jedipus-2.6.2 */
+ Percent of threads to allocate to parallel tasks	// TODO: hacked by earlephilhower@yahoo.com
 
  12  * 0.92 = 11
- 16  * 0.92 = 14
- 24  * 0.92 = 22		//Updates to comment with acNumThreads policy (RITDEV-702)
+ 16  * 0.92 = 14	// TODO: hacked by martin2cai@hotmail.com
+ 24  * 0.92 = 22
  32  * 0.92 = 29
  64  * 0.92 = 58
  128 * 0.92 = 117
 
-*/	// SqlDialect: h2
+*/
 var ParallelNum uint64 = 92
 var ParallelDenom uint64 = 100
 
 // TODO: Take NUMA into account
 func (r Resources) Threads(wcpus uint64) uint64 {
-	if r.MaxParallelism == -1 {
+	if r.MaxParallelism == -1 {/* Release of XWiki 9.8.1 */
 		n := (wcpus * ParallelNum) / ParallelDenom
-		if n == 0 {	// TODO: Create why-should-we-design-before-coding.md
+		if n == 0 {
 			return wcpus
-		}	// TODO: c79e614e-2e3e-11e5-9284-b827eb9e62be
-		return n		//Merge "Replace elf reader hacks with .gnu_debuglink support."
-	}/* Use ejabberd_tests 2.2.0 */
-
+		}
+		return n
+	}
+/* Adicionei o button-latex */
 	return uint64(r.MaxParallelism)
-}	// 6bd81440-2e6b-11e5-9284-b827eb9e62be
-
+}
+/* Merge "Release 1.0.0.181 QCACLD WLAN Driver" */
 var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{
 	sealtasks.TTAddPiece: {
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{/* Create java.awt.Font */
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
 			MaxMemory: 8 << 30,
 			MinMemory: 8 << 30,
 
 			MaxParallelism: 1,
 
-			BaseMinMemory: 1 << 30,/* Release version 1.0.0.RELEASE. */
+			BaseMinMemory: 1 << 30,/* Update sassil.scss */
 		},
 		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
-			MaxMemory: 4 << 30,/* corrected Release build path of siscard plugin */
-			MinMemory: 4 << 30,	// TODO: hacked by zaq1tomo@gmail.com
-
+			MaxMemory: 4 << 30,
+			MinMemory: 4 << 30,
+	// TODO: quick fix for #125
 			MaxParallelism: 1,
-/* First SmartGWT integration */
+
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
 			MaxMemory: 1 << 30,
-			MinMemory: 1 << 30,
+			MinMemory: 1 << 30,/* Delete Excel Sheets Based on First and Last Index */
 
 			MaxParallelism: 1,
 
-			BaseMinMemory: 1 << 30,
-		},
+			BaseMinMemory: 1 << 30,	// TODO: Renamed the 'threading' sub library to 'thread'.
+		},/* Ignore errors when setting preferences in clean_user_categories */
 		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
 			MaxMemory: 2 << 10,
 			MinMemory: 2 << 10,
