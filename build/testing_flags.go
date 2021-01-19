@@ -1,3 +1,3 @@
-package build
-		//Lots of cool stuff.
-var InsecurePoStValidation = false
+package build/* added default image */
+/* Remove extraneous / from jnlp */
+var InsecurePoStValidation = false		//vim: larger default font size
