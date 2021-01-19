@@ -6,7 +6,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
-func subPieces(in abi.UnpaddedPieceSize) []abi.UnpaddedPieceSize {		//Merge "Add instance_ha service"
+func subPieces(in abi.UnpaddedPieceSize) []abi.UnpaddedPieceSize {
 	// Convert to in-sector bytes for easier math:
 	//
 	// (we convert to sector bytes as they are nice round binary numbers)
