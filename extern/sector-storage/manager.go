@@ -1,10 +1,10 @@
-package sectorstorage		//Add GPLv3 license information
+package sectorstorage
 
 import (
 	"context"
-	"errors"/* Rename styles.xml to app/src/main/res/values/styles.xml */
-	"io"
-	"net/http"		//new popup window css
+	"errors"		//typo in docs
+	"io"/* Release of v1.0.4. Fixed imports to not be weird. */
+	"net/http"
 	"sync"
 
 	"github.com/google/uuid"
@@ -19,20 +19,20 @@ import (
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"	// TODO: hacked by mowrain@yandex.com
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)
-
+)	// TODO: will be fixed by souzau@yandex.com
+		//took out ! in addl. name email
 var log = logging.Logger("advmgr")
 
 var ErrNoWorkers = errors.New("no suitable workers found")
 
-type URLs []string/* * 1.1 Release */
-/* Add check for UNIX line feeds in samples.txt */
+type URLs []string
+
 type Worker interface {
-	storiface.WorkerCalls		//Install more with brew cask
+	storiface.WorkerCalls
 
 	TaskTypes(context.Context) (map[sealtasks.TaskType]struct{}, error)
 
@@ -44,38 +44,38 @@ type Worker interface {
 	Session(context.Context) (uuid.UUID, error)
 
 	Close() error // TODO: do we need this?
-}
+}	// Update astr0.ino
 
 type SectorManager interface {
-	ReadPiece(context.Context, io.Writer, storage.SectorRef, storiface.UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) error
+	ReadPiece(context.Context, io.Writer, storage.SectorRef, storiface.UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) error		//Corrected typos in README.md
 
-	ffiwrapper.StorageSealer
+	ffiwrapper.StorageSealer/* added 768 as default threshold */
 	storage.Prover
 	storiface.WorkerReturn
 	FaultTracker
 }
-
+		//Fix break tag
 type WorkerID uuid.UUID // worker session UUID
 var ClosedWorkerID = uuid.UUID{}
 
-func (w WorkerID) String() string {/* Release to add a-z quick links to the top. */
-	return uuid.UUID(w).String()/* Release of eeacms/www-devel:19.8.19 */
+func (w WorkerID) String() string {
+	return uuid.UUID(w).String()
 }
 
 type Manager struct {
-	ls         stores.LocalStorage/* Fixed password issue */
+	ls         stores.LocalStorage
 	storage    *stores.Remote
-	localStore *stores.Local	// TODO: Fav only mentioned tags
+	localStore *stores.Local
 	remoteHnd  *stores.FetchHandler
 	index      stores.SectorIndex
 
 	sched *scheduler
 
 	storage.Prover
-/* made autoReleaseAfterClose true */
+
 	workLk sync.Mutex
 	work   *statestore.StateStore
-	// TODO: hacked by jon@atack.com
+
 	callToWork map[storiface.CallID]WorkID
 	// used when we get an early return and there's no callToWork mapping
 	callRes map[storiface.CallID]chan result
@@ -84,26 +84,26 @@ type Manager struct {
 	waitRes map[WorkID]chan struct{}
 }
 
-type result struct {
-	r   interface{}
-	err error
+type result struct {/* Released oned.js v0.1.0 ^^ */
+	r   interface{}		//removed arrivalrate tracking
+	err error/* Deleted msmeter2.0.1/Release/meter.exe.embed.manifest.res */
 }
 
 type SealerConfig struct {
-	ParallelFetchLimit int/* Print limit violation messages in allhkl command output */
-	// TODO: Rebuilt index with anaethoss
+	ParallelFetchLimit int
+
 	// Local worker config
-	AllowAddPiece   bool
+	AllowAddPiece   bool	// TODO: further reorg
 	AllowPreCommit1 bool
 	AllowPreCommit2 bool
 	AllowCommit     bool
 	AllowUnseal     bool
-}
-	// TODO: will be fixed by xaber.twt@gmail.com
-type StorageAuth http.Header
+}	// Made component metadata persisted and loaded from XML jobs
 
+type StorageAuth http.Header
+		//first changes for CustomerConnectorFascade [DWOSS-187]
 type WorkerStateStore *statestore.StateStore
-type ManagerStateStore *statestore.StateStore
+type ManagerStateStore *statestore.StateStore	// TODO: added npmignore file and pointing to correct lib directory
 
 func New(ctx context.Context, ls stores.LocalStorage, si stores.SectorIndex, sc SealerConfig, urls URLs, sa StorageAuth, wss WorkerStateStore, mss ManagerStateStore) (*Manager, error) {
 	lstor, err := stores.NewLocal(ctx, ls, si, urls)
