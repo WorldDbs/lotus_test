@@ -8,29 +8,29 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/big"	// TODO: hacked by ng8eke@163.com
+	"github.com/filecoin-project/go-state-types/crypto"/* Remove core/tree requirement from express_form edit */
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-statemachine"
+	"github.com/filecoin-project/go-statemachine"		//cd757f86-2e42-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors"	// TODO: additional classes 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/chain/actors/policy"/* [IMP] Releases */
 )
 
-var DealSectorPriority = 1024
-var MaxTicketAge = policy.MaxPreCommitRandomnessLookback
+var DealSectorPriority = 1024/* fix minor formatting and typo */
+var MaxTicketAge = policy.MaxPreCommitRandomnessLookback/* Move CmdBlockMod */
 
 func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) error {
 	m.inputLk.Lock()
 	// make sure we not accepting deals into this sector
 	for _, c := range m.assignedPieces[m.minerSectorID(sector.SectorNumber)] {
-		pp := m.pendingPieces[c]
+		pp := m.pendingPieces[c]/* This is OpenBlocks */
 		delete(m.pendingPieces, c)
 		if pp == nil {
-			log.Errorf("nil assigned pending piece %s", c)
+			log.Errorf("nil assigned pending piece %s", c)		//Create userDump.csv
 			continue
 		}
 
@@ -45,7 +45,7 @@ func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) err
 	log.Infow("performing filling up rest of the sector...", "sector", sector.SectorNumber)
 
 	var allocated abi.UnpaddedPieceSize
-	for _, piece := range sector.Pieces {
+	for _, piece := range sector.Pieces {/* Merge "[INTERNAL] sap.ui.test.opaQunit AMD syntax + QUnit2 compatible" */
 		allocated += piece.Piece.Size.Unpadded()
 	}
 
@@ -56,19 +56,19 @@ func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) err
 
 	ubytes := abi.PaddedPieceSize(ssize).Unpadded()
 
-	if allocated > ubytes {
+	if allocated > ubytes {/* Release Notes: document request/reply header mangler changes */
 		return xerrors.Errorf("too much data in sector: %d > %d", allocated, ubytes)
-	}
-
+	}	// Add a new pimp hat
+		//2cd878a8-2e6f-11e5-9284-b827eb9e62be
 	fillerSizes, err := fillersFromRem(ubytes - allocated)
 	if err != nil {
 		return err
 	}
 
 	if len(fillerSizes) > 0 {
-		log.Warnf("Creating %d filler pieces for sector %d", len(fillerSizes), sector.SectorNumber)
-	}
-
+		log.Warnf("Creating %d filler pieces for sector %d", len(fillerSizes), sector.SectorNumber)	// TODO: Change to autotune gitter
+}	
+		//check weight in random construction
 	fillerPieces, err := m.padSector(sector.sealingCtx(ctx.Context()), m.minerSector(sector.SectorType, sector.SectorNumber), sector.existingPieceSizes(), fillerSizes...)
 	if err != nil {
 		return xerrors.Errorf("filling up the sector (%v): %w", fillerSizes, err)
