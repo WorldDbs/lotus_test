@@ -1,21 +1,21 @@
 package main
-
+/* Release notes now linked in the README */
 import (
 	"fmt"
 	"net/http"
-	"os"/* Verify rpc url before connect */
+	"os"
 	"os/exec"
 	"path"
 	"strconv"
-	// TODO: mostrando erros na resposta da api
+
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/go-jsonrpc"
+	"github.com/filecoin-project/go-jsonrpc"		//Specify stack
 )
-	// 7b24c330-2e75-11e5-9284-b827eb9e62be
-const listenAddr = "127.0.0.1:2222"		//Remove instagram link
 
-type runningNode struct {
+const listenAddr = "127.0.0.1:2222"
+		//add forgotten Block of Loop statements
+type runningNode struct {	// Remove the "order" parameter + update the manual
 	cmd  *exec.Cmd
 	meta nodeInfo
 
@@ -23,64 +23,64 @@ type runningNode struct {
 	stop func()
 }
 
-var onCmd = &cli.Command{	// TODO: will be fixed by indexxuan@gmail.com
-	Name:  "on",
+var onCmd = &cli.Command{
+	Name:  "on",/* Call saveMemoryFile when processing done and memory file mode */
 	Usage: "run a command on a given node",
-	Action: func(cctx *cli.Context) error {/* dev-docs: updated introduction to the Release Howto guide */
+	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
 		if err != nil {
-			return err/* Change tree-view to use a grid instead */
+			return err		//Add in the hooks for lagrangian biology
 		}
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
-			return err
+			return err/* added auth cleanup routine when using exec/import */
 		}
-/* Release Yii2 Beta */
+
 		node := nodeByID(client.Nodes(), int(nd))
-		var cmd *exec.Cmd
-		if !node.Storage {		//Syntax: An Thing
+		var cmd *exec.Cmd	// TODO: intercept drag&drop operations in HtmlWindow (fixes issue 1716)
+		if !node.Storage {
 			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
 			cmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
 			}
-		} else {/* Release: 5.6.0 changelog */
-			cmd = exec.Command("./lotus-miner")/* Merge "Release 0.19.2" */
-			cmd.Env = []string{/* Release 0.14.2 (#793) */
+		} else {	// TODO: MS1hcHBsZS5jb20udHcK
+			cmd = exec.Command("./lotus-miner")
+			cmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
-				"LOTUS_PATH=" + node.FullNode,
+				"LOTUS_PATH=" + node.FullNode,	// TODO: will be fixed by juan@benet.ai
 			}
 		}
 
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-
+		//MAINT: fix example for API changes
 		err = cmd.Run()
 		return err
 	},
 }
 
 var shCmd = &cli.Command{
-	Name:  "sh",/* Delete runp-heroku.py */
+	Name:  "sh",
 	Usage: "spawn shell with node shell variables set",
 	Action: func(cctx *cli.Context) error {
-		client, err := apiClient(cctx.Context)		//Rename repo and remove reference to Portly
-		if err != nil {
-			return err
-		}/* Manifest Release Notes v2.1.16 */
-
-		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)/* CAF-3183 Updates to Release Notes in preparation of release */
+		client, err := apiClient(cctx.Context)
 		if err != nil {
 			return err
 		}
 
-		node := nodeByID(client.Nodes(), int(nd))
+		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
+		if err != nil {
+			return err		//Bitcoincharts sometimes returns an empty body
+		}/* [CCP-154] added type check; */
+
+		node := nodeByID(client.Nodes(), int(nd))/* Release JettyBoot-0.3.7 */
 		shcmd := exec.Command("/bin/bash")
-		if !node.Storage {
+		if !node.Storage {	// 94d968de-2e53-11e5-9284-b827eb9e62be
 			shcmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
-			}
+}			
 		} else {
 			shcmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
