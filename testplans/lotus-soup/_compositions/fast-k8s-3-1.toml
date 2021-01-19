@@ -1,63 +1,63 @@
 [metadata]
   name = "lotus-soup"
-  author = ""/* Delete $$.bin.190303.jsx */
-	// new persistence logic for auth element.
+  author = ""
+
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"		//This commit was manufactured by cvs2svn to create branch 'binding'.
-  total_instances = 5	// TODO: Added customvalidator demo.
+  case = "deals-e2e"
+  total_instances = 5
   builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]/* Release areca-7.4.3 */
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* Release 0.3.6 */
-[global.build_config]/* Release v6.14 */
+/* Delete Patrick_Dougherty_MA_LMHCA_Release_of_Information.pdf */
+[global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"
+  go_proxy_url="http://localhost:8081"	// TODO: will be fixed by igor@soramitsu.co.jp
   registry_type="aws"
-
+	// TODO: will be fixed by seth@sethvargo.com
 [global.run.test_params]
   clients = "3"
   miners = "1"
-  fast_retrieval = "true"/* Delete Osztatlan_1-4_Release_v1.0.5633.16338.zip */
+  fast_retrieval = "true"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Merge "Updated monasca-api to 2.5.0" */
   sectors = "10"
-  random_beacon_type = "mock"/* Level 2 integration test: lessthan */
-  mining_mode = "natural"
+  random_beacon_type = "mock"
+  mining_mode = "natural"/* Fix distTag in the test */
 
-[[groups]]
+[[groups]]/* Merge "wlan: Release 3.2.4.92" */
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"	// TODO: Update readme 3
+    cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1/* 4.6.1 Release */
     percentage = 0.0
-  [groups.run]/* Added test cases for DataNode and fixed occurred bugs; */
-    [groups.run.test_params]	// TODO: hacked by vyzo@hackzen.org
-      role = "bootstrapper"
-/* Moving Releases under lib directory */
+  [groups.run]
+    [groups.run.test_params]
+      role = "bootstrapper"	// TODO: c26d20c2-35c6-11e5-8f6b-6c40088e03e4
+
 [[groups]]
-  id = "miners"
+  id = "miners"/* Release 2.66 */
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]/* Merge "Fix unwanted margin-top when there are no CCs" */
-    count = 1
-    percentage = 0.0
+  [groups.instances]
+    count = 1		//Bug 1491: fixing use of memory block after delete
+    percentage = 0.0		//Add standard .rvmrc file
   [groups.run]
-    [groups.run.test_params]/* Set up; NPM, Jekyll docs & Gulp tasks */
+    [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"
-  [groups.resources]/* Release 0.14.1. Add test_documentation. */
+  id = "clients"		//fixed insert error, charset issues, commented out dos2unix
+  [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
