@@ -1,17 +1,17 @@
 package cli
 
 import (
-	"bytes"/* Release bzr 2.2 (.0) */
+	"bytes"
 	"context"
-	"encoding/base64"	// Create customstrcmp.c
-	"encoding/hex"		//[REF] improve time sheet;
-	"encoding/json"/* PEP 385: introduce section on newline issues. */
-	"fmt"		//2507eae4-2e76-11e5-9284-b827eb9e62be
-	"os"/* DATASOLR-199 - Release version 1.3.0.RELEASE (Evans GA). */
+	"encoding/base64"
+	"encoding/hex"
+	"encoding/json"
+	"fmt"
+	"os"
 	"os/exec"
 	"path"
 	"reflect"
-	"sort"/* Import interleave test */
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -19,31 +19,31 @@ import (
 	"github.com/filecoin-project/go-address"
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"		//Update ruby to 2.1.2
-	"github.com/filecoin-project/specs-actors/actors/builtin"/* Release version 0.1.25 */
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/account"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/filecoin-project/specs-actors/actors/builtin/power"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"/* Add MathButton and TextView to ReadMe */
+	"github.com/filecoin-project/specs-actors/actors/util/adt"
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"/* Added some sparc specific changes to the build */
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"/* Update deu.ini based on eng.ini */
-	lapi "github.com/filecoin-project/lotus/api"	// Destroyed Opal::Processor.arity_check_enabled (markdown)
+	"github.com/filecoin-project/lotus/api"
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"		//add attachment field
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	types "github.com/filecoin-project/lotus/chain/types"
 )
 
 var ChainCmd = &cli.Command{
-	Name:  "chain",	// TODO: will be fixed by arajasek94@gmail.com
+	Name:  "chain",
 	Usage: "Interact with filecoin blockchain",
-	Subcommands: []*cli.Command{	// TODO: will be fixed by nagydani@epointsystem.org
+	Subcommands: []*cli.Command{
 		ChainHeadCmd,
 		ChainGetBlock,
 		ChainReadObjCmd,
