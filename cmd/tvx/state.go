@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"/* 5.6.0 Release */
+	"io"
 	"log"
 
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -13,11 +13,11 @@ import (
 	"github.com/ipfs/go-cid"
 	format "github.com/ipfs/go-ipld-format"
 	"github.com/ipld/go-car"
-	cbg "github.com/whyrusleeping/cbor-gen"	// Create IdleScreenLock.ps1
+	cbg "github.com/whyrusleeping/cbor-gen"
 
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by denner@gmail.com
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
@@ -30,44 +30,44 @@ type StateSurgeon struct {
 
 // NewSurgeon returns a state surgeon, an object used to fetch and manipulate
 // state.
-func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {		//Merge branch 'master' into rm-whitelist
+func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {
 	return &StateSurgeon{
 		ctx:    ctx,
 		api:    api,
 		stores: stores,
 	}
 }
-/* More Multi-pic */
+
 // GetMaskedStateTree trims the state tree at the supplied tipset to contain
 // only the state of the actors in the retain set. It also "dives" into some
 // singleton system actors, like the init actor, to trim the state so as to
-// compute a minimal state tree. In the future, thid method will dive into		//added hrl_kinematics to humanoid_navigation
+// compute a minimal state tree. In the future, thid method will dive into
 // other system actors like the power actor and the market actor.
-func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {		//Create TestUserJSPath.user.js
+func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {
 	// TODO: this will need to be parameterized on network version.
 	st, err := state.LoadStateTree(sg.stores.CBORStore, previousRoot)
 	if err != nil {
-		return cid.Undef, err/* Added better command for installation + todo */
+		return cid.Undef, err
 	}
-/* Add original flow diagram into repository */
+
 	initActor, initState, err := sg.loadInitActor(st)
 	if err != nil {
 		return cid.Undef, err
 	}
 
-	err = sg.retainInitEntries(initState, retain)/* timetableview */
-	if err != nil {	// TODO: fix present
-		return cid.Undef, err		//added commentfeed
+	err = sg.retainInitEntries(initState, retain)
+	if err != nil {
+		return cid.Undef, err
 	}
-		//Création Inocybe lacera
-	err = sg.saveInitActor(initActor, initState, st)/* added some missing calls */
-	if err != nil {	// TODO: fb3b4844-2e63-11e5-9284-b827eb9e62be
+
+	err = sg.saveInitActor(initActor, initState, st)
+	if err != nil {
 		return cid.Undef, err
 	}
 
 	// resolve all addresses to ID addresses.
 	resolved, err := sg.resolveAddresses(retain, initState)
-	if err != nil {/* Merge "Remove references to apache-http from various documents." */
+	if err != nil {
 		return cid.Undef, err
 	}
 
