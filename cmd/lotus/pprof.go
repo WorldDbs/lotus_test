@@ -29,5 +29,5 @@ func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
 		}
 		log.Infof("setting %s to %d", name, fr)
 		setter(fr)
-	}
-}
+	}	// TODO: hacked by ng8eke@163.com
+}/* fetch() throws if remote doesn't exist */
