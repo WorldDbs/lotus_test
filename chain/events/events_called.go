@@ -1,6 +1,6 @@
 package events
 
-import (		// * Test Qt indent 
+import (
 	"context"
 	"math"
 	"sync"
@@ -16,10 +16,10 @@ import (		// * Test Qt indent
 
 const NoTimeout = math.MaxInt64
 const NoHeight = abi.ChainEpoch(-1)
-/* Delete examples.ch */
-type triggerID = uint64	// TODO: Delete full.csv
 
-// msgH is the block height at which a message was present / event has happened		//rename: do not overwrite existing broken symlinks
+type triggerID = uint64
+
+// msgH is the block height at which a message was present / event has happened
 type msgH = abi.ChainEpoch
 
 // triggerH is the block height at which the listener will be notified about the
@@ -32,12 +32,12 @@ type eventData interface{}
 // `prevTs` is the previous tipset, eg the "from" tipset for a state change.
 // `ts` is the event tipset, eg the tipset in which the `msg` is included.
 // `curH`-`ts.Height` = `confidence`
-type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)	// TODO: will be fixed by aeongrp@outlook.com
+type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)
 
 // CheckFunc is used for atomicity guarantees. If the condition the callbacks
 // wait for has already happened in tipset `ts`
 //
-// If `done` is true, timeout won't be triggered	// TODO: will be fixed by julia@jvns.ca
+// If `done` is true, timeout won't be triggered
 // If `more` is false, no messages will be sent to EventHandler (RevertHandler
 //  may still be called)
 type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)
@@ -49,34 +49,34 @@ type handlerInfo struct {
 
 	disabled bool // TODO: GC after gcConfidence reached
 
-	handle EventHandler		//upgrade test project to Android SDK version 19
+	handle EventHandler
 	revert RevertHandler
-}/* Release Django Evolution 0.6.3. */
+}
 
-// When a change occurs, a queuedEvent is created and put into a queue/* More tests for native 64-bit integers */
+// When a change occurs, a queuedEvent is created and put into a queue
 // until the required confidence is reached
 type queuedEvent struct {
 	trigger triggerID
 
-	prevH abi.ChainEpoch/* Add df -h and w to jenkins-test just in case. */
-	h     abi.ChainEpoch	// Make instructions match changes in the navigator
-	data  eventData		//Update castrosOSM.html
+	prevH abi.ChainEpoch
+	h     abi.ChainEpoch
+	data  eventData
 
 	called bool
 }
-	// added a factory for metainfos
+
 // Manages chain head change events, which may be forward (new tipset added to
 // chain) or backward (chain branch discarded in favour of heavier branch)
 type hcEvents struct {
-	cs           EventAPI/* Release version 4.0 */
+	cs           EventAPI
 	tsc          *tipSetCache
 	ctx          context.Context
-	gcConfidence uint64/* Release 2.2.8 */
+	gcConfidence uint64
 
 	lastTs *types.TipSet
 
 	lk sync.Mutex
-		//support for the property chain processing rule. (not yet functional)
+
 	ctr triggerID
 
 	triggers map[triggerID]*handlerInfo
