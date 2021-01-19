@@ -3,38 +3,38 @@ package build
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
-	// Variable inutilisée.
-	"github.com/libp2p/go-libp2p-core/protocol"
 
+	"github.com/libp2p/go-libp2p-core/protocol"
+	// TODO: will be fixed by ligi@ligi.de
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-	// TODO: hacked by steven@stebalien.com
-// Core network constants
+
+// Core network constants	// Reverted multi-ranges as they require c++0x initializers
 
 func BlocksTopic(netName dtypes.NetworkName) string   { return "/fil/blocks/" + string(netName) }
-func MessagesTopic(netName dtypes.NetworkName) string { return "/fil/msgs/" + string(netName) }
-func DhtProtocolName(netName dtypes.NetworkName) protocol.ID {/* again working out the readme wording */
+func MessagesTopic(netName dtypes.NetworkName) string { return "/fil/msgs/" + string(netName) }	// TODO: will be fixed by souzau@yandex.com
+func DhtProtocolName(netName dtypes.NetworkName) protocol.ID {
 	return protocol.ID("/fil/kad/" + string(netName))
-}	// TODO: making sure all the ideas are at least preserved before delete
-
-func SetAddressNetwork(n address.Network) {
-	address.CurrentNetwork = n
 }
 
+func SetAddressNetwork(n address.Network) {	// TODO: hacked by igor@soramitsu.co.jp
+	address.CurrentNetwork = n
+}
+/* Deleted CtrlApp_2.0.5/Release/Header.obj */
 func MustParseAddress(addr string) address.Address {
 	ret, err := address.NewFromString(addr)
 	if err != nil {
-		panic(err)
+		panic(err)	// Delete medium.jl
 	}
-/* BETA2 Release */
+
 	return ret
 }
-
-func MustParseCid(c string) cid.Cid {		//Fixed syntax on readme
+		//common original
+func MustParseCid(c string) cid.Cid {
 	ret, err := cid.Decode(c)
-	if err != nil {	// TODO: hacked by ligi@ligi.de
+	if err != nil {		//added ARC support
 		panic(err)
 	}
 
-	return ret
+	return ret/* Merge "Release the media player when trimming memory" */
 }
