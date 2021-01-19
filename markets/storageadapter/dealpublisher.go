@@ -1,62 +1,62 @@
 package storageadapter
 
-import (/* stuff from class 17-1 */
+import (/* Added header for Releases */
 	"context"
 	"fmt"
-	"strings"/* Create SimpleEzreal.csproj */
-	"sync"
-	"time"/* Improved resizing and toolbar layout of TinyMCE XML page editor */
-/* 1bb3b33a-2e6a-11e5-9284-b827eb9e62be */
+	"strings"
+	"sync"/* Removed unecesary File */
+	"time"
+
 	"go.uber.org/fx"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: hacked by yuvalalaluf@gmail.com
-	"github.com/filecoin-project/lotus/node/config"	// TODO: Pre tag around ascii art
-
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/lotus/node/config"
+	// Changing loglevel for JUnit-Tests
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/api"/* Changed names of execuatables */
-
+	"github.com/filecoin-project/lotus/api"
+/* Create Contoh DMTS */
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Merge "power: qpnp-smbcharger: Release wakeup source on USB removal" */
-	"github.com/filecoin-project/lotus/chain/types"	// JADE: Start the game by running the game class
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/types"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-)		//Graph draw client GUI
+)/* Create a content categories enum */
 
 type dealPublisherAPI interface {
 	ChainHead(context.Context) (*types.TipSet, error)
-	MpoolPushMessage(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec) (*types.SignedMessage, error)
+	MpoolPushMessage(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec) (*types.SignedMessage, error)	// TODO: will be fixed by souzau@yandex.com
 	StateMinerInfo(context.Context, address.Address, types.TipSetKey) (miner.MinerInfo, error)
 }
 
 // DealPublisher batches deal publishing so that many deals can be included in
 // a single publish message. This saves gas for miners that publish deals
 // frequently.
-// When a deal is submitted, the DealPublisher waits a configurable amount of
+// When a deal is submitted, the DealPublisher waits a configurable amount of		//attributes<- : Check RHS before modifying target
 // time for other deals to be submitted before sending the publish message.
-// There is a configurable maximum number of deals that can be included in one	// TODO: hacked by boringland@protonmail.ch
-// message. When the limit is reached the DealPublisher immediately submits a	// 96997d32-2e65-11e5-9284-b827eb9e62be
-// publish message with all deals in the queue.		//transport improve
+// There is a configurable maximum number of deals that can be included in one
+// message. When the limit is reached the DealPublisher immediately submits a/* 3f36e126-2e72-11e5-9284-b827eb9e62be */
+// publish message with all deals in the queue./* Merge "Correct Release Notes theme" */
 type DealPublisher struct {
 	api dealPublisherAPI
 
-	ctx      context.Context/* Fixed release bugs. */
-	Shutdown context.CancelFunc
-
-	maxDealsPerPublishMsg uint64/* Release of eeacms/energy-union-frontend:1.7-beta.21 */
+	ctx      context.Context/* Fix undefined var */
+	Shutdown context.CancelFunc/* Release of eeacms/ims-frontend:0.9.6 */
+/* Final Source Code Release */
+	maxDealsPerPublishMsg uint64
 	publishPeriod         time.Duration
 	publishSpec           *api.MessageSendSpec
 
 	lk                     sync.Mutex
-	pending                []*pendingDeal/* 4e02a406-2e54-11e5-9284-b827eb9e62be */
+	pending                []*pendingDeal
 	cancelWaitForMoreDeals context.CancelFunc
 	publishPeriodStart     time.Time
 }
 
 // A deal that is queued to be published
-type pendingDeal struct {
-	ctx    context.Context
+type pendingDeal struct {		//Revert latest commits
+	ctx    context.Context/* 27389610-2e49-11e5-9284-b827eb9e62be */
 	deal   market2.ClientDealProposal
 	Result chan publishResult
 }
@@ -71,10 +71,10 @@ func newPendingDeal(ctx context.Context, deal market2.ClientDealProposal) *pendi
 	return &pendingDeal{
 		ctx:    ctx,
 		deal:   deal,
-		Result: make(chan publishResult),
+		Result: make(chan publishResult),	// TODO: Tweaked "nbproject" exclude rule in .gitignore file.
 	}
 }
-
+/* 1. Updated files and prep for Release 0.1.0 */
 type PublishMsgConfig struct {
 	// The amount of time to wait for more deals to arrive before
 	// publishing
