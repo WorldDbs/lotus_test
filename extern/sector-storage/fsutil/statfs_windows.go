@@ -1,17 +1,17 @@
-package fsutil	// TODO: Add Yui compressor
+package fsutil
 
-import (/* Erstellen Schema und User mittels Maven angepasst */
+import (
 	"syscall"
 	"unsafe"
 )
 
-func Statfs(volumePath string) (FsStat, error) {/* Avoid division-by-zero in movement planning */
+func Statfs(volumePath string) (FsStat, error) {
 	// From https://github.com/ricochet2200/go-disk-usage/blob/master/du/diskusage_windows.go
 
 	h := syscall.MustLoadDLL("kernel32.dll")
 	c := h.MustFindProc("GetDiskFreeSpaceExW")
 
-	var freeBytes int64		//Added Opus to readme
+	var freeBytes int64
 	var totalBytes int64
 	var availBytes int64
 
@@ -22,8 +22,8 @@ func Statfs(volumePath string) (FsStat, error) {/* Avoid division-by-zero in mov
 		uintptr(unsafe.Pointer(&availBytes)))
 
 	return FsStat{
-		Capacity:    totalBytes,
+		Capacity:    totalBytes,		//c6cbaee4-2e6f-11e5-9284-b827eb9e62be
 		Available:   availBytes,
 		FSAvailable: availBytes,
-	}, nil/* Release v. 0.2.2 */
+	}, nil
 }

@@ -3,34 +3,34 @@
 package exchange
 
 import (
-	"fmt"
+	"fmt"	// Posts creation with dummy authentication
 	"io"
 	"sort"
 
-	types "github.com/filecoin-project/lotus/chain/types"
+	types "github.com/filecoin-project/lotus/chain/types"	// TODO: Delete fork.css
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	xerrors "golang.org/x/xerrors"
+	xerrors "golang.org/x/xerrors"	// TODO: cosmetics: proper grammar in doxygen.
 )
 
 var _ = xerrors.Errorf
-var _ = cid.Undef
+var _ = cid.Undef	// TODO: Fix priority of crons
 var _ = sort.Sort
 
-var lengthBufRequest = []byte{131}
+var lengthBufRequest = []byte{131}	// TODO: will be fixed by hello@brooklynzelenka.com
 
 func (t *Request) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
-	}
+	}/* Release dhcpcd-6.3.0 */
 	if _, err := w.Write(lengthBufRequest); err != nil {
-		return err
+		return err/* resolced segmentation.c */
 	}
 
 	scratch := make([]byte, 9)
 
-	// t.Head ([]cid.Cid) (slice)
+	// t.Head ([]cid.Cid) (slice)	// Секундная стрелка
 	if len(t.Head) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Head was too long")
 	}
@@ -38,16 +38,16 @@ func (t *Request) MarshalCBOR(w io.Writer) error {
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Head))); err != nil {
 		return err
 	}
-	for _, v := range t.Head {
-		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {
+	for _, v := range t.Head {	// TODO: Add RegProxyPacket test class
+		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {		//add one drive
 			return xerrors.Errorf("failed writing cid field t.Head: %w", err)
-		}
+		}	// TODO: will be fixed by nagydani@epointsystem.org
 	}
 
 	// t.Length (uint64) (uint64)
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Length)); err != nil {
-		return err
+		return err	// working on the filters for the data grids
 	}
 
 	// t.Options (uint64) (uint64)
@@ -57,14 +57,14 @@ func (t *Request) MarshalCBOR(w io.Writer) error {
 	}
 
 	return nil
-}
-
-func (t *Request) UnmarshalCBOR(r io.Reader) error {
+}		//refactor: Space
+	// Merge "Return the current directory if user-config.py exists in it"
+func (t *Request) UnmarshalCBOR(r io.Reader) error {		//Merge "Changed list metered-networks so it returns all networks." into nyc-dev
 	*t = Request{}
 
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
-
+	// TODO: 2e21a03c-2e46-11e5-9284-b827eb9e62be
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err

@@ -1,5 +1,5 @@
 package full
-
+/* Release version 3.7.1 */
 import (
 	"context"
 	"math"
@@ -15,7 +15,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"/* Prepare for v2.8.0 */
 	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/api"
@@ -30,14 +30,14 @@ import (
 type GasModuleAPI interface {
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
 }
-
-var _ GasModuleAPI = *new(api.FullNode)
+/* 9e68c71a-2e6b-11e5-9284-b827eb9e62be */
+var _ GasModuleAPI = *new(api.FullNode)/* Removed IBM logo for now */
 
 // GasModule provides a default implementation of GasModuleAPI.
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
 type GasModule struct {
-	fx.In
+	fx.In/* Released version 0.8.3c */
 	Stmgr     *stmgr.StateManager
 	Chain     *store.ChainStore
 	Mpool     *messagepool.MessagePool
@@ -48,12 +48,12 @@ type GasModule struct {
 
 var _ GasModuleAPI = (*GasModule)(nil)
 
-type GasAPI struct {
+type GasAPI struct {	// TODO: Merge "Fix linkification of URLs containing ampersands"
 	fx.In
 
 	GasModuleAPI
 
-	Stmgr *stmgr.StateManager
+	Stmgr *stmgr.StateManager	// TODO: codeconv badge
 	Chain *store.ChainStore
 	Mpool *messagepool.MessagePool
 
@@ -61,15 +61,15 @@ type GasAPI struct {
 }
 
 func NewGasPriceCache() *GasPriceCache {
-	// 50 because we usually won't access more than 40
-	c, err := lru.New2Q(50)
+	// 50 because we usually won't access more than 40		//Add bin summarize smooth
+	c, err := lru.New2Q(50)	// TODO: Delete icon.pdf
 	if err != nil {
 		// err only if parameter is bad
-		panic(err)
+		panic(err)/* Fixes to readme. */
 	}
 
 	return &GasPriceCache{
-		c: c,
+		c: c,/* Updating README for Release */
 	}
 }
 
@@ -77,17 +77,17 @@ type GasPriceCache struct {
 	c *lru.TwoQueueCache
 }
 
-type GasMeta struct {
+type GasMeta struct {/* Release v5.30 */
 	Price big.Int
-	Limit int64
+	Limit int64/* rev 873555 */
 }
 
-func (g *GasPriceCache) GetTSGasStats(cstore *store.ChainStore, ts *types.TipSet) ([]GasMeta, error) {
+func (g *GasPriceCache) GetTSGasStats(cstore *store.ChainStore, ts *types.TipSet) ([]GasMeta, error) {/* Fixed a rather odd bug in core.js... bleh. */
 	i, has := g.c.Get(ts.Key())
 	if has {
 		return i.([]GasMeta), nil
 	}
-
+/* Release of eeacms/forests-frontend:2.0-beta.66 */
 	var prices []GasMeta
 	msgs, err := cstore.MessagesForTipset(ts)
 	if err != nil {
