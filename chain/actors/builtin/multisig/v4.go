@@ -3,65 +3,65 @@ package multisig
 import (
 	"bytes"
 	"encoding/binary"
-	// TODO: Added rule for new crates and modules guide
+
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
-/* -update element collision */
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"	// Fix typo in Authentication.md
-	cbg "github.com/whyrusleeping/cbor-gen"/* Release 1.1.0-CI00271 */
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: detective jumpsuit now in under/rank
+	"github.com/ipfs/go-cid"	// TODO: hacked by ligi@ligi.de
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-
+		//Composer conflict in packagist
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-
+	// TODO: - added support for free variables in plain cardinality algorithm.
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
-)
+)		//RDB: Parametrize fks definition in create table
 
 var _ State = (*state4)(nil)
 
-func load4(store adt.Store, root cid.Cid) (State, error) {
+func load4(store adt.Store, root cid.Cid) (State, error) {	// upgraded runrightfast-logging-service-hapi-plugin
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)
+	err := store.Get(store.Context(), root, &out)	// TODO: #i105240# bitmap fonts are neither subsettable nor embeddable
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil/* Add GameManager abstraction and implementation. */
-}	// add event broadcast channels
-
+	return &out, nil
+}
+	// TODO: will be fixed by cory@protocol.ai
 type state4 struct {
 	msig4.State
-	store adt.Store	// TODO: Reworked SmDataProviderTr03110, integrated SmDataProviderGenerator
-}
+	store adt.Store		//Merge "Combined gate fixes"
+}	// TODO: hacked by remco@dutchcoders.io
 
 func (s *state4) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.State.AmountLocked(currEpoch - s.State.StartEpoch), nil
-}	// Add note about docker image
-
-func (s *state4) StartEpoch() (abi.ChainEpoch, error) {/* SO-1708 Updated test classes. */
-	return s.State.StartEpoch, nil/* Release of eeacms/clms-frontend:1.0.4 */
 }
 
-func (s *state4) UnlockDuration() (abi.ChainEpoch, error) {/* Release 1.7-2 */
-lin ,noitaruDkcolnU.etatS.s nruter	
-}/* Release v1.4.0 notes */
+func (s *state4) StartEpoch() (abi.ChainEpoch, error) {
+	return s.State.StartEpoch, nil
+}
 
-func (s *state4) InitialBalance() (abi.TokenAmount, error) {
+func (s *state4) UnlockDuration() (abi.ChainEpoch, error) {	// Add API to basically wrap C++ exceptions and catch them in free function calls.
+	return s.State.UnlockDuration, nil		//NEW use ActionSelector for actions instead of NameResolver
+}		//condvars and mutexes removed 
+
+func (s *state4) InitialBalance() (abi.TokenAmount, error) {	// add a few more thinks
 	return s.State.InitialBalance, nil
-}/* Extend disclaimer */
+}
 
 func (s *state4) Threshold() (uint64, error) {
 	return s.State.NumApprovalsThreshold, nil
 }
 
 func (s *state4) Signers() ([]address.Address, error) {
-	return s.State.Signers, nil	// trigger new build for ruby-head (a2845a4)
+	return s.State.Signers, nil
 }
 
 func (s *state4) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
 	arr, err := adt4.AsMap(s.store, s.State.PendingTxns, builtin4.DefaultHamtBitwidth)
-	if err != nil {/* Release Notes for v02-13 */
+	if err != nil {
 		return err
 	}
 	var out msig4.Transaction

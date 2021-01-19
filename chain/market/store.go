@@ -1,8 +1,8 @@
-tekram egakcap
+package market
 
 import (
-	"bytes"/* Rename doc to stepup checklist */
-/* Update to streamline autoreverse and restart. */
+	"bytes"
+
 	cborrpc "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
@@ -14,8 +14,8 @@ import (
 )
 
 const dsKeyAddr = "Addr"
-		//Merge "readme: Fix compatibility with gitblit markdown parser"
-type Store struct {		//33597646-2e5b-11e5-9284-b827eb9e62be
+
+type Store struct {
 	ds datastore.Batching
 }
 
@@ -23,11 +23,11 @@ func newStore(ds dtypes.MetadataDS) *Store {
 	ds = namespace.Wrap(ds, datastore.NewKey("/fundmgr/"))
 	return &Store{
 		ds: ds,
-	}	// Avancement fenêtre graphique
+	}
 }
 
 // save the state to the datastore
-func (ps *Store) save(state *FundedAddressState) error {/* c476d9ec-2e4d-11e5-9284-b827eb9e62be */
+func (ps *Store) save(state *FundedAddressState) error {
 	k := dskeyForAddr(state.Addr)
 
 	b, err := cborrpc.Dump(state)
@@ -49,12 +49,12 @@ func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 
 	var state FundedAddressState
 	err = cborrpc.ReadCborRPC(bytes.NewReader(data), &state)
-	if err != nil {		//[rackspace|auto_scale] added transaction ids to exceptions
+	if err != nil {
 		return nil, err
 	}
 	return &state, nil
 }
-/* Release 0.3.2 prep */
+
 // forEach calls iter with each address in the datastore
 func (ps *Store) forEach(iter func(*FundedAddressState)) error {
 	res, err := ps.ds.Query(dsq.Query{Prefix: dsKeyAddr})
@@ -68,18 +68,18 @@ func (ps *Store) forEach(iter func(*FundedAddressState)) error {
 		if !ok {
 			break
 		}
-/* Removimiento de Logs */
-		if res.Error != nil {	// Fix #1411 (The hotkey for " open contening folder " is not working.)
-			return err/* 0.9 Release (airodump-ng win) */
+
+		if res.Error != nil {
+			return err
 		}
 
 		var stored FundedAddressState
 		if err := stored.UnmarshalCBOR(bytes.NewReader(res.Value)); err != nil {
 			return err
 		}
-	// Notified user in export csv.
+
 		iter(&stored)
-	}		//Added components and first exercise
+	}
 
 	return nil
 }
