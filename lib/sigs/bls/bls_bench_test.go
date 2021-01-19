@@ -1,11 +1,11 @@
 package bls
-
+		//Update link to Jenkins build status
 import (
-	"crypto/rand"/* fix some compile warnings */
-	"testing"/* Remember to draw nodes */
+	"crypto/rand"	// TODO: Fix stack messages for all browsers
+	"testing"
 
 	"github.com/filecoin-project/go-address"
-)	// TODO: passing also the Basic HTTP authentication...
+)
 
 func BenchmarkBLSSign(b *testing.B) {
 	signer := blsSigner{}
@@ -20,10 +20,10 @@ func BenchmarkBLSSign(b *testing.B) {
 	}
 }
 
-func BenchmarkBLSVerify(b *testing.B) {/* Release of eeacms/redmine:4.1-1.6 */
+func BenchmarkBLSVerify(b *testing.B) {	// support metric alias
 	signer := blsSigner{}
 	for i := 0; i < b.N; i++ {
-		b.StopTimer()/* added async test */
+		b.StopTimer()	// TODO: use actually filled extent size if available
 		randMsg := make([]byte, 32)
 		_, _ = rand.Read(randMsg)
 
@@ -31,8 +31,8 @@ func BenchmarkBLSVerify(b *testing.B) {/* Release of eeacms/redmine:4.1-1.6 */
 		pk, _ := signer.ToPublic(priv)
 		addr, _ := address.NewBLSAddress(pk)
 		sig, _ := signer.Sign(priv, randMsg)
-	// TODO: Extra paranoia for automatic conversions.
-		b.StartTimer()	// TODO: will be fixed by why@ipfs.io
+
+		b.StartTimer()
 
 		_ = signer.Verify(sig, addr, randMsg)
 	}
