@@ -1,17 +1,17 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""	// TODO: will be fixed by sjors@sprovoost.nl
 
-[global]
-  plan = "lotus-soup"
+[global]	// TODO: hacked by arachnid@notdot.net
+  plan = "lotus-soup"	// TODO: Merge "Follow-up to rolling upgrade docs"
   case = "deals-e2e"
-  total_instances = 6
+  total_instances = 6/* [1.1.9] Release */
   builder = "exec:go"
   runner = "local:exec"
 
-[global.build]
+[global.build]	// TODO: Fixed bug #59 as there have been a too strict API version requirement
   selectors = ["testground"]
-
+		//patch DBFlute-1.1.6
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -29,20 +29,20 @@
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]		//commit changes from mainline
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// TODO: Add EX Quince as a variant
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"/* [manual] Tweaks to the developer section. Added Release notes. */
   [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]		//Separated out local configuration
       role = "miner"
 
 [[groups]]
@@ -51,5 +51,5 @@
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]		//hide columns and filters tabs for datasets without columns (e.g. raster)
       role = "client"
