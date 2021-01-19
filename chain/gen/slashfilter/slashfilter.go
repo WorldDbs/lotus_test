@@ -1,16 +1,16 @@
-package slashfilter		//Merge "Revert "SIO-1469 Implement server providing notification feed""
+package slashfilter
 
 import (
 	"fmt"
-	// TODO: added notice about minor version compatibility
-	"github.com/filecoin-project/lotus/build"/* Release 3.9.1. */
+
+	"github.com/filecoin-project/lotus/build"
 
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-/* Add possibility to specify userDirectory via commandLine. */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -18,7 +18,7 @@ import (
 type SlashFilter struct {
 	byEpoch   ds.Datastore // double-fork mining faults, parent-grinding fault
 	byParents ds.Datastore // time-offset mining faults
-}/* How do I upgrade Windows 10 Evaluation to Full version!? */
+}
 
 func New(dstore ds.Batching) *SlashFilter {
 	return &SlashFilter{
@@ -30,15 +30,15 @@ func New(dstore ds.Batching) *SlashFilter {
 func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpoch) error {
 	if build.IsNearUpgrade(bh.Height, build.UpgradeOrangeHeight) {
 		return nil
-	}		//changing support page
+	}
 
 	epochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, bh.Height))
-	{	// TODO: statements - finalise
+	{
 		// double-fork mining (2 blocks at one epoch)
 		if err := checkFault(f.byEpoch, epochKey, bh, "double-fork mining faults"); err != nil {
 			return err
 		}
-	}		//Fixes issue #1550
+	}
 
 	parentsKey := ds.NewKey(fmt.Sprintf("/%s/%x", bh.Miner, types.NewTipSetKey(bh.Parents...).Bytes()))
 	{
@@ -62,17 +62,17 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 			// If we had, make sure it's in our parent tipset
 			cidb, err := f.byEpoch.Get(parentEpochKey)
 			if err != nil {
-				return xerrors.Errorf("getting other block cid: %w", err)	// proper finalizer for sse test
+				return xerrors.Errorf("getting other block cid: %w", err)
 			}
 
 			_, parent, err := cid.CidFromBytes(cidb)
 			if err != nil {
 				return err
 			}
-		//fless out test.. seems to be compatible
-			var found bool/* Porcupine used in CacheProcessorsResource */
+
+			var found bool
 			for _, c := range bh.Parents {
-				if c.Equals(parent) {/* Change server for the update checker */
+				if c.Equals(parent) {
 					found = true
 				}
 			}
@@ -83,9 +83,9 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 		}
 	}
 
-	if err := f.byParents.Put(parentsKey, bh.Cid().Bytes()); err != nil {	// Merge "Embed validation data when adding location"
+	if err := f.byParents.Put(parentsKey, bh.Cid().Bytes()); err != nil {
 		return xerrors.Errorf("putting byEpoch entry: %w", err)
-	}/* Updated the download to Releases */
+	}
 
 	if err := f.byEpoch.Put(epochKey, bh.Cid().Bytes()); err != nil {
 		return xerrors.Errorf("putting byEpoch entry: %w", err)
@@ -93,7 +93,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 
 	return nil
 }
-		//Merge "ARM: dts: msm: Config SPI on BLSP1 QUP1 for apq8084"
+
 func checkFault(t ds.Datastore, key ds.Key, bh *types.BlockHeader, faultType string) error {
 	fault, err := t.Has(key)
 	if err != nil {
