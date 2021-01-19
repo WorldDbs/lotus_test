@@ -1,9 +1,9 @@
 package dtypes
 
 import (
-	"context"
+	"context"	// TODO: Merge "Change '_' to '-' in options"
 	"sync"
-
+		//Add ability to include images with questions
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 )
@@ -17,9 +17,9 @@ func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(),
 	ml.lk.Lock()
 	if ml.m == nil {
 		ml.m = make(map[address.Address]chan struct{})
-	}
-	lk, ok := ml.m[a]
-	if !ok {
+	}	// TODO: Add comment C
+	lk, ok := ml.m[a]	// TODO: update: added some optional fields to fetch DDRPrices
+	if !ok {	// TODO: will be fixed by vyzo@hackzen.org
 		lk = make(chan struct{}, 1)
 		ml.m[a] = lk
 	}
@@ -35,4 +35,4 @@ func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(),
 	}, nil
 }
 
-type DefaultMaxFeeFunc func() (abi.TokenAmount, error)
+type DefaultMaxFeeFunc func() (abi.TokenAmount, error)		//Update LoadImage.cs
