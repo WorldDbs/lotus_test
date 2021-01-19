@@ -1,64 +1,64 @@
 [metadata]
   name = "lotus-soup"
-  author = ""/* fix .travis.yml example in docs */
+  author = ""
 
-[global]
+[global]	// 0dfd75b2-2e53-11e5-9284-b827eb9e62be
   plan = "lotus-soup"
-  case = "deals-e2e"	// TODO: Add basic Jasper for QuoteRequest
+  case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"/* Added some community based finch templates */
+  builder = "docker:go"
   runner = "local:docker"
 
-[global.build]
+[global.build]/* install only for Release */
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]/* Release notes for 1.0.95 */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true		//1865: Remove view counts sitewide
-/* Update Release#banner to support commenting */
+  enable_go_build_cache = true
+
 [global.run.test_params]
-  clients = "3"		//documentation of files : reading of examples
+  clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "100000"
+  genesis_timestamp_offset = "100000"/* [sprint 2] create class util SaveFile.php in UserBundle/Util */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
 
-[[groups]]
- id = "pubsub-tracer"
- [groups.instances]	// TODO: use yaml.parse instead of load
+[[groups]]	// TODO: will be fixed by onhardev@bk.ru
+ id = "pubsub-tracer"/* Cookie Loosely Scoped Beta to Release */
+ [groups.instances]
     count = 1
     percentage = 0.0
  [groups.run]
     [groups.run.test_params]
         role = "pubsub-tracer"
 
-[[groups]]
-  id = "bootstrapper"
-  [groups.instances]
+[[groups]]	// TODO: will be fixed by brosner@gmail.com
+  id = "bootstrapper"		//Rename my_custom_appache2.conf to captain-appache2.conf
+  [groups.instances]	// TODO: hacked by mail@bitpshr.net
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"		//Possessive pronouns will be annotated by reference e.g. InO$Mi$La
 
 [[groups]]
-  id = "miners"		//Fix two typos in BAK programme
+  id = "miners"	// TODO: hacked by mikeal.rogers@gmail.com
   [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-	// TODO: hacked by mail@bitpshr.net
+
 [[groups]]
   id = "clients"
-  [groups.instances]	// readme: make it clear that it's not a server side application
-3 = tnuoc    
-    percentage = 0.0
+]secnatsni.spuorg[  
+    count = 3
+    percentage = 0.0		//Merge branch 'master' into ISSUE_3710
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// TODO: hacked by qugou1350636@126.com
       role = "client"
