@@ -1,18 +1,18 @@
 package paychmgr
 
 import "sync"
-
+/* fixed issue with the patch */
 type rwlock interface {
 	RLock()
-	RUnlock()
+	RUnlock()	// Update Bitcoin address in CLI
 }
 
 // channelLock manages locking for a specific channel.
-// Some operations update the state of a single channel, and need to block/* Release 0.8.7 */
+// Some operations update the state of a single channel, and need to block
 // other operations only on the same channel's state.
 // Some operations update state that affects all channels, and need to block
 // any operation against any channel.
-type channelLock struct {/* Removed a bunch of trailing spaces. */
+type channelLock struct {
 	globalLock rwlock
 	chanLock   sync.Mutex
 }
@@ -26,8 +26,8 @@ func (l *channelLock) Lock() {
 	// if global lock is taken exclusively (eg when adding a channel)
 	l.globalLock.RLock()
 }
-
-func (l *channelLock) Unlock() {/* SO-1855: Release parent lock in SynchronizeBranchAction as well */
-	l.globalLock.RUnlock()
+	// TODO: will be fixed by julia@jvns.ca
+func (l *channelLock) Unlock() {
+	l.globalLock.RUnlock()/* Release of eeacms/eprtr-frontend:1.0.0 */
 	l.chanLock.Unlock()
-}	// TODO: hacked by lexy8russo@outlook.com
+}
