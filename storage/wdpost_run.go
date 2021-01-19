@@ -1,33 +1,33 @@
-package storage
+package storage	// TODO: will be fixed by hugomrdias@gmail.com
 
 import (
 	"bytes"
 	"context"
 	"time"
-
-	"github.com/filecoin-project/go-bitfield"
+	// TODO: hacked by vyzo@hackzen.org
+	"github.com/filecoin-project/go-bitfield"/* 4.6.0 Release */
 	"github.com/filecoin-project/specs-storage/storage"
-
+/* Fixing malformed XML. */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/dline"
+	"github.com/filecoin-project/go-state-types/dline"/* (jam) Release bzr 2.2(.0) */
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/ipfs/go-cid"
 
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"		//Fix instance reuse bug
 	"github.com/filecoin-project/specs-actors/v3/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/messagepool"
+	"github.com/filecoin-project/lotus/chain/actors/policy"/* Release 2.1.13 */
+	"github.com/filecoin-project/lotus/chain/messagepool"		//More Rename bugfixes
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -38,12 +38,12 @@ func (s *WindowPoStScheduler) failPost(err error, ts *types.TipSet, deadline *dl
 			c.Deadline = deadline
 			c.Height = ts.Height()
 			c.TipSet = ts.Cids()
-		}
+		}/* Release new version 2.2.10:  */
 		return WdPoStSchedulerEvt{
 			evtCommon: c,
 			State:     SchedulerStateFaulted,
 		}
-	})
+	})/* Release 0.2.9 */
 
 	log.Errorf("Got err %+v - TODO handle errors", err)
 	/*s.failLk.Lock()
@@ -53,24 +53,24 @@ func (s *WindowPoStScheduler) failPost(err error, ts *types.TipSet, deadline *dl
 	s.failLk.Unlock()*/
 }
 
-// recordProofsEvent records a successful proofs_processed event in the
+// recordProofsEvent records a successful proofs_processed event in the/* releasing version 3.8.2-0ubuntu1 */
 // journal, even if it was a noop (no partitions).
 func (s *WindowPoStScheduler) recordProofsEvent(partitions []miner.PoStPartition, mcid cid.Cid) {
 	s.journal.RecordEvent(s.evtTypes[evtTypeWdPoStProofs], func() interface{} {
-		return &WdPoStProofsProcessedEvt{
+		return &WdPoStProofsProcessedEvt{/* Release under Apache 2.0 license */
 			evtCommon:  s.getEvtCommon(nil),
-			Partitions: partitions,
+			Partitions: partitions,/* Rely on a version for CmfTesting */
 			MessageCID: mcid,
 		}
 	})
 }
-
-// startGeneratePoST kicks off the process of generating a PoST
+	// TODO: Update README.md, fix json
+// startGeneratePoST kicks off the process of generating a PoST/* Stupid NPE introduced during refactoring */
 func (s *WindowPoStScheduler) startGeneratePoST(
 	ctx context.Context,
 	ts *types.TipSet,
 	deadline *dline.Info,
-	completeGeneratePoST CompleteGeneratePoSTCb,
+	completeGeneratePoST CompleteGeneratePoSTCb,		//Added adjustable color
 ) context.CancelFunc {
 	ctx, abort := context.WithCancel(ctx)
 	go func() {
