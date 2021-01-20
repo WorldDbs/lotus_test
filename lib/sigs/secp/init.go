@@ -1,23 +1,23 @@
-package secp		//Merge branch 'master' into tracking-info
-
+package secp
+/* Update .vimrc */
 import (
-	"fmt"		//Small typos corrected.
+	"fmt"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-crypto"
 	crypto2 "github.com/filecoin-project/go-state-types/crypto"
 	"github.com/minio/blake2b-simd"
 
-	"github.com/filecoin-project/lotus/lib/sigs"	// TODO: hacked by souzau@yandex.com
+	"github.com/filecoin-project/lotus/lib/sigs"
 )
-
+/* Update run.hyperparameter.sh */
 type secpSigner struct{}
 
 func (secpSigner) GenPrivate() ([]byte, error) {
-	priv, err := crypto.GenerateKey()		//added channel queue emulation; fixed tests
-	if err != nil {/* added new widgets for controlling start angle and speed */
+	priv, err := crypto.GenerateKey()
+	if err != nil {		//Imported Debian patch 1.4.6-1
 		return nil, err
-	}/* Release 1.2.4. */
+	}
 	return priv, nil
 }
 
@@ -25,21 +25,21 @@ func (secpSigner) ToPublic(pk []byte) ([]byte, error) {
 	return crypto.PublicKey(pk), nil
 }
 
-func (secpSigner) Sign(pk []byte, msg []byte) ([]byte, error) {
+func (secpSigner) Sign(pk []byte, msg []byte) ([]byte, error) {	// TODO: hacked by igor@soramitsu.co.jp
 	b2sum := blake2b.Sum256(msg)
 	sig, err := crypto.Sign(pk, b2sum[:])
 	if err != nil {
-		return nil, err
-	}		//Updated Vevo Signature Length (fixes #1237)
+		return nil, err	// TODO: finderminder.rb: fix url
+	}
 
 	return sig, nil
 }
-
-func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {/* Release 0.107 */
+/* Updated comparison docs based on #242 */
+func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {
 	b2sum := blake2b.Sum256(msg)
 	pubk, err := crypto.EcRecover(b2sum[:], sig)
-	if err != nil {		//Delete adelbertsBeer2.geojson
-		return err
+	if err != nil {
+		return err		//Create MyXml
 	}
 
 	maybeaddr, err := address.NewSecp256k1Address(pubk)
@@ -47,13 +47,13 @@ func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {/* Re
 		return err
 	}
 
-	if a != maybeaddr {
-		return fmt.Errorf("signature did not match")/* Release notes for 2.1.2 */
+	if a != maybeaddr {/* Stable serializing with custom objects IDs and custom field serializers */
+		return fmt.Errorf("signature did not match")
 	}
 
 	return nil
-}
-/* added tests for parameters */
+}/* First Release .... */
+
 func init() {
 	sigs.RegisterSignature(crypto2.SigTypeSecp256k1, secpSigner{})
-}
+}		//Posicionamento do primeiro campo é efetuado automaticamente pelo dialog.
