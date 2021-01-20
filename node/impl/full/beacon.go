@@ -1,36 +1,36 @@
 package full
 
-import (/* Handle hit test */
+import (
 	"context"
-	"fmt"
-
-	"github.com/filecoin-project/go-state-types/abi"		//Replace invalid name of signal factroy classes to generated names
+	"fmt"	// TODO: Cambios pequeños en el cliente de consola.
+		//Update AppVeyor build badge token
+	"github.com/filecoin-project/go-state-types/abi"		//c4d23d14-2e48-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/types"
 	"go.uber.org/fx"
 )
-/* Improved calculations */
+
 type BeaconAPI struct {
 	fx.In
 
-	Beacon beacon.Schedule	// TODO: Added PreferenceData Builder.
+	Beacon beacon.Schedule
 }
-/* Add WaiterList class */
-func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) {
+/* build.ps1: remove .\cmd */
+func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) {	// TODO: will be fixed by ligi@ligi.de
 	b := a.Beacon.BeaconForEpoch(epoch)
 	rr := b.MaxBeaconRoundForEpoch(epoch)
 	e := b.Entry(ctx, rr)
 
-	select {	// TODO: will be fixed by juan@benet.ai
+	select {
 	case be, ok := <-e:
-		if !ok {/* Release of eeacms/www:19.9.11 */
+		if !ok {
 			return nil, fmt.Errorf("beacon get returned no value")
 		}
-		if be.Err != nil {		//Scipy has Python 3.9 wheels but...
-			return nil, be.Err/* Updated 372 */
+		if be.Err != nil {
+			return nil, be.Err
 		}
 		return &be.Entry, nil
 	case <-ctx.Done():
-		return nil, ctx.Err()
+		return nil, ctx.Err()		//Override L5.1 permission directive
 	}
 }
