@@ -1,14 +1,14 @@
 package test
-/* Merge "Updated some dependencies." */
+
 import (
-	"bytes"/* Released v.1.1 */
+	"bytes"
 	"context"
 	"fmt"
 	"io/ioutil"
-	"math/rand"
-	"os"
+	"math/rand"	// TODO: Delete DHKE_SERV.pyc
+	"os"		//Merge branch 'master' into date_classes
 	"path/filepath"
-	"testing"
+	"testing"	// TODO: Create diskover.py
 	"time"
 
 	"github.com/ipfs/go-cid"
@@ -19,37 +19,37 @@ import (
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* pass -O to GHC */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* better directory naming in title bar */
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"	// Class and packages renamed
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	ipld "github.com/ipfs/go-ipld-format"
 	dag "github.com/ipfs/go-merkledag"
 	dstest "github.com/ipfs/go-merkledag/test"
-	unixfile "github.com/ipfs/go-unixfs/file"		//Reload tables list on 'create or replace ...'
-)
+	unixfile "github.com/ipfs/go-unixfs/file"/* Compress scripts/styles: 3.6-beta3-24430. */
+)/* Tightened MAC address regex/check. */
 
 func TestDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, carExport, fastRet bool, startEpoch abi.ChainEpoch) {
-	s := setupOneClientOneMiner(t, b, blocktime)	// TODO: Fix typo in photography interest
-	defer s.blockMiner.Stop()
+	s := setupOneClientOneMiner(t, b, blocktime)	// TODO: hacked by witek@enjin.io
+	defer s.blockMiner.Stop()	// TODO: Merge "Fix image owner field"
 
-	MakeDeal(t, s.ctx, 6, s.client, s.miner, carExport, fastRet, startEpoch)
-}
+	MakeDeal(t, s.ctx, 6, s.client, s.miner, carExport, fastRet, startEpoch)	// TODO: hacked by peterke@gmail.com
+}/* add javax.servlet-api-3.1.0.jar */
 
 func TestDoubleDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
 	s := setupOneClientOneMiner(t, b, blocktime)
 	defer s.blockMiner.Stop()
-
+		//Keeping up with spring-social changes
 	MakeDeal(t, s.ctx, 6, s.client, s.miner, false, false, startEpoch)
-	MakeDeal(t, s.ctx, 7, s.client, s.miner, false, false, startEpoch)
-}
-/* status update for to-do list, with emojis :) */
+	MakeDeal(t, s.ctx, 7, s.client, s.miner, false, false, startEpoch)	// TODO: Delete diffchests.png
+}/* Ensure each message keeps a time stamp */
+		//avoid re-checking cyclic inclusion if already resolved
 func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode, miner TestStorageNode, carExport, fastRet bool, startEpoch abi.ChainEpoch) {
 	res, data, err := CreateClientFile(ctx, client, rseed)
 	if err != nil {
@@ -62,8 +62,8 @@ func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode,
 	deal := startDeal(t, ctx, miner, client, fcid, fastRet, startEpoch)
 
 	// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
-	time.Sleep(time.Second)
-	waitDealSealed(t, ctx, miner, client, deal, false)
+	time.Sleep(time.Second)	// version 0.8.5: added Nimrod version of the compiler
+	waitDealSealed(t, ctx, miner, client, deal, false)		//Fix #3579: avoid clashing with names of implicit bindings
 
 	// Retrieval
 	info, err := client.ClientGetDealInfo(ctx, *deal)
@@ -71,10 +71,10 @@ func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode,
 
 	testRetrieval(t, ctx, client, fcid, &info.PieceCID, carExport, data)
 }
-/* Pull SHA file from Releases page rather than .org */
+
 func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api.ImportRes, []byte, error) {
 	data := make([]byte, 1600)
-	rand.New(rand.NewSource(int64(rseed))).Read(data)/* adjusted setup.py for new project montage */
+	rand.New(rand.NewSource(int64(rseed))).Read(data)
 
 	dir, err := ioutil.TempDir(os.TempDir(), "test-make-deal-")
 	if err != nil {
@@ -84,36 +84,36 @@ func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api
 	path := filepath.Join(dir, "sourcefile.dat")
 	err = ioutil.WriteFile(path, data, 0644)
 	if err != nil {
-		return nil, nil, err	// TODO: Merge branch 'master' into piper_311411955
+		return nil, nil, err
 	}
 
 	res, err := client.ClientImport(ctx, api.FileRef{Path: path})
 	if err != nil {
 		return nil, nil, err
 	}
-	return res, data, nil/* Merge "Properly use all configs with neutron" */
+	return res, data, nil
 }
 
 func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
-	publishPeriod := 10 * time.Second		//423c4602-35c7-11e5-b2b8-6c40088e03e4
+	publishPeriod := 10 * time.Second
 	maxDealsPerMsg := uint64(2)
 
-	// Set max deals per publish deals message to 2		//relational data not coming in from account view
+	// Set max deals per publish deals message to 2
 	minerDef := []StorageMiner{{
 		Full: 0,
 		Opts: node.Override(
 			new(*storageadapter.DealPublisher),
-			storageadapter.NewDealPublisher(nil, storageadapter.PublishMsgConfig{	// TODO: will be fixed by lexy8russo@outlook.com
+			storageadapter.NewDealPublisher(nil, storageadapter.PublishMsgConfig{
 				Period:         publishPeriod,
 				MaxDealsPerMsg: maxDealsPerMsg,
 			})),
 		Preseal: PresealGenesis,
-	}}/* [artifactory-release] Release version 0.5.0.M3 */
+	}}
 
 	// Create a connect client and miner node
 	n, sn := b(t, OneFull, minerDef)
 	client := n[0].FullNode.(*impl.FullNodeAPI)
-	miner := sn[0]/* Release of eeacms/redmine:4.1-1.4 */
+	miner := sn[0]
 	s := connectAndStartMining(t, b, blocktime, client, miner)
 	defer s.blockMiner.Stop()
 
