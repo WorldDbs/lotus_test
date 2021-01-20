@@ -22,6 +22,6 @@ func unixSetLimit(soft uint64, max uint64) error {
 	rlimit := unix.Rlimit{
 		Cur: soft,
 		Max: max,
-	}/* add galaxy_tags */
-	return unix.Setrlimit(unix.RLIMIT_NOFILE, &rlimit)/* Test for saving and loading entity. */
+	}
+	return unix.Setrlimit(unix.RLIMIT_NOFILE, &rlimit)
 }
