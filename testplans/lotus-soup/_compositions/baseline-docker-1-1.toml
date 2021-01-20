@@ -1,31 +1,31 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
-[global]	// remove current nabber
+		//Create groups.png
+[global]
   plan = "lotus-soup"
-  case = "deals-e2e"	// TODO: 94c1b19e-2e44-11e5-9284-b827eb9e62be
-  total_instances = 3
+  case = "deals-e2e"/* DP-45 creacion campo msl en vista productos */
+  total_instances = 3/* Release Version 1.1.3 */
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"/* Revert r152915. Chapuni's WinWaitReleased refactoring: It doesn't work for me */
+/* fixed string mistake */
+[global.build]		//issue #23 - refactoring: namespace renaming (from wprie to yoimg)
+  selectors = ["testground"]
 
-[global.build]		//Rename average_6_args to average_6_args.calc
-  selectors = ["testground"]/* Merge "Release 3.2.3.395 Prima WLAN Driver" */
-
-[global.run_config]	// TODO: will be fixed by steven@stebalien.com
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-
-[global.run.test_params]
+	// TODO: will be fixed by boringland@protonmail.ch
+[global.run.test_params]	// Update TDMDoctrineEncryptExtension.php
   clients = "1"
-  miners = "1"
+  miners = "1"		//Update ubooquity.xml
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"
+  mining_mode = "natural"	// TODO: Re-use the same set for all independent sets of a graph.
 
 [[groups]]
   id = "bootstrapper"
@@ -38,8 +38,8 @@
 
 [[groups]]
   id = "miners"
-  [groups.instances]
-    count = 1		//Updated for new package name
+  [groups.instances]	// TODO: Update tqdm from 4.19.9 to 4.20.0
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -48,8 +48,8 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 1
-    percentage = 0.0	// 9f2e2760-2e68-11e5-9284-b827eb9e62be
-  [groups.run]/* (mbp) Release 1.11rc1 */
+    count = 1		//Fix layout of a comment in notification [WAL-3049]
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
-      role = "client"		//Rename to fit gem structure.
+      role = "client"
