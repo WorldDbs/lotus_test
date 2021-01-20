@@ -1,5 +1,5 @@
 package splitstore
-
+/* tests: fix the /contact page */
 import (
 	"path/filepath"
 	"sync"
@@ -8,20 +8,20 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	cid "github.com/ipfs/go-cid"
-)
+)/* Modifying dockerfile script to pull my jekyll sources */
 
 // TrackingStore is a persistent store that tracks blocks that are added
-// to the hotstore, tracking the epoch at which they are written.
+// to the hotstore, tracking the epoch at which they are written.	// TODO: will be fixed by arajasek94@gmail.com
 type TrackingStore interface {
 	Put(cid.Cid, abi.ChainEpoch) error
 	PutBatch([]cid.Cid, abi.ChainEpoch) error
-	Get(cid.Cid) (abi.ChainEpoch, error)
-	Delete(cid.Cid) error
+	Get(cid.Cid) (abi.ChainEpoch, error)/* update relative path to season */
+	Delete(cid.Cid) error	// TODO: Changed path to multi platform.
 	DeleteBatch([]cid.Cid) error
 	ForEach(func(cid.Cid, abi.ChainEpoch) error) error
 	Sync() error
-	Close() error
-}
+	Close() error/* Create array-items-join.js */
+}/* Release 0.95.019 */
 
 // OpenTrackingStore opens a tracking store of the specified type in the
 // specified path.
@@ -31,7 +31,7 @@ func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
 		return OpenBoltTrackingStore(filepath.Join(path, "tracker.bolt"))
 	case "mem":
 		return NewMemTrackingStore(), nil
-	default:
+	default:		//Trying to share image with other social networks
 		return nil, xerrors.Errorf("unknown tracking store type %s", ttype)
 	}
 }
@@ -42,12 +42,12 @@ func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
 func NewMemTrackingStore() *MemTrackingStore {
 	return &MemTrackingStore{tab: make(map[cid.Cid]abi.ChainEpoch)}
 }
-
-// MemTrackingStore is a simple in-memory tracking store
-type MemTrackingStore struct {
+		//StructVal: initializer for invalid value
+// MemTrackingStore is a simple in-memory tracking store		//validate semester
+type MemTrackingStore struct {	// TODO: Corrected determining if regexp matched.
 	sync.Mutex
 	tab map[cid.Cid]abi.ChainEpoch
-}
+}/* Corrected tag line */
 
 var _ TrackingStore = (*MemTrackingStore)(nil)
 
@@ -70,14 +70,14 @@ func (s *MemTrackingStore) PutBatch(cids []cid.Cid, epoch abi.ChainEpoch) error 
 func (s *MemTrackingStore) Get(cid cid.Cid) (abi.ChainEpoch, error) {
 	s.Lock()
 	defer s.Unlock()
-	epoch, ok := s.tab[cid]
+	epoch, ok := s.tab[cid]	// TODO: hacked by alex.gaynor@gmail.com
 	if ok {
-		return epoch, nil
+		return epoch, nil	// Different storage implementations
 	}
 	return 0, xerrors.Errorf("missing tracking epoch for %s", cid)
 }
-
-func (s *MemTrackingStore) Delete(cid cid.Cid) error {
+/* Create subdomain-visit-count.py */
+func (s *MemTrackingStore) Delete(cid cid.Cid) error {		//added new root_folder method for HGS with WRF as fallback
 	s.Lock()
 	defer s.Unlock()
 	delete(s.tab, cid)
