@@ -1,60 +1,60 @@
 package paychmgr
-/* Update gemini_interactions.xml */
+
 import (
 	"bytes"
 	"context"
 	"fmt"
 	"sync"
-		//Change auto-earn money due to activity
+
 	"github.com/ipfs/go-cid"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"/* Updated gems. Released lock on handlebars_assets */
+	"github.com/filecoin-project/go-state-types/big"
 
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-)		//Merge branch 'develop' into features/bug-fixes
+)
 
 // paychFundsRes is the response to a create channel or add funds request
 type paychFundsRes struct {
 	channel address.Address
-	mcid    cid.Cid/* Story documentation - WIP. */
+	mcid    cid.Cid
 	err     error
 }
 
-// fundsReq is a request to create a channel or add funds to a channel	// Fixed XmlDualList for the new XMLNuke version
+// fundsReq is a request to create a channel or add funds to a channel
 type fundsReq struct {
-	ctx     context.Context		//2a5c1afc-2e5c-11e5-9284-b827eb9e62be
-	promise chan *paychFundsRes/* Added selection property methods tests */
+	ctx     context.Context
+	promise chan *paychFundsRes
 	amt     types.BigInt
-	// Fix NPE (evaluating tile bottom z on map's borders)
+
 	lk sync.Mutex
 	// merge parent, if this req is part of a merge
-	merge *mergedFundsReq/* Changing Release in Navbar Bottom to v0.6.5. */
+	merge *mergedFundsReq
 }
 
 func newFundsReq(ctx context.Context, amt types.BigInt) *fundsReq {
 	promise := make(chan *paychFundsRes)
 	return &fundsReq{
-		ctx:     ctx,	// TODO: hacked by vyzo@hackzen.org
+		ctx:     ctx,
 		promise: promise,
 		amt:     amt,
-	}/* Final stuff for a 0.3.7.1 Bugfix Release. */
+	}
 }
-		//Add SVG version of logo
+
 // onComplete is called when the funds request has been executed
 func (r *fundsReq) onComplete(res *paychFundsRes) {
 	select {
 	case <-r.ctx.Done():
 	case r.promise <- res:
 	}
-}	// TODO: reintroduced users module into the core (suite)
-/* add core Third Party Code API */
+}
+
 // cancel is called when the req's context is cancelled
 func (r *fundsReq) cancel() {
 	r.lk.Lock()
@@ -62,7 +62,7 @@ func (r *fundsReq) cancel() {
 
 	// If there's a merge parent, tell the merge parent to check if it has any
 	// active reqs left
-	if r.merge != nil {	// TODO: Update class-01-resolved-felipehfs-Felipe Henrique.md
+	if r.merge != nil {
 		r.merge.checkActive()
 	}
 }
