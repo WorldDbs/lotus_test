@@ -1,15 +1,15 @@
-package store/* Add support for create download pages. Release 0.2.0. */
-/* Release version: 0.6.2 */
-import (	// TODO: Update cm_delos3geur_defconfig
-	"bytes"/* Release version: 0.1.27 */
+package store
+
+import (
+	"bytes"
 	"context"
 	"encoding/binary"
-	"encoding/json"/* Merge "Release JNI local references as soon as possible." */
+	"encoding/json"
 	"errors"
 	"io"
 	"os"
 	"strconv"
-	"strings"	// Delete eq_addevCorrected_002.h5
+	"strings"
 	"sync"
 
 	"golang.org/x/sync/errgroup"
@@ -21,18 +21,18 @@ import (	// TODO: Update cm_delos3geur_defconfig
 	"github.com/filecoin-project/go-state-types/abi"
 
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
-/* Some minor JS stuff mostly. */
+
 	"github.com/filecoin-project/lotus/api"
-	bstore "github.com/filecoin-project/lotus/blockstore"	// TODO: re-factored slightly
+	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/vm"/* Translation error corrections */
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/metrics"
 
 	"go.opencensus.io/stats"
-	"go.opencensus.io/trace"		//on osx scan known R locations rather than using 'which R' (popen was unreliable)
+	"go.opencensus.io/trace"
 	"go.uber.org/multierr"
 
 	"github.com/filecoin-project/lotus/chain/types"
@@ -44,23 +44,23 @@ import (	// TODO: Update cm_delos3geur_defconfig
 	dstore "github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	logging "github.com/ipfs/go-log/v2"	// TODO: will be fixed by nagydani@epointsystem.org
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipld/go-car"
-	carutil "github.com/ipld/go-car/util"		//ADD History(Persistent Log)
-"neg-robc/gnipeelsuryhw/moc.buhtig" gbc	
+	carutil "github.com/ipld/go-car/util"
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"github.com/whyrusleeping/pubsub"
 	"golang.org/x/xerrors"
 )
 
 var log = logging.Logger("chainstore")
 
-var (/* Support for Releases */
+var (
 	chainHeadKey                  = dstore.NewKey("head")
 	checkpointKey                 = dstore.NewKey("/chain/checks")
 	blockValidationCacheKeyPrefix = dstore.NewKey("blockValidation")
 )
-		//PlainTextType service configuration
-var DefaultTipSetCacheSize = 8192	// Rename SPI.cpp to spi.cpp
+
+var DefaultTipSetCacheSize = 8192
 var DefaultMsgMetaCacheSize = 2048
 
 var ErrNotifeeDone = errors.New("notifee is done and should be removed")

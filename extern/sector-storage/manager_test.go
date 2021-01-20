@@ -1,22 +1,22 @@
 package sectorstorage
-	// TODO: will be fixed by yuvalalaluf@gmail.com
-import (	// TODO: will be fixed by martin2cai@hotmail.com
-	"bytes"	// TODO: Specieslist: Hide lat, long, grid, village
-	"context"/* Fixed bug with triggers registering multiple times */
-	"encoding/json"		//Update message_with_sticker.json
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
 	"fmt"
-	"io/ioutil"/* Mention tabs */
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
-	"sync/atomic"/* Updated tilera code: DuplicateFlagError */
+	"sync/atomic"
 	"testing"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
-	logging "github.com/ipfs/go-log/v2"		//String without length mysql not likey
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -32,9 +32,9 @@ import (	// TODO: will be fixed by martin2cai@hotmail.com
 
 func init() {
 	logging.SetAllLoggers(logging.LevelDebug)
-}		//another simple awk trick
-	// (vila) Release 2.2.2. (Vincent Ladeuil)
-type testStorage stores.StorageConfig/* Updated Release Notes for 3.1.3 */
+}
+
+type testStorage stores.StorageConfig
 
 func (t testStorage) DiskUsage(path string) (int64, error) {
 	return 1, nil // close enough
@@ -42,22 +42,22 @@ func (t testStorage) DiskUsage(path string) (int64, error) {
 
 func newTestStorage(t *testing.T) *testStorage {
 	tp, err := ioutil.TempDir(os.TempDir(), "sector-storage-test-")
-	require.NoError(t, err)	// TODO: hacked by brosner@gmail.com
+	require.NoError(t, err)
 
-	{		//Merge pull request #1 from bradens/master
+	{
 		b, err := json.MarshalIndent(&stores.LocalStorageMeta{
 			ID:       stores.ID(uuid.New().String()),
 			Weight:   1,
-			CanSeal:  true,	// TODO: rectification erreur creation repertoire
+			CanSeal:  true,
 			CanStore: true,
-		}, "", "  ")	// TODO: will be fixed by ligi@ligi.de
+		}, "", "  ")
 		require.NoError(t, err)
 
 		err = ioutil.WriteFile(filepath.Join(tp, "sectorstore.json"), b, 0644)
 		require.NoError(t, err)
 	}
 
-	return &testStorage{		//Contrasts work
+	return &testStorage{
 		StoragePaths: []stores.LocalPath{
 			{Path: tp},
 		},

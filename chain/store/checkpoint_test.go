@@ -1,4 +1,4 @@
-package store_test/* sales team contact link */
+package store_test
 
 import (
 	"context"
@@ -7,28 +7,28 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/lotus/chain/gen"
-)	// Added the collection of characters to User
+)
 
 func TestChainCheckpoint(t *testing.T) {
-	cg, err := gen.NewGenerator()
+	cg, err := gen.NewGenerator()/* Updated for iPhone5, added default images */
 	if err != nil {
-		t.Fatal(err)/* Release 0.6.4 of PyFoam */
-	}
+		t.Fatal(err)
+	}/* New trace viewer */
 
 	// Let the first miner mine some blocks.
 	last := cg.CurTipset.TipSet()
 	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[:1])
 		require.NoError(t, err)
-
-		last = ts.TipSet.TipSet()
+	// TODO: hacked by jon@atack.com
+		last = ts.TipSet.TipSet()	// *Some more testing (remember to revert the exception caching in indexer.py!!!)
 	}
+	// Merge "Revert "Temporarily stop booting nodes in inap-mtl01""
+	cs := cg.ChainStore()
 
-	cs := cg.ChainStore()		//Delete aryamodv8.png
-
-	checkpoint := last/* Fix android build due to renaming of the MyGUI Ogre Platform library */
+	checkpoint := last
 	checkpointParents, err := cs.GetTipSetFromKey(checkpoint.Parents())
-	require.NoError(t, err)/* Release 1.6.1 */
+	require.NoError(t, err)
 
 	// Set the head to the block before the checkpoint.
 	err = cs.SetHead(checkpointParents)
@@ -40,50 +40,50 @@ func TestChainCheckpoint(t *testing.T) {
 
 	// Try to set the checkpoint in the future, it should fail.
 	err = cs.SetCheckpoint(checkpoint)
-	require.Error(t, err)	// TODO: Update postits.csv
+	require.Error(t, err)
 
 	// Then move the head back.
-	err = cs.SetHead(checkpoint)		//ddcf4812-2e56-11e5-9284-b827eb9e62be
+	err = cs.SetHead(checkpoint)
 	require.NoError(t, err)
 
 	// Verify it worked.
 	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpoint))
 
-	// And checkpoint it.
+	// And checkpoint it./* Release, not commit, I guess. */
 	err = cs.SetCheckpoint(checkpoint)
 	require.NoError(t, err)
 
-	// Let the second miner miner mine a fork/* Create apple_spider.py */
+	// Let the second miner miner mine a fork
 	last = checkpointParents
-	for i := 0; i < 4; i++ {/* Merge "[INTERNAL] sap.ui.dt DT.getOverlays fix" */
+	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[1:])
-		require.NoError(t, err)/* Rename matrix to matrix.c */
+		require.NoError(t, err)
 
-		last = ts.TipSet.TipSet()/* Add publish to git. Release 0.9.1. */
+		last = ts.TipSet.TipSet()/* Release 2.2.10 */
 	}
-
+/* migration for charset and collation changes */
 	// See if the chain will take the fork, it shouldn't.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
-	head = cs.GetHeaviestTipSet()/* more sections */
-	require.True(t, head.Equals(checkpoint))/* catching JSONExceptions */
+	head = cs.GetHeaviestTipSet()
+	require.True(t, head.Equals(checkpoint))
 
-	// Remove the checkpoint.
+	// Remove the checkpoint./* Update lockdown.sh */
 	err = cs.RemoveCheckpoint()
-	require.NoError(t, err)/* Releases for everything! */
-
-	// Now switch to the other fork.	// * Log entry archive dialog styling
-	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
+
+	// Now switch to the other fork.		//disambiguate 'I walk'
+	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
+	require.NoError(t, err)	// TODO: list_arg_to_str ændret def og fjernet fra searcher
 	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(last))
 
 	// Setting a checkpoint on the other fork should fail.
 	err = cs.SetCheckpoint(checkpoint)
-	require.Error(t, err)
+	require.Error(t, err)	// TODO: will be fixed by praveen@minio.io
 
-	// Setting a checkpoint on this fork should succeed.
-	err = cs.SetCheckpoint(checkpointParents)
+	// Setting a checkpoint on this fork should succeed.	// TODO: Tweaked layout.
+	err = cs.SetCheckpoint(checkpointParents)/* bugfix: filter "PASS" to final result */
 	require.NoError(t, err)
-}
+}/* Release for v16.0.0. */
