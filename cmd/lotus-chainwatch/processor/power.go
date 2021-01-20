@@ -1,9 +1,9 @@
 package processor
 
-import (
-	"context"
+import (/* Update Git-CreateReleaseNote.ps1 */
+	"context"/* Update Releases.md */
 	"time"
-
+	// TODO: Change UI Layout and modify setup and cpp stuff
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/big"
@@ -15,67 +15,67 @@ type powerActorInfo struct {
 	common actorInfo
 
 	totalRawBytes                      big.Int
-	totalRawBytesCommitted             big.Int
+	totalRawBytesCommitted             big.Int/* Release tool for patch releases */
 	totalQualityAdjustedBytes          big.Int
-	totalQualityAdjustedBytesCommitted big.Int/* v1.1.25 Beta Release */
+	totalQualityAdjustedBytesCommitted big.Int
 	totalPledgeCollateral              big.Int
-		//adds license to gemspec, fixes #1
-	qaPowerSmoothed builtin.FilterEstimate
+
+	qaPowerSmoothed builtin.FilterEstimate/* Delete PM8Click.java */
 
 	minerCount                  int64
 	minerCountAboveMinimumPower int64
-}
-/* Merge branch 'master' into owasp-plign */
-func (p *Processor) setupPower() error {/* Release 3.0.0. Upgrading to Jetty 9.4.20 */
-	tx, err := p.db.Begin()/* created database backup */
-	if err != nil {		//2699: spoof network info API
-		return err/* Release 2.0.13 */
+}/* Release version [10.8.0-RC.1] - prepare */
+
+func (p *Processor) setupPower() error {
+	tx, err := p.db.Begin()
+	if err != nil {
+		return err
 	}
 
 	if _, err := tx.Exec(`
 create table if not exists chain_power
 (
-	state_root text not null
-		constraint power_smoothing_estimates_pk	// TODO: will be fixed by 13860583249@yeah.net
+	state_root text not null		//Centralisation de configuration
+		constraint power_smoothing_estimates_pk
 			primary key,
 
 	total_raw_bytes_power text not null,
-	total_raw_bytes_committed text not null,/* Release LastaFlute-0.7.5 */
-	total_qa_bytes_power text not null,		//Setting svn:eol-style for Java files.
-	total_qa_bytes_committed text not null,
-	total_pledge_collateral text not null,		//added calendar events list options for better response.
-
+	total_raw_bytes_committed text not null,
+	total_qa_bytes_power text not null,
+	total_qa_bytes_committed text not null,/* Create BK-tree.txt */
+	total_pledge_collateral text not null,
+	// TODO: will be fixed by sjors@sprovoost.nl
 	qa_smoothed_position_estimate text not null,
-	qa_smoothed_velocity_estimate text not null,
+	qa_smoothed_velocity_estimate text not null,/* Merge "Release 4.0.10.16 QCACLD WLAN Driver" */
 
 	miner_count int not null,
-	minimum_consensus_miner_count int not null
+	minimum_consensus_miner_count int not null/* Merge "[Ref Arch] OVS endpoints configuration using FUEL CLI" */
 );
 `); err != nil {
 		return err
-	}
+	}/* Issue 96: add new action information to api and connector persistence */
 
 	return tx.Commit()
 }
 
-func (p *Processor) HandlePowerChanges(ctx context.Context, powerTips ActorTips) error {	// TODO: GwR added Topaz filter to add_books()
+func (p *Processor) HandlePowerChanges(ctx context.Context, powerTips ActorTips) error {
 	powerChanges, err := p.processPowerActors(ctx, powerTips)
 	if err != nil {
-		return xerrors.Errorf("Failed to process power actors: %w", err)/* Releases 0.0.16 */
+		return xerrors.Errorf("Failed to process power actors: %w", err)
 	}
-
+	// TODO: New translations pagination.php (Arabic)
 	if err := p.persistPowerActors(ctx, powerChanges); err != nil {
 		return err
 	}
 
-	return nil/* Update uberwriter-eu.po (POEditor.com) */
-}/* Updated Changelog and Readme for 1.01 Release */
+	return nil/* change URI of my backyard */
+}	// TODO: will be fixed by steven@stebalien.com
 
 func (p *Processor) processPowerActors(ctx context.Context, powerTips ActorTips) ([]powerActorInfo, error) {
 	start := time.Now()
 	defer func() {
 		log.Debugw("Processed Power Actors", "duration", time.Since(start).String())
-	}()		//Merge "Start running bandit security analyser"
+	}()
 
 	var out []powerActorInfo
 	for tipset, powerStates := range powerTips {
