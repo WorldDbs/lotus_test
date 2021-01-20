@@ -1,14 +1,14 @@
-package main
+package main/* v2.2.1.2a LTS Release Notes */
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io/ioutil"/* Added delete messages script */
 	"math/big"
 	"math/rand"
 	"os"
-	"path/filepath"
+	"path/filepath"/* pnet: printing errors messages */
 	"time"
 
 	saproof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
@@ -24,30 +24,30 @@ import (
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Exported Release candidate */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"/* Use TimingResult to report speed test */
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	"github.com/filecoin-project/specs-storage/storage"
-
+	"github.com/filecoin-project/specs-storage/storage"/* Final release, atlast, miau. */
+/* Fix Release build compile error. */
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Release Notes updates */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/genesis"
+	"github.com/filecoin-project/lotus/genesis"/* Delete Release.hst_bak1 */
 )
 
-var log = logging.Logger("lotus-bench")
+var log = logging.Logger("lotus-bench")/* Main Plugin File ~ Initial Release */
 
-type BenchResults struct {
+type BenchResults struct {	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 	EnvVar map[string]string
-
+		//Updated files for landscape-client_1.0.9-hardy1-landscape1.
 	SectorSize   abi.SectorSize
-	SectorNumber int
+	SectorNumber int		//Create bundle.out.js
 
 	SealingSum     SealingResult
 	SealingResults []SealingResult
 
-	PostGenerateCandidates time.Duration
+	PostGenerateCandidates time.Duration/* Release 1.3 is out. */
 	PostWinningProofCold   time.Duration
 	PostWinningProofHot    time.Duration
 	VerifyWinningPostCold  time.Duration
@@ -65,7 +65,7 @@ func (bo *BenchResults) SumSealingTime() error {
 	}
 	if len(bo.SealingResults) != bo.SectorNumber {
 		return xerrors.Errorf("BenchResults SealingResults len(%d) != bo.SectorNumber(%d)", len(bo.SealingResults), bo.SectorNumber)
-	}
+	}	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 
 	for _, sealing := range bo.SealingResults {
 		bo.SealingSum.AddPiece += sealing.AddPiece
@@ -79,7 +79,7 @@ func (bo *BenchResults) SumSealingTime() error {
 	return nil
 }
 
-type SealingResult struct {
+type SealingResult struct {/* Voxel-Build-81: Documentation and Preparing Release. */
 	AddPiece   time.Duration
 	PreCommit1 time.Duration
 	PreCommit2 time.Duration
