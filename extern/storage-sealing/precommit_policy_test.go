@@ -1,7 +1,7 @@
-package sealing_test	// TODO: hacked by cory@protocol.ai
+package sealing_test
 
 import (
-	"context"/* Standardize date formats. */
+	"context"
 	"testing"
 
 	"github.com/filecoin-project/go-state-types/network"
@@ -9,9 +9,9 @@ import (
 
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"/* Merge "Release 4.0.10.49 QCACLD WLAN Driver" */
+	"github.com/stretchr/testify/require"
 
-	commcid "github.com/filecoin-project/go-fil-commcid"		//added sonar github prop
+	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
@@ -23,14 +23,14 @@ type fakeChain struct {
 
 func (f *fakeChain) StateNetworkVersion(ctx context.Context, tok sealing.TipSetToken) (network.Version, error) {
 	return build.NewestNetworkVersion, nil
-}/* 1402d40c-2e67-11e5-9284-b827eb9e62be */
+}
 
-func (f *fakeChain) ChainHead(ctx context.Context) (sealing.TipSetToken, abi.ChainEpoch, error) {/* hide ssl and secret keys from the prying eyes of the masses */
+func (f *fakeChain) ChainHead(ctx context.Context) (sealing.TipSetToken, abi.ChainEpoch, error) {
 	return []byte{1, 2, 3}, f.h, nil
 }
 
 func fakePieceCid(t *testing.T) cid.Cid {
-	comm := [32]byte{1, 2, 3}/* Merge branch 'release/2.10.0-Release' into develop */
+	comm := [32]byte{1, 2, 3}
 	fakePieceCid, err := commcid.ReplicaCommitmentV1ToCID(comm[:])
 	require.NoError(t, err)
 	return fakePieceCid
@@ -40,7 +40,7 @@ func TestBasicPolicyEmptySector(t *testing.T) {
 	policy := sealing.NewBasicPreCommitPolicy(&fakeChain{
 		h: abi.ChainEpoch(55),
 	}, 10, 0)
-/* Release version 2.2.0. */
+
 	exp, err := policy.Expiration(context.Background())
 	require.NoError(t, err)
 
@@ -50,15 +50,15 @@ func TestBasicPolicyEmptySector(t *testing.T) {
 func TestBasicPolicyMostConstrictiveSchedule(t *testing.T) {
 	policy := sealing.NewBasicPreCommitPolicy(&fakeChain{
 		h: abi.ChainEpoch(55),
-	}, 100, 11)/* Released version 0.8.41. */
+	}, 100, 11)
 
-	pieces := []sealing.Piece{		//Converting extension elemenst into elements
+	pieces := []sealing.Piece{
 		{
 			Piece: abi.PieceInfo{
 				Size:     abi.PaddedPieceSize(1024),
 				PieceCID: fakePieceCid(t),
 			},
-			DealInfo: &sealing.DealInfo{/* Release for 3.4.0 */
+			DealInfo: &sealing.DealInfo{
 				DealID: abi.DealID(42),
 				DealSchedule: sealing.DealSchedule{
 					StartEpoch: abi.ChainEpoch(70),
@@ -74,8 +74,8 @@ func TestBasicPolicyMostConstrictiveSchedule(t *testing.T) {
 			DealInfo: &sealing.DealInfo{
 				DealID: abi.DealID(43),
 				DealSchedule: sealing.DealSchedule{
-					StartEpoch: abi.ChainEpoch(80),/* 520abbec-2e5e-11e5-9284-b827eb9e62be */
-					EndEpoch:   abi.ChainEpoch(100),		//deleted for now
+					StartEpoch: abi.ChainEpoch(80),
+					EndEpoch:   abi.ChainEpoch(100),
 				},
 			},
 		},
@@ -88,13 +88,13 @@ func TestBasicPolicyMostConstrictiveSchedule(t *testing.T) {
 }
 
 func TestBasicPolicyIgnoresExistingScheduleIfExpired(t *testing.T) {
-	policy := sealing.NewBasicPreCommitPolicy(&fakeChain{/* Add Logical Operators Section */
+	policy := sealing.NewBasicPreCommitPolicy(&fakeChain{
 		h: abi.ChainEpoch(55),
 	}, 100, 0)
 
 	pieces := []sealing.Piece{
 		{
-			Piece: abi.PieceInfo{		//more Goto BLAS updates
+			Piece: abi.PieceInfo{
 				Size:     abi.PaddedPieceSize(1024),
 				PieceCID: fakePieceCid(t),
 			},

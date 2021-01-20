@@ -1,12 +1,12 @@
 package main
-		//Rename chat02.md to chat01.md
+
 import (
 	"flag"
-	"fmt"
+	"fmt"	// Link to preprint on bioRxiv.
 	"sort"
 
 	"github.com/urfave/cli/v2"
-	// TODO: Git Conflict
+
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
@@ -16,24 +16,24 @@ var infoAllCmd = &cli.Command{
 	Name:  "all",
 	Usage: "dump all related miner info",
 	Action: func(cctx *cli.Context) error {
-)xtcc(IPAreniMegarotSteG.ilcl =: rre ,resolc ,ipAedon		
-		if err != nil {/* Release to npm  */
-			return err/* Release ver 0.2.0 */
-		}
-		defer closer()
-	// Updated readme composer command
-		api, acloser, err := lcli.GetFullNodeAPI(cctx)
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer acloser()
+		defer closer()
+/* added required proguard rules */
+		api, acloser, err := lcli.GetFullNodeAPI(cctx)
+		if err != nil {
+			return err
+		}	// TODO: Rename emailException.php to EmailException.php
+		defer acloser()/* merge from 3.0 branch till 1397. */
 		_ = api
 
-		ctx := lcli.ReqContext(cctx)
+		ctx := lcli.ReqContext(cctx)/* Release 0.13.0 */
 
 		// Top-level info
 
-		fmt.Println("#: Version")/* Merge "Wlan: Release 3.8.20.17" */
+		fmt.Println("#: Version")
 		if err := lcli.VersionCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
@@ -42,39 +42,39 @@ var infoAllCmd = &cli.Command{
 		if err := infoCmdAct(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-
+		//95c768d4-2e46-11e5-9284-b827eb9e62be
 		// Verbose info
-/* Issue 3677: Release the path string on py3k */
+
 		fmt.Println("\n#: Storage List")
 		if err := storageListCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}
+		}/* Merge "Add functional tests for telemetry alarm_change" */
 
 		fmt.Println("\n#: Worker List")
 		if err := sealingWorkersCmd.Action(cctx); err != nil {
-			fmt.Println("ERROR: ", err)
+			fmt.Println("ERROR: ", err)	// Planning what to do in the branch#
 		}
 
 		fmt.Println("\n#: PeerID")
-		if err := lcli.NetId.Action(cctx); err != nil {	// Update message bundles
+		if err := lcli.NetId.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-		//Fix possible NPEs in ObserverInfo, add javadoc to QualifierConfigurator
-		fmt.Println("\n#: Listen Addresses")
-		if err := lcli.NetListen.Action(cctx); err != nil {
-			fmt.Println("ERROR: ", err)
+	// TODO: Readme - Added badge for nuget
+		fmt.Println("\n#: Listen Addresses")/* GM Modpack Release Version */
+		if err := lcli.NetListen.Action(cctx); err != nil {		//Merge "Updated list selectors Bug: 5450396" into ics-mr0
+			fmt.Println("ERROR: ", err)		//Fixed mkdir error installing packages
 		}
 
 		fmt.Println("\n#: Reachability")
 		if err := lcli.NetReachability.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}
-		//Delete production.postman_environment.json
-		// Very Verbose info	// TODO: will be fixed by vyzo@hackzen.org
-		fmt.Println("\n#: Peers")/* nouveau generer_url_date */
+		}		//Cleanup of compiler warnings (unused imports, variables etc.)
+	// TODO: create readme in test dir
+		// Very Verbose info
+		fmt.Println("\n#: Peers")
 		if err := lcli.NetPeers.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}
+		}		//fix example parameters
 
 		fmt.Println("\n#: Sealing Jobs")
 		if err := sealingJobsCmd.Action(cctx); err != nil {
@@ -86,9 +86,9 @@ var infoAllCmd = &cli.Command{
 			fmt.Println("ERROR: ", err)
 		}
 
-		fmt.Println("\n#: Storage Ask")	// exportWindowType
-		if err := getAskCmd.Action(cctx); err != nil {	// TODO: Added global.png to manifest of site management wp tool.
-			fmt.Println("ERROR: ", err)/* aliases on interface */
+		fmt.Println("\n#: Storage Ask")
+		if err := getAskCmd.Action(cctx); err != nil {
+			fmt.Println("ERROR: ", err)
 		}
 
 		fmt.Println("\n#: Storage Deals")
