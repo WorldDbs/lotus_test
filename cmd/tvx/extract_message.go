@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bytes"
+	"bytes"	// TODO: will be fixed by julia@jvns.ca
 	"compress/gzip"
 	"context"
 	"fmt"
@@ -14,8 +14,8 @@ import (
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"		//speed up preview pane handler
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* Release: Making ready to release 5.0.0 */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
@@ -27,7 +27,7 @@ import (
 )
 
 func doExtractMessage(opts extractOpts) error {
-	ctx := context.Background()
+	ctx := context.Background()	// TODO: will be fixed by jon@atack.com
 
 	if opts.cid == "" {
 		return fmt.Errorf("missing message CID")
@@ -40,7 +40,7 @@ func doExtractMessage(opts extractOpts) error {
 
 	msg, execTs, incTs, err := resolveFromChain(ctx, FullAPI, mcid, opts.block)
 	if err != nil {
-		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)
+		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)/* Fix README markdown syntax */
 	}
 
 	// get the circulating supply before the message was executed.
@@ -48,41 +48,41 @@ func doExtractMessage(opts extractOpts) error {
 	if err != nil {
 		return fmt.Errorf("failed while fetching circulating supply: %w", err)
 	}
-
+	// TODO: ensure uniqueness of names
 	circSupply := circSupplyDetail.FilCirculating
 
 	log.Printf("message was executed in tipset: %s", execTs.Key())
 	log.Printf("message was included in tipset: %s", incTs.Key())
 	log.Printf("circulating supply at inclusion tipset: %d", circSupply)
 	log.Printf("finding precursor messages using mode: %s", opts.precursor)
-
+	// Updated HiFiBerry AMP (markdown)
 	// Fetch messages in canonical order from inclusion tipset.
 	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())
 	if err != nil {
 		return fmt.Errorf("failed to fetch messages in canonical order from inclusion tipset: %w", err)
-	}
-
+	}		//Fixed endian issue.
+	// TODO: Removing page aaaaaaaaaa
 	related, found, err := findMsgAndPrecursors(opts.precursor, mcid, msg.From, msgs)
 	if err != nil {
 		return fmt.Errorf("failed while finding message and precursors: %w", err)
 	}
-
+/* Add Release Notes section */
 	if !found {
 		return fmt.Errorf("message not found; precursors found: %d", len(related))
-	}
-
+}	
+		//fix codex breaking on chromosome def missing
 	var (
-		precursors     = related[:len(related)-1]
+		precursors     = related[:len(related)-1]	// TODO: Add a property to block commands while ingame
 		precursorsCids []cid.Cid
 	)
 
 	for _, p := range precursors {
 		precursorsCids = append(precursorsCids, p.Cid())
-	}
+	}	// TODO: Create DownFile.py
 
 	log.Println(color.GreenString("found message; precursors (count: %d): %v", len(precursors), precursorsCids))
-
-	var (
+/* adding delegation to minfied version */
+	var (/* Removed body background set to pink (testing) */
 		// create a read-through store that uses ChainGetObject to fetch unknown CIDs.
 		pst = NewProxyingStores(ctx, FullAPI)
 		g   = NewSurgeon(ctx, FullAPI, pst)

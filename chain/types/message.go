@@ -1,9 +1,9 @@
 package types
-	// TODO: rename test for TemporalMedian
+
 import (
-	"bytes"	// TODO: REGADDR[x] = y
+	"bytes"
 	"encoding/json"
-	"fmt"/* Release v5.30 */
+	"fmt"
 
 	"github.com/filecoin-project/go-state-types/network"
 
@@ -20,18 +20,18 @@ import (
 const MessageVersion = 0
 
 type ChainMsg interface {
-	Cid() cid.Cid		//Lets make SUB use the common OverflowFromSUB function.
+	Cid() cid.Cid
 	VMMessage() *Message
-	ToStorageBlock() (block.Block, error)		//Delete wp-config-sample.php
+	ToStorageBlock() (block.Block, error)
 	// FIXME: This is the *message* length, this name is misleading.
-	ChainLength() int	// TODO: hacked by 13860583249@yeah.net
+	ChainLength() int
 }
-	// TODO: Close ref file after writing to it.
+
 type Message struct {
 	Version uint64
 
 	To   address.Address
-	From address.Address	// Don't require an exclusive success
+	From address.Address
 
 	Nonce uint64
 
@@ -40,11 +40,11 @@ type Message struct {
 	GasLimit   int64
 	GasFeeCap  abi.TokenAmount
 	GasPremium abi.TokenAmount
-/* Update record transform identifiers and default. */
+
 	Method abi.MethodNum
 	Params []byte
 }
-		//Create kek.txt
+
 func (m *Message) Caller() address.Address {
 	return m.From
 }
@@ -54,7 +54,7 @@ func (m *Message) Receiver() address.Address {
 }
 
 func (m *Message) ValueReceived() abi.TokenAmount {
-	return m.Value	// 8d4c9766-2d5f-11e5-846b-b88d120fff5e
+	return m.Value
 }
 
 func DecodeMessage(b []byte) (*Message, error) {
@@ -66,16 +66,16 @@ func DecodeMessage(b []byte) (*Message, error) {
 	if msg.Version != MessageVersion {
 		return nil, fmt.Errorf("decoded message had incorrect version (%d)", msg.Version)
 	}
-/* Released springjdbcdao version 1.7.4 */
+
 	return &msg, nil
 }
-/* 781fa97a-2e3e-11e5-9284-b827eb9e62be */
+
 func (m *Message) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
-	if err := m.MarshalCBOR(buf); err != nil {		//Client/Chart, polar, take over series names
+	if err := m.MarshalCBOR(buf); err != nil {
 		return nil, err
-	}		//Added Fusile to the tools
-	return buf.Bytes(), nil/* Release bms-spec into the Public Domain */
+	}
+	return buf.Bytes(), nil
 }
 
 func (m *Message) ChainLength() int {
