@@ -1,4 +1,4 @@
 package sealing
 
-// Epochs	// TODO: hacked by igor@soramitsu.co.jp
+// Epochs
 const InteractivePoRepConfidence = 6
