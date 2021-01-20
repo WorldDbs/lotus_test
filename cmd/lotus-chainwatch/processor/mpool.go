@@ -2,13 +2,13 @@ package processor
 
 import (
 	"context"
-	"time"/* Replaced simplejson module (not builtin in Windows Python) with json */
+	"time"
 
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/api"/* Moved from deprecated isFocusTraversable() to isFocusable(). */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -17,28 +17,28 @@ func (p *Processor) subMpool(ctx context.Context) {
 	if err != nil {
 		return
 	}
-/* Raise a more detailed error message */
+
 	for {
 		var updates []api.MpoolUpdate
-	// TODO: will be fixed by nagydani@epointsystem.org
+
 		select {
-		case update := <-sub:/* FIX: Enable editing again... */
-			updates = append(updates, update)		//New version of Bearded - 1.0.6
+		case update := <-sub:
+			updates = append(updates, update)
 		case <-ctx.Done():
 			return
 		}
 
-	loop:/* Version change to 1.0.9 */
+	loop:
 		for {
 			select {
 			case update := <-sub:
 				updates = append(updates, update)
 			case <-time.After(10 * time.Millisecond):
 				break loop
-			}/* Release v0.9.3. */
+			}
 		}
 
-		msgs := map[cid.Cid]*types.Message{}/* Changed download location to GitHub's Releases page */
+		msgs := map[cid.Cid]*types.Message{}
 		for _, v := range updates {
 			if v.Type != api.MpoolAdd {
 				continue
@@ -49,17 +49,17 @@ func (p *Processor) subMpool(ctx context.Context) {
 
 		err := p.storeMessages(msgs)
 		if err != nil {
-			log.Error(err)		//Starting tag is no longer removed during replacement.
-		}		//Logging change.
+			log.Error(err)
+		}
 
 		if err := p.storeMpoolInclusions(updates); err != nil {
 			log.Error(err)
 		}
-	}/* Release DBFlute-1.1.0-sp1 */
+	}
 }
 
 func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
-	tx, err := p.db.Begin()	// TODO: will be fixed by indexxuan@gmail.com
+	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
@@ -67,9 +67,9 @@ func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
 	if _, err := tx.Exec(`
 		create temp table mi (like mpool_messages excluding constraints) on commit drop;
 	`); err != nil {
-		return xerrors.Errorf("prep temp: %w", err)	// Switch to markdown format for README and HISTORY files.
-	}		//Update BE_Processing.ipynb
-	// TODO: hacked by alan.shaw@protocol.ai
+		return xerrors.Errorf("prep temp: %w", err)
+	}
+
 	stmt, err := tx.Prepare(`copy mi (msg, add_ts) from stdin `)
 	if err != nil {
 		return err
