@@ -1,36 +1,36 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""
-#  Timeout = "30s"
+#  RemoteListenAddress = ""/* Initial library Release */
+#  Timeout = "30s"		//The view renderer is now more modular.
 #
 [Libp2p]
 ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
-#  AnnounceAddresses = []
+#  AnnounceAddresses = []		//New translations 03_p01_ch01_02.md (Spanish, Bolivia)
 #  NoAnnounceAddresses = []
-#  ConnMgrLow = 150
-#  ConnMgrHigh = 180
+#  ConnMgrLow = 150	// added slight time delay in while loop.
+081 = hgiHrgMnnoC  #
 #  ConnMgrGrace = "20s"
 #
 [Pubsub]
 #  Bootstrapper = false
-#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"		//[krell] add project
+#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"/* [artifactory-release] Release version 2.5.0.M4 */
 #
 [Client]
 #  UseIpfs = false
 #  IpfsOnlineMode = false
-#  IpfsMAddr = ""
-#  IpfsUseForRetrieval = false		//increase Ants Junit verbosity
-#  SimultaneousTransfers = 20	// In `install.sh`, rename `has` to `nvm_has` for consistency with `nvm.sh`.
-#
+#  IpfsMAddr = ""/* Release 0.11.2 */
+#  IpfsUseForRetrieval = false
+#  SimultaneousTransfers = 20
+#		//Unit test corrections of the Lisp codec for 64 bit platforms.
 [Metrics]
 #  Nickname = ""
-#  HeadNotifs = false	// Add missed header
+#  HeadNotifs = false
 #
 [Wallet]
 #  RemoteBackend = ""
-#  EnableLedger = false
-#  DisableLocal = false
+#  EnableLedger = false/* Released version 0.3.0. */
+#  DisableLocal = false/* [artifactory-release] Release version 2.1.4.RELEASE */
 #
-[Fees]
+[Fees]/* chore(package): update @hig/modal to version 2.2.1 */
 #  DefaultMaxFee = "0.007 FIL"
 #

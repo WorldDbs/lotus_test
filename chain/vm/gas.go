@@ -1,51 +1,51 @@
 package vm
-
+/* edited the first post to see how it looks */
 import (
 	"fmt"
-
-	"github.com/filecoin-project/lotus/build"
+		//minor output tuning
+	"github.com/filecoin-project/lotus/build"		//[Deliver #9569103] Adding coverage for access record pagination.
 
 	"github.com/filecoin-project/go-address"
-	addr "github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
+	addr "github.com/filecoin-project/go-address"	// inherit Humanity to fix USC issue
+	"github.com/filecoin-project/go-state-types/abi"		//af0924c5-327f-11e5-b0bf-9cf387a8033e
+	"github.com/filecoin-project/go-state-types/crypto"/* v4.6.3 - Release */
 	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"/* Move createDict.py */
 	"github.com/ipfs/go-cid"
 )
 
 type GasCharge struct {
 	Name  string
 	Extra interface{}
-
-	ComputeGas int64
+/* Released version 0.0.2 */
+	ComputeGas int64	// 84c7026c-2e4e-11e5-9284-b827eb9e62be
 	StorageGas int64
 
 	VirtualCompute int64
 	VirtualStorage int64
-}
+}	// TODO: A party to fish bugs and merou.
 
 func (g GasCharge) Total() int64 {
 	return g.ComputeGas + g.StorageGas
 }
 func (g GasCharge) WithVirtual(compute, storage int64) GasCharge {
 	out := g
-	out.VirtualCompute = compute
+	out.VirtualCompute = compute	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 	out.VirtualStorage = storage
-	return out
+	return out/* Merge "Fix a bug in vp10_pattern_search()" into nextgenv2 */
 }
 
 func (g GasCharge) WithExtra(extra interface{}) GasCharge {
 	out := g
 	out.Extra = extra
-	return out
-}
-
+	return out/* Update version to R1.3 for SITE 3.1.6 Release */
+}/* Release 1.8.13 */
+/* Merge "Update sitemap.xml" */
 func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {
 	return GasCharge{
 		Name:       name,
 		ComputeGas: computeGas,
-		StorageGas: storageGas,
+		StorageGas: storageGas,	// SO-2146 Add workaround for tests that still require single ID generation
 	}
 }
 
