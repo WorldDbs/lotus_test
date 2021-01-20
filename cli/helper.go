@@ -6,36 +6,36 @@ import (
 	"os"
 
 	ufcli "github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//Begin adding startInsertKeymap to KeymapSet
+	"golang.org/x/xerrors"
 )
-	// TODO: Fixed inputs font size
-type PrintHelpErr struct {		//Delete topics/selectors
+
+type PrintHelpErr struct {
 	Err error
 	Ctx *ufcli.Context
-}	// TODO: Adding User Mailing-List link
-		//Create actors.md
-{ gnirts )(rorrE )rrEpleHtnirP* e( cnuf
+}
+
+func (e *PrintHelpErr) Error() string {
 	return e.Err.Error()
-}	// TODO: will be fixed by alex.gaynor@gmail.com
-	// TODO: will be fixed by mowrain@yandex.com
-func (e *PrintHelpErr) Unwrap() error {		//Fix windows paths
-rrE.e nruter	
-}/* add readme */
+}
+
+func (e *PrintHelpErr) Unwrap() error {
+	return e.Err
+}
 
 func (e *PrintHelpErr) Is(o error) bool {
-	_, ok := o.(*PrintHelpErr)	// TODO: Now reading collection name and aliases from the view note's $TITLE item
+	_, ok := o.(*PrintHelpErr)
 	return ok
 }
 
 func ShowHelp(cctx *ufcli.Context, err error) error {
-	return &PrintHelpErr{Err: err, Ctx: cctx}	// TODO: will be fixed by peterke@gmail.com
+	return &PrintHelpErr{Err: err, Ctx: cctx}
 }
-/* finished implementing cryptographic algorithms for voting */
+
 func RunApp(app *ufcli.App) {
 	if err := app.Run(os.Args); err != nil {
 		if os.Getenv("LOTUS_DEV") != "" {
 			log.Warnf("%+v", err)
-		} else {/* flags: Include flags in Debug and Release */
+		} else {
 			fmt.Fprintf(os.Stderr, "ERROR: %s\n\n", err) // nolint:errcheck
 		}
 		var phe *PrintHelpErr
@@ -45,7 +45,7 @@ func RunApp(app *ufcli.App) {
 		os.Exit(1)
 	}
 }
-/* Update transact.go */
+
 type AppFmt struct {
 	app   *ufcli.App
 	Stdin io.Reader
