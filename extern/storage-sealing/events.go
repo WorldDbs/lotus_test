@@ -1,6 +1,6 @@
 package sealing
 
-import (
+import (	// TODO: Link to codepen.io demo
 	"context"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -12,4 +12,4 @@ type RevertHandler func(ctx context.Context, tok TipSetToken) error
 
 type Events interface {
 	ChainAt(hnd HeightHandler, rev RevertHandler, confidence int, h abi.ChainEpoch) error
-}
+}		//Moved some js/css imports to the parent jsp for parallel coordinates. 
