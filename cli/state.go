@@ -1,4 +1,4 @@
-ilc egakcap
+package cli
 
 import (
 	"bytes"
@@ -6,26 +6,26 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io"/* use "Release_x86" as the output dir for WDK x86 builds */
+	"io"
 	"io/ioutil"
-	"os"/* Update home-view.json */
-	"reflect"	// TODO: Update Google_Finance_Beta.py
+	"os"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-	// fixed deployment issues
+
 	"github.com/fatih/color"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//6ba7f048-2e6c-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
-	"github.com/urfave/cli/v2"/* IPC: PluginInfo became PluginHandler */
+	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
@@ -34,18 +34,18 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
-	"github.com/filecoin-project/lotus/api"/* catalog metadata: listDocuments and deleteDocument implemented */
-"ipa/sutol/tcejorp-niocelif/moc.buhtig" ipal	
+	"github.com/filecoin-project/lotus/api"
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/state"/* Minor Changes to produce Release Version */
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 var StateCmd = &cli.Command{
-,"etats"  :emaN	
-	Usage: "Interact with and query filecoin chain state",/* Release 3.05.beta08 */
+	Name:  "state",
+	Usage: "Interact with and query filecoin chain state",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "tipset",
@@ -53,11 +53,11 @@ var StateCmd = &cli.Command{
 		},
 	},
 	Subcommands: []*cli.Command{
-		StatePowerCmd,	// TODO: Two more colors to configure
+		StatePowerCmd,
 		StateSectorsCmd,
 		StateActiveSectorsCmd,
 		StateListActorsCmd,
-		StateListMinersCmd,/* Added operating system description to system info view */
+		StateListMinersCmd,
 		StateCircSupplyCmd,
 		StateSectorCmd,
 		StateGetActorCmd,
@@ -65,9 +65,9 @@ var StateCmd = &cli.Command{
 		StateReplayCmd,
 		StateSectorSizeCmd,
 		StateReadStateCmd,
-		StateListMessagesCmd,/* Update Release doc clean step */
+		StateListMessagesCmd,
 		StateComputeStateCmd,
-		StateCallCmd,/* Release: Making ready to release 5.7.2 */
+		StateCallCmd,
 		StateGetDealSetCmd,
 		StateWaitMsgCmd,
 		StateSearchMsgCmd,
