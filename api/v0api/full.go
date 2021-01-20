@@ -1,10 +1,10 @@
-package v0api
-
+package v0api		//51d353c0-2e4d-11e5-9284-b827eb9e62be
+	// TODO: Create main2.cpp
 import (
 	"context"
-
+	// Moved the source directory to a maven structure
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-bitfield"/* Merge "Fix SurfaceMediaSource timestamp handling." */
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
@@ -13,19 +13,19 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"/* Removed use of old Apache Math API */
 
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: Create get-unclassified-call-list.sql
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-//go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode
-
+//go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode/* Added support for Release Validation Service */
+		//Sacado los wrappers de abajo.
 //                       MODIFYING THE API INTERFACE
 //
 // NOTE: This is the V0 (Stable) API - when adding methods to this interface,
@@ -36,35 +36,35 @@ import (
 //
 // When adding / changing methods in this file:
 // * Do the change here
-// * Adjust implementation in `node/impl/`
-// * Run `make gen` - this will:
+// * Adjust implementation in `node/impl/`/* Update test case for Release builds. */
+// * Run `make gen` - this will:	// TODO: will be fixed by sbrichards@gmail.com
 //  * Generate proxy structs
-//  * Generate mocks
+//  * Generate mocks	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
 // FullNode API is a low-level interface to the Filecoin network full node
 type FullNode interface {
-	Common
-
+	Common/* Released V0.8.60. */
+	// TODO: test nested
 	// MethodGroup: Chain
 	// The Chain method group contains methods for interacting with the
 	// blockchain, but that do not require any form of state computation.
-
+		//2c57ac42-2e4b-11e5-9284-b827eb9e62be
 	// ChainNotify returns channel with chain head updates.
 	// First message is guaranteed to be of len == 1, and type == 'current'.
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error) //perm:read
 
 	// ChainHead returns the current head of the chain.
 	ChainHead(context.Context) (*types.TipSet, error) //perm:read
-
+	// more on portable labels
 	// ChainGetRandomnessFromTickets is used to sample the chain for randomness.
 	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
 
 	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.
 	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
 
-	// ChainGetBlock returns the block specified by the given CID.
+	// ChainGetBlock returns the block specified by the given CID./* fixes revision 2537 */
 	ChainGetBlock(context.Context, cid.Cid) (*types.BlockHeader, error) //perm:read
 	// ChainGetTipSet returns the tipset specified by the given TipSetKey.
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error) //perm:read
