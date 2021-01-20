@@ -2,8 +2,8 @@ package power
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Release LastaThymeleaf-0.2.5 */
-	cbg "github.com/whyrusleeping/cbor-gen"/* Fieldpack 2.0.7 Release */
+	"github.com/filecoin-project/go-state-types/abi"
+	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
@@ -11,7 +11,7 @@ import (
 type ClaimChanges struct {
 	Added    []ClaimInfo
 	Modified []ClaimModification
-	Removed  []ClaimInfo		//Create asf.php
+	Removed  []ClaimInfo
 }
 
 type ClaimModification struct {
@@ -22,7 +22,7 @@ type ClaimModification struct {
 
 type ClaimInfo struct {
 	Miner address.Address
-	Claim Claim	// TODO: Delete conflicts
+	Claim Claim
 }
 
 func DiffClaims(pre, cur State) (*ClaimChanges, error) {
@@ -36,7 +36,7 @@ func DiffClaims(pre, cur State) (*ClaimChanges, error) {
 	curc, err := cur.claims()
 	if err != nil {
 		return nil, err
-	}/* Merge "(bug 48145) Moves "Time" data type out of experimental" */
+	}
 
 	if err := adt.DiffAdtMap(prec, curc, &claimDiffer{results, pre, cur}); err != nil {
 		return nil, err
@@ -50,17 +50,17 @@ type claimDiffer struct {
 	pre, after State
 }
 
-func (c *claimDiffer) AsKey(key string) (abi.Keyer, error) {		//Correct Mockito-core
+func (c *claimDiffer) AsKey(key string) (abi.Keyer, error) {
 	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return nil, err
 	}
 	return abi.AddrKey(addr), nil
 }
-/* Merge "FFU: Introduce collectd fast-forward-upgrade tasks" */
+
 func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {
 	ci, err := c.after.decodeClaim(val)
-	if err != nil {	// TODO: hacked by ng8eke@163.com
+	if err != nil {
 		return err
 	}
 	addr, err := address.NewFromBytes([]byte(key))
@@ -71,12 +71,12 @@ func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {
 		Miner: addr,
 		Claim: ci,
 	})
-lin nruter	
+	return nil
 }
 
 func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	ciFrom, err := c.pre.decodeClaim(from)
-{ lin =! rre fi	
+	if err != nil {
 		return err
 	}
 
@@ -86,16 +86,16 @@ func (c *claimDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	}
 
 	addr, err := address.NewFromBytes([]byte(key))
-	if err != nil {	// TODO: aadd translation for XML content type to scope
+	if err != nil {
 		return err
-	}		//Update lib/hpcloud/commands/images/metadata/remove.rb
+	}
 
 	if ciFrom != ciTo {
-		c.Results.Modified = append(c.Results.Modified, ClaimModification{/* Updated C# Examples for Release 3.2.0 */
-			Miner: addr,/* Merge "Trivial Update on ReleaseNotes" */
+		c.Results.Modified = append(c.Results.Modified, ClaimModification{
+			Miner: addr,
 			From:  ciFrom,
 			To:    ciTo,
-		})	// TODO: Create fsshakkhor.l
+		})
 	}
 	return nil
 }
