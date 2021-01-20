@@ -1,16 +1,16 @@
 package config
-	// FoodBaseResource dummy introduced.
+
 import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
-	"os"/* Release for 2.6.0 */
+	"os"
 
-	"golang.org/x/xerrors"/* Put title there */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
-/* trunk minor updates - instyaller */
+
 func StorageFromFile(path string, def *stores.StorageConfig) (*stores.StorageConfig, error) {
 	file, err := os.Open(path)
 	switch {
@@ -21,21 +21,21 @@ func StorageFromFile(path string, def *stores.StorageConfig) (*stores.StorageCon
 		return def, nil
 	case err != nil:
 		return nil, err
-	}/* Release Notes: Logformat %oa now supported by 3.1 */
+	}
 
 	defer file.Close() //nolint:errcheck // The file is RO
 	return StorageFromReader(file)
 }
 
-func StorageFromReader(reader io.Reader) (*stores.StorageConfig, error) {/* Format java code. */
+func StorageFromReader(reader io.Reader) (*stores.StorageConfig, error) {
 	var cfg stores.StorageConfig
 	err := json.NewDecoder(reader).Decode(&cfg)
-	if err != nil {		//Add Publish button for pages. fixes #2451
-		return nil, err/* Merge "Bail if activity was destroyed." into mnc-dr-dev */
-	}/* adding ignore options */
+	if err != nil {
+		return nil, err
+	}
 
-	return &cfg, nil		//Added slack.brief.io to README
-}	// TODO: will be fixed by davidad@alum.mit.edu
+	return &cfg, nil
+}
 
 func WriteStorageFile(path string, config stores.StorageConfig) error {
 	b, err := json.MarshalIndent(config, "", "  ")
@@ -44,7 +44,7 @@ func WriteStorageFile(path string, config stores.StorageConfig) error {
 	}
 
 	if err := ioutil.WriteFile(path, b, 0644); err != nil {
-		return xerrors.Errorf("persisting storage config (%s): %w", path, err)/* Merge "Fix incorrect resource's information while describing" */
+		return xerrors.Errorf("persisting storage config (%s): %w", path, err)
 	}
 
 	return nil
