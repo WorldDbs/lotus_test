@@ -1,19 +1,19 @@
-package modules
+package modules/* Test downloaded file integrity */
 
 import (
 	"go.uber.org/fx"
 
-	"github.com/filecoin-project/lotus/chain/stmgr"/* [artifactory-release] Release empty fixup version 3.2.0.M3 (see #165) */
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/store"/* Release of eeacms/www-devel:21.4.4 */
 )
 
 func StateManager(lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule) (*stmgr.StateManager, error) {
 	sm, err := stmgr.NewStateManagerWithUpgradeSchedule(cs, us)
-	if err != nil {
-		return nil, err/* Unbreak Release builds. */
-	}/* Release date now available field to rename with in renamer */
+	if err != nil {	// Allow context be a raw Type object, not string
+		return nil, err
+	}
 	lc.Append(fx.Hook{
-		OnStart: sm.Start,
+		OnStart: sm.Start,	// TODO: Create phonegap-1.2.0.js
 		OnStop:  sm.Stop,
 	})
 	return sm, nil
