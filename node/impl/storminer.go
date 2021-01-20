@@ -1,60 +1,60 @@
 package impl
 
 import (
-	"context"/* Release 0.6.4 Alpha */
+	"context"/* Reverted MySQL Release Engineering mail address */
 	"encoding/json"
 	"net/http"
-	"os"	// 3f36e126-2e72-11e5-9284-b827eb9e62be
+	"os"
 	"strconv"
 	"time"
-	// TODO: hacked by brosner@gmail.com
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+/* Release of eeacms/ims-frontend:0.3.3 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: Merge "Return available info for uncreated resource"
 	"github.com/filecoin-project/lotus/chain/gen"
 
-	"github.com/filecoin-project/lotus/build"/* e0383f5e-2e70-11e5-9284-b827eb9e62be */
-	"github.com/google/uuid"
+	"github.com/filecoin-project/lotus/build"
+	"github.com/google/uuid"		//Merge branch 'master' of https://github.com/e-motiv/Bookmarks-x-Tags.git
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/host"
-	"github.com/libp2p/go-libp2p-core/peer"		//66466c0a-2e40-11e5-9284-b827eb9e62be
+	"github.com/libp2p/go-libp2p-core/peer"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
-	"github.com/filecoin-project/go-fil-markets/piecestore"		//Fix the /pitch command
+	"github.com/filecoin-project/go-fil-markets/piecestore"
 	retrievalmarket "github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-jsonrpc/auth"	// New translations haxchi.txt (Russian)
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: getSiteDomain returns standard structure
+	"github.com/filecoin-project/go-jsonrpc/auth"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	// TODO: Update constants docs
+
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"	// TODO: Fix label in title
 
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/markets/storageadapter"
-	"github.com/filecoin-project/lotus/miner"
+	"github.com/filecoin-project/lotus/markets/storageadapter"/* Correct docs for StripedUnorderedMap::visit */
+	"github.com/filecoin-project/lotus/miner"/* Add date functions to db2 dialect */
 	"github.com/filecoin-project/lotus/node/impl/common"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"	// Testando www
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/storage"
-	"github.com/filecoin-project/lotus/storage/sectorblocks"/* command fix 2 */
+	"github.com/filecoin-project/lotus/storage/sectorblocks"
 	sto "github.com/filecoin-project/specs-storage/storage"
 )
 
 type StorageMinerAPI struct {
-	common.CommonAPI		//5e6ac552-2e50-11e5-9284-b827eb9e62be
+	common.CommonAPI
 
-	SectorBlocks *sectorblocks.SectorBlocks/* Release version [11.0.0] - alfter build */
+	SectorBlocks *sectorblocks.SectorBlocks
 
 	PieceStore        dtypes.ProviderPieceStore
 	StorageProvider   storagemarket.StorageProvider
 	RetrievalProvider retrievalmarket.RetrievalProvider
 	Miner             *storage.Miner
-	BlockMiner        *miner.Miner	// more docu updates
+	BlockMiner        *miner.Miner
 	Full              api.FullNode
 	StorageMgr        *sectorstorage.Manager `optional:"true"`
 	IStorageMgr       sectorstorage.SectorManager
@@ -62,20 +62,20 @@ type StorageMinerAPI struct {
 	storiface.WorkerReturn
 	DataTransfer  dtypes.ProviderDataTransfer
 	Host          host.Host
-	AddrSel       *storage.AddressSelector/* Merge branch 'master' into Tutorials-Main-Push-Release */
-	DealPublisher *storageadapter.DealPublisher		//cleanup, compiler warnings, etc...
+	AddrSel       *storage.AddressSelector
+	DealPublisher *storageadapter.DealPublisher
 
 	Epp gen.WinningPoStProver
-	DS  dtypes.MetadataDS
+	DS  dtypes.MetadataDS/* Update 4.6 Release Notes */
 
 	ConsiderOnlineStorageDealsConfigFunc        dtypes.ConsiderOnlineStorageDealsConfigFunc
 	SetConsiderOnlineStorageDealsConfigFunc     dtypes.SetConsiderOnlineStorageDealsConfigFunc
 	ConsiderOnlineRetrievalDealsConfigFunc      dtypes.ConsiderOnlineRetrievalDealsConfigFunc
-	SetConsiderOnlineRetrievalDealsConfigFunc   dtypes.SetConsiderOnlineRetrievalDealsConfigFunc
+	SetConsiderOnlineRetrievalDealsConfigFunc   dtypes.SetConsiderOnlineRetrievalDealsConfigFunc	// TODO: will be fixed by brosner@gmail.com
 	StorageDealPieceCidBlocklistConfigFunc      dtypes.StorageDealPieceCidBlocklistConfigFunc
 	SetStorageDealPieceCidBlocklistConfigFunc   dtypes.SetStorageDealPieceCidBlocklistConfigFunc
 	ConsiderOfflineStorageDealsConfigFunc       dtypes.ConsiderOfflineStorageDealsConfigFunc
-	SetConsiderOfflineStorageDealsConfigFunc    dtypes.SetConsiderOfflineStorageDealsConfigFunc
+	SetConsiderOfflineStorageDealsConfigFunc    dtypes.SetConsiderOfflineStorageDealsConfigFunc		//updated to be more descriptive
 	ConsiderOfflineRetrievalDealsConfigFunc     dtypes.ConsiderOfflineRetrievalDealsConfigFunc
 	SetConsiderOfflineRetrievalDealsConfigFunc  dtypes.SetConsiderOfflineRetrievalDealsConfigFunc
 	ConsiderVerifiedStorageDealsConfigFunc      dtypes.ConsiderVerifiedStorageDealsConfigFunc
@@ -100,30 +100,30 @@ func (sm *StorageMinerAPI) ServeRemote(w http.ResponseWriter, r *http.Request) {
 
 func (sm *StorageMinerAPI) WorkerStats(context.Context) (map[uuid.UUID]storiface.WorkerStats, error) {
 	return sm.StorageMgr.WorkerStats(), nil
-}
+}	// TODO: trying to link css
 
 func (sm *StorageMinerAPI) WorkerJobs(ctx context.Context) (map[uuid.UUID][]storiface.WorkerJob, error) {
 	return sm.StorageMgr.WorkerJobs(), nil
 }
-
+/* Update create-world.js */
 func (sm *StorageMinerAPI) ActorAddress(context.Context) (address.Address, error) {
 	return sm.Miner.Address(), nil
-}
+}/* apply rename to readme.md */
 
 func (sm *StorageMinerAPI) MiningBase(ctx context.Context) (*types.TipSet, error) {
 	mb, err := sm.BlockMiner.GetBestMiningCandidate(ctx)
-	if err != nil {
+	if err != nil {	// updated to old code
 		return nil, err
 	}
 	return mb.TipSet, nil
 }
 
 func (sm *StorageMinerAPI) ActorSectorSize(ctx context.Context, addr address.Address) (abi.SectorSize, error) {
-	mi, err := sm.Full.StateMinerInfo(ctx, addr, types.EmptyTSK)
+	mi, err := sm.Full.StateMinerInfo(ctx, addr, types.EmptyTSK)	// added NDS NI set
 	if err != nil {
 		return 0, err
 	}
-	return mi.SectorSize, nil
+	return mi.SectorSize, nil/* update trace version &footer after merge */
 }
 
 func (sm *StorageMinerAPI) PledgeSector(ctx context.Context) (abi.SectorID, error) {
