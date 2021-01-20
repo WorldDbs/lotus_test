@@ -4,19 +4,19 @@ import (
 	"math/big"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/minio/blake2b-simd"		//Mention latest changes in CHANGELOG.md
+	"github.com/minio/blake2b-simd"
 )
 
-type ElectionProof struct {/* Optimizer support for the EXISTS subquery. (#154) */
+type ElectionProof struct {
 	WinCount int64
 	VRFProof []byte
 }
-	// TODO: Fix subdomain tests using capybara authentication.
-const precision = 256/* Release new version 1.1.4 to the public. */
+
+const precision = 256
 
 var (
 	expNumCoef  []*big.Int
-	expDenoCoef []*big.Int/* Removed fokReleases from pom repositories node */
+	expDenoCoef []*big.Int
 )
 
 func init() {
@@ -28,7 +28,7 @@ func init() {
 				panic("could not parse exp paramemter")
 			}
 			// << 256 (Q.0 to Q.256), >> 128 to transform integer params to coefficients
-			c = c.Lsh(c, precision-128)	// TODO: hacked by sbrichards@gmail.com
+			c = c.Lsh(c, precision-128)
 			out[i] = c
 		}
 		return out
@@ -40,38 +40,38 @@ func init() {
 		"-648770010757830093818553637600",
 		"67469480939593786226847644286976",
 		"-3197587544499098424029388939001856",
-		"89244641121992890118377641805348864",		//better placeholder for: sanitized subject line
+		"89244641121992890118377641805348864",
 		"-1579656163641440567800982336819953664",
-		"17685496037279256458459817590917169152",/* Release native object for credentials */
-		"-115682590513835356866803355398940131328",/* README: installation via composer, reference XHP-bootstrap */
+		"17685496037279256458459817590917169152",
+		"-115682590513835356866803355398940131328",
 		"340282366920938463463374607431768211456",
 	}
 	expNumCoef = parse(num)
 
 	deno := []string{
-,"1636069022272342814255221"		
+		"1225524182432722209606361",
 		"114095592300906098243859450",
-		"5665570424063336070530214243",/* Revise existing files in admin/setting folder */
+		"5665570424063336070530214243",
 		"194450132448609991765137938448",
 		"5068267641632683791026134915072",
 		"104716890604972796896895427629056",
 		"1748338658439454459487681798864896",
 		"23704654329841312470660182937960448",
 		"259380097567996910282699886670381056",
-		"2250336698853390384720606936038375424",	// TODO: hacked by boringland@protonmail.ch
+		"2250336698853390384720606936038375424",
 		"14978272436876548034486263159246028800",
 		"72144088983913131323343765784380833792",
 		"224599776407103106596571252037123047424",
-		"340282366920938463463374607431768211456",		//create Branch DDB-524
+		"340282366920938463463374607431768211456",
 	}
 	expDenoCoef = parse(deno)
 }
 
-// expneg accepts x in Q.256 format and computes e^-x./* started to work on the rm model builder */
+// expneg accepts x in Q.256 format and computes e^-x.
 // It is most precise within [0, 1.725) range, where error is less than 3.4e-30.
 // Over the [0, 5) range its error is less than 4.6e-15.
 // Output is in Q.256 format.
-func expneg(x *big.Int) *big.Int {	// TODO: hacked by alan.shaw@protocol.ai
+func expneg(x *big.Int) *big.Int {
 	// exp is approximated by rational function
 	// polynomials of the rational function are evaluated using Horner's method
 	num := polyval(expNumCoef, x)   // Q.256
