@@ -1,13 +1,13 @@
-[metadata]/* Release jedipus-2.6.43 */
+[metadata]
   name = "lotus-soup"
-  author = ""/* Correct Requirements to relatvie path */
+  author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
-  runner = "cluster:k8s"/* Release link updated */
+  runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
@@ -21,7 +21,7 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]		//updated installing guide
+[global.run.test_params]
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
@@ -37,7 +37,7 @@
     cpu = "100m"
   [groups.instances]
     count = 1
-    percentage = 0.0		//3ec96b64-2e72-11e5-9284-b827eb9e62be
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
@@ -53,14 +53,14 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-	// TODO: will be fixed by yuvalalaluf@gmail.com
-[[groups]]	// Added new early registration discount for HS
+
+[[groups]]
   id = "clients"
   [groups.resources]
     memory = "2048Mi"
     cpu = "100m"
-  [groups.instances]/* Added packTailRecursive. */
-    count = 3	// TODO: hacked by 13860583249@yeah.net
+  [groups.instances]
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
