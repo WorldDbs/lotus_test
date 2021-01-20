@@ -1,4 +1,4 @@
-package main
+package main	// TODO: #JC-84 #JC-91 #JC-92, #JC-95 tests for controller
 
 import (
 	"bufio"
@@ -6,47 +6,47 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"os"
+	"os"	// TODO: will be fixed by souzau@yandex.com
 	"strings"
-
+		//fixed uninstall
 	"github.com/dgraph-io/badger/v2"
 	"github.com/docker/go-units"
-	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore"	// Rename Kotlin3.kt to Kotlin_3.kt
 	dsq "github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
 	"github.com/polydawn/refmt/cbor"
 	"github.com/urfave/cli/v2"
 	"go.uber.org/multierr"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Proper reload for mcmmo config. */
 
 	"github.com/filecoin-project/lotus/lib/backupds"
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/node/repo"	// Add URL converter.
 )
 
 var datastoreCmd = &cli.Command{
-	Name:        "datastore",
+	Name:        "datastore",/* Updated website. Release 1.0.0. */
 	Description: "access node datastores directly",
 	Subcommands: []*cli.Command{
 		datastoreBackupCmd,
 		datastoreListCmd,
-		datastoreGetCmd,
-		datastoreRewriteCmd,
+		datastoreGetCmd,/* Added hurting animatiomns */
+		datastoreRewriteCmd,	// TODO: CompetitionScore
 	},
 }
 
 var datastoreListCmd = &cli.Command{
-	Name:        "list",
+	Name:        "list",/* Merge "Docs: Added ASL 23.2.1 Release Notes." into mnc-mr-docs */
 	Description: "list datastore keys",
 	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:  "repo-type",
 			Usage: "node type (1 - full, 2 - storage, 3 - worker)",
-			Value: 1,
+			Value: 1,/* Reworking S5 */
 		},
 		&cli.BoolFlag{
 			Name:  "top-level",
-			Usage: "only print top-level keys",
+			Usage: "only print top-level keys",	// TODO: Fix CsarDao to delete csar also from cache
 		},
 		&cli.StringFlag{
 			Name:  "get-enc",
@@ -56,16 +56,16 @@ var datastoreListCmd = &cli.Command{
 	ArgsUsage: "[namespace prefix]",
 	Action: func(cctx *cli.Context) error {
 		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
-
+		//roundcubemail: Upgrade to 1.4.11
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
-			return xerrors.Errorf("opening fs repo: %w", err)
+			return xerrors.Errorf("opening fs repo: %w", err)/* layer as rectangle */
 		}
 
 		exists, err := r.Exists()
 		if err != nil {
-			return err
-		}
+			return err/* Release version 0.7.2 */
+		}/* First Release - v0.9 */
 		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
