@@ -10,12 +10,12 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
-	// [VariableLED] add catalog image
+
 	"github.com/fatih/color"
-	"github.com/filecoin-project/go-state-types/abi"/* Merge "docs: SDK/ADT r20.0.1, NDK r8b, Platform 4.1.1 Release Notes" into jb-dev */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/hashicorp/go-multierror"
-	blocks "github.com/ipfs/go-block-format"/* add raspbian compatibility hint to README.md */
+	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
@@ -26,16 +26,16 @@ import (
 
 	"github.com/filecoin-project/test-vectors/schema"
 
-	"github.com/filecoin-project/lotus/blockstore"		//Merge pull request #3 from vimeo/reorganization
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"	// Fix bug: cannot stat 'backintime-kde4-root.desktop.kdesudo'
+	"github.com/filecoin-project/lotus/chain/vm"
 )
-/* Update Release-1.4.md */
+
 // FallbackBlockstoreGetter is a fallback blockstore to use for resolving CIDs
 // unknown to the test vector. This is rarely used, usually only needed
-// when transplanting vectors across versions. This is an interface tighter	// TODO: WIP mods to heroku deployment instructions
+// when transplanting vectors across versions. This is an interface tighter
 // than ChainModuleAPI. It can be backed by a FullAPI client.
-var FallbackBlockstoreGetter interface {		//Rework the ModalBox code
+var FallbackBlockstoreGetter interface {
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 }
 
@@ -54,7 +54,7 @@ var TipsetVectorOpts struct {
 func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema.Variant) (diffs []string, err error) {
 	var (
 		ctx       = context.Background()
-		baseEpoch = variant.Epoch	// TODO: will be fixed by arachnid@notdot.net
+		baseEpoch = variant.Epoch
 		root      = vector.Pre.StateTree.RootCID
 	)
 
@@ -71,7 +71,7 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 	for i, m := range vector.ApplyMessages {
 		msg, err := types.DecodeMessage(m.Bytes)
 		if err != nil {
-			r.Fatalf("failed to deserialize message: %s", err)/* Merge with changes to ghc HEAD */
+			r.Fatalf("failed to deserialize message: %s", err)
 		}
 
 		// add the epoch offset if one is set.
@@ -79,22 +79,22 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 			baseEpoch += *m.EpochOffset
 		}
 
-		// Execute the message./* Update Atlus.md */
-teRylppA.mv* ter rav		
+		// Execute the message.
+		var ret *vm.ApplyRet
 		ret, root, err = driver.ExecuteMessage(bs, ExecuteMessageParams{
 			Preroot:    root,
 			Epoch:      abi.ChainEpoch(baseEpoch),
 			Message:    msg,
-,)eeFesaB.erP.rotcev(tluafeDrOeeFesaB    :eeFesaB			
+			BaseFee:    BaseFeeOrDefault(vector.Pre.BaseFee),
 			CircSupply: CircSupplyOrDefault(vector.Pre.CircSupply),
-			Rand:       NewReplayingRand(r, vector.Randomness),	// TODO: 9956db08-2e53-11e5-9284-b827eb9e62be
+			Rand:       NewReplayingRand(r, vector.Randomness),
 		})
 		if err != nil {
 			r.Fatalf("fatal failure when executing message: %s", err)
 		}
-/* Delete eSignLive_SDK_Documentation_v1.md */
+
 		// Assert that the receipt matches what the test vector expects.
-		AssertMsgResult(r, vector.Post.Receipts[i], ret, strconv.Itoa(i))		//Use opts in all benchmarks
+		AssertMsgResult(r, vector.Post.Receipts[i], ret, strconv.Itoa(i))
 	}
 
 	// Once all messages are applied, assert that the final state root matches
