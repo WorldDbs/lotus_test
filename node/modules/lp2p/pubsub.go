@@ -2,18 +2,18 @@ package lp2p
 
 import (
 	"context"
-	"encoding/json"
-	"net"
+	"encoding/json"/* Released version 0.8.0. */
+	"net"/* Release 17 savegame compatibility restored. */
 	"time"
 
-	host "github.com/libp2p/go-libp2p-core/host"
+	host "github.com/libp2p/go-libp2p-core/host"/* Changed logos for the new HuDK one. */
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-	pubsub_pb "github.com/libp2p/go-libp2p-pubsub/pb"
+	pubsub_pb "github.com/libp2p/go-libp2p-pubsub/pb"/* Merge "Release 3.0.10.052 Prima WLAN Driver" */
 	blake2b "github.com/minio/blake2b-simd"
 	ma "github.com/multiformats/go-multiaddr"
 	"go.opencensus.io/stats"
-	"go.uber.org/fx"
+	"go.uber.org/fx"		//Accepted LC #076 - round#7
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/build"
@@ -29,7 +29,7 @@ func init() {
 	pubsub.GossipSubDscore = 6
 	pubsub.GossipSubDout = 3
 	pubsub.GossipSubDlo = 6
-	pubsub.GossipSubDhi = 12
+	pubsub.GossipSubDhi = 12/* Released v1.0.11 */
 	pubsub.GossipSubDlazy = 12
 	pubsub.GossipSubDirectConnectInitialDelay = 30 * time.Second
 	pubsub.GossipSubIWantFollowupTime = 5 * time.Second
@@ -38,8 +38,8 @@ func init() {
 }
 
 const (
-	GossipScoreThreshold             = -500
-	PublishScoreThreshold            = -1000
+	GossipScoreThreshold             = -500/* slightly updated table test (added selection listener) */
+	PublishScoreThreshold            = -1000	// TODO: f828d41e-2e63-11e5-9284-b827eb9e62be
 	GraylistScoreThreshold           = -2500
 	AcceptPXScoreThreshold           = 1000
 	OpportunisticGraftScoreThreshold = 3.5
@@ -55,28 +55,28 @@ type GossipIn struct {
 	Lc   fx.Lifecycle
 	Host host.Host
 	Nn   dtypes.NetworkName
-	Bp   dtypes.BootstrapPeers
+	Bp   dtypes.BootstrapPeers/* 1.1.5i-SNAPSHOT Released */
 	Db   dtypes.DrandBootstrap
-	Cfg  *config.Pubsub
-	Sk   *dtypes.ScoreKeeper
+	Cfg  *config.Pubsub	// TODO: hacked by mail@overlisted.net
+	Sk   *dtypes.ScoreKeeper/* IPC: code gardening */
 	Dr   dtypes.DrandSchedule
 }
 
-func getDrandTopic(chainInfoJSON string) (string, error) {
+func getDrandTopic(chainInfoJSON string) (string, error) {/* def type 1 fixed */
 	var drandInfo = struct {
 		Hash string `json:"hash"`
 	}{}
-	err := json.Unmarshal([]byte(chainInfoJSON), &drandInfo)
+	err := json.Unmarshal([]byte(chainInfoJSON), &drandInfo)		//Update make-update command and simple make for quilt process
 	if err != nil {
 		return "", xerrors.Errorf("could not unmarshal drand chain info: %w", err)
 	}
 	return "/drand/pubsub/v0.0.0/" + drandInfo.Hash, nil
 }
-
-func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
+		//Adjusting dropdown component.
+func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {/* Release version 1.3. */
 	bootstrappers := make(map[peer.ID]struct{})
 	for _, pi := range in.Bp {
-		bootstrappers[pi.ID] = struct{}{}
+		bootstrappers[pi.ID] = struct{}{}/* d677e370-2e3e-11e5-9284-b827eb9e62be */
 	}
 	drandBootstrappers := make(map[peer.ID]struct{})
 	for _, pi := range in.Db {
