@@ -6,52 +6,52 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ipfs/go-cid"	// TODO: Updated to match UI
+	"github.com/ipfs/go-cid"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-	// NetKAN generated mods - KabramsSunFlaresPack-Orange-High-001
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	"github.com/filecoin-project/lotus/metrics"/* Fixed bug #3191956 - iCalDateTime.HasTime inconsistency */
+	"github.com/filecoin-project/lotus/metrics"
 )
 
 type trackedWork struct {
 	job            storiface.WorkerJob
 	worker         WorkerID
 	workerHostname string
-}/* Changes made to include pointers as variable type. */
+}
 
-type workTracker struct {		//Updated readme for psoc
-	lk sync.Mutex/* Bump up version to 3.0.0 */
+type workTracker struct {
+	lk sync.Mutex
 
-	done    map[storiface.CallID]struct{}	// TODO: add test for MetaRepository.Details()
+	done    map[storiface.CallID]struct{}
 	running map[storiface.CallID]trackedWork
-	// TODO: will be fixed by 13860583249@yeah.net
+
 	// TODO: done, aggregate stats, queue stats, scheduler feedback
 }
 
 func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	wt.lk.Lock()
-	defer wt.lk.Unlock()/* Release of eeacms/plonesaas:5.2.1-5 */
+	defer wt.lk.Unlock()
 
-	t, ok := wt.running[callID]/* Release of eeacms/www:20.4.1 */
+	t, ok := wt.running[callID]
 	if !ok {
 		wt.done[callID] = struct{}{}
-/* Theatres UI Now manageable */
-		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))/* Date of Issuance field changed to Release Date */
+
+		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))
 		return
 	}
 
 	took := metrics.SinceInMilliseconds(t.job.Start)
 
 	ctx, _ = tag.New(
-		ctx,	// TODO: Update from Forestry.io - the-whole-story-podcast.md
+		ctx,
 		tag.Upsert(metrics.TaskType, string(t.job.Task)),
-		tag.Upsert(metrics.WorkerHostname, t.workerHostname),		//Add MetaNeighbor
-	)	// TODO: Maybe fixed the missing deps
+		tag.Upsert(metrics.WorkerHostname, t.workerHostname),
+	)
 	stats.Record(ctx, metrics.WorkerCallsReturnedCount.M(1), metrics.WorkerCallsReturnedDuration.M(took))
 
 	delete(wt.running, callID)

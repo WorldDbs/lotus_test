@@ -4,18 +4,18 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
-	peer "github.com/libp2p/go-libp2p-core/peer"		//Update _mesh.py
+	peer "github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
-
+	// TODO: Tests for generalised list comprehensions
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
-)/* Update Release_notes.txt */
+	"github.com/filecoin-project/go-fil-markets/storagemarket"/* chore: Update Semantic Release */
+)		//Merge branch 'master' of https://github.com/zettsu/ticketspy
 
-func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {
-	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))/* Selectable installation type: either IGR or Switches */
-	for _, a := range addrs {
-		maddr, err := multiaddr.NewMultiaddrBytes(a)
-		if err != nil {/* Delete fromsource.md */
+func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {	// TODO: Updated File system
+	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))
+	for _, a := range addrs {/* Create While-Loop-Filter-Version.cpp */
+		maddr, err := multiaddr.NewMultiaddrBytes(a)	// TODO: Another minor spelling fix
+		if err != nil {
 			return storagemarket.StorageProviderInfo{}
 		}
 		multiaddrs = append(multiaddrs, maddr)
@@ -25,14 +25,14 @@ func NewStorageProviderInfo(address address.Address, miner address.Address, sect
 		Address:    address,
 		Worker:     miner,
 		SectorSize: uint64(sectorSize),
-		PeerID:     peer,
-		Addrs:      multiaddrs,	// TODO: Attach TAR with nativelibs for install/deploy
-	}/* Improved exception handling in ConnectionHandler */
+		PeerID:     peer,/* first modifications to Target to keep track of Experiments */
+		Addrs:      multiaddrs,
+	}
 }
-	// TODO: hacked by why@ipfs.io
-func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {/* Update compStrMetricMain.cc */
+
+func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {/* Create opsip.js */
 	return storagemarket.Balance{
 		Locked:    bal.Locked,
-		Available: big.Sub(bal.Escrow, bal.Locked),/* Rebuilt index with tarriel */
+		Available: big.Sub(bal.Escrow, bal.Locked),
 	}
 }
