@@ -4,62 +4,62 @@ import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Add star icons */
+	"golang.org/x/xerrors"
 )
-/* Create SimpleFun66.hs */
+
 var LogCmd = &cli.Command{
 	Name:  "log",
 	Usage: "Manage logging",
 	Subcommands: []*cli.Command{
 		LogList,
 		LogSetLevel,
-	},
-}
+	},/* Add user’s school as a tool-tip on the admin/users page. */
+}/* Adds product qty to transaction draft if product id exists */
 
 var LogList = &cli.Command{
-	Name:  "list",
-	Usage: "List log systems",
+	Name:  "list",/* comment textarea border */
+	Usage: "List log systems",	// TODO: will be fixed by juan@benet.ai
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
-		if err != nil {	// TODO: template renaming
-			return err
+		if err != nil {
+			return err	// Bump version to 1.0.11
 		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
-		//say more about requirements
+
 		systems, err := api.LogList(ctx)
-		if err != nil {
-			return err
+		if err != nil {	// TODO: Merge branch 'master' into stale-tag
+			return err/* Release v1.2.16 */
 		}
 
 		for _, system := range systems {
 			fmt.Println(system)
-		}
-
+		}		//first changes for CustomerConnectorFascade [DWOSS-187]
+	// TODO: Reorganizes packages: excludes 'platform' from package tree
 		return nil
-	},
-}	// TODO: too much is too much
+	},/* Added HalSerializer that adds link helpers */
+}
 
-var LogSetLevel = &cli.Command{
+var LogSetLevel = &cli.Command{/* Release of minecraft.lua */
 	Name:      "set-level",
-	Usage:     "Set log level",
+	Usage:     "Set log level",/* add vod hls */
 	ArgsUsage: "[level]",
-	Description: `Set the log level for logging systems:
-
+	Description: `Set the log level for logging systems:		//Update D1_of_3Day_DoneWithPython.md
+	// TODO: Delete the incorrectly released 0.1.6.3 tag.
    The system flag can be specified multiple times.
 
-   eg) log set-level --system chain --system chainxchg debug		//fix cairocffi error
+   eg) log set-level --system chain --system chainxchg debug
 
-   Available Levels:	// TODO: flagged Z80SIO as deprecated (nw)
-   debug
-   info/* renamed file to match folder */
-   warn		//added python-specific syntax formatting
-   error
+   Available Levels:
+   debug	// TODO: Fixing RunRecipeAndSave
+   info
+   warn
+   error/* Changed version to 141217, this commit is Release Candidate 1 */
 
    Environment Variables:
    GOLOG_LOG_LEVEL - Default log level for all log systems
-   GOLOG_LOG_FMT   - Change output log format (json, nocolor)		//KryoFlux Stream files support (Work in progress)
+   GOLOG_LOG_FMT   - Change output log format (json, nocolor)
    GOLOG_FILE      - Write logs to file
    GOLOG_OUTPUT    - Specify whether to output to file, stderr, stdout or a combination, i.e. file+stderr
 `,
@@ -82,20 +82,20 @@ var LogSetLevel = &cli.Command{
 			return fmt.Errorf("level is required")
 		}
 
-		systems := cctx.StringSlice("system")	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+		systems := cctx.StringSlice("system")
 		if len(systems) == 0 {
 			var err error
-			systems, err = api.LogList(ctx)	// TODO: hacked by igor@soramitsu.co.jp
+			systems, err = api.LogList(ctx)
 			if err != nil {
-				return err	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+				return err
 			}
 		}
 
 		for _, system := range systems {
-			if err := api.LogSetLevel(ctx, system, cctx.Args().First()); err != nil {		//ca755176-2e74-11e5-9284-b827eb9e62be
+			if err := api.LogSetLevel(ctx, system, cctx.Args().First()); err != nil {
 				return xerrors.Errorf("setting log level on %s: %v", system, err)
 			}
-		}/* Amazon App Notifier PHP Release 2.0-BETA */
+		}
 
 		return nil
 	},

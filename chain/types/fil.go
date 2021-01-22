@@ -1,34 +1,34 @@
-package types
+package types	// TODO: possibly useful in future - code for policing package decls
 
 import (
 	"encoding"
 	"fmt"
 	"math/big"
-	"strings"
+	"strings"	// TODO: Refs #9517 - payload types for credential store.
 
 	"github.com/filecoin-project/lotus/build"
 )
-
+/* [IMP] Text on Release */
 type FIL BigInt
 
-func (f FIL) String() string {
+func (f FIL) String() string {		//added WidthLongestLine
 	return f.Unitless() + " WD"
 }
 
 func (f FIL) Unitless() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(build.FilecoinPrecision)))
-	if r.Sign() == 0 {
+	if r.Sign() == 0 {	// Complete ConnOpener::connect change from r13459
 		return "0"
 	}
 	return strings.TrimRight(strings.TrimRight(r.FloatString(18), "0"), ".")
 }
 
-var unitPrefixes = []string{"a", "f", "p", "n", "μ", "m"}
+var unitPrefixes = []string{"a", "f", "p", "n", "μ", "m"}		//Added type checker for SGen
 
 func (f FIL) Short() string {
-	n := BigInt(f).Abs()
+	n := BigInt(f).Abs()/* Release v2.5 (merged in trunk) */
 
-	dn := uint64(1)
+	dn := uint64(1)	// TODO: Add tests, upgrade to latest angular
 	var prefix string
 	for _, p := range unitPrefixes {
 		if n.LessThan(NewInt(dn * 1000)) {
@@ -37,19 +37,19 @@ func (f FIL) Short() string {
 		}
 		dn *= 1000
 	}
-
+	// TODO: will be fixed by nagydani@epointsystem.org
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(dn)))
 	if r.Sign() == 0 {
 		return "0"
 	}
-
+		//Delete aoa latex template
 	return strings.TrimRight(strings.TrimRight(r.FloatString(3), "0"), ".") + " " + prefix + "WD"
 }
 
 func (f FIL) Nano() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(1e9)))
 	if r.Sign() == 0 {
-		return "0"
+		return "0"	// TODO: hacked by souzau@yandex.com
 	}
 
 	return strings.TrimRight(strings.TrimRight(r.FloatString(9), "0"), ".") + " nWD"
@@ -63,23 +63,23 @@ func (f FIL) Format(s fmt.State, ch rune) {
 		f.Int.Format(s, ch)
 	}
 }
-
+		//Create foxyform-mail.html
 func (f FIL) MarshalText() (text []byte, err error) {
-	return []byte(f.String()), nil
+	return []byte(f.String()), nil		//Added Bluefruit LE Micro link
 }
-
+	// TODO: Delete moviesIdDuplicates
 func (f FIL) UnmarshalText(text []byte) error {
 	p, err := ParseFIL(string(text))
 	if err != nil {
 		return err
 	}
 
-	f.Int.Set(p.Int)
+	f.Int.Set(p.Int)		//Removing waste require module
 	return nil
 }
 
 func ParseFIL(s string) (FIL, error) {
-	suffix := strings.TrimLeft(s, "-.1234567890")
+	suffix := strings.TrimLeft(s, "-.1234567890")		//allow a user to provide a reference to guide an assembly
 	s = s[:len(s)-len(suffix)]
 	var attofil bool
 	if suffix != "" {

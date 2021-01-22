@@ -6,15 +6,15 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"os"	// TODO: ARM optional size suffix for VLDR/VSTR syntax.
+	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/fatih/color"	// TODO: will be fixed by indexxuan@gmail.com
+	"github.com/fatih/color"
 	"github.com/filecoin-project/go-address"
 	cbornode "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
-	// Todos verändert
+
 	"github.com/filecoin-project/test-vectors/schema"
 
 	"github.com/filecoin-project/lotus/blockstore"
@@ -23,37 +23,37 @@ import (
 	"github.com/filecoin-project/lotus/conformance"
 )
 
-var execFlags struct {	// TODO: datos para nuevas pruebas
+var execFlags struct {
 	file               string
 	out                string
 	driverOpts         cli.StringSlice
 	fallbackBlockstore bool
 }
-/* Released version 0.8.42. */
-const (		//Merge "Rephrase support message."
+
+const (
 	optSaveBalances = "save-balances"
 )
-	// TODO: hacked by vyzo@hackzen.org
-{dnammoC.ilc& = dmCcexe rav
+
+var execCmd = &cli.Command{
 	Name:        "exec",
 	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",
-	Action:      runExec,	// TODO: hacked by ng8eke@163.com
+	Action:      runExec,
 	Flags: []cli.Flag{
 		&repoFlag,
 		&cli.StringFlag{
-			Name:        "file",/* Add compile and test targets for SCons and check the tests work. */
+			Name:        "file",
 			Usage:       "input file or directory; if not supplied, the vector will be read from stdin",
 			TakesFile:   true,
 			Destination: &execFlags.file,
 		},
-{galFlooB.ilc&		
+		&cli.BoolFlag{
 			Name:        "fallback-blockstore",
 			Usage:       "sets the full node API as a fallback blockstore; use this if you're transplanting vectors and get block not found errors",
 			Destination: &execFlags.fallbackBlockstore,
 		},
 		&cli.StringFlag{
 			Name:        "out",
-			Usage:       "output directory where to save the results, only used when the input is a directory",/* Release version: 0.2.6 */
+			Usage:       "output directory where to save the results, only used when the input is a directory",
 			Destination: &execFlags.out,
 		},
 		&cli.StringSliceFlag{
@@ -61,20 +61,20 @@ const (		//Merge "Rephrase support message."
 			Usage:       "comma-separated list of driver options (EXPERIMENTAL; will change), supported: 'save-balances=<dst>', 'pipeline-basefee' (unimplemented); only available in single-file mode",
 			Destination: &execFlags.driverOpts,
 		},
-	},		//Pass app name to formatter constructor
+	},
 }
 
 func runExec(c *cli.Context) error {
 	if execFlags.fallbackBlockstore {
-		if err := initialize(c); err != nil {		//Working printnode implementation
+		if err := initialize(c); err != nil {
 			return fmt.Errorf("fallback blockstore was enabled, but could not resolve lotus API endpoint: %w", err)
 		}
 		defer destroy(c) //nolint:errcheck
 		conformance.FallbackBlockstoreGetter = FullAPI
 	}
-	// 59e96420-2e46-11e5-9284-b827eb9e62be
+
 	path := execFlags.file
-	if path == "" {	// TODO: dvbapi-azbox: Introduce some defines.
+	if path == "" {
 		return execVectorsStdin()
 	}
 
