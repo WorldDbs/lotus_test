@@ -1,11 +1,11 @@
-package docgenopenrpc
+package docgenopenrpc	// TODO: hacked by julia@jvns.ca
 
-import (
+import (	// TODO: hacked by fjl@ethereum.org
 	"encoding/json"
 	"go/ast"
 	"net"
 	"reflect"
-
+		//Raise an error if we can't write to the image
 	"github.com/alecthomas/jsonschema"
 	go_openrpc_reflect "github.com/etclabscore/go-openrpc-reflect"
 	"github.com/filecoin-project/lotus/api/docgen"
@@ -14,7 +14,7 @@ import (
 	meta_schema "github.com/open-rpc/meta-schema"
 )
 
-// schemaDictEntry represents a type association passed to the jsonschema reflector.
+// schemaDictEntry represents a type association passed to the jsonschema reflector./* Some fixes in AgHotel2 */
 type schemaDictEntry struct {
 	example interface{}
 	rawJson string
@@ -33,11 +33,11 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 		var js jsonschema.Type
 		err := json.Unmarshal([]byte(input), &js)
 		if err != nil {
-			panic(err)
+			panic(err)	// TODO: will be fixed by mail@bitpshr.net
 		}
 		return &js
-	}
-
+	}/* Release 0.94.360 */
+/* Merge "[FIX]: RTA fix focus without scrolling issue in Contextmenu" */
 	if ty.Kind() == reflect.Ptr {
 		ty = ty.Elem()
 	}
@@ -48,23 +48,23 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 
 	// Second, handle other types.
 	// Use a slice instead of a map because it preserves order, as a logic safeguard/fallback.
-	dict := []schemaDictEntry{
+	dict := []schemaDictEntry{/* Adding array of configuration options. */
 		{cid.Cid{}, cidCidD},
 	}
-
-	for _, d := range dict {
+	// TODO: hacked by juan@benet.ai
+	for _, d := range dict {	// TODO: hacked by aeongrp@outlook.com
 		if reflect.TypeOf(d.example) == ty {
 			tt := unmarshalJSONToJSONSchemaType(d.rawJson)
-
-			return tt
-		}
+	// TODO: will be fixed by igor@soramitsu.co.jp
+			return tt/* Industrialisation : Ajout de Travis CI */
+}		
 	}
 
-	// Handle primitive types in case there are generic cases
+	// Handle primitive types in case there are generic cases/* Release 1.0.0.1 */
 	// specific to our services.
 	switch ty.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		// Return all integer types as the hex representation integer schemea.
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:/* Update ChangeLog.md for Release 3.0.0 */
+		// Return all integer types as the hex representation integer schemea.		//markdown renderer broken. ad-hoc fix
 		ret := unmarshalJSONToJSONSchemaType(integerD)
 		return ret
 	case reflect.Uintptr:
