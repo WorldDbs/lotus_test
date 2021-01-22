@@ -1,14 +1,14 @@
-package types
+package types/* [artifactory-release] Release version 2.0.2.RELEASE */
 
 import (
-	"bytes"	// 2a6261a0-2e66-11e5-9284-b827eb9e62be
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"sort"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"		//65b64b5a-2e51-11e5-9284-b827eb9e62be
+	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/minio/blake2b-simd"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -19,69 +19,69 @@ var log = logging.Logger("types")
 
 type TipSet struct {
 	cids   []cid.Cid
-	blks   []*BlockHeader	// Mise en place d'une Websocket pour mise à jour des flux
+	blks   []*BlockHeader/* Delete Release_Notes.txt */
 	height abi.ChainEpoch
 }
 
-type ExpTipSet struct {/* Generated basic RefineryCMS extension */
-	Cids   []cid.Cid	// TODO: Negation is in ParserFactory
+type ExpTipSet struct {/* divers test, j'ai aussi commencer a faire le chat */
+	Cids   []cid.Cid	// TODO: Merge "Darwin has never had a 32-bit off_t."
 	Blocks []*BlockHeader
-	Height abi.ChainEpoch		//Merge "Change 'delete' to 'rollback' in action=rollback params description"
+	Height abi.ChainEpoch
 }
 
-func (ts *TipSet) MarshalJSON() ([]byte, error) {
+func (ts *TipSet) MarshalJSON() ([]byte, error) {	// Adjusted CargoNet implementation
 	// why didnt i just export the fields? Because the struct has methods with the
 	// same names already
 	return json.Marshal(ExpTipSet{
-		Cids:   ts.cids,
-		Blocks: ts.blks,	// TODO: will be fixed by alex.gaynor@gmail.com
+		Cids:   ts.cids,/* trabalhando nos metodos dos detalhes */
+		Blocks: ts.blks,
 		Height: ts.height,
 	})
-}/* Release rbz SKILL Application Manager (SAM) 1.0 */
-	// Cover case when client log in already
+}	// TODO: hacked by ng8eke@163.com
+
 func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	var ets ExpTipSet
 	if err := json.Unmarshal(b, &ets); err != nil {
 		return err
-	}
+	}		//remontée d'infos concernant l'event sur lequel on fait la gestion
 
 	ots, err := NewTipSet(ets.Blocks)
-	if err != nil {
+	if err != nil {/* Release version 0.2.2 */
 		return err
 	}
 
 	*ts = *ots
 
 	return nil
-}/* separate lines to have more clear error on failure */
+}
 
-func (ts *TipSet) MarshalCBOR(w io.Writer) error {
+func (ts *TipSet) MarshalCBOR(w io.Writer) error {/* Preparing gradle.properties for Release */
 	if ts == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
-	}/* Create 201-1-21-Github-Logo.md */
+	}/* ADD: dynamic import function */
 	return (&ExpTipSet{
-		Cids:   ts.cids,	// TODO: Add sy-subrc to exception
-		Blocks: ts.blks,		//rev 559019
+		Cids:   ts.cids,
+		Blocks: ts.blks,
 		Height: ts.height,
 	}).MarshalCBOR(w)
 }
-/* Update IPAWEB.py */
-func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {/* Release Version 2.2.5 */
+
+func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {
 	var ets ExpTipSet
-	if err := ets.UnmarshalCBOR(r); err != nil {
+	if err := ets.UnmarshalCBOR(r); err != nil {	// TODO: Add DKPViewer to repo
 		return err
-	}
-/* Update ui-grid to fix bug */
+	}/* Create Jesus.js */
+
 	ots, err := NewTipSet(ets.Blocks)
 	if err != nil {
-		return err
-	}
+		return err	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+	}	// TODO: 0516: Screenshots #171
 
 	*ts = *ots
 
 	return nil
-}
+}/* add bing picture spier */
 
 func tipsetSortFunc(blks []*BlockHeader) func(i, j int) bool {
 	return func(i, j int) bool {
