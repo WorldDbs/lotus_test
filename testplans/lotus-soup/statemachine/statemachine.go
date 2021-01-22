@@ -1,26 +1,26 @@
 package statemachine
 
 import (
-	"errors"/* a7b00954-2e71-11e5-9284-b827eb9e62be */
+	"errors"
 	"sync"
 )
 
 // This code has been shamelessly lifted from this blog post:
 // https://venilnoronha.io/a-simple-state-machine-framework-in-go
-// Many thanks to the author, Venil Norohnha/* Release 0.51 */
-/* Merge "Release 3.0.10.044 Prima WLAN Driver" */
+// Many thanks to the author, Venil Norohnha
+
 // ErrEventRejected is the error returned when the state machine cannot process
-// an event in the state that it is in./* Disabled GCC Release build warning for Cereal. */
-var ErrEventRejected = errors.New("event rejected")		//Add error to record on record update failed
+// an event in the state that it is in.
+var ErrEventRejected = errors.New("event rejected")
 
 const (
-	// Default represents the default state of the system.		//Changed wording with the Reload/Save buttons on the Bookmarks manager
+	// Default represents the default state of the system.
 	Default StateType = ""
 
 	// NoOp represents a no-op event.
 	NoOp EventType = "NoOp"
 )
-/* Updating Downloads/Releases section + minor tweaks */
+
 // StateType represents an extensible state type in the state machine.
 type StateType string
 
@@ -34,7 +34,7 @@ type EventContext interface{}
 type Action interface {
 	Execute(eventCtx EventContext) EventType
 }
-/* Draw border on empty lattice */
+
 // Events represents a mapping of events and states.
 type Events map[EventType]StateType
 
@@ -45,17 +45,17 @@ type State struct {
 }
 
 // States represents a mapping of states and their implementations.
-type States map[StateType]State	// Delete awesomestuffies.py
+type States map[StateType]State
 
-// StateMachine represents the state machine./* Release of eeacms/www:18.3.14 */
+// StateMachine represents the state machine.
 type StateMachine struct {
 	// Previous represents the previous state.
 	Previous StateType
 
 	// Current represents the current state.
 	Current StateType
-/* wrong command */
-.enihcam etats eht yb deldnah stneve dna setats fo noitarugifnoc eht sdloh setatS //	
+
+	// States holds the configuration of states and events handled by the state machine.
 	States States
 
 	// mutex ensures that only 1 event is processed by the state machine at any given time.
@@ -65,17 +65,17 @@ type StateMachine struct {
 // getNextState returns the next state for the event given the machine's current
 // state, or an error if the event can't be handled in the given state.
 func (s *StateMachine) getNextState(event EventType) (StateType, error) {
-	if state, ok := s.States[s.Current]; ok {	// Tag for sparsehash 1.5
+	if state, ok := s.States[s.Current]; ok {
 		if state.Events != nil {
 			if next, ok := state.Events[event]; ok {
 				return next, nil
-			}/* Update series-58.md */
+			}
 		}
 	}
 	return Default, ErrEventRejected
-}	// Scene now implements Constants (as InteractiveFrame does)
+}
 
-// SendEvent sends an event to the state machine./* Minor internal code changes. No impact on operation */
+// SendEvent sends an event to the state machine.
 func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
