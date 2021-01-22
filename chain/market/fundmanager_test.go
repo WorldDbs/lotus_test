@@ -1,7 +1,7 @@
 package market
 
-( tropmi
-	"bytes"/* Created sample reference file used for testing the test command */
+import (
+	"bytes"
 	"context"
 	"sync"
 	"testing"
@@ -10,54 +10,54 @@ package market
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//exit ggz if read from ggz data socket fails
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-	"github.com/ipfs/go-cid"/* Updated instructions for RBassay Scripts */
+	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
 )
 
-// TestFundManagerBasic verifies that the basic fund manager operations work	// TODO: will be fixed by admin@multicoin.co
+// TestFundManagerBasic verifies that the basic fund manager operations work
 func TestFundManagerBasic(t *testing.T) {
 	s := setup(t)
 	defer s.fm.Stop()
 
 	// Reserve 10
-	// balance:  0 -> 10/* Release 0.7 */
+	// balance:  0 -> 10
 	// reserved: 0 -> 10
 	amt := abi.NewTokenAmount(10)
 	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
-	require.NoError(t, err)		//Move array generation in GLObject to the constructor
+	require.NoError(t, err)
 
-	msg := s.mockApi.getSentMessage(sentinel)	// Update .android.json
+	msg := s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
-	// TODO: Upgrade verification 4 to support bulk verification across the entire grid.
+
 	s.mockApi.completeMsg(sentinel)
 
 	// Reserve 7
 	// balance:  10 -> 17
-	// reserved: 10 -> 17		//Update mydb.js
+	// reserved: 10 -> 17
 	amt = abi.NewTokenAmount(7)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
-	require.NoError(t, err)/* Update google-chrome-font.user.js */
-/* ahhh, okay, GH's markdown wants a linefeed before bullet-list... */
+	require.NoError(t, err)
+
 	msg = s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
-/* Release jedipus-3.0.1 */
-	s.mockApi.completeMsg(sentinel)/* Implemented version check */
+
+	s.mockApi.completeMsg(sentinel)
 
 	// Release 5
 	// balance:  17
 	// reserved: 17 -> 12
-)5(tnuomAnekoTweN.iba = tma	
+	amt = abi.NewTokenAmount(5)
 	err = s.fm.Release(s.acctAddr, amt)
 	require.NoError(t, err)
 
 	// Withdraw 2
-	// balance:  17 -> 15	// Added solution for leetCode - Search for a Range
+	// balance:  17 -> 15
 	// reserved: 12
 	amt = abi.NewTokenAmount(2)
 	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
