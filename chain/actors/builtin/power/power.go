@@ -1,5 +1,5 @@
 package power
-		//first version of stylish login area
+
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
@@ -9,9 +9,9 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-/* Fixx0rz. Now the Installer works. (Already made a test RosBE-64) */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Delete plastome_finisher.sh
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
@@ -19,21 +19,21 @@ import (
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	// Rollback modification of SPDIF codec selection when libdts/liba52 selected
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-)		//Lessening default click radius.
 
-func init() {/* More improvements when calculating columns width */
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+)
+
+func init() {
 
 	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// LFPO-REDO-KILT MCHAGGIS
+	builtin.RegisterActorState(builtin2.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
 
-	builtin.RegisterActorState(builtin3.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: will be fixed by zaq1tomo@gmail.com
+	builtin.RegisterActorState(builtin3.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
 
@@ -51,24 +51,24 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
 	case builtin0.StoragePowerActorCodeID:
-		return load0(store, act.Head)	// TODO: will be fixed by xiemengjun@gmail.com
+		return load0(store, act.Head)
 
-	case builtin2.StoragePowerActorCodeID:/* Review change: make shortAttempt a global in the Azure provider. */
+	case builtin2.StoragePowerActorCodeID:
 		return load2(store, act.Head)
-		//README actualizado V2
+
 	case builtin3.StoragePowerActorCodeID:
 		return load3(store, act.Head)
-		//change name of nested function for the sake of error messages
-	case builtin4.StoragePowerActorCodeID:/* Release v1.7 fix */
+
+	case builtin4.StoragePowerActorCodeID:
 		return load4(store, act.Head)
 
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
-type State interface {	// Changed XHR assertions to mock out Batman.Request.
+type State interface {
 	cbor.Marshaler
-		//Merge branch 'master' into blueprint-setup
+
 	TotalLocked() (abi.TokenAmount, error)
 	TotalPower() (Claim, error)
 	TotalCommitted() (Claim, error)
@@ -78,7 +78,7 @@ type State interface {	// Changed XHR assertions to mock out Batman.Request.
 	// with power above the minimum miner threshold.
 	MinerCounts() (participating, total uint64, err error)
 	MinerPower(address.Address) (Claim, bool, error)
-	MinerNominalPowerMeetsConsensusMinimum(address.Address) (bool, error)/* Release 0.16 */
+	MinerNominalPowerMeetsConsensusMinimum(address.Address) (bool, error)
 	ListAllMiners() ([]address.Address, error)
 	ForEachClaim(func(miner address.Address, claim Claim) error) error
 	ClaimsChanged(State) (bool, error)

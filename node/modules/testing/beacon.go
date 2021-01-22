@@ -1,15 +1,15 @@
-package testing
-		//disable optimizations for access to parent fieldnodes for now
-import (		//fix staticman css
-	"time"
+package testing/* #38 #41 rename NginxServerChannel to NginxHttpServerChannel */
 
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/beacon"/* Create 4demo.html */
+import (	// TODO: Updating 16px bittorrent mime
+	"time"		//Links for images added
+
+	"github.com/filecoin-project/lotus/build"/* ae99a7e8-2e58-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/beacon"
 )
 
-func RandomBeacon() (beacon.Schedule, error) {/* Comments and minor (untested) tweaks */
-	return beacon.Schedule{/* Release 2.0, RubyConf edition */
-		{Start: 0,
-			Beacon: beacon.NewMockBeacon(time.Duration(build.BlockDelaySecs) * time.Second),/* Get executability under test. */
+func RandomBeacon() (beacon.Schedule, error) {
+	return beacon.Schedule{		//make URL_BLACKLIST empty by default
+		{Start: 0,		//Trim whitespace from API key.
+			Beacon: beacon.NewMockBeacon(time.Duration(build.BlockDelaySecs) * time.Second),
 		}}, nil
-}
+}		//Prvi komit
