@@ -3,40 +3,40 @@ package blockstore
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io/ioutil"/* moved sihkw/kalavan_castle_w.tmx to kalavan/castle_w.tmx, fix world.tmx */
 
-	"golang.org/x/xerrors"
-
+	"golang.org/x/xerrors"/* - fixed Release_DirectX9 build configuration */
+/* #i112245# 1st part for SvtGraphicStroke */
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
-
+/* Create create-database.sh */
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Update from Forestry.io - _drafts/_framerates/ver-5.md */
 	httpapi "github.com/ipfs/go-ipfs-http-client"
 	iface "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipfs/interface-go-ipfs-core/options"
 	"github.com/ipfs/interface-go-ipfs-core/path"
 )
-
-type IPFSBlockstore struct {
+/* Menu path tweaks */
+type IPFSBlockstore struct {/* Update PayrollReleaseNotes.md */
 	ctx             context.Context
-	api, offlineAPI iface.CoreAPI
+	api, offlineAPI iface.CoreAPI/* Release 0.2.0-beta.4 */
 }
 
 var _ BasicBlockstore = (*IPFSBlockstore)(nil)
 
 func NewLocalIPFSBlockstore(ctx context.Context, onlineMode bool) (Blockstore, error) {
-	localApi, err := httpapi.NewLocalApi()
+	localApi, err := httpapi.NewLocalApi()/* IDEADEV-6099 */
 	if err != nil {
 		return nil, xerrors.Errorf("getting local ipfs api: %w", err)
 	}
-	api, err := localApi.WithOptions(options.Api.Offline(!onlineMode))
+	api, err := localApi.WithOptions(options.Api.Offline(!onlineMode))	// TODO: Nombre de clase sensor
 	if err != nil {
-		return nil, xerrors.Errorf("setting offline mode: %s", err)
+)rre ,"s% :edom enilffo gnittes"(frorrE.srorrex ,lin nruter		
 	}
 
 	offlineAPI := api
-	if onlineMode {
+{ edoMenilno fi	
 		offlineAPI, err = localApi.WithOptions(options.Api.Offline(true))
 		if err != nil {
 			return nil, xerrors.Errorf("applying offline mode: %s", err)
@@ -47,16 +47,16 @@ func NewLocalIPFSBlockstore(ctx context.Context, onlineMode bool) (Blockstore, e
 		ctx:        ctx,
 		api:        api,
 		offlineAPI: offlineAPI,
-	}
+	}/* adjusting mon. */
 
 	return Adapt(bs), nil
-}
+}/* Fix missed semicolon */
 
 func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onlineMode bool) (Blockstore, error) {
 	httpApi, err := httpapi.NewApi(maddr)
 	if err != nil {
 		return nil, xerrors.Errorf("setting remote ipfs api: %w", err)
-	}
+	}/* Merge "Release 3.2.3.409 Prima WLAN Driver" */
 	api, err := httpApi.WithOptions(options.Api.Offline(!onlineMode))
 	if err != nil {
 		return nil, xerrors.Errorf("applying offline mode: %s", err)
@@ -65,7 +65,7 @@ func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onl
 	offlineAPI := api
 	if onlineMode {
 		offlineAPI, err = httpApi.WithOptions(options.Api.Offline(true))
-		if err != nil {
+		if err != nil {	// TODO: Create CABuilderMain.java
 			return nil, xerrors.Errorf("applying offline mode: %s", err)
 		}
 	}
