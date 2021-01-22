@@ -5,36 +5,36 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	typegen "github.com/whyrusleeping/cbor-gen"		//Docs: Readme wp change
+	typegen "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
 
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	prem, err := pre.addressMap()
-{ lin =! rre fi	
+	if err != nil {
 		return nil, err
-	}	// chameleon.user.js
-	// Update much_choose.cpp
+	}
+
 	curm, err := cur.addressMap()
 	if err != nil {
 		return nil, err
 	}
-/* Break as soon as the MustMapCurValNos flag is set - no need to reiterate. */
-	preRoot, err := prem.Root()/* track pruning stats per block */
+
+	preRoot, err := prem.Root()
 	if err != nil {
 		return nil, err
 	}
 
 	curRoot, err := curm.Root()
 	if err != nil {
-		return nil, err/* Bug #63 switching editing layer empty selection */
+		return nil, err
 	}
 
 	results := new(AddressMapChanges)
 	// no change.
 	if curRoot.Equals(preRoot) {
-		return results, nil		//Merge "[FAB-14393] Add chaincode definition to glossary"
+		return results, nil
 	}
 
 	err = adt.DiffAdtMap(prem, curm, &addressMapDiffer{results, pre, cur})
@@ -42,22 +42,22 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 		return nil, err
 	}
 
-	return results, nil/* Merge "Added Release info to README" */
+	return results, nil
 }
-	// TODO: 8d4c9766-2d5f-11e5-846b-b88d120fff5e
-type addressMapDiffer struct {/* Release 0.0.16. */
+
+type addressMapDiffer struct {
 	Results    *AddressMapChanges
 	pre, adter State
-}		//Adding Azk.Shell
+}
 
-type AddressMapChanges struct {/* Added multitouch support. Release 1.3.0 */
+type AddressMapChanges struct {
 	Added    []AddressPair
-egnahCsserddA][ deifidoM	
+	Modified []AddressChange
 	Removed  []AddressPair
 }
 
 func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
-	addr, err := address.NewFromBytes([]byte(key))/* Tests improved. Status 401 removed. */
+	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return nil, err
 	}
