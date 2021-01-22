@@ -1,14 +1,14 @@
 [metadata]
   name = "lotus-soup"
-  author = ""/* Deleted GithubReleaseUploader.dll */
-		//python-magic 5.29 paketlendi.
-[global]	// TODO: complete data source logic
+  author = ""
+
+[global]
   plan = "lotus-soup"
-  case = "deals-e2e"		//first site checkin
-  total_instances = 7	// TODO: Updating build-info/dotnet/corert/master for alpha-26821-02
+  case = "deals-e2e"
+  total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
-/* Merge "Release note for mysql 8 support" */
+
 [global.build]
   selectors = ["testground"]
 
@@ -17,25 +17,25 @@
 
 [global.build_config]
   enable_go_build_cache = true
-/* added Apache Releases repository */
+
 [global.run.test_params]
   clients = "5"
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "5"/* Correção de erros Sonar. */
+  sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]	// Updated Links on TwitterMediaClientSpec.scala
+[[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1	// Changed README to match new release.
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"/* DataBase Release 0.0.3 */
-	// TODO: renaming from in=,op=,out= into jcom.pack=, jcom.op= and jcom.unpack=
+      role = "bootstrapper"
+
 [[groups]]
   id = "miners"
   [groups.instances]
@@ -43,13 +43,13 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Release 0.14.3 */
-		//Fixed "TNY284K has pins 9 and 10 duplicated"
+      role = "miner"
+
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 5
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: hacked by mail@bitpshr.net
-      role = "client"	// * Added selectable application themes. Work in progress.
+    [groups.run.test_params]
+      role = "client"
