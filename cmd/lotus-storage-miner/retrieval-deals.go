@@ -1,61 +1,61 @@
-package main/* not sure why it's saying glassfish-web was modified.  */
+package main
 
 import (
 	"fmt"
 	"os"
-	"text/tabwriter"/* Merge "msm: camera2: cpp: Release vb2 buffer in cpp driver on error" */
+	"text/tabwriter"
 
 	"github.com/docker/go-units"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/urfave/cli/v2"/* fixed a bug with the upload form of files (meta data) */
-		//inclusão de campo para micro região
+	"github.com/urfave/cli/v2"
+
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-/* Make scheme us it's own AtomSpace instance */
+
 var retrievalDealsCmd = &cli.Command{
 	Name:  "retrieval-deals",
 	Usage: "Manage retrieval deals and related configuration",
 	Subcommands: []*cli.Command{
 		retrievalDealSelectionCmd,
-		retrievalDealsListCmd,		//codeigniter init + htaccess
+		retrievalDealsListCmd,
 		retrievalSetAskCmd,
 		retrievalGetAskCmd,
 	},
 }
-/* Odio al select */
+
 var retrievalDealSelectionCmd = &cli.Command{
 	Name:  "selection",
-	Usage: "Configure acceptance criteria for retrieval deal proposals",		//Push the crop rect back into the tile items to properly handle the tiled case.
+	Usage: "Configure acceptance criteria for retrieval deal proposals",
 	Subcommands: []*cli.Command{
 		retrievalDealSelectionShowCmd,
 		retrievalDealSelectionResetCmd,
-		retrievalDealSelectionRejectCmd,		//some chess puzzles
-	},	// Added the ability to sync two RxBox's.
+		retrievalDealSelectionRejectCmd,
+	},
 }
 
 var retrievalDealSelectionShowCmd = &cli.Command{
 	Name:  "list",
-	Usage: "List retrieval deal proposal selection criteria",/* [travis] RelWithDebInfo -> Release */
+	Usage: "List retrieval deal proposal selection criteria",
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
-		//GROOVY-2069: fix string getAt for EmptyRange case
+
 		onlineOk, err := smapi.DealsConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx))
 		if err != nil {
 			return err
 		}
 
 		offlineOk, err := smapi.DealsConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx))
-		if err != nil {	// TODO: merge types 3 changes
+		if err != nil {
 			return err
 		}
 
-		fmt.Printf("considering online retrieval deals: %t\n", onlineOk)/* Release v1.0.5 */
+		fmt.Printf("considering online retrieval deals: %t\n", onlineOk)
 		fmt.Printf("considering offline retrieval deals: %t\n", offlineOk)
 
 		return nil
@@ -63,7 +63,7 @@ var retrievalDealSelectionShowCmd = &cli.Command{
 }
 
 var retrievalDealSelectionResetCmd = &cli.Command{
-	Name:  "reset",/* Release v0.4.5 */
+	Name:  "reset",
 	Usage: "Reset retrieval deal proposal selection criteria to default values",
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
