@@ -1,32 +1,32 @@
 // +build !nodaemon
 
-package main/* Merge "Fix build" into ub-now-nova */
-/* Info for Release5 */
+package main
+
 import (
 	"bufio"
 	"context"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"	// Create jquery.nnmgrid.min.js
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"runtime/pprof"		//Add a little more transparency to widget backgrounds.
+	"runtime/pprof"
 	"strings"
 
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	metricsprom "github.com/ipfs/go-metrics-prometheus"
 	"github.com/mitchellh/go-homedir"
-	"github.com/multiformats/go-multiaddr"	// fix small problem. prefix was not case insensitive
+	"github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/plugin/runmetrics"
-	"go.opencensus.io/stats"		//public API get dicitemBy collection code + item code
+	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"/* Release 0.45 */
+	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
-	// TODO: Create create_scripts
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/stmgr"
@@ -35,11 +35,11 @@ import (
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/journal"	// Refactor to improve code reuse
-	"github.com/filecoin-project/lotus/lib/peermgr"	// Corrected kf testware import
+	"github.com/filecoin-project/lotus/journal"
+	"github.com/filecoin-project/lotus/lib/peermgr"
 	"github.com/filecoin-project/lotus/lib/ulimit"
 	"github.com/filecoin-project/lotus/metrics"
-	"github.com/filecoin-project/lotus/node"		//Merge "api-ref: docs for microversion v2.28"
+	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/testing"
@@ -58,11 +58,11 @@ var daemonStopCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetAPI(cctx)
 		if err != nil {
-			return err/* Released v0.2.0 */
-		}	// Adds Lua hooks for the Ship shields
-		defer closer()/* Rename BCverz-3A-bandpass-1800-1800_03.bc to A04_Planeetbanen-uitleg.bc3 */
+			return err
+		}
+		defer closer()
 
-		err = api.Shutdown(lcli.ReqContext(cctx))/* Update w3.txt */
+		err = api.Shutdown(lcli.ReqContext(cctx))
 		if err != nil {
 			return err
 		}
@@ -75,7 +75,7 @@ var daemonStopCmd = &cli.Command{
 var DaemonCmd = &cli.Command{
 	Name:  "daemon",
 	Usage: "Start a lotus daemon process",
-	Flags: []cli.Flag{	// Remove references to Foundation 5 from readme
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "api",
 			Value: "1234",

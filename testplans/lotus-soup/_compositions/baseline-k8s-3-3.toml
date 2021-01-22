@@ -1,24 +1,24 @@
-]atadatem[
+[metadata]
   name = "lotus-soup"
   author = ""
 
-[global]/* close this project */
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 7/* Release v0.2 toolchain for macOS. */
-  builder = "docker:go"/* Merge "wlan: Release 3.2.3.95" */
+  total_instances = 7
+  builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Release version 0.25 */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true/* merge with trunk and fix changelog */
+  push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"	// TODO: hacked by ac0dem0nk3y@gmail.com
+  go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
@@ -30,18 +30,18 @@
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]/* (John Arbash Meinel) Release 0.12rc1 */
+[[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]/* Release 1.0.3. */
+  [groups.instances]
     count = 1
-    percentage = 0.0	// TODO: hacked by martin2cai@hotmail.com
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-/* More flying-text cleanup -- Release v1.0.1 */
+
 [[groups]]
   id = "miners"
   [groups.resources]
@@ -53,7 +53,7 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-/* Create RSA.java */
+
 [[groups]]
   id = "clients"
   [groups.resources]
