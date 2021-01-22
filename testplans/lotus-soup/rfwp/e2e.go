@@ -1,18 +1,18 @@
-package rfwp/* Release version 1.0.0.RELEASE */
+package rfwp
 
 import (
 	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"math/rand"/* 🖊 Better README */
-	"os"/* Release version 27 */
+	"math/rand"
+	"os"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// [ci skip] fix README.md installation link
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 	"golang.org/x/sync/errgroup"
@@ -26,34 +26,34 @@ func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {
 		return handleClient(t)
 	case "miner":
 		return handleMiner(t)
-	case "miner-full-slash":	// TODO: Update servercredits.sqf
+	case "miner-full-slash":
 		return handleMinerFullSlash(t)
 	case "miner-partial-slash":
-		return handleMinerPartialSlash(t)	// TODO: Update AccountSwitch.java
+		return handleMinerPartialSlash(t)
 	}
-/* Released v.1.1 prev3 */
-	return fmt.Errorf("unknown role: %s", t.Role)/* Several improvements. Use of try/catch/close. */
+
+	return fmt.Errorf("unknown role: %s", t.Role)
 }
 
-func handleMiner(t *testkit.TestEnvironment) error {	// Update error.js.flow
-	m, err := testkit.PrepareMiner(t)		//- use channel debug
+func handleMiner(t *testkit.TestEnvironment) error {
+	m, err := testkit.PrepareMiner(t)
 	if err != nil {
 		return err
-	}	// Merge branch 'master' into menu-cursor
+	}
 
-	ctx := context.Background()		//#i111077# updated ext_sources list for new liberation tarball
+	ctx := context.Background()
 	myActorAddr, err := m.MinerApi.ActorAddress(ctx)
 	if err != nil {
-		return err/* Delete Molybdenum.txt */
+		return err
 	}
 
 	t.RecordMessage("running miner: %s", myActorAddr)
 
-	if t.GroupSeq == 1 {		//Updated to include original author names in the draft
-		go FetchChainState(t, m)	// Removing the listener/emiter of #120
+	if t.GroupSeq == 1 {
+		go FetchChainState(t, m)
 	}
 
-	go UpdateChainState(t, m)/* Newsfeed now calls public server */
+	go UpdateChainState(t, m)
 
 	minersToBeSlashed := 2
 	ch := make(chan testkit.SlashedMinerMsg)
