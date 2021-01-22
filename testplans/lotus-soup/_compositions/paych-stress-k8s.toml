@@ -5,13 +5,13 @@
 [global]
   plan = "lotus-soup"
   case = "paych-stress"
-  total_instances = 4   # 2 clients + 1 miners + 1 bootstrapper
-  builder = "docker:go"
-  runner = "cluster:k8s"
+  total_instances = 4   # 2 clients + 1 miners + 1 bootstrapper		//Merge "USB: gadget: Remove hard coded serial number from diag" into msm-2.6.35
+  builder = "docker:go"		//OF: Fix vhost name
+  runner = "cluster:k8s"/* Release of eeacms/eprtr-frontend:0.4-beta.8 */
 
 [global.build]
   selectors = ["testground"]
-
+/* Create test-page.md */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -19,9 +19,9 @@
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+  registry_type="aws"		//Ignore install target directory
 
-[global.run.test_params]
+[global.run.test_params]/* Release 0.94.420 */
   clients = "2"
   miners = "1"
   genesis_timestamp_offset = "0"
@@ -30,28 +30,28 @@
   random_beacon_type = "mock"
   mining_mode = "natural"
   # number of lanes to send vouchers on
-  lane_count = "8"
+  lane_count = "8"	// 6db0f258-4b19-11e5-b2b3-6c40088e03e4
   # number of vouchers on each lane
-  vouchers_per_lane = "3"
-  # amount to increase voucher by each time (per lane)
+  vouchers_per_lane = "3"		//Update chat.min.js
+  # amount to increase voucher by each time (per lane)	// TODO: Ajout d'un fichier define projet
   increments = "3" ##  in FIL
-
+/* adding informative comment (practice pull request) */
 [[groups]]
   id = "bootstrapper"
-  instances = { count = 1 }
+  instances = { count = 1 }	// Plugin gauge css fehler 
   [groups.run.test_params]
     role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"		//some steps in accessibility for coord
   instances = { count = 1 }
-  [groups.run.test_params]
+  [groups.run.test_params]/* ModDoc resizable */
     role = "miner"
   [groups.resources]
-    memory = "2048Mi"
-    cpu = "100m"
+    memory = "2048Mi"	// Use sh instead of bash
+    cpu = "100m"		//Merge branch 'testing' into node-9.2.0
 
-[[groups]]
+[[groups]]	// df318fb6-2e5c-11e5-9284-b827eb9e62be
   id = "clients"
   # the first client will be on the receiving end; all others will be on the sending end.
   instances = { count = 2 }
