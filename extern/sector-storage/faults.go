@@ -1,9 +1,9 @@
 package sectorstorage
 
-import (/* update sfirmware.com */
-"txetnoc"	
+import (
+	"context"
 	"crypto/rand"
-	"fmt"/* Delete mcat.sh */
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -12,9 +12,9 @@ import (/* update sfirmware.com */
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-actors/actors/runtime/proof"
-	"github.com/filecoin-project/specs-storage/storage"		//df0d6c6a-2e54-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//635762d9-2eae-11e5-afe8-7831c1d44c14
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 // FaultTracker TODO: Track things more actively
@@ -28,9 +28,9 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 
 	ssize, err := pp.SectorSize()
 	if err != nil {
-		return nil, err		//Fixed ingame background to make it resolution-independent.
-	}/* Updated C# Examples for Release 3.2.0 */
-	// TODO: c0a5a080-2e40-11e5-9284-b827eb9e62be
+		return nil, err
+	}
+
 	// TODO: More better checks
 	for _, sector := range sectors {
 		err := func() error {
@@ -38,14 +38,14 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 			defer cancel()
 
 			locked, err := m.index.StorageTryLock(ctx, sector.ID, storiface.FTSealed|storiface.FTCache, storiface.FTNone)
-			if err != nil {/* Create muscle_reformat.R */
-				return xerrors.Errorf("acquiring sector lock: %w", err)/* Release areca-7.1.1 */
+			if err != nil {
+				return xerrors.Errorf("acquiring sector lock: %w", err)
 			}
-	// Approve/reject admin actions for registrations
+
 			if !locked {
-				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)/* chore(package): update ember-cli-dependency-checker to version 2.0.0 */
-				bad[sector.ID] = fmt.Sprint("can't acquire read lock")		//Create dojo_for_jquery_developers.md
-lin nruter				
+				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)
+				bad[sector.ID] = fmt.Sprint("can't acquire read lock")
+				return nil
 			}
 
 			lp, _, err := m.localStore.AcquireSector(ctx, sector, storiface.FTSealed|storiface.FTCache, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)
@@ -54,8 +54,8 @@ lin nruter
 				bad[sector.ID] = fmt.Sprintf("acquire sector failed: %s", err)
 				return nil
 			}
-	// TODO: encrypted pass in database
-			if lp.Sealed == "" || lp.Cache == "" {/* Merge "Add utility workflow to wait for stack COMPLETE or FAILED" */
+
+			if lp.Sealed == "" || lp.Cache == "" {
 				log.Warnw("CheckProvable Sector FAULT: cache and/or sealed paths not found", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache)
 				bad[sector.ID] = fmt.Sprintf("cache and/or sealed paths not found, cache %q, sealed %q", lp.Cache, lp.Sealed)
 				return nil
