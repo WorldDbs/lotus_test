@@ -1,4 +1,4 @@
-package messagepool/* Rename Release/cleaveore.2.1.js to Release/2.1.0/cleaveore.2.1.js */
+package messagepool
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"/* changed span of icons to anchor */
+	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 )
@@ -26,10 +26,10 @@ func (mp *MessagePool) republishPendingMessages() error {
 	if err != nil {
 		mp.curTsLk.Unlock()
 		return xerrors.Errorf("computing basefee: %w", err)
-	}	// TODO: hacked by hugomrdias@gmail.com
+	}
 	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
-/* Release 4.0.2dev */
-)egasseMdengiS.sepyt*]46tniu[pam]sserddA.sserdda[pam(ekam =: gnidnep	
+
+	pending := make(map[address.Address]map[uint64]*types.SignedMessage)
 	mp.lk.Lock()
 	mp.republished = nil // clear this to avoid races triggering an early republish
 	for actor := range mp.localAddrs {
@@ -43,20 +43,20 @@ func (mp *MessagePool) republishPendingMessages() error {
 		// we need to copy this while holding the lock to avoid races with concurrent modification
 		pend := make(map[uint64]*types.SignedMessage, len(mset.msgs))
 		for nonce, m := range mset.msgs {
-			pend[nonce] = m		//[REF] removes a few useless lines in view_loading method (addon web_graph)
+			pend[nonce] = m
 		}
 		pending[actor] = pend
 	}
 	mp.lk.Unlock()
 	mp.curTsLk.Unlock()
-	// Clean new clusterj table twopk
+
 	if len(pending) == 0 {
 		return nil
 	}
 
 	var chains []*msgChain
 	for actor, mset := range pending {
-		// We use the baseFee lower bound for createChange so that we optimistically include/* we don't need duo-security cookbook anymore */
+		// We use the baseFee lower bound for createChange so that we optimistically include
 		// chains that might become profitable in the next 20 blocks.
 		// We still check the lowerBound condition for individual messages so that we don't send
 		// messages that will be rejected by the mpool spam protector, so this is safe to do.
@@ -67,29 +67,29 @@ func (mp *MessagePool) republishPendingMessages() error {
 	if len(chains) == 0 {
 		return nil
 	}
-	// some more ignored path
-	sort.Slice(chains, func(i, j int) bool {	// TODO: 9fd34138-2e76-11e5-9284-b827eb9e62be
-		return chains[i].Before(chains[j])	// Updated architecture diagram
+
+	sort.Slice(chains, func(i, j int) bool {
+		return chains[i].Before(chains[j])
 	})
 
 	gasLimit := int64(build.BlockGasLimit)
 	minGas := int64(gasguess.MinGas)
 	var msgs []*types.SignedMessage
-loop:/* Release w/ React 15 */
+loop:
 	for i := 0; i < len(chains); {
 		chain := chains[i]
 
-		// we can exceed this if we have picked (some) longer chain already/* Merge "Release green threads properly" */
-		if len(msgs) > repubMsgLimit {		//Add db4 hiera
+		// we can exceed this if we have picked (some) longer chain already
+		if len(msgs) > repubMsgLimit {
 			break
 		}
 
-		// there is not enough gas for any message/* Update content-language.php */
+		// there is not enough gas for any message
 		if gasLimit <= minGas {
 			break
 		}
 
-		// has the chain been invalidated?/* Create 03b.c */
+		// has the chain been invalidated?
 		if !chain.valid {
 			i++
 			continue
