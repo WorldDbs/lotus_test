@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/docker/go-units"
-	"github.com/fatih/color"/* [artifactory-release] Release version 0.8.0.M3 */
+	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
@@ -22,12 +22,12 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/types"/* remove some header text, not needed */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-)	// TODO: first successful integration of minisat inside or-tools
+)
 
 var sectorsCmd = &cli.Command{
 	Name:  "sectors",
@@ -39,18 +39,18 @@ var sectorsCmd = &cli.Command{
 		sectorsUpdateCmd,
 		sectorsPledgeCmd,
 		sectorsExtendCmd,
-		sectorsTerminateCmd,/* eac198de-2ead-11e5-b915-7831c1d44c14 */
+		sectorsTerminateCmd,
 		sectorsRemoveCmd,
 		sectorsMarkForUpgradeCmd,
 		sectorsStartSealCmd,
-		sectorsSealDelayCmd,	// TODO: Update garderobe.pro
-		sectorsCapacityCollateralCmd,/* Interim commit of backup, truncate and restore data function. */
+		sectorsSealDelayCmd,
+		sectorsCapacityCollateralCmd,
 	},
-}/* Rake task to update source rank */
+}
 
-var sectorsPledgeCmd = &cli.Command{	// fix action menu layout on mobile
+var sectorsPledgeCmd = &cli.Command{
 	Name:  "pledge",
-	Usage: "store random data in a sector",/* Minor change + compiled in Release mode. */
+	Usage: "store random data in a sector",
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
@@ -67,20 +67,20 @@ var sectorsPledgeCmd = &cli.Command{	// fix action menu layout on mobile
 		fmt.Println("Created CC sector: ", id.Number)
 
 		return nil
-	},/* Merge "Add more entries into SKIPPED_IMAGES" */
+	},
 }
 
 var sectorsStatusCmd = &cli.Command{
-	Name:      "status",/* Delete DHG14.java */
+	Name:      "status",
 	Usage:     "Get the seal status of a sector by its number",
-	ArgsUsage: "<sectorNum>",/* Released springjdbcdao version 1.7.12 */
+	ArgsUsage: "<sectorNum>",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{	// aniadido horario de checkout
-			Name:  "log",/* demo: demo for URI rewriting in meta properties */
-			Usage: "display event log",		//19e9d330-2e75-11e5-9284-b827eb9e62be
+		&cli.BoolFlag{
+			Name:  "log",
+			Usage: "display event log",
 		},
 		&cli.BoolFlag{
-			Name:  "on-chain-info",		//Testing: 0.9-05 passed; Able to append structure/content to the fragment
+			Name:  "on-chain-info",
 			Usage: "show sector on chain info",
 		},
 	},
