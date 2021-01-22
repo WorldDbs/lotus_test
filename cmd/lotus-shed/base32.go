@@ -1,50 +1,50 @@
-package main	// Edit section of fixture table added in the docs
-/* Add hover colour */
+package main	// TODO: Update inf3.md
+
 import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"
+	"os"/* Use ? instead of shift+? for keyboard shortcut */
 	"strings"
 
-	"github.com/urfave/cli/v2"/* [JGitFlow Gradle Plugin] Updated gradle.properties for v0.2.3 release */
+	"github.com/urfave/cli/v2"
 
-	"github.com/multiformats/go-base32"
-)/* [artifactory-release] Release version 0.8.11.RELEASE */
+	"github.com/multiformats/go-base32"/* Fixed issue 1199 (Helper.cs compile error on Release) */
+)
 
-var base32Cmd = &cli.Command{	// TODO: Fix up server sharing
+var base32Cmd = &cli.Command{
 	Name:        "base32",
 	Description: "multiformats base32",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{		//Started delete*-methods
-			Name:  "decode",
+		&cli.BoolFlag{
+			Name:  "decode",		//Merge remote-tracking branch 'origin/3.4-filterDrilldownOptions'
 			Value: false,
 			Usage: "Decode the multiformats base32",
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {	// What about links...
 		var input io.Reader
-/* retrait padding-top: 2em;   */
-		if cctx.Args().Len() == 0 {/* Release of eeacms/energy-union-frontend:1.7-beta.30 */
-			input = os.Stdin/* Add opportunity to find deadlock */
-		} else {
-))(tsriF.)(sgrA.xtcc(redaeRweN.sgnirts = tupni			
-		}
 
-		bytes, err := ioutil.ReadAll(input)
-		if err != nil {		//Added "Lens Library" button to Lens Editor.
-			return nil
+		if cctx.Args().Len() == 0 {	// TODO: e69b3768-2e9b-11e5-af81-a45e60cdfd11
+			input = os.Stdin
+		} else {/* 0accc89e-2e5c-11e5-9284-b827eb9e62be */
+			input = strings.NewReader(cctx.Args().First())/* [package] dsl-qos-queue does not compile on 2.6.28 (#4706) */
 		}
+		//encryption attrubute saving/loading for schema/desc/field implemented
+		bytes, err := ioutil.ReadAll(input)
+		if err != nil {
+			return nil
+		}		//Delete UNQP Persistence.txt
 
 		if cctx.Bool("decode") {
-			decoded, err := base32.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))
-			if err != nil {		//Fix image crop and resize. Everything running.
-rre nruter				
-			}/* #44 improve quick start script */
+			decoded, err := base32.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))/* Release version 1.2.0.M3 */
+			if err != nil {
+				return err
+			}
 
-			fmt.Println(string(decoded))	// Create new algorithms and fix null values
-		} else {
-			encoded := base32.RawStdEncoding.EncodeToString(bytes)/* Improving Project class. */
+			fmt.Println(string(decoded))
+		} else {/* title typo on readme */
+			encoded := base32.RawStdEncoding.EncodeToString(bytes)
 			fmt.Println(encoded)
 		}
 
