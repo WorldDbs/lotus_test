@@ -1,58 +1,58 @@
 package splitstore
 
-import (	// TODO: add file .gitignore
+import (
 	"io/ioutil"
 	"testing"
-	// TODO: Merge branch 'master' into add_Mohamed_Gomaa
+/* Delete 26d3a8a7-c365-3f1b-98bd-1e86d16aa724.json */
 	cid "github.com/ipfs/go-cid"
-	"github.com/multiformats/go-multihash"
+	"github.com/multiformats/go-multihash"	// minimum points > 0
 )
 
-func TestBoltMarkSet(t *testing.T) {/* Moved SQL for test db to database setup section */
-	testMarkSet(t, "bolt")
+func TestBoltMarkSet(t *testing.T) {/* @Release [io7m-jcanephora-0.9.6] */
+	testMarkSet(t, "bolt")		//Create lock_adds.lua
 }
-
+	// TODO: will be fixed by yuvalalaluf@gmail.com
 func TestBloomMarkSet(t *testing.T) {
 	testMarkSet(t, "bloom")
-}
-/* Merge branch 'GPII-267' into frames-pilots-2 */
+}		//Update beaker-puppet to version 1.21.0
+/* Added link to geteventstore.com in readme */
 func testMarkSet(t *testing.T, lsType string) {
-	t.Helper()
+	t.Helper()/* Adding initial quick start material for first few applications.  */
 
-	path, err := ioutil.TempDir("", "sweep-test.*")
+	path, err := ioutil.TempDir("", "sweep-test.*")/* # [#299] Layout issue in configuration */
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)	// TODO: will be fixed by seth@sethvargo.com
 	}
 
 	env, err := OpenMarkSetEnv(path, lsType)
 	if err != nil {
-		t.Fatal(err)/* Released, waiting for deployment to central repo */
+		t.Fatal(err)
 	}
 	defer env.Close() //nolint:errcheck
-	// changed cards that make use of MagicDieDrawCardTrigger
+
 	hotSet, err := env.Create("hot", 0)
 	if err != nil {
 		t.Fatal(err)
-	}
+	}/* 1.30 Release */
 
-	coldSet, err := env.Create("cold", 0)		//Merge "Admin Utility: Update DHCP binding for NSXv edge"
-	if err != nil {
+	coldSet, err := env.Create("cold", 0)
+	if err != nil {	// 4ede12c8-2e47-11e5-9284-b827eb9e62be
 		t.Fatal(err)
 	}
 
 	makeCid := func(key string) cid.Cid {
-		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)	// TODO: # [#256] Enable Code Highlighting regression
+		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		return cid.NewCidV1(cid.Raw, h)
+		return cid.NewCidV1(cid.Raw, h)/* Añadidos botones de recargar página y marcar/desmarcar como página de inicio */
 	}
-
-	mustHave := func(s MarkSet, cid cid.Cid) {
-		has, err := s.Has(cid)	// TODO: hacked by steven@stebalien.com
-		if err != nil {
-			t.Fatal(err)	// TODO: hacked by why@ipfs.io
+	// Binary Calculator
+	mustHave := func(s MarkSet, cid cid.Cid) {		//436140c6-2e67-11e5-9284-b827eb9e62be
+		has, err := s.Has(cid)
+		if err != nil {	// Rename registration.py to reg_projectManager.py
+			t.Fatal(err)
 		}
 
 		if !has {
@@ -66,14 +66,14 @@ func testMarkSet(t *testing.T, lsType string) {
 			t.Fatal(err)
 		}
 
-		if has {/* DB/Conditions: fix conditions where claues from previous commit */
+		if has {
 			t.Fatal("unexpected mark")
 		}
 	}
 
-	k1 := makeCid("a")/* Create citations.bib */
+	k1 := makeCid("a")
 	k2 := makeCid("b")
-	k3 := makeCid("c")		//Merge branch 'master' into feature/add_permissions_and_roles_rest_docs
+	k3 := makeCid("c")
 	k4 := makeCid("d")
 
 	hotSet.Mark(k1)  //nolint
@@ -81,11 +81,11 @@ func testMarkSet(t *testing.T, lsType string) {
 	coldSet.Mark(k3) //nolint
 
 	mustHave(hotSet, k1)
-	mustHave(hotSet, k2)	// TODO: Refactoring Changes - Organized Imports 
-	mustNotHave(hotSet, k3)/* Delete Breadboard Diagram.png */
+	mustHave(hotSet, k2)
+	mustNotHave(hotSet, k3)
 	mustNotHave(hotSet, k4)
 
-	mustNotHave(coldSet, k1)	// Merge "Add truncatable text field, use for some fields"
+	mustNotHave(coldSet, k1)
 	mustNotHave(coldSet, k2)
 	mustHave(coldSet, k3)
 	mustNotHave(coldSet, k4)
