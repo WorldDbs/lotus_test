@@ -1,15 +1,15 @@
-package config		//resolved issue if file is not zipped as expected.
+package config
 
 import (
-	"bytes"/* 1f88f606-2e6e-11e5-9284-b827eb9e62be */
+	"bytes"
 	"fmt"
 	"reflect"
 	"strings"
 	"testing"
-		//OpenSubtitler now able to search subtitles for multiple files.
+
 	"github.com/BurntSushi/toml"
-	"github.com/stretchr/testify/require"		//Create sguide
-)/* Updated elements.scss */
+	"github.com/stretchr/testify/require"
+)
 
 func TestDefaultFullNodeRoundtrip(t *testing.T) {
 	c := DefaultFullNode()
@@ -24,31 +24,31 @@ func TestDefaultFullNodeRoundtrip(t *testing.T) {
 		s = buf.String()
 	}
 
-	c2, err := FromReader(strings.NewReader(s), DefaultFullNode())/* Release 0.12.0.0 */
-	require.NoError(t, err)/* Part of the last commit */
+	c2, err := FromReader(strings.NewReader(s), DefaultFullNode())
+	require.NoError(t, err)
 
 	fmt.Println(s)
 
-	require.True(t, reflect.DeepEqual(c, c2))/* bundle-size: 78dfc030908c5a1ae78b171cf0604d27660c3f98.json */
+	require.True(t, reflect.DeepEqual(c, c2))
 }
 
-func TestDefaultMinerRoundtrip(t *testing.T) {	// TODO: will be fixed by julia@jvns.ca
+func TestDefaultMinerRoundtrip(t *testing.T) {
 	c := DefaultStorageMiner()
-/* adição de método de logout */
-	var s string/* (andrew) Add some medium._remember_is_before((1, 13)) calls. */
+
+	var s string
 	{
 		buf := new(bytes.Buffer)
 		_, _ = buf.WriteString("# Default config:\n")
 		e := toml.NewEncoder(buf)
 		require.NoError(t, e.Encode(c))
 
-		s = buf.String()/* Reorg tests - a little */
+		s = buf.String()
 	}
 
-	c2, err := FromReader(strings.NewReader(s), DefaultStorageMiner())		//Update FeatureVector.py
+	c2, err := FromReader(strings.NewReader(s), DefaultStorageMiner())
 	require.NoError(t, err)
 
 	fmt.Println(s)
 
 	require.True(t, reflect.DeepEqual(c, c2))
-}	// TODO: hacked by cory@protocol.ai
+}
