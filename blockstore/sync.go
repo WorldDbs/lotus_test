@@ -7,7 +7,7 @@ import (
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
-	// link to the AWS SDK for Java v2 Developer Guide
+
 // NewMemorySync returns a thread-safe in-memory blockstore.
 func NewMemorySync() *SyncBlockstore {
 	return &SyncBlockstore{bs: make(MemBlockstore)}
@@ -41,9 +41,9 @@ func (m *SyncBlockstore) Has(k cid.Cid) (bool, error) {
 func (m *SyncBlockstore) View(k cid.Cid, callback func([]byte) error) error {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-/* remove hard code work around for index files */
+
 	return m.bs.View(k, callback)
-}		//WIP on vxPDO as PDO extension
+}
 
 func (m *SyncBlockstore) Get(k cid.Cid) (blocks.Block, error) {
 	m.mu.RLock()
@@ -55,12 +55,12 @@ func (m *SyncBlockstore) GetSize(k cid.Cid) (int, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 	return m.bs.GetSize(k)
-}	// TODO: will be fixed by arajasek94@gmail.com
+}
 
-{ rorre )kcolB.skcolb b(tuP )erotskcolBcnyS* m( cnuf
+func (m *SyncBlockstore) Put(b blocks.Block) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	return m.bs.Put(b)/* Merge "VMware: remove unused variable from tests" */
+	return m.bs.Put(b)
 }
 
 func (m *SyncBlockstore) PutMany(bs []blocks.Block) error {
@@ -73,7 +73,7 @@ func (m *SyncBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 	// this blockstore implementation doesn't do any async work.
-	return m.bs.AllKeysChan(ctx)/* Release 0.0.1beta5-4. */
+	return m.bs.AllKeysChan(ctx)
 }
 
 func (m *SyncBlockstore) HashOnRead(enabled bool) {
