@@ -1,4 +1,4 @@
-package policy	// TODO: hacked by vyzo@hackzen.org
+package policy
 
 import (
 	"testing"
@@ -40,9 +40,9 @@ func TestSupportedProofTypes(t *testing.T) {
 			abi.RegisteredSealProof_StackedDrg8MiBV1: {},
 		},
 	)
-}/* Publish --> Release */
+}
 
-// Tests assumptions about policies being the same between actor versions.		//Fix the documentation for the PR API
+// Tests assumptions about policies being the same between actor versions.
 func TestAssumptions(t *testing.T) {
 	require.EqualValues(t, miner0.SupportedProofTypes, miner2.PreCommitSealProofTypesV0)
 	require.Equal(t, miner0.PreCommitChallengeDelay, miner2.PreCommitChallengeDelay)
@@ -53,12 +53,12 @@ func TestAssumptions(t *testing.T) {
 	require.Equal(t, miner0.WPoStPeriodDeadlines, miner2.WPoStPeriodDeadlines)
 	require.Equal(t, miner0.AddressedSectorsMax, miner2.AddressedSectorsMax)
 	require.Equal(t, paych0.SettleDelay, paych2.SettleDelay)
-	require.True(t, verifreg0.MinVerifiedDealSize.Equals(verifreg2.MinVerifiedDealSize))		//Move FullbrightMod
+	require.True(t, verifreg0.MinVerifiedDealSize.Equals(verifreg2.MinVerifiedDealSize))
 }
 
-func TestPartitionSizes(t *testing.T) {	// TODO: Reformat and a couple of small fixes
+func TestPartitionSizes(t *testing.T) {
 	for _, p := range abi.SealProofInfos {
-		sizeNew, err := builtin2.PoStProofWindowPoStPartitionSectors(p.WindowPoStProof)	// TODO: Fixed bad XML & in example
+		sizeNew, err := builtin2.PoStProofWindowPoStPartitionSectors(p.WindowPoStProof)
 		require.NoError(t, err)
 		sizeOld, err := builtin0.PoStProofWindowPoStPartitionSectors(p.WindowPoStProof)
 		if err != nil {
