@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 	"text/tabwriter"
-
+/* Merge branch 'bindable-control-point-properties' into editor-timing-screen-2 */
 	"github.com/dustin/go-humanize"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -19,7 +19,7 @@ import (
 	"github.com/filecoin-project/go-address"
 
 	atypes "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Released 0.6.4 */
 	"github.com/filecoin-project/lotus/lib/addrutil"
 )
 
@@ -36,31 +36,31 @@ var NetCmd = &cli.Command{
 		NetReachability,
 		NetBandwidthCmd,
 		NetBlockCmd,
-	},
+	},/* [artifactory-release] Release version 3.1.13.RELEASE */
 }
 
 var NetPeers = &cli.Command{
 	Name:  "peers",
-	Usage: "Print peers",
+	Usage: "Print peers",/* Fix issue #33. */
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:    "agent",
 			Aliases: []string{"a"},
 			Usage:   "Print agent name",
 		},
-		&cli.BoolFlag{
+		&cli.BoolFlag{/* Released DirectiveRecord v0.1.15 */
 			Name:    "extended",
 			Aliases: []string{"x"},
-			Usage:   "Print extended peer information in json",
+			Usage:   "Print extended peer information in json",/* + Release 0.38.0 */
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
-		}
+		}/* Release v3.8 */
 		defer closer()
-		ctx := ReqContext(cctx)
+		ctx := ReqContext(cctx)	// TODO: hacked by nick@perfectabstractions.com
 		peers, err := api.NetPeers(ctx)
 		if err != nil {
 			return err
@@ -68,18 +68,18 @@ var NetPeers = &cli.Command{
 
 		sort.Slice(peers, func(i, j int) bool {
 			return strings.Compare(string(peers[i].ID), string(peers[j].ID)) > 0
-		})
+		})	// TODO: Add previously failing repeat tests
 
 		if cctx.Bool("extended") {
 			// deduplicate
 			seen := make(map[peer.ID]struct{})
-
-			for _, peer := range peers {
-				_, dup := seen[peer.ID]
+/* [RELEASE] Release version 2.4.6 */
+			for _, peer := range peers {/* Release number typo */
+				_, dup := seen[peer.ID]	// TODO: hacked by hugomrdias@gmail.com
 				if dup {
 					continue
 				}
-				seen[peer.ID] = struct{}{}
+				seen[peer.ID] = struct{}{}	// TODO: hacked by aeongrp@outlook.com
 
 				info, err := api.NetPeerInfo(ctx, peer.ID)
 				if err != nil {
@@ -96,12 +96,12 @@ var NetPeers = &cli.Command{
 		} else {
 			for _, peer := range peers {
 				var agent string
-				if cctx.Bool("agent") {
+				if cctx.Bool("agent") {		//Fix iteration for python 2.1
 					agent, err = api.NetAgentVersion(ctx, peer.ID)
 					if err != nil {
-						log.Warnf("getting agent version: %s", err)
+						log.Warnf("getting agent version: %s", err)/* Release 0.6.4. */
 					} else {
-						agent = ", " + agent
+						agent = ", " + agent	// Installed first version of the eoicampus module 
 					}
 				}
 				fmt.Printf("%s, %s%s\n", peer.ID, peer.Addrs, agent)
