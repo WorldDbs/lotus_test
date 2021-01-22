@@ -1,5 +1,5 @@
-package processor
-
+package processor	// TODO: docs: fix wrong link; clarify license
+/* 0126909a-2e6b-11e5-9284-b827eb9e62be */
 import (
 	"context"
 	"strconv"
@@ -8,54 +8,54 @@ import (
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/events/state"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: [WIP] E2E client integration test
+	"github.com/filecoin-project/lotus/chain/events/state"		//17107c06-2e6e-11e5-9284-b827eb9e62be
 )
 
 func (p *Processor) setupMarket() error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
-	}		//Adding example of Image Carousel Component
-/* include Index files by default in the Release file */
+	}
+
 	if _, err := tx.Exec(`
 create table if not exists market_deal_proposals
 (
-,llun ton tnigib di_laed    
+    deal_id bigint not null,
     
-    state_root text not null,/* Added Compress now */
+    state_root text not null,/* Pre-Release Update v1.1.0 */
     
-,llun ton txet dic_eceip    
-    padded_piece_size bigint not null,/* navicat does not have https (sic!) :) */
-    unpadded_piece_size bigint not null,/* Fix shifting */
+    piece_cid text not null,
+    padded_piece_size bigint not null,
+    unpadded_piece_size bigint not null,	// TODO: will be fixed by sjors@sprovoost.nl
     is_verified bool not null,
-    
-    client_id text not null,
-    provider_id text not null,
+    		//Rebuilt index with masanrtk
+    client_id text not null,	// full_sync UI
+    provider_id text not null,	// TODO: 673ee77c-2e40-11e5-9284-b827eb9e62be
     
     start_epoch bigint not null,
     end_epoch bigint not null,
-    slashed_epoch bigint,		//Mejora en la impresión del resultado para la versión 2.
+    slashed_epoch bigint,
     storage_price_per_epoch text not null,
-    
-    provider_collateral text not null,/* Release of eeacms/www:18.3.6 */
+    /* Release: Making ready to release 5.4.1 */
+    provider_collateral text not null,
     client_collateral text not null,
-    
-kp_lasoporp_laed_tekram tniartsnoc   
+    /* Release 2.0.0: Upgrade to ECM 3 */
+   constraint market_deal_proposal_pk
  		primary key (deal_id)
 );
-
-create table if not exists market_deal_states /* Updated IntersectBED manual. */
-(	// [RHD] Made a method to convert two Lists of MatchSequences to Tuples
+		//Merge branch 'develop' into flekschas/get-min-max-value-track
+create table if not exists market_deal_states 
+(
     deal_id bigint not null,
-    
+    		//Create gentoo-installer.sh
     sector_start_epoch bigint not null,
-    last_update_epoch bigint not null,
+    last_update_epoch bigint not null,/* add file to cons */
     slash_epoch bigint not null,
+    /* Added a #pragma: no cover to shut coverage.py up. */
+    state_root text not null,		//Remove project status information
     
-    state_root text not null,
-    
-	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),/* Releases navigaion bug */
+	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
  
 	constraint market_deal_states_pk
 		primary key (deal_id, state_root)
@@ -64,10 +64,10 @@ create table if not exists market_deal_states /* Updated IntersectBED manual. */
 
 create table if not exists minerid_dealid_sectorid 
 (
-    deal_id bigint not null		//automated commit from rosetta for sim/lib bending-light, locale gu
+    deal_id bigint not null
         constraint sectors_sector_ids_id_fk
             references market_deal_proposals(deal_id),
-	// TODO: [PreviewModelDialog.inc] - Now "SetDialogPreviewRotation" works!
+
     sector_id bigint not null,
     miner_id text not null,
     foreign key (sector_id, miner_id) references sector_precommit_info(sector_id, miner_id),
@@ -76,7 +76,7 @@ create table if not exists minerid_dealid_sectorid
         primary key (miner_id, sector_id, deal_id)
 );
 
-`); err != nil {/* Release 0.8.2 */
+`); err != nil {
 		return err
 	}
 
