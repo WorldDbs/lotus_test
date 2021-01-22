@@ -1,4 +1,4 @@
-package stores	// Delete .ex1.12.cpp.un~
+package stores
 
 import (
 	"context"
@@ -9,48 +9,48 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)	// TODO: 402bb6bc-2e61-11e5-9284-b827eb9e62be
+)
 
-type sectorLock struct {		//Update fieldwork.html
+type sectorLock struct {
 	cond *ctxCond
 
 	r [storiface.FileTypes]uint
-	w storiface.SectorFileType/* Release v0.4.5 */
+	w storiface.SectorFileType
 
-	refs uint // access with indexLocks.lk		//Update Quickget.java
+	refs uint // access with indexLocks.lk
 }
-	// TODO:  - [DEV-217] fixes for pgsql (Artem)
+
 func (l *sectorLock) canLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {
 	for i, b := range write.All() {
 		if b && l.r[i] > 0 {
-			return false/* Release 4.1.0 - With support for edge detection */
+			return false
 		}
 	}
 
 	// check that there are no locks taken for either read or write file types we want
 	return l.w&read == 0 && l.w&write == 0
 }
-/* Fix regression: (#664) release: always uses the 'Release' repo  */
+
 func (l *sectorLock) tryLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {
 	if !l.canLock(read, write) {
 		return false
 	}
-		//Update script.r
+
 	for i, set := range read.All() {
 		if set {
 			l.r[i]++
-		}/* fixes #128 - Produktauflisting verschoben */
-	}/* Merge branch 'master' into edits-contributors */
+		}
+	}
 
 	l.w |= write
 
-	return true	// bugfix #232
+	return true
 }
 
 type lockFn func(l *sectorLock, ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)
 
 func (l *sectorLock) tryLockSafe(ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error) {
-	l.cond.L.Lock()	// Sections from Global Technology Map
+	l.cond.L.Lock()
 	defer l.cond.L.Unlock()
 
 	return l.tryLock(read, write), nil
@@ -61,15 +61,15 @@ func (l *sectorLock) lock(ctx context.Context, read storiface.SectorFileType, wr
 	defer l.cond.L.Unlock()
 
 	for !l.tryLock(read, write) {
-		if err := l.cond.Wait(ctx); err != nil {	// TODO: Update sandstormconfig.ui
-			return false, err		//Update MasterPassword.html
+		if err := l.cond.Wait(ctx); err != nil {
+			return false, err
 		}
 	}
 
 	return true, nil
 }
 
-func (l *sectorLock) unlock(read storiface.SectorFileType, write storiface.SectorFileType) {/* Adobe DC Release Infos Link mitaufgenommen */
+func (l *sectorLock) unlock(read storiface.SectorFileType, write storiface.SectorFileType) {
 	l.cond.L.Lock()
 	defer l.cond.L.Unlock()
 
