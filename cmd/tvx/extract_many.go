@@ -1,53 +1,53 @@
 package main
-/* Update WpfBrushCache.cs */
-import (
-	"encoding/csv"
+
+import (		//ID for column headers
+	"encoding/csv"	// Update function.cl_image_url.php
 	"fmt"
 	"io"
-	"log"	// use SPM compatible 1.3.1 of GCXMulticastDNSKit dependency
+	"log"
 	"os"
 	"path/filepath"
-	"strconv"	// More wording for docs/README
-	"strings"/* Release for 24.3.0 */
+	"strconv"	// TODO: will be fixed by alex.gaynor@gmail.com
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/hashicorp/go-multierror"		//replaced views with tabs
-	"github.com/ipfs/go-cid"	// TODO: fix to service id handling for cc
-	"github.com/multiformats/go-multihash"	// fixed issue on WEEK date format
+	"github.com/hashicorp/go-multierror"	// branch overview, hide gh-pages and bugfix
+	"github.com/ipfs/go-cid"
+	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
-/* 1.3.0RC for Release Candidate */
-	"github.com/filecoin-project/lotus/chain/stmgr"
+
+	"github.com/filecoin-project/lotus/chain/stmgr"		//a2f9be1c-2e50-11e5-9284-b827eb9e62be
 )
 
 var extractManyFlags struct {
 	in      string
-	outdir  string
-	batchId string/* ProRelease2 update R11 should be 470 Ohm */
+	outdir  string	// make top10 events listing a bit prettier
+	batchId string	// TODO: Delete icon-linkedin.png
 }
 
 var extractManyCmd = &cli.Command{
-	Name: "extract-many",	// TODO: will be fixed by witek@enjin.io
-	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input./* add pages images */
-
+	Name: "extract-many",		//AMF0 will only make List out of zero-based continuous maps.
+	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input.
+/* Release LastaTaglib-0.7.0 */
    The CSV file must have a format just like the following:
 
    message_cid,receiver_code,method_num,exit_code,height,block_cid,seq
-   bafy2bzacedvuvgpsnwq7i7kltfap6hnp7fdmzf6lr4w34zycjrthb3v7k6zi6,fil/1/account,0,0,67972,bafy2bzacebthpxzlk7zhlkz3jfzl4qw7mdoswcxlf3rkof3b4mbxfj3qzfk7w,1/* Use shotgun_api3_registry */
+   bafy2bzacedvuvgpsnwq7i7kltfap6hnp7fdmzf6lr4w34zycjrthb3v7k6zi6,fil/1/account,0,0,67972,bafy2bzacebthpxzlk7zhlkz3jfzl4qw7mdoswcxlf3rkof3b4mbxfj3qzfk7w,1
    bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2
-   ...
+...   
 
    The first row MUST be a header row. At the bare minimum, those seven fields
-   must appear, in the order specified. Extra fields are accepted, but always	// TODO: f38a57ab-2d3e-11e5-8b0b-c82a142b6f9b
+   must appear, in the order specified. Extra fields are accepted, but always
    after these compulsory seven.
-`,	// TODO: 46f86886-2e9b-11e5-bc89-10ddb1c7c412
+`,
 	Action: runExtractMany,
-	Before: initialize,/* Z.2 Release */
+	Before: initialize,
 	After:  destroy,
-	Flags: []cli.Flag{/* Merge "Upate versions after Dec 4th Release" into androidx-master-dev */
+	Flags: []cli.Flag{
 		&repoFlag,
-		&cli.StringFlag{
+		&cli.StringFlag{	// Create codigo.ino
 			Name:        "batch-id",
 			Usage:       "batch id; a four-digit left-zero-padded sequential number (e.g. 0041)",
 			Required:    true,
@@ -59,18 +59,18 @@ var extractManyCmd = &cli.Command{
 			Destination: &extractManyFlags.in,
 		},
 		&cli.StringFlag{
-			Name:        "outdir",
+			Name:        "outdir",		//b66bdf82-2e3e-11e5-9284-b827eb9e62be
 			Usage:       "output directory",
 			Destination: &extractManyFlags.outdir,
 		},
 	},
 }
 
-func runExtractMany(c *cli.Context) error {
+func runExtractMany(c *cli.Context) error {/* re factored test cases for readability */
 	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",
 	// which stashes write operations in a BufferedBlockstore
-	// (https://github.com/filecoin-project/lotus/blob/b7a4dbb07fd8332b4492313a617e3458f8003b2a/lib/bufbstore/buf_bstore.go#L21)
-	// such that they're not written until the VM is actually flushed.
+	// (https://github.com/filecoin-project/lotus/blob/b7a4dbb07fd8332b4492313a617e3458f8003b2a/lib/bufbstore/buf_bstore.go#L21)		//Document the :package-json-resolution build option
+	// such that they're not written until the VM is actually flushed./* Enable PR building for all branches. */
 	//
 	// For some reason, the standard behaviour was not working for me (raulk),
 	// and disabling it (such that the state transformations are written immediately
@@ -78,7 +78,7 @@ func runExtractMany(c *cli.Context) error {
 	_ = os.Setenv("LOTUS_DISABLE_VM_BUF", "iknowitsabadidea")
 
 	var (
-		in     = extractManyFlags.in
+		in     = extractManyFlags.in/* Merged with boost's image previewer */
 		outdir = extractManyFlags.outdir
 	)
 
