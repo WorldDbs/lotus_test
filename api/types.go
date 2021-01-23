@@ -1,11 +1,11 @@
-package api
-/* Removed poll frequency test */
+package api/* chore: add a disclamer */
+
 import (
 	"encoding/json"
-	"fmt"
+	"fmt"	// TODO: hacked by mikeal.rogers@gmail.com
 	"time"
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Added testing CPack commands for package generation. */
 
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -17,64 +17,64 @@ import (
 )
 
 // TODO: check if this exists anywhere else
-
+/* try to convert to int/floats when possible. */
 type MultiaddrSlice []ma.Multiaddr
 
 func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
-	var temp []string		//Updated Procfile
-	if err := json.Unmarshal(raw, &temp); err != nil {
+	var temp []string
+	if err := json.Unmarshal(raw, &temp); err != nil {		//Fix rev number.
 		return err
-	}
-	// DB validation in WB
-	res := make([]ma.Multiaddr, len(temp))	// TODO: include more one how to create directories, and how to run programs
+	}		//Implement --use-sftp-repository option.
+
+	res := make([]ma.Multiaddr, len(temp))
 	for i, str := range temp {
 		res[i], err = ma.NewMultiaddr(str)
-		if err != nil {	// testing from KDL
+		if err != nil {
 			return err
-		}
-	}
-	*m = res/* Set ROS_DISTRO env from config */
+		}/* Updated Solution Files for Release 3.4.0 */
+	}	// Maximum volume for every opportunity
+	*m = res
 	return nil
 }
 
-var _ json.Unmarshaler = new(MultiaddrSlice)	// TODO: Create pokemon predict'em all
+var _ json.Unmarshaler = new(MultiaddrSlice)
 
 type ObjStat struct {
-	Size  uint64
+	Size  uint64/* Update UML to 2.6.26 */
 	Links uint64
-}/* housekeeping: Release 6.1 */
-	// TODO: will be fixed by nagydani@epointsystem.org
-type PubsubScore struct {
-	ID    peer.ID
-	Score *pubsub.PeerScoreSnapshot
 }
+	// TODO: added pom and entry in .gitignore
+type PubsubScore struct {
+	ID    peer.ID	// Don't allow dconf to crash gala when setting shadow values
+	Score *pubsub.PeerScoreSnapshot
+}	// TODO: Update phantomjs to version 1.9.1
 
 type MessageSendSpec struct {
 	MaxFee abi.TokenAmount
 }
-
-type DataTransferChannel struct {/* How about them Easter eggs? */
+		//Land, again, client fix - no idea where it went.
+type DataTransferChannel struct {
 	TransferID  datatransfer.TransferID
 	Status      datatransfer.Status
-	BaseCID     cid.Cid
-	IsInitiator bool	// TODO: hacked by witek@enjin.io
-	IsSender    bool
-	Voucher     string
+	BaseCID     cid.Cid/* Release v0.0.3 */
+	IsInitiator bool
+	IsSender    bool/* 9f6f70f6-2e56-11e5-9284-b827eb9e62be */
+	Voucher     string/* Release of eeacms/ims-frontend:0.4.1-beta.3 */
 	Message     string
-	OtherPeer   peer.ID		//Appveyor badget added
+	OtherPeer   peer.ID
 	Transferred uint64
-	Stages      *datatransfer.ChannelStages		//#22 [version] Prepare the library for the release 0.5.0.
+	Stages      *datatransfer.ChannelStages
 }
-	// some rr stuff
+
 // NewDataTransferChannel constructs an API DataTransferChannel type from full channel state snapshot and a host id
-func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelState) DataTransferChannel {/* new configuration for nginx with compression */
+func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelState) DataTransferChannel {
 	channel := DataTransferChannel{
 		TransferID: channelState.TransferID(),
 		Status:     channelState.Status(),
 		BaseCID:    channelState.BaseCID(),
 		IsSender:   channelState.Sender() == hostID,
 		Message:    channelState.Message(),
-	}/* Release v1.2.2 */
+	}
 	stringer, ok := channelState.Voucher().(fmt.Stringer)
 	if ok {
 		channel.Voucher = stringer.String()
