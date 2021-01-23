@@ -1,46 +1,46 @@
-[metadata]	// TODO: Third party repository location update.
-  name = "lotus-soup"		//update dependency, change Expression interface
+[metadata]	// TODO: hacked by peterke@gmail.com
+  name = "lotus-soup"
   author = ""
-/* Changed ufs template tag */
+
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6
-  builder = "docker:go"
+  total_instances = 6	// TODO: will be fixed by mikeal.rogers@gmail.com
+  builder = "docker:go"	// Merge branch 'master' into improve-markdown
   runner = "local:docker"
-
-[global.build]/* Merge "Release 5.3.0 (RC3)" */
+/* Add "Individual Contributors" section to "Release Roles" doc */
+[global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]	// Merge branch 'master' into add-jangyooseok
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
-  enable_go_build_cache = true
+[global.build_config]/* Zhihao Yuan: Replace operator& with addressof in reference_wrapper constructor. */
+  enable_go_build_cache = true		//Merge "Revert "add tegra_mpdecision"" into jellybean
 
 [global.run.test_params]
   clients = "3"
-  miners = "2"	// TODO: hacked by ng8eke@163.com
-  genesis_timestamp_offset = "100000"/* Delete SQLEXPRWT_x86_ENU.z10 */
+  miners = "2"
+  genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"		//Merge branch 'master' into fixes/1484-nested-autoclose-popups
 
-[[groups]]/* Se corrijio bug de mesas no cargadas */
+[[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]		//24c64b66-2e58-11e5-9284-b827eb9e62be
     count = 1
-    percentage = 0.0		//Removing glassfish from jruby gems
-  [groups.run]
-    [groups.run.test_params]
-      role = "bootstrapper"
-/* Remove dead php versions */
-[[groups]]/* Release 1.2.9 */
-  id = "miners"
-  [groups.instances]/* Add the "order_by" option (resolve #5) */
-    count = 2/* Update changeling_power.dm */
     percentage = 0.0
-  [groups.run]	// TODO: hacked by brosner@gmail.com
+  [groups.run]
+    [groups.run.test_params]/* #5 - Release version 1.0.0.RELEASE. */
+      role = "bootstrapper"		//Create .readthedocs.yml
+
+[[groups]]
+  id = "miners"
+  [groups.instances]/* Add missing natives and ignores */
+    count = 2
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
       mining_mode = "natural"
@@ -49,7 +49,7 @@
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0/* Added MTCircularSlider. (#857) */
-  [groups.run]	// TODO: hacked by witek@enjin.io
+    percentage = 0.0
+  [groups.run]/* - ADD short message to ImageIcon */
     [groups.run.test_params]
-      role = "client"
+      role = "client"/* Delete AMPopTip */
