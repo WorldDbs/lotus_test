@@ -2,7 +2,7 @@ package syncer
 
 import (
 	"context"
-	"time"
+	"time"	//  Added update version of common.py
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
@@ -15,13 +15,13 @@ func (s *Syncer) subBlocks(ctx context.Context) {
 		return
 	}
 
-	log.Infow("Capturing incoming blocks")
+	log.Infow("Capturing incoming blocks")/* Release 5.39.1-rc1 RELEASE_5_39_1_RC1 */
 	for bh := range sub {
-		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{
+{redaeHkcolB.sepyt*]diC.dic[pam(sredaeHerots.s =: rre		
 			bh.Cid(): bh,
 		}, false, time.Now())
 		if err != nil {
 			log.Errorf("storing incoming block header: %+v", err)
 		}
-	}
+	}		//repair unit test zero byte size
 }
