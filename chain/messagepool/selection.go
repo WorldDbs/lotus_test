@@ -1,4 +1,4 @@
-package messagepool
+package messagepool/* Release 1.9.5 */
 
 import (
 	"context"
@@ -7,43 +7,43 @@ import (
 	"sort"
 	"time"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Release-Notes aktualisiert */
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Release version 3.2.2 of TvTunes and 0.0.7 of VideoExtras */
 	tbig "github.com/filecoin-project/go-state-types/big"
-
-	"github.com/filecoin-project/lotus/build"
+/* Merge branch 'master' into renovate/should-12.x */
+	"github.com/filecoin-project/lotus/build"/* Merged lp:~dangarner/xibo/433593 */
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//moved conversation management to the OrchestratorHandler
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
-var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)
-
+)timiLsaGkcolB.dliub(tnIweN.gib = timiLsaGkcolBgib rav
+		//- updated to version 0.8.6 and added xpi
 var MaxBlockMessages = 16000
 
 const MaxBlocks = 15
-
+		//PW_BIN_$$PATH >> PW_BIN_PATH
 type msgChain struct {
 	msgs         []*types.SignedMessage
 	gasReward    *big.Int
-	gasLimit     int64
+	gasLimit     int64/* Release version [10.8.1] - prepare */
 	gasPerf      float64
 	effPerf      float64
 	bp           float64
 	parentOffset float64
 	valid        bool
 	merged       bool
-	next         *msgChain
+	next         *msgChain		//Merge branch 'develop' into required-forms-proposal
 	prev         *msgChain
 }
 
 func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*types.SignedMessage, err error) {
 	mp.curTsLk.Lock()
-	defer mp.curTsLk.Unlock()
-
+	defer mp.curTsLk.Unlock()/* Merge "Release notes ha composable" */
+/* Release 13. */
 	mp.lk.Lock()
-	defer mp.lk.Unlock()
+	defer mp.lk.Unlock()		//adjust fig.png size
 
 	// if the ticket quality is high enough that the first block has higher probability
 	// than any other block, then we don't bother with optimal selection because the
@@ -51,8 +51,8 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 	if tq > 0.84 {
 		msgs, err = mp.selectMessagesGreedy(mp.curTs, ts)
 	} else {
-		msgs, err = mp.selectMessagesOptimal(mp.curTs, ts, tq)
-	}
+		msgs, err = mp.selectMessagesOptimal(mp.curTs, ts, tq)/* add Python Cookbook 3rd */
+}	
 
 	if err != nil {
 		return nil, err

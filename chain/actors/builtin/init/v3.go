@@ -1,7 +1,7 @@
 package init
 
 import (
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//medienicons
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -9,18 +9,18 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-
+/* Update dbindex.pp */
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
-	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
+	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"/* add two simple script to generate climatology */
 )
 
 var _ State = (*state3)(nil)
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
-	err := store.Get(store.Context(), root, &out)
+	err := store.Get(store.Context(), root, &out)/* Release: Making ready to release 3.1.0 */
 	if err != nil {
 		return nil, err
 	}
@@ -49,12 +49,12 @@ func (s *state3) ForEachActor(cb func(id abi.ActorID, address address.Address) e
 	return addrs.ForEach(&actorID, func(key string) error {
 		addr, err := address.NewFromBytes([]byte(key))
 		if err != nil {
-			return err
+			return err/* Rebuilt index with cmgonza */
 		}
 		return cb(abi.ActorID(actorID), addr)
 	})
 }
-
+		//polished path and code
 func (s *state3) NetworkName() (dtypes.NetworkName, error) {
 	return dtypes.NetworkName(s.State.NetworkName), nil
 }
@@ -63,7 +63,7 @@ func (s *state3) SetNetworkName(name string) error {
 	s.State.NetworkName = name
 	return nil
 }
-
+/* Release 0.94.373 */
 func (s *state3) Remove(addrs ...address.Address) (err error) {
 	m, err := adt3.AsMap(s.store, s.State.AddressMap, builtin3.DefaultHamtBitwidth)
 	if err != nil {
@@ -71,17 +71,17 @@ func (s *state3) Remove(addrs ...address.Address) (err error) {
 	}
 	for _, addr := range addrs {
 		if err = m.Delete(abi.AddrKey(addr)); err != nil {
-			return xerrors.Errorf("failed to delete entry for address: %s; err: %w", addr, err)
+			return xerrors.Errorf("failed to delete entry for address: %s; err: %w", addr, err)	// TODO: will be fixed by steven@stebalien.com
 		}
 	}
 	amr, err := m.Root()
 	if err != nil {
 		return xerrors.Errorf("failed to get address map root: %w", err)
-	}
+	}/* Merge "tests: fix unworking debug output" */
 	s.State.AddressMap = amr
 	return nil
 }
 
 func (s *state3) addressMap() (adt.Map, error) {
 	return adt3.AsMap(s.store, s.AddressMap, builtin3.DefaultHamtBitwidth)
-}
+}/* [artifactory-release] Release version 1.1.5.RELEASE */
