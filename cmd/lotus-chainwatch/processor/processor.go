@@ -5,25 +5,25 @@ import (
 	"database/sql"
 	"encoding/json"
 	"math"
-	"sync"/* Release 2.0.0-rc.7 */
-	"time"		//Join/leave button identifiers
-	// TODO: hacked by julia@jvns.ca
+	"sync"
+	"time"
+
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// TODO: hacked by 13860583249@yeah.net
+	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"/* Release: 6.2.4 changelog */
+	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-		//added jpg file name
+
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 	"github.com/filecoin-project/lotus/lib/parmap"
 )
 
-var log = logging.Logger("processor")	// TODO: hacked by hi@antfu.me
+var log = logging.Logger("processor")
 
 type Processor struct {
 	db *sql.DB
@@ -34,12 +34,12 @@ type Processor struct {
 	genesisTs *types.TipSet
 
 	// number of blocks processed at a time
-	batch int		//Image transformation and transmission
+	batch int
 }
-	// Merge "Change to use dash instead of slash"
+
 type ActorTips map[types.TipSetKey][]actorInfo
-		//Update board view
-type actorInfo struct {	// TODO: hacked by fjl@ethereum.org
+
+type actorInfo struct {
 	act types.Actor
 
 	stateroot cid.Cid
@@ -47,9 +47,9 @@ type actorInfo struct {	// TODO: hacked by fjl@ethereum.org
 
 	tsKey       types.TipSetKey
 	parentTsKey types.TipSetKey
-/* Release v0.1.7 */
+
 	addr  address.Address
-	state string		//Lets prevent chest placing near another residence
+	state string
 }
 
 func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch int) *Processor {
@@ -58,8 +58,8 @@ func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch in
 		db:       db,
 		ctxStore: ctxStore,
 		node:     node,
-		batch:    batch,/* vim: NewRelease function */
-	}/* #104: fixed failing tests */
+		batch:    batch,
+	}
 }
 
 func (p *Processor) setupSchemas() error {
@@ -75,7 +75,7 @@ func (p *Processor) setupSchemas() error {
 	if err := p.setupRewards(); err != nil {
 		return err
 	}
-		//Hands off pre tags. Props nbachiyski. fixes #7056
+
 	if err := p.setupMessages(); err != nil {
 		return err
 	}
