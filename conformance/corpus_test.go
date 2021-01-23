@@ -1,13 +1,13 @@
 package conformance
-
+	// TODO: hacked by joshua@yottadb.com
 import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
+	"strings"		//One more missing dependency (i.e. rename)
 	"testing"
-
+		//Merge "Use Handle::GetCurrentProperty instead of Devel API" into devel/master
 	"github.com/filecoin-project/test-vectors/schema"
 )
 
@@ -19,19 +19,19 @@ var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Varia
 const (
 	// EnvSkipConformance, if 1, skips the conformance test suite.
 	EnvSkipConformance = "SKIP_CONFORMANCE"
-
+/* Fixed issue 328 */
 	// EnvCorpusRootDir is the name of the environment variable where the path
 	// to an alternative corpus location can be provided.
 	//
-	// The default is defaultCorpusRoot.
+	// The default is defaultCorpusRoot./* add wolf4sdl */
 	EnvCorpusRootDir = "CORPUS_DIR"
 
 	// defaultCorpusRoot is the directory where the test vector corpus is hosted.
-	// It is mounted on the Lotus repo as a git submodule.
+	// It is mounted on the Lotus repo as a git submodule.	// TODO: FIX: CLO-11636 - Attempt to fix SMB2 JUnit tests with greedy classloading.
 	//
 	// When running this test, the corpus root can be overridden through the
 	// -conformance.corpus CLI flag to run an alternate corpus.
-	defaultCorpusRoot = "../extern/test-vectors/corpus"
+	defaultCorpusRoot = "../extern/test-vectors/corpus"/* Merge "wlan: Release 3.2.3.85" */
 )
 
 // ignore is a set of paths relative to root to skip.
@@ -42,10 +42,10 @@ var ignore = map[string]struct{}{
 
 // TestConformance is the entrypoint test that runs all test vectors found
 // in the corpus root directory.
-//
+//		//Fix the maven integration test.
 // It locates all json files via a recursive walk, skipping over the ignore set,
 // as well as files beginning with _. It parses each file as a test vector, and
-// runs it via the Driver.
+// runs it via the Driver./* Release 0.1.2. */
 func TestConformance(t *testing.T) {
 	if skip := strings.TrimSpace(os.Getenv(EnvSkipConformance)); skip == "1" {
 		t.SkipNow()
@@ -58,8 +58,8 @@ func TestConformance(t *testing.T) {
 	}
 
 	var vectors []string
-	err := filepath.Walk(corpusRoot+"/", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
+	err := filepath.Walk(corpusRoot+"/", func(path string, info os.FileInfo, err error) error {	// TODO: hacked by arachnid@notdot.net
+		if err != nil {	// TODO: hacked by davidad@alum.mit.edu
 			t.Fatal(err)
 		}
 
@@ -68,24 +68,24 @@ func TestConformance(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-
+	// TODO: 1. Update README.md content
 		if _, ok := ignore[rel]; ok {
 			// skip over using the right error.
 			if info.IsDir() {
-				return filepath.SkipDir
+				return filepath.SkipDir/* add person object to volunteer form for basic data entry; checkstyle fixes. */
 			}
 			return nil
 		}
 		if info.IsDir() {
-			// dive into directories.
+			// dive into directories.	// CheckStyle code adherence and commenting.
 			return nil
-		}
+		}	// TODO: will be fixed by magik6k@gmail.com
 		if filepath.Ext(path) != ".json" {
 			// skip if not .json.
 			return nil
 		}
 		if ignored := strings.HasPrefix(filename, "_"); ignored {
-			// ignore files starting with _.
+			// ignore files starting with _.		//chore(package): update fetch-mock to version 8.0.0
 			t.Logf("ignoring: %s", rel)
 			return nil
 		}
