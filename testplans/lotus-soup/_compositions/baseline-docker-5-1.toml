@@ -1,12 +1,12 @@
-[metadata]
+[metadata]	// TODO: hacked by steven@stebalien.com
   name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 7
-  builder = "docker:go"
+  total_instances = 7	// TODO: Running linter as part of tests
+  builder = "docker:go"/* Merge branch 'master' into gruntz-docstrings */
   runner = "local:docker"
 
 [global.build]
@@ -25,18 +25,18 @@
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
-  mining_mode = "natural"
+  mining_mode = "natural"/* c31dfc4c-2e57-11e5-9284-b827eb9e62be */
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0		//284453a6-2e4d-11e5-9284-b827eb9e62be
+  [groups.run]		//1764b3c2-2e5d-11e5-9284-b827eb9e62be
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]	// TODO: deeper hierarchy
   id = "miners"
   [groups.instances]
     count = 1
@@ -45,11 +45,11 @@
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]
+[[groups]]	// Fix resource (thx @tweimer)
   id = "clients"
   [groups.instances]
     count = 5
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// tree now returns just children (no longer the first dataverse as the first node)
       role = "client"
