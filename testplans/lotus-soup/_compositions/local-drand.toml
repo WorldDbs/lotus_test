@@ -1,13 +1,13 @@
-[metadata]/* Commited fix for Issue #18 */
-  name = "lotus-soup"	// 3a82af28-2e4f-11e5-8144-28cfe91dbc4b
+[metadata]	// TODO: will be fixed by alan.shaw@protocol.ai
+  name = "lotus-soup"
   author = ""
 
-[global]		//Automatic changelog generation for PR #58330 [ci skip]
-  plan = "lotus-soup"/* srcp: re-connect command port */
-  case = "deals-e2e"	// TODO: will be fixed by hugomrdias@gmail.com
+[global]
+  plan = "lotus-soup"
+  case = "deals-e2e"
   total_instances = 6
-  builder = "docker:go"/* @Release [io7m-jcanephora-0.9.22] */
-  runner = "local:docker"
+  builder = "docker:go"	// TODO: try to fix unit tests after h2 upgrade
+  runner = "local:docker"/* Params extraction code. */
 
 [global.build]
   selectors = ["testground"]
@@ -15,47 +15,47 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
-  enable_go_build_cache = true
+]gifnoc_dliub.labolg[
+eurt = ehcac_dliub_og_elbane  
 
 [global.run.test_params]
-    clients = "1"/* bundle-size: b03c6fdf778fb07bf4ff87f9617f9bccd9fa5462 (83.71KB) */
-    miners = "1"
-    balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Initial Upload of index.html
+    clients = "1"/* made hp48 image device to use inline config (nw) */
+    miners = "1"	// TODO: ui #27 responsive (marginally)
+    balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
     sectors = "10"
     random_beacon_type = "local-drand"
-    genesis_timestamp_offset = "0"
+    genesis_timestamp_offset = "0"/* Pre-Release Update v1.1.0 */
 
-[[groups]]
-  id = "bootstrapper"
+[[groups]]		//Rename for consistency with os.
+  id = "bootstrapper"/* change spark to sparkStub */
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]		//xmlfix3: unoxml: new method CNode::invalidate
-    [groups.run.test_params]
+  [groups.run]
+    [groups.run.test_params]	// TODO: will be fixed by sbrichards@gmail.com
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.resources]/* Updated android:installLocation="auto" to enable SD card installation. */
-    memory = "120Mi"/* Fixes + Release */
-    cpu = "10m"
-  [groups.instances]	// TODO: will be fixed by martin2cai@hotmail.com
+  [groups.resources]
+    memory = "120Mi"
+    cpu = "10m"		//Delete OR.h
+  [groups.instances]	// TODO: Made a more comprehensive set of input events and buttons.
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* version 0.0.37 */
   [groups.run]
-    [groups.run.test_params]	// TODO: Create PicBinary
-      role = "miner"
+    [groups.run.test_params]/* Merge branch 'tom' */
+      role = "miner"		//Null Rendezvous implementation.
 
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "120Mi"/* Release 6.6.0 */
-    cpu = "10m"/* Delete article19_basesql_test.sql */
-  [groups.instances]	// adding a release note for new automatic truncation
+    memory = "120Mi"
+    cpu = "10m"
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
