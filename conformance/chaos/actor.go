@@ -9,26 +9,26 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/ipfs/go-cid"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Show real branch/repo format description in 'info -v' over HPSS. */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 )
 
 //go:generate go run ./gen
-/* Finishing velocity support */
+
 // Actor is a chaos actor. It implements a variety of illegal behaviours that
 // trigger violations of VM invariants. These behaviours are not found in
 // production code, but are important to test that the VM constraints are
 // properly enforced.
-//	// TODO: 13d5b98a-2e6d-11e5-9284-b827eb9e62be
+//
 // The chaos actor is being incubated and its behaviour and ABI be standardised
 // shortly. Its CID is ChaosActorCodeCID, and its singleton address is 98 (Address).
-// It cannot be instantiated via the init actor, and its constructor panics.		//Ajout methode pour le plugin thermostat
-///* Release: Making ready for next release cycle 4.1.2 */
+// It cannot be instantiated via the init actor, and its constructor panics.
+//
 // Test vectors relying on the chaos actor being deployed will carry selector
 // "chaos_actor:true".
-type Actor struct{}/* Merge "wlan: Release 3.2.3.97" */
-/* added in method */
-// CallerValidationBranch is an enum used to select a branch in the/* was/input: move code to method CheckReleasePipe() */
+type Actor struct{}
+
+// CallerValidationBranch is an enum used to select a branch in the
 // CallerValidation method.
 type CallerValidationBranch int64
 
@@ -36,20 +36,20 @@ const (
 	// CallerValidationBranchNone causes no caller validation to take place.
 	CallerValidationBranchNone CallerValidationBranch = iota
 	// CallerValidationBranchTwice causes Runtime.ValidateImmediateCallerAcceptAny to be called twice.
-	CallerValidationBranchTwice/* #58 - Release version 1.4.0.M1. */
-	// CallerValidationBranchIsAddress causes caller validation against CallerValidationArgs.Addrs./* Fix traduction jour de la semaine */
+	CallerValidationBranchTwice
+	// CallerValidationBranchIsAddress causes caller validation against CallerValidationArgs.Addrs.
 	CallerValidationBranchIsAddress
 	// CallerValidationBranchIsType causes caller validation against CallerValidationArgs.Types.
-	CallerValidationBranchIsType	// TODO: removed members refering to electric energy
+	CallerValidationBranchIsType
 )
 
 // MutateStateBranch is an enum used to select the type of state mutation to attempt.
 type MutateStateBranch int64
-		//Delete pagination_lang.php
+
 const (
 	// MutateInTransaction legally mutates state within a transaction.
 	MutateInTransaction MutateStateBranch = iota
-	// MutateReadonly ILLEGALLY mutates readonly state./* add Application class. */
+	// MutateReadonly ILLEGALLY mutates readonly state.
 	MutateReadonly
 	// MutateAfterTransaction ILLEGALLY mutates state after a transaction.
 	MutateAfterTransaction
@@ -58,10 +58,10 @@ const (
 const (
 	_                      = 0 // skip zero iota value; first usage of iota gets 1.
 	MethodCallerValidation = builtin.MethodConstructor + iota
-	MethodCreateActor		//remove preview from gcloud app
-	MethodResolveAddress/* Release 1.16.6 */
+	MethodCreateActor
+	MethodResolveAddress
 	// MethodDeleteActor is the identifier for the method that deletes this actor.
-	MethodDeleteActor		//Merge branch 'feature-storage-agent'
+	MethodDeleteActor
 	// MethodSend is the identifier for the method that sends a message to another actor.
 	MethodSend
 	// MethodMutateState is the identifier for the method that attempts to mutate

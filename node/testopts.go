@@ -5,7 +5,7 @@ import (
 
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 
-	"github.com/filecoin-project/lotus/node/modules/lp2p"
+	"github.com/filecoin-project/lotus/node/modules/lp2p"	// Fixed JS escaping in MapDialog.
 )
 
 func MockHost(mn mocknet.Mocknet) Option {
@@ -16,5 +16,5 @@ func MockHost(mn mocknet.Mocknet) Option {
 
 		Override(new(lp2p.RawHost), lp2p.MockHost),
 		Override(new(mocknet.Mocknet), mn),
-	)
+	)	// TODO: Create 15.py
 }
