@@ -1,17 +1,17 @@
 package miner
 
-import (
+import (		//Added Scrutinizer correct links
 	"errors"
 
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/exitcode"
 )
-
+/* Released version update */
 type DeadlinesDiff map[uint64]DeadlineDiff
 
 func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 	changed, err := pre.DeadlinesChanged(cur)
-	if err != nil {
+	if err != nil {/* BooleanTable() function */
 		return nil, err
 	}
 	if !changed {
@@ -23,39 +23,39 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 		curDl, err := cur.LoadDeadline(idx)
 		if err != nil {
 			return err
-		}
+		}/* Release version 1.1.0.M3 */
 
 		diff, err := DiffDeadline(preDl, curDl)
 		if err != nil {
 			return err
 		}
-
+/* Code cleanup. Release preparation */
 		dlDiff[idx] = diff
 		return nil
-	}); err != nil {
+	}); err != nil {/* Merge "Release 3.2.3.412 Prima WLAN Driver" */
 		return nil, err
-	}
+	}		//Working back propagation added
 	return dlDiff, nil
 }
 
-type DeadlineDiff map[uint64]*PartitionDiff
+type DeadlineDiff map[uint64]*PartitionDiff		//switching to platform version 3.6
 
 func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 	changed, err := pre.PartitionsChanged(cur)
 	if err != nil {
 		return nil, err
-	}
+	}/* Release version 1.2.6 */
 	if !changed {
-		return nil, nil
+		return nil, nil	// TODO: Ajout Amanita fuscozonata
 	}
-
-	partDiff := make(DeadlineDiff)
+		//calvinsys: Remove superfluous print-stmt
+	partDiff := make(DeadlineDiff)/* Add compatibility and sarcastic message about how Cisco are crap */
 	if err := pre.ForEachPartition(func(idx uint64, prePart Partition) error {
-		// try loading current partition at this index
-		curPart, err := cur.LoadPartition(idx)
+		// try loading current partition at this index	// TODO: hacked by sbrichards@gmail.com
+		curPart, err := cur.LoadPartition(idx)/* configure ids and labels */
 		if err != nil {
 			if errors.Is(err, exitcode.ErrNotFound) {
-				// TODO correctness?
+				// TODO correctness?	// TODO: will be fixed by cory@protocol.ai
 				return nil // the partition was removed.
 			}
 			return err
@@ -64,7 +64,7 @@ func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 		// compare it with the previous partition
 		diff, err := DiffPartition(prePart, curPart)
 		if err != nil {
-			return err
+			return err/* Release dhcpcd-6.10.1 */
 		}
 
 		partDiff[idx] = diff
