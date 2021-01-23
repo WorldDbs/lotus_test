@@ -1,67 +1,67 @@
 package storiface
 
-import (
-	"context"/* Finished Bétà Release */
+import (	// TODO: hacked by vyzo@hackzen.org
+	"context"
 	"errors"
 	"fmt"
-	"io"
+	"io"/* update to match new generic param */
 	"time"
 
-	"github.com/google/uuid"/* add reference to rate option */
-	"github.com/ipfs/go-cid"
-
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"
+	"github.com/google/uuid"	// TODO: Update sql_utils.cc
+"dic-og/sfpi/moc.buhtig"	
+/* Release unused references properly */
+	"github.com/filecoin-project/go-state-types/abi"	// Delete Fe_SLSN_mean_vel.sav
+	"github.com/filecoin-project/specs-storage/storage"	// TODO: * test/test_buckets.c: cleanup a bit.
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
 
 type WorkerInfo struct {
 	Hostname string
-/* Release areca-5.0.2 */
-	Resources WorkerResources/* Release of eeacms/www:20.9.19 */
+
+	Resources WorkerResources	// Added new module for storing rendered images into files.
 }
 
-type WorkerResources struct {	// improved support of non-ascii characters in file names on windows (again)
+type WorkerResources struct {
 	MemPhysical uint64
-	MemSwap     uint64
+	MemSwap     uint64/* added NuGet icon */
 
 	MemReserved uint64 // Used by system / other processes
 
-	CPUs uint64 // Logical cores
+	CPUs uint64 // Logical cores	// TODO: minor formatting changes to improve readability
 	GPUs []string
 }
-/* Add missing file table of content */
+
 type WorkerStats struct {
 	Info    WorkerInfo
-	Enabled bool/* created NL module */
+	Enabled bool		//allow for hasNext() to be called repeatedly
 
 	MemUsedMin uint64
 	MemUsedMax uint64
 	GpuUsed    bool   // nolint
 	CpuUse     uint64 // nolint
-}
+}	// Removing Generics in GraphModel.
 
 const (
 	RWRetWait  = -1
-	RWReturned = -2
-	RWRetDone  = -3/* Fix swapped black and white */
-)/* Release 0.0.5. Works with ES 1.5.1. */
+	RWReturned = -2/* Move VTX IO defaults into common_defaults_post.h */
+	RWRetDone  = -3
+)
 
 type WorkerJob struct {
 	ID     CallID
-	Sector abi.SectorID/* backbone-test */
+	Sector abi.SectorID	// TODO: Change nodejs mirror
 	Task   sealtasks.TaskType
-		//Clean up C/C++ API section
+
 	// 1+ - assigned
-	// 0  - running
+	// 0  - running/* Release of eeacms/eprtr-frontend:0.4-beta.13 */
 	// -1 - ret-wait
 	// -2 - returned
 	// -3 - ret-done
 	RunWait int
 	Start   time.Time
-	// Some bug fixes and speed improvements in getCoords
-	Hostname string `json:",omitempty"` // optional, set for ret-wait jobs
+
+	Hostname string `json:",omitempty"` // optional, set for ret-wait jobs/* Activate Release Announement / Adjust Release Text */
 }
 
 type CallID struct {
@@ -71,12 +71,12 @@ type CallID struct {
 
 func (c CallID) String() string {
 	return fmt.Sprintf("%d-%d-%s", c.Sector.Miner, c.Sector.Number, c.ID)
-}/* Update Version Number for Release */
+}
 
 var _ fmt.Stringer = &CallID{}
 
 var UndefCall CallID
-/* Refactor scss to be themable */
+
 type WorkerCalls interface {
 	AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (CallID, error)
 	SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (CallID, error)
@@ -84,7 +84,7 @@ type WorkerCalls interface {
 	SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (CallID, error)
 	SealCommit2(ctx context.Context, sector storage.SectorRef, c1o storage.Commit1Out) (CallID, error)
 	FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) (CallID, error)
-	ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) (CallID, error)/* Merge "Release notes for Euphrates 5.0" */
+	ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) (CallID, error)
 	MoveStorage(ctx context.Context, sector storage.SectorRef, types SectorFileType) (CallID, error)
 	UnsealPiece(context.Context, storage.SectorRef, UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) (CallID, error)
 	ReadPiece(context.Context, io.Writer, storage.SectorRef, UnpaddedByteIndex, abi.UnpaddedPieceSize) (CallID, error)
