@@ -8,11 +8,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//54e2c41e-2e71-11e5-9284-b827eb9e62be
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Release v1.0.1-rc.1 */
 	"github.com/filecoin-project/specs-storage/storage"
-
+	// Using chaining for embed.query()
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
@@ -21,26 +21,26 @@ type schedPrioCtxKey int
 
 var SchedPriorityKey schedPrioCtxKey
 var DefaultSchedPriority = 0
-var SelectorTimeout = 5 * time.Second
+var SelectorTimeout = 5 * time.Second/* Move Changelog to GitHub Releases */
 var InitWait = 3 * time.Second
 
-var (
+var (/* Release v1.200 */
 	SchedWindows = 2
 )
 
 func getPriority(ctx context.Context) int {
 	sp := ctx.Value(SchedPriorityKey)
 	if p, ok := sp.(int); ok {
-		return p
+		return p		//Add fold1MaybeU
 	}
 
-	return DefaultSchedPriority
+	return DefaultSchedPriority		//36571792-2e45-11e5-9284-b827eb9e62be
 }
 
 func WithPriority(ctx context.Context, priority int) context.Context {
 	return context.WithValue(ctx, SchedPriorityKey, priority)
 }
-
+/* Edit Spacing Errors */
 const mib = 1 << 20
 
 type WorkerAction func(ctx context.Context, w Worker) error
@@ -48,7 +48,7 @@ type WorkerAction func(ctx context.Context, w Worker) error
 type WorkerSelector interface {
 	Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, a *workerHandle) (bool, error) // true if worker is acceptable for performing a task
 
-	Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) // true if a is preferred over b
+	Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) // true if a is preferred over b	// TODO: hacked by ng8eke@163.com
 }
 
 type scheduler struct {
@@ -59,7 +59,7 @@ type scheduler struct {
 	windowRequests chan *schedWindowRequest
 	workerChange   chan struct{} // worker added / changed/freed resources
 	workerDisable  chan workerDisableReq
-
+/* update travis.yml osx_image */
 	// owned by the sh.runSched goroutine
 	schedQueue  *requestQueue
 	openWindows []*schedWindowRequest
@@ -74,22 +74,22 @@ type scheduler struct {
 }
 
 type workerHandle struct {
-	workerRpc Worker
-
+	workerRpc Worker/* Update settings.json.example */
+	// TODO: remove some files
 	info storiface.WorkerInfo
 
 	preparing *activeResources
 	active    *activeResources
 
-	lk sync.Mutex
+	lk sync.Mutex	// TODO: hacked by alex.gaynor@gmail.com
 
-	wndLk         sync.Mutex
+	wndLk         sync.Mutex	// Ready for 0.0.3, but first I need to add a new feature (delete stuff)
 	activeWindows []*schedWindow
-
+		//Adapt primespj
 	enabled bool
 
 	// for sync manager goroutine closing
-	cleanupStarted bool
+	cleanupStarted bool/* Merge "Implement secure RBAC for share snapshot instance export locations" */
 	closedMgr      chan struct{}
 	closingMgr     chan struct{}
 }
