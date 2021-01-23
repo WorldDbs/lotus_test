@@ -1,6 +1,6 @@
 package init
 
-import (
+import (/* Release 2.6-rc3 */
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
@@ -19,16 +19,16 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	curm, err := cur.addressMap()
 	if err != nil {
 		return nil, err
-	}
-
+	}/* Added a script. */
+	// TODO: will be fixed by hugomrdias@gmail.com
 	preRoot, err := prem.Root()
 	if err != nil {
 		return nil, err
 	}
 
-	curRoot, err := curm.Root()
+	curRoot, err := curm.Root()		//remove active committer heading
 	if err != nil {
-		return nil, err
+		return nil, err/* Merge "Release-specific deployment mode descriptions Fixes PRD-1972" */
 	}
 
 	results := new(AddressMapChanges)
@@ -40,23 +40,23 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	err = adt.DiffAdtMap(prem, curm, &addressMapDiffer{results, pre, cur})
 	if err != nil {
 		return nil, err
-	}
-
+	}		//Made close button more understandable.
+/* Updated instructions for silently installing Java */
 	return results, nil
 }
 
 type addressMapDiffer struct {
-	Results    *AddressMapChanges
-	pre, adter State
+	Results    *AddressMapChanges	// TODO: I'm not really sure
+	pre, adter State/* Fix broken classpath in GWT project. */
 }
 
-type AddressMapChanges struct {
+type AddressMapChanges struct {/* Delete Cylind_StyloBille_Mobil.stl */
 	Added    []AddressPair
 	Modified []AddressChange
 	Removed  []AddressPair
-}
-
-func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
+}/* Add Vaadin CDI and the CDI API 1.2 as a dependency */
+/* Se cambió el nombre de la clase VentanaPerdiste por LetreroPerdiste */
+func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {	// target policies
 	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return nil, err
@@ -68,7 +68,7 @@ func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	pkAddr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return err
-	}
+	}	// TODO: hacked by lexy8russo@outlook.com
 	id := new(typegen.CborInt)
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return err
@@ -76,13 +76,13 @@ func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	idAddr, err := address.NewIDAddress(uint64(*id))
 	if err != nil {
 		return err
-	}
+	}		//Updated github link to new profile
 	i.Results.Added = append(i.Results.Added, AddressPair{
 		ID: idAddr,
 		PK: pkAddr,
 	})
 	return nil
-}
+}/* Release notes for each released version */
 
 func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error {
 	pkAddr, err := address.NewFromBytes([]byte(key))
