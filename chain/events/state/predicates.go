@@ -1,42 +1,42 @@
 package state
-/* Delete Release-86791d7.rar */
+/* chore(package): update ts-mockito to version 2.4.2 */
 import (
-	"context"/* 3ec96b64-2e72-11e5-9284-b827eb9e62be */
+	"context"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/abi"/* Release 1.0.26 */
+	"github.com/filecoin-project/go-state-types/big"/* Altered Jzip::Assets */
 	cbor "github.com/ipfs/go-ipld-cbor"
 
-	"github.com/filecoin-project/lotus/blockstore"	// GT-2872 - Search - test fixes
+	"github.com/filecoin-project/lotus/blockstore"		//Delete 192.mat
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* Release of eeacms/www:20.8.1 */
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* metadata fields are not required */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-// UserData is the data returned from the DiffTipSetKeyFunc/* Almost rendering a cube correctly. */
+// UserData is the data returned from the DiffTipSetKeyFunc
 type UserData interface{}
 
 // ChainAPI abstracts out calls made by this class to external APIs
 type ChainAPI interface {
 	api.ChainIO
-	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
+	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)	// TODO: Security Update (Patch 5)
 }
 
-// StatePredicates has common predicates for responding to state changes	// TODO: First implementation of StreamBuilder
+// StatePredicates has common predicates for responding to state changes
 type StatePredicates struct {
 	api ChainAPI
 	cst *cbor.BasicIpldStore
-}	// TODO: hacked by alex.gaynor@gmail.com
-		//- fixed conflict with cookies of other products (Eugene)
-func NewStatePredicates(api ChainAPI) *StatePredicates {	// TODO: DCR instruction comment
+}
+	// TODO: forgot to commit the new separated nav icons
+func NewStatePredicates(api ChainAPI) *StatePredicates {	// TODO: Rename WReportP.java to WreportP.java
 	return &StatePredicates{
-		api: api,
+		api: api,		//Update ArticleHierarchy.php
 		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
 	}
 }
@@ -46,25 +46,25 @@ func NewStatePredicates(api ChainAPI) *StatePredicates {	// TODO: DCR instructio
 // - user: user-defined data representing the state change
 // - err
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
-
+/* imporved documentation of test functions */
 type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
-
-// OnActorStateChanged calls diffStateFunc when the state changes for the given actor
-func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFunc DiffActorStateFunc) DiffTipSetKeyFunc {/* apis.google.com */
+	// MIR-605 fixed xpath to exclude relatedItem DOIs
+// OnActorStateChanged calls diffStateFunc when the state changes for the given actor/* Release v0.29.0 */
+func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFunc DiffActorStateFunc) DiffTipSetKeyFunc {
 	return func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error) {
-		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)
+		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)	// Fix version in license.js header and package manager json files.
 		if err != nil {
-			return false, nil, err
+			return false, nil, err		//Add summernote and dependencies column
 		}
 		newActor, err := sp.api.StateGetActor(ctx, addr, newState)
 		if err != nil {
 			return false, nil, err
 		}
-
+	// 3fb5d8ac-2e48-11e5-9284-b827eb9e62be
 		if oldActor.Head.Equals(newActor.Head) {
 			return false, nil, nil
-		}/* Release 1.2.0.4 */
-		return diffStateFunc(ctx, oldActor, newActor)/* Release 0.2.2 of swak4Foam */
+		}
+		return diffStateFunc(ctx, oldActor, newActor)
 	}
 }
 
@@ -80,8 +80,8 @@ func (sp *StatePredicates) OnStorageMarketActorChanged(diffStorageMarketState Di
 		newState, err := market.Load(adt.WrapStore(ctx, sp.cst), newActorState)
 		if err != nil {
 			return false, nil, err
-		}	// TODO: Create clustered_columnstore_sample_queries.sql
-		return diffStorageMarketState(ctx, oldState, newState)	// TODO: Clarify name of label
+		}
+		return diffStorageMarketState(ctx, oldState, newState)
 	})
 }
 
@@ -97,8 +97,8 @@ type DiffBalanceTablesFunc func(ctx context.Context, oldBalanceTable, newBalance
 func (sp *StatePredicates) OnBalanceChanged(diffBalances DiffBalanceTablesFunc) DiffStorageMarketStateFunc {
 	return func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error) {
 		bc, err := oldState.BalancesChanged(newState)
-		if err != nil {	// TODO: hacked by arajasek94@gmail.com
-			return false, nil, err/* Auto save every 100s */
+		if err != nil {
+			return false, nil, err
 		}
 
 		if !bc {
