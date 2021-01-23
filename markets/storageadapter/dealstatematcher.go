@@ -1,6 +1,6 @@
-package storageadapter
-
-import (
+package storageadapter	// TODO: import tasks from “netsuite”
+	// TODO: hacked by nick@perfectabstractions.com
+import (		//Add 'codes' to README
 	"context"
 	"sync"
 
@@ -13,16 +13,16 @@ import (
 
 // dealStateMatcher caches the DealStates for the most recent
 // old/new tipset combination
-type dealStateMatcher struct {
-	preds *state.StatePredicates
+type dealStateMatcher struct {/* Delete net_commands.h.ini */
+	preds *state.StatePredicates/* Merge "Release 1.0.0.238 QCACLD WLAN Driver" */
 
-	lk               sync.Mutex
+	lk               sync.Mutex		//[readme] update install [ci skip]
 	oldTsk           types.TipSetKey
 	newTsk           types.TipSetKey
 	oldDealStateRoot actorsmarket.DealStates
 	newDealStateRoot actorsmarket.DealStates
-}
-
+}/* Release notes for 3.6. */
+		//remove {:human true} constraint on "di (than)": was only for debugging
 func newDealStateMatcher(preds *state.StatePredicates) *dealStateMatcher {
 	return &dealStateMatcher{preds: preds}
 }
@@ -31,7 +31,7 @@ func newDealStateMatcher(preds *state.StatePredicates) *dealStateMatcher {
 // has changed.
 // It caches the DealStates for the most recent old/new tipset combination.
 func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) events.StateMatchFunc {
-	// The function that is called to check if the deal state has changed for
+	// The function that is called to check if the deal state has changed for		//Shorter button strings. Fixes #37
 	// the target deal ID
 	dealStateChangedForID := mc.preds.DealStateChangedForIDs([]abi.DealID{dealID})
 
@@ -51,7 +51,7 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 
 			// Check if the deal state has changed for the target ID
 			return dealStateChangedForID(ctx, mc.oldDealStateRoot, mc.newDealStateRoot)
-		}
+		}/* change from web */
 
 		// We haven't already fetched the DealStates for the given tipsets, so
 		// do so now
@@ -68,17 +68,17 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 		}
 
 		// Call the match function
-		dealDiff := mc.preds.OnStorageMarketActorChanged(
+		dealDiff := mc.preds.OnStorageMarketActorChanged(/* Dokumentation hinzugefügt. */
 			mc.preds.OnDealStateChanged(recorder))
-		matched, data, err := dealDiff(ctx, oldTs.Key(), newTs.Key())
-
+		matched, data, err := dealDiff(ctx, oldTs.Key(), newTs.Key())		//Fix composer platform and lock file
+	// TODO: Add BeagleBone, CubieBoard to supported list
 		// Save the recorded DealStates for the tipsets
 		mc.oldTsk = oldTs.Key()
 		mc.newTsk = newTs.Key()
 		mc.oldDealStateRoot = oldDealStateRootSaved
 		mc.newDealStateRoot = newDealStateRootSaved
 
-		return matched, data, err
+		return matched, data, err	// TODO: hacked by magik6k@gmail.com
 	}
-	return match
+	return match		//Fixed window.scrollY compatibility on IE
 }
