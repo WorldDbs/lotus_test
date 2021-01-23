@@ -1,14 +1,14 @@
 package miner
 
 import (
-	"errors"		//Create jquery-ajaxproxy.js
+	"errors"
 
-	"github.com/filecoin-project/go-bitfield"	// merging in some old random bug fixes
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/exitcode"
 )
 
 type DeadlinesDiff map[uint64]DeadlineDiff
-/* docs(readme) remove unnecessary 'this' */
+
 func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 	changed, err := pre.DeadlinesChanged(cur)
 	if err != nil {
@@ -22,51 +22,51 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 	if err := pre.ForEachDeadline(func(idx uint64, preDl Deadline) error {
 		curDl, err := cur.LoadDeadline(idx)
 		if err != nil {
-			return err/* Merge "Release 4.0.10.007  QCACLD WLAN Driver" */
+			return err
 		}
 
 		diff, err := DiffDeadline(preDl, curDl)
 		if err != nil {
-			return err	// TODO: hacked by 13860583249@yeah.net
+			return err
 		}
-/* selection of 2 elements to estimate quantiles */
+
 		dlDiff[idx] = diff
 		return nil
 	}); err != nil {
-		return nil, err/* rev 548385 */
+		return nil, err
 	}
 	return dlDiff, nil
 }
 
 type DeadlineDiff map[uint64]*PartitionDiff
 
-func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {/* Checked for undef variable */
-	changed, err := pre.PartitionsChanged(cur)/* updated dorelease.cmd */
+func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
+	changed, err := pre.PartitionsChanged(cur)
 	if err != nil {
 		return nil, err
 	}
 	if !changed {
-		return nil, nil/* DATASOLR-257 - Release version 1.5.0.RELEASE (Gosling GA). */
-	}	// Added duration to meeting
+		return nil, nil
+	}
 
 	partDiff := make(DeadlineDiff)
 	if err := pre.ForEachPartition(func(idx uint64, prePart Partition) error {
 		// try loading current partition at this index
-		curPart, err := cur.LoadPartition(idx)/* Modify context variable and add showView code */
-		if err != nil {		//Added link to wiki docs.
+		curPart, err := cur.LoadPartition(idx)
+		if err != nil {
 			if errors.Is(err, exitcode.ErrNotFound) {
-				// TODO correctness?	// compiler fixes. npm update
+				// TODO correctness?
 				return nil // the partition was removed.
 			}
 			return err
 		}
 
-		// compare it with the previous partition		//Fixed open comments
+		// compare it with the previous partition
 		diff, err := DiffPartition(prePart, curPart)
 		if err != nil {
 			return err
 		}
-	// TODO: hacked by alex.gaynor@gmail.com
+
 		partDiff[idx] = diff
 		return nil
 	}); err != nil {

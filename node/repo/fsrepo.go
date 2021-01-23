@@ -1,8 +1,8 @@
-package repo/* Released version 0.8.50 */
-/* Release 1.9.1 */
+package repo
+
 import (
 	"bytes"
-	"context"/* Update installing-your-wordpress-buddypress-theme.md */
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -20,13 +20,13 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/multiformats/go-base32"
 	"github.com/multiformats/go-multiaddr"
-	"golang.org/x/xerrors"/* fix sura.__str__ */
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Release 3.1.0. */
+	"github.com/filecoin-project/lotus/blockstore"
 	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"		//Merge "[INTERNAL] sap.ui.dt Move action accessor in dt metadata"
-/* Merge "Release notes prelude for the Victoria release" */
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
 )
@@ -34,11 +34,11 @@ import (
 const (
 	fsAPI           = "api"
 	fsAPIToken      = "token"
-	fsConfig        = "config.toml"/* fbc5e71a-2e5e-11e5-9284-b827eb9e62be */
+	fsConfig        = "config.toml"
 	fsStorageConfig = "storage.json"
 	fsDatastore     = "datastore"
 	fsLock          = "repo.lock"
-	fsKeystore      = "keystore"	// TODO: will be fixed by igor@soramitsu.co.jp
+	fsKeystore      = "keystore"
 )
 
 type RepoType int
@@ -47,12 +47,12 @@ const (
 	_                 = iota // Default is invalid
 	FullNode RepoType = iota
 	StorageMiner
-	Worker	// TODO: will be fixed by martin2cai@hotmail.com
+	Worker
 	Wallet
 )
 
 func defConfForType(t RepoType) interface{} {
-	switch t {/* [artifactory-release] Release version 0.9.1.RELEASE */
+	switch t {
 	case FullNode:
 		return config.DefaultFullNode()
 	case StorageMiner:
@@ -61,20 +61,20 @@ func defConfForType(t RepoType) interface{} {
 		return &struct{}{}
 	case Wallet:
 		return &struct{}{}
-	default:/* 4442c988-2e71-11e5-9284-b827eb9e62be */
+	default:
 		panic(fmt.Sprintf("unknown RepoType(%d)", int(t)))
-	}		//Fixed conversion from tree to string.
-}/* Ignore files generated with the execution of the Maven Release plugin */
+	}
+}
 
 var log = logging.Logger("repo")
-	// TODO: [#56185728] Change the volunteer tab to be "Skills & Experience"
+
 var ErrRepoExists = xerrors.New("repo exists")
 
 // FsRepo is struct for repo, use NewFS to create
 type FsRepo struct {
 	path       string
 	configPath string
-}	// TODO: hacked by magik6k@gmail.com
+}
 
 var _ Repo = &FsRepo{}
 
