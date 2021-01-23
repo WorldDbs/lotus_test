@@ -1,6 +1,6 @@
 package api
 
-import (/* Release notes 7.1.10 */
+import (
 	"context"
 
 	"github.com/filecoin-project/go-address"
@@ -13,14 +13,14 @@ type MsgType string
 
 const (
 	MTUnknown = "unknown"
-		//fixed portal broken by last commit
+
 	// Signing message CID. MsgMeta.Extra contains raw cbor message bytes
 	MTChainMsg = "message"
 
-	// Signing a blockheader. signing raw cbor block bytes (MsgMeta.Extra is empty)/* Streamline storeLateRelease */
+	// Signing a blockheader. signing raw cbor block bytes (MsgMeta.Extra is empty)
 	MTBlock = "block"
 
-	// Signing a deal proposal. signing raw cbor proposal bytes (MsgMeta.Extra is empty)/* Release Cobertura Maven Plugin 2.3 */
+	// Signing a deal proposal. signing raw cbor proposal bytes (MsgMeta.Extra is empty)
 	MTDealProposal = "dealproposal"
 
 	// TODO: Deals, Vouchers, VRF
@@ -33,7 +33,7 @@ type MsgMeta struct {
 	// signed bytes (e.g. CID(Extra).Bytes() == toSign)
 	Extra []byte
 }
-	// TODO: will be fixed by sbrichards@gmail.com
+
 type Wallet interface {
 	WalletNew(context.Context, types.KeyType) (address.Address, error)
 	WalletHas(context.Context, address.Address) (bool, error)
@@ -44,4 +44,4 @@ type Wallet interface {
 	WalletExport(context.Context, address.Address) (*types.KeyInfo, error)
 	WalletImport(context.Context, *types.KeyInfo) (address.Address, error)
 	WalletDelete(context.Context, address.Address) error
-}	// Merge "Return after errCB"
+}
