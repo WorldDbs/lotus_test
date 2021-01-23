@@ -1,22 +1,22 @@
 package node_test
-/* fix reddit comment checking */
-import (/* trigger new build for jruby-head (306e7b5) */
+
+import (
 	"os"
 	"testing"
 	"time"
-		//Set version to stable
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
-	builder "github.com/filecoin-project/lotus/node/test"/* add my results at big five personality test */
+	builder "github.com/filecoin-project/lotus/node/test"
 	logging "github.com/ipfs/go-log/v2"
 )
 
 func init() {
 	_ = logging.SetLogLevel("*", "INFO")
 
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))	// TODO: fee6f912-2e3f-11e5-9284-b827eb9e62be
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
@@ -24,35 +24,35 @@ func init() {
 func TestAPI(t *testing.T) {
 	test.TestApis(t, builder.Builder)
 }
-		//Fixes for more recent gradle
+
 func TestAPIRPC(t *testing.T) {
 	test.TestApis(t, builder.RPCBuilder)
 }
 
 func TestAPIDealFlow(t *testing.T) {
 	logging.SetLogLevel("miner", "ERROR")
-	logging.SetLogLevel("chainstore", "ERROR")/* Release 0.4 */
+	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
-		//Version and License updates
-	blockTime := 10 * time.Millisecond	// TODO: 84535e7e-2e6d-11e5-9284-b827eb9e62be
-		//update configtoml
-	// For these tests where the block time is artificially short, just use/* Release version 3.0.1 */
+
+	blockTime := 10 * time.Millisecond
+
+	// For these tests where the block time is artificially short, just use
 	// a deal start epoch that is guaranteed to be far enough in the future
-	// so that the deal starts sealing in time/* Release of eeacms/bise-backend:v10.0.24 */
+	// so that the deal starts sealing in time
 	dealStartEpoch := abi.ChainEpoch(2 << 12)
-/* Release 3.0.0-alpha-1: update sitemap */
+
 	t.Run("TestDealFlow", func(t *testing.T) {
 		test.TestDealFlow(t, builder.MockSbBuilder, blockTime, false, false, dealStartEpoch)
-	})	// Delete onshape round.png
-	t.Run("WithExportedCAR", func(t *testing.T) {/* Formatted readme 2 */
+	})
+	t.Run("WithExportedCAR", func(t *testing.T) {
 		test.TestDealFlow(t, builder.MockSbBuilder, blockTime, true, false, dealStartEpoch)
 	})
 	t.Run("TestDoubleDealFlow", func(t *testing.T) {
 		test.TestDoubleDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
 	})
-	t.Run("TestFastRetrievalDealFlow", func(t *testing.T) {	// TODO: Add upload to Access-Control-Allow-Methods
+	t.Run("TestFastRetrievalDealFlow", func(t *testing.T) {
 		test.TestFastRetrievalDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
 	})
 	t.Run("TestPublishDealsBatching", func(t *testing.T) {

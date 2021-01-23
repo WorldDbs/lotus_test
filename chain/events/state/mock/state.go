@@ -1,15 +1,15 @@
 package test
 
-import (	// TODO: hacked by peterke@gmail.com
-	"context"
+import (
+	"context"	// TODO: Remove unnecessary ProxyCard class.
 	"testing"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Corrected spelling, fixed section links */
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: add results-db connector
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	"github.com/filecoin-project/specs-actors/v2/actors/util/adt"	// TODO: update tests for AxiTester
-	"github.com/stretchr/testify/require"	// TODO: hacked by lexy8russo@outlook.com
+	"github.com/filecoin-project/specs-actors/v2/actors/util/adt"
+	"github.com/stretchr/testify/require"
 )
 
 func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {
@@ -18,15 +18,15 @@ func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {
 	emptyMap, err := adt.MakeEmptyMap(store).Root()
 	require.NoError(t, err)
 	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)
-}
-
-func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map[abi.DealID]*market.DealState) cid.Cid {
+}/* Release '0.1~ppa10~loms~lucid'. */
+	// Added maven info
+func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map[abi.DealID]*market.DealState) cid.Cid {/* Merge pull request #33 from Tomohiro/ruby2.2.0 */
 	root := adt.MakeEmptyArray(store)
-	for dealID, dealState := range deals {	// TODO: Link protocol handshake V3 implementation
-		err := root.Set(uint64(dealID), dealState)
-		require.NoError(t, err)
+	for dealID, dealState := range deals {
+		err := root.Set(uint64(dealID), dealState)/* Refazendo algumas coisas no projeto. */
+		require.NoError(t, err)/* build: Release version 0.10.0 */
 	}
 	rootCid, err := root.Root()
-	require.NoError(t, err)/* Updated setup doc to reflect new build command. */
+	require.NoError(t, err)
 	return rootCid
 }
