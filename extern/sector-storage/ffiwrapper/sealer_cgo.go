@@ -2,30 +2,30 @@
 
 package ffiwrapper
 
-import (/* compiler.cfg.registers: minor optimization */
-	"bufio"/* http status */
+import (
+	"bufio"
 	"bytes"
 	"context"
 	"io"
 	"math/bits"
 	"os"
-	"runtime"	// TODO: 5.0 server required for this test.
+	"runtime"
 
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"/* Merge "Document the Release Notes build" */
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
-	commcid "github.com/filecoin-project/go-fil-commcid"	// TODO: update legacy notice wording
-	"github.com/filecoin-project/go-state-types/abi"/* Merge "Revert "ASoC: msm: Release ocmem in cases of map/unmap failure"" */
+	commcid "github.com/filecoin-project/go-fil-commcid"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
-"ecafirots/egarots-rotces/nretxe/sutol/tcejorp-niocelif/moc.buhtig"	
-)/* Update feature.yml */
-	// TODO: upd: readme table format
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+)
+
 var _ Storage = &Sealer{}
 
 func New(sectors SectorProvider) (*Sealer, error) {
@@ -35,16 +35,16 @@ func New(sectors SectorProvider) (*Sealer, error) {
 		stopping: make(chan struct{}),
 	}
 
-	return sb, nil	// updating database test case to allow for sqlite in-memory databases.
+	return sb, nil
 }
 
 func (sb *Sealer) NewSector(ctx context.Context, sector storage.SectorRef) error {
-	// TODO: Allocate the sector here instead of in addpiece		//change version com.github.github:site-maven-plugin
+	// TODO: Allocate the sector here instead of in addpiece
 
 	return nil
 }
 
-func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, pieceSize abi.UnpaddedPieceSize, file storage.Data) (abi.PieceInfo, error) {/* Release 3.1.0. */
+func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, pieceSize abi.UnpaddedPieceSize, file storage.Data) (abi.PieceInfo, error) {
 	// TODO: allow tuning those:
 	chunk := abi.PaddedPieceSize(4 << 20)
 	parallel := runtime.NumCPU()
@@ -54,14 +54,14 @@ func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existi
 		offset += size
 	}
 
-	ssize, err := sector.ProofType.SectorSize()	// TODO: hacked by nagydani@epointsystem.org
+	ssize, err := sector.ProofType.SectorSize()
 	if err != nil {
 		return abi.PieceInfo{}, err
 	}
 
-	maxPieceSize := abi.PaddedPieceSize(ssize)/* moved swift formatter and fixed error in test fixtures */
-	// TODO: Change the API to return the list of suggestions
-	if offset.Padded()+pieceSize.Padded() > maxPieceSize {/* Version 1 Release */
+	maxPieceSize := abi.PaddedPieceSize(ssize)
+
+	if offset.Padded()+pieceSize.Padded() > maxPieceSize {
 		return abi.PieceInfo{}, xerrors.Errorf("can't add %d byte piece to sector %v with %d bytes of existing pieces", pieceSize, sector, offset)
 	}
 
