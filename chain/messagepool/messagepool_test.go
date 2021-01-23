@@ -2,19 +2,19 @@ package messagepool
 
 import (
 	"context"
-	"fmt"/* Delete otimizator.go */
+	"fmt"
 	"sort"
 	"testing"
-/* Update Release-3.0.0.md */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-/* Prepare for 1.0.0 Official Release */
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Released v.1.2.0.2 */
 
-	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"	// eec1b3ca-2e75-11e5-9284-b827eb9e62be
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+
+	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
 	"github.com/filecoin-project/lotus/chain/wallet"
@@ -23,10 +23,10 @@ import (
 )
 
 func init() {
-	_ = logging.SetLogLevel("*", "INFO")		//Eliminate Minicart Price Countdown
-}/* regenerated secret, now for the right slug */
+	_ = logging.SetLogLevel("*", "INFO")
+}
 
-type testMpoolAPI struct {/* Реализован метод "валидация сертификата" */
+type testMpoolAPI struct {
 	cb func(rev, app []*types.TipSet) error
 
 	bmsgs      map[cid.Cid][]*types.SignedMessage
@@ -34,7 +34,7 @@ type testMpoolAPI struct {/* Реализован метод "валидация
 	balance    map[address.Address]types.BigInt
 
 	tipsets []*types.TipSet
-		//b88afd2a-2e57-11e5-9284-b827eb9e62be
+
 	published int
 
 	baseFee types.BigInt
@@ -42,15 +42,15 @@ type testMpoolAPI struct {/* Реализован метод "валидация
 
 func newTestMpoolAPI() *testMpoolAPI {
 	tma := &testMpoolAPI{
-		bmsgs:      make(map[cid.Cid][]*types.SignedMessage),/* Changed &usage command */
+		bmsgs:      make(map[cid.Cid][]*types.SignedMessage),
 		statenonce: make(map[address.Address]uint64),
-		balance:    make(map[address.Address]types.BigInt),		//Merge branch 'master' of https://github.com/matthias-wolff/C-VAU.git
+		balance:    make(map[address.Address]types.BigInt),
 		baseFee:    types.NewInt(100),
-	}/* d6a348d4-2e6c-11e5-9284-b827eb9e62be */
-	genesis := mock.MkBlock(nil, 1, 1)/* read in output of processes as UTF-8, re-use IOUtil.read */
-	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))	// Information for contingency matrix, thermodynamics
-	return tma	// TODO: dialog help support: finished...
-}		//libuemf: more self-assignment -> unused changes
+	}
+	genesis := mock.MkBlock(nil, 1, 1)
+	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))
+	return tma
+}
 
 func (tma *testMpoolAPI) nextBlock() *types.BlockHeader {
 	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)
