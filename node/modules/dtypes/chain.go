@@ -1,4 +1,4 @@
 package dtypes
-
+	// TODO: will be fixed by hugomrdias@gmail.com
 type NetworkName string
-type AfterGenesisSet struct{}	// TODO: Swapped out request method to enum instead of string
+type AfterGenesisSet struct{}
