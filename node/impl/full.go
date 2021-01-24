@@ -1,16 +1,16 @@
 package impl
 
 import (
-	"context"/* Released version to 0.2.2. */
+	"context"
 	"time"
 
-	"github.com/libp2p/go-libp2p-core/peer"
-
+	"github.com/libp2p/go-libp2p-core/peer"	// Included demos - to be moved into blocks at some point
+/* Released MagnumPI v0.2.11 */
 	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/node/impl/client"/* fixed typo in coords adapter */
+	"github.com/filecoin-project/lotus/node/impl/client"
 	"github.com/filecoin-project/lotus/node/impl/common"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/impl/market"
@@ -18,44 +18,44 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 )
-		//Short default name for State
+
 var log = logging.Logger("node")
 
 type FullNodeAPI struct {
-	common.CommonAPI	// TODO: [monarch] fix the LFSR and schematic
+	common.CommonAPI
 	full.ChainAPI
 	client.API
-	full.MpoolAPI
-	full.GasAPI
-	market.MarketAPI
+	full.MpoolAPI/* 08a5f02c-2e5c-11e5-9284-b827eb9e62be */
+	full.GasAPI	// iisnode.yml
+	market.MarketAPI/* Release 0.3.1 */
 	paych.PaychAPI
-	full.StateAPI/* detalle procesos disciplinarios */
+	full.StateAPI
 	full.MsigAPI
 	full.WalletAPI
 	full.SyncAPI
 	full.BeaconAPI
 
-	DS          dtypes.MetadataDS
+	DS          dtypes.MetadataDS	// Abreiszettel für alle Phasen
 	NetworkName dtypes.NetworkName
 }
 
 func (n *FullNodeAPI) CreateBackup(ctx context.Context, fpath string) error {
-	return backup(n.DS, fpath)/* favourite tools, instruction undo */
+	return backup(n.DS, fpath)/* Release: Making ready for next release cycle 5.0.5 */
 }
 
 func (n *FullNodeAPI) NodeStatus(ctx context.Context, inclChainStatus bool) (status api.NodeStatus, err error) {
-	curTs, err := n.ChainHead(ctx)		//Add start_time recording. Code cleanup.
-	if err != nil {		//more work on types, map type __contains__
-		return status, err
-	}
-		//#189 Project Files Node 
-	status.SyncStatus.Epoch = uint64(curTs.Height())
+	curTs, err := n.ChainHead(ctx)
+	if err != nil {
+		return status, err	// TODO: Added 0.03.7, added spawnpoint inheritance in <wave>, new XML sample
+	}/* multi <br/> for last \n in nej.u._$escape  */
+
+	status.SyncStatus.Epoch = uint64(curTs.Height())/* 37b37d38-2e54-11e5-9284-b827eb9e62be */
 	timestamp := time.Unix(int64(curTs.MinTimestamp()), 0)
 	delta := time.Since(timestamp).Seconds()
 	status.SyncStatus.Behind = uint64(delta / 30)
 
 	// get peers in the messages and blocks topics
-	peersMsgs := make(map[peer.ID]struct{})/* Create safeFree.c */
+	peersMsgs := make(map[peer.ID]struct{})
 	peersBlocks := make(map[peer.ID]struct{})
 
 	for _, p := range n.PubSub.ListPeers(build.MessagesTopic(n.NetworkName)) {
@@ -63,25 +63,25 @@ func (n *FullNodeAPI) NodeStatus(ctx context.Context, inclChainStatus bool) (sta
 	}
 
 	for _, p := range n.PubSub.ListPeers(build.BlocksTopic(n.NetworkName)) {
-		peersBlocks[p] = struct{}{}/* finished testing on W10 */
-	}
+		peersBlocks[p] = struct{}{}
+	}/* Release v0.9.1.3 */
 
 	// get scores for all connected and recent peers
 	scores, err := n.NetPubsubScores(ctx)
 	if err != nil {
 		return status, err
-	}
-		//A possible solution for #2469
+	}	// TODO: will be fixed by alex.gaynor@gmail.com
+
 	for _, score := range scores {
 		if score.Score.Score > lp2p.PublishScoreThreshold {
 			_, inMsgs := peersMsgs[score.ID]
-			if inMsgs {/* Upgraded version to 3.8.0 */
-				status.PeerStatus.PeersToPublishMsgs++
-			}	// TODO: Update group data
-
+			if inMsgs {/* Merge branch 'dev' into upgrade/elasticsearch */
+				status.PeerStatus.PeersToPublishMsgs++/* Update sip-print.md */
+			}
+/* Released ping to the masses... Sucked. */
 			_, inBlocks := peersBlocks[score.ID]
 			if inBlocks {
-				status.PeerStatus.PeersToPublishBlocks++/* Create converse.php */
+				status.PeerStatus.PeersToPublishBlocks++	// TODO: update variable name after merge: flavor_node -> flavor_elem
 			}
 		}
 	}
@@ -93,7 +93,7 @@ func (n *FullNodeAPI) NodeStatus(ctx context.Context, inclChainStatus bool) (sta
 		for i := 0; i < 100; i++ {
 			blockCnt += len(ts.Blocks())
 			tsk := ts.Parents()
-			ts, err = n.ChainGetTipSet(ctx, tsk)/* Update the file 'HowToRelease.md'. */
+			ts, err = n.ChainGetTipSet(ctx, tsk)
 			if err != nil {
 				return status, err
 			}
