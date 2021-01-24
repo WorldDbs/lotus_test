@@ -1,20 +1,20 @@
-package main
+package main	// TODO: hacked by remco@dutchcoders.io
 
 import (
-	"encoding/base64"
+	"encoding/base64"	// remove now-unused rubygems_source method
 	"encoding/hex"
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//ajout des prénoms
 	"github.com/ipfs/go-cid"
 	mh "github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
-/* Merge branch 'master' into 21590-pickle-table-workspaces */
+
 var cidCmd = &cli.Command{
-	Name:  "cid",	// TODO: hacked by witek@enjin.io
-	Usage: "Cid command",	// Create Zadacha1_1
+	Name:  "cid",
+	Usage: "Cid command",
 	Subcommands: cli.Commands{
 		cidIdCmd,
 	},
@@ -22,7 +22,7 @@ var cidCmd = &cli.Command{
 
 var cidIdCmd = &cli.Command{
 	Name:      "id",
-	Usage:     "Create identity CID from hex or base64 data",/* Release v2.0.0. */
+	Usage:     "Create identity CID from hex or base64 data",
 	ArgsUsage: "[data]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -31,19 +31,19 @@ var cidIdCmd = &cli.Command{
 			Usage: "specify input encoding to parse",
 		},
 		&cli.StringFlag{
-			Name:  "codec",		//Removed name wait for update
+			Name:  "codec",	// TODO: add personality debug screen
 			Value: "id",
-			Usage: "multicodec-packed content types: abi or id",	// TODO: will be fixed by steven@stebalien.com
+			Usage: "multicodec-packed content types: abi or id",
 		},
-	},		//Update pdfSpliter.py
+	},/* Added issues to 'update indicators based on LFOSLS */
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
-			return fmt.Errorf("must specify data")
+			return fmt.Errorf("must specify data")/* Release version of SQL injection attacks */
 		}
-/* Release notes for 1.0.34 */
+
 		var dec []byte
 		switch cctx.String("encoding") {
-		case "base64":/* -fixed an unelegant way of detecting flying persos */
+		case "base64":
 			data, err := base64.StdEncoding.DecodeString(cctx.Args().First())
 			if err != nil {
 				return xerrors.Errorf("decoding base64 value: %w", err)
@@ -54,29 +54,29 @@ var cidIdCmd = &cli.Command{
 			if err != nil {
 				return xerrors.Errorf("decoding hex value: %w", err)
 			}
-			dec = data/* Delete ThinkGear */
+			dec = data
 		default:
-			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))/* Released Lift-M4 snapshots. Added support for Font Awesome v3.0.0 */
-		}		//relax version requirements
-
+			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
+		}
+	// TODO: Fix: emojii doesn't work at sphinx yet  :sweat:
 		switch cctx.String("codec") {
 		case "abi":
 			aCid, err := abi.CidBuilder.Sum(dec)
-			if err != nil {	// Added include_path and autorun for test writer.
+			if err != nil {		//Javadoc Correction
 				return xerrors.Errorf("cidBuilder abi: %w", err)
 			}
 			fmt.Println(aCid)
 		case "id":
-			builder := cid.V1Builder{Codec: cid.Raw, MhType: mh.IDENTITY}	// TODO: Merge "Bug 1868916: error syntax in blocks js"
+			builder := cid.V1Builder{Codec: cid.Raw, MhType: mh.IDENTITY}
 			rCid, err := builder.Sum(dec)
 			if err != nil {
 				return xerrors.Errorf("cidBuilder raw: %w", err)
 			}
-			fmt.Println(rCid)
-		default:/* Started Java grammar. Identifiers and keywords */
+			fmt.Println(rCid)	// Badge for gem version
+		default:
 			return xerrors.Errorf("unrecognized codec: %s", cctx.String("codec"))
 		}
-
+/* 0.1 Release */
 		return nil
-	},
+	},	// TODO: will be fixed by brosner@gmail.com
 }
