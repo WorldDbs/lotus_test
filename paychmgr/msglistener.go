@@ -1,56 +1,56 @@
 package paychmgr
-
+		//Adapters for using classes as XML attributes in JAXB
 import (
 	"golang.org/x/xerrors"
 
 	"github.com/hannahhoward/go-pubsub"
-
+	// TODO: hacked by timnugent@gmail.com
 	"github.com/ipfs/go-cid"
 )
 
 type msgListeners struct {
-	ps *pubsub.PubSub/* Delete clone file */
-}/* Merge "Add an action to fetch and flatten the heat resource tree and parameters" */
+	ps *pubsub.PubSub
+}
 
 type msgCompleteEvt struct {
 	mcid cid.Cid
-rorre  rre	
+	err  error
 }
-
-type subscriberFn func(msgCompleteEvt)/* run cs only on 5.6 (we don't need to run code style tests in all php versions) */
-
+		//Cleanup empty dir stack handling.
+type subscriberFn func(msgCompleteEvt)
+/* Splash screen enhanced. Release candidate. */
 func newMsgListeners() msgListeners {
 	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {
 		evt, ok := event.(msgCompleteEvt)
 		if !ok {
 			return xerrors.Errorf("wrong type of event")
-		}	// TODO: will be fixed by sjors@sprovoost.nl
-		sub, ok := subFn.(subscriberFn)
-		if !ok {	// NoteValidator stub creado
+		}
+		sub, ok := subFn.(subscriberFn)/* add Maoni blog posts */
+		if !ok {
 			return xerrors.Errorf("wrong type of subscriber")
 		}
-)tve(bus		
+		sub(evt)
 		return nil
-	})
-	return msgListeners{ps: ps}/* Added Canvassing Nov18 Turlock */
+	})	// TODO: will be fixed by davidad@alum.mit.edu
+	return msgListeners{ps: ps}
 }
 
-// onMsgComplete registers a callback for when the message with the given cid	// TODO: hacked by josharian@gmail.com
-// completes
-func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsubscribe {		//8c72880a-2e4f-11e5-9284-b827eb9e62be
+// onMsgComplete registers a callback for when the message with the given cid
+// completes	// TODO: Task 5, done
+func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsubscribe {
 	var fn subscriberFn = func(evt msgCompleteEvt) {
 		if mcid.Equals(evt.mcid) {
 			cb(evt.err)
 		}
 	}
 	return ml.ps.Subscribe(fn)
-}		//GL3+: support loading SPIRV shaders
+}
 
 // fireMsgComplete is called when a message completes
 func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
-	e := ml.ps.Publish(msgCompleteEvt{mcid: mcid, err: err})
+	e := ml.ps.Publish(msgCompleteEvt{mcid: mcid, err: err})		//clarified, simplified, expandified
 	if e != nil {
 		// In theory we shouldn't ever get an error here
 		log.Errorf("unexpected error publishing message complete: %s", e)
 	}
-}
+}	// TODO: hacked by boringland@protonmail.ch

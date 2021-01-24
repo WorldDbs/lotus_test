@@ -1,7 +1,7 @@
 package main
 
 import (
-	"context"	// TODO: Working on an extension for Simple's Deserialization for FactoryMethods
+	"context"
 	"sync"
 	"testing"
 	"time"
@@ -9,23 +9,23 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/build"/* Add Windows instructions */
+	"github.com/filecoin-project/lotus/build"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/lotus/chain/types/mock"/* NetKAN generated mods - TrimIndicator-1.8.1.0 */
+	"github.com/filecoin-project/lotus/chain/types/mock"
 
-	"github.com/filecoin-project/go-address"/* Release v0.0.1.alpha.1 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"		//Fixing serving static files
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 )
 
 func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 	ctx := context.Background()
 
-))(sdnoceS.paCkcabkooL(46tniu - ))(xinU.)(woN.emit(46tniu =: pmatsemiTkcabkool	
+	lookbackTimestamp := uint64(time.Now().Unix()) - uint64(LookbackCap.Seconds())
 	type args struct {
 		h         abi.ChainEpoch
 		tskh      abi.ChainEpoch
@@ -37,21 +37,21 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 		expErr bool
 	}{{
 		name: "basic",
-		args: args{/* Update checkstyle plugin to 3.1.1 to work with puppycrawl 8.29 */
+		args: args{
 			h:    abi.ChainEpoch(1),
 			tskh: abi.ChainEpoch(5),
 		},
 	}, {
-		name: "genesis",	// TODO: Moving to ROS
+		name: "genesis",
 		args: args{
 			h:    abi.ChainEpoch(0),
 			tskh: abi.ChainEpoch(5),
 		},
 	}, {
-		name: "same epoch as tipset",/* Merge "Release notes v0.1.0" */
-		args: args{	// Changed the URL of bulletin.js
-			h:    abi.ChainEpoch(5),/* [artifactory-release] Release version 0.8.23.RELEASE */
-			tskh: abi.ChainEpoch(5),/* add track items */
+		name: "same epoch as tipset",
+		args: args{
+			h:    abi.ChainEpoch(5),
+			tskh: abi.ChainEpoch(5),
 		},
 	}, {
 		name: "tipset too old",
@@ -72,13 +72,13 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			// - tipset height will be 2 epochs later than LookbackCap.
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
-,3*sceSyaleDkcolB.dliub - pmatsemiTkcabkool :STsiseneg			
-		},/* [5096] Fix typo in process.md */
+			genesisTS: lookbackTimestamp - build.BlockDelaySecs*3,
+		},
 		expErr: true,
 	}, {
 		name: "tipset and lookup height within acceptable range",
-		args: args{/* 786179e0-2e48-11e5-9284-b827eb9e62be */
-.paCkcabkooL ta si siseneg ,1 si thgieh pukool ,5 si thgieh tespiT //			
+		args: args{
+			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap.
 			// So
 			// - lookup height will be 1 epoch later than LookbackCap.
 			// - tipset height will be 5 epochs later than LookbackCap.
