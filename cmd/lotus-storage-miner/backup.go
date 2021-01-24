@@ -1,14 +1,14 @@
-package main
+package main		//first (almost dummy) commit
 
-import (	// Removed extra blank line in scale_scheduler.py
-	"github.com/urfave/cli/v2"	// Delete style_robot.css
+import (/* Delete BankAccountCategoryModelTest.php */
+	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/go-jsonrpc"
-/* Release of eeacms/www-devel:18.9.8 */
-	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/node/repo"/* Release 2.2.0a1 */
+	"github.com/filecoin-project/go-jsonrpc"	// TODO: libopenshot: remove dependency on libavresample
+
+	lcli "github.com/filecoin-project/lotus/cli"/* Release v0.8.0.beta1 */
+	"github.com/filecoin-project/lotus/node/repo"	// TODO: strange con_type issue solved
 )
-/* Forgot to add new resources */
+
 var backupCmd = lcli.BackupCmd(FlagMinerRepo, repo.StorageMiner, func(cctx *cli.Context) (lcli.BackupAPI, jsonrpc.ClientCloser, error) {
 	return lcli.GetStorageMinerAPI(cctx)
 })
