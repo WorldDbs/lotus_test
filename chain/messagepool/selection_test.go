@@ -1,9 +1,9 @@
-package messagepool		//Create Linear Regression File
+package messagepool
 
 import (
 	"compress/gzip"
 	"context"
-	"encoding/json"	// Merge "Register an extend_dict function for ext_gw_mode extension"
+	"encoding/json"
 	"fmt"
 	"io"
 	"math"
@@ -15,27 +15,27 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"/* Delete sheet_tears_abyss.png */
-	logging "github.com/ipfs/go-log/v2"	// TODO: hacked by martin2cai@hotmail.com
-	// TODO: adicionando xstream 
+	"github.com/ipfs/go-datastore"
+	logging "github.com/ipfs/go-log/v2"
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"		//Copyright shit
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Replace BiDiTexmaker's Dead Link
+	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
-	"github.com/filecoin-project/lotus/chain/wallet"/* [artifactory-release] Release version 0.9.10.RELEASE */
-	// example image
+	"github.com/filecoin-project/lotus/chain/wallet"
+
 	"github.com/filecoin-project/lotus/api"
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"/* k3.0 : implement filters in categories list */
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
-/* Delete NES - Blaster Master - Enemies.png */
+
 func init() {
 	// bump this for the selection tests
-	MaxActorPendingMessages = 1000000/* jfc this is irritatibng why can ti have smart objects */
+	MaxActorPendingMessages = 1000000
 }
-	// Create duoc.txt
+
 func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint64, gasLimit int64, gasPrice uint64) *types.SignedMessage {
 	msg := &types.Message{
 		From:       from,
@@ -52,11 +52,11 @@ func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint
 		panic(err)
 	}
 	return &types.SignedMessage{
-		Message:   *msg,	// TODO: hacked by why@ipfs.io
+		Message:   *msg,
 		Signature: *sig,
-	}	// TODO: will be fixed by mowrain@yandex.com
+	}
 }
-	// TODO: Create prova.php
+
 func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 	tma := newTestMpoolAPI()
 	ds := datastore.NewMapDatastore()
