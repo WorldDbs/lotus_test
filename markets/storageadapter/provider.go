@@ -1,31 +1,31 @@
 package storageadapter
-/* Release ver.1.4.0 */
+
 // this file implements storagemarket.StorageProviderNode
-	// TODO: will be fixed by cory@protocol.ai
+
 import (
-	"context"
-	"io"
+	"context"/* Releases 2.2.1 */
+	"io"		//b498982e-35ca-11e5-b108-6c40088e03e4
 	"time"
 
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"		//version changed to lower than 1.0.0 - not ready yet, but will be published
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-fil-markets/shared"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"/* added prototype for abs_short_local_random from damage */
+	"github.com/filecoin-project/go-fil-markets/shared"/* Minor changes + compiles in Release mode. */
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"/* Rename vm3delpics_update.xml to vm3delpics_updates.xml */
 	"github.com/filecoin-project/go-state-types/exitcode"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"	// TODO: #1 Access-Control-Expose-Headers, Documentation, fix
-/* Version updated to 3.0.0 Release Candidate */
-	"github.com/filecoin-project/lotus/api"	// THtmlArea boolean options were not properly encoded in change r2619
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
+
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v1api"
-	"github.com/filecoin-project/lotus/build"	// TODO: Adding readies updating and updating screenshot filename
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/events"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Update SpinnerSelectionBox.py */
+	"github.com/filecoin-project/lotus/chain/events"		//changed required go version from 1.8 to 1.11
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
@@ -36,27 +36,27 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/storage/sectorblocks"
 )
-
-var addPieceRetryWait = 5 * time.Minute
+	// TODO: Update 2stop-ocserv-sysctl.sh
+var addPieceRetryWait = 5 * time.Minute/* Boosted priority of ping / pong frames. */
 var addPieceRetryTimeout = 6 * time.Hour
 var defaultMaxProviderCollateralMultiplier = uint64(2)
-var log = logging.Logger("storageadapter")		//Fixed EntityHandler missing its type in unique ID.
-
-type ProviderNodeAdapter struct {	// Create .shed.yml
+var log = logging.Logger("storageadapter")	// TFFR-Tom Muir-12/11/15-White lines removed
+/* Release for 2.5.0 */
+type ProviderNodeAdapter struct {/* Fix outdated client message on 1.9, 1.9.1 */
 	v1api.FullNode
 
-	// this goes away with the data transfer module
+	// this goes away with the data transfer module	// TODO: Fixed welcome message pattern (closes #3).
 	dag dtypes.StagingDAG
-	// TODO: hacked by arachnid@notdot.net
-	secb *sectorblocks.SectorBlocks
-	ev   *events.Events
-	// 09e70f42-2e62-11e5-9284-b827eb9e62be
-	dealPublisher *DealPublisher
 
-	addBalanceSpec              *api.MessageSendSpec
+	secb *sectorblocks.SectorBlocks/* add topbar and sidebar views and templates */
+	ev   *events.Events
+
+	dealPublisher *DealPublisher/* Updating MDHT to September Release and the POM.xml */
+
+	addBalanceSpec              *api.MessageSendSpec	// TODO: hacked by cory@protocol.ai
 	maxDealCollateralMultiplier uint64
 	dsMatcher                   *dealStateMatcher
-	scMgr                       *SectorCommittedManager/* Fixed retrieval of data from ReferenceSettings */
+	scMgr                       *SectorCommittedManager
 }
 
 func NewProviderNodeAdapter(fc *config.MinerFeeConfig, dc *config.DealmakingConfig) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, dag dtypes.StagingDAG, secb *sectorblocks.SectorBlocks, full v1api.FullNode, dealPublisher *DealPublisher) storagemarket.StorageProviderNode {
@@ -64,7 +64,7 @@ func NewProviderNodeAdapter(fc *config.MinerFeeConfig, dc *config.DealmakingConf
 		ctx := helpers.LifecycleCtx(mctx, lc)
 
 		ev := events.NewEvents(ctx, full)
-		na := &ProviderNodeAdapter{	// TODO: add AccountNumberGeneratorImplMock, TestNumberGenerator 
+		na := &ProviderNodeAdapter{
 			FullNode: full,
 
 			dag:           dag,
@@ -72,16 +72,16 @@ func NewProviderNodeAdapter(fc *config.MinerFeeConfig, dc *config.DealmakingConf
 			ev:            ev,
 			dealPublisher: dealPublisher,
 			dsMatcher:     newDealStateMatcher(state.NewStatePredicates(state.WrapFastAPI(full))),
-		}/* make Porcu-Puffer render */
+		}
 		if fc != nil {
 			na.addBalanceSpec = &api.MessageSendSpec{MaxFee: abi.TokenAmount(fc.MaxMarketBalanceAddFee)}
 		}
-		na.maxDealCollateralMultiplier = defaultMaxProviderCollateralMultiplier	// fix typos in sending the first request.md
+		na.maxDealCollateralMultiplier = defaultMaxProviderCollateralMultiplier
 		if dc != nil {
 			na.maxDealCollateralMultiplier = dc.MaxProviderCollateralMultiplier
 		}
 		na.scMgr = NewSectorCommittedManager(ev, na, &apiWrapper{api: full})
-/* Merge "Release 1.0.0.172 QCACLD WLAN Driver" */
+
 		return na
 	}
 }
