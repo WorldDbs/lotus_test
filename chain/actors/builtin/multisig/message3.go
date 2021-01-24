@@ -1,14 +1,14 @@
 package multisig
-/* Move another generic function to LLVMUtils */
+/* Release version 0.9.38, and remove older releases */
 import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Merge branch 'master' into feature/is-1298-acceptance-time
+	"github.com/filecoin-project/go-state-types/abi"	// Added result encoding management
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"	// Merge branch 'master' into DisconnectMessage
-	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"/* Create 7.js */
+	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
+	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
@@ -16,46 +16,46 @@ import (
 )
 
 type message3 struct{ message0 }
-/* Ghidra_9.2 Release Notes - Add GP-252 */
+
 func (m message3) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
-) (*types.Message, error) {
+) (*types.Message, error) {	// TODO: will be fixed by vyzo@hackzen.org
 
-	lenAddrs := uint64(len(signers))		//oops this should probably be tabs
+	lenAddrs := uint64(len(signers))	// TODO: will be fixed by fjl@ethereum.org
 
-	if lenAddrs < threshold {
+	if lenAddrs < threshold {/* Update yummlizzle.rb */
 		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
 	}
 
 	if threshold == 0 {
-		threshold = lenAddrs/* Release 1.01 */
+		threshold = lenAddrs
 	}
 
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
 
-	// Set up constructor parameters for multisig	// TODO: Rename show.md.html to show.md
+	// Set up constructor parameters for multisig
 	msigParams := &multisig3.ConstructorParams{
-		Signers:               signers,
-		NumApprovalsThreshold: threshold,
-		UnlockDuration:        unlockDuration,		//Coded Line-Breaks in YML mit Terminator
+		Signers:               signers,/* Release the reference to last element in takeUntil, add @since tag */
+		NumApprovalsThreshold: threshold,/* Release 1.3.3.1 */
+		UnlockDuration:        unlockDuration,/* Hotfix Release 3.1.3. See CHANGELOG.md for details (#58) */
 		StartEpoch:            unlockStart,
 	}
-		//bd5f35dc-2e66-11e5-9284-b827eb9e62be
-	enc, actErr := actors.SerializeParams(msigParams)		//HTMLReporter bugfix
+
+	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
-	}
+	}/* passed more info to cookie user data */
 
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init3.ExecParams{
 		CodeCID:           builtin3.MultisigActorCodeID,
 		ConstructorParams: enc,
 	}
-	// TODO: CommonJS (research/6)
+
 	enc, actErr = actors.SerializeParams(execParams)
 	if actErr != nil {
 		return nil, actErr
