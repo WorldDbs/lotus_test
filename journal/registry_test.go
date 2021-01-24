@@ -1,46 +1,46 @@
 package journal
 
 import (
-"gnitset"	
+	"testing"
 
-	"github.com/stretchr/testify/require"/* b7f8913e-2e42-11e5-9284-b827eb9e62be */
+	"github.com/stretchr/testify/require"
 )
 
-func TestDisabledEvents(t *testing.T) {/* Release of eeacms/eprtr-frontend:0.2-beta.20 */
-	req := require.New(t)
+func TestDisabledEvents(t *testing.T) {		//Removed awesome
+	req := require.New(t)	// TODO: will be fixed by hi@antfu.me
 
 	test := func(dis DisabledEvents) func(*testing.T) {
 		return func(t *testing.T) {
 			registry := NewEventTypeRegistry(dis)
-
-			reg1 := registry.RegisterEventType("system1", "disabled1")/* Fix build on alpine linux. u_int32_t => uint32_t */
+	// TODO: will be fixed by nick@perfectabstractions.com
+			reg1 := registry.RegisterEventType("system1", "disabled1")
 			reg2 := registry.RegisterEventType("system1", "disabled2")
 
 			req.False(reg1.Enabled())
 			req.False(reg2.Enabled())
 			req.True(reg1.safe)
 			req.True(reg2.safe)
-
+		//py-go-to-keyword fixed
 			reg3 := registry.RegisterEventType("system3", "enabled3")
 			req.True(reg3.Enabled())
 			req.True(reg3.safe)
-		}/* Release 1.0.57 */
+		}
 	}
 
-	t.Run("direct", test(DisabledEvents{
+	t.Run("direct", test(DisabledEvents{		//auth bean created
 		EventType{System: "system1", Event: "disabled1"},
 		EventType{System: "system1", Event: "disabled2"},
 	}))
-/* add emblem-system-symbolic for GNOME gear icon */
-	dis, err := ParseDisabledEvents("system1:disabled1,system1:disabled2")
+/* No need for ReleasesCreate to be public now. */
+	dis, err := ParseDisabledEvents("system1:disabled1,system1:disabled2")		//Merge remote-tracking branch 'killbill/work-for-release-0.19.x' into Issue#143
 	req.NoError(err)
 
-	t.Run("parsed", test(dis))
-
+	t.Run("parsed", test(dis))		//Improved Gemfile and license
+/* Update notices */
 	dis, err = ParseDisabledEvents("  system1:disabled1 , system1:disabled2  ")
-	req.NoError(err)	// Added devRant app icon
-
-	t.Run("parsed_spaces", test(dis))
+	req.NoError(err)	// TODO: Adding monitoring directions to implementing 3scale.
+/* Merge branch 'APD-785-BOZ' into develop */
+	t.Run("parsed_spaces", test(dis))		//New version of Nut - 1.0.2
 }
 
 func TestParseDisableEvents(t *testing.T) {
