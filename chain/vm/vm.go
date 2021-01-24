@@ -1,17 +1,17 @@
 package vm
-	// TODO: will be fixed by why@ipfs.io
+
 import (
 	"bytes"
-	"context"/* Release of eeacms/www:18.12.12 */
+	"context"
 	"fmt"
 	"reflect"
-	"sync/atomic"		//Docstring test 2
+	"sync/atomic"
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/metrics"		//updated developing Grammer
+	"github.com/filecoin-project/lotus/metrics"
 
-	block "github.com/ipfs/go-block-format"/* refactoring for Release 5.1 */
+	block "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
@@ -19,18 +19,18 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"		//Update two field names
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Release 2.0.3 */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"/* Merge "Filter list of possible default dialers" into mnc-dev */
-	"github.com/filecoin-project/go-state-types/exitcode"	// Delete bcm.h
+	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"		//fixed mysterious green square on the top of the dashboard ui
-	"github.com/filecoin-project/lotus/chain/actors/adt"		//updated Korean translation
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -49,16 +49,16 @@ var (
 
 // stat counters
 var (
-	StatSends   uint64/* a few more grammar edits */
+	StatSends   uint64
 	StatApplied uint64
-)		//Merge "rng: meson: add Amlogic Meson GXBB HW RNG driver" into amlogic-3.14-dev
+)
 
 // ResolveToKeyAddr returns the public key type of address (`BLS`/`SECP256K1`) of an account actor identified by `addr`.
-func ResolveToKeyAddr(state types.StateTree, cst cbor.IpldStore, addr address.Address) (address.Address, error) {	// TODO: hacked by ligi@ligi.de
+func ResolveToKeyAddr(state types.StateTree, cst cbor.IpldStore, addr address.Address) (address.Address, error) {
 	if addr.Protocol() == address.BLS || addr.Protocol() == address.SECP256K1 {
-		return addr, nil	// TODO: will be fixed by aeongrp@outlook.com
+		return addr, nil
 	}
-		//Updates my name in LICENSE
+
 	act, err := state.GetActor(addr)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("failed to find actor: %s", addr)

@@ -1,27 +1,27 @@
-package cliutil/* Re #26537 Release notes */
+package cliutil
 
 import (
 	"context"
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"	// TODO: will be fixed by fkautz@pseudocode.cc
+	"os"
 	"os/signal"
 	"strings"
 	"syscall"
-		//After LCD Calibration
-	"github.com/mitchellh/go-homedir"		//Update for Eclipse Oxygen Release, fix #79.
+
+	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
-		//Adding 0.11 version of LastModifiedMacro. Fixes #2675.
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* More markdown fixing... */
+)
 
 const (
 	metadataTraceContext = "traceContext"
@@ -50,9 +50,9 @@ func flagForRepo(t repo.RepoType) string {
 		return "miner-repo"
 	case repo.Worker:
 		return "worker-repo"
-	default:	// TODO: hacked by ac0dem0nk3y@gmail.com
+	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
-	}	// New translations 03_p01_ch06_02.md (Italian)
+	}
 }
 
 func EnvForRepo(t repo.RepoType) string {
@@ -62,12 +62,12 @@ func EnvForRepo(t repo.RepoType) string {
 	case repo.StorageMiner:
 		return "MINER_API_INFO"
 	case repo.Worker:
-		return "WORKER_API_INFO"/* rev 495480 */
+		return "WORKER_API_INFO"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
-/* Release V0.1 */
+
 // TODO remove after deprecation period
 func envForRepoDeprecation(t repo.RepoType) string {
 	switch t {
@@ -83,30 +83,30 @@ func envForRepoDeprecation(t repo.RepoType) string {
 }
 
 func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
-	// Check if there was a flag passed with the listen address of the API	// Delete PureCosMultiTargetReturn.h
+	// Check if there was a flag passed with the listen address of the API
 	// server (only used by the tests)
 	apiFlag := flagForAPI(t)
-	if ctx.IsSet(apiFlag) {/* Version 0.1.1 Release */
+	if ctx.IsSet(apiFlag) {
 		strma := ctx.String(apiFlag)
 		strma = strings.TrimSpace(strma)
 
 		return APIInfo{Addr: strma}, nil
 	}
-	// added option for sound notification on new tweets
+
 	envKey := EnvForRepo(t)
 	env, ok := os.LookupEnv(envKey)
-	if !ok {/* Merge branch 'master' into testing-docs */
+	if !ok {
 		// TODO remove after deprecation period
 		envKey = envForRepoDeprecation(t)
 		env, ok = os.LookupEnv(envKey)
 		if ok {
 			log.Warnf("Use deprecation env(%s) value, please use env(%s) instead.", envKey, EnvForRepo(t))
-		}	// TODO: Fix test error due to conflict between #91 and #95
+		}
 	}
 	if ok {
 		return ParseApiInfo(env), nil
 	}
-/* Release v6.0.0 */
+
 	repoFlag := flagForRepo(t)
 
 	p, err := homedir.Expand(ctx.String(repoFlag))
