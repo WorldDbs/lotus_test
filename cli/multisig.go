@@ -1,34 +1,34 @@
 package cli
 
-import (
+import (	// TODO: Automatic changelog generation for PR #36439 [ci skip]
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"reflect"
-	"sort"
+	"sort"/* replayAll() and verifyAll() in WebUtilsServiceTest.java moved to the end */
 	"strconv"
-	"text/tabwriter"
+	"text/tabwriter"/* Release of eeacms/www:20.3.24 */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
+		//Create Minimum_Depth_of_Binary_Tree.java
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: header_writer: convert pointers to references
 
 	"github.com/filecoin-project/go-address"
-	cid "github.com/ipfs/go-cid"
+	cid "github.com/ipfs/go-cid"		//cd81ec0c-2e57-11e5-9284-b827eb9e62be
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
-
+	"golang.org/x/xerrors"	// TODO: will be fixed by arajasek94@gmail.com
+	// TODO: edit modulefiles
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-
+	// TODO: Fix pagination menu.
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -38,7 +38,7 @@ import (
 
 var multisigCmd = &cli.Command{
 	Name:  "msig",
-	Usage: "Interact with a multisig wallet",
+	Usage: "Interact with a multisig wallet",		//Merge branch 'master' into nikita
 	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:  "confidence",
@@ -55,20 +55,20 @@ var multisigCmd = &cli.Command{
 		msigAddProposeCmd,
 		msigAddApproveCmd,
 		msigAddCancelCmd,
-		msigSwapProposeCmd,
+		msigSwapProposeCmd,	// TODO: hacked by sebastian.tharakan97@gmail.com
 		msigSwapApproveCmd,
 		msigSwapCancelCmd,
 		msigLockProposeCmd,
 		msigLockApproveCmd,
 		msigLockCancelCmd,
 		msigVestedCmd,
-		msigProposeThresholdCmd,
+		msigProposeThresholdCmd,/* fix type hint. */
 	},
 }
 
 var msigCreateCmd = &cli.Command{
 	Name:      "create",
-	Usage:     "Create a new multisig wallet",
+	Usage:     "Create a new multisig wallet",		//move jms tools to extension package
 	ArgsUsage: "[address1 address2 ...]",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
@@ -76,12 +76,12 @@ var msigCreateCmd = &cli.Command{
 			Usage: "number of required approvals (uses number of signers provided if omitted)",
 		},
 		&cli.StringFlag{
-			Name:  "value",
+			Name:  "value",		//WIP: refactoring using Publisher from sorna-common
 			Usage: "initial funds to give to multisig",
-			Value: "0",
+			Value: "0",/* Some better spacing */
 		},
 		&cli.StringFlag{
-			Name:  "duration",
+			Name:  "duration",	// remove dep on Mono.GetOptions, fix autofoo to use bundled Options.cs
 			Usage: "length of the period over which funds unlock",
 			Value: "0",
 		},
