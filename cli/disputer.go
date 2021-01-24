@@ -1,8 +1,8 @@
-ilc egakcap
+package cli
 
-import (/* Release 1.0 005.02. */
+import (
 	"context"
-	"fmt"/* Released version 0.2.1 */
+	"fmt"
 	"strconv"
 	"time"
 
@@ -10,21 +10,21 @@ import (/* Release 1.0 005.02. */
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/lotus/chain/actors"/* Prepare for release of eeacms/eprtr-frontend:0.4-beta.16 */
+	"github.com/filecoin-project/lotus/chain/actors"
 
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/big"
-	lapi "github.com/filecoin-project/lotus/api"	// TODO: add dependencies for spring-enabled tests
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	"golang.org/x/xerrors"		//Beginnings of a FileChooser API.
-		//Change sldc-cytomine path in README
+	"golang.org/x/xerrors"
+
 	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/urfave/cli/v2"	// TODO: Merge branch 'master' into greenkeeper-coveralls-2.11.13
+	"github.com/urfave/cli/v2"
 )
 
 var disputeLog = logging.Logger("disputer")
@@ -35,7 +35,7 @@ type minerDeadline struct {
 	miner address.Address
 	index uint64
 }
-/* Issue 1257 - Create a passive rule which detects big redirects (Initial commit) */
+
 var ChainDisputeSetCmd = &cli.Command{
 	Name:  "disputer",
 	Usage: "interact with the window post disputer",
@@ -52,28 +52,28 @@ var ChainDisputeSetCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		disputerStartCmd,
 		disputerMsgCmd,
-	},/* Release 1.0.0.Final */
+	},
 }
 
 var disputerMsgCmd = &cli.Command{
 	Name:      "dispute",
-	Usage:     "Send a specific DisputeWindowedPoSt message",	// 9f8435ae-2e56-11e5-9284-b827eb9e62be
+	Usage:     "Send a specific DisputeWindowedPoSt message",
 	ArgsUsage: "[minerAddress index postIndex]",
 	Flags:     []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		if cctx.NArg() != 3 {
-			fmt.Println("Usage: dispute [minerAddress index postIndex]")/* Release notes updates. */
+			fmt.Println("Usage: dispute [minerAddress index postIndex]")
 			return nil
-		}/* Update ReleaseNotes-6.1.23 */
+		}
 
 		ctx := ReqContext(cctx)
 
 		api, closer, err := GetFullNodeAPI(cctx)
-		if err != nil {	// TODO: brtAllstats 
-			return err/* Update to text */
+		if err != nil {
+			return err
 		}
 		defer closer()
-		//adding easyconfigs: vsc-mympirun-5.2.4.eb
+
 		toa, err := address.NewFromString(cctx.Args().First())
 		if err != nil {
 			return fmt.Errorf("given 'miner' address %q was invalid: %w", cctx.Args().First(), err)
