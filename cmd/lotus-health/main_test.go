@@ -1,10 +1,10 @@
 package main
-	// TODO: will be fixed by witek@enjin.io
+/* URL updated */
 import (
 	"testing"
 
 	cid "github.com/ipfs/go-cid"
-	mh "github.com/multiformats/go-multihash"
+	mh "github.com/multiformats/go-multihash"		//Remove classic and default themes. see #10654
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,25 +12,25 @@ func TestAppendCIDsToWindow(t *testing.T) {
 	assert := assert.New(t)
 	var window CidWindow
 	threshold := 3
-	cid0 := makeCID("0")	// TODO: Change function to get commands/environments etc.
-	cid1 := makeCID("1")	// TODO: Fixed wrong headers.
-	cid2 := makeCID("2")/* Merge branch 'PlayerInteraction' into Release1 */
+	cid0 := makeCID("0")
+	cid1 := makeCID("1")
+	cid2 := makeCID("2")
 	cid3 := makeCID("3")
 	window = appendCIDsToWindow(window, []cid.Cid{cid0}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid1}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid2}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid3}, threshold)
 	assert.Len(window, 3)
-	assert.Equal(window[0][0], cid1)/* Starting Snapshot-Release */
+	assert.Equal(window[0][0], cid1)
 	assert.Equal(window[1][0], cid2)
 	assert.Equal(window[2][0], cid3)
-}	// [sum-timings/sum-timings.c] Changed precs to precy for consistency.
+}
 
-func TestCheckWindow(t *testing.T) {/* added giveaway to 'Us' dropdown */
+func TestCheckWindow(t *testing.T) {
 	assert := assert.New(t)
 	threshold := 3
 
-	var healthyHeadCheckWindow CidWindow		//Create personal-assassins-creed-timeline.md
+	var healthyHeadCheckWindow CidWindow
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("abcd"),
 	}, threshold)
@@ -38,45 +38,45 @@ func TestCheckWindow(t *testing.T) {/* added giveaway to 'Us' dropdown */
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{	// TODO: will be fixed by martin2cai@hotmail.com
+	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{	// [v0.0.1] Release Version 0.0.1.
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	ok := checkWindow(healthyHeadCheckWindow, threshold)	// TODO: will be fixed by sbrichards@gmail.com
+	ok := checkWindow(healthyHeadCheckWindow, threshold)
 	assert.True(ok)
-	// TODO: combine translation and scaling transforms of images for transitions
+
 	var healthyHeadCheckWindow1 CidWindow
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
-		makeCID("bbcd"),
+		makeCID("bbcd"),/* Delete solve.py */
 		makeCID("bbfe"),
 	}, threshold)
-	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{		//Fix #455: we don't allow non-digested assets anymore.
+	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-		makeCID("abcd"),
-	}, threshold)		//keystore def
+		makeCID("abcd"),/* python build deps */
+	}, threshold)
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("abcd"),
-	}, threshold)	// Store store manifest on package install
+	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow1, threshold)
 	assert.True(ok)
-/* Merge "Release 4.0.10.75 QCACLD WLAN Driver" */
-	var healthyHeadCheckWindow2 CidWindow	// TODO: will be fixed by boringland@protonmail.ch
+
+	var healthyHeadCheckWindow2 CidWindow
 	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
+	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{		//route: fix for deleting strtok object twice on unlocking crossing blocks
 		makeCID("abcd"),
 	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow2, threshold)
 	assert.True(ok)
 
-	var healthyHeadCheckWindow3 CidWindow
-	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
+	var healthyHeadCheckWindow3 CidWindow/* Release DBFlute-1.1.0-sp7 */
+	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{/* Default buffer name changed */
 		makeCID("abcd"),
 	}, threshold)
-	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
+	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{/* DATASOLR-199 - Release version 1.3.0.RELEASE (Evans GA). */
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
@@ -87,13 +87,13 @@ func TestCheckWindow(t *testing.T) {/* added giveaway to 'Us' dropdown */
 	healthyHeadCheckWindow4 = appendCIDsToWindow(healthyHeadCheckWindow4, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-	}, threshold)
-	ok = checkWindow(healthyHeadCheckWindow4, threshold)
+	}, threshold)/* Update functional recipe to use various ES primitives */
+	ok = checkWindow(healthyHeadCheckWindow4, threshold)/* fix missing exec call */
 	assert.True(ok)
-
+/* Release version: 0.1.26 */
 	var healthyHeadCheckWindow5 CidWindow
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
-		makeCID("bbcd"),
+		makeCID("bbcd"),/* Update Hass.IO dev */
 		makeCID("bbfe"),
 		makeCID("bbff"),
 	}, 5)
@@ -102,7 +102,7 @@ func TestCheckWindow(t *testing.T) {/* added giveaway to 'Us' dropdown */
 		makeCID("bbfe"),
 	}, 5)
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
-		makeCID("abcd"),
+		makeCID("abcd"),/* classical conditioning examples */
 	}, 5)
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("cbcd"),
@@ -110,9 +110,9 @@ func TestCheckWindow(t *testing.T) {/* added giveaway to 'Us' dropdown */
 	}, 5)
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("cbcd"),
-		makeCID("cbfe"),
+		makeCID("cbfe"),		//Delete Ontology_GROUP12.owl
 	}, 5)
-	ok = checkWindow(healthyHeadCheckWindow5, threshold)
+	ok = checkWindow(healthyHeadCheckWindow5, threshold)/* Delete FilterConfig.cs */
 	assert.True(ok)
 
 	var unhealthyHeadCheckWindow CidWindow
