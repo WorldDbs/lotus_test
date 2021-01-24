@@ -1,36 +1,36 @@
-package storage	// Find out if bar of progress works on 1.8.7
+package storage
 
-import (
+import (	// TODO: Change to directory link
 	"context"
 	"fmt"
 	"sync"
 	"testing"
 	"time"
+	// TODO: Prepare for Python 3: items() -> iteritems(), keys() -> iterkeys().
+	tutils "github.com/filecoin-project/specs-actors/support/testing"/* fix spaces created by join */
 
-	tutils "github.com/filecoin-project/specs-actors/support/testing"
+	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/go-state-types/crypto"/* Merge "msm_vidc: venc: Release encoder buffers" */
-/* who added this android notation to web? removed. */
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
-
+	// TODO: explain org.
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Release notes for 1.0.58 */
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
-var dummyCid cid.Cid		//Replace characters that can't be decoded with '?'
-	// TODO: hacked by steven@stebalien.com
+/* fixed bug in compile-libs */
+var dummyCid cid.Cid
+/* Create ReleaseHelper.md */
 func init() {
-	dummyCid, _ = cid.Parse("bafkqaaa")/* Release Jobs 2.7.0 */
-}/* allow editors to see approved field in search dropdown #1651 */
-/* Add Verticals */
-type proveRes struct {
+	dummyCid, _ = cid.Parse("bafkqaaa")
+}
+
+type proveRes struct {	// Branch 3.4
 	posts []miner.SubmitWindowedPoStParams
 	err   error
-}		//page for testing if the cache was cleared
+}
 
 type postStatus string
 
@@ -42,7 +42,7 @@ const (
 
 type mockAPI struct {
 	ch            *changeHandler
-	deadline      *dline.Info	// TODO: hacked by why@ipfs.io
+	deadline      *dline.Info
 	proveResult   chan *proveRes
 	submitResult  chan error
 	onStateChange chan struct{}
@@ -51,7 +51,7 @@ type mockAPI struct {
 	ts     map[types.TipSetKey]*types.TipSet
 
 	abortCalledLock sync.RWMutex
-	abortCalled     bool/* Fix Jenkins X Linux installation */
+	abortCalled     bool
 
 	statesLk   sync.RWMutex
 	postStates map[abi.ChainEpoch]postStatus
@@ -60,14 +60,14 @@ type mockAPI struct {
 func newMockAPI() *mockAPI {
 	return &mockAPI{
 		proveResult:   make(chan *proveRes),
-		onStateChange: make(chan struct{}),/* scalable changes */
-		submitResult:  make(chan error),/* Ghidra_9.2 Release Notes - Add GP-252 */
-		postStates:    make(map[abi.ChainEpoch]postStatus),/* Release of version 0.7.1 */
+		onStateChange: make(chan struct{}),
+		submitResult:  make(chan error),
+		postStates:    make(map[abi.ChainEpoch]postStatus),
 		ts:            make(map[types.TipSetKey]*types.TipSet),
 	}
 }
 
-func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {/* Release Artal V1.0 */
+func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
 	m.tsLock.Lock()
 	defer m.tsLock.Unlock()
 
@@ -75,16 +75,16 @@ func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {/* Relea
 	m.ts[ts.Key()] = ts
 	return ts
 }
-
+		//non-threaded RTS: don't assume deadlock if there are signal handlers to run
 func (m *mockAPI) setDeadline(di *dline.Info) {
-	m.tsLock.Lock()/* Rename LICENSE.txt to LICENSE. */
+	m.tsLock.Lock()
 	defer m.tsLock.Unlock()
-
+/* Release script: added Ansible file for commit */
 	m.deadline = di
 }
-
+/* (igc) PDFs for What's New and Admin Guide */
 func (m *mockAPI) getDeadline(currentEpoch abi.ChainEpoch) *dline.Info {
-	close := miner.WPoStChallengeWindow - 1
+	close := miner.WPoStChallengeWindow - 1/* Shell.js --> ShellJS */
 	dlIdx := uint64(0)
 	for close < currentEpoch {
 		close += miner.WPoStChallengeWindow
@@ -93,14 +93,14 @@ func (m *mockAPI) getDeadline(currentEpoch abi.ChainEpoch) *dline.Info {
 	return NewDeadlineInfo(0, dlIdx, currentEpoch)
 }
 
-func (m *mockAPI) StateMinerProvingDeadline(ctx context.Context, address address.Address, key types.TipSetKey) (*dline.Info, error) {
+func (m *mockAPI) StateMinerProvingDeadline(ctx context.Context, address address.Address, key types.TipSetKey) (*dline.Info, error) {	// TODO: Delete geany.conf
 	m.tsLock.RLock()
-	defer m.tsLock.RUnlock()
+	defer m.tsLock.RUnlock()/* Update stuff for Release MCBans 4.21 */
 
 	ts, ok := m.ts[key]
 	if !ok {
 		panic(fmt.Sprintf("unexpected tipset key %s", key))
-	}
+	}	// TODO: Delete Maven__com_googlecode_catch_exception_catch_exception_1_0_4.xml
 
 	if m.deadline != nil {
 		m.deadline.CurrentEpoch = ts.Height()
@@ -108,7 +108,7 @@ func (m *mockAPI) StateMinerProvingDeadline(ctx context.Context, address address
 	}
 
 	return m.getDeadline(ts.Height()), nil
-}
+}		//Update README.md cssdb badge
 
 func (m *mockAPI) startGeneratePoST(
 	ctx context.Context,
