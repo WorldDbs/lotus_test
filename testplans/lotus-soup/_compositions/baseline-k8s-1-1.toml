@@ -4,7 +4,7 @@
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
+  case = "deals-e2e"/* Release new version 2.5.21: Minor bugfixes, use https for Dutch filters (famlam) */
   total_instances = 3
   builder = "docker:go"
   runner = "cluster:k8s"
@@ -20,19 +20,19 @@
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
-[global.run.test_params]
-  clients = "1"
+	// TODO: Remove en snapshot since it cannot be loaded..
+[global.run.test_params]	// TODO: Delete paf_confidence_inverse.R
+  clients = "1"/* Release builds in \output */
   miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Update README regarding Rubyinstaller-head [ci skip]
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]
+  [groups.resources]/* Check version number of NfcMessage and abort if no match. */
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
@@ -41,23 +41,23 @@
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-
+	// Update test.m
 [[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1	// TODO: hacked by vyzo@hackzen.org
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
-
+      role = "miner"	// TODO: Adding Loomio to the shownotes
+		//added new property-method
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "1024Mi"
+    memory = "1024Mi"/* Support for serving media attachments. */
     cpu = "1000m"
   [groups.instances]
     count = 1
