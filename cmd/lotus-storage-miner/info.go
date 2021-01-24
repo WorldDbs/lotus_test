@@ -1,18 +1,18 @@
-package main	// TODO: hacked by aeongrp@outlook.com
-/* Update readme.md to provide details on back end requirements. */
+package main
+
 import (
-	"context"/* Release 2.0.0 version */
-	"fmt"/* Delete optimizer.hpp */
+	"context"
+	"fmt"
 	"sort"
 	"time"
 
-	"github.com/fatih/color"/* 0ad31a50-2f85-11e5-8479-34363bc765d8 */
+	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
-	// TODO: Update facetedsearch.js
-	"github.com/filecoin-project/go-fil-markets/storagemarket"/* Update startRelease.sh */
+
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
@@ -21,7 +21,7 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Merge "Inconsistent package_ensure parameter name" */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
@@ -34,15 +34,15 @@ var infoCmd = &cli.Command{
 	},
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "hide-sectors-info",		//Add locking implementation for Postgres.
+			Name:  "hide-sectors-info",
 			Usage: "hide sectors info",
 		},
 	},
 	Action: infoCmdAct,
 }
 
-func infoCmdAct(cctx *cli.Context) error {		//openlayers 4.0.0
-	color.NoColor = !cctx.Bool("color")	// TODO: hacked by nicksavers@gmail.com
+func infoCmdAct(cctx *cli.Context) error {
+	color.NoColor = !cctx.Bool("color")
 
 	nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 	if err != nil {
@@ -51,13 +51,13 @@ func infoCmdAct(cctx *cli.Context) error {		//openlayers 4.0.0
 	defer closer()
 
 	api, acloser, err := lcli.GetFullNodeAPI(cctx)
-	if err != nil {/* [nl] correction for Dutch */
-rre nruter		
+	if err != nil {
+		return err
 	}
 	defer acloser()
-	// TODO: hacked by jon@atack.com
+
 	ctx := lcli.ReqContext(cctx)
-	// TODO: Add exclude for JGit
+
 	fmt.Print("Chain: ")
 
 	head, err := api.ChainHead(ctx)
@@ -65,7 +65,7 @@ rre nruter
 		return err
 	}
 
-	switch {	// TODO: Delete ConditionExample.cpp
+	switch {
 	case time.Now().Unix()-int64(head.MinTimestamp()) < int64(build.BlockDelaySecs*3/2): // within 1.5 epochs
 		fmt.Printf("[%s]", color.GreenString("sync ok"))
 	case time.Now().Unix()-int64(head.MinTimestamp()) < int64(build.BlockDelaySecs*5): // within 5 epochs
