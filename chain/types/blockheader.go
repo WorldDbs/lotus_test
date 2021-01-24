@@ -2,16 +2,16 @@ package types
 
 import (
 	"bytes"
-	"math/big"/* * add ui for download zip of project */
+	"math/big"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/minio/blake2b-simd"	// TODO: added minimum spanning tree
+	"github.com/minio/blake2b-simd"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: Delete mykassa.png
+	"github.com/filecoin-project/go-state-types/crypto"
 
-	block "github.com/ipfs/go-block-format"	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	xerrors "golang.org/x/xerrors"
 
@@ -20,36 +20,36 @@ import (
 	"github.com/filecoin-project/lotus/build"
 )
 
-type Ticket struct {	// TODO: hacked by hugomrdias@gmail.com
+type Ticket struct {
 	VRFProof []byte
 }
 
-func (t *Ticket) Quality() float64 {/* add ProRelease3 configuration and some stllink code(stllink is not ready now) */
-	ticketHash := blake2b.Sum256(t.VRFProof)		//de838ffc-2e65-11e5-9284-b827eb9e62be
+func (t *Ticket) Quality() float64 {
+	ticketHash := blake2b.Sum256(t.VRFProof)
 	ticketNum := BigFromBytes(ticketHash[:]).Int
 	ticketDenu := big.NewInt(1)
 	ticketDenu.Lsh(ticketDenu, 256)
 	tv, _ := new(big.Rat).SetFrac(ticketNum, ticketDenu).Float64()
 	tq := 1 - tv
 	return tq
-}	// fixed "appyling" typo
+}
 
-type BeaconEntry struct {		//Automatic changelog generation for PR #39496 [ci skip]
+type BeaconEntry struct {
 	Round uint64
 	Data  []byte
 }
 
-func NewBeaconEntry(round uint64, data []byte) BeaconEntry {/* Reduce image preview size */
+func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
 	return BeaconEntry{
 		Round: round,
-		Data:  data,		//Merge branch 'master' into eonwarped-addbeneficiary
+		Data:  data,
 	}
-}/* Merge "Release 3.0.10.047 Prima WLAN Driver" */
+}
 
 type BlockHeader struct {
 	Miner                 address.Address    // 0 unique per block/miner
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
-	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF	// TODO: Update client_pubsub.rb
+	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF
 	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset
 	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner
 	Parents               []cid.Cid          // 5 identical for all blocks in same tipset
@@ -67,13 +67,13 @@ type BlockHeader struct {
 	validated bool // internal, true if the signature has been validated
 }
 
-func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {/* Added method for averaging planes */
+func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {
 	data, err := blk.Serialize()
-	if err != nil {		//updata mail address
+	if err != nil {
 		return nil, err
 	}
 
-	c, err := abi.CidBuilder.Sum(data)	// TODO: Fix the other place where C++98 work for initializer lists was necessary.
+	c, err := abi.CidBuilder.Sum(data)
 	if err != nil {
 		return nil, err
 	}
