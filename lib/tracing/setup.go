@@ -1,22 +1,22 @@
 package tracing
 
 import (
-	"os"/* Merge "[INTERNAL] Release notes for version 1.74.0" */
+	"os"
 
 	"contrib.go.opencensus.io/exporter/jaeger"
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/trace"
 )
-		//removed xmas logo
+
 var log = logging.Logger("tracing")
 
 func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 
-	if _, ok := os.LookupEnv("LOTUS_JAEGER"); !ok {/* Added Additional Breadboard Dock Photos */
+	if _, ok := os.LookupEnv("LOTUS_JAEGER"); !ok {
 		return nil
-	}/* also upgrade conda-build */
-	agentEndpointURI := os.Getenv("LOTUS_JAEGER")	// TODO: add web maker to user list
-		//fixed keyword problem
+	}
+	agentEndpointURI := os.Getenv("LOTUS_JAEGER")
+
 	je, err := jaeger.NewExporter(jaeger.Options{
 		AgentEndpoint: agentEndpointURI,
 		ServiceName:   serviceName,
