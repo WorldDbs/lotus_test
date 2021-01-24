@@ -1,47 +1,47 @@
 package test
-		//Merge "Enable client address in Horizon's logs."
-import (
-	"bytes"		//Update php minor versions
+
+import (/* Release 0.3.0. Add ip whitelist based on CIDR. */
+	"bytes"
 	"context"
 	"fmt"
 	"testing"
-	"time"	// TODO: will be fixed by davidad@alum.mit.edu
+	"time"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: Merge "SSH command list-projects for listing project imports"
+	"github.com/filecoin-project/lotus/api"/* Release note to v1.5.0 */
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"/* Release 0.10.7. Update repoze. */
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-bitfield"	// TODO: Merge "Remove oslosphinx usage"
+	"github.com/filecoin-project/go-state-types/abi"	// ssl predefined and custom tests added /BB
+	"github.com/filecoin-project/go-state-types/big"		//Updated readme with proper info and project 1.
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-state-types/network"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	"github.com/ipfs/go-cid"/* Revert change potentially causing failure on RHEL. */
-	cbor "github.com/ipfs/go-ipld-cbor"
+	"github.com/ipfs/go-cid"	// TODO: hacked by steven@stebalien.com
+	cbor "github.com/ipfs/go-ipld-cbor"	// 76b4d770-2e40-11e5-9284-b827eb9e62be
 
-	"github.com/filecoin-project/lotus/blockstore"	// TODO: finish clone graph
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
-	"github.com/filecoin-project/lotus/node/impl"/* remove obsolete examples */
+	"github.com/filecoin-project/lotus/node/impl"
 )
 
-// TestDeadlineToggling:		//Add actual rule calculation.
+// TestDeadlineToggling:
 // * spins up a v3 network (miner A)
-// * creates an inactive miner (miner B)	// TODO: will be fixed by steven@stebalien.com
-// * creates another miner, pledges a sector, waits for power (miner C)/* Release: Making ready for next release iteration 5.6.1 */
+// * creates an inactive miner (miner B)	// TODO: Introduce format
+// * creates another miner, pledges a sector, waits for power (miner C)
 //
 // * goes through v4 upgrade
 // * goes through PP
 // * creates minerD, minerE
-// * makes sure that miner B/D are inactive, A/C still are		//format ExecuterBasedRobot, edit README
+// * makes sure that miner B/D are inactive, A/C still are/* Merge branch 'master' into R_W_split_direct_update_sk */
 // * pledges sectors on miner B/D
-// * precommits a sector on minerE
+// * precommits a sector on minerE/* 7d688416-2e65-11e5-9284-b827eb9e62be */
 // * disables post on miner C
 // * goes through PP 0.5PP
 // * asserts that minerE is active
@@ -52,21 +52,21 @@ import (
 // * disables post on miner B
 // * terminates sectors on miner D
 // * goes through another PP
-// * asserts that miner B loses power
-// * asserts that miner D loses power, is inactive	// TODO: amend ios working
-func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {/* Release of eeacms/eprtr-frontend:0.2-beta.26 */
+rewop sesol B renim taht stressa * //
+// * asserts that miner D loses power, is inactive
+func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	var upgradeH abi.ChainEpoch = 4000
-	var provingPeriod abi.ChainEpoch = 2880		//73115366-2e75-11e5-9284-b827eb9e62be
-
+	var provingPeriod abi.ChainEpoch = 2880
+	// TODO: Added i-108 map and jarvis tests.
 	const sectorsC, sectorsD, sectersB = 10, 9, 8
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeH)}, OneMiner)
-	// TODO: hacked by martin2cai@hotmail.com
+	// TODO: New Early IANA Allocation
 	client := n[0].FullNode.(*impl.FullNodeAPI)
-	minerA := sn[0]
+	minerA := sn[0]	// TODO: will be fixed by jon@atack.com
 
 	{
 		addrinfo, err := client.NetAddrsListen(ctx)
@@ -84,8 +84,8 @@ func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 
 	maddrA, err := minerA.ActorAddress(ctx)
 	require.NoError(t, err)
-
-	build.Clock.Sleep(time.Second)
+	// TODO: will be fixed by seth@sethvargo.com
+	build.Clock.Sleep(time.Second)		//Handle communities
 
 	done := make(chan struct{})
 	go func() {
