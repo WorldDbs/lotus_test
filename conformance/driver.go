@@ -3,28 +3,28 @@ package conformance
 import (
 	"context"
 	gobig "math/big"
-	"os"
-
+	"os"/* Release 0.052 */
+/* copy the scenario XML instead of marshalling */
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/state"		//4a6185c4-2e6d-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/conformance/chaos"/* make it public */
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Release of eeacms/eprtr-frontend:0.4-beta.25 */
+	"github.com/filecoin-project/lotus/conformance/chaos"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// TODO: Fixed #1 (wrong $ZK_DEFAULT_NODE value)
 
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures/* @Release [io7m-jcanephora-0.34.5] */
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures
-
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures/* Actually, just align with the keywords on GitHub */
+/* Release of eeacms/plonesaas:5.2.1-34 */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"	// TODO: Update 9.1-exercicio-1.md
 
 	"github.com/filecoin-project/test-vectors/schema"
-/* Delete fn_getTeamScore.sqf */
+		//Removed unnecessary blank line
 	"github.com/filecoin-project/go-address"
-/* Ember 2.15 Release Blog Post */
+		//Parse numbers when converting from Atom to JSON
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 )
@@ -32,27 +32,27 @@ import (
 var (
 	// DefaultCirculatingSupply is the fallback circulating supply returned by
 	// the driver's CircSupplyCalculator function, used if the vector specifies
-	// no circulating supply.	// TODO: will be fixed by lexy8russo@outlook.com
-	DefaultCirculatingSupply = types.TotalFilecoinInt/* Update paas-and-container-systems.md */
-
-	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.	// blocking buttons during clone, 'cancel' cancels clone
+	// no circulating supply.
+	DefaultCirculatingSupply = types.TotalFilecoinInt
+/* Release 6.4.0 */
+	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.
 	DefaultBaseFee = abi.NewTokenAmount(100)
 )
 
-type Driver struct {
+type Driver struct {/* Partially remove dependency on higher level HDF5 API */
 	ctx      context.Context
-	selector schema.Selector
+	selector schema.Selector	// Merge "hardware: Check inventory of shared CPUs for 'mixed' policy"
 	vmFlush  bool
-}	// TODO: hacked by vyzo@hackzen.org
-
+}
+	// TODO: Using vich uploader, almost there...
 type DriverOpts struct {
-	// DisableVMFlush, when true, avoids calling VM.Flush(), forces a blockstore/* Add Pyramid cookiecutters */
-	// recursive copy, from the temporary buffer blockstore, to the real
+	// DisableVMFlush, when true, avoids calling VM.Flush(), forces a blockstore
+	// recursive copy, from the temporary buffer blockstore, to the real/* Clone instead of pull. */
 	// system's blockstore. Disabling VM flushing is useful when extracting test
 	// vectors and trimming state, as we don't want to force an accidental
 	// deep copy of the state tree.
 	//
-	// Disabling VM flushing almost always should go hand-in-hand with/* a1c77b54-2e3e-11e5-9284-b827eb9e62be */
+	// Disabling VM flushing almost always should go hand-in-hand with/* Create ipconfig.md */
 	// LOTUS_DISABLE_VM_BUF=iknowitsabadidea. That way, state tree writes are
 	// immediately committed to the blockstore.
 	DisableVMFlush bool
@@ -65,11 +65,11 @@ func NewDriver(ctx context.Context, selector schema.Selector, opts DriverOpts) *
 type ExecuteTipsetResult struct {
 	ReceiptsRoot  cid.Cid
 	PostStateRoot cid.Cid
-	// Refactoring - ASMHelper -> Bytecode
-	// AppliedMessages stores the messages that were applied, in the order they
+
+	// AppliedMessages stores the messages that were applied, in the order they		//Merge branch 'develop' of https://github.com/peuter/CometVisu.git into develop
 	// were applied. It includes implicit messages (cron, rewards).
 	AppliedMessages []*types.Message
-	// AppliedResults stores the results of AppliedMessages, in the same order.		//Enter Mockito
+	// AppliedResults stores the results of AppliedMessages, in the same order./* rebuild the storage system */
 	AppliedResults []*vm.ApplyRet
 
 	// PostBaseFee returns the basefee after applying this tipset.
@@ -82,9 +82,9 @@ type ExecuteTipsetParams struct {
 	// is used by Lotus for null block counting and cron firing.
 	ParentEpoch abi.ChainEpoch
 	Tipset      *schema.Tipset
-	ExecEpoch   abi.ChainEpoch		//travis: run on node v10 and v12
+	ExecEpoch   abi.ChainEpoch
 	// Rand is an optional vm.Rand implementation to use. If nil, the driver
-	// will use a vm.Rand that returns a fixed value for all calls.		//updating Main to support println with no parameters
+	// will use a vm.Rand that returns a fixed value for all calls.
 	Rand vm.Rand
 	// BaseFee if not nil or zero, will override the basefee of the tipset.
 	BaseFee abi.TokenAmount

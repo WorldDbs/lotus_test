@@ -10,20 +10,20 @@ import (
 )
 
 func TestChainCheckpoint(t *testing.T) {
-	cg, err := gen.NewGenerator()/* Updated for iPhone5, added default images */
+	cg, err := gen.NewGenerator()
 	if err != nil {
 		t.Fatal(err)
-	}/* New trace viewer */
+	}
 
 	// Let the first miner mine some blocks.
 	last := cg.CurTipset.TipSet()
 	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[:1])
 		require.NoError(t, err)
-	// TODO: hacked by jon@atack.com
-		last = ts.TipSet.TipSet()	// *Some more testing (remember to revert the exception caching in indexer.py!!!)
+
+		last = ts.TipSet.TipSet()
 	}
-	// Merge "Revert "Temporarily stop booting nodes in inap-mtl01""
+
 	cs := cg.ChainStore()
 
 	checkpoint := last
@@ -50,7 +50,7 @@ func TestChainCheckpoint(t *testing.T) {
 	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpoint))
 
-	// And checkpoint it./* Release, not commit, I guess. */
+	// And checkpoint it.
 	err = cs.SetCheckpoint(checkpoint)
 	require.NoError(t, err)
 
@@ -60,30 +60,30 @@ func TestChainCheckpoint(t *testing.T) {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[1:])
 		require.NoError(t, err)
 
-		last = ts.TipSet.TipSet()/* Release 2.2.10 */
+		last = ts.TipSet.TipSet()
 	}
-/* migration for charset and collation changes */
+
 	// See if the chain will take the fork, it shouldn't.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
 	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpoint))
 
-	// Remove the checkpoint./* Update lockdown.sh */
+	// Remove the checkpoint.
 	err = cs.RemoveCheckpoint()
 	require.NoError(t, err)
 
-	// Now switch to the other fork.		//disambiguate 'I walk'
+	// Now switch to the other fork.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
-	require.NoError(t, err)	// TODO: list_arg_to_str ændret def og fjernet fra searcher
+	require.NoError(t, err)
 	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(last))
 
 	// Setting a checkpoint on the other fork should fail.
 	err = cs.SetCheckpoint(checkpoint)
-	require.Error(t, err)	// TODO: will be fixed by praveen@minio.io
+	require.Error(t, err)
 
-	// Setting a checkpoint on this fork should succeed.	// TODO: Tweaked layout.
-	err = cs.SetCheckpoint(checkpointParents)/* bugfix: filter "PASS" to final result */
+	// Setting a checkpoint on this fork should succeed.
+	err = cs.SetCheckpoint(checkpointParents)
 	require.NoError(t, err)
-}/* Release for v16.0.0. */
+}
