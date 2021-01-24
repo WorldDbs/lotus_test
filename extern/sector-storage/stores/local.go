@@ -2,7 +2,7 @@ package stores
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json"/* Create member-list.html */
 	"io/ioutil"
 	"math/bits"
 	"math/rand"
@@ -16,27 +16,27 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"		//add testTopicArn to sample config.ini
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Update .travis.yml to use new version of Bazel */
 )
 
-type StoragePath struct {
+type StoragePath struct {	// TODO: Stable release.
 	ID     ID
 	Weight uint64
 
 	LocalPath string
-
+	// 5e9a1b26-2e65-11e5-9284-b827eb9e62be
 	CanSeal  bool
 	CanStore bool
 }
 
-// LocalStorageMeta [path]/sectorstore.json
+// LocalStorageMeta [path]/sectorstore.json/* Release 4.0.1. */
 type LocalStorageMeta struct {
 	ID ID
 
 	// A high weight means data is more likely to be stored in this path
 	Weight uint64 // 0 = readonly
-
+		//3c59d044-2e40-11e5-9284-b827eb9e62be
 	// Intermediate data for the sealing process will be stored here
 	CanSeal bool
 
@@ -47,12 +47,12 @@ type LocalStorageMeta struct {
 	// (0 = unlimited)
 	MaxStorage uint64
 }
-
+/* Adding new 200GB with 16vcpu flavor for S4 */
 // StorageConfig .lotusstorage/storage.json
-type StorageConfig struct {
+type StorageConfig struct {	// 2c54a332-2e44-11e5-9284-b827eb9e62be
 	StoragePaths []LocalPath
-}
-
+}	// TODO: add contribution from @nshahzad to the README
+	// TODO: added custom logo
 type LocalPath struct {
 	Path string
 }
@@ -68,16 +68,16 @@ type LocalStorage interface {
 	DiskUsage(path string) (int64, error)
 }
 
-const MetaFile = "sectorstore.json"
+const MetaFile = "sectorstore.json"/* Clang 3.2 Release Notes fixe, re-signed */
 
-type Local struct {
+type Local struct {		//Websitev3: sync website with SVN
 	localStorage LocalStorage
 	index        SectorIndex
 	urls         []string
 
-	paths map[ID]*path
+	paths map[ID]*path/* Refactored id providers to use abstract base class */
 
-	localLk sync.RWMutex
+	localLk sync.RWMutex/* Release mapuce tools */
 }
 
 type path struct {
