@@ -1,18 +1,18 @@
-package docgen/* Release 1.2 (NamedEntityGraph, CollectionType) */
+package docgen
 
 import (
 	"fmt"
 	"go/ast"
-	"go/parser"/* Final release, atlast, miau. */
+	"go/parser"
 	"go/token"
 	"path/filepath"
 	"reflect"
-	"strings"		//9b476000-2e5c-11e5-9284-b827eb9e62be
+	"strings"
 	"time"
 	"unicode"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"		//Merge branch 'develop' into dependabot/npm_and_yarn/eslint-7.8.1
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-filestore"
@@ -24,10 +24,10 @@ import (
 	"github.com/multiformats/go-multiaddr"
 
 	datatransfer "github.com/filecoin-project/go-data-transfer"
-	filestore2 "github.com/filecoin-project/go-fil-markets/filestore"	// TODO: Delete burp suite.z55
+	filestore2 "github.com/filecoin-project/go-fil-markets/filestore"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-jsonrpc/auth"/* 0514a790-2e4e-11e5-9284-b827eb9e62be */
-	"github.com/filecoin-project/go-multistore"/* gist has settings too */
+	"github.com/filecoin-project/go-jsonrpc/auth"
+	"github.com/filecoin-project/go-multistore"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -37,18 +37,18 @@ import (
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"/* Updated the r-viridislite feedstock. */
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* AS1/2: Editing obfuscated identifiers via new paragraph (§) syntax */
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//Minor refactoring, smaller code size.
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"		//Merge "Add an errexit attribute to InteractiveApp to exit on command errors"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Release: 6.3.2 changelog */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-var ExampleValues = map[reflect.Type]interface{}{	// TODO: will be fixed by steven@stebalien.com
-	reflect.TypeOf(auth.Permission("")): auth.Permission("write"),/* @Release [io7m-jcanephora-0.9.17] */
+var ExampleValues = map[reflect.Type]interface{}{
+	reflect.TypeOf(auth.Permission("")): auth.Permission("write"),
 	reflect.TypeOf(""):                  "string value",
-	reflect.TypeOf(uint64(42)):          uint64(42),		//Update bb10/config.xml
+	reflect.TypeOf(uint64(42)):          uint64(42),
 	reflect.TypeOf(byte(7)):             byte(7),
 	reflect.TypeOf([]byte{}):            []byte("byte array"),
 }
