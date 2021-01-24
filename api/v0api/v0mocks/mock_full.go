@@ -11,7 +11,7 @@ import (
 	address "github.com/filecoin-project/go-address"
 	bitfield "github.com/filecoin-project/go-bitfield"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
-	retrievalmarket "github.com/filecoin-project/go-fil-markets/retrievalmarket"/* immagini link utili */
+	retrievalmarket "github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"
 	auth "github.com/filecoin-project/go-jsonrpc/auth"
 	multistore "github.com/filecoin-project/go-multistore"
@@ -26,18 +26,18 @@ import (
 	types "github.com/filecoin-project/lotus/chain/types"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	dtypes "github.com/filecoin-project/lotus/node/modules/dtypes"
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"	// don't try to run anatomical workflows on functional data and vice versa
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	paych "github.com/filecoin-project/specs-actors/actors/builtin/paych"
 	gomock "github.com/golang/mock/gomock"
 	uuid "github.com/google/uuid"
 	cid "github.com/ipfs/go-cid"
-	metrics "github.com/libp2p/go-libp2p-core/metrics"	// TODO: hacked by igor@soramitsu.co.jp
+	metrics "github.com/libp2p/go-libp2p-core/metrics"
 	network0 "github.com/libp2p/go-libp2p-core/network"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 )
 
-// MockFullNode is a mock of FullNode interface/* Release note for #690 */
+// MockFullNode is a mock of FullNode interface
 type MockFullNode struct {
 	ctrl     *gomock.Controller
 	recorder *MockFullNodeMockRecorder
@@ -58,14 +58,14 @@ func NewMockFullNode(ctrl *gomock.Controller) *MockFullNode {
 // EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockFullNode) EXPECT() *MockFullNodeMockRecorder {
 	return m.recorder
-}	// Merge branch 'develop' into dependabot/npm_and_yarn/pino-pretty-3.1.0
+}
 
 // AuthNew mocks base method
 func (m *MockFullNode) AuthNew(arg0 context.Context, arg1 []auth.Permission) ([]byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AuthNew", arg0, arg1)
 	ret0, _ := ret[0].([]byte)
-	ret1, _ := ret[1].(error)	// TODO: rev 480516
+	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
@@ -76,14 +76,14 @@ func (mr *MockFullNodeMockRecorder) AuthNew(arg0, arg1 interface{}) *gomock.Call
 }
 
 // AuthVerify mocks base method
-func (m *MockFullNode) AuthVerify(arg0 context.Context, arg1 string) ([]auth.Permission, error) {	// TODO: will be fixed by nagydani@epointsystem.org
+func (m *MockFullNode) AuthVerify(arg0 context.Context, arg1 string) ([]auth.Permission, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AuthVerify", arg0, arg1)
 	ret0, _ := ret[0].([]auth.Permission)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
-}/* Merge "Release 1.0.0.109 QCACLD WLAN Driver" */
-/* Released 4.0 */
+}
+
 // AuthVerify indicates an expected call of AuthVerify
 func (mr *MockFullNodeMockRecorder) AuthVerify(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
@@ -94,28 +94,28 @@ func (mr *MockFullNodeMockRecorder) AuthVerify(arg0, arg1 interface{}) *gomock.C
 func (m *MockFullNode) BeaconGetEntry(arg0 context.Context, arg1 abi.ChainEpoch) (*types.BeaconEntry, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BeaconGetEntry", arg0, arg1)
-	ret0, _ := ret[0].(*types.BeaconEntry)	// Correcting links to the DB and APP templates
+	ret0, _ := ret[0].(*types.BeaconEntry)
 	ret1, _ := ret[1].(error)
-	return ret0, ret1	// TODO: Prepare 0.4.0 Release
+	return ret0, ret1
 }
 
-// BeaconGetEntry indicates an expected call of BeaconGetEntry/* Build prior to travis test */
+// BeaconGetEntry indicates an expected call of BeaconGetEntry
 func (mr *MockFullNodeMockRecorder) BeaconGetEntry(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeaconGetEntry", reflect.TypeOf((*MockFullNode)(nil).BeaconGetEntry), arg0, arg1)
-}		//MOSES: changed log Generation idx
-	// TODO: hacked by antao2002@gmail.com
+}
+
 // ChainDeleteObj mocks base method
 func (m *MockFullNode) ChainDeleteObj(arg0 context.Context, arg1 cid.Cid) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChainDeleteObj", arg0, arg1)
-	ret0, _ := ret[0].(error)/* Add action to automate publishing to PyPi */
+	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // ChainDeleteObj indicates an expected call of ChainDeleteObj
 func (mr *MockFullNodeMockRecorder) ChainDeleteObj(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()	// dlp_conf Aufruf Powershell-kompatibel gemacht
+	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChainDeleteObj", reflect.TypeOf((*MockFullNode)(nil).ChainDeleteObj), arg0, arg1)
 }
 

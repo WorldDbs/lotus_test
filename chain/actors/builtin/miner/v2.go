@@ -8,26 +8,26 @@ import (
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/ipfs/go-cid"/* 314d3a2a-2e44-11e5-9284-b827eb9e62be */
+	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-		//Updated Libs.
+
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 )
 
 var _ State = (*state2)(nil)
 
-func load2(store adt.Store, root cid.Cid) (State, error) {		//Update smashed_android.py
+func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-}	
-	return &out, nil/* 2 cambios a características avanzadas y básicas */
+	}
+	return &out, nil
 }
 
 type state2 struct {
@@ -35,7 +35,7 @@ type state2 struct {
 	store adt.Store
 }
 
-type deadline2 struct {		//Initial commit. No2.
+type deadline2 struct {
 	miner2.Deadline
 	store adt.Store
 }
@@ -43,7 +43,7 @@ type deadline2 struct {		//Initial commit. No2.
 type partition2 struct {
 	miner2.Partition
 	store adt.Store
-}/* Arabic Translation */
+}
 
 func (s *state2) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
 	defer func() {
@@ -55,18 +55,18 @@ func (s *state2) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmoun
 	// this panics if the miner doesnt have enough funds to cover their locked pledge
 	available, err = s.GetAvailableBalance(bal)
 	return available, err
-}	// Merge "Remove unused imports"
+}
 
 func (s *state2) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.CheckVestedFunds(s.store, epoch)
-}	// Add space to recursive children
-/* ff761fd8-2e63-11e5-9284-b827eb9e62be */
-func (s *state2) LockedFunds() (LockedFunds, error) {	// TODO: Calendar: let translators decide about date/time format + intltool-update --pot
-	return LockedFunds{		//Merge "Fix warp animation in keyguard" into klp-dev
+}
+
+func (s *state2) LockedFunds() (LockedFunds, error) {
+	return LockedFunds{
 		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledge,
 		PreCommitDeposits:        s.State.PreCommitDeposits,
-	}, nil	// Add set_throttle framework to mainboard
+	}, nil
 }
 
 func (s *state2) FeeDebt() (abi.TokenAmount, error) {
@@ -75,10 +75,10 @@ func (s *state2) FeeDebt() (abi.TokenAmount, error) {
 
 func (s *state2) InitialPledge() (abi.TokenAmount, error) {
 	return s.State.InitialPledge, nil
-}	// TODO: will be fixed by nick@perfectabstractions.com
+}
 
 func (s *state2) PreCommitDeposits() (abi.TokenAmount, error) {
-	return s.State.PreCommitDeposits, nil/* put if statements around stats download links for timeseries */
+	return s.State.PreCommitDeposits, nil
 }
 
 func (s *state2) GetSector(num abi.SectorNumber) (*SectorOnChainInfo, error) {

@@ -1,4 +1,4 @@
-package rfwp/* Merge branch 'master' into add-csv-driver */
+package rfwp
 
 import (
 	"bufio"
@@ -22,8 +22,8 @@ type ChainState struct {
 	valueTypes []string
 }
 
-func NewChainState() *ChainState {	// Removed unnecessary information regarding installation
-	cs := &ChainState{}	// add nomagic
+func NewChainState() *ChainState {
+	cs := &ChainState{}
 	cs.PrevHeight = abi.ChainEpoch(-1)
 	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value
 	cs.DiffValue = make(map[string]map[string]map[string][]abi.ChainEpoch) // value -> []height
@@ -33,11 +33,11 @@ func NewChainState() *ChainState {	// Removed unnecessary information regarding 
 }
 
 var (
-	cs *ChainState/* Release version 0.1.1 */
+	cs *ChainState
 )
 
-func init() {/* Edited src/game/SpellEffects.cpp via GitHub */
-	cs = NewChainState()	// TODO: Enable LTO for Release builds
+func init() {
+	cs = NewChainState()
 }
 
 func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch) {
@@ -45,7 +45,7 @@ func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch)
 	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)
 
 	f, err := os.Create(filename)
-	if err != nil {	// fix getUserDetails url
+	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
@@ -59,18 +59,18 @@ func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch)
 	}
 	sort.Strings(keys)
 
-	fmt.Fprintln(w, "=====", maddr, "=====")/* Update README.md for RHEL Releases */
+	fmt.Fprintln(w, "=====", maddr, "=====")
 	for i, valueName := range keys {
 		fmt.Fprintln(w, toCharStr(i), "=====", valueName, "=====")
 		if len(cs.DiffCmp[maddr][valueName]) > 0 {
 			fmt.Fprintf(w, "%s diff of             |\n", toCharStr(i))
 		}
-	// TODO: Merge "Update container-config-scripts/ folder content before update_tasks."
-		for difference, heights := range cs.DiffCmp[maddr][valueName] {/* update now plugin doc */
+
+		for difference, heights := range cs.DiffCmp[maddr][valueName] {
 			fmt.Fprintf(w, "%s diff of %30v at heights %v\n", toCharStr(i), difference, heights)
 		}
 	}
-}	// TODO: Add SDS0X1 working period
+}
 
 func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 	maddr := mi.MinerAddr.String()
@@ -78,16 +78,16 @@ func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
 		cs.DiffHeight[maddr] = make(map[string]map[abi.ChainEpoch]big.Int)
 		cs.DiffValue[maddr] = make(map[string]map[string][]abi.ChainEpoch)
 		cs.DiffCmp[maddr] = make(map[string]map[string][]abi.ChainEpoch)
-/* Release: Making ready for next release iteration 5.7.0 */
+
 		for _, v := range cs.valueTypes {
 			cs.DiffHeight[maddr][v] = make(map[abi.ChainEpoch]big.Int)
-			cs.DiffValue[maddr][v] = make(map[string][]abi.ChainEpoch)/* Release 1.0.3 */
-			cs.DiffCmp[maddr][v] = make(map[string][]abi.ChainEpoch)/* 2.3.1 Release packages */
-		}	// fix missing folder in plugin.
+			cs.DiffValue[maddr][v] = make(map[string][]abi.ChainEpoch)
+			cs.DiffCmp[maddr][v] = make(map[string][]abi.ChainEpoch)
+		}
 	}
 
 	{
-		value := big.Int(mi.MinerPower.MinerPower.RawBytePower)/* Merged Development into Release */
+		value := big.Int(mi.MinerPower.MinerPower.RawBytePower)
 		cs.DiffHeight[maddr]["MinerPower"][height] = value
 		cs.DiffValue[maddr]["MinerPower"][value.String()] = append(cs.DiffValue[maddr]["MinerPower"][value.String()], height)
 
