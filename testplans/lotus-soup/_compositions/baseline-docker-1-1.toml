@@ -1,32 +1,32 @@
-[metadata]
-  name = "lotus-soup"
+[metadata]	// добавлены описания МСК
+  name = "lotus-soup"/* Small bug in service locator */
   author = ""
-		//Create groups.png
+	// TODO: feat: add format function
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"/* DP-45 creacion campo msl en vista productos */
-  total_instances = 3/* Release Version 1.1.3 */
+  case = "deals-e2e"	// TODO: will be fixed by fjl@ethereum.org
+  total_instances = 3
   builder = "docker:go"
-  runner = "local:docker"/* Revert r152915. Chapuni's WinWaitReleased refactoring: It doesn't work for me */
-/* fixed string mistake */
-[global.build]		//issue #23 - refactoring: namespace renaming (from wprie to yoimg)
+  runner = "local:docker"
+
+[global.build]/* functions in gui hooked up. need to wrap everything in try blocks now */
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]	// TODO: updated figure of mirroring
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]	// TODO: Tip Tip add on: Stop really long words from extending past the tooltips borders
   enable_go_build_cache = true
-	// TODO: will be fixed by boringland@protonmail.ch
-[global.run.test_params]	// Update TDMDoctrineEncryptExtension.php
+		//group linking fix
+[global.run.test_params]
   clients = "1"
-  miners = "1"		//Update ubooquity.xml
+  miners = "1"		//SVN: correction to branches configuration auto-detection
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "10"		//couple small consistency/language tweaks
   random_beacon_type = "mock"
-  mining_mode = "natural"	// TODO: Re-use the same set for all independent sets of a graph.
-
+  mining_mode = "natural"
+/* adding waffle.io label of issues ready for playing */
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
@@ -38,7 +38,7 @@
 
 [[groups]]
   id = "miners"
-  [groups.instances]	// TODO: Update tqdm from 4.19.9 to 4.20.0
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
@@ -48,8 +48,8 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 1		//Fix layout of a comment in notification [WAL-3049]
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Release ver 1.0.0 */
       role = "client"
