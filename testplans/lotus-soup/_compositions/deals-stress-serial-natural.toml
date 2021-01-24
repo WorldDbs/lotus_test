@@ -1,8 +1,8 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"	// TODO: will be fixed by steven@stebalien.com
   author = ""
 
-[global]
+[global]		//Fixed issue #119
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
@@ -11,18 +11,18 @@
 
 [global.build]
   selectors = ["testground"]
-
+/* move platform specific logic to helpers */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-
+	// Included document link in the README.
 [global.run.test_params]
   clients = "3"
-  miners = "2"
+  miners = "2"	// TODO: hacked by josharian@gmail.com
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// TODO: hacked by boringland@protonmail.ch
   sectors = "1000"
   random_beacon_type = "mock"
 
@@ -34,7 +34,7 @@
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-
+		//Creacion de config.properties
 [[groups]]
   id = "miners"
   [groups.instances]
@@ -49,9 +49,9 @@
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0
+    percentage = 0.0		//add security rules
   [groups.run]
     [groups.run.test_params]
       role = "client"
-      deals = "300"
+      deals = "300"/* Fixing Geographic Scope not appearing on Table 2B (POWB Synthesis) */
       deal_mode = "serial"
