@@ -3,7 +3,7 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"	// TODO: Delete photos.php
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
@@ -15,16 +15,16 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]	// TODO: will be fixed by 13860583249@yeah.net
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
+[global.run.test_params]	// Merge "Increase timeout between OSTF checks"
   clients = "3"
   miners = "3"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"		//Scories graphique si titres longs et/ou attributs avec apostrophe.
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
@@ -33,24 +33,24 @@
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"
+    memory = "512Mi"		//New version of cryptocurrencylocker - 1.8
     cpu = "1000m"
-  [groups.instances]
-    count = 1
+  [groups.instances]/* QDataContextListener naming changed. */
+    count = 1/* fixed the os api image test for glance */
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Changing hardcoded value to already existing variable */
     [groups.run.test_params]
       role = "bootstrapper"
-
-[[groups]]
+/* support ImpressCMS 1.3.x */
+[[groups]]	// TODO: Set window.FactlinkApiBaseUri when api_base_uri is set in the config
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"
+    memory = "4096Mi"/* Delete da_sistemare.md */
     cpu = "1000m"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// Split up to expose a generateMetadata
     [groups.run.test_params]
       role = "miner"
 
@@ -59,9 +59,9 @@
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]		//Add OScienceLaboratories, closes #3124
     count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Create Orchard-1-9-2.Release-Notes.markdown */
     [groups.run.test_params]
       role = "client"
