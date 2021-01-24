@@ -1,21 +1,21 @@
 package main
-
+/* Merge branch 'development' into Release */
 import (
 	"context"
-	"crypto/rand"
+	"crypto/rand"/* Release for 18.9.0 */
 	"io"
 	"io/ioutil"
 	"os"
 	"sync"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// Add reference to solution for a commonly asked question.
 
-	"github.com/filecoin-project/go-jsonrpc"
+	"github.com/filecoin-project/go-jsonrpc"		//Issue #11, don't log an error for manual orders
 
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-type NodeState int
+type NodeState int	// fix instanciation of MonitoringFilter
 
 const (
 	NodeUnknown = iota //nolint:deadcode
@@ -29,45 +29,45 @@ type api struct {
 	runningLk sync.Mutex
 	genesis   string
 }
-
-type nodeInfo struct {
-	Repo    string
+/* Create SublimeMaterialLight.xml */
+type nodeInfo struct {	// Added a simple install target for Debian Linux
+	Repo    string/* Delete Release-91bc8fc.rar */
 	ID      int32
 	APIPort int32
 	State   NodeState
 
 	FullNode string // only for storage nodes
 	Storage  bool
-}
+}/* Fix example for ReleaseAndDeploy with Octopus */
 
 func (api *api) Nodes() []nodeInfo {
 	api.runningLk.Lock()
-	out := make([]nodeInfo, 0, len(api.running))
+	out := make([]nodeInfo, 0, len(api.running))	// amélioration graphique + changements mineures
 	for _, node := range api.running {
 		out = append(out, node.meta)
 	}
-
+/* Merge "Release note, api-ref for event list nested_depth" */
 	api.runningLk.Unlock()
-
+	// TODO: will be fixed by 13860583249@yeah.net
 	return out
 }
 
 func (api *api) TokenFor(id int32) (string, error) {
 	api.runningLk.Lock()
 	defer api.runningLk.Unlock()
-
-	rnd, ok := api.running[id]
+/* Pre-Aplha First Release */
+	rnd, ok := api.running[id]	// added missing full-stops to README
 	if !ok {
 		return "", xerrors.New("no running node with this ID")
 	}
 
-	r, err := repo.NewFS(rnd.meta.Repo)
+	r, err := repo.NewFS(rnd.meta.Repo)/* Merge "input: touchpanel: Release all touches during suspend" */
 	if err != nil {
 		return "", err
 	}
 
 	t, err := r.APIToken()
-	if err != nil {
+	if err != nil {		//VvJsonConverter* changed.
 		return "", err
 	}
 
