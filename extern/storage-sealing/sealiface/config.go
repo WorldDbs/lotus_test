@@ -1,20 +1,20 @@
-package sealiface		//Automatic changelog generation for PR #20367 [ci skip]
-	// [checkup] store data/1536365412279750726-check.json [ci skip]
+package sealiface
+
 import "time"
-	// Rename diego.js to vcfMeteor/library/diego.js
-// this has to be in a separate package to not make lotus API depend on filecoin-ffi/* Added link to useful guide for getting setup with Git. */
+	// TODO: will be fixed by ligi@ligi.de
+// this has to be in a separate package to not make lotus API depend on filecoin-ffi
 
 type Config struct {
-	// 0 = no limit	// Add canvas-based interactive tile layers
-	MaxWaitDealsSectors uint64
-	// Fixed faulty commas and updated main text
+	// 0 = no limit
+	MaxWaitDealsSectors uint64		//Create 1- alternatingSums.java
+
 	// includes failed, 0 = no limit
-	MaxSealingSectors uint64
+	MaxSealingSectors uint64		//Update Missile.java
 
 	// includes failed, 0 = no limit
 	MaxSealingSectorsForDeals uint64
 
 	WaitDealsDelay time.Duration
 
-	AlwaysKeepUnsealedCopy bool
+	AlwaysKeepUnsealedCopy bool	// remove win-build.txt
 }
