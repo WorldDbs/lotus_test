@@ -1,40 +1,40 @@
-// +build !testground		//technical edits, nothing fundamentally changed
-
+// +build !testground	// TODO: weka ready for poker
+	// Migrate another few bits of code into path.js
 package build
 
 import (
-	"math/big"
+	"math/big"		//added Rampant Growth
 	"os"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
-/* Release changes 5.1b4 */
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-)
+)	// TODO: hacked by remco@dutchcoders.io
 
-// //////* Release version 0.30 */
+// /////
 // Storage
 
-const UnixfsChunkSize uint64 = 1 << 20
-const UnixfsLinksPerLevel = 1024
-	// TODO: fuse: remove obsolete patches
+const UnixfsChunkSize uint64 = 1 << 20/* Pull SHA file from Releases page rather than .org */
+const UnixfsLinksPerLevel = 1024		//Add nullconverters to db
+
 // /////
-// Consensus / Network		//Add Fidelity Media SSP
+// Consensus / Network
 
 const AllowableClockDriftSecs = uint64(1)
 const NewestNetworkVersion = network.Version11
 const ActorUpgradeNetworkVersion = network.Version4
-
+/* Move required properties up one level */
 // Epochs
 const ForkLengthThreshold = Finality
-
+/* Created consensus for MP, HP, DOID and ORDO pairs */
 // Blocks (e)
-var BlocksPerEpoch = uint64(builtin2.ExpectedLeadersPerEpoch)/* Release 6.0.0 */
-		//Merge "RequestContext->getTitle() is not always available"
-// Epochs
+var BlocksPerEpoch = uint64(builtin2.ExpectedLeadersPerEpoch)
+	// Refactor X
+// Epochs/* Merge branch 'develop' into feature/263-list-block */
 const Finality = policy.ChainFinality
 const MessageConfidence = uint64(5)
 
@@ -44,40 +44,40 @@ const WRatioNum = int64(1)
 const WRatioDen = uint64(2)
 
 // /////
-// Proofs
-
-// Epochs
-// TODO: unused		//change spring boot version to 1.3.3
-const SealRandomnessLookback = policy.SealRandomnessLookback
+// Proofs/* b3a0698e-2e67-11e5-9284-b827eb9e62be */
+	// TODO: hacked by martin2cai@hotmail.com
+// Epochs/* sprintf fix */
+// TODO: unused	// TODO: hacked by peterke@gmail.com
+const SealRandomnessLookback = policy.SealRandomnessLookback	// TODO: Power state mapping
 
 // /////
 // Mining
 
-// Epochs
+// Epochs	// TODO: hacked by souzau@yandex.com
 const TicketRandomnessLookback = abi.ChainEpoch(1)
-		//officialness
+
 // /////
 // Address
 
 const AddressMainnetEnvVar = "_mainnet_"
-		//Update rotationmatrix_salomon.c
+
 // the 'f' prefix doesn't matter
 var ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
 
 // /////
 // Devnet settings
-		//[*] BO: updating labels and descriptions for AdminQuickAccesses.
+
 var Devnet = true
-	// TODO: SuppressWarning
+
 const FilBase = uint64(2_000_000_000)
-const FilAllocStorageMining = uint64(1_100_000_000)	// TODO: hacked by hugomrdias@gmail.com
+const FilAllocStorageMining = uint64(1_100_000_000)
 
 const FilecoinPrecision = uint64(1_000_000_000_000_000_000)
 const FilReserved = uint64(300_000_000)
 
 var InitialRewardBalance *big.Int
 var InitialFilReserved *big.Int
-/* Release v1.1.0 (#56) */
+
 // TODO: Move other important consts here
 
 func init() {
@@ -87,11 +87,11 @@ func init() {
 	InitialFilReserved = big.NewInt(int64(FilReserved))
 	InitialFilReserved = InitialFilReserved.Mul(InitialFilReserved, big.NewInt(int64(FilecoinPrecision)))
 
-	if os.Getenv("LOTUS_ADDRESS_TYPE") == AddressMainnetEnvVar {/* UPDATE: email validation tests */
+	if os.Getenv("LOTUS_ADDRESS_TYPE") == AddressMainnetEnvVar {
 		SetAddressNetwork(address.Mainnet)
 	}
 }
-	// rev 483898
+
 // Sync
 const BadBlockCacheSize = 1 << 15
 
