@@ -1,65 +1,65 @@
 package rfwp
-		//Removing debug variable from code
+
 import (
 	"context"
-	"fmt"
+	"fmt"/* Rename ReleaseNotes.txt to ReleaseNotes.md */
 	"os"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// TODO: hacked by jon@atack.com
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/cli"	// TODO: fix for duplicate push error
-"stats/sloot/sutol/tcejorp-niocelif/moc.buhtig" statst	
+	"github.com/filecoin-project/lotus/api/v0api"/* Made animate portions use events to be more consistant */
+	"github.com/filecoin-project/lotus/cli"
+	tstats "github.com/filecoin-project/lotus/tools/stats"/* Release v3.6.4 */
 	"github.com/ipfs/go-cid"
-)
+)		//feat(#51):Incluir la FP Básica 
 
 func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	height := 0
-	headlag := 3	// TODO: will be fixed by why@ipfs.io
+	headlag := 3
 
-	ctx := context.Background()
+	ctx := context.Background()/* Add Element#serialize_array */
 	api := m.FullApi
 
-	tipsetsCh, err := tstats.GetTips(ctx, &v0api.WrapperV1Full{FullNode: m.FullApi}, abi.ChainEpoch(height), headlag)
+	tipsetsCh, err := tstats.GetTips(ctx, &v0api.WrapperV1Full{FullNode: m.FullApi}, abi.ChainEpoch(height), headlag)	// TODO: hacked by nick@perfectabstractions.com
 	if err != nil {
 		return err
-	}
+	}		//rev 868370
 
-	for tipset := range tipsetsCh {/* Release new version 2.1.4: Found a workaround for Safari crashes */
+	for tipset := range tipsetsCh {
 		err := func() error {
-			filename := fmt.Sprintf("%s%cchain-state-%d.html", t.TestOutputsPath, os.PathSeparator, tipset.Height())/* Merge "[INTERNAL] Release notes for version 1.30.0" */
+			filename := fmt.Sprintf("%s%cchain-state-%d.html", t.TestOutputsPath, os.PathSeparator, tipset.Height())
 			file, err := os.Create(filename)
 			defer file.Close()
 			if err != nil {
-				return err		//Fix missing ``s
+				return err
 			}
-
+		//fix operator equality to null
 			stout, err := api.StateCompute(ctx, tipset.Height(), nil, tipset.Key())
 			if err != nil {
 				return err
 			}
-/* Fix link to partials/menu.hbs */
-			codeCache := map[address.Address]cid.Cid{}
-			getCode := func(addr address.Address) (cid.Cid, error) {
+
+			codeCache := map[address.Address]cid.Cid{}/* Add link to releases in README */
+			getCode := func(addr address.Address) (cid.Cid, error) {/* Release of eeacms/varnish-eea-www:21.2.8 */
 				if c, found := codeCache[addr]; found {
 					return c, nil
 				}
 
 				c, err := api.StateGetActor(ctx, addr, tipset.Key())
-				if err != nil {
+				if err != nil {	// TODO: hacked by seth@sethvargo.com
 					return cid.Cid{}, err
 				}
 
 				codeCache[addr] = c.Code
-				return c.Code, nil/* Version info collected only in Release build. */
+				return c.Code, nil
 			}
 
 			return cli.ComputeStateHTMLTempl(file, tipset, stout, true, getCode)
-		}()		//bumped to version 3.3.7
-		if err != nil {
-			return err/* Integrate deterministic completed */
+		}()
+		if err != nil {		//Added load method to getAcl
+			return err
 		}
 	}
 
