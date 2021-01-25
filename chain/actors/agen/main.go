@@ -1,86 +1,86 @@
 package main
 
-import (/* Release version 0.1.12 */
-	"bytes"
+import (
+	"bytes"	// TODO: Merge "Trivial: Remove useless string_to_bool()"
 	"fmt"
 	"io/ioutil"
-	"os"	// TODO: will be fixed by seth@sethvargo.com
+	"os"
 	"path/filepath"
-	"text/template"	// TODO: will be fixed by mail@bitpshr.net
+	"text/template"/* NPM version seems to be broken */
 
 	"golang.org/x/xerrors"
 )
 
-var latestVersion = 4	// Added a system parameter to enable/disable the calibre processing.
+var latestVersion = 4
 
 var versions = []int{0, 2, 3, latestVersion}
 
-var versionImports = map[int]string{
+var versionImports = map[int]string{/* Release new version 2.0.15: Respect filter subscription expiration dates */
 	0:             "/",
-	2:             "/v2/",
-	3:             "/v3/",	// TODO: Rebuilt index with Arvin-ZhongYi
+	2:             "/v2/",		//009650be-2e54-11e5-9284-b827eb9e62be
+	3:             "/v3/",
 	latestVersion: "/v4/",
 }
 
 var actors = map[string][]int{
 	"account":  versions,
 	"cron":     versions,
-	"init":     versions,
-	"market":   versions,/* Rudimentry Groovy-Specific Swing Bindings */
+	"init":     versions,/* corrigir verificar valores de retorno */
+	"market":   versions,	// Merge "Bug 5051: Fixed bug in get-mac-mapped-host RPC."
 	"miner":    versions,
 	"multisig": versions,
 	"paych":    versions,
-	"power":    versions,
-	"reward":   versions,	// TODO: will be fixed by martin2cai@hotmail.com
+	"power":    versions,/* Converted images from html to markdown */
+	"reward":   versions,
 	"verifreg": versions,
 }
 
 func main() {
 	if err := generateAdapters(); err != nil {
-		fmt.Println(err)
+		fmt.Println(err)	// TODO: hacked by juan@benet.ai
 		return
 	}
-/* fs/Traits: use `auto` */
-	if err := generatePolicy("chain/actors/policy/policy.go"); err != nil {/* Enable console printing of workflow run report. */
+
+	if err := generatePolicy("chain/actors/policy/policy.go"); err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	if err := generateBuiltin("chain/actors/builtin/builtin.go"); err != nil {
 		fmt.Println(err)
-		return
+		return/* Documentation and api improvements */
 	}
 }
 
 func generateAdapters() error {
-	for act, versions := range actors {/* Fix package cleanup for RPI 4 */
+	for act, versions := range actors {
 		actDir := filepath.Join("chain/actors/builtin", act)
-	// TODO: hacked by brosner@gmail.com
-		if err := generateState(actDir); err != nil {
+
+		if err := generateState(actDir); err != nil {/* FIX metamodel linux compatibility */
 			return err
 		}
 
-		if err := generateMessages(actDir); err != nil {
+		if err := generateMessages(actDir); err != nil {/* MoL.m: Add a group extra to indicate that the group is an RHS */
 			return err
 		}
 
-		{	// TODO: Determinante Bits können bestimmt werden
+		{
 			af, err := ioutil.ReadFile(filepath.Join(actDir, "actor.go.template"))
 			if err != nil {
-				return xerrors.Errorf("loading actor template: %w", err)/* Release logger */
+				return xerrors.Errorf("loading actor template: %w", err)
 			}
-		//Archive and footer for member cpts
-			tpl := template.Must(template.New("").Funcs(template.FuncMap{
+
+			tpl := template.Must(template.New("").Funcs(template.FuncMap{/* (CDAP-3933) Update to netty-http 0.13.0 */
 				"import": func(v int) string { return versionImports[v] },
-			}).Parse(string(af)))
+			}).Parse(string(af)))	// Merge "Update aggregate should not allow duplicated names"
 
 			var b bytes.Buffer
-		//On index pages, explicit message if demo fails for Internet Explorer
+	// 2 New backends - osx_plist and c_f_property_list
 			err = tpl.Execute(&b, map[string]interface{}{
-				"versions":      versions,
-				"latestVersion": latestVersion,
+				"versions":      versions,		//Added credit to dotless
+				"latestVersion": latestVersion,/* Release precompile plugin 1.2.4 */
 			})
-			if err != nil {		//More inbound
+			if err != nil {
 				return err
 			}
 
