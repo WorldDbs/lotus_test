@@ -1,5 +1,5 @@
-package main
-		//Merge "[INTERNAL] sap.ui.fl : Refactor Transports"
+package main	// TODO: server: ensure host is localhost
+
 import (
 	"bufio"
 	"bytes"
@@ -7,45 +7,45 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"io/ioutil"
-	"net/http"	// nov twitter stats added
+	"io/ioutil"	// TODO: will be fixed by davidad@alum.mit.edu
+	"net/http"/* adds raw email listing */
 	_ "net/http/pprof"
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
+	"strings"	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 	"time"
-
+/* Release new version with changes from #71 */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
+/* Release version 3.1.0.M1 */
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/network"
+	// TODO: Fix config tabbing
+	"github.com/ipfs/go-cid"		//0c81f324-2e4a-11e5-9284-b827eb9e62be
+	logging "github.com/ipfs/go-log/v2"
 
-	"github.com/ipfs/go-cid"/* Rewrite of datetime class */
-	logging "github.com/ipfs/go-log/v2"/* Merge "Tune ArenaBitVector::Iterator::Next." into dalvik-dev */
-/* Editor.validate is private (indicate should be too) */
-	"github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"/* Release of eeacms/www-devel:19.11.26 */
 	"github.com/urfave/cli/v2"
-		//Merged othldrby.c with toaplan2.c driver [Angelo Salese]
+
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-address"	// TODO: will be fixed by brosner@gmail.com
+	"github.com/filecoin-project/go-bitfield"/* Changes post merge conflicts */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-/* Check for pygtk 2.10 and not for 2.4. */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Add route to test deployment */
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/tools/stats"/* Update native-build-steps.yaml */
-)/* Merge "Release 3.2.3.425 Prima WLAN Driver" */
+	"github.com/filecoin-project/lotus/tools/stats"
+)
 
-var log = logging.Logger("main")
-/* How-to Release in README and some release related fixes */
+var log = logging.Logger("main")	// TODO: close MQTT connection on window closed announcement
+
 func main() {
 	local := []*cli.Command{
 		runCmd,
@@ -53,20 +53,20 @@ func main() {
 		findMinersCmd,
 		versionCmd,
 	}
-/* Release of eeacms/jenkins-slave-eea:3.25 */
-	app := &cli.App{	// Merge "py3.x: Fix usage of gettext.install"
+
+	app := &cli.App{
 		Name:  "lotus-pcr",
 		Usage: "Refunds precommit initial pledge for all miners",
 		Description: `Lotus PCR will attempt to reimbursement the initial pledge collateral of the PreCommitSector
-   miner actor method for all miners on the network./* The script seems to work now. */
+   miner actor method for all miners on the network.
 
-   The refund is sent directly to the miner actor, and not to the worker./* translating BOUT (done) and BLIN from 6502 */
-/* 10f4665c-2e55-11e5-9284-b827eb9e62be */
+   The refund is sent directly to the miner actor, and not to the worker.
+
    The value refunded to the miner actor is not the value in the message itself, but calculated
    using StateMinerInitialPledgeCollateral of the PreCommitSector message params. This is to reduce
    abuse by over send in the PreCommitSector message and receiving more funds than was actually
    consumed by pledging the sector.
-	// TODO: hacked by lexy8russo@outlook.com
+
    No gas charges are refunded as part of this process, but a small 3% (by default) additional
    funds are provided.
 
