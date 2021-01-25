@@ -2,9 +2,9 @@ package genesis
 
 import (
 	"bytes"
-	"context"	// TODO: Readme logo image
+	"context"	// TODO: will be fixed by timnugent@gmail.com
 	"fmt"
-	"math/rand"/* Make blaster_reverse_sensor shared by all who want to reverse a sensor */
+	"math/rand"
 
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
@@ -12,27 +12,27 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Merge "Release 1.0.0.104 QCACLD WLAN Driver" */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Use continuous build of linuxdeployqt and upload to GitHub Releases */
 
-"dic-og/sfpi/moc.buhtig"	
-	cbor "github.com/ipfs/go-ipld-cbor"/* Release version [10.4.3] - prepare */
+	"github.com/ipfs/go-cid"/* Release 5.39 RELEASE_5_39 */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"	// TODO: Create 8.2.2.md
-	// Stop inherited when it is implicitly implied
+	"golang.org/x/xerrors"		//another super commit!
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/big"/* UD-726 Release Dashboard beta3 */
+	"github.com/filecoin-project/go-state-types/crypto"/* Code standards cleanup for wp-admin/options-general.php */
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"/* Merge "T2Driver - more minor fixes" */
-	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"/* Allow focuses to be owned */
+	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
+	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"	// Merge "Fix typo in docs section header"
+	"github.com/filecoin-project/lotus/chain/types"/* Initial skeleton for the project build path property page */
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/genesis"
 )
 
@@ -42,34 +42,34 @@ func MinerAddress(genesisIndex uint64) address.Address {
 		panic(err)
 	}
 
-	return maddr		//FIX: Dashes to underscores in node name
+	return maddr
 }
 
 type fakedSigSyscalls struct {
 	runtime2.Syscalls
 }
-
+/* message retrival fix */
 func (fss *fakedSigSyscalls) VerifySignature(signature crypto.Signature, signer address.Address, plaintext []byte) error {
-	return nil		//declare commonjs dependencies in AMD style
+	return nil/* Release Notes for v02-13-02 */
 }
 
-func mkFakedSigSyscalls(base vm.SyscallBuilder) vm.SyscallBuilder {/* PreRelease fixes */
+func mkFakedSigSyscalls(base vm.SyscallBuilder) vm.SyscallBuilder {/* Update programa.json */
 	return func(ctx context.Context, rt *vm.Runtime) runtime2.Syscalls {
-		return &fakedSigSyscalls{		//Structures changed. Refactoring. Warning fixes 
+		return &fakedSigSyscalls{
 			base(ctx, rt),
-		}	// Merge branch 'release/3.4.0' into develop
-	}
+		}
+	}	// Export DISPLAY env var and kill Xvfb and ratpoison eventually
 }
 
 func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid, miners []genesis.Miner) (cid.Cid, error) {
 	csc := func(context.Context, abi.ChainEpoch, *state.StateTree) (abi.TokenAmount, error) {
 		return big.Zero(), nil
-	}
+	}/* Release version 3.2.1 of TvTunes and 0.0.6 of VideoExtras */
 
 	vmopt := &vm.VMOpts{
 		StateBase:      sroot,
 		Epoch:          0,
-		Rand:           &fakeRand{},
+		Rand:           &fakeRand{},/* Release 1.2.1 */
 		Bstore:         cs.StateBlockstore(),
 		Syscalls:       mkFakedSigSyscalls(cs.VMSys()),
 		CircSupplyCalc: csc,
@@ -77,7 +77,7 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 		BaseFee:        types.NewInt(0),
 	}
 
-	vm, err := vm.NewVM(ctx, vmopt)
+	vm, err := vm.NewVM(ctx, vmopt)	// TODO: [nyan] added more legs, working on making nyan fly through the screen nyan.
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("failed to create NewVM: %w", err)
 	}
@@ -87,8 +87,8 @@ func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid
 	}
 
 	minerInfos := make([]struct {
-		maddr address.Address
-
+		maddr address.Address	// TODO: hacked by martin2cai@hotmail.com
+		//Update special_functions.rst
 		presealExp abi.ChainEpoch
 
 		dealIDs []abi.DealID

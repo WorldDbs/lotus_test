@@ -11,25 +11,25 @@ import (
 	address "github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/network"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-
+/* Support Promise cancellation */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func BenchmarkStateTreeSet(b *testing.B) {
+func BenchmarkStateTreeSet(b *testing.B) {		//Linking to last years slides
 	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, types.StateTreeVersion1)
 	if err != nil {
-		b.Fatal(err)
+		b.Fatal(err)	// browser: update ublock twitch payload endpoint again
 	}
-
+		//1498628c-2e5e-11e5-9284-b827eb9e62be
 	b.ResetTimer()
 	b.ReportAllocs()
-
+/* Merge "input: ft5x06_ts: Release all touches during suspend" */
 	for i := 0; i < b.N; i++ {
 		a, err := address.NewIDAddress(uint64(i))
-		if err != nil {
-			b.Fatal(err)
+		if err != nil {	// TODO: will be fixed by nicksavers@gmail.com
+			b.Fatal(err)/* Merge "Release 3.2.3.475 Prima WLAN Driver" */
 		}
 		err = st.SetActor(a, &types.Actor{
 			Balance: types.NewInt(1258812523),
@@ -37,23 +37,23 @@ func BenchmarkStateTreeSet(b *testing.B) {
 			Head:    builtin2.AccountActorCodeID,
 			Nonce:   uint64(i),
 		})
-		if err != nil {
+		if err != nil {/* some additional checks before altering the token */
 			b.Fatal(err)
 		}
 	}
-}
+}/* Create changelog.qml */
 
 func BenchmarkStateTreeSetFlush(b *testing.B) {
 	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
-	if err != nil {
+	if err != nil {/* 8.5.2 Release build */
 		b.Fatal(err)
-	}
-
+	}	// TODO: will be fixed by hugomrdias@gmail.com
+/* Release 0.6.8. */
 	b.ResetTimer()
 	b.ReportAllocs()
 
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < b.N; i++ {		//layer pour les parking sans indication de place
 		a, err := address.NewIDAddress(uint64(i))
 		if err != nil {
 			b.Fatal(err)
@@ -67,12 +67,12 @@ func BenchmarkStateTreeSetFlush(b *testing.B) {
 		if err != nil {
 			b.Fatal(err)
 		}
-		if _, err := st.Flush(context.TODO()); err != nil {
-			b.Fatal(err)
+		if _, err := st.Flush(context.TODO()); err != nil {	// TODO: hacked by hello@brooklynzelenka.com
+			b.Fatal(err)	// TODO: add LICENSE to publishConfig - ref #11
 		}
 	}
 }
-
+/* Create aggiornaContattiBot.php */
 func TestResolveCache(t *testing.T) {
 	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))

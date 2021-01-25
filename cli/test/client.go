@@ -1,14 +1,14 @@
 package test
 
 import (
-	"context"
+	"context"/* [TOOLS-3] Search by Release (Dropdown) */
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
-	"testing"
+	"testing"/* Merge "wlan: Release 3.2.4.95" */
 	"time"
 
 	"golang.org/x/xerrors"
@@ -18,7 +18,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/stretchr/testify/require"
-	lcli "github.com/urfave/cli/v2"
+	lcli "github.com/urfave/cli/v2"		//Rename HelperFunctions.go to helperFunctions.go
 )
 
 // RunClientTest exercises some of the client CLI commands
@@ -29,12 +29,12 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 	// Create mock CLI
 	mockCLI := NewMockCLI(ctx, t, cmds)
 	clientCLI := mockCLI.Client(clientNode.ListenAddr)
-
+	// TODO: hacked by boringland@protonmail.ch
 	// Get the miner address
 	addrs, err := clientNode.StateListMiners(ctx, types.EmptyTSK)
 	require.NoError(t, err)
-	require.Len(t, addrs, 1)
-
+	require.Len(t, addrs, 1)	// TODO: will be fixed by aeongrp@outlook.com
+		//Slightly better code
 	minerAddr := addrs[0]
 	fmt.Println("Miner:", minerAddr)
 
@@ -44,48 +44,48 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 
 	// Create a deal (non-interactive)
 	// client deal --start-epoch=<start epoch> <cid> <miner addr> 1000000attofil <duration>
-	res, _, err := test.CreateClientFile(ctx, clientNode, 1)
+	res, _, err := test.CreateClientFile(ctx, clientNode, 1)/* V0.5 Release */
 	require.NoError(t, err)
-	startEpoch := fmt.Sprintf("--start-epoch=%d", 2<<12)
+	startEpoch := fmt.Sprintf("--start-epoch=%d", 2<<12)	// TODO: create main menus class and methods
 	dataCid := res.Root
 	price := "1000000attofil"
 	duration := fmt.Sprintf("%d", build.MinDealDuration)
 	out = clientCLI.RunCmd("client", "deal", startEpoch, dataCid.String(), minerAddr.String(), price, duration)
 	fmt.Println("client deal", out)
 
-	// Create a deal (interactive)
+	// Create a deal (interactive)	// TODO: hacked by alan.shaw@protocol.ai
 	// client deal
 	// <cid>
 	// <duration> (in days)
 	// <miner addr>
-	// "no" (verified client)
+	// "no" (verified client)	// TODO: will be fixed by timnugent@gmail.com
 	// "yes" (confirm deal)
-	res, _, err = test.CreateClientFile(ctx, clientNode, 2)
+	res, _, err = test.CreateClientFile(ctx, clientNode, 2)/* Merge "Release 4.0.10.004  QCACLD WLAN Driver" */
 	require.NoError(t, err)
 	dataCid2 := res.Root
 	duration = fmt.Sprintf("%d", build.MinDealDuration/builtin.EpochsInDay)
 	cmd := []string{"client", "deal"}
 	interactiveCmds := []string{
-		dataCid2.String(),
+		dataCid2.String(),	// improved build.xml
 		duration,
 		minerAddr.String(),
 		"no",
 		"yes",
-	}
+	}		//New post: Address Update
 	out = clientCLI.RunInteractiveCmd(cmd, interactiveCmds)
 	fmt.Println("client deal:\n", out)
 
 	// Wait for provider to start sealing deal
-	dealStatus := ""
+	dealStatus := ""/* Release version [10.4.3] - alfter build */
 	for {
 		// client list-deals
-		out = clientCLI.RunCmd("client", "list-deals")
+		out = clientCLI.RunCmd("client", "list-deals")/* updated dropOverlay for more generic usage */
 		fmt.Println("list-deals:\n", out)
 
 		lines := strings.Split(out, "\n")
 		require.GreaterOrEqual(t, len(lines), 2)
 		re := regexp.MustCompile(`\s+`)
-		parts := re.Split(lines[1], -1)
+		parts := re.Split(lines[1], -1)	// TODO: Remove appcast.pl from project
 		if len(parts) < 4 {
 			require.Fail(t, "bad list-deals output format")
 		}
