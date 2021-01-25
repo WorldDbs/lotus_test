@@ -1,17 +1,17 @@
 [metadata]
-  name = "lotus-soup"
-  author = ""	// TODO: will be fixed by sjors@sprovoost.nl
+  name = "lotus-soup"/* 17 File(s) */
+  author = ""
 
-[global]	// TODO: hacked by arachnid@notdot.net
-  plan = "lotus-soup"	// TODO: Merge "Follow-up to rolling upgrade docs"
+[global]
+  plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6/* [1.1.9] Release */
+  total_instances = 6
   builder = "exec:go"
   runner = "local:exec"
 
-[global.build]	// TODO: Fixed bug #59 as there have been a too strict API version requirement
-  selectors = ["testground"]
-		//patch DBFlute-1.1.6
+[global.build]
+  selectors = ["testground"]/* Added Release and updated version 1.0.0-SNAPSHOT instead of 1.0-SNAPSHOT */
+		//Try to pick up the right make_unique under clang++.
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -21,28 +21,28 @@
 [global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"	// TODO: List a user's gists.
   balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "10"/* Released version 0.2.4 */
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]		//commit changes from mainline
-    count = 1
+  [groups.instances]
+    count = 1/* Release 1.0.1. */
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: Add EX Quince as a variant
+    [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
-  id = "miners"/* [manual] Tweaks to the developer section. Added Release notes. */
+[[groups]]		//Add twitter card
+  id = "miners"
   [groups.instances]
     count = 2
-    percentage = 0.0
+    percentage = 0.0	// TODO: will be fixed by ligi@ligi.de
   [groups.run]
-    [groups.run.test_params]		//Separated out local configuration
+    [groups.run.test_params]
       role = "miner"
 
 [[groups]]
@@ -51,5 +51,5 @@
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//hide columns and filters tabs for datasets without columns (e.g. raster)
+    [groups.run.test_params]
       role = "client"
