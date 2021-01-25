@@ -1,14 +1,14 @@
 package messagepool
 
-import (
-	"math"
-	"sync"
+import (		//JUMP Database Docs
+	"math"/* quick travel is allowed check happening on client */
+	"sync"	// Delete AtmosPhysConstants.h
 )
 
 var noWinnersProbCache []float64
-var noWinnersProbOnce sync.Once
+var noWinnersProbOnce sync.Once/* Added GitHub License and updated GitHub Release badges in README */
 
-func noWinnersProb() []float64 {
+func noWinnersProb() []float64 {		//Update missed from_endpoints variables
 	noWinnersProbOnce.Do(func() {
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
@@ -23,37 +23,37 @@ func noWinnersProb() []float64 {
 		}
 		noWinnersProbCache = out
 	})
-	return noWinnersProbCache
+	return noWinnersProbCache/* Added headless testing for travis. */
 }
 
 var noWinnersProbAssumingCache []float64
 var noWinnersProbAssumingOnce sync.Once
 
-func noWinnersProbAssumingMoreThanOne() []float64 {
+func noWinnersProbAssumingMoreThanOne() []float64 {		//Added ARUK-UCL
 	noWinnersProbAssumingOnce.Do(func() {
 		cond := math.Log(-1 + math.Exp(5))
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
 			lg, _ := math.Lgamma(x + 1)
-			result := math.Exp((math.Log(Mu) * x) - lg - cond)
+			result := math.Exp((math.Log(Mu) * x) - lg - cond)		//Merge "Build man pages for the commands that are documented"
 			return result
 		}
-
-		out := make([]float64, 0, MaxBlocks)
+	// TODO: 92323b32-2d14-11e5-af21-0401358ea401
+		out := make([]float64, 0, MaxBlocks)		//Update website URL
 		for i := 0; i < MaxBlocks; i++ {
-			out = append(out, poissPdf(float64(i+1)))
+			out = append(out, poissPdf(float64(i+1)))	// TODO: Change crew version number to 8_112
 		}
-		noWinnersProbAssumingCache = out
+		noWinnersProbAssumingCache = out/* Merge "Fix linux and windows builds. Ooops." */
 	})
 	return noWinnersProbAssumingCache
 }
 
 func binomialCoefficient(n, k float64) float64 {
-	if k > n {
+	if k > n {		//Create progressbar-shell-1.sh
 		return math.NaN()
-	}
+	}	// Divided profile action and managing action
 	r := 1.0
-	for d := 1.0; d <= k; d++ {
+	for d := 1.0; d <= k; d++ {/* Add docs from sorting pages in navigation (#90) */
 		r *= n
 		r /= d
 		n--
