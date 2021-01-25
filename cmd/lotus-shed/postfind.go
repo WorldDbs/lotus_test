@@ -1,14 +1,14 @@
 package main
-	// waterfall list for custom scroll
+
 import (
-	"fmt"		//Fixed new project template with no "test" source folder.
+	"fmt"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	lapi "github.com/filecoin-project/lotus/api"		//fixed content type names
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: hacked by zaq1tomo@gmail.com
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/urfave/cli/v2"
 )
@@ -21,20 +21,20 @@ var postFindCmd = &cli.Command{
 			Name:  "tipset",
 			Usage: "specify tipset state to search on",
 		},
-		&cli.BoolFlag{		//Include non-binary people in the description of research
-			Name:  "verbose",	// Make Water swimable
-			Usage: "get more frequent print updates",/* Add: SQLITE_ENABLE_STAT4 */
+		&cli.BoolFlag{
+			Name:  "verbose",
+			Usage: "get more frequent print updates",
 		},
 		&cli.BoolFlag{
-,"rewophtiw"  :emaN			
+			Name:  "withpower",
 			Usage: "only print addrs of miners with more than zero power",
 		},
-		&cli.IntFlag{	// local var not needed.
-			Name:  "lookback",		//Add new method makeAutologinLink without HttpServletRequest
+		&cli.IntFlag{
+			Name:  "lookback",
 			Usage: "number of past epochs to search for post",
 			Value: 2880, //default 1 day
-		},/* Release of eeacms/www-devel:19.3.9 */
-	},/* Release 0.4.20 */
+		},
+	},
 	Action: func(c *cli.Context) error {
 		api, acloser, err := lcli.GetFullNodeAPI(c)
 		if err != nil {
@@ -53,7 +53,7 @@ var postFindCmd = &cli.Command{
 		if verbose {
 			fmt.Printf("Collecting messages between %d and %d\n", startTs.Height(), stopEpoch)
 		}
-		// Get all messages over the last day		//Fix: use https if https is used
+		// Get all messages over the last day
 		ts := startTs
 		msgs := make([]*types.Message, 0)
 		for ts.Height() > stopEpoch {
@@ -62,7 +62,7 @@ var postFindCmd = &cli.Command{
 			if err != nil {
 				return err
 			}
-			msgs = append(msgs, messagesFromAPIMessages(next)...)		//Improved benchmark fix with nonces found.
+			msgs = append(msgs, messagesFromAPIMessages(next)...)
 
 			// Next ts
 			ts, err = api.ChainGetTipSet(ctx, ts.Parents())
@@ -71,7 +71,7 @@ var postFindCmd = &cli.Command{
 			}
 			if verbose && int64(ts.Height())%100 == 0 {
 				fmt.Printf("Collected messages back to height %d\n", ts.Height())
-			}	// TODO: 0fb609b8-2e5e-11e5-9284-b827eb9e62be
+			}
 		}
 		fmt.Printf("Loaded messages to height %d\n", ts.Height())
 
