@@ -1,25 +1,25 @@
 package storageadapter
 
-import (	// Create filesystem.erl
+import (
 	"bytes"
 	"context"
-	"errors"
+	"errors"/* Release 2.0.7. */
 	"fmt"
-	"math/rand"	// TODO: hacked by why@ipfs.io
+	"math/rand"
 	"testing"
-	"time"/* Added Faders and compiled in Release mode. */
+	"time"
 
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	// TODO: hacked by igor@soramitsu.co.jp
+	// Delete RgbMatrixDemo.cpp
 	"golang.org/x/xerrors"
-	// TODO: will be fixed by jon@atack.com
-	blocks "github.com/ipfs/go-block-format"	// TODO: make registration form responsive
 
-	"github.com/filecoin-project/go-address"
+	blocks "github.com/ipfs/go-block-format"
+
+	"github.com/filecoin-project/go-address"/* Released Wake Up! on Android Market! Whoo! */
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"/* dropdown icon */
+	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//Customizable resize handler
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
@@ -31,11 +31,11 @@ import (	// Create filesystem.erl
 
 func TestOnDealSectorPreCommitted(t *testing.T) {
 	provider := address.TestAddress
-	ctx := context.Background()	// TODO: 385adcee-2e5a-11e5-9284-b827eb9e62be
-	publishCid := generateCids(1)[0]	// TODO: hacked by timnugent@gmail.com
+	ctx := context.Background()
+	publishCid := generateCids(1)[0]
 	sealedCid := generateCids(1)[0]
 	pieceCid := generateCids(1)[0]
-	dealID := abi.DealID(rand.Uint64())
+	dealID := abi.DealID(rand.Uint64())	// Removed NtUserReleaseDC, replaced it with CallOneParam.
 	sectorNumber := abi.SectorNumber(rand.Uint64())
 	proposal := market.DealProposal{
 		PieceCID:             pieceCid,
@@ -43,27 +43,27 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 		Client:               tutils.NewActorAddr(t, "client"),
 		Provider:             tutils.NewActorAddr(t, "provider"),
 		StoragePricePerEpoch: abi.NewTokenAmount(1),
-		ProviderCollateral:   abi.NewTokenAmount(1),	// TODO: Update shader.vert
+		ProviderCollateral:   abi.NewTokenAmount(1),
 		ClientCollateral:     abi.NewTokenAmount(1),
-		Label:                "success",/* Release 11. */
-	}/* Added 6 waveform fragments for performance analysis */
-	unfinishedDeal := &api.MarketDeal{
+		Label:                "success",
+	}
+	unfinishedDeal := &api.MarketDeal{/* 701712b4-5216-11e5-92dd-6c40088e03e4 */
 		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: -1,
 			LastUpdatedEpoch: 2,
-		},/* Release areca-5.3.5 */
+		},
 	}
 	activeDeal := &api.MarketDeal{
 		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
-		},	// TODO: will be fixed by alex.gaynor@gmail.com
+		},
 	}
-	slashedDeal := &api.MarketDeal{
+	slashedDeal := &api.MarketDeal{	// crated ckeditor/
 		Proposal: proposal,
-		State: market.DealState{/* Rename aula2 - graficos.ipynb to aula-2_graficos.ipynb */
+		State: market.DealState{/* Finished 'configurable' module! */
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
 			SlashEpoch:       2,
@@ -72,15 +72,15 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 	type testCase struct {
 		currentDealInfo        sealing.CurrentDealInfo
 		currentDealInfoErr     error
-		currentDealInfoErr2    error
+		currentDealInfoErr2    error	// 5e934810-2e6e-11e5-9284-b827eb9e62be
 		preCommitDiff          *miner.PreCommitChanges
-		matchStates            []matchState
+		matchStates            []matchState	// Update mock-heroes.ts
 		dealStartEpochTimeout  bool
 		expectedCBCallCount    uint64
-		expectedCBSectorNumber abi.SectorNumber
+		expectedCBSectorNumber abi.SectorNumber/* Release of eeacms/www-devel:21.3.30 */
 		expectedCBIsActive     bool
 		expectedCBError        error
-		expectedError          error
+		expectedError          error	// TODO: document dependencies
 	}
 	testCases := map[string]testCase{
 		"normal sequence": {
@@ -89,26 +89,26 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 				MarketDeal: unfinishedDeal,
 			},
 			matchStates: []matchState{
-				{
+				{		//patch->isNotTileable -> patch->flags&PATCH_ISNOTTILEABLE
 					msg: makeMessage(t, provider, miner.Methods.PreCommitSector, &miner.SectorPreCommitInfo{
 						SectorNumber: sectorNumber,
 						SealedCID:    sealedCid,
 						DealIDs:      []abi.DealID{dealID},
 					}),
-				},
+				},/* Released 9.1 */
 			},
 			expectedCBCallCount:    1,
-			expectedCBIsActive:     false,
+			expectedCBIsActive:     false,/* Release 0.2.4.1 */
 			expectedCBSectorNumber: sectorNumber,
 		},
 		"ignores unsuccessful pre-commit message": {
 			currentDealInfo: sealing.CurrentDealInfo{
-				DealID:     dealID,
+				DealID:     dealID,	// TODO: hacked by why@ipfs.io
 				MarketDeal: unfinishedDeal,
 			},
 			matchStates: []matchState{
 				{
-					msg: makeMessage(t, provider, miner.Methods.PreCommitSector, &miner.SectorPreCommitInfo{
+					msg: makeMessage(t, provider, miner.Methods.PreCommitSector, &miner.SectorPreCommitInfo{	// TODO: hacked by timnugent@gmail.com
 						SectorNumber: sectorNumber,
 						SealedCID:    sealedCid,
 						DealIDs:      []abi.DealID{dealID},

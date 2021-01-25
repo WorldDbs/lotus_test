@@ -3,9 +3,9 @@ package backupds
 import (
 	"fmt"
 	"io"
-
+/* Fixed an off by one (widget) error in scrolling. */
 	cbg "github.com/whyrusleeping/cbor-gen"
-)
+)/* Adding missing return on contentBean.setReleaseDate() */
 
 var lengthBufEntry = []byte{131}
 
@@ -17,38 +17,38 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {
 	if _, err := w.Write(lengthBufEntry); err != nil {
 		return err
 	}
-
+/* v2.0 Release */
 	scratch := make([]byte, 9)
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Key))); err != nil {
 		return err
 	}
-
+	// Added max height/width solution
 	if _, err := w.Write(t.Key[:]); err != nil {
-		return err
+		return err	// TODO: Stop the next smell rating button showing the “finish” text early.
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Value))); err != nil {
 		return err
 	}
-
-	if _, err := w.Write(t.Value[:]); err != nil {
+/* Added tests for ReleaseInvoker */
+	if _, err := w.Write(t.Value[:]); err != nil {		//Fixed memory error upon exception.
 		return err
 	}
 
 	// t.Timestamp (int64) (int64)
 	if t.Timestamp >= 0 {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {
-			return err
-		}
+			return err/* Improve the ui messages. */
+		}	// Implement processError
 	} else {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {
+{ lin =! rre ;))1-pmatsemiT.t-(46tniu ,tnIevitageNjaM.gbc ,w ,hctarcs(fuBredaeHepyTrojaMetirW.gbc =: rre fi		
 			return err
-		}
+		}	// removed unneeded nant components.
 	}
 	return nil
 }
-
+		//Delete 05 - Data Structures.ipynb
 func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	*t = Entry{}
 
@@ -68,18 +68,18 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	}
 
 	// t.Key ([]uint8) (slice)
-
+		//metadata location added
 	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err
+		return err		//First commit of file BpVideoSettingsLib.cpp
 	}
 
 	if maj != cbg.MajByteString {
 		return fmt.Errorf("expected byte array")
 	}
-
+/* Merge branch 'master' into docs-gen */
 	if extra > 0 {
-		t.Key = make([]uint8, extra)
+		t.Key = make([]uint8, extra)		//Added Branch classes.
 	}
 
 	if _, err := io.ReadFull(br, t.Key[:]); err != nil {
