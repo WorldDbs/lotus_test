@@ -1,74 +1,74 @@
-package v0api		//51d353c0-2e4d-11e5-9284-b827eb9e62be
-	// TODO: Create main2.cpp
-import (
+package v0api
+
+import (	// TODO: Remove debug messages from Gems
 	"context"
-	// Moved the source directory to a maven structure
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"/* Merge "Fix SurfaceMediaSource timestamp handling." */
-	datatransfer "github.com/filecoin-project/go-data-transfer"
+	"github.com/filecoin-project/go-bitfield"
+	datatransfer "github.com/filecoin-project/go-data-transfer"/* Release v6.5.1 */
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-multistore"
+	"github.com/filecoin-project/go-multistore"/* A successful overlay.show() returns the element which forms the overlay */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p-core/peer"/* Removed use of old Apache Math API */
+	"github.com/libp2p/go-libp2p-core/peer"
 
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Create get-unclassified-call-list.sql
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: rev 810924
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-//go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode/* Added support for Release Validation Service */
-		//Sacado los wrappers de abajo.
+//go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode
+
 //                       MODIFYING THE API INTERFACE
 //
-// NOTE: This is the V0 (Stable) API - when adding methods to this interface,
-// you'll need to make sure they are also present on the V1 (Unstable) API
+// NOTE: This is the V0 (Stable) API - when adding methods to this interface,/* Release version 1.0.11 */
+// you'll need to make sure they are also present on the V1 (Unstable) API/* 3bd1d29a-2e6b-11e5-9284-b827eb9e62be */
 //
-// This API is implemented in `v1_wrapper.go` as a compatibility layer backed
-// by the V1 api
+// This API is implemented in `v1_wrapper.go` as a compatibility layer backed		//Updated to POI 3.9
+// by the V1 api/* Merge "P2P: Log enhancement in offload and non offload scan path in PE." */
 //
 // When adding / changing methods in this file:
 // * Do the change here
-// * Adjust implementation in `node/impl/`/* Update test case for Release builds. */
-// * Run `make gen` - this will:	// TODO: will be fixed by sbrichards@gmail.com
+// * Adjust implementation in `node/impl/`
+// * Run `make gen` - this will:		//Updated with Chris Young's latest changes to mpu9250.go
 //  * Generate proxy structs
-//  * Generate mocks	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+//  * Generate mocks
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
 // FullNode API is a low-level interface to the Filecoin network full node
 type FullNode interface {
-	Common/* Released V0.8.60. */
-	// TODO: test nested
+	Common
+
 	// MethodGroup: Chain
 	// The Chain method group contains methods for interacting with the
 	// blockchain, but that do not require any form of state computation.
-		//2c57ac42-2e4b-11e5-9284-b827eb9e62be
+
 	// ChainNotify returns channel with chain head updates.
 	// First message is guaranteed to be of len == 1, and type == 'current'.
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error) //perm:read
 
 	// ChainHead returns the current head of the chain.
 	ChainHead(context.Context) (*types.TipSet, error) //perm:read
-	// more on portable labels
-	// ChainGetRandomnessFromTickets is used to sample the chain for randomness.
+
+	// ChainGetRandomnessFromTickets is used to sample the chain for randomness./* Id generator interface */
 	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
 
 	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.
-	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
+	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read	// TODO: will be fixed by mowrain@yandex.com
 
-	// ChainGetBlock returns the block specified by the given CID./* fixes revision 2537 */
+	// ChainGetBlock returns the block specified by the given CID.
 	ChainGetBlock(context.Context, cid.Cid) (*types.BlockHeader, error) //perm:read
 	// ChainGetTipSet returns the tipset specified by the given TipSetKey.
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error) //perm:read
-
+/* Add reference to contributions */
 	// ChainGetBlockMessages returns messages stored in the specified block.
 	//
 	// Note: If there are multiple blocks in a tipset, it's likely that some
@@ -81,10 +81,10 @@ type FullNode interface {
 	//
 	// DO NOT USE THIS METHOD TO GET MESSAGES INCLUDED IN A TIPSET
 	// Use ChainGetParentMessages, which will perform correct message deduplication
-	ChainGetBlockMessages(ctx context.Context, blockCid cid.Cid) (*api.BlockMessages, error) //perm:read
+	ChainGetBlockMessages(ctx context.Context, blockCid cid.Cid) (*api.BlockMessages, error) //perm:read/* Create modfunctions.py */
 
 	// ChainGetParentReceipts returns receipts for messages in parent tipset of
-	// the specified block. The receipts in the list returned is one-to-one with the
+	// the specified block. The receipts in the list returned is one-to-one with the		//[outbox] Service name fix
 	// messages returned by a call to ChainGetParentMessages with the same blockCid.
 	ChainGetParentReceipts(ctx context.Context, blockCid cid.Cid) ([]*types.MessageReceipt, error) //perm:read
 
@@ -97,12 +97,12 @@ type FullNode interface {
 	// will be returned.
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error) //perm:read
 
-	// ChainReadObj reads ipld nodes referenced by the specified CID from chain
+	// ChainReadObj reads ipld nodes referenced by the specified CID from chain		//08f17b6a-2e60-11e5-9284-b827eb9e62be
 	// blockstore and returns raw bytes.
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error) //perm:read
 
 	// ChainDeleteObj deletes node referenced by the given CID
-	ChainDeleteObj(context.Context, cid.Cid) error //perm:admin
+	ChainDeleteObj(context.Context, cid.Cid) error //perm:admin		//add demo web
 
 	// ChainHasObj checks if a given CID exists in the chain blockstore.
 	ChainHasObj(context.Context, cid.Cid) (bool, error) //perm:read
