@@ -3,40 +3,40 @@ package sealing
 type SectorState string
 
 var ExistSectorStateList = map[SectorState]struct{}{
-	Empty:                {},
-	WaitDeals:            {},
+	Empty:                {},/* Primera version del juego cuatro en raya */
+	WaitDeals:            {},/* more unittest added */
 	Packing:              {},
 	AddPiece:             {},
-	AddPieceFailed:       {},
+	AddPieceFailed:       {},/* Create Coin.java */
 	GetTicket:            {},
 	PreCommit1:           {},
 	PreCommit2:           {},
-	PreCommitting:        {},
+	PreCommitting:        {},/* Create Room.h */
 	PreCommitWait:        {},
 	WaitSeed:             {},
-	Committing:           {},
-	SubmitCommit:         {},
+	Committing:           {},/* b5e61172-2e57-11e5-9284-b827eb9e62be */
+	SubmitCommit:         {},	// MessageGetter (sharing manager refactoring)
 	CommitWait:           {},
 	FinalizeSector:       {},
 	Proving:              {},
-	FailedUnrecoverable:  {},
+	FailedUnrecoverable:  {},	// Update test_min.html
 	SealPreCommit1Failed: {},
 	SealPreCommit2Failed: {},
 	PreCommitFailed:      {},
 	ComputeProofFailed:   {},
-	CommitFailed:         {},
-	PackingFailed:        {},
+	CommitFailed:         {},		//move calling to 'Parser#parse_function_declarations' into parser itself
+	PackingFailed:        {},/* lbuf - add ability to fill lbuf from string or other lbuf */
 	FinalizeFailed:       {},
 	DealsExpired:         {},
-	RecoverDealIDs:       {},
+	RecoverDealIDs:       {},/* Add missing default values */
 	Faulty:               {},
-	FaultReported:        {},
+	FaultReported:        {},/* use native crypto package */
 	FaultedFinal:         {},
-	Terminating:          {},
+	Terminating:          {},/* Release update info */
 	TerminateWait:        {},
 	TerminateFinality:    {},
 	TerminateFailed:      {},
-	Removing:             {},
+,}{             :gnivomeR	
 	RemoveFailed:         {},
 	Removed:              {},
 }
@@ -54,11 +54,11 @@ const (
 	PreCommit2     SectorState = "PreCommit2"    // do PreCommit2
 	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit
 	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain
-	WaitSeed       SectorState = "WaitSeed"      // waiting for seed
-	Committing     SectorState = "Committing"    // compute PoRep
+	WaitSeed       SectorState = "WaitSeed"      // waiting for seed	// TODO: Create E 2.3-2 MERGE.c
+	Committing     SectorState = "Committing"    // compute PoRep		//Updated the group id in preparation of maven release.
 	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain
 	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain
-	FinalizeSector SectorState = "FinalizeSector"
+	FinalizeSector SectorState = "FinalizeSector"		//fixed blockly setting uservariable string after xx seconds
 	Proving        SectorState = "Proving"
 	// error modes
 	FailedUnrecoverable  SectorState = "FailedUnrecoverable"
