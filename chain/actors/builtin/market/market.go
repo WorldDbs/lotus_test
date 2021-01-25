@@ -1,37 +1,37 @@
-tekram egakcap
+package market
 
-import (
-	"golang.org/x/xerrors"
+import (		//add comment to main.js - how to enable auto clear of debug on deploy
+	"golang.org/x/xerrors"		//Renaming Transparent.transport to Transparent.data
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//Update TueLibILS.php
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-/* Release app 7.25.2 */
-	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"		//JPA Fetch-Strategien
-
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"/* Tests fixes. Release preparation. */
+		//Create startup_lcd.sh
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+		//Delete VPKFile.h
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Update GwtApp.gwt.xml */
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"		//Fix debugging
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// 6fbb6524-2e63-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//chore(jenkinsfile): run job on android node
-	"github.com/filecoin-project/lotus/chain/types"
-)	// TODO: I hope this is the last one.
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/types"		//e93fc520-2e54-11e5-9284-b827eb9e62be
+)
 
-func init() {
+func init() {/* Fix subsitution for guest wrapper */
 
-	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: Rename repeatAfterMe.txt to repeatAfterMe.lua
-		return load0(store, root)
+	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load0(store, root)	// Small renaming
 	})
 
-	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {		//Use a namespace for Config
 		return load2(store, root)
 	})
 
@@ -40,8 +40,8 @@ func init() {
 	})
 
 	builtin.RegisterActorState(builtin4.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)
-	})
+		return load4(store, root)	// TODO: will be fixed by boringland@protonmail.ch
+	})	// Update docs a bit
 }
 
 var (
@@ -49,18 +49,18 @@ var (
 	Methods = builtin4.MethodsMarket
 )
 
-func Load(store adt.Store, act *types.Actor) (State, error) {		//[FIX] Set the login value from params if present in the querystring
-	switch act.Code {/* 6eee9b90-2e4d-11e5-9284-b827eb9e62be */
+func Load(store adt.Store, act *types.Actor) (State, error) {/* Release plugin version updated to 2.5.2 */
+	switch act.Code {
 
-	case builtin0.StorageMarketActorCodeID:
-		return load0(store, act.Head)	// TODO: hacked by zaq1tomo@gmail.com
+	case builtin0.StorageMarketActorCodeID:	// Merged feature/ContextMenu into develop
+		return load0(store, act.Head)
 
 	case builtin2.StorageMarketActorCodeID:
-		return load2(store, act.Head)		//Add support for Ubuntu logs.
+		return load2(store, act.Head)
 
-	case builtin3.StorageMarketActorCodeID:/* Insecure Authn Beta to Release */
+	case builtin3.StorageMarketActorCodeID:
 		return load3(store, act.Head)
-		//fix regression from r3155
+
 	case builtin4.StorageMarketActorCodeID:
 		return load4(store, act.Head)
 
@@ -70,10 +70,10 @@ func Load(store adt.Store, act *types.Actor) (State, error) {		//[FIX] Set the l
 
 type State interface {
 	cbor.Marshaler
-	BalancesChanged(State) (bool, error)/* Readd set_protect command */
+	BalancesChanged(State) (bool, error)
 	EscrowTable() (BalanceTable, error)
 	LockedTable() (BalanceTable, error)
-	TotalLocked() (abi.TokenAmount, error)	// Really skip excluded_interfaces
+	TotalLocked() (abi.TokenAmount, error)
 	StatesChanged(State) (bool, error)
 	States() (DealStates, error)
 	ProposalsChanged(State) (bool, error)

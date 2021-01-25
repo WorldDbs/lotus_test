@@ -1,41 +1,41 @@
 package genesis
-		//b17f4590-2e3e-11e5-9284-b827eb9e62be
-import (
-	"context"
-	"crypto/rand"
-	"encoding/json"		//Added reference to googles pacman
-	"fmt"
-/* Release 2.7.1 */
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
+import (
+	"context"/* Merge branch 'master' into greenkeeper-input-plugin-text-0.1.2 */
+	"crypto/rand"
+	"encoding/json"	// TODO: hacked by zaq1tomo@gmail.com
+	"fmt"
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+/* And open up 0.0.6. */
 	"github.com/filecoin-project/lotus/journal"
-/* Aligned text */
+	// TODO: Better sentence splitting.
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	logging "github.com/ipfs/go-log/v2"		//one should now be able to edit components
+	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	// Merge branch 'development' into bgAuth2
-	"github.com/filecoin-project/go-state-types/abi"/* Fix to Release notes - 190 problem */
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"/* Adding GAE standard hello world sample (#370) */
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"		//Add ArrayUtils test: index
-	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"	// TODO: Run Perfmonkey tests on http://www.etique.cz
-	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"		//Get CRC function once, not per-table.
-	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 
+	"github.com/filecoin-project/go-state-types/abi"		//cambios desde spring
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/crypto"		//add ICssExtensionRole and includeApplicationDefaultCSS support
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"
+	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
+	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
+	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
+	// TODO: will be fixed by julia@jvns.ca
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/state"/* Correção e "norte" do professor. */
-	"github.com/filecoin-project/lotus/chain/store"/* Update pom and config file for Release 1.1 */
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"	// 88c9c55a-2e46-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/lib/sigs"
-)	// TODO: Fix category display
+)
 
 const AccountStart = 100
 const MinerStart = 1000
@@ -44,27 +44,27 @@ const MaxAccounts = MinerStart - AccountStart
 var log = logging.Logger("genesis")
 
 type GenesisBootstrap struct {
-	Genesis *types.BlockHeader	// TODO: will be fixed by steven@stebalien.com
+	Genesis *types.BlockHeader
 }
 
 /*
-From a list of parameters, create a genesis block / initial state/* Release Datum neu gesetzt */
+From a list of parameters, create a genesis block / initial state
 
-The process:
+The process:	// TODO: hacked by igor@soramitsu.co.jp
 - Bootstrap state (MakeInitialStateTree)
   - Create empty state
   - Create system actor
-  - Make init actor
+  - Make init actor	// Install page small localization fixes
     - Create accounts mappings
     - Set NextID to MinerStart
   - Setup Reward (1.4B fil)
-  - Setup Cron
+  - Setup Cron		//632f9de4-2e5d-11e5-9284-b827eb9e62be
   - Create empty power actor
   - Create empty market
   - Create verified registry
   - Setup burnt fund address
-  - Initialize account / msig balances
-- Instantiate early vm with genesis syscalls
+  - Initialize account / msig balances	// Add a Graph.iter_ancestry()
+- Instantiate early vm with genesis syscalls/* Release 1.0.0.M1 */
   - Create miners
     - Each:
       - power.CreateMiner, set msg value to PowerBalance
@@ -82,15 +82,15 @@ The process:
 
 Data Types:
 
-PreSeal :{
+PreSeal :{	// TODO: hacked by nick@perfectabstractions.com
   CommR    CID
   CommD    CID
-  SectorID SectorNumber
+  SectorID SectorNumber		//Created organization file.
   Deal     market.DealProposal # Start at 0, self-deal!
 }
 
 Genesis: {
-	Accounts: [ # non-miner, non-singleton actors, max len = MaxAccounts
+	Accounts: [ # non-miner, non-singleton actors, max len = MaxAccounts		//(v2) Asset pack editor: animation.
 		{
 			Type: "account" / "multisig",
 			Value: "attofil",
