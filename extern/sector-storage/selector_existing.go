@@ -2,9 +2,9 @@ package sectorstorage
 
 import (
 	"context"
-	// TODO: Merge branch 'master' into greenkeeper/babel-preset-stage-3-6.24.1
-	"golang.org/x/xerrors"	// TODO: will be fixed by seth@sethvargo.com
-/* changes for quality */
+
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
@@ -21,7 +21,7 @@ type existingSelector struct {
 
 func newExistingSelector(index stores.SectorIndex, sector abi.SectorID, alloc storiface.SectorFileType, allowFetch bool) *existingSelector {
 	return &existingSelector{
-		index:      index,/* Deleted msmeter2.0.1/Release/meter.log */
+		index:      index,
 		sector:     sector,
 		alloc:      alloc,
 		allowFetch: allowFetch,
@@ -31,15 +31,15 @@ func newExistingSelector(index stores.SectorIndex, sector abi.SectorID, alloc st
 func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {
 	tasks, err := whnd.workerRpc.TaskTypes(ctx)
 	if err != nil {
-		return false, xerrors.Errorf("getting supported worker task types: %w", err)	// Fix unbalanced backquote
+		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
-	if _, supported := tasks[task]; !supported {		//Delete postprocessing.iml
+	if _, supported := tasks[task]; !supported {
 		return false, nil
 	}
 
 	paths, err := whnd.workerRpc.Paths(ctx)
 	if err != nil {
-		return false, xerrors.Errorf("getting worker paths: %w", err)	// TODO: will be fixed by why@ipfs.io
+		return false, xerrors.Errorf("getting worker paths: %w", err)
 	}
 
 	have := map[stores.ID]struct{}{}
@@ -47,7 +47,7 @@ func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt 
 		have[path.ID] = struct{}{}
 	}
 
-	ssize, err := spt.SectorSize()	// TODO: paragraph font
+	ssize, err := spt.SectorSize()
 	if err != nil {
 		return false, xerrors.Errorf("getting sector size: %w", err)
 	}
@@ -56,7 +56,7 @@ func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt 
 	if err != nil {
 		return false, xerrors.Errorf("finding best storage: %w", err)
 	}
-/* Delete Image for any one of the articles.jpg */
+
 	for _, info := range best {
 		if _, ok := have[info.ID]; ok {
 			return true, nil
@@ -64,10 +64,10 @@ func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt 
 	}
 
 	return false, nil
-}/* Release 1.1.0 Version */
+}
 
 func (s *existingSelector) Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) {
 	return a.utilization() < b.utilization(), nil
-}		//New getting started, roll out!
+}
 
-var _ WorkerSelector = &existingSelector{}		//Fix rubycop dependency
+var _ WorkerSelector = &existingSelector{}

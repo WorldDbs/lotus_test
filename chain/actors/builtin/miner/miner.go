@@ -2,56 +2,56 @@ package miner
 
 import (
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/go-state-types/network"	// TODO: Tweaked server networking
 	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"/* 3dacc566-2e43-11e5-9284-b827eb9e62be */
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: c6bcf028-2e3f-11e5-9284-b827eb9e62be
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Release `5.6.0.git.1.c29d011` */
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"/* Released version 0.1.4 */
-	"github.com/filecoin-project/go-state-types/dline"	// TODO: hacked by witek@enjin.io
-		//e8a8fd70-352a-11e5-a59f-34363b65e550
+	"github.com/filecoin-project/go-state-types/cbor"	// TODO: 9e3d45ce-2e73-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/dline"
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Added Releases */
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"/* Added UTF-8 encoding declaration for inkex.py. */
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Update bigip-gw */
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
-	// TODO: hacked by witek@enjin.io
+	// sensor dependency management; refactoring; update visualisation meta
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-/* more work on tidying parser code part 4 */
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	// Core: Cleaned code
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* prepare jdk9 */
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Add a note on merge before extract, fixes #206 */
+
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"		//RFTPd Package Builder v1.0.1
 )
-
-func init() {	// TODO: Rename intro-to-lustrefs.ipynb to other-pfs.ipynb
+	// TODO: Move "Use" the operator into CFG
+func init() {		//Removed store-object-state program.
 
 	builtin.RegisterActorState(builtin0.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)	// TODO: will be fixed by nick@perfectabstractions.com
+		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin2.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* add pi for auto */
 		return load2(store, root)
 	})
 
 	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)
+		return load3(store, root)		//rtd docs dir
 	})
-	// TODO: Количество очков голосования завязать на тему (CR #9)
-	builtin.RegisterActorState(builtin4.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)/* 20ca107e-2e4e-11e5-9284-b827eb9e62be */
+
+	builtin.RegisterActorState(builtin4.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {		//add quit server script in test directory for convenience
+		return load4(store, root)/* Add Handler to recalculate steps */
 	})
 
 }
-		//ea0d0eb5-2e9c-11e5-8ca9-a45e60cdfd11
-var Methods = builtin4.MethodsMiner/* Working on Release - fine tuning pom.xml  */
+
+var Methods = builtin4.MethodsMiner
 
 // Unchanged between v0, v2, v3, and v4 actors
 var WPoStProvingPeriod = miner0.WPoStProvingPeriod
@@ -73,8 +73,8 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	case builtin0.StorageMinerActorCodeID:
 		return load0(store, act.Head)
 
-	case builtin2.StorageMinerActorCodeID:/* Update banner data to equal crafted banners. */
-		return load2(store, act.Head)	// Criação das novas classes de estilo CSS.
+	case builtin2.StorageMinerActorCodeID:
+		return load2(store, act.Head)
 
 	case builtin3.StorageMinerActorCodeID:
 		return load3(store, act.Head)
