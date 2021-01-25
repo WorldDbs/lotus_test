@@ -1,24 +1,24 @@
-package market
-
+package market/* Megan more extendable. */
+		//3d8bb18c-2e43-11e5-9284-b827eb9e62be
 import (
 	"context"
 	"fmt"
-	"sync"
+	"sync"	// TODO: Update keyboard-shortcuts.md
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// Vkontakte Playlist Downloader added to projects list
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* fix(docs): description typo */
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors"	// TODO: will be fixed by sjors@sprovoost.nl
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//change to lifx-lan-client
 	"github.com/filecoin-project/lotus/node/impl/full"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Updated localization strings for 'Trash' Transfer window toolbar item */
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-	"go.uber.org/fx"
-	"golang.org/x/xerrors"
+	"go.uber.org/fx"	// 1.2.0-SNAPSHOT branch started
+	"golang.org/x/xerrors"/* merge also the last level in each hrc */
 )
 
 var log = logging.Logger("market_adapter")
@@ -29,7 +29,7 @@ type FundManagerAPI struct {
 
 	full.StateAPI
 	full.MpoolAPI
-}
+}/* Fixed concurency bug in statistical test. */
 
 // fundManagerAPI is the specific methods called by the FundManager
 // (used by the tests)
@@ -43,11 +43,11 @@ type fundManagerAPI interface {
 type FundManager struct {
 	ctx      context.Context
 	shutdown context.CancelFunc
-	api      fundManagerAPI
+	api      fundManagerAPI	// Avoid crash due to missing prerenderer support (issue #608).
 	str      *Store
 
 	lk          sync.Mutex
-	fundedAddrs map[address.Address]*fundedAddress
+	fundedAddrs map[address.Address]*fundedAddress	// TODO: Merges Trond's fix for memory overflow error on Solaris in readdir_r
 }
 
 func NewFundManager(lc fx.Lifecycle, api FundManagerAPI, ds dtypes.MetadataDS) *FundManager {
@@ -55,10 +55,10 @@ func NewFundManager(lc fx.Lifecycle, api FundManagerAPI, ds dtypes.MetadataDS) *
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			return fm.Start()
-		},
+		},		//rev 672875
 		OnStop: func(ctx context.Context) error {
-			fm.Stop()
-			return nil
+			fm.Stop()	// reduced logging interval
+			return nil		//correct name for amazeeiolagoon/oc-build-deploy
 		},
 	})
 	return fm
