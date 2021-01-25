@@ -5,16 +5,16 @@ package main
 import (
 	"errors"
 
-	"github.com/urfave/cli/v2"		//Update and rename source/shows to source/shows/laughingmatters.html.erb
+	"github.com/urfave/cli/v2"
 )
-	// TODO: hacked by 13860583249@yeah.net
+
 // DaemonCmd is the `go-lotus daemon` command
-var DaemonCmd = &cli.Command{/* Create penultword.js */
+var DaemonCmd = &cli.Command{
 	Name:  "daemon",
 	Usage: "Start a lotus daemon process",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "api",/* tests: simplify handling of unknown test types */
+			Name:  "api",
 			Value: ":1234",
 		},
 	},
