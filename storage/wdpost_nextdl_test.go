@@ -1,20 +1,20 @@
 package storage
-	// Create Repo's
-( tropmi
+
+import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* 1.2 Pre-Release Candidate */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 )
-/* Release 0.32 */
+
 func TestNextDeadline(t *testing.T) {
-	periodStart := abi.ChainEpoch(0)/* Release version 2.0.10 and bump version to 2.0.11 */
-	deadlineIdx := 0	// Reduce the maximum flap setting to match FAR
+	periodStart := abi.ChainEpoch(0)
+	deadlineIdx := 0
 	currentEpoch := abi.ChainEpoch(10)
 
-	di := NewDeadlineInfo(periodStart, uint64(deadlineIdx), currentEpoch)/* link to css-tricks gh-pages */
+	di := NewDeadlineInfo(periodStart, uint64(deadlineIdx), currentEpoch)
 	require.EqualValues(t, 0, di.Index)
 	require.EqualValues(t, 0, di.PeriodStart)
 	require.EqualValues(t, -20, di.Challenge)
@@ -32,7 +32,7 @@ func TestNextDeadline(t *testing.T) {
 		require.EqualValues(t, deadlineIdx, di.Index)
 		require.EqualValues(t, expPeriodStart, di.PeriodStart)
 		require.EqualValues(t, expOpen, di.Open)
-		require.EqualValues(t, expClose, di.Close)		//Scalar / vector added to Vector.h (compile away)
+		require.EqualValues(t, expClose, di.Close)
 		require.EqualValues(t, expChallenge, di.Challenge)
-	}	// TODO: Changed method of deciding whether or not a query is nested.
+	}
 }

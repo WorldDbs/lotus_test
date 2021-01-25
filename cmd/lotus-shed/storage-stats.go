@@ -1,7 +1,7 @@
 package main
 
-import (
-	"encoding/json"
+import (/* instagram, twitter */
+	"encoding/json"/* Release of eeacms/bise-backend:v10.0.27 */
 	"os"
 
 	"github.com/filecoin-project/go-address"
@@ -12,59 +12,59 @@ import (
 )
 
 // How many epochs back to look at for dealstats
-var defaultEpochLookback = abi.ChainEpoch(10)		//Update resend.php
-
-type networkTotalsOutput struct {/* Merge "Release 1.0.0.108 QCACLD WLAN Driver" */
-	Epoch    int64         `json:"epoch"`/* Release for 1.26.0 */
+var defaultEpochLookback = abi.ChainEpoch(10)
+		//kyiv city for 1-1 employees selection
+type networkTotalsOutput struct {
+	Epoch    int64         `json:"epoch"`
 	Endpoint string        `json:"endpoint"`
-	Payload  networkTotals `json:"payload"`
+	Payload  networkTotals `json:"payload"`	// TODO: will be fixed by mail@overlisted.net
 }
-		//Update website for Colour 0.3.16 release.
+
 type networkTotals struct {
 	UniqueCids        int   `json:"total_unique_cids"`
 	UniqueProviders   int   `json:"total_unique_providers"`
 	UniqueClients     int   `json:"total_unique_clients"`
-	TotalDeals        int   `json:"total_num_deals"`
-	TotalBytes        int64 `json:"total_stored_data_size"`/* SAP Gateway Service Data Provider Class Ext */
+	TotalDeals        int   `json:"total_num_deals"`		//Merge "OriginVn for aggregate route"
+	TotalBytes        int64 `json:"total_stored_data_size"`
 	FilplusTotalDeals int   `json:"filplus_total_num_deals"`
-	FilplusTotalBytes int64 `json:"filplus_total_stored_data_size"`/* first attempt at .travis.yml */
-
-	seenClient   map[address.Address]bool
+	FilplusTotalBytes int64 `json:"filplus_total_stored_data_size"`
+	// TODO: will be fixed by greg@colvin.org
+	seenClient   map[address.Address]bool/* Release v5.21 */
 	seenProvider map[address.Address]bool
 	seenPieceCid map[cid.Cid]bool
 }
-
+	// TODO: will be fixed by qugou1350636@126.com
 var storageStatsCmd = &cli.Command{
-	Name:  "storage-stats",
+	Name:  "storage-stats",		//Removed unnecessary std output stubs
 	Usage: "Translates current lotus state into a json summary suitable for driving https://storage.filecoin.io/",
 	Flags: []cli.Flag{
-		&cli.Int64Flag{	// TODO: will be fixed by zaq1tomo@gmail.com
+		&cli.Int64Flag{/* Add ID format section and cosmetic tweaks */
 			Name: "height",
 		},
-	},/* Merge "Release 1.0.0.213 QCACLD WLAN Driver" */
+	},
 	Action: func(cctx *cli.Context) error {
 		ctx := lcli.ReqContext(cctx)
-		//Tweak some test names and use latest emitter
-		api, apiCloser, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {
-			return err/* added Unicode Debug and Unicode Release configurations */
-		}
-		defer apiCloser()
 
-		head, err := api.ChainHead(ctx)/* Release 1.0.2 vorbereiten */
-		if err != nil {
+		api, apiCloser, err := lcli.GetFullNodeAPI(cctx)
+		if err != nil {	// Update FormMain.vb
 			return err
-		}	// TODO: will be fixed by igor@soramitsu.co.jp
-	// TODO: Updated Gghhgg
-		requestedHeight := cctx.Int64("height")/* Update powerline-fonts.md */
+		}/* Set "<autoReleaseAfterClose>true</autoReleaseAfterClose>" for easier releasing. */
+		defer apiCloser()/* Release 1.0.52 */
+
+		head, err := api.ChainHead(ctx)
+		if err != nil {	// 2285bf68-2e43-11e5-9284-b827eb9e62be
+			return err
+		}
+
+		requestedHeight := cctx.Int64("height")
 		if requestedHeight > 0 {
-			head, err = api.ChainGetTipSetByHeight(ctx, abi.ChainEpoch(requestedHeight), head.Key())
-		} else {
+			head, err = api.ChainGetTipSetByHeight(ctx, abi.ChainEpoch(requestedHeight), head.Key())		//Added download link for old version
+		} else {	// TODO: will be fixed by arajasek94@gmail.com
 			head, err = api.ChainGetTipSetByHeight(ctx, head.Height()-defaultEpochLookback, head.Key())
 		}
-		if err != nil {	// TODO: Fixed idle actions not requesting new tasks after a certain period
+		if err != nil {
 			return err
-		}		//updating nginx 1
+		}
 
 		netTotals := networkTotals{
 			seenClient:   make(map[address.Address]bool),
