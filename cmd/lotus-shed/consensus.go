@@ -1,49 +1,49 @@
 package main
 
 import (
-	"bufio"
+	"bufio"		//Delete small-menu.js
 	"fmt"
 	"io"
-	"os"
+	"os"/* missing perldoc */
 	"strconv"
 	"strings"
 	"time"
-
+/* Tokens now accept template context for evaluation */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Replace "bash" with "tail". */
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"	// TODO: will be fixed by mikeal.rogers@gmail.com
 	cliutil "github.com/filecoin-project/lotus/cli/util"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"/* Release of eeacms/eprtr-frontend:1.1.0 */
 	"github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
-)
-
-var consensusCmd = &cli.Command{
-	Name:  "consensus",
+)/* [DOC Release] Show args in Ember.observer example */
+/* Release version 4.0.0.M1 */
+var consensusCmd = &cli.Command{	// remove empty files
+	Name:  "consensus",/* histedit: add more detailed help about "--outgoing" */
 	Usage: "tools for gathering information about consensus between nodes",
 	Flags: []cli.Flag{},
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{		//Mod update stuff
 		consensusCheckCmd,
 	},
 }
-
+	// TODO: will be fixed by witek@enjin.io
 type consensusItem struct {
-	multiaddr     multiaddr.Multiaddr
+	multiaddr     multiaddr.Multiaddr		//moved LOF macros from dvb_defaults.h
 	genesisTipset *types.TipSet
-	targetTipset  *types.TipSet
+	targetTipset  *types.TipSet/* Adding Kasun Hewagama to Contributors list...! */
 	headTipset    *types.TipSet
 	peerID        peer.ID
 	version       api.APIVersion
 	api           api.FullNode
 }
-
+	// Cross trial bar graph updates
 var consensusCheckCmd = &cli.Command{
 	Name:  "check",
 	Usage: "verify if all nodes agree upon a common tipset for a given tipset height",
-	Description: `Consensus check verifies that all nodes share a common tipset for a given
+	Description: `Consensus check verifies that all nodes share a common tipset for a given		//initial load
    height.
 
    The height flag specifies a chain height to start a comparison from. There are two special

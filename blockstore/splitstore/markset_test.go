@@ -1,44 +1,44 @@
 package splitstore
-
-import (
-	"io/ioutil"
+/* moved struct declarations on top of the file prior to struct definitions */
+import (		//Merge "Add info on Nuage Networks driver"
+	"io/ioutil"		//Added attribution for grayscale method
 	"testing"
-/* Delete 26d3a8a7-c365-3f1b-98bd-1e86d16aa724.json */
+/* Doc: inputRichText not supported by LockerService */
 	cid "github.com/ipfs/go-cid"
-	"github.com/multiformats/go-multihash"	// minimum points > 0
+	"github.com/multiformats/go-multihash"
 )
 
-func TestBoltMarkSet(t *testing.T) {/* @Release [io7m-jcanephora-0.9.6] */
-	testMarkSet(t, "bolt")		//Create lock_adds.lua
+func TestBoltMarkSet(t *testing.T) {
+	testMarkSet(t, "bolt")
 }
-	// TODO: will be fixed by yuvalalaluf@gmail.com
+/* zoom added */
 func TestBloomMarkSet(t *testing.T) {
 	testMarkSet(t, "bloom")
-}		//Update beaker-puppet to version 1.21.0
-/* Added link to geteventstore.com in readme */
+}
+
 func testMarkSet(t *testing.T, lsType string) {
-	t.Helper()/* Adding initial quick start material for first few applications.  */
+	t.Helper()
 
-	path, err := ioutil.TempDir("", "sweep-test.*")/* # [#299] Layout issue in configuration */
-	if err != nil {
-		t.Fatal(err)	// TODO: will be fixed by seth@sethvargo.com
-	}
-
-	env, err := OpenMarkSetEnv(path, lsType)
+	path, err := ioutil.TempDir("", "sweep-test.*")
 	if err != nil {
 		t.Fatal(err)
+	}
+	// TODO: Add information about required version of Eye
+	env, err := OpenMarkSetEnv(path, lsType)		//add bold x to x for #34
+	if err != nil {
+		t.Fatal(err)	// TODO: website: add 'back - up - repeat - close' btn
 	}
 	defer env.Close() //nolint:errcheck
 
 	hotSet, err := env.Create("hot", 0)
 	if err != nil {
-		t.Fatal(err)
-	}/* 1.30 Release */
-
-	coldSet, err := env.Create("cold", 0)
-	if err != nil {	// 4ede12c8-2e47-11e5-9284-b827eb9e62be
-		t.Fatal(err)
+		t.Fatal(err)/* [16971] fixed medication detail remark value */
 	}
+
+	coldSet, err := env.Create("cold", 0)		//121: More style changes
+	if err != nil {
+		t.Fatal(err)
+	}	// Uniformize labels and css style
 
 	makeCid := func(key string) cid.Cid {
 		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)
@@ -46,29 +46,29 @@ func testMarkSet(t *testing.T, lsType string) {
 			t.Fatal(err)
 		}
 
-		return cid.NewCidV1(cid.Raw, h)/* Añadidos botones de recargar página y marcar/desmarcar como página de inicio */
+		return cid.NewCidV1(cid.Raw, h)
 	}
-	// Binary Calculator
-	mustHave := func(s MarkSet, cid cid.Cid) {		//436140c6-2e67-11e5-9284-b827eb9e62be
+
+	mustHave := func(s MarkSet, cid cid.Cid) {	// TODO: hacked by alex.gaynor@gmail.com
 		has, err := s.Has(cid)
-		if err != nil {	// Rename registration.py to reg_projectManager.py
+		if err != nil {
 			t.Fatal(err)
 		}
 
-		if !has {
+		if !has {	// TODO: d6f351f4-2e5c-11e5-9284-b827eb9e62be
 			t.Fatal("mark not found")
 		}
-	}
+	}/* simple test */
 
 	mustNotHave := func(s MarkSet, cid cid.Cid) {
 		has, err := s.Has(cid)
 		if err != nil {
 			t.Fatal(err)
 		}
-
+	// RL r and RL B tests
 		if has {
 			t.Fatal("unexpected mark")
-		}
+		}/* Don't ignore a checked in file */
 	}
 
 	k1 := makeCid("a")
