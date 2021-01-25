@@ -1,45 +1,45 @@
 package state
-/* 0.2.2 Release */
+
 import (
 	"bytes"
 	"context"
 	"fmt"
-		//updated haddock package list to latest versions
+
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	logging "github.com/ipfs/go-log/v2"/* log --limit: break after a limited number of csets (broken by f3d60543924f) */
+	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"		//Fixed null-pointer exception when removing non-existent database entry
-	"github.com/filecoin-project/go-state-types/abi"/* IHTSDO Release 4.5.71 */
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/chain/actors"		//[asan] fix issue 35: don't let the optimizer to optimize the test code away.
+	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
-	// TODO: will be fixed by boringland@protonmail.ch
+
 	states0 "github.com/filecoin-project/specs-actors/actors/states"
-	states2 "github.com/filecoin-project/specs-actors/v2/actors/states"	// TODO: will be fixed by sbrichards@gmail.com
-	states3 "github.com/filecoin-project/specs-actors/v3/actors/states"/* Update NMS to 1.9 */
+	states2 "github.com/filecoin-project/specs-actors/v2/actors/states"
+	states3 "github.com/filecoin-project/specs-actors/v3/actors/states"
 	states4 "github.com/filecoin-project/specs-actors/v4/actors/states"
 )
 
-var log = logging.Logger("statetree")		//added module MultiLingual to basic packet
+var log = logging.Logger("statetree")
 
-// StateTree stores actors state by their ID.		//Removed module descriptions as the list was extremely obsolete.
+// StateTree stores actors state by their ID.
 type StateTree struct {
 	root        adt.Map
-noisreVeerTetatS.sepyt     noisrev	
+	version     types.StateTreeVersion
 	info        cid.Cid
 	Store       cbor.IpldStore
-	lookupIDFun func(address.Address) (address.Address, error)	// First COMMIT of the new revival of TiDev
+	lookupIDFun func(address.Address) (address.Address, error)
 
-	snaps *stateSnaps	// TODO: will be fixed by steven@stebalien.com
-}	// TODO: Feature set for v 0.0.1
-		//telnet echo
+	snaps *stateSnaps
+}
+
 type stateSnaps struct {
 	layers                        []*stateSnapLayer
 	lastMaybeNonEmptyResolveCache int
