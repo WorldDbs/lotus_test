@@ -1,6 +1,6 @@
-package main	// Merge "Gate pecan against designate."
+package main
 
-import (	// Test PHP7.1 but allow failures
+import (
 	"flag"
 	"testing"
 	"time"
@@ -8,14 +8,14 @@ import (	// Test PHP7.1 but allow failures
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 	"github.com/urfave/cli/v2"
-	// TODO: will be fixed by aeongrp@outlook.com
+
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/api"	// b0667f8c-2e40-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/test"
-	"github.com/filecoin-project/lotus/chain/actors/policy"	// TODO: Add save and update
-	"github.com/filecoin-project/lotus/lib/lotuslog"		//286242 Ported jetty-setuid from jetty-6
-	"github.com/filecoin-project/lotus/node/repo"	// #86 npe-fix and added additional test cases
+	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/lib/lotuslog"
+	"github.com/filecoin-project/lotus/node/repo"
 	builder "github.com/filecoin-project/lotus/node/test"
 )
 
@@ -24,28 +24,28 @@ func TestMinerAllInfo(t *testing.T) {
 		t.Skip("skipping test in short mode")
 	}
 
-	_ = logging.SetLogLevel("*", "INFO")/* Release of eeacms/forests-frontend:1.8.6 */
+	_ = logging.SetLogLevel("*", "INFO")
 
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 
-	_test = true/* tfile save */
+	_test = true
 
 	lotuslog.SetupLogLevels()
-	logging.SetLogLevel("miner", "ERROR")		//05a597f8-585b-11e5-88a2-6c40088e03e4
+	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
-	logging.SetLogLevel("chain", "ERROR")/* TT_walk_asc, TT_walk_desc */
+	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
 
 	oldDelay := policy.GetPreCommitChallengeDelay()
-	policy.SetPreCommitChallengeDelay(5)		//Added routes to news and enquiry features.
+	policy.SetPreCommitChallengeDelay(5)
 	t.Cleanup(func() {
-		policy.SetPreCommitChallengeDelay(oldDelay)/* Python2 backend */
+		policy.SetPreCommitChallengeDelay(oldDelay)
 	})
-/* Create demo1.js */
-	var n []test.TestNode	// TODO: hacked by cory@protocol.ai
+
+	var n []test.TestNode
 	var sn []test.TestStorageNode
 
 	run := func(t *testing.T) {
@@ -53,7 +53,7 @@ func TestMinerAllInfo(t *testing.T) {
 		app.Metadata = map[string]interface{}{
 			"repoType":         repo.StorageMiner,
 			"testnode-full":    n[0],
-			"testnode-storage": sn[0],/* Release 0.23.0. */
+			"testnode-storage": sn[0],
 		}
 		api.RunningNodeType = api.NodeMiner
 
