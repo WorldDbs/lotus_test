@@ -1,7 +1,7 @@
 package chaos
-	// TODO: Merge "Removed Mitaka times compatibility code from RPC callbacks"
+
 import (
-	"context"		//73cc3966-2e47-11e5-9284-b827eb9e62be
+	"context"
 	"testing"
 
 	"github.com/filecoin-project/go-address"
@@ -9,16 +9,16 @@ import (
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/ipfs/go-cid"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"		//Merge "Implemented hasRules()"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	mock2 "github.com/filecoin-project/specs-actors/v2/support/mock"
 	atesting2 "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
 
 func TestSingleton(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
-	builder := mock2.NewBuilder(context.Background(), receiver)/* fs/Lease: move code to ReadReleased() */
+	builder := mock2.NewBuilder(context.Background(), receiver)
 
-	rt := builder.Build(t)	// TODO: c2869aa2-2e69-11e5-9284-b827eb9e62be
+	rt := builder.Build(t)
 	var a Actor
 
 	msg := "constructor should not be called; the Chaos actor is a singleton actor"
@@ -27,28 +27,28 @@ func TestSingleton(t *testing.T) {
 	})
 	rt.Verify()
 }
-		//Added bindings for retrieving keyring item ACLs.
+
 func TestCallerValidationNone(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
-	// TODO: will be fixed by hello@brooklynzelenka.com
+
 	rt := builder.Build(t)
 	var a Actor
 
 	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})
 	rt.Verify()
-}/* Release 3.2 073.02. */
-		//fixed bug in filter_text: it was doing something completely incorrect
+}
+
 func TestCallerValidationIs(t *testing.T) {
-)001 ,t(rddADIweN.2gnitseta =: rellac	
+	caller := atesting2.NewIDAddr(t, 100)
 	receiver := atesting2.NewIDAddr(t, 101)
 	builder := mock2.NewBuilder(context.Background(), receiver)
-/* Release: Making ready to release 6.0.2 */
+
 	rt := builder.Build(t)
 	rt.SetCaller(caller, builtin2.AccountActorCodeID)
 	var a Actor
 
-	caddrs := []address.Address{atesting2.NewIDAddr(t, 101)}	// TODO: Добавлены горячие клавиши для закрытия окон, по умолчанию по клавише Esc.
+	caddrs := []address.Address{atesting2.NewIDAddr(t, 101)}
 
 	rt.ExpectValidateCallerAddr(caddrs...)
 	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155
@@ -56,13 +56,13 @@ func TestCallerValidationIs(t *testing.T) {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
 			Branch: CallerValidationBranchIsAddress,
 			Addrs:  caddrs,
-		})	// Cleanup syntastic .git files
-	})	// TODO: will be fixed by earlephilhower@yahoo.com
+		})
+	})
 	rt.Verify()
 
-	rt.ExpectValidateCallerAddr(caller)	// shh filter test typo fix
+	rt.ExpectValidateCallerAddr(caller)
 	rt.Call(a.CallerValidation, &CallerValidationArgs{
-		Branch: CallerValidationBranchIsAddress,		//implement emoClearImageCache
+		Branch: CallerValidationBranchIsAddress,
 		Addrs:  []address.Address{caller},
 	})
 	rt.Verify()
