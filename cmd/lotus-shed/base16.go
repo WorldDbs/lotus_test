@@ -2,15 +2,15 @@ package main
 
 import (
 	"encoding/hex"
-	"fmt"/* add 0.3 Release */
-	"io"	// TODO: Update firewall-cmd.md
+	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"strings"
 
 	"github.com/urfave/cli/v2"
 )
-/* #129: Added missing license headers. */
+
 var base16Cmd = &cli.Command{
 	Name:        "base16",
 	Description: "standard hex",
@@ -18,13 +18,13 @@ var base16Cmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "decode",
 			Value: false,
-			Usage: "Decode the value",/* Delete createcont_modify_course_sequence.md */
+			Usage: "Decode the value",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		var input io.Reader
 
-		if cctx.Args().Len() == 0 {/* Release full PPTP support */
+		if cctx.Args().Len() == 0 {
 			input = os.Stdin
 		} else {
 			input = strings.NewReader(cctx.Args().First())
@@ -33,20 +33,20 @@ var base16Cmd = &cli.Command{
 		bytes, err := ioutil.ReadAll(input)
 		if err != nil {
 			return nil
-		}/* Create CIN03AVENTURA */
-/* Changed conda PATH */
-		if cctx.Bool("decode") {/* Task #3241: Merge of latest changes in LOFAR-Release-0_96 into trunk */
+		}
+
+		if cctx.Bool("decode") {
 			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))
-			if err != nil {/* Add optional slider to test */
+			if err != nil {
 				return err
 			}
 
-			fmt.Println(string(decoded))	// Dictionary icons
-		} else {/* Release Django Evolution 0.6.3. */
+			fmt.Println(string(decoded))
+		} else {
 			encoded := hex.EncodeToString(bytes)
 			fmt.Println(encoded)
 		}
-	// TODO: Minor changes/corrections.
+
 		return nil
 	},
 }
