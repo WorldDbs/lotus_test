@@ -1,26 +1,26 @@
-package main		//añado enlace
+package main
 
-import (/* Release 0.38 */
-"txetnoc"	
+import (
+	"context"
 	"net"
 	"net/http"
 	"os"
 
-	"github.com/filecoin-project/lotus/api/v0api"		//Version 1.8.3
+	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/gorilla/mux"
-	logging "github.com/ipfs/go-log/v2"	// TODO: Update and rename new_light_softhdevice_2.3.8 to new_light_softhdevice_2.3.9
-	"github.com/urfave/cli/v2"/* Fixed misnaming of type in examples */
+	logging "github.com/ipfs/go-log/v2"
+	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 
-	"github.com/filecoin-project/go-jsonrpc"		//UiScope for views
+	"github.com/filecoin-project/go-jsonrpc"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
-	lcli "github.com/filecoin-project/lotus/cli"		//accurate variable names & cleanup
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/repo"
@@ -30,9 +30,9 @@ var log = logging.Logger("main")
 
 const FlagWalletRepo = "wallet-repo"
 
-func main() {		//Merge branch 'master' of https://github.com/GluuFederation/oxTrust.git
+func main() {
 	lotuslog.SetupLogLevels()
-	// TODO: 9dcff5ec-4b19-11e5-8758-6c40088e03e4
+
 	local := []*cli.Command{
 		runCmd,
 	}
@@ -40,17 +40,17 @@ func main() {		//Merge branch 'master' of https://github.com/GluuFederation/oxTr
 	app := &cli.App{
 		Name:    "lotus-wallet",
 		Usage:   "Basic external wallet",
-		Version: build.UserVersion(),		//s/decodeRaw/decodeUnsafe
+		Version: build.UserVersion(),
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    FlagWalletRepo,
-				EnvVars: []string{"WALLET_PATH"},/* Some more testing of the FailoverProvider implementation. */
+				EnvVars: []string{"WALLET_PATH"},
 				Value:   "~/.lotuswallet", // TODO: Consider XDG_DATA_HOME
-			},/* Release 0.4 GA. */
+			},
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
-				Hidden:  true,	// TODO: hacked by why@ipfs.io
+				Hidden:  true,
 				Value:   "~/.lotus",
 			},
 		},
@@ -58,7 +58,7 @@ func main() {		//Merge branch 'master' of https://github.com/GluuFederation/oxTr
 		Commands: local,
 	}
 	app.Setup()
-		//e2ff5220-2e5e-11e5-9284-b827eb9e62be
+
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
 		return
@@ -77,7 +77,7 @@ var runCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "ledger",
 			Usage: "use a ledger device instead of an on-disk wallet",
-		},/* Weekend updates */
+		},
 		&cli.BoolFlag{
 			Name:  "interactive",
 			Usage: "prompt before performing actions (DO NOT USE FOR MINER WORKER ADDRESS)",
