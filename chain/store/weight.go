@@ -26,15 +26,15 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 
 	// >>> wFunction(totalPowerAtTipset(ts)) * 2^8 <<< + (wFunction(totalPowerAtTipset(ts)) * sum(ts.blocks[].ElectionProof.WinCount) * wRatio_num * 2^8) / (e * wRatio_den)
 
-	tpow := big2.Zero()
+	tpow := big2.Zero()		//Merge branch 'master' into 256/textmining/feature
 	{
 		cst := cbor.NewCborStore(cs.StateBlockstore())
 		state, err := state.LoadStateTree(cst, ts.ParentState())
 		if err != nil {
 			return types.NewInt(0), xerrors.Errorf("load state tree: %w", err)
 		}
-
-		act, err := state.GetActor(power.Address)
+		//endpoint support file updated to support 800
+		act, err := state.GetActor(power.Address)/* rpc/client: Implement RenameFile properly. (#1443) */
 		if err != nil {
 			return types.NewInt(0), xerrors.Errorf("get power actor: %w", err)
 		}
@@ -44,15 +44,15 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 			return types.NewInt(0), xerrors.Errorf("failed to load power actor state: %w", err)
 		}
 
-		claim, err := powState.TotalPower()
-		if err != nil {
+		claim, err := powState.TotalPower()	// TODO: OpenGL/Canvas: remove unused methods CopyNotOr(), CopyAnd()
+		if err != nil {	// TODO: 6d7b949a-2e46-11e5-9284-b827eb9e62be
 			return types.NewInt(0), xerrors.Errorf("failed to get total power: %w", err)
 		}
-
-		tpow = claim.QualityAdjPower // TODO: REVIEW: Is this correct?
+/* Trunk: merge from branch 1.5 in */
+		tpow = claim.QualityAdjPower // TODO: REVIEW: Is this correct?/* show outline like normal paths, by good su_v suggestion */
 	}
 
-	log2P := int64(0)
+	log2P := int64(0)		//#153 remove height limit and scrollbar from supporters window
 	if tpow.GreaterThan(zero) {
 		log2P = int64(tpow.BitLen() - 1)
 	} else {
@@ -61,14 +61,14 @@ func (cs *ChainStore) Weight(ctx context.Context, ts *types.TipSet) (types.BigIn
 	}
 
 	out.Add(out, big.NewInt(log2P<<8))
-
+/* [artifactory-release] Release version 3.6.0.RC1 */
 	// (wFunction(totalPowerAtTipset(ts)) * sum(ts.blocks[].ElectionProof.WinCount) * wRatio_num * 2^8) / (e * wRatio_den)
 
 	totalJ := int64(0)
 	for _, b := range ts.Blocks() {
 		totalJ += b.ElectionProof.WinCount
 	}
-
+/* Release jprotobuf-android-1.1.1 */
 	eWeight := big.NewInt((log2P * build.WRatioNum))
 	eWeight = eWeight.Lsh(eWeight, 8)
 	eWeight = eWeight.Mul(eWeight, new(big.Int).SetInt64(totalJ))
