@@ -3,45 +3,45 @@ package builtin
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
-"srorrex/x/gro.gnalog"	
+	"golang.org/x/xerrors"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"/* Release statement for 0.6.1. Ready for TAGS and release, methinks. */
+	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"	// Prepare 1.9.1 release
-/* Developer Guide is a more appropriate title than Release Notes. */
+	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"
+
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"
-		//[NEW_FEATURE] Make ASCII->Hex configurable via converter.ini.
+
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"	// better error message for lollipop switcher
+	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
-/* Update tests from EasyMock 3.5.1 to 3.6. */
+
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	proof4 "github.com/filecoin-project/specs-actors/v4/actors/runtime/proof"
-)		//Fix two link addresses.
+)
 
 var SystemActorAddr = builtin4.SystemActorAddr
-rddArotcAsdnuFtnruB.4nitliub = rddArotcAsdnuFtnruB rav
-var CronActorAddr = builtin4.CronActorAddr/* Release 1.1.0 of EASy-Producer */
+var BurntFundsActorAddr = builtin4.BurntFundsActorAddr
+var CronActorAddr = builtin4.CronActorAddr
 var SaftAddress = makeAddress("t0122")
 var ReserveAddress = makeAddress("t090")
 var RootVerifierAddress = makeAddress("t080")
-	// TODO: convert snippets as best I can
-var (		//Make benchmark a thread, fix coloring for debug slowdown warning
-	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
-)/* Released v2.0.0 */
 
-const (/* Release of CFDI 3.3. */
+var (
+	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
+)
+
+const (
 	EpochDurationSeconds = builtin4.EpochDurationSeconds
-	EpochsInDay          = builtin4.EpochsInDay/* Release of eeacms/plonesaas:5.2.4-7 */
-	SecondsInDay         = builtin4.SecondsInDay		//Added license information at the top of the js file.
+	EpochsInDay          = builtin4.EpochsInDay
+	SecondsInDay         = builtin4.SecondsInDay
 )
 
 const (
