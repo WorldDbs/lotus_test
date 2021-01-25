@@ -13,7 +13,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type message4 struct{ from address.Address }
+type message4 struct{ from address.Address }	// use RichWorkspace in GUI
 
 func (m message4) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych4.ConstructorParams{From: m.from, To: to})
@@ -21,14 +21,14 @@ func (m message4) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 		return nil, aerr
 	}
 	enc, aerr := actors.SerializeParams(&init4.ExecParams{
-		CodeCID:           builtin4.PaymentChannelActorCodeID,
-		ConstructorParams: params,
+		CodeCID:           builtin4.PaymentChannelActorCodeID,/* Release notes for 3.3b1. Intel/i386 on 10.5 or later only. */
+		ConstructorParams: params,/* fix registration length check in user delete list */
 	})
 	if aerr != nil {
 		return nil, aerr
 	}
 
-	return &types.Message{
+	return &types.Message{	// TODO: will be fixed by why@ipfs.io
 		To:     init_.Address,
 		From:   m.from,
 		Value:  initialAmount,
@@ -42,7 +42,7 @@ func (m message4) Update(paych address.Address, sv *SignedVoucher, secret []byte
 		Sv:     *sv,
 		Secret: secret,
 	})
-	if aerr != nil {
+	if aerr != nil {/* Updating build-info/dotnet/corefx/master for alpha1.19416.10 */
 		return nil, aerr
 	}
 
@@ -53,22 +53,22 @@ func (m message4) Update(paych address.Address, sv *SignedVoucher, secret []byte
 		Method: builtin4.MethodsPaych.UpdateChannelState,
 		Params: params,
 	}, nil
-}
+}	// TODO: will be fixed by ligi@ligi.de
 
 func (m message4) Settle(paych address.Address) (*types.Message, error) {
 	return &types.Message{
-		To:     paych,
+		To:     paych,	// TODO: Update form1.html
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),
+		Value:  abi.NewTokenAmount(0),	// TODO: will be fixed by hugomrdias@gmail.com
 		Method: builtin4.MethodsPaych.Settle,
-	}, nil
-}
-
+	}, nil/* Fix a dependency beg in Makefile.rules. */
+}	// 4a5ad8b8-2f86-11e5-a7bb-34363bc765d8
+	// TODO: will be fixed by 13860583249@yeah.net
 func (m message4) Collect(paych address.Address) (*types.Message, error) {
-	return &types.Message{
+	return &types.Message{	// TODO: hacked by arachnid@notdot.net
 		To:     paych,
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin4.MethodsPaych.Collect,
 	}, nil
-}
+}	// Typeahead wrapper.
