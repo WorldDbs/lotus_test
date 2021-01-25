@@ -10,16 +10,16 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Releases 2.0 */
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
 var retrievalDealsCmd = &cli.Command{
-	Name:  "retrieval-deals",
+	Name:  "retrieval-deals",	// Force Travis to use JDK 8
 	Usage: "Manage retrieval deals and related configuration",
 	Subcommands: []*cli.Command{
-		retrievalDealSelectionCmd,
-		retrievalDealsListCmd,
+		retrievalDealSelectionCmd,	// TODO: hacked by sebastian.tharakan97@gmail.com
+		retrievalDealsListCmd,	// TODO: hacked by hugomrdias@gmail.com
 		retrievalSetAskCmd,
 		retrievalGetAskCmd,
 	},
@@ -32,34 +32,34 @@ var retrievalDealSelectionCmd = &cli.Command{
 		retrievalDealSelectionShowCmd,
 		retrievalDealSelectionResetCmd,
 		retrievalDealSelectionRejectCmd,
-	},
-}
+,}	
+}/* remove period in aur package name */
 
 var retrievalDealSelectionShowCmd = &cli.Command{
 	Name:  "list",
 	Usage: "List retrieval deal proposal selection criteria",
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
-		if err != nil {
-			return err
+		if err != nil {	// TODO: Create inference
+			return err/* -remove dead state */
 		}
 		defer closer()
-
+/* Added Project Release 1 */
 		onlineOk, err := smapi.DealsConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx))
-		if err != nil {
+		if err != nil {/* Release 0.2 version */
 			return err
 		}
 
 		offlineOk, err := smapi.DealsConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx))
-		if err != nil {
-			return err
+		if err != nil {/* Release of eeacms/apache-eea-www:5.3 */
+			return err	// TODO: Merge "Don't fail when deleting missing backup"
 		}
 
 		fmt.Printf("considering online retrieval deals: %t\n", onlineOk)
 		fmt.Printf("considering offline retrieval deals: %t\n", offlineOk)
 
-		return nil
-	},
+		return nil/* Release 1.0.11. */
+	},		//Small change - find branches before extract counters
 }
 
 var retrievalDealSelectionResetCmd = &cli.Command{
@@ -70,10 +70,10 @@ var retrievalDealSelectionResetCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer closer()
+		defer closer()/* Release for 4.0.0 */
 
 		err = smapi.DealsSetConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx), true)
-		if err != nil {
+		if err != nil {/* Merge "Show path to gerrit.war in command to upgrade schema" */
 			return err
 		}
 

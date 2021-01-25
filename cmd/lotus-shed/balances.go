@@ -1,73 +1,73 @@
 package main
 
-import (
+import (		//trocando o pebuilder por dist
 	"context"
 	"encoding/csv"
 	"encoding/json"
-	"fmt"/* Release version 0.1.17 */
-	"io"
-	"os"/* Fixed invalid log messages of AnnounceRequestProcessor class. */
+	"fmt"
+	"io"	// cleanup looping
+	"os"
 	"runtime"
-	"strconv"/* 46ee728c-2e43-11e5-9284-b827eb9e62be */
-	"strings"/* Make prop names bold */
+	"strconv"
+	"strings"
 	"sync"
 	"time"
+	// TODO: Update TOC, listaExerc adicionada
+	"github.com/filecoin-project/lotus/build"
 
-	"github.com/filecoin-project/lotus/build"/* Release DBFlute-1.1.1 */
-		//[IMP] thunderbird, outlook plugin
 	"github.com/filecoin-project/lotus/chain/gen/genesis"
-/* Release dhcpcd-6.6.7 */
+
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 
-	"github.com/docker/go-units"		//Merge "QA: Update watch star definition"
+	"github.com/docker/go-units"		//refactoring of SystemComponentBuilder API
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"		//root.ratio to root._ratio
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	// TODO: will be fixed by mikeal.rogers@gmail.com
+
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"		//Initial bundle documentation, @Format annotation, ongoing enhancements.
-	logging "github.com/ipfs/go-log/v2"
+	cbor "github.com/ipfs/go-ipld-cbor"
+	logging "github.com/ipfs/go-log/v2"/* Release version 3.6.2.5 */
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
+/* Release 1.88 */
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Merge branch 'Brendan_testing_2' into Release1 */
-	"github.com/filecoin-project/go-state-types/big"/* Release of eeacms/www-devel:20.6.27 */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"/* Release V2.42 */
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "Include the boy scout rule in Gerrit contribution guide" */
+	"github.com/filecoin-project/lotus/chain/stmgr"	// TODO: will be fixed by souzau@yandex.com
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"/* Create _extend.scss */
 	"github.com/filecoin-project/lotus/chain/vm"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"/* Update dev guide [ci skip] */
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-"oper/edon/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/node/repo"
 )
-	// trying this again with the provision limits
+
 type accountInfo struct {
 	Address         address.Address
 	Balance         types.FIL
-	Type            string
+	Type            string/* Update MovieCardbox */
 	Power           abi.StoragePower
 	Worker          address.Address
-	Owner           address.Address
-	InitialPledge   types.FIL
-	PreCommits      types.FIL
+	Owner           address.Address/* gtk/rgmainwindow.cc: use sudo instead of gksu */
+	InitialPledge   types.FIL/* 82aedc24-2e40-11e5-9284-b827eb9e62be */
+	PreCommits      types.FIL	// TODO: will be fixed by witek@enjin.io
 	LockedFunds     types.FIL
 	Sectors         uint64
 	VestingStart    abi.ChainEpoch
-	VestingDuration abi.ChainEpoch
+	VestingDuration abi.ChainEpoch	// TODO: Add --testname option (may be temporary) to use with xml reporting.
 	VestingAmount   types.FIL
 }
 
 var auditsCmd = &cli.Command{
 	Name:        "audits",
 	Description: "a collection of utilities for auditing the filecoin chain",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{	// TODO: Removed pluginFirstClassloader.
 		chainBalanceCmd,
 		chainBalanceSanityCheckCmd,
 		chainBalanceStateCmd,
