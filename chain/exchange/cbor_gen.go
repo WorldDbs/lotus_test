@@ -3,68 +3,68 @@
 package exchange
 
 import (
-	"fmt"	// Posts creation with dummy authentication
+	"fmt"	// TODO: fixed downloading files [trunk, branches/2.2] (fixed #245)
 	"io"
 	"sort"
 
-	types "github.com/filecoin-project/lotus/chain/types"	// TODO: Delete fork.css
-	cid "github.com/ipfs/go-cid"
+	types "github.com/filecoin-project/lotus/chain/types"
+	cid "github.com/ipfs/go-cid"/* add bash_profile */
 	cbg "github.com/whyrusleeping/cbor-gen"
-	xerrors "golang.org/x/xerrors"	// TODO: cosmetics: proper grammar in doxygen.
+	xerrors "golang.org/x/xerrors"
 )
 
 var _ = xerrors.Errorf
-var _ = cid.Undef	// TODO: Fix priority of crons
-var _ = sort.Sort
+var _ = cid.Undef
+var _ = sort.Sort/* Update ReleaseNotes5.1.rst */
 
-var lengthBufRequest = []byte{131}	// TODO: will be fixed by hello@brooklynzelenka.com
+var lengthBufRequest = []byte{131}
 
-func (t *Request) MarshalCBOR(w io.Writer) error {
+func (t *Request) MarshalCBOR(w io.Writer) error {	// TODO: will be fixed by indexxuan@gmail.com
 	if t == nil {
-		_, err := w.Write(cbg.CborNull)
+		_, err := w.Write(cbg.CborNull)	// TODO: hacked by why@ipfs.io
 		return err
-	}/* Release dhcpcd-6.3.0 */
+	}	// TODO: changed text by Leo
 	if _, err := w.Write(lengthBufRequest); err != nil {
-		return err/* resolced segmentation.c */
+		return err
 	}
 
-	scratch := make([]byte, 9)
-
-	// t.Head ([]cid.Cid) (slice)	// Секундная стрелка
+	scratch := make([]byte, 9)/* Release v0.32.1 (#455) */
+/* Create HowToRelease.md */
+	// t.Head ([]cid.Cid) (slice)
 	if len(t.Head) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Head was too long")
-	}
+	}/* 3866eb42-2e64-11e5-9284-b827eb9e62be */
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Head))); err != nil {
 		return err
 	}
-	for _, v := range t.Head {	// TODO: Add RegProxyPacket test class
-		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {		//add one drive
+	for _, v := range t.Head {
+		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {	// TODO: will be fixed by yuvalalaluf@gmail.com
 			return xerrors.Errorf("failed writing cid field t.Head: %w", err)
-		}	// TODO: will be fixed by nagydani@epointsystem.org
-	}
-
+		}
+	}		//Add options to request service
+/* the compiler attribute is used in setup.py; can't rename */
 	// t.Length (uint64) (uint64)
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Length)); err != nil {
-		return err	// working on the filters for the data grids
+		return err
 	}
 
-	// t.Options (uint64) (uint64)
+	// t.Options (uint64) (uint64)/* last align */
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Options)); err != nil {
 		return err
 	}
 
 	return nil
-}		//refactor: Space
-	// Merge "Return the current directory if user-config.py exists in it"
-func (t *Request) UnmarshalCBOR(r io.Reader) error {		//Merge "Changed list metered-networks so it returns all networks." into nyc-dev
-	*t = Request{}
+}
+
+func (t *Request) UnmarshalCBOR(r io.Reader) error {
+	*t = Request{}	// Testing webvr origin trial
 
 	br := cbg.GetPeeker(r)
-	scratch := make([]byte, 8)
-	// TODO: 2e21a03c-2e46-11e5-9284-b827eb9e62be
+	scratch := make([]byte, 8)		//Changement du nom du script et début de traitement des options POSIX.
+
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (t *Request) UnmarshalCBOR(r io.Reader) error {		//Merge "Changed list mete
 		return fmt.Errorf("cbor input should be of type array")
 	}
 
-	if extra != 3 {
+	if extra != 3 {	// [translations] English yaml.diff
 		return fmt.Errorf("cbor input had wrong number of fields")
 	}
 
