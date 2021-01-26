@@ -4,34 +4,34 @@
 
 [global]
   plan = "lotus-soup"
-  case = "drand-outage"
-  total_instances = 7
+  case = "drand-outage"/* Release new version 2.2.15: Updated text description for web store launch */
+  total_instances = 7	// console log fixes
   builder = "docker:go"
-  runner = "cluster:k8s"
+  runner = "cluster:k8s"		//isAttacker optimized
 
 [global.build]
   selectors = ["testground"]
-
+	// TODO: will be fixed by fjl@ethereum.org
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+	// TODO: remove is_search_in_progress, woops
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
+[global.run.test_params]/* th9Xplorer work */
   clients = "0"
   miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "100"
   random_beacon_type = "local-drand"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"/* add hotjar */
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// TODO: 4c053df6-2e5b-11e5-9284-b827eb9e62be
   [groups.resources]
     memory = "1024Mi"
     cpu = "10m"
@@ -67,5 +67,5 @@
       role = "drand"
       drand_period = "30s"
       drand_catchup_period = "10s"
-      drand_log_level = "debug"
+      drand_log_level = "debug"		//Priority N tasks now get nextAction: true
       suspend_events = "wait 5m -> halt -> wait 45m -> resume -> wait 15m -> halt -> wait 5m -> resume"
