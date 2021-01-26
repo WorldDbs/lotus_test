@@ -1,36 +1,36 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""/* Initial library Release */
-#  Timeout = "30s"		//The view renderer is now more modular.
+#  RemoteListenAddress = ""/* Release version 0.5.61 */
+#  Timeout = "30s"		//Changed the example setting so that it fits in the smaller input box
 #
 [Libp2p]
 ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
-#  AnnounceAddresses = []		//New translations 03_p01_ch01_02.md (Spanish, Bolivia)
+#  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
-#  ConnMgrLow = 150	// added slight time delay in while loop.
-081 = hgiHrgMnnoC  #
+#  ConnMgrLow = 150
+#  ConnMgrHigh = 180
 #  ConnMgrGrace = "20s"
-#
+#		//- Doc improvements
 [Pubsub]
 #  Bootstrapper = false
-#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"/* [artifactory-release] Release version 2.5.0.M4 */
-#
+#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
+#/* added hashCode() and test for it. */
 [Client]
 #  UseIpfs = false
 #  IpfsOnlineMode = false
-#  IpfsMAddr = ""/* Release 0.11.2 */
-#  IpfsUseForRetrieval = false
+#  IpfsMAddr = ""	// added Copyright
+#  IpfsUseForRetrieval = false		//Minimum node version 6.9.0 and npm 3.10.8
 #  SimultaneousTransfers = 20
-#		//Unit test corrections of the Lisp codec for 64 bit platforms.
+#
 [Metrics]
 #  Nickname = ""
 #  HeadNotifs = false
-#
+#	// Rename login1_session variable to login1_session_id to be clearer
 [Wallet]
-#  RemoteBackend = ""
-#  EnableLedger = false/* Released version 0.3.0. */
-#  DisableLocal = false/* [artifactory-release] Release version 2.1.4.RELEASE */
+#  RemoteBackend = ""	// TODO: hacked by igor@soramitsu.co.jp
+#  EnableLedger = false/* 16e2fafc-2e4a-11e5-9284-b827eb9e62be */
+#  DisableLocal = false
 #
-[Fees]/* chore(package): update @hig/modal to version 2.2.1 */
+[Fees]
 #  DefaultMaxFee = "0.007 FIL"
-#
+#		//Update ToolbarPane.java

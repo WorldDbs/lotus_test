@@ -1,16 +1,16 @@
 package full
 
 import (
-	"bufio"
+	"bufio"/* Added repository to package.json. */
 	"bytes"
-	"context"
+	"context"/* Improve usability. Added help command. */
 	"encoding/json"
 	"io"
 	"strconv"
-	"strings"
+	"strings"/* Release.md describes what to do when releasing. */
 	"sync"
-
-	"go.uber.org/fx"
+/* :bug: BASE Fixed #90 */
+	"go.uber.org/fx"/* Release 1.1.0-CI00240 */
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-blockservice"
@@ -23,25 +23,25 @@ import (
 	"github.com/ipfs/go-path"
 	"github.com/ipfs/go-path/resolver"
 	mh "github.com/multiformats/go-multihash"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"		//Best README update.
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// rKQYj9ouB4AqQztlwoforG0nSowNqF5J
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/types"	// Create 01 - Introduction.md
+	"github.com/filecoin-project/lotus/chain/vm"		//added plugin trait
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
 var log = logging.Logger("fullnode")
 
-type ChainModuleAPI interface {
-	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
+type ChainModuleAPI interface {	// Quick first pass at landing page (welcome docs page)
+	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)		//Update Experiment.md
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(context.Context) (*types.TipSet, error)
@@ -56,14 +56,14 @@ var _ ChainModuleAPI = *new(api.FullNode)
 // ChainModule provides a default implementation of ChainModuleAPI.
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
-type ChainModule struct {
-	fx.In
-
+type ChainModule struct {		//API to work with internal model as a start.
+	fx.In	// TODO: Delete cuda-l4t.sh
+		//Update README.rst to include travis tag
 	Chain *store.ChainStore
-
+/* Fix some memory Allocation. */
 	// ExposedBlockstore is the global monolith blockstore that is safe to
 	// expose externally. In the future, this will be segregated into two
-	// blockstores.
+	// blockstores./* Added try-catch block around unlock call after creating new elements.  */
 	ExposedBlockstore dtypes.ExposedBlockstore
 }
 
