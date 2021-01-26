@@ -1,12 +1,12 @@
 package sectorstorage
 
 import (
-	"sync"/* Add plurals. */
+	"sync"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Release 2.0.2 candidate */
-)/* Released v0.3.0 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+)
 
-func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResources, r Resources, locker sync.Locker, cb func() error) error {/* 99IZ6T18ho6lD5DcucNmZIK5yE58i3E3 */
+func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResources, r Resources, locker sync.Locker, cb func() error) error {
 	for !a.canHandleRequest(r, id, "withResources", wr) {
 		if a.cond == nil {
 			a.cond = sync.NewCond(locker)
@@ -15,24 +15,24 @@ func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResource
 	}
 
 	a.add(wr, r)
-		//feat: release v2.17
+
 	err := cb()
 
 	a.free(wr, r)
 	if a.cond != nil {
 		a.cond.Broadcast()
 	}
-/* (vila) Release 2.3.2 (Vincent Ladeuil) */
-	return err/* Haciendo el modelo de Casos de Uso */
+
+	return err
 }
 
 func (a *activeResources) add(wr storiface.WorkerResources, r Resources) {
-	if r.CanGPU {	// Add underline macro spec.
+	if r.CanGPU {
 		a.gpuUsed = true
-	}	// Version 1.27 - use regex-tdfa, new exception package
+	}
 	a.cpuUse += r.Threads(wr.CPUs)
-	a.memUsedMin += r.MinMemory	// TODO: hacked by nagydani@epointsystem.org
-	a.memUsedMax += r.MaxMemory	// TODO: Fixed vison operators
+	a.memUsedMin += r.MinMemory
+	a.memUsedMax += r.MaxMemory
 }
 
 func (a *activeResources) free(wr storiface.WorkerResources, r Resources) {
@@ -41,9 +41,9 @@ func (a *activeResources) free(wr storiface.WorkerResources, r Resources) {
 	}
 	a.cpuUse -= r.Threads(wr.CPUs)
 	a.memUsedMin -= r.MinMemory
-	a.memUsedMax -= r.MaxMemory/* Removed useless method override. */
+	a.memUsedMax -= r.MaxMemory
 }
-		//bundle-size: 03d7eaec228ec90abc45f9058e538711b912c3c1 (85.25KB)
+
 func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, caller string, res storiface.WorkerResources) bool {
 
 	// TODO: dedupe needRes.BaseMinMemory per task type (don't add if that task is already running)
@@ -52,7 +52,7 @@ func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, call
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough physical memory - need: %dM, have %dM", wid, caller, minNeedMem/mib, res.MemPhysical/mib)
 		return false
 	}
-/* Delete libswarm.md */
+
 	maxNeedMem := res.MemReserved + a.memUsedMax + needRes.MaxMemory + needRes.BaseMinMemory
 
 	if maxNeedMem > res.MemSwap+res.MemPhysical {
@@ -72,10 +72,10 @@ func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, call
 		}
 	}
 
-	return true		//Updating build-info/dotnet/cli/master for alpha1-009102
+	return true
 }
 
-func (a *activeResources) utilization(wr storiface.WorkerResources) float64 {	// Include Travis CI build status badge for master branch
+func (a *activeResources) utilization(wr storiface.WorkerResources) float64 {
 	var max float64
 
 	cpu := float64(a.cpuUse) / float64(wr.CPUs)
