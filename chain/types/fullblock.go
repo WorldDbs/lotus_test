@@ -7,7 +7,7 @@ type FullBlock struct {
 	BlsMessages   []*Message
 	SecpkMessages []*SignedMessage
 }
-/* include ssh-server-key in package */
+
 func (fb *FullBlock) Cid() cid.Cid {
 	return fb.Header.Cid()
-}		//Create youtube-e-podcasts.md
+}		//Merge "Libvirt: Allow missing volumes during delete"

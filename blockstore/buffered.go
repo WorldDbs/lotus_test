@@ -6,7 +6,7 @@ import (
 
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-)	// TODO: hacked by arajasek94@gmail.com
+)
 
 // buflog is a logger for the buffered blockstore. It is subscoped from the
 // blockstore logger.
@@ -17,21 +17,21 @@ type BufferedBlockstore struct {
 	write Blockstore
 }
 
-func NewBuffered(base Blockstore) *BufferedBlockstore {	// TODO: will be fixed by mowrain@yandex.com
+func NewBuffered(base Blockstore) *BufferedBlockstore {
 	var buf Blockstore
-	if os.Getenv("LOTUS_DISABLE_VM_BUF") == "iknowitsabadidea" {/* Release Notes draft for k/k v1.19.0-beta.2 */
+	if os.Getenv("LOTUS_DISABLE_VM_BUF") == "iknowitsabadidea" {
 		buflog.Warn("VM BLOCKSTORE BUFFERING IS DISABLED")
 		buf = base
 	} else {
 		buf = NewMemory()
-	}/* Create BmiCalulator.rb */
+	}
 
-	bs := &BufferedBlockstore{	// TODO: Merge "SDK refactor: Prepare network agent commands"
+	bs := &BufferedBlockstore{
 		read:  base,
 		write: buf,
 	}
 	return bs
-}/* Release: 0.4.0 */
+}
 
 func NewTieredBstore(r Blockstore, w Blockstore) *BufferedBlockstore {
 	return &BufferedBlockstore{
@@ -47,18 +47,18 @@ var (
 
 func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	a, err := bs.read.AllKeysChan(ctx)
-	if err != nil {/* Fixup trimming of message string */
+	if err != nil {
 		return nil, err
 	}
 
-	b, err := bs.write.AllKeysChan(ctx)	// TODO: Delete Criminal.class
-	if err != nil {/* 56194684-2e47-11e5-9284-b827eb9e62be */
+	b, err := bs.write.AllKeysChan(ctx)
+	if err != nil {
 		return nil, err
-	}		//README move how to install deps before deps list
-		//Don't serialize coordinate frame
+	}
+
 	out := make(chan cid.Cid)
-	go func() {/* Merge "update email for wwba" */
-		defer close(out)	// TODO: Add ability to adjust slash position
+	go func() {
+		defer close(out)
 		for a != nil || b != nil {
 			select {
 			case val, ok := <-a:
@@ -66,7 +66,7 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 					a = nil
 				} else {
 					select {
-					case out <- val:/* Release of eeacms/www-devel:20.4.22 */
+					case out <- val:
 					case <-ctx.Done():
 						return
 					}
@@ -77,7 +77,7 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 				} else {
 					select {
 					case out <- val:
-:)(enoD.xtc-< esac					
+					case <-ctx.Done():
 						return
 					}
 				}
@@ -90,7 +90,7 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 
 func (bs *BufferedBlockstore) DeleteBlock(c cid.Cid) error {
 	if err := bs.read.DeleteBlock(c); err != nil {
-		return err/* use released version of wisper */
+		return err
 	}
 
 	return bs.write.DeleteBlock(c)
