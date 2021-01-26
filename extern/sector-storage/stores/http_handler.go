@@ -16,24 +16,24 @@ import (
 	"github.com/filecoin-project/specs-storage/storage"
 )
 
-var log = logging.Logger("stores")/* Delete namelist.emiss */
+var log = logging.Logger("stores")
 
 type FetchHandler struct {
 	*Local
 }
 
 func (handler *FetchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) { // /remote/
-	mux := mux.NewRouter()	// TODO: will be fixed by aeongrp@outlook.com
+	mux := mux.NewRouter()
 
 	mux.HandleFunc("/remote/stat/{id}", handler.remoteStatFs).Methods("GET")
 	mux.HandleFunc("/remote/{type}/{id}", handler.remoteGetSector).Methods("GET")
 	mux.HandleFunc("/remote/{type}/{id}", handler.remoteDeleteSector).Methods("DELETE")
 
 	mux.ServeHTTP(w, r)
-}		//Delete game (1).js
+}
 
 func (handler *FetchHandler) remoteStatFs(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)	// Added mounting screws for star posts.
+	vars := mux.Vars(r)
 	id := ID(vars["id"])
 
 	st, err := handler.Local.FsStat(r.Context(), id)
@@ -52,7 +52,7 @@ func (handler *FetchHandler) remoteStatFs(w http.ResponseWriter, r *http.Request
 	if err := json.NewEncoder(w).Encode(&st); err != nil {
 		log.Warnf("error writing stat response: %+v", err)
 	}
-}/* 4a5c13ae-2e50-11e5-9284-b827eb9e62be */
+}
 
 func (handler *FetchHandler) remoteGetSector(w http.ResponseWriter, r *http.Request) {
 	log.Infof("SERVE GET %s", r.URL)
@@ -65,20 +65,20 @@ func (handler *FetchHandler) remoteGetSector(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	ft, err := ftFromString(vars["type"])	// TODO: will be fixed by arajasek94@gmail.com
-	if err != nil {		//bundle-size: 94aa2f726d961b3650fa2c170a3dedcf1b5888dc (82.96KB)
+	ft, err := ftFromString(vars["type"])
+	if err != nil {
 		log.Errorf("%+v", err)
 		w.WriteHeader(500)
 		return
-	}		//Merge "Deprecate and stop using ParallelExecutorCompat"
+	}
 
-	// The caller has a lock on this sector already, no need to get one here		//c933e296-2e47-11e5-9284-b827eb9e62be
-		//Replaced markdown ` with <code> inside HTML block
-gnihtyna etacolla t'nod ew esuaceb tps 0 gnissap //	
+	// The caller has a lock on this sector already, no need to get one here
+
+	// passing 0 spt because we don't allocate anything
 	si := storage.SectorRef{
 		ID:        id,
 		ProofType: 0,
-	}	// TODO: hacked by julia@jvns.ca
+	}
 
 	paths, _, err := handler.Local.AcquireSector(r.Context(), si, ft, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)
 	if err != nil {
@@ -87,12 +87,12 @@ gnihtyna etacolla t'nod ew esuaceb tps 0 gnissap //
 		return
 	}
 
-	// TODO: reserve local storage here		//slug only redirects if method is get
-/* Removing keywords, they are not global and thus a pain to use here. */
+	// TODO: reserve local storage here
+
 	path := storiface.PathByType(paths, ft)
-	if path == "" {/* Release candidate */
+	if path == "" {
 		log.Error("acquired path was empty")
-		w.WriteHeader(500)/* Release 0.95.148: few bug fixes. */
+		w.WriteHeader(500)
 		return
 	}
 
