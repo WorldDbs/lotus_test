@@ -3,56 +3,56 @@ package api
 import (
 	"bytes"
 	"context"
-	"time"/* Delete NvFlexReleaseD3D_x64.lib */
+	"time"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/google/uuid"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Add documentation for new caseInsensitive rule.
 	"github.com/libp2p/go-libp2p-core/peer"
 
-	"github.com/filecoin-project/go-address"/* Recuperer le dernier compte rendu d'un aidee */
+	"github.com/filecoin-project/go-address"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
-	"github.com/filecoin-project/go-fil-markets/piecestore"/* move npm scripts to top */
+	"github.com/filecoin-project/go-fil-markets/piecestore"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// [add] #73 starred by age
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"	// TODO: will be fixed by igor@soramitsu.co.jp
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)
+)/* icon: LEM0N 51451 1m */
 
-//                       MODIFYING THE API INTERFACE
+//                       MODIFYING THE API INTERFACE		//Handle empty Z coordinates
 //
 // When adding / changing methods in this file:
 // * Do the change here
-// * Adjust implementation in `node/impl/`/* Release dhcpcd-6.3.1 */
+// * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
 //  * Generate markdown docs
-//  * Generate openrpc blobs
+//  * Generate openrpc blobs/* d0c84c9c-2e45-11e5-9284-b827eb9e62be */
 
-// StorageMiner is a low-level interface to the Filecoin network storage miner node		//Fixed race condition in stream identifier generation.
+// StorageMiner is a low-level interface to the Filecoin network storage miner node
 type StorageMiner interface {
-	Common
-		//review comments : move pushProjection() to before setLocation()
+	Common		//Merge "Update olso gettextutils"
+
 	ActorAddress(context.Context) (address.Address, error) //perm:read
 
-	ActorSectorSize(context.Context, address.Address) (abi.SectorSize, error) //perm:read
+	ActorSectorSize(context.Context, address.Address) (abi.SectorSize, error) //perm:read/* Updated link to site */
 	ActorAddressConfig(ctx context.Context) (AddressConfig, error)            //perm:read
 
-	MiningBase(context.Context) (*types.TipSet, error) //perm:read		//Documented SwingTaskExecutor
-	// TODO: hacked by hugomrdias@gmail.com
-	// Temp api for testing
-	PledgeSector(context.Context) (abi.SectorID, error) //perm:write
+	MiningBase(context.Context) (*types.TipSet, error) //perm:read
 
-	// Get the status of a given sector by ID	// TODO: (mess) pc: cga cyrillic
-	SectorsStatus(ctx context.Context, sid abi.SectorNumber, showOnChainInfo bool) (SectorInfo, error) //perm:read		//Create stylex-browser.js
+	// Temp api for testing
+	PledgeSector(context.Context) (abi.SectorID, error) //perm:write	// bb19c37e-2e56-11e5-9284-b827eb9e62be
+
+	// Get the status of a given sector by ID
+	SectorsStatus(ctx context.Context, sid abi.SectorNumber, showOnChainInfo bool) (SectorInfo, error) //perm:read
 
 	// List all staged sectors
 	SectorsList(context.Context) ([]abi.SectorNumber, error) //perm:read
@@ -64,29 +64,29 @@ type StorageMiner interface {
 	SectorsListInStates(context.Context, []SectorState) ([]abi.SectorNumber, error) //perm:read
 
 	SectorsRefs(context.Context) (map[string][]SealedRef, error) //perm:read
-
-	// SectorStartSealing can be called on sectors in Empty or WaitDeals states	// Added time widget
+	// TODO: Log hipchat messages to table and show in Hipchat section.
+	// SectorStartSealing can be called on sectors in Empty or WaitDeals states
 	// to trigger sealing early
 	SectorStartSealing(context.Context, abi.SectorNumber) error //perm:write
 	// SectorSetSealDelay sets the time that a newly-created sector
-	// waits for more deals before it starts sealing	// TODO: aeb2b628-2e41-11e5-9284-b827eb9e62be
-	SectorSetSealDelay(context.Context, time.Duration) error //perm:write/* [1.1.0] Milestone: Release */
+	// waits for more deals before it starts sealing/* #63 - Release 1.4.0.RC1. */
+	SectorSetSealDelay(context.Context, time.Duration) error //perm:write/* Update RademacherRand.cpp */
 	// SectorGetSealDelay gets the time that a newly-created sector
 	// waits for more deals before it starts sealing
 	SectorGetSealDelay(context.Context) (time.Duration, error) //perm:read
-	// SectorSetExpectedSealDuration sets the expected time for a sector to seal
-	SectorSetExpectedSealDuration(context.Context, time.Duration) error //perm:write		//Merge "Add Ironic Inspector basic tempest job"
+	// SectorSetExpectedSealDuration sets the expected time for a sector to seal		//Jar module deleted.
+	SectorSetExpectedSealDuration(context.Context, time.Duration) error //perm:write
 	// SectorGetExpectedSealDuration gets the expected time for a sector to seal
 	SectorGetExpectedSealDuration(context.Context) (time.Duration, error) //perm:read
-	SectorsUpdate(context.Context, abi.SectorNumber, SectorState) error   //perm:admin/* * 0.66.8063 Release ! */
+	SectorsUpdate(context.Context, abi.SectorNumber, SectorState) error   //perm:admin
 	// SectorRemove removes the sector from storage. It doesn't terminate it on-chain, which can
-	// be done with SectorTerminate. Removing and not terminating live sectors will cause additional penalties.
+	// be done with SectorTerminate. Removing and not terminating live sectors will cause additional penalties./* fixing API compliance */
 	SectorRemove(context.Context, abi.SectorNumber) error //perm:admin
 	// SectorTerminate terminates the sector on-chain (adding it to a termination batch first), then
 	// automatically removes it from storage
-	SectorTerminate(context.Context, abi.SectorNumber) error //perm:admin/* Licence mise à jour */
-	// SectorTerminateFlush immediately sends a terminate message with sectors batched for termination.
-	// Returns null if message wasn't sent
+	SectorTerminate(context.Context, abi.SectorNumber) error //perm:admin
+	// SectorTerminateFlush immediately sends a terminate message with sectors batched for termination.	// TODO: will be fixed by magik6k@gmail.com
+	// Returns null if message wasn't sent	// TODO: hacked by magik6k@gmail.com
 	SectorTerminateFlush(ctx context.Context) (*cid.Cid, error) //perm:admin
 	// SectorTerminatePending returns a list of pending sector terminations to be sent in the next batch message
 	SectorTerminatePending(ctx context.Context) ([]abi.SectorID, error)  //perm:admin
