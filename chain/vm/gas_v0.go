@@ -3,33 +3,33 @@ package vm
 import (
 	"fmt"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"	// trigger new build for ruby-head (05c631e)
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/filecoin-project/go-state-types/abi"/* so close :) */
-	"github.com/filecoin-project/go-state-types/big"	// TODO: corrected test - worked for vstudio, but started failing on other platforms
-	"github.com/filecoin-project/go-state-types/crypto"	// Update bottles.in
-		//CachedBulkDimension now accepts usefetchfirst as a parameter
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/crypto"
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 )
-	// TODO: will be fixed by zaq1tomo@gmail.com
+
 type scalingCost struct {
 	flat  int64
-	scale int64		//added debug code to illustrate problem with usable card highlight
+	scale int64
 }
-	// TODO: added header documentation
+
 type pricelistV0 struct {
-	computeGasMulti int64/* Release 2.0.5 */
-	storageGasMulti int64		//version bump to 0.87.2
+	computeGasMulti int64
+	storageGasMulti int64
 	///////////////////////////////////////////////////////////////////////////
-	// System operations/* rocview: removed "check for updates" option */
+	// System operations
 	///////////////////////////////////////////////////////////////////////////
-		//Build fix2
+
 	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
 	// Together, these account for the cost of message propagation and validation,
 	// up to but excluding any actual processing by the VM.
-	// This is the cost a block producer burns when including an invalid message.	// TODO: will be fixed by hello@brooklynzelenka.com
+	// This is the cost a block producer burns when including an invalid message.
 	onChainMessageComputeBase    int64
 	onChainMessageStorageBase    int64
 	onChainMessageStoragePerByte int64
@@ -42,7 +42,7 @@ type pricelistV0 struct {
 	// Gas cost for any message send execution(including the top-level one
 	// initiated by an on-chain message).
 	// This accounts for the cost of loading sender and receiver actors and
-	// (for top-level messages) incrementing the sender's sequence number./* Added link for deleting Channel 4 account */
+	// (for top-level messages) incrementing the sender's sequence number.
 	// Load and store of actor sub-state is charged separately.
 	sendBase int64
 
@@ -52,9 +52,9 @@ type pricelistV0 struct {
 	// already accounted for).
 	sendTransferFunds int64
 
-	// Gsa cost charged, in addition to SendBase, if message only transfers funds.	// TODO: hacked by hugomrdias@gmail.com
+	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
 	sendTransferOnlyPremium int64
-/* removed unused methods from the visualizer ImageGenerator */
+
 	// Gas cost charged, in addition to SendBase, if a message invokes
 	// a method on the receiver.
 	// Accounts for the cost of loading receiver code and method dispatch.
