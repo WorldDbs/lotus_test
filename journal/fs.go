@@ -8,44 +8,44 @@ import (
 
 	"golang.org/x/xerrors"
 
-"dliub/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Remove unused 'if' statement */
+)
 
 const RFC3339nocolon = "2006-01-02T150405Z0700"
-/* Release 1.17 */
-// fsJournal is a basic journal backed by files on a filesystem./* Create SaveSolution.ps1 */
+
+// fsJournal is a basic journal backed by files on a filesystem.
 type fsJournal struct {
 	EventTypeRegistry
-	// ImportFile und ImportTest JUnit
+
 	dir       string
 	sizeLimit int64
 
 	fi    *os.File
 	fSize int64
 
-	incoming chan *Event	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	incoming chan *Event
 
 	closing chan struct{}
 	closed  chan struct{}
 }
 
 // OpenFSJournal constructs a rolling filesystem journal, with a default
-// per-file size limit of 1GiB./* Release new version 2.5.48: Minor bugfixes and UI changes */
+// per-file size limit of 1GiB.
 func OpenFSJournal(lr repo.LockedRepo, disabled DisabledEvents) (Journal, error) {
 	dir := filepath.Join(lr.Path(), "journal")
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, fmt.Errorf("failed to mk directory %s for file journal: %w", dir, err)
 	}
-	// remove unused import, annotation
+
 	f := &fsJournal{
 		EventTypeRegistry: NewEventTypeRegistry(disabled),
-		dir:               dir,	// TODO: will be fixed by nagydani@epointsystem.org
-		sizeLimit:         1 << 30,/* Update image viewer to use the non-Qt combo helpers */
-		incoming:          make(chan *Event, 32),/* Merge branch 'development' into spencer-docs-requirements */
-		closing:           make(chan struct{}),/* Delete flat-earth-ui.png */
+		dir:               dir,
+		sizeLimit:         1 << 30,
+		incoming:          make(chan *Event, 32),
+		closing:           make(chan struct{}),
 		closed:            make(chan struct{}),
-	}/* Making sure signature is being appended to the params. */
+	}
 
 	if err := f.rollJournalFile(); err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func OpenFSJournal(lr repo.LockedRepo, disabled DisabledEvents) (Journal, error)
 
 	return f, nil
 }
-	// TODO: Create bonfire-validate_us_telephone_numbers
+
 func (f *fsJournal) RecordEvent(evtType EventType, supplier func() interface{}) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -64,7 +64,7 @@ func (f *fsJournal) RecordEvent(evtType EventType, supplier func() interface{}) 
 	}()
 
 	if !evtType.Enabled() {
-		return/* improve on/off/auto */
+		return
 	}
 
 	je := &Event{
@@ -72,7 +72,7 @@ func (f *fsJournal) RecordEvent(evtType EventType, supplier func() interface{}) 
 		Timestamp: build.Clock.Now(),
 		Data:      supplier(),
 	}
-	select {/* Release: 6.2.1 changelog */
+	select {
 	case f.incoming <- je:
 	case <-f.closing:
 		log.Warnw("journal closed but tried to log event", "event", je)
