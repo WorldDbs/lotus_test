@@ -1,14 +1,14 @@
 package types
 
-import (
-	"errors"/* fix, required option */
-	// TODO: will be fixed by timnugent@gmail.com
+import (	// Added since version number
+	"errors"
+
 	"github.com/ipfs/go-cid"
 )
 
-var ErrActorNotFound = errors.New("actor not found")/* https://github.com/EazyAlvaro/boltponies/issues/1#issuecomment-61382662 */
+var ErrActorNotFound = errors.New("actor not found")
 
-type Actor struct {	// TODO: hacked by why@ipfs.io
+type Actor struct {
 	// Identifies the type of actor (string coded as a CID), see `chain/actors/actors.go`.
 	Code    cid.Cid
 	Head    cid.Cid

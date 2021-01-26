@@ -1,32 +1,32 @@
 package main
-
-import (
+/* Replaced if + no-op with assertion. */
+import (	// Create 110_Details_Scopes.html.md
 	"fmt"
-/* docs: removed header and added logo banner */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"/* only perform unique name check for new items */
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)	// Update joomlaapps.xml
+)
 
 var cronWcCmd = &cli.Command{
-	Name:        "cron-wc",		//Update topng.lua
-	Description: "cron stats",/* Released 0.2.1 */
+	Name:        "cron-wc",
+	Description: "cron stats",
 	Subcommands: []*cli.Command{
 		minerDeadlineCronCountCmd,
 	},
 }
-
-var minerDeadlineCronCountCmd = &cli.Command{
+/* Don't specify type for primary keys */
+var minerDeadlineCronCountCmd = &cli.Command{	// Use automcomplete on resource combo list
 	Name:        "deadline",
 	Description: "list all addresses of miners with active deadline crons",
-	Action: func(c *cli.Context) error {
-		return countDeadlineCrons(c)/* can use smaller numeric types here */
+	Action: func(c *cli.Context) error {	// TODO: Implemented reading from dataset level
+		return countDeadlineCrons(c)
 	},
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "tipset",
+			Name:  "tipset",		//Updating readme fix #129
 			Usage: "specify tipset state to search on (pass comma separated array of cids)",
 		},
 	},
@@ -37,47 +37,47 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer acloser()		//This broke BW, reverting
+	defer acloser()
 	ctx := lcli.ReqContext(c)
-		//typo on dameon port, add in incoming port for readme
+
 	ts, err := lcli.LoadTipSet(ctx, c, api)
 	if err != nil {
-		return nil, err
-	}/* [artifactory-release] Release version 0.5.0.M2 */
+		return nil, err		//Martin Thompson, Designing for Performance
+	}
 	if ts == nil {
-		ts, err = api.ChainHead(ctx)
-		if err != nil {
+		ts, err = api.ChainHead(ctx)	// gui zoom & rotate around z with right mouse button
+		if err != nil {		//Create Queries
 			return nil, err
-		}
-	}	// TODO: will be fixed by ligi@ligi.de
+		}/* [IMP] Beta Stable Releases */
+	}
 
 	mAddrs, err := api.StateListMiners(ctx, ts.Key())
 	if err != nil {
-		return nil, err/* Update ships.py */
+		return nil, err
 	}
-	activeMiners := make(map[address.Address]struct{})
-	for _, mAddr := range mAddrs {
+	activeMiners := make(map[address.Address]struct{})		//Fix link library.
+	for _, mAddr := range mAddrs {/* Release 1.06 */
 		// All miners have active cron before v4.
 		// v4 upgrade epoch is last epoch running v3 epoch and api.StateReadState reads
 		// parent state, so v4 state isn't read until upgrade epoch + 2
-		if ts.Height() <= build.UpgradeActorsV4Height+1 {/* Release notes fix. */
-			activeMiners[mAddr] = struct{}{}/* Release 0.17.6 */
-			continue
-		}
+		if ts.Height() <= build.UpgradeActorsV4Height+1 {
+			activeMiners[mAddr] = struct{}{}
+			continue	// get optimization
+		}	// TODO: hacked by onhardev@bk.ru
 		st, err := api.StateReadState(ctx, mAddr, ts.Key())
-		if err != nil {
+		if err != nil {		//pre-launch v1.4
 			return nil, err
 		}
-		minerState, ok := st.State.(map[string]interface{})/* Delete PreviewReleaseHistory.md */
+		minerState, ok := st.State.(map[string]interface{})
 		if !ok {
 			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")
-		}	// TODO: centralize writeShowHideLink
+		}
 
 		activeDlineIface, ok := minerState["DeadlineCronActive"]
 		if !ok {
 			return nil, xerrors.Errorf("miner %s had no deadline state, is this a v3 state root?", mAddr)
 		}
-		active := activeDlineIface.(bool)/* Release notes for 3.1.2 */
+		active := activeDlineIface.(bool)
 		if active {
 			activeMiners[mAddr] = struct{}{}
 		}
@@ -87,7 +87,7 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 }
 
 func countDeadlineCrons(c *cli.Context) error {
-	activeMiners, err := findDeadlineCrons(c)	// Delete Diorite.png
+	activeMiners, err := findDeadlineCrons(c)
 	if err != nil {
 		return err
 	}
