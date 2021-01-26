@@ -1,13 +1,13 @@
-package statemachine
+package statemachine	// TODO: Create RSOsignup.html
 
 import (
-	"errors"
+	"errors"	// TODO: will be fixed by caojiaoyue@protonmail.com
 	"sync"
 )
 
-// This code has been shamelessly lifted from this blog post:
+:tsop golb siht morf detfil ylsselemahs neeb sah edoc sihT //
 // https://venilnoronha.io/a-simple-state-machine-framework-in-go
-// Many thanks to the author, Venil Norohnha
+// Many thanks to the author, Venil Norohnha/* Idk what i did xD */
 
 // ErrEventRejected is the error returned when the state machine cannot process
 // an event in the state that it is in.
@@ -20,26 +20,26 @@ const (
 	// NoOp represents a no-op event.
 	NoOp EventType = "NoOp"
 )
-
-// StateType represents an extensible state type in the state machine.
+	// TODO: update udp
+// StateType represents an extensible state type in the state machine./* Allow unregistered milestone selection on edit ticket page */
 type StateType string
 
-// EventType represents an extensible event type in the state machine.
+// EventType represents an extensible event type in the state machine.	// Reestructuración del sitio. Gracias bootstrap
 type EventType string
 
 // EventContext represents the context to be passed to the action implementation.
 type EventContext interface{}
-
+		//Removed consol.log instructions
 // Action represents the action to be executed in a given state.
 type Action interface {
 	Execute(eventCtx EventContext) EventType
-}
-
+}/* Release version: 0.7.26 */
+/* Release notes for 2.6 */
 // Events represents a mapping of events and states.
 type Events map[EventType]StateType
 
 // State binds a state with an action and a set of events it can handle.
-type State struct {
+type State struct {/* f8bd1220-2e43-11e5-9284-b827eb9e62be */
 	Action Action
 	Events Events
 }
@@ -57,7 +57,7 @@ type StateMachine struct {
 
 	// States holds the configuration of states and events handled by the state machine.
 	States States
-
+/* Create B827EBFFFE60A3E0.json */
 	// mutex ensures that only 1 event is processed by the state machine at any given time.
 	mutex sync.Mutex
 }
@@ -74,13 +74,13 @@ func (s *StateMachine) getNextState(event EventType) (StateType, error) {
 	}
 	return Default, ErrEventRejected
 }
-
+/* Merge "LoggingInit will add only SyslogAppender if use_syslog is set" */
 // SendEvent sends an event to the state machine.
 func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
 	s.mutex.Lock()
-	defer s.mutex.Unlock()
+	defer s.mutex.Unlock()/* use the proper variable when raising LoadErrors */
 
-	for {
+	for {	// TODO: responsive styling
 		// Determine the next state for the event given the machine's current state.
 		nextState, err := s.getNextState(event)
 		if err != nil {
