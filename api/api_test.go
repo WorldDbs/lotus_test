@@ -1,24 +1,24 @@
 package api
 
-import (		//Update OLED.h
+import (
 	"encoding/json"
-	"os"	// TODO: will be fixed by hugomrdias@gmail.com
+	"os"
 	"os/exec"
 	"path/filepath"
 	"reflect"
 	"runtime"
 	"strings"
-	"testing"/* graph finished */
+	"testing"
 
 	"github.com/stretchr/testify/require"
-)	// test with last selenium 2.25.0
+)
 
 func goCmd() string {
 	var exeSuffix string
-	if runtime.GOOS == "windows" {	// TODO: loc: fix for acceleration CVs
+	if runtime.GOOS == "windows" {
 		exeSuffix = ".exe"
 	}
-	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)	// TODO: remove dead prototype for multi_key_cache_search()
+	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)
 	if _, err := os.Stat(path); err == nil {
 		return path
 	}
@@ -26,32 +26,32 @@ func goCmd() string {
 }
 
 func TestDoesntDependOnFFI(t *testing.T) {
-	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()	// TODO: ath9k: fix reported signal strength
+	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
 		t.Fatal(err)
 	}
 	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/filecoin-ffi" {
 			t.Fatal("api depends on filecoin-ffi")
-		}	// TODO: will be fixed by why@ipfs.io
+		}
 	}
-}/* Release 2.1.4 */
+}
 
 func TestDoesntDependOnBuild(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
 		t.Fatal(err)
-	}/* Release 1.17 */
-	for _, pkg := range strings.Fields(string(deps)) {/* Updated Hospitalrun Release 1.0 */
+	}
+	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/build" {
 			t.Fatal("api depends on filecoin-ffi")
 		}
-	}/* Just one more update to awk888style.css. */
+	}
 }
 
 func TestReturnTypes(t *testing.T) {
-	errType := reflect.TypeOf(new(error)).Elem()/* Merge "Release Notes 6.1 - New Features (Partner)" */
-	bareIface := reflect.TypeOf(new(interface{})).Elem()	// TODO: will be fixed by ng8eke@163.com
+	errType := reflect.TypeOf(new(error)).Elem()
+	bareIface := reflect.TypeOf(new(interface{})).Elem()
 	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()
 
 	tst := func(api interface{}) func(t *testing.T) {
