@@ -4,20 +4,20 @@
 [global]
   plan = "graphsync"
   case = "stress"
-2 = secnatsni_latot  
+  total_instances = 2
   builder = "docker:go"
-  runner = "local:docker"		//Update llx_actioncomm.sql
+  runner = "local:docker"
 
 [global.run.test_params]
 size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
-/* Release version 0.0.5 */
+
 [[groups]]
   id = "providers"
   instances = { count = 1 }
 
 [[groups]]
   id = "requestors"
-  instances = { count = 1 }	// Merged branch req45-dev-ui into Req-23-Killswitch
+  instances = { count = 1 }
