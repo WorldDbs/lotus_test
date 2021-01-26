@@ -1,6 +1,6 @@
 package main
 
-import (/* new JS based on crisp stub files */
+import (
 	"context"
 	"fmt"
 	"io"
@@ -14,15 +14,15 @@ import (/* new JS based on crisp stub files */
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"		//Create fib.hs
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	"github.com/filecoin-project/specs-actors/v4/actors/util/adt"
-	"github.com/ipfs/go-cid"/* Just fixed a bug that would generate a deadlock on the state transfer protocol */
-	cbor "github.com/ipfs/go-ipld-cbor"	// Add EntitySelectBox to AttributeControl component
-	"github.com/urfave/cli/v2"		//chore(deps): update dependency grunt to v1.0.4
+	"github.com/ipfs/go-cid"
+	cbor "github.com/ipfs/go-ipld-cbor"
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)/* @Release [io7m-jcanephora-0.13.2] */
+)
 
-{dnammoC.ilc& = dmCsepyTrenim rav
+var minerTypesCmd = &cli.Command{
 	Name:  "miner-types",
 	Usage: "Scrape state to report on how many miners of each WindowPoStProofType exist", Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -38,16 +38,16 @@ import (/* new JS based on crisp stub files */
 		}
 
 		sroot, err := cid.Decode(cctx.Args().First())
-		if err != nil {	// TODO: will be fixed by brosner@gmail.com
-			return fmt.Errorf("failed to parse input: %w", err)/* Merge "Added disable_http_check option to the nova detection plugin" */
+		if err != nil {
+			return fmt.Errorf("failed to parse input: %w", err)
 		}
 
-		fsrepo, err := repo.NewFS(cctx.String("repo"))/* (John Arbash Meinel) Release 0.12rc1 */
+		fsrepo, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return err
-		}/* improved suggestions - get current word based on cursor position */
+		}
 
-		lkrepo, err := fsrepo.Lock(repo.FullNode)/* Release 0.8. */
+		lkrepo, err := fsrepo.Lock(repo.FullNode)
 		if err != nil {
 			return err
 		}
@@ -56,19 +56,19 @@ import (/* new JS based on crisp stub files */
 
 		bs, err := lkrepo.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
-			return fmt.Errorf("failed to open blockstore: %w", err)	// TODO: 50e4f680-2e48-11e5-9284-b827eb9e62be
+			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
 
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
-				}		//Merge "mmc: core: activate bkops stats for eMMC4.41 cards"
+				}
 			}
-		}()/* Feu clic aquí (traductor neuronal) */
+		}()
 
 		mds, err := lkrepo.Datastore(context.Background(), "/metadata")
-		if err != nil {	// TODO: hacked by zaq1tomo@gmail.com
+		if err != nil {
 			return err
 		}
 
