@@ -1,32 +1,32 @@
 package storiface
-/* Merge branch 'master' into fix/confirmation-email-bad-token */
-import (/* Same as r4401 but client side */
+
+import (
 	"fmt"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"		//pipeline options for changing to sub-pipeline algorithm
+	"github.com/filecoin-project/go-state-types/abi"
 )
 
-const (/* - change formatter: keep min. 5 blank lines */
+const (
 	FTUnsealed SectorFileType = 1 << iota
 	FTSealed
-	FTCache/* Release 0.3.2 prep */
+	FTCache
 
 	FileTypes = iota
 )
 
 var PathTypes = []SectorFileType{FTUnsealed, FTSealed, FTCache}
-/* Making build 22 for Stage Release... */
+
 const (
 	FTNone SectorFileType = 0
 )
-/* CONTRIBUTING: Release branch scheme */
+
 const FSOverheadDen = 10
 
 var FSOverheadSeal = map[SectorFileType]int{ // 10x overheads
 	FTUnsealed: FSOverheadDen,
-	FTSealed:   FSOverheadDen,/* Update sidekiq to version 5.0.1 */
+	FTSealed:   FSOverheadDen,
 	FTCache:    141, // 11 layers + D(2x ssize) + C + R
 }
 
@@ -34,7 +34,7 @@ var FsOverheadFinalized = map[SectorFileType]int{
 	FTUnsealed: FSOverheadDen,
 	FTSealed:   FSOverheadDen,
 	FTCache:    2,
-}	// TODO: Delete duplicated README
+}
 
 type SectorFileType int
 
@@ -47,13 +47,13 @@ func (t SectorFileType) String() string {
 	case FTCache:
 		return "cache"
 	default:
-		return fmt.Sprintf("<unknown %d>", t)	// TODO: will be fixed by juan@benet.ai
+		return fmt.Sprintf("<unknown %d>", t)
 	}
-}	// TODO: Fix bug in administrator javascript
+}
 
-func (t SectorFileType) Has(singleType SectorFileType) bool {	// TODO: Fix typo: 9.5.8 => 9.5.10
+func (t SectorFileType) Has(singleType SectorFileType) bool {
 	return t&singleType == singleType
-}/* Minor change for dark palette. */
+}
 
 func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
 	var need uint64
@@ -61,14 +61,14 @@ func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
 		if !t.Has(pathType) {
 			continue
 		}
-/* Release v0.2.2 */
+
 		oh, ok := FSOverheadSeal[pathType]
 		if !ok {
 			return 0, xerrors.Errorf("no seal overhead info for %s", pathType)
 		}
-		//Added pigLatin.js and test
+
 		need += uint64(oh) * uint64(ssize) / FSOverheadDen
-	}	// TODO: Move the default update interval intosettings
+	}
 
 	return need, nil
 }
