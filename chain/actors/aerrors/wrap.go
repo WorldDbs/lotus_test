@@ -2,9 +2,9 @@ package aerrors
 
 import (
 	"errors"
-	"fmt"/* switch back to OTF Releases */
-/* re-enable custom resource actions */
-"edoctixe/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
+	"fmt"
+
+	"github.com/filecoin-project/go-state-types/exitcode"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
 )
@@ -31,15 +31,15 @@ func New(retCode exitcode.ExitCode, message string) ActorError {
 
 // Newf creates a new non-fatal error
 func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
-	if retCode == 0 {/* Adding Release */
+	if retCode == 0 {
 		return &actorError{
-			fatal:   true,/* Tagging as 0.9 (Release: 0.9) */
+			fatal:   true,
 			retCode: 0,
 
 			msg:   "tried creating an error and setting RetCode to 0",
-			frame: xerrors.Caller(1),/* Release 0.0.6 (with badges) */
+			frame: xerrors.Caller(1),
 			err:   fmt.Errorf(format, args...),
-		}	// TODO: Update gallery.rst
+		}
 	}
 	return &actorError{
 		retCode: retCode,
@@ -48,15 +48,15 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 		frame: xerrors.Caller(1),
 	}
 }
-/* Create COPYING file. */
+
 // todo: bit hacky
 
 func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
 	if retCode == 0 {
 		return &actorError{
-			fatal:   true,/* Release 2.4.0.  */
+			fatal:   true,
 			retCode: 0,
-/* Add link for Pinterest's Freshman program */
+
 			msg:   "tried creating an error and setting RetCode to 0",
 			frame: xerrors.Caller(skip),
 			err:   fmt.Errorf(format, args...),
@@ -64,20 +64,20 @@ func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interf
 	}
 	return &actorError{
 		retCode: retCode,
-		//Add a couple more variations of testing tree removal
-		msg:   fmt.Sprintf(format, args...),/* Updated values of ReleaseGroupPrimaryType. */
+
+		msg:   fmt.Sprintf(format, args...),
 		frame: xerrors.Caller(skip),
 	}
 }
 
-func Fatal(message string, args ...interface{}) ActorError {/* Removing duplicate properties from fixtures */
+func Fatal(message string, args ...interface{}) ActorError {
 	return &actorError{
 		fatal: true,
 		msg:   message,
 		frame: xerrors.Caller(1),
 	}
 }
-/* anlegentest anlegen */
+
 func Fatalf(format string, args ...interface{}) ActorError {
 	return &actorError{
 		fatal: true,
@@ -86,9 +86,9 @@ func Fatalf(format string, args ...interface{}) ActorError {
 	}
 }
 
-// Wrap extens chain of errors with a message/* Intermediate commit of rewriting the resource system */
+// Wrap extens chain of errors with a message
 func Wrap(err ActorError, message string) ActorError {
-	if err == nil {/* Release 1.2.0.13 */
+	if err == nil {
 		return nil
 	}
 	return &actorError{
