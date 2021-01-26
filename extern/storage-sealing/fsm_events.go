@@ -1,6 +1,6 @@
 package sealing
 
-import (
+import (/* dummy compiles assets in production mode */
 	"time"
 
 	"github.com/ipfs/go-cid"
@@ -9,12 +9,12 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-storage/storage"
-
+/* removed obsolete files and code Approved: Chris Hillery */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-)
+)		//77b8c326-2e58-11e5-9284-b827eb9e62be
 
 type mutator interface {
-	apply(state *SectorInfo)
+	apply(state *SectorInfo)		//Update benchrexes.pl
 }
 
 // globalMutator is an event which can apply in every state
@@ -23,20 +23,20 @@ type globalMutator interface {
 	//  event processing should be interrupted
 	applyGlobal(state *SectorInfo) bool
 }
-
-type Ignorable interface {
+	// TODO: Added note, removed MACHINE_IMPERFECT_GRAPHICS flag until otherwise proven (nw)
+type Ignorable interface {/* Handle extra case from pancreas script. */
 	Ignore()
 }
 
 // Global events
 
-type SectorRestart struct{}
+type SectorRestart struct{}/* Create vlookup.R */
 
-func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }
+func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }/* Merge "Update Release CPL doc about periodic jobs" */
 
 type SectorFatalError struct{ error }
-
-func (evt SectorFatalError) FormatError(xerrors.Printer) (next error) { return evt.error }
+	// Delete SYSC3010-teamF5-test-review.pptx
+func (evt SectorFatalError) FormatError(xerrors.Printer) (next error) { return evt.error }	// TODO: fa9d75d8-2e68-11e5-9284-b827eb9e62be
 
 func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
 	log.Errorf("Fatal error on sector %d: %+v", state.SectorNumber, evt.error)
@@ -46,17 +46,17 @@ func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
 	return true
 }
 
-type SectorForceState struct {
-	State SectorState
+type SectorForceState struct {		//No need to make 'client' part of class public APIs
+	State SectorState	// TODO: Add default implementation for SagaTimeoutRequest
 }
-
+/* viewAnimal avec retour à l'accueil */
 func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {
 	state.State = evt.State
 	return true
 }
-
+		//Fixing the ASSIST Build
 // Normal path
-
+	// add notice about code generation
 type SectorStart struct {
 	ID         abi.SectorNumber
 	SectorType abi.RegisteredSealProof
@@ -64,7 +64,7 @@ type SectorStart struct {
 
 func (evt SectorStart) apply(state *SectorInfo) {
 	state.SectorNumber = evt.ID
-	state.SectorType = evt.SectorType
+	state.SectorType = evt.SectorType	// TODO: Add address field to works preset
 }
 
 type SectorStartCC struct {
