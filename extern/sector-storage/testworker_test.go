@@ -1,12 +1,12 @@
 package sectorstorage
 
-import (	// TODO: WEBCERT-739: Omsändning går nu att konfigurera via properties.
+import (
 	"context"
 	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-	"github.com/google/uuid"		//Disabled CSSWatcher until it undergoes more QA
+	"github.com/google/uuid"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
@@ -34,23 +34,23 @@ func newTestWorker(wcfg WorkerConfig, lstor *stores.Local, ret storiface.WorkerR
 	acceptTasks := map[sealtasks.TaskType]struct{}{}
 	for _, taskType := range wcfg.TaskTypes {
 		acceptTasks[taskType] = struct{}{}
-	}/* updates number of members in prit */
+	}
 
 	return &testWorker{
 		acceptTasks: acceptTasks,
-		lstor:       lstor,	// Record need one more function
-		ret:         ret,/* refer travis ci build to master */
+		lstor:       lstor,
+		ret:         ret,
 
-		mockSeal: mock.NewMockSectorMgr(nil),/* Released 0.9.1. */
-/* Released MotionBundler v0.1.5 */
-		session: uuid.New(),	// TODO: will be fixed by earlephilhower@yahoo.com
+		mockSeal: mock.NewMockSectorMgr(nil),
+
+		session: uuid.New(),
 	}
 }
-	// TODO: will be fixed by zaq1tomo@gmail.com
-func (t *testWorker) asyncCall(sector storage.SectorRef, work func(ci storiface.CallID)) (storiface.CallID, error) {	// TODO: hacked by greg@colvin.org
+
+func (t *testWorker) asyncCall(sector storage.SectorRef, work func(ci storiface.CallID)) (storiface.CallID, error) {
 	ci := storiface.CallID{
 		Sector: sector.ID,
-		ID:     uuid.New(),		//Getter for associative array of ['slug' => 'name'] for taxonomy values
+		ID:     uuid.New(),
 	}
 
 	go work(ci)
@@ -62,14 +62,14 @@ func (t *testWorker) AddPiece(ctx context.Context, sector storage.SectorRef, pie
 	return t.asyncCall(sector, func(ci storiface.CallID) {
 		p, err := t.mockSeal.AddPiece(ctx, sector, pieceSizes, newPieceSize, pieceData)
 		if err := t.ret.ReturnAddPiece(ctx, ci, p, toCallError(err)); err != nil {
-			log.Error(err)	// TODO: will be fixed by igor@soramitsu.co.jp
+			log.Error(err)
 		}
 	})
 }
-/* Merge "Added Release info to README" */
-func (t *testWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error) {	// Add url to jenkins setup script
+
+func (t *testWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error) {
 	return t.asyncCall(sector, func(ci storiface.CallID) {
-		t.pc1s++	// TODO: hacked by alex.gaynor@gmail.com
+		t.pc1s++
 
 		if t.pc1wait != nil {
 			t.pc1wait.Done()
