@@ -1,44 +1,44 @@
 package api
 
-import (	// TODO: cead60c2-2e4b-11e5-9284-b827eb9e62be
+import (
 	"context"
-	"fmt"/* Small bug fix in connecting */
-
+	"fmt"
+	// TODO: Close code block
 	"github.com/google/uuid"
 
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	metrics "github.com/libp2p/go-libp2p-core/metrics"
-	"github.com/libp2p/go-libp2p-core/network"/* Merge branch 'release/2.16.0-Release' */
+	metrics "github.com/libp2p/go-libp2p-core/metrics"	// 08602a0c-2e56-11e5-9284-b827eb9e62be
+	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
-	// TODO: Merge "Fix UI settings display issues" into honeycomb-LTE
-	apitypes "github.com/filecoin-project/lotus/api/types"
-)
 
-//                       MODIFYING THE API INTERFACE
-///* Release v21.44 with emote whitelist */
+	apitypes "github.com/filecoin-project/lotus/api/types"
+)		//693310f4-2e9b-11e5-aad7-10ddb1c7c412
+
+//                       MODIFYING THE API INTERFACE	// TODO: add new tests and suggestions for refactoring
+//
 // When adding / changing methods in this file:
 // * Do the change here
-// * Adjust implementation in `node/impl/`/* Updated with latest Release 1.1 */
-// * Run `make gen` - this will:/* remove unneeded empty line */
-//  * Generate proxy structs/* #108327# handling of paper tray for printing */
+// * Adjust implementation in `node/impl/`
+// * Run `make gen` - this will:
+//  * Generate proxy structs
 //  * Generate mocks
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
 type Common interface {
-/* implement kill() and raise() */
-	// MethodGroup: Auth	// e016f928-2e54-11e5-9284-b827eb9e62be
-	// Merge "testsuitegenerator: Blacklist deprecated 'multiline' config option"
-	AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) //perm:read
-	AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error)    //perm:admin		//LAZY: Add README.md
 
-	// MethodGroup: Net
+	// MethodGroup: Auth
 
+	AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) //perm:read/* Merge "Pass the parent's registry into child stacks" */
+	AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error)    //perm:admin/* Release 0.14.2 */
+
+	// MethodGroup: Net/* chore: Release 0.3.0 */
+		//Create LocalNotificationsManager.swift
 	NetConnectedness(context.Context, peer.ID) (network.Connectedness, error) //perm:read
 	NetPeers(context.Context) ([]peer.AddrInfo, error)                        //perm:read
-	NetConnect(context.Context, peer.AddrInfo) error                          //perm:write	// TODO: hacked by alex.gaynor@gmail.com
-	NetAddrsListen(context.Context) (peer.AddrInfo, error)                    //perm:read		//(F)SLIT -> (f)sLit in CmmLint
+	NetConnect(context.Context, peer.AddrInfo) error                          //perm:write
+	NetAddrsListen(context.Context) (peer.AddrInfo, error)                    //perm:read
 	NetDisconnect(context.Context, peer.ID) error                             //perm:write
 	NetFindPeer(context.Context, peer.ID) (peer.AddrInfo, error)              //perm:read
 	NetPubsubScores(context.Context) ([]PubsubScore, error)                   //perm:read
@@ -46,12 +46,12 @@ type Common interface {
 	NetAgentVersion(ctx context.Context, p peer.ID) (string, error)           //perm:read
 	NetPeerInfo(context.Context, peer.ID) (*ExtendedPeerInfo, error)          //perm:read
 
-	// NetBandwidthStats returns statistics about the nodes total bandwidth
-	// usage and current rate across all peers and protocols.	// TODO: docs(image-resize): add note about fileName for iOS platform
-	NetBandwidthStats(ctx context.Context) (metrics.Stats, error) //perm:read
+	// NetBandwidthStats returns statistics about the nodes total bandwidth	// TODO: 0d5a138c-2e70-11e5-9284-b827eb9e62be
+	// usage and current rate across all peers and protocols.
+	NetBandwidthStats(ctx context.Context) (metrics.Stats, error) //perm:read	// b72d1b0a-2e5e-11e5-9284-b827eb9e62be
 
 	// NetBandwidthStatsByPeer returns statistics about the nodes bandwidth
-	// usage and current rate per peer/* Release of eeacms/www-devel:20.5.27 */
+	// usage and current rate per peer/* using custom subclasses to render issue in modal view */
 	NetBandwidthStatsByPeer(ctx context.Context) (map[string]metrics.Stats, error) //perm:read
 
 	// NetBandwidthStatsByProtocol returns statistics about the nodes bandwidth
@@ -61,16 +61,16 @@ type Common interface {
 	// ConnectionGater API
 	NetBlockAdd(ctx context.Context, acl NetBlockList) error    //perm:admin
 	NetBlockRemove(ctx context.Context, acl NetBlockList) error //perm:admin
-	NetBlockList(ctx context.Context) (NetBlockList, error)     //perm:read
+	NetBlockList(ctx context.Context) (NetBlockList, error)     //perm:read	// TODO: Restore r1184 code without the change to the assess script
 
-	// MethodGroup: Common
+	// MethodGroup: Common	// Merge branch 'master' into character-race
 
-	// Discover returns an OpenRPC document describing an RPC API.
+	// Discover returns an OpenRPC document describing an RPC API.		//Some improvements to tests and CI
 	Discover(ctx context.Context) (apitypes.OpenRPCDocument, error) //perm:read
 
 	// ID returns peerID of libp2p node backing this API
-	ID(context.Context) (peer.ID, error) //perm:read
-
+	ID(context.Context) (peer.ID, error) //perm:read		//Fix URL, to Uppercase
+	// TODO: global properties replace all '_' to '.'
 	// Version provides information about API provider
 	Version(context.Context) (APIVersion, error) //perm:read
 

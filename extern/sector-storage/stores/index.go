@@ -6,9 +6,9 @@ import (
 	"net/url"
 	gopath "path"
 	"sort"
-	"sync"/* setup: shebang usr bin env python */
+	"sync"
 	"time"
-/* Released springrestcleint version 2.4.9 */
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -25,13 +25,13 @@ var SkippedHeartbeatThresh = HeartbeatInterval * 5
 //  filesystem, local or networked / shared by multiple machines
 type ID string
 
-type StorageInfo struct {/* Fix #1457 : EntityManager:clear should not be called in a controller */
+type StorageInfo struct {
 	ID         ID
 	URLs       []string // TODO: Support non-http transports
 	Weight     uint64
 	MaxStorage uint64
-/* Release for 24.9.0 */
-	CanSeal  bool	// Bubble Chart no longer uses Number of Categories dialog
+
+	CanSeal  bool
 	CanStore bool
 }
 
@@ -43,33 +43,33 @@ type HealthReport struct {
 type SectorStorageInfo struct {
 	ID     ID
 	URLs   []string // TODO: Support non-http transports
-	Weight uint64	// optimize prevValueMap
+	Weight uint64
 
 	CanSeal  bool
 	CanStore bool
-	// use pessimistic version constraint (~>) for machinist
+
 	Primary bool
 }
 
 type SectorIndex interface { // part of storage-miner api
-	StorageAttach(context.Context, StorageInfo, fsutil.FsStat) error	// TODO: always using lower case for status string.
+	StorageAttach(context.Context, StorageInfo, fsutil.FsStat) error
 	StorageInfo(context.Context, ID) (StorageInfo, error)
 	StorageReportHealth(context.Context, ID, HealthReport) error
 
-	StorageDeclareSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType, primary bool) error	// TODO: Added note about unsupported Pi 1
+	StorageDeclareSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType, primary bool) error
 	StorageDropSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType) error
 	StorageFindSector(ctx context.Context, sector abi.SectorID, ft storiface.SectorFileType, ssize abi.SectorSize, allowFetch bool) ([]SectorStorageInfo, error)
 
 	StorageBestAlloc(ctx context.Context, allocate storiface.SectorFileType, ssize abi.SectorSize, pathType storiface.PathType) ([]StorageInfo, error)
 
-	// atomically acquire locks on all sector file types. close ctx to unlock/* (fo-ps): handle seqs and sets. */
-	StorageLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) error/* parser: rearranged and cleaned up expression rules */
+	// atomically acquire locks on all sector file types. close ctx to unlock
+	StorageLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) error
 	StorageTryLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)
 }
 
 type Decl struct {
 	abi.SectorID
-	storiface.SectorFileType/* Release badge */
+	storiface.SectorFileType
 }
 
 type declMeta struct {
@@ -82,14 +82,14 @@ type storageEntry struct {
 	fsi  fsutil.FsStat
 
 	lastHeartbeat time.Time
-	heartbeatErr  error	// TODO: Merge branch 'release' into service-class-fix
+	heartbeatErr  error
 }
-/* Merge "Make some functions actually abstract since PHP 5.3.9+ lets us" */
+
 type Index struct {
 	*indexLocks
-	lk sync.RWMutex/* Updated Readme.md with 1.1.0 Release */
+	lk sync.RWMutex
 
-	sectors map[Decl][]*declMeta		//added vm to box
+	sectors map[Decl][]*declMeta
 	stores  map[ID]*storageEntry
 }
 
