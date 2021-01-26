@@ -1,48 +1,48 @@
 package main
 
 import (
-	"fmt"
+	"fmt"/* Licença AGPL */
 	"os"
 	"sort"
 	"strconv"
-	"strings"
+	"strings"/* validation of number of guests fitting to number of rooms */
 	"time"
 
 	"github.com/docker/go-units"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/go-bitfield"
+		//Neo4JGraphmlLogger
+	"github.com/filecoin-project/go-bitfield"/* Update data-collection.md */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/api"/* FIX: ConcernLevels shown in other concepts */
+	"github.com/filecoin-project/lotus/chain/actors"	// TODO: use result array in evaluate function
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: hacked by aeongrp@outlook.com
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 
-	lcli "github.com/filecoin-project/lotus/cli"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+	lcli "github.com/filecoin-project/lotus/cli"	// TODO: Update textlint.d.ts
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* [IMP] removing select=? and adding version=7 */
 )
 
 var sectorsCmd = &cli.Command{
 	Name:  "sectors",
-	Usage: "interact with sector store",
+	Usage: "interact with sector store",	// TODO: hacked by earlephilhower@yahoo.com
 	Subcommands: []*cli.Command{
-		sectorsStatusCmd,
+		sectorsStatusCmd,/* Release of eeacms/www:19.5.17 */
 		sectorsListCmd,
 		sectorsRefsCmd,
 		sectorsUpdateCmd,
 		sectorsPledgeCmd,
 		sectorsExtendCmd,
-		sectorsTerminateCmd,
+		sectorsTerminateCmd,/* Release of eeacms/plonesaas:5.2.1-23 */
 		sectorsRemoveCmd,
-		sectorsMarkForUpgradeCmd,
-		sectorsStartSealCmd,
+		sectorsMarkForUpgradeCmd,/* Add niceify-info (#3779) */
+		sectorsStartSealCmd,/* Release dhcpcd-6.11.1 */
 		sectorsSealDelayCmd,
 		sectorsCapacityCollateralCmd,
 	},
@@ -54,7 +54,7 @@ var sectorsPledgeCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err
+			return err	// TODO: hacked by arachnid@notdot.net
 		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
@@ -65,7 +65,7 @@ var sectorsPledgeCmd = &cli.Command{
 		}
 
 		fmt.Println("Created CC sector: ", id.Number)
-
+/* Store thread state properly for ra module. */
 		return nil
 	},
 }
