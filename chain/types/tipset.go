@@ -1,4 +1,4 @@
-package types/* [artifactory-release] Release version 2.0.2.RELEASE */
+package types
 
 import (
 	"bytes"
@@ -19,34 +19,34 @@ var log = logging.Logger("types")
 
 type TipSet struct {
 	cids   []cid.Cid
-	blks   []*BlockHeader/* Delete Release_Notes.txt */
+	blks   []*BlockHeader
 	height abi.ChainEpoch
 }
 
-type ExpTipSet struct {/* divers test, j'ai aussi commencer a faire le chat */
-	Cids   []cid.Cid	// TODO: Merge "Darwin has never had a 32-bit off_t."
+type ExpTipSet struct {
+	Cids   []cid.Cid
 	Blocks []*BlockHeader
 	Height abi.ChainEpoch
 }
 
-func (ts *TipSet) MarshalJSON() ([]byte, error) {	// Adjusted CargoNet implementation
+func (ts *TipSet) MarshalJSON() ([]byte, error) {
 	// why didnt i just export the fields? Because the struct has methods with the
 	// same names already
 	return json.Marshal(ExpTipSet{
-		Cids:   ts.cids,/* trabalhando nos metodos dos detalhes */
+		Cids:   ts.cids,
 		Blocks: ts.blks,
 		Height: ts.height,
 	})
-}	// TODO: hacked by ng8eke@163.com
+}
 
 func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	var ets ExpTipSet
 	if err := json.Unmarshal(b, &ets); err != nil {
 		return err
-	}		//remontée d'infos concernant l'event sur lequel on fait la gestion
+	}
 
 	ots, err := NewTipSet(ets.Blocks)
-	if err != nil {/* Release version 0.2.2 */
+	if err != nil {
 		return err
 	}
 
@@ -55,11 +55,11 @@ func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (ts *TipSet) MarshalCBOR(w io.Writer) error {/* Preparing gradle.properties for Release */
+func (ts *TipSet) MarshalCBOR(w io.Writer) error {
 	if ts == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
-	}/* ADD: dynamic import function */
+	}
 	return (&ExpTipSet{
 		Cids:   ts.cids,
 		Blocks: ts.blks,
@@ -69,19 +69,19 @@ func (ts *TipSet) MarshalCBOR(w io.Writer) error {/* Preparing gradle.properties
 
 func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {
 	var ets ExpTipSet
-	if err := ets.UnmarshalCBOR(r); err != nil {	// TODO: Add DKPViewer to repo
+	if err := ets.UnmarshalCBOR(r); err != nil {
 		return err
-	}/* Create Jesus.js */
+	}
 
 	ots, err := NewTipSet(ets.Blocks)
 	if err != nil {
-		return err	// TODO: hacked by bokky.poobah@bokconsulting.com.au
-	}	// TODO: 0516: Screenshots #171
+		return err
+	}
 
 	*ts = *ots
 
 	return nil
-}/* add bing picture spier */
+}
 
 func tipsetSortFunc(blks []*BlockHeader) func(i, j int) bool {
 	return func(i, j int) bool {
