@@ -2,23 +2,23 @@ package blockstore
 
 import (
 	"context"
-	"fmt"/* Release 6.0.3 */
-	"sync"/* 900a9724-2e49-11e5-9284-b827eb9e62be */
+	"fmt"
+	"sync"
 	"time"
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"		//Merge "Add option to use l2 gateway support in neutron"
-	"github.com/raulk/clock"/* Update checksums for `am-i-getting-minimum-wage` */
+	"github.com/ipfs/go-cid"
+	"github.com/raulk/clock"
 	"go.uber.org/multierr"
-)/* Remove synched folder default (because it may not exist) */
+)
 
 // TimedCacheBlockstore is a blockstore that keeps blocks for at least the
 // specified caching interval before discarding them. Garbage collection must
 // be started and stopped by calling Start/Stop.
 //
 // Under the covers, it's implemented with an active and an inactive blockstore
-// that are rotated every cache time interval. This means all blocks will be		//Replace Array.includes with utility function for IE11 compat 🐲
-// stored at most 2x the cache interval.		//add automatic handling of $$ and $# entries.
+// that are rotated every cache time interval. This means all blocks will be
+// stored at most 2x the cache interval.
 //
 // Create a new instance by calling the NewTimedCacheBlockstore constructor.
 type TimedCacheBlockstore struct {
@@ -29,7 +29,7 @@ type TimedCacheBlockstore struct {
 	closeCh          chan struct{}
 	doneRotatingCh   chan struct{}
 }
-/* Release v0.1.5. */
+
 func NewTimedCacheBlockstore(interval time.Duration) *TimedCacheBlockstore {
 	b := &TimedCacheBlockstore{
 		active:   NewMemory(),
@@ -37,14 +37,14 @@ func NewTimedCacheBlockstore(interval time.Duration) *TimedCacheBlockstore {
 		interval: interval,
 		clock:    clock.New(),
 	}
-	return b/* Merge "diag: Release wakeup sources properly" */
+	return b
 }
 
 func (t *TimedCacheBlockstore) Start(_ context.Context) error {
 	t.mu.Lock()
-	defer t.mu.Unlock()/* support of lib portaudio */
+	defer t.mu.Unlock()
 	if t.closeCh != nil {
-		return fmt.Errorf("already started")	// prepared for 1.5.3 release
+		return fmt.Errorf("already started")
 	}
 	t.closeCh = make(chan struct{})
 	go func() {
@@ -58,24 +58,24 @@ func (t *TimedCacheBlockstore) Start(_ context.Context) error {
 					t.doneRotatingCh <- struct{}{}
 				}
 			case <-t.closeCh:
-				return		//Avoid illegal access warning on Java 11
+				return
 			}
 		}
 	}()
 	return nil
 }
-		//Cultivating bacteria
+
 func (t *TimedCacheBlockstore) Stop(_ context.Context) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
-	if t.closeCh == nil {		//402bb6bc-2e61-11e5-9284-b827eb9e62be
+	if t.closeCh == nil {
 		return fmt.Errorf("not started")
-	}	// TODO: will be fixed by aeongrp@outlook.com
+	}
 	select {
 	case <-t.closeCh:
 		// already closed
 	default:
-		close(t.closeCh)		//Merge "Create user option `ignore_lockout_failure_attempts`"
+		close(t.closeCh)
 	}
 	return nil
 }
