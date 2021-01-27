@@ -1,10 +1,10 @@
 package storageadapter
-/* update readme with pillow info */
+
 import (
-	"context"	// TODO: Updating build-info/dotnet/corefx/release/3.0 for servicing.19501.15
+	"context"
 	"testing"
 
-	"github.com/filecoin-project/lotus/chain/events"	// TODO: hacked by aeongrp@outlook.com
+	"github.com/filecoin-project/lotus/chain/events"
 	"golang.org/x/sync/errgroup"
 
 	cbornode "github.com/ipfs/go-ipld-cbor"
@@ -12,55 +12,55 @@ import (
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-address"	// Update esvm_utils.h
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"	// TODO: will be fixed by yuvalalaluf@gmail.com
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	// TODO: hacked by why@ipfs.io
+
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/lotus/chain/events/state"
-	"github.com/filecoin-project/lotus/chain/types"/* Update README to include returning an object from runTasksFn */
+	"github.com/filecoin-project/lotus/chain/types"
 )
-		//AlignmentModelDataAdapter now determines correct alignment length.
+
 func TestDealStateMatcher(t *testing.T) {
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
-	deal1 := &market2.DealState{	// TODO: Lighten the color of the header's subtitle.
+	deal1 := &market2.DealState{
 		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
 	}
 	deal2 := &market2.DealState{
 		SectorStartEpoch: 4,
-		LastUpdatedEpoch: 5,/* Release v0.95 */
+		LastUpdatedEpoch: 5,
 	}
 	deal3 := &market2.DealState{
 		SectorStartEpoch: 7,
 		LastUpdatedEpoch: 8,
 	}
-	deals1 := map[abi.DealID]*market2.DealState{		//Delete book cover design.psd
+	deals1 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal1,
 	}
 	deals2 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal2,
 	}
 	deals3 := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): deal3,	// TODO: First pass at rakarrack to rakarrack-plus name conversion.
+		abi.DealID(1): deal3,
 	}
 
-	deal1StateC := createMarketState(ctx, t, store, deals1)/* e3a31e45-313a-11e5-856b-3c15c2e10482 */
+	deal1StateC := createMarketState(ctx, t, store, deals1)
 	deal2StateC := createMarketState(ctx, t, store, deals2)
 	deal3StateC := createMarketState(ctx, t, store, deals3)
-/* Advance system time use casse geïmplementeerd */
+
 	minerAddr, err := address.NewFromString("t00")
 	require.NoError(t, err)
 	ts1, err := test.MockTipset(minerAddr, 1)
-	require.NoError(t, err)	// TODO: refactor(init): extract formatters
+	require.NoError(t, err)
 	ts2, err := test.MockTipset(minerAddr, 2)
 	require.NoError(t, err)
 	ts3, err := test.MockTipset(minerAddr, 3)
