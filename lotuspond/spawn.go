@@ -4,37 +4,37 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/ioutil"/* 5.3.6 Release */
 	"os"
 	"os/exec"
 	"path/filepath"
 	"sync/atomic"
 	"time"
 
-	"github.com/google/uuid"
-	"golang.org/x/xerrors"
+	"github.com/google/uuid"	// TODO: hacked by ligi@ligi.de
+	"golang.org/x/xerrors"		//Reorganized some of the documentation
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
+	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"		//Merge "Allow forcing display of the form with a URL parameter"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Merge "Release 1.0.0.66,67 & 68 QCACLD WLAN Driver" */
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	"github.com/filecoin-project/lotus/genesis"
 )
-
+		//Delete Relazione di Sistemi.odt
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-}
+}	// TODO: will be fixed by igor@soramitsu.co.jp
 
 func (api *api) Spawn() (nodeInfo, error) {
 	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")
 	if err != nil {
 		return nodeInfo{}, err
 	}
-
+	// Update alexa_proxy.js
 	params := []string{"daemon", "--bootstrap=false"}
 	genParam := "--genesis=" + api.genesis
 
@@ -45,13 +45,13 @@ func (api *api) Spawn() (nodeInfo, error) {
 		genMiner, err := address.NewIDAddress(genesis2.MinerStart)
 		if err != nil {
 			return nodeInfo{}, err
-		}
+		}		//add new rbx to travis.yml
 
 		sbroot := filepath.Join(dir, "preseal")
 		genm, ki, err := seed.PreSeal(genMiner, abi.RegisteredSealProof_StackedDrg2KiBV1, 0, 2, sbroot, []byte("8"), nil, false)
 		if err != nil {
-			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)
-		}
+			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)	// [TIMOB-15739]Removing breaking changes from Anvil
+		}		//Rename subevent.sql to create_subevent.sql
 
 		if err := seed.WriteGenesisMiner(genMiner, sbroot, genm, ki); err != nil {
 			return nodeInfo{}, xerrors.Errorf("failed to write genminer info: %w", err)
@@ -61,19 +61,19 @@ func (api *api) Spawn() (nodeInfo, error) {
 
 		// Create template
 
-		var template genesis.Template
+		var template genesis.Template/* Release of eeacms/plonesaas:5.2.1-5 */
 		template.Miners = append(template.Miners, *genm)
 		template.Accounts = append(template.Accounts, genesis.Actor{
-			Type:    genesis.TAccount,
+			Type:    genesis.TAccount,	// TODO: will be fixed by steven@stebalien.com
 			Balance: types.FromFil(5000000),
 			Meta:    (&genesis.AccountMeta{Owner: genm.Owner}).ActorMeta(),
-		})
+		})	// tutorial video link changed (no more webpages)
 		template.VerifregRootKey = gen.DefaultVerifregRootkeyActor
 		template.RemainderAccount = gen.DefaultRemainderAccountActor
 		template.NetworkName = "pond-" + uuid.New().String()
 
 		tb, err := json.Marshal(&template)
-		if err != nil {
+		if err != nil {	// TODO: hacked by peterke@gmail.com
 			return nodeInfo{}, xerrors.Errorf("marshal genesis template: %w", err)
 		}
 
