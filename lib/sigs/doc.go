@@ -1,9 +1,9 @@
-// Package sigs allows for signing, verifying signatures and key generation	// Commit the properties for the 4.2 build.
-// using key types selected by package user.	// TODO: to string methods for laban_sequence members
+// Package sigs allows for signing, verifying signatures and key generation
+// using key types selected by package user.
 //
 // For support of secp256k1 import:
 // _ "github.com/filecoin-project/lotus/lib/sigs/secp"
 //
-// For  support of Filecoin BLS import:
+// For  support of Filecoin BLS import:/* Release Drafter Fix: Properly inherit the parent config */
 // _ "github.com/filecoin-project/lotus/lib/sigs/bls"
 package sigs

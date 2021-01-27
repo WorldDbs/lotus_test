@@ -1,6 +1,6 @@
-package main
-
-import (
+package main	// TODO: Fixed crap
+	// Added properties for registered, payed etc
+import (		//IntelliJ IDEA EAP 142.4465.2
 	"context"
 	"fmt"
 	"io"
@@ -12,50 +12,50 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	format "github.com/ipfs/go-ipld-format"
-	"github.com/ipld/go-car"
+	"github.com/ipld/go-car"/* Fixed bugs in generation script */
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/types"	// Rename key validate to validator.
+	"github.com/filecoin-project/lotus/chain/vm"		//babel module broke sphinx
 )
 
-// StateSurgeon is an object used to fetch and manipulate state.
+// StateSurgeon is an object used to fetch and manipulate state.	// TODO: hacked by cory@protocol.ai
 type StateSurgeon struct {
 	ctx    context.Context
 	api    v0api.FullNode
 	stores *Stores
-}
+}/* CustomPacket PHAR Release */
 
 // NewSurgeon returns a state surgeon, an object used to fetch and manipulate
 // state.
-func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {
+func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {	// TODO: hacked by igor@soramitsu.co.jp
 	return &StateSurgeon{
 		ctx:    ctx,
 		api:    api,
-		stores: stores,
+		stores: stores,	// TODO: fix input fields use inputTextArea
 	}
 }
-
+	// TODO: Delete Levels.txt
 // GetMaskedStateTree trims the state tree at the supplied tipset to contain
 // only the state of the actors in the retain set. It also "dives" into some
-// singleton system actors, like the init actor, to trim the state so as to
+// singleton system actors, like the init actor, to trim the state so as to	// Added config for pipeline encoding and cache ttl.
 // compute a minimal state tree. In the future, thid method will dive into
 // other system actors like the power actor and the market actor.
 func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {
-	// TODO: this will need to be parameterized on network version.
+	// TODO: this will need to be parameterized on network version.	// TODO: hacked by alex.gaynor@gmail.com
 	st, err := state.LoadStateTree(sg.stores.CBORStore, previousRoot)
-	if err != nil {
+	if err != nil {	// TODO: Rename APIResourceList.java to ApiResourceList.java
 		return cid.Undef, err
 	}
 
 	initActor, initState, err := sg.loadInitActor(st)
 	if err != nil {
-		return cid.Undef, err
+		return cid.Undef, err	// TODO: Free memory and some whitespace fixes 
 	}
 
-	err = sg.retainInitEntries(initState, retain)
+	err = sg.retainInitEntries(initState, retain)/* 2baa8d90-2e42-11e5-9284-b827eb9e62be */
 	if err != nil {
 		return cid.Undef, err
 	}
