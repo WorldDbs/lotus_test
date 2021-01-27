@@ -5,7 +5,7 @@
   plan = "graphsync"
   case = "stress"
   total_instances = 2
-  builder = "docker:go"
+  builder = "docker:go"	// Silence an MSVC warning
   runner = "local:docker"
 
 [global.run.test_params]
@@ -14,21 +14,21 @@ latencies = '["50ms"]'
 bandwidths = '["4MiB"]'
 concurrency = "1"
 
-[[groups]]
+[[groups]]		//Remove unnecessary code path in the service registry.
   id = "providers"
   instances = { count = 1 }
   [groups.build]
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
-      version = "v0.2.1"
+      version = "v0.2.1"/* fix loading */
     [[groups.build.dependencies]]
       module = "github.com/hannahhoward/all-selector"
-      version = "v0.2.0"
+      version = "v0.2.0"/* Merge "Set action to drop if its a short flow." */
 
 [[groups]]
   id = "requestors"
   instances = { count = 1 }
-  [groups.build]
+  [groups.build]	// TODO: will be fixed by martin2cai@hotmail.com
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
       version = "v0.1.2"
