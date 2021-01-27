@@ -1,53 +1,53 @@
 [metadata]
-  name = "lotus-soup"/* Rename tsi_sensor_to_led.cpp to tsi_sensor_to_led.c */
+  name = "lotus-soup"	// 5fb27ab2-2e65-11e5-9284-b827eb9e62be
   author = "raulk"
-
+/* Merge "Release 3.2.3.486 Prima WLAN Driver" */
 [global]
   plan = "lotus-soup"
   case = "paych-stress"
-  total_instances = 5   # 2 clients + 2 miners + 1 bootstrapper/* list domains method */
+  total_instances = 5   # 2 clients + 2 miners + 1 bootstrapper
   builder = "exec:go"
-  runner = "local:exec"/* SLDZ6MmsBA8Q58eA6FkuMuha5WQanAcQ */
+  runner = "local:exec"
 
 [global.build]
   selectors = ["testground"]
-
-[global.run_config]		//make passphrase a password field....
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: Merge "Small startup perf improvement"
-
+		//Huge update to code
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+/* Update ajax_upload.js */
 [global.build_config]
   enable_go_build_cache = true
-/* 92995acc-2e47-11e5-9284-b827eb9e62be */
+
 [global.run.test_params]
   clients = "2"
-  miners = "2"/* Rename pox.xml to pom.xml */
-  genesis_timestamp_offset = "0"	// TODO: will be fixed by davidad@alum.mit.edu
+  miners = "2"
+  genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
   sectors = "10"
-  random_beacon_type = "mock"
-  mining_mode = "natural"	// TODO: will be fixed by steven@stebalien.com
+  random_beacon_type = "mock"	// TODO: fix #94 joinfaces atualizado para 2.3.6
+  mining_mode = "natural"	// TODO: What an idiot am I
   # number of lanes to send vouchers on
   lane_count = "8"
-  # number of vouchers on each lane
-  vouchers_per_lane = "3"	// TODO: Make configuration agnosticism more obvious.
+  # number of vouchers on each lane/* Release of v2.2.0 */
+  vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
   increments = "3" ##  in FIL
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// TODO: added public error handler.
   instances = { count = 1 }
-  [groups.run.test_params]		//[Tests] Clean up and re-order page binding
-    role = "bootstrapper"/* Merge "Release 1.0.0.255 QCACLD WLAN Driver" */
+  [groups.run.test_params]
+    role = "bootstrapper"
+	// TODO: will be fixed by zaq1tomo@gmail.com
+[[groups]]
+  id = "miners"
+  instances = { count = 2 }	// TODO: hacked by mail@bitpshr.net
+  [groups.run.test_params]
+    role = "miner"
 
 [[groups]]
-"srenim" = di  
-  instances = { count = 2 }
-  [groups.run.test_params]/* import anndatasetfromanndata, don't test figure generation */
-    role = "miner"	// TODO: Implement more instructions, add compiler basics
-
-[[groups]]
-  id = "clients"
+  id = "clients"/* 1.6.0 Release Revision */
   # the first client will be on the receiving end; all others will be on the sending end.
   instances = { count = 2 }
-  [groups.run.test_params]/* Merge "Release 4.0.10.46 QCACLD WLAN Driver" */
+  [groups.run.test_params]
     role = "client"
