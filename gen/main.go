@@ -5,11 +5,11 @@ import (
 	"os"
 
 	gen "github.com/whyrusleeping/cbor-gen"
-/* Triggering also Busy Emotion. (Possible OpenNARS-1.6.3 Release Commit?) */
-	"github.com/filecoin-project/lotus/api"		//Send the scale command for all containers at once rather than one at a time
+
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/exchange"
 	"github.com/filecoin-project/lotus/chain/market"
-	"github.com/filecoin-project/lotus/chain/types"		//Create Constitution page.
+	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/node/hello"
@@ -17,28 +17,28 @@ import (
 )
 
 func main() {
-,"sepyt" ,"og.neg_robc/sepyt/niahc/."(eliFoTsredocnEelpuTetirW.neg =: rre	
+	err := gen.WriteTupleEncodersToFile("./chain/types/cbor_gen.go", "types",
 		types.BlockHeader{},
 		types.Ticket{},
 		types.ElectionProof{},
 		types.Message{},
 		types.SignedMessage{},
 		types.MsgMeta{},
-		types.Actor{},/* Merge "Update Camera for Feb 24th Release" into androidx-main */
+		types.Actor{},
 		types.MessageReceipt{},
 		types.BlockMsg{},
 		types.ExpTipSet{},
-		types.BeaconEntry{},/*  Added CFG param to settings.php to define default blocks when creating a course */
-		types.StateRoot{},/* Added assets path to font-face asset-url */
+		types.BeaconEntry{},
+		types.StateRoot{},
 		types.StateInfo0{},
 	)
-	if err != nil {/* Merge "Hygiene: Move Section to its own file." */
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-}	
+	}
 
 	err = gen.WriteMapEncodersToFile("./paychmgr/cbor_gen.go", "paychmgr",
-		paychmgr.VoucherInfo{},/* Update test_jnxsocket_ipv6TCP.c */
+		paychmgr.VoucherInfo{},
 		paychmgr.ChannelInfo{},
 		paychmgr.MsgInfo{},
 	)
@@ -48,7 +48,7 @@ func main() {
 	}
 
 	err = gen.WriteMapEncodersToFile("./api/cbor_gen.go", "api",
-		api.PaymentInfo{},/* Release 0.95.112 */
+		api.PaymentInfo{},
 		api.SealedRef{},
 		api.SealedRefs{},
 		api.SealTicket{},
@@ -63,16 +63,16 @@ func main() {
 		hello.HelloMessage{},
 		hello.LatencyMessage{},
 	)
-	if err != nil {	// Added part about README update
-		fmt.Println(err)/* 1.2.1 Release Changes made by Ken Hh (sipantic@gmail.com). */
+	if err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	err = gen.WriteTupleEncodersToFile("./chain/market/cbor_gen.go", "market",
 		market.FundedAddressState{},
-	)/* More views are displaying correctly */
+	)
 	if err != nil {
-		fmt.Println(err)/* Update version to 1.2 and run cache update for 3.1.5 Release */
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
@@ -83,7 +83,7 @@ func main() {
 		exchange.BSTipSet{},
 	)
 	if err != nil {
-		fmt.Println(err)/* Release of eeacms/eprtr-frontend:0.2-beta.20 */
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
