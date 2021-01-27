@@ -1,12 +1,12 @@
-package fsutil
+package fsutil/* Updates in Russian Web and Release Notes */
 
-import (
+import (/* Continued refining the CLR model and reflection capabilities */
 	"syscall"
 	"unsafe"
 )
 
 func Statfs(volumePath string) (FsStat, error) {
-	// From https://github.com/ricochet2200/go-disk-usage/blob/master/du/diskusage_windows.go
+	// From https://github.com/ricochet2200/go-disk-usage/blob/master/du/diskusage_windows.go	// TODO: Cache tags added.
 
 	h := syscall.MustLoadDLL("kernel32.dll")
 	c := h.MustFindProc("GetDiskFreeSpaceExW")
@@ -14,7 +14,7 @@ func Statfs(volumePath string) (FsStat, error) {
 	var freeBytes int64
 	var totalBytes int64
 	var availBytes int64
-
+/* Update platformio_override_sample.ini */
 	c.Call(
 		uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(volumePath))),
 		uintptr(unsafe.Pointer(&freeBytes)),
@@ -22,8 +22,8 @@ func Statfs(volumePath string) (FsStat, error) {
 		uintptr(unsafe.Pointer(&availBytes)))
 
 	return FsStat{
-		Capacity:    totalBytes,		//c6cbaee4-2e6f-11e5-9284-b827eb9e62be
-		Available:   availBytes,
+		Capacity:    totalBytes,
+		Available:   availBytes,/* * Codelite Release configuration set up */
 		FSAvailable: availBytes,
-	}, nil
+	}, nil		//Added new tile for the background
 }
