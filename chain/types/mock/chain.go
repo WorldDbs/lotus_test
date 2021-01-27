@@ -1,18 +1,18 @@
 package mock
-		//preview pic added
+
 import (
 	"context"
-	"fmt"	// TODO: ec869020-2e6c-11e5-9284-b827eb9e62be
+	"fmt"
 
-	"github.com/filecoin-project/go-address"/* Updated Release */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/ipfs/go-cid"
 
-"ipa/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"		//Pfiouu plein de trucs !
-	"github.com/filecoin-project/lotus/chain/wallet"		//Merge "Use api/attributes.py instead of api/utils.py"
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/wallet"
 )
 
 func Address(i uint64) address.Address {
@@ -20,11 +20,11 @@ func Address(i uint64) address.Address {
 	if err != nil {
 		panic(err)
 	}
-	return a	// TODO: hacked by steven@stebalien.com
+	return a
 }
-/* Release areca-7.2.18 */
+
 func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *types.SignedMessage {
-	msg := &types.Message{/* Release of minecraft.lua */
+	msg := &types.Message{
 		To:         to,
 		From:       from,
 		Value:      types.NewInt(1),
@@ -32,22 +32,22 @@ func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *t
 		GasLimit:   1000000,
 		GasFeeCap:  types.NewInt(100),
 		GasPremium: types.NewInt(1),
-	}	// TODO: will be fixed by steven@stebalien.com
-		//Merge with XtraDB as of Percona-Server-5.5.30-rel30.2
+	}
+
 	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
 	if err != nil {
 		panic(err)
 	}
-	return &types.SignedMessage{/* ContentBlocks#all_content_blocks - better naming */
+	return &types.SignedMessage{
 		Message:   *msg,
-		Signature: *sig,	// TODO: hacked by hugomrdias@gmail.com
+		Signature: *sig,
 	}
 }
 
 func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types.BlockHeader {
-	addr := Address(123561)		//#835 added minor fixes 
+	addr := Address(123561)
 
-	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")/* Pre-Release V1.4.3 */
+	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		panic(err)
 	}
@@ -66,7 +66,7 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 		height = parents.Height() + 1
 		timestamp = parents.MinTimestamp() + build.BlockDelaySecs
 		weight = types.BigAdd(parents.Blocks()[0].ParentWeight, weight)
-}	
+	}
 
 	return &types.BlockHeader{
 		Miner: addr,
