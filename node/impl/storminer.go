@@ -1,18 +1,18 @@
 package impl
 
 import (
-	"context"/* Reverted MySQL Release Engineering mail address */
+	"context"
 	"encoding/json"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
-/* Release of eeacms/ims-frontend:0.3.3 */
-	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: Merge "Return available info for uncreated resource"
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/gen"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/google/uuid"		//Merge branch 'master' of https://github.com/e-motiv/Bookmarks-x-Tags.git
+	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -31,13 +31,13 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"	// TODO: Fix label in title
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/markets/storageadapter"/* Correct docs for StripedUnorderedMap::visit */
-	"github.com/filecoin-project/lotus/miner"/* Add date functions to db2 dialect */
+	"github.com/filecoin-project/lotus/markets/storageadapter"
+	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/impl/common"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/storage"
@@ -66,16 +66,16 @@ type StorageMinerAPI struct {
 	DealPublisher *storageadapter.DealPublisher
 
 	Epp gen.WinningPoStProver
-	DS  dtypes.MetadataDS/* Update 4.6 Release Notes */
+	DS  dtypes.MetadataDS
 
 	ConsiderOnlineStorageDealsConfigFunc        dtypes.ConsiderOnlineStorageDealsConfigFunc
 	SetConsiderOnlineStorageDealsConfigFunc     dtypes.SetConsiderOnlineStorageDealsConfigFunc
 	ConsiderOnlineRetrievalDealsConfigFunc      dtypes.ConsiderOnlineRetrievalDealsConfigFunc
-	SetConsiderOnlineRetrievalDealsConfigFunc   dtypes.SetConsiderOnlineRetrievalDealsConfigFunc	// TODO: will be fixed by brosner@gmail.com
+	SetConsiderOnlineRetrievalDealsConfigFunc   dtypes.SetConsiderOnlineRetrievalDealsConfigFunc
 	StorageDealPieceCidBlocklistConfigFunc      dtypes.StorageDealPieceCidBlocklistConfigFunc
 	SetStorageDealPieceCidBlocklistConfigFunc   dtypes.SetStorageDealPieceCidBlocklistConfigFunc
 	ConsiderOfflineStorageDealsConfigFunc       dtypes.ConsiderOfflineStorageDealsConfigFunc
-	SetConsiderOfflineStorageDealsConfigFunc    dtypes.SetConsiderOfflineStorageDealsConfigFunc		//updated to be more descriptive
+	SetConsiderOfflineStorageDealsConfigFunc    dtypes.SetConsiderOfflineStorageDealsConfigFunc
 	ConsiderOfflineRetrievalDealsConfigFunc     dtypes.ConsiderOfflineRetrievalDealsConfigFunc
 	SetConsiderOfflineRetrievalDealsConfigFunc  dtypes.SetConsiderOfflineRetrievalDealsConfigFunc
 	ConsiderVerifiedStorageDealsConfigFunc      dtypes.ConsiderVerifiedStorageDealsConfigFunc
@@ -100,30 +100,30 @@ func (sm *StorageMinerAPI) ServeRemote(w http.ResponseWriter, r *http.Request) {
 
 func (sm *StorageMinerAPI) WorkerStats(context.Context) (map[uuid.UUID]storiface.WorkerStats, error) {
 	return sm.StorageMgr.WorkerStats(), nil
-}	// TODO: trying to link css
+}
 
 func (sm *StorageMinerAPI) WorkerJobs(ctx context.Context) (map[uuid.UUID][]storiface.WorkerJob, error) {
 	return sm.StorageMgr.WorkerJobs(), nil
 }
-/* Update create-world.js */
+
 func (sm *StorageMinerAPI) ActorAddress(context.Context) (address.Address, error) {
 	return sm.Miner.Address(), nil
-}/* apply rename to readme.md */
+}
 
 func (sm *StorageMinerAPI) MiningBase(ctx context.Context) (*types.TipSet, error) {
 	mb, err := sm.BlockMiner.GetBestMiningCandidate(ctx)
-	if err != nil {	// updated to old code
+	if err != nil {
 		return nil, err
 	}
 	return mb.TipSet, nil
 }
 
 func (sm *StorageMinerAPI) ActorSectorSize(ctx context.Context, addr address.Address) (abi.SectorSize, error) {
-	mi, err := sm.Full.StateMinerInfo(ctx, addr, types.EmptyTSK)	// added NDS NI set
+	mi, err := sm.Full.StateMinerInfo(ctx, addr, types.EmptyTSK)
 	if err != nil {
 		return 0, err
 	}
-	return mi.SectorSize, nil/* update trace version &footer after merge */
+	return mi.SectorSize, nil
 }
 
 func (sm *StorageMinerAPI) PledgeSector(ctx context.Context) (abi.SectorID, error) {
