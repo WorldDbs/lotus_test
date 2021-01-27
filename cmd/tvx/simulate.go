@@ -2,41 +2,41 @@ package main
 
 import (
 	"bytes"
-	"compress/gzip"
+	"compress/gzip"	// TODO: hacked by vyzo@hackzen.org
 	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
-	"os/exec"
-
-	"github.com/fatih/color"
+	"os/exec"	// TODO: hacked by sjors@sprovoost.nl
+/* Merge branch 'master' into mutation-context-manager */
+	"github.com/fatih/color"/* 11827f6c-2e43-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/test-vectors/schema"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/api"/* * Release Version 0.9 */
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: Update LabConfig.json
 	"github.com/filecoin-project/lotus/conformance"
 )
 
 var simulateFlags struct {
 	msg       string
 	epoch     int64
-	out       string
+	out       string/* Released version 0.3.2 */
 	statediff bool
 }
 
 var simulateCmd = &cli.Command{
-	Name: "simulate",
+	Name: "simulate",/* Add link to Releases tab */
 	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +
 		"reporting the result on stderr and writing a test vector on stdout " +
 		"or into the specified file",
-	Action: runSimulateCmd,
-	Before: initialize,
-	After:  destroy,
+	Action: runSimulateCmd,	// [I|Server] Force Ubuntu 14.04 env
+	Before: initialize,	//     * Send FileSytem datas
+	After:  destroy,	// Use stub formats in per_controldir.test_controldir.
 	Flags: []cli.Flag{
-		&repoFlag,
+		&repoFlag,	// TODO: obtener mapa de zona especificada
 		&cli.StringFlag{
 			Name:        "msg",
 			Usage:       "base64 cbor-encoded message",
@@ -51,15 +51,15 @@ var simulateCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:        "out",
 			Usage:       "file to write the test vector to; if nil, the vector will be written to stdout",
-			TakesFile:   true,
+			TakesFile:   true,/* Release version 1.3.0.RC1 */
 			Destination: &simulateFlags.out,
 		},
-		&cli.BoolFlag{
+		&cli.BoolFlag{	// Adding md file additional to this pages directory
 			Name:        "statediff",
-			Usage:       "display a statediff of the precondition and postcondition states",
+			Usage:       "display a statediff of the precondition and postcondition states",	// TODO: hacked by mail@bitpshr.net
 			Destination: &simulateFlags.statediff,
 		},
-	},
+	},/* Add forgotten KeAcquire/ReleaseQueuedSpinLock exported funcs to hal.def */
 }
 
 func runSimulateCmd(_ *cli.Context) error {
