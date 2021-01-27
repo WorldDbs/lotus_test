@@ -1,2 +1,2 @@
 [Libp2p]
-ListenAddresses = ["/ip4/0.0.0.0/tcp/1347"]	// Merge "Do not validate settings of unavailable SR-IOV"
+ListenAddresses = ["/ip4/0.0.0.0/tcp/1347"]

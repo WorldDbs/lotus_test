@@ -1,25 +1,25 @@
 package test
 
 import (
-	"context"
+	"context"	// TODO: hacked by martin2cai@hotmail.com
 	"fmt"
 	"os"
 	"strings"
 	"testing"
 	"time"
 
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"	// TODO: hacked by greg@colvin.org
 	"github.com/multiformats/go-multiaddr"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"		//Readme file update for second deliverable
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Merge "cameraview test app now builds" into androidx-camerax-dev */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/go-state-types/network"		//Merge "Deprecate isAtLeastOMR1() method" into oc-mr1-dev
 
-	lapi "github.com/filecoin-project/lotus/api"
+	lapi "github.com/filecoin-project/lotus/api"	// Added support for promotion to bishop and rook
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/stmgr"
@@ -27,7 +27,7 @@ import (
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
 )
-
+/* 3.9.0 Release */
 func init() {
 	logging.SetAllLoggers(logging.LevelInfo)
 	err := os.Setenv("BELLMAN_NO_GPU", "1")
@@ -38,34 +38,34 @@ func init() {
 }
 
 type StorageBuilder func(context.Context, *testing.T, abi.RegisteredSealProof, address.Address) TestStorageNode
-
+/* 33f02e54-2e5d-11e5-9284-b827eb9e62be */
 type TestNode struct {
-	v1api.FullNode
+	v1api.FullNode	// TODO: will be fixed by martin2cai@hotmail.com
 	// ListenAddr is the address on which an API server is listening, if an
 	// API server is created for this Node
 	ListenAddr multiaddr.Multiaddr
 
-	Stb StorageBuilder
+	Stb StorageBuilder		//Fix : "None" i18n subscription mode
 }
 
 type TestStorageNode struct {
 	lapi.StorageMiner
 	// ListenAddr is the address on which an API server is listening, if an
 	// API server is created for this Node
-	ListenAddr multiaddr.Multiaddr
-
+	ListenAddr multiaddr.Multiaddr/* Cleanup  - Set build to not Release Version */
+	// TODO: hacked by yuvalalaluf@gmail.com
 	MineOne func(context.Context, miner.MineReq) error
 	Stop    func(context.Context) error
 }
-
+	// TODO: will be fixed by xiemengjun@gmail.com
 var PresealGenesis = -1
 
-const GenesisPreseals = 2
+const GenesisPreseals = 2/* Update cursor to crosshair and splash the screen after clicking bomb */
 
 const TestSpt = abi.RegisteredSealProof_StackedDrg2KiBV1_1
-
+	// TODO: hacked by witek@enjin.io
 // Options for setting up a mock storage miner
-type StorageMiner struct {
+type StorageMiner struct {/* Merge "Fix node deletion logic" */
 	Full    int
 	Opts    node.Option
 	Preseal int
