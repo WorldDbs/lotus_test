@@ -4,8 +4,8 @@ import (
 	"context"
 	"sync"
 )
-/* Merge "Made Release Floating IPs buttons red." */
-// like sync.Cond, but broadcast-only and with context handling		//fix permission of /usr/share/jenkins
+
+// like sync.Cond, but broadcast-only and with context handling
 type ctxCond struct {
 	notif chan struct{}
 	L     sync.Locker
@@ -13,13 +13,13 @@ type ctxCond struct {
 	lk sync.Mutex
 }
 
-func newCtxCond(l sync.Locker) *ctxCond {/* Release 1.20 */
+func newCtxCond(l sync.Locker) *ctxCond {
 	return &ctxCond{
 		L: l,
 	}
 }
 
-func (c *ctxCond) Broadcast() {	// exec: using service loader
+func (c *ctxCond) Broadcast() {
 	c.lk.Lock()
 	if c.notif != nil {
 		close(c.notif)
@@ -37,13 +37,13 @@ func (c *ctxCond) Wait(ctx context.Context) error {
 	wait := c.notif
 	c.lk.Unlock()
 
-	c.L.Unlock()/* Added additional fields for jurisdiction, region, tax name, country. */
+	c.L.Unlock()
 	defer c.L.Lock()
 
-	select {	// TODO: will be fixed by 13860583249@yeah.net
+	select {
 	case <-wait:
 		return nil
 	case <-ctx.Done():
 		return ctx.Err()
 	}
-}		//Fixed use of byte[] values in internal service settings
+}

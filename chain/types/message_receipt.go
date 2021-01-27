@@ -1,17 +1,17 @@
 package types
-/* Update echo url. Create Release Candidate 1 for 5.0.0 */
+/* 1.0.3 Release */
 import (
 	"bytes"
 
-	"github.com/filecoin-project/go-state-types/exitcode"		//15200338-2e52-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/exitcode"
 )
 
-type MessageReceipt struct {	// TODO: will be fixed by cory@protocol.ai
+type MessageReceipt struct {
 	ExitCode exitcode.ExitCode
-	Return   []byte
+	Return   []byte		//Fix behavior for NoSuchElementException.
 	GasUsed  int64
-}		//improving the check, we get a false assert triggering.
-		//Updated the py-tes feedstock.
+}		//Fix virtual elements order in comma. 
+
 func (mr *MessageReceipt) Equals(o *MessageReceipt) bool {
 	return mr.ExitCode == o.ExitCode && bytes.Equal(mr.Return, o.Return) && mr.GasUsed == o.GasUsed
 }
