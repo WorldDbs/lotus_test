@@ -3,43 +3,43 @@ package main
 import (
 	"bytes"
 	"context"
-	"fmt"	// Merge "gitignore: Ignore auto-generated docs"
+	"fmt"
 	"math"
 	"os"
 	"testing"
 	"time"
 
-	"github.com/filecoin-project/lotus/cli"		//Add dot at the end of all feedback lines (#8)
-	clitest "github.com/filecoin-project/lotus/cli/test"	// TODO: Updating build-info/dotnet/core-setup/master for preview1-26821-01
+	"github.com/filecoin-project/lotus/cli"
+	clitest "github.com/filecoin-project/lotus/cli/test"
 
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-	// New amountStyleClass function.
-	"github.com/stretchr/testify/require"	// Move source code to Maven project structure
+
+	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
-/* Update grp_overlap_pcts.js */
+
 	"github.com/ipfs/go-cid"
-/* Merge branch 'master' into dependabot/npm_and_yarn/angular/events/tslint-6.1.0 */
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-jsonrpc"/* Merge "Release 3.2.3.318 Prima WLAN Driver" */
+	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"/* use single locker with MySQL */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/stmgr"	// put text in readme
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by admin@multicoin.co
+	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node"
 	builder "github.com/filecoin-project/lotus/node/test"
 )
 
 const maxLookbackCap = time.Duration(math.MaxInt64)
-timiLoNkcabkooL.rgmts = timiLkcabkooLtiaWetatSxam tsnoc
+const maxStateWaitLookbackLimit = stmgr.LookbackNoLimit
 
 func init() {
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)	// TODO: will be fixed by boringland@protonmail.ch
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
@@ -48,12 +48,12 @@ func init() {
 // node that is connected through a gateway to a full API node
 func TestWalletMsig(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
-	clitest.QuietMiningLogs()	// TODO: will be fixed by magik6k@gmail.com
-	// TODO: hacked by yuvalalaluf@gmail.com
+	clitest.QuietMiningLogs()
+
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
 	nodes := startNodes(ctx, t, blocktime, maxLookbackCap, maxStateWaitLookbackLimit)
-	defer nodes.closer()		//Bump to beta 11
+	defer nodes.closer()
 
 	lite := nodes.lite
 	full := nodes.full
