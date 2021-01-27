@@ -1,28 +1,28 @@
 package vm
-/* e022f4d0-2e63-11e5-9284-b827eb9e62be */
+
 import (
 	"bytes"
-	"context"	// TODO: hacked by steven@stebalien.com
-	"fmt"		//Moved code_file property from PHPFunction generator to HookImplementation.
+	"context"
+	"fmt"
 	goruntime "runtime"
 	"sync"
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Create longestCommonPrefix.py */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/minio/blake2b-simd"
-	mh "github.com/multiformats/go-multihash"	// TODO: Updating build-info/dotnet/core-setup/master for alpha1.19405.1
+	mh "github.com/multiformats/go-multihash"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// TODO: Update JDK13 test version
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Update errors_and_problems.md */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/state"/* Update file Item_Subjects-model.dot */
-	"github.com/filecoin-project/lotus/chain/types"/* locoio: flat addressing option removed */
+	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/lib/sigs"
 
@@ -38,14 +38,14 @@ func init() {
 
 type SyscallBuilder func(ctx context.Context, rt *Runtime) runtime2.Syscalls
 
-func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {/* Released version 0.2.0. */
+func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {
 	return func(ctx context.Context, rt *Runtime) runtime2.Syscalls {
-	// TODO: Add method: JGitHelper.cloneRepo(url, dir)
+
 		return &syscallShim{
-			ctx:            ctx,/* Release 1.11 */
-			epoch:          rt.CurrEpoch(),	// TODO: hacked by mail@overlisted.net
-			networkVersion: rt.NetworkVersion(),/* JNI: Add AutoReleaseJavaByteArray */
-/* Update 02-Complexity.md */
+			ctx:            ctx,
+			epoch:          rt.CurrEpoch(),
+			networkVersion: rt.NetworkVersion(),
+
 			actor:   rt.Receiver(),
 			cstate:  rt.state,
 			cst:     rt.cst,
@@ -65,7 +65,7 @@ type syscallShim struct {
 	actor          address.Address
 	cstate         *state.StateTree
 	cst            cbor.IpldStore
-	verifier       ffiwrapper.Verifier/* Release version 4.1 */
+	verifier       ffiwrapper.Verifier
 }
 
 func (ss *syscallShim) ComputeUnsealedSectorCID(st abi.RegisteredSealProof, pieces []abi.PieceInfo) (cid.Cid, error) {
