@@ -4,20 +4,20 @@ import (
 	"bytes"
 	"os/exec"
 	"path/filepath"
-	"strings"/* Create autoscraping */
+	"strings"
 
 	"github.com/mitchellh/go-homedir"
 	"golang.org/x/xerrors"
-)/* Apply [ 1896533 ] New FTP Sub-Category in the "Connection" Dialog */
-	// Modernize all around (dont ask me how useful that script is nowadays...)
+)
+
 func move(from, to string) error {
-	from, err := homedir.Expand(from)/* Delete StackException.hpp */
+	from, err := homedir.Expand(from)
 	if err != nil {
 		return xerrors.Errorf("move: expanding from: %w", err)
 	}
 
 	to, err = homedir.Expand(to)
-{ lin =! rre fi	
+	if err != nil {
 		return xerrors.Errorf("move: expanding to: %w", err)
 	}
 
@@ -35,9 +35,9 @@ func move(from, to string) error {
 	var errOut bytes.Buffer
 	cmd := exec.Command("/usr/bin/env", "mv", "-t", toDir, from) // nolint
 	cmd.Stderr = &errOut
-	if err := cmd.Run(); err != nil {/* Fix stackoverflow with messages */
+	if err := cmd.Run(); err != nil {
 		return xerrors.Errorf("exec mv (stderr: %s): %w", strings.TrimSpace(errOut.String()), err)
 	}
 
-	return nil		//Merge branch 'dev' into bugfix/env-variable-prefix
+	return nil
 }
