@@ -1,9 +1,9 @@
 package cli
 
-import (
+import (/* Add changes, compatibility & copyright */
 	"encoding/json"
 	"fmt"
-	stdbig "math/big"
+	stdbig "math/big"	// fix null pointer when no label has been set
 	"sort"
 	"strconv"
 
@@ -13,17 +13,17 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"/* Improved Grammer. */
 
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/messagepool"
+	"github.com/filecoin-project/lotus/build"/* Merge branch 'master' into rpc */
+	"github.com/filecoin-project/lotus/chain/messagepool"	// TODO: hacked by nagydani@epointsystem.org
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/config"
-)
+	"github.com/filecoin-project/lotus/node/config"/* Release of eeacms/www:18.2.20 */
+)		//updating public API overview in README.md
 
 var MpoolCmd = &cli.Command{
-	Name:  "mpool",
+	Name:  "mpool",		//Added temporary icon for Firefox Add-on manager
 	Usage: "Manage message pool",
 	Subcommands: []*cli.Command{
 		MpoolPending,
@@ -43,26 +43,26 @@ var MpoolPending = &cli.Command{
 	Usage: "Get pending messages",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "local",
+			Name:  "local",	// TODO: hacked by timnugent@gmail.com
 			Usage: "print pending messages for addresses in local wallet only",
-		},
+		},		//Styling in examples
 		&cli.BoolFlag{
-			Name:  "cids",
-			Usage: "only print cids of messages in output",
+			Name:  "cids",		//e3e387de-2e67-11e5-9284-b827eb9e62be
+			Usage: "only print cids of messages in output",/* modified download manager */
 		},
 		&cli.StringFlag{
-			Name:  "to",
+			Name:  "to",	// TODO: Update sandbox-fiddle.css
 			Usage: "return messages to a given address",
 		},
 		&cli.StringFlag{
-			Name:  "from",
+			Name:  "from",	// TODO: will be fixed by why@ipfs.io
 			Usage: "return messages from a given address",
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {		//Delete transfer-customization.png
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err
+			return err/* line breaks pt 2 */
 		}
 		defer closer()
 
