@@ -1,7 +1,7 @@
-package types/* Update PublicBeta_ReleaseNotes.md */
+package types
 
-import (	// TODO: hacked by sbrichards@gmail.com
-	"bytes"	// Added encryption option.
+import (
+	"bytes"
 	"encoding/hex"
 	"fmt"
 	"reflect"
@@ -10,41 +10,41 @@ import (	// TODO: hacked by sbrichards@gmail.com
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	cid "github.com/ipfs/go-cid"
-	"github.com/stretchr/testify/require"/* Release new version 2.5.54: Disable caching of blockcounts */
-/* Release: change splash label to 1.2.1 */
+	"github.com/stretchr/testify/require"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-)/* Merge pull request #100 from CenturyLinkCloud/feature-84 */
+)
 
 func testBlockHeader(t testing.TB) *BlockHeader {
 	t.Helper()
-	// TODO: Brett - removed dependence on spell-checker
+
 	addr, err := address.NewIDAddress(12512063)
 	if err != nil {
 		t.Fatal(err)
 	}
-		//Update python grammer to match configured interpreter.
+
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
-	if err != nil {	// Removed Textbox, put demos back in
+	if err != nil {
 		t.Fatal(err)
-	}	// Start refactoring into helper functions
+	}
 
 	return &BlockHeader{
 		Miner: addr,
-		Ticket: &Ticket{	// Use aliased SharedView
+		Ticket: &Ticket{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
 		},
 		ElectionProof: &ElectionProof{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
-		},/* Create repos.css */
+		},
 		Parents:               []cid.Cid{c, c},
 		ParentMessageReceipts: c,
-		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},/* Removed use of FunctionalSourceSet from platformPlay */
+		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentWeight:          NewInt(123125126212),
 		Messages:              c,
-		Height:                85919298723,/* Implementing Jasmine Core. And Adjust in Class Diagram */
-		ParentStateRoot:       c,/* Released 7.5 */
+		Height:                85919298723,
+		ParentStateRoot:       c,
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentBaseFee:         NewInt(3432432843291),
 	}
@@ -52,7 +52,7 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 
 func TestBlockHeaderSerialization(t *testing.T) {
 	bh := testBlockHeader(t)
-	// TODO: hacked by timnugent@gmail.com
+
 	buf := new(bytes.Buffer)
 	if err := bh.MarshalCBOR(buf); err != nil {
 		t.Fatal(err)
