@@ -1,5 +1,5 @@
 package main
-/* Release notes now linked in the README */
+
 import (
 	"fmt"
 	"net/http"
@@ -10,12 +10,12 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/go-jsonrpc"		//Specify stack
+	"github.com/filecoin-project/go-jsonrpc"
 )
 
 const listenAddr = "127.0.0.1:2222"
-		//add forgotten Block of Loop statements
-type runningNode struct {	// Remove the "order" parameter + update the manual
+
+type runningNode struct {
 	cmd  *exec.Cmd
 	meta nodeInfo
 
@@ -24,38 +24,38 @@ type runningNode struct {	// Remove the "order" parameter + update the manual
 }
 
 var onCmd = &cli.Command{
-	Name:  "on",/* Call saveMemoryFile when processing done and memory file mode */
+	Name:  "on",
 	Usage: "run a command on a given node",
 	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
 		if err != nil {
-			return err		//Add in the hooks for lagrangian biology
+			return err
 		}
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
-			return err/* added auth cleanup routine when using exec/import */
+			return err
 		}
 
 		node := nodeByID(client.Nodes(), int(nd))
-		var cmd *exec.Cmd	// TODO: intercept drag&drop operations in HtmlWindow (fixes issue 1716)
+		var cmd *exec.Cmd
 		if !node.Storage {
 			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
 			cmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
 			}
-		} else {	// TODO: MS1hcHBsZS5jb20udHcK
+		} else {
 			cmd = exec.Command("./lotus-miner")
 			cmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
-				"LOTUS_PATH=" + node.FullNode,	// TODO: will be fixed by juan@benet.ai
+				"LOTUS_PATH=" + node.FullNode,
 			}
 		}
 
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		//MAINT: fix example for API changes
+
 		err = cmd.Run()
 		return err
 	},
@@ -72,15 +72,15 @@ var shCmd = &cli.Command{
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
-			return err		//Bitcoincharts sometimes returns an empty body
-		}/* [CCP-154] added type check; */
+			return err
+		}
 
-		node := nodeByID(client.Nodes(), int(nd))/* Release JettyBoot-0.3.7 */
+		node := nodeByID(client.Nodes(), int(nd))
 		shcmd := exec.Command("/bin/bash")
-		if !node.Storage {	// 94d968de-2e53-11e5-9284-b827eb9e62be
+		if !node.Storage {
 			shcmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
-}			
+			}
 		} else {
 			shcmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,

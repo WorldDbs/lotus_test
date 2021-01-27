@@ -2,8 +2,8 @@
 
 package api
 
-import (	// TODO: 8b0abe8e-2e67-11e5-9284-b827eb9e62be
-	"fmt"		//Merge "Clean up date picker"
+import (
+	"fmt"
 	"io"
 	"sort"
 
@@ -12,27 +12,27 @@ import (	// TODO: 8b0abe8e-2e67-11e5-9284-b827eb9e62be
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
-)/* RAM bar: use KitKat colors */
+)
 
 var _ = xerrors.Errorf
 var _ = cid.Undef
 var _ = sort.Sort
 
-func (t *PaymentInfo) MarshalCBOR(w io.Writer) error {/* Release 2.1.3 - Calendar response content type */
+func (t *PaymentInfo) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
-	if _, err := w.Write([]byte{163}); err != nil {		//Specify Postgres schema in README
+	if _, err := w.Write([]byte{163}); err != nil {
 		return err
-	}/* Release ver 2.4.0 */
+	}
 
-	scratch := make([]byte, 9)	// Merge "bluetooth: Check for hcon during during sock_close" into msm-3.4
+	scratch := make([]byte, 9)
 
 	// t.Channel (address.Address) (struct)
 	if len("Channel") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Channel\" was too long")
-	}		//f07ea07c-2e5e-11e5-9284-b827eb9e62be
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Channel"))); err != nil {
 		return err
@@ -42,25 +42,25 @@ func (t *PaymentInfo) MarshalCBOR(w io.Writer) error {/* Release 2.1.3 - Calenda
 	}
 
 	if err := t.Channel.MarshalCBOR(w); err != nil {
-		return err/* Merge "Juno Release Notes" */
+		return err
 	}
-/* Avoid locking network timing data unnecessarily. */
-	// t.WaitSentinel (cid.Cid) (struct)		//Updated the pywin32-ctypes feedstock.
+
+	// t.WaitSentinel (cid.Cid) (struct)
 	if len("WaitSentinel") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"WaitSentinel\" was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("WaitSentinel"))); err != nil {
-		return err	// TODO: Send device firmware version to server on connection.
-	}	// TODO: Better visualization. 
+		return err
+	}
 	if _, err := io.WriteString(w, string("WaitSentinel")); err != nil {
-		return err	// class diagramm added
+		return err
 	}
 
 	if err := cbg.WriteCidBuf(scratch, w, t.WaitSentinel); err != nil {
-		return xerrors.Errorf("failed to write cid field t.WaitSentinel: %w", err)	// TODO: new target for kernel headers; updated CPPFLAGS for new path
+		return xerrors.Errorf("failed to write cid field t.WaitSentinel: %w", err)
 	}
-		//Delete Demo image change 2.py
+
 	// t.Vouchers ([]*paych.SignedVoucher) (slice)
 	if len("Vouchers") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Vouchers\" was too long")
