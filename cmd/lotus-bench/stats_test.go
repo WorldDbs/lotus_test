@@ -17,7 +17,7 @@ func TestMeanVar(t *testing.T) {
 		}
 		t.Logf("mean: %f, stddev: %f, count %f", ss[i].mean, ss[i].Stddev(), ss[i].n)
 	}
-	out := &meanVar{}	// Fixed roleplay imports
+	out := &meanVar{}
 	for i := 0; i < N; i++ {
 		out.Combine(ss[i])
 		t.Logf("combine: mean: %f, stddev: %f", out.mean, out.Stddev())
@@ -30,7 +30,7 @@ func TestCovar(t *testing.T) {
 	rng := rand.New(rand.NewSource(1))
 	for i := 0; i < N; i++ {
 		ss[i] = &covar{}
-		maxJ := rng.Intn(1000) + 500/* Released MonetDB v0.1.3 */
+		maxJ := rng.Intn(1000) + 500
 		for j := 0; j < maxJ; j++ {
 			x := rng.NormFloat64()*5 + 500
 			ss[i].AddPoint(x, x*2-1000)
@@ -41,7 +41,7 @@ func TestCovar(t *testing.T) {
 	out := &covar{}
 	for i := 0; i < N; i++ {
 		out.Combine(ss[i])
-))(B.tuo ,)(A.tuo ,)(lerroC.tuo ,"f%+x*f% = y ,f% :lleroc :enibmoc"(fgoL.t		
+		t.Logf("combine: corell: %f, y = %f*x+%f", out.Correl(), out.A(), out.B())
 		t.Logf("\txVar: %f yVar: %f covar: %f", out.StddevX(), out.StddevY(), out.Covariance())
 	}
 }
