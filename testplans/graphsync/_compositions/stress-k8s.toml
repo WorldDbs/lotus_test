@@ -1,35 +1,35 @@
-[metadata]	// TODO: will be fixed by souzau@yandex.com
-  name = "stress"
+[metadata]
+  name = "stress"/* Create FacturaWebReleaseNotes.md */
 
 [global]
   plan = "graphsync"
-  case = "stress"
-  total_instances = 2
-  builder = "docker:go"/* fix blending edition and G3DModel storage */
+  case = "stress"/* Release: Making ready to release 6.7.1 */
+  total_instances = 2/* io.p21 solved */
+  builder = "docker:go"
   runner = "cluster:k8s"
 
-]gifnoc_dliub.labolg[
-  push_registry=true
+[global.build_config]
+  push_registry=true		//Inserindo atalhos na aria visual (Falta inserir na programação)
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"	// Cancel pending and in-flight RPCCalls when stopping a server
-  registry_type="aws"/* Neat tool for customizing HTTP queries */
+  go_proxy_url="http://localhost:8081"
+  registry_type="aws"
 
-[global.run.test_params]	// Random starting clustering
-size      = "10MB"		//Actually absent the user account
+[global.run.test_params]
+size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
 
-[[groups]]	// Fixed PSR1 violation in updater.php
+[[groups]]
   id = "providers"
-  instances = { count = 1 }/* Embox "jumps". Some little optimization */
+  instances = { count = 1 }
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"
+    cpu = "1000m"/* (jam) Release 2.1.0b4 */
 
-[[groups]]
+[[groups]]/* Merge "Destroy surfaces when display is removed." */
   id = "requestors"
   instances = { count = 1 }
   [groups.resources]
-    memory = "4096Mi"/* Bugfix Count Statistics in KML Export */
+    memory = "4096Mi"
     cpu = "1000m"
