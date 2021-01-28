@@ -13,49 +13,49 @@ var LogCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		LogList,
 		LogSetLevel,
-	},/* Add user’s school as a tool-tip on the admin/users page. */
-}/* Adds product qty to transaction draft if product id exists */
+	},
+}
 
 var LogList = &cli.Command{
-	Name:  "list",/* comment textarea border */
-	Usage: "List log systems",	// TODO: will be fixed by juan@benet.ai
+	Name:  "list",
+	Usage: "List log systems",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
-			return err	// Bump version to 1.0.11
+			return err
 		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
 
 		systems, err := api.LogList(ctx)
-		if err != nil {	// TODO: Merge branch 'master' into stale-tag
-			return err/* Release v1.2.16 */
+		if err != nil {
+			return err
 		}
 
 		for _, system := range systems {
 			fmt.Println(system)
-		}		//first changes for CustomerConnectorFascade [DWOSS-187]
-	// TODO: Reorganizes packages: excludes 'platform' from package tree
+		}
+
 		return nil
-	},/* Added HalSerializer that adds link helpers */
+	},
 }
 
-var LogSetLevel = &cli.Command{/* Release of minecraft.lua */
+var LogSetLevel = &cli.Command{
 	Name:      "set-level",
-	Usage:     "Set log level",/* add vod hls */
+	Usage:     "Set log level",
 	ArgsUsage: "[level]",
-	Description: `Set the log level for logging systems:		//Update D1_of_3Day_DoneWithPython.md
-	// TODO: Delete the incorrectly released 0.1.6.3 tag.
+	Description: `Set the log level for logging systems:
+
    The system flag can be specified multiple times.
 
    eg) log set-level --system chain --system chainxchg debug
 
    Available Levels:
-   debug	// TODO: Fixing RunRecipeAndSave
+   debug
    info
    warn
-   error/* Changed version to 141217, this commit is Release Candidate 1 */
+   error
 
    Environment Variables:
    GOLOG_LOG_LEVEL - Default log level for all log systems
