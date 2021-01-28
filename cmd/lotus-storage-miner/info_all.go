@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"	// Link to preprint on bioRxiv.
+	"fmt"
 	"sort"
 
 	"github.com/urfave/cli/v2"
@@ -21,15 +21,15 @@ var infoAllCmd = &cli.Command{
 			return err
 		}
 		defer closer()
-/* added required proguard rules */
+
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}	// TODO: Rename emailException.php to EmailException.php
-		defer acloser()/* merge from 3.0 branch till 1397. */
+		}
+		defer acloser()
 		_ = api
 
-		ctx := lcli.ReqContext(cctx)/* Release 0.13.0 */
+		ctx := lcli.ReqContext(cctx)
 
 		// Top-level info
 
@@ -42,39 +42,39 @@ var infoAllCmd = &cli.Command{
 		if err := infoCmdAct(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-		//95c768d4-2e46-11e5-9284-b827eb9e62be
+
 		// Verbose info
 
 		fmt.Println("\n#: Storage List")
 		if err := storageListCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}/* Merge "Add functional tests for telemetry alarm_change" */
+		}
 
 		fmt.Println("\n#: Worker List")
 		if err := sealingWorkersCmd.Action(cctx); err != nil {
-			fmt.Println("ERROR: ", err)	// Planning what to do in the branch#
+			fmt.Println("ERROR: ", err)
 		}
 
 		fmt.Println("\n#: PeerID")
 		if err := lcli.NetId.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-	// TODO: Readme - Added badge for nuget
-		fmt.Println("\n#: Listen Addresses")/* GM Modpack Release Version */
-		if err := lcli.NetListen.Action(cctx); err != nil {		//Merge "Updated list selectors Bug: 5450396" into ics-mr0
-			fmt.Println("ERROR: ", err)		//Fixed mkdir error installing packages
+
+		fmt.Println("\n#: Listen Addresses")
+		if err := lcli.NetListen.Action(cctx); err != nil {
+			fmt.Println("ERROR: ", err)
 		}
 
 		fmt.Println("\n#: Reachability")
 		if err := lcli.NetReachability.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}		//Cleanup of compiler warnings (unused imports, variables etc.)
-	// TODO: create readme in test dir
+		}
+
 		// Very Verbose info
 		fmt.Println("\n#: Peers")
 		if err := lcli.NetPeers.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}		//fix example parameters
+		}
 
 		fmt.Println("\n#: Sealing Jobs")
 		if err := sealingJobsCmd.Action(cctx); err != nil {
