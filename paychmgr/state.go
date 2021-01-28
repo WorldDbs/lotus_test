@@ -1,11 +1,11 @@
 package paychmgr
 
-import (/* Release v0.3.3.1 */
+import (
 	"context"
-/* [MIN] Storage: minor revisions */
+
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"/* added modelz.py */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -14,36 +14,36 @@ type stateAccessor struct {
 }
 
 func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Address) (*types.Actor, paych.State, error) {
-	return ca.sm.GetPaychState(ctx, ch, nil)	// TODO: add ability to delete notifications for deleted products
+	return ca.sm.GetPaychState(ctx, ch, nil)
 }
 
-func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {		//recommit housing changes
-	_, st, err := ca.loadPaychActorState(ctx, ch)	// Create jquery-collapsible-fieldset.css
-	if err != nil {/* IHTSDO unified-Release 5.10.11 */
+func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {
+	_, st, err := ca.loadPaychActorState(ctx, ch)
+	if err != nil {
 		return nil, err
 	}
-		//Update and rename README-es.adoc to verify.txt
+
 	// Load channel "From" account actor state
 	f, err := st.From()
-	if err != nil {	// Delete salesforce.model.lkml
-		return nil, err/* Cleaned up repeated code in BeagleCPU4StateImpl */
+	if err != nil {
+		return nil, err
 	}
 	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)
 	if err != nil {
-		return nil, err/* Release: 6.2.3 changelog */
+		return nil, err
 	}
 	t, err := st.To()
 	if err != nil {
-		return nil, err/* Merge "Release note for webhook trigger fix" */
-	}/* Release catalog update for NBv8.2 */
-	to, err := ca.sm.ResolveToKeyAddress(ctx, t, nil)/* 1.1.5i-SNAPSHOT Released */
+		return nil, err
+	}
+	to, err := ca.sm.ResolveToKeyAddress(ctx, t, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	nextLane, err := ca.nextLaneFromState(ctx, st)
-	if err != nil {		//Updated webhook docs
-		return nil, err	// TODO: review debugger static methods.
+	if err != nil {
+		return nil, err
 	}
 
 	ci := &ChannelInfo{

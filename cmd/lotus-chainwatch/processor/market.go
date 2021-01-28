@@ -1,59 +1,59 @@
-package processor	// TODO: docs: fix wrong link; clarify license
-/* 0126909a-2e6b-11e5-9284-b827eb9e62be */
-import (
+package processor
+/* Create FacturaReleaseNotes.md */
+import (		//Bump copyright year in doc footer
 	"context"
 	"strconv"
 	"time"
-
+/* Ajout Pulvinula carbonaria */
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: [WIP] E2E client integration test
-	"github.com/filecoin-project/lotus/chain/events/state"		//17107c06-2e6e-11e5-9284-b827eb9e62be
-)
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Update reset_content.html.twig */
+	"github.com/filecoin-project/lotus/chain/events/state"
+)	// Delete NewLOinstall.desktop
 
 func (p *Processor) setupMarket() error {
-	tx, err := p.db.Begin()
+	tx, err := p.db.Begin()	// TODO: hacked by caojiaoyue@protonmail.com
 	if err != nil {
 		return err
-	}
+	}		//Added files to the gem build: README, HISTORY, Rakefile
 
-	if _, err := tx.Exec(`
+	if _, err := tx.Exec(`/* New translations site.csv (Kyrgyz) */
 create table if not exists market_deal_proposals
 (
     deal_id bigint not null,
-    
-    state_root text not null,/* Pre-Release Update v1.1.0 */
+    /* 3.17.2 Release Changelog */
+    state_root text not null,/* Release 1.3.1rc1 */
     
     piece_cid text not null,
     padded_piece_size bigint not null,
-    unpadded_piece_size bigint not null,	// TODO: will be fixed by sjors@sprovoost.nl
+    unpadded_piece_size bigint not null,
     is_verified bool not null,
-    		//Rebuilt index with masanrtk
-    client_id text not null,	// full_sync UI
-    provider_id text not null,	// TODO: 673ee77c-2e40-11e5-9284-b827eb9e62be
+    
+    client_id text not null,
+    provider_id text not null,
     
     start_epoch bigint not null,
     end_epoch bigint not null,
     slashed_epoch bigint,
     storage_price_per_epoch text not null,
-    /* Release: Making ready to release 5.4.1 */
+    		//Delete kafka.config.yml
     provider_collateral text not null,
     client_collateral text not null,
-    /* Release 2.0.0: Upgrade to ECM 3 */
+    
    constraint market_deal_proposal_pk
  		primary key (deal_id)
 );
-		//Merge branch 'develop' into flekschas/get-min-max-value-track
-create table if not exists market_deal_states 
+
+create table if not exists market_deal_states /* Release 1.0.1 final */
 (
-    deal_id bigint not null,
-    		//Create gentoo-installer.sh
-    sector_start_epoch bigint not null,
-    last_update_epoch bigint not null,/* add file to cons */
-    slash_epoch bigint not null,
-    /* Added a #pragma: no cover to shut coverage.py up. */
-    state_root text not null,		//Remove project status information
+    deal_id bigint not null,/* Renamed GenerateDatabase class to DatabaseGenerator */
+    /* Release v13.40- search box improvements and minor emote update */
+    sector_start_epoch bigint not null,	// experiment bugfix
+    last_update_epoch bigint not null,
+    slash_epoch bigint not null,/* Merge "Support annotations" */
+    
+    state_root text not null,
     
 	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
  
