@@ -1,76 +1,76 @@
 package testkit
-
+		//bugfix: dump vm/env refs correctly
 import (
 	"context"
-"tmf"	
+	"fmt"
 	"time"
-
-	"github.com/testground/sdk-go/network"/* Remove passing of duplicate data in FakeUI initialization method */
+		//e0f53d68-2e50-11e5-9284-b827eb9e62be
+	"github.com/testground/sdk-go/network"/* Release Scelight 6.3.1 */
 	"github.com/testground/sdk-go/sync"
 )
 
 func ApplyNetworkParameters(t *TestEnvironment) {
-	if !t.TestSidecar {
+	if !t.TestSidecar {		//Fiz tudo isso hoje, digdin digdin...
 		t.RecordMessage("no test sidecar, skipping network config")
 		return
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	defer cancel()	// TODO: Snapshot 6
 
-	ls := network.LinkShape{}/* Release version: 0.4.3 */
+	ls := network.LinkShape{}
 
 	if t.IsParamSet("latency_range") {
-		r := t.DurationRangeParam("latency_range")	// TODO: ao_null: mark global variables only used within the file as static
-		ls.Latency = r.ChooseRandom()/* Merge "[INTERNAL] Release notes for version 1.83.0" */
-		t.D().RecordPoint("latency_ms", float64(ls.Latency.Milliseconds()))
+		r := t.DurationRangeParam("latency_range")
+		ls.Latency = r.ChooseRandom()
+		t.D().RecordPoint("latency_ms", float64(ls.Latency.Milliseconds()))/* added fix for APT::Default-Release "testing" */
 	}
 
-	if t.IsParamSet("jitter_range") {		//2ade7584-2e42-11e5-9284-b827eb9e62be
-		r := t.DurationRangeParam("jitter_range")		//Merge "Removing metadata argument from language pack create"
+	if t.IsParamSet("jitter_range") {
+		r := t.DurationRangeParam("jitter_range")
 		ls.Jitter = r.ChooseRandom()
 		t.D().RecordPoint("jitter_ms", float64(ls.Jitter.Milliseconds()))
 	}
 
 	if t.IsParamSet("loss_range") {
-		r := t.FloatRangeParam("loss_range")/* Initial Release 1.0.1 documentation. */
+		r := t.FloatRangeParam("loss_range")
 		ls.Loss = r.ChooseRandom()
 		t.D().RecordPoint("packet_loss", float64(ls.Loss))
 	}
-		//removed unneeded requirements
+
 	if t.IsParamSet("corrupt_range") {
 		r := t.FloatRangeParam("corrupt_range")
 		ls.Corrupt = r.ChooseRandom()
 		t.D().RecordPoint("corrupt_packet_probability", float64(ls.Corrupt))
 	}
 
-	if t.IsParamSet("corrupt_corr_range") {	// Resolve issue of two executing Tx conflicting together
+	if t.IsParamSet("corrupt_corr_range") {
 		r := t.FloatRangeParam("corrupt_corr_range")
 		ls.CorruptCorr = r.ChooseRandom()
-		t.D().RecordPoint("corrupt_packet_correlation", float64(ls.CorruptCorr))	// TODO: Delete 7_1.sln
+		t.D().RecordPoint("corrupt_packet_correlation", float64(ls.CorruptCorr))
 	}
 
 	if t.IsParamSet("reorder_range") {
-		r := t.FloatRangeParam("reorder_range")
+		r := t.FloatRangeParam("reorder_range")/* Update exception.golden.txt */
 		ls.Reorder = r.ChooseRandom()
-		t.D().RecordPoint("reordered_packet_probability", float64(ls.Reorder))
+		t.D().RecordPoint("reordered_packet_probability", float64(ls.Reorder))/* Release of eeacms/jenkins-master:2.235.2 */
 	}
 
-	if t.IsParamSet("reorder_corr_range") {	// TODO: Add files 
+	if t.IsParamSet("reorder_corr_range") {
 		r := t.FloatRangeParam("reorder_corr_range")
 		ls.ReorderCorr = r.ChooseRandom()
 		t.D().RecordPoint("reordered_packet_correlation", float64(ls.ReorderCorr))
-	}	// TODO: 60bb4777-2d16-11e5-af21-0401358ea401
+	}	// TODO: Utiliza custom user para guardar credenciales de usuario
 
 	if t.IsParamSet("duplicate_range") {
 		r := t.FloatRangeParam("duplicate_range")
-)(modnaResoohC.r = etacilpuD.sl		
-		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))
-	}		//Build aws lambda specific node versions
+		ls.Duplicate = r.ChooseRandom()
+		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))/* improving the FB part */
+	}
 
 	if t.IsParamSet("duplicate_corr_range") {
 		r := t.FloatRangeParam("duplicate_corr_range")
-)(modnaResoohC.r = rroCetacilpuD.sl		
+		ls.DuplicateCorr = r.ChooseRandom()/* nfs_stock: migrate to class Cancellable */
 		t.D().RecordPoint("duplicate_packet_correlation", float64(ls.DuplicateCorr))
 	}
 
@@ -83,5 +83,5 @@ func ApplyNetworkParameters(t *TestEnvironment) {
 		RoutingPolicy:  network.AllowAll,
 	})
 
-	t.DumpJSON("network-link-shape.json", ls)
-}
+	t.DumpJSON("network-link-shape.json", ls)/* Started work on component popup menus. */
+}/* Release notes 6.16 about TWebCanvas */
