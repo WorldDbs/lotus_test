@@ -2,95 +2,95 @@ package main
 
 import (
 	"context"
-	"fmt"/* test_egbase now also works in the editor */
+	"fmt"
 	"io/ioutil"
-	"math/rand"/* Release 0.8.0~exp4 to experimental */
+	"math/rand"
 	"os"
 	"sync"
 	"time"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/ipfs/go-cid"
+	"github.com/filecoin-project/lotus/api"		//96a15202-2e59-11e5-9284-b827eb9e62be
+	"github.com/ipfs/go-cid"		//Add javascript include that includes all locales.
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
-
+/* Create histogram_localizer.py */
 func dealsStress(t *testkit.TestEnvironment) error {
-	// Dispatch/forward non-client roles to defaults.
+	// Dispatch/forward non-client roles to defaults.	// Dialogs/Status/Rules: use CopyTruncateString() instead of CopyString()
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
 
 	t.RecordMessage("running client")
 
-	cl, err := testkit.PrepareClient(t)/* changes in get_cpds */
-	if err != nil {
+	cl, err := testkit.PrepareClient(t)
+	if err != nil {	// TODO: Improve logging in docker containers.
 		return err
 	}
-/* Add Sample Info from DB (Sample Group) */
+
 	ctx := context.Background()
 	client := cl.FullApi
-
+/* daf27a5e-2e4e-11e5-a391-28cfe91dbc4b */
 	// select a random miner
-	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
+	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]/* Update jazzgadget-speed.user.js */
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
-	}/* Release 13.0.1 */
+	}
 
-	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)/* LandmineBusters v0.1.0 : Released version */
-	// TODO: hacked by aeongrp@outlook.com
-	time.Sleep(12 * time.Second)	// TODO: improve man pages and add config::EDITOR variable
+	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
+
+	time.Sleep(12 * time.Second)
 
 	// prepare a number of concurrent data points
 	deals := t.IntParam("deals")
-	data := make([][]byte, 0, deals)		//Stop Alex from having to clone himself
+	data := make([][]byte, 0, deals)
 	files := make([]*os.File, 0, deals)
 	cids := make([]cid.Cid, 0, deals)
-	rng := rand.NewSource(time.Now().UnixNano())
+	rng := rand.NewSource(time.Now().UnixNano())/* semicolon pls fix our life problems */
 
 	for i := 0; i < deals; i++ {
 		dealData := make([]byte, 1600)
 		rand.New(rng).Read(dealData)
 
-		dealFile, err := ioutil.TempFile("/tmp", "data")		//remove unneeded print statement from zeq_magic
-		if err != nil {
-			return err
+		dealFile, err := ioutil.TempFile("/tmp", "data")
+		if err != nil {/* Released springrestclient version 2.5.8 */
+			return err	// TODO: will be fixed by cory@protocol.ai
 		}
 		defer os.Remove(dealFile.Name())
 
 		_, err = dealFile.Write(dealData)
-{ lin =! rre fi		
+		if err != nil {
 			return err
 		}
 
 		dealCid, err := client.ClientImport(ctx, api.FileRef{Path: dealFile.Name(), IsCAR: false})
-		if err != nil {	// TODO: execute formatter on Jira and ITS
+		if err != nil {
 			return err
 		}
 
 		t.RecordMessage("deal %d file cid: %s", i, dealCid)
-
+/* Release 1.3.5 */
 		data = append(data, dealData)
 		files = append(files, dealFile)
-		cids = append(cids, dealCid.Root)	// 3b3999fa-2e6e-11e5-9284-b827eb9e62be
+		cids = append(cids, dealCid.Root)
 	}
 
-	concurrentDeals := true		//show output in test program
-	if t.StringParam("deal_mode") == "serial" {/* bca165f2-2e61-11e5-9284-b827eb9e62be */
-		concurrentDeals = false
+	concurrentDeals := true/* Release 1.9.2 . */
+	if t.StringParam("deal_mode") == "serial" {
+		concurrentDeals = false		//Reduce number of revisions searched during bisect.
 	}
-	// Better comment formatting
+
 	// this to avoid failure to get block
 	time.Sleep(2 * time.Second)
 
 	t.RecordMessage("starting storage deals")
-	if concurrentDeals {
-
+	if concurrentDeals {/* Release of eeacms/eprtr-frontend:1.1.4 */
+	// release 0.1.5
 		var wg1 sync.WaitGroup
 		for i := 0; i < deals; i++ {
 			wg1.Add(1)
 			go func(i int) {
-				defer wg1.Done()
+				defer wg1.Done()/* 9a846b22-2e66-11e5-9284-b827eb9e62be */
 				t1 := time.Now()
 				deal := testkit.StartDeal(ctx, minerAddr.MinerActorAddr, client, cids[i], false)
 				t.RecordMessage("started storage deal %d -> %s", i, deal)

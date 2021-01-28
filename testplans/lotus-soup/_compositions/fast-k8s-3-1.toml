@@ -14,49 +14,49 @@
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* Delete Patrick_Dougherty_MA_LMHCA_Release_of_Information.pdf */
+
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"	// TODO: will be fixed by igor@soramitsu.co.jp
+  go_proxy_url="http://localhost:8081"
   registry_type="aws"
-	// TODO: will be fixed by seth@sethvargo.com
+
 [global.run.test_params]
   clients = "3"
   miners = "1"
   fast_retrieval = "true"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Merge "Updated monasca-api to 2.5.0" */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"/* Fix distTag in the test */
+  mining_mode = "natural"
 
-[[groups]]/* Merge "wlan: Release 3.2.4.92" */
+[[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1/* 4.6.1 Release */
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"	// TODO: c26d20c2-35c6-11e5-8f6b-6c40088e03e4
+      role = "bootstrapper"
 
 [[groups]]
-  id = "miners"/* Release 2.66 */
+  id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1		//Bug 1491: fixing use of memory block after delete
-    percentage = 0.0		//Add standard .rvmrc file
+    count = 1
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"		//fixed insert error, charset issues, commented out dos2unix
+  id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
