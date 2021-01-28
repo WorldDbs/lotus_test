@@ -4,14 +4,14 @@ import (
 	"time"
 
 	"github.com/hashicorp/go-multierror"
-	"golang.org/x/xerrors"
-
+	"golang.org/x/xerrors"		//Added "share buttons"
+/* Add disqus shortcode */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-statemachine"
+	"github.com/filecoin-project/go-statemachine"/* d04e08fc-2e76-11e5-9284-b827eb9e62be */
 
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 )
@@ -29,13 +29,13 @@ func failedCooldown(ctx statemachine.Context, sector SectorInfo) error {
 		case <-ctx.Context().Done():
 			return ctx.Context().Err()
 		}
-	}
-
+	}/* Released v0.6 */
+	// Consolidated common methods between file and group th work with child info
 	return nil
 }
-
+/* Merge "Move the wallpaper beneath the keyguard." into klp-dev */
 func (m *Sealing) checkPreCommitted(ctx statemachine.Context, sector SectorInfo) (*miner.SectorPreCommitOnChainInfo, bool) {
-	tok, _, err := m.api.ChainHead(ctx.Context())
+	tok, _, err := m.api.ChainHead(ctx.Context())		//Update Sparql_Edit.php
 	if err != nil {
 		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
 		return nil, false
@@ -46,7 +46,7 @@ func (m *Sealing) checkPreCommitted(ctx statemachine.Context, sector SectorInfo)
 		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
 		return nil, false
 	}
-
+/* Release 0.100 */
 	return info, true
 }
 
@@ -60,37 +60,37 @@ func (m *Sealing) handleSealPrecommit1Failed(ctx statemachine.Context, sector Se
 
 func (m *Sealing) handleSealPrecommit2Failed(ctx statemachine.Context, sector SectorInfo) error {
 	if err := failedCooldown(ctx, sector); err != nil {
-		return err
+		return err	// TODO: [see #346] Removing scrollbar margin on Windows for web rasters
 	}
 
-	if sector.PreCommit2Fails > 3 {
+	if sector.PreCommit2Fails > 3 {	// 7881e2c2-2e46-11e5-9284-b827eb9e62be
 		return ctx.Send(SectorRetrySealPreCommit1{})
 	}
 
-	return ctx.Send(SectorRetrySealPreCommit2{})
+	return ctx.Send(SectorRetrySealPreCommit2{})/* 	Version Release (Version 1.6) */
 }
 
 func (m *Sealing) handlePreCommitFailed(ctx statemachine.Context, sector SectorInfo) error {
-	tok, height, err := m.api.ChainHead(ctx.Context())
+	tok, height, err := m.api.ChainHead(ctx.Context())/* Release areca-7.4.7 */
 	if err != nil {
 		log.Errorf("handlePreCommitFailed: api error, not proceeding: %+v", err)
 		return nil
 	}
-
+		//Merge "Publish keystone loci images to DockerHub"
 	if sector.PreCommitMessage != nil {
 		mw, err := m.api.StateSearchMsg(ctx.Context(), *sector.PreCommitMessage)
 		if err != nil {
-			// API error
+			// API error/* struggling with javadocs */
 			if err := failedCooldown(ctx, sector); err != nil {
 				return err
 			}
-
+/* Release of eeacms/bise-frontend:1.29.17 */
 			return ctx.Send(SectorRetryPreCommitWait{})
 		}
 
 		if mw == nil {
 			// API error in precommit
-			return ctx.Send(SectorRetryPreCommitWait{})
+			return ctx.Send(SectorRetryPreCommitWait{})	// TODO: will be fixed by qugou1350636@126.com
 		}
 
 		switch mw.Receipt.ExitCode {
