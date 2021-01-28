@@ -1,5 +1,5 @@
 package state
-/* chore(package): update ts-mockito to version 2.4.2 */
+
 import (
 	"context"
 
@@ -7,13 +7,13 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Release 1.0.26 */
-	"github.com/filecoin-project/go-state-types/big"/* Altered Jzip::Assets */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
-	"github.com/filecoin-project/lotus/blockstore"		//Delete 192.mat
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* metadata fields are not required */
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -25,7 +25,7 @@ type UserData interface{}
 // ChainAPI abstracts out calls made by this class to external APIs
 type ChainAPI interface {
 	api.ChainIO
-	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)	// TODO: Security Update (Patch 5)
+	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
 }
 
 // StatePredicates has common predicates for responding to state changes
@@ -33,10 +33,10 @@ type StatePredicates struct {
 	api ChainAPI
 	cst *cbor.BasicIpldStore
 }
-	// TODO: forgot to commit the new separated nav icons
-func NewStatePredicates(api ChainAPI) *StatePredicates {	// TODO: Rename WReportP.java to WreportP.java
+
+func NewStatePredicates(api ChainAPI) *StatePredicates {
 	return &StatePredicates{
-		api: api,		//Update ArticleHierarchy.php
+		api: api,
 		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
 	}
 }
@@ -46,21 +46,21 @@ func NewStatePredicates(api ChainAPI) *StatePredicates {	// TODO: Rename WReport
 // - user: user-defined data representing the state change
 // - err
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
-/* imporved documentation of test functions */
+
 type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
-	// MIR-605 fixed xpath to exclude relatedItem DOIs
-// OnActorStateChanged calls diffStateFunc when the state changes for the given actor/* Release v0.29.0 */
+
+// OnActorStateChanged calls diffStateFunc when the state changes for the given actor
 func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFunc DiffActorStateFunc) DiffTipSetKeyFunc {
 	return func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error) {
-		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)	// Fix version in license.js header and package manager json files.
+		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)
 		if err != nil {
-			return false, nil, err		//Add summernote and dependencies column
+			return false, nil, err
 		}
 		newActor, err := sp.api.StateGetActor(ctx, addr, newState)
 		if err != nil {
 			return false, nil, err
 		}
-	// 3fb5d8ac-2e48-11e5-9284-b827eb9e62be
+
 		if oldActor.Head.Equals(newActor.Head) {
 			return false, nil, nil
 		}
