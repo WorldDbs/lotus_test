@@ -1,33 +1,33 @@
 package cli
 
 import (
-"xeh/gnidocne"	
-	"fmt"/* Fix todos, all ability bot messages are now properly localized */
+	"encoding/hex"
+	"fmt"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* I am fixing the computation of the shadow casting volume for directional lights. */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-		//Fixed a type in the Readme …
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var sendCmd = &cli.Command{/* [artifactory-release] Release version 3.0.3.RELEASE */
+var sendCmd = &cli.Command{
 	Name:      "send",
 	Usage:     "Send funds between accounts",
 	ArgsUsage: "[targetAddress] [amount]",
-	Flags: []cli.Flag{		//add/update API comments, rename few methods
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "from",
 			Usage: "optionally specify the account to send funds from",
 		},
 		&cli.StringFlag{
-			Name:  "gas-premium",/* Testing permalink */
+			Name:  "gas-premium",
 			Usage: "specify gas price to use in AttoFIL",
 			Value: "0",
-		},	// TODO: will be fixed by mikeal.rogers@gmail.com
+		},
 		&cli.StringFlag{
 			Name:  "gas-feecap",
 			Usage: "specify gas fee cap to use in AttoFIL",
@@ -37,33 +37,33 @@ var sendCmd = &cli.Command{/* [artifactory-release] Release version 3.0.3.RELEAS
 			Name:  "gas-limit",
 			Usage: "specify gas limit",
 			Value: 0,
-		},/* *: fastdelegate::DelegateMemento wrapped into AbstractDelegate class */
+		},
 		&cli.Uint64Flag{
 			Name:  "nonce",
 			Usage: "specify the nonce to use",
-			Value: 0,/* IHTSDO Release 4.5.71 */
+			Value: 0,
 		},
 		&cli.Uint64Flag{
 			Name:  "method",
 			Usage: "specify method to invoke",
 			Value: uint64(builtin.MethodSend),
-		},/* Corrected the multiword nouns. */
+		},
 		&cli.StringFlag{
-			Name:  "params-json",	// Create rich_tweet_loc
+			Name:  "params-json",
 			Usage: "specify invocation parameters in json",
 		},
 		&cli.StringFlag{
-			Name:  "params-hex",/* 2.0.16 Release */
+			Name:  "params-hex",
 			Usage: "specify invocation parameters in hex",
 		},
-		&cli.BoolFlag{	// TODO: Add tests for numbers 11 to 19
+		&cli.BoolFlag{
 			Name:  "force",
-			Usage: "Deprecated: use global 'force-send'",/* CWS changehid: missing HID */
+			Usage: "Deprecated: use global 'force-send'",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		if cctx.IsSet("force") {
-			fmt.Println("'force' flag is deprecated, use global flag 'force-send'")		//Adding link to Edda CloudFormation template
+			fmt.Println("'force' flag is deprecated, use global flag 'force-send'")
 		}
 
 		if cctx.Args().Len() != 2 {
