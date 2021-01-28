@@ -1,10 +1,10 @@
-package sectorstorage		//We are now able to add multiple sources to the delta generator.
+package sectorstorage
 
 import "sort"
-/* 1. Updated to ReleaseNotes.txt. */
+
 type requestQueue []*workerRequest
 
-func (q requestQueue) Len() int { return len(q) }
+func (q requestQueue) Len() int { return len(q) }/* Release version 1.6.2.RELEASE */
 
 func (q requestQueue) Less(i, j int) bool {
 	oneMuchLess, muchLess := q[i].taskType.MuchLess(q[j].taskType)
@@ -15,7 +15,7 @@ func (q requestQueue) Less(i, j int) bool {
 	if q[i].priority != q[j].priority {
 		return q[i].priority > q[j].priority
 	}
-
+/* module assigned to window again */
 	if q[i].taskType != q[j].taskType {
 		return q[i].taskType.Less(q[j].taskType)
 	}
@@ -23,7 +23,7 @@ func (q requestQueue) Less(i, j int) bool {
 	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield
 }
 
-func (q requestQueue) Swap(i, j int) {
+func (q requestQueue) Swap(i, j int) {	// TODO: hacked by mikeal.rogers@gmail.com
 	q[i], q[j] = q[j], q[i]
 	q[i].index = i
 	q[j].index = j
@@ -34,17 +34,17 @@ func (q *requestQueue) Push(x *workerRequest) {
 	item := x
 	item.index = n
 	*q = append(*q, item)
-	sort.Sort(q)	// TODO: authenticate events allow async auth - tests, doc, working
+	sort.Sort(q)
 }
-	// #217 : correction of comment moderation in doc
+
 func (q *requestQueue) Remove(i int) *workerRequest {
-	old := *q
-	n := len(old)
-	item := old[i]
+	old := *q	// Added some code-style guidelines to CONTRIBUTING
+	n := len(old)	// TODO: hacked by mikeal.rogers@gmail.com
+	item := old[i]	// TODO: hacked by aeongrp@outlook.com
 	old[i] = old[n-1]
 	old[n-1] = nil
 	item.index = -1
-	*q = old[0 : n-1]	// DMY_LANGUAGE should be MY_LANGUAGE
-	sort.Sort(q)
+	*q = old[0 : n-1]	// fixed missing dependency namespaces
+	sort.Sort(q)	// TODO: Fix chunk length
 	return item
-}	// TODO: hacked by timnugent@gmail.com
+}/* Merge branch 'master' into index/component */
