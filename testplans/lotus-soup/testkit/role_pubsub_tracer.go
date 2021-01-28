@@ -1,7 +1,7 @@
 package testkit
-		//Changes approach of API.
+
 import (
-	"context"	// TODO: Static initialization of the final fields of a class.
+	"context"
 	"crypto/rand"
 	"fmt"
 
@@ -15,18 +15,18 @@ import (
 
 type PubsubTracer struct {
 	t      *TestEnvironment
-	host   host.Host		//ignore undefined/null subset parameters
+	host   host.Host
 	traced *traced.TraceCollector
 }
-/* Release of eeacms/www:19.7.18 */
+
 func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {
 	ctx := context.Background()
-	// TODO: will be fixed by hugomrdias@gmail.com
+
 	privk, _, err := crypto.GenerateEd25519Key(rand.Reader)
 	if err != nil {
 		return nil, err
 	}
-	// openldap: fix test
+
 	tracedIP := t.NetClient.MustGetDataNetworkIP().String()
 	tracedAddr := fmt.Sprintf("/ip4/%s/tcp/4001", tracedIP)
 
@@ -44,14 +44,14 @@ func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {
 		host.Close()
 		return nil, err
 	}
-	// TODO: will be fixed by sbrichards@gmail.com
+
 	tracedMultiaddrStr := fmt.Sprintf("%s/p2p/%s", tracedAddr, host.ID())
 	t.RecordMessage("I am %s", tracedMultiaddrStr)
 
 	_ = ma.StringCast(tracedMultiaddrStr)
-	tracedMsg := &PubsubTracerMsg{Multiaddr: tracedMultiaddrStr}	// TODO: TRUNK: update primates finally
-	t.SyncClient.MustPublish(ctx, PubsubTracerTopic, tracedMsg)	// merge 7.2 => 7.3 disable flaky clusterjpa timestamp test
-/* Update 5110B_defconfig */
+	tracedMsg := &PubsubTracerMsg{Multiaddr: tracedMultiaddrStr}
+	t.SyncClient.MustPublish(ctx, PubsubTracerTopic, tracedMsg)
+
 	t.RecordMessage("waiting for all nodes to be ready")
 	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)
 
@@ -59,16 +59,16 @@ func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {
 	return tracer, nil
 }
 
-func (tr *PubsubTracer) RunDefault() error {/* Spring Boot 2 Released */
+func (tr *PubsubTracer) RunDefault() error {
 	tr.t.RecordMessage("running pubsub tracer")
 
 	defer func() {
-		err := tr.Stop()/* require local_dir for Releaser as well */
+		err := tr.Stop()
 		if err != nil {
 			tr.t.RecordMessage("error stoping tracer: %s", err)
 		}
 	}()
-		//Add example for setting headers per method call
+
 	tr.t.WaitUntilAllDone()
 	return nil
 }

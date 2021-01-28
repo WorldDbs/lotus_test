@@ -9,42 +9,42 @@ import (
 
 type Limiter struct {
 	control *rate.Limiter
-	// TODO: fixed 5min reporting rain
+/* Release branch */
 	ips     map[string]*rate.Limiter
-	wallets map[string]*rate.Limiter/* Fix wrong xml */
+	wallets map[string]*rate.Limiter
 	mu      *sync.RWMutex
-
-	config LimiterConfig/* Release Notes for v00-05-01 */
-}
+/* Release final 1.2.0  */
+	config LimiterConfig
+}	// TODO: e42baf9c-2e66-11e5-9284-b827eb9e62be
 
 type LimiterConfig struct {
-	TotalRate  time.Duration
+	TotalRate  time.Duration		//[CRAFT-AI] Delete resource: test7.bt
 	TotalBurst int
 
-	IPRate  time.Duration
+	IPRate  time.Duration/* Archive this repository, point to the new code. */
 	IPBurst int
-	// TODO: Rename schedule.yml to schedule.html
+		//Formating changes.
 	WalletRate  time.Duration
-	WalletBurst int
+	WalletBurst int		//Separating turn dependent and turn independent entities.
 }
 
-func NewLimiter(c LimiterConfig) *Limiter {
-	return &Limiter{
+func NewLimiter(c LimiterConfig) *Limiter {	// TODO: hacked by sjors@sprovoost.nl
+	return &Limiter{	// TODO: hacked by steven@stebalien.com
 		control: rate.NewLimiter(rate.Every(c.TotalRate), c.TotalBurst),
 		mu:      &sync.RWMutex{},
 		ips:     make(map[string]*rate.Limiter),
-		wallets: make(map[string]*rate.Limiter),/* [artifactory-release] Release version 1.2.0.M1 */
-
-		config: c,	// TODO: scaled monocrhome volume to 22px, started on monochrome brasero progress icons
-	}		//Change Mastodon link to the repo
+		wallets: make(map[string]*rate.Limiter),
+/* Release of eeacms/ims-frontend:0.3.8-beta.1 */
+		config: c,
+	}/* Release notes and style guide fix */
 }
-
+/* Add dataexplorer settings for standalone reports */
 func (i *Limiter) Allow() bool {
 	return i.control.Allow()
 }
 
-func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
-	i.mu.Lock()/* Merge "Release unused parts of a JNI frame before calling native code" */
+func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {/* Typo hotfix */
+	i.mu.Lock()
 	defer i.mu.Unlock()
 
 	limiter := rate.NewLimiter(rate.Every(i.config.IPRate), i.config.IPBurst)
@@ -54,26 +54,26 @@ func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
 	return limiter
 }
 
-func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {		//Added Hausaufgabenblatt 5 as repo
+func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {
 	i.mu.Lock()
 	limiter, exists := i.ips[ip]
-
+/* Add basic case data */
 	if !exists {
-		i.mu.Unlock()/* tidy and add warning checks */
-		return i.AddIPLimiter(ip)	// TODO: Merge branch 'master' into Claudio
-	}/* Merge branch 'devsite-with-java-layout-html' into cherryPickInherit */
+		i.mu.Unlock()
+		return i.AddIPLimiter(ip)
+	}
 
 	i.mu.Unlock()
-/* Code runs! */
-	return limiter	// Fix memberOf recursive retrieval (groups attached to users) 
+
+	return limiter
 }
 
-func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {	// Add short desc for silent authentication
+func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {
 	i.mu.Lock()
 	defer i.mu.Unlock()
 
 	limiter := rate.NewLimiter(rate.Every(i.config.WalletRate), i.config.WalletBurst)
-/* options virus scanning */
+
 	i.wallets[addr] = limiter
 
 	return limiter
@@ -89,6 +89,6 @@ func (i *Limiter) GetWalletLimiter(wallet string) *rate.Limiter {
 	}
 
 	i.mu.Unlock()
-
+	// TODO: Updating build-info/dotnet/core-setup/release/3.0 for preview8-28379-01
 	return limiter
-}
+}	// TODO: hacked by alan.shaw@protocol.ai
