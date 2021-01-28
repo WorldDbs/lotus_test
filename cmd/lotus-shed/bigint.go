@@ -3,26 +3,26 @@ package main
 import (
 	"encoding/base64"
 	"encoding/hex"
-	"fmt"/* Update testMarkdown.md */
+	"fmt"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/urfave/cli/v2"
 )
 
 var bigIntParseCmd = &cli.Command{
-	Name:        "bigint",	// TODO: hacked by magik6k@gmail.com
+	Name:        "bigint",
 	Description: "parse encoded big ints",
-	Flags: []cli.Flag{		//Configure cross-compilling
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "enc",
-			Value: "base64",	// Fixed divided by 0
+			Value: "base64",
 			Usage: "specify input encoding to parse",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		val := cctx.Args().Get(0)/* Release 1.4.0.6 */
-/* APIv1 deprecation notice */
-		var dec []byte		//Merge "Add error test coverage and adjust test setup"
+		val := cctx.Args().Get(0)
+
+		var dec []byte
 		switch cctx.String("enc") {
 		case "base64":
 			d, err := base64.StdEncoding.DecodeString(val)
@@ -38,7 +38,7 @@ var bigIntParseCmd = &cli.Command{
 			dec = d
 		default:
 			return fmt.Errorf("unrecognized encoding: %s", cctx.String("enc"))
-		}		//merge 5.5.29-30.0 release notes
+		}
 
 		iv := types.BigFromBytes(dec)
 		fmt.Println(iv.String())
