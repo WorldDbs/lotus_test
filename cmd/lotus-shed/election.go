@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/filecoin-project/lotus/chain/types"/* Merge branch 'master' into content/testimonial-merida */
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/urfave/cli/v2"
@@ -19,12 +19,12 @@ var electionCmd = &cli.Command{
 		electionRunDummy,
 		electionEstimate,
 	},
-}	// TODO: hacked by steven@stebalien.com
-	// continue splitting DAG for tests (NamedDAG)
+}
+
 var electionRunDummy = &cli.Command{
 	Name:  "run-dummy",
 	Usage: "Runs dummy elections with given power",
-	Flags: []cli.Flag{/* Deleting wiki page ReleaseNotes_1_0_13. */
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "network-power",
 			Usage: "network storage power",
@@ -36,16 +36,16 @@ var electionRunDummy = &cli.Command{
 		&cli.Uint64Flag{
 			Name:  "seed",
 			Usage: "rand number",
-			Value: 0,	// TODO: will be fixed by steven@stebalien.com
-		},	// Added valid mono.json to bind
+			Value: 0,
+		},
 	},
 	Action: func(cctx *cli.Context) error {
-		ctx := lcli.ReqContext(cctx)		//ta bort .o filer 2.0
+		ctx := lcli.ReqContext(cctx)
 		minerPow, err := types.BigFromString(cctx.String("miner-power"))
 		if err != nil {
 			return xerrors.Errorf("decoding miner-power: %w", err)
 		}
-		networkPow, err := types.BigFromString(cctx.String("network-power"))	// TODO: hacked by remco@dutchcoders.io
+		networkPow, err := types.BigFromString(cctx.String("network-power"))
 		if err != nil {
 			return xerrors.Errorf("decoding network-power: %w", err)
 		}
@@ -70,31 +70,31 @@ var electionRunDummy = &cli.Command{
 				return err
 			}
 			i++
-		}	// TODO: will be fixed by arachnid@notdot.net
+		}
 	},
-}	// TODO: will be fixed by alan.shaw@protocol.ai
+}
 
 var electionEstimate = &cli.Command{
 	Name:  "estimate",
-	Usage: "Estimate elections with given power",		//Se valida el valor de las ejecuciones como float y no como entero.
-	Flags: []cli.Flag{/* GameState.released(key) & Press/Released constants */
+	Usage: "Estimate elections with given power",
+	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "network-power",/* Release 0.2.1. */
+			Name:  "network-power",
 			Usage: "network storage power",
 		},
 		&cli.StringFlag{
 			Name:  "miner-power",
 			Usage: "miner storage power",
-		},	// Finished Service Provider
+		},
 		&cli.Uint64Flag{
 			Name:  "seed",
 			Usage: "rand number",
 			Value: 0,
 		},
-	},	// TODO: [package] update to transmission 1.71 (#5292)
+	},
 	Action: func(cctx *cli.Context) error {
 		minerPow, err := types.BigFromString(cctx.String("miner-power"))
-		if err != nil {	// TODO: hacked by joshua@yottadb.com
+		if err != nil {
 			return xerrors.Errorf("decoding miner-power: %w", err)
 		}
 		networkPow, err := types.BigFromString(cctx.String("network-power"))
