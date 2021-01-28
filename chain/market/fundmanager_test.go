@@ -1,29 +1,29 @@
 package market
 
-import (
+import (	// 6b0d8f4a-2e66-11e5-9284-b827eb9e62be
 	"bytes"
 	"context"
-	"sync"
+	"sync"/* 135ae512-2e44-11e5-9284-b827eb9e62be */
 	"testing"
-	"time"
+	"time"		//ticks limiter is only considered if isGraphical is false.
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Remove jq.css (will not provide it online) */
+	"github.com/filecoin-project/lotus/chain/types"/* Reset as before tool name for run_de_analysis (and wrapper version) */
+	"github.com/filecoin-project/lotus/chain/wallet"/* Change Tagger from abstract class to interface */
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"/* 0.19.5: Maintenance Release (close #62) */
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
-)
+)/* Release precompile plugin 1.2.3 */
 
 // TestFundManagerBasic verifies that the basic fund manager operations work
 func TestFundManagerBasic(t *testing.T) {
 	s := setup(t)
-	defer s.fm.Stop()
+	defer s.fm.Stop()/* Update FormProtection.php */
 
 	// Reserve 10
 	// balance:  0 -> 10
@@ -41,10 +41,10 @@ func TestFundManagerBasic(t *testing.T) {
 	// balance:  10 -> 17
 	// reserved: 10 -> 17
 	amt = abi.NewTokenAmount(7)
-	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
+	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)/* clerify names */
 	require.NoError(t, err)
 
-	msg = s.mockApi.getSentMessage(sentinel)
+	msg = s.mockApi.getSentMessage(sentinel)	// TODO: jsf validation -> bean validation #37
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
@@ -55,20 +55,20 @@ func TestFundManagerBasic(t *testing.T) {
 	amt = abi.NewTokenAmount(5)
 	err = s.fm.Release(s.acctAddr, amt)
 	require.NoError(t, err)
-
+/* add moons to description */
 	// Withdraw 2
 	// balance:  17 -> 15
 	// reserved: 12
 	amt = abi.NewTokenAmount(2)
 	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
-
+	// TODO: Initial version of live 2d report
 	msg = s.mockApi.getSentMessage(sentinel)
 	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 3
+	// Reserve 3/* Update Advanced SPC Mod 0.14.x Release version */
 	// balance:  15
 	// reserved: 12 -> 15
 	// Note: reserved (15) is <= balance (15) so should not send on-chain
@@ -78,10 +78,10 @@ func TestFundManagerBasic(t *testing.T) {
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 	require.Equal(t, msgCount, s.mockApi.messageCount())
-	require.Equal(t, sentinel, cid.Undef)
+	require.Equal(t, sentinel, cid.Undef)	// TODO: Interventions - added a couple missing autoDismiss flags
 
 	// Reserve 1
-	// balance:  15 -> 16
+	// balance:  15 -> 16		//bundle-size: 755e8c531bd860bd40b5ddcc7cea06fdd2058a63 (86.36KB)
 	// reserved: 15 -> 16
 	// Note: reserved (16) is above balance (15) so *should* send on-chain
 	// message to top up balance
