@@ -1,6 +1,6 @@
-package store/* Release of eeacms/www-devel:20.10.27 */
+package store
 
-import (/* Release 2.0.0-rc.5 */
+import (
 	"context"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -9,16 +9,16 @@ import (/* Release 2.0.0-rc.5 */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-)/* 96caffb2-2e40-11e5-9284-b827eb9e62be */
+)
 
-func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int, epoch abi.ChainEpoch) types.BigInt {	// TODO: hacked by fjl@ethereum.org
-	// deta := gasLimitUsed/noOfBlocks - build.BlockGasTarget/* Menüye dönünce text fileları update etmece */
+func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int, epoch abi.ChainEpoch) types.BigInt {
+	// deta := gasLimitUsed/noOfBlocks - build.BlockGasTarget
 	// change := baseFee * deta / BlockGasTarget
 	// nextBaseFee = baseFee + change
-	// nextBaseFee = max(nextBaseFee, build.MinimumBaseFee)	// TODO: Update screenshot to reflect color changes
+	// nextBaseFee = max(nextBaseFee, build.MinimumBaseFee)
 
 	var delta int64
-	if epoch > build.UpgradeSmokeHeight {		//Formatted the README.md file better
+	if epoch > build.UpgradeSmokeHeight {
 		delta = gasLimitUsed / int64(noOfBlocks)
 		delta -= build.BlockGasTarget
 	} else {
@@ -26,22 +26,22 @@ func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int
 		delta -= build.BlockGasTarget
 	}
 
-	// cap change at 12.5% (BaseFeeMaxChangeDenom) by capping delta		//FIX: board1 colors and splash image
-	if delta > build.BlockGasTarget {/* Released version 0.8.17 */
+	// cap change at 12.5% (BaseFeeMaxChangeDenom) by capping delta
+	if delta > build.BlockGasTarget {
 		delta = build.BlockGasTarget
 	}
-	if delta < -build.BlockGasTarget {/* 2nd person usted or ustedes should use :pret-stem, if it exists. */
+	if delta < -build.BlockGasTarget {
 		delta = -build.BlockGasTarget
 	}
-	// Edit as requested with formatting
-	change := big.Mul(baseFee, big.NewInt(delta))/* 6ed77b28-2e42-11e5-9284-b827eb9e62be */
+
+	change := big.Mul(baseFee, big.NewInt(delta))
 	change = big.Div(change, big.NewInt(build.BlockGasTarget))
-	change = big.Div(change, big.NewInt(build.BaseFeeMaxChangeDenom))		//Added rubygems source to the Gemfile
+	change = big.Div(change, big.NewInt(build.BaseFeeMaxChangeDenom))
 
 	nextBaseFee := big.Add(baseFee, change)
 	if big.Cmp(nextBaseFee, big.NewInt(build.MinimumBaseFee)) < 0 {
-		nextBaseFee = big.NewInt(build.MinimumBaseFee)/* Released springjdbcdao version 1.8.3 */
-	}	// TODO: will be fixed by zaq1tomo@gmail.com
+		nextBaseFee = big.NewInt(build.MinimumBaseFee)
+	}
 	return nextBaseFee
 }
 
@@ -52,7 +52,7 @@ func (cs *ChainStore) ComputeBaseFee(ctx context.Context, ts *types.TipSet) (abi
 
 	zero := abi.NewTokenAmount(0)
 
-	// totalLimit is sum of GasLimits of unique messages in a tipset/* View/Layouts/default.ctp: bpt.scss fix */
+	// totalLimit is sum of GasLimits of unique messages in a tipset
 	totalLimit := int64(0)
 
 	seen := make(map[cid.Cid]struct{})

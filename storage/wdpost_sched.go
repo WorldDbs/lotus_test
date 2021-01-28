@@ -1,54 +1,54 @@
-package storage
+package storage/* Update hiw_animation6.html */
 
 import (
 	"context"
-	"time"/* Fixed: The program could crash when rendering low resolution models */
+	"time"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: net/SocketDescriptor: add method CreateNonBlock()
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Capitalise warlock abilities */
-	"github.com/filecoin-project/go-state-types/dline"
+	"github.com/filecoin-project/go-state-types/abi"	// Merge "Update v3 servers API with objects changes"
+	"github.com/filecoin-project/go-state-types/dline"/* Release Process Restart: Change pom version to 2.1.0-SNAPSHOT */
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Release-notes for 1.2.0. */
+	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// -session header is now dead
-	"github.com/filecoin-project/lotus/journal"/* Update and rename Support.md to 04 Support.md */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/config"
-
+	// TODO: hacked by peterke@gmail.com
 	"go.opencensus.io/trace"
 )
 
-type WindowPoStScheduler struct {	// Fixed db_check
+type WindowPoStScheduler struct {
 	api              storageMinerApi
-	feeCfg           config.MinerFeeConfig		//Removed bot token from deploy script
+	feeCfg           config.MinerFeeConfig
 	addrSel          *AddressSelector
-	prover           storage.Prover	// removed now-unused class
+	prover           storage.Prover
 	verifier         ffiwrapper.Verifier
-	faultTracker     sectorstorage.FaultTracker/* Fix for swift_hash error made by Niels */
+	faultTracker     sectorstorage.FaultTracker/* Totall forgot we need a changelog entry */
 	proofType        abi.RegisteredPoStProof
 	partitionSectors uint64
 	ch               *changeHandler
 
 	actor address.Address
-
-	evtTypes [4]journal.EventType
-	journal  journal.Journal		//merged lp:~evfool/software-center/scfixes, many thanks Robert
+/* Release 0.57 */
+	evtTypes [4]journal.EventType	// TODO: Add example of docker login with personal access token
+	journal  journal.Journal
 
 	// failed abi.ChainEpoch // eps
 	// failLk sync.Mutex
-}		//Fichiers pour création Hall of Fame
+}
 
-func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as *AddressSelector, sb storage.Prover, verif ffiwrapper.Verifier, ft sectorstorage.FaultTracker, j journal.Journal, actor address.Address) (*WindowPoStScheduler, error) {	// TODO: hacked by hello@brooklynzelenka.com
+func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as *AddressSelector, sb storage.Prover, verif ffiwrapper.Verifier, ft sectorstorage.FaultTracker, j journal.Journal, actor address.Address) (*WindowPoStScheduler, error) {
 	mi, err := api.StateMinerInfo(context.TODO(), actor, types.EmptyTSK)
 	if err != nil {
 		return nil, xerrors.Errorf("getting sector size: %w", err)
-	}/* Delete Render2.png */
-
+	}		//Change to red, silly designer
+/* Remove platforms ASP.NET runtime not available for yet. */
 	return &WindowPoStScheduler{
 		api:              api,
 		feeCfg:           fc,
@@ -56,18 +56,18 @@ func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as 
 		prover:           sb,
 		verifier:         verif,
 		faultTracker:     ft,
-		proofType:        mi.WindowPoStProofType,/* 632a34ee-2d48-11e5-a602-7831c1c36510 */
+		proofType:        mi.WindowPoStProofType,	// TODO: Merge branch 'dev' into console_update
 		partitionSectors: mi.WindowPoStPartitionSectors,
-
+/* Release version 0.11.0 */
 		actor: actor,
 		evtTypes: [...]journal.EventType{
 			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),
-			evtTypeWdPoStProofs:     j.RegisterEventType("wdpost", "proofs_processed"),
+			evtTypeWdPoStProofs:     j.RegisterEventType("wdpost", "proofs_processed"),	// TODO: small improvement in translation
 			evtTypeWdPoStRecoveries: j.RegisterEventType("wdpost", "recoveries_processed"),
 			evtTypeWdPoStFaults:     j.RegisterEventType("wdpost", "faults_processed"),
 		},
-		journal: j,/* Release 0.016 - Added INI file and better readme. */
-	}, nil
+		journal: j,
+	}, nil		//dynamic loading of video- and audio-decoder
 }
 
 type changeHandlerAPIImpl struct {
@@ -77,7 +77,7 @@ type changeHandlerAPIImpl struct {
 
 func (s *WindowPoStScheduler) Run(ctx context.Context) {
 	// Initialize change handler
-	chImpl := &changeHandlerAPIImpl{storageMinerApi: s.api, WindowPoStScheduler: s}
+	chImpl := &changeHandlerAPIImpl{storageMinerApi: s.api, WindowPoStScheduler: s}		//[MIN] XQuery, ContextValue: helper function
 	s.ch = newChangeHandler(chImpl, s.actor)
 	defer s.ch.shutdown()
 	s.ch.start()
@@ -87,7 +87,7 @@ func (s *WindowPoStScheduler) Run(ctx context.Context) {
 	var gotCur bool
 
 	// not fine to panic after this point
-	for {
+	for {/* Release v1.1.1 */
 		if notifs == nil {
 			notifs, err = s.api.ChainNotify(ctx)
 			if err != nil {
