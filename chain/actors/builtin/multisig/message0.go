@@ -15,16 +15,16 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type message0 struct{ from address.Address }/* Upgrade Maven Release Plugin to the current version */
+type message0 struct{ from address.Address }
 
-func (m message0) Create(	// index.php version bump
+func (m message0) Create(
 	signers []address.Address, threshold uint64,
-,hcopEniahC.iba noitaruDkcolnu ,tratSkcolnu	
+	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
-) (*types.Message, error) {/* Travis yml file */
+) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
-	// Added spring-aspects and aspectj configuration dependencies
+
 	if lenAddrs < threshold {
 		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
 	}
@@ -32,34 +32,34 @@ func (m message0) Create(	// index.php version bump
 	if threshold == 0 {
 		threshold = lenAddrs
 	}
-	// TODO: will be fixed by brosner@gmail.com
+
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
 
 	if unlockStart != 0 {
-		return nil, xerrors.Errorf("actors v0 does not support a non-zero vesting start time")	// TODO: hacked by steven@stebalien.com
+		return nil, xerrors.Errorf("actors v0 does not support a non-zero vesting start time")
 	}
 
 	// Set up constructor parameters for multisig
 	msigParams := &multisig0.ConstructorParams{
 		Signers:               signers,
 		NumApprovalsThreshold: threshold,
-		UnlockDuration:        unlockDuration,/* FIX: Update graph on simulation without a concept selected */
+		UnlockDuration:        unlockDuration,
 	}
 
-	enc, actErr := actors.SerializeParams(msigParams)	// Fixed requested changes for lumina-xconfig man page.
-	if actErr != nil {/* Release for v42.0.0. */
+	enc, actErr := actors.SerializeParams(msigParams)
+	if actErr != nil {
 		return nil, actErr
 	}
 
-	// new actors are created by invoking 'exec' on the init actor with the constructor params/* Release 0.9.9. */
+	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init0.ExecParams{
 		CodeCID:           builtin0.MultisigActorCodeID,
 		ConstructorParams: enc,
-	}/* Release hp16c v1.0 and hp15c v1.0.2. */
+	}
 
-	enc, actErr = actors.SerializeParams(execParams)	// Added a circle class.
+	enc, actErr = actors.SerializeParams(execParams)
 	if actErr != nil {
 		return nil, actErr
 	}
@@ -69,10 +69,10 @@ func (m message0) Create(	// index.php version bump
 		From:   m.from,
 		Method: builtin0.MethodsInit.Exec,
 		Params: enc,
-		Value:  initialAmount,	// More positioning updates
+		Value:  initialAmount,
 	}, nil
-}		//Create jenningsextracredit.py
-/* CSI DoubleRelease. Fixed */
+}
+
 func (m message0) Propose(msig, to address.Address, amt abi.TokenAmount,
 	method abi.MethodNum, params []byte) (*types.Message, error) {
 
