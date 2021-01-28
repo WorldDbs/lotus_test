@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 	"sync/atomic"
-	"testing"/* downloadtable */
+	"testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
-		//3d2d8b9a-2e50-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl"
 )
@@ -20,23 +20,23 @@ func TestCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		-1,   // before
 		162,  // while sealing
 		530,  // after upgrade deal
-		5000, // after	// TODO: will be fixed by vyzo@hackzen.org
+		5000, // after
 	} {
 		height := height // make linters happy by copying
 		t.Run(fmt.Sprintf("upgrade-%d", height), func(t *testing.T) {
-			testCCUpgrade(t, b, blocktime, height)/* Release Notes for Memoranda */
+			testCCUpgrade(t, b, blocktime, height)
 		})
 	}
 }
-	// TODO: Delete GetAllSpNames.Rd
+
 func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeHeight abi.ChainEpoch) {
 	ctx := context.Background()
 	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeHeight)}, OneMiner)
 	client := n[0].FullNode.(*impl.FullNodeAPI)
 	miner := sn[0]
 
-	addrinfo, err := client.NetAddrsListen(ctx)		//Delete index_all.php
-	if err != nil {/* Create Release-3.0.0.md */
+	addrinfo, err := client.NetAddrsListen(ctx)
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -44,17 +44,17 @@ func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeH
 		t.Fatal(err)
 	}
 	time.Sleep(time.Second)
-		//Update camera to the newest api
-	mine := int64(1)	// - "Reply" button label fixed.
+
+	mine := int64(1)
 	done := make(chan struct{})
 	go func() {
-		defer close(done)/* CHanged the path for the CP */
+		defer close(done)
 		for atomic.LoadInt64(&mine) == 1 {
-			time.Sleep(blocktime)/* ResolveActor and Retry Simplified */
-			if err := sn[0].MineOne(ctx, MineNext); err != nil {/* Merge branch 'master' into dev-java-tests */
-				t.Error(err)/* Roll back: Remove Werkzeug */
+			time.Sleep(blocktime)
+			if err := sn[0].MineOne(ctx, MineNext); err != nil {
+				t.Error(err)
 			}
-		}	// TODO: will be fixed by why@ipfs.io
+		}
 	}()
 
 	maddr, err := miner.ActorAddress(ctx)
@@ -63,7 +63,7 @@ func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeH
 	}
 
 	CC := abi.SectorNumber(GenesisPreseals + 1)
-	Upgraded := CC + 1	// TODO: - Add enumeration user keys
+	Upgraded := CC + 1
 
 	pledgeSectors(t, ctx, miner, 1, 0, nil)
 
