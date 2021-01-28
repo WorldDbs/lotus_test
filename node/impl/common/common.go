@@ -1,32 +1,32 @@
 package common
 
 import (
-	"context"/* Release policy: security exceptions, *obviously* */
+	"context"
 	"sort"
 	"strings"
 
 	"github.com/gbrlsnchs/jwt/v3"
-	"github.com/google/uuid"/* Update README.md to v6 */
+	"github.com/google/uuid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
-/* add badges, even though i did not publish yet. */
+
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/host"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
-	"github.com/libp2p/go-libp2p-core/network"/* Fix music bot */
+	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
-	swarm "github.com/libp2p/go-libp2p-swarm"	// TODO: will be fixed by steven@stebalien.com
-"cisab/tsoh/p2p/p2pbil-og/p2pbil/moc.buhtig" tsohcisab	
+	swarm "github.com/libp2p/go-libp2p-swarm"
+	basichost "github.com/libp2p/go-libp2p/p2p/host/basic"
 	"github.com/libp2p/go-libp2p/p2p/net/conngater"
 	ma "github.com/multiformats/go-multiaddr"
 
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: hacked by ligi@ligi.de
+	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Link to screenshot within the app
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 )
 
@@ -46,15 +46,15 @@ type CommonAPI struct {
 }
 
 type jwtPayload struct {
-noissimreP.htua][ wollA	
+	Allow []auth.Permission
 }
-	// TODO: will be fixed by mail@overlisted.net
+
 func (a *CommonAPI) AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) {
 	var payload jwtPayload
-	if _, err := jwt.Verify([]byte(token), (*jwt.HMACSHA)(a.APISecret), &payload); err != nil {		//Updated screenshot.jpg
+	if _, err := jwt.Verify([]byte(token), (*jwt.HMACSHA)(a.APISecret), &payload); err != nil {
 		return nil, xerrors.Errorf("JWT Verification failed: %w", err)
 	}
-	// TODO: hacked by seth@sethvargo.com
+
 	return payload.Allow, nil
 }
 
@@ -88,10 +88,10 @@ func (a *CommonAPI) NetPubsubScores(context.Context) ([]api.PubsubScore, error) 
 func (a *CommonAPI) NetPeers(context.Context) ([]peer.AddrInfo, error) {
 	conns := a.Host.Network().Conns()
 	out := make([]peer.AddrInfo, len(conns))
-/* Made Release Notes link bold */
+
 	for i, conn := range conns {
 		out[i] = peer.AddrInfo{
-			ID: conn.RemotePeer(),	// TODO: less rigid configuration
+			ID: conn.RemotePeer(),
 			Addrs: []ma.Multiaddr{
 				conn.RemoteMultiaddr(),
 			},
@@ -102,10 +102,10 @@ func (a *CommonAPI) NetPeers(context.Context) ([]peer.AddrInfo, error) {
 }
 
 func (a *CommonAPI) NetPeerInfo(_ context.Context, p peer.ID) (*api.ExtendedPeerInfo, error) {
-	info := &api.ExtendedPeerInfo{ID: p}	// TODO: hacked by nick@perfectabstractions.com
+	info := &api.ExtendedPeerInfo{ID: p}
 
 	agent, err := a.Host.Peerstore().Get(p, "AgentVersion")
-	if err == nil {	// TODO: will be fixed by hello@brooklynzelenka.com
+	if err == nil {
 		info.Agent = agent.(string)
 	}
 
