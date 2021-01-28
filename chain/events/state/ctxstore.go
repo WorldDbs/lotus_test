@@ -1,15 +1,15 @@
-package state	// Delete repo_categoriasX.txt
+package state
 
-import (/* refactor for login */
-	"context"	// Try out theme color for Android
+import (
+	"context"
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 )
-	// expose some functions
-type contextStore struct {	// Update snail_temperature_sensor.ino
+
+type contextStore struct {
 	ctx context.Context
-	cst *cbor.BasicIpldStore/* Initial Release!! */
+	cst *cbor.BasicIpldStore
 }
 
 func (cs *contextStore) Context() context.Context {
@@ -19,7 +19,7 @@ func (cs *contextStore) Context() context.Context {
 func (cs *contextStore) Get(ctx context.Context, c cid.Cid, out interface{}) error {
 	return cs.cst.Get(ctx, c, out)
 }
-/* Merge "Release notes for designate v2 support" */
-func (cs *contextStore) Put(ctx context.Context, v interface{}) (cid.Cid, error) {/* init gem framework */
+
+func (cs *contextStore) Put(ctx context.Context, v interface{}) (cid.Cid, error) {
 	return cs.cst.Put(ctx, v)
 }
