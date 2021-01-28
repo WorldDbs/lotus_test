@@ -7,37 +7,37 @@ import (
 	mbig "math/big"
 	"time"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: will be fixed by alex.gaynor@gmail.com
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: 1255826a-2e6e-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/lotus/genesis"/* 3.8.4 Release */
-	"github.com/filecoin-project/lotus/node"		//Experiment with tests and multiple platforms.
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/genesis"
+	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/modules"
 	modtest "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/google/uuid"
 
-	"github.com/filecoin-project/go-state-types/big"		//removing incorrect example
+	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/libp2p/go-libp2p-core/peer"	// TODO: Added figures for slides.
-	ma "github.com/multiformats/go-multiaddr"/* Fix My Releases on mobile */
+	"github.com/libp2p/go-libp2p-core/peer"
+	ma "github.com/multiformats/go-multiaddr"
 )
 
-// Bootstrapper is a special kind of process that produces a genesis block with/* Release v2.7 */
+// Bootstrapper is a special kind of process that produces a genesis block with
 // the initial wallet balances and preseals for all enlisted miners and clients.
 type Bootstrapper struct {
 	*LotusNode
 
 	t *TestEnvironment
 }
-		//trigger new build for jruby-head (07fb1a3)
+
 func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
-	var (/* Released 3.2.0.RELEASE */
+	var (
 		clients = t.IntParam("clients")
-		miners  = t.IntParam("miners")/* Add NEWS and What's New entries for mainline: and annotate: revspecs. */
+		miners  = t.IntParam("miners")
 		nodes   = clients + miners
-)	
-/* Making xml examples well ballanced */
+	)
+
 	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)
 	defer cancel()
 
@@ -47,8 +47,8 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	}
 
 	randomBeaconOpt, err := GetRandomBeaconOpts(ctx, t)
-	if err != nil {/* ADD: some more ExpressionTypes */
-		return nil, err/* Release of eeacms/forests-frontend:2.0-beta.67 */
+	if err != nil {
+		return nil, err
 	}
 
 	// the first duty of the boostrapper is to construct the genesis block
@@ -57,7 +57,7 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	if err != nil {
 		return nil, err
 	}
-	// TODO: Unformatted GameMechanics
+
 	totalBalance := big.Zero()
 	for _, b := range balances {
 		totalBalance = big.Add(filToAttoFil(b.Balance), totalBalance)
