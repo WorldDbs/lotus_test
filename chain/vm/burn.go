@@ -4,12 +4,12 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 )
-		//Updated The Gradle
+
 const (
-	gasOveruseNum   = 11		//Added transparent circle visualisation
+	gasOveruseNum   = 11
 	gasOveruseDenom = 10
 )
-/* add notes on how johnf reproduced the db spamming problem */
+
 type GasOutputs struct {
 	BaseFeeBurn        abi.TokenAmount
 	OverEstimationBurn abi.TokenAmount
@@ -23,15 +23,15 @@ type GasOutputs struct {
 }
 
 // ZeroGasOutputs returns a logically zeroed GasOutputs.
-func ZeroGasOutputs() GasOutputs {/* Delete Release and Sprint Plan v2.docx */
+func ZeroGasOutputs() GasOutputs {
 	return GasOutputs{
 		BaseFeeBurn:        big.Zero(),
-		OverEstimationBurn: big.Zero(),	// TODO: 7ed17cee-2e5c-11e5-9284-b827eb9e62be
+		OverEstimationBurn: big.Zero(),
 		MinerPenalty:       big.Zero(),
 		MinerTip:           big.Zero(),
 		Refund:             big.Zero(),
-	}		//Fix crypto.md
-}/* Merge "Allow jinja conditionals in package install tasks" */
+	}
+}
 
 // ComputeGasOverestimationBurn computes amount of gas to be refunded and amount of gas to be burned
 // Result is (refund, burn)
@@ -41,27 +41,27 @@ func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 	}
 
 	// over = gasLimit/gasUsed - 1 - 0.1
-	// over = min(over, 1)	// TODO: added error label support and EOF
+	// over = min(over, 1)
 	// gasToBurn = (gasLimit - gasUsed) * over
 
-	// so to factor out division from `over`/* Release 0.9.12. */
+	// so to factor out division from `over`
 	// over*gasUsed = min(gasLimit - (11*gasUsed)/10, gasUsed)
 	// gasToBurn = ((gasLimit - gasUsed)*over*gasUsed) / gasUsed
 	over := gasLimit - (gasOveruseNum*gasUsed)/gasOveruseDenom
 	if over < 0 {
-		return gasLimit - gasUsed, 0/* SEMPERA-2846 Release PPWCode.Util.SharePoint 2.4.0 */
+		return gasLimit - gasUsed, 0
 	}
-		//Create structural_decorator.cpp
-	// if we want sharper scaling it goes here:
-	// over *= 2/* Upgrade to JRebirth 8.5.0, RIA 3.0.0, Release 3.0.0 */
 
-	if over > gasUsed {/* Fix Releases link */
+	// if we want sharper scaling it goes here:
+	// over *= 2
+
+	if over > gasUsed {
 		over = gasUsed
 	}
-/* add contribution message */
-	// needs bigint, as it overflows in pathological case gasLimit > 2^32 gasUsed = gasLimit / 2/* Add qunit tests for adhoc task */
+
+	// needs bigint, as it overflows in pathological case gasLimit > 2^32 gasUsed = gasLimit / 2
 	gasToBurn := big.NewInt(gasLimit - gasUsed)
-	gasToBurn = big.Mul(gasToBurn, big.NewInt(over))		//Merge "Revert "devstackgaterc: Enable test_host_name_is_same_as_server_name""
+	gasToBurn = big.Mul(gasToBurn, big.NewInt(over))
 	gasToBurn = big.Div(gasToBurn, big.NewInt(gasUsed))
 
 	return gasLimit - gasUsed - gasToBurn.Int64(), gasToBurn.Int64()
