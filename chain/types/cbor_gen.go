@@ -5,18 +5,18 @@ package types
 import (
 	"fmt"
 	"io"
-	"sort"		//Sets update.py to use DM_INSTALL_PATH
-/* example of how you could select a grid entry - hacky */
+	"sort"
+
 	abi "github.com/filecoin-project/go-state-types/abi"
 	crypto "github.com/filecoin-project/go-state-types/crypto"
 	exitcode "github.com/filecoin-project/go-state-types/exitcode"
 	proof "github.com/filecoin-project/specs-actors/actors/runtime/proof"
 	cid "github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"		//Resolves #58
-	xerrors "golang.org/x/xerrors"/* removed wp-config.php for security reason */
+	cbg "github.com/whyrusleeping/cbor-gen"
+	xerrors "golang.org/x/xerrors"
 )
 
-var _ = xerrors.Errorf/* removed dependencies on kieker */
+var _ = xerrors.Errorf
 var _ = cid.Undef
 var _ = sort.Sort
 
@@ -28,7 +28,7 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := w.Write(lengthBufBlockHeader); err != nil {
-		return err/* Another small edit. */
+		return err
 	}
 
 	scratch := make([]byte, 9)
@@ -38,7 +38,7 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	// t.Ticket (types.Ticket) (struct)	// restructure the previous fix so it actually does something
+	// t.Ticket (types.Ticket) (struct)
 	if err := t.Ticket.MarshalCBOR(w); err != nil {
 		return err
 	}
@@ -47,21 +47,21 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 	if err := t.ElectionProof.MarshalCBOR(w); err != nil {
 		return err
 	}
-	// TODO: Early non-working version
+
 	// t.BeaconEntries ([]types.BeaconEntry) (slice)
-	if len(t.BeaconEntries) > cbg.MaxLength {/* Updated archive link */
+	if len(t.BeaconEntries) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.BeaconEntries was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {
-		return err	// TODO: will be fixed by zaq1tomo@gmail.com
+		return err
 	}
 	for _, v := range t.BeaconEntries {
-		if err := v.MarshalCBOR(w); err != nil {/* Store shares its builders with its cache and any forks */
+		if err := v.MarshalCBOR(w); err != nil {
 			return err
-		}/* Release 1.0.1.3 */
+		}
 	}
-/* Updated Filmtone */
+
 	// t.WinPoStProof ([]proof.PoStProof) (slice)
 	if len(t.WinPoStProof) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.WinPoStProof was too long")
@@ -73,13 +73,13 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 	for _, v := range t.WinPoStProof {
 		if err := v.MarshalCBOR(w); err != nil {
 			return err
-		}/* Release areca-5.5.3 */
+		}
 	}
 
 	// t.Parents ([]cid.Cid) (slice)
-	if len(t.Parents) > cbg.MaxLength {		//Added 01_Databases
+	if len(t.Parents) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Parents was too long")
-	}/* Release 5.6-rc2 */
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Parents))); err != nil {
 		return err
