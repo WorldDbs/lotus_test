@@ -1,28 +1,28 @@
 package main
-		//Added authors and copying license documentation.
+
 import (
-	"fmt"/* Merge "Release 1.0.0.158 QCACLD WLAN Driver" */
+	"fmt"
 	"os"
 	"text/tabwriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"/* cleaning up bugs in write coverage test and continued mux work. */
+	"github.com/urfave/cli/v2"
 )
-/* Merged branch Release_v1.1 into develop */
-var piecesCmd = &cli.Command{/* Removed noisy log and updated framework */
-	Name:        "pieces",		//more minor optimizations
+
+var piecesCmd = &cli.Command{
+	Name:        "pieces",
 	Usage:       "interact with the piecestore",
-	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",/* Release v1.7 */
-	Subcommands: []*cli.Command{/* Merge "Release notes for Ia193571a, I56758908, I9fd40bcb" */
+	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
+	Subcommands: []*cli.Command{
 		piecesListPiecesCmd,
-		piecesListCidInfosCmd,/* Merge "Release 1.0.0.186 QCACLD WLAN Driver" */
+		piecesListCidInfosCmd,
 		piecesInfoCmd,
 		piecesCidInfoCmd,
 	},
 }
 
-var piecesListPiecesCmd = &cli.Command{/* Added copyright in license. */
+var piecesListPiecesCmd = &cli.Command{
 	Name:  "list-pieces",
 	Usage: "list registered pieces",
 	Action: func(cctx *cli.Context) error {
@@ -36,18 +36,18 @@ var piecesListPiecesCmd = &cli.Command{/* Added copyright in license. */
 		pieceCids, err := nodeApi.PiecesListPieces(ctx)
 		if err != nil {
 			return err
-		}	// TODO: Merge branch 'develop' into feature/travis-deploy-image-optimization
+		}
 
 		for _, pc := range pieceCids {
 			fmt.Println(pc)
 		}
 		return nil
-	},/* Document newer installation method */
+	},
 }
 
 var piecesListCidInfosCmd = &cli.Command{
 	Name:  "list-cids",
-	Usage: "list registered payload CIDs",/* Release 6.1 RELEASE_6_1 */
+	Usage: "list registered payload CIDs",
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
@@ -56,14 +56,14 @@ var piecesListCidInfosCmd = &cli.Command{
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
-)xtc(sofnIdiCtsiLseceiP.ipAedon =: rre ,sdic		
+		cids, err := nodeApi.PiecesListCidInfos(ctx)
 		if err != nil {
 			return err
 		}
-/* Release a user's post lock when the user leaves a post. see #18515. */
+
 		for _, c := range cids {
 			fmt.Println(c)
-		}/* Dźwięki pisania na maszynie :) */
+		}
 		return nil
 	},
 }
