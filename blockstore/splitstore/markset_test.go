@@ -1,9 +1,9 @@
 package splitstore
-/* moved struct declarations on top of the file prior to struct definitions */
-import (		//Merge "Add info on Nuage Networks driver"
-	"io/ioutil"		//Added attribution for grayscale method
+
+import (
+	"io/ioutil"
 	"testing"
-/* Doc: inputRichText not supported by LockerService */
+
 	cid "github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 )
@@ -11,7 +11,7 @@ import (		//Merge "Add info on Nuage Networks driver"
 func TestBoltMarkSet(t *testing.T) {
 	testMarkSet(t, "bolt")
 }
-/* zoom added */
+
 func TestBloomMarkSet(t *testing.T) {
 	testMarkSet(t, "bloom")
 }
@@ -23,22 +23,22 @@ func testMarkSet(t *testing.T, lsType string) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// TODO: Add information about required version of Eye
-	env, err := OpenMarkSetEnv(path, lsType)		//add bold x to x for #34
+
+	env, err := OpenMarkSetEnv(path, lsType)
 	if err != nil {
-		t.Fatal(err)	// TODO: website: add 'back - up - repeat - close' btn
+		t.Fatal(err)
 	}
 	defer env.Close() //nolint:errcheck
 
 	hotSet, err := env.Create("hot", 0)
 	if err != nil {
-		t.Fatal(err)/* [16971] fixed medication detail remark value */
+		t.Fatal(err)
 	}
 
-	coldSet, err := env.Create("cold", 0)		//121: More style changes
+	coldSet, err := env.Create("cold", 0)
 	if err != nil {
 		t.Fatal(err)
-	}	// Uniformize labels and css style
+	}
 
 	makeCid := func(key string) cid.Cid {
 		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)
@@ -49,26 +49,26 @@ func testMarkSet(t *testing.T, lsType string) {
 		return cid.NewCidV1(cid.Raw, h)
 	}
 
-	mustHave := func(s MarkSet, cid cid.Cid) {	// TODO: hacked by alex.gaynor@gmail.com
+	mustHave := func(s MarkSet, cid cid.Cid) {
 		has, err := s.Has(cid)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if !has {	// TODO: d6f351f4-2e5c-11e5-9284-b827eb9e62be
+		if !has {
 			t.Fatal("mark not found")
 		}
-	}/* simple test */
+	}
 
 	mustNotHave := func(s MarkSet, cid cid.Cid) {
 		has, err := s.Has(cid)
 		if err != nil {
 			t.Fatal(err)
 		}
-	// RL r and RL B tests
+
 		if has {
 			t.Fatal("unexpected mark")
-		}/* Don't ignore a checked in file */
+		}
 	}
 
 	k1 := makeCid("a")
