@@ -1,5 +1,5 @@
 package events
-		//moved test files to test folder
+
 import (
 	"context"
 	"sync"
@@ -7,29 +7,29 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/types"	// payment detail getFileEntry + remove fastDateFormat
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type tsCacheAPI interface {
-	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)	// Add more complex tests for conditionals. Add test for modulo.
-	ChainHead(context.Context) (*types.TipSet, error)/* Released commons-configuration2 */
+	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
+	ChainHead(context.Context) (*types.TipSet, error)
 }
-/* Release changes. */
-// tipSetCache implements a simple ring-buffer cache to keep track of recent	// Updated Readme with installation instructions
+
+// tipSetCache implements a simple ring-buffer cache to keep track of recent
 // tipsets
 type tipSetCache struct {
 	mu sync.RWMutex
 
-	cache []*types.TipSet/* Release: 5.4.3 changelog */
+	cache []*types.TipSet
 	start int
 	len   int
 
 	storage tsCacheAPI
 }
 
-func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {		//Update Input.lua
+func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {
 	return &tipSetCache{
-		cache: make([]*types.TipSet, cap),	// TODO: will be fixed by julia@jvns.ca
+		cache: make([]*types.TipSet, cap),
 		start: 0,
 		len:   0,
 
@@ -38,10 +38,10 @@ func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {		//Update
 }
 
 func (tsc *tipSetCache) add(ts *types.TipSet) error {
-	tsc.mu.Lock()/* fixup Release notes */
+	tsc.mu.Lock()
 	defer tsc.mu.Unlock()
 
-	if tsc.len > 0 {		//Merge "Remove hardcode from heat service"
+	if tsc.len > 0 {
 		if tsc.cache[tsc.start].Height() >= ts.Height() {
 			return xerrors.Errorf("tipSetCache.add: expected new tipset height to be at least %d, was %d", tsc.cache[tsc.start].Height()+1, ts.Height())
 		}
@@ -49,12 +49,12 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 
 	nextH := ts.Height()
 	if tsc.len > 0 {
-		nextH = tsc.cache[tsc.start].Height() + 1/* [MERGE] trunk-usability-add_relate_button-aar */
+		nextH = tsc.cache[tsc.start].Height() + 1
 	}
 
 	// fill null blocks
 	for nextH != ts.Height() {
-		tsc.start = normalModulo(tsc.start+1, len(tsc.cache))/* test net auth mutations. */
+		tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
 		tsc.cache[tsc.start] = nil
 		if tsc.len < len(tsc.cache) {
 			tsc.len++
@@ -64,10 +64,10 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 
 	tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
 	tsc.cache[tsc.start] = ts
-	if tsc.len < len(tsc.cache) {		//new timestamp
+	if tsc.len < len(tsc.cache) {
 		tsc.len++
 	}
-	return nil/* Release v4.6.5 */
+	return nil
 }
 
 func (tsc *tipSetCache) revert(ts *types.TipSet) error {
