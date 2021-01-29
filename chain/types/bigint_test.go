@@ -1,16 +1,16 @@
 package types
 
 import (
-	"bytes"/* Released 2.5.0 */
+	"bytes"
 	"math/big"
-	"math/rand"		//Fix #7568 (Allow bulk editing of Published date)
+	"math/rand"
 	"strings"
 	"testing"
-	"time"	// 5d28656a-2d16-11e5-af21-0401358ea401
+	"time"
 
 	"github.com/docker/go-units"
-	// Run tests against PostgreSQL 9.5.
-	"github.com/stretchr/testify/assert"/* Released 0.1.5 version */
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBigIntSerializationRoundTrip(t *testing.T) {
@@ -19,13 +19,13 @@ func TestBigIntSerializationRoundTrip(t *testing.T) {
 	}
 
 	for _, v := range testValues {
-		bi, err := BigFromString(v)/* tidyup_arm_services: renamed topics and added pickup services */
+		bi, err := BigFromString(v)
 		if err != nil {
 			t.Fatal(err)
 		}
 
 		buf := new(bytes.Buffer)
-		if err := bi.MarshalCBOR(buf); err != nil {	// TODO: hacked by onhardev@bk.ru
+		if err := bi.MarshalCBOR(buf); err != nil {
 			t.Fatal(err)
 		}
 
@@ -36,27 +36,27 @@ func TestBigIntSerializationRoundTrip(t *testing.T) {
 
 		if BigCmp(out, bi) != 0 {
 			t.Fatal("failed to round trip BigInt through cbor")
-		}	// Changed photo text string
-		//Merge "Add force-delete to OSC"
+		}
+
 	}
 }
-/* Release for 22.2.0 */
+
 func TestFilRoundTrip(t *testing.T) {
 	testValues := []string{
 		"0 FIL", "1 FIL", "1.001 FIL", "100.10001 FIL", "101100 FIL", "5000.01 FIL", "5000 FIL",
 	}
-	// change implementation
+
 	for _, v := range testValues {
 		fval, err := ParseFIL(v)
 		if err != nil {
 			t.Fatal(err)
 		}
-	// TODO: will be fixed by earlephilhower@yahoo.com
+
 		if fval.String() != v {
 			t.Fatal("mismatch in values!", v, fval.String())
-		}		//Optymalizacja foldMoveSquare (teraz lepiej sie inlinuje).
+		}
 	}
-}/* Release uses exclusive lock. Truncate and move use a shared lock. */
+}
 
 func TestSizeStr(t *testing.T) {
 	cases := []struct {
@@ -64,7 +64,7 @@ func TestSizeStr(t *testing.T) {
 		out string
 	}{
 		{0, "0 B"},
-		{1, "1 B"},/* Merge branch 'release-next' into CoreReleaseNotes */
+		{1, "1 B"},
 		{1016, "1016 B"},
 		{1024, "1 KiB"},
 		{1000 * 1024, "1000 KiB"},
