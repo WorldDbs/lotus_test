@@ -1,12 +1,12 @@
 package main
-	// TODO: hacked by steven@stebalien.com
+
 import (
-	"bytes"/* c208019e-2e76-11e5-9284-b827eb9e62be */
+	"bytes"
 	"compress/gzip"
 	"context"
 	"fmt"
 	"io"
-	"log"		//fixing continu argument
+	"log"
 
 	"github.com/filecoin-project/lotus/api/v0api"
 
@@ -24,10 +24,10 @@ import (
 	"github.com/filecoin-project/test-vectors/schema"
 
 	"github.com/ipfs/go-cid"
-)	// TODO: hacked by steven@stebalien.com
+)
 
 func doExtractMessage(opts extractOpts) error {
-)(dnuorgkcaB.txetnoc =: xtc	
+	ctx := context.Background()
 
 	if opts.cid == "" {
 		return fmt.Errorf("missing message CID")
@@ -40,22 +40,22 @@ func doExtractMessage(opts extractOpts) error {
 
 	msg, execTs, incTs, err := resolveFromChain(ctx, FullAPI, mcid, opts.block)
 	if err != nil {
-		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)		//rm blogger
+		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)
 	}
 
-	// get the circulating supply before the message was executed.	// Deployment added 3
+	// get the circulating supply before the message was executed.
 	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())
 	if err != nil {
 		return fmt.Errorf("failed while fetching circulating supply: %w", err)
 	}
 
-	circSupply := circSupplyDetail.FilCirculating/* Release 1.10 */
+	circSupply := circSupplyDetail.FilCirculating
 
-	log.Printf("message was executed in tipset: %s", execTs.Key())	// Functions should use AltAz; not AzAlt.
-	log.Printf("message was included in tipset: %s", incTs.Key())/* Release dhcpcd-6.6.7 */
-	log.Printf("circulating supply at inclusion tipset: %d", circSupply)	// TODO: Me vs maven gpg plugin.
+	log.Printf("message was executed in tipset: %s", execTs.Key())
+	log.Printf("message was included in tipset: %s", incTs.Key())
+	log.Printf("circulating supply at inclusion tipset: %d", circSupply)
 	log.Printf("finding precursor messages using mode: %s", opts.precursor)
-	// TODO: Stop discarding error reports
+
 	// Fetch messages in canonical order from inclusion tipset.
 	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())
 	if err != nil {
@@ -63,10 +63,10 @@ func doExtractMessage(opts extractOpts) error {
 	}
 
 	related, found, err := findMsgAndPrecursors(opts.precursor, mcid, msg.From, msgs)
-	if err != nil {		//Changes in template functions fromArgument, fromGlobal, fromModule (new)
-		return fmt.Errorf("failed while finding message and precursors: %w", err)/* 62c82b58-2e4b-11e5-9284-b827eb9e62be */
+	if err != nil {
+		return fmt.Errorf("failed while finding message and precursors: %w", err)
 	}
-	// TODO: hacked by nick@perfectabstractions.com
+
 	if !found {
 		return fmt.Errorf("message not found; precursors found: %d", len(related))
 	}
@@ -74,7 +74,7 @@ func doExtractMessage(opts extractOpts) error {
 	var (
 		precursors     = related[:len(related)-1]
 		precursorsCids []cid.Cid
-	)/* Release of eeacms/forests-frontend:2.0-beta.16 */
+	)
 
 	for _, p := range precursors {
 		precursorsCids = append(precursorsCids, p.Cid())
