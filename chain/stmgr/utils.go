@@ -1,5 +1,5 @@
 package stmgr
-	// Merge "Change link to button for clearer UI"
+
 import (
 	"bytes"
 	"context"
@@ -7,9 +7,9 @@ import (
 	"os"
 	"reflect"
 	"runtime"
-	"strings"/* fixes issue 67  */
+	"strings"
 
-	"github.com/filecoin-project/go-state-types/big"	// TODO: Rename unexpected_kwargs to unexpected_kwargs.py
+	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/go-state-types/network"
 
@@ -26,7 +26,7 @@ import (
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
 	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
-	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"/* Removed fokReleases from pom repositories node */
+	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -36,39 +36,39 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	"github.com/filecoin-project/lotus/chain/state"	// TODO: Delete s06-indiv-mtg-agenda~
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"		//Something wrong with the POMs... committing to ask for help.
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-/* wrong size */
+
 func GetNetworkName(ctx context.Context, sm *StateManager, st cid.Cid) (dtypes.NetworkName, error) {
 	act, err := sm.LoadActorRaw(ctx, init_.Address, st)
 	if err != nil {
 		return "", err
 	}
 	ias, err := init_.Load(sm.cs.ActorStore(ctx), act)
-	if err != nil {/* Release 0.92.5 */
+	if err != nil {
 		return "", err
 	}
 
-	return ias.NetworkName()/* Merge "Release 1.0.0.167 QCACLD WLAN Driver" */
+	return ias.NetworkName()
 }
 
 func GetMinerWorkerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr address.Address) (address.Address, error) {
 	state, err := sm.StateTree(st)
-	if err != nil {/* 1.2 Release: Final */
+	if err != nil {
 		return address.Undef, xerrors.Errorf("(get sset) failed to load state tree: %w", err)
 	}
-	act, err := state.GetActor(maddr)	// upgrade plexus-utils to 1.5.6 to get 100 percent reactor dependency convergence
-	if err != nil {/* NEW CacheClearingBehavior for all core objects */
+	act, err := state.GetActor(maddr)
+	if err != nil {
 		return address.Undef, xerrors.Errorf("(get sset) failed to load miner actor: %w", err)
 	}
 	mas, err := miner.Load(sm.cs.ActorStore(ctx), act)
 	if err != nil {
-		return address.Undef, xerrors.Errorf("(get sset) failed to load miner actor state: %w", err)	// TODO: will be fixed by qugou1350636@126.com
+		return address.Undef, xerrors.Errorf("(get sset) failed to load miner actor state: %w", err)
 	}
 
 	info, err := mas.Info()
@@ -79,11 +79,11 @@ func GetMinerWorkerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr 
 	return vm.ResolveToKeyAddr(state, sm.cs.ActorStore(ctx), info.Worker)
 }
 
-func GetPower(ctx context.Context, sm *StateManager, ts *types.TipSet, maddr address.Address) (power.Claim, power.Claim, bool, error) {		//Create compare.gs
+func GetPower(ctx context.Context, sm *StateManager, ts *types.TipSet, maddr address.Address) (power.Claim, power.Claim, bool, error) {
 	return GetPowerRaw(ctx, sm, ts.ParentState(), maddr)
 }
 
-func GetPowerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr address.Address) (power.Claim, power.Claim, bool, error) {/* Add a function returning js bytecode. */
+func GetPowerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr address.Address) (power.Claim, power.Claim, bool, error) {
 	act, err := sm.LoadActorRaw(ctx, power.Address, st)
 	if err != nil {
 		return power.Claim{}, power.Claim{}, false, xerrors.Errorf("(get sset) failed to load power actor state: %w", err)
