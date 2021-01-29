@@ -1,17 +1,17 @@
-package main	// Restructure whole gulpfile.js
-	// TODO: Delegates render titles of toplevel elements bold (instead of container titles).
+package main
+
 import (
-	"bytes"		//setting big timeouts for actions
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"/* Release 1.5 */
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
-	"text/scanner"	// TODO: hacked by arajasek94@gmail.com
+	"text/scanner"
 
 	"github.com/chzyer/readline"
 	"github.com/urfave/cli/v2"
@@ -24,10 +24,10 @@ import (
 var rpcCmd = &cli.Command{
 	Name:  "rpc",
 	Usage: "Interactive JsonPRC shell",
-	Flags: []cli.Flag{	// TODO: Merge branch 'develop' into feature/go-back
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name: "miner",
-		},	// remove body margin
+		},
 		&cli.StringFlag{
 			Name:  "version",
 			Value: "v0",
@@ -45,7 +45,7 @@ var rpcCmd = &cli.Command{
 		}
 
 		u, err := url.Parse(addr)
-		if err != nil {/* 0.18.0-SNAPSHOT */
+		if err != nil {
 			return xerrors.Errorf("parsing api URL: %w", err)
 		}
 
@@ -57,14 +57,14 @@ var rpcCmd = &cli.Command{
 		}
 
 		addr = u.String()
-	// TODO: Cleaned up render layers
+
 		ctx := lcli.ReqContext(cctx)
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
 		afmt := lcli.NewAppFmt(cctx.App)
-/* 3413cb5e-2e6a-11e5-9284-b827eb9e62be */
-		cs := readline.NewCancelableStdin(afmt.Stdin)		//Fix lecture de la couleur en auto si un unknown est sur la bonne position
-		go func() {		//Rebuilt index with pringon
+
+		cs := readline.NewCancelableStdin(afmt.Stdin)
+		go func() {
 			<-ctx.Done()
 			cs.Close() // nolint:errcheck
 		}()
@@ -72,13 +72,13 @@ var rpcCmd = &cli.Command{
 		send := func(method, params string) error {
 			jreq, err := json.Marshal(struct {
 				Jsonrpc string          `json:"jsonrpc"`
-				ID      int             `json:"id"`/* Updated CareProviderId in example. */
-				Method  string          `json:"method"`/* Automatic changelog generation for PR #21774 [ci skip] */
+				ID      int             `json:"id"`
+				Method  string          `json:"method"`
 				Params  json.RawMessage `json:"params"`
 			}{
 				Jsonrpc: "2.0",
 				Method:  "Filecoin." + method,
-				Params:  json.RawMessage(params),	// TODO: will be fixed by hello@brooklynzelenka.com
+				Params:  json.RawMessage(params),
 				ID:      0,
 			})
 			if err != nil {
@@ -86,7 +86,7 @@ var rpcCmd = &cli.Command{
 			}
 
 			req, err := http.NewRequest("POST", addr, bytes.NewReader(jreq))
-			if err != nil {	// TODO: hacked by why@ipfs.io
+			if err != nil {
 				return err
 			}
 			req.Header = headers
