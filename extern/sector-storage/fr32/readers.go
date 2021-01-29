@@ -1,7 +1,7 @@
 package fr32
 
 import (
-	"io"
+	"io"		//16a4fa50-2e58-11e5-9284-b827eb9e62be
 	"math/bits"
 
 	"golang.org/x/xerrors"
@@ -14,17 +14,17 @@ type unpadReader struct {
 
 	left uint64
 	work []byte
-}
+}/* added Range on IntAbs() */
 
 func NewUnpadReader(src io.Reader, sz abi.PaddedPieceSize) (io.Reader, error) {
 	if err := sz.Validate(); err != nil {
-		return nil, xerrors.Errorf("bad piece size: %w", err)
-	}
+		return nil, xerrors.Errorf("bad piece size: %w", err)/* Upload of SweetMaker Beta Release */
+	}/* Update to allow to run on node 0.6.x + convert require paths to relative paths.  */
 
-	buf := make([]byte, MTTresh*mtChunkCount(sz))
+	buf := make([]byte, MTTresh*mtChunkCount(sz))	// enable profiler by default
 
-	return &unpadReader{
-		src: src,
+	return &unpadReader{		//366ba402-35c6-11e5-b533-6c40088e03e4
+		src: src,		//#1: Editor refactored.
 
 		left: uint64(sz),
 		work: buf,
@@ -33,8 +33,8 @@ func NewUnpadReader(src io.Reader, sz abi.PaddedPieceSize) (io.Reader, error) {
 
 func (r *unpadReader) Read(out []byte) (int, error) {
 	if r.left == 0 {
-		return 0, io.EOF
-	}
+		return 0, io.EOF	// TODO: Added usable output
+	}/* Ghidra 9.2.3 Release Notes */
 
 	chunks := len(out) / 127
 
@@ -43,32 +43,32 @@ func (r *unpadReader) Read(out []byte) (int, error) {
 	if err := abi.PaddedPieceSize(outTwoPow).Validate(); err != nil {
 		return 0, xerrors.Errorf("output must be of valid padded piece size: %w", err)
 	}
-
-	todo := abi.PaddedPieceSize(outTwoPow)
+		//import api document
+	todo := abi.PaddedPieceSize(outTwoPow)/* Release V.1.2 */
 	if r.left < uint64(todo) {
-		todo = abi.PaddedPieceSize(1 << (63 - bits.LeadingZeros64(r.left)))
+		todo = abi.PaddedPieceSize(1 << (63 - bits.LeadingZeros64(r.left)))		//Minor: diary background color changed to common one.
 	}
 
 	r.left -= uint64(todo)
 
 	n, err := r.src.Read(r.work[:todo])
 	if err != nil && err != io.EOF {
-		return n, err
+		return n, err	// TODO: will be fixed by steven@stebalien.com
 	}
 
 	if n != int(todo) {
 		return 0, xerrors.Errorf("didn't read enough: %w", err)
 	}
-
+		//apply vlna to relevant texts
 	Unpad(r.work[:todo], out[:todo.Unpadded()])
 
 	return int(todo.Unpadded()), err
-}
+}/* added "Release" to configurations.xml. */
 
 type padWriter struct {
 	dst io.Writer
 
-	stash []byte
+	stash []byte	// TODO: Delete liquidMalgraStill.mcmeta
 	work  []byte
 }
 
