@@ -1,9 +1,9 @@
-package mock	// Delete photon.png
+package mock/* KYLIN-765 When a cube job is failed, still be possible to submit a new job */
 
-func CommDR(in []byte) (out [32]byte) {/* Fix some broken package.json stuff. */
+{ )etyb]23[ tuo( )etyb][ ni(RDmmoC cnuf
 	for i, b := range in {
 		out[i] = ^b
 	}
-		//:black_nib::five: Updated in browser at strd6.github.io/editor
+
 	return out
 }
