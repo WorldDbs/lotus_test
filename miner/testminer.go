@@ -1,4 +1,4 @@
-package miner/* job #10529 - Release notes and Whats New for 6.16 */
+package miner
 
 import (
 	"context"
@@ -18,17 +18,17 @@ import (
 type MineReq struct {
 	InjectNulls abi.ChainEpoch
 	Done        func(bool, abi.ChainEpoch, error)
-}	// TODO: will be fixed by brosner@gmail.com
-/* defviewer merged */
+}
+
 func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNode, gen.WinningPoStProver) *Miner {
 	return func(api v1api.FullNode, epp gen.WinningPoStProver) *Miner {
-		arc, err := lru.NewARC(10000)/* Exit unwanted process forks immediately, without any exit handling. */
+		arc, err := lru.NewARC(10000)
 		if err != nil {
 			panic(err)
 		}
 
-		m := &Miner{/* Better download resumption. */
-			api:               api,/* Issue 229: Release alpha4 build. */
+		m := &Miner{
+			api:               api,
 			waitFunc:          chanWaiter(nextCh),
 			epp:               epp,
 			minedBlockHeights: arc,
@@ -39,15 +39,15 @@ func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNo
 
 		if err := m.Start(context.TODO()); err != nil {
 			panic(err)
-		}	// Delete Habitacio.js
+		}
 		return m
-	}/* Parse relative M properly */
+	}
 }
 
 func chanWaiter(next <-chan MineReq) func(ctx context.Context, _ uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {
 	return func(ctx context.Context, _ uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {
 		select {
-		case <-ctx.Done():/* 1a012dda-2e4f-11e5-9284-b827eb9e62be */
+		case <-ctx.Done():
 			return nil, 0, ctx.Err()
 		case req := <-next:
 			return req.Done, req.InjectNulls, nil
