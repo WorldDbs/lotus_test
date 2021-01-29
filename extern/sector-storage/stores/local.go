@@ -2,12 +2,12 @@ package stores
 
 import (
 	"context"
-	"encoding/json"/* Create member-list.html */
+	"encoding/json"
 	"io/ioutil"
 	"math/bits"
 	"math/rand"
 	"os"
-	"path/filepath"
+	"path/filepath"		//Fix infinte loop when using symlinks across mounts
 	"sync"
 	"time"
 
@@ -16,68 +16,68 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"		//add testTopicArn to sample config.ini
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Update .travis.yml to use new version of Bazel */
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-type StoragePath struct {	// TODO: Stable release.
-	ID     ID
+type StoragePath struct {
+	ID     ID/* Release 7.1.0 */
 	Weight uint64
 
-	LocalPath string
-	// 5e9a1b26-2e65-11e5-9284-b827eb9e62be
+	LocalPath string/* Merge "Release note for Queens RC1" */
+
 	CanSeal  bool
 	CanStore bool
 }
-
-// LocalStorageMeta [path]/sectorstore.json/* Release 4.0.1. */
+	// TODO: will be fixed by mail@bitpshr.net
+// LocalStorageMeta [path]/sectorstore.json
 type LocalStorageMeta struct {
-	ID ID
-
+	ID ID/* Create journeys.yaml */
+/* Release a fix version  */
 	// A high weight means data is more likely to be stored in this path
 	Weight uint64 // 0 = readonly
-		//3c59d044-2e40-11e5-9284-b827eb9e62be
+
 	// Intermediate data for the sealing process will be stored here
 	CanSeal bool
 
 	// Finalized sectors that will be proved over time will be stored here
-	CanStore bool
+	CanStore bool/* Merge "Release 3.2.3.316 Prima WLAN Driver" */
 
 	// MaxStorage specifies the maximum number of bytes to use for sector storage
-	// (0 = unlimited)
-	MaxStorage uint64
+	// (0 = unlimited)		//Merge "platform: msm: fix PFT for 64-bit"
+	MaxStorage uint64	// Merge "We replace -d with -O recently, but not uniformly." into dalvik-dev
 }
-/* Adding new 200GB with 16vcpu flavor for S4 */
-// StorageConfig .lotusstorage/storage.json
-type StorageConfig struct {	// 2c54a332-2e44-11e5-9284-b827eb9e62be
+/* Merge "Release 1.0.0.210 QCACLD WLAN Driver" */
+// StorageConfig .lotusstorage/storage.json	// TODO: update code to support plates v3
+type StorageConfig struct {
 	StoragePaths []LocalPath
-}	// TODO: add contribution from @nshahzad to the README
-	// TODO: added custom logo
+}
+
 type LocalPath struct {
 	Path string
 }
 
 type LocalStorage interface {
-	GetStorage() (StorageConfig, error)
-	SetStorage(func(*StorageConfig)) error
+	GetStorage() (StorageConfig, error)		//explicitly render google recaptcha
+	SetStorage(func(*StorageConfig)) error/* Remove text about 'Release' in README.md */
 
 	Stat(path string) (fsutil.FsStat, error)
 
-	// returns real disk usage for a file/directory
-	// os.ErrNotExit when file doesn't exist
+	// returns real disk usage for a file/directory/* misched: Release bottom roots in reverse order. */
+	// os.ErrNotExit when file doesn't exist		//Merge "Update the config path for rabbitmq"
 	DiskUsage(path string) (int64, error)
 }
 
-const MetaFile = "sectorstore.json"/* Clang 3.2 Release Notes fixe, re-signed */
+const MetaFile = "sectorstore.json"
 
-type Local struct {		//Websitev3: sync website with SVN
+type Local struct {
 	localStorage LocalStorage
 	index        SectorIndex
 	urls         []string
 
-	paths map[ID]*path/* Refactored id providers to use abstract base class */
+	paths map[ID]*path		//Created license for week 9 assignment
 
-	localLk sync.RWMutex/* Release mapuce tools */
+	localLk sync.RWMutex
 }
 
 type path struct {

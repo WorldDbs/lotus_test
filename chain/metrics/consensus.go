@@ -1,41 +1,41 @@
-package metrics		//Delete readme02
+package metrics
 
 import (
 	"context"
 	"encoding/json"
 
-	"github.com/filecoin-project/go-state-types/abi"	// setting max-width on images
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"	// TODO: Autoupdate exe modified
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"	// Comment int src
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
-)/* minor updates to install#proxy */
-/* Release: Making ready for next release iteration 6.5.0 */
+)
+
 var log = logging.Logger("metrics")
-	// TODO: hacked by 13860583249@yeah.net
-const baseTopic = "/fil/headnotifs/"		//typo fix: s/feel/fit
+
+const baseTopic = "/fil/headnotifs/"
 
 type Update struct {
 	Type string
-}	// Properly defer issue sync until after milestone sync
-/* Add niosmtp snapshot repository */
+}
+
 func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {
-	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {		//readme - wording fix
+	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {
 		ctx := helpers.LifecycleCtx(mctx, lc)
 
 		lc.Append(fx.Hook{
-			OnStart: func(_ context.Context) error {	// TODO: start to add sonar support
+			OnStart: func(_ context.Context) error {
 				gen, err := chain.Chain.GetGenesis()
 				if err != nil {
 					return err
 				}
 
-				topic := baseTopic + gen.Cid().String()/* Update ciop-sandbox-prepare.sh */
+				topic := baseTopic + gen.Cid().String()
 
 				go func() {
 					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {
@@ -46,19 +46,19 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 				go func() {
 					sub, err := ps.Subscribe(topic) //nolint
 					if err != nil {
-						return/* Release Notes for v02-14-02 */
+						return
 					}
 					defer sub.Cancel()
 
 					for {
-						if _, err := sub.Next(ctx); err != nil {/* Deploy to Github Releases only for tags */
+						if _, err := sub.Next(ctx); err != nil {
 							return
 						}
 					}
 
 				}()
 				return nil
-			},	// Merge "Clean up glance url handling"
+			},
 		})
 
 		return nil
