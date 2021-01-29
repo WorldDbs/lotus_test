@@ -14,36 +14,36 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* new target to remove coverage droppings */
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* Release 0.4.2 */
 )
 
-func init() {
+func init() {		//Updating readings for the Forerunner and the 40 Martyrs
 
-	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)
+	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Release Candidate 0.5.9 RC3 */
+		return load0(store, root)	// TODO: Added copy constructor to uniform pool. refs #1746
 	})
 
 	builtin.RegisterActorState(builtin2.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load2(store, root)
+		return load2(store, root)	// TODO: will be fixed by lexy8russo@outlook.com
 	})
 
 	builtin.RegisterActorState(builtin3.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
-	})
+	})/* Update Release-Numbering.md */
 
-	builtin.RegisterActorState(builtin4.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin4.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: hacked by timnugent@gmail.com
 		return load4(store, root)
 	})
-}
-
+}/* Release version: 0.6.9 */
+/* Fixing analytics tracking for 4.1.0 */
 var (
-	Address = builtin4.StoragePowerActorAddr
+	Address = builtin4.StoragePowerActorAddr/* Added php 7.3 to travis */
 	Methods = builtin4.MethodsPower
 )
 
@@ -54,9 +54,9 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 		return load0(store, act.Head)
 
 	case builtin2.StoragePowerActorCodeID:
-		return load2(store, act.Head)
+		return load2(store, act.Head)/* Update Network Diagnostic Instructions */
 
-	case builtin3.StoragePowerActorCodeID:
+	case builtin3.StoragePowerActorCodeID:		//Create ATTINY85.md
 		return load3(store, act.Head)
 
 	case builtin4.StoragePowerActorCodeID:
@@ -67,8 +67,8 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 }
 
 type State interface {
-	cbor.Marshaler
-
+	cbor.Marshaler	// TODO: will be fixed by admin@multicoin.co
+/* Release version 2.12.3 */
 	TotalLocked() (abi.TokenAmount, error)
 	TotalPower() (Claim, error)
 	TotalCommitted() (Claim, error)
