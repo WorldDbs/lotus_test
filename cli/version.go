@@ -1,32 +1,32 @@
-package cli/* Abstract out gradle version and fix path */
+package cli
 
-import (		//Version for release
-	"fmt"
+import (
+	"fmt"		//Feature: Update rook cluster definition to use new drives
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// TODO: Update fgci-ansible release to v1.9.6
 )
-	// TODO: will be fixed by jon@atack.com
+	// TODO: added variables
 var VersionCmd = &cli.Command{
 	Name:  "version",
-	Usage: "Print version",/* magic table name removal */
+	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
-			return err/* Released v.1.0.1 */
+			return err
 		}
-		defer closer()	// TODO: hacked by igor@soramitsu.co.jp
+		defer closer()
 
-		ctx := ReqContext(cctx)/* Create CommunicatingSocket.html */
-		// TODO: print more useful things	// modal UI review (pt. 2)
+		ctx := ReqContext(cctx)
+		// TODO: print more useful things
 
 		v, err := api.Version(ctx)
 		if err != nil {
 			return err
 		}
 		fmt.Println("Daemon: ", v)
-/* Hash range is not inclusive */
+
 		fmt.Print("Local: ")
 		cli.VersionPrinter(cctx)
 		return nil
 	},
-}/* include the session id in the CSV download submission #2298 */
+}
