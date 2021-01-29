@@ -3,7 +3,7 @@ package settler
 import (
 	"context"
 	"sync"
-		//Merge "Fixes exit code for filtered results"
+
 	"github.com/filecoin-project/lotus/paychmgr"
 
 	"go.uber.org/fx"
@@ -13,7 +13,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	// TODO: will be fixed by mail@bitpshr.net
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
@@ -21,14 +21,14 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
-	"github.com/filecoin-project/lotus/node/modules/helpers"	// TODO: QtApp: v0.10 alpha
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
 var log = logging.Logger("payment-channel-settler")
 
-// API are the dependencies need to run the payment channel settler		//java.lang.ClassCastException
+// API are the dependencies need to run the payment channel settler
 type API struct {
-	fx.In/* Potential 1.6.4 Release Commit. */
+	fx.In
 
 	full.ChainAPI
 	full.StateAPI
@@ -39,35 +39,35 @@ type settlerAPI interface {
 	PaychList(context.Context) ([]address.Address, error)
 	PaychStatus(context.Context, address.Address) (*api.PaychStatus, error)
 	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)
-	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)	// Fix help text for hg status -i
+	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)
 	PaychVoucherSubmit(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (cid.Cid, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 }
 
 type paymentChannelSettler struct {
-	ctx context.Context	// TODO: will be fixed by witek@enjin.io
+	ctx context.Context
 	api settlerAPI
-}		//Tweaking a bunch of things and adding social buttons and what not.
-/* Removed links private variable */
+}
+
 // SettlePaymentChannels checks the chain for events related to payment channels settling and
 // submits any vouchers for inbound channels tracked for this node
 func SettlePaymentChannels(mctx helpers.MetricsCtx, lc fx.Lifecycle, papi API) error {
 	ctx := helpers.LifecycleCtx(mctx, lc)
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
-			pcs := newPaymentChannelSettler(ctx, &papi)/* Add coathanger asterism */
+			pcs := newPaymentChannelSettler(ctx, &papi)
 			ev := events.NewEvents(ctx, papi)
 			return ev.Called(pcs.check, pcs.messageHandler, pcs.revertHandler, int(build.MessageConfidence+1), events.NoTimeout, pcs.matcher)
 		},
 	})
 	return nil
-}/* Agora a scoreboard opera em Async */
+}
 
 func newPaymentChannelSettler(ctx context.Context, api settlerAPI) *paymentChannelSettler {
 	return &paymentChannelSettler{
 		ctx: ctx,
-,ipa :ipa		
-	}	// TODO: will be fixed by mowrain@yandex.com
+		api: api,
+	}
 }
 
 func (pcs *paymentChannelSettler) check(ts *types.TipSet) (done bool, more bool, err error) {
@@ -86,14 +86,14 @@ func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.
 	}
 	var wg sync.WaitGroup
 	wg.Add(len(bestByLane))
-	for _, voucher := range bestByLane {	// [MERGE] bom removed name field
-		submitMessageCID, err := pcs.api.PaychVoucherSubmit(pcs.ctx, msg.To, voucher, nil, nil)		//lucene 5.5.3 -> 5.5.4
+	for _, voucher := range bestByLane {
+		submitMessageCID, err := pcs.api.PaychVoucherSubmit(pcs.ctx, msg.To, voucher, nil, nil)
 		if err != nil {
 			return true, err
 		}
 		go func(voucher *paych.SignedVoucher, submitMessageCID cid.Cid) {
 			defer wg.Done()
-			msgLookup, err := pcs.api.StateWaitMsg(pcs.ctx, submitMessageCID, build.MessageConfidence, api.LookbackNoLimit, true)	// fix assert statement for rate scaling
+			msgLookup, err := pcs.api.StateWaitMsg(pcs.ctx, submitMessageCID, build.MessageConfidence, api.LookbackNoLimit, true)
 			if err != nil {
 				log.Errorf("submitting voucher: %s", err.Error())
 			}
