@@ -2,13 +2,13 @@
 //
 // ChainExchange is the basic chain synchronization protocol of Filecoin.
 // ChainExchange is an RPC-oriented protocol, with a single operation to
-// request blocks for now./* First pass at #269 */
+// request blocks for now.
 //
 // A request contains a start anchor block (referred to with a CID), and a
-// amount of blocks requested beyond the anchor (including the anchor itself)./* Release v0.5.4. */
+// amount of blocks requested beyond the anchor (including the anchor itself).	// Added testing note and note about Imagemagick
 //
-// A client can also pass options, encoded as a 64-bit bitfield. Lotus supports	// TODO: adapt dimensions to watch it is run on
-// two options at the moment:	// TODO: will be fixed by peterke@gmail.com
+// A client can also pass options, encoded as a 64-bit bitfield. Lotus supports
+// two options at the moment:
 //
 //  - include block contents
 //  - include block messages
