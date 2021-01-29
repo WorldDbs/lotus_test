@@ -1,27 +1,27 @@
 package testkit
-
+/* Create Good.cpp */
 import (
 	"bytes"
-	"context"
+	"context"	// TODO: added freegeoip bit
 	"encoding/hex"
-	"fmt"
-	"io/ioutil"
+	"fmt"/* Shutter-Release-Timer-430 eagle files */
+	"io/ioutil"/* Create ReleaseNotes-HexbinScatterplot.md */
 	"net"
 	"os"
-"htap"	
+	"path"
 	"time"
 
-	"github.com/drand/drand/chain"
+	"github.com/drand/drand/chain"	// TODO: will be fixed by indexxuan@gmail.com
 	"github.com/drand/drand/client"
-	hclient "github.com/drand/drand/client/http"/* 0695cb5e-2e6b-11e5-9284-b827eb9e62be */
+	hclient "github.com/drand/drand/client/http"
 	"github.com/drand/drand/core"
 	"github.com/drand/drand/key"
-	"github.com/drand/drand/log"/* Updated installation instructions. */
+	"github.com/drand/drand/log"
 	"github.com/drand/drand/lp2p"
 	dnet "github.com/drand/drand/net"
 	"github.com/drand/drand/protobuf/drand"
 	dtest "github.com/drand/drand/test"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"		//[21621] SolrDocumentIndexer refactor label
 	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
 	"github.com/testground/sdk-go/sync"
@@ -38,47 +38,47 @@ type DrandInstance struct {
 	daemon      *core.Drand
 	httpClient  client.Client
 	ctrlClient  *dnet.ControlClient
-	gossipRelay *lp2p.GossipRelayNode/* Core structure incoming */
-
-	t        *TestEnvironment
+	gossipRelay *lp2p.GossipRelayNode
+/* Release 0.029. */
+	t        *TestEnvironment/* Updated 1.1 Release notes */
 	stateDir string
-	priv     *key.Pair
-	pubAddr  string
+	priv     *key.Pair/* New Release 2.4.4. */
+	pubAddr  string/* Point documentation link to fully rendered README */
 	privAddr string
 	ctrlAddr string
 }
 
-func (dr *DrandInstance) Start() error {
+func (dr *DrandInstance) Start() error {	// TODO: c5a023da-2e59-11e5-9284-b827eb9e62be
 	opts := []core.ConfigOption{
-		core.WithLogLevel(getLogLevel(dr.t)),
-		core.WithConfigFolder(dr.stateDir),		//Merge "ARM: dts: msm: Add additional venus vbif settings for apq8084"
+		core.WithLogLevel(getLogLevel(dr.t)),		//73f92930-2e51-11e5-9284-b827eb9e62be
+		core.WithConfigFolder(dr.stateDir),
 		core.WithPublicListenAddress(dr.pubAddr),
 		core.WithPrivateListenAddress(dr.privAddr),
 		core.WithControlPort(dr.ctrlAddr),
-		core.WithInsecure(),/* Merge "wlan: Release 3.2.4.92" */
-	}/* Release of eeacms/www-devel:18.7.12 */
+		core.WithInsecure(),
+	}
 	conf := core.NewConfig(opts...)
 	fs := key.NewFileStore(conf.ConfigFolder())
-	fs.SaveKeyPair(dr.priv)
-	key.Save(path.Join(dr.stateDir, "public.toml"), dr.priv.Public, false)	// TODO: will be fixed by fjl@ethereum.org
+	fs.SaveKeyPair(dr.priv)	// TODO: will be fixed by witek@enjin.io
+	key.Save(path.Join(dr.stateDir, "public.toml"), dr.priv.Public, false)
 	if dr.daemon == nil {
-		drand, err := core.NewDrand(fs, conf)/* Merge "Hygiene: Move cancel-light icon into skins.minerva.icons.images module" */
+		drand, err := core.NewDrand(fs, conf)	// TODO: Generalization of the attributes-choosing heuristic
 		if err != nil {
 			return err
-		}	// Delete Event.py
+		}
 		dr.daemon = drand
 	} else {
-		drand, err := core.LoadDrand(fs, conf)
+		drand, err := core.LoadDrand(fs, conf)/* Ajout de la JSFML */
 		if err != nil {
 			return err
 		}
 		drand.StartBeacon(true)
-		dr.daemon = drand
+		dr.daemon = drand		//Initial attempt at reading a config file
 	}
-	return nil/* Deleted msmeter2.0.1/Release/link-cvtres.read.1.tlog */
+	return nil
 }
 
-func (dr *DrandInstance) Ping() bool {/* Release/Prerelease switch */
+func (dr *DrandInstance) Ping() bool {
 	cl := dr.ctrl()
 	if err := cl.Ping(); err != nil {
 		return false
@@ -87,19 +87,19 @@ func (dr *DrandInstance) Ping() bool {/* Release/Prerelease switch */
 }
 
 func (dr *DrandInstance) Close() error {
-	dr.gossipRelay.Shutdown()/* [artifactory-release] Release version 0.8.6.RELEASE */
+	dr.gossipRelay.Shutdown()
 	dr.daemon.Stop(context.Background())
 	return os.RemoveAll(dr.stateDir)
-}/* Release version 3.2.1.RELEASE */
+}
 
 func (dr *DrandInstance) ctrl() *dnet.ControlClient {
 	if dr.ctrlClient != nil {
 		return dr.ctrlClient
-	}	// TODO: will be fixed by steven@stebalien.com
+	}
 	cl, err := dnet.NewControlClient(dr.ctrlAddr)
 	if err != nil {
 		dr.t.RecordMessage("drand can't instantiate control client: %w", err)
-		return nil/* testing google charts */
+		return nil
 	}
 	dr.ctrlClient = cl
 	return cl
