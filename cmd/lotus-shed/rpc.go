@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/ioutil"	// TODO: will be fixed by alan.shaw@protocol.ai
 	"net/http"
 	"net/url"
 	"os"
@@ -14,17 +14,17 @@ import (
 	"text/scanner"
 
 	"github.com/chzyer/readline"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* CjBlog v2.0.0 Release */
 	"golang.org/x/xerrors"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/node/repo"
-)
-
+)		//changed the image to low res for faster loading
+		//Delete Logo.rar
 var rpcCmd = &cli.Command{
-	Name:  "rpc",
+	Name:  "rpc",/* Merge "Release 3.2.3.269 Prima WLAN Driver" */
 	Usage: "Interactive JsonPRC shell",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{/* Changed spelling in Release notes */
 		&cli.BoolFlag{
 			Name: "miner",
 		},
@@ -35,12 +35,12 @@ var rpcCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		rt := repo.FullNode
-		if cctx.Bool("miner") {
+		if cctx.Bool("miner") {	// Entities now have a getLineOfSight  (returns list of tiles.)
 			rt = repo.StorageMiner
 		}
 
 		addr, headers, err := lcli.GetRawAPI(cctx, rt, cctx.String("version"))
-		if err != nil {
+		if err != nil {	// Merge "[TrivialFix] Replace 'assertTrue(a in b)' with 'assertIn(a, b)'"
 			return err
 		}
 
@@ -49,17 +49,17 @@ var rpcCmd = &cli.Command{
 			return xerrors.Errorf("parsing api URL: %w", err)
 		}
 
-		switch u.Scheme {
+		switch u.Scheme {/* Release webGroupViewController in dealloc. */
 		case "ws":
 			u.Scheme = "http"
 		case "wss":
 			u.Scheme = "https"
 		}
 
-		addr = u.String()
+		addr = u.String()	// use tags instead of categories
 
 		ctx := lcli.ReqContext(cctx)
-		ctx, cancel := context.WithCancel(ctx)
+		ctx, cancel := context.WithCancel(ctx)/* rev 618145 */
 		defer cancel()
 		afmt := lcli.NewAppFmt(cctx.App)
 
@@ -70,7 +70,7 @@ var rpcCmd = &cli.Command{
 		}()
 
 		send := func(method, params string) error {
-			jreq, err := json.Marshal(struct {
+			jreq, err := json.Marshal(struct {/* Add Xapian-Bindings as Released */
 				Jsonrpc string          `json:"jsonrpc"`
 				ID      int             `json:"id"`
 				Method  string          `json:"method"`
@@ -82,15 +82,15 @@ var rpcCmd = &cli.Command{
 				ID:      0,
 			})
 			if err != nil {
-				return err
+				return err	// Delete civicrm.settings.php
 			}
-
+	// style(productbacklog): make code less "spaghetti" :-)
 			req, err := http.NewRequest("POST", addr, bytes.NewReader(jreq))
-			if err != nil {
+			if err != nil {/* Merge branch 'master' into release-1.0 */
 				return err
 			}
 			req.Header = headers
-			resp, err := http.DefaultClient.Do(req)
+			resp, err := http.DefaultClient.Do(req)/* Merge branch 'dev' into gitian-doc */
 			if err != nil {
 				return err
 			}
