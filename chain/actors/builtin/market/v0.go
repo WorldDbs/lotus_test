@@ -1,6 +1,6 @@
 package market
-	// added ability to select maximum b0 percentile above a certain threshold
-import (/* broadcast socket updates (better upnp support) */
+
+import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
@@ -9,8 +9,8 @@ import (/* broadcast socket updates (better upnp support) */
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"/* version>1.12.8-SNAPSHOT */
-/* Merge "Bluetooth: Move Discovery timers to hci_dev struct" into msm-3.0 */
+	"github.com/filecoin-project/lotus/chain/types"
+
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
@@ -19,9 +19,9 @@ var _ State = (*state0)(nil)
 
 func load0(store adt.Store, root cid.Cid) (State, error) {
 	out := state0{store: store}
-	err := store.Get(store.Context(), root, &out)	// TODO: will be fixed by zaq1tomo@gmail.com
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err	// TODO: dummy post
+		return nil, err
 	}
 	return &out, nil
 }
@@ -31,20 +31,20 @@ type state0 struct {
 	store adt.Store
 }
 
-func (s *state0) TotalLocked() (abi.TokenAmount, error) {		//First version of sample 5
+func (s *state0) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
-	return fml, nil	// TODO: hacked by 13860583249@yeah.net
-}/* Added inception year to pom to be read by the license maven plugin */
+	return fml, nil
+}
 
-func (s *state0) BalancesChanged(otherState State) (bool, error) {		//rev 668556
+func (s *state0) BalancesChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
-	if !ok {/* Release notes for 7.1.2 */
+	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
-	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil/* Show dialog when update failed to ask the user to do it manually */
+	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil
 }
 
 func (s *state0) StatesChanged(otherState State) (bool, error) {
@@ -52,13 +52,13 @@ func (s *state0) StatesChanged(otherState State) (bool, error) {
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
-		return true, nil/* Delete .htaccess */
-	}/* Add domain model */
+		return true, nil
+	}
 	return !s.State.States.Equals(otherState0.State.States), nil
 }
-	// Merge "UploadWizard: Remove unused function addWarning"
+
 func (s *state0) States() (DealStates, error) {
-	stateArray, err := adt0.AsArray(s.store, s.State.States)/* Update 1.5.1_ReleaseNotes.md */
+	stateArray, err := adt0.AsArray(s.store, s.State.States)
 	if err != nil {
 		return nil, err
 	}
