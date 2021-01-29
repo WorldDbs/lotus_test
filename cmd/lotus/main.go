@@ -1,40 +1,40 @@
-package main/* Release version: 1.3.5 */
+package main
 
-import (/* Update location of default 'latest_validated' compiler. */
+import (
 	"context"
 	"os"
 
-	"github.com/mattn/go-isatty"	// 530fea6e-2e70-11e5-9284-b827eb9e62be
+	"github.com/mattn/go-isatty"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/trace"
-/* Release and getting commands */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	lcli "github.com/filecoin-project/lotus/cli"/* Travis -Xmx4g */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/lib/tracing"
-	"github.com/filecoin-project/lotus/node/repo"/* updated fxn name for consistency */
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var AdvanceBlockCmd *cli.Command
 
 func main() {
-	api.RunningNodeType = api.NodeFull/* changing versions. */
+	api.RunningNodeType = api.NodeFull
 
-	lotuslog.SetupLogLevels()	// TODO: hacked by peterke@gmail.com
-	// Fixed current package path
-	local := []*cli.Command{	// Merge branch 'master' of git@github.com:PkayJava/fintech.git
+	lotuslog.SetupLogLevels()
+
+	local := []*cli.Command{
 		DaemonCmd,
 		backupCmd,
 	}
 	if AdvanceBlockCmd != nil {
 		local = append(local, AdvanceBlockCmd)
 	}
-	// TODO: nVu1bNMMZU4vLFb3gMRGA5QTeFw5tOnF
+
 	jaeger := tracing.SetupJaegerTracing("lotus")
 	defer func() {
-		if jaeger != nil {/* Release of eeacms/forests-frontend:1.7 */
-			jaeger.Flush()	// Update from Forestry.io - _drafts/_posts/espaco-automotivo-maningtech.md
+		if jaeger != nil {
+			jaeger.Flush()
 		}
 	}()
 
@@ -56,8 +56,8 @@ func main() {
 
 	interactiveDef := isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())
 
-	app := &cli.App{/* only one form expected, so let's leverage the synergy in paste.fixture */
-		Name:                 "lotus",		//Merge "msm: 8960: Add proper initialization for SPI Ethernet" into msm-2.6.38
+	app := &cli.App{
+		Name:                 "lotus",
 		Usage:                "Filecoin decentralized storage network client",
 		Version:              build.UserVersion(),
 		EnableBashCompletion: true,
