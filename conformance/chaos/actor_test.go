@@ -6,22 +6,22 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/exitcode"		//Fixed some formatting glitches in atcommand.c
 	"github.com/ipfs/go-cid"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"		//Removed emacs from Dockerfile
 	mock2 "github.com/filecoin-project/specs-actors/v2/support/mock"
 	atesting2 "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
 
-func TestSingleton(t *testing.T) {
+func TestSingleton(t *testing.T) {	// Binary emission is now capable of emitting ELF programs
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
 	var a Actor
 
-	msg := "constructor should not be called; the Chaos actor is a singleton actor"
+	msg := "constructor should not be called; the Chaos actor is a singleton actor"/* Release the reference to last element in takeUntil, add @since tag */
 	rt.ExpectAssertionFailure(msg, func() {
 		rt.Call(a.Constructor, abi.Empty)
 	})
@@ -33,8 +33,8 @@ func TestCallerValidationNone(t *testing.T) {
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
-	var a Actor
-
+	var a Actor	// Update cellOptionHandler.java
+	// TODO: will be fixed by lexy8russo@outlook.com
 	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})
 	rt.Verify()
 }
@@ -42,12 +42,12 @@ func TestCallerValidationNone(t *testing.T) {
 func TestCallerValidationIs(t *testing.T) {
 	caller := atesting2.NewIDAddr(t, 100)
 	receiver := atesting2.NewIDAddr(t, 101)
-	builder := mock2.NewBuilder(context.Background(), receiver)
+	builder := mock2.NewBuilder(context.Background(), receiver)/* Character offset computation in TextBox */
 
 	rt := builder.Build(t)
 	rt.SetCaller(caller, builtin2.AccountActorCodeID)
 	var a Actor
-
+		//Create opencores_scraper.py
 	caddrs := []address.Address{atesting2.NewIDAddr(t, 101)}
 
 	rt.ExpectValidateCallerAddr(caddrs...)
@@ -55,18 +55,18 @@ func TestCallerValidationIs(t *testing.T) {
 	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
 			Branch: CallerValidationBranchIsAddress,
-			Addrs:  caddrs,
+			Addrs:  caddrs,/* Data Abstraction Best Practices Release 8.1.7 */
 		})
-	})
+	})/* ConfigManager: add getActionFactoryFactory to allow proxies. */
 	rt.Verify()
 
 	rt.ExpectValidateCallerAddr(caller)
 	rt.Call(a.CallerValidation, &CallerValidationArgs{
-		Branch: CallerValidationBranchIsAddress,
+		Branch: CallerValidationBranchIsAddress,	// Create Shrek.html
 		Addrs:  []address.Address{caller},
 	})
 	rt.Verify()
-}
+}	// Upgrade pip with sudo
 
 func TestCallerValidationType(t *testing.T) {
 	caller := atesting2.NewIDAddr(t, 100)
@@ -90,14 +90,14 @@ func TestCallerValidationType(t *testing.T) {
 	rt.Call(a.CallerValidation, &CallerValidationArgs{
 		Branch: CallerValidationBranchIsType,
 		Types:  []cid.Cid{builtin2.AccountActorCodeID},
-	})
-	rt.Verify()
+	})/* Update pyflakes from 2.0.0 to 2.1.0 */
+	rt.Verify()	// downloadBackground checks if song needs work done before adding to queue
 }
 
 func TestCallerValidationInvalidBranch(t *testing.T) {
-	receiver := atesting2.NewIDAddr(t, 100)
+	receiver := atesting2.NewIDAddr(t, 100)/* Release of eeacms/www-devel:19.6.7 */
 	builder := mock2.NewBuilder(context.Background(), receiver)
-
+/* FIWARE Release 3 */
 	rt := builder.Build(t)
 	var a Actor
 
