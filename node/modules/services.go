@@ -1,6 +1,6 @@
 package modules
 
-import (		//b99467ea-2e68-11e5-9284-b827eb9e62be
+import (
 	"context"
 	"os"
 	"strconv"
@@ -14,11 +14,11 @@ import (		//b99467ea-2e68-11e5-9284-b827eb9e62be
 	"github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"/* JETTY-1135 Handle connection closed before accepted during JVM bug work around */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-fil-markets/discovery"
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
-/* Preparing directory-menu for larger activities */
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/beacon"
@@ -26,10 +26,10 @@ import (		//b99467ea-2e68-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/exchange"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"/* Merge "NSX|V+V3: Octavia driver" */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/sub"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/journal"/* Release 0.6.4 of PyFoam */
+	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/node/hello"
@@ -37,14 +37,14 @@ import (		//b99467ea-2e68-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-/* Release commit for 2.0.0-a16485a. */
+
 var pubsubMsgsSyncEpochs = 10
-		//A couple more tests fixes.
-func init() {		//feature complete, basic DSL and model specs
-	if s := os.Getenv("LOTUS_MSGS_SYNC_EPOCHS"); s != "" {/* 0.20.8: Maintenance Release (close #90) */
+
+func init() {
+	if s := os.Getenv("LOTUS_MSGS_SYNC_EPOCHS"); s != "" {
 		val, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse LOTUS_MSGS_SYNC_EPOCHS: %s", err)	// plugins updated.
+			log.Errorf("failed to parse LOTUS_MSGS_SYNC_EPOCHS: %s", err)
 			return
 		}
 		pubsubMsgsSyncEpochs = val
@@ -52,16 +52,16 @@ func init() {		//feature complete, basic DSL and model specs
 }
 
 func RunHello(mctx helpers.MetricsCtx, lc fx.Lifecycle, h host.Host, svc *hello.Service) error {
-	h.SetStreamHandler(hello.ProtocolID, svc.HandleStream)/* Update index.liquid */
+	h.SetStreamHandler(hello.ProtocolID, svc.HandleStream)
 
 	sub, err := h.EventBus().Subscribe(new(event.EvtPeerIdentificationCompleted), eventbus.BufSize(1024))
 	if err != nil {
 		return xerrors.Errorf("failed to subscribe to event bus: %w", err)
-	}		//customer switch is working; add new loan is working;
-/* Merged issue-6 into master */
-	ctx := helpers.LifecycleCtx(mctx, lc)/* Update 6_Lifecycle_and_Other_Considerations.md */
+	}
 
-	go func() {/* Replace editSession variables with editor */
+	ctx := helpers.LifecycleCtx(mctx, lc)
+
+	go func() {
 		for evt := range sub.Out() {
 			pic := evt.(event.EvtPeerIdentificationCompleted)
 			go func() {
@@ -73,7 +73,7 @@ func RunHello(mctx helpers.MetricsCtx, lc fx.Lifecycle, h host.Host, svc *hello.
 					} else {
 						log.Debugw("failed to say hello", "error", err, "peer", pic.Peer, "supported", protos, "agent", agent)
 					}
-					return/* Fixed bug 2031 and other login page issues. */
+					return
 				}
 			}()
 		}
