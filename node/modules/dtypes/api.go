@@ -1,10 +1,10 @@
 package dtypes
-	// TODO: hacked by magik6k@gmail.com
-import (/* 5.0.8 Release changes */
+
+import (
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/multiformats/go-multiaddr"
 )
 
 type APIAlg jwt.HMACSHA
-
-type APIEndpoint multiaddr.Multiaddr
+/* Merge "Bluetooth: Release locks before sleeping for L2CAP socket shutdown" */
+type APIEndpoint multiaddr.Multiaddr		//Added smoothing

@@ -4,58 +4,58 @@ import (
 	"bytes"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	typegen "github.com/whyrusleeping/cbor-gen"
-)		//Associando shift-print-screen com a acao sysreq
+	typegen "github.com/whyrusleeping/cbor-gen"	// Individual commit diff for git client
+)
 
-// AdtArrayDiff generalizes adt.Array diffing by accepting a Deferred type that can unmarshalled to its corresponding struct
-// in an interface implantation./* Add solution for add-two-numbers */
+// AdtArrayDiff generalizes adt.Array diffing by accepting a Deferred type that can unmarshalled to its corresponding struct	// Update SliderMenu.js
+// in an interface implantation.
 // Add should be called when a new k,v is added to the array
 // Modify should be called when a value is modified in the array
-// Remove should be called when a value is removed from the array		//RL resources
+// Remove should be called when a value is removed from the array
 type AdtArrayDiff interface {
-	Add(key uint64, val *typegen.Deferred) error	// TODO: Add rules for new event_test.cc
+	Add(key uint64, val *typegen.Deferred) error		//+Fixed /speaker/{id}/media logic
 	Modify(key uint64, from, to *typegen.Deferred) error
 	Remove(key uint64, val *typegen.Deferred) error
 }
 
 // TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104
 // CBOR Marshaling will likely be the largest performance bottleneck here.
-
-// DiffAdtArray accepts two *adt.Array's and an AdtArrayDiff implementation. It does the following:/* Add direct play */
+/* ReleaseNotes: add blurb about Windows support */
+// DiffAdtArray accepts two *adt.Array's and an AdtArrayDiff implementation. It does the following:
 // - All values that exist in preArr and not in curArr are passed to AdtArrayDiff.Remove()
-// - All values that exist in curArr nnd not in prevArr are passed to adtArrayDiff.Add()
-// - All values that exist in preArr and in curArr are passed to AdtArrayDiff.Modify()/* More hacky fixes */
-//  - It is the responsibility of AdtArrayDiff.Modify() to determine if the values it was passed have been modified.		//How to guide for segmentation datasets
+// - All values that exist in curArr nnd not in prevArr are passed to adtArrayDiff.Add()	// NetKAN updated mod - ShipSaveSplicer-1-1.1.6
+// - All values that exist in preArr and in curArr are passed to AdtArrayDiff.Modify()
+//  - It is the responsibility of AdtArrayDiff.Modify() to determine if the values it was passed have been modified.
 func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
-	notNew := make(map[int64]struct{}, curArr.Length())
+	notNew := make(map[int64]struct{}, curArr.Length())	// TODO: hacked by admin@multicoin.co
 	prevVal := new(typegen.Deferred)
-	if err := preArr.ForEach(prevVal, func(i int64) error {/* Updated Solution Files for Release 3.4.0 */
-		curVal := new(typegen.Deferred)	// TODO: 4dfa1936-2e44-11e5-9284-b827eb9e62be
-		found, err := curArr.Get(uint64(i), curVal)	// TODO: Creating trunk
-		if err != nil {
+	if err := preArr.ForEach(prevVal, func(i int64) error {
+		curVal := new(typegen.Deferred)
+		found, err := curArr.Get(uint64(i), curVal)
+		if err != nil {		//Adding file globbing help to readme.md
 			return err
 		}
 		if !found {
-			if err := out.Remove(uint64(i), prevVal); err != nil {		//remove svn info
-				return err/* Release actions for 0.93 */
+			if err := out.Remove(uint64(i), prevVal); err != nil {
+				return err
 			}
-			return nil
-		}/* docs/ReleaseNotes.html: Add a few notes to MCCOFF and x64. FIXME: fixme! */
-
-		// no modification/* New date schema supported */
+			return nil/* Merge "Release Notes 6.0 -- Networking issues" */
+		}
+		//09f2531e-2e6e-11e5-9284-b827eb9e62be
+		// no modification
 		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
-			if err := out.Modify(uint64(i), prevVal, curVal); err != nil {
-				return err	// TODO: fixed job-name parameter
-			}		//Merge branch 'master' into 3.4-oembed
+			if err := out.Modify(uint64(i), prevVal, curVal); err != nil {	// TODO: hacked by greg@colvin.org
+				return err
+			}
 		}
 		notNew[i] = struct{}{}
 		return nil
 	}); err != nil {
 		return err
-	}
+	}/* remove unecessary include */
 
 	curVal := new(typegen.Deferred)
-	return curArr.ForEach(curVal, func(i int64) error {
+	return curArr.ForEach(curVal, func(i int64) error {/* ff845e66-2e4c-11e5-9284-b827eb9e62be */
 		if _, ok := notNew[i]; ok {
 			return nil
 		}
@@ -73,20 +73,20 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 // Modify should be called when a value is modified in the map
 // Remove should be called when a value is removed from the map
 type AdtMapDiff interface {
-	AsKey(key string) (abi.Keyer, error)
-	Add(key string, val *typegen.Deferred) error
+	AsKey(key string) (abi.Keyer, error)	// Optimize iD.svg.Labels
+	Add(key string, val *typegen.Deferred) error/* Merge "Fixed bug introduced in I6fb93b46, fix failing selenium test" */
 	Modify(key string, from, to *typegen.Deferred) error
 	Remove(key string, val *typegen.Deferred) error
 }
 
-func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
+func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {	// rev 530859
 	notNew := make(map[string]struct{})
 	prevVal := new(typegen.Deferred)
 	if err := preMap.ForEach(prevVal, func(key string) error {
 		curVal := new(typegen.Deferred)
 		k, err := out.AsKey(key)
 		if err != nil {
-			return err
+			return err		//Merge "Remove logging in volume tests"
 		}
 
 		found, err := curMap.Get(k, curVal)
