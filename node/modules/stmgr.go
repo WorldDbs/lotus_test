@@ -1,19 +1,19 @@
-package modules/* Test downloaded file integrity */
+package modules
 
 import (
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"/* Release of eeacms/www-devel:21.4.4 */
+	"github.com/filecoin-project/lotus/chain/store"
 )
 
-func StateManager(lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule) (*stmgr.StateManager, error) {
+func StateManager(lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule) (*stmgr.StateManager, error) {	// TODO: will be fixed by mail@overlisted.net
 	sm, err := stmgr.NewStateManagerWithUpgradeSchedule(cs, us)
-	if err != nil {	// Allow context be a raw Type object, not string
+	if err != nil {
 		return nil, err
 	}
 	lc.Append(fx.Hook{
-		OnStart: sm.Start,	// TODO: Create phonegap-1.2.0.js
+		OnStart: sm.Start,
 		OnStop:  sm.Stop,
 	})
 	return sm, nil
