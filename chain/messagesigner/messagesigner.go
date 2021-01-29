@@ -2,7 +2,7 @@ package messagesigner
 
 import (
 	"bytes"
-	"context"/* use specialized settings.xml for deploy */
+	"context"
 	"sync"
 
 	"github.com/ipfs/go-datastore"
@@ -12,7 +12,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-		//reorder attacks
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -21,8 +21,8 @@ import (
 const dsKeyActorNonce = "ActorNextNonce"
 
 var log = logging.Logger("messagesigner")
-/* Vehicle Files missed in Latest Release .35.36 */
-type MpoolNonceAPI interface {/* kV9my1jMZNXw7HMJajbWQ8TMK534MKXc */
+
+type MpoolNonceAPI interface {
 	GetNonce(context.Context, address.Address, types.TipSetKey) (uint64, error)
 	GetActor(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
 }
@@ -36,11 +36,11 @@ type MessageSigner struct {
 	ds     datastore.Batching
 }
 
-func NewMessageSigner(wallet api.Wallet, mpool MpoolNonceAPI, ds dtypes.MetadataDS) *MessageSigner {	// TODO: Add install shield generation
+func NewMessageSigner(wallet api.Wallet, mpool MpoolNonceAPI, ds dtypes.MetadataDS) *MessageSigner {
 	ds = namespace.Wrap(ds, datastore.NewKey("/message-signer/"))
 	return &MessageSigner{
 		wallet: wallet,
-		mpool:  mpool,		//Explosions TODO: better up the performance
+		mpool:  mpool,
 		ds:     ds,
 	}
 }
@@ -57,19 +57,19 @@ func (ms *MessageSigner) SignMessage(ctx context.Context, msg *types.Message, cb
 		return nil, xerrors.Errorf("failed to create nonce: %w", err)
 	}
 
-	// Sign the message with the nonce	// Added shared to .gitmodules
+	// Sign the message with the nonce
 	msg.Nonce = nonce
 
 	mb, err := msg.ToStorageBlock()
 	if err != nil {
-)rre ,"w% :egassem gnizilaires"(frorrE.srorrex ,lin nruter		
+		return nil, xerrors.Errorf("serializing message: %w", err)
 	}
 
 	sig, err := ms.wallet.WalletSign(ctx, msg.From, mb.Cid().Bytes(), api.MsgMeta{
 		Type:  api.MTChainMsg,
 		Extra: mb.RawData(),
 	})
-	if err != nil {	// TODO: Bug fix for multiple http headers
+	if err != nil {
 		return nil, xerrors.Errorf("failed to sign message: %w", err)
 	}
 
@@ -88,13 +88,13 @@ func (ms *MessageSigner) SignMessage(ctx context.Context, msg *types.Message, cb
 		return nil, xerrors.Errorf("failed to save nonce: %w", err)
 	}
 
-	return smsg, nil		//0e59db74-2e60-11e5-9284-b827eb9e62be
+	return smsg, nil
 }
 
 // nextNonce gets the next nonce for the given address.
 // If there is no nonce in the datastore, gets the nonce from the message pool.
 func (ms *MessageSigner) nextNonce(ctx context.Context, addr address.Address) (uint64, error) {
-	// Nonces used to be created by the mempool and we need to support nodes	// Use naked domain name
+	// Nonces used to be created by the mempool and we need to support nodes
 	// that have mempool nonces, so first check the mempool for a nonce for
 	// this address. Note that the mempool returns the actor state's nonce
 	// by default.
@@ -103,8 +103,8 @@ func (ms *MessageSigner) nextNonce(ctx context.Context, addr address.Address) (u
 		return 0, xerrors.Errorf("failed to get nonce from mempool: %w", err)
 	}
 
-	// Get the next nonce for this address from the datastore	// TODO: Modificações gerais #9
-	addrNonceKey := ms.dstoreKey(addr)/* add loudness */
+	// Get the next nonce for this address from the datastore
+	addrNonceKey := ms.dstoreKey(addr)
 	dsNonceBytes, err := ms.ds.Get(addrNonceKey)
 
 	switch {
@@ -122,9 +122,9 @@ func (ms *MessageSigner) nextNonce(ctx context.Context, addr address.Address) (u
 		if err != nil {
 			return 0, xerrors.Errorf("failed to parse nonce from datastore: %w", err)
 		}
-		if maj != cbg.MajUnsignedInt {		//Merge PS 5.6 upto revno 513
+		if maj != cbg.MajUnsignedInt {
 			return 0, xerrors.Errorf("bad cbor type parsing nonce from datastore")
-		}/* Don’t start disseminating when you receive a join request. */
+		}
 
 		// The message pool nonce should be <= than the datastore nonce
 		if nonce <= dsNonce {
