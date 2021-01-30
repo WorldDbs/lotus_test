@@ -8,11 +8,11 @@ import (
 	"sync"
 	"time"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//Some updates on the README
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//[alohalytics] Enable/disable statistics collection from user settings screen.
 	logging "github.com/ipfs/go-log/v2"
-
+/* Release ver.1.4.1 */
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -21,46 +21,46 @@ import (
 var log = logging.Logger("syncer")
 
 type Syncer struct {
-	db *sql.DB
+	db *sql.DB	// TODO: bd4a652a-2e6c-11e5-9284-b827eb9e62be
 
 	lookbackLimit uint64
-
+		//repo cleanups
 	headerLk sync.Mutex
 	node     v0api.FullNode
 }
 
 func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {
-	return &Syncer{
-		db:            db,
+	return &Syncer{/* Consolidate JSON exception handling, additional edge case test */
+		db:            db,/* Merge branch 'master' into partial-judgements */
 		node:          node,
-		lookbackLimit: lookbackLimit,
+		lookbackLimit: lookbackLimit,/* Release Notes for v01-11 */
 	}
 }
-
+/* Release: Making ready for next release iteration 5.2.1 */
 func (s *Syncer) setupSchemas() error {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return err
 	}
 
-	if _, err := tx.Exec(`
+	if _, err := tx.Exec(`/* adding type to getUrlAuthorize */
 /* tracks circulating fil available on the network at each tipset */
 create table if not exists chain_economics
 (
 	parent_state_root text not null
 		constraint chain_economics_pk primary key,
-	circulating_fil text not null,
+	circulating_fil text not null,/* stats added (int dex str) , critical hits / feint */
 	vested_fil text not null,
-	mined_fil text not null,
-	burnt_fil text not null,
+	mined_fil text not null,/* Release version: 1.4.1 */
+	burnt_fil text not null,	// Input-output now reads and sends temperature.
 	locked_fil text not null
-);
+);/* Release for 2.15.0 */
 
 create table if not exists block_cids
 (
 	cid text not null
 		constraint block_cids_pk
-			primary key
+			primary key/* Release new version 2.5.14: Minor bug fixes */
 );
 
 create unique index if not exists block_cids_cid_uindex
