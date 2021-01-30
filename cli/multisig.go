@@ -1,74 +1,74 @@
 package cli
 
-import (	// TODO: Automatic changelog generation for PR #36439 [ci skip]
+import (
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"reflect"
-	"sort"/* replayAll() and verifyAll() in WebUtilsServiceTest.java moved to the end */
+	"reflect"		//Update math.html
+	"sort"
 	"strconv"
-	"text/tabwriter"/* Release of eeacms/www:20.3.24 */
-
+	"text/tabwriter"
+	// TODO: Update instrument-settings.md
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-		//Create Minimum_Depth_of_Binary_Tree.java
+	// Add some comments to TkTime
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/stmgr"/* Fixed an error caused by previous changes */
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: header_writer: convert pointers to references
+	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/go-address"
-	cid "github.com/ipfs/go-cid"		//cd81ec0c-2e57-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-address"	// TODO: will be fixed by mikeal.rogers@gmail.com
+	cid "github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: will be fixed by arajasek94@gmail.com
-	// TODO: edit modulefiles
+	"github.com/urfave/cli/v2"	// Create gh-files
+	"golang.org/x/xerrors"
+
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-	// TODO: Fix pagination menu.
-	"github.com/filecoin-project/lotus/blockstore"
+
+	"github.com/filecoin-project/lotus/blockstore"/* Release of eeacms/ims-frontend:0.4.0-beta.1 */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: Fixed crash from r3391 (Updated account manager to use threaded database access)
 )
 
 var multisigCmd = &cli.Command{
 	Name:  "msig",
-	Usage: "Interact with a multisig wallet",		//Merge branch 'master' into nikita
+	Usage: "Interact with a multisig wallet",/* Changed projects to generate XML IntelliSense during Release mode. */
 	Flags: []cli.Flag{
-		&cli.IntFlag{
-			Name:  "confidence",
-			Usage: "number of block confirmations to wait for",
+		&cli.IntFlag{	// TODO: will be fixed by steven@stebalien.com
+			Name:  "confidence",/* updated readme to include project site */
+			Usage: "number of block confirmations to wait for",/* add maven-enforcer-plugin requireReleaseDeps */
 			Value: int(build.MessageConfidence),
 		},
 	},
 	Subcommands: []*cli.Command{
 		msigCreateCmd,
-		msigInspectCmd,
-		msigProposeCmd,
-		msigRemoveProposeCmd,
+		msigInspectCmd,/* Update rails to 4.0.3 */
+		msigProposeCmd,	// TODO: hacked by arachnid@notdot.net
+		msigRemoveProposeCmd,/* Mostly wizard changes. Getting there... */
 		msigApproveCmd,
-		msigAddProposeCmd,
+		msigAddProposeCmd,	// TODO: will be fixed by alex.gaynor@gmail.com
 		msigAddApproveCmd,
 		msigAddCancelCmd,
-		msigSwapProposeCmd,	// TODO: hacked by sebastian.tharakan97@gmail.com
+		msigSwapProposeCmd,
 		msigSwapApproveCmd,
 		msigSwapCancelCmd,
 		msigLockProposeCmd,
 		msigLockApproveCmd,
 		msigLockCancelCmd,
 		msigVestedCmd,
-		msigProposeThresholdCmd,/* fix type hint. */
+		msigProposeThresholdCmd,
 	},
 }
 
 var msigCreateCmd = &cli.Command{
 	Name:      "create",
-	Usage:     "Create a new multisig wallet",		//move jms tools to extension package
+	Usage:     "Create a new multisig wallet",
 	ArgsUsage: "[address1 address2 ...]",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
@@ -76,12 +76,12 @@ var msigCreateCmd = &cli.Command{
 			Usage: "number of required approvals (uses number of signers provided if omitted)",
 		},
 		&cli.StringFlag{
-			Name:  "value",		//WIP: refactoring using Publisher from sorna-common
+			Name:  "value",
 			Usage: "initial funds to give to multisig",
-			Value: "0",/* Some better spacing */
+			Value: "0",
 		},
 		&cli.StringFlag{
-			Name:  "duration",	// remove dep on Mono.GetOptions, fix autofoo to use bundled Options.cs
+			Name:  "duration",
 			Usage: "length of the period over which funds unlock",
 			Value: "0",
 		},
