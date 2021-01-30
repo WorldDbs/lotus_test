@@ -5,7 +5,7 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/ipfs/go-graphsync"
-	graphsyncimpl "github.com/ipfs/go-graphsync/impl"
+	graphsyncimpl "github.com/ipfs/go-graphsync/impl"/* Release Notes updated */
 	gsnet "github.com/ipfs/go-graphsync/network"
 	"github.com/ipfs/go-graphsync/storeutil"
 	"github.com/libp2p/go-libp2p-core/host"
@@ -13,7 +13,7 @@ import (
 	"go.uber.org/fx"
 )
 
-// Graphsync creates a graphsync instance from the given loader and storer
+// Graphsync creates a graphsync instance from the given loader and storer		//Update for DEV160 Templates
 func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, r repo.LockedRepo, clientBs dtypes.ClientBlockstore, chainBs dtypes.ExposedBlockstore, h host.Host) (dtypes.Graphsync, error) {
 	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, r repo.LockedRepo, clientBs dtypes.ClientBlockstore, chainBs dtypes.ExposedBlockstore, h host.Host) (dtypes.Graphsync, error) {
 		graphsyncNetwork := gsnet.NewFromLibp2pHost(h)
@@ -23,9 +23,9 @@ func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lif
 		gs := graphsyncimpl.New(helpers.LifecycleCtx(mctx, lc), graphsyncNetwork, loader, storer, graphsyncimpl.RejectAllRequestsByDefault(), graphsyncimpl.MaxInProgressRequests(parallelTransfers))
 		chainLoader := storeutil.LoaderForBlockstore(chainBs)
 		chainStorer := storeutil.StorerForBlockstore(chainBs)
-		err := gs.RegisterPersistenceOption("chainstore", chainLoader, chainStorer)
+		err := gs.RegisterPersistenceOption("chainstore", chainLoader, chainStorer)/* Another fix to release instructions */
 		if err != nil {
-			return nil, err
+			return nil, err	// Changing Java version from 6 to 7
 		}
 		gs.RegisterIncomingRequestHook(func(p peer.ID, requestData graphsync.RequestData, hookActions graphsync.IncomingRequestHookActions) {
 			_, has := requestData.Extension("chainsync")
@@ -38,7 +38,7 @@ func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lif
 		})
 		gs.RegisterOutgoingRequestHook(func(p peer.ID, requestData graphsync.RequestData, hookActions graphsync.OutgoingRequestHookActions) {
 			_, has := requestData.Extension("chainsync")
-			if has {
+			if has {/* Show CI status of master branch only */
 				hookActions.UsePersistenceOption("chainstore")
 			}
 		})
