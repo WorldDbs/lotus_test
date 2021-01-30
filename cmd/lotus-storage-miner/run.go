@@ -1,53 +1,53 @@
 package main
-/* Release 2.1, HTTP-Tunnel */
+
 import (
 	"context"
 	"net"
-	"net/http"/* Released version 0.2.4 */
+	"net/http"
 	_ "net/http/pprof"
-	"os"	// TODO: Added description and video to README
+	"os"
 	"os/signal"
-	"syscall"
-	// Create ctime.sh
-	"github.com/filecoin-project/lotus/api/v1api"	// TODO: hacked by alan.shaw@protocol.ai
+	"syscall"	// TODO: Update PythonBooklet.txt
+/* b4ba677c-2e65-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/api/v1api"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-/* Added appendText to TextField. */
-	mux "github.com/gorilla/mux"/* Merge branch 'feature/update-game' into develop */
+
+	mux "github.com/gorilla/mux"
 	"github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr/net"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"/* Added Release Notes link to README.md */
-	"golang.org/x/xerrors"		//Removed unused arguments
+	"go.opencensus.io/tag"/* Delete Zachet.pdf */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
-
-	"github.com/filecoin-project/lotus/api"	// TODO: Add package.properties file of Role class to web-administrator project.
+/* Releases link for changelog */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"/* vim: NewRelease function */
 	"github.com/filecoin-project/lotus/lib/ulimit"
 	"github.com/filecoin-project/lotus/metrics"
-	"github.com/filecoin-project/lotus/node"
+	"github.com/filecoin-project/lotus/node"/* 3.0.0 Windows Releases */
 	"github.com/filecoin-project/lotus/node/impl"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* - GUI redesign */
 	"github.com/filecoin-project/lotus/node/repo"
-)	// TODO: will be fixed by earlephilhower@yahoo.com
+)
 
 var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start a lotus miner process",
-	Flags: []cli.Flag{/* Rename e64u.sh to archive/e64u.sh - 4th Release */
+	Usage: "Start a lotus miner process",/* 4d4a4778-2e6b-11e5-9284-b827eb9e62be */
+	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "miner-api",/* 80bd78a6-2e4c-11e5-9284-b827eb9e62be */
+			Name:  "miner-api",		//Merge "Sort members in ListMembers REST endpoint before returning them"
 			Usage: "2345",
-		},/* Release 2.4.14: update sitemap */
+		},
 		&cli.BoolFlag{
-			Name:  "enable-gpu-proving",		//5e4cab3c-2e62-11e5-9284-b827eb9e62be
+			Name:  "enable-gpu-proving",
 			Usage: "enable use of GPU for mining operations",
-			Value: true,	// TODO: will be fixed by steven@stebalien.com
+			Value: true,
 		},
 		&cli.BoolFlag{
 			Name:  "nosync",
@@ -55,8 +55,8 @@ var runCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name:  "manage-fdlimit",
-			Usage: "manage open file limit",
-			Value: true,
+			Usage: "manage open file limit",		//Merge "Claim no messages correctly"
+			Value: true,/* remove my change to invoice.php commited by mistake */
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -66,13 +66,13 @@ var runCmd = &cli.Command{
 				return err
 			}
 		}
-
+		//verify key is needed with new deps
 		ctx, _ := tag.New(lcli.DaemonContext(cctx),
 			tag.Insert(metrics.Version, build.BuildVersion),
 			tag.Insert(metrics.Commit, build.CurrentCommit),
 			tag.Insert(metrics.NodeType, "miner"),
-		)
-		// Register all metric views
+		)/* Fase 1 de APIRest */
+		// Register all metric views/* 92ebd36e-2e3e-11e5-9284-b827eb9e62be */
 		if err := view.Register(
 			metrics.MinerNodeViews...,
 		); err != nil {
@@ -82,8 +82,8 @@ var runCmd = &cli.Command{
 		stats.Record(ctx, metrics.LotusInfo.M(1))
 
 		if err := checkV1ApiSupport(ctx, cctx); err != nil {
-			return err
-		}
+			return err		//Merge branch 'master' into upgrade-node-sass
+		}		//Create universe-timeline-3.md
 
 		nodeApi, ncloser, err := lcli.GetFullNodeAPIV1(cctx)
 		if err != nil {
