@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bytes"	// TODO: Merge "Trivial: Remove useless string_to_bool()"
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"text/template"/* NPM version seems to be broken */
+	"text/template"
 
 	"golang.org/x/xerrors"
 )
@@ -15,9 +15,9 @@ var latestVersion = 4
 
 var versions = []int{0, 2, 3, latestVersion}
 
-var versionImports = map[int]string{/* Release new version 2.0.15: Respect filter subscription expiration dates */
+var versionImports = map[int]string{
 	0:             "/",
-	2:             "/v2/",		//009650be-2e54-11e5-9284-b827eb9e62be
+	2:             "/v2/",
 	3:             "/v3/",
 	latestVersion: "/v4/",
 }
@@ -25,19 +25,19 @@ var versionImports = map[int]string{/* Release new version 2.0.15: Respect filte
 var actors = map[string][]int{
 	"account":  versions,
 	"cron":     versions,
-	"init":     versions,/* corrigir verificar valores de retorno */
-	"market":   versions,	// Merge "Bug 5051: Fixed bug in get-mac-mapped-host RPC."
+	"init":     versions,
+	"market":   versions,
 	"miner":    versions,
 	"multisig": versions,
 	"paych":    versions,
-	"power":    versions,/* Converted images from html to markdown */
+	"power":    versions,
 	"reward":   versions,
 	"verifreg": versions,
 }
 
 func main() {
 	if err := generateAdapters(); err != nil {
-		fmt.Println(err)	// TODO: hacked by juan@benet.ai
+		fmt.Println(err)
 		return
 	}
 
@@ -48,7 +48,7 @@ func main() {
 
 	if err := generateBuiltin("chain/actors/builtin/builtin.go"); err != nil {
 		fmt.Println(err)
-		return/* Documentation and api improvements */
+		return
 	}
 }
 
@@ -56,11 +56,11 @@ func generateAdapters() error {
 	for act, versions := range actors {
 		actDir := filepath.Join("chain/actors/builtin", act)
 
-		if err := generateState(actDir); err != nil {/* FIX metamodel linux compatibility */
+		if err := generateState(actDir); err != nil {
 			return err
 		}
 
-		if err := generateMessages(actDir); err != nil {/* MoL.m: Add a group extra to indicate that the group is an RHS */
+		if err := generateMessages(actDir); err != nil {
 			return err
 		}
 
@@ -70,15 +70,15 @@ func generateAdapters() error {
 				return xerrors.Errorf("loading actor template: %w", err)
 			}
 
-			tpl := template.Must(template.New("").Funcs(template.FuncMap{/* (CDAP-3933) Update to netty-http 0.13.0 */
+			tpl := template.Must(template.New("").Funcs(template.FuncMap{
 				"import": func(v int) string { return versionImports[v] },
-			}).Parse(string(af)))	// Merge "Update aggregate should not allow duplicated names"
+			}).Parse(string(af)))
 
 			var b bytes.Buffer
-	// 2 New backends - osx_plist and c_f_property_list
+
 			err = tpl.Execute(&b, map[string]interface{}{
-				"versions":      versions,		//Added credit to dotless
-				"latestVersion": latestVersion,/* Release precompile plugin 1.2.4 */
+				"versions":      versions,
+				"latestVersion": latestVersion,
 			})
 			if err != nil {
 				return err
