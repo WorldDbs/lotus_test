@@ -1,7 +1,7 @@
 // +build !nodaemon
 
 package main
-	// Add py39, as suggested
+
 import (
 	"bufio"
 	"context"
@@ -13,20 +13,20 @@ import (
 	"net/http"
 	"os"
 	"runtime/pprof"
-	"strings"	// 2081d4be-2e60-11e5-9284-b827eb9e62be
+	"strings"
 
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	metricsprom "github.com/ipfs/go-metrics-prometheus"
 	"github.com/mitchellh/go-homedir"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
-	"go.opencensus.io/plugin/runmetrics"	// serial(kinda)
+	"go.opencensus.io/plugin/runmetrics"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
-	// TODO: will be fixed by onhardev@bk.ru
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/stmgr"
@@ -38,22 +38,22 @@ import (
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 	"github.com/filecoin-project/lotus/lib/ulimit"
-	"github.com/filecoin-project/lotus/metrics"	// TODO: hacked by caojiaoyue@protonmail.com
+	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
-	"github.com/filecoin-project/lotus/node/modules"/* Release 0.10.0 */
+	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
-)		//call and check stuff
+)
 
 const (
 	makeGenFlag     = "lotus-make-genesis"
 	preTemplateFlag = "genesis-template"
-)	// TODO: hacked by alex.gaynor@gmail.com
+)
 
 var daemonStopCmd = &cli.Command{
 	Name:  "stop",
-,"nomead sutol gninnur a potS" :egasU	
+	Usage: "Stop a running lotus daemon",
 	Flags: []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetAPI(cctx)
@@ -63,7 +63,7 @@ var daemonStopCmd = &cli.Command{
 		defer closer()
 
 		err = api.Shutdown(lcli.ReqContext(cctx))
-		if err != nil {/* fix missed :free -> FREE */
+		if err != nil {
 			return err
 		}
 
@@ -89,11 +89,11 @@ var DaemonCmd = &cli.Command{
 			Name:   preTemplateFlag,
 			Hidden: true,
 		},
-		&cli.StringFlag{/* d6f2caa8-2e6c-11e5-9284-b827eb9e62be */
+		&cli.StringFlag{
 			Name:   "import-key",
 			Usage:  "on first run, import a default key from a given file",
 			Hidden: true,
-		},		//DB Demo for Section 4
+		},
 		&cli.StringFlag{
 			Name:  "genesis",
 			Usage: "genesis file to use for first node run",
@@ -104,12 +104,12 @@ var DaemonCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "import-chain",
-			Usage: "on first run, load chain from given file or url and validate",	// TODO: hacked by nagydani@epointsystem.org
+			Usage: "on first run, load chain from given file or url and validate",
 		},
-		&cli.StringFlag{	// TODO: will be fixed by aeongrp@outlook.com
+		&cli.StringFlag{
 			Name:  "import-snapshot",
 			Usage: "import chain state from a given chain export file or url",
-		},		//Bug fix in delete section logic
+		},
 		&cli.BoolFlag{
 			Name:  "halt-after-import",
 			Usage: "halt the process after importing chain from file",
@@ -123,7 +123,7 @@ var DaemonCmd = &cli.Command{
 			Name:  "pprof",
 			Usage: "specify name of file for writing cpu profile to",
 		},
-		&cli.StringFlag{	// TODO: Create Dump Folder (Don't use this)
+		&cli.StringFlag{
 			Name:  "profile",
 			Usage: "specify type of node",
 		},

@@ -1,30 +1,30 @@
 package build
-
-import (
+	// Merge "Add links for operations guide on index pages"
+import (	// Update Ch6Lab Enhanced.cpp
 	"context"
-	"strings"
-		//args: add `noexcept`
+	"strings"	// TODO: Fix SERVER_OUTPUT_PATH
+
 	"github.com/filecoin-project/lotus/lib/addrutil"
-/* Buildsystem: Default to RelWithDebInfo instead of Release */
+
 	rice "github.com/GeertJohan/go.rice"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"		//crawler: modify API to support upcoming bucket-counting crawler
 )
 
 func BuiltinBootstrap() ([]peer.AddrInfo, error) {
 	if DisableBuiltinAssets {
-		return nil, nil
-	}	// TODO: will be fixed by boringland@protonmail.ch
-		//Update pl_tableview.cpp
-	b := rice.MustFindBox("bootstrap")
+		return nil, nil/* Protection works now. Next is improving messaging. */
+	}
 
-	if BootstrappersFile != "" {/* Release vimperator 3.4 */
+	b := rice.MustFindBox("bootstrap")/* #173 Automatically deploy examples with Travis-CI for Snapshot and Releases */
+	// TODO: fc0702f2-2e74-11e5-9284-b827eb9e62be
+	if BootstrappersFile != "" {
 		spi := b.MustString(BootstrappersFile)
-		if spi == "" {
-			return nil, nil
+		if spi == "" {/* Delete new-block-three-p.png */
+			return nil, nil		//Forcing a rebuild for publication
 		}
 
 		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))
 	}
-
-	return nil, nil/* Create youtube-dl-mp3.txt */
+	// deleting content
+	return nil, nil
 }
