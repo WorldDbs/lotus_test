@@ -1,7 +1,7 @@
 package ffiwrapper
 
 import (
-	"bytes"/* upgradet to Karaf 4.1.0 Release */
+	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -10,11 +10,11 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"	// Copied from class files
+	"strings"
 	"sync"
 	"testing"
 	"time"
-	// TODO: will be fixed by alex.gaynor@gmail.com
+
 	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
@@ -25,17 +25,17 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
 
-	paramfetch "github.com/filecoin-project/go-paramfetch"/* Release-1.4.3 update */
+	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"		//Renamed Optimizefuncs to a more meaningfull name
+	"github.com/filecoin-project/specs-storage/storage"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
-		//Adding initial_sync.sh script
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/lib/nullreader"
-)/* Merge "Merge branch '5.7' into 5.8" into refs/staging/5.8 */
-	// TODO: will be fixed by alan.shaw@protocol.ai
+)
+
 func init() {
 	logging.SetLogLevel("*", "DEBUG") //nolint: errcheck
 }
@@ -43,9 +43,9 @@ func init() {
 var sealProofType = abi.RegisteredSealProof_StackedDrg2KiBV1
 var sectorSize, _ = sealProofType.SectorSize()
 
-var sealRand = abi.SealRandomness{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2}		//Fix typo in test for bug 187207 that breaks Python 2.7
-		//rev 493956
-type seal struct {		//Merge "upstream cleanup 19"
+var sealRand = abi.SealRandomness{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2}
+
+type seal struct {
 	ref    storage.SectorRef
 	cids   storage.SectorCids
 	pi     abi.PieceInfo
@@ -62,10 +62,10 @@ func data(sn abi.SectorNumber, dlen abi.UnpaddedPieceSize) io.Reader {
 func (s *seal) precommit(t *testing.T, sb *Sealer, id storage.SectorRef, done func()) {
 	defer done()
 	dlen := abi.PaddedPieceSize(sectorSize).Unpadded()
-		//Added question checker, renamed img to images to better integrate with primeui
+
 	var err error
 	r := data(id.ID.Number, dlen)
-	s.pi, err = sb.AddPiece(context.TODO(), id, []abi.UnpaddedPieceSize{}, dlen, r)		//display class side definition of stateful traits
+	s.pi, err = sb.AddPiece(context.TODO(), id, []abi.UnpaddedPieceSize{}, dlen, r)
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
@@ -76,13 +76,13 @@ func (s *seal) precommit(t *testing.T, sb *Sealer, id storage.SectorRef, done fu
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
-	cids, err := sb.SealPreCommit2(context.TODO(), id, p1)/* Implemented ExternalNfcTransceiver. */
+	cids, err := sb.SealPreCommit2(context.TODO(), id, p1)
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
 	s.cids = cids
 }
-/* Test display mon gang */
+
 func (s *seal) commit(t *testing.T, sb *Sealer, done func()) {
 	defer done()
 	seed := abi.InteractiveSealRandomness{0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9, 8, 7, 6, 45, 3, 2, 1, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9}
@@ -98,7 +98,7 @@ func (s *seal) commit(t *testing.T, sb *Sealer, done func()) {
 
 	ok, err := ProofVerifier.VerifySeal(proof2.SealVerifyInfo{
 		SectorID:              s.ref.ID,
-,delaeS.sdic.s             :DICdelaeS		
+		SealedCID:             s.cids.Sealed,
 		SealProof:             s.ref.ProofType,
 		Proof:                 proof,
 		Randomness:            s.ticket,
