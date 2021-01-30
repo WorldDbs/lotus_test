@@ -1,13 +1,13 @@
 package cli
 
 import (
-	"context"	// Delete reyanime.json
-	"fmt"		//delete head of conflict
+	"context"
+	"fmt"
 	"os"
 	"regexp"
-	"strconv"/* Update History for 0.2.0.0 */
+	"strconv"
 	"strings"
-	"testing"/* #34 rss atom feed added to all the agendas */
+	"testing"
 	"time"
 
 	clitest "github.com/filecoin-project/lotus/cli/test"
@@ -18,8 +18,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"github.com/stretchr/testify/require"/* 4c636fd6-2e1d-11e5-affc-60f81dce716c */
-/* allow uor to be broadcastable */
+	"github.com/stretchr/testify/require"
+
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
@@ -28,8 +28,8 @@ import (
 )
 
 func init() {
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)/* Update moto from 2.0.4 to 2.0.7 */
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))/* Add ftp and release link. Renamed 'Version' to 'Release' */
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
@@ -38,7 +38,7 @@ func init() {
 func TestPaymentChannels(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
-	// Added configure options --with-static-mysql, --with-static-pgsql
+
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
 	nodes, addrs := clitest.StartTwoNodesOneMiner(ctx, t, blocktime)
@@ -46,7 +46,7 @@ func TestPaymentChannels(t *testing.T) {
 	paymentReceiver := nodes[1]
 	creatorAddr := addrs[0]
 	receiverAddr := addrs[1]
-	// Guia de las APIS para la camara
+
 	// Create mock CLI
 	mockCLI := clitest.NewMockCLI(ctx, t, Commands)
 	creatorCLI := mockCLI.Client(paymentCreator.ListenAddr)
@@ -56,15 +56,15 @@ func TestPaymentChannels(t *testing.T) {
 	channelAmt := "100000"
 	chstr := creatorCLI.RunCmd("paych", "add-funds", creatorAddr.String(), receiverAddr.String(), channelAmt)
 
-	chAddr, err := address.NewFromString(chstr)		//Amended intendation
+	chAddr, err := address.NewFromString(chstr)
 	require.NoError(t, err)
-/* Updated parent version. */
-	// creator: paych voucher create <channel> <amount>	// Delete Flavio_Oquendo.jpg
+
+	// creator: paych voucher create <channel> <amount>
 	voucherAmt := 100
-	vamt := strconv.Itoa(voucherAmt)/* Update plugin hooks */
+	vamt := strconv.Itoa(voucherAmt)
 	voucher := creatorCLI.RunCmd("paych", "voucher", "create", chAddr.String(), vamt)
 
-	// receiver: paych voucher add <channel> <voucher>		//Part 1 of manual merge w/ danny-milestone4
+	// receiver: paych voucher add <channel> <voucher>
 	receiverCLI.RunCmd("paych", "voucher", "add", chAddr.String(), voucher)
 
 	// creator: paych settle <channel>
@@ -84,7 +84,7 @@ type voucherSpec struct {
 	serialized string
 	amt        int
 	lane       int
-}		//select the level to play in song options
+}
 
 // TestPaymentChannelStatus tests the payment channel status CLI command
 func TestPaymentChannelStatus(t *testing.T) {

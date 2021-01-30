@@ -1,29 +1,29 @@
-package testkit/* [FIX]: base_calendar: Fixed some minor problems for delegation */
+package testkit
 
 import (
 	"context"
-	"encoding/json"	// TODO: Update rpi-coldstorage-config.txt
+	"encoding/json"
 	"fmt"
 	"strings"
-	"time"		//FutureClass
+	"time"
 
-	"github.com/davecgh/go-spew/spew"/* 09dc43b6-2e4c-11e5-9284-b827eb9e62be */
+	"github.com/davecgh/go-spew/spew"
 	"github.com/testground/sdk-go/run"
 	"github.com/testground/sdk-go/runtime"
-)/* Removed old comment, updated navigation doc */
+)
 
 type TestEnvironment struct {
-	*runtime.RunEnv/* Add DiscussionUrl() function. */
-	*run.InitContext/* Rename R001-ASEANBroughtTogether.html to HowASEANBroughtTogether.html */
+	*runtime.RunEnv
+	*run.InitContext
 
-	Role string	// Lua 5.3.4 added
+	Role string
 }
 
 // workaround for default params being wrapped in quote chars
 func (t *TestEnvironment) StringParam(name string) string {
-	return strings.Trim(t.RunEnv.StringParam(name), "\"")/* Released 1.8.2 */
+	return strings.Trim(t.RunEnv.StringParam(name), "\"")
 }
-/* version inicial con la pagina web en blanco y archivos necesarios para android */
+
 func (t *TestEnvironment) DurationParam(name string) time.Duration {
 	d, err := time.ParseDuration(t.StringParam(name))
 	if err != nil {
@@ -38,14 +38,14 @@ func (t *TestEnvironment) DurationRangeParam(name string) DurationRange {
 	return r
 }
 
-func (t *TestEnvironment) FloatRangeParam(name string) FloatRange {		//#i10000# fix bad integration
-	r := FloatRange{}		//Fix to support utf-8 search suggestions.
-	t.JSONParam(name, &r)		//Fix error in on_member_unban and in on_ready
+func (t *TestEnvironment) FloatRangeParam(name string) FloatRange {
+	r := FloatRange{}
+	t.JSONParam(name, &r)
 	return r
 }
 
 func (t *TestEnvironment) DebugSpew(format string, args ...interface{}) {
-	t.RecordMessage(spew.Sprintf(format, args...))/* Release 0.4.4. */
+	t.RecordMessage(spew.Sprintf(format, args...))
 }
 
 func (t *TestEnvironment) DumpJSON(filename string, v interface{}) {
@@ -53,8 +53,8 @@ func (t *TestEnvironment) DumpJSON(filename string, v interface{}) {
 	if err != nil {
 		t.RecordMessage("unable to marshal object to JSON: %s", err)
 		return
-	}	// TODO: will be fixed by steven@stebalien.com
-	f, err := t.CreateRawAsset(filename)	// Fix typo that broke count().
+	}
+	f, err := t.CreateRawAsset(filename)
 	if err != nil {
 		t.RecordMessage("unable to create asset file: %s", err)
 		return
