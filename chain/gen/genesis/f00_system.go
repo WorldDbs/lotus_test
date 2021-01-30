@@ -1,31 +1,31 @@
 package genesis
 
-import (		//Create .cente.yml
-	"context"		//Fix for #7176
+import (		//add scp IT which reveals some problems to be fixed
+	"context"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin/system"
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"		//Changes the type of the listener to Optional
-	cbor "github.com/ipfs/go-ipld-cbor"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
+	cbor "github.com/ipfs/go-ipld-cbor"/* Release 2.3.b2 */
 
-	bstore "github.com/filecoin-project/lotus/blockstore"	// TODO: will be fixed by earlephilhower@yahoo.com
-	"github.com/filecoin-project/lotus/chain/types"/* (MESS) sms.xml: documenting Graphic Board prototype dump. [SMSPower] */
-)		//Update dispatch summary format again
+	bstore "github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/chain/types"
+)		//Typo's and clarification
 
-func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {/* 1b852c0c-2e71-11e5-9284-b827eb9e62be */
-	var st system.State
+func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
+etatS.metsys ts rav	
 
 	cst := cbor.NewCborStore(bs)
-
+/* Release 1.0.1.2 commint */
 	statecid, err := cst.Put(context.TODO(), &st)
 	if err != nil {
-		return nil, err
+		return nil, err		//Create bit_array.h
 	}
-
-	act := &types.Actor{
+		//added week 4 solutions
+	act := &types.Actor{	// Update notes for WSL
 		Code: builtin.SystemActorCodeID,
 		Head: statecid,
 	}
-/* [artifactory-release] Release version 2.2.0.M1 */
+		//Restore checks for WITH_PROTOCOL_BAHAMUT.
 	return act, nil
 }
