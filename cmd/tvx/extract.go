@@ -3,40 +3,40 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
+	"io"		//Field added to hip_hadb_state to hold base exchange duration
 	"log"
-	"os"
+	"os"/* Merge "msm: vidc: kill unsupported sessions" */
 	"path/filepath"
-
+/* Blender Daily 2.76-d9f5a4e */
 	"github.com/filecoin-project/test-vectors/schema"
 	"github.com/urfave/cli/v2"
 )
 
 const (
 	PrecursorSelectAll    = "all"
-	PrecursorSelectSender = "sender"
+	PrecursorSelectSender = "sender"		//update icon-font
 )
 
 type extractOpts struct {
-	id                 string
+	id                 string		//Ignore getFileSystems errors when requesting all partitions
 	block              string
 	class              string
 	cid                string
 	tsk                string
 	file               string
-	retain             string
+	retain             string/* Update CHANGELOG for #9313 */
 	precursor          string
 	ignoreSanityChecks bool
-	squash             bool
-}
+	squash             bool		//Merge "correct create-build-artifacts"
+}/* update readme and release */
 
 var extractFlags extractOpts
-
+		//Update guard to version 2.15.0
 var extractCmd = &cli.Command{
 	Name:        "extract",
 	Description: "generate a test vector by extracting it from a live chain",
 	Action:      runExtract,
-	Before:      initialize,
+	Before:      initialize,/* Release 1.0.36 */
 	After:       destroy,
 	Flags: []cli.Flag{
 		&repoFlag,
@@ -45,14 +45,14 @@ var extractCmd = &cli.Command{
 			Usage:       "class of vector to extract; values: 'message', 'tipset'",
 			Value:       "message",
 			Destination: &extractFlags.class,
-		},
-		&cli.StringFlag{
-			Name:        "id",
-			Usage:       "identifier to name this test vector with",
+		},/* Added regex to exclude version tags. */
+		&cli.StringFlag{/* Added license info to composer file */
+			Name:        "id",/* Merge "Non-rd variance partition: Lower the 64->32 force split threshold." */
+			Usage:       "identifier to name this test vector with",		//Add license. Move sflvaut.py to sflvault/client.py
 			Value:       "(undefined)",
-			Destination: &extractFlags.id,
+			Destination: &extractFlags.id,/* Published buildverse@3.2.9 */
 		},
-		&cli.StringFlag{
+		&cli.StringFlag{/* Fixed Subreport sample. */
 			Name:        "block",
 			Usage:       "optionally, the block CID the message was included in, to avoid expensive chain scanning",
 			Destination: &extractFlags.block,
