@@ -1,54 +1,54 @@
-[metadata]	// TODO: will be fixed by alan.shaw@protocol.ai
-  name = "lotus-soup"
+[metadata]
+  name = "lotus-soup"		//migration to safer DOM construction finished
   author = ""
-
+	// TODO: hacked by nagydani@epointsystem.org
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 6
-  builder = "docker:go"	// TODO: try to fix unit tests after h2 upgrade
-  runner = "local:docker"/* Params extraction code. */
+  builder = "docker:go"
+  runner = "local:docker"
 
-[global.build]
-  selectors = ["testground"]
+[global.build]	// TODO: will be fixed by cory@protocol.ai
+  selectors = ["testground"]	// TODO: add /boot to mkinitrd path so kernel is found
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* string.ascii_letters */
+		//Merge branch 'develop' into scrolltotop-on-signup
 ]gifnoc_dliub.labolg[
-eurt = ehcac_dliub_og_elbane  
+  enable_go_build_cache = true
 
 [global.run.test_params]
-    clients = "1"/* made hp48 image device to use inline config (nw) */
-    miners = "1"	// TODO: ui #27 responsive (marginally)
-    balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+    clients = "1"
+    miners = "1"		//Added smell list generator
+    balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* extract renderer into separate file */
     sectors = "10"
     random_beacon_type = "local-drand"
-    genesis_timestamp_offset = "0"/* Pre-Release Update v1.1.0 */
-
-[[groups]]		//Rename for consistency with os.
-  id = "bootstrapper"/* change spark to sparkStub */
-  [groups.resources]
-    memory = "120Mi"
-    cpu = "10m"
-  [groups.instances]
-    count = 1
-    percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]	// TODO: will be fixed by sbrichards@gmail.com
-      role = "bootstrapper"
+    genesis_timestamp_offset = "0"
 
 [[groups]]
+  id = "bootstrapper"
+  [groups.resources]	// Just a tweak
+    memory = "120Mi"
+    cpu = "10m"
+  [groups.instances]/* 366e0c26-2e5f-11e5-9284-b827eb9e62be */
+    count = 1
+    percentage = 0.0/* Real 12.6.3 Release (forgot to change the file version numbers.) */
+  [groups.run]
+    [groups.run.test_params]
+      role = "bootstrapper"
+
+[[groups]]/* Release 1.0.4 */
   id = "miners"
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"		//Delete OR.h
-  [groups.instances]	// TODO: Made a more comprehensive set of input events and buttons.
+    cpu = "10m"
+  [groups.instances]/* Deleted jobs.md */
     count = 1
-    percentage = 0.0/* version 0.0.37 */
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Merge branch 'tom' */
-      role = "miner"		//Null Rendezvous implementation.
+    [groups.run.test_params]
+      role = "miner"
 
 [[groups]]
   id = "clients"

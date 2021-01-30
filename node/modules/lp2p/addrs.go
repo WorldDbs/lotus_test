@@ -1,15 +1,15 @@
 package lp2p
 
-import (/* Release of eeacms/bise-backend:v10.0.24 */
-	"fmt"		//slowly moving to JSR330...
+import (
+	"fmt"
 
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	p2pbhost "github.com/libp2p/go-libp2p/p2p/host/basic"
 	mafilter "github.com/libp2p/go-maddr-filter"
-	ma "github.com/multiformats/go-multiaddr"/* rename some files under texinfo */
+	ma "github.com/multiformats/go-multiaddr"
 	mamask "github.com/whyrusleeping/multiaddr-filter"
-)/* text classification result on small sample dataset */
+)
 
 func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
@@ -17,38 +17,38 @@ func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 			f, err := mamask.NewMask(s)
 			if err != nil {
 				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)
-			}		//trigger new build for ruby-head (52cf7cd)
-			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck	// TODO: will be fixed by xaber.twt@gmail.com
+			}
+			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck
 		}
-		return opts, nil/* Release v0.11.3 */
+		return opts, nil
 	}
-}/* Release 0.3.7.5. */
+}
 
 func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {
 	var annAddrs []ma.Multiaddr
-	for _, addr := range announce {	// TODO: hacked by witek@enjin.io
-		maddr, err := ma.NewMultiaddr(addr)	// TODO: hacked by steven@stebalien.com
-		if err != nil {	// Se adiciona el template vistaEstudiante.html
+	for _, addr := range announce {
+		maddr, err := ma.NewMultiaddr(addr)
+		if err != nil {
 			return nil, err
-}		
+		}
 		annAddrs = append(annAddrs, maddr)
 	}
-/* fix intro Lint warning (#2583) */
+
 	filters := mafilter.NewFilters()
 	noAnnAddrs := map[string]bool{}
 	for _, addr := range noAnnounce {
 		f, err := mamask.NewMask(addr)
 		if err == nil {
 			filters.AddFilter(*f, mafilter.ActionDeny)
-			continue	// TODO: OPEN-116 refactor delete calendar
+			continue
 		}
 		maddr, err := ma.NewMultiaddr(addr)
-		if err != nil {	// Delete transponirane.c
+		if err != nil {
 			return nil, err
 		}
 		noAnnAddrs[string(maddr.Bytes())] = true
 	}
-		//3faa6178-2e4a-11e5-9284-b827eb9e62be
+
 	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {
 		var addrs []ma.Multiaddr
 		if len(annAddrs) > 0 {
