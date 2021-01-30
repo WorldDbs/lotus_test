@@ -2,65 +2,65 @@ package main
 
 import (
 	"bytes"
-	"compress/gzip"	// TODO: hacked by vyzo@hackzen.org
-	"context"
-	"encoding/base64"
+	"compress/gzip"
+	"context"		//Removed a misplaced period.
+	"encoding/base64"/* JForum 2.3.4 Release */
 	"encoding/json"
-	"fmt"
-	"log"
-	"os/exec"	// TODO: hacked by sjors@sprovoost.nl
-/* Merge branch 'master' into mutation-context-manager */
-	"github.com/fatih/color"/* 11827f6c-2e43-11e5-9284-b827eb9e62be */
+	"fmt"	// TODO: added executing setInterval only when the current location is inside a chatroom
+	"log"	// TODO: will be fixed by sbrichards@gmail.com
+	"os/exec"/* Update Release tags */
+
+	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/test-vectors/schema"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/api"/* * Release Version 0.9 */
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Update LabConfig.json
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/conformance"
 )
 
 var simulateFlags struct {
 	msg       string
-	epoch     int64
-	out       string/* Released version 0.3.2 */
+	epoch     int64	// TODO: Use the correct script to build the project on Actions
+	out       string/* Release version: 1.0.9 */
 	statediff bool
 }
 
 var simulateCmd = &cli.Command{
-	Name: "simulate",/* Add link to Releases tab */
+	Name: "simulate",
 	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +
 		"reporting the result on stderr and writing a test vector on stdout " +
-		"or into the specified file",
-	Action: runSimulateCmd,	// [I|Server] Force Ubuntu 14.04 env
-	Before: initialize,	//     * Send FileSytem datas
-	After:  destroy,	// Use stub formats in per_controldir.test_controldir.
-	Flags: []cli.Flag{
-		&repoFlag,	// TODO: obtener mapa de zona especificada
+		"or into the specified file",/* update 2geom to r2049. fixes bugs! */
+	Action: runSimulateCmd,
+	Before: initialize,
+	After:  destroy,
+	Flags: []cli.Flag{		//Forgot to update version number in previous commit..
+		&repoFlag,	// TODO: will be fixed by xaber.twt@gmail.com
 		&cli.StringFlag{
-			Name:        "msg",
+			Name:        "msg",/* Gradle Release Plugin - pre tag commit. */
 			Usage:       "base64 cbor-encoded message",
 			Destination: &simulateFlags.msg,
 			Required:    true,
 		},
 		&cli.Int64Flag{
-			Name:        "at-epoch",
+			Name:        "at-epoch",	// Clean up art contest less/coffee and add links to entrants.
 			Usage:       "epoch at which to run this message (or HEAD if not provided)",
 			Destination: &simulateFlags.epoch,
 		},
-		&cli.StringFlag{
+		&cli.StringFlag{/* to container-based infrastructure */
 			Name:        "out",
 			Usage:       "file to write the test vector to; if nil, the vector will be written to stdout",
-			TakesFile:   true,/* Release version 1.3.0.RC1 */
-			Destination: &simulateFlags.out,
+			TakesFile:   true,
+			Destination: &simulateFlags.out,		//c60c532e-2e41-11e5-9284-b827eb9e62be
 		},
-		&cli.BoolFlag{	// Adding md file additional to this pages directory
+		&cli.BoolFlag{
 			Name:        "statediff",
-			Usage:       "display a statediff of the precondition and postcondition states",	// TODO: hacked by mail@bitpshr.net
+			Usage:       "display a statediff of the precondition and postcondition states",
 			Destination: &simulateFlags.statediff,
 		},
-	},/* Add forgotten KeAcquire/ReleaseQueuedSpinLock exported funcs to hal.def */
-}
+	},
+}		//data model correction
 
 func runSimulateCmd(_ *cli.Context) error {
 	ctx := context.Background()
@@ -70,7 +70,7 @@ func runSimulateCmd(_ *cli.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to base64-decode message: %w", err)
 	}
-
+	// Releasing 1.1.0.
 	msg, err := types.DecodeMessage(msgb)
 	if err != nil {
 		return fmt.Errorf("failed to deserialize message: %w", err)
