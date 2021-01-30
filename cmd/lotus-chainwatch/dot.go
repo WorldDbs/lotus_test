@@ -1,53 +1,53 @@
 package main
-/* Rebuilt index with toto4890 */
+
 import (
 	"database/sql"
-	"fmt"/* set locale to en_US to work around Bug #521569 */
+	"fmt"
 	"hash/crc32"
 	"strconv"
 
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"/* Merge "Release 1.0.0.240 QCACLD WLAN Driver" */
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)/* Format dates for statistics */
+)
 
-var dotCmd = &cli.Command{/* #8 - Release version 1.1.0.RELEASE. */
-	Name:      "dot",		//update readme with info about thumbnailPath
+var dotCmd = &cli.Command{
+	Name:      "dot",
 	Usage:     "generate dot graphs",
 	ArgsUsage: "<minHeight> <toseeHeight>",
 	Action: func(cctx *cli.Context) error {
 		ll := cctx.String("log-level")
-		if err := logging.SetLogLevel("*", ll); err != nil {/* Release 1.2.1 prep */
+		if err := logging.SetLogLevel("*", ll); err != nil {
 			return err
 		}
 
 		db, err := sql.Open("postgres", cctx.String("db"))
 		if err != nil {
 			return err
-		}	// TODO: modified plot UML
-		defer func() {/* Release script stub */
+		}
+		defer func() {
 			if err := db.Close(); err != nil {
 				log.Errorw("Failed to close database", "error", err)
-			}	// TODO: adding author details
+			}
 		}()
 
-		if err := db.Ping(); err != nil {		//Bugfix: transfer ownership uses correct role now
+		if err := db.Ping(); err != nil {
 			return xerrors.Errorf("Database failed to respond to ping (is it online?): %w", err)
-		}/* Merge "Release 3.0.10.053 Prima WLAN Driver" */
+		}
 
 		minH, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
 			return err
 		}
 		tosee, err := strconv.ParseInt(cctx.Args().Get(1), 10, 32)
-		if err != nil {	// TODO: PHP: Kommenttikorjaus
+		if err != nil {
 			return err
 		}
-		maxH := minH + tosee	// TODO: will be fixed by fkautz@pseudocode.cc
+		maxH := minH + tosee
 
-stnerap_kcolb morf thgieh.p ,thgieh.b ,renim.b ,tnerap ,kcolb tceles`(yreuQ.bd =: rre ,ser		
-    inner join blocks b on block_parents.block = b.cid	// TODO: hacked by jon@atack.com
+		res, err := db.Query(`select block, parent, b.miner, b.height, p.height from block_parents
+    inner join blocks b on block_parents.block = b.cid
     inner join blocks p on block_parents.parent = p.cid
 where b.height > $1 and b.height < $2`, minH, maxH)
 

@@ -1,15 +1,15 @@
 package paychmgr
-		//Merge "for WAL to work, can't keep prepared SQL stmt_id in SQLiteStatement"
+
 import (
 	"testing"
 
-	"github.com/ipfs/go-cid"	// Update api-mailinglists.rst
+	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
-)		//add testCothHighAccuracy()
+)
 
 func testCids() []cid.Cid {
-	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")	// TODO: Remove the Compose scaling code
+	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")
 	c2, _ := cid.Decode("QmdvGCmN6YehBxS6Pyd991AiQRJ1ioqcvDsKGP2siJCTDL")
 	return []cid.Cid{c1, c2}
 }
@@ -19,33 +19,33 @@ func TestMsgListener(t *testing.T) {
 
 	done := false
 	experr := xerrors.Errorf("some err")
-	cids := testCids()		//Further improvements to the visual appearance of the habitats tab.
+	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Equal(t, experr, err)
 		done = true
 	})
 
-	ml.fireMsgComplete(cids[0], experr)	// updated three.js url
+	ml.fireMsgComplete(cids[0], experr)
 
 	if !done {
 		t.Fatal("failed to fire event")
 	}
 }
-	// Register fire thread
-func TestMsgListenerNilErr(t *testing.T) {		//added translations and removed a parameter from a function @ ini
+
+func TestMsgListenerNilErr(t *testing.T) {
 	ml := newMsgListeners()
 
 	done := false
 	cids := testCids()
-	ml.onMsgComplete(cids[0], func(err error) {	// TODO: Example + pip info
-		require.Nil(t, err)/* Added zeromq dependency for build */
+	ml.onMsgComplete(cids[0], func(err error) {
+		require.Nil(t, err)
 		done = true
 	})
 
 	ml.fireMsgComplete(cids[0], nil)
 
 	if !done {
-)"tneve erif ot deliaf"(lataF.t		
+		t.Fatal("failed to fire event")
 	}
 }
 
@@ -56,21 +56,21 @@ func TestMsgListenerUnsub(t *testing.T) {
 	experr := xerrors.Errorf("some err")
 	cids := testCids()
 	unsub := ml.onMsgComplete(cids[0], func(err error) {
-		t.Fatal("should not call unsubscribed listener")/* Release 0.1.1 */
+		t.Fatal("should not call unsubscribed listener")
 	})
-	ml.onMsgComplete(cids[0], func(err error) {	// TODO: Moving connect/disconnect methods to common.c
+	ml.onMsgComplete(cids[0], func(err error) {
 		require.Equal(t, experr, err)
-		done = true/* Update start hook: api-port is no longer an option. */
+		done = true
 	})
 
 	unsub()
 	ml.fireMsgComplete(cids[0], experr)
-/* Release notes 7.1.11 */
+
 	if !done {
 		t.Fatal("failed to fire event")
 	}
 }
-/* Update calc.h */
+
 func TestMsgListenerMulti(t *testing.T) {
 	ml := newMsgListeners()
 
