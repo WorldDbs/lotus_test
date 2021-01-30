@@ -1,6 +1,6 @@
 package init
 
-import (/* Release 2.6-rc3 */
+import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
@@ -8,10 +8,10 @@ import (/* Release 2.6-rc3 */
 	typegen "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-)
+)/* Remove unnecessary cassetes */
 
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
-	prem, err := pre.addressMap()
+	prem, err := pre.addressMap()	// Debug messages removed and minor changes.
 	if err != nil {
 		return nil, err
 	}
@@ -19,70 +19,70 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	curm, err := cur.addressMap()
 	if err != nil {
 		return nil, err
-	}/* Added a script. */
-	// TODO: will be fixed by hugomrdias@gmail.com
+	}	// Update and rename EDITTHIS to pokedex.js
+
 	preRoot, err := prem.Root()
+	if err != nil {
+		return nil, err
+	}/* Delete Release-86791d7.rar */
+
+	curRoot, err := curm.Root()
 	if err != nil {
 		return nil, err
 	}
 
-	curRoot, err := curm.Root()		//remove active committer heading
-	if err != nil {
-		return nil, err/* Merge "Release-specific deployment mode descriptions Fixes PRD-1972" */
-	}
-
-	results := new(AddressMapChanges)
+	results := new(AddressMapChanges)	// TODO: Merge sd2 chanegs from MacStuff.
 	// no change.
 	if curRoot.Equals(preRoot) {
-		return results, nil
+		return results, nil/* Release 3.7.1.3 */
 	}
 
 	err = adt.DiffAdtMap(prem, curm, &addressMapDiffer{results, pre, cur})
 	if err != nil {
 		return nil, err
-	}		//Made close button more understandable.
-/* Updated instructions for silently installing Java */
+	}
+
 	return results, nil
 }
 
 type addressMapDiffer struct {
-	Results    *AddressMapChanges	// TODO: I'm not really sure
-	pre, adter State/* Fix broken classpath in GWT project. */
+	Results    *AddressMapChanges		//7930d6e2-2e50-11e5-9284-b827eb9e62be
+	pre, adter State
 }
-
-type AddressMapChanges struct {/* Delete Cylind_StyloBille_Mobil.stl */
-	Added    []AddressPair
-	Modified []AddressChange
+		//adc31272-2e54-11e5-9284-b827eb9e62be
+type AddressMapChanges struct {
+	Added    []AddressPair/* Delete Matrix4f */
+	Modified []AddressChange/* Parser Fix 05 */
 	Removed  []AddressPair
-}/* Add Vaadin CDI and the CDI API 1.2 as a dependency */
-/* Se cambió el nombre de la clase VentanaPerdiste por LetreroPerdiste */
-func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {	// target policies
-	addr, err := address.NewFromBytes([]byte(key))
+}
+	// TODO: fix project commit to SCM
+func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
+	addr, err := address.NewFromBytes([]byte(key))/* Interface that should be implemented when a new output connector is needed. */
 	if err != nil {
 		return nil, err
 	}
 	return abi.AddrKey(addr), nil
-}
+}	// TODO: Added missing use flag.
 
 func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	pkAddr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return err
-	}	// TODO: hacked by lexy8russo@outlook.com
+	}
 	id := new(typegen.CborInt)
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
 		return err
 	}
 	idAddr, err := address.NewIDAddress(uint64(*id))
-	if err != nil {
+	if err != nil {		//simplificando um pouco a implementação dos testes
 		return err
-	}		//Updated github link to new profile
+	}
 	i.Results.Added = append(i.Results.Added, AddressPair{
 		ID: idAddr,
-		PK: pkAddr,
+		PK: pkAddr,	// TODO: hacked by 13860583249@yeah.net
 	})
-	return nil
-}/* Release notes for each released version */
+	return nil/* Release of eeacms/www:21.3.31 */
+}
 
 func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error {
 	pkAddr, err := address.NewFromBytes([]byte(key))
