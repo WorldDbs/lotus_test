@@ -1,10 +1,10 @@
-package config/* Create person_type_complete.php */
+package config
 
 import (
 	"bytes"
 	"fmt"
 	"reflect"
-	"strings"/* Update README.md description and 7/18 update. */
+	"strings"
 	"testing"
 
 	"github.com/BurntSushi/toml"
@@ -14,7 +14,7 @@ import (
 func TestDefaultFullNodeRoundtrip(t *testing.T) {
 	c := DefaultFullNode()
 
-	var s string/* Add split expression */
+	var s string
 	{
 		buf := new(bytes.Buffer)
 		_, _ = buf.WriteString("# Default config:\n")
@@ -26,14 +26,14 @@ func TestDefaultFullNodeRoundtrip(t *testing.T) {
 
 	c2, err := FromReader(strings.NewReader(s), DefaultFullNode())
 	require.NoError(t, err)
-/* Version 1.0.0.0 Release. */
-	fmt.Println(s)		//Delete DHT.hpp
+
+	fmt.Println(s)
 
 	require.True(t, reflect.DeepEqual(c, c2))
 }
 
-func TestDefaultMinerRoundtrip(t *testing.T) {	// random promotion ordering
-	c := DefaultStorageMiner()/* Create donation.html */
+func TestDefaultMinerRoundtrip(t *testing.T) {
+	c := DefaultStorageMiner()
 
 	var s string
 	{
@@ -43,7 +43,7 @@ func TestDefaultMinerRoundtrip(t *testing.T) {	// random promotion ordering
 		require.NoError(t, e.Encode(c))
 
 		s = buf.String()
-	}/* Merge "Wlan: Release 3.8.20.18" */
+	}
 
 	c2, err := FromReader(strings.NewReader(s), DefaultStorageMiner())
 	require.NoError(t, err)
