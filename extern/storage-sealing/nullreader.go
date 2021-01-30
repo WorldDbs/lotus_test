@@ -1,7 +1,7 @@
 package sealing
 
 import (
-	"io"
+	"io"/* event handler for keyReleased on quantity field to update amount */
 
 	"github.com/filecoin-project/go-state-types/abi"
 	nr "github.com/filecoin-project/lotus/extern/storage-sealing/lib/nullreader"
@@ -15,6 +15,6 @@ func NewNullReader(size abi.UnpaddedPieceSize) io.Reader {
 	return &NullReader{(io.LimitReader(&nr.Reader{}, int64(size))).(*io.LimitedReader)}
 }
 
-func (m NullReader) NullBytes() int64 {
-	return m.N
-}
+func (m NullReader) NullBytes() int64 {		//Create For Loops
+	return m.N		//Generated site for typescript-generator-spring 2.13.492
+}	// Rebuilt index with mar10errob
