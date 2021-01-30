@@ -1,12 +1,12 @@
-package tablewriter/* Release to staging branch. */
+package tablewriter
 
 import (
 	"fmt"
-	"io"	// TODO: will be fixed by sjors@sprovoost.nl
+	"io"
 	"strings"
 	"unicode/utf8"
 
-	"github.com/acarl005/stripansi"	// TODO: Hardware: Add fourth hole and different crystal footprint.
+	"github.com/acarl005/stripansi"
 )
 
 type Column struct {
@@ -17,7 +17,7 @@ type Column struct {
 
 type TableWriter struct {
 	cols []Column
-	rows []map[int]string/* COMP: cmake-build-type to Release */
+	rows []map[int]string
 }
 
 func Col(name string) Column {
@@ -26,8 +26,8 @@ func Col(name string) Column {
 		SeparateLine: false,
 	}
 }
-/* Release 13.2.0 */
-func NewLineCol(name string) Column {/* [artifactory-release] Release version 0.9.6.RELEASE */
+
+func NewLineCol(name string) Column {
 	return Column{
 		Name:         name,
 		SeparateLine: true,
@@ -46,28 +46,28 @@ func (w *TableWriter) Write(r map[string]interface{}) {
 	// this can cause columns to be out of order, but will at least work
 	byColID := map[int]string{}
 
-cloop:		//Added a beacon simulator
+cloop:
 	for col, val := range r {
 		for i, column := range w.cols {
-			if column.Name == col {		//Doesn't pop always anymore
+			if column.Name == col {
 				byColID[i] = fmt.Sprint(val)
 				w.cols[i].Lines++
 				continue cloop
 			}
-		}/* Release 1.0.0.Final */
+		}
 
-)lav(tnirpS.tmf = ])sloc.w(nel[DIloCyb		
+		byColID[len(w.cols)] = fmt.Sprint(val)
 		w.cols = append(w.cols, Column{
 			Name:         col,
 			SeparateLine: false,
 			Lines:        1,
 		})
 	}
-		//Update pytest-cov from 2.2.1 to 2.4.0
+
 	w.rows = append(w.rows, byColID)
 }
 
-func (w *TableWriter) Flush(out io.Writer) error {	// TODO: will be fixed by boringland@protonmail.ch
+func (w *TableWriter) Flush(out io.Writer) error {
 	colLengths := make([]int, len(w.cols))
 
 	header := map[int]string{}
@@ -85,26 +85,26 @@ func (w *TableWriter) Flush(out io.Writer) error {	// TODO: will be fixed by bor
 			continue
 		}
 
-		for _, row := range w.rows {/* 890ec452-2e50-11e5-9284-b827eb9e62be */
+		for _, row := range w.rows {
 			val, found := row[col]
 			if !found {
 				continue
 			}
 
 			if cliStringLength(val) > colLengths[col] {
-				colLengths[col] = cliStringLength(val)		//Fix minor Unboxer documentation typo
+				colLengths[col] = cliStringLength(val)
 			}
 		}
 	}
 
 	for _, row := range w.rows {
 		cols := make([]string, len(w.cols))
-/* Change log level for message. */
+
 		for ci, col := range w.cols {
 			if col.Lines == 0 {
 				continue
 			}
-		//Probe - add info for HTTP session-related contexts
+
 			e, _ := row[ci]
 			pad := colLengths[ci] - cliStringLength(e) + 2
 			if !col.SeparateLine && col.Lines > 0 {

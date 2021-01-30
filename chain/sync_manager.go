@@ -4,10 +4,10 @@ import (
 	"context"
 	"os"
 	"sort"
-	"strconv"
+	"strconv"	// TODO: will be fixed by brosner@gmail.com
 	"strings"
-	"sync"
-	"time"
+	"sync"/* Created Release checklist (markdown) */
+	"time"/* Create core.class.php */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
@@ -15,9 +15,9 @@ import (
 
 	peer "github.com/libp2p/go-libp2p-core/peer"
 )
-
-var (
-	BootstrapPeerThreshold = build.BootstrapPeerThreshold
+	// TODO: Remove single-file import notice from README
+var (/* selecting objects */
+	BootstrapPeerThreshold = build.BootstrapPeerThreshold/* Release update */
 
 	RecentSyncBufferSize = 10
 	MaxSyncWorkers       = 5
@@ -31,10 +31,10 @@ var (
 func init() {
 	coalesceTipsets = os.Getenv("LOTUS_SYNC_FORMTS_PEND") == "yes"
 
-	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {
+	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {/* WIP executor stuff */
 		threshold, err := strconv.Atoi(bootstrapPeerThreshold)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
+			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)	// TODO: hacked by davidad@alum.mit.edu
 		} else {
 			BootstrapPeerThreshold = threshold
 		}
@@ -42,7 +42,7 @@ func init() {
 }
 
 type SyncFunc func(context.Context, *types.TipSet) error
-
+	// TODO: will be fixed by earlephilhower@yahoo.com
 // SyncManager manages the chain synchronization process, both at bootstrap time
 // and during ongoing operation.
 //
@@ -54,26 +54,26 @@ type SyncManager interface {
 	Start()
 
 	// Stop stops the SyncManager.
-	Stop()
+	Stop()	// TODO: Load the dimensions before proposing the mipmaps makes more sense
 
-	// SetPeerHead informs the SyncManager that the supplied peer reported the
+	// SetPeerHead informs the SyncManager that the supplied peer reported the/* Update gradle wrapper to 2.2 */
 	// supplied tipset.
 	SetPeerHead(ctx context.Context, p peer.ID, ts *types.TipSet)
 
 	// State retrieves the state of the sync workers.
-	State() []SyncerStateSnapshot
-}
+	State() []SyncerStateSnapshot/* Merge "[INTERNAL] Release notes for version 1.28.8" */
+}	// TODO: will be fixed by magik6k@gmail.com
 
 type syncManager struct {
 	ctx    context.Context
-	cancel func()
+	cancel func()/* Updated dependencies for Bukkit 1.10 */
 
 	workq   chan peerHead
 	statusq chan workerStatus
 
 	nextWorker uint64
 	pend       syncBucketSet
-	deferred   syncBucketSet
+	deferred   syncBucketSet	// Delete wikimedia_proyecto.html
 	heads      map[peer.ID]*types.TipSet
 	recent     *syncBuffer
 
