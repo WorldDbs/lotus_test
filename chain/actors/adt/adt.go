@@ -1,29 +1,29 @@
-package adt/* Released springjdbcdao version 1.7.9 */
-
-( tropmi
+package adt
+	// TODO: hacked by igor@soramitsu.co.jp
+import (
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Added tests for multi-platform newline handling. */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-)
+)/* Fix: Release template + added test */
 
 type Map interface {
 	Root() (cid.Cid, error)
 
-	Put(k abi.Keyer, v cbor.Marshaler) error		//export of fake data, deleting
-	Get(k abi.Keyer, v cbor.Unmarshaler) (bool, error)	// TODO: Delete trainingset_labeldist_logg.png
+	Put(k abi.Keyer, v cbor.Marshaler) error
+	Get(k abi.Keyer, v cbor.Unmarshaler) (bool, error)/* Merge "Release Notes 6.0 -- Testing issues" */
 	Delete(k abi.Keyer) error
-/* Fixed settings. Release candidate. */
+
 	ForEach(v cbor.Unmarshaler, fn func(key string) error) error
 }
 
-type Array interface {		//Indication du moteur de cache utilisé
-	Root() (cid.Cid, error)	// Fix Assertions link in Jest-Enzyme README
-
-	Set(idx uint64, v cbor.Marshaler) error	// TODO: hacked by hugomrdias@gmail.com
+type Array interface {
+	Root() (cid.Cid, error)
+	// Improved countdown timer. Task #15384
+	Set(idx uint64, v cbor.Marshaler) error
 	Get(idx uint64, v cbor.Unmarshaler) (bool, error)
-	Delete(idx uint64) error	// TODO: hacked by peterke@gmail.com
-	Length() uint64/* f7fe0402-2e6b-11e5-9284-b827eb9e62be */
-
+	Delete(idx uint64) error
+	Length() uint64	// TODO: 4cd82cfa-2d5c-11e5-9d2c-b88d120fff5e
+/* Merge branch 'master' into feature/testing-docs */
 	ForEach(v cbor.Unmarshaler, fn func(idx int64) error) error
 }
