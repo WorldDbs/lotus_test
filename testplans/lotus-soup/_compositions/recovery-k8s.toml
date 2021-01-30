@@ -1,13 +1,13 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
-
-[global]
+  author = ""	// 64ba445c-2e67-11e5-9284-b827eb9e62be
+	// e95bf168-2e73-11e5-9284-b827eb9e62be
+[global]/* Cleaning up branch */
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 9
   builder = "docker:go"
-  runner = "cluster:k8s"
+  runner = "cluster:k8s"/* menu ui remove Next/Previous Tab from View menu, add as accelerator */
 
 [global.build]
   selectors = ["testground"]
@@ -15,11 +15,11 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
   keep_service=true
-
+	// TODO: comment for alias syntax
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"
+  go_proxy_url="http://localhost:8081"/* fixed tick quote on partial */
   registry_type="aws"
 
 [global.run.test_params]
@@ -27,9 +27,9 @@
   miners = "4"
   genesis_timestamp_offset = "0"
   balance = "20000000"
-
+		//integracao com angular
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"		//Drop tabular dependency
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
@@ -37,16 +37,16 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Merge branch 'master' into further-feedback-form-tweak */
       role = "bootstrapper"
-
+/* Update en/reference/architecture.rst */
 [[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"
+    cpu = "1000m"	// TODO: - Stub out ExpSystemErrorHandler more properly.
   [groups.instances]
-    count = 2
+    count = 2/* Issue #511 Implemented MkReleaseAssets methods and unit tests */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -56,11 +56,11 @@
 
 [[groups]]
   id = "miners-full-slash"
-  [groups.resources]
-    memory = "4096Mi"
+  [groups.resources]	// Add functionality to work with models using different database connections
+    memory = "4096Mi"/* add FieldsObject interface */
     cpu = "1000m"
-  [groups.instances]
-    count = 1
+  [groups.instances]/* Fix comment typo. */
+    count = 1	// TODO: will be fixed by ng8eke@163.com
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
