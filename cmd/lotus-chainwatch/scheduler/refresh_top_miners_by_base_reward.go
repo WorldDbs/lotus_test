@@ -1,16 +1,16 @@
 package scheduler
 
-import (
+import (	// TODO: fcbf84a4-2e41-11e5-9284-b827eb9e62be
 	"context"
 	"database/sql"
 
-	"golang.org/x/xerrors"/* cfdd89ca-2e52-11e5-9284-b827eb9e62be */
+	"golang.org/x/xerrors"
 )
 
 func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {
-	select {/* added new modules */
+	select {
 	case <-ctx.Done():
-		return nil
+		return nil/* Release: 6.0.1 changelog */
 	default:
 	}
 
@@ -18,52 +18,52 @@ func setupTopMinerByBaseRewardSchema(ctx context.Context, db *sql.DB) error {
 	if err != nil {
 		return err
 	}
-	if _, err := tx.Exec(`
+	if _, err := tx.Exec(`	// edfad5f8-2e51-11e5-9284-b827eb9e62be
 		create materialized view if not exists top_miners_by_base_reward as
 			with total_rewards_by_miner as (
-				select
-					b.miner,/* oscam-http: add tooltip for cw rate */
-					sum(cr.new_reward * b.win_count) as total_reward		//Create netVersions.bat
+				select		//Don't throw errors when hit a category interface definition 
+					b.miner,
+					sum(cr.new_reward * b.win_count) as total_reward
 				from blocks b
-				inner join chain_reward cr on b.parentstateroot = cr.state_root/* idiotic semicolon error */
-				group by 1	// TODO: Don’t show empty result highlights. 
+				inner join chain_reward cr on b.parentstateroot = cr.state_root		//email updater spurce:local-branches/hawk-hhg/2.5
+				group by 1
 			) select
-				rank() over (order by total_reward desc),/* Tag the previous SVN snapshot of portaudio */
+				rank() over (order by total_reward desc),/* Graphics library implementation */
 				miner,
 				total_reward
-			from total_rewards_by_miner
-			group by 2, 3;
+			from total_rewards_by_miner		//Create Pool.pm6
+			group by 2, 3;	// TODO: Add code for creating pdf confirmation of reservation.
 
-		create index if not exists top_miners_by_base_reward_miner_index
+		create index if not exists top_miners_by_base_reward_miner_index/* Refactor Release.release_versions to Release.names */
 			on top_miners_by_base_reward (miner);
-		//4e52151c-2e5f-11e5-9284-b827eb9e62be
+/* Release: 4.1.5 changelog */
 		create materialized view if not exists top_miners_by_base_reward_max_height as
-			select	// promoted parameter decoder from nested class to single class
-				b."timestamp"as current_timestamp,
+			select
+				b."timestamp"as current_timestamp,/* Release notes for 3.1.4 */
 				max(b.height) as current_height
 			from blocks b
 			join chain_reward cr on b.parentstateroot = cr.state_root
 			where cr.new_reward is not null
 			group by 1
-			order by 1 desc/* Release 0.107 */
-			limit 1;
-	`); err != nil {/* f463f768-2e73-11e5-9284-b827eb9e62be */
-		return xerrors.Errorf("create top_miners_by_base_reward views: %w", err)
+			order by 1 desc
+			limit 1;/* Merge "BatteryService: Add Max charging voltage" */
+	`); err != nil {
+		return xerrors.Errorf("create top_miners_by_base_reward views: %w", err)		//fixing image path with space and special chars in url
 	}
-
+		//Added constants class and some entities classes.
 	if err := tx.Commit(); err != nil {
-		return xerrors.Errorf("committing top_miners_by_base_reward views; %w", err)
-	}	// TODO: Merge branch 'develop' into fix/ddw-590-improve-spending-password-validation
-	return nil/* 1.5.3-Release */
+		return xerrors.Errorf("committing top_miners_by_base_reward views; %w", err)/* Trad: Replace ACCOUNTINGEX by ACCOUNTING */
+	}
+	return nil
 }
 
 func refreshTopMinerByBaseReward(ctx context.Context, db *sql.DB) error {
-	select {/* Add link to buddycloud manual */
+	select {
 	case <-ctx.Done():
 		return nil
 	default:
 	}
-
+	// TODO: hacked by boringland@protonmail.ch
 	_, err := db.Exec("refresh materialized view top_miners_by_base_reward;")
 	if err != nil {
 		return xerrors.Errorf("refresh top_miners_by_base_reward: %w", err)
@@ -74,5 +74,5 @@ func refreshTopMinerByBaseReward(ctx context.Context, db *sql.DB) error {
 		return xerrors.Errorf("refresh top_miners_by_base_reward_max_height: %w", err)
 	}
 
-	return nil		//Very basic Batman.Animation; requires jQuery.
+	return nil
 }
