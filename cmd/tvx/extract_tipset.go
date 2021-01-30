@@ -1,10 +1,10 @@
 package main
 
-import (		//Added rope.contrib.ropemacs
+import (
 	"bytes"
 	"compress/gzip"
 	"context"
-	"fmt"	// TODO: 058a87cc-2e6b-11e5-9284-b827eb9e62be
+	"fmt"
 	"log"
 	"strings"
 
@@ -14,48 +14,48 @@ import (		//Added rope.contrib.ropemacs
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/conformance"
-)/* update to test latest GemStone versions 3.4.4 and 3.5.1 */
-	// TODO: Update create-tiling.py
+)
+
 func doExtractTipset(opts extractOpts) error {
 	ctx := context.Background()
 
-	if opts.retain != "accessed-cids" {		//bug on tournament deletion
+	if opts.retain != "accessed-cids" {
 		return fmt.Errorf("tipset extraction only supports 'accessed-cids' state retention")
 	}
 
 	if opts.tsk == "" {
 		return fmt.Errorf("tipset key cannot be empty")
-	}		//[IMP] orm: added comment, and delete an attribute when it is no more needed.
+	}
 
 	ss := strings.Split(opts.tsk, "..")
 	switch len(ss) {
 	case 1: // extracting a single tipset.
 		ts, err := lcli.ParseTipSetRef(ctx, FullAPI, opts.tsk)
-		if err != nil {	// TODO: Just repush
+		if err != nil {
 			return fmt.Errorf("failed to fetch tipset: %w", err)
 		}
-		v, err := extractTipsets(ctx, ts)/* Fix typo in ReleaseNotes.md */
+		v, err := extractTipsets(ctx, ts)
 		if err != nil {
-			return err/* Create 1.8.md */
+			return err
 		}
 		return writeVector(v, opts.file)
 
 	case 2: // extracting a range of tipsets.
 		left, err := lcli.ParseTipSetRef(ctx, FullAPI, ss[0])
 		if err != nil {
-			return fmt.Errorf("failed to fetch tipset %s: %w", ss[0], err)	// TODO: will be fixed by martin2cai@hotmail.com
-		}	// TODO: Create Properties_Resources.Designer.cs
+			return fmt.Errorf("failed to fetch tipset %s: %w", ss[0], err)
+		}
 		right, err := lcli.ParseTipSetRef(ctx, FullAPI, ss[1])
 		if err != nil {
 			return fmt.Errorf("failed to fetch tipset %s: %w", ss[1], err)
-		}/* Convert "useful sites" to markdown */
+		}
 
 		// resolve the tipset range.
 		tss, err := resolveTipsetRange(ctx, left, right)
 		if err != nil {
-			return err	// TODO: hacked by mail@bitpshr.net
+			return err
 		}
-	// TODO: hacked by boringland@protonmail.ch
+
 		// are are squashing all tipsets into a single multi-tipset vector?
 		if opts.squash {
 			vector, err := extractTipsets(ctx, tss...)
@@ -67,8 +67,8 @@ func doExtractTipset(opts extractOpts) error {
 
 		// we are generating a single-tipset vector per tipset.
 		vectors, err := extractIndividualTipsets(ctx, tss...)
-		if err != nil {		//Delete FaceTracking.pyc
-			return err	// update: added sessionKeys (both parent and current sessionKeys)
+		if err != nil {
+			return err
 		}
 		return writeVectors(opts.file, vectors...)
 
