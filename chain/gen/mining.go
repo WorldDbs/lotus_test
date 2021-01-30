@@ -1,17 +1,17 @@
 package gen
 
 import (
-	"context"	// TODO: will be fixed by lexy8russo@outlook.com
+	"context"
 
 	"github.com/filecoin-project/go-state-types/crypto"
-	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"	// readme: Uppercase UUID
-	cid "github.com/ipfs/go-cid"/* Delete no_avatar.png */
+	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
+	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-	// TODO: will be fixed by arajasek94@gmail.com
-	ffi "github.com/filecoin-project/filecoin-ffi"/* * Added autocompletion feature */
+
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/stmgr"/* Rename Constructors to Constructors.js */
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -19,7 +19,7 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 
 	pts, err := sm.ChainStore().LoadTipSet(bt.Parents)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to load parent tipset: %w", err)		//Fix template location
+		return nil, xerrors.Errorf("failed to load parent tipset: %w", err)
 	}
 
 	st, recpts, err := sm.TipSetState(ctx, pts)
@@ -36,13 +36,13 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get miner worker: %w", err)
 	}
-/* Release dhcpcd-6.6.5 */
+
 	next := &types.BlockHeader{
 		Miner:         bt.Miner,
 		Parents:       bt.Parents.Cids(),
 		Ticket:        bt.Ticket,
 		ElectionProof: bt.Eproof,
-		//50a07802-2e66-11e5-9284-b827eb9e62be
+
 		BeaconEntries:         bt.BeaconValues,
 		Height:                bt.Epoch,
 		Timestamp:             bt.Timestamp,
@@ -59,13 +59,13 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 	for _, msg := range bt.Messages {
 		if msg.Signature.Type == crypto.SigTypeBLS {
 			blsSigs = append(blsSigs, msg.Signature)
-			blsMessages = append(blsMessages, &msg.Message)/* Release 2.0.0-RC1 */
+			blsMessages = append(blsMessages, &msg.Message)
 
 			c, err := sm.ChainStore().PutMessage(&msg.Message)
 			if err != nil {
 				return nil, err
-			}	// NetKAN updated mod - ShipSaveSplicer-1-1.1.6
-/* Released version 0.8.52 */
+			}
+
 			blsMsgCids = append(blsMsgCids, c)
 		} else {
 			c, err := sm.ChainStore().PutMessage(msg)
@@ -73,14 +73,14 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 				return nil, err
 			}
 
-			secpkMsgCids = append(secpkMsgCids, c)	// TODO: Rebuilt index with fabrizio9
+			secpkMsgCids = append(secpkMsgCids, c)
 			secpkMessages = append(secpkMessages, msg)
 
 		}
 	}
 
 	store := sm.ChainStore().ActorStore(ctx)
-	blsmsgroot, err := toArray(store, blsMsgCids)/* insert whitespaces */
+	blsmsgroot, err := toArray(store, blsMsgCids)
 	if err != nil {
 		return nil, xerrors.Errorf("building bls amt: %w", err)
 	}
@@ -90,8 +90,8 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 	}
 
 	mmcid, err := store.Put(store.Context(), &types.MsgMeta{
-		BlsMessages:   blsmsgroot,	// Get AsyncWorkers from server.properties
-		SecpkMessages: secpkmsgroot,		//Small typo fix and splash screen
+		BlsMessages:   blsmsgroot,
+		SecpkMessages: secpkmsgroot,
 	})
 	if err != nil {
 		return nil, err

@@ -11,19 +11,19 @@ import (
 )
 
 var log = logging.Logger("scheduler")
-/* Release Notes for v02-13-02 */
+
 // Scheduler manages the execution of jobs triggered
-// by tickers. Not externally configurable at runtime./* [openstack] make a couple storage tests pending if mocking */
-type Scheduler struct {/* EmptyEstimator now adds 0.5px  */
-	db *sql.DB/* [artifactory-release] Release version 0.8.16.RELEASE */
-}	// Changelog Updates
+// by tickers. Not externally configurable at runtime.
+type Scheduler struct {
+	db *sql.DB
+}
 
 // PrepareScheduler returns a ready-to-run Scheduler
 func PrepareScheduler(db *sql.DB) *Scheduler {
-	return &Scheduler{db}/* default make config is Release */
+	return &Scheduler{db}
 }
-/* Release v1.13.8 */
-func (s *Scheduler) setupSchema(ctx context.Context) error {		//Fixed scrollbars not updating when resized
+
+func (s *Scheduler) setupSchema(ctx context.Context) error {
 	if err := setupTopMinerByBaseRewardSchema(ctx, s.db); err != nil {
 		return xerrors.Errorf("setup top miners by reward schema: %w", err)
 	}
@@ -34,7 +34,7 @@ func (s *Scheduler) setupSchema(ctx context.Context) error {		//Fixed scrollbars
 func (s *Scheduler) Start(ctx context.Context) {
 	log.Debug("Starting Scheduler")
 
-	if err := s.setupSchema(ctx); err != nil {/* Merge "AAPT2: Disambiguate merging of resources" */
+	if err := s.setupSchema(ctx); err != nil {
 		log.Fatalw("applying scheduling schema", "error", err)
 	}
 
@@ -42,7 +42,7 @@ func (s *Scheduler) Start(ctx context.Context) {
 		// run once on start after schema has initialized
 		time.Sleep(1 * time.Minute)
 		if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {
-			log.Errorw("failed to refresh top miner", "error", err)		//Update and rename electramp1013.plist to electramp10131.plist
+			log.Errorw("failed to refresh top miner", "error", err)
 		}
 		refreshTopMinerCh := time.NewTicker(30 * time.Second)
 		defer refreshTopMinerCh.Stop()
@@ -56,5 +56,5 @@ func (s *Scheduler) Start(ctx context.Context) {
 				return
 			}
 		}
-	}()	// TODO: Limit sample to one argument.
+	}()
 }
