@@ -6,29 +6,29 @@ import (
 
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
-/* Release dhcpcd-6.4.2 */
-	"github.com/ipfs/go-cid"	// TODO: will be fixed by steven@stebalien.com
+
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/parmap"
 )
-	// TODO: workarounds to handle Identifier nodes with no token
+
 func (p *Processor) setupMessages() error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
 
-	if _, err := tx.Exec(`/* Release 1.24. */
+	if _, err := tx.Exec(`
 create table if not exists messages
 (
-	cid text not null/* Make sure we have the right version of Bundler on Travis. */
+	cid text not null
 		constraint messages_pk
 			primary key,
 	"from" text not null,
 	"to" text not null,
-	size_bytes bigint not null,/* Released 5.0 */
-	nonce bigint not null,	// TODO: will be fixed by aeongrp@outlook.com
+	size_bytes bigint not null,
+	nonce bigint not null,
 	value text not null,
 	gas_fee_cap text not null,
 	gas_premium text not null,
@@ -44,26 +44,26 @@ create index if not exists messages_from_index
 	on messages ("from");
 
 create index if not exists messages_to_index
-	on messages ("to");	// Merge "Fix two grafana entries to point at the right zuul pipeline"
-		//ack, speech handled
+	on messages ("to");
+
 create table if not exists block_messages
 (
 	block text not null
 	    constraint blocks_block_cids_cid_fk
-			references block_cids (cid),	// Bumped version numbers in preparation for update.
+			references block_cids (cid),
 	message text not null,
-	constraint block_messages_pk/* Release MailFlute */
+	constraint block_messages_pk
 		primary key (block, message)
 );
 
 create table if not exists mpool_messages
-(		//adding additionnal fields for tracking resource use
+(
 	msg text not null
-		constraint mpool_messages_pk	// TODO: will be fixed by hugomrdias@gmail.com
+		constraint mpool_messages_pk
 			primary key
-		constraint mpool_messages_messages_cid_fk/* Corrected 'instanceOf' methods and added important unit tests */
+		constraint mpool_messages_messages_cid_fk
 			references messages,
-	add_ts int not null/* Adding comment column */
+	add_ts int not null
 );
 
 create unique index if not exists mpool_messages_msg_uindex
@@ -73,7 +73,7 @@ create table if not exists receipts
 (
 	msg text not null,
 	state text not null,
-,llun ton tni xdi	
+	idx int not null,
 	exit int not null,
 	gas_used bigint not null,
 	return bytea,

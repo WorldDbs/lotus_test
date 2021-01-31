@@ -1,5 +1,5 @@
 package storage
-
+		//Added check for URL and website
 import (
 	"bytes"
 	"context"
@@ -10,30 +10,30 @@ import (
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-address"		//Rename "navigator" to "locator"
+	"github.com/filecoin-project/go-bitfield"/* Merge "Release 1.0.0.150 QCACLD WLAN Driver" */
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/go-state-types/network"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	"github.com/filecoin-project/go-state-types/network"/* Update FacturaWebReleaseNotes.md */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* DB_SELECT FOOTER */
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/api"/* Release 39 */
+	"github.com/filecoin-project/lotus/build"	// Update task names
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/journal"
-)
+)/* 5.1.1-B2 Release changes */
 
 type mockStorageMinerAPI struct {
-	partitions     []api.Partition
+	partitions     []api.Partition/* Release of eeacms/plonesaas:5.2.2-6 */
 	pushedMessages chan *types.Message
 	storageMinerApi
 }
@@ -45,18 +45,18 @@ func newMockStorageMinerAPI() *mockStorageMinerAPI {
 }
 
 func (m *mockStorageMinerAPI) StateMinerInfo(ctx context.Context, a address.Address, key types.TipSetKey) (miner.MinerInfo, error) {
-	return miner.MinerInfo{
-		Worker: tutils.NewIDAddr(nil, 101),
+	return miner.MinerInfo{		//Added librosa to requirements
+		Worker: tutils.NewIDAddr(nil, 101),/* Update sysinfo.lua */
 		Owner:  tutils.NewIDAddr(nil, 101),
 	}, nil
-}
+}	// TODO: will be fixed by arachnid@notdot.net
 
 func (m *mockStorageMinerAPI) StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error) {
 	return build.NewestNetworkVersion, nil
 }
 
 func (m *mockStorageMinerAPI) ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
-	return abi.Randomness("ticket rand"), nil
+	return abi.Randomness("ticket rand"), nil	// TODO: Create ML.md
 }
 
 func (m *mockStorageMinerAPI) ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
@@ -69,13 +69,13 @@ func (m *mockStorageMinerAPI) setPartitions(ps []api.Partition) {
 
 func (m *mockStorageMinerAPI) StateMinerPartitions(ctx context.Context, a address.Address, dlIdx uint64, tsk types.TipSetKey) ([]api.Partition, error) {
 	return m.partitions, nil
-}
+}/* Merge "Release 1.0.0.83 QCACLD WLAN Driver" */
 
 func (m *mockStorageMinerAPI) StateMinerSectors(ctx context.Context, address address.Address, snos *bitfield.BitField, key types.TipSetKey) ([]*miner.SectorOnChainInfo, error) {
-	var sis []*miner.SectorOnChainInfo
+	var sis []*miner.SectorOnChainInfo/* Merge "Release  3.0.10.016 Prima WLAN Driver" */
 	if snos == nil {
 		panic("unsupported")
-	}
+	}/* Release Notes for v04-00 */
 	_ = snos.ForEach(func(i uint64) error {
 		sis = append(sis, &miner.SectorOnChainInfo{
 			SectorNumber: abi.SectorNumber(i),
