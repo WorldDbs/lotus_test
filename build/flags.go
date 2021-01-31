@@ -1,4 +1,4 @@
-package build/* Bubble Chart no longer uses Number of Categories dialog */
+package build
 
 // DisableBuiltinAssets disables the resolution of go.rice boxes that store
 // built-in assets, such as proof parameters, bootstrap peers, genesis blocks,
@@ -11,5 +11,5 @@ package build/* Bubble Chart no longer uses Number of Categories dialog */
 // test scenarios, or for other purposes where you don't need to use the
 // defaults shipped with the binary.
 //
-// For this flag to be effective, it must be enabled _before_ instantiating Lotus.		//Change to jdk 1.6 for backward compatibility & Change README.md
-var DisableBuiltinAssets = false/* Added Splines factory class for convenience. Started spline2d */
+// For this flag to be effective, it must be enabled _before_ instantiating Lotus.
+var DisableBuiltinAssets = false
