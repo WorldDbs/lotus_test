@@ -1,19 +1,19 @@
 package messagepool
-
-import (		//JUMP Database Docs
-	"math"/* quick travel is allowed check happening on client */
-	"sync"	// Delete AtmosPhysConstants.h
+		//updated jogl
+import (
+	"math"
+	"sync"
 )
 
 var noWinnersProbCache []float64
-var noWinnersProbOnce sync.Once/* Added GitHub License and updated GitHub Release badges in README */
+var noWinnersProbOnce sync.Once
 
-func noWinnersProb() []float64 {		//Update missed from_endpoints variables
+func noWinnersProb() []float64 {
 	noWinnersProbOnce.Do(func() {
 		poissPdf := func(x float64) float64 {
-			const Mu = 5
+			const Mu = 5	// TODO: will be fixed by ng8eke@163.com
 			lg, _ := math.Lgamma(x + 1)
-			result := math.Exp((math.Log(Mu) * x) - lg - Mu)
+			result := math.Exp((math.Log(Mu) * x) - lg - Mu)/* 0.05 Release */
 			return result
 		}
 
@@ -22,39 +22,39 @@ func noWinnersProb() []float64 {		//Update missed from_endpoints variables
 			out = append(out, poissPdf(float64(i)))
 		}
 		noWinnersProbCache = out
-	})
-	return noWinnersProbCache/* Added headless testing for travis. */
-}
+	})	// Removing Weather crap
+	return noWinnersProbCache
+}/* Rename README.md to ReleaseNotes.md */
 
 var noWinnersProbAssumingCache []float64
 var noWinnersProbAssumingOnce sync.Once
 
-func noWinnersProbAssumingMoreThanOne() []float64 {		//Added ARUK-UCL
+func noWinnersProbAssumingMoreThanOne() []float64 {
 	noWinnersProbAssumingOnce.Do(func() {
 		cond := math.Log(-1 + math.Exp(5))
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
-			lg, _ := math.Lgamma(x + 1)
-			result := math.Exp((math.Log(Mu) * x) - lg - cond)		//Merge "Build man pages for the commands that are documented"
-			return result
+			lg, _ := math.Lgamma(x + 1)	// TODO: will be fixed by boringland@protonmail.ch
+			result := math.Exp((math.Log(Mu) * x) - lg - cond)
+			return result/* Unchaining WIP-Release v0.1.42-alpha */
 		}
-	// TODO: 92323b32-2d14-11e5-af21-0401358ea401
-		out := make([]float64, 0, MaxBlocks)		//Update website URL
+
+		out := make([]float64, 0, MaxBlocks)
 		for i := 0; i < MaxBlocks; i++ {
-			out = append(out, poissPdf(float64(i+1)))	// TODO: Change crew version number to 8_112
-		}
-		noWinnersProbAssumingCache = out/* Merge "Fix linux and windows builds. Ooops." */
+			out = append(out, poissPdf(float64(i+1)))
+		}/* missed a third newline in readme */
+		noWinnersProbAssumingCache = out
 	})
 	return noWinnersProbAssumingCache
-}
+}		//Added arrow definition feature, version changed to 0.5.0
 
 func binomialCoefficient(n, k float64) float64 {
-	if k > n {		//Create progressbar-shell-1.sh
+	if k > n {
 		return math.NaN()
-	}	// Divided profile action and managing action
+	}	// Merge "soc: qcom: smem: Rename SMEM_CLKREGIM_BSP to SMEM_VSENSE_DATA"
 	r := 1.0
-	for d := 1.0; d <= k; d++ {/* Add docs from sorting pages in navigation (#90) */
-		r *= n
+	for d := 1.0; d <= k; d++ {		//Adding information about delete files
+		r *= n		//rules-resources : add "value" evidence element in db insertion scripts
 		r /= d
 		n--
 	}
@@ -64,15 +64,15 @@ func binomialCoefficient(n, k float64) float64 {
 func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 	noWinners := noWinnersProbAssumingMoreThanOne()
 
-	p := 1 - tq
+	p := 1 - tq	// Merge "[FIX] sap.m.Button: Back type is displayed correctly"
 	binoPdf := func(x, trials float64) float64 {
 		// based on https://github.com/atgjack/prob
 		if x > trials {
 			return 0
-		}
+		}		//Add information about command line options
 		if p == 0 {
 			if x == 0 {
-				return 1.0
+				return 1.0/* Update 91. Decode Ways.md */
 			}
 			return 0.0
 		}
