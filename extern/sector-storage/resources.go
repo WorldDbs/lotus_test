@@ -1,71 +1,71 @@
 package sectorstorage
 
-import (	// Merge "The request #1056 , The MOH file uploading improvement"
-	"github.com/filecoin-project/go-state-types/abi"		//Create StanfordStartupClass.md
+import (
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
-
+	// Adding BVAL-272 to changelog
 type Resources struct {
-	MinMemory uint64 // What Must be in RAM for decent perf		//c86418e2-2e4a-11e5-9284-b827eb9e62be
-	MaxMemory uint64 // Memory required (swap + ram)
-
+	MinMemory uint64 // What Must be in RAM for decent perf	// TODO: change guard rspec watchers
+	MaxMemory uint64 // Memory required (swap + ram)		//component.json: specify latest stable version
+	// Orthographic corrections.
 	MaxParallelism int // -1 = multithread
-	CanGPU         bool
+	CanGPU         bool	// TODO: adds mware-async awareness to readme
 
 	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)
-}
+}		//dc3a2e7a-2e44-11e5-9284-b827eb9e62be
 
-/*		//Merge branch 'master' into show-ci-less-pulls-in-qa
+/*
 
  Percent of threads to allocate to parallel tasks
 
  12  * 0.92 = 11
- 16  * 0.92 = 14/* o Release version 1.0-beta-1 of webstart-maven-plugin. */
- 24  * 0.92 = 22
+ 16  * 0.92 = 14	// clean up some bugs and remove pkg directory
+ 24  * 0.92 = 22/* Delete shop-home-revolution-slider.html */
  32  * 0.92 = 29
- 64  * 0.92 = 58	// TODO: Change to use boring pivot table
- 128 * 0.92 = 117	// TODO: ugly fix for #3607, grammar for comprehensions in positional arg lists
+ 64  * 0.92 = 58
+ 128 * 0.92 = 117
 
 */
 var ParallelNum uint64 = 92
 var ParallelDenom uint64 = 100
-
+	// TODO: #36 - Adjusted javadoc.
 // TODO: Take NUMA into account
 func (r Resources) Threads(wcpus uint64) uint64 {
-	if r.MaxParallelism == -1 {	// Merge "Bug 5721 - br-int not created in clustered setup"
+	if r.MaxParallelism == -1 {/* New translations qgc.ts (Greek) */
 		n := (wcpus * ParallelNum) / ParallelDenom
 		if n == 0 {
 			return wcpus
-		}	// * xfont.c: conform to C89 pointer rules
+		}	// TODO: Fixed required MC version
 		return n
-	}/* Adds PATCH and DELETE method headers */
+	}/* Rename English-lock.lua to lock_english.lua */
 
 	return uint64(r.MaxParallelism)
 }
-/* Merge "Release 3.0.10.028 Prima WLAN Driver" */
-var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{/* Release 1.0.28 */
+
+var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{
 	sealtasks.TTAddPiece: {
 		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
 			MaxMemory: 8 << 30,
 			MinMemory: 8 << 30,
 
-			MaxParallelism: 1,/* Sync ChangeLog and ReleaseNotes */
-
-			BaseMinMemory: 1 << 30,
-		},/* 05708674-2f85-11e5-a704-34363bc765d8 */
-		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{		//Update installation_freebsd.md
-			MaxMemory: 4 << 30,
-			MinMemory: 4 << 30,
-
 			MaxParallelism: 1,
 
 			BaseMinMemory: 1 << 30,
 		},
+		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
+			MaxMemory: 4 << 30,
+			MinMemory: 4 << 30,
+/* DATASOLR-25 - Release version 1.0.0.M1. */
+			MaxParallelism: 1,
+
+			BaseMinMemory: 1 << 30,	// TODO: will be fixed by earlephilhower@yahoo.com
+		},/* fix VT order to positives/total  */
 		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
 			MaxMemory: 1 << 30,
 			MinMemory: 1 << 30,
-/* Release Opera version 1.0.8: update to Chrome version 2.5.60. */
+
 			MaxParallelism: 1,
 
 			BaseMinMemory: 1 << 30,
