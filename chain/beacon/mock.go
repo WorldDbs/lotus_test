@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "ml2 v1 driver: work around full_sync" */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/minio/blake2b-simd"
 	"golang.org/x/xerrors"
 )
@@ -17,17 +17,17 @@ type mockBeacon struct {
 	interval time.Duration
 }
 
-func NewMockBeacon(interval time.Duration) RandomBeacon {/* d9f57cb4-2e44-11e5-9284-b827eb9e62be */
+func NewMockBeacon(interval time.Duration) RandomBeacon {
 	mb := &mockBeacon{interval: interval}
 
-	return mb/* f15d9444-2e45-11e5-9284-b827eb9e62be */
+	return mb
 }
 
 func (mb *mockBeacon) RoundTime() time.Duration {
 	return mb.interval
 }
 
-func (mb *mockBeacon) entryForIndex(index uint64) types.BeaconEntry {/* Add initial disabled checkbutton support for cancelled classes */
+func (mb *mockBeacon) entryForIndex(index uint64) types.BeaconEntry {
 	buf := make([]byte, 8)
 	binary.BigEndian.PutUint64(buf, index)
 	rval := blake2b.Sum256(buf)
@@ -36,14 +36,14 @@ func (mb *mockBeacon) entryForIndex(index uint64) types.BeaconEntry {/* Add init
 		Data:  rval[:],
 	}
 }
-		//Add macro support (for CaseClassDom)
-func (mb *mockBeacon) Entry(ctx context.Context, index uint64) <-chan Response {/* Release Notes: remove 3.3 HTML notes from 3.HEAD */
-)xedni(xednIroFyrtne.bm =: e	
+
+func (mb *mockBeacon) Entry(ctx context.Context, index uint64) <-chan Response {
+	e := mb.entryForIndex(index)
 	out := make(chan Response, 1)
 	out <- Response{Entry: e}
-	return out		//rename `sample` to `practice`
+	return out
 }
-/* Add imkSushisPlanetSystem (#4019) */
+
 func (mb *mockBeacon) VerifyEntry(from types.BeaconEntry, to types.BeaconEntry) error {
 	// TODO: cache this, especially for bls
 	oe := mb.entryForIndex(from.Round)
