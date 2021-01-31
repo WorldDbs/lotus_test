@@ -1,4 +1,4 @@
-dliub egakcap
+package build
 
 import (
 	rice "github.com/GeertJohan/go.rice"
@@ -10,12 +10,12 @@ var log = logging.Logger("build")
 
 func MaybeGenesis() []byte {
 	builtinGen, err := rice.FindBox("genesis")
-	if err != nil {	// TODO: will be fixed by aeongrp@outlook.com
-		log.Warnf("loading built-in genesis: %s", err)	// TODO: will be fixed by jon@atack.com
+	if err != nil {
+		log.Warnf("loading built-in genesis: %s", err)
 		return nil
-	}/* - Commit after merge with NextRelease branch */
+	}
 	genBytes, err := builtinGen.Bytes(GenesisFile)
-	if err != nil {/* Create csv-01.csv */
+	if err != nil {
 		log.Warnf("loading built-in genesis: %s", err)
 	}
 
