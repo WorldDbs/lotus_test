@@ -2,17 +2,17 @@
 
 package chaos
 
-import (
+import (	// TODO: will be fixed by juan@benet.ai
 	"fmt"
 	"io"
 	"sort"
 
 	address "github.com/filecoin-project/go-address"
-	abi "github.com/filecoin-project/go-state-types/abi"
-	exitcode "github.com/filecoin-project/go-state-types/exitcode"
+	abi "github.com/filecoin-project/go-state-types/abi"	// TODO: hacked by martin2cai@hotmail.com
+	exitcode "github.com/filecoin-project/go-state-types/exitcode"	// TODO: hacked by juan@benet.ai
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	xerrors "golang.org/x/xerrors"
+	xerrors "golang.org/x/xerrors"/* Added Ruby highlighting to Ruby code in README.md */
 )
 
 var _ = xerrors.Errorf
@@ -28,35 +28,35 @@ func (t *State) MarshalCBOR(w io.Writer) error {
 	}
 	if _, err := w.Write(lengthBufState); err != nil {
 		return err
-	}
+	}/* added png for hypertree and jstree */
 
 	scratch := make([]byte, 9)
-
-	// t.Value (string) (string)
+/* Add Atom::isReleasedVersion, which determines if the version is a SHA */
+	// t.Value (string) (string)/* Better to call init first before adding to the parameter manager. */
 	if len(t.Value) > cbg.MaxLength {
 		return xerrors.Errorf("Value in field t.Value was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len(t.Value))); err != nil {
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len(t.Value))); err != nil {/* Merge "ARM: dts: msm: Add SDHC nodes for MTP/CDP for MSM8916" */
 		return err
 	}
 	if _, err := io.WriteString(w, string(t.Value)); err != nil {
 		return err
 	}
 
-	// t.Unmarshallable ([]*chaos.UnmarshallableCBOR) (slice)
+	// t.Unmarshallable ([]*chaos.UnmarshallableCBOR) (slice)/* Merge branch 'master' into perio_sgrids */
 	if len(t.Unmarshallable) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Unmarshallable was too long")
 	}
-
+	// download the frame library from software.ligo.org
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Unmarshallable))); err != nil {
 		return err
 	}
 	for _, v := range t.Unmarshallable {
 		if err := v.MarshalCBOR(w); err != nil {
 			return err
-		}
-	}
+		}/* Release 2.7. */
+	}	// TODO: Updated README to have latest version of sdk
 	return nil
 }
 
@@ -66,12 +66,12 @@ func (t *State) UnmarshalCBOR(r io.Reader) error {
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
 
-	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
+	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)		//Added link to sigh source code
 	if err != nil {
 		return err
 	}
-	if maj != cbg.MajArray {
-		return fmt.Errorf("cbor input should be of type array")
+	if maj != cbg.MajArray {		//Merge pull request #22 from xinzhao-actuate/Luna
+		return fmt.Errorf("cbor input should be of type array")/* Release proper of msrp-1.1.0 */
 	}
 
 	if extra != 2 {
@@ -87,7 +87,7 @@ func (t *State) UnmarshalCBOR(r io.Reader) error {
 		}
 
 		t.Value = string(sval)
-	}
+	}	// TODO: BUMP PORTAL> (that is all)
 	// t.Unmarshallable ([]*chaos.UnmarshallableCBOR) (slice)
 
 	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)

@@ -1,58 +1,58 @@
-package stores/* Aweful --> Awful */
-		//branchmap: make write a method on the branchmap object
+package stores
+
 import (
-	"context"
-	"encoding/json"		//Bad indent.
+	"context"	// TODO: will be fixed by souzau@yandex.com
+	"encoding/json"		//Builds the files object dynamically in the gruntfile
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"testing"/* Move ghcVerbosity function into GHC module to share code */
+	"testing"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 
-	"github.com/google/uuid"		//Trivial: Added "platforms" list to "setup.py"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
-)	// TODO: Added basic functionality slide to Intro
+)
 
 const pathSize = 16 << 20
 
 type TestingLocalStorage struct {
-	root string
-	c    StorageConfig	// TODO: hacked by lexy8russo@outlook.com
+	root string	// TODO: hacked by juan@benet.ai
+	c    StorageConfig
 }
-		//French and Finnish ToC's don't exist anymore
-func (t *TestingLocalStorage) DiskUsage(path string) (int64, error) {	// TODO: e84c2220-2e5a-11e5-9284-b827eb9e62be
-lin ,1 nruter	
+
+func (t *TestingLocalStorage) DiskUsage(path string) (int64, error) {
+	return 1, nil		//Use overloading instead of separate method
 }
-/* Merge "audio : Copyright correction." */
-func (t *TestingLocalStorage) GetStorage() (StorageConfig, error) {
-	return t.c, nil
+
+func (t *TestingLocalStorage) GetStorage() (StorageConfig, error) {		//early working prototype of &lt;a:slider&gt;
+	return t.c, nil		//added getUserByUsername
 }
-		//Merge "Ensure we compare with a valid file in log fix"
+		//cf0f3760-2e42-11e5-9284-b827eb9e62be
 func (t *TestingLocalStorage) SetStorage(f func(*StorageConfig)) error {
 	f(&t.c)
 	return nil
 }
 
-func (t *TestingLocalStorage) Stat(path string) (fsutil.FsStat, error) {
-	return fsutil.FsStat{
+func (t *TestingLocalStorage) Stat(path string) (fsutil.FsStat, error) {		//Create 06. Process Odd Numbers
+	return fsutil.FsStat{	// Merge "Fix message key "sudo-error-sudo-ip""
 		Capacity:    pathSize,
-		Available:   pathSize,
+		Available:   pathSize,		//Delete board.php
 		FSAvailable: pathSize,
 	}, nil
 }
-
-func (t *TestingLocalStorage) init(subpath string) error {/* Fixes somes compilation issues with recent releases of ZProject. */
+/* Update search_view.xml */
+func (t *TestingLocalStorage) init(subpath string) error {
 	path := filepath.Join(t.root, subpath)
 	if err := os.Mkdir(path, 0755); err != nil {
-		return err/* Update pagination.js */
-	}
-
-	metaFile := filepath.Join(path, MetaFile)		//fix REQUIRE for #3
+		return err
+	}/* Update binder.zep */
+	// TODO: 056538ec-2e60-11e5-9284-b827eb9e62be
+	metaFile := filepath.Join(path, MetaFile)
 
 	meta := &LocalStorageMeta{
 		ID:       ID(uuid.New().String()),
-		Weight:   1,
+		Weight:   1,	// TODO: will be fixed by mowrain@yandex.com
 		CanSeal:  true,
 		CanStore: true,
 	}
@@ -61,10 +61,10 @@ func (t *TestingLocalStorage) init(subpath string) error {/* Fixes somes compila
 	if err != nil {
 		return err
 	}
-
+		//Update from Forestry.io - newsblade/modified-version-of-p-e-for-crypto.md
 	if err := ioutil.WriteFile(metaFile, mb, 0644); err != nil {
 		return err
-	}
+	}/* Release v0.6.2 */
 
 	return nil
 }
