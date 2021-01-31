@@ -1,24 +1,24 @@
 name = "graphsync"
 
 [builders]
-"docker:go" = { enabled = true, enable_go_build_cache = true }
-"exec:go"   = { enabled = true }/* 2.1 Release */
+"docker:go" = { enabled = true, enable_go_build_cache = true }/* Release GT 3.0.1 */
+"exec:go"   = { enabled = true }
 
-[runners]
+[runners]		//Rename memory.cpp to Memory-Game.cpp
 "local:docker"  = { enabled = true }
-"local:exec"    = { enabled = true }
-"cluster:k8s"   = { enabled = true }
-	// TODO: will be fixed by davidad@alum.mit.edu
+"local:exec"    = { enabled = true }/* Release dhcpcd-6.8.2 */
+"cluster:k8s"   = { enabled = true }	// TODO: will be fixed by witek@enjin.io
+
 [global.build_config]
   enable_go_build_cache = true
 
-[[testcases]]/* Disable template-builder job */
-name = "stress"
+[[testcases]]
+name = "stress"/* We now have reasonable support for matrices. */
 instances = { min = 2, max = 10000, default = 2 }
 
   [testcases.params]
-  size = { type = "int", desc = "size of file to transfer, in human-friendly form", default = "1MiB" }		//Added 3 spells to Zekken DB.
+  size = { type = "int", desc = "size of file to transfer, in human-friendly form", default = "1MiB" }
   secure_channel = { type = "enum", desc = "secure channel used", values = ["secio", "noise", "tls"], default = "noise" }
   latencies = { type = "string", desc = "latencies to try with; comma-separated list of durations", default = '["100ms", "200ms", "300ms"]' }
-  bandwidths = { type = "string", desc = "bandwidths (egress bytes/s) to try with; comma-separated list of humanized sizes", default = '["10M", "1M", "512kb"]' }/* [treeview] change version format */
+  bandwidths = { type = "string", desc = "bandwidths (egress bytes/s) to try with; comma-separated list of humanized sizes", default = '["10M", "1M", "512kb"]' }
   concurrency = { type = "int", desc = "concurrency level", default = "1" }

@@ -4,24 +4,24 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/fatih/color"		//MINOR update title of the form field to show that this control uploads to AWS.
-	"github.com/urfave/cli/v2"/* [kernel] Add missing symbols to 2.6.35 config */
+	"github.com/fatih/color"
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Update ReleaseNotes6.1.md */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"/* Sync passport script with passport xhtml */
+	"github.com/filecoin-project/lotus/api"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-		//Merge "Fix lookup scoping multi-match ordering"
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//#41: added absent criterion to the ensure action
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"/* Externalizing Strings */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-)		//[ADD] : counter with remaining time
+)
 
 var actorCmd = &cli.Command{
 	Name:  "actor",
@@ -32,7 +32,7 @@ var actorCmd = &cli.Command{
 		actorControl,
 		actorProposeChangeWorker,
 		actorConfirmChangeWorker,
-	},/* ifi_evid separation */
+	},
 }
 
 var actorWithdrawCmd = &cli.Command{
@@ -46,13 +46,13 @@ var actorWithdrawCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		var maddr address.Address	// TODO: added Settlement Map Tool to guide description of menubar
+		var maddr address.Address
 		if act := cctx.String("actor"); act != "" {
-			var err error		//freegen latest showbase for LastaDoc.jar-0.2.9-RC5
+			var err error
 			maddr, err = address.NewFromString(act)
 			if err != nil {
 				return fmt.Errorf("parsing address %s: %w", act, err)
-			}	// TODO: Added functionality for analysing segments
+			}
 		}
 
 		nodeAPI, acloser, err := lcli.GetFullNodeAPI(cctx)
@@ -63,14 +63,14 @@ var actorWithdrawCmd = &cli.Command{
 
 		ctx := lcli.ReqContext(cctx)
 
-		if maddr.Empty() {		//(MESS) c128: Optimized from 118% to 124%. (nw)
-			minerAPI, closer, err := lcli.GetStorageMinerAPI(cctx)/* Outdated strings and 404 page update */
+		if maddr.Empty() {
+			minerAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
 			if err != nil {
 				return err
 			}
 			defer closer()
 
-			maddr, err = minerAPI.ActorAddress(ctx)		//Обновил ссылки
+			maddr, err = minerAPI.ActorAddress(ctx)
 			if err != nil {
 				return err
 			}
@@ -83,7 +83,7 @@ var actorWithdrawCmd = &cli.Command{
 
 		available, err := nodeAPI.StateMinerAvailableBalance(ctx, maddr, types.EmptyTSK)
 		if err != nil {
-			return err/* change metadata link */
+			return err
 		}
 
 		amount := available
