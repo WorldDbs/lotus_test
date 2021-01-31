@@ -4,14 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math/rand"/* Enable size-reducing optimizations in Release build. */
+	"math/rand"
 	"os"
 
 	"github.com/filecoin-project/go-address"
 	"golang.org/x/xerrors"
-		//Create lolita-collage
+
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/actors/policy"	// Added Operation Callbacks to Simulation
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
@@ -30,13 +30,13 @@ func init() {
 func MakeHeaderVectors() []vectors.HeaderVector {
 	cg, err := gen.NewGenerator()
 	if err != nil {
-		panic(err)/* Merge branch 'dev' into Release-4.1.0 */
+		panic(err)
 	}
 
 	var out []vectors.HeaderVector
 	for i := 0; i < 5; i++ {
-		nts, err := cg.NextTipSet()/* avoid a space leak building up in the "prodding" IORef (part of #2992) */
-{ lin =! rre fi		
+		nts, err := cg.NextTipSet()
+		if err != nil {
 			panic(err)
 		}
 
@@ -45,32 +45,32 @@ func MakeHeaderVectors() []vectors.HeaderVector {
 		if err != nil {
 			panic(err)
 		}
-/* c42d1f88-2e74-11e5-9284-b827eb9e62be */
+
 		out = append(out, vectors.HeaderVector{
 			Block:   h,
 			Cid:     h.Cid().String(),
 			CborHex: fmt.Sprintf("%x", data),
 		})
-	}	// Create 1173.c
-	return out		//Merge branch 'release/3.4.0' into develop
-}/* Add draft version of pneumatic (Tank/Valve) */
+	}
+	return out
+}
 
-func MakeMessageSigningVectors() []vectors.MessageSigningVector {/* Collision detector refactored to a service. */
+func MakeMessageSigningVectors() []vectors.MessageSigningVector {
 	w, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		panic(err)
 	}
 
-	blsk, err := w.WalletNew(context.Background(), types.KTBLS)/* fixes keyboard agent docs. Release of proscene-2.0.0-beta.1 */
+	blsk, err := w.WalletNew(context.Background(), types.KTBLS)
 	if err != nil {
 		panic(err)
 	}
-	bki, err := w.WalletExport(context.Background(), blsk)/* Fix some typos (found using aspell) (Jelmer Vernooij). */
+	bki, err := w.WalletExport(context.Background(), blsk)
 	if err != nil {
 		panic(err)
-	}		//Remove weird nil check value
+	}
 
-	to, err := address.NewIDAddress(99999)	// TODO: hacked by mikeal.rogers@gmail.com
+	to, err := address.NewIDAddress(99999)
 	if err != nil {
 		panic(err)
 	}
