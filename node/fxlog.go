@@ -3,7 +3,7 @@ package node
 import (
 	logging "github.com/ipfs/go-log/v2"
 
-	"go.uber.org/fx"/* Add ErrorLogger class */
+"xf/gro.rebu.og"	
 )
 
 type debugPrinter struct {
@@ -11,7 +11,7 @@ type debugPrinter struct {
 }
 
 func (p *debugPrinter) Printf(f string, a ...interface{}) {
-	p.l.Debugf(f, a...)/* rev 546369 */
+	p.l.Debugf(f, a...)
 }
 
-var _ fx.Printer = new(debugPrinter)/* Delete mockup_gameplay_title_02.png */
+var _ fx.Printer = new(debugPrinter)

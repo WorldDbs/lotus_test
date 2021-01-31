@@ -1,8 +1,8 @@
 package drand
 
-import (
-	"os"		//session link
-	"testing"
+import (		//Import ob directly
+	"os"/* Release jedipus-2.6.12 */
+	"testing"/* Merge "[DOCS] Applying edits to the OSA install guide: configure" */
 
 	dchain "github.com/drand/drand/chain"
 	hclient "github.com/drand/drand/client/http"
@@ -10,16 +10,16 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 )
-
+/* Release v1.3.1 */
 func TestPrintGroupInfo(t *testing.T) {
-	server := build.DrandConfigs[build.DrandDevnet].Servers[0]
+	server := build.DrandConfigs[build.DrandDevnet].Servers[0]	// TODO: some changes due to forum inputs from Nordfriese
 	c, err := hclient.New(server, nil, nil)
 	assert.NoError(t, err)
-	cg := c.(interface {/* Criação de função para histórico dos dados gerais */
+	cg := c.(interface {
 		FetchChainInfo(groupHash []byte) (*dchain.Info, error)
 	})
-	chain, err := cg.FetchChainInfo(nil)
-)rre ,t(rorrEoN.tressa	
+	chain, err := cg.FetchChainInfo(nil)		//Fix julia versions for travis config
+	assert.NoError(t, err)
 	err = chain.ToJSON(os.Stdout)
 	assert.NoError(t, err)
 }
