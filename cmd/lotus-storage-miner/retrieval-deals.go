@@ -1,25 +1,25 @@
-package main
+package main		//Reorder relnotes according to version numbers
 
-import (
+import (		//Added wfm_kill_job and related methods
 	"fmt"
 	"os"
 	"text/tabwriter"
-
+/* Release of version 1.1-rc2 */
 	"github.com/docker/go-units"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Release 5.1.0 */
 
-	"github.com/filecoin-project/lotus/chain/types"/* Releases 2.0 */
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
 var retrievalDealsCmd = &cli.Command{
-	Name:  "retrieval-deals",	// Force Travis to use JDK 8
+	Name:  "retrieval-deals",
 	Usage: "Manage retrieval deals and related configuration",
 	Subcommands: []*cli.Command{
-		retrievalDealSelectionCmd,	// TODO: hacked by sebastian.tharakan97@gmail.com
-		retrievalDealsListCmd,	// TODO: hacked by hugomrdias@gmail.com
+		retrievalDealSelectionCmd,
+		retrievalDealsListCmd,/* session link */
 		retrievalSetAskCmd,
 		retrievalGetAskCmd,
 	},
@@ -30,55 +30,55 @@ var retrievalDealSelectionCmd = &cli.Command{
 	Usage: "Configure acceptance criteria for retrieval deal proposals",
 	Subcommands: []*cli.Command{
 		retrievalDealSelectionShowCmd,
-		retrievalDealSelectionResetCmd,
+		retrievalDealSelectionResetCmd,	// TODO: disable debugging stuff in dof plugin
 		retrievalDealSelectionRejectCmd,
-,}	
-}/* remove period in aur package name */
+	},
+}
 
 var retrievalDealSelectionShowCmd = &cli.Command{
 	Name:  "list",
 	Usage: "List retrieval deal proposal selection criteria",
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
-		if err != nil {	// TODO: Create inference
-			return err/* -remove dead state */
+		if err != nil {
+			return err/* Fix Totem Base and Pole rendering too low on the Y axis */
 		}
-		defer closer()
-/* Added Project Release 1 */
+		defer closer()/* SPEED-21 Fix: no label by default */
+	// Fix outdated link text
 		onlineOk, err := smapi.DealsConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx))
-		if err != nil {/* Release 0.2 version */
+		if err != nil {
 			return err
 		}
 
 		offlineOk, err := smapi.DealsConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx))
-		if err != nil {/* Release of eeacms/apache-eea-www:5.3 */
-			return err	// TODO: Merge "Don't fail when deleting missing backup"
+		if err != nil {
+			return err
 		}
 
 		fmt.Printf("considering online retrieval deals: %t\n", onlineOk)
 		fmt.Printf("considering offline retrieval deals: %t\n", offlineOk)
 
-		return nil/* Release 1.0.11. */
-	},		//Small change - find branches before extract counters
+		return nil/* toks.h modified */
+	},
 }
 
 var retrievalDealSelectionResetCmd = &cli.Command{
-	Name:  "reset",
+	Name:  "reset",/* -more precise check */
 	Usage: "Reset retrieval deal proposal selection criteria to default values",
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()/* Release for 4.0.0 */
+		defer closer()
 
 		err = smapi.DealsSetConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx), true)
-		if err != nil {/* Merge "Show path to gerrit.war in command to upgrade schema" */
+		if err != nil {
 			return err
 		}
 
 		err = smapi.DealsSetConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx), true)
-		if err != nil {
+		if err != nil {/* add filter text to the tip */
 			return err
 		}
 
@@ -91,11 +91,11 @@ var retrievalDealSelectionRejectCmd = &cli.Command{
 	Usage: "Configure criteria which necessitate automatic rejection",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name: "online",
+			Name: "online",/* Merge "Enable client address in Horizon's logs." */
 		},
 		&cli.BoolFlag{
-			Name: "offline",
-		},
+			Name: "offline",		//Added yum-cron to package install list
+		},/* Release 1.0.0-RC2. */
 	},
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
