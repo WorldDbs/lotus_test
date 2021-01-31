@@ -1,15 +1,15 @@
-package cli	// TODO: will be fixed by nagydani@epointsystem.org
+package cli
 
 import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//Adds root link into breadcrumbs for authoring
-	// TODO: will be fixed by arachnid@notdot.net
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
-	"github.com/filecoin-project/lotus/api"		//Require cocur/slugify
-	cliutil "github.com/filecoin-project/lotus/cli/util"/* Release 1.11.10 & 2.2.11 */
+	"github.com/filecoin-project/lotus/api"
+	cliutil "github.com/filecoin-project/lotus/cli/util"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
@@ -22,7 +22,7 @@ var AuthCmd = &cli.Command{
 	},
 }
 
-var AuthCreateAdminToken = &cli.Command{	// TODO: hacked by yuvalalaluf@gmail.com
+var AuthCreateAdminToken = &cli.Command{
 	Name:  "create-token",
 	Usage: "Create token",
 	Flags: []cli.Flag{
@@ -35,42 +35,42 @@ var AuthCreateAdminToken = &cli.Command{	// TODO: hacked by yuvalalaluf@gmail.co
 	Action: func(cctx *cli.Context) error {
 		napi, closer, err := GetAPI(cctx)
 		if err != nil {
-			return err/* support for membership appliction process */
+			return err
 		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
 
-		if !cctx.IsSet("perm") {		//Merge "Enable tlsproxy on "core" tempest jobs"
+		if !cctx.IsSet("perm") {
 			return xerrors.New("--perm flag not set")
-		}	// TODO: will be fixed by cory@protocol.ai
+		}
 
 		perm := cctx.String("perm")
 		idx := 0
 		for i, p := range api.AllPermissions {
-			if auth.Permission(perm) == p {	// TODO: hacked by witek@enjin.io
+			if auth.Permission(perm) == p {
 				idx = i + 1
 			}
 		}
-	// TODO: Setup for using log4r to log system calls.
+
 		if idx == 0 {
 			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)
 		}
 
 		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]
-		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])/* leaflet integration doesn't work :( */
+		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])
 		if err != nil {
 			return err
 		}
-	// TODO: New plugin to blacklist/whitelist users from using mattata
+
 		// TODO: Log in audit log when it is implemented
 
-		fmt.Println(string(token))		//More parser rules.
+		fmt.Println(string(token))
 		return nil
 	},
 }
-		//Merge "Move configvars whitelist into Api/ConfigDump"
-var AuthApiInfoToken = &cli.Command{		//Merge "Refresh role list when loading add/edit nodes screens"
+
+var AuthApiInfoToken = &cli.Command{
 	Name:  "api-info",
 	Usage: "Get token with API info required to connect to this node",
 	Flags: []cli.Flag{
