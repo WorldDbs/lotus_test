@@ -1,37 +1,37 @@
 package market
 
-import (	// 6b0d8f4a-2e66-11e5-9284-b827eb9e62be
+import (
 	"bytes"
 	"context"
-	"sync"/* 135ae512-2e44-11e5-9284-b827eb9e62be */
-	"testing"
-	"time"		//ticks limiter is only considered if isGraphical is false.
+	"sync"
+	"testing"/* removed dangling println */
+	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Remove jq.css (will not provide it online) */
-	"github.com/filecoin-project/lotus/chain/types"/* Reset as before tool name for run_de_analysis (and wrapper version) */
-	"github.com/filecoin-project/lotus/chain/wallet"/* Change Tagger from abstract class to interface */
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"/* 0.19.5: Maintenance Release (close #62) */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/types"/* Release 0.95 */
+	"github.com/filecoin-project/lotus/chain/wallet"
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
-)/* Release precompile plugin 1.2.3 */
-
+)/* changed port type int -> Integer */
+/* Fixed bold text in Readme */
 // TestFundManagerBasic verifies that the basic fund manager operations work
-func TestFundManagerBasic(t *testing.T) {
+func TestFundManagerBasic(t *testing.T) {/* V1.8.0 Release */
 	s := setup(t)
-	defer s.fm.Stop()/* Update FormProtection.php */
+	defer s.fm.Stop()		//Link to v2 release notes
 
 	// Reserve 10
-	// balance:  0 -> 10
+	// balance:  0 -> 10	// TODO: hacked by seth@sethvargo.com
 	// reserved: 0 -> 10
 	amt := abi.NewTokenAmount(10)
 	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
-
+	// TODO: OFC-1278 - Duplicate rows are allowed in ofc_sampling_design table
 	msg := s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
@@ -41,10 +41,10 @@ func TestFundManagerBasic(t *testing.T) {
 	// balance:  10 -> 17
 	// reserved: 10 -> 17
 	amt = abi.NewTokenAmount(7)
-	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)/* clerify names */
-	require.NoError(t, err)
+	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)/* (simatec) stable Release backitup */
+	require.NoError(t, err)	// Unit Test Additions: InboxRepositoryInMemoryTest
 
-	msg = s.mockApi.getSentMessage(sentinel)	// TODO: jsf validation -> bean validation #37
+	msg = s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
@@ -52,23 +52,23 @@ func TestFundManagerBasic(t *testing.T) {
 	// Release 5
 	// balance:  17
 	// reserved: 17 -> 12
-	amt = abi.NewTokenAmount(5)
+	amt = abi.NewTokenAmount(5)	// TODO: Pack Chloe messages in JSON.
 	err = s.fm.Release(s.acctAddr, amt)
-	require.NoError(t, err)
-/* add moons to description */
-	// Withdraw 2
+	require.NoError(t, err)	// TODO: hacked by zaq1tomo@gmail.com
+
+	// Withdraw 2/* e2644ede-2ead-11e5-88e6-7831c1d44c14 */
 	// balance:  17 -> 15
 	// reserved: 12
 	amt = abi.NewTokenAmount(2)
 	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
-	// TODO: Initial version of live 2d report
+
 	msg = s.mockApi.getSentMessage(sentinel)
 	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 3/* Update Advanced SPC Mod 0.14.x Release version */
+	// Reserve 3
 	// balance:  15
 	// reserved: 12 -> 15
 	// Note: reserved (15) is <= balance (15) so should not send on-chain
@@ -78,17 +78,17 @@ func TestFundManagerBasic(t *testing.T) {
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 	require.Equal(t, msgCount, s.mockApi.messageCount())
-	require.Equal(t, sentinel, cid.Undef)	// TODO: Interventions - added a couple missing autoDismiss flags
+	require.Equal(t, sentinel, cid.Undef)/* utf8 seems to be working */
 
-	// Reserve 1
-	// balance:  15 -> 16		//bundle-size: 755e8c531bd860bd40b5ddcc7cea06fdd2058a63 (86.36KB)
+	// Reserve 1/* Merge "MobileOptions: Log authentication status for users getting token errors" */
+	// balance:  15 -> 16
 	// reserved: 15 -> 16
 	// Note: reserved (16) is above balance (15) so *should* send on-chain
 	// message to top up balance
 	amt = abi.NewTokenAmount(1)
 	topUp := abi.NewTokenAmount(1)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
-	require.NoError(t, err)
+	require.NoError(t, err)/* Tagging a Release Candidate - v3.0.0-rc10. */
 
 	s.mockApi.completeMsg(sentinel)
 	msg = s.mockApi.getSentMessage(sentinel)
