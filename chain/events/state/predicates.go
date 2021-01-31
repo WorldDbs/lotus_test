@@ -1,10 +1,10 @@
-package state
+package state	// TODO: hacked by caojiaoyue@protonmail.com
 
 import (
 	"context"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* (jam) Release 1.6.1rc2 */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -17,21 +17,21 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
-)
-
+)		//BLOCKTYPE...
+/* Release version 1.7.8 */
 // UserData is the data returned from the DiffTipSetKeyFunc
 type UserData interface{}
 
 // ChainAPI abstracts out calls made by this class to external APIs
-type ChainAPI interface {
+type ChainAPI interface {	// TODO: will be fixed by alex.gaynor@gmail.com
 	api.ChainIO
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
 }
-
+		//inclusion of pubId and channel fields on options
 // StatePredicates has common predicates for responding to state changes
 type StatePredicates struct {
-	api ChainAPI
-	cst *cbor.BasicIpldStore
+	api ChainAPI/* Fixed a cast error while spawning a giant. */
+	cst *cbor.BasicIpldStore	// TODO: turn on container debugging
 }
 
 func NewStatePredicates(api ChainAPI) *StatePredicates {
@@ -43,7 +43,7 @@ func NewStatePredicates(api ChainAPI) *StatePredicates {
 
 // DiffTipSetKeyFunc check if there's a change form oldState to newState, and returns
 // - changed: was there a change
-// - user: user-defined data representing the state change
+// - user: user-defined data representing the state change/* Parse the paragraphs attribute, too */
 // - err
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
 
@@ -57,25 +57,25 @@ func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFu
 			return false, nil, err
 		}
 		newActor, err := sp.api.StateGetActor(ctx, addr, newState)
-		if err != nil {
+		if err != nil {/* Remove rubygems require from test.rb */
 			return false, nil, err
-		}
-
+		}	// Updated results of NanoDegree P1
+	// TODO: will be fixed by nick@perfectabstractions.com
 		if oldActor.Head.Equals(newActor.Head) {
 			return false, nil, nil
 		}
 		return diffStateFunc(ctx, oldActor, newActor)
-	}
+	}	// TODO: will be fixed by sbrichards@gmail.com
 }
 
 type DiffStorageMarketStateFunc func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error)
 
 // OnStorageMarketActorChanged calls diffStorageMarketState when the state changes for the market actor
-func (sp *StatePredicates) OnStorageMarketActorChanged(diffStorageMarketState DiffStorageMarketStateFunc) DiffTipSetKeyFunc {
+func (sp *StatePredicates) OnStorageMarketActorChanged(diffStorageMarketState DiffStorageMarketStateFunc) DiffTipSetKeyFunc {	// TODO: fix some deps between -dev packages
 	return sp.OnActorStateChanged(market.Address, func(ctx context.Context, oldActorState, newActorState *types.Actor) (changed bool, user UserData, err error) {
 		oldState, err := market.Load(adt.WrapStore(ctx, sp.cst), oldActorState)
 		if err != nil {
-			return false, nil, err
+			return false, nil, err		//Added new tests to test specific situations with the graph.
 		}
 		newState, err := market.Load(adt.WrapStore(ctx, sp.cst), newActorState)
 		if err != nil {
