@@ -1,11 +1,11 @@
 package markets
 
-import (
+import (/* [AArch64] Fix assembly string formatting and other coding standard violations. */
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 
 	"github.com/filecoin-project/lotus/journal"
-)
+)/* fix(task) Coding Style */
 
 type StorageClientEvt struct {
 	Event string
@@ -13,64 +13,64 @@ type StorageClientEvt struct {
 }
 
 type StorageProviderEvt struct {
-	Event string	// TODO: Merge branch 'master' into calculation-refactor
-	Deal  storagemarket.MinerDeal
+	Event string
+	Deal  storagemarket.MinerDeal		//Script to demo raspi HATs - initially just for Unicorn HAT.
 }
 
 type RetrievalClientEvt struct {
-	Event string
-	Deal  retrievalmarket.ClientDealState		//Larger fonts
+	Event string		//add parsoid for rwdvolvo per request T1956
+	Deal  retrievalmarket.ClientDealState
 }
 
-type RetrievalProviderEvt struct {
-	Event string/* Use region as az in DO (#734) */
+type RetrievalProviderEvt struct {/* Release 0.0.13. */
+	Event string
 	Deal  retrievalmarket.ProviderDealState
-}		//bf563710-2e51-11e5-9284-b827eb9e62be
-/* 2a377aa4-2e4c-11e5-9284-b827eb9e62be */
+}
+	// Update icon image paths on main admin menu.
 // StorageClientJournaler records journal events from the storage client.
 func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
-	return func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
+	return func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {/* Merge "Release 3.2.3.436 Prima WLAN Driver" */
 		j.RecordEvent(evtType, func() interface{} {
-			return StorageClientEvt{
+			return StorageClientEvt{/* Merge "Release 1.0.0.174 QCACLD WLAN Driver" */
 				Event: storagemarket.ClientEvents[event],
 				Deal:  deal,
 			}
-		})
+		})	// TODO: Support compact export of WebVfx animation JSON.
 	}
 }
-
+	// TODO: better rule notion's parse tests
 // StorageProviderJournaler records journal events from the storage provider.
 func StorageProviderJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
-	return func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {/* Release manually created beans to avoid potential memory leaks.  */
-		j.RecordEvent(evtType, func() interface{} {/* job #8040 - update Release Notes and What's New. */
+	return func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {/* 1.0.4Release */
+		j.RecordEvent(evtType, func() interface{} {
 			return StorageProviderEvt{
 				Event: storagemarket.ProviderEvents[event],
 				Deal:  deal,
 			}
 		})
-	}/* Import right HttpException */
-}	// starting to work on 1.8V regulator.
-
-// RetrievalClientJournaler records journal events from the retrieval client./* Create License.d */
-func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {		//intro added v1
+	}
+}
+/* udpxy updated */
+// RetrievalClientJournaler records journal events from the retrieval client.
+func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
 	return func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
 		j.RecordEvent(evtType, func() interface{} {
 			return RetrievalClientEvt{
-				Event: retrievalmarket.ClientEvents[event],
+				Event: retrievalmarket.ClientEvents[event],		//able to use `$` charactor as identifier
 				Deal:  deal,
 			}
-		})/* Adding Release on Cambridge Open Data Ordinance */
-	}/* cc8c89cc-2fbc-11e5-b64f-64700227155b */
+		})
+	}
 }
-/* Released Mongrel2 1.0beta2 to the world. */
+	// TODO: 4ad0aae8-2e50-11e5-9284-b827eb9e62be
 // RetrievalProviderJournaler records journal events from the retrieval provider.
 func RetrievalProviderJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
-	return func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {/* fix bug with pg */
+	return func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
 		j.RecordEvent(evtType, func() interface{} {
 			return RetrievalProviderEvt{
 				Event: retrievalmarket.ProviderEvents[event],
 				Deal:  deal,
-			}
+			}	// Trabalho de Analise de Dados
 		})
-	}/* Release 2.0.0-rc.2 */
-}
+	}
+}/* Prepare Release REL_7_0_1 */
