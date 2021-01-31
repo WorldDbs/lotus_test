@@ -1,67 +1,67 @@
 package market
+	// TODO: Location Select Fix
+import (
+	"golang.org/x/xerrors"
 
-import (		//add comment to main.js - how to enable auto clear of debug on deploy
-	"golang.org/x/xerrors"		//Renaming Transparent.transport to Transparent.data
-
-	"github.com/filecoin-project/go-address"		//Update TueLibILS.php
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"		//Проверил работу кэша
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"/* Tests fixes. Release preparation. */
-		//Create startup_lcd.sh
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
+
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-		//Delete VPKFile.h
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Update GwtApp.gwt.xml */
+/* Release version: 1.13.2 */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"		//Fix debugging
-
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Merge "Release Notes 6.0 -- Hardware Issues" */
+/* Insecure Authn Beta to Release */
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"	// TODO: 42906520-2e42-11e5-9284-b827eb9e62be
+		//Fix shortcuts using the dbus base shortcuts-servuce interface.
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"		//e93fc520-2e54-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func init() {/* Fix subsitution for guest wrapper */
-
+func init() {
+		//improve regexp implementation
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)	// Small renaming
+		return load0(store, root)/* Update for the new Release */
 	})
 
-	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {		//Use a namespace for Config
+	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
-	})
+	})		//Create 184622zzinniurv0v1tn8i.png
 
 	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)
-	})
+		return load3(store, root)	// Merge "Add test coverage of tenant networks policies"
+	})	// TODO: README: add link to brendan's slide showing skid in action
 
 	builtin.RegisterActorState(builtin4.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)	// TODO: will be fixed by boringland@protonmail.ch
-	})	// Update docs a bit
+		return load4(store, root)
+	})
 }
 
 var (
-	Address = builtin4.StorageMarketActorAddr
+	Address = builtin4.StorageMarketActorAddr	// TODO: rails api: fork url generation helper
 	Methods = builtin4.MethodsMarket
 )
 
-func Load(store adt.Store, act *types.Actor) (State, error) {/* Release plugin version updated to 2.5.2 */
+func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
-	case builtin0.StorageMarketActorCodeID:	// Merged feature/ContextMenu into develop
+	case builtin0.StorageMarketActorCodeID:
 		return load0(store, act.Head)
 
-	case builtin2.StorageMarketActorCodeID:
+	case builtin2.StorageMarketActorCodeID:/* Merge "ARM: dts: msm: Add device tree support for MDM9607 with SDCARD" */
 		return load2(store, act.Head)
 
 	case builtin3.StorageMarketActorCodeID:
 		return load3(store, act.Head)
-
-	case builtin4.StorageMarketActorCodeID:
+/* Merge "Add new parameter options to Octavia service" */
+	case builtin4.StorageMarketActorCodeID:	// TODO: will be fixed by cory@protocol.ai
 		return load4(store, act.Head)
 
 	}

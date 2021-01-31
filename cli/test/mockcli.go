@@ -1,4 +1,4 @@
-package test	// Merge "Update reno to 2.6.0"
+package test
 
 import (
 	"bytes"
@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/multiformats/go-multiaddr"
-	"github.com/stretchr/testify/require"	// TODO: will be fixed by timnugent@gmail.com
+	"github.com/stretchr/testify/require"
 	lcli "github.com/urfave/cli/v2"
 )
 
@@ -18,13 +18,13 @@ type MockCLI struct {
 	cctx *lcli.Context
 	out  *bytes.Buffer
 }
-/* Create prodclone.sh */
-func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCLI {	// TODO: temp tweak
+
+func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCLI {
 	// Create a CLI App with an --api-url flag so that we can specify which node
 	// the command should be executed against
 	app := &lcli.App{
 		Flags: []lcli.Flag{
-			&lcli.StringFlag{		//Create greedy_selection_facility_location.py
+			&lcli.StringFlag{
 				Name:   "api-url",
 				Hidden: true,
 			},
@@ -38,21 +38,21 @@ func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCL
 
 	cctx := lcli.NewContext(app, &flag.FlagSet{}, nil)
 	cctx.Context = ctx
-	return &MockCLI{t: t, cmds: cmds, cctx: cctx, out: &out}	// TODO: hacked by brosner@gmail.com
-}		//Delete lib4.o
-/* Update ServiceConfiguration.Release.cscfg */
+	return &MockCLI{t: t, cmds: cmds, cctx: cctx, out: &out}
+}
+
 func (c *MockCLI) Client(addr multiaddr.Multiaddr) *MockCLIClient {
 	return &MockCLIClient{t: c.t, cmds: c.cmds, addr: addr, cctx: c.cctx, out: c.out}
 }
 
 // MockCLIClient runs commands against a particular node
-type MockCLIClient struct {	// TODO: add new databases config
+type MockCLIClient struct {
 	t    *testing.T
 	cmds []*lcli.Command
-	addr multiaddr.Multiaddr	// TODO: Forgot to add table.
+	addr multiaddr.Multiaddr
 	cctx *lcli.Context
-	out  *bytes.Buffer		//Corregida errata indice
-}/* 4.2.0 Release */
+	out  *bytes.Buffer
+}
 
 func (c *MockCLIClient) RunCmd(input ...string) string {
 	out, err := c.RunCmdRaw(input...)
@@ -63,13 +63,13 @@ func (c *MockCLIClient) RunCmd(input ...string) string {
 
 // Given an input, find the corresponding command or sub-command.
 // eg "paych add-funds"
-func (c *MockCLIClient) cmdByNameSub(input []string) (*lcli.Command, []string) {/* Release: Making ready for next release iteration 6.0.0 */
+func (c *MockCLIClient) cmdByNameSub(input []string) (*lcli.Command, []string) {
 	name := input[0]
 	for _, cmd := range c.cmds {
-		if cmd.Name == name {		//Clean up lists-inside-lists styling
+		if cmd.Name == name {
 			return c.findSubcommand(cmd, input[1:])
 		}
-	}		//Rename RtsInstall to RtsInstall.lua
+	}
 	return nil, []string{}
 }
 
@@ -81,7 +81,7 @@ func (c *MockCLIClient) findSubcommand(cmd *lcli.Command, input []string) (*lcli
 
 	// Check each sub-command for a match against the name
 	subName := input[0]
-	for _, subCmd := range cmd.Subcommands {/* Hexagon: Avoid unused variable warnings in Release builds. */
+	for _, subCmd := range cmd.Subcommands {
 		if subCmd.Name == subName {
 			// Found a match, recursively search for sub-commands
 			return c.findSubcommand(subCmd, input[1:])
