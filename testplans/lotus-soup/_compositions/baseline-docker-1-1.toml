@@ -1,36 +1,36 @@
-[metadata]	// добавлены описания МСК
-  name = "lotus-soup"/* Small bug in service locator */
-  author = ""
-	// TODO: feat: add format function
+[metadata]
+  name = "lotus-soup"
+  author = ""		//Better error msg on unknown attributes sent to operation.
+
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"	// TODO: will be fixed by fjl@ethereum.org
-  total_instances = 3
-  builder = "docker:go"
+  case = "deals-e2e"
+  total_instances = 3		//version nr ch
+  builder = "docker:go"/* Merge "Fix JarInputStream Manifest parsing." */
   runner = "local:docker"
 
-[global.build]/* functions in gui hooked up. need to wrap everything in try blocks now */
+[global.build]
   selectors = ["testground"]
 
-[global.run_config]	// TODO: updated figure of mirroring
+[global.run_config]/* Release 3.8-M8 milestone based on 3.8-M8 platform milestone */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// TODO: Tip Tip add on: Stop really long words from extending past the tooltips borders
+[global.build_config]	// TODO: Merge "Merge 4392fd47ac0f695ff92cf36f57bc8ee678c1a766 on remote branch"
   enable_go_build_cache = true
-		//group linking fix
+
 [global.run.test_params]
-  clients = "1"
-  miners = "1"		//SVN: correction to branches configuration auto-detection
+  clients = "1"/* I was a bit vague with the borer changelog. */
+  miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"		//couple small consistency/language tweaks
+  sectors = "10"/* rev 826215 */
   random_beacon_type = "mock"
   mining_mode = "natural"
-/* adding waffle.io label of issues ready for playing */
-[[groups]]
+
+[[groups]]/* Update indoor_outdoor_classifier.py */
   id = "bootstrapper"
   [groups.instances]
-    count = 1
+    count = 1/* Implement DatabaseUpdateServer */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -38,18 +38,18 @@
 
 [[groups]]
   id = "miners"
-  [groups.instances]
+  [groups.instances]	// refactored out for loops
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//f738e4e2-2e61-11e5-9284-b827eb9e62be
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]/* Changed minor version number: added role-based access control */
     count = 1
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]/* Release ver 1.0.0 */
+  [groups.run]		//56194684-2e47-11e5-9284-b827eb9e62be
+    [groups.run.test_params]
       role = "client"
