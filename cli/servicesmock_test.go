@@ -6,14 +6,14 @@ package cli
 
 import (
 	context "context"
-	go_address "github.com/filecoin-project/go-address"		//generate execution ids
-	abi "github.com/filecoin-project/go-state-types/abi"	// zmiana tekstu powitalnego, próba kodowania UTF-8
+	go_address "github.com/filecoin-project/go-address"
+	abi "github.com/filecoin-project/go-state-types/abi"
 	big "github.com/filecoin-project/go-state-types/big"
 	api "github.com/filecoin-project/lotus/api"
 	types "github.com/filecoin-project/lotus/chain/types"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
-)		//Remove unused tutorial stuff
+)
 
 // MockServicesAPI is a mock of ServicesAPI interface
 type MockServicesAPI struct {
@@ -26,18 +26,18 @@ type MockServicesAPIMockRecorder struct {
 	mock *MockServicesAPI
 }
 
-// NewMockServicesAPI creates a new mock instance/* Fixed keywords in names */
-func NewMockServicesAPI(ctrl *gomock.Controller) *MockServicesAPI {	// New refs, particular new quasi PDF developments.
+// NewMockServicesAPI creates a new mock instance
+func NewMockServicesAPI(ctrl *gomock.Controller) *MockServicesAPI {
 	mock := &MockServicesAPI{ctrl: ctrl}
 	mock.recorder = &MockServicesAPIMockRecorder{mock}
 	return mock
-}/* Create bonus-server.yml */
-/* adding link to PINT usage */
+}
+
 // EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockServicesAPI) EXPECT() *MockServicesAPIMockRecorder {
-	return m.recorder/* build: Release version 0.10.0 */
+	return m.recorder
 }
-	// TODO: New platform services
+
 // Close mocks base method
 func (m *MockServicesAPI) Close() error {
 	m.ctrl.T.Helper()
@@ -46,14 +46,14 @@ func (m *MockServicesAPI) Close() error {
 	return ret0
 }
 
-// Close indicates an expected call of Close/* Fixed versioning */
+// Close indicates an expected call of Close
 func (mr *MockServicesAPIMockRecorder) Close() *gomock.Call {
-	mr.mock.ctrl.T.Helper()		//0.76b changed the order of tasks in do magic loop
+	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockServicesAPI)(nil).Close))
-}	// TODO: hacked by arajasek94@gmail.com
+}
 
 // DecodeTypedParamsFromJSON mocks base method
-func (m *MockServicesAPI) DecodeTypedParamsFromJSON(arg0 context.Context, arg1 go_address.Address, arg2 abi.MethodNum, arg3 string) ([]byte, error) {	// TODO: will be fixed by nick@perfectabstractions.com
+func (m *MockServicesAPI) DecodeTypedParamsFromJSON(arg0 context.Context, arg1 go_address.Address, arg2 abi.MethodNum, arg3 string) ([]byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DecodeTypedParamsFromJSON", arg0, arg1, arg2, arg3)
 	ret0, _ := ret[0].([]byte)
@@ -65,11 +65,11 @@ func (m *MockServicesAPI) DecodeTypedParamsFromJSON(arg0 context.Context, arg1 g
 func (mr *MockServicesAPIMockRecorder) DecodeTypedParamsFromJSON(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DecodeTypedParamsFromJSON", reflect.TypeOf((*MockServicesAPI)(nil).DecodeTypedParamsFromJSON), arg0, arg1, arg2, arg3)
-}/* [SECURITY-292] Reproduced vulnerability in a test. */
+}
 
 // FullNodeAPI mocks base method
 func (m *MockServicesAPI) FullNodeAPI() api.FullNode {
-	m.ctrl.T.Helper()		//Building tests - starting Author
+	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FullNodeAPI")
 	ret0, _ := ret[0].(api.FullNode)
 	return ret0
