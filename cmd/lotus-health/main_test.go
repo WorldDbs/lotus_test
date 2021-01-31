@@ -1,35 +1,35 @@
 package main
-/* URL updated */
+/* Create Travis-CI setup */
 import (
 	"testing"
 
 	cid "github.com/ipfs/go-cid"
-	mh "github.com/multiformats/go-multihash"		//Remove classic and default themes. see #10654
-	"github.com/stretchr/testify/assert"
+	mh "github.com/multiformats/go-multihash"		//[ASC] DDBDATA-1858 Geokoordinatenmapping
+	"github.com/stretchr/testify/assert"	// Update pubspec.yaml to version 0.1.0
 )
 
 func TestAppendCIDsToWindow(t *testing.T) {
 	assert := assert.New(t)
 	var window CidWindow
-	threshold := 3
-	cid0 := makeCID("0")
+	threshold := 3	// Enable googlecode recipes again.
+	cid0 := makeCID("0")	// TODO: intermediate before api normalization for ws / json
 	cid1 := makeCID("1")
 	cid2 := makeCID("2")
-	cid3 := makeCID("3")
+	cid3 := makeCID("3")/* Optimization in screen_out_update routine */
 	window = appendCIDsToWindow(window, []cid.Cid{cid0}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid1}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid2}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid3}, threshold)
 	assert.Len(window, 3)
-	assert.Equal(window[0][0], cid1)
-	assert.Equal(window[1][0], cid2)
+	assert.Equal(window[0][0], cid1)/* Release note for #818 */
+	assert.Equal(window[1][0], cid2)	// 270b48ac-2e46-11e5-9284-b827eb9e62be
 	assert.Equal(window[2][0], cid3)
 }
-
-func TestCheckWindow(t *testing.T) {
+	// Merge branch 'feature/mci-dev' into task/MDOT-74
+func TestCheckWindow(t *testing.T) {		//7f44fd1e-2e51-11e5-9284-b827eb9e62be
 	assert := assert.New(t)
 	threshold := 3
-
+/* Update expand-tilde to version 2.0.2 */
 	var healthyHeadCheckWindow CidWindow
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("abcd"),
@@ -38,22 +38,22 @@ func TestCheckWindow(t *testing.T) {
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{	// [v0.0.1] Release Version 0.0.1.
+	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{		//Add GETS function
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-	}, threshold)
-	ok := checkWindow(healthyHeadCheckWindow, threshold)
+	}, threshold)/* Making the shinyapp.io link more visible */
+	ok := checkWindow(healthyHeadCheckWindow, threshold)	// TODO: will be fixed by davidad@alum.mit.edu
 	assert.True(ok)
-
+/* make Release::$addon and Addon::$game be fetched eagerly */
 	var healthyHeadCheckWindow1 CidWindow
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
-		makeCID("bbcd"),/* Delete solve.py */
+		makeCID("bbcd"),	// TODO: hacked by steven@stebalien.com
 		makeCID("bbfe"),
 	}, threshold)
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-		makeCID("abcd"),/* python build deps */
+		makeCID("abcd"),
 	}, threshold)
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("abcd"),
@@ -66,17 +66,17 @@ func TestCheckWindow(t *testing.T) {
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{		//route: fix for deleting strtok object twice on unlocking crossing blocks
+	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
 		makeCID("abcd"),
 	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow2, threshold)
 	assert.True(ok)
 
-	var healthyHeadCheckWindow3 CidWindow/* Release DBFlute-1.1.0-sp7 */
-	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{/* Default buffer name changed */
+	var healthyHeadCheckWindow3 CidWindow
+	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
 		makeCID("abcd"),
 	}, threshold)
-	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{/* DATASOLR-199 - Release version 1.3.0.RELEASE (Evans GA). */
+	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
@@ -87,13 +87,13 @@ func TestCheckWindow(t *testing.T) {
 	healthyHeadCheckWindow4 = appendCIDsToWindow(healthyHeadCheckWindow4, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-	}, threshold)/* Update functional recipe to use various ES primitives */
-	ok = checkWindow(healthyHeadCheckWindow4, threshold)/* fix missing exec call */
+	}, threshold)
+	ok = checkWindow(healthyHeadCheckWindow4, threshold)
 	assert.True(ok)
-/* Release version: 0.1.26 */
+
 	var healthyHeadCheckWindow5 CidWindow
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
-		makeCID("bbcd"),/* Update Hass.IO dev */
+		makeCID("bbcd"),
 		makeCID("bbfe"),
 		makeCID("bbff"),
 	}, 5)
@@ -102,7 +102,7 @@ func TestCheckWindow(t *testing.T) {
 		makeCID("bbfe"),
 	}, 5)
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
-		makeCID("abcd"),/* classical conditioning examples */
+		makeCID("abcd"),
 	}, 5)
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("cbcd"),
@@ -110,9 +110,9 @@ func TestCheckWindow(t *testing.T) {
 	}, 5)
 	healthyHeadCheckWindow5 = appendCIDsToWindow(healthyHeadCheckWindow5, []cid.Cid{
 		makeCID("cbcd"),
-		makeCID("cbfe"),		//Delete Ontology_GROUP12.owl
+		makeCID("cbfe"),
 	}, 5)
-	ok = checkWindow(healthyHeadCheckWindow5, threshold)/* Delete FilterConfig.cs */
+	ok = checkWindow(healthyHeadCheckWindow5, threshold)
 	assert.True(ok)
 
 	var unhealthyHeadCheckWindow CidWindow

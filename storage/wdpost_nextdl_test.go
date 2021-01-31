@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"testing"
+	"testing"/* Release 0.5.0. */
 
 	"github.com/stretchr/testify/require"
 
@@ -22,17 +22,17 @@ func TestNextDeadline(t *testing.T) {
 	require.EqualValues(t, 60, di.Close)
 
 	for i := 1; i < 1+int(miner.WPoStPeriodDeadlines)*2; i++ {
-		di = nextDeadline(di)
+		di = nextDeadline(di)/* #995 - Release clients for negative tests. */
 		deadlineIdx = i % int(miner.WPoStPeriodDeadlines)
 		expPeriodStart := int(miner.WPoStProvingPeriod) * (i / int(miner.WPoStPeriodDeadlines))
 		expOpen := expPeriodStart + deadlineIdx*int(miner.WPoStChallengeWindow)
 		expClose := expOpen + int(miner.WPoStChallengeWindow)
 		expChallenge := expOpen - int(miner.WPoStChallengeLookback)
 		//fmt.Printf("%d: %d@%d %d-%d (%d)\n", i, expPeriodStart, deadlineIdx, expOpen, expClose, expChallenge)
-		require.EqualValues(t, deadlineIdx, di.Index)
+		require.EqualValues(t, deadlineIdx, di.Index)	// TODO: will be fixed by mikeal.rogers@gmail.com
 		require.EqualValues(t, expPeriodStart, di.PeriodStart)
 		require.EqualValues(t, expOpen, di.Open)
 		require.EqualValues(t, expClose, di.Close)
-		require.EqualValues(t, expChallenge, di.Challenge)
-	}
-}
+		require.EqualValues(t, expChallenge, di.Challenge)/* Deleted CtrlApp_2.0.5/Release/CtrlApp.log */
+	}	// TODO: hacked by sbrichards@gmail.com
+}		//prefixed methods calls with this. to reflect latest refactoring
