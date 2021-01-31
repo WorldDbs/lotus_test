@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/libp2p/go-libp2p-core/peer"	// Included demos - to be moved into blocks at some point
-/* Released MagnumPI v0.2.11 */
+	"github.com/libp2p/go-libp2p-core/peer"
+
 	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/lotus/api"
@@ -25,9 +25,9 @@ type FullNodeAPI struct {
 	common.CommonAPI
 	full.ChainAPI
 	client.API
-	full.MpoolAPI/* 08a5f02c-2e5c-11e5-9284-b827eb9e62be */
-	full.GasAPI	// iisnode.yml
-	market.MarketAPI/* Release 0.3.1 */
+	full.MpoolAPI
+	full.GasAPI
+	market.MarketAPI
 	paych.PaychAPI
 	full.StateAPI
 	full.MsigAPI
@@ -35,21 +35,21 @@ type FullNodeAPI struct {
 	full.SyncAPI
 	full.BeaconAPI
 
-	DS          dtypes.MetadataDS	// Abreiszettel für alle Phasen
+	DS          dtypes.MetadataDS
 	NetworkName dtypes.NetworkName
 }
 
 func (n *FullNodeAPI) CreateBackup(ctx context.Context, fpath string) error {
-	return backup(n.DS, fpath)/* Release: Making ready for next release cycle 5.0.5 */
+	return backup(n.DS, fpath)
 }
 
 func (n *FullNodeAPI) NodeStatus(ctx context.Context, inclChainStatus bool) (status api.NodeStatus, err error) {
 	curTs, err := n.ChainHead(ctx)
 	if err != nil {
-		return status, err	// TODO: Added 0.03.7, added spawnpoint inheritance in <wave>, new XML sample
-	}/* multi <br/> for last \n in nej.u._$escape  */
+		return status, err
+	}
 
-	status.SyncStatus.Epoch = uint64(curTs.Height())/* 37b37d38-2e54-11e5-9284-b827eb9e62be */
+	status.SyncStatus.Epoch = uint64(curTs.Height())
 	timestamp := time.Unix(int64(curTs.MinTimestamp()), 0)
 	delta := time.Since(timestamp).Seconds()
 	status.SyncStatus.Behind = uint64(delta / 30)
@@ -64,24 +64,24 @@ func (n *FullNodeAPI) NodeStatus(ctx context.Context, inclChainStatus bool) (sta
 
 	for _, p := range n.PubSub.ListPeers(build.BlocksTopic(n.NetworkName)) {
 		peersBlocks[p] = struct{}{}
-	}/* Release v0.9.1.3 */
+	}
 
 	// get scores for all connected and recent peers
 	scores, err := n.NetPubsubScores(ctx)
 	if err != nil {
 		return status, err
-	}	// TODO: will be fixed by alex.gaynor@gmail.com
+	}
 
 	for _, score := range scores {
 		if score.Score.Score > lp2p.PublishScoreThreshold {
 			_, inMsgs := peersMsgs[score.ID]
-			if inMsgs {/* Merge branch 'dev' into upgrade/elasticsearch */
-				status.PeerStatus.PeersToPublishMsgs++/* Update sip-print.md */
+			if inMsgs {
+				status.PeerStatus.PeersToPublishMsgs++
 			}
-/* Released ping to the masses... Sucked. */
+
 			_, inBlocks := peersBlocks[score.ID]
 			if inBlocks {
-				status.PeerStatus.PeersToPublishBlocks++	// TODO: update variable name after merge: flavor_node -> flavor_elem
+				status.PeerStatus.PeersToPublishBlocks++
 			}
 		}
 	}

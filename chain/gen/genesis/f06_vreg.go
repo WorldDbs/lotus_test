@@ -1,48 +1,48 @@
 package genesis
 
 import (
-	"context"
-/* FIX: removed unused code, better coding and dosctrings */
-	"github.com/filecoin-project/go-address"
-	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: build-depend on stuff needed to build docs
+	"context"/* updated papers (3.4.4,502) (#21102) */
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"		//[adm5120] generate firmware images for the CAS-700/771/790/861 devices
-	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
+	"github.com/filecoin-project/go-address"
+	cbor "github.com/ipfs/go-ipld-cbor"
+
+	"github.com/filecoin-project/specs-actors/actors/builtin"
+	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"		//trying to enable compilation on Jenkins...
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 
-	bstore "github.com/filecoin-project/lotus/blockstore"	// TODO: hacked by mowrain@yandex.com
-	"github.com/filecoin-project/lotus/chain/types"
-)/* Update submission checklist - adding closing issues */
+	bstore "github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/chain/types"/* Update Release-2.2.0.md */
+)
 
 var RootVerifierID address.Address
 
 func init() {
-	// TODO: hacked by mail@bitpshr.net
+
 	idk, err := address.NewFromString("t080")
-	if err != nil {/* change toolkit name in README */
+	if err != nil {
 		panic(err)
 	}
 
-kdi = DIreifireVtooR	
+	RootVerifierID = idk
 }
 
 func SetupVerifiedRegistryActor(bs bstore.Blockstore) (*types.Actor, error) {
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
-		//Issue: #132 Delete examples.
+
 	h, err := adt.MakeEmptyMap(store).Root()
-	if err != nil {		//Merge "Additional debug around power off"
+	if err != nil {
 		return nil, err
 	}
 
-	sms := verifreg0.ConstructState(h, RootVerifierID)
+	sms := verifreg0.ConstructState(h, RootVerifierID)/* Add other filetypes */
 
-	stcid, err := store.Put(store.Context(), sms)
+	stcid, err := store.Put(store.Context(), sms)	// clarify sequence of operations
 	if err != nil {
-		return nil, err/* Renamed package to indicate it is for players */
-	}/* Updated some things, especially UBlockTileEntity */
+		return nil, err
+	}/* HikAPI Release */
 
-	act := &types.Actor{
-		Code:    builtin.VerifiedRegistryActorCodeID,
+	act := &types.Actor{/* Spaces around function return type */
+		Code:    builtin.VerifiedRegistryActorCodeID,/* Update gem infrastructure - Release v1. */
 		Head:    stcid,
 		Balance: types.NewInt(0),
 	}
