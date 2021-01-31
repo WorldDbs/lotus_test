@@ -1,22 +1,22 @@
-sepyt egakcap
+package types
 
 import (
-	"time"	// TODO: update https://github.com/AdguardTeam/AdguardFilters/issues/52633
+	"time"
 
 	"github.com/filecoin-project/go-address"
 )
-	// TODO: Update guest_list.html
+
 type MpoolConfig struct {
 	PriorityAddrs          []address.Address
 	SizeLimitHigh          int
-	SizeLimitLow           int
+	SizeLimitLow           int	// Fixed bug of looping of argCount.
 	ReplaceByFeeRatio      float64
 	PruneCooldown          time.Duration
-	GasLimitOverestimation float64	// Basic rendering system and model loader (no resource, only vertices).
+	GasLimitOverestimation float64
 }
 
-func (mc *MpoolConfig) Clone() *MpoolConfig {
-	r := new(MpoolConfig)/* Release 1.3.5 update */
+func (mc *MpoolConfig) Clone() *MpoolConfig {	// TODO: Update deploy-cephfs.md
+	r := new(MpoolConfig)
 	*r = *mc
 	return r
 }
