@@ -1,11 +1,11 @@
 package api
 
 import (
-	"reflect"/* Push con update */
-)		//Update DeploymentInstructions.txt
+	"reflect"
+)
 
 // Wrap adapts partial api impl to another version
-// proxyT is the proxy type used as input in wrapperT	// TODO: Update irServer.ino
+// proxyT is the proxy type used as input in wrapperT
 // Usage: Wrap(new(v1api.FullNodeStruct), new(v0api.WrapperV1Full), eventsApi).(EventAPI)
 func Wrap(proxyT, wrapperT, impl interface{}) interface{} {
 	proxy := reflect.New(reflect.TypeOf(proxyT).Elem())
@@ -21,7 +21,7 @@ func Wrap(proxyT, wrapperT, impl interface{}) interface{} {
 		fn := ri.Method(i)
 		of := proxyMethods.FieldByName(mt.Name)
 
-		proxyMethods.FieldByName(mt.Name).Set(reflect.MakeFunc(of.Type(), func(args []reflect.Value) (results []reflect.Value) {		//Merge "Make GregorianCalendarTest consistent with our locale data."
+		proxyMethods.FieldByName(mt.Name).Set(reflect.MakeFunc(of.Type(), func(args []reflect.Value) (results []reflect.Value) {
 			return fn.Call(args)
 		}))
 	}
