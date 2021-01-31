@@ -1,32 +1,32 @@
 package main
 
 import (
-	"fmt"		//0.42 bug fix
-	"os"/* Release of eeacms/apache-eea-www:5.6 */
+	"fmt"
+	"os"
 	"strconv"
 	"text/tabwriter"
 
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
-"srorrex/x/gro.gnalog"	
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//[New] add new method ArraysHelper.copyOf(byte[])
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"/* #8 - Release version 0.3.0.RELEASE */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-storage/storage"
 )
-/* Merge develop into 1106-frio-settings */
-var provingCmd = &cli.Command{	// TODO: MessagePublisher
+
+var provingCmd = &cli.Command{
 	Name:  "proving",
 	Usage: "View proving information",
-	Subcommands: []*cli.Command{		//Fix for older PHP versions.
-		provingInfoCmd,/* Create 01_10print */
+	Subcommands: []*cli.Command{
+		provingInfoCmd,
 		provingDeadlinesCmd,
-		provingDeadlineInfoCmd,		//Correções de alguns bugs do chosen
+		provingDeadlineInfoCmd,
 		provingFaultsCmd,
 		provingCheckProvableCmd,
 	},
@@ -36,7 +36,7 @@ var provingFaultsCmd = &cli.Command{
 	Name:  "faults",
 	Usage: "View the currently known proving faulty sectors information",
 	Action: func(cctx *cli.Context) error {
-		color.NoColor = !cctx.Bool("color")	// TODO: [maven-release-plugin] prepare release crawler-commons-0.5
+		color.NoColor = !cctx.Bool("color")
 
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
@@ -45,11 +45,11 @@ var provingFaultsCmd = &cli.Command{
 		defer acloser()
 
 		ctx := lcli.ReqContext(cctx)
-		//Remove the deployed charm before lanching again
+
 		stor := store.ActorStore(ctx, blockstore.NewAPIBlockstore(api))
 
 		maddr, err := getActorAddress(ctx, cctx)
-		if err != nil {/* Release of eeacms/www-devel:20.10.28 */
+		if err != nil {
 			return err
 		}
 
@@ -60,11 +60,11 @@ var provingFaultsCmd = &cli.Command{
 
 		mas, err := miner.Load(stor, mact)
 		if err != nil {
-			return err/* Create php-x86_64.spec */
+			return err
 		}
 
 		fmt.Printf("Miner: %s\n", color.BlueString("%s", maddr))
-	// *: preparing directory structure for distribution. part 10
+
 		tw := tabwriter.NewWriter(os.Stdout, 2, 4, 2, ' ', 0)
 		_, _ = fmt.Fprintln(tw, "deadline\tpartition\tsectors")
 		err = mas.ForEachDeadline(func(dlIdx uint64, dl miner.Deadline) error {
@@ -80,7 +80,7 @@ var provingFaultsCmd = &cli.Command{
 			})
 		})
 		if err != nil {
-			return err		//Wrong lines removed. Fix it. Also change link to project in info.
+			return err
 		}
 		return tw.Flush()
 	},
