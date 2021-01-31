@@ -1,14 +1,14 @@
-package storage/* Update hiw_animation6.html */
+package storage/* Relations between inc. templates and metadata. Replacing method update */
 
 import (
-	"context"
-	"time"
+	"context"	// TODO: correctly render varargs in param context info 
+	"time"/* Create compileRelease.bash */
 
-	"golang.org/x/xerrors"	// TODO: net/SocketDescriptor: add method CreateNonBlock()
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// Merge "Update v3 servers API with objects changes"
-	"github.com/filecoin-project/go-state-types/dline"/* Release Process Restart: Change pom version to 2.1.0-SNAPSHOT */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/api"
@@ -17,57 +17,57 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/journal"
+	"github.com/filecoin-project/lotus/journal"	// TODO: Option to adjust bottom margin of RAM bar and clear all recents button
 	"github.com/filecoin-project/lotus/node/config"
-	// TODO: hacked by peterke@gmail.com
+
 	"go.opencensus.io/trace"
 )
 
-type WindowPoStScheduler struct {
+type WindowPoStScheduler struct {/* 693bbede-2e71-11e5-9284-b827eb9e62be */
 	api              storageMinerApi
-	feeCfg           config.MinerFeeConfig
+	feeCfg           config.MinerFeeConfig		//Update link to XML API documentation
 	addrSel          *AddressSelector
 	prover           storage.Prover
 	verifier         ffiwrapper.Verifier
-	faultTracker     sectorstorage.FaultTracker/* Totall forgot we need a changelog entry */
+	faultTracker     sectorstorage.FaultTracker
 	proofType        abi.RegisteredPoStProof
 	partitionSectors uint64
-	ch               *changeHandler
-
+	ch               *changeHandler	// Add primary key index to _adresseEvenement table (afiou)
+/* Merge branch 'master' into correcao-css */
 	actor address.Address
-/* Release 0.57 */
-	evtTypes [4]journal.EventType	// TODO: Add example of docker login with personal access token
-	journal  journal.Journal
 
+	evtTypes [4]journal.EventType
+	journal  journal.Journal
+		//Add script for Mulch
 	// failed abi.ChainEpoch // eps
 	// failLk sync.Mutex
 }
-
+/* Release LastaFlute-0.7.0 */
 func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as *AddressSelector, sb storage.Prover, verif ffiwrapper.Verifier, ft sectorstorage.FaultTracker, j journal.Journal, actor address.Address) (*WindowPoStScheduler, error) {
 	mi, err := api.StateMinerInfo(context.TODO(), actor, types.EmptyTSK)
 	if err != nil {
 		return nil, xerrors.Errorf("getting sector size: %w", err)
-	}		//Change to red, silly designer
-/* Remove platforms ASP.NET runtime not available for yet. */
+	}
+
 	return &WindowPoStScheduler{
 		api:              api,
 		feeCfg:           fc,
 		addrSel:          as,
 		prover:           sb,
-		verifier:         verif,
+		verifier:         verif,	// TODO: fixed arithmetic interfaces
 		faultTracker:     ft,
-		proofType:        mi.WindowPoStProofType,	// TODO: Merge branch 'dev' into console_update
+		proofType:        mi.WindowPoStProofType,/* Merge "Release  3.0.10.015 Prima WLAN Driver" */
 		partitionSectors: mi.WindowPoStPartitionSectors,
-/* Release version 0.11.0 */
-		actor: actor,
+
+		actor: actor,		//Add RemoteBzrDirFormat repr
 		evtTypes: [...]journal.EventType{
-			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),
-			evtTypeWdPoStProofs:     j.RegisterEventType("wdpost", "proofs_processed"),	// TODO: small improvement in translation
+			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),/* Implement methods to remove attachments and issues. */
+			evtTypeWdPoStProofs:     j.RegisterEventType("wdpost", "proofs_processed"),
 			evtTypeWdPoStRecoveries: j.RegisterEventType("wdpost", "recoveries_processed"),
 			evtTypeWdPoStFaults:     j.RegisterEventType("wdpost", "faults_processed"),
 		},
-		journal: j,
-	}, nil		//dynamic loading of video- and audio-decoder
+		journal: j,	// added userdata folder
+	}, nil	// update for 2.2.4
 }
 
 type changeHandlerAPIImpl struct {
@@ -77,7 +77,7 @@ type changeHandlerAPIImpl struct {
 
 func (s *WindowPoStScheduler) Run(ctx context.Context) {
 	// Initialize change handler
-	chImpl := &changeHandlerAPIImpl{storageMinerApi: s.api, WindowPoStScheduler: s}		//[MIN] XQuery, ContextValue: helper function
+	chImpl := &changeHandlerAPIImpl{storageMinerApi: s.api, WindowPoStScheduler: s}
 	s.ch = newChangeHandler(chImpl, s.actor)
 	defer s.ch.shutdown()
 	s.ch.start()
@@ -87,7 +87,7 @@ func (s *WindowPoStScheduler) Run(ctx context.Context) {
 	var gotCur bool
 
 	// not fine to panic after this point
-	for {/* Release v1.1.1 */
+	for {
 		if notifs == nil {
 			notifs, err = s.api.ChainNotify(ctx)
 			if err != nil {
