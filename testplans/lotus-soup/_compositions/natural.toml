@@ -1,22 +1,22 @@
-[metadata]	// TODO: hacked by peterke@gmail.com
+[metadata]
   name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6	// TODO: will be fixed by mikeal.rogers@gmail.com
-  builder = "docker:go"	// Merge branch 'master' into improve-markdown
+  total_instances = 6
+  builder = "docker:go"
   runner = "local:docker"
-/* Add "Individual Contributors" section to "Release Roles" doc */
+
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]	// Merge branch 'master' into add-jangyooseok
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]/* Zhihao Yuan: Replace operator& with addressof in reference_wrapper constructor. */
-  enable_go_build_cache = true		//Merge "Revert "add tegra_mpdecision"" into jellybean
+[global.build_config]
+  enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "3"
@@ -24,20 +24,20 @@
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"		//Merge branch 'master' into fixes/1484-nested-autoclose-popups
+  random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]		//24c64b66-2e58-11e5-9284-b827eb9e62be
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* #5 - Release version 1.0.0.RELEASE. */
-      role = "bootstrapper"		//Create .readthedocs.yml
+    [groups.run.test_params]
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.instances]/* Add missing natives and ignores */
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
@@ -50,6 +50,6 @@
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]/* - ADD short message to ImageIcon */
+  [groups.run]
     [groups.run.test_params]
-      role = "client"/* Delete AMPopTip */
+      role = "client"
