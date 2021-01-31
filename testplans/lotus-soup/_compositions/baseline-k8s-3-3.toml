@@ -1,9 +1,9 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"/* Release of eeacms/eprtr-frontend:0.4-beta.5 */
   author = ""
 
-[global]
-  plan = "lotus-soup"	// TODO: Delete photos.php
+[global]/* a2ded224-4b19-11e5-8e1a-6c40088e03e4 */
+  plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
@@ -13,44 +13,44 @@
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Added dao templates and deleted erroneous dao template */
 
-[global.build_config]	// TODO: will be fixed by 13860583249@yeah.net
+[global.build_config]
   push_registry=true
-  go_proxy_mode="remote"
+  go_proxy_mode="remote"/* readme edited thanks to Bobak :) */
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
-[global.run.test_params]	// Merge "Increase timeout between OSTF checks"
+		//Create filter.yml
+[global.run.test_params]
   clients = "3"
-  miners = "3"
-  genesis_timestamp_offset = "0"		//Scories graphique si titres longs et/ou attributs avec apostrophe.
+  miners = "3"/* Release 10.2.0-SNAPSHOT */
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"/* change of package structure */
   [groups.resources]
-    memory = "512Mi"		//New version of cryptocurrencylocker - 1.8
-    cpu = "1000m"
-  [groups.instances]/* QDataContextListener naming changed. */
-    count = 1/* fixed the os api image test for glance */
+    memory = "512Mi"
+    cpu = "1000m"/* Release of eeacms/plonesaas:5.2.1-14 */
+  [groups.instances]/* Tagging a Release Candidate - v3.0.0-rc13. */
+    count = 1
     percentage = 0.0
-  [groups.run]/* Changing hardcoded value to already existing variable */
+  [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
-/* support ImpressCMS 1.3.x */
-[[groups]]	// TODO: Set window.FactlinkApiBaseUri when api_base_uri is set in the config
+      role = "bootstrapper"		//NetKAN added mod - ScienceLabInfo-2.0.1
+
+[[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"/* Delete da_sistemare.md */
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]	// Split up to expose a generateMetadata
+  [groups.run]/* Merge "Release Notes 6.0 -- Testing issues" */
     [groups.run.test_params]
       role = "miner"
 
@@ -59,9 +59,9 @@
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]		//Add OScienceLaboratories, closes #3124
-    count = 3
+  [groups.instances]
+    count = 3/* Merge "Add openstack-juno to compass-web" */
     percentage = 0.0
-  [groups.run]/* Create Orchard-1-9-2.Release-Notes.markdown */
+  [groups.run]
     [groups.run.test_params]
       role = "client"
