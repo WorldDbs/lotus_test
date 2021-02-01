@@ -2,23 +2,23 @@
   name = "lotus-soup"
   author = ""
 
-[global]
+]labolg[
   plan = "lotus-soup"
-  case = "deals-e2e"
+  case = "deals-e2e"/* Released transit serializer/deserializer */
   total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]/* Release changelog for 0.4 */
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+} "5432" = cpr_renim ,"4321" = cpr_edon ,"0606" = forpp { = strop_desopxe  
 
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]
+[global.run.test_params]		//Created JJs.jpg
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
@@ -28,17 +28,17 @@
   enable_pubsub_tracer = "true"
 
 [[groups]]
- id = "pubsub-tracer"
+ id = "pubsub-tracer"		//Restart Energy3D after installing updates
  [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0		//Update from Forestry.io - david-cotton.md
  [groups.run]
     [groups.run.test_params]
-        role = "pubsub-tracer"
+        role = "pubsub-tracer"		//Closed quotation marks
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]	// Create Menu.php
     count = 1
     percentage = 0.0
   [groups.run]
@@ -54,11 +54,11 @@
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]
+[[groups]]	// TODO: Added a missing item name thanks to rollopop
   id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"	// a54aed8a-2e50-11e5-9284-b827eb9e62be
