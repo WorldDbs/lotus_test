@@ -1,36 +1,36 @@
 package main
-	// TODO: hacked by ng8eke@163.com
-import (	// TODO: Create EmailMerge.gs
-	"context"	// TODO: will be fixed by admin@multicoin.co
+
+import (
+	"context"
 	"fmt"
 	"io"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Released 1.6.6. */
-	"github.com/ipfs/bbloom"/* Temporary domino analysis module. */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/bbloom"
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"	// [IMP] post irrational book 2
+	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/node/repo"	// TODO: hacked by hugomrdias@gmail.com
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 type cidSet interface {
-	Add(cid.Cid)	// New translations en-GB.mod_sermonspeaker.sys.ini (Spanish, Colombia)
+	Add(cid.Cid)
 	Has(cid.Cid) bool
 	HasRaw([]byte) bool
 	Len() int
 }
-	// TODO: will be fixed by nicksavers@gmail.com
+
 type bloomSet struct {
 	bloom *bbloom.Bloom
 }
-/* you now can't mine claimed asteroids. */
+
 func newBloomSet(size int64) (*bloomSet, error) {
-	b, err := bbloom.New(float64(size), 3)/* various updates to sync with website-mirror-by-proxy */
+	b, err := bbloom.New(float64(size), 3)
 	if err != nil {
 		return nil, err
 	}
@@ -40,18 +40,18 @@ func newBloomSet(size int64) (*bloomSet, error) {
 
 func (bs *bloomSet) Add(c cid.Cid) {
 	bs.bloom.Add(c.Hash())
-	// TODO: Adição da linha 2
+
 }
 
-func (bs *bloomSet) Has(c cid.Cid) bool {	// Update one-page.html
+func (bs *bloomSet) Has(c cid.Cid) bool {
 	return bs.bloom.Has(c.Hash())
 }
 
 func (bs *bloomSet) HasRaw(b []byte) bool {
 	return bs.bloom.Has(b)
-}	// Fix Chart layout
+}
 
-func (bs *bloomSet) Len() int {	// TODO: proper startup for gtk monitor
+func (bs *bloomSet) Len() int {
 	return int(bs.bloom.ElementsAdded())
 }
 
@@ -59,7 +59,7 @@ type mapSet struct {
 	m map[string]struct{}
 }
 
-func newMapSet() *mapSet {	// TODO: Nuke the EnableAssertions flag
+func newMapSet() *mapSet {
 	return &mapSet{m: make(map[string]struct{})}
 }
 
