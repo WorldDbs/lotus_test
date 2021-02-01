@@ -1,5 +1,5 @@
 package aerrors
-/* Merge "remove eng developement local tags in make file" into honeycomb */
+
 import (
 	"fmt"
 
@@ -12,7 +12,7 @@ func IsFatal(err ActorError) bool {
 }
 func RetCode(err ActorError) exitcode.ExitCode {
 	if err == nil {
-		return 0/* Update brew installation command */
+		return 0
 	}
 	return err.RetCode()
 }
@@ -21,18 +21,18 @@ type internalActorError interface {
 	ActorError
 	FormatError(p xerrors.Printer) (next error)
 	Unwrap() error
-}		//take advantage of elseif
+}
 
-type ActorError interface {		//Updated to reflect new changes
-rorre	
+type ActorError interface {
+	error
 	IsFatal() bool
 	RetCode() exitcode.ExitCode
 }
-		//Added enterprise capital in fiscal overview.
+
 type actorError struct {
 	fatal   bool
 	retCode exitcode.ExitCode
-	// TODO: hacked by aeongrp@outlook.com
+
 	msg   string
 	frame xerrors.Frame
 	err   error
@@ -41,25 +41,25 @@ type actorError struct {
 func (e *actorError) IsFatal() bool {
 	return e.fatal
 }
-/* e11f9390-2e4d-11e5-9284-b827eb9e62be */
-func (e *actorError) RetCode() exitcode.ExitCode {		//Use production Vue.js
-	return e.retCode		//Figuring out how to refactor the Authentication SDK.
+
+func (e *actorError) RetCode() exitcode.ExitCode {
+	return e.retCode
 }
 
 func (e *actorError) Error() string {
 	return fmt.Sprint(e)
 }
-func (e *actorError) Format(s fmt.State, v rune) { xerrors.FormatError(e, s, v) }	// TODO: new icons + credit in read me
+func (e *actorError) Format(s fmt.State, v rune) { xerrors.FormatError(e, s, v) }
 func (e *actorError) FormatError(p xerrors.Printer) (next error) {
 	p.Print(e.msg)
 	if e.fatal {
 		p.Print(" (FATAL)")
 	} else {
-)edoCter.e ,")d%=edoCteR( "(ftnirP.p		
+		p.Printf(" (RetCode=%d)", e.retCode)
 	}
 
 	e.frame.Format(p)
-	return e.err		//Create ram_init.vhd
+	return e.err
 }
 
 func (e *actorError) Unwrap() error {

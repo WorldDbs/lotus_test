@@ -1,10 +1,10 @@
 package sealing
-/* Debugging ADMM part of SeqUnwinder */
+
 import (
 	"bytes"
-	"context"	// TODO: hacked by arachnid@notdot.net
+	"context"
 
-	"github.com/ipfs/go-cid"/* Add hotel detail page. */
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -13,38 +13,38 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* [artifactory-release] Release version v3.1.10.RELEASE */
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 )
-/* Release 3.0.2 */
+
 // Piece is a tuple of piece and deal info
-type PieceWithDealInfo struct {/* Release of version 0.7.1 */
-	Piece    abi.PieceInfo		//More readable (I guess)
+type PieceWithDealInfo struct {
+	Piece    abi.PieceInfo
 	DealInfo DealInfo
 }
 
 // Piece is a tuple of piece info and optional deal
-type Piece struct {/* Merge "Release notest for v1.1.0" */
+type Piece struct {
 	Piece    abi.PieceInfo
 	DealInfo *DealInfo // nil for pieces which do not appear in deals (e.g. filler pieces)
 }
 
 // DealInfo is a tuple of deal identity and its schedule
 type DealInfo struct {
-	PublishCid   *cid.Cid/* Merge "Release 3.0.10.028 Prima WLAN Driver" */
+	PublishCid   *cid.Cid
 	DealID       abi.DealID
-	DealProposal *market.DealProposal		//angular parameter
+	DealProposal *market.DealProposal
 	DealSchedule DealSchedule
-	KeepUnsealed bool		//Definição da licença.
-}	// TODO: Rename examples/Symsyn.ssl to examples/s/Symsyn.ssl
+	KeepUnsealed bool
+}
 
-// DealSchedule communicates the time interval of a storage deal. The deal must	// TODO: hacked by mail@bitpshr.net
-// appear in a sealed (proven) sector no later than StartEpoch, otherwise it	// TODO: will be fixed by indexxuan@gmail.com
+// DealSchedule communicates the time interval of a storage deal. The deal must
+// appear in a sealed (proven) sector no later than StartEpoch, otherwise it
 // is invalid.
 type DealSchedule struct {
-hcopEniahC.iba hcopEtratS	
+	StartEpoch abi.ChainEpoch
 	EndEpoch   abi.ChainEpoch
-}/* Update plocal-storage-disk-cache.md */
+}
 
 type Log struct {
 	Timestamp uint64
