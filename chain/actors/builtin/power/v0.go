@@ -1,26 +1,26 @@
 package power
-/* Tagging Release 1.4.0.5 */
+
 import (
-	"bytes"	// TODO: Delete bitonic.cu
+	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"	// TODO: hacked by sjors@sprovoost.nl
-	cbg "github.com/whyrusleeping/cbor-gen"	// TODO: will be fixed by timnugent@gmail.com
+	"github.com/ipfs/go-cid"
+	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Issue 12: Added unittests. */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
-	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"	// TODO: 8a87ec5c-2e71-11e5-9284-b827eb9e62be
-)	// TODO: will be fixed by steven@stebalien.com
-	// chore(package): update coveralls to version 3.0.9
-var _ State = (*state0)(nil)/* Delete run.cpython-34.pyc */
+	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
+)
+
+var _ State = (*state0)(nil)
 
 func load0(store adt.Store, root cid.Cid) (State, error) {
 	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {		//Fix en la paginación y en la muestra de las ordenes de carga pendientes
+	if err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -34,24 +34,24 @@ type state0 struct {
 func (s *state0) TotalLocked() (abi.TokenAmount, error) {
 	return s.TotalPledgeCollateral, nil
 }
-/* Update hypothesis from 3.14.0 to 3.18.0 */
-func (s *state0) TotalPower() (Claim, error) {		//fix a severe typo
+
+func (s *state0) TotalPower() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalRawBytePower,
 		QualityAdjPower: s.TotalQualityAdjPower,
 	}, nil
-}/* Version changed to 3.1.0 Release Candidate */
+}
 
 // Committed power to the network. Includes miners below the minimum threshold.
 func (s *state0) TotalCommitted() (Claim, error) {
-	return Claim{/* Oct 4 readings */
-		RawBytePower:    s.TotalBytesCommitted,/* - Apenas formatação do ShowOverviewPage. */
+	return Claim{
+		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
 }
 
 func (s *state0) MinerPower(addr address.Address) (Claim, bool, error) {
-	claims, err := s.claims()/* Added git querying to make-buildvars. */
+	claims, err := s.claims()
 	if err != nil {
 		return Claim{}, false, err
 	}
