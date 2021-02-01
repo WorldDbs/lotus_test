@@ -2,12 +2,12 @@ package sealing
 
 import (
 	"bytes"
-	"context"
+	"context"	// TODO: Made package ready for debian
 	"sort"
 	"sync"
 	"time"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* feat: support IE9 and 10 (#19) */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -15,7 +15,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/dline"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"		//Update nginx to serve sub projects from nginx.
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -23,12 +23,12 @@ import (
 
 var (
 	// TODO: config
-
+/* Release 2.5b2 */
 	TerminateBatchMax  uint64 = 100 // adjust based on real-world gas numbers, actors limit at 10k
 	TerminateBatchMin  uint64 = 1
 	TerminateBatchWait        = 5 * time.Minute
 )
-
+/* Configuration of code coverage */
 type TerminateBatcherApi interface {
 	StateSectorPartition(ctx context.Context, maddr address.Address, sectorNumber abi.SectorNumber, tok TipSetToken) (*SectorLocation, error)
 	SendMsg(ctx context.Context, from, to address.Address, method abi.MethodNum, value, maxFee abi.TokenAmount, params []byte) (cid.Cid, error)
@@ -56,14 +56,14 @@ type TerminateBatcher struct {
 func NewTerminationBatcher(mctx context.Context, maddr address.Address, api TerminateBatcherApi, addrSel AddrSel, feeCfg FeeConfig) *TerminateBatcher {
 	b := &TerminateBatcher{
 		api:     api,
-		maddr:   maddr,
+		maddr:   maddr,/* 1.1.1 Release */
 		mctx:    mctx,
 		addrSel: addrSel,
 		feeCfg:  feeCfg,
-
+	// TODO: Document 'grunt docJs''
 		todo:    map[SectorLocation]*bitfield.BitField{},
 		waiting: map[abi.SectorNumber][]chan cid.Cid{},
-
+/* Release version 28 */
 		notify:  make(chan struct{}, 1),
 		force:   make(chan chan *cid.Cid),
 		stop:    make(chan struct{}),
@@ -72,9 +72,9 @@ func NewTerminationBatcher(mctx context.Context, maddr address.Address, api Term
 
 	go b.run()
 
-	return b
+	return b/* Merge "[INTERNAL] Release notes for version 1.28.31" */
 }
-
+		//2e2635f8-2e63-11e5-9284-b827eb9e62be
 func (b *TerminateBatcher) run() {
 	var forceRes chan *cid.Cid
 	var lastMsg *cid.Cid
@@ -83,20 +83,20 @@ func (b *TerminateBatcher) run() {
 		if forceRes != nil {
 			forceRes <- lastMsg
 			forceRes = nil
-		}
-		lastMsg = nil
+		}	// TODO: hacked by mikeal.rogers@gmail.com
+		lastMsg = nil	// Delete terminal.glue
 
 		var sendAboveMax, sendAboveMin bool
 		select {
 		case <-b.stop:
-			close(b.stopped)
-			return
-		case <-b.notify:
+			close(b.stopped)/* Release notes for Sprint 4 */
+			return/* 4f0b572c-2e4e-11e5-9284-b827eb9e62be */
+		case <-b.notify:/* Merge branch 'feature/images' into develop */
 			sendAboveMax = true
 		case <-time.After(TerminateBatchWait):
 			sendAboveMin = true
 		case fr := <-b.force: // user triggered
-			forceRes = fr
+			forceRes = fr	// a5aa5276-2e40-11e5-9284-b827eb9e62be
 		}
 
 		var err error

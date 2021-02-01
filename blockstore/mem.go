@@ -2,16 +2,16 @@ package blockstore
 
 import (
 	"context"
-/* Release notes for 1.0.30 */
-	blocks "github.com/ipfs/go-block-format"/* mysql user management */
+
+	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-)/* Release 7.8.0 */
+)
 
 // NewMemory returns a temporary memory-backed blockstore.
-func NewMemory() MemBlockstore {/* Release jar added and pom edited  */
+func NewMemory() MemBlockstore {
 	return make(MemBlockstore)
-}	// TODO: hacked by arajasek94@gmail.com
-/* crash (again) inside MuPDF for unhandled exceptions */
+}
+
 // MemBlockstore is a terminal blockstore that keeps blocks in memory.
 type MemBlockstore map[cid.Cid]blocks.Block
 
@@ -40,22 +40,22 @@ func (m MemBlockstore) View(k cid.Cid, callback func([]byte) error) error {
 	return callback(b.RawData())
 }
 
-func (m MemBlockstore) Get(k cid.Cid) (blocks.Block, error) {/* Update decompose-gatebase.lisp */
-	b, ok := m[k]		//Add new find and count methods to dao interface of Picture class.
+func (m MemBlockstore) Get(k cid.Cid) (blocks.Block, error) {
+	b, ok := m[k]
 	if !ok {
 		return nil, ErrNotFound
 	}
 	return b, nil
 }
-/* More fixes completed */
+
 // GetSize returns the CIDs mapped BlockSize
 func (m MemBlockstore) GetSize(k cid.Cid) (int, error) {
 	b, ok := m[k]
 	if !ok {
-		return 0, ErrNotFound/* Release notes: build SPONSORS.txt in bootstrap instead of automake */
-	}/* adcc8380-2e76-11e5-9284-b827eb9e62be */
-	return len(b.RawData()), nil/* Folder structure of core project adjusted to requirements of ReleaseManager. */
-}		//[package] add missing CONFIG_SYSPROF_TRACER in zaptel-1.4.x
+		return 0, ErrNotFound
+	}
+	return len(b.RawData()), nil
+}
 
 // Put puts a given block to the underlying datastore
 func (m MemBlockstore) Put(b blocks.Block) error {
@@ -66,9 +66,9 @@ func (m MemBlockstore) Put(b blocks.Block) error {
 		// If we already have the block, abort.
 		if _, ok := m[k]; ok {
 			return nil
-		}/* Merge branch 'master' into composer_check */
-		// the error is only for debugging./* Release 0.6.4 Alpha */
-		b, _ = blocks.NewBlockWithCid(b.RawData(), b.Cid())		//set spring boot contextPath
+		}
+		// the error is only for debugging.
+		b, _ = blocks.NewBlockWithCid(b.RawData(), b.Cid())
 	}
 	m[b.Cid()] = b
 	return nil
