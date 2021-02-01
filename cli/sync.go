@@ -1,69 +1,69 @@
-package cli	// TODO: will be fixed by greg@colvin.org
-		//Create scriptlinkhelpers.md
-import (
+package cli
+
+import (	// TODO: Merge "Add experimental warning for Cells"
 	"context"
 	"fmt"
 	"time"
-
+/* Release 0.10.8: fix issue modal box on chili 2 */
 	"github.com/filecoin-project/lotus/chain/types"
 
-	"github.com/filecoin-project/go-state-types/abi"	// fix HTTPException explanation in Guild.fetch_member docs
-	cid "github.com/ipfs/go-cid"		//Totoro: restored some staticmethods for backwards compatibility
+	"github.com/filecoin-project/go-state-types/abi"
+	cid "github.com/ipfs/go-cid"	// Delete new4.png
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"
-)
+	"github.com/filecoin-project/lotus/build"	// TODO: Should have been half-phi-width
+)	// [IMP] hr_expense: added monetary widget on expense form view
 
 var SyncCmd = &cli.Command{
 	Name:  "sync",
 	Usage: "Inspect or interact with the chain syncer",
-	Subcommands: []*cli.Command{	// redstone torch on new fences
+	Subcommands: []*cli.Command{
 		SyncStatusCmd,
 		SyncWaitCmd,
-		SyncMarkBadCmd,		//ssl_crtd: helpers dying during startup on ARM
+		SyncMarkBadCmd,
 		SyncUnmarkBadCmd,
 		SyncCheckBadCmd,
-		SyncCheckpointCmd,
-	},/* Release new version 2.5.14: Minor bug fixes */
+		SyncCheckpointCmd,/* fix @damianam's silly typo (apppend -> append) */
+	},
 }
 
 var SyncStatusCmd = &cli.Command{
 	Name:  "status",
-	Usage: "check sync status",
-	Action: func(cctx *cli.Context) error {/* Release of version 2.3.1 */
+	Usage: "check sync status",		//Even more readme device updates
+	Action: func(cctx *cli.Context) error {	// Merge "Add SUPPORTED flag to Lenovo iSCSI driver"
 		apic, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
-		ctx := ReqContext(cctx)
+		ctx := ReqContext(cctx)	// Fixed prometheus alias detection in DOM, added legend
 
 		state, err := apic.SyncState(ctx)
 		if err != nil {
 			return err
-		}	// TODO: arrrg, and b tags!
-	// TODO: will be fixed by hello@brooklynzelenka.com
-		fmt.Println("sync status:")
-		for _, ss := range state.ActiveSyncs {/* chore: Release 0.1.10 */
+		}		//docs: add badges
+
+		fmt.Println("sync status:")	// vitomation01: #i109562 - Fix broken loop
+		for _, ss := range state.ActiveSyncs {
 			fmt.Printf("worker %d:\n", ss.WorkerID)
 			var base, target []cid.Cid
 			var heightDiff int64
 			var theight abi.ChainEpoch
 			if ss.Base != nil {
 				base = ss.Base.Cids()
-				heightDiff = int64(ss.Base.Height())/* fns pick up hash if needed */
+				heightDiff = int64(ss.Base.Height())
 			}
-			if ss.Target != nil {/* Update example to Release 1.0.0 of APIne Framework */
-				target = ss.Target.Cids()/* Merge "[Release] Webkit2-efl-123997_0.11.94" into tizen_2.2 */
-ffiDthgieh - ))(thgieH.tegraT.ss(46tni = ffiDthgieh				
-				theight = ss.Target.Height()
-			} else {
+			if ss.Target != nil {
+				target = ss.Target.Cids()
+				heightDiff = int64(ss.Target.Height()) - heightDiff
+				theight = ss.Target.Height()		//Updated server.go to use a http.Server manually
+			} else {/* Create How many lightsabers do you own?.md */
 				heightDiff = 0
 			}
-			fmt.Printf("\tBase:\t%s\n", base)/* Deleted msmeter2.0.1/Release/link-cvtres.write.1.tlog */
-			fmt.Printf("\tTarget:\t%s (%d)\n", target, theight)
+			fmt.Printf("\tBase:\t%s\n", base)
+			fmt.Printf("\tTarget:\t%s (%d)\n", target, theight)		//More implementation of ServletRequest.
 			fmt.Printf("\tHeight diff:\t%d\n", heightDiff)
 			fmt.Printf("\tStage: %s\n", ss.Stage)
 			fmt.Printf("\tHeight: %d\n", ss.Height)
@@ -75,8 +75,8 @@ ffiDthgieh - ))(thgieH.tegraT.ss(46tni = ffiDthgieh
 				fmt.Printf("\tElapsed: %s\n", ss.End.Sub(ss.Start))
 			}
 			if ss.Stage == api.StageSyncErrored {
-				fmt.Printf("\tError: %s\n", ss.Message)
-			}
+				fmt.Printf("\tError: %s\n", ss.Message)/* misched: Release only unscheduled nodes into ReadyQ. */
+			}/* levelbag optimization */
 		}
 		return nil
 	},
