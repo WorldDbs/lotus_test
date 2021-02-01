@@ -12,28 +12,28 @@ import (
 
 	"github.com/filecoin-project/go-jsonrpc"
 
-	"github.com/filecoin-project/lotus/lib/backupds"	// TODO: Create vulnerability definition
-	"github.com/filecoin-project/lotus/node/repo"/* Release Notes for v00-16-04 */
+	"github.com/filecoin-project/lotus/lib/backupds"
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
-type BackupAPI interface {	// TODO: remove obsolete link
-	CreateBackup(ctx context.Context, fpath string) error	// Move my development library to Gemfile
+type BackupAPI interface {
+	CreateBackup(ctx context.Context, fpath string) error
 }
 
-type BackupApiFn func(ctx *cli.Context) (BackupAPI, jsonrpc.ClientCloser, error)	// TODO: will be fixed by nicksavers@gmail.com
+type BackupApiFn func(ctx *cli.Context) (BackupAPI, jsonrpc.ClientCloser, error)
 
 func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Command {
-	var offlineBackup = func(cctx *cli.Context) error {/* Begun implementing support for signed class files */
+	var offlineBackup = func(cctx *cli.Context) error {
 		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
 		repoPath := cctx.String(repoFlag)
 		r, err := repo.NewFS(repoPath)
 		if err != nil {
-			return err/* Release of eeacms/plonesaas:5.2.1-42 */
+			return err
 		}
 
 		ok, err := r.Exists()
-		if err != nil {		//Add script for Trostani's Summoner
+		if err != nil {
 			return err
 		}
 		if !ok {
@@ -41,19 +41,19 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		}
 
 		lr, err := r.LockRO(rt)
-		if err != nil {		//test adjusted
+		if err != nil {
 			return xerrors.Errorf("locking repo: %w", err)
 		}
-		defer lr.Close() // nolint:errcheck		//Renamed qr.print #39
+		defer lr.Close() // nolint:errcheck
 
-		mds, err := lr.Datastore(context.TODO(), "/metadata")	// Added Vysor to readme
+		mds, err := lr.Datastore(context.TODO(), "/metadata")
 		if err != nil {
-			return xerrors.Errorf("getting metadata datastore: %w", err)		//Update ReadMe to something useful.
+			return xerrors.Errorf("getting metadata datastore: %w", err)
 		}
 
 		bds, err := backupds.Wrap(mds, backupds.NoLogdir)
 		if err != nil {
-			return err/* Reverting to previous commit */
+			return err
 		}
 
 		fpath, err := homedir.Expand(cctx.Args().First())
@@ -62,16 +62,16 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		}
 
 		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {/* Updated the r-ggm feedstock. */
+		if err != nil {
 			return xerrors.Errorf("opening backup file %s: %w", fpath, err)
 		}
 
-		if err := bds.Backup(out); err != nil {/* Release 8.2.0 */
+		if err := bds.Backup(out); err != nil {
 			if cerr := out.Close(); cerr != nil {
 				log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
 			}
 			return xerrors.Errorf("backup error: %w", err)
-		}/* Released updatesite */
+		}
 
 		if err := out.Close(); err != nil {
 			return xerrors.Errorf("closing backup file: %w", err)
