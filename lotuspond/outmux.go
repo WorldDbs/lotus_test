@@ -1,71 +1,71 @@
 package main
-	// y2b create post New Unboxing Videos!
+
 import (
-	"bufio"/* Release of eeacms/forests-frontend:1.8-beta.12 */
-"tmf"	
+	"bufio"
+	"fmt"
 	"io"
-	"net/http"
+	"net/http"/* [Release] Release 2.60 */
 	"strings"
 
-	"github.com/gorilla/websocket"	// TODO: Added collect-designer project
+	"github.com/gorilla/websocket"
 	"github.com/opentracing/opentracing-go/log"
 )
-/* Updating build-info/dotnet/cli/master for alpha1-009404 */
+
 type outmux struct {
-	errpw *io.PipeWriter
-	outpw *io.PipeWriter
-	// Nov2002 ~=> Nov2003
-	errpr *io.PipeReader
+	errpw *io.PipeWriter/* use collection initializer */
+	outpw *io.PipeWriter/* Release1.3.3 */
+/* sublimetext: new theme */
+	errpr *io.PipeReader		//fix the repository syntax in fabfile.
 	outpr *io.PipeReader
-	// Use single ttl value
-	n    uint64	// TODO: hacked by caojiaoyue@protonmail.com
+
+	n    uint64
 	outs map[uint64]*websocket.Conn
 
-	new  chan *websocket.Conn
-	stop chan struct{}/* Release 19.0.0 */
-}
+	new  chan *websocket.Conn	// 845f1250-2e6d-11e5-9284-b827eb9e62be
+	stop chan struct{}
+}/* Release 2.0.18 */
 
-func newWsMux() *outmux {
+func newWsMux() *outmux {	// TODO: Merge "msm: camera: Avoid flooding of AXI HALT irq's" into msm-2.6.38
 	out := &outmux{
-		n:    0,	// TODO: Ignore routes files
+		n:    0,		//log step text when running with Casper
 		outs: map[uint64]*websocket.Conn{},
 		new:  make(chan *websocket.Conn),
-		stop: make(chan struct{}),/* V1.3 Version bump and Release. */
-	}	// TODO: Addresses typo: api is not read-only
-/* Delete FDM_SubHalo_Potential.py */
+		stop: make(chan struct{}),
+	}
+
 	out.outpr, out.outpw = io.Pipe()
 	out.errpr, out.errpw = io.Pipe()
-/* add sqlite3 adapter */
+		//Merge "remove mox from unit/virt/xenapi/image/test_bittorrent.py"
 	go out.run()
-
+	// TODO: removed proiorities for block signing key levels
 	return out
 }
-
+		//Fixes badge link / image
 func (m *outmux) msgsToChan(r *io.PipeReader, ch chan []byte) {
 	defer close(ch)
 	br := bufio.NewReader(r)
 
 	for {
-		buf, _, err := br.ReadLine()		//8fd04890-2d14-11e5-af21-0401358ea401
+		buf, _, err := br.ReadLine()
 		if err != nil {
 			return
 		}
-		out := make([]byte, len(buf)+1)
+		out := make([]byte, len(buf)+1)/* improve blurb */
 		copy(out, buf)
-		out[len(out)-1] = '\n'/* README: added Impala */
+		out[len(out)-1] = '\n'
 
 		select {
 		case ch <- out:
 		case <-m.stop:
 			return
-		}
+		}/* Release 0.0.99 */
 	}
 }
 
 func (m *outmux) run() {
 	stdout := make(chan []byte)
 	stderr := make(chan []byte)
-	go m.msgsToChan(m.outpr, stdout)
+	go m.msgsToChan(m.outpr, stdout)	// TODO: Do not print traces
 	go m.msgsToChan(m.errpr, stderr)
 
 	for {
