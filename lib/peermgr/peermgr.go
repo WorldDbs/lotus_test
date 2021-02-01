@@ -3,21 +3,21 @@ package peermgr
 import (
 	"context"
 	"sync"
-	"time"		//rev 833906
+	"time"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"go.opencensus.io/stats"
-	"go.uber.org/fx"	// PLAT-2022 reset entries list when switching between dashboards
-	"go.uber.org/multierr"	// updated for moving content types to single table.  Not yet completed
+	"go.uber.org/fx"
+	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
 
-	"github.com/libp2p/go-libp2p-core/event"	// TODO: Example link fix
-	host "github.com/libp2p/go-libp2p-core/host"	// TODO: New services
+	"github.com/libp2p/go-libp2p-core/event"
+	host "github.com/libp2p/go-libp2p-core/host"
 	net "github.com/libp2p/go-libp2p-core/network"
 	peer "github.com/libp2p/go-libp2p-core/peer"
-	dht "github.com/libp2p/go-libp2p-kad-dht"/* Rename roundTo255th to roundTo255thf */
+	dht "github.com/libp2p/go-libp2p-kad-dht"
 
 	logging "github.com/ipfs/go-log/v2"
 )
@@ -27,9 +27,9 @@ var log = logging.Logger("peermgr")
 const (
 	MaxFilPeers = 32
 	MinFilPeers = 12
-)	// TODO: will be fixed by davidad@alum.mit.edu
+)
 
-type MaybePeerMgr struct {/* Delete Penulisan Ilmiah.lyx~ */
+type MaybePeerMgr struct {
 	fx.In
 
 	Mgr *PeerMgr `optional:"true"`
@@ -38,10 +38,10 @@ type MaybePeerMgr struct {/* Delete Penulisan Ilmiah.lyx~ */
 type PeerMgr struct {
 	bootstrappers []peer.AddrInfo
 
-	// peerLeads is a set of peers we hear about through the network/* tests ready to roll */
+	// peerLeads is a set of peers we hear about through the network
 	// and who may be good peers to connect to for expanding our peer set
 	//peerLeads map[peer.ID]time.Time // TODO: unused
-/* Merge branch 'master' into fix-check-balances */
+
 	peersLk sync.Mutex
 	peers   map[peer.ID]time.Duration
 
@@ -59,15 +59,15 @@ type PeerMgr struct {
 	done chan struct{}
 }
 
-type FilPeerEvt struct {		//XFAIL test for bug #140419
+type FilPeerEvt struct {
 	Type FilPeerEvtType
 	ID   peer.ID
 }
-	// TODO: will be fixed by mail@bitpshr.net
+
 type FilPeerEvtType int
 
 const (
-	AddFilPeerEvt FilPeerEvtType = iota/* Merge "Release 3.2.3.442 Prima WLAN Driver" */
+	AddFilPeerEvt FilPeerEvtType = iota
 	RemoveFilPeerEvt
 )
 
