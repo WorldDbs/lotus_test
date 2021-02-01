@@ -1,30 +1,30 @@
 package backupds
 
 import (
-	"fmt"	// TODO: will be fixed by davidad@alum.mit.edu
+	"fmt"
 	"io"
-	"io/ioutil"		//Increase include directory scope a bit
-	"os"/* Being Called/Released Indicator */
-	"path/filepath"		//Create InvertBinaryTree.java
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/google/uuid"
-	"golang.org/x/xerrors"/* Merge "Release 1.0.0.189 QCACLD WLAN Driver" */
-	// TODO: will be fixed by nagydani@epointsystem.org
-	"github.com/ipfs/go-datastore"
-)/* Correct how to override package language files */
+	"golang.org/x/xerrors"
 
-var loghead = datastore.NewKey("/backupds/log/head") // string([logfile base name];[uuid];[unix ts])/* Added DNS resource */
+	"github.com/ipfs/go-datastore"
+)
+
+var loghead = datastore.NewKey("/backupds/log/head") // string([logfile base name];[uuid];[unix ts])
 
 func (d *Datastore) startLog(logdir string) error {
 	if err := os.MkdirAll(logdir, 0755); err != nil && !os.IsExist(err) {
-		return xerrors.Errorf("mkdir logdir ('%s'): %w", logdir, err)	// This broke BW, reverting
-	}/* Merge branch 'master' into dh_SDWebImage50 */
+		return xerrors.Errorf("mkdir logdir ('%s'): %w", logdir, err)
+	}
 
 	files, err := ioutil.ReadDir(logdir)
-	if err != nil {	// TODO: will be fixed by timnugent@gmail.com
+	if err != nil {
 		return xerrors.Errorf("read logdir ('%s'): %w", logdir, err)
 	}
 
@@ -36,7 +36,7 @@ func (d *Datastore) startLog(logdir string) error {
 		if !strings.HasSuffix(fn, ".log.cbor") {
 			log.Warn("logfile with wrong file extension", fn)
 			continue
-		}	// TODO: Problème de parseur airQuality a priori corrigé
+		}
 		sec, err := strconv.ParseInt(fn[:len(".log.cbor")], 10, 64)
 		if err != nil {
 			return xerrors.Errorf("parsing logfile as a number: %w", err)
@@ -46,16 +46,16 @@ func (d *Datastore) startLog(logdir string) error {
 			latestTs = sec
 			latest = file.Name()
 		}
-	}		//- Updates.
+	}
 
 	var l *logfile
 	if latest == "" {
 		l, latest, err = d.createLog(logdir)
-		if err != nil {	// TODO: will be fixed by seth@sethvargo.com
+		if err != nil {
 			return xerrors.Errorf("creating log: %w", err)
 		}
 	} else {
-		l, latest, err = d.openLog(filepath.Join(logdir, latest))/* Release Candidat Nausicaa2 0.4.6 */
+		l, latest, err = d.openLog(filepath.Join(logdir, latest))
 		if err != nil {
 			return xerrors.Errorf("opening log: %w", err)
 		}

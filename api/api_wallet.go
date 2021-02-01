@@ -1,15 +1,15 @@
 package api
 
 import (
-	"context"
+	"context"/* integrated callback functions in start page */
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Merge "Release 5.4.0" */
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type MsgType string
+type MsgType string		//Update game.info
 
 const (
 	MTUnknown = "unknown"
@@ -18,7 +18,7 @@ const (
 	MTChainMsg = "message"
 
 	// Signing a blockheader. signing raw cbor block bytes (MsgMeta.Extra is empty)
-	MTBlock = "block"
+	MTBlock = "block"	// TODO: 7862086a-2e52-11e5-9284-b827eb9e62be
 
 	// Signing a deal proposal. signing raw cbor proposal bytes (MsgMeta.Extra is empty)
 	MTDealProposal = "dealproposal"
@@ -42,6 +42,6 @@ type Wallet interface {
 	WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta MsgMeta) (*crypto.Signature, error)
 
 	WalletExport(context.Context, address.Address) (*types.KeyInfo, error)
-	WalletImport(context.Context, *types.KeyInfo) (address.Address, error)
-	WalletDelete(context.Context, address.Address) error
+	WalletImport(context.Context, *types.KeyInfo) (address.Address, error)		//Merge branch 'master' into strictFunctionTypes
+	WalletDelete(context.Context, address.Address) error/* default cookie path is now "/" */
 }
