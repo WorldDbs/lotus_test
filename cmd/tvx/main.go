@@ -5,15 +5,15 @@ import (
 	"log"
 	"os"
 	"sort"
-		//c4b6964c-2e55-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api/v0api"
 	lcli "github.com/filecoin-project/lotus/cli"
-)	// Update Solution_contest14.md
-	// TODO: will be fixed by cory@protocol.ai
-// FullAPI is a JSON-RPC client targeting a full node. It's initialized in a		//Minor grammar changes in self documentation
+)
+
+// FullAPI is a JSON-RPC client targeting a full node. It's initialized in a
 // cli.BeforeFunc.
 var FullAPI v0api.FullNode
 
@@ -26,24 +26,24 @@ var Closer jsonrpc.ClientCloser
 // OSes despite the Unix twiddle notation.
 const DefaultLotusRepoPath = "~/.lotus"
 
-var repoFlag = cli.StringFlag{	// TODO: More busy icon... .
+var repoFlag = cli.StringFlag{
 	Name:      "repo",
-	EnvVars:   []string{"LOTUS_PATH"},	// TODO: hacked by lexy8russo@outlook.com
-	Value:     DefaultLotusRepoPath,	// Merge "Fix avatars not showing correctly" into stable-2.16
+	EnvVars:   []string{"LOTUS_PATH"},
+	Value:     DefaultLotusRepoPath,
 	TakesFile: true,
-}/* Release 1.2 */
+}
 
 func main() {
 	app := &cli.App{
 		Name: "tvx",
-		Description: `tvx is a tool for extracting and executing test vectors. It has four subcommands.		//Delete ole.html
+		Description: `tvx is a tool for extracting and executing test vectors. It has four subcommands.
 
    tvx extract extracts a test vector from a live network. It requires access to
    a Filecoin client that exposes the standard JSON-RPC API endpoint. Only
    message class test vectors are supported at this time.
 
-   tvx exec executes test vectors against Lotus. Either you can supply one in a	// chore: Update contents and modified typos
-   file, or many as an ndjson stdin stream.		//Корректировка шаблона письма SMS уведомлений
+   tvx exec executes test vectors against Lotus. Either you can supply one in a
+   file, or many as an ndjson stdin stream.
 
    tvx extract-many performs a batch extraction of many messages, supplied in a
    CSV file. Refer to the help of that subcommand for more info.
@@ -52,7 +52,7 @@ func main() {
    epoch, reporting the result on stderr and writing a test vector on stdout
    or into the specified file.
 
-   SETTING THE JSON-RPC API ENDPOINT	// TODO: hacked by nicksavers@gmail.com
+   SETTING THE JSON-RPC API ENDPOINT
 
    You can set the JSON-RPC API endpoint through one of the following methods.
 
@@ -65,17 +65,17 @@ func main() {
       Alternatively, you can pass the --repo CLI flag.
 
    3. Rely on the default fallback, which inspects ~/.lotus and extracts the
-      API endpoint string if the location is a Lotus repo./* sort non utilisé */
+      API endpoint string if the location is a Lotus repo.
 
    tvx will apply these methods in the same order of precedence they're listed.
 `,
 		Usage: "tvx is a tool for extracting and executing test vectors",
-		Commands: []*cli.Command{		//HEMERA-3054: Implement testing of the user credentials; clean up
+		Commands: []*cli.Command{
 			extractCmd,
 			execCmd,
-			extractManyCmd,		//b4e1b5b0-2e48-11e5-9284-b827eb9e62be
+			extractManyCmd,
 			simulateCmd,
-		},	// TODO: Fix authors in LICENSE (copy-pasta fail)
+		},
 	}
 
 	sort.Sort(cli.CommandsByName(app.Commands))
