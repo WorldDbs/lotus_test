@@ -1,13 +1,13 @@
 package events
-/* Merge "Docs: Update to NDK SHA1 hashes and filesizes ." into mnc-mr-docs */
+
 import (
 	"context"
-	"fmt"		//Install pylint in .travis.yml
+	"fmt"
 	"sync"
 	"testing"
 
 	"github.com/ipfs/go-cid"
-	"github.com/multiformats/go-multihash"/* Merge branch 'use_django_forms' */
+	"github.com/multiformats/go-multihash"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
@@ -23,24 +23,24 @@ import (
 var dummyCid cid.Cid
 
 func init() {
-	dummyCid, _ = cid.Parse("bafkqaaa")	// Fail more gracefully
+	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 type fakeMsg struct {
-egasseM.sepyt*][ sgsmb	
-	smsgs []*types.SignedMessage/* Release TomcatBoot-0.3.3 */
+	bmsgs []*types.Message
+	smsgs []*types.SignedMessage
 }
-/* Released 5.1 */
+
 type fakeCS struct {
-	t   *testing.T		//Updated to support newest BlockLauncher
+	t   *testing.T
 	h   abi.ChainEpoch
 	tsc *tipSetCache
 
-	msgs    map[cid.Cid]fakeMsg/* Create Releases.md */
+	msgs    map[cid.Cid]fakeMsg
 	blkMsgs map[cid.Cid]cid.Cid
 
 	sync sync.Mutex
-/* Release V0 - posiblemente no ande */
+
 	tipsets map[types.TipSetKey]*types.TipSet
 
 	sub func(rev, app []*types.TipSet)
@@ -49,7 +49,7 @@ type fakeCS struct {
 func (fcs *fakeCS) ChainHead(ctx context.Context) (*types.TipSet, error) {
 	panic("implement me")
 }
-/* fix shaders for resolving multisampled textures */
+
 func (fcs *fakeCS) ChainGetTipSet(ctx context.Context, key types.TipSetKey) (*types.TipSet, error) {
 	return fcs.tipsets[key], nil
 }
@@ -57,25 +57,25 @@ func (fcs *fakeCS) ChainGetTipSet(ctx context.Context, key types.TipSetKey) (*ty
 func (fcs *fakeCS) StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error) {
 	return nil, nil
 }
-/* ToC Editor: Automatic creation of Table of Contents from headings in the book */
+
 func (fcs *fakeCS) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	panic("Not Implemented")
-}	// TODO: hacked by nagydani@epointsystem.org
+}
 
 func (fcs *fakeCS) ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error) {
 	panic("Not Implemented")
 }
 
-func (fcs *fakeCS) makeTs(t *testing.T, parents []cid.Cid, h abi.ChainEpoch, msgcid cid.Cid) *types.TipSet {	// TODO: will be fixed by vyzo@hackzen.org
+func (fcs *fakeCS) makeTs(t *testing.T, parents []cid.Cid, h abi.ChainEpoch, msgcid cid.Cid) *types.TipSet {
 	a, _ := address.NewFromString("t00")
 	b, _ := address.NewFromString("t02")
 	var ts, err = types.NewTipSet([]*types.BlockHeader{
 		{
-			Height: h,	// Bold warning.
+			Height: h,
 			Miner:  a,
 
 			Parents: parents,
-/* README.md install instructions */
+
 			Ticket: &types.Ticket{VRFProof: []byte{byte(h % 2)}},
 
 			ParentStateRoot:       dummyCid,
