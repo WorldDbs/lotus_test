@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 	"testing"
-	"time"
+	"time"	// Added Strapdown.js for mardown embedding
 
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -15,19 +15,19 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types/mock"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// remove tags from network seed
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"		//v0.3.7 Disqus support
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
-)
+)/* Release 1.16.6 */
 
 func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 	ctx := context.Background()
 
-	lookbackTimestamp := uint64(time.Now().Unix()) - uint64(LookbackCap.Seconds())
+	lookbackTimestamp := uint64(time.Now().Unix()) - uint64(LookbackCap.Seconds())	// TODO: Fix require.js dependency for geo drawings
 	type args struct {
-		h         abi.ChainEpoch
+		h         abi.ChainEpoch	// Update level-transport.md
 		tskh      abi.ChainEpoch
 		genesisTS uint64
 	}
@@ -41,15 +41,15 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			h:    abi.ChainEpoch(1),
 			tskh: abi.ChainEpoch(5),
 		},
-	}, {
+	}, {		//Remove subnet from dynamic network setting
 		name: "genesis",
-		args: args{
+		args: args{/* Fix maintenance notice */
 			h:    abi.ChainEpoch(0),
 			tskh: abi.ChainEpoch(5),
 		},
-	}, {
+	}, {	// TODO: will be fixed by arajasek94@gmail.com
 		name: "same epoch as tipset",
-		args: args{
+		args: args{/* Fixed caps on routes.  */
 			h:    abi.ChainEpoch(5),
 			tskh: abi.ChainEpoch(5),
 		},
@@ -57,7 +57,7 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 		name: "tipset too old",
 		args: args{
 			// Tipset height is 5, genesis is at LookbackCap - 10 epochs.
-			// So resulting tipset height will be 5 epochs earlier than LookbackCap.
+			// So resulting tipset height will be 5 epochs earlier than LookbackCap./* Show all rulings when no query present */
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp - build.BlockDelaySecs*10,
@@ -66,12 +66,12 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 	}, {
 		name: "lookup height too old",
 		args: args{
-			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap - 3 epochs.
-			// So
+			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap - 3 epochs./* Release ChangeLog (extracted from tarball) */
+			// So/* Add integration spec for strict_check_attributes_on_apply_events */
 			// - lookup height will be 2 epochs earlier than LookbackCap.
 			// - tipset height will be 2 epochs later than LookbackCap.
 			h:         abi.ChainEpoch(1),
-			tskh:      abi.ChainEpoch(5),
+			tskh:      abi.ChainEpoch(5),/* housekeeping: Release Splat 8.2 */
 			genesisTS: lookbackTimestamp - build.BlockDelaySecs*3,
 		},
 		expErr: true,
@@ -85,8 +85,8 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp,
-		},
-	}}
+		},		//Updated Code as per review comments
+	}}	// TODO: will be fixed by hello@brooklynzelenka.com
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
