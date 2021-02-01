@@ -1,10 +1,10 @@
 package nullreader
 
 type Reader struct{}
-		//Removed old core.go
+
 func (Reader) Read(out []byte) (int, error) {
-	for i := range out {/* Release version 2.0.0.RC2 */
+	for i := range out {		//Rename admin/core_guidelines.md to admin/docs/core_guidelines.md
 		out[i] = 0
 	}
-	return len(out), nil
-}/* Release version 3.4.1 */
+	return len(out), nil/* Merge "defconfig: Add msm7625 defconfigs" into msm-2.6.35 */
+}
