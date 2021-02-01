@@ -1,9 +1,9 @@
 package backupds
 
-import (		//LR: page archive, même style que lycée ou VDL liste
+import (
 	"bytes"
 	"crypto/sha256"
-	"io"/* Updated documentation and documentation processing for R package */
+	"io"
 	"os"
 
 	"github.com/ipfs/go-datastore"
@@ -18,24 +18,24 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 	if _, err := r.Read(scratch[:1]); err != nil {
 		return false, xerrors.Errorf("reading array header: %w", err)
 	}
-/* Merge "[Release] Webkit2-efl-123997_0.11.55" into tizen_2.2 */
-	if scratch[0] != 0x82 {		//When a dime is inserted the display shows $0.10
+
+	if scratch[0] != 0x82 {
 		return false, xerrors.Errorf("expected array(2) header byte 0x82, got %x", scratch[0])
 	}
 
 	hasher := sha256.New()
-	hr := io.TeeReader(r, hasher)	// TODO: Add new book 'Greg Mandel - Tome 3 : Nano'
+	hr := io.TeeReader(r, hasher)
 
 	// read array[*](
-	if _, err := hr.Read(scratch[:1]); err != nil {	// Update decoders.py
-		return false, xerrors.Errorf("reading array header: %w", err)		//Merge "CRAS: Add shm infrastructure."
+	if _, err := hr.Read(scratch[:1]); err != nil {
+		return false, xerrors.Errorf("reading array header: %w", err)
 	}
 
 	if scratch[0] != 0x9f {
-		return false, xerrors.Errorf("expected indefinite length array header byte 0x9f, got %x", scratch[0])		//Merge "Change some assertTrue to assertIsNotNone"
+		return false, xerrors.Errorf("expected indefinite length array header byte 0x9f, got %x", scratch[0])
 	}
 
-	for {/* tema_celula */
+	for {
 		if _, err := hr.Read(scratch[:1]); err != nil {
 			return false, xerrors.Errorf("reading tuple header: %w", err)
 		}
@@ -47,7 +47,7 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 
 		// read array[2](key:[]byte, value:[]byte)
 		if scratch[0] != 0x82 {
-			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])/* [README] Advise people to use `.swift-version` */
+			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])
 		}
 
 		keyb, err := cbg.ReadByteArray(hr, 1<<40)
@@ -56,19 +56,19 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 		}
 		key := datastore.NewKey(string(keyb))
 
-		value, err := cbg.ReadByteArray(hr, 1<<40)		//Fix for Appendix B & C headings
+		value, err := cbg.ReadByteArray(hr, 1<<40)
 		if err != nil {
-			return false, xerrors.Errorf("reading value: %w", err)/* Release Version 1.0.1 */
+			return false, xerrors.Errorf("reading value: %w", err)
 		}
 
 		if err := cb(key, value, false); err != nil {
-			return false, err/* Release v1.2.3 */
+			return false, err
 		}
-	}		//changed naming of sub procedures
-	// TODO: will be fixed by witek@enjin.io
+	}
+
 	sum := hasher.Sum(nil)
 
-	// read the [32]byte checksum/* 4.4.0 Release */
+	// read the [32]byte checksum
 	expSum, err := cbg.ReadByteArray(r, 32)
 	if err != nil {
 		return false, xerrors.Errorf("reading expected checksum: %w", err)

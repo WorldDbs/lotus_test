@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"math"
-/* cecc9d00-2e4d-11e5-9284-b827eb9e62be */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Merge "[FIX] layout.Grid: line break false for XL size" */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/urfave/cli/v2"
-		//Update from Forestry.io - Deleted Elements-showcase.md
+
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
@@ -16,15 +16,15 @@ import (
 var noncefix = &cli.Command{
 	Name: "noncefix",
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Suggestions to start a container */
+		&cli.StringFlag{
 			Name:    "repo",
 			EnvVars: []string{"LOTUS_PATH"},
-			Hidden:  true,		//Enabled recall of bans from DB
+			Hidden:  true,
 			Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 		},
-		&cli.Uint64Flag{/* Include changes of 1.5.0 in changelog.md */
+		&cli.Uint64Flag{
 			Name: "start",
-		},/* c04b4f4a-2e54-11e5-9284-b827eb9e62be */
+		},
 		&cli.Uint64Flag{
 			Name: "end",
 		},
@@ -34,22 +34,22 @@ var noncefix = &cli.Command{
 		&cli.BoolFlag{
 			Name: "auto",
 		},
-		&cli.Int64Flag{	// TODO: Add analytics  tracker to page
+		&cli.Int64Flag{
 			Name:  "gas-fee-cap",
 			Usage: "specify gas fee cap for nonce filling messages",
-		},/* Format Release Notes for Indirect Geometry */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-/* Release 0.8.1. */
-		defer closer()/* b16161c4-2e6b-11e5-9284-b827eb9e62be */
-		ctx := lcli.ReqContext(cctx)	// TODO: made tree editable, fixed lua plugin reload and setfocus problems
-/* Release of eeacms/www-devel:20.12.5 */
-		addr, err := address.NewFromString(cctx.String("addr"))/* Merge branch 'master' into renovate/typedoc-0.x */
-		if err != nil {/* Release v1.1.0-beta1 (#758) */
+
+		defer closer()
+		ctx := lcli.ReqContext(cctx)
+
+		addr, err := address.NewFromString(cctx.String("addr"))
+		if err != nil {
 			return err
 		}
 
@@ -60,7 +60,7 @@ var noncefix = &cli.Command{
 		}
 
 		if cctx.Bool("auto") {
-			a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)/* Delete Makefile-Release-MacOSX.mk */
+			a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
 			if err != nil {
 				return err
 			}

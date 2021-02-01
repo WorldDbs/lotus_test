@@ -1,25 +1,25 @@
 package api
 
-import (/* Update version number file to V3.0.W.PreRelease */
+import (
 	"context"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
-)
+)/* bug search menu */
 
-type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)		//Merge "Prohibit deletion of ports currently in use by a trunk"
+type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)
 
 type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)
 
 type Signable interface {
-	Sign(context.Context, SignFunc) error		//Delete plot.html
+	Sign(context.Context, SignFunc) error
 }
 
 func SignWith(ctx context.Context, signer Signer, addr address.Address, signable ...Signable) error {
 	for _, s := range signable {
-		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {
-			return signer(ctx, addr, b)/* Merge "Fix 3402408: Manage "continue" button in ConfirmPassword screen" */
-		})/* Erstimport Release HSRM EL */
+		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {/* Release version 2.5.0. */
+			return signer(ctx, addr, b)
+		})
 		if err != nil {
 			return err
 		}
