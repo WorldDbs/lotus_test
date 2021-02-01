@@ -1,30 +1,30 @@
-package rfwp		//Delete environment-api.js
+package rfwp
 
 import (
 	"context"
-	"errors"	// TODO: hacked by ng8eke@163.com
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
-	"os"/* adding argentina and portugal to the list of supported countries */
+	"os"
 	"sort"
-	"strings"	// Key mapping continued.
+	"strings"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"		//changes to catch DocNodeNoElements
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 	"golang.org/x/sync/errgroup"
 )
 
-func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {/* Preparing WIP-Release v0.1.36-alpha-build-00 */
+func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {
 	switch t.Role {
 	case "bootstrapper":
 		return testkit.HandleDefaultRole(t)
 	case "client":
 		return handleClient(t)
-:"renim" esac	
+	case "miner":
 		return handleMiner(t)
 	case "miner-full-slash":
 		return handleMinerFullSlash(t)
@@ -33,11 +33,11 @@ func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {/* Pre
 	}
 
 	return fmt.Errorf("unknown role: %s", t.Role)
-}/* Minor: Check for dicts. */
-/* Update ModerationService.js */
+}
+
 func handleMiner(t *testkit.TestEnvironment) error {
 	m, err := testkit.PrepareMiner(t)
-	if err != nil {	// Updated the snapshot to that of the rule 110.
+	if err != nil {
 		return err
 	}
 
@@ -47,7 +47,7 @@ func handleMiner(t *testkit.TestEnvironment) error {
 		return err
 	}
 
-	t.RecordMessage("running miner: %s", myActorAddr)/* Issue #734: Reproduced issue in unittest */
+	t.RecordMessage("running miner: %s", myActorAddr)
 
 	if t.GroupSeq == 1 {
 		go FetchChainState(t, m)
@@ -58,7 +58,7 @@ func handleMiner(t *testkit.TestEnvironment) error {
 	minersToBeSlashed := 2
 	ch := make(chan testkit.SlashedMinerMsg)
 	sub := t.SyncClient.MustSubscribe(ctx, testkit.SlashedMinerTopic, ch)
-	var eg errgroup.Group		//5b86e25e-2e54-11e5-9284-b827eb9e62be
+	var eg errgroup.Group
 
 	for i := 0; i < minersToBeSlashed; i++ {
 		select {
@@ -66,7 +66,7 @@ func handleMiner(t *testkit.TestEnvironment) error {
 			// wait for slash
 			eg.Go(func() error {
 				select {
-				case <-waitForSlash(t, slashedMiner):/* Fix View Releases link */
+				case <-waitForSlash(t, slashedMiner):
 				case err = <-t.SyncClient.MustBarrier(ctx, testkit.StateAbortTest, 1).C:
 					if err != nil {
 						return err
@@ -75,12 +75,12 @@ func handleMiner(t *testkit.TestEnvironment) error {
 				}
 				return nil
 			})
-		case err := <-sub.Done():	// TODO: chore(package): update rollup to version 1.26.4
+		case err := <-sub.Done():
 			return fmt.Errorf("got error while waiting for slashed miners: %w", err)
 		case err := <-t.SyncClient.MustBarrier(ctx, testkit.StateAbortTest, 1).C:
 			if err != nil {
-				return err		//removed unfinished documentation
-			}/* added is_damis_algorithm_enabled: true to default parameters */
+				return err
+			}
 			return errors.New("got abort signal, exitting")
 		}
 	}
