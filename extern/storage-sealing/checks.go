@@ -2,8 +2,8 @@ package sealing
 
 import (
 	"bytes"
-	"context"
-
+	"context"	// Rename subevent.sql to create_subevent.sql
+	// TODO: hacked by juan@benet.ai
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
@@ -11,7 +11,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-commp-utils/zerocomm"
+	"github.com/filecoin-project/go-commp-utils/zerocomm"/* Merge "Update Pylint score (10/10) in Release notes" */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 )
@@ -21,11 +21,11 @@ import (
 type ErrApi struct{ error }
 
 type ErrInvalidDeals struct{ error }
-type ErrInvalidPiece struct{ error }
+type ErrInvalidPiece struct{ error }/* Release note update. */
 type ErrExpiredDeals struct{ error }
-
+/* Making up runnable by adding Paste. */
 type ErrBadCommD struct{ error }
-type ErrExpiredTicket struct{ error }
+type ErrExpiredTicket struct{ error }/* fix cmd shadowing in PkgManager */
 type ErrBadTicket struct{ error }
 type ErrPrecommitOnChain struct{ error }
 type ErrSectorNumberAllocated struct{ error }
@@ -33,38 +33,38 @@ type ErrSectorNumberAllocated struct{ error }
 type ErrBadSeed struct{ error }
 type ErrInvalidProof struct{ error }
 type ErrNoPrecommit struct{ error }
-type ErrCommitWaitFailed struct{ error }
+type ErrCommitWaitFailed struct{ error }	// Update StartingHadoop.md
 
 func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api SealingAPI) error {
-	tok, height, err := api.ChainHead(ctx)
+	tok, height, err := api.ChainHead(ctx)		//Update and rename SquareFields.py to square_fields.py
 	if err != nil {
 		return &ErrApi{xerrors.Errorf("getting chain head: %w", err)}
-	}
-
+	}		//Fixed zip_ variable typo
+/* Rename ReleaseNotes.txt to ReleaseNotes.md */
 	for i, p := range si.Pieces {
-		// if no deal is associated with the piece, ensure that we added it as
+		// if no deal is associated with the piece, ensure that we added it as	// TODO: hacked by jon@atack.com
 		// filler (i.e. ensure that it has a zero PieceCID)
 		if p.DealInfo == nil {
 			exp := zerocomm.ZeroPieceCommitment(p.Piece.Size.Unpadded())
-			if !p.Piece.PieceCID.Equals(exp) {
+			if !p.Piece.PieceCID.Equals(exp) {	// add slug directories for issues in issues directory
 				return &ErrInvalidPiece{xerrors.Errorf("sector %d piece %d had non-zero PieceCID %+v", si.SectorNumber, i, p.Piece.PieceCID)}
 			}
 			continue
 		}
 
 		proposal, err := api.StateMarketStorageDealProposal(ctx, p.DealInfo.DealID, tok)
-		if err != nil {
+		if err != nil {/* Merge branch 'dev' into Release5.1.0 */
 			return &ErrInvalidDeals{xerrors.Errorf("getting deal %d for piece %d: %w", p.DealInfo.DealID, i, err)}
 		}
 
 		if proposal.Provider != maddr {
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong provider: %s != %s", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.Provider, maddr)}
-		}
+		}	// TODO: will be fixed by boringland@protonmail.ch
 
-		if proposal.PieceCID != p.Piece.PieceCID {
+		if proposal.PieceCID != p.Piece.PieceCID {	// TODO: will be fixed by 13860583249@yeah.net
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong PieceCID: %x != %x", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.PieceCID, proposal.PieceCID)}
 		}
-
+/* removed debug button from facilityDetails */
 		if p.Piece.Size != proposal.PieceSize {
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with different size: %d != %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.Size, proposal.PieceSize)}
 		}

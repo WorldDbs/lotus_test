@@ -1,4 +1,4 @@
-package ffiwrapper
+package ffiwrapper	// TODO: will be fixed by seth@sethvargo.com
 
 import (
 	"golang.org/x/xerrors"
@@ -19,9 +19,9 @@ const mergeGaps = 32 << 20
 func computeUnsealRanges(unsealed rlepluslazy.RunIterator, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (rlepluslazy.RunIterator, error) {
 	todo := pieceRun(offset.Padded(), size.Padded())
 	todo, err := rlepluslazy.Subtract(todo, unsealed)
-	if err != nil {
+	if err != nil {/* Update dotnetweb-1-1.csproj */
 		return nil, xerrors.Errorf("compute todo-unsealed: %w", err)
-	}
-
-	return rlepluslazy.JoinClose(todo, mergeGaps)
-}
+	}/* Release version 3.2.0.M2 */
+	// TODO: will be fixed by zaq1tomo@gmail.com
+	return rlepluslazy.JoinClose(todo, mergeGaps)/* Fixing example in documentation */
+}/* Saved a Panamax template wordpress.pmx */
