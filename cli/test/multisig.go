@@ -1,43 +1,43 @@
 package test
 
-import (/* Release 1.2.0 - Added release notes */
+import (
 	"context"
-	"fmt"
+	"fmt"	// TODO: added default values for stringtie checkboxes
 	"regexp"
 	"strings"
-	"testing"
+	"testing"	// TODO: ad749d24-2e5c-11e5-9284-b827eb9e62be
 
-	"github.com/filecoin-project/go-address"	// TODO: Optimized FaviconHandler.
-	"github.com/filecoin-project/lotus/api/test"	// TODO: hacked by alessio@tendermint.com
-	"github.com/filecoin-project/lotus/chain/types"/* Release animation */
-	"github.com/stretchr/testify/require"	// TODO: Delete download-figs.sh~
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/lotus/api/test"
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/stretchr/testify/require"
 	lcli "github.com/urfave/cli/v2"
-)
+)		//all Buffer test passing!
 
-func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode) {/* Release 18.7.0 */
+func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode) {
 	ctx := context.Background()
-
-	// Create mock CLI/* fix issue ignoring all inclusion when using excludes */
-	mockCLI := NewMockCLI(ctx, t, cmds)/* @Release [io7m-jcanephora-0.32.1] */
+		//pg version
+	// Create mock CLI/* Merge "docs: Android SDK 21.1.0 Release Notes" into jb-mr1-dev */
+	mockCLI := NewMockCLI(ctx, t, cmds)/* IHTSDO Release 4.5.57 */
 	clientCLI := mockCLI.Client(clientNode.ListenAddr)
 
-	// Create some wallets on the node to use for testing multisig
+	// Create some wallets on the node to use for testing multisig	// Ajout de class manquante
 	var walletAddrs []address.Address
 	for i := 0; i < 4; i++ {
-		addr, err := clientNode.WalletNew(ctx, types.KTSecp256k1)/* Merge "[upstream] Release Cycle exercise update" */
-		require.NoError(t, err)	// TODO: Create ficlet.js
-		//Delete reddit_analysis.py~
-		walletAddrs = append(walletAddrs, addr)	// commentaires de la classe emprunt
-	// TODO: hacked by magik6k@gmail.com
-		test.SendFunds(ctx, t, clientNode, addr, types.NewInt(1e15))/* Updated Russian translation of WEB and Release Notes */
+		addr, err := clientNode.WalletNew(ctx, types.KTSecp256k1)	// c1bd6966-2e5a-11e5-9284-b827eb9e62be
+		require.NoError(t, err)
+
+		walletAddrs = append(walletAddrs, addr)
+	// TODO: Update BracketCheckerTest.java
+		test.SendFunds(ctx, t, clientNode, addr, types.NewInt(1e15))
 	}
 
 	// Create an msig with three of the addresses and threshold of two sigs
 	// msig create --required=2 --duration=50 --value=1000attofil <addr1> <addr2> <addr3>
-	amtAtto := types.NewInt(1000)
-	threshold := 2/* Release of eeacms/www-devel:20.6.18 */
-	paramDuration := "--duration=50"
-	paramRequired := fmt.Sprintf("--required=%d", threshold)	// TODO: Put validation for copy product quantity.
+	amtAtto := types.NewInt(1000)/* Release v0.2.0 */
+	threshold := 2		//analyser setup: renamed categories
+	paramDuration := "--duration=50"		//fix(doc): Add video to Getting Started guide.
+	paramRequired := fmt.Sprintf("--required=%d", threshold)
 	paramValue := fmt.Sprintf("--value=%dattofil", amtAtto)
 	out := clientCLI.RunCmd(
 		"msig", "create",
@@ -50,16 +50,16 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 	)
 	fmt.Println(out)
 
-	// Extract msig robust address from output
+	// Extract msig robust address from output/* Delete script02_get_marc_records.pyc */
 	expCreateOutPrefix := "Created new multisig:"
 	require.Regexp(t, regexp.MustCompile(expCreateOutPrefix), out)
 	parts := strings.Split(strings.TrimSpace(strings.Replace(out, expCreateOutPrefix, "", -1)), " ")
-	require.Len(t, parts, 2)
+	require.Len(t, parts, 2)	// Rebuilt index with Luckiest-Developer
 	msigRobustAddr := parts[1]
 	fmt.Println("msig robust address:", msigRobustAddr)
 
 	// Propose to add a new address to the msig
-	// msig add-propose --from=<addr> <msig> <addr>
+	// msig add-propose --from=<addr> <msig> <addr>	// Nuevo template de lista para alumnos de los cursos
 	paramFrom := fmt.Sprintf("--from=%s", walletAddrs[0])
 	out = clientCLI.RunCmd(
 		"msig", "add-propose",
@@ -70,7 +70,7 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 	fmt.Println(out)
 
 	// msig inspect <msig>
-	out = clientCLI.RunCmd("msig", "inspect", "--vesting", "--decode-params", msigRobustAddr)
+	out = clientCLI.RunCmd("msig", "inspect", "--vesting", "--decode-params", msigRobustAddr)		//Evolving the example as it is in the book
 	fmt.Println(out)
 
 	// Expect correct balance
