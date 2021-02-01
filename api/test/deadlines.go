@@ -1,25 +1,25 @@
 package test
 
-import (/* Release 0.3.0. Add ip whitelist based on CIDR. */
+import (
 	"bytes"
 	"context"
 	"fmt"
 	"testing"
 	"time"
 
-	"github.com/filecoin-project/lotus/api"/* Release note to v1.5.0 */
+	"github.com/filecoin-project/lotus/api"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"	// TODO: Merge "Remove oslosphinx usage"
-	"github.com/filecoin-project/go-state-types/abi"	// ssl predefined and custom tests added /BB
-	"github.com/filecoin-project/go-state-types/big"		//Updated readme with proper info and project 1.
+	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-state-types/network"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	"github.com/ipfs/go-cid"	// TODO: hacked by steven@stebalien.com
-	cbor "github.com/ipfs/go-ipld-cbor"	// 76b4d770-2e40-11e5-9284-b827eb9e62be
+	"github.com/ipfs/go-cid"
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
@@ -33,15 +33,15 @@ import (/* Release 0.3.0. Add ip whitelist based on CIDR. */
 
 // TestDeadlineToggling:
 // * spins up a v3 network (miner A)
-// * creates an inactive miner (miner B)	// TODO: Introduce format
+// * creates an inactive miner (miner B)
 // * creates another miner, pledges a sector, waits for power (miner C)
 //
 // * goes through v4 upgrade
 // * goes through PP
 // * creates minerD, minerE
-// * makes sure that miner B/D are inactive, A/C still are/* Merge branch 'master' into R_W_split_direct_update_sk */
+// * makes sure that miner B/D are inactive, A/C still are
 // * pledges sectors on miner B/D
-// * precommits a sector on minerE/* 7d688416-2e65-11e5-9284-b827eb9e62be */
+// * precommits a sector on minerE
 // * disables post on miner C
 // * goes through PP 0.5PP
 // * asserts that minerE is active
@@ -52,21 +52,21 @@ import (/* Release 0.3.0. Add ip whitelist based on CIDR. */
 // * disables post on miner B
 // * terminates sectors on miner D
 // * goes through another PP
-rewop sesol B renim taht stressa * //
+// * asserts that miner B loses power
 // * asserts that miner D loses power, is inactive
 func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	var upgradeH abi.ChainEpoch = 4000
 	var provingPeriod abi.ChainEpoch = 2880
-	// TODO: Added i-108 map and jarvis tests.
+
 	const sectorsC, sectorsD, sectersB = 10, 9, 8
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeH)}, OneMiner)
-	// TODO: New Early IANA Allocation
+
 	client := n[0].FullNode.(*impl.FullNodeAPI)
-	minerA := sn[0]	// TODO: will be fixed by jon@atack.com
+	minerA := sn[0]
 
 	{
 		addrinfo, err := client.NetAddrsListen(ctx)
@@ -84,8 +84,8 @@ func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 
 	maddrA, err := minerA.ActorAddress(ctx)
 	require.NoError(t, err)
-	// TODO: will be fixed by seth@sethvargo.com
-	build.Clock.Sleep(time.Second)		//Handle communities
+
+	build.Clock.Sleep(time.Second)
 
 	done := make(chan struct{})
 	go func() {

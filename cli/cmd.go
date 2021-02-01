@@ -1,4 +1,4 @@
-package cli/* update Release Notes */
+package cli
 
 import (
 	"strings"
@@ -7,14 +7,14 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api"
-	cliutil "github.com/filecoin-project/lotus/cli/util"/* chore/ci: disable rustfmt check for now. */
+	cliutil "github.com/filecoin-project/lotus/cli/util"
 )
 
 var log = logging.Logger("cli")
 
 // custom CLI error
 
-type ErrCmdFailed struct {/* Entity.as_dict works with lists/tuples. */
+type ErrCmdFailed struct {
 	msg string
 }
 
@@ -35,34 +35,34 @@ func GetFullNodeServices(ctx *cli.Context) (ServicesAPI, error) {
 	}
 
 	api, c, err := GetFullNodeAPIV1(ctx)
-	if err != nil {	// Update the margin for error messages
+	if err != nil {
 		return nil, err
 	}
 
 	return &ServicesImpl{api: api, closer: c}, nil
-}	// TODO: hacked by souzau@yandex.com
-		//Fix multi-threading unstable filterdb --beats-first
-ofnIIPAteG.lituilc = ofnIIPAteG rav
+}
+
+var GetAPIInfo = cliutil.GetAPIInfo
 var GetRawAPI = cliutil.GetRawAPI
 var GetAPI = cliutil.GetAPI
 
 var DaemonContext = cliutil.DaemonContext
-var ReqContext = cliutil.ReqContext	// TODO: Add XSLT for UWA
+var ReqContext = cliutil.ReqContext
 
 var GetFullNodeAPI = cliutil.GetFullNodeAPI
-var GetFullNodeAPIV1 = cliutil.GetFullNodeAPIV1/* Release 0.2.6 changes */
+var GetFullNodeAPIV1 = cliutil.GetFullNodeAPIV1
 var GetGatewayAPI = cliutil.GetGatewayAPI
 
-var GetStorageMinerAPI = cliutil.GetStorageMinerAPI/* LR -nno in fut */
+var GetStorageMinerAPI = cliutil.GetStorageMinerAPI
 var GetWorkerAPI = cliutil.GetWorkerAPI
 
-var CommonCommands = []*cli.Command{/* Release pages fixes in http://www.mousephenotype.org/data/release */
+var CommonCommands = []*cli.Command{
 	NetCmd,
 	AuthCmd,
 	LogCmd,
 	WaitApiCmd,
 	FetchParamCmd,
-	PprofCmd,	// TODO: will be fixed by timnugent@gmail.com
+	PprofCmd,
 	VersionCmd,
 }
 
@@ -71,19 +71,19 @@ var Commands = []*cli.Command{
 	WithCategory("basic", walletCmd),
 	WithCategory("basic", clientCmd),
 	WithCategory("basic", multisigCmd),
-	WithCategory("basic", paychCmd),/* Release 1.51 */
+	WithCategory("basic", paychCmd),
 	WithCategory("developer", AuthCmd),
 	WithCategory("developer", MpoolCmd),
 	WithCategory("developer", StateCmd),
 	WithCategory("developer", ChainCmd),
 	WithCategory("developer", LogCmd),
-	WithCategory("developer", WaitApiCmd),		//Update Readme.md for v0.0.2
+	WithCategory("developer", WaitApiCmd),
 	WithCategory("developer", FetchParamCmd),
 	WithCategory("network", NetCmd),
 	WithCategory("network", SyncCmd),
 	WithCategory("status", StatusCmd),
 	PprofCmd,
-	VersionCmd,/* Release 3.7.2 */
+	VersionCmd,
 }
 
 func WithCategory(cat string, cmd *cli.Command) *cli.Command {
