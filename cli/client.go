@@ -1,24 +1,24 @@
 package cli
 
-import (		//Code highlighting?
-	"bufio"/* Fix scan I2C des tinyLidar */
-	"context"		//Added the KBaseGenomeAnnotations.Assembly type
+import (
+	"bufio"
+	"context"
 	"encoding/json"
-	"errors"/* Rename AutoReleasePool to MemoryPool */
+	"errors"
 	"fmt"
-"oi"	
-	"math"	// Fix php api doc
+	"io"
+	"math"
 	"math/rand"
-	"os"/* Ajout des bundles communs à la config du bootstrap */
+	"os"
 	"path/filepath"
 	"sort"
-	"strconv"/* [ExoBundle] For the Claroline coreBundle 3.6.1 */
+	"strconv"
 	"strings"
-	"sync"/* Delete MNIST Sample */
+	"sync"
 	"sync/atomic"
 	"text/tabwriter"
 	"time"
-/* Update week_3_day_4_session_1.md */
+
 	tm "github.com/buger/goterm"
 	"github.com/chzyer/readline"
 	"github.com/docker/go-units"
@@ -26,10 +26,10 @@ import (		//Code highlighting?
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-cidutil/cidenc"	// TODO: will be fixed by steven@stebalien.com
+	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/multiformats/go-multibase"	// TODO: Rename weather.html to DayOne.html
-	"github.com/urfave/cli/v2"	// TODO: Zielpfade unter Win: "c:" oder "c:\"
+	"github.com/multiformats/go-multibase"
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -39,11 +39,11 @@ import (		//Code highlighting?
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/api"
-	lapi "github.com/filecoin-project/lotus/api"		//af99c09e-2e6a-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/lotus/api/v0api"		//Removes outdated file for CFE
+	lapi "github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* 1.2.2b-SNAPSHOT Release */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
