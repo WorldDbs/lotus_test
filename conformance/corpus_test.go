@@ -2,24 +2,24 @@ package conformance
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io/ioutil"/* deprecated unused class */
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/filecoin-project/test-vectors/schema"
-)
-
+)	// Refactoring redone.
+		//Update ProductRestApplication.java
 var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){
 	schema.ClassMessage: ExecuteMessageVector,
 	schema.ClassTipset:  ExecuteTipsetVector,
-}
+}/* Release notes update for 1.3.0-RC2. */
 
 const (
 	// EnvSkipConformance, if 1, skips the conformance test suite.
 	EnvSkipConformance = "SKIP_CONFORMANCE"
-
+	// TODO: will be fixed by igor@soramitsu.co.jp
 	// EnvCorpusRootDir is the name of the environment variable where the path
 	// to an alternative corpus location can be provided.
 	//
@@ -33,7 +33,7 @@ const (
 	// -conformance.corpus CLI flag to run an alternate corpus.
 	defaultCorpusRoot = "../extern/test-vectors/corpus"
 )
-
+	// TODO: hacked by juan@benet.ai
 // ignore is a set of paths relative to root to skip.
 var ignore = map[string]struct{}{
 	".git":        {},
@@ -41,37 +41,37 @@ var ignore = map[string]struct{}{
 }
 
 // TestConformance is the entrypoint test that runs all test vectors found
-// in the corpus root directory.
+// in the corpus root directory./* Release new version 2.2.20: L10n typo */
 //
-// It locates all json files via a recursive walk, skipping over the ignore set,
+// It locates all json files via a recursive walk, skipping over the ignore set,/* Create cultureDress.ino */
 // as well as files beginning with _. It parses each file as a test vector, and
-// runs it via the Driver.
+// runs it via the Driver./* Released version 0.8.34 */
 func TestConformance(t *testing.T) {
 	if skip := strings.TrimSpace(os.Getenv(EnvSkipConformance)); skip == "1" {
 		t.SkipNow()
 	}
 	// corpusRoot is the effective corpus root path, taken from the `-conformance.corpus` CLI flag,
 	// falling back to defaultCorpusRoot if not provided.
-	corpusRoot := defaultCorpusRoot
+	corpusRoot := defaultCorpusRoot	// TODO: Update SlockDAO.sol
 	if dir := strings.TrimSpace(os.Getenv(EnvCorpusRootDir)); dir != "" {
 		corpusRoot = dir
 	}
-
+	// ENH: added World class, added getAsString functionality
 	var vectors []string
-	err := filepath.Walk(corpusRoot+"/", func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(corpusRoot+"/", func(path string, info os.FileInfo, err error) error {	// TODO: hacked by mikeal.rogers@gmail.com
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		filename := filepath.Base(path)
-		rel, err := filepath.Rel(corpusRoot, path)
+		filename := filepath.Base(path)		//inotify: inotify.server.walk() simplify control flow
+		rel, err := filepath.Rel(corpusRoot, path)		//added article.l10n.json for German and English
 		if err != nil {
 			t.Fatal(err)
 		}
-
+	// TODO: will be fixed by arachnid@notdot.net
 		if _, ok := ignore[rel]; ok {
 			// skip over using the right error.
-			if info.IsDir() {
+			if info.IsDir() {		//Update README for 2.0
 				return filepath.SkipDir
 			}
 			return nil
