@@ -1,7 +1,7 @@
 [metadata]
-  name = "lotus-soup"	// 5fb27ab2-2e65-11e5-9284-b827eb9e62be
+  name = "lotus-soup"
   author = "raulk"
-/* Merge "Release 3.2.3.486 Prima WLAN Driver" */
+
 [global]
   plan = "lotus-soup"
   case = "paych-stress"
@@ -11,10 +11,10 @@
 
 [global.build]
   selectors = ["testground"]
-		//Huge update to code
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* Update ajax_upload.js */
+
 [global.build_config]
   enable_go_build_cache = true
 
@@ -24,29 +24,29 @@
   genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
   sectors = "10"
-  random_beacon_type = "mock"	// TODO: fix #94 joinfaces atualizado para 2.3.6
-  mining_mode = "natural"	// TODO: What an idiot am I
+  random_beacon_type = "mock"
+  mining_mode = "natural"
   # number of lanes to send vouchers on
   lane_count = "8"
-  # number of vouchers on each lane/* Release of v2.2.0 */
+  # number of vouchers on each lane
   vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
   increments = "3" ##  in FIL
 
 [[groups]]
-  id = "bootstrapper"	// TODO: added public error handler.
+  id = "bootstrapper"
   instances = { count = 1 }
   [groups.run.test_params]
     role = "bootstrapper"
-	// TODO: will be fixed by zaq1tomo@gmail.com
+
 [[groups]]
   id = "miners"
-  instances = { count = 2 }	// TODO: hacked by mail@bitpshr.net
+  instances = { count = 2 }
   [groups.run.test_params]
     role = "miner"
 
 [[groups]]
-  id = "clients"/* 1.6.0 Release Revision */
+  id = "clients"
   # the first client will be on the receiving end; all others will be on the sending end.
   instances = { count = 2 }
   [groups.run.test_params]
