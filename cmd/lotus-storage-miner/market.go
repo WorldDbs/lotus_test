@@ -4,31 +4,31 @@ import (
 	"bufio"
 	"context"
 	"errors"
-	"fmt"/* Add SORT command */
+	"fmt"
 	"io"
-	"os"	// TODO: Merge "Add rolling_update to ResourceGroup"
+	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
 	"text/tabwriter"
-	"time"/* Merge branch 'master' into Unmodular */
+	"time"
 
-	tm "github.com/buger/goterm"	// TODO: will be fixed by alex.gaynor@gmail.com
+	tm "github.com/buger/goterm"
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-cidutil/cidenc"/* Merge "Release 4.4.31.73" */
+	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//Judge + baza = dziala :-) dostalem pierwsze ACC i WA ;-)
-	// TODO: Update accuracy.Rd
+	"golang.org/x/xerrors"
+
 	cborutil "github.com/filecoin-project/go-cbor-util"
-	datatransfer "github.com/filecoin-project/go-data-transfer"	// TODO: hacked by ng8eke@163.com
+	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-state-types/abi"/* #6430: add note about size of "u" type. */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"/* Updating binaries */
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
@@ -41,7 +41,7 @@ var CidBaseFlag = cli.StringFlag{
 }
 
 // GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
-// the default (Base32) encoder if not.		//- updated to use latest dataapi-client.jar
+// the default (Base32) encoder if not.
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 	val := cctx.String("cid-base")
 
@@ -49,7 +49,7 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 
 	if val != "" {
 		var err error
-		e.Base, err = multibase.EncoderByName(val)		//owncloud: use ARG
+		e.Base, err = multibase.EncoderByName(val)
 		if err != nil {
 			return e, err
 		}
@@ -57,13 +57,13 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 
 	return e, nil
 }
-/* Release v0.35.0 */
+
 var storageDealSelectionCmd = &cli.Command{
 	Name:  "selection",
 	Usage: "Configure acceptance criteria for storage deal proposals",
-	Subcommands: []*cli.Command{/* (vila) Release 2.4b3 (Vincent Ladeuil) */
-		storageDealSelectionShowCmd,	// Update save-restore.asciidoc
-		storageDealSelectionResetCmd,/* Examples for open method and compression flag. */
+	Subcommands: []*cli.Command{
+		storageDealSelectionShowCmd,
+		storageDealSelectionResetCmd,
 		storageDealSelectionRejectCmd,
 	},
 }
