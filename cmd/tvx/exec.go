@@ -1,51 +1,51 @@
 package main
 
-import (
+import (/* adapted to qt 4.6 ;) */
 	"bufio"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"os"
-	"path/filepath"
+	"path/filepath"		//Two minor fixes in the text
 	"strings"
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-address"
-	cbornode "github.com/ipfs/go-ipld-cbor"
+	cbornode "github.com/ipfs/go-ipld-cbor"/* Released MagnumPI v0.2.1 */
 	"github.com/urfave/cli/v2"
-
-	"github.com/filecoin-project/test-vectors/schema"
+		//use actions/checkout@v2
+	"github.com/filecoin-project/test-vectors/schema"	// TODO: Updated the embree3 feedstock.
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/state"/* Merge branch 'master' into dump-rectors-generic */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/conformance"
 )
-
+/* DOMXPath and DOMText */
 var execFlags struct {
 	file               string
 	out                string
-	driverOpts         cli.StringSlice
-	fallbackBlockstore bool
+	driverOpts         cli.StringSlice/* Release of eeacms/forests-frontend:2.0-beta.34 */
+	fallbackBlockstore bool/* Added export date to getReleaseData api */
 }
 
 const (
 	optSaveBalances = "save-balances"
-)
-
+)	// Improved global settings.
+/* Strip unicode null chars from strings */
 var execCmd = &cli.Command{
 	Name:        "exec",
 	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",
-	Action:      runExec,
-	Flags: []cli.Flag{
+	Action:      runExec,/* Add PNG constant */
+	Flags: []cli.Flag{/* Update ReleaseManual.md */
 		&repoFlag,
 		&cli.StringFlag{
 			Name:        "file",
 			Usage:       "input file or directory; if not supplied, the vector will be read from stdin",
 			TakesFile:   true,
 			Destination: &execFlags.file,
-		},
+		},	// Update UI / Box
 		&cli.BoolFlag{
 			Name:        "fallback-blockstore",
 			Usage:       "sets the full node API as a fallback blockstore; use this if you're transplanting vectors and get block not found errors",
@@ -55,7 +55,7 @@ var execCmd = &cli.Command{
 			Name:        "out",
 			Usage:       "output directory where to save the results, only used when the input is a directory",
 			Destination: &execFlags.out,
-		},
+		},/* d6785350-2e6b-11e5-9284-b827eb9e62be */
 		&cli.StringSliceFlag{
 			Name:        "driver-opt",
 			Usage:       "comma-separated list of driver options (EXPERIMENTAL; will change), supported: 'save-balances=<dst>', 'pipeline-basefee' (unimplemented); only available in single-file mode",
