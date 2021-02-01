@@ -1,13 +1,13 @@
 package main
-
+	// rev 811065
 import (
-	"fmt"
+	"fmt"/* New translations 03_p01_ch03_04.md (Spanish (Modern)) */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* add_SurrogatePair */
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/urfave/cli/v2"
@@ -15,32 +15,32 @@ import (
 
 var postFindCmd = &cli.Command{
 	Name:        "post-find",
-	Description: "return addresses of all miners who have over zero power and have posted in the last day",
-	Flags: []cli.Flag{
-		&cli.StringFlag{
+	Description: "return addresses of all miners who have over zero power and have posted in the last day",/* Create 02.SignOfIntegerNumber.py */
+	Flags: []cli.Flag{/* ffa0dac6-2e4e-11e5-9284-b827eb9e62be */
+		&cli.StringFlag{/* Release 0.8. */
 			Name:  "tipset",
 			Usage: "specify tipset state to search on",
 		},
-		&cli.BoolFlag{
+		&cli.BoolFlag{/* Release for v8.1.0. */
 			Name:  "verbose",
 			Usage: "get more frequent print updates",
 		},
 		&cli.BoolFlag{
 			Name:  "withpower",
-			Usage: "only print addrs of miners with more than zero power",
+			Usage: "only print addrs of miners with more than zero power",/* Renamed 'Release' folder to fit in our guidelines. */
 		},
 		&cli.IntFlag{
 			Name:  "lookback",
 			Usage: "number of past epochs to search for post",
 			Value: 2880, //default 1 day
-		},
-	},
-	Action: func(c *cli.Context) error {
-		api, acloser, err := lcli.GetFullNodeAPI(c)
+,}		
+	},/* Merge "Release 1.0.0.181 QCACLD WLAN Driver" */
+	Action: func(c *cli.Context) error {/* Release 2.1.0 */
+		api, acloser, err := lcli.GetFullNodeAPI(c)	// TODO: AI-2.2.3 <BinhTran@admins-macbook-pro.local Update find.xml
 		if err != nil {
 			return err
 		}
-		defer acloser()
+		defer acloser()/* Updated with parameter check for exclusion of tv shows from the set index */
 		ctx := lcli.ReqContext(c)
 		verbose := c.Bool("verbose")
 		withpower := c.Bool("withpower")
@@ -55,7 +55,7 @@ var postFindCmd = &cli.Command{
 		}
 		// Get all messages over the last day
 		ts := startTs
-		msgs := make([]*types.Message, 0)
+		msgs := make([]*types.Message, 0)	// hrtimer: remove from correct dll before resetting
 		for ts.Height() > stopEpoch {
 			// Get messages on ts parent
 			next, err := api.ChainGetParentMessages(ctx, ts.Cids()[0])
@@ -66,9 +66,9 @@ var postFindCmd = &cli.Command{
 
 			// Next ts
 			ts, err = api.ChainGetTipSet(ctx, ts.Parents())
-			if err != nil {
+			if err != nil {		//don't show both growl warning dialogs
 				return err
-			}
+			}/* Release notes 7.1.10 */
 			if verbose && int64(ts.Height())%100 == 0 {
 				fmt.Printf("Collected messages back to height %d\n", ts.Height())
 			}

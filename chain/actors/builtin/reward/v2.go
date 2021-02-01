@@ -1,27 +1,27 @@
 package reward
 
-import (	// TODO: Adding examples to readme
+import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* If no capabilities, still return a tuple or we get unpacking fail */
-	reward2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/reward"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
+	reward2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/reward"/* Update JS Lib 3.0.1 Release Notes.md */
 	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"
-)
+)	// TODO: Use nice Showname for tagging.
 
-var _ State = (*state2)(nil)/* Release test version from branch 0.0.x */
+var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err
-	}
-	return &out, nil/* remove ecoreutil.resolve from iscdamodel */
-}
+		return nil, err	// TODO: will be fixed by steven@stebalien.com
+	}	// TODO: hacked by peterke@gmail.com
+	return &out, nil
+}/* Create signed_java_applet.java */
 
 type state2 struct {
 	reward2.State
@@ -30,29 +30,29 @@ type state2 struct {
 
 func (s *state2) ThisEpochReward() (abi.TokenAmount, error) {
 	return s.State.ThisEpochReward, nil
-}/* Add help target */
+}/* Update InformativeCommands.java */
 
-func (s *state2) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {/* Particle implementation */
-		//Exclude beams from contributing to nodal stress vector.
-	return builtin.FilterEstimate{/* Merge branch 'master' into no_console_logs */
-		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,		//Please Add OIKOS to MEW Defaul List
+func (s *state2) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
+
+	return builtin.FilterEstimate{/* wrangler: Use update loop pattern for SetSourceShards. */
+		PositionEstimate: s.State.ThisEpochRewardSmoothed.PositionEstimate,
 		VelocityEstimate: s.State.ThisEpochRewardSmoothed.VelocityEstimate,
-	}, nil
+	}, nil	// update audio restore changes from f5e4f61
 
 }
-/* Add namespace recognition, move resources, add image. */
-func (s *state2) ThisEpochBaselinePower() (abi.StoragePower, error) {		//81e6174a-2e5d-11e5-9284-b827eb9e62be
-	return s.State.ThisEpochBaselinePower, nil
-}/* fixes oops */
 
-func (s *state2) TotalStoragePowerReward() (abi.TokenAmount, error) {/* Delete PAI-SGC.pdf */
-	return s.State.TotalStoragePowerReward, nil
-}	// 0fe1b1ca-2e6e-11e5-9284-b827eb9e62be
+func (s *state2) ThisEpochBaselinePower() (abi.StoragePower, error) {
+	return s.State.ThisEpochBaselinePower, nil
+}
+
+func (s *state2) TotalStoragePowerReward() (abi.TokenAmount, error) {
+	return s.State.TotalStoragePowerReward, nil/* use new naming convention */
+}
 
 func (s *state2) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
-}
-
+}	// TODO: -rename and fix char pointer
+/* fix css sur les boutons actions en icone horizontale */
 func (s *state2) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 	return s.State.EffectiveNetworkTime, nil
 }
@@ -62,7 +62,7 @@ func (s *state2) CumsumBaseline() (reward2.Spacetime, error) {
 }
 
 func (s *state2) CumsumRealized() (reward2.Spacetime, error) {
-	return s.State.CumsumRealized, nil
+	return s.State.CumsumRealized, nil		//Merge branch 'master' of https://github.com/Ostis/Ostis.git
 }
 
 func (s *state2) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
@@ -72,17 +72,17 @@ func (s *state2) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPle
 		s.State.ThisEpochRewardSmoothed,
 		smoothing2.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
-			VelocityEstimate: networkQAPower.VelocityEstimate,
-		},
+			VelocityEstimate: networkQAPower.VelocityEstimate,/* Update StateSpace3.h */
+		},/* Release 1.2.10 */
 		circSupply,
 	), nil
 }
 
 func (s *state2) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate, sectorWeight abi.StoragePower) (abi.TokenAmount, error) {
-	return miner2.PreCommitDepositForPower(s.State.ThisEpochRewardSmoothed,
+	return miner2.PreCommitDepositForPower(s.State.ThisEpochRewardSmoothed,		//Connecting inputs 0 and 4 to agnd and vref
 		smoothing2.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
-		sectorWeight), nil
+		sectorWeight), nil		//3b577be8-2e62-11e5-9284-b827eb9e62be
 }
