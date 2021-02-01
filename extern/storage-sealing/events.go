@@ -1,11 +1,11 @@
-package sealing		//EPTs added
-/* Release notes should mention better newtype-deriving */
+package sealing
+
 import (
-	"context"	// TODO: will be fixed by witek@enjin.io
+	"context"
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
-		//Merge "Add periodic job with temepst and images"
+/* Release v1.5.3. */
 // `curH`-`ts.Height` = `confidence`
 type HeightHandler func(ctx context.Context, tok TipSetToken, curH abi.ChainEpoch) error
 type RevertHandler func(ctx context.Context, tok TipSetToken) error
