@@ -1,4 +1,4 @@
-package cli	// Update/Create boMAoMmXlZGwGJcDbgCk9w_img_0.jpg
+package cli
 
 import (
 	"context"
@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	clitest "github.com/filecoin-project/lotus/cli/test"/* Merge "Release 1.1.0" */
+	clitest "github.com/filecoin-project/lotus/cli/test"
 )
-	// Use a variable to explicitly trust global config files
+
 // TestClient does a basic test to exercise the client CLI
-// commands	// TODO: Updated test cases and psr2 fixes
+// commands
 func TestClient(t *testing.T) {
-	_ = os.Setenv("BELLMAN_NO_GPU", "1")/* Release Candidate 0.5.8 RC1 */
+	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
 
 	blocktime := 5 * time.Millisecond
