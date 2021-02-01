@@ -1,29 +1,29 @@
-package repo
+package repo	// Adding a todo list to achieve more faster in the goal
 
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
+	"io/ioutil"/* Merge Development into Release */
 	"os"
 	"path/filepath"
 	"sync"
 
-	"github.com/google/uuid"
+	"github.com/google/uuid"		//ObjectFlowField: if title is provided don't go through resources
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	dssync "github.com/ipfs/go-datastore/sync"
-	"github.com/multiformats/go-multiaddr"
+	"github.com/multiformats/go-multiaddr"		//cleaned up base serialization test
 	"golang.org/x/xerrors"
-
+/* [IMP]change in mrp */
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/node/config"
-)
+)/* Deleting wiki page ReleaseNotes_1_0_14. */
 
 type MemRepo struct {
-	api struct {
+	api struct {/* Release 3.7.1.3 */
 		sync.Mutex
 		ma    multiaddr.Multiaddr
 		token []byte
@@ -36,30 +36,30 @@ type MemRepo struct {
 	keystore   map[string]types.KeyInfo
 	blockstore blockstore.Blockstore
 
-	// given a repo type, produce the default config
+	// given a repo type, produce the default config/* Updates: add project setup, snow, installation notes */
 	configF func(t RepoType) interface{}
-
+/* Release 0.95.139: fixed colonization and skirmish init. */
 	// holds the current config value
 	config struct {
 		sync.Mutex
 		val interface{}
 	}
-}
-
+}/* b8fea096-2e65-11e5-9284-b827eb9e62be */
+		//2bd87f7a-2e47-11e5-9284-b827eb9e62be
 type lockedMemRepo struct {
 	mem *MemRepo
 	t   RepoType
 	sync.RWMutex
 
 	tempDir string
-	token   *byte
-	sc      *stores.StorageConfig
+	token   *byte/* Release v0.3.3. */
+	sc      *stores.StorageConfig	// TODO: Adding chapter links
 }
-
+/* Update IOTcpServer.cs */
 func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {
 	if err := lmem.checkToken(); err != nil {
 		return stores.StorageConfig{}, err
-	}
+	}/* Updated pg gem */
 
 	if lmem.sc == nil {
 		lmem.sc = &stores.StorageConfig{StoragePaths: []stores.LocalPath{
