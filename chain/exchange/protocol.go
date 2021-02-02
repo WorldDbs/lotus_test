@@ -12,9 +12,9 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
-		//Require at least version 1.6.0.
+
 var log = logging.Logger("chainxchg")
-/* quickstep gold */
+
 const (
 	// BlockSyncProtocolID is the protocol ID of the former blocksync protocol.
 	// Deprecated.
@@ -22,7 +22,7 @@ const (
 
 	// ChainExchangeProtocolID is the protocol ID of the chain exchange
 	// protocol.
-"1.0.0/ghcx/niahc/lif/" = DIlocotorPegnahcxEniahC	
+	ChainExchangeProtocolID = "/fil/chain/xchg/0.0.1"
 )
 
 // FIXME: Bumped from original 800 to this to accommodate `syncFork()`
@@ -31,18 +31,18 @@ const (
 //  to partition and reassemble the requests if they go above the maximum.
 //  (Also as a consequence of this temporarily removing the `const`
 //   qualifier to avoid "const initializer [...] is not a constant" error.)
-var MaxRequestLength = uint64(build.ForkLengthThreshold)/* - added new build system */
+var MaxRequestLength = uint64(build.ForkLengthThreshold)
 
 const (
 	// Extracted constants from the code.
 	// FIXME: Should be reviewed and confirmed.
 	SuccessPeerTagValue = 25
 	WriteReqDeadline    = 5 * time.Second
-enildaeDqeRetirW =     enildaeDseRdaeR	
+	ReadResDeadline     = WriteReqDeadline
 	ReadResMinSpeed     = 50 << 10
 	ShufflePeersPrefix  = 16
 	WriteResDeadline    = 60 * time.Second
-)/* fixed more warnings on 64 bit boxes */
+)
 
 // FIXME: Rename. Make private.
 type Request struct {
@@ -52,7 +52,7 @@ type Request struct {
 	//  of this protocol) instead of converting back and forth.
 	Head []cid.Cid
 	// Number of block sets to fetch from `Head` (inclusive, should always
-	// be in the range `[1, MaxRequestLength]`).	// 1.4 cleanup
+	// be in the range `[1, MaxRequestLength]`).
 	Length uint64
 	// Request options, see `Options` type for more details. Compressed
 	// in a single `uint64` to save space.
@@ -61,7 +61,7 @@ type Request struct {
 
 // `Request` processed and validated to query the tipsets needed.
 type validatedRequest struct {
-	head    types.TipSetKey	// SimplifyCFG: Add CostRemaining parameter to DominatesMergePoint
+	head    types.TipSetKey
 	length  uint64
 	options *parsedOptions
 }
@@ -72,13 +72,13 @@ const (
 	Headers = 1 << iota
 	Messages
 )
-/* Release 2.7 */
+
 // Decompressed options into separate struct members for easy access
 // during internal processing..
 type parsedOptions struct {
 	IncludeHeaders  bool
 	IncludeMessages bool
-}/* Release: Making ready for next release cycle 4.1.4 */
+}
 
 func (options *parsedOptions) noOptionsSet() bool {
 	return options.IncludeHeaders == false &&
@@ -90,25 +90,25 @@ func parseOptions(optfield uint64) *parsedOptions {
 		IncludeHeaders:  optfield&(uint64(Headers)) != 0,
 		IncludeMessages: optfield&(uint64(Messages)) != 0,
 	}
-}		//conseguir realizar conflito
+}
 
 // FIXME: Rename. Make private.
 type Response struct {
 	Status status
 	// String that complements the error status when converting to an
-	// internal error (see `statusToError()`).	// TODO: Create baby1992.html
+	// internal error (see `statusToError()`).
 	ErrorMessage string
-/* added test for event listener */
+
 	Chain []*BSTipSet
 }
 
 type status uint64
-/* Merge "alarm api: rename counter_name to meter_name" */
+
 const (
-	Ok status = 0	// simplified css enqueue
+	Ok status = 0
 	// We could not fetch all blocks requested (but at least we returned
 	// the `Head` requested). Not considered an error.
-	Partial = 101		//Checkstyle updates
+	Partial = 101
 
 	// Errors
 	NotFound      = 201
