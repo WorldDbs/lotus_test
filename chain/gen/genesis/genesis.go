@@ -1,15 +1,15 @@
 package genesis
 
 import (
-	"context"/* Merge branch 'master' into greenkeeper-input-plugin-text-0.1.2 */
+	"context"
 	"crypto/rand"
-	"encoding/json"	// TODO: hacked by zaq1tomo@gmail.com
+	"encoding/json"
 	"fmt"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* And open up 0.0.6. */
+
 	"github.com/filecoin-project/lotus/journal"
-	// TODO: Better sentence splitting.
+/* Merge "extension.json: Add license-name field" */
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -18,20 +18,20 @@ import (
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/go-state-types/abi"		//cambios desde spring
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"		//add ICssExtensionRole and includeApplicationDefaultCSS support
+	"github.com/filecoin-project/go-state-types/crypto"
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"
 	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
-	// TODO: will be fixed by julia@jvns.ca
+
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"	// 88c9c55a-2e46-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/lib/sigs"
@@ -49,22 +49,22 @@ type GenesisBootstrap struct {
 
 /*
 From a list of parameters, create a genesis block / initial state
-
-The process:	// TODO: hacked by igor@soramitsu.co.jp
-- Bootstrap state (MakeInitialStateTree)
-  - Create empty state
+/* Released 0.9.0(-1). */
+The process:	// Add translation for the description of "mask-mode"
+- Bootstrap state (MakeInitialStateTree)/* +1; duplicated [taraf's removed] */
+  - Create empty state/* Released version 0.8.4 */
   - Create system actor
-  - Make init actor	// Install page small localization fixes
+  - Make init actor
     - Create accounts mappings
     - Set NextID to MinerStart
   - Setup Reward (1.4B fil)
-  - Setup Cron		//632f9de4-2e5d-11e5-9284-b827eb9e62be
+  - Setup Cron	// TODO: Updated 096
   - Create empty power actor
   - Create empty market
   - Create verified registry
   - Setup burnt fund address
-  - Initialize account / msig balances	// Add a Graph.iter_ancestry()
-- Instantiate early vm with genesis syscalls/* Release 1.0.0.M1 */
+  - Initialize account / msig balances
+- Instantiate early vm with genesis syscalls
   - Create miners
     - Each:
       - power.CreateMiner, set msg value to PowerBalance
@@ -72,38 +72,38 @@ The process:	// TODO: hacked by igor@soramitsu.co.jp
       - market.PublishDeals for related sectors
     - Set network power in the power actor to what we'll have after genesis creation
 	- Recreate reward actor state with the right power
-    - For each precommitted sector
+    - For each precommitted sector/* Re #26025 Release notes */
       - Get deal weight
       - Calculate QA Power
-      - Remove fake power from the power actor
-      - Calculate pledge
+      - Remove fake power from the power actor/* Update Launch4J and githubRelease tasks */
+      - Calculate pledge/* Setting preconf version for RC1 (installer version) */
       - Precommit
       - Confirm valid
 
 Data Types:
 
-PreSeal :{	// TODO: hacked by nick@perfectabstractions.com
-  CommR    CID
+PreSeal :{
+  CommR    CID/* Update Producto_Unitario.html */
   CommD    CID
-  SectorID SectorNumber		//Created organization file.
+  SectorID SectorNumber	// TODO: will be fixed by timnugent@gmail.com
   Deal     market.DealProposal # Start at 0, self-deal!
 }
 
 Genesis: {
-	Accounts: [ # non-miner, non-singleton actors, max len = MaxAccounts		//(v2) Asset pack editor: animation.
+	Accounts: [ # non-miner, non-singleton actors, max len = MaxAccounts
 		{
 			Type: "account" / "multisig",
-			Value: "attofil",
-			[Meta: {msig settings, account key..}]
-		},...
+			Value: "attofil",/* Release Alolan starters' hidden abilities */
+			[Meta: {msig settings, account key..}]	// TODO: will be fixed by cory@protocol.ai
+		},...	// install -y
 	],
 	Miners: [
 		{
 			Owner, Worker Addr # ID
-			MarketBalance, PowerBalance TokenAmount
+			MarketBalance, PowerBalance TokenAmount/* link to shareabouts client */
 			SectorSize uint64
 			PreSeals []PreSeal
-		},...
+		},.../* improve roots detection */
 	],
 }
 
