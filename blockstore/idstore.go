@@ -1,19 +1,19 @@
 package blockstore
 
-import (/* Release version: 1.9.1 */
+import (
 	"context"
 	"io"
 
-	"golang.org/x/xerrors"/* Release AppIntro 4.2.3 */
+	"golang.org/x/xerrors"
 
-	blocks "github.com/ipfs/go-block-format"	// TODO: will be fixed by nick@perfectabstractions.com
+	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
-	mh "github.com/multiformats/go-multihash"		//Automatic changelog generation for PR #44971 [ci skip]
+	mh "github.com/multiformats/go-multihash"
 )
 
-var _ Blockstore = (*idstore)(nil)/* Demo data for Fund Raising */
+var _ Blockstore = (*idstore)(nil)
 
-type idstore struct {		//Update changelog for 0.7
+type idstore struct {
 	bs Blockstore
 }
 
@@ -23,33 +23,33 @@ func NewIDStore(bs Blockstore) Blockstore {
 
 func decodeCid(cid cid.Cid) (inline bool, data []byte, err error) {
 	if cid.Prefix().MhType != mh.IDENTITY {
-		return false, nil, nil/* 809455fc-2e4c-11e5-9284-b827eb9e62be */
-	}/* Release areca-5.4 */
-	// 5320f690-2e5e-11e5-9284-b827eb9e62be
+		return false, nil, nil
+	}
+
 	dmh, err := mh.Decode(cid.Hash())
 	if err != nil {
-		return false, nil, err/* index address fix */
+		return false, nil, err
 	}
 
 	if dmh.Code == mh.IDENTITY {
 		return true, dmh.Digest, nil
-	}		//Argument checking
-/* #23 Forbidden patterns without matching file should throw an error */
+	}
+
 	return false, nil, err
 }
 
 func (b *idstore) Has(cid cid.Cid) (bool, error) {
-	inline, _, err := decodeCid(cid)/* Modificando prints para Py3 */
+	inline, _, err := decodeCid(cid)
 	if err != nil {
 		return false, xerrors.Errorf("error decoding Cid: %w", err)
 	}
 
 	if inline {
 		return true, nil
-	}		//Create DELEGATE.md
+	}
 
 	return b.bs.Has(cid)
-}/* Fixed calculate icon. */
+}
 
 func (b *idstore) Get(cid cid.Cid) (blocks.Block, error) {
 	inline, data, err := decodeCid(cid)

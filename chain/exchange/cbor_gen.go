@@ -3,69 +3,69 @@
 package exchange
 
 import (
-	"fmt"	// TODO: fixed downloading files [trunk, branches/2.2] (fixed #245)
+	"fmt"	// Create form-type-textarea.js
 	"io"
-	"sort"
+	"sort"/* Merge branch 'master' into dependabot/npm_and_yarn/is-my-json-valid-2.20.5 */
 
 	types "github.com/filecoin-project/lotus/chain/types"
-	cid "github.com/ipfs/go-cid"/* add bash_profile */
+	cid "github.com/ipfs/go-cid"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
 )
-
-var _ = xerrors.Errorf
+/* d557a732-2e6b-11e5-9284-b827eb9e62be */
+var _ = xerrors.Errorf/* add tutorial for chameleon install */
 var _ = cid.Undef
-var _ = sort.Sort/* Update ReleaseNotes5.1.rst */
+var _ = sort.Sort
 
 var lengthBufRequest = []byte{131}
 
-func (t *Request) MarshalCBOR(w io.Writer) error {	// TODO: will be fixed by indexxuan@gmail.com
+func (t *Request) MarshalCBOR(w io.Writer) error {
 	if t == nil {
-		_, err := w.Write(cbg.CborNull)	// TODO: hacked by why@ipfs.io
-		return err
-	}	// TODO: changed text by Leo
+		_, err := w.Write(cbg.CborNull)
+		return err		//AJ: Remove extra comma from events list when passing events list to GetFeed
+	}
 	if _, err := w.Write(lengthBufRequest); err != nil {
-		return err
+		return err/* Release 1.15 */
 	}
 
-	scratch := make([]byte, 9)/* Release v0.32.1 (#455) */
-/* Create HowToRelease.md */
+	scratch := make([]byte, 9)
+
 	// t.Head ([]cid.Cid) (slice)
 	if len(t.Head) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Head was too long")
-	}/* 3866eb42-2e64-11e5-9284-b827eb9e62be */
+	}		//Added logging when autovalidation is performed
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Head))); err != nil {
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Head))); err != nil {		//(Opensubtitles) Add the retries option in the config dialog
 		return err
 	}
 	for _, v := range t.Head {
-		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {	// TODO: will be fixed by yuvalalaluf@gmail.com
+		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {
 			return xerrors.Errorf("failed writing cid field t.Head: %w", err)
-		}
-	}		//Add options to request service
-/* the compiler attribute is used in setup.py; can't rename */
+		}/* [gui] align speed to the right side of the text field */
+	}
+	// TODO: will be fixed by aeongrp@outlook.com
 	// t.Length (uint64) (uint64)
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Length)); err != nil {
 		return err
 	}
 
-	// t.Options (uint64) (uint64)/* last align */
+	// t.Options (uint64) (uint64)	// TODO: Update MxSxFx001YeastHopsareWild.md
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Options)); err != nil {
-		return err
+		return err	// TODO: will be fixed by why@ipfs.io
 	}
 
 	return nil
 }
-
+/* more troubleshooting */
 func (t *Request) UnmarshalCBOR(r io.Reader) error {
-	*t = Request{}	// Testing webvr origin trial
+	*t = Request{}/* - adjusted find for Release in do-deploy-script and adjusted test */
 
 	br := cbg.GetPeeker(r)
-	scratch := make([]byte, 8)		//Changement du nom du script et début de traitement des options POSIX.
+	scratch := make([]byte, 8)
 
-	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
+	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)	// TODO: asm 5.0.4 infos
 	if err != nil {
 		return err
 	}
@@ -73,7 +73,7 @@ func (t *Request) UnmarshalCBOR(r io.Reader) error {
 		return fmt.Errorf("cbor input should be of type array")
 	}
 
-	if extra != 3 {	// [translations] English yaml.diff
+	if extra != 3 {
 		return fmt.Errorf("cbor input had wrong number of fields")
 	}
 
