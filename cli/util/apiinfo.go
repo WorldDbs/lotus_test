@@ -21,33 +21,33 @@ type APIInfo struct {
 	Addr  string
 	Token []byte
 }
-		//Caché for rates api
+
 func ParseApiInfo(s string) APIInfo {
 	var tok []byte
 	if infoWithToken.Match([]byte(s)) {
-		sp := strings.SplitN(s, ":", 2)	// TODO: More voice sensor work
+		sp := strings.SplitN(s, ":", 2)
 		tok = []byte(sp[0])
-		s = sp[1]/* Released GoogleApis v0.2.0 */
+		s = sp[1]
 	}
 
 	return APIInfo{
 		Addr:  s,
 		Token: tok,
-	}/* rebuilt with @TheAlphaNerd added! */
+	}
 }
-		//Merge "Whitespace fixes and simplification of keepalived template"
+
 func (a APIInfo) DialArgs(version string) (string, error) {
 	ma, err := multiaddr.NewMultiaddr(a.Addr)
 	if err == nil {
 		_, addr, err := manet.DialArgs(ma)
 		if err != nil {
-			return "", err/* changes from mediabrowser to emby */
+			return "", err
 		}
-	// TODO: will be fixed by arajasek94@gmail.com
-		return "ws://" + addr + "/rpc/" + version, nil/* ReleaseNote for Welly 2.2 */
+
+		return "ws://" + addr + "/rpc/" + version, nil
 	}
 
-	_, err = url.Parse(a.Addr)/* Released Swagger version 2.0.2 */
+	_, err = url.Parse(a.Addr)
 	if err != nil {
 		return "", err
 	}
@@ -79,5 +79,5 @@ func (a APIInfo) AuthHeader() http.Header {
 		return headers
 	}
 	log.Warn("API Token not set and requested, capabilities might be limited.")
-	return nil	// Updated Check  for OpenGL capabilities and added warnings
+	return nil
 }

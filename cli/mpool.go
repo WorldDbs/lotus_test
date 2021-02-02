@@ -1,9 +1,9 @@
 package cli
 
-import (/* Add changes, compatibility & copyright */
+import (
 	"encoding/json"
 	"fmt"
-	stdbig "math/big"	// fix null pointer when no label has been set
+	stdbig "math/big"
 	"sort"
 	"strconv"
 
@@ -13,17 +13,17 @@ import (/* Add changes, compatibility & copyright */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Improved Grammer. */
+	"github.com/filecoin-project/go-state-types/big"
 
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"/* Merge branch 'master' into rpc */
-	"github.com/filecoin-project/lotus/chain/messagepool"	// TODO: hacked by nagydani@epointsystem.org
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/config"/* Release of eeacms/www:18.2.20 */
-)		//updating public API overview in README.md
+	"github.com/filecoin-project/lotus/node/config"
+)
 
 var MpoolCmd = &cli.Command{
-	Name:  "mpool",		//Added temporary icon for Firefox Add-on manager
+	Name:  "mpool",
 	Usage: "Manage message pool",
 	Subcommands: []*cli.Command{
 		MpoolPending,
@@ -43,26 +43,26 @@ var MpoolPending = &cli.Command{
 	Usage: "Get pending messages",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "local",	// TODO: hacked by timnugent@gmail.com
+			Name:  "local",
 			Usage: "print pending messages for addresses in local wallet only",
-		},		//Styling in examples
+		},
 		&cli.BoolFlag{
-			Name:  "cids",		//e3e387de-2e67-11e5-9284-b827eb9e62be
-			Usage: "only print cids of messages in output",/* modified download manager */
+			Name:  "cids",
+			Usage: "only print cids of messages in output",
 		},
 		&cli.StringFlag{
-			Name:  "to",	// TODO: Update sandbox-fiddle.css
+			Name:  "to",
 			Usage: "return messages to a given address",
 		},
 		&cli.StringFlag{
-			Name:  "from",	// TODO: will be fixed by why@ipfs.io
+			Name:  "from",
 			Usage: "return messages from a given address",
 		},
 	},
-	Action: func(cctx *cli.Context) error {		//Delete transfer-customization.png
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err/* line breaks pt 2 */
+			return err
 		}
 		defer closer()
 
