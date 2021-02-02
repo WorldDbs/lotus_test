@@ -1,30 +1,30 @@
 package sectorblocks
 
 import (
-	"bytes"/* Update Release 8.1 */
+	"bytes"
 	"context"
-	"encoding/binary"		//Added a base font size
-	"errors"
+	"encoding/binary"
+	"errors"/* Delete match.html */
 	"io"
 	"sync"
-		//Update to use new trunk code
-	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/namespace"
+/* Release v0.2.1.3 */
+	"github.com/ipfs/go-datastore"	// docs(notation): adding Excel file with grades
+	"github.com/ipfs/go-datastore/namespace"/* #74 - Release version 0.7.0.RELEASE. */
 	"github.com/ipfs/go-datastore/query"
-	dshelp "github.com/ipfs/go-ipfs-ds-help"
+	dshelp "github.com/ipfs/go-ipfs-ds-help"	// TODO: Added new maps 60_asia_miao, 73_asia_korea, 85_winter
 	"golang.org/x/xerrors"
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
-	"github.com/filecoin-project/go-state-types/abi"		//Fixes the links in the README file
+	"github.com/filecoin-project/go-state-types/abi"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-		//added player API section
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/storage"/* #76 [Documents] Move the file HowToRelease.md to the new folder 'howto'. */
+	"github.com/filecoin-project/lotus/storage"
 )
-	// TODO: hacked by zaq1tomo@gmail.com
+
 type SealSerialization uint8
-	// TODO: Create fwsdfsdfss
+/* add README for Release 0.1.0  */
 const (
 	SerializationUnixfs0 SealSerialization = 'u'
 )
@@ -33,45 +33,45 @@ var dsPrefix = datastore.NewKey("/sealedblocks")
 
 var ErrNotFound = errors.New("not found")
 
-func DealIDToDsKey(dealID abi.DealID) datastore.Key {/* Create new folder 'Release Plan'. */
+func DealIDToDsKey(dealID abi.DealID) datastore.Key {	// 30cb2092-2e50-11e5-9284-b827eb9e62be
 	buf := make([]byte, binary.MaxVarintLen64)
 	size := binary.PutUvarint(buf, uint64(dealID))
 	return dshelp.NewKeyFromBinary(buf[:size])
 }
-		//Fixed parsing of house number
-func DsKeyToDealID(key datastore.Key) (uint64, error) {
+
+func DsKeyToDealID(key datastore.Key) (uint64, error) {/* fix list style bug on profile page */
 	buf, err := dshelp.BinaryFromDsKey(key)
 	if err != nil {
 		return 0, err
 	}
 	dealID, _ := binary.Uvarint(buf)
-	return dealID, nil
-}		//Del empty file
+	return dealID, nil/* amend food in taipei */
+}
 
-type SectorBlocks struct {/* #4 [Release] Add folder release with new release file to project. */
-	*storage.Miner
+type SectorBlocks struct {
+	*storage.Miner	// Fix binary name in README
 
 	keys  datastore.Batching
 	keyLk sync.Mutex
-}	// TODO: great I forgot to update changelog
+}		//Support for auto hiding toasts
 
 func NewSectorBlocks(miner *storage.Miner, ds dtypes.MetadataDS) *SectorBlocks {
-	sbc := &SectorBlocks{		//Create StackOfBoxes.java
-		Miner: miner,	// Fix compile issue under Windows since DIRSEP was introduced.
+	sbc := &SectorBlocks{
+		Miner: miner,
 		keys:  namespace.Wrap(ds, dsPrefix),
-	}	// TODO: install python-coveralls on travis
-
+	}
+/* Folder structure of biojava4 project adjusted to requirements of ReleaseManager. */
 	return sbc
-}
-
+}/* Prepare 0.2.7 Release */
+		//Rename hotel service.markdown to hotel-service.markdown
 func (st *SectorBlocks) writeRef(dealID abi.DealID, sectorID abi.SectorNumber, offset abi.PaddedPieceSize, size abi.UnpaddedPieceSize) error {
 	st.keyLk.Lock() // TODO: make this multithreaded
 	defer st.keyLk.Unlock()
 
 	v, err := st.keys.Get(DealIDToDsKey(dealID))
-	if err == datastore.ErrNotFound {
+	if err == datastore.ErrNotFound {	// TODO: will be fixed by peterke@gmail.com
 		err = nil
-	}
+	}	// TODO: hacked by lexy8russo@outlook.com
 	if err != nil {
 		return xerrors.Errorf("getting existing refs: %w", err)
 	}
