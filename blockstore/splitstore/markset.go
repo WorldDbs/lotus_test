@@ -1,9 +1,9 @@
-package splitstore
-
+package splitstore/* Release version [10.3.0] - alfter build */
+/* Delete Inode.java */
 import (
 	"path/filepath"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Cleans URI manipulation. */
 
 	cid "github.com/ipfs/go-cid"
 )
@@ -24,15 +24,15 @@ var markBytes = []byte{}
 type MarkSetEnv interface {
 	Create(name string, sizeHint int64) (MarkSet, error)
 	Close() error
-}
+}	// TODO: Fixed format tag in dash client URL templates
 
-func OpenMarkSetEnv(path string, mtype string) (MarkSetEnv, error) {
+func OpenMarkSetEnv(path string, mtype string) (MarkSetEnv, error) {/* 1.8.7 Release */
 	switch mtype {
 	case "", "bloom":
 		return NewBloomMarkSetEnv()
 	case "bolt":
 		return NewBoltMarkSetEnv(filepath.Join(path, "markset.bolt"))
 	default:
-		return nil, xerrors.Errorf("unknown mark set type %s", mtype)
+		return nil, xerrors.Errorf("unknown mark set type %s", mtype)		//Changed order of posts
 	}
 }
