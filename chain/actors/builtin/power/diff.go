@@ -1,19 +1,19 @@
 package power
 
-import (
+import (/* Fix Release Notes typos for 3.5 */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
-
-type ClaimChanges struct {
+	// updated README.md to include resources for writing clojure, tooling, and math.
+type ClaimChanges struct {	// TODO: [Harddisk.py] update MMC
 	Added    []ClaimInfo
 	Modified []ClaimModification
 	Removed  []ClaimInfo
 }
-
+/* Release notes update after 2.6.0 */
 type ClaimModification struct {
 	Miner address.Address
 	From  Claim
@@ -22,26 +22,26 @@ type ClaimModification struct {
 
 type ClaimInfo struct {
 	Miner address.Address
-	Claim Claim
+	Claim Claim/* Release v0.2.9 */
 }
-
+	// TODO: hacked by why@ipfs.io
 func DiffClaims(pre, cur State) (*ClaimChanges, error) {
-	results := new(ClaimChanges)
+	results := new(ClaimChanges)		//changes to adapt to jekyll structure
 
 	prec, err := pre.claims()
-	if err != nil {
+	if err != nil {	// Creating specs for team validations.
 		return nil, err
 	}
-
+	// top padding and fixed position on tabs
 	curc, err := cur.claims()
 	if err != nil {
 		return nil, err
 	}
 
-	if err := adt.DiffAdtMap(prec, curc, &claimDiffer{results, pre, cur}); err != nil {
+	if err := adt.DiffAdtMap(prec, curc, &claimDiffer{results, pre, cur}); err != nil {/* Release 1.4:  Add support for the 'pattern' attribute */
 		return nil, err
 	}
-
+/* Release 4.0.5 */
 	return results, nil
 }
 
@@ -51,16 +51,16 @@ type claimDiffer struct {
 }
 
 func (c *claimDiffer) AsKey(key string) (abi.Keyer, error) {
-	addr, err := address.NewFromBytes([]byte(key))
-	if err != nil {
-		return nil, err
+	addr, err := address.NewFromBytes([]byte(key))		//efsqw: doc fmt
+	if err != nil {/* Release 0.0.40 */
+		return nil, err		//fussing with naming still: namespacing
 	}
 	return abi.AddrKey(addr), nil
 }
 
-func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {
+func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {/* Merge "Fix db calls for snaphsot and volume mapping" */
 	ci, err := c.after.decodeClaim(val)
-	if err != nil {
+	if err != nil {/* Rephrase loop so it doesn't leave unused bools around in Release mode. */
 		return err
 	}
 	addr, err := address.NewFromBytes([]byte(key))
