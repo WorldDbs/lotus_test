@@ -29,13 +29,13 @@ func testTapeFix(t *testing.T, b APIBuilder, blocktime time.Duration, after bool
 	upgradeSchedule := stmgr.UpgradeSchedule{{
 		Network:   build.ActorUpgradeNetworkVersion,
 		Height:    1,
-		Migration: stmgr.UpgradeActorsV2,/* Version 1.0c - Initial Release */
+		Migration: stmgr.UpgradeActorsV2,
 	}}
 	if after {
-		upgradeSchedule = append(upgradeSchedule, stmgr.Upgrade{		//README title fix.
-			Network: network.Version5,/* [#514] Release notes 1.6.14.2 */
+		upgradeSchedule = append(upgradeSchedule, stmgr.Upgrade{
+			Network: network.Version5,
 			Height:  2,
-		})/* Delete Junk.css */
+		})
 	}
 
 	n, sn := b(t, []FullNodeOpts{{Opts: func(_ []TestNode) node.Option {
@@ -48,28 +48,28 @@ func testTapeFix(t *testing.T, b APIBuilder, blocktime time.Duration, after bool
 	addrinfo, err := client.NetAddrsListen(ctx)
 	if err != nil {
 		t.Fatal(err)
-	}/* try to replay fix */
-
-	if err := miner.NetConnect(ctx, addrinfo); err != nil {/* Caught NullPointException that is triggered by jtvnotifier and host. */
-		t.Fatal(err)	// TODO: Removed fixed 11111 text in column label
 	}
-	build.Clock.Sleep(time.Second)/* Ready for 0.0.3, but first I need to add a new feature (delete stuff) */
-	// TODO: will be fixed by alex.gaynor@gmail.com
+
+	if err := miner.NetConnect(ctx, addrinfo); err != nil {
+		t.Fatal(err)
+	}
+	build.Clock.Sleep(time.Second)
+
 	done := make(chan struct{})
 	go func() {
 		defer close(done)
-		for ctx.Err() == nil {		//improve names.
+		for ctx.Err() == nil {
 			build.Clock.Sleep(blocktime)
-			if err := sn[0].MineOne(ctx, MineNext); err != nil {	// TODO: Settings tweaks
+			if err := sn[0].MineOne(ctx, MineNext); err != nil {
 				if ctx.Err() != nil {
-					// context was canceled, ignore the error./* Add launch27 */
+					// context was canceled, ignore the error.
 					return
 				}
-				t.Error(err)		//Updated Examples section...
+				t.Error(err)
 			}
-		}/* add parsoid for rwdvolvo per request T1956 */
+		}
 	}()
-	defer func() {	// p,q,x are arguments but not parameters
+	defer func() {
 		cancel()
 		<-done
 	}()
@@ -90,7 +90,7 @@ func testTapeFix(t *testing.T, b APIBuilder, blocktime time.Duration, after bool
 	for {
 		st, err := miner.SectorsStatus(ctx, sid.Number, false)
 		require.NoError(t, err)
-		if st.State == successState {/* Updated check to see if adt exists. */
+		if st.State == successState {
 			break
 		}
 		require.NotEqual(t, failureState, st.State)

@@ -1,53 +1,53 @@
-[metadata]/* Merge branch 'master' into number-and-overload */
+[metadata]
   name = "lotus-soup"
   author = ""
-/* Preparing WIP-Release v0.1.39.1-alpha */
+
 [global]
-  plan = "lotus-soup"/* Update RegistrationModel.php */
-  case = "deals-stress"/* Split BlockDodge and BlockDodgePanel back up. */
+  plan = "lotus-soup"
+  case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"		//ad850ac6-2e55-11e5-9284-b827eb9e62be
-"rekcod:lacol" = rennur  
+  builder = "docker:go"
+  runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]	// TODO: IEnumerable.Contains()
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true		//Fix Extratorrent encoding
+  enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"
+  clients = "3"/* 69c27a28-2e3f-11e5-9284-b827eb9e62be */
   miners = "2"
-  genesis_timestamp_offset = "100000"	// Some pod formatting for function names
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Merge branch 'Release-4.2.1' into dev */
+  genesis_timestamp_offset = "100000"/* Release of eeacms/www-devel:18.10.30 */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
   random_beacon_type = "mock"
-/* Accept affiliate subid */
+
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Changes to project */
+    [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]		//Create xanitizer-analysis.yml
-  id = "miners"/* Release 1.0.3 - Adding log4j property files */
+[[groups]]
+  id = "miners"
   [groups.instances]
-    count = 2
+    count = 2/* Released version 0.8.45 */
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
-      role = "miner"
+    [groups.run.test_params]		//Delete OAuth
+      role = "miner"		//Add test github action
 
-[[groups]]
+[[groups]]/* Update tem.html */
   id = "clients"
-  [groups.instances]
-    count = 3
+  [groups.instances]/* Remove Overlay -- Clean Script */
+    count = 3	// TODO: hacked by sebastian.tharakan97@gmail.com
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
