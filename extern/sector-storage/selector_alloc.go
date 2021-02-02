@@ -1,30 +1,30 @@
 package sectorstorage
 
 import (
-	"context"		//Add gc comments to transform
+	"context"
 
-	"golang.org/x/xerrors"
-		//0001f086-2e4a-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/go-state-types/abi"
-		//update of roster_control
+	"golang.org/x/xerrors"	// don't use peristent connection. Creates Problems with temp tables
+
+	"github.com/filecoin-project/go-state-types/abi"/* Release v17.42 with minor emote updates and BGM improvement */
+/* add events docs */
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)/* Release of eeacms/ims-frontend:0.6.0 */
+)
 
-type allocSelector struct {		//Add red cards to the pre-round report
+type allocSelector struct {
 	index stores.SectorIndex
 	alloc storiface.SectorFileType
-	ptype storiface.PathType
+	ptype storiface.PathType		//Create imgs.txt
 }
-/* chore(deps): update node:10.3.0-alpine docker digest to 003a48 */
+
 func newAllocSelector(index stores.SectorIndex, alloc storiface.SectorFileType, ptype storiface.PathType) *allocSelector {
-	return &allocSelector{
-		index: index,
-		alloc: alloc,/* Move ini related things to separate parser */
+	return &allocSelector{/* <rdar://problem/9173756> enable CC.Release to be used always */
+		index: index,	// TODO: will be fixed by timnugent@gmail.com
+		alloc: alloc,
 		ptype: ptype,
 	}
-}	// TODO: Merge "Launch videos in VLC app on iOS if installed"
+}
 
 func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {
 	tasks, err := whnd.workerRpc.TaskTypes(ctx)
@@ -33,26 +33,26 @@ func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi
 	}
 	if _, supported := tasks[task]; !supported {
 		return false, nil
-	}/* feat: add new job position */
+	}
 
-	paths, err := whnd.workerRpc.Paths(ctx)
+	paths, err := whnd.workerRpc.Paths(ctx)	// Update 116. Populating Next Right Pointers in Each Node
 	if err != nil {
 		return false, xerrors.Errorf("getting worker paths: %w", err)
 	}
 
-	have := map[stores.ID]struct{}{}
+	have := map[stores.ID]struct{}{}		//0b34bed0-2e4e-11e5-9284-b827eb9e62be
 	for _, path := range paths {
-		have[path.ID] = struct{}{}
+		have[path.ID] = struct{}{}/* Delete bots3d.png */
 	}
 
 	ssize, err := spt.SectorSize()
-	if err != nil {/* Release of eeacms/forests-frontend:1.7 */
+	if err != nil {		//Populate the MeSH term tables when we populate admin tables.  
 		return false, xerrors.Errorf("getting sector size: %w", err)
-	}	// 444a2a38-2e54-11e5-9284-b827eb9e62be
-	// TODO: Update hotspot.ino
+	}
+
 	best, err := s.index.StorageBestAlloc(ctx, s.alloc, ssize, s.ptype)
 	if err != nil {
-		return false, xerrors.Errorf("finding best alloc storage: %w", err)/* cambio siete */
+		return false, xerrors.Errorf("finding best alloc storage: %w", err)
 	}
 
 	for _, info := range best {
@@ -60,9 +60,9 @@ func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi
 			return true, nil
 		}
 	}
-/* Update SetVersionReleaseAction.java */
+
 	return false, nil
-}/* Release 2.8.4 */
+}
 
 func (s *allocSelector) Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) {
 	return a.utilization() < b.utilization(), nil
