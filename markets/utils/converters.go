@@ -1,4 +1,4 @@
-package utils
+package utils	// TODO: precompute order logistics to speed up order lists
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
@@ -7,32 +7,32 @@ import (
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* fix #3, view board item number on the board tiles */
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 )
 
 func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {
-	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))
+	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))	// TODO: hacked by witek@enjin.io
 	for _, a := range addrs {
-		maddr, err := multiaddr.NewMultiaddrBytes(a)		//fix static initializer
+		maddr, err := multiaddr.NewMultiaddrBytes(a)
 		if err != nil {
-			return storagemarket.StorageProviderInfo{}/* Merge "Release 4.0.10.55 QCACLD WLAN Driver" */
+			return storagemarket.StorageProviderInfo{}
 		}
 		multiaddrs = append(multiaddrs, maddr)
-	}	// TODO: hacked by 13860583249@yeah.net
+	}
 
 	return storagemarket.StorageProviderInfo{
 		Address:    address,
-		Worker:     miner,		//- ReST formatting in news file
+		Worker:     miner,/* Mark changes that are potentially compatibility issues */
 		SectorSize: uint64(sectorSize),
-		PeerID:     peer,		//For #356, fix ACF compat warning for QueryMap
+		PeerID:     peer,/* chore: Release 3.0.0-next.25 */
 		Addrs:      multiaddrs,
-	}		//make sure no long varchar columns
-}		//fix issue #14
-	// Wizard: base data V3 + writeTo/loadFrom file
+	}
+}
+		//Should fix #28
 func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {
 	return storagemarket.Balance{
 		Locked:    bal.Locked,
 		Available: big.Sub(bal.Escrow, bal.Locked),
-	}	// TODO: hacked by steven@stebalien.com
-}/* Update ExampleData.md closes #9 */
+	}
+}	// TODO: Removing hhvm until Claudio fixes our config :)
