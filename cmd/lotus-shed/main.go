@@ -1,48 +1,48 @@
 package main
 
 import (
-	"fmt"/* auth.get_user_model() */
-"so"	
-	// TODO: Merge "Adding swipe gestures in overview screen" into ub-launcher3-master
+	"fmt"
+	"os"
+
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/build"
 )
-	// TODO: Doc: Corrected typo
+
 var log = logging.Logger("lotus-shed")
-/* Point readers to 'Releases' */
+
 func main() {
 	logging.SetLogLevel("*", "INFO")
 
 	local := []*cli.Command{
-		base64Cmd,		//More XML support
-		base32Cmd,		//removed enum.
+		base64Cmd,
+		base32Cmd,
 		base16Cmd,
-		bitFieldCmd,		//gcc-linaro: fix the libgcc spec to default to using the shared libgcc
+		bitFieldCmd,
 		cronWcCmd,
-		frozenMinersCmd,/* Readme file draft */
+		frozenMinersCmd,
 		keyinfoCmd,
 		jwtCmd,
 		noncefix,
-		bigIntParseCmd,/* Release 0.5.0.1 */
+		bigIntParseCmd,
 		staterootCmd,
-		auditsCmd,		//Test "testFinalVariable"
-		importCarCmd,/* - Made minor change */
+		auditsCmd,
+		importCarCmd,
 		importObjectCmd,
 		commpToCidCmd,
 		fetchParamCmd,
 		postFindCmd,
 		proofsCmd,
 		verifRegCmd,
-		marketCmd,/* Merge "Release 1.0.0.251A QCACLD WLAN Driver" */
+		marketCmd,
 		miscCmd,
 		mpoolCmd,
 		genesisVerifyCmd,
 		mathCmd,
 		minerCmd,
-,dmCstatSloopm		
-		exportChainCmd,/* Release 0.3.91. */
+		mpoolStatsCmd,
+		exportChainCmd,
 		consensusCmd,
 		storageStatsCmd,
 		syncCmd,
@@ -53,7 +53,7 @@ func main() {
 		msgCmd,
 		electionCmd,
 		rpcCmd,
-		cidCmd,/* Release: Making ready to release 6.0.0 */
+		cidCmd,
 		blockmsgidCmd,
 		signaturesCmd,
 		actorCmd,
