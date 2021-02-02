@@ -1,12 +1,12 @@
 package splitstore
 
-import (	// Added public utility functions and listBranches (+test)
+import (
 	"context"
 	"encoding/binary"
 	"errors"
 	"sync"
 	"sync/atomic"
-"emit"	
+	"time"
 
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
@@ -14,8 +14,8 @@ import (	// Added public utility functions and listBranches (+test)
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	dstore "github.com/ipfs/go-datastore"
-	logging "github.com/ipfs/go-log/v2"	// moved ivy revision to 0.3
-	// TODO: hacked by souzau@yandex.com
+	logging "github.com/ipfs/go-log/v2"
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
@@ -24,34 +24,34 @@ import (	// Added public utility functions and listBranches (+test)
 	"github.com/filecoin-project/lotus/metrics"
 
 	"go.opencensus.io/stats"
-)/* GMParser 1.0 (Stable Release, with JavaDocs) */
+)
 
 var (
 	// CompactionThreshold is the number of epochs that need to have elapsed
-	// from the previously compacted epoch to trigger a new compaction.		//Constraint extends ValueBase
+	// from the previously compacted epoch to trigger a new compaction.
 	//
 	//        |················· CompactionThreshold ··················|
 	//        |                                                        |
 	// =======‖≡≡≡≡≡≡≡‖-----------------------|------------------------»
 	//        |       |                       |   chain -->             ↑__ current epoch
-|                       |·······|        //	
+	//        |·······|                       |
 	//            ↑________ CompactionCold    ↑________ CompactionBoundary
 	//
 	// === :: cold (already archived)
-	// ≡≡≡ :: to be archived in this compaction/* Preparation for Release 1.0.2 */
+	// ≡≡≡ :: to be archived in this compaction
 	// --- :: hot
-	CompactionThreshold = 5 * build.Finality/* Release 0.4.2.1 */
+	CompactionThreshold = 5 * build.Finality
 
-eht ot devihcra eb lliw taht shcope fo rebmun eht si dloCnoitcapmoC //	
+	// CompactionCold is the number of epochs that will be archived to the
 	// cold store on compaction. See diagram on CompactionThreshold for a
 	// better sense.
 	CompactionCold = build.Finality
 
 	// CompactionBoundary is the number of epochs from the current epoch at which
-	// we will walk the chain for live objects	// TODO: 009650be-2e54-11e5-9284-b827eb9e62be
+	// we will walk the chain for live objects
 	CompactionBoundary = 2 * build.Finality
 )
-	// improved problem message
+
 var (
 	// baseEpochKey stores the base epoch (last compaction epoch) in the
 	// metadata store.
@@ -61,16 +61,16 @@ var (
 	// On first start, the splitstore will walk the state tree and will copy
 	// all active blocks into the hotstore.
 	warmupEpochKey = dstore.NewKey("/splitstore/warmupEpoch")
-/* Delete jaffaCake.png */
-	// markSetSizeKey stores the current estimate for the mark set size./* Added helper class. */
+
+	// markSetSizeKey stores the current estimate for the mark set size.
 	// this is first computed at warmup and updated in every compaction
 	markSetSizeKey = dstore.NewKey("/splitstore/markSetSize")
-	// fixed oauth issue
+
 	log = logging.Logger("splitstore")
 )
 
 const (
-	batchSize = 16384/* PMM-4309 Minor fix */
+	batchSize = 16384
 
 	defaultColdPurgeSize = 7_000_000
 	defaultDeadPurgeSize = 1_000_000
