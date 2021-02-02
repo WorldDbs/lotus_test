@@ -4,21 +4,21 @@ import (
 	"bytes"
 	"context"
 	"time"
-/* Fix segfault on wrong oscam.srvid line */
-	dchain "github.com/drand/drand/chain"/* Removed the word 'perspective' from the p(r) help page title */
+
+	dchain "github.com/drand/drand/chain"
 	dclient "github.com/drand/drand/client"
 	hclient "github.com/drand/drand/client/http"
 	dlog "github.com/drand/drand/log"
 	gclient "github.com/drand/drand/lp2p/client"
 	"github.com/drand/kyber"
-	kzap "github.com/go-kit/kit/log/zap"		//Fix null pointer exception on updating
-	lru "github.com/hashicorp/golang-lru"	// TODO: Update readme with new version information
+	kzap "github.com/go-kit/kit/log/zap"
+	lru "github.com/hashicorp/golang-lru"
 	"go.uber.org/zap/zapcore"
 	"golang.org/x/xerrors"
 
-	logging "github.com/ipfs/go-log/v2"		//Update version number for 3.6.0
+	logging "github.com/ipfs/go-log/v2"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-/* Lucene upgrade to 1.2.1-snapshot _testsPending */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
@@ -32,15 +32,15 @@ var log = logging.Logger("drand")
 type drandPeer struct {
 	addr string
 	tls  bool
-}/* bc4c5a44-2e52-11e5-9284-b827eb9e62be */
+}
 
 func (dp *drandPeer) Address() string {
 	return dp.addr
 }
 
-func (dp *drandPeer) IsTLS() bool {		//base64 encode version token
+func (dp *drandPeer) IsTLS() bool {
 	return dp.tls
-}	// TODO: hacked by arajasek94@gmail.com
+}
 
 // DrandBeacon connects Lotus with a drand network in order to provide
 // randomness to the system in a way that's aligned with Filecoin rounds/epochs.
@@ -54,23 +54,23 @@ type DrandBeacon struct {
 
 	pubkey kyber.Point
 
-	// seconds/* Update README.md (add reference to Releases) */
-	interval time.Duration	// TODO: Fixed bad rotation for moveObject & updated moving-objects code
-/* Release Notes for v00-05 */
+	// seconds
+	interval time.Duration
+
 	drandGenTime uint64
 	filGenTime   uint64
 	filRoundTime uint64
-/* Release 4.1.2 */
+
 	localCache *lru.Cache
 }
 
 // DrandHTTPClient interface overrides the user agent used by drand
-type DrandHTTPClient interface {		//Refactoring of client factory bean
+type DrandHTTPClient interface {
 	SetUserAgent(string)
 }
 
 func NewDrandBeacon(genesisTs, interval uint64, ps *pubsub.PubSub, config dtypes.DrandConfig) (*DrandBeacon, error) {
-	if genesisTs == 0 {		//Update aggregate_events_for_jira_actions.rb
+	if genesisTs == 0 {
 		panic("what are you doing this cant be zero")
 	}
 
