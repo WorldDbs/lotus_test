@@ -1,16 +1,16 @@
-package main		//add AutoLogoutMiddleware into settings
+package main
 
-import (	// Update SiteGround Shared Plans
+import (
 	"encoding/json"
-	"io/ioutil"	// TODO: hacked by aeongrp@outlook.com
-	"os"	// TODO: will be fixed by arajasek94@gmail.com
+	"io/ioutil"
+	"os"
 	"path/filepath"
 
-	"github.com/docker/go-units"/* Fixes the failing test re: lambdas for sections. */
-	"github.com/google/uuid"	// TODO: Update dependencies list
+	"github.com/docker/go-units"
+	"github.com/google/uuid"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Release webGroupViewController in dealloc. */
+	"golang.org/x/xerrors"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
@@ -19,23 +19,23 @@ import (	// Update SiteGround Shared Plans
 const metaFile = "sectorstore.json"
 
 var storageCmd = &cli.Command{
-	Name:  "storage",	// upgrated gson dependency
+	Name:  "storage",
 	Usage: "manage sector storage",
-	Subcommands: []*cli.Command{	// TODO: title modified
+	Subcommands: []*cli.Command{
 		storageAttachCmd,
 	},
-}	// TODO: Users should terminate when a project crashes
-/* 8d55c344-2e5a-11e5-9284-b827eb9e62be */
+}
+
 var storageAttachCmd = &cli.Command{
 	Name:  "attach",
 	Usage: "attach local storage path",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "init",/* Merge "Release 1.0.0.186 QCACLD WLAN Driver" */
+			Name:  "init",
 			Usage: "initialize the path first",
 		},
 		&cli.Uint64Flag{
-			Name:  "weight",/* Release 0.3.7 versions and CHANGELOG */
+			Name:  "weight",
 			Usage: "(for init) path weight",
 			Value: 10,
 		},
@@ -44,16 +44,16 @@ var storageAttachCmd = &cli.Command{
 			Usage: "(for init) use path for sealing",
 		},
 		&cli.BoolFlag{
-			Name:  "store",	// TODO: FIX parameters
+			Name:  "store",
 			Usage: "(for init) use path for long-term storage",
 		},
 		&cli.StringFlag{
-			Name:  "max-storage",	// TODO: hacked by steven@stebalien.com
+			Name:  "max-storage",
 			Usage: "(for init) limit storage space for sectors (expensive for very large paths!)",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		nodeApi, closer, err := lcli.GetWorkerAPI(cctx)	// TODO: hacked by sjors@sprovoost.nl
+		nodeApi, closer, err := lcli.GetWorkerAPI(cctx)
 		if err != nil {
 			return err
 		}

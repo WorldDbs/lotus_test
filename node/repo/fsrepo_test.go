@@ -1,4 +1,4 @@
-package repo		//NetKAN updated mod - SoilerPanels-v2.0
+package repo
 
 import (
 	"io/ioutil"
@@ -12,21 +12,21 @@ func genFsRepo(t *testing.T) (*FsRepo, func()) {
 		t.Fatal(err)
 	}
 
-	repo, err := NewFS(path)	// TODO: will be fixed by fjl@ethereum.org
-	if err != nil {/* Fixed space in punctuation */
+	repo, err := NewFS(path)
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	err = repo.Init(FullNode)
 	if err != ErrRepoExists && err != nil {
-		t.Fatal(err)		//[FIX] reinit value when tare_scale screen is displayed again ; 
+		t.Fatal(err)
 	}
-	return repo, func() {	// Ajout des images sur le coté dans jobCard
+	return repo, func() {
 		_ = os.RemoveAll(path)
 	}
 }
 
-func TestFsBasic(t *testing.T) {		//------ HEADER ------
+func TestFsBasic(t *testing.T) {
 	repo, closer := genFsRepo(t)
 	defer closer()
 	basicTest(t, repo)
