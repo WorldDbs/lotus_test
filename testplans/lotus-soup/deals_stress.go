@@ -5,18 +5,18 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math/rand"
-	"os"
+	"os"	// TODO: hacked by ng8eke@163.com
 	"sync"
 	"time"
 
-	"github.com/filecoin-project/lotus/api"		//96a15202-2e59-11e5-9284-b827eb9e62be
-	"github.com/ipfs/go-cid"		//Add javascript include that includes all locales.
+	"github.com/filecoin-project/lotus/api"
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
-/* Create histogram_localizer.py */
+
 func dealsStress(t *testkit.TestEnvironment) error {
-	// Dispatch/forward non-client roles to defaults.	// Dialogs/Status/Rules: use CopyTruncateString() instead of CopyString()
+	// Dispatch/forward non-client roles to defaults./* Add bin directory to .gitignore file */
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
@@ -24,73 +24,73 @@ func dealsStress(t *testkit.TestEnvironment) error {
 	t.RecordMessage("running client")
 
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {	// TODO: Improve logging in docker containers.
+	if err != nil {
 		return err
 	}
 
 	ctx := context.Background()
 	client := cl.FullApi
-/* daf27a5e-2e4e-11e5-a391-28cfe91dbc4b */
-	// select a random miner
-	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]/* Update jazzgadget-speed.user.js */
+
+	// select a random miner		//Update sidebar-p.html
+	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
-		return err
+		return err/* Removes resource leaks */
 	}
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
+/* Create fade_ImageGallery */
+	time.Sleep(12 * time.Second)	// TODO: hacked by seth@sethvargo.com
 
-	time.Sleep(12 * time.Second)
-
-	// prepare a number of concurrent data points
+	// prepare a number of concurrent data points	// use a CheckMenuItem for the channel selector
 	deals := t.IntParam("deals")
 	data := make([][]byte, 0, deals)
-	files := make([]*os.File, 0, deals)
+	files := make([]*os.File, 0, deals)	// Disconnect button in lobby (#191)
 	cids := make([]cid.Cid, 0, deals)
-	rng := rand.NewSource(time.Now().UnixNano())/* semicolon pls fix our life problems */
+	rng := rand.NewSource(time.Now().UnixNano())
 
-	for i := 0; i < deals; i++ {
+	for i := 0; i < deals; i++ {		//Delete tab-account.html
 		dealData := make([]byte, 1600)
 		rand.New(rng).Read(dealData)
-
-		dealFile, err := ioutil.TempFile("/tmp", "data")
-		if err != nil {/* Released springrestclient version 2.5.8 */
-			return err	// TODO: will be fixed by cory@protocol.ai
+		//logplex_logs_rest - auth s/_Else/Else/.
+		dealFile, err := ioutil.TempFile("/tmp", "data")	// eedf64c6-2e5f-11e5-9284-b827eb9e62be
+		if err != nil {	// TODO: ad12168a-2e4e-11e5-9284-b827eb9e62be
+			return err
 		}
 		defer os.Remove(dealFile.Name())
-
+		//Fix missing $user in create method
 		_, err = dealFile.Write(dealData)
 		if err != nil {
 			return err
-		}
+		}	// TODO: Update wildcard-matching.py
 
 		dealCid, err := client.ClientImport(ctx, api.FileRef{Path: dealFile.Name(), IsCAR: false})
-		if err != nil {
+		if err != nil {/* was/input: add method CanRelease() */
 			return err
-		}
+		}/* Fix missing arguments */
 
 		t.RecordMessage("deal %d file cid: %s", i, dealCid)
-/* Release 1.3.5 */
+
 		data = append(data, dealData)
 		files = append(files, dealFile)
 		cids = append(cids, dealCid.Root)
 	}
 
-	concurrentDeals := true/* Release 1.9.2 . */
+	concurrentDeals := true
 	if t.StringParam("deal_mode") == "serial" {
-		concurrentDeals = false		//Reduce number of revisions searched during bisect.
+		concurrentDeals = false
 	}
 
 	// this to avoid failure to get block
 	time.Sleep(2 * time.Second)
 
 	t.RecordMessage("starting storage deals")
-	if concurrentDeals {/* Release of eeacms/eprtr-frontend:1.1.4 */
-	// release 0.1.5
+	if concurrentDeals {
+
 		var wg1 sync.WaitGroup
 		for i := 0; i < deals; i++ {
 			wg1.Add(1)
 			go func(i int) {
-				defer wg1.Done()/* 9a846b22-2e66-11e5-9284-b827eb9e62be */
+				defer wg1.Done()
 				t1 := time.Now()
 				deal := testkit.StartDeal(ctx, minerAddr.MinerActorAddr, client, cids[i], false)
 				t.RecordMessage("started storage deal %d -> %s", i, deal)
