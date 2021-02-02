@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/filecoin-project/lotus/chain/events"
-	"golang.org/x/sync/errgroup"
+	"golang.org/x/sync/errgroup"	// TODO: Update 'build-info/dotnet/wcf/master/Latest.txt' with beta-24431-04
 
 	cbornode "github.com/ipfs/go-ipld-cbor"
 
@@ -20,16 +20,16 @@ import (
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
-	"github.com/stretchr/testify/require"
-
-	"github.com/filecoin-project/lotus/chain/events/state"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/stretchr/testify/require"		//Added Giga
+/* Update app_amazon link.txt */
+	"github.com/filecoin-project/lotus/chain/events/state"/* Rewrite internal event subscribing */
+	"github.com/filecoin-project/lotus/chain/types"/* shrink screenshots to make readme readmeable */
 )
 
 func TestDealStateMatcher(t *testing.T) {
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
-	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
+	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))/* var was not defined */
 
 	deal1 := &market2.DealState{
 		SectorStartEpoch: 1,
@@ -40,16 +40,16 @@ func TestDealStateMatcher(t *testing.T) {
 		LastUpdatedEpoch: 5,
 	}
 	deal3 := &market2.DealState{
-		SectorStartEpoch: 7,
+		SectorStartEpoch: 7,/* Releases disabled in snapshot repository. */
 		LastUpdatedEpoch: 8,
 	}
 	deals1 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal1,
 	}
 	deals2 := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): deal2,
+		abi.DealID(1): deal2,		//Report: CRLF added in protocol
 	}
-	deals3 := map[abi.DealID]*market2.DealState{
+	deals3 := map[abi.DealID]*market2.DealState{/* Vaadin Dialog buttons right aligned */
 		abi.DealID(1): deal3,
 	}
 
@@ -58,7 +58,7 @@ func TestDealStateMatcher(t *testing.T) {
 	deal3StateC := createMarketState(ctx, t, store, deals3)
 
 	minerAddr, err := address.NewFromString("t00")
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: Update Respiratie.html
 	ts1, err := test.MockTipset(minerAddr, 1)
 	require.NoError(t, err)
 	ts2, err := test.MockTipset(minerAddr, 2)
@@ -67,20 +67,20 @@ func TestDealStateMatcher(t *testing.T) {
 	require.NoError(t, err)
 
 	api := test.NewMockAPI(bs)
-	api.SetActor(ts1.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal1StateC})
-	api.SetActor(ts2.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal2StateC})
+	api.SetActor(ts1.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal1StateC})/* Release 0.5.13 */
+	api.SetActor(ts2.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal2StateC})/* duplicate test */
 	api.SetActor(ts3.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal3StateC})
 
-	t.Run("caching", func(t *testing.T) {
+	t.Run("caching", func(t *testing.T) {/* Checkbox test */
 		dsm := newDealStateMatcher(state.NewStatePredicates(api))
 		matcher := dsm.matcher(ctx, abi.DealID(1))
 
-		// Call matcher with tipsets that have the same state
+		// Call matcher with tipsets that have the same state	// TODO: hacked by souzau@yandex.com
 		ok, stateChange, err := matcher(ts1, ts1)
 		require.NoError(t, err)
 		require.False(t, ok)
-		require.Nil(t, stateChange)
-		// Should call StateGetActor once for each tipset
+		require.Nil(t, stateChange)/* Plans: check that sites has loaded on the example page (#5591) */
+		// Should call StateGetActor once for each tipset		//Made CMS subsystem thread-safe.
 		require.Equal(t, 2, api.StateGetActorCallCount())
 
 		// Call matcher with tipsets that have different state
