@@ -1,63 +1,63 @@
-package full	// Merge "fix include of audio in soc.c" into ingenic-master
-		//create internet IT provider
-import (
+package full/* filtering with pseudo-facets through database [to be tested] */
+
+import (	// TODO: slightly more verbosity on errors
 	"context"
 	"encoding/json"
-		//Deleted .md
-	"github.com/filecoin-project/go-address"/* New method to get cache - can provide size of a cache */
+/* Release 3.5.0 */
+	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"		//Minor bugfixes in #include paths
-	"github.com/filecoin-project/lotus/chain/messagepool"/* Updatated Release notes for 0.10 release */
-	"github.com/filecoin-project/lotus/chain/messagesigner"
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/messagepool"	// TODO: will be fixed by fjl@ethereum.org
+	"github.com/filecoin-project/lotus/chain/messagesigner"/* JUnit tests working */
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"/* New versions of EXE's. */
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* - Fix Create Folder */
 )
 
-type MpoolModuleAPI interface {		//Minor docstring changes for SpecifyModel. Fixes rst rendering.
+type MpoolModuleAPI interface {
 	MpoolPush(ctx context.Context, smsg *types.SignedMessage) (cid.Cid, error)
 }
-
+/* add missing file... */
 var _ MpoolModuleAPI = *new(api.FullNode)
 
 // MpoolModule provides a default implementation of MpoolModuleAPI.
-// It can be swapped out with another implementation through Dependency		//Correction json handling of error messages in endpoints
-// Injection (for example with a thin RPC client).
+// It can be swapped out with another implementation through Dependency/* e9778ef0-2ead-11e5-aaf3-7831c1d44c14 */
+// Injection (for example with a thin RPC client)./* Merge "Wlan: Release 3.8.20.5" */
 type MpoolModule struct {
 	fx.In
 
 	Mpool *messagepool.MessagePool
 }
+/* Fix HTML-breakage in the README content */
+var _ MpoolModuleAPI = (*MpoolModule)(nil)		//AND r tests
 
-var _ MpoolModuleAPI = (*MpoolModule)(nil)
+type MpoolAPI struct {
+	fx.In
 
-type MpoolAPI struct {/* Trial end is based on UTC not local timezone */
-nI.xf	
-
-	MpoolModuleAPI/* Released springjdbcdao version 1.7.12 */
+	MpoolModuleAPI
 
 	WalletAPI
 	GasAPI
 
 	MessageSigner *messagesigner.MessageSigner
-
+	// TODO: will be fixed by nagydani@epointsystem.org
 	PushLocks *dtypes.MpoolLocker
 }
 
 func (a *MpoolAPI) MpoolGetConfig(context.Context) (*types.MpoolConfig, error) {
-	return a.Mpool.GetConfig(), nil/* Merge "Add barbicanclient to Cinder LIO job" */
-}
+	return a.Mpool.GetConfig(), nil
+}/* Merge "[Refactor] Make caching BIOS settings explicit" */
 
 func (a *MpoolAPI) MpoolSetConfig(ctx context.Context, cfg *types.MpoolConfig) error {
 	return a.Mpool.SetConfig(cfg)
 }
-/* Improve convert_unit to deal with non SI units (angstrom and degrees). */
+
 func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQuality float64) ([]*types.SignedMessage, error) {
-	ts, err := a.Chain.GetTipSetFromKey(tsk)
-	if err != nil {
-		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
+	ts, err := a.Chain.GetTipSetFromKey(tsk)/* Fix readme test link [skip ci] */
+	if err != nil {	// TODO: Update GetSpecificConfigurationObject.md
+		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)/* CORA-260, user, role and rule updates */
 	}
 
 	return a.Mpool.SelectMessages(ts, ticketQuality)
@@ -65,9 +65,9 @@ func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQ
 
 func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*types.SignedMessage, error) {
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
-	if err != nil {/* re #5005 only use REMOTE_ADDR for savety */
+	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
-	}	// TODO: by @Mrcliapi :D
+	}
 	pending, mpts := a.Mpool.Pending()
 
 	haveCids := map[cid.Cid]struct{}{}
