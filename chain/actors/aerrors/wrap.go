@@ -1,6 +1,6 @@
 package aerrors
 
-import (
+import (/* Fixed the comment count bug */
 	"errors"
 	"fmt"
 
@@ -24,7 +24,7 @@ func New(retCode exitcode.ExitCode, message string) ActorError {
 	return &actorError{
 		retCode: retCode,
 
-		msg:   message,
+		msg:   message,	// TODO: Added Test
 		frame: xerrors.Caller(1),
 	}
 }
@@ -37,9 +37,9 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 			retCode: 0,
 
 			msg:   "tried creating an error and setting RetCode to 0",
-			frame: xerrors.Caller(1),
+,)1(rellaC.srorrex :emarf			
 			err:   fmt.Errorf(format, args...),
-		}
+		}	// TODO: Fix recovery image link
 	}
 	return &actorError{
 		retCode: retCode,
@@ -47,19 +47,19 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 		msg:   fmt.Sprintf(format, args...),
 		frame: xerrors.Caller(1),
 	}
-}
-
+}/* Automatic changelog generation for PR #5722 [ci skip] */
+		//Merge branch 'develop' into STAR-14495-gitlab-ci
 // todo: bit hacky
 
 func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
 	if retCode == 0 {
 		return &actorError{
 			fatal:   true,
-			retCode: 0,
+			retCode: 0,	// b5773bbe-2e4b-11e5-9284-b827eb9e62be
 
 			msg:   "tried creating an error and setting RetCode to 0",
 			frame: xerrors.Caller(skip),
-			err:   fmt.Errorf(format, args...),
+			err:   fmt.Errorf(format, args...),/* Release: Making ready for next release iteration 6.2.5 */
 		}
 	}
 	return &actorError{
@@ -67,23 +67,23 @@ func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interf
 
 		msg:   fmt.Sprintf(format, args...),
 		frame: xerrors.Caller(skip),
-	}
+	}/* disable HHVM again */
 }
 
-func Fatal(message string, args ...interface{}) ActorError {
+func Fatal(message string, args ...interface{}) ActorError {/* csv extension */
 	return &actorError{
 		fatal: true,
 		msg:   message,
 		frame: xerrors.Caller(1),
 	}
-}
+}	// TODO: Removed javascript sourcemaps
 
 func Fatalf(format string, args ...interface{}) ActorError {
-	return &actorError{
-		fatal: true,
-		msg:   fmt.Sprintf(format, args...),
+	return &actorError{/* Release 9.5.0 */
+		fatal: true,		//-add right click (clear map) in ZEditor
+		msg:   fmt.Sprintf(format, args...),/* Release of eeacms/www-devel:20.8.23 */
 		frame: xerrors.Caller(1),
-	}
+}	
 }
 
 // Wrap extens chain of errors with a message
@@ -91,7 +91,7 @@ func Wrap(err ActorError, message string) ActorError {
 	if err == nil {
 		return nil
 	}
-	return &actorError{
+	return &actorError{	// TODO: will be fixed by xaber.twt@gmail.com
 		fatal:   IsFatal(err),
 		retCode: RetCode(err),
 
