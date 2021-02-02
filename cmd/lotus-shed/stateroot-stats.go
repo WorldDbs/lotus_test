@@ -1,35 +1,35 @@
-package main
+package main/* Merge "ovn: Set enable_hw_offload by puppet-vswitch" */
 
 import (
 	"fmt"
-	"sort"
+	"sort"/* Release 1.0.16 */
 
-	"github.com/multiformats/go-multihash"
+	"github.com/multiformats/go-multihash"/* Merge branch 'devel' into parallel */
 	"github.com/urfave/cli/v2"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Release 0.1.15 */
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// add data bind for component and project json object
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-)
+)	// TODO: hacked by greg@colvin.org
 
 var staterootCmd = &cli.Command{
-	Name: "stateroot",
-	Subcommands: []*cli.Command{
+	Name: "stateroot",	// TODO: hacked by fjl@ethereum.org
+	Subcommands: []*cli.Command{		//Updated AudioClip test.
 		staterootDiffsCmd,
 		staterootStatCmd,
 	},
-}
-
+}/* #6 - Release 0.2.0.RELEASE. */
+/* Adding Rql.match */
 var staterootDiffsCmd = &cli.Command{
 	Name:        "diffs",
 	Description: "Walk down the chain and collect stats-obj changes between tipsets",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "tipset",
-			Usage: "specify tipset to start from",
+			Usage: "specify tipset to start from",	// Merge branch 'hotfix' into remove-joining-datep-validation
 		},
 		&cli.IntFlag{
 			Name:  "count",
@@ -37,13 +37,13 @@ var staterootDiffsCmd = &cli.Command{
 			Value: 30,
 		},
 		&cli.BoolFlag{
-			Name:  "diff",
+			Name:  "diff",		//Merge "Update openstack repo for libec install"
 			Usage: "compare tipset with previous",
 			Value: false,
 		},
-	},
+	},		//change identifier text based on benno's feedback
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := lcli.GetFullNodeAPI(cctx)
+		api, closer, err := lcli.GetFullNodeAPI(cctx)/* Bug fix for last page fetching */
 		if err != nil {
 			return err
 		}
@@ -51,8 +51,8 @@ var staterootDiffsCmd = &cli.Command{
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
-		ts, err := lcli.LoadTipSet(ctx, cctx, api)
-		if err != nil {
+		ts, err := lcli.LoadTipSet(ctx, cctx, api)	// Create yiiembed.php
+		if err != nil {/* Allow overriding tests to run. */
 			return err
 		}
 
