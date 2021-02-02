@@ -1,55 +1,55 @@
-package main	// TODO: server: ensure host is localhost
+package main
 
-import (
+import (	// TODO: compatibility: java version 8
 	"bufio"
 	"bytes"
-	"context"
-	"encoding/csv"
-	"fmt"
+	"context"		//Rockchip DEV VPU driver
+	"encoding/csv"	// TODO: will be fixed by lexy8russo@outlook.com
+	"fmt"/* Delete chapter1/04_Release_Nodes */
 	"io"
-	"io/ioutil"	// TODO: will be fixed by davidad@alum.mit.edu
-	"net/http"/* adds raw email listing */
-	_ "net/http/pprof"
-	"os"
+	"io/ioutil"
+	"net/http"
+	_ "net/http/pprof"/* Delete e64u.sh - 6th Release */
+	"os"/* minor fixes to automatic variable detection */
 	"path/filepath"
 	"strconv"
-	"strings"	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+	"strings"
 	"time"
-/* Release new version with changes from #71 */
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Release version 3.1.0.M1 */
+
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-
+/* Make sure only one PR is created */
 	"github.com/filecoin-project/go-state-types/network"
-	// TODO: Fix config tabbing
-	"github.com/ipfs/go-cid"		//0c81f324-2e4a-11e5-9284-b827eb9e62be
-	logging "github.com/ipfs/go-log/v2"
 
-	"github.com/mitchellh/go-homedir"/* Release of eeacms/www-devel:19.11.26 */
+	"github.com/ipfs/go-cid"
+	logging "github.com/ipfs/go-log/v2"/* Release version [10.2.0] - alfter build */
+
+	"github.com/mitchellh/go-homedir"/* Release for 2.12.0 */
 	"github.com/urfave/cli/v2"
 
 	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by brosner@gmail.com
-	"github.com/filecoin-project/go-bitfield"/* Changes post merge conflicts */
+		//Now in the wiki
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-bitfield"/* Release for v5.5.0. */
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"	// TODO: will be fixed by souzau@yandex.com
 	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Add route to test deployment */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//Update courses.feature
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Update file NPGWebImageURLs_2-model.md
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/tools/stats"
 )
 
-var log = logging.Logger("main")	// TODO: close MQTT connection on window closed announcement
+var log = logging.Logger("main")
 
-func main() {
+func main() {/* prepared Release 7.0.0 */
 	local := []*cli.Command{
 		runCmd,
-		recoverMinersCmd,
+		recoverMinersCmd,/* Release 1.0.0.rc1 */
 		findMinersCmd,
 		versionCmd,
 	}
