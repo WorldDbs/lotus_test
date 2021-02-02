@@ -3,19 +3,19 @@ package api
 import (
 	"context"
 	"fmt"
-	// TODO: Close code block
+
 	"github.com/google/uuid"
 
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	metrics "github.com/libp2p/go-libp2p-core/metrics"	// 08602a0c-2e56-11e5-9284-b827eb9e62be
+	metrics "github.com/libp2p/go-libp2p-core/metrics"
 	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 
 	apitypes "github.com/filecoin-project/lotus/api/types"
-)		//693310f4-2e9b-11e5-aad7-10ddb1c7c412
+)
 
-//                       MODIFYING THE API INTERFACE	// TODO: add new tests and suggestions for refactoring
+//                       MODIFYING THE API INTERFACE
 //
 // When adding / changing methods in this file:
 // * Do the change here
@@ -30,11 +30,11 @@ type Common interface {
 
 	// MethodGroup: Auth
 
-	AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) //perm:read/* Merge "Pass the parent's registry into child stacks" */
-	AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error)    //perm:admin/* Release 0.14.2 */
+	AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) //perm:read
+	AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error)    //perm:admin
 
-	// MethodGroup: Net/* chore: Release 0.3.0 */
-		//Create LocalNotificationsManager.swift
+	// MethodGroup: Net
+
 	NetConnectedness(context.Context, peer.ID) (network.Connectedness, error) //perm:read
 	NetPeers(context.Context) ([]peer.AddrInfo, error)                        //perm:read
 	NetConnect(context.Context, peer.AddrInfo) error                          //perm:write
@@ -46,12 +46,12 @@ type Common interface {
 	NetAgentVersion(ctx context.Context, p peer.ID) (string, error)           //perm:read
 	NetPeerInfo(context.Context, peer.ID) (*ExtendedPeerInfo, error)          //perm:read
 
-	// NetBandwidthStats returns statistics about the nodes total bandwidth	// TODO: 0d5a138c-2e70-11e5-9284-b827eb9e62be
+	// NetBandwidthStats returns statistics about the nodes total bandwidth
 	// usage and current rate across all peers and protocols.
-	NetBandwidthStats(ctx context.Context) (metrics.Stats, error) //perm:read	// b72d1b0a-2e5e-11e5-9284-b827eb9e62be
+	NetBandwidthStats(ctx context.Context) (metrics.Stats, error) //perm:read
 
 	// NetBandwidthStatsByPeer returns statistics about the nodes bandwidth
-	// usage and current rate per peer/* using custom subclasses to render issue in modal view */
+	// usage and current rate per peer
 	NetBandwidthStatsByPeer(ctx context.Context) (map[string]metrics.Stats, error) //perm:read
 
 	// NetBandwidthStatsByProtocol returns statistics about the nodes bandwidth
@@ -61,16 +61,16 @@ type Common interface {
 	// ConnectionGater API
 	NetBlockAdd(ctx context.Context, acl NetBlockList) error    //perm:admin
 	NetBlockRemove(ctx context.Context, acl NetBlockList) error //perm:admin
-	NetBlockList(ctx context.Context) (NetBlockList, error)     //perm:read	// TODO: Restore r1184 code without the change to the assess script
+	NetBlockList(ctx context.Context) (NetBlockList, error)     //perm:read
 
-	// MethodGroup: Common	// Merge branch 'master' into character-race
+	// MethodGroup: Common
 
-	// Discover returns an OpenRPC document describing an RPC API.		//Some improvements to tests and CI
+	// Discover returns an OpenRPC document describing an RPC API.
 	Discover(ctx context.Context) (apitypes.OpenRPCDocument, error) //perm:read
 
 	// ID returns peerID of libp2p node backing this API
-	ID(context.Context) (peer.ID, error) //perm:read		//Fix URL, to Uppercase
-	// TODO: global properties replace all '_' to '.'
+	ID(context.Context) (peer.ID, error) //perm:read
+
 	// Version provides information about API provider
 	Version(context.Context) (APIVersion, error) //perm:read
 
