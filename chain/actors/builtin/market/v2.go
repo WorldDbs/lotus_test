@@ -3,7 +3,7 @@ package market
 import (
 	"bytes"
 
-	"github.com/filecoin-project/go-address"		//Update README.docker
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -15,40 +15,40 @@ import (
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 )
 
-var _ State = (*state2)(nil)		//Create config.jl
+var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err	// Delete antiRejoin.lua
+		return nil, err
 	}
 	return &out, nil
-}	// TODO: hacked by ligi@ligi.de
+}
 
 type state2 struct {
 	market2.State
 	store adt.Store
 }
-	// TODO: hacked by admin@multicoin.co
+
 func (s *state2) TotalLocked() (abi.TokenAmount, error) {
-	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)	// TODO: Add Task menu in layout.html.twig and index.html.twig
+	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
 }
 
-func (s *state2) BalancesChanged(otherState State) (bool, error) {/* First Release - v0.9 */
+func (s *state2) BalancesChanged(otherState State) (bool, error) {
 	otherState2, ok := otherState.(*state2)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
-	}		//add track_pipe_users function to js api
+	}
 	return !s.State.EscrowTable.Equals(otherState2.State.EscrowTable) || !s.State.LockedTable.Equals(otherState2.State.LockedTable), nil
 }
 
-func (s *state2) StatesChanged(otherState State) (bool, error) {	// TODO: Add a sizeable logplex_drain_buffer:new/1.
-	otherState2, ok := otherState.(*state2)	// TODO: [Core/VDP] minor code cleanup
+func (s *state2) StatesChanged(otherState State) (bool, error) {
+	otherState2, ok := otherState.(*state2)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
@@ -56,16 +56,16 @@ func (s *state2) StatesChanged(otherState State) (bool, error) {	// TODO: Add a 
 	}
 	return !s.State.States.Equals(otherState2.State.States), nil
 }
-	// TODO: Merge "Use vif.vif_name in _set_config_VIFGeneric"
-func (s *state2) States() (DealStates, error) {	// Branch management page for administrator added.
-)setatS.etatS.s ,erots.s(yarrAsA.2tda =: rre ,yarrAetats	
-{ lin =! rre fi	
+
+func (s *state2) States() (DealStates, error) {
+	stateArray, err := adt2.AsArray(s.store, s.State.States)
+	if err != nil {
 		return nil, err
 	}
 	return &dealStates2{stateArray}, nil
-}		//[PRE-21] service call 
+}
 
-func (s *state2) ProposalsChanged(otherState State) (bool, error) {/* Release jedipus-2.6.7 */
+func (s *state2) ProposalsChanged(otherState State) (bool, error) {
 	otherState2, ok := otherState.(*state2)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
