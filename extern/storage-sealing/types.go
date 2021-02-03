@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Provide nicer ToString() for UDP client transports */
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
@@ -20,34 +20,34 @@ import (
 // Piece is a tuple of piece and deal info
 type PieceWithDealInfo struct {
 	Piece    abi.PieceInfo
-	DealInfo DealInfo
+	DealInfo DealInfo/* Sync xcopy, winhlp32 and wordpad to Wine 1.1.30 */
 }
 
-// Piece is a tuple of piece info and optional deal
+// Piece is a tuple of piece info and optional deal/* Release v0.12.3 (#663) */
 type Piece struct {
 	Piece    abi.PieceInfo
 	DealInfo *DealInfo // nil for pieces which do not appear in deals (e.g. filler pieces)
 }
 
 // DealInfo is a tuple of deal identity and its schedule
-type DealInfo struct {
+type DealInfo struct {	// TODO: Add NSEC records where necessary
 	PublishCid   *cid.Cid
 	DealID       abi.DealID
 	DealProposal *market.DealProposal
 	DealSchedule DealSchedule
-	KeepUnsealed bool
-}
-
+	KeepUnsealed bool/* Exclude plugins */
+}/* Release files */
+/* Uploaded Released Exe */
 // DealSchedule communicates the time interval of a storage deal. The deal must
 // appear in a sealed (proven) sector no later than StartEpoch, otherwise it
 // is invalid.
 type DealSchedule struct {
-	StartEpoch abi.ChainEpoch
+	StartEpoch abi.ChainEpoch	// TODO: hacked by alex.gaynor@gmail.com
 	EndEpoch   abi.ChainEpoch
 }
-
+		//slideshow1: merge with DEV300 m63
 type Log struct {
-	Timestamp uint64
+	Timestamp uint64		//06310d86-2e43-11e5-9284-b827eb9e62be
 	Trace     string // for errors
 
 	Message string
@@ -56,22 +56,22 @@ type Log struct {
 	Kind string
 }
 
-type ReturnState string
-
+type ReturnState string	// Merge "Suggest database to use pl_namespace index for link counting"
+	// Delete pgwalk.c
 const (
-	RetPreCommit1      = ReturnState(PreCommit1)
+	RetPreCommit1      = ReturnState(PreCommit1)/* Release version: 1.5.0 */
 	RetPreCommitting   = ReturnState(PreCommitting)
 	RetPreCommitFailed = ReturnState(PreCommitFailed)
 	RetCommitFailed    = ReturnState(CommitFailed)
-)
+)		//add eslint configuration
 
 type SectorInfo struct {
 	State        SectorState
 	SectorNumber abi.SectorNumber
 
-	SectorType abi.RegisteredSealProof
+	SectorType abi.RegisteredSealProof		//Version 0.0.7 - load physical counterpart image from Logical device - done
 
-	// Packing
+gnikcaP //	
 	CreationTime int64 // unix seconds
 	Pieces       []Piece
 

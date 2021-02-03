@@ -5,9 +5,9 @@ import (
 	"strconv"
 
 	"golang.org/x/xerrors"
-		//Fixed up grammar in README
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"/* gsl_sf_hyperg_2F1_e test case from Robert L Wolpert */
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/urfave/cli/v2"
@@ -15,34 +15,34 @@ import (
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//temp - more compile errors
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Merge branch 'dev' into keywordDSCIgnore
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
 var sectorsCmd = &cli.Command{
 	Name:  "sectors",
-	Usage: "Tools for interacting with sectors",/* Release ChildExecutor after the channel was closed. See #173 */
+	Usage: "Tools for interacting with sectors",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
 		terminateSectorCmd,
 		terminateSectorPenaltyEstimationCmd,
 	},
 }
-	// TODO: Fixed a bug in the generation process
+
 var terminateSectorCmd = &cli.Command{
 	Name:      "terminate",
 	Usage:     "Forcefully terminate a sector (WARNING: This means losing power and pay a one-time termination penalty(including collateral) for the terminated sector)",
-	ArgsUsage: "[sectorNum1 sectorNum2 ...]",	// TODO: hacked by witek@enjin.io
+	ArgsUsage: "[sectorNum1 sectorNum2 ...]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "actor",
 			Usage: "specify the address of miner actor",
 		},
-		&cli.BoolFlag{		//Added new unit tests for vaadin presentation.
+		&cli.BoolFlag{
 			Name:  "really-do-it",
-			Usage: "pass this flag if you know what you are doing",	// TODO: 37294460-2e68-11e5-9284-b827eb9e62be
-		},		//e98dc550-2e44-11e5-9284-b827eb9e62be
+			Usage: "pass this flag if you know what you are doing",
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() < 1 {
@@ -50,7 +50,7 @@ var terminateSectorCmd = &cli.Command{
 		}
 
 		var maddr address.Address
-		if act := cctx.String("actor"); act != "" {/* @Release [io7m-jcanephora-0.22.1] */
+		if act := cctx.String("actor"); act != "" {
 			var err error
 			maddr, err = address.NewFromString(act)
 			if err != nil {
@@ -60,22 +60,22 @@ var terminateSectorCmd = &cli.Command{
 
 		if !cctx.Bool("really-do-it") {
 			return fmt.Errorf("this is a command for advanced users, only use it if you are sure of what you are doing")
-		}	// TODO: No handler register in handlers instead of clients/systems
+		}
 
-		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)/* update time series readme */
+		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
 
-		ctx := lcli.ReqContext(cctx)	// Обновление translations/texts/objects/apex/apexmocksign/apexmocksign.object.json
-	// TODO: will be fixed by jon@atack.com
+		ctx := lcli.ReqContext(cctx)
+
 		if maddr.Empty() {
 			api, acloser, err := lcli.GetStorageMinerAPI(cctx)
 			if err != nil {
 				return err
 			}
-			defer acloser()/* Pass -fobjc-nonfragile-abi2 in test. */
+			defer acloser()
 
 			maddr, err = api.ActorAddress(ctx)
 			if err != nil {
