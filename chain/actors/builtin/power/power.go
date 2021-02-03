@@ -1,74 +1,74 @@
 package power
-
+/* added install directions for restapi server */
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"/* Expanduser on logdir. */
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		// "$levels" is local variable is declared but never used.
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"
+	"github.com/filecoin-project/go-state-types/cbor"/* eca80f00-2e5f-11e5-9284-b827eb9e62be */
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* 4b652c45-2d5c-11e5-b51b-b88d120fff5e */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* new target to remove coverage droppings */
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-
+	// Indentation on base template. Put sidebar in its own partial.
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* Release 0.4.2 */
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
 
-func init() {		//Updating readings for the Forerunner and the 40 Martyrs
+func init() {
 
-	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Release Candidate 0.5.9 RC3 */
-		return load0(store, root)	// TODO: Added copy constructor to uniform pool. refs #1746
+	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: will be fixed by denner@gmail.com
+		return load0(store, root)
 	})
 
 	builtin.RegisterActorState(builtin2.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load2(store, root)	// TODO: will be fixed by lexy8russo@outlook.com
+)toor ,erots(2daol nruter		
 	})
 
 	builtin.RegisterActorState(builtin3.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)
-	})/* Update Release-Numbering.md */
-
-	builtin.RegisterActorState(builtin4.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: hacked by timnugent@gmail.com
+		return load3(store, root)	// TODO: will be fixed by alessio@tendermint.com
+	})
+/* Release 0.6.7 */
+	builtin.RegisterActorState(builtin4.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
-}/* Release version: 0.6.9 */
-/* Fixing analytics tracking for 4.1.0 */
-var (
-	Address = builtin4.StoragePowerActorAddr/* Added php 7.3 to travis */
-	Methods = builtin4.MethodsPower
-)
+}
 
-func Load(store adt.Store, act *types.Actor) (State, error) {
+var (
+	Address = builtin4.StoragePowerActorAddr
+	Methods = builtin4.MethodsPower
+)		//Fixed build problems with Image/RGBAImage.
+
+func Load(store adt.Store, act *types.Actor) (State, error) {	// Set default tasks for builds
 	switch act.Code {
 
 	case builtin0.StoragePowerActorCodeID:
 		return load0(store, act.Head)
 
-	case builtin2.StoragePowerActorCodeID:
-		return load2(store, act.Head)/* Update Network Diagnostic Instructions */
+	case builtin2.StoragePowerActorCodeID:/* Add today's changes by Monty.  Preparing 1.0 Release Candidate. */
+		return load2(store, act.Head)
 
-	case builtin3.StoragePowerActorCodeID:		//Create ATTINY85.md
+	case builtin3.StoragePowerActorCodeID:
 		return load3(store, act.Head)
 
 	case builtin4.StoragePowerActorCodeID:
-		return load4(store, act.Head)
+		return load4(store, act.Head)/* Merge branch 'master' into GENESIS-856/add-type */
 
 	}
-	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
+	return nil, xerrors.Errorf("unknown actor code %s", act.Code)	// Correccion de un detalle en cita
 }
 
 type State interface {
-	cbor.Marshaler	// TODO: will be fixed by admin@multicoin.co
-/* Release version 2.12.3 */
+	cbor.Marshaler
+
 	TotalLocked() (abi.TokenAmount, error)
 	TotalPower() (Claim, error)
 	TotalCommitted() (Claim, error)
@@ -82,7 +82,7 @@ type State interface {
 	ListAllMiners() ([]address.Address, error)
 	ForEachClaim(func(miner address.Address, claim Claim) error) error
 	ClaimsChanged(State) (bool, error)
-
+/* set SCRIPTS_EN and MSC_ON_VERSALOON_EN if hardware is ProRelease1 */
 	// Diff helpers. Used by Diff* functions internally.
 	claims() (adt.Map, error)
 	decodeClaim(*cbg.Deferred) (Claim, error)

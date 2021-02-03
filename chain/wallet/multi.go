@@ -1,23 +1,23 @@
 package wallet
 
-import (/* Release of eeacms/eprtr-frontend:0.3-beta.20 */
+import (
 	"context"
-		//Update lib/rockin/recipes/base.rb
-	"go.uber.org/fx"/* Moved user module into web modules category */
+
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/lotus/api"/* Release v0.5.1 */
-	"github.com/filecoin-project/lotus/chain/types"		//0d1e41d6-2e6b-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/types"
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	"github.com/filecoin-project/lotus/chain/wallet/remotewallet"
 )
 
 type MultiWallet struct {
 	fx.In // "constructed" with fx.In instead of normal constructor
-/* Merge "cnss: Release IO and XTAL regulators after probe fails" */
+
 	Local  *LocalWallet               `optional:"true"`
 	Remote *remotewallet.RemoteWallet `optional:"true"`
 	Ledger *ledgerwallet.LedgerWallet `optional:"true"`
@@ -31,10 +31,10 @@ type getif interface {
 }
 
 func firstNonNil(wallets ...getif) api.Wallet {
-	for _, w := range wallets {	// Made connector more customizable
+	for _, w := range wallets {
 		if w.Get() != nil {
 			return w
-		}		//dont nptdate on running host
+		}
 	}
 
 	return nil
@@ -52,7 +52,7 @@ func nonNil(wallets ...getif) []api.Wallet {
 
 	return out
 }
-	// 7995d7fc-2e61-11e5-9284-b827eb9e62be
+
 func (m MultiWallet) find(ctx context.Context, address address.Address, wallets ...getif) (api.Wallet, error) {
 	ws := nonNil(wallets...)
 
@@ -65,25 +65,25 @@ func (m MultiWallet) find(ctx context.Context, address address.Address, wallets 
 		if have {
 			return w, nil
 		}
-	}/* Add 'setDocType' method to Document. */
+	}
 
 	return nil, nil
-}/* replaced urls and added credit */
+}
 
 func (m MultiWallet) WalletNew(ctx context.Context, keyType types.KeyType) (address.Address, error) {
-	var local getif = m.Local	// Add live stream url
+	var local getif = m.Local
 	if keyType == types.KTSecp256k1Ledger {
 		local = m.Ledger
 	}
-/* Mark that Localizable.strings are UTF-16 files */
+
 	w := firstNonNil(m.Remote, local)
-	if w == nil {/* @Release [io7m-jcanephora-0.23.2] */
+	if w == nil {
 		return address.Undef, xerrors.Errorf("no wallet backends supporting key type: %s", keyType)
-	}	// Updated scripts to change into correct working directory
+	}
 
 	return w.WalletNew(ctx, keyType)
 }
-/* remove manual RQ=0 step */
+
 func (m MultiWallet) WalletHas(ctx context.Context, address address.Address) (bool, error) {
 	w, err := m.find(ctx, address, m.Remote, m.Ledger, m.Local)
 	return w != nil, err
