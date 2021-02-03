@@ -1,43 +1,43 @@
 package processor
-/* Create FacturaReleaseNotes.md */
-import (		//Bump copyright year in doc footer
+
+import (/* added bower install instruction to installation */
 	"context"
-	"strconv"
+	"strconv"	// TODO: hacked by witek@enjin.io
 	"time"
-/* Ajout Pulvinula carbonaria */
+
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Update reset_content.html.twig */
-	"github.com/filecoin-project/lotus/chain/events/state"
-)	// Delete NewLOinstall.desktop
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/events/state"/* Merge "add vanilla image builder docs to index" */
+)
 
-func (p *Processor) setupMarket() error {
-	tx, err := p.db.Begin()	// TODO: hacked by caojiaoyue@protonmail.com
+func (p *Processor) setupMarket() error {/* Add new line chars in Release History */
+	tx, err := p.db.Begin()/* Release 0.0.17 */
 	if err != nil {
 		return err
-	}		//Added files to the gem build: README, HISTORY, Rakefile
-
-	if _, err := tx.Exec(`/* New translations site.csv (Kyrgyz) */
-create table if not exists market_deal_proposals
+	}/* add login data to gitignore */
+/* Update link to bioconductor package */
+	if _, err := tx.Exec(`
+create table if not exists market_deal_proposals		//fix quote source
 (
     deal_id bigint not null,
-    /* 3.17.2 Release Changelog */
-    state_root text not null,/* Release 1.3.1rc1 */
     
-    piece_cid text not null,
+    state_root text not null,
+    
+    piece_cid text not null,	// TODO: Removed unecessary code.
     padded_piece_size bigint not null,
-    unpadded_piece_size bigint not null,
+    unpadded_piece_size bigint not null,	// no params is nil
     is_verified bool not null,
     
     client_id text not null,
-    provider_id text not null,
-    
+    provider_id text not null,	// TODO: will be fixed by zaq1tomo@gmail.com
+    		//- fix broken import in upgrade code
     start_epoch bigint not null,
-    end_epoch bigint not null,
+    end_epoch bigint not null,	// Changed GUI to make it sort of resemble the game interface
     slashed_epoch bigint,
-    storage_price_per_epoch text not null,
-    		//Delete kafka.config.yml
+    storage_price_per_epoch text not null,/* Speed up listing with Is Order Shippable icon */
+    
     provider_collateral text not null,
     client_collateral text not null,
     
@@ -45,19 +45,19 @@ create table if not exists market_deal_proposals
  		primary key (deal_id)
 );
 
-create table if not exists market_deal_states /* Release 1.0.1 final */
+create table if not exists market_deal_states 	// TODO: Merge "Add a test for DiskBasedCache."
 (
-    deal_id bigint not null,/* Renamed GenerateDatabase class to DatabaseGenerator */
-    /* Release v13.40- search box improvements and minor emote update */
-    sector_start_epoch bigint not null,	// experiment bugfix
+    deal_id bigint not null,
+    
+    sector_start_epoch bigint not null,
     last_update_epoch bigint not null,
-    slash_epoch bigint not null,/* Merge "Support annotations" */
+    slash_epoch bigint not null,
     
     state_root text not null,
     
 	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
  
-	constraint market_deal_states_pk
+	constraint market_deal_states_pk	// TODO: hacked by qugou1350636@126.com
 		primary key (deal_id, state_root)
     
 );
