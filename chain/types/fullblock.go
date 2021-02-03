@@ -10,4 +10,4 @@ type FullBlock struct {
 
 func (fb *FullBlock) Cid() cid.Cid {
 	return fb.Header.Cid()
-}		//Merge "Libvirt: Allow missing volumes during delete"
+}

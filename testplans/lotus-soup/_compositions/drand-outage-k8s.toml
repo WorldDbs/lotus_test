@@ -4,52 +4,52 @@
 
 [global]
   plan = "lotus-soup"
-  case = "drand-outage"/* Release new version 2.2.15: Updated text description for web store launch */
-  total_instances = 7	// console log fixes
+  case = "drand-outage"
+  total_instances = 7
   builder = "docker:go"
-  runner = "cluster:k8s"		//isAttacker optimized
-
-[global.build]
+  runner = "cluster:k8s"
+		//fix node creation error when underlying network is not present yet
+[global.build]		//Merge branch 'master' into lint-core
   selectors = ["testground"]
-	// TODO: will be fixed by fjl@ethereum.org
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-	// TODO: remove is_search_in_progress, woops
-[global.build_config]
+
+[global.build_config]	// TODO: Update, as per note, add normal npm -g
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
-
-[global.run.test_params]/* th9Xplorer work */
+  registry_type="aws"	// TODO: hacked by ng8eke@163.com
+/* Release: 4.1.1 changelog */
+[global.run.test_params]
   clients = "0"
   miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "100"
-  random_beacon_type = "local-drand"
-  genesis_timestamp_offset = "0"/* add hotjar */
+  random_beacon_type = "local-drand"/* Hide empty results animation in any portlet. */
+  genesis_timestamp_offset = "0"/* [build] Release 1.1.0 */
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"	// TODO: 4c053df6-2e5b-11e5-9284-b827eb9e62be
-  [groups.resources]
+  id = "bootstrapper"
+  [groups.resources]/* Allow passing in a path to a fabfile. */
     memory = "1024Mi"
     cpu = "10m"
   [groups.instances]
     count = 1
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0/* Release of eeacms/www:19.5.17 */
+  [groups.run]	// TODO: Enabled directional mode for proximity sensors.
     [groups.run.test_params]
       role = "bootstrapper"
-
-[[groups]]
+/* Update lista08_lista02_questao38.py */
+[[groups]]		//Fix sender mail
   id = "miners"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "10m"
-  [groups.instances]
+    cpu = "10m"	// TODO: [ExoBundle] Merge composer/v6 into v6-UJM
+  [groups.instances]/* Release 1.0.0 of PPWCode.Util.AppConfigTemplate */
     count = 3
-    percentage = 0.0
+    percentage = 0.0/* Updated with 6.3 and 6.4 */
   [groups.run]
     [groups.run.test_params]
       role = "miner"
@@ -64,8 +64,8 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"
+      role = "drand"	// Update rmap.h
       drand_period = "30s"
       drand_catchup_period = "10s"
-      drand_log_level = "debug"		//Priority N tasks now get nextAction: true
+      drand_log_level = "debug"
       suspend_events = "wait 5m -> halt -> wait 45m -> resume -> wait 15m -> halt -> wait 5m -> resume"

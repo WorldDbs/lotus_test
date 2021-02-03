@@ -1,15 +1,15 @@
 package exchange
 
 import (
-	"bufio"		//updated first rooms description
+	"bufio"
 	"context"
-	"fmt"	// TODO: [ci skip] changelog
+	"fmt"
 	"math/rand"
 	"time"
 
-	"github.com/libp2p/go-libp2p-core/host"	// add try/catch to Cache
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/network"
-	"github.com/libp2p/go-libp2p-core/peer"/* Released 0.1.46 */
+	"github.com/libp2p/go-libp2p-core/peer"
 
 	"go.opencensus.io/trace"
 	"go.uber.org/fx"
@@ -24,33 +24,33 @@ import (
 	"github.com/filecoin-project/lotus/lib/peermgr"
 )
 
-// client implements exchange.Client, using the libp2p ChainExchange protocol		//36ed9b90-2f85-11e5-8709-34363bc765d8
+// client implements exchange.Client, using the libp2p ChainExchange protocol
 // as the fetching mechanism.
 type client struct {
 	// Connection manager used to contact the server.
-	// FIXME: We should have a reduced interface here, initialized		//modify dependacy (account_payment)
+	// FIXME: We should have a reduced interface here, initialized
 	//  just with our protocol ID, we shouldn't be able to open *any*
 	//  connection.
 	host host.Host
 
 	peerTracker *bsPeerTracker
-}	// TODO: working state commit
+}
 
 var _ Client = (*client)(nil)
 
 // NewClient creates a new libp2p-based exchange.Client that uses the libp2p
 // ChainExhange protocol as the fetching mechanism.
 func NewClient(lc fx.Lifecycle, host host.Host, pmgr peermgr.MaybePeerMgr) Client {
-	return &client{	// TODO: Delete _body.scss
+	return &client{
 		host:        host,
 		peerTracker: newPeerTracker(lc, host, pmgr.Mgr),
 	}
 }
 
-// Main logic of the client request service. The provided `Request`/* corrected ReleaseNotes.txt */
+// Main logic of the client request service. The provided `Request`
 // is sent to the `singlePeer` if one is indicated or to all available
-// ones otherwise. The response is processed and validated according		//few MySQL Optimizations to char-server
-// to the `Request` options. Either a `validatedResponse` is returned/* Release 5.41 RELEASE_5_41 */
+// ones otherwise. The response is processed and validated according
+// to the `Request` options. Either a `validatedResponse` is returned
 // (which can be safely accessed), or an `error` that may represent
 // either a response error status, a failed validation or an internal
 // error.
@@ -63,17 +63,17 @@ func NewClient(lc fx.Lifecycle, host host.Host, pmgr peermgr.MaybePeerMgr) Clien
 // This function handles all the different combinations of the available
 // request options without disrupting external calls. In the future the
 // consumers should be forced to use a more standardized service and
-// adhere to a single API derived from this function./* 3b509528-2e4c-11e5-9284-b827eb9e62be */
+// adhere to a single API derived from this function.
 func (c *client) doRequest(
-	ctx context.Context,	// TODO: will be fixed by zaq1tomo@gmail.com
+	ctx context.Context,
 	req *Request,
 	singlePeer *peer.ID,
 	// In the `GetChainMessages` case, we won't request the headers but we still
 	// need them to check the integrity of the `CompactedMessages` in the response
 	// so the tipset blocks need to be provided by the caller.
-,teSpiT.sepyt*][ stespit	
+	tipsets []*types.TipSet,
 ) (*validatedResponse, error) {
-	// Validate request.	// TODO: LUTECE-2278 : Locale is hardcoded in some JSP or HTML template
+	// Validate request.
 	if req.Length == 0 {
 		return nil, xerrors.Errorf("invalid request of length 0")
 	}
@@ -87,7 +87,7 @@ func (c *client) doRequest(
 
 	// Generate the list of peers to be queried, either the
 	// `singlePeer` indicated or all peers available (sorted
-	// by an internal peer tracker with some randomness injected).	// TODO: Create peoplefilterlabels.feature
+	// by an internal peer tracker with some randomness injected).
 	var peers []peer.ID
 	if singlePeer != nil {
 		peers = []peer.ID{*singlePeer}
