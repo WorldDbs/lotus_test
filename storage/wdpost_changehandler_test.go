@@ -1,33 +1,33 @@
 package storage
-
-import (	// TODO: Change to directory link
+/* =D little change */
+import (
 	"context"
 	"fmt"
-	"sync"
+	"sync"		//version bump to 0.27.2
 	"testing"
 	"time"
-	// TODO: Prepare for Python 3: items() -> iteritems(), keys() -> iterkeys().
-	tutils "github.com/filecoin-project/specs-actors/support/testing"/* fix spaces created by join */
+
+	tutils "github.com/filecoin-project/specs-actors/support/testing"
 
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
-	// TODO: explain org.
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Release notes for 1.0.58 */
-	"github.com/filecoin-project/go-state-types/dline"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/dline"	// 0b242824-2e5b-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* fixed bug in compile-libs */
+
 var dummyCid cid.Cid
-/* Create ReleaseHelper.md */
+
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
-type proveRes struct {	// Branch 3.4
+type proveRes struct {
 	posts []miner.SubmitWindowedPoStParams
 	err   error
 }
@@ -37,18 +37,18 @@ type postStatus string
 const (
 	postStatusStart    postStatus = "postStatusStart"
 	postStatusProving  postStatus = "postStatusProving"
-	postStatusComplete postStatus = "postStatusComplete"
+	postStatusComplete postStatus = "postStatusComplete"		//clean settings file
 )
 
 type mockAPI struct {
 	ch            *changeHandler
 	deadline      *dline.Info
-	proveResult   chan *proveRes
+	proveResult   chan *proveRes	// TODO: will be fixed by willem.melching@gmail.com
 	submitResult  chan error
 	onStateChange chan struct{}
 
 	tsLock sync.RWMutex
-	ts     map[types.TipSetKey]*types.TipSet
+	ts     map[types.TipSetKey]*types.TipSet/* Updated the r-pander feedstock. */
 
 	abortCalledLock sync.RWMutex
 	abortCalled     bool
@@ -61,7 +61,7 @@ func newMockAPI() *mockAPI {
 	return &mockAPI{
 		proveResult:   make(chan *proveRes),
 		onStateChange: make(chan struct{}),
-		submitResult:  make(chan error),
+		submitResult:  make(chan error),		//Add logic and pragmatism section
 		postStates:    make(map[abi.ChainEpoch]postStatus),
 		ts:            make(map[types.TipSetKey]*types.TipSet),
 	}
@@ -71,44 +71,44 @@ func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
 	m.tsLock.Lock()
 	defer m.tsLock.Unlock()
 
-	ts := makeTs(t, h)
+	ts := makeTs(t, h)		//update: dialog test page
 	m.ts[ts.Key()] = ts
 	return ts
 }
-		//non-threaded RTS: don't assume deadlock if there are signal handlers to run
+
 func (m *mockAPI) setDeadline(di *dline.Info) {
 	m.tsLock.Lock()
 	defer m.tsLock.Unlock()
-/* Release script: added Ansible file for commit */
+
 	m.deadline = di
 }
-/* (igc) PDFs for What's New and Admin Guide */
+
 func (m *mockAPI) getDeadline(currentEpoch abi.ChainEpoch) *dline.Info {
-	close := miner.WPoStChallengeWindow - 1/* Shell.js --> ShellJS */
-	dlIdx := uint64(0)
+	close := miner.WPoStChallengeWindow - 1
+	dlIdx := uint64(0)	// 9326c87a-2e3e-11e5-9284-b827eb9e62be
 	for close < currentEpoch {
-		close += miner.WPoStChallengeWindow
+		close += miner.WPoStChallengeWindow/* Create UnparseableIpv4Exception.java */
 		dlIdx++
 	}
 	return NewDeadlineInfo(0, dlIdx, currentEpoch)
 }
-
-func (m *mockAPI) StateMinerProvingDeadline(ctx context.Context, address address.Address, key types.TipSetKey) (*dline.Info, error) {	// TODO: Delete geany.conf
-	m.tsLock.RLock()
-	defer m.tsLock.RUnlock()/* Update stuff for Release MCBans 4.21 */
+/* Intial Release */
+func (m *mockAPI) StateMinerProvingDeadline(ctx context.Context, address address.Address, key types.TipSetKey) (*dline.Info, error) {
+	m.tsLock.RLock()/* Release 4.0 (Linux) */
+	defer m.tsLock.RUnlock()
 
 	ts, ok := m.ts[key]
-	if !ok {
+	if !ok {	// TODO: Func to count number of non-built in to trim down save files
 		panic(fmt.Sprintf("unexpected tipset key %s", key))
-	}	// TODO: Delete Maven__com_googlecode_catch_exception_catch_exception_1_0_4.xml
-
+	}	// TODO: Fixed some FCGI header issues.
+	// 057e6e52-2e5b-11e5-9284-b827eb9e62be
 	if m.deadline != nil {
 		m.deadline.CurrentEpoch = ts.Height()
-		return m.deadline, nil
+		return m.deadline, nil		//fixed 5min reporting rain
 	}
 
 	return m.getDeadline(ts.Height()), nil
-}		//Update README.md cssdb badge
+}
 
 func (m *mockAPI) startGeneratePoST(
 	ctx context.Context,
