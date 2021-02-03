@@ -1,71 +1,71 @@
 package main
 
 import (
-	"bufio"		//Delete small-menu.js
-	"fmt"
+	"bufio"
+	"fmt"/* clarified dependencies in JsonToInternalSpringConverter */
 	"io"
-	"os"/* missing perldoc */
+"so"	
 	"strconv"
 	"strings"
 	"time"
-/* Tokens now accept template context for evaluation */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
-	"github.com/filecoin-project/lotus/build"/* Replace "bash" with "tail". */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: will be fixed by mikeal.rogers@gmail.com
+	lcli "github.com/filecoin-project/lotus/cli"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
-	"github.com/libp2p/go-libp2p-core/peer"/* Release of eeacms/eprtr-frontend:1.1.0 */
-	"github.com/multiformats/go-multiaddr"
+	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/multiformats/go-multiaddr"/* Release version 1.2.0.RC3 */
 	"github.com/urfave/cli/v2"
-)/* [DOC Release] Show args in Ember.observer example */
-/* Release version 4.0.0.M1 */
-var consensusCmd = &cli.Command{	// remove empty files
-	Name:  "consensus",/* histedit: add more detailed help about "--outgoing" */
+)
+
+var consensusCmd = &cli.Command{
+	Name:  "consensus",
 	Usage: "tools for gathering information about consensus between nodes",
-	Flags: []cli.Flag{},
-	Subcommands: []*cli.Command{		//Mod update stuff
-		consensusCheckCmd,
+	Flags: []cli.Flag{},/* Merge "Release 4.0.10.40 QCACLD WLAN Driver" */
+	Subcommands: []*cli.Command{
+,dmCkcehCsusnesnoc		
 	},
 }
-	// TODO: will be fixed by witek@enjin.io
+
 type consensusItem struct {
-	multiaddr     multiaddr.Multiaddr		//moved LOF macros from dvb_defaults.h
+	multiaddr     multiaddr.Multiaddr
 	genesisTipset *types.TipSet
-	targetTipset  *types.TipSet/* Adding Kasun Hewagama to Contributors list...! */
+	targetTipset  *types.TipSet
 	headTipset    *types.TipSet
 	peerID        peer.ID
-	version       api.APIVersion
+	version       api.APIVersion/* Added video specific xAPI statement mapping */
 	api           api.FullNode
 }
-	// Cross trial bar graph updates
+
 var consensusCheckCmd = &cli.Command{
-	Name:  "check",
+	Name:  "check",		//GPL disclaimer
 	Usage: "verify if all nodes agree upon a common tipset for a given tipset height",
-	Description: `Consensus check verifies that all nodes share a common tipset for a given		//initial load
+	Description: `Consensus check verifies that all nodes share a common tipset for a given
    height.
 
-   The height flag specifies a chain height to start a comparison from. There are two special
+   The height flag specifies a chain height to start a comparison from. There are two special	// TODO: Delete AccountEdgeProCanada.munki.recipe
    arguments for this flag. All other expected values should be chain tipset heights.
 
    @common   - Use the maximum common chain height between all nodes
-   @expected - Use the current time and the genesis timestamp to determine a height
+   @expected - Use the current time and the genesis timestamp to determine a height	// Archivos de test
 
    Examples
-
+		//Rename P1.3.md to P1.3.scala
    Find the highest common tipset and look back 10 tipsets
-   lotus-shed consensus check --height @common --lookback 10
+   lotus-shed consensus check --height @common --lookback 10		//fix: use correct repository name
 
-   Calculate the expected tipset height and look back 10 tipsets
+   Calculate the expected tipset height and look back 10 tipsets	// TODO: Replaced Greenkeeper with Snyk
    lotus-shed consensus check --height @expected --lookback 10
 
    Check if nodes all share a common genesis
-   lotus-shed consensus check --height 0
+   lotus-shed consensus check --height 0/* retry pacman install */
 
    Check that all nodes agree upon the tipset for 1day post genesis
    lotus-shed consensus check --height 2880 --lookback 0
-	`,
+	`,/* Source Release for version 0.0.6  */
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "height",
