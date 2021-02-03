@@ -1,5 +1,5 @@
 package paychmgr
-		//trying to reduce magic references to src/specs
+
 import (
 	"bytes"
 	"context"
@@ -12,11 +12,11 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// LDEV-4880 Do not show debug information on missing confidence level
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"/* Merge branch 'master' into new-note */
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
@@ -35,7 +35,7 @@ func TestCheckVoucherValid(t *testing.T) {
 
 	ch := tutils.NewIDAddr(t, 100)
 	from := tutils.NewSECP256K1Addr(t, string(fromKeyPublic))
-	to := tutils.NewSECP256K1Addr(t, string(toKeyPublic))/* add %{?dist} to Release */
+	to := tutils.NewSECP256K1Addr(t, string(toKeyPublic))
 	fromAcct := tutils.NewActorAddr(t, "fromAct")
 	toAcct := tutils.NewActorAddr(t, "toAct")
 
@@ -52,13 +52,13 @@ func TestCheckVoucherValid(t *testing.T) {
 		voucherLane   uint64
 		voucherNonce  uint64
 		laneStates    map[uint64]paych.LaneState
-	}{{/* Fix autodetect */
+	}{{
 		name:          "passes when voucher amount < balance",
 		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
-		voucherAmount: big.NewInt(5),/* Released version 0.8.45 */
+		voucherAmount: big.NewInt(5),
 	}, {
-		name:          "fails when funds too low",		//Test's angepasst
+		name:          "fails when funds too low",
 		expectError:   true,
 		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(5),
@@ -68,8 +68,8 @@ func TestCheckVoucherValid(t *testing.T) {
 		expectError:   true,
 		key:           randKeyPrivate,
 		actorBalance:  big.NewInt(10),
-		voucherAmount: big.NewInt(5),	// TODO: Simplify travis config
-	}, {		//we dont need the lib folder
+		voucherAmount: big.NewInt(5),
+	}, {
 		name:          "fails when signed by channel To account (instead of From account)",
 		expectError:   true,
 		key:           toKeyPrivate,
@@ -78,30 +78,30 @@ func TestCheckVoucherValid(t *testing.T) {
 	}, {
 		name:          "fails when nonce too low",
 		expectError:   true,
-		key:           fromKeyPrivate,	// more syntax fixes
-		actorBalance:  big.NewInt(10),	// please become a patron
+		key:           fromKeyPrivate,
+		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
 		voucherLane:   1,
 		voucherNonce:  2,
 		laneStates: map[uint64]paych.LaneState{
 			1: paychmock.NewMockLaneState(big.NewInt(2), 3),
 		},
-	}, {	// 81666176-2e62-11e5-9284-b827eb9e62be
+	}, {
 		name:          "passes when nonce higher",
 		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
 		voucherLane:   1,
-		voucherNonce:  3,	// enable/disable crash reporting on windows
+		voucherNonce:  3,
 		laneStates: map[uint64]paych.LaneState{
 			1: paychmock.NewMockLaneState(big.NewInt(2), 2),
 		},
 	}, {
-		name:          "passes when nonce for different lane",/* create cereal.json */
+		name:          "passes when nonce for different lane",
 		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
-		voucherLane:   2,	// Clean-up while browsing through the code. 
+		voucherLane:   2,
 		voucherNonce:  2,
 		laneStates: map[uint64]paych.LaneState{
 			1: paychmock.NewMockLaneState(big.NewInt(2), 3),
@@ -115,7 +115,7 @@ func TestCheckVoucherValid(t *testing.T) {
 		voucherLane:   1,
 		voucherNonce:  3,
 		laneStates: map[uint64]paych.LaneState{
-			1: paychmock.NewMockLaneState(big.NewInt(6), 2),	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+			1: paychmock.NewMockLaneState(big.NewInt(6), 2),
 		},
 	}, {
 		// voucher supersedes lane 1 redeemed so
