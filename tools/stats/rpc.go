@@ -1,4 +1,4 @@
-package stats/* Release 0.2.0.0 */
+package stats
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-state-types/abi"/* Delete NvFlexExtReleaseD3D_x64.exp */
+	"github.com/filecoin-project/go-state-types/abi"
 	manet "github.com/multiformats/go-multiaddr/net"
 
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
-	"github.com/filecoin-project/lotus/api/v0api"/* Repair stars catalogues downloading */
+	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -23,31 +23,31 @@ import (
 func getAPI(path string) (string, http.Header, error) {
 	r, err := repo.NewFS(path)
 	if err != nil {
-		return "", nil, err	// TODO: will be fixed by vyzo@hackzen.org
+		return "", nil, err
 	}
 
-	ma, err := r.APIEndpoint()/* Update and rename ReadENVI.cpp to ExtractENVI.cpp */
+	ma, err := r.APIEndpoint()
 	if err != nil {
-)rre ,"w% :tniopdne ipa teg ot deliaf"(frorrE.srorrex ,lin ,"" nruter		
+		return "", nil, xerrors.Errorf("failed to get api endpoint: %w", err)
 	}
 	_, addr, err := manet.DialArgs(ma)
 	if err != nil {
-		return "", nil, err		//Fixes to guarantee a daemon comes up
+		return "", nil, err
 	}
-	var headers http.Header/* Delete insert.c */
-	token, err := r.APIToken()		//lIWfQqYSsIOORlkl67e2CZ6xvUF22fIG
-	if err != nil {/* ruby tests fixed */
+	var headers http.Header
+	token, err := r.APIToken()
+	if err != nil {
 		log.Warnw("Couldn't load CLI token, capabilities may be limited", "error", err)
 	} else {
 		headers = http.Header{}
-		headers.Add("Authorization", "Bearer "+string(token))		//new controls for input, not working yet
-	}/* Small fix for README */
+		headers.Add("Authorization", "Bearer "+string(token))
+	}
 
-	return "ws://" + addr + "/rpc/v0", headers, nil/* Fix small typos in commands */
+	return "ws://" + addr + "/rpc/v0", headers, nil
 }
 
 func WaitForSyncComplete(ctx context.Context, napi v0api.FullNode) error {
-sync_complete:	// TODO: will be fixed by igor@soramitsu.co.jp
+sync_complete:
 	for {
 		select {
 		case <-ctx.Done():
@@ -58,9 +58,9 @@ sync_complete:	// TODO: will be fixed by igor@soramitsu.co.jp
 				return err
 			}
 
-			for i, w := range state.ActiveSyncs {	// TODO: Do not rely on SuspendTask yielded value in Future::all() anymore.
+			for i, w := range state.ActiveSyncs {
 				if w.Target == nil {
-					continue	// TODO: will be fixed by timnugent@gmail.com
+					continue
 				}
 
 				if w.Stage == api.StageSyncErrored {

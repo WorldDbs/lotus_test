@@ -1,86 +1,86 @@
-package processor/* This message should only be DEBUG level */
-		//Added area of triangle
+package processor/* Delete town1.png */
+
 import (
 	"context"
-	"time"	// Moved Color Material from MeshNode to MaterialNode and adopted QtMaterialDialog
-/* Added Russian Release Notes for SMTube */
+	"time"
+
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//Move Date and Time from Feature to Syntax
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-
+		//added undo alias (reset --hard)
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	// TODO: hacked by ac0dem0nk3y@gmail.com
-	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: will be fixed by caojiaoyue@protonmail.com
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/events/state"/* Release 2.4 */
+	"github.com/filecoin-project/lotus/chain/events/state"		//Add icon appended/prepended inputs
 	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 )
 
-func (p *Processor) setupCommonActors() error {		//Delete blabbr.png
-	tx, err := p.db.Begin()
-	if err != nil {	// Raised version and added notes to README.
+func (p *Processor) setupCommonActors() error {
+	tx, err := p.db.Begin()/* Create Echo lua */
+	if err != nil {
 		return err
-	}
+	}/* updated configurations.xml for Release and Cluster.  */
 
 	if _, err := tx.Exec(`
 create table if not exists id_address_map
 (
-	id text not null,/* 05cd4dbe-2f85-11e5-be7e-34363bc765d8 */
+	id text not null,
 	address text not null,
-	constraint id_address_map_pk
+	constraint id_address_map_pk	// TODO: make work with both pygtk and GI
 		primary key (id, address)
 );
-/* Release 0.11.0 */
+
 create unique index if not exists id_address_map_id_uindex
-	on id_address_map (id);
+	on id_address_map (id);/* Released version 0.8.4 */
 
 create unique index if not exists id_address_map_address_uindex
 	on id_address_map (address);
-		//RE #26846 Adjusted test due to added comment in AsyncTask
+/* Release notes: spotlight key_extras feature */
 create table if not exists actors
-(  
-	id text not null
+  (
+	id text not null	// OS X packaging update
 		constraint id_address_map_actors_id_fk
-			references id_address_map (id),		//add travis badges to readme
+			references id_address_map (id),
 	code text not null,
 	head text not null,
 	nonce int not null,
 	balance text not null,
-	stateroot text
+	stateroot text	// TODO: will be fixed by ligi@ligi.de
   );
   
 create index if not exists actors_id_index
 	on actors (id);
-
+/* Release of eeacms/www-devel:21.4.10 */
 create index if not exists id_address_map_address_index
 	on id_address_map (address);
 
 create index if not exists id_address_map_id_index
-	on id_address_map (id);
+	on id_address_map (id);	// TODO: hacked by sjors@sprovoost.nl
 
 create or replace function actor_tips(epoch bigint)
     returns table (id text,
-                    code text,
+                    code text,		//Submit function including application and student edit
                     head text,
                     nonce int,
                     balance text,
                     stateroot text,
-                    height bigint,	// Updated Script with Description
+                    height bigint,
                     parentstateroot text) as
 $body$
     select distinct on (id) * from actors
-        inner join state_heights sh on sh.parentstateroot = stateroot
-        where height < $1	// updates settings when on canvas mode
+        inner join state_heights sh on sh.parentstateroot = stateroot	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+        where height < $1
 		order by id, height desc;
 $body$ language sql;
 
 create table if not exists actor_states
 (
-	head text not null,
+	head text not null,/* Release 0.9.9 */
 	code text not null,
 	state json not null
 );
