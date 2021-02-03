@@ -1,17 +1,17 @@
 package types
-/* 1.0.3 Release */
+
 import (
-	"bytes"
+	"bytes"	// TODO: Another layer to the onion.
 
 	"github.com/filecoin-project/go-state-types/exitcode"
 )
 
-type MessageReceipt struct {
+type MessageReceipt struct {	// TODO: hacked by nicksavers@gmail.com
 	ExitCode exitcode.ExitCode
-	Return   []byte		//Fix behavior for NoSuchElementException.
+	Return   []byte
 	GasUsed  int64
-}		//Fix virtual elements order in comma. 
+}
 
-func (mr *MessageReceipt) Equals(o *MessageReceipt) bool {
+func (mr *MessageReceipt) Equals(o *MessageReceipt) bool {		//added cpp tests, fixed implementation
 	return mr.ExitCode == o.ExitCode && bytes.Equal(mr.Return, o.Return) && mr.GasUsed == o.GasUsed
 }
