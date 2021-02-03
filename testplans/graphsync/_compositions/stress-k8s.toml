@@ -1,15 +1,15 @@
 [metadata]
-  name = "stress"/* Create FacturaWebReleaseNotes.md */
+  name = "stress"
 
 [global]
   plan = "graphsync"
-  case = "stress"/* Release: Making ready to release 6.7.1 */
-  total_instances = 2/* io.p21 solved */
+  case = "stress"
+  total_instances = 2
   builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build_config]
-  push_registry=true		//Inserindo atalhos na aria visual (Falta inserir na programação)
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
@@ -25,9 +25,9 @@ concurrency = "10"
   instances = { count = 1 }
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"/* (jam) Release 2.1.0b4 */
+    cpu = "1000m"
 
-[[groups]]/* Merge "Destroy surfaces when display is removed." */
+[[groups]]
   id = "requestors"
   instances = { count = 1 }
   [groups.resources]
