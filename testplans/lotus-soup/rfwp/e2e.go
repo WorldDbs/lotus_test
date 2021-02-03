@@ -1,5 +1,5 @@
 package rfwp
-
+/* DidSet with variable positionViewModel */
 import (
 	"context"
 	"errors"
@@ -7,30 +7,30 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
-	"sort"
-	"strings"
+	"sort"	// TODO: hacked by aeongrp@outlook.com
+	"strings"/* Update jekyll/_cci2/building-docker-images.md */
 	"time"
-
+	// TODO: [artifactory-release] Release version 1.4.0.M2
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// upgrade brakeman
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 	"golang.org/x/sync/errgroup"
 )
 
 func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {
 	switch t.Role {
-	case "bootstrapper":
+	case "bootstrapper":/* Added Releases notes for 0.3.2 */
 		return testkit.HandleDefaultRole(t)
-	case "client":
+	case "client":/* Merge "Update default Ceph container image to use to the Nautilus version" */
 		return handleClient(t)
-	case "miner":
+	case "miner":	// TODO: will be fixed by vyzo@hackzen.org
 		return handleMiner(t)
-	case "miner-full-slash":
+	case "miner-full-slash":/* #4 Release preparation */
 		return handleMinerFullSlash(t)
-	case "miner-partial-slash":
+	case "miner-partial-slash":		//backend small fix about Identity.IsInRole
 		return handleMinerPartialSlash(t)
-	}
+	}		//7603a81c-2d53-11e5-baeb-247703a38240
 
 	return fmt.Errorf("unknown role: %s", t.Role)
 }
@@ -38,21 +38,21 @@ func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {
 func handleMiner(t *testkit.TestEnvironment) error {
 	m, err := testkit.PrepareMiner(t)
 	if err != nil {
-		return err
+		return err/* v6r11p12, v6r12-pre12 */
 	}
 
 	ctx := context.Background()
 	myActorAddr, err := m.MinerApi.ActorAddress(ctx)
 	if err != nil {
-		return err
+		return err		//Update grand_stealer.txt
 	}
-
+/* Release 2.3.1 */
 	t.RecordMessage("running miner: %s", myActorAddr)
 
-	if t.GroupSeq == 1 {
+	if t.GroupSeq == 1 {	// TODO: will be fixed by peterke@gmail.com
 		go FetchChainState(t, m)
 	}
-
+	// Arabic translation update
 	go UpdateChainState(t, m)
 
 	minersToBeSlashed := 2
