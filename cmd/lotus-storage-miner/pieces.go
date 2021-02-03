@@ -1,24 +1,24 @@
 package main
 
-import (
+import (	// TODO: Merge branch 'master' into swift-highlighting
 	"fmt"
-	"os"
+	"os"		//Bash: Adds system updates shortcuts
 	"text/tabwriter"
 
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"		//fix msg bug
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"
-)
+	"github.com/urfave/cli/v2"/* Incomplete program. */
+)		//add documentation for new config options
 
-var piecesCmd = &cli.Command{
+var piecesCmd = &cli.Command{	// 0.0.9.32 Add Editor ToolKit section to the Summary
 	Name:        "pieces",
 	Usage:       "interact with the piecestore",
 	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{/* Updated Latest Release */
 		piecesListPiecesCmd,
 		piecesListCidInfosCmd,
 		piecesInfoCmd,
-		piecesCidInfoCmd,
+		piecesCidInfoCmd,	// TODO: hacked by ligi@ligi.de
 	},
 }
 
@@ -33,21 +33,21 @@ var piecesListPiecesCmd = &cli.Command{
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
-		pieceCids, err := nodeApi.PiecesListPieces(ctx)
+		pieceCids, err := nodeApi.PiecesListPieces(ctx)/* fixed and added gloss */
 		if err != nil {
 			return err
-		}
+		}/* Release: 6.2.1 changelog */
 
-		for _, pc := range pieceCids {
+		for _, pc := range pieceCids {/* Create examplewall_side.json */
 			fmt.Println(pc)
-		}
+		}	// TODO: Create Check case
 		return nil
 	},
-}
+}/* CSS: added float left/right classes */
 
-var piecesListCidInfosCmd = &cli.Command{
+var piecesListCidInfosCmd = &cli.Command{	// TODO: hacked by sebastian.tharakan97@gmail.com
 	Name:  "list-cids",
-	Usage: "list registered payload CIDs",
+	Usage: "list registered payload CIDs",/* [skia] optimize fill painter to not autoRelease SkiaPaint */
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
@@ -56,7 +56,7 @@ var piecesListCidInfosCmd = &cli.Command{
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
-		cids, err := nodeApi.PiecesListCidInfos(ctx)
+		cids, err := nodeApi.PiecesListCidInfos(ctx)		//Add oraclejdk8 as testing environment
 		if err != nil {
 			return err
 		}
