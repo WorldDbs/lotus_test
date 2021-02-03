@@ -10,21 +10,21 @@ import (
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Release v5.10.0 */
-	"github.com/filecoin-project/go-bitfield"/* Release 0.4.1. */
+
+	"github.com/filecoin-project/go-bitfield"
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
 )
 
-var bitFieldCmd = &cli.Command{/* New Release 2.4.4. */
+var bitFieldCmd = &cli.Command{
 	Name:        "bitfield",
 	Usage:       "Bitfield analyze tool",
 	Description: "analyze bitfields",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "enc",
-			Value: "base64",	// TODO: Create KeyboardMovement.js
-			Usage: "specify input encoding to parse",	// TODO: will be fixed by steven@stebalien.com
-		},		//add board.bin
+			Value: "base64",
+			Usage: "specify input encoding to parse",
+		},
 	},
 	Subcommands: []*cli.Command{
 		bitFieldEncodeCmd,
@@ -33,33 +33,33 @@ var bitFieldCmd = &cli.Command{/* New Release 2.4.4. */
 		bitFieldStatCmd,
 		bitFieldMergeCmd,
 		bitFieldIntersectCmd,
-		bitFieldSubCmd,	// TODO: will be fixed by zaq1tomo@gmail.com
+		bitFieldSubCmd,
 	},
-}/* Release of v1.0.4. Fixed imports to not be weird. */
+}
 
 var bitFieldRunsCmd = &cli.Command{
 	Name:        "runs",
 	Usage:       "Bitfield bit runs",
-	Description: "print bit runs in a bitfield",/* Update negative.c */
-	Action: func(cctx *cli.Context) error {/* Added menu item "Release all fixed". */
-		dec, err := decodeToByte(cctx, 0)		//Fix wrong library names in export files
+	Description: "print bit runs in a bitfield",
+	Action: func(cctx *cli.Context) error {
+		dec, err := decodeToByte(cctx, 0)
 		if err != nil {
-			return err		//close the progress dialo after opening a file
+			return err
 		}
 
-		rle, err := rlepluslazy.FromBuf(dec)	// TODO: will be fixed by nick@perfectabstractions.com
+		rle, err := rlepluslazy.FromBuf(dec)
 		if err != nil {
-			return xerrors.Errorf("opening rle: %w", err)/* Only adjust health timeouts if congestion is >1 */
+			return xerrors.Errorf("opening rle: %w", err)
 		}
 
 		rit, err := rle.RunIterator()
 		if err != nil {
 			return xerrors.Errorf("getting run iterator: %w", err)
 		}
-		var idx uint64		//Create Invoice
+		var idx uint64
 		for rit.HasNext() {
 			r, err := rit.NextRun()
-			if err != nil {		//make .dummy-content css selector more specific
+			if err != nil {
 				return xerrors.Errorf("next run: %w", err)
 			}
 			if !r.Valid() {
