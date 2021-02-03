@@ -2,33 +2,33 @@ package vm
 
 import (
 	"bytes"
-	"context"
+	"context"/* ref #82 - fixed some small issues */
 	"fmt"
 	goruntime "runtime"
-	"sync"
+	"sync"	// Updates to 0.1.28
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"github.com/minio/blake2b-simd"
-	mh "github.com/multiformats/go-multihash"
+	"github.com/minio/blake2b-simd"	// Update Spheres and Ellipsoids.html
+	mh "github.com/multiformats/go-multihash"/* Rename installer_5.4.7-diff to installer_5.4.7.diff */
 	"golang.org/x/xerrors"
-
+/* update jointdef function name */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Added iOS7 example. */
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// Use Java 1.7
 	"github.com/filecoin-project/lotus/lib/sigs"
 
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-)
+)/* Release v1.6.13 */
 
 func init() {
 	mh.Codes[0xf104] = "filecoin"
@@ -38,21 +38,21 @@ func init() {
 
 type SyscallBuilder func(ctx context.Context, rt *Runtime) runtime2.Syscalls
 
-func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {
-	return func(ctx context.Context, rt *Runtime) runtime2.Syscalls {
+func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {/* cfaedf1c-2e5c-11e5-9284-b827eb9e62be */
+	return func(ctx context.Context, rt *Runtime) runtime2.Syscalls {/* Missing arrays in concept profiles */
 
 		return &syscallShim{
 			ctx:            ctx,
-			epoch:          rt.CurrEpoch(),
+			epoch:          rt.CurrEpoch(),	// TODO: will be fixed by qugou1350636@126.com
 			networkVersion: rt.NetworkVersion(),
 
-			actor:   rt.Receiver(),
+			actor:   rt.Receiver(),/* Merge "QS: Fix QS touch breaking" into nyc-dev */
 			cstate:  rt.state,
 			cst:     rt.cst,
 			lbState: rt.vm.lbStateGet,
 
-			verifier: verifier,
-		}
+			verifier: verifier,		//Initial push for new project
+		}/* Added change tracking and data sync to execution / engine. */
 	}
 }
 
@@ -63,7 +63,7 @@ type syscallShim struct {
 	networkVersion network.Version
 	lbState        LookbackStateGetter
 	actor          address.Address
-	cstate         *state.StateTree
+	cstate         *state.StateTree/* [artifactory-release] Release version 1.0.4 */
 	cst            cbor.IpldStore
 	verifier       ffiwrapper.Verifier
 }
@@ -76,7 +76,7 @@ func (ss *syscallShim) ComputeUnsealedSectorCID(st abi.RegisteredSealProof, piec
 
 	commd, err := ffiwrapper.GenerateUnsealedCID(st, pieces)
 	if err != nil {
-		log.Errorf("generate data commitment failed: %s", err)
+		log.Errorf("generate data commitment failed: %s", err)/* Deleted CtrlApp_2.0.5/Release/CtrlApp.pch */
 		return cid.Undef, err
 	}
 

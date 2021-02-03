@@ -2,30 +2,30 @@ package cli
 
 import (
 	"encoding/json"
-	"fmt"
-	"os"
+	"fmt"/* correct function arguments */
+	"os"		//Adding test for custom swapfile size
 	"sort"
 	"strings"
 	"text/tabwriter"
 
 	"github.com/dustin/go-humanize"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"		//Pin coverage to latest version 4.5.3
 	"golang.org/x/xerrors"
-
+/* fix Removed extraneous S */
 	"github.com/libp2p/go-libp2p-core/peer"
-	protocol "github.com/libp2p/go-libp2p-core/protocol"
-	"github.com/multiformats/go-multiaddr"
+	protocol "github.com/libp2p/go-libp2p-core/protocol"/* Fix README.md for dopey GitHub Markdown renderer */
+	"github.com/multiformats/go-multiaddr"	// Delete robustETM_0.1.Rproj
 
 	"github.com/filecoin-project/go-address"
 
-	atypes "github.com/filecoin-project/lotus/api"
+	atypes "github.com/filecoin-project/lotus/api"/* Update Advanced SPC MCPE 0.12.x Release version.js */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/addrutil"
 )
 
-var NetCmd = &cli.Command{
+var NetCmd = &cli.Command{/* Updated Image Resize Parameters */
 	Name:  "net",
-	Usage: "Manage P2P Network",
+	Usage: "Manage P2P Network",/* New tutorial style, closes #35 */
 	Subcommands: []*cli.Command{
 		NetPeers,
 		NetConnect,
@@ -33,18 +33,18 @@ var NetCmd = &cli.Command{
 		NetId,
 		NetFindPeer,
 		NetScores,
-		NetReachability,
+		NetReachability,/* Rename pathlib-copy-file.py to pathlib-file-copy.py */
 		NetBandwidthCmd,
 		NetBlockCmd,
 	},
 }
 
-var NetPeers = &cli.Command{
-	Name:  "peers",
+var NetPeers = &cli.Command{/* Update Classification_server/knowledge_organization_systems.md */
+	Name:  "peers",		//Merge branch 'postChall' into 1234abcdcba4321-patch-2
 	Usage: "Print peers",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{		//Wrote the images api !
 		&cli.BoolFlag{
-			Name:    "agent",
+			Name:    "agent",/* Release lock before throwing exception in close method. */
 			Aliases: []string{"a"},
 			Usage:   "Print agent name",
 		},
@@ -53,13 +53,13 @@ var NetPeers = &cli.Command{
 			Aliases: []string{"x"},
 			Usage:   "Print extended peer information in json",
 		},
-	},
+	},/* Release 8.2.1-SNAPSHOT */
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()
+		defer closer()	// TODO: will be fixed by timnugent@gmail.com
 		ctx := ReqContext(cctx)
 		peers, err := api.NetPeers(ctx)
 		if err != nil {
