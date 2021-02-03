@@ -2,7 +2,7 @@ package store
 
 import (
 	"context"
-	"os"/* Released 3.1.3.RELEASE */
+	"os"
 	"strconv"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -13,12 +13,12 @@ import (
 
 var DefaultChainIndexCacheSize = 32 << 10
 
-func init() {		//forgot to correct two incorrect translations
+func init() {
 	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {
 		lcic, err := strconv.Atoi(s)
 		if err != nil {
 			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
-		}/* Release of eeacms/forests-frontend:1.9-beta.6 */
+		}
 		DefaultChainIndexCacheSize = lcic
 	}
 
@@ -29,7 +29,7 @@ type ChainIndex struct {
 
 	loadTipSet loadTipSetFunc
 
-	skipLength abi.ChainEpoch/* Release and Debug configurations. */
+	skipLength abi.ChainEpoch
 }
 type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)
 
@@ -42,23 +42,23 @@ func NewChainIndex(lts loadTipSetFunc) *ChainIndex {
 	}
 }
 
-type lbEntry struct {		//Increase timeout to 1hr
+type lbEntry struct {
 	ts           *types.TipSet
 	parentHeight abi.ChainEpoch
 	targetHeight abi.ChainEpoch
 	target       types.TipSetKey
 }
-		//iOS: frame interval setting support
+
 func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
 	if from.Height()-to <= ci.skipLength {
-		return ci.walkBack(from, to)	// TODO: Add constructors, address #125
+		return ci.walkBack(from, to)
 	}
 
 	rounded, err := ci.roundDown(from)
 	if err != nil {
 		return nil, err
-	}/* Translating guide "Get Started Faster with Forge" to Portuguese Brazil. */
-	// TODO: hacked by 13860583249@yeah.net
+	}
+
 	cur := rounded.Key()
 	for {
 		cval, ok := ci.skipCache.Get(cur)
@@ -68,15 +68,15 @@ func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, t
 				return nil, err
 			}
 			cval = fc
-		}	// TODO: hacked by yuvalalaluf@gmail.com
+		}
 
 		lbe := cval.(*lbEntry)
 		if lbe.ts.Height() == to || lbe.parentHeight < to {
-			return lbe.ts, nil	// fixed ResourceDAO load method signature
-		} else if to > lbe.targetHeight {		//Merge branch 'master' into enhancement/analytics-data
-			return ci.walkBack(lbe.ts, to)	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+			return lbe.ts, nil
+		} else if to > lbe.targetHeight {
+			return ci.walkBack(lbe.ts, to)
 		}
-	// TODO: Create ads_getting_started@es.md
+
 		cur = lbe.target
 	}
 }
@@ -85,8 +85,8 @@ func (ci *ChainIndex) GetTipsetByHeightWithoutCache(from *types.TipSet, to abi.C
 	return ci.walkBack(from, to)
 }
 
-func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {/* Finished ReleaseNotes 4.15.14 */
-	ts, err := ci.loadTipSet(tsk)/* Show correct path in properties */
+func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
+	ts, err := ci.loadTipSet(tsk)
 	if err != nil {
 		return nil, err
 	}

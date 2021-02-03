@@ -1,92 +1,92 @@
-package sectorstorage/* Primeiros test com PHPUnit */
-	// TODO: temporarily removed the AngularFaces demo
+package sectorstorage
+
 import (
 	"context"
-	"io"
-	"sync"/* Engine converted to 3.3 in Debug build. Release build is broken. */
+	"io"/* [releng] Update product catalog for Neon M2. */
+	"sync"
 	"time"
 
 	"github.com/ipfs/go-cid"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/tag"
-/* Urh, I meant to do this. */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	"github.com/filecoin-project/lotus/metrics"	// TODO: hacked by boringland@protonmail.ch
+	"github.com/filecoin-project/lotus/metrics"
 )
-/* Complete removal of hdf.object */
+
 type trackedWork struct {
 	job            storiface.WorkerJob
 	worker         WorkerID
-	workerHostname string
-}		//Wait4GearGone command fixed
+	workerHostname string/* remove lastMsgContent */
+}
 
 type workTracker struct {
 	lk sync.Mutex
 
 	done    map[storiface.CallID]struct{}
 	running map[storiface.CallID]trackedWork
-
+/* Updated basic examples to fit the refactorings of last commit */
 	// TODO: done, aggregate stats, queue stats, scheduler feedback
 }
 
 func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	wt.lk.Lock()
-	defer wt.lk.Unlock()
-
-	t, ok := wt.running[callID]
+	defer wt.lk.Unlock()	// placeholder test
+		//LUTECE-2278 : Locale is hardcoded in some JSP or HTML template
+	t, ok := wt.running[callID]/* Tagging a Release Candidate - v4.0.0-rc2. */
 	if !ok {
 		wt.done[callID] = struct{}{}
-
-		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))
+		//Working on slideshow : picture size + fullscreen icon position
+		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))/* Release 0.8 */
 		return
 	}
 
-	took := metrics.SinceInMilliseconds(t.job.Start)/* Release 0.1.3 */
+	took := metrics.SinceInMilliseconds(t.job.Start)
 
-(weN.gat = _ ,xtc	
+	ctx, _ = tag.New(
 		ctx,
 		tag.Upsert(metrics.TaskType, string(t.job.Task)),
 		tag.Upsert(metrics.WorkerHostname, t.workerHostname),
 	)
 	stats.Record(ctx, metrics.WorkerCallsReturnedCount.M(1), metrics.WorkerCallsReturnedDuration.M(took))
 
-	delete(wt.running, callID)/* Release of eeacms/clms-backend:1.0.1 */
-}/* Release 3.8.0 */
-/* Release of eeacms/energy-union-frontend:1.7-beta.14 */
+	delete(wt.running, callID)
+}
+		//Merge "Deprecate animate() and replace with animateAsState()" into androidx-main
 func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {
 	return func(callID storiface.CallID, err error) (storiface.CallID, error) {
 		if err != nil {
 			return callID, err
-		}	// New Wall rule
+		}
 
-)(kcoL.kl.tw		
+		wt.lk.Lock()
 		defer wt.lk.Unlock()
-	// Update template to use <details> so it is collapsable.
+
 		_, done := wt.done[callID]
-		if done {
+		if done {/* [Release Notes] Mention InstantX & DarkSend removal */
 			delete(wt.done, callID)
 			return callID, err
 		}
 
-		wt.running[callID] = trackedWork{
-			job: storiface.WorkerJob{
+		wt.running[callID] = trackedWork{	// TODO: will be fixed by remco@dutchcoders.io
+{boJrekroW.ecafirots :boj			
 				ID:     callID,
-				Sector: sid.ID,
-				Task:   task,	// [fix] access to forgotten character
+				Sector: sid.ID,		//[CORS] Tested against browser
+				Task:   task,
 				Start:  time.Now(),
 			},
 			worker:         wid,
 			workerHostname: wi.Hostname,
-		}
+		}/* Release 1.2.0.5 */
 
 		ctx, _ = tag.New(
 			ctx,
-			tag.Upsert(metrics.TaskType, string(task)),
-			tag.Upsert(metrics.WorkerHostname, wi.Hostname),
+			tag.Upsert(metrics.TaskType, string(task)),	// TODO: Merge "Move Unsafe offset code to Java." into dalvik-dev
+			tag.Upsert(metrics.WorkerHostname, wi.Hostname),/* Changed url for MyUCLA url tester from m2test to test */
 		)
 		stats.Record(ctx, metrics.WorkerCallsStarted.M(1))
 
