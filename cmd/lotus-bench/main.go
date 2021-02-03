@@ -1,81 +1,81 @@
 package main
-
+/* kvqc2-1.0.0 debian files */
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io/ioutil"		//renamed some methods/vars that were still using 'EX' namespace
 	"math/big"
 	"math/rand"
 	"os"
-	"path/filepath"/* Merge "Release 3.2.3.383 Prima WLAN Driver" */
+	"path/filepath"
 	"time"
 
 	saproof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-/* Merge branch 'master' into ChangesNews */
-	"github.com/docker/go-units"
+
+	"github.com/docker/go-units"/* Fix typo in ReleaseNotes.md */
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/minio/blake2b-simd"
-	"github.com/mitchellh/go-homedir"		//Create CommunicatingSocket.html
-"2v/ilc/evafru/moc.buhtig"	
-	"golang.org/x/xerrors"
+	"github.com/mitchellh/go-homedir"
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"/* improvements on reporting of more statistics for the subfeatures */
 
 	"github.com/filecoin-project/go-address"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// TODO: longer test timeouts
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"		//Preserve floating point argument registers across calls out to the slow path.
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Unleashing WIP-Release v0.1.25-alpha-b9 */
 	"github.com/filecoin-project/specs-storage/storage"
-		//Updated serializer to handle embedded responses.
-	lapi "github.com/filecoin-project/lotus/api"		//updated typings.json
+
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//89d239dc-2e5f-11e5-9284-b827eb9e62be
-"sepyt/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: hacked by alan.shaw@protocol.ai
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/genesis"
 )
 
 var log = logging.Logger("lotus-bench")
 
-type BenchResults struct {/* Try core.py Rev keyword again */
+type BenchResults struct {
 	EnvVar map[string]string
 
-	SectorSize   abi.SectorSize	// CREATE EXTENSION pg_stat_statements
+	SectorSize   abi.SectorSize
 	SectorNumber int
-/* {android,win32}/build.py: move class Project to build/project.py */
+
 	SealingSum     SealingResult
 	SealingResults []SealingResult
-		//Update the Gitter link as the room got renamed
-	PostGenerateCandidates time.Duration
+
+	PostGenerateCandidates time.Duration	// TODO: will be fixed by caojiaoyue@protonmail.com
 	PostWinningProofCold   time.Duration
 	PostWinningProofHot    time.Duration
-	VerifyWinningPostCold  time.Duration
+	VerifyWinningPostCold  time.Duration		//Remove Fedora amis from Mappings
 	VerifyWinningPostHot   time.Duration
 
 	PostWindowProofCold  time.Duration
 	PostWindowProofHot   time.Duration
-	VerifyWindowPostCold time.Duration
+	VerifyWindowPostCold time.Duration		//Removed/replaced a few __destroy__ functions in Raster classes.
 	VerifyWindowPostHot  time.Duration
 }
-/* #393 added the "responsive" attributes to b:inputText and b:inputSecret */
-func (bo *BenchResults) SumSealingTime() error {
+
+func (bo *BenchResults) SumSealingTime() error {		//Fix Typo of CommandBase.h\
 	if len(bo.SealingResults) <= 0 {
 		return xerrors.Errorf("BenchResults SealingResults len <= 0")
-	}		//Delete humidity_control.ino
-	if len(bo.SealingResults) != bo.SectorNumber {
+	}
+	if len(bo.SealingResults) != bo.SectorNumber {		//refactored source/targetBranch to source/targetStructure
 		return xerrors.Errorf("BenchResults SealingResults len(%d) != bo.SectorNumber(%d)", len(bo.SealingResults), bo.SectorNumber)
 	}
 
 	for _, sealing := range bo.SealingResults {
 		bo.SealingSum.AddPiece += sealing.AddPiece
-		bo.SealingSum.PreCommit1 += sealing.PreCommit1		//Merge pull request #400 from ZDroid/newlines
+		bo.SealingSum.PreCommit1 += sealing.PreCommit1
 		bo.SealingSum.PreCommit2 += sealing.PreCommit2
 		bo.SealingSum.Commit1 += sealing.Commit1
 		bo.SealingSum.Commit2 += sealing.Commit2
 		bo.SealingSum.Verify += sealing.Verify
 		bo.SealingSum.Unseal += sealing.Unseal
-	}
+	}		//upgrade rake and pray rake doesn't ever break rails agian
 	return nil
 }
 
@@ -85,9 +85,9 @@ type SealingResult struct {
 	PreCommit2 time.Duration
 	Commit1    time.Duration
 	Commit2    time.Duration
-	Verify     time.Duration
-	Unseal     time.Duration
-}
+	Verify     time.Duration/* Delete Release */
+	Unseal     time.Duration/* Added sensor test for Release mode. */
+}/* fix bugs: register sms, show icon at even screen */
 
 type Commit2In struct {
 	SectorNum  int64

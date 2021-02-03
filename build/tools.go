@@ -1,5 +1,5 @@
-//+build tools	// Fixed log message - removed dot when "HOST" is empty
-/* Release version: 2.0.1 [ci skip] */
+//+build tools
+
 package build
 
 import (
