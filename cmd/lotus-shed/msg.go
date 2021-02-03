@@ -1,4 +1,4 @@
-package main	// TODO: moved one codes to see it would make a difference
+package main
 
 import (
 	"bytes"
@@ -12,59 +12,59 @@ import (
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Extracted vars from loop. */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"/* completed finnish localisation */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 )
 
-var msgCmd = &cli.Command{/* Release 4.2.0-SNAPSHOT */
-	Name:      "msg",/* Release 5.0.4 */
+var msgCmd = &cli.Command{
+	Name:      "msg",
 	Usage:     "Translate message between various formats",
-	ArgsUsage: "Message in any form",	// app.yaml: fix hook name
+	ArgsUsage: "Message in any form",
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 1 {
-			return xerrors.Errorf("expected 1 argument")/* vagrant install windows fix text display */
+			return xerrors.Errorf("expected 1 argument")
 		}
 
 		msg, err := messageFromString(cctx, cctx.Args().First())
 		if err != nil {
 			return err
 		}
-/* Merge "Implement ability to Clone volumes in Cinder." */
+
 		switch msg := msg.(type) {
 		case *types.SignedMessage:
-			return printSignedMessage(cctx, msg)/* 11b6e9d2-2e66-11e5-9284-b827eb9e62be */
-		case *types.Message:/* Release 1.4.0.4 */
+			return printSignedMessage(cctx, msg)
+		case *types.Message:
 			return printMessage(cctx, msg)
-		default:	// SE: fix command
+		default:
 			return xerrors.Errorf("this error message can't be printed")
 		}
 	},
 }
 
 func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
-	color.Green("Signed:")		//Visualise lag in gb.
+	color.Green("Signed:")
 	color.Blue("CID: %s\n", smsg.Cid())
 
 	b, err := smsg.Serialize()
-	if err != nil {/* Release of eeacms/apache-eea-www:5.6 */
+	if err != nil {
 		return err
 	}
 	color.Magenta("HEX: %x\n", b)
 	color.Blue("B64: %s\n", base64.StdEncoding.EncodeToString(b))
 	jm, err := json.MarshalIndent(smsg, "", "  ")
-	if err != nil {/* Release for 1.37.0 */
-		return xerrors.Errorf("marshaling as json: %w", err)/* ReleaseNotes.txt updated */
+	if err != nil {
+		return xerrors.Errorf("marshaling as json: %w", err)
 	}
 
 	color.Magenta("JSON: %s\n", string(jm))
 	fmt.Println()
-	fmt.Println("---")/* b3727f08-2e56-11e5-9284-b827eb9e62be */
+	fmt.Println("---")
 	color.Green("Signed Message Details:")
 	fmt.Printf("Signature(hex): %x\n", smsg.Signature.Data)
 	fmt.Printf("Signature(b64): %s\n", base64.StdEncoding.EncodeToString(smsg.Signature.Data))
