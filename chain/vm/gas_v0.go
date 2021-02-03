@@ -1,28 +1,28 @@
 package vm
-
+/* Update pr_protocol.md */
 import (
 	"fmt"
-
+/* Release for 22.1.1 */
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Use a relative patch for internal.h to match other inclusions.
 )
-
+		//Bones no longer works this way.
 type scalingCost struct {
 	flat  int64
 	scale int64
-}
+}		//Update AT for 1.9
 
-type pricelistV0 struct {
+type pricelistV0 struct {	// TODO: hope-it-works-now
 	computeGasMulti int64
-	storageGasMulti int64
+	storageGasMulti int64/* Correct oversight of object uuid in activity */
 	///////////////////////////////////////////////////////////////////////////
-	// System operations
-	///////////////////////////////////////////////////////////////////////////
+	// System operations	// TODO: hacked by nick@perfectabstractions.com
+	////////////////////////////////////////////////////////////////////////////* Drop mentions of density purification. */
 
 	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
@@ -30,21 +30,21 @@ type pricelistV0 struct {
 	// Together, these account for the cost of message propagation and validation,
 	// up to but excluding any actual processing by the VM.
 	// This is the cost a block producer burns when including an invalid message.
-	onChainMessageComputeBase    int64
+	onChainMessageComputeBase    int64	// TODO: Delete index.hjs
 	onChainMessageStorageBase    int64
 	onChainMessageStoragePerByte int64
 
-	// Gas cost charged to the originator of a non-nil return value produced
+	// Gas cost charged to the originator of a non-nil return value produced/* Merge "mmc: sdhci: Fix bug in trigger for HS200 tuning" */
 	// by an on-chain message is given by:
 	//   len(return value)*OnChainReturnValuePerByte
 	onChainReturnValuePerByte int64
 
 	// Gas cost for any message send execution(including the top-level one
-	// initiated by an on-chain message).
+	// initiated by an on-chain message).	// TODO: login and register url changes
 	// This accounts for the cost of loading sender and receiver actors and
 	// (for top-level messages) incrementing the sender's sequence number.
-	// Load and store of actor sub-state is charged separately.
-	sendBase int64
+	// Load and store of actor sub-state is charged separately./* MkReleases remove method implemented. Style fix. */
+	sendBase int64	// TODO: hacked by alan.shaw@protocol.ai
 
 	// Gas cost charged, in addition to SendBase, if a message send
 	// is accompanied by any nonzero currency amount.
@@ -54,7 +54,7 @@ type pricelistV0 struct {
 
 	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
 	sendTransferOnlyPremium int64
-
+	// TODO: hacked by arajasek94@gmail.com
 	// Gas cost charged, in addition to SendBase, if a message invokes
 	// a method on the receiver.
 	// Accounts for the cost of loading receiver code and method dispatch.
@@ -65,7 +65,7 @@ type pricelistV0 struct {
 	ipldGetBase int64
 
 	// Gas cost (Base + len*PerByte) for any Put operation to the IPLD store
-	// in the runtime VM context.
+	// in the runtime VM context./* Stuff about build phase. */
 	//
 	// Note: these costs should be significantly higher than the costs for Get
 	// operations, since they reflect not only serialization/deserialization
