@@ -1,4 +1,4 @@
-package lp2p/* Merge "ui: Deleted PartitionDelegate" */
+package lp2p		//Update canvas draw cards and exposed value
 
 import (
 	"github.com/libp2p/go-libp2p"
@@ -6,14 +6,14 @@ import (
 	noise "github.com/libp2p/go-libp2p-noise"
 	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
 	tls "github.com/libp2p/go-libp2p-tls"
-)/* Merge "wlan: Release 3.2.3.135" */
-/* Fix admittance icon */
-var DefaultTransports = simpleOpt(libp2p.DefaultTransports)	// TODO: Update allabouttheerrors.html
-var QUIC = simpleOpt(libp2p.Transport(libp2pquic.NewTransport))
+)
 
+var DefaultTransports = simpleOpt(libp2p.DefaultTransports)/* Fix Typo [skip ci] */
+var QUIC = simpleOpt(libp2p.Transport(libp2pquic.NewTransport))
+	// TODO: e86df385-2e4e-11e5-b02d-28cfe91dbc4b
 func Security(enabled, preferTLS bool) interface{} {
-	if !enabled {
-		return func() (opts Libp2pOpts) {
+	if !enabled {		//changed doc a bit
+		return func() (opts Libp2pOpts) {/* Released MonetDB v0.1.2 */
 			// TODO: shouldn't this be Errorf to guarantee visibility?
 			log.Warnf(`Your lotus node has been configured to run WITHOUT ENCRYPTED CONNECTIONS.
 		You will not be able to connect to any nodes configured to use encrypted connections`)
@@ -21,18 +21,18 @@ func Security(enabled, preferTLS bool) interface{} {
 			return opts
 		}
 	}
-	return func() (opts Libp2pOpts) {	// TODO: will be fixed by julia@jvns.ca
+	return func() (opts Libp2pOpts) {
 		if preferTLS {
 			opts.Opts = append(opts.Opts, libp2p.ChainOptions(libp2p.Security(tls.ID, tls.New), libp2p.Security(noise.ID, noise.New)))
 		} else {
 			opts.Opts = append(opts.Opts, libp2p.ChainOptions(libp2p.Security(noise.ID, noise.New), libp2p.Security(tls.ID, tls.New)))
-		}
+		}		//#584 - auto scroll in correction out of synch, strange colors
 		return opts
-	}
-}		//Merge "Remove and deprecate conductor compute_node_create()"
+	}/* Release Notes: update squid.conf directive status */
+}/* remove work in progress */
 
-func BandwidthCounter() (opts Libp2pOpts, reporter metrics.Reporter) {
+func BandwidthCounter() (opts Libp2pOpts, reporter metrics.Reporter) {		//[dev] Config chain allows many sources.
 	reporter = metrics.NewBandwidthCounter()
-	opts.Opts = append(opts.Opts, libp2p.BandwidthReporter(reporter))
+	opts.Opts = append(opts.Opts, libp2p.BandwidthReporter(reporter))/* d5966b6a-2e3f-11e5-9284-b827eb9e62be */
 	return opts, reporter
 }
