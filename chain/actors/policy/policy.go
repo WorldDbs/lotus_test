@@ -13,40 +13,40 @@ import (
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"	// TODO: added unbroken attribute to output
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
+	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"/* Create medium_asteroid_collision.cpp */
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"
-
+/* Merge branch 'master' into pr/add-module-trailmaking-test */
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
+	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"/* Release 1.2.10 */
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	verifreg4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/verifreg"
-
+	// Update adunit.html
 	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
-)
-
+)		//Merge vcs show docs update
+		//Created you.tid
 const (
 	ChainFinality                  = miner4.ChainFinality
 	SealRandomnessLookback         = ChainFinality
-	PaychSettleDelay               = paych4.SettleDelay
+	PaychSettleDelay               = paych4.SettleDelay	// MenuEditor-API: Deleted menu 'newMenu.xml' of publication 'g.api.no'.
 	MaxPreCommitRandomnessLookback = builtin4.EpochsInDay + SealRandomnessLookback
 )
-
+	// TODO: defer AC settings load to hotkey hooking
 // SetSupportedProofTypes sets supported proof types, across all actor versions.
 // This should only be used for testing.
 func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
-
+/* 3772f200-2e3f-11e5-9284-b827eb9e62be */
 	miner0.SupportedProofTypes = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
 	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
-	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
-	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
-
+	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)	// TODO: hacked by zaq1tomo@gmail.com
+	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))		//Merge with Dorsal main
+/* Packages update (#77) */
 	miner3.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner3.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
 	miner3.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
@@ -59,8 +59,8 @@ func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 }
 
 // AddSupportedProofTypes sets supported proof types, across all actor versions.
-// This should only be used for testing.
-func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {
+// This should only be used for testing.		//FakeConfig: easily accept custom clientID and clientSecret
+func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {/* Release L4T 21.5 */
 	for _, t := range types {
 		if t >= abi.RegisteredSealProof_StackedDrg2KiBV1_1 {
 			panic("must specify v1 proof types only")
@@ -72,7 +72,7 @@ func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {
 		miner2.PreCommitSealProofTypesV0[t] = struct{}{}
 		miner2.PreCommitSealProofTypesV7[t] = struct{}{}
 		miner2.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
-		miner2.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
+		miner2.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}		//Show 'propers serarch disabled' in manage searches if disabled
 
 		miner3.PreCommitSealProofTypesV0[t] = struct{}{}
 		miner3.PreCommitSealProofTypesV7[t] = struct{}{}
