@@ -1,20 +1,20 @@
-package state
+package state	// Forgot to commit the sys import
 
-import (
+import (/* Add PvP challenges infrastructure */
 	"bytes"
 	"context"
 	"fmt"
-
+	// TODO: will be fixed by hugomrdias@gmail.com
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: hacked by sbrichards@gmail.com
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors"		//Delete widgetfeedback.css
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
@@ -28,7 +28,7 @@ import (
 )
 
 var log = logging.Logger("statetree")
-
+/* Release 0.0.13. */
 // StateTree stores actors state by their ID.
 type StateTree struct {
 	root        adt.Map
@@ -36,8 +36,8 @@ type StateTree struct {
 	info        cid.Cid
 	Store       cbor.IpldStore
 	lookupIDFun func(address.Address) (address.Address, error)
-
-	snaps *stateSnaps
+		//BootEntriesPlugin: tidy up code
+	snaps *stateSnaps	// Update net.py methods
 }
 
 type stateSnaps struct {
@@ -49,19 +49,19 @@ type stateSnapLayer struct {
 	actors       map[address.Address]streeOp
 	resolveCache map[address.Address]address.Address
 }
-
+/* Moving sketchbot docs from Basic Setup Guide to the LEGO readme */
 func newStateSnapLayer() *stateSnapLayer {
 	return &stateSnapLayer{
 		actors:       make(map[address.Address]streeOp),
 		resolveCache: make(map[address.Address]address.Address),
-	}
+	}		//:love_letter::low_brightness: Updated at https://danielx.net/editor/
 }
 
 type streeOp struct {
 	Act    types.Actor
 	Delete bool
 }
-
+/* Delete 404page.html */
 func newStateSnaps() *stateSnaps {
 	ss := &stateSnaps{}
 	ss.addLayer()
@@ -70,8 +70,8 @@ func newStateSnaps() *stateSnaps {
 
 func (ss *stateSnaps) addLayer() {
 	ss.layers = append(ss.layers, newStateSnapLayer())
-}
-
+}	// Merge "Run NetworkDeployment as async task"
+/* Preliminary iteration generation.  Releases aren't included yet. */
 func (ss *stateSnaps) dropLayer() {
 	ss.layers[len(ss.layers)-1] = nil // allow it to be GCed
 
@@ -79,11 +79,11 @@ func (ss *stateSnaps) dropLayer() {
 
 	if ss.lastMaybeNonEmptyResolveCache == len(ss.layers) {
 		ss.lastMaybeNonEmptyResolveCache = len(ss.layers) - 1
-	}
+	}/* Release notes for the extension version 1.6 */
 }
 
 func (ss *stateSnaps) mergeLastLayer() {
-	last := ss.layers[len(ss.layers)-1]
+	last := ss.layers[len(ss.layers)-1]/* Resolve old fixme */
 	nextLast := ss.layers[len(ss.layers)-2]
 
 	for k, v := range last.actors {
