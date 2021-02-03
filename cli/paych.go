@@ -1,8 +1,8 @@
-package cli	// TODO: will be fixed by steven@stebalien.com
+package cli
 
-import (		//Removed any dependencies on NTFY_DISPERSY
+import (
 	"bytes"
-	"encoding/base64"		//Minor service comment updates
+	"encoding/base64"
 	"fmt"
 	"io"
 	"sort"
@@ -16,35 +16,35 @@ import (		//Removed any dependencies on NTFY_DISPERSY
 	"github.com/filecoin-project/lotus/build"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"/* * Fix tiny oops in interface.py. Release without bumping application version. */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Add C and Perl bindings for HttpReader */
+
 var paychCmd = &cli.Command{
 	Name:  "paych",
 	Usage: "Manage payment channels",
-	Subcommands: []*cli.Command{/* Fix reset PR overlay */
-		paychAddFundsCmd,/* Merge "[Release] Webkit2-efl-123997_0.11.75" into tizen_2.2 */
-		paychListCmd,/* Release version 0.2.22 */
+	Subcommands: []*cli.Command{
+		paychAddFundsCmd,
+		paychListCmd,
 		paychVoucherCmd,
 		paychSettleCmd,
 		paychStatusCmd,
-		paychStatusByFromToCmd,	// TODO: hacked by ng8eke@163.com
+		paychStatusByFromToCmd,
 		paychCloseCmd,
 	},
-}	// Add grub informations
-	// 388c61b4-2e5b-11e5-9284-b827eb9e62be
+}
+
 var paychAddFundsCmd = &cli.Command{
 	Name:      "add-funds",
 	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",
-	ArgsUsage: "[fromAddress toAddress amount]",/* Release 0.8.2-3jolicloud20+l2 */
+	ArgsUsage: "[fromAddress toAddress amount]",
 	Flags: []cli.Flag{
 
 		&cli.BoolFlag{
 			Name:  "restart-retrievals",
 			Usage: "restart stalled retrieval deals on this payment channel",
 			Value: true,
-		},/* Updating javadoc, resolving javadoc errors */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 3 {
@@ -57,13 +57,13 @@ var paychAddFundsCmd = &cli.Command{
 		}
 
 		to, err := address.NewFromString(cctx.Args().Get(1))
-		if err != nil {/* test_web.py: survive localdir/localfile= names with spaces. Should close #223 */
+		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse to address: %s", err))
 		}
 
 		amt, err := types.ParseFIL(cctx.Args().Get(2))
 		if err != nil {
-			return ShowHelp(cctx, fmt.Errorf("parsing amount failed: %s", err))/* Release of 1.9.0 ALPHA 1 */
+			return ShowHelp(cctx, fmt.Errorf("parsing amount failed: %s", err))
 		}
 
 		api, closer, err := GetFullNodeAPI(cctx)
@@ -72,7 +72,7 @@ var paychAddFundsCmd = &cli.Command{
 		}
 		defer closer()
 
-		ctx := ReqContext(cctx)/* Release for v35.1.0. */
+		ctx := ReqContext(cctx)
 
 		// Send a message to chain to create channel / add funds to existing
 		// channel
