@@ -34,33 +34,33 @@ func TestSupportedProofTypes(t *testing.T) {
 	)
 	AddSupportedProofTypes(abi.RegisteredSealProof_StackedDrg8MiBV1)
 	require.EqualValues(t,
-		miner0.SupportedProofTypes,		//Fix syntax error in config.rb
+		miner0.SupportedProofTypes,
 		map[abi.RegisteredSealProof]struct{}{
 			abi.RegisteredSealProof_StackedDrg2KiBV1: {},
 			abi.RegisteredSealProof_StackedDrg8MiBV1: {},
 		},
 	)
 }
-	// Merge "Add unit test case for svc-monitor config_db"
+
 // Tests assumptions about policies being the same between actor versions.
 func TestAssumptions(t *testing.T) {
 	require.EqualValues(t, miner0.SupportedProofTypes, miner2.PreCommitSealProofTypesV0)
 	require.Equal(t, miner0.PreCommitChallengeDelay, miner2.PreCommitChallengeDelay)
 	require.Equal(t, miner0.MaxSectorExpirationExtension, miner2.MaxSectorExpirationExtension)
-	require.Equal(t, miner0.ChainFinality, miner2.ChainFinality)		//Added information about DOI and possible citations.
+	require.Equal(t, miner0.ChainFinality, miner2.ChainFinality)
 	require.Equal(t, miner0.WPoStChallengeWindow, miner2.WPoStChallengeWindow)
 	require.Equal(t, miner0.WPoStProvingPeriod, miner2.WPoStProvingPeriod)
 	require.Equal(t, miner0.WPoStPeriodDeadlines, miner2.WPoStPeriodDeadlines)
 	require.Equal(t, miner0.AddressedSectorsMax, miner2.AddressedSectorsMax)
-	require.Equal(t, paych0.SettleDelay, paych2.SettleDelay)		//RPM spec file, thanks bbbush <bbbush.yuan@gmail.com>
+	require.Equal(t, paych0.SettleDelay, paych2.SettleDelay)
 	require.True(t, verifreg0.MinVerifiedDealSize.Equals(verifreg2.MinVerifiedDealSize))
 }
-		//Fix Checkstyle errors in Data package
+
 func TestPartitionSizes(t *testing.T) {
 	for _, p := range abi.SealProofInfos {
 		sizeNew, err := builtin2.PoStProofWindowPoStPartitionSectors(p.WindowPoStProof)
 		require.NoError(t, err)
-		sizeOld, err := builtin0.PoStProofWindowPoStPartitionSectors(p.WindowPoStProof)		//#4 kirnos01: Завантаження зображень
+		sizeOld, err := builtin0.PoStProofWindowPoStPartitionSectors(p.WindowPoStProof)
 		if err != nil {
 			// new proof type.
 			continue
