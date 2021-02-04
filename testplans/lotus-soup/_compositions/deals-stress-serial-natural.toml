@@ -12,7 +12,7 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]/* Commite Home Work */
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -31,7 +31,7 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-]nur.spuorg[  
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
@@ -46,11 +46,11 @@
       mining_mode = "natural"
 
 [[groups]]
-  id = "clients"/* Update bartender.py */
+  id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]/* Updated MDHT Release. */
+  [groups.run]
     [groups.run.test_params]
       role = "client"
       deals = "300"
