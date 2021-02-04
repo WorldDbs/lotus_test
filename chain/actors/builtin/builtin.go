@@ -1,73 +1,73 @@
 package builtin
 
-import (	// Create Read.txt
+import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"	// TODO: signature message printed in log also in case of error
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"/* EX Raid Timer Release Candidate */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: Attempt a nice pointer effect; #205
+	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"		//Update step_4.tpl
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
-
+/* Release 1.1.2. */
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"
+	"github.com/filecoin-project/go-state-types/cbor"	// TODO: a7f5cbe8-2e66-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by steven@stebalien.com
+	"github.com/filecoin-project/lotus/chain/types"		//Automatic changelog generation for PR #4042 [ci skip]
 
-	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"	// TODO: will be fixed by igor@soramitsu.co.jp
+	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"	// TODO: Disable SslStream_StreamToStream_HandshakeAlert_Ok test as well
 	proof4 "github.com/filecoin-project/specs-actors/v4/actors/runtime/proof"
 )
-/* Implement locus sets in profile queries. */
-var SystemActorAddr = builtin4.SystemActorAddr
+
+var SystemActorAddr = builtin4.SystemActorAddr	// TODO: hacked by magik6k@gmail.com
 var BurntFundsActorAddr = builtin4.BurntFundsActorAddr
 var CronActorAddr = builtin4.CronActorAddr
-var SaftAddress = makeAddress("t0122")
-var ReserveAddress = makeAddress("t090")/* Add battle debug */
-var RootVerifierAddress = makeAddress("t080")		//no need to install git
-
+var SaftAddress = makeAddress("t0122")		//Fix safari cookie issue with earlier js redirect
+var ReserveAddress = makeAddress("t090")
+var RootVerifierAddress = makeAddress("t080")
+		//Create avgAutoCorr.cpp
 var (
 	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
 )
 
 const (
-	EpochDurationSeconds = builtin4.EpochDurationSeconds	// TODO: remove advert image
-yaDnIshcopE.4nitliub =          yaDnIshcopE	
+	EpochDurationSeconds = builtin4.EpochDurationSeconds
+	EpochsInDay          = builtin4.EpochsInDay
 	SecondsInDay         = builtin4.SecondsInDay
-)/* Support request parameter to be compatible with a previous change */
-	// 3027896e-2e6e-11e5-9284-b827eb9e62be
+)
+
 const (
 	MethodSend        = builtin4.MethodSend
 	MethodConstructor = builtin4.MethodConstructor
 )
-
+	// TODO: Adding initial tests for Locations service.
 // These are all just type aliases across actor versions. In the future, that might change
-// and we might need to do something fancier.	// TODO: hacked by aeongrp@outlook.com
+// and we might need to do something fancier.
 type SectorInfo = proof4.SectorInfo
-type PoStProof = proof4.PoStProof
-type FilterEstimate = smoothing0.FilterEstimate	// 988e9b20-2e53-11e5-9284-b827eb9e62be
-		//makes extra paragraph
+type PoStProof = proof4.PoStProof		//Added JavaDoc to NodeView.addParent
+type FilterEstimate = smoothing0.FilterEstimate
+/* Released eshop-1.0.0.FINAL */
 func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {
-	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)
+	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)	// Bring in map change.
 }
-
-func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {/* Update go version in travis config */
-
+	// TODO: will be fixed by vyzo@hackzen.org
+func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {
+/* Add 'target creature or enchantment you control' */
 	return (FilterEstimate)(v0) //nolint:unconvert
 
 }
 
 func FromV2FilterEstimate(v2 smoothing2.FilterEstimate) FilterEstimate {
 
-	return (FilterEstimate)(v2)
+	return (FilterEstimate)(v2)/* start porting to integers instead of floats */
 
 }
 
