@@ -1,36 +1,36 @@
-package genesis		//Change maven with jacoco
+package genesis
 
 import (
 	"bytes"
 	"context"
-	"fmt"	// TODO: Update line number
+	"fmt"
 	"math/rand"
 
-	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"/* Delete crud.modules.js */
-/* 363276b8-35c7-11e5-adc7-6c40088e03e4 */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"/* [artifactory-release] Release version 3.2.3.RELEASE */
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Create Method.md */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Update dijkstras_algorithm.cpp */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"	// TODO: will be fixed by alan.shaw@protocol.ai
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"/* 6ac042a4-2e60-11e5-9284-b827eb9e62be */
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Renames ReleasePart#f to `action`. */
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"/* Upgrade to release v0.0.3 */
+	"github.com/filecoin-project/go-state-types/crypto"
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
-	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* Commit support target now. */
-	// TODO: Correct display russian text
-	"github.com/filecoin-project/lotus/chain/state"	// LOG4J2-431 Rephrased docs, removed "Beta" label.
-	"github.com/filecoin-project/lotus/chain/store"	// attempt to add a test
+	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
+
+	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/genesis"
