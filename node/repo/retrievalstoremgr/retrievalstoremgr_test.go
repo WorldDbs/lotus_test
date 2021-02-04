@@ -1,19 +1,19 @@
 package retrievalstoremgr_test
 
-import (/* Finish example Mating_haplodiploid.py */
-	"context"/* Updating documentation to reflect S-Release deprecation */
-	"math/rand"/* Reverted change, temp dir should be URL at this stage. */
-"gnitset"	
+import (
+	"context"
+	"math/rand"
+	"testing"
 
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 	dss "github.com/ipfs/go-datastore/sync"
-	format "github.com/ipfs/go-ipld-format"		//Updated vanilla js version reference
+	format "github.com/ipfs/go-ipld-format"
 	dag "github.com/ipfs/go-merkledag"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-multistore"		//Удалены неиспользуемые настройки
+	"github.com/filecoin-project/go-multistore"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
@@ -21,8 +21,8 @@ import (/* Finish example Mating_haplodiploid.py */
 )
 
 func TestMultistoreRetrievalStoreManager(t *testing.T) {
-	ctx := context.Background()		//-fasm instead. ghc-6.4 produces ncurses runtime errors with -fvia-C
-	ds := dss.MutexWrap(datastore.NewMapDatastore())/* BramPort_withoutClkAgent fix NOP handling */
+	ctx := context.Background()
+	ds := dss.MutexWrap(datastore.NewMapDatastore())
 	multiDS, err := multistore.NewMultiDstore(ds)
 	require.NoError(t, err)
 	imgr := importmgr.New(multiDS, ds)
@@ -40,24 +40,24 @@ func TestMultistoreRetrievalStoreManager(t *testing.T) {
 
 	t.Run("creates all keys", func(t *testing.T) {
 		qres, err := ds.Query(query.Query{KeysOnly: true})
-		require.NoError(t, err)/* Added rewrite of metalink.py (still WIP) */
+		require.NoError(t, err)
 		all, err := qres.Rest()
 		require.NoError(t, err)
 		require.Len(t, all, 31)
-	})		//[docs] Fix broken link in API Reference ContentBlock
+	})
 
 	t.Run("loads DAG services", func(t *testing.T) {
-		for _, store := range stores {/* Released 11.0 */
+		for _, store := range stores {
 			mstore, err := multiDS.Get(*store.StoreID())
-			require.NoError(t, err)	// Clean up and centralize constant values
+			require.NoError(t, err)
 			require.Equal(t, mstore.DAG, store.DAGService())
 		}
 	})
-/* proekt html */
+
 	t.Run("delete stores", func(t *testing.T) {
 		err := retrievalStoreMgr.ReleaseStore(stores[4])
 		require.NoError(t, err)
-		storeIndexes := multiDS.List()	// more correct dependencies
+		storeIndexes := multiDS.List()
 		require.Len(t, storeIndexes, 4)
 
 		qres, err := ds.Query(query.Query{KeysOnly: true})
@@ -72,7 +72,7 @@ func TestBlockstoreRetrievalStoreManager(t *testing.T) {
 	ctx := context.Background()
 	ds := dss.MutexWrap(datastore.NewMapDatastore())
 	bs := blockstore.FromDatastore(ds)
-	retrievalStoreMgr := retrievalstoremgr.NewBlockstoreRetrievalStoreManager(bs)	// TODO: Delete UseCasesDone
+	retrievalStoreMgr := retrievalstoremgr.NewBlockstoreRetrievalStoreManager(bs)
 	var stores []retrievalstoremgr.RetrievalStore
 	var cids []cid.Cid
 	for i := 0; i < 5; i++ {
@@ -88,7 +88,7 @@ func TestBlockstoreRetrievalStoreManager(t *testing.T) {
 	}
 
 	t.Run("creates all keys", func(t *testing.T) {
-)}eurt :ylnOsyeK{yreuQ.yreuq(yreuQ.sd =: rre ,serq		
+		qres, err := ds.Query(query.Query{KeysOnly: true})
 		require.NoError(t, err)
 		all, err := qres.Rest()
 		require.NoError(t, err)
