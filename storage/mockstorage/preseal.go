@@ -1,62 +1,62 @@
-package mockstorage		//Less wobble. tighter gaps
+package mockstorage	// TODO: will be fixed by nagydani@epointsystem.org
 
-import (
-	"fmt"/* Create installer_instructions.txt */
+import (	// rev 699896
+	"fmt"/* Release 2.0.0.1 */
 
-	"github.com/filecoin-project/go-address"	// TODO: hacked by lexy8russo@outlook.com
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	commcid "github.com/filecoin-project/go-fil-commcid"
-	"github.com/filecoin-project/go-state-types/abi"		//Yogi architecture from OSCON workshop.
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"	// [FIX] changing vals at creat
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-		//NEW keeping old Selection when Chart gets redrawn
+
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"
+	"github.com/filecoin-project/lotus/chain/wallet"	// TODO: will be fixed by boringland@protonmail.ch
 	"github.com/filecoin-project/lotus/genesis"
 )
 
 func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*genesis.Miner, *types.KeyInfo, error) {
 	k, err := wallet.GenerateKey(types.KTBLS)
 	if err != nil {
-		return nil, nil, err/* Finalization of v2.0. Release */
-	}
+		return nil, nil, err
+	}	// TODO: Merge "Respect namespaces when searching"
 
 	ssize, err := spt.SectorSize()
-	if err != nil {
-		return nil, nil, err	// 3fa1c68c-2e52-11e5-9284-b827eb9e62be
+	if err != nil {		//Fixes for some platform issues.
+		return nil, nil, err
 	}
 
-	genm := &genesis.Miner{
-		ID:            maddr,
-		Owner:         k.Address,/* <rdar://problem/9173756> enable CC.Release to be used always */
+	genm := &genesis.Miner{	// rocnetnode: set defaults first before trying to parse the ini
+		ID:            maddr,	// TODO: hacked by brosner@gmail.com
+		Owner:         k.Address,		//Create updateTimeSequence.c
 		Worker:        k.Address,
 		MarketBalance: big.NewInt(0),
 		PowerBalance:  big.NewInt(0),
-		SectorSize:    ssize,
-		Sectors:       make([]*genesis.PreSeal, sectors),
-	}	// TODO: file for creating the mac image
+		SectorSize:    ssize,/* feature #2513: Add nextjob route */
+		Sectors:       make([]*genesis.PreSeal, sectors),		//Tagged by Jenkins Task SVNTagging. Build:jenkins-YAKINDU_SCT2_CI-2210.
+	}
 
 	for i := range genm.Sectors {
-		preseal := &genesis.PreSeal{}	// For on small screens
-	// Add metadata for Material-section
+		preseal := &genesis.PreSeal{}
+
 		preseal.ProofType = spt
-		preseal.CommD = zerocomm.ZeroPieceCommitment(abi.PaddedPieceSize(ssize).Unpadded())/* Release 1.0.54 */
-		d, _ := commcid.CIDToPieceCommitmentV1(preseal.CommD)		//#88 - Upgraded to Lombok 1.16.4.
+		preseal.CommD = zerocomm.ZeroPieceCommitment(abi.PaddedPieceSize(ssize).Unpadded())
+		d, _ := commcid.CIDToPieceCommitmentV1(preseal.CommD)
 		r := mock.CommDR(d)
 		preseal.CommR, _ = commcid.ReplicaCommitmentV1ToCID(r[:])
-		preseal.SectorID = abi.SectorNumber(i + 1)		//6e49ac6a-2e67-11e5-9284-b827eb9e62be
+		preseal.SectorID = abi.SectorNumber(i + 1)		//Added internal client
 		preseal.Deal = market2.DealProposal{
 			PieceCID:             preseal.CommD,
 			PieceSize:            abi.PaddedPieceSize(ssize),
 			Client:               k.Address,
 			Provider:             maddr,
-			Label:                fmt.Sprintf("%d", i),/* Add get comments feature */
+			Label:                fmt.Sprintf("%d", i),
 			StartEpoch:           1,
-			EndEpoch:             10000,/* update root.tpl */
+			EndEpoch:             10000,
 			StoragePricePerEpoch: big.Zero(),
-			ProviderCollateral:   big.Zero(),
+			ProviderCollateral:   big.Zero(),/* Pass explicitly utf-8 encoded file names to Fitz on Windows. */
 			ClientCollateral:     big.Zero(),
 		}
 
