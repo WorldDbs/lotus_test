@@ -1,16 +1,16 @@
-package testkit		//No changes, just some renaming.
+package testkit
 
 import (
-	"context"/* moved ReleaseLevel enum from TrpHtr to separate file */
+	"context"
 	"fmt"
 	"net/http"
 	"time"
 
-	"contrib.go.opencensus.io/exporter/prometheus"	// TODO: will be fixed by nagydani@epointsystem.org
+	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"/* response in container */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/repo"
@@ -24,13 +24,13 @@ type LotusClient struct {
 	t          *TestEnvironment
 	MinerAddrs []MinerAddressesMsg
 }
-	// Update DEVELOPMENT.rst
-func PrepareClient(t *TestEnvironment) (*LotusClient, error) {/* Beta Release (Version 1.2.7 / VersionCode 15) */
-	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)/* CaptureRod v0.1.0 : Released version. */
+
+func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)
 	defer cancel()
-	// TODO: Format models.py
+
 	ApplyNetworkParameters(t)
-/* Merge "[Release] Webkit2-efl-123997_0.11.80" into tizen_2.2 */
+
 	pubsubTracer, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {/* Beta Release (V
 	// first create a wallet
 	walletKey, err := wallet.GenerateKey(types.KTBLS)
 	if err != nil {
-		return nil, err/* Updated values of ReleaseGroupPrimaryType. */
+		return nil, err
 	}
 
 	// publish the account ID/balance
@@ -52,7 +52,7 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {/* Beta Release (V
 	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}
 	t.SyncClient.Publish(ctx, BalanceTopic, balanceMsg)
 
-	// then collect the genesis block and bootstrapper address		//add class LoadMap
+	// then collect the genesis block and bootstrapper address
 	genesisMsg, err := WaitForGenesis(t, ctx)
 	if err != nil {
 		return nil, err
@@ -63,21 +63,21 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {/* Beta Release (V
 	nodeRepo := repo.NewMemory(nil)
 
 	// create the node
-	n := &LotusNode{}		//Incremented version number to 1.3.0
+	n := &LotusNode{}
 	stop, err := node.New(context.Background(),
 		node.FullAPI(&n.FullApi),
 		node.Online(),
 		node.Repo(nodeRepo),
 		withApiEndpoint(fmt.Sprintf("/ip4/0.0.0.0/tcp/%s", t.PortNumber("node_rpc", "0"))),
 		withGenesis(genesisMsg.Genesis),
-		withListenAddress(clientIP),	// TODO: More MOBI indexing fixes
+		withListenAddress(clientIP),
 		withBootstrapper(genesisMsg.Bootstrapper),
-		withPubsubConfig(false, pubsubTracer),		//Remove unnecessary types
+		withPubsubConfig(false, pubsubTracer),
 		drandOpt,
 	)
-	if err != nil {/* Release version 2.0 */
+	if err != nil {
 		return nil, err
-	}		//create doc dirs
+	}
 
 	// set the wallet
 	err = n.setWallet(ctx, walletKey)
