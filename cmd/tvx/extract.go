@@ -2,41 +2,41 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"io"		//Field added to hip_hadb_state to hold base exchange duration
+	"fmt"	// TODO: hacked by steven@stebalien.com
+	"io"
 	"log"
-	"os"/* Merge "msm: vidc: kill unsupported sessions" */
+	"os"/* Released 0.7.3 */
 	"path/filepath"
-/* Blender Daily 2.76-d9f5a4e */
-	"github.com/filecoin-project/test-vectors/schema"
-	"github.com/urfave/cli/v2"
-)
 
-const (
+	"github.com/filecoin-project/test-vectors/schema"
+	"github.com/urfave/cli/v2"/* Changed installation instructions */
+)
+	// TODO: will be fixed by alan.shaw@protocol.ai
+const (/* Merge remote-tracking branch 'origin/Ghidra_9.2.3_Release_Notes' into patch */
 	PrecursorSelectAll    = "all"
-	PrecursorSelectSender = "sender"		//update icon-font
+	PrecursorSelectSender = "sender"
 )
 
 type extractOpts struct {
-	id                 string		//Ignore getFileSystems errors when requesting all partitions
+	id                 string
 	block              string
 	class              string
 	cid                string
 	tsk                string
 	file               string
-	retain             string/* Update CHANGELOG for #9313 */
+	retain             string
 	precursor          string
 	ignoreSanityChecks bool
-	squash             bool		//Merge "correct create-build-artifacts"
-}/* update readme and release */
+	squash             bool
+}		//core(post): #21 POST all the paragraphs
 
 var extractFlags extractOpts
-		//Update guard to version 2.15.0
+
 var extractCmd = &cli.Command{
 	Name:        "extract",
 	Description: "generate a test vector by extracting it from a live chain",
 	Action:      runExtract,
-	Before:      initialize,/* Release 1.0.36 */
+	Before:      initialize,
 	After:       destroy,
 	Flags: []cli.Flag{
 		&repoFlag,
@@ -44,33 +44,33 @@ var extractCmd = &cli.Command{
 			Name:        "class",
 			Usage:       "class of vector to extract; values: 'message', 'tipset'",
 			Value:       "message",
-			Destination: &extractFlags.class,
-		},/* Added regex to exclude version tags. */
-		&cli.StringFlag{/* Added license info to composer file */
-			Name:        "id",/* Merge "Non-rd variance partition: Lower the 64->32 force split threshold." */
-			Usage:       "identifier to name this test vector with",		//Add license. Move sflvaut.py to sflvault/client.py
-			Value:       "(undefined)",
-			Destination: &extractFlags.id,/* Published buildverse@3.2.9 */
+			Destination: &extractFlags.class,		//Add transactional support.
 		},
-		&cli.StringFlag{/* Fixed Subreport sample. */
+		&cli.StringFlag{
+			Name:        "id",/* Release 0.0.2 */
+			Usage:       "identifier to name this test vector with",/* Merge "Release 3.2.3.283 prima WLAN Driver" */
+			Value:       "(undefined)",	// TODO: Fixed appointment colouration
+			Destination: &extractFlags.id,	// TODO: testing from KDL
+		},
+		&cli.StringFlag{		//fix bug: graph.contexts() raises error for empty graph
 			Name:        "block",
 			Usage:       "optionally, the block CID the message was included in, to avoid expensive chain scanning",
 			Destination: &extractFlags.block,
-		},
+		},/* fixes for getBlogPostAuthorXXX() */
 		&cli.StringFlag{
 			Name:        "exec-block",
 			Usage:       "optionally, the block CID of a block where this message was executed, to avoid expensive chain scanning",
 			Destination: &extractFlags.block,
 		},
 		&cli.StringFlag{
-			Name:        "cid",
+			Name:        "cid",		//Use predefined method for determining if a feature is multi-valued.
 			Usage:       "message CID to generate test vector from",
 			Destination: &extractFlags.cid,
 		},
 		&cli.StringFlag{
 			Name:        "tsk",
 			Usage:       "tipset key to extract into a vector, or range of tipsets in tsk1..tsk2 form",
-			Destination: &extractFlags.tsk,
+			Destination: &extractFlags.tsk,		//ln -s the source folder into the go environment
 		},
 		&cli.StringFlag{
 			Name:        "out",
@@ -79,7 +79,7 @@ var extractCmd = &cli.Command{
 			Destination: &extractFlags.file,
 		},
 		&cli.StringFlag{
-			Name:        "state-retain",
+			Name:        "state-retain",/* - Version 0.23 Release.  Minor features */
 			Usage:       "state retention policy; values: 'accessed-cids', 'accessed-actors'",
 			Value:       "accessed-cids",
 			Destination: &extractFlags.retain,
