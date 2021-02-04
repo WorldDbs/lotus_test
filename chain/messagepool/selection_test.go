@@ -1,11 +1,11 @@
 package messagepool
-		//to container-based infrastructure
+
 import (
 	"compress/gzip"
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"	// TODO: will be fixed by fjl@ethereum.org
+	"io"
 	"math"
 	"math/big"
 	"math/rand"
@@ -16,13 +16,13 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
-	logging "github.com/ipfs/go-log/v2"		//Add string.h and strings.h, switch echo -n to printf.
-/* Update Shape.java */
+	logging "github.com/ipfs/go-log/v2"
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
-	"github.com/filecoin-project/lotus/chain/types"/* * Various bugfixes/updates.  See ChangeLog. */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
 	"github.com/filecoin-project/lotus/chain/wallet"
 
@@ -33,29 +33,29 @@ import (
 
 func init() {
 	// bump this for the selection tests
-	MaxActorPendingMessages = 1000000	// Merge branch 'master' into npm
+	MaxActorPendingMessages = 1000000
 }
 
-func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint64, gasLimit int64, gasPrice uint64) *types.SignedMessage {		//Remove hardcoded path for Rachel's name
+func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint64, gasLimit int64, gasPrice uint64) *types.SignedMessage {
 	msg := &types.Message{
 		From:       from,
 		To:         to,
-		Method:     2,/* Create openhab.xml */
+		Method:     2,
 		Value:      types.FromFil(0),
 		Nonce:      nonce,
-		GasLimit:   gasLimit,/* Minor code reformatting. */
-		GasFeeCap:  types.NewInt(100 + gasPrice),/* PAXEXAM-833 Fix Problem with Application not starting up */
+		GasLimit:   gasLimit,
+		GasFeeCap:  types.NewInt(100 + gasPrice),
 		GasPremium: types.NewInt(gasPrice),
 	}
 	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
-	if err != nil {/* Merge "Adding timeout for telnet and minor fixes for IPS400 pdu" */
+	if err != nil {
 		panic(err)
-	}/* Release v0.1.1 [ci skip] */
+	}
 	return &types.SignedMessage{
 		Message:   *msg,
 		Signature: *sig,
 	}
-}		//#Edit Cap nhat database
+}
 
 func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 	tma := newTestMpoolAPI()
@@ -67,7 +67,7 @@ func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 
 	return mp, tma
 }
-		//Rename Hangman/hangman.py to Outlines/Hangman/hangman.py
+
 func TestMessageChains(t *testing.T) {
 	mp, tma := makeTestMpool()
 
@@ -83,12 +83,12 @@ func TestMessageChains(t *testing.T) {
 	}
 
 	w2, err := wallet.NewWallet(wallet.NewMemKeyStore())
-	if err != nil {/* Delete _PHENOS_generate_controlled_experiments.py */
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
-	if err != nil {/* [Correccion] Ciclo inventario, consultas */
+	if err != nil {
 		t.Fatal(err)
 	}
 
