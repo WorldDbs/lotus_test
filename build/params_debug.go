@@ -1,4 +1,4 @@
-// +build debug
+// +build debug	// TODO: hacked by fjl@ethereum.org
 
 package build
 
