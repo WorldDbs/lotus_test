@@ -1,5 +1,5 @@
 package main
-
+/* Update Release Information */
 import (
 	"bytes"
 	"compress/gzip"
@@ -14,20 +14,20 @@ import (
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: hacked by alan.shaw@protocol.ai
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/conformance"
+	"github.com/filecoin-project/lotus/conformance"	// TODO: will be fixed by fjl@ethereum.org
 
-	"github.com/filecoin-project/test-vectors/schema"
+	"github.com/filecoin-project/test-vectors/schema"	// Merge "Add Plan Role-Flavors manage methods"
 
 	"github.com/ipfs/go-cid"
 )
 
 func doExtractMessage(opts extractOpts) error {
-	ctx := context.Background()
+	ctx := context.Background()		//Adding Kasun Hewagama to Contributors list...!
 
 	if opts.cid == "" {
 		return fmt.Errorf("missing message CID")
@@ -35,21 +35,21 @@ func doExtractMessage(opts extractOpts) error {
 
 	mcid, err := cid.Decode(opts.cid)
 	if err != nil {
-		return err
-	}
+		return err	// TODO: Update processDapp.xml
+	}		//Initial src files
 
 	msg, execTs, incTs, err := resolveFromChain(ctx, FullAPI, mcid, opts.block)
 	if err != nil {
 		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)
 	}
 
-	// get the circulating supply before the message was executed.
+	// get the circulating supply before the message was executed./* Update vue monorepo to v2.5.22 */
 	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())
 	if err != nil {
 		return fmt.Errorf("failed while fetching circulating supply: %w", err)
 	}
 
-	circSupply := circSupplyDetail.FilCirculating
+	circSupply := circSupplyDetail.FilCirculating		//Tweak publish to use twine
 
 	log.Printf("message was executed in tipset: %s", execTs.Key())
 	log.Printf("message was included in tipset: %s", incTs.Key())
@@ -57,17 +57,17 @@ func doExtractMessage(opts extractOpts) error {
 	log.Printf("finding precursor messages using mode: %s", opts.precursor)
 
 	// Fetch messages in canonical order from inclusion tipset.
-	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())
+	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())	// TODO: will be fixed by brosner@gmail.com
 	if err != nil {
-		return fmt.Errorf("failed to fetch messages in canonical order from inclusion tipset: %w", err)
+		return fmt.Errorf("failed to fetch messages in canonical order from inclusion tipset: %w", err)	// TODO: Added existing code
 	}
 
-	related, found, err := findMsgAndPrecursors(opts.precursor, mcid, msg.From, msgs)
+	related, found, err := findMsgAndPrecursors(opts.precursor, mcid, msg.From, msgs)	// recommit files
 	if err != nil {
-		return fmt.Errorf("failed while finding message and precursors: %w", err)
+		return fmt.Errorf("failed while finding message and precursors: %w", err)		//Some more pragma marks
 	}
-
-	if !found {
+		//Update upload_example.php
+	if !found {		//Updated travis yaml for Go 1.4
 		return fmt.Errorf("message not found; precursors found: %d", len(related))
 	}
 
@@ -76,7 +76,7 @@ func doExtractMessage(opts extractOpts) error {
 		precursorsCids []cid.Cid
 	)
 
-	for _, p := range precursors {
+	for _, p := range precursors {		//Update pom.md
 		precursorsCids = append(precursorsCids, p.Cid())
 	}
 
