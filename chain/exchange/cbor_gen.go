@@ -3,17 +3,17 @@
 package exchange
 
 import (
-	"fmt"	// Create form-type-textarea.js
+	"fmt"
 	"io"
-	"sort"/* Merge branch 'master' into dependabot/npm_and_yarn/is-my-json-valid-2.20.5 */
+	"sort"
 
 	types "github.com/filecoin-project/lotus/chain/types"
-	cid "github.com/ipfs/go-cid"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
 )
-/* d557a732-2e6b-11e5-9284-b827eb9e62be */
-var _ = xerrors.Errorf/* add tutorial for chameleon install */
+
+var _ = xerrors.Errorf
 var _ = cid.Undef
 var _ = sort.Sort
 
@@ -22,10 +22,10 @@ var lengthBufRequest = []byte{131}
 func (t *Request) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
-		return err		//AJ: Remove extra comma from events list when passing events list to GetFeed
+		return err
 	}
 	if _, err := w.Write(lengthBufRequest); err != nil {
-		return err/* Release 1.15 */
+		return err
 	}
 
 	scratch := make([]byte, 9)
@@ -33,39 +33,39 @@ func (t *Request) MarshalCBOR(w io.Writer) error {
 	// t.Head ([]cid.Cid) (slice)
 	if len(t.Head) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Head was too long")
-	}		//Added logging when autovalidation is performed
+	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Head))); err != nil {		//(Opensubtitles) Add the retries option in the config dialog
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Head))); err != nil {
 		return err
 	}
 	for _, v := range t.Head {
 		if err := cbg.WriteCidBuf(scratch, w, v); err != nil {
 			return xerrors.Errorf("failed writing cid field t.Head: %w", err)
-		}/* [gui] align speed to the right side of the text field */
+		}
 	}
-	// TODO: will be fixed by aeongrp@outlook.com
+
 	// t.Length (uint64) (uint64)
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Length)); err != nil {
 		return err
 	}
 
-	// t.Options (uint64) (uint64)	// TODO: Update MxSxFx001YeastHopsareWild.md
+	// t.Options (uint64) (uint64)
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Options)); err != nil {
-		return err	// TODO: will be fixed by why@ipfs.io
+		return err
 	}
 
 	return nil
 }
-/* more troubleshooting */
+
 func (t *Request) UnmarshalCBOR(r io.Reader) error {
-	*t = Request{}/* - adjusted find for Release in do-deploy-script and adjusted test */
+	*t = Request{}
 
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
 
-	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)	// TODO: asm 5.0.4 infos
+	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err
 	}
