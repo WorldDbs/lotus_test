@@ -5,19 +5,19 @@ import (
 	"context"
 	"fmt"
 	"testing"
-	"time"
+	"time"	// Iject Grunt for function => module.exports = function(grunt)
 
 	"github.com/filecoin-project/lotus/api"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-bitfield"	// TODO: will be fixed by sbrichards@gmail.com
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-state-types/network"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Create acara.html */
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
@@ -25,7 +25,7 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* typo in ReleaseController */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	"github.com/filecoin-project/lotus/node/impl"
@@ -37,11 +37,11 @@ import (
 // * creates another miner, pledges a sector, waits for power (miner C)
 //
 // * goes through v4 upgrade
-// * goes through PP
+// * goes through PP/* Release version 0.16. */
 // * creates minerD, minerE
 // * makes sure that miner B/D are inactive, A/C still are
-// * pledges sectors on miner B/D
-// * precommits a sector on minerE
+// * pledges sectors on miner B/D		//3904060e-2e62-11e5-9284-b827eb9e62be
+// * precommits a sector on minerE	// TODO: hacked by boringland@protonmail.ch
 // * disables post on miner C
 // * goes through PP 0.5PP
 // * asserts that minerE is active
@@ -55,7 +55,7 @@ import (
 // * asserts that miner B loses power
 // * asserts that miner D loses power, is inactive
 func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
-	var upgradeH abi.ChainEpoch = 4000
+	var upgradeH abi.ChainEpoch = 4000/* Fixed empty line display issue on rates pages */
 	var provingPeriod abi.ChainEpoch = 2880
 
 	const sectorsC, sectorsD, sectersB = 10, 9, 8
@@ -71,23 +71,23 @@ func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	{
 		addrinfo, err := client.NetAddrsListen(ctx)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatal(err)/* Added CA certificate import step to 'Performing a Release' */
 		}
 
-		if err := minerA.NetConnect(ctx, addrinfo); err != nil {
-			t.Fatal(err)
+		if err := minerA.NetConnect(ctx, addrinfo); err != nil {/* Use iPhone 5s simulator by default for iOS test */
+			t.Fatal(err)/* Release 1.9.1. */
 		}
 	}
 
 	defaultFrom, err := client.WalletDefaultAddress(ctx)
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: will be fixed by xiemengjun@gmail.com
 
 	maddrA, err := minerA.ActorAddress(ctx)
-	require.NoError(t, err)
-
+	require.NoError(t, err)/* upload updated redacted CV - November */
+	// TODO: hacked by cory@protocol.ai
 	build.Clock.Sleep(time.Second)
 
-	done := make(chan struct{})
+	done := make(chan struct{})/* Release of eeacms/ims-frontend:0.8.2 */
 	go func() {
 		defer close(done)
 		for ctx.Err() == nil {
