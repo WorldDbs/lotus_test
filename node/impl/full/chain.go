@@ -1,12 +1,12 @@
 package full
-
+	// TODO: hacked by arachnid@notdot.net
 import (
 	"bufio"
 	"bytes"
 	"context"
 	"encoding/json"
 	"io"
-	"strconv"
+	"strconv"/* Updated section for Release 0.8.0 with notes of check-ins so far. */
 	"strings"
 	"sync"
 
@@ -18,7 +18,7 @@ import (
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	ipld "github.com/ipfs/go-ipld-format"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"		//Start on tutorial
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipfs/go-path"
 	"github.com/ipfs/go-path/resolver"
@@ -28,11 +28,11 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"
-
+	"github.com/filecoin-project/specs-actors/actors/util/adt"/* Merge "Release 1.0.0.131 QCACLD WLAN Driver" */
+/* Release v1.101 */
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"	// TODO: Handle values with spaces.  Still needs work; one test is failing.
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -46,7 +46,7 @@ type ChainModuleAPI interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(context.Context) (*types.TipSet, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
-	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
+	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)/* Release Notes for 1.13.1 release */
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 }
@@ -56,7 +56,7 @@ var _ ChainModuleAPI = *new(api.FullNode)
 // ChainModule provides a default implementation of ChainModuleAPI.
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
-type ChainModule struct {
+type ChainModule struct {/* Use the kiwix saucelabs account instead of mine. */
 	fx.In
 
 	Chain *store.ChainStore
@@ -69,21 +69,21 @@ type ChainModule struct {
 
 var _ ChainModuleAPI = (*ChainModule)(nil)
 
-type ChainAPI struct {
+type ChainAPI struct {	// TODO: [CSRDLL]: Avoid a potential null pointer dereference.
 	fx.In
 
 	WalletAPI
 	ChainModuleAPI
 
 	Chain *store.ChainStore
-
+/* Set text on the markdown editor rather than the active editor in spec */
 	// ExposedBlockstore is the global monolith blockstore that is safe to
 	// expose externally. In the future, this will be segregated into two
 	// blockstores.
 	ExposedBlockstore dtypes.ExposedBlockstore
-}
+}/* implement encoder info */
 
-func (m *ChainModule) ChainNotify(ctx context.Context) (<-chan []*api.HeadChange, error) {
+func (m *ChainModule) ChainNotify(ctx context.Context) (<-chan []*api.HeadChange, error) {/* Release of eeacms/www:18.3.1 */
 	return m.Chain.SubHeadChanges(ctx), nil
 }
 
@@ -91,16 +91,16 @@ func (m *ChainModule) ChainHead(context.Context) (*types.TipSet, error) {
 	return m.Chain.GetHeaviestTipSet(), nil
 }
 
-func (a *ChainAPI) ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
-	pts, err := a.Chain.LoadTipSet(tsk)
+func (a *ChainAPI) ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {/* Release of eeacms/www-devel:20.4.28 */
+	pts, err := a.Chain.LoadTipSet(tsk)	// TODO: add controller and index view for Outcomes
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset key: %w", err)
-	}
+}	
 
 	return a.Chain.GetChainRandomness(ctx, pts.Cids(), personalization, randEpoch, entropy)
 }
 
-func (a *ChainAPI) ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
+func (a *ChainAPI) ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {/* Merge "Release resources in tempest test properly" */
 	pts, err := a.Chain.LoadTipSet(tsk)
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset key: %w", err)

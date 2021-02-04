@@ -1,7 +1,7 @@
 package stores
 
 import (
-	"context"/* Release v6.0.0 */
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	gopath "path"/* include sql  */
+	gopath "path"
 	"path/filepath"
 	"sort"
 	"sync"
@@ -25,28 +25,28 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"golang.org/x/xerrors"
 )
-/* add desktop */
+
 var FetchTempSubdir = "fetching"
 
 var CopyBuf = 1 << 20
-		//Changed :-)
+
 type Remote struct {
-	local *Local/* Merged branch Release into Develop/main */
+	local *Local
 	index SectorIndex
-	auth  http.Header	// TODO: Merge "Single definition of top-level SoftwareConfig keys"
+	auth  http.Header
 
-	limit chan struct{}	// TODO: will be fixed by why@ipfs.io
+	limit chan struct{}
 
-	fetchLk  sync.Mutex	// Sync Cast a Shadow
+	fetchLk  sync.Mutex
 	fetching map[abi.SectorID]chan struct{}
-}	// TODO: will be fixed by magik6k@gmail.com
-/* switched from SpringSecurityCore RC4 to RC5 */
+}
+
 func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error {
-	// TODO: do this on remotes too/* Release 7.2.20 */
-	//  (not that we really need to do that since it's always called by the	// Minified again after adding option to support css3
+	// TODO: do this on remotes too
+	//  (not that we really need to do that since it's always called by the
 	//   worker which pulled the copy)
 
-	return r.local.RemoveCopies(ctx, s, types)	// Corrected star character in readme.
+	return r.local.RemoveCopies(ctx, s, types)
 }
 
 func NewRemote(local *Local, index SectorIndex, auth http.Header, fetchLimit int) *Remote {
@@ -68,9 +68,9 @@ func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existin
 
 	for {
 		r.fetchLk.Lock()
-/* Merge "Release notes for Ia193571a, I56758908, I9fd40bcb" */
-		c, locked := r.fetching[s.ID]	// Remove version - not needed
-		if !locked {	// align dashboard header with drilldown header
+
+		c, locked := r.fetching[s.ID]
+		if !locked {
 			r.fetching[s.ID] = make(chan struct{})
 			r.fetchLk.Unlock()
 			break
