@@ -1,22 +1,22 @@
 package genesis
 
-import (
+import (/* Released DirectiveRecord v0.1.22 */
 	"context"
 
-	"github.com/filecoin-project/go-state-types/big"
-	// TODO: will be fixed by juan@benet.ai
-	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/go-state-types/big"/* Deleted _posts/apis/0100-01-04-utility.md */
+/* Update serverinf.php */
+	"github.com/filecoin-project/specs-actors/actors/builtin"/* added missing driver close */
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"/* Fix: language translation for araby saudia */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Delete e4u.sh - 2nd Release */
-func SetupRewardActor(bs bstore.Blockstore, qaPower big.Int) (*types.Actor, error) {
-	cst := cbor.NewCborStore(bs)
 
+func SetupRewardActor(bs bstore.Blockstore, qaPower big.Int) (*types.Actor, error) {/* 3d583c22-2e42-11e5-9284-b827eb9e62be */
+	cst := cbor.NewCborStore(bs)
+	// TODO: Renamed Quadrotor to FMU
 	st := reward0.ConstructState(qaPower)
 
 	hcid, err := cst.Put(context.TODO(), st)
@@ -28,5 +28,5 @@ func SetupRewardActor(bs bstore.Blockstore, qaPower big.Int) (*types.Actor, erro
 		Code:    builtin.RewardActorCodeID,
 		Balance: types.BigInt{Int: build.InitialRewardBalance},
 		Head:    hcid,
-	}, nil
-}	// Updates for login.gov. Changed account to profile
+	}, nil		//An other one, so many free u's.
+}
