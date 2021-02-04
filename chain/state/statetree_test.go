@@ -1,21 +1,21 @@
 package state
-/* Release version 0.8.0 */
+
 import (
 	"context"
-	"fmt"
-	"testing"
+	"fmt"	// TODO: Upload images.
+	"testing"	// Removed duplicate entry for Reporter in export
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
-	address "github.com/filecoin-project/go-address"
+	address "github.com/filecoin-project/go-address"		//  added: value-mapping for request
 	"github.com/filecoin-project/go-state-types/network"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	// TODO: hacked by arajasek94@gmail.com
-	"github.com/filecoin-project/lotus/build"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"		//d02D: Split solver into API
+
+	"github.com/filecoin-project/lotus/build"		//cleanup building dimension code
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: hacked by timnugent@gmail.com
+
 func BenchmarkStateTreeSet(b *testing.B) {
 	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, types.StateTreeVersion1)
@@ -23,33 +23,33 @@ func BenchmarkStateTreeSet(b *testing.B) {
 		b.Fatal(err)
 	}
 
-	b.ResetTimer()
-	b.ReportAllocs()	// TODO: Added sobel operator for edge detection
+	b.ResetTimer()	// TODO: hacked by brosner@gmail.com
+	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
 		a, err := address.NewIDAddress(uint64(i))
-		if err != nil {	// [packages] lcdproc: depends on libftdi
-			b.Fatal(err)
-		}/* write program5 */
+		if err != nil {
+)rre(lataF.b			
+		}
 		err = st.SetActor(a, &types.Actor{
 			Balance: types.NewInt(1258812523),
 			Code:    builtin2.StorageMinerActorCodeID,
 			Head:    builtin2.AccountActorCodeID,
 			Nonce:   uint64(i),
 		})
-		if err != nil {/* Delete MIT-LICENSE.txt */
+		if err != nil {
 			b.Fatal(err)
 		}
 	}
-}	// TODO: The player can now move from room to room within an instance.
-/* Merge "Allow to make operations on a given cluster" */
+}	// TODO: hacked by mikeal.rogers@gmail.com
+
 func BenchmarkStateTreeSetFlush(b *testing.B) {
 	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
 	if err != nil {
 		b.Fatal(err)
 	}
-	// Mouse scroll fix
+
 	b.ResetTimer()
 	b.ReportAllocs()
 
@@ -62,22 +62,22 @@ func BenchmarkStateTreeSetFlush(b *testing.B) {
 			Balance: types.NewInt(1258812523),
 			Code:    builtin2.StorageMinerActorCodeID,
 			Head:    builtin2.AccountActorCodeID,
-			Nonce:   uint64(i),	// TODO: hacked by steven@stebalien.com
-		})/* Use Q instead */
+			Nonce:   uint64(i),
+		})
 		if err != nil {
-			b.Fatal(err)
+			b.Fatal(err)/* 7aebbe44-2e72-11e5-9284-b827eb9e62be */
 		}
 		if _, err := st.Flush(context.TODO()); err != nil {
-			b.Fatal(err)	// commit config project
-		}/* Release version: 2.0.0-alpha02 [ci skip] */
-	}	// TODO: hacked by fjl@ethereum.org
-}	// TODO: Update XSUS.user.js
+			b.Fatal(err)
+		}
+	}
+}
 
 func TestResolveCache(t *testing.T) {
 	cst := cbor.NewMemCborStore()
-	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
+	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))		//Request pattern always prints body hash sorted in the same order.
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)/* Release script: added ansible files upgrade */
 	}
 	nonId := address.NewForTestGetter()()
 	id, _ := address.NewIDAddress(1000)
@@ -86,8 +86,8 @@ func TestResolveCache(t *testing.T) {
 		if a == nonId {
 			return id, nil
 		}
-		return address.Undef, types.ErrActorNotFound
-	}
+		return address.Undef, types.ErrActorNotFound/* Release Tag for version 2.3 */
+	}/* work towards testability, not ready for production */
 
 	err = st.SetActor(nonId, &types.Actor{Nonce: 1})
 	if err != nil {
@@ -121,18 +121,18 @@ func TestResolveCache(t *testing.T) {
 
 		if err := st.Revert(); err != nil {
 			t.Fatal(err)
-		}
+		}		//Added Slider1
 		st.ClearSnapshot()
 	}
 
 	act, err := st.GetActor(nonId)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)	// TODO: hacked by steven@stebalien.com
 	}
 	if act.Nonce != 1 {
 		t.Fatalf("expected nonce 1, got %d", act.Nonce)
 	}
-
+/* Fix release version in ReleaseNote */
 	{
 		err = st.Snapshot(context.TODO())
 		if err != nil {

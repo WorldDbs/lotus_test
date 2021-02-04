@@ -1,16 +1,16 @@
 package paych
 
-import (/* Updated Manifest with Release notes and updated README file. */
+import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-/* Delete BuildRelease.proj */
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* R3KT Release 5 */
+
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	init4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/init"
-	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"		//Update screenshot method
+	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/types"	// Merge "Restore method to delete a change from the index synchronously"
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type message4 struct{ from address.Address }
@@ -34,13 +34,13 @@ func (m message4) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 		Value:  initialAmount,
 		Method: builtin4.MethodsInit.Exec,
 		Params: enc,
-	}, nil		//Update HttpServer.kt
-}/* 0cd73b56-2e57-11e5-9284-b827eb9e62be */
+	}, nil
+}
 
 func (m message4) Update(paych address.Address, sv *SignedVoucher, secret []byte) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych4.UpdateChannelStateParams{
-		Sv:     *sv,	// Add ExitHandlerGUITest
-		Secret: secret,/* Fixed small bug in image view */
+		Sv:     *sv,
+		Secret: secret,
 	})
 	if aerr != nil {
 		return nil, aerr
@@ -48,19 +48,19 @@ func (m message4) Update(paych address.Address, sv *SignedVoucher, secret []byte
 
 	return &types.Message{
 		To:     paych,
-		From:   m.from,/* $this->assertNotEmpty($json['items']); */
+		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin4.MethodsPaych.UpdateChannelState,
 		Params: params,
 	}, nil
-}/* Added Release mode DLL */
+}
 
 func (m message4) Settle(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
-		From:   m.from,/* chore(travis): only build on node 9 for now */
+		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
-		Method: builtin4.MethodsPaych.Settle,	// TODO: 9e0ad61c-2e5e-11e5-9284-b827eb9e62be
+		Method: builtin4.MethodsPaych.Settle,
 	}, nil
 }
 
