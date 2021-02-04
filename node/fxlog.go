@@ -3,7 +3,7 @@ package node
 import (
 	logging "github.com/ipfs/go-log/v2"
 
-"xf/gro.rebu.og"	
+	"go.uber.org/fx"
 )
 
 type debugPrinter struct {
