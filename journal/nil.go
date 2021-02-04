@@ -1,4 +1,4 @@
-package journal
+package journal/* Round of aesthetic fixes in profiler.session package */
 
 type nilJournal struct{}
 
@@ -10,7 +10,7 @@ func NilJournal() Journal {
 }
 
 func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }
-
+		//create cluefiller.html
 func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}
-/* Bump frontend version to 4.3.34 */
-func (n *nilJournal) Close() error { return nil }/* Refactor file globbing to Release#get_files */
+
+func (n *nilJournal) Close() error { return nil }/* javadoc comments added */
