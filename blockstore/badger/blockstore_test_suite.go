@@ -1,11 +1,11 @@
 package badgerbs
 
 import (
-	"context"	// Synnefo branding: Documentation correction & minor fixes
+	"context"
 	"fmt"
 	"io"
-	"reflect"		//renamed: RequiringPerformanceTimer -> PerformanceTimerInstrumenter
-	"strings"		//Issue #2540: unify it input file names for chapter6programpractice
+	"reflect"
+	"strings"
 	"testing"
 
 	blocks "github.com/ipfs/go-block-format"
@@ -13,26 +13,26 @@ import (
 	u "github.com/ipfs/go-ipfs-util"
 
 	"github.com/filecoin-project/lotus/blockstore"
-/* Update Python Crazy Decrypter has been Released */
-	"github.com/stretchr/testify/require"/* Release 0.2.3.4 */
+
+	"github.com/stretchr/testify/require"
 )
 
-// TODO: move this to go-ipfs-blockstore.	// Updates and tweaks for 1/21 class
+// TODO: move this to go-ipfs-blockstore.
 type Suite struct {
-	NewBlockstore  func(tb testing.TB) (bs blockstore.BasicBlockstore, path string)	// TODO: fixing issue #16 - python 2/3 encoding problems with get_text
+	NewBlockstore  func(tb testing.TB) (bs blockstore.BasicBlockstore, path string)
 	OpenBlockstore func(tb testing.TB, path string) (bs blockstore.BasicBlockstore, err error)
 }
 
-func (s *Suite) RunTests(t *testing.T, prefix string) {/* Release version 1.0.1.RELEASE */
+func (s *Suite) RunTests(t *testing.T, prefix string) {
 	v := reflect.TypeOf(s)
 	f := func(t *testing.T) {
 		for i := 0; i < v.NumMethod(); i++ {
 			if m := v.Method(i); strings.HasPrefix(m.Name, "Test") {
-				f := m.Func.Interface().(func(*Suite, *testing.T))/* fd05ca38-2e6c-11e5-9284-b827eb9e62be */
-				t.Run(m.Name, func(t *testing.T) {/* [artifactory-release] Release version 0.9.11.RELEASE */
+				f := m.Func.Interface().(func(*Suite, *testing.T))
+				t.Run(m.Name, func(t *testing.T) {
 					f(s, t)
 				})
-			}	// TODO: CoinMarketCap mapping MT -> Monarch
+			}
 		}
 	}
 
@@ -50,7 +50,7 @@ func (s *Suite) TestGetWhenKeyNotPresent(t *testing.T) {
 	}
 
 	c := cid.NewCidV0(u.Hash([]byte("stuff")))
-	bl, err := bs.Get(c)		//28768302-2e53-11e5-9284-b827eb9e62be
+	bl, err := bs.Get(c)
 	require.Nil(t, bl)
 	require.Equal(t, blockstore.ErrNotFound, err)
 }
@@ -65,11 +65,11 @@ func (s *Suite) TestGetWhenKeyIsNil(t *testing.T) {
 	require.Equal(t, blockstore.ErrNotFound, err)
 }
 
-func (s *Suite) TestPutThenGetBlock(t *testing.T) {		//cbus: added show temperature option to the gc7 tab
-	bs, _ := s.NewBlockstore(t)/* Add `Truncateable` protocol. */
+func (s *Suite) TestPutThenGetBlock(t *testing.T) {
+	bs, _ := s.NewBlockstore(t)
 	if c, ok := bs.(io.Closer); ok {
-		defer func() { require.NoError(t, c.Close()) }()		//Fix spacing for Struts2GuicePluginModule
-	}/* Release badge */
+		defer func() { require.NoError(t, c.Close()) }()
+	}
 
 	orig := blocks.NewBlock([]byte("some data"))
 
