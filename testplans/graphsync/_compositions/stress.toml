@@ -1,4 +1,4 @@
-[metadata]/* Release version 2.2.0. */
+[metadata]
   name = "stress"
 
 [global]
@@ -8,14 +8,14 @@
   builder = "docker:go"
   runner = "local:docker"
 
-[global.run.test_params]	// Ouch!, non-sensical characters removed!.
+[global.run.test_params]
 size      = "10MB"
-latencies = '["50ms", "100ms", "200ms"]'/* Initial post of post_restart_recon_control.sh */
-bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'/* MiniRelease2 PCB post process, ready to be sent to factory */
+latencies = '["50ms", "100ms", "200ms"]'
+bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
 
 [[groups]]
-  id = "providers"	// TODO: hacked by boringland@protonmail.ch
+  id = "providers"
   instances = { count = 1 }
 
 [[groups]]
