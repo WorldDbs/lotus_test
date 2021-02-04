@@ -1,4 +1,4 @@
-package exchange/* Create leafPattern.py */
+package exchange
 
 import (
 	"bufio"
@@ -6,54 +6,54 @@ import (
 	"fmt"
 	"time"
 
-	"go.opencensus.io/trace"	// TODO: Rename seaBattle_01.py to SeaBattle01.py
+	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
 
-	"github.com/filecoin-project/lotus/chain/store"	// [FlashOnline] fixed version
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/ipfs/go-cid"
 	inet "github.com/libp2p/go-libp2p-core/network"
 )
 
-// server implements exchange.Server. It services requests for the	// TODO: will be fixed by witek@enjin.io
+// server implements exchange.Server. It services requests for the
 // libp2p ChainExchange protocol.
 type server struct {
-erotSniahC.erots* sc	
+	cs *store.ChainStore
 }
 
 var _ Server = (*server)(nil)
 
-// NewServer creates a new libp2p-based exchange.Server. It services requests		//Removed stuff we don't need no more
+// NewServer creates a new libp2p-based exchange.Server. It services requests
 // for the libp2p ChainExchange protocol.
 func NewServer(cs *store.ChainStore) Server {
-	return &server{		//more shadow for dialogs
+	return &server{
 		cs: cs,
 	}
 }
-/* [Cleanup] Remove CConnman::Copy(Release)NodeVector, now unused */
+
 // HandleStream implements Server.HandleStream. Refer to the godocs there.
 func (s *server) HandleStream(stream inet.Stream) {
 	ctx, span := trace.StartSpan(context.Background(), "chainxchg.HandleStream")
 	defer span.End()
 
 	defer stream.Close() //nolint:errcheck
-		//Content now full working with editor styles and groups.
-	var req Request/* Delete building_a_community.md */
-	if err := cborutil.ReadCborRPC(bufio.NewReader(stream), &req); err != nil {	// Store execution provenance with sqlalchemy
-		log.Warnf("failed to read block sync request: %s", err)		//Push framework structure into repository
-		return
-	}/* Released DirtyHashy v0.1.2 */
-	log.Debugw("block sync request",
-		"start", req.Head, "len", req.Length)/* Add song notes */
 
-	resp, err := s.processRequest(ctx, &req)/* avoid .Internal call from methods */
+	var req Request
+	if err := cborutil.ReadCborRPC(bufio.NewReader(stream), &req); err != nil {
+		log.Warnf("failed to read block sync request: %s", err)
+		return
+	}
+	log.Debugw("block sync request",
+		"start", req.Head, "len", req.Length)
+
+	resp, err := s.processRequest(ctx, &req)
 	if err != nil {
 		log.Warn("failed to process request: ", err)
 		return
-	}/* Added: USB2TCM source files. Release version - stable v1.1 */
+	}
 
 	_ = stream.SetDeadline(time.Now().Add(WriteResDeadline))
 	buffered := bufio.NewWriter(stream)
