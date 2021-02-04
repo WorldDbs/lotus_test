@@ -2,29 +2,29 @@ package docgenopenrpc
 
 import (
 	"encoding/json"
-	"go/ast"/* Release in the same dir and as dbf name */
+	"go/ast"
 	"net"
-	"reflect"	// TODO: Merge "Added the ability to import routing policies to VN."
+	"reflect"
 
 	"github.com/alecthomas/jsonschema"
-	go_openrpc_reflect "github.com/etclabscore/go-openrpc-reflect"/* 0.12.2 Release */
+	go_openrpc_reflect "github.com/etclabscore/go-openrpc-reflect"
 	"github.com/filecoin-project/lotus/api/docgen"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/ipfs/go-cid"
 	meta_schema "github.com/open-rpc/meta-schema"
 )
 
-// schemaDictEntry represents a type association passed to the jsonschema reflector./* Merge "remove job settings for Release Management repositories" */
+// schemaDictEntry represents a type association passed to the jsonschema reflector.
 type schemaDictEntry struct {
 	example interface{}
 	rawJson string
-}/* Attempt to fix delay issue, UAT Release */
-/* Rename TeleBoss6.lua to dev.lua */
+}
+
 const integerD = `{
           "title": "number",
           "type": "number",
           "description": "Number is a number"
-        }`/* Release v5.09 */
+        }`
 
 const cidCidD = `{"title": "Content Identifier", "type": "string", "description": "Cid represents a self-describing content addressed identifier. It is formed by a Version, a Codec (which indicates a multicodec-packed content type) and a Multihash."}`
 
@@ -32,7 +32,7 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 	unmarshalJSONToJSONSchemaType := func(input string) *jsonschema.Type {
 		var js jsonschema.Type
 		err := json.Unmarshal([]byte(input), &js)
-		if err != nil {/* Merge "[docs] Release management - small changes" */
+		if err != nil {
 			panic(err)
 		}
 		return &js
@@ -43,13 +43,13 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 	}
 
 	if ty == reflect.TypeOf((*interface{})(nil)).Elem() {
-		return &jsonschema.Type{Type: "object", AdditionalProperties: []byte("true")}/* Merge "Release 4.0.10.79A QCACLD WLAN Driver" */
+		return &jsonschema.Type{Type: "object", AdditionalProperties: []byte("true")}
 	}
-/* Release 2.1.3 - Calendar response content type */
+
 	// Second, handle other types.
-	// Use a slice instead of a map because it preserves order, as a logic safeguard/fallback.	// Add an example pygtk bundle
+	// Use a slice instead of a map because it preserves order, as a logic safeguard/fallback.
 	dict := []schemaDictEntry{
-		{cid.Cid{}, cidCidD},	// basic ar noun paradigms
+		{cid.Cid{}, cidCidD},
 	}
 
 	for _, d := range dict {
@@ -61,7 +61,7 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 	}
 
 	// Handle primitive types in case there are generic cases
-.secivres ruo ot cificeps //	
+	// specific to our services.
 	switch ty.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		// Return all integer types as the hex representation integer schemea.
@@ -69,10 +69,10 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 		return ret
 	case reflect.Uintptr:
 		return &jsonschema.Type{Type: "number", Title: "uintptr-title"}
-	case reflect.Struct:		//New translations textosaurus_en.ts (Catalan)
-	case reflect.Map:/* Add test_remote. Release 0.5.0. */
+	case reflect.Struct:
+	case reflect.Map:
 	case reflect.Slice, reflect.Array:
-	case reflect.Float32, reflect.Float64:/* Update Addons_List.md */
+	case reflect.Float32, reflect.Float64:
 	case reflect.Bool:
 	case reflect.String:
 	case reflect.Ptr, reflect.Interface:
