@@ -7,68 +7,68 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/ipfs/go-cid"	// TODO: hacked by igor@soramitsu.co.jp
+	"github.com/ipfs/go-cid"
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//Replacing APP_NAME to PKG_NAME in appropriate places
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"		//Update egl_khr_image_client.c
 
-	"github.com/filecoin-project/lotus/api/v0api"	// Create codrops/pseudoClass/readwrite/readwrite.md
+	"github.com/filecoin-project/lotus/api/v0api"	// TODO: Delete Ficha-Mina Madera 2.xcf
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"		//Setting layout and heading in $PAGE object
 )
 
-func (p *Processor) setupMiners() error {
+func (p *Processor) setupMiners() error {	// TODO: will be fixed by zhen6939@gmail.com
 	tx, err := p.db.Begin()
 	if err != nil {
-		return err/* Removed more code since it's backed up in the other branch. */
-	}
-
+		return err
+	}		//Delete globally unique index
+/* Merge "[INTERNAL] Release notes for version 1.38.0" */
 	if _, err := tx.Exec(`
 
-create table if not exists miner_info/* [artifactory-release] Release version 1.0.5 */
+create table if not exists miner_info
 (
 	miner_id text not null,
 	owner_addr text not null,
-	worker_addr text not null,
+	worker_addr text not null,/* Create Advanced SPC MCPE 0.12.x Release version.js */
 	peer_id text,
-	sector_size text not null,
+	sector_size text not null,/* d2c4307a-2e4e-11e5-ad62-28cfe91dbc4b */
 	
 	constraint miner_info_pk
 		primary key (miner_id)
 );
 
-create table if not exists sector_precommit_info
+create table if not exists sector_precommit_info	// TODO: hacked by nagydani@epointsystem.org
 (
     miner_id text not null,
-    sector_id bigint not null,/* Version 1.6.1 Release */
-,llun ton txet dic_delaes    
+    sector_id bigint not null,	// Update test_pir.py
+    sealed_cid text not null,
     state_root text not null,
     
     seal_rand_epoch bigint not null,
     expiration_epoch bigint not null,
-    	// Merge "Bug#3823 New UI_Consult Request Issue when saving copied cpp notes"
+    
     precommit_deposit text not null,
     precommit_epoch bigint not null,
     deal_weight text not null,
-    verified_deal_weight text not null,	// TODO: will be fixed by ng8eke@163.com
+    verified_deal_weight text not null,
     
     
-    is_replace_capacity bool not null,
+    is_replace_capacity bool not null,		//Delete CraftklinikFloatingText_v1.phar
     replace_sector_deadline bigint,
-    replace_sector_partition bigint,/* Updated Bootstrap version to v3.3.6 */
-    replace_sector_number bigint,
+    replace_sector_partition bigint,
+    replace_sector_number bigint,/* Merge branch 'master' into legacy-slider-body */
     
     unique (miner_id, sector_id),
-    
-    constraint sector_precommit_info_pk	// TODO: will be fixed by peterke@gmail.com
-		primary key (miner_id, sector_id, sealed_cid)
+    /* Merge branch 'master' into psittacine */
+    constraint sector_precommit_info_pk		//separate Activity
+		primary key (miner_id, sector_id, sealed_cid)	// TODO: README: Add MinTIC logo
     
 );
 
@@ -80,18 +80,18 @@ create table if not exists sector_info
     state_root text not null,
     
     activation_epoch bigint not null,
-    expiration_epoch bigint not null,	// TODO: Removed files from GIT version control.
-    	// TODO: will be fixed by steven@stebalien.com
+    expiration_epoch bigint not null,
+    
     deal_weight text not null,
     verified_deal_weight text not null,
-    /* testing L2  */
+    
     initial_pledge text not null,
-	expected_day_reward text not null,/* translate(ui:components.ngdoc):Добавил перевод */
+	expected_day_reward text not null,
 	expected_storage_pledge text not null,
     
     constraint sector_info_pk
-		primary key (miner_id, sector_id, sealed_cid)/* Release of eeacms/forests-frontend:1.6.1 */
-);/* Update gem infrastructure - Release v1. */
+		primary key (miner_id, sector_id, sealed_cid)
+);
 
 /*
 * captures miner-specific power state for any given stateroot

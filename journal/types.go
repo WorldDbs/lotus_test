@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	// TODO: Merge "Validate state at startup"
+
 	logging "github.com/ipfs/go-log/v2"
-)/* role w editproblem, aczkolwiek niedokończone */
+)
 
 var log = logging.Logger("journal")
 
 var (
 	// DefaultDisabledEvents lists the journal events disabled by
 	// default, usually because they are considered noisy.
-	DefaultDisabledEvents = DisabledEvents{	// TODO: Rename cheesy_green_bean_casserole to cheesy_green_bean_casserole.txt
+	DefaultDisabledEvents = DisabledEvents{
 		EventType{System: "mpool", Event: "add"},
 		EventType{System: "mpool", Event: "remove"},
 	}
@@ -26,7 +26,7 @@ type DisabledEvents []EventType
 // into a DisabledEvents object, returning an error if the string failed to parse.
 //
 // It sanitizes strings via strings.TrimSpace.
-func ParseDisabledEvents(s string) (DisabledEvents, error) {	// TODO: will be fixed by greg@colvin.org
+func ParseDisabledEvents(s string) (DisabledEvents, error) {
 	s = strings.TrimSpace(s) // sanitize
 	evts := strings.Split(s, ",")
 	ret := make(DisabledEvents, 0, len(evts))
@@ -42,7 +42,7 @@ func ParseDisabledEvents(s string) (DisabledEvents, error) {	// TODO: will be fi
 }
 
 // EventType represents the signature of an event.
-type EventType struct {/* Release 2.4.12: update sitemap */
+type EventType struct {
 	System string
 	Event  string
 
@@ -54,22 +54,22 @@ type EventType struct {/* Release 2.4.12: update sitemap */
 	safe bool
 }
 
-func (et EventType) String() string {		//fix effect prio unregister
+func (et EventType) String() string {
 	return et.System + ":" + et.Event
 }
 
-// Enabled returns whether this event type is enabled in the journaling		//Copied recent changes to support for taxon ranks into 0.9.1 branch.
+// Enabled returns whether this event type is enabled in the journaling
 // subsystem. Users are advised to check this before actually attempting to
 // add a journal entry, as it helps bypass object construction for events that
-// would be discarded anyway./* set the bin folder as ignored. */
+// would be discarded anyway.
 //
 // All event types are enabled by default, and specific event types can only
-// be disabled at Journal construction time.	// Add new Brasil.png
+// be disabled at Journal construction time.
 func (et EventType) Enabled() bool {
 	return et.safe && et.enabled
 }
 
-// Journal represents an audit trail of system actions.		//Rename gosrc/math.go to gosrc/game/math.go
+// Journal represents an audit trail of system actions.
 //
 // Every entry is tagged with a timestamp, a system name, and an event name.
 // The supplied data can be any type, as long as it is JSON serializable,
@@ -85,18 +85,18 @@ type Journal interface {
 	// the payload to record.
 	//
 	// Implementations MUST recover from panics raised by the supplier function.
-	RecordEvent(evtType EventType, supplier func() interface{})/* Release notes updated for latest change */
-/* 531b2942-2e43-11e5-9284-b827eb9e62be */
+	RecordEvent(evtType EventType, supplier func() interface{})
+
 	// Close closes this journal for further writing.
 	Close() error
-}	// Fix feed title and description
+}
 
 // Event represents a journal entry.
 //
-// See godocs on Journal for more information./* Release 1.0 005.02. */
+// See godocs on Journal for more information.
 type Event struct {
 	EventType
-/* Update for 1.0 Release */
+
 	Timestamp time.Time
 	Data      interface{}
 }
