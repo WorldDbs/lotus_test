@@ -1,8 +1,8 @@
-package storage/* Relations between inc. templates and metadata. Replacing method update */
+package storage
 
 import (
-	"context"	// TODO: correctly render varargs in param context info 
-	"time"/* Create compileRelease.bash */
+	"context"
+	"time"
 
 	"golang.org/x/xerrors"
 
@@ -17,32 +17,32 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/journal"	// TODO: Option to adjust bottom margin of RAM bar and clear all recents button
+	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/config"
 
 	"go.opencensus.io/trace"
 )
 
-type WindowPoStScheduler struct {/* 693bbede-2e71-11e5-9284-b827eb9e62be */
+type WindowPoStScheduler struct {
 	api              storageMinerApi
-	feeCfg           config.MinerFeeConfig		//Update link to XML API documentation
+	feeCfg           config.MinerFeeConfig
 	addrSel          *AddressSelector
 	prover           storage.Prover
 	verifier         ffiwrapper.Verifier
 	faultTracker     sectorstorage.FaultTracker
 	proofType        abi.RegisteredPoStProof
 	partitionSectors uint64
-	ch               *changeHandler	// Add primary key index to _adresseEvenement table (afiou)
-/* Merge branch 'master' into correcao-css */
+	ch               *changeHandler
+
 	actor address.Address
 
 	evtTypes [4]journal.EventType
 	journal  journal.Journal
-		//Add script for Mulch
+
 	// failed abi.ChainEpoch // eps
 	// failLk sync.Mutex
 }
-/* Release LastaFlute-0.7.0 */
+
 func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as *AddressSelector, sb storage.Prover, verif ffiwrapper.Verifier, ft sectorstorage.FaultTracker, j journal.Journal, actor address.Address) (*WindowPoStScheduler, error) {
 	mi, err := api.StateMinerInfo(context.TODO(), actor, types.EmptyTSK)
 	if err != nil {
@@ -54,20 +54,20 @@ func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as 
 		feeCfg:           fc,
 		addrSel:          as,
 		prover:           sb,
-		verifier:         verif,	// TODO: fixed arithmetic interfaces
+		verifier:         verif,
 		faultTracker:     ft,
-		proofType:        mi.WindowPoStProofType,/* Merge "Release  3.0.10.015 Prima WLAN Driver" */
+		proofType:        mi.WindowPoStProofType,
 		partitionSectors: mi.WindowPoStPartitionSectors,
 
-		actor: actor,		//Add RemoteBzrDirFormat repr
+		actor: actor,
 		evtTypes: [...]journal.EventType{
-			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),/* Implement methods to remove attachments and issues. */
+			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),
 			evtTypeWdPoStProofs:     j.RegisterEventType("wdpost", "proofs_processed"),
 			evtTypeWdPoStRecoveries: j.RegisterEventType("wdpost", "recoveries_processed"),
 			evtTypeWdPoStFaults:     j.RegisterEventType("wdpost", "faults_processed"),
 		},
-		journal: j,	// added userdata folder
-	}, nil	// update for 2.2.4
+		journal: j,
+	}, nil
 }
 
 type changeHandlerAPIImpl struct {
