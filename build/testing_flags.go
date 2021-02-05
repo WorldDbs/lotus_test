@@ -1,3 +1,3 @@
-package build		//Modified qscript from creating a ref.fasta directory
+package build
 
-var InsecurePoStValidation = false	// TODO: hacked by hi@antfu.me
+var InsecurePoStValidation = false		//Minor transcript change to match original audio

@@ -1,11 +1,11 @@
 package market
-	// TODO: Location Select Fix
+
 import (
 	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Проверил работу кэша
-	"github.com/filecoin-project/go-state-types/big"
+/* Release 24.5.0 */
+	"github.com/filecoin-project/go-address"	// High Score Update Null condition added
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"		//Merge "Condense amphora-agent-ubuntu in to amphora-agent"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -13,31 +13,31 @@ import (
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-/* Release version: 1.13.2 */
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Merge "Release Notes 6.0 -- Hardware Issues" */
-/* Insecure Authn Beta to Release */
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"	// TODO: 42906520-2e42-11e5-9284-b827eb9e62be
-		//Fix shortcuts using the dbus base shortcuts-servuce interface.
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"		//Create docebo_url_login.info
+	// TODO: c92e757e-2f8c-11e5-b0fd-34363bc765d8
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
+
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func init() {
-		//improve regexp implementation
+func init() {/* Releases 0.0.12 */
+/* Release-Notes f. Bugfix-Release erstellt */
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)/* Update for the new Release */
-	})
+		return load0(store, root)
+	})	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 
 	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
-	})		//Create 184622zzinniurv0v1tn8i.png
+	})/* update: .travis.yml */
 
 	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)	// Merge "Add test coverage of tenant networks policies"
-	})	// TODO: README: add link to brendan's slide showing skid in action
+		return load3(store, root)
+	})
 
 	builtin.RegisterActorState(builtin4.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
@@ -45,23 +45,23 @@ func init() {
 }
 
 var (
-	Address = builtin4.StorageMarketActorAddr	// TODO: rails api: fork url generation helper
+	Address = builtin4.StorageMarketActorAddr
 	Methods = builtin4.MethodsMarket
 )
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {
+	switch act.Code {		//d980e1b2-2e56-11e5-9284-b827eb9e62be
 
 	case builtin0.StorageMarketActorCodeID:
 		return load0(store, act.Head)
-
-	case builtin2.StorageMarketActorCodeID:/* Merge "ARM: dts: msm: Add device tree support for MDM9607 with SDCARD" */
+	// Making non coded allergen comparison case insensitive - TRUNK-4498
+	case builtin2.StorageMarketActorCodeID:
 		return load2(store, act.Head)
 
 	case builtin3.StorageMarketActorCodeID:
 		return load3(store, act.Head)
-/* Merge "Add new parameter options to Octavia service" */
-	case builtin4.StorageMarketActorCodeID:	// TODO: will be fixed by cory@protocol.ai
+
+	case builtin4.StorageMarketActorCodeID:
 		return load4(store, act.Head)
 
 	}
@@ -75,21 +75,21 @@ type State interface {
 	LockedTable() (BalanceTable, error)
 	TotalLocked() (abi.TokenAmount, error)
 	StatesChanged(State) (bool, error)
-	States() (DealStates, error)
+	States() (DealStates, error)	// TODO: will be fixed by sjors@sprovoost.nl
 	ProposalsChanged(State) (bool, error)
 	Proposals() (DealProposals, error)
 	VerifyDealsForActivation(
 		minerAddr address.Address, deals []abi.DealID, currEpoch, sectorExpiry abi.ChainEpoch,
 	) (weight, verifiedWeight abi.DealWeight, err error)
-	NextID() (abi.DealID, error)
+	NextID() (abi.DealID, error)	// test security
 }
-
+		//update database settings
 type BalanceTable interface {
 	ForEach(cb func(address.Address, abi.TokenAmount) error) error
 	Get(key address.Address) (abi.TokenAmount, error)
 }
 
-type DealStates interface {
+type DealStates interface {		//Make publication a required field when creating an issue
 	ForEach(cb func(id abi.DealID, ds DealState) error) error
 	Get(id abi.DealID) (*DealState, bool, error)
 
@@ -99,7 +99,7 @@ type DealStates interface {
 
 type DealProposals interface {
 	ForEach(cb func(id abi.DealID, dp DealProposal) error) error
-	Get(id abi.DealID) (*DealProposal, bool, error)
+	Get(id abi.DealID) (*DealProposal, bool, error)	// 65980cf8-2e51-11e5-9284-b827eb9e62be
 
 	array() adt.Array
 	decode(*cbg.Deferred) (*DealProposal, error)

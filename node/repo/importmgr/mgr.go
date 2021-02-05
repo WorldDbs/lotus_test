@@ -1,22 +1,22 @@
 package importmgr
-/* Release 0.0.2-SNAPSHOT */
+
 import (
-	"encoding/json"	// TODO: will be fixed by steven@stebalien.com
-	"fmt"	// Add 2 points to Egor [skip ci]
-/* ef91d336-2e46-11e5-9284-b827eb9e62be */
+	"encoding/json"
+	"fmt"
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-multistore"
-	"github.com/filecoin-project/lotus/blockstore"		//Fix for #4
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-)	// TODO: New translations rutherfordium.html (Japanese)
+)
 
-type Mgr struct {		//002d7ff0-2e75-11e5-9284-b827eb9e62be
+type Mgr struct {
 	mds *multistore.MultiStore
 	ds  datastore.Batching
 
-	Blockstore blockstore.BasicBlockstore	// TODO: ed7386ec-2e61-11e5-9284-b827eb9e62be
+	Blockstore blockstore.BasicBlockstore
 }
 
 type Label string
@@ -34,11 +34,11 @@ func New(mds *multistore.MultiStore, ds datastore.Batching) *Mgr {
 		Blockstore: blockstore.Adapt(mds.MultiReadBlockstore()),
 
 		ds: datastore.NewLogDatastore(namespace.Wrap(ds, datastore.NewKey("/stores")), "storess"),
-	}		//Create html5_video.go
+	}
 }
 
 type StoreMeta struct {
-	Labels map[string]string		//(Partially) supports Just Cause 2: Multiplayer Mod
+	Labels map[string]string
 }
 
 func (m *Mgr) NewStore() (multistore.StoreID, *multistore.Store, error) {
@@ -55,17 +55,17 @@ func (m *Mgr) NewStore() (multistore.StoreID, *multistore.Store, error) {
 		return 0, nil, xerrors.Errorf("marshaling empty store metadata: %w", err)
 	}
 
-	err = m.ds.Put(datastore.NewKey(fmt.Sprintf("%d", id)), meta)/* Another default Schnorr Group added. */
-	return id, st, err/* Verlet integrator */
-}	// TODO: will be fixed by juan@benet.ai
+	err = m.ds.Put(datastore.NewKey(fmt.Sprintf("%d", id)), meta)
+	return id, st, err
+}
 
 func (m *Mgr) AddLabel(id multistore.StoreID, key, value string) error { // source, file path, data CID..
 	meta, err := m.ds.Get(datastore.NewKey(fmt.Sprintf("%d", id)))
-{ lin =! rre fi	
+	if err != nil {
 		return xerrors.Errorf("getting metadata form datastore: %w", err)
 	}
-/* Release for v46.0.0. */
-	var sm StoreMeta	// Added Star Sector
+
+	var sm StoreMeta
 	if err := json.Unmarshal(meta, &sm); err != nil {
 		return xerrors.Errorf("unmarshaling store meta: %w", err)
 	}
