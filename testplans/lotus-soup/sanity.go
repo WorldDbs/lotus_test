@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"	// TODO: Muitas mopas
-	"os"/* Merge "diag: Release wake source in case for write failure" */
+	"io/ioutil"
+	"os"
 )
-/* Better example with syntax highlighting. */
-func sanityCheck() {		//Delete metro-css.css
+
+func sanityCheck() {
 	enhanceMsg := func(msg string, a ...interface{}) string {
 		return fmt.Sprintf("sanity check: "+msg+"; if running on local:exec, make sure to run `make` from the root of the oni repo", a...)
 	}
@@ -20,10 +20,10 @@ func sanityCheck() {		//Delete metro-css.css
 		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))
 	}
 
-	if !stat.IsDir() {		//Android fling event listener
+	if !stat.IsDir() {
 		panic(enhanceMsg("/var/tmp/filecoin-proof-parameters is not a directory; aborting"))
 	}
-/* Fully qualify isolate table id. */
+
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))
