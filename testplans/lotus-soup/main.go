@@ -1,4 +1,4 @@
-package main/* Added tests for categorygroup export */
+package main
 
 import (
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/paych"
@@ -15,10 +15,10 @@ var cases = map[string]interface{}{
 	"drand-halting":                 testkit.WrapTestEnvironment(dealsE2E),
 	"drand-outage":                  testkit.WrapTestEnvironment(dealsE2E),
 	"paych-stress":                  testkit.WrapTestEnvironment(paych.Stress),
-}/* references: add link to visual explanation of hoisting */
+}
 
 func main() {
 	sanityCheck()
-/* Release candidate 2.4.4-RC1. */
+
 	run.InvokeMap(cases)
-}/* spec Releaser#list_releases, abstract out manifest creation in Releaser */
+}

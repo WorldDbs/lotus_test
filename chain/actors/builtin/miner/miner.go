@@ -1,47 +1,47 @@
 package miner
-	// TODO: Add Barcode scanner to Utility Plugins
+
 import (
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/network"	// fix bug of XmlProcessingInstruction#toXml
-	"github.com/ipfs/go-cid"	// README.md — Different flavored Indentation
+	"github.com/filecoin-project/go-state-types/big"/* Release 1.00.00 */
+	"github.com/filecoin-project/go-state-types/network"	// TODO: hacked by greg@colvin.org
+	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"/* docs(readme): create simple description */
-/* dummy compiles assets in production mode */
-	"github.com/filecoin-project/go-address"/* Release a 2.4.0 */
-	"github.com/filecoin-project/go-bitfield"
+	"golang.org/x/xerrors"
+
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-bitfield"/* Release 1.0.0-alpha */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/go-state-types/dline"
-
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"	// Delete site_info2.xcf
+/* update sbt version */
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* Proper exception handling... */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-
+/* Update README.md prepare for CocoaPods Release */
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Delete tempsensor2.o */
+		//Expand examples to cover some of the simpler cases
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"	// TODO: hacked by sbrichards@gmail.com
-)
-/* Shift-right click ICs to reload them. */
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"		//Dhamma School - SEP
+)/* Release of eeacms/forests-frontend:2.0-beta.39 */
+
 func init() {
 
 	builtin.RegisterActorState(builtin0.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)/* Updated for Apache Tika 1.16 Release */
-	})/* updated for namespaced class #2156 */
-
-	builtin.RegisterActorState(builtin2.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load2(store, root)/* NTR prepared Release 1.1.10 */
+		return load0(store, root)
+	})
+		//Fix the documentation URL
+	builtin.RegisterActorState(builtin2.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// Create qt_xlib_test1.pro
+		return load2(store, root)
 	})
 
-	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// Create snotra.en.md
 		return load3(store, root)
 	})
 
@@ -50,14 +50,14 @@ func init() {
 	})
 
 }
-	// Fix some mistakes so the game loads
+	// GLES 2 example up and running!
 var Methods = builtin4.MethodsMiner
-
+		//renamed a few variables for consistency, spectrum now working
 // Unchanged between v0, v2, v3, and v4 actors
-var WPoStProvingPeriod = miner0.WPoStProvingPeriod	// TODO: Fix `path` in example
-var WPoStPeriodDeadlines = miner0.WPoStPeriodDeadlines
-var WPoStChallengeWindow = miner0.WPoStChallengeWindow
-var WPoStChallengeLookback = miner0.WPoStChallengeLookback	// TODO: will be fixed by lexy8russo@outlook.com
+var WPoStProvingPeriod = miner0.WPoStProvingPeriod
+var WPoStPeriodDeadlines = miner0.WPoStPeriodDeadlines		//Added separate doxyfile for qthelp documentation generation
+var WPoStChallengeWindow = miner0.WPoStChallengeWindow		//contentType fix
+var WPoStChallengeLookback = miner0.WPoStChallengeLookback
 var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff
 
 const MinSectorExpiration = miner0.MinSectorExpiration
