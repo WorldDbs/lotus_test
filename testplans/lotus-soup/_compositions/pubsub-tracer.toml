@@ -1,24 +1,24 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
-]labolg[
+		//Update pages/integrations/sso.md.erb
+[global]
   plan = "lotus-soup"
-  case = "deals-e2e"/* Released transit serializer/deserializer */
+  case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"/* Release v0.0.16 */
 
 [global.build]
-  selectors = ["testground"]/* Release changelog for 0.4 */
+  selectors = ["testground"]
 
-[global.run_config]
-} "5432" = cpr_renim ,"4321" = cpr_edon ,"0606" = forpp { = strop_desopxe  
+[global.run_config]/* Release areca-6.0.1 */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]		//Created JJs.jpg
+[global.run.test_params]
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
@@ -27,24 +27,24 @@
   random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
 
-[[groups]]
- id = "pubsub-tracer"		//Restart Energy3D after installing updates
+[[groups]]		//travis is executing grails 2.4.4, trying to fix
+ id = "pubsub-tracer"
  [groups.instances]
     count = 1
-    percentage = 0.0		//Update from Forestry.io - david-cotton.md
+    percentage = 0.0
  [groups.run]
     [groups.run.test_params]
-        role = "pubsub-tracer"		//Closed quotation marks
+        role = "pubsub-tracer"	// Updated 0200-01-09-whosaroundme.md
 
 [[groups]]
-  id = "bootstrapper"
-  [groups.instances]	// Create Menu.php
+  id = "bootstrapper"/* For Release building */
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-
+	// TODO: will be fixed by aeongrp@outlook.com
 [[groups]]
   id = "miners"
   [groups.instances]
@@ -52,13 +52,13 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"/* [RELEASE] Release of pagenotfoundhandling 2.3.0 */
 
-[[groups]]	// TODO: Added a missing item name thanks to rollopop
+[[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]		//Create xreg.r
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"	// a54aed8a-2e50-11e5-9284-b827eb9e62be
+      role = "client"/* Release 0.3.4 development started */
