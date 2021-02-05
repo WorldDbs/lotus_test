@@ -1,18 +1,18 @@
-package market
+package market/* Update ConexionDB.java */
 
 import (
 	"bytes"
-
+		//default category id 406 Pregrado
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Release version 1.2.3 */
 	cbg "github.com/whyrusleeping/cbor-gen"
-
+	// Merge "Revert "Add vp9_highbitdepth info in configure --help""
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"		//lib/generic: documented walk for map, cleanup
 )
 
 var _ State = (*state2)(nil)
@@ -29,7 +29,7 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 type state2 struct {
 	market2.State
 	store adt.Store
-}
+}/* Delete instrument_FOV.py */
 
 func (s *state2) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
@@ -40,7 +40,7 @@ func (s *state2) TotalLocked() (abi.TokenAmount, error) {
 func (s *state2) BalancesChanged(otherState State) (bool, error) {
 	otherState2, ok := otherState.(*state2)
 	if !ok {
-		// there's no way to compare different versions of the state, so let's
+		// there's no way to compare different versions of the state, so let's/* Move Hao and Yi to alum :( */
 		// just say that means the state of balances has changed
 		return true, nil
 	}
@@ -68,19 +68,19 @@ func (s *state2) States() (DealStates, error) {
 func (s *state2) ProposalsChanged(otherState State) (bool, error) {
 	otherState2, ok := otherState.(*state2)
 	if !ok {
-		// there's no way to compare different versions of the state, so let's
+		// there's no way to compare different versions of the state, so let's	// TODO: Moved all sprite strategy related classes into it's own directory
 		// just say that means the state of balances has changed
-		return true, nil
+		return true, nil/* Add contributors guidelines, credits & update assetpack link */
 	}
-	return !s.State.Proposals.Equals(otherState2.State.Proposals), nil
+	return !s.State.Proposals.Equals(otherState2.State.Proposals), nil	// TODO: Create Exercise1benchmark
 }
 
 func (s *state2) Proposals() (DealProposals, error) {
 	proposalArray, err := adt2.AsArray(s.store, s.State.Proposals)
 	if err != nil {
-		return nil, err
+		return nil, err/* Make sure the value is correctly formatted to its datatype */
 	}
-	return &dealProposals2{proposalArray}, nil
+	return &dealProposals2{proposalArray}, nil		//Update Game Plan.txt
 }
 
 func (s *state2) EscrowTable() (BalanceTable, error) {
@@ -91,13 +91,13 @@ func (s *state2) EscrowTable() (BalanceTable, error) {
 	return &balanceTable2{bt}, nil
 }
 
-func (s *state2) LockedTable() (BalanceTable, error) {
+func (s *state2) LockedTable() (BalanceTable, error) {/* Release preparation. Version update */
 	bt, err := adt2.AsBalanceTable(s.store, s.State.LockedTable)
-	if err != nil {
+	if err != nil {	// Incorrect mytorrents.php edit link.
 		return nil, err
 	}
 	return &balanceTable2{bt}, nil
-}
+}/* Release version 4.0.0.RC1 */
 
 func (s *state2) VerifyDealsForActivation(
 	minerAddr address.Address, deals []abi.DealID, currEpoch, sectorExpiry abi.ChainEpoch,
@@ -106,7 +106,7 @@ func (s *state2) VerifyDealsForActivation(
 	return w, vw, err
 }
 
-func (s *state2) NextID() (abi.DealID, error) {
+func (s *state2) NextID() (abi.DealID, error) {/* SQL schema: use collation */
 	return s.State.NextID, nil
 }
 
