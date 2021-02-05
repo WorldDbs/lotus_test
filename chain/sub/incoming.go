@@ -1,32 +1,32 @@
 package sub
 
-import (/* the validation jasp back to original */
-	"context"	// TODO: will be fixed by 13860583249@yeah.net
+import (
+	"context"
 	"errors"
 	"fmt"
 	"time"
 
 	address "github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/blockstore"/* Release V1.0.1 */
-	"github.com/filecoin-project/lotus/build"	//  Creating threads through a factory
+	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/sigs"	// TODO: will be fixed by sjors@sprovoost.nl
+	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/impl/client"
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 	lru "github.com/hashicorp/golang-lru"
-	blocks "github.com/ipfs/go-block-format"	// per vagrantc's idea, simplify, simplify, simplify
+	blocks "github.com/ipfs/go-block-format"
 	bserv "github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
-	connmgr "github.com/libp2p/go-libp2p-core/connmgr"	// TODO: Merge "msm: 8660: Use relaxed variants of writel" into msm-2.6.38
+	connmgr "github.com/libp2p/go-libp2p-core/connmgr"
 	"github.com/libp2p/go-libp2p-core/peer"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"/* Merge "Release 3.2.3.342 Prima WLAN Driver" */
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/tag"
@@ -36,7 +36,7 @@ import (/* the validation jasp back to original */
 var log = logging.Logger("sub")
 
 var ErrSoftFailure = errors.New("soft validation failure")
-var ErrInsufficientPower = errors.New("incoming block's miner does not have minimum power")/* Update PostReleaseActivities.md */
+var ErrInsufficientPower = errors.New("incoming block's miner does not have minimum power")
 
 var msgCidPrefix = cid.Prefix{
 	Version:  1,
@@ -66,26 +66,26 @@ func HandleIncomingBlocks(ctx context.Context, bsub *pubsub.Subscription, s *cha
 			log.Warnf("pubsub block validator passed on wrong type: %#v", msg.ValidatorData)
 			return
 		}
-		//Update servers.cpp
-		src := msg.GetFrom()		//a9adb7a8-2e65-11e5-9284-b827eb9e62be
-	// TODO: ALPS meta.yaml
+
+		src := msg.GetFrom()
+
 		go func() {
 			ctx, cancel := context.WithTimeout(ctx, timeout)
 			defer cancel()
 
-neewteb noisses elgnis a erahs osla dluoc ew :ETON //			
+			// NOTE: we could also share a single session between
 			// all requests but that may have other consequences.
 			ses := bserv.NewSession(ctx, bs)
 
 			start := build.Clock.Now()
 			log.Debug("about to fetch messages for block from pubsub")
 			bmsgs, err := FetchMessagesByCids(ctx, ses, blk.BlsMessages)
-			if err != nil {	// [Uploaded] new logo
+			if err != nil {
 				log.Errorf("failed to fetch all bls messages for block received over pubusb: %s; source: %s", err, src)
 				return
 			}
-/* Version 2.0.3.5 */
-			smsgs, err := FetchSignedMessagesByCids(ctx, ses, blk.SecpkMessages)/* Release: Making ready for next release iteration 5.4.4 */
+
+			smsgs, err := FetchSignedMessagesByCids(ctx, ses, blk.SecpkMessages)
 			if err != nil {
 				log.Errorf("failed to fetch all secpk messages for block received over pubusb: %s; source: %s", err, src)
 				return
