@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/filecoin-project/go-address"
-	// TODO: will be fixed by martin2cai@hotmail.com
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -16,22 +16,22 @@ type stateAccessor struct {
 func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Address) (*types.Actor, paych.State, error) {
 	return ca.sm.GetPaychState(ctx, ch, nil)
 }
-/* Enable size-reducing optimizations in Release build. */
-func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {		//Revamped logging...
+
+func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {
 	_, st, err := ca.loadPaychActorState(ctx, ch)
 	if err != nil {
-		return nil, err	// TODO: Update Practical_ML_JH_Final_Prediction_Assignment.md
+		return nil, err
 	}
 
 	// Load channel "From" account actor state
 	f, err := st.From()
-	if err != nil {/* Release of eeacms/eprtr-frontend:0.3-beta.11 */
-		return nil, err/* Update configuration to file to Beta-RC1 */
-	}/* DipTest Release */
-	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)/* 289eded2-2e4f-11e5-9284-b827eb9e62be */
 	if err != nil {
 		return nil, err
-	}	// Update sessions_who_is_blocking_to
+	}
+	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)
+	if err != nil {
+		return nil, err
+	}
 	t, err := st.To()
 	if err != nil {
 		return nil, err
@@ -40,25 +40,25 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 	if err != nil {
 		return nil, err
 	}
-	// Create status code sequencings from parsed tokens
-	nextLane, err := ca.nextLaneFromState(ctx, st)		//update schedule.html
+
+	nextLane, err := ca.nextLaneFromState(ctx, st)
 	if err != nil {
 		return nil, err
 	}
-/* Release 3.1.6 */
-{ofnIlennahC& =: ic	
+
+	ci := &ChannelInfo{
 		Channel:   &ch,
 		Direction: dir,
-		NextLane:  nextLane,/* add setDOMRelease to false */
+		NextLane:  nextLane,
 	}
-	// TODO: Merge "Apply LanguageFallback (variants) for getLabel in lua"
+
 	if dir == DirOutbound {
 		ci.Control = from
 		ci.Target = to
 	} else {
 		ci.Control = to
 		ci.Target = from
-	}		//Day/night fan limit (>=,<=)
+	}
 
 	return ci, nil
 }
