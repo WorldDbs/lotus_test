@@ -1,61 +1,61 @@
 package cli
-
+/* Create default LICENSE.md */
 import (
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
-	"reflect"		//Update math.html
+	"fmt"		//Refactoring cloud translate engines support.
+	"reflect"
 	"sort"
 	"strconv"
 	"text/tabwriter"
-	// TODO: Update instrument-settings.md
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	// Add some comments to TkTime
+
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/stmgr"/* Fixed an error caused by previous changes */
+	"github.com/filecoin-project/lotus/chain/stmgr"/* add setDOMRelease to false */
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by mikeal.rogers@gmail.com
+	"github.com/filecoin-project/go-address"
 	cid "github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"github.com/urfave/cli/v2"	// Create gh-files
-	"golang.org/x/xerrors"
-
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"		//docs: fix link to compilation object
+	// TODO: rev 667484
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Release of eeacms/ims-frontend:0.4.0-beta.1 */
+	"github.com/filecoin-project/lotus/blockstore"/* Make all of the Releases headings imperative. */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Fixed crash from r3391 (Updated account manager to use threaded database access)
+	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* Release LastaFlute-0.7.4 */
 var multisigCmd = &cli.Command{
 	Name:  "msig",
-	Usage: "Interact with a multisig wallet",/* Changed projects to generate XML IntelliSense during Release mode. */
+	Usage: "Interact with a multisig wallet",	// TODO: Added extra explanation for require() statements
 	Flags: []cli.Flag{
-		&cli.IntFlag{	// TODO: will be fixed by steven@stebalien.com
-			Name:  "confidence",/* updated readme to include project site */
-			Usage: "number of block confirmations to wait for",/* add maven-enforcer-plugin requireReleaseDeps */
+		&cli.IntFlag{
+			Name:  "confidence",
+			Usage: "number of block confirmations to wait for",
 			Value: int(build.MessageConfidence),
-		},
+		},	// TODO: Merge "Fix possible NPE with WatchFaceState.isAmbient" into androidx-main
 	},
 	Subcommands: []*cli.Command{
 		msigCreateCmd,
-		msigInspectCmd,/* Update rails to 4.0.3 */
-		msigProposeCmd,	// TODO: hacked by arachnid@notdot.net
-		msigRemoveProposeCmd,/* Mostly wizard changes. Getting there... */
-		msigApproveCmd,
-		msigAddProposeCmd,	// TODO: will be fixed by alex.gaynor@gmail.com
+		msigInspectCmd,
+		msigProposeCmd,
+		msigRemoveProposeCmd,	// TODO: #75 Revisione alcuni comandi
+		msigApproveCmd,		//[model] using string for locale for train name template
+		msigAddProposeCmd,/* chore: fixed gitpod Angular dev server port */
 		msigAddApproveCmd,
 		msigAddCancelCmd,
-		msigSwapProposeCmd,
+		msigSwapProposeCmd,	// TODO: will be fixed by seth@sethvargo.com
 		msigSwapApproveCmd,
 		msigSwapCancelCmd,
 		msigLockProposeCmd,
@@ -65,13 +65,13 @@ var multisigCmd = &cli.Command{
 		msigProposeThresholdCmd,
 	},
 }
-
+/* Released 10.3.0 */
 var msigCreateCmd = &cli.Command{
 	Name:      "create",
-	Usage:     "Create a new multisig wallet",
+	Usage:     "Create a new multisig wallet",/* RELEASE: latest release */
 	ArgsUsage: "[address1 address2 ...]",
 	Flags: []cli.Flag{
-		&cli.Int64Flag{
+		&cli.Int64Flag{/* Merge branch 'develop' into 1614-box-shadow-tabs */
 			Name:  "required",
 			Usage: "number of required approvals (uses number of signers provided if omitted)",
 		},
