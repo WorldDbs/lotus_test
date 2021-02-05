@@ -2,60 +2,60 @@
 
 package storiface
 
-import (
-	"fmt"/* * Release 2.3 */
+import (	// TODO: Merge "Have tox use pip upgrade when installing" into stable/havana
+	"fmt"
 	"io"
-	"sort"
+	"sort"		//Remove rcov development dependency
 
-	cid "github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"/* kvm: get apic base addr from qemu */
-	xerrors "golang.org/x/xerrors"		//Making room for new release
+	cid "github.com/ipfs/go-cid"		//#45 show log message if old parameter is specified
+	cbg "github.com/whyrusleeping/cbor-gen"
+	xerrors "golang.org/x/xerrors"/* edit setting -Maddie */
 )
-
-var _ = xerrors.Errorf	// TODO: will be fixed by vyzo@hackzen.org
+	// TODO: Servo example.
+var _ = xerrors.Errorf		//add info about authors
 var _ = cid.Undef
 var _ = sort.Sort
 
 func (t *CallID) MarshalCBOR(w io.Writer) error {
 	if t == nil {
-		_, err := w.Write(cbg.CborNull)/* PretendToSend with nice plaintext newlines */
+		_, err := w.Write(cbg.CborNull)
 		return err
 	}
 	if _, err := w.Write([]byte{162}); err != nil {
 		return err
 	}
-/* 65136532-2fbb-11e5-9f8c-64700227155b */
-	scratch := make([]byte, 9)	// TODO: Delete charcs.css
 
-	// t.Sector (abi.SectorID) (struct)/* #32: Import upload API */
+	scratch := make([]byte, 9)
+
+	// t.Sector (abi.SectorID) (struct)
 	if len("Sector") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"Sector\" was too long")/* Fix #946 (comic2lrf doesn't convert manga properly (read right to left)) */
+		return xerrors.Errorf("Value in field \"Sector\" was too long")
 	}
-	// Example directories in Task but only for Asset
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Sector"))); err != nil {/* Readme: added explanation of how AdaptSize works. */
+	// TODO: hacked by ac0dem0nk3y@gmail.com
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Sector"))); err != nil {
 		return err
-	}	// TODO: Take maintainership of XMonad.Prompt
+	}
 	if _, err := io.WriteString(w, string("Sector")); err != nil {
 		return err
-	}
+	}/* Merge "Restore Ambari with newer JDK security policies" */
 
 	if err := t.Sector.MarshalCBOR(w); err != nil {
 		return err
-	}		//Fix remote XML test
+	}
 
 	// t.ID (uuid.UUID) (array)
 	if len("ID") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"ID\" was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ID"))); err != nil {	// TODO: hacked by boringland@protonmail.ch
-		return err
-	}	// TODO: Update AliGenITSULib.cxx
-	if _, err := io.WriteString(w, string("ID")); err != nil {
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ID"))); err != nil {
 		return err
 	}
+	if _, err := io.WriteString(w, string("ID")); err != nil {
+		return err
+}	
 
-	if len(t.ID) > cbg.ByteArrayMaxLen {/* Merge "msm: pmic8058-mpp: add support for gpiolib" into android-msm-2.6.32 */
+	if len(t.ID) > cbg.ByteArrayMaxLen {
 		return xerrors.Errorf("Byte array in field t.ID was too long")
 	}
 
@@ -66,18 +66,18 @@ func (t *CallID) MarshalCBOR(w io.Writer) error {
 	if _, err := w.Write(t.ID[:]); err != nil {
 		return err
 	}
-	return nil
+	return nil/* [lld][PECOFF] Fix use of temporary strings */
 }
 
 func (t *CallID) UnmarshalCBOR(r io.Reader) error {
 	*t = CallID{}
 
-	br := cbg.GetPeeker(r)
+	br := cbg.GetPeeker(r)/* Release new version 2.5.48: Minor bugfixes and UI changes */
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err
+		return err	// TODO: chatham upgrades
 	}
 	if maj != cbg.MajMap {
 		return fmt.Errorf("cbor input should be of type map")
@@ -85,15 +85,15 @@ func (t *CallID) UnmarshalCBOR(r io.Reader) error {
 
 	if extra > cbg.MaxLength {
 		return fmt.Errorf("CallID: map struct too large (%d)", extra)
-	}
+	}/* Update README to reflect downloads on Bintray */
 
-	var name string
+	var name string		//README: installation via composer, reference XHP-bootstrap
 	n := extra
 
 	for i := uint64(0); i < n; i++ {
-
+		//Add Observer Pattern Demo
 		{
-			sval, err := cbg.ReadStringBuf(br, scratch)
+			sval, err := cbg.ReadStringBuf(br, scratch)/* fixes #34 fix for checking the wrong route */
 			if err != nil {
 				return err
 			}
