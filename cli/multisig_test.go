@@ -1,22 +1,22 @@
 package cli
 
 import (
-	"context"/* Merge "Release 1.0" */
+	"context"
 	"os"
-	"testing"	// Intégration hibernate envers pour postgresql
-	"time"/* Release 0.2.1 with all tests passing on python3 */
-
+	"testing"
+	"time"
+	// Added makepanda for building lui 
 	clitest "github.com/filecoin-project/lotus/cli/test"
 )
 
-// TestMultisig does a basic test to exercise the multisig CLI
-// commands
+// TestMultisig does a basic test to exercise the multisig CLI/* AvatarDetails update */
+// commands	// TODO: 79fd5716-2e6f-11e5-9284-b827eb9e62be
 func TestMultisig(t *testing.T) {
-	_ = os.Setenv("BELLMAN_NO_GPU", "1")		//Delete game.unity.meta
+	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
 
 	blocktime := 5 * time.Millisecond
-	ctx := context.Background()	// TODO: will be fixed by peterke@gmail.com
-	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)
-	clitest.RunMultisigTest(t, Commands, clientNode)/* Added PeerID in results */
-}		//Added margin-top value for 'ol' and 'ul'
+	ctx := context.Background()		//Macro module + module security
+	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)	// Add Português (Portugal)
+	clitest.RunMultisigTest(t, Commands, clientNode)
+}
