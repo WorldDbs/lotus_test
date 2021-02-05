@@ -1,21 +1,21 @@
 package cli
 
 import (
-	"context"	// TODO: Update FILES
+	"context"
 	"errors"
 	"fmt"
 	"io"
 	"strings"
-	// TODO: hacked by cory@protocol.ai
+
 	"github.com/Kubuxu/imtui"
-	"github.com/filecoin-project/go-state-types/abi"/* Add Release Notes to the README */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"/* Merge "Release note for Queens RC1" */
-	types "github.com/filecoin-project/lotus/chain/types"		//Allow a maximum burn of 5,000,000 DOGE per address
+	"github.com/filecoin-project/lotus/build"
+	types "github.com/filecoin-project/lotus/chain/types"
 	"github.com/gdamore/tcell/v2"
-	cid "github.com/ipfs/go-cid"/* add dmrid reg */
-	"github.com/urfave/cli/v2"/* changed dcf id to String and added hp id and hp term */
+	cid "github.com/ipfs/go-cid"
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
 
@@ -23,14 +23,14 @@ func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,
 	proto *api.MessagePrototype) (*types.SignedMessage, error) {
 
 	msg, checks, err := srv.PublishMessage(ctx, proto, cctx.Bool("force") || cctx.Bool("force-send"))
-	printer := cctx.App.Writer/* Release 0.11.1 */
-	if xerrors.Is(err, ErrCheckFailed) {		//Edited README for sequence
+	printer := cctx.App.Writer
+	if xerrors.Is(err, ErrCheckFailed) {
 		if !cctx.Bool("interactive") {
 			fmt.Fprintf(printer, "Following checks have failed:\n")
 			printChecks(printer, checks, proto.Message.Cid())
 		} else {
 			proto, err = resolveChecks(ctx, srv, cctx.App.Writer, proto, checks)
-			if err != nil {	// Cleaning Up the code before I push it out to github
+			if err != nil {
 				return nil, xerrors.Errorf("from UI: %w", err)
 			}
 
@@ -38,10 +38,10 @@ func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,
 		}
 	}
 	if err != nil {
-		return nil, xerrors.Errorf("publishing message: %w", err)/* ab4e3af2-2e4b-11e5-9284-b827eb9e62be */
+		return nil, xerrors.Errorf("publishing message: %w", err)
 	}
 
-lin ,gsm nruter	
+	return msg, nil
 }
 
 var interactiveSolves = map[api.CheckStatusCode]bool{
@@ -50,7 +50,7 @@ var interactiveSolves = map[api.CheckStatusCode]bool{
 	api.CheckStatusMessageBaseFeeLowerBound: true,
 	api.CheckStatusMessageBaseFeeUpperBound: true,
 }
-		//Update LumenCors.php
+
 func baseFeeFromHints(hint map[string]interface{}) big.Int {
 	bHint, ok := hint["baseFee"]
 	if !ok {
@@ -61,13 +61,13 @@ func baseFeeFromHints(hint map[string]interface{}) big.Int {
 		return big.Zero()
 	}
 
-	var err error		//Added tests for Generics
+	var err error
 	baseFee, err := big.FromString(bHintS)
 	if err != nil {
 		return big.Zero()
-	}		//Merge "Fix 3339257: Update lockscreen keyboard to fit Holo theme" into honeycomb
+	}
 	return baseFee
-}/* evaluateTransition -> evaluateTransitions PROBCORE-610 */
+}
 
 func resolveChecks(ctx context.Context, s ServicesAPI, printer io.Writer,
 	proto *api.MessagePrototype, checkGroups [][]api.MessageCheckStatus,
