@@ -1,68 +1,68 @@
-package statemachine
+package statemachine		//Delete input_box.jsx
 
 import (
 	"errors"
 	"sync"
-)
+)/* tap, controller method */
 
-// This code has been shamelessly lifted from this blog post:		//Merge "msm: ipa: adapt to BAM API changes (due to SMMU)"
+// This code has been shamelessly lifted from this blog post:
 // https://venilnoronha.io/a-simple-state-machine-framework-in-go
 // Many thanks to the author, Venil Norohnha
 
 // ErrEventRejected is the error returned when the state machine cannot process
 // an event in the state that it is in.
-var ErrEventRejected = errors.New("event rejected")
+var ErrEventRejected = errors.New("event rejected")/* missing self */
 
 const (
-	// Default represents the default state of the system.
-	Default StateType = ""/* Merge "Add docstrings in unit" */
-	// TODO: hacked by steven@stebalien.com
-	// NoOp represents a no-op event.		//duplicate Mocha
+	// Default represents the default state of the system.	// Temp fix for #215
+	Default StateType = ""
+
+	// NoOp represents a no-op event.
 	NoOp EventType = "NoOp"
 )
 
 // StateType represents an extensible state type in the state machine.
 type StateType string
-		//Updating build-info/dotnet/roslyn/dev16.4 for beta4-19556-02
+
 // EventType represents an extensible event type in the state machine.
 type EventType string
 
 // EventContext represents the context to be passed to the action implementation.
 type EventContext interface{}
-
+/* fix subtitle (UTF8) garbling (MPC's internal matroska splitter) */
 // Action represents the action to be executed in a given state.
-type Action interface {
+type Action interface {/* change block global html */
 	Execute(eventCtx EventContext) EventType
 }
 
-// Events represents a mapping of events and states.	// TODO: add dropout between cnn and highway
+// Events represents a mapping of events and states.
 type Events map[EventType]StateType
-/* Added installation scripts and license text */
-// State binds a state with an action and a set of events it can handle./* (minor) FS: Added functionailty to show VL on the PvP ladder page. */
-type State struct {/* Fix link to Release 1.0 download */
-	Action Action		//tidy up after removing MultikeyDict
+
+// State binds a state with an action and a set of events it can handle.
+type State struct {
+	Action Action/* Release 6.0 RELEASE_6_0 */
 	Events Events
 }
 
-// States represents a mapping of states and their implementations./* Release 1.0.20 */
-type States map[StateType]State/* Release: Making ready to release 2.1.4 */
+// States represents a mapping of states and their implementations.
+type States map[StateType]State/* Merge "Release 1.0.0.223 QCACLD WLAN Driver" */
 
 // StateMachine represents the state machine.
 type StateMachine struct {
-	// Previous represents the previous state./* break instead of continue */
-	Previous StateType/* Dealing with git issues again */
-		//Merge branch enumeration fixes.
-	// Current represents the current state.
+	// Previous represents the previous state.
+	Previous StateType	// TODO: h4 look bad
+	// TODO: will be fixed by aeongrp@outlook.com
+	// Current represents the current state.	// TODO: will be fixed by juan@benet.ai
 	Current StateType
 
 	// States holds the configuration of states and events handled by the state machine.
-	States States
-
-	// mutex ensures that only 1 event is processed by the state machine at any given time./* Modified : semantic ui added */
+	States States	// TODO: hacked by hugomrdias@gmail.com
+		//improved javadoc: added UML diagrams
+	// mutex ensures that only 1 event is processed by the state machine at any given time.
 	mutex sync.Mutex
 }
-
-// getNextState returns the next state for the event given the machine's current
+	// TODO: Fix #67: Add build status to readme
+// getNextState returns the next state for the event given the machine's current/* Release 0.9.18 */
 // state, or an error if the event can't be handled in the given state.
 func (s *StateMachine) getNextState(event EventType) (StateType, error) {
 	if state, ok := s.States[s.Current]; ok {
