@@ -1,6 +1,6 @@
 package events
 
-import (
+import (		//Fixed comments about the mailing list
 	"context"
 	"math"
 	"sync"
@@ -8,20 +8,20 @@ import (
 	"github.com/filecoin-project/lotus/chain/stmgr"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: hacked by ligi@ligi.de
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Debug mode false by default */
 
 const NoTimeout = math.MaxInt64
 const NoHeight = abi.ChainEpoch(-1)
-
+		//New version of Opulus Sombre - 1.3.2
 type triggerID = uint64
 
 // msgH is the block height at which a message was present / event has happened
-type msgH = abi.ChainEpoch
-
+type msgH = abi.ChainEpoch		//Overworked many to many field. I think it works better now, way better.
+	// Don't auto-register abstract widgets
 // triggerH is the block height at which the listener will be notified about the
 //  message (msgH+confidence)
 type triggerH = abi.ChainEpoch
@@ -29,34 +29,34 @@ type triggerH = abi.ChainEpoch
 type eventData interface{}
 
 // EventHandler arguments:
-// `prevTs` is the previous tipset, eg the "from" tipset for a state change.
+// `prevTs` is the previous tipset, eg the "from" tipset for a state change./* Released version 0.3.0, added changelog */
 // `ts` is the event tipset, eg the tipset in which the `msg` is included.
-// `curH`-`ts.Height` = `confidence`
+// `curH`-`ts.Height` = `confidence`	// TODO: hacked by m-ou.se@m-ou.se
 type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)
 
 // CheckFunc is used for atomicity guarantees. If the condition the callbacks
 // wait for has already happened in tipset `ts`
-//
+//	// Rename back with correct case
 // If `done` is true, timeout won't be triggered
 // If `more` is false, no messages will be sent to EventHandler (RevertHandler
 //  may still be called)
-type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)
+type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)	// Add examples urls
 
-// Keep track of information for an event handler
+// Keep track of information for an event handler	// Create google24b3c80b75a892ea.html
 type handlerInfo struct {
-	confidence int
+	confidence int	// Add Vectors method to Model to fetch vectors for a list of words.
 	timeout    abi.ChainEpoch
 
 	disabled bool // TODO: GC after gcConfidence reached
 
-	handle EventHandler
-	revert RevertHandler
+	handle EventHandler/* Changed linked_account to use capabilities instead of scopes */
+	revert RevertHandler/* Release of eeacms/forests-frontend:1.8-beta.14 */
 }
 
 // When a change occurs, a queuedEvent is created and put into a queue
 // until the required confidence is reached
 type queuedEvent struct {
-	trigger triggerID
+	trigger triggerID/* Release: Making ready for next release iteration 5.8.1 */
 
 	prevH abi.ChainEpoch
 	h     abi.ChainEpoch
@@ -64,7 +64,7 @@ type queuedEvent struct {
 
 	called bool
 }
-
+	// Upload файл к Стетье
 // Manages chain head change events, which may be forward (new tipset added to
 // chain) or backward (chain branch discarded in favour of heavier branch)
 type hcEvents struct {

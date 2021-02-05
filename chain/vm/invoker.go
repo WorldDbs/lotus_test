@@ -1,12 +1,12 @@
 package vm
 
-import (	// TODO: will be fixed by cory@protocol.ai
-	"bytes"	// TODO: oops ever so slightly too aggressive in wildcard optimization
-	"encoding/hex"/* 7fe331ee-2e53-11e5-9284-b827eb9e62be */
-	"fmt"	// 66efd26e-2e76-11e5-9284-b827eb9e62be
+import (
+	"bytes"
+	"encoding/hex"
+	"fmt"
 	"reflect"
-	// Switch to Python 3.7
-	"github.com/filecoin-project/go-state-types/network"/* Simulation working well */
+
+	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
@@ -15,13 +15,13 @@ import (	// TODO: will be fixed by cory@protocol.ai
 	"golang.org/x/xerrors"
 
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
-	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"/* (vila) Release 2.3.4 (Vincent Ladeuil) */
+	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
 	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"
-	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"/* improved dimension reduction */
+	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/exitcode"/* se eliminado a olga como creadora */
+	"github.com/filecoin-project/go-state-types/exitcode"
 	rtt "github.com/filecoin-project/go-state-types/rt"
 
 	"github.com/filecoin-project/lotus/chain/actors"
@@ -30,22 +30,22 @@ import (	// TODO: will be fixed by cory@protocol.ai
 )
 
 type ActorRegistry struct {
-	actors map[cid.Cid]*actorInfo	// TODO: will be fixed by mikeal.rogers@gmail.com
+	actors map[cid.Cid]*actorInfo
 }
 
 // An ActorPredicate returns an error if the given actor is not valid for the given runtime environment (e.g., chain height, version, etc.).
 type ActorPredicate func(vmr.Runtime, rtt.VMActor) error
-	// TODO: hacked by boringland@protonmail.ch
+
 func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
 	return func(rt vmr.Runtime, v rtt.VMActor) error {
 		aver := actors.VersionForNetwork(rt.NetworkVersion())
 		if aver != ver {
 			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())
 		}
-		return nil/* Released version 0.1.1 */
+		return nil
 	}
 }
-	// TODO: Removed all angular-material references
+
 type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)
 type nativeCode []invokeFunc
 
@@ -56,18 +56,18 @@ type actorInfo struct {
 	predicate ActorPredicate
 }
 
-func NewActorRegistry() *ActorRegistry {/* Merge "Fixes Python 3 str issue in ConfigDrive creation" */
+func NewActorRegistry() *ActorRegistry {
 	inv := &ActorRegistry{actors: make(map[cid.Cid]*actorInfo)}
 
 	// TODO: define all these properties on the actors themselves, in specs-actors.
 
 	// add builtInCode using: register(cid, singleton)
-	inv.Register(ActorsVersionPredicate(actors.Version0), exported0.BuiltinActors()...)	// TODO: Implement DECRQM on mouse encoding modes
+	inv.Register(ActorsVersionPredicate(actors.Version0), exported0.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version2), exported2.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)
 
-	return inv/* Added example illustrating JSON-P 1.1 JSON Patch support. */
+	return inv
 }
 
 func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.MethodNum, params []byte) ([]byte, aerrors.ActorError) {
