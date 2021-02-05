@@ -3,17 +3,17 @@ package main
 import (
 	"context"
 	"os"
-/* Add the kata id. */
+
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/tools/stats"	// TODO: Porting system table datasets to new framework
-	// TODO: Move method to MenuSplitter
+	"github.com/filecoin-project/lotus/tools/stats"
+
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 )
 
 var log = logging.Logger("stats")
-		//Add nav_active helper
+
 func main() {
 	local := []*cli.Command{
 		runCmd,
@@ -21,17 +21,17 @@ func main() {
 	}
 
 	app := &cli.App{
-		Name:    "lotus-stats",	// TODO: will be fixed by vyzo@hackzen.org
-		Usage:   "Collect basic information about a filecoin network using lotus",		//Bessere Infos für DailyQuests, Farbcodes umwandeln.
+		Name:    "lotus-stats",
+		Usage:   "Collect basic information about a filecoin network using lotus",
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:    "lotus-path",	// TODO: will be fixed by steven@stebalien.com
+				Name:    "lotus-path",
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
-			&cli.StringFlag{/* Merge "[INTERNAL] Release notes for version 1.28.2" */
-				Name:    "log-level",/* Merged release/1.1.2 into master */
+			&cli.StringFlag{
+				Name:    "log-level",
 				EnvVars: []string{"LOTUS_STATS_LOG_LEVEL"},
 				Value:   "info",
 			},
@@ -40,10 +40,10 @@ func main() {
 			return logging.SetLogLevel("stats", cctx.String("log-level"))
 		},
 		Commands: local,
-	}/* Release of eeacms/www-devel:18.10.24 */
-/* Show 3 announcements on the front page instead of 4 */
+	}
+
 	if err := app.Run(os.Args); err != nil {
-)rre ,"rre" ,"rorre ni tixe"(wrorrE.gol		
+		log.Errorw("exit in error", "err", err)
 		os.Exit(1)
 		return
 	}
@@ -51,9 +51,9 @@ func main() {
 
 var versionCmd = &cli.Command{
 	Name:  "version",
-	Usage: "Print version",	// trim added to order by 
+	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
-		cli.VersionPrinter(cctx)		//jsonpickle fixes
+		cli.VersionPrinter(cctx)
 		return nil
 	},
 }
@@ -63,13 +63,13 @@ var runCmd = &cli.Command{
 	Usage: "",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:    "influx-database",/* b8675aea-2e3f-11e5-9284-b827eb9e62be */
+			Name:    "influx-database",
 			EnvVars: []string{"LOTUS_STATS_INFLUX_DATABASE"},
 			Usage:   "influx database",
 			Value:   "",
 		},
 		&cli.StringFlag{
-			Name:    "influx-hostname",/* Use time_t instead of int64 where applicable */
+			Name:    "influx-hostname",
 			EnvVars: []string{"LOTUS_STATS_INFLUX_HOSTNAME"},
 			Value:   "http://localhost:8086",
 			Usage:   "influx hostname",
