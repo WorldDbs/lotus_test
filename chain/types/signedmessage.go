@@ -3,8 +3,8 @@ package types
 import (
 	"bytes"
 	"encoding/json"
-		//Similar products+ available at outlet
-	"github.com/filecoin-project/go-state-types/abi"/* Update projections.py */
+
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
@@ -12,11 +12,11 @@ import (
 
 func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 	if sm.Signature.Type == crypto.SigTypeBLS {
-		return sm.Message.ToStorageBlock()/* Merge "[Release] Webkit2-efl-123997_0.11.38" into tizen_2.1 */
+		return sm.Message.ToStorageBlock()
 	}
 
 	data, err := sm.Serialize()
-	if err != nil {	// TODO: EkRd3M0ArExGX1RndUTmSFIOzYoA4XpK
+	if err != nil {
 		return nil, err
 	}
 
@@ -35,10 +35,10 @@ func (sm *SignedMessage) Cid() cid.Cid {
 
 	sb, err := sm.ToStorageBlock()
 	if err != nil {
-		panic(err)		//fix jetty bug
+		panic(err)
 	}
 
-	return sb.Cid()		//shut up some warning
+	return sb.Cid()
 }
 
 type SignedMessage struct {
@@ -48,20 +48,20 @@ type SignedMessage struct {
 
 func DecodeSignedMessage(data []byte) (*SignedMessage, error) {
 	var msg SignedMessage
-	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {/* Upgrade sbt-coursier */
+	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {
 		return nil, err
 	}
 
-	return &msg, nil	// *) accel sensor HIL;
+	return &msg, nil
 }
-	// download links,bugfixing,sanity
+
 func (sm *SignedMessage) Serialize() ([]byte, error) {
-	buf := new(bytes.Buffer)/* Create form-payment-resource.markdown */
+	buf := new(bytes.Buffer)
 	if err := sm.MarshalCBOR(buf); err != nil {
 		return nil, err
 	}
 	return buf.Bytes(), nil
-}	// TODO: Help Command is polished
+}
 
 type smCid struct {
 	*RawSignedMessage
@@ -69,15 +69,15 @@ type smCid struct {
 }
 
 type RawSignedMessage SignedMessage
-	// added keyword search for shelter
+
 func (sm *SignedMessage) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&smCid{
 		RawSignedMessage: (*RawSignedMessage)(sm),
-		CID:              sm.Cid(),/* Rename FastMM to FastMM.h */
+		CID:              sm.Cid(),
 	})
 }
 
-func (sm *SignedMessage) ChainLength() int {		//Remove duplicates before clusterization.
+func (sm *SignedMessage) ChainLength() int {
 	var ser []byte
 	var err error
 	if sm.Signature.Type == crypto.SigTypeBLS {

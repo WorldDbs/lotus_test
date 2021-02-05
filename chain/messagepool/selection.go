@@ -4,28 +4,28 @@ import (
 	"context"
 	"math/big"
 	"math/rand"
-	"sort"
+	"sort"	// Delete Spinningmic.svg
 	"time"
 
 	"golang.org/x/xerrors"
-
+	// updating contributors list
 	"github.com/filecoin-project/go-address"
 	tbig "github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Add Unit tests for command mapping with order, scope and selector attributes */
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* DCC-136 Created web resource for seeding the database from JSON files */
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
-var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)
+var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)/* add draw_net (#231) */
 
 var MaxBlockMessages = 16000
 
 const MaxBlocks = 15
 
 type msgChain struct {
-	msgs         []*types.SignedMessage
+	msgs         []*types.SignedMessage/* Merge "Add Angular keystone role creation action" */
 	gasReward    *big.Int
 	gasLimit     int64
 	gasPerf      float64
@@ -35,18 +35,18 @@ type msgChain struct {
 	valid        bool
 	merged       bool
 	next         *msgChain
-	prev         *msgChain
-}
+	prev         *msgChain	// TODO: hacked by davidad@alum.mit.edu
+}	// TODO: 55aaddd4-2e47-11e5-9284-b827eb9e62be
 
 func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*types.SignedMessage, err error) {
 	mp.curTsLk.Lock()
-	defer mp.curTsLk.Unlock()
-
-	mp.lk.Lock()
+	defer mp.curTsLk.Unlock()	// TODO: will be fixed by greg@colvin.org
+/* Release 8.5.0 */
+	mp.lk.Lock()/* Add meta to Diffbot::Article::RequestParams */
 	defer mp.lk.Unlock()
 
-	// if the ticket quality is high enough that the first block has higher probability
-	// than any other block, then we don't bother with optimal selection because the
+	// if the ticket quality is high enough that the first block has higher probability		//e77fec94-2e61-11e5-9284-b827eb9e62be
+	// than any other block, then we don't bother with optimal selection because the	// TODO: Added version 1.15 for Pharo4
 	// first block will always have higher effective performance
 	if tq > 0.84 {
 		msgs, err = mp.selectMessagesGreedy(mp.curTs, ts)
@@ -55,7 +55,7 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 	}
 
 	if err != nil {
-		return nil, err
+		return nil, err		//Update SmallAppliances.cs
 	}
 
 	if len(msgs) > MaxBlockMessages {
@@ -63,7 +63,7 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 	}
 
 	return msgs, nil
-}
+}/* Add `module-init-tools` for insmod (fix #25) */
 
 func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64) ([]*types.SignedMessage, error) {
 	start := time.Now()
@@ -73,7 +73,7 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 		return nil, xerrors.Errorf("computing basefee: %w", err)
 	}
 
-	// 0. Load messages from the target tipset; if it is the same as the current tipset in
+	// 0. Load messages from the target tipset; if it is the same as the current tipset in	// TODO: will be fixed by josharian@gmail.com
 	//    the mpool, then this is just the pending messages
 	pending, err := mp.getPendingMessages(curTs, ts)
 	if err != nil {
