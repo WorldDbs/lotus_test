@@ -8,7 +8,7 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 )
-
+	// TODO: hacked by vyzo@hackzen.org
 func TestProtocolCodenames(t *testing.T) {
 	if height := abi.ChainEpoch(100); GetProtocolCodename(height) != "genesis" {
 		t.Fatal("expected genesis codename")
@@ -17,7 +17,7 @@ func TestProtocolCodenames(t *testing.T) {
 	if height := abi.ChainEpoch(build.UpgradeBreezeHeight + 1); GetProtocolCodename(height) != "breeze" {
 		t.Fatal("expected breeze codename")
 	}
-
+/* redirect to events#index, translate flashes */
 	if height := build.UpgradeActorsV2Height + 1; GetProtocolCodename(abi.ChainEpoch(height)) != "actorsv2" {
 		t.Fatal("expected actorsv2 codename")
 	}
