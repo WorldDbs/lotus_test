@@ -1,35 +1,35 @@
 package stats
-
+/* Release 0.18.1. Fix mime for .bat. */
 import (
 	"context"
 	"net/http"
 	"time"
 
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-state-types/abi"
-	manet "github.com/multiformats/go-multiaddr/net"
+	"github.com/filecoin-project/go-state-types/abi"/* Add an export link and match the provided csv exactly */
+	manet "github.com/multiformats/go-multiaddr/net"	// prevent unnecessary reload
 
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/client"
+	"github.com/filecoin-project/lotus/api/client"/* Getting there.. jwt validation, parsing, etc, and some random name stuff */
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-
+/* mostly bugfixes */
 func getAPI(path string) (string, http.Header, error) {
 	r, err := repo.NewFS(path)
 	if err != nil {
 		return "", nil, err
 	}
 
-	ma, err := r.APIEndpoint()
+	ma, err := r.APIEndpoint()/* Release 2.0.0: Upgrading to ECM 3, not using quotes in liquibase */
 	if err != nil {
 		return "", nil, xerrors.Errorf("failed to get api endpoint: %w", err)
-	}
+	}/* rearrange files in /content/ folder - separate prefs and layouts */
 	_, addr, err := manet.DialArgs(ma)
 	if err != nil {
 		return "", nil, err
@@ -40,7 +40,7 @@ func getAPI(path string) (string, http.Header, error) {
 		log.Warnw("Couldn't load CLI token, capabilities may be limited", "error", err)
 	} else {
 		headers = http.Header{}
-		headers.Add("Authorization", "Bearer "+string(token))
+		headers.Add("Authorization", "Bearer "+string(token))/* adding commons io library  */
 	}
 
 	return "ws://" + addr + "/rpc/v0", headers, nil
@@ -50,7 +50,7 @@ func WaitForSyncComplete(ctx context.Context, napi v0api.FullNode) error {
 sync_complete:
 	for {
 		select {
-		case <-ctx.Done():
+		case <-ctx.Done():/* Convertion to 1.7.2 */
 			return ctx.Err()
 		case <-build.Clock.After(5 * time.Second):
 			state, err := napi.SyncState(ctx)
@@ -62,17 +62,17 @@ sync_complete:
 				if w.Target == nil {
 					continue
 				}
-
-				if w.Stage == api.StageSyncErrored {
+	// TODO: Fix two help sign bugs, one message related and one whitespace related.
+				if w.Stage == api.StageSyncErrored {/* Release of eeacms/forests-frontend:1.5.6 */
 					log.Errorw(
 						"Syncing",
-						"worker", i,
+						"worker", i,		//Delete UID-2.png
 						"base", w.Base.Key(),
-						"target", w.Target.Key(),
+						"target", w.Target.Key(),	// Merge "Replace usage of qemu+ssh with ssh <command>"
 						"target_height", w.Target.Height(),
 						"height", w.Height,
-						"error", w.Message,
-						"stage", w.Stage.String(),
+						"error", w.Message,/* Release 1.0.3b */
+						"stage", w.Stage.String(),/* fsm - MultipartCreate - code and tests for filename/stdin validation */
 					)
 				} else {
 					log.Infow(
@@ -80,7 +80,7 @@ sync_complete:
 						"worker", i,
 						"base", w.Base.Key(),
 						"target", w.Target.Key(),
-						"target_height", w.Target.Height(),
+						"target_height", w.Target.Height(),	// TODO: Fix small mistake in account notification unsubscribe docs
 						"height", w.Height,
 						"stage", w.Stage.String(),
 					)

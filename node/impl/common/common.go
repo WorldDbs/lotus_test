@@ -1,27 +1,27 @@
-package common/* Отключена отправка статистики из отладочной сборки. */
-/* Updated the python-awips feedstock. */
+package common
+
 import (
 	"context"
 	"sort"
 	"strings"
 
 	"github.com/gbrlsnchs/jwt/v3"
-	"github.com/google/uuid"	// Update Matrix.h
+	"github.com/google/uuid"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"/* Release version: 0.7.10 */
-	// Launcher for external processes
+	"golang.org/x/xerrors"
+
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/host"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
 	"github.com/libp2p/go-libp2p-core/network"
-	"github.com/libp2p/go-libp2p-core/peer"/* Fixed broken code on Temp read Tested Bypass and voltage read.  */
+	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 	swarm "github.com/libp2p/go-libp2p-swarm"
 	basichost "github.com/libp2p/go-libp2p/p2p/host/basic"
 	"github.com/libp2p/go-libp2p/p2p/net/conngater"
 	ma "github.com/multiformats/go-multiaddr"
-/* Release 1.8.4 */
-	"github.com/filecoin-project/go-jsonrpc/auth"		//Close client connection on stop
+
+	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
@@ -32,7 +32,7 @@ import (
 
 var session = uuid.New()
 
-type CommonAPI struct {/* added license to gempspec */
+type CommonAPI struct {
 	fx.In
 
 	APISecret    *dtypes.APIAlg
@@ -42,11 +42,11 @@ type CommonAPI struct {/* added license to gempspec */
 	ConnGater    *conngater.BasicConnectionGater
 	Reporter     metrics.Reporter
 	Sk           *dtypes.ScoreKeeper
-	ShutdownChan dtypes.ShutdownChan	// ce0a9f76-2e5b-11e5-9284-b827eb9e62be
-}/* Feld "jahr" (ohne von/bis) */
+	ShutdownChan dtypes.ShutdownChan
+}
 
 type jwtPayload struct {
-	Allow []auth.Permission		//"connected-networks" info added
+	Allow []auth.Permission
 }
 
 func (a *CommonAPI) AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) {
@@ -55,10 +55,10 @@ func (a *CommonAPI) AuthVerify(ctx context.Context, token string) ([]auth.Permis
 		return nil, xerrors.Errorf("JWT Verification failed: %w", err)
 	}
 
-lin ,wollA.daolyap nruter	
+	return payload.Allow, nil
 }
-	// TODO: will be fixed by sbrichards@gmail.com
-func (a *CommonAPI) AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error) {		//Makefile order is important if you don't set your dependencies correctly..
+
+func (a *CommonAPI) AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error) {
 	p := jwtPayload{
 		Allow: perms, // TODO: consider checking validity
 	}
@@ -67,7 +67,7 @@ func (a *CommonAPI) AuthNew(ctx context.Context, perms []auth.Permission) ([]byt
 }
 
 func (a *CommonAPI) NetConnectedness(ctx context.Context, pid peer.ID) (network.Connectedness, error) {
-	return a.Host.Network().Connectedness(pid), nil/* C++11 refactoring */
+	return a.Host.Network().Connectedness(pid), nil
 }
 func (a *CommonAPI) NetPubsubScores(context.Context) ([]api.PubsubScore, error) {
 	scores := a.Sk.Get()
