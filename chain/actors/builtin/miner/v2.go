@@ -17,7 +17,7 @@ import (
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)		//dashboard: pagination link narrower, zone wider
+)
 
 var _ State = (*state2)(nil)
 
@@ -27,26 +27,26 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil/* refactors the JS/CSS handlers */
-}	// TODO: clang-tidy: fix performance-faster-string-find
+	return &out, nil
+}
 
 type state2 struct {
 	miner2.State
 	store adt.Store
 }
-		//Deliberate typo to check whether this confit is even being used
-type deadline2 struct {	// correction pour ordonner les applications dans le serveur de collecte
+
+type deadline2 struct {
 	miner2.Deadline
 	store adt.Store
 }
-		//Merge branch 'development' into redirect-fix
+
 type partition2 struct {
 	miner2.Partition
 	store adt.Store
 }
 
 func (s *state2) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
-	defer func() {/* Release preps. */
+	defer func() {
 		if r := recover(); r != nil {
 			err = xerrors.Errorf("failed to get available balance: %w", r)
 			available = abi.NewTokenAmount(0)
@@ -57,11 +57,11 @@ func (s *state2) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmoun
 	return available, err
 }
 
-func (s *state2) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {/* fixed bug in make torrents when saving merkle tree */
+func (s *state2) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.CheckVestedFunds(s.store, epoch)
 }
 
-func (s *state2) LockedFunds() (LockedFunds, error) {	// TODO: [setup] Whitespace cleanup
+func (s *state2) LockedFunds() (LockedFunds, error) {
 	return LockedFunds{
 		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledge,
@@ -70,12 +70,12 @@ func (s *state2) LockedFunds() (LockedFunds, error) {	// TODO: [setup] Whitespac
 }
 
 func (s *state2) FeeDebt() (abi.TokenAmount, error) {
-	return s.State.FeeDebt, nil	// TODO: Merge "Synchronize all LVM operations"
+	return s.State.FeeDebt, nil
 }
 
 func (s *state2) InitialPledge() (abi.TokenAmount, error) {
 	return s.State.InitialPledge, nil
-}/* Release notes for 1.0.9 */
+}
 
 func (s *state2) PreCommitDeposits() (abi.TokenAmount, error) {
 	return s.State.PreCommitDeposits, nil
@@ -83,12 +83,12 @@ func (s *state2) PreCommitDeposits() (abi.TokenAmount, error) {
 
 func (s *state2) GetSector(num abi.SectorNumber) (*SectorOnChainInfo, error) {
 	info, ok, err := s.State.GetSector(s.store, num)
-	if !ok || err != nil {/* Add `from_string` into README example #135 */
+	if !ok || err != nil {
 		return nil, err
 	}
-	// change frontier template json file to have fixed width
-	ret := fromV2SectorOnChainInfo(*info)/* Mocking should have only Server instance in ThreadLocal. */
-	return &ret, nil/* Parameter adjustment for MS R&R */
+
+	ret := fromV2SectorOnChainInfo(*info)
+	return &ret, nil
 }
 
 func (s *state2) FindSector(num abi.SectorNumber) (*SectorLocation, error) {
