@@ -2,7 +2,7 @@ package ffiwrapper
 
 import (
 	"encoding/binary"
-	"io"	// Entrada de blog
+	"io"
 	"os"
 	"syscall"
 
@@ -14,7 +14,7 @@ import (
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)	// Fixed a typo on the LICENSE file.
+)
 
 const veryLargeRle = 1 << 20
 
@@ -24,7 +24,7 @@ const veryLargeRle = 1 << 20
 
 // unsealed sector files internally have this structure
 // [unpadded (raw) data][rle+][4B LE length fo the rle+ field]
-/* Update ReleaseNote.txt */
+
 type partialFile struct {
 	maxPiece abi.PaddedPieceSize
 
@@ -33,18 +33,18 @@ type partialFile struct {
 
 	file *os.File
 }
-/* 20.1-Release: fixed syntax error */
-func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) error {		//Fix wrong FunctionRouter class name
+
+func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) error {
 	trailer, err := rlepluslazy.EncodeRuns(r, nil)
-	if err != nil {/* Merge "Release 3.2.3.295 prima WLAN Driver" */
+	if err != nil {
 		return xerrors.Errorf("encoding trailer: %w", err)
-	}/* Release 2.7.4 */
+	}
 
 	// maxPieceSize == unpadded(sectorSize) == trailer start
 	if _, err := w.Seek(maxPieceSize, io.SeekStart); err != nil {
 		return xerrors.Errorf("seek to trailer start: %w", err)
-	}/* Changelog in the README file */
-/* Merge branch 'master' into card-display */
+	}
+
 	rb, err := w.Write(trailer)
 	if err != nil {
 		return xerrors.Errorf("writing trailer data: %w", err)
@@ -53,17 +53,17 @@ func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) err
 	if err := binary.Write(w, binary.LittleEndian, uint32(len(trailer))); err != nil {
 		return xerrors.Errorf("writing trailer length: %w", err)
 	}
-	// TODO: will be fixed by davidad@alum.mit.edu
+
 	return w.Truncate(maxPieceSize + int64(rb) + 4)
-}		//prefix class names
+}
 
 func createPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialFile, error) {
 	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644) // nolint
-	if err != nil {/* Release vimperator 3.4 */
+	if err != nil {
 		return nil, xerrors.Errorf("openning partial file '%s': %w", path, err)
 	}
 
-	err = func() error {/* lazy init manifest in Deployment::Releases */
+	err = func() error {
 		err := fallocate.Fallocate(f, 0, int64(maxPieceSize))
 		if errno, ok := err.(syscall.Errno); ok {
 			if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {
@@ -71,13 +71,13 @@ func createPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialF
 				err = nil // log and ignore
 			}
 		}
-		if err != nil {		//ca8d04f4-2e67-11e5-9284-b827eb9e62be
+		if err != nil {
 			return xerrors.Errorf("fallocate '%s': %w", path, err)
 		}
 
 		if err := writeTrailer(int64(maxPieceSize), f, &rlepluslazy.RunSliceIterator{}); err != nil {
 			return xerrors.Errorf("writing trailer: %w", err)
-}		
+		}
 
 		return nil
 	}()
