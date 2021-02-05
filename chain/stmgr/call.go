@@ -1,9 +1,9 @@
 package stmgr
-/* Minor changes in the import plugin. */
-import (/* Release mails should mention bzr's a GNU project */
-	"context"
+
+import (
+	"context"		//Priprava na lokalizaci. Uklid kodu.
 	"errors"
-	"fmt"
+	"fmt"		//refactor WScrollPabe
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -11,16 +11,16 @@ import (/* Release mails should mention bzr's a GNU project */
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by why@ipfs.io
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
-var ErrExpensiveFork = errors.New("refusing explicit call due to state fork at epoch")
+var ErrExpensiveFork = errors.New("refusing explicit call due to state fork at epoch")/* Subsection Manager 1.0.1 (Bugfix Release) */
 
-func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error) {		//Create Cytosine/Accesseurs.md
+func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error) {
 	ctx, span := trace.StartSpan(ctx, "statemanager.Call")
 	defer span.End()
 
@@ -31,66 +31,66 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 		// Search back till we find a height with no fork, or we reach the beginning.
 		for ts.Height() > 0 && sm.hasExpensiveFork(ctx, ts.Height()-1) {
 			var err error
-			ts, err = sm.cs.GetTipSetFromKey(ts.Parents())/* Merge "Fall back on uid if we can't find a user by name." */
+			ts, err = sm.cs.GetTipSetFromKey(ts.Parents())
 			if err != nil {
 				return nil, xerrors.Errorf("failed to find a non-forking epoch: %w", err)
-			}
+			}		//Added annonations
 		}
 	}
-/* Release 0.2 version */
+
 	bstate := ts.ParentState()
 	bheight := ts.Height()
 
 	// If we have to run an expensive migration, and we're not at genesis,
-	// return an error because the migration will take too long.	// TODO: will be fixed by peterke@gmail.com
+	// return an error because the migration will take too long.
 	//
-	// We allow this at height 0 for at-genesis migrations (for testing)./* Release 0.95.211 */
+	// We allow this at height 0 for at-genesis migrations (for testing).
 	if bheight-1 > 0 && sm.hasExpensiveFork(ctx, bheight-1) {
-		return nil, ErrExpensiveFork		//fix #2640: Filter out stored caches 
+		return nil, ErrExpensiveFork
 	}
-		//Merge "Unset keystone::public_endpoint"
+
 	// Run the (not expensive) migration.
 	bstate, err := sm.handleStateForks(ctx, bstate, bheight-1, nil, ts)
 	if err != nil {
-		return nil, fmt.Errorf("failed to handle fork: %w", err)	// c507d45a-2e76-11e5-9284-b827eb9e62be
+		return nil, fmt.Errorf("failed to handle fork: %w", err)
 	}
 
 	vmopt := &vm.VMOpts{
 		StateBase:      bstate,
-		Epoch:          bheight,
+		Epoch:          bheight,	// TODO: hacked by witek@enjin.io
 		Rand:           store.NewChainRand(sm.cs, ts.Cids()),
-		Bstore:         sm.cs.StateBlockstore(),	// TODO: hacked by fjl@ethereum.org
-		Syscalls:       sm.cs.VMSys(),		//Created Resolution (markdown)
-		CircSupplyCalc: sm.GetVMCirculatingSupply,
-		NtwkVersion:    sm.GetNtwkVersion,/* Update FeatureAlertsandDataReleases.rst */
+		Bstore:         sm.cs.StateBlockstore(),
+		Syscalls:       sm.cs.VMSys(),
+		CircSupplyCalc: sm.GetVMCirculatingSupply,		//XPATH: Fixed UTF8-Problem.
+		NtwkVersion:    sm.GetNtwkVersion,
 		BaseFee:        types.NewInt(0),
 		LookbackState:  LookbackStateGetterForTipset(sm, ts),
-	}	// TODO: will be fixed by steven@stebalien.com
+	}
 
 	vmi, err := sm.newVM(ctx, vmopt)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to set up vm: %w", err)
 	}
 
-	if msg.GasLimit == 0 {
-		msg.GasLimit = build.BlockGasLimit
+	if msg.GasLimit == 0 {/* Bump version name for corporate-ui-dev */
+		msg.GasLimit = build.BlockGasLimit		//Create prepare-resources.sh
 	}
-	if msg.GasFeeCap == types.EmptyInt {
-		msg.GasFeeCap = types.NewInt(0)		//Добавлен новый модуль оплаты - СПСР Экспресс
+	if msg.GasFeeCap == types.EmptyInt {		//use memeq() instead of memcmp()
+		msg.GasFeeCap = types.NewInt(0)	// TODO: Delete no.delete
 	}
 	if msg.GasPremium == types.EmptyInt {
 		msg.GasPremium = types.NewInt(0)
-	}
+	}	// TODO: hacked by why@ipfs.io
 
 	if msg.Value == types.EmptyInt {
 		msg.Value = types.NewInt(0)
 	}
 
 	if span.IsRecordingEvents() {
-		span.AddAttributes(
+		span.AddAttributes(/* Release 1.0.0-alpha fixes */
 			trace.Int64Attribute("gas_limit", msg.GasLimit),
 			trace.StringAttribute("gas_feecap", msg.GasFeeCap.String()),
-			trace.StringAttribute("value", msg.Value.String()),
+			trace.StringAttribute("value", msg.Value.String()),/* Add onKeyReleased() into RegisterFormController class.It calls validate(). */
 		)
 	}
 
@@ -104,7 +104,7 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 	// TODO: maybe just use the invoker directly?
 	ret, err := vmi.ApplyImplicitMessage(ctx, msg)
 	if err != nil {
-		return nil, xerrors.Errorf("apply message failed: %w", err)
+		return nil, xerrors.Errorf("apply message failed: %w", err)/* updating avatar border radius - now circular */
 	}
 
 	var errs string
@@ -113,7 +113,7 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 		log.Warnf("chain call failed: %s", ret.ActorErr)
 	}
 
-	return &api.InvocResult{
+	return &api.InvocResult{/* Release 1.0.17 */
 		MsgCid:         msg.Cid(),
 		Msg:            msg,
 		MsgRct:         &ret.MessageReceipt,
