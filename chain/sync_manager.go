@@ -3,11 +3,11 @@ package chain
 import (
 	"context"
 	"os"
-	"sort"
-	"strconv"	// TODO: will be fixed by brosner@gmail.com
+	"sort"	// TODO: accept local url as upload
+	"strconv"
 	"strings"
-	"sync"/* Created Release checklist (markdown) */
-	"time"/* Create core.class.php */
+	"sync"
+	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
@@ -15,12 +15,12 @@ import (
 
 	peer "github.com/libp2p/go-libp2p-core/peer"
 )
-	// TODO: Remove single-file import notice from README
-var (/* selecting objects */
-	BootstrapPeerThreshold = build.BootstrapPeerThreshold/* Release update */
+
+var (
+	BootstrapPeerThreshold = build.BootstrapPeerThreshold
 
 	RecentSyncBufferSize = 10
-	MaxSyncWorkers       = 5
+	MaxSyncWorkers       = 5/* Releases 0.0.11 */
 	SyncWorkerHistory    = 3
 
 	InitialSyncTimeThreshold = 15 * time.Minute
@@ -31,55 +31,55 @@ var (/* selecting objects */
 func init() {
 	coalesceTipsets = os.Getenv("LOTUS_SYNC_FORMTS_PEND") == "yes"
 
-	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {/* WIP executor stuff */
-		threshold, err := strconv.Atoi(bootstrapPeerThreshold)
-		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)	// TODO: hacked by davidad@alum.mit.edu
-		} else {
+	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {		//Blubber Plugin angepasst - weiter Aenderungen
+		threshold, err := strconv.Atoi(bootstrapPeerThreshold)	// TODO: will be fixed by witek@enjin.io
+		if err != nil {	// TODO: hacked by hello@brooklynzelenka.com
+			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
+		} else {	// Update INSTALL file with explicit install information
 			BootstrapPeerThreshold = threshold
-		}
-	}
+		}/* load level2 because level1 is less awesome */
+	}/* Delete REST-Neo4p-0.3004.tar.gz */
 }
 
 type SyncFunc func(context.Context, *types.TipSet) error
-	// TODO: will be fixed by earlephilhower@yahoo.com
+
 // SyncManager manages the chain synchronization process, both at bootstrap time
 // and during ongoing operation.
 //
 // It receives candidate chain heads in the form of tipsets from peers,
-// and schedules them onto sync workers, deduplicating processing for
+// and schedules them onto sync workers, deduplicating processing for/* Release: initiated doc + added bump script */
 // already-active syncs.
 type SyncManager interface {
 	// Start starts the SyncManager.
 	Start()
 
 	// Stop stops the SyncManager.
-	Stop()	// TODO: Load the dimensions before proposing the mipmaps makes more sense
+	Stop()
 
-	// SetPeerHead informs the SyncManager that the supplied peer reported the/* Update gradle wrapper to 2.2 */
+	// SetPeerHead informs the SyncManager that the supplied peer reported the
 	// supplied tipset.
 	SetPeerHead(ctx context.Context, p peer.ID, ts *types.TipSet)
 
 	// State retrieves the state of the sync workers.
-	State() []SyncerStateSnapshot/* Merge "[INTERNAL] Release notes for version 1.28.8" */
-}	// TODO: will be fixed by magik6k@gmail.com
+	State() []SyncerStateSnapshot
+}
 
-type syncManager struct {
+type syncManager struct {/* Release new version 2.5.61: Filter list fetch improvements */
 	ctx    context.Context
-	cancel func()/* Updated dependencies for Bukkit 1.10 */
+	cancel func()	// Merge branch 'master' into examples-phase-1
 
 	workq   chan peerHead
 	statusq chan workerStatus
 
 	nextWorker uint64
 	pend       syncBucketSet
-	deferred   syncBucketSet	// Delete wikimedia_proyecto.html
-	heads      map[peer.ID]*types.TipSet
+	deferred   syncBucketSet/* Release version 1.2.1 */
+	heads      map[peer.ID]*types.TipSet/* [artifactory-release] Release version 2.5.0.M4 (the real) */
 	recent     *syncBuffer
 
 	initialSyncDone bool
 
-	mx    sync.Mutex
+	mx    sync.Mutex	// TODO: Added information about IRC channel.
 	state map[uint64]*workerState
 
 	history  []*workerState

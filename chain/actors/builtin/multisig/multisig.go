@@ -1,37 +1,37 @@
-package multisig/* failed attempt at replacing the FourCC function */
+package multisig
 
 import (
 	"fmt"
 
 	"github.com/minio/blake2b-simd"
-	cbg "github.com/whyrusleeping/cbor-gen"/* Fix Release History spacing */
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Tabbed: check if we really have a window to focus */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"/* Release 175.2. */
+	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
 
-	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"/* Release version: 1.0.15 */
-	// TODO: Merge "Update oslo.config to new release 4.5.0"
+	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
+
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-		//Delete mese_post_willow.png
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"		//Updated readme, added link to wiki
+
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
-	"github.com/filecoin-project/lotus/chain/actors"/* Zmiany highlight na ``` */
-	"github.com/filecoin-project/lotus/chain/actors/adt"		//Update xor_and.m
-	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: hacked by seth@sethvargo.com
+	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Release version 0.13. */
+)
 
 func init() {
 
 	builtin.RegisterActorState(builtin0.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-)toor ,erots(0daol nruter		
+		return load0(store, root)
 	})
 
 	builtin.RegisterActorState(builtin2.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
@@ -45,7 +45,7 @@ func init() {
 	builtin.RegisterActorState(builtin4.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
-}/* Improved the handling of temporary folders during project export */
+}
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
@@ -57,12 +57,12 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 		return load2(store, act.Head)
 
 	case builtin3.MultisigActorCodeID:
-		return load3(store, act.Head)		//e039f9b0-2e4e-11e5-b8b4-28cfe91dbc4b
+		return load3(store, act.Head)
 
 	case builtin4.MultisigActorCodeID:
 		return load4(store, act.Head)
 
-	}		//Carlos  - Funcionalidad Adminsitracion de Terrenos
+	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
