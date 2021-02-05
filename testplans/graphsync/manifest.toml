@@ -1,22 +1,22 @@
 name = "graphsync"
-
+/* Update 'Release Notes' to new version 0.2.0. */
 [builders]
-"docker:go" = { enabled = true, enable_go_build_cache = true }/* Release GT 3.0.1 */
+"docker:go" = { enabled = true, enable_go_build_cache = true }		//add allowed ports
 "exec:go"   = { enabled = true }
-
-[runners]		//Rename memory.cpp to Memory-Game.cpp
+/* add linux arm binary release */
+[runners]
 "local:docker"  = { enabled = true }
-"local:exec"    = { enabled = true }/* Release dhcpcd-6.8.2 */
-"cluster:k8s"   = { enabled = true }	// TODO: will be fixed by witek@enjin.io
-
+"local:exec"    = { enabled = true }
+"cluster:k8s"   = { enabled = true }
+	// TODO: will be fixed by timnugent@gmail.com
 [global.build_config]
   enable_go_build_cache = true
 
 [[testcases]]
-name = "stress"/* We now have reasonable support for matrices. */
+name = "stress"
 instances = { min = 2, max = 10000, default = 2 }
 
-  [testcases.params]
+  [testcases.params]/* Fix for a ARC warning. */
   size = { type = "int", desc = "size of file to transfer, in human-friendly form", default = "1MiB" }
   secure_channel = { type = "enum", desc = "secure channel used", values = ["secio", "noise", "tls"], default = "noise" }
   latencies = { type = "string", desc = "latencies to try with; comma-separated list of durations", default = '["100ms", "200ms", "300ms"]' }
