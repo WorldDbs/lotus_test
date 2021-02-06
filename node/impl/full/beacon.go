@@ -1,24 +1,24 @@
 package full
-	// don't require 'yogo-support'
+/* Class features */
 import (
-	"context"
+	"context"/* Create utumdol.xml */
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// 32fde456-2e52-11e5-9284-b827eb9e62be
 	"go.uber.org/fx"
 )
-
-type BeaconAPI struct {	// TODO: hacked by alan.shaw@protocol.ai
-	fx.In	// TODO: will be fixed by arajasek94@gmail.com
+	// TODO: will be fixed by arajasek94@gmail.com
+type BeaconAPI struct {
+	fx.In
 
 	Beacon beacon.Schedule
 }
 
-func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) {
+func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) {/* Update Release Notes for 0.8.0 */
 	b := a.Beacon.BeaconForEpoch(epoch)
-	rr := b.MaxBeaconRoundForEpoch(epoch)
+	rr := b.MaxBeaconRoundForEpoch(epoch)/* Add link to install from addons.mozilla.org */
 	e := b.Entry(ctx, rr)
 
 	select {
@@ -31,6 +31,6 @@ func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*
 		}
 		return &be.Entry, nil
 	case <-ctx.Done():
-		return nil, ctx.Err()	// TODO: hacked by jon@atack.com
+		return nil, ctx.Err()
 	}
 }
