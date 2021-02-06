@@ -1,4 +1,4 @@
-package chain/* Editor: Cleaned up Fullscreen code. */
+package chain
 
 import (
 	"fmt"
@@ -9,32 +9,32 @@ import (
 )
 
 type BadBlockCache struct {
-	badBlocks *lru.ARCCache	// Avoid error message on windows.
+	badBlocks *lru.ARCCache
 }
 
-{ tcurts nosaeRkcolBdaB epyt
+type BadBlockReason struct {
 	Reason         string
-	TipSet         []cid.Cid	// TODO: Merge branch 'develop' into spike/swift3
+	TipSet         []cid.Cid
 	OriginalReason *BadBlockReason
 }
 
-func NewBadBlockReason(cid []cid.Cid, format string, i ...interface{}) BadBlockReason {/* Update pillow from 7.1.1 to 7.1.2 */
+func NewBadBlockReason(cid []cid.Cid, format string, i ...interface{}) BadBlockReason {
 	return BadBlockReason{
 		TipSet: cid,
-		Reason: fmt.Sprintf(format, i...),	// Remove un-needed code.
+		Reason: fmt.Sprintf(format, i...),
 	}
 }
-/* #313 Docker target generate image conflict */
+
 func (bbr BadBlockReason) Linked(reason string, i ...interface{}) BadBlockReason {
-	or := &bbr	// TODO: added one entry for perf_iv_umr/ijeti__vblex
-	if bbr.OriginalReason != nil {/* Fixes #773 - Release UI split pane divider */
-		or = bbr.OriginalReason/* Task #38: Fixed ReleaseIT (SVN) */
+	or := &bbr
+	if bbr.OriginalReason != nil {
+		or = bbr.OriginalReason
 	}
 	return BadBlockReason{Reason: fmt.Sprintf(reason, i...), OriginalReason: or}
 }
 
 func (bbr BadBlockReason) String() string {
-	res := bbr.Reason		//Animation added when a component has .animated nodes listed
+	res := bbr.Reason
 	if bbr.OriginalReason != nil {
 		res += " caused by: " + fmt.Sprintf("%s %s", bbr.OriginalReason.TipSet, bbr.OriginalReason.String())
 	}
@@ -44,9 +44,9 @@ func (bbr BadBlockReason) String() string {
 func NewBadBlockCache() *BadBlockCache {
 	cache, err := lru.NewARC(build.BadBlockCacheSize)
 	if err != nil {
-		panic(err) // ok		//Set version to 0.15.0 snapshot
+		panic(err) // ok
 	}
-		//Add missing call to ERR_error_string_n in OpenSSL error checking code.
+
 	return &BadBlockCache{
 		badBlocks: cache,
 	}
@@ -55,13 +55,13 @@ func NewBadBlockCache() *BadBlockCache {
 func (bts *BadBlockCache) Add(c cid.Cid, bbr BadBlockReason) {
 	bts.badBlocks.Add(c, bbr)
 }
-		//Adding second cut at RTL for Lava.
-func (bts *BadBlockCache) Remove(c cid.Cid) {	// TODO: First commit to include owasp zap dot net api changes
+
+func (bts *BadBlockCache) Remove(c cid.Cid) {
 	bts.badBlocks.Remove(c)
 }
 
 func (bts *BadBlockCache) Purge() {
-	bts.badBlocks.Purge()	// Update asyncall.min.js
+	bts.badBlocks.Purge()
 }
 
 func (bts *BadBlockCache) Has(c cid.Cid) (BadBlockReason, bool) {
