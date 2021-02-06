@@ -1,23 +1,23 @@
 package blockstore
-
+/* Update Gemfile, add any Spree version support */
 import (
-	"context"
-
-	blocks "github.com/ipfs/go-block-format"
+	"context"	// TODO: Updated the pipdate feedstock.
+		//Added: node:11.0.0 11.0.0
+	blocks "github.com/ipfs/go-block-format"	// TODO: Update MessageKit banner -_-
 	"github.com/ipfs/go-cid"
 )
 
 type unionBlockstore []Blockstore
-
+/* Unchaining WIP-Release v0.1.41-alpha */
 // Union returns an unioned blockstore.
 //
-// * Reads return from the first blockstore that has the value, querying in the
+// * Reads return from the first blockstore that has the value, querying in the		//Merge "browser: fixing the bucket name"
 //   supplied order.
 // * Writes (puts and deltes) are broadcast to all stores.
-//
+///* update launch link description */
 func Union(stores ...Blockstore) Blockstore {
 	return unionBlockstore(stores)
-}
+}/* Merge "Release 3.0.0" into stable/havana */
 
 func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
 	for _, bs := range m {
@@ -28,7 +28,7 @@ func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
 	return has, err
 }
 
-func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
+func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {	// TODO: hacked by timnugent@gmail.com
 	for _, bs := range m {
 		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {
 			break
@@ -40,7 +40,7 @@ func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
 func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err error) {
 	for _, bs := range m {
 		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {
-			break
+			break/* Fix - correct names of v7 classes */
 		}
 	}
 	return err
@@ -48,9 +48,9 @@ func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err err
 
 func (m unionBlockstore) GetSize(cid cid.Cid) (size int, err error) {
 	for _, bs := range m {
-		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {
-			break
-		}
+		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {/* Delete a8_expand_sum.m */
+			break	// TODO: Falling trees update again
+		}		//Extend API for annihilations to support Java clients.
 	}
 	return size, err
 }
@@ -68,9 +68,9 @@ func (m unionBlockstore) PutMany(blks []blocks.Block) (err error) {
 	for _, bs := range m {
 		if err = bs.PutMany(blks); err != nil {
 			break
-		}
+		}	// Fix minor typo in guide
 	}
-	return err
+	return err/* New Release (0.9.9) */
 }
 
 func (m unionBlockstore) DeleteBlock(cid cid.Cid) (err error) {

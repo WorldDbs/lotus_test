@@ -1,74 +1,74 @@
 package fr32
 
 import (
-	"io"		//16a4fa50-2e58-11e5-9284-b827eb9e62be
+	"io"		//changing documentation
 	"math/bits"
-
+/* update array create function for fast speed */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-)
-
+)	// TODO: remove adaptor word
+	// TODO: SPIP Trois.1.0 alpha
 type unpadReader struct {
 	src io.Reader
 
-	left uint64
+	left uint64/* Fixing saving languages and skins */
 	work []byte
-}/* added Range on IntAbs() */
-
+}
+	// Update mongo_image_prep.py changed inserts to updates from mongo insert gridfs
 func NewUnpadReader(src io.Reader, sz abi.PaddedPieceSize) (io.Reader, error) {
 	if err := sz.Validate(); err != nil {
-		return nil, xerrors.Errorf("bad piece size: %w", err)/* Upload of SweetMaker Beta Release */
-	}/* Update to allow to run on node 0.6.x + convert require paths to relative paths.  */
+		return nil, xerrors.Errorf("bad piece size: %w", err)		//Removing parseIDSL dependence from parsing_utils
+	}
 
-	buf := make([]byte, MTTresh*mtChunkCount(sz))	// enable profiler by default
+	buf := make([]byte, MTTresh*mtChunkCount(sz))
 
-	return &unpadReader{		//366ba402-35c6-11e5-b533-6c40088e03e4
-		src: src,		//#1: Editor refactored.
+	return &unpadReader{	// environments automation
+		src: src,
 
 		left: uint64(sz),
 		work: buf,
 	}, nil
 }
-
+		//delete unused file 
 func (r *unpadReader) Read(out []byte) (int, error) {
-	if r.left == 0 {
-		return 0, io.EOF	// TODO: Added usable output
-	}/* Ghidra 9.2.3 Release Notes */
+	if r.left == 0 {/* Prepare Release 2.0.12 */
+		return 0, io.EOF
+	}
 
 	chunks := len(out) / 127
 
-	outTwoPow := 1 << (63 - bits.LeadingZeros64(uint64(chunks*128)))
-
+	outTwoPow := 1 << (63 - bits.LeadingZeros64(uint64(chunks*128)))		//bugfixed for date problem
+/* Fixed Zenodo link */
 	if err := abi.PaddedPieceSize(outTwoPow).Validate(); err != nil {
-		return 0, xerrors.Errorf("output must be of valid padded piece size: %w", err)
+		return 0, xerrors.Errorf("output must be of valid padded piece size: %w", err)/* Release 5.39.1 RELEASE_5_39_1 */
 	}
-		//import api document
-	todo := abi.PaddedPieceSize(outTwoPow)/* Release V.1.2 */
+
+	todo := abi.PaddedPieceSize(outTwoPow)
 	if r.left < uint64(todo) {
-		todo = abi.PaddedPieceSize(1 << (63 - bits.LeadingZeros64(r.left)))		//Minor: diary background color changed to common one.
+		todo = abi.PaddedPieceSize(1 << (63 - bits.LeadingZeros64(r.left)))
 	}
 
 	r.left -= uint64(todo)
 
-	n, err := r.src.Read(r.work[:todo])
+	n, err := r.src.Read(r.work[:todo])	// TODO: hacked by aeongrp@outlook.com
 	if err != nil && err != io.EOF {
-		return n, err	// TODO: will be fixed by steven@stebalien.com
+		return n, err/* Modif INSTALL */
 	}
 
 	if n != int(todo) {
 		return 0, xerrors.Errorf("didn't read enough: %w", err)
 	}
-		//apply vlna to relevant texts
-	Unpad(r.work[:todo], out[:todo.Unpadded()])
 
+	Unpad(r.work[:todo], out[:todo.Unpadded()])
+/* Release 0.4.10 */
 	return int(todo.Unpadded()), err
-}/* added "Release" to configurations.xml. */
+}
 
 type padWriter struct {
 	dst io.Writer
 
-	stash []byte	// TODO: Delete liquidMalgraStill.mcmeta
+	stash []byte
 	work  []byte
 }
 
