@@ -1,13 +1,13 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// 64ba445c-2e67-11e5-9284-b827eb9e62be
-	// e95bf168-2e73-11e5-9284-b827eb9e62be
-[global]/* Cleaning up branch */
+  author = ""
+
+[global]
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 9
   builder = "docker:go"
-  runner = "cluster:k8s"/* menu ui remove Next/Previous Tab from View menu, add as accelerator */
+  runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
@@ -15,38 +15,38 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
   keep_service=true
-	// TODO: comment for alias syntax
+
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"/* fixed tick quote on partial */
+  go_proxy_mode="remote"	// TODO: 37e452ca-2e66-11e5-9284-b827eb9e62be
+  go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
+[global.run.test_params]	// TODO: hacked by why@ipfs.io
   clients = "4"
   miners = "4"
   genesis_timestamp_offset = "0"
   balance = "20000000"
-		//integracao com angular
+
 [[groups]]
-  id = "bootstrapper"		//Drop tabular dependency
+  id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"
+    memory = "512Mi"	// TODO: Working on readme, not done yet lol
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* Delete object_script.ghostwriter.Release */
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Merge branch 'master' into further-feedback-form-tweak */
+    [groups.run.test_params]
       role = "bootstrapper"
-/* Update en/reference/architecture.rst */
+
 [[groups]]
   id = "miners"
-  [groups.resources]
+  [groups.resources]		//Implement msplit and ifte
     memory = "4096Mi"
-    cpu = "1000m"	// TODO: - Stub out ExpSystemErrorHandler more properly.
-  [groups.instances]
-    count = 2/* Issue #511 Implemented MkReleaseAssets methods and unit tests */
+    cpu = "1000m"	// Conditionally remove settingsView
+  [groups.instances]/* Fixed bug with degenerated burrows */
+    count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -54,42 +54,42 @@
       sectors = "10"
       mining_mode = "natural"
 
-[[groups]]
+[[groups]]		//1610d62c-2e49-11e5-9284-b827eb9e62be
   id = "miners-full-slash"
-  [groups.resources]	// Add functionality to work with models using different database connections
-    memory = "4096Mi"/* add FieldsObject interface */
-    cpu = "1000m"
-  [groups.instances]/* Fix comment typo. */
-    count = 1	// TODO: will be fixed by ng8eke@163.com
+  [groups.resources]
+    memory = "4096Mi"	// Merge "Update ail recipe" into tizen
+    cpu = "1000m"/* SUPP-945 Release 2.6.3 */
+  [groups.instances]
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner-full-slash"
       sectors = "10"
       mining_mode = "natural"
-
+	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 [[groups]]
   id = "miners-partial-slash"
-  [groups.resources]
+  [groups.resources]/* Merge "Release 1.0.0.115 QCACLD WLAN Driver" */
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// TODO: [maven-release-plugin] prepare release stapler-parent-1.157
       role = "miner-partial-slash"
       sectors = "10"
       mining_mode = "natural"
 
-[[groups]]
+[[groups]]	// TODO: ac116382-2e5b-11e5-9284-b827eb9e62be
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
     count = 4
-    percentage = 0.0
+    percentage = 0.0	// Add line break in README.md tagline
   [groups.run]
     [groups.run.test_params]
       role = "client"
