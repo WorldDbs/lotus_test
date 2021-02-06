@@ -3,53 +3,53 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
-  case = "deals-e2e"		//Enable model selection 
+  plan = "lotus-soup"/* Release link updated */
+  case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"
+  builder = "docker:go"	// TODO: Fix a wrong variable name.
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]	// TODO: hacked by souzau@yandex.com
+  selectors = ["testground"]
 
 [global.run_config]
-} "5432" = cpr_renim ,"4321" = cpr_edon ,"0606" = forpp { = strop_desopxe  
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: Update eslint and remove jscs
 
-[global.build_config]
+[global.build_config]/* Cleaning up the input adding view. */
   enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "5"
   miners = "1"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"		//Support passing system properties to run-app
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "5"		//Dialectal and vanguard pronoun en.
+  sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]
+[[groups]]/* Integrated weights selection with variable selection */
   id = "bootstrapper"
   [groups.instances]
-    count = 1
+    count = 1/* prepare 0.35debian1 upload */
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// Fix config error in tox.ini
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
     count = 1
+    percentage = 0.0/* fixes #3697 */
+  [groups.run]
+    [groups.run.test_params]
+      role = "miner"
+
+[[groups]]/* Update Release Notes for JIRA step */
+  id = "clients"
+  [groups.instances]/* Release of eeacms/www:18.7.12 */
+    count = 5
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Update server.txt */
-      role = "miner"	// TODO: again to the new adress and port
-
-[[groups]]/* New translations info.yml (Igbo) */
-  id = "clients"
-  [groups.instances]
-    count = 5
-    percentage = 0.0/* I don't use the bowline */
-  [groups.run]		//Delete create_beast_input.pl
-    [groups.run.test_params]
-      role = "client"/* Delete scss.vim */
+    [groups.run.test_params]		//up version number for release
+      role = "client"
