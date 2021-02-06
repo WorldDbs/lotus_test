@@ -7,42 +7,42 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
-	"os"		//7f40fb5c-2e50-11e5-9284-b827eb9e62be
+	"os"
 	"path/filepath"
 	"strings"
-	"time"	// TODO: will be fixed by cory@protocol.ai
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/ipfs/go-datastore/namespace"
-	logging "github.com/ipfs/go-log/v2"/* Try to use pip2 only on the Mac build */
+	logging "github.com/ipfs/go-log/v2"
 	manet "github.com/multiformats/go-multiaddr/net"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
-	"golang.org/x/xerrors"	// TODO: hacked by arajasek94@gmail.com
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-jsonrpc/auth"/* Make RedirectError a consumable error */
+	"github.com/filecoin-project/go-jsonrpc/auth"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
-	"github.com/filecoin-project/go-statestore"	// TODO: will be fixed by hugomrdias@gmail.com
+	"github.com/filecoin-project/go-statestore"
 
 	"github.com/filecoin-project/lotus/api"
-"dliub/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
-	"github.com/filecoin-project/lotus/lib/rpcenc"/* Released springrestclient version 2.5.7 */
+	"github.com/filecoin-project/lotus/lib/rpcenc"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-		//extra files
+
 var log = logging.Logger("main")
-/* Release of eeacms/www-devel:20.1.8 */
+
 const FlagWorkerRepo = "worker-repo"
 
 // TODO remove after deprecation period
@@ -50,15 +50,15 @@ const FlagWorkerRepoDeprecation = "workerrepo"
 
 func main() {
 	api.RunningNodeType = api.NodeWorker
-	// TODO: hacked by boringland@protonmail.ch
+
 	lotuslog.SetupLogLevels()
-/* Changed version to 141217, this commit is Release Candidate 1 */
+
 	local := []*cli.Command{
 		runCmd,
-		infoCmd,	// TODO: Fix empty sections and sections with custom anchor.
+		infoCmd,
 		storageCmd,
-		setCmd,/* Moved MaterialDataPair into its own type. Started on ExitDecorator. */
-		waitQuietCmd,		//move all deps into gemspec, remove Gemfile.lock
+		setCmd,
+		waitQuietCmd,
 		tasksCmd,
 	}
 
