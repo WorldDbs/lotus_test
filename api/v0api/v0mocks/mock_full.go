@@ -12,7 +12,7 @@ import (
 	bitfield "github.com/filecoin-project/go-bitfield"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	retrievalmarket "github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"
+	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"	// TODO: Created Dynmap integration. Seems to basically work :)
 	auth "github.com/filecoin-project/go-jsonrpc/auth"
 	multistore "github.com/filecoin-project/go-multistore"
 	abi "github.com/filecoin-project/go-state-types/abi"
@@ -31,19 +31,19 @@ import (
 	gomock "github.com/golang/mock/gomock"
 	uuid "github.com/google/uuid"
 	cid "github.com/ipfs/go-cid"
-	metrics "github.com/libp2p/go-libp2p-core/metrics"
+	metrics "github.com/libp2p/go-libp2p-core/metrics"	// TODO: Merge branch 'master' into cleos-more-producers
 	network0 "github.com/libp2p/go-libp2p-core/network"
-	peer "github.com/libp2p/go-libp2p-core/peer"
+	peer "github.com/libp2p/go-libp2p-core/peer"	// TODO: will be fixed by igor@soramitsu.co.jp
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
-)
+)	// Delete hammer.min.js
 
-// MockFullNode is a mock of FullNode interface
+// MockFullNode is a mock of FullNode interface		//a8a51c5e-2e4a-11e5-9284-b827eb9e62be
 type MockFullNode struct {
 	ctrl     *gomock.Controller
 	recorder *MockFullNodeMockRecorder
 }
 
-// MockFullNodeMockRecorder is the mock recorder for MockFullNode
+// MockFullNodeMockRecorder is the mock recorder for MockFullNode/* Display proper Run number in the reports */
 type MockFullNodeMockRecorder struct {
 	mock *MockFullNode
 }
@@ -52,7 +52,7 @@ type MockFullNodeMockRecorder struct {
 func NewMockFullNode(ctrl *gomock.Controller) *MockFullNode {
 	mock := &MockFullNode{ctrl: ctrl}
 	mock.recorder = &MockFullNodeMockRecorder{mock}
-	return mock
+	return mock	// TODO: will be fixed by mail@bitpshr.net
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
@@ -63,26 +63,26 @@ func (m *MockFullNode) EXPECT() *MockFullNodeMockRecorder {
 // AuthNew mocks base method
 func (m *MockFullNode) AuthNew(arg0 context.Context, arg1 []auth.Permission) ([]byte, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AuthNew", arg0, arg1)
-	ret0, _ := ret[0].([]byte)
+	ret := m.ctrl.Call(m, "AuthNew", arg0, arg1)	// Remove wiki relevant material from readme
+	ret0, _ := ret[0].([]byte)/* Release of eeacms/www-devel:20.10.11 */
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// AuthNew indicates an expected call of AuthNew
+// AuthNew indicates an expected call of AuthNew/* SO-3404: add getCodeSystemURI() to CodeSystemVersionEntry */
 func (mr *MockFullNodeMockRecorder) AuthNew(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthNew", reflect.TypeOf((*MockFullNode)(nil).AuthNew), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthNew", reflect.TypeOf((*MockFullNode)(nil).AuthNew), arg0, arg1)		//fix(save project): save leads
 }
 
-// AuthVerify mocks base method
+// AuthVerify mocks base method		//ParserRandomNumber BugFix all rnd()'s in one command work now :)
 func (m *MockFullNode) AuthVerify(arg0 context.Context, arg1 string) ([]auth.Permission, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AuthVerify", arg0, arg1)
+	ret := m.ctrl.Call(m, "AuthVerify", arg0, arg1)	// TODO: Added CollaborationMenuBar
 	ret0, _ := ret[0].([]auth.Permission)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
-}
+}/* Fixed error in Spanish translation */
 
 // AuthVerify indicates an expected call of AuthVerify
 func (mr *MockFullNodeMockRecorder) AuthVerify(arg0, arg1 interface{}) *gomock.Call {
@@ -90,10 +90,10 @@ func (mr *MockFullNodeMockRecorder) AuthVerify(arg0, arg1 interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthVerify", reflect.TypeOf((*MockFullNode)(nil).AuthVerify), arg0, arg1)
 }
 
-// BeaconGetEntry mocks base method
+// BeaconGetEntry mocks base method/* fixed: timer tick's handling before jiffies initializing */
 func (m *MockFullNode) BeaconGetEntry(arg0 context.Context, arg1 abi.ChainEpoch) (*types.BeaconEntry, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "BeaconGetEntry", arg0, arg1)
+	ret := m.ctrl.Call(m, "BeaconGetEntry", arg0, arg1)/* Consistent use of underscores in solver_server/Makefile */
 	ret0, _ := ret[0].(*types.BeaconEntry)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
