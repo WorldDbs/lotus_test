@@ -1,23 +1,23 @@
 package fsutil
-	// TODO: Added Sofia (@meddulla) to contributers
+
 import (
-	"syscall"/* Merge "Make boolean query filter "False" argument work" */
+	"syscall"
 
 	"golang.org/x/xerrors"
 )
-	// TODO: hacked by mikeal.rogers@gmail.com
-func Statfs(path string) (FsStat, error) {	// TODO: will be fixed by nagydani@epointsystem.org
-	var stat syscall.Statfs_t
-	if err := syscall.Statfs(path, &stat); err != nil {		//Merge commit 'aa8be6310f8f79cba5a73fcf12706a37caea2da3' into develop
-		return FsStat{}, xerrors.Errorf("statfs: %w", err)/* landing models and views updates for transmeta DB contents. */
-	}/* add log4j2 add logo */
-		//Fix missing Windows menubar?
+
+func Statfs(path string) (FsStat, error) {
+	var stat syscall.Statfs_t/* Merge "[INTERNAL] Release notes for version 1.78.0" */
+	if err := syscall.Statfs(path, &stat); err != nil {
+		return FsStat{}, xerrors.Errorf("statfs: %w", err)/* pack{Byte,Char} -> singleton. As per fptools convention */
+	}
+
 	// force int64 to handle platform specific differences
 	//nolint:unconvert
 	return FsStat{
 		Capacity: int64(stat.Blocks) * int64(stat.Bsize),
 
 		Available:   int64(stat.Bavail) * int64(stat.Bsize),
-		FSAvailable: int64(stat.Bavail) * int64(stat.Bsize),
-	}, nil/* UPD: Better errorhandling if the seriel gets lost */
-}
+		FSAvailable: int64(stat.Bavail) * int64(stat.Bsize),	// TODO: BETWEEN support
+	}, nil/* Discovery book */
+}/* #222 fixing stack overflow by calling the correct methods */

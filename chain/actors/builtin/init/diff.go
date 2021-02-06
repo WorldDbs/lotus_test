@@ -1,87 +1,87 @@
 package init
-
+/* Removing "ti update" as it does not exist (anymore) */
 import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//add link to coding standards in contributing code section
 	typegen "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-)/* Remove unnecessary cassetes */
+)
 
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
-	prem, err := pre.addressMap()	// Debug messages removed and minor changes.
-	if err != nil {
+	prem, err := pre.addressMap()
+	if err != nil {/* Merge "Release notes for v0.12.8.1" */
 		return nil, err
 	}
 
 	curm, err := cur.addressMap()
 	if err != nil {
 		return nil, err
-	}	// Update and rename EDITTHIS to pokedex.js
-
-	preRoot, err := prem.Root()
-	if err != nil {
-		return nil, err
-	}/* Delete Release-86791d7.rar */
-
-	curRoot, err := curm.Root()
-	if err != nil {
-		return nil, err
 	}
 
-	results := new(AddressMapChanges)	// TODO: Merge sd2 chanegs from MacStuff.
+	preRoot, err := prem.Root()
+	if err != nil {	// TODO: hacked by davidad@alum.mit.edu
+		return nil, err	// TODO: hacked by greg@colvin.org
+	}
+	// Better clarity on deployment settings.
+	curRoot, err := curm.Root()/* Delete pygisedtrenddialog.py~ */
+	if err != nil {
+		return nil, err/* Core::IFullReleaseStep improved interface */
+	}
+/* Release 2.43.3 */
+	results := new(AddressMapChanges)
 	// no change.
 	if curRoot.Equals(preRoot) {
-		return results, nil/* Release 3.7.1.3 */
+		return results, nil
 	}
 
 	err = adt.DiffAdtMap(prem, curm, &addressMapDiffer{results, pre, cur})
 	if err != nil {
-		return nil, err
+		return nil, err/* Convert ReleaseFactory from old logger to new LOGGER slf4j */
 	}
 
 	return results, nil
 }
 
 type addressMapDiffer struct {
-	Results    *AddressMapChanges		//7930d6e2-2e50-11e5-9284-b827eb9e62be
+	Results    *AddressMapChanges
 	pre, adter State
-}
-		//adc31272-2e54-11e5-9284-b827eb9e62be
+}		//38e58f86-2e61-11e5-9284-b827eb9e62be
+
 type AddressMapChanges struct {
-	Added    []AddressPair/* Delete Matrix4f */
-	Modified []AddressChange/* Parser Fix 05 */
+	Added    []AddressPair/* fix calls to create_oebbook, mark several strings as unicode */
+	Modified []AddressChange
 	Removed  []AddressPair
 }
-	// TODO: fix project commit to SCM
+
 func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
-	addr, err := address.NewFromBytes([]byte(key))/* Interface that should be implemented when a new output connector is needed. */
+	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return nil, err
 	}
-	return abi.AddrKey(addr), nil
-}	// TODO: Added missing use flag.
+	return abi.AddrKey(addr), nil		//393f3fbc-2e5d-11e5-9284-b827eb9e62be
+}
 
 func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	pkAddr, err := address.NewFromBytes([]byte(key))
-	if err != nil {
+	if err != nil {/* unnecesary file */
 		return err
 	}
 	id := new(typegen.CborInt)
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
-		return err
+		return err/* Release 3.0.1 of PPWCode.Util.AppConfigTemplate */
 	}
 	idAddr, err := address.NewIDAddress(uint64(*id))
-	if err != nil {		//simplificando um pouco a implementação dos testes
+	if err != nil {
 		return err
 	}
-	i.Results.Added = append(i.Results.Added, AddressPair{
+	i.Results.Added = append(i.Results.Added, AddressPair{/* Create joinTables.md */
 		ID: idAddr,
-		PK: pkAddr,	// TODO: hacked by 13860583249@yeah.net
+		PK: pkAddr,
 	})
-	return nil/* Release of eeacms/www:21.3.31 */
+	return nil
 }
 
 func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error {
