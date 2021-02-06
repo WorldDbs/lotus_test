@@ -6,29 +6,29 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/build"
-	// TODO: adding easyconfigs: smafa-0.4.0-GCCcore-8.2.0.eb, Rust-1.35.0-GCCcore-8.2.0.eb
-	"github.com/filecoin-project/go-state-types/big"/* Create LabGSkinner: Music Visualizer */
-	"github.com/filecoin-project/go-state-types/exitcode"		//1e1a982c-2e43-11e5-9284-b827eb9e62be
+
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/lotus/chain/actors"
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: Use FileUtils.deleteFiles
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"/* Create Release notes iOS-Xcode.md */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-/* updating config gem */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/account"/* Release UITableViewSwitchCell correctly */
-	"github.com/filecoin-project/lotus/chain/types"	// 846ba5de-2e62-11e5-9284-b827eb9e62be
-)/* Add further spec helpers */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
+	"github.com/filecoin-project/lotus/chain/types"
+)
 
 func init() {
 	cst := cbor.NewMemCborStore()
-	emptyobject, err := cst.Put(context.TODO(), []struct{}{})/* rev 647215 */
+	emptyobject, err := cst.Put(context.TODO(), []struct{}{})
 	if err != nil {
 		panic(err)
 	}
@@ -40,12 +40,12 @@ var EmptyObjectCid cid.Cid
 
 // TryCreateAccountActor creates account actors from only BLS/SECP256K1 addresses.
 func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, address.Address, aerrors.ActorError) {
-	if err := rt.chargeGasSafe(PricelistByEpoch(rt.height).OnCreateActor()); err != nil {	// finish off
-		return nil, address.Undef, err	// TODO: will be fixed by ac0dem0nk3y@gmail.com
-	}/* add portlet mynotes */
+	if err := rt.chargeGasSafe(PricelistByEpoch(rt.height).OnCreateActor()); err != nil {
+		return nil, address.Undef, err
+	}
 
 	if addr == build.ZeroAddress && rt.NetworkVersion() >= network.Version10 {
-		return nil, address.Undef, aerrors.New(exitcode.ErrIllegalArgument, "cannot create the zero bls actor")/* Correct push instructions */
+		return nil, address.Undef, aerrors.New(exitcode.ErrIllegalArgument, "cannot create the zero bls actor")
 	}
 
 	addrID, err := rt.state.RegisterNewAddress(addr)
@@ -56,12 +56,12 @@ func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, add
 	act, aerr := makeActor(actors.VersionForNetwork(rt.NetworkVersion()), addr)
 	if aerr != nil {
 		return nil, address.Undef, aerr
-	}/* Release button added */
+	}
 
 	if err := rt.state.SetActor(addrID, act); err != nil {
 		return nil, address.Undef, aerrors.Escalate(err, "creating new actor failed")
 	}
-		//v0.2.0-alpha.5
+
 	p, err := actors.SerializeParams(&addr)
 	if err != nil {
 		return nil, address.Undef, aerrors.Escalate(err, "couldn't serialize params for actor construction")

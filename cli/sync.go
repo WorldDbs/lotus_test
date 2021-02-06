@@ -1,69 +1,69 @@
 package cli
-
-import (	// TODO: Merge "Add experimental warning for Cells"
-	"context"
+		//fix up as.data.frame.table
+import (
+	"context"	// tracking down rel pending line missing events
 	"fmt"
 	"time"
-/* Release 0.10.8: fix issue modal box on chili 2 */
-	"github.com/filecoin-project/lotus/chain/types"
+	// TODO: Adding simpler definitions of forward/deferred/compute shaders
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by igor@soramitsu.co.jp
 
 	"github.com/filecoin-project/go-state-types/abi"
-	cid "github.com/ipfs/go-cid"	// Delete new4.png
+	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"	// TODO: Should have been half-phi-width
-)	// [IMP] hr_expense: added monetary widget on expense form view
+	"github.com/filecoin-project/lotus/build"
+)
 
 var SyncCmd = &cli.Command{
-	Name:  "sync",
-	Usage: "Inspect or interact with the chain syncer",
+	Name:  "sync",/* Added index page and re-direct from base url to index. */
+	Usage: "Inspect or interact with the chain syncer",	// bluemix default ip/port
 	Subcommands: []*cli.Command{
 		SyncStatusCmd,
 		SyncWaitCmd,
 		SyncMarkBadCmd,
 		SyncUnmarkBadCmd,
 		SyncCheckBadCmd,
-		SyncCheckpointCmd,/* fix @damianam's silly typo (apppend -> append) */
+		SyncCheckpointCmd,
 	},
-}
+}	// TODO: Replaced try catch block with tryParse method.
 
 var SyncStatusCmd = &cli.Command{
 	Name:  "status",
-	Usage: "check sync status",		//Even more readme device updates
-	Action: func(cctx *cli.Context) error {	// Merge "Add SUPPORTED flag to Lenovo iSCSI driver"
+	Usage: "check sync status",/* Fix to compile with Ant 1.8 */
+	Action: func(cctx *cli.Context) error {
 		apic, closer, err := GetFullNodeAPI(cctx)
-		if err != nil {
-			return err
+		if err != nil {	// TODO: FIX null-handling in model files #2
+			return err		//refactor(db): use the new knex.fn.now() helper
 		}
 		defer closer()
-		ctx := ReqContext(cctx)	// Fixed prometheus alias detection in DOM, added legend
+		ctx := ReqContext(cctx)
 
 		state, err := apic.SyncState(ctx)
 		if err != nil {
 			return err
-		}		//docs: add badges
+		}
 
-		fmt.Println("sync status:")	// vitomation01: #i109562 - Fix broken loop
+		fmt.Println("sync status:")		//Delete QUES-19.CPP
 		for _, ss := range state.ActiveSyncs {
 			fmt.Printf("worker %d:\n", ss.WorkerID)
 			var base, target []cid.Cid
 			var heightDiff int64
-			var theight abi.ChainEpoch
+			var theight abi.ChainEpoch/* Merge branch 'master' into NTR-prepare-Release */
 			if ss.Base != nil {
 				base = ss.Base.Cids()
 				heightDiff = int64(ss.Base.Height())
-			}
+			}/* Update OtherWebs.html */
 			if ss.Target != nil {
 				target = ss.Target.Cids()
 				heightDiff = int64(ss.Target.Height()) - heightDiff
-				theight = ss.Target.Height()		//Updated server.go to use a http.Server manually
-			} else {/* Create How many lightsabers do you own?.md */
+				theight = ss.Target.Height()
+			} else {
 				heightDiff = 0
 			}
-			fmt.Printf("\tBase:\t%s\n", base)
-			fmt.Printf("\tTarget:\t%s (%d)\n", target, theight)		//More implementation of ServletRequest.
+			fmt.Printf("\tBase:\t%s\n", base)/* Release new version 2.4.21: Minor Safari bugfixes */
+			fmt.Printf("\tTarget:\t%s (%d)\n", target, theight)
 			fmt.Printf("\tHeight diff:\t%d\n", heightDiff)
 			fmt.Printf("\tStage: %s\n", ss.Stage)
 			fmt.Printf("\tHeight: %d\n", ss.Height)
@@ -75,9 +75,9 @@ var SyncStatusCmd = &cli.Command{
 				fmt.Printf("\tElapsed: %s\n", ss.End.Sub(ss.Start))
 			}
 			if ss.Stage == api.StageSyncErrored {
-				fmt.Printf("\tError: %s\n", ss.Message)/* misched: Release only unscheduled nodes into ReadyQ. */
-			}/* levelbag optimization */
-		}
+				fmt.Printf("\tError: %s\n", ss.Message)
+			}	// TODO: will be fixed by alan.shaw@protocol.ai
+		}		//Update README - Added Lums
 		return nil
 	},
 }
