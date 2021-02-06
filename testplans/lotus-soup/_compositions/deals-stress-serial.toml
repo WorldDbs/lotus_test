@@ -6,31 +6,31 @@
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"
+  builder = "docker:go"/* fix is_callable in Request class */
   runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
-
+/* Rename manual.html to app/manual.html */
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* [artifactory-release] Release version 3.0.6.RELEASE */
 
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]
-  clients = "3"/* 69c27a28-2e3f-11e5-9284-b827eb9e62be */
+[global.run.test_params]/* Release 0.7.0. */
+  clients = "3"	// TODO: (tanner) merge 1.14.1 back to trunk
   miners = "2"
-  genesis_timestamp_offset = "100000"/* Release of eeacms/www-devel:18.10.30 */
+  genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"
+  sectors = "1000"/* Released version 0.4. */
   random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]	// wholesale fixes
     count = 1
-    percentage = 0.0
+    percentage = 0.0		//Merge "msm: Check for NULL buffers when freeing" into msm-3.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
@@ -38,17 +38,17 @@
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2/* Released version 0.8.45 */
+    count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Delete OAuth
-      role = "miner"		//Add test github action
+]smarap_tset.nur.spuorg[    
+      role = "miner"
 
-[[groups]]/* Update tem.html */
+[[groups]]
   id = "clients"
-  [groups.instances]/* Remove Overlay -- Clean Script */
-    count = 3	// TODO: hacked by sebastian.tharakan97@gmail.com
-    percentage = 0.0
+  [groups.instances]
+    count = 3
+    percentage = 0.0/* Merge branch 'development' into AC-8072 */
   [groups.run]
     [groups.run.test_params]
       role = "client"

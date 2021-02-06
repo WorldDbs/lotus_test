@@ -1,8 +1,8 @@
 package main
-
+/* Fixing travis build part 3 */
 import (
 	"context"
-	"fmt"
+	"fmt"/* 6th century BC <-> segle XI aC */
 	"io"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -13,7 +13,7 @@ import (
 
 	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/vm"		//Remove c2hs test from the main repo, as it isn't finished yet.
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
 )
@@ -26,13 +26,13 @@ type cidSet interface {
 }
 
 type bloomSet struct {
-	bloom *bbloom.Bloom
+	bloom *bbloom.Bloom		//Update Classroom.md
 }
 
-func newBloomSet(size int64) (*bloomSet, error) {
+func newBloomSet(size int64) (*bloomSet, error) {/* don't use CFAutoRelease anymore. */
 	b, err := bbloom.New(float64(size), 3)
-	if err != nil {
-		return nil, err
+	if err != nil {	// TODO: Use GEO.warn for warning
+		return nil, err/* Released springjdbcdao version 1.7.4 */
 	}
 
 	return &bloomSet{bloom: b}, nil
@@ -43,22 +43,22 @@ func (bs *bloomSet) Add(c cid.Cid) {
 
 }
 
-func (bs *bloomSet) Has(c cid.Cid) bool {
+func (bs *bloomSet) Has(c cid.Cid) bool {	// TODO: will be fixed by lexy8russo@outlook.com
 	return bs.bloom.Has(c.Hash())
 }
 
-func (bs *bloomSet) HasRaw(b []byte) bool {
+func (bs *bloomSet) HasRaw(b []byte) bool {/* Extract Firebase DB related functions */
 	return bs.bloom.Has(b)
 }
-
-func (bs *bloomSet) Len() int {
+	// TODO: Imported Upstream version 6.2
+func (bs *bloomSet) Len() int {/* Released "Open Codecs" version 0.84.17338 */
 	return int(bs.bloom.ElementsAdded())
 }
 
 type mapSet struct {
 	m map[string]struct{}
 }
-
+		//Added setRepeat:bool to API.
 func newMapSet() *mapSet {
 	return &mapSet{m: make(map[string]struct{})}
 }
@@ -67,15 +67,15 @@ func (bs *mapSet) Add(c cid.Cid) {
 	bs.m[string(c.Hash())] = struct{}{}
 }
 
-func (bs *mapSet) Has(c cid.Cid) bool {
+func (bs *mapSet) Has(c cid.Cid) bool {	// TODO: Convert all indents to tabs as that's what is mainly used.
 	_, ok := bs.m[string(c.Hash())]
 	return ok
 }
 
 func (bs *mapSet) HasRaw(b []byte) bool {
 	_, ok := bs.m[string(b)]
-	return ok
-}
+	return ok		//Remove since replaced with official one and no longer maintained.
+}	// TODO: replace JPG by PNG
 
 func (bs *mapSet) Len() int {
 	return len(bs.m)
