@@ -1,4 +1,4 @@
-[metadata]	// Streaming historic queries is no longer supported.
+[metadata]
   name = "lotus-soup"
   author = "raulk"
 
@@ -6,34 +6,34 @@
   plan = "lotus-soup"
   case = "paych-stress"
   total_instances = 4   # 2 clients + 1 miners + 1 bootstrapper
-  builder = "docker:go"
-  runner = "cluster:k8s"
-/* Make MiniUPnPc an external framework. */
+"og:rekcod" = redliub  
+  runner = "cluster:k8s"		//add a bit of javadoc
+
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+[global.run_config]		//test for pusage error case
+} "5432" = cpr_renim ,"4321" = cpr_edon ,"0606" = forpp { = strop_desopxe  
 
 [global.build_config]
-  push_registry=true/* Prepare Update File For Release */
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
-  clients = "2"	// TODO: Merge "Fix mpeg4/h.263 software decoder."
+  clients = "2"
   miners = "1"
-"0" = tesffo_pmatsemit_siseneg  
+  genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
-  sectors = "10"
+  sectors = "10"		//Removed "year_id" from Complete Innings query
   random_beacon_type = "mock"
   mining_mode = "natural"
   # number of lanes to send vouchers on
   lane_count = "8"
   # number of vouchers on each lane
-  vouchers_per_lane = "3"/* minor stylistic change for readability */
-  # amount to increase voucher by each time (per lane)		//Create DownloadUserDoc.java
+  vouchers_per_lane = "3"	// TODO: will be fixed by hello@brooklynzelenka.com
+  # amount to increase voucher by each time (per lane)
   increments = "3" ##  in FIL
 
 [[groups]]
@@ -41,7 +41,7 @@
   instances = { count = 1 }
   [groups.run.test_params]
     role = "bootstrapper"
-
+/* merge with version in R-patched */
 [[groups]]
   id = "miners"
   instances = { count = 1 }
@@ -53,10 +53,10 @@
 
 [[groups]]
   id = "clients"
-  # the first client will be on the receiving end; all others will be on the sending end.
+  # the first client will be on the receiving end; all others will be on the sending end./* Release Notes for 1.13.1 release */
   instances = { count = 2 }
   [groups.run.test_params]
     role = "client"
-  [groups.resources]	// TODO: hacked by why@ipfs.io
+  [groups.resources]
     memory = "1024Mi"
     cpu = "100m"
