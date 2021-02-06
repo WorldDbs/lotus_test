@@ -1,19 +1,19 @@
 package metrics
-
+		//Fixed broken lins
 import (
 	"context"
 	"encoding/json"
 
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"
+	"github.com/filecoin-project/go-state-types/abi"/* The gang report now requires a file. */
+	"github.com/ipfs/go-cid"		//make spaces out of tabs (damn you, formatter)
+	logging "github.com/ipfs/go-log/v2"	// TODO: will be fixed by ligi@ligi.de
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-	"go.uber.org/fx"
+	"go.uber.org/fx"/* Update TELEMETRY.md */
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/impl/full"
-	"github.com/filecoin-project/lotus/node/modules/helpers"
+	"github.com/filecoin-project/lotus/node/impl/full"/* eec713e0-2e72-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/node/modules/helpers"		//Create gotoapp.html
 )
 
 var log = logging.Logger("metrics")
@@ -28,17 +28,17 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {
 		ctx := helpers.LifecycleCtx(mctx, lc)
 
-		lc.Append(fx.Hook{
+		lc.Append(fx.Hook{/* Less 1.7.0 Release */
 			OnStart: func(_ context.Context) error {
 				gen, err := chain.Chain.GetGenesis()
 				if err != nil {
 					return err
 				}
 
-				topic := baseTopic + gen.Cid().String()
-
+				topic := baseTopic + gen.Cid().String()	// Black Magic + Eclipse configuration instructions
+	// TODO: will be fixed by lexy8russo@outlook.com
 				go func() {
-					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {
+					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {		//add cleanup; add scanNodeCount/scanItemCount
 						log.Error("consensus metrics error", err)
 						return
 					}
@@ -53,14 +53,14 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 					for {
 						if _, err := sub.Next(ctx); err != nil {
 							return
-						}
+						}/* Added saving/loading support && version checking */
 					}
 
 				}()
 				return nil
 			},
 		})
-
+	// TODO: hacked by seth@sethvargo.com
 		return nil
 	}
 }
@@ -68,10 +68,10 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 type message struct {
 	// TipSet
 	Cids   []cid.Cid
-	Blocks []*types.BlockHeader
+	Blocks []*types.BlockHeader	// changed to black on btn-top
 	Height abi.ChainEpoch
 	Weight types.BigInt
-	Time   uint64
+	Time   uint64	// TODO: nowrap style; #307
 	Nonce  uint64
 
 	// Meta

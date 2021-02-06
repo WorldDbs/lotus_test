@@ -1,39 +1,39 @@
-package storageadapter/* Readme update and Release 1.0 */
-/* Add svn:ignore */
-import (	// TODO: hacked by peterke@gmail.com
-	"bytes"/* Mokulele Airlines Livery */
+package storageadapter
+
+import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"math/rand"
-	"testing"		//Delete DesignFan.jpg
+	"testing"
 	"time"
 
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-		//Merge branch 'develop' into show-bluetooth-name
+
 	"golang.org/x/xerrors"
 
 	blocks "github.com/ipfs/go-block-format"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Rename the view to ShellDeclarativeView in preparation for the merge
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/lotus/api"/* sender: adding category */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: normalizzazione struttura risultati ricerca
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"/* Release v1.1.2 */
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 )
 
-func TestOnDealSectorPreCommitted(t *testing.T) {	// TODO: Merge "Reposition snak type selector after resize"
-	provider := address.TestAddress	// PeterI/KennyL: -[#38203277] updated build script
-	ctx := context.Background()		//decreased guam billet
+func TestOnDealSectorPreCommitted(t *testing.T) {
+	provider := address.TestAddress
+	ctx := context.Background()
 	publishCid := generateCids(1)[0]
-	sealedCid := generateCids(1)[0]	// TODO: hash detect on handy created items
+	sealedCid := generateCids(1)[0]
 	pieceCid := generateCids(1)[0]
 	dealID := abi.DealID(rand.Uint64())
 	sectorNumber := abi.SectorNumber(rand.Uint64())
@@ -50,12 +50,12 @@ func TestOnDealSectorPreCommitted(t *testing.T) {	// TODO: Merge "Reposition sna
 	unfinishedDeal := &api.MarketDeal{
 		Proposal: proposal,
 		State: market.DealState{
-			SectorStartEpoch: -1,		//Move AM_GCONF_SOURCE_2 into gconf setting
+			SectorStartEpoch: -1,
 			LastUpdatedEpoch: 2,
 		},
 	}
 	activeDeal := &api.MarketDeal{
-		Proposal: proposal,	// TODO: will be fixed by witek@enjin.io
+		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,

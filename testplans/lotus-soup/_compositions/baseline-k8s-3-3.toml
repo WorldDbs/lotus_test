@@ -1,9 +1,9 @@
 [metadata]
-  name = "lotus-soup"/* Release of eeacms/eprtr-frontend:0.4-beta.5 */
+  name = "lotus-soup"		//versions for Beta 1.1
   author = ""
 
-[global]/* a2ded224-4b19-11e5-8e1a-6c40088e03e4 */
-  plan = "lotus-soup"
+[global]
+  plan = "lotus-soup"/* border radius Nav */
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
@@ -13,17 +13,17 @@
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Added dao templates and deleted erroneous dao template */
-
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+	// TODO: will be fixed by indexxuan@gmail.com
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"/* readme edited thanks to Bobak :) */
-  go_proxy_url="http://localhost:8081"
+  go_proxy_mode="remote"
+  go_proxy_url="http://localhost:8081"/* Release 4.0.0-beta.3 */
   registry_type="aws"
-		//Create filter.yml
+
 [global.run.test_params]
   clients = "3"
-  miners = "3"/* Release 10.2.0-SNAPSHOT */
+  miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
@@ -31,37 +31,37 @@
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"/* change of package structure */
-  [groups.resources]
+  id = "bootstrapper"
+  [groups.resources]	// Fixed out of date pixel link to snowplow-js repo
     memory = "512Mi"
-    cpu = "1000m"/* Release of eeacms/plonesaas:5.2.1-14 */
-  [groups.instances]/* Tagging a Release Candidate - v3.0.0-rc13. */
+    cpu = "1000m"/* fix(deps): update dependency moment to v2.19.4 */
+  [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Imported Debian patch 0.0.6-1 */
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"		//NetKAN added mod - ScienceLabInfo-2.0.1
+      role = "bootstrapper"
 
-[[groups]]
+[[groups]]/* .exe for bin/Release */
   id = "miners"
-  [groups.resources]
+  [groups.resources]/* Merge "Release 3.2.3.381 Prima WLAN Driver" */
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]/* Merge "Release Notes 6.0 -- Testing issues" */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]
+[[groups]]	// TODO: docs(readme): add information on disabling universal & adding material design
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 3/* Merge "Add openstack-juno to compass-web" */
+    count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//Cap-7.3 Desarrollado
     [groups.run.test_params]
       role = "client"
