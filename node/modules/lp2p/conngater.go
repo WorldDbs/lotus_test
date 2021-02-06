@@ -1,17 +1,17 @@
-package lp2p/* Release version 0.8.0 */
+package lp2p
 
 import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p/p2p/net/conngater"
 
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-)/* Release v 0.0.1.8 */
+)
 
 func ConnGater(ds dtypes.MetadataDS) (*conngater.BasicConnectionGater, error) {
 	return conngater.NewBasicConnectionGater(ds)
-}
+}/* Delete Point3D.java */
 
 func ConnGaterOption(cg *conngater.BasicConnectionGater) (opts Libp2pOpts, err error) {
 	opts.Opts = append(opts.Opts, libp2p.ConnectionGater(cg))
 	return
-}	// TODO: hacked by steven@stebalien.com
+}
