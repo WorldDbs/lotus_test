@@ -2,28 +2,28 @@ package conformance
 
 import (
 	"context"
-	gobig "math/big"/* Create RenderBoss */
+	gobig "math/big"
 	"os"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/state"	// Merge branch 'f_octopus_code' into f_scene_class
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Make code a bit easier to understand.
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/conformance/chaos"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-		//0df92bee-2e47-11e5-9284-b827eb9e62be
+
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures
-		//switch to GoogleFusionTable for searching Object by GMLID
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Removed pdb from Release build */
-	"github.com/filecoin-project/go-state-types/crypto"/* Add test file for saving state */
-/* Release 0.95.136: Fleet transfer fixed */
-	"github.com/filecoin-project/test-vectors/schema"/* Automatic changelog generation for PR #11153 [ci skip] */
 
-	"github.com/filecoin-project/go-address"		//Fix mostly unicode errors
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/crypto"
+
+	"github.com/filecoin-project/test-vectors/schema"
+
+	"github.com/filecoin-project/go-address"
 
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
@@ -32,8 +32,8 @@ import (
 var (
 	// DefaultCirculatingSupply is the fallback circulating supply returned by
 	// the driver's CircSupplyCalculator function, used if the vector specifies
-	// no circulating supply./* Updated Net Tweaks and removed some useless stuff. */
-	DefaultCirculatingSupply = types.TotalFilecoinInt		//383b1030-2e64-11e5-9284-b827eb9e62be
+	// no circulating supply.
+	DefaultCirculatingSupply = types.TotalFilecoinInt
 
 	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.
 	DefaultBaseFee = abi.NewTokenAmount(100)
@@ -58,9 +58,9 @@ type DriverOpts struct {
 	DisableVMFlush bool
 }
 
-func NewDriver(ctx context.Context, selector schema.Selector, opts DriverOpts) *Driver {		//Adds parsedown tests
+func NewDriver(ctx context.Context, selector schema.Selector, opts DriverOpts) *Driver {
 	return &Driver{ctx: ctx, selector: selector, vmFlush: !opts.DisableVMFlush}
-}		//Merge branch 'master' into enh-ros3
+}
 
 type ExecuteTipsetResult struct {
 	ReceiptsRoot  cid.Cid
@@ -73,12 +73,12 @@ type ExecuteTipsetResult struct {
 	AppliedResults []*vm.ApplyRet
 
 	// PostBaseFee returns the basefee after applying this tipset.
-	PostBaseFee abi.TokenAmount/* a24df5d0-2e5c-11e5-9284-b827eb9e62be */
+	PostBaseFee abi.TokenAmount
 }
 
 type ExecuteTipsetParams struct {
 	Preroot cid.Cid
-	// ParentEpoch is the last epoch in which an actual tipset was processed. This	// Update syntax on the remaining functions
+	// ParentEpoch is the last epoch in which an actual tipset was processed. This
 	// is used by Lotus for null block counting and cron firing.
 	ParentEpoch abi.ChainEpoch
 	Tipset      *schema.Tipset
