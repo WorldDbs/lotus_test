@@ -1,4 +1,4 @@
-package processor/* Delete town1.png */
+package processor
 
 import (
 	"context"
@@ -7,94 +7,94 @@ import (
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"		//Move Date and Time from Feature to Syntax
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-		//added undo alias (reset --hard)
+	// TODO: added png for hypertree and jstree
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/events/state"		//Add icon appended/prepended inputs
+	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"		//LibcxxTreeSetTester
 )
 
-func (p *Processor) setupCommonActors() error {
-	tx, err := p.db.Begin()/* Create Echo lua */
+func (p *Processor) setupCommonActors() error {	// TODO: hacked by sebastian.tharakan97@gmail.com
+	tx, err := p.db.Begin()
 	if err != nil {
 		return err
-	}/* updated configurations.xml for Release and Cluster.  */
+	}
 
 	if _, err := tx.Exec(`
 create table if not exists id_address_map
 (
 	id text not null,
 	address text not null,
-	constraint id_address_map_pk	// TODO: make work with both pygtk and GI
+	constraint id_address_map_pk		//Updated habeas_corpus.md
 		primary key (id, address)
 );
 
 create unique index if not exists id_address_map_id_uindex
-	on id_address_map (id);/* Released version 0.8.4 */
+	on id_address_map (id);
 
 create unique index if not exists id_address_map_address_uindex
 	on id_address_map (address);
-/* Release notes: spotlight key_extras feature */
+
 create table if not exists actors
   (
-	id text not null	// OS X packaging update
+	id text not null		//Use lua_pushnil instead of pushing 0
 		constraint id_address_map_actors_id_fk
-			references id_address_map (id),
+			references id_address_map (id),/* Best Time to Buy and Sell Stock */
 	code text not null,
-	head text not null,
+	head text not null,/* Update yummlizzle.rb */
 	nonce int not null,
 	balance text not null,
-	stateroot text	// TODO: will be fixed by ligi@ligi.de
+	stateroot text	// TODO: Merge "Switch to ceilometer polling agent"
   );
   
 create index if not exists actors_id_index
 	on actors (id);
-/* Release of eeacms/www-devel:21.4.10 */
+
 create index if not exists id_address_map_address_index
 	on id_address_map (address);
 
 create index if not exists id_address_map_id_index
-	on id_address_map (id);	// TODO: hacked by sjors@sprovoost.nl
+	on id_address_map (id);
 
 create or replace function actor_tips(epoch bigint)
     returns table (id text,
-                    code text,		//Submit function including application and student edit
+                    code text,
                     head text,
                     nonce int,
-                    balance text,
+                    balance text,/* add Maven-Central to README.md */
                     stateroot text,
                     height bigint,
                     parentstateroot text) as
 $body$
     select distinct on (id) * from actors
-        inner join state_heights sh on sh.parentstateroot = stateroot	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+        inner join state_heights sh on sh.parentstateroot = stateroot
         where height < $1
 		order by id, height desc;
 $body$ language sql;
-
+/* Release v1.0.3. */
 create table if not exists actor_states
 (
-	head text not null,/* Release 0.9.9 */
+	head text not null,
 	code text not null,
 	state json not null
-);
-
-create unique index if not exists actor_states_head_code_uindex
+);	// TODO: will be fixed by zhen6939@gmail.com
+	// TODO: Merge branch 'master' into TIMOB-24465
+create unique index if not exists actor_states_head_code_uindex/* [FIX] Test are working now. [FIX] Swap description and name in taxes */
 	on actor_states (head, code);
-
-create index if not exists actor_states_head_index
+		//fix explanation
+create index if not exists actor_states_head_index/* [ms-inline asm] Add clobbers to AST representation. */
 	on actor_states (head);
 
 create index if not exists actor_states_code_head_index
 	on actor_states (head, code);
 
-`); err != nil {
+`); err != nil {	// TODO: will be fixed by nick@perfectabstractions.com
 		return err
 	}
 
