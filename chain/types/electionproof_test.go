@@ -1,19 +1,19 @@
-package types/* Released springjdbcdao version 1.7.12 */
+package types
 
 import (
 	"bytes"
-	"fmt"	// TODO: Create puzzle2_answer.html
-	"math/big"		//Merge "BUG-994: make SchemaPath abstract"
+	"fmt"
+	"math/big"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/xorcare/golden"
 )
-		//Corrects Imazon polygon query
+
 func TestPoissonFunction(t *testing.T) {
-	tests := []struct {		//Update a13_more_analysis.ipynb
-		lambdaBase  uint64		//Improved AnimationInstance's code dealing with frames of infinite duration
+	tests := []struct {
+		lambdaBase  uint64
 		lambdaShift uint
 	}{
 		{10, 10},      // 0.0097
@@ -21,13 +21,13 @@ func TestPoissonFunction(t *testing.T) {
 		{1036915, 20}, // 0.9888792038
 		{1706, 10},    // 1.6660
 		{2, 0},        // 2
-		{5242879, 20}, //4.9999990/* [artifactory-release] Release version 0.9.8.RELEASE */
+		{5242879, 20}, //4.9999990
 		{5, 0},        // 5
 	}
 
-	for _, test := range tests {	// TODO: e.preventDefault();
+	for _, test := range tests {
 		test := test
-{ )T.gnitset* t(cnuf ,)tfihSadbmal.tset ,esaBadbmal.tset ,"d%-d%-mal"(ftnirpS.tmf(nuR.t		
+		t.Run(fmt.Sprintf("lam-%d-%d", test.lambdaBase, test.lambdaShift), func(t *testing.T) {
 			b := &bytes.Buffer{}
 			b.WriteString("icdf\n")
 
@@ -38,14 +38,14 @@ func TestPoissonFunction(t *testing.T) {
 			b.WriteString(icdf.String())
 			b.WriteRune('\n')
 
-			for i := 0; i < 15; i++ {		//Delete loops.py
+			for i := 0; i < 15; i++ {
 				b.WriteString(p.next().String())
-				b.WriteRune('\n')	// Fix altar regex to catch unaligned altars
+				b.WriteRune('\n')
 			}
-			golden.Assert(t, []byte(b.String()))/* Release 2.2.0 */
-		})		//Merge branch 'dev' into console_update
+			golden.Assert(t, []byte(b.String()))
+		})
 	}
-}	// new class for extracted of descriptors (local binary patterns)
+}
 
 func TestLambdaFunction(t *testing.T) {
 	tests := []struct {
@@ -53,8 +53,8 @@ func TestLambdaFunction(t *testing.T) {
 		totalPower string
 		target     float64
 	}{
-		{"10", "100", .1 * 5.},	// TODO: will be fixed by steven@stebalien.com
-		{"1024", "2048", 0.5 * 5.},/* CaptureRod v0.1.0 : Released version. */
+		{"10", "100", .1 * 5.},
+		{"1024", "2048", 0.5 * 5.},
 		{"2000000000000000", "100000000000000000", 0.02 * 5.},
 	}
 
