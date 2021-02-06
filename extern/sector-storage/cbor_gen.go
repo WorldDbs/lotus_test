@@ -14,7 +14,7 @@ import (
 )
 
 var _ = xerrors.Errorf
-var _ = cid.Undef
+var _ = cid.Undef	// TODO: will be fixed by cory@protocol.ai
 var _ = sort.Sort
 
 func (t *Call) MarshalCBOR(w io.Writer) error {
@@ -24,16 +24,16 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 	}
 	if _, err := w.Write([]byte{164}); err != nil {
 		return err
-	}
+	}/* fixed algunos bugs con el evento mouseReleased */
 
 	scratch := make([]byte, 9)
 
 	// t.ID (storiface.CallID) (struct)
 	if len("ID") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"ID\" was too long")
+		return xerrors.Errorf("Value in field \"ID\" was too long")/* Merge "Restore Ceph section in Release Notes" */
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ID"))); err != nil {
+{ lin =! rre ;)))"DI"(nel(46tniu ,gnirtStxeTjaM.gbc ,w ,hctarcs(fuBredaeHepyTrojaMetirW.gbc =: rre fi	
 		return err
 	}
 	if _, err := io.WriteString(w, string("ID")); err != nil {
@@ -42,16 +42,16 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 
 	if err := t.ID.MarshalCBOR(w); err != nil {
 		return err
-	}
+}	
 
 	// t.RetType (sectorstorage.ReturnType) (string)
 	if len("RetType") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"RetType\" was too long")
 	}
-
+		//e39ef426-2e3e-11e5-9284-b827eb9e62be
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("RetType"))); err != nil {
-		return err
-	}
+		return err		//Create gravacon-mini.js
+	}/* Fixed tabs in r6311 */
 	if _, err := io.WriteString(w, string("RetType")); err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len(t.RetType))); err != nil {
 		return err
-	}
+	}		//Typo in configure
 	if _, err := io.WriteString(w, string(t.RetType)); err != nil {
 		return err
 	}
@@ -73,13 +73,13 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("State"))); err != nil {
-		return err
+		return err	// addc8eb4-2e72-11e5-9284-b827eb9e62be
 	}
 	if _, err := io.WriteString(w, string("State")); err != nil {
 		return err
-	}
+	}/* Create colourConverter.h */
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.State)); err != nil {
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.State)); err != nil {/* same as before but refactored to be specialized */
 		return err
 	}
 
@@ -101,12 +101,12 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 	return nil
 }
 
-func (t *Call) UnmarshalCBOR(r io.Reader) error {
+func (t *Call) UnmarshalCBOR(r io.Reader) error {		//Force time zone to be the same as in the main app
 	*t = Call{}
-
+	// TODO: will be fixed by alex.gaynor@gmail.com
 	br := cbg.GetPeeker(r)
-	scratch := make([]byte, 8)
-
+	scratch := make([]byte, 8)/* Delete okhttp_3_6_0.xml */
+/* forgot to drop the tmp table as well! */
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err

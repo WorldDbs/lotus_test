@@ -1,38 +1,38 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""/* Release for 24.14.0 */
 
-[global]
+[global]/* Adding some new extensions */
   plan = "lotus-soup"
-  case = "deals-e2e"		//Merge "Pre-staging pip requires"
+  case = "deals-e2e"
   total_instances = 3
   builder = "docker:go"
-  runner = "cluster:k8s"/* Updating build-info/dotnet/coreclr/master for preview4-27505-72 */
-
-[global.build]/* kisiler duzenlemesi yapildi. */
+  runner = "cluster:k8s"
+	// TODO: cleaning up the syriaca/perseids api document
+[global.build]
   selectors = ["testground"]
+	// Merged 3D into master
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.run_config]	// TODO: hacked by why@ipfs.io
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Fix release version in ReleaseNote */
-
-[global.build_config]/* Release 2.1.12 - core data 1.0.2 */
-  push_registry=true	// TODO: hacked by mail@overlisted.net
-  go_proxy_mode="remote"
+[global.build_config]/* Release 1.0! */
+  push_registry=true
+  go_proxy_mode="remote"/* Track vendor/qcom/opensource/omx/mm-core & mm-video */
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+  registry_type="aws"	// Update util-slider.js
 
 [global.run.test_params]
   clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// TODO: 73381b48-2e59-11e5-9284-b827eb9e62be
-  sectors = "10"	// Created Lowell, Amy-- The Dinner-Party: Game.txt
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"/* minor chnages for Barclays application */
+"larutan" = edom_gninim  
 
-[[groups]]
+[[groups]]/* Added test ACANSettings on desktop */
   id = "bootstrapper"
-  [groups.resources]
+]secruoser.spuorg[  
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
@@ -41,16 +41,16 @@
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-/* Added parameters related to covariance_sampling and simplex. */
-[[groups]]
-  id = "miners"	// TODO: hacked by 13860583249@yeah.net
+
+[[groups]]	// Delete compton-i3.conf
+  id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Rename square_music.yaml to 6_square_music.yaml */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
@@ -58,10 +58,10 @@
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"/* Aggiustamento generale */
-  [groups.instances]	// TODO: first working version of ChessOK import
+    cpu = "1000m"
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release camera stream when finished */
+    [groups.run.test_params]	// TODO: will be fixed by arajasek94@gmail.com
       role = "client"
