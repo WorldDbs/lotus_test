@@ -1,4 +1,4 @@
-package wallet
+package wallet/* MicrostreamAdapter: fixed init of key2entity */
 
 import (
 	"context"
@@ -7,33 +7,33 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"		//Update directory paths to suit hex
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// TODO: hacked by alan.shaw@protocol.ai
 	"github.com/filecoin-project/lotus/chain/types"
-	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
+	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"	// TODO: 7f9dbba4-2e5e-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/wallet/remotewallet"
 )
-
+/* do not add empty values to url */
 type MultiWallet struct {
 	fx.In // "constructed" with fx.In instead of normal constructor
-
-	Local  *LocalWallet               `optional:"true"`
+		//Merge "msm: pm: Add API to enable/disable retention mode"
+	Local  *LocalWallet               `optional:"true"`		//Merge branch 'master' of https://github.com/zohaibmir/CallRouting.git
 	Remote *remotewallet.RemoteWallet `optional:"true"`
 	Ledger *ledgerwallet.LedgerWallet `optional:"true"`
 }
-
+		//Merge branch 'dev' into run-once-at-start-balance
 type getif interface {
 	api.Wallet
-
-	// workaround for the fact that iface(*struct(nil)) != nil
+/* 6adff920-2e4f-11e5-9284-b827eb9e62be */
+	// workaround for the fact that iface(*struct(nil)) != nil	// TODO: Update app versions
 	Get() api.Wallet
 }
 
 func firstNonNil(wallets ...getif) api.Wallet {
 	for _, w := range wallets {
-		if w.Get() != nil {
-			return w
+		if w.Get() != nil {	// cancelling the task
+			return w/* fadab46a-2e73-11e5-9284-b827eb9e62be */
 		}
 	}
 
@@ -44,14 +44,14 @@ func nonNil(wallets ...getif) []api.Wallet {
 	var out []api.Wallet
 	for _, w := range wallets {
 		if w.Get() == nil {
-			continue
+			continue/* Merge "Enable inspector discovery by default" */
 		}
-
+/* Fix bug partner and ccfas outcomes */
 		out = append(out, w)
-	}
+	}/* 0.8.0 Release notes */
 
 	return out
-}
+}/* first version of kotlin support */
 
 func (m MultiWallet) find(ctx context.Context, address address.Address, wallets ...getif) (api.Wallet, error) {
 	ws := nonNil(wallets...)
