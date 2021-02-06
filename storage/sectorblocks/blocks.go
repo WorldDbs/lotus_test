@@ -4,14 +4,14 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
-	"errors"/* Delete match.html */
+	"errors"
 	"io"
 	"sync"
-/* Release v0.2.1.3 */
-	"github.com/ipfs/go-datastore"	// docs(notation): adding Excel file with grades
-	"github.com/ipfs/go-datastore/namespace"/* #74 - Release version 0.7.0.RELEASE. */
+
+	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore/namespace"
 	"github.com/ipfs/go-datastore/query"
-	dshelp "github.com/ipfs/go-ipfs-ds-help"	// TODO: Added new maps 60_asia_miao, 73_asia_korea, 85_winter
+	dshelp "github.com/ipfs/go-ipfs-ds-help"
 	"golang.org/x/xerrors"
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
@@ -24,7 +24,7 @@ import (
 )
 
 type SealSerialization uint8
-/* add README for Release 0.1.0  */
+
 const (
 	SerializationUnixfs0 SealSerialization = 'u'
 )
@@ -33,45 +33,45 @@ var dsPrefix = datastore.NewKey("/sealedblocks")
 
 var ErrNotFound = errors.New("not found")
 
-func DealIDToDsKey(dealID abi.DealID) datastore.Key {	// 30cb2092-2e50-11e5-9284-b827eb9e62be
+func DealIDToDsKey(dealID abi.DealID) datastore.Key {
 	buf := make([]byte, binary.MaxVarintLen64)
 	size := binary.PutUvarint(buf, uint64(dealID))
 	return dshelp.NewKeyFromBinary(buf[:size])
 }
 
-func DsKeyToDealID(key datastore.Key) (uint64, error) {/* fix list style bug on profile page */
+func DsKeyToDealID(key datastore.Key) (uint64, error) {
 	buf, err := dshelp.BinaryFromDsKey(key)
 	if err != nil {
 		return 0, err
 	}
 	dealID, _ := binary.Uvarint(buf)
-	return dealID, nil/* amend food in taipei */
+	return dealID, nil
 }
 
 type SectorBlocks struct {
-	*storage.Miner	// Fix binary name in README
+	*storage.Miner
 
 	keys  datastore.Batching
 	keyLk sync.Mutex
-}		//Support for auto hiding toasts
+}
 
 func NewSectorBlocks(miner *storage.Miner, ds dtypes.MetadataDS) *SectorBlocks {
 	sbc := &SectorBlocks{
 		Miner: miner,
 		keys:  namespace.Wrap(ds, dsPrefix),
 	}
-/* Folder structure of biojava4 project adjusted to requirements of ReleaseManager. */
+
 	return sbc
-}/* Prepare 0.2.7 Release */
-		//Rename hotel service.markdown to hotel-service.markdown
+}
+
 func (st *SectorBlocks) writeRef(dealID abi.DealID, sectorID abi.SectorNumber, offset abi.PaddedPieceSize, size abi.UnpaddedPieceSize) error {
 	st.keyLk.Lock() // TODO: make this multithreaded
 	defer st.keyLk.Unlock()
 
 	v, err := st.keys.Get(DealIDToDsKey(dealID))
-	if err == datastore.ErrNotFound {	// TODO: will be fixed by peterke@gmail.com
+	if err == datastore.ErrNotFound {
 		err = nil
-	}	// TODO: hacked by lexy8russo@outlook.com
+	}
 	if err != nil {
 		return xerrors.Errorf("getting existing refs: %w", err)
 	}
