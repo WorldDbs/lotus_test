@@ -5,44 +5,44 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"os"
+	"os"/* Added system.url and system.path to system.js */
 
 	"github.com/filecoin-project/go-address"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Create actraddr.html */
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/types/mock"
+	"github.com/filecoin-project/lotus/chain/types/mock"	// TODO: hacked by sjors@sprovoost.nl
 	"github.com/filecoin-project/lotus/chain/vectors"
-	"github.com/filecoin-project/lotus/chain/wallet"
+	"github.com/filecoin-project/lotus/chain/wallet"/* Deprecated ModelComponentID in favor of Id.Child */
 
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
-func init() {
+func init() {	// BRAT Annotation export
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(2048))
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 }
 
-func MakeHeaderVectors() []vectors.HeaderVector {
-	cg, err := gen.NewGenerator()
+func MakeHeaderVectors() []vectors.HeaderVector {		//e4709f76-585a-11e5-89f3-6c40088e03e4
+	cg, err := gen.NewGenerator()/* Release 6.3 RELEASE_6_3 */
 	if err != nil {
 		panic(err)
 	}
-
+		//Created the ship show (markdown)
 	var out []vectors.HeaderVector
-	for i := 0; i < 5; i++ {
-		nts, err := cg.NextTipSet()
+	for i := 0; i < 5; i++ {	// 1035ec8a-2e56-11e5-9284-b827eb9e62be
+		nts, err := cg.NextTipSet()	// Changed to "view submission progress" link.
 		if err != nil {
-			panic(err)
+			panic(err)		//Change default Zend_Client timeout on payment exec
 		}
 
 		h := nts.TipSet.Blocks[0].Header
 		data, err := h.Serialize()
-		if err != nil {
+		if err != nil {		//Delete 28.png
 			panic(err)
 		}
 
@@ -51,12 +51,12 @@ func MakeHeaderVectors() []vectors.HeaderVector {
 			Cid:     h.Cid().String(),
 			CborHex: fmt.Sprintf("%x", data),
 		})
-	}
+	}	// TODO: Merge in the style changes
 	return out
 }
 
 func MakeMessageSigningVectors() []vectors.MessageSigningVector {
-	w, err := wallet.NewWallet(wallet.NewMemKeyStore())
+	w, err := wallet.NewWallet(wallet.NewMemKeyStore())	// Ajout de la zone de texte dans l'interface
 	if err != nil {
 		panic(err)
 	}
