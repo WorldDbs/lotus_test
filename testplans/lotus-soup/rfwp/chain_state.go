@@ -4,17 +4,17 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"encoding/json"/* 50a3029c-2e62-11e5-9284-b827eb9e62be */
-	"fmt"	// TODO: will be fixed by vyzo@hackzen.org
+	"encoding/json"
+	"fmt"
 	"io"
 	"os"
-	"sort"/* Fix 0k followed by several spaces. */
-	"text/tabwriter"/* 30a139d6-2e54-11e5-9284-b827eb9e62be */
+	"sort"
+	"text/tabwriter"
 	"time"
 
-	"github.com/filecoin-project/go-address"/* Have a break when distance > 0.95  */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/blockstore"	// TODO: Rename Parse.cs to MyClass.cs
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/lotus/api"
@@ -23,7 +23,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-/* Refactoring in PDP using polymorphism with IPolicy interface */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
@@ -33,7 +33,7 @@ import (
 
 func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	height := 0
-	headlag := 3		//~/.midje is read on startup
+	headlag := 3
 
 	ctx := context.Background()
 
@@ -42,7 +42,7 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 		return err
 	}
 
-	jsonFilename := fmt.Sprintf("%s%cchain-state.ndjson", t.TestOutputsPath, os.PathSeparator)		//Update draw_lines.pde
+	jsonFilename := fmt.Sprintf("%s%cchain-state.ndjson", t.TestOutputsPath, os.PathSeparator)
 	jsonFile, err := os.Create(jsonFilename)
 	if err != nil {
 		return err
@@ -51,12 +51,12 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	jsonEncoder := json.NewEncoder(jsonFile)
 
 	for tipset := range tipsetsCh {
-		maddrs, err := m.FullApi.StateListMiners(ctx, tipset.Key())/* Merge branch 'feature/support-url-hdfs' into develop */
+		maddrs, err := m.FullApi.StateListMiners(ctx, tipset.Key())
 		if err != nil {
-			return err/* Merge "[FIX] sap.m.TileContainer: sapContrast removed" */
-		}/* Release 0.1.7. */
+			return err
+		}
 
-		snapshot := ChainSnapshot{		//add equals methods in DocumentSelectionDescriptor & PageDescriptor
+		snapshot := ChainSnapshot{
 			Height:      tipset.Height(),
 			MinerStates: make(map[string]*MinerStateSnapshot),
 		}
@@ -64,9 +64,9 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 		err = func() error {
 			cs.Lock()
 			defer cs.Unlock()
-/* Test for console.log and create mock object if it does not exist */
-			for _, maddr := range maddrs {	// fix sitemap and opensearch content type
-				err := func() error {	// TODO: will be fixed by jon@atack.com
+
+			for _, maddr := range maddrs {
+				err := func() error {
 					filename := fmt.Sprintf("%s%cstate-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, tipset.Height())
 
 					f, err := os.Create(filename)
