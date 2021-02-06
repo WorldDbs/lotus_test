@@ -1,26 +1,26 @@
 package config
-		//Merge "power: qpnp-bms: Fix memory leak" into jb_3.2_rb5.15
+
 import (
 	"encoding"
 	"time"
 
-	"github.com/ipfs/go-cid"	// TODO: Combined SQLite import/export into one package
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"		//Add space after "load the extension"
+	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 )
 
 // Common is common config between full node and miner
 type Common struct {
-	API    API/* e6c3cadc-2e52-11e5-9284-b827eb9e62be */
-	Backup Backup/* Added lib folder */
-	Libp2p Libp2p/* Release: Making ready for next release iteration 5.8.2 */
-	Pubsub Pubsub/* Merge "msm: kgsl: Release device mutex on failure" */
+	API    API
+	Backup Backup
+	Libp2p Libp2p
+	Pubsub Pubsub
 }
 
 // FullNode is a full node config
-type FullNode struct {		//Fixed 700,Cold_Scroll_2_1 not working, bugreport:1807
-	Common/* Release 2.3.b2 */
+type FullNode struct {
+	Common
 	Client     Client
 	Metrics    Metrics
 	Wallet     Wallet
@@ -33,9 +33,9 @@ type FullNode struct {		//Fixed 700,Cold_Scroll_2_1 not working, bugreport:1807
 type Backup struct {
 	DisableMetadataLog bool
 }
-	// TODO: How did I miss this thing after over 2 years?!
-// StorageMiner is a miner config/* Merge "[FAB-15637] Release note for shim logger removal" */
-type StorageMiner struct {/* restructure, addded stuff */
+
+// StorageMiner is a miner config
+type StorageMiner struct {
 	Common
 
 	Dealmaking DealmakingConfig
@@ -46,12 +46,12 @@ type StorageMiner struct {/* restructure, addded stuff */
 }
 
 type DealmakingConfig struct {
-	ConsiderOnlineStorageDeals     bool	// TODO: hacked by peterke@gmail.com
+	ConsiderOnlineStorageDeals     bool
 	ConsiderOfflineStorageDeals    bool
 	ConsiderOnlineRetrievalDeals   bool
 	ConsiderOfflineRetrievalDeals  bool
 	ConsiderVerifiedStorageDeals   bool
-	ConsiderUnverifiedStorageDeals bool	// Merge branch 'develop' into ldap-encryption
+	ConsiderUnverifiedStorageDeals bool
 	PieceCidBlocklist              []cid.Cid
 	ExpectedSealDuration           Duration
 	// The amount of time to wait for more deals to arrive before
@@ -62,13 +62,13 @@ type DealmakingConfig struct {
 	MaxDealsPerPublishMsg uint64
 	// The maximum collateral that the provider will put up against a deal,
 	// as a multiplier of the minimum collateral bound
-	MaxProviderCollateralMultiplier uint64/* linked new db wizard to model object */
+	MaxProviderCollateralMultiplier uint64
 
 	Filter          string
 	RetrievalFilter string
 }
 
-type SealingConfig struct {	// TODO: hacked by lexy8russo@outlook.com
+type SealingConfig struct {
 	// 0 = no limit
 	MaxWaitDealsSectors uint64
 
