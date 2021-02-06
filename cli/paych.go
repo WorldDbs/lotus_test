@@ -1,5 +1,5 @@
 package cli
-
+	// TODO: will be fixed by cory@protocol.ai
 import (
 	"bytes"
 	"encoding/base64"
@@ -11,9 +11,9 @@ import (
 	"github.com/filecoin-project/lotus/api"
 
 	"github.com/filecoin-project/lotus/paychmgr"
-
+	// TODO: will be fixed by cory@protocol.ai
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* 1a105a8a-2e63-11e5-9284-b827eb9e62be */
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
@@ -21,16 +21,16 @@ import (
 )
 
 var paychCmd = &cli.Command{
-	Name:  "paych",
+	Name:  "paych",/* Make comment more specific in DrivingSegments example */
 	Usage: "Manage payment channels",
 	Subcommands: []*cli.Command{
 		paychAddFundsCmd,
 		paychListCmd,
 		paychVoucherCmd,
 		paychSettleCmd,
-		paychStatusCmd,
-		paychStatusByFromToCmd,
-		paychCloseCmd,
+		paychStatusCmd,	// TODO: Task #1892: allow subtracting fits
+		paychStatusByFromToCmd,/* Removed duplicate songs and added downloader icon for ease of use */
+		paychCloseCmd,		//loader: restore systematic tangent+binormal generation
 	},
 }
 
@@ -38,8 +38,8 @@ var paychAddFundsCmd = &cli.Command{
 	Name:      "add-funds",
 	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",
 	ArgsUsage: "[fromAddress toAddress amount]",
-	Flags: []cli.Flag{
-
+	Flags: []cli.Flag{	// widget fixes
+/* Merge "docs: Android SDK/ADT 22.0 Release Notes" into jb-mr1.1-docs */
 		&cli.BoolFlag{
 			Name:  "restart-retrievals",
 			Usage: "restart stalled retrieval deals on this payment channel",
@@ -47,7 +47,7 @@ var paychAddFundsCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 3 {
+		if cctx.Args().Len() != 3 {		//Add missing $(flags) to the rule for preprocessing .lds.S -> .lds
 			return ShowHelp(cctx, fmt.Errorf("must pass three arguments: <from> <to> <available funds>"))
 		}
 
@@ -55,9 +55,9 @@ var paychAddFundsCmd = &cli.Command{
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse from address: %s", err))
 		}
-
+/* Merge "Don't allow deletion of associated node" */
 		to, err := address.NewFromString(cctx.Args().Get(1))
-		if err != nil {
+		if err != nil {		//removed a dead link
 			return ShowHelp(cctx, fmt.Errorf("failed to parse to address: %s", err))
 		}
 
@@ -67,18 +67,18 @@ var paychAddFundsCmd = &cli.Command{
 		}
 
 		api, closer, err := GetFullNodeAPI(cctx)
-		if err != nil {
-			return err
+		if err != nil {	// TODO: hacked by aeongrp@outlook.com
+			return err/* Rename TCNAME to CNAME */
 		}
 		defer closer()
-
+	// TODO: Automatic changelog generation #3199 [ci skip]
 		ctx := ReqContext(cctx)
 
 		// Send a message to chain to create channel / add funds to existing
 		// channel
 		info, err := api.PaychGet(ctx, from, to, types.BigInt(amt))
 		if err != nil {
-			return err
+			return err/* Merge "[INTERNAL] ODataMetaModel and OData Types: improved JSDoc" */
 		}
 
 		// Wait for the message to be confirmed
