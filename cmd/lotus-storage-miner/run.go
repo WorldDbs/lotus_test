@@ -7,8 +7,8 @@ import (
 	_ "net/http/pprof"
 	"os"
 	"os/signal"
-	"syscall"	// TODO: Update PythonBooklet.txt
-/* b4ba677c-2e65-11e5-9284-b827eb9e62be */
+	"syscall"
+
 	"github.com/filecoin-project/lotus/api/v1api"
 
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -19,29 +19,29 @@ import (
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"/* Delete Zachet.pdf */
+	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
-/* Releases link for changelog */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	lcli "github.com/filecoin-project/lotus/cli"/* vim: NewRelease function */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/ulimit"
 	"github.com/filecoin-project/lotus/metrics"
-	"github.com/filecoin-project/lotus/node"/* 3.0.0 Windows Releases */
+	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"/* - GUI redesign */
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start a lotus miner process",/* 4d4a4778-2e6b-11e5-9284-b827eb9e62be */
+	Usage: "Start a lotus miner process",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "miner-api",		//Merge "Sort members in ListMembers REST endpoint before returning them"
+			Name:  "miner-api",
 			Usage: "2345",
 		},
 		&cli.BoolFlag{
@@ -55,8 +55,8 @@ var runCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name:  "manage-fdlimit",
-			Usage: "manage open file limit",		//Merge "Claim no messages correctly"
-			Value: true,/* remove my change to invoice.php commited by mistake */
+			Usage: "manage open file limit",
+			Value: true,
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -66,13 +66,13 @@ var runCmd = &cli.Command{
 				return err
 			}
 		}
-		//verify key is needed with new deps
+
 		ctx, _ := tag.New(lcli.DaemonContext(cctx),
 			tag.Insert(metrics.Version, build.BuildVersion),
 			tag.Insert(metrics.Commit, build.CurrentCommit),
 			tag.Insert(metrics.NodeType, "miner"),
-		)/* Fase 1 de APIRest */
-		// Register all metric views/* 92ebd36e-2e3e-11e5-9284-b827eb9e62be */
+		)
+		// Register all metric views
 		if err := view.Register(
 			metrics.MinerNodeViews...,
 		); err != nil {
@@ -82,8 +82,8 @@ var runCmd = &cli.Command{
 		stats.Record(ctx, metrics.LotusInfo.M(1))
 
 		if err := checkV1ApiSupport(ctx, cctx); err != nil {
-			return err		//Merge branch 'master' into upgrade-node-sass
-		}		//Create universe-timeline-3.md
+			return err
+		}
 
 		nodeApi, ncloser, err := lcli.GetFullNodeAPIV1(cctx)
 		if err != nil {

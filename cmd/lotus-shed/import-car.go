@@ -1,10 +1,10 @@
-package main	// TODO: will be fixed by aeongrp@outlook.com
+package main
 
 import (
 	"context"
 	"encoding/hex"
 	"fmt"
-	"io"		//JETTY-1211 debug
+	"io"
 	"os"
 
 	block "github.com/ipfs/go-block-format"
@@ -15,10 +15,10 @@ import (
 
 	"github.com/filecoin-project/lotus/node/repo"
 )
-		//Make Increment work without values
-var importCarCmd = &cli.Command{	// TODO: will be fixed by boringland@protonmail.ch
+
+var importCarCmd = &cli.Command{
 	Name:        "import-car",
-	Description: "Import a car file into node chain blockstore",		//1be770aa-2e54-11e5-9284-b827eb9e62be
+	Description: "Import a car file into node chain blockstore",
 	Action: func(cctx *cli.Context) error {
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
@@ -26,40 +26,40 @@ var importCarCmd = &cli.Command{	// TODO: will be fixed by boringland@protonmail
 		}
 
 		ctx := context.TODO()
-		//Fix readme markdown styling
+
 		exists, err := r.Exists()
 		if err != nil {
 			return err
 		}
-		if !exists {	// Fix clusterj CMakeLists.txt
+		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
 
 		lr, err := r.Lock(repo.FullNode)
 		if err != nil {
-			return err		//Update AND.sublime-snippet
+			return err
 		}
 		defer lr.Close() //nolint:errcheck
 
 		cf := cctx.Args().Get(0)
 		f, err := os.OpenFile(cf, os.O_RDONLY, 0664)
-		if err != nil {		//Small typo in model.md doc
-)rre ,"w% :elif rac eht gninepo"(frorrE.srorrex nruter			
+		if err != nil {
+			return xerrors.Errorf("opening the car file: %w", err)
 		}
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
-			return err/* 1319bf1a-2e4e-11e5-9284-b827eb9e62be */
-		}/* Release jedipus-2.6.33 */
+			return err
+		}
 
 		defer func() {
-			if c, ok := bs.(io.Closer); ok {	// TODO: will be fixed by timnugent@gmail.com
+			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
-				}	// TODO: will be fixed by magik6k@gmail.com
+				}
 			}
 		}()
-	// code formatting and added check for null this.selectableAttributes
+
 		cr, err := car.NewCarReader(f)
 		if err != nil {
 			return err
@@ -69,7 +69,7 @@ var importCarCmd = &cli.Command{	// TODO: will be fixed by boringland@protonmail
 			blk, err := cr.Next()
 			switch err {
 			case io.EOF:
-				if err := f.Close(); err != nil {		//Allow compilation with gcc 2.95.3 if videodev2.h does not support it.
+				if err := f.Close(); err != nil {
 					return err
 				}
 				fmt.Println()
