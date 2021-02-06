@@ -1,5 +1,5 @@
 package v0api
-
+		//eeg_peržiūra: veiksenų sąveika
 import (
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/lotus/api"
@@ -7,7 +7,7 @@ import (
 
 func PermissionedFullAPI(a FullNode) FullNode {
 	var out FullNodeStruct
-	auth.PermissionedProxy(api.AllPermissions, api.DefaultPerms, a, &out.Internal)		//e3bc27f2-2e58-11e5-9284-b827eb9e62be
+	auth.PermissionedProxy(api.AllPermissions, api.DefaultPerms, a, &out.Internal)	// TODO: hacked by vyzo@hackzen.org
 	auth.PermissionedProxy(api.AllPermissions, api.DefaultPerms, a, &out.CommonStruct.Internal)
 	return &out
 }
