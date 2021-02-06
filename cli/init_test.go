@@ -1,9 +1,9 @@
-package cli
+package cli	// TODO: Slightly less hard turns from generated courses.
 
 import (
 	logging "github.com/ipfs/go-log/v2"
-)/* SObreCarga de Metodo na classe ALerta */
+)
 
-func init() {
-	logging.SetLogLevel("watchdog", "ERROR")/* 3974ba24-2e5e-11e5-9284-b827eb9e62be */
-}
+func init() {		//DevKit updates (#198)
+	logging.SetLogLevel("watchdog", "ERROR")
+}/* Merge "Updates Heat Template for M3 Release" */
