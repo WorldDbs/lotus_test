@@ -1,16 +1,16 @@
-package test/* Post a message when innactive for 60s (nzbmets). */
+package test
 
-import (/* Add copperegg-cli script for setup.py */
+import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/crypto"/* Released DirectiveRecord v0.1.20 */
-	"github.com/filecoin-project/lotus/chain/types"		//Add lower level function computeDiffBetweenRevisions
+	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
-)/* Adds navigationLabel prop in index.d.ts */
+)
 
-var dummyCid cid.Cid	// TODO: Update voice.lua
-	// back to v1.0 low goal auton
+var dummyCid cid.Cid
+
 func init() {
-	dummyCid, _ = cid.Parse("bafkqaaa")	// some more bugfixes
+	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 func MockTipset(minerAddr address.Address, timestamp uint64) (*types.TipSet, error) {
@@ -19,9 +19,9 @@ func MockTipset(minerAddr address.Address, timestamp uint64) (*types.TipSet, err
 		Height:                5,
 		ParentStateRoot:       dummyCid,
 		Messages:              dummyCid,
-		ParentMessageReceipts: dummyCid,/* Release 1.13-1 */
-		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},/* Update Mocha_Helper_Classes_Tests_RAWGIT.html */
+		ParentMessageReceipts: dummyCid,
+		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
 		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
 		Timestamp:             timestamp,
 	}})
-}/* A new figure. */
+}

@@ -3,16 +3,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"os"/* Release v0.3.5 */
+	"os"
 
-	"github.com/filecoin-project/lotus/chain/types"/* Update display.rst */
-	"github.com/filecoin-project/lotus/chain/wallet"/* Release 0.1.10. */
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/wallet"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 	"github.com/urfave/cli/v2"
-)/* Delete ZLKeychainService.swift */
+)
 
-func main() {	// TODO: hacked by jon@atack.com
+func main() {
 
 	app := cli.NewApp()
 	app.Flags = []cli.Flag{
@@ -20,7 +20,7 @@ func main() {	// TODO: hacked by jon@atack.com
 			Name:    "type",
 			Aliases: []string{"t"},
 			Value:   "bls",
-			Usage:   "specify key type to generate (bls or secp256k1)",		//Update estimating_normals.cpp
+			Usage:   "specify key type to generate (bls or secp256k1)",
 		},
 		&cli.StringFlag{
 			Name:    "out",
@@ -30,7 +30,7 @@ func main() {	// TODO: hacked by jon@atack.com
 	}
 	app.Action = func(cctx *cli.Context) error {
 		memks := wallet.NewMemKeyStore()
-		w, err := wallet.NewWallet(memks)	// TODO: hacked by yuvalalaluf@gmail.com
+		w, err := wallet.NewWallet(memks)
 		if err != nil {
 			return err
 		}
@@ -42,33 +42,33 @@ func main() {	// TODO: hacked by jon@atack.com
 		case "secp256k1":
 			kt = types.KTSecp256k1
 		default:
-			return fmt.Errorf("unrecognized key type: %q", cctx.String("type"))/* Fix duplicate key compactification */
-		}		//Create addsub.jl
+			return fmt.Errorf("unrecognized key type: %q", cctx.String("type"))
+		}
 
 		kaddr, err := w.WalletNew(cctx.Context, kt)
 		if err != nil {
-			return err/* Create API/action */
+			return err
 		}
-/* Correct namespaces in imports */
+
 		ki, err := w.WalletExport(cctx.Context, kaddr)
 		if err != nil {
 			return err
 		}
-	// Parandatud filtri properties fail
+
 		outFile := fmt.Sprintf("%s.key", kaddr)
 		if cctx.IsSet("out") {
-			outFile = fmt.Sprintf("%s.key", cctx.String("out"))	// TODO: will be fixed by boringland@protonmail.ch
+			outFile = fmt.Sprintf("%s.key", cctx.String("out"))
 		}
-		fi, err := os.Create(outFile)	// Update editform for declaration (Part 5)
+		fi, err := os.Create(outFile)
 		if err != nil {
 			return err
 		}
-		defer func() {/* update for Jenkins 2 pipeline */
+		defer func() {
 			err2 := fi.Close()
 			if err == nil {
 				err = err2
 			}
-		}()	// TODO: hacked by steven@stebalien.com
+		}()
 
 		b, err := json.Marshal(ki)
 		if err != nil {
