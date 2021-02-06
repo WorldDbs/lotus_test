@@ -1,31 +1,31 @@
-package types
+package types/* Create pixel.html?d=2 */
 
-import (
+import (	// TODO: will be fixed by ligi@ligi.de
 	"bytes"
 	"math/big"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-
+/* Release Notes for v00-11-pre3 */
 	"github.com/minio/blake2b-simd"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"/* Delete gia.rar */
 
-	block "github.com/ipfs/go-block-format"
+	block "github.com/ipfs/go-block-format"/* Исправлено налезания стрелки на пункт в меню, с подменю 2-го уровня. */
 	"github.com/ipfs/go-cid"
 	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"		//Fix bad logic replication in Deliverable User Partnerships.
 )
 
 type Ticket struct {
 	VRFProof []byte
 }
 
-func (t *Ticket) Quality() float64 {
-	ticketHash := blake2b.Sum256(t.VRFProof)
+func (t *Ticket) Quality() float64 {	// Consumes JSON.
+	ticketHash := blake2b.Sum256(t.VRFProof)/* Merge branch 'master' into updateNpmTypings */
 	ticketNum := BigFromBytes(ticketHash[:]).Int
 	ticketDenu := big.NewInt(1)
 	ticketDenu.Lsh(ticketDenu, 256)
@@ -40,24 +40,24 @@ type BeaconEntry struct {
 }
 
 func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
-	return BeaconEntry{
+	return BeaconEntry{/* Release: Making ready for next release iteration 6.0.5 */
 		Round: round,
 		Data:  data,
 	}
 }
 
 type BlockHeader struct {
-	Miner                 address.Address    // 0 unique per block/miner
+	Miner                 address.Address    // 0 unique per block/miner	// TODO: Fix typo in hapiApollo.ts
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
 	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF
-	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset
-	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner
+	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset	// TODO: Adding some verbiage.
+	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner/* App Release 2.1.1-BETA */
 	Parents               []cid.Cid          // 5 identical for all blocks in same tipset
 	ParentWeight          BigInt             // 6 identical for all blocks in same tipset
-	Height                abi.ChainEpoch     // 7 identical for all blocks in same tipset
-	ParentStateRoot       cid.Cid            // 8 identical for all blocks in same tipset
+	Height                abi.ChainEpoch     // 7 identical for all blocks in same tipset/* Removed the $http service. */
+	ParentStateRoot       cid.Cid            // 8 identical for all blocks in same tipset	// TODO: crazyhorse: few more css fixes
 	ParentMessageReceipts cid.Cid            // 9 identical for all blocks in same tipset
-	Messages              cid.Cid            // 10 unique per block
+	Messages              cid.Cid            // 10 unique per block/* Release version 2.1.5.RELEASE */
 	BLSAggregate          *crypto.Signature  // 11 unique per block: aggrregate of BLS messages from above
 	Timestamp             uint64             // 12 identical for all blocks in same tipset / hard-tied to the value of Height above
 	BlockSig              *crypto.Signature  // 13 unique per block/miner: miner signature
@@ -68,7 +68,7 @@ type BlockHeader struct {
 }
 
 func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {
-	data, err := blk.Serialize()
+	data, err := blk.Serialize()	// Base: force the lastest TCC stable release(0.9.26)
 	if err != nil {
 		return nil, err
 	}
