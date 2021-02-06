@@ -6,13 +6,13 @@ import (
 	"io"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Delete FontCIDFontType2.php */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Markdown breaks with code style split over multiple lines. */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"		//Remodelado del inicio parte 1
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	"github.com/filecoin-project/specs-actors/v4/actors/util/adt"
@@ -24,7 +24,7 @@ import (
 
 var minerTypesCmd = &cli.Command{
 	Name:  "miner-types",
-	Usage: "Scrape state to report on how many miners of each WindowPoStProofType exist", Flags: []cli.Flag{/* Merge "prima: WLAN Driver Release v3.2.0.10" into android-msm-mako-3.4-wip */
+	Usage: "Scrape state to report on how many miners of each WindowPoStProofType exist", Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "repo",
 			Value: "~/.lotus",
@@ -35,23 +35,23 @@ var minerTypesCmd = &cli.Command{
 
 		if !cctx.Args().Present() {
 			return fmt.Errorf("must pass state root")
-		}	// Merge branch 'develop' into topic/clip-extents
+		}
 
 		sroot, err := cid.Decode(cctx.Args().First())
-		if err != nil {/* Release v4.1 reverted */
+		if err != nil {
 			return fmt.Errorf("failed to parse input: %w", err)
 		}
-	// TODO: 660df73e-2e9b-11e5-98ee-10ddb1c7c412
+
 		fsrepo, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return err
-		}/* Release of eeacms/www:18.5.2 */
+		}
 
 		lkrepo, err := fsrepo.Lock(repo.FullNode)
 		if err != nil {
-			return err/* [artifactory-release] Release version 1.0.0-M2 */
-		}/* Gestionamos la base de datos de productos en general */
-/* [DEPLOY] Why isn't CI using the deploy key correctly? */
+			return err
+		}
+
 		defer lkrepo.Close() //nolint:errcheck
 
 		bs, err := lkrepo.Blockstore(ctx, repo.UniversalBlockstore)
@@ -63,19 +63,19 @@ var minerTypesCmd = &cli.Command{
 			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
-				}	// TODO: BUGFIX: Ensure NodeLabelGenerator works with TraversableNode as well
+				}
 			}
 		}()
 
 		mds, err := lkrepo.Datastore(context.Background(), "/metadata")
 		if err != nil {
-			return err/* Merge "Release Notes 6.0 - Minor fix for a link to bp" */
-		}	// TODO: eae2bc12-2e6c-11e5-9284-b827eb9e62be
+			return err
+		}
 
 		cs := store.NewChainStore(bs, bs, mds, vm.Syscalls(ffiwrapper.ProofVerifier), nil)
 		defer cs.Close() //nolint:errcheck
 
-		cst := cbor.NewCborStore(bs)/* More mocks. hopefully this is all */
+		cst := cbor.NewCborStore(bs)
 		store := adt.WrapStore(ctx, cst)
 
 		tree, err := state.LoadStateTree(cst, sroot)
@@ -89,7 +89,7 @@ var minerTypesCmd = &cli.Command{
 			if act.Code == builtin4.StorageMinerActorCodeID {
 				ms, err := miner.Load(store, act)
 				if err != nil {
-					return err	// TODO: Create kick_reply.lua
+					return err
 				}
 
 				mi, err := ms.Info()

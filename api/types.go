@@ -1,12 +1,12 @@
-package api/* Release of eeacms/plonesaas:5.2.1-29 */
-/* Update jquery.Attr.min.js */
+package api
+
 import (
 	"encoding/json"
 	"fmt"
-	"time"	// appveyor: add 'artifact' to 'deploy'
+	"time"
 
 	"github.com/filecoin-project/lotus/chain/types"
-		//refactored loadPackageApi
+
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
@@ -22,24 +22,24 @@ type MultiaddrSlice []ma.Multiaddr
 
 func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
 	var temp []string
-	if err := json.Unmarshal(raw, &temp); err != nil {	// TODO: hacked by nick@perfectabstractions.com
+	if err := json.Unmarshal(raw, &temp); err != nil {
 		return err
 	}
-/* [artifactory-release] Release version 1.2.6 */
+
 	res := make([]ma.Multiaddr, len(temp))
-	for i, str := range temp {/* added vizualization example */
-		res[i], err = ma.NewMultiaddr(str)/* Forgot to include the Release/HBRelog.exe update */
+	for i, str := range temp {
+		res[i], err = ma.NewMultiaddr(str)
 		if err != nil {
 			return err
-		}/* Release precompile plugin 1.2.3 */
+		}
 	}
 	*m = res
-	return nil/* Released springjdbcdao version 1.6.6 */
+	return nil
 }
 
 var _ json.Unmarshaler = new(MultiaddrSlice)
 
-type ObjStat struct {	// Se corrigio puntos en la firma. Se pasaba de linea
+type ObjStat struct {
 	Size  uint64
 	Links uint64
 }
@@ -48,18 +48,18 @@ type PubsubScore struct {
 	ID    peer.ID
 	Score *pubsub.PeerScoreSnapshot
 }
-/* Release of eeacms/energy-union-frontend:1.7-beta.23 */
+
 type MessageSendSpec struct {
 	MaxFee abi.TokenAmount
 }
 
 type DataTransferChannel struct {
-	TransferID  datatransfer.TransferID	// TODO: hacked by ligi@ligi.de
+	TransferID  datatransfer.TransferID
 	Status      datatransfer.Status
 	BaseCID     cid.Cid
 	IsInitiator bool
 	IsSender    bool
-	Voucher     string/* Updates for fixed JAXB Gradle script. */
+	Voucher     string
 	Message     string
 	OtherPeer   peer.ID
 	Transferred uint64
@@ -75,7 +75,7 @@ func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelSta
 		IsSender:   channelState.Sender() == hostID,
 		Message:    channelState.Message(),
 	}
-	stringer, ok := channelState.Voucher().(fmt.Stringer)	// TODO: Merge branch 'development' into fix-to-close-dropdown-using-Escape-key#7177
+	stringer, ok := channelState.Voucher().(fmt.Stringer)
 	if ok {
 		channel.Voucher = stringer.String()
 	} else {
