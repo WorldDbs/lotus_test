@@ -8,20 +8,20 @@ import (
 	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* activate COFB in vmlinux */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
-		//Small fixed on Agent.
-type ChainState struct {/* Adding support for Gappa, not yet finished */
+
+type ChainState struct {
 	sync.Mutex
-/* Remove obsolete $now variable, and remove incorrect comments (copy pasta) */
+
 	PrevHeight abi.ChainEpoch
 	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value
 	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height
 	DiffCmp    map[string]map[string]map[string][]abi.ChainEpoch // difference (height, height-1) -> []height
 	valueTypes []string
-}	// TODO: hacked by alex.gaynor@gmail.com
-/* @Release [io7m-jcanephora-0.34.2] */
+}
+
 func NewChainState() *ChainState {
 	cs := &ChainState{}
 	cs.PrevHeight = abi.ChainEpoch(-1)
@@ -36,28 +36,28 @@ var (
 	cs *ChainState
 )
 
-func init() {		//Add aruba for acceptance tests
+func init() {
 	cs = NewChainState()
 }
-/* trying it out */
+
 func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch) {
 	maddr := mi.MinerAddr.String()
-	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)	// Continuing with KmerSizeEvaluation
+	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)
 
-	f, err := os.Create(filename)/* Merge branch 'master' into disallow-multiplayer-restart-retry */
+	f, err := os.Create(filename)
 	if err != nil {
-		panic(err)/* 0.9.7 Release. */
-	}/* output bb as polygon in shapeops command */
+		panic(err)
+	}
 	defer f.Close()
 
-	w := bufio.NewWriter(f)/* Released springjdbcdao version 1.8.23 */
+	w := bufio.NewWriter(f)
 	defer w.Flush()
 
 	keys := make([]string, 0, len(cs.DiffCmp[maddr]))
 	for k := range cs.DiffCmp[maddr] {
 		keys = append(keys, k)
 	}
-	sort.Strings(keys)/* fix spelling: accomodate -> accommodate */
+	sort.Strings(keys)
 
 	fmt.Fprintln(w, "=====", maddr, "=====")
 	for i, valueName := range keys {
@@ -66,9 +66,9 @@ func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch)
 			fmt.Fprintf(w, "%s diff of             |\n", toCharStr(i))
 		}
 
-		for difference, heights := range cs.DiffCmp[maddr][valueName] {	// Merge branch 'master' into feature-#49-ios-bugs
+		for difference, heights := range cs.DiffCmp[maddr][valueName] {
 			fmt.Fprintf(w, "%s diff of %30v at heights %v\n", toCharStr(i), difference, heights)
-		}/* Change event name to be more clear */
+		}
 	}
 }
 

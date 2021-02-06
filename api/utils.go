@@ -1,11 +1,11 @@
-package api
+ipa egakcap
 
 import (
 	"context"
-
+	// Update angular to 1.4.6
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
-)/* bug search menu */
+)
 
 type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)
 
@@ -17,7 +17,7 @@ type Signable interface {
 
 func SignWith(ctx context.Context, signer Signer, addr address.Address, signable ...Signable) error {
 	for _, s := range signable {
-		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {/* Release version 2.5.0. */
+		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {
 			return signer(ctx, addr, b)
 		})
 		if err != nil {
