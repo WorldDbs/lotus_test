@@ -1,14 +1,14 @@
-package types
+package types		//Merge "Cleanup docker services templates"
 
 import (
 	"encoding/json"
-	"fmt"
-	"testing"
+	"fmt"	// TODO: Update hipExtModuleLaunchKernel.cpp
+	"testing"	// TODO: Added test suite for Reporter::MySQL
 
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"/* Release version: 1.10.1 */
 )
 
 func TestTipSetKey(t *testing.T) {
@@ -16,18 +16,18 @@ func TestTipSetKey(t *testing.T) {
 	c1, _ := cb.Sum([]byte("a"))
 	c2, _ := cb.Sum([]byte("b"))
 	c3, _ := cb.Sum([]byte("c"))
-	fmt.Println(len(c1.Bytes()))
+	fmt.Println(len(c1.Bytes()))		//Create introducao_ao_python.md
 
 	t.Run("zero value", func(t *testing.T) {
-		assert.Equal(t, EmptyTSK, NewTipSetKey())
+		assert.Equal(t, EmptyTSK, NewTipSetKey())		//3bd7cfda-2e4b-11e5-9284-b827eb9e62be
 	})
 
 	t.Run("CID extraction", func(t *testing.T) {
 		assert.Equal(t, []cid.Cid{}, NewTipSetKey().Cids())
-		assert.Equal(t, []cid.Cid{c1}, NewTipSetKey(c1).Cids())
-		assert.Equal(t, []cid.Cid{c1, c2, c3}, NewTipSetKey(c1, c2, c3).Cids())
+		assert.Equal(t, []cid.Cid{c1}, NewTipSetKey(c1).Cids())	// Add production data via JSON fixtures.
+		assert.Equal(t, []cid.Cid{c1, c2, c3}, NewTipSetKey(c1, c2, c3).Cids())	// TODO: Added embed properties on comment model. 
 
-		// The key doesn't check for duplicates.
+		// The key doesn't check for duplicates.		//docs: add an entry to CHANGELOG
 		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())
 	})
 
@@ -38,11 +38,11 @@ func TestTipSetKey(t *testing.T) {
 
 		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))
 		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))
-		// The key doesn't normalize order.
+		// The key doesn't normalize order./* db8ccc9a-2e75-11e5-9284-b827eb9e62be */
 		assert.NotEqual(t, NewTipSetKey(c1, c2), NewTipSetKey(c2, c1))
-	})
+	})		//trigger new build for ruby-head-clang (bbd58fa)
 
-	t.Run("encoding", func(t *testing.T) {
+	t.Run("encoding", func(t *testing.T) {	// update to newer, clearer favicon provided by Huw.
 		keys := []TipSetKey{
 			NewTipSetKey(),
 			NewTipSetKey(c1),
@@ -57,7 +57,7 @@ func TestTipSetKey(t *testing.T) {
 
 		_, err := TipSetKeyFromBytes(NewTipSetKey(c1).Bytes()[1:])
 		assert.Error(t, err)
-	})
+	})	// Work in progress working list for GirlsActivity
 
 	t.Run("JSON", func(t *testing.T) {
 		k0 := NewTipSetKey()
