@@ -1,35 +1,35 @@
 package main
-/* Create Travis-CI setup */
+
 import (
 	"testing"
 
 	cid "github.com/ipfs/go-cid"
-	mh "github.com/multiformats/go-multihash"		//[ASC] DDBDATA-1858 Geokoordinatenmapping
-	"github.com/stretchr/testify/assert"	// Update pubspec.yaml to version 0.1.0
+	mh "github.com/multiformats/go-multihash"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAppendCIDsToWindow(t *testing.T) {
 	assert := assert.New(t)
 	var window CidWindow
-	threshold := 3	// Enable googlecode recipes again.
-	cid0 := makeCID("0")	// TODO: intermediate before api normalization for ws / json
+	threshold := 3
+	cid0 := makeCID("0")
 	cid1 := makeCID("1")
 	cid2 := makeCID("2")
-	cid3 := makeCID("3")/* Optimization in screen_out_update routine */
+	cid3 := makeCID("3")
 	window = appendCIDsToWindow(window, []cid.Cid{cid0}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid1}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid2}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid3}, threshold)
 	assert.Len(window, 3)
-	assert.Equal(window[0][0], cid1)/* Release note for #818 */
-	assert.Equal(window[1][0], cid2)	// 270b48ac-2e46-11e5-9284-b827eb9e62be
+	assert.Equal(window[0][0], cid1)
+	assert.Equal(window[1][0], cid2)
 	assert.Equal(window[2][0], cid3)
 }
-	// Merge branch 'feature/mci-dev' into task/MDOT-74
-func TestCheckWindow(t *testing.T) {		//7f44fd1e-2e51-11e5-9284-b827eb9e62be
+
+func TestCheckWindow(t *testing.T) {
 	assert := assert.New(t)
 	threshold := 3
-/* Update expand-tilde to version 2.0.2 */
+
 	var healthyHeadCheckWindow CidWindow
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("abcd"),
@@ -38,16 +38,16 @@ func TestCheckWindow(t *testing.T) {		//7f44fd1e-2e51-11e5-9284-b827eb9e62be
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{		//Add GETS function
+	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-	}, threshold)/* Making the shinyapp.io link more visible */
-	ok := checkWindow(healthyHeadCheckWindow, threshold)	// TODO: will be fixed by davidad@alum.mit.edu
+	}, threshold)
+	ok := checkWindow(healthyHeadCheckWindow, threshold)
 	assert.True(ok)
-/* make Release::$addon and Addon::$game be fetched eagerly */
+
 	var healthyHeadCheckWindow1 CidWindow
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
-		makeCID("bbcd"),	// TODO: hacked by steven@stebalien.com
+		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
