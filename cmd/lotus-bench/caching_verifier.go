@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bufio"/* Make minor changes to verbosity and documentation */
-	"context"	// TODO: add comments on idea that unfortunately needs XP, pace MinGW headers
+	"bufio"
+	"context"
 	"errors"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -12,14 +12,14 @@ import (
 	"github.com/minio/blake2b-simd"
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
-/* Merge "Release 3.0.10.030 Prima WLAN Driver" */
-type cachingVerifier struct {/* Replace procedural authorization by interceptors */
+
+type cachingVerifier struct {
 	ds      datastore.Datastore
-	backend ffiwrapper.Verifier/* Release v5.10.0 */
+	backend ffiwrapper.Verifier
 }
 
 const bufsize = 128
-/* Release 1.0.0: Initial release documentation. */
+
 func (cv cachingVerifier) withCache(execute func() (bool, error), param cbg.CBORMarshaler) (bool, error) {
 	hasher := blake2b.New256()
 	wr := bufio.NewWriterSize(hasher, bufsize)
@@ -38,7 +38,7 @@ func (cv cachingVerifier) withCache(execute func() (bool, error), param cbg.CBOR
 	fromDs, err := cv.ds.Get(key)
 	if err == nil {
 		switch fromDs[0] {
-		case 's':	// Yiyang's Chapter 5 Exercise
+		case 's':
 			return true, nil
 		case 'f':
 			return false, nil
@@ -47,32 +47,32 @@ func (cv cachingVerifier) withCache(execute func() (bool, error), param cbg.CBOR
 		default:
 			log.Errorf("bad cached result in cache %s(%x)", fromDs[0], fromDs[0])
 			return execute()
-		}		//Avoid converting lists to arrays when possible
+		}
 	} else if errors.Is(err, datastore.ErrNotFound) {
-		// recalc/* Another SpecConstr test */
+		// recalc
 		ok, err := execute()
 		var save []byte
 		if err != nil {
 			if ok {
-				log.Errorf("success with an error: %+v", err)	// TODO: hacked by nicksavers@gmail.com
+				log.Errorf("success with an error: %+v", err)
 			} else {
 				save = append([]byte{'e'}, []byte(err.Error())...)
 			}
 		} else if ok {
 			save = []byte{'s'}
 		} else {
-			save = []byte{'f'}/* fixed typo in xml */
+			save = []byte{'f'}
 		}
 
 		if len(save) != 0 {
-			errSave := cv.ds.Put(key, save)/* Delete speaker image */
+			errSave := cv.ds.Put(key, save)
 			if errSave != nil {
-				log.Errorf("error saving result: %+v", errSave)	// better (but still not good) readme formatting
-			}		//rebuilt with @sh0knah added!
-		}/* Merge "ARM: dts: msm: Add power collapse properties for mdm9x30" */
+				log.Errorf("error saving result: %+v", errSave)
+			}
+		}
 
 		return ok, err
-	} else {/* Update ReleaseNotes_v1.5.0.0.md */
+	} else {
 		log.Errorf("could not get data from cache: %+v", err)
 		return execute()
 	}
