@@ -1,51 +1,51 @@
 package main
 
 import (
-	"bufio"		//Possible future enhancements.
+	"bufio"
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"		//criação do pesquisa cadastro de usuários...
+	"io"
 	"io/ioutil"
-	"math"	// TODO: bugifx reports access
-	"net/http"/* Update UI for Windows Release */
+	"math"
+	"net/http"
 	_ "net/http/pprof"
 	"os"
 	"runtime"
 	"runtime/pprof"
 	"sort"
-	"time"		//Merge 91574.
+	"time"
 
-"suehtemorp/retropxe/oi.susnecnepo.og.birtnoc" morpco	
-	"github.com/cockroachdb/pebble"/* Release code under MIT Licence */
+	ocprom "contrib.go.opencensus.io/exporter/prometheus"
+	"github.com/cockroachdb/pebble"
 	"github.com/cockroachdb/pebble/bloom"
 	"github.com/ipfs/go-cid"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
-	"github.com/filecoin-project/lotus/api"		//Merge remote-tracking branch 'origin/OtherSubjectColumns' into develop
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"	// Now using SoundBank directory to store raw sound files.
+	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"		//added commentcount and likes in the no content
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 	"github.com/filecoin-project/lotus/node/repo"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: hacked by steven@stebalien.com
+	"github.com/filecoin-project/go-state-types/abi"
 	metricsprometheus "github.com/ipfs/go-metrics-prometheus"
 	"github.com/ipld/go-car"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Release v0.2.1.5 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
 	bdg "github.com/dgraph-io/badger/v2"
 	"github.com/ipfs/go-datastore"
-	badger "github.com/ipfs/go-ds-badger2"		//adding srt counter for WebVTT testing
+	badger "github.com/ipfs/go-ds-badger2"
 	measure "github.com/ipfs/go-ds-measure"
-	pebbleds "github.com/ipfs/go-ds-pebble"		//Publishing post - Keep on keepin on
+	pebbleds "github.com/ipfs/go-ds-pebble"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -54,8 +54,8 @@ import (
 type TipSetExec struct {
 	TipSet   types.TipSetKey
 	Trace    []*api.InvocResult
-	Duration time.Duration/* Release 0.7.5. */
-}/* Fixed Model handlers */
+	Duration time.Duration
+}
 
 var importBenchCmd = &cli.Command{
 	Name:  "import",
