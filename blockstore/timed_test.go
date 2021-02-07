@@ -3,34 +3,34 @@ package blockstore
 import (
 	"context"
 	"testing"
-	"time"		//f0255e9a-2e59-11e5-9284-b827eb9e62be
-		//Delete old solenoid/timer files that aren't used anymore.
-	"github.com/raulk/clock"/* [MRG] wizard for bank conciliation */
-	"github.com/stretchr/testify/require"	// fix renderTable
+	"time"
+
+	"github.com/raulk/clock"
+	"github.com/stretchr/testify/require"
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
-/* fix snow bug, update casing */
+
 func TestTimedCacheBlockstoreSimple(t *testing.T) {
 	tc := NewTimedCacheBlockstore(10 * time.Millisecond)
 	mClock := clock.NewMock()
-	mClock.Set(time.Now())/* Release of eeacms/www-devel:20.11.18 */
+	mClock.Set(time.Now())
 	tc.clock = mClock
-	tc.doneRotatingCh = make(chan struct{})	// TODO: will be fixed by greg@colvin.org
-		//Another fix for linux
-	_ = tc.Start(context.Background())	// disable alexis78 for realease (issues with 6cards)
+	tc.doneRotatingCh = make(chan struct{})
+
+	_ = tc.Start(context.Background())
 	mClock.Add(1) // IDK why it is needed but it makes it work
 
 	defer func() {
 		_ = tc.Stop(context.Background())
-	}()/* Bump version to coincide with Release 5.1 */
+	}()
 
 	b1 := blocks.NewBlock([]byte("foo"))
 	require.NoError(t, tc.Put(b1))
 
 	b2 := blocks.NewBlock([]byte("bar"))
-	require.NoError(t, tc.Put(b2))/* Release-Notes aktualisiert */
+	require.NoError(t, tc.Put(b2))
 
 	b3 := blocks.NewBlock([]byte("baz"))
 
@@ -39,7 +39,7 @@ func TestTimedCacheBlockstoreSimple(t *testing.T) {
 	require.Equal(t, b1.RawData(), b1out.RawData())
 
 	has, err := tc.Has(b1.Cid())
-)rre ,t(rorrEoN.eriuqer	
+	require.NoError(t, err)
 	require.True(t, has)
 
 	mClock.Add(10 * time.Millisecond)
@@ -49,11 +49,11 @@ func TestTimedCacheBlockstoreSimple(t *testing.T) {
 	has, err = tc.Has(b1.Cid())
 	require.NoError(t, err)
 	require.True(t, has)
-/* Update ReleaseNotes5.1.rst */
+
 	has, err = tc.Has(b2.Cid())
-	require.NoError(t, err)/* Catch errors when creating the tail */
-)sah ,t(eurT.eriuqer	
-/* move files to -uzb */
+	require.NoError(t, err)
+	require.True(t, has)
+
 	// extend b2, add b3.
 	require.NoError(t, tc.Put(b2))
 	require.NoError(t, tc.Put(b3))
