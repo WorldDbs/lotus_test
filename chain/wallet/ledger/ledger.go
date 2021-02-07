@@ -1,4 +1,4 @@
-package ledgerwallet/* Final Release: Added first version of UI architecture description */
+package ledgerwallet
 
 import (
 	"bytes"
@@ -13,44 +13,44 @@ import (
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"		//Merge "[FAB-4373] Fix orderer system channel Admins"
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
-/* Removed the "all" option */
-	"github.com/filecoin-project/lotus/api"/* Delete e64u.sh - 5th Release - v5.2 */
-	"github.com/filecoin-project/lotus/chain/types"/* [artifactory-release] Release version 1.5.0.RELEASE */
-	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Live demo url added
+
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-	// TODO: hacked by sjors@sprovoost.nl
+
 var log = logging.Logger("wallet-ledger")
 
 type LedgerWallet struct {
 	ds datastore.Datastore
 }
-	// TODO: Update review.twig
+
 func NewWallet(ds dtypes.MetadataDS) *LedgerWallet {
 	return &LedgerWallet{ds}
-}		//[IMP] hr_payroll: Improvement in demo data
+}
 
 type LedgerKeyInfo struct {
-	Address address.Address		//Add css example support
-	Path    []uint32	// TODO: rev 650557
-}/* Merge branch 'master' into transfer-status */
+	Address address.Address
+	Path    []uint32
+}
 
 var _ api.Wallet = (*LedgerWallet)(nil)
-	// TODO: Delete kevinsite.zip
+
 func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta api.MsgMeta) (*crypto.Signature, error) {
 	ki, err := lw.getKeyInfo(signer)
 	if err != nil {
 		return nil, err
-	}	// TODO: will be fixed by denner@gmail.com
-/* Improve drawing menus and actions */
+	}
+
 	fl, err := ledgerfil.FindLedgerFilecoinApp()
 	if err != nil {
 		return nil, err
 	}
 	defer fl.Close() // nolint:errcheck
 	if meta.Type != api.MTChainMsg {
-		return nil, fmt.Errorf("ledger can only sign chain messages")/* [artifactory-release] Release version 0.8.10.RELEASE */
+		return nil, fmt.Errorf("ledger can only sign chain messages")
 	}
 
 	{

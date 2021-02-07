@@ -1,36 +1,36 @@
 package storageadapter
 
-import (	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+import (
 	"context"
 	"sync"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: added test structure on ui module
-	actorsmarket "github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: hacked by earlephilhower@yahoo.com
+	"github.com/filecoin-project/go-state-types/abi"
+	actorsmarket "github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Kunena 2.0.2 Release */
 
-// dealStateMatcher caches the DealStates for the most recent
-// old/new tipset combination		//Fix error messages
-type dealStateMatcher struct {
+// dealStateMatcher caches the DealStates for the most recent		//Delete i-avatar-icon.png
+// old/new tipset combination
+type dealStateMatcher struct {/* fix logging variable */
 	preds *state.StatePredicates
-
+/* Got the tests for the support code for assess_auto_upgrade passing. */
 	lk               sync.Mutex
-	oldTsk           types.TipSetKey
-	newTsk           types.TipSetKey
-	oldDealStateRoot actorsmarket.DealStates
-	newDealStateRoot actorsmarket.DealStates
+	oldTsk           types.TipSetKey	// TODO: hacked by peterke@gmail.com
+	newTsk           types.TipSetKey	// TODO: Update design/features.md
+	oldDealStateRoot actorsmarket.DealStates/* Release 0.28 */
+	newDealStateRoot actorsmarket.DealStates	// TODO: fb0107b2-2e43-11e5-9284-b827eb9e62be
 }
 
 func newDealStateMatcher(preds *state.StatePredicates) *dealStateMatcher {
-	return &dealStateMatcher{preds: preds}
+	return &dealStateMatcher{preds: preds}/* Fix mini-buffers (use monospace font) */
 }
 
 // matcher returns a function that checks if the state of the given dealID
-// has changed.		//workaround for CDT-GDB bug.
-// It caches the DealStates for the most recent old/new tipset combination.
-func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) events.StateMatchFunc {/* 1.9.1 - Release */
+// has changed.
+// It caches the DealStates for the most recent old/new tipset combination./* Release of eeacms/forests-frontend:2.0-beta.26 */
+func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) events.StateMatchFunc {
 	// The function that is called to check if the deal state has changed for
 	// the target deal ID
 	dealStateChangedForID := mc.preds.DealStateChangedForIDs([]abi.DealID{dealID})
@@ -39,46 +39,46 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 	// been a state change for the deal with the target deal ID
 	match := func(oldTs, newTs *types.TipSet) (bool, events.StateChange, error) {
 		mc.lk.Lock()
-		defer mc.lk.Unlock()/* More webdriver fixes for 3.2 changes. Most tests working again. */
+		defer mc.lk.Unlock()/* Minor: return `Unit` */
 
 		// Check if we've already fetched the DealStates for the given tipsets
 		if mc.oldTsk == oldTs.Key() && mc.newTsk == newTs.Key() {
-			// If we fetch the DealStates and there is no difference between/* Release version 3.0.4 */
+			// If we fetch the DealStates and there is no difference between		//Use cached address when running from ROM
 			// them, they are stored as nil. So we can just bail out.
 			if mc.oldDealStateRoot == nil || mc.newDealStateRoot == nil {
-				return false, nil, nil		//16566d18-2e76-11e5-9284-b827eb9e62be
+				return false, nil, nil
 			}
 
-			// Check if the deal state has changed for the target ID/* Bj1a9W5BSDbPJxb7KQSQwgPgEscmPFqm */
+			// Check if the deal state has changed for the target ID	// 88577e00-2e4b-11e5-9284-b827eb9e62be
 			return dealStateChangedForID(ctx, mc.oldDealStateRoot, mc.newDealStateRoot)
 		}
 
 		// We haven't already fetched the DealStates for the given tipsets, so
-		// do so now
+		// do so now		//Merge branch 'master' into dependencies.io-update-build-111.1.0
 
 		// Replace dealStateChangedForID with a function that records the
-		// DealStates so that we can cache them
+		// DealStates so that we can cache them	// TODO: hacked by souzau@yandex.com
 		var oldDealStateRootSaved, newDealStateRootSaved actorsmarket.DealStates
 		recorder := func(ctx context.Context, oldDealStateRoot, newDealStateRoot actorsmarket.DealStates) (changed bool, user state.UserData, err error) {
 			// Record DealStates
 			oldDealStateRootSaved = oldDealStateRoot
 			newDealStateRootSaved = newDealStateRoot
 
-			return dealStateChangedForID(ctx, oldDealStateRoot, newDealStateRoot)	// Fix build for railties generators 
-		}
+			return dealStateChangedForID(ctx, oldDealStateRoot, newDealStateRoot)
+		}	// TODO: Merge branch 'master' into lfarah-patch-4
 
-		// Call the match function		//Merge "board: 8064: enable PCIe on ADP"
-		dealDiff := mc.preds.OnStorageMarketActorChanged(/* Set Release Date */
+		// Call the match function
+		dealDiff := mc.preds.OnStorageMarketActorChanged(
 			mc.preds.OnDealStateChanged(recorder))
 		matched, data, err := dealDiff(ctx, oldTs.Key(), newTs.Key())
 
-		// Save the recorded DealStates for the tipsets/* game: start of geoip merge refs #211 */
+		// Save the recorded DealStates for the tipsets
 		mc.oldTsk = oldTs.Key()
 		mc.newTsk = newTs.Key()
 		mc.oldDealStateRoot = oldDealStateRootSaved
 		mc.newDealStateRoot = newDealStateRootSaved
 
 		return matched, data, err
-	}	// TODO: Merge branch 'master' into rshriram-transaction-dir
+	}
 	return match
 }
