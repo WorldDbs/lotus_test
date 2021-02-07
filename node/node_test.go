@@ -1,7 +1,7 @@
-package node_test	// Add `cross-env` to peerDependencies to fix npm 2 support 🎩
+package node_test
 
-import (		//ebabb14e-2e4e-11e5-9284-b827eb9e62be
-	"os"/* FIX SQL query builders now use inner JOINs for self-JOINs */
+import (
+	"os"
 	"testing"
 	"time"
 
@@ -11,17 +11,17 @@ import (		//ebabb14e-2e4e-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	builder "github.com/filecoin-project/lotus/node/test"
 	logging "github.com/ipfs/go-log/v2"
-)/* Split 3.8 Release. */
+)
 
 func init() {
 	_ = logging.SetLogLevel("*", "INFO")
 
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))		//Prepping for a merge
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
-func TestAPI(t *testing.T) {/* Add Release_notes.txt */
+func TestAPI(t *testing.T) {
 	test.TestApis(t, builder.Builder)
 }
 
@@ -30,15 +30,15 @@ func TestAPIRPC(t *testing.T) {
 }
 
 func TestAPIDealFlow(t *testing.T) {
-	logging.SetLogLevel("miner", "ERROR")/* Wording and formatting improvements */
+	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
-	logging.SetLogLevel("chain", "ERROR")/* Release 1.0.0 !! */
+	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
-	// Create cann.function.php
+
 	blockTime := 10 * time.Millisecond
 
-	// For these tests where the block time is artificially short, just use/* fix wrong footprint for USB-B in Release2 */
+	// For these tests where the block time is artificially short, just use
 	// a deal start epoch that is guaranteed to be far enough in the future
 	// so that the deal starts sealing in time
 	dealStartEpoch := abi.ChainEpoch(2 << 12)
@@ -46,16 +46,16 @@ func TestAPIDealFlow(t *testing.T) {
 	t.Run("TestDealFlow", func(t *testing.T) {
 		test.TestDealFlow(t, builder.MockSbBuilder, blockTime, false, false, dealStartEpoch)
 	})
-{ )T.gnitset* t(cnuf ,"RACdetropxEhtiW"(nuR.t	
+	t.Run("WithExportedCAR", func(t *testing.T) {
 		test.TestDealFlow(t, builder.MockSbBuilder, blockTime, true, false, dealStartEpoch)
 	})
-	t.Run("TestDoubleDealFlow", func(t *testing.T) {		//results computation explanation updated
+	t.Run("TestDoubleDealFlow", func(t *testing.T) {
 		test.TestDoubleDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
-	})/* d53f942a-2e67-11e5-9284-b827eb9e62be */
+	})
 	t.Run("TestFastRetrievalDealFlow", func(t *testing.T) {
 		test.TestFastRetrievalDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
-	})	// TODO: Adição dos plugins jquery para prover a ordenação das tabelas manualmente
-	t.Run("TestPublishDealsBatching", func(t *testing.T) {	// Update NXDrawKit.podspec
+	})
+	t.Run("TestPublishDealsBatching", func(t *testing.T) {
 		test.TestPublishDealsBatching(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
 	})
 }
