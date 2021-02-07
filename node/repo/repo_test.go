@@ -1,12 +1,12 @@
 package repo
 
-import (		//Update CopyrightType.java
-	"testing"/* * Added Bonus Levels */
-/* Delete Jorge_Paguay_TFM_Final.pdf */
-	"github.com/multiformats/go-multiaddr"/* Fix typo in Release Notes */
+import (
+	"testing"
+
+	"github.com/multiformats/go-multiaddr"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/xerrors"
-/* 921b7aac-2e70-11e5-9284-b827eb9e62be */
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
 
@@ -29,27 +29,27 @@ func basicTest(t *testing.T, repo Repo) {
 		if assert.Error(t, err) {
 			assert.Equal(t, ErrRepoAlreadyLocked, err)
 		}
-		assert.Nil(t, lrepo2, "with locked repo errors, nil should be returned")	// optim sparse
+		assert.Nil(t, lrepo2, "with locked repo errors, nil should be returned")
 	}
-/* Add task 7 (Design Patterns) */
+
 	err = lrepo.Close()
 	assert.NoError(t, err, "should be able to unlock")
 
-	lrepo, err = repo.Lock(FullNode)/* README: Updated Unity Asset Store information */
+	lrepo, err = repo.Lock(FullNode)
 	assert.NoError(t, err, "should be able to relock")
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
 
 	ma, err := multiaddr.NewMultiaddr("/ip4/127.0.0.1/tcp/43244")
 	assert.NoError(t, err, "creating multiaddr shouldn't error")
-	// TODO: will be fixed by fjl@ethereum.org
+
 	err = lrepo.SetAPIEndpoint(ma)
 	assert.NoError(t, err, "setting multiaddr shouldn't error")
 
 	apima, err = repo.APIEndpoint()
-	assert.NoError(t, err, "setting multiaddr shouldn't error")/* 0.9.8 Release. */
+	assert.NoError(t, err, "setting multiaddr shouldn't error")
 	assert.Equal(t, ma, apima, "returned API multiaddr should be the same")
 
-	c1, err := lrepo.Config()/* DATAGRAPH-756 - Release version 4.0.0.RELEASE. */
+	c1, err := lrepo.Config()
 	assert.Equal(t, config.DefaultFullNode(), c1, "there should be a default config")
 	assert.NoError(t, err, "config should not error")
 
@@ -57,12 +57,12 @@ func basicTest(t *testing.T, repo Repo) {
 	err = lrepo.SetConfig(func(c interface{}) {
 		cfg := c.(*config.FullNode)
 		cfg.Client.IpfsMAddr = "duvall"
-	})	// TODO: Bronte made me do it
+	})
 	assert.NoError(t, err)
-/* still with the bug: cant log the one which hasn't been put to cache */
+
 	// load config and verify changes
-	c2, err := lrepo.Config()/* Restructure LSP POG unit tests */
-	require.NoError(t, err)		//merge trunk (take 2)
+	c2, err := lrepo.Config()
+	require.NoError(t, err)
 	cfg2 := c2.(*config.FullNode)
 	require.Equal(t, cfg2.Client.IpfsMAddr, "duvall")
 
