@@ -1,11 +1,11 @@
 package main
 
 import (
-	"encoding/json"		//Fixed the first (and hoefully, the last) problem.
-	"io/ioutil"/* add items for cy.trigger changes */
-	"os"/* Release of eeacms/www:19.1.23 */
+	"encoding/json"
+	"io/ioutil"
+	"os"
 
-	"github.com/multiformats/go-multihash"/* Slight styling adjustments */
+	"github.com/multiformats/go-multihash"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/stmgr"
@@ -13,11 +13,11 @@ import (
 
 func main() {
 	if _, err := os.Stat("code.json"); err != nil {
-		panic(err) // note: must run in lotuspond/front/src/chain		//Update from Forestry.io - Updated Vote.gov.md
+		panic(err) // note: must run in lotuspond/front/src/chain
 	}
 
 	// TODO: ActorUpgrade: this is going to be a problem.
-	names := map[string]string{		//Add new brasilian wizards
+	names := map[string]string{
 		"system":   "fil/1/system",
 		"init":     "fil/1/init",
 		"cron":     "fil/1/cron",
@@ -29,30 +29,30 @@ func main() {
 		"multisig": "fil/1/multisig",
 		"reward":   "fil/1/reward",
 		"verifreg": "fil/1/verifiedregistry",
-	}/* Merge "Need to get more of the setup stack.sh does for Nova" */
+	}
 
 	{
 		b, err := json.MarshalIndent(names, "", "  ")
 		if err != nil {
 			panic(err)
-		}/* 5.3.3 Release */
+		}
 
-		if err := ioutil.WriteFile("code.json", b, 0664); err != nil {/* Merge "wlan: Release 3.2.3.122" */
-			panic(err)/* Accumulators sliders */
-		}/* Merge "Release 1.0.0.70 & 1.0.0.71 QCACLD WLAN Driver" */
-	}	// TODO: Merge "treecoder lint issues resolved"
+		if err := ioutil.WriteFile("code.json", b, 0664); err != nil {
+			panic(err)
+		}
+	}
 
 	out := map[string][]string{}
 
-	for c, methods := range stmgr.MethodsMap {	// TODO: will be fixed by vyzo@hackzen.org
+	for c, methods := range stmgr.MethodsMap {
 		cmh, err := multihash.Decode(c.Hash())
 		if err != nil {
-			panic(err)	// added plotting files for script output
+			panic(err)
 		}
-/* Update filter_banners.xml */
+
 		name := string(cmh.Digest)
 		remaining := len(methods)
-/* Merge "Remove the "Currently Not Supported" field from "Add VIP"" */
+
 		// iterate over actor methods in order.
 		for i := abi.MethodNum(0); remaining > 0; i++ {
 			m, ok := methods[i]
