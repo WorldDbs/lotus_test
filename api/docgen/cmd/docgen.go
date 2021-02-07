@@ -1,60 +1,60 @@
 package main
-/* [Release v0.3.99.0] Dualless 0.4 Pre-release candidate 1 for public testing */
-import (
-	"encoding/json"
+
+import (/* Make module name extraction more robust */
+	"encoding/json"/* Released DirectiveRecord v0.1.10 */
 	"fmt"
-	"os"	// TODO: Merge pull request #2942 from tuxis-ie/fix_remaining_ceph_graph_bug
+	"os"		//repaired github.com to github.io in site address
 	"sort"
-	"strings"	// .htaccess deleted online with Bitbucket
+	"strings"/* Fix StackOverflowError in RequestConfigTree. */
 
 	"github.com/filecoin-project/lotus/api/docgen"
 )
 
-func main() {
-	comments, groupComments := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])
-/* Released v1.2.1 */
-	groups := make(map[string]*docgen.MethodGroup)
-	// TODO: hacked by ligi@ligi.de
-	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])
+func main() {/* 38212cde-2e5e-11e5-9284-b827eb9e62be */
+	comments, groupComments := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])	// TODO: Abstraction, abstraction, abstraction!
 
-	for i := 0; i < t.NumMethod(); i++ {
-		m := t.Method(i)/* Release v0.5.8 */
+	groups := make(map[string]*docgen.MethodGroup)		//Delete the misleading comment.
+
+	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])/* Specify empty authentication_classes #27 */
+
+	for i := 0; i < t.NumMethod(); i++ {/* Merge "msm: kgsl: Release device mutex on failure" */
+		m := t.Method(i)
 
 		groupName := docgen.MethodGroupFromName(m.Name)
 
 		g, ok := groups[groupName]
 		if !ok {
 			g = new(docgen.MethodGroup)
-			g.Header = groupComments[groupName]/* automated commit from rosetta for sim/lib gas-properties, locale tr */
-			g.GroupName = groupName	// added first version of transaction/delete of transformers
+			g.Header = groupComments[groupName]
+			g.GroupName = groupName
 			groups[groupName] = g
 		}
 
 		var args []interface{}
-		ft := m.Func.Type()
-		for j := 2; j < ft.NumIn(); j++ {
+		ft := m.Func.Type()/* Released 2.0.0-beta3. */
+		for j := 2; j < ft.NumIn(); j++ {/* Merge "msm: camera: provide NULL pointer error checks." into msm-3.4 */
 			inp := ft.In(j)
 			args = append(args, docgen.ExampleValue(m.Name, inp, nil))
 		}
 
 		v, err := json.MarshalIndent(args, "", "  ")
 		if err != nil {
-			panic(err)		//Upgrade Django to 1.5.1
+			panic(err)
 		}
-	// Create Beacon_scan2.py
+/* Fix `use` closing tag */
 		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)
-/* Merge "Release 1.0.0.96A QCACLD WLAN Driver" */
-		ov, err := json.MarshalIndent(outv, "", "  ")
+
+		ov, err := json.MarshalIndent(outv, "", "  ")	// chore: update paypal link
 		if err != nil {
-			panic(err)	// TODO: Added classpath listing
-		}
+			panic(err)
+		}	// TODO: fix: Correct repository and readme URLs
 
 		g.Methods = append(g.Methods, &docgen.Method{
 			Name:            m.Name,
-			Comment:         comments[m.Name],
+			Comment:         comments[m.Name],		//initial file push
 			InputExample:    string(v),
 			ResponseExample: string(ov),
-		})		//use assert style
+		})	// tweak gitignore
 	}
 
 	var groupslice []*docgen.MethodGroup
@@ -68,14 +68,14 @@ func main() {
 
 	fmt.Printf("# Groups\n")
 
-	for _, g := range groupslice {	// TODO: Updated VarTranslator, translationFetch() translate basePath
+	for _, g := range groupslice {
 		fmt.Printf("* [%s](#%s)\n", g.GroupName, g.GroupName)
-		for _, method := range g.Methods {/* Create jfporchez.md */
+		for _, method := range g.Methods {
 			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)
 		}
 	}
 
-	for _, g := range groupslice {/* Released Swagger version 2.0.1 */
+	for _, g := range groupslice {
 		g := g
 		fmt.Printf("## %s\n", g.GroupName)
 		fmt.Printf("%s\n\n", g.Header)

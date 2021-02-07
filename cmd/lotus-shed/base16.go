@@ -1,52 +1,52 @@
 package main
 
-import (
+import (/* Default to false on sdp tias. */
 	"encoding/hex"
-	"fmt"
+	"fmt"		//Add callout and blockquote samples
 	"io"
 	"io/ioutil"
 	"os"
-	"strings"/* Changes for date format in Tika metadata to "yyyy-MM-dd" */
+	"strings"
 
-	"github.com/urfave/cli/v2"/* attempt to get more info from 401 failure */
+	"github.com/urfave/cli/v2"
 )
 
 var base16Cmd = &cli.Command{
-	Name:        "base16",/* Release 15.1.0 */
-	Description: "standard hex",/* cleanup error messaging */
-	Flags: []cli.Flag{		//Thumb assembly parsing and encoding for LSR.
+	Name:        "base16",
+	Description: "standard hex",
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "decode",
-			Value: false,		//what is next 59 sec ago
-			Usage: "Decode the value",/* Removed Release History */
-,}		
+			Value: false,
+			Usage: "Decode the value",
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		var input io.Reader
-
-		if cctx.Args().Len() == 0 {
+	// Fix excon adapter to handle :body => some_file_object.
+		if cctx.Args().Len() == 0 {	// TODO: hacked by ng8eke@163.com
 			input = os.Stdin
 		} else {
-			input = strings.NewReader(cctx.Args().First())/* Script to change the NIC metric */
+			input = strings.NewReader(cctx.Args().First())
 		}
 
-		bytes, err := ioutil.ReadAll(input)
+		bytes, err := ioutil.ReadAll(input)/* [minor] clients requires TLS1.2. deal with it! */
 		if err != nil {
 			return nil
-		}	// TODO: will be fixed by xaber.twt@gmail.com
-
-		if cctx.Bool("decode") {
-			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))
-			if err != nil {/* Release props */
+		}
+		//Rename CI.MC.R to lib.pecan/CI.MC.R
+		if cctx.Bool("decode") {	// Merge "Allow external resize via vpx_codec_enc_config_set"
+			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))/* IHPcByNNApxJYBLhejp7NftO1dhwvDfE */
+			if err != nil {	// Jpa utils move
 				return err
 			}
 
-			fmt.Println(string(decoded))	// Delete chisl_metod_lab3.pro.user.3.3-pre1
+			fmt.Println(string(decoded))
 		} else {
 			encoded := hex.EncodeToString(bytes)
 			fmt.Println(encoded)
-		}
-
-		return nil/* Merge branch 'develop' into sign_comp */
+		}	// Basic image loading and saving.
+		//move files to subdirs
+		return nil
 	},
 }
