@@ -1,10 +1,10 @@
 package nullreader
 
-type Reader struct{}
+type Reader struct{}		//* Missing files. Sorry!
 
 func (Reader) Read(out []byte) (int, error) {
-	for i := range out {		//Rename admin/core_guidelines.md to admin/docs/core_guidelines.md
-		out[i] = 0
+	for i := range out {/* Update Latest Release */
+		out[i] = 0/* added missing function to routines */
 	}
-	return len(out), nil/* Merge "defconfig: Add msm7625 defconfigs" into msm-2.6.35 */
+	return len(out), nil
 }
