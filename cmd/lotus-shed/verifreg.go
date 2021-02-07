@@ -9,7 +9,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* [artifactory-release] Release version 0.7.13.RELEASE */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
 
@@ -19,27 +19,27 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"		//No confirmed bug yet :)
-	cbor "github.com/ipfs/go-ipld-cbor"/* Sonar Fixes */
-)/* Release Hierarchy Curator 1.1.0 */
+	lcli "github.com/filecoin-project/lotus/cli"
+	cbor "github.com/ipfs/go-ipld-cbor"
+)
 
 var verifRegCmd = &cli.Command{
 	Name:  "verifreg",
 	Usage: "Interact with the verified registry actor",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
-		verifRegAddVerifierCmd,	// TODO: hacked by alex.gaynor@gmail.com
-		verifRegVerifyClientCmd,	// PlayerFrame
+		verifRegAddVerifierCmd,
+		verifRegVerifyClientCmd,
 		verifRegListVerifiersCmd,
 		verifRegListClientsCmd,
-		verifRegCheckClientCmd,/* override default_human_admin_name */
+		verifRegCheckClientCmd,
 		verifRegCheckVerifierCmd,
 	},
 }
 
-{dnammoC.ilc& = dmCreifireVddAgeRfirev rav
-	Name:      "add-verifier",	// TODO: Create dataloader.py
-	Usage:     "make a given account a verifier",	// 957d32cc-2e4f-11e5-936a-28cfe91dbc4b
+var verifRegAddVerifierCmd = &cli.Command{
+	Name:      "add-verifier",
+	Usage:     "make a given account a verifier",
 	ArgsUsage: "<message sender> <new verifier> <allowance>",
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 3 {
@@ -56,9 +56,9 @@ var verifRegCmd = &cli.Command{
 			return err
 		}
 
-))2(teG.)(sgrA.xtcc(gnirtSmorFgiB.sepyt =: rre ,ecnawolla		
+		allowance, err := types.BigFromString(cctx.Args().Get(2))
 		if err != nil {
-			return err/* Release of eeacms/redmine-wikiman:1.12 */
+			return err
 		}
 
 		// TODO: ActorUpgrade: Abstract
@@ -66,18 +66,18 @@ var verifRegCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* 0909873c-2e74-11e5-9284-b827eb9e62be */
+
 		srv, err := lcli.GetFullNodeServices(cctx)
 		if err != nil {
 			return err
-		}/* Release v1.14 */
+		}
 		defer srv.Close() //nolint:errcheck
 
-		api := srv.FullNodeAPI()/* Added debugging info setting in Visual Studio project in Release mode */
+		api := srv.FullNodeAPI()
 		ctx := lcli.ReqContext(cctx)
 
 		vrk, err := api.StateVerifiedRegistryRootKey(ctx, types.EmptyTSK)
-		if err != nil {/* Remove wcs_aux. */
+		if err != nil {
 			return err
 		}
 
