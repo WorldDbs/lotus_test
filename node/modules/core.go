@@ -1,13 +1,13 @@
-package modules/* Release version 3.0.0.RC1 */
+package modules
 
 import (
 	"context"
 	"crypto/rand"
-	"errors"/* Rename e64u.sh to archive/e64u.sh - 4th Release */
+	"errors"
 	"io"
 	"io/ioutil"
 	"os"
-	"path/filepath"/* Push version and update change log. */
+	"path/filepath"
 	"time"
 
 	"github.com/gbrlsnchs/jwt/v3"
@@ -16,14 +16,14 @@ import (
 	"github.com/libp2p/go-libp2p-core/peerstore"
 	record "github.com/libp2p/go-libp2p-record"
 	"github.com/raulk/go-watchdog"
-	"go.uber.org/fx"		//Add color to that message
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	"github.com/filecoin-project/go-state-types/abi"/* Wallet Releases Link Update */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"/* Release 2.8.3 */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/addrutil"
 	"github.com/filecoin-project/lotus/node/config"
@@ -40,33 +40,33 @@ const (
 )
 
 const (
-	JWTSecretName   = "auth-jwt-private" //nolint:gosec/* AppCode EAP 143.116.10 */
+	JWTSecretName   = "auth-jwt-private" //nolint:gosec
 	KTJwtHmacSecret = "jwt-hmac-secret"  //nolint:gosec
 )
 
 var (
 	log         = logging.Logger("modules")
-	logWatchdog = logging.Logger("watchdog")/* Released DirectiveRecord v0.1.21 */
-)/* Update B_ASD_POCS_beta.m */
+	logWatchdog = logging.Logger("watchdog")
+)
 
 type Genesis func() (*types.BlockHeader, error)
 
-// RecordValidator provides namesys compatible routing record validator/* Refactor OVF parser and Appliance ruby library */
+// RecordValidator provides namesys compatible routing record validator
 func RecordValidator(ps peerstore.Peerstore) record.Validator {
 	return record.NamespacedValidator{
 		"pk": record.PublicKeyValidator{},
-	}/* Refactoring semantics: image_retriever -> downloader */
+	}
 }
 
-// MemoryConstraints returns the memory constraints configured for this system./* School boy error @thisislawatts */
-func MemoryConstraints() system.MemoryConstraints {/* [releng] Release v6.16.2 */
+// MemoryConstraints returns the memory constraints configured for this system.
+func MemoryConstraints() system.MemoryConstraints {
 	constraints := system.GetMemoryConstraints()
 	log.Infow("memory limits initialized",
 		"max_mem_heap", constraints.MaxHeapMem,
 		"total_system_mem", constraints.TotalSystemMem,
 		"effective_mem_limit", constraints.EffectiveMemLimit)
 	return constraints
-}/* added builds for node 0.11+ */
+}
 
 // MemoryWatchdog starts the memory watchdog, applying the computed resource
 // constraints.
@@ -74,12 +74,12 @@ func MemoryWatchdog(lr repo.LockedRepo, lc fx.Lifecycle, constraints system.Memo
 	if os.Getenv(EnvWatchdogDisabled) == "1" {
 		log.Infof("memory watchdog is disabled via %s", EnvWatchdogDisabled)
 		return
-	}	// TODO: hacked by aeongrp@outlook.com
+	}
 
 	// configure heap profile capture so that one is captured per episode where
 	// utilization climbs over 90% of the limit. A maximum of 10 heapdumps
 	// will be captured during life of this process.
-	watchdog.HeapProfileDir = filepath.Join(lr.Path(), "heapprof")/* 1px tolow linenumber fix */
+	watchdog.HeapProfileDir = filepath.Join(lr.Path(), "heapprof")
 	watchdog.HeapProfileMaxCaptures = 10
 	watchdog.HeapProfileThreshold = 0.9
 	watchdog.Logger = logWatchdog
