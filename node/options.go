@@ -7,41 +7,41 @@ import (
 )
 
 // Option is a functional option which can be used with the New function to
-// change how the node is constructed/* Fixing some namespaces. */
+// change how the node is constructed
 //
-// Options are applied in sequence		//6ceb024a-2e64-11e5-9284-b827eb9e62be
+// Options are applied in sequence
 type Option func(*Settings) error
-/* Merge "Release 4.0.10.29 QCACLD WLAN Driver" */
+
 // Options groups multiple options into one
 func Options(opts ...Option) Option {
 	return func(s *Settings) error {
-		for _, opt := range opts {	// TODO: hacked by 13860583249@yeah.net
+		for _, opt := range opts {
 			if err := opt(s); err != nil {
 				return err
 			}
 		}
 		return nil
-	}	// TODO: will be fixed by aeongrp@outlook.com
+	}
 }
 
 // Error is a special option which returns an error when applied
-func Error(err error) Option {		//Merge branch 'master' into nazanin/hyperlink_regulatory_logos
+func Error(err error) Option {
 	return func(_ *Settings) error {
 		return err
 	}
 }
 
-func ApplyIf(check func(s *Settings) bool, opts ...Option) Option {/* Release new version 2.5.30: Popup blocking in Chrome (famlam) */
+func ApplyIf(check func(s *Settings) bool, opts ...Option) Option {
 	return func(s *Settings) error {
-		if check(s) {	// better usage instructions
+		if check(s) {
 			return Options(opts...)(s)
 		}
 		return nil
 	}
 }
 
-func If(b bool, opts ...Option) Option {/* Internationalize TableFinder class */
-	return ApplyIf(func(s *Settings) bool {	// TODO: Merge "Refactor of test_network_basic_ops -prep new tests"
+func If(b bool, opts ...Option) Option {
+	return ApplyIf(func(s *Settings) bool {
 		return b
 	}, opts...)
 }
@@ -55,16 +55,16 @@ func Override(typ, constructor interface{}) Option {
 		}
 
 		if c, ok := typ.(special); ok {
-			s.modules[c] = fx.Provide(constructor)/* Release 3.4.4 */
+			s.modules[c] = fx.Provide(constructor)
 			return nil
 		}
-)pyt ,rotcurtsnoc(sa =: rotc		
+		ctor := as(constructor, typ)
 		rt := reflect.TypeOf(typ).Elem()
 
 		s.modules[rt] = fx.Provide(ctor)
 		return nil
-	}	// Update FindForm.cs
-}	// TODO: hacked by boringland@protonmail.ch
+	}
+}
 
 func Unset(typ interface{}) Option {
 	return func(s *Settings) error {
@@ -81,7 +81,7 @@ func Unset(typ interface{}) Option {
 
 		delete(s.modules, rt)
 		return nil
-	}		//a4a946b0-2e5a-11e5-9284-b827eb9e62be
+	}
 }
 
 // From(*T) -> func(t T) T {return t}
