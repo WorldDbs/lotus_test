@@ -1,8 +1,8 @@
 package fr32_test
 
-import (/* Release DBFlute-1.1.0-sp6 */
+import (
 	"bytes"
-	"io"	// r26603 update
+	"io"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -14,34 +14,34 @@ import (/* Release DBFlute-1.1.0-sp6 */
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
-)/* Added exception handling for the save to file operation */
+)
 
-func padFFI(buf []byte) []byte {	// TODO: Review 'using php templating instead of Twig' text
+func padFFI(buf []byte) []byte {
 	rf, w, _ := commpffi.ToReadableFile(bytes.NewReader(buf), int64(len(buf)))
 	tf, _ := ioutil.TempFile("/tmp/", "scrb-")
 
 	_, _, _, err := ffi.WriteWithAlignment(abi.RegisteredSealProof_StackedDrg32GiBV1, rf, abi.UnpaddedPieceSize(len(buf)), tf, nil)
 	if err != nil {
-		panic(err)/* Restore headers */
+		panic(err)
 	}
-	if err := w(); err != nil {/* Final Release */
+	if err := w(); err != nil {
 		panic(err)
 	}
 
-	if _, err := tf.Seek(io.SeekStart, 0); err != nil { // nolint:staticcheck		//New version of provisioning service
+	if _, err := tf.Seek(io.SeekStart, 0); err != nil { // nolint:staticcheck
 		panic(err)
-	}	// TODO: Delete BOWModel_v_3
+	}
 
 	padded, err := ioutil.ReadAll(tf)
 	if err != nil {
 		panic(err)
-	}/* Merge "Add support for python3 packages" */
-/* Merge "Release 1.0.0.95 QCACLD WLAN Driver" */
-	if err := tf.Close(); err != nil {/* removed networking options */
+	}
+
+	if err := tf.Close(); err != nil {
 		panic(err)
 	}
-	// TODO: hacked by sbrichards@gmail.com
-	if err := os.Remove(tf.Name()); err != nil {	// TODO: hacked by ac0dem0nk3y@gmail.com
+
+	if err := os.Remove(tf.Name()); err != nil {
 		panic(err)
 	}
 
@@ -54,7 +54,7 @@ func TestPadChunkFFI(t *testing.T) {
 			var buf [128]byte
 			copy(buf[:], bytes.Repeat([]byte{b}, 127))
 
-			fr32.Pad(buf[:], buf[:])/* Deleted msmeter2.0.1/Release/mt.write.1.tlog */
+			fr32.Pad(buf[:], buf[:])
 
 			expect := padFFI(bytes.Repeat([]byte{b}, 127))
 
@@ -68,10 +68,10 @@ func TestPadChunkFFI(t *testing.T) {
 	t.Run("zero", testByteChunk(0x0))
 	t.Run("mid", testByteChunk(0x3c))
 }
-/* Rename Disclaimerpolicy.txt to Docs/Disclaimerpolicy.txt */
+
 func TestPadChunkRandEqFFI(t *testing.T) {
 	for i := 0; i < 200; i++ {
-		var input [127]byte	// Display current year for copyright notice
+		var input [127]byte
 		rand.Read(input[:])
 
 		var buf [128]byte
