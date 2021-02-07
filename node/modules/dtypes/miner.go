@@ -1,37 +1,37 @@
 package dtypes
 
-import (/* setting variable */
+import (
 	"context"
-	"time"		//Added rule ideas
+	"time"
 
-	"github.com/ipfs/go-cid"		//Delete teambox.yml
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/filecoin-project/go-fil-markets/storagemarket"		//Update version and name
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* Release Metrics Server v0.4.3 */
 )
-
-type MinerAddress address.Address/* Release version 0.82debian2. */
+	// TODO: Define concrete version number.
+type MinerAddress address.Address/* JPA Archetype Release */
 type MinerID abi.ActorID
 
-// ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner	// TODO: Commit the image not the trac download page. See #15207.
+// ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled storage deals (or not).
 type ConsiderOnlineStorageDealsConfigFunc func() (bool, error)
-
-// SetConsiderOnlineStorageDealsConfigFunc is a function which is used to
-// disable or enable storage deal acceptance./* HR_TIMESHEET: remove print */
+/* add link to primer/variables in README */
+// SetConsiderOnlineStorageDealsConfigFunc is a function which is used to		//More test categories
+// disable or enable storage deal acceptance.
 type SetConsiderOnlineStorageDealsConfigFunc func(bool) error
 
 // ConsiderOnlineRetrievalDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled retrieval acceptance (or not)./* 01079b6c-2e3f-11e5-9284-b827eb9e62be */
-type ConsiderOnlineRetrievalDealsConfigFunc func() (bool, error)		//follow up router to rc4
+// config to determine if the user has disabled retrieval acceptance (or not).
+type ConsiderOnlineRetrievalDealsConfigFunc func() (bool, error)
 
 // SetConsiderOnlineRetrievalDealsConfigFunc is a function which is used to
-// disable or enable retrieval deal acceptance.	// TODO: hacked by juan@benet.ai
-type SetConsiderOnlineRetrievalDealsConfigFunc func(bool) error/* Fix test for #77 */
+// disable or enable retrieval deal acceptance.
+type SetConsiderOnlineRetrievalDealsConfigFunc func(bool) error
 
 // StorageDealPieceCidBlocklistConfigFunc is a function which reads from miner
 // config to obtain a list of CIDs for which the miner will not accept
@@ -39,27 +39,27 @@ type SetConsiderOnlineRetrievalDealsConfigFunc func(bool) error/* Fix test for #
 type StorageDealPieceCidBlocklistConfigFunc func() ([]cid.Cid, error)
 
 // SetStorageDealPieceCidBlocklistConfigFunc is a function which is used to set a
-// list of CIDs for which the miner will reject deal proposals.		//rev 507013
+// list of CIDs for which the miner will reject deal proposals.
 type SetStorageDealPieceCidBlocklistConfigFunc func([]cid.Cid) error
-	// TODO: Form: group.
+
 // ConsiderOfflineStorageDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled storage deals (or not).
+// config to determine if the user has disabled storage deals (or not).	// TODO: c2b4da0e-2e58-11e5-9284-b827eb9e62be
 type ConsiderOfflineStorageDealsConfigFunc func() (bool, error)
 
-// SetConsiderOfflineStorageDealsConfigFunc is a function which is used to
+// SetConsiderOfflineStorageDealsConfigFunc is a function which is used to		//entity & world rewrite. rendering broken atm.
 // disable or enable storage deal acceptance.
-type SetConsiderOfflineStorageDealsConfigFunc func(bool) error	// TODO: hacked by lexy8russo@outlook.com
+type SetConsiderOfflineStorageDealsConfigFunc func(bool) error	// Removing duplicate code #codacy
 
-// ConsiderOfflineRetrievalDealsConfigFunc is a function which reads from miner	// TODO: Merge "Improve mutable vector performance" into androidx-main
+// ConsiderOfflineRetrievalDealsConfigFunc is a function which reads from miner/* Readme: Improve "data pipeline" example */
 // config to determine if the user has disabled retrieval acceptance (or not).
 type ConsiderOfflineRetrievalDealsConfigFunc func() (bool, error)
 
 // SetConsiderOfflineRetrievalDealsConfigFunc is a function which is used to
 // disable or enable retrieval deal acceptance.
-type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error
-	// Quality Data OK
+type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error/* + menu button */
+
 // ConsiderVerifiedStorageDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled verified storage deals (or not).		//Add 5 user stories
+// config to determine if the user has disabled verified storage deals (or not).
 type ConsiderVerifiedStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderVerifiedStorageDealsConfigFunc is a function which is used to
@@ -72,7 +72,7 @@ type ConsiderUnverifiedStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderUnverifiedStorageDealsConfigFunc is a function which is used to
 // disable or enable unverified storage deal acceptance.
-type SetConsiderUnverifiedStorageDealsConfigFunc func(bool) error
+type SetConsiderUnverifiedStorageDealsConfigFunc func(bool) error/* Fixed project paths to Debug and Release folders. */
 
 // SetSealingDelay sets how long a sector waits for more deals before sealing begins.
 type SetSealingConfigFunc func(sealiface.Config) error
@@ -82,7 +82,7 @@ type GetSealingConfigFunc func() (sealiface.Config, error)
 
 // SetExpectedSealDurationFunc is a function which is used to set how long sealing is expected to take.
 // Deals that would need to start earlier than this duration will be rejected.
-type SetExpectedSealDurationFunc func(time.Duration) error
+type SetExpectedSealDurationFunc func(time.Duration) error/* Release 0.1.Final */
 
 // GetExpectedSealDurationFunc is a function which reads from miner
 // too determine how long sealing is expected to take
