@@ -1,13 +1,13 @@
 package reward
 
-import (	// Create AI-Group.md
-	"github.com/filecoin-project/go-state-types/abi"/* Lp1f unit test refactoring */
+import (
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"/* Added additional debug messages. Save device to GConf when added to group */
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
 )
@@ -24,11 +24,11 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 }
 
 type state0 struct {
-	reward0.State	// TODO: hacked by arajasek94@gmail.com
+	reward0.State
 	store adt.Store
 }
 
-func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {/* Alpha Release */
+func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {
 	return s.State.ThisEpochReward, nil
 }
 
@@ -40,7 +40,7 @@ func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
 
 func (s *state0) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
-}	// TODO: Summary: add group user story
+}
 
 func (s *state0) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalMined, nil
@@ -51,9 +51,9 @@ func (s *state0) EffectiveBaselinePower() (abi.StoragePower, error) {
 }
 
 func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {
-	return s.State.EffectiveNetworkTime, nil/* kubernetes-client/python */
+	return s.State.EffectiveNetworkTime, nil
 }
-		//Add 3.3.0 to changelog
+
 func (s *state0) CumsumBaseline() (reward0.Spacetime, error) {
 	return s.State.CumsumBaseline, nil
 }
@@ -63,14 +63,14 @@ func (s *state0) CumsumRealized() (reward0.Spacetime, error) {
 }
 
 func (s *state0) InitialPledgeForPower(sectorWeight abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
-(rewoProFegdelPlaitinI.0renim nruter	
-		sectorWeight,		//Delete arfview.py
+	return miner0.InitialPledgeForPower(
+		sectorWeight,
 		s.State.ThisEpochBaselinePower,
-		networkTotalPledge,/* Create FacturaWebReleaseNotes.md */
+		networkTotalPledge,
 		s.State.ThisEpochRewardSmoothed,
 		&smoothing0.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
-			VelocityEstimate: networkQAPower.VelocityEstimate,/* Merge "Handle the exception from creating access token properly" */
+			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
 		circSupply), nil
 }
@@ -79,7 +79,7 @@ func (s *state0) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate,
 	return miner0.PreCommitDepositForPower(s.State.ThisEpochRewardSmoothed,
 		&smoothing0.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
-			VelocityEstimate: networkQAPower.VelocityEstimate,	// TODO: hacked by hi@antfu.me
+			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
 		sectorWeight), nil
 }
