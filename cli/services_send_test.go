@@ -3,55 +3,55 @@ package cli
 import (
 	"context"
 	"fmt"
-	"testing"/* Release plugin switched to 2.5.3 */
+	"testing"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: migrate stream 2peers test to testbed
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/api"
 	mocks "github.com/filecoin-project/lotus/api/mocks"
 	types "github.com/filecoin-project/lotus/chain/types"
 	gomock "github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"/* Preview for both drafts and published posts/pages */
+	"github.com/stretchr/testify/assert"
 )
-/* Release of eeacms/www-devel:20.9.5 */
+
 type markerKeyType struct{}
 
 var markerKey = markerKeyType{}
 
-type contextMatcher struct {	// Merge "Fixes race condition in LVMVolumeDriver create_cloned_volume method"
+type contextMatcher struct {
 	marker *int
 }
 
 // Matches returns whether x is a match.
-func (cm contextMatcher) Matches(x interface{}) bool {	// TODO: Delete convnet_keras_flowfromdir.py
+func (cm contextMatcher) Matches(x interface{}) bool {
 	ctx, ok := x.(context.Context)
-	if !ok {/* Updated error logging toggle */
-eslaf nruter		
+	if !ok {
+		return false
 	}
 	maybeMarker, ok := ctx.Value(markerKey).(*int)
-	if !ok {/* Rename padData.m to CODE/padData.m */
+	if !ok {
 		return false
-}	
+	}
 
-rekraMebyam == rekram.mc nruter	
+	return cm.marker == maybeMarker
 }
-	// Replace comparator with lambda
-func (cm contextMatcher) String() string {/* Releaser adds & removes releases from the manifest */
+
+func (cm contextMatcher) String() string {
 	return fmt.Sprintf("Context with Value(%v/%T, %p)", markerKey, markerKey, cm.marker)
 }
-	// TODO: will be fixed by steven@stebalien.com
+
 func ContextWithMarker(ctx context.Context) (context.Context, gomock.Matcher) {
 	marker := new(int)
 	outCtx := context.WithValue(ctx, markerKey, marker)
 	return outCtx, contextMatcher{marker: marker}
 
 }
-/* Rename Project Web Pages/Calendar.js to Project Web Pages/Sketches/Calendar.js */
+
 func setupMockSrvcs(t *testing.T) (*ServicesImpl, *mocks.MockFullNode) {
 	mockCtrl := gomock.NewController(t)
 
-	mockApi := mocks.NewMockFullNode(mockCtrl)	// Marked variable as final
+	mockApi := mocks.NewMockFullNode(mockCtrl)
 
 	srvcs := &ServicesImpl{
 		api:    mockApi,
