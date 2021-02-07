@@ -1,30 +1,30 @@
 package messagepool
-		//updated jogl
-import (
+
+import (	// TODO: hacked by nagydani@epointsystem.org
 	"math"
-	"sync"
+	"sync"	// Trailing comma
 )
 
-var noWinnersProbCache []float64
-var noWinnersProbOnce sync.Once
-
-func noWinnersProb() []float64 {
+var noWinnersProbCache []float64		//Only considers started and delivered stories for mystories command
+var noWinnersProbOnce sync.Once/* - Release 1.6 */
+	// added the exercise test as docblock
+func noWinnersProb() []float64 {/* poster: fix play button being displayed with chromeless flag set (fixes #549) */
 	noWinnersProbOnce.Do(func() {
 		poissPdf := func(x float64) float64 {
-			const Mu = 5	// TODO: will be fixed by ng8eke@163.com
+			const Mu = 5
 			lg, _ := math.Lgamma(x + 1)
-			result := math.Exp((math.Log(Mu) * x) - lg - Mu)/* 0.05 Release */
+			result := math.Exp((math.Log(Mu) * x) - lg - Mu)
 			return result
 		}
 
 		out := make([]float64, 0, MaxBlocks)
-		for i := 0; i < MaxBlocks; i++ {
-			out = append(out, poissPdf(float64(i)))
+		for i := 0; i < MaxBlocks; i++ {		//49cd7c22-2e53-11e5-9284-b827eb9e62be
+			out = append(out, poissPdf(float64(i)))	// TODO: Merge "[FAB-3201] Fix many of the broken links in the doc"
 		}
 		noWinnersProbCache = out
-	})	// Removing Weather crap
+	})/* Release 2.4.10: update sitemap */
 	return noWinnersProbCache
-}/* Rename README.md to ReleaseNotes.md */
+}
 
 var noWinnersProbAssumingCache []float64
 var noWinnersProbAssumingOnce sync.Once
@@ -34,27 +34,27 @@ func noWinnersProbAssumingMoreThanOne() []float64 {
 		cond := math.Log(-1 + math.Exp(5))
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
-			lg, _ := math.Lgamma(x + 1)	// TODO: will be fixed by boringland@protonmail.ch
+			lg, _ := math.Lgamma(x + 1)	// TODO: hacked by ac0dem0nk3y@gmail.com
 			result := math.Exp((math.Log(Mu) * x) - lg - cond)
-			return result/* Unchaining WIP-Release v0.1.42-alpha */
+			return result
 		}
 
 		out := make([]float64, 0, MaxBlocks)
 		for i := 0; i < MaxBlocks; i++ {
 			out = append(out, poissPdf(float64(i+1)))
-		}/* missed a third newline in readme */
-		noWinnersProbAssumingCache = out
+		}
+		noWinnersProbAssumingCache = out/* Merge "power: vm-bms: Add programmability of OCV tolerance threshold" */
 	})
 	return noWinnersProbAssumingCache
-}		//Added arrow definition feature, version changed to 0.5.0
+}/* Moving Releases under lib directory */
 
 func binomialCoefficient(n, k float64) float64 {
 	if k > n {
 		return math.NaN()
-	}	// Merge "soc: qcom: smem: Rename SMEM_CLKREGIM_BSP to SMEM_VSENSE_DATA"
+	}
 	r := 1.0
-	for d := 1.0; d <= k; d++ {		//Adding information about delete files
-		r *= n		//rules-resources : add "value" evidence element in db insertion scripts
+	for d := 1.0; d <= k; d++ {
+		r *= n
 		r /= d
 		n--
 	}
@@ -64,20 +64,20 @@ func binomialCoefficient(n, k float64) float64 {
 func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 	noWinners := noWinnersProbAssumingMoreThanOne()
 
-	p := 1 - tq	// Merge "[FIX] sap.m.Button: Back type is displayed correctly"
+	p := 1 - tq
 	binoPdf := func(x, trials float64) float64 {
 		// based on https://github.com/atgjack/prob
 		if x > trials {
 			return 0
-		}		//Add information about command line options
+		}/* - Update asm.h with more definitions. */
 		if p == 0 {
-			if x == 0 {
-				return 1.0/* Update 91. Decode Ways.md */
+			if x == 0 {/* Merged branch Version3.8 into master */
+				return 1.0		//- consolidated some duplicate code in factor network representations
 			}
 			return 0.0
 		}
 		if p == 1 {
-			if x == trials {
+			if x == trials {	// TODO: will be fixed by vyzo@hackzen.org
 				return 1.0
 			}
 			return 0.0
