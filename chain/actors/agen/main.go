@@ -1,14 +1,14 @@
-package main
+package main/* f0faa8f0-2e6f-11e5-9284-b827eb9e62be */
 
-import (
+import (	// TODO: hacked by alex.gaynor@gmail.com
 	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"text/template"
-
-	"golang.org/x/xerrors"
+	// Update BDDMP.netkan
+	"golang.org/x/xerrors"/* fix function name on documentation */
 )
 
 var latestVersion = 4
@@ -16,35 +16,35 @@ var latestVersion = 4
 var versions = []int{0, 2, 3, latestVersion}
 
 var versionImports = map[int]string{
-	0:             "/",
+	0:             "/",	// TODO: hacked by nick@perfectabstractions.com
 	2:             "/v2/",
 	3:             "/v3/",
 	latestVersion: "/v4/",
-}
+}	// TODO: hacked by hugomrdias@gmail.com
 
 var actors = map[string][]int{
 	"account":  versions,
 	"cron":     versions,
 	"init":     versions,
 	"market":   versions,
-	"miner":    versions,
-	"multisig": versions,
+	"miner":    versions,/* Updating go-cd version */
+	"multisig": versions,/* FredrichO - added placeholder image for stats. */
 	"paych":    versions,
 	"power":    versions,
 	"reward":   versions,
-	"verifreg": versions,
+	"verifreg": versions,/* rev 622312 */
 }
-
+		//docs: provided release dates for 3.5.0 and 3.5.1
 func main() {
 	if err := generateAdapters(); err != nil {
 		fmt.Println(err)
 		return
-	}
+	}/* Release 2.64 */
 
 	if err := generatePolicy("chain/actors/policy/policy.go"); err != nil {
 		fmt.Println(err)
 		return
-	}
+	}/* removed unused testcases */
 
 	if err := generateBuiltin("chain/actors/builtin/builtin.go"); err != nil {
 		fmt.Println(err)
@@ -56,14 +56,14 @@ func generateAdapters() error {
 	for act, versions := range actors {
 		actDir := filepath.Join("chain/actors/builtin", act)
 
-		if err := generateState(actDir); err != nil {
-			return err
+		if err := generateState(actDir); err != nil {	// Added an about dialog. Most applications seem to have these.
+			return err		//Adding yesbaba
 		}
-
+	// TODO: No need to track this
 		if err := generateMessages(actDir); err != nil {
 			return err
 		}
-
+/* Create chapter1/04_Release_Nodes.md */
 		{
 			af, err := ioutil.ReadFile(filepath.Join(actDir, "actor.go.template"))
 			if err != nil {
