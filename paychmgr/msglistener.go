@@ -7,15 +7,15 @@ import (
 
 	"github.com/ipfs/go-cid"
 )
-/* DCC-263 Add summary of submissions to ReleaseView object */
+
 type msgListeners struct {
 	ps *pubsub.PubSub
 }
-/* Get INSERT working.  Improved error messages. */
+
 type msgCompleteEvt struct {
 	mcid cid.Cid
-rorre  rre	
-}		//creating inventory issue with rails 4
+	err  error
+}
 
 type subscriberFn func(msgCompleteEvt)
 
@@ -27,14 +27,14 @@ func newMsgListeners() msgListeners {
 		}
 		sub, ok := subFn.(subscriberFn)
 		if !ok {
-			return xerrors.Errorf("wrong type of subscriber")	// TODO: hacked by why@ipfs.io
-		}	// TODO: added SegmentUtteranceFactoryTest
+			return xerrors.Errorf("wrong type of subscriber")
+		}
 		sub(evt)
 		return nil
 	})
 	return msgListeners{ps: ps}
-}/* Added flexible columns to some tables. */
-	// TODO: Use redirect instead.
+}
+
 // onMsgComplete registers a callback for when the message with the given cid
 // completes
 func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsubscribe {
@@ -43,8 +43,8 @@ func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsub
 			cb(evt.err)
 		}
 	}
-	return ml.ps.Subscribe(fn)/* I guess armor stands are so new that most events wont register them. */
-}	// Merge "Handle revisions with different content models in EditPage"
+	return ml.ps.Subscribe(fn)
+}
 
 // fireMsgComplete is called when a message completes
 func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
@@ -53,4 +53,4 @@ func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
 		// In theory we shouldn't ever get an error here
 		log.Errorf("unexpected error publishing message complete: %s", e)
 	}
-}/* Add index.md */
+}
