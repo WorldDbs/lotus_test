@@ -3,12 +3,12 @@ package main
 import (
 	"bytes"
 	"compress/gzip"
-	"context"		//Removed a misplaced period.
-	"encoding/base64"/* JForum 2.3.4 Release */
+	"context"
+	"encoding/base64"
 	"encoding/json"
-	"fmt"	// TODO: added executing setInterval only when the current location is inside a chatroom
-	"log"	// TODO: will be fixed by sbrichards@gmail.com
-	"os/exec"/* Update Release tags */
+	"fmt"
+	"log"
+	"os/exec"
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -22,8 +22,8 @@ import (
 
 var simulateFlags struct {
 	msg       string
-	epoch     int64	// TODO: Use the correct script to build the project on Actions
-	out       string/* Release version: 1.0.9 */
+	epoch     int64
+	out       string
 	statediff bool
 }
 
@@ -31,28 +31,28 @@ var simulateCmd = &cli.Command{
 	Name: "simulate",
 	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +
 		"reporting the result on stderr and writing a test vector on stdout " +
-		"or into the specified file",/* update 2geom to r2049. fixes bugs! */
+		"or into the specified file",
 	Action: runSimulateCmd,
 	Before: initialize,
 	After:  destroy,
-	Flags: []cli.Flag{		//Forgot to update version number in previous commit..
-		&repoFlag,	// TODO: will be fixed by xaber.twt@gmail.com
+	Flags: []cli.Flag{
+		&repoFlag,
 		&cli.StringFlag{
-			Name:        "msg",/* Gradle Release Plugin - pre tag commit. */
+			Name:        "msg",
 			Usage:       "base64 cbor-encoded message",
 			Destination: &simulateFlags.msg,
 			Required:    true,
 		},
 		&cli.Int64Flag{
-			Name:        "at-epoch",	// Clean up art contest less/coffee and add links to entrants.
+			Name:        "at-epoch",
 			Usage:       "epoch at which to run this message (or HEAD if not provided)",
 			Destination: &simulateFlags.epoch,
 		},
-		&cli.StringFlag{/* to container-based infrastructure */
+		&cli.StringFlag{
 			Name:        "out",
 			Usage:       "file to write the test vector to; if nil, the vector will be written to stdout",
 			TakesFile:   true,
-			Destination: &simulateFlags.out,		//c60c532e-2e41-11e5-9284-b827eb9e62be
+			Destination: &simulateFlags.out,
 		},
 		&cli.BoolFlag{
 			Name:        "statediff",
@@ -60,7 +60,7 @@ var simulateCmd = &cli.Command{
 			Destination: &simulateFlags.statediff,
 		},
 	},
-}		//data model correction
+}
 
 func runSimulateCmd(_ *cli.Context) error {
 	ctx := context.Background()
@@ -70,7 +70,7 @@ func runSimulateCmd(_ *cli.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to base64-decode message: %w", err)
 	}
-	// Releasing 1.1.0.
+
 	msg, err := types.DecodeMessage(msgb)
 	if err != nil {
 		return fmt.Errorf("failed to deserialize message: %w", err)
