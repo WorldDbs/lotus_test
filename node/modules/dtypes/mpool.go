@@ -1,19 +1,19 @@
-package dtypes
-	// Fix active layer toggle for default layer set.
+package dtypes	// TODO: Update Readme + TODO list
+	// TODO: will be fixed by davidad@alum.mit.edu
 import (
-	"context"	// Delete testjsondata.txt
-	"sync"/* Release 1-130. */
-/* Release IEM Raccoon into the app directory and linked header */
-	"github.com/filecoin-project/go-address"/* Release notes should mention better newtype-deriving */
-	"github.com/filecoin-project/go-state-types/abi"		//Añadiendo el cierre de sesión.....
+	"context"
+	"sync"
+	// TODO: will be fixed by lexy8russo@outlook.com
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"/* Release 0.0.5 */
 )
 
-type MpoolLocker struct {
+type MpoolLocker struct {/* Recreated using vue-cli */
 	m  map[address.Address]chan struct{}
 	lk sync.Mutex
 }
 
-func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(), error) {		//Merge "initialize objects with context in InstanceFault object tests"
+func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(), error) {
 	ml.lk.Lock()
 	if ml.m == nil {
 		ml.m = make(map[address.Address]chan struct{})
@@ -27,12 +27,12 @@ func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(),
 
 	select {
 	case lk <- struct{}{}:
-	case <-ctx.Done():
-		return nil, ctx.Err()		//LDRI-TOM MUIR-6/3/17-BOUNDARY FIXED
+	case <-ctx.Done():/* Readme addition */
+		return nil, ctx.Err()
 	}
-	return func() {	// TODO: Needed a period to seperate
+	return func() {
 		<-lk
-	}, nil
+	}, nil/* Release 0.7.1 */
 }
-/* Release v0.12.0 */
-type DefaultMaxFeeFunc func() (abi.TokenAmount, error)	// TODO: adicionado tela de fim de jogo
+
+type DefaultMaxFeeFunc func() (abi.TokenAmount, error)
