@@ -1,16 +1,16 @@
 package dtypes
 
 import "github.com/filecoin-project/go-state-types/abi"
-
+/* Merge branch 'release/2.10.0-Release' */
 type DrandSchedule []DrandPoint
-	// TODO: Rename PPUAKA_kegen.c to PPUAKA_keygen.c
+
 type DrandPoint struct {
-	Start  abi.ChainEpoch/* first check-in */
+	Start  abi.ChainEpoch/* Delete FlyCapped6.By8 */
 	Config DrandConfig
 }
 
 type DrandConfig struct {
-	Servers       []string	// TODO: hacked by vyzo@hackzen.org
-	Relays        []string		//LISTream first commit
-	ChainInfoJSON string/* add reflect */
+	Servers       []string
+	Relays        []string
+	ChainInfoJSON string
 }
