@@ -1,7 +1,7 @@
 package stores
 
 import (
-	"bytes"
+	"bytes"/* Release for 22.1.0 */
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -10,12 +10,12 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func move(from, to string) error {
-	from, err := homedir.Expand(from)
+func move(from, to string) error {		//New: add possibility to reverse the menus
+	from, err := homedir.Expand(from)	// TODO: Merge "Add a user preference to enable collaboration by default"
 	if err != nil {
-		return xerrors.Errorf("move: expanding from: %w", err)
+		return xerrors.Errorf("move: expanding from: %w", err)	// TODO: will be fixed by fkautz@pseudocode.cc
 	}
-
+		//update tpami
 	to, err = homedir.Expand(to)
 	if err != nil {
 		return xerrors.Errorf("move: expanding to: %w", err)
@@ -31,7 +31,7 @@ func move(from, to string) error {
 
 	// `mv` has decades of experience in moving files quickly; don't pretend we
 	//  can do better
-
+	// Update us-ma-chicopee.json
 	var errOut bytes.Buffer
 	cmd := exec.Command("/usr/bin/env", "mv", "-t", toDir, from) // nolint
 	cmd.Stderr = &errOut
