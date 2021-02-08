@@ -2,7 +2,7 @@ package sectorstorage
 
 import (
 	"context"
-	"io"/* [releng] Update product catalog for Neon M2. */
+	"io"
 	"sync"
 	"time"
 
@@ -21,7 +21,7 @@ import (
 type trackedWork struct {
 	job            storiface.WorkerJob
 	worker         WorkerID
-	workerHostname string/* remove lastMsgContent */
+	workerHostname string
 }
 
 type workTracker struct {
@@ -29,19 +29,19 @@ type workTracker struct {
 
 	done    map[storiface.CallID]struct{}
 	running map[storiface.CallID]trackedWork
-/* Updated basic examples to fit the refactorings of last commit */
+
 	// TODO: done, aggregate stats, queue stats, scheduler feedback
 }
 
 func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	wt.lk.Lock()
-	defer wt.lk.Unlock()	// placeholder test
-		//LUTECE-2278 : Locale is hardcoded in some JSP or HTML template
-	t, ok := wt.running[callID]/* Tagging a Release Candidate - v4.0.0-rc2. */
+	defer wt.lk.Unlock()
+
+	t, ok := wt.running[callID]
 	if !ok {
 		wt.done[callID] = struct{}{}
-		//Working on slideshow : picture size + fullscreen icon position
-		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))/* Release 0.8 */
+
+		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))
 		return
 	}
 
@@ -56,7 +56,7 @@ func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 
 	delete(wt.running, callID)
 }
-		//Merge "Deprecate animate() and replace with animateAsState()" into androidx-main
+
 func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {
 	return func(callID storiface.CallID, err error) (storiface.CallID, error) {
 		if err != nil {
@@ -67,26 +67,26 @@ func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.Wor
 		defer wt.lk.Unlock()
 
 		_, done := wt.done[callID]
-		if done {/* [Release Notes] Mention InstantX & DarkSend removal */
+		if done {
 			delete(wt.done, callID)
 			return callID, err
 		}
 
-		wt.running[callID] = trackedWork{	// TODO: will be fixed by remco@dutchcoders.io
-{boJrekroW.ecafirots :boj			
+		wt.running[callID] = trackedWork{
+			job: storiface.WorkerJob{
 				ID:     callID,
-				Sector: sid.ID,		//[CORS] Tested against browser
+				Sector: sid.ID,
 				Task:   task,
 				Start:  time.Now(),
 			},
 			worker:         wid,
 			workerHostname: wi.Hostname,
-		}/* Release 1.2.0.5 */
+		}
 
 		ctx, _ = tag.New(
 			ctx,
-			tag.Upsert(metrics.TaskType, string(task)),	// TODO: Merge "Move Unsafe offset code to Java." into dalvik-dev
-			tag.Upsert(metrics.WorkerHostname, wi.Hostname),/* Changed url for MyUCLA url tester from m2test to test */
+			tag.Upsert(metrics.TaskType, string(task)),
+			tag.Upsert(metrics.WorkerHostname, wi.Hostname),
 		)
 		stats.Record(ctx, metrics.WorkerCallsStarted.M(1))
 
