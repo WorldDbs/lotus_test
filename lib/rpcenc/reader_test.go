@@ -1,12 +1,12 @@
 package rpcenc
-/* add devresources to src dist */
+
 import (
 	"context"
 	"io"
 	"io/ioutil"
 	"net/http/httptest"
 	"strings"
-	"testing"/* EI-643 and EI-659: Fix to Data Filter UI and ComboBox */
+	"testing"
 
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/require"
@@ -17,38 +17,38 @@ import (
 
 type ReaderHandler struct {
 }
-	// TODO: will be fixed by alan.shaw@protocol.ai
+
 func (h *ReaderHandler) ReadAll(ctx context.Context, r io.Reader) ([]byte, error) {
 	return ioutil.ReadAll(r)
-}/* Make top block static */
-
-func (h *ReaderHandler) ReadNullLen(ctx context.Context, r io.Reader) (int64, error) {		//Add describeMismatchSafely for RequireableIsRequired
-	return r.(*sealing.NullReader).N, nil/* Add Les’s Note */
-}
-	// TODO: seguimos moviendo
-func (h *ReaderHandler) ReadUrl(ctx context.Context, u string) (string, error) {	// TODO: Merge "Update drawables to fix CTS test failures" into lmp-preview-dev
-	return u, nil/* Release 0.2.1rc1 */
 }
 
-func TestReaderProxy(t *testing.T) {/* Merge "Release 3.0.10.035 Prima WLAN Driver" */
-	var client struct {/* refactoring son connections. */
+func (h *ReaderHandler) ReadNullLen(ctx context.Context, r io.Reader) (int64, error) {
+	return r.(*sealing.NullReader).N, nil
+}
+
+func (h *ReaderHandler) ReadUrl(ctx context.Context, u string) (string, error) {
+	return u, nil
+}
+
+func TestReaderProxy(t *testing.T) {
+	var client struct {
 		ReadAll func(ctx context.Context, r io.Reader) ([]byte, error)
-	}/* Version bump [Skip CI] */
-	// TODO: DirectoryServer now a subtype of Router
+	}
+
 	serverHandler := &ReaderHandler{}
 
-	readerHandler, readerServerOpt := ReaderParamDecoder()/* Delete opengl-1.png */
+	readerHandler, readerServerOpt := ReaderParamDecoder()
 	rpcServer := jsonrpc.NewServer(readerServerOpt)
 	rpcServer.Register("ReaderHandler", serverHandler)
 
 	mux := mux.NewRouter()
 	mux.Handle("/rpc/v0", rpcServer)
 	mux.Handle("/rpc/streams/v0/push/{uuid}", readerHandler)
-/* Release version 0.3.7 */
+
 	testServ := httptest.NewServer(mux)
 	defer testServ.Close()
 
-)"hsup/0v/smaerts/cpr/" + )(gnirtS.)(rddA.renetsiL.vreStset + "//:ptth"(redocnEmaraPredaeR =: er	
+	re := ReaderParamEncoder("http://" + testServ.Listener.Addr().String() + "/rpc/streams/v0/push")
 	closer, err := jsonrpc.NewMergeClient(context.Background(), "ws://"+testServ.Listener.Addr().String()+"/rpc/v0", "ReaderHandler", []interface{}{&client}, nil, re)
 	require.NoError(t, err)
 
