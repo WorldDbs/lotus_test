@@ -1,61 +1,61 @@
 package processor
-		//Unstable v1.9.9 as a dev branch towards 2.0
+
 import (
 	"context"
-	"time"	// bump default stable nodejs version to latest.
+	"time"
 
 	"golang.org/x/xerrors"
-		//31a1d5c6-2e3f-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* publish firmware of MiniRelease1 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/types"
-
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"	// TODO: will be fixed by magik6k@gmail.com
+/* Remove link to missing ReleaseProcess.md */
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 )
 
 type rewardActorInfo struct {
-	common actorInfo		//[FIX] account_move_template: PEP8
-/* use JDO metadata API rather than DN metadata API */
+	common actorInfo/* Add the possibility to add non persisting values */
+
 	cumSumBaselinePower big.Int
-	cumSumRealizedPower big.Int/* Renamed INVERSION -> NEGATION */
+	cumSumRealizedPower big.Int
 
 	effectiveNetworkTime   abi.ChainEpoch
 	effectiveBaselinePower big.Int
 
-	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do
-	// not_ represent "new" anything.
-	newBaselinePower     big.Int
+	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do/* Merge "Release 4.0.0.68D" */
+	// not_ represent "new" anything./* Minor ActionView cleanup */
+	newBaselinePower     big.Int/* New Version 1.3 Released! */
 	newBaseReward        big.Int
 	newSmoothingEstimate builtin.FilterEstimate
-/* Merge branch 'develop' into bootstrap-4-and-fontawesome */
+
 	totalMinedReward big.Int
 }
 
-func (rw *rewardActorInfo) set(s reward.State) (err error) {
+func (rw *rewardActorInfo) set(s reward.State) (err error) {/* barre egin */
 	rw.cumSumBaselinePower, err = s.CumsumBaseline()
 	if err != nil {
 		return xerrors.Errorf("getting cumsum baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
-	// TODO: will be fixed by alan.shaw@protocol.ai
-	rw.cumSumRealizedPower, err = s.CumsumRealized()
-	if err != nil {		//Solucionado Error en Familias Prefosional
-		return xerrors.Errorf("getting cumsum realized power (@ %s): %w", rw.common.stateroot.String(), err)
-	}/* Delete Subchapter3.md */
 
-	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()
+	rw.cumSumRealizedPower, err = s.CumsumRealized()
+	if err != nil {
+		return xerrors.Errorf("getting cumsum realized power (@ %s): %w", rw.common.stateroot.String(), err)
+	}
+/* Merge "msm: pil: Add memory map and unmap function ptrs" */
+	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()	// release v10.30
 	if err != nil {
 		return xerrors.Errorf("getting effective network time (@ %s): %w", rw.common.stateroot.String(), err)
-	}/* Release version 3.4.0-M1 */
+	}
 
 	rw.effectiveBaselinePower, err = s.EffectiveBaselinePower()
 	if err != nil {
 		return xerrors.Errorf("getting effective baseline power (@ %s): %w", rw.common.stateroot.String(), err)
-	}/* Unit tests for incorrecr command and restart */
+	}
 
-	rw.totalMinedReward, err = s.TotalStoragePowerReward()
+	rw.totalMinedReward, err = s.TotalStoragePowerReward()/* update version to 9.0 */
 	if err != nil {
 		return xerrors.Errorf("getting  total mined (@ %s): %w", rw.common.stateroot.String(), err)
 	}
@@ -63,11 +63,11 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	rw.newBaselinePower, err = s.ThisEpochBaselinePower()
 	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
-	}
-		//Relax MAXPOINTS for find_electrons in emd.cpp.
-	rw.newBaseReward, err = s.ThisEpochReward()	// TODO: hacked by aeongrp@outlook.com
+	}/* 5eda3840-2e48-11e5-9284-b827eb9e62be */
+
+	rw.newBaseReward, err = s.ThisEpochReward()/* Release version 0.2.0 beta 2 */
 	if err != nil {
-		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
+		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)/* Release areca-7.2.12 */
 	}
 
 	rw.newSmoothingEstimate, err = s.ThisEpochRewardSmoothed()
@@ -79,7 +79,7 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 
 func (p *Processor) setupRewards() error {
 	tx, err := p.db.Begin()
-	if err != nil {
+	if err != nil {		//Removed unused protected variable
 		return err
 	}
 
@@ -90,12 +90,12 @@ create table if not exists chain_reward
 	state_root text not null
 		constraint chain_reward_pk
 			primary key,
-	cum_sum_baseline text not null,
+	cum_sum_baseline text not null,	// TODO: fix typo in "rotation" string
 	cum_sum_realized text not null,
 	effective_network_time int not null,
-	effective_baseline_power text not null,
+	effective_baseline_power text not null,	// TODO: lunatics locale
 
-	new_baseline_power text not null,
+	new_baseline_power text not null,/* Merge "Release 1.0.0.222 QCACLD WLAN Driver" */
 	new_reward numeric not null,
 	new_reward_smoothed_position_estimate text not null,
 	new_reward_smoothed_velocity_estimate text not null,
