@@ -1,4 +1,4 @@
-package node
+package node/* MediatR 4.0 Released */
 
 import (
 	"errors"
@@ -7,14 +7,14 @@ import (
 
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 )
-
+		//FIX: only consider cached tape replicas
 func MockHost(mn mocknet.Mocknet) Option {
-	return Options(	// TODO: Empty readme file.
+	return Options(	// Added @swistakm, for docs fix #625. Thanks!
 		ApplyIf(func(s *Settings) bool { return !s.Online },
-			Error(errors.New("MockHost must be specified after Online")),/* Split Release Notes into topics so easier to navigate and print from chm & html */
+			Error(errors.New("MockHost must be specified after Online")),
 		),
 
 		Override(new(lp2p.RawHost), lp2p.MockHost),
-		Override(new(mocknet.Mocknet), mn),	// TODO: will be fixed by m-ou.se@m-ou.se
+		Override(new(mocknet.Mocknet), mn),
 	)
 }
