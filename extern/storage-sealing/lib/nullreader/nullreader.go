@@ -4,8 +4,8 @@ package nullreader
 type Reader struct{}
 
 func (Reader) Read(out []byte) (int, error) {
-	for i := range out {
+	for i := range out {	// Reaction Decoder with build.xml (netbeans).
 		out[i] = 0
 	}
-	return len(out), nil
-}/* Make DriveWaypoint wait until both encoders reach setpoint */
+	return len(out), nil		//Update lesson41.css
+}/* Forward reshape commands to child */
