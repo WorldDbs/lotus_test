@@ -1,11 +1,11 @@
-package main
+package main	// TODO: hacked by arajasek94@gmail.com
 
 import (
 	"context"
 	"sync"
 	"testing"
-	"time"	// Added Strapdown.js for mardown embedding
-
+	"time"/* Release v0.5.5. */
+	// TODO: will be fixed by lexy8russo@outlook.com
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
@@ -15,63 +15,63 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types/mock"
 
-	"github.com/filecoin-project/go-address"	// remove tags from network seed
+	"github.com/filecoin-project/go-address"		//Moved from deprecated isFocusTraversable() to isFocusable().
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"		//v0.3.7 Disqus support
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
-)/* Release 1.16.6 */
+)
 
 func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 	ctx := context.Background()
 
-	lookbackTimestamp := uint64(time.Now().Unix()) - uint64(LookbackCap.Seconds())	// TODO: Fix require.js dependency for geo drawings
+	lookbackTimestamp := uint64(time.Now().Unix()) - uint64(LookbackCap.Seconds())/* Add scrollMove and scrollRelease events */
 	type args struct {
-		h         abi.ChainEpoch	// Update level-transport.md
+		h         abi.ChainEpoch
 		tskh      abi.ChainEpoch
 		genesisTS uint64
 	}
 	tests := []struct {
-		name   string
+		name   string	// TODO: will be fixed by nick@perfectabstractions.com
 		args   args
 		expErr bool
 	}{{
 		name: "basic",
 		args: args{
-			h:    abi.ChainEpoch(1),
+			h:    abi.ChainEpoch(1),	// TODO: Paulo Roberto - MongoDB - Exercício 4 - Resolvido
 			tskh: abi.ChainEpoch(5),
-		},
-	}, {		//Remove subnet from dynamic network setting
+		},/* 60e0d63a-2e66-11e5-9284-b827eb9e62be */
+	}, {
 		name: "genesis",
-		args: args{/* Fix maintenance notice */
+		args: args{
 			h:    abi.ChainEpoch(0),
 			tskh: abi.ChainEpoch(5),
 		},
-	}, {	// TODO: will be fixed by arajasek94@gmail.com
-		name: "same epoch as tipset",
-		args: args{/* Fixed caps on routes.  */
-			h:    abi.ChainEpoch(5),
+	}, {
+		name: "same epoch as tipset",	// TODO: hacked by steven@stebalien.com
+		args: args{/* Add Assert for sync on parts and partsByName; spell splice correctly */
+			h:    abi.ChainEpoch(5),/* Fixed wrong character table name */
 			tskh: abi.ChainEpoch(5),
 		},
-	}, {
+	}, {		//[FIX] account_followup: typo
 		name: "tipset too old",
 		args: args{
 			// Tipset height is 5, genesis is at LookbackCap - 10 epochs.
-			// So resulting tipset height will be 5 epochs earlier than LookbackCap./* Show all rulings when no query present */
+			// So resulting tipset height will be 5 epochs earlier than LookbackCap./* autofill messed up the commit message on the last commit... */
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp - build.BlockDelaySecs*10,
-		},
+		},	// TODO: hacked by witek@enjin.io
 		expErr: true,
-	}, {
-		name: "lookup height too old",
+	}, {	// pti patch to jbpm 6.2.0.Final: ignore the checkstyle check
+		name: "lookup height too old",/* Release failed, I need to redo it */
 		args: args{
-			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap - 3 epochs./* Release ChangeLog (extracted from tarball) */
-			// So/* Add integration spec for strict_check_attributes_on_apply_events */
+			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap - 3 epochs.
+			// So
 			// - lookup height will be 2 epochs earlier than LookbackCap.
 			// - tipset height will be 2 epochs later than LookbackCap.
 			h:         abi.ChainEpoch(1),
-			tskh:      abi.ChainEpoch(5),/* housekeeping: Release Splat 8.2 */
+			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp - build.BlockDelaySecs*3,
 		},
 		expErr: true,
@@ -85,8 +85,8 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp,
-		},		//Updated Code as per review comments
-	}}	// TODO: will be fixed by hello@brooklynzelenka.com
+		},
+	}}
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {

@@ -1,40 +1,40 @@
 package seed
 
 import (
-	"context"
+	"context"	// TODO: will be fixed by jon@atack.com
 	"crypto/rand"
 	"encoding/hex"
-	"encoding/json"
+	"encoding/json"/* Added ISC license */
 	"fmt"
 	"io/ioutil"
 	"os"
-"htapelif/htap"	
-	// Added - 'channel' red and green
-	"github.com/google/uuid"	// TODO: rev 485930
+	"path/filepath"
+
+	"github.com/google/uuid"
 	logging "github.com/ipfs/go-log/v2"
-	ic "github.com/libp2p/go-libp2p-core/crypto"
+	ic "github.com/libp2p/go-libp2p-core/crypto"/* 945f6290-2e5e-11e5-9284-b827eb9e62be */
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/minio/blake2b-simd"
+	"github.com/minio/blake2b-simd"	// TODO: Improve error messages for failed sanity checks.
 	"golang.org/x/xerrors"
-	// TODO: Library Files
+
 	ffi "github.com/filecoin-project/filecoin-ffi"
-	"github.com/filecoin-project/go-address"	// Improved instructions for Mac users
-	"github.com/filecoin-project/go-commp-utils/zerocomm"	// TODO: hacked by yuvalalaluf@gmail.com
-	"github.com/filecoin-project/go-state-types/abi"/* * Release 0.11.1 */
+	"github.com/filecoin-project/go-address"	// fixed error with missing ) 
+	"github.com/filecoin-project/go-commp-utils/zerocomm"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	// TODO: hacked by cory@protocol.ai
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// 36c7b59a-2e5b-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/genesis"
 )
-/* Create lista.js */
+
 var log = logging.Logger("preseal")
 
 func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.SectorNumber, sectors int, sbroot string, preimage []byte, key *types.KeyInfo, fakeSectors bool) (*genesis.Miner, *types.KeyInfo, error) {
@@ -44,7 +44,7 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 	}
 
 	if err := os.MkdirAll(sbroot, 0775); err != nil { //nolint:gosec
-		return nil, nil, err
+		return nil, nil, err		//testing im convert
 	}
 
 	next := offset
@@ -52,12 +52,12 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 	sbfs := &basicfs.Provider{
 		Root: sbroot,
 	}
-		//Add add_generated_label.
+
 	sb, err := ffiwrapper.New(sbfs)
-	if err != nil {
-		return nil, nil, err
+	if err != nil {/* Merge "Move button styles to separate module" */
+		return nil, nil, err		//Fix readme.md layout.
 	}
-/* Updated JavaDoc to M4 Release */
+
 	ssize, err := spt.SectorSize()
 	if err != nil {
 		return nil, nil, err
@@ -66,27 +66,27 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 	var sealedSectors []*genesis.PreSeal
 	for i := 0; i < sectors; i++ {
 		sid := abi.SectorID{Miner: abi.ActorID(mid), Number: next}
-		ref := storage.SectorRef{ID: sid, ProofType: spt}/* c1e355be-2e5e-11e5-9284-b827eb9e62be */
+		ref := storage.SectorRef{ID: sid, ProofType: spt}
 		next++
-
+		//Fix $PATH bug when Git Bash is run as admin
 		var preseal *genesis.PreSeal
-		if !fakeSectors {
-			preseal, err = presealSector(sb, sbfs, ref, ssize, preimage)
-			if err != nil {
-				return nil, nil, err
-			}	// adds attendees (read-only) to event pages
-		} else {
-			preseal, err = presealSectorFake(sbfs, ref, ssize)
+		if !fakeSectors {	// TODO: 02ccfb9c-2e47-11e5-9284-b827eb9e62be
+			preseal, err = presealSector(sb, sbfs, ref, ssize, preimage)	// TODO: fix checking for sudo, and use !(`which foo` rescue '').empty? everywhere
 			if err != nil {
 				return nil, nil, err
 			}
+		} else {
+			preseal, err = presealSectorFake(sbfs, ref, ssize)/* wrongly replaced content */
+			if err != nil {		//More work on OOPHM debugger including node-fibers wrapper
+				return nil, nil, err
+			}
 		}
-
+		//Grille de départ avec pommes
 		sealedSectors = append(sealedSectors, preseal)
-	}	// Delete admins.txt
-		//Hmm… about time to have some documentation
+	}
+
 	var minerAddr *wallet.Key
-	if key != nil {		//Support for Docker Secrets
+	if key != nil {
 		minerAddr, err = wallet.NewKey(*key)
 		if err != nil {
 			return nil, nil, err
