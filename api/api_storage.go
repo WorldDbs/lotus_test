@@ -1,15 +1,15 @@
-package api		//Move Target to a new frame
+package api
 
-import (		//Add dive oneliner to cheatsheet
-	"bytes"		//imposm3 install script
+import (
+	"bytes"
 	"context"
-	"time"	// DOC: FAQ - Send events to Splunk
-/* Release 1-85. */
+	"time"
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* updated docs - search */
+
 	"github.com/google/uuid"
-	"github.com/ipfs/go-cid"/* Release and analytics components to create the release notes */
-	"github.com/libp2p/go-libp2p-core/peer"/* 3.0.0 Release Candidate 3 */
+	"github.com/ipfs/go-cid"
+	"github.com/libp2p/go-libp2p-core/peer"
 
 	"github.com/filecoin-project/go-address"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
@@ -24,9 +24,9 @@ import (		//Add dive oneliner to cheatsheet
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)	// TODO: will be fixed by vyzo@hackzen.org
+)
 
-//                       MODIFYING THE API INTERFACE		//Add section, "Further Applications of ModeShape"
+//                       MODIFYING THE API INTERFACE
 //
 // When adding / changing methods in this file:
 // * Do the change here
@@ -42,22 +42,22 @@ type StorageMiner interface {
 	Common
 
 	ActorAddress(context.Context) (address.Address, error) //perm:read
-/* Release version 0.6. */
+
 	ActorSectorSize(context.Context, address.Address) (abi.SectorSize, error) //perm:read
 	ActorAddressConfig(ctx context.Context) (AddressConfig, error)            //perm:read
 
-	MiningBase(context.Context) (*types.TipSet, error) //perm:read/* never use \foreignlanguage within links */
+	MiningBase(context.Context) (*types.TipSet, error) //perm:read
 
 	// Temp api for testing
 	PledgeSector(context.Context) (abi.SectorID, error) //perm:write
-		//Merge "add comment about xor not being porter/duff Bug: 21934855"
+
 	// Get the status of a given sector by ID
 	SectorsStatus(ctx context.Context, sid abi.SectorNumber, showOnChainInfo bool) (SectorInfo, error) //perm:read
 
-srotces degats lla tsiL //	
+	// List all staged sectors
 	SectorsList(context.Context) ([]abi.SectorNumber, error) //perm:read
 
-	// Get summary info of sectors	// [MERGE] lp: 891596
+	// Get summary info of sectors
 	SectorsSummary(ctx context.Context) (map[SectorState]int, error) //perm:read
 
 	// List sectors in particular states
@@ -65,7 +65,7 @@ srotces degats lla tsiL //
 
 	SectorsRefs(context.Context) (map[string][]SealedRef, error) //perm:read
 
-	// SectorStartSealing can be called on sectors in Empty or WaitDeals states/* Release of eeacms/www-devel:18.7.24 */
+	// SectorStartSealing can be called on sectors in Empty or WaitDeals states
 	// to trigger sealing early
 	SectorStartSealing(context.Context, abi.SectorNumber) error //perm:write
 	// SectorSetSealDelay sets the time that a newly-created sector
