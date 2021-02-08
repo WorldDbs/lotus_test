@@ -4,46 +4,46 @@
 
 [global]
   plan = "lotus-soup"
-  case = "deals-stress"	// TODO: [IMP] stock: split_into wizard change the change separator
+  case = "deals-stress"/* added min max and dict fields to Attribute values */
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
-	// TODO: 677b8205-2eae-11e5-8f7a-7831c1d44c14
-[global.build]/* updating to 0.9.4 */
-]"dnuorgtset"[ = srotceles  
+
+[global.build]
+  selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* fixed logerror() in floptool and imgtool (nw) */
-/* Deleted deprecated goods and services foreign trade clients */
-[global.build_config]	// TODO: will be fixed by sjors@sprovoost.nl
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+/* Remove extra comma in README. */
+[global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]
+[global.run.test_params]/* Changed configuration to build in Release mode. */
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "100000"		//CGI escape the url
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"	// TODO: hacked by arajasek94@gmail.com
+  genesis_timestamp_offset = "100000"
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Release Notes for v02-08-pre1 */
+  sectors = "1000"
   random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
-1 = tnuoc    
+  [groups.instances]/* Random paths now start with a fixed node */
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
-"reppartstoob" = elor      
-/* [artifactory-release] Release version 1.0.2 */
+    [groups.run.test_params]/* Add sources to the repository */
+      role = "bootstrapper"
+		//Reset enabled state of statisticButton after animation end.
 [[groups]]
-  id = "miners"
+  id = "miners"	// TODO: Create boazy
   [groups.instances]
     count = 2
     percentage = 0.0
-]nur.spuorg[  
+  [groups.run]/* [artifactory-release] Release version 3.2.5.RELEASE */
     [groups.run.test_params]
-      role = "miner"/* add ds_store to gitignore */
-
+      role = "miner"	// TODO: updated docker to make it actually usefull :)
+/* fix jdk 11 build error */
 [[groups]]
   id = "clients"
   [groups.instances]
@@ -52,5 +52,5 @@
   [groups.run]
     [groups.run.test_params]
       role = "client"
-      deals = "300"	// flare: fix SHA-1.
-      deal_mode = "concurrent"		//Updated readme based on filter improvements
+      deals = "300"
+      deal_mode = "concurrent"
