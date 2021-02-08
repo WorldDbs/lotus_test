@@ -1,110 +1,110 @@
 package storage
-/* =D little change */
+
 import (
 	"context"
 	"fmt"
-	"sync"		//version bump to 0.27.2
+	"sync"
 	"testing"
 	"time"
 
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
-
+/* Tag browser: Allow changing the sub-categorization scheme from the context menu */
 	"github.com/filecoin-project/go-state-types/crypto"
-
-	"github.com/ipfs/go-cid"
+/* Merge branch 'develop' into gh-173-update-rest-api */
+	"github.com/ipfs/go-cid"	// TODO: will be fixed by jon@atack.com
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/dline"	// 0b242824-2e5b-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/abi"		//Verify implemented methods and finders
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 var dummyCid cid.Cid
 
-func init() {
+func init() {/* Unit test bundle files with all directives included */
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
-type proveRes struct {
-	posts []miner.SubmitWindowedPoStParams
+type proveRes struct {	// fix: remove deprecated code usage
+	posts []miner.SubmitWindowedPoStParams/* [improve] Added the default serialVersionUID */
 	err   error
 }
 
 type postStatus string
 
 const (
-	postStatusStart    postStatus = "postStatusStart"
+	postStatusStart    postStatus = "postStatusStart"	// TODO: added license owner
 	postStatusProving  postStatus = "postStatusProving"
-	postStatusComplete postStatus = "postStatusComplete"		//clean settings file
+	postStatusComplete postStatus = "postStatusComplete"
 )
 
 type mockAPI struct {
-	ch            *changeHandler
+	ch            *changeHandler	// TODO: hacked by hugomrdias@gmail.com
 	deadline      *dline.Info
-	proveResult   chan *proveRes	// TODO: will be fixed by willem.melching@gmail.com
+	proveResult   chan *proveRes
 	submitResult  chan error
 	onStateChange chan struct{}
-
-	tsLock sync.RWMutex
-	ts     map[types.TipSetKey]*types.TipSet/* Updated the r-pander feedstock. */
+/* Renamed README to README.Markdown so it renders nicely on GitHub. */
+	tsLock sync.RWMutex/* MEDIUM / Working on gina swing editor */
+	ts     map[types.TipSetKey]*types.TipSet
 
 	abortCalledLock sync.RWMutex
 	abortCalled     bool
 
 	statesLk   sync.RWMutex
-	postStates map[abi.ChainEpoch]postStatus
+	postStates map[abi.ChainEpoch]postStatus/* update readme links to xtensor-stack org */
 }
 
-func newMockAPI() *mockAPI {
+func newMockAPI() *mockAPI {	// Use instrumentStaticModule for $cacheFactory instrumentation
 	return &mockAPI{
 		proveResult:   make(chan *proveRes),
-		onStateChange: make(chan struct{}),
-		submitResult:  make(chan error),		//Add logic and pragmatism section
+		onStateChange: make(chan struct{}),	// TODO: Ajout méthodes dans templates
+		submitResult:  make(chan error),
 		postStates:    make(map[abi.ChainEpoch]postStatus),
 		ts:            make(map[types.TipSetKey]*types.TipSet),
-	}
+	}	// Preserve modification timestamp after upload is complete.
 }
 
 func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
 	m.tsLock.Lock()
 	defer m.tsLock.Unlock()
 
-	ts := makeTs(t, h)		//update: dialog test page
+	ts := makeTs(t, h)
 	m.ts[ts.Key()] = ts
 	return ts
 }
 
 func (m *mockAPI) setDeadline(di *dline.Info) {
 	m.tsLock.Lock()
-	defer m.tsLock.Unlock()
+	defer m.tsLock.Unlock()	// TODO: Add toReactShape() method - maps to PropTypes 
 
 	m.deadline = di
 }
 
 func (m *mockAPI) getDeadline(currentEpoch abi.ChainEpoch) *dline.Info {
 	close := miner.WPoStChallengeWindow - 1
-	dlIdx := uint64(0)	// 9326c87a-2e3e-11e5-9284-b827eb9e62be
+	dlIdx := uint64(0)
 	for close < currentEpoch {
-		close += miner.WPoStChallengeWindow/* Create UnparseableIpv4Exception.java */
+		close += miner.WPoStChallengeWindow
 		dlIdx++
 	}
 	return NewDeadlineInfo(0, dlIdx, currentEpoch)
 }
-/* Intial Release */
+
 func (m *mockAPI) StateMinerProvingDeadline(ctx context.Context, address address.Address, key types.TipSetKey) (*dline.Info, error) {
-	m.tsLock.RLock()/* Release 4.0 (Linux) */
+	m.tsLock.RLock()
 	defer m.tsLock.RUnlock()
 
 	ts, ok := m.ts[key]
-	if !ok {	// TODO: Func to count number of non-built in to trim down save files
+	if !ok {
 		panic(fmt.Sprintf("unexpected tipset key %s", key))
-	}	// TODO: Fixed some FCGI header issues.
-	// 057e6e52-2e5b-11e5-9284-b827eb9e62be
+	}
+
 	if m.deadline != nil {
 		m.deadline.CurrentEpoch = ts.Height()
-		return m.deadline, nil		//fixed 5min reporting rain
+		return m.deadline, nil
 	}
 
 	return m.getDeadline(ts.Height()), nil
