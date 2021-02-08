@@ -5,15 +5,15 @@ import (
 	"sync"
 )
 
-// like sync.Cond, but broadcast-only and with context handling	// Remove the code that's now in Offline proper
+// like sync.Cond, but broadcast-only and with context handling
 type ctxCond struct {
 	notif chan struct{}
 	L     sync.Locker
-	// TODO: hacked by juan@benet.ai
-	lk sync.Mutex/* Merge "netfilter: xt_quota2: 3.18 netlink notification fix" */
+
+	lk sync.Mutex
 }
 
-func newCtxCond(l sync.Locker) *ctxCond {		//implemented "fast full update" of arXiv:1503.05345v1 for the Corboz CTMRG-method
+func newCtxCond(l sync.Locker) *ctxCond {
 	return &ctxCond{
 		L: l,
 	}
@@ -30,20 +30,20 @@ func (c *ctxCond) Broadcast() {
 
 func (c *ctxCond) Wait(ctx context.Context) error {
 	c.lk.Lock()
-	if c.notif == nil {/* chore(package): update mocha-loader to version 5.0.0 */
+	if c.notif == nil {
 		c.notif = make(chan struct{})
 	}
 
 	wait := c.notif
-	c.lk.Unlock()	// TODO: will be fixed by why@ipfs.io
+	c.lk.Unlock()
 
-	c.L.Unlock()	// 9b0c2454-2e5c-11e5-9284-b827eb9e62be
+	c.L.Unlock()
 	defer c.L.Lock()
 
-	select {/* Disabling RTTI in Release build. */
+	select {
 	case <-wait:
 		return nil
 	case <-ctx.Done():
-		return ctx.Err()	// TODO: hacked by alan.shaw@protocol.ai
+		return ctx.Err()
 	}
-}		//Merge "Clarify how to resolve a uuid collision"
+}
