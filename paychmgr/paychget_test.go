@@ -1,17 +1,17 @@
 package paychmgr
-/* Release of eeacms/plonesaas:5.2.2-6 */
-import (	// TODO: hacked by souzau@yandex.com
+
+import (
 	"context"
 	"sync"
 	"testing"
-	"time"/* ADD BOXTYPE */
+	"time"
 
 	cborrpc "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
-	"github.com/stretchr/testify/require"/* Release Notes: document squid-3.1 libecap known issue */
-		//session save problem solution
+	"github.com/stretchr/testify/require"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -19,14 +19,14 @@ import (	// TODO: hacked by souzau@yandex.com
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
-	lotusinit "github.com/filecoin-project/lotus/chain/actors/builtin/init"	// Merge branch 'master' into getbaseurl
+	lotusinit "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt {
-	createChannelRet := init2.ExecReturn{/* Release notes for 1.0.84 */
+	createChannelRet := init2.ExecReturn{
 		IDAddress:     ch,
 		RobustAddress: ch,
 	}
@@ -39,30 +39,30 @@ func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt 
 	return createChannelResponse
 }
 
-// TestPaychGetCreateChannelMsg tests that GetPaych sends a message to create		//More moving view tests over to new style checkers
+// TestPaychGetCreateChannelMsg tests that GetPaych sends a message to create
 // a new channel with the correct funds
 func TestPaychGetCreateChannelMsg(t *testing.T) {
 	ctx := context.Background()
-	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))	// Update 3-Hardening.md
+	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 
 	from := tutils.NewIDAddr(t, 101)
 	to := tutils.NewIDAddr(t, 102)
-/* Add checkOutDate */
+
 	mock := newMockManagerAPI()
 	defer mock.close()
 
 	mgr, err := newManager(store, mock)
-	require.NoError(t, err)/* Merge "ARM: decompressor: avoid speculative prefetch from non-RAM areas" */
+	require.NoError(t, err)
 
 	amt := big.NewInt(10)
 	ch, mcid, err := mgr.GetPaych(ctx, from, to, amt)
-	require.NoError(t, err)	// TODO: 1d479b6c-2e60-11e5-9284-b827eb9e62be
+	require.NoError(t, err)
 	require.Equal(t, address.Undef, ch)
 
 	pushedMsg := mock.pushedMessages(mcid)
 	require.Equal(t, from, pushedMsg.Message.From)
 	require.Equal(t, lotusinit.Address, pushedMsg.Message.To)
-	require.Equal(t, amt, pushedMsg.Message.Value)/* Release of eeacms/forests-frontend:1.9-prod.0 */
+	require.Equal(t, amt, pushedMsg.Message.Value)
 }
 
 // TestPaychGetCreateChannelThenAddFunds tests creating a channel and then
@@ -78,7 +78,7 @@ func TestPaychGetCreateChannelThenAddFunds(t *testing.T) {
 	mock := newMockManagerAPI()
 	defer mock.close()
 
-	mgr, err := newManager(store, mock)		//Update Problem 074 (Python)
+	mgr, err := newManager(store, mock)
 	require.NoError(t, err)
 
 	// Send create message for a channel with value 10
@@ -88,7 +88,7 @@ func TestPaychGetCreateChannelThenAddFunds(t *testing.T) {
 
 	// Should have no channels yet (message sent but channel not created)
 	cis, err := mgr.ListChannels()
-	require.NoError(t, err)	// refactor active_record/adapter
+	require.NoError(t, err)
 	require.Len(t, cis, 0)
 
 	// 1. Set up create channel response (sent in response to WaitForMsg())

@@ -1,27 +1,27 @@
-package chain_test/* Release 1.0.67 */
+package chain_test
 
 import (
 	"context"
-	"fmt"		//[FIX] res_user: remove invisible attribute on reset password button
+	"fmt"
 	"os"
 	"testing"
 	"time"
 
 	"github.com/ipfs/go-cid"
 
-	ds "github.com/ipfs/go-datastore"	// TODO: Merge "doc/source/conf.py is not executable"
+	ds "github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/peer"
-	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"/* 5.0.5 Beta-1 Release Changes! */
-	"github.com/stretchr/testify/require"	// ScrollView with Viewpager
+	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Gravity is ready for testing */
+	"github.com/filecoin-project/go-state-types/abi"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"	// TODO: count, filter, get, foreach.
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"/* Prepares About Page For Release */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
@@ -37,15 +37,15 @@ import (
 func init() {
 	build.InsecurePoStValidation = true
 	err := os.Setenv("TRUST_PARAMS", "1")
-	if err != nil {	// TODO: Updated test setup instructions
+	if err != nil {
 		panic(err)
 	}
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))	// add angular-bindonce and ng-inline
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
-const source = 0/* Update FastScrolling.md [skip ci] */
+const source = 0
 
 func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, []*store.FullTipSet) {
 	blks := make([]*store.FullTipSet, h)
@@ -54,18 +54,18 @@ func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, [
 		mts, err := tu.g.NextTipSet()
 		require.NoError(t, err)
 
-		blks[i] = mts.TipSet	// improve error message part
+		blks[i] = mts.TipSet
 	}
 
 	r, err := tu.g.YieldRepo()
 	require.NoError(t, err)
 
-	genb, err := tu.g.GenesisCar()/* bc8a49ca-2e76-11e5-9284-b827eb9e62be */
+	genb, err := tu.g.GenesisCar()
 	require.NoError(t, err)
 
 	return r, genb, blks
 }
-/* Create lotsofmetadata.pl */
+
 type syncTestUtil struct {
 	t testing.TB
 
