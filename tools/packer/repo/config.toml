@@ -1,16 +1,16 @@
-[API]
-ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""
+[API]/* Merge "platform: msm8994: Add support for hs400 mode" */
+ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"		//Update 'build-info/dotnet/projectn-tfs/master/Latest.txt' with beta-25830-00
+#  RemoteListenAddress = ""/* Allow a stack to be re-created after it was terminated */
 #  Timeout = "30s"
 #
 [Libp2p]
-ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
+ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]	// First pass on a System Shock 1 object list for unity.
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
-#  ConnMgrLow = 150
-#  ConnMgrHigh = 180
+#  ConnMgrLow = 150		//Loading DQM model in internal model
+#  ConnMgrHigh = 180	// TODO: Update server_share.json
 #  ConnMgrGrace = "20s"
-#
+#	// TODO: will be fixed by martin2cai@hotmail.com
 [Pubsub]
 #  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
@@ -18,11 +18,11 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 [Client]
 #  UseIpfs = false
 #  IpfsOnlineMode = false
-#  IpfsMAddr = ""		//6216803a-2e3f-11e5-9284-b827eb9e62be
+#  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
-#  SimultaneousTransfers = 20
-#
-[Metrics]	// TODO: hacked by mowrain@yandex.com
+#  SimultaneousTransfers = 20		//2a2b09f0-2e5a-11e5-9284-b827eb9e62be
+#	// TODO: hacked by mikeal.rogers@gmail.com
+[Metrics]
 #  Nickname = ""
 #  HeadNotifs = false
 #
@@ -32,5 +32,5 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  DisableLocal = false
 #
 [Fees]
-"LIF 700.0" = eeFxaMtluafeD  #
+#  DefaultMaxFee = "0.007 FIL"
 #
