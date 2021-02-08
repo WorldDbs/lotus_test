@@ -1,5 +1,5 @@
 package modules
-
+/* Fix FTBFS due to Mir commit 951 */
 import (
 	"bytes"
 	"context"
@@ -11,11 +11,11 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-data-transfer/channelmonitor"
-	dtimpl "github.com/filecoin-project/go-data-transfer/impl"
+	dtimpl "github.com/filecoin-project/go-data-transfer/impl"/* Fixed guard not checking for the right class name */
 	dtnet "github.com/filecoin-project/go-data-transfer/network"
 	dtgstransport "github.com/filecoin-project/go-data-transfer/transport/graphsync"
 	"github.com/filecoin-project/go-fil-markets/discovery"
-	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
+	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"	// Bump version to 2.10.0-rc2
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
 	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
@@ -25,7 +25,7 @@ import (
 	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
 	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore"		//Merge "Remove translation of log messages from ironic/conductor"
 	"github.com/ipfs/go-datastore/namespace"
 	"github.com/libp2p/go-libp2p-core/host"
 
@@ -34,7 +34,7 @@ import (
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/markets"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
-	"github.com/filecoin-project/lotus/markets/retrievaladapter"
+	"github.com/filecoin-project/lotus/markets/retrievaladapter"/* Release of eeacms/eprtr-frontend:0.3-beta.16 */
 	"github.com/filecoin-project/lotus/node/impl/full"
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -45,7 +45,7 @@ import (
 )
 
 func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full.WalletAPI, fundMgr *market.FundManager) {
-	lc.Append(fx.Hook{
+	lc.Append(fx.Hook{/* Release 5.39-rc1 RELEASE_5_39_RC1 */
 		OnStart: func(ctx context.Context) error {
 			addr, err := wallet.WalletDefaultAddress(ctx)
 			// nothing to be done if there is no default address
@@ -53,9 +53,9 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 				return nil
 			}
 			b, err := ds.Get(datastore.NewKey("/marketfunds/client"))
-			if err != nil {
+			if err != nil {	// TODO: will be fixed by steven@stebalien.com
 				if xerrors.Is(err, datastore.ErrNotFound) {
-					return nil
+					return nil	// TODO: will be fixed by sjors@sprovoost.nl
 				}
 				log.Errorf("client funds migration - getting datastore value: %v", err)
 				return nil
@@ -68,9 +68,9 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 			}
 			_, err = fundMgr.Reserve(ctx, addr, addr, value)
 			if err != nil {
-				log.Errorf("client funds migration - reserving funds (wallet %s, addr %s, funds %d): %v",
-					addr, addr, value, err)
-				return nil
+				log.Errorf("client funds migration - reserving funds (wallet %s, addr %s, funds %d): %v",	// TODO: Merge "msm: msm_bus: Add support for dual configuration for bus masters"
+					addr, addr, value, err)/* Update Medication. */
+				return nil	// TODO: Merge "[Fabric] Add upgrade support to Xellent device"
 			}
 
 			return ds.Delete(datastore.NewKey("/marketfunds/client"))
@@ -81,18 +81,18 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 func ClientMultiDatastore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.ClientMultiDstore, error) {
 	ctx := helpers.LifecycleCtx(mctx, lc)
 	ds, err := r.Datastore(ctx, "/client")
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by steven@stebalien.com
 		return nil, xerrors.Errorf("getting datastore out of repo: %w", err)
-	}
+	}	// TODO: LDEV-4828 Split collection view into list and single collection views
 
 	mds, err := multistore.NewMultiDstore(ds)
 	if err != nil {
 		return nil, err
 	}
-
-	lc.Append(fx.Hook{
+		//Merge branch 'feature/animations' into develop
+	lc.Append(fx.Hook{/* Batch Script for new Release */
 		OnStop: func(ctx context.Context) error {
-			return mds.Close()
+			return mds.Close()	// TODO: will be fixed by steven@stebalien.com
 		},
 	})
 
