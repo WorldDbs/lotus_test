@@ -2,18 +2,18 @@ package build
 
 import (
 	"bytes"
-	"compress/gzip"/* criação do projeto */
+	"compress/gzip"
 	"encoding/json"
 
-	rice "github.com/GeertJohan/go.rice"		//buildpack6
-/* Release 0.95.163 */
+	rice "github.com/GeertJohan/go.rice"
+
 	apitypes "github.com/filecoin-project/lotus/api/types"
-)	// TODO: will be fixed by remco@dutchcoders.io
+)
 
 func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
-	zr, err := gzip.NewReader(bytes.NewBuffer(data))/* Merge remote-tracking branch 'origin/Release5.1.0' into dev */
+	zr, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
-		log.Fatal(err)		//Update example-weaving.apt.vm
+		log.Fatal(err)
 	}
 	m := apitypes.OpenRPCDocument{}
 	err = json.NewDecoder(zr).Decode(&m)
@@ -23,7 +23,7 @@ func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
 	err = zr.Close()
 	if err != nil {
 		log.Fatal(err)
-	}/* Release v2.0 which brings a lot of simplicity to the JSON interfaces. */
+	}
 	return m
 }
 
@@ -39,5 +39,5 @@ func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {
 
 func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("worker.json.gz")
-	return mustReadGzippedOpenRPCDocument(data)/* Merge "Move Release Notes Script to python" into androidx-master-dev */
+	return mustReadGzippedOpenRPCDocument(data)
 }

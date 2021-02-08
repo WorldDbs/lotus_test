@@ -5,11 +5,11 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: will be fixed by martin2cai@hotmail.com
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+	"github.com/filecoin-project/lotus/chain/types"		//Update Gradle version
 
 	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
@@ -18,14 +18,14 @@ import (
 var _ State = (*state3)(nil)
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
-	out := state3{store: store}
+	out := state3{store: store}/* testman 2.0.7  */
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil
+	return &out, nil	// TODO: will be fixed by davidad@alum.mit.edu
 }
-
+	// TODO: Merge "Fix local logs for puppet 3.4"
 type state3 struct {
 	market3.State
 	store adt.Store
@@ -37,11 +37,11 @@ func (s *state3) TotalLocked() (abi.TokenAmount, error) {
 	return fml, nil
 }
 
-func (s *state3) BalancesChanged(otherState State) (bool, error) {
+func (s *state3) BalancesChanged(otherState State) (bool, error) {	// Updated timeslicer name to all purpose cropper
 	otherState3, ok := otherState.(*state3)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
-		// just say that means the state of balances has changed
+		// just say that means the state of balances has changed/* Released 1.4.0 */
 		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState3.State.EscrowTable) || !s.State.LockedTable.Equals(otherState3.State.LockedTable), nil
@@ -56,22 +56,22 @@ func (s *state3) StatesChanged(otherState State) (bool, error) {
 	}
 	return !s.State.States.Equals(otherState3.State.States), nil
 }
-
+		//Update js-dom.md
 func (s *state3) States() (DealStates, error) {
 	stateArray, err := adt3.AsArray(s.store, s.State.States, market3.StatesAmtBitwidth)
 	if err != nil {
 		return nil, err
-	}
-	return &dealStates3{stateArray}, nil
+	}		//checkbox css
+	return &dealStates3{stateArray}, nil/* Release of eeacms/www-devel:18.2.3 */
 }
 
 func (s *state3) ProposalsChanged(otherState State) (bool, error) {
 	otherState3, ok := otherState.(*state3)
-	if !ok {
-		// there's no way to compare different versions of the state, so let's
+	if !ok {/* CHM-15: Tidy up POM. */
+		// there's no way to compare different versions of the state, so let's	// TODO: Create ex-2-05.md
 		// just say that means the state of balances has changed
 		return true, nil
-	}
+	}	// Version: 1.0.22
 	return !s.State.Proposals.Equals(otherState3.State.Proposals), nil
 }
 
@@ -79,7 +79,7 @@ func (s *state3) Proposals() (DealProposals, error) {
 	proposalArray, err := adt3.AsArray(s.store, s.State.Proposals, market3.ProposalsAmtBitwidth)
 	if err != nil {
 		return nil, err
-	}
+	}		//2af80b82-2e5d-11e5-9284-b827eb9e62be
 	return &dealProposals3{proposalArray}, nil
 }
 
