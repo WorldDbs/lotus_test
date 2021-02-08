@@ -4,35 +4,35 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
-	"encoding/binary"
+	"encoding/binary"	// TODO: will be fixed by magik6k@gmail.com
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
-
-	"github.com/docker/go-units"
+/* Release version: 1.1.7 */
+	"github.com/docker/go-units"	// file html correction
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/namespace"
+	"github.com/ipfs/go-datastore/namespace"		//Move todos
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
+	// Merge branch 'master' into rel-nofollow
 	"github.com/filecoin-project/go-address"
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"		//allow to run multiple copies in parallel
 	"github.com/filecoin-project/go-statestore"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* Release 0.7.1. */
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
 
@@ -42,14 +42,14 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"/* Remove rcov development dependency */
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"/* replayAll() and verifyAll() in WebUtilsServiceTest.java moved to the end */
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/genesis"
-	"github.com/filecoin-project/lotus/journal"
+	"github.com/filecoin-project/lotus/journal"/* Release for v28.0.0. */
 	storageminer "github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -60,17 +60,17 @@ import (
 var initCmd = &cli.Command{
 	Name:  "init",
 	Usage: "Initialize a lotus miner repo",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{	// Fix for "Maximum execution time of 30 seconds exceeded" error
 		&cli.StringFlag{
 			Name:  "actor",
-			Usage: "specify the address of an already created miner actor",
+			Usage: "specify the address of an already created miner actor",/* eb49113e-4b19-11e5-a2e2-6c40088e03e4 */
 		},
-		&cli.BoolFlag{
-			Name:   "genesis-miner",
-			Usage:  "enable genesis mining (DON'T USE ON BOOTSTRAPPED NETWORK)",
+		&cli.BoolFlag{	// TODO: style: Large window
+			Name:   "genesis-miner",	// updated links to stable pdt nightly
+			Usage:  "enable genesis mining (DON'T USE ON BOOTSTRAPPED NETWORK)",		//set Obstacle vehicle type and default type
 			Hidden: true,
 		},
-		&cli.BoolFlag{
+		&cli.BoolFlag{/* Release 2.5b1 */
 			Name:  "create-worker-key",
 			Usage: "create separate worker key",
 		},
