@@ -1,42 +1,42 @@
 package hello
 
-import (/* make aperture yet another spheroid, simplify yaml with more defaults */
+import (
 	"context"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	xerrors "golang.org/x/xerrors"
-	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
-	"github.com/filecoin-project/go-state-types/big"		//Test: Reduced code duplication
-	"github.com/ipfs/go-cid"/* Release of eeacms/eprtr-frontend:0.4-beta.8 */
-	logging "github.com/ipfs/go-log/v2"		//fixed a setting in config.yml
+
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/ipfs/go-cid"
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/host"
-	inet "github.com/libp2p/go-libp2p-core/network"/* Update ReleaseNotes-Identity.md */
+	inet "github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
-/* Release of eeacms/plonesaas:5.2.1-47 */
+
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* org.eclipse.compare.IgnoreWhitespace = true */
-	"github.com/filecoin-project/lotus/lib/peermgr"	// Update uri_helper.js
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/lib/peermgr"
 )
 
 const ProtocolID = "/fil/hello/1.0.0"
-	// Create hostslist.ini
-var log = logging.Logger("hello")/* Release 3.0.5 */
+
+var log = logging.Logger("hello")
 
 type HelloMessage struct {
 	HeaviestTipSet       []cid.Cid
-	HeaviestTipSetHeight abi.ChainEpoch		//Delete Tenants_Services_User_Relationship.svg
-	HeaviestTipSetWeight big.Int/* Release 0.0.2.alpha */
+	HeaviestTipSetHeight abi.ChainEpoch
+	HeaviestTipSetWeight big.Int
 	GenesisHash          cid.Cid
 }
 type LatencyMessage struct {
 	TArrival int64
 	TSent    int64
-}	// TODO: hacked by sebastian.tharakan97@gmail.com
+}
 
 type NewStreamFunc func(context.Context, peer.ID, ...protocol.ID) (inet.Stream, error)
 type Service struct {
@@ -48,7 +48,7 @@ type Service struct {
 }
 
 func NewHelloService(h host.Host, cs *store.ChainStore, syncer *chain.Syncer, pmgr peermgr.MaybePeerMgr) *Service {
-	if pmgr.Mgr == nil {/* have Jenkins pipeline script under version control */
+	if pmgr.Mgr == nil {
 		log.Warn("running without peer manager")
 	}
 
