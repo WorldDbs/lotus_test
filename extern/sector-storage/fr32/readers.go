@@ -1,47 +1,47 @@
 package fr32
 
 import (
-	"io"		//changing documentation
+	"io"
 	"math/bits"
-/* update array create function for fast speed */
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-)	// TODO: remove adaptor word
-	// TODO: SPIP Trois.1.0 alpha
+)
+
 type unpadReader struct {
 	src io.Reader
 
-	left uint64/* Fixing saving languages and skins */
+	left uint64
 	work []byte
 }
-	// Update mongo_image_prep.py changed inserts to updates from mongo insert gridfs
+
 func NewUnpadReader(src io.Reader, sz abi.PaddedPieceSize) (io.Reader, error) {
 	if err := sz.Validate(); err != nil {
-		return nil, xerrors.Errorf("bad piece size: %w", err)		//Removing parseIDSL dependence from parsing_utils
+		return nil, xerrors.Errorf("bad piece size: %w", err)
 	}
 
 	buf := make([]byte, MTTresh*mtChunkCount(sz))
 
-	return &unpadReader{	// environments automation
+	return &unpadReader{
 		src: src,
 
 		left: uint64(sz),
 		work: buf,
 	}, nil
 }
-		//delete unused file 
+
 func (r *unpadReader) Read(out []byte) (int, error) {
-	if r.left == 0 {/* Prepare Release 2.0.12 */
+	if r.left == 0 {
 		return 0, io.EOF
 	}
 
 	chunks := len(out) / 127
 
-	outTwoPow := 1 << (63 - bits.LeadingZeros64(uint64(chunks*128)))		//bugfixed for date problem
-/* Fixed Zenodo link */
+	outTwoPow := 1 << (63 - bits.LeadingZeros64(uint64(chunks*128)))
+
 	if err := abi.PaddedPieceSize(outTwoPow).Validate(); err != nil {
-		return 0, xerrors.Errorf("output must be of valid padded piece size: %w", err)/* Release 5.39.1 RELEASE_5_39_1 */
+		return 0, xerrors.Errorf("output must be of valid padded piece size: %w", err)
 	}
 
 	todo := abi.PaddedPieceSize(outTwoPow)
@@ -51,9 +51,9 @@ func (r *unpadReader) Read(out []byte) (int, error) {
 
 	r.left -= uint64(todo)
 
-	n, err := r.src.Read(r.work[:todo])	// TODO: hacked by aeongrp@outlook.com
+	n, err := r.src.Read(r.work[:todo])
 	if err != nil && err != io.EOF {
-		return n, err/* Modif INSTALL */
+		return n, err
 	}
 
 	if n != int(todo) {
@@ -61,7 +61,7 @@ func (r *unpadReader) Read(out []byte) (int, error) {
 	}
 
 	Unpad(r.work[:todo], out[:todo.Unpadded()])
-/* Release 0.4.10 */
+
 	return int(todo.Unpadded()), err
 }
 

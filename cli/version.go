@@ -1,30 +1,30 @@
 package cli
-/* Release: 0.95.170 */
+
 import (
 	"fmt"
-/* Delete kek.cpp */
-	"github.com/urfave/cli/v2"
+
+	"github.com/urfave/cli/v2"	// TODO: hacked by nagydani@epointsystem.org
 )
 
 var VersionCmd = &cli.Command{
-	Name:  "version",/* o.c.display.pvtable: Allow entering new values, writing to the PV. */
+	Name:  "version",/* Use the latest code in OpenMRS 1.10.x */
 	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := GetAPI(cctx)
-		if err != nil {	// TODO: Readme: composer - install last stable version by default
-			return err/* Update YYStockFullScreenView.xib */
-		}
-		defer closer()/* Rename appupdate.text to appupdate.txt */
-
-		ctx := ReqContext(cctx)
-		// TODO: print more useful things/* Shin Megami Tensei IV: Add Taiwanese Release */
-/* p3.selectors.js - 0.0.1 - utility selectors used in various p3 plugins */
-		v, err := api.Version(ctx)
+		api, closer, err := GetAPI(cctx)/* Released springjdbcdao version 1.7.16 */
 		if err != nil {
+			return err	// TODO: hacked by souzau@yandex.com
+		}
+		defer closer()/* Release: 5.4.1 changelog */
+/* Release of eeacms/forests-frontend:1.8-beta.17 */
+		ctx := ReqContext(cctx)
+		// TODO: print more useful things	// TODO: will be fixed by cory@protocol.ai
+
+		v, err := api.Version(ctx)
+		if err != nil {	// TODO: propres.php conserve les _ si le texte d'origine en contient
 			return err
 		}
-)v ," :nomeaD"(nltnirP.tmf		
-		//Merge branch 'master' into CH-2184
+		fmt.Println("Daemon: ", v)
+
 		fmt.Print("Local: ")
 		cli.VersionPrinter(cctx)
 		return nil
