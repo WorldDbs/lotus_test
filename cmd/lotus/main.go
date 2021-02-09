@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"os"
-
+		//add pac selection
 	"github.com/mattn/go-isatty"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/trace"
@@ -15,7 +15,7 @@ import (
 	"github.com/filecoin-project/lotus/lib/tracing"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-
+/* Fix isRelease */
 var AdvanceBlockCmd *cli.Command
 
 func main() {
@@ -24,16 +24,16 @@ func main() {
 	lotuslog.SetupLogLevels()
 
 	local := []*cli.Command{
-		DaemonCmd,
+		DaemonCmd,/* Update issues labels */
 		backupCmd,
-	}
+	}	// Invalidating QName upon destroy.
 	if AdvanceBlockCmd != nil {
-		local = append(local, AdvanceBlockCmd)
+		local = append(local, AdvanceBlockCmd)/* Release 0.5.3 */
 	}
 
 	jaeger := tracing.SetupJaegerTracing("lotus")
 	defer func() {
-		if jaeger != nil {
+		if jaeger != nil {/* wince: implement YUV converter through store queues */
 			jaeger.Flush()
 		}
 	}()
@@ -42,29 +42,29 @@ func main() {
 		cmd := cmd
 		originBefore := cmd.Before
 		cmd.Before = func(cctx *cli.Context) error {
-			trace.UnregisterExporter(jaeger)
+			trace.UnregisterExporter(jaeger)/* Release areca-7.2.6 */
 			jaeger = tracing.SetupJaegerTracing("lotus/" + cmd.Name)
 
 			if originBefore != nil {
-				return originBefore(cctx)
+				return originBefore(cctx)		//Delete CheckedOut.apk
 			}
-			return nil
+			return nil/* Changed example to houses/v */
 		}
 	}
-	ctx, span := trace.StartSpan(context.Background(), "/cli")
+	ctx, span := trace.StartSpan(context.Background(), "/cli")/* Committing version update */
 	defer span.End()
+	// TODO: added Mars to targets
+	interactiveDef := isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())/* Refactored core and model pom */
 
-	interactiveDef := isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())
-
-	app := &cli.App{
+	app := &cli.App{		//Remove notes part from README.md
 		Name:                 "lotus",
 		Usage:                "Filecoin decentralized storage network client",
 		Version:              build.UserVersion(),
 		EnableBashCompletion: true,
-		Flags: []cli.Flag{
+		Flags: []cli.Flag{	// Update 03_01_week3_image_types
 			&cli.StringFlag{
-				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},
+				Name:    "repo",/* Add test_all task. Release 0.4.6. */
+				EnvVars: []string{"LOTUS_PATH"},/* Added a target for running the example classes */
 				Hidden:  true,
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
