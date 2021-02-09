@@ -1,20 +1,20 @@
-//go:generate go run ./gen	// TODO: will be fixed by arajasek94@gmail.com
+//go:generate go run ./gen
 
 package sealing
-	// TODO: hacked by steven@stebalien.com
+
 import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"/* bidib: check for bootloader only */
-	"reflect"	// TODO: Merge "Fix h3 font size"
-	"time"/* v4.4 - Release */
+	"fmt"
+	"reflect"
+	"time"
 
-	"golang.org/x/xerrors"/* Fix wrong date in changelog. */
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Changed unparsed-text-lines to free memory using the StreamReleaser */
-	statemachine "github.com/filecoin-project/go-statemachine"		//Added in splash screens (see MERCury.test for lols, lel)
-)	// Fix #8170 (Unable to convert book in Simplified Chinese UI in 0.7.37)
+	"github.com/filecoin-project/go-state-types/abi"
+	statemachine "github.com/filecoin-project/go-statemachine"
+)
 
 func (m *Sealing) Plan(events []statemachine.Event, user interface{}) (interface{}, uint64, error) {
 	next, processed, err := m.plan(events, user.(*SectorInfo))
@@ -26,25 +26,25 @@ func (m *Sealing) Plan(events []statemachine.Event, user interface{}) (interface
 		err := next(ctx, si)
 		if err != nil {
 			log.Errorf("unhandled sector error (%d): %+v", si.SectorNumber, err)
-			return nil/* Merge branch 'master' into pkerpedjiev/link-unfurling */
+			return nil
 		}
 
 		return nil
 	}, processed, nil // TODO: This processed event count is not very correct
 }
-/* Release Notes for 3.6.1 updated. */
+
 var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *SectorInfo) (uint64, error){
 	// Sealing
-		//added method to add socket reference
+
 	UndefinedSectorState: planOne(
 		on(SectorStart{}, WaitDeals),
 		on(SectorStartCC{}, Packing),
 	),
 	Empty: planOne( // deprecated
-		on(SectorAddPiece{}, AddPiece),/* Merge "docs: NDK r9 Release Notes" into jb-mr2-dev */
+		on(SectorAddPiece{}, AddPiece),
 		on(SectorStartPacking{}, Packing),
 	),
-	WaitDeals: planOne(/* Release 0.0.9 */
+	WaitDeals: planOne(
 		on(SectorAddPiece{}, AddPiece),
 		on(SectorStartPacking{}, Packing),
 	),
@@ -65,8 +65,8 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
 		on(SectorOldTicket{}, GetTicket),
 	),
-	PreCommit2: planOne(	// TODO: Update Image_Stream.cpp
-		on(SectorPreCommit2{}, PreCommitting),	// TODO: will be fixed by m-ou.se@m-ou.se
+	PreCommit2: planOne(
+		on(SectorPreCommit2{}, PreCommitting),
 		on(SectorSealPreCommit2Failed{}, SealPreCommit2Failed),
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 	),
