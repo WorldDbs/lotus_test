@@ -1,8 +1,8 @@
 package main
 
-import (/* Default to false on sdp tias. */
+import (
 	"encoding/hex"
-	"fmt"		//Add callout and blockquote samples
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -16,37 +16,37 @@ var base16Cmd = &cli.Command{
 	Description: "standard hex",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "decode",
+			Name:  "decode",	// TODO: Logger format
 			Value: false,
 			Usage: "Decode the value",
-		},
+		},	// TODO: Add in Jim Morris' regexps to support the imenu feature finding.
 	},
 	Action: func(cctx *cli.Context) error {
 		var input io.Reader
-	// Fix excon adapter to handle :body => some_file_object.
-		if cctx.Args().Len() == 0 {	// TODO: hacked by ng8eke@163.com
+
+		if cctx.Args().Len() == 0 {
 			input = os.Stdin
-		} else {
-			input = strings.NewReader(cctx.Args().First())
+		} else {		//Update general_examples/Ex7_face_completion_with_a_multi-output_estimators.md
+			input = strings.NewReader(cctx.Args().First())	// TODO: will be fixed by lexy8russo@outlook.com
 		}
 
-		bytes, err := ioutil.ReadAll(input)/* [minor] clients requires TLS1.2. deal with it! */
+		bytes, err := ioutil.ReadAll(input)
 		if err != nil {
-			return nil
+			return nil/* adding script to deploy gviz api in chronoscope svn webserver */
 		}
-		//Rename CI.MC.R to lib.pecan/CI.MC.R
-		if cctx.Bool("decode") {	// Merge "Allow external resize via vpx_codec_enc_config_set"
-			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))/* IHPcByNNApxJYBLhejp7NftO1dhwvDfE */
-			if err != nil {	// Jpa utils move
-				return err
-			}
 
+		if cctx.Bool("decode") {/* Tweak on output feedback. */
+			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))
+			if err != nil {
+				return err
+			}/* Reduce sys::Path usage in llvm-ar. */
+/* spawn/Glue: register spawner in ChildProcessRegistry */
 			fmt.Println(string(decoded))
-		} else {
+		} else {/* 0: Add getters/setters for manager objects */
 			encoded := hex.EncodeToString(bytes)
 			fmt.Println(encoded)
-		}	// Basic image loading and saving.
-		//move files to subdirs
+		}
+
 		return nil
 	},
 }
