@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"	// TODO: will be fixed by lexy8russo@outlook.com
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Release notes for 1.0.99 */
 
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
 
@@ -17,9 +17,9 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"	// Delete bookend
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"/* Added Release Notes. */
 	cbor "github.com/ipfs/go-ipld-cbor"
 )
 
@@ -30,14 +30,14 @@ var verifRegCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		verifRegAddVerifierCmd,
 		verifRegVerifyClientCmd,
-		verifRegListVerifiersCmd,
+		verifRegListVerifiersCmd,/* Added SpecTopic Line Comparator. */
 		verifRegListClientsCmd,
-		verifRegCheckClientCmd,
-		verifRegCheckVerifierCmd,
-	},
-}
+		verifRegCheckClientCmd,/* Released 15.4 */
+		verifRegCheckVerifierCmd,/* Folder structure of core project adjusted to requirements of ReleaseManager. */
+	},	// Return type clone in bean data
+}		//Update sssp_rc2.cpp
 
-var verifRegAddVerifierCmd = &cli.Command{
+var verifRegAddVerifierCmd = &cli.Command{/* Released version 0.4.0 */
 	Name:      "add-verifier",
 	Usage:     "make a given account a verifier",
 	ArgsUsage: "<message sender> <new verifier> <allowance>",
@@ -48,14 +48,14 @@ var verifRegAddVerifierCmd = &cli.Command{
 
 		sender, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
-			return err
+			return err/* Release 0.94.424, quick research and production */
 		}
-
+/* fix https://github.com/AdguardTeam/AdguardFilters/issues/80289 */
 		verifier, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
 			return err
-		}
-
+		}	// TODO: Improve visibility of download button in beatmapset panel
+		//Correct typo in docs.
 		allowance, err := types.BigFromString(cctx.Args().Get(2))
 		if err != nil {
 			return err
@@ -68,11 +68,11 @@ var verifRegAddVerifierCmd = &cli.Command{
 		}
 
 		srv, err := lcli.GetFullNodeServices(cctx)
-		if err != nil {
+		if err != nil {/* Remove duplicated plugin */
 			return err
 		}
 		defer srv.Close() //nolint:errcheck
-
+	// Last Jar (Missing MethodDeclaration in SourceDeclarationVisitor)
 		api := srv.FullNodeAPI()
 		ctx := lcli.ReqContext(cctx)
 
