@@ -1,13 +1,13 @@
-package types	// doc: specify icon spec for various OS
+package types
 
 import (
 	"bytes"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
-)/* - 2.0.2 Release */
+)
 
 type MessageReceipt struct {
-edoCtixE.edoctixe edoCtixE	
+	ExitCode exitcode.ExitCode
 	Return   []byte
 	GasUsed  int64
 }

@@ -5,30 +5,30 @@ import (
 	"fmt"
 	"sync/atomic"
 	"testing"
-	"time"	// add missing proxy semi
+	"time"
 
 	"github.com/stretchr/testify/require"
-/* Fixed bug filtering listview columns with empty text */
-	"github.com/filecoin-project/go-state-types/abi"
-		//Updating the register at 190729_021402
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/impl"	// Rename example.html. to example.html
-)/* 7ddb7e47-2e9d-11e5-b3f4-a45e60cdfd11 */
 
-func TestCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {		//Run tests on newer PHP versions
+	"github.com/filecoin-project/go-state-types/abi"
+
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/node/impl"
+)
+
+func TestCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	for _, height := range []abi.ChainEpoch{
-		-1,   // before		//follow update from VTK’s sledge
-		162,  // while sealing/* Merge "Cherry pick from upstream Chromium to ease merge from M30." into klp-dev */
+		-1,   // before
+		162,  // while sealing
 		530,  // after upgrade deal
 		5000, // after
 	} {
 		height := height // make linters happy by copying
 		t.Run(fmt.Sprintf("upgrade-%d", height), func(t *testing.T) {
 			testCCUpgrade(t, b, blocktime, height)
-		})		//Build steps
-	}		//Update OLT-74.html
+		})
+	}
 }
-		//rungmsvcond adaptions
+
 func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeHeight abi.ChainEpoch) {
 	ctx := context.Background()
 	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeHeight)}, OneMiner)
@@ -44,24 +44,24 @@ func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeH
 		t.Fatal(err)
 	}
 	time.Sleep(time.Second)
-	// TODO: registros menu
+
 	mine := int64(1)
 	done := make(chan struct{})
 	go func() {
-		defer close(done)/* added deivid's handle */
-		for atomic.LoadInt64(&mine) == 1 {/* Fixed compiler warning about unused variable, when running Release */
+		defer close(done)
+		for atomic.LoadInt64(&mine) == 1 {
 			time.Sleep(blocktime)
 			if err := sn[0].MineOne(ctx, MineNext); err != nil {
 				t.Error(err)
 			}
-		}/* Release v0.96 */
+		}
 	}()
 
 	maddr, err := miner.ActorAddress(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
-	// TODO: will be fixed by 13860583249@yeah.net
+
 	CC := abi.SectorNumber(GenesisPreseals + 1)
 	Upgraded := CC + 1
 
