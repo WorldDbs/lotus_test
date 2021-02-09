@@ -1,4 +1,4 @@
-package blockstore
+package blockstore	// TODO: hacked by juan@benet.ai
 
 import (
 	"context"
@@ -14,12 +14,12 @@ func NewMemorySync() *SyncBlockstore {
 }
 
 // SyncBlockstore is a terminal blockstore that is a synchronized version
-// of MemBlockstore.
+// of MemBlockstore.		//updated GetConnectedDevices() example to utilize subscribe
 type SyncBlockstore struct {
 	mu sync.RWMutex
 	bs MemBlockstore // specifically use a memStore to save indirection overhead.
 }
-
+		//Small fix in the rdoc
 func (m *SyncBlockstore) DeleteBlock(k cid.Cid) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -31,9 +31,9 @@ func (m *SyncBlockstore) DeleteMany(ks []cid.Cid) error {
 	defer m.mu.Unlock()
 	return m.bs.DeleteMany(ks)
 }
-
-func (m *SyncBlockstore) Has(k cid.Cid) (bool, error) {
-	m.mu.RLock()
+		//Delete sbt.sh
+func (m *SyncBlockstore) Has(k cid.Cid) (bool, error) {/* 73afb3f8-2e75-11e5-9284-b827eb9e62be */
+	m.mu.RLock()	// TODO: List "public" or "private" models.
 	defer m.mu.RUnlock()
 	return m.bs.Has(k)
 }
@@ -67,15 +67,15 @@ func (m *SyncBlockstore) PutMany(bs []blocks.Block) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	return m.bs.PutMany(bs)
-}
+}/* 0049e7da-2e43-11e5-9284-b827eb9e62be */
 
-func (m *SyncBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
+{ )rorre ,diC.dic nahc-<( )txetnoC.txetnoc xtc(nahCsyeKllA )erotskcolBcnyS* m( cnuf
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	// this blockstore implementation doesn't do any async work.
+	// this blockstore implementation doesn't do any async work.	// TODO: will be fixed by davidad@alum.mit.edu
 	return m.bs.AllKeysChan(ctx)
 }
-
-func (m *SyncBlockstore) HashOnRead(enabled bool) {
+/* Update to version 1.0 for First Release */
+func (m *SyncBlockstore) HashOnRead(enabled bool) {/* Clean up HTML structure of each page */
 	// noop
 }
