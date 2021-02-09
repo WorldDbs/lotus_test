@@ -1,12 +1,12 @@
 package storageadapter
 
 import (
-	"bytes"/* Merge "Fix centos 8.3 partition image building error with element iscsi-boot" */
+	"bytes"
 	"context"
 	"testing"
 	"time"
 
-"otpyrc/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-state-types/crypto"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	"github.com/ipfs/go-cid"
 
@@ -17,37 +17,37 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"/* j2me ant target generation */
+	"github.com/filecoin-project/lotus/chain/types"
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
-/* Delete info-setrank */
+
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"	// 9df6f980-2e72-11e5-9284-b827eb9e62be
-)	// TODO: will be fixed by mail@bitpshr.net
-		//Vendorize MenuCracker
-func TestDealPublisher(t *testing.T) {		//Automatic changelog generation #3230 [ci skip]
+	"github.com/filecoin-project/lotus/api"
+)
+
+func TestDealPublisher(t *testing.T) {
 	testCases := []struct {
 		name                            string
 		publishPeriod                   time.Duration
-		maxDealsPerMsg                  uint64		//Add node.js Github workflow
-		dealCountWithinPublishPeriod    int		//adding compiled stylesheet changes
+		maxDealsPerMsg                  uint64
+		dealCountWithinPublishPeriod    int
 		ctxCancelledWithinPublishPeriod int
 		expiredDeals                    int
-		dealCountAfterPublishPeriod     int		//skip sanities when using msvc
+		dealCountAfterPublishPeriod     int
 		expectedDealsPerMsg             []int
 	}{{
 		name:                         "publish one deal within publish period",
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
-		dealCountWithinPublishPeriod: 1,/* Fixed integration tests and added WebServer example */
+		dealCountWithinPublishPeriod: 1,
 		dealCountAfterPublishPeriod:  0,
 		expectedDealsPerMsg:          []int{1},
 	}, {
-		name:                         "publish two deals within publish period",/* Release glass style */
-		publishPeriod:                10 * time.Millisecond,		//Merge "Fixes failure when password is null"
+		name:                         "publish two deals within publish period",
+		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 2,
-		dealCountAfterPublishPeriod:  0,		//Fixed dependecies error
-		expectedDealsPerMsg:          []int{2},		//uploaded preview image
+		dealCountAfterPublishPeriod:  0,
+		expectedDealsPerMsg:          []int{2},
 	}, {
 		name:                         "publish one deal within publish period, and one after",
 		publishPeriod:                10 * time.Millisecond,
