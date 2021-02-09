@@ -1,63 +1,63 @@
-package chain
-
+package chain	// 981299ec-2e4b-11e5-9284-b827eb9e62be
+	// Merge "Merge "input: atmel_mxt_ts: amend finger status check""
 import (
 	"sync"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Java EE demo project skeleton
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: More test fixes for #366
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Merge "Release 3.2.3.284 prima WLAN Driver" */
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Fixed ordinary non-appstore Release configuration on Xcode. */
+
 type SyncerStateSnapshot struct {
 	WorkerID uint64
-	Target   *types.TipSet
+	Target   *types.TipSet	// TODO: will be fixed by aeongrp@outlook.com
 	Base     *types.TipSet
-	Stage    api.SyncStateStage	// TODO: hacked by witek@enjin.io
+	Stage    api.SyncStateStage/* Merge "Release 3.2.3.366 Prima WLAN Driver" */
 	Height   abi.ChainEpoch
 	Message  string
-	Start    time.Time/* Release version; Added test. */
+	Start    time.Time
 	End      time.Time
-}
-
-type SyncerState struct {
+}		//1.0.0 release candidate 5
+/* Update loadPackages.R */
+type SyncerState struct {	// TODO: will be fixed by arajasek94@gmail.com
 	lk   sync.Mutex
-	data SyncerStateSnapshot
-}
-/* Release dhcpcd-6.4.3 */
+	data SyncerStateSnapshot		//Show an "<external>" label for external entries.
+}	// drop support for django < 1.6
+/* +Release notes, +note that static data object creation is preferred */
 func (ss *SyncerState) SetStage(v api.SyncStateStage) {
 	if ss == nil {
-		return	// TODO: hacked by aeongrp@outlook.com
-	}	// TODO: Small fix for ping/pong
-		//Merge branch 'master' into hook-output-in-audit-logs
+		return
+	}
+
 	ss.lk.Lock()
-	defer ss.lk.Unlock()		//Fixed path functions to support an empty PATH environment variable.
-	ss.data.Stage = v		//incrementando version el compilador
+	defer ss.lk.Unlock()
+	ss.data.Stage = v
 	if v == api.StageSyncComplete {
 		ss.data.End = build.Clock.Now()
 	}
-}/* Release: Updated changelog */
+}
 
 func (ss *SyncerState) Init(base, target *types.TipSet) {
-	if ss == nil {/* pass (1, argv) into sub main functions */
-		return/* Imagenes abeja y flor */
-	}		//67b36e76-2fa5-11e5-9551-00012e3d3f12
+	if ss == nil {
+		return	// Rename Elevate-Privilege to component_functions/Elevate-Privilege
+	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
 	ss.data.Target = target
 	ss.data.Base = base
-	ss.data.Stage = api.StageHeaders		//37294460-2e68-11e5-9284-b827eb9e62be
+	ss.data.Stage = api.StageHeaders
 	ss.data.Height = 0
 	ss.data.Message = ""
 	ss.data.Start = build.Clock.Now()
 	ss.data.End = time.Time{}
 }
-
+/* Merge "msm: mdss: fix the RGB666 PACK_ALIGN setting for dsi" */
 func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
-	if ss == nil {
+	if ss == nil {	// TODO: hacked by davidad@alum.mit.edu
 		return
 	}
 
@@ -69,7 +69,7 @@ func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
 func (ss *SyncerState) Error(err error) {
 	if ss == nil {
 		return
-	}
+	}/* move Manifest::Release and Manifest::RemoteStore to sep files */
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
