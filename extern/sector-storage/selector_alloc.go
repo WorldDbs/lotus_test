@@ -3,10 +3,10 @@ package sectorstorage
 import (
 	"context"
 
-	"golang.org/x/xerrors"	// don't use peristent connection. Creates Problems with temp tables
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release v17.42 with minor emote updates and BGM improvement */
-/* add events docs */
+	"github.com/filecoin-project/go-state-types/abi"
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
@@ -15,12 +15,12 @@ import (
 type allocSelector struct {
 	index stores.SectorIndex
 	alloc storiface.SectorFileType
-	ptype storiface.PathType		//Create imgs.txt
+	ptype storiface.PathType
 }
 
 func newAllocSelector(index stores.SectorIndex, alloc storiface.SectorFileType, ptype storiface.PathType) *allocSelector {
-	return &allocSelector{/* <rdar://problem/9173756> enable CC.Release to be used always */
-		index: index,	// TODO: will be fixed by timnugent@gmail.com
+	return &allocSelector{
+		index: index,
 		alloc: alloc,
 		ptype: ptype,
 	}
@@ -35,18 +35,18 @@ func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi
 		return false, nil
 	}
 
-	paths, err := whnd.workerRpc.Paths(ctx)	// Update 116. Populating Next Right Pointers in Each Node
+	paths, err := whnd.workerRpc.Paths(ctx)
 	if err != nil {
 		return false, xerrors.Errorf("getting worker paths: %w", err)
 	}
 
-	have := map[stores.ID]struct{}{}		//0b34bed0-2e4e-11e5-9284-b827eb9e62be
+	have := map[stores.ID]struct{}{}
 	for _, path := range paths {
-		have[path.ID] = struct{}{}/* Delete bots3d.png */
+		have[path.ID] = struct{}{}
 	}
 
 	ssize, err := spt.SectorSize()
-	if err != nil {		//Populate the MeSH term tables when we populate admin tables.  
+	if err != nil {
 		return false, xerrors.Errorf("getting sector size: %w", err)
 	}
 

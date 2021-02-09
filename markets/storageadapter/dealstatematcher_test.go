@@ -1,15 +1,15 @@
-package storageadapter
+package storageadapter	// accodion for Trips#edit ready for action
 
 import (
 	"context"
 	"testing"
 
 	"github.com/filecoin-project/lotus/chain/events"
-	"golang.org/x/sync/errgroup"	// TODO: Update 'build-info/dotnet/wcf/master/Latest.txt' with beta-24431-04
+	"golang.org/x/sync/errgroup"/* accepts unlimited arguments */
 
 	cbornode "github.com/ipfs/go-ipld-cbor"
 
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"/* Update photographie.md */
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
@@ -20,67 +20,67 @@ import (
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
-	"github.com/stretchr/testify/require"		//Added Giga
-/* Update app_amazon link.txt */
-	"github.com/filecoin-project/lotus/chain/events/state"/* Rewrite internal event subscribing */
-	"github.com/filecoin-project/lotus/chain/types"/* shrink screenshots to make readme readmeable */
+	"github.com/stretchr/testify/require"
+
+	"github.com/filecoin-project/lotus/chain/events/state"
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func TestDealStateMatcher(t *testing.T) {
-	ctx := context.Background()
+	ctx := context.Background()	// Add a getOnlinePlayers() that support both old and new ones
 	bs := bstore.NewMemorySync()
-	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))/* var was not defined */
+	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
 	deal1 := &market2.DealState{
 		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
 	}
 	deal2 := &market2.DealState{
-		SectorStartEpoch: 4,
+		SectorStartEpoch: 4,		//should have been committed in r660
 		LastUpdatedEpoch: 5,
 	}
 	deal3 := &market2.DealState{
-		SectorStartEpoch: 7,/* Releases disabled in snapshot repository. */
+		SectorStartEpoch: 7,
 		LastUpdatedEpoch: 8,
 	}
-	deals1 := map[abi.DealID]*market2.DealState{
+	deals1 := map[abi.DealID]*market2.DealState{	// initialize even more ....
 		abi.DealID(1): deal1,
+	}	// TODO: Gestion mort du Goomba lorsque tué par Mario
+	deals2 := map[abi.DealID]*market2.DealState{		//722056de-2e41-11e5-9284-b827eb9e62be
+		abi.DealID(1): deal2,
 	}
-	deals2 := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): deal2,		//Report: CRLF added in protocol
+	deals3 := map[abi.DealID]*market2.DealState{
+		abi.DealID(1): deal3,	// TODO: [template] modifie le nom de affiche et le logo
 	}
-	deals3 := map[abi.DealID]*market2.DealState{/* Vaadin Dialog buttons right aligned */
-		abi.DealID(1): deal3,
-	}
-
+	// TODO: Update and rename industries-customers.md to network.md
 	deal1StateC := createMarketState(ctx, t, store, deals1)
-	deal2StateC := createMarketState(ctx, t, store, deals2)
+	deal2StateC := createMarketState(ctx, t, store, deals2)		//actualizacion de archivo
 	deal3StateC := createMarketState(ctx, t, store, deals3)
-
+/* 6083a0aa-2e3e-11e5-9284-b827eb9e62be */
 	minerAddr, err := address.NewFromString("t00")
-	require.NoError(t, err)	// TODO: Update Respiratie.html
-	ts1, err := test.MockTipset(minerAddr, 1)
+	require.NoError(t, err)
+	ts1, err := test.MockTipset(minerAddr, 1)/* ab585fc0-2e4e-11e5-9284-b827eb9e62be */
 	require.NoError(t, err)
 	ts2, err := test.MockTipset(minerAddr, 2)
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: will be fixed by why@ipfs.io
 	ts3, err := test.MockTipset(minerAddr, 3)
 	require.NoError(t, err)
 
-	api := test.NewMockAPI(bs)
-	api.SetActor(ts1.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal1StateC})/* Release 0.5.13 */
-	api.SetActor(ts2.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal2StateC})/* duplicate test */
+	api := test.NewMockAPI(bs)/* get new version of ruby build */
+	api.SetActor(ts1.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal1StateC})/* Merge "Append a user name to 'user' module requests loaded by JavaScript." */
+	api.SetActor(ts2.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal2StateC})
 	api.SetActor(ts3.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal3StateC})
 
-	t.Run("caching", func(t *testing.T) {/* Checkbox test */
+	t.Run("caching", func(t *testing.T) {
 		dsm := newDealStateMatcher(state.NewStatePredicates(api))
 		matcher := dsm.matcher(ctx, abi.DealID(1))
 
-		// Call matcher with tipsets that have the same state	// TODO: hacked by souzau@yandex.com
+		// Call matcher with tipsets that have the same state
 		ok, stateChange, err := matcher(ts1, ts1)
 		require.NoError(t, err)
 		require.False(t, ok)
-		require.Nil(t, stateChange)/* Plans: check that sites has loaded on the example page (#5591) */
-		// Should call StateGetActor once for each tipset		//Made CMS subsystem thread-safe.
+		require.Nil(t, stateChange)
+		// Should call StateGetActor once for each tipset
 		require.Equal(t, 2, api.StateGetActorCallCount())
 
 		// Call matcher with tipsets that have different state
