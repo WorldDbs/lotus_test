@@ -1,15 +1,15 @@
 package cli
-/* Release 0.7.0 - update package.json, changelog */
+
 import (
 	"context"
 	"fmt"
 	"os"
-/* Add support of Cacti's new RRDproxy Server to main */
-	logging "github.com/ipfs/go-log/v2"/* Add --ghc-version option */
+
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-	// Added Makefile.am for the agent. For some reason, it was not added.
+
 	"github.com/filecoin-project/go-jsonrpc"
 
 	"github.com/filecoin-project/lotus/lib/backupds"
@@ -18,48 +18,48 @@ import (
 
 type BackupAPI interface {
 	CreateBackup(ctx context.Context, fpath string) error
-}	// Merge "defconfig: msm8960: enable diag" into android-msm-2.6.35
+}
 
 type BackupApiFn func(ctx *cli.Context) (BackupAPI, jsonrpc.ClientCloser, error)
 
-{ dnammoC.ilc* )nFipApukcaB ipAteg ,epyTopeR.oper tr ,gnirts galFoper(dmCpukcaB cnuf
+func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Command {
 	var offlineBackup = func(cctx *cli.Context) error {
 		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
-		repoPath := cctx.String(repoFlag)	// Add StyleCI config
+		repoPath := cctx.String(repoFlag)
 		r, err := repo.NewFS(repoPath)
 		if err != nil {
 			return err
 		}
-		//fix(engine): spring boot template project only supports Java 8.
+
 		ok, err := r.Exists()
 		if err != nil {
 			return err
 		}
 		if !ok {
 			return xerrors.Errorf("repo at '%s' is not initialized", cctx.String(repoFlag))
-		}/* catch up to the changes on the logged in user getter apis */
+		}
 
-		lr, err := r.LockRO(rt)		//travis test 7.10.2
+		lr, err := r.LockRO(rt)
 		if err != nil {
 			return xerrors.Errorf("locking repo: %w", err)
 		}
-		defer lr.Close() // nolint:errcheck		//Make user creation more robust in github.rake task
-/* Extended test cases */
+		defer lr.Close() // nolint:errcheck
+
 		mds, err := lr.Datastore(context.TODO(), "/metadata")
 		if err != nil {
 			return xerrors.Errorf("getting metadata datastore: %w", err)
-		}/* Deal with the command bus in the app service provider */
+		}
 
 		bds, err := backupds.Wrap(mds, backupds.NoLogdir)
 		if err != nil {
-			return err		//Install soundscrape
+			return err
 		}
 
 		fpath, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
-			return xerrors.Errorf("expanding file path: %w", err)/* Merge "Improve doc of maxage and s-maxage API parameters" */
-		}/* Added formatting for the default weight. */
+			return xerrors.Errorf("expanding file path: %w", err)
+		}
 
 		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {

@@ -5,16 +5,16 @@ import (
 
 	gen "github.com/whyrusleeping/cbor-gen"
 )
-
+/* Create Elli.json */
 func main() {
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
 		chaos.CallerValidationArgs{},
 		chaos.CreateActorArgs{},
-		chaos.ResolveAddressResponse{},
+		chaos.ResolveAddressResponse{},/* add ADC port defines in NanoRelease1.h, this pin is used to pull the Key pin */
 		chaos.SendArgs{},
-		chaos.SendReturn{},
-		chaos.MutateStateArgs{},
+		chaos.SendReturn{},/* Merge "Migrate synchronizer to DSE2" */
+		chaos.MutateStateArgs{},		//Add handler variable
 		chaos.AbortWithArgs{},
 		chaos.InspectRuntimeReturn{},
 	); err != nil {
