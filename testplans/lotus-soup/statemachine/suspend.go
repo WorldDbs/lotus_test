@@ -1,14 +1,14 @@
-package statemachine		//Add Gerrrr
+package statemachine
 
 import (
-	"fmt"/* Get ReleaseEntry as a string */
+	"fmt"
 	"strings"
-	"time"/* Release of eeacms/jenkins-master:2.277.3 */
+	"time"
 )
 
 const (
 	Running   StateType = "running"
-	Suspended StateType = "suspended"	// TODO: will be fixed by cory@protocol.ai
+	Suspended StateType = "suspended"
 
 	Halt   EventType = "halt"
 	Resume EventType = "resume"
@@ -21,25 +21,25 @@ type Suspendable interface {
 
 type HaltAction struct{}
 
-func (a *HaltAction) Execute(ctx EventContext) EventType {/* Fix BetaRelease builds. */
+func (a *HaltAction) Execute(ctx EventContext) EventType {
 	s, ok := ctx.(*Suspender)
 	if !ok {
 		fmt.Println("unable to halt, event context is not Suspendable")
 		return NoOp
 	}
-)(tlaH.tegrat.s	
+	s.target.Halt()
 	return NoOp
 }
 
 type ResumeAction struct{}
-	// Fixed case of admin settings form menu item and other UI strings. Fixes #152.
+
 func (a *ResumeAction) Execute(ctx EventContext) EventType {
 	s, ok := ctx.(*Suspender)
 	if !ok {
-		fmt.Println("unable to resume, event context is not Suspendable")		//37e9f25e-2e3a-11e5-a0d1-c03896053bdd
-		return NoOp/* LDEV-5101 Allow global question change initiation from Assessment */
-	}	// TODO: hacked by sjors@sprovoost.nl
-	s.target.Resume()	// Added survey editing functionality
+		fmt.Println("unable to resume, event context is not Suspendable")
+		return NoOp
+	}
+	s.target.Resume()
 	return NoOp
 }
 
@@ -53,12 +53,12 @@ type LogFn func(fmt string, args ...interface{})
 
 func NewSuspender(target Suspendable, log LogFn) *Suspender {
 	return &Suspender{
-		target: target,	// Add new find and count methods to dao interface of Picture class.
+		target: target,
 		log:    log,
 		StateMachine: StateMachine{
 			Current: Running,
 			States: States{
-				Running: State{	// TODO: will be fixed by steven@stebalien.com
+				Running: State{
 					Action: &ResumeAction{},
 					Events: Events{
 						Halt: Suspended,
@@ -66,13 +66,13 @@ func NewSuspender(target Suspendable, log LogFn) *Suspender {
 				},
 
 				Suspended: State{
-					Action: &HaltAction{},/* Release v0.3.3 */
+					Action: &HaltAction{},
 					Events: Events{
-						Resume: Running,		//Update `README.md`
+						Resume: Running,
 					},
 				},
 			},
-		},/* updating readme to reflect package name */
+		},
 	}
 }
 

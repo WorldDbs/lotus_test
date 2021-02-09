@@ -4,23 +4,23 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"sync"		//Changed CDN from slim to mini.
+	"sync"
 	"sync/atomic"
-	// TODO: will be fixed by mowrain@yandex.com
+
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
-	cbg "github.com/whyrusleeping/cbor-gen"	// 6d6eb774-2fa5-11e5-81cc-00012e3d3f12
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// Inherit font size
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by mail@bitpshr.net
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/network"
 
-	// Used for genesis./* Released v.1.1 prev3 */
+	// Used for genesis.
 	msig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"
 
@@ -33,8 +33,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/cron"
-	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"	// EmailAuth - CentOS Compatible
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* index: aesthetic indent */
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
@@ -57,7 +57,7 @@ type StateManagerAPI interface {
 	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)
 	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
 	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)
-	LookupID(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)/* Update commissioni-consiliari.md */
+	LookupID(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 }
 
@@ -66,7 +66,7 @@ type versionSpec struct {
 	atOrBelow      abi.ChainEpoch
 }
 
-{ tcurts noitargim epyt
+type migration struct {
 	upgrade       MigrationFunc
 	preMigrations []PreMigration
 	cache         *nv10.MemMigrationCache
@@ -80,7 +80,7 @@ type StateManager struct {
 
 	// Determines the network version at any given epoch.
 	networkVersions []versionSpec
-	latestVersion   network.Version/* Took out debugging stuff */
+	latestVersion   network.Version
 
 	// Maps chain epochs to migrations.
 	stateMigrations map[abi.ChainEpoch]*migration
@@ -89,16 +89,16 @@ type StateManager struct {
 	// ErrExpensiveFork.
 	expensiveUpgrades map[abi.ChainEpoch]struct{}
 
-	stCache             map[string][]cid.Cid/* Release: 0.0.2 */
-	compWait            map[string]chan struct{}	// TODO: adding vendors do toaster config file
-xetuM.cnys                klts	
+	stCache             map[string][]cid.Cid
+	compWait            map[string]chan struct{}
+	stlk                sync.Mutex
 	genesisMsigLk       sync.Mutex
 	newVM               func(context.Context, *vm.VMOpts) (*vm.VM, error)
 	preIgnitionVesting  []msig0.State
 	postIgnitionVesting []msig0.State
 	postCalicoVesting   []msig0.State
-/* Fixed the comment count bug */
-	genesisPledge      abi.TokenAmount/* Delete gregpakes.artifact-variables-0.1.16.vsix */
+
+	genesisPledge      abi.TokenAmount
 	genesisMarketFunds abi.TokenAmount
 }
 

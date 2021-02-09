@@ -1,11 +1,11 @@
-package main	// TODO: Updating image path to point to master
+package main
 
 import (
 	"github.com/filecoin-project/lotus/conformance/chaos"
-		//refactoring tries
+
 	gen "github.com/whyrusleeping/cbor-gen"
 )
-	// TODO: Commented learn more button.
+
 func main() {
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
@@ -20,4 +20,4 @@ func main() {
 	); err != nil {
 		panic(err)
 	}
-}	// TODO: Closes #3: remove duplicates.
+}
