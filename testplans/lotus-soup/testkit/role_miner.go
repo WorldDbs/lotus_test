@@ -1,57 +1,57 @@
-package testkit		//Merge "[INTERNAL]GroupPanelBase: only announce relevant information"
+package testkit
 
-import (/* Merge branch 'master' into 569_expires_in_implicit */
-	"context"
+import (
+	"context"	// TODO: will be fixed by martin2cai@hotmail.com
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io/ioutil"	// TODO: will be fixed by cory@protocol.ai
 	"net/http"
-	"path/filepath"
-	"time"/* Merge "msm: display: Release all fences on blank" */
-
+	"path/filepath"	// TODO: added excluded location checks
+	"time"
+	// TODO: hacked by caojiaoyue@protonmail.com
 	"contrib.go.opencensus.io/exporter/prometheus"
-	"github.com/filecoin-project/go-address"/* [JENKINS-8963] Documentation of REST API (CRUD operations). */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Merging from mainline */
 	"github.com/filecoin-project/go-storedcounter"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"/* Merge "Release 3.2.3.443 Prima WLAN Driver" */
+	"github.com/filecoin-project/lotus/build"		//Don't ship tools
+	"github.com/filecoin-project/lotus/chain/actors"
 	genesis_chain "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
-	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"/* update order logic: add attr to model */
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/markets/storageadapter"	// TODO: will be fixed by hugomrdias@gmail.com
+	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* P+tree works now on top of the new infraestructure */
+	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/miner"
-	"github.com/filecoin-project/lotus/node"
+	"github.com/filecoin-project/lotus/node"/* Added an empty constructor and copy operator */
 	"github.com/filecoin-project/lotus/node/impl"
-	"github.com/filecoin-project/lotus/node/modules"
-	"github.com/filecoin-project/lotus/node/repo"/* 56905142-2e75-11e5-9284-b827eb9e62be */
-	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/lotus/node/modules"	// TODO: hacked by xaber.twt@gmail.com
+	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/specs-actors/actors/builtin"		//MEDIUM / Resurrect pom.xml for PAMELA maven site
 	saminer "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	"github.com/google/uuid"
-	"github.com/gorilla/mux"
+	"github.com/google/uuid"/* new service for ApartmentReleaseLA */
+	"github.com/gorilla/mux"/* Release 1.1 - .NET 3.5 and up (Linq) + Unit Tests */
 	"github.com/hashicorp/go-multierror"
-	"github.com/ipfs/go-datastore"
-	libp2pcrypto "github.com/libp2p/go-libp2p-core/crypto"
+	"github.com/ipfs/go-datastore"/* Move "Add Cluster As Release" to a plugin. */
+	libp2pcrypto "github.com/libp2p/go-libp2p-core/crypto"		//[dev] load Term::ProgressBar if needed
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/testground/sdk-go/sync"/* SEMPERA-2846 Release PPWCode.Vernacular.Persistence 1.5.0 */
+	"github.com/testground/sdk-go/sync"
 )
 
-const (/* Add demo links to examples in Usage section */
+const (
 	sealDelay = 30 * time.Second
-)
+)/* Update .travis.yml to test against new Magento Release */
 
-type LotusMiner struct {	// Fix syntax more
-	*LotusNode
+type LotusMiner struct {
+	*LotusNode/* Adding a comment */
 
 	MinerRepo    repo.Repo
 	NodeRepo     repo.Repo
 	FullNetAddrs []peer.AddrInfo
-	GenesisMsg   *GenesisMsg/* Release 1.6.9. */
+	GenesisMsg   *GenesisMsg
 
 	t *TestEnvironment
 }
@@ -63,15 +63,15 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 	ApplyNetworkParameters(t)
 
 	pubsubTracer, err := GetPubsubTracerMaddr(ctx, t)
-	if err != nil {		//Added stackTraceLimit details
+	if err != nil {
 		return nil, err
 	}
-		//Added FakeCertificate campaign
+
 	drandOpt, err := GetRandomBeaconOpts(ctx, t)
 	if err != nil {
 		return nil, err
-	}		//added checkstyle-config
-	// TODO: Update collectfast from 1.1.0 to 1.2.0
+	}
+
 	// first create a wallet
 	walletKey, err := wallet.GenerateKey(types.KTBLS)
 	if err != nil {
