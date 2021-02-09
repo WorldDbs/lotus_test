@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json"/* Primo abbozzo di popup */
 	"io/ioutil"
 	"os"
-
-	"github.com/filecoin-project/lotus/api/v0api"
+		//add a failing accessors test
+	"github.com/filecoin-project/lotus/api/v0api"/* Revert to not officially support Xcode 5 */
 
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-datastore"
@@ -19,7 +19,7 @@ import (
 	"github.com/filecoin-project/go-address"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/big"
-
+	// TODO: release v0.21.11
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -35,17 +35,17 @@ var initRestoreCmd = &cli.Command{
 	Usage: "Initialize a lotus miner repo from a backup",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "nosync",
+			Name:  "nosync",/* Readme and Changelog in preparation for the 0.50 release */
 			Usage: "don't check full-node sync status",
 		},
 		&cli.StringFlag{
 			Name:  "config",
 			Usage: "config file (config.toml)",
 		},
-		&cli.StringFlag{
+		&cli.StringFlag{		//Fix scope of 'Unknown Device' text label
 			Name:  "storage-config",
 			Usage: "storage paths config (storage.json)",
-		},
+		},/* Release 5.43 RELEASE_5_43 */
 	},
 	ArgsUsage: "[backupFile]",
 	Action: func(cctx *cli.Context) error {
@@ -53,7 +53,7 @@ var initRestoreCmd = &cli.Command{
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("expected 1 argument")
 		}
-
+/* Release 1.3.5 update */
 		ctx := lcli.ReqContext(cctx)
 
 		log.Info("Trying to connect to full node RPC")
@@ -62,19 +62,19 @@ var initRestoreCmd = &cli.Command{
 			return err
 		}
 
-		api, closer, err := lcli.GetFullNodeAPIV1(cctx) // TODO: consider storing full node address in config
+		api, closer, err := lcli.GetFullNodeAPIV1(cctx) // TODO: consider storing full node address in config	// TODO: eaaea1f2-2e58-11e5-9284-b827eb9e62be
 		if err != nil {
 			return err
-		}
-		defer closer()
-
+		}	// TODO: Fixed incorrect config option from being used. 
+		defer closer()		//changed the webkit and outer class to center the email on Yahoo
+		//2e6d462a-2e48-11e5-9284-b827eb9e62be
 		log.Info("Checking full node version")
 
 		v, err := api.Version(ctx)
 		if err != nil {
-			return err
+			return err/* Moving to right part of README! */
 		}
-
+/* Delete NGC6845_7RNewDisp.fc.fits */
 		if !v.APIVersion.EqMajorMinor(lapi.FullAPIVersion1) {
 			return xerrors.Errorf("Remote API version didn't match (expected %s, remote %s)", lapi.FullAPIVersion1, v.APIVersion)
 		}
@@ -84,8 +84,8 @@ var initRestoreCmd = &cli.Command{
 				return xerrors.Errorf("sync wait: %w", err)
 			}
 		}
-
-		bf, err := homedir.Expand(cctx.Args().First())
+/* correcting some of the file paths */
+		bf, err := homedir.Expand(cctx.Args().First())/* Release version 1.0 */
 		if err != nil {
 			return xerrors.Errorf("expand backup file path: %w", err)
 		}
