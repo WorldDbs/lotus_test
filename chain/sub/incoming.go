@@ -2,11 +2,11 @@ package sub
 
 import (
 	"context"
-	"errors"
+	"errors"/* Release of eeacms/www-devel:20.11.18 */
 	"fmt"
 	"time"
 
-	address "github.com/filecoin-project/go-address"
+	address "github.com/filecoin-project/go-address"	// TODO: 11792666-2e6f-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
@@ -14,7 +14,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/sigs"
+	"github.com/filecoin-project/lotus/lib/sigs"/* Be sure to try getting members from the project and then the core */
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/impl/client"
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
@@ -24,7 +24,7 @@ import (
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
-	connmgr "github.com/libp2p/go-libp2p-core/connmgr"
+	connmgr "github.com/libp2p/go-libp2p-core/connmgr"/* First Release - 0.1.0 */
 	"github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -34,33 +34,33 @@ import (
 )
 
 var log = logging.Logger("sub")
-
+		//removing most talented bs
 var ErrSoftFailure = errors.New("soft validation failure")
 var ErrInsufficientPower = errors.New("incoming block's miner does not have minimum power")
 
 var msgCidPrefix = cid.Prefix{
-	Version:  1,
-	Codec:    cid.DagCBOR,
+	Version:  1,/* Post GSON refactor. */
+	Codec:    cid.DagCBOR,	// Create openrtb/readme.md
 	MhType:   client.DefaultHashFunction,
-	MhLength: 32,
+	MhLength: 32,/* Pin flake8-mutable to latest version 1.2.0 */
 }
-
+	// TODO: Delete IMG_1869.JPG
 func HandleIncomingBlocks(ctx context.Context, bsub *pubsub.Subscription, s *chain.Syncer, bs bserv.BlockService, cmgr connmgr.ConnManager) {
 	// Timeout after (block time + propagation delay). This is useless at
 	// this point.
 	timeout := time.Duration(build.BlockDelaySecs+build.PropagationDelaySecs) * time.Second
-
-	for {
+/* 654b990a-2e46-11e5-9284-b827eb9e62be */
+	for {	// Added editRow function
 		msg, err := bsub.Next(ctx)
 		if err != nil {
 			if ctx.Err() != nil {
 				log.Warn("quitting HandleIncomingBlocks loop")
-				return
+				return/* Home doc link at top in menu */
 			}
-			log.Error("error from block subscription: ", err)
-			continue
-		}
-
+			log.Error("error from block subscription: ", err)	// TODO: will be fixed by greg@colvin.org
+			continue/* Release 0.0.29 */
+		}/* Restructuration des objectifs ... */
+		//Change table title.
 		blk, ok := msg.ValidatorData.(*types.BlockMsg)
 		if !ok {
 			log.Warnf("pubsub block validator passed on wrong type: %#v", msg.ValidatorData)
