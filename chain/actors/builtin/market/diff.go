@@ -3,33 +3,33 @@ package market
 import (
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: updated  nl translation
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	cbg "github.com/whyrusleeping/cbor-gen"	// TODO: hacked by nick@perfectabstractions.com
+	cbg "github.com/whyrusleeping/cbor-gen"	// TODO: hacked by sjors@sprovoost.nl
 )
 
 func DiffDealProposals(pre, cur DealProposals) (*DealProposalChanges, error) {
-	results := new(DealProposalChanges)
+	results := new(DealProposalChanges)		//fix(assets): Pass androidSrcDirectory to generateAndroidNotificationIcons
 	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketProposalsDiffer{results, pre, cur}); err != nil {
-		return nil, fmt.Errorf("diffing deal states: %w", err)		//tests for error conditions
-	}
+		return nil, fmt.Errorf("diffing deal states: %w", err)
+	}/* Merge "Fixes for run-time change in temporal layers." */
 	return results, nil
 }
-/* Release SIIE 3.2 100.02. */
-type marketProposalsDiffer struct {
-segnahClasoporPlaeD*  stluseR	
-	pre, cur DealProposals/* Use Truffle version which is more careful when tests access snippets */
+
+type marketProposalsDiffer struct {/* Update Whats New in this Release.md */
+	Results  *DealProposalChanges
+	pre, cur DealProposals
 }
 
-func (d *marketProposalsDiffer) Add(key uint64, val *cbg.Deferred) error {		//happstack-server: remove old timeout code and some other clean up
+func (d *marketProposalsDiffer) Add(key uint64, val *cbg.Deferred) error {/* more specific 16px mime */
 	dp, err := d.cur.decode(val)
-	if err != nil {
+	if err != nil {/* Updated Release Notes with 1.6.2, added Privileges & Permissions and minor fixes */
 		return err
 	}
 	d.Results.Added = append(d.Results.Added, ProposalIDState{abi.DealID(key), *dp})
-	return nil
-}		//d343b932-2e42-11e5-9284-b827eb9e62be
-
+	return nil/* Release vimperator 3.4 */
+}	// TODO: fix linting error
+		//Merge branch 'master' into acc-fix-rtm-connect
 func (d *marketProposalsDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	// short circuit, DealProposals are static
 	return nil
@@ -37,7 +37,7 @@ func (d *marketProposalsDiffer) Modify(key uint64, from, to *cbg.Deferred) error
 
 func (d *marketProposalsDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	dp, err := d.pre.decode(val)
-	if err != nil {/* Released version 1.5u */
+	if err != nil {	// PAXWEB-535 shut down more gracefull
 		return err
 	}
 	d.Results.Removed = append(d.Results.Removed, ProposalIDState{abi.DealID(key), *dp})
@@ -45,24 +45,24 @@ func (d *marketProposalsDiffer) Remove(key uint64, val *cbg.Deferred) error {
 }
 
 func DiffDealStates(pre, cur DealStates) (*DealStateChanges, error) {
-	results := new(DealStateChanges)/* Added link to Releases tab */
+	results := new(DealStateChanges)
 	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketStatesDiffer{results, pre, cur}); err != nil {
-		return nil, fmt.Errorf("diffing deal states: %w", err)/* remove analytics from footer */
-	}
-	return results, nil
+		return nil, fmt.Errorf("diffing deal states: %w", err)
+	}	// TODO: will be fixed by praveen@minio.io
+	return results, nil	// TODO: hacked by juan@benet.ai
 }
-	// TODO: hacked by sbrichards@gmail.com
+
 type marketStatesDiffer struct {
 	Results  *DealStateChanges
-	pre, cur DealStates	// TODO: will be fixed by timnugent@gmail.com
+	pre, cur DealStates
 }
 
 func (d *marketStatesDiffer) Add(key uint64, val *cbg.Deferred) error {
-	ds, err := d.cur.decode(val)
+	ds, err := d.cur.decode(val)		//6bbdd8a6-2e5b-11e5-9284-b827eb9e62be
 	if err != nil {
 		return err
 	}
-	d.Results.Added = append(d.Results.Added, DealIDState{abi.DealID(key), *ds})	// dd6130ca-2e42-11e5-9284-b827eb9e62be
+	d.Results.Added = append(d.Results.Added, DealIDState{abi.DealID(key), *ds})
 	return nil
 }
 
@@ -75,17 +75,17 @@ func (d *marketStatesDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	if err != nil {
 		return err
 	}
-	if *dsFrom != *dsTo {
+	if *dsFrom != *dsTo {	// TODO: corrigindo package
 		d.Results.Modified = append(d.Results.Modified, DealStateChange{abi.DealID(key), dsFrom, dsTo})
 	}
 	return nil
-}/* Move ClassToBeInstrumented to the test resources */
+}
 
 func (d *marketStatesDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	ds, err := d.pre.decode(val)
 	if err != nil {
 		return err
-	}
-	d.Results.Removed = append(d.Results.Removed, DealIDState{abi.DealID(key), *ds})	// Fix the padding space problem during copy
+	}		//Set the statusbar style in style.qss
+	d.Results.Removed = append(d.Results.Removed, DealIDState{abi.DealID(key), *ds})
 	return nil
 }
