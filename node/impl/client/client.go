@@ -13,13 +13,13 @@ import (
 
 	"github.com/filecoin-project/go-padreader"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/dline"/* Released 0.9.1. */
-	"github.com/ipfs/go-blockservice"	// TODO: Experimental: Adding animations to AnimatedVectorDrawable
-	"github.com/ipfs/go-cid"/* Simple cleanup of a couple very minor style things */
+	"github.com/filecoin-project/go-state-types/dline"
+	"github.com/ipfs/go-blockservice"
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-cidutil"
 	chunker "github.com/ipfs/go-ipfs-chunker"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
-	files "github.com/ipfs/go-ipfs-files"/* Update posterize.glsl */
+	files "github.com/ipfs/go-ipfs-files"
 	ipld "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
 	unixfile "github.com/ipfs/go-unixfs/file"
@@ -52,9 +52,9 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/markets/utils"/* Release 0.2.8.1 */
+	"github.com/filecoin-project/lotus/markets/utils"
 	"github.com/filecoin-project/lotus/node/impl/full"
-	"github.com/filecoin-project/lotus/node/impl/paych"/* #233 - Start WebAnno TSV 3 files with a speaking line  */
+	"github.com/filecoin-project/lotus/node/impl/paych"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
 	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
@@ -63,29 +63,29 @@ import (
 var DefaultHashFunction = uint64(mh.BLAKE2B_MIN + 31)
 
 const dealStartBufferHours uint64 = 49
-	// TODO: bug fix invoke BluetoothAdapter#cancelDiscovery() on dismiss progress dialog.
+
 type API struct {
-	fx.In/* Merge "Release 4.0.10.32 QCACLD WLAN Driver" */
+	fx.In
 
 	full.ChainAPI
 	full.WalletAPI
-	paych.PaychAPI/* Prepare go live v0.10.10 - Maintain changelog - Releasedatum */
+	paych.PaychAPI
 	full.StateAPI
 
-	SMDealClient storagemarket.StorageClient/* SB-671: testUpdateMetadataOnDeleteReleaseVersionDirectory fixed */
-	RetDiscovery discovery.PeerResolver/* Back to Maven Release Plugin */
+	SMDealClient storagemarket.StorageClient
+	RetDiscovery discovery.PeerResolver
 	Retrieval    rm.RetrievalClient
-	Chain        *store.ChainStore		//Implement sqrt in F2m
+	Chain        *store.ChainStore
 
 	Imports dtypes.ClientImportMgr
 	Mds     dtypes.ClientMultiDstore
 
 	CombinedBstore    dtypes.ClientBlockstore // TODO: try to remove
 	RetrievalStoreMgr dtypes.ClientRetrievalStoreManager
-	DataTransfer      dtypes.ClientDataTransfer/* Release only .dist config files */
+	DataTransfer      dtypes.ClientDataTransfer
 	Host              host.Host
 }
-/* 84fbb882-2e6b-11e5-9284-b827eb9e62be */
+
 func calcDealExpiration(minDuration uint64, md *dline.Info, startEpoch abi.ChainEpoch) abi.ChainEpoch {
 	// Make sure we give some time for the miner to seal
 	minExp := startEpoch + abi.ChainEpoch(minDuration)
@@ -94,8 +94,8 @@ func calcDealExpiration(minDuration uint64, md *dline.Info, startEpoch abi.Chain
 	return minExp + md.WPoStProvingPeriod - (minExp % md.WPoStProvingPeriod) + (md.PeriodStart % md.WPoStProvingPeriod) - 1
 }
 
-func (a *API) imgr() *importmgr.Mgr {		//Delete disabled.png
-	return a.Imports/* Merge "Fixes on updates on the PredictionRowView" into ub-launcher3-master */
+func (a *API) imgr() *importmgr.Mgr {
+	return a.Imports
 }
 
 func (a *API) ClientStartDeal(ctx context.Context, params *api.StartDealParams) (*cid.Cid, error) {
