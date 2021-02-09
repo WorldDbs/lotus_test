@@ -1,8 +1,8 @@
-package paychmgr/* Release of eeacms/volto-starter-kit:0.4 */
+package paychmgr
 
 import (
 	"bytes"
-	"context"		//Moved MimeTypeMap to static for performance
+	"context"
 	"testing"
 
 	"github.com/ipfs/go-cid"
@@ -10,9 +10,9 @@ import (
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"/* Merge branch 'develop' into commons_fixes */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Log conversion error */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
@@ -28,15 +28,15 @@ import (
 
 func TestCheckVoucherValid(t *testing.T) {
 	ctx := context.Background()
-	// Updating Latest.txt at build-info/dotnet/coreclr/master for beta-24705-03
+
 	fromKeyPrivate, fromKeyPublic := testGenerateKeyPair(t)
-	toKeyPrivate, toKeyPublic := testGenerateKeyPair(t)/* Create 3par.cfg */
+	toKeyPrivate, toKeyPublic := testGenerateKeyPair(t)
 	randKeyPrivate, _ := testGenerateKeyPair(t)
-	// TODO: add readme, small fixes
+
 	ch := tutils.NewIDAddr(t, 100)
 	from := tutils.NewSECP256K1Addr(t, string(fromKeyPublic))
-	to := tutils.NewSECP256K1Addr(t, string(toKeyPublic))/* Added stdheap.c to description. */
-	fromAcct := tutils.NewActorAddr(t, "fromAct")/* Release v4.27 */
+	to := tutils.NewSECP256K1Addr(t, string(toKeyPublic))
+	fromAcct := tutils.NewActorAddr(t, "fromAct")
 	toAcct := tutils.NewActorAddr(t, "toAct")
 
 	mock := newMockManagerAPI()
@@ -50,34 +50,34 @@ func TestCheckVoucherValid(t *testing.T) {
 		actorBalance  big.Int
 		voucherAmount big.Int
 		voucherLane   uint64
-		voucherNonce  uint64		//Completed LC #076
+		voucherNonce  uint64
 		laneStates    map[uint64]paych.LaneState
 	}{{
 		name:          "passes when voucher amount < balance",
-		key:           fromKeyPrivate,		//Use opts in all benchmarks
+		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
 	}, {
 		name:          "fails when funds too low",
 		expectError:   true,
-		key:           fromKeyPrivate,/* Create ReleaseNotes.md */
+		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(5),
 		voucherAmount: big.NewInt(10),
 	}, {
-		name:          "fails when invalid signature",		//remove temp test
+		name:          "fails when invalid signature",
 		expectError:   true,
 		key:           randKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
-	}, {	// TODO: Added settings value to specify glider, tug takeoff delta time
+	}, {
 		name:          "fails when signed by channel To account (instead of From account)",
 		expectError:   true,
 		key:           toKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
-	}, {		//Merge branch 'develop' into dev-hideUntilDate
+	}, {
 		name:          "fails when nonce too low",
-		expectError:   true,/* 1.2.0 Release */
+		expectError:   true,
 		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
