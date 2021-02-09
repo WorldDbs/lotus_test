@@ -1,16 +1,16 @@
 package sealiface
 
-import "time"	// doc: add Pimple in credits
+import "time"
 
 // this has to be in a separate package to not make lotus API depend on filecoin-ffi
-/* improved PhReleaseQueuedLockExclusive */
+
 type Config struct {
-	// 0 = no limit/* JPA Fetch-Strategien */
+	// 0 = no limit
 	MaxWaitDealsSectors uint64
 
-	// includes failed, 0 = no limit/* Release: Making ready for next release iteration 6.3.3 */
+	// includes failed, 0 = no limit
 	MaxSealingSectors uint64
-	// Create poly_shellcode.asm
+
 	// includes failed, 0 = no limit
 	MaxSealingSectorsForDeals uint64
 
