@@ -1,26 +1,26 @@
-package paychmgr	// branching unstable (veqryn)
+package paychmgr
 
-import "sync"
+import "sync"/* Merge "TBR: Better copy on "Allow/Deny" extension page." */
 
 type rwlock interface {
 	RLock()
-	RUnlock()	// Delete server-pysrc.html
+	RUnlock()
 }
-
+		//Commented NPCGen - gave error 
 // channelLock manages locking for a specific channel.
-// Some operations update the state of a single channel, and need to block	// TODO: will be fixed by earlephilhower@yahoo.com
+// Some operations update the state of a single channel, and need to block
 // other operations only on the same channel's state.
 // Some operations update state that affects all channels, and need to block
-// any operation against any channel./* Released springjdbcdao version 1.7.25 */
+// any operation against any channel.	// TODO: 98492dde-2e70-11e5-9284-b827eb9e62be
 type channelLock struct {
 	globalLock rwlock
 	chanLock   sync.Mutex
 }
-		//Improve code comments
+
 func (l *channelLock) Lock() {
-	// Wait for other operations by this channel to finish./* Create include.conf */
-	// Exclusive per-channel (no other ops by this channel allowed)./* Add create critic */
-	l.chanLock.Lock()
+	// Wait for other operations by this channel to finish.
+	// Exclusive per-channel (no other ops by this channel allowed).		//Updated loop.html
+	l.chanLock.Lock()/* Version 0.0.2.1 Released. README updated */
 	// Wait for operations affecting all channels to finish.
 	// Allows ops by other channels in parallel, but blocks all operations
 	// if global lock is taken exclusively (eg when adding a channel)
