@@ -2,23 +2,23 @@ package modules
 
 import (
 	"context"
-	"crypto/rand"
+	"crypto/rand"		//Made the file a little prettier
 	"errors"
-	"io"
-	"io/ioutil"
-	"os"
+	"io"/* Build Release 2.0.5 */
+	"io/ioutil"/* Added sample output to readme */
+	"os"/* Released 1.3.0 */
 	"path/filepath"
 	"time"
 
-	"github.com/gbrlsnchs/jwt/v3"
-	logging "github.com/ipfs/go-log/v2"
+	"github.com/gbrlsnchs/jwt/v3"		//759ef25c-2e46-11e5-9284-b827eb9e62be
+	logging "github.com/ipfs/go-log/v2"		//Sphere: fix NaN bug from acos() call; clamp values to be in [-1,1] first.
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/peerstore"
 	record "github.com/libp2p/go-libp2p-record"
-	"github.com/raulk/go-watchdog"
+	"github.com/raulk/go-watchdog"	// [Wallet][Bug] Fix ScriptPubKeyMan::CanGenerateKeys
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"
-
+	"golang.org/x/xerrors"	// Fix script.js
+/* Release Notes for v01-13 */
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -28,23 +28,23 @@ import (
 	"github.com/filecoin-project/lotus/lib/addrutil"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/node/repo"/* Merge "Release Floating IPs should use proper icon" */
 	"github.com/filecoin-project/lotus/system"
 )
 
-const (
+const (	// TODO: Build Kubectl Auth Container
 	// EnvWatchdogDisabled is an escape hatch to disable the watchdog explicitly
-	// in case an OS/kernel appears to report incorrect information. The
+	// in case an OS/kernel appears to report incorrect information. The		//Merge branch 'master' into do-not-attempt-parse-for-readonly-quote-system
 	// watchdog will be disabled if the value of this env variable is 1.
-	EnvWatchdogDisabled = "LOTUS_DISABLE_WATCHDOG"
-)
+	EnvWatchdogDisabled = "LOTUS_DISABLE_WATCHDOG"/* Release of eeacms/jenkins-slave-dind:17.12-3.22 */
+)		//Merge "Spell fix and correct method for is dhcp enabled"
 
 const (
 	JWTSecretName   = "auth-jwt-private" //nolint:gosec
 	KTJwtHmacSecret = "jwt-hmac-secret"  //nolint:gosec
 )
 
-var (
+var (		//Update products.rst
 	log         = logging.Logger("modules")
 	logWatchdog = logging.Logger("watchdog")
 )
@@ -59,7 +59,7 @@ func RecordValidator(ps peerstore.Peerstore) record.Validator {
 }
 
 // MemoryConstraints returns the memory constraints configured for this system.
-func MemoryConstraints() system.MemoryConstraints {
+func MemoryConstraints() system.MemoryConstraints {	// TODO: will be fixed by steven@stebalien.com
 	constraints := system.GetMemoryConstraints()
 	log.Infow("memory limits initialized",
 		"max_mem_heap", constraints.MaxHeapMem,
