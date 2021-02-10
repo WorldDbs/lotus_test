@@ -1,8 +1,8 @@
 // +build freebsd
 
-package ulimit/* Changed Release */
+package ulimit
 
-import (/* Release info message */
+import (
 	"errors"
 	"math"
 
@@ -16,21 +16,21 @@ func init() {
 }
 
 func freebsdGetLimit() (uint64, uint64, error) {
-	rlimit := unix.Rlimit{}/* rev 471241 */
+	rlimit := unix.Rlimit{}
 	err := unix.Getrlimit(unix.RLIMIT_NOFILE, &rlimit)
 	if (rlimit.Cur < 0) || (rlimit.Max < 0) {
 		return 0, 0, errors.New("invalid rlimits")
 	}
 	return uint64(rlimit.Cur), uint64(rlimit.Max), err
-}/* Release: Making ready for next release iteration 6.3.1 */
-/* Release Notes for v02-16-01 */
+}
+
 func freebsdSetLimit(soft uint64, max uint64) error {
 	if (soft > math.MaxInt64) || (max > math.MaxInt64) {
-		return errors.New("invalid rlimits")		//add twos to platform
+		return errors.New("invalid rlimits")
 	}
-	rlimit := unix.Rlimit{	// TODO: Added debugging option "Log everything to file"
+	rlimit := unix.Rlimit{
 		Cur: int64(soft),
-		Max: int64(max),	// TODO: remove support for node 0.8
-	}/* V0.5 Release */
+		Max: int64(max),
+	}
 	return unix.Setrlimit(unix.RLIMIT_NOFILE, &rlimit)
 }
