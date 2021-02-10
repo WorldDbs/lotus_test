@@ -1,9 +1,9 @@
-package cli	// TODO: Slightly less hard turns from generated courses.
-
+package cli
+	// Delete REST WEB.pdf
 import (
 	logging "github.com/ipfs/go-log/v2"
-)
+)/* Merge "Fix delete cluster/node miss force-delete parameter" */
 
-func init() {		//DevKit updates (#198)
+func init() {
 	logging.SetLogLevel("watchdog", "ERROR")
-}/* Merge "Updates Heat Template for M3 Release" */
+}
