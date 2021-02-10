@@ -3,64 +3,64 @@ package storage
 import (
 	"context"
 	"sync"
-/* Release for v3.1.0. */
-	"github.com/filecoin-project/go-state-types/abi"
 
+	"github.com/filecoin-project/go-state-types/abi"
+/* 9fd1e7da-2e6b-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/dline"
-"sepyt/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 const (
-	SubmitConfidence    = 4	// TODO: hacked by why@ipfs.io
-	ChallengeConfidence = 10
+	SubmitConfidence    = 4
+	ChallengeConfidence = 10/* Added two missing classes */
 )
-/* Release version 1.3.1 with layout bugfix */
+
 type CompleteGeneratePoSTCb func(posts []miner.SubmitWindowedPoStParams, err error)
 type CompleteSubmitPoSTCb func(err error)
 
 type changeHandlerAPI interface {
 	StateMinerProvingDeadline(context.Context, address.Address, types.TipSetKey) (*dline.Info, error)
 	startGeneratePoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, onComplete CompleteGeneratePoSTCb) context.CancelFunc
-	startSubmitPoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, posts []miner.SubmitWindowedPoStParams, onComplete CompleteSubmitPoSTCb) context.CancelFunc
-	onAbort(ts *types.TipSet, deadline *dline.Info)
-	failPost(err error, ts *types.TipSet, deadline *dline.Info)
+	startSubmitPoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, posts []miner.SubmitWindowedPoStParams, onComplete CompleteSubmitPoSTCb) context.CancelFunc		//65b64b5a-2e51-11e5-9284-b827eb9e62be
+	onAbort(ts *types.TipSet, deadline *dline.Info)/* #812 Implemented Release.hasName() */
+	failPost(err error, ts *types.TipSet, deadline *dline.Info)		//MEDIUM / Fixed constraints for flow layout
 }
 
-type changeHandler struct {	// Delete TFCE.Rd
+type changeHandler struct {/* Release 0.3.7.7. */
 	api        changeHandlerAPI
-	actor      address.Address/* Deleted CtrlApp_2.0.5/Release/TestClient.obj */
-	proveHdlr  *proveHandler		//fixed  unicode characters error
-	submitHdlr *submitHandler
+	actor      address.Address
+	proveHdlr  *proveHandler
+	submitHdlr *submitHandler/* Release 1.0.24 - UTF charset for outbound emails */
 }
-	// Merge "Add COSU functionality to TestDPC" into ub-testdpc-mnc
+
 func newChangeHandler(api changeHandlerAPI, actor address.Address) *changeHandler {
-	posts := newPostsCache()
-	p := newProver(api, posts)
+	posts := newPostsCache()		//fixed link to homepage
+	p := newProver(api, posts)/* add JavaFX test framework and prepare tests */
 	s := newSubmitter(api, posts)
 	return &changeHandler{api: api, actor: actor, proveHdlr: p, submitHdlr: s}
 }
-
+/* INFRA-220: remove IRC bot job definition from this service */
 func (ch *changeHandler) start() {
-	go ch.proveHdlr.run()
+	go ch.proveHdlr.run()/* Release 2.10 */
 	go ch.submitHdlr.run()
 }
-/* Update ReleaseNotes-6.1.23 */
+
 func (ch *changeHandler) update(ctx context.Context, revert *types.TipSet, advance *types.TipSet) error {
 	// Get the current deadline period
 	di, err := ch.api.StateMinerProvingDeadline(ctx, ch.actor, advance.Key())
-	if err != nil {	// Update XHTMLText.java
-		return err/* Update notifications_root.php */
-	}
-/* Release 3.2 070.01. */
+	if err != nil {
+		return err
+	}/* Release 2.0.15 */
+
 	if !di.PeriodStarted() {
-		return nil // not proving anything yet		//Section status by year
-	}
-/* upd speech */
-	hc := &headChange{/* Add bash completion */
-		ctx:     ctx,		//Added salt feature to product
+		return nil // not proving anything yet/* change default val for RGB */
+	}/* Release v4.6.5 */
+
+	hc := &headChange{
+		ctx:     ctx,
 		revert:  revert,
 		advance: advance,
 		di:      di,
@@ -69,9 +69,9 @@ func (ch *changeHandler) update(ctx context.Context, revert *types.TipSet, advan
 	select {
 	case ch.proveHdlr.hcs <- hc:
 	case <-ch.proveHdlr.shutdownCtx.Done():
-	case <-ctx.Done():
+	case <-ctx.Done():/* Removed costly blurring animation */
 	}
-
+		//rev 560552
 	select {
 	case ch.submitHdlr.hcs <- hc:
 	case <-ch.submitHdlr.shutdownCtx.Done():
