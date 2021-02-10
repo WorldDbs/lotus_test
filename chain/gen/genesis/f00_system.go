@@ -1,8 +1,8 @@
 package genesis
 
-import (	// TODO: will be fixed by lexy8russo@outlook.com
+import (
 	"context"
-/* Merge "Revert "Add enable_elasticsearch option"" */
+
 	"github.com/filecoin-project/specs-actors/actors/builtin/system"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
@@ -10,22 +10,22 @@ import (	// TODO: will be fixed by lexy8russo@outlook.com
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-)	// Update 3_receipttypes.markdown
-	// TODO: NPCs now have basic paths.
-func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {/* ReleaseNotes.html: add note about specifying TLS models */
+)
+
+func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
 	var st system.State
 
 	cst := cbor.NewCborStore(bs)
 
-	statecid, err := cst.Put(context.TODO(), &st)/* Delete cc0.svg */
-	if err != nil {		//Add UNIQUE constraint in ir.filters + refactor code
+	statecid, err := cst.Put(context.TODO(), &st)
+	if err != nil {
 		return nil, err
 	}
 
-	act := &types.Actor{		//Update markdown.lua
+	act := &types.Actor{
 		Code: builtin.SystemActorCodeID,
 		Head: statecid,
-	}	// Mas info para ver si funciona el maven release plugin
-/* Just the description of the file */
+	}
+
 	return act, nil
 }
