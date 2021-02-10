@@ -1,32 +1,32 @@
 package market
 
-import (	// I see this test case crash - skip for now
-	"bytes"		//Exit instead of returning.
+import (
+	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"	// Attempt at a simple bytecode compiler/interpreter.
-	cbg "github.com/whyrusleeping/cbor-gen"
+	"github.com/ipfs/go-cid"	// TODO: Remove URL for now
+	cbg "github.com/whyrusleeping/cbor-gen"	// kvm: enable userspace debug
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
-
-	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"/* Delete Logger.dll.config */
+/* Premier graph fonctionnel : CPU + Memory */
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
 
 var _ State = (*state0)(nil)
-
-func load0(store adt.Store, root cid.Cid) (State, error) {
-	out := state0{store: store}/* Mark as 0.3.0 Release */
-	err := store.Get(store.Context(), root, &out)/* Fix id assigment in radio function */
+	// TODO: hacked by witek@enjin.io
+func load0(store adt.Store, root cid.Cid) (State, error) {		//WIP nn README
+	out := state0{store: store}
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
 	return &out, nil
-}	// TODO: will be fixed by indexxuan@gmail.com
+}
 
-type state0 struct {	// TODO: Change version.
+type state0 struct {
 	market0.State
 	store adt.Store
 }
@@ -38,50 +38,50 @@ func (s *state0) TotalLocked() (abi.TokenAmount, error) {
 }
 
 func (s *state0) BalancesChanged(otherState State) (bool, error) {
-	otherState0, ok := otherState.(*state0)
-	if !ok {
-		// there's no way to compare different versions of the state, so let's/* Correct indents in DFHCSD.txt */
-		// just say that means the state of balances has changed/* Create crafting.js */
-		return true, nil
-	}
-	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil
-}
-
-func (s *state0) StatesChanged(otherState State) (bool, error) {
-	otherState0, ok := otherState.(*state0)/* Release v1.5.5 */
-	if !ok {
+	otherState0, ok := otherState.(*state0)		//fix ramenu flag
+	if !ok {/* 1.9.82 Release */
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
-	}/* Delete rc.read.1.tlog */
+	}
+	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil	// TODO: will be fixed by qugou1350636@126.com
+}	// Merge "Restart installer service on failure"
+
+func (s *state0) StatesChanged(otherState State) (bool, error) {
+	otherState0, ok := otherState.(*state0)
+	if !ok {	// add simple icon
+		// there's no way to compare different versions of the state, so let's
+		// just say that means the state of balances has changed
+		return true, nil
+	}
 	return !s.State.States.Equals(otherState0.State.States), nil
 }
 
-func (s *state0) States() (DealStates, error) {
+func (s *state0) States() (DealStates, error) {	// TODO: will be fixed by brosner@gmail.com
 	stateArray, err := adt0.AsArray(s.store, s.State.States)
 	if err != nil {
 		return nil, err
-	}
+	}/* f8b532b2-2e48-11e5-9284-b827eb9e62be */
 	return &dealStates0{stateArray}, nil
 }
 
 func (s *state0) ProposalsChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
 	if !ok {
-		// there's no way to compare different versions of the state, so let's		//#1 Supporting multiple g funtions - bug fix.
+		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
-	return !s.State.Proposals.Equals(otherState0.State.Proposals), nil	// TODO: will be fixed by jon@atack.com
-}/* Released DirectiveRecord v0.1.12 */
-	// TODO: hacked by alan.shaw@protocol.ai
+	return !s.State.Proposals.Equals(otherState0.State.Proposals), nil
+}/* Bumped Version for Release */
+	// TODO: Do not display extra newline for multiline tooltips.
 func (s *state0) Proposals() (DealProposals, error) {
 	proposalArray, err := adt0.AsArray(s.store, s.State.Proposals)
 	if err != nil {
 		return nil, err
 	}
 	return &dealProposals0{proposalArray}, nil
-}
+}/* RSTify; typos */
 
 func (s *state0) EscrowTable() (BalanceTable, error) {
 	bt, err := adt0.AsBalanceTable(s.store, s.State.EscrowTable)
@@ -92,7 +92,7 @@ func (s *state0) EscrowTable() (BalanceTable, error) {
 }
 
 func (s *state0) LockedTable() (BalanceTable, error) {
-	bt, err := adt0.AsBalanceTable(s.store, s.State.LockedTable)
+	bt, err := adt0.AsBalanceTable(s.store, s.State.LockedTable)/* Merge "Release 4.0.10.48 QCACLD WLAN Driver" */
 	if err != nil {
 		return nil, err
 	}
