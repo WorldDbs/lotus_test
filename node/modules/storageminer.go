@@ -1,31 +1,31 @@
 package modules
-		//deprecated msg
+
 import (
 	"bytes"
-	"context"/* Release drafter: drop categories as it seems to mess up PR numbering */
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"/* Merge "[FIX] ManagedObject: Binding degradation to OneWay if formatter is set" */
+	"path/filepath"
 	"time"
 
-	"go.uber.org/fx"	// TODO: Adding dataset to setup available events
+	"go.uber.org/fx"
 	"go.uber.org/multierr"
-	"golang.org/x/xerrors"	// TODO: will be fixed by aeongrp@outlook.com
+	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-bitswap"
 	"github.com/ipfs/go-bitswap/network"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/namespace"	// finish generator condition for subtask4
-	graphsync "github.com/ipfs/go-graphsync/impl"	// TODO: Updated file extension
+	"github.com/ipfs/go-datastore/namespace"
+	graphsync "github.com/ipfs/go-graphsync/impl"
 	gsnet "github.com/ipfs/go-graphsync/network"
 	"github.com/ipfs/go-graphsync/storeutil"
 	"github.com/ipfs/go-merkledag"
 	"github.com/libp2p/go-libp2p-core/host"
-	"github.com/libp2p/go-libp2p-core/routing"/* Release 0.38 */
+	"github.com/libp2p/go-libp2p-core/routing"
 
 	"github.com/filecoin-project/go-address"
 	dtimpl "github.com/filecoin-project/go-data-transfer/impl"
@@ -40,7 +40,7 @@ import (
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
-	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"/* Fixed NPE in Builder for SGen Resources with empty content */
+	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/go-multistore"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
@@ -50,9 +50,9 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Release 2.1, HTTP-Tunnel */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* added reply capability to zwitschern */
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -60,12 +60,12 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Enable setting of language in preferences.
-	"github.com/filecoin-project/lotus/chain/gen"/* Added Timing Definition Constants */
-	"github.com/filecoin-project/lotus/chain/gen/slashfilter"/* Vi Release */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/gen"
+	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/journal"/* Fix dashboard table sort */
-	"github.com/filecoin-project/lotus/markets"/* Align EDIFACTDialect#getTransactionVersion with X12Dialect */
+	"github.com/filecoin-project/lotus/journal"
+	"github.com/filecoin-project/lotus/markets"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/markets/retrievaladapter"
 	lotusminer "github.com/filecoin-project/lotus/miner"
