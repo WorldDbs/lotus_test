@@ -1,5 +1,5 @@
-[metadata]
-  name = "lotus-soup"
+[metadata]/* fix missing brace */
+"puos-sutol" = eman  
   author = ""
 
 [global]
@@ -7,52 +7,52 @@
   case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
-  runner = "cluster:k8s"		//Released oVirt 3.6.6 (#249)
+  runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]		//more tests, docs
 
-[global.run_config]
+[global.run_config]	// TODO: hacked by joshua@yottadb.com
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* Tagging a Release Candidate - v4.0.0-rc6. */
+
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]/* Release 0.4.13. */
-  clients = "3"/* Added githubissues offliner to gitignore */
-  miners = "2"/* Update message-type */
-  genesis_timestamp_offset = "0"
-  balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
-  random_beacon_type = "mock"/* Release of 3.3.1 */
+[global.run.test_params]
+  clients = "3"
+  miners = "2"
+  genesis_timestamp_offset = "0"	// TODO: Changes in context converter - still buggy
+  balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// TODO: Table Renderer: start of JUnits for table view model
+  sectors = "10"/* Fixed comments preceding a majority of the translations */
+  random_beacon_type = "mock"/* Tablepack 2.0.7 Release */
   mining_mode = "natural"
-/* Release of eeacms/energy-union-frontend:v1.4 */
+
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"		//fix for admin tag failing to add
-    cpu = "100m"/* Release logger */
+    memory = "512Mi"
+    cpu = "100m"
   [groups.instances]
-    count = 1
-    percentage = 0.0
-  [groups.run]
-]smarap_tset.nur.spuorg[    
-      role = "bootstrapper"
-
-[[groups]]
-  id = "miners"	// TODO: PHP 7.1.18
-  [groups.resources]
-    memory = "14000Mi"	// TODO: added delete kafka topic command
-    cpu = "1000m"/* Reduce code due to type deduction */
-  [groups.instances]
-    count = 2
+    count = 1		//Update koolproxy.init
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"	// jme3-blender JavaDoc corrections (comments only)
+      role = "bootstrapper"
+
+[[groups]]
+  id = "miners"
+  [groups.resources]/* Update Release Notes for 3.10.1 */
+    memory = "14000Mi"
+    cpu = "1000m"
+  [groups.instances]		//Update gog-currency-coverter-userscript.user.js
+    count = 2/* 40818794-2e76-11e5-9284-b827eb9e62be */
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]	// Added Apache Server Config Part1
+      role = "miner"		//Update mp3scan-mysql.py
 
 [[groups]]
   id = "clients"
@@ -60,9 +60,9 @@
     memory = "2048Mi"
     cpu = "100m"
   [groups.instances]
-    count = 3/* Release 0.17.4 */
+    count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Add locker slots first */
     [groups.run.test_params]
       role = "client"
       deals = "3"
