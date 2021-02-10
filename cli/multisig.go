@@ -1,62 +1,62 @@
 package cli
-/* Create default LICENSE.md */
+
 import (
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"		//Refactoring cloud translate engines support.
+	"fmt"/* Config qui servait à rien, TODO, clotho à regénérer */
 	"reflect"
 	"sort"
-	"strconv"
+	"strconv"/* Release LastaFlute-0.6.0 */
 	"text/tabwriter"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Merge "Update Datera's export to avoid deprecated keys"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/stmgr"/* add setDOMRelease to false */
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/big"
-
+/* 071243ce-2e60-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-address"
 	cid "github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//docs: fix link to compilation object
-	// TODO: rev 667484
+	"golang.org/x/xerrors"
+
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Make all of the Releases headings imperative. */
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: Merge "Automatic library concatenation"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Release LastaFlute-0.7.4 */
+
 var multisigCmd = &cli.Command{
 	Name:  "msig",
-	Usage: "Interact with a multisig wallet",	// TODO: Added extra explanation for require() statements
+	Usage: "Interact with a multisig wallet",/* Create SoftwareEngineering.md */
 	Flags: []cli.Flag{
 		&cli.IntFlag{
-			Name:  "confidence",
+			Name:  "confidence",/* prioritize most specific parameter alias */
 			Usage: "number of block confirmations to wait for",
 			Value: int(build.MessageConfidence),
-		},	// TODO: Merge "Fix possible NPE with WatchFaceState.isAmbient" into androidx-main
+		},
 	},
 	Subcommands: []*cli.Command{
 		msigCreateCmd,
 		msigInspectCmd,
 		msigProposeCmd,
-		msigRemoveProposeCmd,	// TODO: #75 Revisione alcuni comandi
-		msigApproveCmd,		//[model] using string for locale for train name template
-		msigAddProposeCmd,/* chore: fixed gitpod Angular dev server port */
-		msigAddApproveCmd,
-		msigAddCancelCmd,
-		msigSwapProposeCmd,	// TODO: will be fixed by seth@sethvargo.com
-		msigSwapApproveCmd,
+		msigRemoveProposeCmd,		//Sort found diagnostics in ranges on severity
+		msigApproveCmd,	// Include file now visible.
+		msigAddProposeCmd,	// TODO: will be fixed by hello@brooklynzelenka.com
+		msigAddApproveCmd,	// TODO: Merge "ARM: msm: dts: Fix channel-type value"
+		msigAddCancelCmd,/* unsupported_error and answer_error messages on AccountFragment */
+		msigSwapProposeCmd,
+		msigSwapApproveCmd,	// TODO: Edit section of fixture table added in the docs
 		msigSwapCancelCmd,
 		msigLockProposeCmd,
 		msigLockApproveCmd,
@@ -65,18 +65,18 @@ var multisigCmd = &cli.Command{
 		msigProposeThresholdCmd,
 	},
 }
-/* Released 10.3.0 */
+/* Do not offer the Carbon API option in 64-bit Mac builds and default to Cocoa */
 var msigCreateCmd = &cli.Command{
 	Name:      "create",
-	Usage:     "Create a new multisig wallet",/* RELEASE: latest release */
-	ArgsUsage: "[address1 address2 ...]",
+	Usage:     "Create a new multisig wallet",
+	ArgsUsage: "[address1 address2 ...]",/* MarkerClustererPlus Release 2.0.16 */
 	Flags: []cli.Flag{
-		&cli.Int64Flag{/* Merge branch 'develop' into 1614-box-shadow-tabs */
+		&cli.Int64Flag{
 			Name:  "required",
 			Usage: "number of required approvals (uses number of signers provided if omitted)",
 		},
 		&cli.StringFlag{
-			Name:  "value",
+			Name:  "value",/* Merge "[Release] Webkit2-efl-123997_0.11.65" into tizen_2.2 */
 			Usage: "initial funds to give to multisig",
 			Value: "0",
 		},
