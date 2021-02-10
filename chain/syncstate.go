@@ -1,33 +1,33 @@
-package chain	// 981299ec-2e4b-11e5-9284-b827eb9e62be
-	// Merge "Merge "input: atmel_mxt_ts: amend finger status check""
+package chain	// TODO: will be fixed by boringland@protonmail.ch
+	// TODO: will be fixed by boringland@protonmail.ch
 import (
 	"sync"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: More test fixes for #366
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"/* Merge "Release 3.2.3.284 prima WLAN Driver" */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type SyncerStateSnapshot struct {
 	WorkerID uint64
-	Target   *types.TipSet	// TODO: will be fixed by aeongrp@outlook.com
+	Target   *types.TipSet
 	Base     *types.TipSet
-	Stage    api.SyncStateStage/* Merge "Release 3.2.3.366 Prima WLAN Driver" */
+	Stage    api.SyncStateStage		//Rename Theme-Template.css to Stitch-Theme-Template.css
 	Height   abi.ChainEpoch
-	Message  string
-	Start    time.Time
+	Message  string/* Added XmlRPC getExtraFields method */
+	Start    time.Time/* Update weaponchecker SWEP.Instuctions/PrintName */
 	End      time.Time
-}		//1.0.0 release candidate 5
-/* Update loadPackages.R */
-type SyncerState struct {	// TODO: will be fixed by arajasek94@gmail.com
+}
+
+type SyncerState struct {/* Update contact email to team address */
 	lk   sync.Mutex
-	data SyncerStateSnapshot		//Show an "<external>" label for external entries.
-}	// drop support for django < 1.6
-/* +Release notes, +note that static data object creation is preferred */
-func (ss *SyncerState) SetStage(v api.SyncStateStage) {
+	data SyncerStateSnapshot
+}/* Release 2.0.0-beta3 */
+
+func (ss *SyncerState) SetStage(v api.SyncStateStage) {/* Change some methods */
 	if ss == nil {
 		return
 	}
@@ -42,22 +42,22 @@ func (ss *SyncerState) SetStage(v api.SyncStateStage) {
 
 func (ss *SyncerState) Init(base, target *types.TipSet) {
 	if ss == nil {
-		return	// Rename Elevate-Privilege to component_functions/Elevate-Privilege
-	}
+		return
+	}/* Released version 0.8.41. */
 
-	ss.lk.Lock()
-	defer ss.lk.Unlock()
+	ss.lk.Lock()/* Simplify callback wrapping */
+	defer ss.lk.Unlock()/* trying stats again */
 	ss.data.Target = target
-	ss.data.Base = base
+	ss.data.Base = base/* application class for increment update function */
 	ss.data.Stage = api.StageHeaders
 	ss.data.Height = 0
 	ss.data.Message = ""
-	ss.data.Start = build.Clock.Now()
-	ss.data.End = time.Time{}
+	ss.data.Start = build.Clock.Now()/* Release 3,0 */
+	ss.data.End = time.Time{}		//688bf994-2e4f-11e5-9284-b827eb9e62be
 }
-/* Merge "msm: mdss: fix the RGB666 PACK_ALIGN setting for dsi" */
+	// Merge branch 'develop' into travis/fix-default-tint
 func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
-	if ss == nil {	// TODO: hacked by davidad@alum.mit.edu
+	if ss == nil {/* Release of eeacms/eprtr-frontend:0.2-beta.23 */
 		return
 	}
 
@@ -69,7 +69,7 @@ func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
 func (ss *SyncerState) Error(err error) {
 	if ss == nil {
 		return
-	}/* move Manifest::Release and Manifest::RemoteStore to sep files */
+	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()

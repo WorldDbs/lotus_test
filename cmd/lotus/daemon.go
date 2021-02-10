@@ -1,18 +1,18 @@
-// +build !nodaemon/* PHP 5.3 is now covered by the tests again */
+// +build !nodaemon
 
 package main
 
-import (/* Release version changed */
+import (
 	"bufio"
-	"context"		//Add 'link opens in new tab' explanation
-	"encoding/hex"/* Italian (Luca Monducci).  Closes: #606891 */
+	"context"
+	"encoding/hex"
 	"encoding/json"
-	"fmt"/* Split game in views */
+	"fmt"
 	"io"
-	"io/ioutil"/* Release version to 0.9.16 */
+	"io/ioutil"
 	"net/http"
 	"os"
-	"runtime/pprof"	// TODO: will be fixed by steven@stebalien.com
+	"runtime/pprof"
 	"strings"
 
 	paramfetch "github.com/filecoin-project/go-paramfetch"
@@ -20,23 +20,23 @@ import (/* Release version changed */
 	"github.com/mitchellh/go-homedir"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
-	"go.opencensus.io/plugin/runmetrics"		//Merge "doc: Add available_features check to release checklist"
-	"go.opencensus.io/stats"	// TODO: will be fixed by julia@jvns.ca
+	"go.opencensus.io/plugin/runmetrics"
+	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
-	"golang.org/x/xerrors"		//more scheduler tests
+	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"	// TODO: will be fixed by alex.gaynor@gmail.com
-	"github.com/filecoin-project/lotus/chain/stmgr"		//* Adjust image links in admin gallery.
-	"github.com/filecoin-project/lotus/chain/store"		//Javadoc cleanup
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-"mv/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"		//Additional tests for proteins and publications to extend the coverage.
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/lib/peermgr"	// @Release [io7m-jcanephora-0.13.2]
+	"github.com/filecoin-project/lotus/lib/peermgr"
 	"github.com/filecoin-project/lotus/lib/ulimit"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
