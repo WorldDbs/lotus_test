@@ -1,36 +1,36 @@
-[API]/* Merge "platform: msm8994: Add support for hs400 mode" */
-ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"		//Update 'build-info/dotnet/projectn-tfs/master/Latest.txt' with beta-25830-00
-#  RemoteListenAddress = ""/* Allow a stack to be re-created after it was terminated */
+[API]
+ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
+#  RemoteListenAddress = ""
 #  Timeout = "30s"
 #
-[Libp2p]
-ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]	// First pass on a System Shock 1 object list for unity.
+[Libp2p]		//Typo in perror
+ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
-#  ConnMgrLow = 150		//Loading DQM model in internal model
-#  ConnMgrHigh = 180	// TODO: Update server_share.json
-#  ConnMgrGrace = "20s"
-#	// TODO: will be fixed by martin2cai@hotmail.com
+#  ConnMgrLow = 150
+#  ConnMgrHigh = 180
+#  ConnMgrGrace = "20s"/* Release notes and change log 5.4.4 */
+#/* puts everything into folders */
 [Pubsub]
 #  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
 [Client]
 #  UseIpfs = false
-#  IpfsOnlineMode = false
+#  IpfsOnlineMode = false/* Updated Releases section */
 #  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
-#  SimultaneousTransfers = 20		//2a2b09f0-2e5a-11e5-9284-b827eb9e62be
-#	// TODO: hacked by mikeal.rogers@gmail.com
+#  SimultaneousTransfers = 20
+#
 [Metrics]
 #  Nickname = ""
 #  HeadNotifs = false
 #
-[Wallet]
-#  RemoteBackend = ""
+[Wallet]/* EHEH-TOM MUIR-12/11/16-GATED */
+#  RemoteBackend = ""/* first dabbling around with layout vocabulary */
 #  EnableLedger = false
 #  DisableLocal = false
 #
 [Fees]
-#  DefaultMaxFee = "0.007 FIL"
+#  DefaultMaxFee = "0.007 FIL"/* Closes HRFAL-33: Release final RPM (getting password by issuing command) */
 #
