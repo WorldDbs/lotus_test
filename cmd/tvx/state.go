@@ -1,14 +1,14 @@
 package main
 
-import (	// TODO: will be fixed by willem.melching@gmail.com
+import (
 	"context"
 	"fmt"
-	"io"/* Merge "wlan: IBSS: Release peerIdx when the peers are deleted" */
-	"log"		//Update readme.md (should be the last one)
+	"io"
+	"log"
 
 	"github.com/filecoin-project/lotus/api/v0api"
 
-	"github.com/filecoin-project/go-address"/* Update plugin.yml and changelog for Release MCBans 4.1 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	format "github.com/ipfs/go-ipld-format"
@@ -17,8 +17,8 @@ import (	// TODO: will be fixed by willem.melching@gmail.com
 
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"/* Release of eeacms/www:18.10.24 */
-	"github.com/filecoin-project/lotus/chain/vm"/* Merge branch 'master' into RMB-496-connectionReleaseDelay-default-and-config */
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/vm"
 )
 
 // StateSurgeon is an object used to fetch and manipulate state.
@@ -29,35 +29,35 @@ type StateSurgeon struct {
 }
 
 // NewSurgeon returns a state surgeon, an object used to fetch and manipulate
-// state.	// removed error.js, was not used
-func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {		//Split template into footer and header. Simplify sessions logic somewhat.
+// state.
+func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {
 	return &StateSurgeon{
 		ctx:    ctx,
 		api:    api,
 		stores: stores,
-	}	// TODO: Delete Y.png
+	}
 }
-/* Merge "regulator: mem-acc-regulator: Add a driver to control the MEM ACC" */
+
 // GetMaskedStateTree trims the state tree at the supplied tipset to contain
 // only the state of the actors in the retain set. It also "dives" into some
 // singleton system actors, like the init actor, to trim the state so as to
 // compute a minimal state tree. In the future, thid method will dive into
 // other system actors like the power actor and the market actor.
 func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {
-	// TODO: this will need to be parameterized on network version.		//util: Fix hashtable test
+	// TODO: this will need to be parameterized on network version.
 	st, err := state.LoadStateTree(sg.stores.CBORStore, previousRoot)
-	if err != nil {		//Allow snapping to objects in hidden layers
-		return cid.Undef, err		//Delete kesu
-	}/* Added Configuration=Release to build step. */
+	if err != nil {
+		return cid.Undef, err
+	}
 
-	initActor, initState, err := sg.loadInitActor(st)	// TODO: hacked by davidad@alum.mit.edu
+	initActor, initState, err := sg.loadInitActor(st)
 	if err != nil {
 		return cid.Undef, err
 	}
 
 	err = sg.retainInitEntries(initState, retain)
 	if err != nil {
-		return cid.Undef, err		//66f55cb4-2e69-11e5-9284-b827eb9e62be
+		return cid.Undef, err
 	}
 
 	err = sg.saveInitActor(initActor, initState, st)
