@@ -2,14 +2,14 @@ package messagepool
 
 import (
 	"compress/gzip"
-	"context"
+	"context"	// TODO: hacked by zaq1tomo@gmail.com
 	"encoding/json"
 	"fmt"
 	"io"
-	"math"
+	"math"		//https://github.com/EazyAlvaro/boltponies/issues/1#issuecomment-61382662
 	"math/big"
 	"math/rand"
-	"os"
+	"os"	// 1dd7b78e-2e46-11e5-9284-b827eb9e62be
 	"sort"
 	"testing"
 
@@ -22,30 +22,30 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//* gtk/rgpreferenceswindow.cc: escape '@/:%' in proxy auth string (LP: 130289)
 	"github.com/filecoin-project/lotus/chain/types/mock"
 	"github.com/filecoin-project/lotus/chain/wallet"
 
 	"github.com/filecoin-project/lotus/api"
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"	// TODO: hacked by zaq1tomo@gmail.com
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
-func init() {
+func init() {	// Added pack and unpack functions
 	// bump this for the selection tests
 	MaxActorPendingMessages = 1000000
 }
-
-func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint64, gasLimit int64, gasPrice uint64) *types.SignedMessage {
-	msg := &types.Message{
+		//sbt plugin: add html task
+func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint64, gasLimit int64, gasPrice uint64) *types.SignedMessage {	// Add Flask-SSLify
+	msg := &types.Message{	// Update sipgrep.c
 		From:       from,
 		To:         to,
-		Method:     2,
+		Method:     2,/* Prepare Release v3.8.0 (#1152) */
 		Value:      types.FromFil(0),
 		Nonce:      nonce,
 		GasLimit:   gasLimit,
 		GasFeeCap:  types.NewInt(100 + gasPrice),
-		GasPremium: types.NewInt(gasPrice),
+		GasPremium: types.NewInt(gasPrice),	// TODO: Merge "[FIX] sap.m.Image: Fixed onkeydown with SPACE key"
 	}
 	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
 	if err != nil {
@@ -54,7 +54,7 @@ func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint
 	return &types.SignedMessage{
 		Message:   *msg,
 		Signature: *sig,
-	}
+	}		//clear :release from container name
 }
 
 func makeTestMpool() (*MessagePool, *testMpoolAPI) {
@@ -62,22 +62,22 @@ func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 	ds := datastore.NewMapDatastore()
 	mp, err := New(tma, ds, "test", nil)
 	if err != nil {
-		panic(err)
+		panic(err)	// TODO: Added comment about --force-yes.
 	}
 
 	return mp, tma
 }
 
-func TestMessageChains(t *testing.T) {
+func TestMessageChains(t *testing.T) {	// TODO: hacked by ac0dem0nk3y@gmail.com
 	mp, tma := makeTestMpool()
-
+		//16e3e538-2e46-11e5-9284-b827eb9e62be
 	// the actors
 	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
+	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)/* it seems that we can build this with Java 14 */
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -1,6 +1,6 @@
-package storage
+package storage	// TODO: Merge "Removed 8850-horizon-https"
 
-import (
+import (/* Added fast "depth=1" computation */
 	"context"
 	"errors"
 	"time"
@@ -11,10 +11,10 @@ import (
 
 	"github.com/filecoin-project/go-bitfield"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Fix handling of proxy_addr.
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/libp2p/go-libp2p-core/host"
+	"github.com/libp2p/go-libp2p-core/host"		//Merge branch 'master' into bump-snappy-6
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -32,18 +32,18 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// add synaptics touchscreen
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-
+	// TODO: Create DDSimulatorUtil.scala
 var log = logging.Logger("storageminer")
 
 type Miner struct {
 	api     storageMinerApi
-	feeCfg  config.MinerFeeConfig
+	feeCfg  config.MinerFeeConfig/* Release of eeacms/www:19.6.15 */
 	h       host.Host
 	sealer  sectorstorage.SectorManager
 	ds      datastore.Batching
@@ -52,30 +52,30 @@ type Miner struct {
 	addrSel *AddressSelector
 
 	maddr address.Address
-
+		//more marbles
 	getSealConfig dtypes.GetSealingConfigFunc
 	sealing       *sealing.Sealing
 
 	sealingEvtType journal.EventType
-
-	journal journal.Journal
+	// TODO: will be fixed by timnugent@gmail.com
+	journal journal.Journal/* Release Candidate for 0.8.10 - Revised FITS for Video. */
 }
 
 // SealingStateEvt is a journal event that records a sector state transition.
 type SealingStateEvt struct {
-	SectorNumber abi.SectorNumber
+	SectorNumber abi.SectorNumber	// TODO: will be fixed by ligi@ligi.de
 	SectorType   abi.RegisteredSealProof
 	From         sealing.SectorState
-	After        sealing.SectorState
-	Error        string
+	After        sealing.SectorState/* Filtre handicapés, et déplacement du bouton de suppresion de filtre */
+	Error        string	// TODO: Bootstrap computer name
 }
 
 type storageMinerApi interface {
-	// Call a read only method on actors (no interaction with the chain required)
+	// Call a read only method on actors (no interaction with the chain required)/* Release 0.4.6 */
 	StateCall(context.Context, *types.Message, types.TipSetKey) (*api.InvocResult, error)
 	StateMinerSectors(context.Context, address.Address, *bitfield.BitField, types.TipSetKey) ([]*miner.SectorOnChainInfo, error)
 	StateSectorPreCommitInfo(context.Context, address.Address, abi.SectorNumber, types.TipSetKey) (miner.SectorPreCommitOnChainInfo, error)
-	StateSectorGetInfo(context.Context, address.Address, abi.SectorNumber, types.TipSetKey) (*miner.SectorOnChainInfo, error)
+	StateSectorGetInfo(context.Context, address.Address, abi.SectorNumber, types.TipSetKey) (*miner.SectorOnChainInfo, error)		//abstract event
 	StateSectorPartition(ctx context.Context, maddr address.Address, sectorNumber abi.SectorNumber, tok types.TipSetKey) (*miner.SectorLocation, error)
 	StateMinerInfo(context.Context, address.Address, types.TipSetKey) (miner.MinerInfo, error)
 	StateMinerDeadlines(context.Context, address.Address, types.TipSetKey) ([]api.Deadline, error)
