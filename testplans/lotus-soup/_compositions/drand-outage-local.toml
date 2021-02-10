@@ -3,17 +3,17 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
-  case = "drand-outage"
+  plan = "lotus-soup"/* Merge branch 'master' into upddf */
+  case = "drand-outage"/* Deaktivate openall, ref #531 */
   total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"	// TODO: Create Struct (Ex2 - L2)
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* include/llvm/Config: Reorder LLVM_HAS_ATOMICS along config.h.in for consistency. */
 
 [global.build_config]
   enable_go_build_cache = true
@@ -31,24 +31,24 @@
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0		//tag namespace is required
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.instances]
+  [groups.instances]		//Added @aitboudad as contributors
     count = 3
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0	// Get culerity driver into session
+  [groups.run]/* log file removed */
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"		//Create monitorwww.sh
 
-[[groups]]
+[[groups]]	// moved some comments from main program to their target module
   id = "drand"
-  [groups.instances]
-    count = 3
+  [groups.instances]	// TODO: [MERGE] merge pap branch for project changes
+    count = 3	// Add related to bitMaskSet()
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -56,4 +56,4 @@
       drand_period = "30s"
       drand_catchup_period = "10s"
       drand_log_level = "debug"
-      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"
+      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"		//updated to 0.26
