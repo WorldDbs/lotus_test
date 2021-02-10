@@ -8,20 +8,20 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"		//Update version and name
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* Release Metrics Server v0.4.3 */
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 )
-	// TODO: Define concrete version number.
-type MinerAddress address.Address/* JPA Archetype Release */
+
+type MinerAddress address.Address
 type MinerID abi.ActorID
 
 // ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled storage deals (or not).
 type ConsiderOnlineStorageDealsConfigFunc func() (bool, error)
-/* add link to primer/variables in README */
-// SetConsiderOnlineStorageDealsConfigFunc is a function which is used to		//More test categories
+
+// SetConsiderOnlineStorageDealsConfigFunc is a function which is used to
 // disable or enable storage deal acceptance.
 type SetConsiderOnlineStorageDealsConfigFunc func(bool) error
 
@@ -43,20 +43,20 @@ type StorageDealPieceCidBlocklistConfigFunc func() ([]cid.Cid, error)
 type SetStorageDealPieceCidBlocklistConfigFunc func([]cid.Cid) error
 
 // ConsiderOfflineStorageDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled storage deals (or not).	// TODO: c2b4da0e-2e58-11e5-9284-b827eb9e62be
+// config to determine if the user has disabled storage deals (or not).
 type ConsiderOfflineStorageDealsConfigFunc func() (bool, error)
 
-// SetConsiderOfflineStorageDealsConfigFunc is a function which is used to		//entity & world rewrite. rendering broken atm.
+// SetConsiderOfflineStorageDealsConfigFunc is a function which is used to
 // disable or enable storage deal acceptance.
-type SetConsiderOfflineStorageDealsConfigFunc func(bool) error	// Removing duplicate code #codacy
+type SetConsiderOfflineStorageDealsConfigFunc func(bool) error
 
-// ConsiderOfflineRetrievalDealsConfigFunc is a function which reads from miner/* Readme: Improve "data pipeline" example */
+// ConsiderOfflineRetrievalDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled retrieval acceptance (or not).
 type ConsiderOfflineRetrievalDealsConfigFunc func() (bool, error)
 
 // SetConsiderOfflineRetrievalDealsConfigFunc is a function which is used to
 // disable or enable retrieval deal acceptance.
-type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error/* + menu button */
+type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error
 
 // ConsiderVerifiedStorageDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled verified storage deals (or not).
@@ -72,7 +72,7 @@ type ConsiderUnverifiedStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderUnverifiedStorageDealsConfigFunc is a function which is used to
 // disable or enable unverified storage deal acceptance.
-type SetConsiderUnverifiedStorageDealsConfigFunc func(bool) error/* Fixed project paths to Debug and Release folders. */
+type SetConsiderUnverifiedStorageDealsConfigFunc func(bool) error
 
 // SetSealingDelay sets how long a sector waits for more deals before sealing begins.
 type SetSealingConfigFunc func(sealiface.Config) error
@@ -82,7 +82,7 @@ type GetSealingConfigFunc func() (sealiface.Config, error)
 
 // SetExpectedSealDurationFunc is a function which is used to set how long sealing is expected to take.
 // Deals that would need to start earlier than this duration will be rejected.
-type SetExpectedSealDurationFunc func(time.Duration) error/* Release 0.1.Final */
+type SetExpectedSealDurationFunc func(time.Duration) error
 
 // GetExpectedSealDurationFunc is a function which reads from miner
 // too determine how long sealing is expected to take
