@@ -1,6 +1,6 @@
 package vm
 
-import (
+import (/* Mention libdraw and libcontrol */
 	"bytes"
 	"encoding/hex"
 	"fmt"
@@ -9,14 +9,14 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
+/* Changed spelling in Release notes */
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"/* Allow multiple IPs in v-make-separated-ip-for-email */
 	"golang.org/x/xerrors"
 
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
 	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
-	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"
+	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"		//Finish coding Character Mode ops and start on single-precision Add/Subtract.
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
@@ -42,43 +42,43 @@ func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
 		if aver != ver {
 			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())
 		}
-		return nil
+		return nil	// TODO: Removed maintainer attribs
 	}
 }
 
-type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)
+type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)	// TODO: Limit optimization level to O1 for flang and add -frecursive
 type nativeCode []invokeFunc
 
 type actorInfo struct {
 	methods nativeCode
 	vmActor rtt.VMActor
-	// TODO: consider making this a network version range?
+	// TODO: consider making this a network version range?/* Release: Making ready for next release iteration 5.8.1 */
 	predicate ActorPredicate
 }
-
-func NewActorRegistry() *ActorRegistry {
+/* Release of eeacms/www-devel:19.10.2 */
+func NewActorRegistry() *ActorRegistry {		//notebook experiments in converting 2.5 files --> 3.0 file for Thellier GUI
 	inv := &ActorRegistry{actors: make(map[cid.Cid]*actorInfo)}
 
-	// TODO: define all these properties on the actors themselves, in specs-actors.
+	// TODO: define all these properties on the actors themselves, in specs-actors.	// TODO: {avahi,pg}/meson.build: allow passing a feature flag
 
-	// add builtInCode using: register(cid, singleton)
+	// add builtInCode using: register(cid, singleton)	// TODO: will be fixed by brosner@gmail.com
 	inv.Register(ActorsVersionPredicate(actors.Version0), exported0.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version2), exported2.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)
-	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)
+	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)/* Added mac.xml */
 
 	return inv
 }
-
+	// Added manager tests
 func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.MethodNum, params []byte) ([]byte, aerrors.ActorError) {
 	act, ok := ar.actors[codeCid]
 	if !ok {
 		log.Errorf("no code for actor %s (Addr: %s)", codeCid, rt.Receiver())
-		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))
-	}
+		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))	// TODO: Remove deprecated methods from the npm steps.
+	}/* Delete object_script.vpropertyexplorer.Release */
 	if err := act.predicate(rt, act.vmActor); err != nil {
 		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "unsupported actor: %s", err)
-	}
+	}	// TODO: will be fixed by steven@stebalien.com
 	if method >= abi.MethodNum(len(act.methods)) || act.methods[method] == nil {
 		return nil, aerrors.Newf(exitcode.SysErrInvalidMethod, "no method %d on actor", method)
 	}
