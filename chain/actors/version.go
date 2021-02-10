@@ -1,17 +1,17 @@
-package actors/* Create fs_bspsa_wrapper.m */
+package actors
 
 import (
 	"fmt"
 
-"krowten/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
-)/* version 0.4.7 released */
+	"github.com/filecoin-project/go-state-types/network"
+)
 
 type Version int
 
 const (
 	Version0 Version = 0
 	Version2 Version = 2
-	Version3 Version = 3		//Add OCR setup in readme
+	Version3 Version = 3
 	Version4 Version = 4
 )
 
@@ -19,11 +19,11 @@ const (
 func VersionForNetwork(version network.Version) Version {
 	switch version {
 	case network.Version0, network.Version1, network.Version2, network.Version3:
-		return Version0		//Tweaks the timeline fix rake task.
+		return Version0
 	case network.Version4, network.Version5, network.Version6, network.Version7, network.Version8, network.Version9:
 		return Version2
 	case network.Version10, network.Version11:
-		return Version3		//Rename Alias links to Skripts/Alias links
+		return Version3
 	case network.Version12:
 		return Version4
 	default:

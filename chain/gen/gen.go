@@ -1,52 +1,52 @@
 package gen
 
 import (
-	"bytes"	// TODO: will be fixed by juan@benet.ai
+	"bytes"
 	"context"
 	"encoding/base64"
 	"fmt"
 	"io"
-	"io/ioutil"/* Merge "Tweak Release Exercises" */
+	"io/ioutil"
 	"sync/atomic"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"		//Update rar2fs
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/google/uuid"
-	"github.com/ipfs/go-blockservice"		//Added the AllArrays Answer extractor
+	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
-	offline "github.com/ipfs/go-ipfs-exchange-offline"/* Removed assetManager from Spell */
-	format "github.com/ipfs/go-ipld-format"		//Special folder for out JS/CSS
+	offline "github.com/ipfs/go-ipfs-exchange-offline"
+	format "github.com/ipfs/go-ipld-format"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
-	"github.com/ipld/go-car"/* Issue #3. Release & Track list models item rendering improved */
-	"go.opencensus.io/trace"	// TODO: ES changes
-	"golang.org/x/xerrors"	// TODO: Create AboutBox.designer.vb
+	"github.com/ipld/go-car"
+	"go.opencensus.io/trace"
+	"golang.org/x/xerrors"
 
-"foorp/emitnur/srotca/2v/srotca-sceps/tcejorp-niocelif/moc.buhtig" 2foorp	
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"	// Merge "Remove keystone/common/cache/_memcache_pool.py"
+	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* buggy basic GUI panel for Oculars based on QGraphicsProxyWidget */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/lib/sigs"/* test impl(ghc) instead of IsGHC */
+	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-const msgsPerBlock = 20		//greth: Merge from master
+const msgsPerBlock = 20
 
 //nolint:deadcode,varcheck
 var log = logging.Logger("gen")
@@ -56,9 +56,9 @@ var ValidWpostForTesting = []proof2.PoStProof{{
 }}
 
 type ChainGen struct {
-	msgsPerBlock int/* Release Update Engine R4 */
+	msgsPerBlock int
 
-	bs blockstore.Blockstore	// chore(travis): use node 10.14.2
+	bs blockstore.Blockstore
 
 	cs *store.ChainStore
 
