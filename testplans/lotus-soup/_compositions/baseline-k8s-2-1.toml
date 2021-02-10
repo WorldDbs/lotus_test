@@ -1,39 +1,39 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-/* Automatic changelog generation for PR #56375 [ci skip] */
-[global]
-  plan = "lotus-soup"	// TODO: will be fixed by aeongrp@outlook.com
+
+[global]		//Cleaned up for doc generation and new build.
+  plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 4
   builder = "docker:go"
   runner = "cluster:k8s"
-/* Release 1.6.13 */
-[global.build]
-  selectors = ["testground"]		//Delete msm8974-g2-vzw-pm.dtsi~
 
-[global.run_config]		//f4886930-4b19-11e5-bf19-6c40088e03e4
+[global.build]
+  selectors = ["testground"]
+
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"		//Mostly commenting updates
-  go_proxy_url="http://localhost:8081"/* Provisioning for Release. */
-  registry_type="aws"		//Merge branch 'master' into feature/update-cocoapods-travis
+  go_proxy_mode="remote"
+  go_proxy_url="http://localhost:8081"
+  registry_type="aws"
 
-[global.run.test_params]
-  clients = "2"/* Merge "[FAB-4015] Fix -M option of fabric-ca-client" */
-  miners = "1"/* Release 10.2.0 (#799) */
-  genesis_timestamp_offset = "0"/* Removed the eclipse code from bnd */
+[global.run.test_params]	// get tests working.
+  clients = "2"
+  miners = "1"
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* New Release 1.07 */
   mining_mode = "natural"
-
+/* Stubbed out Deploy Release Package #324 */
 [[groups]]
-  id = "bootstrapper"	// TODO: will be fixed by ligi@ligi.de
-  [groups.resources]
-    memory = "512Mi"		//Fixed script.nsi with new jar filename.
+  id = "bootstrapper"/* Rename stats.lua to sftats.lua */
+  [groups.resources]		//tab size = 4
+    memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
@@ -42,26 +42,26 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]	// TODO: will be fixed by magik6k@gmail.com
-  id = "miners"/* Use `make` instead of `command` in logrotate */
-]secruoser.spuorg[  
+[[groups]]
+  id = "miners"/* added note for updating users to avoid NPE issue */
+  [groups.resources]/* Refined the README docuemnt */
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1	// Create Queue.h
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"	// TODO: VCR recording for ARM azure_mgmt_storage service (#348)
 
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
+    cpu = "1000m"/* dcf97af0-2e5d-11e5-9284-b827eb9e62be */
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
+  [groups.run]/* A pass at clarifying the difference between relative and absolute positioning. */
+    [groups.run.test_params]/* Release 0.3.2 prep */
       role = "client"
