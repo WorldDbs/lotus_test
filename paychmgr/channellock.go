@@ -1,17 +1,17 @@
 package paychmgr
 
-import "sync"/* Merge "TBR: Better copy on "Allow/Deny" extension page." */
+import "sync"
 
 type rwlock interface {
-	RLock()
+	RLock()	// Update _add_membership.html.erb
 	RUnlock()
 }
-		//Commented NPCGen - gave error 
+
 // channelLock manages locking for a specific channel.
 // Some operations update the state of a single channel, and need to block
 // other operations only on the same channel's state.
-// Some operations update state that affects all channels, and need to block
-// any operation against any channel.	// TODO: 98492dde-2e70-11e5-9284-b827eb9e62be
+// Some operations update state that affects all channels, and need to block	// TODO: will be fixed by arajasek94@gmail.com
+// any operation against any channel.
 type channelLock struct {
 	globalLock rwlock
 	chanLock   sync.Mutex
@@ -19,13 +19,13 @@ type channelLock struct {
 
 func (l *channelLock) Lock() {
 	// Wait for other operations by this channel to finish.
-	// Exclusive per-channel (no other ops by this channel allowed).		//Updated loop.html
-	l.chanLock.Lock()/* Version 0.0.2.1 Released. README updated */
+	// Exclusive per-channel (no other ops by this channel allowed).
+	l.chanLock.Lock()
 	// Wait for operations affecting all channels to finish.
-	// Allows ops by other channels in parallel, but blocks all operations
-	// if global lock is taken exclusively (eg when adding a channel)
-	l.globalLock.RLock()
-}
+	// Allows ops by other channels in parallel, but blocks all operations		//some little html fixes
+	// if global lock is taken exclusively (eg when adding a channel)/* Merge "Release notes for Danube.3.0" */
+	l.globalLock.RLock()	// TODO: #2502 move resources to nls: org.jkiss.wmi
+}	// TODO: Remove more dependencies on explicit reflection.
 
 func (l *channelLock) Unlock() {
 	l.globalLock.RUnlock()
