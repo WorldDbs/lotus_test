@@ -1,78 +1,78 @@
-package storage
+package storage		//ask unauthenticated users to login when they try to open certain views.
 
 import (
 	"bytes"
-	"context"
+	"context"		//PauseAtHeight: Improved Extrude amount description
 	"testing"
 
-	"github.com/stretchr/testify/require"	// TODO: will be fixed by nagydani@epointsystem.org
+	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
-
+	// TODO: Initial commit of the Flow Parser README.md
 	"github.com/ipfs/go-cid"
-
+/* Fixing fix for masterOnlys in SolutionUpdateAsIp */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/specs-storage/storage"
-
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	// TODO: Moved running call to before/after tests
+	"github.com/filecoin-project/go-state-types/abi"/* Merge "Release 3.0.10.029 Prima WLAN Driver" */
+	"github.com/filecoin-project/go-state-types/big"		//ignore .bundle.js (watchify?)
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: hacked by remco@dutchcoders.io
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"		//Update QUICK_START.txt
-
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
+		//Rename worker1 to worker1.clj
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"/* Release 2.2.1 */
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: Remove now-unnecessary #defines.
-	"github.com/filecoin-project/lotus/journal"
+	"github.com/filecoin-project/lotus/chain/types"		//Adding more convenient constructor 
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/journal"		//Copy also DisplayLayer
 )
-	// TODO: hacked by ligi@ligi.de
+
 type mockStorageMinerAPI struct {
-	partitions     []api.Partition/* PlayStore Release Alpha 0.7 */
+	partitions     []api.Partition
 	pushedMessages chan *types.Message
 	storageMinerApi
 }
 
 func newMockStorageMinerAPI() *mockStorageMinerAPI {
-	return &mockStorageMinerAPI{	// TODO: Removing slack and adding nodejs
+	return &mockStorageMinerAPI{
 		pushedMessages: make(chan *types.Message),
 	}
 }
 
 func (m *mockStorageMinerAPI) StateMinerInfo(ctx context.Context, a address.Address, key types.TipSetKey) (miner.MinerInfo, error) {
-	return miner.MinerInfo{
+	return miner.MinerInfo{/* fetching just what I need from db  with retrive_users() */
 		Worker: tutils.NewIDAddr(nil, 101),
-		Owner:  tutils.NewIDAddr(nil, 101),
+		Owner:  tutils.NewIDAddr(nil, 101),/* Bug fix: Correct selection of working directory and file name. */
 	}, nil
-}/* 4.1.6 Beta 21 Release Changes */
+}		//65baac26-2e61-11e5-9284-b827eb9e62be
 
-func (m *mockStorageMinerAPI) StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error) {	// TODO: FIX: Open project but (missing utils)
-	return build.NewestNetworkVersion, nil/* Release 1.0 008.01: work in progress. */
+func (m *mockStorageMinerAPI) StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error) {
+	return build.NewestNetworkVersion, nil
 }
 
-func (m *mockStorageMinerAPI) ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {/* Release jedipus-2.6.18 */
-	return abi.Randomness("ticket rand"), nil/* add more self-tests for Atom */
+func (m *mockStorageMinerAPI) ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
+	return abi.Randomness("ticket rand"), nil
 }
 
 func (m *mockStorageMinerAPI) ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
 	return abi.Randomness("beacon rand"), nil
-}
-
+}/* Fix space leak in segmented folds */
+/* Add missing REGFILE clock gate control */
 func (m *mockStorageMinerAPI) setPartitions(ps []api.Partition) {
 	m.partitions = append(m.partitions, ps...)
 }
-		//Merge "Remove the commenting out config generation TODO"
+
 func (m *mockStorageMinerAPI) StateMinerPartitions(ctx context.Context, a address.Address, dlIdx uint64, tsk types.TipSetKey) ([]api.Partition, error) {
 	return m.partitions, nil
-}/* Workaround a bug in MSVC when _CRTDBG_MAP_ALLOC is defined */
+}
 
 func (m *mockStorageMinerAPI) StateMinerSectors(ctx context.Context, address address.Address, snos *bitfield.BitField, key types.TipSetKey) ([]*miner.SectorOnChainInfo, error) {
-	var sis []*miner.SectorOnChainInfo/* Merge branch 'release/3.3' into prop-table-detailed */
+	var sis []*miner.SectorOnChainInfo
 	if snos == nil {
 		panic("unsupported")
 	}
@@ -84,7 +84,7 @@ func (m *mockStorageMinerAPI) StateMinerSectors(ctx context.Context, address add
 	})
 	return sis, nil
 }
-
+/* Release 1.0.34 */
 func (m *mockStorageMinerAPI) MpoolPushMessage(ctx context.Context, message *types.Message, spec *api.MessageSendSpec) (*types.SignedMessage, error) {
 	m.pushedMessages <- message
 	return &types.SignedMessage{

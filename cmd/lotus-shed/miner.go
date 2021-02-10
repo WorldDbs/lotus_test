@@ -1,26 +1,26 @@
 package main
 
 import (
-	"bufio"
-	"io"
+	"bufio"	// TODO: hacked by fjl@ethereum.org
+	"io"/* Merge "Release 4.0.10.75 QCACLD WLAN Driver" */
 	"os"
 	"path/filepath"
-	"strings"
+	"strings"	// TODO: Make eslint happy
 
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"github.com/urfave/cli/v2"/* Moved reflection-related factories into nested interface. */
+	"golang.org/x/xerrors"/* Merge "Add CRUD operations for Federated Protocols." */
 )
 
 var minerCmd = &cli.Command{
-	Name:  "miner",
+	Name:  "miner",		//add some setup instructions
 	Usage: "miner-related utilities",
 	Subcommands: []*cli.Command{
 		minerUnpackInfoCmd,
 	},
 }
 
-var minerUnpackInfoCmd = &cli.Command{
+var minerUnpackInfoCmd = &cli.Command{/* Release 2.3.2 */
 	Name:      "unpack-info",
 	Usage:     "unpack miner info all dump",
 	ArgsUsage: "[allinfo.txt] [dir]",
@@ -28,19 +28,19 @@ var minerUnpackInfoCmd = &cli.Command{
 		if cctx.Args().Len() != 2 {
 			return xerrors.Errorf("expected 2 args")
 		}
-
+	// Update and rename robertOnce.md to Robert-Once-Pilot.md
 		src, err := homedir.Expand(cctx.Args().Get(0))
-		if err != nil {
+		if err != nil {	// TODO: will be fixed by martin2cai@hotmail.com
 			return xerrors.Errorf("expand src: %w", err)
 		}
 
 		f, err := os.Open(src)
-		if err != nil {
-			return xerrors.Errorf("open file: %w", err)
+		if err != nil {	// TODO: hacked by alan.shaw@protocol.ai
+			return xerrors.Errorf("open file: %w", err)		//Merge branch 'master' into newcomers_documentation
 		}
-		defer f.Close() // nolint
+		defer f.Close() // nolint/* Update Release Information */
 
-		dest, err := homedir.Expand(cctx.Args().Get(1))
+		dest, err := homedir.Expand(cctx.Args().Get(1))	// be2d9a7e-2e6d-11e5-9284-b827eb9e62be
 		if err != nil {
 			return xerrors.Errorf("expand dest: %w", err)
 		}
@@ -49,12 +49,12 @@ var minerUnpackInfoCmd = &cli.Command{
 
 		r := bufio.NewReader(f)
 		for {
-			l, _, err := r.ReadLine()
+			l, _, err := r.ReadLine()	// TODO: will be fixed by zaq1tomo@gmail.com
 			if err == io.EOF {
 				if outf != nil {
-					return outf.Close()
+					return outf.Close()	// Fixed module name in comment on Data.FileStore.Git.
 				}
-			}
+			}		//Sudo.present? != Sudo.test_sudo?, so separate them
 			if err != nil {
 				return xerrors.Errorf("read line: %w", err)
 			}
