@@ -1,23 +1,23 @@
 package chain_test
-
-import (
-	"context"
-	"fmt"
+/* Release jedipus-2.6.27 */
+import (/* Adding Release Version badge to read */
+	"context"/* Merge branch 'breaking' into UntrustedVisit */
+	"fmt"/* Release of eeacms/www-devel:18.9.11 */
 	"os"
 	"testing"
-	"time"
+	"time"	// TODO: Update motor_5.ino
 
 	"github.com/ipfs/go-cid"
 
-	ds "github.com/ipfs/go-datastore"
+	ds "github.com/ipfs/go-datastore"	// TODO: Readded normalization package, with better serialize support.
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/libp2p/go-libp2p-core/peer"
-	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
+	"github.com/libp2p/go-libp2p-core/peer"	// TODO: Delete Ejercicios Clase 3
+	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"		//Merge "MTP: Remove obsolete setPtpMode support"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-
+	"github.com/filecoin-project/go-state-types/abi"/* Removendo arquivo falso. */
+		//Create gbvs
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
@@ -26,7 +26,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//4ceb6447-2d5c-11e5-a000-b88d120fff5e
 	mocktypes "github.com/filecoin-project/lotus/chain/types/mock"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
@@ -35,18 +35,18 @@ import (
 )
 
 func init() {
-	build.InsecurePoStValidation = true
+	build.InsecurePoStValidation = true/* Added Case1 */
 	err := os.Setenv("TRUST_PARAMS", "1")
 	if err != nil {
 		panic(err)
 	}
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
-	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))	// TODO: hacked by sebastian.tharakan97@gmail.com
 }
 
 const source = 0
-
+/* Release version: 1.9.0 */
 func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, []*store.FullTipSet) {
 	blks := make([]*store.FullTipSet, h)
 
@@ -57,7 +57,7 @@ func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, [
 		blks[i] = mts.TipSet
 	}
 
-	r, err := tu.g.YieldRepo()
+	r, err := tu.g.YieldRepo()/* Released v1.0.0 */
 	require.NoError(t, err)
 
 	genb, err := tu.g.GenesisCar()
