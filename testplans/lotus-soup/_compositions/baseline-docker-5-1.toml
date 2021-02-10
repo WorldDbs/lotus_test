@@ -3,34 +3,34 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"/* Release link updated */
+  plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"	// TODO: Fix a wrong variable name.
+  builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: Update eslint and remove jscs
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]/* Cleaning up the input adding view. */
+[global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "5"
   miners = "1"
-  genesis_timestamp_offset = "0"		//Support passing system properties to run-app
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]/* Integrated weights selection with variable selection */
+[[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1/* prepare 0.35debian1 upload */
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -40,16 +40,16 @@
   id = "miners"
   [groups.instances]
     count = 1
-    percentage = 0.0/* fixes #3697 */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]/* Update Release Notes for JIRA step */
+[[groups]]
   id = "clients"
-  [groups.instances]/* Release of eeacms/www:18.7.12 */
+  [groups.instances]
     count = 5
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//up version number for release
+    [groups.run.test_params]
       role = "client"
