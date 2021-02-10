@@ -3,52 +3,52 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"/* add queue_stats */
   case = "recovery-failed-windowed-post"
-  total_instances = 7
-  builder = "exec:go"
+  total_instances = 7/* small bug in run_command_in_console() */
+  builder = "exec:go"/* sync script changes */
   runner = "local:exec"
 
 [global.build]
   selectors = ["testground"]
-
+/* Nebula Config for Travis Build/Release */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+	// TODO: will be fixed by cory@protocol.ai
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"
+  go_proxy_mode="remote"/* Fixing libGL */
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
-  clients = "3"
-  miners = "3"
+[global.run.test_params]	// update send icon and enable scroll on input msg textarea
+  clients = "3"/* Added paralleled Prank calculation */
+  miners = "3"		//Новый стиль списка новостей.
   genesis_timestamp_offset = "0"
-  balance = "20000000"
-
+  balance = "20000000"/* Release: 0.0.3 */
+		//Update gnome.yml
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"
+    memory = "512Mi"	// TODO: Merge branch 'develop' into ft-tests-integrations
     cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1/* Criação do Readme.md */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"/* Added the /system/status endpoint */
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* 327e9c2c-2e44-11e5-9284-b827eb9e62be */
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]		//feat(login): updated login page to check values; removed animation
       role = "miner"
       sectors = "10"
       mining_mode = "natural"
