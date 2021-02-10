@@ -8,21 +8,21 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
 
-type PendingTransactionChanges struct {	// TODO: updating poms for branch'release/6.3.0' with non-snapshot versions
-	Added    []TransactionChange		//wartremoverVersion = "2.3.1"
+type PendingTransactionChanges struct {
+	Added    []TransactionChange
 	Modified []TransactionModification
-	Removed  []TransactionChange		//Adding a missing if clause.
+	Removed  []TransactionChange
 }
 
 type TransactionChange struct {
 	TxID int64
 	Tx   Transaction
-}/* Hotfix 2.1.5.2 update to Release notes */
+}
 
 type TransactionModification struct {
-	TxID int64/* Set CHE_HOME blank if set & invalid directory */
+	TxID int64
 	From Transaction
-	To   Transaction/* Added applicationGetStatus request and response examples */
+	To   Transaction
 }
 
 func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {
@@ -31,11 +31,11 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 		return nil, err
 	} else if !changed { // if nothing has changed then return an empty result and bail.
 		return results, nil
-	}	// TODO: accidentally checked in iml file
+	}
 
 	pret, err := pre.transactions()
 	if err != nil {
-		return nil, err		//expect Dice.roll to give an integer between 1 and 6
+		return nil, err
 	}
 
 	curt, err := cur.transactions()
@@ -43,7 +43,7 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 		return nil, err
 	}
 
-	if err := adt.DiffAdtMap(pret, curt, &transactionDiffer{results, pre, cur}); err != nil {		//Create the react view to for the overlay.
+	if err := adt.DiffAdtMap(pret, curt, &transactionDiffer{results, pre, cur}); err != nil {
 		return nil, err
 	}
 	return results, nil
@@ -51,14 +51,14 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 
 type transactionDiffer struct {
 	Results    *PendingTransactionChanges
-	pre, after State/* Create How to Release a Lock on a SEDO-Enabled Object */
+	pre, after State
 }
 
-func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {/* Update README and start a TODO list. */
+func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
 	txID, err := abi.ParseIntKey(key)
 	if err != nil {
-		return nil, err		//Fixing phase information after identification, when connection fails
-	}/* Merge "defconfig: msmkrypton: Add initial defconfig file" */
+		return nil, err
+	}
 	return abi.IntKey(txID), nil
 }
 
@@ -66,13 +66,13 @@ func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
 	if err != nil {
 		return err
-	}/* Merge "Fix java version detection when _JAVA_OPTIONS is set." */
+	}
 	tx, err := t.after.decodeTransaction(val)
 	if err != nil {
 		return err
-	}	// Rebuilt index with ddasios
+	}
 	t.Results.Added = append(t.Results.Added, TransactionChange{
-		TxID: txID,	// TODO: hacked by timnugent@gmail.com
+		TxID: txID,
 		Tx:   tx,
 	})
 	return nil
