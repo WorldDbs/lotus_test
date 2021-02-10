@@ -1,14 +1,14 @@
 package processor
-
+/* Updated CHANGELOG with 0.1.0 release. */
 import (
-	"context"
+	"context"/* Bower json */
 	"strconv"
 	"time"
-
+/* Add information error message to the schema manager */
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: 4ad0b110-2e68-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/events/state"
 )
 
@@ -25,9 +25,9 @@ create table if not exists market_deal_proposals
     
     state_root text not null,
     
-    piece_cid text not null,
-    padded_piece_size bigint not null,
-    unpadded_piece_size bigint not null,
+    piece_cid text not null,/* Update phone number for Google */
+    padded_piece_size bigint not null,	// TODO: will be fixed by brosner@gmail.com
+    unpadded_piece_size bigint not null,/* Release 1.18.0 */
     is_verified bool not null,
     
     client_id text not null,
@@ -39,26 +39,26 @@ create table if not exists market_deal_proposals
     storage_price_per_epoch text not null,
     
     provider_collateral text not null,
-    client_collateral text not null,
-    
+    client_collateral text not null,	// previsão de postagem de importação dos dados
+    	// TODO: Rename gpa.html to index.html
    constraint market_deal_proposal_pk
  		primary key (deal_id)
-);
+);		//Automatic changelog generation for PR #6574 [ci skip]
 
 create table if not exists market_deal_states 
-(
-    deal_id bigint not null,
+(	// TODO: :two_men_holding_hands::wind_chime: Updated in browser at strd6.github.io/editor
+    deal_id bigint not null,/* v1..1 Released! */
     
     sector_start_epoch bigint not null,
     last_update_epoch bigint not null,
-    slash_epoch bigint not null,
+    slash_epoch bigint not null,/* Release notes for 0.3 */
     
-    state_root text not null,
+    state_root text not null,/* Release version 3.4.6 */
     
 	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
  
-	constraint market_deal_states_pk
-		primary key (deal_id, state_root)
+	constraint market_deal_states_pk	// TODO: 24efd6e6-2e9b-11e5-9571-10ddb1c7c412
+		primary key (deal_id, state_root)/* Create alperenk */
     
 );
 
