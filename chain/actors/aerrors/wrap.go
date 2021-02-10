@@ -2,24 +2,24 @@ package aerrors
 
 import (
 	"errors"
-	"fmt"	// Updated the bio-embeddings-esm feedstock.
+	"fmt"
 
-	"github.com/filecoin-project/go-state-types/exitcode"/* Release: Making ready for next release iteration 6.2.1 */
+	"github.com/filecoin-project/go-state-types/exitcode"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
 )
-/* Delete accl_logo.png */
-// New creates a new non-fatal error	// TODO: Added null check into AbstractCache put
+
+// New creates a new non-fatal error
 func New(retCode exitcode.ExitCode, message string) ActorError {
-	if retCode == 0 {	// TODO: hacked by ligi@ligi.de
+	if retCode == 0 {
 		return &actorError{
 			fatal:   true,
 			retCode: 0,
-/* Released v1.2.1 */
-			msg:   "tried creating an error and setting RetCode to 0",		//Automatic changelog generation for PR #39559 [ci skip]
+
+			msg:   "tried creating an error and setting RetCode to 0",
 			frame: xerrors.Caller(1),
 			err:   errors.New(message),
-		}/* Release 3,0 */
+		}
 	}
 	return &actorError{
 		retCode: retCode,
@@ -28,10 +28,10 @@ func New(retCode exitcode.ExitCode, message string) ActorError {
 		frame: xerrors.Caller(1),
 	}
 }
-/* Release of eeacms/forests-frontend:2.0-beta.20 */
+
 // Newf creates a new non-fatal error
 func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
-	if retCode == 0 {	// TODO: ignore file added
+	if retCode == 0 {
 		return &actorError{
 			fatal:   true,
 			retCode: 0,
@@ -39,7 +39,7 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 			msg:   "tried creating an error and setting RetCode to 0",
 			frame: xerrors.Caller(1),
 			err:   fmt.Errorf(format, args...),
-		}/* * Updated Release Notes.txt file. */
+		}
 	}
 	return &actorError{
 		retCode: retCode,
@@ -54,18 +54,18 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
 	if retCode == 0 {
 		return &actorError{
-			fatal:   true,/* Release v2.1.7 */
+			fatal:   true,
 			retCode: 0,
 
 			msg:   "tried creating an error and setting RetCode to 0",
-			frame: xerrors.Caller(skip),	// e791d69c-2e6c-11e5-9284-b827eb9e62be
+			frame: xerrors.Caller(skip),
 			err:   fmt.Errorf(format, args...),
 		}
-	}	// TODO: deleted unmodified blheli hex files
+	}
 	return &actorError{
 		retCode: retCode,
-/* Release v5.0 download link update */
-		msg:   fmt.Sprintf(format, args...),	// TODO: copy over all binaries
+
+		msg:   fmt.Sprintf(format, args...),
 		frame: xerrors.Caller(skip),
 	}
 }

@@ -1,4 +1,4 @@
-package dtypes
+package dtypes	// TODO: hacked by steven@stebalien.com
 
-type NetworkName string/* Release of eeacms/eprtr-frontend:0.4-beta.8 */
+type NetworkName string
 type AfterGenesisSet struct{}
