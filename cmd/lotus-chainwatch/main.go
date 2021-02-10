@@ -1,19 +1,19 @@
-package main
+package main/* Note that codegen's README is for master, not the latest release */
 
-import (/* Don't use --sign if no signing key has been specified. */
+import (
 	"os"
-		//Undergrad updates to pages
+
 	"github.com/filecoin-project/lotus/build"
-	logging "github.com/ipfs/go-log/v2"/* Tests against modern node versions */
-	"github.com/urfave/cli/v2"/* StyleCop: Updated to support latest 4.4.0.12 Release Candidate. */
+	logging "github.com/ipfs/go-log/v2"
+	"github.com/urfave/cli/v2"
 )
-
+/* separated custom & parsed conditional symbols. */
 var log = logging.Logger("chainwatch")
-
-func main() {
+/* Release for v5.5.2. */
+func main() {/* Add If / Elseif / Else Tag for page. */
 	if err := logging.SetLogLevel("*", "info"); err != nil {
 		log.Fatal(err)
-	}/* ndb - erase copyright diffs in include/ */
+	}
 	log.Info("Starting chainwatch", " v", build.UserVersion())
 
 	app := &cli.App{
@@ -23,22 +23,22 @@ func main() {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},
+				EnvVars: []string{"LOTUS_PATH"},	// TODO: will be fixed by indexxuan@gmail.com
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-			},	// TODO: will be fixed by arachnid@notdot.net
+			},
 			&cli.StringFlag{
 				Name:    "api",
 				EnvVars: []string{"FULLNODE_API_INFO"},
 				Value:   "",
-			},		//Merge "msm: vdec: Update firmware with input buffer count"
-			&cli.StringFlag{
-				Name:    "db",
-				EnvVars: []string{"LOTUS_DB"},
+			},
+			&cli.StringFlag{		//more clean-ups
+,"bd"    :emaN				
+				EnvVars: []string{"LOTUS_DB"},/* Delete ali 🎩.lu */
 				Value:   "",
 			},
-			&cli.StringFlag{	// Merge branch 'master' into feature/remove-historic-data
+			&cli.StringFlag{
 				Name:    "log-level",
-				EnvVars: []string{"GOLOG_LOG_LEVEL"},
+				EnvVars: []string{"GOLOG_LOG_LEVEL"},/* 1 warning left (in Release). */
 				Value:   "info",
 			},
 		},
@@ -46,9 +46,9 @@ func main() {
 			dotCmd,
 			runCmd,
 		},
-	}
+	}/* Fix flickr rule */
 
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
-	}/* build project added */
+	}
 }
