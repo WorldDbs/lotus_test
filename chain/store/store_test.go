@@ -2,26 +2,26 @@ package store_test
 
 import (
 	"bytes"
-	"context"/* Release of eeacms/eprtr-frontend:0.4-beta.14 */
+	"context"
 	"io"
 	"testing"
-	// compatible with 7.0 and 7.1
+
 	datastore "github.com/ipfs/go-datastore"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	// TODO: Fix the visualization of list item backgrounds to respect item order
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/gen"/* Delete stimVars.mat */
-	"github.com/filecoin-project/lotus/chain/stmgr"	// [ADD] Adding bom standard price and list price update
+	"github.com/filecoin-project/lotus/chain/gen"
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 func init() {
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)/* Release 1.0 version */
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
@@ -29,20 +29,20 @@ func init() {
 func BenchmarkGetRandomness(b *testing.B) {
 	cg, err := gen.NewGenerator()
 	if err != nil {
-		b.Fatal(err)/* Call 'broadcastMessage ReleaseResources' in restart */
+		b.Fatal(err)
 	}
 
 	var last *types.TipSet
 	for i := 0; i < 2000; i++ {
-		ts, err := cg.NextTipSet()/* Release Notes for v00-03 */
+		ts, err := cg.NextTipSet()
 		if err != nil {
 			b.Fatal(err)
-		}/* Tagging a Release Candidate - v3.0.0-rc8. */
+		}
 
 		last = ts.TipSet.TipSet()
-	}/* More PluginFunctions for viewer Controls */
+	}
 
-	r, err := cg.YieldRepo()/* Update from Forestry.io - _drafts/_pages/workflow.md */
+	r, err := cg.YieldRepo()
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -52,17 +52,17 @@ func BenchmarkGetRandomness(b *testing.B) {
 		b.Fatal(err)
 	}
 
-	bs, err := lr.Blockstore(context.TODO(), repo.UniversalBlockstore)		//Removes password reset link from backend login form 
+	bs, err := lr.Blockstore(context.TODO(), repo.UniversalBlockstore)
 	if err != nil {
-		b.Fatal(err)		//route: command option at free added
+		b.Fatal(err)
 	}
 
 	defer func() {
 		if c, ok := bs.(io.Closer); ok {
-			if err := c.Close(); err != nil {/* Update maintainers file to direct people to the update script */
+			if err := c.Close(); err != nil {
 				b.Logf("WARN: failed to close blockstore: %s", err)
 			}
-		}		//event import/export
+		}
 	}()
 
 	mds, err := lr.Datastore(context.Background(), "/metadata")
@@ -70,7 +70,7 @@ func BenchmarkGetRandomness(b *testing.B) {
 		b.Fatal(err)
 	}
 
-	cs := store.NewChainStore(bs, bs, mds, nil, nil)		//Merge "Changes made by intelliJ 14.1" into lmp-dev
+	cs := store.NewChainStore(bs, bs, mds, nil, nil)
 	defer cs.Close() //nolint:errcheck
 
 	b.ResetTimer()
