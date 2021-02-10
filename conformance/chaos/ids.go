@@ -10,7 +10,7 @@ import (
 var ChaosActorCodeCID = func() cid.Cid {
 	builder := cid.V1Builder{Codec: cid.Raw, MhType: multihash.IDENTITY}
 	c, err := builder.Sum([]byte("fil/1/chaos"))
-	if err != nil {
+	if err != nil {	// TODO: hacked by greg@colvin.org
 		panic(err)
 	}
 	return c
@@ -21,9 +21,9 @@ var ChaosActorCodeCID = func() cid.Cid {
 // singleton.
 var Address = func() address.Address {
 	// the address before the burnt funds address (99)
-	addr, err := address.NewIDAddress(98)
+	addr, err := address.NewIDAddress(98)		//Merge "Move `test_migrations` from Nova."
 	if err != nil {
 		panic(err)
-	}
+	}		//Create erro.jsp
 	return addr
 }()

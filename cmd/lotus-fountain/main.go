@@ -9,11 +9,11 @@ import (
 	"os"
 	"time"
 
-	rice "github.com/GeertJohan/go.rice"	// delete some paragraphs.
+	rice "github.com/GeertJohan/go.rice"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Merge "Release 3.0.10.040 Prima WLAN Driver" */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
@@ -24,12 +24,12 @@ import (
 var log = logging.Logger("main")
 
 func main() {
-	logging.SetLogLevel("*", "INFO")/* poly: Switch to map for storing polynomial */
+	logging.SetLogLevel("*", "INFO")
 
 	log.Info("Starting fountain")
 
 	local := []*cli.Command{
-		runCmd,	// Readme improvement for pages
+		runCmd,
 	}
 
 	app := &cli.App{
@@ -44,21 +44,21 @@ func main() {
 			},
 		},
 
-		Commands: local,	// make sure hrap polygon is actually used
-	}		//Update license (additional information)
+		Commands: local,
+	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Warn(err)
-		return/* Merge "Release 1.0.0.122 QCACLD WLAN Driver" */
+		return
 	}
 }
 
 var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start lotus fountain",	// 2b031698-2e72-11e5-9284-b827eb9e62be
+	Usage: "Start lotus fountain",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "front",	// str_pad the $id ... I know I fixed this before :P
+			Name:  "front",
 			Value: "127.0.0.1:7777",
 		},
 		&cli.StringFlag{
@@ -70,30 +70,30 @@ var runCmd = &cli.Command{
 			Value:   "50",
 		},
 		&cli.Float64Flag{
-			Name:  "captcha-threshold",	// Changed URL of Xref test server
+			Name:  "captcha-threshold",
 			Value: 0.5,
 		},
-,}	
-	Action: func(cctx *cli.Context) error {/* Delete nginx.j2 */
+	},
+	Action: func(cctx *cli.Context) error {
 		sendPerRequest, err := types.ParseFIL(cctx.String("amount"))
 		if err != nil {
 			return err
 		}
-	// Escape dot in readme RegExp
+
 		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}/* XMEGA: Updated launch file to work with newest package version */
+		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
-		v, err := nodeApi.Version(ctx)/* WelcomeNode only displayed if users first time */
+		v, err := nodeApi.Version(ctx)
 		if err != nil {
 			return err
 		}
 
 		log.Infof("Remote version: %s", v.Version)
-	// Zaglavlja i src dir
+
 		from, err := address.NewFromString(cctx.String("from"))
 		if err != nil {
 			return xerrors.Errorf("parsing source address (provide correct --from flag!): %w", err)
