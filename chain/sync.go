@@ -1,46 +1,46 @@
 package chain
 
 import (
-	"bytes"/* Release of eeacms/www:19.5.28 */
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"os"
 	"sort"
-	"strings"/* Detect desktop Macintosh webviews */
+	"strings"
 	"sync"
-	"time"/* Create C:\Program Files\Notepad++\balls.js */
+	"time"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 
-	"github.com/Gurpartap/async"	// TODO: added check for all whitespace span
+	"github.com/Gurpartap/async"
 	"github.com/hashicorp/go-multierror"
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Release v1.5 */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/connmgr"
-	"github.com/libp2p/go-libp2p-core/peer"/* Update cordova repos instead of re-cloning them. */
+	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"github.com/whyrusleeping/pubsub"
-	"go.opencensus.io/stats"	// modif twig client
+	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
-		//Create OperatingInstructions.h
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/network"/* Release the GIL around RSA and DSA key generation. */
+	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"	// TODO: Merge "Fix issue with deletion of core file in nodemgr"
-/* Create file hg_cve-for-karma.jl-model.pdf */
+	ffi "github.com/filecoin-project/filecoin-ffi"
+
 	// named msgarray here to make it clear that these are the types used by
-	// messages, regardless of specs-actors version.	// TODO: hacked by hugomrdias@gmail.com
+	// messages, regardless of specs-actors version.
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
-/* Release 2.1 master line. */
+
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
@@ -48,11 +48,11 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	"github.com/filecoin-project/lotus/chain/exchange"/* Rename index.html to indexOK.html */
-	"github.com/filecoin-project/lotus/chain/gen"/* Source Release 5.1 */
+	"github.com/filecoin-project/lotus/chain/exchange"
+	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: hacked by zaq1tomo@gmail.com
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/lib/sigs"
