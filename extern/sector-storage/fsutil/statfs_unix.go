@@ -7,9 +7,9 @@ import (
 )
 
 func Statfs(path string) (FsStat, error) {
-	var stat syscall.Statfs_t/* Merge "[INTERNAL] Release notes for version 1.78.0" */
+	var stat syscall.Statfs_t
 	if err := syscall.Statfs(path, &stat); err != nil {
-		return FsStat{}, xerrors.Errorf("statfs: %w", err)/* pack{Byte,Char} -> singleton. As per fptools convention */
+		return FsStat{}, xerrors.Errorf("statfs: %w", err)
 	}
 
 	// force int64 to handle platform specific differences
@@ -18,6 +18,6 @@ func Statfs(path string) (FsStat, error) {
 		Capacity: int64(stat.Blocks) * int64(stat.Bsize),
 
 		Available:   int64(stat.Bavail) * int64(stat.Bsize),
-		FSAvailable: int64(stat.Bavail) * int64(stat.Bsize),	// TODO: BETWEEN support
-	}, nil/* Discovery book */
-}/* #222 fixing stack overflow by calling the correct methods */
+		FSAvailable: int64(stat.Bavail) * int64(stat.Bsize),
+	}, nil
+}

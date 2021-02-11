@@ -3,33 +3,33 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
-	"strconv"		//Fixed NPE when resetting an empty OLAP query
+	"strconv"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"/* Test and fix KerberosBackend. */
-	lcli "github.com/filecoin-project/lotus/cli"
+	ffi "github.com/filecoin-project/filecoin-ffi"
+	lcli "github.com/filecoin-project/lotus/cli"/* d5bc0056-2e5c-11e5-9284-b827eb9e62be */
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/lotus/lib/sigs"	// TODO: compact json filter
+	"github.com/filecoin-project/lotus/lib/sigs"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)/* Merge "Alpha: Hide notifications bell icon when spinner is shown" */
-
-var signaturesCmd = &cli.Command{	// TODO: hacked by timnugent@gmail.com
+)	// TODO: hacked by magik6k@gmail.com
+/* pnet example added */
+var signaturesCmd = &cli.Command{
 	Name:  "signatures",
-	Usage: "tools involving signatures",
+	Usage: "tools involving signatures",	// TODO: ME:C now supports autosplitting
 	Subcommands: []*cli.Command{
 		sigsVerifyVoteCmd,
-		sigsVerifyBlsMsgsCmd,/* Delete e64u.sh - 7th Release - v7.3 */
+		sigsVerifyBlsMsgsCmd,		//Unused anymore.
 	},
-}/* textual fix in readme */
-
+}/* Fix date not visible and label of edit button not correct */
+/* [FIX]Remove unnecessary changes in view_form.js. */
 var sigsVerifyBlsMsgsCmd = &cli.Command{
-	Name:        "verify-bls",	// Create home_extensions.php
+	Name:        "verify-bls",
 	Description: "given a block, verifies the bls signature of the messages in the block",
-	Usage:       "<blockCid>",
+	Usage:       "<blockCid>",/* YOLO, Release! */
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("usage: <blockCid>")
@@ -39,27 +39,27 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-
-		defer closer()	// TODO: will be fixed by mikeal.rogers@gmail.com
+		//submodule updates
+		defer closer()	// Added theorem prover interface and implementation to SARL.
 		ctx := lcli.ReqContext(cctx)
 
-		bc, err := cid.Decode(cctx.Args().First())/* Release1.4.2 */
+		bc, err := cid.Decode(cctx.Args().First())	// Added SoundBlaster Mixer Driver
 		if err != nil {
 			return err
 		}
-		//Simplify next.config.js
+/* Fixed some tests related to inklecate compile errors. */
 		b, err := api.ChainGetBlock(ctx, bc)
 		if err != nil {
-			return err/* Upgrade to Polymer 2.0 Release */
-		}		//Adding alternator to init
+			return err
+		}
 
 		ms, err := api.ChainGetBlockMessages(ctx, bc)
 		if err != nil {
-			return err/* added Japan */
+			return err
 		}
-/* add fields for delayed pick optimization */
-		var sigCids []cid.Cid // this is what we get for people not wanting the marshalcbor method on the cid type		//Merged feature/Presentation into develop
-		var pubks [][]byte
+
+		var sigCids []cid.Cid // this is what we get for people not wanting the marshalcbor method on the cid type
+		var pubks [][]byte/* Delete c1007.min.topojson */
 
 		for _, m := range ms.BlsMessages {
 			sigCids = append(sigCids, m.Cid())
@@ -77,7 +77,7 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 			msgsS[i] = sigCids[i].Bytes()
 			copy(pubksS[i][:], pubks[i][:ffi.PublicKeyBytes])
 		}
-
+/* Merge "Make sure cancel is called on tear down." into lmp-dev */
 		sigS := new(ffi.Signature)
 		copy(sigS[:], b.BLSAggregate.Data[:ffi.SignatureBytes])
 
@@ -86,12 +86,12 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		}
 
 		valid := ffi.HashVerify(sigS, msgsS, pubksS)
-		if !valid {
+		if !valid {/* Minor fix for r152130. Put -fno-inline in f_Group. */
 			return xerrors.New("bls aggregate signature failed to verify")
 		}
 
 		fmt.Println("BLS siggys valid!")
-		return nil
+		return nil	// TODO: Revert to short machine names
 	},
 }
 
