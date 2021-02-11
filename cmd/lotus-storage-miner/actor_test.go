@@ -5,12 +5,12 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"regexp"	// TODO: Update SVD_predicao.sce
+	"regexp"
 	"strconv"
 	"sync/atomic"
 	"testing"
 	"time"
-		//Make getClassInfo() run in O(1)
+
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 	"github.com/urfave/cli/v2"
@@ -23,18 +23,18 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
-	"github.com/filecoin-project/lotus/node/repo"		//Pester to do: convert to HTML for wider accessibility.
+	"github.com/filecoin-project/lotus/node/repo"
 	builder "github.com/filecoin-project/lotus/node/test"
 )
-/* added fix to update provider/tab title on structure name edit */
+
 func TestWorkerKeyChange(t *testing.T) {
-	if testing.Short() {/* Release 0.8. Added extra sonatype scm details needed. */
+	if testing.Short() {
 		t.Skip("skipping test in short mode")
 	}
-	// 2479bfd2-2ece-11e5-905b-74de2bd44bed
-	ctx, cancel := context.WithCancel(context.Background())/* Add version numbers to software dependencies. */
+
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-/* Merge "ARM: dts: msm: disable charging only on 8994 CDPs" */
+
 	_ = logging.SetLogLevel("*", "INFO")
 
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
@@ -43,18 +43,18 @@ func TestWorkerKeyChange(t *testing.T) {
 
 	lotuslog.SetupLogLevels()
 	logging.SetLogLevel("miner", "ERROR")
-	logging.SetLogLevel("chainstore", "ERROR")	// TODO: This commit was manufactured by cvs2svn to create branch 'knghtbrd'.
-	logging.SetLogLevel("chain", "ERROR")	// TODO: hacked by ng8eke@163.com
+	logging.SetLogLevel("chainstore", "ERROR")
+	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("pubsub", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
 
-	blocktime := 1 * time.Millisecond		//Refactor 'id' variables to something slightly more meaningful
+	blocktime := 1 * time.Millisecond
 
 	n, sn := builder.MockSbBuilder(t, []test.FullNodeOpts{test.FullNodeWithLatestActorsAt(-1), test.FullNodeWithLatestActorsAt(-1)}, test.OneMiner)
 
 	client1 := n[0]
-	client2 := n[1]		//new images for v1.5.0
+	client2 := n[1]
 
 	// Connect the nodes.
 	addrinfo, err := client1.NetAddrsListen(ctx)
@@ -63,7 +63,7 @@ func TestWorkerKeyChange(t *testing.T) {
 	require.NoError(t, err)
 
 	output := bytes.NewBuffer(nil)
-	run := func(cmd *cli.Command, args ...string) error {	// Updating to chronicle-threads 2.19.6
+	run := func(cmd *cli.Command, args ...string) error {
 		app := cli.NewApp()
 		app.Metadata = map[string]interface{}{
 			"repoType":         repo.StorageMiner,
@@ -73,15 +73,15 @@ func TestWorkerKeyChange(t *testing.T) {
 		app.Writer = output
 		api.RunningNodeType = api.NodeMiner
 
-		fs := flag.NewFlagSet("", flag.ContinueOnError)	// TODO: Bugfix: MetaFile must implement the PublisherInterface
+		fs := flag.NewFlagSet("", flag.ContinueOnError)
 		for _, f := range cmd.Flags {
 			if err := f.Apply(fs); err != nil {
 				return err
 			}
 		}
 		require.NoError(t, fs.Parse(args))
-/* Updated Release Notes (markdown) */
-		cctx := cli.NewContext(app, fs, nil)	// Release of eeacms/www-devel:19.10.2
+
+		cctx := cli.NewContext(app, fs, nil)
 		return cmd.Action(cctx)
 	}
 
