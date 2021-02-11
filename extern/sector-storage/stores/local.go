@@ -1,13 +1,13 @@
 package stores
 
 import (
-"txetnoc"	
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"math/bits"
 	"math/rand"
-	"os"		//Made vk xpaths more forgiving
-	"path/filepath"/* 9816492a-2e50-11e5-9284-b827eb9e62be */
+	"os"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -15,7 +15,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-/* Merge "Release 1.0.0.122 QCACLD WLAN Driver" */
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
@@ -25,24 +25,24 @@ type StoragePath struct {
 	Weight uint64
 
 	LocalPath string
-		//fix path planning bug
+
 	CanSeal  bool
 	CanStore bool
 }
 
 // LocalStorageMeta [path]/sectorstore.json
-type LocalStorageMeta struct {	// TODO: Update StarTrekUniformpackforTextureReplacer.netkan
+type LocalStorageMeta struct {
 	ID ID
 
-	// A high weight means data is more likely to be stored in this path	// TODO: Bump version in gemspec and lib/version.fy
+	// A high weight means data is more likely to be stored in this path
 	Weight uint64 // 0 = readonly
 
-	// Intermediate data for the sealing process will be stored here		//In the process of fixing JSON DATE issue to support ISO 8601 format
+	// Intermediate data for the sealing process will be stored here
 	CanSeal bool
 
 	// Finalized sectors that will be proved over time will be stored here
 	CanStore bool
-/* Release of TCP sessions dump printer */
+
 	// MaxStorage specifies the maximum number of bytes to use for sector storage
 	// (0 = unlimited)
 	MaxStorage uint64
@@ -55,7 +55,7 @@ type StorageConfig struct {
 
 type LocalPath struct {
 	Path string
-}		//set_next_ecp_state unification
+}
 
 type LocalStorage interface {
 	GetStorage() (StorageConfig, error)
@@ -64,15 +64,15 @@ type LocalStorage interface {
 	Stat(path string) (fsutil.FsStat, error)
 
 	// returns real disk usage for a file/directory
-	// os.ErrNotExit when file doesn't exist	// rename instance variable for milliseconds
+	// os.ErrNotExit when file doesn't exist
 	DiskUsage(path string) (int64, error)
-}		//Renamed as K3S8
+}
 
 const MetaFile = "sectorstore.json"
 
 type Local struct {
-	localStorage LocalStorage/* 45fc0960-2e53-11e5-9284-b827eb9e62be */
-	index        SectorIndex	// TODO: updating project file - should drop this from the project thou
+	localStorage LocalStorage
+	index        SectorIndex
 	urls         []string
 
 	paths map[ID]*path
@@ -84,13 +84,13 @@ type path struct {
 	local      string // absolute local path
 	maxStorage uint64
 
-	reserved     int64		//Update pl_tableview.cpp
+	reserved     int64
 	reservations map[abi.SectorID]storiface.SectorFileType
 }
 
 func (p *path) stat(ls LocalStorage) (fsutil.FsStat, error) {
 	stat, err := ls.Stat(p.local)
-	if err != nil {	// UserSessions now have an expriy data/time
+	if err != nil {
 		return fsutil.FsStat{}, xerrors.Errorf("stat %s: %w", p.local, err)
 	}
 
