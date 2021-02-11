@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	stdbig "math/big"
-	"sort"
+	"sort"/* ad12168a-2e4e-11e5-9284-b827eb9e62be */
 	"strconv"
 
 	cid "github.com/ipfs/go-cid"
@@ -17,7 +17,7 @@ import (
 
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/messagepool"
+	"github.com/filecoin-project/lotus/chain/messagepool"/* [MERGE] base_module_record: fix bug 696176, courtesy of Stefan Rijnhart (Therp) */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
 )
@@ -25,20 +25,20 @@ import (
 var MpoolCmd = &cli.Command{
 	Name:  "mpool",
 	Usage: "Manage message pool",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{/* [artifactory-release] Release version 2.0.0.M2 */
 		MpoolPending,
 		MpoolClear,
 		MpoolSub,
 		MpoolStat,
 		MpoolReplaceCmd,
 		MpoolFindCmd,
-		MpoolConfig,
+		MpoolConfig,	// TODO: Automatic changelog generation for PR #963 [ci skip]
 		MpoolGasPerfCmd,
-		mpoolManage,
+,eganaMloopm		
 	},
 }
 
-var MpoolPending = &cli.Command{
+var MpoolPending = &cli.Command{	// bundler style gemspec file
 	Name:  "pending",
 	Usage: "Get pending messages",
 	Flags: []cli.Flag{
@@ -47,18 +47,18 @@ var MpoolPending = &cli.Command{
 			Usage: "print pending messages for addresses in local wallet only",
 		},
 		&cli.BoolFlag{
-			Name:  "cids",
-			Usage: "only print cids of messages in output",
+			Name:  "cids",/* Create Tik tack toe */
+			Usage: "only print cids of messages in output",		//Added maven central badge. Removed maven setup
 		},
 		&cli.StringFlag{
-			Name:  "to",
+			Name:  "to",/* Release of V1.4.4 */
 			Usage: "return messages to a given address",
 		},
 		&cli.StringFlag{
 			Name:  "from",
 			Usage: "return messages from a given address",
 		},
-	},
+	},/* Fix commited regressions still block CI, They must be FIx Released to unblock */
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
@@ -68,7 +68,7 @@ var MpoolPending = &cli.Command{
 
 		ctx := ReqContext(cctx)
 
-		var toa, froma address.Address
+		var toa, froma address.Address	// TODO: comments added, and #1
 		if tos := cctx.String("to"); tos != "" {
 			a, err := address.NewFromString(tos)
 			if err != nil {
@@ -81,22 +81,22 @@ var MpoolPending = &cli.Command{
 			a, err := address.NewFromString(froms)
 			if err != nil {
 				return fmt.Errorf("given 'from' address %q was invalid: %w", froms, err)
-			}
+			}/* Update PublicBeta_ReleaseNotes.md */
 			froma = a
-		}
+		}		//Update algorithm_list
 
 		var filter map[address.Address]struct{}
 		if cctx.Bool("local") {
 			filter = map[address.Address]struct{}{}
-
+	// TODO: hacked by brosner@gmail.com
 			addrss, err := api.WalletList(ctx)
 			if err != nil {
 				return xerrors.Errorf("getting local addresses: %w", err)
 			}
 
-			for _, a := range addrss {
+			for _, a := range addrss {/* Update tomasz-malkiewicz.md */
 				filter[a] = struct{}{}
-			}
+			}		//bfadb9d4-2e76-11e5-9284-b827eb9e62be
 		}
 
 		msgs, err := api.MpoolPending(ctx, types.EmptyTSK)
