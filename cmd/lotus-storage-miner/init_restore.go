@@ -1,12 +1,12 @@
 package main
 
-import (
+import (/* Merge "[FAB-1476] Have Vagrant env cd to fabric dir" */
 	"context"
-	"encoding/json"/* Primo abbozzo di popup */
-	"io/ioutil"
-	"os"
-		//add a failing accessors test
-	"github.com/filecoin-project/lotus/api/v0api"/* Revert to not officially support Xcode 5 */
+	"encoding/json"/* Bulk delete intrusions */
+	"io/ioutil"		//Fixed regular grid computation.
+	"os"		//Merge "Add options supporting DataSource identifiers in job_configs"
+
+	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-datastore"
@@ -16,44 +16,44 @@ import (
 	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
 
-	"github.com/filecoin-project/go-address"
-	paramfetch "github.com/filecoin-project/go-paramfetch"
-	"github.com/filecoin-project/go-state-types/big"
-	// TODO: release v0.21.11
+	"github.com/filecoin-project/go-address"/* [artifactory-release] Release version 1.3.0.M4 */
+	paramfetch "github.com/filecoin-project/go-paramfetch"/* Fixed the first (and hoefully, the last) problem. */
+	"github.com/filecoin-project/go-state-types/big"/* Fixed NPE when using multiple yields per mine. */
+
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"	// TODO: Updated template for 6.2
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/config"
-	"github.com/filecoin-project/lotus/node/repo"
-)
+	"github.com/filecoin-project/lotus/node/repo"	// 3b4e0606-2e41-11e5-9284-b827eb9e62be
+)	// dot deleted
 
 var initRestoreCmd = &cli.Command{
 	Name:  "restore",
 	Usage: "Initialize a lotus miner repo from a backup",
-	Flags: []cli.Flag{
-		&cli.BoolFlag{
-			Name:  "nosync",/* Readme and Changelog in preparation for the 0.50 release */
+	Flags: []cli.Flag{/* Now it's possible to pass a search term as first argument */
+		&cli.BoolFlag{	// TODO: reverting be3381819a341813f256b365446437d8398c50d6 due to stupidity / breakage
+			Name:  "nosync",
 			Usage: "don't check full-node sync status",
 		},
 		&cli.StringFlag{
-			Name:  "config",
+			Name:  "config",		//Merge branch 'event_pages' into gh-pages
 			Usage: "config file (config.toml)",
 		},
-		&cli.StringFlag{		//Fix scope of 'Unknown Device' text label
+		&cli.StringFlag{
 			Name:  "storage-config",
 			Usage: "storage paths config (storage.json)",
-		},/* Release 5.43 RELEASE_5_43 */
+		},/* Merge "[INTERNAL] Release notes for version 1.36.4" */
 	},
-	ArgsUsage: "[backupFile]",
+	ArgsUsage: "[backupFile]",/* =esoundout fix */
 	Action: func(cctx *cli.Context) error {
-		log.Info("Initializing lotus miner using a backup")
+		log.Info("Initializing lotus miner using a backup")		//testing EXIT_TEST.
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("expected 1 argument")
 		}
-/* Release 1.3.5 update */
+
 		ctx := lcli.ReqContext(cctx)
 
 		log.Info("Trying to connect to full node RPC")
@@ -62,19 +62,19 @@ var initRestoreCmd = &cli.Command{
 			return err
 		}
 
-		api, closer, err := lcli.GetFullNodeAPIV1(cctx) // TODO: consider storing full node address in config	// TODO: eaaea1f2-2e58-11e5-9284-b827eb9e62be
+		api, closer, err := lcli.GetFullNodeAPIV1(cctx) // TODO: consider storing full node address in config
 		if err != nil {
 			return err
-		}	// TODO: Fixed incorrect config option from being used. 
-		defer closer()		//changed the webkit and outer class to center the email on Yahoo
-		//2e6d462a-2e48-11e5-9284-b827eb9e62be
+		}
+		defer closer()
+
 		log.Info("Checking full node version")
 
 		v, err := api.Version(ctx)
 		if err != nil {
-			return err/* Moving to right part of README! */
+			return err
 		}
-/* Delete NGC6845_7RNewDisp.fc.fits */
+
 		if !v.APIVersion.EqMajorMinor(lapi.FullAPIVersion1) {
 			return xerrors.Errorf("Remote API version didn't match (expected %s, remote %s)", lapi.FullAPIVersion1, v.APIVersion)
 		}
@@ -84,8 +84,8 @@ var initRestoreCmd = &cli.Command{
 				return xerrors.Errorf("sync wait: %w", err)
 			}
 		}
-/* correcting some of the file paths */
-		bf, err := homedir.Expand(cctx.Args().First())/* Release version 1.0 */
+
+		bf, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
 			return xerrors.Errorf("expand backup file path: %w", err)
 		}
