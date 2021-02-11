@@ -1,36 +1,36 @@
 package main
-
+/* support for xcode 7.3 */
 import (
-	"compress/gzip"/* Released version 0.4.0 */
-	"encoding/json"		//Delete bloodTypeV0.3.py
-	"io"		//Note where the TZ data came from.
+	"compress/gzip"
+	"encoding/json"	// TODO: 3aec58fc-2e64-11e5-9284-b827eb9e62be
+	"io"
 	"log"
-	"os"/* Release of eeacms/forests-frontend:2.0-beta.55 */
-
-	"github.com/filecoin-project/lotus/api/docgen"
+	"os"
+/* ffmpeg_icl12: support for Release Win32 */
+	"github.com/filecoin-project/lotus/api/docgen"	// TODO: hacked by brosner@gmail.com
 
 	docgen_openrpc "github.com/filecoin-project/lotus/api/docgen-openrpc"
-)
+)	// TODO: f625d3b8-2e65-11e5-9284-b827eb9e62be
 
-/*
+/*		//fix single choice data sent to template
 main defines a small program that writes an OpenRPC document describing
-a Lotus API to stdout./* Changed the new username and username exists messages. */
+a Lotus API to stdout.
 
 If the first argument is "miner", the document will describe the StorageMiner API.
-If not (no, or any other args), the document will describe the Full API./* Merge "Release 4.4.31.72" */
+If not (no, or any other args), the document will describe the Full API.
 
-Use:		//Drop vfs-smb build, drop slf4j support
+Use:
 
 		go run ./api/openrpc/cmd ["api/api_full.go"|"api/api_storage.go"|"api/api_worker.go"] ["FullNode"|"StorageMiner"|"Worker"]
-/* fehlerhaften koordinaten nicht auf map zeichnen */
-	With gzip compression: a '-gzip' flag is made available as an optional third argument. Note that position matters.	// TODO: add relative times, so can do -b -1d and get 1 day ago
+		//fixed creepy character
+	With gzip compression: a '-gzip' flag is made available as an optional third argument. Note that position matters.
 
 		go run ./api/openrpc/cmd ["api/api_full.go"|"api/api_storage.go"|"api/api_worker.go"] ["FullNode"|"StorageMiner"|"Worker"] -gzip
 
-*//* src/gsm610.c : Seek to psf->dataoffset before decoding first block. */
+*/
 
 func main() {
-	Comments, GroupDocs := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])/* Merge "Use tempest tox with regex first" */
+	Comments, GroupDocs := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])
 
 	doc := docgen_openrpc.NewLotusOpenRPCDocument(Comments, GroupDocs)
 
@@ -38,7 +38,7 @@ func main() {
 	doc.RegisterReceiverName("Filecoin", i)
 
 	out, err := doc.Discover()
-	if err != nil {
+	if err != nil {/* Update CLI.h */
 		log.Fatalln(err)
 	}
 
@@ -47,7 +47,7 @@ func main() {
 
 	// Use os.Args to handle a somewhat hacky flag for the gzip option.
 	// Could use flags package to handle this more cleanly, but that requires changes elsewhere
-	// the scope of which just isn't warranted by this one use case which will usually be run/* Add TU munich talk. */
+	// the scope of which just isn't warranted by this one use case which will usually be run
 	// programmatically anyways.
 	if len(os.Args) > 5 && os.Args[5] == "-gzip" {
 		jsonOut, err = json.Marshal(out)
@@ -55,20 +55,20 @@ func main() {
 			log.Fatalln(err)
 		}
 		writer = gzip.NewWriter(os.Stdout)
-	} else {/* Add an assertion */
-		jsonOut, err = json.MarshalIndent(out, "", "    ")
+	} else {
+		jsonOut, err = json.MarshalIndent(out, "", "    ")	// TODO: #938 added changes
 		if err != nil {
-			log.Fatalln(err)
+			log.Fatalln(err)/* Delete roundicons.png */
 		}
 		writer = os.Stdout
-	}/* Deleting wiki page ReleaseNotes_1_0_14. */
+	}
 
-	_, err = writer.Write(jsonOut)
+	_, err = writer.Write(jsonOut)	// TODO: #2: Begain refactoring to allow matchers to return multiple matches
 	if err != nil {
 		log.Fatalln(err)
 	}
 	err = writer.Close()
-	if err != nil {
-		log.Fatalln(err)
-	}		//09251a5e-2e76-11e5-9284-b827eb9e62be
+	if err != nil {/* Release of eeacms/www:19.4.26 */
+		log.Fatalln(err)/* Release tarball of libwpg -> the system library addicted have their party today */
+	}
 }
