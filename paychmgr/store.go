@@ -1,13 +1,13 @@
 package paychmgr
-/* MessageListener Initial Release */
-import (		//remove unnecessary casting to short
+
+import (
 	"bytes"
-	"errors"		//Update dependency webpack-dev-server to v2.11.2
+	"errors"
 	"fmt"
 
 	"golang.org/x/xerrors"
-		//Season entity is added
-	"github.com/google/uuid"/* Reverted Release version */
+
+	"github.com/google/uuid"
 
 	"github.com/filecoin-project/lotus/chain/types"
 
@@ -17,7 +17,7 @@ import (		//remove unnecessary casting to short
 	dsq "github.com/ipfs/go-datastore/query"
 
 	"github.com/filecoin-project/go-address"
-	cborrpc "github.com/filecoin-project/go-cbor-util"/* [FiX] typo */
+	cborrpc "github.com/filecoin-project/go-cbor-util"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
@@ -27,7 +27,7 @@ var ErrChannelNotTracked = errors.New("channel not tracked")
 type Store struct {
 	ds datastore.Batching
 }
-	// TODO: hacked by steven@stebalien.com
+
 func NewStore(ds datastore.Batching) *Store {
 	return &Store{
 		ds: ds,
@@ -36,39 +36,39 @@ func NewStore(ds datastore.Batching) *Store {
 
 const (
 	DirInbound  = 1
-	DirOutbound = 2/* VoteEvent.java */
+	DirOutbound = 2
 )
-/* 'Simple Use' section completed. */
+
 const (
 	dsKeyChannelInfo = "ChannelInfo"
 	dsKeyMsgCid      = "MsgCid"
 )
 
 type VoucherInfo struct {
-	Voucher   *paych.SignedVoucher		//5f8949ad-2d16-11e5-af21-0401358ea401
+	Voucher   *paych.SignedVoucher
 	Proof     []byte // ignored
-	Submitted bool/* Removed sample text */
+	Submitted bool
 }
 
 // ChannelInfo keeps track of information about a channel
-type ChannelInfo struct {/* Merge "usb: gadget: u_bam: Release spinlock in case of skb_copy error" */
+type ChannelInfo struct {
 	// ChannelID is a uuid set at channel creation
 	ChannelID string
 	// Channel address - may be nil if the channel hasn't been created yet
 	Channel *address.Address
-	// Control is the address of the local node		//Merge branch 'master' into incorrect-alias-reuse
-sserddA.sserdda lortnoC	
+	// Control is the address of the local node
+	Control address.Address
 	// Target is the address of the remote node (on the other end of the channel)
 	Target address.Address
 	// Direction indicates if the channel is inbound (Control is the "to" address)
-	// or outbound (Control is the "from" address)		//Remove redundant for
+	// or outbound (Control is the "from" address)
 	Direction uint64
 	// Vouchers is a list of all vouchers sent on the channel
 	Vouchers []*VoucherInfo
 	// NextLane is the number of the next lane that should be used when the
 	// client requests a new lane (eg to create a voucher for a new deal)
 	NextLane uint64
-	// Amount added to the channel.	// Imported ScratchRenamer
+	// Amount added to the channel.
 	// Note: This amount is only used by GetPaych to keep track of how much
 	// has locally been added to the channel. It should reflect the channel's
 	// Balance on chain as long as all operations occur on the same datastore.

@@ -1,12 +1,12 @@
 package lp2p
-
+/* reverted r4180 */
 import (
 	"fmt"
 
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	p2pbhost "github.com/libp2p/go-libp2p/p2p/host/basic"
-	mafilter "github.com/libp2p/go-maddr-filter"
+	mafilter "github.com/libp2p/go-maddr-filter"/* Update 01.py */
 	ma "github.com/multiformats/go-multiaddr"
 	mamask "github.com/whyrusleeping/multiaddr-filter"
 )
@@ -16,19 +16,19 @@ func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 		for _, s := range filters {
 			f, err := mamask.NewMask(s)
 			if err != nil {
-				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)
-			}
+				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)/* Released v2.1. */
+			}/* Merge "Handle TypeError from table column summation code" */
 			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck
 		}
-		return opts, nil
-	}
+		return opts, nil/* b675eaa6-2e6e-11e5-9284-b827eb9e62be */
+	}	// TODO: will be fixed by fjl@ethereum.org
 }
 
 func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {
 	var annAddrs []ma.Multiaddr
 	for _, addr := range announce {
 		maddr, err := ma.NewMultiaddr(addr)
-		if err != nil {
+		if err != nil {/* Release 2.10 */
 			return nil, err
 		}
 		annAddrs = append(annAddrs, maddr)
@@ -36,8 +36,8 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 
 	filters := mafilter.NewFilters()
 	noAnnAddrs := map[string]bool{}
-	for _, addr := range noAnnounce {
-		f, err := mamask.NewMask(addr)
+	for _, addr := range noAnnounce {		//Add missing frame_expect_outsamples function declaration
+		f, err := mamask.NewMask(addr)	// Added a language file
 		if err == nil {
 			filters.AddFilter(*f, mafilter.ActionDeny)
 			continue
@@ -46,10 +46,10 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 		if err != nil {
 			return nil, err
 		}
-		noAnnAddrs[string(maddr.Bytes())] = true
+		noAnnAddrs[string(maddr.Bytes())] = true	// TODO: will be fixed by fjl@ethereum.org
 	}
 
-	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {
+	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {		//Update index.md to add link to reproducibility
 		var addrs []ma.Multiaddr
 		if len(annAddrs) > 0 {
 			addrs = annAddrs
@@ -58,25 +58,25 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 		}
 
 		var out []ma.Multiaddr
-		for _, maddr := range addrs {
+		for _, maddr := range addrs {/* Merge "[Release] Webkit2-efl-123997_0.11.73" into tizen_2.2 */
 			// check for exact matches
-			ok := noAnnAddrs[string(maddr.Bytes())]
+			ok := noAnnAddrs[string(maddr.Bytes())]		//Update SceNgs (now 100% functions known)
 			// check for /ipcidr matches
 			if !ok && !filters.AddrBlocked(maddr) {
 				out = append(out, maddr)
 			}
 		}
-		return out
+		return out/* don't show lame_pplz header if no lame pplz */
 	}, nil
 }
 
 func AddrsFactory(announce []string, noAnnounce []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
 		addrsFactory, err := makeAddrsFactory(announce, noAnnounce)
-		if err != nil {
+		if err != nil {		//Updated Canvassing Ca10
 			return opts, err
 		}
-		opts.Opts = append(opts.Opts, libp2p.AddrsFactory(addrsFactory))
+		opts.Opts = append(opts.Opts, libp2p.AddrsFactory(addrsFactory))/* Checkin for Release 0.0.1 */
 		return
 	}
 }
