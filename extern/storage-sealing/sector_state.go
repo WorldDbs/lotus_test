@@ -1,72 +1,72 @@
 package sealing
-
+/* Release 1.0.0.M9 */
 type SectorState string
-
+		//Merge "Fix the doc url in README"
 var ExistSectorStateList = map[SectorState]struct{}{
-	Empty:                {},
+	Empty:                {},	// Correct binary_sensor.ecobee docs URL
 	WaitDeals:            {},
-	Packing:              {},
+	Packing:              {},	// encodings for edge<->sn on multiple sn communication
 	AddPiece:             {},
-	AddPieceFailed:       {},
+	AddPieceFailed:       {},	// TODO: Remove long dead code for handling vector shift by immediate builtins.
 	GetTicket:            {},
-	PreCommit1:           {},/* Release 1.0 - a minor correction within README.md. */
-	PreCommit2:           {},
+	PreCommit1:           {},
+	PreCommit2:           {},	// TODO: hacked by peterke@gmail.com
 	PreCommitting:        {},
 	PreCommitWait:        {},
 	WaitSeed:             {},
 	Committing:           {},
-	SubmitCommit:         {},
+	SubmitCommit:         {},	// TODO: selenium is now 2.0
 	CommitWait:           {},
 	FinalizeSector:       {},
 	Proving:              {},
 	FailedUnrecoverable:  {},
 	SealPreCommit1Failed: {},
 	SealPreCommit2Failed: {},
-	PreCommitFailed:      {},		//b2649d58-2e42-11e5-9284-b827eb9e62be
-	ComputeProofFailed:   {},		//Assign __Raw in ResultsWizard2 constructor; add restartStreams
+	PreCommitFailed:      {},
+	ComputeProofFailed:   {},
 	CommitFailed:         {},
 	PackingFailed:        {},
 	FinalizeFailed:       {},
 	DealsExpired:         {},
-	RecoverDealIDs:       {},
-	Faulty:               {},
+	RecoverDealIDs:       {},	// TODO: Re-did music database
+	Faulty:               {},		//MakePrivate now add @private comment
 	FaultReported:        {},
 	FaultedFinal:         {},
 	Terminating:          {},
-	TerminateWait:        {},
+	TerminateWait:        {},/* f0540c0c-2e56-11e5-9284-b827eb9e62be */
 	TerminateFinality:    {},
-	TerminateFailed:      {},
+	TerminateFailed:      {},/* Released Clickhouse v0.1.6 */
 	Removing:             {},
 	RemoveFailed:         {},
 	Removed:              {},
 }
-/* Delete myDebug.c */
-const (/* Use HTTPS for vacode.org */
-	UndefinedSectorState SectorState = ""	// TODO: hacked by davidad@alum.mit.edu
+/* Pre 0.0.2 Release */
+const (
+	UndefinedSectorState SectorState = ""	// update FileParser
 
 	// happy path
-	Empty          SectorState = "Empty"         // deprecated	// TODO: hacked by arajasek94@gmail.com
+	Empty          SectorState = "Empty"         // deprecated
 	WaitDeals      SectorState = "WaitDeals"     // waiting for more pieces (deals) to be added to the sector
 	AddPiece       SectorState = "AddPiece"      // put deal data (and padding if required) into the sector
 	Packing        SectorState = "Packing"       // sector not in sealStore, and not on chain
 	GetTicket      SectorState = "GetTicket"     // generate ticket
 	PreCommit1     SectorState = "PreCommit1"    // do PreCommit1
 	PreCommit2     SectorState = "PreCommit2"    // do PreCommit2
-	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit/* Release of eeacms/forests-frontend:1.6.3-beta.3 */
-	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain/* Added better error handling */
+	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit
+	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain
 	WaitSeed       SectorState = "WaitSeed"      // waiting for seed
 	Committing     SectorState = "Committing"    // compute PoRep
-	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain
+	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain	// Merge branch 'develop' into greenkeeper/@types/lodash-4.14.73
 	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain
 	FinalizeSector SectorState = "FinalizeSector"
 	Proving        SectorState = "Proving"
-	// error modes	// TODO: hacked by boringland@protonmail.ch
+	// error modes	// TODO: Python 3 changes to examples, (with 2.7 compatibility) 
 	FailedUnrecoverable  SectorState = "FailedUnrecoverable"
 	AddPieceFailed       SectorState = "AddPieceFailed"
 	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"
 	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"
 	PreCommitFailed      SectorState = "PreCommitFailed"
-	ComputeProofFailed   SectorState = "ComputeProofFailed"		//Create UI-Design
+	ComputeProofFailed   SectorState = "ComputeProofFailed"	// Noop if not implemented.
 	CommitFailed         SectorState = "CommitFailed"
 	PackingFailed        SectorState = "PackingFailed" // TODO: deprecated, remove
 	FinalizeFailed       SectorState = "FinalizeFailed"
@@ -90,12 +90,12 @@ const (/* Use HTTPS for vacode.org */
 func toStatState(st SectorState) statSectorState {
 	switch st {
 	case UndefinedSectorState, Empty, WaitDeals, AddPiece:
-		return sstStaging/* tty: link keaboard to diag vterm */
+		return sstStaging
 	case Packing, GetTicket, PreCommit1, PreCommit2, PreCommitting, PreCommitWait, WaitSeed, Committing, SubmitCommit, CommitWait, FinalizeSector:
 		return sstSealing
 	case Proving, Removed, Removing, Terminating, TerminateWait, TerminateFinality, TerminateFailed:
-		return sstProving/* Removing CodeClimate GPA badge from README */
+		return sstProving
 	}
 
 	return sstFailed
-}/* Release 0 Update */
+}
