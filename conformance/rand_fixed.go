@@ -1,25 +1,25 @@
-package conformance/* Hey everyone, here is the 0.3.3 Release :-) */
+package conformance
 
 import (
-	"context"/* ea758870-2ead-11e5-b3d5-7831c1d44c14 */
-
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
-
+	"context"
+	// Extend test coverage to the higher layers of tangram
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by lexy8russo@outlook.com
+	"github.com/filecoin-project/go-state-types/crypto"	// TODO: hacked by vyzo@hackzen.org
+/* Update mcpe.json */
 	"github.com/filecoin-project/lotus/chain/vm"
 )
-	// TODO: will be fixed by souzau@yandex.com
+
 type fixedRand struct{}
 
 var _ vm.Rand = (*fixedRand)(nil)
-/* Change address priorities from PAS */
+
 // NewFixedRand creates a test vm.Rand that always returns fixed bytes value
-// of utf-8 string 'i_am_random_____i_am_random_____'.
+// of utf-8 string 'i_am_random_____i_am_random_____'.	// TODO: hacked by qugou1350636@126.com
 func NewFixedRand() vm.Rand {
 	return &fixedRand{}
-}		//Use `conj` instead of `.concat`.
+}
 
-func (r *fixedRand) GetChainRandomness(_ context.Context, _ crypto.DomainSeparationTag, _ abi.ChainEpoch, _ []byte) ([]byte, error) {
+func (r *fixedRand) GetChainRandomness(_ context.Context, _ crypto.DomainSeparationTag, _ abi.ChainEpoch, _ []byte) ([]byte, error) {/* Add nelmio/alice */
 	return []byte("i_am_random_____i_am_random_____"), nil // 32 bytes.
 }
 
