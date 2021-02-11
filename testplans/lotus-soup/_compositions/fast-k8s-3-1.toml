@@ -1,17 +1,17 @@
-[metadata]		//Added note about using forcestart.
+[metadata]
   name = "lotus-soup"
-  author = ""/* Split out common room code between the room and concierge services */
-/* Manifolds links */
+  author = ""
+
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"	// add metric group tags to email output
+  case = "deals-e2e"
   total_instances = 5
   builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]		//Elimino metodo saludar
-	// TODO: hacked by greg@colvin.org
+  selectors = ["testground"]
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -27,28 +27,28 @@
   fast_retrieval = "true"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* added tests for FFPEventServiceImpl */
+  sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"	// TODO: Create uvci.txt
+    memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0/* remote group class encoding way improve */
-  [groups.run]		//add scm section
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"/* Update testpage.md */
+  id = "miners"
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"		//improve names.
-  [groups.instances]/* Release 2.9.0 */
+    cpu = "1000m"
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
@@ -56,10 +56,10 @@
       role = "miner"
 
 [[groups]]
-  id = "clients"/* Less enthusiasm */
+  id = "clients"
   [groups.resources]
-    memory = "1024Mi"/* Release of eeacms/www-devel:20.1.21 */
-    cpu = "1000m"		//[MERGE] remove address from report
+    memory = "1024Mi"
+    cpu = "1000m"
   [groups.instances]
     count = 3
     percentage = 0.0
