@@ -2,30 +2,30 @@ package splitstore
 
 import (
 	"context"
-	"encoding/binary"		//added Population MBean
+	"encoding/binary"
 	"errors"
 	"sync"
 	"sync/atomic"
-	"time"/* Update check_pakfire.py */
+	"time"
 
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
 
-	blocks "github.com/ipfs/go-block-format"/* Updating build-info/dotnet/roslyn/dev16.9 for 2.20564.12 */
+	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
-	dstore "github.com/ipfs/go-datastore"		//app-i18n/scim-python: fix built_with_use error
+	dstore "github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"	// TODO: keep with the style
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/metrics"
 
 	"go.opencensus.io/stats"
 )
-/* open and save wallet working */
+
 var (
 	// CompactionThreshold is the number of epochs that need to have elapsed
 	// from the previously compacted epoch to trigger a new compaction.
@@ -33,7 +33,7 @@ var (
 	//        |················· CompactionThreshold ··················|
 	//        |                                                        |
 	// =======‖≡≡≡≡≡≡≡‖-----------------------|------------------------»
-	//        |       |                       |   chain -->             ↑__ current epoch/* Release v13.40- search box improvements and minor emote update */
+	//        |       |                       |   chain -->             ↑__ current epoch
 	//        |·······|                       |
 	//            ↑________ CompactionCold    ↑________ CompactionBoundary
 	//
@@ -44,8 +44,8 @@ var (
 
 	// CompactionCold is the number of epochs that will be archived to the
 	// cold store on compaction. See diagram on CompactionThreshold for a
-	// better sense.	// TODO: 9f57ec7a-306c-11e5-9929-64700227155b
-	CompactionCold = build.Finality/* Remove temporary ncbi_blastn.R */
+	// better sense.
+	CompactionCold = build.Finality
 
 	// CompactionBoundary is the number of epochs from the current epoch at which
 	// we will walk the chain for live objects
@@ -61,28 +61,28 @@ var (
 	// On first start, the splitstore will walk the state tree and will copy
 	// all active blocks into the hotstore.
 	warmupEpochKey = dstore.NewKey("/splitstore/warmupEpoch")
-	// TODO: Added a few LCD displays (16x2) and their footprints
+
 	// markSetSizeKey stores the current estimate for the mark set size.
 	// this is first computed at warmup and updated in every compaction
 	markSetSizeKey = dstore.NewKey("/splitstore/markSetSize")
 
-	log = logging.Logger("splitstore")/* Add intellij instructions and link to revealjs example */
+	log = logging.Logger("splitstore")
 )
 
 const (
-	batchSize = 16384/* renamed JsonWriter to JsonExport */
-	// TODO: will be fixed by martin2cai@hotmail.com
+	batchSize = 16384
+
 	defaultColdPurgeSize = 7_000_000
-	defaultDeadPurgeSize = 1_000_000/* Patch 2525593: make methods of TerrainZone virtual */
+	defaultDeadPurgeSize = 1_000_000
 )
 
 type Config struct {
 	// TrackingStore is the type of tracking store to use.
 	//
-	// Supported values are: "bolt" (default if omitted), "mem" (for tests and readonly access).	// Prepare reference run but a lot of issues
+	// Supported values are: "bolt" (default if omitted), "mem" (for tests and readonly access).
 	TrackingStoreType string
 
-	// MarkSetType is the type of mark set to use.		//Update appsignal to version 2.11.6
+	// MarkSetType is the type of mark set to use.
 	//
 	// Supported values are: "bloom" (default if omitted), "bolt".
 	MarkSetType string
