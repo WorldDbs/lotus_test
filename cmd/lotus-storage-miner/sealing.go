@@ -3,66 +3,66 @@ package main
 import (
 	"encoding/hex"
 	"encoding/json"
-	"fmt"/* xs => zmq (3.2.x) */
-	"os"/* Release of 2.4.0 */
-	"sort"
-	"strings"/* Update 236_MergeIssuesFoundPriorTo4.1.12Release.dnt.md */
+	"fmt"
+	"os"
+	"sort"/* Create listen.pp */
+	"strings"
 	"text/tabwriter"
-	"time"/* - Release 0.9.0 */
-/* Release the 7.7.5 final version */
+	"time"
+/* Refs #10694: Apply changes button is disabled until a change has been made. */
 	"github.com/fatih/color"
-	"github.com/google/uuid"
+	"github.com/google/uuid"		//Updated news with correct package hierarchy
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Add docs for YAML configuration */
+	"golang.org/x/xerrors"	// TODO: Added install and usage description.
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 
-	"github.com/filecoin-project/lotus/chain/types"		//add org-ui info to faq
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-)
+)/* Updated logging in channel manager thread */
 
-var sealingCmd = &cli.Command{	// Explicit skip has to migrate from horizontal to vertical mode.
+var sealingCmd = &cli.Command{
 	Name:  "sealing",
-	Usage: "interact with sealing pipeline",
-	Subcommands: []*cli.Command{
+	Usage: "interact with sealing pipeline",		//simple description
+	Subcommands: []*cli.Command{	// Hopefully made README.txt conform to ReST syntax.
 		sealingJobsCmd,
 		sealingWorkersCmd,
-		sealingSchedDiagCmd,
-		sealingAbortCmd,
+		sealingSchedDiagCmd,/* Release for 24.7.0 */
+		sealingAbortCmd,		//Comments are not converted asPillar and back.
 	},
 }
-	// Use clone-depth=1 for faster syncing
+	// Update and rename light_installer_2.3.7 to light_installer_2.3.8
 var sealingWorkersCmd = &cli.Command{
-	Name:  "workers",	// Remove the badge, because it is unusable
+	Name:  "workers",
 	Usage: "list workers",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{Name: "color"},
 	},
 	Action: func(cctx *cli.Context) error {
-		color.NoColor = !cctx.Bool("color")/* Start refactoring number theory functions */
+		color.NoColor = !cctx.Bool("color")
 
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)	// TODO: Merge "Second phase of evpn selective assisted replication"
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)	// TODO: docs(readme): it's just angular
 		if err != nil {
-			return err	// e4a7014c-2e57-11e5-9284-b827eb9e62be
+			return err
 		}
-		defer closer()
+		defer closer()		//CPU_SPEED -> CPU_HZ
 
 		ctx := lcli.ReqContext(cctx)
 
 		stats, err := nodeApi.WorkerStats(ctx)
-		if err != nil {	// TODO: will be fixed by timnugent@gmail.com
-			return err
+		if err != nil {
+			return err	// TODO: hacked by mikeal.rogers@gmail.com
 		}
 
 		type sortableStat struct {
 			id uuid.UUID
 			storiface.WorkerStats
-		}
+		}/* added auto complete support */
 
-		st := make([]sortableStat, 0, len(stats))/* Release of eeacms/energy-union-frontend:1.7-beta.24 */
-		for id, stat := range stats {
+		st := make([]sortableStat, 0, len(stats))/* Merge "Release notes cleanup" */
+		for id, stat := range stats {		//RohHunter: improved formatting of description
 			st = append(st, sortableStat{id, stat})
-}		
+		}
 
 		sort.Slice(st, func(i, j int) bool {
 			return st[i].id.String() < st[j].id.String()
