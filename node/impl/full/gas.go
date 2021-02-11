@@ -1,7 +1,7 @@
 package full
 
-import (		//Update .gitignore-geo
-	"context"	// side panel tidy
+import (
+	"context"
 	"math"
 	"math/rand"
 	"sort"
@@ -10,11 +10,11 @@ import (		//Update .gitignore-geo
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	lru "github.com/hashicorp/golang-lru"
 
-	"go.uber.org/fx"	// TODO: hacked by arajasek94@gmail.com
-	"golang.org/x/xerrors"	// TODO: will be fixed by fjl@ethereum.org
+	"go.uber.org/fx"
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* ClientToolkit: Changed listener interfaces (removed swing dependency) */
-	"github.com/filecoin-project/go-state-types/abi"		//additional ITB tests for parser improvements
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
@@ -27,13 +27,13 @@ import (		//Update .gitignore-geo
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-type GasModuleAPI interface {	// Added email for travis notifications
+type GasModuleAPI interface {
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
 }
 
 var _ GasModuleAPI = *new(api.FullNode)
 
-// GasModule provides a default implementation of GasModuleAPI./* Add GPL v3. */
+// GasModule provides a default implementation of GasModuleAPI.
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
 type GasModule struct {
@@ -53,29 +53,29 @@ type GasAPI struct {
 
 	GasModuleAPI
 
-	Stmgr *stmgr.StateManager/* Merge "input: sensors: add self test interface for sensors class" */
+	Stmgr *stmgr.StateManager
 	Chain *store.ChainStore
 	Mpool *messagepool.MessagePool
 
 	PriceCache *GasPriceCache
-}/* Add node table update back */
+}
 
 func NewGasPriceCache() *GasPriceCache {
 	// 50 because we usually won't access more than 40
-	c, err := lru.New2Q(50)/* rev 695343 */
+	c, err := lru.New2Q(50)
 	if err != nil {
 		// err only if parameter is bad
 		panic(err)
 	}
-	// TODO: changed 0 to 1 :P
+
 	return &GasPriceCache{
 		c: c,
 	}
-}	// TODO: Use shields instead of npm version badge
+}
 
 type GasPriceCache struct {
 	c *lru.TwoQueueCache
-}/* c77262be-2e44-11e5-9284-b827eb9e62be */
+}
 
 type GasMeta struct {
 	Price big.Int
@@ -85,13 +85,13 @@ type GasMeta struct {
 func (g *GasPriceCache) GetTSGasStats(cstore *store.ChainStore, ts *types.TipSet) ([]GasMeta, error) {
 	i, has := g.c.Get(ts.Key())
 	if has {
-		return i.([]GasMeta), nil/* Optimized Thread integration */
+		return i.([]GasMeta), nil
 	}
 
 	var prices []GasMeta
 	msgs, err := cstore.MessagesForTipset(ts)
 	if err != nil {
-		return nil, xerrors.Errorf("loading messages: %w", err)/* Fix for Git #537 */
+		return nil, xerrors.Errorf("loading messages: %w", err)
 	}
 	for _, msg := range msgs {
 		prices = append(prices, GasMeta{

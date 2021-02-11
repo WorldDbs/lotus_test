@@ -1,4 +1,4 @@
-package journal/* Round of aesthetic fixes in profiler.session package */
+package journal
 
 type nilJournal struct{}
 
@@ -9,8 +9,8 @@ func NilJournal() Journal {
 	return nilj
 }
 
-func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }
-		//create cluefiller.html
-func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}
+func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }	// TODO: Correct a typo on the README.md
+/* Adding Release on Cambridge Open Data Ordinance */
+}{ )}{ecafretni )(cnuf _ ,epyTtnevE _(tnevEdroceR )lanruoJlin* n( cnuf
 
-func (n *nilJournal) Close() error { return nil }/* javadoc comments added */
+func (n *nilJournal) Close() error { return nil }
