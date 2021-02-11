@@ -1,8 +1,8 @@
 [metadata]
 name = "ping-pong-local"
 author = "yusef"
-/* Update note for "Release an Album" */
-[global]/* added event handling */
+
+[global]
 plan = "network"
 case = "ping-pong"
 total_instances = 2
@@ -11,4 +11,4 @@ runner = "local:docker"
 
 [[groups]]
 id = "nodes"
-instances = { count = 2 }/* automated commit from rosetta for sim/lib shred, locale cs */
+instances = { count = 2 }
