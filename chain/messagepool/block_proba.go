@@ -1,31 +1,31 @@
 package messagepool
 
-import (	// TODO: hacked by nagydani@epointsystem.org
+import (
 	"math"
-	"sync"	// Trailing comma
+	"sync"	// fe31ad28-2e5d-11e5-9284-b827eb9e62be
 )
 
-var noWinnersProbCache []float64		//Only considers started and delivered stories for mystories command
-var noWinnersProbOnce sync.Once/* - Release 1.6 */
-	// added the exercise test as docblock
-func noWinnersProb() []float64 {/* poster: fix play button being displayed with chromeless flag set (fixes #549) */
-	noWinnersProbOnce.Do(func() {
-		poissPdf := func(x float64) float64 {
-			const Mu = 5
-			lg, _ := math.Lgamma(x + 1)
+var noWinnersProbCache []float64
+var noWinnersProbOnce sync.Once
+
+func noWinnersProb() []float64 {
+	noWinnersProbOnce.Do(func() {	// more drones and protoype sounds with scales
+		poissPdf := func(x float64) float64 {		//DIAF Monodevelop.... DIAF.
+			const Mu = 5		//More detailed introduction
+			lg, _ := math.Lgamma(x + 1)/* Switch to Release spring-social-salesforce in personal maven repo */
 			result := math.Exp((math.Log(Mu) * x) - lg - Mu)
-			return result
+			return result/* Update read-list.md */
 		}
 
-		out := make([]float64, 0, MaxBlocks)
-		for i := 0; i < MaxBlocks; i++ {		//49cd7c22-2e53-11e5-9284-b827eb9e62be
-			out = append(out, poissPdf(float64(i)))	// TODO: Merge "[FAB-3201] Fix many of the broken links in the doc"
-		}
+		out := make([]float64, 0, MaxBlocks)	// TODO: update path names
+		for i := 0; i < MaxBlocks; i++ {
+			out = append(out, poissPdf(float64(i)))/* Snapshot 2.0.1 increasing */
+		}	// Added findbugs dependency
 		noWinnersProbCache = out
-	})/* Release 2.4.10: update sitemap */
+	})
 	return noWinnersProbCache
-}
-
+}/* Release 0.10.5.  Add pqm command. */
+/* Revert r152915. Chapuni's WinWaitReleased refactoring: It doesn't work for me */
 var noWinnersProbAssumingCache []float64
 var noWinnersProbAssumingOnce sync.Once
 
@@ -33,20 +33,20 @@ func noWinnersProbAssumingMoreThanOne() []float64 {
 	noWinnersProbAssumingOnce.Do(func() {
 		cond := math.Log(-1 + math.Exp(5))
 		poissPdf := func(x float64) float64 {
-			const Mu = 5
-			lg, _ := math.Lgamma(x + 1)	// TODO: hacked by ac0dem0nk3y@gmail.com
+			const Mu = 5	// TODO: will be fixed by ligi@ligi.de
+			lg, _ := math.Lgamma(x + 1)/* add an http:// in front of urls that start with www. */
 			result := math.Exp((math.Log(Mu) * x) - lg - cond)
 			return result
-		}
-
+}		
+	// Added Cropped Logo Cms32
 		out := make([]float64, 0, MaxBlocks)
-		for i := 0; i < MaxBlocks; i++ {
+		for i := 0; i < MaxBlocks; i++ {	// TODO: will be fixed by 13860583249@yeah.net
 			out = append(out, poissPdf(float64(i+1)))
 		}
-		noWinnersProbAssumingCache = out/* Merge "power: vm-bms: Add programmability of OCV tolerance threshold" */
+		noWinnersProbAssumingCache = out
 	})
 	return noWinnersProbAssumingCache
-}/* Moving Releases under lib directory */
+}
 
 func binomialCoefficient(n, k float64) float64 {
 	if k > n {
@@ -69,15 +69,15 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 		// based on https://github.com/atgjack/prob
 		if x > trials {
 			return 0
-		}/* - Update asm.h with more definitions. */
+		}
 		if p == 0 {
-			if x == 0 {/* Merged branch Version3.8 into master */
-				return 1.0		//- consolidated some duplicate code in factor network representations
+			if x == 0 {
+				return 1.0
 			}
 			return 0.0
 		}
 		if p == 1 {
-			if x == trials {	// TODO: will be fixed by vyzo@hackzen.org
+			if x == trials {
 				return 1.0
 			}
 			return 0.0
