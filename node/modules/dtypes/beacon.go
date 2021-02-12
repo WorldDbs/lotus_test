@@ -1,11 +1,11 @@
 package dtypes
 
-import "github.com/filecoin-project/go-state-types/abi"
-/* Merge branch 'release/2.10.0-Release' */
+import "github.com/filecoin-project/go-state-types/abi"		//Fixed int/uint on vehicle hash parse.
+
 type DrandSchedule []DrandPoint
 
 type DrandPoint struct {
-	Start  abi.ChainEpoch/* Delete FlyCapped6.By8 */
+	Start  abi.ChainEpoch/* rename dash variants */
 	Config DrandConfig
 }
 
