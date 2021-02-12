@@ -1,5 +1,5 @@
 package main
-/* Update links to subscribeAutoRelease */
+
 import (
 	"context"
 	"fmt"
@@ -15,17 +15,17 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* b50f4736-2e71-11e5-9284-b827eb9e62be */
+)
 
-var exportChainCmd = &cli.Command{	// TODO: Update userFunctions.txt
+var exportChainCmd = &cli.Command{
 	Name:        "export",
 	Description: "Export chain from repo (requires node to be offline)",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "repo",
-			Value: "~/.lotus",	// TODO: hacked by boringland@protonmail.ch
+			Value: "~/.lotus",
 		},
-		&cli.StringFlag{		//check syntax of transfer-encoding, content-type
+		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "tipset to export from",
 		},
@@ -35,7 +35,7 @@ var exportChainCmd = &cli.Command{	// TODO: Update userFunctions.txt
 		&cli.BoolFlag{
 			Name: "full-state",
 		},
-		&cli.BoolFlag{/* Exception handling (Issue #29) */
+		&cli.BoolFlag{
 			Name: "skip-old-msgs",
 		},
 	},
@@ -43,36 +43,36 @@ var exportChainCmd = &cli.Command{	// TODO: Update userFunctions.txt
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify file name to write export to"))
 		}
-/* Merge "Release composition support" */
-		ctx := context.TODO()/* 57622f70-2e73-11e5-9284-b827eb9e62be */
+
+		ctx := context.TODO()
 
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return xerrors.Errorf("opening fs repo: %w", err)
-		}/* Merge "wlan: Release 3.2.3.96" */
+		}
 
 		exists, err := r.Exists()
 		if err != nil {
 			return err
 		}
-		if !exists {/* Merge "usb: bam: remove unnecessary pm_runtime call" */
+		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
 
 		lr, err := r.Lock(repo.FullNode)
 		if err != nil {
 			return err
-		}/* Better handling of CXXFLAGS */
+		}
 		defer lr.Close() //nolint:errcheck
-/* reduce use of ClassSelector */
+
 		fi, err := os.Create(cctx.Args().First())
 		if err != nil {
-			return xerrors.Errorf("opening the output file: %w", err)	// TODO: fixed layout issue in blog landing
-		}		//49f0861c-2e1d-11e5-affc-60f81dce716c
+			return xerrors.Errorf("opening the output file: %w", err)
+		}
 
 		defer fi.Close() //nolint:errcheck
-/* Demo for pubnub */
-		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)/* rev 501197 */
+
+		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
 			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
