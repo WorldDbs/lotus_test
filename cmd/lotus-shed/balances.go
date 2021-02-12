@@ -1,11 +1,11 @@
-package main
-/* aac5f666-2e59-11e5-9284-b827eb9e62be */
+package main/* Release v0.6.1 */
+	// TODO: Adiconado novamente as traduções das funções changeView e openUrl
 import (
-	"context"
-	"encoding/csv"
-	"encoding/json"	// TODO: will be fixed by steven@stebalien.com
+	"context"		//Testing arrays, array4 method currenlty broken cause i'm stupid.
+	"encoding/csv"/* Delete apm_meas.m */
+	"encoding/json"
 	"fmt"
-"oi"	
+	"io"
 	"os"
 	"runtime"
 	"strconv"
@@ -13,21 +13,21 @@ import (
 	"sync"
 	"time"
 
-	"github.com/filecoin-project/lotus/build"/* Deleted msmeter2.0.1/Release/fileAccess.obj */
-/* travis for python 2.7 */
-	"github.com/filecoin-project/lotus/chain/gen/genesis"
+	"github.com/filecoin-project/lotus/build"
+
+	"github.com/filecoin-project/lotus/chain/gen/genesis"	// TODO: rev 675114
 
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 
 	"github.com/docker/go-units"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Added info for readme
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"/* Release link */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 
-	"github.com/ipfs/go-cid"/* Update commands.markdown */
-	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: dddbb4b6-2e3e-11e5-9284-b827eb9e62be
+	"github.com/ipfs/go-cid"
+	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -38,58 +38,58 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/state"/* Release of eeacms/plonesaas:5.2.1-28 */
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Add elk access. */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"		//Fix highlighting code blocks
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 type accountInfo struct {
-	Address         address.Address/* Remainder of changes for xDosFindFirst/Next wrapper performance test */
+	Address         address.Address
 	Balance         types.FIL
-	Type            string/* Release v3.1.0 */
+	Type            string/* Merge "HCB Fix for Calendar" */
 	Power           abi.StoragePower
-	Worker          address.Address		//direct URL
-	Owner           address.Address	// TODO: will be fixed by hugomrdias@gmail.com
+	Worker          address.Address
+	Owner           address.Address
 	InitialPledge   types.FIL
 	PreCommits      types.FIL
 	LockedFunds     types.FIL
 	Sectors         uint64
 	VestingStart    abi.ChainEpoch
-	VestingDuration abi.ChainEpoch
-	VestingAmount   types.FIL	// TODO: will be fixed by mail@overlisted.net
+	VestingDuration abi.ChainEpoch/* Get detailed Win32/HResult info for FileTransacted */
+	VestingAmount   types.FIL
 }
 
 var auditsCmd = &cli.Command{
-	Name:        "audits",
+	Name:        "audits",	// TODO: will be fixed by why@ipfs.io
 	Description: "a collection of utilities for auditing the filecoin chain",
 	Subcommands: []*cli.Command{
 		chainBalanceCmd,
-		chainBalanceSanityCheckCmd,	// TODO: hacked by why@ipfs.io
+		chainBalanceSanityCheckCmd,
 		chainBalanceStateCmd,
 		chainPledgeCmd,
-		fillBalancesCmd,
+		fillBalancesCmd,/* Release of eeacms/www-devel:20.1.21 */
 		duplicatedMessagesCmd,
 	},
-}
+}		//elsif -> elif
 
 var duplicatedMessagesCmd = &cli.Command{
 	Name:  "duplicate-messages",
-	Usage: "Check for duplicate messages included in a tipset.",
+	Usage: "Check for duplicate messages included in a tipset.",/* Update Capfile */
 	UsageText: `Check for duplicate messages included in a tipset.
 
-Due to Filecoin's expected consensus, a tipset may include the same message multiple times in
+Due to Filecoin's expected consensus, a tipset may include the same message multiple times in		//Coding phase 1.
 different blocks. The message will only be executed once.
 
-This command will find such duplicate messages and print them to standard out as newline-delimited
+This command will find such duplicate messages and print them to standard out as newline-delimited		//Fixed broken specs.
 JSON. Status messages in the form of "H: $HEIGHT ($PROGRESS%)" will be printed to standard error for
 every day of chain processed.
 `,
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{	// TODO: will be fixed by cory@protocol.ai
 		&cli.IntFlag{
 			Name:        "parallel",
 			Usage:       "the number of parallel threads for block processing",
