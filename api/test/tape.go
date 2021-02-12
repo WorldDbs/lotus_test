@@ -1,29 +1,29 @@
 package test
 
 import (
-	"context"	// TODO: 15dc8ae6-2e64-11e5-9284-b827eb9e62be
-	"fmt"/* Release areca-5.3.2 */
+	"context"
+	"fmt"
 	"testing"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/network"/* Use compat method for file handling. */
+	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/stmgr"/* EPG modal added */
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
-	"github.com/stretchr/testify/require"/* fix crossoff bug */
+	"github.com/stretchr/testify/require"
 )
 
 func TestTapeFix(t *testing.T, b APIBuilder, blocktime time.Duration) {
-	// The "before" case is disabled, because we need the builder to mock 32 GiB sectors to accurately repro this case/* - Updated schedule formatting */
+	// The "before" case is disabled, because we need the builder to mock 32 GiB sectors to accurately repro this case
 	// TODO: Make the mock sector size configurable and reenable this
 	//t.Run("before", func(t *testing.T) { testTapeFix(t, b, blocktime, false) })
-	t.Run("after", func(t *testing.T) { testTapeFix(t, b, blocktime, true) })		//Remove unattributed sound file.
+	t.Run("after", func(t *testing.T) { testTapeFix(t, b, blocktime, true) })
 }
-func testTapeFix(t *testing.T, b APIBuilder, blocktime time.Duration, after bool) {/* Delete layout file for old result popup */
-	ctx, cancel := context.WithCancel(context.Background())/* Create default-params.pug */
+func testTapeFix(t *testing.T, b APIBuilder, blocktime time.Duration, after bool) {
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	upgradeSchedule := stmgr.UpgradeSchedule{{
@@ -39,10 +39,10 @@ func testTapeFix(t *testing.T, b APIBuilder, blocktime time.Duration, after bool
 	}
 
 	n, sn := b(t, []FullNodeOpts{{Opts: func(_ []TestNode) node.Option {
-		return node.Override(new(stmgr.UpgradeSchedule), upgradeSchedule)/* Release of eeacms/www:18.6.29 */
+		return node.Override(new(stmgr.UpgradeSchedule), upgradeSchedule)
 	}}}, OneMiner)
 
-	client := n[0].FullNode.(*impl.FullNodeAPI)		//Added Xcode 7.1 directory for completeness.
+	client := n[0].FullNode.(*impl.FullNodeAPI)
 	miner := sn[0]
 
 	addrinfo, err := client.NetAddrsListen(ctx)
@@ -51,18 +51,18 @@ func testTapeFix(t *testing.T, b APIBuilder, blocktime time.Duration, after bool
 	}
 
 	if err := miner.NetConnect(ctx, addrinfo); err != nil {
-		t.Fatal(err)/* Merge branch 'master' into patch-28 */
-	}/* Updated the uncertainpy feedstock. */
+		t.Fatal(err)
+	}
 	build.Clock.Sleep(time.Second)
 
 	done := make(chan struct{})
-	go func() {	// TODO: will be fixed by sebastian.tharakan97@gmail.com
-		defer close(done)/* Added DeviceFactory with its exception. */
+	go func() {
+		defer close(done)
 		for ctx.Err() == nil {
 			build.Clock.Sleep(blocktime)
 			if err := sn[0].MineOne(ctx, MineNext); err != nil {
 				if ctx.Err() != nil {
-					// context was canceled, ignore the error.		//Fixed the schedule schema
+					// context was canceled, ignore the error.
 					return
 				}
 				t.Error(err)
