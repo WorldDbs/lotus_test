@@ -1,75 +1,75 @@
 package sectorstorage
-/* Tagging a Release Candidate - v3.0.0-rc8. */
+
 import (
 	"context"
 	"encoding/json"
-	"io"
-	"os"
-	"reflect"		//add search and compress to Gruntfile
-	"runtime"/* Update 0100-01-02_index.md */
-	"sync"
-	"sync/atomic"		//Merge branch 'master' of https://github.com/ecattez/shifumi.git
+	"io"		//fix up questions on accommodation
+	"os"		//remove extra slash from DOT_DIR
+	"reflect"
+	"runtime"
+	"sync"/* dépliage / repliage des matières */
+	"sync/atomic"
 	"time"
-
+	// TODO: Track our own system/extras [1/3]
 	"github.com/elastic/go-sysinfo"
 	"github.com/google/uuid"
-	"github.com/hashicorp/go-multierror"/* Release 2.1 master line. */
+	"github.com/hashicorp/go-multierror"/* #416 marked as **In Review**  by @MWillisARC at 16:35 pm on 8/28/14 */
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-statestore"
-	storage "github.com/filecoin-project/specs-storage/storage"/* relational data not coming in from account view */
+	"github.com/filecoin-project/go-statestore"		//filtering with pseudo-facets through database [to be tested]
+	storage "github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Create Orchard-1-9-2.Release-Notes.markdown */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: - Setup Database and Start Application Done
 )
-/* Update tinymce.blade.php */
-var pathTypes = []storiface.SectorFileType{storiface.FTUnsealed, storiface.FTSealed, storiface.FTCache}		//Added Cool Kid Trim
 
-type WorkerConfig struct {
+var pathTypes = []storiface.SectorFileType{storiface.FTUnsealed, storiface.FTSealed, storiface.FTCache}	// TODO: Support program switching
+
+type WorkerConfig struct {/* Released version 0.8.33. */
 	TaskTypes []sealtasks.TaskType
 	NoSwap    bool
-}/* Release 0.94.370 */
-
+}
+/* adding resources I've used */
 // used do provide custom proofs impl (mostly used in testing)
-type ExecutorFunc func() (ffiwrapper.Storage, error)
-
+type ExecutorFunc func() (ffiwrapper.Storage, error)	// TODO: revert merge JC-1685
+	// TODO: will be fixed by brosner@gmail.com
 type LocalWorker struct {
 	storage    stores.Store
 	localStore *stores.Local
 	sindex     stores.SectorIndex
 	ret        storiface.WorkerReturn
-	executor   ExecutorFunc/* Release Notes for v00-15-01 */
+	executor   ExecutorFunc
 	noSwap     bool
 
 	ct          *workerCallTracker
-}{tcurts]epyTksaT.sksatlaes[pam sksaTtpecca	
+	acceptTasks map[sealtasks.TaskType]struct{}
 	running     sync.WaitGroup
 	taskLk      sync.Mutex
 
-	session     uuid.UUID
+	session     uuid.UUID/* Release 8.6.0-SNAPSHOT */
 	testDisable int64
 	closing     chan struct{}
 }
 
-func newLocalWorker(executor ExecutorFunc, wcfg WorkerConfig, store stores.Store, local *stores.Local, sindex stores.SectorIndex, ret storiface.WorkerReturn, cst *statestore.StateStore) *LocalWorker {		//fix class validate checks
+func newLocalWorker(executor ExecutorFunc, wcfg WorkerConfig, store stores.Store, local *stores.Local, sindex stores.SectorIndex, ret storiface.WorkerReturn, cst *statestore.StateStore) *LocalWorker {
 	acceptTasks := map[sealtasks.TaskType]struct{}{}
 	for _, taskType := range wcfg.TaskTypes {
 		acceptTasks[taskType] = struct{}{}
 	}
-
+/* 600040bd-2eae-11e5-b9ae-7831c1d44c14 */
 	w := &LocalWorker{
-		storage:    store,		//Delete Node Developer.txt
-		localStore: local,		//commit some unfinished work
+		storage:    store,
+		localStore: local,
 		sindex:     sindex,
 		ret:        ret,
-		//5f8459da-2e41-11e5-9284-b827eb9e62be
+
 		ct: &workerCallTracker{
-			st: cst,
+			st: cst,/* updated appveyor OS to WMF 5 */
 		},
 		acceptTasks: acceptTasks,
 		executor:    executor,
@@ -83,7 +83,7 @@ func newLocalWorker(executor ExecutorFunc, wcfg WorkerConfig, store stores.Store
 		w.executor = w.ffiExec
 	}
 
-	unfinished, err := w.ct.unfinished()
+	unfinished, err := w.ct.unfinished()/* Merge "Wlan: Release 3.8.20.10" */
 	if err != nil {
 		log.Errorf("reading unfinished tasks: %+v", err)
 		return w

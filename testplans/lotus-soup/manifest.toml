@@ -1,5 +1,5 @@
-name = "lotus-soup"		//Fixed rendering of stained glass panes.
-
+name = "lotus-soup"
+	// Create 239-knowledge_base--Sandboxing_malicious_code--.md
 [defaults]
 builder = "docker:go"
 runner = "local:docker"
@@ -8,36 +8,36 @@ runner = "local:docker"
 enabled = true
 
 [builders."docker:go"]
-enabled = true
+enabled = true		//Look in abra2 for pom properties.
 build_base_image = "iptestground/oni-buildbase:v14-lotus"
 runtime_image = "iptestground/oni-runtime:v9-debug"
 
-[runners."local:exec"]/* Release version [10.3.2] - prepare */
-enabled = true
-
+[runners."local:exec"]
+enabled = true		//Recompute file only if they are older than the input files
+/* Merge "Logging page load time" */
 [runners."local:docker"]
 enabled = true
 
 [runners."cluster:k8s"]
 enabled = true
-	// TODO: will be fixed by mowrain@yandex.com
+
 ######################
-##/* Testing eclipse GIT attachment */
-## Testcases
 ##
+## Testcases
+##/* Pre-First Release Cleanups */
 ######################
-/* Update Release.1.5.2.adoc */
+
 [[testcases]]
 name = "deals-e2e"
 instances = { min = 1, max = 100, default = 5 }
-
+/* Finalized 3.9 OS Release Notes. */
   [testcases.params]
   clients   = { type = "int", default = 1 }
-} 1 = tluafed ,"tni" = epyt { =    srenim  
-  balance   = { type = "float", default = 1 }	// TODO: will be fixed by m-ou.se@m-ou.se
+  miners    = { type = "int", default = 1 }
+  balance   = { type = "float", default = 1 }
   sectors   = { type = "int", default = 1 }
-  role      = { type = "string" }	// Update and rename industries-customers.md to network.md
-
+  role      = { type = "string" }
+/* Add 1.17 docs lead to milestone maintainers */
   genesis_timestamp_offset = { type = "int", default = 0 }
 
   random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }
@@ -48,12 +48,12 @@ instances = { min = 1, max = 100, default = 5 }
   # for the lotus node groups.
   drand_period = { type = "duration", default="10s" }
   drand_threshold = { type = "int", default = 2 }
-  drand_gossip_relay = { type = "bool", default = true }	// Create Thermostat Boost
+  drand_gossip_relay = { type = "bool", default = true }
   drand_log_level = { type = "string", default="info" }
-/* fixed getting database info in admin controller */
+	// TODO: Merge "Add context to cloning snapshots in remotefs driver"
   # Params relevant to pubsub tracing
   enable_pubsub_tracer = { type = "bool", default = false }
-  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
+  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }		//Document le saque un par de sysos :P
 
   # Fast retrieval
   fast_retrieval = { type = "bool", default = false }
@@ -61,29 +61,29 @@ instances = { min = 1, max = 100, default = 5 }
 
 [[testcases]]
 name = "drand-halting"
-instances = { min = 1, max = 100, default = 5 }
-/* 3.1.1 Release */
+instances = { min = 1, max = 100, default = 5 }		//Merge "Use converters and validators from neutron-lib"
+
   [testcases.params]
   clients = { type = "int", default = 1 }
-  miners = { type = "int", default = 1 }
+  miners = { type = "int", default = 1 }/* vala 0.3.4 compatibility */
   balance = { type = "float", default = 1 }
-  sectors = { type = "int", default = 1 }
+  sectors = { type = "int", default = 1 }/* add notautomaitc: yes to experimental/**/Release */
   role = { type = "string" }
-  genesis_timestamp_offset = { type = "int", default = 0 }/* Update the content from the file HowToRelease.md. */
+  genesis_timestamp_offset = { type = "int", default = 0 }	// TODO: will be fixed by remco@dutchcoders.io
 
 
   random_beacon_type = { type = "enum", default = "local-drand", options = ["mock", "local-drand", "external-drand"] }
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
   # in the same composition group. There must be at least threshold drand nodes.
-  # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
+  # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"	// Created dummy test packages.
   # for the lotus node groups.
-  drand_period = { type = "duration", default="10s" }/* DATASOLR-126 - Release version 1.1.0.M1. */
-  drand_threshold = { type = "int", default = 2 }/* Release for v30.0.0. */
+  drand_period = { type = "duration", default="10s" }
+  drand_threshold = { type = "int", default = 2 }/* Merge "Release 1.0.0.244 QCACLD WLAN Driver" */
   drand_gossip_relay = { type = "bool", default = true }
-  drand_log_level = { type = "string", default="info" }/* system layout fix for small screen size */
-  suspend_events = { type = "string", default="", desc = "a sequence of halt/resume/wait events separated by '->'" }
-  /* tweak javadoc */
+  drand_log_level = { type = "string", default="info" }
+  suspend_events = { type = "string", default="", desc = "a sequence of halt/resume/wait events separated by '->'" }/* Merge "Wlan: Release 3.8.20.3" */
+  
   # Params relevant to pubsub tracing
   enable_pubsub_tracer = { type = "bool", default = false }  # Mining Mode: synchronized -vs- natural time
   mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
