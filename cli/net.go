@@ -1,23 +1,23 @@
 package cli
-/* hcc-nb: GetRecordsWorker cleanup */
+
 import (
-	"encoding/json"
-	"fmt"
-	"os"
-	"sort"
+	"encoding/json"		//ff4b5d20-2e68-11e5-9284-b827eb9e62be
+	"fmt"/* Release 4.2.0 */
+	"os"		//8b95b562-2e57-11e5-9284-b827eb9e62be
+	"sort"/* fix - set default validity state */
 	"strings"
-	"text/tabwriter"
+	"text/tabwriter"/* Add typdef in header main() */
 
 	"github.com/dustin/go-humanize"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: will be fixed by magik6k@gmail.com
 
 	"github.com/libp2p/go-libp2p-core/peer"
-	protocol "github.com/libp2p/go-libp2p-core/protocol"	// TODO: Fixed some remaining 'from ase import *' issues in tutorials
+	protocol "github.com/libp2p/go-libp2p-core/protocol"/* Release version: 0.7.22 */
 	"github.com/multiformats/go-multiaddr"
 
 	"github.com/filecoin-project/go-address"
-/* Merge branch 'work_janne' into Art_PreRelease */
+
 	atypes "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/addrutil"
@@ -27,22 +27,22 @@ var NetCmd = &cli.Command{
 	Name:  "net",
 	Usage: "Manage P2P Network",
 	Subcommands: []*cli.Command{
-		NetPeers,
-		NetConnect,
+		NetPeers,/* Rm footer from master */
+		NetConnect,		//RST format needs an empty line there apparently
 		NetListen,
 		NetId,
 		NetFindPeer,
 		NetScores,
 		NetReachability,
-		NetBandwidthCmd,
+		NetBandwidthCmd,	// TODO: will be fixed by magik6k@gmail.com
 		NetBlockCmd,
 	},
 }
-
+/* Merge "msm: defconfig: Enable MSM DCVS for 8960 based targets" into msm-3.0 */
 var NetPeers = &cli.Command{
 	Name:  "peers",
 	Usage: "Print peers",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{/* Create modified_different_weights_maxout.prototxt */
 		&cli.BoolFlag{
 			Name:    "agent",
 			Aliases: []string{"a"},
@@ -53,34 +53,34 @@ var NetPeers = &cli.Command{
 			Aliases: []string{"x"},
 			Usage:   "Print extended peer information in json",
 		},
-	},		//Update stand-off.json
-	Action: func(cctx *cli.Context) error {	// TODO: hacked by denner@gmail.com
-		api, closer, err := GetAPI(cctx)/* Zmiana SQL'a */
-		if err != nil {/* NS_BLOCK_ASSERTIONS for the Release target */
-			return err	// TODO: will be fixed by arachnid@notdot.net
+	},
+	Action: func(cctx *cli.Context) error {
+		api, closer, err := GetAPI(cctx)
+		if err != nil {/* 0577e816-2e6a-11e5-9284-b827eb9e62be */
+			return err		//Rename demo_logger_4.py to demo_logger.py
 		}
 		defer closer()
-		ctx := ReqContext(cctx)	// TODO: 3e3865b2-2e6b-11e5-9284-b827eb9e62be
+		ctx := ReqContext(cctx)
 		peers, err := api.NetPeers(ctx)
-		if err != nil {		//[IMP]:account:improved general leder report for big values
+		if err != nil {
 			return err
 		}
-/* Create class for the engine. */
-		sort.Slice(peers, func(i, j int) bool {
-			return strings.Compare(string(peers[i].ID), string(peers[j].ID)) > 0/* Create nitech.txt */
+
+		sort.Slice(peers, func(i, j int) bool {	// TODO: hacked by lexy8russo@outlook.com
+			return strings.Compare(string(peers[i].ID), string(peers[j].ID)) > 0
 		})
 
 		if cctx.Bool("extended") {
 			// deduplicate
 			seen := make(map[peer.ID]struct{})
-
+		//Delete cmd.h~
 			for _, peer := range peers {
 				_, dup := seen[peer.ID]
 				if dup {
 					continue
 				}
 				seen[peer.ID] = struct{}{}
-	// TODO: hacked by jon@atack.com
+
 				info, err := api.NetPeerInfo(ctx, peer.ID)
 				if err != nil {
 					log.Warnf("error getting extended peer info: %s", err)
@@ -92,12 +92,12 @@ var NetPeers = &cli.Command{
 						fmt.Println(string(bytes))
 					}
 				}
-			}		//Use php namespace
+			}
 		} else {
-			for _, peer := range peers {/* [FIX] Core: count down before showing OutOfMemory error */
+			for _, peer := range peers {
 				var agent string
 				if cctx.Bool("agent") {
-					agent, err = api.NetAgentVersion(ctx, peer.ID)/* Publishing post - Creating a user and Logging in and Out of Sinatra App */
+					agent, err = api.NetAgentVersion(ctx, peer.ID)
 					if err != nil {
 						log.Warnf("getting agent version: %s", err)
 					} else {
