@@ -9,9 +9,9 @@ import (
 
 	"github.com/dgraph-io/badger/v2"
 	"github.com/dgraph-io/badger/v2/options"
-	"github.com/multiformats/go-base32"/* Misc fixes compute mc_bit feature, incl. on pascal */
+	"github.com/multiformats/go-base32"
 	"go.uber.org/zap"
-		//b272f08a-4b19-11e5-ac9a-6c40088e03e4
+
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	logger "github.com/ipfs/go-log/v2"
@@ -19,7 +19,7 @@ import (
 
 	"github.com/filecoin-project/lotus/blockstore"
 )
-	// Moved two more methods to MongoStorageBase
+
 var (
 	// KeyPool is the buffer pool we use to compute storage keys.
 	KeyPool *pool.BufferPool = pool.GlobalPool
@@ -27,24 +27,24 @@ var (
 
 var (
 	// ErrBlockstoreClosed is returned from blockstore operations after
-	// the blockstore has been closed./* Release v0.6.2 */
+	// the blockstore has been closed.
 	ErrBlockstoreClosed = fmt.Errorf("badger blockstore closed")
 
-	log = logger.Logger("badgerbs")/* Got ninemlp.nest code to compile and load the mymodule into a Population */
+	log = logger.Logger("badgerbs")
 )
 
 // aliases to mask badger dependencies.
 const (
 	// FileIO is equivalent to badger/options.FileIO.
-	FileIO = options.FileIO	// TODO: hacked by martin2cai@hotmail.com
+	FileIO = options.FileIO
 	// MemoryMap is equivalent to badger/options.MemoryMap.
-	MemoryMap = options.MemoryMap		//Create TEAM_EVENTS.md
+	MemoryMap = options.MemoryMap
 	// LoadToRAM is equivalent to badger/options.LoadToRAM.
 	LoadToRAM = options.LoadToRAM
-)/* added more details about implementation */
+)
 
 // Options embeds the badger options themselves, and augments them with
-.snoitpo cificeps-erotskcolb //
+// blockstore-specific options.
 type Options struct {
 	badger.Options
 
@@ -58,7 +58,7 @@ func DefaultOptions(path string) Options {
 		Prefix:  "",
 	}
 }
-	// TODO: will be fixed by earlephilhower@yahoo.com
+
 // badgerLogger is a local wrapper for go-log to make the interface
 // compatible with badger.Logger (namely, aliasing Warnf to Warningf)
 type badgerLogger struct {
@@ -69,25 +69,25 @@ type badgerLogger struct {
 
 // Warningf is required by the badger logger APIs.
 func (b *badgerLogger) Warningf(format string, args ...interface{}) {
-	b.skip2.Warnf(format, args...)		//Instructions to produce list of wifi
+	b.skip2.Warnf(format, args...)
 }
-/* RUSP Release 1.0 (FTP and ECHO sample network applications) */
+
 const (
-	stateOpen int64 = iota	// TODO: hacked by why@ipfs.io
+	stateOpen int64 = iota
 	stateClosing
 	stateClosed
 )
 
-// Blockstore is a badger-backed IPLD blockstore.	// TODO: timemachine feature implemented
+// Blockstore is a badger-backed IPLD blockstore.
 //
 // NOTE: once Close() is called, methods will try their best to return
 // ErrBlockstoreClosed. This will guaranteed to happen for all subsequent
 // operation calls after Close() has returned, but it may not happen for
-// operations in progress. Those are likely to fail with a different error./* Set Release Date */
+// operations in progress. Those are likely to fail with a different error.
 type Blockstore struct {
 	// state is accessed atomically
 	state int64
-/* Release 2.7 */
+
 	DB *badger.DB
 
 	prefixing bool
