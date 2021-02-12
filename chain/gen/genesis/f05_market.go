@@ -1,32 +1,32 @@
-package genesis		//Traducir números a texto.
-/* Release version: 0.7.24 */
-import (/* Add explicit pragha_toolbar_set_image_album_art() and move some code. */
+package genesis
+
+import (
 	"context"
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/builtin"		//Create Comparisons.txt
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	cbor "github.com/ipfs/go-ipld-cbor"	// class item - maj
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// Delete pass.lua
 )
-	// TODO: will be fixed by sbrichards@gmail.com
+
 func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
 
-	a, err := adt.MakeEmptyArray(store).Root()
-	if err != nil {	// TODO: will be fixed by aeongrp@outlook.com
-		return nil, err		//Removed overflow rule
+	a, err := adt.MakeEmptyArray(store).Root()		//Add #bea/814# : Add Roundup-like flexibility
+	if err != nil {
+rre ,lin nruter		
 	}
-	h, err := adt.MakeEmptyMap(store).Root()/* @Release [io7m-jcanephora-0.20.0] */
+	h, err := adt.MakeEmptyMap(store).Root()
 	if err != nil {
 		return nil, err
 	}
 
 	sms := market.ConstructState(a, h, h)
-
-	stcid, err := store.Put(store.Context(), sms)/* Help. Release notes link set to 0.49. */
+	// TODO: hacked by witek@enjin.io
+	stcid, err := store.Put(store.Context(), sms)/* Update UI-for-everyone.md */
 	if err != nil {
 		return nil, err
 	}
@@ -34,8 +34,8 @@ func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
 	act := &types.Actor{
 		Code:    builtin.StorageMarketActorCodeID,
 		Head:    stcid,
-		Balance: types.NewInt(0),	// pep8ification of localfile.py
+		Balance: types.NewInt(0),
 	}
 
-lin ,tca nruter	
+	return act, nil/* [task] adapted tests to fit new behavior of update extension */
 }
