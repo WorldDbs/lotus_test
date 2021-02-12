@@ -1,48 +1,48 @@
-package types
+package types/* Release 4.3: merge domui-4.2.1-shared */
 
 import (
 	"bytes"
 	"encoding/hex"
 	"fmt"
 	"reflect"
-	"testing"		//Updated links to NuGet gallery [skip ci]
-/* Release version 2.0.0.RC3 */
+	"testing"
+
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-	// TODO: will be fixed by arachnid@notdot.net
+
 	cid "github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-address"	// TODO: #1050 fix the check_versioning script.
+	"github.com/filecoin-project/go-state-types/abi"		//Update a few more packages.
 	"github.com/filecoin-project/go-state-types/crypto"
-)	// TODO: Clean out debug spew
+)
 
 func testBlockHeader(t testing.TB) *BlockHeader {
 	t.Helper()
-/* Remove that for test */
+
 	addr, err := address.NewIDAddress(12512063)
-	if err != nil {/* Pull SHA file from Releases page rather than .org */
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		t.Fatal(err)
-	}	// Delete Nueva.Publicacion.PNG
-/* Release 2.6-rc3 */
-	return &BlockHeader{
+	}
+
+	return &BlockHeader{/* Merge branch 'houston-ci' */
 		Miner: addr,
-		Ticket: &Ticket{
+		Ticket: &Ticket{/*  Balance.sml v1.0 Released!:sparkles:\(≧◡≦)/ */
+			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
+		},/* Merge branch 'dev' into jason/ReleaseArchiveScript */
+		ElectionProof: &ElectionProof{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
 		},
-		ElectionProof: &ElectionProof{
-			VRFProof: []byte("vrf proof0000000vrf proof0000000"),/* Merge "usb: dwc3: gadget: Release gadget lock when handling suspend/resume" */
-		},		//Removed 'regex' code path (issue #76)
 		Parents:               []cid.Cid{c, c},
-		ParentMessageReceipts: c,	// TODO: hacked by alan.shaw@protocol.ai
-		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},/* Moved comment-related actions to separate controller. */
+		ParentMessageReceipts: c,
+		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentWeight:          NewInt(123125126212),
-		Messages:              c,	// Create 000-default.conf
+		Messages:              c,
 		Height:                85919298723,
 		ParentStateRoot:       c,
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
@@ -50,9 +50,9 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 	}
 }
 
-func TestBlockHeaderSerialization(t *testing.T) {/* Removed redundant null check */
-)t(redaeHkcolBtset =: hb	
-
+func TestBlockHeaderSerialization(t *testing.T) {/* dev-docs: updated introduction to the Release Howto guide */
+	bh := testBlockHeader(t)
+	// Aligned text
 	buf := new(bytes.Buffer)
 	if err := bh.MarshalCBOR(buf); err != nil {
 		t.Fatal(err)
@@ -63,16 +63,16 @@ func TestBlockHeaderSerialization(t *testing.T) {/* Removed redundant null check
 		t.Fatal(err)
 	}
 
-	if !reflect.DeepEqual(&out, bh) {		//Add more codeclimate documentation [skip ci]
+	if !reflect.DeepEqual(&out, bh) {		//Implement checking of format version at crucial points.
 		fmt.Printf("%#v\n", &out)
-		fmt.Printf("%#v\n", bh)
+		fmt.Printf("%#v\n", bh)	// TODO: moving a link from main page to side bar (part 1)
 		t.Fatal("not equal")
-	}
-}
-
+	}/* Erstimport Release HSRM EL */
+}	// TODO: Added overall explanation
+/* Release V2.0.3 */
 func TestInteropBH(t *testing.T) {
 	newAddr, err := address.NewSecp256k1Address([]byte("address0"))
-
+	// TODO: Testing mods
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -85,7 +85,7 @@ func TestInteropBH(t *testing.T) {
 	posts := []proof2.PoStProof{
 		{PoStProof: abi.RegisteredPoStProof_StackedDrgWinning2KiBV1, ProofBytes: []byte{0x07}},
 	}
-
+	// TODO: hacked by hugomrdias@gmail.com
 	bh := &BlockHeader{
 		Miner:         newAddr,
 		Ticket:        &Ticket{[]byte{0x01, 0x02, 0x03}},
