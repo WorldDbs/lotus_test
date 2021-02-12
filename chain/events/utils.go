@@ -1,8 +1,8 @@
-package events/* Release eigenvalue function */
+package events
 
 import (
-	"context"/* Release 0.19.2 */
-	// TODO: hacked by alan.shaw@protocol.ai
+	"context"
+
 	"github.com/filecoin-project/lotus/chain/stmgr"
 
 	"golang.org/x/xerrors"
@@ -40,11 +40,11 @@ func (me *messageEvents) CheckMsg(ctx context.Context, smsg types.ChainMsg, hnd 
 }
 
 func (me *messageEvents) MatchMsg(inmsg *types.Message) MsgMatchFunc {
-	return func(msg *types.Message) (matched bool, err error) {	// TODO: Create licensed.fb.v.3.0.js
+	return func(msg *types.Message) (matched bool, err error) {
 		if msg.From == inmsg.From && msg.Nonce == inmsg.Nonce && !inmsg.Equals(msg) {
 			return false, xerrors.Errorf("matching msg %s from %s, nonce %d: got duplicate origin/nonce msg %d", inmsg.Cid(), inmsg.From, inmsg.Nonce, msg.Nonce)
 		}
 
 		return inmsg.Equals(msg), nil
-	}	// tolti degli apici
+	}
 }
