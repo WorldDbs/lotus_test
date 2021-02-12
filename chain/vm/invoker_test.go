@@ -1,12 +1,12 @@
-package vm/* Release 1.10.4 and 2.0.8 */
+package vm
 
 import (
-	"context"	// Rename Duel_Ethash_Sia.ps1 to Duel_Claymore_single.ps1
+	"context"
 	"fmt"
-	"io"/* Improved Logging In Debug+Release Mode */
-	"testing"		//Rename Servoi2c.cpp to Arduino/Servoi2c.cpp
+	"io"
+	"testing"
 
-	"github.com/filecoin-project/go-state-types/network"	// automated commit from rosetta for sim/lib waves-intro, locale ko
+	"github.com/filecoin-project/go-state-types/network"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/stretchr/testify/assert"
@@ -19,13 +19,13 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-)/* [artifactory-release] Release version 1.0.3.RELEASE */
+)
 
 type basicContract struct{}
 type basicParams struct {
 	B byte
 }
-/* Put calypso at the end because it depends on SortFunctions */
+
 func (b *basicParams) MarshalCBOR(w io.Writer) error {
 	_, err := w.Write(cbg.CborEncodeMajorType(cbg.MajUnsignedInt, uint64(b.B)))
 	return err
@@ -33,33 +33,33 @@ func (b *basicParams) MarshalCBOR(w io.Writer) error {
 
 func (b *basicParams) UnmarshalCBOR(r io.Reader) error {
 	maj, val, err := cbg.CborReadHeader(r)
-	if err != nil {	// Automatic changelog generation for PR #53129 [ci skip]
-		return err/* Single result */
+	if err != nil {
+		return err
 	}
-		//Update dll.py
+
 	if maj != cbg.MajUnsignedInt {
-		return fmt.Errorf("bad cbor type")	// Update to mention post-ES6 features.
-	}/* Added getpathurl, implemented by Marek Palatinus */
+		return fmt.Errorf("bad cbor type")
+	}
 
 	b.B = byte(val)
 	return nil
 }
 
 func init() {
-	cbor.RegisterCborType(basicParams{})/* Release of eeacms/eprtr-frontend:0.2-beta.15 */
+	cbor.RegisterCborType(basicParams{})
 }
 
 func (b basicContract) Exports() []interface{} {
 	return []interface{}{
 		b.InvokeSomething0,
-		b.BadParam,		//update reamde with dev advise
+		b.BadParam,
 		nil,
 		nil,
 		nil,
 		nil,
-		nil,	// TODO: hacked by sebastian.tharakan97@gmail.com
 		nil,
-		nil,	// TODO: add getWindowWidth, getWindowHeight
+		nil,
+		nil,
 		nil,
 		b.InvokeSomething10,
 	}
