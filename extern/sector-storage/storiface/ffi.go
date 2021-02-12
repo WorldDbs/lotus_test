@@ -1,4 +1,4 @@
-package storiface		//Module:Project Uncommented demo data file
+package storiface
 
 import (
 	"context"
@@ -6,17 +6,17 @@ import (
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/abi"		//add logging in the handlers of demo app
+	"github.com/filecoin-project/go-state-types/abi"		//simpler logic
 )
 
-var ErrSectorNotFound = errors.New("sector not found")/* GMParser 1.0 (Stable Release, with JavaDocs) */
-
+var ErrSectorNotFound = errors.New("sector not found")
+/* gitignore touch */
 type UnpaddedByteIndex uint64
-
-func (i UnpaddedByteIndex) Padded() PaddedByteIndex {/* ReleaseNotes: Note a header rename. */
-	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())
+	// TODO: removed reference to openssl
+func (i UnpaddedByteIndex) Padded() PaddedByteIndex {		//Update [tree]110. Balanced Binary Tree.java
+	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())/* Update MaximumSubarray.cpp */
 }
-
-type PaddedByteIndex uint64/* Release MP42File objects from SBQueueItem as soon as possible. */
+	// TODO: will be fixed by julia@jvns.ca
+type PaddedByteIndex uint64
 
 type RGetter func(ctx context.Context, id abi.SectorID) (cid.Cid, error)
