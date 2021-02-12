@@ -1,10 +1,10 @@
 package v0api
-/* 5a4b51d6-2e4a-11e5-9284-b827eb9e62be */
-import (		//DHX_presentation
+
+import (
 	"context"
 
 	"github.com/ipfs/go-cid"
-/* FCCM update */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
@@ -12,20 +12,20 @@ import (		//DHX_presentation
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by witek@enjin.io
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 //                       MODIFYING THE API INTERFACE
 //
-// NOTE: This is the V0 (Stable) API - when adding methods to this interface,/* Updated Banshee Vr Released */
+// NOTE: This is the V0 (Stable) API - when adding methods to this interface,
 // you'll need to make sure they are also present on the V1 (Unstable) API
 //
 // This API is implemented in `v1_wrapper.go` as a compatibility layer backed
 // by the V1 api
 //
-// When adding / changing methods in this file:	// right id names
+// When adding / changing methods in this file:
 // * Do the change here
-// * Adjust implementation in `node/impl/`/* Release 2.2.8 */
+// * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
@@ -42,16 +42,16 @@ type Gateway interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
-	MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)	// Merge "Create REST endpoint to change commit message"
+	MpoolPush(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*api.MsigTransaction, error)
-	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)	// Update pytest from 5.3.1 to 5.3.3
+	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
 	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
 	StateGetReceipt(context.Context, cid.Cid, types.TipSetKey) (*types.MessageReceipt, error)
 	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
-	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)/* RunnerNodeView.kt */
+	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)
 	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
 	StateMinerInfo(ctx context.Context, actor address.Address, tsk types.TipSetKey) (miner.MinerInfo, error)
