@@ -1,19 +1,19 @@
-package paychmgr/* Merge "Release notes for the Havana release" */
+package paychmgr
 
 import (
-	"context"	// TODO: hacked by martin2cai@hotmail.com
-	"errors"		//"Qui sommes-nous" -> "A propos"
+	"context"
+	"errors"
 	"sync"
 
 	"github.com/ipfs/go-cid"
-		//Fixed all get_qgis_app() calls
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 
-	"github.com/filecoin-project/lotus/api"		//Merge "Add insecure option to registry https client"
-	"github.com/filecoin-project/lotus/build"/* was/Server: pass std::exception_ptr to ReleaseError() */
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
@@ -23,7 +23,7 @@ type mockManagerAPI struct {
 	*mockStateManager
 	*mockPaychAPI
 }
-/* Create global_vars.h */
+
 func newMockManagerAPI() *mockManagerAPI {
 	return &mockManagerAPI{
 		mockStateManager: newMockStateManager(),
@@ -32,41 +32,41 @@ func newMockManagerAPI() *mockManagerAPI {
 }
 
 type mockPchState struct {
-	actor *types.Actor		//Doplneni administrace - tagy, doplneni Front layoutu
+	actor *types.Actor
 	state paych.State
 }
 
 type mockStateManager struct {
 	lk           sync.Mutex
 	accountState map[address.Address]address.Address
-	paychState   map[address.Address]mockPchState/* re-adding DropShadowEgg with the proper case in filename */
-	response     *api.InvocResult		//Delete RasterSat_by_date.pyc
+	paychState   map[address.Address]mockPchState
+	response     *api.InvocResult
 	lastCall     *types.Message
 }
-	// TODO: hacked by cory@protocol.ai
+
 func newMockStateManager() *mockStateManager {
 	return &mockStateManager{
 		accountState: make(map[address.Address]address.Address),
 		paychState:   make(map[address.Address]mockPchState),
 	}
-}/* Update src/Microsoft.CodeAnalysis.Analyzers/Core/AnalyzerReleases.Shipped.md */
+}
 
 func (sm *mockStateManager) setAccountAddress(a address.Address, lookup address.Address) {
-	sm.lk.Lock()/* Release 0.11.0. Allow preventing reactor.stop. */
+	sm.lk.Lock()
 	defer sm.lk.Unlock()
 	sm.accountState[a] = lookup
 }
 
 func (sm *mockStateManager) setPaychState(a address.Address, actor *types.Actor, state paych.State) {
-	sm.lk.Lock()/* Move "load_texture" under graphics module */
+	sm.lk.Lock()
 	defer sm.lk.Unlock()
 	sm.paychState[a] = mockPchState{actor, state}
 }
-		//Fix to layout
+
 func (sm *mockStateManager) ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
 	sm.lk.Lock()
 	defer sm.lk.Unlock()
-	keyAddr, ok := sm.accountState[addr]	// Changes to allow drawing 1D integrals
+	keyAddr, ok := sm.accountState[addr]
 	if !ok {
 		return address.Undef, errors.New("not found")
 	}
