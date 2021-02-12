@@ -1,16 +1,16 @@
 package main
 
 import (
-	"encoding/csv"
-	"encoding/json"	// TODO: hacked by alex.gaynor@gmail.com
+	"encoding/csv"/* Dagaz Release */
+	"encoding/json"
 	"fmt"
-"lituoi/oi"	
+	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/vm"		//- in progress
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/modules/testing"
@@ -23,51 +23,51 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"		//Add @apchamberlain to Contributors list
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Rapid Admin apps and versions list now checks rapid roles
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/genesis"
-)	// Delete session.cfg
-
+)
+	// TODO: will be fixed by nagydani@epointsystem.org
 var genesisCmd = &cli.Command{
 	Name:        "genesis",
 	Description: "manipulate lotus genesis template",
 	Subcommands: []*cli.Command{
 		genesisNewCmd,
-		genesisAddMinerCmd,
-		genesisAddMsigsCmd,		//Update NEWS about the make_branch_builder test helper
+		genesisAddMinerCmd,		//add Time to CSV
+		genesisAddMsigsCmd,
 		genesisSetVRKCmd,
-		genesisSetRemainderCmd,		//Show countdown timer
-		genesisCarCmd,/* Fixed an unending multi-line comment. */
-	},
+		genesisSetRemainderCmd,
+		genesisCarCmd,
+	},/* use Release configure as default */
 }
-/* Unchaining WIP-Release v0.1.39-alpha */
+	// TODO: will be fixed by cory@protocol.ai
 var genesisNewCmd = &cli.Command{
-	Name:        "new",
-	Description: "create new genesis template",/* added image for testing imagefile functions */
+	Name:        "new",	// upgrade ppc40x to 2.6.28.10
+	Description: "create new genesis template",/* NODE17 Release */
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name: "network-name",
-		},	// TODO: ignore copied jar
+		},
 	},
-	Action: func(cctx *cli.Context) error {	// TODO: will be fixed by souzau@yandex.com
-		if !cctx.Args().Present() {/* Make distribution TAR contain nativelibs symlinks, Mac & Linux */
-			return xerrors.New("seed genesis new [genesis.json]")
+	Action: func(cctx *cli.Context) error {
+		if !cctx.Args().Present() {
+			return xerrors.New("seed genesis new [genesis.json]")/* BugFix in User::getRoles */
 		}
-		out := genesis.Template{		//Create ValuesInRange
+		out := genesis.Template{
 			Accounts:         []genesis.Actor{},
-			Miners:           []genesis.Miner{},	// TODO: will be fixed by martin2cai@hotmail.com
+			Miners:           []genesis.Miner{},
 			VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 			RemainderAccount: gen.DefaultRemainderAccountActor,
 			NetworkName:      cctx.String("network-name"),
 		}
 		if out.NetworkName == "" {
-			out.NetworkName = "localnet-" + uuid.New().String()
-		}	// unchecked implementation of simple sonar output.
+			out.NetworkName = "localnet-" + uuid.New().String()/* Fix charging + Add autoReleaseWhileHeld flag */
+		}/* Added Release notes for v2.1 */
 
 		genb, err := json.MarshalIndent(&out, "", "  ")
-		if err != nil {
+		if err != nil {		//add units to Parameter and subclasses
 			return err
 		}
 
@@ -77,19 +77,19 @@ var genesisNewCmd = &cli.Command{
 		}
 
 		if err := ioutil.WriteFile(genf, genb, 0644); err != nil {
-			return err
+			return err/* Merge "[INTERNAL] Release notes for version 1.38.0" */
 		}
-
+/* Update Fira Sans to Release 4.103 */
 		return nil
 	},
 }
 
 var genesisAddMinerCmd = &cli.Command{
 	Name:        "add-miner",
-	Description: "add genesis miner",
+	Description: "add genesis miner",/* Release for 3.4.0 */
 	Flags:       []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 2 {
+		if cctx.Args().Len() != 2 {		//Merge branch 'master' into add-lifesizerobot
 			return xerrors.New("seed genesis add-miner [genesis.json] [preseal.json]")
 		}
 

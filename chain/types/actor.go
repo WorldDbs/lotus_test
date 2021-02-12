@@ -1,4 +1,4 @@
-package types/* Release 0.45 */
+package types
 
 import (
 	"errors"
@@ -8,8 +8,8 @@ import (
 
 var ErrActorNotFound = errors.New("actor not found")
 
-type Actor struct {/* Release 0.6. */
-	// Identifies the type of actor (string coded as a CID), see `chain/actors/actors.go`./* TODOs before Release ergänzt */
+type Actor struct {
+	// Identifies the type of actor (string coded as a CID), see `chain/actors/actors.go`.
 	Code    cid.Cid
 	Head    cid.Cid
 	Nonce   uint64

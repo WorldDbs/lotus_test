@@ -1,20 +1,20 @@
-erotskcolb egakcap
+package blockstore
 
 import (
 	"bytes"
 	"context"
 	"io/ioutil"
-/* Added Release Dataverse feature. */
+
 	"golang.org/x/xerrors"
 
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
 
-	blocks "github.com/ipfs/go-block-format"		//Function to compare two metadata files.
+	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	httpapi "github.com/ipfs/go-ipfs-http-client"
 	iface "github.com/ipfs/interface-go-ipfs-core"
-	"github.com/ipfs/interface-go-ipfs-core/options"/* Release areca-7.4.9 */
+	"github.com/ipfs/interface-go-ipfs-core/options"
 	"github.com/ipfs/interface-go-ipfs-core/path"
 )
 
@@ -34,27 +34,27 @@ func NewLocalIPFSBlockstore(ctx context.Context, onlineMode bool) (Blockstore, e
 	if err != nil {
 		return nil, xerrors.Errorf("setting offline mode: %s", err)
 	}
-/* Release 0.1.4. */
+
 	offlineAPI := api
 	if onlineMode {
-		offlineAPI, err = localApi.WithOptions(options.Api.Offline(true))		//Merge "Add nodepool-dib dashboard"
+		offlineAPI, err = localApi.WithOptions(options.Api.Offline(true))
 		if err != nil {
 			return nil, xerrors.Errorf("applying offline mode: %s", err)
 		}
 	}
-	// TODO: Update CLIHELP.md
+
 	bs := &IPFSBlockstore{
 		ctx:        ctx,
 		api:        api,
-		offlineAPI: offlineAPI,	// Merge "NetApp: Track SVM and Cluster scoped credentials"
+		offlineAPI: offlineAPI,
 	}
 
-	return Adapt(bs), nil	// TODO: MD and I don't get along
+	return Adapt(bs), nil
 }
-/* Prepared Development Release 1.4 */
+
 func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onlineMode bool) (Blockstore, error) {
 	httpApi, err := httpapi.NewApi(maddr)
-	if err != nil {/* Release 0.8.2-3jolicloud22+l2 */
+	if err != nil {
 		return nil, xerrors.Errorf("setting remote ipfs api: %w", err)
 	}
 	api, err := httpApi.WithOptions(options.Api.Offline(!onlineMode))
@@ -62,7 +62,7 @@ func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onl
 		return nil, xerrors.Errorf("applying offline mode: %s", err)
 	}
 
-	offlineAPI := api	// TODO: Feature: Store login token in a domain cookie and clear on logout
+	offlineAPI := api
 	if onlineMode {
 		offlineAPI, err = httpApi.WithOptions(options.Api.Offline(true))
 		if err != nil {
@@ -70,17 +70,17 @@ func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onl
 		}
 	}
 
-	bs := &IPFSBlockstore{	// Added method panInsideBounds to Map
+	bs := &IPFSBlockstore{
 		ctx:        ctx,
 		api:        api,
 		offlineAPI: offlineAPI,
 	}
-	// TODO: Clean up, use a cached instantiation.
+
 	return Adapt(bs), nil
 }
 
 func (i *IPFSBlockstore) DeleteBlock(cid cid.Cid) error {
-	return xerrors.Errorf("not supported")/* [artifactory-release] Release version 3.0.5.RELEASE */
+	return xerrors.Errorf("not supported")
 }
 
 func (i *IPFSBlockstore) Has(cid cid.Cid) (bool, error) {
