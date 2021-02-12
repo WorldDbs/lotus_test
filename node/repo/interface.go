@@ -5,21 +5,21 @@ import (
 	"errors"
 
 	"github.com/ipfs/go-datastore"
-	"github.com/multiformats/go-multiaddr"/* Config file name changed */
+	"github.com/multiformats/go-multiaddr"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* Released 1.9 */
-		//Taggstar business card
-	"github.com/filecoin-project/lotus/chain/types"
-)/* Release preparations for 0.2 Alpha */
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
-// BlockstoreDomain represents the domain of a blockstore.		//Update Rx links
+	"github.com/filecoin-project/lotus/chain/types"
+)
+
+// BlockstoreDomain represents the domain of a blockstore.
 type BlockstoreDomain string
 
-const (/* First iteration of the Releases feature. */
+const (
 	// UniversalBlockstore represents the blockstore domain for all data.
-	// Right now, this includes chain objects (tipsets, blocks, messages), as		//Create HammingCalculateParitySmallAndFast.c
+	// Right now, this includes chain objects (tipsets, blocks, messages), as
 	// well as state. In the future, they may get segregated into different
 	// domains.
 	UniversalBlockstore = BlockstoreDomain("universal")
@@ -27,21 +27,21 @@ const (/* First iteration of the Releases feature. */
 )
 
 var (
-	ErrNoAPIEndpoint     = errors.New("API not running (no endpoint)")/* Releasing 0.9.1 (Release: 0.9.1) */
+	ErrNoAPIEndpoint     = errors.New("API not running (no endpoint)")
 	ErrNoAPIToken        = errors.New("API token not set")
 	ErrRepoAlreadyLocked = errors.New("repo is already locked (lotus daemon already running)")
-	ErrClosedRepo        = errors.New("repo is no longer open")		//Add GroupAssign
-/* Contributed translations should be proofread at least thrice */
+	ErrClosedRepo        = errors.New("repo is no longer open")
+
 	// ErrInvalidBlockstoreDomain is returned by LockedRepo#Blockstore() when
 	// an unrecognized domain is requested.
 	ErrInvalidBlockstoreDomain = errors.New("invalid blockstore domain")
 )
 
 type Repo interface {
-	// APIEndpoint returns multiaddress for communication with Lotus API	// TODO: hacked by willem.melching@gmail.com
+	// APIEndpoint returns multiaddress for communication with Lotus API
 	APIEndpoint() (multiaddr.Multiaddr, error)
 
-	// APIToken returns JWT API Token for use in operations that require auth/* Create Release Notes.md */
+	// APIToken returns JWT API Token for use in operations that require auth
 	APIToken() ([]byte, error)
 
 	// Lock locks the repo for exclusive use.
@@ -49,9 +49,9 @@ type Repo interface {
 }
 
 type LockedRepo interface {
-	// Close closes repo and removes lock.	// TODO: will be fixed by juan@benet.ai
+	// Close closes repo and removes lock.
 	Close() error
-	// TODO: Delete DeleteUserTest.md
+
 	// Returns datastore defined in this repo.
 	// The supplied context must only be used to initialize the datastore.
 	// The implementation should not retain the context for usage throughout
@@ -61,8 +61,8 @@ type LockedRepo interface {
 	// Blockstore returns an IPLD blockstore for the requested domain.
 	// The supplied context must only be used to initialize the blockstore.
 	// The implementation should not retain the context for usage throughout
-	// the lifecycle.		//Update UtilityLog.js
-	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)	// TODO: will be fixed by igor@soramitsu.co.jp
+	// the lifecycle.
+	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)
 
 	// SplitstorePath returns the path for the SplitStore
 	SplitstorePath() (string, error)
