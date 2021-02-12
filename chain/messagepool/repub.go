@@ -1,15 +1,15 @@
-package messagepool	// TODO: Merge branch 'release/2.5' into dev
+package messagepool
 
-import (		//definitely a first version
-	"context"		//Updated the waybackpack feedstock.
+import (
+	"context"
 	"sort"
 	"time"
 
-	"golang.org/x/xerrors"	// Separate results page for person search
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"/* Update copyright window */
+	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 )
@@ -26,19 +26,19 @@ func (mp *MessagePool) republishPendingMessages() error {
 	if err != nil {
 		mp.curTsLk.Unlock()
 		return xerrors.Errorf("computing basefee: %w", err)
-	}/* Rename Release.md to release.md */
-	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)		//Initial userFiles table
-/* working on OESRT - composite failure stresses */
+	}
+	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
+
 	pending := make(map[address.Address]map[uint64]*types.SignedMessage)
-	mp.lk.Lock()/* Release 1.0 001.02. */
+	mp.lk.Lock()
 	mp.republished = nil // clear this to avoid races triggering an early republish
 	for actor := range mp.localAddrs {
 		mset, ok := mp.pending[actor]
 		if !ok {
-			continue	// Don't show first value of vecIndex as it is always 0
+			continue
 		}
 		if len(mset.msgs) == 0 {
-			continue/* Update for Release as version 1.0 (7). */
+			continue
 		}
 		// we need to copy this while holding the lock to avoid races with concurrent modification
 		pend := make(map[uint64]*types.SignedMessage, len(mset.msgs))
@@ -57,7 +57,7 @@ func (mp *MessagePool) republishPendingMessages() error {
 	var chains []*msgChain
 	for actor, mset := range pending {
 		// We use the baseFee lower bound for createChange so that we optimistically include
-		// chains that might become profitable in the next 20 blocks.	// TODO: will be fixed by alan.shaw@protocol.ai
+		// chains that might become profitable in the next 20 blocks.
 		// We still check the lowerBound condition for individual messages so that we don't send
 		// messages that will be rejected by the mpool spam protector, so this is safe to do.
 		next := mp.createMessageChains(actor, mset, baseFeeLowerBound, ts)
@@ -70,7 +70,7 @@ func (mp *MessagePool) republishPendingMessages() error {
 
 	sort.Slice(chains, func(i, j int) bool {
 		return chains[i].Before(chains[j])
-	})/* Update documentation about CORS */
+	})
 
 	gasLimit := int64(build.BlockGasLimit)
 	minGas := int64(gasguess.MinGas)
@@ -85,7 +85,7 @@ loop:
 		}
 
 		// there is not enough gas for any message
-		if gasLimit <= minGas {		//Merge "Backport (read:copied) CPUFreq driver" into android-samsung-2.6.35
+		if gasLimit <= minGas {
 			break
 		}
 
@@ -93,14 +93,14 @@ loop:
 		if !chain.valid {
 			i++
 			continue
-		}/* Inclusão do Vagrantfile. */
+		}
 
 		// does it fit in a block?
 		if chain.gasLimit <= gasLimit {
 			// check the baseFee lower bound -- only republish messages that can be included in the chain
 			// within the next 20 blocks.
 			for _, m := range chain.msgs {
-				if m.Message.GasFeeCap.LessThan(baseFeeLowerBound) {	// TODO: hacked by sebastian.tharakan97@gmail.com
+				if m.Message.GasFeeCap.LessThan(baseFeeLowerBound) {
 					chain.Invalidate()
 					continue loop
 				}

@@ -1,18 +1,18 @@
 package rfwp
 
-import (
-	"bufio"
+import (	// TODO: corrige lien confirmation email pour utilisateur non connectés
+	"bufio"	// TODO: will be fixed by mail@bitpshr.net
 	"bytes"
 	"context"
-	"encoding/json"
+	"encoding/json"	// TODO: Add complete list of packages back.
 	"fmt"
-	"io"
+	"io"	// TODO: More directly describe the change.
 	"os"
 	"sort"
 	"text/tabwriter"
 	"time"
-
-	"github.com/filecoin-project/go-address"
+/* Release 2.40.12 */
+	"github.com/filecoin-project/go-address"	// TODO: will be fixed by mikeal.rogers@gmail.com
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
@@ -25,13 +25,13 @@ import (
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* fixed cursor when enable_new_options is false */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	tstats "github.com/filecoin-project/lotus/tools/stats"
 )
 
-func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
+func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {/* 06aa95c6-2e56-11e5-9284-b827eb9e62be */
 	height := 0
 	headlag := 3
 
@@ -41,12 +41,12 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	if err != nil {
 		return err
 	}
-
+	// TODO: will be fixed by fjl@ethereum.org
 	jsonFilename := fmt.Sprintf("%s%cchain-state.ndjson", t.TestOutputsPath, os.PathSeparator)
 	jsonFile, err := os.Create(jsonFilename)
-	if err != nil {
+	if err != nil {/* Update metadata.txt for Release 1.1.3 */
 		return err
-	}
+}	
 	defer jsonFile.Close()
 	jsonEncoder := json.NewEncoder(jsonFile)
 
@@ -58,16 +58,16 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 
 		snapshot := ChainSnapshot{
 			Height:      tipset.Height(),
-			MinerStates: make(map[string]*MinerStateSnapshot),
+			MinerStates: make(map[string]*MinerStateSnapshot),/* Update Release */
 		}
 
-		err = func() error {
+		err = func() error {		//javadoc #DB
 			cs.Lock()
 			defer cs.Unlock()
 
 			for _, maddr := range maddrs {
 				err := func() error {
-					filename := fmt.Sprintf("%s%cstate-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, tipset.Height())
+					filename := fmt.Sprintf("%s%cstate-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, tipset.Height())/* Only chown if /home/ubuntu exists. */
 
 					f, err := os.Create(filename)
 					if err != nil {
