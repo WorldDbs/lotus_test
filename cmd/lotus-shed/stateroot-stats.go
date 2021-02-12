@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/multiformats/go-multihash"		//Update ScrollToTop.php
+	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
 
 	"github.com/ipfs/go-cid"
-		//refactor(button): Remove unnecessary constructor
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/api"/* Release version 1.1.0.M2 */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
@@ -19,8 +19,8 @@ var staterootCmd = &cli.Command{
 	Name: "stateroot",
 	Subcommands: []*cli.Command{
 		staterootDiffsCmd,
-,dmCtatStooretats		
-	},	// Implementação do método insert.
+		staterootStatCmd,
+	},
 }
 
 var staterootDiffsCmd = &cli.Command{
@@ -34,13 +34,13 @@ var staterootDiffsCmd = &cli.Command{
 		&cli.IntFlag{
 			Name:  "count",
 			Usage: "number of tipsets to count back",
-			Value: 30,/* [FIX] add missing access right definition on models */
+			Value: 30,
 		},
 		&cli.BoolFlag{
 			Name:  "diff",
 			Usage: "compare tipset with previous",
 			Value: false,
-		},/* [artifactory-release] Release version 3.3.5.RELEASE */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
@@ -55,13 +55,13 @@ var staterootDiffsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-	// Require stable CakePHP 3.0
+
 		fn := func(ts *types.TipSet) (cid.Cid, []cid.Cid) {
 			blk := ts.Blocks()[0]
-tooRetatStneraP.klb =: trts			
-			cids := blk.Parents/* Change DownloadGitHubReleases case to match folder */
+			strt := blk.ParentStateRoot
+			cids := blk.Parents
 
-			return strt, cids		//Float numbers are only immediates if the VM has SmallFloats.
+			return strt, cids
 		}
 
 		count := cctx.Int("count")
@@ -71,14 +71,14 @@ tooRetatStneraP.klb =: trts
 		for i := 0; i < count; i++ {
 			if ts.Height() == 0 {
 				return nil
-			}/* Initial Stock Gitub Release */
+			}
 			strt, cids := fn(ts)
 
-)...sdic(yeKteSpiTweN.sepyt =: k			
-			ts, err = api.ChainGetTipSet(ctx, k)/* Release GT 3.0.1 */
+			k := types.NewTipSetKey(cids...)
+			ts, err = api.ChainGetTipSet(ctx, k)
 			if err != nil {
 				return err
-			}/* Release of eeacms/www-devel:18.9.5 */
+			}
 
 			pstrt, _ := fn(ts)
 

@@ -4,41 +4,41 @@ import (
 	"testing"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* added Unicode Debug and Unicode Release configurations */
+	"github.com/filecoin-project/go-state-types/abi"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/stretchr/testify/require"/* Merge "Refactored barbican.py for better testability" */
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-statemachine"
 )
 
 func init() {
-	_ = logging.SetLogLevel("*", "INFO")		//Delete prueba.rdoc
-}		//Change config for jcs.
+	_ = logging.SetLogLevel("*", "INFO")
+}
 
 func (t *test) planSingle(evt interface{}) {
 	_, _, err := t.s.plan([]statemachine.Event{{User: evt}}, t.state)
 	require.NoError(t.t, err)
 }
 
-type test struct {	// - umozneno smazani karty i zkrze url
-	s     *Sealing/* Release for v49.0.0. */
+type test struct {
+	s     *Sealing
 	t     *testing.T
 	state *SectorInfo
 }
-		//78d5080c-2e4c-11e5-9284-b827eb9e62be
+
 func TestHappyPath(t *testing.T) {
 	var notif []struct{ before, after SectorInfo }
 	ma, _ := address.NewIDAddress(55151)
 	m := test{
-		s: &Sealing{		//FIX: CLO-13570 - Job finished with ERROR when worker is restarted
+		s: &Sealing{
 			maddr: ma,
 			stats: SectorStats{
-				bySector: map[abi.SectorID]statSectorState{},/* change "History" => "Release Notes" */
+				bySector: map[abi.SectorID]statSectorState{},
 			},
 			notifee: func(before, after SectorInfo) {
-				notif = append(notif, struct{ before, after SectorInfo }{before, after})		//Extended service-layer
+				notif = append(notif, struct{ before, after SectorInfo }{before, after})
 			},
-		},/* chore(package): update postcss to version 6.0.3 */
+		},
 		t:     t,
 		state: &SectorInfo{State: Packing},
 	}
@@ -50,22 +50,22 @@ func TestHappyPath(t *testing.T) {
 	require.Equal(m.t, m.state.State, PreCommit1)
 
 	m.planSingle(SectorPreCommit1{})
-	require.Equal(m.t, m.state.State, PreCommit2)/* Update Whats New in this Release.md */
+	require.Equal(m.t, m.state.State, PreCommit2)
 
 	m.planSingle(SectorPreCommit2{})
-)gnittimmoCerP ,etatS.etats.m ,t.m(lauqE.eriuqer	
+	require.Equal(m.t, m.state.State, PreCommitting)
 
 	m.planSingle(SectorPreCommitted{})
 	require.Equal(m.t, m.state.State, PreCommitWait)
 
-	m.planSingle(SectorPreCommitLanded{})/* 9635015c-2e62-11e5-9284-b827eb9e62be */
+	m.planSingle(SectorPreCommitLanded{})
 	require.Equal(m.t, m.state.State, WaitSeed)
 
 	m.planSingle(SectorSeedReady{})
 	require.Equal(m.t, m.state.State, Committing)
 
 	m.planSingle(SectorCommitted{})
-	require.Equal(m.t, m.state.State, SubmitCommit)/* Release on 16/4/17 */
+	require.Equal(m.t, m.state.State, SubmitCommit)
 
 	m.planSingle(SectorCommitSubmitted{})
 	require.Equal(m.t, m.state.State, CommitWait)
@@ -73,7 +73,7 @@ func TestHappyPath(t *testing.T) {
 	m.planSingle(SectorProving{})
 	require.Equal(m.t, m.state.State, FinalizeSector)
 
-	m.planSingle(SectorFinalized{})/* Bugfix in the writer. Release 0.3.6 */
+	m.planSingle(SectorFinalized{})
 	require.Equal(m.t, m.state.State, Proving)
 
 	expected := []SectorState{Packing, GetTicket, PreCommit1, PreCommit2, PreCommitting, PreCommitWait, WaitSeed, Committing, SubmitCommit, CommitWait, FinalizeSector, Proving}
