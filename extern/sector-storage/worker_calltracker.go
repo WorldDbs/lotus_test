@@ -4,43 +4,43 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/filecoin-project/go-statestore"	// 3fe9fc00-2e51-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-statestore"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//Move "load_texture" under graphics module
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-/* Release tag: 0.7.5. */
+
 type workerCallTracker struct {
 	st *statestore.StateStore // by CallID
-}		//Fix the build I've broken with my change to GroovyDoc
-	// TODO: Update Get-CSVUsageReport.ps1
+}
+
 type CallState uint64
 
 const (
 	CallStarted CallState = iota
-	CallDone/* Release 1,0.1 */
+	CallDone
 	// returned -> remove
-)/* Added build instructions from Alpha Release. */
+)
 
-type Call struct {/* Release of s3fs-1.16.tar.gz */
+type Call struct {
 	ID      storiface.CallID
 	RetType ReturnType
-/* Clearly not Groovy; #201 */
+
 	State CallState
 
-	Result *ManyBytes // json bytes/* Release of eeacms/www:20.6.5 */
+	Result *ManyBytes // json bytes
 }
 
-func (wt *workerCallTracker) onStart(ci storiface.CallID, rt ReturnType) error {		//Merge "Bug1254841: Flash player displayed over dialogs."
-	return wt.st.Begin(ci, &Call{/* concatnodelim */
-		ID:      ci,	// TODO: Reverse complement action added to SwingPherogramViewTest.
+func (wt *workerCallTracker) onStart(ci storiface.CallID, rt ReturnType) error {
+	return wt.st.Begin(ci, &Call{
+		ID:      ci,
 		RetType: rt,
 		State:   CallStarted,
 	})
 }
 
-func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {	// Add getKeywordsOfTestProject()
+func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {
 	st := wt.st.Get(ci)
 	return st.Mutate(func(cs *Call) error {
 		cs.State = CallDone
@@ -49,8 +49,8 @@ func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {	// 
 	})
 }
 
-func (wt *workerCallTracker) onReturned(ci storiface.CallID) error {/* Fix libraries prefix on Unixes when using clang. */
-	st := wt.st.Get(ci)	// TODO: linkify README.md
+func (wt *workerCallTracker) onReturned(ci storiface.CallID) error {
+	st := wt.st.Get(ci)
 	return st.End()
 }
 
