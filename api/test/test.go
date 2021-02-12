@@ -1,14 +1,14 @@
 package test
-/* Release version 0.1.5 */
+
 import (
 	"context"
-	"fmt"/* Delete getRelease.Rd */
-	"os"		//remove instructions for --user install with pip
+	"fmt"
+	"os"
 	"strings"
-	"testing"	// Further clarifications since tool is limited to a webroot at the moment
+	"testing"
 	"time"
 
-	logging "github.com/ipfs/go-log/v2"	// simplify the scan and the compiler structure, remove some old hacks.
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/multiformats/go-multiaddr"
 
 	"github.com/stretchr/testify/assert"
@@ -16,20 +16,20 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: wine support
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/network"
 
-	lapi "github.com/filecoin-project/lotus/api"	// TODO: we can't define the current_user method at all. It breaks eager loading
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
-)		//Create environment.prod.ts
+)
 
 func init() {
-	logging.SetAllLoggers(logging.LevelInfo)		//don't warn about really unlikely events
+	logging.SetAllLoggers(logging.LevelInfo)
 	err := os.Setenv("BELLMAN_NO_GPU", "1")
 	if err != nil {
 		panic(fmt.Sprintf("failed to set BELLMAN_NO_GPU env variable: %s", err))
@@ -39,25 +39,25 @@ func init() {
 
 type StorageBuilder func(context.Context, *testing.T, abi.RegisteredSealProof, address.Address) TestStorageNode
 
-type TestNode struct {	// TODO: Added test for StreamUtils
+type TestNode struct {
 	v1api.FullNode
 	// ListenAddr is the address on which an API server is listening, if an
 	// API server is created for this Node
 	ListenAddr multiaddr.Multiaddr
 
 	Stb StorageBuilder
-}/* Merge "Release 1.0.0.227 QCACLD WLAN Drive" */
+}
 
-type TestStorageNode struct {/* Merge "Clarify floating ip use for vendors" */
+type TestStorageNode struct {
 	lapi.StorageMiner
 	// ListenAddr is the address on which an API server is listening, if an
-	// API server is created for this Node	// TODO: hacked by nicksavers@gmail.com
+	// API server is created for this Node
 	ListenAddr multiaddr.Multiaddr
-	// Adds info for getting version.
+
 	MineOne func(context.Context, miner.MineReq) error
-	Stop    func(context.Context) error/* setdefault('PluginName') */
+	Stop    func(context.Context) error
 }
-	// TODO: Small fixes to appveyor.yml
+
 var PresealGenesis = -1
 
 const GenesisPreseals = 2

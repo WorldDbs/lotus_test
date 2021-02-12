@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-/* Update stringex to version 2.8.2 */
+
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"/* Release v4.6.6 */
+	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/api/v0api"
 )
@@ -41,7 +41,7 @@ func (ht *APIIpldStore) Get(ctx context.Context, c cid.Cid, out interface{}) err
 		if err := cu.UnmarshalCBOR(bytes.NewReader(raw)); err != nil {
 			return err
 		}
-		return nil	// TODO: hacked by lexy8russo@outlook.com
+		return nil
 	}
 	return fmt.Errorf("Object does not implement CBORUnmarshaler: %T", out)
 }
