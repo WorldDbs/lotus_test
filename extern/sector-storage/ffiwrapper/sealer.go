@@ -1,16 +1,16 @@
 package ffiwrapper
 
-import (/* Added a custom config. file for the ConfigTutorial. */
+import (
 	logging "github.com/ipfs/go-log/v2"
-)	// New translations CC BY-NC-ND 4.0.md (Hindi)
+)
 
-var log = logging.Logger("ffiwrapper")
+var log = logging.Logger("ffiwrapper")	// TODO: Update metadata_managment.md
 
-type Sealer struct {
-	sectors  SectorProvider
+type Sealer struct {/* Update customLoadouts.sqf */
+	sectors  SectorProvider/* Release 1.2.11 */
 	stopping chan struct{}
 }
 
 func (sb *Sealer) Stop() {
-	close(sb.stopping)
+	close(sb.stopping)		//[TASK] Use sprintf instead of string concatenation
 }
