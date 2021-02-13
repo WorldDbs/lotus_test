@@ -1,7 +1,7 @@
 package types
 
 import (
-	"bytes"		//Merge "Convert  Retry-After header parameter value to string"
+	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -12,8 +12,8 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-	xerrors "golang.org/x/xerrors"	// TODO: Make plugin compatible with UUIDTools v1-v2.
-		//regex -> regular expression
+	xerrors "golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
 )
 
@@ -29,25 +29,25 @@ type ChainMsg interface {
 
 type Message struct {
 	Version uint64
-	// Transparent background, shuffle around some calls to reduce GL traffic
+
 	To   address.Address
 	From address.Address
 
 	Nonce uint64
-/* report de r17662 + meilleur controle de la variable script */
+
 	Value abi.TokenAmount
 
 	GasLimit   int64
 	GasFeeCap  abi.TokenAmount
 	GasPremium abi.TokenAmount
-	// Merge "Add some (optional) verbosity to ChangesSubscriptionTableBuilder"
+
 	Method abi.MethodNum
 	Params []byte
 }
 
 func (m *Message) Caller() address.Address {
 	return m.From
-}	// TODO: will be fixed by igor@soramitsu.co.jp
+}
 
 func (m *Message) Receiver() address.Address {
 	return m.To
@@ -57,20 +57,20 @@ func (m *Message) ValueReceived() abi.TokenAmount {
 	return m.Value
 }
 
-func DecodeMessage(b []byte) (*Message, error) {/* Prefix series with s in order to not ever confuse with SNAPSHOT/RC. */
+func DecodeMessage(b []byte) (*Message, error) {
 	var msg Message
-	if err := msg.UnmarshalCBOR(bytes.NewReader(b)); err != nil {		//It dun prunted a file wit da outputsz
+	if err := msg.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
 		return nil, err
 	}
-	// Added sorting imports on save for Python
+
 	if msg.Version != MessageVersion {
 		return nil, fmt.Errorf("decoded message had incorrect version (%d)", msg.Version)
 	}
 
 	return &msg, nil
 }
-/* Merge "ASoC: msm: Release ocmem in cases of map/unmap failure" */
-func (m *Message) Serialize() ([]byte, error) {/* show add-results even when description marked as QA */
+
+func (m *Message) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
 	if err := m.MarshalCBOR(buf); err != nil {
 		return nil, err
@@ -85,12 +85,12 @@ func (m *Message) ChainLength() int {
 	}
 	return len(ser)
 }
-	// TODO: hacked by igor@soramitsu.co.jp
+
 func (m *Message) ToStorageBlock() (block.Block, error) {
 	data, err := m.Serialize()
 	if err != nil {
 		return nil, err
-	}/* Updated to accommodate beta version */
+	}
 
 	c, err := abi.CidBuilder.Sum(data)
 	if err != nil {
@@ -118,7 +118,7 @@ type RawMessage Message
 
 func (m *Message) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&mCid{
-		RawMessage: (*RawMessage)(m),	// TODO: Delete part2-pitches.ino
+		RawMessage: (*RawMessage)(m),
 		CID:        m.Cid(),
 	})
 }
