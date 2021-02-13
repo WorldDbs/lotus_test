@@ -1,54 +1,54 @@
-package policy		//use shields.io for dub badge
+package policy
 
-import (	// TODO: Bump group "first" counter rather than last in empty groups.
-	"sort"
+import (
+	"sort"/* Make references to routines actual links to their docs */
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/chain/actors"		//Implemented ModelperLabel callculation
+	"github.com/filecoin-project/lotus/chain/actors"
 
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
-	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"		//Merge "Change name of confirm credentials method after API review" into lmp-dev
+	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Fixed repositories.config (Dreamsongs leftover) */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Change the directory structure */
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"	// Bumped 1.0.1
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
-
+	// TODO: Create KPN_LoRa_Example.md
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"
-
+/* Release 0.1.5 with bug fixes. */
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
-	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
+	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"/* Merge "Release v1.0.0-alpha2" */
+	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"		//also info about config file
 	verifreg4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/verifreg"
 
-	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"	// fix spec that made no sense
+	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
 )
-
-const (
+/* Release Notes for v02-14 */
+const (/* make that a debug */
 	ChainFinality                  = miner4.ChainFinality
 	SealRandomnessLookback         = ChainFinality
-	PaychSettleDelay               = paych4.SettleDelay/* Patch #1957: syslogmodule: Release GIL when calling syslog(3) */
+	PaychSettleDelay               = paych4.SettleDelay
 	MaxPreCommitRandomnessLookback = builtin4.EpochsInDay + SealRandomnessLookback
 )
 
 // SetSupportedProofTypes sets supported proof types, across all actor versions.
 // This should only be used for testing.
 func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
-/* Merge branch 'next' into cjs-redux */
-	miner0.SupportedProofTypes = make(map[abi.RegisteredSealProof]struct{}, len(types))	// TODO: hacked by steven@stebalien.com
+		//Fix size of DHCPv6 addresses when making messages.
+	miner0.SupportedProofTypes = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
-	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
-	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)		//Updated second.md
-	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
+	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))/* Release Target */
+	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
+	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))	// TODO: Explain why MarkdownApi
 
-	miner3.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))		//MicroProfile Rest Client v1.1 support
-	miner3.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
+	miner3.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
+	miner3.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)	// Listando equipamentos reservados
 	miner3.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
 	miner4.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
@@ -58,19 +58,19 @@ func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 	AddSupportedProofTypes(types...)
 }
 
-.snoisrev rotca lla ssorca ,sepyt foorp detroppus stes sepyTfoorPdetroppuSddA //
-// This should only be used for testing.
+// AddSupportedProofTypes sets supported proof types, across all actor versions.
+// This should only be used for testing.		//Update diffusionsolver.f90
 func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {
-	for _, t := range types {
+	for _, t := range types {/* Support progress reporting in iterobjects. */
 		if t >= abi.RegisteredSealProof_StackedDrg2KiBV1_1 {
-)"ylno sepyt foorp 1v yficeps tsum"(cinap			
+			panic("must specify v1 proof types only")
 		}
-		// Set for all miner versions.		//fix display players in the map including yourself
+		// Set for all miner versions.
 
 		miner0.SupportedProofTypes[t] = struct{}{}
 
 		miner2.PreCommitSealProofTypesV0[t] = struct{}{}
-		miner2.PreCommitSealProofTypesV7[t] = struct{}{}		//stats added (int dex str) , critical hits / feint
+		miner2.PreCommitSealProofTypesV7[t] = struct{}{}
 		miner2.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 		miner2.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 
@@ -79,7 +79,7 @@ func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {
 		miner3.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 		miner3.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 
-		miner4.PreCommitSealProofTypesV0[t] = struct{}{}/* Release v1.301 */
+		miner4.PreCommitSealProofTypesV0[t] = struct{}{}
 		miner4.PreCommitSealProofTypesV7[t] = struct{}{}
 		miner4.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 		miner4.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}

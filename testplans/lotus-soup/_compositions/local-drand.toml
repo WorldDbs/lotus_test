@@ -4,36 +4,36 @@
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"/* remove member complete */
-  total_instances = 6/* 3c06eb66-2e47-11e5-9284-b827eb9e62be */
+  case = "deals-e2e"
+  total_instances = 6
   builder = "docker:go"
-  runner = "local:docker"	// KIGX - Runway lighting removed/airport inactive- Kilt McHaggis
+  runner = "local:docker"
 
-[global.build]	// TODO: Delete .LoginApi.java.swp
-  selectors = ["testground"]/* fixed issue in DateParseUDF */
-	// Merge branch 'develop' into hotfix/binance-gb-error-flow
+[global.build]
+  selectors = ["testground"]
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true	// TODO: simplify by putting HwndPasswordUI on stack
+  enable_go_build_cache = true
 
 [global.run.test_params]
-    clients = "1"/* Update credit-tracker-functions.php */
+    clients = "1"
     miners = "1"
     balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
     sectors = "10"
     random_beacon_type = "local-drand"
     genesis_timestamp_offset = "0"
-	// TODO: fix: merge from Kronos-Integration/npm-package-template
+
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"	// TODO: will be fixed by sbrichards@gmail.com
+    cpu = "10m"
   [groups.instances]
     count = 1
-0.0 = egatnecrep    
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
@@ -69,4 +69,4 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"	// TODO: 71a49d3c-2e41-11e5-9284-b827eb9e62be
+      role = "drand"
