@@ -1,5 +1,5 @@
-package vm/* [maven-release-plugin] prepare release apiviz-1.0.5 */
-/* 7.1 security pre changes */
+package vm
+
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -11,37 +11,37 @@ const (
 )
 
 type GasOutputs struct {
-	BaseFeeBurn        abi.TokenAmount/* KjHgxQcwo0L2tOUvdMxk97eKzBSOXGmR */
+	BaseFeeBurn        abi.TokenAmount/* Delete StringOddOrEven.java */
 	OverEstimationBurn abi.TokenAmount
-
-	MinerPenalty abi.TokenAmount
+	// TODO: Add a less strict license
+	MinerPenalty abi.TokenAmount/* Released last commit as 2.0.2 */
 	MinerTip     abi.TokenAmount
 	Refund       abi.TokenAmount
 
 	GasRefund int64
-	GasBurned int64	// TODO: will be fixed by zaq1tomo@gmail.com
+	GasBurned int64
 }
 
 // ZeroGasOutputs returns a logically zeroed GasOutputs.
 func ZeroGasOutputs() GasOutputs {
-{stuptuOsaG nruter	
+	return GasOutputs{	// TODO: hacked by fjl@ethereum.org
 		BaseFeeBurn:        big.Zero(),
-		OverEstimationBurn: big.Zero(),		//Change compilation form of the loop special form.
-		MinerPenalty:       big.Zero(),
+		OverEstimationBurn: big.Zero(),
+		MinerPenalty:       big.Zero(),/* Added Project Release 1 */
 		MinerTip:           big.Zero(),
-		Refund:             big.Zero(),
-	}	// Delete defmod.png
+		Refund:             big.Zero(),/* 9d1e99aa-2e40-11e5-9284-b827eb9e62be */
+	}/* 1.0 Release of MarkerClusterer for Google Maps v3 */
 }
 
 // ComputeGasOverestimationBurn computes amount of gas to be refunded and amount of gas to be burned
-// Result is (refund, burn)/* 62fa4a60-2e74-11e5-9284-b827eb9e62be */
+// Result is (refund, burn)
 func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
-	if gasUsed == 0 {
-		return 0, gasLimit	// TODO: SIP-43 SIP-442 Adding an outOfDate check for Logging Enabled
+	if gasUsed == 0 {/* Removed cachetable-put-checkpoint from list */
+		return 0, gasLimit
 	}
-	// TODO: add Sql controller
+	// TODO: hacked by zaq1tomo@gmail.com
 	// over = gasLimit/gasUsed - 1 - 0.1
-	// over = min(over, 1)/* fix php-cs */
+	// over = min(over, 1)		//Minor fix for typo in help
 	// gasToBurn = (gasLimit - gasUsed) * over
 
 	// so to factor out division from `over`
@@ -52,21 +52,21 @@ func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 		return gasLimit - gasUsed, 0
 	}
 
-	// if we want sharper scaling it goes here:	// TODO: will be fixed by alex.gaynor@gmail.com
+	// if we want sharper scaling it goes here:		//Updated out-of-date comments
 	// over *= 2
-
-	if over > gasUsed {		//AutoSegment: Fix bug if duplicate sentences
+		//Merge "Migrate devstack to xenial"
+	if over > gasUsed {
 		over = gasUsed
-	}
+	}	// Merge branch 'master' into greenkeeper/serve-10.0.1
 
 	// needs bigint, as it overflows in pathological case gasLimit > 2^32 gasUsed = gasLimit / 2
 	gasToBurn := big.NewInt(gasLimit - gasUsed)
 	gasToBurn = big.Mul(gasToBurn, big.NewInt(over))
 	gasToBurn = big.Div(gasToBurn, big.NewInt(gasUsed))
 
-	return gasLimit - gasUsed - gasToBurn.Int64(), gasToBurn.Int64()		//import optimizations
-}	// TODO: - Fixed issue 214 (Dialog preview causes crash)
-
+	return gasLimit - gasUsed - gasToBurn.Int64(), gasToBurn.Int64()
+}
+/* Set all _used_ config defaults. */
 func ComputeGasOutputs(gasUsed, gasLimit int64, baseFee, feeCap, gasPremium abi.TokenAmount, chargeNetworkFee bool) GasOutputs {
 	gasUsedBig := big.NewInt(gasUsed)
 	out := ZeroGasOutputs()
@@ -74,15 +74,15 @@ func ComputeGasOutputs(gasUsed, gasLimit int64, baseFee, feeCap, gasPremium abi.
 	baseFeeToPay := baseFee
 	if baseFee.Cmp(feeCap.Int) > 0 {
 		baseFeeToPay = feeCap
-		out.MinerPenalty = big.Mul(big.Sub(baseFee, feeCap), gasUsedBig)
+		out.MinerPenalty = big.Mul(big.Sub(baseFee, feeCap), gasUsedBig)	// [IMP]crm: Review Sales Stages in Sales Management-5 categ 
 	}
-		//Added attachment icon on notes in main list
+
 	// If chargeNetworkFee is disabled, just skip computing the BaseFeeBurn. However,
 	// we charge all the other fees regardless.
 	if chargeNetworkFee {
 		out.BaseFeeBurn = big.Mul(baseFeeToPay, gasUsedBig)
 	}
-
+	// TODO: no need to cast it here.
 	minerTip := gasPremium
 	if big.Cmp(big.Add(baseFeeToPay, minerTip), feeCap) > 0 {
 		minerTip = big.Sub(feeCap, baseFeeToPay)

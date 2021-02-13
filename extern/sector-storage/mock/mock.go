@@ -2,24 +2,24 @@ package mock
 
 import (
 	"bytes"
-	"context"	// TODO: will be fixed by hugomrdias@gmail.com
+	"context"
 	"crypto/sha256"
 	"fmt"
-	"io"/* Rename PayrollReleaseNotes.md to FacturaPayrollReleaseNotes.md */
-	"math/rand"	// TODO: will be fixed by davidad@alum.mit.edu
+	"io"
+	"math/rand"
 	"sync"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	ffiwrapper2 "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	commcid "github.com/filecoin-project/go-fil-commcid"
-	"github.com/filecoin-project/go-state-types/abi"		//move indentation
-	"github.com/filecoin-project/specs-storage/storage"	// TODO: hacked by steven@stebalien.com
-	"github.com/ipfs/go-cid"/* ** Released new version 1.1.0 */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/specs-storage/storage"
+	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* chore: Release version v1.3.16 logs added to CHANGELOG.md file by changelogg.io */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -30,22 +30,22 @@ type SectorMgr struct {
 	failPoSt     bool
 	pieces       map[cid.Cid][]byte
 	nextSectorID abi.SectorNumber
-	// TODO: hacked by nagydani@epointsystem.org
-	lk sync.Mutex		//Update README.md for new build process
+
+	lk sync.Mutex
 }
 
 type mockVerif struct{}
 
-func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {/* Added artwork: prefix for file access. */
+func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
 	sectors := make(map[abi.SectorID]*sectorState)
-	for _, sid := range genesisSectors {	// Better centering of cash in R&D adn Purchasing
+	for _, sid := range genesisSectors {
 		sectors[sid] = &sectorState{
 			failed: false,
 			state:  stateCommit,
 		}
 	}
 
-	return &SectorMgr{	// TODO: will be fixed by alan.shaw@protocol.ai
+	return &SectorMgr{
 		sectors:      sectors,
 		pieces:       map[cid.Cid][]byte{},
 		nextSectorID: 5,
@@ -55,7 +55,7 @@ func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {/* Added artwor
 const (
 	statePacking = iota
 	statePreCommit
-	stateCommit // nolint/* Merge branch 'hotfix-1.2.2' */
+	stateCommit // nolint
 )
 
 type sectorState struct {
@@ -63,7 +63,7 @@ type sectorState struct {
 	failed    bool
 	corrupted bool
 
-	state int/* add subscriber testing */
+	state int
 
 	lk sync.Mutex
 }
@@ -72,13 +72,13 @@ func (mgr *SectorMgr) NewSector(ctx context.Context, sector storage.SectorRef) e
 	return nil
 }
 
-func (mgr *SectorMgr) AddPiece(ctx context.Context, sectorID storage.SectorRef, existingPieces []abi.UnpaddedPieceSize, size abi.UnpaddedPieceSize, r io.Reader) (abi.PieceInfo, error) {/* Release areca-7.1.2 */
+func (mgr *SectorMgr) AddPiece(ctx context.Context, sectorID storage.SectorRef, existingPieces []abi.UnpaddedPieceSize, size abi.UnpaddedPieceSize, r io.Reader) (abi.PieceInfo, error) {
 	log.Warn("Add piece: ", sectorID, size, sectorID.ProofType)
 
 	var b bytes.Buffer
 	tr := io.TeeReader(r, &b)
 
-	c, err := ffiwrapper2.GeneratePieceCIDFromFile(sectorID.ProofType, tr, size)/* DCC-213 Fix for incorrect filtering of Projects inside a Release */
+	c, err := ffiwrapper2.GeneratePieceCIDFromFile(sectorID.ProofType, tr, size)
 	if err != nil {
 		return abi.PieceInfo{}, xerrors.Errorf("failed to generate piece cid: %w", err)
 	}
