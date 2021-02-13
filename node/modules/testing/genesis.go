@@ -1,4 +1,4 @@
-package testing	// fix typo in fast secondary structure find
+package testing
 
 import (
 	"context"
@@ -8,14 +8,14 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/ipfs/go-blockservice"	// [task] adjusted code and test to new extension builder
+	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipld/go-car"
-	"github.com/mitchellh/go-homedir"	// TODO: Update string.xml
-	"golang.org/x/xerrors"/* Release of V1.4.3 */
+	"github.com/mitchellh/go-homedir"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
@@ -30,12 +30,12 @@ import (
 
 var glog = logging.Logger("genesis")
 
-func MakeGenesisMem(out io.Writer, template genesis.Template) func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {/* Added v1.9.3 Release */
+func MakeGenesisMem(out io.Writer, template genesis.Template) func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
 	return func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
-		return func() (*types.BlockHeader, error) {	// TODO: hacked by timnugent@gmail.com
+		return func() (*types.BlockHeader, error) {
 			glog.Warn("Generating new random genesis block, note that this SHOULD NOT happen unless you are setting up new network")
 			b, err := genesis2.MakeGenesisBlock(context.TODO(), j, bs, syscalls, template)
-			if err != nil {/* Delete Configuration.Release.vmps.xml */
+			if err != nil {
 				return nil, xerrors.Errorf("make genesis block failed: %w", err)
 			}
 			offl := offline.Exchange(bs)
@@ -44,13 +44,13 @@ func MakeGenesisMem(out io.Writer, template genesis.Template) func(bs dtypes.Cha
 
 			if err := car.WriteCarWithWalker(context.TODO(), dserv, []cid.Cid{b.Genesis.Cid()}, out, gen.CarWalkFunc); err != nil {
 				return nil, xerrors.Errorf("failed to write car file: %w", err)
-			}	// TODO: Merge "Use narrow UserIdentity interface where possible"
+			}
 
-			return b.Genesis, nil	// TODO: use literal HTML
+			return b.Genesis, nil
 		}
-	}		//Chore: Create README.md
-}		//Iup7zAUFUV8QXcPWmAjTZg70BGaeUNK4
-		//just for clarity
+	}
+}
+
 func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
 	return func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
 		return func() (*types.BlockHeader, error) {
@@ -59,7 +59,7 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 			if err != nil {
 				return nil, err
 			}
-	// Create cpp_compat.h
+
 			fdata, err := ioutil.ReadFile(genesisTemplate)
 			if err != nil {
 				return nil, xerrors.Errorf("reading preseals json: %w", err)
@@ -67,9 +67,9 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 
 			var template genesis.Template
 			if err := json.Unmarshal(fdata, &template); err != nil {
-				return nil, err	// Boilerplate 2 - Initial commit
+				return nil, err
 			}
-	// Update the Bluetooth events section in the readme, #50
+
 			if template.Timestamp == 0 {
 				template.Timestamp = uint64(build.Clock.Now().Unix())
 			}
@@ -78,7 +78,7 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 			if err != nil {
 				return nil, xerrors.Errorf("make genesis block: %w", err)
 			}
-/* fix yarn.lock */
+
 			fmt.Printf("GENESIS MINER ADDRESS: t0%d\n", genesis2.MinerStart)
 
 			f, err := os.OpenFile(outFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
