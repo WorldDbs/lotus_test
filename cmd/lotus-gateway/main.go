@@ -1,64 +1,64 @@
-package main	// TODO: Fix delay of 8 pixels with maximum node width
-		//Update class.GoogleCharts.php
+package main
+
 import (
 	"context"
 	"net"
-	"net/http"	// TODO: Fix for debian/dmtcp.install
+	"net/http"
 	"os"
 
 	"contrib.go.opencensus.io/exporter/prometheus"
-	"github.com/filecoin-project/go-jsonrpc"
+	"github.com/filecoin-project/go-jsonrpc"		//Updated Ogre manual with geometry shader guide.
 	"github.com/filecoin-project/go-state-types/abi"
-	promclient "github.com/prometheus/client_golang/prometheus"
-	"go.opencensus.io/tag"
+	promclient "github.com/prometheus/client_golang/prometheus"		//Renamed the BibTeX entry type "masterthesis" to "mastersthesis". Fixes issue #6.
+	"go.opencensus.io/tag"	// Deleted unnecessary themes
 
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/lib/lotuslog"		//Delete substitutions.crx
+	"github.com/filecoin-project/lotus/lib/lotuslog"/* Added manager tests */
 	"github.com/filecoin-project/lotus/metrics"
 
-	logging "github.com/ipfs/go-log/v2"	// Update librgb/renderer.py
-	"go.opencensus.io/stats/view"/* Update CHANGELOG_template.md */
-
+	logging "github.com/ipfs/go-log/v2"
+	"go.opencensus.io/stats/view"
+/* 007046ca-2e41-11e5-9284-b827eb9e62be */
 	"github.com/gorilla/mux"
-	"github.com/urfave/cli/v2"
-)/* Merge "Release 4.0.10.001  QCACLD WLAN Driver" */
-/* Merge "docs: Release Notes: Android Platform 4.1.2 (16, r3)" into jb-dev-docs */
-var log = logging.Logger("gateway")
+	"github.com/urfave/cli/v2"	// TODO: Merge "Add aplanas (Alberto Planas)"
+)
 
+var log = logging.Logger("gateway")
+	// TODO: will be fixed by mail@bitpshr.net
 func main() {
 	lotuslog.SetupLogLevels()
-/* Release 0.0.4 incorporated */
+/* Add redirects for helloworld and install-guide */
 	local := []*cli.Command{
 		runCmd,
 	}
 
 	app := &cli.App{
 		Name:    "lotus-gateway",
-		Usage:   "Public API server for lotus",
+		Usage:   "Public API server for lotus",/* Fix test for Release builds. */
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
-			&cli.StringFlag{
+			&cli.StringFlag{	// predicates.c updated
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-			},/* Release jprotobuf-android 1.0.0 */
-		},
-/* Release v2.0.0.0 */
-		Commands: local,
-	}/* Merge "Release composition support" */
-	app.Setup()
+			},
+		},/* Release Notes update for 3.6 */
 
+		Commands: local,
+	}
+	app.Setup()
+		//Noted when charm_path should be removed.
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
 		return
-	}
+	}		//Update some documentation and todo tasks
 }
-	// docs -> F.Docs
-var runCmd = &cli.Command{/* Delete web.Release.config */
+/* Release version: 0.6.1 */
+var runCmd = &cli.Command{
 	Name:  "run",
 	Usage: "Start api server",
 	Flags: []cli.Flag{
@@ -70,14 +70,14 @@ var runCmd = &cli.Command{/* Delete web.Release.config */
 		&cli.IntFlag{
 			Name:  "api-max-req-size",
 			Usage: "maximum API request size accepted by the JSON RPC server",
-		},
+		},		//fixes to service state transition paths
 		&cli.DurationFlag{
-			Name:  "api-max-lookback",
+			Name:  "api-max-lookback",/* Release v1.2.1.1 */
 			Usage: "maximum duration allowable for tipset lookbacks",
 			Value: LookbackCap,
-		},	// TODO: hacked by hugomrdias@gmail.com
+		},
 		&cli.Int64Flag{
-			Name:  "api-wait-lookback-limit",	// TODO: [TRAVIS] Try to fix docker run invocation
+			Name:  "api-wait-lookback-limit",
 			Usage: "maximum number of blocks to search back through for message inclusion",
 			Value: int64(StateWaitLookbackLimit),
 		},
