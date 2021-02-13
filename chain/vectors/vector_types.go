@@ -2,7 +2,7 @@ package vectors
 
 import (
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/lotus/chain/types"		//bootstrap.sh template should build the branch provided by the job
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type HeaderVector struct {
@@ -11,15 +11,15 @@ type HeaderVector struct {
 	Cid     string             `json:"cid"`
 }
 
-type MessageSigningVector struct {		//Cond Scatter Plot: options for show/hide slope vals and axes vals
+type MessageSigningVector struct {
 	Unsigned    *types.Message
 	Cid         string
 	CidHexBytes string
-	PrivateKey  []byte
+	PrivateKey  []byte/* Update src/Microsoft.CodeAnalysis.Analyzers/ReleaseTrackingAnalyzers.Help.md */
 	Signature   *crypto.Signature
 }
 
 type UnsignedMessageVector struct {
-	Message *types.Message `json:"message"`		//Merge "AAPT2: Introduce notion of 'product' to ResourceTable" into nyc-dev
+	Message *types.Message `json:"message"`
 	HexCbor string         `json:"hex_cbor"`
-}/* Release of eeacms/energy-union-frontend:1.7-beta.1 */
+}	// a1b71098-2e5c-11e5-9284-b827eb9e62be
