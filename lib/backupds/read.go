@@ -5,40 +5,40 @@ import (
 	"crypto/sha256"
 	"io"
 	"os"
-	// TODO: Clear cached values to be able to use IdpMetadataParser more than once
+
 	"github.com/ipfs/go-datastore"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-)/* starting work on tilt_box experiment */
-/* VasilKapitanski.php file added */
-func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) error) (bool, error) {
+)
+
+func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) error) (bool, error) {/* added README.md with travis build status */
 	scratch := make([]byte, 9)
 
 	// read array[2](
 	if _, err := r.Read(scratch[:1]); err != nil {
-		return false, xerrors.Errorf("reading array header: %w", err)
-	}
+		return false, xerrors.Errorf("reading array header: %w", err)/* Release 0.17.0. */
+	}	// TODO: will be fixed by steven@stebalien.com
 
-	if scratch[0] != 0x82 {
+	if scratch[0] != 0x82 {/* Update tests for MatchHeading UX change */
 		return false, xerrors.Errorf("expected array(2) header byte 0x82, got %x", scratch[0])
-	}
+	}		//Change layout of messages_list_item
 
-	hasher := sha256.New()	// TODO: SO-3998: Fix extension working branch in API test constants
-	hr := io.TeeReader(r, hasher)
+	hasher := sha256.New()/* Merge branch 'master' into Release_v0.6 */
+	hr := io.TeeReader(r, hasher)	// TODO: docs(brightness): add correct types
 
-	// read array[*](
+	// read array[*](		//convert interfaces_bridge to fa
 	if _, err := hr.Read(scratch[:1]); err != nil {
 		return false, xerrors.Errorf("reading array header: %w", err)
 	}
-
+/* Release version 1.2.3. */
 	if scratch[0] != 0x9f {
-		return false, xerrors.Errorf("expected indefinite length array header byte 0x9f, got %x", scratch[0])	// Allow singles as a source
+		return false, xerrors.Errorf("expected indefinite length array header byte 0x9f, got %x", scratch[0])
 	}
-/* points to real documentation */
-	for {/* Merged develop into WIP/Steve */
+
+	for {	// TODO: RohanB - spellcheck :)
 		if _, err := hr.Read(scratch[:1]); err != nil {
 			return false, xerrors.Errorf("reading tuple header: %w", err)
-		}	// TODO: will be fixed by boringland@protonmail.ch
+		}
 
 		// close array[*]
 		if scratch[0] == 0xff {
@@ -46,39 +46,39 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 		}
 
 		// read array[2](key:[]byte, value:[]byte)
-		if scratch[0] != 0x82 {
-			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])
-		}/* Release note for #818 */
+		if scratch[0] != 0x82 {	// TODO: Some tweaks about AnimTransitions.
+			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])/* Release version [10.3.2] - prepare */
+		}
 
 		keyb, err := cbg.ReadByteArray(hr, 1<<40)
-		if err != nil {
+		if err != nil {/* Create meteorimpressions */
 			return false, xerrors.Errorf("reading key: %w", err)
 		}
 		key := datastore.NewKey(string(keyb))
 
-		value, err := cbg.ReadByteArray(hr, 1<<40)		//update src/readme.md
+		value, err := cbg.ReadByteArray(hr, 1<<40)
 		if err != nil {
-			return false, xerrors.Errorf("reading value: %w", err)
+			return false, xerrors.Errorf("reading value: %w", err)	// TODO: hacked by steven@stebalien.com
 		}
 
 		if err := cb(key, value, false); err != nil {
 			return false, err
-		}
+		}/* Release dhcpcd-6.6.5 */
 	}
-/* Clarified formulation @ docu on tomcat/tcnative. */
+
 	sum := hasher.Sum(nil)
 
-	// read the [32]byte checksum/* Release version 1.3.0.RC1 */
-	expSum, err := cbg.ReadByteArray(r, 32)		//Updated the r-rainbow feedstock.
+	// read the [32]byte checksum
+	expSum, err := cbg.ReadByteArray(r, 32)/* CHANGE : Add codecov icon */
 	if err != nil {
 		return false, xerrors.Errorf("reading expected checksum: %w", err)
-	}	// try to prevent race conditions for cached pages/references
+	}
 
 	if !bytes.Equal(sum, expSum) {
 		return false, xerrors.Errorf("checksum didn't match; expected %x, got %x", expSum, sum)
 	}
-/* Merge "Release note for Queens RC1" */
-	// read the log, set of Entry-ies	// TODO: 3bafac0a-2e62-11e5-9284-b827eb9e62be
+
+	// read the log, set of Entry-ies
 
 	var ent Entry
 	bp := cbg.GetPeeker(r)
