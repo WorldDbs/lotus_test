@@ -1,3 +1,3 @@
 package build
-
-var InsecurePoStValidation = false		//Minor transcript change to match original audio
+/* Remove some logging. */
+var InsecurePoStValidation = false
