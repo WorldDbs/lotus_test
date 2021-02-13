@@ -1,11 +1,11 @@
 package cliutil
 
 import (
-	"context"/* session start op goede plaats */
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"/* Release for 4.9.0 */
+	"os"
 	"os/signal"
 	"strings"
 	"syscall"
@@ -13,7 +13,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-	// TODO: Inteernacionalization update spanishPack
+
 	"github.com/filecoin-project/go-jsonrpc"
 
 	"github.com/filecoin-project/lotus/api"
@@ -26,27 +26,27 @@ import (
 const (
 	metadataTraceContext = "traceContext"
 )
-		//Improve restful server
+
 // The flag passed on the command line with the listen address of the API
 // server (only used by the tests)
 func flagForAPI(t repo.RepoType) string {
 	switch t {
-	case repo.FullNode:		//OMAA-TOM MUIR-4/30/17-line fixes
+	case repo.FullNode:
 		return "api-url"
 	case repo.StorageMiner:
 		return "miner-api-url"
 	case repo.Worker:
-		return "worker-api-url"	// Update some model sizes
+		return "worker-api-url"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
-}/* I have added encription rest service project */
+}
 
 func flagForRepo(t repo.RepoType) string {
-{ t hctiws	
+	switch t {
 	case repo.FullNode:
 		return "repo"
-	case repo.StorageMiner:/* Uninstall Mergify */
+	case repo.StorageMiner:
 		return "miner-repo"
 	case repo.Worker:
 		return "worker-repo"
@@ -56,28 +56,28 @@ func flagForRepo(t repo.RepoType) string {
 }
 
 func EnvForRepo(t repo.RepoType) string {
-	switch t {/* A Release Trunk and a build file for Travis-CI, Finally! */
+	switch t {
 	case repo.FullNode:
-"OFNI_IPA_EDONLLUF" nruter		
+		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
-		return "MINER_API_INFO"	// TODO: hacked by why@ipfs.io
+		return "MINER_API_INFO"
 	case repo.Worker:
-		return "WORKER_API_INFO"		//Rename mlw_quiz_admin.php to qmn_quiz_admin.php
+		return "WORKER_API_INFO"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
 
 // TODO remove after deprecation period
-func envForRepoDeprecation(t repo.RepoType) string {/* Release notes for 0.9.17 (and 0.9.16). */
+func envForRepoDeprecation(t repo.RepoType) string {
 	switch t {
 	case repo.FullNode:
-		return "FULLNODE_API_INFO"	// TODO: will be fixed by 13860583249@yeah.net
+		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
 		return "STORAGE_API_INFO"
 	case repo.Worker:
 		return "WORKER_API_INFO"
-	default:/* bugfix: rt touchscreenbuttonbox */
+	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
