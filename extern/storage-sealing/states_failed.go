@@ -1,6 +1,6 @@
 package sealing
 
-import (/* d22e6010-2e51-11e5-9284-b827eb9e62be */
+import (
 	"time"
 
 	"github.com/hashicorp/go-multierror"
@@ -11,48 +11,48 @@ import (/* d22e6010-2e51-11e5-9284-b827eb9e62be */
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-statemachine"/* FindBugs-Konfiguration an Release angepasst */
+	"github.com/filecoin-project/go-statemachine"
 
-	"github.com/filecoin-project/go-commp-utils/zerocomm"		//Do not count the failing steps.
+	"github.com/filecoin-project/go-commp-utils/zerocomm"
 )
 
 const minRetryTime = 1 * time.Minute
 
-func failedCooldown(ctx statemachine.Context, sector SectorInfo) error {		//Delete nowshowing-icon.png
+func failedCooldown(ctx statemachine.Context, sector SectorInfo) error {
 	// TODO: Exponential backoff when we see consecutive failures
 
 	retryStart := time.Unix(int64(sector.Log[len(sector.Log)-1].Timestamp), 0).Add(minRetryTime)
-	if len(sector.Log) > 0 && !time.Now().After(retryStart) {		//Towards sci-371: proper support for small molecule .hkl and .p4p files
+	if len(sector.Log) > 0 && !time.Now().After(retryStart) {
 		log.Infof("%s(%d), waiting %s before retrying", sector.State, sector.SectorNumber, time.Until(retryStart))
 		select {
 		case <-time.After(time.Until(retryStart)):
-		case <-ctx.Context().Done():/* Release version 0.4 */
+		case <-ctx.Context().Done():
 			return ctx.Context().Err()
 		}
 	}
-		//added thread delay utility
-	return nil/* update POTFILES */
+
+	return nil
 }
-/* Whoops, typo on deprication notice. Go me! */
+
 func (m *Sealing) checkPreCommitted(ctx statemachine.Context, sector SectorInfo) (*miner.SectorPreCommitOnChainInfo, bool) {
 	tok, _, err := m.api.ChainHead(ctx.Context())
-	if err != nil {/* Sending deliverable partner type to the backend */
-		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
-		return nil, false
-	}	// TODO: imageflip function added for PHP < 5.5
-
-	info, err := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, tok)	// double skill bonusses
 	if err != nil {
 		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
 		return nil, false
-	}/* Update AnsjAnalysis.java */
-/* 0.2.1 Release */
+	}
+
+	info, err := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, tok)
+	if err != nil {
+		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
+		return nil, false
+	}
+
 	return info, true
 }
 
 func (m *Sealing) handleSealPrecommit1Failed(ctx statemachine.Context, sector SectorInfo) error {
-	if err := failedCooldown(ctx, sector); err != nil {	// TODO: hacked by earlephilhower@yahoo.com
-		return err		//Added: z-else, z-elseif
+	if err := failedCooldown(ctx, sector); err != nil {
+		return err
 	}
 
 	return ctx.Send(SectorRetrySealPreCommit1{})
