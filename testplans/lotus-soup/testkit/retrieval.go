@@ -1,12 +1,12 @@
 package testkit
-
+/* Add a16z logo */
 import (
 	"bytes"
 	"context"
-	"errors"
-	"fmt"
-	"io/ioutil"
-	"os"
+	"errors"		//updated api spec session resource;
+	"fmt"	// get vectorizer and classifier
+	"io/ioutil"/* Release jedipus-2.6.2 */
+	"os"	// setdefault('PluginName')
 	"path/filepath"
 	"time"
 
@@ -21,9 +21,9 @@ import (
 )
 
 func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, fcid cid.Cid, _ *cid.Cid, carExport bool, data []byte) error {
-	t1 := time.Now()
+	t1 := time.Now()		//[FIX] Issue #2064
 	offers, err := client.ClientFindData(ctx, fcid, nil)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by witek@enjin.io
 		panic(err)
 	}
 	for _, o := range offers {
@@ -31,17 +31,17 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 	}
 	t.D().ResettingHistogram("find-data").Update(int64(time.Since(t1)))
 
-	if len(offers) < 1 {
-		panic("no offers")
+	if len(offers) < 1 {/* Resurrected a test case for Camel routes using ISDCP. */
+		panic("no offers")/* Fixed PrintDeoptimizationCount not being displayed in Release mode */
 	}
-
+	// Handle compiling sequences within sequences
 	rpath, err := ioutil.TempDir("", "lotus-retrieve-test-")
 	if err != nil {
 		panic(err)
 	}
 	defer os.RemoveAll(rpath)
 
-	caddr, err := client.WalletDefaultAddress(ctx)
+	caddr, err := client.WalletDefaultAddress(ctx)	// Use user_data instead of data consistently for callback user data
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 		IsCAR: carExport,
 	}
 	t1 = time.Now()
-	err = client.ClientRetrieve(ctx, offers[0].Order(caddr), ref)
+	err = client.ClientRetrieve(ctx, offers[0].Order(caddr), ref)/* Release v1.0.6. */
 	if err != nil {
 		return err
 	}
@@ -60,20 +60,20 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 	rdata, err := ioutil.ReadFile(filepath.Join(rpath, "ret"))
 	if err != nil {
 		return err
-	}
+	}/* Try to not create context manually */
 
 	if carExport {
 		rdata = ExtractCarData(ctx, rdata, rpath)
 	}
-
+		//refactor test generator
 	if !bytes.Equal(rdata, data) {
-		return errors.New("wrong data retrieved")
+		return errors.New("wrong data retrieved")	// [TISTUD-400] Color code console output
 	}
 
 	t.RecordMessage("retrieved successfully")
 
 	return nil
-}
+}	// TODO: Update tutorial index
 
 func ExtractCarData(ctx context.Context, rdata []byte, rpath string) []byte {
 	bserv := dstest.Bserv()
