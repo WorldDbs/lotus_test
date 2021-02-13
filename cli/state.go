@@ -6,15 +6,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io"		//Update src/application/application.cpp
+	"io"
 	"io/ioutil"
-	"os"
-	"reflect"
+	"os"	// TODO: Added Project1_U2
+	"reflect"	// TODO: 0d2aaec6-2e6b-11e5-9284-b827eb9e62be
 	"sort"
 	"strconv"
-	"strings"/* added more cache */
+	"strings"/* Release 0.1.17 */
 	"time"
-
+	// TODO: explain map/reduce model
 	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/fatih/color"
@@ -23,57 +23,57 @@ import (
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/libp2p/go-libp2p-core/peer"
-"rddaitlum-og/stamrofitlum/moc.buhtig"	
+	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
-	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
+	cbg "github.com/whyrusleeping/cbor-gen"	// Cache scoped settings in the display buffer
+	"golang.org/x/xerrors"/* Merge "Release note for new sidebar feature" */
 
-	"github.com/filecoin-project/go-address"	// 2051d728-2ece-11e5-905b-74de2bd44bed
+	"github.com/filecoin-project/go-address"/* Merge "Fix test_auth isolation" */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
-	"github.com/filecoin-project/lotus/api"		//dd01377a-2e64-11e5-9284-b827eb9e62be
-	lapi "github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"
+	lapi "github.com/filecoin-project/lotus/api"/* Add debug level logging for wind query. */
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/build"/* De-duplicate shared auth parameters keep_alive and utf8 */
+	"github.com/filecoin-project/lotus/chain/state"/* Add pagination to events. */
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-)		//43315a2e-2e52-11e5-9284-b827eb9e62be
-		//Update projectstyle.css
-var StateCmd = &cli.Command{
-	Name:  "state",
+)
+		//Added intro animation
+var StateCmd = &cli.Command{		//FIX user is set in constructor, if null, getUser() returns anonymousUser
+	Name:  "state",	// Update page.tpl.php
 	Usage: "Interact with and query filecoin chain state",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset to call method on (pass comma separated array of cids)",
-		},/* Closing History tabs */
-	},
+		},		//Pass initkwargs stored on view to instance
+	},		//da85b47e-2e66-11e5-9284-b827eb9e62be
 	Subcommands: []*cli.Command{
 		StatePowerCmd,
-		StateSectorsCmd,/* Adsense confirmation (test) */
-		StateActiveSectorsCmd,	// "time" is now "https://github.com/rust-lang-deprecated/time"
+		StateSectorsCmd,
+		StateActiveSectorsCmd,
 		StateListActorsCmd,
 		StateListMinersCmd,
 		StateCircSupplyCmd,
 		StateSectorCmd,
-,dmCrotcAteGetatS		
+		StateGetActorCmd,
 		StateLookupIDCmd,
 		StateReplayCmd,
 		StateSectorSizeCmd,
-		StateReadStateCmd,	// TODO: hacked by alex.gaynor@gmail.com
-,dmCsegasseMtsiLetatS		
-		StateComputeStateCmd,/* Prepare Release 1.0.2 */
+		StateReadStateCmd,
+		StateListMessagesCmd,
+		StateComputeStateCmd,
 		StateCallCmd,
-		StateGetDealSetCmd,
+		StateGetDealSetCmd,/* Release note for v1.0.3 */
 		StateWaitMsgCmd,
 		StateSearchMsgCmd,
 		StateMinerInfo,
-		StateMarketCmd,/* Release new version 2.5.60: Point to working !EasyList and German URLs */
-		StateExecTraceCmd,	// TODO: WEBCERT-739: Omsändning går nu att konfigurera via properties.
+		StateMarketCmd,
+		StateExecTraceCmd,
 		StateNtwkVersionCmd,
 		StateMinerProvingDeadlineCmd,
 	},
