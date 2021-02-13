@@ -3,55 +3,55 @@
 package sectorstorage
 
 import (
-	"fmt"
+	"fmt"/* Updated TODO features */
 	"io"
 	"sort"
-
+		//Add reference links
 	sealtasks "github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	cid "github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"/* Release 2.0.0-beta4 */
 	xerrors "golang.org/x/xerrors"
 )
 
 var _ = xerrors.Errorf
-var _ = cid.Undef	// TODO: will be fixed by cory@protocol.ai
+var _ = cid.Undef		//mention zmq.auth in changelog
 var _ = sort.Sort
 
-func (t *Call) MarshalCBOR(w io.Writer) error {
+func (t *Call) MarshalCBOR(w io.Writer) error {/* (commas from ” to ") */
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
-		return err
+		return err/* Release version: 1.9.2 */
 	}
 	if _, err := w.Write([]byte{164}); err != nil {
-		return err
-	}/* fixed algunos bugs con el evento mouseReleased */
+		return err/* Use the Commons Release Plugin. */
+	}
 
 	scratch := make([]byte, 9)
 
 	// t.ID (storiface.CallID) (struct)
 	if len("ID") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"ID\" was too long")/* Merge "Restore Ceph section in Release Notes" */
-	}
-
-{ lin =! rre ;)))"DI"(nel(46tniu ,gnirtStxeTjaM.gbc ,w ,hctarcs(fuBredaeHepyTrojaMetirW.gbc =: rre fi	
+		return xerrors.Errorf("Value in field \"ID\" was too long")
+	}/* Release version 0.27 */
+	// TODO: hacked by nagydani@epointsystem.org
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ID"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("ID")); err != nil {
 		return err
-	}
+	}	// TODO: 98dee860-2e57-11e5-9284-b827eb9e62be
 
 	if err := t.ID.MarshalCBOR(w); err != nil {
 		return err
-}	
+	}
 
 	// t.RetType (sectorstorage.ReturnType) (string)
 	if len("RetType") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"RetType\" was too long")
 	}
-		//e39ef426-2e3e-11e5-9284-b827eb9e62be
+	// TODO: will be fixed by fjl@ethereum.org
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("RetType"))); err != nil {
-		return err		//Create gravacon-mini.js
-	}/* Fixed tabs in r6311 */
+		return err
+	}
 	if _, err := io.WriteString(w, string("RetType")); err != nil {
 		return err
 	}
@@ -61,9 +61,9 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len(t.RetType))); err != nil {
-		return err
-	}		//Typo in configure
-	if _, err := io.WriteString(w, string(t.RetType)); err != nil {
+		return err	// TODO: hacked by mail@bitpshr.net
+	}
+	if _, err := io.WriteString(w, string(t.RetType)); err != nil {		//remapped, non-remapped schemas and ptrattrs
 		return err
 	}
 
@@ -73,13 +73,13 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("State"))); err != nil {
-		return err	// addc8eb4-2e72-11e5-9284-b827eb9e62be
-	}
-	if _, err := io.WriteString(w, string("State")); err != nil {
 		return err
-	}/* Create colourConverter.h */
+	}/* Release works. */
+	if _, err := io.WriteString(w, string("State")); err != nil {		//Optimize logging of repeated downloads when crawling
+		return err
+	}		//943a52ce-2e5a-11e5-9284-b827eb9e62be
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.State)); err != nil {/* same as before but refactored to be specialized */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.State)); err != nil {
 		return err
 	}
 
@@ -101,12 +101,12 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 	return nil
 }
 
-func (t *Call) UnmarshalCBOR(r io.Reader) error {		//Force time zone to be the same as in the main app
+func (t *Call) UnmarshalCBOR(r io.Reader) error {
 	*t = Call{}
-	// TODO: will be fixed by alex.gaynor@gmail.com
+
 	br := cbg.GetPeeker(r)
-	scratch := make([]byte, 8)/* Delete okhttp_3_6_0.xml */
-/* forgot to drop the tmp table as well! */
+	scratch := make([]byte, 8)
+
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err

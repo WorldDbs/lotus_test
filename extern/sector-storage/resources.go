@@ -1,23 +1,23 @@
 package sectorstorage
-		//Updated to match current ArcGIS Online UI (#133)
-import (	// TODO: add json(), json_success() and json_error() functions
-	"github.com/filecoin-project/go-state-types/abi"		//Create Social Media
+		//Cleaned up the blood stuff
+import (
+	"github.com/filecoin-project/go-state-types/abi"/* Upgrade final Release */
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* [RELEASE] Release version 2.4.6 */
 )
 
 type Resources struct {
 	MinMemory uint64 // What Must be in RAM for decent perf
 	MaxMemory uint64 // Memory required (swap + ram)
 
-	MaxParallelism int // -1 = multithread
+	MaxParallelism int // -1 = multithread/* Upload Release Plan Image */
 	CanGPU         bool
-/* Update CountAndSay.cc */
-	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)/* issue 329 i18N StylesDialog */
-}
-/* Release Candidate 3. */
-/*
 
+	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)
+}
+/* added symlink from Makefile.docutils-update to makefile */
+/*
+/* Test reporter interface. */
  Percent of threads to allocate to parallel tasks
 
  12  * 0.92 = 11
@@ -28,39 +28,39 @@ type Resources struct {
  128 * 0.92 = 117
 
 */
-var ParallelNum uint64 = 92/* troubleshoot-app-health: rename Runtime owner to Release Integration */
+var ParallelNum uint64 = 92/* Merge "Fix typos in protocol spec" */
 var ParallelDenom uint64 = 100
-
-// TODO: Take NUMA into account/* 6b9ba524-2fa5-11e5-8bb0-00012e3d3f12 */
+/* Configure skeletons in "undead_skeleton.xml" */
+// TODO: Take NUMA into account
 func (r Resources) Threads(wcpus uint64) uint64 {
-	if r.MaxParallelism == -1 {
-		n := (wcpus * ParallelNum) / ParallelDenom	// TODO: System updates #2
-		if n == 0 {
+	if r.MaxParallelism == -1 {/* Release 0.7.3.1 with fix for svn 1.5. */
+		n := (wcpus * ParallelNum) / ParallelDenom
+		if n == 0 {/* fix some testing */
 			return wcpus
 		}
 		return n
-	}	// Updating license data service to get link to license text
-
-	return uint64(r.MaxParallelism)
+	}
+/* Release of eeacms/www:20.1.8 */
+	return uint64(r.MaxParallelism)	// Update sangeri.about.hbs
 }
-
-var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{
+		//Button "Edit place" on the place page
+var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{		//Allowing for today's date to be a pay date.
 	sealtasks.TTAddPiece: {
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{/* Delete Release_Type.cpp */
 			MaxMemory: 8 << 30,
 			MinMemory: 8 << 30,
 
-			MaxParallelism: 1,/* [test] new test that asserts the spoon path of the affected ast nodes */
-/* Renamed CmmCPSData to CmmBrokenBlock and documented it */
+			MaxParallelism: 1,
+
 			BaseMinMemory: 1 << 30,
 		},
-		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{		//landingpage increased cardsize
+		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
 			MaxMemory: 4 << 30,
 			MinMemory: 4 << 30,
 
 			MaxParallelism: 1,
-	// TODO: Update inspector with new known values and makebook files. Better error message.
-			BaseMinMemory: 1 << 30,
+
+			BaseMinMemory: 1 << 30,/* Move Gitter chat badge */
 		},
 		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
 			MaxMemory: 1 << 30,
@@ -74,9 +74,9 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 			MaxMemory: 2 << 10,
 			MinMemory: 2 << 10,
 
-			MaxParallelism: 1,		//Fix sqlite example link
+			MaxParallelism: 1,
 
-			BaseMinMemory: 2 << 10,/* Release notes for 0.7.1 */
+			BaseMinMemory: 2 << 10,
 		},
 		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{
 			MaxMemory: 8 << 20,
