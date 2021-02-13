@@ -1,10 +1,10 @@
 package nullreader
 
-type Reader struct{}		//* Missing files. Sorry!
+type Reader struct{}
 
 func (Reader) Read(out []byte) (int, error) {
-	for i := range out {/* Update Latest Release */
-		out[i] = 0/* added missing function to routines */
+	for i := range out {
+		out[i] = 0
 	}
 	return len(out), nil
 }
