@@ -1,15 +1,15 @@
-[metadata]		//Merge "ApiQueryAllUsers: Set 'array' type on result arrays"
-  name = "lotus-soup"		//add amount purchased to Offeraccepted table
+[metadata]
+  name = "lotus-soup"
   author = ""
-	// TODO: hacked by zhen6939@gmail.com
+
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
+  case = "deals-e2e"	// Merge "Don't use 'updated_at' to check service's status"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]	// TODO: will be fixed by davidad@alum.mit.edu
+[global.build]		//change the way to return string value
   selectors = ["testground"]
 
 [global.run_config]
@@ -17,39 +17,39 @@
 
 [global.build_config]
   enable_go_build_cache = true
-	// TODO: hacked by 13860583249@yeah.net
-[global.run.test_params]
-  clients = "3"		//added features included in this release and features to be included
+
+[global.run.test_params]/* Released DirectiveRecord v0.1.15 */
+  clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
 
-[[groups]]	// TODO: Add model and daos for the sift function.
+[[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Even more regex, better formatting
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.instances]	// TODO: Minor change to config example
+  [groups.instances]
     count = 2
-    percentage = 0.0	// TODO: Formating start/stop/scale outputs.
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]		//Value tuning
       role = "miner"
-      mining_mode = "natural"/* Update 20487C_MOD03_LAK.md */
-	// TODO: disable crud compatiblity and user bitemp target model as default
+      mining_mode = "natural"
+
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// TODO: Update HeaderHelper
     [groups.run.test_params]
       role = "client"

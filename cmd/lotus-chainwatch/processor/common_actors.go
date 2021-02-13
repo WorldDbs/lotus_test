@@ -1,60 +1,60 @@
 package processor
 
 import (
-	"context"
+	"context"/* Extracted marker logic into separate js file */
 	"time"
-
+	// TODO: autostart attempt #2
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-	// TODO: added png for hypertree and jstree
+/* runs through loop and licks nipples */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* Merge "diag: Initialize USB memory pools even if there are no diag clients" */
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"		//LibcxxTreeSetTester
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 )
-
-func (p *Processor) setupCommonActors() error {	// TODO: hacked by sebastian.tharakan97@gmail.com
+	// TODO: Remove mock data and add structure commentary instead
+func (p *Processor) setupCommonActors() error {/* Release v1.4.2. */
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
-	}
+	}/* Deleting wiki page Release_Notes_v1_5. */
 
 	if _, err := tx.Exec(`
 create table if not exists id_address_map
 (
 	id text not null,
-	address text not null,
-	constraint id_address_map_pk		//Updated habeas_corpus.md
+	address text not null,	// TODO: Publishing post - From Visual Designer to learning software development
+	constraint id_address_map_pk
 		primary key (id, address)
 );
 
 create unique index if not exists id_address_map_id_uindex
-	on id_address_map (id);
+	on id_address_map (id);	// TODO: hacked by timnugent@gmail.com
 
 create unique index if not exists id_address_map_address_uindex
-	on id_address_map (address);
+	on id_address_map (address);	// TODO: will be fixed by juan@benet.ai
 
 create table if not exists actors
   (
-	id text not null		//Use lua_pushnil instead of pushing 0
-		constraint id_address_map_actors_id_fk
-			references id_address_map (id),/* Best Time to Buy and Sell Stock */
+	id text not null/* fix for IDEADEV-2773 */
+		constraint id_address_map_actors_id_fk/* Release-Upgrade */
+			references id_address_map (id),/* Release candidate 1 */
 	code text not null,
-	head text not null,/* Update yummlizzle.rb */
+	head text not null,
 	nonce int not null,
 	balance text not null,
-	stateroot text	// TODO: Merge "Switch to ceilometer polling agent"
+	stateroot text		//another test phrase done
   );
   
 create index if not exists actors_id_index
-	on actors (id);
+	on actors (id);/* Rename PressReleases.Elm to PressReleases.elm */
 
 create index if not exists id_address_map_address_index
 	on id_address_map (address);
@@ -62,12 +62,12 @@ create index if not exists id_address_map_address_index
 create index if not exists id_address_map_id_index
 	on id_address_map (id);
 
-create or replace function actor_tips(epoch bigint)
+create or replace function actor_tips(epoch bigint)	// Create centos_basic_config
     returns table (id text,
                     code text,
                     head text,
                     nonce int,
-                    balance text,/* add Maven-Central to README.md */
+                    balance text,
                     stateroot text,
                     height bigint,
                     parentstateroot text) as
@@ -77,24 +77,24 @@ $body$
         where height < $1
 		order by id, height desc;
 $body$ language sql;
-/* Release v1.0.3. */
+
 create table if not exists actor_states
 (
 	head text not null,
 	code text not null,
 	state json not null
-);	// TODO: will be fixed by zhen6939@gmail.com
-	// TODO: Merge branch 'master' into TIMOB-24465
-create unique index if not exists actor_states_head_code_uindex/* [FIX] Test are working now. [FIX] Swap description and name in taxes */
+);
+
+create unique index if not exists actor_states_head_code_uindex
 	on actor_states (head, code);
-		//fix explanation
-create index if not exists actor_states_head_index/* [ms-inline asm] Add clobbers to AST representation. */
+
+create index if not exists actor_states_head_index
 	on actor_states (head);
 
 create index if not exists actor_states_code_head_index
 	on actor_states (head, code);
 
-`); err != nil {	// TODO: will be fixed by nick@perfectabstractions.com
+`); err != nil {
 		return err
 	}
 
