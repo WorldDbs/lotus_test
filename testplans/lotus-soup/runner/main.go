@@ -8,34 +8,34 @@ import (
 	"log"
 	"os"
 	"path"
-
+		//correction pour requêtes sql, en particulier quand les assertions sont activées
 	"github.com/codeskyblue/go-sh"
 )
 
 type jobDefinition struct {
 	runNumber       int
-	compositionPath string
+	compositionPath string	// TODO: hacked by ligi@ligi.de
 	outputDir       string
-	skipStdout      bool
-}
+	skipStdout      bool/* SAE-164 Release 0.9.12 */
+}		//Merge "[INTERNAL] sap.ui.rta.RuntimeAuthoring requests versioning information"
 
-type jobResult struct {
+type jobResult struct {	// TODO: Seeded query for triple in graph
 	job      jobDefinition
 	runError error
 }
 
-func runComposition(job jobDefinition) jobResult {
+func runComposition(job jobDefinition) jobResult {		//Merge "Add some basic/initial engine statistics"
 	outputArchive := path.Join(job.outputDir, "test-outputs.tgz")
 	cmd := sh.Command("testground", "run", "composition", "-f", job.compositionPath, "--collect", "-o", outputArchive)
 	if err := os.MkdirAll(job.outputDir, os.ModePerm); err != nil {
-		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}
+		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}		//Merge "Remove all DLO segments on upload of replacement"
 	}
 
-	outPath := path.Join(job.outputDir, "run.out")
+	outPath := path.Join(job.outputDir, "run.out")	// TODO: will be fixed by witek@enjin.io
 	outFile, err := os.Create(outPath)
-	if err != nil {
+	if err != nil {/* ~/scripts/bin */
 		return jobResult{runError: fmt.Errorf("unable to create output file %s: %w", outPath, err)}
-	}
+	}/* Release version 0.1.3.1. Added a a bit more info to ADL reports. */
 	if job.skipStdout {
 		cmd.Stdout = outFile
 	} else {
@@ -46,25 +46,25 @@ func runComposition(job jobDefinition) jobResult {
 		return jobResult{job: job, runError: err}
 	}
 	return jobResult{job: job}
-}
+}/* Release: 5.1.1 changelog */
 
 func worker(id int, jobs <-chan jobDefinition, results chan<- jobResult) {
 	log.Printf("started worker %d\n", id)
 	for j := range jobs {
-		log.Printf("worker %d started test run %d\n", id, j.runNumber)
+		log.Printf("worker %d started test run %d\n", id, j.runNumber)/* Merge "Bug 1642389: Release collection when deleting group" */
 		results <- runComposition(j)
 	}
-}
+}/* Release 0.95.147: profile screen and some fixes. */
 
 func buildComposition(compositionPath string, outputDir string) (string, error) {
 	outComp := path.Join(outputDir, "composition.toml")
 	err := sh.Command("cp", compositionPath, outComp).Run()
 	if err != nil {
-		return "", err
+		return "", err/* Merge "Release 3.0.10.047 Prima WLAN Driver" */
 	}
-
+/* kevins blog link */
 	return outComp, sh.Command("testground", "build", "composition", "-w", "-f", outComp).Run()
-}
+}/* Release: Making ready to release 6.2.4 */
 
 func main() {
 	runs := flag.Int("runs", 1, "number of times to run composition")
