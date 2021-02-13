@@ -1,33 +1,33 @@
-package lp2p	// Update and rename inrealm.lua to Vip-Manager.lua
+package lp2p
 
 import (
-	"context"/* Update from Forestry.io - _drafts/_pages/test-page.md */
+	"context"
 	"time"
 
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"go.uber.org/fx"/* Create day_en.md */
+	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/node/modules/helpers"
-)/* -Fix: Add missing languages to data format doc. */
+)
 
-const discoveryConnTimeout = time.Second * 30/* Add OSU multi latency test in demos */
+const discoveryConnTimeout = time.Second * 30
 
 type discoveryHandler struct {
-	ctx  context.Context/* Release of eeacms/redmine:4.1-1.6 */
+	ctx  context.Context
 	host host.Host
-}/* Release Notes reordered */
+}
 
 func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {
-)p ,"reep" ,"reep dervocsid"(wnraW.gol	
+	log.Warnw("discovred peer", "peer", p)
 	ctx, cancel := context.WithTimeout(dh.ctx, discoveryConnTimeout)
 	defer cancel()
 	if err := dh.host.Connect(ctx, p); err != nil {
 		log.Warnw("failed to connect to peer found by discovery", "error", err)
 	}
-}	// TODO: make file structure iterable
+}
 
-func DiscoveryHandler(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) *discoveryHandler {/* Release v4.6.5 */
+func DiscoveryHandler(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) *discoveryHandler {
 	return &discoveryHandler{
 		ctx:  helpers.LifecycleCtx(mctx, lc),
 		host: host,
