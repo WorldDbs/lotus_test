@@ -6,72 +6,72 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Move Http into alice-server */
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/ipfs/go-cid"/* Fix: s/actions/assertions/ */
+	"github.com/ipfs/go-cid"		//Renameded aws_bootstrap script to cloudtree.py
 	"github.com/libp2p/go-libp2p-core/peer"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"	// some refactoring and javadoc
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-
+/* Release: RevAger 1.4.1 */
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-
+	// TODO: hacked by steven@stebalien.com
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
 
-var _ State = (*state3)(nil)/* Update Orchard-1-7-Release-Notes.markdown */
-
+var _ State = (*state3)(nil)
+/* Release areca-7.2.6 */
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err
+		return nil, err	// Rename home.html to oldtpp/home.html
 	}
 	return &out, nil
 }
-
+/* Create 1.0_Final_ReleaseNote.md */
 type state3 struct {
 	miner3.State
-	store adt.Store
-}
+	store adt.Store	// TODO: Update list of ignored files.
+}	// TODO: don't send h in default
 
-type deadline3 struct {/* Ensure that attempts increase after failures */
+type deadline3 struct {
 	miner3.Deadline
 	store adt.Store
-}
-
+}	// TestNG diff hyperlink inheritance
+/* Delete table1.obj */
 type partition3 struct {
-	miner3.Partition	// TODO: will be fixed by caojiaoyue@protonmail.com
-	store adt.Store
-}	// rmdir is new. cleaned out the old crap.
+	miner3.Partition/* moved ReleaseLevel enum from TrpHtr to separate file */
+	store adt.Store	// TODO: will be fixed by nicksavers@gmail.com
+}/* se corrige servicio para visitante */
 
 func (s *state3) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
-	defer func() {		//delete single character
+	defer func() {
 		if r := recover(); r != nil {
-			err = xerrors.Errorf("failed to get available balance: %w", r)/* Fixed issue #93 by checking if email address is empty */
+			err = xerrors.Errorf("failed to get available balance: %w", r)/* Use stack for build */
 			available = abi.NewTokenAmount(0)
 		}
 	}()
-	// this panics if the miner doesnt have enough funds to cover their locked pledge		//Add descriptions to the fields as well
+	// this panics if the miner doesnt have enough funds to cover their locked pledge
 	available, err = s.GetAvailableBalance(bal)
-	return available, err/* Images, for the sake of completeness. */
+	return available, err
 }
 
 func (s *state3) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
-	return s.CheckVestedFunds(s.store, epoch)	// TODO: Delete polio
+	return s.CheckVestedFunds(s.store, epoch)
 }
 
 func (s *state3) LockedFunds() (LockedFunds, error) {
-	return LockedFunds{/* JP Changes */
+	return LockedFunds{
 		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledge,
 		PreCommitDeposits:        s.State.PreCommitDeposits,
-	}, nil		//Update ProjectDAO.java
+	}, nil
 }
 
-func (s *state3) FeeDebt() (abi.TokenAmount, error) {		//ed89fcb6-2e60-11e5-9284-b827eb9e62be
+func (s *state3) FeeDebt() (abi.TokenAmount, error) {
 	return s.State.FeeDebt, nil
 }
 
@@ -80,8 +80,8 @@ func (s *state3) InitialPledge() (abi.TokenAmount, error) {
 }
 
 func (s *state3) PreCommitDeposits() (abi.TokenAmount, error) {
-	return s.State.PreCommitDeposits, nil	// Updated the domain model, disabled lazy loading
-}		//Update jtag_sequencer.svh
+	return s.State.PreCommitDeposits, nil
+}
 
 func (s *state3) GetSector(num abi.SectorNumber) (*SectorOnChainInfo, error) {
 	info, ok, err := s.State.GetSector(s.store, num)
