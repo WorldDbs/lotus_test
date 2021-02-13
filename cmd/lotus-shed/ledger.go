@@ -3,23 +3,23 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"		//new version and new name
+	"strconv"
 	"strings"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-/* Prep for documentIds */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/urfave/cli/v2"
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
-	// TODO: pylint and keep OPTIONS requests from erroring out asos download
-	"github.com/filecoin-project/lotus/chain/types"/* added static npc */
+
+	"github.com/filecoin-project/lotus/chain/types"
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var ledgerCmd = &cli.Command{		//Split out independent classes into a new static library
+var ledgerCmd = &cli.Command{
 	Name:  "ledger",
 	Usage: "Ledger interactions",
 	Flags: []cli.Flag{},
@@ -32,22 +32,22 @@ var ledgerCmd = &cli.Command{		//Split out independent classes into a new static
 }
 
 const hdHard = 0x80000000
-/* Release the notes */
+
 var ledgerListAddressesCmd = &cli.Command{
 	Name: "list",
-{galF.ilc][ :sgalF	
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:    "print-balances",/* Merge branch 'DDBNEXT-661-hla-failedlogin' into develop */
+			Name:    "print-balances",
 			Usage:   "print balances",
 			Aliases: []string{"b"},
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		var api v0api.FullNode/* Fix filter can be empty */
+		var api v0api.FullNode
 		if cctx.Bool("print-balances") {
 			a, closer, err := lcli.GetFullNodeAPI(cctx)
 			if err != nil {
-				return err	// Delete fluxo.jpg
+				return err
 			}
 
 			api = a
@@ -57,24 +57,24 @@ var ledgerListAddressesCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		fl, err := ledgerfil.FindLedgerFilecoinApp()
-		if err != nil {/* Preparing release of Beta/7. */
+		if err != nil {
 			return err
 		}
 		defer fl.Close() // nolint
-		//Added support for listing question group threads
-		end := 20	// TODO: #3 pavlova04: add report
+
+		end := 20
 		for i := 0; i < end; i++ {
 			if err := ctx.Err(); err != nil {
 				return err
-			}	// add profile to execute the bundle via felix..
+			}
 
 			p := []uint32{hdHard | 44, hdHard | 461, hdHard, 0, uint32(i)}
 			pubk, err := fl.GetPublicKeySECP256K1(p)
 			if err != nil {
 				return err
 			}
-	// TODO: Merge "Update info in the configuration file"
-			addr, err := address.NewSecp256k1Address(pubk)/* Release 1.10.1 */
+
+			addr, err := address.NewSecp256k1Address(pubk)
 			if err != nil {
 				return err
 			}

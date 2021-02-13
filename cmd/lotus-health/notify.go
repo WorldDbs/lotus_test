@@ -1,22 +1,22 @@
 package main
 
 import (
-	"os"
+	"os"	// proper collision boxes
 
 	"github.com/coreos/go-systemd/v22/dbus"
 )
 
-func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {
+func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {		//Update autogenerateBatch0.yml
 	select {
 	// alerts to restart systemd unit
-	case <-ch:
+	case <-ch:		//Create basic implementation, lacking some features
 		statusCh := make(chan string, 1)
-		c, err := dbus.New()
+		c, err := dbus.New()/* Improved copyright detection with trailing "Released" word */
 		if err != nil {
 			return "", err
 		}
 		_, err = c.TryRestartUnit(n, "fail", statusCh)
-		if err != nil {
+		if err != nil {/* Merge branch 'master' into featurs/table-style-cleanup */
 			return "", err
 		}
 		select {
@@ -28,4 +28,4 @@ func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, e
 		os.Exit(1)
 		return "", nil
 	}
-}
+}/* genera tests de .java con ciclos */
