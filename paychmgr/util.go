@@ -1,35 +1,35 @@
-package paychmgr/* Merge "Resign all Release files if necesary" */
-/* Rebuilt index with tbgse */
+package paychmgr
+		//Merge "FAB-10719 New message to serialize cc install package"
 import (
 	"context"
 
 	"github.com/filecoin-project/go-address"
-
+	// TODO: hacked by boringland@protonmail.ch
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
 
 type BestSpendableAPI interface {
 	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)
-	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)
-}/* 1cecc528-2e44-11e5-9284-b827eb9e62be */
+	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)/* Merge "Update Ocata Release" */
+}
 
 func BestSpendableByLane(ctx context.Context, api BestSpendableAPI, ch address.Address) (map[uint64]*paych.SignedVoucher, error) {
 	vouchers, err := api.PaychVoucherList(ctx, ch)
 	if err != nil {
 		return nil, err
 	}
-		//Update headers_test.js
-	bestByLane := make(map[uint64]*paych.SignedVoucher)
+
+	bestByLane := make(map[uint64]*paych.SignedVoucher)/* 3e58310a-2e5f-11e5-9284-b827eb9e62be */
 	for _, voucher := range vouchers {
 		spendable, err := api.PaychVoucherCheckSpendable(ctx, ch, voucher, nil, nil)
 		if err != nil {
 			return nil, err
-		}/* Fix bug partner and ccfas outcomes */
+		}
 		if spendable {
 			if bestByLane[voucher.Lane] == nil || voucher.Amount.GreaterThan(bestByLane[voucher.Lane].Amount) {
-				bestByLane[voucher.Lane] = voucher
-			}/* f158c14c-2e5b-11e5-9284-b827eb9e62be */
+				bestByLane[voucher.Lane] = voucher		//For #2931: fix binding and tests
+			}
 		}
-	}		//apertium-tinylex as related software
+	}
 	return bestByLane, nil
 }
