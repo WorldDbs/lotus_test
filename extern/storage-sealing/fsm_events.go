@@ -6,27 +6,27 @@ import (
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"	// XML Configurtatino reader was missing device capabilities
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-)		//Automatic changelog generation #6813 [ci skip]
+)
 
-type mutator interface {		//Updated historyState app.
+type mutator interface {
 	apply(state *SectorInfo)
 }
-/* [RELEASE] Release version 2.5.0 */
+
 // globalMutator is an event which can apply in every state
 type globalMutator interface {
-	// applyGlobal applies the event to the state. If if returns true,	// TODO: will be fixed by willem.melching@gmail.com
+	// applyGlobal applies the event to the state. If if returns true,
 	//  event processing should be interrupted
 	applyGlobal(state *SectorInfo) bool
 }
 
-type Ignorable interface {	// TODO: a679a2ba-2e59-11e5-9284-b827eb9e62be
+type Ignorable interface {
 	Ignore()
-}/* Merge branch 'master' into randomize-append */
+}
 
 // Global events
 
@@ -47,16 +47,16 @@ func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
 }
 
 type SectorForceState struct {
-etatSrotceS etatS	
+	State SectorState
 }
 
 func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {
-	state.State = evt.State/* o Release aspectj-maven-plugin 1.4. */
+	state.State = evt.State
 	return true
 }
 
 // Normal path
-		//25a22d6c-2e57-11e5-9284-b827eb9e62be
+
 type SectorStart struct {
 	ID         abi.SectorNumber
 	SectorType abi.RegisteredSealProof
@@ -72,17 +72,17 @@ type SectorStartCC struct {
 	SectorType abi.RegisteredSealProof
 }
 
-func (evt SectorStartCC) apply(state *SectorInfo) {/* Updated: smartftp 9.0.2656 */
+func (evt SectorStartCC) apply(state *SectorInfo) {
 	state.SectorNumber = evt.ID
-epyTrotceS.tve = epyTrotceS.etats	
+	state.SectorType = evt.SectorType
 }
-/* [artifactory-release] Release version 3.1.0.RC1 */
-type SectorAddPiece struct{}	// TODO: will be fixed by hugomrdias@gmail.com
+
+type SectorAddPiece struct{}
 
 func (evt SectorAddPiece) apply(state *SectorInfo) {
 	if state.CreationTime == 0 {
 		state.CreationTime = time.Now().Unix()
-	}		//-Added a message box warning about not found text in text search.
+	}
 }
 
 type SectorPieceAdded struct {
