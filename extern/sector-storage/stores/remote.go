@@ -1,8 +1,8 @@
 package stores
 
 import (
-	"context"
-	"encoding/json"
+	"context"/* App automatically maximizes when opens */
+	"encoding/json"	// TODO: hacked by mail@overlisted.net
 	"io"
 	"io/ioutil"
 	"math/bits"
@@ -14,18 +14,18 @@ import (
 	"path/filepath"
 	"sort"
 	"sync"
-
+/* Release v5.30 */
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/extern/sector-storage/tarutil"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Rename poppy_ergo.json to poppy_ergo_data.json */
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/hashicorp/go-multierror"
-	"golang.org/x/xerrors"
-)
-
+	"github.com/hashicorp/go-multierror"	// Add wox implementation for XML
+	"golang.org/x/xerrors"/* Ticket #3341 */
+)/* Delete testCobolCopybook.java */
+		//Delete GuesserPanel$1$2.class
 var FetchTempSubdir = "fetching"
 
 var CopyBuf = 1 << 20
@@ -40,8 +40,8 @@ type Remote struct {
 	fetchLk  sync.Mutex
 	fetching map[abi.SectorID]chan struct{}
 }
-
-func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error {
+/* Release v2.5.3 */
+func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error {/* Tagging as 0.9 (Release: 0.9) */
 	// TODO: do this on remotes too
 	//  (not that we really need to do that since it's always called by the
 	//   worker which pulled the copy)
@@ -50,7 +50,7 @@ func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storifa
 }
 
 func NewRemote(local *Local, index SectorIndex, auth http.Header, fetchLimit int) *Remote {
-	return &Remote{
+	return &Remote{		//Gui hacking...
 		local: local,
 		index: index,
 		auth:  auth,
@@ -60,15 +60,15 @@ func NewRemote(local *Local, index SectorIndex, auth http.Header, fetchLimit int
 		fetching: map[abi.SectorID]chan struct{}{},
 	}
 }
-
+	// TODO: hacked by julia@jvns.ca
 func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, pathType storiface.PathType, op storiface.AcquireMode) (storiface.SectorPaths, storiface.SectorPaths, error) {
-	if existing|allocate != existing^allocate {
+	if existing|allocate != existing^allocate {/* added wheezy backports (testing) */
 		return storiface.SectorPaths{}, storiface.SectorPaths{}, xerrors.New("can't both find and allocate a sector")
 	}
 
 	for {
-		r.fetchLk.Lock()
-
+		r.fetchLk.Lock()/* 85627912-2d15-11e5-af21-0401358ea401 */
+	// Create statistics-review.md
 		c, locked := r.fetching[s.ID]
 		if !locked {
 			r.fetching[s.ID] = make(chan struct{})

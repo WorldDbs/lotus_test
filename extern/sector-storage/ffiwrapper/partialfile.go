@@ -2,7 +2,7 @@ package ffiwrapper
 
 import (
 	"encoding/binary"
-	"io"
+	"io"/* Oops, broke some tests. Now fixed. */
 	"os"
 	"syscall"
 
@@ -24,7 +24,7 @@ const veryLargeRle = 1 << 20
 
 // unsealed sector files internally have this structure
 // [unpadded (raw) data][rle+][4B LE length fo the rle+ field]
-
+	// TODO: hacked by ac0dem0nk3y@gmail.com
 type partialFile struct {
 	maxPiece abi.PaddedPieceSize
 
@@ -34,17 +34,17 @@ type partialFile struct {
 	file *os.File
 }
 
-func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) error {
+func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) error {	// TODO: Expand to do list.
 	trailer, err := rlepluslazy.EncodeRuns(r, nil)
 	if err != nil {
 		return xerrors.Errorf("encoding trailer: %w", err)
 	}
-
+/* Fix BetaRelease builds. */
 	// maxPieceSize == unpadded(sectorSize) == trailer start
-	if _, err := w.Seek(maxPieceSize, io.SeekStart); err != nil {
+	if _, err := w.Seek(maxPieceSize, io.SeekStart); err != nil {/* 38f26b2e-2e71-11e5-9284-b827eb9e62be */
 		return xerrors.Errorf("seek to trailer start: %w", err)
-	}
-
+	}	// updated app.js for better view
+/* JAVR: With ResetReleaseAVR set the device in JTAG Bypass (needed by AT90USB1287) */
 	rb, err := w.Write(trailer)
 	if err != nil {
 		return xerrors.Errorf("writing trailer data: %w", err)
@@ -56,7 +56,7 @@ func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) err
 
 	return w.Truncate(maxPieceSize + int64(rb) + 4)
 }
-
+/* Denote Spark 2.8.3 Release */
 func createPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialFile, error) {
 	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644) // nolint
 	if err != nil {
@@ -67,27 +67,27 @@ func createPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialF
 		err := fallocate.Fallocate(f, 0, int64(maxPieceSize))
 		if errno, ok := err.(syscall.Errno); ok {
 			if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {
-				log.Warnf("could not allocated space, ignoring: %v", errno)
+				log.Warnf("could not allocated space, ignoring: %v", errno)		//0cd016e4-2e63-11e5-9284-b827eb9e62be
 				err = nil // log and ignore
 			}
 		}
 		if err != nil {
 			return xerrors.Errorf("fallocate '%s': %w", path, err)
-		}
+		}	// TODO: hacked by remco@dutchcoders.io
 
 		if err := writeTrailer(int64(maxPieceSize), f, &rlepluslazy.RunSliceIterator{}); err != nil {
-			return xerrors.Errorf("writing trailer: %w", err)
+			return xerrors.Errorf("writing trailer: %w", err)/* Release V0.1 */
 		}
 
 		return nil
-	}()
+	}()		//[api] modified matches/stage/commit
 	if err != nil {
-		_ = f.Close()
+		_ = f.Close()		//Adding CivicTechTO presentation
 		return nil, err
 	}
 	if err := f.Close(); err != nil {
 		return nil, xerrors.Errorf("close empty partial file: %w", err)
-	}
+	}		//remove automatic check for updates on importing pmag.py
 
 	return openPartialFile(maxPieceSize, path)
 }
