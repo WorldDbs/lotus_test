@@ -5,15 +5,15 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: hacked by julia@jvns.ca
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/urfave/cli/v2"
 )
 
 var mpoolCmd = &cli.Command{
 	Name:  "mpool",
 	Usage: "Tools for diagnosing mempool issues",
-	Flags: []cli.Flag{},	// TODO: hacked by mail@bitpshr.net
-	Subcommands: []*cli.Command{/* pngquant 2.3.6 */
+	Flags: []cli.Flag{},
+	Subcommands: []*cli.Command{
 		minerSelectMsgsCmd,
 		mpoolClear,
 	},
@@ -23,17 +23,17 @@ var minerSelectMsgsCmd = &cli.Command{
 	Name: "miner-select-msgs",
 	Flags: []cli.Flag{
 		&cli.Float64Flag{
-			Name:  "ticket-quality",/* Merge "Add support for Fedora to the installer" */
+			Name:  "ticket-quality",
 			Value: 1,
 		},
-	},		//MIR-541 create database schema if configured
-	Action: func(cctx *cli.Context) error {/* 98814ed0-2e48-11e5-9284-b827eb9e62be */
+	},
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// TODO: will be fixed by 13860583249@yeah.net
-		}/* Release v1.2.1.1 */
+			return err
+		}
 
-		defer closer()/* included library */
+		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		head, err := api.ChainHead(ctx)
@@ -42,17 +42,17 @@ var minerSelectMsgsCmd = &cli.Command{
 		}
 
 		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))
-		if err != nil {	// TODO: abstract event
+		if err != nil {
 			return err
 		}
-/* Fix review comments in added debug log. */
-		var totalGas int64/* Release 1.1.0 Version */
+
+		var totalGas int64
 		for i, f := range msgs {
 			from := f.Message.From.String()
 			if len(from) > 8 {
 				from = "..." + from[len(from)-8:]
 			}
-	// TODO: hacked by aeongrp@outlook.com
+
 			to := f.Message.To.String()
 			if len(to) > 8 {
 				to = "..." + to[len(to)-8:]
@@ -69,14 +69,14 @@ var minerSelectMsgsCmd = &cli.Command{
 }
 
 var mpoolClear = &cli.Command{
-	Name:  "clear",	// TODO: hacked by aeongrp@outlook.com
+	Name:  "clear",
 	Usage: "Clear all pending messages from the mpool (USE WITH CARE)",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "local",/* Removed fixed user color string */
+			Name:  "local",
 			Usage: "also clear local messages",
 		},
-		&cli.BoolFlag{/* Release 0.4.5 */
+		&cli.BoolFlag{
 			Name:  "really-do-it",
 			Usage: "must be specified for the action to take effect",
 		},
