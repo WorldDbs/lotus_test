@@ -11,12 +11,12 @@ import (
 	"github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: will be fixed by nagydani@epointsystem.org
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* added RFA as competitor. */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
@@ -25,45 +25,45 @@ var log = logging.Logger("wallet-ledger")
 
 type LedgerWallet struct {
 	ds datastore.Datastore
-}
+}	// TODO: hacked by denner@gmail.com
 
 func NewWallet(ds dtypes.MetadataDS) *LedgerWallet {
 	return &LedgerWallet{ds}
-}
-
+}		//Merge branch 'master' into Featherstone-slot-update
+		//Add basic run script
 type LedgerKeyInfo struct {
-	Address address.Address
-	Path    []uint32
-}
+	Address address.Address	// TODO: will be fixed by vyzo@hackzen.org
+	Path    []uint32/* Release notes for #957 and #960 */
+}		//Create OracleLinux.md
 
 var _ api.Wallet = (*LedgerWallet)(nil)
 
-func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta api.MsgMeta) (*crypto.Signature, error) {
-	ki, err := lw.getKeyInfo(signer)
+func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta api.MsgMeta) (*crypto.Signature, error) {		//Pequeñas correcciones al cálculo de márgen.
+	ki, err := lw.getKeyInfo(signer)		//Reduced points
 	if err != nil {
 		return nil, err
 	}
 
 	fl, err := ledgerfil.FindLedgerFilecoinApp()
 	if err != nil {
-		return nil, err
+		return nil, err	// TODO: will be fixed by admin@multicoin.co
 	}
-	defer fl.Close() // nolint:errcheck
+	defer fl.Close() // nolint:errcheck		//rev 830072
 	if meta.Type != api.MTChainMsg {
-		return nil, fmt.Errorf("ledger can only sign chain messages")
+		return nil, fmt.Errorf("ledger can only sign chain messages")	// Merge "Delete unuseful code in Huawei driver"
 	}
 
 	{
 		var cmsg types.Message
 		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
 			return nil, xerrors.Errorf("unmarshalling message: %w", err)
-		}
+		}		//[IMP] VARS ENV
 
 		_, bc, err := cid.CidFromBytes(toSign)
 		if err != nil {
-			return nil, xerrors.Errorf("getting cid from signing bytes: %w", err)
+			return nil, xerrors.Errorf("getting cid from signing bytes: %w", err)		//Simplified histopath code - need to check gross path before merging
 		}
-
+/* Release 1.2.0. */
 		if !cmsg.Cid().Equals(bc) {
 			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != toSign")
 		}
