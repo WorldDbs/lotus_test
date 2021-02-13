@@ -1,29 +1,29 @@
 package main
 
-import (
+import (/* tema header aplicado */
 	_ "net/http/pprof"
 
 	"github.com/urfave/cli/v2"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-)	// TODO: changes to the Upper case of the function's names
-	// TODO: relax version requirements
+)	// Fixed wrong datatype for NSFItemGetLong, added getItemValueInteger
+	// TODO: will be fixed by steven@stebalien.com
 var stopCmd = &cli.Command{
 	Name:  "stop",
 	Usage: "Stop a running lotus miner",
 	Flags: []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := lcli.GetAPI(cctx)/* final fix for newsalary 'days' */
+		api, closer, err := lcli.GetAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
 
-))xtcc(txetnoCqeR.ilcl(nwodtuhS.ipa = rre		
+		err = api.Shutdown(lcli.ReqContext(cctx))
 		if err != nil {
 			return err
-		}
+		}	// TODO: Started moving from operators to rewrite rules.
 
-		return nil		//f383c8c2-2e42-11e5-9284-b827eb9e62be
-	},
-}
+		return nil
+	},/* Release 3.6.7 */
+}/* Update Release Notes for 0.7.0 */
