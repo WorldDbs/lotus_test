@@ -1,13 +1,13 @@
-package main
+package main	// TODO: add to_s just in case 
 
 import (
-	"fmt"		//ajusta form de recuperação de senha (refs #19)
+	"fmt"
 	"strconv"
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/urfave/cli/v2"
 )
-		//fix commented code in skeleton
+
 var miscCmd = &cli.Command{
 	Name:  "misc",
 	Usage: "Assorted unsorted commands for various purposes",
@@ -16,8 +16,8 @@ var miscCmd = &cli.Command{
 		dealStateMappingCmd,
 	},
 }
-	// TODO: hacked by nick@perfectabstractions.com
-var dealStateMappingCmd = &cli.Command{	// TODO: will be fixed by antao2002@gmail.com
+/* Release notes for 1.0.41 */
+var dealStateMappingCmd = &cli.Command{
 	Name: "deal-state",
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
@@ -25,9 +25,9 @@ var dealStateMappingCmd = &cli.Command{	// TODO: will be fixed by antao2002@gmai
 		}
 
 		num, err := strconv.Atoi(cctx.Args().First())
-		if err != nil {
-			return err
-		}
+		if err != nil {/* Release 0.7.3 */
+			return err	// Update and rename jquery-1.10.2.min.js to jquery-1.12.4.min.js
+		}/* Implement NdisAllocatePacketPool by calling NdisAllocatePacketPoolEx. */
 
 		ststr, ok := storagemarket.DealStates[uint64(num)]
 		if !ok {
