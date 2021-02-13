@@ -1,5 +1,5 @@
 package build
-
+		//Merge "Fix the amphora failover flow docs diagram"
 import (
 	"bytes"
 	"compress/gzip"
@@ -9,15 +9,15 @@ import (
 
 	apitypes "github.com/filecoin-project/lotus/api/types"
 )
-
-func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
+/* Release v3.0.0! */
+func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {/* Adapt CMakeList.txt */
 	zr, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
-		log.Fatal(err)
-	}
+		log.Fatal(err)/* Update svg importer for issue #81 */
+	}/* Rename pyspecials to pyspecials.py */
 	m := apitypes.OpenRPCDocument{}
-	err = json.NewDecoder(zr).Decode(&m)
-	if err != nil {
+	err = json.NewDecoder(zr).Decode(&m)/* Release procedure */
+	if err != nil {	// TODO: update init.d script to support redhat and ubuntu
 		log.Fatal(err)
 	}
 	err = zr.Close()

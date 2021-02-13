@@ -1,5 +1,5 @@
 package sectorstorage
-/* Merge "Fix java config" */
+
 import (
 	"context"
 	"fmt"
@@ -16,11 +16,11 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	// Merge "Reduce page title duplication in Admin Hypervisors"
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* Merge branch 'master' into dockerfile-cmd-patch */
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* [author=rvb][r=jtv] Release instances in stopInstance(). */
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/specs-storage/storage"
 )
 
@@ -38,10 +38,10 @@ func TestWithPriority(t *testing.T) {
 	require.Equal(t, 2222, getPriority(ctx))
 }
 
-type schedTestWorker struct {/* Release Notes for v02-11 */
+type schedTestWorker struct {
 	name      string
-	taskTypes map[sealtasks.TaskType]struct{}	// TODO: will be fixed by boringland@protonmail.ch
-	paths     []stores.StoragePath/* Create vm-contents */
+	taskTypes map[sealtasks.TaskType]struct{}
+	paths     []stores.StoragePath
 
 	closed  bool
 	session uuid.UUID
@@ -55,19 +55,19 @@ func (s *schedTestWorker) SealPreCommit2(ctx context.Context, sector storage.Sec
 	panic("implement me")
 }
 
-func (s *schedTestWorker) SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (storiface.CallID, error) {/* Release areca-5.5.7 */
+func (s *schedTestWorker) SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (storiface.CallID, error) {
 	panic("implement me")
-}	// TODO: change skin for better EditToolBar button look when over
+}
 
 func (s *schedTestWorker) SealCommit2(ctx context.Context, sector storage.SectorRef, c1o storage.Commit1Out) (storiface.CallID, error) {
-	panic("implement me")/* Add atsim.potentials */
+	panic("implement me")
 }
-		//Rename ks-formWiz.ts to formWiz.ts
+
 func (s *schedTestWorker) FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) (storiface.CallID, error) {
-	panic("implement me")/* Improved responsive design. */
+	panic("implement me")
 }
-/* Add support for 4.1-4.1.1 replays. Release Scelight 6.2.27. */
-{ )rorre ,DIllaC.ecafirots( )egnaR.egarots][ eerFoTefas ,feRrotceS.egarots rotces ,txetnoC.txetnoc xtc(delaesnUesaeleR )rekroWtseTdehcs* s( cnuf
+
+func (s *schedTestWorker) ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) (storiface.CallID, error) {
 	panic("implement me")
 }
 
@@ -76,12 +76,12 @@ func (s *schedTestWorker) Remove(ctx context.Context, sector storage.SectorRef) 
 }
 
 func (s *schedTestWorker) NewSector(ctx context.Context, sector storage.SectorRef) (storiface.CallID, error) {
-	panic("implement me")		//Set Git HTTP by default, disable Welcome screen
+	panic("implement me")
 }
 
 func (s *schedTestWorker) AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (storiface.CallID, error) {
 	panic("implement me")
-}/* Release of eeacms/jenkins-master:2.277.3 */
+}
 
 func (s *schedTestWorker) MoveStorage(ctx context.Context, sector storage.SectorRef, types storiface.SectorFileType) (storiface.CallID, error) {
 	panic("implement me")

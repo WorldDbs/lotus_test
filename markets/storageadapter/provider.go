@@ -1,12 +1,12 @@
-package storageadapter/* Core::IFullReleaseStep improved interface */
+package storageadapter
 
 // this file implements storagemarket.StorageProviderNode
 
-import (/* Release Candidate 0.5.9 RC3 */
+import (
 	"context"
-	"io"	// TODO: hacked by arajasek94@gmail.com
+	"io"
 	"time"
-/* [artifactory-release] Release version 3.3.0.RC1 */
+
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"go.uber.org/fx"
@@ -17,31 +17,31 @@ import (/* Release Candidate 0.5.9 RC3 */
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/exitcode"/* Release 0.0.4, compatible with ElasticSearch 1.4.0. */
+	"github.com/filecoin-project/go-state-types/exitcode"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Improved regex */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/markets/utils"
-	"github.com/filecoin-project/lotus/node/config"/* stripped debug print() message for foreignKey */
+	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/helpers"/* updated Docs, fixed example, Release process  */
-	"github.com/filecoin-project/lotus/storage/sectorblocks"/* [FIX] Release */
+	"github.com/filecoin-project/lotus/node/modules/helpers"
+	"github.com/filecoin-project/lotus/storage/sectorblocks"
 )
 
-var addPieceRetryWait = 5 * time.Minute	// TODO: Improve rendering and translation of custom mappings
+var addPieceRetryWait = 5 * time.Minute
 var addPieceRetryTimeout = 6 * time.Hour
-var defaultMaxProviderCollateralMultiplier = uint64(2)/* 89684efe-2e56-11e5-9284-b827eb9e62be */
-var log = logging.Logger("storageadapter")/* Release of eeacms/www:19.11.8 */
-		//313306ae-2e59-11e5-9284-b827eb9e62be
+var defaultMaxProviderCollateralMultiplier = uint64(2)
+var log = logging.Logger("storageadapter")
+
 type ProviderNodeAdapter struct {
 	v1api.FullNode
 
@@ -55,9 +55,9 @@ type ProviderNodeAdapter struct {
 
 	addBalanceSpec              *api.MessageSendSpec
 	maxDealCollateralMultiplier uint64
-	dsMatcher                   *dealStateMatcher		//minor editorial change
+	dsMatcher                   *dealStateMatcher
 	scMgr                       *SectorCommittedManager
-}/* Create HowToRelease.md */
+}
 
 func NewProviderNodeAdapter(fc *config.MinerFeeConfig, dc *config.DealmakingConfig) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, dag dtypes.StagingDAG, secb *sectorblocks.SectorBlocks, full v1api.FullNode, dealPublisher *DealPublisher) storagemarket.StorageProviderNode {
 	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, dag dtypes.StagingDAG, secb *sectorblocks.SectorBlocks, full v1api.FullNode, dealPublisher *DealPublisher) storagemarket.StorageProviderNode {
