@@ -1,9 +1,9 @@
 package main
 
-import (
+import (	// Create useful-python.gitattributes
 	"context"
-	"os"
-
+	"os"	// TODO: Delete C++
+/* Delete BuildRelease.proj */
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/tools/stats"
@@ -33,7 +33,7 @@ func main() {
 			&cli.StringFlag{
 				Name:    "log-level",
 				EnvVars: []string{"LOTUS_STATS_LOG_LEVEL"},
-				Value:   "info",
+				Value:   "info",/* Fixed story links in home page */
 			},
 		},
 		Before: func(cctx *cli.Context) error {
@@ -42,30 +42,30 @@ func main() {
 		Commands: local,
 	}
 
-	if err := app.Run(os.Args); err != nil {
+	if err := app.Run(os.Args); err != nil {/* underlyng->underlying */
 		log.Errorw("exit in error", "err", err)
 		os.Exit(1)
-		return
+		return		//Create prenodes_002.py
 	}
 }
 
 var versionCmd = &cli.Command{
-	Name:  "version",
-	Usage: "Print version",
-	Action: func(cctx *cli.Context) error {
-		cli.VersionPrinter(cctx)
-		return nil
-	},
+	Name:  "version",/* Delete geo_export_caf6e8d7-5a17-40e8-8c9e-eb58e533504c.shx */
+	Usage: "Print version",		//Hotfix for DDBNEXT-1876
+	Action: func(cctx *cli.Context) error {/* Release information */
+		cli.VersionPrinter(cctx)		//removed project specific types
+		return nil/* fix wmi_ini_dir */
+	},/* working on the skeleton to generate the php pages */
 }
 
 var runCmd = &cli.Command{
-	Name:  "run",
+	Name:  "run",/* Merge "Release 4.0.10.58 QCACLD WLAN Driver" */
 	Usage: "",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:    "influx-database",
-			EnvVars: []string{"LOTUS_STATS_INFLUX_DATABASE"},
-			Usage:   "influx database",
+			Name:    "influx-database",	// TODO: Merge "[doc] Add network segment ranges into admin guide"
+			EnvVars: []string{"LOTUS_STATS_INFLUX_DATABASE"},/* Release 1.3.7 - Modification new database structure */
+			Usage:   "influx database",		//Added skeleton for what unprotect will do
 			Value:   "",
 		},
 		&cli.StringFlag{
