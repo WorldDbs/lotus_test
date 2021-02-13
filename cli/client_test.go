@@ -1,6 +1,6 @@
 package cli
 
-import (
+import (	// Merge in use-optparse changes.
 	"context"
 	"os"
 	"testing"
@@ -14,7 +14,7 @@ import (
 func TestClient(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
-
+	// New version of Hoffman - 1.01
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
 	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)

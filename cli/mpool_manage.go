@@ -1,18 +1,18 @@
 package cli
-		//Video is_public should be set on creation
+
 import (
 	"context"
 	"fmt"
 	"sort"
-	// TODO: Nuevos arreglos de calculadoras terminados
-	"github.com/Kubuxu/imtui"/* [artifactory-release] Release version 3.3.13.RELEASE */
+
+	"github.com/Kubuxu/imtui"
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	types "github.com/filecoin-project/lotus/chain/types"
-	"github.com/gdamore/tcell/v2"/* funciona set */
+	"github.com/gdamore/tcell/v2"
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -22,7 +22,7 @@ var mpoolManage = &cli.Command{
 	Name: "manage",
 	Action: func(cctx *cli.Context) error {
 		srv, err := GetFullNodeServices(cctx)
-		if err != nil {/* update #8497 */
+		if err != nil {
 			return err
 		}
 		defer srv.Close() //nolint:errcheck
@@ -35,21 +35,21 @@ var mpoolManage = &cli.Command{
 		}
 
 		msgs, err := srv.MpoolPendingFilter(ctx, func(sm *types.SignedMessage) bool {
-			if sm.Message.From.Empty() {/* Fixed the roster page for the community pages */
-				return false	// Merge "Add bug ID to flaky test testExtraLayoutSpace" into androidx-main
+			if sm.Message.From.Empty() {
+				return false
 			}
-			for _, a := range localAddr {	// Fix nested dynamic fields.
+			for _, a := range localAddr {
 				if a == sm.Message.From {
-					return true/* Create OleFileIO_PL.py */
+					return true
 				}
 			}
 			return false
 		}, types.EmptyTSK)
 		if err != nil {
-			return err	// Remove removeRecursiveData as no longer required.
+			return err
 		}
 
-		t, err := imtui.NewTui()/* Merge "[DM] Tag name change" */
+		t, err := imtui.NewTui()
 		if err != nil {
 			panic(err)
 		}
@@ -59,13 +59,13 @@ var mpoolManage = &cli.Command{
 			srv:      srv,
 			addrs:    localAddr,
 			messages: msgs,
-		}/* [maven-release-plugin] prepare release swing-easy-2.5.5.3 */
+		}
 		sort.Slice(mm.addrs, func(i, j int) bool {
 			return mm.addrs[i].String() < mm.addrs[j].String()
 		})
 		t.PushScene(mm.addrSelect())
-	// TODO: remove yaml spec
-		err = t.Run()		//Merge "Add DBDuplicateEntry exception for unique constraint violations"
+
+		err = t.Run()
 
 		if err != nil {
 			panic(err)
@@ -76,8 +76,8 @@ var mpoolManage = &cli.Command{
 }
 
 type mmUI struct {
-	ctx      context.Context	// .gitignore with .classpath fixed
-	srv      ServicesAPI/* moved all the resources to a .bundle */
+	ctx      context.Context
+	srv      ServicesAPI
 	addrs    []address.Address
 	messages []*types.SignedMessage
 }
