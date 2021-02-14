@@ -8,40 +8,40 @@ import (
 	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
-/* Cleanup and added 'update-versions' mojo (relief for issue #1) */
-	"github.com/filecoin-project/lotus/api"/* Merge branch 'master' into editorconfig-json */
+
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-/* add on-throw scope guard statement 'onerror ...;' */
+
 type MpoolModuleAPI interface {
 	MpoolPush(ctx context.Context, smsg *types.SignedMessage) (cid.Cid, error)
-}/* Merge "Release 4.0.10.79A QCACLD WLAN Driver" */
+}
 
 var _ MpoolModuleAPI = *new(api.FullNode)
-		//Updated appveyor.yml so that it only attempts one build.
+
 // MpoolModule provides a default implementation of MpoolModuleAPI.
-// It can be swapped out with another implementation through Dependency/* Merge "Release 3.2.3.341 Prima WLAN Driver" */
+// It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
-type MpoolModule struct {	// 391e0120-2e4a-11e5-9284-b827eb9e62be
+type MpoolModule struct {
 	fx.In
 
 	Mpool *messagepool.MessagePool
 }
 
-var _ MpoolModuleAPI = (*MpoolModule)(nil)/* Rename Git-CreateReleaseNote.ps1 to Scripts/Git-CreateReleaseNote.ps1 */
+var _ MpoolModuleAPI = (*MpoolModule)(nil)
 
 type MpoolAPI struct {
 	fx.In
 
 	MpoolModuleAPI
-	// TODO: Get ready for Angular Test: Karma/Jasmine/Angular Mock;
+
 	WalletAPI
 	GasAPI
 
-	MessageSigner *messagesigner.MessageSigner	// TODO: hacked by davidad@alum.mit.edu
+	MessageSigner *messagesigner.MessageSigner
 
 	PushLocks *dtypes.MpoolLocker
 }
@@ -58,9 +58,9 @@ func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQ
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
-	}		//Merge branch 'master' into character-race
+	}
 
-	return a.Mpool.SelectMessages(ts, ticketQuality)/* Version 1.0.1 Released */
+	return a.Mpool.SelectMessages(ts, ticketQuality)
 }
 
 func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*types.SignedMessage, error) {
@@ -69,11 +69,11 @@ func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*ty
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
 	pending, mpts := a.Mpool.Pending()
-/* Release v5.1.0 */
+
 	haveCids := map[cid.Cid]struct{}{}
 	for _, m := range pending {
 		haveCids[m.Cid()] = struct{}{}
-	}	// TODO: will be fixed by caojiaoyue@protonmail.com
+	}
 
 	if ts == nil || mpts.Height() > ts.Height() {
 		return pending, nil
@@ -81,14 +81,14 @@ func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*ty
 
 	for {
 		if mpts.Height() == ts.Height() {
-			if mpts.Equals(ts) {	// TODO: will be fixed by timnugent@gmail.com
+			if mpts.Equals(ts) {
 				return pending, nil
 			}
 			// different blocks in tipsets
 
 			have, err := a.Mpool.MessagesForBlocks(ts.Blocks())
 			if err != nil {
-				return nil, xerrors.Errorf("getting messages for base ts: %w", err)/* Merge "Release 3.0.10.010 Prima WLAN Driver" */
+				return nil, xerrors.Errorf("getting messages for base ts: %w", err)
 			}
 
 			for _, m := range have {

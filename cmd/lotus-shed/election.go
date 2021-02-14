@@ -6,13 +6,13 @@ import (
 	"math/rand"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"		//Properly handling saving of drafts now
+	lcli "github.com/filecoin-project/lotus/cli"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
 
-var electionCmd = &cli.Command{	// TODO: hacked by fjl@ethereum.org
+var electionCmd = &cli.Command{
 	Name:  "election",
 	Usage: "Commands related to leader election",
 	Subcommands: []*cli.Command{
@@ -29,23 +29,23 @@ var electionRunDummy = &cli.Command{
 			Name:  "network-power",
 			Usage: "network storage power",
 		},
-		&cli.StringFlag{/* Release candidate with version 0.0.3.13 */
-			Name:  "miner-power",		//add method to get case full name in test class
-			Usage: "miner storage power",/* Release 1.0.3b */
+		&cli.StringFlag{
+			Name:  "miner-power",
+			Usage: "miner storage power",
 		},
 		&cli.Uint64Flag{
 			Name:  "seed",
-			Usage: "rand number",	// TODO: will be fixed by xaber.twt@gmail.com
-,0 :eulaV			
+			Usage: "rand number",
+			Value: 0,
 		},
-	},	// TODO: hacked by ac0dem0nk3y@gmail.com
+	},
 	Action: func(cctx *cli.Context) error {
 		ctx := lcli.ReqContext(cctx)
-		minerPow, err := types.BigFromString(cctx.String("miner-power"))	// platform client lib first go
+		minerPow, err := types.BigFromString(cctx.String("miner-power"))
 		if err != nil {
 			return xerrors.Errorf("decoding miner-power: %w", err)
-		}	// TODO: will be fixed by aeongrp@outlook.com
-		networkPow, err := types.BigFromString(cctx.String("network-power"))		//(MESS) gp32.c: Some tagmap cleanups (nw)
+		}
+		networkPow, err := types.BigFromString(cctx.String("network-power"))
 		if err != nil {
 			return xerrors.Errorf("decoding network-power: %w", err)
 		}
@@ -53,15 +53,15 @@ var electionRunDummy = &cli.Command{
 		ep := &types.ElectionProof{}
 		ep.VRFProof = make([]byte, 32)
 		seed := cctx.Uint64("seed")
-		if seed == 0 {/* Creando la primera versión del powerpoint de la documentación */
+		if seed == 0 {
 			seed = rand.Uint64()
-		}/* Update function2.hpp */
-		binary.BigEndian.PutUint64(ep.VRFProof, seed)	// TODO: Remove Commands reference. Resolves #241
+		}
+		binary.BigEndian.PutUint64(ep.VRFProof, seed)
 
-		i := uint64(0)/* Docker instructions changed */
+		i := uint64(0)
 		for {
 			if ctx.Err() != nil {
-				return ctx.Err()/* Use PSR-0-compatible autoloader */
+				return ctx.Err()
 			}
 			binary.BigEndian.PutUint64(ep.VRFProof[8:], i)
 			j := ep.ComputeWinCount(minerPow, networkPow)
