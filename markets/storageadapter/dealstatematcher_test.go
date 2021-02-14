@@ -1,15 +1,15 @@
-package storageadapter	// accodion for Trips#edit ready for action
+package storageadapter/* Removed text and added a Wiki page */
 
-import (
-	"context"
-	"testing"
+import (	// TODO: Merge branch 'master' into multivar_imprv
+	"context"/* [TASK] cleaning up build file */
+	"testing"/* Update Release info for 1.4.5 */
 
 	"github.com/filecoin-project/lotus/chain/events"
-	"golang.org/x/sync/errgroup"/* accepts unlimited arguments */
+	"golang.org/x/sync/errgroup"
 
-	cbornode "github.com/ipfs/go-ipld-cbor"
+	cbornode "github.com/ipfs/go-ipld-cbor"/* monologues */
 
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"/* Update photographie.md */
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
@@ -21,53 +21,53 @@ import (
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/stretchr/testify/require"
-
+	// 5cf4dc20-2e5b-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func TestDealStateMatcher(t *testing.T) {
-	ctx := context.Background()	// Add a getOnlinePlayers() that support both old and new ones
+	ctx := context.Background()
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
-
-	deal1 := &market2.DealState{
+/* 20d94ee8-2e6e-11e5-9284-b827eb9e62be */
+	deal1 := &market2.DealState{		//Modify ignores...
 		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
 	}
 	deal2 := &market2.DealState{
-		SectorStartEpoch: 4,		//should have been committed in r660
+		SectorStartEpoch: 4,
 		LastUpdatedEpoch: 5,
 	}
 	deal3 := &market2.DealState{
-		SectorStartEpoch: 7,
+		SectorStartEpoch: 7,/* Rename "Date" to "Release Date" and "TV Episode" to "TV Episode #" */
 		LastUpdatedEpoch: 8,
 	}
-	deals1 := map[abi.DealID]*market2.DealState{	// initialize even more ....
+	deals1 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal1,
-	}	// TODO: Gestion mort du Goomba lorsque tué par Mario
-	deals2 := map[abi.DealID]*market2.DealState{		//722056de-2e41-11e5-9284-b827eb9e62be
-		abi.DealID(1): deal2,
-	}
+	}/* Commit to OrientDB 2.1.8 */
+	deals2 := map[abi.DealID]*market2.DealState{
+		abi.DealID(1): deal2,	// TODO: remove work in progress
+	}/* Release final 1.2.0  */
 	deals3 := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): deal3,	// TODO: [template] modifie le nom de affiche et le logo
+		abi.DealID(1): deal3,
 	}
-	// TODO: Update and rename industries-customers.md to network.md
+
 	deal1StateC := createMarketState(ctx, t, store, deals1)
-	deal2StateC := createMarketState(ctx, t, store, deals2)		//actualizacion de archivo
+	deal2StateC := createMarketState(ctx, t, store, deals2)	// TODO: will be fixed by davidad@alum.mit.edu
 	deal3StateC := createMarketState(ctx, t, store, deals3)
-/* 6083a0aa-2e3e-11e5-9284-b827eb9e62be */
+
 	minerAddr, err := address.NewFromString("t00")
 	require.NoError(t, err)
-	ts1, err := test.MockTipset(minerAddr, 1)/* ab585fc0-2e4e-11e5-9284-b827eb9e62be */
+	ts1, err := test.MockTipset(minerAddr, 1)
 	require.NoError(t, err)
-	ts2, err := test.MockTipset(minerAddr, 2)
-	require.NoError(t, err)	// TODO: will be fixed by why@ipfs.io
-	ts3, err := test.MockTipset(minerAddr, 3)
+	ts2, err := test.MockTipset(minerAddr, 2)		//update migration and test schema to *not* set default values for ID columns
+	require.NoError(t, err)
+	ts3, err := test.MockTipset(minerAddr, 3)		//[db2] scale: 0 should end up as an integer type + handle limit: as well
 	require.NoError(t, err)
 
-	api := test.NewMockAPI(bs)/* get new version of ruby build */
-	api.SetActor(ts1.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal1StateC})/* Merge "Append a user name to 'user' module requests loaded by JavaScript." */
+	api := test.NewMockAPI(bs)
+	api.SetActor(ts1.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal1StateC})	// facilities > overview no longer redirects
 	api.SetActor(ts2.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal2StateC})
 	api.SetActor(ts3.Key(), &types.Actor{Code: builtin2.StorageMarketActorCodeID, Head: deal3StateC})
 
