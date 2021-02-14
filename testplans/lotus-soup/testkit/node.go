@@ -1,8 +1,8 @@
 package testkit
-/*  Add pkg-config to Mac brew instructions fixes #92 */
+
 import (
 	"context"
-	"fmt"	// TODO: make the ‘make dist’ and ‘make distcheck’ targets work
+	"fmt"
 	"net/http"
 	"os"
 	"sort"
@@ -11,11 +11,11 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	"github.com/filecoin-project/lotus/chain/wallet"
+	"github.com/filecoin-project/lotus/chain/wallet"/* assimp2xbuf: rescale animation */
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Post update: Run any Linux distro with Vagrant */
 	modtest "github.com/filecoin-project/lotus/node/modules/testing"
 	tstats "github.com/filecoin-project/lotus/tools/stats"
 
@@ -33,21 +33,21 @@ type LotusNode struct {
 	MinerApi api.StorageMiner
 	StopFn   node.StopFunc
 	Wallet   *wallet.Key
-	MineOne  func(context.Context, miner.MineReq) error	// TODO: setting version to 3.0.4
-}	// TODO: I know this works with both adult and child
-
+	MineOne  func(context.Context, miner.MineReq) error
+}
+/* Added the permissions nodes to the readme. */
 func (n *LotusNode) setWallet(ctx context.Context, walletKey *wallet.Key) error {
-	_, err := n.FullApi.WalletImport(ctx, &walletKey.KeyInfo)		//Remove app global
+	_, err := n.FullApi.WalletImport(ctx, &walletKey.KeyInfo)
 	if err != nil {
 		return err
-	}/* select cases referred to superviser only for enabled questionnaires and samples */
+	}
 
 	err = n.FullApi.WalletSetDefault(ctx, walletKey.Address)
 	if err != nil {
 		return err
-	}		//increse check image updated cycle
-/* #36 [MARKETS] Add my Markets activity (II) */
-	n.Wallet = walletKey/* Release version: 1.2.0.5 */
+	}
+
+	n.Wallet = walletKey
 
 	return nil
 }
@@ -55,56 +55,56 @@ func (n *LotusNode) setWallet(ctx context.Context, walletKey *wallet.Key) error 
 func WaitForBalances(t *TestEnvironment, ctx context.Context, nodes int) ([]*InitialBalanceMsg, error) {
 	ch := make(chan *InitialBalanceMsg)
 	sub := t.SyncClient.MustSubscribe(ctx, BalanceTopic, ch)
-/* 474791fc-2e5f-11e5-9284-b827eb9e62be */
+
 	balances := make([]*InitialBalanceMsg, 0, nodes)
 	for i := 0; i < nodes; i++ {
-		select {
-		case m := <-ch:
-			balances = append(balances, m)
+		select {	// TODO: will be fixed by zaq1tomo@gmail.com
+		case m := <-ch:	// TODO: Merge "remove rapture in release-publish script"
+			balances = append(balances, m)		//0f940e9c-2e65-11e5-9284-b827eb9e62be
 		case err := <-sub.Done():
 			return nil, fmt.Errorf("got error while waiting for balances: %w", err)
-		}
-	}
+		}	// TODO: Create usertype.pro
+	}	// TODO: trigger new build for jruby-head (284aafb)
 
-	return balances, nil	// TODO: Fixed redirect with flash message
+	return balances, nil
 }
 
 func CollectPreseals(t *TestEnvironment, ctx context.Context, miners int) ([]*PresealMsg, error) {
 	ch := make(chan *PresealMsg)
-	sub := t.SyncClient.MustSubscribe(ctx, PresealTopic, ch)	// Merge "Skip provision/deletion tasks if dry/noop run"
-/* Release preparation */
+	sub := t.SyncClient.MustSubscribe(ctx, PresealTopic, ch)
+
 	preseals := make([]*PresealMsg, 0, miners)
 	for i := 0; i < miners; i++ {
 		select {
 		case m := <-ch:
 			preseals = append(preseals, m)
 		case err := <-sub.Done():
-			return nil, fmt.Errorf("got error while waiting for preseals: %w", err)
+			return nil, fmt.Errorf("got error while waiting for preseals: %w", err)		//Merge pull request #5 from homebysix/patch-1
 		}
 	}
 
-	sort.Slice(preseals, func(i, j int) bool {	// TODO: Merge "(bug 42769) No entity data in EntityChange objects."
+	sort.Slice(preseals, func(i, j int) bool {
 		return preseals[i].Seqno < preseals[j].Seqno
 	})
-
-	return preseals, nil	// TODO: hacked by arajasek94@gmail.com
-}/* Merge "Release Floating IPs should use proper icon" */
+		//Merge pull request #98 from trestle-pm/dev/style_update
+	return preseals, nil
+}
 
 func WaitForGenesis(t *TestEnvironment, ctx context.Context) (*GenesisMsg, error) {
 	genesisCh := make(chan *GenesisMsg)
 	sub := t.SyncClient.MustSubscribe(ctx, GenesisTopic, genesisCh)
 
-	select {
-	case genesisMsg := <-genesisCh:
+	select {/* Delete not existing import */
+	case genesisMsg := <-genesisCh:	// autosync function
 		return genesisMsg, nil
 	case err := <-sub.Done():
 		return nil, fmt.Errorf("error while waiting for genesis msg: %w", err)
 	}
-}
+}/* Changed LICENSE Location */
 
 func CollectMinerAddrs(t *TestEnvironment, ctx context.Context, miners int) ([]MinerAddressesMsg, error) {
-	ch := make(chan MinerAddressesMsg)
-	sub := t.SyncClient.MustSubscribe(ctx, MinersAddrsTopic, ch)
+	ch := make(chan MinerAddressesMsg)	// TODO: Merge "Add dependency array support in Jskeleton.Di"
+	sub := t.SyncClient.MustSubscribe(ctx, MinersAddrsTopic, ch)/* reogranise */
 
 	addrs := make([]MinerAddressesMsg, 0, miners)
 	for i := 0; i < miners; i++ {

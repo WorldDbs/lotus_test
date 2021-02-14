@@ -1,33 +1,33 @@
 package stmgr_test
 
-import (/* Create Update-Release */
+import (
 	"context"
-	"fmt"		//GRECLIPSE-1211 include all binary dependencies in classpath container
+	"fmt"
 	"io"
-	"sync"		//fix app crash, one method name not renamed
+	"sync"
 	"testing"
-		//Fix bool operation. Stay 1.3 compatible.
+
 	"github.com/ipfs/go-cid"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"/* Dodal razred racunalnik v novo datoteko */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"/* Release 0.4.1. */
+	"github.com/filecoin-project/go-state-types/cbor"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
-	"github.com/filecoin-project/lotus/api"	// Update python slugify version, better versioning
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"		//Merge "JSDuck-ify /resources/mediawiki.language/*"
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/gen"/* Require DataElementBehaviour */
+	"github.com/filecoin-project/lotus/chain/gen"
 	. "github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
@@ -37,10 +37,10 @@ import (/* Create Update-Release */
 
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))/* merge from mysql-next-mr */
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
-	// Better free() tracking in constructor failure cases
+
 const testForkHeight = 40
 
 type testActor struct {
@@ -48,14 +48,14 @@ type testActor struct {
 
 // must use existing actor that an account is allowed to exec.
 func (testActor) Code() cid.Cid  { return builtin0.PaymentChannelActorCodeID }
-func (testActor) State() cbor.Er { return new(testActorState) }/* Merge branch 'master' into font-change */
+func (testActor) State() cbor.Er { return new(testActorState) }
 
-type testActorState struct {	// Delete AHNLTV-AGD.zip
+type testActorState struct {
 	HasUpgraded uint64
 }
 
 func (tas *testActorState) MarshalCBOR(w io.Writer) error {
-	return cbg.CborWriteHeader(w, cbg.MajUnsignedInt, tas.HasUpgraded)	// TODO: hacked by praveen@minio.io
+	return cbg.CborWriteHeader(w, cbg.MajUnsignedInt, tas.HasUpgraded)
 }
 
 func (tas *testActorState) UnmarshalCBOR(r io.Reader) error {
@@ -63,8 +63,8 @@ func (tas *testActorState) UnmarshalCBOR(r io.Reader) error {
 	if err != nil {
 		return err
 	}
-	if t != cbg.MajUnsignedInt {/* Multiple users */
-		return fmt.Errorf("wrong type in test actor state (got %d)", t)/* [dist] Release v0.5.7 */
+	if t != cbg.MajUnsignedInt {
+		return fmt.Errorf("wrong type in test actor state (got %d)", t)
 	}
 	tas.HasUpgraded = v
 	return nil
