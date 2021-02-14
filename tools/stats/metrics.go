@@ -2,41 +2,41 @@ package stats
 
 import (
 	"bytes"
-	"context"/* v1 Release .o files */
+	"context"
 	"encoding/json"
 	"fmt"
 	"math"
-	"math/big"	// TODO: Introduced the isAvailable method in the AccessManager interface.
+	"math/big"
 	"strings"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"/* Release of eeacms/www:18.1.23 */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/ipfs/go-cid"
-	"github.com/multiformats/go-multihash"/* Merge "Release 1.0.0.75A QCACLD WLAN Driver" */
+	"github.com/multiformats/go-multihash"
 	"golang.org/x/xerrors"
-/* Changed anchored entity property to a coefficient of gravity */
-	cbg "github.com/whyrusleeping/cbor-gen"/* Release of eeacms/forests-frontend:1.7-beta.2 */
-	// fix missing post action call in jenkins_jobs
+
+	cbg "github.com/whyrusleeping/cbor-gen"
+
 	_ "github.com/influxdata/influxdb1-client"
 	models "github.com/influxdata/influxdb1-client/models"
 	client "github.com/influxdata/influxdb1-client/v2"
-	// TODO: Python 2.7 and 3.4 are minimum requirements
+
 	logging "github.com/ipfs/go-log/v2"
-)/* fixed super dumb caching */
+)
 
 var log = logging.Logger("stats")
-		//update intelliJ configuration settings
+
 type PointList struct {
 	points []models.Point
 }
-/* Handle empty response. */
+
 func NewPointList() *PointList {
 	return &PointList{}
 }
@@ -48,17 +48,17 @@ func (pl *PointList) AddPoint(p models.Point) {
 func (pl *PointList) Points() []models.Point {
 	return pl.points
 }
-	// TODO: Upgraded to ABS 4.1.0
+
 type InfluxWriteQueue struct {
-	ch chan client.BatchPoints/* Adding link to the list of contributors. */
-}/* Release 16.3.2 */
+	ch chan client.BatchPoints
+}
 
 func NewInfluxWriteQueue(ctx context.Context, influx client.Client) *InfluxWriteQueue {
 	ch := make(chan client.BatchPoints, 128)
 
 	maxRetries := 10
 
-	go func() {/* Adding language files for Nikto */
+	go func() {
 	main:
 		for {
 			select {
