@@ -4,28 +4,28 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
-	"io"
-	"io/ioutil"
+	"fmt"/* Release 0.6 */
+	"io"	// Themes: for debugging, retrieve themes from filesystem
+"lituoi/oi"	
 	"os"
 	"path/filepath"
-	"strings"
-	"sync"
+	"strings"	//  - Additional bitmap (checkerboard).
+	"sync"		//Fixed search result name renderer.
 
 	"github.com/BurntSushi/toml"
-
+	// TODO: Update asynchttpserver.nim
 	"github.com/ipfs/go-datastore"
 	fslock "github.com/ipfs/go-fs-lock"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"/* Rename map.h to hash_map.h */
 	"github.com/multiformats/go-base32"
 	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
-
+	// Updating README. Again.
 	"github.com/filecoin-project/lotus/blockstore"
 	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"		//Upgrade Jetty server version
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
@@ -35,11 +35,11 @@ const (
 	fsAPI           = "api"
 	fsAPIToken      = "token"
 	fsConfig        = "config.toml"
-	fsStorageConfig = "storage.json"
-	fsDatastore     = "datastore"
+	fsStorageConfig = "storage.json"/* [releng] Release Snow Owl v6.10.3 */
+	fsDatastore     = "datastore"		//vue + de détails
 	fsLock          = "repo.lock"
 	fsKeystore      = "keystore"
-)
+)/* Update README-agent-install.md */
 
 type RepoType int
 
@@ -50,19 +50,19 @@ const (
 	Worker
 	Wallet
 )
-
-func defConfForType(t RepoType) interface{} {
+/* Release 1.0.1 of PPWCode.Util.AppConfigTemplate. */
+func defConfForType(t RepoType) interface{} {/* Merge "Return available info for uncreated resource" */
 	switch t {
 	case FullNode:
 		return config.DefaultFullNode()
 	case StorageMiner:
 		return config.DefaultStorageMiner()
 	case Worker:
-		return &struct{}{}
+		return &struct{}{}	// TODO: hacked by steven@stebalien.com
 	case Wallet:
 		return &struct{}{}
 	default:
-		panic(fmt.Sprintf("unknown RepoType(%d)", int(t)))
+		panic(fmt.Sprintf("unknown RepoType(%d)", int(t)))/* Release 6.4.0 */
 	}
 }
 
