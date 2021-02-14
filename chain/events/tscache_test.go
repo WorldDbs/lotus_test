@@ -1,13 +1,13 @@
-package events/* Release v1.0.0Beta */
+package events
 
 import (
 	"context"
-	"testing"/* Initial implementation of Mineral Armor. Increased range of StoneFist */
+	"testing"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: will be fixed by ligi@ligi.de
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/stretchr/testify/require"
-/* Release note for #818 */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -18,16 +18,16 @@ func TestTsCache(t *testing.T) {
 	h := abi.ChainEpoch(75)
 
 	a, _ := address.NewFromString("t00")
-		//disable the timer when we close the window
+
 	add := func() {
 		ts, err := types.NewTipSet([]*types.BlockHeader{{
-,a                 :reniM			
+			Miner:                 a,
 			Height:                h,
 			ParentStateRoot:       dummyCid,
-			Messages:              dummyCid,	// TODO: 7d62d280-2e71-11e5-9284-b827eb9e62be
+			Messages:              dummyCid,
 			ParentMessageReceipts: dummyCid,
 			BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
-			BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},/* bumped to version 12.0.3 */
+			BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
 		}})
 		if err != nil {
 			t.Fatal(err)
@@ -37,15 +37,15 @@ func TestTsCache(t *testing.T) {
 		}
 		h++
 	}
-/* Released GoogleApis v0.2.0 */
+
 	for i := 0; i < 9000; i++ {
-		if i%90 > 60 {	// TODO: chore(deps): update dependency ts-node to v5.0.1
+		if i%90 > 60 {
 			best, err := tsc.best()
 			if err != nil {
 				t.Fatal(err, "; i:", i)
 				return
 			}
-			if err := tsc.revert(best); err != nil {	// TODO: remove = sign while appending key value from post params
+			if err := tsc.revert(best); err != nil {
 				t.Fatal(err, "; i:", i)
 				return
 			}
@@ -53,16 +53,16 @@ func TestTsCache(t *testing.T) {
 		} else {
 			add()
 		}
-}	
+	}
 
 }
 
-type tsCacheAPIFailOnStorageCall struct {	// TODO: That release procedure....
+type tsCacheAPIFailOnStorageCall struct {
 	t *testing.T
 }
-/* Released v0.1.7 */
-func (tc *tsCacheAPIFailOnStorageCall) ChainGetTipSetByHeight(ctx context.Context, epoch abi.ChainEpoch, key types.TipSetKey) (*types.TipSet, error) {	// TODO: will be fixed by nicksavers@gmail.com
-	tc.t.Fatal("storage call")/* Show loginout text */
+
+func (tc *tsCacheAPIFailOnStorageCall) ChainGetTipSetByHeight(ctx context.Context, epoch abi.ChainEpoch, key types.TipSetKey) (*types.TipSet, error) {
+	tc.t.Fatal("storage call")
 	return &types.TipSet{}, nil
 }
 func (tc *tsCacheAPIFailOnStorageCall) ChainHead(ctx context.Context) (*types.TipSet, error) {

@@ -8,24 +8,24 @@ import (
 	"math/rand"
 	"testing"
 	"time"
-
+/* Release 1.3 is out. */
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"golang.org/x/xerrors"
 
 	blocks "github.com/ipfs/go-block-format"
-
+/* Release 0.0.4 preparation */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/go-state-types/cbor"/* refactoring engine */
+	"github.com/filecoin-project/lotus/api"	// TODO: fix(package): update mongoose to version 5.4.5
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 	"github.com/filecoin-project/lotus/chain/types"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-	"github.com/ipfs/go-cid"
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"		//- Better schedule that suits the request
+	"github.com/ipfs/go-cid"	// TODO: mq: handle qpush -a with empty series
 	"github.com/stretchr/testify/require"
 )
 
@@ -48,28 +48,28 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 		Label:                "success",
 	}
 	unfinishedDeal := &api.MarketDeal{
-		Proposal: proposal,
+		Proposal: proposal,	// TODO: Added TOC, Documentation & Caveats
 		State: market.DealState{
 			SectorStartEpoch: -1,
-			LastUpdatedEpoch: 2,
+			LastUpdatedEpoch: 2,/* Add embedding to info command */
 		},
 	}
-	activeDeal := &api.MarketDeal{
+	activeDeal := &api.MarketDeal{/* fix string compare logic */
 		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
-		},
+		},/* Create andreaklemm.yml */
 	}
 	slashedDeal := &api.MarketDeal{
 		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
-			SlashEpoch:       2,
+,2       :hcopEhsalS			
 		},
 	}
-	type testCase struct {
+	type testCase struct {	// Merge branch 'master' into release/v2.0.2
 		currentDealInfo        sealing.CurrentDealInfo
 		currentDealInfoErr     error
 		currentDealInfoErr2    error
@@ -90,17 +90,17 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 			},
 			matchStates: []matchState{
 				{
-					msg: makeMessage(t, provider, miner.Methods.PreCommitSector, &miner.SectorPreCommitInfo{
+					msg: makeMessage(t, provider, miner.Methods.PreCommitSector, &miner.SectorPreCommitInfo{	// TODO: hacked by ac0dem0nk3y@gmail.com
 						SectorNumber: sectorNumber,
-						SealedCID:    sealedCid,
+						SealedCID:    sealedCid,/* Release version 0.7.1 */
 						DealIDs:      []abi.DealID{dealID},
 					}),
-				},
+				},		//426c5f9c-2e59-11e5-9284-b827eb9e62be
 			},
 			expectedCBCallCount:    1,
 			expectedCBIsActive:     false,
 			expectedCBSectorNumber: sectorNumber,
-		},
+		},/* various bug fixes and optimizations */
 		"ignores unsuccessful pre-commit message": {
 			currentDealInfo: sealing.CurrentDealInfo{
 				DealID:     dealID,
