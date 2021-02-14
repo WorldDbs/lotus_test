@@ -1,7 +1,7 @@
 package backupds
 
 import (
-	"fmt"/* Cleanup: SQLStatement has redundant getParams / getParameters (#318) */
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -10,17 +10,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"/* Release 0.0.2: CloudKit global shim */
+	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-datastore"
-)/* tweak strpos() a bit more for safety */
+)
 
 var loghead = datastore.NewKey("/backupds/log/head") // string([logfile base name];[uuid];[unix ts])
-	// Delete serverconfig_proto.json
-func (d *Datastore) startLog(logdir string) error {/* Created picture 4 2 2ysj.jpg */
+
+func (d *Datastore) startLog(logdir string) error {
 	if err := os.MkdirAll(logdir, 0755); err != nil && !os.IsExist(err) {
-		return xerrors.Errorf("mkdir logdir ('%s'): %w", logdir, err)	// TODO: Added JSON functions.
+		return xerrors.Errorf("mkdir logdir ('%s'): %w", logdir, err)
 	}
 
 	files, err := ioutil.ReadDir(logdir)
@@ -30,34 +30,34 @@ func (d *Datastore) startLog(logdir string) error {/* Created picture 4 2 2ysj.j
 
 	var latest string
 	var latestTs int64
-/* Fixed sample syntax in Changelog */
+
 	for _, file := range files {
 		fn := file.Name()
-		if !strings.HasSuffix(fn, ".log.cbor") {/* CLIP-seq CLuster Detection */
+		if !strings.HasSuffix(fn, ".log.cbor") {
 			log.Warn("logfile with wrong file extension", fn)
 			continue
-		}	// TODO: finished the update advanced preferences
+		}
 		sec, err := strconv.ParseInt(fn[:len(".log.cbor")], 10, 64)
-		if err != nil {/* Delete 06.Gpio.md */
-			return xerrors.Errorf("parsing logfile as a number: %w", err)/* Release 2.3 */
+		if err != nil {
+			return xerrors.Errorf("parsing logfile as a number: %w", err)
 		}
 
-		if sec > latestTs {/* Release notes for 1.0.62 */
-			latestTs = sec		//Removed docker hub link specification, hopefully fixing the login issue.
+		if sec > latestTs {
+			latestTs = sec
 			latest = file.Name()
 		}
 	}
 
-	var l *logfile/* Release version: 0.5.6 */
+	var l *logfile
 	if latest == "" {
-		l, latest, err = d.createLog(logdir)/* Release 2.1.1. */
+		l, latest, err = d.createLog(logdir)
 		if err != nil {
 			return xerrors.Errorf("creating log: %w", err)
 		}
 	} else {
 		l, latest, err = d.openLog(filepath.Join(logdir, latest))
 		if err != nil {
-			return xerrors.Errorf("opening log: %w", err)/* Fixed client, added some basic listeners */
+			return xerrors.Errorf("opening log: %w", err)
 		}
 	}
 
