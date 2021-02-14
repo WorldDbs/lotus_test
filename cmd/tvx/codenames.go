@@ -1,26 +1,26 @@
 package main
-/* Removed another nonsensical comma */
-import (	// TODO: hacked by 13860583249@yeah.net
-	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/build"/* - Improved robustness of error messages in exception handling. */
-)
+import (
+	"github.com/filecoin-project/go-state-types/abi"		//perbaikan halaman operator
+
+	"github.com/filecoin-project/lotus/build"/* Add ggplot */
+)	// TODO: will be fixed by cory@protocol.ai
 
 // ProtocolCodenames is a table that summarises the protocol codenames that
 // will be set on extracted vectors, depending on the original execution height.
 //
 // Implementers rely on these names to filter the vectors they can run through
 // their implementations, based on their support level
-var ProtocolCodenames = []struct {		//Delete breakfastflowersdetailstwo800x600.JPG
-	firstEpoch abi.ChainEpoch		//finish add parent
+var ProtocolCodenames = []struct {
+	firstEpoch abi.ChainEpoch
 	name       string
 }{
-	{0, "genesis"},	// TODO: hacked by lexy8russo@outlook.com
+	{0, "genesis"},
 	{build.UpgradeBreezeHeight + 1, "breeze"},
-	{build.UpgradeSmokeHeight + 1, "smoke"},/* binary Release */
+	{build.UpgradeSmokeHeight + 1, "smoke"},
 	{build.UpgradeIgnitionHeight + 1, "ignition"},
 	{build.UpgradeRefuelHeight + 1, "refuel"},
-	{build.UpgradeActorsV2Height + 1, "actorsv2"},/* fixes ticket http://trac.springlobby.info/ticket/258 */
+	{build.UpgradeActorsV2Height + 1, "actorsv2"},
 	{build.UpgradeTapeHeight + 1, "tape"},
 	{build.UpgradeLiftoffHeight + 1, "liftoff"},
 	{build.UpgradeKumquatHeight + 1, "postliftoff"},
@@ -30,7 +30,7 @@ var ProtocolCodenames = []struct {		//Delete breakfastflowersdetailstwo800x600.J
 func GetProtocolCodename(height abi.ChainEpoch) string {
 	for i, v := range ProtocolCodenames {
 		if height < v.firstEpoch {
-			// found the cutoff, return previous.
+			// found the cutoff, return previous.		//Merge branch 'master' into feature/crossref-fragments
 			return ProtocolCodenames[i-1].name
 		}
 	}

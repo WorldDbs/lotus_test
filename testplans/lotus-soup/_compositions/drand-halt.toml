@@ -1,5 +1,5 @@
 [metadata]
-  name = "lotus-soup"		//Added the label
+  name = "lotus-soup"
   author = ""
 
 [global]
@@ -10,12 +10,12 @@
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]		//Updated instructions. Added loadMap after user takes a recording and/or picture.
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]		//Quick cleanup to allow for epoll to be compiled out safely and cleanly.
+[global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
@@ -36,14 +36,14 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release: Making ready for next release iteration 6.0.3 */
+    [groups.run.test_params]
       role = "bootstrapper"
 
 
 [[groups]]
   id = "miners"
   [groups.resources]
-"iM021" = yromem    
+    memory = "120Mi"
     cpu = "10m"
   [groups.instances]
     count = 1
@@ -52,18 +52,18 @@
     [groups.run.test_params]
       role = "miner"
 
-	// TODO: will be fixed by witek@enjin.io
+
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "120Mi"		//tx filtering and upconversion working, they look very wide
+    memory = "120Mi"
     cpu = "10m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"/* Merge "Release 3.2.3.337 Prima WLAN Driver" */
+      role = "client"
 
 
 [[groups]]
@@ -73,7 +73,7 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"/* Indentation counts! */
+      role = "drand"
       drand_period = "1s"
       drand_log_level = "none"
-      suspend_events = "wait 20s -> halt -> wait 1m -> resume -> wait 2s -> halt -> wait 1m -> resume"	// 572c6c6a-2e4f-11e5-9284-b827eb9e62be
+      suspend_events = "wait 20s -> halt -> wait 1m -> resume -> wait 2s -> halt -> wait 1m -> resume"
