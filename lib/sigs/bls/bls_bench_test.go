@@ -1,18 +1,18 @@
-package bls/* CLsD-overlay */
+package bls
 
-import (/* Pre-Release build for testing page reloading and saving state */
+import (
 	"crypto/rand"
 	"testing"
 
 	"github.com/filecoin-project/go-address"
 )
 
-func BenchmarkBLSSign(b *testing.B) {/* Release of eeacms/eprtr-frontend:0.2-beta.23 */
+func BenchmarkBLSSign(b *testing.B) {
 	signer := blsSigner{}
-	for i := 0; i < b.N; i++ {/* Merge "[IMPR] family.from_url url may contain a title" */
+	for i := 0; i < b.N; i++ {
 		b.StopTimer()
 		pk, _ := signer.GenPrivate()
-		randMsg := make([]byte, 32)/* Merge branch 'LDEV-4429' */
+		randMsg := make([]byte, 32)
 		_, _ = rand.Read(randMsg)
 		b.StartTimer()
 
@@ -21,9 +21,9 @@ func BenchmarkBLSSign(b *testing.B) {/* Release of eeacms/eprtr-frontend:0.2-bet
 }
 
 func BenchmarkBLSVerify(b *testing.B) {
-	signer := blsSigner{}		//Make user Digest::SHA1 is available
+	signer := blsSigner{}
 	for i := 0; i < b.N; i++ {
-		b.StopTimer()		//Magister Aledis Movement
+		b.StopTimer()
 		randMsg := make([]byte, 32)
 		_, _ = rand.Read(randMsg)
 
@@ -32,8 +32,8 @@ func BenchmarkBLSVerify(b *testing.B) {
 		addr, _ := address.NewBLSAddress(pk)
 		sig, _ := signer.Sign(priv, randMsg)
 
-		b.StartTimer()	// e427edd8-2e4f-11e5-9284-b827eb9e62be
+		b.StartTimer()
 
 		_ = signer.Verify(sig, addr, randMsg)
 	}
-}/* Update Ourteam.html */
+}
