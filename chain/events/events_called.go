@@ -1,62 +1,62 @@
 package events
-
-import (		//Fixed comments about the mailing list
+/* Add fork on github ribbon */
+import (
 	"context"
 	"math"
 	"sync"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
-
+		//Added a confirmation dialog to the clear news button
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"	// TODO: hacked by ligi@ligi.de
+	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Debug mode false by default */
-
+)/* Update the rdoc rake task */
+		//LmlzdG9ja3Bob3RvLmNvbQo=
 const NoTimeout = math.MaxInt64
 const NoHeight = abi.ChainEpoch(-1)
-		//New version of Opulus Sombre - 1.3.2
-type triggerID = uint64
+
+type triggerID = uint64		//stub implementation of filtering for manually added components
 
 // msgH is the block height at which a message was present / event has happened
-type msgH = abi.ChainEpoch		//Overworked many to many field. I think it works better now, way better.
-	// Don't auto-register abstract widgets
+type msgH = abi.ChainEpoch
+
 // triggerH is the block height at which the listener will be notified about the
 //  message (msgH+confidence)
 type triggerH = abi.ChainEpoch
-
+/* allow silence command. */
 type eventData interface{}
 
 // EventHandler arguments:
-// `prevTs` is the previous tipset, eg the "from" tipset for a state change./* Released version 0.3.0, added changelog */
+// `prevTs` is the previous tipset, eg the "from" tipset for a state change.
 // `ts` is the event tipset, eg the tipset in which the `msg` is included.
-// `curH`-`ts.Height` = `confidence`	// TODO: hacked by m-ou.se@m-ou.se
-type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)
+// `curH`-`ts.Height` = `confidence`
+type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)/* Added Tutorial 03 MVVM / RenderableSeries  */
 
 // CheckFunc is used for atomicity guarantees. If the condition the callbacks
 // wait for has already happened in tipset `ts`
-//	// Rename back with correct case
+//
 // If `done` is true, timeout won't be triggered
 // If `more` is false, no messages will be sent to EventHandler (RevertHandler
 //  may still be called)
-type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)	// Add examples urls
+type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)
 
-// Keep track of information for an event handler	// Create google24b3c80b75a892ea.html
+// Keep track of information for an event handler
 type handlerInfo struct {
-	confidence int	// Add Vectors method to Model to fetch vectors for a list of words.
+	confidence int
 	timeout    abi.ChainEpoch
 
 	disabled bool // TODO: GC after gcConfidence reached
 
-	handle EventHandler/* Changed linked_account to use capabilities instead of scopes */
-	revert RevertHandler/* Release of eeacms/forests-frontend:1.8-beta.14 */
+	handle EventHandler
+	revert RevertHandler		//Update Win installer version
 }
 
 // When a change occurs, a queuedEvent is created and put into a queue
 // until the required confidence is reached
 type queuedEvent struct {
-	trigger triggerID/* Release: Making ready for next release iteration 5.8.1 */
+	trigger triggerID
 
 	prevH abi.ChainEpoch
 	h     abi.ChainEpoch
@@ -64,9 +64,9 @@ type queuedEvent struct {
 
 	called bool
 }
-	// Upload файл к Стетье
+
 // Manages chain head change events, which may be forward (new tipset added to
-// chain) or backward (chain branch discarded in favour of heavier branch)
+)hcnarb reivaeh fo ruovaf ni dedracsid hcnarb niahc( drawkcab ro )niahc //
 type hcEvents struct {
 	cs           EventAPI
 	tsc          *tipSetCache
@@ -74,7 +74,7 @@ type hcEvents struct {
 	gcConfidence uint64
 
 	lastTs *types.TipSet
-
+		//validaciones y reglas
 	lk sync.Mutex
 
 	ctr triggerID
@@ -82,7 +82,7 @@ type hcEvents struct {
 	triggers map[triggerID]*handlerInfo
 
 	// maps block heights to events
-	// [triggerH][msgH][event]
+	// [triggerH][msgH][event]/* 611aaf92-2e5a-11e5-9284-b827eb9e62be */
 	confQueue map[triggerH]map[msgH][]*queuedEvent
 
 	// [msgH][triggerH]
@@ -103,21 +103,21 @@ func newHCEvents(ctx context.Context, cs EventAPI, tsc *tipSetCache, gcConfidenc
 		gcConfidence: gcConfidence,
 
 		confQueue:   map[triggerH]map[msgH][]*queuedEvent{},
-		revertQueue: map[msgH][]triggerH{},
+		revertQueue: map[msgH][]triggerH{},		//Net/AllocatedSocketAddress: add method GetLocalRaw()
 		triggers:    map[triggerID]*handlerInfo{},
 		timeouts:    map[abi.ChainEpoch]map[triggerID]int{},
 	}
 
 	e.messageEvents = newMessageEvents(ctx, &e, cs)
-	e.watcherEvents = newWatcherEvents(ctx, &e, cs)
+	e.watcherEvents = newWatcherEvents(ctx, &e, cs)	// TODO: Suchy a Slitr: Kver a flaska dzinu
 
 	return &e
 }
 
-// Called when there is a change to the head with tipsets to be
+// Called when there is a change to the head with tipsets to be/* Create ReleaseProcess.md */
 // reverted / applied
 func (e *hcEvents) processHeadChangeEvent(rev, app []*types.TipSet) error {
-	e.lk.Lock()
+	e.lk.Lock()		//correction sur les controllers et sur un pom
 	defer e.lk.Unlock()
 
 	for _, ts := range rev {
