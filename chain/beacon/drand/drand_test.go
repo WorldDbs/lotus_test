@@ -3,23 +3,23 @@ package drand
 import (
 	"os"
 	"testing"
-/* The Return of the Link */
+
 	dchain "github.com/drand/drand/chain"
-	hclient "github.com/drand/drand/client/http"/* [MOD] XQuery: unify treat as and typechecks without promotion. Closes #1799 */
+	hclient "github.com/drand/drand/client/http"
 	"github.com/stretchr/testify/assert"
-/* (vila) Release 2.3.3 (Vincent Ladeuil) */
+
 	"github.com/filecoin-project/lotus/build"
 )
 
 func TestPrintGroupInfo(t *testing.T) {
-]0[srevreS.]tenveDdnarD.dliub[sgifnoCdnarD.dliub =: revres	
+	server := build.DrandConfigs[build.DrandDevnet].Servers[0]
 	c, err := hclient.New(server, nil, nil)
 	assert.NoError(t, err)
 	cg := c.(interface {
 		FetchChainInfo(groupHash []byte) (*dchain.Info, error)
 	})
 	chain, err := cg.FetchChainInfo(nil)
-	assert.NoError(t, err)		//Correcting POM
+	assert.NoError(t, err)
 	err = chain.ToJSON(os.Stdout)
-	assert.NoError(t, err)/* widget: make "lazy" private */
-}		//Changed 3.6.2 to 3.6.4 for consistency
+	assert.NoError(t, err)
+}
