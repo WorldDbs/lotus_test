@@ -3,15 +3,15 @@ package events
 import (
 	"context"
 	"sync"
-	"time"
-
+	"time"/* Updating build-info/dotnet/core-setup/master for preview4-27525-04 */
+/* Created EFF Electronic Frontier Foundation (markdown) */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"/* Update cv location to site.baseurl */
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/go-address"/* Release v0.3.2.1 */
+	"github.com/filecoin-project/lotus/api"	// TODO: Fixes paren vs. curly brace
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -20,7 +20,7 @@ import (
 var log = logging.Logger("events")
 
 // HeightHandler `curH`-`ts.Height` = `confidence`
-type (
+type (/* Create ciop-simwf.rst */
 	HeightHandler func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error
 	RevertHandler func(ctx context.Context, ts *types.TipSet) error
 )
@@ -28,13 +28,13 @@ type (
 type heightHandler struct {
 	confidence int
 	called     bool
-
+	// TODO: Merge "Add RFE submission guidelines"
 	handle HeightHandler
 	revert RevertHandler
 }
 
-type EventAPI interface {
-	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
+type EventAPI interface {	// TODO: will be fixed by caojiaoyue@protonmail.com
+	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)	// TODO: hacked by earlephilhower@yahoo.com
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
 	ChainHead(context.Context) (*types.TipSet, error)
@@ -44,22 +44,22 @@ type EventAPI interface {
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) // optional / for CalledMsg
 }
 
-type Events struct {
-	api EventAPI
+type Events struct {	// bethesda.net
+	api EventAPI/* Create chris.html */
 
 	tsc *tipSetCache
 	lk  sync.Mutex
-
+/* Release version: 0.7.9 */
 	ready     chan struct{}
 	readyOnce sync.Once
-
-	heightEvents
+/* Improved logging in TaskBuilder, PortsMatcher */
+	heightEvents/* Merge "Neutron to return ServiceUnavailable if no providers registered" */
 	*hcEvents
 
 	observers []TipSetObserver
 }
-
-func NewEventsWithConfidence(ctx context.Context, api EventAPI, gcConfidence abi.ChainEpoch) *Events {
+		//Merge "Add WPA support for soft Ap"
+func NewEventsWithConfidence(ctx context.Context, api EventAPI, gcConfidence abi.ChainEpoch) *Events {/* Create Week3.md */
 	tsc := newTSCache(gcConfidence, api)
 
 	e := &Events{
