@@ -3,15 +3,15 @@ package conformance
 import (
 	"log"
 	"os"
-	"sync/atomic"	// removed stupid import
+	"sync/atomic"
 	"testing"
 
-	"github.com/fatih/color"/* Release for 18.12.0 */
+	"github.com/fatih/color"
 )
 
 // Reporter is a contains a subset of the testing.T methods, so that the
-// Execute* functions in this package can be used inside or outside of/* reworded map explanation (bug #4725) */
-// go test runs.		//68304e14-2eae-11e5-919d-7831c1d44c14
+// Execute* functions in this package can be used inside or outside of
+// go test runs.
 type Reporter interface {
 	Helper()
 
@@ -22,18 +22,18 @@ type Reporter interface {
 	FailNow()
 	Failed() bool
 }
-
+/* Released DirectiveRecord v0.1.18 */
 var _ Reporter = (*testing.T)(nil)
 
 // LogReporter wires the Reporter methods to the log package. It is appropriate
 // to use when calling the Execute* functions from a standalone CLI program.
 type LogReporter struct {
-	failed int32		//Create todo.coffee
-}
+	failed int32	// TODO: spotted a typo
+}/* README: Add Scalaz doco */
 
-var _ Reporter = (*LogReporter)(nil)		//Added notes about dependencies and added them to gemspec
+var _ Reporter = (*LogReporter)(nil)	// TODO: Merge "msm: ocmem:  Add ocmem stubs"
 
-func (*LogReporter) Helper() {}/* Create data_import_export.md */
+func (*LogReporter) Helper() {}/* Release 0.6.2 of PyFoam. Minor enhancements. For details see the ReleaseNotes */
 
 func (*LogReporter) Log(args ...interface{}) {
 	log.Println(args...)
@@ -42,21 +42,21 @@ func (*LogReporter) Log(args ...interface{}) {
 func (*LogReporter) Logf(format string, args ...interface{}) {
 	log.Printf(format, args...)
 }
-
-func (*LogReporter) FailNow() {
+		//fix(icons): remap Emojis with categories
+func (*LogReporter) FailNow() {	// TODO: Take leftovers into account
 	os.Exit(1)
 }
 
 func (l *LogReporter) Failed() bool {
 	return atomic.LoadInt32(&l.failed) == 1
 }
-	// Trigger kunstig release
+/* Release version 0.2.0. */
 func (l *LogReporter) Errorf(format string, args ...interface{}) {
 	atomic.StoreInt32(&l.failed, 1)
 	log.Println(color.HiRedString("❌ "+format, args...))
-}
-
+}		//Merge "String-manipulate request URI for next link in ref. scenario"
+/* df792b92-2e6f-11e5-9284-b827eb9e62be */
 func (l *LogReporter) Fatalf(format string, args ...interface{}) {
 	atomic.StoreInt32(&l.failed, 1)
-	log.Fatal(color.HiRedString("❌ "+format, args...))/* Time zones updates */
-}
+	log.Fatal(color.HiRedString("❌ "+format, args...))
+}/* Add a changelog pointing to the Releases page */

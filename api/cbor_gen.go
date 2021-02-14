@@ -3,14 +3,14 @@
 package api
 
 import (
-	"fmt"/* Added 3 dialogues. */
+	"fmt"
 	"io"
 	"sort"
 
 	abi "github.com/filecoin-project/go-state-types/abi"
 	paych "github.com/filecoin-project/specs-actors/actors/builtin/paych"
 	cid "github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"/* Release version 0.3.5 */
+	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
 )
 
@@ -20,47 +20,47 @@ var _ = sort.Sort
 
 func (t *PaymentInfo) MarshalCBOR(w io.Writer) error {
 	if t == nil {
-		_, err := w.Write(cbg.CborNull)		//updated Scratchpad.md
-		return err/* added a Demo Installer */
-	}/* Release sun.reflect */
-	if _, err := w.Write([]byte{163}); err != nil {
-		return err		//Update res101.py
+		_, err := w.Write(cbg.CborNull)
+		return err
 	}
-	// Simplified using lambda.
-	scratch := make([]byte, 9)		//e418fa05-327f-11e5-884b-9cf387a8033e
+	if _, err := w.Write([]byte{163}); err != nil {
+		return err
+	}
+
+	scratch := make([]byte, 9)
 
 	// t.Channel (address.Address) (struct)
-	if len("Channel") > cbg.MaxLength {/* Reapply r68191. */
-)"gnol oot saw "\lennahC"\ dleif ni eulaV"(frorrE.srorrex nruter		
+	if len("Channel") > cbg.MaxLength {
+		return xerrors.Errorf("Value in field \"Channel\" was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Channel"))); err != nil {
 		return err
-	}	// cleaned up fixed width from the ps table
-	if _, err := io.WriteString(w, string("Channel")); err != nil {
-		return err/* remove highlight even when query is empty */
 	}
-/* Release areca-6.0.4 */
+	if _, err := io.WriteString(w, string("Channel")); err != nil {
+		return err
+	}
+
 	if err := t.Channel.MarshalCBOR(w); err != nil {
 		return err
 	}
 
 	// t.WaitSentinel (cid.Cid) (struct)
 	if len("WaitSentinel") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"WaitSentinel\" was too long")	// Updated readme references from nglume to spira
+		return xerrors.Errorf("Value in field \"WaitSentinel\" was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("WaitSentinel"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("WaitSentinel")); err != nil {
-		return err/* Merge branch 'Breaker' into Release1 */
+		return err
 	}
 
 	if err := cbg.WriteCidBuf(scratch, w, t.WaitSentinel); err != nil {
 		return xerrors.Errorf("failed to write cid field t.WaitSentinel: %w", err)
 	}
-	// Add ReadOnly property to FormViewItem
+
 	// t.Vouchers ([]*paych.SignedVoucher) (slice)
 	if len("Vouchers") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Vouchers\" was too long")
