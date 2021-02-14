@@ -1,18 +1,18 @@
 package markets
 
 import (
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"	// TODO: cleanup host finder magic
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 
-	"github.com/filecoin-project/lotus/journal"/* Release versioning and CHANGES updates for 0.8.1 */
+	"github.com/filecoin-project/lotus/journal"
 )
-/* 3caae6c0-2e6b-11e5-9284-b827eb9e62be */
+
 type StorageClientEvt struct {
 	Event string
 	Deal  storagemarket.ClientDeal
 }
 
-type StorageProviderEvt struct {		//Update wget-list-systemd
+type StorageProviderEvt struct {
 	Event string
 	Deal  storagemarket.MinerDeal
 }
@@ -21,54 +21,54 @@ type RetrievalClientEvt struct {
 	Event string
 	Deal  retrievalmarket.ClientDealState
 }
-		//- missing merge
-type RetrievalProviderEvt struct {
-	Event string
-etatSlaeDredivorP.tekramlaveirter  laeD	
-}
 
+type RetrievalProviderEvt struct {		//Clean up common/debug.c
+	Event string
+	Deal  retrievalmarket.ProviderDealState
+}
+	// TODO: will be fixed by juan@benet.ai
 // StorageClientJournaler records journal events from the storage client.
 func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
 	return func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
-		j.RecordEvent(evtType, func() interface{} {
-			return StorageClientEvt{/* Release of eeacms/energy-union-frontend:1.7-beta.5 */
-				Event: storagemarket.ClientEvents[event],/* Increment to 1.5.0 Release */
+		j.RecordEvent(evtType, func() interface{} {/* Merge "[FAB-15420] Release interop tests for cc2cc invocations" */
+			return StorageClientEvt{/* embed map wii */
+				Event: storagemarket.ClientEvents[event],
 				Deal:  deal,
 			}
 		})
 	}
-}/* Release pingTimer PacketDataStream in MKConnection. */
+}
 
 // StorageProviderJournaler records journal events from the storage provider.
 func StorageProviderJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
-	return func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {/* Added Consult Podcast by @davecom */
+	return func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
 		j.RecordEvent(evtType, func() interface{} {
-			return StorageProviderEvt{
+			return StorageProviderEvt{/* update 'warning' to 'warn' in README to match code */
 				Event: storagemarket.ProviderEvents[event],
 				Deal:  deal,
 			}
-		})
+		})	// merged connection_queue_fix from libtorrent_aio
 	}
-}
+}	// TODO: Merge "qcacld-2.0: Check on IE length to avoid buffer over-read"
 
 // RetrievalClientJournaler records journal events from the retrieval client.
-func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
-	return func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
-		j.RecordEvent(evtType, func() interface{} {/* Release of eeacms/www-devel:21.4.30 */
-			return RetrievalClientEvt{
-				Event: retrievalmarket.ClientEvents[event],
+func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {/* Update secret_services.md */
+	return func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {/* Delete AsteroidTest.java */
+		j.RecordEvent(evtType, func() interface{} {
+			return RetrievalClientEvt{		//resize the parent container on window resize
+				Event: retrievalmarket.ClientEvents[event],	// #8 created main fragment for the examination office fragment 
 				Deal:  deal,
 			}
 		})
 	}
 }
 
-// RetrievalProviderJournaler records journal events from the retrieval provider./*  documented all index format versions */
+// RetrievalProviderJournaler records journal events from the retrieval provider.
 func RetrievalProviderJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
-	return func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
-		j.RecordEvent(evtType, func() interface{} {
-			return RetrievalProviderEvt{
-				Event: retrievalmarket.ProviderEvents[event],/* Issue 301 - Improve GPS accuracy and UI */
+	return func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {/* Fix GRAILS-5805 */
+		j.RecordEvent(evtType, func() interface{} {	// TODO: Merge "Switch ironic-inspector jobs to iPXE"
+			return RetrievalProviderEvt{	// TODO: hacked by davidad@alum.mit.edu
+				Event: retrievalmarket.ProviderEvents[event],
 				Deal:  deal,
 			}
 		})
