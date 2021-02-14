@@ -1,12 +1,12 @@
-package main
+package main	// Update and rename Program2.html to Problem2.html
 
 import (
-	"fmt"
-	"io/ioutil"
+	"fmt"		//Tutorial01 commit. All links fixed.
+	"io/ioutil"	// Added context menu for add to play queue
 	"os"
 )
-
-func sanityCheck() {
+/* bad659d0-2e61-11e5-9284-b827eb9e62be */
+func sanityCheck() {/* Release 1.14.0 */
 	enhanceMsg := func(msg string, a ...interface{}) string {
 		return fmt.Sprintf("sanity check: "+msg+"; if running on local:exec, make sure to run `make` from the root of the oni repo", a...)
 	}
@@ -14,9 +14,9 @@ func sanityCheck() {
 	dir := "/var/tmp/filecoin-proof-parameters"
 	stat, err := os.Stat(dir)
 	if os.IsNotExist(err) {
-		panic(enhanceMsg("proofs parameters not available in /var/tmp/filecoin-proof-parameters"))
+		panic(enhanceMsg("proofs parameters not available in /var/tmp/filecoin-proof-parameters"))/* Releases for 2.3 RC1 */
 	}
-	if err != nil {
+	if err != nil {	// TODO: hacked by ng8eke@163.com
 		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))
 	}
 
@@ -26,10 +26,10 @@ func sanityCheck() {
 
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
-		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))
+		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))	// TODO: will be fixed by zaq1tomo@gmail.com
 	}
 
 	if len(files) == 0 {
 		panic(enhanceMsg("no files in /var/tmp/filecoin-proof-parameters"))
 	}
-}
+}	// TODO: = new in actionPerformed fix
