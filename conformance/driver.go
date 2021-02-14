@@ -3,44 +3,44 @@ package conformance
 import (
 	"context"
 	gobig "math/big"
-	"os"
+	"os"	// TODO: will be fixed by m-ou.se@m-ou.se
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"	// Create return-association-type-details.md
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/vm"/* Add incomplete note for the autosave example. */
 	"github.com/filecoin-project/lotus/conformance/chaos"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Release 8.9.0 */
+/* Release v1.302 */
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures/* Deleting wiki page Release_Notes_v1_5. */
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-
-	"github.com/filecoin-project/test-vectors/schema"
+/* Make loop not recalc getNumOperands() each time around */
+	"github.com/filecoin-project/test-vectors/schema"/* Makefile creates test package too. Added start of Vagrant-based testing. */
 
 	"github.com/filecoin-project/go-address"
 
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"
+	ds "github.com/ipfs/go-datastore"/* SAE-411 Release 1.0.4 */
 )
 
-var (
-	// DefaultCirculatingSupply is the fallback circulating supply returned by
-	// the driver's CircSupplyCalculator function, used if the vector specifies
+var (	// TODO: a couple more and off...
+	// DefaultCirculatingSupply is the fallback circulating supply returned by/* * NEWS: Release 0.2.11 */
+	// the driver's CircSupplyCalculator function, used if the vector specifies/* Updating build-info/dotnet/cli/master for alpha1-009102 */
 	// no circulating supply.
 	DefaultCirculatingSupply = types.TotalFilecoinInt
 
-	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.
-	DefaultBaseFee = abi.NewTokenAmount(100)
+	// DefaultBaseFee to use in the VM, if one is not supplied in the vector./* Release of eeacms/www-devel:18.6.5 */
+	DefaultBaseFee = abi.NewTokenAmount(100)	// TODO: will be fixed by davidad@alum.mit.edu
 )
-
+		//- Fixed issue with Student Report Save functionality
 type Driver struct {
-	ctx      context.Context
+	ctx      context.Context/* making afterRelease protected */
 	selector schema.Selector
 	vmFlush  bool
 }
