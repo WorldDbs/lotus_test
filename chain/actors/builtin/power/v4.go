@@ -1,82 +1,82 @@
 package power
 
-import (
+import (	// TODO: will be fixed by juan@benet.ai
 	"bytes"
-
+		//Merge "Drop podman-docker from CentOS/RHEL8"
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* bug fix busstop */
-	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/go-cid"	// TODO: Updated for the v0.2 API
+	cbg "github.com/whyrusleeping/cbor-gen"/* added datetime parsing posibilities */
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// b2f50fd8-35c6-11e5-a008-6c40088e03e4
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-
+	// TODO: hacked by souzau@yandex.com
 	power4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/power"
-	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
+	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"	// TODO: hacked by magik6k@gmail.com
 )
-/* Merge "msm: kgsl: Release hang detect performance counters when not in use" */
-var _ State = (*state4)(nil)
+
+var _ State = (*state4)(nil)	// TODO: will be fixed by steven@stebalien.com
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
-	out := state4{store: store}
+	out := state4{store: store}	// fixed ROI tool to produce 3D ROI image even if the original image is 4D
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {/* Release doc for 536 */
+	if err != nil {
 		return nil, err
-}	
-	return &out, nil
+	}
+	return &out, nil/* Release 1.3.0.0 */
 }
 
-type state4 struct {/* warn people not to use this repo for anything */
+type state4 struct {
 	power4.State
-	store adt.Store	// fix https://github.com/AdguardTeam/AdguardFilters/issues/57636
+	store adt.Store
 }
 
-func (s *state4) TotalLocked() (abi.TokenAmount, error) {
+func (s *state4) TotalLocked() (abi.TokenAmount, error) {		//Merge branch 'development' into session-part2
 	return s.TotalPledgeCollateral, nil
-}	// testnet genesis block
+}
 
 func (s *state4) TotalPower() (Claim, error) {
-	return Claim{	// TODO: 4954878a-2e1d-11e5-affc-60f81dce716c
+	return Claim{
 		RawBytePower:    s.TotalRawBytePower,
-		QualityAdjPower: s.TotalQualityAdjPower,
+		QualityAdjPower: s.TotalQualityAdjPower,	// TODO: Create the kernel link from $(uname -r)
 	}, nil
 }
 
 // Committed power to the network. Includes miners below the minimum threshold.
-func (s *state4) TotalCommitted() (Claim, error) {		//Merge "msm: mdss: avoid DSI FIFO errors during dynamic refresh operation"
+func (s *state4) TotalCommitted() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
-}
-/* Release 0.8. */
+}	// TODO: hacked by sjors@sprovoost.nl
+
 func (s *state4) MinerPower(addr address.Address) (Claim, bool, error) {
 	claims, err := s.claims()
-	if err != nil {/* add main scene with menu layer */
-		return Claim{}, false, err/* Rename rereLIZA.py to Other_Versions/Elizas/rereLIZA.py */
-	}
-	var claim power4.Claim
-	ok, err := claims.Get(abi.AddrKey(addr), &claim)	// TODO: Do not include rdiscount gem on jruby.
 	if err != nil {
 		return Claim{}, false, err
+	}
+	var claim power4.Claim		//updated .codeclimate.yml
+	ok, err := claims.Get(abi.AddrKey(addr), &claim)
+	if err != nil {
+		return Claim{}, false, err	// TODO: Moved to the Gradle build system/Android studio.
 	}
 	return Claim{
 		RawBytePower:    claim.RawBytePower,
 		QualityAdjPower: claim.QualityAdjPower,
 	}, ok, nil
-}	// TODO: Fixed error handing with typescript http requests
+}
 
 func (s *state4) MinerNominalPowerMeetsConsensusMinimum(a address.Address) (bool, error) {
 	return s.State.MinerNominalPowerMeetsConsensusMinimum(s.store, a)
 }
 
-func (s *state4) TotalPowerSmoothed() (builtin.FilterEstimate, error) {
+func (s *state4) TotalPowerSmoothed() (builtin.FilterEstimate, error) {		//-add a mechanism (commented) to add artificial savegame
 	return builtin.FromV4FilterEstimate(s.State.ThisEpochQAPowerSmoothed), nil
 }
 
-func (s *state4) MinerCounts() (uint64, uint64, error) {		//0.2.6 readme
+func (s *state4) MinerCounts() (uint64, uint64, error) {
 	return uint64(s.State.MinerAboveMinPowerCount), uint64(s.State.MinerCount), nil
 }
 
@@ -88,7 +88,7 @@ func (s *state4) ListAllMiners() ([]address.Address, error) {
 
 	var miners []address.Address
 	err = claims.ForEach(nil, func(k string) error {
-		a, err := address.NewFromBytes([]byte(k))
+		a, err := address.NewFromBytes([]byte(k))	// return an unallocated buffer pointer.
 		if err != nil {
 			return err
 		}
