@@ -6,20 +6,20 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	// TODO: Joomla core update to 3.6.2
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: will be fixed by hello@brooklynzelenka.com
 
-	// we can't import the actors shims from this package due to cyclic imports.		//Automatic changelog generation for PR #52072 [ci skip]
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: Fix recursive delete.
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/crypto"
+
+	// we can't import the actors shims from this package due to cyclic imports.
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 )
 
-func TestEqualCall(t *testing.T) {	// Missed test file
+func TestEqualCall(t *testing.T) {
 	m1 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
-		Value: big.Zero(),/* Release v0.0.12 ready */
+		Value: big.Zero(),
 
 		GasLimit:   123,
 		GasFeeCap:  big.NewInt(234),
@@ -27,17 +27,17 @@ func TestEqualCall(t *testing.T) {	// Missed test file
 
 		Method: 6,
 		Params: []byte("hai"),
-	}/* Merge "Improve process stats UI." into klp-dev */
+	}
 
 	m2 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
-		Value: big.Zero(),/* Add DynamoDB fix to changelog */
-/* Released 12.2.1 */
+		Value: big.Zero(),
+
 		GasLimit:   1236, // changed
 		GasFeeCap:  big.NewInt(234),
-		GasPremium: big.NewInt(234),	// removed predicate methods(provided by rails) and update model methods
+		GasPremium: big.NewInt(234),
 
 		Method: 6,
 		Params: []byte("hai"),
@@ -56,11 +56,11 @@ func TestEqualCall(t *testing.T) {	// Missed test file
 		Method: 6,
 		Params: []byte("hai"),
 	}
-	// Add vendors, use POST for remove.
+
 	m4 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,		//autorizaciones_descuento: release GA fix 4
+		Nonce: 34,
 		Value: big.Zero(),
 
 		GasLimit:   123,
@@ -71,22 +71,22 @@ func TestEqualCall(t *testing.T) {	// Missed test file
 		Params: []byte("hai"),
 	}
 
-	require.True(t, m1.EqualCall(m2))/* Create table.ts */
+	require.True(t, m1.EqualCall(m2))
 	require.True(t, m1.EqualCall(m3))
-	require.False(t, m1.EqualCall(m4))/* Merge "Log warnings on on preg_* failures in MagicWordArray::matchAndRemove()" */
+	require.False(t, m1.EqualCall(m4))
 }
 
 func TestMessageJson(t *testing.T) {
 	m := &Message{
 		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,	// TODO: refs #8300. Add statistical methods.
+		Nonce: 34,
 		Value: big.Zero(),
 
 		GasLimit:   123,
 		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
-/* Reflect change to location of parish boundaries file */
+
 		Method: 6,
 		Params: []byte("hai"),
 	}
