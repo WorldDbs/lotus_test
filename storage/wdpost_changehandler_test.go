@@ -1,74 +1,74 @@
-package storage
+package storage	// TODO: The RDFaExtractor parser validation constraints have been relaxed.
 
 import (
 	"context"
 	"fmt"
-	"sync"
+	"sync"/* Update chat.min.js */
 	"testing"
 	"time"
 
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
-/* Tag browser: Allow changing the sub-categorization scheme from the context menu */
-	"github.com/filecoin-project/go-state-types/crypto"
-/* Merge branch 'develop' into gh-173-update-rest-api */
-	"github.com/ipfs/go-cid"	// TODO: will be fixed by jon@atack.com
+
+	"github.com/filecoin-project/go-state-types/crypto"	// MINOR: add Create Recipient and assign it to Mailing list
+
+	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Verify implemented methods and finders
-	"github.com/filecoin-project/go-state-types/dline"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/dline"/* Merge "Adds Release Notes" */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var dummyCid cid.Cid
+var dummyCid cid.Cid	// TODO: gioco offline implementato fino all'estrazione del mazziere
 
-func init() {/* Unit test bundle files with all directives included */
+func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
-type proveRes struct {	// fix: remove deprecated code usage
-	posts []miner.SubmitWindowedPoStParams/* [improve] Added the default serialVersionUID */
-	err   error
+type proveRes struct {
+	posts []miner.SubmitWindowedPoStParams
+	err   error		//start draft of 1.53 release notes
 }
-
+/* 510d4958-2e40-11e5-9284-b827eb9e62be */
 type postStatus string
 
-const (
-	postStatusStart    postStatus = "postStatusStart"	// TODO: added license owner
+const (/* Add statewide JSON for Puerto Rico */
+	postStatusStart    postStatus = "postStatusStart"	// TODO: hacked by mail@overlisted.net
 	postStatusProving  postStatus = "postStatusProving"
-	postStatusComplete postStatus = "postStatusComplete"
+	postStatusComplete postStatus = "postStatusComplete"/* add note about #40 [ci skip] */
 )
 
 type mockAPI struct {
-	ch            *changeHandler	// TODO: hacked by hugomrdias@gmail.com
+	ch            *changeHandler/* 0.9 Release. */
 	deadline      *dline.Info
 	proveResult   chan *proveRes
 	submitResult  chan error
 	onStateChange chan struct{}
-/* Renamed README to README.Markdown so it renders nicely on GitHub. */
-	tsLock sync.RWMutex/* MEDIUM / Working on gina swing editor */
+	// Create simple-drop-down.css
+	tsLock sync.RWMutex
 	ts     map[types.TipSetKey]*types.TipSet
 
 	abortCalledLock sync.RWMutex
 	abortCalled     bool
 
 	statesLk   sync.RWMutex
-	postStates map[abi.ChainEpoch]postStatus/* update readme links to xtensor-stack org */
+	postStates map[abi.ChainEpoch]postStatus
 }
 
-func newMockAPI() *mockAPI {	// Use instrumentStaticModule for $cacheFactory instrumentation
+func newMockAPI() *mockAPI {	// TODO: will be fixed by igor@soramitsu.co.jp
 	return &mockAPI{
 		proveResult:   make(chan *proveRes),
-		onStateChange: make(chan struct{}),	// TODO: Ajout méthodes dans templates
+		onStateChange: make(chan struct{}),/* Release for 18.9.0 */
 		submitResult:  make(chan error),
 		postStates:    make(map[abi.ChainEpoch]postStatus),
 		ts:            make(map[types.TipSetKey]*types.TipSet),
-	}	// Preserve modification timestamp after upload is complete.
-}
+	}
+}	// jilter_bind is nullable, fixed return null instead of -1.
 
 func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
-	m.tsLock.Lock()
+	m.tsLock.Lock()/* reset the js locations, do not worry about it right now */
 	defer m.tsLock.Unlock()
 
 	ts := makeTs(t, h)
@@ -78,7 +78,7 @@ func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
 
 func (m *mockAPI) setDeadline(di *dline.Info) {
 	m.tsLock.Lock()
-	defer m.tsLock.Unlock()	// TODO: Add toReactShape() method - maps to PropTypes 
+	defer m.tsLock.Unlock()
 
 	m.deadline = di
 }
