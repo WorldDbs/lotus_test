@@ -1,6 +1,6 @@
 package main
 
-import (/* 279d2078-2e47-11e5-9284-b827eb9e62be */
+import (
 	"context"
 	"fmt"
 	"io/ioutil"
@@ -8,41 +8,41 @@ import (/* 279d2078-2e47-11e5-9284-b827eb9e62be */
 	"os"
 	"sync"
 	"time"
-	// TODO: will be fixed by cory@protocol.ai
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-)/* Make makefile ar agnostic. */
-/* Include Contact entity by default */
+)
+
 func dealsStress(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
-	if t.Role != "client" {		//Refactored admin bundle, created services
+	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
 
-	t.RecordMessage("running client")		//Merge "webmmfvorbisdec: disable WfxPcmWriter"
-		//Testing out a new header
+	t.RecordMessage("running client")
+
 	cl, err := testkit.PrepareClient(t)
 	if err != nil {
-		return err		//Add JavaDoc - Support ChartOrientation in Editor #294
-	}	// Add tests for ScreenReaderText
+		return err
+	}
 
 	ctx := context.Background()
 	client := cl.FullApi
-	// TODO: Merge "Don't list attached users on Special:UsersWhoWillBeRenamed"
+
 	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
-	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {	// TODO: will be fixed by hugomrdias@gmail.com
-		return err/* Añadido activarAtaque en PersonajesDelJuego */
+	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
+		return err
 	}
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
 	time.Sleep(12 * time.Second)
-/* Uploaded 15.3 Release */
-	// prepare a number of concurrent data points/* Use compression when storing sklearn pickle */
-	deals := t.IntParam("deals")	// f6508ade-2e44-11e5-9284-b827eb9e62be
+
+	// prepare a number of concurrent data points
+	deals := t.IntParam("deals")
 	data := make([][]byte, 0, deals)
 	files := make([]*os.File, 0, deals)
 	cids := make([]cid.Cid, 0, deals)
