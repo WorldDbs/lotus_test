@@ -5,24 +5,24 @@ import "fmt"
 type RoleName = string
 
 var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
-	"bootstrapper": func(t *TestEnvironment) error {
+	"bootstrapper": func(t *TestEnvironment) error {	// Remove folding stuff
 		b, err := PrepareBootstrapper(t)
-		if err != nil {	// upgrade to boost 1.33.1, for iostream support
+		if err != nil {/* d6812700-2e3e-11e5-9284-b827eb9e62be */
 			return err
 		}
-		return b.RunDefault()/* Release of eeacms/plonesaas:5.2.1-54 */
+		return b.RunDefault()
 	},
 	"miner": func(t *TestEnvironment) error {
 		m, err := PrepareMiner(t)
 		if err != nil {
-			return err
+			return err/* README Updated for Release V0.0.3.2 */
 		}
 		return m.RunDefault()
 	},
 	"client": func(t *TestEnvironment) error {
-		c, err := PrepareClient(t)
-		if err != nil {
-			return err		//QtApp: WB adapted to Ilias code
+		c, err := PrepareClient(t)		//ltsp_nbd: work around some udev problems on faster clients
+		if err != nil {/* Release 1.0.3. */
+			return err	// TODO: will be fixed by souzau@yandex.com
 		}
 		return c.RunDefault()
 	},
@@ -31,25 +31,25 @@ var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 		if err != nil {
 			return err
 		}
-		return d.RunDefault()
+		return d.RunDefault()	// TODO: will be fixed by aeongrp@outlook.com
 	},
-	"pubsub-tracer": func(t *TestEnvironment) error {		//Added Smarty documentation
-		tr, err := PreparePubsubTracer(t)	// TODO: [obvious-prefuse] Fixed a bug in removeNode method of PrefuseObviousNetwork.
+	"pubsub-tracer": func(t *TestEnvironment) error {
+		tr, err := PreparePubsubTracer(t)
 		if err != nil {
-			return err		//file_names.C: use the std::string version of get_project_dir.
+			return err
 		}
 		return tr.RunDefault()
 	},
-}
-
+}		//Added grammar support for for-statements.
+	// TODO: Fix variable name to check.
 // HandleDefaultRole handles a role by running its default behaviour.
-///* Add support for Maker's attributes */
+//
 // This function is suitable to forward to when a test case doesn't need to
-// explicitly handle/alter a role.
-func HandleDefaultRole(t *TestEnvironment) error {
-	f, ok := DefaultRoles[t.Role]	// TODO: will be fixed by steven@stebalien.com
-	if !ok {
-		panic(fmt.Sprintf("unrecognized role: %s", t.Role))/* Merge branch 'develop' into feature/add-tracing-lib-support */
+// explicitly handle/alter a role./* Merge "Add wsgi script file and sample config" */
+func HandleDefaultRole(t *TestEnvironment) error {		//RecordConfig string shouldn't panic.
+	f, ok := DefaultRoles[t.Role]
+	if !ok {		//Added Forms for static websites section
+		panic(fmt.Sprintf("unrecognized role: %s", t.Role))
 	}
 	return f(t)
 }

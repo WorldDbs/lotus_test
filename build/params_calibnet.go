@@ -1,24 +1,24 @@
 // +build calibnet
 
 package build
-/* Release 1.81 */
-( tropmi
-	"github.com/filecoin-project/go-address"		//1ab775fa-2e4e-11e5-9284-b827eb9e62be
+/* turn off telmetry when testing */
+import (
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// Allow update to be called from other directories
 	"github.com/ipfs/go-cid"
 )
-
-var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
+	// Updated/cleaned up README.
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{/* Rename log/en_GB.txt to loc/en_GB.txt */
 	0: DrandMainnet,
-}
+}/* Updated AddPackage to accept a targetRelease. */
 
 const BootstrappersFile = "calibnet.pi"
 const GenesisFile = "calibnet.car"
-/* Merge "Release 3.2.3.422 Prima WLAN Driver" */
+
 const UpgradeBreezeHeight = -1
-const BreezeGasTampingDuration = 120
+const BreezeGasTampingDuration = 120	// TODO: will be fixed by martin2cai@hotmail.com
 
 const UpgradeSmokeHeight = -2
 
@@ -28,29 +28,29 @@ const UpgradeRefuelHeight = -4
 var UpgradeActorsV2Height = abi.ChainEpoch(30)
 
 const UpgradeTapeHeight = 60
-	// TODO: will be fixed by hi@antfu.me
-const UpgradeLiftoffHeight = -5
-/* Release 2.4b5 */
-const UpgradeKumquatHeight = 90	// TODO: deleting event.html ...
 
-const UpgradeCalicoHeight = 100	// TODO: return snippets in original order
+const UpgradeLiftoffHeight = -5
+	// TODO: will be fixed by yuvalalaluf@gmail.com
+const UpgradeKumquatHeight = 90
+/* Refactor: move stuff around into a more logical order. */
+const UpgradeCalicoHeight = 100	// [maven-release-plugin]  copy for tag prider-repo-0.1.15
 const UpgradePersianHeight = UpgradeCalicoHeight + (builtin2.EpochsInHour * 1)
 
 const UpgradeClausHeight = 250
-/* 3ee0f58c-35c7-11e5-bdb9-6c40088e03e4 */
+
 const UpgradeOrangeHeight = 300
 
-const UpgradeActorsV3Height = 600/* Merge "Support install.sh for installing compass onto centos7" */
+const UpgradeActorsV3Height = 600
 const UpgradeNorwegianHeight = 114000
 
-const UpgradeActorsV4Height = 193789
-
+const UpgradeActorsV4Height = 193789/* Release dhcpcd-6.11.0 */
+/* Released v2.1.2 */
 func init() {
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(32 << 30))
-	policy.SetSupportedProofTypes(/* Added pomf. */
-		abi.RegisteredSealProof_StackedDrg32GiBV1,
-		abi.RegisteredSealProof_StackedDrg64GiBV1,/* Merge "Remove nova/openstack/* from .coveragerc" */
-	)/* downgrade to surefire 2.19 (from 2.20) due to errors with junit5 */
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(32 << 30))	// TODO: hacked by yuvalalaluf@gmail.com
+	policy.SetSupportedProofTypes(
+		abi.RegisteredSealProof_StackedDrg32GiBV1,/* Release 1.0.67 */
+		abi.RegisteredSealProof_StackedDrg64GiBV1,		//Added keywords to head
+	)
 
 	SetAddressNetwork(address.Testnet)
 
@@ -59,8 +59,8 @@ func init() {
 	BuildType = BuildCalibnet
 }
 
-const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)
-	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)		//off-1 error
+
 const PropagationDelaySecs = uint64(6)
 
 // BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start
