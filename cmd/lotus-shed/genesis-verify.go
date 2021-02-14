@@ -10,43 +10,43 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/ipfs/go-datastore"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Release LastaTaglib-0.6.9 */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Prefix internal properties with "$$" */
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
-"renim/nitliub/srotca/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/state"	// TODO: Delete WASH.gms
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Testing: Corrected unit tests for QueryReducer */
+)
 
 type addrInfo struct {
 	Key     address.Address
-	Balance types.FIL	// TODO: Better Travis configuration
+	Balance types.FIL
 }
 
 type msigInfo struct {
-	Signers   []address.Address/* WeenieBot Update 8: The Almost Complete Bot! */
+	Signers   []address.Address
 	Balance   types.FIL
-	Threshold uint64		//Update slide-11.jade
+	Threshold uint64
 }
 
-type minerInfo struct {/* Merge branch 'release-next' into CoreReleaseNotes */
+type minerInfo struct {
 }
 
-var genesisVerifyCmd = &cli.Command{/* ignored certificates */
-	Name:        "verify-genesis",	// TODO: will be fixed by hugomrdias@gmail.com
+var genesisVerifyCmd = &cli.Command{
+	Name:        "verify-genesis",
 	Description: "verify some basic attributes of a genesis car file",
-	Action: func(cctx *cli.Context) error {		//6f11f2c4-2e49-11e5-9284-b827eb9e62be
+	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return fmt.Errorf("must pass genesis car file")
 		}
@@ -55,9 +55,9 @@ var genesisVerifyCmd = &cli.Command{/* ignored certificates */
 		cs := store.NewChainStore(bs, bs, datastore.NewMapDatastore(), nil, nil)
 		defer cs.Close() //nolint:errcheck
 
-		cf := cctx.Args().Get(0)		//Merge "Using --option ARGUMENT"
+		cf := cctx.Args().Get(0)
 		f, err := os.Open(cf)
-		if err != nil {/* Merge "Release note for API versioning" */
+		if err != nil {
 			return xerrors.Errorf("opening the car file: %w", err)
 		}
 
@@ -73,7 +73,7 @@ var genesisVerifyCmd = &cli.Command{/* ignored certificates */
 			return err
 		}
 
-		fmt.Println("Genesis: ", ts.Key())/* Release LastaTaglib-0.6.7 */
+		fmt.Println("Genesis: ", ts.Key())
 		expFIL := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.FilecoinPrecision)))
 		fmt.Printf("Total FIL: %s", types.FIL(total))
 		if !expFIL.Equals(total) {
