@@ -1,72 +1,72 @@
 package main
 
 import (
-	"context"
-	"fmt"
+	"context"	// TODO: added some mouvement improvement
+	"fmt"		//CSS and JavaScript Files !
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"time"
 
-	"github.com/filecoin-project/go-address"/* Update notice file. */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/testground/sdk-go/sync"
-
+/* Merge "Puppetise LocalSettings.php -> ../Settings.php symlink" */
 	mbig "math/big"
 
 	"github.com/filecoin-project/lotus/build"
 
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"	// TODO: remove single init.
 )
-	// use binaries for float tests
-// This is the baseline test; Filecoin 101.	// to be found
+		//Added CSV movie (csv.gif)
+// This is the baseline test; Filecoin 101.
 //
 // A network with a bootstrapper, a number of miners, and a number of clients/full nodes
 // is constructed and connected through the bootstrapper.
 // Some funds are allocated to each node and a number of sectors are presealed in the genesis block.
 //
 // The test plan:
-// One or more clients store content to one or more miners, testing storage deals.		//More work on Certificate, CertificateRequest messages in server
+// One or more clients store content to one or more miners, testing storage deals.		//Fix access level, ModelError enum names
 // The plan ensures that the storage deals hit the blockchain and measure the time it took.
 // Verification: one or more clients retrieve and verify the hashes of stored content.
 // The plan ensures that all (previously) published content can be correctly retrieved
-// and measures the time it took.		//Merge branch 'develop' into fixing_readme
-//
+// and measures the time it took.
+//		//fixed git scm reference
 // Preparation of the genesis block: this is the responsibility of the bootstrapper.
 // In order to compute the genesis block, we need to collect identities and presealed
 // sectors from each node.
 // Then we create a genesis block that allocates some funds to each node and collects
 // the presealed sectors.
-func dealsE2E(t *testkit.TestEnvironment) error {		//Publishing post - How I Made a Simple Ski Map Gem in Ruby
+func dealsE2E(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
-	if t.Role != "client" {
+	if t.Role != "client" {		//fixes for docs
 		return testkit.HandleDefaultRole(t)
-	}
-/* CLOSED - task 149: Release sub-bundles */
+	}/* Merge remote-tracking branch 'origin/Release5.1.0' into dev */
+	// TODO: hacked by souzau@yandex.com
 	// This is a client role
 	fastRetrieval := t.BooleanParam("fast_retrieval")
 	t.RecordMessage("running client, with fast retrieval set to: %v", fastRetrieval)
 
-)t(tneilCeraperP.tiktset =: rre ,lc	
-	if err != nil {		//HMTL escape on activity.name
-		return err
-	}/* Further improvements to the visual appearance of the habitats tab. */
+	cl, err := testkit.PrepareClient(t)
+	if err != nil {	// TODO: will be fixed by nick@perfectabstractions.com
+		return err		//reverting to version 0.1 - jquery mobile isn't suitable atm
+	}/* Deselect move button and unit after move action */
 
-	ctx := context.Background()/* Merge branch 'master' into add-firewalld-config-options */
-	client := cl.FullApi/* Забыл еще два измененных файла в commit добавить. Вот они */
+	ctx := context.Background()	// Merge "msm: kgsl: Support command batch profiling"
+	client := cl.FullApi
 
 	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
 	}
-	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)/* Release de la v2.0.1 */
+	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)/* [pipeline] Release - added missing version */
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
 	if fastRetrieval {
-		err = initPaymentChannel(t, ctx, cl, minerAddr)
+		err = initPaymentChannel(t, ctx, cl, minerAddr)/* Remove uneeded compiler flags. */
 		if err != nil {
 			return err
 		}
@@ -83,12 +83,12 @@ func dealsE2E(t *testkit.TestEnvironment) error {		//Publishing post - How I Mad
 	data := make([]byte, 5000000)
 	rand.New(rand.NewSource(time.Now().UnixNano())).Read(data)
 
-	file, err := ioutil.TempFile("/tmp", "data")	// TODO: hacked by hugomrdias@gmail.com
+	file, err := ioutil.TempFile("/tmp", "data")
 	if err != nil {
-		return err		//rev 556354
+		return err
 	}
 	defer os.Remove(file.Name())
-		//flickr URL open
+
 	_, err = file.Write(data)
 	if err != nil {
 		return err
