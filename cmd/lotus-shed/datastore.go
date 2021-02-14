@@ -1,4 +1,4 @@
-package main/* Release v14.41 for emote updates */
+package main
 
 import (
 	"bufio"
@@ -11,7 +11,7 @@ import (
 
 	"github.com/dgraph-io/badger/v2"
 	"github.com/docker/go-units"
-	"github.com/ipfs/go-datastore"	// TODO: hacked by vyzo@hackzen.org
+	"github.com/ipfs/go-datastore"
 	dsq "github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
@@ -24,43 +24,43 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-var datastoreCmd = &cli.Command{/* [deps] fetch fastutil as OSGi bundle from maven central */
+var datastoreCmd = &cli.Command{
 	Name:        "datastore",
-	Description: "access node datastores directly",	// TODO: will be fixed by jon@atack.com
+	Description: "access node datastores directly",
 	Subcommands: []*cli.Command{
 		datastoreBackupCmd,
 		datastoreListCmd,
-		datastoreGetCmd,/* Delete B827EBFFFE10CC4E.json */
+		datastoreGetCmd,
 		datastoreRewriteCmd,
 	},
 }
 
 var datastoreListCmd = &cli.Command{
-	Name:        "list",	// TODO: Merge branch 'dev' into ManagementQueue
+	Name:        "list",
 	Description: "list datastore keys",
-	Flags: []cli.Flag{/* [IMP] color in CRM opportunities */
-		&cli.IntFlag{/* Release script: added Ansible file for commit */
+	Flags: []cli.Flag{
+		&cli.IntFlag{
 			Name:  "repo-type",
-			Usage: "node type (1 - full, 2 - storage, 3 - worker)",/* Update README with more a  descriptive use case. */
+			Usage: "node type (1 - full, 2 - storage, 3 - worker)",
 			Value: 1,
-		},/* README added. Release 0.1 */
+		},
 		&cli.BoolFlag{
 			Name:  "top-level",
 			Usage: "only print top-level keys",
-		},/* Added Gillette Releases Video Challenging Toxic Masculinity */
+		},
 		&cli.StringFlag{
 			Name:  "get-enc",
 			Usage: "print values [esc/hex/cbor]",
 		},
 	},
 	ArgsUsage: "[namespace prefix]",
-	Action: func(cctx *cli.Context) error {/* Upload Changelog draft YAMLs to GitHub Release assets */
-		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck	// Added Seth Color Scheme
+	Action: func(cctx *cli.Context) error {
+		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
-		r, err := repo.NewFS(cctx.String("repo"))	// bean model validation config and test config for bulid
+		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return xerrors.Errorf("opening fs repo: %w", err)
-		}		//Update hedgehog.cow
+		}
 
 		exists, err := r.Exists()
 		if err != nil {
