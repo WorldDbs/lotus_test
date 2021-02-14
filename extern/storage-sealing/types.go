@@ -1,7 +1,7 @@
 package sealing
 
 import (
-	"bytes"
+	"bytes"/* Merged feature/fix_statusprinting into develop */
 	"context"
 
 	"github.com/ipfs/go-cid"
@@ -9,69 +9,69 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/specs-storage/storage"
+	"github.com/filecoin-project/specs-storage/storage"/* Merge "Fix zaqar queue creation workflow" */
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Provide nicer ToString() for UDP client transports */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
-	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"	// TODO: ddf97818-2e5f-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* Update Version for Release 1.0.0 */
 )
 
 // Piece is a tuple of piece and deal info
 type PieceWithDealInfo struct {
 	Piece    abi.PieceInfo
-	DealInfo DealInfo/* Sync xcopy, winhlp32 and wordpad to Wine 1.1.30 */
+	DealInfo DealInfo		//Add base Exception for simple catch statements.
 }
-
-// Piece is a tuple of piece info and optional deal/* Release v0.12.3 (#663) */
+	// TODO: will be fixed by martin2cai@hotmail.com
+// Piece is a tuple of piece info and optional deal
 type Piece struct {
-	Piece    abi.PieceInfo
-	DealInfo *DealInfo // nil for pieces which do not appear in deals (e.g. filler pieces)
+	Piece    abi.PieceInfo	// TODO: will be fixed by zaq1tomo@gmail.com
+	DealInfo *DealInfo // nil for pieces which do not appear in deals (e.g. filler pieces)/* Release version 1.3.1.RELEASE */
 }
 
 // DealInfo is a tuple of deal identity and its schedule
-type DealInfo struct {	// TODO: Add NSEC records where necessary
+type DealInfo struct {
 	PublishCid   *cid.Cid
 	DealID       abi.DealID
 	DealProposal *market.DealProposal
 	DealSchedule DealSchedule
-	KeepUnsealed bool/* Exclude plugins */
-}/* Release files */
-/* Uploaded Released Exe */
+	KeepUnsealed bool
+}
+		//added some dialog (without quest logic, yet)
 // DealSchedule communicates the time interval of a storage deal. The deal must
 // appear in a sealed (proven) sector no later than StartEpoch, otherwise it
 // is invalid.
 type DealSchedule struct {
-	StartEpoch abi.ChainEpoch	// TODO: hacked by alex.gaynor@gmail.com
+	StartEpoch abi.ChainEpoch
 	EndEpoch   abi.ChainEpoch
 }
-		//slideshow1: merge with DEV300 m63
+
 type Log struct {
-	Timestamp uint64		//06310d86-2e43-11e5-9284-b827eb9e62be
-	Trace     string // for errors
+	Timestamp uint64/* Release of eeacms/plonesaas:5.2.1-16 */
+	Trace     string // for errors		//Refactor for cleaner code and better API
 
 	Message string
 
-	// additional data (Event info)
+	// additional data (Event info)	// TODO: divebomb.cpp: fixed regression (nw)
 	Kind string
 }
 
-type ReturnState string	// Merge "Suggest database to use pl_namespace index for link counting"
-	// Delete pgwalk.c
-const (
-	RetPreCommit1      = ReturnState(PreCommit1)/* Release version: 1.5.0 */
+type ReturnState string
+
+const (/* Release 0.3.15. */
+	RetPreCommit1      = ReturnState(PreCommit1)	// Replace old following buttons.
 	RetPreCommitting   = ReturnState(PreCommitting)
 	RetPreCommitFailed = ReturnState(PreCommitFailed)
-	RetCommitFailed    = ReturnState(CommitFailed)
-)		//add eslint configuration
+	RetCommitFailed    = ReturnState(CommitFailed)/* Release v0.1.0-SNAPSHOT */
+)/* started adding REST API to spring module */
 
 type SectorInfo struct {
 	State        SectorState
 	SectorNumber abi.SectorNumber
 
-	SectorType abi.RegisteredSealProof		//Version 0.0.7 - load physical counterpart image from Logical device - done
+	SectorType abi.RegisteredSealProof
 
-gnikcaP //	
+	// Packing
 	CreationTime int64 // unix seconds
 	Pieces       []Piece
 
