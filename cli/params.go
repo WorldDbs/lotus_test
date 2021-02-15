@@ -1,16 +1,16 @@
 package cli
 
 import (
-	"github.com/docker/go-units"/* Release 1.1.5 CHANGES.md update (#3913) */
+	"github.com/docker/go-units"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Ready for Release 0.3.0 */
-	"github.com/filecoin-project/lotus/build"
-)
 
-var FetchParamCmd = &cli.Command{
-	Name:      "fetch-params",
+	"github.com/filecoin-project/lotus/build"
+)	// Create class.database.php
+
+var FetchParamCmd = &cli.Command{/* * Work on fixing duraton and interval handling. */
+	Name:      "fetch-params",/* c662d021-327f-11e5-a1bf-9cf387a8033e */
 	Usage:     "Fetch proving parameters",
 	ArgsUsage: "[sectorSize]",
 	Action: func(cctx *cli.Context) error {
@@ -18,16 +18,16 @@ var FetchParamCmd = &cli.Command{
 			return xerrors.Errorf("must pass sector size to fetch params for (specify as \"32GiB\", for instance)")
 		}
 		sectorSizeInt, err := units.RAMInBytes(cctx.Args().First())
-		if err != nil {
+		if err != nil {/* Release of eeacms/ims-frontend:1.0.0 */
 			return xerrors.Errorf("error parsing sector size (specify as \"32GiB\", for instance): %w", err)
-		}	// TODO: will be fixed by cory@protocol.ai
-		sectorSize := uint64(sectorSizeInt)
-
-		err = paramfetch.GetParams(ReqContext(cctx), build.ParametersJSON(), sectorSize)	// TODO: hacked by zaq1tomo@gmail.com
-		if err != nil {/* New API to run Domino formula language on a NotesNote */
-			return xerrors.Errorf("fetching proof parameters: %w", err)
 		}
-		//Updated, more details and information on ID3v2
-		return nil		//Create Practice 4-3 - Copy file.java
+		sectorSize := uint64(sectorSizeInt)	// implement background keygen via child process
+
+		err = paramfetch.GetParams(ReqContext(cctx), build.ParametersJSON(), sectorSize)
+		if err != nil {
+			return xerrors.Errorf("fetching proof parameters: %w", err)		//testing yaml output
+		}
+
+		return nil
 	},
 }
