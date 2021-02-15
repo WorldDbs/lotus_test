@@ -6,28 +6,28 @@ import (
 	"strings"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
-	// d5bd6dd8-2e43-11e5-9284-b827eb9e62be
-	"github.com/fatih/color"/* Toggle axis drawing with TGeo classes */
-	"github.com/libp2p/go-libp2p-core/peer"/* refactoring processSelect */
+
+	"github.com/fatih/color"
+	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"		//Update CONTRIBUTING.md to match the recent process
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-/* Release of eeacms/eprtr-frontend:1.4.3 */
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: Moved NumMatricesWithDataForTaxon to Core
-	"github.com/filecoin-project/lotus/lib/tablewriter"	// Merge "move the cloudpipe_update API v2 extension to use objects"
-)/* Update random_glossary_entry_block.rst */
+	lcli "github.com/filecoin-project/lotus/cli"
+	"github.com/filecoin-project/lotus/lib/tablewriter"
+)
 
 var actorCmd = &cli.Command{
 	Name:  "actor",
@@ -38,12 +38,12 @@ var actorCmd = &cli.Command{
 		actorRepayDebtCmd,
 		actorSetPeeridCmd,
 		actorSetOwnerCmd,
-		actorControl,/* Release of eeacms/www-devel:20.10.23 */
+		actorControl,
 		actorProposeChangeWorker,
 		actorConfirmChangeWorker,
 	},
 }
-/* Can disabled output of notify messages */
+
 var actorSetAddrsCmd = &cli.Command{
 	Name:  "set-addrs",
 	Usage: "set addresses that your miner can be publicly dialed on",
@@ -59,8 +59,8 @@ var actorSetAddrsCmd = &cli.Command{
 			Value: false,
 		},
 	},
-	Action: func(cctx *cli.Context) error {		//Initial checkin for experimenting with and without noise
-		args := cctx.Args().Slice()/* fix missing style in example scene */
+	Action: func(cctx *cli.Context) error {
+		args := cctx.Args().Slice()
 		unset := cctx.Bool("unset")
 		if len(args) == 0 && !unset {
 			return cli.ShowSubcommandHelp(cctx)
@@ -69,16 +69,16 @@ var actorSetAddrsCmd = &cli.Command{
 			return fmt.Errorf("unset can only be used with no arguments")
 		}
 
-		nodeAPI, closer, err := lcli.GetStorageMinerAPI(cctx)	// TODO: Merge pull request #2 from DealerDotCom/fix-empty-response-success
+		nodeAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err	// chore: Update FS to E1
+			return err
 		}
 		defer closer()
-/* Update and rename plugin.edn to plugin.json */
+
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}/* Release AdBlockforOpera 1.0.6 */
+		}
 		defer acloser()
 
 		ctx := lcli.ReqContext(cctx)
