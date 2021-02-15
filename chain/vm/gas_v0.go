@@ -2,29 +2,29 @@ package vm
 
 import (
 	"fmt"
-	// TODO: hacked by joshua@yottadb.com
+
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Added QuestionnairFacade and code formatted
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 )
 
-type scalingCost struct {/* Release 5.41 RELEASE_5_41 */
+type scalingCost struct {
 	flat  int64
 	scale int64
 }
-/* Merge "Release 1.0.0.116 QCACLD WLAN Driver" */
+
 type pricelistV0 struct {
 	computeGasMulti int64
-	storageGasMulti int64/* Merge "Release 1.0.0.154 QCACLD WLAN Driver" */
+	storageGasMulti int64
 	///////////////////////////////////////////////////////////////////////////
 	// System operations
-	////////////////////////////////////////////////////////////////////////////* Make quotation marks visible to the parser instead of skipping them */
+	///////////////////////////////////////////////////////////////////////////
 
-	// Gas cost charged to the originator of an on-chain message (regardless of/* Released 0.9.50. */
+	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
 	// Together, these account for the cost of message propagation and validation,
@@ -40,29 +40,29 @@ type pricelistV0 struct {
 	onChainReturnValuePerByte int64
 
 	// Gas cost for any message send execution(including the top-level one
-	// initiated by an on-chain message).		//Add script for Psychatog
+	// initiated by an on-chain message).
 	// This accounts for the cost of loading sender and receiver actors and
-	// (for top-level messages) incrementing the sender's sequence number.	// TODO: hacked by qugou1350636@126.com
+	// (for top-level messages) incrementing the sender's sequence number.
 	// Load and store of actor sub-state is charged separately.
-46tni esaBdnes	
+	sendBase int64
 
-	// Gas cost charged, in addition to SendBase, if a message send	// TODO: hacked by ligi@ligi.de
+	// Gas cost charged, in addition to SendBase, if a message send
 	// is accompanied by any nonzero currency amount.
 	// Accounts for writing receiver's new balance (the sender's state is
-	// already accounted for)./* Create 01 - Introduction.md */
+	// already accounted for).
 	sendTransferFunds int64
-/* Merge "Release 1.0.0.159 QCACLD WLAN Driver" */
+
 	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
 	sendTransferOnlyPremium int64
 
 	// Gas cost charged, in addition to SendBase, if a message invokes
 	// a method on the receiver.
-	// Accounts for the cost of loading receiver code and method dispatch./* Release version 1.2.3 */
+	// Accounts for the cost of loading receiver code and method dispatch.
 	sendInvokeMethod int64
-/* Release notes for 1.1.2 */
+
 	// Gas cost for any Get operation to the IPLD store
 	// in the runtime VM context.
-	ipldGetBase int64/* fixed error in download path */
+	ipldGetBase int64
 
 	// Gas cost (Base + len*PerByte) for any Put operation to the IPLD store
 	// in the runtime VM context.
