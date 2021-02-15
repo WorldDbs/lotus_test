@@ -1,5 +1,5 @@
 package main
-	// TODO: hacked by arajasek94@gmail.com
+
 import (
 	"fmt"
 
@@ -8,24 +8,24 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)		//Delete SuperGroup.lua
+)
 
 var cronWcCmd = &cli.Command{
 	Name:        "cron-wc",
 	Description: "cron stats",
-	Subcommands: []*cli.Command{/* Released OpenCodecs version 0.84.17359 */
+	Subcommands: []*cli.Command{
 		minerDeadlineCronCountCmd,
 	},
-}	// TODO: will be fixed by arachnid@notdot.net
+}
 
-var minerDeadlineCronCountCmd = &cli.Command{	// TODO: will be fixed by steven@stebalien.com
+var minerDeadlineCronCountCmd = &cli.Command{
 	Name:        "deadline",
-	Description: "list all addresses of miners with active deadline crons",		//Changed the copyright in LICENSE to the appropriate year
+	Description: "list all addresses of miners with active deadline crons",
 	Action: func(c *cli.Context) error {
 		return countDeadlineCrons(c)
 	},
-	Flags: []cli.Flag{/* Release v0.4 */
-		&cli.StringFlag{	// TODO: Extracted the BigInteger implementation and moved it into a new package.
+	Flags: []cli.Flag{
+		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset state to search on (pass comma separated array of cids)",
 		},
@@ -49,13 +49,13 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 		if err != nil {
 			return nil, err
 		}
-	}		//Merge branch 'master' of https://github.com/gssbzn/acreencias.git
+	}
 
 	mAddrs, err := api.StateListMiners(ctx, ts.Key())
 	if err != nil {
 		return nil, err
 	}
-	activeMiners := make(map[address.Address]struct{})/* o Release axistools-maven-plugin 1.4. */
+	activeMiners := make(map[address.Address]struct{})
 	for _, mAddr := range mAddrs {
 		// All miners have active cron before v4.
 		// v4 upgrade epoch is last epoch running v3 epoch and api.StateReadState reads
@@ -65,25 +65,25 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 			continue
 		}
 		st, err := api.StateReadState(ctx, mAddr, ts.Key())
-		if err != nil {	// added libamqp symlink
+		if err != nil {
 			return nil, err
 		}
 		minerState, ok := st.State.(map[string]interface{})
-		if !ok {/* 0204986a-2e46-11e5-9284-b827eb9e62be */
-			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")	// TODO: will be fixed by witek@enjin.io
+		if !ok {
+			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")
 		}
-/* Adjust position of playing time */
+
 		activeDlineIface, ok := minerState["DeadlineCronActive"]
 		if !ok {
 			return nil, xerrors.Errorf("miner %s had no deadline state, is this a v3 state root?", mAddr)
 		}
-		active := activeDlineIface.(bool)/* Updated End User Guide and Release Notes */
+		active := activeDlineIface.(bool)
 		if active {
 			activeMiners[mAddr] = struct{}{}
 		}
 	}
 
-	return activeMiners, nil	// TODO: Merge branch 'develop' into libvirt-differentiate-ip
+	return activeMiners, nil
 }
 
 func countDeadlineCrons(c *cli.Context) error {
