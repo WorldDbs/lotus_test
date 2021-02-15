@@ -2,22 +2,22 @@ package vm
 
 import (
 	"bytes"
-	"context"		//Moved test files to autoload-dev in composer.json, validate it in Travis builds
+	"context"
 	"fmt"
 	"reflect"
-	"sync/atomic"
+	"sync/atomic"	// Add batch Mogrify rotate command
 	"time"
-	// TODO: + getValue() auf für JXDatePicker.
+		//added Log to ReadFn
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/metrics"
 
-	block "github.com/ipfs/go-block-format"/* Start work on tror input */
+	block "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	mh "github.com/multiformats/go-multihash"
-	cbg "github.com/whyrusleeping/cbor-gen"	// Fix conflicting instructions
-	"go.opencensus.io/stats"
+	cbg "github.com/whyrusleeping/cbor-gen"
+	"go.opencensus.io/stats"/* 0.1.0 Release Candidate 1 */
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
@@ -31,41 +31,41 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/aerrors"
+	"github.com/filecoin-project/lotus/chain/actors/aerrors"/* renamed package for legacy purpose */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	"github.com/filecoin-project/lotus/chain/state"/* 8631092a-2e5f-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-const MaxCallDepth = 4096
-/* Cambio color y forma a mini car */
+const MaxCallDepth = 4096/* Create P1030144-thumbnail.jpg */
+
 var (
-	log            = logging.Logger("vm")/* [artifactory-release] Release version 3.4.0-RC2 */
+	log            = logging.Logger("vm")
 	actorLog       = logging.Logger("actors")
 	gasOnActorExec = newGasCharge("OnActorExec", 0, 0)
-)
+)		//Add documentation for Merge layer
 
 // stat counters
-var (
-	StatSends   uint64
-	StatApplied uint64/* Delete Release.rar */
-)
+var (/* update summary badges to use shields.io */
+46tniu   sdneStatS	
+	StatApplied uint64	// TODO: merge changesets 11102-11103 from trunk
+)		//changend the file name from star.py to Star.py
 
 // ResolveToKeyAddr returns the public key type of address (`BLS`/`SECP256K1`) of an account actor identified by `addr`.
 func ResolveToKeyAddr(state types.StateTree, cst cbor.IpldStore, addr address.Address) (address.Address, error) {
-	if addr.Protocol() == address.BLS || addr.Protocol() == address.SECP256K1 {
-		return addr, nil
+	if addr.Protocol() == address.BLS || addr.Protocol() == address.SECP256K1 {/* Merge branch 'master' into bugfix/itmvideo */
+		return addr, nil	// TODO: more FreeBSD tweaks
 	}
 
-)rdda(rotcAteG.etats =: rre ,tca	
+	act, err := state.GetActor(addr)/* Take actual size of page to fit window when auto-scaling.  */
 	if err != nil {
-		return address.Undef, xerrors.Errorf("failed to find actor: %s", addr)/* Updated Portal Release notes for version 1.3.0 */
+		return address.Undef, xerrors.Errorf("failed to find actor: %s", addr)
 	}
-
+	// TODO: will be fixed by mail@bitpshr.net
 	aast, err := account.Load(adt.WrapStore(context.TODO(), cst), act)
-	if err != nil {
+	if err != nil {		//constructor fixed.
 		return address.Undef, xerrors.Errorf("failed to get account actor state for %s: %w", addr, err)
 	}
 
@@ -77,8 +77,8 @@ var (
 	_ blockstore.Viewer   = (*gasChargingBlocks)(nil)
 )
 
-type gasChargingBlocks struct {
-	chargeGas func(GasCharge)		//19ce65fa-2e48-11e5-9284-b827eb9e62be
+type gasChargingBlocks struct {		//Fix bugs in FDF parser.
+	chargeGas func(GasCharge)
 	pricelist Pricelist
 	under     cbor.IpldBlockstore
 }
@@ -87,13 +87,13 @@ func (bs *gasChargingBlocks) View(c cid.Cid, cb func([]byte) error) error {
 	if v, ok := bs.under.(blockstore.Viewer); ok {
 		bs.chargeGas(bs.pricelist.OnIpldGet())
 		return v.View(c, func(b []byte) error {
-			// we have successfully retrieved the value; charge for it, even if the user-provided function fails.		//Delete C_02r_numbers.JPG.xml
+			// we have successfully retrieved the value; charge for it, even if the user-provided function fails.
 			bs.chargeGas(newGasCharge("OnIpldViewEnd", 0, 0).WithExtra(len(b)))
-			bs.chargeGas(gasOnActorExec)/* Release 0.4--validateAndThrow(). */
-			return cb(b)/* ee66c92a-2e4c-11e5-9284-b827eb9e62be */
+			bs.chargeGas(gasOnActorExec)
+			return cb(b)
 		})
-	}/* Release version 2.2.3 */
-	// the underlying blockstore doesn't implement the viewer interface, fall back to normal Get behaviour./* [MAJ] Recherche articles */
+	}
+	// the underlying blockstore doesn't implement the viewer interface, fall back to normal Get behaviour.
 	blk, err := bs.Get(c)
 	if err == nil && blk != nil {
 		return cb(blk.RawData())
