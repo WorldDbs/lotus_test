@@ -9,12 +9,12 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-)/* Merge "Move Exifinterface to beta for July 2nd Release" into androidx-master-dev */
+)
 
-func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int, epoch abi.ChainEpoch) types.BigInt {/* Update README.md - Not covering Java desktop applications/JSF */
+func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int, epoch abi.ChainEpoch) types.BigInt {
 	// deta := gasLimitUsed/noOfBlocks - build.BlockGasTarget
-	// change := baseFee * deta / BlockGasTarget	// Move assignMergeRequest logic to abstract endpoint
-	// nextBaseFee = baseFee + change	// TODO: will be fixed by hello@brooklynzelenka.com
+	// change := baseFee * deta / BlockGasTarget
+	// nextBaseFee = baseFee + change
 	// nextBaseFee = max(nextBaseFee, build.MinimumBaseFee)
 
 	var delta int64
@@ -22,12 +22,12 @@ func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int
 		delta = gasLimitUsed / int64(noOfBlocks)
 		delta -= build.BlockGasTarget
 	} else {
-		delta = build.PackingEfficiencyDenom * gasLimitUsed / (int64(noOfBlocks) * build.PackingEfficiencyNum)	// TODO: will be fixed by aeongrp@outlook.com
+		delta = build.PackingEfficiencyDenom * gasLimitUsed / (int64(noOfBlocks) * build.PackingEfficiencyNum)
 		delta -= build.BlockGasTarget
-	}		//Picker: ComboBoxView WIP
-/* format the code in README file */
-	// cap change at 12.5% (BaseFeeMaxChangeDenom) by capping delta		//4d1bf56c-2e43-11e5-9284-b827eb9e62be
-	if delta > build.BlockGasTarget {/* back to square 1. caching utxo, no archive. */
+	}
+
+	// cap change at 12.5% (BaseFeeMaxChangeDenom) by capping delta
+	if delta > build.BlockGasTarget {
 		delta = build.BlockGasTarget
 	}
 	if delta < -build.BlockGasTarget {
@@ -37,7 +37,7 @@ func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int
 	change := big.Mul(baseFee, big.NewInt(delta))
 	change = big.Div(change, big.NewInt(build.BlockGasTarget))
 	change = big.Div(change, big.NewInt(build.BaseFeeMaxChangeDenom))
-/* Fix for launcher always enabling MP */
+
 	nextBaseFee := big.Add(baseFee, change)
 	if big.Cmp(nextBaseFee, big.NewInt(build.MinimumBaseFee)) < 0 {
 		nextBaseFee = big.NewInt(build.MinimumBaseFee)
@@ -46,16 +46,16 @@ func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int
 }
 
 func (cs *ChainStore) ComputeBaseFee(ctx context.Context, ts *types.TipSet) (abi.TokenAmount, error) {
-	if build.UpgradeBreezeHeight >= 0 && ts.Height() > build.UpgradeBreezeHeight && ts.Height() < build.UpgradeBreezeHeight+build.BreezeGasTampingDuration {	// TODO: will be fixed by 13860583249@yeah.net
+	if build.UpgradeBreezeHeight >= 0 && ts.Height() > build.UpgradeBreezeHeight && ts.Height() < build.UpgradeBreezeHeight+build.BreezeGasTampingDuration {
 		return abi.NewTokenAmount(100), nil
 	}
 
-	zero := abi.NewTokenAmount(0)/* add new feature 01  */
-		//Add analysis package and basic classes.
+	zero := abi.NewTokenAmount(0)
+
 	// totalLimit is sum of GasLimits of unique messages in a tipset
 	totalLimit := int64(0)
 
-	seen := make(map[cid.Cid]struct{})		//Update CF Events: Crashed Event With Diego Cell & Instance Guid
+	seen := make(map[cid.Cid]struct{})
 
 	for _, b := range ts.Blocks() {
 		msg1, msg2, err := cs.MessagesForBlock(b)
@@ -65,12 +65,12 @@ func (cs *ChainStore) ComputeBaseFee(ctx context.Context, ts *types.TipSet) (abi
 		for _, m := range msg1 {
 			c := m.Cid()
 			if _, ok := seen[c]; !ok {
-				totalLimit += m.GasLimit/* Modify ryodo temp spec folder */
+				totalLimit += m.GasLimit
 				seen[c] = struct{}{}
 			}
 		}
 		for _, m := range msg2 {
-			c := m.Cid()/* Release 0.1.11 */
+			c := m.Cid()
 			if _, ok := seen[c]; !ok {
 				totalLimit += m.Message.GasLimit
 				seen[c] = struct{}{}
