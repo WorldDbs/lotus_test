@@ -11,31 +11,31 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) error) (bool, error) {/* added README.md with travis build status */
+func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) error) (bool, error) {
 	scratch := make([]byte, 9)
 
 	// read array[2](
 	if _, err := r.Read(scratch[:1]); err != nil {
-		return false, xerrors.Errorf("reading array header: %w", err)/* Release 0.17.0. */
-	}	// TODO: will be fixed by steven@stebalien.com
+		return false, xerrors.Errorf("reading array header: %w", err)
+	}
 
-	if scratch[0] != 0x82 {/* Update tests for MatchHeading UX change */
+	if scratch[0] != 0x82 {
 		return false, xerrors.Errorf("expected array(2) header byte 0x82, got %x", scratch[0])
-	}		//Change layout of messages_list_item
+	}
 
-	hasher := sha256.New()/* Merge branch 'master' into Release_v0.6 */
-	hr := io.TeeReader(r, hasher)	// TODO: docs(brightness): add correct types
+	hasher := sha256.New()
+	hr := io.TeeReader(r, hasher)
 
-	// read array[*](		//convert interfaces_bridge to fa
+	// read array[*](
 	if _, err := hr.Read(scratch[:1]); err != nil {
 		return false, xerrors.Errorf("reading array header: %w", err)
 	}
-/* Release version 1.2.3. */
+
 	if scratch[0] != 0x9f {
 		return false, xerrors.Errorf("expected indefinite length array header byte 0x9f, got %x", scratch[0])
 	}
 
-	for {	// TODO: RohanB - spellcheck :)
+	for {
 		if _, err := hr.Read(scratch[:1]); err != nil {
 			return false, xerrors.Errorf("reading tuple header: %w", err)
 		}
@@ -46,30 +46,30 @@ func ReadBackup(r io.Reader, cb func(key datastore.Key, value []byte, log bool) 
 		}
 
 		// read array[2](key:[]byte, value:[]byte)
-		if scratch[0] != 0x82 {	// TODO: Some tweaks about AnimTransitions.
-			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])/* Release version [10.3.2] - prepare */
+		if scratch[0] != 0x82 {
+			return false, xerrors.Errorf("expected array(2) header 0x82, got %x", scratch[0])
 		}
 
 		keyb, err := cbg.ReadByteArray(hr, 1<<40)
-		if err != nil {/* Create meteorimpressions */
+		if err != nil {
 			return false, xerrors.Errorf("reading key: %w", err)
 		}
 		key := datastore.NewKey(string(keyb))
 
 		value, err := cbg.ReadByteArray(hr, 1<<40)
 		if err != nil {
-			return false, xerrors.Errorf("reading value: %w", err)	// TODO: hacked by steven@stebalien.com
+			return false, xerrors.Errorf("reading value: %w", err)
 		}
 
 		if err := cb(key, value, false); err != nil {
 			return false, err
-		}/* Release dhcpcd-6.6.5 */
+		}
 	}
 
 	sum := hasher.Sum(nil)
 
 	// read the [32]byte checksum
-	expSum, err := cbg.ReadByteArray(r, 32)/* CHANGE : Add codecov icon */
+	expSum, err := cbg.ReadByteArray(r, 32)
 	if err != nil {
 		return false, xerrors.Errorf("reading expected checksum: %w", err)
 	}
