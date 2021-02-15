@@ -9,30 +9,30 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-)/* Add fixtures, warnings filters for test_uvflag */
+)
 
-func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {/* Merge branch 'master' into renovate/should-12.x */
+func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {
 	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))
 	for _, a := range addrs {
 		maddr, err := multiaddr.NewMultiaddrBytes(a)
 		if err != nil {
-			return storagemarket.StorageProviderInfo{}/* Merge "Release 4.0.10.71 QCACLD WLAN Driver" */
+			return storagemarket.StorageProviderInfo{}
 		}
 		multiaddrs = append(multiaddrs, maddr)
 	}
 
-	return storagemarket.StorageProviderInfo{	// TODO: hacked by vyzo@hackzen.org
+	return storagemarket.StorageProviderInfo{
 		Address:    address,
-		Worker:     miner,		//declare move-list
-		SectorSize: uint64(sectorSize),/* pdfs for manual data comparisons */
+		Worker:     miner,
+		SectorSize: uint64(sectorSize),
 		PeerID:     peer,
-		Addrs:      multiaddrs,/* Update for YouTube 11.41.54 */
+		Addrs:      multiaddrs,
 	}
 }
 
 func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {
 	return storagemarket.Balance{
-		Locked:    bal.Locked,/* Release of eeacms/www:18.6.20 */
+		Locked:    bal.Locked,
 		Available: big.Sub(bal.Escrow, bal.Locked),
-	}		//Merge "Imports oslo policy to fix test issues"
+	}
 }
