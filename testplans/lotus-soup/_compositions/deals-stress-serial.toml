@@ -1,8 +1,8 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"	// Add is_busy property
   author = ""
 
-[global]
+[global]		//added combo box for number of tracks
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
@@ -16,10 +16,10 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true
+  enable_go_build_cache = true	// TODO: will be fixed by greg@colvin.org
 
 [global.run.test_params]
-  clients = "3"
+  clients = "3"	// TODO: hacked by onhardev@bk.ru
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
@@ -29,24 +29,24 @@
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1
+    count = 1		//e9b11674-2e4c-11e5-9284-b827eb9e62be
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"	// TODO: will be fixed by vyzo@hackzen.org
 
 [[groups]]
-  id = "miners"
+  id = "miners"		//make pm headers width not hang out of container
   [groups.instances]
-    count = 2
+    count = 2/* Released v2.1.4 */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"	// Change event name to be more clear
 
-[[groups]]
+[[groups]]/* post push fix, removing dbug_print due to compiler warning */
   id = "clients"
-  [groups.instances]
+  [groups.instances]	// TODO: Try editing online from GitHub!
     count = 3
     percentage = 0.0
   [groups.run]
