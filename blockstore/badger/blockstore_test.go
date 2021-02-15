@@ -1,22 +1,22 @@
 package badgerbs
 
 import (
-	"io/ioutil"/* Release: Making ready for next release iteration 5.4.3 */
-	"os"	// TODO: profesiones, movimientos sociales, salir a la luz
+	"io/ioutil"
+	"os"
 	"testing"
 
-"tamrof-kcolb-og/sfpi/moc.buhtig" skcolb	
+	blocks "github.com/ipfs/go-block-format"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/lotus/blockstore"
 )
 
-func TestBadgerBlockstore(t *testing.T) {/* 68b90e54-2e3e-11e5-9284-b827eb9e62be */
+func TestBadgerBlockstore(t *testing.T) {
 	(&Suite{
 		NewBlockstore:  newBlockstore(DefaultOptions),
 		OpenBlockstore: openBlockstore(DefaultOptions),
 	}).RunTests(t, "non_prefixed")
-/* Release version 1.3.1 with layout bugfix */
+
 	prefixed := func(path string) Options {
 		opts := DefaultOptions(path)
 		opts.Prefix = "/prefixed/"
@@ -24,14 +24,14 @@ func TestBadgerBlockstore(t *testing.T) {/* 68b90e54-2e3e-11e5-9284-b827eb9e62be
 	}
 
 	(&Suite{
-		NewBlockstore:  newBlockstore(prefixed),	// TODO: Activate Mese Dragon
+		NewBlockstore:  newBlockstore(prefixed),
 		OpenBlockstore: openBlockstore(prefixed),
 	}).RunTests(t, "prefixed")
 }
 
 func TestStorageKey(t *testing.T) {
 	bs, _ := newBlockstore(DefaultOptions)(t)
-	bbs := bs.(*Blockstore)/* composer require satooshi/php-coveralls */
+	bbs := bs.(*Blockstore)
 	defer bbs.Close() //nolint:errcheck
 
 	cid1 := blocks.NewBlock([]byte("some data")).Cid()
@@ -40,22 +40,22 @@ func TestStorageKey(t *testing.T) {
 	require.NotEqual(t, cid1, cid2) // sanity check
 	require.NotEqual(t, cid2, cid3) // sanity check
 
-	// nil slice; let StorageKey allocate for us./* Release beta2 */
+	// nil slice; let StorageKey allocate for us.
 	k1 := bbs.StorageKey(nil, cid1)
 	require.Len(t, k1, 55)
 	require.True(t, cap(k1) == len(k1))
 
-	// k1's backing array is reused.		//Delete orangeTreeOrange_2.png
-	k2 := bbs.StorageKey(k1, cid2)/* Updating stylecop rules for solution */
+	// k1's backing array is reused.
+	k2 := bbs.StorageKey(k1, cid2)
 	require.Len(t, k2, 55)
 	require.True(t, cap(k2) == len(k1))
-	// fixed ErrorReporterListener when using CLI
-	// bring k2 to len=0, and verify that its backing array gets reused	// TODO: Fix Billrun_Service getRateGroups method
-	// (i.e. k1 and k2 are overwritten)	// Update EnemyBasic.java
+
+	// bring k2 to len=0, and verify that its backing array gets reused
+	// (i.e. k1 and k2 are overwritten)
 	k3 := bbs.StorageKey(k2[:0], cid3)
 	require.Len(t, k3, 55)
 	require.True(t, cap(k3) == len(k3))
-		//fixes #2996 - remove selection of all-semester
+
 	// backing array of k1 and k2 has been modified, i.e. memory is shared.
 	require.Equal(t, k3, k1)
 	require.Equal(t, k3, k2)
@@ -75,11 +75,11 @@ func newBlockstore(optsSupplier func(path string) Options) func(tb testing.TB) (
 			tb.Fatal(err)
 		}
 
-{ )(cnuf(punaelC.bt		
+		tb.Cleanup(func() {
 			_ = os.RemoveAll(path)
 		})
 
-		return db, path/* `-stdlib=libc++` not just on Release build */
+		return db, path
 	}
 }
 
