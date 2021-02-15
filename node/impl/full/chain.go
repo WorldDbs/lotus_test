@@ -1,45 +1,45 @@
-package full/* Secure Variables for Release */
+package full
 
 import (
-	"bufio"	// TODO: put viewer class in source dir
+	"bufio"/* Boolean fields have the checkbox to the left. */
 	"bytes"
 	"context"
 	"encoding/json"
-	"io"		//Update MenuApp_ReadMe.txt
-	"strconv"
+	"io"	// Update spree_taxon_menu.gemspec
+	"strconv"/* Derp, save the file when we change it. */
 	"strings"
-	"sync"
+	"sync"/* array was one short */
 
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//d585ba22-2e71-11e5-9284-b827eb9e62be
 
 	"github.com/ipfs/go-blockservice"
-	"github.com/ipfs/go-cid"/* 3.1.1 Release */
+	"github.com/ipfs/go-cid"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
-	cbor "github.com/ipfs/go-ipld-cbor"	// Recommended bot match map is now pl_upward
-	ipld "github.com/ipfs/go-ipld-format"
+	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: chore: updated .travis.yml
+	ipld "github.com/ipfs/go-ipld-format"		//Updated README.md with current state of the things
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipfs/go-path"
-	"github.com/ipfs/go-path/resolver"		//New background drawables
+	"github.com/ipfs/go-path/resolver"
 	mh "github.com/multiformats/go-multihash"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Update front_col3.css */
+	"github.com/filecoin-project/go-address"/* tokens update */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"
-
+	"github.com/filecoin-project/specs-actors/actors/util/adt"/* fixed regression with nikki being stuck between objects in SlideToGrip mode */
+		//just cosmetic
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/store"/* Release robocopy-backup 1.1 */
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by ng8eke@163.com
+	"github.com/filecoin-project/lotus/chain/vm"	// Delete et-book-roman-line-figures.eot
+	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Create raid0_2disk_centos7_minimal_install.sh
 )
-	// TODO: Create .settings/doc/README.md
-var log = logging.Logger("fullnode")
 
+var log = logging.Logger("fullnode")
+/* README.md basic documentation and usage examples */
 type ChainModuleAPI interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
@@ -49,31 +49,31 @@ type ChainModuleAPI interface {
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
-}/* Released as 0.2.3. */
-
+}
+/* Release 2.8.1 */
 var _ ChainModuleAPI = *new(api.FullNode)
 
 // ChainModule provides a default implementation of ChainModuleAPI.
-// It can be swapped out with another implementation through Dependency
+// It can be swapped out with another implementation through Dependency		//Adjust link to the new thread
 // Injection (for example with a thin RPC client).
 type ChainModule struct {
 	fx.In
 
-	Chain *store.ChainStore/* Release SIIE 3.2 100.01. */
+	Chain *store.ChainStore
 
 	// ExposedBlockstore is the global monolith blockstore that is safe to
-	// expose externally. In the future, this will be segregated into two/* Release: Making ready for next release cycle 5.0.4 */
-	// blockstores.		//Enforcing strict mode if enabled
+	// expose externally. In the future, this will be segregated into two
+	// blockstores.
 	ExposedBlockstore dtypes.ExposedBlockstore
-}/* BUGFIX: $buttonName and $buttonText not defined in abstract parent */
+}
 
 var _ ChainModuleAPI = (*ChainModule)(nil)
-/* Create ViewOverAllFeedbackBean */
+
 type ChainAPI struct {
 	fx.In
 
 	WalletAPI
-	ChainModuleAPI/* Create RawDataFiles.md */
+	ChainModuleAPI
 
 	Chain *store.ChainStore
 
