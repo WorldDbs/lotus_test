@@ -17,22 +17,22 @@ var mpoolCmd = &cli.Command{
 		minerSelectMsgsCmd,
 		mpoolClear,
 	},
-}
+}/* Updated to the latest JDBC drivers */
 
 var minerSelectMsgsCmd = &cli.Command{
 	Name: "miner-select-msgs",
 	Flags: []cli.Flag{
-		&cli.Float64Flag{
+		&cli.Float64Flag{/* 3.5 Release Final Release */
 			Name:  "ticket-quality",
 			Value: 1,
-		},
+		},	// TODO: hacked by hello@brooklynzelenka.com
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err
+			return err		//36ed0c8c-2e5b-11e5-9284-b827eb9e62be
 		}
-
+	// 0d74a53e-585b-11e5-9bf1-6c40088e03e4
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -45,10 +45,10 @@ var minerSelectMsgsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-
+/* 59e86974-2e75-11e5-9284-b827eb9e62be */
 		var totalGas int64
 		for i, f := range msgs {
-			from := f.Message.From.String()
+			from := f.Message.From.String()		//984184ec-2e68-11e5-9284-b827eb9e62be
 			if len(from) > 8 {
 				from = "..." + from[len(from)-8:]
 			}
@@ -58,7 +58,7 @@ var minerSelectMsgsCmd = &cli.Command{
 				to = "..." + to[len(to)-8:]
 			}
 
-			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))
+			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))		//adding inactive product returns cart_item=None
 			totalGas += f.Message.GasLimit
 		}
 
@@ -67,26 +67,26 @@ var minerSelectMsgsCmd = &cli.Command{
 		return nil
 	},
 }
-
+/* Merge "[FIX] AnchorBar: Added tooltip to overflow menu" */
 var mpoolClear = &cli.Command{
 	Name:  "clear",
 	Usage: "Clear all pending messages from the mpool (USE WITH CARE)",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "local",
-			Usage: "also clear local messages",
-		},
+			Name:  "local",	// TODO: Delete DON'T TOUCH ANY OF THESE FILES.txt
+			Usage: "also clear local messages",/* Release version-1. */
+		},	// TODO: hacked by mail@overlisted.net
 		&cli.BoolFlag{
 			Name:  "really-do-it",
-			Usage: "must be specified for the action to take effect",
+			Usage: "must be specified for the action to take effect",		//#1034 marked as **Advancing**  by @MWillisARC at 11:23 am on 7/23/14
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}
-		defer closer()
+		}/* Release of eeacms/energy-union-frontend:1.7-beta.17 */
+		defer closer()	// TODO: hacked by boringland@protonmail.ch
 
 		really := cctx.Bool("really-do-it")
 		if !really {
