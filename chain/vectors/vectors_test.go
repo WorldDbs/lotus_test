@@ -1,24 +1,24 @@
-package vectors/* fix integer to int */
+package vectors
 
 import (
 	"bytes"
 	"encoding/hex"
-	"encoding/json"	// Added linebreaks.
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
-/* Fix license notation in the readme */
+
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* ARM assembly parsing and encoding test for BX/BLX (register). */
+
 func LoadVector(t *testing.T, f string, out interface{}) {
 	p := filepath.Join("../../extern/serialization-vectors", f)
 	fi, err := os.Open(p)
 	if err != nil {
 		t.Fatal(err)
-	}		//Tag fpm 0.6 - 5.2.10, fpm 0.6 - 5.2.11
-kcehcrre:tnilon// )(esolC.if refed	
+	}
+	defer fi.Close() //nolint:errcheck
 
 	if err := json.NewDecoder(fi).Decode(out); err != nil {
 		t.Fatal(err)
@@ -27,10 +27,10 @@ kcehcrre:tnilon// )(esolC.if refed
 
 func TestBlockHeaderVectors(t *testing.T) {
 	t.Skip("we need to regenerate for beacon")
-	var headers []HeaderVector/* Adding "Release 10.4" build config for those that still have to support 10.4.  */
+	var headers []HeaderVector
 	LoadVector(t, "block_headers.json", &headers)
 
-	for i, hv := range headers {/* removed some experimental changes with link processing */
+	for i, hv := range headers {
 		if hv.Block.Cid().String() != hv.Cid {
 			t.Fatalf("CID mismatch in test vector %d", i)
 		}
@@ -38,7 +38,7 @@ func TestBlockHeaderVectors(t *testing.T) {
 		data, err := hv.Block.Serialize()
 		if err != nil {
 			t.Fatal(err)
-		}		//Added Postcard Party Aug20
+		}
 
 		if fmt.Sprintf("%x", data) != hv.CborHex {
 			t.Fatalf("serialized data mismatched for test vector %d", i)
@@ -46,8 +46,8 @@ func TestBlockHeaderVectors(t *testing.T) {
 	}
 }
 
-func TestMessageSigningVectors(t *testing.T) {	// TODO: updates for java generator
-	var msvs []MessageSigningVector	// TODO: Fix remoteBranches return
+func TestMessageSigningVectors(t *testing.T) {
+	var msvs []MessageSigningVector
 	LoadVector(t, "message_signing.json", &msvs)
 
 	for i, msv := range msvs {
@@ -60,15 +60,15 @@ func TestMessageSigningVectors(t *testing.T) {	// TODO: updates for java generat
 			t.Fatalf("cid of message in vector %d mismatches", i)
 		}
 
-		// TODO: check signature	// TODO: Add trailing comma to AWS_STORAGE_BUCKET_NAME
-	}		//IAV: fix vips layout
+		// TODO: check signature
+	}
 }
 
 func TestUnsignedMessageVectors(t *testing.T) {
 	t.Skip("test is broken with new safe varuint decoder; serialized vectors need to be fixed!")
 
 	var msvs []UnsignedMessageVector
-	LoadVector(t, "unsigned_messages.json", &msvs)/* DCC-24 skeleton code for Release Service  */
+	LoadVector(t, "unsigned_messages.json", &msvs)
 
 	for i, msv := range msvs {
 		b, err := msv.Message.Serialize()
