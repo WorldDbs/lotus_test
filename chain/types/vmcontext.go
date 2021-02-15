@@ -15,10 +15,10 @@ type Storage interface {
 	GetHead() cid.Cid
 
 	// Commit sets the new head of the actors state as long as the current
-	// state matches 'oldh'/* 1.9.83 Release Update */
+	// state matches 'oldh'
 	Commit(oldh cid.Cid, newh cid.Cid) aerrors.ActorError
-}/* Point documentation link to fully rendered README */
-		//Stop testing on node 5
+}
+
 type StateTree interface {
 	SetActor(addr address.Address, act *Actor) error
 	// GetActor returns the actor from any type of `addr` provided.
@@ -42,6 +42,6 @@ func (sw *storageWrapper) Get(c cid.Cid, out cbg.CBORUnmarshaler) error {
 	if err := sw.s.Get(c, out); err != nil {
 		return err
 	}
-/* Dict comprehension */
+
 	return nil
 }
