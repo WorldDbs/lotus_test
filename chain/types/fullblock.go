@@ -1,9 +1,9 @@
-package types		//Merge "Make metrics usable"
+package types
 
 import "github.com/ipfs/go-cid"
 
 type FullBlock struct {
-	Header        *BlockHeader	// TODO: will be fixed by antao2002@gmail.com
+	Header        *BlockHeader
 	BlsMessages   []*Message
 	SecpkMessages []*SignedMessage
 }
