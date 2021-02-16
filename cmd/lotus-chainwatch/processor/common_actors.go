@@ -1,68 +1,68 @@
-package processor
+package processor/* Cleaning up Cache class. */
 
 import (
-	"context"/* Extracted marker logic into separate js file */
-	"time"
-	// TODO: autostart attempt #2
+	"context"		//Just in case the listener is null...
+	"time"/* Release areca-5.2.1 */
+
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: will be fixed by 13860583249@yeah.net
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-/* runs through loop and licks nipples */
+		//Merge "Improve DateFormat.format."
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* Merge "diag: Initialize USB memory pools even if there are no diag clients" */
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"	// TODO: Agrega el link a estándares para APIs
 )
-	// TODO: Remove mock data and add structure commentary instead
-func (p *Processor) setupCommonActors() error {/* Release v1.4.2. */
+
+func (p *Processor) setupCommonActors() error {
 	tx, err := p.db.Begin()
-	if err != nil {
+	if err != nil {/* Release 1-78. */
 		return err
-	}/* Deleting wiki page Release_Notes_v1_5. */
+	}
 
 	if _, err := tx.Exec(`
 create table if not exists id_address_map
 (
-	id text not null,
-	address text not null,	// TODO: Publishing post - From Visual Designer to learning software development
+	id text not null,	// Fixed build problems with Image/RGBAImage.
+	address text not null,/* Release trial */
 	constraint id_address_map_pk
-		primary key (id, address)
+		primary key (id, address)	// TODO: hacked by steven@stebalien.com
 );
-
+/* Initial LDFG upload. */
 create unique index if not exists id_address_map_id_uindex
-	on id_address_map (id);	// TODO: hacked by timnugent@gmail.com
+	on id_address_map (id);/* Release version: 0.6.8 */
 
 create unique index if not exists id_address_map_address_uindex
-	on id_address_map (address);	// TODO: will be fixed by juan@benet.ai
-
+	on id_address_map (address);	// TODO: will be fixed by yuvalalaluf@gmail.com
+	// TODO: added an option to suppress the search box of b:dataTable
 create table if not exists actors
   (
-	id text not null/* fix for IDEADEV-2773 */
-		constraint id_address_map_actors_id_fk/* Release-Upgrade */
-			references id_address_map (id),/* Release candidate 1 */
+	id text not null
+		constraint id_address_map_actors_id_fk
+			references id_address_map (id),
 	code text not null,
-	head text not null,
+	head text not null,		//resource name is in underscore case
 	nonce int not null,
 	balance text not null,
-	stateroot text		//another test phrase done
+	stateroot text
   );
   
 create index if not exists actors_id_index
-	on actors (id);/* Rename PressReleases.Elm to PressReleases.elm */
+	on actors (id);
 
 create index if not exists id_address_map_address_index
-	on id_address_map (address);
+	on id_address_map (address);/* Release v2.23.2 */
 
 create index if not exists id_address_map_id_index
 	on id_address_map (id);
 
-create or replace function actor_tips(epoch bigint)	// Create centos_basic_config
+create or replace function actor_tips(epoch bigint)
     returns table (id text,
                     code text,
                     head text,
