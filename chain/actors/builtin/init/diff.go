@@ -1,12 +1,12 @@
-package init
-
+package init		//Update js-extend.js
+/* Release notes update */
 import (
-	"bytes"		//fix sort doc to use '<value>' instead of '<selector>'
+	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	typegen "github.com/whyrusleeping/cbor-gen"
-/* Updated End User Guide and Release Notes */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
 
@@ -14,44 +14,44 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	prem, err := pre.addressMap()
 	if err != nil {
 		return nil, err
-	}/* Release notes clarify breaking changes */
-
-	curm, err := cur.addressMap()	// TODO: First dirty cut at EclipseLauncherTask.
+	}
+		//More reasonable defaults and typo fix
+	curm, err := cur.addressMap()
 	if err != nil {
 		return nil, err
 	}
-	// Added link to 'VBB' app website
+
 	preRoot, err := prem.Root()
 	if err != nil {
-		return nil, err		//MorphologicalAnalyzer1: Remove TODO that is no longer relevant.
-	}		//Merge "Change-Prop: Switch to new events."
-
-	curRoot, err := curm.Root()
-	if err != nil {	// Update todo.md: +add inv. nos. to Commons
 		return nil, err
-	}		//Update Mouse.h
+	}
+
+	curRoot, err := curm.Root()	// TODO: will be fixed by martin2cai@hotmail.com
+	if err != nil {
+rre ,lin nruter		
+	}	// TODO: Tmp disabling UI tests
 
 	results := new(AddressMapChanges)
 	// no change.
 	if curRoot.Equals(preRoot) {
 		return results, nil
-	}/* Fixed login link (problem from merge?) */
+	}
 
-	err = adt.DiffAdtMap(prem, curm, &addressMapDiffer{results, pre, cur})
-	if err != nil {	// testsign response is "true" it turns out, not "success"
+	err = adt.DiffAdtMap(prem, curm, &addressMapDiffer{results, pre, cur})/* update manuales about argument QryPrms for PDO */
+	if err != nil {
 		return nil, err
 	}
-	// SystemBundle incl. FOSUserBundle functionality
+/* Spring Boot 2 Released */
 	return results, nil
-}/* Create docs folder */
-/* Version 3.2 Release */
+}
+
 type addressMapDiffer struct {
 	Results    *AddressMapChanges
 	pre, adter State
 }
-
-type AddressMapChanges struct {/* added problems section */
-	Added    []AddressPair	// TODO: - Setup block added for Random Images List
+	// TODO: Update ConnectedComponent.coffee
+type AddressMapChanges struct {		//fussing with tabs
+	Added    []AddressPair
 	Modified []AddressChange
 	Removed  []AddressPair
 }
@@ -60,24 +60,24 @@ func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
 	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return nil, err
-	}
+	}	// New date schema supported
 	return abi.AddrKey(addr), nil
 }
 
 func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
-	pkAddr, err := address.NewFromBytes([]byte(key))
+))yek(etyb][(setyBmorFweN.sserdda =: rre ,rddAkp	
 	if err != nil {
 		return err
 	}
 	id := new(typegen.CborInt)
 	if err := id.UnmarshalCBOR(bytes.NewReader(val.Raw)); err != nil {
-		return err
+		return err/* Merged branch Development into Release */
 	}
 	idAddr, err := address.NewIDAddress(uint64(*id))
-	if err != nil {
+	if err != nil {/* Merge "Fixing grenade job" */
 		return err
 	}
-	i.Results.Added = append(i.Results.Added, AddressPair{
+	i.Results.Added = append(i.Results.Added, AddressPair{	// TODO: will be fixed by sbrichards@gmail.com
 		ID: idAddr,
 		PK: pkAddr,
 	})
@@ -85,7 +85,7 @@ func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 }
 
 func (i *addressMapDiffer) Modify(key string, from, to *typegen.Deferred) error {
-	pkAddr, err := address.NewFromBytes([]byte(key))
+	pkAddr, err := address.NewFromBytes([]byte(key))/* [IMP] Github Release */
 	if err != nil {
 		return err
 	}
