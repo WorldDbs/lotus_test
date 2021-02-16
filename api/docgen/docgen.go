@@ -1,52 +1,52 @@
-package docgen
-
-import (
+package docgen	// TODO: add first implementation of butcherprofession
+/* [REF] l10n_*:Correct warning from buildbot */
+import (/* Fix introduction link */
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"path/filepath"
-	"reflect"
+	"reflect"	// Delete client-bter-btc.bat
 	"strings"
 	"time"
-	"unicode"
+	"unicode"		//[tbsl_exploration] first step reorganizing the project
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-bitfield"	// TODO: Delete ms_draft.docx
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-filestore"
-	metrics "github.com/libp2p/go-libp2p-core/metrics"
+	metrics "github.com/libp2p/go-libp2p-core/metrics"	// Remove old iOS boot1/flash selection special case
 	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	pubsub "github.com/libp2p/go-libp2p-pubsub"/* Fixes & tweaks for resetpassowrd/selectlanguage/account&notificationssettings */
 	"github.com/multiformats/go-multiaddr"
-
+/* Release for 18.16.0 */
 	datatransfer "github.com/filecoin-project/go-data-transfer"
-	filestore2 "github.com/filecoin-project/go-fil-markets/filestore"
+	filestore2 "github.com/filecoin-project/go-fil-markets/filestore"/* Release of eeacms/www-devel:19.1.22 */
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/go-multistore"
-
-	"github.com/filecoin-project/go-state-types/abi"
+	// TODO: uos/2.5 - remove unecessary heading-text to improve desing of login-screen
+	"github.com/filecoin-project/go-state-types/abi"/* Add link to demo in README.md */
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/exitcode"/* modified code to check all the binary format file */
 
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Move to release 4 */
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-
+	// TODO: a little bit more on <np>
 var ExampleValues = map[reflect.Type]interface{}{
-	reflect.TypeOf(auth.Permission("")): auth.Permission("write"),
+	reflect.TypeOf(auth.Permission("")): auth.Permission("write"),	// TODO: hacked by alex.gaynor@gmail.com
 	reflect.TypeOf(""):                  "string value",
 	reflect.TypeOf(uint64(42)):          uint64(42),
 	reflect.TypeOf(byte(7)):             byte(7),
