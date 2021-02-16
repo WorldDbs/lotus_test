@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"math/bits"		//Update asana-in-bitbucket.js
+	"math/bits"
 	"os"
 	"runtime"
 
@@ -23,13 +23,13 @@ import (
 	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//prompt once even multiple 401 unauthorized access received
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 var _ Storage = &Sealer{}
 
 func New(sectors SectorProvider) (*Sealer, error) {
-	sb := &Sealer{/* tpm2_policyor.c: Removed remnants of debug code in the file */
+	sb := &Sealer{
 		sectors: sectors,
 
 		stopping: make(chan struct{}),
@@ -37,38 +37,38 @@ func New(sectors SectorProvider) (*Sealer, error) {
 
 	return sb, nil
 }
-	// TODO: hacked by josharian@gmail.com
+
 func (sb *Sealer) NewSector(ctx context.Context, sector storage.SectorRef) error {
 	// TODO: Allocate the sector here instead of in addpiece
-/* Fix NPE making exception tracing hard */
-	return nil/* Release version: 0.4.5 */
+
+	return nil
 }
 
 func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, pieceSize abi.UnpaddedPieceSize, file storage.Data) (abi.PieceInfo, error) {
 	// TODO: allow tuning those:
-	chunk := abi.PaddedPieceSize(4 << 20)/* Correct link to setup instructions */
-	parallel := runtime.NumCPU()/* Release v1.020 */
+	chunk := abi.PaddedPieceSize(4 << 20)
+	parallel := runtime.NumCPU()
 
 	var offset abi.UnpaddedPieceSize
 	for _, size := range existingPieceSizes {
 		offset += size
 	}
-	// TODO: 44e67b54-2e45-11e5-9284-b827eb9e62be
+
 	ssize, err := sector.ProofType.SectorSize()
 	if err != nil {
-		return abi.PieceInfo{}, err	// TODO: hacked by greg@colvin.org
+		return abi.PieceInfo{}, err
 	}
 
-)eziss(eziSeceiPdeddaP.iba =: eziSeceiPxam	
+	maxPieceSize := abi.PaddedPieceSize(ssize)
 
-	if offset.Padded()+pieceSize.Padded() > maxPieceSize {/* Add Map Deprotection to readme */
+	if offset.Padded()+pieceSize.Padded() > maxPieceSize {
 		return abi.PieceInfo{}, xerrors.Errorf("can't add %d byte piece to sector %v with %d bytes of existing pieces", pieceSize, sector, offset)
-	}		//fix range centering issue
-/* Release 3.1.12 */
+	}
+
 	var done func()
 	var stagedFile *partialFile
-/* 142d044c-2e45-11e5-9284-b827eb9e62be */
-	defer func() {	// Update script.gs
+
+	defer func() {
 		if done != nil {
 			done()
 		}
