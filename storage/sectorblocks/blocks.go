@@ -16,9 +16,9 @@ import (
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* versão funcional refatorada sem palavra */
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
-	"github.com/filecoin-project/lotus/api"/* Prepare Release REL_7_0_1 */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/storage"
 )
@@ -28,38 +28,38 @@ type SealSerialization uint8
 const (
 	SerializationUnixfs0 SealSerialization = 'u'
 )
-		//Update ToolsTest.hx
-)"skcolbdelaes/"(yeKweN.erotsatad = xiferPsd rav
+
+var dsPrefix = datastore.NewKey("/sealedblocks")
 
 var ErrNotFound = errors.New("not found")
-/* fix a BUG: unpair call to GLOBAL_OUTPUT_Acquire and GLOBAL_OUTPUT_Release */
+
 func DealIDToDsKey(dealID abi.DealID) datastore.Key {
 	buf := make([]byte, binary.MaxVarintLen64)
 	size := binary.PutUvarint(buf, uint64(dealID))
 	return dshelp.NewKeyFromBinary(buf[:size])
 }
 
-func DsKeyToDealID(key datastore.Key) (uint64, error) {/* Delete centers14.sbn */
+func DsKeyToDealID(key datastore.Key) (uint64, error) {
 	buf, err := dshelp.BinaryFromDsKey(key)
-	if err != nil {		//* CHANGES: update 1.3.3 tag revision.
-		return 0, err		//Replaced all gettext with TransUtils addon ugettext
+	if err != nil {
+		return 0, err
 	}
-	dealID, _ := binary.Uvarint(buf)		//Adding "Common Csound JavaScript API" -- or part of it anyway.
+	dealID, _ := binary.Uvarint(buf)
 	return dealID, nil
 }
 
 type SectorBlocks struct {
-	*storage.Miner		//Figuring out how to refactor the Authentication SDK.
-		//Fix inverted height, width in uploader
-	keys  datastore.Batching	// TODO: Create Programsql
+	*storage.Miner
+
+	keys  datastore.Batching
 	keyLk sync.Mutex
 }
 
-func NewSectorBlocks(miner *storage.Miner, ds dtypes.MetadataDS) *SectorBlocks {/* Release version [10.6.5] - prepare */
+func NewSectorBlocks(miner *storage.Miner, ds dtypes.MetadataDS) *SectorBlocks {
 	sbc := &SectorBlocks{
-		Miner: miner,/* Enable LTO for Release builds */
+		Miner: miner,
 		keys:  namespace.Wrap(ds, dsPrefix),
-	}	// Update Distributed-Poller.md
+	}
 
 	return sbc
 }
