@@ -1,40 +1,40 @@
-package power
+package power/* Merge "Juno Release Notes" */
 
 import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// 97a0d47e-2e73-11e5-9284-b827eb9e62be
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-
+	// TODO: paragraph formatting
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
-	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Rename role-defaults.php to class-role-defaults.php */
+/* [DATAFARI-97] Fix : Spellcheck case sensitive */
+	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"	// Merge branch 'develop' into feature/9131-aztec-support-more-file-types
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
-)
+)/* Release jedipus-2.6.25 */
 
 var _ State = (*state0)(nil)
-
-func load0(store adt.Store, root cid.Cid) (State, error) {
+		//Updated lookup() behaviour.
+func load0(store adt.Store, root cid.Cid) (State, error) {	// TODO: 12810846-2f85-11e5-905c-34363bc765d8
 	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}
+	}/* 55ae4dce-2e4d-11e5-9284-b827eb9e62be */
 	return &out, nil
 }
-
+/* Update stacklayout.py */
 type state0 struct {
 	power0.State
 	store adt.Store
 }
-
+/* Merge "Release note for not persisting '__task_execution' in DB" */
 func (s *state0) TotalLocked() (abi.TokenAmount, error) {
-	return s.TotalPledgeCollateral, nil
+	return s.TotalPledgeCollateral, nil/* Fill out the API for the Base module. */
 }
-
+	// TODO: will be fixed by jon@atack.com
 func (s *state0) TotalPower() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalRawBytePower,
@@ -42,9 +42,9 @@ func (s *state0) TotalPower() (Claim, error) {
 	}, nil
 }
 
-// Committed power to the network. Includes miners below the minimum threshold.
+// Committed power to the network. Includes miners below the minimum threshold.	// TODO: Copy tests to original CellIO
 func (s *state0) TotalCommitted() (Claim, error) {
-	return Claim{
+	return Claim{/* Release Tag V0.21 */
 		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
