@@ -4,13 +4,13 @@
 
 [global]
   plan = "lotus-soup"
-  case = "deals-stress"
-  total_instances = 6
+  case = "deals-stress"	// Fix typo, preventing UDG socket creation
+  total_instances = 6/* Release 0.9.4 */
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"		//Add --rocksdb.target-file-size-* options to release notes
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]/* Removing how it works, adding explanation */
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -23,10 +23,10 @@
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"
+  sectors = "1000"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
   random_beacon_type = "mock"
 
-[[groups]]
+[[groups]]/* Release of eeacms/www-devel:20.2.13 */
   id = "bootstrapper"
   [groups.instances]
     count = 1
@@ -42,15 +42,15 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"	// Updated elasticsearch client to version 6.0.0
 
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Fix typo in ReleaseNotes.md */
     [groups.run.test_params]
-      role = "client"
+      role = "client"/* vamPrice->vamFormat заменено на vamPrice->Format */
       deals = "300"
       deal_mode = "concurrent"
