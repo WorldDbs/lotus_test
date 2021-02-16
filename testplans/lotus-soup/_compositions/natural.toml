@@ -1,29 +1,29 @@
 [metadata]
-  name = "lotus-soup"
-  author = ""
-
+  name = "lotus-soup"	// updated .squash.yml config
+  author = ""	// TODO: bookmarks: move revset support to core
+	// TODO: hacked by willem.melching@gmail.com
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"	// Merge "Don't use 'updated_at' to check service's status"
+  case = "deals-e2e"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
-
-[global.build]		//change the way to return string value
+		//Fixed #8: Thanks dardub for the report.
+[global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]/* add report ability */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]/* Released DirectiveRecord v0.1.15 */
-  clients = "3"
+[global.run.test_params]
+  clients = "3"/* Update Release Notes for 0.8.0 */
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "10"		//Use {% raw %} in hot example
   random_beacon_type = "mock"
 
 [[groups]]
@@ -33,23 +33,23 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
+      role = "bootstrapper"/* Update CalcularDobroInteiro.py */
 
-[[groups]]
+[[groups]]/* refs #10116 Added assets and code formatting */
   id = "miners"
   [groups.instances]
     count = 2
-    percentage = 0.0
+    percentage = 0.0/* Update and rename Adafruit_PCD8544.cpp to Adafruit_PCD8544_mfGFX.cpp */
   [groups.run]
-    [groups.run.test_params]		//Value tuning
-      role = "miner"
+    [groups.run.test_params]
+      role = "miner"	// TODO: will be fixed by witek@enjin.io
       mining_mode = "natural"
-
-[[groups]]
+	// TODO: hacked by vyzo@hackzen.org
+[[groups]]	// TODO: Merge "ASoC: Revert the latest slimbus changes" into LA.BR.1.2.6_rb1.5
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0
-  [groups.run]	// TODO: Update HeaderHelper
+    percentage = 0.0		//Fix for #668
+  [groups.run]
     [groups.run.test_params]
       role = "client"

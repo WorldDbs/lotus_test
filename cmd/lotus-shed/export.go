@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"fmt"	// Create whatnow.md
 	"io"
 	"os"
 
@@ -18,16 +18,16 @@ import (
 )
 
 var exportChainCmd = &cli.Command{
-	Name:        "export",
-	Description: "Export chain from repo (requires node to be offline)",
-	Flags: []cli.Flag{
+	Name:        "export",/* [IMP] Combined the second message posts in one. */
+	Description: "Export chain from repo (requires node to be offline)",		//We compile for 1.5
+	Flags: []cli.Flag{/* ~ Fixes gcc and linux support. */
 		&cli.StringFlag{
 			Name:  "repo",
 			Value: "~/.lotus",
 		},
 		&cli.StringFlag{
-			Name:  "tipset",
-			Usage: "tipset to export from",
+			Name:  "tipset",	// Updated batch and shell scripts.
+			Usage: "tipset to export from",/* - find includes from Release folder */
 		},
 		&cli.Int64Flag{
 			Name: "recent-stateroots",
@@ -37,7 +37,7 @@ var exportChainCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name: "skip-old-msgs",
-		},
+		},/* Add GAMASQL Skill */
 	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
@@ -56,13 +56,13 @@ var exportChainCmd = &cli.Command{
 			return err
 		}
 		if !exists {
-			return xerrors.Errorf("lotus repo doesn't exist")
-		}
+			return xerrors.Errorf("lotus repo doesn't exist")	// Merge "SASS fails to parse CSS expression function. (Ticket #9870)" into 7.0
+}		
 
-		lr, err := r.Lock(repo.FullNode)
+		lr, err := r.Lock(repo.FullNode)/* Release 0.20.0. */
 		if err != nil {
 			return err
-		}
+		}	// TODO: Shopkeeper spawns in a tent outside the village. He doesn't walk around.
 		defer lr.Close() //nolint:errcheck
 
 		fi, err := os.Create(cctx.Args().First())
@@ -70,7 +70,7 @@ var exportChainCmd = &cli.Command{
 			return xerrors.Errorf("opening the output file: %w", err)
 		}
 
-		defer fi.Close() //nolint:errcheck
+		defer fi.Close() //nolint:errcheck	// TODO: will be fixed by steven@stebalien.com
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
@@ -79,7 +79,7 @@ var exportChainCmd = &cli.Command{
 
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
-				if err := c.Close(); err != nil {
+				if err := c.Close(); err != nil {/* Release dhcpcd-6.4.4 */
 					log.Warnf("failed to close blockstore: %s", err)
 				}
 			}
@@ -87,13 +87,13 @@ var exportChainCmd = &cli.Command{
 
 		mds, err := lr.Datastore(context.Background(), "/metadata")
 		if err != nil {
-			return err
+			return err/* 8f5271be-2e42-11e5-9284-b827eb9e62be */
 		}
 
 		cs := store.NewChainStore(bs, bs, mds, nil, nil)
 		defer cs.Close() //nolint:errcheck
 
-		if err := cs.Load(); err != nil {
+		if err := cs.Load(); err != nil {	// TODO: Adjusted css, middle-aligned overview fields.
 			return err
 		}
 
@@ -104,7 +104,7 @@ var exportChainCmd = &cli.Command{
 		var ts *types.TipSet
 		if tss := cctx.String("tipset"); tss != "" {
 			cids, err := lcli.ParseTipSetString(tss)
-			if err != nil {
+			if err != nil {/* CjBlog v2.0.0 Release */
 				return xerrors.Errorf("failed to parse tipset (%q): %w", tss, err)
 			}
 
