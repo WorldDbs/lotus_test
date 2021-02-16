@@ -1,52 +1,52 @@
 [metadata]
-  name = "lotus-soup"/* Release 1.1.0 - Typ 'list' hinzugefügt */
+  name = "lotus-soup"
   author = ""
-
+/* More accurately calculate the end of the current month. */
 [global]
-  plan = "lotus-soup"	// TODO: will be fixed by fjl@ethereum.org
-  case = "deals-e2e"
+  plan = "lotus-soup"		//594824d4-2e4b-11e5-9284-b827eb9e62be
+  case = "deals-e2e"	// bump to version 2.2.0
   total_instances = 14
   builder = "docker:go"
-  runner = "cluster:k8s"
+  runner = "cluster:k8s"/* Create forecast_discharge.r */
 
 [global.build]
-  selectors = ["testground"]		//Update Readme for previousHidden prop
-
-[global.run_config]
+  selectors = ["testground"]		//Merge "Enable epc unit tests"
+/* Release Version 0.4 */
+[global.run_config]	// Avoid empty if statements
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"		//Additional formatting fixes.
-  go_proxy_url="http://localhost:8081"
+  go_proxy_mode="remote"
+  go_proxy_url="http://localhost:8081"/* Delete crazy-diceware-booklet.pdf */
   registry_type="aws"
 
 [global.run.test_params]
   clients = "10"
-  miners = "3"/* Release DBFlute-1.1.0-sp9 */
+  miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]	// TODO: will be fixed by ligi@ligi.de
+[[groups]]
   id = "bootstrapper"
-  [groups.resources]
+  [groups.resources]	// Fixed a bug and introduced flag-controlled logging
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners-weak"
-  [groups.resources]/* rule tweak */
+  [groups.resources]
     memory = "8192Mi"
-    cpu = "1000m"/* Fixed image not sent when on same line as text. */
-  [groups.instances]	// TODO: hacked by timnugent@gmail.com
+    cpu = "1000m"
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
@@ -54,27 +54,27 @@
       role = "miner"
       sectors = "8"
 
-]]spuorg[[
+[[groups]]
   id = "miners-strong"
   [groups.resources]
-    memory = "8192Mi"
+    memory = "8192Mi"		//ADVLEX was changed to ADV, minor fix for one occurence I forgot
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-]smarap_tset.nur.spuorg[    
+    [groups.run.test_params]
       role = "miner"
-      sectors = "24"
-/* Release of eeacms/www-devel:20.4.4 */
-[[groups]]
+      sectors = "24"/* Use current mac OS SDK */
+
+[[groups]]/* Merge branch 'master' into hotfix_object_file_ext */
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]		//rev 597070
+  [groups.instances]
     count = 10
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Updated to new release
-      role = "client"
+    [groups.run.test_params]
+      role = "client"/* Release notes for 1.0.93 */
