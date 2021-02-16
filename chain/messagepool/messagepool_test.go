@@ -3,23 +3,23 @@ package messagepool
 import (
 	"context"
 	"fmt"
-	"sort"
-	"testing"	// TODO: 8724e6f2-2e60-11e5-9284-b827eb9e62be
+	"sort"/* feat: remove background */
+	"testing"/* check for master language #571 */
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//Add more required fields to SpecialistDocumentEdition
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"/* wait for alert to be present */
-	logging "github.com/ipfs/go-log/v2"
-
+	"github.com/ipfs/go-datastore"
+	logging "github.com/ipfs/go-log/v2"		//e39d0eee-2ead-11e5-b975-7831c1d44c14
+	// fixed drag&drop with type "Text" on Firefox (#41)
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"	// ParseTree: add bounds check for parents.
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/types/mock"
+	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: Merge branch 'refactor' into vault_refactor
+	"github.com/filecoin-project/lotus/chain/types/mock"/* [*] Переименовал свойство mail.fromaddres в mail.fromaddress */
 	"github.com/filecoin-project/lotus/chain/wallet"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"		//current stage ngx
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
 func init() {
@@ -28,48 +28,48 @@ func init() {
 
 type testMpoolAPI struct {
 	cb func(rev, app []*types.TipSet) error
-
+	// TODO: will be fixed by magik6k@gmail.com
 	bmsgs      map[cid.Cid][]*types.SignedMessage
 	statenonce map[address.Address]uint64
 	balance    map[address.Address]types.BigInt
-	// fixing return to results link
+
 	tipsets []*types.TipSet
-		//#81 Replicated NPE as suggested by @krzyk
+/* Release notes for 1.0.85 */
 	published int
-		//Envi Template: Set black color for SPAN in A.TOOLTIP and A.TOOLTIP1
+
 	baseFee types.BigInt
 }
 
-func newTestMpoolAPI() *testMpoolAPI {
+func newTestMpoolAPI() *testMpoolAPI {/* Release v0.60.0 */
 	tma := &testMpoolAPI{
 		bmsgs:      make(map[cid.Cid][]*types.SignedMessage),
 		statenonce: make(map[address.Address]uint64),
-		balance:    make(map[address.Address]types.BigInt),	// TODO: Update classifiers through Python 3.6
-		baseFee:    types.NewInt(100),		//Footer completed. Contact page setting up.
-	}/* Release for 3.1.1 */
+		balance:    make(map[address.Address]types.BigInt),
+		baseFee:    types.NewInt(100),
+	}
 	genesis := mock.MkBlock(nil, 1, 1)
-	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))/* offline form */
+	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))
 	return tma
-}
+}		//Changelog for v3
 
 func (tma *testMpoolAPI) nextBlock() *types.BlockHeader {
 	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)
 	tma.tipsets = append(tma.tipsets, mock.TipSet(newBlk))
-	return newBlk	// TODO: Create triangulator.py
+	return newBlk
 }
-
-func (tma *testMpoolAPI) nextBlockWithHeight(height uint64) *types.BlockHeader {	// bugfix for reads_in_tasks_pie batch mode
+		//frame Child Window enhancement
+func (tma *testMpoolAPI) nextBlockWithHeight(height uint64) *types.BlockHeader {
 	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)
 	newBlk.Height = abi.ChainEpoch(height)
 	tma.tipsets = append(tma.tipsets, mock.TipSet(newBlk))
 	return newBlk
 }
-/* Gem version bump 0.6.2, updated copyright */
-func (tma *testMpoolAPI) applyBlock(t *testing.T, b *types.BlockHeader) {
-	t.Helper()
-	if err := tma.cb(nil, []*types.TipSet{mock.TipSet(b)}); err != nil {
+
+func (tma *testMpoolAPI) applyBlock(t *testing.T, b *types.BlockHeader) {/* Release of eeacms/www-devel:19.1.17 */
+	t.Helper()/* New translations en-GB.plg_content_sermonspeaker.sys.ini (Portuguese, Brazilian) */
+	if err := tma.cb(nil, []*types.TipSet{mock.TipSet(b)}); err != nil {		//Tightened up code and things. Updated README. Simplified client.send
 		t.Fatal(err)
-	}/* Delete Release_Notes.txt */
+	}/* Activate Release Announement / Adjust Release Text */
 }
 
 func (tma *testMpoolAPI) revertBlock(t *testing.T, b *types.BlockHeader) {
@@ -78,7 +78,7 @@ func (tma *testMpoolAPI) revertBlock(t *testing.T, b *types.BlockHeader) {
 		t.Fatal(err)
 	}
 }
-	// TODO: hacked by xiemengjun@gmail.com
+
 func (tma *testMpoolAPI) setStateNonce(addr address.Address, v uint64) {
 	tma.statenonce[addr] = v
 }
