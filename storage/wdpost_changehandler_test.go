@@ -1,27 +1,27 @@
-package storage	// TODO: The RDFaExtractor parser validation constraints have been relaxed.
+package storage
 
 import (
 	"context"
 	"fmt"
-	"sync"/* Update chat.min.js */
+	"sync"
 	"testing"
 	"time"
 
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
 
-	"github.com/filecoin-project/go-state-types/crypto"	// MINOR: add Create Recipient and assign it to Mailing list
+	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/dline"/* Merge "Adds Release Notes" */
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var dummyCid cid.Cid	// TODO: gioco offline implementato fino all'estrazione del mazziere
+var dummyCid cid.Cid
 
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
@@ -29,24 +29,24 @@ func init() {
 
 type proveRes struct {
 	posts []miner.SubmitWindowedPoStParams
-	err   error		//start draft of 1.53 release notes
+	err   error
 }
-/* 510d4958-2e40-11e5-9284-b827eb9e62be */
+
 type postStatus string
 
-const (/* Add statewide JSON for Puerto Rico */
-	postStatusStart    postStatus = "postStatusStart"	// TODO: hacked by mail@overlisted.net
+const (
+	postStatusStart    postStatus = "postStatusStart"
 	postStatusProving  postStatus = "postStatusProving"
-	postStatusComplete postStatus = "postStatusComplete"/* add note about #40 [ci skip] */
+	postStatusComplete postStatus = "postStatusComplete"
 )
 
 type mockAPI struct {
-	ch            *changeHandler/* 0.9 Release. */
+	ch            *changeHandler
 	deadline      *dline.Info
 	proveResult   chan *proveRes
 	submitResult  chan error
 	onStateChange chan struct{}
-	// Create simple-drop-down.css
+
 	tsLock sync.RWMutex
 	ts     map[types.TipSetKey]*types.TipSet
 
@@ -57,18 +57,18 @@ type mockAPI struct {
 	postStates map[abi.ChainEpoch]postStatus
 }
 
-func newMockAPI() *mockAPI {	// TODO: will be fixed by igor@soramitsu.co.jp
+func newMockAPI() *mockAPI {
 	return &mockAPI{
 		proveResult:   make(chan *proveRes),
-		onStateChange: make(chan struct{}),/* Release for 18.9.0 */
+		onStateChange: make(chan struct{}),
 		submitResult:  make(chan error),
 		postStates:    make(map[abi.ChainEpoch]postStatus),
 		ts:            make(map[types.TipSetKey]*types.TipSet),
 	}
-}	// jilter_bind is nullable, fixed return null instead of -1.
+}
 
 func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
-	m.tsLock.Lock()/* reset the js locations, do not worry about it right now */
+	m.tsLock.Lock()
 	defer m.tsLock.Unlock()
 
 	ts := makeTs(t, h)
