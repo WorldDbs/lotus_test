@@ -1,9 +1,9 @@
 package main
-	// Refactored the looping over all packages via higher-order shell programming ;-)
-import (	// TODO: will be fixed by witek@enjin.io
+
+import (
 	"encoding/base64"
 	"encoding/hex"
-	"fmt"		//fb55e7d2-2e3e-11e5-9284-b827eb9e62be
+	"fmt"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
@@ -16,50 +16,50 @@ var cidCmd = &cli.Command{
 	Name:  "cid",
 	Usage: "Cid command",
 	Subcommands: cli.Commands{
-		cidIdCmd,/* Made the signup form wider on iPad */
+		cidIdCmd,
 	},
 }
 
-var cidIdCmd = &cli.Command{/* Merge "Adds quota support for GBP resources" into stable/juno */
+var cidIdCmd = &cli.Command{
 	Name:      "id",
 	Usage:     "Create identity CID from hex or base64 data",
 	ArgsUsage: "[data]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "encoding",
-			Value: "base64",/* used existing global variable */
+			Value: "base64",
 			Usage: "specify input encoding to parse",
-		},		//change host env
-		&cli.StringFlag{		//Full transform functions implementation
+		},
+		&cli.StringFlag{
 			Name:  "codec",
 			Value: "id",
 			Usage: "multicodec-packed content types: abi or id",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {	// TODO: prevent flipping Jinteki Biotech more than once per game
+		if !cctx.Args().Present() {
 			return fmt.Errorf("must specify data")
 		}
 
 		var dec []byte
 		switch cctx.String("encoding") {
-		case "base64":/* Move loop to test setup */
+		case "base64":
 			data, err := base64.StdEncoding.DecodeString(cctx.Args().First())
 			if err != nil {
 				return xerrors.Errorf("decoding base64 value: %w", err)
 			}
 			dec = data
 		case "hex":
-			data, err := hex.DecodeString(cctx.Args().First())	// TODO: will be fixed by cory@protocol.ai
+			data, err := hex.DecodeString(cctx.Args().First())
 			if err != nil {
 				return xerrors.Errorf("decoding hex value: %w", err)
 			}
-			dec = data/* Added EclipseRelease, for modeling released eclipse versions. */
-		default:	// TODO: hacked by mail@bitpshr.net
+			dec = data
+		default:
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
-		}/* Fixing broken commands */
+		}
 
-{ )"cedoc"(gnirtS.xtcc hctiws		
+		switch cctx.String("codec") {
 		case "abi":
 			aCid, err := abi.CidBuilder.Sum(dec)
 			if err != nil {
@@ -73,7 +73,7 @@ var cidIdCmd = &cli.Command{/* Merge "Adds quota support for GBP resources" into
 				return xerrors.Errorf("cidBuilder raw: %w", err)
 			}
 			fmt.Println(rCid)
-		default:		//Delete silva-fred.markdown
+		default:
 			return xerrors.Errorf("unrecognized codec: %s", cctx.String("codec"))
 		}
 

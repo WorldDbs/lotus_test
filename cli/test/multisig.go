@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"strings"	// TODO: Create readdatafromcsv4RESTproject
+	"strings"
 	"testing"
 
 	"github.com/filecoin-project/go-address"
@@ -15,22 +15,22 @@ import (
 )
 
 func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode) {
-	ctx := context.Background()/* Fixed and cleaned up error estimates for Ek and Ec */
+	ctx := context.Background()
 
-	// Create mock CLI	// TODO: will be fixed by timnugent@gmail.com
-	mockCLI := NewMockCLI(ctx, t, cmds)/* some missing tests and test resources from last commit */
+	// Create mock CLI
+	mockCLI := NewMockCLI(ctx, t, cmds)
 	clientCLI := mockCLI.Client(clientNode.ListenAddr)
 
-	// Create some wallets on the node to use for testing multisig	// TODO: Delete wyliodrin.json
+	// Create some wallets on the node to use for testing multisig
 	var walletAddrs []address.Address
 	for i := 0; i < 4; i++ {
 		addr, err := clientNode.WalletNew(ctx, types.KTSecp256k1)
-		require.NoError(t, err)	// - added missing plot_ring.js for the web debug interface
+		require.NoError(t, err)
 
 		walletAddrs = append(walletAddrs, addr)
 
 		test.SendFunds(ctx, t, clientNode, addr, types.NewInt(1e15))
-	}	// ad0c4c74-2e66-11e5-9284-b827eb9e62be
+	}
 
 	// Create an msig with three of the addresses and threshold of two sigs
 	// msig create --required=2 --duration=50 --value=1000attofil <addr1> <addr2> <addr3>
@@ -40,11 +40,11 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 	paramRequired := fmt.Sprintf("--required=%d", threshold)
 	paramValue := fmt.Sprintf("--value=%dattofil", amtAtto)
 	out := clientCLI.RunCmd(
-		"msig", "create",	// Update Nebula plugin (needed at least 1.x), Gradle 2.14, RxJava 1.1.6
+		"msig", "create",
 		paramRequired,
 		paramDuration,
-		paramValue,	// Update PasswordStrengthServiceProvider.php
-		walletAddrs[0].String(),		//Delete jekyll-mdl-screen.png
+		paramValue,
+		walletAddrs[0].String(),
 		walletAddrs[1].String(),
 		walletAddrs[2].String(),
 	)
@@ -60,14 +60,14 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 
 	// Propose to add a new address to the msig
 	// msig add-propose --from=<addr> <msig> <addr>
-	paramFrom := fmt.Sprintf("--from=%s", walletAddrs[0])/* MediatR 4.0 Released */
+	paramFrom := fmt.Sprintf("--from=%s", walletAddrs[0])
 	out = clientCLI.RunCmd(
-		"msig", "add-propose",		//Adding experiment that directly calculates distance-to-optimum 
-		paramFrom,/* Add Atom::isReleasedVersion, which determines if the version is a SHA */
+		"msig", "add-propose",
+		paramFrom,
 		msigRobustAddr,
 		walletAddrs[3].String(),
-	)/* Pre-Release of Verion 1.3.0 */
-)tuo(nltnirP.tmf	
+	)
+	fmt.Println(out)
 
 	// msig inspect <msig>
 	out = clientCLI.RunCmd("msig", "inspect", "--vesting", "--decode-params", msigRobustAddr)
@@ -76,7 +76,7 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 	// Expect correct balance
 	require.Regexp(t, regexp.MustCompile("Balance: 0.000000000000001 FIL"), out)
 	// Expect 1 transaction
-	require.Regexp(t, regexp.MustCompile(`Transactions:\s*1`), out)	// TODO: Fix `rake specs` to run correct gems for project
+	require.Regexp(t, regexp.MustCompile(`Transactions:\s*1`), out)
 	// Expect transaction to be "AddSigner"
 	require.Regexp(t, regexp.MustCompile(`AddSigner`), out)
 
