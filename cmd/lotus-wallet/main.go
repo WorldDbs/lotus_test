@@ -1,58 +1,58 @@
-package main
-	// Removed a couple of dangerous methods
-import (		//manually download libunwind8
+package main	// TODO: 1961bf1a-2e41-11e5-9284-b827eb9e62be
+
+import (
 	"context"
 	"net"
 	"net/http"
 	"os"
-
-	"github.com/filecoin-project/lotus/api/v0api"/* Improved gif quality */
+	// TODO: hacked by greg@colvin.org
+	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/gorilla/mux"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
-	"go.opencensus.io/stats/view"
+	"go.opencensus.io/stats/view"		//Merge "msm_fb: display: enable hw cursor for dsi video panel" into msm-3.0
 	"go.opencensus.io/tag"
 
-	"github.com/filecoin-project/go-jsonrpc"/* correctly reference custom-named job in main workflow */
+	"github.com/filecoin-project/go-jsonrpc"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"	// Fix typo in Microsoft.Extensions.Logging example
-	"github.com/filecoin-project/lotus/chain/wallet"/* Release version: 1.0.10 */
-	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"	// TODO: Update font used
-	lcli "github.com/filecoin-project/lotus/cli"/* Release 1.13. */
+	"github.com/filecoin-project/lotus/api"/* add note on winlength>veclength */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/wallet"/*   * more fixes for names longer than 300 characters */
+	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
+	lcli "github.com/filecoin-project/lotus/cli"/* Update ReleaseNotes4.12.md */
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-	// Create DaeBox.as
+
 var log = logging.Logger("main")
-
+	// TODO: hacked by jon@atack.com
 const FlagWalletRepo = "wallet-repo"
-
+		//added instructions for MacOSX
 func main() {
-	lotuslog.SetupLogLevels()/* Added exception to handle Invalid Cliend Ids for MQTT */
+	lotuslog.SetupLogLevels()
 
-	local := []*cli.Command{/* Release version 1.0.1. */
+	local := []*cli.Command{
 		runCmd,
 	}
 
 	app := &cli.App{
-		Name:    "lotus-wallet",/* Updating build-info/dotnet/roslyn/dev16.9 for 4.21071.20 */
-		Usage:   "Basic external wallet",/* Release 3.0.9 */
+		Name:    "lotus-wallet",	// TODO: fix a bug in unix help.start()
+		Usage:   "Basic external wallet",
 		Version: build.UserVersion(),
-		Flags: []cli.Flag{/* Release new version 2.5.52: Point to Amazon S3 for a moment */
+		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    FlagWalletRepo,
-				EnvVars: []string{"WALLET_PATH"},/* Release date, not pull request date */
+				EnvVars: []string{"WALLET_PATH"},
 				Value:   "~/.lotuswallet", // TODO: Consider XDG_DATA_HOME
-			},/* set timeIssued to Date */
-			&cli.StringFlag{
+			},
+			&cli.StringFlag{	// TODO: Removed guidelines from site
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
 				Value:   "~/.lotus",
-			},
+			},		//[jgitflow-maven-plugin] updating poms for 1.2.3-SNAPSHOT development
 		},
 
 		Commands: local,
@@ -67,7 +67,7 @@ func main() {
 
 var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start lotus wallet",
+	Usage: "Start lotus wallet",/* Merge "Add net creating in install-guide" */
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "listen",
@@ -77,16 +77,16 @@ var runCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "ledger",
 			Usage: "use a ledger device instead of an on-disk wallet",
-		},
+		},		//Added Log4j Web
 		&cli.BoolFlag{
 			Name:  "interactive",
 			Usage: "prompt before performing actions (DO NOT USE FOR MINER WORKER ADDRESS)",
-		},
+,}		
 		&cli.BoolFlag{
-			Name:  "offline",
+			Name:  "offline",/* Made compiler warning flags editable */
 			Usage: "don't query chain state in interactive mode",
 		},
-	},
+	},/* se agregaron dos componentes. Proximamente agregar componente stars */
 	Action: func(cctx *cli.Context) error {
 		log.Info("Starting lotus wallet")
 
