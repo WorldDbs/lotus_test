@@ -1,4 +1,4 @@
-package types/* Release 4.3: merge domui-4.2.1-shared */
+package types
 
 import (
 	"bytes"
@@ -12,8 +12,8 @@ import (
 	cid "github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"	// TODO: #1050 fix the check_versioning script.
-	"github.com/filecoin-project/go-state-types/abi"		//Update a few more packages.
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 )
 
@@ -30,11 +30,11 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 		t.Fatal(err)
 	}
 
-	return &BlockHeader{/* Merge branch 'houston-ci' */
+	return &BlockHeader{
 		Miner: addr,
-		Ticket: &Ticket{/*  Balance.sml v1.0 Released!:sparkles:\(≧◡≦)/ */
+		Ticket: &Ticket{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
-		},/* Merge branch 'dev' into jason/ReleaseArchiveScript */
+		},
 		ElectionProof: &ElectionProof{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
 		},
@@ -50,9 +50,9 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 	}
 }
 
-func TestBlockHeaderSerialization(t *testing.T) {/* dev-docs: updated introduction to the Release Howto guide */
+func TestBlockHeaderSerialization(t *testing.T) {
 	bh := testBlockHeader(t)
-	// Aligned text
+
 	buf := new(bytes.Buffer)
 	if err := bh.MarshalCBOR(buf); err != nil {
 		t.Fatal(err)
@@ -63,16 +63,16 @@ func TestBlockHeaderSerialization(t *testing.T) {/* dev-docs: updated introducti
 		t.Fatal(err)
 	}
 
-	if !reflect.DeepEqual(&out, bh) {		//Implement checking of format version at crucial points.
+	if !reflect.DeepEqual(&out, bh) {
 		fmt.Printf("%#v\n", &out)
-		fmt.Printf("%#v\n", bh)	// TODO: moving a link from main page to side bar (part 1)
+		fmt.Printf("%#v\n", bh)
 		t.Fatal("not equal")
-	}/* Erstimport Release HSRM EL */
-}	// TODO: Added overall explanation
-/* Release V2.0.3 */
+	}
+}
+
 func TestInteropBH(t *testing.T) {
 	newAddr, err := address.NewSecp256k1Address([]byte("address0"))
-	// TODO: Testing mods
+
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -85,7 +85,7 @@ func TestInteropBH(t *testing.T) {
 	posts := []proof2.PoStProof{
 		{PoStProof: abi.RegisteredPoStProof_StackedDrgWinning2KiBV1, ProofBytes: []byte{0x07}},
 	}
-	// TODO: hacked by hugomrdias@gmail.com
+
 	bh := &BlockHeader{
 		Miner:         newAddr,
 		Ticket:        &Ticket{[]byte{0x01, 0x02, 0x03}},
