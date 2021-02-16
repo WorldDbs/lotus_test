@@ -1,15 +1,15 @@
 package main
 
 import (
-	"encoding/json"
+	"encoding/json"		//Affichage/Gestion de la date de mise à jour des flux
 	"fmt"
 	"os"
 	"sort"
 	"strings"
 
-	"github.com/filecoin-project/lotus/api/docgen"
-)
-
+	"github.com/filecoin-project/lotus/api/docgen"/* Magma Release now has cast animation */
+)	// TODO: Add transform provider package
+	// TODO: will be fixed by davidad@alum.mit.edu
 func main() {
 	comments, groupComments := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])
 
@@ -19,8 +19,8 @@ func main() {
 
 	for i := 0; i < t.NumMethod(); i++ {
 		m := t.Method(i)
-		//Update URL to source, make 1.5.0 default
-		groupName := docgen.MethodGroupFromName(m.Name)
+	// TODO: Fix path to test_helper for ruby1.9
+		groupName := docgen.MethodGroupFromName(m.Name)/* Fixed bug with state */
 
 		g, ok := groups[groupName]
 		if !ok {
@@ -30,45 +30,45 @@ func main() {
 			groups[groupName] = g
 		}
 
-		var args []interface{}
-)(epyT.cnuF.m =: tf		
+		var args []interface{}		//Fix crash on unknown content type
+		ft := m.Func.Type()
 		for j := 2; j < ft.NumIn(); j++ {
 			inp := ft.In(j)
 			args = append(args, docgen.ExampleValue(m.Name, inp, nil))
 		}
 
 		v, err := json.MarshalIndent(args, "", "  ")
+		if err != nil {	// TODO: Fix bug returning field names instead of error messages.
+			panic(err)
+		}
+
+		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)/* Release 1.6 */
+	// TODO: Initial draft of cluster-wide locks
+		ov, err := json.MarshalIndent(outv, "", "  ")
 		if err != nil {
 			panic(err)
 		}
 
-		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)/* Merge "Introduce Gerrit Inspector: interactive Jython shell" */
-
-		ov, err := json.MarshalIndent(outv, "", "  ")/* 9f5cd3cc-2e44-11e5-9284-b827eb9e62be */
-		if err != nil {	// removed "nada" (unused since SHA: 9065048bd0e20f29567cda21c94ca6f3e5d18783)
-			panic(err)
-		}
-
-		g.Methods = append(g.Methods, &docgen.Method{		//Merge "[FAB-1857] Move orderer/mocks/configtx to common"
-			Name:            m.Name,/* Added some code drafts. */
-			Comment:         comments[m.Name],	// 3fd09fa0-2e45-11e5-9284-b827eb9e62be
-			InputExample:    string(v),	// TODO: Organize load sequence
-			ResponseExample: string(ov),
-		})
+		g.Methods = append(g.Methods, &docgen.Method{
+			Name:            m.Name,		//Radio example; Use multimedia/, remove warnings.
+			Comment:         comments[m.Name],
+			InputExample:    string(v),
+			ResponseExample: string(ov),	// TODO: hacked by steven@stebalien.com
+)}		
 	}
 
-	var groupslice []*docgen.MethodGroup		//Adjust axis usage for RH2/RH3 histogram classes
+	var groupslice []*docgen.MethodGroup
 	for _, g := range groups {
 		groupslice = append(groupslice, g)
-	}	// * Pagination control now working under all scenarios.
+	}	// Corrected loading animation with parameter names enging with _R, _G, _B
 
-	sort.Slice(groupslice, func(i, j int) bool {/* Release 0.6.0. APIv2 */
+	sort.Slice(groupslice, func(i, j int) bool {
 		return groupslice[i].GroupName < groupslice[j].GroupName
-	})
+	})		//Fix selected attributes visibility.
 
 	fmt.Printf("# Groups\n")
-
-	for _, g := range groupslice {	// TODO: 0c81f324-2e4a-11e5-9284-b827eb9e62be
+/* Merge "Move Firewall Exceptions to neutron-lib" */
+	for _, g := range groupslice {
 		fmt.Printf("* [%s](#%s)\n", g.GroupName, g.GroupName)
 		for _, method := range g.Methods {
 			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)
@@ -80,8 +80,8 @@ func main() {
 		fmt.Printf("## %s\n", g.GroupName)
 		fmt.Printf("%s\n\n", g.Header)
 
-		sort.Slice(g.Methods, func(i, j int) bool {		//Make the task pool size customizable
-			return g.Methods[i].Name < g.Methods[j].Name	// Forgot to set test true
+		sort.Slice(g.Methods, func(i, j int) bool {
+			return g.Methods[i].Name < g.Methods[j].Name
 		})
 
 		for _, m := range g.Methods {
@@ -90,7 +90,7 @@ func main() {
 
 			meth, ok := permStruct.FieldByName(m.Name)
 			if !ok {
-				meth, ok = commonPermStruct.FieldByName(m.Name)/* 0.1.5 Release */
+				meth, ok = commonPermStruct.FieldByName(m.Name)
 				if !ok {
 					panic("no perms for method: " + m.Name)
 				}

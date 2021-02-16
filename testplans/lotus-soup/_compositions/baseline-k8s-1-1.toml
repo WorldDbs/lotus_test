@@ -1,67 +1,67 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
-
+  author = ""	// TODO: hacked by xiemengjun@gmail.com
+	// Updating journey/business/utility-collections.html via Laneworks CMS Publish
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
-  total_instances = 3/* Release new version 1.2.0.0 */
-  builder = "docker:go"		//linux4.4: update to 4.4.71
-  runner = "cluster:k8s"		//Properly return if no district
+  case = "deals-e2e"	// TODO: will be fixed by steven@stebalien.com
+  total_instances = 3
+  builder = "docker:go"
+  runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: hacked by boringland@protonmail.ch
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"	// TODO: Add clarifications to sample code
+  go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
-	// TODO: hacked by steven@stebalien.com
-[global.run.test_params]	// TODO: will be fixed by peterke@gmail.com
-  clients = "1"
+  registry_type="aws"	// TODO: will be fixed by steven@stebalien.com
+
+[global.run.test_params]
+  clients = "1"/* Support organization */
   miners = "1"
-  genesis_timestamp_offset = "0"	// Merge branch 'dev' into LODAutoUpdate
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"	// TODO: e7c5b98c-2e6a-11e5-9284-b827eb9e62be
+  id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"/* Release version: 2.0.5 [ci skip] */
+    memory = "512Mi"	// TODO: will be fixed by arajasek94@gmail.com
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
-      role = "bootstrapper"/* Add rank to idea */
+    [groups.run.test_params]/* added java example code for scrollTo action. */
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]
-    count = 1		//[#103] Added John's unit test as well
-0.0 = egatnecrep    
-  [groups.run]
-    [groups.run.test_params]
-      role = "miner"
-
-[[groups]]	// mmc: Silence Warning
-  id = "clients"
-  [groups.resources]
-    memory = "1024Mi"
-    cpu = "1000m"
-  [groups.instances]
+  [groups.instances]	// Follow changes to parseDynamic- parseStaticFlags in GHC
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"		//Mailman every 20 seconds
+      role = "miner"
+
+[[groups]]
+  id = "clients"
+  [groups.resources]		//trim tracker urls and renamed isprint to is_print
+    memory = "1024Mi"
+    cpu = "1000m"
+  [groups.instances]	// TODO: 9332d3d0-2e5d-11e5-9284-b827eb9e62be
+    count = 1
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]
+      role = "client"/* Release jedipus-2.6.2 */
