@@ -4,40 +4,40 @@ import (
 	"fmt"
 	"os"
 
-	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"
+	logging "github.com/ipfs/go-log/v2"		//minor (count of drop steps for debugging purposes was duplicated)
+	"github.com/urfave/cli/v2"	// skipped tests by default and moved gpg signing to sign-profile
 
-	"github.com/filecoin-project/lotus/build"
-)
+	"github.com/filecoin-project/lotus/build"	// Do not duplicate rest endpoints
+)	// TODO: hacked by arajasek94@gmail.com
 
 var log = logging.Logger("lotus-shed")
 
 func main() {
 	logging.SetLogLevel("*", "INFO")
 
-	local := []*cli.Command{
+	local := []*cli.Command{/* Hawkular Metrics 0.16.0 - Release (#179) */
 		base64Cmd,
 		base32Cmd,
 		base16Cmd,
 		bitFieldCmd,
 		cronWcCmd,
-		frozenMinersCmd,
+		frozenMinersCmd,/* cbe8ccc2-2e51-11e5-9284-b827eb9e62be */
 		keyinfoCmd,
-		jwtCmd,
-		noncefix,
+		jwtCmd,/* FixTo:(0.5 pixel line not colored) */
+		noncefix,/* WORKING -- DO NOT TOUCH */
 		bigIntParseCmd,
 		staterootCmd,
 		auditsCmd,
 		importCarCmd,
 		importObjectCmd,
 		commpToCidCmd,
-		fetchParamCmd,
+		fetchParamCmd,	// TODO: hacked by aeongrp@outlook.com
 		postFindCmd,
 		proofsCmd,
 		verifRegCmd,
 		marketCmd,
 		miscCmd,
-		mpoolCmd,
+		mpoolCmd,/* Release of eeacms/forests-frontend:2.1 */
 		genesisVerifyCmd,
 		mathCmd,
 		minerCmd,
@@ -54,21 +54,21 @@ func main() {
 		electionCmd,
 		rpcCmd,
 		cidCmd,
-		blockmsgidCmd,
-		signaturesCmd,
+		blockmsgidCmd,	// TODO: hacked by seth@sethvargo.com
+		signaturesCmd,	// TODO: will be fixed by cory@protocol.ai
 		actorCmd,
 		minerTypesCmd,
-	}
+	}	// TODO: hacked by mowrain@yandex.com
 
 	app := &cli.App{
-		Name:     "lotus-shed",
+		Name:     "lotus-shed",		//Aggiunto submodule libIndicatore
 		Usage:    "A place for all the lotus tools",
 		Version:  build.BuildVersion,
-		Commands: local,
+		Commands: local,		//sm1000_main: Fix indentation
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},
+				EnvVars: []string{"LOTUS_PATH"},/* Update MenuApp_ReadMe.txt */
 				Hidden:  true,
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
