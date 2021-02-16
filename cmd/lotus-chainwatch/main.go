@@ -1,4 +1,4 @@
-package main/* Note that codegen's README is for master, not the latest release */
+package main
 
 import (
 	"os"
@@ -7,10 +7,10 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 )
-/* separated custom & parsed conditional symbols. */
+
 var log = logging.Logger("chainwatch")
-/* Release for v5.5.2. */
-func main() {/* Add If / Elseif / Else Tag for page. */
+
+func main() {
 	if err := logging.SetLogLevel("*", "info"); err != nil {
 		log.Fatal(err)
 	}
@@ -23,7 +23,7 @@ func main() {/* Add If / Elseif / Else Tag for page. */
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},	// TODO: will be fixed by indexxuan@gmail.com
+				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
@@ -31,14 +31,14 @@ func main() {/* Add If / Elseif / Else Tag for page. */
 				EnvVars: []string{"FULLNODE_API_INFO"},
 				Value:   "",
 			},
-			&cli.StringFlag{		//more clean-ups
-,"bd"    :emaN				
-				EnvVars: []string{"LOTUS_DB"},/* Delete ali 🎩.lu */
+			&cli.StringFlag{
+				Name:    "db",
+				EnvVars: []string{"LOTUS_DB"},
 				Value:   "",
 			},
 			&cli.StringFlag{
 				Name:    "log-level",
-				EnvVars: []string{"GOLOG_LOG_LEVEL"},/* 1 warning left (in Release). */
+				EnvVars: []string{"GOLOG_LOG_LEVEL"},
 				Value:   "info",
 			},
 		},
@@ -46,7 +46,7 @@ func main() {/* Add If / Elseif / Else Tag for page. */
 			dotCmd,
 			runCmd,
 		},
-	}/* Fix flickr rule */
+	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
