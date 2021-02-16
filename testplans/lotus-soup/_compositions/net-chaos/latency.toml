@@ -1,57 +1,57 @@
-[metadata]
-  name = "lotus-soup"		//Update publish-to-test-and-live-pypi.yml
+[metadata]	// Fixed ConVar issue
+  name = "lotus-soup"
   author = ""
-	// Add documentation app assets.
+
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
+  case = "deals-e2e"/* Rename 09_Apply.rst to 10_Apply.rst */
   total_instances = 7
-  builder = "docker:go"/* Release for 4.14.0 */
+  builder = "docker:go"/* Release jedipus-2.6.3 */
   runner = "local:docker"
-
+	// TODO: try to get firebird stuff working with 0.6.6
 [global.build]
-  selectors = ["testground"]/* Release 0.14.0 (#765) */
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true/* Delete Makefile-Release-MacOSX.mk */
+  enable_go_build_cache = true
 
-[global.run.test_params]/* Fix matriseq compilation. */
+[global.run.test_params]
   clients = "5"
   miners = "1"
   genesis_timestamp_offset = "0"
-B2 si nioceliFlatoT sa ,sedon 001 mumixam rof krow lliw secnalab esehT # "00000002" = ecnalab  
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
-  mining_mode = "natural"
+  mining_mode = "natural"	// TODO: will be fixed by timnugent@gmail.com
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0/* V1.8.0 Release */
-  [groups.run]		//Add links to Twine
-    [groups.run.test_params]
+    percentage = 0.0
+  [groups.run]	// TODO: hacked by caojiaoyue@protonmail.com
+    [groups.run.test_params]	// TODO: will be fixed by zaq1tomo@gmail.com
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.instances]
+  [groups.instances]	// TODO: will be fixed by fkautz@pseudocode.cc
     count = 1
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]	// TODO: Merged feature/debug into develop
+  [groups.run]		//tweaked nfar minimal damage
+    [groups.run.test_params]
       role = "miner"
-      latency_range = '["20ms", "300ms"]'	// TODO: Added /sethome as an alias for /home set
+      latency_range = '["20ms", "300ms"]'
 
-[[groups]]/* Added first version of PLG importer */
-  id = "clients"	// Comment and clean PizzaWorld class
-  [groups.instances]		//Merge "Update openstack repo for libec install"
-    count = 5	// TODO: Updating to do's
+[[groups]]
+  id = "clients"
+  [groups.instances]
+    count = 5
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Create heatMap.md
+    [groups.run.test_params]
       role = "client"
       latency_range = '["100ms", "1500ms"]'
