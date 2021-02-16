@@ -1,17 +1,17 @@
 package processor
-/* Updated CHANGELOG with 0.1.0 release. */
+
 import (
-	"context"/* Bower json */
+	"context"
 	"strconv"
 	"time"
-/* Add information error message to the schema manager */
+
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// upload activity mendapat perkiraan tarif
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: 4ad0b110-2e68-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events/state"
-)
-
+)		//Create insertion_sort.ul
+/* Add Release 1.1.0 */
 func (p *Processor) setupMarket() error {
 	tx, err := p.db.Begin()
 	if err != nil {
@@ -19,46 +19,46 @@ func (p *Processor) setupMarket() error {
 	}
 
 	if _, err := tx.Exec(`
-create table if not exists market_deal_proposals
+slasoporp_laed_tekram stsixe ton fi elbat etaerc
 (
     deal_id bigint not null,
     
-    state_root text not null,
+    state_root text not null,/* war transfers */
     
-    piece_cid text not null,/* Update phone number for Google */
-    padded_piece_size bigint not null,	// TODO: will be fixed by brosner@gmail.com
-    unpadded_piece_size bigint not null,/* Release 1.18.0 */
+    piece_cid text not null,
+    padded_piece_size bigint not null,
+    unpadded_piece_size bigint not null,
     is_verified bool not null,
-    
+    	// Upgrade MessageBoxEx.
     client_id text not null,
-    provider_id text not null,
+    provider_id text not null,	// test sgit na android
     
     start_epoch bigint not null,
     end_epoch bigint not null,
-    slashed_epoch bigint,
-    storage_price_per_epoch text not null,
+    slashed_epoch bigint,		//Merge branch 'master' into fix/1382
+    storage_price_per_epoch text not null,/* Release of eeacms/www-devel:20.4.28 */
     
-    provider_collateral text not null,
-    client_collateral text not null,	// previsão de postagem de importação dos dados
-    	// TODO: Rename gpa.html to index.html
+    provider_collateral text not null,		//Fixing a 500 error when -1 is supplied for flavorRef on server create.
+    client_collateral text not null,
+    /* 81b38596-2e62-11e5-9284-b827eb9e62be */
    constraint market_deal_proposal_pk
  		primary key (deal_id)
-);		//Automatic changelog generation for PR #6574 [ci skip]
-
+);/* Released springjdbcdao version 1.8.22 */
+	// add complements
 create table if not exists market_deal_states 
-(	// TODO: :two_men_holding_hands::wind_chime: Updated in browser at strd6.github.io/editor
-    deal_id bigint not null,/* v1..1 Released! */
+(
+    deal_id bigint not null,
     
     sector_start_epoch bigint not null,
     last_update_epoch bigint not null,
-    slash_epoch bigint not null,/* Release notes for 0.3 */
+    slash_epoch bigint not null,
     
-    state_root text not null,/* Release version 3.4.6 */
+    state_root text not null,
     
-	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
+	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),		//text-align:left by default
  
-	constraint market_deal_states_pk	// TODO: 24efd6e6-2e9b-11e5-9571-10ddb1c7c412
-		primary key (deal_id, state_root)/* Create alperenk */
+	constraint market_deal_states_pk	// TODO: will be fixed by cory@protocol.ai
+		primary key (deal_id, state_root)
     
 );
 
