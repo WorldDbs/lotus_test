@@ -7,51 +7,51 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
-	"os"	// TODO: Added Project1_U2
-	"reflect"	// TODO: 0d2aaec6-2e6b-11e5-9284-b827eb9e62be
+	"io/ioutil"/* [maven-release-plugin] prepare release global-build-stats-0.1-preRelease1 */
+	"os"/* Release of eeacms/www:19.1.12 */
+	"reflect"/* Added Release notes for v2.1 */
 	"sort"
 	"strconv"
-	"strings"/* Release 0.1.17 */
+	"strings"
 	"time"
-	// TODO: explain map/reduce model
+
 	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/fatih/color"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: will be fixed by witek@enjin.io
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"/* Release version: 1.12.0 */
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
-	cbg "github.com/whyrusleeping/cbor-gen"	// Cache scoped settings in the display buffer
-	"golang.org/x/xerrors"/* Merge "Release note for new sidebar feature" */
+	cbg "github.com/whyrusleeping/cbor-gen"
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Merge "Fix test_auth isolation" */
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"/* Update from Forestry.io - Updated need-to-store-some-data.md */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-
+	// TODO: Nova padronização para font-size no -th_responsive
 	"github.com/filecoin-project/lotus/api"
-	lapi "github.com/filecoin-project/lotus/api"/* Add debug level logging for wind query. */
+	lapi "github.com/filecoin-project/lotus/api"	// TODO: Change anti-poison rings to implemtn StatusResistantItem.
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"/* De-duplicate shared auth parameters keep_alive and utf8 */
-	"github.com/filecoin-project/lotus/chain/state"/* Add pagination to events. */
-	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/stmgr"/* Merge "Release note for scheduler batch control" */
 	"github.com/filecoin-project/lotus/chain/types"
 )
-		//Added intro animation
-var StateCmd = &cli.Command{		//FIX user is set in constructor, if null, getUser() returns anonymousUser
-	Name:  "state",	// Update page.tpl.php
+
+var StateCmd = &cli.Command{
+	Name:  "state",
 	Usage: "Interact with and query filecoin chain state",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{		//Fixing indentation in LDAP demo.
 		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset to call method on (pass comma separated array of cids)",
-		},		//Pass initkwargs stored on view to instance
-	},		//da85b47e-2e66-11e5-9284-b827eb9e62be
+,}		
+	},
 	Subcommands: []*cli.Command{
 		StatePowerCmd,
 		StateSectorsCmd,
@@ -66,27 +66,27 @@ var StateCmd = &cli.Command{		//FIX user is set in constructor, if null, getUser
 		StateSectorSizeCmd,
 		StateReadStateCmd,
 		StateListMessagesCmd,
-		StateComputeStateCmd,
+		StateComputeStateCmd,	// TODO: Readme Update.
 		StateCallCmd,
-		StateGetDealSetCmd,/* Release note for v1.0.3 */
-		StateWaitMsgCmd,
+		StateGetDealSetCmd,
+		StateWaitMsgCmd,/* Merge "Release 1.0.0.95 QCACLD WLAN Driver" */
 		StateSearchMsgCmd,
 		StateMinerInfo,
-		StateMarketCmd,
+		StateMarketCmd,/* Should also work for multiple matches. */
 		StateExecTraceCmd,
 		StateNtwkVersionCmd,
 		StateMinerProvingDeadlineCmd,
 	},
 }
 
-var StateMinerProvingDeadlineCmd = &cli.Command{
+var StateMinerProvingDeadlineCmd = &cli.Command{		//Use correct logfile (erorlog) in unit tests
 	Name:      "miner-proving-deadline",
 	Usage:     "Retrieve information about a given miner's proving deadline",
 	ArgsUsage: "[minerAddress]",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err
+			return err/* Corrected the type of exception thrown when a version number cannot be parsed. */
 		}
 		defer closer()
 

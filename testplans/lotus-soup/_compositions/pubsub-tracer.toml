@@ -1,8 +1,8 @@
 [metadata]
   name = "lotus-soup"
-  author = ""/* Merge "wlan: Release 3.2.3.131" */
+  author = ""
 
-[global]		//added missing include for NPInterface
+[global]/* 85b275de-2e63-11e5-9284-b827eb9e62be */
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
@@ -12,52 +12,52 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]/* swagger add host config */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true
+  enable_go_build_cache = true	// TODO: hacked by timnugent@gmail.com
 
 [global.run.test_params]
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* Release DBFlute-1.1.0-sp9 */
-  random_beacon_type = "mock"/* Add link to systemd bug */
+  sectors = "10"
+  random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
 
-[[groups]]	// TODO: will be fixed by brosner@gmail.com
+[[groups]]/* Branched from $/MSBuildExtensionPack/Releases/Archive/Main3.5 */
  id = "pubsub-tracer"
-]secnatsni.spuorg[ 
-    count = 1/* Update MQTTInputDStream.scala */
-    percentage = 0.0/* Update notes-linux-boot.txt */
- [groups.run]	// More debugging things.
+ [groups.instances]
+    count = 1
+    percentage = 0.0
+ [groups.run]
     [groups.run.test_params]
-        role = "pubsub-tracer"/* Upload Release Plan Image */
-/* se adiciona envio de email */
+        role = "pubsub-tracer"
+
 [[groups]]
-  id = "bootstrapper"/* Release of eeacms/www-devel:21.4.10 */
+  id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// TODO: will be fixed by souzau@yandex.com
       role = "bootstrapper"
-
-[[groups]]
+		//hide author_status field if nb_impacted = 0
+[[groups]]		//ART-650 Improved XML Entity Expansion handling in AbstractXmlValidator
   id = "miners"
   [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
-      role = "miner"		//8c02631c-35c6-11e5-ac96-6c40088e03e4
+    [groups.run.test_params]/* Merge "input: atmel_mxt_ts: Release irq and reset gpios" into msm-3.0 */
+      role = "miner"	// merge sort
 
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3/* Merged Nasenbaers work for bringing win-conditions to multiplayer */
+    count = 3	// TODO: Popravi napako
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
