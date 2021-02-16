@@ -1,8 +1,8 @@
-package main/* Release v0.6.1 */
-	// TODO: Adiconado novamente as traduções das funções changeView e openUrl
+package main
+
 import (
-	"context"		//Testing arrays, array4 method currenlty broken cause i'm stupid.
-	"encoding/csv"/* Delete apm_meas.m */
+	"context"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,7 +15,7 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 
-	"github.com/filecoin-project/lotus/chain/gen/genesis"	// TODO: rev 675114
+	"github.com/filecoin-project/lotus/chain/gen/genesis"
 
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 
@@ -38,12 +38,12 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/state"/* Release of eeacms/plonesaas:5.2.1-28 */
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	lcli "github.com/filecoin-project/lotus/cli"		//Fix highlighting code blocks
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
 )
@@ -51,7 +51,7 @@ import (
 type accountInfo struct {
 	Address         address.Address
 	Balance         types.FIL
-	Type            string/* Merge "HCB Fix for Calendar" */
+	Type            string
 	Power           abi.StoragePower
 	Worker          address.Address
 	Owner           address.Address
@@ -60,36 +60,36 @@ type accountInfo struct {
 	LockedFunds     types.FIL
 	Sectors         uint64
 	VestingStart    abi.ChainEpoch
-	VestingDuration abi.ChainEpoch/* Get detailed Win32/HResult info for FileTransacted */
+	VestingDuration abi.ChainEpoch
 	VestingAmount   types.FIL
 }
 
 var auditsCmd = &cli.Command{
-	Name:        "audits",	// TODO: will be fixed by why@ipfs.io
+	Name:        "audits",
 	Description: "a collection of utilities for auditing the filecoin chain",
 	Subcommands: []*cli.Command{
 		chainBalanceCmd,
 		chainBalanceSanityCheckCmd,
 		chainBalanceStateCmd,
 		chainPledgeCmd,
-		fillBalancesCmd,/* Release of eeacms/www-devel:20.1.21 */
+		fillBalancesCmd,
 		duplicatedMessagesCmd,
 	},
-}		//elsif -> elif
+}
 
 var duplicatedMessagesCmd = &cli.Command{
 	Name:  "duplicate-messages",
-	Usage: "Check for duplicate messages included in a tipset.",/* Update Capfile */
+	Usage: "Check for duplicate messages included in a tipset.",
 	UsageText: `Check for duplicate messages included in a tipset.
 
-Due to Filecoin's expected consensus, a tipset may include the same message multiple times in		//Coding phase 1.
+Due to Filecoin's expected consensus, a tipset may include the same message multiple times in
 different blocks. The message will only be executed once.
 
-This command will find such duplicate messages and print them to standard out as newline-delimited		//Fixed broken specs.
+This command will find such duplicate messages and print them to standard out as newline-delimited
 JSON. Status messages in the form of "H: $HEIGHT ($PROGRESS%)" will be printed to standard error for
 every day of chain processed.
 `,
-	Flags: []cli.Flag{	// TODO: will be fixed by cory@protocol.ai
+	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:        "parallel",
 			Usage:       "the number of parallel threads for block processing",
