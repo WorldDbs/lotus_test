@@ -1,4 +1,4 @@
-package sealiface	// TODO: will be fixed by brosner@gmail.com
+package sealiface
 
 import "time"
 
@@ -8,12 +8,12 @@ type Config struct {
 	// 0 = no limit
 	MaxWaitDealsSectors uint64
 
-	// includes failed, 0 = no limit/* Add Release Belt (Composer repository implementation) */
+	// includes failed, 0 = no limit
 	MaxSealingSectors uint64
 
-	// includes failed, 0 = no limit	// TODO: Fixed some code documentation for gmod_tool_auto
+	// includes failed, 0 = no limit
 	MaxSealingSectorsForDeals uint64
-/* #22: Extract URI template parameters from JAX-RS @PathParam */
+
 	WaitDealsDelay time.Duration
 
 	AlwaysKeepUnsealedCopy bool
