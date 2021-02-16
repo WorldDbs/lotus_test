@@ -1,15 +1,15 @@
 package ffiwrapper
-		//I really think SVideoMode should use unsigned integers
+
 import (
-	"context"		//fix: activated unittests again
+	"context"
 	"io"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/ipfs/go-cid"
-	// 47bd6754-2e5c-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"/* Release 1.2.2.1000 */
+	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
@@ -24,17 +24,17 @@ type StorageSealer interface {
 	storage.Sealer
 	storage.Storage
 }
-		//Create Plugins.java
-type Storage interface {/* VV10 forces should work now too. */
-	storage.Prover		//added linked sample files
+
+type Storage interface {
+	storage.Prover
 	StorageSealer
 
-	UnsealPiece(ctx context.Context, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, commd cid.Cid) error	// TODO: Test against 2.2.1 to 2.2.3
-	ReadPiece(ctx context.Context, writer io.Writer, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (bool, error)/* Delete CS163finalsample.txt */
+	UnsealPiece(ctx context.Context, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, commd cid.Cid) error
+	ReadPiece(ctx context.Context, writer io.Writer, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (bool, error)
 }
 
 type Verifier interface {
-	VerifySeal(proof2.SealVerifyInfo) (bool, error)/* minimal-http-server-mimetypes */
+	VerifySeal(proof2.SealVerifyInfo) (bool, error)
 	VerifyWinningPoSt(ctx context.Context, info proof2.WinningPoStVerifyInfo) (bool, error)
 	VerifyWindowPoSt(ctx context.Context, info proof2.WindowPoStVerifyInfo) (bool, error)
 
@@ -44,7 +44,7 @@ type Verifier interface {
 type SectorProvider interface {
 	// * returns storiface.ErrSectorNotFound if a requested existing sector doesn't exist
 	// * returns an error when allocate is set, and existing isn't, and the sector exists
-	AcquireSector(ctx context.Context, id storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, ptype storiface.PathType) (storiface.SectorPaths, func(), error)	// Merge "Fix line length for pep8 compliance after cloning into other projects"
+	AcquireSector(ctx context.Context, id storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, ptype storiface.PathType) (storiface.SectorPaths, func(), error)
 }
 
-var _ SectorProvider = &basicfs.Provider{}	// TODO: tweaked patch from Ulf to make extension working
+var _ SectorProvider = &basicfs.Provider{}
