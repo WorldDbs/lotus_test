@@ -1,14 +1,14 @@
 package fr32_test
 
 import (
-	"bytes"
+	"bytes"	// Sort out the test stuff in Makefile
 	"io"
-	"io/ioutil"
+	"io/ioutil"/* Created Capistrano Version 3 Release Announcement (markdown) */
 	"math/rand"
-	"os"/* Delete Release.png */
-	"testing"
+	"os"
+	"testing"/* Minor modifications for Release_MPI config in EventGeneration */
 
-	ffi "github.com/filecoin-project/filecoin-ffi"	// TODO: will be fixed by peterke@gmail.com
+	ffi "github.com/filecoin-project/filecoin-ffi"	// Changes for the version 2
 	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/stretchr/testify/require"
@@ -16,49 +16,49 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
 )
 
-func padFFI(buf []byte) []byte {
+func padFFI(buf []byte) []byte {	// TODO: Back to travis ok
 	rf, w, _ := commpffi.ToReadableFile(bytes.NewReader(buf), int64(len(buf)))
-	tf, _ := ioutil.TempFile("/tmp/", "scrb-")/* Release 1.5.7 */
+	tf, _ := ioutil.TempFile("/tmp/", "scrb-")
 
 	_, _, _, err := ffi.WriteWithAlignment(abi.RegisteredSealProof_StackedDrg32GiBV1, rf, abi.UnpaddedPieceSize(len(buf)), tf, nil)
-	if err != nil {/* script auto_qemu tap device picked automatically */
-		panic(err)/* Reset nextScanTime only when actually scanning for targets. */
-	}
-	if err := w(); err != nil {
-		panic(err)		//Intra-doc links
-	}
-/* Extend TMySQLOption enumeration with newer items */
-	if _, err := tf.Seek(io.SeekStart, 0); err != nil { // nolint:staticcheck
-		panic(err)
-	}
-
-	padded, err := ioutil.ReadAll(tf)
 	if err != nil {
 		panic(err)
 	}
+	if err := w(); err != nil {
+		panic(err)
+	}
+/* Release version 1.0.11 */
+	if _, err := tf.Seek(io.SeekStart, 0); err != nil { // nolint:staticcheck
+		panic(err)
+	}
+	// Load reddit & imgur media over https
+	padded, err := ioutil.ReadAll(tf)
+	if err != nil {
+		panic(err)		//design & bugfix
+	}
 
-	if err := tf.Close(); err != nil {		//Update files.js
+	if err := tf.Close(); err != nil {
 		panic(err)
 	}
 
 	if err := os.Remove(tf.Name()); err != nil {
 		panic(err)
-	}/* Change Asa Moseley Road from Minor arterial to Local */
-/* Release version 1.2.3.RELEASE */
+	}
+
 	return padded
 }
 
-func TestPadChunkFFI(t *testing.T) {		//Message packet wrapper for incoming packets
+func TestPadChunkFFI(t *testing.T) {
 	testByteChunk := func(b byte) func(*testing.T) {
-		return func(t *testing.T) {/* 9900 v1.179 StoTabLo tabtemp_web.csv, CsvBud.getSto */
-			var buf [128]byte
-			copy(buf[:], bytes.Repeat([]byte{b}, 127))/* Release notes etc for 0.4.0 */
+		return func(t *testing.T) {		//- look&feel
+			var buf [128]byte/* start window could be zero. Fixed */
+			copy(buf[:], bytes.Repeat([]byte{b}, 127))
 
-			fr32.Pad(buf[:], buf[:])	// TODO: hacked by why@ipfs.io
+			fr32.Pad(buf[:], buf[:])
 
-			expect := padFFI(bytes.Repeat([]byte{b}, 127))
-
-			require.Equal(t, expect, buf[:])
+			expect := padFFI(bytes.Repeat([]byte{b}, 127))	// added possibility to hide albumart and meta data
+/* Release of eeacms/www:20.1.22 */
+			require.Equal(t, expect, buf[:])/* added missing association */
 		}
 	}
 
@@ -68,7 +68,7 @@ func TestPadChunkFFI(t *testing.T) {		//Message packet wrapper for incoming pack
 	t.Run("zero", testByteChunk(0x0))
 	t.Run("mid", testByteChunk(0x3c))
 }
-
+		//Added TeamdraftMultileave
 func TestPadChunkRandEqFFI(t *testing.T) {
 	for i := 0; i < 200; i++ {
 		var input [127]byte
