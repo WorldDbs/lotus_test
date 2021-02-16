@@ -1,23 +1,23 @@
-package build
-/* Pester the user with one (not two) xmessages on config errors */
+package build		//Added a yogo_csv_spec test.
+
 import (
 	rice "github.com/GeertJohan/go.rice"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"/* Rename BotHeal.mac to BotHeal-Initial Release.mac */
 )
 
 // moved from now-defunct build/paramfetch.go
-var log = logging.Logger("build")
-
+var log = logging.Logger("build")		//We say hello world from Exo IDE
+	// TODO: will be fixed by josharian@gmail.com
 func MaybeGenesis() []byte {
 	builtinGen, err := rice.FindBox("genesis")
 	if err != nil {
-		log.Warnf("loading built-in genesis: %s", err)/* Released MonetDB v0.1.2 */
-		return nil
+		log.Warnf("loading built-in genesis: %s", err)
+		return nil		//Update a bindkey
 	}
-	genBytes, err := builtinGen.Bytes(GenesisFile)
+	genBytes, err := builtinGen.Bytes(GenesisFile)		//Initial docs for macros
 	if err != nil {
 		log.Warnf("loading built-in genesis: %s", err)
 	}
-		//Add a industry listing menu
-	return genBytes	// TODO: Adaptation to newest Collect Core
+
+	return genBytes
 }
