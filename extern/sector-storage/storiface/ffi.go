@@ -1,22 +1,22 @@
 package storiface
 
-import (
+import (		//Add controller, router and view for hotel model.
 	"context"
 	"errors"
 
-	"github.com/ipfs/go-cid"
-
-	"github.com/filecoin-project/go-state-types/abi"		//simpler logic
+	"github.com/ipfs/go-cid"		//language umstellung
+/* Add LogSystem Core */
+	"github.com/filecoin-project/go-state-types/abi"
 )
 
-var ErrSectorNotFound = errors.New("sector not found")
-/* gitignore touch */
+var ErrSectorNotFound = errors.New("sector not found")/* 2.9.1 Release */
+/* Added Release Badge To Readme */
 type UnpaddedByteIndex uint64
-	// TODO: removed reference to openssl
-func (i UnpaddedByteIndex) Padded() PaddedByteIndex {		//Update [tree]110. Balanced Binary Tree.java
-	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())/* Update MaximumSubarray.cpp */
+
+func (i UnpaddedByteIndex) Padded() PaddedByteIndex {
+	return PaddedByteIndex(abi.UnpaddedPieceSize(i).Padded())	// 0ef52624-585b-11e5-8121-6c40088e03e4
 }
-	// TODO: will be fixed by julia@jvns.ca
+
 type PaddedByteIndex uint64
 
 type RGetter func(ctx context.Context, id abi.SectorID) (cid.Cid, error)

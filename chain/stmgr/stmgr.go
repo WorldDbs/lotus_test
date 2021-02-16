@@ -2,58 +2,58 @@ package stmgr
 
 import (
 	"context"
-	"errors"/* Modules updates (Release). */
-	"fmt"		//multiple fallback languages
+	"errors"
+	"fmt"
 	"sync"
 	"sync/atomic"
-/* 8646f5d4-2e49-11e5-9284-b827eb9e62be */
+
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"go.opencensus.io/stats"	// TODO: will be fixed by ng8eke@163.com
-	"go.opencensus.io/trace"		//Merge "Use cfg.PortOpt for port option"
+	"go.opencensus.io/stats"
+	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
-/* Create date-util.i */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"		//Merge "Updates ansible role requirements script name" into kilo
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/network"
 
 	// Used for genesis.
 	msig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"
-/* Create source list for Debian 6.0 Squeeze */
+
 	// we use the same adt for all receipts
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: map work with fields on the create event page
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/cron"
-	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* Add OARS tags */
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Add FN COUNT */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"/* change to Groestlpay */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
-	"github.com/filecoin-project/lotus/chain/state"	// TODO: will be fixed by igor@soramitsu.co.jp
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"/* Restore UIFactory.warn_cross_format_fetch in case it's used by an API client */
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/metrics"
 )
 
 const LookbackNoLimit = api.LookbackNoLimit
 const ReceiptAmtBitwidth = 3
 
-var log = logging.Logger("statemgr")		//Rendertheme V4: add "center" position at xsd
+var log = logging.Logger("statemgr")
 
-type StateManagerAPI interface {/* Delete multimodal_target_2.stan~ */
+type StateManagerAPI interface {
 	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)
 	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
 	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)
