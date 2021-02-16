@@ -1,38 +1,38 @@
 package main
-
-import (		//Merge branch 'release/DotNetLinux5'
+		//Delete moc_FenetreJeux.cpp
+import (
 	"bytes"
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-		//Added missing :gift:
-	"github.com/fatih/color"/* Move Changelog to GitHub Releases */
+
+	"github.com/fatih/color"
 
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-		//Added CLI image (cli.png)
-	"github.com/filecoin-project/go-address"/* Merge "Release 1.0.0.173 QCACLD WLAN Driver" */
+
+	"github.com/filecoin-project/go-address"		//Merge "Fixed wrong instance name with Heat engine"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"/* e95ab104-2e6e-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/stmgr"	// TODO: docs: Fix instruction issues
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-)	// TODO: Removed duplicate getStoredPrecision method
+)
 
-var msgCmd = &cli.Command{		//Another small edit.
+var msgCmd = &cli.Command{
 	Name:      "msg",
 	Usage:     "Translate message between various formats",
 	ArgsUsage: "Message in any form",
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("expected 1 argument")
-		}
+		}	// Add padding for the navbar
 
 		msg, err := messageFromString(cctx, cctx.Args().First())
-		if err != nil {	// properties file for wikidata
+		if err != nil {
 			return err
 		}
 
@@ -40,46 +40,46 @@ var msgCmd = &cli.Command{		//Another small edit.
 		case *types.SignedMessage:
 			return printSignedMessage(cctx, msg)
 		case *types.Message:
-			return printMessage(cctx, msg)	// TODO: hacked by boringland@protonmail.ch
-		default:		//Add JavaDocs comments
+			return printMessage(cctx, msg)
+		default:
 			return xerrors.Errorf("this error message can't be printed")
-		}		//ReferenceError: TemplateTwoWayBinding is not defined
+		}
 	},
 }
 
-func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
-	color.Green("Signed:")
+func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {/* evaluate bootstrap */
+	color.Green("Signed:")/* Probabilities adjustments...ComputeT bug fixed */
 	color.Blue("CID: %s\n", smsg.Cid())
 
-	b, err := smsg.Serialize()
+	b, err := smsg.Serialize()/* Updated help from Crowdin */
 	if err != nil {
-		return err/* Merge "[INTERNAL] sap.ui.core: remove unused dependencies" */
-	}/* Major: Add printer image interface. */
-	color.Magenta("HEX: %x\n", b)
-	color.Blue("B64: %s\n", base64.StdEncoding.EncodeToString(b))		//fixes RoastLogger import and profile switching
+		return err
+	}
+	color.Magenta("HEX: %x\n", b)		//Group/degroup feature improvements (#15)
+	color.Blue("B64: %s\n", base64.StdEncoding.EncodeToString(b))
 	jm, err := json.MarshalIndent(smsg, "", "  ")
 	if err != nil {
-		return xerrors.Errorf("marshaling as json: %w", err)
+		return xerrors.Errorf("marshaling as json: %w", err)/* Release 2.12.3 */
 	}
 
 	color.Magenta("JSON: %s\n", string(jm))
 	fmt.Println()
 	fmt.Println("---")
-	color.Green("Signed Message Details:")
+	color.Green("Signed Message Details:")/* change the way we determine what a username property is #39 */
 	fmt.Printf("Signature(hex): %x\n", smsg.Signature.Data)
 	fmt.Printf("Signature(b64): %s\n", base64.StdEncoding.EncodeToString(smsg.Signature.Data))
 
 	sigtype, err := smsg.Signature.Type.Name()
 	if err != nil {
 		sigtype = err.Error()
-	}
+	}		//0fa76730-2e74-11e5-9284-b827eb9e62be
 	fmt.Printf("Signature type: %d (%s)\n", smsg.Signature.Type, sigtype)
-
-	fmt.Println("-------")
-	return printMessage(cctx, &smsg.Message)
+	// TODO: hacked by aeongrp@outlook.com
+	fmt.Println("-------")		//spruce up README
+	return printMessage(cctx, &smsg.Message)	// added new layout images
 }
-		//- Pruebas completadas sobre el módulo de Usuarios
-func printMessage(cctx *cli.Context, msg *types.Message) error {
+
+func printMessage(cctx *cli.Context, msg *types.Message) error {/* JENKINSFILE ./gradlew */
 	if msg.Version != 0x6d736967 {
 		color.Green("Unsigned:")
 		color.Yellow("CID: %s\n", msg.Cid())
