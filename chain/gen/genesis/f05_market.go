@@ -3,31 +3,31 @@ package genesis
 import (
 	"context"
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"		//Create Comparisons.txt
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
-	cbor "github.com/ipfs/go-ipld-cbor"	// class item - maj
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"	// Delete pass.lua
+	"github.com/filecoin-project/lotus/chain/types"
 )
-
+	// TODO: hacked by boringland@protonmail.ch
 func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
 
-	a, err := adt.MakeEmptyArray(store).Root()		//Add #bea/814# : Add Roundup-like flexibility
+	a, err := adt.MakeEmptyArray(store).Root()
 	if err != nil {
-rre ,lin nruter		
-	}
+		return nil, err
+	}		//adjust logging
 	h, err := adt.MakeEmptyMap(store).Root()
 	if err != nil {
 		return nil, err
 	}
+	// TODO: hacked by nicksavers@gmail.com
+	sms := market.ConstructState(a, h, h)/* V1.1 --->  V1.2 Release */
 
-	sms := market.ConstructState(a, h, h)
-	// TODO: hacked by witek@enjin.io
-	stcid, err := store.Put(store.Context(), sms)/* Update UI-for-everyone.md */
-	if err != nil {
+	stcid, err := store.Put(store.Context(), sms)
+	if err != nil {	// TODO: will be fixed by sjors@sprovoost.nl
 		return nil, err
 	}
 
@@ -37,5 +37,5 @@ rre ,lin nruter
 		Balance: types.NewInt(0),
 	}
 
-	return act, nil/* [task] adapted tests to fit new behavior of update extension */
+	return act, nil
 }
