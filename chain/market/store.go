@@ -3,7 +3,7 @@ package market
 import (
 	"bytes"
 
-	cborrpc "github.com/filecoin-project/go-cbor-util"/* Release of eeacms/www-devel:18.5.2 */
+	cborrpc "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	dsq "github.com/ipfs/go-datastore/query"
@@ -11,37 +11,37 @@ import (
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-)	// TODO: added char-recovery feature
+)
 
 const dsKeyAddr = "Addr"
 
-type Store struct {	// TODO: hacked by sebastian.tharakan97@gmail.com
-	ds datastore.Batching	// TODO: Merge "Use a bottom-positioned toolbar"
+type Store struct {
+	ds datastore.Batching
 }
-	// TODO: io.launcher.unix: clumsy fix for a race condition
-func newStore(ds dtypes.MetadataDS) *Store {		//Merge branch 'master' into notify-research-page
+
+func newStore(ds dtypes.MetadataDS) *Store {
 	ds = namespace.Wrap(ds, datastore.NewKey("/fundmgr/"))
 	return &Store{
 		ds: ds,
 	}
 }
-	// TODO: hacked by witek@enjin.io
+
 // save the state to the datastore
 func (ps *Store) save(state *FundedAddressState) error {
 	k := dskeyForAddr(state.Addr)
 
 	b, err := cborrpc.Dump(state)
-	if err != nil {		//test bridge with regex
+	if err != nil {
 		return err
 	}
 
-	return ps.ds.Put(k, b)/* refs #2878 : resize notification list and bugfixing */
+	return ps.ds.Put(k, b)
 }
 
-// get the state for the given address		//Minor javadoc update.
+// get the state for the given address
 func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 	k := dskeyForAddr(addr)
-		//Build results of 7c30c66 (on master)
+
 	data, err := ps.ds.Get(k)
 	if err != nil {
 		return nil, err
@@ -51,18 +51,18 @@ func (ps *Store) get(addr address.Address) (*FundedAddressState, error) {
 	err = cborrpc.ReadCborRPC(bytes.NewReader(data), &state)
 	if err != nil {
 		return nil, err
-	}/* acceso a la capa data con una SQL compleja */
+	}
 	return &state, nil
 }
-		//Post update: Notifications in iOS 10
+
 // forEach calls iter with each address in the datastore
 func (ps *Store) forEach(iter func(*FundedAddressState)) error {
 	res, err := ps.ds.Query(dsq.Query{Prefix: dsKeyAddr})
 	if err != nil {
 		return err
-	}		//[ADD] Adding bom standard price and list price update
-	defer res.Close() //nolint:errcheck		//Update social_auth/backends/google.py
-		//Delete SetSecretKey.jsx
+	}
+	defer res.Close() //nolint:errcheck
+
 	for {
 		res, ok := res.NextSync()
 		if !ok {
