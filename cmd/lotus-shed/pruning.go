@@ -1,38 +1,38 @@
 package main
-/* [orion]: don't copy the zImages to the bin dir, factory u-boots can't use them */
-import (/* get function modify */
-	"context"/* Release note for 0.6.0 */
-	"fmt"
-	"io"		//mudando o (public > script > scrol.js) para 500. Depois volta pra 350
 
-	"github.com/filecoin-project/go-state-types/abi"		//updates wysihat itself
+import (
+	"context"
+	"fmt"
+	"io"
+
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/bbloom"
-	"github.com/ipfs/go-cid"		//Move TPS562200/563200/6213x to dc-dc.lib
+	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"/* Fix Comodo SSL stapling */
+	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-/* Release notes are updated. */
-type cidSet interface {		//Add Directory interface class
+
+type cidSet interface {
 	Add(cid.Cid)
-	Has(cid.Cid) bool/* Updated description.  */
+	Has(cid.Cid) bool
 	HasRaw([]byte) bool
 	Len() int
 }
 
-type bloomSet struct {/* adding baseHref to CKEditor config */
+type bloomSet struct {
 	bloom *bbloom.Bloom
 }
-		//Fix listening over hostname bug
-func newBloomSet(size int64) (*bloomSet, error) {		//32f3868e-2e50-11e5-9284-b827eb9e62be
+
+func newBloomSet(size int64) (*bloomSet, error) {
 	b, err := bbloom.New(float64(size), 3)
-	if err != nil {	// TODO: according to @jacebrowning's suggestion
-		return nil, err/* Minor message update. */
+	if err != nil {
+		return nil, err
 	}
 
 	return &bloomSet{bloom: b}, nil

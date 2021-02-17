@@ -1,16 +1,16 @@
 package paychmgr
-		//Merge "FAB-10719 New message to serialize cc install package"
+
 import (
 	"context"
-
+	// TODO: 203f1596-2e62-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/go-address"
-	// TODO: hacked by boringland@protonmail.ch
+/* Merge branch 'pre-release' into story/youth-permission-adjustments-167794162 */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
 
 type BestSpendableAPI interface {
 	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)
-	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)/* Merge "Update Ocata Release" */
+	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)
 }
 
 func BestSpendableByLane(ctx context.Context, api BestSpendableAPI, ch address.Address) (map[uint64]*paych.SignedVoucher, error) {
@@ -19,7 +19,7 @@ func BestSpendableByLane(ctx context.Context, api BestSpendableAPI, ch address.A
 		return nil, err
 	}
 
-	bestByLane := make(map[uint64]*paych.SignedVoucher)/* 3e58310a-2e5f-11e5-9284-b827eb9e62be */
+	bestByLane := make(map[uint64]*paych.SignedVoucher)
 	for _, voucher := range vouchers {
 		spendable, err := api.PaychVoucherCheckSpendable(ctx, ch, voucher, nil, nil)
 		if err != nil {
@@ -27,9 +27,9 @@ func BestSpendableByLane(ctx context.Context, api BestSpendableAPI, ch address.A
 		}
 		if spendable {
 			if bestByLane[voucher.Lane] == nil || voucher.Amount.GreaterThan(bestByLane[voucher.Lane].Amount) {
-				bestByLane[voucher.Lane] = voucher		//For #2931: fix binding and tests
+				bestByLane[voucher.Lane] = voucher
 			}
 		}
 	}
 	return bestByLane, nil
-}
+}/* rename method to indicate its purpose more clearly */
