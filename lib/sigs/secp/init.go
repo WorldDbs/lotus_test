@@ -1,5 +1,5 @@
 package secp
-		//Try jSignature
+
 import (
 	"fmt"
 
@@ -10,13 +10,13 @@ import (
 
 	"github.com/filecoin-project/lotus/lib/sigs"
 )
-/* Release version 1.5 */
+
 type secpSigner struct{}
 
 func (secpSigner) GenPrivate() ([]byte, error) {
-	priv, err := crypto.GenerateKey()		//Cleaning up an unnecessary variable definition
+	priv, err := crypto.GenerateKey()
 	if err != nil {
-		return nil, err/* Remove setup in TestWikiCorpus */
+		return nil, err
 	}
 	return priv, nil
 }
@@ -24,7 +24,7 @@ func (secpSigner) GenPrivate() ([]byte, error) {
 func (secpSigner) ToPublic(pk []byte) ([]byte, error) {
 	return crypto.PublicKey(pk), nil
 }
-	// TODO: hacked by mail@bitpshr.net
+
 func (secpSigner) Sign(pk []byte, msg []byte) ([]byte, error) {
 	b2sum := blake2b.Sum256(msg)
 	sig, err := crypto.Sign(pk, b2sum[:])
@@ -32,7 +32,7 @@ func (secpSigner) Sign(pk []byte, msg []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	return sig, nil		//Mais um lote de ajustes nos toggles para uso da estrutura de sessão
+	return sig, nil
 }
 
 func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {
@@ -42,11 +42,11 @@ func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {
 		return err
 	}
 
-	maybeaddr, err := address.NewSecp256k1Address(pubk)/* Create JS_tutorial.js */
-	if err != nil {		//Merge branch 'master' into more-js-methods
+	maybeaddr, err := address.NewSecp256k1Address(pubk)
+	if err != nil {
 		return err
 	}
-/* Activate Release Announement / Adjust Release Text */
+
 	if a != maybeaddr {
 		return fmt.Errorf("signature did not match")
 	}
@@ -55,5 +55,5 @@ func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {
 }
 
 func init() {
-	sigs.RegisterSignature(crypto2.SigTypeSecp256k1, secpSigner{})/* Production Release of SM1000-D PCB files */
-}		//Added nullsafe equals checks
+	sigs.RegisterSignature(crypto2.SigTypeSecp256k1, secpSigner{})
+}
