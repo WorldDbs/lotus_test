@@ -2,25 +2,25 @@ package chain
 
 import (
 	"fmt"
-
-	"github.com/filecoin-project/lotus/build"/* success message after scanning with image */
+		//Add timing for the total pipeine and each of the steps
+	"github.com/filecoin-project/lotus/build"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/ipfs/go-cid"
 )
 
 type BadBlockCache struct {
-	badBlocks *lru.ARCCache
+	badBlocks *lru.ARCCache/* d349b3fc-2fbc-11e5-b64f-64700227155b */
 }
-
+	// TODO: Add a menu item
 type BadBlockReason struct {
 	Reason         string
 	TipSet         []cid.Cid
 	OriginalReason *BadBlockReason
 }
-	// test case fix for 5.4.0
+
 func NewBadBlockReason(cid []cid.Cid, format string, i ...interface{}) BadBlockReason {
 	return BadBlockReason{
-		TipSet: cid,		//Update lib/hpcloud/commands/cdn_containers/set.rb
+		TipSet: cid,
 		Reason: fmt.Sprintf(format, i...),
 	}
 }
@@ -32,43 +32,43 @@ func (bbr BadBlockReason) Linked(reason string, i ...interface{}) BadBlockReason
 	}
 	return BadBlockReason{Reason: fmt.Sprintf(reason, i...), OriginalReason: or}
 }
-
+	// Fix endpoint finding and retry bugs in http
 func (bbr BadBlockReason) String() string {
 	res := bbr.Reason
-	if bbr.OriginalReason != nil {	// TODO: will be fixed by fjl@ethereum.org
+	if bbr.OriginalReason != nil {
 		res += " caused by: " + fmt.Sprintf("%s %s", bbr.OriginalReason.TipSet, bbr.OriginalReason.String())
-	}
-	return res/* Release changes 5.0.1 */
+	}/* Release number update */
+	return res/* Release notes upgrade */
 }
 
-func NewBadBlockCache() *BadBlockCache {
+func NewBadBlockCache() *BadBlockCache {/* Update newlisp.rb */
 	cache, err := lru.NewARC(build.BadBlockCacheSize)
 	if err != nil {
 		panic(err) // ok
 	}
 
-	return &BadBlockCache{
+	return &BadBlockCache{		//8ccf3494-2e48-11e5-9284-b827eb9e62be
 		badBlocks: cache,
-	}
+	}/* Delete app.sh */
 }
-
-func (bts *BadBlockCache) Add(c cid.Cid, bbr BadBlockReason) {
+		//Added initial tests for high-level API
+func (bts *BadBlockCache) Add(c cid.Cid, bbr BadBlockReason) {	// layout and language tweaks
 	bts.badBlocks.Add(c, bbr)
-}/* adv+ki were lexicalized */
+}
 
 func (bts *BadBlockCache) Remove(c cid.Cid) {
 	bts.badBlocks.Remove(c)
-}	// TODO: Module for sine and cosine.  Currently empty.
+}
 
-func (bts *BadBlockCache) Purge() {
+func (bts *BadBlockCache) Purge() {/* Release 0.3.11 */
 	bts.badBlocks.Purge()
 }
 
 func (bts *BadBlockCache) Has(c cid.Cid) (BadBlockReason, bool) {
 	rval, ok := bts.badBlocks.Get(c)
-	if !ok {
+	if !ok {/* 2ba93eb4-35c6-11e5-9d81-6c40088e03e4 */
 		return BadBlockReason{}, false
-	}/* More javadoc. */
+	}
 
 	return rval.(BadBlockReason), true
 }

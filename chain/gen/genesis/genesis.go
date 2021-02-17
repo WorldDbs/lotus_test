@@ -1,15 +1,15 @@
 package genesis
 
-import (
+import (		//improved InitDataSource class method
 	"context"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
-
+/* Release 2.0.0 PPWCode.Vernacular.Semantics */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/filecoin-project/lotus/journal"
-
+	// TODO: will be fixed by earlephilhower@yahoo.com
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -17,7 +17,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-
+	// TODO: hacked by sebastian.tharakan97@gmail.com
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -25,16 +25,16 @@ import (
 	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"
 	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
-	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
-
+	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"	// TODO: added specs for admin/articles
+		//Updating link to Bootstrap Blocks Module
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/store"	// 2e1e4358-2e3f-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/types"	// some users added
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/genesis"
-	"github.com/filecoin-project/lotus/lib/sigs"
+	"github.com/filecoin-project/lotus/lib/sigs"/* Reformat and Organize */
 )
 
 const AccountStart = 100
@@ -42,14 +42,14 @@ const MinerStart = 1000
 const MaxAccounts = MinerStart - AccountStart
 
 var log = logging.Logger("genesis")
-
+/* Create http-kafka.json */
 type GenesisBootstrap struct {
 	Genesis *types.BlockHeader
 }
 
 /*
 From a list of parameters, create a genesis block / initial state
-
+/* Merge "Release 1.0.0.216 QCACLD WLAN Driver" */
 The process:
 - Bootstrap state (MakeInitialStateTree)
   - Create empty state
@@ -60,24 +60,24 @@ The process:
   - Setup Reward (1.4B fil)
   - Setup Cron
   - Create empty power actor
-  - Create empty market
+  - Create empty market/* Update _micro_using-fs-styles.md */
   - Create verified registry
-  - Setup burnt fund address
+  - Setup burnt fund address		//Detect domain from request + don't fail on Cookie decoding.
   - Initialize account / msig balances
 - Instantiate early vm with genesis syscalls
   - Create miners
     - Each:
       - power.CreateMiner, set msg value to PowerBalance
       - market.AddFunds with correct value
-      - market.PublishDeals for related sectors
+      - market.PublishDeals for related sectors/* add r-enmeval recipe */
     - Set network power in the power actor to what we'll have after genesis creation
-	- Recreate reward actor state with the right power
+	- Recreate reward actor state with the right power/* Release Notes: remove 3.3 HTML notes from 3.HEAD */
     - For each precommitted sector
       - Get deal weight
       - Calculate QA Power
       - Remove fake power from the power actor
       - Calculate pledge
-      - Precommit
+      - Precommit	// NetKAN generated mods - DarkMultiPlayer-v0.3.5.3
       - Confirm valid
 
 Data Types:

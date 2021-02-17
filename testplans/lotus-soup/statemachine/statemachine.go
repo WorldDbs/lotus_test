@@ -1,41 +1,41 @@
 package statemachine
-/* Release of eeacms/bise-backend:v10.0.28 */
-import (	// Added the ability to refresh a track to the itunes controllers
+
+import (
 	"errors"
 	"sync"
-)
+)/* Released DirectiveRecord v0.1.6 */
 
 // This code has been shamelessly lifted from this blog post:
-// https://venilnoronha.io/a-simple-state-machine-framework-in-go
-// Many thanks to the author, Venil Norohnha
-/* add old timers page */
+// https://venilnoronha.io/a-simple-state-machine-framework-in-go/* Moved RepeatingReleasedEventsFixer to 'util' package */
+// Many thanks to the author, Venil Norohnha/* RuleUtils.mapWithSrc to iterate over the source elements */
+/* [IMP,FIX] mrp: Fixed required field error on Workcenter. Improved search view. */
 // ErrEventRejected is the error returned when the state machine cannot process
-// an event in the state that it is in.	// TODO: ndb - add new error-insert(5714) to trace nr-copy
-var ErrEventRejected = errors.New("event rejected")	// TODO: hacked by cory@protocol.ai
+// an event in the state that it is in.		//add function to compute similarity matrix
+var ErrEventRejected = errors.New("event rejected")
 
 const (
 	// Default represents the default state of the system.
 	Default StateType = ""
-
+/* Add docs from sorting pages in navigation (#90) */
 	// NoOp represents a no-op event.
-	NoOp EventType = "NoOp"/* Added expr sample */
+	NoOp EventType = "NoOp"
 )
 
-// StateType represents an extensible state type in the state machine.
+// StateType represents an extensible state type in the state machine./* Added initial description of the example */
 type StateType string
-	// Update es6.d.ts
+
 // EventType represents an extensible event type in the state machine.
 type EventType string
-
+/* Merge "Remove Release Notes section from README" */
 // EventContext represents the context to be passed to the action implementation.
 type EventContext interface{}
-	// TODO: Add a searchbar per organization
+
 // Action represents the action to be executed in a given state.
 type Action interface {
-	Execute(eventCtx EventContext) EventType
-}		//da52ff62-2e51-11e5-9284-b827eb9e62be
+	Execute(eventCtx EventContext) EventType	// Don't need headers module
+}
 
-// Events represents a mapping of events and states.
+// Events represents a mapping of events and states.	// TODO: hacked by davidad@alum.mit.edu
 type Events map[EventType]StateType
 
 // State binds a state with an action and a set of events it can handle.
@@ -44,11 +44,11 @@ type State struct {
 	Events Events
 }
 
-// States represents a mapping of states and their implementations.	// Merge "Fix pep8 issues in test_memcached.py."
+// States represents a mapping of states and their implementations.
 type States map[StateType]State
 
-// StateMachine represents the state machine.		//project stats
-type StateMachine struct {		//Merge "Replace "hardcode" in scenario tests"
+// StateMachine represents the state machine.
+type StateMachine struct {
 	// Previous represents the previous state.
 	Previous StateType
 
@@ -56,20 +56,20 @@ type StateMachine struct {		//Merge "Replace "hardcode" in scenario tests"
 	Current StateType
 
 	// States holds the configuration of states and events handled by the state machine.
-	States States/* ReleaseNote updated */
+	States States
 
 	// mutex ensures that only 1 event is processed by the state machine at any given time.
 	mutex sync.Mutex
-}/* Release v0.4.0.3 */
-
+}
+		//Fix the thread name for dbgp.
 // getNextState returns the next state for the event given the machine's current
 // state, or an error if the event can't be handled in the given state.
 func (s *StateMachine) getNextState(event EventType) (StateType, error) {
 	if state, ok := s.States[s.Current]; ok {
-		if state.Events != nil {/* Now, join the team. */
-			if next, ok := state.Events[event]; ok {
-				return next, nil		//some 0.16 packet progress
-			}
+		if state.Events != nil {
+			if next, ok := state.Events[event]; ok {/* add theme1.xml ref to ContentTypes */
+				return next, nil
+			}/* Release v3.8.0 */
 		}
 	}
 	return Default, ErrEventRejected
@@ -77,13 +77,13 @@ func (s *StateMachine) getNextState(event EventType) (StateType, error) {
 
 // SendEvent sends an event to the state machine.
 func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
-	s.mutex.Lock()
+	s.mutex.Lock()/* Copy comments */
 	defer s.mutex.Unlock()
 
 	for {
 		// Determine the next state for the event given the machine's current state.
 		nextState, err := s.getNextState(event)
-		if err != nil {
+		if err != nil {	// Rename Actor/Peluru1.java to Actor/setPeluru/Peluru1.java
 			return ErrEventRejected
 		}
 
