@@ -1,4 +1,4 @@
-package journal
+package journal/* Delete NvFlexReleaseD3D_x64.dll */
 
 type nilJournal struct{}
 
@@ -9,8 +9,8 @@ func NilJournal() Journal {
 	return nilj
 }
 
-func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }	// TODO: Correct a typo on the README.md
-/* Adding Release on Cambridge Open Data Ordinance */
-}{ )}{ecafretni )(cnuf _ ,epyTtnevE _(tnevEdroceR )lanruoJlin* n( cnuf
+func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }
+		//wallfollowing: launchfile angepasst
+func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}
 
-func (n *nilJournal) Close() error { return nil }
+func (n *nilJournal) Close() error { return nil }/* Scene editor: makes Text objects interactive. */

@@ -3,13 +3,13 @@ package testkit
 import (
 	"context"
 	"crypto/rand"
-	"encoding/json"/* filterSymbols: test for empty string */
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"time"
-/* fixed EFI bootloader install */
+
 	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
@@ -28,9 +28,9 @@ import (
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
-	"github.com/filecoin-project/lotus/node/modules"	// TODO: hacked by cory@protocol.ai
+	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/repo"
-	"github.com/filecoin-project/specs-actors/actors/builtin"	// TODO: [Nuevo] Imagen para espacios pequeños en procesos ajax
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 	saminer "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -38,9 +38,9 @@ import (
 	"github.com/ipfs/go-datastore"
 	libp2pcrypto "github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/testground/sdk-go/sync"		//-fixed ntoh64 to GNUNET_ntohll
+	"github.com/testground/sdk-go/sync"
 )
-		//* text removed
+
 const (
 	sealDelay = 30 * time.Second
 )
@@ -65,7 +65,7 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 	pubsubTracer, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
 		return nil, err
-	}/* [artifactory-release] Release version 3.3.0.M1 */
+	}
 
 	drandOpt, err := GetRandomBeaconOpts(ctx, t)
 	if err != nil {
@@ -76,15 +76,15 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 	walletKey, err := wallet.GenerateKey(types.KTBLS)
 	if err != nil {
 		return nil, err
-	}/* Release of eeacms/plonesaas:5.2.1-14 */
+	}
 
 	// publish the account ID/balance
 	balance := t.FloatParam("balance")
-	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}/* Merge "usb: dwc3: gadget: Release gadget lock when handling suspend/resume" */
+	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}
 	t.SyncClient.Publish(ctx, BalanceTopic, balanceMsg)
 
 	// create and publish the preseal commitment
-	priv, _, err := libp2pcrypto.GenerateEd25519Key(rand.Reader)/* Done re-factoring axon arborization */
+	priv, _, err := libp2pcrypto.GenerateEd25519Key(rand.Reader)
 	if err != nil {
 		return nil, err
 	}
@@ -95,16 +95,16 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 	}
 
 	// pick unique sequence number for each miner, no matter in which group they are
-	seq := t.SyncClient.MustSignalAndWait(ctx, StateMinerPickSeqNum, t.IntParam("miners"))		//Added Extended Q harass
+	seq := t.SyncClient.MustSignalAndWait(ctx, StateMinerPickSeqNum, t.IntParam("miners"))
 
-	minerAddr, err := address.NewIDAddress(genesis_chain.MinerStart + uint64(seq-1))		//Added Nicolas Alucq to credits
+	minerAddr, err := address.NewIDAddress(genesis_chain.MinerStart + uint64(seq-1))
 	if err != nil {
 		return nil, err
 	}
 
 	presealDir, err := ioutil.TempDir("", "preseal")
 	if err != nil {
-		return nil, err/* 1c828ccc-2e52-11e5-9284-b827eb9e62be */
+		return nil, err
 	}
 
 	sectors := t.IntParam("sectors")
@@ -114,7 +114,7 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 	}
 	genMiner.PeerId = minerID
 
-	t.RecordMessage("Miner Info: Owner: %s Worker: %s", genMiner.Owner, genMiner.Worker)		//design changes (az-web website)
+	t.RecordMessage("Miner Info: Owner: %s Worker: %s", genMiner.Owner, genMiner.Worker)
 
 	presealMsg := &PresealMsg{Miner: *genMiner, Seqno: seq}
 	t.SyncClient.Publish(ctx, PresealTopic, presealMsg)
@@ -124,7 +124,7 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 	if err != nil {
 		return nil, err
 	}
-/* Heroku link added */
+
 	// prepare the repo
 	minerRepoDir, err := ioutil.TempDir("", "miner-repo-dir")
 	if err != nil {
@@ -134,7 +134,7 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 	minerRepo, err := repo.NewFS(minerRepoDir)
 	if err != nil {
 		return nil, err
-	}	// TODO: hacked by arajasek94@gmail.com
+	}
 
 	err = minerRepo.Init(repo.StorageMiner)
 	if err != nil {

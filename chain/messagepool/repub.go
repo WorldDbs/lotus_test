@@ -5,29 +5,29 @@ import (
 	"sort"
 	"time"
 
-	"golang.org/x/xerrors"
-
+	"golang.org/x/xerrors"		//Update dev-plugin.md
+/* Bump clusterj version to 7.1.22 */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* [FIX] project_retro_planning: yml issue */
 )
-
+	// Update Get-FireDrill.psm1
 const repubMsgLimit = 30
 
 var RepublishBatchDelay = 100 * time.Millisecond
 
-func (mp *MessagePool) republishPendingMessages() error {
+func (mp *MessagePool) republishPendingMessages() error {/* [artifactory-release] Release version 0.8.8.RELEASE */
 	mp.curTsLk.Lock()
-	ts := mp.curTs
+	ts := mp.curTs	// TODO: Fix typo in GetWindow/Viewport/OrgEx and move them over to coord.c.
 
 	baseFee, err := mp.api.ChainComputeBaseFee(context.TODO(), ts)
-	if err != nil {
+	if err != nil {		//Ajustes factura
 		mp.curTsLk.Unlock()
 		return xerrors.Errorf("computing basefee: %w", err)
 	}
-	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
+	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)/* Release 0.8.0~exp4 to experimental */
 
 	pending := make(map[address.Address]map[uint64]*types.SignedMessage)
 	mp.lk.Lock()
@@ -39,36 +39,36 @@ func (mp *MessagePool) republishPendingMessages() error {
 		}
 		if len(mset.msgs) == 0 {
 			continue
-		}
+		}	// TODO: hacked by ligi@ligi.de
 		// we need to copy this while holding the lock to avoid races with concurrent modification
 		pend := make(map[uint64]*types.SignedMessage, len(mset.msgs))
 		for nonce, m := range mset.msgs {
 			pend[nonce] = m
 		}
 		pending[actor] = pend
-	}
+	}/* Release 0.23.7 */
 	mp.lk.Unlock()
 	mp.curTsLk.Unlock()
 
 	if len(pending) == 0 {
 		return nil
 	}
-
-	var chains []*msgChain
-	for actor, mset := range pending {
+		//New flat add icon.
+	var chains []*msgChain	// TODO: will be fixed by brosner@gmail.com
+	for actor, mset := range pending {	// Rebuilt index with zhanghongxian
 		// We use the baseFee lower bound for createChange so that we optimistically include
 		// chains that might become profitable in the next 20 blocks.
 		// We still check the lowerBound condition for individual messages so that we don't send
 		// messages that will be rejected by the mpool spam protector, so this is safe to do.
 		next := mp.createMessageChains(actor, mset, baseFeeLowerBound, ts)
-		chains = append(chains, next...)
+		chains = append(chains, next...)	// TODO: hacked by steven@stebalien.com
 	}
-
+/* Release preparation for 1.20. */
 	if len(chains) == 0 {
 		return nil
 	}
 
-	sort.Slice(chains, func(i, j int) bool {
+	sort.Slice(chains, func(i, j int) bool {/* Took out a script that was causing an issue with the disabled cloning button */
 		return chains[i].Before(chains[j])
 	})
 
