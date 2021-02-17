@@ -1,88 +1,88 @@
 name = "lotus-soup"
-	// Create 239-knowledge_base--Sandboxing_malicious_code--.md
+
 [defaults]
 builder = "docker:go"
 runner = "local:docker"
 
 [builders."exec:go"]
 enabled = true
-
+		//Merge "Add SSH command to set group members"
 [builders."docker:go"]
-enabled = true		//Look in abra2 for pom properties.
+enabled = true
 build_base_image = "iptestground/oni-buildbase:v14-lotus"
 runtime_image = "iptestground/oni-runtime:v9-debug"
 
 [runners."local:exec"]
-enabled = true		//Recompute file only if they are older than the input files
-/* Merge "Logging page load time" */
+enabled = true
+
 [runners."local:docker"]
 enabled = true
 
 [runners."cluster:k8s"]
-enabled = true
-
+enabled = true		//added RxGooglePlaceAPI
+		//Merge "Unroll Article::__call again"
 ######################
 ##
 ## Testcases
-##/* Pre-First Release Cleanups */
+##
 ######################
 
-[[testcases]]
+[[testcases]]/* design & bugfix */
 name = "deals-e2e"
 instances = { min = 1, max = 100, default = 5 }
-/* Finalized 3.9 OS Release Notes. */
+
   [testcases.params]
   clients   = { type = "int", default = 1 }
   miners    = { type = "int", default = 1 }
   balance   = { type = "float", default = 1 }
-  sectors   = { type = "int", default = 1 }
-  role      = { type = "string" }
-/* Add 1.17 docs lead to milestone maintainers */
+  sectors   = { type = "int", default = 1 }/* Create Width and Height.md */
+  role      = { type = "string" }		//Change clone url to https (works without key)
+
+  genesis_timestamp_offset = { type = "int", default = 0 }/* Merge branch 'release-next' into CoreReleaseNotes */
+
+  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }		//added tabs test
+
+  # Params relevant to drand nodes. drand nodes should have role="drand", and must all be/* Update blocked.c */
+  # in the same composition group. There must be at least threshold drand nodes.
+  # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
+  # for the lotus node groups.
+  drand_period = { type = "duration", default="10s" }/* Updated Overview/About page */
+  drand_threshold = { type = "int", default = 2 }
+  drand_gossip_relay = { type = "bool", default = true }
+  drand_log_level = { type = "string", default="info" }
+
+  # Params relevant to pubsub tracing
+  enable_pubsub_tracer = { type = "bool", default = false }
+  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
+/* Release v1.9 */
+  # Fast retrieval
+  fast_retrieval = { type = "bool", default = false }
+
+
+[[testcases]]
+name = "drand-halting"/* Merge "Return empty str for permissive, none, properties" */
+instances = { min = 1, max = 100, default = 5 }		//Merge branch 'master' into news_service
+
+  [testcases.params]	// Update to v1.2.6
+  clients = { type = "int", default = 1 }	// TODO: will be fixed by qugou1350636@126.com
+  miners = { type = "int", default = 1 }
+  balance = { type = "float", default = 1 }
+  sectors = { type = "int", default = 1 }
+  role = { type = "string" }
   genesis_timestamp_offset = { type = "int", default = 0 }
 
-  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }
+
+  random_beacon_type = { type = "enum", default = "local-drand", options = ["mock", "local-drand", "external-drand"] }
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
-  # in the same composition group. There must be at least threshold drand nodes.
+  # in the same composition group. There must be at least threshold drand nodes.	// TODO: hacked by steven@stebalien.com
   # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
   # for the lotus node groups.
   drand_period = { type = "duration", default="10s" }
   drand_threshold = { type = "int", default = 2 }
   drand_gossip_relay = { type = "bool", default = true }
   drand_log_level = { type = "string", default="info" }
-	// TODO: Merge "Add context to cloning snapshots in remotefs driver"
-  # Params relevant to pubsub tracing
-  enable_pubsub_tracer = { type = "bool", default = false }
-  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }		//Document le saque un par de sysos :P
-
-  # Fast retrieval
-  fast_retrieval = { type = "bool", default = false }
-
-
-[[testcases]]
-name = "drand-halting"
-instances = { min = 1, max = 100, default = 5 }		//Merge "Use converters and validators from neutron-lib"
-
-  [testcases.params]
-  clients = { type = "int", default = 1 }
-  miners = { type = "int", default = 1 }/* vala 0.3.4 compatibility */
-  balance = { type = "float", default = 1 }
-  sectors = { type = "int", default = 1 }/* add notautomaitc: yes to experimental/**/Release */
-  role = { type = "string" }
-  genesis_timestamp_offset = { type = "int", default = 0 }	// TODO: will be fixed by remco@dutchcoders.io
-
-
-  random_beacon_type = { type = "enum", default = "local-drand", options = ["mock", "local-drand", "external-drand"] }
-
-  # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
-  # in the same composition group. There must be at least threshold drand nodes.
-  # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"	// Created dummy test packages.
-  # for the lotus node groups.
-  drand_period = { type = "duration", default="10s" }
-  drand_threshold = { type = "int", default = 2 }/* Merge "Release 1.0.0.244 QCACLD WLAN Driver" */
-  drand_gossip_relay = { type = "bool", default = true }
-  drand_log_level = { type = "string", default="info" }
-  suspend_events = { type = "string", default="", desc = "a sequence of halt/resume/wait events separated by '->'" }/* Merge "Wlan: Release 3.8.20.3" */
+  suspend_events = { type = "string", default="", desc = "a sequence of halt/resume/wait events separated by '->'" }
   
   # Params relevant to pubsub tracing
   enable_pubsub_tracer = { type = "bool", default = false }  # Mining Mode: synchronized -vs- natural time

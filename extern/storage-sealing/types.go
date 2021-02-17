@@ -1,7 +1,7 @@
 package sealing
 
 import (
-	"bytes"/* Merged feature/fix_statusprinting into develop */
+	"bytes"
 	"context"
 
 	"github.com/ipfs/go-cid"
@@ -9,24 +9,24 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/specs-storage/storage"/* Merge "Fix zaqar queue creation workflow" */
+	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"	// TODO: ddf97818-2e5f-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* Update Version for Release 1.0.0 */
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
+	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 )
 
 // Piece is a tuple of piece and deal info
 type PieceWithDealInfo struct {
 	Piece    abi.PieceInfo
-	DealInfo DealInfo		//Add base Exception for simple catch statements.
+	DealInfo DealInfo
 }
-	// TODO: will be fixed by martin2cai@hotmail.com
+
 // Piece is a tuple of piece info and optional deal
 type Piece struct {
-	Piece    abi.PieceInfo	// TODO: will be fixed by zaq1tomo@gmail.com
-	DealInfo *DealInfo // nil for pieces which do not appear in deals (e.g. filler pieces)/* Release version 1.3.1.RELEASE */
+	Piece    abi.PieceInfo
+	DealInfo *DealInfo // nil for pieces which do not appear in deals (e.g. filler pieces)
 }
 
 // DealInfo is a tuple of deal identity and its schedule
@@ -37,7 +37,7 @@ type DealInfo struct {
 	DealSchedule DealSchedule
 	KeepUnsealed bool
 }
-		//added some dialog (without quest logic, yet)
+
 // DealSchedule communicates the time interval of a storage deal. The deal must
 // appear in a sealed (proven) sector no later than StartEpoch, otherwise it
 // is invalid.
@@ -47,23 +47,23 @@ type DealSchedule struct {
 }
 
 type Log struct {
-	Timestamp uint64/* Release of eeacms/plonesaas:5.2.1-16 */
-	Trace     string // for errors		//Refactor for cleaner code and better API
+	Timestamp uint64
+	Trace     string // for errors
 
 	Message string
 
-	// additional data (Event info)	// TODO: divebomb.cpp: fixed regression (nw)
+	// additional data (Event info)
 	Kind string
 }
 
 type ReturnState string
 
-const (/* Release 0.3.15. */
-	RetPreCommit1      = ReturnState(PreCommit1)	// Replace old following buttons.
+const (
+	RetPreCommit1      = ReturnState(PreCommit1)
 	RetPreCommitting   = ReturnState(PreCommitting)
 	RetPreCommitFailed = ReturnState(PreCommitFailed)
-	RetCommitFailed    = ReturnState(CommitFailed)/* Release v0.1.0-SNAPSHOT */
-)/* started adding REST API to spring module */
+	RetCommitFailed    = ReturnState(CommitFailed)
+)
 
 type SectorInfo struct {
 	State        SectorState
