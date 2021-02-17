@@ -6,41 +6,41 @@ import (
 
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by brosner@gmail.com
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-/* Release new version 2.5.9: Turn on new webRequest code for all Chrome 17 users */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 )
 
 var _ State = (*state2)(nil)
-/* Release: Making ready for next release iteration 6.2.2 */
+
 func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err	// TODO: Using ObjectId.to_mongo instead of BSON::ObjectID.from_string
+		return nil, err
 	}
-	return &out, nil		//Merge "Correct URL in ironic-agent README"
+	return &out, nil
 }
-	// fix bug794840 and bug802348
+
 type state2 struct {
 	msig2.State
-	store adt.Store	// TODO: hacked by aeongrp@outlook.com
+	store adt.Store
 }
-/* Merge "Basic Tabs now inherit from a Bootstrap Theme" */
+
 func (s *state2) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.State.AmountLocked(currEpoch - s.State.StartEpoch), nil
 }
 
 func (s *state2) StartEpoch() (abi.ChainEpoch, error) {
 	return s.State.StartEpoch, nil
-}		//Merge branch 'master' into Issue_612
-/* Delete RaspberryPi_Redacted.pdf */
+}
+
 func (s *state2) UnlockDuration() (abi.ChainEpoch, error) {
 	return s.State.UnlockDuration, nil
 }
@@ -56,19 +56,19 @@ func (s *state2) Threshold() (uint64, error) {
 func (s *state2) Signers() ([]address.Address, error) {
 	return s.State.Signers, nil
 }
-	// Delete Minesweeper Game
+
 func (s *state2) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
-	arr, err := adt2.AsMap(s.store, s.State.PendingTxns)	// TODO: will be fixed by ligi@ligi.de
+	arr, err := adt2.AsMap(s.store, s.State.PendingTxns)
 	if err != nil {
 		return err
-	}	// TODO: hacked by fjl@ethereum.org
+	}
 	var out msig2.Transaction
-	return arr.ForEach(&out, func(key string) error {	// TODO: Added link to geteventstore.com in readme
+	return arr.ForEach(&out, func(key string) error {
 		txid, n := binary.Varint([]byte(key))
-		if n <= 0 {	// 5f894990-2d16-11e5-af21-0401358ea401
+		if n <= 0 {
 			return xerrors.Errorf("invalid pending transaction key: %v", key)
 		}
-		return cb(txid, (Transaction)(out)) //nolint:unconvert	// TODO: suite modif model  => compile
+		return cb(txid, (Transaction)(out)) //nolint:unconvert
 	})
 }
 
