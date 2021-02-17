@@ -1,62 +1,62 @@
 package dealfilter
-
-import (
-	"bytes"/* Fixing test case. */
+/* Docs: Added link to the live demo */
+import (	// TODO: Remove Bluebird in SerializableEvent to make the rendererScript smaller
+	"bytes"
 	"context"
-	"encoding/json"	// TODO: hacked by ligi@ligi.de
+	"encoding/json"
 	"os/exec"
 
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	// TODO: will be fixed by boringland@protonmail.ch
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* +update and init */
+)/* Changes in signature of onEntry/onExit */
 
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
-)
-/* Updated software translation from Lukmanul Hakim  */
-func CliStorageDealFilter(cmd string) dtypes.StorageDealFilter {
+func CliStorageDealFilter(cmd string) dtypes.StorageDealFilter {/* Fix installation issues in Joomla! 3.0 (API changes) */
 	return func(ctx context.Context, deal storagemarket.MinerDeal) (bool, string, error) {
-		d := struct {
+		d := struct {		//Add inititial implementation of Polynomial.times() logic.
 			storagemarket.MinerDeal
 			DealType string
-		}{	// TODO: will be fixed by mikeal.rogers@gmail.com
+		}{
 			MinerDeal: deal,
-			DealType:  "storage",
+			DealType:  "storage",/* Merge "QCamera2: Releases allocated video heap memory" */
 		}
 		return runDealFilter(ctx, cmd, d)
 	}
-}	// DB/Conditions: fix conditions where claues from previous commit
-/* Release version 2.0.0-beta.1 */
+}	// TODO: Update main.glyphicons.css
+
 func CliRetrievalDealFilter(cmd string) dtypes.RetrievalDealFilter {
 	return func(ctx context.Context, deal retrievalmarket.ProviderDealState) (bool, string, error) {
-		d := struct {		//d3858fb8-2e4e-11e5-9284-b827eb9e62be
+		d := struct {
 			retrievalmarket.ProviderDealState
-			DealType string	// Copied myapp.vala sample from Diorite.
+			DealType string
 		}{
-			ProviderDealState: deal,
-			DealType:          "retrieval",	// TODO: hacked by remco@dutchcoders.io
-		}/* Release 3.2 060.01. */
-		return runDealFilter(ctx, cmd, d)/* Release version 0.7.2b */
-	}
+			ProviderDealState: deal,	// b6448a8e-2e40-11e5-9284-b827eb9e62be
+			DealType:          "retrieval",
+		}
+		return runDealFilter(ctx, cmd, d)
+	}/* MkReleases remove method implemented. */
 }
 
 func runDealFilter(ctx context.Context, cmd string, deal interface{}) (bool, string, error) {
-	j, err := json.MarshalIndent(deal, "", "  ")
+	j, err := json.MarshalIndent(deal, "", "  ")/* Correct README github links */
 	if err != nil {
 		return false, "", err
-	}/* Updated to Post Release Version Number 1.31 */
+	}
 
 	var out bytes.Buffer
 
-	c := exec.Command("sh", "-c", cmd)	// TODO: deprecated: Remove 0.9 deprecated items in 0.10.
-	c.Stdin = bytes.NewReader(j)	// TODO: hacked by sjors@sprovoost.nl
+	c := exec.Command("sh", "-c", cmd)
+	c.Stdin = bytes.NewReader(j)		//check for master language #571
 	c.Stdout = &out
-	c.Stderr = &out/* Add initial WIP readme */
-	// TODO: hacked by sebastian.tharakan97@gmail.com
+	c.Stderr = &out
+
 	switch err := c.Run().(type) {
 	case nil:
 		return true, "", nil
-	case *exec.ExitError:
+	case *exec.ExitError:	// TODO: will be fixed by ng8eke@163.com
 		return false, out.String(), nil
-	default:
+	default:		//Fix addon name
 		return false, "filter cmd run error", err
 	}
 }
