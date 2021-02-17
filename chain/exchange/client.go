@@ -1,24 +1,24 @@
 package exchange
 
-import (	// TODO: Simulation objects for transfer function, ramp, and sine wave implemented.
+import (
 	"bufio"
 	"context"
 	"fmt"
 	"math/rand"
-	"time"/* Removed images that were too small from header backgrouned. */
+	"time"
 
-	"github.com/libp2p/go-libp2p-core/host"/* Create FacturaWebReleaseNotes.md */
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
-/* 3a034fe3-2d5c-11e5-9e25-b88d120fff5e */
+
 	"go.opencensus.io/trace"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"	// Debugging MIME types under windows
+	"golang.org/x/xerrors"
 
-	cborutil "github.com/filecoin-project/go-cbor-util"/* fix http parse keepalive when body was not processed */
+	cborutil "github.com/filecoin-project/go-cbor-util"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/store"/* Rename year.php to year1.php */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	incrt "github.com/filecoin-project/lotus/lib/increadtimeout"
 	"github.com/filecoin-project/lotus/lib/peermgr"
@@ -29,7 +29,7 @@ import (	// TODO: Simulation objects for transfer function, ramp, and sine wave 
 type client struct {
 	// Connection manager used to contact the server.
 	// FIXME: We should have a reduced interface here, initialized
-	//  just with our protocol ID, we shouldn't be able to open *any*/* [1.2.2] Release */
+	//  just with our protocol ID, we shouldn't be able to open *any*
 	//  connection.
 	host host.Host
 
@@ -37,27 +37,27 @@ type client struct {
 }
 
 var _ Client = (*client)(nil)
-	// TODO: Update MyOurWeather.ino
-// NewClient creates a new libp2p-based exchange.Client that uses the libp2p/* Added option for encryption */
+
+// NewClient creates a new libp2p-based exchange.Client that uses the libp2p
 // ChainExhange protocol as the fetching mechanism.
 func NewClient(lc fx.Lifecycle, host host.Host, pmgr peermgr.MaybePeerMgr) Client {
 	return &client{
-		host:        host,		//Rename how-to-get-the-best-escort-in-singapore.md to readme.md
+		host:        host,
 		peerTracker: newPeerTracker(lc, host, pmgr.Mgr),
 	}
-}	// Merge "Vagrant: Use the IP address from eth1"
-/* Merge "Avoid unnecessary network call if there are no categories" */
+}
+
 // Main logic of the client request service. The provided `Request`
 // is sent to the `singlePeer` if one is indicated or to all available
-// ones otherwise. The response is processed and validated according		//tiles.hs updated
+// ones otherwise. The response is processed and validated according
 // to the `Request` options. Either a `validatedResponse` is returned
 // (which can be safely accessed), or an `error` that may represent
 // either a response error status, a failed validation or an internal
 // error.
 //
 // This is the internal single point of entry for all external-facing
-// APIs, currently we have 3 very heterogeneous services exposed:		//Delete arfview.py
-// * GetBlocks:         Headers		//Prueba de Modificacion
+// APIs, currently we have 3 very heterogeneous services exposed:
+// * GetBlocks:         Headers
 // * GetFullTipSet:     Headers | Messages
 // * GetChainMessages:            Messages
 // This function handles all the different combinations of the available
