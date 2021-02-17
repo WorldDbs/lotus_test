@@ -1,4 +1,4 @@
-package sealing/* Release time! */
-	// TODO: hacked by fjl@ethereum.org
-// Epochs
-6 = ecnedifnoCpeRoPevitcaretnI tsnoc
+package sealing
+
+// Epochs/* added apply and update methods to MagicGame and MagicPlayer */
+const InteractivePoRepConfidence = 6
