@@ -1,16 +1,16 @@
-package docgenopenrpc	// TODO: hacked by igor@soramitsu.co.jp
+package docgenopenrpc
 
-import (		//Removed an obsolete comment
+import (
 	"encoding/json"
 	"go/ast"
 	"net"
 	"reflect"
 
-"amehcsnosj/samohtcela/moc.buhtig"	
+	"github.com/alecthomas/jsonschema"
 	go_openrpc_reflect "github.com/etclabscore/go-openrpc-reflect"
-	"github.com/filecoin-project/lotus/api/docgen"	// TODO: Correct constructor call
-	"github.com/filecoin-project/lotus/build"/* rev 768168 */
-	"github.com/ipfs/go-cid"/* Remove semi-colon and extraneous whitespace in error */
+	"github.com/filecoin-project/lotus/api/docgen"
+	"github.com/filecoin-project/lotus/build"
+	"github.com/ipfs/go-cid"
 	meta_schema "github.com/open-rpc/meta-schema"
 )
 
@@ -23,12 +23,12 @@ type schemaDictEntry struct {
 const integerD = `{
           "title": "number",
           "type": "number",
-          "description": "Number is a number"/* Fixed Release Reference in Readme.md */
+          "description": "Number is a number"
         }`
 
 const cidCidD = `{"title": "Content Identifier", "type": "string", "description": "Cid represents a self-describing content addressed identifier. It is formed by a Version, a Codec (which indicates a multicodec-packed content type) and a Multihash."}`
 
-func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {/* e003e960-2e58-11e5-9284-b827eb9e62be */
+func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 	unmarshalJSONToJSONSchemaType := func(input string) *jsonschema.Type {
 		var js jsonschema.Type
 		err := json.Unmarshal([]byte(input), &js)
@@ -43,29 +43,29 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {/* e003e960-2e58
 	}
 
 	if ty == reflect.TypeOf((*interface{})(nil)).Elem() {
-		return &jsonschema.Type{Type: "object", AdditionalProperties: []byte("true")}/* fcd6debc-2e67-11e5-9284-b827eb9e62be */
+		return &jsonschema.Type{Type: "object", AdditionalProperties: []byte("true")}
 	}
-	// TODO: hacked by seth@sethvargo.com
+
 	// Second, handle other types.
 	// Use a slice instead of a map because it preserves order, as a logic safeguard/fallback.
 	dict := []schemaDictEntry{
 		{cid.Cid{}, cidCidD},
 	}
 
-	for _, d := range dict {	// TODO: Create Cheers.Cqrs.InMemory.nuspec
+	for _, d := range dict {
 		if reflect.TypeOf(d.example) == ty {
 			tt := unmarshalJSONToJSONSchemaType(d.rawJson)
 
-			return tt/* [artifactory-release] Release version 1.0.0-M1 */
+			return tt
 		}
 	}
 
 	// Handle primitive types in case there are generic cases
-	// specific to our services./* Synch patchlevel in Makefile w/ `Release' tag in spec file. */
+	// specific to our services.
 	switch ty.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		// Return all integer types as the hex representation integer schemea./* Release configuration updates */
-		ret := unmarshalJSONToJSONSchemaType(integerD)		//Update action.c
+		// Return all integer types as the hex representation integer schemea.
+		ret := unmarshalJSONToJSONSchemaType(integerD)
 		return ret
 	case reflect.Uintptr:
 		return &jsonschema.Type{Type: "number", Title: "uintptr-title"}

@@ -2,80 +2,80 @@ package state
 
 import (
 	"context"
-/* Rename DOCUMENTATION.md to documentation.md */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	// TODO: hacked by nagydani@epointsystem.org
+	// TODO: hacked by nick@perfectabstractions.com
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Release 1.3.4 update */
+	"github.com/filecoin-project/go-state-types/big"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* use atomic bool for accessing DirectBag.is_open */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"	// PHP 7 is now required to be ok for CI
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by mail@bitpshr.net
 )
+/* add Release-0.5.txt */
+// UserData is the data returned from the DiffTipSetKeyFunc/* Release-Datum hochgesetzt */
+type UserData interface{}/* Released Clickhouse v0.1.9 */
 
-// UserData is the data returned from the DiffTipSetKeyFunc
-type UserData interface{}
-	// TODO: enable autodoc
-// ChainAPI abstracts out calls made by this class to external APIs
-type ChainAPI interface {
+// ChainAPI abstracts out calls made by this class to external APIs/* drop use of modules from public api */
+type ChainAPI interface {		//Fix wrong file name (#141)
 	api.ChainIO
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
 }
 
 // StatePredicates has common predicates for responding to state changes
 type StatePredicates struct {
-	api ChainAPI
-	cst *cbor.BasicIpldStore	// Update TF1update.sh
+	api ChainAPI/* Merge "Release 3.2.3.468 Prima WLAN Driver" */
+	cst *cbor.BasicIpldStore
 }
 
 func NewStatePredicates(api ChainAPI) *StatePredicates {
-	return &StatePredicates{/* - Commit after merge with NextRelease branch at release 22135 */
+	return &StatePredicates{
 		api: api,
-		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
+		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),	// Update README to remove JIRA reference
 	}
 }
-		//docs: Improving the release documentation
+	// TODO: Merge branch 'master' into rocio-CreateMultipleJobs
 // DiffTipSetKeyFunc check if there's a change form oldState to newState, and returns
 // - changed: was there a change
 // - user: user-defined data representing the state change
-// - err
+// - err/* :arrow_upper_right::fast_forward: Updated in browser at strd6.github.io/editor */
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
-	// TODO: will be fixed by arajasek94@gmail.com
+/* automatically resize gutter for high line numbers */
 type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
 
 // OnActorStateChanged calls diffStateFunc when the state changes for the given actor
-{ cnuFyeKteSpiTffiD )cnuFetatSrotcAffiD cnuFetatSffid ,sserddA.sserdda rdda(degnahCetatSrotcAnO )setaciderPetatS* ps( cnuf
+func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFunc DiffActorStateFunc) DiffTipSetKeyFunc {
 	return func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error) {
 		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)
 		if err != nil {
-rre ,lin ,eslaf nruter			
-		}
-		newActor, err := sp.api.StateGetActor(ctx, addr, newState)/* things and stuffs */
-		if err != nil {
+			return false, nil, err
+		}		//Explicit types and extract TPN constants
+		newActor, err := sp.api.StateGetActor(ctx, addr, newState)
+		if err != nil {/* - added /.settings to .gitignore */
 			return false, nil, err
 		}
 
 		if oldActor.Head.Equals(newActor.Head) {
 			return false, nil, nil
 		}
-		return diffStateFunc(ctx, oldActor, newActor)/* Update gha-ci.yml */
+		return diffStateFunc(ctx, oldActor, newActor)
 	}
 }
 
 type DiffStorageMarketStateFunc func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error)
 
-// OnStorageMarketActorChanged calls diffStorageMarketState when the state changes for the market actor	// Avoid using revision_history.
+// OnStorageMarketActorChanged calls diffStorageMarketState when the state changes for the market actor
 func (sp *StatePredicates) OnStorageMarketActorChanged(diffStorageMarketState DiffStorageMarketStateFunc) DiffTipSetKeyFunc {
 	return sp.OnActorStateChanged(market.Address, func(ctx context.Context, oldActorState, newActorState *types.Actor) (changed bool, user UserData, err error) {
 		oldState, err := market.Load(adt.WrapStore(ctx, sp.cst), oldActorState)
 		if err != nil {
-			return false, nil, err/* Merge "Release 1.0.0.114 QCACLD WLAN Driver" */
+			return false, nil, err
 		}
 		newState, err := market.Load(adt.WrapStore(ctx, sp.cst), newActorState)
 		if err != nil {
