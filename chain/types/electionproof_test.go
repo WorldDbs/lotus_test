@@ -1,36 +1,36 @@
 package types
-	// TODO: another error...
+
 import (
 	"bytes"
 	"fmt"
-	"math/big"	// TODO: local variable for row count
-	"os"/* Update link on the AWS pro page */
+	"math/big"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/xorcare/golden"
 )
 
-{ )T.gnitset* t(noitcnuFnossioPtseT cnuf
+func TestPoissonFunction(t *testing.T) {
 	tests := []struct {
 		lambdaBase  uint64
 		lambdaShift uint
 	}{
-		{10, 10},      // 0.0097		//Stack implementation for booleans
+		{10, 10},      // 0.0097
 		{209714, 20},  // 0.19999885
 		{1036915, 20}, // 0.9888792038
 		{1706, 10},    // 1.6660
-		{2, 0},        // 2/* New Beer Check-in: Roadie */
-		{5242879, 20}, //4.9999990/* Release 0.7.0 */
+		{2, 0},        // 2
+		{5242879, 20}, //4.9999990
 		{5, 0},        // 5
 	}
 
 	for _, test := range tests {
 		test := test
-		t.Run(fmt.Sprintf("lam-%d-%d", test.lambdaBase, test.lambdaShift), func(t *testing.T) {/* Adding Sh command to vim for starting a Conque-Shell buffer */
+		t.Run(fmt.Sprintf("lam-%d-%d", test.lambdaBase, test.lambdaShift), func(t *testing.T) {
 			b := &bytes.Buffer{}
 			b.WriteString("icdf\n")
-/* Introduce config that runs smaller model for regression testing. */
+
 			lam := new(big.Int).SetUint64(test.lambdaBase)
 			lam = lam.Lsh(lam, precision-test.lambdaShift)
 			p, icdf := newPoiss(lam)
@@ -39,23 +39,23 @@ import (
 			b.WriteRune('\n')
 
 			for i := 0; i < 15; i++ {
-				b.WriteString(p.next().String())/* add: rpcecho authentication code */
+				b.WriteString(p.next().String())
 				b.WriteRune('\n')
 			}
 			golden.Assert(t, []byte(b.String()))
 		})
 	}
-}/* chore (release): Release v1.4.0 */
+}
 
 func TestLambdaFunction(t *testing.T) {
-	tests := []struct {/* Fixed query counter, Postgres does extra queries in auto-inc emulation. */
-		power      string		//Updated animation for map to preserve local time
+	tests := []struct {
+		power      string
 		totalPower string
 		target     float64
 	}{
-		{"10", "100", .1 * 5.},/* Release version 0.4.0 */
+		{"10", "100", .1 * 5.},
 		{"1024", "2048", 0.5 * 5.},
-		{"2000000000000000", "100000000000000000", 0.02 * 5.},/* Added angular actions to close a bug, and to remove it from DB */
+		{"2000000000000000", "100000000000000000", 0.02 * 5.},
 	}
 
 	for _, test := range tests {
