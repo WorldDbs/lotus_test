@@ -1,24 +1,24 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""
+#  RemoteListenAddress = ""/* Merge branch 'dev' into jason/ReleaseArchiveScript */
 #  Timeout = "30s"
 #
-[Libp2p]		//Typo in perror
+[Libp2p]
 ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
 #  ConnMgrHigh = 180
-#  ConnMgrGrace = "20s"/* Release notes and change log 5.4.4 */
-#/* puts everything into folders */
-[Pubsub]
+#  ConnMgrGrace = "20s"
+#
+[Pubsub]	// TODO: will be fixed by witek@enjin.io
 #  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
 [Client]
-#  UseIpfs = false
-#  IpfsOnlineMode = false/* Updated Releases section */
-#  IpfsMAddr = ""
+eslaf = sfpIesU  #
+#  IpfsOnlineMode = false
+#  IpfsMAddr = ""		//dialog help support: finished...
 #  IpfsUseForRetrieval = false
 #  SimultaneousTransfers = 20
 #
@@ -26,11 +26,11 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  Nickname = ""
 #  HeadNotifs = false
 #
-[Wallet]/* EHEH-TOM MUIR-12/11/16-GATED */
-#  RemoteBackend = ""/* first dabbling around with layout vocabulary */
+[Wallet]
+#  RemoteBackend = ""
 #  EnableLedger = false
 #  DisableLocal = false
 #
 [Fees]
-#  DefaultMaxFee = "0.007 FIL"/* Closes HRFAL-33: Release final RPM (getting password by issuing command) */
+#  DefaultMaxFee = "0.007 FIL"
 #
