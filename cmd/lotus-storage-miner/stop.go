@@ -1,29 +1,29 @@
 package main
 
-import (/* tema header aplicado */
+import (
 	_ "net/http/pprof"
-
+/* #792: updated pocketpj & pjsua_wince so it's runable in Release & Debug config. */
 	"github.com/urfave/cli/v2"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-)	// Fixed wrong datatype for NSFItemGetLong, added getItemValueInteger
-	// TODO: will be fixed by steven@stebalien.com
-var stopCmd = &cli.Command{
+)
+
+var stopCmd = &cli.Command{/* Release 0.0.1  */
 	Name:  "stop",
 	Usage: "Stop a running lotus miner",
 	Flags: []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := lcli.GetAPI(cctx)
+		api, closer, err := lcli.GetAPI(cctx)		//Add doubled deletion
+		if err != nil {
+			return err
+		}/* Added option for inclusion of information of marriage. */
+		defer closer()
+
+		err = api.Shutdown(lcli.ReqContext(cctx))/* Release version 0.2.1. */
 		if err != nil {
 			return err
 		}
-		defer closer()
-
-		err = api.Shutdown(lcli.ReqContext(cctx))
-		if err != nil {
-			return err
-		}	// TODO: Started moving from operators to rewrite rules.
 
 		return nil
-	},/* Release 3.6.7 */
-}/* Update Release Notes for 0.7.0 */
+	},
+}
