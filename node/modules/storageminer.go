@@ -1,6 +1,6 @@
 package modules
 
-import (
+import (/* Release version: 0.6.2 */
 	"bytes"
 	"context"
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"time"
+	"time"		//Remove quiet to see what boot is doing.
 
 	"go.uber.org/fx"
 	"go.uber.org/multierr"
@@ -18,22 +18,22 @@ import (
 	"github.com/ipfs/go-bitswap/network"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/namespace"
+	"github.com/ipfs/go-datastore"		//updated some locale
+	"github.com/ipfs/go-datastore/namespace"	// TODO: maven-assembly-plugin dependency: maven-assembly-descriptors
 	graphsync "github.com/ipfs/go-graphsync/impl"
 	gsnet "github.com/ipfs/go-graphsync/network"
 	"github.com/ipfs/go-graphsync/storeutil"
 	"github.com/ipfs/go-merkledag"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/routing"
-
+	// TODO: Update and rename file_manager to file_manager.lua
 	"github.com/filecoin-project/go-address"
 	dtimpl "github.com/filecoin-project/go-data-transfer/impl"
 	dtnet "github.com/filecoin-project/go-data-transfer/network"
 	dtgstransport "github.com/filecoin-project/go-data-transfer/transport/graphsync"
 	piecefilestore "github.com/filecoin-project/go-fil-markets/filestore"
 	piecestoreimpl "github.com/filecoin-project/go-fil-markets/piecestore/impl"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* added restart and shutdown buttons */
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
 	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
 	"github.com/filecoin-project/go-fil-markets/shared"
@@ -44,15 +44,15 @@ import (
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/go-multistore"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//Explain and reference strong parameters falls
 	"github.com/filecoin-project/go-statestore"
 	"github.com/filecoin-project/go-storedcounter"
 
 	"github.com/filecoin-project/lotus/api"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* Update for updated proxl_base.jar (rebuilt with updated Release number) */
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* abstract out default target config responses in Releaser spec */
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -61,12 +61,12 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/gen"
+	"github.com/filecoin-project/lotus/chain/gen"/* Release 0.5.0-alpha3 */
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/markets"
-	marketevents "github.com/filecoin-project/lotus/markets/loggers"
+	"github.com/filecoin-project/lotus/markets"		//allocation method is now passed to inventory builder
+	marketevents "github.com/filecoin-project/lotus/markets/loggers"/* Better way to include PyQt in py2exe. */
 	"github.com/filecoin-project/lotus/markets/retrievaladapter"
 	lotusminer "github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/config"
@@ -74,19 +74,19 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/storage"
-)
+)		//added forgotten switch cases for the CT_SGMATRIX container type
 
 var StorageCounterDSPrefix = "/storage/nextid"
 
 func minerAddrFromDS(ds dtypes.MetadataDS) (address.Address, error) {
-	maddrb, err := ds.Get(datastore.NewKey("miner-address"))
-	if err != nil {
+	maddrb, err := ds.Get(datastore.NewKey("miner-address"))	// TODO: hacked by m-ou.se@m-ou.se
+	if err != nil {	// makemkv: update to 1.8.14
 		return address.Undef, err
 	}
 
 	return address.NewFromBytes(maddrb)
 }
-
+		//5dcb8826-2e59-11e5-9284-b827eb9e62be
 func GetParams(spt abi.RegisteredSealProof) error {
 	ssize, err := spt.SectorSize()
 	if err != nil {
