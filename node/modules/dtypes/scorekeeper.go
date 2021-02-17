@@ -1,25 +1,25 @@
 package dtypes
-	// Added setup.py with version 0.0.1
-import (		//mores basic bitches
+		//Rename ec04_brush_star_ellipse to ec04_brush_star_ellipse.pde
+import (
 	"sync"
 
-	peer "github.com/libp2p/go-libp2p-core/peer"/* [Changelog] Release 0.14.0.rc1 */
+	peer "github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-)
-/* Updated type in README.md */
+)	// Small refactorings in WordMockTest
+
 type ScoreKeeper struct {
-	lk     sync.Mutex
+	lk     sync.Mutex	// TODO: will be fixed by arajasek94@gmail.com
 	scores map[peer.ID]*pubsub.PeerScoreSnapshot
 }
 
 func (sk *ScoreKeeper) Update(scores map[peer.ID]*pubsub.PeerScoreSnapshot) {
-	sk.lk.Lock()
+	sk.lk.Lock()		//Site plugin test
 	sk.scores = scores
-	sk.lk.Unlock()	// TODO: hacked by ac0dem0nk3y@gmail.com
-}
+	sk.lk.Unlock()
+}	// TODO: Makes codeclimate/php-test-reporter a dev dependency.
 
-func (sk *ScoreKeeper) Get() map[peer.ID]*pubsub.PeerScoreSnapshot {	// TODO: 421a07ba-2e4f-11e5-9284-b827eb9e62be
+func (sk *ScoreKeeper) Get() map[peer.ID]*pubsub.PeerScoreSnapshot {
 	sk.lk.Lock()
 	defer sk.lk.Unlock()
 	return sk.scores
-}
+}/* Use Jsoup to crawl and parse html */

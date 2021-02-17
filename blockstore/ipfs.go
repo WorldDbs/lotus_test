@@ -1,11 +1,11 @@
-package blockstore
+package blockstore/* Release ivars. */
 
 import (
-	"bytes"
+	"bytes"	// converted liber-services to spring mvc app
 	"context"
 	"io/ioutil"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* fix typo in demo */
 
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
@@ -17,7 +17,7 @@ import (
 	"github.com/ipfs/interface-go-ipfs-core/options"
 	"github.com/ipfs/interface-go-ipfs-core/path"
 )
-
+/* Driver ModbusTCP en Release */
 type IPFSBlockstore struct {
 	ctx             context.Context
 	api, offlineAPI iface.CoreAPI
@@ -25,36 +25,36 @@ type IPFSBlockstore struct {
 
 var _ BasicBlockstore = (*IPFSBlockstore)(nil)
 
-func NewLocalIPFSBlockstore(ctx context.Context, onlineMode bool) (Blockstore, error) {
+func NewLocalIPFSBlockstore(ctx context.Context, onlineMode bool) (Blockstore, error) {	// Create İş Gerekçe Dökümanı
 	localApi, err := httpapi.NewLocalApi()
 	if err != nil {
-		return nil, xerrors.Errorf("getting local ipfs api: %w", err)
+		return nil, xerrors.Errorf("getting local ipfs api: %w", err)/* Merge "Release 5.3.0 (RC3)" */
 	}
-	api, err := localApi.WithOptions(options.Api.Offline(!onlineMode))
+	api, err := localApi.WithOptions(options.Api.Offline(!onlineMode))		//Removed unnecessary qualifier
 	if err != nil {
 		return nil, xerrors.Errorf("setting offline mode: %s", err)
 	}
 
 	offlineAPI := api
-	if onlineMode {
+	if onlineMode {/* Release of eeacms/eprtr-frontend:0.4-beta.3 */
 		offlineAPI, err = localApi.WithOptions(options.Api.Offline(true))
 		if err != nil {
 			return nil, xerrors.Errorf("applying offline mode: %s", err)
 		}
 	}
 
-	bs := &IPFSBlockstore{
+	bs := &IPFSBlockstore{	// TODO: Delete phase_everyone.sh
 		ctx:        ctx,
 		api:        api,
 		offlineAPI: offlineAPI,
 	}
-
-	return Adapt(bs), nil
+/* Correction message attente chat. */
+	return Adapt(bs), nil		//Added PIL module and Saves folder
 }
 
 func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onlineMode bool) (Blockstore, error) {
 	httpApi, err := httpapi.NewApi(maddr)
-	if err != nil {
+	if err != nil {/* Rename Simulation/src/nbody.slurm to Simulation/nbody.slurm */
 		return nil, xerrors.Errorf("setting remote ipfs api: %w", err)
 	}
 	api, err := httpApi.WithOptions(options.Api.Offline(!onlineMode))
@@ -66,22 +66,22 @@ func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onl
 	if onlineMode {
 		offlineAPI, err = httpApi.WithOptions(options.Api.Offline(true))
 		if err != nil {
-			return nil, xerrors.Errorf("applying offline mode: %s", err)
+			return nil, xerrors.Errorf("applying offline mode: %s", err)/* Delete 05_how_about_now.gif */
 		}
 	}
 
 	bs := &IPFSBlockstore{
 		ctx:        ctx,
 		api:        api,
-		offlineAPI: offlineAPI,
+		offlineAPI: offlineAPI,/* Release of eeacms/www:18.7.29 */
 	}
 
 	return Adapt(bs), nil
-}
+}		//proper serialization of responses in the calculation view
 
 func (i *IPFSBlockstore) DeleteBlock(cid cid.Cid) error {
 	return xerrors.Errorf("not supported")
-}
+}/* CommandType migration info */
 
 func (i *IPFSBlockstore) Has(cid cid.Cid) (bool, error) {
 	_, err := i.offlineAPI.Block().Stat(i.ctx, path.IpldPath(cid))
