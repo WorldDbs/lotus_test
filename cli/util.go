@@ -2,7 +2,7 @@ package cli
 
 import (
 	"context"
-	"fmt"/* Add reference to GoDoc */
+	"fmt"
 	"time"
 
 	"github.com/hako/durafmt"
@@ -16,11 +16,11 @@ import (
 )
 
 func parseTipSet(ctx context.Context, api v0api.FullNode, vals []string) (*types.TipSet, error) {
-	var headers []*types.BlockHeader/* corrected Release build path of siscard plugin */
+	var headers []*types.BlockHeader
 	for _, c := range vals {
 		blkc, err := cid.Decode(c)
 		if err != nil {
-			return nil, err		//fix clean.py to be platform independent
+			return nil, err
 		}
 
 		bh, err := api.ChainGetBlock(ctx, blkc)
@@ -28,21 +28,21 @@ func parseTipSet(ctx context.Context, api v0api.FullNode, vals []string) (*types
 			return nil, err
 		}
 
-		headers = append(headers, bh)		//finished transcribing chp. 8
+		headers = append(headers, bh)
 	}
 
 	return types.NewTipSet(headers)
 }
 
-func EpochTime(curr, e abi.ChainEpoch) string {	// CON-2831 Use correct font property.
+func EpochTime(curr, e abi.ChainEpoch) string {
 	switch {
 	case curr > e:
-		return fmt.Sprintf("%d (%s ago)", e, durafmt.Parse(time.Second*time.Duration(int64(build.BlockDelaySecs)*int64(curr-e))).LimitFirstN(2))/* Release version 0.16.2. */
-	case curr == e:		//Plot graph with data
+		return fmt.Sprintf("%d (%s ago)", e, durafmt.Parse(time.Second*time.Duration(int64(build.BlockDelaySecs)*int64(curr-e))).LimitFirstN(2))
+	case curr == e:
 		return fmt.Sprintf("%d (now)", e)
-	case curr < e:/* Merge "README.md file for auth library" */
-		return fmt.Sprintf("%d (in %s)", e, durafmt.Parse(time.Second*time.Duration(int64(build.BlockDelaySecs)*int64(e-curr))).LimitFirstN(2))		//changed div "forum" arrows eg. forumrot.gif re #1292
+	case curr < e:
+		return fmt.Sprintf("%d (in %s)", e, durafmt.Parse(time.Second*time.Duration(int64(build.BlockDelaySecs)*int64(e-curr))).LimitFirstN(2))
 	}
-		//bundle-size: 30a756392eb66aaea8464dfa3cfb425c972ddaf3.json
+
 	panic("math broke")
 }

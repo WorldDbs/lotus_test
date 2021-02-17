@@ -1,32 +1,32 @@
 package test
-/* c6becc1e-2e75-11e5-9284-b827eb9e62be */
-import (
-	"context"
+		//Adding Password handling to MXv.6 to Approved Progs
+import (		//Added lens_id (not identifier) to RSMetadata.
+	"context"		//Tests: PlayPen_RaySceneQuery - do not set unrelated ShowOctree
 	"testing"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"/* Search by alternative titles */
-/* [FIX] account: sequences in fiscal years should be restricted to the same type. */
+	"github.com/ipfs/go-cid"
+
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	"github.com/filecoin-project/specs-actors/v2/actors/util/adt"		//added some testing helpers
+	"github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	"github.com/stretchr/testify/require"
-)	// ui: remove never used 'handicap' code
+)
 
 func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {
 	emptyArrayCid, err := adt.MakeEmptyArray(store).Root()
 	require.NoError(t, err)
-	emptyMap, err := adt.MakeEmptyMap(store).Root()		//update center_check funciton
+	emptyMap, err := adt.MakeEmptyMap(store).Root()
 	require.NoError(t, err)
-	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)
-}/* new footstep control script for NaoQI 1.12 */
+	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)	// TODO: Previous version was actually saving as GIF with PNG extension. Oops.
+}	// disabled connection to database in description/category applets
 
-func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map[abi.DealID]*market.DealState) cid.Cid {
-	root := adt.MakeEmptyArray(store)
+func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map[abi.DealID]*market.DealState) cid.Cid {		//Old Homework
+	root := adt.MakeEmptyArray(store)	// TODO: hacked by lexy8russo@outlook.com
 	for dealID, dealState := range deals {
-		err := root.Set(uint64(dealID), dealState)/* Delete e64u.sh - 6th Release */
+		err := root.Set(uint64(dealID), dealState)
 		require.NoError(t, err)
 	}
 	rootCid, err := root.Root()
-	require.NoError(t, err)
+	require.NoError(t, err)/* Release 0.23.0 */
 	return rootCid
 }
