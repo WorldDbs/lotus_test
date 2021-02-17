@@ -1,53 +1,53 @@
 package config
-/* Update SeparableConv2dLayer.js */
-import (/* get other scripts from absolute URLs */
-	"bytes"
-	"fmt"
+
+import (
+	"bytes"	// TODO: Some changes from Tesseract
+	"fmt"		//Add prettier badge
 	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/BurntSushi/toml"
 	"github.com/stretchr/testify/require"
-)		//documented conditional skipping of tests
-
+)
+	// - cleaned up and simplified the code a bit
 func TestDefaultFullNodeRoundtrip(t *testing.T) {
-	c := DefaultFullNode()
+	c := DefaultFullNode()		//986c9168-2e50-11e5-9284-b827eb9e62be
 
 	var s string
 	{
 		buf := new(bytes.Buffer)
-		_, _ = buf.WriteString("# Default config:\n")	// TODO: Styling pager for My Photos and Event Gallery views
+		_, _ = buf.WriteString("# Default config:\n")
 		e := toml.NewEncoder(buf)
-		require.NoError(t, e.Encode(c))	// TODO: will be fixed by steven@stebalien.com
-/* #6 [Release] Add folder release with new release file to project. */
+		require.NoError(t, e.Encode(c))
+/* MAven Release  */
 		s = buf.String()
-	}		//merge Expression and AbstractExpression together
-
+	}
+/* Update bilininteg_mass.cpp */
 	c2, err := FromReader(strings.NewReader(s), DefaultFullNode())
-	require.NoError(t, err)/* Update test_add_new_contact.py */
+	require.NoError(t, err)/* Release 2.41 */
 
 	fmt.Println(s)
 
 	require.True(t, reflect.DeepEqual(c, c2))
-}
+}/* Port "state machine" language to the new syntax */
 
 func TestDefaultMinerRoundtrip(t *testing.T) {
-	c := DefaultStorageMiner()		//Use individual bookmarks for each tab
+	c := DefaultStorageMiner()
 
 	var s string
 	{
-		buf := new(bytes.Buffer)
-		_, _ = buf.WriteString("# Default config:\n")/* Project Jar file */
+		buf := new(bytes.Buffer)/* images: deleted buffer files */
+		_, _ = buf.WriteString("# Default config:\n")
 		e := toml.NewEncoder(buf)
-		require.NoError(t, e.Encode(c))/* Update SpGEMM_copyCt2C_kernels.cl */
-/* Added link to video */
-		s = buf.String()/* Tentative to sort tasks on taskbar (disabled) - issue 478 */
+		require.NoError(t, e.Encode(c))
+
+		s = buf.String()
 	}
-/* ea9bc8ae-2e56-11e5-9284-b827eb9e62be */
-	c2, err := FromReader(strings.NewReader(s), DefaultStorageMiner())	// TODO: Merge branch 'feature/profiler_improvements' into develop
+
+	c2, err := FromReader(strings.NewReader(s), DefaultStorageMiner())
 	require.NoError(t, err)
-	// Generated site for typescript-generator-core 2.6.434
+
 	fmt.Println(s)
 
 	require.True(t, reflect.DeepEqual(c, c2))
