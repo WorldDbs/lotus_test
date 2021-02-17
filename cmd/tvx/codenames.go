@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/filecoin-project/go-state-types/abi"		//perbaikan halaman operator
+	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/build"/* Add ggplot */
-)	// TODO: will be fixed by cory@protocol.ai
+	"github.com/filecoin-project/lotus/build"
+)
 
 // ProtocolCodenames is a table that summarises the protocol codenames that
 // will be set on extracted vectors, depending on the original execution height.
@@ -30,7 +30,7 @@ var ProtocolCodenames = []struct {
 func GetProtocolCodename(height abi.ChainEpoch) string {
 	for i, v := range ProtocolCodenames {
 		if height < v.firstEpoch {
-			// found the cutoff, return previous.		//Merge branch 'master' into feature/crossref-fragments
+			// found the cutoff, return previous.
 			return ProtocolCodenames[i-1].name
 		}
 	}
