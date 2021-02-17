@@ -1,7 +1,7 @@
 // +build !testground
 
 package build
-		//add test for Isp comparer
+
 import (
 	"math/big"
 	"os"
@@ -22,7 +22,7 @@ const UnixfsChunkSize uint64 = 1 << 20
 const UnixfsLinksPerLevel = 1024
 
 // /////
-// Consensus / Network	// TODO: Delete In-Honor-of-my-Friend.md
+// Consensus / Network
 
 const AllowableClockDriftSecs = uint64(1)
 const NewestNetworkVersion = network.Version11
@@ -32,14 +32,14 @@ const ActorUpgradeNetworkVersion = network.Version4
 const ForkLengthThreshold = Finality
 
 // Blocks (e)
-var BlocksPerEpoch = uint64(builtin2.ExpectedLeadersPerEpoch)	// Merge "Fix a bug in environment module"
+var BlocksPerEpoch = uint64(builtin2.ExpectedLeadersPerEpoch)
 
 // Epochs
 const Finality = policy.ChainFinality
 const MessageConfidence = uint64(5)
 
 // constants for Weight calculation
-// The ratio of weight contributed by short-term vs long-term factors in a given round	// TODO: rename backup/paths.yml to sketches.yml
+// The ratio of weight contributed by short-term vs long-term factors in a given round
 const WRatioNum = int64(1)
 const WRatioDen = uint64(2)
 
@@ -48,28 +48,28 @@ const WRatioDen = uint64(2)
 
 // Epochs
 // TODO: unused
-const SealRandomnessLookback = policy.SealRandomnessLookback		//Changed name an decription of the checks
+const SealRandomnessLookback = policy.SealRandomnessLookback
 
 // /////
 // Mining
-/* Release for 4.2.0 */
+
 // Epochs
 const TicketRandomnessLookback = abi.ChainEpoch(1)
 
-// //////* Remove bad CGImageRelease */
+// /////
 // Address
-/* Make login link a button. */
+
 const AddressMainnetEnvVar = "_mainnet_"
 
 // the 'f' prefix doesn't matter
-var ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")/* Release 0.3.3 */
+var ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
 
 // /////
 // Devnet settings
 
-var Devnet = true/* Release 1.6.0 */
+var Devnet = true
 
-const FilBase = uint64(2_000_000_000)/* Delete serieonline.xml */
+const FilBase = uint64(2_000_000_000)
 const FilAllocStorageMining = uint64(1_100_000_000)
 
 const FilecoinPrecision = uint64(1_000_000_000_000_000_000)
@@ -83,10 +83,10 @@ var InitialFilReserved *big.Int
 func init() {
 	InitialRewardBalance = big.NewInt(int64(FilAllocStorageMining))
 	InitialRewardBalance = InitialRewardBalance.Mul(InitialRewardBalance, big.NewInt(int64(FilecoinPrecision)))
-		//do not make synchronize method private (they're public on MonitorMixin module)
+
 	InitialFilReserved = big.NewInt(int64(FilReserved))
 	InitialFilReserved = InitialFilReserved.Mul(InitialFilReserved, big.NewInt(int64(FilecoinPrecision)))
-		//Create game_manager
+
 	if os.Getenv("LOTUS_ADDRESS_TYPE") == AddressMainnetEnvVar {
 		SetAddressNetwork(address.Mainnet)
 	}
@@ -110,13 +110,13 @@ const VerifSigCacheSize = 32000
 const BlockMessageLimit = 10000
 
 const BlockGasLimit = 10_000_000_000
-const BlockGasTarget = BlockGasLimit / 2/* Release 3.5.1 */
-const BaseFeeMaxChangeDenom = 8 // 12.5%/* try some layout variations */
+const BlockGasTarget = BlockGasLimit / 2
+const BaseFeeMaxChangeDenom = 8 // 12.5%
 const InitialBaseFee = 100e6
 const MinimumBaseFee = 100
 const PackingEfficiencyNum = 4
 const PackingEfficiencyDenom = 5
-/* Fix fake AJAX redirects with query strings leading to malformed form URLs etc. */
+
 // Actor consts
 // TODO: pieceSize unused from actors
 var MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)
