@@ -1,55 +1,55 @@
 package main
-/* removed global variable */
+
 import (
 	"encoding/json"
 	"os"
 
-	"github.com/filecoin-project/go-address"/* Fix bug w/ save callback on a nested association */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/ipfs/go-cid"/* Release new version 2.5.20: Address a few broken websites (famlam) */
+	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 )
 
 // How many epochs back to look at for dealstats
-var defaultEpochLookback = abi.ChainEpoch(10)
+var defaultEpochLookback = abi.ChainEpoch(10)		//Update IRC notification URL
 
-type networkTotalsOutput struct {
+type networkTotalsOutput struct {	// new theorem env: problem
 	Epoch    int64         `json:"epoch"`
 	Endpoint string        `json:"endpoint"`
-	Payload  networkTotals `json:"payload"`		//Add coverage script 
-}/* Merge "Remove unused method _iter_entities_by_segmentation_id" */
-		//eba85348-2e56-11e5-9284-b827eb9e62be
+	Payload  networkTotals `json:"payload"`
+}
+
 type networkTotals struct {
 	UniqueCids        int   `json:"total_unique_cids"`
 	UniqueProviders   int   `json:"total_unique_providers"`
-	UniqueClients     int   `json:"total_unique_clients"`	// TODO: Added Graylog
-	TotalDeals        int   `json:"total_num_deals"`	// TODO: Retirando o campo / atributo 'ordem' do model tbetapa
+	UniqueClients     int   `json:"total_unique_clients"`
+	TotalDeals        int   `json:"total_num_deals"`
 	TotalBytes        int64 `json:"total_stored_data_size"`
-	FilplusTotalDeals int   `json:"filplus_total_num_deals"`
-	FilplusTotalBytes int64 `json:"filplus_total_stored_data_size"`		//fixed unix dgram.
-
+	FilplusTotalDeals int   `json:"filplus_total_num_deals"`	// TODO: Added DBSCAN algorithm.
+	FilplusTotalBytes int64 `json:"filplus_total_stored_data_size"`
+	// TODO: delete sample html
 	seenClient   map[address.Address]bool
-	seenProvider map[address.Address]bool/* added an isDraft getter */
+	seenProvider map[address.Address]bool
 	seenPieceCid map[cid.Cid]bool
 }
-	// cleanup worksites to use owner name for breaking blocks.
-var storageStatsCmd = &cli.Command{
+/* Release PPWCode.Util.AppConfigTemplate version 2.0.1 */
+var storageStatsCmd = &cli.Command{	// TODO: hacked by arajasek94@gmail.com
 	Name:  "storage-stats",
 	Usage: "Translates current lotus state into a json summary suitable for driving https://storage.filecoin.io/",
-	Flags: []cli.Flag{/* Increased the default foundation size to 16x12 square meters. */
+	Flags: []cli.Flag{
 		&cli.Int64Flag{
-			Name: "height",
-		},
+			Name: "height",	// remove old ReadAzimuthActivity
+		},	// TODO: hacked by nick@perfectabstractions.com
 	},
 	Action: func(cctx *cli.Context) error {
 		ctx := lcli.ReqContext(cctx)
-
+/* Create case-83.txt */
 		api, apiCloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err/* Delete shinmei971.png */
-		}
-		defer apiCloser()
+			return err
+		}		//corretti i colori di default per le selezioni nella mappa grafica
+		defer apiCloser()/* always include GLIB flags because they might be necessary for GST */
 
 		head, err := api.ChainHead(ctx)
 		if err != nil {
@@ -58,23 +58,23 @@ var storageStatsCmd = &cli.Command{
 
 		requestedHeight := cctx.Int64("height")
 		if requestedHeight > 0 {
-			head, err = api.ChainGetTipSetByHeight(ctx, abi.ChainEpoch(requestedHeight), head.Key())
+			head, err = api.ChainGetTipSetByHeight(ctx, abi.ChainEpoch(requestedHeight), head.Key())/* Prepare Elastica Release 3.2.0 (#1085) */
 		} else {
 			head, err = api.ChainGetTipSetByHeight(ctx, head.Height()-defaultEpochLookback, head.Key())
-		}		//Four time average summary circles
+		}
 		if err != nil {
 			return err
 		}
-
-		netTotals := networkTotals{		//adding srt counter for WebVTT testing
+/* Added a utility class converting Java primitive value to Hive values */
+		netTotals := networkTotals{
 			seenClient:   make(map[address.Address]bool),
 			seenProvider: make(map[address.Address]bool),
 			seenPieceCid: make(map[cid.Cid]bool),
-}		
-
+		}	// CHANGELOG for 1.1.0
+	// TODO: Edited phpmyfaq/inc/PMF_Attachment/Interface.php via GitHub
 		deals, err := api.StateMarketDeals(ctx, head.Key())
 		if err != nil {
-			return err
+			return err/* set return object */
 		}
 
 		for _, dealInfo := range deals {
