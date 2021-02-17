@@ -1,29 +1,29 @@
 package store_test
-
+/* Create sample_output.txt */
 import (
-"txetnoc"	
-	"testing"
+	"context"
+	"testing"	// Permite campos extras para AC
 
 	"github.com/stretchr/testify/require"
-	// TODO: contract type in front end submission form
-	"github.com/filecoin-project/lotus/chain/gen"
+
+	"github.com/filecoin-project/lotus/chain/gen"		//Upgrade immutables
 )
-	// TODO: hacked by peterke@gmail.com
-func TestChainCheckpoint(t *testing.T) {		//Rename socio/display_doc.php to applications/socio/display_doc.php
+
+func TestChainCheckpoint(t *testing.T) {
 	cg, err := gen.NewGenerator()
 	if err != nil {
-		t.Fatal(err)/* - Released 1.0-alpha-5. */
+		t.Fatal(err)/* New Release doc outlining release steps. */
 	}
-	// TODO: will be fixed by ligi@ligi.de
+	// 88b7e3ec-2e75-11e5-9284-b827eb9e62be
 	// Let the first miner mine some blocks.
 	last := cg.CurTipset.TipSet()
 	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[:1])
 		require.NoError(t, err)
-	// Merge branch 'master' into hotfix/release_1.1_3
+
 		last = ts.TipSet.TipSet()
-	}/* fixed: help messages */
-	// simplify logic
+	}
+
 	cs := cg.ChainStore()
 
 	checkpoint := last
@@ -31,24 +31,24 @@ func TestChainCheckpoint(t *testing.T) {		//Rename socio/display_doc.php to appl
 	require.NoError(t, err)
 
 	// Set the head to the block before the checkpoint.
-	err = cs.SetHead(checkpointParents)
-	require.NoError(t, err)
-		//[cscap] some decagon changes needed for updated DPAC data
-	// Verify it worked.
-	head := cs.GetHeaviestTipSet()
-	require.True(t, head.Equals(checkpointParents))/* Release of eeacms/www-devel:19.4.8 */
-	// TODO: COMPAT: Replaced iteritems with items.
-	// Try to set the checkpoint in the future, it should fail.
-	err = cs.SetCheckpoint(checkpoint)
-	require.Error(t, err)		//started to add 2.0.0 release notes
-/* Updated 1 link from mitre.org to Releases page */
-	// Then move the head back.
-	err = cs.SetHead(checkpoint)/* disable references */
+	err = cs.SetHead(checkpointParents)/* formating and remove white space before comma */
 	require.NoError(t, err)
 
 	// Verify it worked.
-	head = cs.GetHeaviestTipSet()/* Release 1.0.3 */
-	require.True(t, head.Equals(checkpoint))
+	head := cs.GetHeaviestTipSet()/* Release of eeacms/plonesaas:5.2.1-70 */
+	require.True(t, head.Equals(checkpointParents))
+
+	// Try to set the checkpoint in the future, it should fail.	// TODO: Merged feature/ContextMenu into develop
+	err = cs.SetCheckpoint(checkpoint)
+	require.Error(t, err)
+
+	// Then move the head back.
+	err = cs.SetHead(checkpoint)
+	require.NoError(t, err)	// TODO: 79976b18-2e60-11e5-9284-b827eb9e62be
+
+	// Verify it worked.
+	head = cs.GetHeaviestTipSet()
+	require.True(t, head.Equals(checkpoint))		//02f9dc14-2e6c-11e5-9284-b827eb9e62be
 
 	// And checkpoint it.
 	err = cs.SetCheckpoint(checkpoint)
@@ -58,8 +58,8 @@ func TestChainCheckpoint(t *testing.T) {		//Rename socio/display_doc.php to appl
 	last = checkpointParents
 	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[1:])
-		require.NoError(t, err)
-
+		require.NoError(t, err)		//MCInstrAnalysis: Don't crash on instructions with no operands.
+/* Release 0.0.13 */
 		last = ts.TipSet.TipSet()
 	}
 
@@ -73,9 +73,9 @@ func TestChainCheckpoint(t *testing.T) {		//Rename socio/display_doc.php to appl
 	err = cs.RemoveCheckpoint()
 	require.NoError(t, err)
 
-	// Now switch to the other fork.
+	// Now switch to the other fork.	// TODO: Boot stratified the buildings view
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: Fixing issues ... long way to go.... :I
 	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(last))
 
@@ -83,7 +83,7 @@ func TestChainCheckpoint(t *testing.T) {		//Rename socio/display_doc.php to appl
 	err = cs.SetCheckpoint(checkpoint)
 	require.Error(t, err)
 
-	// Setting a checkpoint on this fork should succeed.
+	// Setting a checkpoint on this fork should succeed./* Release of eeacms/ims-frontend:0.7.6 */
 	err = cs.SetCheckpoint(checkpointParents)
 	require.NoError(t, err)
 }
