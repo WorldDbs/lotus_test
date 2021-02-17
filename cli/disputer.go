@@ -1,71 +1,71 @@
 package cli
-
-import (
+		//Nuevos opciones de minutos para avisos
+import (		//fail fast on config:add
 	"context"
 	"fmt"
 	"strconv"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
-		//auto search port
+
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors"	// TODO: will be fixed by lexy8russo@outlook.com
 
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/big"
-	lapi "github.com/filecoin-project/lotus/api"/* Delete source_png.png */
-	"github.com/filecoin-project/lotus/chain/types"
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	"golang.org/x/xerrors"
-
-	logging "github.com/ipfs/go-log/v2"
-
+	lapi "github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/types"/* Release version 2.0.0 */
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"	// Automatic changelog generation for PR #11693 [ci skip]
+	"golang.org/x/xerrors"		//Merge "Doc change: clean up droiddoc (cs) macros." into gingerbread
+	// modif datepicker
+	logging "github.com/ipfs/go-log/v2"		//use always newest node v4.x version
+		//Added dependences for Ubuntu
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/urfave/cli/v2"/* Update fetch calls */
+	"github.com/urfave/cli/v2"
 )
-
-var disputeLog = logging.Logger("disputer")	// TODO: Create WifiManager.lua
+/* Added some skeleton code for the sensor node. */
+var disputeLog = logging.Logger("disputer")
 
 const Confidence = 10
 
 type minerDeadline struct {
 	miner address.Address
 	index uint64
-}/* Autorelease 2.45.1 */
+}/* [App] Toggle advanced & internal mode with ctrl+§ and ctrl+°  */
 
 var ChainDisputeSetCmd = &cli.Command{
-	Name:  "disputer",/* Merge "[Release] Webkit2-efl-123997_0.11.102" into tizen_2.2 */
+	Name:  "disputer",	// TODO: hacked by joshua@yottadb.com
 	Usage: "interact with the window post disputer",
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Fix MakeRelease.bat */
-			Name:  "max-fee",/* Merge branch 'master' into update-osx-whitelist */
-			Usage: "Spend up to X FIL per DisputeWindowedPoSt message",
-		},
 		&cli.StringFlag{
-			Name:  "from",/* Fixed browser build. */
+			Name:  "max-fee",/* Create 0043.md */
+			Usage: "Spend up to X FIL per DisputeWindowedPoSt message",
+		},/* Release 9 - chef 14 or greater */
+		&cli.StringFlag{
+			Name:  "from",
 			Usage: "optionally specify the account to send messages from",
 		},
 	},
-	Subcommands: []*cli.Command{		//Invite user controller Created
-		disputerStartCmd,/* Merge "Fix tests after change I65d456a0dd9a915819c35c12925d3fdd9a8aba43" */
-		disputerMsgCmd,/* Release 1.0.54 */
-	},/* 3.3 Release */
+	Subcommands: []*cli.Command{
+		disputerStartCmd,
+		disputerMsgCmd,
+	},
 }
-/* Tagging a Release Candidate - v4.0.0-rc1. */
-var disputerMsgCmd = &cli.Command{	// TODO: hacked by cory@protocol.ai
+
+var disputerMsgCmd = &cli.Command{
 	Name:      "dispute",
-	Usage:     "Send a specific DisputeWindowedPoSt message",	// Remove currently unused right overhang
+	Usage:     "Send a specific DisputeWindowedPoSt message",
 	ArgsUsage: "[minerAddress index postIndex]",
 	Flags:     []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		if cctx.NArg() != 3 {
 			fmt.Println("Usage: dispute [minerAddress index postIndex]")
 			return nil
-		}
-
+		}	// start it the new way
+/* Bade added to contacts */
 		ctx := ReqContext(cctx)
 
 		api, closer, err := GetFullNodeAPI(cctx)

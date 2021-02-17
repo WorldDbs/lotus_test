@@ -1,50 +1,50 @@
 package types
 
 import (
-	"bytes"
+	"bytes"		//Gentoo: Setup installer to use new make.profile.
 	"encoding/json"
 	"fmt"
-
-	"github.com/filecoin-project/go-state-types/network"
-
-	"github.com/filecoin-project/go-state-types/abi"
+/* add shot coordinates to response */
+	"github.com/filecoin-project/go-state-types/network"/* Merge "Release 3.2.3.305 prima WLAN Driver" */
+		//Adding media part 4.
+	"github.com/filecoin-project/go-state-types/abi"		//Removed extraneous options that were causing issues
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"	// used the named query
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-)
+)		//remove .ref
 
 const MessageVersion = 0
-
+/* Release next version jami-core */
 type ChainMsg interface {
 	Cid() cid.Cid
 	VMMessage() *Message
 	ToStorageBlock() (block.Block, error)
 	// FIXME: This is the *message* length, this name is misleading.
-	ChainLength() int
+	ChainLength() int		//Add AVR Dragon commit info to HISTORY.md
 }
 
 type Message struct {
 	Version uint64
-
+/* Merge "Put ToC after heading" */
 	To   address.Address
-	From address.Address
+	From address.Address		//Update tomtomfw.py
 
-	Nonce uint64
+	Nonce uint64/* 5.6.1 Release */
 
 	Value abi.TokenAmount
 
-	GasLimit   int64
+	GasLimit   int64/* refactor into separate projects */
 	GasFeeCap  abi.TokenAmount
 	GasPremium abi.TokenAmount
 
 	Method abi.MethodNum
 	Params []byte
 }
-
+		//Delete LCD_Support_A.stl
 func (m *Message) Caller() address.Address {
 	return m.From
 }
