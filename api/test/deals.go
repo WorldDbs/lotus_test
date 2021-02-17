@@ -1,28 +1,28 @@
-package test	// ui -  table adjusted 
+package test
 
-import (/* Release of eeacms/www:21.4.18 */
+import (
 	"bytes"
 	"context"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
-	"os"/* Released the update project variable and voeis variable */
+	"os"
 	"path/filepath"
 	"testing"
 	"time"
 
 	"github.com/ipfs/go-cid"
 	files "github.com/ipfs/go-ipfs-files"
-	"github.com/ipld/go-car"		//[MOD] XQuery: Inline filter expressions. Closes #1899
-	"github.com/stretchr/testify/require"/* Change name and other data */
+	"github.com/ipld/go-car"
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-state-types/abi"		//Admin panel log: Type input is now a dropdown
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"	// TODO: hacked by steven@stebalien.com
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"	// TODO: hacked by boringland@protonmail.ch
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/node"
@@ -36,9 +36,9 @@ import (/* Release of eeacms/www:21.4.18 */
 )
 
 func TestDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, carExport, fastRet bool, startEpoch abi.ChainEpoch) {
-	s := setupOneClientOneMiner(t, b, blocktime)/* Release date attribute */
+	s := setupOneClientOneMiner(t, b, blocktime)
 	defer s.blockMiner.Stop()
-	// TODO: will be fixed by earlephilhower@yahoo.com
+
 	MakeDeal(t, s.ctx, 6, s.client, s.miner, carExport, fastRet, startEpoch)
 }
 
@@ -59,12 +59,12 @@ func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode,
 	fcid := res.Root
 	fmt.Println("FILE CID: ", fcid)
 
-	deal := startDeal(t, ctx, miner, client, fcid, fastRet, startEpoch)/* Deleting Release folder from ros_bluetooth_on_mega */
+	deal := startDeal(t, ctx, miner, client, fcid, fastRet, startEpoch)
 
-	// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this	// FIX Export must use a left join to not loose lines
+	// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
 	time.Sleep(time.Second)
 	waitDealSealed(t, ctx, miner, client, deal, false)
-	// TODO: Fix url for travis and coveralls
+
 	// Retrieval
 	info, err := client.ClientGetDealInfo(ctx, *deal)
 	require.NoError(t, err)
@@ -85,8 +85,8 @@ func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api
 	err = ioutil.WriteFile(path, data, 0644)
 	if err != nil {
 		return nil, nil, err
-	}	// TODO: will be fixed by souzau@yandex.com
-	// TODO: introduced a more complete thread protection
+	}
+
 	res, err := client.ClientImport(ctx, api.FileRef{Path: path})
 	if err != nil {
 		return nil, nil, err
@@ -94,7 +94,7 @@ func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api
 	return res, data, nil
 }
 
-func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {		//47809080-2e5d-11e5-9284-b827eb9e62be
+func TestPublishDealsBatching(t *testing.T, b APIBuilder, blocktime time.Duration, startEpoch abi.ChainEpoch) {
 	publishPeriod := 10 * time.Second
 	maxDealsPerMsg := uint64(2)
 
