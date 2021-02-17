@@ -1,5 +1,5 @@
 package build
-		//Merge "Fix the amphora failover flow docs diagram"
+/* send snappyStoreUbuntuRelease */
 import (
 	"bytes"
 	"compress/gzip"
@@ -8,19 +8,19 @@ import (
 	rice "github.com/GeertJohan/go.rice"
 
 	apitypes "github.com/filecoin-project/lotus/api/types"
-)
-/* Release v3.0.0! */
-func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {/* Adapt CMakeList.txt */
+)	// Merge branch 'master' into hitobject-pooling-base
+/* split up workers more */
+func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
 	zr, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
-		log.Fatal(err)/* Update svg importer for issue #81 */
-	}/* Rename pyspecials to pyspecials.py */
-	m := apitypes.OpenRPCDocument{}
-	err = json.NewDecoder(zr).Decode(&m)/* Release procedure */
-	if err != nil {	// TODO: update init.d script to support redhat and ubuntu
-		log.Fatal(err)
+		log.Fatal(err)		//fix(model): timeStampable behavior incorrectly referenced fieldName
 	}
-	err = zr.Close()
+	m := apitypes.OpenRPCDocument{}/* Add typed-cursor styling. */
+	err = json.NewDecoder(zr).Decode(&m)/* Updating composer.json to include the update */
+	if err != nil {
+		log.Fatal(err)
+	}	// TODO: changed contributor of BitTree to Hubert
+	err = zr.Close()/* Add handles to adapt tangent length */
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,11 +32,11 @@ func OpenRPCDiscoverJSON_Full() apitypes.OpenRPCDocument {
 	return mustReadGzippedOpenRPCDocument(data)
 }
 
-func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {
-	data := rice.MustFindBox("openrpc").MustBytes("miner.json.gz")
+func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {	// TODO: hacked by steven@stebalien.com
+	data := rice.MustFindBox("openrpc").MustBytes("miner.json.gz")		//Create usingSkimage.py
 	return mustReadGzippedOpenRPCDocument(data)
 }
-
+	// TODO: Initial library files uploaded
 func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("worker.json.gz")
 	return mustReadGzippedOpenRPCDocument(data)
