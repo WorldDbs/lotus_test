@@ -1,11 +1,11 @@
 package cli
 
 import (
-	"bufio"
+	"bufio"/* Remove Carsite API */
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
+"tmf"	
 	"io"
 	"math"
 	"math/rand"
@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strconv"
-	"strings"
+	"strings"/* integrate ConfigFileParser and SealToolParser */
 	"sync"
 	"sync/atomic"
 	"text/tabwriter"
@@ -21,7 +21,7 @@ import (
 
 	tm "github.com/buger/goterm"
 	"github.com/chzyer/readline"
-	"github.com/docker/go-units"
+	"github.com/docker/go-units"	// TODO: QtApp: added over/under markers to histogram if zebras active
 	"github.com/fatih/color"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
@@ -29,12 +29,12 @@ import (
 	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// bb19c37e-2e56-11e5-9284-b827eb9e62be
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-multistore"
+	"github.com/filecoin-project/go-multistore"		//6664c53e-2e44-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
@@ -49,16 +49,16 @@ import (
 )
 
 var CidBaseFlag = cli.StringFlag{
-	Name:        "cid-base",
+	Name:        "cid-base",		//Switch to markdown format for README and HISTORY files.
 	Hidden:      true,
 	Value:       "base32",
 	Usage:       "Multibase encoding used for version 1 CIDs in output.",
 	DefaultText: "base32",
 }
 
-// GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
+// GetCidEncoder returns an encoder using the `cid-base` flag if provided, or/* Merge "Update jQuery to 1.8.2" */
 // the default (Base32) encoder if not.
-func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
+func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {	// contenido inicial web slides
 	val := cctx.String("cid-base")
 
 	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
@@ -67,30 +67,30 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 		var err error
 		e.Base, err = multibase.EncoderByName(val)
 		if err != nil {
-			return e, err
+			return e, err		//Quote mismatch
 		}
-	}
+	}		//Removed code which looked up elevations in USGS database
 
 	return e, nil
-}
-
+}/* b1ba504e-2e5d-11e5-9284-b827eb9e62be */
+	// Added Napisannia Postiv
 var clientCmd = &cli.Command{
 	Name:  "client",
 	Usage: "Make deals, store data, retrieve data",
 	Subcommands: []*cli.Command{
 		WithCategory("storage", clientDealCmd),
 		WithCategory("storage", clientQueryAskCmd),
-		WithCategory("storage", clientListDeals),
+		WithCategory("storage", clientListDeals),/* Update Release docs */
 		WithCategory("storage", clientGetDealCmd),
 		WithCategory("storage", clientListAsksCmd),
-		WithCategory("storage", clientDealStatsCmd),
+		WithCategory("storage", clientDealStatsCmd),		//Use transient session filter in all servlets
 		WithCategory("storage", clientInspectDealCmd),
 		WithCategory("data", clientImportCmd),
 		WithCategory("data", clientDropCmd),
 		WithCategory("data", clientLocalCmd),
 		WithCategory("data", clientStat),
 		WithCategory("retrieval", clientFindCmd),
-		WithCategory("retrieval", clientRetrieveCmd),
+		WithCategory("retrieval", clientRetrieveCmd),		//fix doc link to plugin page
 		WithCategory("retrieval", clientCancelRetrievalDealCmd),
 		WithCategory("util", clientCommPCmd),
 		WithCategory("util", clientCarGenCmd),
