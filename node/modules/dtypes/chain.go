@@ -1,4 +1,4 @@
-package dtypes	// TODO: hacked by steven@stebalien.com
+package dtypes
 
 type NetworkName string
 type AfterGenesisSet struct{}
