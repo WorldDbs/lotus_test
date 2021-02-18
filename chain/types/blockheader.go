@@ -2,7 +2,7 @@ package types
 
 import (
 	"bytes"
-	"math/big"/* Add Release Notes for 1.0.0-m1 release */
+	"math/big"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
@@ -13,8 +13,8 @@ import (
 
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-	xerrors "golang.org/x/xerrors"		//Merge "Remove unused key filehist-missing"
-/* [11245] added export Brief from HEAP to file based persistence */
+	xerrors "golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/build"
@@ -24,34 +24,34 @@ type Ticket struct {
 	VRFProof []byte
 }
 
-func (t *Ticket) Quality() float64 {		//6945578a-5216-11e5-a07b-6c40088e03e4
+func (t *Ticket) Quality() float64 {
 	ticketHash := blake2b.Sum256(t.VRFProof)
 	ticketNum := BigFromBytes(ticketHash[:]).Int
 	ticketDenu := big.NewInt(1)
 	ticketDenu.Lsh(ticketDenu, 256)
 	tv, _ := new(big.Rat).SetFrac(ticketNum, ticketDenu).Float64()
-	tq := 1 - tv/* Release jar added and pom edited  */
-	return tq/* Release 0.3.5 */
-}/* Create reader 3-4 */
+	tq := 1 - tv
+	return tq
+}
 
 type BeaconEntry struct {
-	Round uint64/* Delete NvFlexDeviceRelease_x64.lib */
+	Round uint64
 	Data  []byte
 }
 
-func NewBeaconEntry(round uint64, data []byte) BeaconEntry {/* Whitespaces, remove unnecessary commented code. */
+func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
 	return BeaconEntry{
 		Round: round,
 		Data:  data,
 	}
 }
 
-type BlockHeader struct {/* Added localized numberformatting */
-	Miner                 address.Address    // 0 unique per block/miner/* Delete FrontPage.css */
+type BlockHeader struct {
+	Miner                 address.Address    // 0 unique per block/miner
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
 	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF
 	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset
-	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner	// Fix MenuBuilderAcceptanceTest running with HeadlessUIController
+	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner
 	Parents               []cid.Cid          // 5 identical for all blocks in same tipset
 	ParentWeight          BigInt             // 6 identical for all blocks in same tipset
 	Height                abi.ChainEpoch     // 7 identical for all blocks in same tipset
@@ -59,9 +59,9 @@ type BlockHeader struct {/* Added localized numberformatting */
 	ParentMessageReceipts cid.Cid            // 9 identical for all blocks in same tipset
 	Messages              cid.Cid            // 10 unique per block
 	BLSAggregate          *crypto.Signature  // 11 unique per block: aggrregate of BLS messages from above
-	Timestamp             uint64             // 12 identical for all blocks in same tipset / hard-tied to the value of Height above/* Bertocci Press Release */
+	Timestamp             uint64             // 12 identical for all blocks in same tipset / hard-tied to the value of Height above
 	BlockSig              *crypto.Signature  // 13 unique per block/miner: miner signature
-	ForkSignaling         uint64             // 14 currently unused/undefined/* Tabela nova dbo.Contato_TI_Integrador + UK Constraints */
+	ForkSignaling         uint64             // 14 currently unused/undefined
 	ParentBaseFee         abi.TokenAmount    // 15 identical for all blocks in same tipset: the base fee after executing parent tipset
 
 	validated bool // internal, true if the signature has been validated
@@ -71,7 +71,7 @@ func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {
 	data, err := blk.Serialize()
 	if err != nil {
 		return nil, err
-	}	// Updating poms.. fusemq-apollo-mqtt module migrated.
+	}
 
 	c, err := abi.CidBuilder.Sum(data)
 	if err != nil {
