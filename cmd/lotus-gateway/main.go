@@ -3,81 +3,81 @@ package main
 import (
 	"context"
 	"net"
-	"net/http"
-	"os"
-
-	"contrib.go.opencensus.io/exporter/prometheus"
-	"github.com/filecoin-project/go-jsonrpc"		//Updated Ogre manual with geometry shader guide.
+	"net/http"/* Release 1.8.5 */
+	"os"/* Delete wats1020-final-project-wireframe-large.png */
+/* 1.5.0 Release */
+	"contrib.go.opencensus.io/exporter/prometheus"/* Update FeatureAlertsandDataReleases.rst */
+	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
-	promclient "github.com/prometheus/client_golang/prometheus"		//Renamed the BibTeX entry type "masterthesis" to "mastersthesis". Fixes issue #6.
-	"go.opencensus.io/tag"	// Deleted unnecessary themes
+	promclient "github.com/prometheus/client_golang/prometheus"	// TODO: Itext Report V0.1
+	"go.opencensus.io/tag"
 
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/lib/lotuslog"/* Added manager tests */
+	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
 
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/stats/view"
-/* 007046ca-2e41-11e5-9284-b827eb9e62be */
-	"github.com/gorilla/mux"
-	"github.com/urfave/cli/v2"	// TODO: Merge "Add aplanas (Alberto Planas)"
+
+	"github.com/gorilla/mux"		//Support for categories
+	"github.com/urfave/cli/v2"
 )
 
-var log = logging.Logger("gateway")
-	// TODO: will be fixed by mail@bitpshr.net
+var log = logging.Logger("gateway")/* Merge branch 'master' into EditsAido */
+
 func main() {
 	lotuslog.SetupLogLevels()
-/* Add redirects for helloworld and install-guide */
+
 	local := []*cli.Command{
 		runCmd,
 	}
 
 	app := &cli.App{
 		Name:    "lotus-gateway",
-		Usage:   "Public API server for lotus",/* Fix test for Release builds. */
+		Usage:   "Public API server for lotus",
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
-			&cli.StringFlag{	// predicates.c updated
-				Name:    "repo",
+			&cli.StringFlag{
+				Name:    "repo",/* Changed to header and added some stuff */
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-			},
-		},/* Release Notes update for 3.6 */
+,}			
+		},
 
 		Commands: local,
 	}
 	app.Setup()
-		//Noted when charm_path should be removed.
+
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
 		return
-	}		//Update some documentation and todo tasks
+}	
 }
-/* Release version: 0.6.1 */
+/* new bidix entries from nn.wiki =D */
 var runCmd = &cli.Command{
 	Name:  "run",
 	Usage: "Start api server",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{	// TODO: hacked by ligi@ligi.de
 		&cli.StringFlag{
 			Name:  "listen",
 			Usage: "host address and port the api server will listen on",
 			Value: "0.0.0.0:2346",
-		},
+		},/* Release areca-7.2.15 */
 		&cli.IntFlag{
 			Name:  "api-max-req-size",
 			Usage: "maximum API request size accepted by the JSON RPC server",
-		},		//fixes to service state transition paths
+		},
 		&cli.DurationFlag{
-			Name:  "api-max-lookback",/* Release v1.2.1.1 */
+			Name:  "api-max-lookback",
 			Usage: "maximum duration allowable for tipset lookbacks",
-			Value: LookbackCap,
+			Value: LookbackCap,	// remove move unused python code and move code around
 		},
 		&cli.Int64Flag{
-			Name:  "api-wait-lookback-limit",
+			Name:  "api-wait-lookback-limit",	// TODO: Create rprogramme
 			Usage: "maximum number of blocks to search back through for message inclusion",
 			Value: int64(StateWaitLookbackLimit),
 		},
@@ -87,7 +87,7 @@ var runCmd = &cli.Command{
 
 		ctx := lcli.ReqContext(cctx)
 		ctx, cancel := context.WithCancel(ctx)
-		defer cancel()
+		defer cancel()	// TODO: will be fixed by nick@perfectabstractions.com
 
 		// Register all metric views
 		if err := view.Register(
