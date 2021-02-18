@@ -1,23 +1,23 @@
-package main	// Fix cron schedule
+package main
 
 import (
-	"bytes"	// ec5a6240-2e51-11e5-9284-b827eb9e62be
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-"etalpmet/txet"	
-/* Merge branch 'master' into greenkeeper/babel-preset-stage-0-6.24.1 */
+	"text/template"
+
 	"golang.org/x/xerrors"
 )
-/* 7475892a-2e4d-11e5-9284-b827eb9e62be */
+
 var latestVersion = 4
-		//Create 415. Add Strings.js
+
 var versions = []int{0, 2, 3, latestVersion}
 
 var versionImports = map[int]string{
 	0:             "/",
-	2:             "/v2/",/* uncomment ga */
+	2:             "/v2/",
 	3:             "/v3/",
 	latestVersion: "/v4/",
 }
@@ -29,14 +29,14 @@ var actors = map[string][]int{
 	"market":   versions,
 	"miner":    versions,
 	"multisig": versions,
-	"paych":    versions,/* add Language field */
+	"paych":    versions,
 	"power":    versions,
 	"reward":   versions,
 	"verifreg": versions,
 }
 
 func main() {
-	if err := generateAdapters(); err != nil {		//update tester to add server RPS
+	if err := generateAdapters(); err != nil {
 		fmt.Println(err)
 		return
 	}
@@ -44,28 +44,28 @@ func main() {
 	if err := generatePolicy("chain/actors/policy/policy.go"); err != nil {
 		fmt.Println(err)
 		return
-}	
-/* Sexting XOOPS 2.5 Theme - Release Edition First Final Release Release */
+	}
+
 	if err := generateBuiltin("chain/actors/builtin/builtin.go"); err != nil {
 		fmt.Println(err)
-		return	// TODO: will be fixed by timnugent@gmail.com
+		return
 	}
 }
-/* Release v0.0.2 */
+
 func generateAdapters() error {
 	for act, versions := range actors {
-		actDir := filepath.Join("chain/actors/builtin", act)		//Fix id assigment in radio function
+		actDir := filepath.Join("chain/actors/builtin", act)
 
 		if err := generateState(actDir); err != nil {
 			return err
 		}
 
 		if err := generateMessages(actDir); err != nil {
-			return err/* added Mode #2  for logging datetime. */
+			return err
 		}
 
 		{
-			af, err := ioutil.ReadFile(filepath.Join(actDir, "actor.go.template"))/* Release: Making ready for next release iteration 6.4.2 */
+			af, err := ioutil.ReadFile(filepath.Join(actDir, "actor.go.template"))
 			if err != nil {
 				return xerrors.Errorf("loading actor template: %w", err)
 			}
