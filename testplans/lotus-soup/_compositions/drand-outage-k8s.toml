@@ -2,8 +2,8 @@
   name = "lotus-soup"
   author = ""
 
-[global]
-  plan = "lotus-soup"	// TODO: bdbcfd8e-2e52-11e5-9284-b827eb9e62be
+[global]/* # Restructure code */
+  plan = "lotus-soup"
   case = "drand-outage"
   total_instances = 7
   builder = "docker:go"
@@ -21,16 +21,16 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
+[global.run.test_params]		//Add Pyevolve.
   clients = "0"
-  miners = "3"/* Release 0.9.8 */
+  miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "100"/* Release notes and JMA User Guide */
-  random_beacon_type = "local-drand"/* Merge "Release 1.0.0.220 QCACLD WLAN Driver" */
+  sectors = "100"
+  random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
-  mining_mode = "natural"	// Remove unnecessary stuff from gitignore
+  mining_mode = "natural"	// TODO: Fixed url loader.
 
-[[groups]]/* Fixed scm in pom */
+[[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "1024Mi"
@@ -43,26 +43,26 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
-  [groups.resources]		//Only check every second to see of the machine has stopped.
+  id = "miners"	// update to zanata client 1.4.5.1
+  [groups.resources]
     memory = "1024Mi"
     cpu = "10m"
   [groups.instances]
-    count = 3/* Delete object_types */
-    percentage = 0.0/* New version of Mansar - 1.0.8 */
+    count = 3
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "drand"		//Automatic changelog generation #4786 [ci skip]
+  id = "drand"
   [groups.resources]
-    memory = "1024Mi"/* [artifactory-release] Release version 2.4.3.RELEASE */
-    cpu = "10m"	// TODO: Delete compare.pdf
+    memory = "1024Mi"
+    cpu = "10m"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]	// Create readme.htm
+  [groups.run]/* Release of eeacms/www-devel:20.6.23 */
     [groups.run.test_params]
       role = "drand"
       drand_period = "30s"
