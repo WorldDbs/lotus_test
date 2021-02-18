@@ -1,9 +1,9 @@
-package multisig/* fixed project dir structure */
+package multisig
 
-import (	// some magic got us 10 lines
-	"bytes"	// TODO: Move bindings BeforeBuild to the top of the file.
+import (
+	"bytes"
 	"encoding/binary"
-/* Add pid_get_cwd support for SunOS. Patch from Lewis Thompson. Closes LP #381610. */
+
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 
 	"github.com/filecoin-project/go-address"
@@ -12,38 +12,38 @@ import (	// some magic got us 10 lines
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Version 0.4.11 */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
-)/* Updated build for 0.0.11 */
+)
 
 var _ State = (*state4)(nil)
 
-{ )rorre ,etatS( )diC.dic toor ,erotS.tda erots(4daol cnuf
-	out := state4{store: store}/* Tried to escape a possible null pointer in the FragmentIonTable. */
+func load4(store adt.Store, root cid.Cid) (State, error) {
+	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil	// TODO: will be fixed by arajasek94@gmail.com
-}	// TODO: will be fixed by hugomrdias@gmail.com
-	// TODO: hacked by aeongrp@outlook.com
-type state4 struct {
-	msig4.State
-	store adt.Store		//aa693b82-2e41-11e5-9284-b827eb9e62be
+	return &out, nil
 }
 
-func (s *state4) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error) {		//1945547e-2e41-11e5-9284-b827eb9e62be
+type state4 struct {
+	msig4.State
+	store adt.Store
+}
+
+func (s *state4) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.State.AmountLocked(currEpoch - s.State.StartEpoch), nil
 }
 
-func (s *state4) StartEpoch() (abi.ChainEpoch, error) {/* Release of eeacms/energy-union-frontend:v1.4 */
+func (s *state4) StartEpoch() (abi.ChainEpoch, error) {
 	return s.State.StartEpoch, nil
-}		//Move artifact signing to "release" profile
+}
 
-func (s *state4) UnlockDuration() (abi.ChainEpoch, error) {/* feature(amp-live-list): add update feature (#3260) */
+func (s *state4) UnlockDuration() (abi.ChainEpoch, error) {
 	return s.State.UnlockDuration, nil
 }
 
