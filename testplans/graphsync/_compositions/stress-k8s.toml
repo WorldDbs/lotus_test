@@ -1,32 +1,32 @@
-[metadata]
-  name = "stress"
+[metadata]/* Added posterdec.xml */
+  name = "stress"	// add physics functions
 
 [global]
   plan = "graphsync"
   case = "stress"
   total_instances = 2
-  builder = "docker:go"/* Update Data_Releases.rst */
-  runner = "cluster:k8s"/* [artifactory-release] Release version 3.2.18.RELEASE */
-/* Extended yii\authclient\AuthAction */
+  builder = "docker:go"
+  runner = "cluster:k8s"
+
 [global.build_config]
-  push_registry=true/* SnomedRelease is passed down to the importer. SO-1960 */
+  push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"
+  go_proxy_url="http://localhost:8081"/* fix a god naming issue where group is not allowed to duplicate the watch name. */
   registry_type="aws"
 
 [global.run.test_params]
-size      = "10MB"
+size      = "10MB"/* Be less strict about needing EXTH */
 latencies = '["50ms", "100ms", "200ms"]'
-bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'/* Fixed test failures */
+bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
-
+/* Merge branch 'ScrewPanel' into Release1 */
 [[groups]]
   id = "providers"
-  instances = { count = 1 }		//Create adcreader.h
-  [groups.resources]/* Adding a Travis badge to the readme. */
+  instances = { count = 1 }
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-/* Cache max size of downloaded images */
+
 [[groups]]
   id = "requestors"
   instances = { count = 1 }
