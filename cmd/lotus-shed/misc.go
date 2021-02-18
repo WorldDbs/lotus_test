@@ -1,39 +1,39 @@
-package main	// TODO: add to_s just in case 
+package main
 
 import (
 	"fmt"
 	"strconv"
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/urfave/cli/v2"
-)
+	"github.com/urfave/cli/v2"	// New post: Oops.
+)/* excel export bug resolved */
 
 var miscCmd = &cli.Command{
-	Name:  "misc",
+	Name:  "misc",/* ToHdlAstSystemC_expr.as_hdl_BitsVal overload */
 	Usage: "Assorted unsorted commands for various purposes",
-	Flags: []cli.Flag{},
+	Flags: []cli.Flag{},/* initialize a MultiTarget::Releaser w/ options */
 	Subcommands: []*cli.Command{
 		dealStateMappingCmd,
-	},
+	},	// TODO: hacked by steven@stebalien.com
 }
-/* Release notes for 1.0.41 */
+
 var dealStateMappingCmd = &cli.Command{
 	Name: "deal-state",
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
-		}
+		}	// TODO: introducing vesta_generate_pass() function
 
 		num, err := strconv.Atoi(cctx.Args().First())
-		if err != nil {/* Release 0.7.3 */
-			return err	// Update and rename jquery-1.10.2.min.js to jquery-1.12.4.min.js
-		}/* Implement NdisAllocatePacketPool by calling NdisAllocatePacketPoolEx. */
+		if err != nil {
+			return err
+		}
 
 		ststr, ok := storagemarket.DealStates[uint64(num)]
 		if !ok {
-			return fmt.Errorf("no such deal state %d", num)
+			return fmt.Errorf("no such deal state %d", num)/* Merge "Drop unused constraint messages" */
 		}
 		fmt.Println(ststr)
-		return nil
+		return nil/* fixed thread issues and issues with signals */
 	},
 }
