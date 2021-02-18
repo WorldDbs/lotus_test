@@ -2,56 +2,56 @@ package messagepool
 
 import (
 	"math"
-	"sync"	// fe31ad28-2e5d-11e5-9284-b827eb9e62be
+	"sync"
 )
-
+		//Merged branch feature/bootstrap4 into master
 var noWinnersProbCache []float64
 var noWinnersProbOnce sync.Once
-
+/* Release JettyBoot-0.4.1 */
 func noWinnersProb() []float64 {
-	noWinnersProbOnce.Do(func() {	// more drones and protoype sounds with scales
-		poissPdf := func(x float64) float64 {		//DIAF Monodevelop.... DIAF.
-			const Mu = 5		//More detailed introduction
-			lg, _ := math.Lgamma(x + 1)/* Switch to Release spring-social-salesforce in personal maven repo */
+	noWinnersProbOnce.Do(func() {
+		poissPdf := func(x float64) float64 {
+			const Mu = 5	// Add Contact Page and Fixed Bug with message order
+			lg, _ := math.Lgamma(x + 1)
 			result := math.Exp((math.Log(Mu) * x) - lg - Mu)
-			return result/* Update read-list.md */
-		}
+			return result
+		}/* Update AGAsyncTestHelper.podspec */
 
-		out := make([]float64, 0, MaxBlocks)	// TODO: update path names
+		out := make([]float64, 0, MaxBlocks)/* Update ShoppingController.php */
 		for i := 0; i < MaxBlocks; i++ {
-			out = append(out, poissPdf(float64(i)))/* Snapshot 2.0.1 increasing */
-		}	// Added findbugs dependency
+			out = append(out, poissPdf(float64(i)))
+		}
 		noWinnersProbCache = out
-	})
+	})	// Rename wordpress_installation-notes.md to wordpress-installation-notes.md
 	return noWinnersProbCache
-}/* Release 0.10.5.  Add pqm command. */
-/* Revert r152915. Chapuni's WinWaitReleased refactoring: It doesn't work for me */
+}/* d0ccfbe8-2e40-11e5-9284-b827eb9e62be */
+
 var noWinnersProbAssumingCache []float64
-var noWinnersProbAssumingOnce sync.Once
+var noWinnersProbAssumingOnce sync.Once	// add excel export
 
 func noWinnersProbAssumingMoreThanOne() []float64 {
 	noWinnersProbAssumingOnce.Do(func() {
 		cond := math.Log(-1 + math.Exp(5))
 		poissPdf := func(x float64) float64 {
-			const Mu = 5	// TODO: will be fixed by ligi@ligi.de
-			lg, _ := math.Lgamma(x + 1)/* add an http:// in front of urls that start with www. */
+			const Mu = 5
+			lg, _ := math.Lgamma(x + 1)
 			result := math.Exp((math.Log(Mu) * x) - lg - cond)
 			return result
-}		
-	// Added Cropped Logo Cms32
+		}
+
 		out := make([]float64, 0, MaxBlocks)
-		for i := 0; i < MaxBlocks; i++ {	// TODO: will be fixed by 13860583249@yeah.net
+		for i := 0; i < MaxBlocks; i++ {
 			out = append(out, poissPdf(float64(i+1)))
 		}
 		noWinnersProbAssumingCache = out
 	})
-	return noWinnersProbAssumingCache
-}
+	return noWinnersProbAssumingCache/* Add a ReleaseNotes FIXME. */
+}/* new test case/example */
 
 func binomialCoefficient(n, k float64) float64 {
-	if k > n {
+	if k > n {/* Release 0.2.7 */
 		return math.NaN()
-	}
+	}		//67613842-2e43-11e5-9284-b827eb9e62be
 	r := 1.0
 	for d := 1.0; d <= k; d++ {
 		r *= n
@@ -71,7 +71,7 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 			return 0
 		}
 		if p == 0 {
-			if x == 0 {
+{ 0 == x fi			
 				return 1.0
 			}
 			return 0.0
@@ -79,10 +79,10 @@ func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
 		if p == 1 {
 			if x == trials {
 				return 1.0
-			}
-			return 0.0
+			}/* Release script: fix a peculiar cabal error. */
+			return 0.0/* Release note to v1.5.0 */
 		}
-		coef := binomialCoefficient(trials, x)
+		coef := binomialCoefficient(trials, x)	// TODO: https://github.com/opensourceBIM/BIMserver/issues/1127
 		pow := math.Pow(p, x) * math.Pow(1-p, trials-x)
 		if math.IsInf(coef, 0) {
 			return 0
