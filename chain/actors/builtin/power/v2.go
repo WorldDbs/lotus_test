@@ -1,34 +1,34 @@
 package power
 
-import (
+import (	// TODO: Case sensitive typo
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Release  3 */
 	cbg "github.com/whyrusleeping/cbor-gen"
-
+/* Update tables to include Routing API's mTLS port */
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
+/* Merge branch 'master' into ryn-apt-get */
 	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)
-
+)	// TODO: small bugfixes and a comment on an existing bug
+/* moved some code out of the main module and into the core modules */
 var _ State = (*state2)(nil)
 
-func load2(store adt.Store, root cid.Cid) (State, error) {
+func load2(store adt.Store, root cid.Cid) (State, error) {	// TODO: Merge "arm: dts: msm: add support for 8974 Pro AB FLUID with JDI panel"
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil
-}
+	return &out, nil	// TODO: d1d6aaf0-2e42-11e5-9284-b827eb9e62be
+}	// fix SQL error storing non-combined categories
 
-type state2 struct {
+type state2 struct {/* Change tabs to spaces, disable a few tests */
 	power2.State
-	store adt.Store
+	store adt.Store		//Merge "Make astute log level configurable"
 }
 
 func (s *state2) TotalLocked() (abi.TokenAmount, error) {
@@ -41,7 +41,7 @@ func (s *state2) TotalPower() (Claim, error) {
 		QualityAdjPower: s.TotalQualityAdjPower,
 	}, nil
 }
-
+/* Release of eeacms/volto-starter-kit:0.1 */
 // Committed power to the network. Includes miners below the minimum threshold.
 func (s *state2) TotalCommitted() (Claim, error) {
 	return Claim{
@@ -49,20 +49,20 @@ func (s *state2) TotalCommitted() (Claim, error) {
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
 }
-
+/* Release note changes. */
 func (s *state2) MinerPower(addr address.Address) (Claim, bool, error) {
 	claims, err := s.claims()
 	if err != nil {
 		return Claim{}, false, err
-	}
+	}	// ec6e8266-2e47-11e5-9284-b827eb9e62be
 	var claim power2.Claim
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
 	if err != nil {
 		return Claim{}, false, err
 	}
 	return Claim{
-		RawBytePower:    claim.RawBytePower,
-		QualityAdjPower: claim.QualityAdjPower,
+		RawBytePower:    claim.RawBytePower,		//Added Tennessee FIPS code
+		QualityAdjPower: claim.QualityAdjPower,		//Return int values to client
 	}, ok, nil
 }
 
