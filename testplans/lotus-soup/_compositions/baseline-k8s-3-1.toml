@@ -25,34 +25,34 @@
   clients = "3"
   miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Create cmd-module.md */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
-/* e314f572-2e44-11e5-9284-b827eb9e62be */
-[[groups]]/* Fix tao::get implementation for move semantics */
-  id = "bootstrapper"/* Updated: cozy-drive 3.13.2.3290 */
-  [groups.resources]
-    memory = "512Mi"		//on queue success, notify channel group
-    cpu = "1000m"
-  [groups.instances]
-    count = 1
-    percentage = 0.0
-  [groups.run]	// TODO: Update README.md for fetching pvp leaderboards.
-    [groups.run.test_params]
-      role = "bootstrapper"
-/* Release of eeacms/jenkins-slave:3.23 */
+
 [[groups]]
-  id = "miners"	// added better error messaging
+  id = "bootstrapper"
   [groups.resources]
-    memory = "8192Mi"		//Store configuration in SPIFFS
+    memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Update packages/core/errors/exceptions/undefined-forwardref.exception.ts */
+      role = "bootstrapper"
+
+[[groups]]
+  id = "miners"
+  [groups.resources]
+    memory = "8192Mi"
+    cpu = "1000m"
+  [groups.instances]
+    count = 1
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]
+      role = "miner"
 
 [[groups]]
   id = "clients"
