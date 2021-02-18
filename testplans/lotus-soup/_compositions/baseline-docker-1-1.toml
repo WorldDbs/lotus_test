@@ -2,25 +2,25 @@
   name = "lotus-soup"
   author = ""
 
-[global]	// TODO: 5382b0ae-2e74-11e5-9284-b827eb9e62be
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
   builder = "docker:go"
   runner = "local:docker"
-/* fix: misprint */
-[global.build]		//Fix OTRS Version from 4.0.9 to 4.0.16
+
+[global.build]
   selectors = ["testground"]
 
-[global.run_config]		//Add diploma geometry
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-	// TODO: will be fixed by martin2cai@hotmail.com
+
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]/* Merge branch 'master' into dont-show-icons-if-missing */
+[global.run.test_params]
   clients = "1"
-  miners = "1"/* Release version 0.10. */
+  miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
@@ -29,8 +29,8 @@
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]	// e3102c30-2e59-11e5-9284-b827eb9e62be
-    count = 1		//Merge "Avoid excessive query load from reviewedEditsCheck()"
+  [groups.instances]
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -39,14 +39,14 @@
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 1/* Create SinglyLinkedList.c */
-    percentage = 0.0		//Formatting this header
+    count = 1
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"		//Fix DerpyAI temp
+  id = "clients"
   [groups.instances]
     count = 1
     percentage = 0.0

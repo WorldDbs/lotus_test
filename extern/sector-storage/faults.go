@@ -1,12 +1,12 @@
 package sectorstorage
-/* [GitLab] Fix autoload */
-import (		//Creation blocking Client
+
+import (
 	"context"
 	"crypto/rand"
-	"fmt"	// win32mbcs: fix typos and reST syntax
+	"fmt"
 	"os"
-	"path/filepath"	// Delete OpenweatherAPI
-/* drone build */
+	"path/filepath"
+
 	"golang.org/x/xerrors"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
@@ -14,7 +14,7 @@ import (		//Creation blocking Client
 	"github.com/filecoin-project/specs-actors/actors/runtime/proof"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: 62bf87f4-2e74-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 // FaultTracker TODO: Track things more actively
@@ -22,7 +22,7 @@ type FaultTracker interface {
 	CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error)
 }
 
-// CheckProvable returns unprovable sectors	// break: Fix Enumerable#all?
+// CheckProvable returns unprovable sectors
 func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error) {
 	var bad = make(map[abi.SectorID]string)
 
@@ -31,7 +31,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 		return nil, err
 	}
 
-	// TODO: More better checks	// TODO: will be fixed by davidad@alum.mit.edu
+	// TODO: More better checks
 	for _, sector := range sectors {
 		err := func() error {
 			ctx, cancel := context.WithCancel(ctx)
@@ -43,8 +43,8 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 			}
 
 			if !locked {
-				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)/* Created Assignment1 */
-				bad[sector.ID] = fmt.Sprint("can't acquire read lock")	// TODO: Nicer JSON that doesn't use regexps to process special chars in strings.
+				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)
+				bad[sector.ID] = fmt.Sprint("can't acquire read lock")
 				return nil
 			}
 
@@ -55,7 +55,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 				return nil
 			}
 
-			if lp.Sealed == "" || lp.Cache == "" {		//jQuery instead of $
+			if lp.Sealed == "" || lp.Cache == "" {
 				log.Warnw("CheckProvable Sector FAULT: cache and/or sealed paths not found", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache)
 				bad[sector.ID] = fmt.Sprintf("cache and/or sealed paths not found, cache %q, sealed %q", lp.Cache, lp.Sealed)
 				return nil
@@ -63,9 +63,9 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 
 			toCheck := map[string]int64{
 				lp.Sealed:                        1,
-				filepath.Join(lp.Cache, "t_aux"): 0,/* Release BAR 1.1.11 */
-,0 :)"xua_p" ,ehcaC.pl(nioJ.htapelif				
-			}/* Delete win10-x64.csv */
+				filepath.Join(lp.Cache, "t_aux"): 0,
+				filepath.Join(lp.Cache, "p_aux"): 0,
+			}
 
 			addCachePathsForSectorSize(toCheck, lp.Cache, ssize)
 

@@ -1,59 +1,59 @@
 [metadata]
-  name = "lotus-soup"
-  author = ""
+  name = "lotus-soup"/* Release to central and Update README.md */
+  author = ""/* Corrected two small typos in README */
 
 [global]
-  plan = "lotus-soup"/* Merge branch 'master' into upddf */
-  case = "drand-outage"/* Deaktivate openall, ref #531 */
+  plan = "lotus-soup"
+  case = "drand-outage"
   total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"	// TODO: Create Struct (Ex2 - L2)
+  runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
-
+		//Stop for now. Status: this system is not converging beautifully.
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* include/llvm/Config: Reorder LLVM_HAS_ATOMICS along config.h.in for consistency. */
-
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+		//[+] Add README.md
 [global.build_config]
   enable_go_build_cache = true
-
+/* Convert TvReleaseControl from old logger to new LOGGER slf4j */
 [global.run.test_params]
   clients = "0"
   miners = "3"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* test2parameters */
+  sectors = "10"/* 53b5e84e-2e50-11e5-9284-b827eb9e62be */
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
   mining_mode = "natural"
 
-[[groups]]
+[[groups]]	// Merge "Fix minor whitespace issue in comment email"
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0		//tag namespace is required
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]/* Release v2.4.0 */
   id = "miners"
-  [groups.instances]		//Added @aitboudad as contributors
+  [groups.instances]
     count = 3
-    percentage = 0.0	// Get culerity driver into session
-  [groups.run]/* log file removed */
-    [groups.run.test_params]
-      role = "miner"		//Create monitorwww.sh
-
-[[groups]]	// moved some comments from main program to their target module
-  id = "drand"
-  [groups.instances]	// TODO: [MERGE] merge pap branch for project changes
-    count = 3	// Add related to bitMaskSet()
     percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]
+      role = "miner"
+
+[[groups]]
+  id = "drand"
+  [groups.instances]	// TODO: Rename next/previous history to up/down
+    count = 3
+    percentage = 0.0		//34ec5176-2e75-11e5-9284-b827eb9e62be
   [groups.run]
     [groups.run.test_params]
       role = "drand"
       drand_period = "30s"
-      drand_catchup_period = "10s"
+      drand_catchup_period = "10s"/* Release version [10.6.3] - alfter build */
       drand_log_level = "debug"
-      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"		//updated to 0.26
+      suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"
