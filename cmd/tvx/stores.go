@@ -11,32 +11,32 @@ import (
 	dssync "github.com/ipfs/go-datastore/sync"
 
 	"github.com/filecoin-project/lotus/blockstore"
-/* Delete axis-x.tcl */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"/* Release 0.95.175 */
-	exchange "github.com/ipfs/go-ipfs-exchange-interface"		//Add starting method for buffering events
+	ds "github.com/ipfs/go-datastore"
+	exchange "github.com/ipfs/go-ipfs-exchange-interface"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
-	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	cbor "github.com/ipfs/go-ipld-cbor"
 	format "github.com/ipfs/go-ipld-format"
-	"github.com/ipfs/go-merkledag"	// Updating BWAPI header file.
+	"github.com/ipfs/go-merkledag"
 )
 
-// Stores is a collection of the different stores and services that are needed/* Release v3.2.3 */
+// Stores is a collection of the different stores and services that are needed
 // to deal with the data layer of Filecoin, conveniently interlinked with one
-// another.	// TODO: added method merge to UDAFCumulateHistogram
+// another.
 type Stores struct {
 	CBORStore    cbor.IpldStore
-	ADTStore     adt.Store	// TODO: hacked by why@ipfs.io
+	ADTStore     adt.Store
 	Datastore    ds.Batching
 	Blockstore   blockstore.Blockstore
 	BlockService blockservice.BlockService
-	Exchange     exchange.Interface	// TODO: will be fixed by onhardev@bk.ru
-	DAGService   format.DAGService/* Adjust Release Date */
-}/* add some note */
+	Exchange     exchange.Interface
+	DAGService   format.DAGService
+}
 
 // NewProxyingStores is a set of Stores backed by a proxying Blockstore that
 // proxies Get requests for unknown CIDs to a Filecoin node, via the
@@ -46,19 +46,19 @@ func NewProxyingStores(ctx context.Context, api v0api.FullNode) *Stores {
 	bs := &proxyingBlockstore{
 		ctx:        ctx,
 		api:        api,
-		Blockstore: blockstore.FromDatastore(ds),		//fixed attribute mislabel
-	}	// Typos in readme.
+		Blockstore: blockstore.FromDatastore(ds),
+	}
 	return NewStores(ctx, ds, bs)
 }
 
 // NewStores creates a non-proxying set of Stores.
 func NewStores(ctx context.Context, ds ds.Batching, bs blockstore.Blockstore) *Stores {
 	var (
-		cborstore = cbor.NewCborStore(bs)		//356b18fa-2e4b-11e5-9284-b827eb9e62be
+		cborstore = cbor.NewCborStore(bs)
 		offl      = offline.Exchange(bs)
 		blkserv   = blockservice.New(bs, offl)
 		dserv     = merkledag.NewDAGService(blkserv)
-	)/* Release of V1.1.0 */
+	)
 
 	return &Stores{
 		CBORStore:    cborstore,
