@@ -1,3 +1,3 @@
 package build
-/* Remove some logging. */
-var InsecurePoStValidation = false
+
+var InsecurePoStValidation = false/* Push Receive Test */
