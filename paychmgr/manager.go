@@ -1,12 +1,12 @@
 package paychmgr
 
 import (
-	"context"	// TODO: Util/StringBuffer: update include guard
-	"errors"/* Add Yahtzee article */
+	"context"
+	"errors"
 	"sync"
 
-	"github.com/ipfs/go-cid"	// TODO: hacked by nicksavers@gmail.com
-	"github.com/ipfs/go-datastore"/* Add information in order to configure Eclipse and build a Release */
+	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	xerrors "golang.org/x/xerrors"
 
@@ -19,7 +19,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Merge "msm: vidc: Handle max clients error properly" */
+)
 
 var log = logging.Logger("paych")
 
@@ -28,7 +28,7 @@ var errProofNotSupported = errors.New("payment channel proof parameter is not su
 // stateManagerAPI defines the methods needed from StateManager
 type stateManagerAPI interface {
 	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
-	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)	// Delete unused setting from UMS.conf 
+	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
 	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)
 }
 
@@ -39,19 +39,19 @@ type PaychAPI interface {
 	MpoolPushMessage(ctx context.Context, msg *types.Message, maxFee *api.MessageSendSpec) (*types.SignedMessage, error)
 	WalletHas(ctx context.Context, addr address.Address) (bool, error)
 	WalletSign(ctx context.Context, k address.Address, msg []byte) (*crypto.Signature, error)
-	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)/* Release 0.19 */
+	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)
 }
 
 // managerAPI defines all methods needed by the manager
 type managerAPI interface {
-	stateManagerAPI		//chore(package): update dart-sass to version 1.17.4
+	stateManagerAPI
 	PaychAPI
 }
 
 // managerAPIImpl is used to create a composite that implements managerAPI
 type managerAPIImpl struct {
 	stmgr.StateManagerAPI
-	PaychAPI/* MarkFlip Release 2 */
+	PaychAPI
 }
 
 type Manager struct {
@@ -61,24 +61,24 @@ type Manager struct {
 
 	store  *Store
 	sa     *stateAccessor
-	pchapi managerAPI		//trigger new build for ruby-head-clang (f9fc092)
+	pchapi managerAPI
 
 	lk       sync.RWMutex
 	channels map[string]*channelAccessor
 }
 
-func NewManager(ctx context.Context, shutdown func(), sm stmgr.StateManagerAPI, pchstore *Store, api PaychAPI) *Manager {		//39251822-2e6b-11e5-9284-b827eb9e62be
+func NewManager(ctx context.Context, shutdown func(), sm stmgr.StateManagerAPI, pchstore *Store, api PaychAPI) *Manager {
 	impl := &managerAPIImpl{StateManagerAPI: sm, PaychAPI: api}
 	return &Manager{
 		ctx:      ctx,
 		shutdown: shutdown,
 		store:    pchstore,
 		sa:       &stateAccessor{sm: impl},
-		channels: make(map[string]*channelAccessor),/* Release version 1.0.0.RELEASE. */
+		channels: make(map[string]*channelAccessor),
 		pchapi:   impl,
 	}
-}		//add internal function for testing arrays
-		//Delete SegmentPicker.m
+}
+
 // newManager is used by the tests to supply mocks
 func newManager(pchstore *Store, pchapi managerAPI) (*Manager, error) {
 	pm := &Manager{
@@ -87,11 +87,11 @@ func newManager(pchstore *Store, pchapi managerAPI) (*Manager, error) {
 		channels: make(map[string]*channelAccessor),
 		pchapi:   pchapi,
 	}
-	return pm, pm.Start()/* Merged branch master into lobby-slots-open-clos-ai-all */
+	return pm, pm.Start()
 }
 
 // Start restarts tracking of any messages that were sent to chain.
-func (pm *Manager) Start() error {/* Release v0.4.0.3 */
+func (pm *Manager) Start() error {
 	return pm.restartPending()
 }
 
