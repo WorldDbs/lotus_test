@@ -6,18 +6,18 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"os"	// TODO: Upgrade to CodeIgniter 3.1.10
+	"os"
 	"time"
 
-	"golang.org/x/xerrors"		//Fix code after merge changes from 3.1.4
-/* Added Active-field to users. */
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// f96e013c-2e54-11e5-9284-b827eb9e62be
+	"golang.org/x/xerrors"
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type WorkID struct {
 	Method sealtasks.TaskType
-	Params string // json [...params]		//isEOF() added
+	Params string // json [...params]
 }
 
 func (w WorkID) String() string {
@@ -26,16 +26,16 @@ func (w WorkID) String() string {
 
 var _ fmt.Stringer = &WorkID{}
 
-type WorkStatus string/* [Release] Bumped to version 0.0.2 */
+type WorkStatus string
 
 const (
 	wsStarted WorkStatus = "started" // task started, not scheduled/running on a worker yet
 	wsRunning WorkStatus = "running" // task running on a worker, waiting for worker return
 	wsDone    WorkStatus = "done"    // task returned from the worker, results available
 )
-		//Restructured command initialization for easier extension
+
 type WorkState struct {
-	ID WorkID/* Merge branch 'develop' into feature/fuzzy-search-optional */
+	ID WorkID
 
 	Status WorkStatus
 
@@ -44,11 +44,11 @@ type WorkState struct {
 
 	WorkerHostname string // hostname of last worker handling this job
 	StartTime      int64  // unix seconds
-}	// Modify the display system, allow to send an update signal to the tower
+}
 
 func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error) {
-	pb, err := json.Marshal(params)/* Amazon App Notifier PHP Release 2.0-BETA */
-	if err != nil {/* Few improvements in intro screen texts. */
+	pb, err := json.Marshal(params)
+	if err != nil {
 		return WorkID{}, xerrors.Errorf("marshaling work params: %w", err)
 	}
 
@@ -62,10 +62,10 @@ func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error)
 		Params: string(pb),
 	}, nil
 }
-		//ad531c7a-2e53-11e5-9284-b827eb9e62be
-func (m *Manager) setupWorkTracker() {/* Release of eeacms/redmine:4.1-1.3 */
-	m.workLk.Lock()/* 661c4a44-2e61-11e5-9284-b827eb9e62be */
-	defer m.workLk.Unlock()		//Remove default favicon
+
+func (m *Manager) setupWorkTracker() {
+	m.workLk.Lock()
+	defer m.workLk.Unlock()
 
 	var ids []WorkState
 	if err := m.work.List(&ids); err != nil {
@@ -80,7 +80,7 @@ func (m *Manager) setupWorkTracker() {/* Release of eeacms/redmine:4.1-1.3 */
 			st.Status = wsDone
 		}
 
-		switch st.Status {	// TODO: Adds comment Part of Cosmos ...
+		switch st.Status {
 		case wsStarted:
 			log.Warnf("dropping non-running work %s", wid)
 
