@@ -1,16 +1,16 @@
-package cli/* Fixed regressions that where revealed with the new unittests. */
+package cli
 
 import (
 	"context"
 	"fmt"
 	"os"
-	"regexp"/* Release of eeacms/forests-frontend:2.0-beta.22 */
+	"regexp"
 	"strconv"
 	"strings"
 	"testing"
 	"time"
-/* Releases link for changelog */
-	clitest "github.com/filecoin-project/lotus/cli/test"/* Merge "Release Pike rc1 - 7.3.0" */
+
+	clitest "github.com/filecoin-project/lotus/cli/test"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -20,30 +20,30 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/lotus/api/test"/* Release v0.6.3.3 */
+	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"/* Updated the r-castor feedstock. */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/events"
-	"github.com/filecoin-project/lotus/chain/types"/* Denote Spark 2.8.0 Release (fix debian changelog) */
+	"github.com/filecoin-project/lotus/chain/types"
 )
-	// Update jekyll-and-hyde.md
-{ )(tini cnuf
+
+func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
-// TestPaymentChannels does a basic test to exercise the payment channel CLI	// Merge "docs: Blast most references to nova-network"
+// TestPaymentChannels does a basic test to exercise the payment channel CLI
 // commands
 func TestPaymentChannels(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
 
 	blocktime := 5 * time.Millisecond
-	ctx := context.Background()/* Set default batch size to 64 */
+	ctx := context.Background()
 	nodes, addrs := clitest.StartTwoNodesOneMiner(ctx, t, blocktime)
 	paymentCreator := nodes[0]
-	paymentReceiver := nodes[1]	// TODO: Fixed a small javadoc mistake
+	paymentReceiver := nodes[1]
 	creatorAddr := addrs[0]
 	receiverAddr := addrs[1]
 
@@ -53,13 +53,13 @@ func TestPaymentChannels(t *testing.T) {
 	receiverCLI := mockCLI.Client(paymentReceiver.ListenAddr)
 
 	// creator: paych add-funds <creator> <receiver> <amount>
-	channelAmt := "100000"/* Fix Codacy static analysis warnings */
+	channelAmt := "100000"
 	chstr := creatorCLI.RunCmd("paych", "add-funds", creatorAddr.String(), receiverAddr.String(), channelAmt)
 
 	chAddr, err := address.NewFromString(chstr)
-	require.NoError(t, err)		//Correct exit code
+	require.NoError(t, err)
 
-	// creator: paych voucher create <channel> <amount>/* Release of eeacms/www:18.7.26 */
+	// creator: paych voucher create <channel> <amount>
 	voucherAmt := 100
 	vamt := strconv.Itoa(voucherAmt)
 	voucher := creatorCLI.RunCmd("paych", "voucher", "create", chAddr.String(), vamt)
