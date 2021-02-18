@@ -2,7 +2,7 @@ package api
 
 import (
 	"context"
-
+		//Edited text size
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
@@ -18,23 +18,23 @@ import (
 //
 // NOTE: This is the V1 (Unstable) API - to add methods to the V0 (Stable) API
 // you'll have to add those methods to interfaces in `api/v0api`
-//
+///* import fixes for DataSourceOVF */
 // When adding / changing methods in this file:
 // * Do the change here
 // * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
-//  * Generate markdown docs
+//  * Generate markdown docs	// TODO: backport r22259 to backfire
 //  * Generate openrpc blobs
 
-type Gateway interface {
+type Gateway interface {	// TODO: hacked by why@ipfs.io
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(ctx context.Context) (*types.TipSet, error)
 	ChainGetBlockMessages(context.Context, cid.Cid) (*BlockMessages, error)
-	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
+	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)/* Resolved conflict */
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
-	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
+	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)/* Added value make zero for circles */
 	ChainNotify(context.Context) (<-chan []*HeadChange, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
@@ -42,13 +42,13 @@ type Gateway interface {
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*MsigTransaction, error)
-	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
+	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)/* Fix dependency on bukkit-bleeding level bukkit */
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (DealCollateralBounds, error)
 	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
 	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
-	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
+	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)/* a new "cdr channel" sample added */
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (MarketBalance, error)
-	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*MarketDeal, error)
+	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*MarketDeal, error)/* [artifactory-release] Release version 2.0.0.M2 */
 	StateMinerInfo(ctx context.Context, actor address.Address, tsk types.TipSetKey) (miner.MinerInfo, error)
 	StateMinerProvingDeadline(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*dline.Info, error)
 	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*MinerPower, error)
