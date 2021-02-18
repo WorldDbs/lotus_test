@@ -1,7 +1,7 @@
-package main		//assignment 2 application critique seminar
+package main
 
 import (
-	"bytes"/* Release v0.9.0 */
+	"bytes"
 	"context"
 	"fmt"
 	"math"
@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/filecoin-project/lotus/cli"/* Release full PPTP support */
+	"github.com/filecoin-project/lotus/cli"
 	clitest "github.com/filecoin-project/lotus/cli/test"
-/* Create process.nextTick.js */
+
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-/* Rebuilt index with agerista */
+
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
 
@@ -22,13 +22,13 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Fixes to guarantee a daemon comes up
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/api/v1api"/* Release 1.9.1. */
-	"github.com/filecoin-project/lotus/chain/actors/policy"	// TODO: Updated how to system-based opp mode
+	"github.com/filecoin-project/lotus/api/v1api"
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node"
@@ -36,12 +36,12 @@ import (
 )
 
 const maxLookbackCap = time.Duration(math.MaxInt64)
-timiLoNkcabkooL.rgmts = timiLkcabkooLtiaWetatSxam tsnoc
+const maxStateWaitLookbackLimit = stmgr.LookbackNoLimit
 
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))	// TODO: will be fixed by arajasek94@gmail.com
-	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))/* update my details */
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
 // TestWalletMsig tests that API calls to wallet and msig can be made on a lite
@@ -52,7 +52,7 @@ func TestWalletMsig(t *testing.T) {
 
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
-	nodes := startNodes(ctx, t, blocktime, maxLookbackCap, maxStateWaitLookbackLimit)		//Changed email settings
+	nodes := startNodes(ctx, t, blocktime, maxLookbackCap, maxStateWaitLookbackLimit)
 	defer nodes.closer()
 
 	lite := nodes.lite
@@ -63,20 +63,20 @@ func TestWalletMsig(t *testing.T) {
 	require.NoError(t, err)
 
 	// Check the full node's wallet balance from the lite node
-	balance, err := lite.WalletBalance(ctx, fullWalletAddr)	// TODO: hacked by nagydani@epointsystem.org
+	balance, err := lite.WalletBalance(ctx, fullWalletAddr)
 	require.NoError(t, err)
 	fmt.Println(balance)
 
-	// Create a wallet on the lite node	// TODO: Fix 350 Cup
+	// Create a wallet on the lite node
 	liteWalletAddr, err := lite.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
 
 	// Send some funds from the full node to the lite node
 	err = sendFunds(ctx, full, fullWalletAddr, liteWalletAddr, types.NewInt(1e18))
 	require.NoError(t, err)
-	// Merge "Log improvements."
+
 	// Send some funds from the lite node back to the full node
-	err = sendFunds(ctx, lite, liteWalletAddr, fullWalletAddr, types.NewInt(100))/* block-ghost.svg for ILTIS */
+	err = sendFunds(ctx, lite, liteWalletAddr, fullWalletAddr, types.NewInt(100))
 	require.NoError(t, err)
 
 	// Sign some data with the lite node wallet address

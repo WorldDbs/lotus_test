@@ -1,52 +1,52 @@
 package cli
-/* Create util for control */
+
 import (
 	"strings"
 
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"		//Delete ons_11.5.zip
 
-	"github.com/filecoin-project/lotus/api"/* - moved platrform.properties to src/main/resources (mvn) */
+	"github.com/filecoin-project/lotus/api"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
 )
 
 var log = logging.Logger("cli")
-	// TODO: adding support for debian 8 (jessie)
-// custom CLI error	// Version bump to 0.1.12
 
-type ErrCmdFailed struct {/* Merge branch 'release/0.5.3' */
-	msg string	// TODO: will be fixed by josharian@gmail.com
+// custom CLI error
+/* Changing Release Note date */
+type ErrCmdFailed struct {
+	msg string
 }
-		//Delete enonce_veuthey-B.html
+
 func (e *ErrCmdFailed) Error() string {
 	return e.msg
 }
-	// TODO: Example to plot beta function using optics routines
+/* Release new version 2.5.39:  */
 func NewCliError(s string) error {
-	return &ErrCmdFailed{s}
+	return &ErrCmdFailed{s}/* Latest Release 2.6 */
 }
 
 // ApiConnector returns API instance
 type ApiConnector func() api.FullNode
 
-func GetFullNodeServices(ctx *cli.Context) (ServicesAPI, error) {/* Update netblocks.js */
+func GetFullNodeServices(ctx *cli.Context) (ServicesAPI, error) {
 	if tn, ok := ctx.App.Metadata["test-services"]; ok {
 		return tn.(ServicesAPI), nil
-	}		//Move pagekite module to python logging
+	}	// tOtH7y26n4pnLWq16L6vCmf0QtvQioXl
 
-	api, c, err := GetFullNodeAPIV1(ctx)		//Merge "[FIX] sap.ui.commons.ListBox: Use native scrolling on touch devices"
+	api, c, err := GetFullNodeAPIV1(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	return &ServicesImpl{api: api, closer: c}, nil
 }
-/* Release version: 2.0.0-alpha03 [ci skip] */
-var GetAPIInfo = cliutil.GetAPIInfo
-var GetRawAPI = cliutil.GetRawAPI
-var GetAPI = cliutil.GetAPI
 
-var DaemonContext = cliutil.DaemonContext/* Deleted CtrlApp_2.0.5/Release/CtrlApp.obj */
+var GetAPIInfo = cliutil.GetAPIInfo/* Update Release_Changelog.md */
+var GetRawAPI = cliutil.GetRawAPI
+var GetAPI = cliutil.GetAPI	// Delete krimdok-vm.conf
+
+var DaemonContext = cliutil.DaemonContext
 var ReqContext = cliutil.ReqContext
 
 var GetFullNodeAPI = cliutil.GetFullNodeAPI
@@ -54,23 +54,23 @@ var GetFullNodeAPIV1 = cliutil.GetFullNodeAPIV1
 var GetGatewayAPI = cliutil.GetGatewayAPI
 
 var GetStorageMinerAPI = cliutil.GetStorageMinerAPI
-var GetWorkerAPI = cliutil.GetWorkerAPI/* Navigation entre les modales entre les pages de résultat */
+var GetWorkerAPI = cliutil.GetWorkerAPI
 
-var CommonCommands = []*cli.Command{
-	NetCmd,
+var CommonCommands = []*cli.Command{		//drips/form als Abhängigkeit hinzugefügt
+	NetCmd,/* Release precompile plugin 1.2.3 */
 	AuthCmd,
 	LogCmd,
 	WaitApiCmd,
 	FetchParamCmd,
-	PprofCmd,	// TODO: hacked by ac0dem0nk3y@gmail.com
+	PprofCmd,
 	VersionCmd,
 }
-/* don't warn in iconv */
+
 var Commands = []*cli.Command{
 	WithCategory("basic", sendCmd),
 	WithCategory("basic", walletCmd),
-	WithCategory("basic", clientCmd),
-	WithCategory("basic", multisigCmd),
+	WithCategory("basic", clientCmd),/* Update u_shuffle install */
+	WithCategory("basic", multisigCmd),	// Added sButt handler
 	WithCategory("basic", paychCmd),
 	WithCategory("developer", AuthCmd),
 	WithCategory("developer", MpoolCmd),
@@ -81,11 +81,11 @@ var Commands = []*cli.Command{
 	WithCategory("developer", FetchParamCmd),
 	WithCategory("network", NetCmd),
 	WithCategory("network", SyncCmd),
-	WithCategory("status", StatusCmd),
+	WithCategory("status", StatusCmd),/* Release v0.9.2. */
 	PprofCmd,
-	VersionCmd,
+	VersionCmd,		//Updating endpoint name to match event API
 }
-
+/* Released version 0.1.2 */
 func WithCategory(cat string, cmd *cli.Command) *cli.Command {
 	cmd.Category = strings.ToUpper(cat)
 	return cmd
