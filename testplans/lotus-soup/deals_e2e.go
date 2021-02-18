@@ -1,8 +1,8 @@
 package main
 
 import (
-	"context"	// TODO: added some mouvement improvement
-	"fmt"		//CSS and JavaScript Files !
+	"context"
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -12,14 +12,14 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/testground/sdk-go/sync"
-/* Merge "Puppetise LocalSettings.php -> ../Settings.php symlink" */
+
 	mbig "math/big"
 
 	"github.com/filecoin-project/lotus/build"
 
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"	// TODO: remove single init.
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
-		//Added CSV movie (csv.gif)
+
 // This is the baseline test; Filecoin 101.
 //
 // A network with a bootstrapper, a number of miners, and a number of clients/full nodes
@@ -27,12 +27,12 @@ import (
 // Some funds are allocated to each node and a number of sectors are presealed in the genesis block.
 //
 // The test plan:
-// One or more clients store content to one or more miners, testing storage deals.		//Fix access level, ModelError enum names
+// One or more clients store content to one or more miners, testing storage deals.
 // The plan ensures that the storage deals hit the blockchain and measure the time it took.
 // Verification: one or more clients retrieve and verify the hashes of stored content.
 // The plan ensures that all (previously) published content can be correctly retrieved
 // and measures the time it took.
-//		//fixed git scm reference
+//
 // Preparation of the genesis block: this is the responsibility of the bootstrapper.
 // In order to compute the genesis block, we need to collect identities and presealed
 // sectors from each node.
@@ -40,20 +40,20 @@ import (
 // the presealed sectors.
 func dealsE2E(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
-	if t.Role != "client" {		//fixes for docs
+	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
-	}/* Merge remote-tracking branch 'origin/Release5.1.0' into dev */
-	// TODO: hacked by souzau@yandex.com
+	}
+
 	// This is a client role
 	fastRetrieval := t.BooleanParam("fast_retrieval")
 	t.RecordMessage("running client, with fast retrieval set to: %v", fastRetrieval)
 
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {	// TODO: will be fixed by nick@perfectabstractions.com
-		return err		//reverting to version 0.1 - jquery mobile isn't suitable atm
-	}/* Deselect move button and unit after move action */
+	if err != nil {
+		return err
+	}
 
-	ctx := context.Background()	// Merge "msm: kgsl: Support command batch profiling"
+	ctx := context.Background()
 	client := cl.FullApi
 
 	// select a random miner
@@ -61,12 +61,12 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
 	}
-	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)/* [pipeline] Release - added missing version */
+	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
 	if fastRetrieval {
-		err = initPaymentChannel(t, ctx, cl, minerAddr)/* Remove uneeded compiler flags. */
+		err = initPaymentChannel(t, ctx, cl, minerAddr)
 		if err != nil {
 			return err
 		}
