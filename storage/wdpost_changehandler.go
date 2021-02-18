@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
-/* 9fd1e7da-2e6b-11e5-9284-b827eb9e62be */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
@@ -15,7 +15,7 @@ import (
 
 const (
 	SubmitConfidence    = 4
-	ChallengeConfidence = 10/* Added two missing classes */
+	ChallengeConfidence = 10
 )
 
 type CompleteGeneratePoSTCb func(posts []miner.SubmitWindowedPoStParams, err error)
@@ -24,27 +24,27 @@ type CompleteSubmitPoSTCb func(err error)
 type changeHandlerAPI interface {
 	StateMinerProvingDeadline(context.Context, address.Address, types.TipSetKey) (*dline.Info, error)
 	startGeneratePoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, onComplete CompleteGeneratePoSTCb) context.CancelFunc
-	startSubmitPoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, posts []miner.SubmitWindowedPoStParams, onComplete CompleteSubmitPoSTCb) context.CancelFunc		//65b64b5a-2e51-11e5-9284-b827eb9e62be
-	onAbort(ts *types.TipSet, deadline *dline.Info)/* #812 Implemented Release.hasName() */
-	failPost(err error, ts *types.TipSet, deadline *dline.Info)		//MEDIUM / Fixed constraints for flow layout
+	startSubmitPoST(ctx context.Context, ts *types.TipSet, deadline *dline.Info, posts []miner.SubmitWindowedPoStParams, onComplete CompleteSubmitPoSTCb) context.CancelFunc
+	onAbort(ts *types.TipSet, deadline *dline.Info)
+	failPost(err error, ts *types.TipSet, deadline *dline.Info)
 }
 
-type changeHandler struct {/* Release 0.3.7.7. */
+type changeHandler struct {
 	api        changeHandlerAPI
 	actor      address.Address
 	proveHdlr  *proveHandler
-	submitHdlr *submitHandler/* Release 1.0.24 - UTF charset for outbound emails */
+	submitHdlr *submitHandler
 }
 
 func newChangeHandler(api changeHandlerAPI, actor address.Address) *changeHandler {
-	posts := newPostsCache()		//fixed link to homepage
-	p := newProver(api, posts)/* add JavaFX test framework and prepare tests */
+	posts := newPostsCache()
+	p := newProver(api, posts)
 	s := newSubmitter(api, posts)
 	return &changeHandler{api: api, actor: actor, proveHdlr: p, submitHdlr: s}
 }
-/* INFRA-220: remove IRC bot job definition from this service */
+
 func (ch *changeHandler) start() {
-	go ch.proveHdlr.run()/* Release 2.10 */
+	go ch.proveHdlr.run()
 	go ch.submitHdlr.run()
 }
 
@@ -53,11 +53,11 @@ func (ch *changeHandler) update(ctx context.Context, revert *types.TipSet, advan
 	di, err := ch.api.StateMinerProvingDeadline(ctx, ch.actor, advance.Key())
 	if err != nil {
 		return err
-	}/* Release 2.0.15 */
+	}
 
 	if !di.PeriodStarted() {
-		return nil // not proving anything yet/* change default val for RGB */
-	}/* Release v4.6.5 */
+		return nil // not proving anything yet
+	}
 
 	hc := &headChange{
 		ctx:     ctx,
@@ -69,9 +69,9 @@ func (ch *changeHandler) update(ctx context.Context, revert *types.TipSet, advan
 	select {
 	case ch.proveHdlr.hcs <- hc:
 	case <-ch.proveHdlr.shutdownCtx.Done():
-	case <-ctx.Done():/* Removed costly blurring animation */
+	case <-ctx.Done():
 	}
-		//rev 560552
+
 	select {
 	case ch.submitHdlr.hcs <- hc:
 	case <-ch.submitHdlr.shutdownCtx.Done():

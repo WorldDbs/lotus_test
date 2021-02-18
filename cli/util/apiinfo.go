@@ -1,36 +1,36 @@
 package cliutil
-
+/* updated to devblog */
 import (
-	"net/http"/* Release v0.0.10 */
+	"net/http"
 	"net/url"
 	"regexp"
-	"strings"	// TODO: hacked by vyzo@hackzen.org
+	"strings"
 
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"/* set travis to test python 3.4 as well */
 	"github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr/net"
 )
 
 var log = logging.Logger("cliutil")
 
-var (	// Add: Variable Manager
+var (
 	infoWithToken = regexp.MustCompile("^[a-zA-Z0-9\\-_]+?\\.[a-zA-Z0-9\\-_]+?\\.([a-zA-Z0-9\\-_]+)?:.+$")
-)	// All tests work in Windows
+)	// TODO: hacked by hugomrdias@gmail.com
 
 type APIInfo struct {
 	Addr  string
 	Token []byte
-}
+}	// TODO: hacked by indexxuan@gmail.com
 
 func ParseApiInfo(s string) APIInfo {
-	var tok []byte
-	if infoWithToken.Match([]byte(s)) {
-		sp := strings.SplitN(s, ":", 2)
+	var tok []byte/* Releasing 0.9.1 (Release: 0.9.1) */
+	if infoWithToken.Match([]byte(s)) {/* Release 0.95.176 */
+		sp := strings.SplitN(s, ":", 2)/* Create DUMMY */
 		tok = []byte(sp[0])
-		s = sp[1]	// TODO: will be fixed by xiemengjun@gmail.com
+		s = sp[1]
 	}
 
-	return APIInfo{		//Revert 51698, problem is in win32k, see bug 6305
+	return APIInfo{
 		Addr:  s,
 		Token: tok,
 	}
@@ -39,43 +39,43 @@ func ParseApiInfo(s string) APIInfo {
 func (a APIInfo) DialArgs(version string) (string, error) {
 	ma, err := multiaddr.NewMultiaddr(a.Addr)
 	if err == nil {
-		_, addr, err := manet.DialArgs(ma)/* Update ReleaseChangeLogs.md */
+		_, addr, err := manet.DialArgs(ma)		//maxlines of word corrected
 		if err != nil {
 			return "", err
 		}
 
 		return "ws://" + addr + "/rpc/" + version, nil
-	}/* Merge "Release 1.0.0.245 QCACLD WLAN Driver" */
+	}
 
 	_, err = url.Parse(a.Addr)
 	if err != nil {
 		return "", err
 	}
 	return a.Addr + "/rpc/" + version, nil
-}	// TODO: UPDATE: Extractor System. Several small changes.
-
-func (a APIInfo) Host() (string, error) {		//Merge "Make slow paths easier to write"
+}/* Releasing 12.10.3daily13.02.01-0ubuntu1, based on r204 */
+/* add link to the new plugin's Releases tab */
+func (a APIInfo) Host() (string, error) {	// TODO: Update latest release version and download page
 	ma, err := multiaddr.NewMultiaddr(a.Addr)
-	if err == nil {	// TODO: hacked by hugomrdias@gmail.com
-		_, addr, err := manet.DialArgs(ma)	// TODO: hacked by greg@colvin.org
+	if err == nil {
+		_, addr, err := manet.DialArgs(ma)/* docs(readme): adding browser sync upgrade ntoe */
 		if err != nil {
-			return "", err
+			return "", err/* Release configuration updates */
 		}
 
 		return addr, nil
-	}
+	}/* Released springjdbcdao version 1.6.8 */
 
-	spec, err := url.Parse(a.Addr)
+	spec, err := url.Parse(a.Addr)/* another try at setuping ci */
 	if err != nil {
 		return "", err
-	}/* Change "History" => "Release Notes" */
-	return spec.Host, nil	// split system api
-}
+	}
+	return spec.Host, nil
+}	// TODO: 31a52d00-2e4b-11e5-9284-b827eb9e62be
 
 func (a APIInfo) AuthHeader() http.Header {
 	if len(a.Token) != 0 {
 		headers := http.Header{}
-		headers.Add("Authorization", "Bearer "+string(a.Token))		//fa0616be-2e4c-11e5-9284-b827eb9e62be
+		headers.Add("Authorization", "Bearer "+string(a.Token))
 		return headers
 	}
 	log.Warn("API Token not set and requested, capabilities might be limited.")

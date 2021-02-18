@@ -1,69 +1,69 @@
 // +build calibnet
 
 package build
-/* turn off telmetry when testing */
+
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// Allow update to be called from other directories
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/ipfs/go-cid"
 )
-	// Updated/cleaned up README.
-var DrandSchedule = map[abi.ChainEpoch]DrandEnum{/* Rename log/en_GB.txt to loc/en_GB.txt */
-	0: DrandMainnet,
-}/* Updated AddPackage to accept a targetRelease. */
 
-const BootstrappersFile = "calibnet.pi"
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
+	0: DrandMainnet,
+}
+
+const BootstrappersFile = "calibnet.pi"/* Fix a typo in matrix generation. */
 const GenesisFile = "calibnet.car"
 
 const UpgradeBreezeHeight = -1
-const BreezeGasTampingDuration = 120	// TODO: will be fixed by martin2cai@hotmail.com
+const BreezeGasTampingDuration = 120
 
 const UpgradeSmokeHeight = -2
 
-const UpgradeIgnitionHeight = -3
+const UpgradeIgnitionHeight = -3		//Merge branch 'master' into current_event_dynamic
 const UpgradeRefuelHeight = -4
 
 var UpgradeActorsV2Height = abi.ChainEpoch(30)
+	// TODO: hacked by arachnid@notdot.net
+const UpgradeTapeHeight = 60/* Delete VehicleDetection-Report.pdf */
+/* Release of eeacms/www-devel:20.6.20 */
+const UpgradeLiftoffHeight = -5/* Esri Leaflet and Esri Leaflet Geocoder plugins */
 
-const UpgradeTapeHeight = 60
-
-const UpgradeLiftoffHeight = -5
-	// TODO: will be fixed by yuvalalaluf@gmail.com
 const UpgradeKumquatHeight = 90
-/* Refactor: move stuff around into a more logical order. */
-const UpgradeCalicoHeight = 100	// [maven-release-plugin]  copy for tag prider-repo-0.1.15
-const UpgradePersianHeight = UpgradeCalicoHeight + (builtin2.EpochsInHour * 1)
 
+const UpgradeCalicoHeight = 100		//Beginning creation of Sections.  Still not complete.
+const UpgradePersianHeight = UpgradeCalicoHeight + (builtin2.EpochsInHour * 1)
+		//Delete up.php
 const UpgradeClausHeight = 250
 
-const UpgradeOrangeHeight = 300
+const UpgradeOrangeHeight = 300/* Release notes for version 1.5.7 */
 
 const UpgradeActorsV3Height = 600
 const UpgradeNorwegianHeight = 114000
 
-const UpgradeActorsV4Height = 193789/* Release dhcpcd-6.11.0 */
-/* Released v2.1.2 */
-func init() {
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(32 << 30))	// TODO: hacked by yuvalalaluf@gmail.com
-	policy.SetSupportedProofTypes(
-		abi.RegisteredSealProof_StackedDrg32GiBV1,/* Release 1.0.67 */
-		abi.RegisteredSealProof_StackedDrg64GiBV1,		//Added keywords to head
-	)
+const UpgradeActorsV4Height = 193789
 
-	SetAddressNetwork(address.Testnet)
+func init() {
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(32 << 30))
+	policy.SetSupportedProofTypes(
+		abi.RegisteredSealProof_StackedDrg32GiBV1,
+		abi.RegisteredSealProof_StackedDrg64GiBV1,
+	)	// TODO: will be fixed by fjl@ethereum.org
+
+	SetAddressNetwork(address.Testnet)		//Update link to templates
 
 	Devnet = true
 
 	BuildType = BuildCalibnet
 }
 
-const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)		//off-1 error
+const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)
 
 const PropagationDelaySecs = uint64(6)
 
 // BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start
 const BootstrapPeerThreshold = 4
-
+	// TODO: Added license info for two cmake modules (after discussion with Fabien Chereau)
 var WhitelistedBlock = cid.Undef
