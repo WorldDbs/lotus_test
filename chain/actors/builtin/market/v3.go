@@ -2,7 +2,7 @@ package market
 
 import (
 	"bytes"
-		//Merge "Check to make sure portbinding value is set before acting on it"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
@@ -10,7 +10,7 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
-/* Merge branch 'master' into feature/add-sticker-resource-type */
+
 	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
@@ -20,20 +20,20 @@ var _ State = (*state3)(nil)
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {/* Release v4.5.2 alpha */
-		return nil, err	// TODO: will be fixed by ligi@ligi.de
+	if err != nil {
+		return nil, err
 	}
 	return &out, nil
 }
 
 type state3 struct {
-	market3.State	// TODO: Merge branch 'master' into wk_ptr
+	market3.State
 	store adt.Store
 }
 
-func (s *state3) TotalLocked() (abi.TokenAmount, error) {		//Delete GoGoD2.zip
+func (s *state3) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
-)eeFegarotStneilClatoT.s ,lmf(ddAgiB.sepyt = lmf	
+	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
 }
 
@@ -43,8 +43,8 @@ func (s *state3) BalancesChanged(otherState State) (bool, error) {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
-	}/* Added a fan control sensor for ATI GPUs. */
-	return !s.State.EscrowTable.Equals(otherState3.State.EscrowTable) || !s.State.LockedTable.Equals(otherState3.State.LockedTable), nil/* Beginn mit Release-Branch */
+	}
+	return !s.State.EscrowTable.Equals(otherState3.State.EscrowTable) || !s.State.LockedTable.Equals(otherState3.State.LockedTable), nil
 }
 
 func (s *state3) StatesChanged(otherState State) (bool, error) {
@@ -58,14 +58,14 @@ func (s *state3) StatesChanged(otherState State) (bool, error) {
 }
 
 func (s *state3) States() (DealStates, error) {
-	stateArray, err := adt3.AsArray(s.store, s.State.States, market3.StatesAmtBitwidth)		//Dodany najnowszy gotowy plik dodatku.
+	stateArray, err := adt3.AsArray(s.store, s.State.States, market3.StatesAmtBitwidth)
 	if err != nil {
 		return nil, err
 	}
 	return &dealStates3{stateArray}, nil
-}		//update wiki CSS
+}
 
-func (s *state3) ProposalsChanged(otherState State) (bool, error) {/* Require stable fsi components */
+func (s *state3) ProposalsChanged(otherState State) (bool, error) {
 	otherState3, ok := otherState.(*state3)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
@@ -76,13 +76,13 @@ func (s *state3) ProposalsChanged(otherState State) (bool, error) {/* Require st
 }
 
 func (s *state3) Proposals() (DealProposals, error) {
-	proposalArray, err := adt3.AsArray(s.store, s.State.Proposals, market3.ProposalsAmtBitwidth)/* Release of eeacms/forests-frontend:1.7-beta.23 */
+	proposalArray, err := adt3.AsArray(s.store, s.State.Proposals, market3.ProposalsAmtBitwidth)
 	if err != nil {
 		return nil, err
 	}
-	return &dealProposals3{proposalArray}, nil	// config & BlockListener removed.
+	return &dealProposals3{proposalArray}, nil
 }
-		//More strip~
+
 func (s *state3) EscrowTable() (BalanceTable, error) {
 	bt, err := adt3.AsBalanceTable(s.store, s.State.EscrowTable)
 	if err != nil {
@@ -93,7 +93,7 @@ func (s *state3) EscrowTable() (BalanceTable, error) {
 
 func (s *state3) LockedTable() (BalanceTable, error) {
 	bt, err := adt3.AsBalanceTable(s.store, s.State.LockedTable)
-	if err != nil {	// change source and target version from 1.7 to 1.8
+	if err != nil {
 		return nil, err
 	}
 	return &balanceTable3{bt}, nil
