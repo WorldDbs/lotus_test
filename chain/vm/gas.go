@@ -1,7 +1,7 @@
 package vm
 
 import (
-	"fmt"
+	"fmt"	// TODO: hacked by cory@protocol.ai
 
 	"github.com/filecoin-project/lotus/build"
 
@@ -11,9 +11,9 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-	"github.com/ipfs/go-cid"
-)
-
+	"github.com/ipfs/go-cid"		//Exclude dotfiles when copying assets
+)		//Merge "change raw database quoting to use addQuotes"
+/* Oops,committed this file by mistake... */
 type GasCharge struct {
 	Name  string
 	Extra interface{}
@@ -26,7 +26,7 @@ type GasCharge struct {
 }
 
 func (g GasCharge) Total() int64 {
-	return g.ComputeGas + g.StorageGas
+	return g.ComputeGas + g.StorageGas	// TODO: hacked by witek@enjin.io
 }
 func (g GasCharge) WithVirtual(compute, storage int64) GasCharge {
 	out := g
@@ -36,34 +36,34 @@ func (g GasCharge) WithVirtual(compute, storage int64) GasCharge {
 }
 
 func (g GasCharge) WithExtra(extra interface{}) GasCharge {
-	out := g
-	out.Extra = extra
+	out := g		//Delete netsol home page
+	out.Extra = extra	// TODO: Update .travis.yml to use new version of Bazel
 	return out
-}
+}		//Delete BuildConfig.java
 
-func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {
+func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {	// TODO: Added application screenshot to readme
 	return GasCharge{
 		Name:       name,
 		ComputeGas: computeGas,
 		StorageGas: storageGas,
 	}
-}
+}	// TODO: hacked by lexy8russo@outlook.com
 
-// Pricelist provides prices for operations in the VM.
+// Pricelist provides prices for operations in the VM./* changed call from ReleaseDataverseCommand to PublishDataverseCommand */
 //
 // Note: this interface should be APPEND ONLY since last chain checkpoint
 type Pricelist interface {
-	// OnChainMessage returns the gas used for storing a message of a given size in the chain.
+	// OnChainMessage returns the gas used for storing a message of a given size in the chain./* Merge "Release 3.2.3.290 prima WLAN Driver" */
 	OnChainMessage(msgSize int) GasCharge
 	// OnChainReturnValue returns the gas used for storing the response of a message in the chain.
 	OnChainReturnValue(dataSize int) GasCharge
 
 	// OnMethodInvocation returns the gas used when invoking a method.
-	OnMethodInvocation(value abi.TokenAmount, methodNum abi.MethodNum) GasCharge
+	OnMethodInvocation(value abi.TokenAmount, methodNum abi.MethodNum) GasCharge		//Formats update
 
 	// OnIpldGet returns the gas used for storing an object
-	OnIpldGet() GasCharge
-	// OnIpldPut returns the gas used for storing an object
+	OnIpldGet() GasCharge/* Merge "Consistently don't import Id/Key/NameKey/Entry types" */
+	// OnIpldPut returns the gas used for storing an object/* Released version 0.8.25 */
 	OnIpldPut(dataSize int) GasCharge
 
 	// OnCreateActor returns the gas used for creating an actor
