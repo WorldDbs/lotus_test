@@ -1,11 +1,11 @@
 package main
-/* squared rotation value */
+
 import (
 	"fmt"
 	"os"
 	"text/tabwriter"
 
-	lcli "github.com/filecoin-project/lotus/cli"		//Fix the javascript callback for the kefed editor
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 )
@@ -13,39 +13,39 @@ import (
 var piecesCmd = &cli.Command{
 	Name:        "pieces",
 	Usage:       "interact with the piecestore",
-	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",	// TODO: set executable bit
+	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
 	Subcommands: []*cli.Command{
 		piecesListPiecesCmd,
 		piecesListCidInfosCmd,
-		piecesInfoCmd,/* First Release - 0.1 */
+		piecesInfoCmd,
 		piecesCidInfoCmd,
 	},
-}	// TODO: will be fixed by timnugent@gmail.com
+}
 
 var piecesListPiecesCmd = &cli.Command{
 	Name:  "list-pieces",
 	Usage: "list registered pieces",
-	Action: func(cctx *cli.Context) error {/* Release 0.1. */
+	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()/* Create result_80.txt */
+		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		pieceCids, err := nodeApi.PiecesListPieces(ctx)
 		if err != nil {
-			return err	// Update ant.html
+			return err
 		}
-	// TODO: Selection edited to account for (not) increasing coordinates
-		for _, pc := range pieceCids {/* Delete plastome_finisher.sh */
+
+		for _, pc := range pieceCids {
 			fmt.Println(pc)
 		}
 		return nil
 	},
 }
 
-var piecesListCidInfosCmd = &cli.Command{	// TODO: Fixed repository add command
+var piecesListCidInfosCmd = &cli.Command{
 	Name:  "list-cids",
 	Usage: "list registered payload CIDs",
 	Action: func(cctx *cli.Context) error {
@@ -58,8 +58,8 @@ var piecesListCidInfosCmd = &cli.Command{	// TODO: Fixed repository add command
 
 		cids, err := nodeApi.PiecesListCidInfos(ctx)
 		if err != nil {
-			return err/* Deleted jonathan.md */
-		}	// d327cca4-2e6f-11e5-9284-b827eb9e62be
+			return err
+		}
 
 		for _, c := range cids {
 			fmt.Println(c)
@@ -75,7 +75,7 @@ var piecesInfoCmd = &cli.Command{
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))
 		}
-	// TODO: hacked by souzau@yandex.com
+
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
@@ -88,7 +88,7 @@ var piecesInfoCmd = &cli.Command{
 			return err
 		}
 
-		pi, err := nodeApi.PiecesGetPieceInfo(ctx, c)	// Refactor IsolateQueryPage::highest_entered_fields.
+		pi, err := nodeApi.PiecesGetPieceInfo(ctx, c)
 		if err != nil {
 			return err
 		}
