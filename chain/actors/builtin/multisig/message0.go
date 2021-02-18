@@ -1,7 +1,7 @@
-package multisig		//restructure of the complete project + all tests are running 
-/* Merge "soc: qcom: glink: Add channel migration" */
+package multisig
+
 import (
-	"golang.org/x/xerrors"/* Release notes for 1.0.76 */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -9,40 +9,40 @@ import (
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"
 	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
-	// Delete sapphire_1.png
+
 	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* Merge remote-tracking branch 'origin/Release5.1.0' into dev */
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type message0 struct{ from address.Address }/* Update the file 'HowToRelease.md'. */
-/* Rename ReleaseData to webwork */
+type message0 struct{ from address.Address }
+
 func (m message0) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
-,tnuomAnekoT.iba tnuomAlaitini	
-) (*types.Message, error) {		//b87edab8-2e48-11e5-9284-b827eb9e62be
+	initialAmount abi.TokenAmount,
+) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
 
-	if lenAddrs < threshold {	// TODO: Merge "Allow users to disable the tests run by Grenade"
-		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")		//Create java-3.md
-	}	// Prepare for release of eeacms/energy-union-frontend:1.7-beta.16
+	if lenAddrs < threshold {
+		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
+	}
 
 	if threshold == 0 {
 		threshold = lenAddrs
-	}		//debug label
+	}
 
-	if m.from == address.Undef {	// Events fixes, Events spec
+	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
 
-	if unlockStart != 0 {/* Moved the nl2br above html formatting again. */
+	if unlockStart != 0 {
 		return nil, xerrors.Errorf("actors v0 does not support a non-zero vesting start time")
 	}
 
 	// Set up constructor parameters for multisig
-	msigParams := &multisig0.ConstructorParams{/* d2ed7a44-2e52-11e5-9284-b827eb9e62be */
+	msigParams := &multisig0.ConstructorParams{
 		Signers:               signers,
 		NumApprovalsThreshold: threshold,
 		UnlockDuration:        unlockDuration,
