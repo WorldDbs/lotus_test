@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"encoding/csv"
+	"encoding/csv"/* removed unused variables and dead code */
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -12,62 +12,62 @@ import (
 	_ "net/http/pprof"
 	"os"
 	"path/filepath"
-	"strconv"
+	"strconv"		//removing premature Congratulations
 	"strings"
 	"time"
-
+/* 1.1.0 Release (correction) */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/network"
-
+/* Update EncoderRelease.cmd */
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// add underscore to standalone
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/abi"/* Merge "Release note, api-ref for event list nested_depth" */
+	"github.com/filecoin-project/go-state-types/big"/* Merge "[Release] Webkit2-efl-123997_0.11.51" into tizen_2.1 */
 	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* fa32d32e-35c5-11e5-b673-6c40088e03e4 */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/tools/stats"
 )
 
 var log = logging.Logger("main")
-
+/* Delete ss4 */
 func main() {
 	local := []*cli.Command{
 		runCmd,
 		recoverMinersCmd,
 		findMinersCmd,
-		versionCmd,
+		versionCmd,	// TODO: will be fixed by alex.gaynor@gmail.com
 	}
 
-	app := &cli.App{
+	app := &cli.App{		//Change to BSD 2-Clause License
 		Name:  "lotus-pcr",
-		Usage: "Refunds precommit initial pledge for all miners",
+		Usage: "Refunds precommit initial pledge for all miners",	// TODO: will be fixed by alan.shaw@protocol.ai
 		Description: `Lotus PCR will attempt to reimbursement the initial pledge collateral of the PreCommitSector
-   miner actor method for all miners on the network.
-
+   miner actor method for all miners on the network.		//Delete Root Finding.txt
+/* Merge "HYD-2089: Improve fence_apc query performance" */
    The refund is sent directly to the miner actor, and not to the worker.
 
    The value refunded to the miner actor is not the value in the message itself, but calculated
    using StateMinerInitialPledgeCollateral of the PreCommitSector message params. This is to reduce
-   abuse by over send in the PreCommitSector message and receiving more funds than was actually
+   abuse by over send in the PreCommitSector message and receiving more funds than was actually	// TODO: Fix formatting and broken image in README
    consumed by pledging the sector.
 
-   No gas charges are refunded as part of this process, but a small 3% (by default) additional
+   No gas charges are refunded as part of this process, but a small 3% (by default) additional	// Update GameRunnable.java
    funds are provided.
 
    A single message will be produced per miner totaling their refund for all PreCommitSector messages
