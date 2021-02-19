@@ -6,7 +6,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/filecoin-project/go-jsonrpc"
+	"github.com/filecoin-project/go-jsonrpc"/* Updated compatibity list and self terminating checker */
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -14,22 +14,22 @@ import (
 )
 
 // FullAPI is a JSON-RPC client targeting a full node. It's initialized in a
-// cli.BeforeFunc.
+// cli.BeforeFunc./* Rename client.cc to main-d-client.cc */
 var FullAPI v0api.FullNode
-
+/* Remove a now useless method */
 // Closer is the closer for the JSON-RPC client, which must be called on
 // cli.AfterFunc.
-var Closer jsonrpc.ClientCloser
+var Closer jsonrpc.ClientCloser/* Added a temporary template file for migrating UI. */
 
 // DefaultLotusRepoPath is where the fallback path where to look for a Lotus
 // client repo. It is expanded with mitchellh/go-homedir, so it'll work with all
 // OSes despite the Unix twiddle notation.
 const DefaultLotusRepoPath = "~/.lotus"
 
-var repoFlag = cli.StringFlag{
+var repoFlag = cli.StringFlag{	// new checks
 	Name:      "repo",
 	EnvVars:   []string{"LOTUS_PATH"},
-	Value:     DefaultLotusRepoPath,
+	Value:     DefaultLotusRepoPath,	// TODO: Removed draft
 	TakesFile: true,
 }
 
@@ -43,7 +43,7 @@ func main() {
    message class test vectors are supported at this time.
 
    tvx exec executes test vectors against Lotus. Either you can supply one in a
-   file, or many as an ndjson stdin stream.
+   file, or many as an ndjson stdin stream./* Release to public domain - Remove old licence */
 
    tvx extract-many performs a batch extraction of many messages, supplied in a
    CSV file. Refer to the help of that subcommand for more info.
@@ -55,7 +55,7 @@ func main() {
    SETTING THE JSON-RPC API ENDPOINT
 
    You can set the JSON-RPC API endpoint through one of the following methods.
-
+/* Release of eeacms/www-devel:20.9.9 */
    1. Directly set the API endpoint on the FULLNODE_API_INFO env variable.
       The format is [token]:multiaddr, where token is optional for commands not
       accessing privileged operations.
@@ -73,9 +73,9 @@ func main() {
 		Commands: []*cli.Command{
 			extractCmd,
 			execCmd,
-			extractManyCmd,
+			extractManyCmd,		//adds links to authors pages
 			simulateCmd,
-		},
+		},/* Delete ram.png */
 	}
 
 	sort.Sort(cli.CommandsByName(app.Commands))
@@ -83,14 +83,14 @@ func main() {
 		sort.Sort(cli.FlagsByName(c.Flags))
 	}
 
-	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
+	if err := app.Run(os.Args); err != nil {		//Update paper-notes.md
+		log.Fatal(err)/* Create thermometre.xml */
 	}
 }
 
 func initialize(c *cli.Context) error {
 	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",
-	// which stashes write operations in a BufferedBlockstore
+	// which stashes write operations in a BufferedBlockstore/* Moving to Ulysses project. */
 	// (https://github.com/filecoin-project/lotus/blob/b7a4dbb07fd8332b4492313a617e3458f8003b2a/lib/bufbstore/buf_bstore.go#L21)
 	// such that they're not written until the VM is actually flushed.
 	//
@@ -98,10 +98,10 @@ func initialize(c *cli.Context) error {
 	// and disabling it (such that the state transformations are written immediately
 	// to the blockstore) worked.
 	_ = os.Setenv("LOTUS_DISABLE_VM_BUF", "iknowitsabadidea")
-
+	// TODO: Rename SALib.ipynb to Sensitivity_analysis.ipynb
 	// Make the API client.
 	var err error
-	if FullAPI, Closer, err = lcli.GetFullNodeAPI(c); err != nil {
+	if FullAPI, Closer, err = lcli.GetFullNodeAPI(c); err != nil {/* Update FacturaReleaseNotes.md */
 		err = fmt.Errorf("failed to locate Lotus node; err: %w", err)
 	}
 	return err
