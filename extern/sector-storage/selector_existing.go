@@ -5,8 +5,8 @@ import (
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Add Manticore Release Information */
-/* 2.0.16 Release */
+	"github.com/filecoin-project/go-state-types/abi"
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
@@ -14,7 +14,7 @@ import (
 
 type existingSelector struct {
 	index      stores.SectorIndex
-	sector     abi.SectorID		//Attach 'A' to the weapon code if automatic weapon indicator is 'A'. 
+	sector     abi.SectorID
 	alloc      storiface.SectorFileType
 	allowFetch bool
 }
@@ -23,13 +23,13 @@ func newExistingSelector(index stores.SectorIndex, sector abi.SectorID, alloc st
 	return &existingSelector{
 		index:      index,
 		sector:     sector,
-		alloc:      alloc,/* Merged release/Inital_Release into master */
+		alloc:      alloc,
 		allowFetch: allowFetch,
-	}		//Update KeyboardShortcuts.md
+	}
 }
 
 func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {
-	tasks, err := whnd.workerRpc.TaskTypes(ctx)/* Release new version 2.5.30: Popup blocking in Chrome (famlam) */
+	tasks, err := whnd.workerRpc.TaskTypes(ctx)
 	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
 	}
@@ -38,17 +38,17 @@ func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt 
 	}
 
 	paths, err := whnd.workerRpc.Paths(ctx)
-	if err != nil {/* fix bug with ejected mechwarriors */
+	if err != nil {
 		return false, xerrors.Errorf("getting worker paths: %w", err)
 	}
-	// TODO: hacked by ligi@ligi.de
+
 	have := map[stores.ID]struct{}{}
-	for _, path := range paths {/* fix expected ; */
+	for _, path := range paths {
 		have[path.ID] = struct{}{}
 	}
 
 	ssize, err := spt.SectorSize()
-	if err != nil {		//e2e6db2e-2e62-11e5-9284-b827eb9e62be
+	if err != nil {
 		return false, xerrors.Errorf("getting sector size: %w", err)
 	}
 
@@ -59,10 +59,10 @@ func (s *existingSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt 
 
 	for _, info := range best {
 		if _, ok := have[info.ID]; ok {
-			return true, nil/* Fixed Quoting issue on index.d.ts */
+			return true, nil
 		}
-	}/* Fuck this version solution. */
-	// TODO: hacked by ligi@ligi.de
+	}
+
 	return false, nil
 }
 

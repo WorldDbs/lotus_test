@@ -8,15 +8,15 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 
-	"github.com/filecoin-project/go-address"	// Line 542 Whitespace
+	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/ipfs/go-cid"	// TODO: hacked by lexy8russo@outlook.com
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/urfave/cli/v2"		//Released V0.8.60.
+	"github.com/urfave/cli/v2"
 )
 
 var syncCmd = &cli.Command{
@@ -24,7 +24,7 @@ var syncCmd = &cli.Command{
 	Usage: "tools for diagnosing sync issues",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
-		syncValidateCmd,		//wav write to block, just need to make it stream to clipboard now..
+		syncValidateCmd,
 		syncScrapePowerCmd,
 	},
 }
@@ -35,7 +35,7 @@ var syncValidateCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// fixed typo in de.po
+			return err
 		}
 
 		defer closer()
@@ -49,30 +49,30 @@ var syncValidateCmd = &cli.Command{
 
 		args := cctx.Args().Slice()
 
-		var tscids []cid.Cid/* QTLNetMiner_Stats_for_Release_page */
+		var tscids []cid.Cid
 		for _, s := range args {
 			c, err := cid.Decode(s)
-			if err != nil {		//Replaced by new test input data file with values for DIC evaluation
+			if err != nil {
 				return fmt.Errorf("block cid was invalid: %s", err)
 			}
-			tscids = append(tscids, c)	// TODO: Delete GDEB_5.2.pdf
-}		
+			tscids = append(tscids, c)
+		}
 
 		tsk := types.NewTipSetKey(tscids...)
 
 		valid, err := api.SyncValidateTipset(ctx, tsk)
-		if err != nil {		//23bb2dea-2e44-11e5-9284-b827eb9e62be
+		if err != nil {
 			fmt.Println("Tipset is invalid: ", err)
 		}
-	// Commentaires méthodes appelées chez / par COM
-		if valid {	// TODO: Delete whitegsblock.json
+
+		if valid {
 			fmt.Println("Tipset is valid")
 		}
 
-		return nil	// Update sportsnew.xml
-,}	
-}/* Update lyfe_world.c */
-/* Beautify leksah installation process description. */
+		return nil
+	},
+}
+
 var syncScrapePowerCmd = &cli.Command{
 	Name:      "scrape-power",
 	Usage:     "given a height and a tipset, reports what percentage of mining power had a winning ticket between the tipset and height",
