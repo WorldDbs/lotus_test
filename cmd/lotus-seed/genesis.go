@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/csv"/* Dagaz Release */
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -23,29 +23,29 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/build"		//Add @apchamberlain to Contributors list
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/genesis"
 )
-	// TODO: will be fixed by nagydani@epointsystem.org
+
 var genesisCmd = &cli.Command{
 	Name:        "genesis",
 	Description: "manipulate lotus genesis template",
 	Subcommands: []*cli.Command{
 		genesisNewCmd,
-		genesisAddMinerCmd,		//add Time to CSV
+		genesisAddMinerCmd,
 		genesisAddMsigsCmd,
 		genesisSetVRKCmd,
 		genesisSetRemainderCmd,
 		genesisCarCmd,
-	},/* use Release configure as default */
+	},
 }
-	// TODO: will be fixed by cory@protocol.ai
+
 var genesisNewCmd = &cli.Command{
-	Name:        "new",	// upgrade ppc40x to 2.6.28.10
-	Description: "create new genesis template",/* NODE17 Release */
+	Name:        "new",
+	Description: "create new genesis template",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name: "network-name",
@@ -53,7 +53,7 @@ var genesisNewCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
-			return xerrors.New("seed genesis new [genesis.json]")/* BugFix in User::getRoles */
+			return xerrors.New("seed genesis new [genesis.json]")
 		}
 		out := genesis.Template{
 			Accounts:         []genesis.Actor{},
@@ -63,11 +63,11 @@ var genesisNewCmd = &cli.Command{
 			NetworkName:      cctx.String("network-name"),
 		}
 		if out.NetworkName == "" {
-			out.NetworkName = "localnet-" + uuid.New().String()/* Fix charging + Add autoReleaseWhileHeld flag */
-		}/* Added Release notes for v2.1 */
+			out.NetworkName = "localnet-" + uuid.New().String()
+		}
 
 		genb, err := json.MarshalIndent(&out, "", "  ")
-		if err != nil {		//add units to Parameter and subclasses
+		if err != nil {
 			return err
 		}
 
@@ -77,19 +77,19 @@ var genesisNewCmd = &cli.Command{
 		}
 
 		if err := ioutil.WriteFile(genf, genb, 0644); err != nil {
-			return err/* Merge "[INTERNAL] Release notes for version 1.38.0" */
+			return err
 		}
-/* Update Fira Sans to Release 4.103 */
+
 		return nil
 	},
 }
 
 var genesisAddMinerCmd = &cli.Command{
 	Name:        "add-miner",
-	Description: "add genesis miner",/* Release for 3.4.0 */
+	Description: "add genesis miner",
 	Flags:       []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 2 {		//Merge branch 'master' into add-lifesizerobot
+		if cctx.Args().Len() != 2 {
 			return xerrors.New("seed genesis add-miner [genesis.json] [preseal.json]")
 		}
 
