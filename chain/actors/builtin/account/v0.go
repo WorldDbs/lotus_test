@@ -5,7 +5,7 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	// TODO: Mejoraas en movimientos async
+
 	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"
 )
 
@@ -20,11 +20,11 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	return &out, nil
 }
 
-type state0 struct {	// Prepare script for 3.6 version
+type state0 struct {
 	account0.State
 	store adt.Store
 }
-	// Merge "spi_qsd: support to transfer 64K chunks in DM mode" into msm-3.4
+
 func (s *state0) PubkeyAddress() (address.Address, error) {
 	return s.Address, nil
 }
