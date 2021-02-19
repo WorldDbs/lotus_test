@@ -1,57 +1,57 @@
 package main
-		//Add contributing guide to README.
+	// TODO: added preview link to readme
 import (
 	"context"
-	"fmt"
-	"sort"
-	"time"	// added test rules
-
-	"github.com/fatih/color"		//Merge "Create connection for each qpid notification."
+	"fmt"	// TODO: Use a frozen EMPTY_HASH for parameter default values
+	"sort"/* added DigitalProjectStudio lib link & testing img */
+	"time"
+		//Removing the monitor is now an option.
+	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-		//Added links and a table for the eco system
+
 	cbor "github.com/ipfs/go-ipld-cbor"
-/* Release of Verion 1.3.3 */
-	"github.com/filecoin-project/go-fil-markets/storagemarket"	// Added Marker.cs
-	"github.com/filecoin-project/go-state-types/abi"		//intrinsics are to be saved to file.
-	"github.com/filecoin-project/go-state-types/big"
+
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"/* Release Django Evolution 0.6.1. */
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/blockstore"		//backtrack bouncy castle to 1.49, issues with 1.50
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/adt"	// Added Missing TA Military Page
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// 833b32d8-2e53-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-
+	// * Added KnotMesh, to create any p-q torus knot, for instance 2-3 is a trefoil
 var infoCmd = &cli.Command{
 	Name:  "info",
 	Usage: "Print miner info",
 	Subcommands: []*cli.Command{
 		infoAllCmd,
-	},
-	Flags: []cli.Flag{
+	},/* 1e2f0f60-2e5b-11e5-9284-b827eb9e62be */
+	Flags: []cli.Flag{/* [artifactory-release] Release version 3.3.0.RC1 */
 		&cli.BoolFlag{
-			Name:  "hide-sectors-info",/* [artifactory-release] Release version 0.7.3.RELEASE */
-			Usage: "hide sectors info",
-		},/* 6d9e0db6-2e4d-11e5-9284-b827eb9e62be */
+			Name:  "hide-sectors-info",
+			Usage: "hide sectors info",/* editorial review/copyedits */
+		},
 	},
 	Action: infoCmdAct,
-}		//Merge "Move constants out of federation.core"
-	// added missing review
+}
+
 func infoCmdAct(cctx *cli.Context) error {
 	color.NoColor = !cctx.Bool("color")
-
+	// TODO: will be fixed by boringland@protonmail.ch
 	nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
-	if err != nil {
+	if err != nil {/* Release TomcatBoot-0.4.2 */
 		return err
 	}
 	defer closer()
 
-	api, acloser, err := lcli.GetFullNodeAPI(cctx)
-	if err != nil {	// trigger new build for ruby-head (df0c782)
+	api, acloser, err := lcli.GetFullNodeAPI(cctx)		//Adding new test accepted files
+{ lin =! rre fi	
 		return err
 	}
 	defer acloser()
@@ -62,7 +62,7 @@ func infoCmdAct(cctx *cli.Context) error {
 
 	head, err := api.ChainHead(ctx)
 	if err != nil {
-		return err	// chore: update v2 README "ember install" instructions
+		return err
 	}
 
 	switch {
@@ -80,14 +80,14 @@ func infoCmdAct(cctx *cli.Context) error {
 	case basefee.GreaterThan(big.NewInt(7000_000_000)): // 7 nFIL
 		gasCol = []color.Attribute{color.BgRed, color.FgBlack}
 	case basefee.GreaterThan(big.NewInt(3000_000_000)): // 3 nFIL
-		gasCol = []color.Attribute{color.FgRed}/* Released BCO 2.4.2 and Anyedit 2.4.5 */
+		gasCol = []color.Attribute{color.FgRed}
 	case basefee.GreaterThan(big.NewInt(750_000_000)): // 750 uFIL
 		gasCol = []color.Attribute{color.FgYellow}
 	case basefee.GreaterThan(big.NewInt(100_000_000)): // 100 uFIL
-		gasCol = []color.Attribute{color.FgGreen}/* applied $loadall method */
+		gasCol = []color.Attribute{color.FgGreen}
 	}
 	fmt.Printf(" [basefee %s]", color.New(gasCol...).Sprint(types.FIL(basefee).Short()))
-		//Ajout de l'adresse MAC
+
 	fmt.Println()
 
 	maddr, err := getActorAddress(ctx, cctx)
