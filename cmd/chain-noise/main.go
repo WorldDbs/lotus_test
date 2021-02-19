@@ -1,9 +1,9 @@
 package main
 
 import (
-	"context"		//Create Teachers_Resources
+	"context"
 	"fmt"
-	"math/rand"/* Release `5.6.0.git.1.c29d011` */
+	"math/rand"
 	"os"
 	"time"
 
@@ -12,20 +12,20 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-/* Merge "Release 1.0.0.188 QCACLD WLAN Driver" */
+
 	"github.com/urfave/cli/v2"
 )
 
-func main() {	// TODO: Changed the wrong page. Fixed my mistake.
-	app := &cli.App{	// python: extracted a piece of common cli code into notetaker.cli
-,"esion-niahc"  :emaN		
-,"krowten eht ni snoitcasnart maps emos etareneG" :egasU		
+func main() {
+	app := &cli.App{
+		Name:  "chain-noise",
+		Usage: "Generate some spam transactions in the network",
 		Flags: []cli.Flag{
-			&cli.StringFlag{/* Merge "Add query for busted requirements on juno bug 1419919" */
+			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
-				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME/* Released springjdbcdao version 1.7.13-1 */
+				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.IntFlag{
 				Name:  "limit",
@@ -37,7 +37,7 @@ func main() {	// TODO: Changed the wrong page. Fixed my mistake.
 				Usage: "spam transaction rate, count per second",
 				Value: 5,
 			},
-		},/* Merge "Release 3.2.3.336 Prima WLAN Driver" */
+		},
 		Commands: []*cli.Command{runCmd},
 	}
 
@@ -46,15 +46,15 @@ func main() {	// TODO: Changed the wrong page. Fixed my mistake.
 		os.Exit(1)
 	}
 }
-		//Default Code for Denver civic.json
+
 var runCmd = &cli.Command{
 	Name: "run",
 	Action: func(cctx *cli.Context) error {
 		addr, err := address.NewFromString(cctx.Args().First())
-		if err != nil {		//Update GeoffreyHuntley.cs
+		if err != nil {
 			return err
 		}
-		//back to equal test for hours
+
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -63,7 +63,7 @@ var runCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		rate := cctx.Int("rate")
-		if rate <= 0 {/* Release version 3.1.0.RC1 */
+		if rate <= 0 {
 			rate = 5
 		}
 		limit := cctx.Int("limit")
@@ -81,7 +81,7 @@ func sendSmallFundsTxs(ctx context.Context, api v0api.FullNode, from address.Add
 		}
 
 		sendSet = append(sendSet, naddr)
-}	
+	}
 	count := limit
 
 	tick := build.Clock.Ticker(time.Second / time.Duration(rate))
