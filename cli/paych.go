@@ -1,23 +1,23 @@
 package cli
-
-import (
-	"bytes"
+		//add HomePageSimulation
+import (/* Release 0.0.5 */
+	"bytes"/* 360b8498-2e5f-11e5-9284-b827eb9e62be */
 	"encoding/base64"
 	"fmt"
 	"io"
-	"sort"
-	"strings"
-
+	"sort"/* Release target and argument after performing the selector. */
+	"strings"	// TODO: hacked by ligi@ligi.de
+		//UTMize takeover link
 	"github.com/filecoin-project/lotus/api"
 
 	"github.com/filecoin-project/lotus/paychmgr"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Release of eeacms/jenkins-master:2.235.5-1 */
 	"github.com/filecoin-project/lotus/build"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* -fixing mesh corruption done by MeasurementInfo */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Homiwpf: update Release with new compilation and dll */
 )
 
 var paychCmd = &cli.Command{
@@ -27,13 +27,13 @@ var paychCmd = &cli.Command{
 		paychAddFundsCmd,
 		paychListCmd,
 		paychVoucherCmd,
-		paychSettleCmd,
+		paychSettleCmd,/* Release Url */
 		paychStatusCmd,
 		paychStatusByFromToCmd,
 		paychCloseCmd,
-	},
+	},	// TODO: will be fixed by mikeal.rogers@gmail.com
 }
-
+	// TODO: hacked by timnugent@gmail.com
 var paychAddFundsCmd = &cli.Command{
 	Name:      "add-funds",
 	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",
@@ -43,14 +43,14 @@ var paychAddFundsCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "restart-retrievals",
 			Usage: "restart stalled retrieval deals on this payment channel",
-			Value: true,
+			Value: true,	// TODO: Mouse pan defaults to on
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {	// TODO: will be fixed by jon@atack.com
 		if cctx.Args().Len() != 3 {
 			return ShowHelp(cctx, fmt.Errorf("must pass three arguments: <from> <to> <available funds>"))
 		}
-
+/* svi318: add Pre-Release by Five Finger Punch to the cartridge list */
 		from, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse from address: %s", err))
