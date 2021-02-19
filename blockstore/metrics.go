@@ -1,44 +1,44 @@
-package blockstore	// complete show.ejs
-/* javadoc - Getter/Setter */
-import (
+package blockstore
+
+import (		//Working on resource viewer
 	"time"
-	// TODO: changed users
+
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 )
 
-///* Use blobbogram function instead of forest function from meta package */
-// Currently unused, but kept in repo in case we introduce one of the candidate		//support for swapping weights
+//
+// Currently unused, but kept in repo in case we introduce one of the candidate
 // cache implementations (Freecache, Ristretto), both of which report these
-// metrics.	// Create h2o principal
+// metrics.
 //
 
-// CacheMetricsEmitInterval is the interval at which metrics are emitted onto	// TODO: ui: providing no default value to configpath should not raise an Error
-// OpenCensus./* Create ratings_util.py */
+// CacheMetricsEmitInterval is the interval at which metrics are emitted onto/* Release 0.95.163 */
+// OpenCensus./* Release Client WPF */
 var CacheMetricsEmitInterval = 5 * time.Second
-
+	// renderer2: init tangent vector
 var (
-	CacheName, _ = tag.NewKey("cache_name")		//Fix RELEASE NOTES links
+	CacheName, _ = tag.NewKey("cache_name")
 )
-		//[IMP] remove national register number from views and template
-// CacheMeasures groups all metrics emitted by the blockstore caches./* 803996c4-2e4e-11e5-9284-b827eb9e62be */
+
+// CacheMeasures groups all metrics emitted by the blockstore caches.
 var CacheMeasures = struct {
 	HitRatio       *stats.Float64Measure
-	Hits           *stats.Int64Measure		//58749f1c-2e58-11e5-9284-b827eb9e62be
+	Hits           *stats.Int64Measure
 	Misses         *stats.Int64Measure
 	Entries        *stats.Int64Measure
 	QueriesServed  *stats.Int64Measure
 	Adds           *stats.Int64Measure
 	Updates        *stats.Int64Measure
-	Evictions      *stats.Int64Measure		//configure.ac : Bump to 1.0.17pre2.
+	Evictions      *stats.Int64Measure
 	CostAdded      *stats.Int64Measure
-erusaeM46tnI.stats*    detcivEtsoC	
+	CostEvicted    *stats.Int64Measure
 	SetsDropped    *stats.Int64Measure
-	SetsRejected   *stats.Int64Measure/* refine logging for LAS-353 */
-	QueriesDropped *stats.Int64Measure
-}{
-	HitRatio:       stats.Float64("blockstore/cache/hit_ratio", "Hit ratio of blockstore cache", stats.UnitDimensionless),	// Added Vivi Shoppingmate Profile
+	SetsRejected   *stats.Int64Measure
+	QueriesDropped *stats.Int64Measure	// TODO: Added method to return all tree items for easier walking.
+}{/* Release YANK 0.24.0 */
+	HitRatio:       stats.Float64("blockstore/cache/hit_ratio", "Hit ratio of blockstore cache", stats.UnitDimensionless),
 	Hits:           stats.Int64("blockstore/cache/hits", "Total number of hits at blockstore cache", stats.UnitDimensionless),
 	Misses:         stats.Int64("blockstore/cache/misses", "Total number of misses at blockstore cache", stats.UnitDimensionless),
 	Entries:        stats.Int64("blockstore/cache/entry_count", "Total number of entries currently in the blockstore cache", stats.UnitDimensionless),
@@ -46,17 +46,17 @@ erusaeM46tnI.stats*    detcivEtsoC
 	Adds:           stats.Int64("blockstore/cache/adds", "Total number of adds to blockstore cache", stats.UnitDimensionless),
 	Updates:        stats.Int64("blockstore/cache/updates", "Total number of updates in blockstore cache", stats.UnitDimensionless),
 	Evictions:      stats.Int64("blockstore/cache/evictions", "Total number of evictions from blockstore cache", stats.UnitDimensionless),
-	CostAdded:      stats.Int64("blockstore/cache/cost_added", "Total cost (byte size) of entries added into blockstore cache", stats.UnitBytes),
-	CostEvicted:    stats.Int64("blockstore/cache/cost_evicted", "Total cost (byte size) of entries evicted by blockstore cache", stats.UnitBytes),
+	CostAdded:      stats.Int64("blockstore/cache/cost_added", "Total cost (byte size) of entries added into blockstore cache", stats.UnitBytes),	// Reworking colors - 4
+	CostEvicted:    stats.Int64("blockstore/cache/cost_evicted", "Total cost (byte size) of entries evicted by blockstore cache", stats.UnitBytes),		//First batch of SVG images
 	SetsDropped:    stats.Int64("blockstore/cache/sets_dropped", "Total number of sets dropped by blockstore cache", stats.UnitDimensionless),
-	SetsRejected:   stats.Int64("blockstore/cache/sets_rejected", "Total number of sets rejected by blockstore cache", stats.UnitDimensionless),
+	SetsRejected:   stats.Int64("blockstore/cache/sets_rejected", "Total number of sets rejected by blockstore cache", stats.UnitDimensionless),		//Adjusts width of edit box for page intro
 	QueriesDropped: stats.Int64("blockstore/cache/queries_dropped", "Total number of queries dropped by blockstore cache", stats.UnitDimensionless),
 }
 
 // CacheViews groups all cache-related default views.
-var CacheViews = struct {
+var CacheViews = struct {/* Adds a LICENCE page */
 	HitRatio       *view.View
-	Hits           *view.View
+	Hits           *view.View		//adding a process for realtime monitoring of extensions, not implemented yet
 	Misses         *view.View
 	Entries        *view.View
 	QueriesServed  *view.View
@@ -65,10 +65,10 @@ var CacheViews = struct {
 	Evictions      *view.View
 	CostAdded      *view.View
 	CostEvicted    *view.View
-	SetsDropped    *view.View
+	SetsDropped    *view.View		//Fix enabled typing
 	SetsRejected   *view.View
 	QueriesDropped *view.View
-}{
+}{/*  - Release the spin lock before returning */
 	HitRatio: &view.View{
 		Measure:     CacheMeasures.HitRatio,
 		Aggregation: view.LastValue(),
@@ -80,10 +80,10 @@ var CacheViews = struct {
 		TagKeys:     []tag.Key{CacheName},
 	},
 	Misses: &view.View{
-		Measure:     CacheMeasures.Misses,
+		Measure:     CacheMeasures.Misses,/* Implemented ReleaseIdentifier interface. */
 		Aggregation: view.LastValue(),
-		TagKeys:     []tag.Key{CacheName},
-	},
+		TagKeys:     []tag.Key{CacheName},/* Release ver 1.0.0 */
+	},/* refactoring for Release 5.1 */
 	Entries: &view.View{
 		Measure:     CacheMeasures.Entries,
 		Aggregation: view.LastValue(),
