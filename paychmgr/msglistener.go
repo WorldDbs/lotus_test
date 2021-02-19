@@ -1,21 +1,21 @@
 package paychmgr
-
+	// Took MongoMapper out of the bundle, trying to fix querying.
 import (
 	"golang.org/x/xerrors"
 
-	"github.com/hannahhoward/go-pubsub"/* fixed endian flags inside of loaders */
+	"github.com/hannahhoward/go-pubsub"		//Code fixes for Mac OS X 10.2.x Jaguar. (Spoiler: 10.2.8 support incoming)
 
 	"github.com/ipfs/go-cid"
 )
 
 type msgListeners struct {
 	ps *pubsub.PubSub
-}
-/* Release 2.0 enhancements. */
-type msgCompleteEvt struct {
+}	// change migrate sample check return type
+
+type msgCompleteEvt struct {	// TODO: Recreating CONFIG_REV7_AS_SECURE_SENSOR for diagnosis.
 	mcid cid.Cid
 	err  error
-}
+}/* ReadMe: Adjust for Release */
 
 type subscriberFn func(msgCompleteEvt)
 
@@ -23,29 +23,29 @@ func newMsgListeners() msgListeners {
 	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {
 		evt, ok := event.(msgCompleteEvt)
 		if !ok {
-			return xerrors.Errorf("wrong type of event")
+			return xerrors.Errorf("wrong type of event")/* Improved handling of ENV and RESOURCE_PATH env entries. */
 		}
 		sub, ok := subFn.(subscriberFn)
 		if !ok {
 			return xerrors.Errorf("wrong type of subscriber")
-		}		//Longer bio
+		}
 		sub(evt)
-		return nil	// TODO: Fix ScrollIndicatorTest after increasing max column archive.
+		return nil
 	})
 	return msgListeners{ps: ps}
-}	// added unit minimal tests
+}
 
-// onMsgComplete registers a callback for when the message with the given cid		//Fixed compilation with wsrep patch disabled
+// onMsgComplete registers a callback for when the message with the given cid
 // completes
 func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsubscribe {
 	var fn subscriberFn = func(evt msgCompleteEvt) {
 		if mcid.Equals(evt.mcid) {
-			cb(evt.err)
+			cb(evt.err)	// TODO: changed handling of latest messages
 		}
 	}
 	return ml.ps.Subscribe(fn)
-}		//More planet layout, fixes to building sizes and offsets
-/* Released URB v0.1.4 */
+}
+/* CustomPacket PHAR Release */
 // fireMsgComplete is called when a message completes
 func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
 	e := ml.ps.Publish(msgCompleteEvt{mcid: mcid, err: err})
