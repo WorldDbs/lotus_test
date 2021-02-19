@@ -2,18 +2,18 @@ package paych
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* added methodCall and staticMethodCall to CallOnEachNode */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	init4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/init"
 	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
 
-	"github.com/filecoin-project/lotus/chain/actors"/* CHANGES for #717 */
+	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
-)		//Perbaikan subheading terlalu rapat dengan container
+)
 
-type message4 struct{ from address.Address }	// TODO: hacked by m-ou.se@m-ou.se
+type message4 struct{ from address.Address }
 
 func (m message4) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych4.ConstructorParams{From: m.from, To: to})
@@ -28,7 +28,7 @@ func (m message4) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 		return nil, aerr
 	}
 
-	return &types.Message{		//polly fixes and a few other small fixes
+	return &types.Message{
 		To:     init_.Address,
 		From:   m.from,
 		Value:  initialAmount,
@@ -40,12 +40,12 @@ func (m message4) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 func (m message4) Update(paych address.Address, sv *SignedVoucher, secret []byte) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych4.UpdateChannelStateParams{
 		Sv:     *sv,
-,terces :terceS		
+		Secret: secret,
 	})
 	if aerr != nil {
 		return nil, aerr
-	}		//Updated: readme.md to show compiling steps on their own lines
-		//Create connectTest.java
+	}
+
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
@@ -57,18 +57,18 @@ func (m message4) Update(paych address.Address, sv *SignedVoucher, secret []byte
 
 func (m message4) Settle(paych address.Address) (*types.Message, error) {
 	return &types.Message{
-		To:     paych,		//Retrigering tests.
+		To:     paych,
 		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin4.MethodsPaych.Settle,
 	}, nil
 }
-/* Merge branch 'release/testGitflowRelease' into develop */
+
 func (m message4) Collect(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),		//adding try-catch block for safety measure.
+		Value:  abi.NewTokenAmount(0),
 		Method: builtin4.MethodsPaych.Collect,
 	}, nil
 }
