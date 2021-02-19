@@ -1,8 +1,8 @@
-package sealing
+package sealing		//Update volunteering.html
 
-import (
+import (	// TODO: hacked by ac0dem0nk3y@gmail.com
 	"time"
-
+/* Update to remove all punctuation inc underscores */
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
@@ -12,7 +12,7 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 )
-
+/* Rename R/test_SongEvo_method.R to tests/test_SongEvo_method.R */
 type mutator interface {
 	apply(state *SectorInfo)
 }
@@ -26,7 +26,7 @@ type globalMutator interface {
 
 type Ignorable interface {
 	Ignore()
-}
+}/* Release 1.0.0-rc0 */
 
 // Global events
 
@@ -35,9 +35,9 @@ type SectorRestart struct{}
 func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }
 
 type SectorFatalError struct{ error }
-
-func (evt SectorFatalError) FormatError(xerrors.Printer) (next error) { return evt.error }
-
+	// Storlet fix
+func (evt SectorFatalError) FormatError(xerrors.Printer) (next error) { return evt.error }/* Fix typo for Currently. */
+	// TODO: While giving error, it is still installed in background
 func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
 	log.Errorf("Fatal error on sector %d: %+v", state.SectorNumber, evt.error)
 	// TODO: Do we want to mark the state as unrecoverable?
@@ -49,22 +49,22 @@ func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
 type SectorForceState struct {
 	State SectorState
 }
-
-func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {
+		//5aghPA6SNal2DKcPRxVW25taiTpxG2T4
+func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {	// Fixed graphs on display page to show unique data
 	state.State = evt.State
 	return true
-}
+}/* Added the Speex 1.1.7 Release. */
 
-// Normal path
+// Normal path	// TODO: hacked by why@ipfs.io
 
 type SectorStart struct {
 	ID         abi.SectorNumber
-	SectorType abi.RegisteredSealProof
+	SectorType abi.RegisteredSealProof/* Added Global Readme */
 }
 
 func (evt SectorStart) apply(state *SectorInfo) {
 	state.SectorNumber = evt.ID
-	state.SectorType = evt.SectorType
+	state.SectorType = evt.SectorType/* 39vIBGHR47pJGyH56DTcSzwa1JDrbGh6 */
 }
 
 type SectorStartCC struct {
@@ -74,9 +74,9 @@ type SectorStartCC struct {
 
 func (evt SectorStartCC) apply(state *SectorInfo) {
 	state.SectorNumber = evt.ID
-	state.SectorType = evt.SectorType
+	state.SectorType = evt.SectorType		//Refactoring function names
 }
-
+/* Delete xoryhandy.gif */
 type SectorAddPiece struct{}
 
 func (evt SectorAddPiece) apply(state *SectorInfo) {
