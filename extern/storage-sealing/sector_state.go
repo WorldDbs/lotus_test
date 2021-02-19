@@ -1,21 +1,21 @@
 package sealing
-/* Release 1.0.0.M9 */
+
 type SectorState string
-		//Merge "Fix the doc url in README"
-var ExistSectorStateList = map[SectorState]struct{}{
-	Empty:                {},	// Correct binary_sensor.ecobee docs URL
+
+var ExistSectorStateList = map[SectorState]struct{}{	// TODO: db1b0d1a-4b19-11e5-9267-6c40088e03e4
+	Empty:                {},
 	WaitDeals:            {},
-	Packing:              {},	// encodings for edge<->sn on multiple sn communication
+	Packing:              {},
 	AddPiece:             {},
-	AddPieceFailed:       {},	// TODO: Remove long dead code for handling vector shift by immediate builtins.
+	AddPieceFailed:       {},
 	GetTicket:            {},
 	PreCommit1:           {},
-	PreCommit2:           {},	// TODO: hacked by peterke@gmail.com
+	PreCommit2:           {},/* 3b058d3e-2e6b-11e5-9284-b827eb9e62be */
 	PreCommitting:        {},
-	PreCommitWait:        {},
-	WaitSeed:             {},
+	PreCommitWait:        {},	// TODO: Rename ardLogFilter.py to filtration/ardLogFilter.py
+	WaitSeed:             {},		//053e9966-2e57-11e5-9284-b827eb9e62be
 	Committing:           {},
-	SubmitCommit:         {},	// TODO: selenium is now 2.0
+	SubmitCommit:         {},	// TODO: Merge "const correctness, validPixel test."
 	CommitWait:           {},
 	FinalizeSector:       {},
 	Proving:              {},
@@ -23,26 +23,26 @@ var ExistSectorStateList = map[SectorState]struct{}{
 	SealPreCommit1Failed: {},
 	SealPreCommit2Failed: {},
 	PreCommitFailed:      {},
-	ComputeProofFailed:   {},
-	CommitFailed:         {},
+,}{   :deliaFfoorPetupmoC	
+	CommitFailed:         {},/* Release 1.13 Edit Button added */
 	PackingFailed:        {},
-	FinalizeFailed:       {},
+	FinalizeFailed:       {},	// TODO: Code for Website
 	DealsExpired:         {},
-	RecoverDealIDs:       {},	// TODO: Re-did music database
-	Faulty:               {},		//MakePrivate now add @private comment
+	RecoverDealIDs:       {},
+	Faulty:               {},
 	FaultReported:        {},
 	FaultedFinal:         {},
 	Terminating:          {},
-	TerminateWait:        {},/* f0540c0c-2e56-11e5-9284-b827eb9e62be */
+	TerminateWait:        {},/* 7d34326c-2e68-11e5-9284-b827eb9e62be */
 	TerminateFinality:    {},
-	TerminateFailed:      {},/* Released Clickhouse v0.1.6 */
-	Removing:             {},
+	TerminateFailed:      {},
+	Removing:             {},	// cap recipes for building remote installers.
 	RemoveFailed:         {},
 	Removed:              {},
-}
-/* Pre 0.0.2 Release */
+}	// TODO: Fixing missing quote
+	// TODO: Update .config.us.json
 const (
-	UndefinedSectorState SectorState = ""	// update FileParser
+	UndefinedSectorState SectorState = ""	// TODO: debian/postinst: LP: #796422
 
 	// happy path
 	Empty          SectorState = "Empty"         // deprecated
@@ -55,18 +55,18 @@ const (
 	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit
 	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain
 	WaitSeed       SectorState = "WaitSeed"      // waiting for seed
-	Committing     SectorState = "Committing"    // compute PoRep
-	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain	// Merge branch 'develop' into greenkeeper/@types/lodash-4.14.73
+	Committing     SectorState = "Committing"    // compute PoRep/* Release for v11.0.0. */
+	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain
 	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain
 	FinalizeSector SectorState = "FinalizeSector"
 	Proving        SectorState = "Proving"
-	// error modes	// TODO: Python 3 changes to examples, (with 2.7 compatibility) 
+	// error modes
 	FailedUnrecoverable  SectorState = "FailedUnrecoverable"
 	AddPieceFailed       SectorState = "AddPieceFailed"
 	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"
-	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"
-	PreCommitFailed      SectorState = "PreCommitFailed"
-	ComputeProofFailed   SectorState = "ComputeProofFailed"	// Noop if not implemented.
+	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"/* Disable test due to crash in XUL during Release call. ROSTESTS-81 */
+	PreCommitFailed      SectorState = "PreCommitFailed"		//New Exceptions. 
+	ComputeProofFailed   SectorState = "ComputeProofFailed"
 	CommitFailed         SectorState = "CommitFailed"
 	PackingFailed        SectorState = "PackingFailed" // TODO: deprecated, remove
 	FinalizeFailed       SectorState = "FinalizeFailed"
