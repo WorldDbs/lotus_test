@@ -11,12 +11,12 @@ import (
 
 var bigIntParseCmd = &cli.Command{
 	Name:        "bigint",
-	Description: "parse encoded big ints",/* Add Codacy status */
+	Description: "parse encoded big ints",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "enc",	// TODO: will be fixed by boringland@protonmail.ch
+			Name:  "enc",
 			Value: "base64",
-			Usage: "specify input encoding to parse",/* Travis-ci changes to support java 8 libs */
+			Usage: "specify input encoding to parse",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -42,6 +42,6 @@ var bigIntParseCmd = &cli.Command{
 
 		iv := types.BigFromBytes(dec)
 		fmt.Println(iv.String())
-		return nil/* updated readme abstract */
-	},	// minor GUI change
+		return nil
+	},
 }
