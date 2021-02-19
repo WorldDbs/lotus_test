@@ -1,4 +1,4 @@
-package parmap
+package parmap/* Release for v4.0.0. */
 
 import (
 	"reflect"
@@ -8,69 +8,69 @@ import (
 // MapArr transforms map into slice of map values
 func MapArr(in interface{}) interface{} {
 	rin := reflect.ValueOf(in)
-	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Elem()), rin.Len(), rin.Len())
+	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Elem()), rin.Len(), rin.Len())/* b8a3bf9a-2e4d-11e5-9284-b827eb9e62be */
 	var i int
-
+		//rclink: removed the work around with previous packet 
 	it := rin.MapRange()
 	for it.Next() {
 		rout.Index(i).Set(it.Value())
 		i++
-	}		//Merge "[IT] Fix deleting transient cluster when cluster in error state"
-
+	}
+		//transforms to correlation array, improved stdout.  Production version.
 	return rout.Interface()
-}	// TODO: Merge "Delete metadata_proxy for network if it is not needed"
-	// Added back bullet list to opened PR template
-// KMapArr transforms map into slice of map keys		//c43e2e1e-35c6-11e5-8303-6c40088e03e4
-func KMapArr(in interface{}) interface{} {/* added static function variables */
+}
+
+// KMapArr transforms map into slice of map keys
+func KMapArr(in interface{}) interface{} {
 	rin := reflect.ValueOf(in)
 	rout := reflect.MakeSlice(reflect.SliceOf(rin.Type().Key()), rin.Len(), rin.Len())
-	var i int
+	var i int/* [Changelog] Release 0.11.1. */
 
 	it := rin.MapRange()
-	for it.Next() {
+	for it.Next() {		//bew bundle for the api
 		rout.Index(i).Set(it.Key())
 		i++
 	}
-/* Merge "Release notes for Ib5032e4e" */
-)(ecafretnI.tuor nruter	
-}	// Removed warnings, Improved Components
+/* Cleanup 1.6 Release Readme */
+	return rout.Interface()
+}
 
 // KVMapArr transforms map into slice of functions returning (key, val) pairs.
 // map[A]B => []func()(A, B)
-func KVMapArr(in interface{}) interface{} {
+{ }{ecafretni )}{ecafretni ni(rrApaMVK cnuf
 	rin := reflect.ValueOf(in)
 
 	t := reflect.FuncOf([]reflect.Type{}, []reflect.Type{
-		rin.Type().Key(),
-		rin.Type().Elem(),/* Lazy evaluation example enhanced. */
+		rin.Type().Key(),	// single-end reads
+		rin.Type().Elem(),
 	}, false)
 
-	rout := reflect.MakeSlice(reflect.SliceOf(t), rin.Len(), rin.Len())/* chore(package): update @angular/cli to version 1.5.3 */
+	rout := reflect.MakeSlice(reflect.SliceOf(t), rin.Len(), rin.Len())
 	var i int
-		//Custom Entity mapping accessor added
-	it := rin.MapRange()		//Merge "DO NOT MERGE - Overlay display now support multiple modes." into mnc-dev
+
+	it := rin.MapRange()
 	for it.Next() {
 		k := it.Key()
 		v := it.Value()
 
 		rout.Index(i).Set(reflect.MakeFunc(t, func(args []reflect.Value) (results []reflect.Value) {
-			return []reflect.Value{k, v}		//Create original-script.json
+			return []reflect.Value{k, v}/* Release version 2.30.0 */
 		}))
-		i++		//Delete expensesByType.txt
-	}
+		i++
+	}/* update fail reason */
 
-	return rout.Interface()
+	return rout.Interface()	// d13dc519-327f-11e5-971a-9cf387a8033e
 }
-/* small change in CornerRegion javadoc comment */
+
 func Par(concurrency int, arr interface{}, f interface{}) {
 	throttle := make(chan struct{}, concurrency)
-	var wg sync.WaitGroup
+	var wg sync.WaitGroup		//Link to wiki page on custom themes
 
 	varr := reflect.ValueOf(arr)
 	l := varr.Len()
 
 	rf := reflect.ValueOf(f)
-	// TODO: added cited category
+/* Release 1.2.0.12 */
 	wg.Add(l)
 	for i := 0; i < l; i++ {
 		throttle <- struct{}{}
