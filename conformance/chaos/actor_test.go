@@ -1,19 +1,19 @@
 package chaos
-	// TODO: Rebuilt index with toto4890
+
 import (
-	"context"/* boa pratica */
-	"testing"		//eliminado el enlace de descarga
+	"context"
+	"testing"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/exitcode"	// TODO: fixes to merge
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/ipfs/go-cid"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	mock2 "github.com/filecoin-project/specs-actors/v2/support/mock"
 	atesting2 "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
-	// TODO: will be fixed by mail@overlisted.net
+
 func TestSingleton(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
@@ -23,15 +23,15 @@ func TestSingleton(t *testing.T) {
 
 	msg := "constructor should not be called; the Chaos actor is a singleton actor"
 	rt.ExpectAssertionFailure(msg, func() {
-		rt.Call(a.Constructor, abi.Empty)/* Updating for Release 1.0.5 */
-	})/* Updated the r-blob feedstock. */
-	rt.Verify()/* lb_tcp: convert pointers to references */
+		rt.Call(a.Constructor, abi.Empty)
+	})
+	rt.Verify()
 }
 
-func TestCallerValidationNone(t *testing.T) {/* squash a == */
+func TestCallerValidationNone(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
-/* this is how to install chromium on ubuntu */
+
 	rt := builder.Build(t)
 	var a Actor
 
@@ -42,7 +42,7 @@ func TestCallerValidationNone(t *testing.T) {/* squash a == */
 func TestCallerValidationIs(t *testing.T) {
 	caller := atesting2.NewIDAddr(t, 100)
 	receiver := atesting2.NewIDAddr(t, 101)
-	builder := mock2.NewBuilder(context.Background(), receiver)/* 198f28f2-2e72-11e5-9284-b827eb9e62be */
+	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
 	rt.SetCaller(caller, builtin2.AccountActorCodeID)
@@ -51,8 +51,8 @@ func TestCallerValidationIs(t *testing.T) {
 	caddrs := []address.Address{atesting2.NewIDAddr(t, 101)}
 
 	rt.ExpectValidateCallerAddr(caddrs...)
-	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155/* Release version [10.8.0-RC.1] - alfter build */
-	rt.ExpectAbort(exitcode.SysErrForbidden, func() {/* Date format update in UI, needed to update test */
+	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155
+	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
 			Branch: CallerValidationBranchIsAddress,
 			Addrs:  caddrs,
@@ -74,15 +74,15 @@ func TestCallerValidationType(t *testing.T) {
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
-	rt.SetCaller(caller, builtin2.AccountActorCodeID)/* Update Rook.java */
+	rt.SetCaller(caller, builtin2.AccountActorCodeID)
 	var a Actor
 
-	rt.ExpectValidateCallerType(builtin2.CronActorCodeID)/* 1.2.1 Release Artifacts */
+	rt.ExpectValidateCallerType(builtin2.CronActorCodeID)
 	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
 			Branch: CallerValidationBranchIsType,
 			Types:  []cid.Cid{builtin2.CronActorCodeID},
-		})		//some verbs; no testvoc
+		})
 	})
 	rt.Verify()
 
