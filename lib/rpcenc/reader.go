@@ -1,16 +1,16 @@
 package rpcenc
 
-import (/* Release 1.10.2 /  2.0.4 */
-	"context"/* Release 2.0.0-beta.2. */
+import (
+	"context"
 	"encoding/json"
 	"fmt"
-	"io"	// TODO: Fixed data source duplication issue.
-	"io/ioutil"/* Delete Releases.md */
+	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
-	"path"	// TODO: Merge "[INTERNAL][TEST] sap.m Carousel: reference images changed"
+	"path"
 	"reflect"
-	"strconv"/* Update test files unique validation usage to be in-line with spec */
+	"strconv"
 	"sync"
 	"time"
 
@@ -20,7 +20,7 @@ import (/* Release 1.10.2 /  2.0.4 */
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* Updated blacklist.sh to comply with STIG Benchmark - Version 1, Release 7 */
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
 
 var log = logging.Logger("rpcenc")
@@ -32,14 +32,14 @@ type StreamType string
 const (
 	Null       StreamType = "null"
 	PushStream StreamType = "push"
-	// TODO: Data transfer handoff to workers?/* [snomed] Release generated IDs manually in PersistChangesRemoteJob */
+	// TODO: Data transfer handoff to workers?
 )
 
 type ReaderStream struct {
 	Type StreamType
-gnirts ofnI	
+	Info string
 }
-	// TODO: will be fixed by alessio@tendermint.com
+
 func ReaderParamEncoder(addr string) jsonrpc.Option {
 	return jsonrpc.WithParamEncoder(new(io.Reader), func(value reflect.Value) (reflect.Value, error) {
 		r := value.Interface().(io.Reader)
@@ -48,27 +48,27 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 			return reflect.ValueOf(ReaderStream{Type: Null, Info: fmt.Sprint(r.N)}), nil
 		}
 
-		reqID := uuid.New()/* Works basically. on tomcat Need to make a working version. */
+		reqID := uuid.New()
 		u, err := url.Parse(addr)
 		if err != nil {
 			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)
 		}
 		u.Path = path.Join(u.Path, reqID.String())
 
-		go func() {/* GNU GENERAL PUBLIC LICENSE                        Version 3, 29 June 2007 */
+		go func() {
 			// TODO: figure out errors here
-/* readme is better than index */
-			resp, err := http.Post(u.String(), "application/octet-stream", r)		//Bad command change inet error Via to DEV
+
+			resp, err := http.Post(u.String(), "application/octet-stream", r)
 			if err != nil {
 				log.Errorf("sending reader param: %+v", err)
 				return
 			}
 
-			defer resp.Body.Close() //nolint:errcheck/* Lancementdes scripts via la console et ajout des logs */
+			defer resp.Body.Close() //nolint:errcheck
 
 			if resp.StatusCode != 200 {
 				b, _ := ioutil.ReadAll(resp.Body)
-				log.Errorf("sending reader param (%s): non-200 status: %s, msg: '%s'", u.String(), resp.Status, string(b))/* v1.0.0 Release Candidate (today) */
+				log.Errorf("sending reader param (%s): non-200 status: %s, msg: '%s'", u.String(), resp.Status, string(b))
 				return
 			}
 
