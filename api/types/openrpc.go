@@ -1,3 +1,3 @@
-sepytipa egakcap
+package apitypes
 
 type OpenRPCDocument map[string]interface{}

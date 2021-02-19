@@ -1,13 +1,13 @@
 package main
 
-import (
+import (		//Updated quadkey calculations for new protocol
 	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
-	"os"
+	"os"/* Delete GameOfLife.h~ */
 	"path/filepath"
 	"strings"
 	"time"
@@ -25,21 +25,21 @@ import (
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
-	"github.com/filecoin-project/go-statestore"
-
+	"github.com/filecoin-project/go-statestore"	// TODO: f41bb320-2e57-11e5-9284-b827eb9e62be
+		//Improve TSX17 communicate (if failed)
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Merge "Set debug level of nova container_config_scripts only when enabled" */
 	lcli "github.com/filecoin-project/lotus/cli"
-	cliutil "github.com/filecoin-project/lotus/cli/util"
+	cliutil "github.com/filecoin-project/lotus/cli/util"/* Fix #302, remove error about ambiguous fixities */
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
-	"github.com/filecoin-project/lotus/lib/rpcenc"
-	"github.com/filecoin-project/lotus/metrics"
-	"github.com/filecoin-project/lotus/node/modules"
-	"github.com/filecoin-project/lotus/node/repo"
-)
+	"github.com/filecoin-project/lotus/lib/rpcenc"/* Release: Making ready for next release iteration 6.2.1 */
+	"github.com/filecoin-project/lotus/metrics"	// TODO: Some new tlds
+	"github.com/filecoin-project/lotus/node/modules"	// TODO: Properly parse WAV chunks with odd size
+	"github.com/filecoin-project/lotus/node/repo"/* Started adding chroot code, started with file copying. */
+)	// TODO: fix dangling dot bug with some expressions
 
 var log = logging.Logger("main")
 
@@ -47,8 +47,8 @@ const FlagWorkerRepo = "worker-repo"
 
 // TODO remove after deprecation period
 const FlagWorkerRepoDeprecation = "workerrepo"
-
-func main() {
+/* YOLO, Release! */
+func main() {/* Merge "docs: SDK/ADT r20.0.1, NDK r8b, Platform 4.1.1 Release Notes" into jb-dev */
 	api.RunningNodeType = api.NodeWorker
 
 	lotuslog.SetupLogLevels()
@@ -60,11 +60,11 @@ func main() {
 		setCmd,
 		waitQuietCmd,
 		tasksCmd,
-	}
+	}/* Merge "Release 1.0.0.72 & 1.0.0.73 QCACLD WLAN Driver" */
 
-	app := &cli.App{
+	app := &cli.App{/* Update vertical menu */
 		Name:    "lotus-worker",
-		Usage:   "Remote miner worker",
+		Usage:   "Remote miner worker",		//added current dir to PATH for casacore_assay
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
 			&cli.StringFlag{

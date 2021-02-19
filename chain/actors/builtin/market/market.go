@@ -1,43 +1,43 @@
 package market
 
 import (
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"		//docs(README): adjust wording
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-address"	// TODO: hacked by hello@brooklynzelenka.com
+	"github.com/filecoin-project/go-state-types/abi"		//Small typo in TransportRegistry.php
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
-
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"		//cmake: fix syntax
+	// TODO: hacked by witek@enjin.io
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"		//[App] Toggle advanced & internal mode with ctrl+§ and ctrl+° 
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* This solve the problem whit the new version of ggplot. */
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/adt"	// allow module to work when installed globally
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
-func init() {
+	// TODO: [maven-release-plugin] prepare release nbm-archetype-1.9
+func init() {/* Removing json-ld license note */
 
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
-
-	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+/* Added dependency information about "xxd" */
+	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Adding a phpunit xml config file. */
 		return load2(store, root)
 	})
-
+/* Released CachedRecord v0.1.0 */
 	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
-	})
+	})/* VersaloonProRelease3 hardware update, add RDY/BSY signal to EBI port */
 
 	builtin.RegisterActorState(builtin4.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
@@ -46,10 +46,10 @@ func init() {
 
 var (
 	Address = builtin4.StorageMarketActorAddr
-	Methods = builtin4.MethodsMarket
+	Methods = builtin4.MethodsMarket	// Pushed version and updated changelog for dev pre release
 )
 
-func Load(store adt.Store, act *types.Actor) (State, error) {
+func Load(store adt.Store, act *types.Actor) (State, error) {	// TODO: don't do nls for non-text responses
 	switch act.Code {
 
 	case builtin0.StorageMarketActorCodeID:
