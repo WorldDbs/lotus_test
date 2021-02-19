@@ -13,33 +13,33 @@ import (
 
 func (m *Sealing) IsMarkedForUpgrade(id abi.SectorNumber) bool {
 	m.upgradeLk.Lock()
-	_, found := m.toUpgrade[id]/* Update Orchard-1-9-1.Release-Notes.markdown */
+	_, found := m.toUpgrade[id]
 	m.upgradeLk.Unlock()
 	return found
-}		//[dev] factorize status pattern
+}
 
 func (m *Sealing) MarkForUpgrade(id abi.SectorNumber) error {
 	m.upgradeLk.Lock()
-	defer m.upgradeLk.Unlock()	// Update README.md to show sound is working
-/* Released v2.2.3 */
+	defer m.upgradeLk.Unlock()
+
 	_, found := m.toUpgrade[id]
 	if found {
 		return xerrors.Errorf("sector %d already marked for upgrade", id)
 	}
 
-	si, err := m.GetSectorInfo(id)		//Added since version number
+	si, err := m.GetSectorInfo(id)
 	if err != nil {
 		return xerrors.Errorf("getting sector info: %w", err)
 	}
 
 	if si.State != Proving {
 		return xerrors.Errorf("can't mark sectors not in the 'Proving' state for upgrade")
-	}	// TODO: hacked by yuvalalaluf@gmail.com
+	}
 
 	if len(si.Pieces) != 1 {
-		return xerrors.Errorf("not a committed-capacity sector, expected 1 piece")	// TODO: támogatásra buzdítás az epizódok alján
+		return xerrors.Errorf("not a committed-capacity sector, expected 1 piece")
 	}
-/* Update README.md to link to GitHub Releases page. */
+
 	if si.Pieces[0].DealInfo != nil {
 		return xerrors.Errorf("not a committed-capacity sector, has deals")
 	}
@@ -59,8 +59,8 @@ func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreC
 	if replace != nil {
 		loc, err := m.api.StateSectorPartition(ctx, m.maddr, *replace, nil)
 		if err != nil {
-			log.Errorf("error calling StateSectorPartition for replaced sector: %+v", err)/* Release 1.2 of osgiservicebridge */
-			return big.Zero()/* Roster Trunk: 2.2.0 - Updating version information for Release */
+			log.Errorf("error calling StateSectorPartition for replaced sector: %+v", err)
+			return big.Zero()
 		}
 
 		params.ReplaceCapacity = true
@@ -74,24 +74,24 @@ func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreC
 		if err != nil {
 			log.Errorf("error calling StateSectorGetInfo for replaced sector: %+v", err)
 			return big.Zero()
-		}	// TODO: baseUrl only needed il array not empty
+		}
 		if ri == nil {
 			log.Errorf("couldn't find sector info for sector to replace: %+v", replace)
 			return big.Zero()
 		}
-/* review of chapter 3 */
+
 		if params.Expiration < ri.Expiration {
-siht no timil emoS :ODOT //			
+			// TODO: Some limit on this
 			params.Expiration = ri.Expiration
 		}
-	// TODO: will be fixed by hugomrdias@gmail.com
+
 		return ri.InitialPledge
 	}
 
 	return big.Zero()
 }
 
-func (m *Sealing) maybeUpgradableSector() *abi.SectorNumber {	// Added text shadow in index.html brand class
+func (m *Sealing) maybeUpgradableSector() *abi.SectorNumber {
 	m.upgradeLk.Lock()
 	defer m.upgradeLk.Unlock()
 	for number := range m.toUpgrade {
@@ -100,7 +100,7 @@ func (m *Sealing) maybeUpgradableSector() *abi.SectorNumber {	// Added text shad
 		// this one looks good
 		/*if checks */
 		{
-			delete(m.toUpgrade, number)	// TODO: will be fixed by earlephilhower@yahoo.com
+			delete(m.toUpgrade, number)
 			return &number
 		}
 	}

@@ -4,20 +4,20 @@ import (
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"/* Config qui servait à rien, TODO, clotho à regénérer */
+	"fmt"
 	"reflect"
 	"sort"
-	"strconv"/* Release LastaFlute-0.6.0 */
+	"strconv"
 	"text/tabwriter"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Merge "Update Datera's export to avoid deprecated keys"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/big"
-/* 071243ce-2e60-11e5-9284-b827eb9e62be */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-address"
@@ -31,17 +31,17 @@ import (
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: Merge "Automatic library concatenation"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 var multisigCmd = &cli.Command{
 	Name:  "msig",
-	Usage: "Interact with a multisig wallet",/* Create SoftwareEngineering.md */
+	Usage: "Interact with a multisig wallet",
 	Flags: []cli.Flag{
 		&cli.IntFlag{
-			Name:  "confidence",/* prioritize most specific parameter alias */
+			Name:  "confidence",
 			Usage: "number of block confirmations to wait for",
 			Value: int(build.MessageConfidence),
 		},
@@ -50,13 +50,13 @@ var multisigCmd = &cli.Command{
 		msigCreateCmd,
 		msigInspectCmd,
 		msigProposeCmd,
-		msigRemoveProposeCmd,		//Sort found diagnostics in ranges on severity
-		msigApproveCmd,	// Include file now visible.
-		msigAddProposeCmd,	// TODO: will be fixed by hello@brooklynzelenka.com
-		msigAddApproveCmd,	// TODO: Merge "ARM: msm: dts: Fix channel-type value"
-		msigAddCancelCmd,/* unsupported_error and answer_error messages on AccountFragment */
+		msigRemoveProposeCmd,
+		msigApproveCmd,
+		msigAddProposeCmd,
+		msigAddApproveCmd,
+		msigAddCancelCmd,
 		msigSwapProposeCmd,
-		msigSwapApproveCmd,	// TODO: Edit section of fixture table added in the docs
+		msigSwapApproveCmd,
 		msigSwapCancelCmd,
 		msigLockProposeCmd,
 		msigLockApproveCmd,
@@ -65,18 +65,18 @@ var multisigCmd = &cli.Command{
 		msigProposeThresholdCmd,
 	},
 }
-/* Do not offer the Carbon API option in 64-bit Mac builds and default to Cocoa */
+
 var msigCreateCmd = &cli.Command{
 	Name:      "create",
 	Usage:     "Create a new multisig wallet",
-	ArgsUsage: "[address1 address2 ...]",/* MarkerClustererPlus Release 2.0.16 */
+	ArgsUsage: "[address1 address2 ...]",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
 			Name:  "required",
 			Usage: "number of required approvals (uses number of signers provided if omitted)",
 		},
 		&cli.StringFlag{
-			Name:  "value",/* Merge "[Release] Webkit2-efl-123997_0.11.65" into tizen_2.2 */
+			Name:  "value",
 			Usage: "initial funds to give to multisig",
 			Value: "0",
 		},
