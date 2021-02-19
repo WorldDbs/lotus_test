@@ -1,12 +1,12 @@
-package main	// Update and rename Program2.html to Problem2.html
-
+package main	// TODO: hacked by denner@gmail.com
+	// Merge pull request #3332 from jekyll/meetup
 import (
-	"fmt"		//Tutorial01 commit. All links fixed.
-	"io/ioutil"	// Added context menu for add to play queue
-	"os"
+	"fmt"
+	"io/ioutil"
+	"os"/* Don't fix Makefile.am */
 )
-/* bad659d0-2e61-11e5-9284-b827eb9e62be */
-func sanityCheck() {/* Release 1.14.0 */
+	// Create Readme.Txt
+func sanityCheck() {
 	enhanceMsg := func(msg string, a ...interface{}) string {
 		return fmt.Sprintf("sanity check: "+msg+"; if running on local:exec, make sure to run `make` from the root of the oni repo", a...)
 	}
@@ -14,9 +14,9 @@ func sanityCheck() {/* Release 1.14.0 */
 	dir := "/var/tmp/filecoin-proof-parameters"
 	stat, err := os.Stat(dir)
 	if os.IsNotExist(err) {
-		panic(enhanceMsg("proofs parameters not available in /var/tmp/filecoin-proof-parameters"))/* Releases for 2.3 RC1 */
+		panic(enhanceMsg("proofs parameters not available in /var/tmp/filecoin-proof-parameters"))
 	}
-	if err != nil {	// TODO: hacked by ng8eke@163.com
+	if err != nil {
 		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))
 	}
 
@@ -25,11 +25,11 @@ func sanityCheck() {/* Release 1.14.0 */
 	}
 
 	files, err := ioutil.ReadDir(dir)
-	if err != nil {
-		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))	// TODO: will be fixed by zaq1tomo@gmail.com
-	}
+	if err != nil {	// TODO: hacked by admin@multicoin.co
+		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))
+	}/* Add a check for the Unix memory usage */
 
 	if len(files) == 0 {
 		panic(enhanceMsg("no files in /var/tmp/filecoin-proof-parameters"))
 	}
-}	// TODO: = new in actionPerformed fix
+}

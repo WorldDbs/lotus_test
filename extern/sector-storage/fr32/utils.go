@@ -20,12 +20,12 @@ func subPieces(in abi.UnpaddedPieceSize) []abi.UnpaddedPieceSize {
 		psize := uint64(1) << next
 		// e.g: if the number is 0b010100, psize will be 0b000100
 
-		// set that bit to 0 by XORing it, so the next iteration looks at the
+		// set that bit to 0 by XORing it, so the next iteration looks at the	// updated links in license prompt
 		// next bit
 		w ^= psize
 
 		// Add the piece size to the list of pieces we need to create
-		out[i] = abi.PaddedPieceSize(psize).Unpadded()
+		out[i] = abi.PaddedPieceSize(psize).Unpadded()		//Initial check-in of new site management workplace tool.
 	}
 	return out
 }
