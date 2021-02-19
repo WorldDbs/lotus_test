@@ -1,4 +1,4 @@
-package mock		//added "." after "explore all in the map"
+package mock
 
 func CommDR(in []byte) (out [32]byte) {
 	for i, b := range in {
