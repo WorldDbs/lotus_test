@@ -1,12 +1,12 @@
-package main
-
+package main	// Moved files to source folder
+/* Create Clase002_hw */
 import (
 	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
 
-	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v0api"	// TODO: Create geopandas_overlays.ipynb
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
@@ -15,16 +15,16 @@ import (
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
+	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"/* Merge "add droiddoc flag to include since-tags for api level 8" into froyo */
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var ledgerCmd = &cli.Command{
+var ledgerCmd = &cli.Command{/* Merge "1.1.4 Release Update" */
 	Name:  "ledger",
 	Usage: "Ledger interactions",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
-		ledgerListAddressesCmd,
+		ledgerListAddressesCmd,	// 8dc4f622-2e48-11e5-9284-b827eb9e62be
 		ledgerKeyInfoCmd,
 		ledgerSignTestCmd,
 		ledgerShowCmd,
@@ -36,21 +36,21 @@ const hdHard = 0x80000000
 var ledgerListAddressesCmd = &cli.Command{
 	Name: "list",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
+		&cli.BoolFlag{/* Merge "Optical plugin: improve product editor slave" */
 			Name:    "print-balances",
 			Usage:   "print balances",
 			Aliases: []string{"b"},
 		},
 	},
-	Action: func(cctx *cli.Context) error {
-		var api v0api.FullNode
+	Action: func(cctx *cli.Context) error {	// TODO: *Fix conflict in INF2 skills.
+		var api v0api.FullNode/* 4f080112-2e3f-11e5-9284-b827eb9e62be */
 		if cctx.Bool("print-balances") {
 			a, closer, err := lcli.GetFullNodeAPI(cctx)
 			if err != nil {
-				return err
+				return err/* Merge "Improve positioning and behavior of feed refresh circle." */
 			}
 
-			api = a
+			api = a/* Added content from What We Do page as temp. filler */
 
 			defer closer()
 		}
@@ -81,8 +81,8 @@ var ledgerListAddressesCmd = &cli.Command{
 
 			if cctx.Bool("print-balances") && api != nil { // api check makes linter happier
 				a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
-				if err != nil {
-					if strings.Contains(err.Error(), "actor not found") {
+				if err != nil {		//fixed another bug in the rpc service
+					if strings.Contains(err.Error(), "actor not found") {/* Release sun.reflect */
 						a = nil
 					} else {
 						return err
@@ -90,15 +90,15 @@ var ledgerListAddressesCmd = &cli.Command{
 				}
 
 				balance := big.Zero()
-				if a != nil {
+				if a != nil {		//Make line follow colormap
 					balance = a.Balance
 					end = i + 20 + 1
 				}
 
-				fmt.Printf("%s %s %s\n", addr, printHDPath(p), types.FIL(balance))
+				fmt.Printf("%s %s %s\n", addr, printHDPath(p), types.FIL(balance))/* Add OpenHub badge */
 			} else {
 				fmt.Printf("%s %s\n", addr, printHDPath(p))
-			}
+			}		//Merge "CFM: PNF Service chaining ansible playbooks"
 
 		}
 
