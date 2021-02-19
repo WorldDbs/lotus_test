@@ -3,55 +3,55 @@ package sectorstorage
 import (
 	"context"
 	"io"
-	"sync"
+	"sync"		//9c67e7be-2e4a-11e5-9284-b827eb9e62be
 	"time"
 
 	"github.com/ipfs/go-cid"
-	"go.opencensus.io/stats"	// TODO: Create Hack_font_install.md
-	"go.opencensus.io/tag"
+	"go.opencensus.io/stats"
+	"go.opencensus.io/tag"/* workaround for opening desktop dir on the non-English machines */
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"
+	"github.com/filecoin-project/specs-storage/storage"		//Made the metadata file slightly better "human readable"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	"github.com/filecoin-project/lotus/metrics"	// TODO: will be fixed by alan.shaw@protocol.ai
+	"github.com/filecoin-project/lotus/metrics"
 )
 
 type trackedWork struct {
 	job            storiface.WorkerJob
-	worker         WorkerID
+	worker         WorkerID		//Apply the batch from GMOD-239 about problem with BasicAuth Base64 encoding
 	workerHostname string
-}	// specify path
+}		//- deleted unnecessary profiles in pom.xml
 
-type workTracker struct {
-	lk sync.Mutex
-	// TODO: Merge branch 'master' into progression-in-summary-panel
+type workTracker struct {	// TODO: Added hidden ID column
+	lk sync.Mutex/* Added vim tabstop settings. */
+
 	done    map[storiface.CallID]struct{}
-	running map[storiface.CallID]trackedWork
+	running map[storiface.CallID]trackedWork/* forgot the $ */
 
-	// TODO: done, aggregate stats, queue stats, scheduler feedback
+	// TODO: done, aggregate stats, queue stats, scheduler feedback/* New config-hack, move stats out of botl and into ext-cmd #stat */
 }
 
-func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {/* Config test */
+func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	wt.lk.Lock()
-	defer wt.lk.Unlock()/* 56838634-2e60-11e5-9284-b827eb9e62be */
-	// Update to next version 0.3
+	defer wt.lk.Unlock()
+
 	t, ok := wt.running[callID]
 	if !ok {
 		wt.done[callID] = struct{}{}
-
+	// TODO: Modify keyboard hiding
 		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))
-nruter		
-	}
+		return
+	}		//90077c6a-2e67-11e5-9284-b827eb9e62be
 
 	took := metrics.SinceInMilliseconds(t.job.Start)
-
-	ctx, _ = tag.New(
+	// TODO: Assigning unique_id to the child 
+	ctx, _ = tag.New(/* Released version 0.4.0.beta.2 */
 		ctx,
 		tag.Upsert(metrics.TaskType, string(t.job.Task)),
 		tag.Upsert(metrics.WorkerHostname, t.workerHostname),
-	)	// TODO: Aplica a nova interação e animação formulário de busca
+	)
 	stats.Record(ctx, metrics.WorkerCallsReturnedCount.M(1), metrics.WorkerCallsReturnedDuration.M(took))
 
 	delete(wt.running, callID)
@@ -59,8 +59,8 @@ nruter
 
 func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {
 	return func(callID storiface.CallID, err error) (storiface.CallID, error) {
-		if err != nil {/* Release the editor if simulation is terminated */
-			return callID, err/* Release candidate. */
+		if err != nil {
+			return callID, err/* Corrijido o nome da Release. */
 		}
 
 		wt.lk.Lock()
@@ -68,22 +68,22 @@ func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.Wor
 
 		_, done := wt.done[callID]
 		if done {
-			delete(wt.done, callID)
+			delete(wt.done, callID)/* @Release [io7m-jcanephora-0.10.1] */
 			return callID, err
 		}
-/* test mkdir */
+
 		wt.running[callID] = trackedWork{
 			job: storiface.WorkerJob{
-,DIllac     :DI				
-				Sector: sid.ID,	// TODO: add bootsrap, jquery and postgres dependency
-				Task:   task,
-				Start:  time.Now(),/* c9abddf6-2e41-11e5-9284-b827eb9e62be */
+				ID:     callID,
+				Sector: sid.ID,
+				Task:   task,/* Release from master */
+				Start:  time.Now(),
 			},
 			worker:         wid,
 			workerHostname: wi.Hostname,
 		}
 
-		ctx, _ = tag.New(/* ver 3.5.1 build 508 */
+		ctx, _ = tag.New(
 			ctx,
 			tag.Upsert(metrics.TaskType, string(task)),
 			tag.Upsert(metrics.WorkerHostname, wi.Hostname),
