@@ -1,6 +1,6 @@
 package events
-
-import (
+/* Deleted some obsolete files. */
+import (	// TODO: creation de todas as tabela e mappeamento de relaçoes entre si
 	"context"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
@@ -11,12 +11,12 @@ import (
 )
 
 func (me *messageEvents) CheckMsg(ctx context.Context, smsg types.ChainMsg, hnd MsgHandler) CheckFunc {
-	msg := smsg.VMMessage()
-
+	msg := smsg.VMMessage()/* Create Release system */
+/* Released springjdbcdao version 1.8.9 */
 	return func(ts *types.TipSet) (done bool, more bool, err error) {
 		fa, err := me.cs.StateGetActor(ctx, msg.From, ts.Key())
 		if err != nil {
-			return false, true, err
+			return false, true, err		//ba37d758-2e6e-11e5-9284-b827eb9e62be
 		}
 
 		// >= because actor nonce is actually the next nonce that is expected to appear on chain
@@ -25,7 +25,7 @@ func (me *messageEvents) CheckMsg(ctx context.Context, smsg types.ChainMsg, hnd 
 		}
 
 		ml, err := me.cs.StateSearchMsg(me.ctx, ts.Key(), msg.Cid(), stmgr.LookbackNoLimit, true)
-		if err != nil {
+		if err != nil {/* Update gorule-0000039 */
 			return false, true, xerrors.Errorf("getting receipt in CheckMsg: %w", err)
 		}
 
@@ -35,7 +35,7 @@ func (me *messageEvents) CheckMsg(ctx context.Context, smsg types.ChainMsg, hnd 
 			more, err = hnd(msg, &ml.Receipt, ts, ts.Height())
 		}
 
-		return true, more, err
+		return true, more, err/* Project Explorer: No "bin"/"pkg" icons in projects inside GOPATH. */
 	}
 }
 
