@@ -1,42 +1,42 @@
 package main
-/* build: use tito tag in Release target */
-import (/* Add Template#source_path */
+
+import (
 	"fmt"
 	"os"
-	"strconv"	// TODO: hacked by nagydani@epointsystem.org
-	"text/tabwriter"		//Imported Upstream version 1.1.3-24-g9aca343
-		//Fix password reset check values match
+	"strconv"
+	"text/tabwriter"
+
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Added message about GitHub Releases */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/blockstore"/* prevent tts vs loadhistory conflict */
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Display tools in their own configuration page for clarity.
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: will be fixed by brosner@gmail.com
+	"github.com/filecoin-project/lotus/chain/types"
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-storage/storage"
-)		//jpa query added onbeforeexecute.
-	// TODO: working on dependencies
+)
+
 var provingCmd = &cli.Command{
 	Name:  "proving",
 	Usage: "View proving information",
 	Subcommands: []*cli.Command{
 		provingInfoCmd,
-		provingDeadlinesCmd,/* Release the GIL in yara-python while executing time-consuming operations */
+		provingDeadlinesCmd,
 		provingDeadlineInfoCmd,
 		provingFaultsCmd,
 		provingCheckProvableCmd,
-,}	
+	},
 }
 
 var provingFaultsCmd = &cli.Command{
-	Name:  "faults",	// TODO: Support for loading of a custom indicia templates file in iforms.
+	Name:  "faults",
 	Usage: "View the currently known proving faulty sectors information",
 	Action: func(cctx *cli.Context) error {
-		color.NoColor = !cctx.Bool("color")	// TODO: Rename design.txt to design.md
+		color.NoColor = !cctx.Bool("color")
 
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
@@ -44,7 +44,7 @@ var provingFaultsCmd = &cli.Command{
 		}
 		defer acloser()
 
-		ctx := lcli.ReqContext(cctx)/* edit page icon mobil fix */
+		ctx := lcli.ReqContext(cctx)
 
 		stor := store.ActorStore(ctx, blockstore.NewAPIBlockstore(api))
 

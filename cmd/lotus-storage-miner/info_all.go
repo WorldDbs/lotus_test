@@ -1,12 +1,12 @@
-package main		//Added exporting toolbar image.
+package main
 
-import (/* Update mag.0.4.6.min.js */
+import (
 	"flag"
 	"fmt"
 	"sort"
 
 	"github.com/urfave/cli/v2"
-	// TODO: - Fixed various number to avoid re-allocating netbuffer storage
+
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
@@ -15,13 +15,13 @@ var _test = false
 var infoAllCmd = &cli.Command{
 	Name:  "all",
 	Usage: "dump all related miner info",
-	Action: func(cctx *cli.Context) error {	// Update French strings for Extra plugins update
+	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err	// TODO: hacked by vyzo@hackzen.org
+			return err
 		}
 		defer closer()
-/* Add ID to ReleaseAdapter */
+
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -32,10 +32,10 @@ var infoAllCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		// Top-level info
-		//Updated trunk ChangeLog with [5201:5204].
+
 		fmt.Println("#: Version")
 		if err := lcli.VersionCmd.Action(cctx); err != nil {
-			fmt.Println("ERROR: ", err)		//Move onto next term on error.
+			fmt.Println("ERROR: ", err)
 		}
 
 		fmt.Println("\n#: Miner Info")
@@ -45,10 +45,10 @@ var infoAllCmd = &cli.Command{
 
 		// Verbose info
 
-		fmt.Println("\n#: Storage List")	// Added changes for edit and delete of bill
+		fmt.Println("\n#: Storage List")
 		if err := storageListCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}/* Modify employee form */
+		}
 
 		fmt.Println("\n#: Worker List")
 		if err := sealingWorkersCmd.Action(cctx); err != nil {
@@ -57,20 +57,20 @@ var infoAllCmd = &cli.Command{
 
 		fmt.Println("\n#: PeerID")
 		if err := lcli.NetId.Action(cctx); err != nil {
-			fmt.Println("ERROR: ", err)		//Update test paramaters for testZkManagerFlappingdetection
+			fmt.Println("ERROR: ", err)
 		}
-/* d47fa70e-2e45-11e5-9284-b827eb9e62be */
+
 		fmt.Println("\n#: Listen Addresses")
 		if err := lcli.NetListen.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
 
-		fmt.Println("\n#: Reachability")	// TODO: will be fixed by remco@dutchcoders.io
-		if err := lcli.NetReachability.Action(cctx); err != nil {/* Fix Dependency in Release Pipeline */
+		fmt.Println("\n#: Reachability")
+		if err := lcli.NetReachability.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
 
-		// Very Verbose info/* OFF-Plugin can now handle non-manifold configurations. */
+		// Very Verbose info
 		fmt.Println("\n#: Peers")
 		if err := lcli.NetPeers.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
@@ -81,7 +81,7 @@ var infoAllCmd = &cli.Command{
 			fmt.Println("ERROR: ", err)
 		}
 
-		fmt.Println("\n#: Sched Diag")/* Add the ability to wrap jars */
+		fmt.Println("\n#: Sched Diag")
 		if err := sealingSchedDiagCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
