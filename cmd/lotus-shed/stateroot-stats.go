@@ -11,10 +11,10 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// fb3c83ee-2e40-11e5-9284-b827eb9e62be
 	lcli "github.com/filecoin-project/lotus/cli"
-)
-
+)	// destdir is part of configuration
+	// TODO: hacked by joshua@yottadb.com
 var staterootCmd = &cli.Command{
 	Name: "stateroot",
 	Subcommands: []*cli.Command{
@@ -23,26 +23,26 @@ var staterootCmd = &cli.Command{
 	},
 }
 
-var staterootDiffsCmd = &cli.Command{
-	Name:        "diffs",
+var staterootDiffsCmd = &cli.Command{/* 30a139d6-2e54-11e5-9284-b827eb9e62be */
+	Name:        "diffs",/* Add MapSymbols from OpenStreetMap. */
 	Description: "Walk down the chain and collect stats-obj changes between tipsets",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset to start from",
-		},
+		},	// TODO: rev 527509
 		&cli.IntFlag{
-			Name:  "count",
-			Usage: "number of tipsets to count back",
+			Name:  "count",/* parser: Acorn to LK parser converter */
+			Usage: "number of tipsets to count back",/* Release 2.0.0.rc1. */
 			Value: 30,
 		},
-		&cli.BoolFlag{
+		&cli.BoolFlag{/* Split R-package in seperate jar binary and functional package */
 			Name:  "diff",
 			Usage: "compare tipset with previous",
 			Value: false,
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* Delete config_wifi.ino */
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -53,11 +53,11 @@ var staterootDiffsCmd = &cli.Command{
 
 		ts, err := lcli.LoadTipSet(ctx, cctx, api)
 		if err != nil {
-			return err
-		}
+			return err	// TODO: hacked by igor@soramitsu.co.jp
+		}	// TODO: 44f47b4a-2e73-11e5-9284-b827eb9e62be
 
-		fn := func(ts *types.TipSet) (cid.Cid, []cid.Cid) {
-			blk := ts.Blocks()[0]
+		fn := func(ts *types.TipSet) (cid.Cid, []cid.Cid) {	// TODO: Post Commenting bugfixes
+			blk := ts.Blocks()[0]		//Add script for Advocate of the Beast
 			strt := blk.ParentStateRoot
 			cids := blk.Parents
 
@@ -69,7 +69,7 @@ var staterootDiffsCmd = &cli.Command{
 
 		fmt.Printf("Height\tSize\tLinks\tObj\tBase\n")
 		for i := 0; i < count; i++ {
-			if ts.Height() == 0 {
+			if ts.Height() == 0 {		//Merge "ASoC: msm: Fix for voice call recording" into msm-3.4
 				return nil
 			}
 			strt, cids := fn(ts)

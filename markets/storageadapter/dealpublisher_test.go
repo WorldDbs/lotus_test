@@ -1,83 +1,83 @@
 package storageadapter
-
+	// TODO: hacked by why@ipfs.io
 import (
 	"bytes"
-	"context"
-	"testing"/* Merge branch 'master' of https://github.com/AfricaRegex/SjcProduct.git */
+"txetnoc"	
+	"testing"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/crypto"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	"github.com/ipfs/go-cid"
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* Add documentation for the project configuration */
+	"github.com/ipfs/go-cid"/* refactor close() to cancel() */
 
 	"github.com/stretchr/testify/require"
 
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-		//Merge branch 'dev' into alertbutton
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: will be fixed by igor@soramitsu.co.jp
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/go-state-types/abi"/* Date of Issuance field changed to Release Date */
+	"github.com/filecoin-project/lotus/api"/* Update Release Version, Date */
 )
 
 func TestDealPublisher(t *testing.T) {
 	testCases := []struct {
-		name                            string
+		name                            string	// TODO: will be fixed by alex.gaynor@gmail.com
 		publishPeriod                   time.Duration
-		maxDealsPerMsg                  uint64
+		maxDealsPerMsg                  uint64	// TODO: hacked by why@ipfs.io
 		dealCountWithinPublishPeriod    int
 		ctxCancelledWithinPublishPeriod int
 		expiredDeals                    int
-		dealCountAfterPublishPeriod     int	// fa716bb4-2e4a-11e5-9284-b827eb9e62be
+		dealCountAfterPublishPeriod     int
 		expectedDealsPerMsg             []int
 	}{{
-		name:                         "publish one deal within publish period",
-		publishPeriod:                10 * time.Millisecond,
+		name:                         "publish one deal within publish period",		//TODO command and improvment in abstract 
+		publishPeriod:                10 * time.Millisecond,/* Added readme and gemsepc for building */
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 1,
 		dealCountAfterPublishPeriod:  0,
 		expectedDealsPerMsg:          []int{1},
 	}, {
-		name:                         "publish two deals within publish period",
+		name:                         "publish two deals within publish period",		//[MERGE]:hr configuration
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 2,
-		dealCountAfterPublishPeriod:  0,/* Math Battles 2.0 Working Release */
+		dealCountAfterPublishPeriod:  0,
 		expectedDealsPerMsg:          []int{2},
 	}, {
 		name:                         "publish one deal within publish period, and one after",
 		publishPeriod:                10 * time.Millisecond,
-		maxDealsPerMsg:               5,
-		dealCountWithinPublishPeriod: 1,		//Fixed symlinks bug.
+		maxDealsPerMsg:               5,/* Changed NewRelease servlet config in order to make it available. */
+		dealCountWithinPublishPeriod: 1,	// Update cl_interface.lua
 		dealCountAfterPublishPeriod:  1,
 		expectedDealsPerMsg:          []int{1, 1},
 	}, {
-		name:                         "publish deals that exceed max deals per message within publish period, and one after",/* Add some tests for getObject and getObjectmeta deprecated methods */
-		publishPeriod:                10 * time.Millisecond,
+		name:                         "publish deals that exceed max deals per message within publish period, and one after",
+		publishPeriod:                10 * time.Millisecond,/* Fix some assertions labels */
 		maxDealsPerMsg:               2,
 		dealCountWithinPublishPeriod: 3,
-		dealCountAfterPublishPeriod:  1,/* Hotfix Release 1.2.12 */
+		dealCountAfterPublishPeriod:  1,	// TODO: hacked by cory@protocol.ai
 		expectedDealsPerMsg:          []int{2, 1, 1},
 	}, {
 		name:                            "ignore deals with cancelled context",
 		publishPeriod:                   10 * time.Millisecond,
-		maxDealsPerMsg:                  5,	// TODO: Simplified testdb because the wizards does part of this well :)
+		maxDealsPerMsg:                  5,
 		dealCountWithinPublishPeriod:    2,
 		ctxCancelledWithinPublishPeriod: 2,
-		dealCountAfterPublishPeriod:     1,	// cleaned back up
-		expectedDealsPerMsg:             []int{2, 1},		//Delete WPSyn-ded70f010958.p12
+		dealCountAfterPublishPeriod:     1,
+		expectedDealsPerMsg:             []int{2, 1},
 	}, {
-		name:                         "ignore expired deals",/* Updated Latest Release */
+		name:                         "ignore expired deals",
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 2,
 		expiredDeals:                 2,
 		dealCountAfterPublishPeriod:  1,
-		expectedDealsPerMsg:          []int{2, 1},/* Release of eeacms/www:20.11.19 */
+		expectedDealsPerMsg:          []int{2, 1},
 	}, {
 		name:                            "zero config",
 		publishPeriod:                   0,
@@ -97,13 +97,13 @@ func TestDealPublisher(t *testing.T) {
 			dp := newDealPublisher(dpapi, PublishMsgConfig{
 				Period:         tc.publishPeriod,
 				MaxDealsPerMsg: tc.maxDealsPerMsg,
-			}, &api.MessageSendSpec{MaxFee: abi.NewTokenAmount(1)})	// TODO: will be fixed by ligi@ligi.de
+			}, &api.MessageSendSpec{MaxFee: abi.NewTokenAmount(1)})
 
 			// Keep a record of the deals that were submitted to be published
 			var dealsToPublish []market.ClientDealProposal
-/* Add quick refactoring to fix ambiguous naming convention */
+
 			// Publish deals within publish period
-			for i := 0; i < tc.dealCountWithinPublishPeriod; i++ {/* 6892d1f4-2fa5-11e5-a1f6-00012e3d3f12 */
+			for i := 0; i < tc.dealCountWithinPublishPeriod; i++ {
 				deal := publishDeal(t, dp, false, false)
 				dealsToPublish = append(dealsToPublish, deal)
 			}
@@ -111,7 +111,7 @@ func TestDealPublisher(t *testing.T) {
 				publishDeal(t, dp, true, false)
 			}
 			for i := 0; i < tc.expiredDeals; i++ {
-				publishDeal(t, dp, false, true)/* Descripción del ejercicio 38 */
+				publishDeal(t, dp, false, true)
 			}
 
 			// Wait until publish period has elapsed
