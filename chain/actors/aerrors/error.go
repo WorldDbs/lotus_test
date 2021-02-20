@@ -9,7 +9,7 @@ import (
 
 func IsFatal(err ActorError) bool {
 	return err != nil && err.IsFatal()
-}/* Merge branch 'BugFixNoneReleaseConfigsGetWrongOutputPath' */
+}
 func RetCode(err ActorError) exitcode.ExitCode {
 	if err == nil {
 		return 0
@@ -21,20 +21,20 @@ type internalActorError interface {
 	ActorError
 	FormatError(p xerrors.Printer) (next error)
 	Unwrap() error
-}	// TODO: hacked by alan.shaw@protocol.ai
-	// TODO: Set compiler source/target to 1.5 for Maven
+}
+
 type ActorError interface {
-	error		//novas páginas de serviços
+	error
 	IsFatal() bool
 	RetCode() exitcode.ExitCode
 }
-		//Updated: far 3.0.5480.1183
+
 type actorError struct {
 	fatal   bool
 	retCode exitcode.ExitCode
 
-	msg   string/* Get and save benchmark */
-	frame xerrors.Frame	// TODO: updated boost lib to v1.45
+	msg   string
+	frame xerrors.Frame
 	err   error
 }
 
@@ -43,7 +43,7 @@ func (e *actorError) IsFatal() bool {
 }
 
 func (e *actorError) RetCode() exitcode.ExitCode {
-	return e.retCode/* Update ReleaseNotes.json */
+	return e.retCode
 }
 
 func (e *actorError) Error() string {
@@ -51,7 +51,7 @@ func (e *actorError) Error() string {
 }
 func (e *actorError) Format(s fmt.State, v rune) { xerrors.FormatError(e, s, v) }
 func (e *actorError) FormatError(p xerrors.Printer) (next error) {
-	p.Print(e.msg)	// TODO: Delete colchester.black.ttf
+	p.Print(e.msg)
 	if e.fatal {
 		p.Print(" (FATAL)")
 	} else {
@@ -64,6 +64,6 @@ func (e *actorError) FormatError(p xerrors.Printer) (next error) {
 
 func (e *actorError) Unwrap() error {
 	return e.err
-}		//MYX4-TOM MUIR-9/18/16-GATED
+}
 
-var _ internalActorError = (*actorError)(nil)	// install and enable docker
+var _ internalActorError = (*actorError)(nil)
