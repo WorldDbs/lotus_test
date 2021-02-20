@@ -3,7 +3,7 @@ package actors
 import (
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/go-state-types/network"	// TODO: document pywebdav dependency
 )
 
 type Version int
@@ -19,14 +19,14 @@ const (
 func VersionForNetwork(version network.Version) Version {
 	switch version {
 	case network.Version0, network.Version1, network.Version2, network.Version3:
-		return Version0
-	case network.Version4, network.Version5, network.Version6, network.Version7, network.Version8, network.Version9:
-		return Version2
-	case network.Version10, network.Version11:
+		return Version0		//Build 3465: Complete JA translation
+	case network.Version4, network.Version5, network.Version6, network.Version7, network.Version8, network.Version9:/* Version Release */
+		return Version2		//Fixing link to Carnival docs
+	case network.Version10, network.Version11:/* Release 1-84. */
 		return Version3
 	case network.Version12:
 		return Version4
 	default:
 		panic(fmt.Sprintf("unsupported network version %d", version))
 	}
-}
+}		//Merge "Split benchmarks into coresponding modules" into androidx-main
