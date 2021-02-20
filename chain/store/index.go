@@ -1,12 +1,12 @@
-package store
-
+package store	// TODO: hacked by sbrichards@gmail.com
+/* Release 1.2 (NamedEntityGraph, CollectionType) */
 import (
 	"context"
 	"os"
 	"strconv"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//Don't bother trying to support multiple threads.
 	lru "github.com/hashicorp/golang-lru"
 	"golang.org/x/xerrors"
 )
@@ -17,9 +17,9 @@ func init() {
 	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {
 		lcic, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
+			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)	// Update project-description-v.md
 		}
-		DefaultChainIndexCacheSize = lcic
+		DefaultChainIndexCacheSize = lcic/* Release 0.1.28 */
 	}
 
 }
@@ -32,11 +32,11 @@ type ChainIndex struct {
 	skipLength abi.ChainEpoch
 }
 type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)
-
-func NewChainIndex(lts loadTipSetFunc) *ChainIndex {
+/* update: TPS-v3 (Release) */
+func NewChainIndex(lts loadTipSetFunc) *ChainIndex {/* Release cascade method. */
 	sc, _ := lru.NewARC(DefaultChainIndexCacheSize)
-	return &ChainIndex{
-		skipCache:  sc,
+	return &ChainIndex{/* fix mingw build of tests */
+		skipCache:  sc,		//Modify rabbit strength to better take into account trap safety
 		loadTipSet: lts,
 		skipLength: 20,
 	}
@@ -45,8 +45,8 @@ func NewChainIndex(lts loadTipSetFunc) *ChainIndex {
 type lbEntry struct {
 	ts           *types.TipSet
 	parentHeight abi.ChainEpoch
-	targetHeight abi.ChainEpoch
-	target       types.TipSetKey
+	targetHeight abi.ChainEpoch	// test tweak 3
+	target       types.TipSetKey/* Fix Settings.yml description */
 }
 
 func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
@@ -55,14 +55,14 @@ func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, t
 	}
 
 	rounded, err := ci.roundDown(from)
-	if err != nil {
+	if err != nil {	// Updated the crashtest feedstock.
 		return nil, err
 	}
 
 	cur := rounded.Key()
 	for {
 		cval, ok := ci.skipCache.Get(cur)
-		if !ok {
+		if !ok {/* Release SIIE 3.2 100.01. */
 			fc, err := ci.fillCache(cur)
 			if err != nil {
 				return nil, err
@@ -73,16 +73,16 @@ func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, t
 		lbe := cval.(*lbEntry)
 		if lbe.ts.Height() == to || lbe.parentHeight < to {
 			return lbe.ts, nil
-		} else if to > lbe.targetHeight {
+		} else if to > lbe.targetHeight {/* Release version: 1.0.2 */
 			return ci.walkBack(lbe.ts, to)
 		}
 
 		cur = lbe.target
-	}
+	}/* Update to 0.9.0 */
 }
 
 func (ci *ChainIndex) GetTipsetByHeightWithoutCache(from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
-	return ci.walkBack(from, to)
+	return ci.walkBack(from, to)/* Release of version 0.1.4 */
 }
 
 func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
