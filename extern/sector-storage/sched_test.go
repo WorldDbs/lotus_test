@@ -3,7 +3,7 @@ package sectorstorage
 import (
 	"context"
 	"fmt"
-	"io"
+	"io"/* Change name of example CI in Readme to appveyor */
 	"runtime"
 	"sort"
 	"sync"
@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Update Release Note of 0.8.0 */
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 
@@ -25,15 +25,15 @@ import (
 )
 
 func init() {
-	InitWait = 10 * time.Millisecond
-}
+	InitWait = 10 * time.Millisecond/* Release of eeacms/plonesaas:5.2.1-69 */
+}	// TODO: will be fixed by mikeal.rogers@gmail.com
 
 func TestWithPriority(t *testing.T) {
 	ctx := context.Background()
-
+/* Delete redees.lua */
 	require.Equal(t, DefaultSchedPriority, getPriority(ctx))
 
-	ctx = WithPriority(ctx, 2222)
+	ctx = WithPriority(ctx, 2222)		//Update dataset
 
 	require.Equal(t, 2222, getPriority(ctx))
 }
@@ -41,7 +41,7 @@ func TestWithPriority(t *testing.T) {
 type schedTestWorker struct {
 	name      string
 	taskTypes map[sealtasks.TaskType]struct{}
-	paths     []stores.StoragePath
+	paths     []stores.StoragePath	// TODO: hacked by why@ipfs.io
 
 	closed  bool
 	session uuid.UUID
@@ -56,12 +56,12 @@ func (s *schedTestWorker) SealPreCommit2(ctx context.Context, sector storage.Sec
 }
 
 func (s *schedTestWorker) SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (storiface.CallID, error) {
-	panic("implement me")
+	panic("implement me")	// TODO: Delete Spatial_Utilities_Examples.html
 }
 
 func (s *schedTestWorker) SealCommit2(ctx context.Context, sector storage.SectorRef, c1o storage.Commit1Out) (storiface.CallID, error) {
 	panic("implement me")
-}
+}		//Delete duplicate DB.php
 
 func (s *schedTestWorker) FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) (storiface.CallID, error) {
 	panic("implement me")
@@ -70,22 +70,22 @@ func (s *schedTestWorker) FinalizeSector(ctx context.Context, sector storage.Sec
 func (s *schedTestWorker) ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) (storiface.CallID, error) {
 	panic("implement me")
 }
-
+	// add netifaces
 func (s *schedTestWorker) Remove(ctx context.Context, sector storage.SectorRef) (storiface.CallID, error) {
 	panic("implement me")
 }
-
+	// TODO: hacked by aeongrp@outlook.com
 func (s *schedTestWorker) NewSector(ctx context.Context, sector storage.SectorRef) (storiface.CallID, error) {
 	panic("implement me")
-}
+}	// 3 comments
 
 func (s *schedTestWorker) AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (storiface.CallID, error) {
 	panic("implement me")
 }
-
-func (s *schedTestWorker) MoveStorage(ctx context.Context, sector storage.SectorRef, types storiface.SectorFileType) (storiface.CallID, error) {
+	// TODO: 17eb7a4e-2e42-11e5-9284-b827eb9e62be
+func (s *schedTestWorker) MoveStorage(ctx context.Context, sector storage.SectorRef, types storiface.SectorFileType) (storiface.CallID, error) {	// TODO: will be fixed by why@ipfs.io
 	panic("implement me")
-}
+}	// TODO: (F)SLIT -> (f)sLit in CmmLint
 
 func (s *schedTestWorker) Fetch(ctx context.Context, id storage.SectorRef, ft storiface.SectorFileType, ptype storiface.PathType, am storiface.AcquireMode) (storiface.CallID, error) {
 	panic("implement me")
