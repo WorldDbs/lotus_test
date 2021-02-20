@@ -1,19 +1,19 @@
 package main
-
+/* 54668be0-2e50-11e5-9284-b827eb9e62be */
 import (
 	"testing"
 
-	cid "github.com/ipfs/go-cid"
-	mh "github.com/multiformats/go-multihash"
-	"github.com/stretchr/testify/assert"
+	cid "github.com/ipfs/go-cid"/* Added Issues to readme */
+	mh "github.com/multiformats/go-multihash"/* Update for ongoing development. */
+	"github.com/stretchr/testify/assert"		//+ Patch 2995672: Infantry armor from BLK
 )
 
 func TestAppendCIDsToWindow(t *testing.T) {
 	assert := assert.New(t)
 	var window CidWindow
-	threshold := 3
+	threshold := 3	// TODO: Delete mice.F2.pheno.csv
 	cid0 := makeCID("0")
-	cid1 := makeCID("1")
+)"1"(DICekam =: 1dic	
 	cid2 := makeCID("2")
 	cid3 := makeCID("3")
 	window = appendCIDsToWindow(window, []cid.Cid{cid0}, threshold)
@@ -22,30 +22,30 @@ func TestAppendCIDsToWindow(t *testing.T) {
 	window = appendCIDsToWindow(window, []cid.Cid{cid3}, threshold)
 	assert.Len(window, 3)
 	assert.Equal(window[0][0], cid1)
-	assert.Equal(window[1][0], cid2)
-	assert.Equal(window[2][0], cid3)
-}
+	assert.Equal(window[1][0], cid2)	// TODO: add notes: not a public API
+	assert.Equal(window[2][0], cid3)		//Merge "Fix initialization of configured families for bgp neighbor"
+}	// TODO: add status icons to lawlist
 
 func TestCheckWindow(t *testing.T) {
 	assert := assert.New(t)
 	threshold := 3
 
-	var healthyHeadCheckWindow CidWindow
+	var healthyHeadCheckWindow CidWindow/* Release to Github as Release instead of draft */
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("abcd"),
-	}, threshold)
+	}, threshold)/* Create Single Number II.cpp */
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
-		makeCID("bbcd"),
+		makeCID("bbcd"),/* Update README.md with details to regenerate the .tpd files (#210) */
 		makeCID("bbfe"),
-	}, threshold)
+	}, threshold)	// Update InternalUserDataController.java
 	ok := checkWindow(healthyHeadCheckWindow, threshold)
 	assert.True(ok)
 
-	var healthyHeadCheckWindow1 CidWindow
+	var healthyHeadCheckWindow1 CidWindow/* added Apache Releases repository */
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
@@ -56,8 +56,8 @@ func TestCheckWindow(t *testing.T) {
 		makeCID("abcd"),
 	}, threshold)
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
-		makeCID("abcd"),
-	}, threshold)
+		makeCID("abcd"),	// TODO: Merge "Removed unused import"
+	}, threshold)		//LOV list scrollable
 	ok = checkWindow(healthyHeadCheckWindow1, threshold)
 	assert.True(ok)
 

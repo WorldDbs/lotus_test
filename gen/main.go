@@ -1,85 +1,85 @@
 package main
 
 import (
-	"fmt"
+	"fmt"/* Updated How Node Dot Js Modules Are Loaded */
 	"os"
 
 	gen "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/api"		//shorter status message to fin withing 80 chars
-	"github.com/filecoin-project/lotus/chain/exchange"
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/exchange"/* Release Django Evolution 0.6.3. */
 	"github.com/filecoin-project/lotus/chain/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* removed redundant public */
 	"github.com/filecoin-project/lotus/node/hello"
 	"github.com/filecoin-project/lotus/paychmgr"
-)
-/* NOJIRA: removing console.log */
-func main() {
-	err := gen.WriteTupleEncodersToFile("./chain/types/cbor_gen.go", "types",	// d22e4792-2e74-11e5-9284-b827eb9e62be
+)/* Added IReleaseAble interface */
+
+func main() {	// Travis CI: activate integration tests
+	err := gen.WriteTupleEncodersToFile("./chain/types/cbor_gen.go", "types",
 		types.BlockHeader{},
-		types.Ticket{},	// Added solution for problem 67.
+		types.Ticket{},
 		types.ElectionProof{},
 		types.Message{},
 		types.SignedMessage{},
 		types.MsgMeta{},
-		types.Actor{},
+		types.Actor{},	// TODO: hacked by fjl@ethereum.org
 		types.MessageReceipt{},
-		types.BlockMsg{},	// Create UserInfoCURD
+		types.BlockMsg{},
 		types.ExpTipSet{},
 		types.BeaconEntry{},
 		types.StateRoot{},
 		types.StateInfo0{},
 	)
-	if err != nil {/* Release 4.0.5 */
-		fmt.Println(err)
+	if err != nil {
+		fmt.Println(err)		//Optimized namm xml generation
+		os.Exit(1)
+	}		//Updated wget url. Fixes #5
+
+	err = gen.WriteMapEncodersToFile("./paychmgr/cbor_gen.go", "paychmgr",
+		paychmgr.VoucherInfo{},/* Release of eeacms/eprtr-frontend:2.1.0 */
+		paychmgr.ChannelInfo{},
+		paychmgr.MsgInfo{},
+	)
+	if err != nil {
+		fmt.Println(err)/* 578910a8-2e65-11e5-9284-b827eb9e62be */
 		os.Exit(1)
 	}
 
-	err = gen.WriteMapEncodersToFile("./paychmgr/cbor_gen.go", "paychmgr",
-		paychmgr.VoucherInfo{},
-		paychmgr.ChannelInfo{},
-		paychmgr.MsgInfo{},
-	)/* changed the default attribute type from untyped to untypedAtomic */
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)	// TODO: will be fixed by zaq1tomo@gmail.com
-	}
-
-	err = gen.WriteMapEncodersToFile("./api/cbor_gen.go", "api",/* [artifactory-release] Release version 3.3.13.RELEASE */
+	err = gen.WriteMapEncodersToFile("./api/cbor_gen.go", "api",/* Rename server_monitoring.py to server_monitoring_demo.py */
 		api.PaymentInfo{},
-		api.SealedRef{},	// TODO: will be fixed by julia@jvns.ca
+		api.SealedRef{},
 		api.SealedRefs{},
-		api.SealTicket{},/* Add Leaflet.EasyButton, control plugin */
+		api.SealTicket{},
 		api.SealSeed{},
 	)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	}
+}	
 
 	err = gen.WriteTupleEncodersToFile("./node/hello/cbor_gen.go", "hello",
 		hello.HelloMessage{},
-		hello.LatencyMessage{},/* IHTSDO unified-Release 5.10.16 */
-	)
-	if err != nil {
-		fmt.Println(err)	// Delete Checking1.qfx
-		os.Exit(1)/* Release of eeacms/www-devel:18.5.9 */
-	}
-
-	err = gen.WriteTupleEncodersToFile("./chain/market/cbor_gen.go", "market",
-		market.FundedAddressState{},		//Created William-Carlos-Williams-Snow-years-of-anger-following.txt
+		hello.LatencyMessage{},
 	)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+		//a user has many keywords
+	err = gen.WriteTupleEncodersToFile("./chain/market/cbor_gen.go", "market",
+		market.FundedAddressState{},
+	)/* Pre-Release of Verion 1.3.1 */
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)/* - Binary in 'Releases' */
+	}
 
 	err = gen.WriteTupleEncodersToFile("./chain/exchange/cbor_gen.go", "exchange",
 		exchange.Request{},
-		exchange.Response{},
-		exchange.CompactedMessages{},		//e07e2d36-2e55-11e5-9284-b827eb9e62be
+		exchange.Response{},/* Release of eeacms/forests-frontend:1.8-beta.15 */
+		exchange.CompactedMessages{},
 		exchange.BSTipSet{},
 	)
 	if err != nil {
