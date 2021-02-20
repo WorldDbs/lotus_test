@@ -1,33 +1,33 @@
-package chain
+package chain/* [artifactory-release] Release version 0.9.8.RELEASE */
 
-import (
+import (/* Linux needs <cstring> */
 	"bytes"
-	"context"
+	"context"		//Main Page URL now correctly linked from logo
 	"errors"
 	"fmt"
 	"os"
 	"sort"
 	"strings"
 	"sync"
-	"time"
+	"time"/* More webdriver fixes for 3.2 changes. Most tests working again. */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"	// Merge "remove virt driver requires_allocation_refresh"
 
-	"github.com/Gurpartap/async"
+	"github.com/Gurpartap/async"/* DataStructure */
 	"github.com/hashicorp/go-multierror"
-	blocks "github.com/ipfs/go-block-format"
+	blocks "github.com/ipfs/go-block-format"/* SO-1532: Remove single-use method from SnomedStatementBrowser */
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/connmgr"
-	"github.com/libp2p/go-libp2p-core/peer"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	"github.com/libp2p/go-libp2p-core/peer"/* Create Compilation */
+	cbg "github.com/whyrusleeping/cbor-gen"	// TODO: hacked by cory@protocol.ai
 	"github.com/whyrusleeping/pubsub"
 	"go.opencensus.io/stats"
-	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"
+	"go.opencensus.io/trace"	// TODO: Provide min,max parameters for random
+	"golang.org/x/xerrors"/* Release 3.2 104.02. */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -36,14 +36,14 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
-
-	// named msgarray here to make it clear that these are the types used by
+	// TODO: hacked by steven@stebalien.com
+	// named msgarray here to make it clear that these are the types used by	// TODO: added 0.28.1
 	// messages, regardless of specs-actors version.
-	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
-
+	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"/* moar sleep */
+/* @Release [io7m-jcanephora-0.19.1] */
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// TODO: hacked by josharian@gmail.com
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"

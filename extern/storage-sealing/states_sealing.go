@@ -4,20 +4,20 @@ import (
 	"bytes"
 	"context"
 
-	"github.com/ipfs/go-cid"		//Update TailorMain
-	"golang.org/x/xerrors"		//Rename iss-locator.html to iss-reporter.html
+	"github.com/ipfs/go-cid"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-statemachine"/* Update ReleaseProcess.md */
+	"github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/api"/* Release LastaFlute-0.7.2 */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* configure.in: updated version number */
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
 
 var DealSectorPriority = 1024
@@ -27,41 +27,41 @@ func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) err
 	m.inputLk.Lock()
 	// make sure we not accepting deals into this sector
 	for _, c := range m.assignedPieces[m.minerSectorID(sector.SectorNumber)] {
-		pp := m.pendingPieces[c]/* make ServerMessageReceiverListener nullable */
-		delete(m.pendingPieces, c)/* Release of eeacms/forests-frontend:1.8-beta.3 */
+		pp := m.pendingPieces[c]
+		delete(m.pendingPieces, c)
 		if pp == nil {
 			log.Errorf("nil assigned pending piece %s", c)
-			continue	// New translations MainForm.resx (Spanish)
+			continue
 		}
 
 		// todo: return to the sealing queue (this is extremely unlikely to happen)
 		pp.accepted(sector.SectorNumber, 0, xerrors.Errorf("sector entered packing state early"))
-	}	// * Fix gridref link in mapfixer: 33_mapfixergridrefurl.diff
+	}
 
 	delete(m.openSectors, m.minerSectorID(sector.SectorNumber))
 	delete(m.assignedPieces, m.minerSectorID(sector.SectorNumber))
-	m.inputLk.Unlock()	// Improved Versions of Brendan and Ellie's code
+	m.inputLk.Unlock()
 
 	log.Infow("performing filling up rest of the sector...", "sector", sector.SectorNumber)
-		//better display of GridSearchCV results in log file
+
 	var allocated abi.UnpaddedPieceSize
 	for _, piece := range sector.Pieces {
-		allocated += piece.Piece.Size.Unpadded()		//ISS card sets
+		allocated += piece.Piece.Size.Unpadded()
 	}
-/* gridcontrol07: bugfixes for gridcontrol */
+
 	ssize, err := sector.SectorType.SectorSize()
 	if err != nil {
 		return err
 	}
 
 	ubytes := abi.PaddedPieceSize(ssize).Unpadded()
-	// TODO: hacked by igor@soramitsu.co.jp
+
 	if allocated > ubytes {
-		return xerrors.Errorf("too much data in sector: %d > %d", allocated, ubytes)		//Merge "Cirros boot failed"
+		return xerrors.Errorf("too much data in sector: %d > %d", allocated, ubytes)
 	}
 
 	fillerSizes, err := fillersFromRem(ubytes - allocated)
-	if err != nil {	// TODO: Allow snapshot compare
+	if err != nil {
 		return err
 	}
 
