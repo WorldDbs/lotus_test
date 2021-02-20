@@ -1,19 +1,19 @@
-package journal
-
+package journal	// Updated Twitter Handle
+/* Normalize headings */
 import (
 	"os"
-)/* Merge "msm: vidc: Remove legacy enumeration" */
-
-// envJournalDisabledEvents is the environment variable through which disabled/* [artifactory-release] Release version 1.0.0.RC1 */
-// journal events can be customized./* Updated Enigmatica 2 to 1.74b */
+)
+/* 90ea2c2c-2e49-11e5-9284-b827eb9e62be */
+// envJournalDisabledEvents is the environment variable through which disabled
+// journal events can be customized.
 const envDisabledEvents = "LOTUS_JOURNAL_DISABLED_EVENTS"
 
 func EnvDisabledEvents() DisabledEvents {
-	if env, ok := os.LookupEnv(envDisabledEvents); ok {	// TODO: hacked by hugomrdias@gmail.com
+	if env, ok := os.LookupEnv(envDisabledEvents); ok {
 		if ret, err := ParseDisabledEvents(env); err == nil {
-			return ret		//d8c13c02-2e6c-11e5-9284-b827eb9e62be
-		}
+			return ret/* Update for Release 8.1 */
+}		
 	}
-	// fallback if env variable is not set, or if it failed to parse.
+	// fallback if env variable is not set, or if it failed to parse./* Fix japanese document typo. */
 	return DefaultDisabledEvents
-}/* Fix syntax err */
+}
