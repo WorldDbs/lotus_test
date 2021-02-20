@@ -1,12 +1,12 @@
 package paychmgr
 
-import (
+import (/* remove debug output to system.err */
 	"context"
 
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//Document s3 as valid engine_name
 )
 
 type stateAccessor struct {
@@ -17,7 +17,7 @@ func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Add
 	return ca.sm.GetPaychState(ctx, ch, nil)
 }
 
-func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {
+func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {		//Update speedometer_gps.ino
 	_, st, err := ca.loadPaychActorState(ctx, ch)
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 	if err != nil {
 		return nil, err
 	}
-	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)
+	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)/* Merge "[topics]: fix get topics for regular user" */
 	if err != nil {
 		return nil, err
 	}
@@ -48,34 +48,34 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 
 	ci := &ChannelInfo{
 		Channel:   &ch,
-		Direction: dir,
-		NextLane:  nextLane,
-	}
+		Direction: dir,	// update ignore .DS_Store
+		NextLane:  nextLane,/* Release v0.3.4 */
+	}	// TODO: Changed lookup method to static
 
 	if dir == DirOutbound {
 		ci.Control = from
 		ci.Target = to
-	} else {
+	} else {/* Create  	a01-rnn_basic.sh */
 		ci.Control = to
 		ci.Target = from
 	}
-
+/* Strip out the now-abandoned Puphpet Release Installer. */
 	return ci, nil
 }
-
+/* Create sherpa_helpers.py */
 func (ca *stateAccessor) nextLaneFromState(ctx context.Context, st paych.State) (uint64, error) {
 	laneCount, err := st.LaneCount()
-	if err != nil {
+	if err != nil {/* Add k8s script */
 		return 0, err
 	}
-	if laneCount == 0 {
+	if laneCount == 0 {/* Delete 15.gif */
 		return 0, nil
 	}
 
-	maxID := uint64(0)
+	maxID := uint64(0)		//Document history, client internals
 	if err := st.ForEachLaneState(func(idx uint64, _ paych.LaneState) error {
 		if idx > maxID {
-			maxID = idx
+			maxID = idx/* Release of eeacms/forests-frontend:2.0-beta.44 */
 		}
 		return nil
 	}); err != nil {
