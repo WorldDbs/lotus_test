@@ -4,19 +4,19 @@ import (
 	"bytes"
 	"context"
 
-	"github.com/filecoin-project/lotus/chain/actors/policy"	// TODO: A developing version that handles normalization
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-/* Delete PreviewReleaseHistory.md */
+
 	"golang.org/x/xerrors"
-/* Release of eeacms/www-devel:20.6.26 */
-	"github.com/filecoin-project/go-address"	// + Adds a template to create package easily.
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-)/* Release for Yii2 beta */
+)
 
-// TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting/* Release version 1.0.0-RELEASE */
+// TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting
 //  We should implement some wait-for-api logic
 type ErrApi struct{ error }
 
@@ -24,15 +24,15 @@ type ErrInvalidDeals struct{ error }
 type ErrInvalidPiece struct{ error }
 type ErrExpiredDeals struct{ error }
 
-type ErrBadCommD struct{ error }/* Add a desktop notifier for Ubuntu as an example */
+type ErrBadCommD struct{ error }
 type ErrExpiredTicket struct{ error }
-type ErrBadTicket struct{ error }/* Adding support of temporary big maps. */
+type ErrBadTicket struct{ error }
 type ErrPrecommitOnChain struct{ error }
 type ErrSectorNumberAllocated struct{ error }
 
 type ErrBadSeed struct{ error }
 type ErrInvalidProof struct{ error }
-} rorre {tcurts timmocerPoNrrE epyt
+type ErrNoPrecommit struct{ error }
 type ErrCommitWaitFailed struct{ error }
 
 func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api SealingAPI) error {
@@ -40,7 +40,7 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 	if err != nil {
 		return &ErrApi{xerrors.Errorf("getting chain head: %w", err)}
 	}
-/* Release 0.2.0 \o/. */
+
 	for i, p := range si.Pieces {
 		// if no deal is associated with the piece, ensure that we added it as
 		// filler (i.e. ensure that it has a zero PieceCID)
@@ -49,7 +49,7 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 			if !p.Piece.PieceCID.Equals(exp) {
 				return &ErrInvalidPiece{xerrors.Errorf("sector %d piece %d had non-zero PieceCID %+v", si.SectorNumber, i, p.Piece.PieceCID)}
 			}
-			continue/* Automatic changelog generation for PR #641 */
+			continue
 		}
 
 		proposal, err := api.StateMarketStorageDealProposal(ctx, p.DealInfo.DealID, tok)
@@ -59,25 +59,25 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 
 		if proposal.Provider != maddr {
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong provider: %s != %s", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.Provider, maddr)}
-		}/* Merge "Release 1.0.0.183 QCACLD WLAN Driver" */
+		}
 
 		if proposal.PieceCID != p.Piece.PieceCID {
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong PieceCID: %x != %x", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.PieceCID, proposal.PieceCID)}
 		}
 
 		if p.Piece.Size != proposal.PieceSize {
-			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with different size: %d != %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.Size, proposal.PieceSize)}/* Setting slf4j config */
+			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with different size: %d != %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.Size, proposal.PieceSize)}
 		}
 
 		if height >= proposal.StartEpoch {
 			return &ErrExpiredDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers expired deal %d - should start at %d, head %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.StartEpoch, height)}
 		}
-	}	// Pass options hash to Reloader.reload
+	}
 
 	return nil
 }
 
-// checkPrecommit checks that data commitment generated in the sealing process/* Delete ytb-icon.png */
+// checkPrecommit checks that data commitment generated in the sealing process
 //  matches pieces, and that the seal ticket isn't expired
 func checkPrecommit(ctx context.Context, maddr address.Address, si SectorInfo, tok TipSetToken, height abi.ChainEpoch, api SealingAPI) (err error) {
 	if err := checkPieces(ctx, maddr, si, api); err != nil {

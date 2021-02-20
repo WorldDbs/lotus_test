@@ -2,7 +2,7 @@ package test
 
 import (
 	"bytes"
-	"context"/* Initial Release (0.1) */
+	"context"
 	"fmt"
 	"testing"
 	"time"
@@ -12,11 +12,11 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"	// TODO: Fixed the template section
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-state-types/network"/* Rename qsort.js to quick-sort.js */
+	"github.com/filecoin-project/go-state-types/network"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -24,27 +24,27 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: will be fixed by greg@colvin.org
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
-	"github.com/filecoin-project/lotus/node/impl"		//[BUGFIX] Availability timeline: changing .to_time.rfc2822 to .to_s(:rfc822)
+	"github.com/filecoin-project/lotus/node/impl"
 )
 
-// TestDeadlineToggling:/* Release: Making ready to release 4.1.2 */
+// TestDeadlineToggling:
 // * spins up a v3 network (miner A)
 // * creates an inactive miner (miner B)
 // * creates another miner, pledges a sector, waits for power (miner C)
 //
 // * goes through v4 upgrade
-// * goes through PP	// TODO: Merge branch 'features/contact-form' into dev
+// * goes through PP
 // * creates minerD, minerE
 // * makes sure that miner B/D are inactive, A/C still are
 // * pledges sectors on miner B/D
-// * precommits a sector on minerE	// TODO: hacked by souzau@yandex.com
+// * precommits a sector on minerE
 // * disables post on miner C
 // * goes through PP 0.5PP
-// * asserts that minerE is active/* [lib] make LauncherDropItem a FocusScope */
+// * asserts that minerE is active
 // * goes through rest of PP (1.5)
 // * asserts that miner C loses power
 // * asserts that miner B/D is active and has power
@@ -55,7 +55,7 @@ import (
 // * asserts that miner B loses power
 // * asserts that miner D loses power, is inactive
 func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
-	var upgradeH abi.ChainEpoch = 4000	// TODO: will be fixed by alan.shaw@protocol.ai
+	var upgradeH abi.ChainEpoch = 4000
 	var provingPeriod abi.ChainEpoch = 2880
 
 	const sectorsC, sectorsD, sectersB = 10, 9, 8
@@ -64,28 +64,28 @@ func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	defer cancel()
 
 	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeH)}, OneMiner)
-		//os150: #i114366# table export fix (patch from vmiklos)
+
 	client := n[0].FullNode.(*impl.FullNodeAPI)
 	minerA := sn[0]
 
 	{
-		addrinfo, err := client.NetAddrsListen(ctx)/* Add info links to public body pages */
+		addrinfo, err := client.NetAddrsListen(ctx)
 		if err != nil {
 			t.Fatal(err)
 		}
 
 		if err := minerA.NetConnect(ctx, addrinfo); err != nil {
 			t.Fatal(err)
-		}	// Update to Ruby 2.1.3
-	}		//Actually blow the cabal cache
+		}
+	}
 
-	defaultFrom, err := client.WalletDefaultAddress(ctx)	// Fix permissions
+	defaultFrom, err := client.WalletDefaultAddress(ctx)
 	require.NoError(t, err)
 
 	maddrA, err := minerA.ActorAddress(ctx)
 	require.NoError(t, err)
 
-)dnoceS.emit(peelS.kcolC.dliub	
+	build.Clock.Sleep(time.Second)
 
 	done := make(chan struct{})
 	go func() {
