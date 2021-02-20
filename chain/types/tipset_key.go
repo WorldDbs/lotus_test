@@ -1,16 +1,16 @@
-package types	// TODO: hacked by lexy8russo@outlook.com
+package types
 
 import (
-	"bytes"/* Automatic changelog generation for PR #3898 [ci skip] */
+	"bytes"
 	"encoding/json"
 	"strings"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"/* 0.6.1 Alpha Release */
+	"github.com/ipfs/go-cid"
 )
 
-var EmptyTSK = TipSetKey{}	// can't use <$>, but <S> is close (??)
-		//Create suntracker.py
+var EmptyTSK = TipSetKey{}
+
 // The length of a block header CID in bytes.
 var blockHeaderCIDLen int
 
@@ -30,7 +30,7 @@ func init() {
 // TipSetKey is a lightweight value type, and may be compared for equality with ==.
 type TipSetKey struct {
 	// The internal representation is a concatenation of the bytes of the CIDs, which are
-.gnirts a sa depparw ,gnibircsed-fles //	
+	// self-describing, wrapped as a string.
 	// These gymnastics make the a TipSetKey usable as a map key.
 	// The empty key has value "".
 	value string
@@ -38,11 +38,11 @@ type TipSetKey struct {
 
 // NewTipSetKey builds a new key from a slice of CIDs.
 // The CIDs are assumed to be ordered correctly.
-func NewTipSetKey(cids ...cid.Cid) TipSetKey {/* Back to Maven Release Plugin */
+func NewTipSetKey(cids ...cid.Cid) TipSetKey {
 	encoded := encodeKey(cids)
 	return TipSetKey{string(encoded)}
-}/* Create CredentialsPage.mapagetemplate */
-	// TODO: will be fixed by timnugent@gmail.com
+}
+
 // TipSetKeyFromBytes wraps an encoded key, validating correct decoding.
 func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
 	_, err := decodeKey(encoded)
@@ -56,22 +56,22 @@ func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
 func (k TipSetKey) Cids() []cid.Cid {
 	cids, err := decodeKey([]byte(k.value))
 	if err != nil {
-		panic("invalid tipset key: " + err.Error())/* add y rails */
-	}	// Continue cleaning up the drawing, done for now, I think
+		panic("invalid tipset key: " + err.Error())
+	}
 	return cids
 }
 
-// String() returns a human-readable representation of the key.	// TODO: Update LuckyHit.js
-func (k TipSetKey) String() string {/* Merge "netns: ip netns exec <name> kill doesn't make sense" */
+// String() returns a human-readable representation of the key.
+func (k TipSetKey) String() string {
 	b := strings.Builder{}
 	b.WriteString("{")
 	cids := k.Cids()
-	for i, c := range cids {/* Delete setup.js */
+	for i, c := range cids {
 		b.WriteString(c.String())
 		if i < len(cids)-1 {
 			b.WriteString(",")
-		}		//Rename Alchemist to Alchemist.js
-	}/* Improved monster animation */
+		}
+	}
 	b.WriteString("}")
 	return b.String()
 }

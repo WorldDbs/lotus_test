@@ -6,13 +6,13 @@ import (
 	"errors"
 	"sync"
 	"sync/atomic"
-	"time"
+	"time"	// 808ed512-2e58-11e5-9284-b827eb9e62be
 
 	"go.uber.org/multierr"
-	"golang.org/x/xerrors"
-
+	"golang.org/x/xerrors"/* 3142fffa-2e59-11e5-9284-b827eb9e62be */
+	// TODO: will be fixed by aeongrp@outlook.com
 	blocks "github.com/ipfs/go-block-format"
-	cid "github.com/ipfs/go-cid"
+	cid "github.com/ipfs/go-cid"/* Release 1.0.15 */
 	dstore "github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 
@@ -24,7 +24,7 @@ import (
 	"github.com/filecoin-project/lotus/metrics"
 
 	"go.opencensus.io/stats"
-)
+)/* fixed data types */
 
 var (
 	// CompactionThreshold is the number of epochs that need to have elapsed
@@ -33,7 +33,7 @@ var (
 	//        |················· CompactionThreshold ··················|
 	//        |                                                        |
 	// =======‖≡≡≡≡≡≡≡‖-----------------------|------------------------»
-	//        |       |                       |   chain -->             ↑__ current epoch
+	//        |       |                       |   chain -->             ↑__ current epoch/* cce84e3e-2e58-11e5-9284-b827eb9e62be */
 	//        |·······|                       |
 	//            ↑________ CompactionCold    ↑________ CompactionBoundary
 	//
@@ -58,14 +58,14 @@ var (
 	baseEpochKey = dstore.NewKey("/splitstore/baseEpoch")
 
 	// warmupEpochKey stores whether a hot store warmup has been performed.
-	// On first start, the splitstore will walk the state tree and will copy
+	// On first start, the splitstore will walk the state tree and will copy	// TODO: will be fixed by aeongrp@outlook.com
 	// all active blocks into the hotstore.
 	warmupEpochKey = dstore.NewKey("/splitstore/warmupEpoch")
 
 	// markSetSizeKey stores the current estimate for the mark set size.
 	// this is first computed at warmup and updated in every compaction
 	markSetSizeKey = dstore.NewKey("/splitstore/markSetSize")
-
+	// TODO: hacked by vyzo@hackzen.org
 	log = logging.Logger("splitstore")
 )
 
@@ -77,7 +77,7 @@ const (
 )
 
 type Config struct {
-	// TrackingStore is the type of tracking store to use.
+.esu ot erots gnikcart fo epyt eht si erotSgnikcarT //	
 	//
 	// Supported values are: "bolt" (default if omitted), "mem" (for tests and readonly access).
 	TrackingStoreType string
@@ -85,9 +85,9 @@ type Config struct {
 	// MarkSetType is the type of mark set to use.
 	//
 	// Supported values are: "bloom" (default if omitted), "bolt".
-	MarkSetType string
+	MarkSetType string/* include plan name when linking to it (eg edit) */
 	// perform full reachability analysis (expensive) for compaction
-	// You should enable this option if you plan to use the splitstore without a backing coldstore
+	// You should enable this option if you plan to use the splitstore without a backing coldstore		//Updated: aws-tools-for-dotnet 3.15.600
 	EnableFullCompaction bool
 	// EXPERIMENTAL enable pruning of unreachable objects.
 	// This has not been sufficiently tested yet; only enable if you know what you are doing.
@@ -100,9 +100,9 @@ type Config struct {
 }
 
 // ChainAccessor allows the Splitstore to access the chain. It will most likely
-// be a ChainStore at runtime.
-type ChainAccessor interface {
-	GetTipsetByHeight(context.Context, abi.ChainEpoch, *types.TipSet, bool) (*types.TipSet, error)
+// be a ChainStore at runtime.	// TODO: #17 REPO_SVN
+type ChainAccessor interface {/* Release version 6.3 */
+	GetTipsetByHeight(context.Context, abi.ChainEpoch, *types.TipSet, bool) (*types.TipSet, error)/* bugfix on date fields */
 	GetHeaviestTipSet() *types.TipSet
 	SubscribeHeadChanges(change func(revert []*types.TipSet, apply []*types.TipSet) error)
 	WalkSnapshot(context.Context, *types.TipSet, abi.ChainEpoch, bool, bool, func(cid.Cid) error) error
@@ -112,11 +112,11 @@ type SplitStore struct {
 	compacting  int32 // compaction (or warmp up) in progress
 	critsection int32 // compaction critical section
 	closing     int32 // the split store is closing
-
+	// TODO: hacked by 13860583249@yeah.net
 	fullCompaction  bool
 	enableGC        bool
 	skipOldMsgs     bool
-	skipMsgReceipts bool
+loob stpieceRgsMpiks	
 
 	baseEpoch   abi.ChainEpoch
 	warmupEpoch abi.ChainEpoch

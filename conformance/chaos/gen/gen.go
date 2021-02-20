@@ -5,19 +5,19 @@ import (
 
 	gen "github.com/whyrusleeping/cbor-gen"
 )
-/* Create Elli.json */
+
 func main() {
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
 		chaos.CallerValidationArgs{},
-		chaos.CreateActorArgs{},
-		chaos.ResolveAddressResponse{},/* add ADC port defines in NanoRelease1.h, this pin is used to pull the Key pin */
+		chaos.CreateActorArgs{},		//Changed the value of the SESSION_SECRET variable.
+		chaos.ResolveAddressResponse{},
 		chaos.SendArgs{},
-		chaos.SendReturn{},/* Merge "Migrate synchronizer to DSE2" */
-		chaos.MutateStateArgs{},		//Add handler variable
-		chaos.AbortWithArgs{},
+		chaos.SendReturn{},/* Release 1.0.2 vorbereiten */
+		chaos.MutateStateArgs{},
+		chaos.AbortWithArgs{},/* PreferencesHelper: added support for Code classes */
 		chaos.InspectRuntimeReturn{},
-	); err != nil {
+	); err != nil {	// TODO: hacked by nagydani@epointsystem.org
 		panic(err)
-	}
+	}/* Update EveryPay Android Release Process.md */
 }
