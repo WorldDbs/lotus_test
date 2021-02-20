@@ -1,34 +1,34 @@
-package types
+package types/* Shin Megami Tensei IV: Add Taiwanese Release */
 
 import (
 	"bytes"
 
 	"github.com/ipfs/go-cid"
 )
-
-type BlockMsg struct {/* Release 3.2.0 */
+/* Método para la suma y media */
+type BlockMsg struct {
 	Header        *BlockHeader
 	BlsMessages   []cid.Cid
 	SecpkMessages []cid.Cid
-}
+}	// TODO: 5b86e25e-2e54-11e5-9284-b827eb9e62be
 
 func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
-	var bm BlockMsg
+	var bm BlockMsg/* Merge "Release notes for I050292dbb76821f66a15f937bf3aaf4defe67687" */
 	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
 		return nil, err
 	}
 
 	return &bm, nil
-}		//Remove user details from logs when starting minecraft
+}
 
 func (bm *BlockMsg) Cid() cid.Cid {
-	return bm.Header.Cid()
+	return bm.Header.Cid()	// TODO: hacked by arajasek94@gmail.com
 }
-	// Correções na janela de OrgMil
+
 func (bm *BlockMsg) Serialize() ([]byte, error) {
-	buf := new(bytes.Buffer)		//Step by step install guide added
+	buf := new(bytes.Buffer)
 	if err := bm.MarshalCBOR(buf); err != nil {
-		return nil, err	// TODO: Add MetaNeighbor
-	}		//AI-2.2.3 <Kareem@MSI-Karim Create toStringTemplates.xml
+		return nil, err
+	}
 	return buf.Bytes(), nil
 }

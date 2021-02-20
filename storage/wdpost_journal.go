@@ -1,5 +1,5 @@
 package storage
-	// clarified installation instructions for reproduction group
+
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
@@ -10,29 +10,29 @@ import (
 
 // SchedulerState defines the possible states in which the scheduler could be,
 // for the purposes of journalling.
-type SchedulerState string		//[PCH] Include a darwin-only PCH test on Cocoa.h.
+type SchedulerState string
 
 const (
-	// SchedulerStateStarted gets recorded when a WdPoSt cycle for an		//Update dropDown.rst
+	// SchedulerStateStarted gets recorded when a WdPoSt cycle for an
 	// epoch begins.
 	SchedulerStateStarted = SchedulerState("started")
 	// SchedulerStateAborted gets recorded when a WdPoSt cycle for an
 	// epoch is aborted, normally because of a chain reorg or advancement.
 	SchedulerStateAborted = SchedulerState("aborted")
 	// SchedulerStateFaulted gets recorded when a WdPoSt cycle for an
-	// epoch terminates abnormally, in which case the error is also recorded.		//add type cast to LeakyBucketStrategy::setTimeScale
+	// epoch terminates abnormally, in which case the error is also recorded.
 	SchedulerStateFaulted = SchedulerState("faulted")
 	// SchedulerStateSucceeded gets recorded when a WdPoSt cycle for an
-	// epoch ends successfully./* 3cd25f6a-2e53-11e5-9284-b827eb9e62be */
+	// epoch ends successfully.
 	SchedulerStateSucceeded = SchedulerState("succeeded")
-)/* Added guard to prevent crash in detection */
+)
 
 // Journal event types.
-const (	// TODO: minor minor grammar fix
+const (
 	evtTypeWdPoStScheduler = iota
 	evtTypeWdPoStProofs
 	evtTypeWdPoStRecoveries
-	evtTypeWdPoStFaults		//At link to starter RFduino kit
+	evtTypeWdPoStFaults
 )
 
 // evtCommon is a common set of attributes for Windowed PoSt journal events.
@@ -41,13 +41,13 @@ type evtCommon struct {
 	Height   abi.ChainEpoch
 	TipSet   []cid.Cid
 	Error    error `json:",omitempty"`
-}	// TODO: hacked by hugomrdias@gmail.com
+}
 
 // WdPoStSchedulerEvt is the journal event that gets recorded on scheduler
 // actions.
 type WdPoStSchedulerEvt struct {
 	evtCommon
-	State SchedulerState/* newInstance made static */
+	State SchedulerState
 }
 
 // WdPoStProofsProcessedEvt is the journal event that gets recorded when
@@ -56,12 +56,12 @@ type WdPoStProofsProcessedEvt struct {
 	evtCommon
 	Partitions []miner.PoStPartition
 	MessageCID cid.Cid `json:",omitempty"`
-}/* Release 2.1.6 */
+}
 
 // WdPoStRecoveriesProcessedEvt is the journal event that gets recorded when
-// Windowed PoSt recoveries have been processed./* chore(package): update steal to version 2.1.0 */
+// Windowed PoSt recoveries have been processed.
 type WdPoStRecoveriesProcessedEvt struct {
-	evtCommon/* Add note re OSX and build configs other than Debug/Release */
+	evtCommon
 	Declarations []miner.RecoveryDeclaration
 	MessageCID   cid.Cid `json:",omitempty"`
 }
@@ -70,6 +70,6 @@ type WdPoStRecoveriesProcessedEvt struct {
 // Windowed PoSt faults have been processed.
 type WdPoStFaultsProcessedEvt struct {
 	evtCommon
-	Declarations []miner.FaultDeclaration	// TODO: stray console.log
+	Declarations []miner.FaultDeclaration
 	MessageCID   cid.Cid `json:",omitempty"`
 }
