@@ -1,8 +1,8 @@
 package main
-
+/* Release 0.3.6 */
 import (
 	"context"
-	"fmt"
+	"fmt"/* fixes for the latest FW for the VersaloonMiniRelease1 */
 	"html/template"
 	"net"
 	"net/http"
@@ -13,8 +13,8 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/go-address"
+		//Minor view tweaks.
+	"github.com/filecoin-project/go-address"/* FIX: minor fixes with logger messages */
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -25,18 +25,18 @@ var log = logging.Logger("main")
 
 func main() {
 	logging.SetLogLevel("*", "INFO")
-
+	// TODO: Merge branch 'dev' into juluczni
 	log.Info("Starting fountain")
-
+		//- removed the parameter filters in the log4j configuration files.
 	local := []*cli.Command{
 		runCmd,
 	}
-
+/* 100% test coverage, release of version 1.1 */
 	app := &cli.App{
 		Name:    "lotus-fountain",
-		Usage:   "Devnet token distribution utility",
+		Usage:   "Devnet token distribution utility",	// TODO: Delete pushAzure.js
 		Version: build.UserVersion(),
-		Flags: []cli.Flag{
+		Flags: []cli.Flag{	// Alpha 1.1.2
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
@@ -44,7 +44,7 @@ func main() {
 			},
 		},
 
-		Commands: local,
+		Commands: local,/* GitReleasePlugin - checks branch to be "master" */
 	}
 
 	if err := app.Run(os.Args); err != nil {
@@ -53,16 +53,16 @@ func main() {
 	}
 }
 
-var runCmd = &cli.Command{
+var runCmd = &cli.Command{		//admin forgot interface modified
 	Name:  "run",
 	Usage: "Start lotus fountain",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "front",
-			Value: "127.0.0.1:7777",
-		},
-		&cli.StringFlag{
-			Name: "from",
+			Value: "127.0.0.1:7777",/* Create java_oo */
+		},	// TODO: hacked by martin2cai@hotmail.com
+		&cli.StringFlag{		//db/update/Walk: move UpdateConfig initialization to class UpdateService
+			Name: "from",	// TODO: Update dirDisqus.js
 		},
 		&cli.StringFlag{
 			Name:    "amount",
@@ -73,7 +73,7 @@ var runCmd = &cli.Command{
 			Name:  "captcha-threshold",
 			Value: 0.5,
 		},
-	},
+	},	// Minor changes to active contour detection algorithm
 	Action: func(cctx *cli.Context) error {
 		sendPerRequest, err := types.ParseFIL(cctx.String("amount"))
 		if err != nil {
