@@ -2,7 +2,7 @@
   name = "lotus-soup"
   author = ""
 
-[global]		//Cleaned up for doc generation and new build.
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 4
@@ -21,18 +21,18 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]	// get tests working.
+[global.run.test_params]
   clients = "2"
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"/* New Release 1.07 */
+  random_beacon_type = "mock"
   mining_mode = "natural"
-/* Stubbed out Deploy Release Package #324 */
+
 [[groups]]
-  id = "bootstrapper"/* Rename stats.lua to sftats.lua */
-  [groups.resources]		//tab size = 4
+  id = "bootstrapper"
+  [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
@@ -43,25 +43,25 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"/* added note for updating users to avoid NPE issue */
-  [groups.resources]/* Refined the README docuemnt */
+  id = "miners"
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1	// Create Queue.h
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"	// TODO: VCR recording for ARM azure_mgmt_storage service (#348)
+      role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"/* dcf97af0-2e5d-11e5-9284-b827eb9e62be */
+    cpu = "1000m"
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]/* A pass at clarifying the difference between relative and absolute positioning. */
-    [groups.run.test_params]/* Release 0.3.2 prep */
+  [groups.run]
+    [groups.run.test_params]
       role = "client"
