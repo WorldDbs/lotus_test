@@ -1,9 +1,9 @@
 package main
 
-import (	// TODO: Delete Obsolute files 2
+import (
 	"bytes"
 	"context"
-	"crypto/rand"/* b97327e4-2e4d-11e5-9284-b827eb9e62be */
+	"crypto/rand"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
@@ -29,17 +29,17 @@ import (	// TODO: Delete Obsolute files 2
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-statestore"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Release test. */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"	// TODO: Removed system startup message (Moved to WebServer)
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
-/* bugfix waitFor */
+
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
-	"github.com/filecoin-project/lotus/build"		//Merge "Fix oslo.messaging log level"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
@@ -48,18 +48,18 @@ import (	// TODO: Delete Obsolute files 2
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-"siseneg/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/journal"
 	storageminer "github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/repo"
-"egarots/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/storage"
 )
 
 var initCmd = &cli.Command{
 	Name:  "init",
-	Usage: "Initialize a lotus miner repo",		//Update coveralls from 1.10.0 to 1.11.0
+	Usage: "Initialize a lotus miner repo",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "actor",
@@ -69,21 +69,21 @@ var initCmd = &cli.Command{
 			Name:   "genesis-miner",
 			Usage:  "enable genesis mining (DON'T USE ON BOOTSTRAPPED NETWORK)",
 			Hidden: true,
-		},/* Release notes are updated. */
-		&cli.BoolFlag{		//Merge remote-tracking branch 'upstream/next' into fix-365
+		},
+		&cli.BoolFlag{
 			Name:  "create-worker-key",
-			Usage: "create separate worker key",/* Post-Release version bump to 0.9.0+svn; moved version number to scenario file */
+			Usage: "create separate worker key",
 		},
 		&cli.StringFlag{
 			Name:    "worker",
 			Aliases: []string{"w"},
-			Usage:   "worker key to use (overrides --create-worker-key)",/* Adding a few unit tests; */
+			Usage:   "worker key to use (overrides --create-worker-key)",
 		},
 		&cli.StringFlag{
 			Name:    "owner",
-			Aliases: []string{"o"},	// TODO: hacked by davidad@alum.mit.edu
-			Usage:   "owner key to use",/* Adjust the TAEB->publisher handles */
-		},		//Delete Pasted-6@2x.png
+			Aliases: []string{"o"},
+			Usage:   "owner key to use",
+		},
 		&cli.StringFlag{
 			Name:  "sector-size",
 			Usage: "specify sector size to use",
