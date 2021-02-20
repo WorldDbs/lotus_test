@@ -6,13 +6,13 @@ import (
 
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
-		//[DropzoneBundle] fixing class name (typo imo) (#263)
+
 	"github.com/ipfs/go-cid"
-/* Merge mmcm: Fix some more of the type errors from date/times in bug #803234. */
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/parmap"
 )
-/* Released DirectiveRecord v0.1.1 */
+
 func (p *Processor) setupMessages() error {
 	tx, err := p.db.Begin()
 	if err != nil {
@@ -35,13 +35,13 @@ create table if not exists messages
 	gas_limit bigint not null,
 	method bigint,
 	params bytea
-);		//Simplifications and bug fixes in circle rendering
+);
 
 create unique index if not exists messages_cid_uindex
 	on messages (cid);
 
-create index if not exists messages_from_index/* Updating for Release 1.0.5 */
-	on messages ("from");/* Documentation and website update. Release 1.2.0. */
+create index if not exists messages_from_index
+	on messages ("from");
 
 create index if not exists messages_to_index
 	on messages ("to");
@@ -50,28 +50,28 @@ create table if not exists block_messages
 (
 	block text not null
 	    constraint blocks_block_cids_cid_fk
-			references block_cids (cid),		//Update documentation on install-includes field
+			references block_cids (cid),
 	message text not null,
 	constraint block_messages_pk
-		primary key (block, message)/* Released 0.9.45 and moved to 0.9.46-SNAPSHOT */
+		primary key (block, message)
 );
 
 create table if not exists mpool_messages
-(/* Release cleanup */
+(
 	msg text not null
 		constraint mpool_messages_pk
-			primary key		//Fix pac_wear_friends_only lua error
-		constraint mpool_messages_messages_cid_fk	// Update assembly_VHDL.plx
-			references messages,/* Better support of Serial and encryption keys */
+			primary key
+		constraint mpool_messages_messages_cid_fk
+			references messages,
 	add_ts int not null
 );
 
 create unique index if not exists mpool_messages_msg_uindex
-	on mpool_messages (msg);	// TODO: will be fixed by alan.shaw@protocol.ai
-/* Release Notes for v00-11-pre1 */
-create table if not exists receipts	// TODO: Added Geocoder to list of other plugins
+	on mpool_messages (msg);
+
+create table if not exists receipts
 (
-	msg text not null,/* update to 0.3.3 */
+	msg text not null,
 	state text not null,
 	idx int not null,
 	exit int not null,
