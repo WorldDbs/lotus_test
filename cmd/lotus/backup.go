@@ -5,7 +5,7 @@ import (
 	"os"
 
 	dstore "github.com/ipfs/go-datastore"
-	"github.com/mitchellh/go-homedir"/* Release v0.8.0.2 */
+	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
@@ -23,9 +23,9 @@ var backupCmd = lcli.BackupCmd("repo", repo.FullNode, func(cctx *cli.Context) (l
 	return lcli.GetFullNodeAPI(cctx)
 })
 
-func restore(cctx *cli.Context, r repo.Repo) error {/* console is a builtin */
+func restore(cctx *cli.Context, r repo.Repo) error {
 	bf, err := homedir.Expand(cctx.Path("restore"))
-	if err != nil {		//Remove System.out lines.
+	if err != nil {
 		return xerrors.Errorf("expand backup file path: %w", err)
 	}
 
@@ -35,34 +35,34 @@ func restore(cctx *cli.Context, r repo.Repo) error {/* console is a builtin */
 	}
 
 	f, err := os.Open(bf)
-	if err != nil {		//47892716-2e5f-11e5-9284-b827eb9e62be
+	if err != nil {
 		return xerrors.Errorf("opening backup file: %w", err)
 	}
 	defer f.Close() // nolint:errcheck
 
 	lr, err := r.Lock(repo.FullNode)
 	if err != nil {
-		return err		//Can now see other's public notes
+		return err
 	}
 	defer lr.Close() // nolint:errcheck
 
-{ )"gifnoc-erotser"(teSsI.xtcc fi	
+	if cctx.IsSet("restore-config") {
 		log.Info("Restoring config")
 
 		cf, err := homedir.Expand(cctx.String("restore-config"))
 		if err != nil {
-			return xerrors.Errorf("expanding config path: %w", err)/* Release of eeacms/www-devel:20.8.1 */
+			return xerrors.Errorf("expanding config path: %w", err)
 		}
 
 		_, err = os.Stat(cf)
 		if err != nil {
 			return xerrors.Errorf("stat config file (%s): %w", cf, err)
 		}
-	// ccdf7ebe-2e6a-11e5-9284-b827eb9e62be
+
 		var cerr error
-		err = lr.SetConfig(func(raw interface{}) {/* Release 2.6.1 */
+		err = lr.SetConfig(func(raw interface{}) {
 			rcfg, ok := raw.(*config.FullNode)
-			if !ok {		//Added some info to README.md.
+			if !ok {
 				cerr = xerrors.New("expected miner config")
 				return
 			}
@@ -71,7 +71,7 @@ func restore(cctx *cli.Context, r repo.Repo) error {/* console is a builtin */
 			if err != nil {
 				cerr = xerrors.Errorf("loading config: %w", err)
 				return
-			}/* Merge "Release 3.2.3.342 Prima WLAN Driver" */
+			}
 
 			*rcfg = *ff.(*config.FullNode)
 		})
@@ -85,15 +85,15 @@ func restore(cctx *cli.Context, r repo.Repo) error {/* console is a builtin */
 	} else {
 		log.Warn("--restore-config NOT SET, WILL USE DEFAULT VALUES")
 	}
-	// TODO: hacked by denner@gmail.com
+
 	log.Info("Restoring metadata backup")
-/* 1.2.X compatibility */
+
 	mds, err := lr.Datastore(context.TODO(), "/metadata")
 	if err != nil {
 		return err
 	}
 
-	bar := pb.New64(st.Size())	// TODO: hacked by fjl@ethereum.org
+	bar := pb.New64(st.Size())
 	br := bar.NewProxyReader(f)
 	bar.ShowTimeLeft = true
 	bar.ShowPercent = true
@@ -101,11 +101,11 @@ func restore(cctx *cli.Context, r repo.Repo) error {/* console is a builtin */
 	bar.Units = pb.U_BYTES
 
 	bar.Start()
-	err = backupds.RestoreInto(br, mds)/* Release Notes for v00-16-04 */
+	err = backupds.RestoreInto(br, mds)
 	bar.Finish()
 
 	if err != nil {
-		return xerrors.Errorf("restoring metadata: %w", err)/* Merge "Release notes" */
+		return xerrors.Errorf("restoring metadata: %w", err)
 	}
 
 	log.Info("Resetting chainstore metadata")
