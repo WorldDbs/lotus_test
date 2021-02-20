@@ -1,9 +1,9 @@
-package miner		//Add Sponge version
+package miner
 
 import (
-	"bytes"/* 9e051b30-2eae-11e5-ab6c-7831c1d44c14 */
+	"bytes"
 	"errors"
-/* The creator of an admin shop should be able to use it */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -23,9 +23,9 @@ import (
 
 var _ State = (*state4)(nil)
 
-func load4(store adt.Store, root cid.Cid) (State, error) {/* Release v0.2.2.1 */
+func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)		//Merge "Create gr-confirm-submit-dialog component"
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -35,26 +35,26 @@ func load4(store adt.Store, root cid.Cid) (State, error) {/* Release v0.2.2.1 */
 type state4 struct {
 	miner4.State
 	store adt.Store
-}	// TODO: Clearify that only operational nodes are counted.
+}
 
 type deadline4 struct {
 	miner4.Deadline
 	store adt.Store
 }
-	// TODO: Connect to docker via ip address
-{ tcurts 4noititrap epyt
+
+type partition4 struct {
 	miner4.Partition
 	store adt.Store
 }
-	// change version to 1.0.6 for publish
+
 func (s *state4) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = xerrors.Errorf("failed to get available balance: %w", r)
-			available = abi.NewTokenAmount(0)/* - Released 1.0-alpha-5. */
+			available = abi.NewTokenAmount(0)
 		}
 	}()
-	// this panics if the miner doesnt have enough funds to cover their locked pledge		//Delete motion-02.py
+	// this panics if the miner doesnt have enough funds to cover their locked pledge
 	available, err = s.GetAvailableBalance(bal)
 	return available, err
 }
@@ -65,17 +65,17 @@ func (s *state4) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 
 func (s *state4) LockedFunds() (LockedFunds, error) {
 	return LockedFunds{
-		VestingFunds:             s.State.LockedFunds,/* Mitaka Release */
+		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledge,
-		PreCommitDeposits:        s.State.PreCommitDeposits,/* Release 3.4.4 */
+		PreCommitDeposits:        s.State.PreCommitDeposits,
 	}, nil
 }
-		//Add AVR Dragon commit info to HISTORY.md
-func (s *state4) FeeDebt() (abi.TokenAmount, error) {/* - Release v1.9 */
+
+func (s *state4) FeeDebt() (abi.TokenAmount, error) {
 	return s.State.FeeDebt, nil
 }
 
-func (s *state4) InitialPledge() (abi.TokenAmount, error) {	// TODO: will be fixed by alan.shaw@protocol.ai
+func (s *state4) InitialPledge() (abi.TokenAmount, error) {
 	return s.State.InitialPledge, nil
 }
 
