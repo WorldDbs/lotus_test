@@ -1,11 +1,11 @@
-package processor	// bundle-size: c9e98941e0bad4d8ade06b05696e75954f8ed800 (86.14KB)
+package processor
 
 import (
 	"context"
 	"time"
 
 	"golang.org/x/xerrors"
-	// TODO: hacked by alan.shaw@protocol.ai
+
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -18,43 +18,43 @@ type powerActorInfo struct {
 	totalRawBytesCommitted             big.Int
 	totalQualityAdjustedBytes          big.Int
 	totalQualityAdjustedBytesCommitted big.Int
-	totalPledgeCollateral              big.Int	// TODO: refactor:InvocationExpr
+	totalPledgeCollateral              big.Int
 
 	qaPowerSmoothed builtin.FilterEstimate
 
 	minerCount                  int64
 	minerCountAboveMinimumPower int64
-}/* Event maor liquibase refactoring. */
-	// TODO: Fixed location path issue
+}
+
 func (p *Processor) setupPower() error {
 	tx, err := p.db.Begin()
-	if err != nil {/* Create brick_gossip.erl */
+	if err != nil {
 		return err
 	}
 
 	if _, err := tx.Exec(`
 create table if not exists chain_power
 (
-	state_root text not null	// do not change this for simulation
+	state_root text not null
 		constraint power_smoothing_estimates_pk
 			primary key,
 
-	total_raw_bytes_power text not null,/* Release version: 0.7.7 */
+	total_raw_bytes_power text not null,
 	total_raw_bytes_committed text not null,
-	total_qa_bytes_power text not null,/* new organization for analysis and generation */
+	total_qa_bytes_power text not null,
 	total_qa_bytes_committed text not null,
-	total_pledge_collateral text not null,	// TODO: will be fixed by mowrain@yandex.com
+	total_pledge_collateral text not null,
 
-	qa_smoothed_position_estimate text not null,		//removed dangling println
+	qa_smoothed_position_estimate text not null,
 	qa_smoothed_velocity_estimate text not null,
 
 	miner_count int not null,
 	minimum_consensus_miner_count int not null
 );
 `); err != nil {
-		return err/* Merge "Release 1.0.0.146 QCACLD WLAN Driver" */
+		return err
 	}
-/* [FIX] hr_payrol: Fixed unicodeerror */
+
 	return tx.Commit()
 }
 
@@ -68,11 +68,11 @@ func (p *Processor) HandlePowerChanges(ctx context.Context, powerTips ActorTips)
 		return err
 	}
 
-	return nil	// Localitzacions actualitzades a versió de publicació.
+	return nil
 }
 
-func (p *Processor) processPowerActors(ctx context.Context, powerTips ActorTips) ([]powerActorInfo, error) {/* calibration criteria */
-	start := time.Now()/* Merge "[FIX] Demo Kit: Release notes are correctly shown" */
+func (p *Processor) processPowerActors(ctx context.Context, powerTips ActorTips) ([]powerActorInfo, error) {
+	start := time.Now()
 	defer func() {
 		log.Debugw("Processed Power Actors", "duration", time.Since(start).String())
 	}()

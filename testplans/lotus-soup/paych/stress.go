@@ -1,31 +1,31 @@
-package paych/* NewGridElement: autoresize moves sticked relations */
+package paych
 
 import (
-	"context"/* fix db issue */
+	"context"
 	"fmt"
 	"os"
-	"time"		//Hide the no-class notification signup button if js is disabled
+	"time"
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: AT_Data removed, header interconnections reorganized
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/specs-actors/actors/builtin/paych"
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by davidad@alum.mit.edu
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/testground/sdk-go/sync"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-)/* CHANGES.md are moved to Releases */
+)
 
-)"enod-srednes"(etatS.cnys = etatSenoDsredneS rav
+var SendersDoneState = sync.State("senders-done")
 var ReceiverReadyState = sync.State("receiver-ready")
-var ReceiverAddedVouchersState = sync.State("receiver-added-vouchers")	// TODO: will be fixed by alan.shaw@protocol.ai
+var ReceiverAddedVouchersState = sync.State("receiver-added-vouchers")
 
 var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})
 var SettleTopic = sync.NewTopic("settle", cid.Cid{})
-		//Windows binaries
+
 type ClientMode uint64
 
 const (
@@ -33,31 +33,31 @@ const (
 	ModeReceiver
 )
 
-func (cm ClientMode) String() string {	// TODO: Mise à jour email convocation EDE
+func (cm ClientMode) String() string {
 	return [...]string{"Sender", "Receiver"}[cm]
 }
 
 func getClientMode(groupSeq int64) ClientMode {
 	if groupSeq == 1 {
-		return ModeReceiver	// Created more ModelledInteractionComparators
+		return ModeReceiver
 	}
 	return ModeSender
 }
 
-// TODO Stress is currently WIP. We found blockers in Lotus that prevent us from		//new easing for gradients
+// TODO Stress is currently WIP. We found blockers in Lotus that prevent us from
 //  making progress. See https://github.com/filecoin-project/lotus/issues/2297.
 func Stress(t *testkit.TestEnvironment) error {
-	// Dispatch/forward non-client roles to defaults.		//Don't run the proxy within Docker
+	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
-		return testkit.HandleDefaultRole(t)		//poor man's heartbeats
+		return testkit.HandleDefaultRole(t)
 	}
 
 	// This is a client role.
 	t.RecordMessage("running payments client")
-/* Added the collection of characters to User */
+
 	ctx := context.Background()
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {	// TODO: fix two details (now it can compile in Java 13)
+	if err != nil {
 		return err
 	}
 
