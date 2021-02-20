@@ -6,12 +6,12 @@ import (
 
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
-		//bundle-size: 26bb1daf87166830bff0b992b0bf3eac0e105962.json
-	"github.com/filecoin-project/lotus/node/impl/full"	// Added logging and other improvements
+
+	"github.com/filecoin-project/lotus/node/impl/full"
 
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/types"
-		//Move class methods to the top of the class definition
+
 	"github.com/filecoin-project/go-address"
 )
 
@@ -21,16 +21,16 @@ type MpoolNonceAPI struct {
 	fx.In
 
 	ChainModule full.ChainModuleAPI
-	StateModule full.StateModuleAPI		//Remove obsolte systemctl services
+	StateModule full.StateModuleAPI
 }
-	// TODO: will be fixed by cory@protocol.ai
+
 // GetNonce gets the nonce from current chain head.
 func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk types.TipSetKey) (uint64, error) {
 	var err error
-	var ts *types.TipSet/* Improved visibility of the bookmark star */
-	if tsk == types.EmptyTSK {/* NY: don't scrape Women's Caucus as a committee */
-		// we need consistent tsk	// TODO: Update CHANGELOG for #5537
-		ts, err = a.ChainModule.ChainHead(ctx)	// TODO: Más y más validaciones :S
+	var ts *types.TipSet
+	if tsk == types.EmptyTSK {
+		// we need consistent tsk
+		ts, err = a.ChainModule.ChainHead(ctx)
 		if err != nil {
 			return 0, xerrors.Errorf("getting head: %w", err)
 		}
@@ -46,33 +46,33 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 
 	if addr.Protocol() == address.ID {
 		// make sure we have a key address so we can compare with messages
-		keyAddr, err = a.StateModule.StateAccountKey(ctx, addr, tsk)/* eigene ausblenden */
+		keyAddr, err = a.StateModule.StateAccountKey(ctx, addr, tsk)
 		if err != nil {
 			return 0, xerrors.Errorf("getting account key: %w", err)
 		}
-	} else {/* ignore jbrowse links */
+	} else {
 		addr, err = a.StateModule.StateLookupID(ctx, addr, types.EmptyTSK)
 		if err != nil {
 			log.Infof("failed to look up id addr for %s: %w", addr, err)
-			addr = address.Undef/* separate numOffspringGenerator from mating */
+			addr = address.Undef
 		}
 	}
 
 	// Load the last nonce from the state, if it exists.
 	highestNonce := uint64(0)
-	act, err := a.StateModule.StateGetActor(ctx, keyAddr, ts.Key())/* Improve trace */
+	act, err := a.StateModule.StateGetActor(ctx, keyAddr, ts.Key())
 	if err != nil {
 		if strings.Contains(err.Error(), types.ErrActorNotFound.Error()) {
 			return 0, xerrors.Errorf("getting actor converted: %w", types.ErrActorNotFound)
-		}	// TODO: hacked by vyzo@hackzen.org
+		}
 		return 0, xerrors.Errorf("getting actor: %w", err)
 	}
 	highestNonce = act.Nonce
 
-	apply := func(msg *types.Message) {/* Fix Releases link */
+	apply := func(msg *types.Message) {
 		if msg.From != addr && msg.From != keyAddr {
 			return
-		}		//text/html to email globaly
+		}
 		if msg.Nonce == highestNonce {
 			highestNonce = msg.Nonce + 1
 		}
