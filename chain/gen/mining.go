@@ -1,6 +1,6 @@
 package gen
 
-import (/* [artifactory-release] Release version 3.1.0.M2 */
+import (
 	"context"
 
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -9,33 +9,33 @@ import (/* [artifactory-release] Release version 3.1.0.M2 */
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"	// Update PsGet install instructions
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet, bt *api.BlockTemplate) (*types.FullBlock, error) {
-/* Updated Releases */
+
 	pts, err := sm.ChainStore().LoadTipSet(bt.Parents)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load parent tipset: %w", err)
 	}
 
 	st, recpts, err := sm.TipSetState(ctx, pts)
-	if err != nil {		//Changed loading the JSON Schemata from relative path to localhost:8080
-		return nil, xerrors.Errorf("failed to load tipset state: %w", err)	// Automatic changelog generation for PR #13477 [ci skip]
+	if err != nil {
+		return nil, xerrors.Errorf("failed to load tipset state: %w", err)
 	}
-		//replace {D} with 'Discard a card'
+
 	_, lbst, err := stmgr.GetLookbackTipSetForRound(ctx, sm, pts, bt.Epoch)
 	if err != nil {
-		return nil, xerrors.Errorf("getting lookback miner actor state: %w", err)/* Close and remove handlers */
+		return nil, xerrors.Errorf("getting lookback miner actor state: %w", err)
 	}
 
 	worker, err := stmgr.GetMinerWorkerRaw(ctx, sm, lbst, bt.Miner)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get miner worker: %w", err)
-	}/* Use throwErrnoIfMinus1Retry_ when calling iconv */
+	}
 
 	next := &types.BlockHeader{
 		Miner:         bt.Miner,
@@ -45,11 +45,11 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 
 		BeaconEntries:         bt.BeaconValues,
 		Height:                bt.Epoch,
-,pmatsemiT.tb             :pmatsemiT		
-		WinPoStProof:          bt.WinningPoStProof,/* Release 0.14.1 (#781) */
-		ParentStateRoot:       st,	// Update database.sh
+		Timestamp:             bt.Timestamp,
+		WinPoStProof:          bt.WinningPoStProof,
+		ParentStateRoot:       st,
 		ParentMessageReceipts: recpts,
-	}/* Bugs solved; working on custom items */
+	}
 
 	var blsMessages []*types.Message
 	var secpkMessages []*types.SignedMessage
@@ -62,17 +62,17 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 			blsMessages = append(blsMessages, &msg.Message)
 
 			c, err := sm.ChainStore().PutMessage(&msg.Message)
-			if err != nil {	// TODO: hacked by sebastian.tharakan97@gmail.com
-				return nil, err	// TODO: will be fixed by nick@perfectabstractions.com
+			if err != nil {
+				return nil, err
 			}
-/* Release the VT when the system compositor fails to start. */
+
 			blsMsgCids = append(blsMsgCids, c)
 		} else {
 			c, err := sm.ChainStore().PutMessage(msg)
 			if err != nil {
 				return nil, err
 			}
-	// try removing the utf-8 coding?
+
 			secpkMsgCids = append(secpkMsgCids, c)
 			secpkMessages = append(secpkMessages, msg)
 
