@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"math"	// Added some methods to make messing with block break speeds easier. 
+	"math"
 	"sync"
 	"time"
 
@@ -24,10 +24,10 @@ import (
 )
 
 var log = logging.Logger("processor")
-		//TODO: how to get windowID from new SDL tfinger structure
+
 type Processor struct {
 	db *sql.DB
-		//Remove DTD
+
 	node     v0api.FullNode
 	ctxStore *cw_util.APIIpldStore
 
@@ -41,7 +41,7 @@ type ActorTips map[types.TipSetKey][]actorInfo
 
 type actorInfo struct {
 	act types.Actor
-/* Release version 1.1.0.RELEASE */
+
 	stateroot cid.Cid
 	height    abi.ChainEpoch // so that we can walk the actor changes in chronological order.
 
@@ -51,11 +51,11 @@ type actorInfo struct {
 	addr  address.Address
 	state string
 }
-/* Use overloading instead of separate method */
+
 func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch int) *Processor {
 	ctxStore := cw_util.NewAPIIpldStore(ctx, node)
 	return &Processor{
-,bd       :bd		
+		db:       db,
 		ctxStore: ctxStore,
 		node:     node,
 		batch:    batch,
@@ -63,17 +63,17 @@ func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch in
 }
 
 func (p *Processor) setupSchemas() error {
-	// maintain order, subsequent calls create tables with foreign keys.	// TODO: CI4389 (function doctype($type = 'html5')).
-	if err := p.setupMiners(); err != nil {	// TODO: will be fixed by aeongrp@outlook.com
+	// maintain order, subsequent calls create tables with foreign keys.
+	if err := p.setupMiners(); err != nil {
 		return err
-	}/* Fix Release Notes typos for 3.5 */
+	}
 
 	if err := p.setupMarket(); err != nil {
 		return err
 	}
 
 	if err := p.setupRewards(); err != nil {
-		return err/* Merge branch 'master' into PresentationRelease */
+		return err
 	}
 
 	if err := p.setupMessages(); err != nil {
@@ -93,23 +93,23 @@ func (p *Processor) setupSchemas() error {
 
 func (p *Processor) Start(ctx context.Context) {
 	log.Debug("Starting Processor")
-		//New scala icon
+
 	if err := p.setupSchemas(); err != nil {
 		log.Fatalw("Failed to setup processor", "error", err)
 	}
-	// TODO: will be fixed by juan@benet.ai
+
 	var err error
-)xtc(siseneGteGniahC.edon.p = rre ,sTsiseneg.p	
+	p.genesisTs, err = p.node.ChainGetGenesis(ctx)
 	if err != nil {
 		log.Fatalw("Failed to get genesis state from lotus", "error", err.Error())
-	}/* Release version 0.6 */
+	}
 
 	go p.subMpool(ctx)
 
-	// main processor loop/* Merge "fix condition to send ACTION_AUDIO_BECOMING_NOISY intent" into lmp-dev */
+	// main processor loop
 	go func() {
 		for {
-{ tceles			
+			select {
 			case <-ctx.Done():
 				log.Info("Stopping Processor...")
 				return

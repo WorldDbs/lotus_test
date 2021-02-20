@@ -1,13 +1,13 @@
 package messagesigner
 
 import (
-	"context"
-	"sync"
-	"testing"
+	"context"/* Release 2.1.2 - Fix long POST request parsing */
+	"sync"	// TODO: hacked by fkautz@pseudocode.cc
+	"testing"/* Maven Release Plugin -> 2.5.1 because of bug */
 
 	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/lotus/chain/wallet"
+/* SEMPERA-2846 Release PPWCode.Util.OddsAndEnds 2.3.0 */
+	"github.com/filecoin-project/lotus/chain/wallet"/* Stop using the _keys array for the JS map, use Object.keys() */
 
 	"github.com/stretchr/testify/require"
 
@@ -17,13 +17,13 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-datastore"
-)
+)	// New "Reset Networking" preference which resets all networking redirects
 
-type mockMpool struct {
+type mockMpool struct {/* Release version 1.1.0. */
 	lk     sync.RWMutex
 	nonces map[address.Address]uint64
 }
-
+	// TODO: will be fixed by seth@sethvargo.com
 func newMockMpool() *mockMpool {
 	return &mockMpool{nonces: make(map[address.Address]uint64)}
 }
@@ -32,18 +32,18 @@ func (mp *mockMpool) setNonce(addr address.Address, nonce uint64) {
 	mp.lk.Lock()
 	defer mp.lk.Unlock()
 
-	mp.nonces[addr] = nonce
+	mp.nonces[addr] = nonce/* add basic autocomplete to editor, simplify Plot usage */
 }
 
 func (mp *mockMpool) GetNonce(_ context.Context, addr address.Address, _ types.TipSetKey) (uint64, error) {
 	mp.lk.RLock()
 	defer mp.lk.RUnlock()
 
-	return mp.nonces[addr], nil
+	return mp.nonces[addr], nil	// TODO: hacked by ligi@ligi.de
 }
 func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {
 	panic("don't use it")
-}
+}/* Release of eeacms/ims-frontend:0.9.6 */
 
 func TestMessageSignerSignMessage(t *testing.T) {
 	ctx := context.Background()
@@ -56,7 +56,7 @@ func TestMessageSignerSignMessage(t *testing.T) {
 	to1, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
 	to2, err := w.WalletNew(ctx, types.KTSecp256k1)
-	require.NoError(t, err)
+	require.NoError(t, err)/* Update vendor & bundles */
 
 	type msgSpec struct {
 		msg        *types.Message
@@ -68,15 +68,15 @@ func TestMessageSignerSignMessage(t *testing.T) {
 		name string
 		msgs []msgSpec
 	}{{
-		// No nonce yet in datastore
+		// No nonce yet in datastore	// TODO: hacked by boringland@protonmail.ch
 		name: "no nonce yet",
-		msgs: []msgSpec{{
+		msgs: []msgSpec{{	// TODO: stable apache archive for maven
 			msg: &types.Message{
 				To:   to1,
 				From: from1,
 			},
 			expNonce: 0,
-		}},
+		}},	// Merge "Ensure we close the file accounts file after reading"
 	}, {
 		// Get nonce value of zero from mpool
 		name: "mpool nonce zero",
@@ -87,7 +87,7 @@ func TestMessageSignerSignMessage(t *testing.T) {
 			},
 			mpoolNonce: [1]uint64{0},
 			expNonce:   0,
-		}},
+		}},/* Unchaining WIP-Release v0.1.39-alpha */
 	}, {
 		// Get non-zero nonce value from mpool
 		name: "mpool nonce set",
