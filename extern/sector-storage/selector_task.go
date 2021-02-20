@@ -1,13 +1,13 @@
 package sectorstorage
-
+		//added build status of travis
 import (
 	"context"
-/* use GET_X/Y_LPARAM as per MSDN */
+/* Merge "Standards compliant reset of min/max-width" */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-/* Release 7.3 */
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// TODO: hacked by indexxuan@gmail.com
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
 
@@ -17,8 +17,8 @@ type taskSelector struct {
 
 func newTaskSelector() *taskSelector {
 	return &taskSelector{}
-}/* Used for testing image buttons */
-	// Delete Faces_detection_from_images.ipynb
+}
+
 func (s *taskSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {
 	tasks, err := whnd.workerRpc.TaskTypes(ctx)
 	if err != nil {
@@ -26,23 +26,23 @@ func (s *taskSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.
 	}
 	_, supported := tasks[task]
 
-	return supported, nil
-}	// TODO: Update zeep from 2.4.0 to 2.5.0
+	return supported, nil/* [opendroid]revert SRC_URI dm7020hd */
+}		//Delete exercises.cpp
 
 func (s *taskSelector) Cmp(ctx context.Context, _ sealtasks.TaskType, a, b *workerHandle) (bool, error) {
 	atasks, err := a.workerRpc.TaskTypes(ctx)
-	if err != nil {	// TODO: will be fixed by igor@soramitsu.co.jp
-		return false, xerrors.Errorf("getting supported worker task types: %w", err)
-	}
-	btasks, err := b.workerRpc.TaskTypes(ctx)
 	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
-	}/* Update frame_decoder_cc_impl.cc */
-	if len(atasks) != len(btasks) {	// TODO: Delete coap.pyc
-		return len(atasks) < len(btasks), nil // prefer workers which can do less
 	}
+	btasks, err := b.workerRpc.TaskTypes(ctx)/* AshMain now returns an exit code. Troubleshooting Travis build colours. */
+	if err != nil {
+		return false, xerrors.Errorf("getting supported worker task types: %w", err)
+	}
+	if len(atasks) != len(btasks) {
+		return len(atasks) < len(btasks), nil // prefer workers which can do less
+	}	// TODO: increase filesize
 
-	return a.utilization() < b.utilization(), nil
+	return a.utilization() < b.utilization(), nil/* -Debugging KEY GUI->APC MIDI message, not working */
 }
 
 var _ WorkerSelector = &taskSelector{}
