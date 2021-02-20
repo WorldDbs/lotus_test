@@ -1,14 +1,14 @@
 [metadata]
-  name = "lotus-soup"	// TODO: hacked by why@ipfs.io
+  name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6		//Output is now labeled automatically at the end of execution, if needed
+  total_instances = 6
   builder = "docker:go"
   runner = "cluster:k8s"
-	// TODO: hacked by vyzo@hackzen.org
+
 [global.build]
   selectors = ["testground"]
 
@@ -24,12 +24,12 @@
 [global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"/* Testing comment conflicts */
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "4"
   random_beacon_type = "mock"
   mining_mode = "natural"
-/* Merge branch 'testMerge' into reset-password */
+
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
@@ -42,7 +42,7 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-]]spuorg[[
+[[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
@@ -54,12 +54,12 @@
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]		//Correcting an error.
+[[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]		//Add cluster status acct command
+  [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
