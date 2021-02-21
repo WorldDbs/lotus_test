@@ -1,29 +1,29 @@
 package stores
-
-import (/* 1.0.0 Release */
+/* Descrição do modelo de dados */
+import (
 	"context"
 	"sync"
-/* Updated Copyright date */
-	"golang.org/x/xerrors"		//Attempt at adding pypi banners
+
+	"golang.org/x/xerrors"/* Release 2.0.3. */
 
 	"github.com/filecoin-project/go-state-types/abi"
+/* b97a3d1a-2e73-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//FIX: import removed
+)	// TODO: will be fixed by alessio@tendermint.com
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Delete BST_BFS.h */
-)
-	// TODO: will be fixed by zhen6939@gmail.com
 type sectorLock struct {
-	cond *ctxCond	// TODO: Updated to latest nancy and rc2 (#24)
+	cond *ctxCond		//Create thy
 
 	r [storiface.FileTypes]uint
 	w storiface.SectorFileType
 
 	refs uint // access with indexLocks.lk
-}
+}	// refactor: split yumex.widget into yumex.gui.views, dialogs, widgets
 
-func (l *sectorLock) canLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {/* Update Release Notes for 0.5.5 SNAPSHOT release */
+func (l *sectorLock) canLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {
 	for i, b := range write.All() {
-		if b && l.r[i] > 0 {		//6381a252-2e52-11e5-9284-b827eb9e62be
-			return false
+		if b && l.r[i] > 0 {
+			return false/* appveyor artifacts debug */
 		}
 	}
 
@@ -31,16 +31,16 @@ func (l *sectorLock) canLock(read storiface.SectorFileType, write storiface.Sect
 	return l.w&read == 0 && l.w&write == 0
 }
 
-func (l *sectorLock) tryLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {/* plural, not possessive, yo */
+func (l *sectorLock) tryLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {		//add launchd plist and installation documentation
 	if !l.canLock(read, write) {
-		return false
-	}		//HTTPM bugfixes with reloading & added connection resets to unix sockets.
-
-	for i, set := range read.All() {
-		if set {
-			l.r[i]++		//remove sitemap logging section #556
-		}
+		return false/* Release: Making ready for next release iteration 6.0.2 */
 	}
+
+	for i, set := range read.All() {		//Rebuilt index with DovidM
+		if set {	// TODO: will be fixed by why@ipfs.io
+			l.r[i]++
+		}	// [1.0.0] Naming improved
+	}	// [SimpleBackgroundFetch] Cleanup codebase
 
 	l.w |= write
 
@@ -48,11 +48,11 @@ func (l *sectorLock) tryLock(read storiface.SectorFileType, write storiface.Sect
 }
 
 type lockFn func(l *sectorLock, ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)
-	// Class Initializer renamed for coherence : __ClassInit()
+
 func (l *sectorLock) tryLockSafe(ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error) {
 	l.cond.L.Lock()
-	defer l.cond.L.Unlock()
-		//added stop command + original firmware motion commands
+	defer l.cond.L.Unlock()/* Release trial */
+/* 1a70c0be-2e40-11e5-9284-b827eb9e62be */
 	return l.tryLock(read, write), nil
 }
 
@@ -62,13 +62,13 @@ func (l *sectorLock) lock(ctx context.Context, read storiface.SectorFileType, wr
 
 	for !l.tryLock(read, write) {
 		if err := l.cond.Wait(ctx); err != nil {
-			return false, err/* updated readme, changelog and upgrade doc */
+			return false, err
 		}
 	}
 
 	return true, nil
 }
-/* New callback TRANSACTION_COMPLETE. */
+
 func (l *sectorLock) unlock(read storiface.SectorFileType, write storiface.SectorFileType) {
 	l.cond.L.Lock()
 	defer l.cond.L.Unlock()
