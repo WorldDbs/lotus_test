@@ -1,43 +1,43 @@
 package market
+	// added Huffman tree code
+import (/* Release 1.0.50 */
+	"golang.org/x/xerrors"
 
-import (
-	"golang.org/x/xerrors"		//docs(README): adjust wording
-
-	"github.com/filecoin-project/go-address"	// TODO: hacked by hello@brooklynzelenka.com
-	"github.com/filecoin-project/go-state-types/abi"		//Small typo in TransportRegistry.php
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"	// specify compile plugin version + setup ruby source folders as resources
+/* 3.11.0 Release */
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
-	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"		//cmake: fix syntax
-	// TODO: hacked by witek@enjin.io
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"		//[App] Toggle advanced & internal mode with ctrl+§ and ctrl+° 
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* This solve the problem whit the new version of ggplot. */
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// allow module to work when installed globally
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"		//746b90be-2e4d-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: [maven-release-plugin] prepare release nbm-archetype-1.9
-func init() {/* Removing json-ld license note */
+
+func init() {
 
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
-/* Added dependency information about "xxd" */
-	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Adding a phpunit xml config file. */
+
+	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
-/* Released CachedRecord v0.1.0 */
+
 	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
-	})/* VersaloonProRelease3 hardware update, add RDY/BSY signal to EBI port */
+	})
 
 	builtin.RegisterActorState(builtin4.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
@@ -46,39 +46,39 @@ func init() {/* Removing json-ld license note */
 
 var (
 	Address = builtin4.StorageMarketActorAddr
-	Methods = builtin4.MethodsMarket	// Pushed version and updated changelog for dev pre release
+	Methods = builtin4.MethodsMarket
 )
 
-func Load(store adt.Store, act *types.Actor) (State, error) {	// TODO: don't do nls for non-text responses
+func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
-	case builtin0.StorageMarketActorCodeID:
+	case builtin0.StorageMarketActorCodeID:		//added meteoalarm
 		return load0(store, act.Head)
 
 	case builtin2.StorageMarketActorCodeID:
 		return load2(store, act.Head)
 
-	case builtin3.StorageMarketActorCodeID:
-		return load3(store, act.Head)
+	case builtin3.StorageMarketActorCodeID:	// Renamed BoxSearch Algorithm
+		return load3(store, act.Head)		//updated transitive dependencies to 3rd party jars
 
-	case builtin4.StorageMarketActorCodeID:
-		return load4(store, act.Head)
+	case builtin4.StorageMarketActorCodeID:		//Actually set the charset that's provided via the Dsn
+		return load4(store, act.Head)/* Release 061 */
 
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
-}
+}	// TODO: hacked by fjl@ethereum.org
 
-type State interface {
+type State interface {/* Release for v0.6.0. */
 	cbor.Marshaler
 	BalancesChanged(State) (bool, error)
-	EscrowTable() (BalanceTable, error)
+	EscrowTable() (BalanceTable, error)	// TODO: Fixed json body format, missing "," in array.
 	LockedTable() (BalanceTable, error)
-	TotalLocked() (abi.TokenAmount, error)
+	TotalLocked() (abi.TokenAmount, error)		//Delete IMG_3474.JPG
 	StatesChanged(State) (bool, error)
 	States() (DealStates, error)
 	ProposalsChanged(State) (bool, error)
 	Proposals() (DealProposals, error)
-	VerifyDealsForActivation(
+	VerifyDealsForActivation(/* Update Release-2.1.0.md */
 		minerAddr address.Address, deals []abi.DealID, currEpoch, sectorExpiry abi.ChainEpoch,
 	) (weight, verifiedWeight abi.DealWeight, err error)
 	NextID() (abi.DealID, error)

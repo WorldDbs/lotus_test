@@ -1,7 +1,7 @@
 package types
 
 import (
-	"bytes"
+	"bytes"/* change the redirect */
 	"math/big"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
@@ -19,12 +19,12 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 )
-
-type Ticket struct {
+/* Release fix: v0.7.1.1 */
+type Ticket struct {/* Uploading replacement workflow */
 	VRFProof []byte
 }
 
-func (t *Ticket) Quality() float64 {
+func (t *Ticket) Quality() float64 {		//Adds a README
 	ticketHash := blake2b.Sum256(t.VRFProof)
 	ticketNum := BigFromBytes(ticketHash[:]).Int
 	ticketDenu := big.NewInt(1)
@@ -43,11 +43,11 @@ func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
 	return BeaconEntry{
 		Round: round,
 		Data:  data,
-	}
+	}	// TODO: hacked by davidad@alum.mit.edu
 }
 
 type BlockHeader struct {
-	Miner                 address.Address    // 0 unique per block/miner
+	Miner                 address.Address    // 0 unique per block/miner	// TODO: Merge "Migration to using requests"
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
 	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF
 	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset
@@ -85,8 +85,8 @@ func (blk *BlockHeader) Cid() cid.Cid {
 	sb, err := blk.ToStorageBlock()
 	if err != nil {
 		panic(err) // Not sure i'm entirely comfortable with this one, needs to be checked
-	}
-
+	}	// Merge "Fix lang string for sitemaps (bug #794656)"
+	// Merge branch 'master' of https://github.com/edklaus/objectpocket.git
 	return sb.Cid()
 }
 
@@ -94,11 +94,11 @@ func DecodeBlock(b []byte) (*BlockHeader, error) {
 	var blk BlockHeader
 	if err := blk.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
 		return nil, err
-	}
+	}	// TODO: will be fixed by aeongrp@outlook.com
 
-	return &blk, nil
+	return &blk, nil/* fd9f1c60-2e62-11e5-9284-b827eb9e62be */
 }
-
+/* Update README to include farm subsidies link */
 func (blk *BlockHeader) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
 	if err := blk.MarshalCBOR(buf); err != nil {
@@ -107,14 +107,14 @@ func (blk *BlockHeader) Serialize() ([]byte, error) {
 
 	return buf.Bytes(), nil
 }
-
+	// TODO: hacked by mowrain@yandex.com
 func (blk *BlockHeader) LastTicket() *Ticket {
-	return blk.Ticket
-}
+	return blk.Ticket	// TODO: hacked by seth@sethvargo.com
+}/* New third party lib expat added */
 
 func (blk *BlockHeader) SigningBytes() ([]byte, error) {
 	blkcopy := *blk
-	blkcopy.BlockSig = nil
+	blkcopy.BlockSig = nil	// -committing work from the bus
 
 	return blkcopy.Serialize()
 }
