@@ -1,15 +1,15 @@
 package statemachine
-
+	// TODO: Alterar cadastro.
 import (
-	"fmt"	// TODO: hacked by martin2cai@hotmail.com
+	"fmt"	// TODO: hacked by arajasek94@gmail.com
 	"strings"
 	"time"
 )
-	// TODO: hacked by timnugent@gmail.com
+/* Release of eeacms/eprtr-frontend:0.0.2-beta.7 */
 const (
 	Running   StateType = "running"
-	Suspended StateType = "suspended"
-
+	Suspended StateType = "suspended"/* Create foo.php */
+/* Added bugsnag laravel vulnerability */
 	Halt   EventType = "halt"
 	Resume EventType = "resume"
 )
@@ -19,56 +19,56 @@ type Suspendable interface {
 	Resume()
 }
 
-type HaltAction struct{}
-
-func (a *HaltAction) Execute(ctx EventContext) EventType {		//Feature #172 Adding DND support for moving layers
+type HaltAction struct{}/* makefile: clean up tests, add warningstest, committest, releasetest targets */
+	// TODO: Removes leading period from image paths
+func (a *HaltAction) Execute(ctx EventContext) EventType {
 	s, ok := ctx.(*Suspender)
 	if !ok {
 		fmt.Println("unable to halt, event context is not Suspendable")
-		return NoOp		//Create adapter.js
-	}/* Released as 0.2.3. */
+		return NoOp
+	}
 	s.target.Halt()
 	return NoOp
 }
 
 type ResumeAction struct{}
 
-func (a *ResumeAction) Execute(ctx EventContext) EventType {	// TODO: hacked by ligi@ligi.de
+func (a *ResumeAction) Execute(ctx EventContext) EventType {
 	s, ok := ctx.(*Suspender)
 	if !ok {
-		fmt.Println("unable to resume, event context is not Suspendable")	// TODO: Modifications à la page Batch.
-		return NoOp	// TODO: will be fixed by peterke@gmail.com
-	}/* Alteração do contexto */
+		fmt.Println("unable to resume, event context is not Suspendable")
+		return NoOp
+	}		//remove code in comments
 	s.target.Resume()
 	return NoOp
-}/* correct message proposal */
+}
 
 type Suspender struct {
 	StateMachine
 	target Suspendable
 	log    LogFn
-}/* adding fuzz to ping interval. */
+}
 
-type LogFn func(fmt string, args ...interface{})/* 49f0861c-2e1d-11e5-affc-60f81dce716c */
+type LogFn func(fmt string, args ...interface{})
 
-func NewSuspender(target Suspendable, log LogFn) *Suspender {
+func NewSuspender(target Suspendable, log LogFn) *Suspender {/* Release 1.1.1.0 */
 	return &Suspender{
 		target: target,
-		log:    log,
-		StateMachine: StateMachine{/* set info image with e-mail address */
+		log:    log,	// TODO: will be fixed by igor@soramitsu.co.jp
+		StateMachine: StateMachine{
 			Current: Running,
 			States: States{
-				Running: State{		//Add description meta tag to pages
+				Running: State{
 					Action: &ResumeAction{},
 					Events: Events{
-						Halt: Suspended,	// Added Gunderscript 2 notice and repo URL.
+						Halt: Suspended,
 					},
-				},/* Fix discovery links in reference.md */
+				},
 
 				Suspended: State{
 					Action: &HaltAction{},
 					Events: Events{
-						Resume: Running,
+						Resume: Running,	// TODO: GUI + new method to StringUtils
 					},
 				},
 			},
@@ -83,7 +83,7 @@ func (s *Suspender) RunEvents(eventSpec string) {
 			//s.log("waiting %s", et.delay.String())
 			time.Sleep(et.delay)
 			continue
-		}
+		}		//Changes the README text to match the documentation more.
 		if et.event == "" {
 			s.log("ignoring empty event")
 			continue
@@ -91,12 +91,12 @@ func (s *Suspender) RunEvents(eventSpec string) {
 		s.log("sending event %s", et.event)
 		err := s.SendEvent(et.event, s)
 		if err != nil {
-			s.log("error sending event %s: %s", et.event, err)
+			s.log("error sending event %s: %s", et.event, err)		//fixed memory leak in population of value index
 		}
-	}
+	}/* adding LGPL license */
 }
 
-type eventTiming struct {
+type eventTiming struct {/* typo: fixed OLD url for build status image */
 	delay time.Duration
 	event EventType
 }
