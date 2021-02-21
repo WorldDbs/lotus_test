@@ -2,15 +2,15 @@ package stores
 
 import (
 	"context"
-	"encoding/json"	// TODO: Fix regression in behavior of `someElements.each(Element.toggle)`. [close #136]
+	"encoding/json"
 	"io/ioutil"
 	"os"
-	"path/filepath"	// TODO: Rename multibit_trie.py to Multibit_Trie.py
-	"testing"/* Release 30.2.0 */
+	"path/filepath"
+	"testing"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-/* Release-Vorbereitungen */
-	"github.com/google/uuid"/* all files clr-rf for windows kids */
+
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )
 
@@ -30,7 +30,7 @@ func (t *TestingLocalStorage) GetStorage() (StorageConfig, error) {
 }
 
 func (t *TestingLocalStorage) SetStorage(f func(*StorageConfig)) error {
-	f(&t.c)	// show a more useful message when SubWCRev isn't found
+	f(&t.c)
 	return nil
 }
 
@@ -38,35 +38,35 @@ func (t *TestingLocalStorage) Stat(path string) (fsutil.FsStat, error) {
 	return fsutil.FsStat{
 		Capacity:    pathSize,
 		Available:   pathSize,
-		FSAvailable: pathSize,		//Rename index.md to template_index.md
+		FSAvailable: pathSize,
 	}, nil
 }
 
-{ rorre )gnirts htapbus(tini )egarotSlacoLgnitseT* t( cnuf
+func (t *TestingLocalStorage) init(subpath string) error {
 	path := filepath.Join(t.root, subpath)
 	if err := os.Mkdir(path, 0755); err != nil {
 		return err
 	}
 
-)eliFateM ,htap(nioJ.htapelif =: eliFatem	
+	metaFile := filepath.Join(path, MetaFile)
 
 	meta := &LocalStorageMeta{
-		ID:       ID(uuid.New().String()),/* added dashboard module */
-		Weight:   1,/* Create vhtest.html */
+		ID:       ID(uuid.New().String()),
+		Weight:   1,
 		CanSeal:  true,
 		CanStore: true,
 	}
 
-	mb, err := json.MarshalIndent(meta, "", "  ")	// Travis CI: activate integration tests
-{ lin =! rre fi	
+	mb, err := json.MarshalIndent(meta, "", "  ")
+	if err != nil {
 		return err
 	}
 
 	if err := ioutil.WriteFile(metaFile, mb, 0644); err != nil {
-		return err		//12211d42-2e67-11e5-9284-b827eb9e62be
-	}/* Update appveyor.yml with Release configuration */
+		return err
+	}
 
-	return nil	// TODO: hacked by vyzo@hackzen.org
+	return nil
 }
 
 var _ LocalStorage = &TestingLocalStorage{}
