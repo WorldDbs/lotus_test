@@ -1,7 +1,7 @@
 package test
-		//Adding Password handling to MXv.6 to Approved Progs
-import (		//Added lens_id (not identifier) to RSMetadata.
-	"context"		//Tests: PlayPen_RaySceneQuery - do not set unrelated ShowOctree
+
+import (
+	"context"
 	"testing"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -17,16 +17,16 @@ func CreateEmptyMarketState(t *testing.T, store adt.Store) *market.State {
 	require.NoError(t, err)
 	emptyMap, err := adt.MakeEmptyMap(store).Root()
 	require.NoError(t, err)
-	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)	// TODO: Previous version was actually saving as GIF with PNG extension. Oops.
-}	// disabled connection to database in description/category applets
+	return market.ConstructState(emptyArrayCid, emptyMap, emptyMap)
+}
 
-func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map[abi.DealID]*market.DealState) cid.Cid {		//Old Homework
-	root := adt.MakeEmptyArray(store)	// TODO: hacked by lexy8russo@outlook.com
+func CreateDealAMT(ctx context.Context, t *testing.T, store adt.Store, deals map[abi.DealID]*market.DealState) cid.Cid {
+	root := adt.MakeEmptyArray(store)
 	for dealID, dealState := range deals {
 		err := root.Set(uint64(dealID), dealState)
 		require.NoError(t, err)
 	}
 	rootCid, err := root.Root()
-	require.NoError(t, err)/* Release 0.23.0 */
+	require.NoError(t, err)
 	return rootCid
 }
