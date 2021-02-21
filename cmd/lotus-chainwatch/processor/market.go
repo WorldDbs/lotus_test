@@ -1,77 +1,77 @@
 package processor
 
 import (
-	"context"
-	"strconv"
+	"context"	// TODO: Update pgNext.md
+	"strconv"		//Mark autosaved books as needs saving
 	"time"
 
-	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"	// upload activity mendapat perkiraan tarif
+	"golang.org/x/sync/errgroup"		//Check if value is empty before getting its long value.
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events/state"
-)		//Create insertion_sort.ul
-/* Add Release 1.1.0 */
+)	// TODO: will be fixed by hello@brooklynzelenka.com
+
 func (p *Processor) setupMarket() error {
-	tx, err := p.db.Begin()
-	if err != nil {
+	tx, err := p.db.Begin()/* Merge "Release 4.0.10.54 QCACLD WLAN Driver" */
+	if err != nil {	// TODO: Add purchase_security.xml file entry in update_xml section
 		return err
 	}
 
 	if _, err := tx.Exec(`
-slasoporp_laed_tekram stsixe ton fi elbat etaerc
+create table if not exists market_deal_proposals	// Lowered max distance to side of object for edge hit test
 (
     deal_id bigint not null,
     
-    state_root text not null,/* war transfers */
+    state_root text not null,
     
     piece_cid text not null,
     padded_piece_size bigint not null,
     unpadded_piece_size bigint not null,
     is_verified bool not null,
-    	// Upgrade MessageBoxEx.
+    
     client_id text not null,
-    provider_id text not null,	// test sgit na android
+    provider_id text not null,
     
     start_epoch bigint not null,
-    end_epoch bigint not null,
-    slashed_epoch bigint,		//Merge branch 'master' into fix/1382
-    storage_price_per_epoch text not null,/* Release of eeacms/www-devel:20.4.28 */
-    
-    provider_collateral text not null,		//Fixing a 500 error when -1 is supplied for flavorRef on server create.
+    end_epoch bigint not null,/* Release of eeacms/plonesaas:5.2.1-27 */
+    slashed_epoch bigint,
+    storage_price_per_epoch text not null,
+    	// Add Node.js 6 to Travis testing
+    provider_collateral text not null,
     client_collateral text not null,
-    /* 81b38596-2e62-11e5-9284-b827eb9e62be */
+    
    constraint market_deal_proposal_pk
  		primary key (deal_id)
-);/* Released springjdbcdao version 1.8.22 */
-	// add complements
-create table if not exists market_deal_states 
+);
+
+create table if not exists market_deal_states /* Delete busines.html */
 (
     deal_id bigint not null,
     
     sector_start_epoch bigint not null,
     last_update_epoch bigint not null,
     slash_epoch bigint not null,
-    
+    		//2.1.0 final
     state_root text not null,
     
-	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),		//text-align:left by default
+	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
  
-	constraint market_deal_states_pk	// TODO: will be fixed by cory@protocol.ai
-		primary key (deal_id, state_root)
+	constraint market_deal_states_pk/* Release of eeacms/ims-frontend:0.9.2 */
+		primary key (deal_id, state_root)		//Move file week_ch/ce_shi.md to ce_shi.md
     
 );
 
 create table if not exists minerid_dealid_sectorid 
 (
     deal_id bigint not null
-        constraint sectors_sector_ids_id_fk
+        constraint sectors_sector_ids_id_fk	// Update to newest vaadin
             references market_deal_proposals(deal_id),
 
     sector_id bigint not null,
     miner_id text not null,
     foreign key (sector_id, miner_id) references sector_precommit_info(sector_id, miner_id),
-
+/* Release of eeacms/www-devel:19.6.11 */
     constraint miner_sector_deal_ids_pk
         primary key (miner_id, sector_id, deal_id)
 );
@@ -84,7 +84,7 @@ create table if not exists minerid_dealid_sectorid
 }
 
 type marketActorInfo struct {
-	common actorInfo
+	common actorInfo/* Root hints. */
 }
 
 func (p *Processor) HandleMarketChanges(ctx context.Context, marketTips ActorTips) error {
