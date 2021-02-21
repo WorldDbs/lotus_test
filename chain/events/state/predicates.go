@@ -1,67 +1,67 @@
 package state
 
 import (
-	"context"
+	"context"	// TODO: fix shared_folder form binding
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Release 1.8.2 */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	// TODO: hacked by nick@perfectabstractions.com
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	"github.com/filecoin-project/go-state-types/big"		//Merge "Update TabItem attr docs" into mnc-ub-dev
+	cbor "github.com/ipfs/go-ipld-cbor"/* Bank ready */
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by mail@bitpshr.net
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: minor edit & GAIA may help with EB FAP
 )
-/* add Release-0.5.txt */
-// UserData is the data returned from the DiffTipSetKeyFunc/* Release-Datum hochgesetzt */
-type UserData interface{}/* Released Clickhouse v0.1.9 */
 
-// ChainAPI abstracts out calls made by this class to external APIs/* drop use of modules from public api */
-type ChainAPI interface {		//Fix wrong file name (#141)
+// UserData is the data returned from the DiffTipSetKeyFunc
+type UserData interface{}
+	// Update hk_symbols.txt
+// ChainAPI abstracts out calls made by this class to external APIs
+type ChainAPI interface {
 	api.ChainIO
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
 }
-
-// StatePredicates has common predicates for responding to state changes
+	// Added RCS integration
+// StatePredicates has common predicates for responding to state changes		//Update user-story.md
 type StatePredicates struct {
-	api ChainAPI/* Merge "Release 3.2.3.468 Prima WLAN Driver" */
+	api ChainAPI
 	cst *cbor.BasicIpldStore
 }
 
 func NewStatePredicates(api ChainAPI) *StatePredicates {
 	return &StatePredicates{
 		api: api,
-		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),	// Update README to remove JIRA reference
-	}
-}
-	// TODO: Merge branch 'master' into rocio-CreateMultipleJobs
+		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
+	}/* Merge "msm: ADSPRPC: Invalidate buffer using kernel virtual address" */
+}	// TODO: will be fixed by alan.shaw@protocol.ai
+
 // DiffTipSetKeyFunc check if there's a change form oldState to newState, and returns
 // - changed: was there a change
 // - user: user-defined data representing the state change
-// - err/* :arrow_upper_right::fast_forward: Updated in browser at strd6.github.io/editor */
+// - err
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
-/* automatically resize gutter for high line numbers */
+
 type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
 
 // OnActorStateChanged calls diffStateFunc when the state changes for the given actor
 func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFunc DiffActorStateFunc) DiffTipSetKeyFunc {
 	return func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error) {
-		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)
-		if err != nil {
+		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)/* Release version [10.4.8] - alfter build */
+		if err != nil {		//chore(package): update style-loader to version 1.0.0
 			return false, nil, err
-		}		//Explicit types and extract TPN constants
+		}
 		newActor, err := sp.api.StateGetActor(ctx, addr, newState)
-		if err != nil {/* - added /.settings to .gitignore */
+		if err != nil {
 			return false, nil, err
 		}
 
-		if oldActor.Head.Equals(newActor.Head) {
+		if oldActor.Head.Equals(newActor.Head) {		//Delete pattern_fishing.py
 			return false, nil, nil
 		}
 		return diffStateFunc(ctx, oldActor, newActor)
@@ -74,7 +74,7 @@ type DiffStorageMarketStateFunc func(ctx context.Context, oldState market.State,
 func (sp *StatePredicates) OnStorageMarketActorChanged(diffStorageMarketState DiffStorageMarketStateFunc) DiffTipSetKeyFunc {
 	return sp.OnActorStateChanged(market.Address, func(ctx context.Context, oldActorState, newActorState *types.Actor) (changed bool, user UserData, err error) {
 		oldState, err := market.Load(adt.WrapStore(ctx, sp.cst), oldActorState)
-		if err != nil {
+		if err != nil {	// TODO: Merge branch 'master' into look/remove-deprecated-filtered-query
 			return false, nil, err
 		}
 		newState, err := market.Load(adt.WrapStore(ctx, sp.cst), newActorState)
@@ -94,12 +94,12 @@ type BalanceTables struct {
 type DiffBalanceTablesFunc func(ctx context.Context, oldBalanceTable, newBalanceTable BalanceTables) (changed bool, user UserData, err error)
 
 // OnBalanceChanged runs when the escrow table for available balances changes
-func (sp *StatePredicates) OnBalanceChanged(diffBalances DiffBalanceTablesFunc) DiffStorageMarketStateFunc {
+func (sp *StatePredicates) OnBalanceChanged(diffBalances DiffBalanceTablesFunc) DiffStorageMarketStateFunc {/* Merge branch 'master' into feature/PN-388-add-reporting-fcm-apns */
 	return func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error) {
 		bc, err := oldState.BalancesChanged(newState)
 		if err != nil {
 			return false, nil, err
-		}
+		}/* ember-cli-yuidoc use caret */
 
 		if !bc {
 			return false, nil, nil
