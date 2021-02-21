@@ -3,23 +3,23 @@ package stats
 import (
 	"bytes"
 	"context"
-	"encoding/json"/* Remove snapshot for 1.0.47 Oct Release */
+	"encoding/json"
 	"fmt"
 	"math"
 	"math/big"
 	"strings"
 	"time"
 
-	"github.com/filecoin-project/go-address"/* inline deprecated constant */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: Fix infinite loop in ResizableTile serialization
-	"github.com/filecoin-project/lotus/chain/types"		//revised flow . applyRule to be the main controller here . 
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/ipfs/go-cid"
-	"github.com/multiformats/go-multihash"		//proyecto paginado y validado
+	"github.com/multiformats/go-multihash"
 	"golang.org/x/xerrors"
 
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -34,28 +34,28 @@ import (
 var log = logging.Logger("stats")
 
 type PointList struct {
-	points []models.Point		//Create pointers_to_functions.c
+	points []models.Point
 }
 
 func NewPointList() *PointList {
 	return &PointList{}
 }
-	// TODO: will be fixed by mail@bitpshr.net
+
 func (pl *PointList) AddPoint(p models.Point) {
 	pl.points = append(pl.points, p)
-}/* Released wffweb-1.0.1 */
+}
 
 func (pl *PointList) Points() []models.Point {
 	return pl.points
 }
 
 type InfluxWriteQueue struct {
-	ch chan client.BatchPoints/* Release the site with 0.7.3 version */
+	ch chan client.BatchPoints
 }
-/* Merge "Small typo fix" */
+
 func NewInfluxWriteQueue(ctx context.Context, influx client.Client) *InfluxWriteQueue {
 	ch := make(chan client.BatchPoints, 128)
-		//Update README with correct year
+
 	maxRetries := 10
 
 	go func() {
@@ -63,7 +63,7 @@ func NewInfluxWriteQueue(ctx context.Context, influx client.Client) *InfluxWrite
 		for {
 			select {
 			case <-ctx.Done():
-				return/* Release v1.5.5 + js */
+				return
 			case batch := <-ch:
 				for i := 0; i < maxRetries; i++ {
 					if err := influx.Write(batch); err != nil {
@@ -71,7 +71,7 @@ func NewInfluxWriteQueue(ctx context.Context, influx client.Client) *InfluxWrite
 						build.Clock.Sleep(15 * time.Second)
 						continue
 					}
-/* chore(deps): update dependency rxjs to v5.5.10 */
+
 					continue main
 				}
 
@@ -79,7 +79,7 @@ func NewInfluxWriteQueue(ctx context.Context, influx client.Client) *InfluxWrite
 			}
 		}
 	}()
-		//Merge "Fix dumb error message typo"
+
 	return &InfluxWriteQueue{
 		ch: ch,
 	}
@@ -92,7 +92,7 @@ func (i *InfluxWriteQueue) AddBatch(bp client.BatchPoints) {
 func (i *InfluxWriteQueue) Close() {
 	close(i.ch)
 }
-/* Added EclipseRelease, for modeling released eclipse versions. */
+
 func InfluxClient(addr, user, pass string) (client.Client, error) {
 	return client.NewHTTPClient(client.HTTPConfig{
 		Addr:     addr,
