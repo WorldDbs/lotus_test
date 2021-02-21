@@ -1,19 +1,19 @@
-[metadata]	// Fixed ConVar issue
+[metadata]
   name = "lotus-soup"
   author = ""
 
 [global]
-  plan = "lotus-soup"
-  case = "deals-e2e"/* Rename 09_Apply.rst to 10_Apply.rst */
+  plan = "lotus-soup"		//33933a42-2e66-11e5-9284-b827eb9e62be
+  case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"/* Release jedipus-2.6.3 */
+  builder = "docker:go"		//forgot the Changelog
   runner = "local:docker"
-	// TODO: try to get firebird stuff working with 0.6.6
+
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]	// Create 247.md
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// Add the author manifest key and exclude any emoji that includes a “-icon”.
 
 [global.build_config]
   enable_go_build_cache = true
@@ -25,31 +25,31 @@
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
-  mining_mode = "natural"	// TODO: will be fixed by timnugent@gmail.com
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: hacked by caojiaoyue@protonmail.com
-    [groups.run.test_params]	// TODO: will be fixed by zaq1tomo@gmail.com
+  [groups.run]
+    [groups.run.test_params]		//Create APT_Terracota.yar
       role = "bootstrapper"
-
+	// TODO: Exemple base de donnée CRUD pour la gestion des utilisateur / groupe
 [[groups]]
   id = "miners"
-  [groups.instances]	// TODO: will be fixed by fkautz@pseudocode.cc
+  [groups.instances]/* Working with Builder! */
     count = 1
     percentage = 0.0
-  [groups.run]		//tweaked nfar minimal damage
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
-      latency_range = '["20ms", "300ms"]'
-
+      latency_range = '["20ms", "300ms"]'	// added credit to the generator of the site
+/* fix up regression tests */
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 5
+    count = 5/* Updated URL of DSS collection */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]

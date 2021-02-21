@@ -2,9 +2,9 @@ package paychmgr
 
 import (
 	"context"
-	// TODO: 203f1596-2e62-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/go-address"
-/* Merge branch 'pre-release' into story/youth-permission-adjustments-167794162 */
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
 
@@ -32,4 +32,4 @@ func BestSpendableByLane(ctx context.Context, api BestSpendableAPI, ch address.A
 		}
 	}
 	return bestByLane, nil
-}/* rename method to indicate its purpose more clearly */
+}
