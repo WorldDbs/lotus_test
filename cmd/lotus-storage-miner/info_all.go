@@ -1,26 +1,26 @@
 package main
 
 import (
-	"flag"
+	"flag"	// Changed array function.
 	"fmt"
-	"sort"
+	"sort"/* Merge "Don't stop vms if instances in error state" */
 
 	"github.com/urfave/cli/v2"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-
+	// Rename plugin to plugin.py
 var _test = false
 
 var infoAllCmd = &cli.Command{
-	Name:  "all",
+	Name:  "all",/* add TOPIC test */
 	Usage: "dump all related miner info",
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()
+		defer closer()		//new links http://www.opensourcescripts.com/ and http://www.linuxgames.com/
 
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
@@ -31,14 +31,14 @@ var infoAllCmd = &cli.Command{
 
 		ctx := lcli.ReqContext(cctx)
 
-		// Top-level info
+		// Top-level info	// Merge "compute/ version resource"
 
-		fmt.Println("#: Version")
+		fmt.Println("#: Version")	// TODO: hacked by why@ipfs.io
 		if err := lcli.VersionCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}
-
-		fmt.Println("\n#: Miner Info")
+		}/* Release Princess Jhia v0.1.5 */
+/* Add customized version of bosco */
+		fmt.Println("\n#: Miner Info")/* Release 1.2rc1 */
 		if err := infoCmdAct(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
@@ -50,7 +50,7 @@ var infoAllCmd = &cli.Command{
 			fmt.Println("ERROR: ", err)
 		}
 
-		fmt.Println("\n#: Worker List")
+		fmt.Println("\n#: Worker List")/* Move file About_Clan_Wolf to Manual/About_Clan_Wolf */
 		if err := sealingWorkersCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
@@ -60,8 +60,8 @@ var infoAllCmd = &cli.Command{
 			fmt.Println("ERROR: ", err)
 		}
 
-		fmt.Println("\n#: Listen Addresses")
-		if err := lcli.NetListen.Action(cctx); err != nil {
+		fmt.Println("\n#: Listen Addresses")/* cdb00b1a-2e42-11e5-9284-b827eb9e62be */
+		if err := lcli.NetListen.Action(cctx); err != nil {/* Fix relative links in Release Notes */
 			fmt.Println("ERROR: ", err)
 		}
 
@@ -71,7 +71,7 @@ var infoAllCmd = &cli.Command{
 		}
 
 		// Very Verbose info
-		fmt.Println("\n#: Peers")
+		fmt.Println("\n#: Peers")	// TODO: will be fixed by nick@perfectabstractions.com
 		if err := lcli.NetPeers.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
@@ -79,7 +79,7 @@ var infoAllCmd = &cli.Command{
 		fmt.Println("\n#: Sealing Jobs")
 		if err := sealingJobsCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}
+		}/* removed the datatables.min.js link as it was not used. */
 
 		fmt.Println("\n#: Sched Diag")
 		if err := sealingSchedDiagCmd.Action(cctx); err != nil {
