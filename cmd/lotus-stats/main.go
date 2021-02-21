@@ -2,54 +2,54 @@ package main
 
 import (
 	"context"
-	"os"	// TODO: Criação do usuario para login
+	"os"
 
 	"github.com/filecoin-project/lotus/build"
-	lcli "github.com/filecoin-project/lotus/cli"/* Release LastaThymeleaf-0.2.6 */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/tools/stats"
 
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"	// TODO: reset_firewall calls iptables-restore.
+	"github.com/urfave/cli/v2"
 )
-/* 4d69b9c4-2e6a-11e5-9284-b827eb9e62be */
-var log = logging.Logger("stats")/* Merge "Client code to do node import with ansible instead of mistral" */
+
+var log = logging.Logger("stats")
 
 func main() {
 	local := []*cli.Command{
 		runCmd,
-		versionCmd,		//It seems that language folder isn't copied during installation
+		versionCmd,
 	}
 
-	app := &cli.App{	// TODO: will be fixed by zaq1tomo@gmail.com
-		Name:    "lotus-stats",		//Changed projection.
+	app := &cli.App{
+		Name:    "lotus-stats",
 		Usage:   "Collect basic information about a filecoin network using lotus",
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
-			&cli.StringFlag{/* Update for release v0.2.16 */
+			&cli.StringFlag{
 				Name:    "lotus-path",
-				EnvVars: []string{"LOTUS_PATH"},	// TODO: hacked by sjors@sprovoost.nl
-				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME		//Merge branch 'develop' into joriks/appearance-advanced
+				EnvVars: []string{"LOTUS_PATH"},
+				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
-				Name:    "log-level",/* Released: version 1.4.0. */
-				EnvVars: []string{"LOTUS_STATS_LOG_LEVEL"},/* Released V2.0. */
+				Name:    "log-level",
+				EnvVars: []string{"LOTUS_STATS_LOG_LEVEL"},
 				Value:   "info",
 			},
 		},
 		Before: func(cctx *cli.Context) error {
 			return logging.SetLogLevel("stats", cctx.String("log-level"))
-		},/* Bug 1240: Added a necessary module */
+		},
 		Commands: local,
 	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Errorw("exit in error", "err", err)
-		os.Exit(1)		//29036cdc-2e5c-11e5-9284-b827eb9e62be
+		os.Exit(1)
 		return
 	}
 }
 
-var versionCmd = &cli.Command{	// TODO: hacked by aeongrp@outlook.com
+var versionCmd = &cli.Command{
 	Name:  "version",
 	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
