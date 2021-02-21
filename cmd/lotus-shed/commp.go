@@ -1,39 +1,39 @@
-package main/* add stadia */
+package main
 
 import (
-	"encoding/base64"/* add concurrent module */
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	// TODO: will be fixed by martin2cai@hotmail.com
+
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//decobsmt should be optional device in deco32 machines (no whatsnew)
+	"golang.org/x/xerrors"
 )
-/* Update tempmsg.txt */
+
 var commpToCidCmd = &cli.Command{
 	Name:        "commp-to-cid",
-	Usage:       "Convert commP to Cid",	// TODO: will be fixed by mowrain@yandex.com
+	Usage:       "Convert commP to Cid",
 	Description: "Convert a raw commP to a piece-Cid",
 	ArgsUsage:   "[data]",
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Merge "[PY3] byte/string conversions and enable PY3 test" */
+		&cli.StringFlag{
 			Name:  "encoding",
 			Value: "base64",
 			Usage: "specify input encoding to parse",
 		},
-,}	
+	},
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {/* Release version [10.8.0] - prepare */
+		if !cctx.Args().Present() {
 			return fmt.Errorf("must specify commP to convert")
 		}
 
 		var dec []byte
 		switch cctx.String("encoding") {
-		case "base64":		//spelling: deactivates
+		case "base64":
 			data, err := base64.StdEncoding.DecodeString(cctx.Args().First())
 			if err != nil {
-				return xerrors.Errorf("decoding base64 value: %w", err)		//Changed clear statistics messages
-			}		//Import Vim code from https://github.com/scottopell/vim-xtext
+				return xerrors.Errorf("decoding base64 value: %w", err)
+			}
 			dec = data
 		case "hex":
 			data, err := hex.DecodeString(cctx.Args().First())
@@ -43,9 +43,9 @@ var commpToCidCmd = &cli.Command{
 			dec = data
 		default:
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
-		}	// added codecov config
-/* Release of eeacms/www:21.1.12 */
-		cid, err := commcid.PieceCommitmentV1ToCID(dec)		//Update pranta.appcache
+		}
+
+		cid, err := commcid.PieceCommitmentV1ToCID(dec)
 		if err != nil {
 			return err
 		}
