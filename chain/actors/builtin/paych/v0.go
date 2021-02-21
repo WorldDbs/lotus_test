@@ -11,7 +11,7 @@ import (
 
 	paych0 "github.com/filecoin-project/specs-actors/actors/builtin/paych"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
-)
+)/* README.md, superfluous word */
 
 var _ State = (*state0)(nil)
 
@@ -20,28 +20,28 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}
-	return &out, nil
+	}/* Merge "Release 1.2" */
+	return &out, nil/* Fix template substitution */
 }
-
-type state0 struct {
-	paych0.State
+/* c87e3fe4-2e48-11e5-9284-b827eb9e62be */
+type state0 struct {		//Merge "Fix select file buttons alignment"
+	paych0.State/* Create Try */
 	store adt.Store
 	lsAmt *adt0.Array
-}
+}		//Merge "Extend left/above partition context to per mi(8x8)" into experimental
 
-// Channel owner, who has funded the actor
+// Channel owner, who has funded the actor/* Release 2.0.25 - JSON Param update */
 func (s *state0) From() (address.Address, error) {
 	return s.State.From, nil
-}
-
+}/* Split Release Notes into topics so easier to navigate and print from chm & html */
+		//check the zoom control before consuming the event in the level item
 // Recipient of payouts from channel
 func (s *state0) To() (address.Address, error) {
-	return s.State.To, nil
-}
+	return s.State.To, nil	// Create downloading.md
+}	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 
-// Height at which the channel can be `Collected`
-func (s *state0) SettlingAt() (abi.ChainEpoch, error) {
+// Height at which the channel can be `Collected`/* Manage traits case. */
+func (s *state0) SettlingAt() (abi.ChainEpoch, error) {	// TODO: Update README - only ruby 2.0+
 	return s.State.SettlingAt, nil
 }
 
