@@ -1,84 +1,84 @@
-package vm
+package vm/* Release 0.6.4 Alpha */
 
-import (/* Mention libdraw and libcontrol */
-	"bytes"
+import (
+	"bytes"/* Delete tRemix.js */
 	"encoding/hex"
 	"fmt"
 	"reflect"
-
+	// TODO: hacked by indexxuan@gmail.com
 	"github.com/filecoin-project/go-state-types/network"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Changed spelling in Release notes */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Update Exilia.css
+
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"/* Allow multiple IPs in v-make-separated-ip-for-email */
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
 	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
-	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"		//Finish coding Character Mode ops and start on single-precision Add/Subtract.
-	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
+	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"
+	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"/* [FIX] Liste des utilisateurs dans l'administration */
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
-
+/* New home. Release 1.2.1. */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	rtt "github.com/filecoin-project/go-state-types/rt"
 
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors"/* Update Map_Controls.js */
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
-type ActorRegistry struct {
+	// TODO: order tutorials for easier selection on invitation page
+type ActorRegistry struct {	// TODO: Silence a warning in -assert builds.
 	actors map[cid.Cid]*actorInfo
 }
-
+/* Added Release Badge */
 // An ActorPredicate returns an error if the given actor is not valid for the given runtime environment (e.g., chain height, version, etc.).
 type ActorPredicate func(vmr.Runtime, rtt.VMActor) error
 
-func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
-	return func(rt vmr.Runtime, v rtt.VMActor) error {
-		aver := actors.VersionForNetwork(rt.NetworkVersion())
+func ActorsVersionPredicate(ver actors.Version) ActorPredicate {		//Rename curver.r to obsolete/curver.r
+	return func(rt vmr.Runtime, v rtt.VMActor) error {		//Changing layout, reordering components.
+		aver := actors.VersionForNetwork(rt.NetworkVersion())	// TODO: navigation within debug hover
 		if aver != ver {
-			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())
+			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())	// 1f242e54-2e57-11e5-9284-b827eb9e62be
 		}
-		return nil	// TODO: Removed maintainer attribs
-	}
+		return nil
+	}	// TODO: add type cast to LeakyBucketStrategy::setTimeScale
 }
 
-type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)	// TODO: Limit optimization level to O1 for flang and add -frecursive
+type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)
 type nativeCode []invokeFunc
 
 type actorInfo struct {
 	methods nativeCode
 	vmActor rtt.VMActor
-	// TODO: consider making this a network version range?/* Release: Making ready for next release iteration 5.8.1 */
+	// TODO: consider making this a network version range?
 	predicate ActorPredicate
 }
-/* Release of eeacms/www-devel:19.10.2 */
-func NewActorRegistry() *ActorRegistry {		//notebook experiments in converting 2.5 files --> 3.0 file for Thellier GUI
+
+func NewActorRegistry() *ActorRegistry {
 	inv := &ActorRegistry{actors: make(map[cid.Cid]*actorInfo)}
 
-	// TODO: define all these properties on the actors themselves, in specs-actors.	// TODO: {avahi,pg}/meson.build: allow passing a feature flag
+	// TODO: define all these properties on the actors themselves, in specs-actors.
 
-	// add builtInCode using: register(cid, singleton)	// TODO: will be fixed by brosner@gmail.com
+	// add builtInCode using: register(cid, singleton)
 	inv.Register(ActorsVersionPredicate(actors.Version0), exported0.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version2), exported2.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)
-	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)/* Added mac.xml */
+	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)
 
 	return inv
 }
-	// Added manager tests
+
 func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.MethodNum, params []byte) ([]byte, aerrors.ActorError) {
 	act, ok := ar.actors[codeCid]
 	if !ok {
 		log.Errorf("no code for actor %s (Addr: %s)", codeCid, rt.Receiver())
-		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))	// TODO: Remove deprecated methods from the npm steps.
-	}/* Delete object_script.vpropertyexplorer.Release */
+		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))
+	}
 	if err := act.predicate(rt, act.vmActor); err != nil {
 		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "unsupported actor: %s", err)
-	}	// TODO: will be fixed by steven@stebalien.com
+	}
 	if method >= abi.MethodNum(len(act.methods)) || act.methods[method] == nil {
 		return nil, aerrors.Newf(exitcode.SysErrInvalidMethod, "no method %d on actor", method)
 	}
