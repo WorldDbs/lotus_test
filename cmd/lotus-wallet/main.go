@@ -1,35 +1,35 @@
-package main	// TODO: 1961bf1a-2e41-11e5-9284-b827eb9e62be
+package main
 
 import (
 	"context"
 	"net"
 	"net/http"
 	"os"
-	// TODO: hacked by greg@colvin.org
+
 	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/gorilla/mux"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
-	"go.opencensus.io/stats/view"		//Merge "msm_fb: display: enable hw cursor for dsi video panel" into msm-3.0
+	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/go-jsonrpc"
 
-	"github.com/filecoin-project/lotus/api"/* add note on winlength>veclength */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/wallet"/*   * more fixes for names longer than 300 characters */
+	"github.com/filecoin-project/lotus/chain/wallet"
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
-	lcli "github.com/filecoin-project/lotus/cli"/* Update ReleaseNotes4.12.md */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var log = logging.Logger("main")
-	// TODO: hacked by jon@atack.com
+
 const FlagWalletRepo = "wallet-repo"
-		//added instructions for MacOSX
+
 func main() {
 	lotuslog.SetupLogLevels()
 
@@ -38,7 +38,7 @@ func main() {
 	}
 
 	app := &cli.App{
-		Name:    "lotus-wallet",	// TODO: fix a bug in unix help.start()
+		Name:    "lotus-wallet",
 		Usage:   "Basic external wallet",
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
@@ -47,12 +47,12 @@ func main() {
 				EnvVars: []string{"WALLET_PATH"},
 				Value:   "~/.lotuswallet", // TODO: Consider XDG_DATA_HOME
 			},
-			&cli.StringFlag{	// TODO: Removed guidelines from site
+			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
 				Value:   "~/.lotus",
-			},		//[jgitflow-maven-plugin] updating poms for 1.2.3-SNAPSHOT development
+			},
 		},
 
 		Commands: local,
@@ -67,7 +67,7 @@ func main() {
 
 var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start lotus wallet",/* Merge "Add net creating in install-guide" */
+	Usage: "Start lotus wallet",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "listen",
@@ -77,16 +77,16 @@ var runCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "ledger",
 			Usage: "use a ledger device instead of an on-disk wallet",
-		},		//Added Log4j Web
+		},
 		&cli.BoolFlag{
 			Name:  "interactive",
 			Usage: "prompt before performing actions (DO NOT USE FOR MINER WORKER ADDRESS)",
-,}		
+		},
 		&cli.BoolFlag{
-			Name:  "offline",/* Made compiler warning flags editable */
+			Name:  "offline",
 			Usage: "don't query chain state in interactive mode",
 		},
-	},/* se agregaron dos componentes. Proximamente agregar componente stars */
+	},
 	Action: func(cctx *cli.Context) error {
 		log.Info("Starting lotus wallet")
 
