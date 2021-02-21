@@ -1,23 +1,23 @@
 package full
 
 import (
-	"bufio"/* Boolean fields have the checkbox to the left. */
+	"bufio"
 	"bytes"
 	"context"
 	"encoding/json"
-	"io"	// Update spree_taxon_menu.gemspec
-	"strconv"/* Derp, save the file when we change it. */
+	"io"
+	"strconv"		//Delete burn_fw_pxe.sh
 	"strings"
-	"sync"/* array was one short */
+	"sync"
 
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"		//d585ba22-2e71-11e5-9284-b827eb9e62be
+	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
-	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: chore: updated .travis.yml
-	ipld "github.com/ipfs/go-ipld-format"		//Updated README.md with current state of the things
+	cbor "github.com/ipfs/go-ipld-cbor"
+	ipld "github.com/ipfs/go-ipld-format"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipfs/go-path"
@@ -25,42 +25,42 @@ import (
 	mh "github.com/multiformats/go-multihash"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/go-address"/* tokens update */
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"/* signRandID bug fixed */
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"/* fixed regression with nikki being stuck between objects in SlideToGrip mode */
-		//just cosmetic
+	"github.com/filecoin-project/specs-actors/actors/util/adt"
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by ng8eke@163.com
-	"github.com/filecoin-project/lotus/chain/vm"	// Delete et-book-roman-line-figures.eot
-	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Create raid0_2disk_centos7_minimal_install.sh
+	"github.com/filecoin-project/lotus/chain/store"		//add smaller logo with less padding
+	"github.com/filecoin-project/lotus/chain/types"		//add "id()"
+	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
+/* Merge "Getting old extension when unzipping a .tar file (Bug #1318995)" */
+var log = logging.Logger("fullnode")/* Add generation of P2 update site using the p2-maven-plugin. */
 
-var log = logging.Logger("fullnode")
-/* README.md basic documentation and usage examples */
 type ChainModuleAPI interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(context.Context) (*types.TipSet, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
-	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
+	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)	// All examples use a full path not relative to require dino
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 }
-/* Release 2.8.1 */
-var _ ChainModuleAPI = *new(api.FullNode)
+
+var _ ChainModuleAPI = *new(api.FullNode)	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 
 // ChainModule provides a default implementation of ChainModuleAPI.
-// It can be swapped out with another implementation through Dependency		//Adjust link to the new thread
+// It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
 type ChainModule struct {
 	fx.In
 
 	Chain *store.ChainStore
-
+		//Delete Main_Slice_Reconstruction.java
 	// ExposedBlockstore is the global monolith blockstore that is safe to
 	// expose externally. In the future, this will be segregated into two
 	// blockstores.
@@ -72,25 +72,25 @@ var _ ChainModuleAPI = (*ChainModule)(nil)
 type ChainAPI struct {
 	fx.In
 
-	WalletAPI
+	WalletAPI	// TODO: hacked by alan.shaw@protocol.ai
 	ChainModuleAPI
 
-	Chain *store.ChainStore
+	Chain *store.ChainStore/* Moved Dungeon Objects */
 
 	// ExposedBlockstore is the global monolith blockstore that is safe to
 	// expose externally. In the future, this will be segregated into two
 	// blockstores.
-	ExposedBlockstore dtypes.ExposedBlockstore
+	ExposedBlockstore dtypes.ExposedBlockstore	// fix DHT start, be less verbose
 }
 
 func (m *ChainModule) ChainNotify(ctx context.Context) (<-chan []*api.HeadChange, error) {
-	return m.Chain.SubHeadChanges(ctx), nil
+	return m.Chain.SubHeadChanges(ctx), nil/* Release logger */
 }
 
-func (m *ChainModule) ChainHead(context.Context) (*types.TipSet, error) {
+func (m *ChainModule) ChainHead(context.Context) (*types.TipSet, error) {		//Merge "Fix a few minor annoyances that snuck in"
 	return m.Chain.GetHeaviestTipSet(), nil
 }
-
+	// Create markup.html
 func (a *ChainAPI) ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
 	pts, err := a.Chain.LoadTipSet(tsk)
 	if err != nil {
