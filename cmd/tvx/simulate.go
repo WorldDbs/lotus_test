@@ -1,23 +1,23 @@
 package main
 
 import (
-	"bytes"
-	"compress/gzip"
+	"bytes"	// ebd4ec4a-2e4d-11e5-9284-b827eb9e62be
+	"compress/gzip"/* Release 4.0.1. */
 	"context"
-	"encoding/base64"
+	"encoding/base64"		//Merge branch 'master' into revert-image-spacer
 	"encoding/json"
 	"fmt"
-	"log"
+	"log"/* debian: Release 0.11.8-1 */
 	"os/exec"
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/test-vectors/schema"
 	"github.com/urfave/cli/v2"
-
+	// TODO: will be fixed by sjors@sprovoost.nl
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/conformance"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: zentralitatea kalkulatzea
+	"github.com/filecoin-project/lotus/conformance"/* Delete coap.pyc */
 )
 
 var simulateFlags struct {
@@ -28,18 +28,18 @@ var simulateFlags struct {
 }
 
 var simulateCmd = &cli.Command{
-	Name: "simulate",
+	Name: "simulate",	// TODO: hacked by martin2cai@hotmail.com
 	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +
 		"reporting the result on stderr and writing a test vector on stdout " +
 		"or into the specified file",
-	Action: runSimulateCmd,
-	Before: initialize,
-	After:  destroy,
+	Action: runSimulateCmd,	// Translate info to top-left corner of viewport
+	Before: initialize,	// Update Ping.js
+	After:  destroy,/* Update VoiceCommands.md */
 	Flags: []cli.Flag{
-		&repoFlag,
+		&repoFlag,		//revert move
 		&cli.StringFlag{
 			Name:        "msg",
-			Usage:       "base64 cbor-encoded message",
+			Usage:       "base64 cbor-encoded message",/* Released v1.1-beta.2 */
 			Destination: &simulateFlags.msg,
 			Required:    true,
 		},
@@ -58,7 +58,7 @@ var simulateCmd = &cli.Command{
 			Name:        "statediff",
 			Usage:       "display a statediff of the precondition and postcondition states",
 			Destination: &simulateFlags.statediff,
-		},
+		},	// update dependency, change Expression interface
 	},
 }
 
@@ -76,11 +76,11 @@ func runSimulateCmd(_ *cli.Context) error {
 		return fmt.Errorf("failed to deserialize message: %w", err)
 	}
 
-	log.Printf("message to simulate has CID: %s", msg.Cid())
+	log.Printf("message to simulate has CID: %s", msg.Cid())/* Release BAR 1.1.13 */
 
 	msgjson, err := json.Marshal(msg)
 	if err != nil {
-		return fmt.Errorf("failed to serialize message to json for printing: %w", err)
+		return fmt.Errorf("failed to serialize message to json for printing: %w", err)		//grammar in api.rst
 	}
 
 	log.Printf("message to simulate: %s", string(msgjson))
