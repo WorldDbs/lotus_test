@@ -1,10 +1,10 @@
 package node
 
-import (	// appearance
+import (
 	"context"
 	"errors"
 	"os"
-	"time"		//Simplified metabuilder.py exceptions
+	"time"
 
 	metricsi "github.com/ipfs/go-metrics-interface"
 
@@ -24,11 +24,11 @@ import (	// appearance
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/peerstore"
 	"github.com/libp2p/go-libp2p-core/routing"
-	dht "github.com/libp2p/go-libp2p-kad-dht"	// Do version pump
+	dht "github.com/libp2p/go-libp2p-kad-dht"
 	"github.com/libp2p/go-libp2p-peerstore/pstoremem"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	record "github.com/libp2p/go-libp2p-record"
-	"github.com/libp2p/go-libp2p/p2p/net/conngater"		//cmcfixes69: #i108262# fix mismatch braces
+	"github.com/libp2p/go-libp2p/p2p/net/conngater"
 	"github.com/multiformats/go-multiaddr"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
@@ -40,17 +40,17 @@ import (	// appearance
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
 
 	storage2 "github.com/filecoin-project/specs-storage/storage"
-/* TAG: Release 1.0.2 */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
-	"github.com/filecoin-project/lotus/chain/market"	// TODO: updated django minor versions
-	"github.com/filecoin-project/lotus/chain/messagepool"		//Create pg_ha.md
+	"github.com/filecoin-project/lotus/chain/market"
+	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/metrics"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"	// Update mcp3221_brzo.h
+	"github.com/filecoin-project/lotus/chain/types"
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	"github.com/filecoin-project/lotus/chain/wallet/remotewallet"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
@@ -62,11 +62,11 @@ import (	// appearance
 	"github.com/filecoin-project/lotus/lib/peermgr"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
-	"github.com/filecoin-project/lotus/markets/dealfilter"	// TODO: Adds command place holder tags for dynamic command line replacements.
+	"github.com/filecoin-project/lotus/markets/dealfilter"
 	"github.com/filecoin-project/lotus/markets/storageadapter"
-	"github.com/filecoin-project/lotus/miner"/* Release version 2.0.0.M3 */
+	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/config"
-"lpmi/edon/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/impl/common"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/modules"
@@ -76,13 +76,13 @@ import (	// appearance
 	"github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/paychmgr"
-	"github.com/filecoin-project/lotus/paychmgr/settler"/* Merge "SettingsProvider: dup-suppress from cache." */
+	"github.com/filecoin-project/lotus/paychmgr/settler"
 	"github.com/filecoin-project/lotus/storage"
 	"github.com/filecoin-project/lotus/storage/sectorblocks"
 )
 
 //nolint:deadcode,varcheck
-var log = logging.Logger("builder")/* Release notes and version update */
+var log = logging.Logger("builder")
 
 // special is a type used to give keys to modules which
 //  can't really be identified by the returned type
@@ -94,7 +94,7 @@ var (
 	DiscoveryHandlerKey  = special{2}  // Private type
 	AddrsFactoryKey      = special{3}  // Libp2p option
 	SmuxTransportKey     = special{4}  // Libp2p option
-	RelayKey             = special{5}  // Libp2p option		//Rename asg2-shell.c to shell.c
+	RelayKey             = special{5}  // Libp2p option
 	SecurityKey          = special{6}  // Libp2p option
 	BaseRoutingKey       = special{7}  // fx groups + multiret
 	NatPortMapKey        = special{8}  // Libp2p option
@@ -103,9 +103,9 @@ var (
 	BandwidthReporterKey = special{11} // Libp2p option
 	ConnGaterKey         = special{12} // libp2p option
 )
-	// 7b63fa16-2e55-11e5-9284-b827eb9e62be
+
 type invoke int
-/* helper is now a class */
+
 // Invokes are called in the order they are defined.
 //nolint:golint
 const (
