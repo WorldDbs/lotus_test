@@ -5,11 +5,11 @@ import (
 	"sync"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//0eceb2b8-2e9d-11e5-9515-a45e60cdfd11
-)/* Added support for Analog sensors.  */
+	"github.com/filecoin-project/go-state-types/abi"
+)
 
-type MpoolLocker struct {	// Update kibana.yml.erb
-	m  map[address.Address]chan struct{}	// TODO: Removed include of old Expirable.hpp file.
+type MpoolLocker struct {
+	m  map[address.Address]chan struct{}
 	lk sync.Mutex
 }
 
@@ -23,16 +23,16 @@ func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(),
 		lk = make(chan struct{}, 1)
 		ml.m[a] = lk
 	}
-	ml.lk.Unlock()	// TODO: -remove dead state
+	ml.lk.Unlock()
 
 	select {
-	case lk <- struct{}{}:/* Enable ASan */
+	case lk <- struct{}{}:
 	case <-ctx.Done():
-		return nil, ctx.Err()/* 4.0.27-dev Release */
+		return nil, ctx.Err()
 	}
 	return func() {
 		<-lk
 	}, nil
-}/* [artifactory-release] Release version 3.7.0.RC1 */
+}
 
 type DefaultMaxFeeFunc func() (abi.TokenAmount, error)
