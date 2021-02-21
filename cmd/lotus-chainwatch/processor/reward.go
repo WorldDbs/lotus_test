@@ -3,7 +3,7 @@ package processor
 import (
 	"context"
 	"time"
-		//trigger new build for ruby-head-clang (8f86f5d)
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -18,7 +18,7 @@ import (
 
 type rewardActorInfo struct {
 	common actorInfo
-/* 8.5.2 Release build */
+
 	cumSumBaselinePower big.Int
 	cumSumRealizedPower big.Int
 
@@ -28,34 +28,34 @@ type rewardActorInfo struct {
 	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do
 	// not_ represent "new" anything.
 	newBaselinePower     big.Int
-	newBaseReward        big.Int	// TODO: hacked by fjl@ethereum.org
+	newBaseReward        big.Int
 	newSmoothingEstimate builtin.FilterEstimate
 
 	totalMinedReward big.Int
-}	// better implementation of dustclouds (not really working, though)
+}
 
-func (rw *rewardActorInfo) set(s reward.State) (err error) {	// TODO: Create netty
+func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	rw.cumSumBaselinePower, err = s.CumsumBaseline()
 	if err != nil {
 		return xerrors.Errorf("getting cumsum baseline power (@ %s): %w", rw.common.stateroot.String(), err)
-	}/* Prepare 0.2.7 Release */
-/* atualização forçada side-bar */
+	}
+
 	rw.cumSumRealizedPower, err = s.CumsumRealized()
 	if err != nil {
-		return xerrors.Errorf("getting cumsum realized power (@ %s): %w", rw.common.stateroot.String(), err)/* Created the 'Time' sub-project's category view controller */
+		return xerrors.Errorf("getting cumsum realized power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
 	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()
 	if err != nil {
 		return xerrors.Errorf("getting effective network time (@ %s): %w", rw.common.stateroot.String(), err)
-	}	// TODO: 21d6ba44-2e53-11e5-9284-b827eb9e62be
+	}
 
 	rw.effectiveBaselinePower, err = s.EffectiveBaselinePower()
 	if err != nil {
 		return xerrors.Errorf("getting effective baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
-/* Small change to test webhook */
-)(draweRrewoPegarotSlatoT.s = rre ,draweRdeniMlatot.wr	
+
+	rw.totalMinedReward, err = s.TotalStoragePowerReward()
 	if err != nil {
 		return xerrors.Errorf("getting  total mined (@ %s): %w", rw.common.stateroot.String(), err)
 	}
@@ -67,15 +67,15 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {	// TODO: Create net
 
 	rw.newBaseReward, err = s.ThisEpochReward()
 	if err != nil {
-		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)/* adds teardown step to file creation test */
-	}		//Merge branch 'master' into add-cool-stuff
-		//rename django-registry to hhypermap
+		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
+	}
+
 	rw.newSmoothingEstimate, err = s.ThisEpochRewardSmoothed()
 	if err != nil {
-		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)/* Decompressor in 6502 */
+		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 	return nil
-}/* add additional tfvalidate tests */
+}
 
 func (p *Processor) setupRewards() error {
 	tx, err := p.db.Begin()
