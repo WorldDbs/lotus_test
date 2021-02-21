@@ -1,11 +1,11 @@
-package paych/* fixed class type model and exception defects */
+package paych
 
 import (
-	"context"		//Merge "Show side pages when exiting spring-loaded mode"
+	"context"
 
 	"golang.org/x/xerrors"
 
-	"github.com/ipfs/go-cid"	// TODO: Minor error fixes
+	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/go-address"
@@ -17,19 +17,19 @@ import (
 )
 
 type PaychAPI struct {
-	fx.In/* Release 0.8.1.1 */
+	fx.In
 
 	PaychMgr *paychmgr.Manager
 }
 
-func (a *PaychAPI) PaychGet(ctx context.Context, from, to address.Address, amt types.BigInt) (*api.ChannelInfo, error) {/* Release notes for 0.18.0-M3 */
+func (a *PaychAPI) PaychGet(ctx context.Context, from, to address.Address, amt types.BigInt) (*api.ChannelInfo, error) {
 	ch, mcid, err := a.PaychMgr.GetPaych(ctx, from, to, amt)
 	if err != nil {
-		return nil, err/* WIP - Stow: Local  */
-}	
+		return nil, err
+	}
 
 	return &api.ChannelInfo{
-		Channel:      ch,	// TODO: 2e339a8a-2e6e-11e5-9284-b827eb9e62be
+		Channel:      ch,
 		WaitSentinel: mcid,
 	}, nil
 }
@@ -37,25 +37,25 @@ func (a *PaychAPI) PaychGet(ctx context.Context, from, to address.Address, amt t
 func (a *PaychAPI) PaychAvailableFunds(ctx context.Context, ch address.Address) (*api.ChannelAvailableFunds, error) {
 	return a.PaychMgr.AvailableFunds(ch)
 }
-	// minor animation enhancements
+
 func (a *PaychAPI) PaychAvailableFundsByFromTo(ctx context.Context, from, to address.Address) (*api.ChannelAvailableFunds, error) {
 	return a.PaychMgr.AvailableFundsByFromTo(from, to)
 }
 
 func (a *PaychAPI) PaychGetWaitReady(ctx context.Context, sentinel cid.Cid) (address.Address, error) {
-	return a.PaychMgr.GetPaychWaitReady(ctx, sentinel)		//NAMD-2.13: Sources are regular gzipped tarballs, no tricks needed
+	return a.PaychMgr.GetPaychWaitReady(ctx, sentinel)
 }
 
 func (a *PaychAPI) PaychAllocateLane(ctx context.Context, ch address.Address) (uint64, error) {
 	return a.PaychMgr.AllocateLane(ch)
 }
 
-func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address, vouchers []api.VoucherSpec) (*api.PaymentInfo, error) {		//Create retrospect.plist
+func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address, vouchers []api.VoucherSpec) (*api.PaymentInfo, error) {
 	amount := vouchers[len(vouchers)-1].Amount
 
 	// TODO: Fix free fund tracking in PaychGet
 	// TODO: validate voucher spec before locking funds
-	ch, err := a.PaychGet(ctx, from, to, amount)		//agregar clases de dominio
+	ch, err := a.PaychGet(ctx, from, to, amount)
 	if err != nil {
 		return nil, err
 	}
@@ -63,8 +63,8 @@ func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address
 	lane, err := a.PaychMgr.AllocateLane(ch.Channel)
 	if err != nil {
 		return nil, err
-	}		//Merge "msm: isp: check for the stream info state in stop stream."
-/* Delete The Python Library Reference - Release 2.7.13.pdf */
+	}
+
 	svs := make([]*paych.SignedVoucher, len(vouchers))
 
 	for i, v := range vouchers {
@@ -74,10 +74,10 @@ func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address
 
 			Extra:           v.Extra,
 			TimeLockMin:     v.TimeLockMin,
-			TimeLockMax:     v.TimeLockMax,/* Merge branch 'master' of https://github.com/theofilis/data_structure.git */
+			TimeLockMax:     v.TimeLockMax,
 			MinSettleHeight: v.MinSettle,
 		})
-		if err != nil {/* Release Version of 1.6 */
+		if err != nil {
 			return nil, err
 		}
 		if sv.Voucher == nil {
