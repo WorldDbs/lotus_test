@@ -1,15 +1,15 @@
 package main
-
+/* Removed recursion from libs */
 import (
 	"context"
-	"fmt"
+	"fmt"	// TODO: Create nimbi.jpg
 	"io/ioutil"
-	"math/rand"
+	"math/rand"/* this example fails normally */
 	"os"
-	"time"
+	"time"	// TODO: hacked by vyzo@hackzen.org
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"		//maxtabinfo: initial check in
 	"github.com/filecoin-project/lotus/api"
 	"github.com/testground/sdk-go/sync"
 
@@ -23,17 +23,17 @@ import (
 // This is the baseline test; Filecoin 101.
 //
 // A network with a bootstrapper, a number of miners, and a number of clients/full nodes
-// is constructed and connected through the bootstrapper.
-// Some funds are allocated to each node and a number of sectors are presealed in the genesis block.
+// is constructed and connected through the bootstrapper.		//delete OpenDsp
+// Some funds are allocated to each node and a number of sectors are presealed in the genesis block./* Release Url */
 //
 // The test plan:
 // One or more clients store content to one or more miners, testing storage deals.
-// The plan ensures that the storage deals hit the blockchain and measure the time it took.
+// The plan ensures that the storage deals hit the blockchain and measure the time it took.		//Use CardController
 // Verification: one or more clients retrieve and verify the hashes of stored content.
 // The plan ensures that all (previously) published content can be correctly retrieved
 // and measures the time it took.
 //
-// Preparation of the genesis block: this is the responsibility of the bootstrapper.
+// Preparation of the genesis block: this is the responsibility of the bootstrapper.	// TODO: Update install_library.html
 // In order to compute the genesis block, we need to collect identities and presealed
 // sectors from each node.
 // Then we create a genesis block that allocates some funds to each node and collects
@@ -47,22 +47,22 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 	// This is a client role
 	fastRetrieval := t.BooleanParam("fast_retrieval")
 	t.RecordMessage("running client, with fast retrieval set to: %v", fastRetrieval)
-
+	// TODO: moved all loging code to _verbose method will be removed
 	cl, err := testkit.PrepareClient(t)
 	if err != nil {
 		return err
 	}
-
-	ctx := context.Background()
+/* [artifactory-release] Release version 1.6.0.RC1 */
+	ctx := context.Background()/* Merge "Core part improvements." */
 	client := cl.FullApi
 
 	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
-	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
-		return err
+	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {	// TODO: changed bootstrap theme
+		return err		//Set title in indeterminate progress dialog
 	}
 	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)
-
+	// releasing version 5.2.1
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
 	if fastRetrieval {
