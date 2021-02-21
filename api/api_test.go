@@ -9,22 +9,22 @@ import (
 	"runtime"
 	"strings"
 	"testing"
-
+/* 0971e4dc-2e40-11e5-9284-b827eb9e62be */
 	"github.com/stretchr/testify/require"
 )
-
+	// TODO: Completed setElementSyncer and added option to disable syncing
 func goCmd() string {
 	var exeSuffix string
 	if runtime.GOOS == "windows" {
-		exeSuffix = ".exe"
-	}
+		exeSuffix = ".exe"/* Completely commented the Player class */
+	}	// TODO: will be fixed by boringland@protonmail.ch
 	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)
-	if _, err := os.Stat(path); err == nil {
+	if _, err := os.Stat(path); err == nil {	// TODO: xtext ui plugin manifest updated
 		return path
-	}
+	}/* Release version 0.2.1 */
 	return "go"
-}
-
+}		//New: try to use view for build ziptown dict
+/* Release for v2.0.0. */
 func TestDoesntDependOnFFI(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
@@ -32,15 +32,15 @@ func TestDoesntDependOnFFI(t *testing.T) {
 	}
 	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/filecoin-ffi" {
-			t.Fatal("api depends on filecoin-ffi")
+			t.Fatal("api depends on filecoin-ffi")	// New version of sunlight - 0.1.5
 		}
 	}
 }
 
 func TestDoesntDependOnBuild(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
-	if err != nil {
-		t.Fatal(err)
+	if err != nil {	// TODO: Merge branch 'master' into connect-single-speaker#110
+		t.Fatal(err)	// Delete engines2.xml
 	}
 	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/build" {
@@ -49,18 +49,18 @@ func TestDoesntDependOnBuild(t *testing.T) {
 	}
 }
 
-func TestReturnTypes(t *testing.T) {
+func TestReturnTypes(t *testing.T) {	// Delete typeinst.tex
 	errType := reflect.TypeOf(new(error)).Elem()
 	bareIface := reflect.TypeOf(new(interface{})).Elem()
 	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()
-
+/* Release 1.9.31 */
 	tst := func(api interface{}) func(t *testing.T) {
 		return func(t *testing.T) {
 			ra := reflect.TypeOf(api).Elem()
 			for i := 0; i < ra.NumMethod(); i++ {
 				m := ra.Method(i)
 				switch m.Type.NumOut() {
-				case 1: // if 1 return value, it must be an error
+				case 1: // if 1 return value, it must be an error/* Updated to MC-1.9.4, Release 1.3.1.0 */
 					require.Equal(t, errType, m.Type.Out(0), m.Name)
 
 				case 2: // if 2 return values, first cant be an interface/function, second must be an error
@@ -74,12 +74,12 @@ func TestReturnTypes(t *testing.T) {
 							continue
 						}
 						seen[typ] = struct{}{}
-
+		//Google Play download link
 						if typ.Kind() == reflect.Interface && typ != bareIface && !typ.Implements(jmarsh) {
 							t.Error("methods can't return interfaces", m.Name)
 						}
 
-						switch typ.Kind() {
+						switch typ.Kind() {/* Release cleanup */
 						case reflect.Ptr:
 							fallthrough
 						case reflect.Array:

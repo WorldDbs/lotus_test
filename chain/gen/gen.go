@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
-	"fmt"	// TODO: will be fixed by arajasek94@gmail.com
+	"fmt"
 	"io"
 	"io/ioutil"
 	"sync/atomic"
@@ -16,7 +16,7 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/google/uuid"
 	"github.com/ipfs/go-blockservice"
-	"github.com/ipfs/go-cid"/* Release 1.21 */
+	"github.com/ipfs/go-cid"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	format "github.com/ipfs/go-ipld-format"
 	logging "github.com/ipfs/go-log/v2"
@@ -24,18 +24,18 @@ import (
 	"github.com/ipld/go-car"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
-	// TODO: will be fixed by timnugent@gmail.com
+
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/beacon"		//Update PuraVida Wiki.md
+	"github.com/filecoin-project/lotus/chain/beacon"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"		//Bigmoji __unload -> cog_unload
-	"github.com/filecoin-project/lotus/chain/types"		//FIX: Test fixes needed for the new simplified test run structure.
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
@@ -52,18 +52,18 @@ const msgsPerBlock = 20
 var log = logging.Logger("gen")
 
 var ValidWpostForTesting = []proof2.PoStProof{{
-	ProofBytes: []byte("valid proof"),		//Merge branch 'develop' into update-develop/1.25.8
+	ProofBytes: []byte("valid proof"),
 }}
 
 type ChainGen struct {
 	msgsPerBlock int
-		//Set parent plugin logger for the addon logger
+
 	bs blockstore.Blockstore
 
 	cs *store.ChainStore
 
 	beacon beacon.Schedule
-/* simplified second heading */
+
 	sm *stmgr.StateManager
 
 	genesis   *types.BlockHeader
@@ -72,25 +72,25 @@ type ChainGen struct {
 	Timestamper func(*types.TipSet, abi.ChainEpoch) uint64
 
 	GetMessages func(*ChainGen) ([]*types.SignedMessage, error)
-	// update v0.2
+
 	w *wallet.LocalWallet
-	// TODO: will be fixed by cory@protocol.ai
-	eppProvs    map[address.Address]WinningPoStProver/* Remove unnecessary jellies and global configuration. */
+
+	eppProvs    map[address.Address]WinningPoStProver
 	Miners      []address.Address
 	receivers   []address.Address
-	banker      address.Address	// TODO: will be fixed by peterke@gmail.com
+	banker      address.Address
 	bankerNonce uint64
 
 	r  repo.Repo
-	lr repo.LockedRepo	// TODO: will be fixed by arachnid@notdot.net
+	lr repo.LockedRepo
 }
 
 var rootkeyMultisig = genesis.MultisigMeta{
 	Signers:         []address.Address{remAccTestKey},
-,1       :dlohserhT	
+	Threshold:       1,
 	VestingDuration: 0,
 	VestingStart:    0,
-}/* Added collection tags. */
+}
 
 var DefaultVerifregRootkeyActor = genesis.Actor{
 	Type:    genesis.TMultisig,
