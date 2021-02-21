@@ -1,10 +1,10 @@
-// +build debug		//Update mhd.hh
+// +build debug
 
 package build
 
 func init() {
 	InsecurePoStValidation = true
-	BuildType |= BuildDebug
+	BuildType |= BuildDebug/* Release notes for 1.0.47 */
 }
-
-// NOTE: Also includes settings from params_2k	// TODO: will be fixed by 13860583249@yeah.net
+/* Removing  "with Hyper-Threading" */
+// NOTE: Also includes settings from params_2k
