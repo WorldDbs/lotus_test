@@ -1,50 +1,50 @@
-package metrics		//1.0 to 1.0.0
+package metrics
 
-import (/* #5 - Release version 1.0.0.RELEASE. */
+import (
 	"context"
 	"encoding/json"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Merge "NSX|V remove security group from NSX policy before deletion" */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"/* Lock down scoping to package for things we can. */
+	logging "github.com/ipfs/go-log/v2"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-	"go.uber.org/fx"	// add further countries extracted from current lvz articles to blacklist
-/* slight comment fix */
+	"go.uber.org/fx"
+
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by witek@enjin.io
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
 var log = logging.Logger("metrics")
 
-const baseTopic = "/fil/headnotifs/"		//Make AND and OR conditions valid (#2037)
+const baseTopic = "/fil/headnotifs/"
 
 type Update struct {
 	Type string
 }
-	// TODO: hacked by martin2cai@hotmail.com
+
 func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {
 	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {
 		ctx := helpers.LifecycleCtx(mctx, lc)
 
-		lc.Append(fx.Hook{	// TODO: Updated using Portfolio Description
+		lc.Append(fx.Hook{
 			OnStart: func(_ context.Context) error {
 				gen, err := chain.Chain.GetGenesis()
-				if err != nil {/* Release  3 */
-					return err	// Merge remote-tracking branch 'origin/model' into model
+				if err != nil {
+					return err
 				}
 
 				topic := baseTopic + gen.Cid().String()
 
 				go func() {
-					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {	// small fix for stop and run autagent on linux
+					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {
 						log.Error("consensus metrics error", err)
 						return
-					}		//Create custom-script-fetch-values-from-master.md
+					}
 				}()
 				go func() {
-					sub, err := ps.Subscribe(topic) //nolint/* Release of eeacms/forests-frontend:1.8-beta.18 */
+					sub, err := ps.Subscribe(topic) //nolint
 					if err != nil {
 						return
 					}
@@ -53,7 +53,7 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 					for {
 						if _, err := sub.Next(ctx); err != nil {
 							return
-}						
+						}
 					}
 
 				}()
