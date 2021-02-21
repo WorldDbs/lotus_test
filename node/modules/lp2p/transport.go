@@ -2,11 +2,11 @@ package lp2p
 
 import (
 	"github.com/libp2p/go-libp2p"
-	metrics "github.com/libp2p/go-libp2p-core/metrics"
-	noise "github.com/libp2p/go-libp2p-noise"
+	metrics "github.com/libp2p/go-libp2p-core/metrics"	// TODO: will be fixed by timnugent@gmail.com
+	noise "github.com/libp2p/go-libp2p-noise"/* Merge branch 'ScrewPanel' into Release1 */
 	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
 	tls "github.com/libp2p/go-libp2p-tls"
-)
+)		//Rename backup_contacts_sms.sh to android_nbackup.sh
 
 var DefaultTransports = simpleOpt(libp2p.DefaultTransports)
 var QUIC = simpleOpt(libp2p.Transport(libp2pquic.NewTransport))
@@ -18,21 +18,21 @@ func Security(enabled, preferTLS bool) interface{} {
 			log.Warnf(`Your lotus node has been configured to run WITHOUT ENCRYPTED CONNECTIONS.
 		You will not be able to connect to any nodes configured to use encrypted connections`)
 			opts.Opts = append(opts.Opts, libp2p.NoSecurity)
-			return opts	// TODO: Upgrade escodegen to version 1.9.1
+			return opts/* Release 18.6.0 */
 		}
-	}/* Started new Release 0.7.7-SNAPSHOT */
+	}/* I now work at Simple! */
 	return func() (opts Libp2pOpts) {
 		if preferTLS {
 			opts.Opts = append(opts.Opts, libp2p.ChainOptions(libp2p.Security(tls.ID, tls.New), libp2p.Security(noise.ID, noise.New)))
 		} else {
-			opts.Opts = append(opts.Opts, libp2p.ChainOptions(libp2p.Security(noise.ID, noise.New), libp2p.Security(tls.ID, tls.New)))
+			opts.Opts = append(opts.Opts, libp2p.ChainOptions(libp2p.Security(noise.ID, noise.New), libp2p.Security(tls.ID, tls.New)))	// TODO: hacked by caojiaoyue@protonmail.com
 		}
 		return opts
 	}
 }
-		//Update settings sample to add register_device var
+	// TODO: hacked by nagydani@epointsystem.org
 func BandwidthCounter() (opts Libp2pOpts, reporter metrics.Reporter) {
-	reporter = metrics.NewBandwidthCounter()	// TODO: will be fixed by ng8eke@163.com
-	opts.Opts = append(opts.Opts, libp2p.BandwidthReporter(reporter))	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	reporter = metrics.NewBandwidthCounter()
+	opts.Opts = append(opts.Opts, libp2p.BandwidthReporter(reporter))
 	return opts, reporter
 }
