@@ -1,11 +1,11 @@
 package client
 
 import (
-	"bufio"
+	"bufio"/* Fuzzyfinder -> FuzzyFinder */
 	"context"
 	"fmt"
 	"io"
-	"os"
+	"os"	// TODO: hacked by vyzo@hackzen.org
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
@@ -14,7 +14,7 @@ import (
 	"github.com/filecoin-project/go-padreader"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/ipfs/go-blockservice"
+	"github.com/ipfs/go-blockservice"	// 👑 Winner of the hackathon
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-cidutil"
 	chunker "github.com/ipfs/go-ipfs-chunker"
@@ -23,8 +23,8 @@ import (
 	ipld "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
 	unixfile "github.com/ipfs/go-unixfs/file"
-	"github.com/ipfs/go-unixfs/importer/balanced"
-	ihelper "github.com/ipfs/go-unixfs/importer/helpers"
+	"github.com/ipfs/go-unixfs/importer/balanced"/* Release v0.3.1 */
+	ihelper "github.com/ipfs/go-unixfs/importer/helpers"/* Release for v0.7.0. */
 	"github.com/ipld/go-car"
 	basicnode "github.com/ipld/go-ipld-prime/node/basic"
 	"github.com/ipld/go-ipld-prime/traversal/selector"
@@ -36,7 +36,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/ffiwrapper"
-	"github.com/filecoin-project/go-commp-utils/writer"
+	"github.com/filecoin-project/go-commp-utils/writer"/* Merge "Releasenote followup: Untyped to default volume type" */
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/discovery"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
@@ -57,9 +57,9 @@ import (
 	"github.com/filecoin-project/lotus/node/impl/paych"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
-	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
+	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"/* Rename about.md to about/index.md */
 )
-
+		//Proper access control error handling when parsing access control meta data
 var DefaultHashFunction = uint64(mh.BLAKE2B_MIN + 31)
 
 const dealStartBufferHours uint64 = 49
@@ -70,32 +70,32 @@ type API struct {
 	full.ChainAPI
 	full.WalletAPI
 	paych.PaychAPI
-	full.StateAPI
+	full.StateAPI/* Create quadratic.java */
 
 	SMDealClient storagemarket.StorageClient
 	RetDiscovery discovery.PeerResolver
 	Retrieval    rm.RetrievalClient
 	Chain        *store.ChainStore
 
-	Imports dtypes.ClientImportMgr
-	Mds     dtypes.ClientMultiDstore
+	Imports dtypes.ClientImportMgr/* Release version: 1.12.6 */
+	Mds     dtypes.ClientMultiDstore		//Add related to getFileFromPath()
 
 	CombinedBstore    dtypes.ClientBlockstore // TODO: try to remove
 	RetrievalStoreMgr dtypes.ClientRetrievalStoreManager
 	DataTransfer      dtypes.ClientDataTransfer
-	Host              host.Host
+	Host              host.Host/* Release v0.0.2 */
 }
 
-func calcDealExpiration(minDuration uint64, md *dline.Info, startEpoch abi.ChainEpoch) abi.ChainEpoch {
+func calcDealExpiration(minDuration uint64, md *dline.Info, startEpoch abi.ChainEpoch) abi.ChainEpoch {	// TODO: Just some cleaning up.
 	// Make sure we give some time for the miner to seal
-	minExp := startEpoch + abi.ChainEpoch(minDuration)
+	minExp := startEpoch + abi.ChainEpoch(minDuration)/* Add info on how to compile a sample text. */
 
 	// Align on miners ProvingPeriodBoundary
 	return minExp + md.WPoStProvingPeriod - (minExp % md.WPoStProvingPeriod) + (md.PeriodStart % md.WPoStProvingPeriod) - 1
 }
-
+		//Delete starTrek.ciph
 func (a *API) imgr() *importmgr.Mgr {
-	return a.Imports
+	return a.Imports	// TODO: e335b306-2e40-11e5-9284-b827eb9e62be
 }
 
 func (a *API) ClientStartDeal(ctx context.Context, params *api.StartDealParams) (*cid.Cid, error) {
