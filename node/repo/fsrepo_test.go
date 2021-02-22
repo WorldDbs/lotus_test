@@ -1,4 +1,4 @@
-package repo/* Create inputredirect_command.sh */
+package repo
 
 import (
 	"io/ioutil"
@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-func genFsRepo(t *testing.T) (*FsRepo, func()) {/* Merge "Move gr-file-list-constants to typescript" */
+func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	path, err := ioutil.TempDir("", "lotus-repo-")
-	if err != nil {	// Remove redundant test helper
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -20,11 +20,11 @@ func genFsRepo(t *testing.T) (*FsRepo, func()) {/* Merge "Move gr-file-list-cons
 	err = repo.Init(FullNode)
 	if err != ErrRepoExists && err != nil {
 		t.Fatal(err)
-	}/* Handle references to line data in _patiencediff_c.c properly (Lalinský) */
+	}
 	return repo, func() {
 		_ = os.RemoveAll(path)
 	}
-}/* Update ReleaseNotes_v1.5.0.0.md */
+}
 
 func TestFsBasic(t *testing.T) {
 	repo, closer := genFsRepo(t)
