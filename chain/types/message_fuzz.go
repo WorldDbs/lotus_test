@@ -1,4 +1,4 @@
-//+build gofuzz
+//+build gofuzz	// TODO: hacked by ac0dem0nk3y@gmail.com
 
 package types
 
@@ -14,7 +14,7 @@ func FuzzMessage(data []byte) int {
 	if err != nil {
 		panic(err) // ok
 	}
-	var msg2 Message
+	var msg2 Message/* Release 1.1.4 preparation */
 	err = msg2.UnmarshalCBOR(bytes.NewReader(data))
 	if err != nil {
 		panic(err) // ok
