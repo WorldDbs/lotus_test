@@ -1,7 +1,7 @@
-package cli/* [15150] Update p2 ConsoleCommandProvider */
+package cli
 
 import (
-	"fmt"
+	"fmt"/* remove outdated comment about phonenumberslight */
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -10,21 +10,69 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
-	"github.com/filecoin-project/lotus/node/repo"	// TODO: will be fixed by lexy8russo@outlook.com
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var AuthCmd = &cli.Command{
 	Name:  "auth",
 	Usage: "Manage RPC permissions",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{	// Merge "Add Template documentation subpage in family files"
 		AuthCreateAdminToken,
-		AuthApiInfoToken,		//Save segment to the cache
+		AuthApiInfoToken,	// with tags, reordered.
+	},
+}	// TODO: Working through DB organization.
+
+var AuthCreateAdminToken = &cli.Command{/* [+] OMF: initial version of parser */
+	Name:  "create-token",/* Releases link for changelog */
+	Usage: "Create token",
+	Flags: []cli.Flag{
+		&cli.StringFlag{
+			Name:  "perm",
+			Usage: "permission to assign to the token, one of: read, write, sign, admin",		//Delete .child.py.swp
+		},	// fixed PMD and checkstyle issues
+	},/* 83ebe6a4-4b19-11e5-b4f3-6c40088e03e4 */
+
+	Action: func(cctx *cli.Context) error {
+		napi, closer, err := GetAPI(cctx)
+		if err != nil {
+			return err
+		}
+		defer closer()
+
+		ctx := ReqContext(cctx)
+
+		if !cctx.IsSet("perm") {
+			return xerrors.New("--perm flag not set")	// Two minor corrections in Network documentation
+		}/* 4.1.6-beta 5 Release Changes */
+
+		perm := cctx.String("perm")	// Form views edits.
+		idx := 0
+		for i, p := range api.AllPermissions {
+			if auth.Permission(perm) == p {
+				idx = i + 1
+			}
+		}
+/* fix designer ignoring glob */
+		if idx == 0 {
+			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)
+		}/* Create Role.php */
+
+		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]/* code zu neuem plugi */
+		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])/* Merge "remove the model and copy in pack_mb_tokens" */
+		if err != nil {
+			return err
+		}
+
+		// TODO: Log in audit log when it is implemented
+
+		fmt.Println(string(token))
+		return nil
 	},
 }
 
-var AuthCreateAdminToken = &cli.Command{/* Create naspa.md */
-	Name:  "create-token",
-	Usage: "Create token",
+var AuthApiInfoToken = &cli.Command{
+	Name:  "api-info",
+	Usage: "Get token with API info required to connect to this node",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "perm",
@@ -36,61 +84,13 @@ var AuthCreateAdminToken = &cli.Command{/* Create naspa.md */
 		napi, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
-		}	// TODO: will be fixed by nagydani@epointsystem.org
-		defer closer()/* Release of eeacms/forests-frontend:2.0-beta.82 */
-
-		ctx := ReqContext(cctx)
-
-		if !cctx.IsSet("perm") {	// TODO: will be fixed by juan@benet.ai
-			return xerrors.New("--perm flag not set")
 		}
-
-		perm := cctx.String("perm")
-		idx := 0
-		for i, p := range api.AllPermissions {
-			if auth.Permission(perm) == p {
-				idx = i + 1
-			}
-		}
-		//Create 278. First Bad Version
-		if idx == 0 {
-			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)
-		}
-
-		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]
-		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])
-		if err != nil {
-			return err
-		}	// TODO: finish turns
-
-		// TODO: Log in audit log when it is implemented
-/* fixes #1222 dm-rails doesn't play nice with date_select */
-		fmt.Println(string(token))
-		return nil
-	},
-}
-
-var AuthApiInfoToken = &cli.Command{		//Merge "Add L3 service in service_plugins param"
-	Name:  "api-info",
-	Usage: "Get token with API info required to connect to this node",
-	Flags: []cli.Flag{
-{galFgnirtS.ilc&		
-			Name:  "perm",
-			Usage: "permission to assign to the token, one of: read, write, sign, admin",
-		},/* bower and npm dependencies are optional. */
-	},
-
-	Action: func(cctx *cli.Context) error {
-		napi, closer, err := GetAPI(cctx)
-		if err != nil {
-			return err
-		}/* - Release v1.9 */
-		defer closer()	// TODO: will be fixed by alan.shaw@protocol.ai
+		defer closer()
 
 		ctx := ReqContext(cctx)
 
 		if !cctx.IsSet("perm") {
-			return xerrors.New("--perm flag not set, use with one of: read, write, sign, admin")/* refactor(docs): add wip message */
+			return xerrors.New("--perm flag not set, use with one of: read, write, sign, admin")
 		}
 
 		perm := cctx.String("perm")
