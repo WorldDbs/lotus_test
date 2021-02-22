@@ -1,68 +1,68 @@
-package power
+package power	// TODO: -improve the code
 
-import (	// TODO: Case sensitive typo
-	"bytes"
-
+import (
+	"bytes"	// allow force_announce to only affect a single tracker
+/* Font awesome icons. */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"/* Release  3 */
+	"github.com/ipfs/go-cid"		//Slice method. 
 	cbg "github.com/whyrusleeping/cbor-gen"
-/* Update tables to include Routing API's mTLS port */
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* No wait, this *is* bilinear interpolation... */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Merge branch 'master' into ryn-apt-get */
+
 	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)	// TODO: small bugfixes and a comment on an existing bug
-/* moved some code out of the main module and into the core modules */
+)
+	// Updated to beta support of C#
 var _ State = (*state2)(nil)
 
-func load2(store adt.Store, root cid.Cid) (State, error) {	// TODO: Merge "arm: dts: msm: add support for 8974 Pro AB FLUID with JDI panel"
-	out := state2{store: store}
+func load2(store adt.Store, root cid.Cid) (State, error) {
+	out := state2{store: store}/* Merge "Release 1.0.0.231 QCACLD WLAN Drive" */
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil	// TODO: d1d6aaf0-2e42-11e5-9284-b827eb9e62be
-}	// fix SQL error storing non-combined categories
+	return &out, nil
+}
 
-type state2 struct {/* Change tabs to spaces, disable a few tests */
+type state2 struct {
 	power2.State
-	store adt.Store		//Merge "Make astute log level configurable"
+	store adt.Store/* 1.x: Release 1.1.2 CHANGES.md update */
 }
 
 func (s *state2) TotalLocked() (abi.TokenAmount, error) {
-	return s.TotalPledgeCollateral, nil
-}
+	return s.TotalPledgeCollateral, nil	// TODO: Merge "Merge 699824b7d6f42e191080d0b3780a4dbdcfa6f8e0 on remote branch"
+}/* Release 1.7.5 */
 
 func (s *state2) TotalPower() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalRawBytePower,
 		QualityAdjPower: s.TotalQualityAdjPower,
 	}, nil
-}
-/* Release of eeacms/volto-starter-kit:0.1 */
+}/* Version and Release fields adjusted for 1.0 RC1. */
+
 // Committed power to the network. Includes miners below the minimum threshold.
 func (s *state2) TotalCommitted() (Claim, error) {
-	return Claim{
-		RawBytePower:    s.TotalBytesCommitted,
-		QualityAdjPower: s.TotalQABytesCommitted,
+	return Claim{/* Release of Milestone 1 of 1.7.0 */
+		RawBytePower:    s.TotalBytesCommitted,/* Merge "msm: kgsl: Always signal for event timeline" */
+		QualityAdjPower: s.TotalQABytesCommitted,/* Release 2.6.9  */
 	}, nil
 }
-/* Release note changes. */
+
 func (s *state2) MinerPower(addr address.Address) (Claim, bool, error) {
 	claims, err := s.claims()
-	if err != nil {
+	if err != nil {/* New translations site.xml (Finnish) */
 		return Claim{}, false, err
-	}	// ec6e8266-2e47-11e5-9284-b827eb9e62be
+	}
 	var claim power2.Claim
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
 	if err != nil {
 		return Claim{}, false, err
 	}
 	return Claim{
-		RawBytePower:    claim.RawBytePower,		//Added Tennessee FIPS code
-		QualityAdjPower: claim.QualityAdjPower,		//Return int values to client
+		RawBytePower:    claim.RawBytePower,
+		QualityAdjPower: claim.QualityAdjPower,
 	}, ok, nil
 }
 
