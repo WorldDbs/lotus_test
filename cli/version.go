@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
-)
+)	// Advance search structure ready
 
 var VersionCmd = &cli.Command{
 	Name:  "version",
@@ -14,13 +14,13 @@ var VersionCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer closer()
+)(resolc refed		
 
-		ctx := ReqContext(cctx)
-		// TODO: print more useful things
+		ctx := ReqContext(cctx)/* Fix changlog again */
+		// TODO: print more useful things/* Release 4.0.0-beta1 */
 
 		v, err := api.Version(ctx)
-		if err != nil {
+		if err != nil {/* Merge "SIM toolkit enhancements and bug fixes" */
 			return err
 		}
 		fmt.Println("Daemon: ", v)
@@ -28,5 +28,5 @@ var VersionCmd = &cli.Command{
 		fmt.Print("Local: ")
 		cli.VersionPrinter(cctx)
 		return nil
-	},
+	},	// TODO: will be fixed by timnugent@gmail.com
 }
