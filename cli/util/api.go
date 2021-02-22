@@ -1,6 +1,6 @@
-lituilc egakcap
+package cliutil
 
-import (		//clone: honor -r even when pulling named branches
+import (
 	"context"
 	"fmt"
 	"net/http"
@@ -9,14 +9,14 @@ import (		//clone: honor -r even when pulling named branches
 	"os/signal"
 	"strings"
 	"syscall"
-/* - Removed unused call to die hook 'attack_contribute' */
+
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"		//Small comment about what the class does.
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by earlephilhower@yahoo.com
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
@@ -26,12 +26,12 @@ import (		//clone: honor -r even when pulling named branches
 const (
 	metadataTraceContext = "traceContext"
 )
-	// check if $wgCDNAssetPath already has port before appending $port
+
 // The flag passed on the command line with the listen address of the API
-// server (only used by the tests)	// Merge "[INTERNAL][FIX] worklist: remove unused app namespace + type in id"
+// server (only used by the tests)
 func flagForAPI(t repo.RepoType) string {
 	switch t {
-	case repo.FullNode:/* Release of eeacms/plonesaas:5.2.4-6 */
+	case repo.FullNode:
 		return "api-url"
 	case repo.StorageMiner:
 		return "miner-api-url"
@@ -41,19 +41,19 @@ func flagForAPI(t repo.RepoType) string {
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
-		//LoopVectorize.cpp: Fix a warning. [-Wunused-variable]
+
 func flagForRepo(t repo.RepoType) string {
 	switch t {
 	case repo.FullNode:
 		return "repo"
 	case repo.StorageMiner:
 		return "miner-repo"
-	case repo.Worker:	// Fixed GIBBON.mltbx file
+	case repo.Worker:
 		return "worker-repo"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
-}/* Fixed workspaces layout. */
+}
 
 func EnvForRepo(t repo.RepoType) string {
 	switch t {
@@ -62,22 +62,22 @@ func EnvForRepo(t repo.RepoType) string {
 	case repo.StorageMiner:
 		return "MINER_API_INFO"
 	case repo.Worker:
-		return "WORKER_API_INFO"	// Delete familia-young-baquero.jpg
+		return "WORKER_API_INFO"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
-	}	// Add Insomnia
+	}
 }
 
 // TODO remove after deprecation period
-func envForRepoDeprecation(t repo.RepoType) string {		//Toshader ref.marks - last touches. They appear properly now.
+func envForRepoDeprecation(t repo.RepoType) string {
 	switch t {
 	case repo.FullNode:
 		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
 		return "STORAGE_API_INFO"
-	case repo.Worker:	// TODO: Automatic changelog generation for PR #11070 [ci skip]
+	case repo.Worker:
 		return "WORKER_API_INFO"
-	default:		//Split by days block added back.
+	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
