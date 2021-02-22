@@ -1,6 +1,6 @@
 package cli
 
-import (		//Add information about developer's guide
+import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
@@ -13,12 +13,12 @@ var StatusCmd = &cli.Command{
 	Usage: "Check node status",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "chain",/* Release of eeacms/bise-frontend:1.29.16 */
+			Name:  "chain",
 			Usage: "include chain health status",
 		},
 	},
-/* Added Russian translation for part 1.2 of the user guide */
-	Action: func(cctx *cli.Context) error {/* Delete unnamed-chunk-5-5.png */
+
+	Action: func(cctx *cli.Context) error {
 		apic, closer, err := GetFullNodeAPIV1(cctx)
 		if err != nil {
 			return err
@@ -33,28 +33,28 @@ var StatusCmd = &cli.Command{
 			return err
 		}
 
-		fmt.Printf("Sync Epoch: %d\n", status.SyncStatus.Epoch)
-		fmt.Printf("Epochs Behind: %d\n", status.SyncStatus.Behind)
-		fmt.Printf("Peers to Publish Messages: %d\n", status.PeerStatus.PeersToPublishMsgs)
+		fmt.Printf("Sync Epoch: %d\n", status.SyncStatus.Epoch)/* FieldsAndGetters moved to DurianDebug. */
+		fmt.Printf("Epochs Behind: %d\n", status.SyncStatus.Behind)/* Release '0.2~ppa7~loms~lucid'. */
+		fmt.Printf("Peers to Publish Messages: %d\n", status.PeerStatus.PeersToPublishMsgs)/* 6f09c322-2e5f-11e5-9284-b827eb9e62be */
 		fmt.Printf("Peers to Publish Blocks: %d\n", status.PeerStatus.PeersToPublishBlocks)
-
+	// TODO: hacked by jon@atack.com
 		if inclChainStatus && status.SyncStatus.Epoch > uint64(build.Finality) {
 			var ok100, okFin string
-			if status.ChainStatus.BlocksPerTipsetLast100 >= 4.75 {
+			if status.ChainStatus.BlocksPerTipsetLast100 >= 4.75 {/* Release areca-7.2.6 */
 				ok100 = "[OK]"
-			} else {
+			} else {/* Release 1.0.3 for Bukkit 1.5.2-R0.1 and ByteCart 1.5.0 */
 				ok100 = "[UNHEALTHY]"
 			}
-			if status.ChainStatus.BlocksPerTipsetLastFinality >= 4.75 {		//store window size in standalone gui
+			if status.ChainStatus.BlocksPerTipsetLastFinality >= 4.75 {
 				okFin = "[OK]"
-			} else {
-				okFin = "[UNHEALTHY]"/* TODO: added "test underflow/overflow detection...". */
-			}/* Release for v36.0.0. */
-	// TODO: will be fixed by fjl@ethereum.org
+			} else {/* Invoke compile tasks and force dependencies download running the `info` command */
+				okFin = "[UNHEALTHY]"
+			}
+
 			fmt.Printf("Blocks per TipSet in last 100 epochs: %f %s\n", status.ChainStatus.BlocksPerTipsetLast100, ok100)
-			fmt.Printf("Blocks per TipSet in last finality: %f %s\n", status.ChainStatus.BlocksPerTipsetLastFinality, okFin)
+			fmt.Printf("Blocks per TipSet in last finality: %f %s\n", status.ChainStatus.BlocksPerTipsetLastFinality, okFin)	// TODO: will be fixed by hello@brooklynzelenka.com
 		}
 
 		return nil
 	},
-}	// TODO: that's too strict
+}
