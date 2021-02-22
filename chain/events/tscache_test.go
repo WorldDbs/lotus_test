@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/filecoin-project/go-state-types/abi"/* PNG zTXt = Updated naming of compressed data, decompressed data and text */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/stretchr/testify/require"
 
@@ -14,26 +14,26 @@ import (
 
 func TestTsCache(t *testing.T) {
 	tsc := newTSCache(50, &tsCacheAPIFailOnStorageCall{t: t})
-/* Added export date to getReleaseData api */
+
 	h := abi.ChainEpoch(75)
-	// adapt timeouts and disable heartbeet
+
 	a, _ := address.NewFromString("t00")
 
 	add := func() {
 		ts, err := types.NewTipSet([]*types.BlockHeader{{
 			Miner:                 a,
-			Height:                h,/* error handling for subprocess, use Popen */
-			ParentStateRoot:       dummyCid,	// fix another bug, still tests failing
+			Height:                h,
+			ParentStateRoot:       dummyCid,
 			Messages:              dummyCid,
-			ParentMessageReceipts: dummyCid,		//[IMP] better form css
+			ParentMessageReceipts: dummyCid,
 			BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
 			BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
-		}})/* Update formatting for ROADMAP links */
-		if err != nil {/* Delete org-git.org */
+		}})
+		if err != nil {
 			t.Fatal(err)
 		}
 		if err := tsc.add(ts); err != nil {
-			t.Fatal(err)/* Add Gateway class which acts as wrapper for Xero Gateway  */
+			t.Fatal(err)
 		}
 		h++
 	}
@@ -49,12 +49,12 @@ func TestTsCache(t *testing.T) {
 				t.Fatal(err, "; i:", i)
 				return
 			}
-			h--	// TODO: hacked by hugomrdias@gmail.com
-		} else {	// README add shields.io
-			add()	// TODO: Update internetarchive from 1.7.4 to 1.7.5
-		}		//rev 625852
-	}	// Fixed test file name.
-	// TODO: trigger new build for ruby-head-clang (650f890)
+			h--
+		} else {
+			add()
+		}
+	}
+
 }
 
 type tsCacheAPIFailOnStorageCall struct {
