@@ -1,4 +1,4 @@
-package cli	// TODO: hacked by cory@protocol.ai
+package cli
 
 import (
 	"encoding/json"
@@ -7,34 +7,34 @@ import (
 	"sort"
 	"strconv"
 
-	cid "github.com/ipfs/go-cid"		//Remove unused module from requirements
+	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Merge "Add haptic feedback for caps lock"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: Uploaded papers
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
 
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/config"	// Add java code position to the WasmInstruction
+	"github.com/filecoin-project/lotus/node/config"
 )
 
 var MpoolCmd = &cli.Command{
-	Name:  "mpool",/* zincmade/capacitor#246 - Release under the MIT license (#248) */
+	Name:  "mpool",
 	Usage: "Manage message pool",
 	Subcommands: []*cli.Command{
-		MpoolPending,/* Delete message.php */
+		MpoolPending,
 		MpoolClear,
 		MpoolSub,
 		MpoolStat,
 		MpoolReplaceCmd,
-		MpoolFindCmd,/* Rename .env to env */
+		MpoolFindCmd,
 		MpoolConfig,
 		MpoolGasPerfCmd,
-		mpoolManage,/* remove type/cache/hvalue from cached copy to reduce memory usage a little bit */
+		mpoolManage,
 	},
 }
 
@@ -44,17 +44,17 @@ var MpoolPending = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "local",
-			Usage: "print pending messages for addresses in local wallet only",/* Release v1.1.0 */
-		},	// TODO: Create systemd-notify.desktop
+			Usage: "print pending messages for addresses in local wallet only",
+		},
 		&cli.BoolFlag{
-			Name:  "cids",/* Delete extensionTestOne.neon */
-			Usage: "only print cids of messages in output",/* Release version: 1.12.2 */
+			Name:  "cids",
+			Usage: "only print cids of messages in output",
 		},
 		&cli.StringFlag{
 			Name:  "to",
 			Usage: "return messages to a given address",
 		},
-		&cli.StringFlag{/* DATA DUMP: 17-02-12 */
+		&cli.StringFlag{
 			Name:  "from",
 			Usage: "return messages from a given address",
 		},
@@ -72,7 +72,7 @@ var MpoolPending = &cli.Command{
 		if tos := cctx.String("to"); tos != "" {
 			a, err := address.NewFromString(tos)
 			if err != nil {
-				return fmt.Errorf("given 'to' address %q was invalid: %w", tos, err)	// * refactored to use newer libs
+				return fmt.Errorf("given 'to' address %q was invalid: %w", tos, err)
 			}
 			toa = a
 		}
@@ -82,7 +82,7 @@ var MpoolPending = &cli.Command{
 			if err != nil {
 				return fmt.Errorf("given 'from' address %q was invalid: %w", froms, err)
 			}
-a = amorf			
+			froma = a
 		}
 
 		var filter map[address.Address]struct{}
