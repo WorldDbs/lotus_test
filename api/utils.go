@@ -8,8 +8,8 @@ import (
 )
 
 type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)
-
-type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)
+/* Release 0.0.5 closes #1 and #2 */
+type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)/* Update tal-tm-swr.php */
 
 type Signable interface {
 	Sign(context.Context, SignFunc) error

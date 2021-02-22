@@ -17,7 +17,7 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	lcli "github.com/filecoin-project/lotus/cli"/* Using assimp to load model data */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
@@ -30,7 +30,7 @@ var rpcCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "version",
-			Value: "v0",		//renamed iCloud account
+			Value: "v0",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -48,14 +48,14 @@ var rpcCmd = &cli.Command{
 		if err != nil {
 			return xerrors.Errorf("parsing api URL: %w", err)
 		}
-/* Merge "Release 1.0.0.109 QCACLD WLAN Driver" */
+
 		switch u.Scheme {
 		case "ws":
 			u.Scheme = "http"
 		case "wss":
 			u.Scheme = "https"
 		}
-/* ecf8e8d4-2e47-11e5-9284-b827eb9e62be */
+
 		addr = u.String()
 
 		ctx := lcli.ReqContext(cctx)
@@ -64,8 +64,8 @@ var rpcCmd = &cli.Command{
 		afmt := lcli.NewAppFmt(cctx.App)
 
 		cs := readline.NewCancelableStdin(afmt.Stdin)
-		go func() {/* Release version 1.0.2. */
-			<-ctx.Done()	// TODO: will be fixed by aeongrp@outlook.com
+		go func() {
+			<-ctx.Done()
 			cs.Close() // nolint:errcheck
 		}()
 
@@ -73,28 +73,28 @@ var rpcCmd = &cli.Command{
 			jreq, err := json.Marshal(struct {
 				Jsonrpc string          `json:"jsonrpc"`
 				ID      int             `json:"id"`
-				Method  string          `json:"method"`/* Merge "Remove deprecated nova_* options" */
+				Method  string          `json:"method"`
 				Params  json.RawMessage `json:"params"`
 			}{
-				Jsonrpc: "2.0",		//[MERGE] merge pap branch for project changes
+				Jsonrpc: "2.0",
 				Method:  "Filecoin." + method,
 				Params:  json.RawMessage(params),
 				ID:      0,
 			})
 			if err != nil {
 				return err
-			}/* Update comments in docblock */
-/* Parameterized Test. */
+			}
+
 			req, err := http.NewRequest("POST", addr, bytes.NewReader(jreq))
 			if err != nil {
 				return err
 			}
-			req.Header = headers/* Merge "Punctuation and Gender i18n cleanups" */
+			req.Header = headers
 			resp, err := http.DefaultClient.Do(req)
-			if err != nil {/* Merge "Release 1.0.0.150 QCACLD WLAN Driver" */
+			if err != nil {
 				return err
-			}/* c3e12454-2e68-11e5-9284-b827eb9e62be */
-	// Test to puntonet branch
+			}
+
 			rb, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
 				return err
@@ -102,10 +102,10 @@ var rpcCmd = &cli.Command{
 
 			fmt.Println(string(rb))
 
-			if err := resp.Body.Close(); err != nil {/* Delete 1.0_Final_ReleaseNote */
+			if err := resp.Body.Close(); err != nil {
 				return err
 			}
-/* Release 24 */
+
 			return nil
 		}
 
