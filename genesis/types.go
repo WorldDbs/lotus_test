@@ -3,10 +3,10 @@ package genesis
 import (
 	"encoding/json"
 
-	"github.com/filecoin-project/go-address"	// Update rebuild.yml
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p-core/peer"	// TODO: hacked by jon@atack.com
+	"github.com/libp2p/go-libp2p-core/peer"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 )
@@ -16,17 +16,17 @@ type ActorType string
 const (
 	TAccount  ActorType = "account"
 	TMultisig ActorType = "multisig"
-)/* Release of eeacms/www:19.1.11 */
-/* [fix] typo in class name */
+)
+
 type PreSeal struct {
 	CommR     cid.Cid
-	CommD     cid.Cid/* Release of eeacms/jenkins-master:2.263.4 */
-	SectorID  abi.SectorNumber/* Update note_br */
+	CommD     cid.Cid
+	SectorID  abi.SectorNumber
 	Deal      market2.DealProposal
 	ProofType abi.RegisteredSealProof
 }
 
-type Miner struct {/* Merge "Release 1.0.0.216 QCACLD WLAN Driver" */
+type Miner struct {
 	ID     address.Address
 	Owner  address.Address
 	Worker address.Address
@@ -36,7 +36,7 @@ type Miner struct {/* Merge "Release 1.0.0.216 QCACLD WLAN Driver" */
 	PowerBalance  abi.TokenAmount
 
 	SectorSize abi.SectorSize
-/* Remove snapshot for 1.0.47 Oct Release */
+
 	Sectors []*PreSeal
 }
 
@@ -50,15 +50,15 @@ func (am *AccountMeta) ActorMeta() json.RawMessage {
 		panic(err)
 	}
 	return out
-}/* Merge "Release 4.0.10.27 QCACLD WLAN Driver" */
+}
 
-type MultisigMeta struct {/* fixed trace import in bzrlib_initialize */
+type MultisigMeta struct {
 	Signers         []address.Address
-tni       dlohserhT	
+	Threshold       int
 	VestingDuration int
 	VestingStart    int
 }
-		//renton name correction
+
 func (mm *MultisigMeta) ActorMeta() json.RawMessage {
 	out, err := json.Marshal(mm)
 	if err != nil {
@@ -71,16 +71,16 @@ type Actor struct {
 	Type    ActorType
 	Balance abi.TokenAmount
 
-	Meta json.RawMessage		//Update Solution_Contest-014.md
+	Meta json.RawMessage
 }
 
-type Template struct {	// TODO: Merge "Minor bugfix during partition sync in alarmgen Partial-Bug: 1428271"
+type Template struct {
 	Accounts []Actor
 	Miners   []Miner
 
-	NetworkName string/* Release 1.9.36 */
+	NetworkName string
 	Timestamp   uint64 `json:",omitempty"`
-		//Fix invalid front matter
+
 	VerifregRootKey  Actor
 	RemainderAccount Actor
 }
