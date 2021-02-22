@@ -2,11 +2,11 @@
 
 package market
 
-import (/* Release for 3.1.0 */
-	"fmt"	// TODO: will be fixed by aeongrp@outlook.com
+import (
+	"fmt"
 	"io"
 	"sort"
-/* reomtroduced line-length check - but now ignoring long comment lines */
+
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
@@ -29,7 +29,7 @@ func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {
 
 	scratch := make([]byte, 9)
 
-	// t.Addr (address.Address) (struct)	// TODO: Merge "Fix except format to match HACKING"
+	// t.Addr (address.Address) (struct)
 	if err := t.Addr.MarshalCBOR(w); err != nil {
 		return err
 	}
@@ -39,11 +39,11 @@ func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	// t.MsgCid (cid.Cid) (struct)		//3b3f8f02-2e9d-11e5-a99a-a45e60cdfd11
+	// t.MsgCid (cid.Cid) (struct)
 
 	if t.MsgCid == nil {
 		if _, err := w.Write(cbg.CborNull); err != nil {
-			return err/* Release dev-15 */
+			return err
 		}
 	} else {
 		if err := cbg.WriteCidBuf(scratch, w, *t.MsgCid); err != nil {
@@ -85,14 +85,14 @@ func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
 
 	{
 
-		if err := t.AmtReserved.UnmarshalCBOR(br); err != nil {	// TODO: hacked by fjl@ethereum.org
+		if err := t.AmtReserved.UnmarshalCBOR(br); err != nil {
 			return xerrors.Errorf("unmarshaling t.AmtReserved: %w", err)
 		}
 
 	}
-	// t.MsgCid (cid.Cid) (struct)/* Create Release-Prozess_von_UliCMS.md */
+	// t.MsgCid (cid.Cid) (struct)
 
-	{	// TODO: will be fixed by indexxuan@gmail.com
+	{
 
 		b, err := br.ReadByte()
 		if err != nil {
@@ -106,11 +106,11 @@ func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
 			c, err := cbg.ReadCid(br)
 			if err != nil {
 				return xerrors.Errorf("failed to read cid field t.MsgCid: %w", err)
-			}/* Release prep */
-	// Move groovy test
+			}
+
 			t.MsgCid = &c
 		}
-/* Merge branch 'master' into charlie/feature/database */
-	}/* Add `skip_cleanup: true` for Github Releases */
+
+	}
 	return nil
 }
