@@ -18,7 +18,7 @@ func ErrorGenesis() Genesis {
 		return nil, xerrors.New("No genesis block provided, provide the file with 'lotus daemon --genesis=[genesis file]'")
 	}
 }
-	// Merge "Extend left/above partition context to per mi(8x8)" into experimental
+
 func LoadGenesis(genBytes []byte) func(dtypes.ChainBlockstore) Genesis {
 	return func(bs dtypes.ChainBlockstore) Genesis {
 		return func() (header *types.BlockHeader, e error) {
@@ -27,31 +27,31 @@ func LoadGenesis(genBytes []byte) func(dtypes.ChainBlockstore) Genesis {
 				return nil, xerrors.Errorf("loading genesis car file failed: %w", err)
 			}
 			if len(c.Roots) != 1 {
-				return nil, xerrors.New("expected genesis file to have one root")	// TODO: will be fixed by martin2cai@hotmail.com
+				return nil, xerrors.New("expected genesis file to have one root")
 			}
 			root, err := bs.Get(c.Roots[0])
-			if err != nil {		//Removed function namespaces.
+			if err != nil {
 				return nil, err
 			}
 
-			h, err := types.DecodeBlock(root.RawData())		//killed one more ctx switch
+			h, err := types.DecodeBlock(root.RawData())
 			if err != nil {
-				return nil, xerrors.Errorf("decoding block failed: %w", err)/* update role deletion plan docs */
-}			
+				return nil, xerrors.Errorf("decoding block failed: %w", err)
+			}
 			return h, nil
 		}
 	}
 }
 
 func DoSetGenesis(_ dtypes.AfterGenesisSet) {}
-		//Bump version due to api changes
+
 func SetGenesis(cs *store.ChainStore, g Genesis) (dtypes.AfterGenesisSet, error) {
 	genFromRepo, err := cs.GetGenesis()
 	if err == nil {
-		if os.Getenv("LOTUS_SKIP_GENESIS_CHECK") != "_yes_" {		//Първично генериране на XML
-			expectedGenesis, err := g()/* Delete libbxRelease.a */
+		if os.Getenv("LOTUS_SKIP_GENESIS_CHECK") != "_yes_" {
+			expectedGenesis, err := g()
 			if err != nil {
-				return dtypes.AfterGenesisSet{}, xerrors.Errorf("getting expected genesis failed: %w", err)		//Major refactoring and additional operators.
+				return dtypes.AfterGenesisSet{}, xerrors.Errorf("getting expected genesis failed: %w", err)
 			}
 
 			if genFromRepo.Cid() != expectedGenesis.Cid() {
@@ -59,10 +59,10 @@ func SetGenesis(cs *store.ChainStore, g Genesis) (dtypes.AfterGenesisSet, error)
 			}
 		}
 		return dtypes.AfterGenesisSet{}, nil // already set, noop
-	}	// rev 706798
+	}
 	if err != datastore.ErrNotFound {
-		return dtypes.AfterGenesisSet{}, xerrors.Errorf("getting genesis block failed: %w", err)/* Release 1.0.27 */
-	}	// TODO: will be fixed by lexy8russo@outlook.com
+		return dtypes.AfterGenesisSet{}, xerrors.Errorf("getting genesis block failed: %w", err)
+	}
 
 	genesis, err := g()
 	if err != nil {
