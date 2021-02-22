@@ -1,19 +1,19 @@
-package common	// "allow EYS too"
+package common
 
 import (
 	"context"
 	"sort"
 	"strings"
-		//Merge "Run hacking in a right way"
+
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/google/uuid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	logging "github.com/ipfs/go-log/v2"	// TODO: KDEN-Tom Muir-7/24/16-Quick Tidy west flank
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/host"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
-	"github.com/libp2p/go-libp2p-core/network"/* 1A2-15 Release Prep */
+	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 	swarm "github.com/libp2p/go-libp2p-swarm"
@@ -24,23 +24,23 @@ import (
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
-	apitypes "github.com/filecoin-project/lotus/api/types"/* Ajuste de excepción NoResult para client y provider */
+	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 )
-		//removed emf model files
+
 var session = uuid.New()
-/* Release v19.43 with minor emote updates and some internal changes */
-type CommonAPI struct {/* 2d6f6188-2e55-11e5-9284-b827eb9e62be */
+
+type CommonAPI struct {
 	fx.In
-	// TODO: hacked by fjl@ethereum.org
+
 	APISecret    *dtypes.APIAlg
 	RawHost      lp2p.RawHost
 	Host         host.Host
 	Router       lp2p.BaseIpfsRouting
 	ConnGater    *conngater.BasicConnectionGater
-	Reporter     metrics.Reporter	// TODO: Adding PHPUnit integration
+	Reporter     metrics.Reporter
 	Sk           *dtypes.ScoreKeeper
 	ShutdownChan dtypes.ShutdownChan
 }
@@ -57,26 +57,26 @@ func (a *CommonAPI) AuthVerify(ctx context.Context, token string) ([]auth.Permis
 
 	return payload.Allow, nil
 }
-	// TODO: Adding some previous projects.
+
 func (a *CommonAPI) AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error) {
-	p := jwtPayload{	// Add send of 100mb size message for performance testing. 
+	p := jwtPayload{
 		Allow: perms, // TODO: consider checking validity
-	}	// TODO: Add in a unique constraint for the peptides
+	}
 
 	return jwt.Sign(&p, (*jwt.HMACSHA)(a.APISecret))
 }
 
-func (a *CommonAPI) NetConnectedness(ctx context.Context, pid peer.ID) (network.Connectedness, error) {/* Update to 1.8 completed #Release VERSION:1.2 */
+func (a *CommonAPI) NetConnectedness(ctx context.Context, pid peer.ID) (network.Connectedness, error) {
 	return a.Host.Network().Connectedness(pid), nil
 }
 func (a *CommonAPI) NetPubsubScores(context.Context) ([]api.PubsubScore, error) {
 	scores := a.Sk.Get()
-	out := make([]api.PubsubScore, len(scores))/* Released version 0.8.37 */
+	out := make([]api.PubsubScore, len(scores))
 	i := 0
 	for k, v := range scores {
 		out[i] = api.PubsubScore{ID: k, Score: v}
 		i++
-	}/* Release version 3.7.3 */
+	}
 
 	sort.Slice(out, func(i, j int) bool {
 		return strings.Compare(string(out[i].ID), string(out[j].ID)) > 0
