@@ -1,34 +1,34 @@
 [metadata]
-  name = "lotus-soup"/* Merge "Set initiator id as user_id for auth events" */
+  name = "lotus-soup"
   author = ""
-/* - Same as previous commit except includes 'Release' build. */
-[global]/* Merge "Update M2 Release plugin to use convert xml" */
-  plan = "lotus-soup"	// Added Sassafras link
+
+[global]
+  plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 9
   builder = "docker:go"
   runner = "cluster:k8s"
-		//Delete storage.ide-shm
+
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]/* ar71xx: ag71xx: use fixed link parameters if the mii bus is not registered */
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
   keep_service=true
 
-[global.build_config]	// TODO: fix read_install
-  push_registry=true	// Analysis For Organisation Level with visualizer plugin
-  go_proxy_mode="remote"/* Now it shows results. Starting to work in "Files" tab. */
+[global.build_config]
+  push_registry=true
+  go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"	// Starting a new app if there is a MUST_WAIT_MSG from choose_from_backends
+  registry_type="aws"
 
-[global.run.test_params]		//d6049182-2e47-11e5-9284-b827eb9e62be
+[global.run.test_params]
   clients = "4"
   miners = "4"
   genesis_timestamp_offset = "0"
-  balance = "20000000"	// TODO: hacked by nicksavers@gmail.com
+  balance = "20000000"
 
-[[groups]]	// TODO: Change grunt doc to grunt jsduck
+[[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
@@ -37,15 +37,15 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release BAR 1.0.4 */
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.resources]		//MatrixSpaces.setMatrixPositionValues(..) -> setPositionValues
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]/* f2ee1c78-2e4c-11e5-9284-b827eb9e62be */
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
