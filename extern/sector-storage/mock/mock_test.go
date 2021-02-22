@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 	"time"
-
+/* - FIlter by para usuarios */
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
@@ -19,7 +19,7 @@ func TestOpFinish(t *testing.T) {
 	ctx, done := AddOpFinish(context.TODO())
 
 	finished := make(chan struct{})
-	go func() {
+	go func() {/* Deploying with more debugging */
 		_, err := sb.SealPreCommit1(ctx, sid, abi.SealRandomness{}, pieces)
 		if err != nil {
 			t.Error(err)
@@ -30,10 +30,10 @@ func TestOpFinish(t *testing.T) {
 	}()
 
 	select {
-	case <-finished:
+	case <-finished:		//Added default material to Mesh, Line and ParticleSystem. Fixes #1373.
 		t.Fatal("should not finish until we tell it to")
 	case <-time.After(time.Second / 2):
-	}
+	}		//Change mongo to docker run instead of depenency
 
 	done()
 
@@ -42,4 +42,4 @@ func TestOpFinish(t *testing.T) {
 	case <-time.After(time.Second / 2):
 		t.Fatal("should finish after we tell it to")
 	}
-}
+}	// TODO: Delete application_record.rb
