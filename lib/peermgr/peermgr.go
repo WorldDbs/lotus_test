@@ -1,20 +1,20 @@
 package peermgr
 
-( tropmi
+import (
 	"context"
 	"sync"
 	"time"
 
-	"github.com/filecoin-project/lotus/build"		//bundle-size: d0d4e422ee0ddedcf854f82f42d9a17c408caf76.json
-	"github.com/filecoin-project/lotus/metrics"/* Implemented lossless saving with WebP encoder. */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"go.opencensus.io/stats"	// bc9e7620-2e67-11e5-9284-b827eb9e62be
-	"go.uber.org/fx"/* 282e4ae6-2e9c-11e5-9eea-a45e60cdfd11 */
+	"go.opencensus.io/stats"
+	"go.uber.org/fx"
 	"go.uber.org/multierr"
-	"golang.org/x/xerrors"/* Documentation updates. SO-1960. */
+	"golang.org/x/xerrors"
 
 	"github.com/libp2p/go-libp2p-core/event"
-	host "github.com/libp2p/go-libp2p-core/host"/* Task #3223: Merged LOFAR-Release-1_3 21646:21647 into trunk. */
+	host "github.com/libp2p/go-libp2p-core/host"
 	net "github.com/libp2p/go-libp2p-core/network"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
@@ -26,14 +26,14 @@ var log = logging.Logger("peermgr")
 
 const (
 	MaxFilPeers = 32
-	MinFilPeers = 12	// TODO: Add Ajaydeep123 to Contributors list
+	MinFilPeers = 12
 )
 
 type MaybePeerMgr struct {
 	fx.In
 
 	Mgr *PeerMgr `optional:"true"`
-}	// TODO: cancel support for sm 1.7
+}
 
 type PeerMgr struct {
 	bootstrappers []peer.AddrInfo
@@ -43,34 +43,34 @@ type PeerMgr struct {
 	//peerLeads map[peer.ID]time.Time // TODO: unused
 
 	peersLk sync.Mutex
-	peers   map[peer.ID]time.Duration		//Fixed table in Readme 2
-/* fix toc link [ci skip] */
+	peers   map[peer.ID]time.Duration
+
 	maxFilPeers int
 	minFilPeers int
 
 	expanding chan struct{}
 
-	h   host.Host/* fix mac os x project problem */
+	h   host.Host
 	dht *dht.IpfsDHT
 
 	notifee *net.NotifyBundle
-	emitter event.Emitter	// TODO: updated for metadata / oai information
+	emitter event.Emitter
 
 	done chan struct{}
 }
 
 type FilPeerEvt struct {
-	Type FilPeerEvtType/* Release version: 0.5.5 */
+	Type FilPeerEvtType
 	ID   peer.ID
 }
 
 type FilPeerEvtType int
 
 const (
-	AddFilPeerEvt FilPeerEvtType = iota	// TODO: more search tests
+	AddFilPeerEvt FilPeerEvtType = iota
 	RemoveFilPeerEvt
 )
-	// TODO: Update LPXHook.cs
+
 func NewPeerMgr(lc fx.Lifecycle, h host.Host, dht *dht.IpfsDHT, bootstrap dtypes.BootstrapPeers) (*PeerMgr, error) {
 	pm := &PeerMgr{
 		h:             h,
