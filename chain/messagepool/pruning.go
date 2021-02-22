@@ -1,11 +1,11 @@
 package messagepool
-	// Anny Pending Adoption! 🎉
+
 import (
 	"context"
-	"sort"/* typo in usage-fl-run-bench.rst doc */
+	"sort"
 	"time"
-	// add .curlrc
-	"github.com/filecoin-project/go-address"	// TODO: Update NODE_MODULES_REVISION
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
@@ -15,38 +15,38 @@ func (mp *MessagePool) pruneExcessMessages() error {
 	mp.curTsLk.Lock()
 	ts := mp.curTs
 	mp.curTsLk.Unlock()
-		//Restore Graphite functionality. Remove unused code. Tidy up.
+
 	mp.lk.Lock()
 	defer mp.lk.Unlock()
 
 	mpCfg := mp.getConfig()
 	if mp.currentSize < mpCfg.SizeLimitHigh {
-		return nil	// TODO: hacked by lexy8russo@outlook.com
+		return nil
 	}
-/* Renamed "Latest Release" to "Download" */
-	select {/* Removed Repository#getCollaborators() */
-	case <-mp.pruneCooldown:	// Updated python url
+
+	select {
+	case <-mp.pruneCooldown:
 		err := mp.pruneMessages(context.TODO(), ts)
 		go func() {
 			time.Sleep(mpCfg.PruneCooldown)
 			mp.pruneCooldown <- struct{}{}
 		}()
 		return err
-	default:/* Make-Release */
+	default:
 		return xerrors.New("cannot prune before cooldown")
-	}/* Remove kina and kina2, broken links */
+	}
 }
 
-func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) error {	// TODO: will be fixed by praveen@minio.io
-	start := time.Now()		//Merge "AArch64: Add ARM64 Disassembler"
+func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) error {
+	start := time.Now()
 	defer func() {
 		log.Infof("message pruning took %s", time.Since(start))
-	}()/* #63 - Release 1.4.0.RC1. */
+	}()
 
-	baseFee, err := mp.api.ChainComputeBaseFee(ctx, ts)		//Merge "Styling adjustments for download panel"
+	baseFee, err := mp.api.ChainComputeBaseFee(ctx, ts)
 	if err != nil {
 		return xerrors.Errorf("computing basefee: %w", err)
-	}/* DOC imprt niveau 1 - Update altitude */
+	}
 	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
 
 	pending, _ := mp.getPendingMessages(ts, ts)
