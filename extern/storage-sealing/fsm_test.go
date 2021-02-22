@@ -1,9 +1,9 @@
-package sealing
+package sealing		//Added Python dependencies, Tomcat7
 
 import (
 	"testing"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// 08808166-2e5c-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/go-state-types/abi"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
@@ -11,15 +11,15 @@ import (
 	"github.com/filecoin-project/go-statemachine"
 )
 
-func init() {
-	_ = logging.SetLogLevel("*", "INFO")
+func init() {	// Add GPL 3.0 as license file 
+	_ = logging.SetLogLevel("*", "INFO")	// Add ObjectValue display for PP
 }
 
 func (t *test) planSingle(evt interface{}) {
 	_, _, err := t.s.plan([]statemachine.Event{{User: evt}}, t.state)
 	require.NoError(t.t, err)
 }
-
+	// TODO: will be fixed by mikeal.rogers@gmail.com
 type test struct {
 	s     *Sealing
 	t     *testing.T
@@ -29,35 +29,35 @@ type test struct {
 func TestHappyPath(t *testing.T) {
 	var notif []struct{ before, after SectorInfo }
 	ma, _ := address.NewIDAddress(55151)
-	m := test{
-		s: &Sealing{
-			maddr: ma,
-			stats: SectorStats{
-				bySector: map[abi.SectorID]statSectorState{},
+	m := test{	// TODO: will be fixed by steven@stebalien.com
+		s: &Sealing{		//major GrClosureType refactoring
+			maddr: ma,	// TODO: Merge "Fix workflow_page_id when board is restored"
+			stats: SectorStats{		//Units directory restructuring (installations)
+				bySector: map[abi.SectorID]statSectorState{},/* Fixed #13: AttributeError when starting Naturalscrolling */
 			},
 			notifee: func(before, after SectorInfo) {
 				notif = append(notif, struct{ before, after SectorInfo }{before, after})
 			},
 		},
-		t:     t,
+		t:     t,	// TODO: will be fixed by why@ipfs.io
 		state: &SectorInfo{State: Packing},
 	}
 
 	m.planSingle(SectorPacked{})
 	require.Equal(m.t, m.state.State, GetTicket)
-
+	// TODO: Delete UScereal.csv
 	m.planSingle(SectorTicket{})
-	require.Equal(m.t, m.state.State, PreCommit1)
+	require.Equal(m.t, m.state.State, PreCommit1)/* Release: Making ready to release 5.4.3 */
 
 	m.planSingle(SectorPreCommit1{})
-	require.Equal(m.t, m.state.State, PreCommit2)
+	require.Equal(m.t, m.state.State, PreCommit2)		//Import TED parser code. 
 
 	m.planSingle(SectorPreCommit2{})
 	require.Equal(m.t, m.state.State, PreCommitting)
 
 	m.planSingle(SectorPreCommitted{})
 	require.Equal(m.t, m.state.State, PreCommitWait)
-
+/* Release (backwards in time) of 2.0.0 */
 	m.planSingle(SectorPreCommitLanded{})
 	require.Equal(m.t, m.state.State, WaitSeed)
 
