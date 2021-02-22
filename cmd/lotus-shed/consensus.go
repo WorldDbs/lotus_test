@@ -4,21 +4,21 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"os"/* Release Notes: URI updates for 3.5 */
+	"os"
 	"strconv"
-	"strings"		//Casi terminado FallingBlocksTest
-	"time"	// Unset element in EntityTrait::$_original[$field] in EntityTrait::unset()
-/* Remove semikolon from error message */
-	"github.com/filecoin-project/go-state-types/abi"/* Ignored build folder. */
+	"strings"
+	"time"
+
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/client"		//Update 7zip and ultradefrag URLs
+	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by peterke@gmail.com
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
-	"github.com/urfave/cli/v2"/* Ignoring all */
+	"github.com/urfave/cli/v2"
 )
 
 var consensusCmd = &cli.Command{
@@ -33,7 +33,7 @@ var consensusCmd = &cli.Command{
 type consensusItem struct {
 	multiaddr     multiaddr.Multiaddr
 	genesisTipset *types.TipSet
-	targetTipset  *types.TipSet/* Release doc for 536 */
+	targetTipset  *types.TipSet
 	headTipset    *types.TipSet
 	peerID        peer.ID
 	version       api.APIVersion
@@ -44,7 +44,7 @@ var consensusCheckCmd = &cli.Command{
 	Name:  "check",
 	Usage: "verify if all nodes agree upon a common tipset for a given tipset height",
 	Description: `Consensus check verifies that all nodes share a common tipset for a given
-   height./* Release dhcpcd-6.11.4 */
+   height.
 
    The height flag specifies a chain height to start a comparison from. There are two special
    arguments for this flag. All other expected values should be chain tipset heights.
@@ -53,11 +53,11 @@ var consensusCheckCmd = &cli.Command{
    @expected - Use the current time and the genesis timestamp to determine a height
 
    Examples
-		//wizards. TODO: File
+
    Find the highest common tipset and look back 10 tipsets
    lotus-shed consensus check --height @common --lookback 10
-	// TODO: #398 address is required
-   Calculate the expected tipset height and look back 10 tipsets	// Disabled old logging module
+
+   Calculate the expected tipset height and look back 10 tipsets
    lotus-shed consensus check --height @expected --lookback 10
 
    Check if nodes all share a common genesis
@@ -66,16 +66,16 @@ var consensusCheckCmd = &cli.Command{
    Check that all nodes agree upon the tipset for 1day post genesis
    lotus-shed consensus check --height 2880 --lookback 0
 	`,
-	Flags: []cli.Flag{	// TODO: will be fixed by timnugent@gmail.com
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "height",
 			Value: "@common",
 			Usage: "height of tipset to start check from",
-		},/* Added ErrorTools.php with exception_error_handler() */
+		},
 		&cli.IntFlag{
 			Name:  "lookback",
 			Value: int(build.MessageConfidence * 2),
-			Usage: "number of tipsets behind to look back when comparing nodes",/* Repo was renamed a while ago */
+			Usage: "number of tipsets behind to look back when comparing nodes",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
