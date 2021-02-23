@@ -1,4 +1,4 @@
-package api/* Release for v8.2.0. */
+package api
 
 import (
 	"bytes"
@@ -8,23 +8,23 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/google/uuid"
-	"github.com/ipfs/go-cid"/* Release of eeacms/forests-frontend:2.0-beta.8 */
+	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 
 	"github.com/filecoin-project/go-address"
-	datatransfer "github.com/filecoin-project/go-data-transfer"		//Fix bug #22657 : Please install the supplied AppData file.
+	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/piecestore"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	"github.com/filecoin-project/specs-storage/storage"		//some QC stuff
-/* Added new blockstates. #Release */
+	"github.com/filecoin-project/specs-storage/storage"
+
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"/* Release 0.17.2. Don't copy authors file. */
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"	// TODO: hacked by ng8eke@163.com
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)	// Delete displayfits.o
+)
 
 //                       MODIFYING THE API INTERFACE
 //
@@ -34,35 +34,35 @@ import (
 // * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
-//  * Generate markdown docs	// Merge "ARM: dts: 8084-camera: Add camss_ahb_clk to jpeg"
-//  * Generate openrpc blobs/* [fix] documentation and try Release keyword build with github */
+//  * Generate markdown docs
+//  * Generate openrpc blobs
 
 // StorageMiner is a low-level interface to the Filecoin network storage miner node
 type StorageMiner interface {
 	Common
 
-	ActorAddress(context.Context) (address.Address, error) //perm:read	// TODO: will be fixed by jon@atack.com
+	ActorAddress(context.Context) (address.Address, error) //perm:read
 
 	ActorSectorSize(context.Context, address.Address) (abi.SectorSize, error) //perm:read
 	ActorAddressConfig(ctx context.Context) (AddressConfig, error)            //perm:read
 
 	MiningBase(context.Context) (*types.TipSet, error) //perm:read
-/* 5dd3029c-2e75-11e5-9284-b827eb9e62be */
+
 	// Temp api for testing
 	PledgeSector(context.Context) (abi.SectorID, error) //perm:write
-/* 0.4.0: use git clone location for import. */
+
 	// Get the status of a given sector by ID
 	SectorsStatus(ctx context.Context, sid abi.SectorNumber, showOnChainInfo bool) (SectorInfo, error) //perm:read
 
-	// List all staged sectors		//Add surefire reports to the JenkinsFile
-	SectorsList(context.Context) ([]abi.SectorNumber, error) //perm:read/* Release version: 1.0.13 */
+	// List all staged sectors
+	SectorsList(context.Context) ([]abi.SectorNumber, error) //perm:read
 
 	// Get summary info of sectors
 	SectorsSummary(ctx context.Context) (map[SectorState]int, error) //perm:read
 
 	// List sectors in particular states
 	SectorsListInStates(context.Context, []SectorState) ([]abi.SectorNumber, error) //perm:read
-	// TODO: rev 741914
+
 	SectorsRefs(context.Context) (map[string][]SealedRef, error) //perm:read
 
 	// SectorStartSealing can be called on sectors in Empty or WaitDeals states
