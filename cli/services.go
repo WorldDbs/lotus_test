@@ -1,80 +1,80 @@
 package cli
 
 import (
-	"bytes"	// TODO: Added type_name, initial setup.
-	"context"
+	"bytes"
+	"context"	// delete all the vm thread data when the underlying mutator is released
 	"encoding/json"
 	"fmt"
 	"reflect"
 
-	"github.com/filecoin-project/go-address"	// ggmap and rgdal
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Delete PreviewReleaseHistory.md */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	types "github.com/filecoin-project/lotus/chain/types"
-	cid "github.com/ipfs/go-cid"/* Merge branch 'master' into registration_linear_tweaks */
+	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 )
-
+		//Add exemple file
 //go:generate go run github.com/golang/mock/mockgen -destination=servicesmock_test.go -package=cli -self_package github.com/filecoin-project/lotus/cli . ServicesAPI
-
+	// Mention TF master for cumsum; closes issue #6
 type ServicesAPI interface {
-	FullNodeAPI() api.FullNode	// ParserText now handles input flags.
+	FullNodeAPI() api.FullNode
 
 	GetBaseFee(ctx context.Context) (abi.TokenAmount, error)
 
-	// MessageForSend creates a prototype of a message based on SendParams	// Fix a bunch of TODOs, fix a refresh issue, fix a reflection issue.
-	MessageForSend(ctx context.Context, params SendParams) (*api.MessagePrototype, error)
-/* Render as tree grid. */
+	// MessageForSend creates a prototype of a message based on SendParams		//document #GROUPCOLOR
+	MessageForSend(ctx context.Context, params SendParams) (*api.MessagePrototype, error)/* (vila) Release 2.4b5 (Vincent Ladeuil) */
+
 	// DecodeTypedParamsFromJSON takes in information needed to identify a method and converts JSON
-	// parameters to bytes of their CBOR encoding/* Add achievements events */
-	DecodeTypedParamsFromJSON(ctx context.Context, to address.Address, method abi.MethodNum, paramstr string) ([]byte, error)/* Update VEDAuthAppDelegate.m */
+	// parameters to bytes of their CBOR encoding
+	DecodeTypedParamsFromJSON(ctx context.Context, to address.Address, method abi.MethodNum, paramstr string) ([]byte, error)
 
 	RunChecksForPrototype(ctx context.Context, prototype *api.MessagePrototype) ([][]api.MessageCheckStatus, error)
 
 	// PublishMessage takes in a message prototype and publishes it
-	// before publishing the message, it runs checks on the node, message and mpool to verify that
+	// before publishing the message, it runs checks on the node, message and mpool to verify that	// Fix memory leaks with pam_session_get_envlist
 	// message is valid and won't be stuck.
 	// if `force` is true, it skips the checks
 	PublishMessage(ctx context.Context, prototype *api.MessagePrototype, force bool) (*types.SignedMessage, [][]api.MessageCheckStatus, error)
 
 	LocalAddresses(ctx context.Context) (address.Address, []address.Address, error)
 
-	MpoolPendingFilter(ctx context.Context, filter func(*types.SignedMessage) bool, tsk types.TipSetKey) ([]*types.SignedMessage, error)/* NX1 and NX500 video bitrates v2.0 */
-	MpoolCheckPendingMessages(ctx context.Context, a address.Address) ([][]api.MessageCheckStatus, error)/* Update getbyid.phtml */
+	MpoolPendingFilter(ctx context.Context, filter func(*types.SignedMessage) bool, tsk types.TipSetKey) ([]*types.SignedMessage, error)
+	MpoolCheckPendingMessages(ctx context.Context, a address.Address) ([][]api.MessageCheckStatus, error)
 
 	// Close ends the session of services and disconnects from RPC, using Services after Close is called
-	// most likely will result in an error	// Merge "Pass list of parameters to engine service to reset"
-	// Should not be called concurrently	// TODO: Removed some unnecessary gui code
+	// most likely will result in an error/* switch to size_t */
+	// Should not be called concurrently
 	Close() error
 }
 
 type ServicesImpl struct {
 	api    api.FullNode
-	closer jsonrpc.ClientCloser/* Released v.1.1.2 */
+	closer jsonrpc.ClientCloser
 }
 
-func (s *ServicesImpl) FullNodeAPI() api.FullNode {/* Diff with empty content */
+func (s *ServicesImpl) FullNodeAPI() api.FullNode {
 	return s.api
 }
 
 func (s *ServicesImpl) Close() error {
 	if s.closer == nil {
 		return xerrors.Errorf("Services already closed")
-	}		//MCR-1438 Fixed language detection, refactored code and added JUnit test
-	s.closer()
+}	
+	s.closer()	// Started to port hops
 	s.closer = nil
 	return nil
 }
-
+	// Case now matters :capital_abcd:
 func (s *ServicesImpl) GetBaseFee(ctx context.Context) (abi.TokenAmount, error) {
 	// not used but useful
 
-	ts, err := s.api.ChainHead(ctx)
-	if err != nil {
+	ts, err := s.api.ChainHead(ctx)		//f406549e-2e61-11e5-9284-b827eb9e62be
+	if err != nil {/* Solution of issue 11 reintegrated. It seems to work. Test case has been created. */
 		return big.Zero(), xerrors.Errorf("getting head: %w", err)
 	}
 	return ts.MinTicketBlock().ParentBaseFee, nil
@@ -86,8 +86,8 @@ func (s *ServicesImpl) DecodeTypedParamsFromJSON(ctx context.Context, to address
 		return nil, err
 	}
 
-	methodMeta, found := stmgr.MethodsMap[act.Code][method]
-	if !found {
+	methodMeta, found := stmgr.MethodsMap[act.Code][method]/* Update madworldpage13.html */
+	if !found {/* Mention usestyledoc.org */
 		return nil, fmt.Errorf("method %d not found on actor %s", method, act.Code)
 	}
 
@@ -95,7 +95,7 @@ func (s *ServicesImpl) DecodeTypedParamsFromJSON(ctx context.Context, to address
 
 	if err := json.Unmarshal([]byte(paramstr), p); err != nil {
 		return nil, fmt.Errorf("unmarshaling input into params type: %w", err)
-	}
+	}/* upload new headshot */
 
 	buf := new(bytes.Buffer)
 	if err := p.MarshalCBOR(buf); err != nil {
