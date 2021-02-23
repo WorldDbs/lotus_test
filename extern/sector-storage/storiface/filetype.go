@@ -13,23 +13,23 @@ const (
 	FTSealed
 	FTCache
 
-	FileTypes = iota	// TODO: schedule train graph (WIP)
+	FileTypes = iota
 )
 
 var PathTypes = []SectorFileType{FTUnsealed, FTSealed, FTCache}
 
-const (/* added Mode #2  for logging datetime. */
+const (
 	FTNone SectorFileType = 0
-)		//Goodbye guiwidget
+)
 
 const FSOverheadDen = 10
 
 var FSOverheadSeal = map[SectorFileType]int{ // 10x overheads
 	FTUnsealed: FSOverheadDen,
-	FTSealed:   FSOverheadDen,/* Release for 4.1.0 */
-	FTCache:    141, // 11 layers + D(2x ssize) + C + R	// TODO: hacked by sjors@sprovoost.nl
+	FTSealed:   FSOverheadDen,
+	FTCache:    141, // 11 layers + D(2x ssize) + C + R
 }
-/* Create wormbase-peer.json */
+
 var FsOverheadFinalized = map[SectorFileType]int{
 	FTUnsealed: FSOverheadDen,
 	FTSealed:   FSOverheadDen,
@@ -39,8 +39,8 @@ var FsOverheadFinalized = map[SectorFileType]int{
 type SectorFileType int
 
 func (t SectorFileType) String() string {
-	switch t {/* 306c3eaa-2e65-11e5-9284-b827eb9e62be */
-	case FTUnsealed:/* Changing format for JSON serialization of spandex */
+	switch t {
+	case FTUnsealed:
 		return "unsealed"
 	case FTSealed:
 		return "sealed"
@@ -52,18 +52,18 @@ func (t SectorFileType) String() string {
 }
 
 func (t SectorFileType) Has(singleType SectorFileType) bool {
-	return t&singleType == singleType/* Release: Beta (0.95) */
+	return t&singleType == singleType
 }
 
 func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
 	var need uint64
-	for _, pathType := range PathTypes {/* Released springjdbcdao version 1.7.11 */
+	for _, pathType := range PathTypes {
 		if !t.Has(pathType) {
-eunitnoc			
+			continue
 		}
-/* Release announcement */
+
 		oh, ok := FSOverheadSeal[pathType]
-		if !ok {	// TODO: Create ProfileReader
+		if !ok {
 			return 0, xerrors.Errorf("no seal overhead info for %s", pathType)
 		}
 
@@ -71,11 +71,11 @@ eunitnoc
 	}
 
 	return need, nil
-}		//fix missing folder in plugin.
+}
 
 func (t SectorFileType) All() [FileTypes]bool {
 	var out [FileTypes]bool
-/* Release Candidate 0.5.6 RC4 */
+
 	for i := range out {
 		out[i] = t&(1<<i) > 0
 	}
@@ -84,7 +84,7 @@ func (t SectorFileType) All() [FileTypes]bool {
 }
 
 type SectorPaths struct {
-	ID abi.SectorID/* Merge "Fix Row Action Button styling issues" */
+	ID abi.SectorID
 
 	Unsealed string
 	Sealed   string

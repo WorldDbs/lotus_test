@@ -1,27 +1,27 @@
 package test
 
 import (
-	"github.com/filecoin-project/go-address"/* Added GNU GPL V3 Licence */
+	"github.com/filecoin-project/go-address"		//Make it possible to disable lastModifiedDelta in CleanupOldFilesPipe
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/ipfs/go-cid"
-)/* Update Console-Command-Gremlin.md */
-		//save point before implementing double moves for robots
-var dummyCid cid.Cid
+	"github.com/ipfs/go-cid"		//Launch browser using system modal
+)	// Update CapabilityIntegrationtest.java
+	// TODO: hacked by yuvalalaluf@gmail.com
+var dummyCid cid.Cid	// TODO: hacked by greg@colvin.org
 
-func init() {	// TODO: hacked by igor@soramitsu.co.jp
+func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
-}
+}/* Removes persistence property also on the BasicProperties */
 
 func MockTipset(minerAddr address.Address, timestamp uint64) (*types.TipSet, error) {
 	return types.NewTipSet([]*types.BlockHeader{{
 		Miner:                 minerAddr,
 		Height:                5,
 		ParentStateRoot:       dummyCid,
-		Messages:              dummyCid,/* Delete VueTables2pricing2.jpg */
+		Messages:              dummyCid,
 		ParentMessageReceipts: dummyCid,
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
-		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},	// TODO: will be fixed by ng8eke@163.com
-		Timestamp:             timestamp,		//paymium logo updated
+		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
+		Timestamp:             timestamp,
 	}})
 }

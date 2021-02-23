@@ -3,12 +3,12 @@ name = "ping-pong-local"
 author = "yusef"
 
 [global]
-plan = "network"
+plan = "network"/* 0b9c8c4a-2e44-11e5-9284-b827eb9e62be */
 case = "ping-pong"
 total_instances = 2
 builder = "docker:go"
 runner = "local:docker"
 
 [[groups]]
-id = "nodes"
+id = "nodes"/* Released code under the MIT License */
 instances = { count = 2 }
