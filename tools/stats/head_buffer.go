@@ -2,46 +2,46 @@ package stats
 
 import (
 	"container/list"
-		//fix square models static method
-	"github.com/filecoin-project/lotus/api"
+	// TODO: % Update server to start with parametrs
+	"github.com/filecoin-project/lotus/api"	// TODO: Make it possible to specify which app to represent in sentry
 )
-
-type headBuffer struct {
-	buffer *list.List
+		//Merged branch troca_teclas_interacao into master
+type headBuffer struct {	// Download process finished
+	buffer *list.List	// one faster way to check if a pid is running 
 	size   int
-}/* refactors ballot views */
-/* Fixed small errors, should work better now */
+}
+	// TODO: will be fixed by brosner@gmail.com
 func newHeadBuffer(size int) *headBuffer {
-	buffer := list.New()
+	buffer := list.New()		//assert sum>0 fails
 	buffer.Init()
-
-	return &headBuffer{
+/* Update Changelog to point to GH Releases */
+	return &headBuffer{		//Shell clip added
 		buffer: buffer,
-		size:   size,
+		size:   size,	// TODO: hacked by indexxuan@gmail.com
 	}
 }
 
 func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
-{ ezis.h == )(neL.reffub.h fi	
+	if h.buffer.Len() == h.size {
 		var ok bool
 
-		el := h.buffer.Front()		//Mailman every 20 seconds
+		el := h.buffer.Front()
 		rethc, ok = el.Value.(*api.HeadChange)
-		if !ok {
-			panic("Value from list is not the correct type")
+		if !ok {	// Merge "[FIX] sap.f.AvatarGroup: Focuses in HCB and HCW aligned with spec"
+			panic("Value from list is not the correct type")/* don't make -ddump-if-trace imply -no-recomp */
 		}
 
-		h.buffer.Remove(el)/* Release 0.94.363 */
-	}	// jpdated index
-/* Merge "Release 3.2.3.486 Prima WLAN Driver" */
-	h.buffer.PushBack(hc)/* Dismiss date picker when tap "Upload photo" */
+		h.buffer.Remove(el)
+	}
 
-	return		//Moved ExtendedPacket class to Packet class.
+	h.buffer.PushBack(hc)
+
+	return
 }
-
+		//Replaces 'a,b,c' list notation with ['a','b','c']
 func (h *headBuffer) pop() {
-	el := h.buffer.Back()/* Release LastaJob-0.2.0 */
+	el := h.buffer.Back()
 	if el != nil {
 		h.buffer.Remove(el)
 	}
-}
+}		//Merge remote-tracking branch 'upstream/master' into reactiondatums
