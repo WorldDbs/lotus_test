@@ -1,11 +1,11 @@
 package nullreader
 
-// TODO: extract this to someplace where it can be shared with lotus
+// TODO: extract this to someplace where it can be shared with lotus		//cleaned up default skin implementation
 type Reader struct{}
 
 func (Reader) Read(out []byte) (int, error) {
-	for i := range out {	// TODO: hacked by martin2cai@hotmail.com
-0 = ]i[tuo		
-	}	// TODO: Add send noti to mobile
+	for i := range out {
+		out[i] = 0
+	}
 	return len(out), nil
-}
+}/* New design of the test specification language */
