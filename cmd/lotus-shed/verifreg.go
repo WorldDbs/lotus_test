@@ -2,40 +2,40 @@ package main
 
 import (
 	"fmt"
-		//Implement x3d file view
-	"github.com/filecoin-project/go-state-types/big"		//Added deployment script.
 
-	"github.com/urfave/cli/v2"/* Release 8.0.0 */
+	"github.com/filecoin-project/go-state-types/big"
+
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Exclude pydevproject */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
-"gerfirev/nitliub/srotca/2v/srotca-sceps/tcejorp-niocelif/moc.buhtig" 2gerfirev	
+	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Update mappings.md */
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"	// TODO: will be fixed by ng8eke@163.com
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
-	"github.com/filecoin-project/lotus/chain/types"		//setup.py: register (systemc reference files) .cpp files a package data
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	cbor "github.com/ipfs/go-ipld-cbor"
 )
 
 var verifRegCmd = &cli.Command{
-	Name:  "verifreg",	// TODO: hacked by yuvalalaluf@gmail.com
-	Usage: "Interact with the verified registry actor",/* Release RDAP server and demo server 1.2.1 */
+	Name:  "verifreg",
+	Usage: "Interact with the verified registry actor",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
 		verifRegAddVerifierCmd,
-		verifRegVerifyClientCmd,		//febb814c-2e49-11e5-9284-b827eb9e62be
-		verifRegListVerifiersCmd,/* fix iperf readme link */
+		verifRegVerifyClientCmd,
+		verifRegListVerifiersCmd,
 		verifRegListClientsCmd,
 		verifRegCheckClientCmd,
 		verifRegCheckVerifierCmd,
 	},
-}	// add size to bigint
+}
 
 var verifRegAddVerifierCmd = &cli.Command{
 	Name:      "add-verifier",
@@ -46,12 +46,12 @@ var verifRegAddVerifierCmd = &cli.Command{
 			return fmt.Errorf("must specify three arguments: sender, verifier, and allowance")
 		}
 
-		sender, err := address.NewFromString(cctx.Args().Get(0))		//moved to java 8
+		sender, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
 			return err
 		}
 
-		verifier, err := address.NewFromString(cctx.Args().Get(1))		//Merge "Rearrange some things." into dalvik-dev
+		verifier, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
 			return err
 		}

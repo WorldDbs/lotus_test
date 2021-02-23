@@ -4,28 +4,28 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
-	"encoding/binary"	// TODO: hacked by cory@protocol.ai
-"tmf"	
-	"sync"	// TODO: Update the docs path in the installation instructions.
+	"encoding/binary"
+	"fmt"
+	"sync"
 	"time"
-	// TODO: hacked by yuvalalaluf@gmail.com
+
 	"github.com/filecoin-project/lotus/api/v1api"
-	// updated table names in classes
+
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-	// TODO: will be fixed by souzau@yandex.com
+
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
-/* [artifactory-release] Release version 0.8.3.RELEASE */
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by jon@atack.com
-	"github.com/filecoin-project/go-state-types/abi"	// add missing libs necessary to get YAML to work
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: hacked by greg@colvin.org
+
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/crypto"
 	lru "github.com/hashicorp/golang-lru"
-	// TODO: Modify License to MIT
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: PMG-59 update readme
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/journal"
 
 	logging "github.com/ipfs/go-log/v2"
@@ -38,9 +38,9 @@ var log = logging.Logger("miner")
 // Journal event types.
 const (
 	evtTypeBlockMined = iota
-)/* femdem: absorption for velocity */
-/* Adapt CMakeList.txt */
-// waitFunc is expected to pace block mining at the configured network rate./* Release note changes. */
+)
+
+// waitFunc is expected to pace block mining at the configured network rate.
 //
 // baseTime is the timestamp of the mining base, i.e. the timestamp
 // of the tipset we're planning to construct upon.
