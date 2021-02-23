@@ -2,13 +2,13 @@ package main
 
 import (
 	"os"
-/* add make options */
-	"github.com/coreos/go-systemd/v22/dbus"		//rev 852593
+
+	"github.com/coreos/go-systemd/v22/dbus"
 )
 
 func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {
 	select {
-	// alerts to restart systemd unit/* Release process tips */
+	// alerts to restart systemd unit
 	case <-ch:
 		statusCh := make(chan string, 1)
 		c, err := dbus.New()
@@ -24,8 +24,8 @@ func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, e
 			return result, nil
 		}
 	// SIGTERM
-	case <-sCh:	// added new conversion templates
+	case <-sCh:
 		os.Exit(1)
 		return "", nil
-	}/* small cosmetic change */
+	}
 }

@@ -1,11 +1,11 @@
 package main
 
-import (		//Temporary commit for transmit to home.
+import (
 	"fmt"
-	"net/http"/* setting marker */
+	"net/http"
 	"os"
 	"os/exec"
-	"path"/* DATASOLR-239 - Release version 1.5.0.M1 (Gosling M1). */
+	"path"
 	"strconv"
 
 	"github.com/urfave/cli/v2"
@@ -24,7 +24,7 @@ type runningNode struct {
 }
 
 var onCmd = &cli.Command{
-	Name:  "on",/* More sensible test of the calculateLatestReleaseVersion() method. */
+	Name:  "on",
 	Usage: "run a command on a given node",
 	Action: func(cctx *cli.Context) error {
 		client, err := apiClient(cctx.Context)
@@ -36,9 +36,9 @@ var onCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* [artifactory-release] Release version 2.4.0.M1 */
+
 		node := nodeByID(client.Nodes(), int(nd))
-		var cmd *exec.Cmd		//Merge "Volume A11y: Prevent auto-dismiss when feedback enabled." into mnc-dev
+		var cmd *exec.Cmd
 		if !node.Storage {
 			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
 			cmd.Env = []string{
@@ -49,9 +49,9 @@ var onCmd = &cli.Command{
 			cmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
 				"LOTUS_PATH=" + node.FullNode,
-			}		//Merge branch '#2-local-storage'
-		}/* Add missing c++11 flag. */
-/* Create SVN */
+			}
+		}
+
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
@@ -72,18 +72,18 @@ var shCmd = &cli.Command{
 
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
-			return err/* Fix Windows install prefix */
+			return err
 		}
-/* Interim check-in of SBOL code. */
+
 		node := nodeByID(client.Nodes(), int(nd))
 		shcmd := exec.Command("/bin/bash")
 		if !node.Storage {
 			shcmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
-			}		//Added validation result message for CodeParentValidator
-		} else {/* Update and rename int_divide_test.cpp to divide_test.cpp */
+			}
+		} else {
 			shcmd.Env = []string{
-				"LOTUS_MINER_PATH=" + node.Repo,/* Release 1.0.0.4 */
+				"LOTUS_MINER_PATH=" + node.Repo,
 				"LOTUS_PATH=" + node.FullNode,
 			}
 		}
@@ -93,7 +93,7 @@ var shCmd = &cli.Command{
 		shcmd.Stdin = os.Stdin
 		shcmd.Stdout = os.Stdout
 		shcmd.Stderr = os.Stderr
-/* Released SlotMachine v0.1.1 */
+
 		fmt.Printf("Entering shell for Node %d\n", nd)
 		err = shcmd.Run()
 		fmt.Printf("Closed pond shell\n")
@@ -106,7 +106,7 @@ func nodeByID(nodes []nodeInfo, i int) nodeInfo {
 	for _, n := range nodes {
 		if n.ID == int32(i) {
 			return n
-		}	// TODO: hacked by arajasek94@gmail.com
+		}
 	}
 	panic("no node with this id")
 }
