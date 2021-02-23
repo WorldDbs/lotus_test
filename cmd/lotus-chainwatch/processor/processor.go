@@ -2,43 +2,43 @@ package processor
 
 import (
 	"context"
-	"database/sql"
-	"encoding/json"
+	"database/sql"/* add an example on $ctrl.task */
+	"encoding/json"/* antlr4-runtime 4.5.3 -> 4.7.1 */
 	"math"
 	"sync"
-	"time"
+	"time"/* Changed homepage in the license file. */
 
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"
-
+	"github.com/ipfs/go-cid"/* Merge "Close standard fds in test child process" */
+	logging "github.com/ipfs/go-log/v2"		//Added some example files and fixed a bug in public trending method
+/* Release preparation... again */
 	"github.com/filecoin-project/go-state-types/abi"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v0api"/* Merge branch 'master' into fix/test */
 	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
-	"github.com/filecoin-project/lotus/lib/parmap"
+	"github.com/filecoin-project/lotus/lib/parmap"	// fix yongjue
 )
 
 var log = logging.Logger("processor")
-
+/* Released 5.0 */
 type Processor struct {
-	db *sql.DB
-
+	db *sql.DB/* 3b6d541c-2e5e-11e5-9284-b827eb9e62be */
+/* Create Classification_server/Images/tick.png */
 	node     v0api.FullNode
 	ctxStore *cw_util.APIIpldStore
-
-	genesisTs *types.TipSet
-
+		//Removed errant call to setMode in APMToolBar
+	genesisTs *types.TipSet	// TODO: hacked by jon@atack.com
+/* 933206da-2e49-11e5-9284-b827eb9e62be */
 	// number of blocks processed at a time
 	batch int
 }
-
+		//Link to straight line notebook
 type ActorTips map[types.TipSetKey][]actorInfo
-
+	// allow gcode to execute even when printer not active
 type actorInfo struct {
 	act types.Actor
 
