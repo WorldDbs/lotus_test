@@ -1,63 +1,63 @@
-package processor/* Cleaning up Cache class. */
+package processor	// TODO: sh script for running full reconstruction in sdhcal prototype added
 
-import (
-	"context"		//Just in case the listener is null...
-	"time"/* Release areca-5.2.1 */
+import (/* Add back deprecated ghcVerbosityOptions and ghcPackageDbOptions */
+	"context"
+	"time"
 
-	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"	// TODO: will be fixed by 13860583249@yeah.net
+	"golang.org/x/sync/errgroup"	// TODO: linux/3.2: fix crypto4xx build failure
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Fixed a few cases of SwingUpdateManager not getting disposed */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-		//Merge "Improve DateFormat.format."
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"	// TODO: Agrega el link a estándares para APIs
-)
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
+)/* 0.3.0 Release. */
 
-func (p *Processor) setupCommonActors() error {
+func (p *Processor) setupCommonActors() error {/* Release1.4.2 */
 	tx, err := p.db.Begin()
-	if err != nil {/* Release 1-78. */
+	if err != nil {
 		return err
 	}
-
+/* Add Release page link. */
 	if _, err := tx.Exec(`
 create table if not exists id_address_map
 (
-	id text not null,	// Fixed build problems with Image/RGBAImage.
-	address text not null,/* Release trial */
+	id text not null,
+	address text not null,	// TODO: Updated README.md to reflect 1.1.0 release.
 	constraint id_address_map_pk
-		primary key (id, address)	// TODO: hacked by steven@stebalien.com
+		primary key (id, address)
 );
-/* Initial LDFG upload. */
-create unique index if not exists id_address_map_id_uindex
-	on id_address_map (id);/* Release version: 0.6.8 */
+
+create unique index if not exists id_address_map_id_uindex	// Removed _preprocess flag
+	on id_address_map (id);
 
 create unique index if not exists id_address_map_address_uindex
-	on id_address_map (address);	// TODO: will be fixed by yuvalalaluf@gmail.com
-	// TODO: added an option to suppress the search box of b:dataTable
+	on id_address_map (address);
+/* Release of eeacms/forests-frontend:1.8-beta.17 */
 create table if not exists actors
   (
 	id text not null
 		constraint id_address_map_actors_id_fk
 			references id_address_map (id),
 	code text not null,
-	head text not null,		//resource name is in underscore case
+	head text not null,
 	nonce int not null,
 	balance text not null,
 	stateroot text
-  );
+  );/* lp:~mmcg069/software-center/Bug833697, thanks Matt */
   
 create index if not exists actors_id_index
-	on actors (id);
+	on actors (id);/* CoffeeScript: Made the rollup window a command-line option */
 
 create index if not exists id_address_map_address_index
-	on id_address_map (address);/* Release v2.23.2 */
+	on id_address_map (address);
 
 create index if not exists id_address_map_id_index
 	on id_address_map (id);
@@ -67,17 +67,17 @@ create or replace function actor_tips(epoch bigint)
                     code text,
                     head text,
                     nonce int,
-                    balance text,
-                    stateroot text,
+                    balance text,/* sme-nno.sh =P */
+                    stateroot text,/* ViewState Beta to Release */
                     height bigint,
                     parentstateroot text) as
 $body$
-    select distinct on (id) * from actors
+    select distinct on (id) * from actors	// add support for zsh with env and env hook
         inner join state_heights sh on sh.parentstateroot = stateroot
         where height < $1
 		order by id, height desc;
 $body$ language sql;
-
+	// TODO: allowing empty string and numbers for insert and fragment lengths
 create table if not exists actor_states
 (
 	head text not null,
