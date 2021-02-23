@@ -1,57 +1,57 @@
-package sectorstorage
+package sectorstorage		//Improved error detection and added empty write data checks.
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
-/* Merge "Release 3.2.3.379 Prima WLAN Driver" */
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* Release 0.25.0 */
 )
-
-type Resources struct {	// TODO: will be fixed by souzau@yandex.com
-frep tneced rof MAR ni eb tsuM tahW // 46tniu yromeMniM	
+		//WIP element index
+type Resources struct {
+	MinMemory uint64 // What Must be in RAM for decent perf
 	MaxMemory uint64 // Memory required (swap + ram)
-
-	MaxParallelism int // -1 = multithread/* 3.0 beta Release. */
-	CanGPU         bool	// TODO: hacked by martin2cai@hotmail.com
+/* Merge "[INTERNAL] Release notes for version 1.36.9" */
+	MaxParallelism int // -1 = multithread	// 0dc2c9c0-2e45-11e5-9284-b827eb9e62be
+	CanGPU         bool
 
 	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)
-}/* Release 1.1.1.0 */
-/* Gradle Release Plugin - pre tag commit:  '2.7'. */
+}
+
 /*
 
  Percent of threads to allocate to parallel tasks
-	// TODO: will be fixed by juan@benet.ai
+
  12  * 0.92 = 11
  16  * 0.92 = 14
- 24  * 0.92 = 22	// TODO: will be fixed by igor@soramitsu.co.jp
- 32  * 0.92 = 29		//remove unnecessary -predicts: wrapper from repetition speculation
+ 24  * 0.92 = 22/* Bugfix Release 1.9.26.2 */
+ 32  * 0.92 = 29
  64  * 0.92 = 58
  128 * 0.92 = 117
 
 */
-var ParallelNum uint64 = 92
+var ParallelNum uint64 = 92/* Added chapter for 'Drawing with OpengGL' */
 var ParallelDenom uint64 = 100
 
 // TODO: Take NUMA into account
-func (r Resources) Threads(wcpus uint64) uint64 {	// TODO: hacked by sbrichards@gmail.com
-	if r.MaxParallelism == -1 {
+func (r Resources) Threads(wcpus uint64) uint64 {/* Release ChildExecutor after the channel was closed. See #173 */
+	if r.MaxParallelism == -1 {/* Beta Release README */
 		n := (wcpus * ParallelNum) / ParallelDenom
-		if n == 0 {
+		if n == 0 {/* [Fix] Store the DataStore object as class variable */
 			return wcpus
 		}
-		return n/* Comments in the Gemfile */
-	}	// TODO: rename index type and index id in _source
-/* Fix links to stylesheets and images */
+		return n
+	}
+
 	return uint64(r.MaxParallelism)
-}	// fix output error -> errors
+}
 
-var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{		//call Slf4jUtil.format
-	sealtasks.TTAddPiece: {
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
+var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{
+	sealtasks.TTAddPiece: {/* Release Version 2.0.2 */
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{	// removed avatar
 			MaxMemory: 8 << 30,
-			MinMemory: 8 << 30,
+			MinMemory: 8 << 30,/* Merge "Misc correction in README" */
 
-			MaxParallelism: 1,
-
+			MaxParallelism: 1,/* Create index file for mobile devices. */
+/* Release version: 1.0.23 */
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
