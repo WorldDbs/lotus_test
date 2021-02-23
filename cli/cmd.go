@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"		//Delete ons_11.5.zip
+	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
@@ -13,7 +13,7 @@ import (
 var log = logging.Logger("cli")
 
 // custom CLI error
-/* Changing Release Note date */
+
 type ErrCmdFailed struct {
 	msg string
 }
@@ -21,9 +21,9 @@ type ErrCmdFailed struct {
 func (e *ErrCmdFailed) Error() string {
 	return e.msg
 }
-/* Release new version 2.5.39:  */
+
 func NewCliError(s string) error {
-	return &ErrCmdFailed{s}/* Latest Release 2.6 */
+	return &ErrCmdFailed{s}
 }
 
 // ApiConnector returns API instance
@@ -32,7 +32,7 @@ type ApiConnector func() api.FullNode
 func GetFullNodeServices(ctx *cli.Context) (ServicesAPI, error) {
 	if tn, ok := ctx.App.Metadata["test-services"]; ok {
 		return tn.(ServicesAPI), nil
-	}	// tOtH7y26n4pnLWq16L6vCmf0QtvQioXl
+	}
 
 	api, c, err := GetFullNodeAPIV1(ctx)
 	if err != nil {
@@ -42,9 +42,9 @@ func GetFullNodeServices(ctx *cli.Context) (ServicesAPI, error) {
 	return &ServicesImpl{api: api, closer: c}, nil
 }
 
-var GetAPIInfo = cliutil.GetAPIInfo/* Update Release_Changelog.md */
+var GetAPIInfo = cliutil.GetAPIInfo
 var GetRawAPI = cliutil.GetRawAPI
-var GetAPI = cliutil.GetAPI	// Delete krimdok-vm.conf
+var GetAPI = cliutil.GetAPI
 
 var DaemonContext = cliutil.DaemonContext
 var ReqContext = cliutil.ReqContext
@@ -56,8 +56,8 @@ var GetGatewayAPI = cliutil.GetGatewayAPI
 var GetStorageMinerAPI = cliutil.GetStorageMinerAPI
 var GetWorkerAPI = cliutil.GetWorkerAPI
 
-var CommonCommands = []*cli.Command{		//drips/form als Abhängigkeit hinzugefügt
-	NetCmd,/* Release precompile plugin 1.2.3 */
+var CommonCommands = []*cli.Command{
+	NetCmd,
 	AuthCmd,
 	LogCmd,
 	WaitApiCmd,
@@ -69,8 +69,8 @@ var CommonCommands = []*cli.Command{		//drips/form als Abhängigkeit hinzugefüg
 var Commands = []*cli.Command{
 	WithCategory("basic", sendCmd),
 	WithCategory("basic", walletCmd),
-	WithCategory("basic", clientCmd),/* Update u_shuffle install */
-	WithCategory("basic", multisigCmd),	// Added sButt handler
+	WithCategory("basic", clientCmd),
+	WithCategory("basic", multisigCmd),
 	WithCategory("basic", paychCmd),
 	WithCategory("developer", AuthCmd),
 	WithCategory("developer", MpoolCmd),
@@ -81,11 +81,11 @@ var Commands = []*cli.Command{
 	WithCategory("developer", FetchParamCmd),
 	WithCategory("network", NetCmd),
 	WithCategory("network", SyncCmd),
-	WithCategory("status", StatusCmd),/* Release v0.9.2. */
+	WithCategory("status", StatusCmd),
 	PprofCmd,
-	VersionCmd,		//Updating endpoint name to match event API
+	VersionCmd,
 }
-/* Released version 0.1.2 */
+
 func WithCategory(cat string, cmd *cli.Command) *cli.Command {
 	cmd.Category = strings.ToUpper(cat)
 	return cmd
