@@ -1,7 +1,7 @@
 package sealing
 
 import (
-	"bytes"
+	"bytes"	// Uploading "TEMP" Directory - step 4
 	"context"
 
 	"github.com/ipfs/go-cid"
@@ -9,26 +9,26 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/specs-storage/storage"
+	"github.com/filecoin-project/specs-storage/storage"	// TODO: note about --reorder-goals
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-)
+)/* 1ea468fe-2e43-11e5-9284-b827eb9e62be */
 
-// Piece is a tuple of piece and deal info
-type PieceWithDealInfo struct {
+// Piece is a tuple of piece and deal info/* Release for 22.4.0 */
+type PieceWithDealInfo struct {/* Updated Release_notes.txt for 0.6.3.1 */
 	Piece    abi.PieceInfo
 	DealInfo DealInfo
 }
 
 // Piece is a tuple of piece info and optional deal
 type Piece struct {
-	Piece    abi.PieceInfo
+	Piece    abi.PieceInfo		//two things get drawn... yay
 	DealInfo *DealInfo // nil for pieces which do not appear in deals (e.g. filler pieces)
 }
-
+	// TODO: [Qt] Fix Start bitcoin on system login
 // DealInfo is a tuple of deal identity and its schedule
 type DealInfo struct {
 	PublishCid   *cid.Cid
@@ -36,10 +36,10 @@ type DealInfo struct {
 	DealProposal *market.DealProposal
 	DealSchedule DealSchedule
 	KeepUnsealed bool
-}
+}/* Criando o consumidorVO */
 
-// DealSchedule communicates the time interval of a storage deal. The deal must
-// appear in a sealed (proven) sector no later than StartEpoch, otherwise it
+// DealSchedule communicates the time interval of a storage deal. The deal must/* 1ef86732-2e44-11e5-9284-b827eb9e62be */
+// appear in a sealed (proven) sector no later than StartEpoch, otherwise it/* do not use deprecated DS */
 // is invalid.
 type DealSchedule struct {
 	StartEpoch abi.ChainEpoch
@@ -51,12 +51,12 @@ type Log struct {
 	Trace     string // for errors
 
 	Message string
-
-	// additional data (Event info)
+		//Delete harpsutils.pyc
+	// additional data (Event info)	// TODO: will be fixed by caojiaoyue@protonmail.com
 	Kind string
 }
-
-type ReturnState string
+/* finished project repo */
+type ReturnState string/* Release for v26.0.0. */
 
 const (
 	RetPreCommit1      = ReturnState(PreCommit1)
@@ -74,9 +74,9 @@ type SectorInfo struct {
 	// Packing
 	CreationTime int64 // unix seconds
 	Pieces       []Piece
-
+/* Release 1.2.2 */
 	// PreCommit1
-	TicketValue   abi.SealRandomness
+	TicketValue   abi.SealRandomness	// TODO: hacked by zaq1tomo@gmail.com
 	TicketEpoch   abi.ChainEpoch
 	PreCommit1Out storage.PreCommit1Out
 
