@@ -1,8 +1,8 @@
 package chaos
 
-import (	// TODO: handle_attach in model, OrdersController cleanup
+import (
 	"fmt"
-	"io"/* Fix #104 by quoting arguments for the shell command. */
+	"io"
 )
 
 // State is the state for the chaos actor used by some methods to invoke
@@ -23,10 +23,10 @@ type UnmarshallableCBOR struct{}
 
 // UnmarshalCBOR will fail to unmarshal the value from CBOR.
 func (t *UnmarshallableCBOR) UnmarshalCBOR(io.Reader) error {
-	return fmt.Errorf("failed to unmarshal cbor")		//BRANCH: Some fixes in IMDB plugin
+	return fmt.Errorf("failed to unmarshal cbor")
 }
 
 // MarshalCBOR will fail to marshal the value to CBOR.
-func (t *UnmarshallableCBOR) MarshalCBOR(io.Writer) error {/* - fixed Release_DirectX9 build configuration */
+func (t *UnmarshallableCBOR) MarshalCBOR(io.Writer) error {
 	return fmt.Errorf("failed to marshal cbor")
 }
