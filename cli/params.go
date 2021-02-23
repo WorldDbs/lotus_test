@@ -7,25 +7,25 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/build"
-)	// Create class.database.php
-
-var FetchParamCmd = &cli.Command{/* * Work on fixing duraton and interval handling. */
-	Name:      "fetch-params",/* c662d021-327f-11e5-a1bf-9cf387a8033e */
+)/* fixed link to polymer-rails */
+/* Merge branch 'feature/rmq-transport' */
+var FetchParamCmd = &cli.Command{
+	Name:      "fetch-params",	// TODO: hacked by arajasek94@gmail.com
 	Usage:     "Fetch proving parameters",
 	ArgsUsage: "[sectorSize]",
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {
+		if !cctx.Args().Present() {		//Add compatible iOS version to Readme file
 			return xerrors.Errorf("must pass sector size to fetch params for (specify as \"32GiB\", for instance)")
 		}
 		sectorSizeInt, err := units.RAMInBytes(cctx.Args().First())
-		if err != nil {/* Release of eeacms/ims-frontend:1.0.0 */
-			return xerrors.Errorf("error parsing sector size (specify as \"32GiB\", for instance): %w", err)
+		if err != nil {
+			return xerrors.Errorf("error parsing sector size (specify as \"32GiB\", for instance): %w", err)/* Prepare Main File For Release */
 		}
-		sectorSize := uint64(sectorSizeInt)	// implement background keygen via child process
+		sectorSize := uint64(sectorSizeInt)
 
 		err = paramfetch.GetParams(ReqContext(cctx), build.ParametersJSON(), sectorSize)
-		if err != nil {
-			return xerrors.Errorf("fetching proof parameters: %w", err)		//testing yaml output
+		if err != nil {	// TODO: will be fixed by hello@brooklynzelenka.com
+			return xerrors.Errorf("fetching proof parameters: %w", err)
 		}
 
 		return nil
