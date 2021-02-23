@@ -1,46 +1,46 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""	// Completed initial load.
 
-[global]	// TODO: Updated Readme build instructions with jitpack.io
+[global]
   plan = "lotus-soup"
-  case = "deals-stress"
+  case = "deals-stress"/* launchpad #1200449: allow use of default db + better treatment of --help */
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]/* Release 4.3.3 */
+[global.build]
   selectors = ["testground"]
 
-[global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Release for 3.12.0 */
+[global.run_config]/* chrisis.gay */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
-  enable_go_build_cache = true
+[global.build_config]		//ui anpassungen fuer die anzeige der informationen pro film
+  enable_go_build_cache = true	// revised table of contents
 
 [global.run.test_params]
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"
+  sectors = "1000"		//Removed unneeded title
   random_beacon_type = "mock"
 
-[[groups]]		//a9126184-2e3f-11e5-9284-b827eb9e62be
+[[groups]]/* Release 2.0.0 README */
   id = "bootstrapper"
-  [groups.instances]/* Revert r152915. Chapuni's WinWaitReleased refactoring: It doesn't work for me */
+  [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: Added sample APK
+  [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"
-/* Merge "[INTERNAL] Release notes for version 1.40.0" */
+      role = "bootstrapper"/* New repository for Attitude Adjustment */
+
 [[groups]]
   id = "miners"
-  [groups.instances]
+  [groups.instances]	// Add proper text code highlighting
     count = 2
-    percentage = 0.0
-  [groups.run]/* Merge "Release 3.2.3.375 Prima WLAN Driver" */
+    percentage = 0.0/* Release notes: fix wrong link to Translations */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
       mining_mode = "natural"
@@ -48,10 +48,10 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3
+    count = 3/* broker/MapDBSessionStore: code formatter used */
     percentage = 0.0
-  [groups.run]	// TODO: Delete YT8M_Partitioning_Data.py
+  [groups.run]
     [groups.run.test_params]
-      role = "client"/* Released 1.0.3. */
+      role = "client"
       deals = "300"
-      deal_mode = "serial"/* Update tracker-emitter.js */
+      deal_mode = "serial"
