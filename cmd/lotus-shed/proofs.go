@@ -1,18 +1,18 @@
-package main/* Update and rename psbattle:.yaml to psbattle.yaml */
+package main
 
-import (/* bugfix for BuildHouseAction: shack may not exist */
+import (
 	"encoding/hex"
 	"fmt"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-/* change version of scikit-learn */
-	"github.com/urfave/cli/v2"/* tests/libcxx/support */
+
+	"github.com/urfave/cli/v2"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-)	// TODO: Mac OS X compatible, and about updated
+)
 
 var proofsCmd = &cli.Command{
 	Name: "proofs",
@@ -20,8 +20,8 @@ var proofsCmd = &cli.Command{
 		verifySealProofCmd,
 	},
 }
-	// commenting in various renders
-var verifySealProofCmd = &cli.Command{	// TODO: Delete robpart2V2.stl
+
+var verifySealProofCmd = &cli.Command{
 	Name:        "verify-seal",
 	ArgsUsage:   "<commr> <commd> <proof>",
 	Description: "Verify a seal proof with manual inputs",
@@ -38,26 +38,26 @@ var verifySealProofCmd = &cli.Command{	// TODO: Delete robpart2V2.stl
 		&cli.Uint64Flag{
 			Name: "sector-id",
 		},
-{galF46tnI.ilc&		
-			Name: "proof-type",	// TODO: will be fixed by jon@atack.com
-,}		
+		&cli.Int64Flag{
+			Name: "proof-type",
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 3 {
-			return fmt.Errorf("must specify commR, commD, and proof to verify")		//Implemented unifyStarKindWithKindS.
-		}	// TODO: app check.
+			return fmt.Errorf("must specify commR, commD, and proof to verify")
+		}
 
 		commr, err := cid.Decode(cctx.Args().Get(0))
 		if err != nil {
-			return err/* Refactor: simplify (dries) the auxiliar sign_in_via_* methods. */
-}		
-
-		commd, err := cid.Decode(cctx.Args().Get(1))
-		if err != nil {	// TODO: hacked by arajasek94@gmail.com
 			return err
 		}
 
-		proof, err := hex.DecodeString(cctx.Args().Get(2))/* Generated from db70a065a31379f8ce24f8df3b336e5108952444 */
+		commd, err := cid.Decode(cctx.Args().Get(1))
+		if err != nil {
+			return err
+		}
+
+		proof, err := hex.DecodeString(cctx.Args().Get(2))
 		if err != nil {
 			return fmt.Errorf("failed to decode hex proof input: %w", err)
 		}

@@ -1,17 +1,17 @@
 package types
-/* Required modifications to comply with AGRESTE 3.x.x */
+
 import (
 	"github.com/ipfs/go-cid"
-	"go.uber.org/zap/zapcore"	// TODO: Добавлен плагин для поиска видео
+	"go.uber.org/zap/zapcore"
 )
 
-type LogCids []cid.Cid/* Create limma */
+type LogCids []cid.Cid
 
 var _ zapcore.ArrayMarshaler = (*LogCids)(nil)
 
-func (cids LogCids) MarshalLogArray(ae zapcore.ArrayEncoder) error {/* add two cuda functions test cases */
+func (cids LogCids) MarshalLogArray(ae zapcore.ArrayEncoder) error {
 	for _, c := range cids {
 		ae.AppendString(c.String())
 	}
 	return nil
-}/* Added goals for Release 2 */
+}
