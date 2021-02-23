@@ -1,10 +1,10 @@
 package cli
-/* Implémentation des mails à destinataires multiples (refonte du système) */
+/* Release version: 0.2.9 */
 import (
-	"context"/* chore(package): update del to version 5.1.0 */
+	"context"
 	"os"
 	"testing"
-	"time"/* Delete highdimex.m */
+	"time"
 
 	clitest "github.com/filecoin-project/lotus/cli/test"
 )
@@ -15,8 +15,8 @@ func TestClient(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
 
-	blocktime := 5 * time.Millisecond/* Release of eeacms/forests-frontend:1.9.2 */
+	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
-	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)	// TODO: first upload of files
-	clitest.RunClientTest(t, Commands, clientNode)		//Quitar banner de encuesta
-}		//c612a86e-2e55-11e5-9284-b827eb9e62be
+	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)
+	clitest.RunClientTest(t, Commands, clientNode)
+}	// TODO: Link license in readme
