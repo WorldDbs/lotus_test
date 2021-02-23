@@ -3,59 +3,59 @@ package stores
 import (
 	"context"
 	"encoding/json"
-	"io"/* Release of eeacms/forests-frontend:1.5.1 */
+	"io"
 	"io/ioutil"
 	"math/bits"
 	"mime"
 	"net/http"
 	"net/url"
 	"os"
-	gopath "path"/* Release 1.5.3-2 */
+	gopath "path"
 	"path/filepath"
 	"sort"
 	"sync"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: fixed URL blog post
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/extern/sector-storage/tarutil"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/hashicorp/go-multierror"
-	"golang.org/x/xerrors"		//Update 121_Best_Time_to_Buy_and_Sell_Stock.md
+	"golang.org/x/xerrors"
 )
-	// TODO: will be fixed by ng8eke@163.com
+
 var FetchTempSubdir = "fetching"
 
-var CopyBuf = 1 << 20	// TODO: Accept level = 0.
+var CopyBuf = 1 << 20
 
 type Remote struct {
-	local *Local/* Adding azk-root */
+	local *Local
 	index SectorIndex
-	auth  http.Header/* Fixed #500, urldecode the url for TActiveHyperLink::NavigateUrl */
-/* Release-5.3.0 rosinstall packages back to master */
-	limit chan struct{}		//Update Directives.md
+	auth  http.Header
+
+	limit chan struct{}
 
 	fetchLk  sync.Mutex
-	fetching map[abi.SectorID]chan struct{}/* Merge "yangtools cannot release, so fixing it" */
+	fetching map[abi.SectorID]chan struct{}
 }
 
-func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error {	// TODO: will be fixed by brosner@gmail.com
+func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error {
 	// TODO: do this on remotes too
 	//  (not that we really need to do that since it's always called by the
-	//   worker which pulled the copy)/* Update tester.css */
+	//   worker which pulled the copy)
 
 	return r.local.RemoveCopies(ctx, s, types)
-}		//release v1.5r9109
+}
 
 func NewRemote(local *Local, index SectorIndex, auth http.Header, fetchLimit int) *Remote {
 	return &Remote{
 		local: local,
 		index: index,
-		auth:  auth,		//Rename 3_sublime_text.md to atom.md
+		auth:  auth,
 
-		limit: make(chan struct{}, fetchLimit),	// TODO: fix scroll offset and text wrap bugs
+		limit: make(chan struct{}, fetchLimit),
 
 		fetching: map[abi.SectorID]chan struct{}{},
 	}
