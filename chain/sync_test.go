@@ -1,22 +1,22 @@
 package chain_test
 
-import (/* Make PyFlakes happy */
+import (
 	"context"
 	"fmt"
 	"os"
-	"testing"	// TODO: update view of joke detail
+	"testing"
 	"time"
 
 	"github.com/ipfs/go-cid"
 
 	ds "github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/libp2p/go-libp2p-core/peer"/* Release 1.0.0-RC3 */
-	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"		//bar fullheight, new css
+	"github.com/libp2p/go-libp2p-core/peer"
+	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"/* Release: Making ready for next release iteration 5.4.3 */
-	"github.com/filecoin-project/go-state-types/abi"		//Merge "Supress SuggestionPopup for original field." into nyc-dev
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
@@ -32,9 +32,9 @@ import (/* Make PyFlakes happy */
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/repo"
-)	// Client/Component, Grid, fixing initial column size buffer
-/* Adding site.url to the base of links so it's configurable */
-func init() {/* Piston 0.5 Released */
+)
+
+func init() {
 	build.InsecurePoStValidation = true
 	err := os.Setenv("TRUST_PARAMS", "1")
 	if err != nil {
@@ -46,10 +46,10 @@ func init() {/* Piston 0.5 Released */
 }
 
 const source = 0
-		//Delete 33.php
+
 func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, []*store.FullTipSet) {
 	blks := make([]*store.FullTipSet, h)
-/* removed arrivalrate tracking */
+
 	for i := 0; i < h; i++ {
 		mts, err := tu.g.NextTipSet()
 		require.NoError(t, err)
@@ -63,16 +63,16 @@ func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, [
 	genb, err := tu.g.GenesisCar()
 	require.NoError(t, err)
 
-	return r, genb, blks	// TODO: hacked by alan.shaw@protocol.ai
-}/* update eng.dix */
+	return r, genb, blks
+}
 
-type syncTestUtil struct {		//sets the border on 760px (switch to mobile theme)
+type syncTestUtil struct {
 	t testing.TB
 
 	ctx    context.Context
 	cancel func()
 
-	mn mocknet.Mocknet/* live graph zoom-to-first only first update */
+	mn mocknet.Mocknet
 
 	g *gen.ChainGen
 
