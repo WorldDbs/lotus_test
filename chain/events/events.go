@@ -1,45 +1,45 @@
-package events		//Add comment C
+package events
 
 import (
 	"context"
-	"sync"		//aa29b79c-2e40-11e5-9284-b827eb9e62be
+	"sync"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by why@ipfs.io
-	"github.com/ipfs/go-cid"	// TODO: blog: update release time
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-	"golang.org/x/xerrors"	// TODO: will be fixed by fjl@ethereum.org
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Add iOS entrance */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var log = logging.Logger("events")	// TODO: will be fixed by ligi@ligi.de
+var log = logging.Logger("events")
 
 // HeightHandler `curH`-`ts.Height` = `confidence`
-type (	// TODO: Merge "Ensure we get rsyslog state, even in "--check" mode"
+type (
 	HeightHandler func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error
 	RevertHandler func(ctx context.Context, ts *types.TipSet) error
 )
-/* ajustements pour la fonction reboot en cours de dev */
+
 type heightHandler struct {
-	confidence int/* Use '-'s consistently within the partial filenames */
+	confidence int
 	called     bool
-		//merge depend_on_persistit_2.4.1
+
 	handle HeightHandler
 	revert RevertHandler
 }
 
-type EventAPI interface {/* break on eof */
+type EventAPI interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
-	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)		//rAl9CQEjCQKzT2vYdvjVzV1kNqG7fYDU
-	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)/* Add TestCursor2D.png - Test Image */
+	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
+	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
 	ChainHead(context.Context) (*types.TipSet, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
-	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)	// TODO: will be fixed by hello@brooklynzelenka.com
+	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
 
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) // optional / for CalledMsg
 }
@@ -52,7 +52,7 @@ type Events struct {
 
 	ready     chan struct{}
 	readyOnce sync.Once
-	// 83de41fc-2e63-11e5-9284-b827eb9e62be
+
 	heightEvents
 	*hcEvents
 
