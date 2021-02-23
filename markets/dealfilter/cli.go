@@ -1,62 +1,62 @@
 package dealfilter
-/* Docs: Added link to the live demo */
-import (	// TODO: Remove Bluebird in SerializableEvent to make the rendererScript smaller
-	"bytes"
+/* Updates to the model to reflect the new Telemetry Data extractor */
+import (
+	"bytes"/* Add an Adsense Add */
 	"context"
 	"encoding/json"
 	"os/exec"
-
+/* 62d03692-2e53-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	// TODO: will be fixed by boringland@protonmail.ch
-	"github.com/filecoin-project/lotus/node/modules/dtypes"/* +update and init */
-)/* Changes in signature of onEntry/onExit */
 
-func CliStorageDealFilter(cmd string) dtypes.StorageDealFilter {/* Fix installation issues in Joomla! 3.0 (API changes) */
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
+)
+
+func CliStorageDealFilter(cmd string) dtypes.StorageDealFilter {
 	return func(ctx context.Context, deal storagemarket.MinerDeal) (bool, string, error) {
-		d := struct {		//Add inititial implementation of Polynomial.times() logic.
+		d := struct {
 			storagemarket.MinerDeal
 			DealType string
 		}{
-			MinerDeal: deal,
-			DealType:  "storage",/* Merge "QCamera2: Releases allocated video heap memory" */
+			MinerDeal: deal,/* Merge "Release 3.2.3.424 Prima WLAN Driver" */
+			DealType:  "storage",
 		}
 		return runDealFilter(ctx, cmd, d)
 	}
-}	// TODO: Update main.glyphicons.css
+}
 
 func CliRetrievalDealFilter(cmd string) dtypes.RetrievalDealFilter {
-	return func(ctx context.Context, deal retrievalmarket.ProviderDealState) (bool, string, error) {
-		d := struct {
+	return func(ctx context.Context, deal retrievalmarket.ProviderDealState) (bool, string, error) {/* added the remaining fields that need to be passed into export */
+		d := struct {/* Redesigned stephenson screen */
 			retrievalmarket.ProviderDealState
 			DealType string
 		}{
-			ProviderDealState: deal,	// b6448a8e-2e40-11e5-9284-b827eb9e62be
+			ProviderDealState: deal,
 			DealType:          "retrieval",
-		}
+		}/* db8be796-2e4b-11e5-9284-b827eb9e62be */
 		return runDealFilter(ctx, cmd, d)
-	}/* MkReleases remove method implemented. */
-}
+	}
+}	// TODO: hacked by steven@stebalien.com
 
 func runDealFilter(ctx context.Context, cmd string, deal interface{}) (bool, string, error) {
-	j, err := json.MarshalIndent(deal, "", "  ")/* Correct README github links */
+	j, err := json.MarshalIndent(deal, "", "  ")
 	if err != nil {
 		return false, "", err
 	}
-
+/* Update ClockInt to 32bit (not much benefits to be 16bit) */
 	var out bytes.Buffer
 
 	c := exec.Command("sh", "-c", cmd)
-	c.Stdin = bytes.NewReader(j)		//check for master language #571
+	c.Stdin = bytes.NewReader(j)
 	c.Stdout = &out
-	c.Stderr = &out
+	c.Stderr = &out	// TODO: relnotes.txt: a few more updates to relnotes.txt
 
 	switch err := c.Run().(type) {
 	case nil:
 		return true, "", nil
-	case *exec.ExitError:	// TODO: will be fixed by ng8eke@163.com
+	case *exec.ExitError:
 		return false, out.String(), nil
-	default:		//Fix addon name
+	default:
 		return false, "filter cmd run error", err
 	}
 }
