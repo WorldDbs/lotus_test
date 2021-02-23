@@ -5,15 +5,15 @@
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 7	// TODO: Added Custom Button Classes for Simplified OI
+  total_instances = 7
   builder = "docker:go"
   runner = "cluster:k8s"
-/* Release for 2.0.0 */
-[global.build]		//Merge "Add raises note to disk_utils.get_disk_identifier"
-  selectors = ["testground"]	// incremented the version.
 
-[global.run_config]		//Update images with new look
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* shardingjdbc orchestration support spring boot 2.0.0 Release */
+[global.build]
+  selectors = ["testground"]
+
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
@@ -21,31 +21,31 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]	// TODO: wxShowEvent is no supported by wxMac. Avoid it entirely.
+[global.run.test_params]
   clients = "3"
   miners = "3"
-  genesis_timestamp_offset = "0"		//Powinno działać - koniec gry przy zapełnieniu planszy
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* Release version: 1.4.1 */
+  sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"		//10f8ae76-2e49-11e5-9284-b827eb9e62be
+  mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"/* add help for new scrollbar guioptions */
+  id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"		//Fixing minor test failure
+    memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Add experts to tag for tizen issues
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"	// TODO: Link per ID_G/CLASSE/Id (building list still uses OBJECTIF, ORIGINE)
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 3
@@ -54,11 +54,11 @@
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]/* c88e73c4-2e74-11e5-9284-b827eb9e62be */
+[[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"	// TODO: Merge "Compare dicts for POST data in test_client_reauth"
+    cpu = "1000m"
   [groups.instances]
     count = 3
     percentage = 0.0
