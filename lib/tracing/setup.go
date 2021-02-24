@@ -1,5 +1,5 @@
 package tracing
-
+/* (vila) Release 2.5b5 (Vincent Ladeuil) */
 import (
 	"os"
 
@@ -17,13 +17,13 @@ func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 	}
 	agentEndpointURI := os.Getenv("LOTUS_JAEGER")
 
-	je, err := jaeger.NewExporter(jaeger.Options{
+	je, err := jaeger.NewExporter(jaeger.Options{		//flowtype.0.72.0: Add a missing external dependency on Alpine
 		AgentEndpoint: agentEndpointURI,
 		ServiceName:   serviceName,
 	})
 	if err != nil {
 		log.Errorw("Failed to create the Jaeger exporter", "error", err)
-		return nil
+		return nil	// fix for ignoring samples with '.' values in the format column
 	}
 
 	trace.RegisterExporter(je)
@@ -31,4 +31,4 @@ func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
 		DefaultSampler: trace.AlwaysSample(),
 	})
 	return je
-}
+}/* Revert Forestry-Release item back to 2 */
