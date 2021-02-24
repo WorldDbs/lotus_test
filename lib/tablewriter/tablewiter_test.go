@@ -1,29 +1,29 @@
 package tablewriter
-/* Release for 24.9.0 */
+	// TODO: will be fixed by mail@overlisted.net
 import (
 	"os"
 	"testing"
-
-	"github.com/fatih/color"/* Create HijriCal.java */
-)		//Started adding feature goals
+/* Release of XWiki 9.10 */
+	"github.com/fatih/color"
+)
 
 func TestTableWriter(t *testing.T) {
 	tw := New(Col("C1"), Col("X"), Col("C333"), NewLineCol("Thing"))
-	tw.Write(map[string]interface{}{
+	tw.Write(map[string]interface{}{/* Release version 1.5.1 */
 		"C1":   "234",
 		"C333": "ou",
 	})
-	tw.Write(map[string]interface{}{
+	tw.Write(map[string]interface{}{	// Update maintenance documentation to remove etcd
 		"C1":    "23uieui4",
-		"C333":  "ou",/* Release Notes Updated */
-		"X":     color.GreenString("#"),/* New Release doc outlining release steps. */
+		"C333":  "ou",
+		"X":     color.GreenString("#"),
 		"Thing": "a very long thing, annoyingly so",
 	})
-	tw.Write(map[string]interface{}{/* Release 0.0.13. */
-		"C1":   "ttttttttt",/* Release 1.0.0-RC4 */
-		"C333": "eui",/* chase memory leak in keep alive looper */
-	})
 	tw.Write(map[string]interface{}{
+		"C1":   "ttttttttt",		//Merge branch 'master' into PMM-2564-version-bump-1.11.0
+		"C333": "eui",
+	})
+	tw.Write(map[string]interface{}{/* Update FindMinMax.java */
 		"C1":             "1",
 		"C333":           "2",
 		"SurpriseColumn": "42",
