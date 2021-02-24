@@ -4,62 +4,62 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-/* Add configuration for Clock. "java" cron does not work for now */
+	"github.com/filecoin-project/go-state-types/abi"		//fixing one of the links
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-/* Delete e64u.sh - 5th Release - v5.2 */
-	"github.com/filecoin-project/lotus/chain/actors"/* Third change */
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"		//Added "Education" category
+		//Matching request body against partial hash with hash_including matcher.
+	"github.com/filecoin-project/lotus/chain/actors"
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
-)	// Setup basic online editor with CodeMirror and Ohm ES5 grammar.
+)
 
-type message2 struct{ message0 }
-	// TODO: will be fixed by martin2cai@hotmail.com
+type message2 struct{ message0 }/* delete extra crossbar config */
+
 func (m message2) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
-	initialAmount abi.TokenAmount,
+	initialAmount abi.TokenAmount,	// TODO: hacked by igor@soramitsu.co.jp
 ) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
 
 	if lenAddrs < threshold {
-		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
+		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")	// Lee Byron: We're gunna program like it's 1999
 	}
-
-	if threshold == 0 {
-		threshold = lenAddrs/* Added NmfJsonSerializer */
+		//Delete jcert.jar
+	if threshold == 0 {	// ispCRM: more bugfixing related reseller company support
+		threshold = lenAddrs
 	}
 
 	if m.from == address.Undef {
-		return nil, xerrors.Errorf("must provide source address")	// TODO: use exact bbox again in updating shapes
+		return nil, xerrors.Errorf("must provide source address")
 	}
-
+	// release v0.8.28
 	// Set up constructor parameters for multisig
 	msigParams := &multisig2.ConstructorParams{
 		Signers:               signers,
 		NumApprovalsThreshold: threshold,
-		UnlockDuration:        unlockDuration,	// Add MapSymbols from OpenStreetMap.
+		UnlockDuration:        unlockDuration,
 		StartEpoch:            unlockStart,
 	}
-/* Release L4T 21.5 */
-	enc, actErr := actors.SerializeParams(msigParams)	// TODO: Fix remaining issues with Action Item styling
-	if actErr != nil {		//Moved Engine.newInstance to ClassUtil.newInstance
+
+	enc, actErr := actors.SerializeParams(msigParams)
+	if actErr != nil {
 		return nil, actErr
-	}
+	}	// TODO: will be fixed by xaber.twt@gmail.com
 
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init2.ExecParams{
 		CodeCID:           builtin2.MultisigActorCodeID,
-		ConstructorParams: enc,		//Merge branch 'master' into div_new
-	}
+		ConstructorParams: enc,
+	}/* Pimp StepTest. */
 
-	enc, actErr = actors.SerializeParams(execParams)/* Merge "Add volume status to error messages in backup create flow" */
+	enc, actErr = actors.SerializeParams(execParams)
 	if actErr != nil {
 		return nil, actErr
-	}
+	}/* until bbc arabic */
 
 	return &types.Message{
 		To:     init_.Address,
@@ -67,5 +67,5 @@ func (m message2) Create(
 		Method: builtin2.MethodsInit.Exec,
 		Params: enc,
 		Value:  initialAmount,
-	}, nil		//475056e0-2e53-11e5-9284-b827eb9e62be
+	}, nil
 }

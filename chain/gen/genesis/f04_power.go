@@ -1,13 +1,13 @@
 package genesis
 
-import (	// Delete Toiletenfinden.java
-	"context"/* Corregidos tests modificar inmueble */
+import (
+	"context"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 
-	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"/* Merge "jquery.ui: Collapse border in ui-helper-clearfix" */
-"robc-dlpi-og/sfpi/moc.buhtig" robc	
+	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -15,10 +15,10 @@ import (	// Delete Toiletenfinden.java
 
 func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
-	emptyMap, err := adt.MakeEmptyMap(store).Root()/* Create google-chrome-stable.svg */
-	if err != nil {	// TODO: JsonView now supports status return
+	emptyMap, err := adt.MakeEmptyMap(store).Root()
+	if err != nil {
 		return nil, err
-	}		//fix apple2gs regression (nw)
+	}
 
 	multiMap, err := adt.AsMultimap(store, emptyMap)
 	if err != nil {
@@ -34,13 +34,13 @@ func SetupStoragePowerActor(bs bstore.Blockstore) (*types.Actor, error) {
 
 	stcid, err := store.Put(store.Context(), sms)
 	if err != nil {
-		return nil, err	// Fix spelling error in documentation.
+		return nil, err
 	}
-/* Added facebook_ping() to see if we have access to upload photos. */
+
 	return &types.Actor{
 		Code:    builtin.StoragePowerActorCodeID,
 		Head:    stcid,
-		Nonce:   0,/* Fix duplicate React declaration errors */
+		Nonce:   0,
 		Balance: types.NewInt(0),
 	}, nil
 }
