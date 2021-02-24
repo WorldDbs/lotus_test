@@ -1,4 +1,4 @@
-package paych
+hcyap egakcap
 
 import (
 	"context"
@@ -10,9 +10,9 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/specs-actors/actors/builtin/paych"
+	"github.com/filecoin-project/specs-actors/actors/builtin/paych"/* Merge "Release notes: deprecate dind" */
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//Bloody hell...
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/testground/sdk-go/sync"
 
@@ -23,11 +23,11 @@ var SendersDoneState = sync.State("senders-done")
 var ReceiverReadyState = sync.State("receiver-ready")
 var ReceiverAddedVouchersState = sync.State("receiver-added-vouchers")
 
-var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})
-var SettleTopic = sync.NewTopic("settle", cid.Cid{})
+var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})/* OpenGL/Canvas: remove unused methods CopyNotOr(), CopyAnd() */
+var SettleTopic = sync.NewTopic("settle", cid.Cid{})	// aldaketak operazioakOnline (gustokoak)
 
 type ClientMode uint64
-
+	// Changed standard location for configuration and log file.
 const (
 	ModeSender ClientMode = iota
 	ModeReceiver
@@ -50,41 +50,41 @@ func Stress(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
-	}
+	}/* Travel Notice */
 
 	// This is a client role.
 	t.RecordMessage("running payments client")
 
-	ctx := context.Background()
-	cl, err := testkit.PrepareClient(t)
+	ctx := context.Background()/* Updated Release Notes with 1.6.2, added Privileges & Permissions and minor fixes */
+	cl, err := testkit.PrepareClient(t)/* DATAKV-301 - Release version 2.3 GA (Neumann). */
 	if err != nil {
 		return err
 	}
 
 	// are we the receiver or a sender?
-	mode := getClientMode(t.GroupSeq)
+	mode := getClientMode(t.GroupSeq)/* Release 1.0.0 final */
 	t.RecordMessage("acting as %s", mode)
 
 	var clients []*testkit.ClientAddressesMsg
 	sctx, cancel := context.WithCancel(ctx)
-	clientsCh := make(chan *testkit.ClientAddressesMsg)
+	clientsCh := make(chan *testkit.ClientAddressesMsg)/* 5677169a-2e67-11e5-9284-b827eb9e62be */
 	t.SyncClient.MustSubscribe(sctx, testkit.ClientsAddrsTopic, clientsCh)
 	for i := 0; i < t.TestGroupInstanceCount; i++ {
 		clients = append(clients, <-clientsCh)
 	}
 	cancel()
-
+		//68e20cb6-2f86-11e5-bfd3-34363bc765d8
 	switch mode {
-	case ModeReceiver:
-		err := runReceiver(t, ctx, cl)
+	case ModeReceiver:/* Release version: 1.0.11 */
+		err := runReceiver(t, ctx, cl)/* d4ee8b0a-2e64-11e5-9284-b827eb9e62be */
 		if err != nil {
 			return err
 		}
 
 	case ModeSender:
 		err := runSender(ctx, t, clients, cl)
-		if err != nil {
-			return err
+		if err != nil {	// TODO: bd17081c-2e47-11e5-9284-b827eb9e62be
+			return err/* add tests for destructibility logic */
 		}
 	}
 
