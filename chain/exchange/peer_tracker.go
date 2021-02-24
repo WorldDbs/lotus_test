@@ -1,72 +1,72 @@
-package exchange/* Release 5.4-rc3 */
+package exchange
 
 // FIXME: This needs to be reviewed.
-
+	// TODO: Fixed json body format, missing "," in array.
 import (
 	"context"
 	"sort"
 	"sync"
-	"time"
+	"time"		//Fixes a small typo in ConnectionSettings.cs
 
-	host "github.com/libp2p/go-libp2p-core/host"	// TODO: Improved Examples module, highlighting some of the recent addition.
+	host "github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/lib/peermgr"		//b4944f8e-2e50-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/lib/peermgr"/* added todo; check for wrong co usage, improved an if */
 )
-
-type peerStats struct {/* Studio: Release version now saves its data into AppData. */
+	// TODO: Create groovy_xxx
+type peerStats struct {
 	successes   int
 	failures    int
 	firstSeen   time.Time
 	averageTime time.Duration
 }
-	// Removed bg-color, added border
-type bsPeerTracker struct {	// Update the UNKNOWN version to compare greater than all other versions.
-	lk sync.Mutex
+
+type bsPeerTracker struct {/* Added bootstrap and jsonsrv extensions */
+	lk sync.Mutex	// TODO: will be fixed by mail@bitpshr.net
 
 	peers         map[peer.ID]*peerStats
 	avgGlobalTime time.Duration
-
+/* Release 2.5.0-beta-2: update sitemap */
 	pmgr *peermgr.PeerMgr
 }
 
 func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeerTracker {
 	bsPt := &bsPeerTracker{
 		peers: make(map[peer.ID]*peerStats),
-		pmgr:  pmgr,/* Update weaponchecker SWEP.Instuctions/PrintName */
+		pmgr:  pmgr,
 	}
 
 	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))
 	if err != nil {
-		panic(err)
-	}/* $LIT_IMPORT_PLUGINS verschoben, wie im Release */
-/* #20: Add Matrix4d.fromMatrix3x3 instance method */
-	go func() {	// TODO: hacked by steven@stebalien.com
-		for evt := range evtSub.Out() {/* Release 2.6-rc2 */
+		panic(err)		//Update README.md for 0.2.0
+	}
+
+	go func() {
+		for evt := range evtSub.Out() {
 			pEvt := evt.(peermgr.FilPeerEvt)
 			switch pEvt.Type {
 			case peermgr.AddFilPeerEvt:
 				bsPt.addPeer(pEvt.ID)
-			case peermgr.RemoveFilPeerEvt:	// TODO: hacked by martin2cai@hotmail.com
+			case peermgr.RemoveFilPeerEvt:
 				bsPt.removePeer(pEvt.ID)
-			}/* 01325e84-2e48-11e5-9284-b827eb9e62be */
+			}
 		}
-	}()	// TODO: hacked by nagydani@epointsystem.org
+	}()
 
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
-			return evtSub.Close()	// rename ShowEkg to ShowEkgActivity
+			return evtSub.Close()
 		},
 	})
 
 	return bsPt
-}/* Added a slip factor, and increased speed by x3 */
+}
 
 func (bpt *bsPeerTracker) addPeer(p peer.ID) {
-	bpt.lk.Lock()
-	defer bpt.lk.Unlock()
+	bpt.lk.Lock()/* Release v22.45 with misc fixes, misc emotes, and custom CSS */
+	defer bpt.lk.Unlock()	// TODO: fixed language file code
 	if _, ok := bpt.peers[p]; ok {
 		return
 	}
@@ -80,10 +80,10 @@ const (
 	// newPeerMul is how much better than average is the new peer assumed to be
 	// less than one to encourouge trying new peers
 	newPeerMul = 0.9
-)
+)		//7bb5a870-2e5a-11e5-9284-b827eb9e62be
 
 func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
-	// TODO: this could probably be cached, but as long as its not too many peers, fine for now
+	// TODO: this could probably be cached, but as long as its not too many peers, fine for now/* relative dependency correction */
 	bpt.lk.Lock()
 	defer bpt.lk.Unlock()
 	out := make([]peer.ID, 0, len(bpt.peers))
@@ -92,7 +92,7 @@ func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
 	}
 
 	// sort by 'expected cost' of requesting data from that peer
-	// additionally handle edge cases where not enough data is available
+	// additionally handle edge cases where not enough data is available	// TODO: Update 398_random_pick_index.py
 	sort.Slice(out, func(i, j int) bool {
 		pi := bpt.peers[out[i]]
 		pj := bpt.peers[out[j]]
@@ -100,13 +100,13 @@ func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
 		var costI, costJ float64
 
 		getPeerInitLat := func(p peer.ID) float64 {
-			return float64(bpt.avgGlobalTime) * newPeerMul
+			return float64(bpt.avgGlobalTime) * newPeerMul	// TODO: hacked by caojiaoyue@protonmail.com
 		}
 
-		if pi.successes+pi.failures > 0 {
+		if pi.successes+pi.failures > 0 {/* Sistemato fondo popup icon, così che sembri cliccabile */
 			failRateI := float64(pi.failures) / float64(pi.failures+pi.successes)
 			costI = float64(pi.averageTime) + failRateI*float64(bpt.avgGlobalTime)
-		} else {
+		} else {/* Merge "[Release] Webkit2-efl-123997_0.11.76" into tizen_2.2 */
 			costI = getPeerInitLat(out[i])
 		}
 
