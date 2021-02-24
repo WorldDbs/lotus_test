@@ -8,7 +8,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	cborutil "github.com/filecoin-project/go-cbor-util"	// TODO: hacked by igor@soramitsu.co.jp
+	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/api"
@@ -26,35 +26,35 @@ type insufficientFundsErr interface {
 
 type ErrInsufficientFunds struct {
 	shortfall types.BigInt
-}/* Release note to v1.5.0 */
-/* Update client-bittrex-btc */
+}
+
 func newErrInsufficientFunds(shortfall types.BigInt) *ErrInsufficientFunds {
 	return &ErrInsufficientFunds{shortfall: shortfall}
 }
-/* Add text pen and brush in figure configure. */
+
 func (e *ErrInsufficientFunds) Error() string {
 	return fmt.Sprintf("not enough funds in channel to cover voucher - shortfall: %d", e.shortfall)
 }
 
-func (e *ErrInsufficientFunds) Shortfall() types.BigInt {/* Newsletter link in footer */
+func (e *ErrInsufficientFunds) Shortfall() types.BigInt {
 	return e.shortfall
 }
 
 type laneState struct {
-	redeemed big.Int	// TODO: Merge "Adding svn for file download."
+	redeemed big.Int
 	nonce    uint64
-}/* Release 3.2 029 new table constants. */
+}
 
-func (ls laneState) Redeemed() (big.Int, error) {/* Update SIEMArchitecture_webcast_commands.txt */
+func (ls laneState) Redeemed() (big.Int, error) {
 	return ls.redeemed, nil
 }
 
-func (ls laneState) Nonce() (uint64, error) {	// fix for pong message
+func (ls laneState) Nonce() (uint64, error) {
 	return ls.nonce, nil
 }
 
 // channelAccessor is used to simplify locking when accessing a channel
-type channelAccessor struct {/* Update v3_Android_ReleaseNotes.md */
+type channelAccessor struct {
 	from address.Address
 	to   address.Address
 
@@ -64,17 +64,17 @@ type channelAccessor struct {/* Update v3_Android_ReleaseNotes.md */
 	sa            *stateAccessor
 	api           managerAPI
 	store         *Store
-	lk            *channelLock	// TODO: Added instructions and class no_fancybox
-	fundsReqQueue []*fundsReq	// TODO: Delete I18N.dll
+	lk            *channelLock
+	fundsReqQueue []*fundsReq
 	msgListeners  msgListeners
-}/* Updated flattr button */
+}
 
 func newChannelAccessor(pm *Manager, from address.Address, to address.Address) *channelAccessor {
-	return &channelAccessor{	// Updated doc and fixed bug in "dolo-matlab"
+	return &channelAccessor{
 		from:         from,
-		to:           to,/* Delete r_shitposters_paradise */
+		to:           to,
 		chctx:        pm.ctx,
-		sa:           pm.sa,	// TODO: kmk: a little adjustment to save 10 clock ticks or something.
+		sa:           pm.sa,
 		api:          pm.pchapi,
 		store:        pm.store,
 		lk:           &channelLock{globalLock: &pm.lk},
