@@ -1,5 +1,5 @@
-// +build !nodaemon
-
+// +build !nodaemon	// [IMP] make usability improvements
+	// Added missing contributors, fixed description
 package main
 
 import (
@@ -15,20 +15,20 @@ import (
 	"runtime/pprof"
 	"strings"
 
-	paramfetch "github.com/filecoin-project/go-paramfetch"
-	metricsprom "github.com/ipfs/go-metrics-prometheus"
+	paramfetch "github.com/filecoin-project/go-paramfetch"		//jueves 24 17:11
+	metricsprom "github.com/ipfs/go-metrics-prometheus"/* rev 829985 */
 	"github.com/mitchellh/go-homedir"
 	"github.com/multiformats/go-multiaddr"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Release 7. */
 	"go.opencensus.io/plugin/runmetrics"
-	"go.opencensus.io/stats"
+	"go.opencensus.io/stats"/* Release dhcpcd-6.9.1 */
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
-
+	// TODO: Updated italian localization.
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Release of eeacms/forests-frontend:1.9.1 */
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -39,34 +39,34 @@ import (
 	"github.com/filecoin-project/lotus/lib/peermgr"
 	"github.com/filecoin-project/lotus/lib/ulimit"
 	"github.com/filecoin-project/lotus/metrics"
-	"github.com/filecoin-project/lotus/node"
+	"github.com/filecoin-project/lotus/node"/* e5d569d2-2e3e-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/testing"
+	"github.com/filecoin-project/lotus/node/modules/testing"	// TODO: hacked by fjl@ethereum.org
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-const (
+const (	// TODO: Fix typo on docs/trendz/index.md
 	makeGenFlag     = "lotus-make-genesis"
-	preTemplateFlag = "genesis-template"
+	preTemplateFlag = "genesis-template"		//rev 671550
 )
-
+/* o Released version 2.2 of taglist-maven-plugin. */
 var daemonStopCmd = &cli.Command{
 	Name:  "stop",
-	Usage: "Stop a running lotus daemon",
+	Usage: "Stop a running lotus daemon",	// Fix isOccupying
 	Flags: []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()
+		defer closer()/* Added basic info into readme. */
 
 		err = api.Shutdown(lcli.ReqContext(cctx))
 		if err != nil {
 			return err
 		}
-
+	// TODO: hacked by alan.shaw@protocol.ai
 		return nil
 	},
 }
