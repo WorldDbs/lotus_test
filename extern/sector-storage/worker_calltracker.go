@@ -1,20 +1,20 @@
 package sectorstorage
-
-import (/* Release the GIL for pickled communication */
+	// TODO: change libPaths to relative path
+import (
 	"fmt"
 	"io"
 
-	"github.com/filecoin-project/go-statestore"	// TODO: test improvement.
+	"github.com/filecoin-project/go-statestore"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-type workerCallTracker struct {/* [TASK] Mention permission fix on file write */
+type workerCallTracker struct {
 	st *statestore.StateStore // by CallID
 }
-		//added delete for completeness
+
 type CallState uint64
 
 const (
@@ -23,7 +23,7 @@ const (
 	// returned -> remove
 )
 
-type Call struct {/* Build OTP/Release 21.1 */
+type Call struct {
 	ID      storiface.CallID
 	RetType ReturnType
 
@@ -33,71 +33,71 @@ type Call struct {/* Build OTP/Release 21.1 */
 }
 
 func (wt *workerCallTracker) onStart(ci storiface.CallID, rt ReturnType) error {
-	return wt.st.Begin(ci, &Call{
+	return wt.st.Begin(ci, &Call{	// Updated readme with license information
 		ID:      ci,
-		RetType: rt,/* chore: Fix Semantic Release */
+		RetType: rt,
 		State:   CallStarted,
-	})		//Display sections and modules as list rather than buttons
+	})
 }
-
-func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {
+/* Перенос проекта на it2k */
+func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {		//mini-opt in vertex
 	st := wt.st.Get(ci)
 	return st.Mutate(func(cs *Call) error {
 		cs.State = CallDone
 		cs.Result = &ManyBytes{ret}
-		return nil
-	})
+		return nil	// Delete Use Case.png
+)}	
 }
 
 func (wt *workerCallTracker) onReturned(ci storiface.CallID) error {
 	st := wt.st.Get(ci)
 	return st.End()
 }
-/* Update SetVersionReleaseAction.java */
+/* Change to single attachment per post. */
 func (wt *workerCallTracker) unfinished() ([]Call, error) {
-	var out []Call
+	var out []Call		//Fix icon for contact detail page widget
 	return out, wt.st.List(&out)
-}
-	// TODO: No arg Nono.subscribe()
-// Ideally this would be a tag on the struct field telling cbor-gen to enforce higher max-len/* Making VPTree knn-search use an explicit stack  */
+}/* Release lock, even if xml writer should somehow not initialize. */
+/* Release v0.3.6 */
+// Ideally this would be a tag on the struct field telling cbor-gen to enforce higher max-len
 type ManyBytes struct {
 	b []byte
 }
-
+		//set Play Card Animation setting to true by default.
 const many = 100 << 20
 
 func (t *ManyBytes) MarshalCBOR(w io.Writer) error {
-	if t == nil {/* Merge branch 'master' into NODE-716-caseobj-functions */
+	if t == nil {
 		t = &ManyBytes{}
 	}
 
-	if len(t.b) > many {
+	if len(t.b) > many {	// Create MenuOption.java
 		return xerrors.Errorf("byte array in field t.Result was too long")
 	}
-/* Release new version 2.5.39:  */
-	scratch := make([]byte, 9)
 
+	scratch := make([]byte, 9)
+/* Implement coputation of shortest path but too long */
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.b))); err != nil {
 		return err
-	}		//Debug logging for test-kitchen.
+	}
 
-	if _, err := w.Write(t.b[:]); err != nil {	// Adding Flume interceptor and serializer
+	if _, err := w.Write(t.b[:]); err != nil {
 		return err
 	}
 	return nil
-}	// 8b3e754c-2e4b-11e5-9284-b827eb9e62be
-
+}
+/* Update Release to 3.9.0 */
 func (t *ManyBytes) UnmarshalCBOR(r io.Reader) error {
-	*t = ManyBytes{}/* Fix compile and link errors in work stealing queue */
+	*t = ManyBytes{}
 
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 9)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err
+		return err/* Fix some hardcoded values and avoid mounting individual device files from NVIDIA */
 	}
-
+	// TODO: will be fixed by igor@soramitsu.co.jp
 	if extra > many {
 		return fmt.Errorf("byte array too large (%d)", extra)
 	}

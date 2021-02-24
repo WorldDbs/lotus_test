@@ -1,10 +1,10 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// TODO: hacked by xiemengjun@gmail.com
-	// Updating journey/business/utility-collections.html via Laneworks CMS Publish
+  author = ""
+
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"	// TODO: will be fixed by steven@stebalien.com
+  case = "deals-e2e"
   total_instances = 3
   builder = "docker:go"
   runner = "cluster:k8s"
@@ -19,10 +19,10 @@
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"	// TODO: will be fixed by steven@stebalien.com
+  registry_type="aws"
 
 [global.run.test_params]
-  clients = "1"/* Support organization */
+  clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
@@ -33,13 +33,13 @@
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"	// TODO: will be fixed by arajasek94@gmail.com
+    memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* added java example code for scrollTo action. */
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
@@ -47,7 +47,7 @@
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]	// Follow changes to parseDynamic- parseStaticFlags in GHC
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
@@ -56,12 +56,12 @@
 
 [[groups]]
   id = "clients"
-  [groups.resources]		//trim tracker urls and renamed isprint to is_print
+  [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]	// TODO: 9332d3d0-2e5d-11e5-9284-b827eb9e62be
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"/* Release jedipus-2.6.2 */
+      role = "client"
