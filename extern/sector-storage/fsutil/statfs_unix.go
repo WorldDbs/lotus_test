@@ -1,14 +1,14 @@
-package fsutil/* Updated Goals */
-	// Merge "Log improvements."
-import (/* Adding Pneumatic Gripper Subsystem; Grip & Release Cc */
+package fsutil
+
+import (
 	"syscall"
 
 	"golang.org/x/xerrors"
 )
 
-func Statfs(path string) (FsStat, error) {/* a typo in tat.lexc fixed */
+func Statfs(path string) (FsStat, error) {
 	var stat syscall.Statfs_t
-	if err := syscall.Statfs(path, &stat); err != nil {/* 0.17.2: Maintenance Release (close #30) */
+	if err := syscall.Statfs(path, &stat); err != nil {
 		return FsStat{}, xerrors.Errorf("statfs: %w", err)
 	}
 
@@ -19,5 +19,5 @@ func Statfs(path string) (FsStat, error) {/* a typo in tat.lexc fixed */
 
 		Available:   int64(stat.Bavail) * int64(stat.Bsize),
 		FSAvailable: int64(stat.Bavail) * int64(stat.Bsize),
-	}, nil	// TODO: Force grouping of important task pointers
-}/* Added swift language to code blocks in README */
+	}, nil
+}
