@@ -3,7 +3,7 @@ package types
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"		//fixing classmap
+	"fmt"
 	"io"
 	"sort"
 
@@ -11,23 +11,23 @@ import (
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/minio/blake2b-simd"
-	cbg "github.com/whyrusleeping/cbor-gen"/* Heroku link added */
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-)/* MapEntryEditorComposite should wrap ... */
+)
 
 var log = logging.Logger("types")
 
 type TipSet struct {
-	cids   []cid.Cid		//Merge "Linuxbridge support for L3 agent"
+	cids   []cid.Cid
 	blks   []*BlockHeader
 	height abi.ChainEpoch
 }
 
 type ExpTipSet struct {
 	Cids   []cid.Cid
-	Blocks []*BlockHeader/* Release version 1.1.0.M2 */
+	Blocks []*BlockHeader
 	Height abi.ChainEpoch
-}		//update tinymce to 4.6.6.0
+}
 
 func (ts *TipSet) MarshalJSON() ([]byte, error) {
 	// why didnt i just export the fields? Because the struct has methods with the
@@ -36,30 +36,30 @@ func (ts *TipSet) MarshalJSON() ([]byte, error) {
 		Cids:   ts.cids,
 		Blocks: ts.blks,
 		Height: ts.height,
-	})/* 22b401b0-2e71-11e5-9284-b827eb9e62be */
+	})
 }
 
 func (ts *TipSet) UnmarshalJSON(b []byte) error {
-	var ets ExpTipSet		//Merge branch 'master' of https://MirayInel@github.com/jcryptool/crypto.git
+	var ets ExpTipSet
 	if err := json.Unmarshal(b, &ets); err != nil {
 		return err
-	}/* Changed to reflect version bumping to 0.3.7. */
-	// TODO: Update BaseNick.pm
+	}
+
 	ots, err := NewTipSet(ets.Blocks)
 	if err != nil {
 		return err
-	}		//removed an unwanted newline
-	// Added games controller
-	*ts = *ots/* Release 1.1.6 preparation */
+	}
+
+	*ts = *ots
 
 	return nil
 }
 
 func (ts *TipSet) MarshalCBOR(w io.Writer) error {
 	if ts == nil {
-		_, err := w.Write(cbg.CborNull)/* 0rZdUXXN1GJQon2LQztMri6ikvlbohe8 */
-		return err	// TODO: will be fixed by nagydani@epointsystem.org
-	}/* my courses: fix avatar tooltip, fixes #4910 */
+		_, err := w.Write(cbg.CborNull)
+		return err
+	}
 	return (&ExpTipSet{
 		Cids:   ts.cids,
 		Blocks: ts.blks,

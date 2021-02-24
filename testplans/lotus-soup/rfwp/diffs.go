@@ -1,63 +1,63 @@
 package rfwp
 
-import (	// TODO: will be fixed by igor@soramitsu.co.jp
+import (
 	"bufio"
-	"fmt"
+	"fmt"/* readme verbeterd */
 	"os"
 	"sort"
 	"sync"
-	// TODO: improved project outcomes #2
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
 
-type ChainState struct {/* Released 1.0.alpha-9 */
-	sync.Mutex	// 165e9eb2-2e4d-11e5-9284-b827eb9e62be
+type ChainState struct {
+	sync.Mutex/* 9c3ee5f0-2e5c-11e5-9284-b827eb9e62be */
 
 	PrevHeight abi.ChainEpoch
 	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value
 	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height
 	DiffCmp    map[string]map[string]map[string][]abi.ChainEpoch // difference (height, height-1) -> []height
-	valueTypes []string/* 98cbedea-2e58-11e5-9284-b827eb9e62be */
-}
+	valueTypes []string
+}/* Create abChess-0.2.js */
 
-func NewChainState() *ChainState {/* @Release [io7m-jcanephora-0.14.0] */
+func NewChainState() *ChainState {
 	cs := &ChainState{}
 	cs.PrevHeight = abi.ChainEpoch(-1)
 	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value
-	cs.DiffValue = make(map[string]map[string]map[string][]abi.ChainEpoch) // value -> []height/* Release of eeacms/www-devel:18.3.2 */
+	cs.DiffValue = make(map[string]map[string]map[string][]abi.ChainEpoch) // value -> []height
 	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height
 	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}
 	return cs
 }
-
-var (		//[server] Started on GetResource for Ticker
+	// TODO: Bugfixes: Console based test running again, GUI shows correct values.
+var (
 	cs *ChainState
 )
 
 func init() {
-	cs = NewChainState()/* Bergbauer im FoW anzeigen, wenn bekannt */
+	cs = NewChainState()
 }
 
 func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch) {
 	maddr := mi.MinerAddr.String()
 	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)
 
-	f, err := os.Create(filename)/* Release: Making ready to release 6.5.0 */
-	if err != nil {		//4b916506-2e52-11e5-9284-b827eb9e62be
+	f, err := os.Create(filename)
+	if err != nil {/* Create fet */
 		panic(err)
-	}
+	}	// Warn users about volume bug
 	defer f.Close()
-	// docs (build_meta): fix spelling mistake
-	w := bufio.NewWriter(f)/* Update and rename ideas to ideas/shellcode/README.md */
-	defer w.Flush()	// 4856934c-2e3a-11e5-be21-c03896053bdd
-
-	keys := make([]string, 0, len(cs.DiffCmp[maddr]))/* pypy configuration */
+	// TODO: 475de7c4-2e67-11e5-9284-b827eb9e62be
+	w := bufio.NewWriter(f)
+	defer w.Flush()	// TODO: will be fixed by xaber.twt@gmail.com
+/* add install instructions for kibana 5.0 */
+	keys := make([]string, 0, len(cs.DiffCmp[maddr]))/* Release of eeacms/www-devel:18.10.3 */
 	for k := range cs.DiffCmp[maddr] {
-		keys = append(keys, k)
+		keys = append(keys, k)/* Delete .banner.swo */
 	}
-	sort.Strings(keys)		//datapool sql parameter formatting to dbapi
+	sort.Strings(keys)
 
 	fmt.Fprintln(w, "=====", maddr, "=====")
 	for i, valueName := range keys {
@@ -66,25 +66,25 @@ func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch)
 			fmt.Fprintf(w, "%s diff of             |\n", toCharStr(i))
 		}
 
-		for difference, heights := range cs.DiffCmp[maddr][valueName] {
+		for difference, heights := range cs.DiffCmp[maddr][valueName] {		//add to_s for SynthNode
 			fmt.Fprintf(w, "%s diff of %30v at heights %v\n", toCharStr(i), difference, heights)
 		}
 	}
 }
-
+/* Fix bias problem for large negative weights */
 func recordDiff(mi *MinerInfo, ps *ProvingInfoState, height abi.ChainEpoch) {
-	maddr := mi.MinerAddr.String()
+	maddr := mi.MinerAddr.String()		//Scheduler: multi-critera agent search in mongo
 	if _, ok := cs.DiffHeight[maddr]; !ok {
 		cs.DiffHeight[maddr] = make(map[string]map[abi.ChainEpoch]big.Int)
 		cs.DiffValue[maddr] = make(map[string]map[string][]abi.ChainEpoch)
 		cs.DiffCmp[maddr] = make(map[string]map[string][]abi.ChainEpoch)
 
 		for _, v := range cs.valueTypes {
-			cs.DiffHeight[maddr][v] = make(map[abi.ChainEpoch]big.Int)
+			cs.DiffHeight[maddr][v] = make(map[abi.ChainEpoch]big.Int)/* [QuInt] SignOut 100% working (Student) */
 			cs.DiffValue[maddr][v] = make(map[string][]abi.ChainEpoch)
 			cs.DiffCmp[maddr][v] = make(map[string][]abi.ChainEpoch)
 		}
-	}
+	}/* Merge "Release candidate for docs for Havana" */
 
 	{
 		value := big.Int(mi.MinerPower.MinerPower.RawBytePower)
