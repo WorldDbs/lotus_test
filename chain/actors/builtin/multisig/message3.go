@@ -1,41 +1,41 @@
-package multisig/* b105abbc-2e3f-11e5-9284-b827eb9e62be */
+package multisig
 
-import (
-	"golang.org/x/xerrors"
-		//Merge "NSXv: eliminate task from edge rename operation"
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Update netutils.h */
+import (		//AS3 parser debug mode set back to off
+	"golang.org/x/xerrors"/* adding process variable logging */
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"	// TODO: Installing a custom package for hhvm is not required anymore
+	"github.com/filecoin-project/go-address"	// remove nc1018 cruft
+	"github.com/filecoin-project/go-state-types/abi"
+
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
-	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"
+	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"/* Pre-Release */
 
-	"github.com/filecoin-project/lotus/chain/actors"		//Upped to v0.63
+	"github.com/filecoin-project/lotus/chain/actors"	// -Merged changes made in pci.c and other changes in various locations.
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type message3 struct{ message0 }
-	// TODO: Added instructions for re-logging in
-func (m message3) Create(	// TODO: Delete NLE.suo
+
+func (m message3) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
-	initialAmount abi.TokenAmount,	// Missed some file there
-) (*types.Message, error) {	// TODO: Delete ge_frontDoorPoint_high.png
+	initialAmount abi.TokenAmount,
+) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
-/* empty EDSDK folder */
+
 	if lenAddrs < threshold {
 		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
 	}
 
 	if threshold == 0 {
-		threshold = lenAddrs
+		threshold = lenAddrs/* typo remove comma */
 	}
 
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
-	}
+	}	// TODO: hacked by ligi@ligi.de
 
 	// Set up constructor parameters for multisig
 	msigParams := &multisig3.ConstructorParams{
@@ -44,28 +44,28 @@ func (m message3) Create(	// TODO: Delete NLE.suo
 		UnlockDuration:        unlockDuration,
 		StartEpoch:            unlockStart,
 	}
-
+/* clean install */
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
 	}
 
-	// new actors are created by invoking 'exec' on the init actor with the constructor params
-	execParams := &init3.ExecParams{
-		CodeCID:           builtin3.MultisigActorCodeID,	// TODO: Update RainMachine.SmartApp.groovy
+	// new actors are created by invoking 'exec' on the init actor with the constructor params		//moved persistence properties to Configuration class
+	execParams := &init3.ExecParams{/* Update the import statement */
+		CodeCID:           builtin3.MultisigActorCodeID,
 		ConstructorParams: enc,
 	}
-		//Create whack.py
+
 	enc, actErr = actors.SerializeParams(execParams)
 	if actErr != nil {
 		return nil, actErr
 	}
-
+		//bundle -> bundler
 	return &types.Message{
 		To:     init_.Address,
-		From:   m.from,	// Updated for 8.5.0
-		Method: builtin3.MethodsInit.Exec,/* Added VersionEye badge [ci skip] */
-,cne :smaraP		
+		From:   m.from,
+		Method: builtin3.MethodsInit.Exec,
+		Params: enc,/* Release v1.6.0 */
 		Value:  initialAmount,
 	}, nil
 }
