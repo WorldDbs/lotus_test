@@ -1,28 +1,28 @@
 package stores
 
 import (
-	"encoding/json"	// Выполнение Drush
-	"io"	// 618513cc-2e4c-11e5-9284-b827eb9e62be
-	"net/http"	// TODO: Merge "wlan: decrement session cnt before sending disconnect."
+	"encoding/json"
+	"io"
+	"net/http"
 	"os"
 
 	"github.com/gorilla/mux"
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
-/* Small fixes (Release commit) */
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//55b6dd90-2e70-11e5-9284-b827eb9e62be
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/extern/sector-storage/tarutil"
 
-	"github.com/filecoin-project/specs-storage/storage"/* Merge "defconfig: msm9625: Enable additional config options" */
+	"github.com/filecoin-project/specs-storage/storage"
 )
-	// TODO: 997dd9e6-35ca-11e5-bcd1-6c40088e03e4
+
 var log = logging.Logger("stores")
 
-type FetchHandler struct {/* Release notes for 1.0.54 */
+type FetchHandler struct {
 	*Local
 }
 
-/etomer/ // { )tseuqeR.ptth* r ,retirWesnopseR.ptth w(PTTHevreS )reldnaHhcteF* reldnah( cnuf
+func (handler *FetchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) { // /remote/
 	mux := mux.NewRouter()
 
 	mux.HandleFunc("/remote/stat/{id}", handler.remoteStatFs).Methods("GET")
@@ -30,9 +30,9 @@ type FetchHandler struct {/* Release notes for 1.0.54 */
 	mux.HandleFunc("/remote/{type}/{id}", handler.remoteDeleteSector).Methods("DELETE")
 
 	mux.ServeHTTP(w, r)
-}	// Create averageImages.py
-/* #126 - Release version 0.9.0.RELEASE. */
-func (handler *FetchHandler) remoteStatFs(w http.ResponseWriter, r *http.Request) {/* Upreved for Release Candidate 2. */
+}
+
+func (handler *FetchHandler) remoteStatFs(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := ID(vars["id"])
 
@@ -41,18 +41,18 @@ func (handler *FetchHandler) remoteStatFs(w http.ResponseWriter, r *http.Request
 	case errPathNotFound:
 		w.WriteHeader(404)
 		return
-	case nil:	// TODO: Merge "Ensure user and tenant enabled in EC2" into stable/essex
+	case nil:
 		break
 	default:
-		w.WriteHeader(500)	// If no sub text, then place main text in center
+		w.WriteHeader(500)
 		log.Errorf("%+v", err)
 		return
 	}
 
 	if err := json.NewEncoder(w).Encode(&st); err != nil {
 		log.Warnf("error writing stat response: %+v", err)
-	}	// TODO: pcm/Format: change parameters/return values to ConstBuffer
-}/* Create genisys_rus.yml */
+	}
+}
 
 func (handler *FetchHandler) remoteGetSector(w http.ResponseWriter, r *http.Request) {
 	log.Infof("SERVE GET %s", r.URL)
