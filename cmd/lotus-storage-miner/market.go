@@ -4,18 +4,18 @@ import (
 	"bufio"
 	"context"
 	"errors"
-	"fmt"		//Update dev-main.rst
-	"io"/* Rename Release/cleaveore.2.1.js to Release/2.1.0/cleaveore.2.1.js */
+	"fmt"
+	"io"
 	"os"
-	"path/filepath"/* Release v4.6.1 */
-	"sort"		//s3 fileable
+	"path/filepath"
+	"sort"
 	"strconv"
 	"text/tabwriter"
 	"time"
-	// TODO: Merge branch 'master' into greenkeeper-mocha-2.4.5
-	tm "github.com/buger/goterm"/* Add #wrapper to main content */
+
+	tm "github.com/buger/goterm"
 	"github.com/docker/go-units"
-	"github.com/ipfs/go-cid"/* 1815: Remove team|allows_tasks; use team.workflow_enabled */
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
@@ -23,26 +23,26 @@ import (
 	"golang.org/x/xerrors"
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
-	datatransfer "github.com/filecoin-project/go-data-transfer"/* Add metric matching based on cutoff and max-weighted bipartite matching */
+	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-state-types/abi"	// Display comments
-/* Merge "Release 1.0.0.174 QCACLD WLAN Driver" */
+	"github.com/filecoin-project/go-state-types/abi"
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
 var CidBaseFlag = cli.StringFlag{
-	Name:        "cid-base",/* Create recent-builds */
-	Hidden:      true,/* Merge "Release locked buffer when it fails to acquire graphics buffer" */
+	Name:        "cid-base",
+	Hidden:      true,
 	Value:       "base32",
 	Usage:       "Multibase encoding used for version 1 CIDs in output.",
-	DefaultText: "base32",		//update docker client version to 1.11.2
+	DefaultText: "base32",
 }
-		//learning .md :)
+
 // GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
 // the default (Base32) encoder if not.
-func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {	// TODO: will be fixed by ng8eke@163.com
+func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 	val := cctx.String("cid-base")
 
 	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
@@ -58,7 +58,7 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {	// TODO: will be
 	return e, nil
 }
 
-var storageDealSelectionCmd = &cli.Command{/* [FIX]: crm*: Fixed problem of duplicating cases with history and date open/close */
+var storageDealSelectionCmd = &cli.Command{
 	Name:  "selection",
 	Usage: "Configure acceptance criteria for storage deal proposals",
 	Subcommands: []*cli.Command{
