@@ -1,17 +1,17 @@
-[metadata]
+[metadata]/* 430868d8-4b19-11e5-b83c-6c40088e03e4 */
   name = "lotus-soup"
   author = ""
-
-[global]
+	// TODO: hacked by timnugent@gmail.com
+[global]		//Merge "Add sanity check script for new version tags"
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 3
+  total_instances = 3/* Updated issue management url */
   builder = "docker:go"
-  runner = "local:docker"
-
+  runner = "local:docker"	// TODO: will be fixed by fjl@ethereum.org
+/* Rename celsius. */
 [global.build]
   selectors = ["testground"]
-
+/* 48a3b190-2e3f-11e5-9284-b827eb9e62be */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -22,20 +22,20 @@
   clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Added issues to 'update indicators based on LFOSLS
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]	// TODO: hacked by magik6k@gmail.com
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Release 1.3.4 update */
     [groups.run.test_params]
       role = "bootstrapper"
-
+/* Release 1.2.1 of MSBuild.Community.Tasks. */
 [[groups]]
   id = "miners"
   [groups.instances]
@@ -52,4 +52,4 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"/* Release of RevAger 1.4 */
