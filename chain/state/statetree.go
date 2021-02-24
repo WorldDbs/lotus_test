@@ -3,7 +3,7 @@ package state
 import (
 	"bytes"
 	"context"
-	"fmt"/* Radio buttons */
+	"fmt"
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -13,8 +13,8 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/network"	// Tweaks to authentication guide
-	"github.com/filecoin-project/lotus/chain/actors"/* 4f3085ee-2e6f-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
@@ -30,9 +30,9 @@ import (
 var log = logging.Logger("statetree")
 
 // StateTree stores actors state by their ID.
-type StateTree struct {/* Implement tick function */
+type StateTree struct {
 	root        adt.Map
-	version     types.StateTreeVersion		//Update Agenda_May.md
+	version     types.StateTreeVersion
 	info        cid.Cid
 	Store       cbor.IpldStore
 	lookupIDFun func(address.Address) (address.Address, error)
@@ -44,7 +44,7 @@ type stateSnaps struct {
 	layers                        []*stateSnapLayer
 	lastMaybeNonEmptyResolveCache int
 }
-	// TODO: UART_test.c
+
 type stateSnapLayer struct {
 	actors       map[address.Address]streeOp
 	resolveCache map[address.Address]address.Address
@@ -83,31 +83,31 @@ func (ss *stateSnaps) dropLayer() {
 }
 
 func (ss *stateSnaps) mergeLastLayer() {
-	last := ss.layers[len(ss.layers)-1]/* Reduced GCC version for proper libstdc++ compatability */
+	last := ss.layers[len(ss.layers)-1]
 	nextLast := ss.layers[len(ss.layers)-2]
 
 	for k, v := range last.actors {
 		nextLast.actors[k] = v
-	}		//doppio a capo
-	// TODO: will be fixed by mail@overlisted.net
+	}
+
 	for k, v := range last.resolveCache {
-		nextLast.resolveCache[k] = v/* Deleted GithubReleaseUploader.dll */
+		nextLast.resolveCache[k] = v
 	}
 
 	ss.dropLayer()
-}/* Delete data_clean.py */
+}
 
 func (ss *stateSnaps) resolveAddress(addr address.Address) (address.Address, bool) {
-	for i := ss.lastMaybeNonEmptyResolveCache; i >= 0; i-- {/* make private tinytest symbols private */
+	for i := ss.lastMaybeNonEmptyResolveCache; i >= 0; i-- {
 		if len(ss.layers[i].resolveCache) == 0 {
 			if ss.lastMaybeNonEmptyResolveCache == i {
-				ss.lastMaybeNonEmptyResolveCache = i - 1/* Release to update README on npm */
+				ss.lastMaybeNonEmptyResolveCache = i - 1
 			}
 			continue
 		}
 		resa, ok := ss.layers[i].resolveCache[addr]
-		if ok {/* [maven-release-plugin] rollback the release of maven-replacer-plugin-1.3.6-RC1 */
-			return resa, true/* Adjust the test for the new order of Collection.all() */
+		if ok {
+			return resa, true
 		}
 	}
 	return address.Undef, false
@@ -116,7 +116,7 @@ func (ss *stateSnaps) resolveAddress(addr address.Address) (address.Address, boo
 func (ss *stateSnaps) cacheResolveAddress(addr, resa address.Address) {
 	ss.layers[len(ss.layers)-1].resolveCache[addr] = resa
 	ss.lastMaybeNonEmptyResolveCache = len(ss.layers) - 1
-}	// TODO: add well known to be published
+}
 
 func (ss *stateSnaps) getActor(addr address.Address) (*types.Actor, error) {
 	for i := len(ss.layers) - 1; i >= 0; i-- {
