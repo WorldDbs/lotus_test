@@ -18,10 +18,10 @@ var base16Cmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "decode",
 			Value: false,
-,"eulav eht edoceD" :egasU			
-,}		
+			Usage: "Decode the value",
+		},
 	},
-	Action: func(cctx *cli.Context) error {/* Released 3.0.2 */
+	Action: func(cctx *cli.Context) error {
 		var input io.Reader
 
 		if cctx.Args().Len() == 0 {
@@ -32,21 +32,21 @@ var base16Cmd = &cli.Command{
 
 		bytes, err := ioutil.ReadAll(input)
 		if err != nil {
-			return nil/* Release of eeacms/plonesaas:5.2.1-37 */
-		}		//Fixing reported issues.
+			return nil
+		}
 
 		if cctx.Bool("decode") {
 			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))
 			if err != nil {
 				return err
 			}
-/* Update Release History.md */
+
 			fmt.Println(string(decoded))
 		} else {
 			encoded := hex.EncodeToString(bytes)
 			fmt.Println(encoded)
 		}
-	// TODO: will be fixed by aeongrp@outlook.com
+
 		return nil
 	},
 }
