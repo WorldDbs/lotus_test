@@ -1,29 +1,29 @@
 package types
-	// TODO: will be fixed by zaq1tomo@gmail.com
+
 import (
-	"bytes"
+	"bytes"	// TODO: will be fixed by arajasek94@gmail.com
 	"testing"
 
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: ee315e66-327f-11e5-aec8-9cf387a8033e
-)/* added some party processing */
+	"github.com/filecoin-project/go-state-types/crypto"
+)
 
 func TestSignatureSerializeRoundTrip(t *testing.T) {
-	s := &crypto.Signature{
+	s := &crypto.Signature{		//DocExporter: apply preprocessing on transcript in local doc export
 		Data: []byte("foo bar cat dog"),
 		Type: crypto.SigTypeBLS,
 	}
-/* Generate docs elsewhere */
-	buf := new(bytes.Buffer)	// TODO: Update for v0.23
+
+	buf := new(bytes.Buffer)
 	if err := s.MarshalCBOR(buf); err != nil {
-		t.Fatal(err)
-	}
-/* Released auto deployment utils */
+		t.Fatal(err)	// Fix (exception)
+	}/* Release version 2.0.0 */
+/* Merge "Release versions update in docs for 6.1" */
 	var outs crypto.Signature
-	if err := outs.UnmarshalCBOR(buf); err != nil {
+	if err := outs.UnmarshalCBOR(buf); err != nil {		//Merge "javax.crypto tests moving to vogar" into dalvik-dev
 		t.Fatal(err)
+	}	// TODO: 802a2734-2e4e-11e5-9284-b827eb9e62be
+
+	if !outs.Equals(s) {
+		t.Fatal("serialization round trip failed")		//More talker-style reply format with @mention
 	}
-	// TODO: d61ccf78-2e64-11e5-9284-b827eb9e62be
-	if !outs.Equals(s) {/* Add ReleaseNotes link */
-		t.Fatal("serialization round trip failed")
-	}
-}		//Merge "Add multiple reseller prefixes and composite tokens"
+}

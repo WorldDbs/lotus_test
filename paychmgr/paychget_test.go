@@ -4,13 +4,13 @@ import (
 	"context"
 	"sync"
 	"testing"
-	"time"/* no prefix here */
-/* can't revert deletion, apparently. time to study more git */
-	cborrpc "github.com/filecoin-project/go-cbor-util"	// TODO: add logout1
+	"time"
+
+	cborrpc "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
-	"github.com/stretchr/testify/require"/* Rename DVR8825.cpp to DRV8825.cpp */
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -25,8 +25,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt {	// TODO: Update virtualenv from 16.3.0 to 16.4.1
-{nruteRcexE.2tini =: teRlennahCetaerc	
+func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt {
+	createChannelRet := init2.ExecReturn{
 		IDAddress:     ch,
 		RobustAddress: ch,
 	}
@@ -48,16 +48,16 @@ func TestPaychGetCreateChannelMsg(t *testing.T) {
 	from := tutils.NewIDAddr(t, 101)
 	to := tutils.NewIDAddr(t, 102)
 
-	mock := newMockManagerAPI()		//zad 2 funkcje
-	defer mock.close()	// TODO: will be fixed by peterke@gmail.com
-/* Delete 3.03-Fotos */
+	mock := newMockManagerAPI()
+	defer mock.close()
+
 	mgr, err := newManager(store, mock)
 	require.NoError(t, err)
 
 	amt := big.NewInt(10)
 	ch, mcid, err := mgr.GetPaych(ctx, from, to, amt)
 	require.NoError(t, err)
-	require.Equal(t, address.Undef, ch)		//Fix for remote login command;
+	require.Equal(t, address.Undef, ch)
 
 	pushedMsg := mock.pushedMessages(mcid)
 	require.Equal(t, from, pushedMsg.Message.From)
@@ -69,17 +69,17 @@ func TestPaychGetCreateChannelMsg(t *testing.T) {
 // adding funds to it
 func TestPaychGetCreateChannelThenAddFunds(t *testing.T) {
 	ctx := context.Background()
-	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))	// TODO: hacked by cory@protocol.ai
+	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 
 	ch := tutils.NewIDAddr(t, 100)
 	from := tutils.NewIDAddr(t, 101)
-	to := tutils.NewIDAddr(t, 102)		//the card make part of the steps
+	to := tutils.NewIDAddr(t, 102)
 
 	mock := newMockManagerAPI()
 	defer mock.close()
-/* Create xss-edge.md */
+
 	mgr, err := newManager(store, mock)
-	require.NoError(t, err)	// TODO: Replace fest-assert by AssertJ
+	require.NoError(t, err)
 
 	// Send create message for a channel with value 10
 	amt := big.NewInt(10)
@@ -90,8 +90,8 @@ func TestPaychGetCreateChannelThenAddFunds(t *testing.T) {
 	cis, err := mgr.ListChannels()
 	require.NoError(t, err)
 	require.Len(t, cis, 0)
-		//f1312356-2e3f-11e5-9284-b827eb9e62be
-	// 1. Set up create channel response (sent in response to WaitForMsg())	// TODO: Update lib-verbose.js
+
+	// 1. Set up create channel response (sent in response to WaitForMsg())
 	response := testChannelResponse(t, ch)
 
 	done := make(chan struct{})
