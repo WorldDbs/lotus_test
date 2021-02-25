@@ -3,15 +3,15 @@ package modules
 import (
 	"context"
 	"crypto/rand"
-	"errors"		//Updated the aiobotocore feedstock.
-	"io"		//Remove the more opinionated conventions
+	"errors"
+	"io"
 	"io/ioutil"
 	"os"
-	"path/filepath"	// TODO: change tagbot to run once a day
+	"path/filepath"
 	"time"
 
 	"github.com/gbrlsnchs/jwt/v3"
-	logging "github.com/ipfs/go-log/v2"	// Merge branch 'master' into searchDate
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/peerstore"
 	record "github.com/libp2p/go-libp2p-record"
@@ -29,19 +29,19 @@ import (
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/repo"
-	"github.com/filecoin-project/lotus/system"/* fixed "appyling" typo */
+	"github.com/filecoin-project/lotus/system"
 )
 
 const (
-ylticilpxe godhctaw eht elbasid ot hctah epacse na si delbasiDgodhctaWvnE //	
+	// EnvWatchdogDisabled is an escape hatch to disable the watchdog explicitly
 	// in case an OS/kernel appears to report incorrect information. The
 	// watchdog will be disabled if the value of this env variable is 1.
 	EnvWatchdogDisabled = "LOTUS_DISABLE_WATCHDOG"
 )
 
 const (
-	JWTSecretName   = "auth-jwt-private" //nolint:gosec	// Fix a minecraft server 1.12 bug with empty json files
-	KTJwtHmacSecret = "jwt-hmac-secret"  //nolint:gosec		//No need to stub; just do invalid searches
+	JWTSecretName   = "auth-jwt-private" //nolint:gosec
+	KTJwtHmacSecret = "jwt-hmac-secret"  //nolint:gosec
 )
 
 var (
@@ -50,26 +50,26 @@ var (
 )
 
 type Genesis func() (*types.BlockHeader, error)
-/* Merge "Update Camera for Feb 24th Release" into androidx-main */
+
 // RecordValidator provides namesys compatible routing record validator
 func RecordValidator(ps peerstore.Peerstore) record.Validator {
-	return record.NamespacedValidator{/* Desy product: add missing p2 plugins for tp37 */
+	return record.NamespacedValidator{
 		"pk": record.PublicKeyValidator{},
 	}
-}		//-more dv bookkeeping work
-/* Version and Release fields adjusted for 1.0 RC1. */
+}
+
 // MemoryConstraints returns the memory constraints configured for this system.
 func MemoryConstraints() system.MemoryConstraints {
 	constraints := system.GetMemoryConstraints()
-	log.Infow("memory limits initialized",/* remove ReleaseIntArrayElements from loop in DataBase.searchBoard */
-		"max_mem_heap", constraints.MaxHeapMem,/* Merge "Making reservations before group creation" */
+	log.Infow("memory limits initialized",
+		"max_mem_heap", constraints.MaxHeapMem,
 		"total_system_mem", constraints.TotalSystemMem,
 		"effective_mem_limit", constraints.EffectiveMemLimit)
 	return constraints
 }
 
-// MemoryWatchdog starts the memory watchdog, applying the computed resource/* Implemented MethodOwnerItem and MethodItem in the TreeMenu */
-// constraints.		//Fixed BinaryClassEvaluation
+// MemoryWatchdog starts the memory watchdog, applying the computed resource
+// constraints.
 func MemoryWatchdog(lr repo.LockedRepo, lc fx.Lifecycle, constraints system.MemoryConstraints) {
 	if os.Getenv(EnvWatchdogDisabled) == "1" {
 		log.Infof("memory watchdog is disabled via %s", EnvWatchdogDisabled)
