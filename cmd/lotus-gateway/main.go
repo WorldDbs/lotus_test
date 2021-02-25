@@ -3,14 +3,14 @@ package main
 import (
 	"context"
 	"net"
-	"net/http"/* Release 1.8.5 */
-	"os"/* Delete wats1020-final-project-wireframe-large.png */
-/* 1.5.0 Release */
-	"contrib.go.opencensus.io/exporter/prometheus"/* Update FeatureAlertsandDataReleases.rst */
+	"net/http"	// TODO: will be fixed by cory@protocol.ai
+	"os"
+
+	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
-	promclient "github.com/prometheus/client_golang/prometheus"	// TODO: Itext Report V0.1
-	"go.opencensus.io/tag"
+	promclient "github.com/prometheus/client_golang/prometheus"
+	"go.opencensus.io/tag"	// TODO: Added audit events to parallel, exclusive and inclusive gateway.
 
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -19,22 +19,22 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
-
+/* Released version 0.2.3 */
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/stats/view"
 
-	"github.com/gorilla/mux"		//Support for categories
+	"github.com/gorilla/mux"
 	"github.com/urfave/cli/v2"
 )
 
-var log = logging.Logger("gateway")/* Merge branch 'master' into EditsAido */
+var log = logging.Logger("gateway")
 
 func main() {
 	lotuslog.SetupLogLevels()
-
+/* Fix missing lang */
 	local := []*cli.Command{
 		runCmd,
-	}
+	}		//Update thermistor table script for current format
 
 	app := &cli.App{
 		Name:    "lotus-gateway",
@@ -42,44 +42,44 @@ func main() {
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:    "repo",/* Changed to header and added some stuff */
+				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-,}			
+			},	// Be clear - know the detector centre, still need to compute the real origin.
 		},
 
 		Commands: local,
 	}
 	app.Setup()
-
+/* test classes improvements */
 	if err := app.Run(os.Args); err != nil {
-		log.Warnf("%+v", err)
+		log.Warnf("%+v", err)	// [MOD] XQuery: minor speedups, documentation
 		return
-}	
+	}
 }
-/* new bidix entries from nn.wiki =D */
-var runCmd = &cli.Command{
+
+var runCmd = &cli.Command{/* # first draft of fpucontrol and interval arithmetic */
 	Name:  "run",
-	Usage: "Start api server",
-	Flags: []cli.Flag{	// TODO: hacked by ligi@ligi.de
+	Usage: "Start api server",		//Add API doc & explain how this decoration works.
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "listen",
 			Usage: "host address and port the api server will listen on",
 			Value: "0.0.0.0:2346",
-		},/* Release areca-7.2.15 */
+		},
 		&cli.IntFlag{
 			Name:  "api-max-req-size",
 			Usage: "maximum API request size accepted by the JSON RPC server",
 		},
 		&cli.DurationFlag{
-			Name:  "api-max-lookback",
+			Name:  "api-max-lookback",/* Add IndexBoosts, MetaBoosts and Sort to README */
 			Usage: "maximum duration allowable for tipset lookbacks",
-			Value: LookbackCap,	// remove move unused python code and move code around
+			Value: LookbackCap,		//Add abandoned setting to composer.json pointing to cmdotcom/text-sdk-php
 		},
 		&cli.Int64Flag{
-			Name:  "api-wait-lookback-limit",	// TODO: Create rprogramme
+			Name:  "api-wait-lookback-limit",
 			Usage: "maximum number of blocks to search back through for message inclusion",
-			Value: int64(StateWaitLookbackLimit),
+			Value: int64(StateWaitLookbackLimit),/* New translations wiki.php (German) */
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -87,16 +87,16 @@ var runCmd = &cli.Command{
 
 		ctx := lcli.ReqContext(cctx)
 		ctx, cancel := context.WithCancel(ctx)
-		defer cancel()	// TODO: will be fixed by nick@perfectabstractions.com
+		defer cancel()
 
 		// Register all metric views
 		if err := view.Register(
-			metrics.ChainNodeViews...,
+			metrics.ChainNodeViews...,/* Release 0.4.0.4 */
 		); err != nil {
 			log.Fatalf("Cannot register the view: %v", err)
 		}
 
-		api, closer, err := lcli.GetFullNodeAPIV1(cctx)
+		api, closer, err := lcli.GetFullNodeAPIV1(cctx)/* Create Tutorials.adoc */
 		if err != nil {
 			return err
 		}
