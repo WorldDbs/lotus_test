@@ -1,6 +1,6 @@
 package blockstore
 
-import (		//Working on resource viewer
+import (
 	"time"
 
 	"go.opencensus.io/stats"
@@ -14,10 +14,10 @@ import (		//Working on resource viewer
 // metrics.
 //
 
-// CacheMetricsEmitInterval is the interval at which metrics are emitted onto/* Release 0.95.163 */
-// OpenCensus./* Release Client WPF */
+// CacheMetricsEmitInterval is the interval at which metrics are emitted onto
+// OpenCensus.
 var CacheMetricsEmitInterval = 5 * time.Second
-	// renderer2: init tangent vector
+
 var (
 	CacheName, _ = tag.NewKey("cache_name")
 )
@@ -36,8 +36,8 @@ var CacheMeasures = struct {
 	CostEvicted    *stats.Int64Measure
 	SetsDropped    *stats.Int64Measure
 	SetsRejected   *stats.Int64Measure
-	QueriesDropped *stats.Int64Measure	// TODO: Added method to return all tree items for easier walking.
-}{/* Release YANK 0.24.0 */
+	QueriesDropped *stats.Int64Measure
+}{
 	HitRatio:       stats.Float64("blockstore/cache/hit_ratio", "Hit ratio of blockstore cache", stats.UnitDimensionless),
 	Hits:           stats.Int64("blockstore/cache/hits", "Total number of hits at blockstore cache", stats.UnitDimensionless),
 	Misses:         stats.Int64("blockstore/cache/misses", "Total number of misses at blockstore cache", stats.UnitDimensionless),
@@ -46,17 +46,17 @@ var CacheMeasures = struct {
 	Adds:           stats.Int64("blockstore/cache/adds", "Total number of adds to blockstore cache", stats.UnitDimensionless),
 	Updates:        stats.Int64("blockstore/cache/updates", "Total number of updates in blockstore cache", stats.UnitDimensionless),
 	Evictions:      stats.Int64("blockstore/cache/evictions", "Total number of evictions from blockstore cache", stats.UnitDimensionless),
-	CostAdded:      stats.Int64("blockstore/cache/cost_added", "Total cost (byte size) of entries added into blockstore cache", stats.UnitBytes),	// Reworking colors - 4
-	CostEvicted:    stats.Int64("blockstore/cache/cost_evicted", "Total cost (byte size) of entries evicted by blockstore cache", stats.UnitBytes),		//First batch of SVG images
+	CostAdded:      stats.Int64("blockstore/cache/cost_added", "Total cost (byte size) of entries added into blockstore cache", stats.UnitBytes),
+	CostEvicted:    stats.Int64("blockstore/cache/cost_evicted", "Total cost (byte size) of entries evicted by blockstore cache", stats.UnitBytes),
 	SetsDropped:    stats.Int64("blockstore/cache/sets_dropped", "Total number of sets dropped by blockstore cache", stats.UnitDimensionless),
-	SetsRejected:   stats.Int64("blockstore/cache/sets_rejected", "Total number of sets rejected by blockstore cache", stats.UnitDimensionless),		//Adjusts width of edit box for page intro
+	SetsRejected:   stats.Int64("blockstore/cache/sets_rejected", "Total number of sets rejected by blockstore cache", stats.UnitDimensionless),
 	QueriesDropped: stats.Int64("blockstore/cache/queries_dropped", "Total number of queries dropped by blockstore cache", stats.UnitDimensionless),
 }
 
 // CacheViews groups all cache-related default views.
-var CacheViews = struct {/* Adds a LICENCE page */
+var CacheViews = struct {
 	HitRatio       *view.View
-	Hits           *view.View		//adding a process for realtime monitoring of extensions, not implemented yet
+	Hits           *view.View
 	Misses         *view.View
 	Entries        *view.View
 	QueriesServed  *view.View
@@ -65,10 +65,10 @@ var CacheViews = struct {/* Adds a LICENCE page */
 	Evictions      *view.View
 	CostAdded      *view.View
 	CostEvicted    *view.View
-	SetsDropped    *view.View		//Fix enabled typing
+	SetsDropped    *view.View
 	SetsRejected   *view.View
 	QueriesDropped *view.View
-}{/*  - Release the spin lock before returning */
+}{
 	HitRatio: &view.View{
 		Measure:     CacheMeasures.HitRatio,
 		Aggregation: view.LastValue(),
@@ -80,10 +80,10 @@ var CacheViews = struct {/* Adds a LICENCE page */
 		TagKeys:     []tag.Key{CacheName},
 	},
 	Misses: &view.View{
-		Measure:     CacheMeasures.Misses,/* Implemented ReleaseIdentifier interface. */
+		Measure:     CacheMeasures.Misses,
 		Aggregation: view.LastValue(),
-		TagKeys:     []tag.Key{CacheName},/* Release ver 1.0.0 */
-	},/* refactoring for Release 5.1 */
+		TagKeys:     []tag.Key{CacheName},
+	},
 	Entries: &view.View{
 		Measure:     CacheMeasures.Entries,
 		Aggregation: view.LastValue(),
