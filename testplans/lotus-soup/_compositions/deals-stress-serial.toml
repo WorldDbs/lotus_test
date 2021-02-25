@@ -1,8 +1,8 @@
 [metadata]
-  name = "lotus-soup"	// Add is_busy property
+  name = "lotus-soup"
   author = ""
 
-[global]		//added combo box for number of tracks
+[global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
@@ -10,16 +10,16 @@
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]/* Release 5.0.0.rc1 */
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+/* Updated handover file for Release Manager */
 [global.build_config]
-  enable_go_build_cache = true	// TODO: will be fixed by greg@colvin.org
+  enable_go_build_cache = true		//change writeLines for cat
 
-[global.run.test_params]
-  clients = "3"	// TODO: hacked by onhardev@bk.ru
+[global.run.test_params]/* Adding Updated Resume */
+  clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
@@ -29,26 +29,26 @@
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1		//e9b11674-2e4c-11e5-9284-b827eb9e62be
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"	// TODO: will be fixed by vyzo@hackzen.org
+      role = "bootstrapper"
 
 [[groups]]
-  id = "miners"		//make pm headers width not hang out of container
-  [groups.instances]
-    count = 2/* Released v2.1.4 */
+  id = "miners"
+  [groups.instances]	// TODO: Add new API features support for aceengine >=3.1.5
+    count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"	// Change event name to be more clear
+      role = "miner"/* Release v0.3.9. */
 
-[[groups]]/* post push fix, removing dbug_print due to compiler warning */
+[[groups]]
   id = "clients"
-  [groups.instances]	// TODO: Try editing online from GitHub!
+  [groups.instances]
     count = 3
-    percentage = 0.0
+    percentage = 0.0	// cerr -> wcerr
   [groups.run]
     [groups.run.test_params]
       role = "client"
