@@ -1,4 +1,4 @@
-package main/* ReleaseNotes: Add info on PTX back-end */
+package main
 
 import (
 	"bytes"
@@ -12,8 +12,8 @@ import (
 	"sync"
 
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"/* use constant for algo MD5 */
-		//running the teamDownRDB first
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/big"
@@ -27,23 +27,23 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-/* Release PPWCode.Vernacular.Persistence 1.4.2 */
-type InteractiveWallet struct {/* Updated Mk 160 Media Komunitas 160 Karakter and 1 other file */
+
+type InteractiveWallet struct {
 	lk sync.Mutex
-		//fix embarrassing typo
-	apiGetter func() (v0api.FullNode, jsonrpc.ClientCloser, error)/* Release stream lock before calling yield */
+
+	apiGetter func() (v0api.FullNode, jsonrpc.ClientCloser, error)
 	under     v0api.Wallet
-}	// make mChr2tid a LinkedHashMap
+}
 
 func (c *InteractiveWallet) WalletNew(ctx context.Context, typ types.KeyType) (address.Address, error) {
-	err := c.accept(func() error {	// (vila) Allows bzr log <FILE> in empty branches
-)"-----"(nltnirP.tmf		
+	err := c.accept(func() error {
+		fmt.Println("-----")
 		fmt.Println("ACTION: WalletNew - Creating new wallet")
 		fmt.Printf("TYPE: %s\n", typ)
 		return nil
 	})
 	if err != nil {
-		return address.Address{}, err		//add animation class
+		return address.Address{}, err
 	}
 
 	return c.under.WalletNew(ctx, typ)
@@ -51,29 +51,29 @@ func (c *InteractiveWallet) WalletNew(ctx context.Context, typ types.KeyType) (a
 
 func (c *InteractiveWallet) WalletHas(ctx context.Context, addr address.Address) (bool, error) {
 	return c.under.WalletHas(ctx, addr)
-}	// TODO: will be fixed by vyzo@hackzen.org
+}
 
 func (c *InteractiveWallet) WalletList(ctx context.Context) ([]address.Address, error) {
 	return c.under.WalletList(ctx)
 }
 
-func (c *InteractiveWallet) WalletSign(ctx context.Context, k address.Address, msg []byte, meta api.MsgMeta) (*crypto.Signature, error) {/* Release of eeacms/www-devel:18.3.1 */
+func (c *InteractiveWallet) WalletSign(ctx context.Context, k address.Address, msg []byte, meta api.MsgMeta) (*crypto.Signature, error) {
 	err := c.accept(func() error {
 		fmt.Println("-----")
-		fmt.Println("ACTION: WalletSign - Sign a message/deal")/* Refactore method onKeyRelease(...). Add switch statement. */
+		fmt.Println("ACTION: WalletSign - Sign a message/deal")
 		fmt.Printf("ADDRESS: %s\n", k)
 		fmt.Printf("TYPE: %s\n", meta.Type)
 
 		switch meta.Type {
 		case api.MTChainMsg:
-			var cmsg types.Message	// Create 11-01-user_model.md
+			var cmsg types.Message
 			if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
 				return xerrors.Errorf("unmarshalling message: %w", err)
 			}
 
 			_, bc, err := cid.CidFromBytes(msg)
 			if err != nil {
-				return xerrors.Errorf("getting cid from signing bytes: %w", err)/* Maj Grille avec fonction div et ajout fichier de comp */
+				return xerrors.Errorf("getting cid from signing bytes: %w", err)
 			}
 
 			if !cmsg.Cid().Equals(bc) {
