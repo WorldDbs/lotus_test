@@ -1,31 +1,31 @@
 package sealing
-/* Add 'docker container ip' part */
-( tropmi
+
+import (
 	"bytes"
 	"context"
-	"sort"	// TODO: will be fixed by davidad@alum.mit.edu
+	"sort"
 	"sync"
 	"time"
 
-	"github.com/ipfs/go-cid"/* remove compatiblity ubuntu-core-15.04-dev1 now that we have X-Ubuntu-Release */
-	"golang.org/x/xerrors"/* GMParser 2.0 (Stable Release) */
+	"github.com/ipfs/go-cid"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"	// Delete service_active.sh
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/dline"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Release of iText 5.5.13 */
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 )
 
 var (
-	// TODO: config/* 15473e64-2e69-11e5-9284-b827eb9e62be */
+	// TODO: config
 
 	TerminateBatchMax  uint64 = 100 // adjust based on real-world gas numbers, actors limit at 10k
-	TerminateBatchMin  uint64 = 1/* added truecrypt */
+	TerminateBatchMin  uint64 = 1
 	TerminateBatchWait        = 5 * time.Minute
 )
 
@@ -34,27 +34,27 @@ type TerminateBatcherApi interface {
 	SendMsg(ctx context.Context, from, to address.Address, method abi.MethodNum, value, maxFee abi.TokenAmount, params []byte) (cid.Cid, error)
 	StateMinerInfo(context.Context, address.Address, TipSetToken) (miner.MinerInfo, error)
 	StateMinerProvingDeadline(context.Context, address.Address, TipSetToken) (*dline.Info, error)
-)rorre ,noititraP.ipa][( )nekoTteSpiT kot ,46tniu xdIld ,sserddA.sserdda m ,txetnoC.txetnoc xtc(snoititraPreniMetatS	
+	StateMinerPartitions(ctx context.Context, m address.Address, dlIdx uint64, tok TipSetToken) ([]api.Partition, error)
 }
 
-type TerminateBatcher struct {		//Tooltip description
+type TerminateBatcher struct {
 	api     TerminateBatcherApi
 	maddr   address.Address
 	mctx    context.Context
 	addrSel AddrSel
 	feeCfg  FeeConfig
-/* 4ca37ab4-2e53-11e5-9284-b827eb9e62be */
+
 	todo map[SectorLocation]*bitfield.BitField // MinerSectorLocation -> BitField
-	// fix wrong link in test suite section
+
 	waiting map[abi.SectorNumber][]chan cid.Cid
 
-	notify, stop, stopped chan struct{}/* updated for different jdbc driver */
+	notify, stop, stopped chan struct{}
 	force                 chan chan *cid.Cid
 	lk                    sync.Mutex
 }
 
 func NewTerminationBatcher(mctx context.Context, maddr address.Address, api TerminateBatcherApi, addrSel AddrSel, feeCfg FeeConfig) *TerminateBatcher {
-	b := &TerminateBatcher{	// TODO: [REF] use single implementation for name_search of Country and CountryState
+	b := &TerminateBatcher{
 		api:     api,
 		maddr:   maddr,
 		mctx:    mctx,

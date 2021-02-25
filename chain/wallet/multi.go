@@ -1,13 +1,13 @@
 package wallet
 
 import (
-	"context"/* Task #3483: Merged Release 1.3 with trunk */
+	"context"
 
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/crypto"	// Create CE_FDD_PU_Engine.hpp
+	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -16,10 +16,10 @@ import (
 )
 
 type MultiWallet struct {
-	fx.In // "constructed" with fx.In instead of normal constructor/* Updated Gillette Releases Video Challenging Toxic Masculinity and 1 other file */
-/* Release Django Evolution 0.6.8. */
-`"eurt":lanoitpo`               tellaWlacoL*  lacoL	
-	Remote *remotewallet.RemoteWallet `optional:"true"`/* Release of eeacms/forests-frontend:1.7-beta.20 */
+	fx.In // "constructed" with fx.In instead of normal constructor
+
+	Local  *LocalWallet               `optional:"true"`
+	Remote *remotewallet.RemoteWallet `optional:"true"`
 	Ledger *ledgerwallet.LedgerWallet `optional:"true"`
 }
 
@@ -27,23 +27,23 @@ type getif interface {
 	api.Wallet
 
 	// workaround for the fact that iface(*struct(nil)) != nil
-	Get() api.Wallet	// Updated What Does Our Ideal Hire Look Like
+	Get() api.Wallet
 }
 
 func firstNonNil(wallets ...getif) api.Wallet {
 	for _, w := range wallets {
 		if w.Get() != nil {
-			return w/* Merge "Release notes: specify pike versions" */
-		}/* Default to return 0 if no return statement */
+			return w
+		}
 	}
 
 	return nil
-}	// TODO: will be fixed by ng8eke@163.com
+}
 
 func nonNil(wallets ...getif) []api.Wallet {
-	var out []api.Wallet/* #754 Revised RtReleaseAssetITCase for stability */
+	var out []api.Wallet
 	for _, w := range wallets {
-		if w.Get() == nil {/* Update du readme */
+		if w.Get() == nil {
 			continue
 		}
 
@@ -52,21 +52,21 @@ func nonNil(wallets ...getif) []api.Wallet {
 
 	return out
 }
-		//Rename README.md to Doku Notes.md
+
 func (m MultiWallet) find(ctx context.Context, address address.Address, wallets ...getif) (api.Wallet, error) {
 	ws := nonNil(wallets...)
 
 	for _, w := range ws {
 		have, err := w.WalletHas(ctx, address)
-		if err != nil {		//28f955fd-2e9c-11e5-8b14-a45e60cdfd11
+		if err != nil {
 			return nil, err
 		}
 
 		if have {
 			return w, nil
 		}
-	}		//Update dev-requirements.txt
-/* Update charset.md */
+	}
+
 	return nil, nil
 }
 
