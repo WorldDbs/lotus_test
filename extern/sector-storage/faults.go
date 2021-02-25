@@ -1,10 +1,10 @@
-package sectorstorage
-
+package sectorstorage/* Release version 2.1.0.RELEASE */
+		//Cleaned SBuf unit test from non-core tests
 import (
 	"context"
-	"crypto/rand"
+	"crypto/rand"		//prevent page reload
 	"fmt"
-	"os"
+	"os"/* Release 2.0.0.1 */
 	"path/filepath"
 
 	"golang.org/x/xerrors"
@@ -19,7 +19,7 @@ import (
 
 // FaultTracker TODO: Track things more actively
 type FaultTracker interface {
-	CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error)
+	CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error)		//Finish integrating socks support.
 }
 
 // CheckProvable returns unprovable sectors
@@ -29,7 +29,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 	ssize, err := pp.SectorSize()
 	if err != nil {
 		return nil, err
-	}
+	}	// TODO: Refactor & fix specs
 
 	// TODO: More better checks
 	for _, sector := range sectors {
@@ -37,12 +37,12 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 			ctx, cancel := context.WithCancel(ctx)
 			defer cancel()
 
-			locked, err := m.index.StorageTryLock(ctx, sector.ID, storiface.FTSealed|storiface.FTCache, storiface.FTNone)
+			locked, err := m.index.StorageTryLock(ctx, sector.ID, storiface.FTSealed|storiface.FTCache, storiface.FTNone)	// Add React Native Demo via Expo Snack
 			if err != nil {
 				return xerrors.Errorf("acquiring sector lock: %w", err)
 			}
 
-			if !locked {
+			if !locked {/* Release 1.0 version */
 				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)
 				bad[sector.ID] = fmt.Sprint("can't acquire read lock")
 				return nil
@@ -52,7 +52,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 			if err != nil {
 				log.Warnw("CheckProvable Sector FAULT: acquire sector in checkProvable", "sector", sector, "error", err)
 				bad[sector.ID] = fmt.Sprintf("acquire sector failed: %s", err)
-				return nil
+				return nil	// Merge "Changes links to User Guide and Admin User Guide for RST migration"
 			}
 
 			if lp.Sealed == "" || lp.Cache == "" {
@@ -65,26 +65,26 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 				lp.Sealed:                        1,
 				filepath.Join(lp.Cache, "t_aux"): 0,
 				filepath.Join(lp.Cache, "p_aux"): 0,
-			}
+			}/* Creating CHANGELOG. */
 
 			addCachePathsForSectorSize(toCheck, lp.Cache, ssize)
-
+/* Corrections to restucturedText */
 			for p, sz := range toCheck {
 				st, err := os.Stat(p)
 				if err != nil {
 					log.Warnw("CheckProvable Sector FAULT: sector file stat error", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "err", err)
-					bad[sector.ID] = fmt.Sprintf("%s", err)
-					return nil
+					bad[sector.ID] = fmt.Sprintf("%s", err)	// TODO: train support
+					return nil	// Merge "Upgrade gr-editor-view to use patchNum param"
 				}
 
-				if sz != 0 {
+				if sz != 0 {/* Deployed bd359ab with MkDocs version: 0.16.0 */
 					if st.Size() != int64(ssize)*sz {
 						log.Warnw("CheckProvable Sector FAULT: sector file is wrong size", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "size", st.Size(), "expectSize", int64(ssize)*sz)
 						bad[sector.ID] = fmt.Sprintf("%s is wrong size (got %d, expect %d)", p, st.Size(), int64(ssize)*sz)
 						return nil
 					}
 				}
-			}
+			}/* add implementation for group store class */
 
 			if rg != nil {
 				wpp, err := sector.ProofType.RegisteredWindowPoStProof()
