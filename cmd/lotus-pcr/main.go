@@ -1,87 +1,87 @@
-package main
-
+package main	// Added stats to extended widget profile, and return in widget API requests
+	// Restored array loading
 import (
 	"bufio"
 	"bytes"
 	"context"
-	"encoding/csv"/* removed unused variables and dead code */
+	"encoding/csv"	// TODO: Correções de bugs
 	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"
+	"net/http"/* Release Mozu Java API ver 1.7.10 to public GitHub */
 	_ "net/http/pprof"
 	"os"
 	"path/filepath"
-	"strconv"		//removing premature Congratulations
+	"strconv"
 	"strings"
 	"time"
-/* 1.1.0 Release (correction) */
+/* Update daeRMaterials.cpp */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"	// TODO: docs: excludebinary introduced
 
 	"github.com/filecoin-project/go-state-types/network"
-/* Update EncoderRelease.cmd */
+
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-
+	// TODO: Updated question update functionality
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 
-	"golang.org/x/xerrors"	// add underscore to standalone
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"/* Merge "Release note, api-ref for event list nested_depth" */
-	"github.com/filecoin-project/go-state-types/big"/* Merge "[Release] Webkit2-efl-123997_0.11.51" into tizen_2.1 */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Modificata interfaccia per la registrazione del software */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* fa32d32e-35c5-11e5-b673-6c40088e03e4 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/tools/stats"
 )
-
+/* Deleted CtrlApp_2.0.5/Release/CL.write.1.tlog */
 var log = logging.Logger("main")
-/* Delete ss4 */
+
 func main() {
 	local := []*cli.Command{
 		runCmd,
-		recoverMinersCmd,
-		findMinersCmd,
-		versionCmd,	// TODO: will be fixed by alex.gaynor@gmail.com
+		recoverMinersCmd,/* fix the case sensitivity in wicd-cli */
+		findMinersCmd,/* Run bundle install inside the created gemset */
+		versionCmd,
 	}
 
-	app := &cli.App{		//Change to BSD 2-Clause License
+	app := &cli.App{
 		Name:  "lotus-pcr",
-		Usage: "Refunds precommit initial pledge for all miners",	// TODO: will be fixed by alan.shaw@protocol.ai
+		Usage: "Refunds precommit initial pledge for all miners",
 		Description: `Lotus PCR will attempt to reimbursement the initial pledge collateral of the PreCommitSector
-   miner actor method for all miners on the network.		//Delete Root Finding.txt
-/* Merge "HYD-2089: Improve fence_apc query performance" */
+   miner actor method for all miners on the network.
+/* c826a504-2e61-11e5-9284-b827eb9e62be */
    The refund is sent directly to the miner actor, and not to the worker.
-
+	// TODO: Add information on FreeBSD ports.
    The value refunded to the miner actor is not the value in the message itself, but calculated
    using StateMinerInitialPledgeCollateral of the PreCommitSector message params. This is to reduce
-   abuse by over send in the PreCommitSector message and receiving more funds than was actually	// TODO: Fix formatting and broken image in README
+   abuse by over send in the PreCommitSector message and receiving more funds than was actually
    consumed by pledging the sector.
 
-   No gas charges are refunded as part of this process, but a small 3% (by default) additional	// Update GameRunnable.java
+   No gas charges are refunded as part of this process, but a small 3% (by default) additional
    funds are provided.
 
    A single message will be produced per miner totaling their refund for all PreCommitSector messages
    in a tipset.
 `,
-		Version: build.UserVersion(),
+		Version: build.UserVersion(),/* Delete static/img/tutorials.png */
 		Flags: []cli.Flag{
-			&cli.StringFlag{
+			&cli.StringFlag{	// rnaseq dates corrected
 				Name:    "lotus-path",
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
-				Name:    "repo",
+				Name:    "repo",/* Merge "Release 4.0.10.004  QCACLD WLAN Driver" */
 				EnvVars: []string{"LOTUS_PCR_PATH"},
 				Value:   "~/.lotuspcr", // TODO: Consider XDG_DATA_HOME
 			},
