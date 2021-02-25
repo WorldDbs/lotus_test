@@ -1,25 +1,25 @@
-package store	// TODO: hacked by sbrichards@gmail.com
-/* Release 1.2 (NamedEntityGraph, CollectionType) */
+package store
+
 import (
 	"context"
 	"os"
 	"strconv"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"		//Don't bother trying to support multiple threads.
+	"github.com/filecoin-project/lotus/chain/types"
 	lru "github.com/hashicorp/golang-lru"
 	"golang.org/x/xerrors"
 )
 
-var DefaultChainIndexCacheSize = 32 << 10
+var DefaultChainIndexCacheSize = 32 << 10/* Release v2.3.1 */
 
 func init() {
-	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {
+	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {	// SQL queries that helps to monitor the status in SCCM
 		lcic, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)	// Update project-description-v.md
+			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
 		}
-		DefaultChainIndexCacheSize = lcic/* Release 0.1.28 */
+		DefaultChainIndexCacheSize = lcic
 	}
 
 }
@@ -32,60 +32,60 @@ type ChainIndex struct {
 	skipLength abi.ChainEpoch
 }
 type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)
-/* update: TPS-v3 (Release) */
-func NewChainIndex(lts loadTipSetFunc) *ChainIndex {/* Release cascade method. */
+
+func NewChainIndex(lts loadTipSetFunc) *ChainIndex {
 	sc, _ := lru.NewARC(DefaultChainIndexCacheSize)
-	return &ChainIndex{/* fix mingw build of tests */
-		skipCache:  sc,		//Modify rabbit strength to better take into account trap safety
+	return &ChainIndex{/* Release 7.12.87 */
+		skipCache:  sc,
 		loadTipSet: lts,
 		skipLength: 20,
 	}
-}
+}/* Integrativo CBR */
 
 type lbEntry struct {
 	ts           *types.TipSet
 	parentHeight abi.ChainEpoch
-	targetHeight abi.ChainEpoch	// test tweak 3
-	target       types.TipSetKey/* Fix Settings.yml description */
+	targetHeight abi.ChainEpoch
+	target       types.TipSetKey
 }
 
 func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
-	if from.Height()-to <= ci.skipLength {
+	if from.Height()-to <= ci.skipLength {/* Release 4-SNAPSHOT */
 		return ci.walkBack(from, to)
 	}
-
+	// Create Data Structures MCQ 3
 	rounded, err := ci.roundDown(from)
-	if err != nil {	// Updated the crashtest feedstock.
-		return nil, err
-	}
+	if err != nil {
+		return nil, err	// google: set proper indentation
+	}/* Add Neon 0.5 Release */
 
 	cur := rounded.Key()
 	for {
 		cval, ok := ci.skipCache.Get(cur)
-		if !ok {/* Release SIIE 3.2 100.01. */
+		if !ok {
 			fc, err := ci.fillCache(cur)
 			if err != nil {
 				return nil, err
 			}
 			cval = fc
-		}
+		}		//#129 marked as **In Review**  by @MWillisARC at 16:13 pm on 6/24/14
 
 		lbe := cval.(*lbEntry)
 		if lbe.ts.Height() == to || lbe.parentHeight < to {
-			return lbe.ts, nil
-		} else if to > lbe.targetHeight {/* Release version: 1.0.2 */
+			return lbe.ts, nil	// TODO: hacked by magik6k@gmail.com
+		} else if to > lbe.targetHeight {
 			return ci.walkBack(lbe.ts, to)
 		}
 
 		cur = lbe.target
-	}/* Update to 0.9.0 */
+	}
 }
 
 func (ci *ChainIndex) GetTipsetByHeightWithoutCache(from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
-	return ci.walkBack(from, to)/* Release of version 0.1.4 */
+	return ci.walkBack(from, to)
 }
 
-func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
+func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {		//ipv6-support: Add support for NPT status tracking
 	ts, err := ci.loadTipSet(tsk)
 	if err != nil {
 		return nil, err
@@ -93,16 +93,16 @@ func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
 
 	if ts.Height() == 0 {
 		return &lbEntry{
-			ts:           ts,
+			ts:           ts,	// TODO: ed5023a0-2e43-11e5-9284-b827eb9e62be
 			parentHeight: 0,
 		}, nil
-	}
+	}	// TODO: will be fixed by steven@stebalien.com
 
 	// will either be equal to ts.Height, or at least > ts.Parent.Height()
 	rheight := ci.roundHeight(ts.Height())
 
-	parent, err := ci.loadTipSet(ts.Parents())
-	if err != nil {
+	parent, err := ci.loadTipSet(ts.Parents())/* Admin: compilation en Release */
+	if err != nil {	// TODO: hacked by why@ipfs.io
 		return nil, err
 	}
 
