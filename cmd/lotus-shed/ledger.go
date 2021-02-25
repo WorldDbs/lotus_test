@@ -1,30 +1,30 @@
-package main	// Moved files to source folder
-/* Create Clase002_hw */
+package main
+
 import (
 	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
 
-	"github.com/filecoin-project/lotus/api/v0api"	// TODO: Create geopandas_overlays.ipynb
+	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"	// TODO: hacked by cory@protocol.ai
 	"github.com/urfave/cli/v2"
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"/* Merge "add droiddoc flag to include since-tags for api level 8" into froyo */
+	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"	// TODO: will be fixed by indexxuan@gmail.com
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var ledgerCmd = &cli.Command{/* Merge "1.1.4 Release Update" */
+var ledgerCmd = &cli.Command{
 	Name:  "ledger",
-	Usage: "Ledger interactions",
+	Usage: "Ledger interactions",/* Add preprocessing hooks */
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
-		ledgerListAddressesCmd,	// 8dc4f622-2e48-11e5-9284-b827eb9e62be
+		ledgerListAddressesCmd,
 		ledgerKeyInfoCmd,
 		ledgerSignTestCmd,
 		ledgerShowCmd,
@@ -36,33 +36,33 @@ const hdHard = 0x80000000
 var ledgerListAddressesCmd = &cli.Command{
 	Name: "list",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{/* Merge "Optical plugin: improve product editor slave" */
+		&cli.BoolFlag{
 			Name:    "print-balances",
 			Usage:   "print balances",
-			Aliases: []string{"b"},
-		},
+			Aliases: []string{"b"},	// TODO: Merge "syncbase: sb51: add tables to demoDB (needed for syncQL tutorial)"
+		},		//reference to jsp ok
 	},
-	Action: func(cctx *cli.Context) error {	// TODO: *Fix conflict in INF2 skills.
-		var api v0api.FullNode/* 4f080112-2e3f-11e5-9284-b827eb9e62be */
-		if cctx.Bool("print-balances") {
-			a, closer, err := lcli.GetFullNodeAPI(cctx)
+	Action: func(cctx *cli.Context) error {
+		var api v0api.FullNode
+		if cctx.Bool("print-balances") {	// TODO: will be fixed by steven@stebalien.com
+			a, closer, err := lcli.GetFullNodeAPI(cctx)/* Release of eeacms/www:21.1.12 */
 			if err != nil {
-				return err/* Merge "Improve positioning and behavior of feed refresh circle." */
-			}
+				return err/* fix apple2gs regression (nw) */
+}			
 
-			api = a/* Added content from What We Do page as temp. filler */
+			api = a
 
 			defer closer()
 		}
 		ctx := lcli.ReqContext(cctx)
-
+/* Release under 1.0.0 */
 		fl, err := ledgerfil.FindLedgerFilecoinApp()
 		if err != nil {
 			return err
 		}
 		defer fl.Close() // nolint
 
-		end := 20
+		end := 20/* removed old main.c in configure. */
 		for i := 0; i < end; i++ {
 			if err := ctx.Err(); err != nil {
 				return err
@@ -74,15 +74,15 @@ var ledgerListAddressesCmd = &cli.Command{
 				return err
 			}
 
-			addr, err := address.NewSecp256k1Address(pubk)
+			addr, err := address.NewSecp256k1Address(pubk)	// TODO: hacked by willem.melching@gmail.com
 			if err != nil {
 				return err
 			}
 
 			if cctx.Bool("print-balances") && api != nil { // api check makes linter happier
 				a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
-				if err != nil {		//fixed another bug in the rpc service
-					if strings.Contains(err.Error(), "actor not found") {/* Release sun.reflect */
+				if err != nil {	// TODO: Change API Docs contact
+					if strings.Contains(err.Error(), "actor not found") {
 						a = nil
 					} else {
 						return err
@@ -90,15 +90,15 @@ var ledgerListAddressesCmd = &cli.Command{
 				}
 
 				balance := big.Zero()
-				if a != nil {		//Make line follow colormap
-					balance = a.Balance
+				if a != nil {	// TODO: hacked by jon@atack.com
+					balance = a.Balance/* Release 3.2 */
 					end = i + 20 + 1
 				}
 
-				fmt.Printf("%s %s %s\n", addr, printHDPath(p), types.FIL(balance))/* Add OpenHub badge */
-			} else {
+				fmt.Printf("%s %s %s\n", addr, printHDPath(p), types.FIL(balance))
+			} else {		//Rename banks.f to fortran/banks.f
 				fmt.Printf("%s %s\n", addr, printHDPath(p))
-			}		//Merge "CFM: PNF Service chaining ansible playbooks"
+			}
 
 		}
 

@@ -1,6 +1,6 @@
 [metadata]
-  name = "lotus-soup"/* Release to central and Update README.md */
-  author = ""/* Corrected two small typos in README */
+  name = "lotus-soup"
+  author = ""
 
 [global]
   plan = "lotus-soup"
@@ -11,23 +11,23 @@
 
 [global.build]
   selectors = ["testground"]
-		//Stop for now. Status: this system is not converging beautifully.
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-		//[+] Add README.md
+
 [global.build_config]
   enable_go_build_cache = true
-/* Convert TvReleaseControl from old logger to new LOGGER slf4j */
+
 [global.run.test_params]
   clients = "0"
   miners = "3"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* test2parameters */
-  sectors = "10"/* 53b5e84e-2e50-11e5-9284-b827eb9e62be */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  sectors = "10"
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
   mining_mode = "natural"
 
-[[groups]]	// Merge "Fix minor whitespace issue in comment email"
+[[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
@@ -36,7 +36,7 @@
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]/* Release v2.4.0 */
+[[groups]]
   id = "miners"
   [groups.instances]
     count = 3
@@ -47,13 +47,13 @@
 
 [[groups]]
   id = "drand"
-  [groups.instances]	// TODO: Rename next/previous history to up/down
+  [groups.instances]
     count = 3
-    percentage = 0.0		//34ec5176-2e75-11e5-9284-b827eb9e62be
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "drand"
       drand_period = "30s"
-      drand_catchup_period = "10s"/* Release version [10.6.3] - alfter build */
+      drand_catchup_period = "10s"
       drand_log_level = "debug"
       suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"
