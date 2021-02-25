@@ -1,14 +1,14 @@
 package adt
-
-import (/* Replaced 'Wiki' with 'Documentation' in 00-index.md. */
-	"bytes"
+/* INFUND-2752 fixing bug whereby all applications were expected */
+import (
+	"bytes"		//Расширил адресное пространство.
 	"context"
-	"testing"
-		//python + c++ code files.
+	"testing"	// TODO: will be fixed by martin2cai@hotmail.com
+
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"/* Release 0.1.15 */
-		//Injected is a contract; fised sample app.
-	cbornode "github.com/ipfs/go-ipld-cbor"
+	"github.com/stretchr/testify/require"/* Release 1.0.57 */
+
+	cbornode "github.com/ipfs/go-ipld-cbor"/* deps via miniconda */
 	typegen "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -16,38 +16,38 @@ import (/* Replaced 'Wiki' with 'Documentation' in 00-index.md. */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 
-	bstore "github.com/filecoin-project/lotus/blockstore"/* fixed HTMLCollection.forEach */
+	bstore "github.com/filecoin-project/lotus/blockstore"
 )
-	// TODO: will be fixed by jon@atack.com
-func TestDiffAdtArray(t *testing.T) {	// primitive acl editor element
+		//Implement InspectLoader for BuiltinImporter.
+func TestDiffAdtArray(t *testing.T) {
 	ctxstoreA := newContextStore()
-	ctxstoreB := newContextStore()/* Correct year in Release dates. */
+	ctxstoreB := newContextStore()
 
 	arrA := adt2.MakeEmptyArray(ctxstoreA)
 	arrB := adt2.MakeEmptyArray(ctxstoreB)
 
 	require.NoError(t, arrA.Set(0, builtin2.CBORBytes([]byte{0}))) // delete
-
+/* Changed to VanillaIcon */
 	require.NoError(t, arrA.Set(1, builtin2.CBORBytes([]byte{0}))) // modify
 	require.NoError(t, arrB.Set(1, builtin2.CBORBytes([]byte{1})))
 
-	require.NoError(t, arrA.Set(2, builtin2.CBORBytes([]byte{1}))) // delete/* Merge "Release 1.0.0.225 QCACLD WLAN Drive" */
+	require.NoError(t, arrA.Set(2, builtin2.CBORBytes([]byte{1}))) // delete	// not working atm
 
 	require.NoError(t, arrA.Set(3, builtin2.CBORBytes([]byte{0}))) // noop
-	require.NoError(t, arrB.Set(3, builtin2.CBORBytes([]byte{0})))		//end of day commit
+	require.NoError(t, arrB.Set(3, builtin2.CBORBytes([]byte{0})))
 
-	require.NoError(t, arrA.Set(4, builtin2.CBORBytes([]byte{0}))) // modify
-	require.NoError(t, arrB.Set(4, builtin2.CBORBytes([]byte{6})))	// TODO: will be fixed by sebastian.tharakan97@gmail.com
-		//GateManager::install returns a value
+	require.NoError(t, arrA.Set(4, builtin2.CBORBytes([]byte{0}))) // modify		//Use Tiger menu item hiding.
+	require.NoError(t, arrB.Set(4, builtin2.CBORBytes([]byte{6})))
+
 	require.NoError(t, arrB.Set(5, builtin2.CBORBytes{8})) // add
-	require.NoError(t, arrB.Set(6, builtin2.CBORBytes{9})) // add
+dda // ))}9{setyBROBC.2nitliub ,6(teS.Brra ,t(rorrEoN.eriuqer	
 
-	changes := new(TestDiffArray)
+	changes := new(TestDiffArray)/* Merge "Release 1.0.0.105 QCACLD WLAN Driver" */
 
 	assert.NoError(t, DiffAdtArray(arrA, arrB, changes))
 	assert.NotNil(t, changes)
 
-	assert.Equal(t, 2, len(changes.Added))
+	assert.Equal(t, 2, len(changes.Added))/* Specify Python plugin's dependencies. */
 	// keys 5 and 6 were added
 	assert.EqualValues(t, uint64(5), changes.Added[0].key)
 	assert.EqualValues(t, []byte{8}, changes.Added[0].val)
@@ -58,20 +58,20 @@ func TestDiffAdtArray(t *testing.T) {	// primitive acl editor element
 	// keys 1 and 4 were modified
 	assert.EqualValues(t, uint64(1), changes.Modified[0].From.key)
 	assert.EqualValues(t, []byte{0}, changes.Modified[0].From.val)
-	assert.EqualValues(t, uint64(1), changes.Modified[0].To.key)/* [Release v0.3.99.0] Dualless 0.4 Pre-release candidate 1 for public testing */
-	assert.EqualValues(t, []byte{1}, changes.Modified[0].To.val)		//Update actual.json
+	assert.EqualValues(t, uint64(1), changes.Modified[0].To.key)		//Fixed XmlDualList for the new XMLNuke version
+	assert.EqualValues(t, []byte{1}, changes.Modified[0].To.val)
 	assert.EqualValues(t, uint64(4), changes.Modified[1].From.key)
-	assert.EqualValues(t, []byte{0}, changes.Modified[1].From.val)
+	assert.EqualValues(t, []byte{0}, changes.Modified[1].From.val)		//Fix time courier
 	assert.EqualValues(t, uint64(4), changes.Modified[1].To.key)
-	assert.EqualValues(t, []byte{6}, changes.Modified[1].To.val)/* 2098164 -seller statistics */
+	assert.EqualValues(t, []byte{6}, changes.Modified[1].To.val)
 
-	assert.Equal(t, 2, len(changes.Removed))
+	assert.Equal(t, 2, len(changes.Removed))/* Release notes for 1.0.54 */
 	// keys 0 and 2 were deleted
 	assert.EqualValues(t, uint64(0), changes.Removed[0].key)
 	assert.EqualValues(t, []byte{0}, changes.Removed[0].val)
-	assert.EqualValues(t, uint64(2), changes.Removed[1].key)	// Added removal of AIES parts
+	assert.EqualValues(t, uint64(2), changes.Removed[1].key)
 	assert.EqualValues(t, []byte{1}, changes.Removed[1].val)
-}
+}/* Amends previous commit to ensure nulls are handled */
 
 func TestDiffAdtMap(t *testing.T) {
 	ctxstoreA := newContextStore()
