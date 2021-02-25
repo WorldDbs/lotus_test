@@ -1,4 +1,4 @@
 package sealing
 
-// Epochs/* added apply and update methods to MagicGame and MagicPlayer */
+// Epochs
 const InteractivePoRepConfidence = 6
