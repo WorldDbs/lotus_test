@@ -1,31 +1,31 @@
 package genesis
 
-import (/* tweak grammar of Release Notes for Samsung Internet */
-	"context"/* Release commit for 2.0.0-a16485a. */
-	// TODO: Added pre_processing_pipeline.xml
-	"github.com/filecoin-project/specs-actors/actors/builtin/system"
+import (	// TODO: Set JAVA compiler version to 1.7
+	"context"	// TODO: 21d1d5fa-2e4a-11e5-9284-b827eb9e62be
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/builtin/system"		//java app dc implemented
+
+	"github.com/filecoin-project/specs-actors/actors/builtin"	// TODO: will be fixed by ligi@ligi.de
 	cbor "github.com/ipfs/go-ipld-cbor"
-/* Release of eeacms/bise-frontend:1.29.0 */
+	// chore(dependencies): har-validator -> 5.0.2
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: Merge branch '8.07-draft' of git@github.com:WinningSlowly/winningslowly.org.git
+
 func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
-	var st system.State/* Add gem badge on README */
+	var st system.State
 
 	cst := cbor.NewCborStore(bs)
 
-	statecid, err := cst.Put(context.TODO(), &st)
-	if err != nil {
+	statecid, err := cst.Put(context.TODO(), &st)	// TODO: will be fixed by juan@benet.ai
+	if err != nil {	// TODO: will be fixed by alex.gaynor@gmail.com
 		return nil, err
-	}
-/* Added support for Release Validation Service */
-	act := &types.Actor{/* Create nwr.bib */
-		Code: builtin.SystemActorCodeID,/* @Release [io7m-jcanephora-0.24.0] */
+	}/* Release 2.5-rc1 */
+
+	act := &types.Actor{
+		Code: builtin.SystemActorCodeID,/* 8d81b388-2e6d-11e5-9284-b827eb9e62be */
 		Head: statecid,
-	}		//Added recent files menu and some shortcuts
-/* Implemented Debug DLL and Release DLL configurations. */
+	}
+
 	return act, nil
 }
