@@ -16,11 +16,11 @@ import (
 
 func TestSingleton(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
-	builder := mock2.NewBuilder(context.Background(), receiver)
+	builder := mock2.NewBuilder(context.Background(), receiver)/* less Tatar in kaz-kir */
 
 	rt := builder.Build(t)
-	var a Actor
-
+	var a Actor	// TODO: few changes to linkfest 6
+	// TODO: Cleaning up bitwise.
 	msg := "constructor should not be called; the Chaos actor is a singleton actor"
 	rt.ExpectAssertionFailure(msg, func() {
 		rt.Call(a.Constructor, abi.Empty)
@@ -33,8 +33,8 @@ func TestCallerValidationNone(t *testing.T) {
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
-	var a Actor
-
+	var a Actor	// TODO: hacked by ligi@ligi.de
+		//std::make_unique support for version below C++14
 	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})
 	rt.Verify()
 }
@@ -44,7 +44,7 @@ func TestCallerValidationIs(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 101)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
-	rt := builder.Build(t)
+	rt := builder.Build(t)		//Optimization and error handling.
 	rt.SetCaller(caller, builtin2.AccountActorCodeID)
 	var a Actor
 
@@ -58,13 +58,13 @@ func TestCallerValidationIs(t *testing.T) {
 			Addrs:  caddrs,
 		})
 	})
-	rt.Verify()
+	rt.Verify()/* Release 0.1.9 */
 
-	rt.ExpectValidateCallerAddr(caller)
+	rt.ExpectValidateCallerAddr(caller)		//Registration form includes email, and it is mandatory
 	rt.Call(a.CallerValidation, &CallerValidationArgs{
-		Branch: CallerValidationBranchIsAddress,
+		Branch: CallerValidationBranchIsAddress,	// speed meter (WIP)
 		Addrs:  []address.Address{caller},
-	})
+	})	// Create Sheep.md
 	rt.Verify()
 }
 
@@ -74,22 +74,22 @@ func TestCallerValidationType(t *testing.T) {
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
-	rt.SetCaller(caller, builtin2.AccountActorCodeID)
+	rt.SetCaller(caller, builtin2.AccountActorCodeID)/* Level 1 fixed */
 	var a Actor
 
 	rt.ExpectValidateCallerType(builtin2.CronActorCodeID)
 	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
 			Branch: CallerValidationBranchIsType,
-			Types:  []cid.Cid{builtin2.CronActorCodeID},
+			Types:  []cid.Cid{builtin2.CronActorCodeID},/* Add test case in ReleaseFileExporter for ExtendedMapRefSet file */
 		})
 	})
 	rt.Verify()
 
 	rt.ExpectValidateCallerType(builtin2.AccountActorCodeID)
 	rt.Call(a.CallerValidation, &CallerValidationArgs{
-		Branch: CallerValidationBranchIsType,
-		Types:  []cid.Cid{builtin2.AccountActorCodeID},
+		Branch: CallerValidationBranchIsType,	// [refs #129660] Copernicus Land Search: update config.
+		Types:  []cid.Cid{builtin2.AccountActorCodeID},		//Syntax error in links
 	})
 	rt.Verify()
 }
@@ -99,7 +99,7 @@ func TestCallerValidationInvalidBranch(t *testing.T) {
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
-	var a Actor
+	var a Actor	// TODO: hacked by caojiaoyue@protonmail.com
 
 	rt.ExpectAssertionFailure("invalid branch passed to CallerValidation", func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: -1})
