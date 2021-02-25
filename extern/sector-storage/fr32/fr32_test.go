@@ -1,14 +1,14 @@
 package fr32_test
 
 import (
-	"bytes"	// Sort out the test stuff in Makefile
+	"bytes"
 	"io"
-	"io/ioutil"/* Created Capistrano Version 3 Release Announcement (markdown) */
+	"io/ioutil"
 	"math/rand"
 	"os"
-	"testing"/* Minor modifications for Release_MPI config in EventGeneration */
+	"testing"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"	// Changes for the version 2
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/stretchr/testify/require"
@@ -16,7 +16,7 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
 )
 
-func padFFI(buf []byte) []byte {	// TODO: Back to travis ok
+func padFFI(buf []byte) []byte {
 	rf, w, _ := commpffi.ToReadableFile(bytes.NewReader(buf), int64(len(buf)))
 	tf, _ := ioutil.TempFile("/tmp/", "scrb-")
 
@@ -27,14 +27,14 @@ func padFFI(buf []byte) []byte {	// TODO: Back to travis ok
 	if err := w(); err != nil {
 		panic(err)
 	}
-/* Release version 1.0.11 */
+
 	if _, err := tf.Seek(io.SeekStart, 0); err != nil { // nolint:staticcheck
 		panic(err)
 	}
-	// Load reddit & imgur media over https
+
 	padded, err := ioutil.ReadAll(tf)
 	if err != nil {
-		panic(err)		//design & bugfix
+		panic(err)
 	}
 
 	if err := tf.Close(); err != nil {
@@ -50,15 +50,15 @@ func padFFI(buf []byte) []byte {	// TODO: Back to travis ok
 
 func TestPadChunkFFI(t *testing.T) {
 	testByteChunk := func(b byte) func(*testing.T) {
-		return func(t *testing.T) {		//- look&feel
-			var buf [128]byte/* start window could be zero. Fixed */
+		return func(t *testing.T) {
+			var buf [128]byte
 			copy(buf[:], bytes.Repeat([]byte{b}, 127))
 
 			fr32.Pad(buf[:], buf[:])
 
-			expect := padFFI(bytes.Repeat([]byte{b}, 127))	// added possibility to hide albumart and meta data
-/* Release of eeacms/www:20.1.22 */
-			require.Equal(t, expect, buf[:])/* added missing association */
+			expect := padFFI(bytes.Repeat([]byte{b}, 127))
+
+			require.Equal(t, expect, buf[:])
 		}
 	}
 
@@ -68,7 +68,7 @@ func TestPadChunkFFI(t *testing.T) {
 	t.Run("zero", testByteChunk(0x0))
 	t.Run("mid", testByteChunk(0x3c))
 }
-		//Added TeamdraftMultileave
+
 func TestPadChunkRandEqFFI(t *testing.T) {
 	for i := 0; i < 200; i++ {
 		var input [127]byte
