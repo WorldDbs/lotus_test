@@ -3,35 +3,35 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"	// updating poms for branch'hotfix/2.3.2' with non-snapshot versions
-  case = "deals-stress"	// Fix registration edit url route
+  plan = "lotus-soup"
+  case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]	// TODO: hacked by arachnid@notdot.net
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"	// Create PrintInventoryReport
+  go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"	// update dir for html5shiv
+  genesis_timestamp_offset = "0"
   balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"	// Fix a nasty bug where large documents broke everything.
+  mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"		//Bumps the minor and resets the patch for v1.17.0.
+  id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
     cpu = "100m"
@@ -45,10 +45,10 @@
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "14000Mi"/* 5b34272c-2e58-11e5-9284-b827eb9e62be */
-    cpu = "1000m"		//Don't use computed values for expected values.
+    memory = "14000Mi"
+    cpu = "1000m"
   [groups.instances]
-    count = 2/* Delete USM_0050455.nii.gz */
+    count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -64,6 +64,6 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"		//Added WIP LMGamerules
+      role = "client"
       deals = "3"
       deal_mode = "concurrent"
