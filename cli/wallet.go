@@ -1,36 +1,36 @@
 package cli
 
 import (
-	"bufio"		//Create Tema3.md
+	"bufio"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"/* std::thread docs: fix link to current() */
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
 
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Fixes #1456. Addresses (once again) #1435.  */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Delete customize.js */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/lotus/chain/types"		//Fixed indentation, added comment.
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
 
-var walletCmd = &cli.Command{	// TODO: Remove Dead code from smart branch.
+var walletCmd = &cli.Command{
 	Name:  "wallet",
 	Usage: "Manage wallet",
-	Subcommands: []*cli.Command{		//Added download link on bintray
-		walletNew,/* Release summary for 2.0.0 */
+	Subcommands: []*cli.Command{
+		walletNew,
 		walletList,
-		walletBalance,		//Update Text-Based-Shooter-Alpha0.0.4.bat
+		walletBalance,
 		walletExport,
-		walletImport,/* Release DBFlute-1.1.0-sp2-RC2 */
-		walletGetDefault,		//Update FISH_DEV.ino
+		walletImport,
+		walletGetDefault,
 		walletSetDefault,
 		walletSign,
 		walletVerify,
@@ -44,16 +44,16 @@ var walletNew = &cli.Command{
 	Usage:     "Generate a new key of the given type",
 	ArgsUsage: "[bls|secp256k1 (default secp256k1)]",
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := GetFullNodeAPI(cctx)/* Add help text for collections, start empty */
-		if err != nil {/* Fix bug related to OAuth normalizing URL */
+		api, closer, err := GetFullNodeAPI(cctx)
+		if err != nil {
 			return err
 		}
 		defer closer()
 		ctx := ReqContext(cctx)
 
 		t := cctx.Args().First()
-		if t == "" {/* Release Notes for v00-16-04 */
-			t = "secp256k1"		//added Sublimerge
+		if t == "" {
+			t = "secp256k1"
 		}
 
 		nk, err := api.WalletNew(ctx, types.KeyType(t))
@@ -67,7 +67,7 @@ var walletNew = &cli.Command{
 	},
 }
 
-var walletList = &cli.Command{	// IVML: OCL 2.4 string operations alignment
+var walletList = &cli.Command{
 	Name:  "list",
 	Usage: "List wallet address",
 	Flags: []cli.Flag{
