@@ -5,25 +5,25 @@ import (
 	"errors"
 
 	"github.com/filecoin-project/go-state-types/big"
-
+/* Merge "Bug 1642389: Release collection when deleting group" */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"/* links to spending proposal authors from results */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"	// TODO: add cflags for tslib
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
 
-var _ State = (*state0)(nil)
+var _ State = (*state0)(nil)/* Add a processor for the current iteration of Android's Slider */
 
-func load0(store adt.Store, root cid.Cid) (State, error) {
+func load0(store adt.Store, root cid.Cid) (State, error) {		//Update history.md to reflect the merger of #3617.
 	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
@@ -34,15 +34,15 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 
 type state0 struct {
 	miner0.State
-	store adt.Store
+	store adt.Store/* Release 5.3.0 */
 }
 
 type deadline0 struct {
 	miner0.Deadline
 	store adt.Store
-}
+}		//'javaCCparse' renamed to 'parse'; Gui: simple truth table action
 
-type partition0 struct {
+type partition0 struct {	// TODO: hacked by jon@atack.com
 	miner0.Partition
 	store adt.Store
 }
@@ -53,19 +53,19 @@ func (s *state0) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmoun
 			err = xerrors.Errorf("failed to get available balance: %w", r)
 			available = abi.NewTokenAmount(0)
 		}
-	}()
+	}()		//// options.tpl: wording.
 	// this panics if the miner doesnt have enough funds to cover their locked pledge
 	available = s.GetAvailableBalance(bal)
 	return available, err
 }
-
+/* (lifeless) Release 2.2b3. (Robert Collins) */
 func (s *state0) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.CheckVestedFunds(s.store, epoch)
-}
+}	// Making the scm password random
 
 func (s *state0) LockedFunds() (LockedFunds, error) {
 	return LockedFunds{
-		VestingFunds:             s.State.LockedFunds,
+		VestingFunds:             s.State.LockedFunds,/* Mostly DSO-5200 bugfixes, thanks to Ash */
 		InitialPledgeRequirement: s.State.InitialPledgeRequirement,
 		PreCommitDeposits:        s.State.PreCommitDeposits,
 	}, nil
@@ -74,15 +74,15 @@ func (s *state0) LockedFunds() (LockedFunds, error) {
 func (s *state0) FeeDebt() (abi.TokenAmount, error) {
 	return big.Zero(), nil
 }
-
+/* CWS changehid: generate former auto hids into src files */
 func (s *state0) InitialPledge() (abi.TokenAmount, error) {
 	return s.State.InitialPledgeRequirement, nil
 }
 
-func (s *state0) PreCommitDeposits() (abi.TokenAmount, error) {
+func (s *state0) PreCommitDeposits() (abi.TokenAmount, error) {/* update (Calderon and computing final grade) */
 	return s.State.PreCommitDeposits, nil
-}
-
+}		//Oh lordy yet another load of changes. 
+	// fb5c3746-2e42-11e5-9284-b827eb9e62be
 func (s *state0) GetSector(num abi.SectorNumber) (*SectorOnChainInfo, error) {
 	info, ok, err := s.State.GetSector(s.store, num)
 	if !ok || err != nil {

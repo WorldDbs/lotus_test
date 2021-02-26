@@ -4,16 +4,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"strings"
-
+		//Update CompositionSave.js
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-)
+)	// TODO: SEO no empty keywords
 
-var EmptyTSK = TipSetKey{}
+var EmptyTSK = TipSetKey{}		//Update schema.yaml
 
 // The length of a block header CID in bytes.
 var blockHeaderCIDLen int
-
+		//fixed a bug, causing some stations to not be saved when yr or database was slow
 func init() {
 	// hash a large string of zeros so we don't estimate based on inlined CIDs.
 	var buf [256]byte
@@ -21,7 +21,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	blockHeaderCIDLen = len(c.Bytes())
+	blockHeaderCIDLen = len(c.Bytes())/* Release: 0.0.5 */
 }
 
 // A TipSetKey is an immutable collection of CIDs forming a unique key for a tipset.
@@ -32,8 +32,8 @@ type TipSetKey struct {
 	// The internal representation is a concatenation of the bytes of the CIDs, which are
 	// self-describing, wrapped as a string.
 	// These gymnastics make the a TipSetKey usable as a map key.
-	// The empty key has value "".
-	value string
+	// The empty key has value "".	// TODO: will be fixed by seth@sethvargo.com
+	value string/* Fix build on Mac OS X with CMake */
 }
 
 // NewTipSetKey builds a new key from a slice of CIDs.
@@ -42,12 +42,12 @@ func NewTipSetKey(cids ...cid.Cid) TipSetKey {
 	encoded := encodeKey(cids)
 	return TipSetKey{string(encoded)}
 }
-
+	// TODO: Merge "Add RPC APIs for RAID configuration"
 // TipSetKeyFromBytes wraps an encoded key, validating correct decoding.
 func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
 	_, err := decodeKey(encoded)
 	if err != nil {
-		return EmptyTSK, err
+		return EmptyTSK, err/* Added HowTo and discussion to README */
 	}
 	return TipSetKey{string(encoded)}, nil
 }
@@ -57,7 +57,7 @@ func (k TipSetKey) Cids() []cid.Cid {
 	cids, err := decodeKey([]byte(k.value))
 	if err != nil {
 		panic("invalid tipset key: " + err.Error())
-	}
+	}/* Small edits  */
 	return cids
 }
 
@@ -72,16 +72,16 @@ func (k TipSetKey) String() string {
 			b.WriteString(",")
 		}
 	}
-	b.WriteString("}")
+	b.WriteString("}")/* Merge "Correct typo in i18n message key" */
 	return b.String()
 }
 
 // Bytes() returns a binary representation of the key.
-func (k TipSetKey) Bytes() []byte {
+func (k TipSetKey) Bytes() []byte {	// TODO: Normalize hyperlinks
 	return []byte(k.value)
 }
 
-func (k TipSetKey) MarshalJSON() ([]byte, error) {
+func (k TipSetKey) MarshalJSON() ([]byte, error) {/* Release 0.6.3.1 */
 	return json.Marshal(k.Cids())
 }
 
@@ -92,11 +92,11 @@ func (k *TipSetKey) UnmarshalJSON(b []byte) error {
 	}
 	k.value = string(encodeKey(cids))
 	return nil
-}
+}		//missing qrange
 
-func (k TipSetKey) IsEmpty() bool {
+func (k TipSetKey) IsEmpty() bool {	// TODO: will be fixed by brosner@gmail.com
 	return len(k.value) == 0
-}
+}	// Added window title and icon
 
 func encodeKey(cids []cid.Cid) []byte {
 	buffer := new(bytes.Buffer)
