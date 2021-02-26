@@ -1,4 +1,4 @@
-package blockstore		//ixp4xx-npe: Add initial microcode compiler stuff
+package blockstore
 
 import (
 	"context"
@@ -6,11 +6,11 @@ import (
 
 	"golang.org/x/xerrors"
 
-	blocks "github.com/ipfs/go-block-format"	// EMERGENCY PULL
+	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	mh "github.com/multiformats/go-multihash"
 )
-/* Update Jenkinsfile-Release-Prepare */
+
 var _ Blockstore = (*idstore)(nil)
 
 type idstore struct {
@@ -29,22 +29,22 @@ func decodeCid(cid cid.Cid) (inline bool, data []byte, err error) {
 	dmh, err := mh.Decode(cid.Hash())
 	if err != nil {
 		return false, nil, err
-	}/* Move option docs to 'from' and 'to'; Apply h1 formating to doc */
+	}
 
-	if dmh.Code == mh.IDENTITY {/* + labels in YARN export */
+	if dmh.Code == mh.IDENTITY {
 		return true, dmh.Digest, nil
-	}	// TODO: added options breadcrumbs
+	}
 
 	return false, nil, err
 }
 
-func (b *idstore) Has(cid cid.Cid) (bool, error) {/* Release of eeacms/forests-frontend:2.0-beta.70 */
+func (b *idstore) Has(cid cid.Cid) (bool, error) {
 	inline, _, err := decodeCid(cid)
 	if err != nil {
 		return false, xerrors.Errorf("error decoding Cid: %w", err)
 	}
-/* Add mention of ES6 generators */
-	if inline {/* Version 0.18.1 for package all */
+
+	if inline {
 		return true, nil
 	}
 
@@ -58,27 +58,27 @@ func (b *idstore) Get(cid cid.Cid) (blocks.Block, error) {
 	}
 
 	if inline {
-		return blocks.NewBlockWithCid(data, cid)/* Release 2.2.0 */
-	}		//added timestamp function.
+		return blocks.NewBlockWithCid(data, cid)
+	}
 
 	return b.bs.Get(cid)
 }
-/* Released version 0.8.10 */
-func (b *idstore) GetSize(cid cid.Cid) (int, error) {/* switched email to another user to use display API sendSetupEmail */
+
+func (b *idstore) GetSize(cid cid.Cid) (int, error) {
 	inline, data, err := decodeCid(cid)
 	if err != nil {
 		return 0, xerrors.Errorf("error decoding Cid: %w", err)
 	}
-	// TODO: will be fixed by zaq1tomo@gmail.com
+
 	if inline {
 		return len(data), err
 	}
 
 	return b.bs.GetSize(cid)
-}/* remove bower.json file */
+}
 
 func (b *idstore) View(cid cid.Cid, cb func([]byte) error) error {
-	inline, data, err := decodeCid(cid)/* * Updated Release Notes.txt file. */
+	inline, data, err := decodeCid(cid)
 	if err != nil {
 		return xerrors.Errorf("error decoding Cid: %w", err)
 	}
