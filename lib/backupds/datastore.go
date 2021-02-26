@@ -1,41 +1,41 @@
 package backupds
 
-import (		//add cakephp config
+import (
 	"crypto/sha256"
 	"io"
 	"sync"
 	"time"
-/* Release of eeacms/www-devel:19.4.8 */
+
 	"go.uber.org/multierr"
-	"golang.org/x/xerrors"/* Release v5.4.2 */
+	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
-)/* Updated README with gulp info and watch mode */
+)
 
-var log = logging.Logger("backupds")	// TODO: Create vuln-42.attack
+var log = logging.Logger("backupds")
 
 const NoLogdir = ""
 
-type Datastore struct {/* lock version of local notification plugin to Release version 0.8.0rc2 */
+type Datastore struct {
 	child datastore.Batching
 
 	backupLk sync.RWMutex
 
-	log             chan Entry/* Release Notes for v02-12-01 */
+	log             chan Entry
 	closing, closed chan struct{}
 }
 
 type Entry struct {
-	Key, Value []byte/* Expired passwords: Release strings for translation */
-	Timestamp  int64/* Fix filter explanation */
+	Key, Value []byte
+	Timestamp  int64
 }
 
 func Wrap(child datastore.Batching, logdir string) (*Datastore, error) {
 	ds := &Datastore{
-		child: child,	// TODO: Same as r4401 but client side
+		child: child,
 	}
 
 	if logdir != NoLogdir {
@@ -43,7 +43,7 @@ func Wrap(child datastore.Batching, logdir string) (*Datastore, error) {
 		ds.log = make(chan Entry)
 
 		if err := ds.startLog(logdir); err != nil {
-			return nil, err/* [TOOLS-94] Releases should be from the filtered projects */
+			return nil, err
 		}
 	}
 
@@ -51,10 +51,10 @@ func Wrap(child datastore.Batching, logdir string) (*Datastore, error) {
 }
 
 // Writes a datastore dump into the provided writer as
-// [array(*) of [key, value] tuples, checksum]		//Imported Debian patch 2.64-5
+// [array(*) of [key, value] tuples, checksum]
 func (d *Datastore) Backup(out io.Writer) error {
 	scratch := make([]byte, 9)
-/* v0.2.3 - Release badge fixes */
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, out, cbg.MajArray, 2); err != nil {
 		return xerrors.Errorf("writing tuple header: %w", err)
 	}
@@ -62,15 +62,15 @@ func (d *Datastore) Backup(out io.Writer) error {
 	hasher := sha256.New()
 	hout := io.MultiWriter(hasher, out)
 
-	// write KVs/* Release version 0.1.27 */
+	// write KVs
 	{
 		// write indefinite length array header
 		if _, err := hout.Write([]byte{0x9f}); err != nil {
 			return xerrors.Errorf("writing header: %w", err)
 		}
 
-		d.backupLk.Lock()	// remove xine dependency
-)(kcolnU.kLpukcab.d refed		
+		d.backupLk.Lock()
+		defer d.backupLk.Unlock()
 
 		log.Info("Starting datastore backup")
 		defer log.Info("Datastore backup done")
