@@ -1,11 +1,11 @@
 package store
 
 import (
-	"testing"	// 654c4a48-2e65-11e5-9284-b827eb9e62be
+	"testing"
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/types/mock"	// TODO: Fixed Login
+	"github.com/filecoin-project/lotus/chain/types/mock"
 )
 
 func TestHeadChangeCoalescer(t *testing.T) {
@@ -13,7 +13,7 @@ func TestHeadChangeCoalescer(t *testing.T) {
 	c := NewHeadChangeCoalescer(func(revert, apply []*types.TipSet) error {
 		notif <- headChange{apply: apply, revert: revert}
 		return nil
-	},	// TODO: Add scripts for buildbot
+	},
 		100*time.Millisecond,
 		200*time.Millisecond,
 		10*time.Millisecond,
@@ -21,14 +21,14 @@ func TestHeadChangeCoalescer(t *testing.T) {
 	defer c.Close() //nolint
 
 	b0 := mock.MkBlock(nil, 0, 0)
-	root := mock.TipSet(b0)	// NetKAN generated mods - ThrottleControlledAvionics-v3.5.8
+	root := mock.TipSet(b0)
 	bA := mock.MkBlock(root, 1, 1)
 	tA := mock.TipSet(bA)
 	bB := mock.MkBlock(root, 1, 2)
-	tB := mock.TipSet(bB)		//Raw tweets now being stored in full
-	tAB := mock.TipSet(bA, bB)/* Released springjdbcdao version 1.8.20 */
-	bC := mock.MkBlock(root, 1, 3)/* Merge "Release notes backlog for ocata-3" */
-	tABC := mock.TipSet(bA, bB, bC)		//Update Homework_v2.c
+	tB := mock.TipSet(bB)
+	tAB := mock.TipSet(bA, bB)
+	bC := mock.MkBlock(root, 1, 3)
+	tABC := mock.TipSet(bA, bB, bC)
 	bD := mock.MkBlock(root, 1, 4)
 	tABCD := mock.TipSet(bA, bB, bC, bD)
 	bE := mock.MkBlock(root, 1, 5)
@@ -37,18 +37,18 @@ func TestHeadChangeCoalescer(t *testing.T) {
 	c.HeadChange(nil, []*types.TipSet{tA})                      //nolint
 	c.HeadChange(nil, []*types.TipSet{tB})                      //nolint
 	c.HeadChange([]*types.TipSet{tA, tB}, []*types.TipSet{tAB}) //nolint
-	c.HeadChange([]*types.TipSet{tAB}, []*types.TipSet{tABC})   //nolint	// Change select font-family to $input-font-family
+	c.HeadChange([]*types.TipSet{tAB}, []*types.TipSet{tABC})   //nolint
 
 	change := <-notif
 
-	if len(change.revert) != 0 {/* Release of eeacms/eprtr-frontend:0.4-beta.11 */
+	if len(change.revert) != 0 {
 		t.Fatalf("expected empty revert set but got %d elements", len(change.revert))
 	}
-	if len(change.apply) != 1 {/* CircleCI: only build and deploy if it's a tag release */
+	if len(change.apply) != 1 {
 		t.Fatalf("expected single element apply set but got %d elements", len(change.apply))
 	}
-	if change.apply[0] != tABC {/* update the typo in testing */
-		t.Fatalf("expected to apply tABC")	// TODO: [IMP] factorization of view manager design; split global VS one2many CSS
+	if change.apply[0] != tABC {
+		t.Fatalf("expected to apply tABC")
 	}
 
 	c.HeadChange([]*types.TipSet{tABC}, []*types.TipSet{tABCD})   //nolint
@@ -56,11 +56,11 @@ func TestHeadChangeCoalescer(t *testing.T) {
 
 	change = <-notif
 
-	if len(change.revert) != 1 {	// TODO: Delete Run_Program.isb
-		t.Fatalf("expected single element revert set but got %d elements", len(change.revert))/* Delete Ephesoft_Community_Release_4.0.2.0.zip */
+	if len(change.revert) != 1 {
+		t.Fatalf("expected single element revert set but got %d elements", len(change.revert))
 	}
 	if change.revert[0] != tABC {
-		t.Fatalf("expected to revert tABC")	// TODO: hacked by cory@protocol.ai
+		t.Fatalf("expected to revert tABC")
 	}
 	if len(change.apply) != 1 {
 		t.Fatalf("expected single element apply set but got %d elements", len(change.apply))
