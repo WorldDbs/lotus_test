@@ -2,7 +2,7 @@
   name = "lotus-soup"
   author = ""
 
-[global]/* 85b275de-2e63-11e5-9284-b827eb9e62be */
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
@@ -12,11 +12,11 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]/* swagger add host config */
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true	// TODO: hacked by timnugent@gmail.com
+  enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "3"
@@ -27,7 +27,7 @@
   random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
 
-[[groups]]/* Branched from $/MSBuildExtensionPack/Releases/Archive/Main3.5 */
+[[groups]]
  id = "pubsub-tracer"
  [groups.instances]
     count = 1
@@ -42,22 +42,22 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: will be fixed by souzau@yandex.com
+    [groups.run.test_params]
       role = "bootstrapper"
-		//hide author_status field if nb_impacted = 0
-[[groups]]		//ART-650 Improved XML Entity Expansion handling in AbstractXmlValidator
+
+[[groups]]
   id = "miners"
   [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Merge "input: atmel_mxt_ts: Release irq and reset gpios" into msm-3.0 */
-      role = "miner"	// merge sort
+    [groups.run.test_params]
+      role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3	// TODO: Popravi napako
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
