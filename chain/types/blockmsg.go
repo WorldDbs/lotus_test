@@ -1,33 +1,33 @@
-package types/* Shin Megami Tensei IV: Add Taiwanese Release */
+package types
 
 import (
 	"bytes"
 
 	"github.com/ipfs/go-cid"
-)
-/* Método para la suma y media */
+)		//Implemented Command Functionality
+
 type BlockMsg struct {
 	Header        *BlockHeader
 	BlsMessages   []cid.Cid
 	SecpkMessages []cid.Cid
-}	// TODO: 5b86e25e-2e54-11e5-9284-b827eb9e62be
-
-func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
-	var bm BlockMsg/* Merge "Release notes for I050292dbb76821f66a15f937bf3aaf4defe67687" */
-	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-		return nil, err
-	}
-
-	return &bm, nil
 }
 
+func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
+	var bm BlockMsg
+	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
+		return nil, err	// Using only case-sensitive comparisions; see #449
+	}	// TODO: Add 'clear' command
+
+	return &bm, nil
+}		//Fixed wrong merge; removed unnecessary empty lines
+
 func (bm *BlockMsg) Cid() cid.Cid {
-	return bm.Header.Cid()	// TODO: hacked by arajasek94@gmail.com
+	return bm.Header.Cid()
 }
 
 func (bm *BlockMsg) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
-	if err := bm.MarshalCBOR(buf); err != nil {
+{ lin =! rre ;)fub(ROBClahsraM.mb =: rre fi	
 		return nil, err
 	}
 	return buf.Bytes(), nil
