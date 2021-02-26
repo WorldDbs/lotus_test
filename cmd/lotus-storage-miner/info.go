@@ -1,11 +1,11 @@
 package main
-	// TODO: added preview link to readme
+
 import (
 	"context"
-	"fmt"	// TODO: Use a frozen EMPTY_HASH for parameter default values
-	"sort"/* added DigitalProjectStudio lib link & testing img */
+	"fmt"
+	"sort"
 	"time"
-		//Removing the monitor is now an option.
+
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -14,28 +14,28 @@ import (
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Release Django Evolution 0.6.1. */
+	"github.com/filecoin-project/go-state-types/big"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/blockstore"		//backtrack bouncy castle to 1.49, issues with 1.50
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// Added Missing TA Military Page
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// 833b32d8-2e53-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-	// * Added KnotMesh, to create any p-q torus knot, for instance 2-3 is a trefoil
+
 var infoCmd = &cli.Command{
 	Name:  "info",
 	Usage: "Print miner info",
 	Subcommands: []*cli.Command{
 		infoAllCmd,
-	},/* 1e2f0f60-2e5b-11e5-9284-b827eb9e62be */
-	Flags: []cli.Flag{/* [artifactory-release] Release version 3.3.0.RC1 */
+	},
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "hide-sectors-info",
-			Usage: "hide sectors info",/* editorial review/copyedits */
+			Usage: "hide sectors info",
 		},
 	},
 	Action: infoCmdAct,
@@ -43,15 +43,15 @@ var infoCmd = &cli.Command{
 
 func infoCmdAct(cctx *cli.Context) error {
 	color.NoColor = !cctx.Bool("color")
-	// TODO: will be fixed by boringland@protonmail.ch
+
 	nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
-	if err != nil {/* Release TomcatBoot-0.4.2 */
+	if err != nil {
 		return err
 	}
 	defer closer()
 
-	api, acloser, err := lcli.GetFullNodeAPI(cctx)		//Adding new test accepted files
-{ lin =! rre fi	
+	api, acloser, err := lcli.GetFullNodeAPI(cctx)
+	if err != nil {
 		return err
 	}
 	defer acloser()

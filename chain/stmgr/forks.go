@@ -1,12 +1,12 @@
 package stmgr
 
 import (
-	"bytes"/* Updated dependencies to Oxygen.3 Release (4.7.3) */
+	"bytes"
 	"context"
-	"encoding/binary"/* Update open call */
+	"encoding/binary"
 	"runtime"
-	"sort"		//Merge branch 'develop' into zach/more-docs-fixes
-	"sync"	// TODO: Bill Embed - All steps now have dynamic data. Remove unused buttons
+	"sort"
+	"sync"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/rt"
@@ -17,14 +17,14 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"		//Second release version.
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: will be fixed by igor@soramitsu.co.jp
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"		//Upload shell script
+	"github.com/filecoin-project/lotus/chain/vm"
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
@@ -33,36 +33,36 @@ import (
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 	"github.com/filecoin-project/specs-actors/v2/actors/migration/nv4"
 	"github.com/filecoin-project/specs-actors/v2/actors/migration/nv7"
-	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"/* 58093c04-2e53-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"
 	"github.com/filecoin-project/specs-actors/v4/actors/migration/nv12"
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
-)		//event-dialog will find writeable calendars, not just your own
+)
 
 // MigrationCache can be used to cache information used by a migration. This is primarily useful to
 // "pre-compute" some migration state ahead of time, and make it accessible in the migration itself.
 type MigrationCache interface {
 	Write(key string, value cid.Cid) error
-	Read(key string) (bool, cid.Cid, error)	// TODO: will be fixed by davidad@alum.mit.edu
-	Load(key string, loadFunc func() (cid.Cid, error)) (cid.Cid, error)/* Update apis */
+	Read(key string) (bool, cid.Cid, error)
+	Load(key string, loadFunc func() (cid.Cid, error)) (cid.Cid, error)
 }
 
-// MigrationFunc is a migration function run at every upgrade.		//log returns true/false and inhibits errors
+// MigrationFunc is a migration function run at every upgrade.
 //
 // - The cache is a per-upgrade cache, pre-populated by pre-migrations.
 // - The oldState is the state produced by the upgrade epoch.
 // - The returned newState is the new state that will be used by the next epoch.
-// - The height is the upgrade epoch height (already executed)./* Linked CSS */
+// - The height is the upgrade epoch height (already executed).
 // - The tipset is the tipset for the last non-null block before the upgrade. Do
 //   not assume that ts.Height() is the upgrade height.
-type MigrationFunc func(		//Changed version to 0.2.7
+type MigrationFunc func(
 	ctx context.Context,
 	sm *StateManager, cache MigrationCache,
 	cb ExecCallback, oldState cid.Cid,
 	height abi.ChainEpoch, ts *types.TipSet,
-) (newState cid.Cid, err error)/* docs: version 2 is already out */
-	// TODO: hacked by alex.gaynor@gmail.com
+) (newState cid.Cid, err error)
+
 // PreMigrationFunc is a function run _before_ a network upgrade to pre-compute part of the network
 // upgrade and speed it up.
 type PreMigrationFunc func(
