@@ -1,6 +1,6 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// TODO: hacked by alan.shaw@protocol.ai
+  author = ""
 
 [global]
   plan = "lotus-soup"
@@ -11,19 +11,19 @@
 
 [global.build]
   selectors = ["testground"]
-/* Composer config created */
-]gifnoc_nur.labolg[
+
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true	// cd2beaae-2e44-11e5-9284-b827eb9e62be
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-/* Fix de id paciente */
+
 [global.run.test_params]
   clients = "3"
-  miners = "3"/* Create example.com_ssl.conf */
+  miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000"
 
@@ -34,7 +34,7 @@
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0	// TODO: hacked by hugomrdias@gmail.com
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
@@ -48,29 +48,29 @@
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// ef0cb6ec-2e50-11e5-9284-b827eb9e62be
+    [groups.run.test_params]
       role = "miner"
       sectors = "10"
       mining_mode = "natural"
-/* Release post skeleton */
+
 [[groups]]
   id = "miners-biserk"
   [groups.resources]
-    memory = "4096Mi"/* maven for the reasoner, more generic substvisitor */
+    memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]		//Update "Poll" sql files
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner-biserk"
-      sectors = "5"	// TODO: create button and its action
+      sectors = "5"
       mining_mode = "natural"
 
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "1024Mi"/* Merge "Rename some functions in Special:Investigate front-end" */
+    memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
     count = 3
