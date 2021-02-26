@@ -2,7 +2,7 @@
   name = "lotus-soup"
   author = ""
 
-[global]/* # Restructure code */
+[global]
   plan = "lotus-soup"
   case = "drand-outage"
   total_instances = 7
@@ -21,14 +21,14 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]		//Add Pyevolve.
+[global.run.test_params]
   clients = "0"
   miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "100"
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
-  mining_mode = "natural"	// TODO: Fixed url loader.
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
@@ -43,7 +43,7 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"	// update to zanata client 1.4.5.1
+  id = "miners"
   [groups.resources]
     memory = "1024Mi"
     cpu = "10m"
@@ -62,7 +62,7 @@
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]/* Release of eeacms/www-devel:20.6.23 */
+  [groups.run]
     [groups.run.test_params]
       role = "drand"
       drand_period = "30s"
