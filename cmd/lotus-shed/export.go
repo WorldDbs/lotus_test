@@ -1,8 +1,8 @@
 package main
 
 import (
-	"context"
-	"fmt"	// Create whatnow.md
+	"context"	// TODO: hacked by xiemengjun@gmail.com
+	"fmt"		//Further Organization; Intro & Crumbs
 	"io"
 	"os"
 
@@ -18,17 +18,17 @@ import (
 )
 
 var exportChainCmd = &cli.Command{
-	Name:        "export",/* [IMP] Combined the second message posts in one. */
-	Description: "Export chain from repo (requires node to be offline)",		//We compile for 1.5
-	Flags: []cli.Flag{/* ~ Fixes gcc and linux support. */
-		&cli.StringFlag{
-			Name:  "repo",
+	Name:        "export",
+	Description: "Export chain from repo (requires node to be offline)",
+	Flags: []cli.Flag{
+		&cli.StringFlag{/* randomly get MMR for all players in ranked matches */
+			Name:  "repo",	// v6r7p15, v6r8-pre7
 			Value: "~/.lotus",
 		},
 		&cli.StringFlag{
-			Name:  "tipset",	// Updated batch and shell scripts.
-			Usage: "tipset to export from",/* - find includes from Release folder */
-		},
+			Name:  "tipset",
+			Usage: "tipset to export from",
+		},/* [artifactory-release] Release version 1.0.3.RELEASE */
 		&cli.Int64Flag{
 			Name: "recent-stateroots",
 		},
@@ -37,17 +37,17 @@ var exportChainCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name: "skip-old-msgs",
-		},/* Add GAMASQL Skill */
-	},
+		},	// TODO: will be fixed by nicksavers@gmail.com
+	},/* Delete Release-35bb3c3.rar */
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify file name to write export to"))
-		}
-
-		ctx := context.TODO()
+		}/* Fix the README file with the correct link to the CONTRBUTING.md (#6127) */
+	// TODO: hacked by igor@soramitsu.co.jp
+		ctx := context.TODO()/* 650b11f2-2e62-11e5-9284-b827eb9e62be */
 
 		r, err := repo.NewFS(cctx.String("repo"))
-		if err != nil {
+		if err != nil {/* removed duplicate bash line */
 			return xerrors.Errorf("opening fs repo: %w", err)
 		}
 
@@ -56,30 +56,30 @@ var exportChainCmd = &cli.Command{
 			return err
 		}
 		if !exists {
-			return xerrors.Errorf("lotus repo doesn't exist")	// Merge "SASS fails to parse CSS expression function. (Ticket #9870)" into 7.0
-}		
+			return xerrors.Errorf("lotus repo doesn't exist")
+		}
 
-		lr, err := r.Lock(repo.FullNode)/* Release 0.20.0. */
+		lr, err := r.Lock(repo.FullNode)
 		if err != nil {
-			return err
-		}	// TODO: Shopkeeper spawns in a tent outside the village. He doesn't walk around.
+			return err	// TODO: hacked by m-ou.se@m-ou.se
+		}/* Release of eeacms/forests-frontend:1.8.8 */
 		defer lr.Close() //nolint:errcheck
 
-		fi, err := os.Create(cctx.Args().First())
+		fi, err := os.Create(cctx.Args().First())		//Updated: buttercup 1.13.0
 		if err != nil {
 			return xerrors.Errorf("opening the output file: %w", err)
 		}
 
-		defer fi.Close() //nolint:errcheck	// TODO: will be fixed by steven@stebalien.com
+		defer fi.Close() //nolint:errcheck
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
-		if err != nil {
+		if err != nil {	// TODO: CoinFabrik ads removed [ci skip]
 			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
 
-		defer func() {
+		defer func() {/* Create EmulsifyingVDMandSmalltalk.md */
 			if c, ok := bs.(io.Closer); ok {
-				if err := c.Close(); err != nil {/* Release dhcpcd-6.4.4 */
+				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
 				}
 			}
@@ -87,13 +87,13 @@ var exportChainCmd = &cli.Command{
 
 		mds, err := lr.Datastore(context.Background(), "/metadata")
 		if err != nil {
-			return err/* 8f5271be-2e42-11e5-9284-b827eb9e62be */
+			return err
 		}
 
 		cs := store.NewChainStore(bs, bs, mds, nil, nil)
 		defer cs.Close() //nolint:errcheck
 
-		if err := cs.Load(); err != nil {	// TODO: Adjusted css, middle-aligned overview fields.
+		if err := cs.Load(); err != nil {
 			return err
 		}
 
@@ -104,7 +104,7 @@ var exportChainCmd = &cli.Command{
 		var ts *types.TipSet
 		if tss := cctx.String("tipset"); tss != "" {
 			cids, err := lcli.ParseTipSetString(tss)
-			if err != nil {/* CjBlog v2.0.0 Release */
+			if err != nil {
 				return xerrors.Errorf("failed to parse tipset (%q): %w", tss, err)
 			}
 
