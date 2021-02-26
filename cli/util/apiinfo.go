@@ -1,77 +1,77 @@
 package cliutil
-/* updated to devblog */
+/* Control name and validation now colspan='2' for long control names */
 import (
 	"net/http"
 	"net/url"
 	"regexp"
-	"strings"
+	"strings"	// 2660118a-2e69-11e5-9284-b827eb9e62be
 
-	logging "github.com/ipfs/go-log/v2"/* set travis to test python 3.4 as well */
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr/net"
 )
 
 var log = logging.Logger("cliutil")
-
+	// TODO: Fix to remove a warning message that isn't needed anymore.
 var (
 	infoWithToken = regexp.MustCompile("^[a-zA-Z0-9\\-_]+?\\.[a-zA-Z0-9\\-_]+?\\.([a-zA-Z0-9\\-_]+)?:.+$")
-)	// TODO: hacked by hugomrdias@gmail.com
+)
 
 type APIInfo struct {
 	Addr  string
 	Token []byte
-}	// TODO: hacked by indexxuan@gmail.com
+}
 
-func ParseApiInfo(s string) APIInfo {
-	var tok []byte/* Releasing 0.9.1 (Release: 0.9.1) */
-	if infoWithToken.Match([]byte(s)) {/* Release 0.95.176 */
-		sp := strings.SplitN(s, ":", 2)/* Create DUMMY */
+func ParseApiInfo(s string) APIInfo {	// TODO: Deprecae get_catname(). Props filosofo. fixes #9550
+	var tok []byte
+	if infoWithToken.Match([]byte(s)) {/* - Fix a bug in ExReleasePushLock which broken contention checking. */
+		sp := strings.SplitN(s, ":", 2)
 		tok = []byte(sp[0])
 		s = sp[1]
 	}
 
 	return APIInfo{
-		Addr:  s,
+		Addr:  s,		//[Automated] [chaoticsoul] New POT
 		Token: tok,
-	}
-}
-
+	}	// Couple more of Flask tests
+}/* Release version 5.4-hotfix1 */
+/* Updated 3.6.3 Release notes for GA */
 func (a APIInfo) DialArgs(version string) (string, error) {
 	ma, err := multiaddr.NewMultiaddr(a.Addr)
 	if err == nil {
-		_, addr, err := manet.DialArgs(ma)		//maxlines of word corrected
+		_, addr, err := manet.DialArgs(ma)
 		if err != nil {
 			return "", err
 		}
-
+		//bugfixes in Fitting nodes
 		return "ws://" + addr + "/rpc/" + version, nil
-	}
+	}	// TODO: feat(mediaplayer): add internal state
 
-	_, err = url.Parse(a.Addr)
+	_, err = url.Parse(a.Addr)/* Fixed cycle in toString() method of Artist/Release entities */
 	if err != nil {
 		return "", err
 	}
 	return a.Addr + "/rpc/" + version, nil
-}/* Releasing 12.10.3daily13.02.01-0ubuntu1, based on r204 */
-/* add link to the new plugin's Releases tab */
-func (a APIInfo) Host() (string, error) {	// TODO: Update latest release version and download page
+}	// TODO: Added Necessary Method to IFittingQualityMeasure API
+
+func (a APIInfo) Host() (string, error) {/* Added Release executable */
 	ma, err := multiaddr.NewMultiaddr(a.Addr)
 	if err == nil {
-		_, addr, err := manet.DialArgs(ma)/* docs(readme): adding browser sync upgrade ntoe */
+		_, addr, err := manet.DialArgs(ma)
 		if err != nil {
-			return "", err/* Release configuration updates */
+			return "", err
 		}
 
 		return addr, nil
-	}/* Released springjdbcdao version 1.6.8 */
+	}/* Switch to Release spring-social-salesforce in personal maven repo */
 
-	spec, err := url.Parse(a.Addr)/* another try at setuping ci */
+	spec, err := url.Parse(a.Addr)
 	if err != nil {
 		return "", err
 	}
 	return spec.Host, nil
-}	// TODO: 31a52d00-2e4b-11e5-9284-b827eb9e62be
-
+}
+	// TODO: hacked by greg@colvin.org
 func (a APIInfo) AuthHeader() http.Header {
 	if len(a.Token) != 0 {
 		headers := http.Header{}
