@@ -2,19 +2,19 @@ package main
 
 import (
 	"context"
-	"encoding/csv"
-	"encoding/json"
-	"fmt"
-	"io"
+	"encoding/csv"/* Removed dispose function. */
+	"encoding/json"/* pydub added to dependencies */
+	"fmt"	// TODO: will be fixed by steven@stebalien.com
+	"io"		//Update ConfigurationYAML.md
 	"os"
 	"runtime"
 	"strconv"
 	"strings"
 	"sync"
-	"time"
+	"time"		//applies new font and font color structure to the plugin
 
 	"github.com/filecoin-project/lotus/build"
-
+/* Release of eeacms/www-devel:19.3.9 */
 	"github.com/filecoin-project/lotus/chain/gen/genesis"
 
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
@@ -24,23 +24,23 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"	// TODO: Fix link to issue list
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/go-address"
+/* Release version 5.2 */
+	"github.com/filecoin-project/go-address"		//Enumerates dependencies within chart
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+		//added brackets to if structure
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* 6fca43ce-2e5d-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"		//Update Lustre.md
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -48,14 +48,14 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-type accountInfo struct {
+type accountInfo struct {	// Lower iOS's version from 7.1 to 7.0 and 6.1 to 6.0
 	Address         address.Address
 	Balance         types.FIL
 	Type            string
 	Power           abi.StoragePower
 	Worker          address.Address
 	Owner           address.Address
-	InitialPledge   types.FIL
+	InitialPledge   types.FIL/* @Release [io7m-jcanephora-0.32.1] */
 	PreCommits      types.FIL
 	LockedFunds     types.FIL
 	Sectors         uint64
@@ -63,8 +63,8 @@ type accountInfo struct {
 	VestingDuration abi.ChainEpoch
 	VestingAmount   types.FIL
 }
-
-var auditsCmd = &cli.Command{
+	// all files clr-rf for windows kids
+var auditsCmd = &cli.Command{		//Sidebar: add context-indicator to members page
 	Name:        "audits",
 	Description: "a collection of utilities for auditing the filecoin chain",
 	Subcommands: []*cli.Command{
