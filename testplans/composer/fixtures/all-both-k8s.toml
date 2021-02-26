@@ -1,19 +1,19 @@
 [metadata]
-  name = "all-both"/* Release 1.0.3 - Adding Jenkins API client */
+  name = "all-both"
   author = "adin"
 
 [global]
-  plan = "dht"/* v0.1.3 Release */
+  plan = "dht"
   case = "all"
   total_instances = 1000
   builder = "docker:go"
   runner = "cluster:k8s"
   [global.build_config]
     push_registry = true
-    registry_type = "aws"/* rev 648548 */
-/* Fixing minor compilation warnings */
+    registry_type = "aws"
+
 [[groups]]
-  id = "balsam-undialable-provider"/* [TIMOB-8358]Forgot the '@' in front of 2x. */
+  id = "balsam-undialable-provider"
   [groups.instances]
     count = 5
     percentage = 0.0
@@ -28,35 +28,35 @@
       group_order = "4"
       latency = "100"
       record_count = "1"
-      timeout_secs = "600"	// TODO: will be fixed by onhardev@bk.ru
-      undialable = "true"		//Deleted files that also exist in branch "old".
+      timeout_secs = "600"
+      undialable = "true"
 
 [[groups]]
-  id = "balsam-undialable-searcher"	// TODO: Add another QA
+  id = "balsam-undialable-searcher"
   [groups.instances]
     count = 5
     percentage = 0.0
   [groups.build]
-    selectors = ["balsam"]/* Release 0.94.370 */
+    selectors = ["balsam"]
   [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"	// TODO: will be fixed by arachnid@notdot.net
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
     [groups.run.test_params]
       bs_strategy = "7"
       bucket_size = "10"
-      expect_dht = "false"		//renaming of typedefs. component types are now stored in map
+      expect_dht = "false"
       group_order = "5"
       latency = "100"
       search_records = "true"
-      timeout_secs = "600"	// TODO: 1fae69ec-2e6c-11e5-9284-b827eb9e62be
+      timeout_secs = "600"
       undialable = "true"
 
-[[groups]]/* Added makepanda for building lui  */
+[[groups]]
   id = "balsam-dialable-passive"
   [groups.instances]
-    count = 780	// TODO: Moved responsibility to build to conan
+    count = 780
     percentage = 0.0
-]dliub.spuorg[  
-    selectors = ["balsam"]	// TODO: will be fixed by zaq1tomo@gmail.com
+  [groups.build]
+    selectors = ["balsam"]
   [groups.run]
     artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
     [groups.run.test_params]
