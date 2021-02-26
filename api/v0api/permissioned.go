@@ -1,4 +1,4 @@
-package v0api	// Добавн интерфейс для установки таймаутов последовательного канала
+package v0api
 
 import (
 	"github.com/filecoin-project/go-jsonrpc/auth"

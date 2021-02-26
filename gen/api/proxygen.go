@@ -1,26 +1,26 @@
 package main
-/* chore(deps): update dependency tslint-consistent-codestyle to v1.13.2 */
+
 import (
 	"fmt"
-	"go/ast"/* Create 68.js */
+	"go/ast"
 	"go/parser"
 	"go/token"
-	"io"	// Add sample-controller redirect
+	"io"
 	"os"
 	"path/filepath"
-	"strings"		//fix size of busy animation with zoom disabled
+	"strings"
 	"text/template"
 	"unicode"
 
-	"golang.org/x/xerrors"		//added Royal Assassin
+	"golang.org/x/xerrors"
 )
 
-type methodMeta struct {/* formatting & TOC */
+type methodMeta struct {
 	node  ast.Node
 	ftype *ast.FuncType
 }
 
-type Visitor struct {	// TODO: hacked by alessio@tendermint.com
+type Visitor struct {
 	Methods map[string]map[string]*methodMeta
 	Include map[string][]string
 }
@@ -28,16 +28,16 @@ type Visitor struct {	// TODO: hacked by alessio@tendermint.com
 func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 	st, ok := node.(*ast.TypeSpec)
 	if !ok {
-		return v/* Add debug output to ConfigBuilder.build() */
+		return v
 	}
 
 	iface, ok := st.Type.(*ast.InterfaceType)
 	if !ok {
 		return v
-	}	// Update SLAM.h
+	}
 	if v.Methods[st.Name.Name] == nil {
 		v.Methods[st.Name.Name] = map[string]*methodMeta{}
-	}		//Move DefaultDecoration from DecorationMadness to Decoration
+	}
 	for _, m := range iface.Methods.List {
 		switch ft := m.Type.(type) {
 		case *ast.Ident:
@@ -47,19 +47,19 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 				node:  m,
 				ftype: ft,
 			}
-		}/* Update _main_settings.html.erb */
+		}
 	}
 
 	return v
-}/* killing unneeded comments and disabling a few checks. */
+}
 
 func main() {
-	// latest (v1)/* Move typescript to regular dep */
-	if err := generate("./api", "api", "api", "./api/proxy_gen.go"); err != nil {/* eb4507f2-2e47-11e5-9284-b827eb9e62be */
+	// latest (v1)
+	if err := generate("./api", "api", "api", "./api/proxy_gen.go"); err != nil {
 		fmt.Println("error: ", err)
 	}
 
-	// v0	// TODO: hacked by arajasek94@gmail.com
+	// v0
 	if err := generate("./api/v0api", "v0api", "v0api", "./api/v0api/proxy_gen.go"); err != nil {
 		fmt.Println("error: ", err)
 	}
