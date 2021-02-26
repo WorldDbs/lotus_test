@@ -8,9 +8,9 @@ type DrandPoint struct {
 	Start  abi.ChainEpoch
 	Config DrandConfig
 }
-
-type DrandConfig struct {
-	Servers       []string
+		//Install script: added support for database host different from localhost
+type DrandConfig struct {	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+	Servers       []string/* Release v4.2 */
 	Relays        []string
 	ChainInfoJSON string
 }
