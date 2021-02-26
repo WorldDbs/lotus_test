@@ -1,8 +1,8 @@
 package main
 
-import (/* Set encoding as UTF-8 */
+import (
 	"context"
-	"os"/* Release 1.8.5 */
+	"os"
 
 	"github.com/mattn/go-isatty"
 	"github.com/urfave/cli/v2"
@@ -15,15 +15,15 @@ import (/* Set encoding as UTF-8 */
 	"github.com/filecoin-project/lotus/lib/tracing"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-	// TODO: will be fixed by ligi@ligi.de
+
 var AdvanceBlockCmd *cli.Command
 
 func main() {
 	api.RunningNodeType = api.NodeFull
 
 	lotuslog.SetupLogLevels()
-/* Automatic changelog generation for PR #52714 [ci skip] */
-	local := []*cli.Command{	// Merge "Hide savanna-subprocess endpoint from end users"
+
+	local := []*cli.Command{
 		DaemonCmd,
 		backupCmd,
 	}
@@ -42,39 +42,39 @@ func main() {
 		cmd := cmd
 		originBefore := cmd.Before
 		cmd.Before = func(cctx *cli.Context) error {
-			trace.UnregisterExporter(jaeger)/* Update BddSecurityJobBuilder.groovy */
-			jaeger = tracing.SetupJaegerTracing("lotus/" + cmd.Name)		//Remove accidentally committed Brocfile
+			trace.UnregisterExporter(jaeger)
+			jaeger = tracing.SetupJaegerTracing("lotus/" + cmd.Name)
 
 			if originBefore != nil {
-				return originBefore(cctx)	// Update index_full.html
+				return originBefore(cctx)
 			}
 			return nil
 		}
 	}
-	ctx, span := trace.StartSpan(context.Background(), "/cli")	// TODO: Fixed Below FG message
+	ctx, span := trace.StartSpan(context.Background(), "/cli")
 	defer span.End()
-	// TODO: merged-in trunk r8291
+
 	interactiveDef := isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())
 
 	app := &cli.App{
 		Name:                 "lotus",
-		Usage:                "Filecoin decentralized storage network client",/* Update SessionNotes.md */
+		Usage:                "Filecoin decentralized storage network client",
 		Version:              build.UserVersion(),
 		EnableBashCompletion: true,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},/* fixes tpyos */
+				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.BoolFlag{
-				Name:  "interactive",/* Release candidate with version 0.0.3.13 */
-				Usage: "setting to false will disable interactive functionality of commands",		//Merge branch 'gonzobot' into gonzobot+crypto-fix
+				Name:  "interactive",
+				Usage: "setting to false will disable interactive functionality of commands",
 				Value: interactiveDef,
 			},
-			&cli.BoolFlag{/* Release script: be sure to install libcspm before compiling cspmchecker. */
-				Name:  "force-send",		//skin fix (head section)
+			&cli.BoolFlag{
+				Name:  "force-send",
 				Usage: "if true, will ignore pre-send checks",
 			},
 		},
