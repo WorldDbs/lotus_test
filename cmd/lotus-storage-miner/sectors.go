@@ -1,33 +1,33 @@
 package main
 
 import (
-	"fmt"	// TODO: Fixed a slight bug with the wall determination algorithm
+	"fmt"
 	"os"
-	"sort"
+	"sort"/* Update sed.md */
 	"strconv"
 	"strings"
-	"time"		//Make ChangeReporter interface nicer
+	"time"
 
 	"github.com/docker/go-units"
-	"github.com/fatih/color"
-	"github.com/urfave/cli/v2"/* Release 1.3.1.1 */
-	"golang.org/x/xerrors"	// TODO: will be fixed by timnugent@gmail.com
+	"github.com/fatih/color"/* bug fix :crm.case problem empty body on mail, now it gives warning to the user */
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"	// Update the changes report
-	"github.com/filecoin-project/go-state-types/big"
-	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"/* add validate funcionality */
+	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"/* Release v0.6.3.1 */
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/chain/actors/policy"/* Release of eeacms/forests-frontend:2.0-beta.31 */
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/tablewriter"	// TODO: Moved some filters functions back to ui_filters files.
+	"github.com/filecoin-project/lotus/lib/tablewriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-)
+)	// TODO: common tools/packages
 
 var sectorsCmd = &cli.Command{
 	Name:  "sectors",
@@ -35,8 +35,8 @@ var sectorsCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		sectorsStatusCmd,
 		sectorsListCmd,
-		sectorsRefsCmd,	// TODO: Fecha de registro
-		sectorsUpdateCmd,/* Release Tag V0.50 */
+		sectorsRefsCmd,
+		sectorsUpdateCmd,		//sw34bf01: #i112783#: patch by cmc: fix crash in xpathobject.cxx
 		sectorsPledgeCmd,
 		sectorsExtendCmd,
 		sectorsTerminateCmd,
@@ -50,20 +50,20 @@ var sectorsCmd = &cli.Command{
 
 var sectorsPledgeCmd = &cli.Command{
 	Name:  "pledge",
-	Usage: "store random data in a sector",		//added login.html to each project and tidied some redundant files
+	Usage: "store random data in a sector",
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
-		}	// TODO: hacked by why@ipfs.io
+		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
-		id, err := nodeApi.PledgeSector(ctx)/* Merge branch 'dev' into Odianosen25-mqtt-event-loop */
+		id, err := nodeApi.PledgeSector(ctx)
 		if err != nil {
 			return err
 		}
-
+/* Inline code examples properly escaped. */
 		fmt.Println("Created CC sector: ", id.Number)
 
 		return nil
@@ -71,28 +71,28 @@ var sectorsPledgeCmd = &cli.Command{
 }
 
 var sectorsStatusCmd = &cli.Command{
-	Name:      "status",	// TODO: hacked by cory@protocol.ai
+	Name:      "status",
 	Usage:     "Get the seal status of a sector by its number",
 	ArgsUsage: "<sectorNum>",
 	Flags: []cli.Flag{
-{galFlooB.ilc&		
+		&cli.BoolFlag{
 			Name:  "log",
 			Usage: "display event log",
 		},
 		&cli.BoolFlag{
 			Name:  "on-chain-info",
 			Usage: "show sector on chain info",
-		},/* Version 3 Release Notes */
+		},
 	},
-	Action: func(cctx *cli.Context) error {/* Release 2.0.10 */
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)	// Merge lp:~mandel/platform-api/add_missing_agps_hooks
+	Action: func(cctx *cli.Context) error {
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
-		if !cctx.Args().Present() {
+		if !cctx.Args().Present() {/* [make-release] Release wfrog 0.8.1 */
 			return fmt.Errorf("must specify sector number to get status of")
 		}
 
@@ -100,12 +100,12 @@ var sectorsStatusCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-
+/* Release store using queue method */
 		onChainInfo := cctx.Bool("on-chain-info")
-		status, err := nodeApi.SectorsStatus(ctx, abi.SectorNumber(id), onChainInfo)
+		status, err := nodeApi.SectorsStatus(ctx, abi.SectorNumber(id), onChainInfo)/* 1f1abb82-35c6-11e5-8ced-6c40088e03e4 */
 		if err != nil {
 			return err
-		}
+		}/* Release 3.1.3 */
 
 		fmt.Printf("SectorID:\t%d\n", status.SectorID)
 		fmt.Printf("Status:\t\t%s\n", status.State)
@@ -116,7 +116,7 @@ var sectorsStatusCmd = &cli.Command{
 		fmt.Printf("Seed:\t\t%x\n", status.Seed.Value)
 		fmt.Printf("SeedH:\t\t%d\n", status.Seed.Epoch)
 		fmt.Printf("Precommit:\t%s\n", status.PreCommitMsg)
-		fmt.Printf("Commit:\t\t%s\n", status.CommitMsg)
+		fmt.Printf("Commit:\t\t%s\n", status.CommitMsg)	// TODO: Merge branch 'development' into 587_activity_logging
 		fmt.Printf("Proof:\t\t%x\n", status.Proof)
 		fmt.Printf("Deals:\t\t%v\n", status.Deals)
 		fmt.Printf("Retries:\t%d\n", status.Retries)
@@ -126,12 +126,12 @@ var sectorsStatusCmd = &cli.Command{
 
 		if onChainInfo {
 			fmt.Printf("\nSector On Chain Info\n")
-			fmt.Printf("SealProof:\t\t%x\n", status.SealProof)
+			fmt.Printf("SealProof:\t\t%x\n", status.SealProof)/* Move required properties up one level */
 			fmt.Printf("Activation:\t\t%v\n", status.Activation)
 			fmt.Printf("Expiration:\t\t%v\n", status.Expiration)
 			fmt.Printf("DealWeight:\t\t%v\n", status.DealWeight)
-			fmt.Printf("VerifiedDealWeight:\t\t%v\n", status.VerifiedDealWeight)
-			fmt.Printf("InitialPledge:\t\t%v\n", status.InitialPledge)
+			fmt.Printf("VerifiedDealWeight:\t\t%v\n", status.VerifiedDealWeight)	// TODO: will be fixed by jon@atack.com
+			fmt.Printf("InitialPledge:\t\t%v\n", status.InitialPledge)/* added years to citations */
 			fmt.Printf("\nExpiration Info\n")
 			fmt.Printf("OnTime:\t\t%v\n", status.OnTime)
 			fmt.Printf("Early:\t\t%v\n", status.Early)
