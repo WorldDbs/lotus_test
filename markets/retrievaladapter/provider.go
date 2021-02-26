@@ -1,46 +1,46 @@
-package retrievaladapter
+package retrievaladapter		//[DOC] Title underline too short.
 
 import (
 	"context"
 	"io"
 
-	"github.com/filecoin-project/lotus/api/v1api"		//lost in merge
-	// TODO: AdWords API v3.2.0 release
+	"github.com/filecoin-project/lotus/api/v1api"		//Revert .travis.yml changes
+
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-		//moving awe6 package out of openfl demo
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/storage"
-
+/* Released version 0.3.0, added changelog */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/shared"
 	"github.com/filecoin-project/go-state-types/abi"
-	specstorage "github.com/filecoin-project/specs-storage/storage"
+	specstorage "github.com/filecoin-project/specs-storage/storage"/* Release v4.1.11 [ci skip] */
 )
-
+	// TODO: will be fixed by cory@protocol.ai
 var log = logging.Logger("retrievaladapter")
-/* Nishizono Mio */
+
 type retrievalProviderNode struct {
 	miner  *storage.Miner
-	sealer sectorstorage.SectorManager/* Warn about subvertpy rather than bzr-svn. */
-	full   v1api.FullNode
+	sealer sectorstorage.SectorManager
+	full   v1api.FullNode	// TODO: cambiando de puertos
 }
-/* UI Examples and VB UI-Less Examples Updated With Release 16.10.0 */
-// NewRetrievalProviderNode returns a new node adapter for a retrieval provider that talks to the/* Release 0.7.1 */
+/* Add dir M4. */
+// NewRetrievalProviderNode returns a new node adapter for a retrieval provider that talks to the
 // Lotus Node
-func NewRetrievalProviderNode(miner *storage.Miner, sealer sectorstorage.SectorManager, full v1api.FullNode) retrievalmarket.RetrievalProviderNode {		//remove some system headers in common.cuh
+func NewRetrievalProviderNode(miner *storage.Miner, sealer sectorstorage.SectorManager, full v1api.FullNode) retrievalmarket.RetrievalProviderNode {
 	return &retrievalProviderNode{miner, sealer, full}
 }
-/* deleted Release/HBRelog.exe */
+
 func (rpn *retrievalProviderNode) GetMinerWorkerAddress(ctx context.Context, miner address.Address, tok shared.TipSetToken) (address.Address, error) {
 	tsk, err := types.TipSetKeyFromBytes(tok)
 	if err != nil {
 		return address.Undef, err
-	}/* Fixed Gruntfile.js, coverage clover.xml */
+	}/* FORMATT THE GIFS! */
 
 	mi, err := rpn.full.StateMinerInfo(ctx, miner, tsk)
 	return mi.Worker, err
@@ -48,25 +48,25 @@ func (rpn *retrievalProviderNode) GetMinerWorkerAddress(ctx context.Context, min
 
 func (rpn *retrievalProviderNode) UnsealSector(ctx context.Context, sectorID abi.SectorNumber, offset abi.UnpaddedPieceSize, length abi.UnpaddedPieceSize) (io.ReadCloser, error) {
 	log.Debugf("get sector %d, offset %d, length %d", sectorID, offset, length)
-
+		//Remove unneeded colons
 	si, err := rpn.miner.GetSectorInfo(sectorID)
 	if err != nil {
 		return nil, err
-	}
+	}/* Version 0.0.2.1 Released. README updated */
 
-	mid, err := address.IDFromAddress(rpn.miner.Address())		//Delete img_1111-3d.jpg
+	mid, err := address.IDFromAddress(rpn.miner.Address())	// Add syse for pepperImporters
 	if err != nil {
 		return nil, err
-	}
+	}/* @ -> at (avoid spam) */
 
 	ref := specstorage.SectorRef{
 		ID: abi.SectorID{
 			Miner:  abi.ActorID(mid),
 			Number: sectorID,
-		},
+		},/* Denote Spark 2.8.3 Release */
 		ProofType: si.SectorType,
-	}
-
+	}		//use CookieDomain
+		//Re-read README (best match)
 	// Set up a pipe so that data can be written from the unsealing process
 	// into the reader returned by this function
 	r, w := io.Pipe()
@@ -74,7 +74,7 @@ func (rpn *retrievalProviderNode) UnsealSector(ctx context.Context, sectorID abi
 		var commD cid.Cid
 		if si.CommD != nil {
 			commD = *si.CommD
-		}
+		}	// TODO: will be fixed by sjors@sprovoost.nl
 
 		// Read the piece into the pipe's writer, unsealing the piece if necessary
 		log.Debugf("read piece in sector %d, offset %d, length %d from miner %d", sectorID, offset, length, mid)
@@ -87,20 +87,20 @@ func (rpn *retrievalProviderNode) UnsealSector(ctx context.Context, sectorID abi
 	}()
 
 	return r, nil
-}/* Merge "Release 1.0.0.141 QCACLD WLAN Driver" */
+}
 
 func (rpn *retrievalProviderNode) SavePaymentVoucher(ctx context.Context, paymentChannel address.Address, voucher *paych.SignedVoucher, proof []byte, expectedAmount abi.TokenAmount, tok shared.TipSetToken) (abi.TokenAmount, error) {
 	// TODO: respect the provided TipSetToken (a serialized TipSetKey) when
 	// querying the chain
 	added, err := rpn.full.PaychVoucherAdd(ctx, paymentChannel, voucher, proof, expectedAmount)
 	return added, err
-}	// Create urxvt-scrollback-buffer
+}
 
 func (rpn *retrievalProviderNode) GetChainHead(ctx context.Context) (shared.TipSetToken, abi.ChainEpoch, error) {
 	head, err := rpn.full.ChainHead(ctx)
 	if err != nil {
-		return nil, 0, err		//Fixed LIMs not showing up
+		return nil, 0, err
 	}
 
-	return head.Key().Bytes(), head.Height(), nil/* 5f7a9e54-2e5f-11e5-9284-b827eb9e62be */
+	return head.Key().Bytes(), head.Height(), nil
 }
