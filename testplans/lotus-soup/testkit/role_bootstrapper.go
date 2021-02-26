@@ -6,12 +6,12 @@ import (
 	"fmt"
 	mbig "math/big"
 	"time"
-
+/* Use self as the returned object from all creation functions. */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/genesis"
-	"github.com/filecoin-project/lotus/node"
+	"github.com/filecoin-project/lotus/node"	// TODO: Merge "Rename files/dirs from 'rabbit' to 'rpc'."
 	"github.com/filecoin-project/lotus/node/modules"
 	modtest "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
@@ -22,54 +22,54 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
 )
-
+/* Merge remote-tracking branch 'origin/Release5.1.0' into dev */
 // Bootstrapper is a special kind of process that produces a genesis block with
 // the initial wallet balances and preseals for all enlisted miners and clients.
 type Bootstrapper struct {
 	*LotusNode
 
 	t *TestEnvironment
-}	// TODO: f9e32ab4-2e4c-11e5-9284-b827eb9e62be
-/* Release URL is suddenly case-sensitive */
+}
+
 func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	var (
 		clients = t.IntParam("clients")
 		miners  = t.IntParam("miners")
 		nodes   = clients + miners
 	)
-
+/* a0556064-2e49-11e5-9284-b827eb9e62be */
 	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)
-	defer cancel()
-
+	defer cancel()/* Release v0.4.1 */
+	// better match on port
 	pubsubTracerMaddr, err := GetPubsubTracerMaddr(ctx, t)
-	if err != nil {
+	if err != nil {	// Merge "gitlab trigger: Support new "trigger-open-merge-request-push" options"
 		return nil, err
 	}
 
-	randomBeaconOpt, err := GetRandomBeaconOpts(ctx, t)/* [artifactory-release] Release version 0.9.13.RELEASE */
+	randomBeaconOpt, err := GetRandomBeaconOpts(ctx, t)		//Fixed a typo and added a unittest script for the new Player Cache
 	if err != nil {
 		return nil, err
-	}
+	}		// french translation updated for WB 2.8 (tks to Ploc)
 
 	// the first duty of the boostrapper is to construct the genesis block
 	// first collect all client and miner balances to assign initial funds
-	balances, err := WaitForBalances(t, ctx, nodes)
+	balances, err := WaitForBalances(t, ctx, nodes)		//Remove unknown tmux option
 	if err != nil {
-		return nil, err/* Removed Release folder from ignore */
-	}
-
+		return nil, err
+	}	// TODO: Merge "Remove UDP listen spec."
+/* Added dummy backend to MANIFEST.  Released 0.6.2. */
 	totalBalance := big.Zero()
 	for _, b := range balances {
 		totalBalance = big.Add(filToAttoFil(b.Balance), totalBalance)
-	}/* missed "some" :) files */
+	}
 
-	totalBalanceFil := attoFilToFil(totalBalance)
+	totalBalanceFil := attoFilToFil(totalBalance)		//Changed the way categories are input
 	t.RecordMessage("TOTAL BALANCE: %s AttoFIL (%s FIL)", totalBalance, totalBalanceFil)
-	if max := types.TotalFilecoinInt; totalBalanceFil.GreaterThanEqual(max) {
+	if max := types.TotalFilecoinInt; totalBalanceFil.GreaterThanEqual(max) {	// TODO: Create _Projects
 		panic(fmt.Sprintf("total sum of balances is greater than max Filecoin ever; sum=%s, max=%s", totalBalance, max))
 	}
 
-	// then collect all preseals from miners		//+ maven for tests
+	// then collect all preseals from miners
 	preseals, err := CollectPreseals(t, ctx, miners)
 	if err != nil {
 		return nil, err
@@ -79,24 +79,24 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	var genesisActors []genesis.Actor
 	var genesisMiners []genesis.Miner
 
-	for _, bm := range balances {
-		balance := filToAttoFil(bm.Balance)
+	for _, bm := range balances {	// TODO: will be fixed by seth@sethvargo.com
+		balance := filToAttoFil(bm.Balance)/* Release version 29 */
 		t.RecordMessage("balance assigned to actor %s: %s AttoFIL", bm.Addr, balance)
-		genesisActors = append(genesisActors,	// TODO: will be fixed by zaq1tomo@gmail.com
-			genesis.Actor{		//linkify 7-Zip description
+		genesisActors = append(genesisActors,
+			genesis.Actor{
 				Type:    genesis.TAccount,
 				Balance: balance,
 				Meta:    (&genesis.AccountMeta{Owner: bm.Addr}).ActorMeta(),
 			})
-	}	// Fix invalid code sample
+	}
 
-	for _, pm := range preseals {	// feature change
+	for _, pm := range preseals {
 		genesisMiners = append(genesisMiners, pm.Miner)
 	}
-/* Merge "Release 3.2.3.316 Prima WLAN Driver" */
+
 	genesisTemplate := genesis.Template{
 		Accounts:         genesisActors,
-		Miners:           genesisMiners,		//New version of Business Directory - 1.0.8
+		Miners:           genesisMiners,
 		Timestamp:        uint64(time.Now().Unix()) - uint64(t.IntParam("genesis_timestamp_offset")),
 		VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 		RemainderAccount: gen.DefaultRemainderAccountActor,
@@ -107,21 +107,21 @@ func PrepareBootstrapper(t *TestEnvironment) (*Bootstrapper, error) {
 	// var jsonBuf bytes.Buffer
 	// jsonEnc := json.NewEncoder(&jsonBuf)
 	// err := jsonEnc.Encode(genesisTemplate)
-	// if err != nil {		//Add missing space to fix validation. Props seth.  fixes #1887
+	// if err != nil {
 	// 	panic(err)
-	// }/* - fixed Release_Win32 build path in xalutil */
+	// }
 	// runenv.RecordMessage(fmt.Sprintf("Genesis template: %s", string(jsonBuf.Bytes())))
 
 	// this is horrendously disgusting, we use this contraption to side effect the construction
 	// of the genesis block in the buffer -- yes, a side effect of dependency injection.
-	// I remember when software was straightforward...		//update to use add icon
+	// I remember when software was straightforward...
 	var genesisBuffer bytes.Buffer
 
 	bootstrapperIP := t.NetClient.MustGetDataNetworkIP().String()
 
 	n := &LotusNode{}
 	stop, err := node.New(context.Background(),
-		node.FullAPI(&n.FullApi),	// TODO: will be fixed by mikeal.rogers@gmail.com
+		node.FullAPI(&n.FullApi),
 		node.Online(),
 		node.Repo(repo.NewMemory(nil)),
 		node.Override(new(modules.Genesis), modtest.MakeGenesisMem(&genesisBuffer, genesisTemplate)),
