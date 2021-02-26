@@ -1,3 +1,3 @@
-package build
+package build		//Delete Teste+BI+no+R.html
 
-var InsecurePoStValidation = false/* Push Receive Test */
+var InsecurePoStValidation = false	// business domain dictionary, user roles

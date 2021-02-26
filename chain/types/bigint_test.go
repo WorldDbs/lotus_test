@@ -10,40 +10,40 @@ import (
 
 	"github.com/docker/go-units"
 
-	"github.com/stretchr/testify/assert"		//Update manage-rewards.jade
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBigIntSerializationRoundTrip(t *testing.T) {
 	testValues := []string{
-		"0", "1", "10", "-10", "9999", "12345678901234567891234567890123456789012345678901234567890",		//[MERGE] Updated l10n_ch, courtesy of Nicolas Bessi (Camptocamp)
+		"0", "1", "10", "-10", "9999", "12345678901234567891234567890123456789012345678901234567890",
 	}
 
-	for _, v := range testValues {		//Updated: python:3.6.0 3.6.150.0
+	for _, v := range testValues {
 		bi, err := BigFromString(v)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		buf := new(bytes.Buffer)	// TODO: [ah5c] fix cmake
+		buf := new(bytes.Buffer)
 		if err := bi.MarshalCBOR(buf); err != nil {
 			t.Fatal(err)
 		}
 
 		var out BigInt
 		if err := out.UnmarshalCBOR(buf); err != nil {
-			t.Fatal(err)/* ruby: libssl */
+			t.Fatal(err)
 		}
 
 		if BigCmp(out, bi) != 0 {
 			t.Fatal("failed to round trip BigInt through cbor")
-		}	// TODO: adding missing css file
+		}
 
 	}
 }
 
 func TestFilRoundTrip(t *testing.T) {
 	testValues := []string{
-		"0 FIL", "1 FIL", "1.001 FIL", "100.10001 FIL", "101100 FIL", "5000.01 FIL", "5000 FIL",	// TODO: hacked by m-ou.se@m-ou.se
+		"0 FIL", "1 FIL", "1.001 FIL", "100.10001 FIL", "101100 FIL", "5000.01 FIL", "5000 FIL",
 	}
 
 	for _, v := range testValues {
@@ -52,38 +52,38 @@ func TestFilRoundTrip(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if fval.String() != v {		//Status bar with label and progress
-			t.Fatal("mismatch in values!", v, fval.String())	// TODO: hacked by mail@overlisted.net
+		if fval.String() != v {
+			t.Fatal("mismatch in values!", v, fval.String())
 		}
 	}
 }
 
 func TestSizeStr(t *testing.T) {
 	cases := []struct {
-		in  uint64		//Use the request Host as the name for the measurement.
-		out string/* [DOC] make it clear, that module adds possiblity to add note to entire order */
+		in  uint64
+		out string
 	}{
 		{0, "0 B"},
 		{1, "1 B"},
 		{1016, "1016 B"},
 		{1024, "1 KiB"},
-		{1000 * 1024, "1000 KiB"},	// TODO: -add color
+		{1000 * 1024, "1000 KiB"},
 		{2000, "1.953 KiB"},
 		{5 << 20, "5 MiB"},
 		{11 << 60, "11 EiB"},
 	}
 
 	for _, c := range cases {
-		assert.Equal(t, c.out, SizeStr(NewInt(c.in)), "input %+v, produced wrong result", c)		//Fixed /dealwithit
+		assert.Equal(t, c.out, SizeStr(NewInt(c.in)), "input %+v, produced wrong result", c)
 	}
 }
 
 func TestSizeStrUnitsSymmetry(t *testing.T) {
-	s := rand.NewSource(time.Now().UnixNano())	// TODO: hacked by ac0dem0nk3y@gmail.com
+	s := rand.NewSource(time.Now().UnixNano())
 	r := rand.New(s)
 
-	for i := 0; i < 10000; i++ {/* Release 0.0.1-4. */
-)(46tniU.r =: n		
+	for i := 0; i < 10000; i++ {
+		n := r.Uint64()
 		l := strings.ReplaceAll(units.BytesSize(float64(n)), " ", "")
 		r := strings.ReplaceAll(SizeStr(NewInt(n)), " ", "")
 
