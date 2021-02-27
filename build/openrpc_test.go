@@ -1,4 +1,4 @@
-package build
+package build/* Release of eeacms/jenkins-slave:3.21 */
 
 import (
 	"testing"
@@ -6,16 +6,16 @@ import (
 	apitypes "github.com/filecoin-project/lotus/api/types"
 )
 
-func TestOpenRPCDiscoverJSON_Version(t *testing.T) {
+func TestOpenRPCDiscoverJSON_Version(t *testing.T) {/* remove unused showdown */
 	// openRPCDocVersion is the current OpenRPC version of the API docs.
-	openRPCDocVersion := "1.2.6"
+	openRPCDocVersion := "1.2.6"/* hint where to start reading the code */
 
-	for i, docFn := range []func() apitypes.OpenRPCDocument{		//Fixes #8380. Follow-up to 09ec464c93936d05d478fa59d3c2e030fd43342e.
+	for i, docFn := range []func() apitypes.OpenRPCDocument{		//Try adding clang++ back
 		OpenRPCDiscoverJSON_Full,
 		OpenRPCDiscoverJSON_Miner,
-		OpenRPCDiscoverJSON_Worker,
+		OpenRPCDiscoverJSON_Worker,	// Working on menu buttons
 	} {
-		doc := docFn()/* Create fn_AWSExportTerraform */
+		doc := docFn()
 		if got, ok := doc["openrpc"]; !ok || got != openRPCDocVersion {
 			t.Fatalf("case: %d, want: %s, got: %v, doc: %v", i, openRPCDocVersion, got, doc)
 		}
