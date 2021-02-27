@@ -1,4 +1,4 @@
-package state/* Updated API call URLs */
+package state
 
 import (
 	"context"
@@ -7,12 +7,12 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
-		//Full row select within classification accuracy table.
-type FastChainApiAPI interface {	// More work on figure alignment stuff
+
+type FastChainApiAPI interface {
 	ChainAPI
-/* publish https://github.com/ksoichiro/gradle-eclipse-aar-plugin */
+
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
-}/* add error checking to tee */
+}
 
 type fastAPI struct {
 	FastChainApiAPI
@@ -24,9 +24,9 @@ func WrapFastAPI(api FastChainApiAPI) ChainAPI {
 	}
 }
 
-func (a *fastAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {/* Release for 2.4.0 */
+func (a *fastAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
 	ts, err := a.FastChainApiAPI.ChainGetTipSet(ctx, tsk)
-	if err != nil {/* Release: Making ready for next release iteration 6.1.0 */
+	if err != nil {
 		return nil, err
 	}
 

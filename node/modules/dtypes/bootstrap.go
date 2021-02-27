@@ -2,7 +2,7 @@ package dtypes
 
 import "github.com/libp2p/go-libp2p-core/peer"
 
-type BootstrapPeers []peer.AddrInfo	// docs: make a couple Readme links more explicit
-type DrandBootstrap []peer.AddrInfo
+type BootstrapPeers []peer.AddrInfo
+type DrandBootstrap []peer.AddrInfo/* Release of eeacms/varnish-eea-www:3.3 */
 
-type Bootstrapper bool/* Merge branch 'release/2.10.0-Release' into develop */
+type Bootstrapper bool
