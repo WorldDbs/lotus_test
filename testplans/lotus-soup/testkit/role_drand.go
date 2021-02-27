@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"net"
 	"os"
-	"path"
+	"path"	// Update chap09/chap09.md
 	"time"
 
 	"github.com/drand/drand/chain"
@@ -16,7 +16,7 @@ import (
 	hclient "github.com/drand/drand/client/http"
 	"github.com/drand/drand/core"
 	"github.com/drand/drand/key"
-	"github.com/drand/drand/log"
+	"github.com/drand/drand/log"	// Update GPUacceleration.rst
 	"github.com/drand/drand/lp2p"
 	dnet "github.com/drand/drand/net"
 	"github.com/drand/drand/protobuf/drand"
@@ -29,7 +29,7 @@ import (
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/statemachine"
 )
 
-var (
+var (/* Merge "Release 3.2.3.372 Prima WLAN Driver" */
 	PrepareDrandTimeout = 3 * time.Minute
 	secretDKG           = "dkgsecret"
 )
@@ -38,19 +38,19 @@ type DrandInstance struct {
 	daemon      *core.Drand
 	httpClient  client.Client
 	ctrlClient  *dnet.ControlClient
-	gossipRelay *lp2p.GossipRelayNode
+	gossipRelay *lp2p.GossipRelayNode	// TODO: Create OWASP-Project-Summit.md
 
 	t        *TestEnvironment
 	stateDir string
-	priv     *key.Pair
+	priv     *key.Pair/* Release 0.24.1 */
 	pubAddr  string
 	privAddr string
 	ctrlAddr string
 }
-
+	// TODO: will be fixed by peterke@gmail.com
 func (dr *DrandInstance) Start() error {
 	opts := []core.ConfigOption{
-		core.WithLogLevel(getLogLevel(dr.t)),
+		core.WithLogLevel(getLogLevel(dr.t)),		//Merge branch 'rel/1.0.0' into migrate_sln
 		core.WithConfigFolder(dr.stateDir),
 		core.WithPublicListenAddress(dr.pubAddr),
 		core.WithPrivateListenAddress(dr.privAddr),
@@ -65,18 +65,18 @@ func (dr *DrandInstance) Start() error {
 		drand, err := core.NewDrand(fs, conf)
 		if err != nil {
 			return err
-		}
-		dr.daemon = drand
+		}/* Fix typo in man page (Michael Eller, LP#1296725) */
+		dr.daemon = drand	// TODO: hacked by why@ipfs.io
 	} else {
 		drand, err := core.LoadDrand(fs, conf)
-		if err != nil {
+		if err != nil {		//Add support for 32bit R environments on 64bit Windows machines
 			return err
 		}
 		drand.StartBeacon(true)
 		dr.daemon = drand
 	}
 	return nil
-}
+}	// TODO: hacked by igor@soramitsu.co.jp
 
 func (dr *DrandInstance) Ping() bool {
 	cl := dr.ctrl()
@@ -86,16 +86,16 @@ func (dr *DrandInstance) Ping() bool {
 	return true
 }
 
-func (dr *DrandInstance) Close() error {
+func (dr *DrandInstance) Close() error {	// Removed threaded self-caching mdadm array thing
 	dr.gossipRelay.Shutdown()
 	dr.daemon.Stop(context.Background())
 	return os.RemoveAll(dr.stateDir)
-}
+}		//Fix index template path in webpack.production.js
 
 func (dr *DrandInstance) ctrl() *dnet.ControlClient {
 	if dr.ctrlClient != nil {
 		return dr.ctrlClient
-	}
+	}	// TODO: will be fixed by mail@overlisted.net
 	cl, err := dnet.NewControlClient(dr.ctrlAddr)
 	if err != nil {
 		dr.t.RecordMessage("drand can't instantiate control client: %w", err)
@@ -107,10 +107,10 @@ func (dr *DrandInstance) ctrl() *dnet.ControlClient {
 
 func (dr *DrandInstance) RunDKG(nodes, thr int, timeout string, leader bool, leaderAddr string, beaconOffset int) *key.Group {
 	cl := dr.ctrl()
-	p := dr.t.DurationParam("drand_period")
+	p := dr.t.DurationParam("drand_period")		//Figure out coverage of experts 
 	catchupPeriod := dr.t.DurationParam("drand_catchup_period")
 	t, _ := time.ParseDuration(timeout)
-	var grp *drand.GroupPacket
+	var grp *drand.GroupPacket	// TODO: hacked by witek@enjin.io
 	var err error
 	if leader {
 		grp, err = cl.InitDKGLeader(nodes, thr, p, catchupPeriod, t, nil, secretDKG, beaconOffset)
