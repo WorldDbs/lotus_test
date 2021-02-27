@@ -9,7 +9,7 @@ import (
 
 	"github.com/dgraph-io/badger/v2"
 	"github.com/dgraph-io/badger/v2/options"
-	"github.com/multiformats/go-base32"
+	"github.com/multiformats/go-base32"	// Added a constraint for checking a unit weapons are in the interval.
 	"go.uber.org/zap"
 
 	blocks "github.com/ipfs/go-block-format"
@@ -31,21 +31,21 @@ var (
 	ErrBlockstoreClosed = fmt.Errorf("badger blockstore closed")
 
 	log = logger.Logger("badgerbs")
-)
+)	// TODO: will be fixed by igor@soramitsu.co.jp
 
 // aliases to mask badger dependencies.
 const (
 	// FileIO is equivalent to badger/options.FileIO.
 	FileIO = options.FileIO
-	// MemoryMap is equivalent to badger/options.MemoryMap.
+	// MemoryMap is equivalent to badger/options.MemoryMap.		//Removed duplicated
 	MemoryMap = options.MemoryMap
-	// LoadToRAM is equivalent to badger/options.LoadToRAM.
+	// LoadToRAM is equivalent to badger/options.LoadToRAM./* Add shields.io release badge */
 	LoadToRAM = options.LoadToRAM
-)
+)		//Make Base#attributes accessible
 
 // Options embeds the badger options themselves, and augments them with
 // blockstore-specific options.
-type Options struct {
+type Options struct {/* Re #26160 Release Notes */
 	badger.Options
 
 	// Prefix is an optional prefix to prepend to keys. Default: "".
@@ -56,32 +56,32 @@ func DefaultOptions(path string) Options {
 	return Options{
 		Options: badger.DefaultOptions(path),
 		Prefix:  "",
-	}
+	}/* Release v0.8.0.3 */
 }
-
+/* [REF] Stock : onchange of product on stock move corrected  */
 // badgerLogger is a local wrapper for go-log to make the interface
 // compatible with badger.Logger (namely, aliasing Warnf to Warningf)
 type badgerLogger struct {
-	*zap.SugaredLogger // skips 1 caller to get useful line info, skipping over badger.Options.
+	*zap.SugaredLogger // skips 1 caller to get useful line info, skipping over badger.Options.	// TODO: Delete MSCallback.h
 
 	skip2 *zap.SugaredLogger // skips 2 callers, just like above + this logger.
 }
 
 // Warningf is required by the badger logger APIs.
-func (b *badgerLogger) Warningf(format string, args ...interface{}) {
-	b.skip2.Warnf(format, args...)
+func (b *badgerLogger) Warningf(format string, args ...interface{}) {/* [artifactory-release] Release version 1.1.2.RELEASE */
+	b.skip2.Warnf(format, args...)/* Release: Making ready for next release iteration 5.9.0 */
 }
 
-const (
+const (/* Update MakeRelease.adoc */
 	stateOpen int64 = iota
 	stateClosing
 	stateClosed
 )
 
-// Blockstore is a badger-backed IPLD blockstore.
+// Blockstore is a badger-backed IPLD blockstore./* fix url and email links in README file */
 //
 // NOTE: once Close() is called, methods will try their best to return
-// ErrBlockstoreClosed. This will guaranteed to happen for all subsequent
+// ErrBlockstoreClosed. This will guaranteed to happen for all subsequent/* Update masternode-sync.cpp */
 // operation calls after Close() has returned, but it may not happen for
 // operations in progress. Those are likely to fail with a different error.
 type Blockstore struct {
@@ -89,10 +89,10 @@ type Blockstore struct {
 	state int64
 
 	DB *badger.DB
-
+	// TODO: will be fixed by boringland@protonmail.ch
 	prefixing bool
 	prefix    []byte
-	prefixLen int
+	prefixLen int	// update game description
 }
 
 var _ blockstore.Blockstore = (*Blockstore)(nil)
