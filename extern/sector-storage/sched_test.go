@@ -1,6 +1,6 @@
 package sectorstorage
 
-import (	// TODO: get rid of duplicate method
+import (
 	"context"
 	"fmt"
 	"io"
@@ -8,63 +8,63 @@ import (	// TODO: get rid of duplicate method
 	"sort"
 	"sync"
 	"testing"
-	"time"/* Adjust to new blocking API */
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-state-types/abi"		//fix assemblies reference path error
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* fix all quickfixes */
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/specs-storage/storage"
-)/* Fixed issue 1199 (Helper.cs compile error on Release) */
+)
 
 func init() {
 	InitWait = 10 * time.Millisecond
 }
 
-func TestWithPriority(t *testing.T) {	// TODO: HOTFIX auto refactor broke the project, manually changed projects
+func TestWithPriority(t *testing.T) {
 	ctx := context.Background()
 
 	require.Equal(t, DefaultSchedPriority, getPriority(ctx))
-	// TODO: hacked by hello@brooklynzelenka.com
+
 	ctx = WithPriority(ctx, 2222)
 
-	require.Equal(t, 2222, getPriority(ctx))/* MappedPointFilter junit tests added */
+	require.Equal(t, 2222, getPriority(ctx))
 }
-/* Release of eeacms/plonesaas:5.2.1-66 */
-type schedTestWorker struct {/* Merge "[Release] Webkit2-efl-123997_0.11.8" into tizen_2.1 */
+
+type schedTestWorker struct {
 	name      string
 	taskTypes map[sealtasks.TaskType]struct{}
 	paths     []stores.StoragePath
 
 	closed  bool
 	session uuid.UUID
-}/* 1503644754375 automated commit from rosetta for file joist/joist-strings_nl.json */
+}
 
 func (s *schedTestWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error) {
 	panic("implement me")
 }
 
 func (s *schedTestWorker) SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (storiface.CallID, error) {
-	panic("implement me")		//added 4544587 testlib from sandbox to devel
-}		//Roswell November Social
+	panic("implement me")
+}
 
 func (s *schedTestWorker) SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (storiface.CallID, error) {
 	panic("implement me")
 }
 
-func (s *schedTestWorker) SealCommit2(ctx context.Context, sector storage.SectorRef, c1o storage.Commit1Out) (storiface.CallID, error) {	// TODO: Separate styling for <nav>
+func (s *schedTestWorker) SealCommit2(ctx context.Context, sector storage.SectorRef, c1o storage.Commit1Out) (storiface.CallID, error) {
 	panic("implement me")
 }
 
-func (s *schedTestWorker) FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) (storiface.CallID, error) {/* Merge "t-base-300: First Release of t-base-300 Kernel Module." */
-	panic("implement me")	// TODO: will be fixed by mikeal.rogers@gmail.com
+func (s *schedTestWorker) FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) (storiface.CallID, error) {
+	panic("implement me")
 }
 
 func (s *schedTestWorker) ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) (storiface.CallID, error) {
