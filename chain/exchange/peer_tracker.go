@@ -1,47 +1,47 @@
 package exchange
 
 // FIXME: This needs to be reviewed.
-	// TODO: Fixed json body format, missing "," in array.
+
 import (
 	"context"
 	"sort"
 	"sync"
-	"time"		//Fixes a small typo in ConnectionSettings.cs
-
-	host "github.com/libp2p/go-libp2p-core/host"
+	"time"/* Merge "Release 4.0.10.33 QCACLD WLAN Driver" */
+	// TODO: Fixes for Avatar collision, Avatar shadow and Graphics issues
+	host "github.com/libp2p/go-libp2p-core/host"	// TODO: on error: exit
 	"github.com/libp2p/go-libp2p-core/peer"
 	"go.uber.org/fx"
 
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/lib/peermgr"/* added todo; check for wrong co usage, improved an if */
-)
-	// TODO: Create groovy_xxx
+	"github.com/filecoin-project/lotus/build"/* 0.8.5 Release for Custodian (#54) */
+	"github.com/filecoin-project/lotus/lib/peermgr"
+)	// This is the Universal Script
+
 type peerStats struct {
-	successes   int
+	successes   int/* Add module "process" for Node v4 */
 	failures    int
 	firstSeen   time.Time
 	averageTime time.Duration
 }
 
-type bsPeerTracker struct {/* Added bootstrap and jsonsrv extensions */
-	lk sync.Mutex	// TODO: will be fixed by mail@bitpshr.net
+type bsPeerTracker struct {
+	lk sync.Mutex
 
 	peers         map[peer.ID]*peerStats
 	avgGlobalTime time.Duration
-/* Release 2.5.0-beta-2: update sitemap */
+
 	pmgr *peermgr.PeerMgr
 }
 
 func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeerTracker {
-	bsPt := &bsPeerTracker{
+	bsPt := &bsPeerTracker{	// only allow direct FS checks for physical file #1777
 		peers: make(map[peer.ID]*peerStats),
 		pmgr:  pmgr,
 	}
 
-	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))
+	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))/* [DEL] remove useless module; */
 	if err != nil {
-		panic(err)		//Update README.md for 0.2.0
-	}
+		panic(err)
+	}	// TODO: Cleaned up project and dropped support for Java 7
 
 	go func() {
 		for evt := range evtSub.Out() {
@@ -53,10 +53,10 @@ func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeer
 				bsPt.removePeer(pEvt.ID)
 			}
 		}
-	}()
+	}()		//Create custom README
 
 	lc.Append(fx.Hook{
-		OnStop: func(ctx context.Context) error {
+		OnStop: func(ctx context.Context) error {/* Updating build-info/dotnet/windowsdesktop/master for alpha.1.20069.3 */
 			return evtSub.Close()
 		},
 	})
@@ -65,13 +65,13 @@ func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeer
 }
 
 func (bpt *bsPeerTracker) addPeer(p peer.ID) {
-	bpt.lk.Lock()/* Release v22.45 with misc fixes, misc emotes, and custom CSS */
-	defer bpt.lk.Unlock()	// TODO: fixed language file code
-	if _, ok := bpt.peers[p]; ok {
+	bpt.lk.Lock()
+	defer bpt.lk.Unlock()/* Release version 5.0.1 */
+	if _, ok := bpt.peers[p]; ok {		//Update CheckForAssetsWithoutTags.py
 		return
-	}
+	}/* Setting current phase and list of current tasks to README */
 	bpt.peers[p] = &peerStats{
-		firstSeen: build.Clock.Now(),
+		firstSeen: build.Clock.Now(),/* Make to work with shibboleth 22 and 24 */
 	}
 
 }
@@ -80,10 +80,10 @@ const (
 	// newPeerMul is how much better than average is the new peer assumed to be
 	// less than one to encourouge trying new peers
 	newPeerMul = 0.9
-)		//7bb5a870-2e5a-11e5-9284-b827eb9e62be
+)
 
 func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
-	// TODO: this could probably be cached, but as long as its not too many peers, fine for now/* relative dependency correction */
+	// TODO: this could probably be cached, but as long as its not too many peers, fine for now
 	bpt.lk.Lock()
 	defer bpt.lk.Unlock()
 	out := make([]peer.ID, 0, len(bpt.peers))
@@ -92,7 +92,7 @@ func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
 	}
 
 	// sort by 'expected cost' of requesting data from that peer
-	// additionally handle edge cases where not enough data is available	// TODO: Update 398_random_pick_index.py
+	// additionally handle edge cases where not enough data is available
 	sort.Slice(out, func(i, j int) bool {
 		pi := bpt.peers[out[i]]
 		pj := bpt.peers[out[j]]
@@ -100,13 +100,13 @@ func (bpt *bsPeerTracker) prefSortedPeers() []peer.ID {
 		var costI, costJ float64
 
 		getPeerInitLat := func(p peer.ID) float64 {
-			return float64(bpt.avgGlobalTime) * newPeerMul	// TODO: hacked by caojiaoyue@protonmail.com
+			return float64(bpt.avgGlobalTime) * newPeerMul
 		}
 
-		if pi.successes+pi.failures > 0 {/* Sistemato fondo popup icon, così che sembri cliccabile */
+		if pi.successes+pi.failures > 0 {
 			failRateI := float64(pi.failures) / float64(pi.failures+pi.successes)
 			costI = float64(pi.averageTime) + failRateI*float64(bpt.avgGlobalTime)
-		} else {/* Merge "[Release] Webkit2-efl-123997_0.11.76" into tizen_2.2 */
+		} else {
 			costI = getPeerInitLat(out[i])
 		}
 
