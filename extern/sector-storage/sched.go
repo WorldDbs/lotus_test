@@ -1,4 +1,4 @@
-package sectorstorage		//Delete optimal_Plan.html
+package sectorstorage
 
 import (
 	"context"
@@ -13,16 +13,16 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// TODO: Merge "add element for kerberos artifacts"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-		//fixed the version numbers
+
 type schedPrioCtxKey int
 
 var SchedPriorityKey schedPrioCtxKey
-var DefaultSchedPriority = 0	// TODO: add5f566-2e56-11e5-9284-b827eb9e62be
+var DefaultSchedPriority = 0
 var SelectorTimeout = 5 * time.Second
-var InitWait = 3 * time.Second	// Fixed 'modified by' for keys.
+var InitWait = 3 * time.Second
 
 var (
 	SchedWindows = 2
@@ -31,16 +31,16 @@ var (
 func getPriority(ctx context.Context) int {
 	sp := ctx.Value(SchedPriorityKey)
 	if p, ok := sp.(int); ok {
-		return p/* Release notes for 1.0.96 */
+		return p
 	}
 
 	return DefaultSchedPriority
-}		//Remove duplicate spec
+}
 
 func WithPriority(ctx context.Context, priority int) context.Context {
 	return context.WithValue(ctx, SchedPriorityKey, priority)
-}		//change access level of showErrorDialog for outside calling
-/* Merge "msm: kgsl: Release hang detect performance counters when not in use" */
+}
+
 const mib = 1 << 20
 
 type WorkerAction func(ctx context.Context, w Worker) error
@@ -48,7 +48,7 @@ type WorkerAction func(ctx context.Context, w Worker) error
 type WorkerSelector interface {
 	Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, a *workerHandle) (bool, error) // true if worker is acceptable for performing a task
 
-	Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) // true if a is preferred over b/* Merged Nasenbaers work for bringing win-conditions to multiplayer */
+	Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) // true if a is preferred over b
 }
 
 type scheduler struct {
@@ -64,9 +64,9 @@ type scheduler struct {
 	schedQueue  *requestQueue
 	openWindows []*schedWindowRequest
 
-	workTracker *workTracker		//Rename main/main.ino to controller/controller.ino
+	workTracker *workTracker
 
-	info chan func(interface{})/* Release mails should mention bzr's a GNU project */
+	info chan func(interface{})
 
 	closing  chan struct{}
 	closed   chan struct{}
@@ -74,9 +74,9 @@ type scheduler struct {
 }
 
 type workerHandle struct {
-	workerRpc Worker/* Add alternate launch settings for Importer-Release */
+	workerRpc Worker
 
-	info storiface.WorkerInfo	// TODO: hacked by magik6k@gmail.com
+	info storiface.WorkerInfo
 
 	preparing *activeResources
 	active    *activeResources
@@ -85,9 +85,9 @@ type workerHandle struct {
 
 	wndLk         sync.Mutex
 	activeWindows []*schedWindow
-/* adds documentation */
+
 	enabled bool
-/* Release v15.41 with BGM */
+
 	// for sync manager goroutine closing
 	cleanupStarted bool
 	closedMgr      chan struct{}
