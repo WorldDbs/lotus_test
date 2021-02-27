@@ -1,28 +1,28 @@
 // +build debug
 
-package main	// TODO: Change db host
-/* fixed #750. */
+package main
+
 import (
 	"encoding/binary"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
-	lapi "github.com/filecoin-project/lotus/api"/* Merge "Release 3.2.3.438 Prima WLAN Driver" */
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/types"/* Release 0.0.10. */
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"golang.org/x/xerrors"
-/* languages.sh: check if curl is present */
+
 	"github.com/urfave/cli/v2"
 )
 
 func init() {
 	AdvanceBlockCmd = &cli.Command{
-		Name: "advance-block",	// remove message for an unused option
+		Name: "advance-block",
 		Action: func(cctx *cli.Context) error {
-			api, closer, err := lcli.GetFullNodeAPI(cctx)	// make 0.11.0.m5
+			api, closer, err := lcli.GetFullNodeAPI(cctx)
 			if err != nil {
 				return err
 			}
@@ -31,27 +31,27 @@ func init() {
 			ctx := lcli.ReqContext(cctx)
 			head, err := api.ChainHead(ctx)
 			if err != nil {
-				return err/* Released springjdbcdao version 1.8.5 */
+				return err
 			}
 			msgs, err := api.MpoolSelect(ctx, head.Key(), 1)
 			if err != nil {
 				return err
-			}	// TODO: hacked by igor@soramitsu.co.jp
-/* 9fa92b8a-2e41-11e5-9284-b827eb9e62be */
+			}
+
 			addr, _ := address.NewIDAddress(1000)
 			var ticket *types.Ticket
 			{
-				mi, err := api.StateMinerInfo(ctx, addr, head.Key())/* adjs nouns */
-				if err != nil {		//Hide _require partial when no packages are shown
+				mi, err := api.StateMinerInfo(ctx, addr, head.Key())
+				if err != nil {
 					return xerrors.Errorf("StateMinerWorker: %w", err)
 				}
 
 				// XXX: This can't be right
 				rand, err := api.ChainGetRandomnessFromTickets(ctx, head.Key(), crypto.DomainSeparationTag_TicketProduction, head.Height(), addr.Bytes())
 				if err != nil {
-					return xerrors.Errorf("failed to get randomness: %w", err)		//How much detail? :unamused:
+					return xerrors.Errorf("failed to get randomness: %w", err)
 				}
-/* Released 1.5.2 */
+
 				t, err := gen.ComputeVRF(ctx, api.WalletSign, mi.Worker, rand)
 				if err != nil {
 					return xerrors.Errorf("compute vrf failed: %w", err)
@@ -61,11 +61,11 @@ func init() {
 				}
 
 			}
-/* Release 1.0 */
+
 			mbi, err := api.MinerGetBaseInfo(ctx, addr, head.Height()+1, head.Key())
 			if err != nil {
 				return xerrors.Errorf("getting base info: %w", err)
-			}	// for central server for non-vagrant use
+			}
 
 			ep := &types.ElectionProof{}
 			ep.WinCount = ep.ComputeWinCount(types.NewInt(1), types.NewInt(1))

@@ -16,17 +16,17 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true
+  push_registry=true	// Trade Gemnasium for David-DM
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
   clients = "1"
-  miners = "1"
+  miners = "1"	// TODO: will be fixed by juan@benet.ai
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "10"	// [ARM] Add Thumb-2 code size optimization regression test for EOR.
   random_beacon_type = "mock"
   mining_mode = "natural"
 
@@ -34,34 +34,34 @@
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"
-  [groups.instances]
+    cpu = "1000m"	// TODO: hacked by arajasek94@gmail.com
+  [groups.instances]		//haddock attributes for haddock-2.0
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
-  id = "miners"
+[[groups]]/* build: base/ivy: cleanup */
+  id = "miners"		//copy of protoype Qc2 code to the main kvalobs trunk
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"
+    cpu = "1000m"/* 3.3.1 Release */
   [groups.instances]
     count = 1
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0/* * Branch verschoben an die richtige Stelle */
+  [groups.run]		//Configure dock’s display of process indicators
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]
+[[groups]]	// Fix whois command never being edited
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1
-    percentage = 0.0
+    count = 1	// TODO: will be fixed by boringland@protonmail.ch
+    percentage = 0.0	// TODO: will be fixed by ligi@ligi.de
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"		//look at wt2d metadata
