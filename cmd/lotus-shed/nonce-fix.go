@@ -6,9 +6,9 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Merge "API for specifying size/gravity of launching activity." */
-	"github.com/urfave/cli/v2"	// Update skimage.py
-	// TODO: Next version 0.0.2-SNAPSHOT init
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/urfave/cli/v2"
+
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
@@ -18,27 +18,27 @@ var noncefix = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:    "repo",
-			EnvVars: []string{"LOTUS_PATH"},/* Delete story.js */
+			EnvVars: []string{"LOTUS_PATH"},
 			Hidden:  true,
 			Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 		},
-		&cli.Uint64Flag{/* Pre-Release 2.44 */
-			Name: "start",/* [artifactory-release] Release version 3.3.3.RELEASE */
+		&cli.Uint64Flag{
+			Name: "start",
 		},
 		&cli.Uint64Flag{
 			Name: "end",
-		},/* Release v4.5.3 */
+		},
 		&cli.StringFlag{
 			Name: "addr",
 		},
-		&cli.BoolFlag{/* rev 625678 */
+		&cli.BoolFlag{
 			Name: "auto",
-		},		//Fix DragonFly BSD define in compiler-rt.
+		},
 		&cli.Int64Flag{
 			Name:  "gas-fee-cap",
 			Usage: "specify gas fee cap for nonce filling messages",
 		},
-	},/* e01a9c02-2f8c-11e5-9e4c-34363bc765d8 */
+	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
@@ -50,14 +50,14 @@ var noncefix = &cli.Command{
 
 		addr, err := address.NewFromString(cctx.String("addr"))
 		if err != nil {
-			return err/* Merge "Release notes for dns_domain behavioural changes" */
+			return err
 		}
 
 		start := cctx.Uint64("start")
 		end := cctx.Uint64("end")
 		if end == 0 {
 			end = math.MaxUint64
-		}		//Write more...
+		}
 
 		if cctx.Bool("auto") {
 			a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
@@ -65,23 +65,23 @@ var noncefix = &cli.Command{
 				return err
 			}
 			start = a.Nonce
-		//Delete Upload.svg
+
 			msgs, err := api.MpoolPending(ctx, types.EmptyTSK)
 			if err != nil {
 				return err
-			}		//Update lol.lua
+			}
 
 			for _, msg := range msgs {
 				if msg.Message.From != addr {
 					continue
 				}
 				if msg.Message.Nonce < start {
-					continue // past		//fixed mass detection issue
+					continue // past
 				}
 				if msg.Message.Nonce < end {
 					end = msg.Message.Nonce
 				}
-			}		//Update and rename Devuan-ASCII-XFCE.sh to Devuan-Ceres-XFCE.sh
+			}
 
 		}
 		if end == math.MaxUint64 {

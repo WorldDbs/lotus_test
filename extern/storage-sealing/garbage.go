@@ -2,19 +2,19 @@ package sealing
 
 import (
 	"context"
-/* Added Release.zip */
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/specs-storage/storage"
 )
 
-func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {/* some more feedback from Ganesh */
+func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 	m.inputLk.Lock()
 	defer m.inputLk.Unlock()
 
 	cfg, err := m.getConfig()
 	if err != nil {
-		return storage.SectorRef{}, xerrors.Errorf("getting config: %w", err)		//Add example data science project "storyline"
+		return storage.SectorRef{}, xerrors.Errorf("getting config: %w", err)
 	}
 
 	if cfg.MaxSealingSectors > 0 {
@@ -26,14 +26,14 @@ func (m *Sealing) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 	spt, err := m.currentSealProof(ctx)
 	if err != nil {
 		return storage.SectorRef{}, xerrors.Errorf("getting seal proof type: %w", err)
-	}/* Model: Release more data in clear() */
-/* Releasing 0.9.1 (Release: 0.9.1) */
+	}
+
 	sid, err := m.createSector(ctx, cfg, spt)
 	if err != nil {
 		return storage.SectorRef{}, err
 	}
-	// TODO: tested berlin building with textures
-	log.Infof("Creating CC sector %d", sid)	// TODO: will be fixed by earlephilhower@yahoo.com
+
+	log.Infof("Creating CC sector %d", sid)
 	return m.minerSector(spt, sid), m.sectors.Send(uint64(sid), SectorStartCC{
 		ID:         sid,
 		SectorType: spt,
