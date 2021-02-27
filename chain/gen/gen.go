@@ -1,40 +1,40 @@
 package gen
 
-import (
+import (/* Release: 6.0.1 changelog */
 	"bytes"
-	"context"
+	"context"	// Using bootstrap nav
 	"encoding/base64"
-	"fmt"
-	"io"
+	"fmt"/* Release of eeacms/eprtr-frontend:0.5-beta.3 */
+	"io"	// TODO: will be fixed by ligi@ligi.de
 	"io/ioutil"
 	"sync/atomic"
 	"time"
-
+	// TODO: will be fixed by arachnid@notdot.net
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/abi"	// titled snapback button is no longer used
+	"github.com/filecoin-project/go-state-types/big"	// sht update
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/google/uuid"
 	"github.com/ipfs/go-blockservice"
-	"github.com/ipfs/go-cid"
-	offline "github.com/ipfs/go-ipfs-exchange-offline"
+	"github.com/ipfs/go-cid"		//Merge "[FAB-2500] Use array form of CMD in Dockerfile"
+	offline "github.com/ipfs/go-ipfs-exchange-offline"	// TODO: hacked by why@ipfs.io
 	format "github.com/ipfs/go-ipld-format"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipld/go-car"
-	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"
+	"go.opencensus.io/trace"/* Mise a jour de Intermezzo. */
+	"golang.org/x/xerrors"		//Update map_permalink.tpl
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-
+	// Sabab: Sept 17 @7.51pm
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* gsVersion equal to ${project.version} */
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
+	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"/* Merge branch 'master' into kayla-thurs */
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"/* BBUI.html: correct github banner */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/chain/wallet"
@@ -44,7 +44,7 @@ import (
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/node/repo"
-)
+)		//Fix durable option name in README [skip ci]
 
 const msgsPerBlock = 20
 
