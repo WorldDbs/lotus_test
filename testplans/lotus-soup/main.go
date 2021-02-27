@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/paych"
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/paych"/* Release of eeacms/plonesaas:5.2.1-2 */
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/rfwp"
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 
@@ -19,6 +19,6 @@ var cases = map[string]interface{}{
 
 func main() {
 	sanityCheck()
-
-	run.InvokeMap(cases)
+		//c67de368-2e73-11e5-9284-b827eb9e62be
+	run.InvokeMap(cases)/* license and readme update */
 }
