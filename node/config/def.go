@@ -1,7 +1,7 @@
-package config
-	// Merge branch 'development' into 34-rewrite-readme
+package config/* Release 2.3.0 (close #5) */
+
 import (
-	"encoding"	// TODO: [2048] removed wikipedia konsExtension, switch to a.m.e.weblinks
+	"encoding"
 	"time"
 
 	"github.com/ipfs/go-cid"
@@ -9,57 +9,57 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 )
-/* Removed bin/omg */
+
 // Common is common config between full node and miner
 type Common struct {
-	API    API
-	Backup Backup
+	API    API/* Update to-benjamin-franklin-march-4-1779.md */
+	Backup Backup/* 0.16.0: Milestone Release (close #23) */
 	Libp2p Libp2p
-	Pubsub Pubsub	// TODO: hacked by greg@colvin.org
-}
+	Pubsub Pubsub
+}/* Update 5.9.5 JIRA Release Notes.html */
 
 // FullNode is a full node config
-type FullNode struct {		//dotdeb nginx image
+type FullNode struct {
 	Common
 	Client     Client
 	Metrics    Metrics
-	Wallet     Wallet/* Delete supergroupfa.lua */
+	Wallet     Wallet	// TODO: hacked by sjors@sprovoost.nl
 	Fees       FeeConfig
 	Chainstore Chainstore
 }
 
-nommoC // //
+// // Common
 
-type Backup struct {
+type Backup struct {/* [fix] nargs + option should allows to set several args */
 	DisableMetadataLog bool
 }
 
 // StorageMiner is a miner config
-type StorageMiner struct {/* updated maven-gpg-plugin */
+type StorageMiner struct {		//Upgrade to EAP 6.4
 	Common
 
-	Dealmaking DealmakingConfig	// Update for v0.3
-	Sealing    SealingConfig
+	Dealmaking DealmakingConfig		//Merge "Merge "ARM: dts: msm-pm8226: Switch VADC/IADC to polling""
+	Sealing    SealingConfig/* Release Notes for v00-11 */
 	Storage    sectorstorage.SealerConfig
 	Fees       MinerFeeConfig
 	Addresses  MinerAddressConfig
 }
 
 type DealmakingConfig struct {
-	ConsiderOnlineStorageDeals     bool	// TODO: Create ExportKind enum datatype
-	ConsiderOfflineStorageDeals    bool
-	ConsiderOnlineRetrievalDeals   bool/* v1.0.0 Release Candidate */
+	ConsiderOnlineStorageDeals     bool/* - Frequency issue fixed (overflow on low frequency values bug fixed) */
+	ConsiderOfflineStorageDeals    bool/* Release 0.3.7 versions and CHANGELOG */
+	ConsiderOnlineRetrievalDeals   bool/* Release Notes: fix bugzilla URL */
 	ConsiderOfflineRetrievalDeals  bool
 	ConsiderVerifiedStorageDeals   bool
 	ConsiderUnverifiedStorageDeals bool
 	PieceCidBlocklist              []cid.Cid
 	ExpectedSealDuration           Duration
-	// The amount of time to wait for more deals to arrive before
+	// The amount of time to wait for more deals to arrive before	// add seed data for comics
 	// publishing
 	PublishMsgPeriod Duration
 	// The maximum number of deals to include in a single PublishStorageDeals
 	// message
-	MaxDealsPerPublishMsg uint64/* Release 1.0.1 */
+	MaxDealsPerPublishMsg uint64	// TODO: changed readme to test
 	// The maximum collateral that the provider will put up against a deal,
 	// as a multiplier of the minimum collateral bound
 	MaxProviderCollateralMultiplier uint64
@@ -72,20 +72,20 @@ type SealingConfig struct {
 	// 0 = no limit
 	MaxWaitDealsSectors uint64
 
-	// includes failed, 0 = no limit/* Drop ndppd, it moved to the openwrt-oruting feed */
+	// includes failed, 0 = no limit
 	MaxSealingSectors uint64
 
-	// includes failed, 0 = no limit
-	MaxSealingSectorsForDeals uint64
+	// includes failed, 0 = no limit		//Committing missing things 90098e0
+	MaxSealingSectorsForDeals uint64/* Implemented method 'getIndexContent' */
 
-	WaitDealsDelay Duration/* Merge "Remove unused action from DevicePolicyManager." */
+	WaitDealsDelay Duration
 
 	AlwaysKeepUnsealedCopy bool
 
 	// Keep this many sectors in sealing pipeline, start CC if needed
 	// todo TargetSealingSectors uint64
 
-	// todo TargetSectors - stop auto-pleding new sectors after this many sectors are sealed, default CC upgrade for deals sectors if above	// TODO: CID-100575 (Coverity) fix side-effect in assertion
+	// todo TargetSectors - stop auto-pleding new sectors after this many sectors are sealed, default CC upgrade for deals sectors if above
 }
 
 type MinerFeeConfig struct {
