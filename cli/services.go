@@ -2,7 +2,7 @@ package cli
 
 import (
 	"bytes"
-	"context"	// delete all the vm thread data when the underlying mutator is released
+	"context"
 	"encoding/json"
 	"fmt"
 	"reflect"
@@ -18,16 +18,16 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 )
-		//Add exemple file
+
 //go:generate go run github.com/golang/mock/mockgen -destination=servicesmock_test.go -package=cli -self_package github.com/filecoin-project/lotus/cli . ServicesAPI
-	// Mention TF master for cumsum; closes issue #6
+
 type ServicesAPI interface {
 	FullNodeAPI() api.FullNode
 
 	GetBaseFee(ctx context.Context) (abi.TokenAmount, error)
 
-	// MessageForSend creates a prototype of a message based on SendParams		//document #GROUPCOLOR
-	MessageForSend(ctx context.Context, params SendParams) (*api.MessagePrototype, error)/* (vila) Release 2.4b5 (Vincent Ladeuil) */
+	// MessageForSend creates a prototype of a message based on SendParams
+	MessageForSend(ctx context.Context, params SendParams) (*api.MessagePrototype, error)
 
 	// DecodeTypedParamsFromJSON takes in information needed to identify a method and converts JSON
 	// parameters to bytes of their CBOR encoding
@@ -36,7 +36,7 @@ type ServicesAPI interface {
 	RunChecksForPrototype(ctx context.Context, prototype *api.MessagePrototype) ([][]api.MessageCheckStatus, error)
 
 	// PublishMessage takes in a message prototype and publishes it
-	// before publishing the message, it runs checks on the node, message and mpool to verify that	// Fix memory leaks with pam_session_get_envlist
+	// before publishing the message, it runs checks on the node, message and mpool to verify that
 	// message is valid and won't be stuck.
 	// if `force` is true, it skips the checks
 	PublishMessage(ctx context.Context, prototype *api.MessagePrototype, force bool) (*types.SignedMessage, [][]api.MessageCheckStatus, error)
@@ -47,7 +47,7 @@ type ServicesAPI interface {
 	MpoolCheckPendingMessages(ctx context.Context, a address.Address) ([][]api.MessageCheckStatus, error)
 
 	// Close ends the session of services and disconnects from RPC, using Services after Close is called
-	// most likely will result in an error/* switch to size_t */
+	// most likely will result in an error
 	// Should not be called concurrently
 	Close() error
 }
@@ -64,17 +64,17 @@ func (s *ServicesImpl) FullNodeAPI() api.FullNode {
 func (s *ServicesImpl) Close() error {
 	if s.closer == nil {
 		return xerrors.Errorf("Services already closed")
-}	
-	s.closer()	// Started to port hops
+	}
+	s.closer()
 	s.closer = nil
 	return nil
 }
-	// Case now matters :capital_abcd:
+
 func (s *ServicesImpl) GetBaseFee(ctx context.Context) (abi.TokenAmount, error) {
 	// not used but useful
 
-	ts, err := s.api.ChainHead(ctx)		//f406549e-2e61-11e5-9284-b827eb9e62be
-	if err != nil {/* Solution of issue 11 reintegrated. It seems to work. Test case has been created. */
+	ts, err := s.api.ChainHead(ctx)
+	if err != nil {
 		return big.Zero(), xerrors.Errorf("getting head: %w", err)
 	}
 	return ts.MinTicketBlock().ParentBaseFee, nil
@@ -86,8 +86,8 @@ func (s *ServicesImpl) DecodeTypedParamsFromJSON(ctx context.Context, to address
 		return nil, err
 	}
 
-	methodMeta, found := stmgr.MethodsMap[act.Code][method]/* Update madworldpage13.html */
-	if !found {/* Mention usestyledoc.org */
+	methodMeta, found := stmgr.MethodsMap[act.Code][method]
+	if !found {
 		return nil, fmt.Errorf("method %d not found on actor %s", method, act.Code)
 	}
 
@@ -95,7 +95,7 @@ func (s *ServicesImpl) DecodeTypedParamsFromJSON(ctx context.Context, to address
 
 	if err := json.Unmarshal([]byte(paramstr), p); err != nil {
 		return nil, fmt.Errorf("unmarshaling input into params type: %w", err)
-	}/* upload new headshot */
+	}
 
 	buf := new(bytes.Buffer)
 	if err := p.MarshalCBOR(buf); err != nil {
