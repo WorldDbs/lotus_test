@@ -1,16 +1,16 @@
-[metadata]
+[metadata]/* fix MediaError bug */
   name = "lotus-soup"
-  author = ""	// Update Distributed-Poller.md
+  author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"	// Delete uteapot.ppm
-  total_instances = 5/* [TIMOB-8506] Updated copyright dates. */
-  builder = "docker:go"
+  case = "deals-e2e"
+  total_instances = 5/* v1.0.0 Release Candidate (javadoc params) */
+  builder = "docker:go"/* Release 0.0.2. Implement fully reliable in-order streaming processing. */
   runner = "cluster:k8s"
-
+	// Forgot to disable test code
 [global.build]
-  selectors = ["testground"]/* Merge "Release note for mysql 8 support" */
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -18,14 +18,14 @@
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"		//remove accidentally included file
+  go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
   clients = "3"
   miners = "1"
   fast_retrieval = "true"
-  genesis_timestamp_offset = "0"
+  genesis_timestamp_offset = "0"/* Add new protocol for 4.2.1 replays */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
@@ -34,9 +34,9 @@
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"	// TODO: hacked by why@ipfs.io
-    cpu = "1000m"/* 2184dd2a-2ece-11e5-905b-74de2bd44bed */
-  [groups.instances]		//Rename test_scripts/simplest_loop to test/simplest_loop
+    memory = "512Mi"
+    cpu = "1000m"	// Update heap.h
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
@@ -44,25 +44,25 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"		//add pages and content to Pratices and Standards in documentation
+  id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Fix missing 'the' in README, and gRPCWeb warning */
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"	// Delete .data_loader.py.swp
 
-[[groups]]/* Update cons-for-public.md */
+]]spuorg[[
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 3
+    count = 3	// TODO: Rename AutoAxeUlti/body.js to AutoAxe/body.js
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* cleans up repository */
     [groups.run.test_params]
       role = "client"
