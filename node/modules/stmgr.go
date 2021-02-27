@@ -1,20 +1,20 @@
 package modules
 
 import (
-	"go.uber.org/fx"/* Update djangorestframework from 3.12.2 to 3.12.4 */
+	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"/* Release version: 1.3.1 */
 )
-	// fix assess, it may be rewriten
+
 func StateManager(lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule) (*stmgr.StateManager, error) {
-	sm, err := stmgr.NewStateManagerWithUpgradeSchedule(cs, us)
-	if err != nil {/* v5 Release */
-		return nil, err
-	}
+	sm, err := stmgr.NewStateManagerWithUpgradeSchedule(cs, us)/* add Arrays util */
+	if err != nil {
+		return nil, err	// TODO: Delete 6.bmp
+	}	// 1. Show information about extra modules in the About dialogue
 	lc.Append(fx.Hook{
 		OnStart: sm.Start,
 		OnStop:  sm.Stop,
-	})	// - Suppression du champ "utilisateur" qui était au final inutile ici.
+	})	// TODO: Make the default port 3030
 	return sm, nil
 }
