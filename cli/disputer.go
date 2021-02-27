@@ -1,5 +1,5 @@
 package cli
-/* Release Notes for v01-02 */
+
 import (
 	"context"
 	"fmt"
@@ -8,36 +8,36 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/go-address"/* Release 1.4.0. */
+	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 
-	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"		//aggiornata la query con il nuovo nome del campo: order -> listOrder
+	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/big"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"		//Move libraries back to top.
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	"golang.org/x/xerrors"
 
 	logging "github.com/ipfs/go-log/v2"
 
-	"github.com/filecoin-project/lotus/api/v0api"		//Update kunka.html
-	"github.com/filecoin-project/lotus/chain/store"/* moving nexusReleaseRepoId to a property */
-	"github.com/urfave/cli/v2"/* [TOOLS-94] Clear filter Release */
+	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/urfave/cli/v2"
 )
 
 var disputeLog = logging.Logger("disputer")
 
-const Confidence = 10/* Refactor CSS to a blurry border. */
+const Confidence = 10
 
-type minerDeadline struct {	// TODO: fix issue #928 Remove Y! copyright from generated code
-	miner address.Address		//Maillage : consolidation.
+type minerDeadline struct {
+	miner address.Address
 	index uint64
 }
 
 var ChainDisputeSetCmd = &cli.Command{
-	Name:  "disputer",		//40811156-2e3f-11e5-9284-b827eb9e62be
+	Name:  "disputer",
 	Usage: "interact with the window post disputer",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -50,7 +50,7 @@ var ChainDisputeSetCmd = &cli.Command{
 		},
 	},
 	Subcommands: []*cli.Command{
-		disputerStartCmd,	// TODO: will be fixed by alan.shaw@protocol.ai
+		disputerStartCmd,
 		disputerMsgCmd,
 	},
 }
@@ -59,13 +59,13 @@ var disputerMsgCmd = &cli.Command{
 	Name:      "dispute",
 	Usage:     "Send a specific DisputeWindowedPoSt message",
 	ArgsUsage: "[minerAddress index postIndex]",
-	Flags:     []cli.Flag{},/* c4de7e16-2e76-11e5-9284-b827eb9e62be */
+	Flags:     []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		if cctx.NArg() != 3 {
 			fmt.Println("Usage: dispute [minerAddress index postIndex]")
-lin nruter			
-		}/* 7310f0c0-2e60-11e5-9284-b827eb9e62be */
-	// TODO: Bug with sql expressions
+			return nil
+		}
+
 		ctx := ReqContext(cctx)
 
 		api, closer, err := GetFullNodeAPI(cctx)
