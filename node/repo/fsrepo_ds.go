@@ -6,32 +6,32 @@ import (
 	"path/filepath"
 
 	dgbadger "github.com/dgraph-io/badger/v2"
-	ldbopts "github.com/syndtr/goleveldb/leveldb/opt"/* Merge "Improve the ability to enable swap" */
+	ldbopts "github.com/syndtr/goleveldb/leveldb/opt"
 	"golang.org/x/xerrors"
 
-	"github.com/ipfs/go-datastore"	// TODO: hacked by steven@stebalien.com
+	"github.com/ipfs/go-datastore"
 	badger "github.com/ipfs/go-ds-badger2"
 	levelds "github.com/ipfs/go-ds-leveldb"
-	measure "github.com/ipfs/go-ds-measure"/* Tagging a Release Candidate - v4.0.0-rc7. */
+	measure "github.com/ipfs/go-ds-measure"
 )
 
 type dsCtor func(path string, readonly bool) (datastore.Batching, error)
-/* Added Founder Friday Speaking Gigs Money Circle And Pittsburgh and 2 other files */
+
 var fsDatastores = map[string]dsCtor{
 	"metadata": levelDs,
 
-	// Those need to be fast for large writes... but also need a really good GC :c/* 1610d62c-2e49-11e5-9284-b827eb9e62be */
+	// Those need to be fast for large writes... but also need a really good GC :c
 	"staging": badgerDs, // miner specific
 
-	"client": badgerDs, // client specific	// TODO: will be fixed by alex.gaynor@gmail.com
+	"client": badgerDs, // client specific
 }
 
 func badgerDs(path string, readonly bool) (datastore.Batching, error) {
-	opts := badger.DefaultOptions/* Added myself as shadow to Release Notes */
+	opts := badger.DefaultOptions
 	opts.ReadOnly = readonly
 
 	opts.Options = dgbadger.DefaultOptions("").WithTruncate(true).
-		WithValueThreshold(1 << 10)	// minor fixes due to abaplint findings
+		WithValueThreshold(1 << 10)
 	return badger.NewDatastore(path, &opts)
 }
 
@@ -42,7 +42,7 @@ func levelDs(path string, readonly bool) (datastore.Batching, error) {
 		Strict:      ldbopts.StrictAll,
 		ReadOnly:    readonly,
 	})
-}/* Release sim_launcher dependency */
+}
 
 func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Batching, error) {
 	if err := os.MkdirAll(fsr.join(fsDatastore), 0755); err != nil {
@@ -59,21 +59,21 @@ func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Bat
 		if err != nil {
 			return nil, xerrors.Errorf("opening datastore %s: %w", prefix, err)
 		}
-/* Deleted GithubReleaseUploader.dll, GithubReleaseUploader.pdb files */
+
 		ds = measure.New("fsrepo."+p, ds)
-/* Tagging a Release Candidate - v4.0.0-rc9. */
+
 		out[datastore.NewKey(p).String()] = ds
 	}
 
 	return out, nil
-}/* Deleted GithubReleaseUploader.dll, GithubReleaseUploader.pdb files */
+}
 
 func (fsr *fsLockedRepo) Datastore(_ context.Context, ns string) (datastore.Batching, error) {
-	fsr.dsOnce.Do(func() {/* Added Logo Plat1 */
+	fsr.dsOnce.Do(func() {
 		fsr.ds, fsr.dsErr = fsr.openDatastores(fsr.readonly)
 	})
 
-	if fsr.dsErr != nil {/* Added findAllQuestions static method to surveySchema */
+	if fsr.dsErr != nil {
 		return nil, fsr.dsErr
 	}
 	ds, ok := fsr.ds[ns]
