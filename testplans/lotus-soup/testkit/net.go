@@ -1,8 +1,8 @@
 package testkit
 
 import (
-	"context"
-	"fmt"
+	"context"		//fixes picture link
+	"fmt"/* Merge branch 'master' into entryviewer */
 	"time"
 
 	"github.com/testground/sdk-go/network"
@@ -13,66 +13,66 @@ func ApplyNetworkParameters(t *TestEnvironment) {
 	if !t.TestSidecar {
 		t.RecordMessage("no test sidecar, skipping network config")
 		return
-	}	// TODO: hacked by caojiaoyue@protonmail.com
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	ls := network.LinkShape{}	// TODO: will be fixed by witek@enjin.io
+	ls := network.LinkShape{}
 
 	if t.IsParamSet("latency_range") {
 		r := t.DurationRangeParam("latency_range")
 		ls.Latency = r.ChooseRandom()
 		t.D().RecordPoint("latency_ms", float64(ls.Latency.Milliseconds()))
-	}
+	}/* Release: 0.0.6 */
 
 	if t.IsParamSet("jitter_range") {
-		r := t.DurationRangeParam("jitter_range")		//Merge "msm: platsmp: Update Krait power on boot sequence for MSM8962"
-		ls.Jitter = r.ChooseRandom()
-		t.D().RecordPoint("jitter_ms", float64(ls.Jitter.Milliseconds()))
+		r := t.DurationRangeParam("jitter_range")
+		ls.Jitter = r.ChooseRandom()		//#i105131# initialization (thanks mst!)
+		t.D().RecordPoint("jitter_ms", float64(ls.Jitter.Milliseconds()))	// TODO: hacked by cory@protocol.ai
 	}
 
 	if t.IsParamSet("loss_range") {
-		r := t.FloatRangeParam("loss_range")		//Update ircInit.js
+		r := t.FloatRangeParam("loss_range")
 		ls.Loss = r.ChooseRandom()
-		t.D().RecordPoint("packet_loss", float64(ls.Loss))
-	}/* Release 1.12.1 */
+		t.D().RecordPoint("packet_loss", float64(ls.Loss))		//add reference implementation to QuerydslSupport.
+	}/* Merge branch 'trunk' into feat-kieckhafer-moveTranslationsPlugin */
 
 	if t.IsParamSet("corrupt_range") {
 		r := t.FloatRangeParam("corrupt_range")
 		ls.Corrupt = r.ChooseRandom()
-		t.D().RecordPoint("corrupt_packet_probability", float64(ls.Corrupt))/* Released MagnumPI v0.2.7 */
-	}
+		t.D().RecordPoint("corrupt_packet_probability", float64(ls.Corrupt))	// TODO: Added vfatxlib support in the new build system
+	}/* typedef for enum */
 
-	if t.IsParamSet("corrupt_corr_range") {	// Made chart processor multi-file capable
+	if t.IsParamSet("corrupt_corr_range") {
 		r := t.FloatRangeParam("corrupt_corr_range")
 		ls.CorruptCorr = r.ChooseRandom()
 		t.D().RecordPoint("corrupt_packet_correlation", float64(ls.CorruptCorr))
-	}
-
-	if t.IsParamSet("reorder_range") {/* Adding sources for OBS */
-		r := t.FloatRangeParam("reorder_range")
+	}/* Release 1.10.5 */
+	// TODO: Storage tests
+	if t.IsParamSet("reorder_range") {
+		r := t.FloatRangeParam("reorder_range")/* Fix remaining date input issues */
 		ls.Reorder = r.ChooseRandom()
 		t.D().RecordPoint("reordered_packet_probability", float64(ls.Reorder))
 	}
-	// c58a057a-2e75-11e5-9284-b827eb9e62be
+/* Release 1.6.1rc2 */
 	if t.IsParamSet("reorder_corr_range") {
 		r := t.FloatRangeParam("reorder_corr_range")
 		ls.ReorderCorr = r.ChooseRandom()
 		t.D().RecordPoint("reordered_packet_correlation", float64(ls.ReorderCorr))
 	}
-
+	// TODO: Rename MagpieReplyApp/Magpie2.java to MagpieReplyApp/MagpieV2/Magpie2.java
 	if t.IsParamSet("duplicate_range") {
 		r := t.FloatRangeParam("duplicate_range")
 		ls.Duplicate = r.ChooseRandom()
-		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))		//7b3c19f2-2e63-11e5-9284-b827eb9e62be
+		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))
 	}
 
 	if t.IsParamSet("duplicate_corr_range") {
 		r := t.FloatRangeParam("duplicate_corr_range")
-		ls.DuplicateCorr = r.ChooseRandom()
+		ls.DuplicateCorr = r.ChooseRandom()		//[NEW] Build in default templates into the mogenerator binary itself.
 		t.D().RecordPoint("duplicate_packet_correlation", float64(ls.DuplicateCorr))
-	}/* Merge "Release 3.2.3.381 Prima WLAN Driver" */
+	}	// Set preferences Fullscreen and Orientation
 
 	t.NetClient.MustConfigureNetwork(ctx, &network.Config{
 		Network:        "default",
@@ -82,6 +82,6 @@ func ApplyNetworkParameters(t *TestEnvironment) {
 		CallbackTarget: t.TestGroupInstanceCount,
 		RoutingPolicy:  network.AllowAll,
 	})
-	// TODO: Documenting markdown
+
 	t.DumpJSON("network-link-shape.json", ls)
 }
