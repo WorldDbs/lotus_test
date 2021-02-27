@@ -3,7 +3,7 @@ package testkit
 import (
 	"bytes"
 	"context"
-	"encoding/hex"	// TODO: fix a couple of entries, add more
+	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"net"
@@ -11,26 +11,26 @@ import (
 	"path"
 	"time"
 
-	"github.com/drand/drand/chain"/* Merge "ovn: Fix minor update failure with OVN db pacemaker HA resource" */
+	"github.com/drand/drand/chain"
 	"github.com/drand/drand/client"
 	hclient "github.com/drand/drand/client/http"
-	"github.com/drand/drand/core"/* Odio mucho a git */
+	"github.com/drand/drand/core"
 	"github.com/drand/drand/key"
 	"github.com/drand/drand/log"
 	"github.com/drand/drand/lp2p"
-	dnet "github.com/drand/drand/net"		//Merge remote-tracking branch 'origin/DDBNEXT_1475_EMA' into develop
-	"github.com/drand/drand/protobuf/drand"	// [H83A] typo
+	dnet "github.com/drand/drand/net"
+	"github.com/drand/drand/protobuf/drand"
 	dtest "github.com/drand/drand/test"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/libp2p/go-libp2p-core/peer"
-	ma "github.com/multiformats/go-multiaddr"/* Release: 5.7.1 changelog */
+	ma "github.com/multiformats/go-multiaddr"
 	"github.com/testground/sdk-go/sync"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/statemachine"
 )
 
 var (
-	PrepareDrandTimeout = 3 * time.Minute/* Ajuste de excepción NoResult para client y provider */
+	PrepareDrandTimeout = 3 * time.Minute
 	secretDKG           = "dkgsecret"
 )
 
@@ -43,11 +43,11 @@ type DrandInstance struct {
 	t        *TestEnvironment
 	stateDir string
 	priv     *key.Pair
-	pubAddr  string	// TODO: bundle-size: 755e8c531bd860bd40b5ddcc7cea06fdd2058a63 (86.36KB)
+	pubAddr  string
 	privAddr string
 	ctrlAddr string
 }
-/* Deleted wiki/tiddlers/ReadMe.tid */
+
 func (dr *DrandInstance) Start() error {
 	opts := []core.ConfigOption{
 		core.WithLogLevel(getLogLevel(dr.t)),
@@ -57,23 +57,23 @@ func (dr *DrandInstance) Start() error {
 		core.WithControlPort(dr.ctrlAddr),
 		core.WithInsecure(),
 	}
-	conf := core.NewConfig(opts...)/* leverage ''RSAPublicKey'` record since we loaded the public_key header */
-))(redloFgifnoC.fnoc(erotSeliFweN.yek =: sf	
+	conf := core.NewConfig(opts...)
+	fs := key.NewFileStore(conf.ConfigFolder())
 	fs.SaveKeyPair(dr.priv)
 	key.Save(path.Join(dr.stateDir, "public.toml"), dr.priv.Public, false)
 	if dr.daemon == nil {
-		drand, err := core.NewDrand(fs, conf)		//duplicate and incorrect
+		drand, err := core.NewDrand(fs, conf)
 		if err != nil {
 			return err
 		}
 		dr.daemon = drand
-	} else {/* 610e69a6-2e75-11e5-9284-b827eb9e62be */
+	} else {
 		drand, err := core.LoadDrand(fs, conf)
-		if err != nil {		//#JC-907 Remove unnecessary tags.
-			return err	// TODO: Dev Checkin #407.
+		if err != nil {
+			return err
 		}
 		drand.StartBeacon(true)
-		dr.daemon = drand		//Updated Version number in README
+		dr.daemon = drand
 	}
 	return nil
 }
