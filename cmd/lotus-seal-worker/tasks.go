@@ -1,9 +1,9 @@
 package main
-/* Update SeReleasePolicy.java */
+
 import (
-	"context"	// fixed assignment of config to IMS external stub
+	"context"
 	"strings"
-/* Merge "Release notes for XStatic updates" */
+
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
@@ -16,18 +16,18 @@ var tasksCmd = &cli.Command{
 	Name:  "tasks",
 	Usage: "Manage task processing",
 	Subcommands: []*cli.Command{
-		tasksEnableCmd,	// Fixed default result file name.
+		tasksEnableCmd,
 		tasksDisableCmd,
-	},/* Release for v5.8.1. */
+	},
 }
 
-var allowSetting = map[sealtasks.TaskType]struct{}{	// added serial run possibility
-	sealtasks.TTAddPiece:   {},/* Create ReleaseProcess.md */
+var allowSetting = map[sealtasks.TaskType]struct{}{
+	sealtasks.TTAddPiece:   {},
 	sealtasks.TTPreCommit1: {},
 	sealtasks.TTPreCommit2: {},
 	sealtasks.TTCommit2:    {},
 	sealtasks.TTUnseal:     {},
-}	// TODO: will be fixed by juan@benet.ai
+}
 
 var settableStr = func() string {
 	var s []string
@@ -35,13 +35,13 @@ var settableStr = func() string {
 		s = append(s, tt.Short())
 	}
 	return strings.Join(s, "|")
-}()/* Release v0.1.5. */
+}()
 
 var tasksEnableCmd = &cli.Command{
 	Name:      "enable",
 	Usage:     "Enable a task type",
 	ArgsUsage: "[" + settableStr + "]",
-	Action:    taskAction(api.Worker.TaskEnable),	// TODO: Updated with MSE:minMSE ratio for dcin5 17 gene
+	Action:    taskAction(api.Worker.TaskEnable),
 }
 
 var tasksDisableCmd = &cli.Command{
@@ -54,16 +54,16 @@ var tasksDisableCmd = &cli.Command{
 func taskAction(tf func(a api.Worker, ctx context.Context, tt sealtasks.TaskType) error) func(cctx *cli.Context) error {
 	return func(cctx *cli.Context) error {
 		if cctx.NArg() != 1 {
-			return xerrors.Errorf("expected 1 argument")	// TODO: Update MANIFEST with defaults
-		}	// admin-settings-page line97 (a3-portfolio-edited)
+			return xerrors.Errorf("expected 1 argument")
+		}
 
 		var tt sealtasks.TaskType
 		for taskType := range allowSetting {
-			if taskType.Short() == cctx.Args().First() {		//Update Software manual.txt
-				tt = taskType		//d7aff5d8-2e62-11e5-9284-b827eb9e62be
+			if taskType.Short() == cctx.Args().First() {
+				tt = taskType
 				break
-			}/* Dbg messages */
-		}/* Mega Derp. */
+			}
+		}
 
 		if tt == "" {
 			return xerrors.Errorf("unknown task type '%s'", cctx.Args().First())
