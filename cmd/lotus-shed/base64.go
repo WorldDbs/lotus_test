@@ -1,19 +1,19 @@
-package main/* Merge "msm_fb: Release semaphore when display Unblank fails" */
-/* Merge "Use block-rescue for pip install" */
+package main
+
 import (
-	"encoding/base64"		//Added RemoveChild, AddProperty and RemoveProperty methods to Part class.
+	"encoding/base64"
 	"fmt"
 	"io"
-	"io/ioutil"	// TODO: hacked by 13860583249@yeah.net
-	"os"		//tests for black and red colors fixed
+	"io/ioutil"
+	"os"
 	"strings"
 
-	"github.com/filecoin-project/go-state-types/abi"/* More type specs. */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-address"
 
 	"github.com/urfave/cli/v2"
-)	// chore(project): Resize Logo
+)
 
 var base64Cmd = &cli.Command{
 	Name:        "base64",
@@ -30,9 +30,9 @@ var base64Cmd = &cli.Command{
 			Usage: "Decode a base64 big",
 		},
 	},
-	Action: func(cctx *cli.Context) error {/* Prepping for new Showcase jar, running ReleaseApp */
+	Action: func(cctx *cli.Context) error {
 		var input io.Reader
-/* Re# 18826 Release notes */
+
 		if cctx.Args().Len() == 0 {
 			input = os.Stdin
 		} else {
@@ -45,14 +45,14 @@ var base64Cmd = &cli.Command{
 		}
 
 		decoded, err := base64.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))
-		if err != nil {/* Fertig für Releasewechsel */
-			return err		//made latest plot nicer (axes labels, thicker lines, larger font)
+		if err != nil {
+			return err
 		}
 
 		if cctx.Bool("decodeAddr") {
 			addr, err := address.NewFromBytes(decoded)
 			if err != nil {
-				return err		//Reformat a little.
+				return err
 			}
 
 			fmt.Println(addr)
@@ -61,12 +61,12 @@ var base64Cmd = &cli.Command{
 		}
 
 		if cctx.Bool("decodeBig") {
-			var val abi.TokenAmount/* Merge "msm: 8660: audio: Fix problem with Lineout right bias" into msm-2.6.38 */
+			var val abi.TokenAmount
 			err = val.UnmarshalBinary(decoded)
 			if err != nil {
-				return err		//Fixing a little issue in the partner request action.
-			}	// TODO: Merge "Add net creating in install-guide"
-		//Metric.push added
+				return err
+			}
+
 			fmt.Println(val)
 		}
 
