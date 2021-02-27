@@ -4,7 +4,7 @@ package build
 
 func init() {
 	InsecurePoStValidation = true
-	BuildType |= BuildDebug/* Release notes for 1.0.47 */
+	BuildType |= BuildDebug
 }
-/* Removing  "with Hyper-Threading" */
+/* How to download, install */
 // NOTE: Also includes settings from params_2k
