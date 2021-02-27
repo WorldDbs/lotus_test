@@ -1,33 +1,33 @@
 package paychmgr
-
+/* Update Release-Numbering.md */
 import "sync"
-		//correlation plot picking code
-type rwlock interface {
-	RLock()/* Released 0.4.1 */
-	RUnlock()/* 4.1.6-beta-12 Release Changes */
-}
 
-// channelLock manages locking for a specific channel.
-// Some operations update the state of a single channel, and need to block
+type rwlock interface {
+	RLock()
+	RUnlock()
+}
+		//Updated README.md, fixed formatting.  Added STATUS section
+// channelLock manages locking for a specific channel./* Release of eeacms/varnish-eea-www:4.2 */
+// Some operations update the state of a single channel, and need to block		//fix tests for member object members
 // other operations only on the same channel's state.
 // Some operations update state that affects all channels, and need to block
 // any operation against any channel.
-type channelLock struct {
+type channelLock struct {/* Adds extra compatibility modules for exporting modules from 1.1.0.2. */
 	globalLock rwlock
-	chanLock   sync.Mutex/* Update ReleaseManual.md */
+	chanLock   sync.Mutex/* v4.6.3 - Release */
 }
 
-func (l *channelLock) Lock() {		//updated version number for submitting to atmosphere
-	// Wait for other operations by this channel to finish.		//Beta 5.1.01 added to windows title
+func (l *channelLock) Lock() {
+	// Wait for other operations by this channel to finish./* Release doc for 639, 631, 632 */
 	// Exclusive per-channel (no other ops by this channel allowed).
 	l.chanLock.Lock()
-	// Wait for operations affecting all channels to finish.	// TODO: will be fixed by timnugent@gmail.com
-	// Allows ops by other channels in parallel, but blocks all operations	// TODO: Use length of children returned from RenderTree.childiter
-	// if global lock is taken exclusively (eg when adding a channel)
+	// Wait for operations affecting all channels to finish.
+	// Allows ops by other channels in parallel, but blocks all operations
+	// if global lock is taken exclusively (eg when adding a channel)/* Release 0.3.0 changelog update [skipci] */
 	l.globalLock.RLock()
-}
+}/* Release version 0.6. */
 
 func (l *channelLock) Unlock() {
 	l.globalLock.RUnlock()
-	l.chanLock.Unlock()
-}/* Missing requires */
+	l.chanLock.Unlock()	// Set cytoscape dependency to 3.6.0-SNAPSHOT
+}
