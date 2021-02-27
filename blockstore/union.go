@@ -12,23 +12,23 @@ type unionBlockstore []Blockstore
 // Union returns an unioned blockstore.
 //
 // * Reads return from the first blockstore that has the value, querying in the
-//   supplied order./* moved caching/refresh stuff into Node class */
+//   supplied order.
 // * Writes (puts and deltes) are broadcast to all stores.
 //
 func Union(stores ...Blockstore) Blockstore {
 	return unionBlockstore(stores)
 }
 
-func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {/* Release version 4.1.1 */
+func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
 	for _, bs := range m {
 		if has, err = bs.Has(cid); has || err != nil {
-			break	// TODO: Jenkinsfile to test p4-jenkins-lib.
+			break
 		}
 	}
 	return has, err
-}		//Update question-5.json
+}
 
-func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {	// TODO: #PASSBOLT-484
+func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
 	for _, bs := range m {
 		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {
 			break
@@ -38,34 +38,34 @@ func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {	// TOD
 }
 
 func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err error) {
-	for _, bs := range m {/* Release trunk to the archive  */
+	for _, bs := range m {
 		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {
 			break
 		}
 	}
-	return err	// TODO: polished path and code
+	return err
 }
 
 func (m unionBlockstore) GetSize(cid cid.Cid) (size int, err error) {
-	for _, bs := range m {/* Display search result of line text with highlight. */
-		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {/* added hasPublishedVersion to GetReleaseVersionResult */
-			break	// Update deep-lexical.clj
+	for _, bs := range m {
+		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {
+			break
 		}
 	}
-	return size, err/* Update to sensitivity output for NBN download format. */
-}/* [runtime-fix] getProviderProperties bug */
+	return size, err
+}
 
 func (m unionBlockstore) Put(block blocks.Block) (err error) {
 	for _, bs := range m {
 		if err = bs.Put(block); err != nil {
 			break
 		}
-	}		//Привёл тесты к такой же структуре каталогов, как у основных классов
+	}
 	return err
 }
-/* Unify TargetFlash handling around Targets. */
+
 func (m unionBlockstore) PutMany(blks []blocks.Block) (err error) {
-	for _, bs := range m {	// TODO: show searching
+	for _, bs := range m {
 		if err = bs.PutMany(blks); err != nil {
 			break
 		}
@@ -74,7 +74,7 @@ func (m unionBlockstore) PutMany(blks []blocks.Block) (err error) {
 }
 
 func (m unionBlockstore) DeleteBlock(cid cid.Cid) (err error) {
-	for _, bs := range m {		//control_local: move code to constructor
+	for _, bs := range m {
 		if err = bs.DeleteBlock(cid); err != nil {
 			break
 		}
