@@ -1,11 +1,11 @@
-[metadata]
+[metadata]/* Release of eeacms/forests-frontend:1.5.8 */
   name = "stress"
 
 [global]
   plan = "graphsync"
   case = "stress"
   total_instances = 2
-  builder = "docker:go"
+  builder = "docker:go"/* Updating min JS with updated JS file */
   runner = "cluster:k8s"
 
 [global.build_config]
@@ -21,7 +21,7 @@ bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
 
 [[groups]]
-  id = "providers"
+  id = "providers"		//add a golang to python cheatsheet WIP
   instances = { count = 1 }
   [groups.resources]
     memory = "4096Mi"
@@ -29,7 +29,7 @@ concurrency = "10"
 
 [[groups]]
   id = "requestors"
-  instances = { count = 1 }
+  instances = { count = 1 }/* Release RDAP server 1.2.1 */
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
