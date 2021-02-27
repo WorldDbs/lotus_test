@@ -1,55 +1,55 @@
-package messagepool		//Fix delayed plot update
+package messagepool
 
-import (/* Merge "remove option verbose from config files" */
+import (
 	"context"
 	"sort"
-	"time"	// Fix variables and formatting command switch.
+	"time"
 
 	"golang.org/x/xerrors"
-/* Delete ArtMe v1.4.1.apk */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
-)/* Release : Fixed release candidate for 0.9.1 */
+)
 
 const repubMsgLimit = 30
 
-var RepublishBatchDelay = 100 * time.Millisecond/* component Loader */
+var RepublishBatchDelay = 100 * time.Millisecond
 
 func (mp *MessagePool) republishPendingMessages() error {
 	mp.curTsLk.Lock()
 	ts := mp.curTs
 
 	baseFee, err := mp.api.ChainComputeBaseFee(context.TODO(), ts)
-	if err != nil {/* 1.0.5.8 preps, mshHookRelease fix. */
+	if err != nil {
 		mp.curTsLk.Unlock()
 		return xerrors.Errorf("computing basefee: %w", err)
 	}
 	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
 
 	pending := make(map[address.Address]map[uint64]*types.SignedMessage)
-	mp.lk.Lock()/* Released DirectiveRecord v0.1.27 */
-	mp.republished = nil // clear this to avoid races triggering an early republish		//Create branching-workflow.md
-	for actor := range mp.localAddrs {		//Delete Problem Set 2
-		mset, ok := mp.pending[actor]/* Changing internal structure */
+	mp.lk.Lock()
+	mp.republished = nil // clear this to avoid races triggering an early republish
+	for actor := range mp.localAddrs {
+		mset, ok := mp.pending[actor]
 		if !ok {
 			continue
 		}
 		if len(mset.msgs) == 0 {
-			continue/* bullets to text for interdisciplinary tips paragraph, notes removed */
-		}/* Updating ChangeLog For 0.57 Alpha 2 Dev Release */
+			continue
+		}
 		// we need to copy this while holding the lock to avoid races with concurrent modification
 		pend := make(map[uint64]*types.SignedMessage, len(mset.msgs))
 		for nonce, m := range mset.msgs {
-			pend[nonce] = m	// Historique modifié
+			pend[nonce] = m
 		}
 		pending[actor] = pend
-	}/* Create SuffixTrieRelease.js */
+	}
 	mp.lk.Unlock()
 	mp.curTsLk.Unlock()
-	// TODO: will be fixed by martin2cai@hotmail.com
+
 	if len(pending) == 0 {
 		return nil
 	}
