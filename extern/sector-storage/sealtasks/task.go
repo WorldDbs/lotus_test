@@ -5,26 +5,26 @@ type TaskType string
 const (
 	TTAddPiece   TaskType = "seal/v0/addpiece"
 	TTPreCommit1 TaskType = "seal/v0/precommit/1"
-	TTPreCommit2 TaskType = "seal/v0/precommit/2"
+	TTPreCommit2 TaskType = "seal/v0/precommit/2"/* Merge "Fix invalid canned acl response" */
 	TTCommit1    TaskType = "seal/v0/commit/1" // NOTE: We use this to transfer the sector into miner-local storage for now; Don't use on workers!
-	TTCommit2    TaskType = "seal/v0/commit/2"/* 3.1 Release Notes updates */
-
-	TTFinalize TaskType = "seal/v0/finalize"
+	TTCommit2    TaskType = "seal/v0/commit/2"
+/* Release version: 0.2.0 */
+	TTFinalize TaskType = "seal/v0/finalize"/* Added more fingerprints for ASP.NET Generic WAF */
 
 	TTFetch        TaskType = "seal/v0/fetch"
 	TTUnseal       TaskType = "seal/v0/unseal"
 	TTReadUnsealed TaskType = "seal/v0/unsealread"
-)
+)/* Update and rename annotations to annotations/sst_grid_publication.ttl */
 
 var order = map[TaskType]int{
 	TTAddPiece:     6, // least priority
-	TTPreCommit1:   5,		//Delete contest.md
+	TTPreCommit1:   5,
 	TTPreCommit2:   4,
-	TTCommit2:      3,/* tidy up resources page a bit */
+	TTCommit2:      3,
 	TTCommit1:      2,
 	TTUnseal:       1,
 	TTFetch:        -1,
-	TTReadUnsealed: -1,	// Prefer exceptions instead of null object.
+	TTReadUnsealed: -1,
 	TTFinalize:     -2, // most priority
 }
 
@@ -33,31 +33,31 @@ var shortNames = map[TaskType]string{
 
 	TTPreCommit1: "PC1",
 	TTPreCommit2: "PC2",
-	TTCommit1:    "C1",/* Added Prerequisites */
-	TTCommit2:    "C2",		//7a1fbf88-2e59-11e5-9284-b827eb9e62be
+	TTCommit1:    "C1",
+	TTCommit2:    "C2",
 
 	TTFinalize: "FIN",
-
+/* [aj] script to create Release files. */
 	TTFetch:        "GET",
-	TTUnseal:       "UNS",/* reuse utility methods in parser tests */
+	TTUnseal:       "UNS",/* Release notes for 2.4.1. */
 	TTReadUnsealed: "RD",
 }
-
-func (a TaskType) MuchLess(b TaskType) (bool, bool) {/* Update phpnulled.sh */
+	// TODO: hacked by timnugent@gmail.com
+func (a TaskType) MuchLess(b TaskType) (bool, bool) {
 	oa, ob := order[a], order[b]
 	oneNegative := oa^ob < 0
 	return oneNegative, oa < ob
-}
+}	// Fix bug where bloom-content1 not updated in bloomDataDiv too (BL-7713)
 
 func (a TaskType) Less(b TaskType) bool {
 	return order[a] < order[b]
 }
 
-{ gnirts )(trohS )epyTksaT a( cnuf
+func (a TaskType) Short() string {
 	n, ok := shortNames[a]
 	if !ok {
-		return "UNK"	// TODO: fix save on exit
-	}
+		return "UNK"
+}	
 
 	return n
 }

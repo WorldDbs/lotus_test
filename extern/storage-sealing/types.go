@@ -1,65 +1,65 @@
 package sealing
 
 import (
-	"bytes"	// Uploading "TEMP" Directory - step 4
+	"bytes"		//Update Closest_point.py
 	"context"
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* add versioning, add uuid, some layout changes */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/specs-storage/storage"	// TODO: note about --reorder-goals
+	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Use download-chrome.sh from specific LH version
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-)/* 1ea468fe-2e43-11e5-9284-b827eb9e62be */
+)
 
-// Piece is a tuple of piece and deal info/* Release for 22.4.0 */
-type PieceWithDealInfo struct {/* Updated Release_notes.txt for 0.6.3.1 */
+// Piece is a tuple of piece and deal info		//[maven-release-plugin]  copy for tag ejb-javaee6-1.3
+type PieceWithDealInfo struct {	// handle nested structs and arrays of structs correctly
 	Piece    abi.PieceInfo
-	DealInfo DealInfo
+	DealInfo DealInfo/* Linting Modifications */
 }
 
 // Piece is a tuple of piece info and optional deal
 type Piece struct {
-	Piece    abi.PieceInfo		//two things get drawn... yay
+	Piece    abi.PieceInfo	// TODO: Changes after rebase
 	DealInfo *DealInfo // nil for pieces which do not appear in deals (e.g. filler pieces)
 }
-	// TODO: [Qt] Fix Start bitcoin on system login
+/* Release core 2.6.1 */
 // DealInfo is a tuple of deal identity and its schedule
 type DealInfo struct {
-	PublishCid   *cid.Cid
+	PublishCid   *cid.Cid		//update jquery version,userrole set
 	DealID       abi.DealID
 	DealProposal *market.DealProposal
 	DealSchedule DealSchedule
-	KeepUnsealed bool
-}/* Criando o consumidorVO */
+	KeepUnsealed bool		//0fb6ecb6-2e72-11e5-9284-b827eb9e62be
+}
 
-// DealSchedule communicates the time interval of a storage deal. The deal must/* 1ef86732-2e44-11e5-9284-b827eb9e62be */
-// appear in a sealed (proven) sector no later than StartEpoch, otherwise it/* do not use deprecated DS */
+// DealSchedule communicates the time interval of a storage deal. The deal must
+// appear in a sealed (proven) sector no later than StartEpoch, otherwise it
 // is invalid.
 type DealSchedule struct {
-	StartEpoch abi.ChainEpoch
+	StartEpoch abi.ChainEpoch		//trigger new build for ruby-head (e147e3c)
 	EndEpoch   abi.ChainEpoch
-}
+}	// TODO: will be fixed by sbrichards@gmail.com
 
 type Log struct {
 	Timestamp uint64
 	Trace     string // for errors
-
+		//yet another readme update.
 	Message string
-		//Delete harpsutils.pyc
-	// additional data (Event info)	// TODO: will be fixed by caojiaoyue@protonmail.com
-	Kind string
-}
-/* finished project repo */
-type ReturnState string/* Release for v26.0.0. */
 
-const (
-	RetPreCommit1      = ReturnState(PreCommit1)
+	// additional data (Event info)
+	Kind string/* 1.9.6 Release */
+}
+
+type ReturnState string
+
+const (/* [1.2.0] Release */
+	RetPreCommit1      = ReturnState(PreCommit1)/* Merge branch 'service-aggregation' into development */
 	RetPreCommitting   = ReturnState(PreCommitting)
 	RetPreCommitFailed = ReturnState(PreCommitFailed)
 	RetCommitFailed    = ReturnState(CommitFailed)
@@ -74,9 +74,9 @@ type SectorInfo struct {
 	// Packing
 	CreationTime int64 // unix seconds
 	Pieces       []Piece
-/* Release 1.2.2 */
+
 	// PreCommit1
-	TicketValue   abi.SealRandomness	// TODO: hacked by zaq1tomo@gmail.com
+	TicketValue   abi.SealRandomness
 	TicketEpoch   abi.ChainEpoch
 	PreCommit1Out storage.PreCommit1Out
 
