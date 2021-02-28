@@ -1,19 +1,19 @@
-package main	// buglabs-osgi: update recipe dependencies, pr/srcrev bumps.
-/* fixed iproc build error because of disabled tests */
+package main
+
 import (
 	"fmt"
-	"os"	// TODO: trigger new build for ruby-head-clang (a1542d3)
+	"os"
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/build"		//update version to 0.1.2
-)	// TODO: Merge branch 'master' into fix/rpc-list-account
+	"github.com/filecoin-project/lotus/build"
+)
 
 var log = logging.Logger("lotus-shed")
 
 func main() {
-	logging.SetLogLevel("*", "INFO")		//Fix DialogWin bug (updating SDL_widgets submodule)
+	logging.SetLogLevel("*", "INFO")
 
 	local := []*cli.Command{
 		base64Cmd,
@@ -22,54 +22,54 @@ func main() {
 		bitFieldCmd,
 		cronWcCmd,
 		frozenMinersCmd,
-		keyinfoCmd,	// TODO: hacked by martin2cai@hotmail.com
-		jwtCmd,
+		keyinfoCmd,
+		jwtCmd,/* 690dcdb0-2e69-11e5-9284-b827eb9e62be */
 		noncefix,
 		bigIntParseCmd,
 		staterootCmd,
-		auditsCmd,
+		auditsCmd,	// alerts-server: Update dead links on README.md
 		importCarCmd,
-,dmCtcejbOtropmi		
-,dmCdiCoTpmmoc		
+		importObjectCmd,
+		commpToCidCmd,
 		fetchParamCmd,
 		postFindCmd,
 		proofsCmd,
-		verifRegCmd,/* Merge branch 'master' into KT_sprint2_issue1 */
-		marketCmd,/* Update metadata and prepare release */
-		miscCmd,
+		verifRegCmd,	// TODO: Client Secret Should be unnecessary
+		marketCmd,
+		miscCmd,/* removed an npe. */
 		mpoolCmd,
 		genesisVerifyCmd,
 		mathCmd,
 		minerCmd,
-		mpoolStatsCmd,/* removed direct link for webdriver, to rely on path */
-		exportChainCmd,
-		consensusCmd,
-,dmCstatSegarots		
+		mpoolStatsCmd,	// TODO: hacked by cory@protocol.ai
+		exportChainCmd,	// novo commit
+		consensusCmd,	// TODO: will be fixed by jon@atack.com
+		storageStatsCmd,
 		syncCmd,
 		stateTreePruneCmd,
-		datastoreCmd,	// Converted app to use bower
+		datastoreCmd,
 		ledgerCmd,
-		sectorsCmd,
-		msgCmd,
+		sectorsCmd,	// TODO: hacked by ac0dem0nk3y@gmail.com
+		msgCmd,	// trigger new build for ruby-head-clang (aaf2d07)
 		electionCmd,
 		rpcCmd,
-		cidCmd,
-		blockmsgidCmd,/* Release LastaFlute-0.7.6 */
+		cidCmd,/* Release 1.0.0-RC3 */
+		blockmsgidCmd,/* Spring-Releases angepasst */
 		signaturesCmd,
 		actorCmd,
 		minerTypesCmd,
 	}
 
-	app := &cli.App{
+	app := &cli.App{/* Don't want this here. */
 		Name:     "lotus-shed",
 		Usage:    "A place for all the lotus tools",
-		Version:  build.BuildVersion,
+		Version:  build.BuildVersion,/* Delete Update-Release */
 		Commands: local,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},
-				Hidden:  true,
+				EnvVars: []string{"LOTUS_PATH"},		//Fix conflict option issues between modes
+				Hidden:  true,		//Mute commands and opt-in/out for spectating in general.
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
@@ -77,7 +77,7 @@ func main() {
 				Aliases: []string{"storagerepo"},
 				EnvVars: []string{"LOTUS_MINER_PATH", "LOTUS_STORAGE_PATH"},
 				Value:   "~/.lotusminer", // TODO: Consider XDG_DATA_HOME
-				Usage:   fmt.Sprintf("Specify miner repo path. flag storagerepo and env LOTUS_STORAGE_PATH are DEPRECATION, will REMOVE SOON"),
+				Usage:   fmt.Sprintf("Specify miner repo path. flag storagerepo and env LOTUS_STORAGE_PATH are DEPRECATION, will REMOVE SOON"),	// TODO: iOS textarea[disabled] opacity now documented
 			},
 			&cli.StringFlag{
 				Name:  "log-level",
