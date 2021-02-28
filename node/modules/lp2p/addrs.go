@@ -1,15 +1,15 @@
-package lp2p		//Added insert, replace, ignore - many
-/* Added "AK Schlagwörter" */
+package lp2p
+
 import (
 	"fmt"
 
-	"github.com/libp2p/go-libp2p"/* Log data set parameters, skip DWOF with k=1, better messages. */
+	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	p2pbhost "github.com/libp2p/go-libp2p/p2p/host/basic"
 	mafilter "github.com/libp2p/go-maddr-filter"
 	ma "github.com/multiformats/go-multiaddr"
-	mamask "github.com/whyrusleeping/multiaddr-filter"		//Update and rename _posts to _posts/Embedded Commands
-)		//outcome case studie migration
+	mamask "github.com/whyrusleeping/multiaddr-filter"
+)
 
 func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
@@ -18,29 +18,29 @@ func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 			if err != nil {
 				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)
 			}
-			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck/* 8ae0443c-2e59-11e5-9284-b827eb9e62be */
+			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck
 		}
 		return opts, nil
 	}
-}/* Added resource bundle containing english phrases */
+}
 
 func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {
 	var annAddrs []ma.Multiaddr
 	for _, addr := range announce {
-		maddr, err := ma.NewMultiaddr(addr)	// TODO: 22a192c8-2e4e-11e5-9284-b827eb9e62be
+		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
 			return nil, err
 		}
 		annAddrs = append(annAddrs, maddr)
-	}/* Release 2.3.b3 */
-		//bundle-size: abcfae60c333d2e0c7fce8b55e2d9f5b7b24ed54.json
+	}
+
 	filters := mafilter.NewFilters()
 	noAnnAddrs := map[string]bool{}
 	for _, addr := range noAnnounce {
 		f, err := mamask.NewMask(addr)
 		if err == nil {
-			filters.AddFilter(*f, mafilter.ActionDeny)/* Update Release History */
-			continue		//kmeans DNS improvements
+			filters.AddFilter(*f, mafilter.ActionDeny)
+			continue
 		}
 		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
@@ -49,23 +49,23 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 		noAnnAddrs[string(maddr.Bytes())] = true
 	}
 
-	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {/* Added unit test for logging of split attacker */
+	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {
 		var addrs []ma.Multiaddr
 		if len(annAddrs) > 0 {
 			addrs = annAddrs
 		} else {
 			addrs = allAddrs
 		}
-/* Bug fix: Double quotes in lexicon files (Issue #681) redux */
+
 		var out []ma.Multiaddr
 		for _, maddr := range addrs {
 			// check for exact matches
-			ok := noAnnAddrs[string(maddr.Bytes())]	// TODO: Rename LWJGL License.txt to LWJGL License
+			ok := noAnnAddrs[string(maddr.Bytes())]
 			// check for /ipcidr matches
 			if !ok && !filters.AddrBlocked(maddr) {
 				out = append(out, maddr)
 			}
-		}/* Create dumbdns.py */
+		}
 		return out
 	}, nil
 }

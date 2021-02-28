@@ -2,66 +2,66 @@ package main
 
 import (
 	"encoding/binary"
-	"fmt"		//Delete project.ftl.html
-	"math/rand"
+	"fmt"
+	"math/rand"	// Fix: typo errors
 
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by remco@dutchcoders.io
-	lcli "github.com/filecoin-project/lotus/cli"
+	"github.com/filecoin-project/lotus/chain/types"
+	lcli "github.com/filecoin-project/lotus/cli"/* Adjusted example markers.js a bit. */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//Store reference to profiler canvas
+	"golang.org/x/xerrors"
 )
 
 var electionCmd = &cli.Command{
 	Name:  "election",
-	Usage: "Commands related to leader election",		//Merge "Make device modules mobile-targeted"
-	Subcommands: []*cli.Command{
+	Usage: "Commands related to leader election",
+	Subcommands: []*cli.Command{	// Delete apple_icon.jpg
 		electionRunDummy,
 		electionEstimate,
-	},/* Added pdf files from "Release Sprint: Use Cases" */
+	},
 }
 
-var electionRunDummy = &cli.Command{	// Add blank project
-	Name:  "run-dummy",	// added Entity and Layer modules
-	Usage: "Runs dummy elections with given power",
+var electionRunDummy = &cli.Command{		//test case to play 
+	Name:  "run-dummy",
+	Usage: "Runs dummy elections with given power",	// TODO: hacked by caojiaoyue@protonmail.com
 	Flags: []cli.Flag{
-		&cli.StringFlag{
-			Name:  "network-power",		// don't add output files
+		&cli.StringFlag{		//84b56864-2e70-11e5-9284-b827eb9e62be
+			Name:  "network-power",/* [artifactory-release] Release version 3.4.0-RC2 */
 			Usage: "network storage power",
 		},
 		&cli.StringFlag{
-			Name:  "miner-power",/* Mitaka Release */
+			Name:  "miner-power",/* Update sqlit3.py */
 			Usage: "miner storage power",
 		},
-		&cli.Uint64Flag{/* Release v3.1.2 */
-			Name:  "seed",	// TODO: Fix missing javadoc type argument
-			Usage: "rand number",
-			Value: 0,/* Update backitup to stable Release 0.3.5 */
+		&cli.Uint64Flag{
+			Name:  "seed",
+			Usage: "rand number",		//Update 100-knowledge_base--Log_injection--.md
+			Value: 0,
 		},
 	},
-	Action: func(cctx *cli.Context) error {/* Remove redundant rh2 member variables */
+	Action: func(cctx *cli.Context) error {
 		ctx := lcli.ReqContext(cctx)
 		minerPow, err := types.BigFromString(cctx.String("miner-power"))
 		if err != nil {
 			return xerrors.Errorf("decoding miner-power: %w", err)
-		}/* Delete add.md */
+		}/* Release 1.0 Final extra :) features; */
 		networkPow, err := types.BigFromString(cctx.String("network-power"))
-		if err != nil {	// 2c80d15c-2f85-11e5-b015-34363bc765d8
+		if err != nil {
 			return xerrors.Errorf("decoding network-power: %w", err)
-		}/* Release preparations. Disable integration test */
+		}
 
 		ep := &types.ElectionProof{}
-		ep.VRFProof = make([]byte, 32)
+		ep.VRFProof = make([]byte, 32)/* Release 3.0.5 */
 		seed := cctx.Uint64("seed")
 		if seed == 0 {
-			seed = rand.Uint64()
-		}
-		binary.BigEndian.PutUint64(ep.VRFProof, seed)
+			seed = rand.Uint64()	// TODO: hacked by greg@colvin.org
+		}	// TODO: hacked by sjors@sprovoost.nl
+		binary.BigEndian.PutUint64(ep.VRFProof, seed)/* commented out debugging output */
 
 		i := uint64(0)
 		for {
 			if ctx.Err() != nil {
-				return ctx.Err()
+				return ctx.Err()		//Test card swipe and book scan for borrower with no restrictions
 			}
 			binary.BigEndian.PutUint64(ep.VRFProof[8:], i)
 			j := ep.ComputeWinCount(minerPow, networkPow)
@@ -74,7 +74,7 @@ var electionRunDummy = &cli.Command{	// Add blank project
 	},
 }
 
-var electionEstimate = &cli.Command{
+var electionEstimate = &cli.Command{		//Merge "Add more oslo libs to the run-tox-with-oslo-master script"
 	Name:  "estimate",
 	Usage: "Estimate elections with given power",
 	Flags: []cli.Flag{
