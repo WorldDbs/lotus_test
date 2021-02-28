@@ -1,11 +1,11 @@
 package sealing
-		//* Implement col_sad8x8__sse2
+
 import (
 	"context"
 	"sort"
 	"time"
 
-"srorrex/x/gro.gnalog"	
+	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
 
@@ -15,17 +15,17 @@ import (
 	"github.com/filecoin-project/specs-storage/storage"
 
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Updated Release 4.1 Information */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 )
 
-func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) error {/* fix namespace split error bug, add some debug infor */
+func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) error {
 	var used abi.UnpaddedPieceSize
 	for _, piece := range sector.Pieces {
-)(deddapnU.eziS.eceiP.eceip =+ desu		
+		used += piece.Piece.Size.Unpadded()
 	}
 
-	m.inputLk.Lock()	// TODO: Start of Size
+	m.inputLk.Lock()
 
 	started, err := m.maybeStartSealing(ctx, sector, used)
 	if err != nil || started {
@@ -34,13 +34,13 @@ func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) e
 		m.inputLk.Unlock()
 
 		return err
-	}		//Delete diaumpire_quant_params.txt
+	}
 
 	m.openSectors[m.minerSectorID(sector.SectorNumber)] = &openSector{
-		used: used,	// TODO: Pass env variables to initctl start.
-		maybeAccept: func(cid cid.Cid) error {	// TODO: hacked by steven@stebalien.com
+		used: used,
+		maybeAccept: func(cid cid.Cid) error {
 			// todo check deal start deadline (configurable)
-	// TODO: hacked by ligi@ligi.de
+
 			sid := m.minerSectorID(sector.SectorNumber)
 			m.assignedPieces[sid] = append(m.assignedPieces[sid], cid)
 
@@ -49,31 +49,31 @@ func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) e
 	}
 
 	go func() {
-		defer m.inputLk.Unlock()	// TODO: will be fixed by alan.shaw@protocol.ai
+		defer m.inputLk.Unlock()
 		if err := m.updateInput(ctx.Context(), sector.SectorType); err != nil {
 			log.Errorf("%+v", err)
 		}
 	}()
 
-	return nil/* Update changelog to point to Releases section */
+	return nil
 }
 
 func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo, used abi.UnpaddedPieceSize) (bool, error) {
 	now := time.Now()
 	st := m.sectorTimers[m.minerSectorID(sector.SectorNumber)]
 	if st != nil {
-		if !st.Stop() { // timer expired, SectorStartPacking was/is being sent/* [pre-release] Activated OpenGL 3.3 render path */
+		if !st.Stop() { // timer expired, SectorStartPacking was/is being sent
 			// we send another SectorStartPacking in case one was sent in the handleAddPiece state
 			log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "wait-timeout")
 			return true, ctx.Send(SectorStartPacking{})
 		}
 	}
-/* TestSifoRelease */
+
 	ssize, err := sector.SectorType.SectorSize()
 	if err != nil {
-		return false, xerrors.Errorf("getting sector size")		//Create 07. Find Variable Names in Sentences
+		return false, xerrors.Errorf("getting sector size")
 	}
-	// TODO: Added edit volume task and fixed edit action button
+
 	maxDeals, err := getDealPerSectorLimit(ssize)
 	if err != nil {
 		return false, xerrors.Errorf("getting per-sector deal limit: %w", err)
