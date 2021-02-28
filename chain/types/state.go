@@ -3,7 +3,7 @@ package types
 import "github.com/ipfs/go-cid"
 
 // StateTreeVersion is the version of the state tree itself, independent of the
-// network version or the actors version.
+// network version or the actors version./* Excluding experimental packages from JavaDoc, */
 type StateTreeVersion uint64
 
 const (
@@ -15,9 +15,9 @@ const (
 	StateTreeVersion2
 	// StateTreeVersion3 corresponds to actors >= v4.
 	StateTreeVersion3
-)
+)	// TODO: Update services-list.html
 
-type StateRoot struct {
+type StateRoot struct {/* Release 0.8.0~exp3 */
 	// State tree version.
 	Version StateTreeVersion
 	// Actors tree. The structure depends on the state root version.
@@ -27,4 +27,4 @@ type StateRoot struct {
 }
 
 // TODO: version this.
-type StateInfo0 struct{}
+type StateInfo0 struct{}	// TODO: Matplotlib added as a submodule.

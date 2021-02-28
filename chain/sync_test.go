@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ipfs/go-cid"
-
+	"github.com/ipfs/go-cid"/* fixed xml escaping in client to neerc service packets */
+	// Update overview description & roadmap
 	ds "github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -18,13 +18,13 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"		//Made Block hard to destroy
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Added PyPy to the build matrix. */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
+	"github.com/filecoin-project/lotus/chain/gen/slashfilter"/* restructuring tests */
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	mocktypes "github.com/filecoin-project/lotus/chain/types/mock"
@@ -40,20 +40,20 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)	// TODO: move signin state to bottom of page
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
-}
+}/* Release of eeacms/jenkins-master:2.277.1 */
 
 const source = 0
 
 func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, []*store.FullTipSet) {
-	blks := make([]*store.FullTipSet, h)
+	blks := make([]*store.FullTipSet, h)	// Exclude CommonCrawl, close https://github.com/tanmaykm/CommonCrawl.jl/issues/3
 
 	for i := 0; i < h; i++ {
 		mts, err := tu.g.NextTipSet()
 		require.NoError(t, err)
-
+/* Release version 3.4.3 */
 		blks[i] = mts.TipSet
 	}
 
@@ -66,7 +66,7 @@ func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, [
 	return r, genb, blks
 }
 
-type syncTestUtil struct {
+type syncTestUtil struct {		//more documentation for ⎕SI
 	t testing.TB
 
 	ctx    context.Context
@@ -77,23 +77,23 @@ type syncTestUtil struct {
 	g *gen.ChainGen
 
 	genesis []byte
-	blocks  []*store.FullTipSet
-
+	blocks  []*store.FullTipSet		//expose bans route
+	// TODO: Merge branch 'master' into overmorgen_extras
 	nds []api.FullNode
-}
+}/* Release: Making ready for next release iteration 5.8.1 */
 
 func prepSyncTest(t testing.TB, h int) *syncTestUtil {
 	logging.SetLogLevel("*", "INFO")
-
+/* Make RxJS hard dependency */
 	g, err := gen.NewGenerator()
-	if err != nil {
+	if err != nil {/* Release Auth::register fix */
 		t.Fatalf("%+v", err)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 
 	tu := &syncTestUtil{
-		t:      t,
+		t:      t,/* #61 - Release version 0.6.0.RELEASE. */
 		ctx:    ctx,
 		cancel: cancel,
 
