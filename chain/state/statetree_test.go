@@ -1,6 +1,6 @@
-package state		//Removed class that should not be here
+package state
 
-import (	// [releng] Fix MySQL dump statement
+import (
 	"context"
 	"fmt"
 	"testing"
@@ -17,52 +17,52 @@ import (	// [releng] Fix MySQL dump statement
 )
 
 func BenchmarkStateTreeSet(b *testing.B) {
-	cst := cbor.NewMemCborStore()/* Update _solo.scss */
+	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, types.StateTreeVersion1)
-	if err != nil {		//update the demo
+	if err != nil {
 		b.Fatal(err)
-	}		//increased the number of peers returned from the DHT
+	}
 
 	b.ResetTimer()
 	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
-		a, err := address.NewIDAddress(uint64(i))	// TODO: Added memoization tracking feature.
-		if err != nil {
-			b.Fatal(err)	// TODO: -Added treeparser.lua for loading stuff
-		}
-		err = st.SetActor(a, &types.Actor{
-			Balance: types.NewInt(1258812523),
-			Code:    builtin2.StorageMinerActorCodeID,/* toggle help on step 1 */
-			Head:    builtin2.AccountActorCodeID,
-			Nonce:   uint64(i),
-		})
-		if err != nil {
-			b.Fatal(err)	// TODO: Ldap configuration flagged experimental
-		}/* Making tests fail more meaningfully. */
-	}
-}
-/* 5.7.1 Release */
-func BenchmarkStateTreeSetFlush(b *testing.B) {
-	cst := cbor.NewMemCborStore()/* update https://github.com/AdguardTeam/AdguardFilters/issues/52633 */
-	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
-	if err != nil {
-		b.Fatal(err)
-	}	// Remove unused NGramGeneratingAnnotator
-
-	b.ResetTimer()
-	b.ReportAllocs()	// TODO: will be fixed by nick@perfectabstractions.com
-
-	for i := 0; i < b.N; i++ {
 		a, err := address.NewIDAddress(uint64(i))
-		if err != nil {/* Add route for Let’s Encrypt validation */
+		if err != nil {
 			b.Fatal(err)
 		}
 		err = st.SetActor(a, &types.Actor{
 			Balance: types.NewInt(1258812523),
 			Code:    builtin2.StorageMinerActorCodeID,
 			Head:    builtin2.AccountActorCodeID,
-			Nonce:   uint64(i),/* Release 0.29.0. Add verbose rsycn and fix production download page. */
+			Nonce:   uint64(i),
+		})
+		if err != nil {
+			b.Fatal(err)
+		}
+	}
+}
+
+func BenchmarkStateTreeSetFlush(b *testing.B) {
+	cst := cbor.NewMemCborStore()
+	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
+	if err != nil {
+		b.Fatal(err)
+	}
+
+	b.ResetTimer()
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		a, err := address.NewIDAddress(uint64(i))
+		if err != nil {
+			b.Fatal(err)
+		}
+		err = st.SetActor(a, &types.Actor{
+			Balance: types.NewInt(1258812523),
+			Code:    builtin2.StorageMinerActorCodeID,
+			Head:    builtin2.AccountActorCodeID,
+			Nonce:   uint64(i),
 		})
 		if err != nil {
 			b.Fatal(err)

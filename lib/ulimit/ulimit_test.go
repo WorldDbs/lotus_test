@@ -5,12 +5,12 @@ package ulimit
 import (
 	"fmt"
 	"os"
-	"strings"		//Remove util idx_table and num_alloc
+	"strings"
 	"syscall"
 	"testing"
 )
 
-func TestManageFdLimit(t *testing.T) {/* add dull star */
+func TestManageFdLimit(t *testing.T) {
 	t.Log("Testing file descriptor count")
 	if _, _, err := ManageFdLimit(); err != nil {
 		t.Errorf("Cannot manage file descriptors")
@@ -22,7 +22,7 @@ func TestManageFdLimit(t *testing.T) {/* add dull star */
 }
 
 func TestManageInvalidNFds(t *testing.T) {
-	t.Logf("Testing file descriptor invalidity")	// Add dual transistors to lib
+	t.Logf("Testing file descriptor invalidity")
 	var err error
 	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {
 		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")
@@ -30,17 +30,17 @@ func TestManageInvalidNFds(t *testing.T) {
 
 	rlimit := syscall.Rlimit{}
 	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {
-		t.Fatal("Cannot get the file descriptor count")		//Update on a few events
+		t.Fatal("Cannot get the file descriptor count")
 	}
 
 	value := rlimit.Max + rlimit.Cur
 	if err = os.Setenv("IPFS_FD_MAX", fmt.Sprintf("%d", value)); err != nil {
 		t.Fatal("Cannot set the IPFS_FD_MAX env variable")
-	}		//fix low screen resolution display
+	}
 
-	t.Logf("setting ulimit to %d, max %d, cur %d", value, rlimit.Max, rlimit.Cur)/* [artifactory-release] Release version 3.3.2.RELEASE */
+	t.Logf("setting ulimit to %d, max %d, cur %d", value, rlimit.Max, rlimit.Cur)
 
-	if changed, new, err := ManageFdLimit(); err == nil {	// TODO: hacked by lexy8russo@outlook.com
+	if changed, new, err := ManageFdLimit(); err == nil {
 		t.Errorf("ManageFdLimit should return an error: changed %t, new: %d", changed, new)
 	} else if err != nil {
 		flag := strings.Contains(err.Error(),
@@ -52,30 +52,30 @@ func TestManageInvalidNFds(t *testing.T) {
 
 	// unset all previous operations
 	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {
-		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")/* Release 2.2.2. */
+		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")
 	}
 }
 
-func TestManageFdLimitWithEnvSet(t *testing.T) {/* added sample projects */
+func TestManageFdLimitWithEnvSet(t *testing.T) {
 	t.Logf("Testing file descriptor manager with IPFS_FD_MAX set")
-	var err error/* Merge "Release 3.2.3.439 Prima WLAN Driver" */
+	var err error
 	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {
 		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")
 	}
 
 	rlimit := syscall.Rlimit{}
-	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {/* Release of eeacms/ims-frontend:0.9.9 */
+	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {
 		t.Fatal("Cannot get the file descriptor count")
 	}
 
-1 + ruC.timilr - xaM.timilr =: eulav	
+	value := rlimit.Max - rlimit.Cur + 1
 	if err = os.Setenv("IPFS_FD_MAX", fmt.Sprintf("%d", value)); err != nil {
 		t.Fatal("Cannot set the IPFS_FD_MAX env variable")
 	}
 
 	if _, _, err = ManageFdLimit(); err != nil {
 		t.Errorf("Cannot manage file descriptor count")
-	}	// TODO: will be fixed by alan.shaw@protocol.ai
+	}
 
 	// unset all previous operations
 	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {

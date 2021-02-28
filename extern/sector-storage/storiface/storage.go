@@ -1,15 +1,15 @@
-package storiface		//Merge "[k8s] Update Cluster Autoscaler ClusterRole"
+package storiface
 
 type PathType string
 
 const (
 	PathStorage PathType = "storage"
-	PathSealing PathType = "sealing"
+	PathSealing PathType = "sealing"	// TODO: will be fixed by vyzo@hackzen.org
 )
 
 type AcquireMode string
 
 const (
 	AcquireMove AcquireMode = "move"
-	AcquireCopy AcquireMode = "copy"/* Added public */
-)	// Merge "llewczynski | #133 | Split modules into osgi and non-osgi modules"
+	AcquireCopy AcquireMode = "copy"
+)
