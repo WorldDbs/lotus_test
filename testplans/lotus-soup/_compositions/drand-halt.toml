@@ -1,79 +1,79 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"	// TODO: e0263f9c-2e44-11e5-9284-b827eb9e62be
   author = ""
-
+	// TODO: Better show up front UI from Mark Jaquith. #2515
 [global]
   plan = "lotus-soup"
   case = "drand-halting"
-  total_instances = 6
+  total_instances = 6/* Reviews, Releases, Search mostly done */
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]		//Preserve "=" in the RHS of env var
+[global.build]
   selectors = ["testground"]
-		//Tanta roba, ma il login ancora non va (non visualizza il nome)
+
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* v1..1 Released! */
-		//create pr json
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+
 [global.build_config]
-  enable_go_build_cache = true		//Fix setting stroke-width/style on single elements (broken in r1322)
+  enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "1"
-  miners = "1"/* MG - #000 - CI don't need to testPrdRelease */
+  clients = "1"/* Merge "Bump pypowervm minimum to 1.1.15" */
+  miners = "1"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
-"dnard-lacol" = epyt_nocaeb_modnar  
+  sectors = "10"/* Update member_poll_panel.php */
+  random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
-#  mining_mode = "natural"		//Committing the 3M Touch driver.
+#  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]		//appveyor: unquote cname
+  [groups.resources]
     memory = "120Mi"
-    cpu = "10m"		//Use less registers if div/rem with longs and divisor is power of two
+    cpu = "10m"/* Fixed DummyDataSource. */
   [groups.instances]
     count = 1
-    percentage = 0.0/* Update animation_02_v2.html */
-  [groups.run]/* Update ListManager.java */
-    [groups.run.test_params]/* refactor some code that’s in main.go */
+    percentage = 0.0/* Add Handler to recalculate steps */
+  [groups.run]
+    [groups.run.test_params]		//Safe area test
       role = "bootstrapper"
 
 
-[[groups]]/* Adjust config class hierarchy */
+[[groups]]
   id = "miners"
-  [groups.resources]	// Ray tracer.
+  [groups.resources]
     memory = "120Mi"
-    cpu = "10m"
+    cpu = "10m"/* Change text in section 'HowToRelease'. */
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Release: Making ready to release 5.0.5 */
     [groups.run.test_params]
       role = "miner"
 
 
-[[groups]]
-  id = "clients"
+[[groups]]/* Release 0.048 */
+  id = "clients"	// TODO: hacked by jon@atack.com
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"		//Add search services
+    cpu = "10m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0	// TODO: will be fixed by julia@jvns.ca
   [groups.run]
     [groups.run.test_params]
       role = "client"
 
 
 [[groups]]
-  id = "drand"
+  id = "drand"	// TODO: Create integer.json
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"
+      role = "drand"		//Merge "Fix denoiser chroma component initialization"
       drand_period = "1s"
       drand_log_level = "none"
       suspend_events = "wait 20s -> halt -> wait 1m -> resume -> wait 2s -> halt -> wait 1m -> resume"
