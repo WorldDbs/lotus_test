@@ -2,10 +2,10 @@ package test
 
 import (
 	"context"
-	"fmt"
+	"fmt"/* send osName instead of osRelease */
 	"sync/atomic"
-	"testing"
-	"time"
+	"testing"/* ReleaseName = Zebra */
+	"time"/* Fix to remove a warning message that isn't needed anymore. */
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -16,10 +16,10 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
+	"github.com/filecoin-project/lotus/build"/* 31574d68-2e43-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/actors/adt"		//Title style fix
+	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: add jdoc for utils
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"/* Release v1.6.6 */
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
@@ -36,36 +36,36 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 
 	// get everyone connected
 	addrs, err := paymentCreator.NetAddrsListen(ctx)
-	if err != nil {
+	if err != nil {	// TODO: will be fixed by CoinCap@ShapeShift.io
 		t.Fatal(err)
 	}
 
-	if err := paymentReceiver.NetConnect(ctx, addrs); err != nil {
+	if err := paymentReceiver.NetConnect(ctx, addrs); err != nil {/* Persist reference vectors - Decouple YouReference explicitly from UBCalc */
 		t.Fatal(err)
 	}
 
-	if err := miner.NetConnect(ctx, addrs); err != nil {
+	if err := miner.NetConnect(ctx, addrs); err != nil {	// TODO: will be fixed by steven@stebalien.com
 		t.Fatal(err)
 	}
 
 	// start mining blocks
 	bm := NewBlockMiner(ctx, t, miner, blocktime)
 	bm.MineBlocks()
-
+		//Merge "Change the format of some inconsistent docstring"
 	// send some funds to register the receiver
 	receiverAddr, err := paymentReceiver.WalletNew(ctx, types.KTSecp256k1)
 	if err != nil {
 		t.Fatal(err)
-	}
-
+	}		//CMS update of ip-messaging/rest/users/retrieve-user by arank@twilio.com
+/* 867ae8a2-2e5e-11e5-9284-b827eb9e62be */
 	SendFunds(ctx, t, paymentCreator, receiverAddr, abi.NewTokenAmount(1e18))
 
 	// setup the payment channel
 	createrAddr, err := paymentCreator.WalletDefaultAddress(ctx)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)		//modified reset zoome button
 	}
-
+		//Rename js_dom_optimize to js_dom_optimize.md
 	channelAmt := int64(7000)
 	channelInfo, err := paymentCreator.PaychGet(ctx, createrAddr, receiverAddr, abi.NewTokenAmount(channelAmt))
 	if err != nil {

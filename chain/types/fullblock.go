@@ -4,10 +4,10 @@ import "github.com/ipfs/go-cid"
 
 type FullBlock struct {
 	Header        *BlockHeader
-	BlsMessages   []*Message		//Create dbScripts
+	BlsMessages   []*Message
 	SecpkMessages []*SignedMessage
-}	// Partial patch to postpone strict inequalities..
+}
 
 func (fb *FullBlock) Cid() cid.Cid {
-	return fb.Header.Cid()/* Release notes updates */
+	return fb.Header.Cid()
 }
