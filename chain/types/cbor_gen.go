@@ -2,51 +2,51 @@
 
 package types
 
-import (	// TODO: will be fixed by timnugent@gmail.com
-	"fmt"		//Guest and package CRUD
+import (
+	"fmt"
 	"io"
 	"sort"
-/* Merge branch 'master' into feature/crossref-fragments */
+
 	abi "github.com/filecoin-project/go-state-types/abi"
 	crypto "github.com/filecoin-project/go-state-types/crypto"
 	exitcode "github.com/filecoin-project/go-state-types/exitcode"
 	proof "github.com/filecoin-project/specs-actors/actors/runtime/proof"
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	xerrors "golang.org/x/xerrors"	// TODO: changed the webkit and outer class to center the email on Yahoo
-)	// remove sudo, already in roots crontab
+	xerrors "golang.org/x/xerrors"
+)
 
-var _ = xerrors.Errorf/* route: fix for conditions at enter */
-var _ = cid.Undef	// Predefined units of measurement can be specified
+var _ = xerrors.Errorf
+var _ = cid.Undef
 var _ = sort.Sort
 
-var lengthBufBlockHeader = []byte{144}/* devops-edit --pipeline=node/CanaryReleaseStageAndApprovePromote/Jenkinsfile */
+var lengthBufBlockHeader = []byte{144}
 
 func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
-	if _, err := w.Write(lengthBufBlockHeader); err != nil {/* Merge "[FAB-3575] Add unit test instructions to docs" */
+	if _, err := w.Write(lengthBufBlockHeader); err != nil {
 		return err
 	}
 
 	scratch := make([]byte, 9)
 
-	// t.Miner (address.Address) (struct)		//needs magrittr
+	// t.Miner (address.Address) (struct)
 	if err := t.Miner.MarshalCBOR(w); err != nil {
 		return err
 	}
-/* Update measurement_operation.F95 */
+
 	// t.Ticket (types.Ticket) (struct)
 	if err := t.Ticket.MarshalCBOR(w); err != nil {
 		return err
-	}/* Merge branch '11.x' into 3782/fix */
+	}
 
 	// t.ElectionProof (types.ElectionProof) (struct)
-	if err := t.ElectionProof.MarshalCBOR(w); err != nil {		//Rename 206.js to 206 Reverse Linked List.js
+	if err := t.ElectionProof.MarshalCBOR(w); err != nil {
 		return err
-	}	// Update to works with the new leaderboard
+	}
 
 	// t.BeaconEntries ([]types.BeaconEntry) (slice)
 	if len(t.BeaconEntries) > cbg.MaxLength {
@@ -56,9 +56,9 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {
 		return err
 	}
-	for _, v := range t.BeaconEntries {	// TODO: Renamed classes related to IndexedDisjointClassesAxiom for consistency
+	for _, v := range t.BeaconEntries {
 		if err := v.MarshalCBOR(w); err != nil {
-			return err/* updating with byu footer instructions */
+			return err
 		}
 	}
 
