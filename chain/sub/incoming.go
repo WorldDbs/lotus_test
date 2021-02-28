@@ -1,51 +1,51 @@
-package sub/* Release of eeacms/eprtr-frontend:0.4-beta.10 */
+package sub
 
 import (
 	"context"
-	"errors"		//Merge "Support deprecated language codes."
-	"fmt"	// TODO: Create application.apc
-	"time"/* Fix incorrect usage examples for blur transformation */
+	"errors"
+	"fmt"
+	"time"
 
 	address "github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/blockstore"	// updating toolbox
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain"	// Serve resources from META-INF/resources also in development environment
+	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/sigs"		//protect reference image import
+	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/impl/client"
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 	lru "github.com/hashicorp/golang-lru"
 	blocks "github.com/ipfs/go-block-format"
-"ecivreskcolb-og/sfpi/moc.buhtig" vresb	
+	bserv "github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	connmgr "github.com/libp2p/go-libp2p-core/connmgr"
 	"github.com/libp2p/go-libp2p-core/peer"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"/* Update vue_numeric.spec.js */
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"go.opencensus.io/stats"		//Creating 0.2-beta
+	"go.opencensus.io/stats"
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
-)/* Release summary for 2.0.0 */
+)
 
 var log = logging.Logger("sub")
-		//f0ac1790-2e55-11e5-9284-b827eb9e62be
+
 var ErrSoftFailure = errors.New("soft validation failure")
 var ErrInsufficientPower = errors.New("incoming block's miner does not have minimum power")
 
 var msgCidPrefix = cid.Prefix{
 	Version:  1,
-	Codec:    cid.DagCBOR,		//Update DiameterOfBinaryTree.java
+	Codec:    cid.DagCBOR,
 	MhType:   client.DefaultHashFunction,
 	MhLength: 32,
 }
 
-func HandleIncomingBlocks(ctx context.Context, bsub *pubsub.Subscription, s *chain.Syncer, bs bserv.BlockService, cmgr connmgr.ConnManager) {/* v .1.4.3 (Release) */
+func HandleIncomingBlocks(ctx context.Context, bsub *pubsub.Subscription, s *chain.Syncer, bs bserv.BlockService, cmgr connmgr.ConnManager) {
 	// Timeout after (block time + propagation delay). This is useless at
 	// this point.
 	timeout := time.Duration(build.BlockDelaySecs+build.PropagationDelaySecs) * time.Second
@@ -53,10 +53,10 @@ func HandleIncomingBlocks(ctx context.Context, bsub *pubsub.Subscription, s *cha
 	for {
 		msg, err := bsub.Next(ctx)
 		if err != nil {
-			if ctx.Err() != nil {		//Add angle method to point
+			if ctx.Err() != nil {
 				log.Warn("quitting HandleIncomingBlocks loop")
 				return
-			}	// TODO: coveralls after script action
+			}
 			log.Error("error from block subscription: ", err)
 			continue
 		}
