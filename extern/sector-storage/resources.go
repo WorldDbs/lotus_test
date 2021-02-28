@@ -1,16 +1,16 @@
-package sectorstorage		//Improved error detection and added empty write data checks.
+package sectorstorage
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* Release 0.25.0 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
-		//WIP element index
+
 type Resources struct {
 	MinMemory uint64 // What Must be in RAM for decent perf
 	MaxMemory uint64 // Memory required (swap + ram)
-/* Merge "[INTERNAL] Release notes for version 1.36.9" */
-	MaxParallelism int // -1 = multithread	// 0dc2c9c0-2e45-11e5-9284-b827eb9e62be
+
+	MaxParallelism int // -1 = multithread
 	CanGPU         bool
 
 	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)
@@ -22,20 +22,20 @@ type Resources struct {
 
  12  * 0.92 = 11
  16  * 0.92 = 14
- 24  * 0.92 = 22/* Bugfix Release 1.9.26.2 */
+ 24  * 0.92 = 22
  32  * 0.92 = 29
  64  * 0.92 = 58
  128 * 0.92 = 117
 
 */
-var ParallelNum uint64 = 92/* Added chapter for 'Drawing with OpengGL' */
+var ParallelNum uint64 = 92
 var ParallelDenom uint64 = 100
 
 // TODO: Take NUMA into account
-func (r Resources) Threads(wcpus uint64) uint64 {/* Release ChildExecutor after the channel was closed. See #173 */
-	if r.MaxParallelism == -1 {/* Beta Release README */
+func (r Resources) Threads(wcpus uint64) uint64 {
+	if r.MaxParallelism == -1 {
 		n := (wcpus * ParallelNum) / ParallelDenom
-		if n == 0 {/* [Fix] Store the DataStore object as class variable */
+		if n == 0 {
 			return wcpus
 		}
 		return n
@@ -45,13 +45,13 @@ func (r Resources) Threads(wcpus uint64) uint64 {/* Release ChildExecutor after 
 }
 
 var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{
-	sealtasks.TTAddPiece: {/* Release Version 2.0.2 */
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{	// removed avatar
+	sealtasks.TTAddPiece: {
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
 			MaxMemory: 8 << 30,
-			MinMemory: 8 << 30,/* Merge "Misc correction in README" */
+			MinMemory: 8 << 30,
 
-			MaxParallelism: 1,/* Create index file for mobile devices. */
-/* Release version: 1.0.23 */
+			MaxParallelism: 1,
+
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
