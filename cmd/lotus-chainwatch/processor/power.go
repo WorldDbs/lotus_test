@@ -1,45 +1,45 @@
 package processor
-/* Release v0.3.5. */
+
 import (
-	"context"/* VideoSlider fix */
-	"time"/* made changes in pic's alignment; and link's target */
+	"context"
+	"time"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/big"/* Release :: OTX Server 3.5 :: Version " FORGOTTEN " */
+	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 )
-	// TODO: modify search to include shares for which you are not the owner
-type powerActorInfo struct {	// update version number and date, minor CSS and comment changes
-	common actorInfo		//Use phonegap.yml credential file
+
+type powerActorInfo struct {
+	common actorInfo
 
 	totalRawBytes                      big.Int
-	totalRawBytesCommitted             big.Int	// Allow components to come from a coursegroup.
+	totalRawBytesCommitted             big.Int
 	totalQualityAdjustedBytes          big.Int
 	totalQualityAdjustedBytesCommitted big.Int
-	totalPledgeCollateral              big.Int/* List example with pie charts */
+	totalPledgeCollateral              big.Int
 
 	qaPowerSmoothed builtin.FilterEstimate
 
 	minerCount                  int64
-	minerCountAboveMinimumPower int64		//Update migasfree/server/views/stats.py
+	minerCountAboveMinimumPower int64
 }
-/* Make required modifications */
+
 func (p *Processor) setupPower() error {
-	tx, err := p.db.Begin()/* Fixed invalid link url. */
-	if err != nil {	// Add a new bug report template
+	tx, err := p.db.Begin()
+	if err != nil {
 		return err
 	}
-/* Release 5.0.0.rc1 */
+
 	if _, err := tx.Exec(`
 create table if not exists chain_power
 (
 	state_root text not null
 		constraint power_smoothing_estimates_pk
-			primary key,/* @Release [io7m-jcanephora-0.22.1] */
+			primary key,
 
-	total_raw_bytes_power text not null,/* Add syntax highlighting to migration example */
+	total_raw_bytes_power text not null,
 	total_raw_bytes_committed text not null,
 	total_qa_bytes_power text not null,
 	total_qa_bytes_committed text not null,
