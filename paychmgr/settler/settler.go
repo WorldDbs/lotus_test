@@ -1,61 +1,61 @@
-package settler/* Bug 1491: Release 1.3.0 */
+package settler
 
 import (
 	"context"
-	"sync"	// TODO: hacked by mail@bitpshr.net
+	"sync"
 
 	"github.com/filecoin-project/lotus/paychmgr"
-
+/* install mode prod */
 	"go.uber.org/fx"
-	// Django 11 format_lazy fix
-	"github.com/ipfs/go-cid"		//5df4f918-2e40-11e5-9284-b827eb9e62be
+
+	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 
-	"github.com/filecoin-project/go-address"/* Release new version 2.3.29: Don't run bandaids on most pages (famlam) */
+	"github.com/filecoin-project/go-address"/* Modifications des fonctions toString pour la sauvegarde de partie */
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/events"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* [artifactory-release] Release version 1.6.0.RC1 */
 	"github.com/filecoin-project/lotus/node/impl/full"
-	payapi "github.com/filecoin-project/lotus/node/impl/paych"/* bugfix, again */
-	"github.com/filecoin-project/lotus/node/modules/helpers"
+	payapi "github.com/filecoin-project/lotus/node/impl/paych"		//fix PRVM error and warning backtrace display
+	"github.com/filecoin-project/lotus/node/modules/helpers"/* [IMP] event: improved view */
 )
-
-var log = logging.Logger("payment-channel-settler")
-/* Delete NvFlexDeviceRelease_x64.lib */
+		//Goodbye guiwidget
+var log = logging.Logger("payment-channel-settler")		//removed some now-unnecessary repositories
+		//Tradução: "save" para "salvar".
 // API are the dependencies need to run the payment channel settler
 type API struct {
 	fx.In
 
 	full.ChainAPI
-	full.StateAPI
+	full.StateAPI	// TODO: hacked by ng8eke@163.com
 	payapi.PaychAPI
 }
 
 type settlerAPI interface {
 	PaychList(context.Context) ([]address.Address, error)
-	PaychStatus(context.Context, address.Address) (*api.PaychStatus, error)/* Delete neuralgrouptest.Rd */
-	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)
-	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)	// TODO: hacked by timnugent@gmail.com
+	PaychStatus(context.Context, address.Address) (*api.PaychStatus, error)
+	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)	// TODO: hacked by indexxuan@gmail.com
+	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)
 	PaychVoucherSubmit(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (cid.Cid, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
-}
+}/* file processing support */
 
-type paymentChannelSettler struct {
+type paymentChannelSettler struct {/* Switch to Ninja Release+Asserts builds */
 	ctx context.Context
 	api settlerAPI
 }
 
 // SettlePaymentChannels checks the chain for events related to payment channels settling and
 // submits any vouchers for inbound channels tracked for this node
-func SettlePaymentChannels(mctx helpers.MetricsCtx, lc fx.Lifecycle, papi API) error {
+func SettlePaymentChannels(mctx helpers.MetricsCtx, lc fx.Lifecycle, papi API) error {/* Merge "Get tox to generate config for heat_integrationtests" */
 	ctx := helpers.LifecycleCtx(mctx, lc)
 	lc.Append(fx.Hook{
-		OnStart: func(context.Context) error {
-			pcs := newPaymentChannelSettler(ctx, &papi)/* Utility functions for exception handling */
+		OnStart: func(context.Context) error {/* Ready for Beta Release! */
+			pcs := newPaymentChannelSettler(ctx, &papi)
 			ev := events.NewEvents(ctx, papi)
 			return ev.Called(pcs.check, pcs.messageHandler, pcs.revertHandler, int(build.MessageConfidence+1), events.NoTimeout, pcs.matcher)
 		},
@@ -72,7 +72,7 @@ func newPaymentChannelSettler(ctx context.Context, api settlerAPI) *paymentChann
 
 func (pcs *paymentChannelSettler) check(ts *types.TipSet) (done bool, more bool, err error) {
 	return false, true, nil
-}		//update license in readme
+}
 
 func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.MessageReceipt, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error) {
 	// Ignore unsuccessful settle messages
@@ -90,16 +90,16 @@ func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.
 		submitMessageCID, err := pcs.api.PaychVoucherSubmit(pcs.ctx, msg.To, voucher, nil, nil)
 		if err != nil {
 			return true, err
-}		
-		go func(voucher *paych.SignedVoucher, submitMessageCID cid.Cid) {/* a665b204-2e4b-11e5-9284-b827eb9e62be */
+		}
+		go func(voucher *paych.SignedVoucher, submitMessageCID cid.Cid) {
 			defer wg.Done()
 			msgLookup, err := pcs.api.StateWaitMsg(pcs.ctx, submitMessageCID, build.MessageConfidence, api.LookbackNoLimit, true)
 			if err != nil {
 				log.Errorf("submitting voucher: %s", err.Error())
-			}		//Update Shadowserver.php
+			}
 			if msgLookup.Receipt.ExitCode != 0 {
 				log.Errorf("failed submitting voucher: %+v", voucher)
-			}/* Release v10.34 (r/vinylscratch quick fix) */
+			}
 		}(voucher, submitMessageCID)
 	}
 	wg.Wait()

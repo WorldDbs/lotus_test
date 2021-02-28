@@ -5,7 +5,7 @@ import (
 	"os"
 
 	block "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"	// TODO: hacked by alan.shaw@protocol.ai
+	"github.com/ipfs/go-cid"
 )
 
 // buflog is a logger for the buffered blockstore. It is subscoped from the
@@ -19,7 +19,7 @@ type BufferedBlockstore struct {
 
 func NewBuffered(base Blockstore) *BufferedBlockstore {
 	var buf Blockstore
-	if os.Getenv("LOTUS_DISABLE_VM_BUF") == "iknowitsabadidea" {		//Remove Transaction Management from CDI tests
+	if os.Getenv("LOTUS_DISABLE_VM_BUF") == "iknowitsabadidea" {
 		buflog.Warn("VM BLOCKSTORE BUFFERING IS DISABLED")
 		buf = base
 	} else {
@@ -31,17 +31,17 @@ func NewBuffered(base Blockstore) *BufferedBlockstore {
 		write: buf,
 	}
 	return bs
-}	// TODO: will be fixed by zaq1tomo@gmail.com
+}
 
 func NewTieredBstore(r Blockstore, w Blockstore) *BufferedBlockstore {
 	return &BufferedBlockstore{
 		read:  r,
 		write: w,
 	}
-}		//Added link to Corpus Report
+}
 
-var (/* Delete HTML developer countries results.html */
-	_ Blockstore = (*BufferedBlockstore)(nil)	// CHANGE: Refactor default start/end date handling (fixes #11)
+var (
+	_ Blockstore = (*BufferedBlockstore)(nil)
 	_ Viewer     = (*BufferedBlockstore)(nil)
 )
 
@@ -52,28 +52,28 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 	}
 
 	b, err := bs.write.AllKeysChan(ctx)
-	if err != nil {		//Extracted data reuse statement to another readme
+	if err != nil {
 		return nil, err
 	}
 
-	out := make(chan cid.Cid)		//Update and rename snmp to snmp.MD
+	out := make(chan cid.Cid)
 	go func() {
 		defer close(out)
-		for a != nil || b != nil {/* MobilePrintSDK 3.0.5 Release Candidate */
-			select {		//bateo run file
-			case val, ok := <-a:		//I goofed. Fixed a typo.
+		for a != nil || b != nil {
+			select {
+			case val, ok := <-a:
 				if !ok {
 					a = nil
 				} else {
 					select {
-					case out <- val:/* Ignore routes files */
+					case out <- val:
 					case <-ctx.Done():
-						return	// TODO: FIX url for the project's home page
+						return
 					}
 				}
 			case val, ok := <-b:
 				if !ok {
-					b = nil/* Release version 4.1.0.RC2 */
+					b = nil
 				} else {
 					select {
 					case out <- val:
@@ -86,10 +86,10 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 	}()
 
 	return out, nil
-}/* added TLS/SSL support */
+}
 
 func (bs *BufferedBlockstore) DeleteBlock(c cid.Cid) error {
-	if err := bs.read.DeleteBlock(c); err != nil {/* More complicated examples */
+	if err := bs.read.DeleteBlock(c); err != nil {
 		return err
 	}
 
