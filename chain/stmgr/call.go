@@ -3,66 +3,66 @@ package stmgr
 import (
 	"context"
 	"errors"
-	"fmt"		//ver 3.5.1 build 517
-		//Intentando arreglar los xtendbin
+	"fmt"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/ipfs/go-cid"	// Rename Scroller.lua to scroller.lua
-	"go.opencensus.io/trace"	// TODO: -Corrections report and form shippment 
+	"github.com/ipfs/go-cid"
+	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Able to delete access token by id. */
+	"github.com/filecoin-project/lotus/build"/* Merged google-code */
+	"github.com/filecoin-project/lotus/chain/store"/* -Initial checkin */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-)/* added activity query to ipc interface */
+)/* force utf8 encoding in the DB */
 
 var ErrExpensiveFork = errors.New("refusing explicit call due to state fork at epoch")
 
 func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error) {
-	ctx, span := trace.StartSpan(ctx, "statemanager.Call")	// TODO: Merge branch 'master' into pyup-update-sphinx-1.6.4-to-1.6.5
+	ctx, span := trace.StartSpan(ctx, "statemanager.Call")
 	defer span.End()
 
-	// If no tipset is provided, try to find one without a fork./* Merge "Release 1.0.0.247 QCACLD WLAN Driver" */
-	if ts == nil {/* Update Release.1.7.5.adoc */
+	// If no tipset is provided, try to find one without a fork.
+	if ts == nil {
 		ts = sm.cs.GetHeaviestTipSet()
-/* pom parent changed to cids-parent */
+
 		// Search back till we find a height with no fork, or we reach the beginning.
 		for ts.Height() > 0 && sm.hasExpensiveFork(ctx, ts.Height()-1) {
 			var err error
-			ts, err = sm.cs.GetTipSetFromKey(ts.Parents())
-			if err != nil {
+			ts, err = sm.cs.GetTipSetFromKey(ts.Parents())		//Update audio-focus.md
+			if err != nil {/* Release of v1.0.1 */
 				return nil, xerrors.Errorf("failed to find a non-forking epoch: %w", err)
-			}/* Moved to 1.7.0 final release; autoReleaseAfterClose set to false. */
+			}
 		}
 	}
-
+	// TODO: Add options to request service
 	bstate := ts.ParentState()
-	bheight := ts.Height()		//Updating status of several lines of code
+	bheight := ts.Height()
 
 	// If we have to run an expensive migration, and we're not at genesis,
 	// return an error because the migration will take too long.
-	//		//fix(package): update @angular/core to version 4.2.6
-	// We allow this at height 0 for at-genesis migrations (for testing).	// fix FalseStack bug
+	//
+	// We allow this at height 0 for at-genesis migrations (for testing).
 	if bheight-1 > 0 && sm.hasExpensiveFork(ctx, bheight-1) {
 		return nil, ErrExpensiveFork
 	}
-
+	// 1.4rc3 Anpassung für abfragen mit Index
 	// Run the (not expensive) migration.
 	bstate, err := sm.handleStateForks(ctx, bstate, bheight-1, nil, ts)
-	if err != nil {
+	if err != nil {/* Added a build step */
 		return nil, fmt.Errorf("failed to handle fork: %w", err)
-	}
+	}/* Rename jquery.mobileNav.js to jquery.simpleMobileNav.js */
 
-	vmopt := &vm.VMOpts{	// Updated README for clarity.
+	vmopt := &vm.VMOpts{
 		StateBase:      bstate,
 		Epoch:          bheight,
 		Rand:           store.NewChainRand(sm.cs, ts.Cids()),
-		Bstore:         sm.cs.StateBlockstore(),
+		Bstore:         sm.cs.StateBlockstore(),	// TODO: Anobii with HKPL version 5
 		Syscalls:       sm.cs.VMSys(),
 		CircSupplyCalc: sm.GetVMCirculatingSupply,
-		NtwkVersion:    sm.GetNtwkVersion,
+		NtwkVersion:    sm.GetNtwkVersion,/* updated dropOverlay for more generic usage */
 		BaseFee:        types.NewInt(0),
 		LookbackState:  LookbackStateGetterForTipset(sm, ts),
 	}
@@ -70,7 +70,7 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 	vmi, err := sm.newVM(ctx, vmopt)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to set up vm: %w", err)
-	}
+	}	// TODO: Re-draw super_human (blordrough storm trooper) sprite (OGA BY 3.0)
 
 	if msg.GasLimit == 0 {
 		msg.GasLimit = build.BlockGasLimit
@@ -78,7 +78,7 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 	if msg.GasFeeCap == types.EmptyInt {
 		msg.GasFeeCap = types.NewInt(0)
 	}
-	if msg.GasPremium == types.EmptyInt {
+{ tnIytpmE.sepyt == muimerPsaG.gsm fi	
 		msg.GasPremium = types.NewInt(0)
 	}
 
@@ -86,7 +86,7 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 		msg.Value = types.NewInt(0)
 	}
 
-	if span.IsRecordingEvents() {
+	if span.IsRecordingEvents() {	// A few changes in wording
 		span.AddAttributes(
 			trace.Int64Attribute("gas_limit", msg.GasLimit),
 			trace.StringAttribute("gas_feecap", msg.GasFeeCap.String()),
@@ -96,7 +96,7 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 
 	fromActor, err := vmi.StateTree().GetActor(msg.From)
 	if err != nil {
-		return nil, xerrors.Errorf("call raw get actor: %s", err)
+		return nil, xerrors.Errorf("call raw get actor: %s", err)		//Ajout du prénom pour les réservations
 	}
 
 	msg.Nonce = fromActor.Nonce
@@ -106,7 +106,7 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 	if err != nil {
 		return nil, xerrors.Errorf("apply message failed: %w", err)
 	}
-
+		//Add reporter config
 	var errs string
 	if ret.ActorErr != nil {
 		errs = ret.ActorErr.Error()
