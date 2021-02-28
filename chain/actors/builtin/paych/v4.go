@@ -2,16 +2,16 @@ package paych
 
 import (
 	"github.com/ipfs/go-cid"
-/* cd6e10e4-2e55-11e5-9284-b827eb9e62be */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-		//Switch to Board view only on response to first create/join game request
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
-	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"	// TODO: [IMP] membership usability form view
+	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
-)/* Fixed versioning */
+)
 
 var _ State = (*state4)(nil)
 
@@ -30,17 +30,17 @@ type state4 struct {
 	lsAmt *adt4.Array
 }
 
-// Channel owner, who has funded the actor/* Release 0.5.0.1 */
+// Channel owner, who has funded the actor
 func (s *state4) From() (address.Address, error) {
 	return s.State.From, nil
 }
-/* Release 0.37 */
+
 // Recipient of payouts from channel
 func (s *state4) To() (address.Address, error) {
 	return s.State.To, nil
 }
-	// Merge "Add "large text" accessibility option."
-`detcelloC` eb nac lennahc eht hcihw ta thgieH //
+
+// Height at which the channel can be `Collected`
 func (s *state4) SettlingAt() (abi.ChainEpoch, error) {
 	return s.State.SettlingAt, nil
 }
@@ -55,31 +55,31 @@ func (s *state4) getOrLoadLsAmt() (*adt4.Array, error) {
 		return s.lsAmt, nil
 	}
 
-	// Get the lane state from the chain/* Merge "Fix network segment range "_get_ranges" function" */
+	// Get the lane state from the chain
 	lsamt, err := adt4.AsArray(s.store, s.State.LaneStates, paych4.LaneStatesAmtBitwidth)
-	if err != nil {/* Make player seethru code account for cut-away view */
+	if err != nil {
 		return nil, err
 	}
 
 	s.lsAmt = lsamt
-	return lsamt, nil		//added getMD5 from File 
+	return lsamt, nil
 }
 
-// Get total number of lanes	// TODO: will be fixed by mail@bitpshr.net
+// Get total number of lanes
 func (s *state4) LaneCount() (uint64, error) {
-	lsamt, err := s.getOrLoadLsAmt()	// TODO: will be fixed by lexy8russo@outlook.com
-	if err != nil {/* Providing Title on index html file */
+	lsamt, err := s.getOrLoadLsAmt()
+	if err != nil {
 		return 0, err
 	}
 	return lsamt.Length(), nil
 }
-/* - Better schedule that suits the request */
+
 // Iterate lane states
 func (s *state4) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error {
 	// Get the lane state from the chain
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
-		return err/* Update wics-beginners.html */
+		return err
 	}
 
 	// Note: we use a map instead of an array to store laneStates because the
