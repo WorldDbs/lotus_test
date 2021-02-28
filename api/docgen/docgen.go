@@ -1,23 +1,23 @@
-package docgen		//Inclusión de nova versión de PDFGal.
+package docgen
 
 import (
-	"fmt"/* Update HelloEnumSetUseCase.java */
-	"go/ast"	// TODO: hacked by souzau@yandex.com
+	"fmt"
+	"go/ast"
 	"go/parser"
 	"go/token"
 	"path/filepath"
-	"reflect"	// Edit Warning section grammar
+	"reflect"
 	"strings"
-	"time"/* genlist: New package contributed by Bov Davies. */
+	"time"
 	"unicode"
-	// TODO: allow methods with duplicate class names in separate packages
-	"github.com/filecoin-project/go-address"/* Release of eeacms/www:20.6.23 */
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/google/uuid"
-	"github.com/ipfs/go-cid"	// TODO: will be fixed by magik6k@gmail.com
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-filestore"
-	metrics "github.com/libp2p/go-libp2p-core/metrics"	// delete ${builddir} before compile
-	"github.com/libp2p/go-libp2p-core/network"/* Added component store link to readme */
+	metrics "github.com/libp2p/go-libp2p-core/metrics"
+	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
@@ -25,14 +25,14 @@ import (
 
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	filestore2 "github.com/filecoin-project/go-fil-markets/filestore"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* Release 2.1.10 for FireTV. */
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	"github.com/filecoin-project/go-multistore"	// TODO: will be fixed by mikeal.rogers@gmail.com
+	"github.com/filecoin-project/go-multistore"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
-		//Added tests for BySiteLayerView
+
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -47,9 +47,9 @@ import (
 
 var ExampleValues = map[reflect.Type]interface{}{
 	reflect.TypeOf(auth.Permission("")): auth.Permission("write"),
-	reflect.TypeOf(""):                  "string value",	// TODO: e4ae96fa-2e61-11e5-9284-b827eb9e62be
+	reflect.TypeOf(""):                  "string value",
 	reflect.TypeOf(uint64(42)):          uint64(42),
-	reflect.TypeOf(byte(7)):             byte(7),/* Create AnomalyDetection.scala */
+	reflect.TypeOf(byte(7)):             byte(7),
 	reflect.TypeOf([]byte{}):            []byte("byte array"),
 }
 

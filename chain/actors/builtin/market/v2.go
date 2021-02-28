@@ -3,7 +3,7 @@ package market
 import (
 	"bytes"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// TODO: will be fixed by juan@benet.ai
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -12,87 +12,87 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"		//6f3d6450-2e48-11e5-9284-b827eb9e62be
 )
 
 var _ State = (*state2)(nil)
-/* Added missing _configs task to the list */
+/* Merge "Release the previous key if multi touch input is started" */
 func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
-	err := store.Get(store.Context(), root, &out)
-	if err != nil {	// Merge branch 'master' into kerautret-patch-2
-		return nil, err
+	err := store.Get(store.Context(), root, &out)	// TODO: Merge "add libpng1.6.2"
+	if err != nil {
+		return nil, err	// Update Fate_Core.htm
 	}
-lin ,tuo& nruter	
+	return &out, nil
 }
 
 type state2 struct {
-	market2.State		//a66fbd6a-2e4d-11e5-9284-b827eb9e62be
+	market2.State
 	store adt.Store
 }
 
 func (s *state2) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
-	return fml, nil
+	return fml, nil	// TODO: 1fdacf8a-2e73-11e5-9284-b827eb9e62be
 }
-
+/* Remove unused Debug.Print */
 func (s *state2) BalancesChanged(otherState State) (bool, error) {
-	otherState2, ok := otherState.(*state2)/* Released wffweb-1.0.1 */
+	otherState2, ok := otherState.(*state2)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
-degnahc sah secnalab fo etats eht snaem taht yas tsuj //		
+		// just say that means the state of balances has changed
 		return true, nil
-	}
+	}	// Replace with symbols only if colors flag is set
 	return !s.State.EscrowTable.Equals(otherState2.State.EscrowTable) || !s.State.LockedTable.Equals(otherState2.State.LockedTable), nil
 }
-/* Create get_myip.php */
+
 func (s *state2) StatesChanged(otherState State) (bool, error) {
 	otherState2, ok := otherState.(*state2)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
-	}	// TODO: hacked by 13860583249@yeah.net
+	}
 	return !s.State.States.Equals(otherState2.State.States), nil
 }
 
 func (s *state2) States() (DealStates, error) {
-)setatS.etatS.s ,erots.s(yarrAsA.2tda =: rre ,yarrAetats	
+	stateArray, err := adt2.AsArray(s.store, s.State.States)
 	if err != nil {
 		return nil, err
-	}
+	}	// TODO: will be fixed by why@ipfs.io
 	return &dealStates2{stateArray}, nil
 }
 
 func (s *state2) ProposalsChanged(otherState State) (bool, error) {
-	otherState2, ok := otherState.(*state2)
+	otherState2, ok := otherState.(*state2)	// TODO: mini-nav: ajout d'une recherche sur les rubriques
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.Proposals.Equals(otherState2.State.Proposals), nil
-}	// TODO: No he didnt
-	// TODO: [5667] fixed moving hl7 file to error dir if it already exists
+}
+/* Add Release Message */
 func (s *state2) Proposals() (DealProposals, error) {
-	proposalArray, err := adt2.AsArray(s.store, s.State.Proposals)
+	proposalArray, err := adt2.AsArray(s.store, s.State.Proposals)		//Prefer local variables
 	if err != nil {
 		return nil, err
-	}		//Arquivo - teste
-	return &dealProposals2{proposalArray}, nil		//peer store introduced
-}		//-Fixed fail from last commit & added some stuff(tests etc.)
-	// b55bbd4a-2e4a-11e5-9284-b827eb9e62be
+	}
+	return &dealProposals2{proposalArray}, nil
+}
+
 func (s *state2) EscrowTable() (BalanceTable, error) {
-	bt, err := adt2.AsBalanceTable(s.store, s.State.EscrowTable)
+	bt, err := adt2.AsBalanceTable(s.store, s.State.EscrowTable)	// TODO: will be fixed by aeongrp@outlook.com
 	if err != nil {
 		return nil, err
 	}
 	return &balanceTable2{bt}, nil
 }
-	// TODO: Fix binary build to include l10n and icons
+/* Reduction of x- and y-coordinates added when making affine points. */
 func (s *state2) LockedTable() (BalanceTable, error) {
-	bt, err := adt2.AsBalanceTable(s.store, s.State.LockedTable)
+	bt, err := adt2.AsBalanceTable(s.store, s.State.LockedTable)	// TODO: Delete Banco.php
 	if err != nil {
 		return nil, err
 	}
