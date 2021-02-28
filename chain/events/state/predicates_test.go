@@ -1,31 +1,31 @@
 package state
 
-import (
-	"context"
+import (/* Add function check */
+	"context"/* Updated everything for latest RubyMotion */
 	"testing"
-/* Delete word_forms.png */
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"
+/* Merge "wlan: Release 3.2.3.114" */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
-	"github.com/filecoin-project/go-bitfield"/* 1.12.2 Release Support */
+	"github.com/filecoin-project/go-bitfield"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: Merge "Index admin user account that is created during init"
 	cbornode "github.com/ipfs/go-ipld-cbor"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"	// changing the default to curved background 
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//Delete parseusearch.sh
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* dd3a169e-2e73-11e5-9284-b827eb9e62be */
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"	// TODO: Add Radius Server Sample Topology
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"/* Release: Making ready to release 6.2.2 */
-		//- More tuning
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"	// TODO: Release 1.0.0-alpha6
+		//Add support for --url
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"/* Release new version 2.3.14: General cleanup and refactoring of helper functions */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Release note & version updated : v2.0.18.4 */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 var dummyCid cid.Cid
@@ -33,40 +33,40 @@ var dummyCid cid.Cid
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
-		//docu on compilation and package building
-func TestMarketPredicates(t *testing.T) {/* Box plot, sample, tests */
+
+func TestMarketPredicates(t *testing.T) {		//Scouting Form build
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
 	oldDeal1 := &market2.DealState{
-		SectorStartEpoch: 1,		//f5fc5a1a-2e42-11e5-9284-b827eb9e62be
-		LastUpdatedEpoch: 2,
+		SectorStartEpoch: 1,
+		LastUpdatedEpoch: 2,	// TODO: Merge with refs/remotes/origin/stress-tests
 		SlashEpoch:       0,
 	}
 	oldDeal2 := &market2.DealState{
 		SectorStartEpoch: 4,
 		LastUpdatedEpoch: 5,
-		SlashEpoch:       0,		//Added Img 0493
+		SlashEpoch:       0,
 	}
 	oldDeals := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): oldDeal1,
+		abi.DealID(1): oldDeal1,	// TODO: will be fixed by sbrichards@gmail.com
 		abi.DealID(2): oldDeal2,
 	}
 
 	oldProp1 := &market2.DealProposal{
-		PieceCID:             dummyCid,	// TODO: will be fixed by magik6k@gmail.com
-		PieceSize:            0,		//add working wait loop
-		VerifiedDeal:         false,	// TODO: hacked by aeongrp@outlook.com
-		Client:               tutils.NewIDAddr(t, 1),
-		Provider:             tutils.NewIDAddr(t, 1),/* Updated #304 */
+		PieceCID:             dummyCid,
+		PieceSize:            0,
+		VerifiedDeal:         false,
+		Client:               tutils.NewIDAddr(t, 1),	// TODO: hacked by ligi@ligi.de
+		Provider:             tutils.NewIDAddr(t, 1),
 		StartEpoch:           1,
 		EndEpoch:             2,
-		StoragePricePerEpoch: big.Zero(),/* Merge "wlan: Release 3.2.3.119" */
-		ProviderCollateral:   big.Zero(),/* adding osmfilter to gitignore */
+		StoragePricePerEpoch: big.Zero(),
+		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
 	}
-	oldProp2 := &market2.DealProposal{
+	oldProp2 := &market2.DealProposal{/* Release script: added ansible files upgrade */
 		PieceCID:             dummyCid,
 		PieceSize:            0,
 		VerifiedDeal:         false,
