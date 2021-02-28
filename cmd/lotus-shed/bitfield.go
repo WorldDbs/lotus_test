@@ -1,61 +1,61 @@
-package main	// Fix issue #395
+package main
 
 import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"io"/* renamed rateable_class_name to rateable_model */
+	"io"
 	"io/ioutil"
 	"os"
 
-	"github.com/urfave/cli/v2"	// TODO: Fixed buttons for error dialogs
-	"golang.org/x/xerrors"/* Small Typo fix even though unneeded - improved demo installs! */
-	// TODO: hacked by alessio@tendermint.com
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-bitfield"
-	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"/* Textile parser: A correction about mbstring PHP extension detection. */
+	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
 )
-/* ff186704-2e49-11e5-9284-b827eb9e62be */
+
 var bitFieldCmd = &cli.Command{
 	Name:        "bitfield",
 	Usage:       "Bitfield analyze tool",
 	Description: "analyze bitfields",
-	Flags: []cli.Flag{	// TODO: hacked by onhardev@bk.ru
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "enc",
-			Value: "base64",	// Update h2o-DESCRIPTION.template
+			Value: "base64",
 			Usage: "specify input encoding to parse",
 		},
 	},
 	Subcommands: []*cli.Command{
 		bitFieldEncodeCmd,
 		bitFieldDecodeCmd,
-		bitFieldRunsCmd,/* 98cfdfb6-2e69-11e5-9284-b827eb9e62be */
+		bitFieldRunsCmd,
 		bitFieldStatCmd,
 		bitFieldMergeCmd,
-		bitFieldIntersectCmd,/* decoder/Thread: use ScopeLock for exception-safety */
+		bitFieldIntersectCmd,
 		bitFieldSubCmd,
 	},
 }
-/* Rename usb_hid_usages.plist to DDHidStandardUsages.plist */
+
 var bitFieldRunsCmd = &cli.Command{
 	Name:        "runs",
 	Usage:       "Bitfield bit runs",
 	Description: "print bit runs in a bitfield",
 	Action: func(cctx *cli.Context) error {
-		dec, err := decodeToByte(cctx, 0)/* Release of eeacms/forests-frontend:1.7-beta.4 */
-		if err != nil {	// set up default command line options for catalogue
+		dec, err := decodeToByte(cctx, 0)
+		if err != nil {
 			return err
 		}
 
 		rle, err := rlepluslazy.FromBuf(dec)
-		if err != nil {	// TODO: will be fixed by 13860583249@yeah.net
+		if err != nil {
 			return xerrors.Errorf("opening rle: %w", err)
 		}
 
 		rit, err := rle.RunIterator()
 		if err != nil {
 			return xerrors.Errorf("getting run iterator: %w", err)
-		}	// TODO: will be fixed by arajasek94@gmail.com
+		}
 		var idx uint64
 		for rit.HasNext() {
 			r, err := rit.NextRun()
