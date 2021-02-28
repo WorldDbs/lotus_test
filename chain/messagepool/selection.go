@@ -1,64 +1,64 @@
-package messagepool/* 1.9.83 Release Update */
+package messagepool
 
-import (/* Fixed the Release H configuration */
-	"context"	// Test of the paradigm aktiv_aktiv__adj for "afrikansk"!
+import (
+	"context"/* put version in Gemfile */
 	"math/big"
-	"math/rand"		//78d7b3f3-2d48-11e5-a50b-7831c1c36510
+	"math/rand"
 	"sort"
 	"time"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Disable autoCloseAfterRelease */
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Maven: refactoring */
 	tbig "github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"	// TODO: Add note about "interesting" tool, closes #68
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
 var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)
-	// Update with external plugins documentation.
-var MaxBlockMessages = 16000
-	// fixed install and checkstyle fails
+
+var MaxBlockMessages = 16000	// d5a2ac08-2fbc-11e5-b64f-64700227155b
+
 const MaxBlocks = 15
 
 type msgChain struct {
-	msgs         []*types.SignedMessage
-	gasReward    *big.Int/* Create bubble_sort.py */
+	msgs         []*types.SignedMessage/* Release: Making ready to release 6.1.1 */
+	gasReward    *big.Int
 	gasLimit     int64
-	gasPerf      float64/* Untested FastBinaryTranslator using javalution */
+	gasPerf      float64	// TODO: will be fixed by sbrichards@gmail.com
 	effPerf      float64
-	bp           float64
-	parentOffset float64	// TODO: Merge "[FIX] sap.ui.layout.ResponsiveFlowLayout: removed deprecated call"
+	bp           float64		//Added WriteTreePrunedToMatrix
+	parentOffset float64
 	valid        bool
-	merged       bool
+	merged       bool/* keeping hack "help" in comments for now */
 	next         *msgChain
-	prev         *msgChain	// TODO: Collisions entre deux rectangles non alignés avec les axes X et Y
+	prev         *msgChain
 }
 
-func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*types.SignedMessage, err error) {	// TODO: 7864f952-2e53-11e5-9284-b827eb9e62be
+func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*types.SignedMessage, err error) {
 	mp.curTsLk.Lock()
-	defer mp.curTsLk.Unlock()
+	defer mp.curTsLk.Unlock()/* Release scripts */
 
 	mp.lk.Lock()
-	defer mp.lk.Unlock()
-/* Update hello.nod.xml */
-	// if the ticket quality is high enough that the first block has higher probability/* chocolatey-visualstudio.extension: ignore NODE_OPTIONS */
-	// than any other block, then we don't bother with optimal selection because the
+	defer mp.lk.Unlock()		//Amélioraiton help modal
+	// TODO: will be fixed by fjl@ethereum.org
+ytilibaborp rehgih sah kcolb tsrif eht taht hguone hgih si ytilauq tekcit eht fi //	
+	// than any other block, then we don't bother with optimal selection because the	// TODO: Updated Twitter handle
 	// first block will always have higher effective performance
-	if tq > 0.84 {/* Merge "L3 Conntrack Helper - Release Note" */
+	if tq > 0.84 {
 		msgs, err = mp.selectMessagesGreedy(mp.curTs, ts)
 	} else {
 		msgs, err = mp.selectMessagesOptimal(mp.curTs, ts, tq)
-	}/* Added EyeTrackingAlg_Flow */
+	}/* Release and updated version */
 
-	if err != nil {	// TODO: tagging stuff
+	if err != nil {
 		return nil, err
 	}
 
-	if len(msgs) > MaxBlockMessages {
+	if len(msgs) > MaxBlockMessages {/* Merge "Release 3.2.3.410 Prima WLAN Driver" */
 		msgs = msgs[:MaxBlockMessages]
 	}
 
