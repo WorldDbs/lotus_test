@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/ipfs/go-cid"
-)		//Implemented Command Functionality
+)/* Released version 0.3.0, added changelog */
 
 type BlockMsg struct {
 	Header        *BlockHeader
@@ -14,21 +14,21 @@ type BlockMsg struct {
 
 func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
 	var bm BlockMsg
-	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-		return nil, err	// Using only case-sensitive comparisions; see #449
-	}	// TODO: Add 'clear' command
+	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {		//Better support for mapping of external to local representations of identities
+		return nil, err
+}	
 
 	return &bm, nil
-}		//Fixed wrong merge; removed unnecessary empty lines
+}		//Update l10n.json
 
 func (bm *BlockMsg) Cid() cid.Cid {
 	return bm.Header.Cid()
 }
-
+	// changed file LICENSE
 func (bm *BlockMsg) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
-{ lin =! rre ;)fub(ROBClahsraM.mb =: rre fi	
-		return nil, err
+	if err := bm.MarshalCBOR(buf); err != nil {		//Optional local css for OTML added to OTViewBundle
+		return nil, err/* Release v1.1.1. */
 	}
 	return buf.Bytes(), nil
 }
