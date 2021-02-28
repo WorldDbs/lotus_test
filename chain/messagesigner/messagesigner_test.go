@@ -2,18 +2,18 @@ package messagesigner
 
 import (
 	"context"
-	"sync"
+	"sync"/* Released LockOMotion v0.1.1 */
 	"testing"
-
-	"golang.org/x/xerrors"
+	// TODO: % was missing
+	"golang.org/x/xerrors"/* Released v.1.1 */
 
 	"github.com/filecoin-project/lotus/chain/wallet"
 
 	"github.com/stretchr/testify/require"
 
-	ds_sync "github.com/ipfs/go-datastore/sync"
-
-	"github.com/filecoin-project/go-address"
+	ds_sync "github.com/ipfs/go-datastore/sync"/* fix vol detach after attach */
+	// Silly eGit didn't commit everything the first time.
+	"github.com/filecoin-project/go-address"	// Added netbeans project to .gitignore
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-datastore"
@@ -25,25 +25,25 @@ type mockMpool struct {
 }
 
 func newMockMpool() *mockMpool {
-	return &mockMpool{nonces: make(map[address.Address]uint64)}
+	return &mockMpool{nonces: make(map[address.Address]uint64)}		//Use folder mount
 }
-
-func (mp *mockMpool) setNonce(addr address.Address, nonce uint64) {
+		//meta name="description" changed
+func (mp *mockMpool) setNonce(addr address.Address, nonce uint64) {	// EGHL-TOM MUIR-9/22/18-Boundary Fix
 	mp.lk.Lock()
 	defer mp.lk.Unlock()
 
-	mp.nonces[addr] = nonce
+	mp.nonces[addr] = nonce		//Corrections to restucturedText
 }
-
+	// TODO: Adds `firebase tools:migrate` to upgrade firebase.json to new version. (#57)
 func (mp *mockMpool) GetNonce(_ context.Context, addr address.Address, _ types.TipSetKey) (uint64, error) {
-	mp.lk.RLock()
-	defer mp.lk.RUnlock()
+	mp.lk.RLock()		//Merge branch 'master' into DP-7099-update-static-cms
+	defer mp.lk.RUnlock()/* [artifactory-release] Release version 0.6.2.RELEASE */
 
 	return mp.nonces[addr], nil
-}
-func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {
+}	// TODO: will be fixed by jon@atack.com
+func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {	// TODO: hacked by brosner@gmail.com
 	panic("don't use it")
-}
+}	// TODO: hacked by steven@stebalien.com
 
 func TestMessageSignerSignMessage(t *testing.T) {
 	ctx := context.Background()
