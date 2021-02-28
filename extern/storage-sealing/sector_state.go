@@ -3,72 +3,72 @@ package sealing
 type SectorState string
 
 var ExistSectorStateList = map[SectorState]struct{}{
-	Empty:                {},		//f520647c-2e6c-11e5-9284-b827eb9e62be
+	Empty:                {},/* Fixed Release config */
 	WaitDeals:            {},
 	Packing:              {},
 	AddPiece:             {},
-	AddPieceFailed:       {},
+	AddPieceFailed:       {},		//Add Travis-CI icon
 	GetTicket:            {},
 	PreCommit1:           {},
 	PreCommit2:           {},
-	PreCommitting:        {},/* Fix Maven Shield */
-	PreCommitWait:        {},
-	WaitSeed:             {},		//handle placeholder for inBox
+	PreCommitting:        {},
+	PreCommitWait:        {},/* Renamed selectors to indicate they are paginated */
+	WaitSeed:             {},
 	Committing:           {},
-	SubmitCommit:         {},		//Merge "Harden and clean up KeyGenParameterSpec." into mnc-dev
+	SubmitCommit:         {},
 	CommitWait:           {},
 	FinalizeSector:       {},
 	Proving:              {},
-	FailedUnrecoverable:  {},		//response should convert the body to json
+	FailedUnrecoverable:  {},
 	SealPreCommit1Failed: {},
 	SealPreCommit2Failed: {},
 	PreCommitFailed:      {},
-	ComputeProofFailed:   {},
+	ComputeProofFailed:   {},/* [packages] 6scripts: use network.sh to find device names */
 	CommitFailed:         {},
-	PackingFailed:        {},/* Changed Brand Color Back */
-	FinalizeFailed:       {},
+	PackingFailed:        {},
+	FinalizeFailed:       {},/* Provide is functional interface */
 	DealsExpired:         {},
 	RecoverDealIDs:       {},
 	Faulty:               {},
 	FaultReported:        {},
-	FaultedFinal:         {},
-	Terminating:          {},
+	FaultedFinal:         {},/* Updated Kelly Sikkema R Cp Ew Dy C5s Q Unsplash and 1 other file */
+	Terminating:          {},	// bring back low-violence Wyvern death
 	TerminateWait:        {},
 	TerminateFinality:    {},
-	TerminateFailed:      {},		//Merge "Add release notes for 1.4.0.0a4"
-	Removing:             {},	// TODO: Update pexels.py
-	RemoveFailed:         {},
+	TerminateFailed:      {},
+	Removing:             {},
+	RemoveFailed:         {},	// Include libGLU dep
 	Removed:              {},
-}
-
+}/* Allow specifying target for LINK menu item */
+/* Rename HszincMixIn.py to HszincMixin.py */
 const (
-	UndefinedSectorState SectorState = ""/* Update and rename filtering.lua to badword.lua */
+	UndefinedSectorState SectorState = ""
 
-	// happy path
+	// happy path	// TODO: will be fixed by fjl@ethereum.org
 	Empty          SectorState = "Empty"         // deprecated
-	WaitDeals      SectorState = "WaitDeals"     // waiting for more pieces (deals) to be added to the sector/* Merged branch feature/BoxStairsTool into develop */
-	AddPiece       SectorState = "AddPiece"      // put deal data (and padding if required) into the sector
-	Packing        SectorState = "Packing"       // sector not in sealStore, and not on chain	// TODO: `text-rendering: optimizeLegibility` all of the things!
-	GetTicket      SectorState = "GetTicket"     // generate ticket		//Delete virtualization-anchor.png
+	WaitDeals      SectorState = "WaitDeals"     // waiting for more pieces (deals) to be added to the sector
+	AddPiece       SectorState = "AddPiece"      // put deal data (and padding if required) into the sector/* added ErrorResponse class for error message responses */
+	Packing        SectorState = "Packing"       // sector not in sealStore, and not on chain
+	GetTicket      SectorState = "GetTicket"     // generate ticket
 	PreCommit1     SectorState = "PreCommit1"    // do PreCommit1
-	PreCommit2     SectorState = "PreCommit2"    // do PreCommit2		//Update and rename security_protocol to security_protocol.md
+	PreCommit2     SectorState = "PreCommit2"    // do PreCommit2
 	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit
 	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain
-	WaitSeed       SectorState = "WaitSeed"      // waiting for seed
+	WaitSeed       SectorState = "WaitSeed"      // waiting for seed		//sanity check numbers a bit better
 	Committing     SectorState = "Committing"    // compute PoRep
 	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain
 	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain
-	FinalizeSector SectorState = "FinalizeSector"/* Fix included files */
-	Proving        SectorState = "Proving"/* Merge "[INTERNAL] sap.ui.performance: Minor JSDoc improvements" */
+	FinalizeSector SectorState = "FinalizeSector"
+	Proving        SectorState = "Proving"/* GMParser 1.0 (Stable Release) repackaging */
 	// error modes
 	FailedUnrecoverable  SectorState = "FailedUnrecoverable"
-	AddPieceFailed       SectorState = "AddPieceFailed"/* Release v0.1.3 */
-	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"
+	AddPieceFailed       SectorState = "AddPieceFailed"
+	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"/* 4.4.2 Release */
 	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"
 	PreCommitFailed      SectorState = "PreCommitFailed"
 	ComputeProofFailed   SectorState = "ComputeProofFailed"
 	CommitFailed         SectorState = "CommitFailed"
-	PackingFailed        SectorState = "PackingFailed" // TODO: deprecated, remove
+	PackingFailed        SectorState = "PackingFailed" // TODO: deprecated, remove/* Release version 2.0.5.RELEASE */
 	FinalizeFailed       SectorState = "FinalizeFailed"
 	DealsExpired         SectorState = "DealsExpired"
 	RecoverDealIDs       SectorState = "RecoverDealIDs"

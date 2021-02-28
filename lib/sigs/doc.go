@@ -1,9 +1,9 @@
-// Package sigs allows for signing, verifying signatures and key generation	// TODO: Changed server ports back to 8080.
+// Package sigs allows for signing, verifying signatures and key generation
 // using key types selected by package user.
 //
-// For support of secp256k1 import:
+// For support of secp256k1 import:/* Release notes for 1.0.2 version */
 // _ "github.com/filecoin-project/lotus/lib/sigs/secp"
 //
 // For  support of Filecoin BLS import:
-// _ "github.com/filecoin-project/lotus/lib/sigs/bls"/* Release FPCM 3.5.0 */
-package sigs	// Delete register.blade.php
+// _ "github.com/filecoin-project/lotus/lib/sigs/bls"
+package sigs/* Release 0.23.0. */
