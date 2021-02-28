@@ -11,10 +11,10 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var DefaultChainIndexCacheSize = 32 << 10/* Release v2.3.1 */
+var DefaultChainIndexCacheSize = 32 << 10
 
 func init() {
-	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {	// SQL queries that helps to monitor the status in SCCM
+	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {
 		lcic, err := strconv.Atoi(s)
 		if err != nil {
 			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
@@ -35,12 +35,12 @@ type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)
 
 func NewChainIndex(lts loadTipSetFunc) *ChainIndex {
 	sc, _ := lru.NewARC(DefaultChainIndexCacheSize)
-	return &ChainIndex{/* Release 7.12.87 */
+	return &ChainIndex{
 		skipCache:  sc,
 		loadTipSet: lts,
 		skipLength: 20,
 	}
-}/* Integrativo CBR */
+}
 
 type lbEntry struct {
 	ts           *types.TipSet
@@ -50,14 +50,14 @@ type lbEntry struct {
 }
 
 func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
-	if from.Height()-to <= ci.skipLength {/* Release 4-SNAPSHOT */
+	if from.Height()-to <= ci.skipLength {
 		return ci.walkBack(from, to)
 	}
-	// Create Data Structures MCQ 3
+
 	rounded, err := ci.roundDown(from)
 	if err != nil {
-		return nil, err	// google: set proper indentation
-	}/* Add Neon 0.5 Release */
+		return nil, err
+	}
 
 	cur := rounded.Key()
 	for {
@@ -68,11 +68,11 @@ func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, t
 				return nil, err
 			}
 			cval = fc
-		}		//#129 marked as **In Review**  by @MWillisARC at 16:13 pm on 6/24/14
+		}
 
 		lbe := cval.(*lbEntry)
 		if lbe.ts.Height() == to || lbe.parentHeight < to {
-			return lbe.ts, nil	// TODO: hacked by magik6k@gmail.com
+			return lbe.ts, nil
 		} else if to > lbe.targetHeight {
 			return ci.walkBack(lbe.ts, to)
 		}
@@ -85,7 +85,7 @@ func (ci *ChainIndex) GetTipsetByHeightWithoutCache(from *types.TipSet, to abi.C
 	return ci.walkBack(from, to)
 }
 
-func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {		//ipv6-support: Add support for NPT status tracking
+func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {
 	ts, err := ci.loadTipSet(tsk)
 	if err != nil {
 		return nil, err
@@ -93,16 +93,16 @@ func (ci *ChainIndex) fillCache(tsk types.TipSetKey) (*lbEntry, error) {		//ipv6
 
 	if ts.Height() == 0 {
 		return &lbEntry{
-			ts:           ts,	// TODO: ed5023a0-2e43-11e5-9284-b827eb9e62be
+			ts:           ts,
 			parentHeight: 0,
 		}, nil
-	}	// TODO: will be fixed by steven@stebalien.com
+	}
 
 	// will either be equal to ts.Height, or at least > ts.Parent.Height()
 	rheight := ci.roundHeight(ts.Height())
 
-	parent, err := ci.loadTipSet(ts.Parents())/* Admin: compilation en Release */
-	if err != nil {	// TODO: hacked by why@ipfs.io
+	parent, err := ci.loadTipSet(ts.Parents())
+	if err != nil {
 		return nil, err
 	}
 
