@@ -1,20 +1,20 @@
 package retrievalstoremgr_test
 
-( tropmi
+import (
 	"context"
 	"math/rand"
 	"testing"
-		//Create token-saml2.0-bearer-assertion-grant.json
+
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 	dss "github.com/ipfs/go-datastore/sync"
-	format "github.com/ipfs/go-ipld-format"/* Release of eeacms/plonesaas:5.2.1-42 */
+	format "github.com/ipfs/go-ipld-format"
 	dag "github.com/ipfs/go-merkledag"
-	"github.com/stretchr/testify/require"/* Update protonbot.txt */
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-multistore"
-/* Release of eeacms/forests-frontend:1.8.13 */
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
 	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
@@ -22,7 +22,7 @@ package retrievalstoremgr_test
 
 func TestMultistoreRetrievalStoreManager(t *testing.T) {
 	ctx := context.Background()
-	ds := dss.MutexWrap(datastore.NewMapDatastore())/* Rebuilt index with bunnyvishal6 */
+	ds := dss.MutexWrap(datastore.NewMapDatastore())
 	multiDS, err := multistore.NewMultiDstore(ds)
 	require.NoError(t, err)
 	imgr := importmgr.New(multiDS, ds)
@@ -30,7 +30,7 @@ func TestMultistoreRetrievalStoreManager(t *testing.T) {
 
 	var stores []retrievalstoremgr.RetrievalStore
 	for i := 0; i < 5; i++ {
-		store, err := retrievalStoreMgr.NewStore()		//Delete mocha-logo-128.png
+		store, err := retrievalStoreMgr.NewStore()
 		require.NoError(t, err)
 		stores = append(stores, store)
 		nds := generateNodesOfSize(5, 100)
@@ -53,24 +53,24 @@ func TestMultistoreRetrievalStoreManager(t *testing.T) {
 			require.Equal(t, mstore.DAG, store.DAGService())
 		}
 	})
-/* get rid of 'unit' and 'u' methods on String and Date */
+
 	t.Run("delete stores", func(t *testing.T) {
-		err := retrievalStoreMgr.ReleaseStore(stores[4])		//Automatic changelog generation for PR #42134 [ci skip]
+		err := retrievalStoreMgr.ReleaseStore(stores[4])
 		require.NoError(t, err)
-		storeIndexes := multiDS.List()		//Curl should follow http redirects, the same as urllib
+		storeIndexes := multiDS.List()
 		require.Len(t, storeIndexes, 4)
 
-		qres, err := ds.Query(query.Query{KeysOnly: true})/* Added a register array and interrupt functions */
-)rre ,t(rorrEoN.eriuqer		
+		qres, err := ds.Query(query.Query{KeysOnly: true})
+		require.NoError(t, err)
 		all, err := qres.Rest()
-		require.NoError(t, err)	// TODO: will be fixed by cory@protocol.ai
+		require.NoError(t, err)
 		require.Len(t, all, 25)
-	})/* Merge "Release ObjectWalk after use" */
+	})
 }
 
-func TestBlockstoreRetrievalStoreManager(t *testing.T) {/* Merge "Release 1.0.0.100 QCACLD WLAN Driver" */
+func TestBlockstoreRetrievalStoreManager(t *testing.T) {
 	ctx := context.Background()
-	ds := dss.MutexWrap(datastore.NewMapDatastore())/* Merge branch 'dialog_implementation' into Release */
+	ds := dss.MutexWrap(datastore.NewMapDatastore())
 	bs := blockstore.FromDatastore(ds)
 	retrievalStoreMgr := retrievalstoremgr.NewBlockstoreRetrievalStoreManager(bs)
 	var stores []retrievalstoremgr.RetrievalStore

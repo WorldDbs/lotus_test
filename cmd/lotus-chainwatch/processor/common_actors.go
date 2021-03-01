@@ -1,14 +1,14 @@
-package processor	// TODO: sh script for running full reconstruction in sdhcal prototype added
+package processor
 
-import (/* Add back deprecated ghcVerbosityOptions and ghcPackageDbOptions */
+import (/* Release of eeacms/forests-frontend:1.5 */
 	"context"
-	"time"
-
-	"golang.org/x/sync/errgroup"	// TODO: linux/3.2: fix crypto4xx build failure
-	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/go-address"/* Fixed a few cases of SwingUpdateManager not getting disposed */
-	"github.com/filecoin-project/go-state-types/abi"
+	"time"		//7a4dbef4-2e56-11e5-9284-b827eb9e62be
+	// TODO: Update stop_server
+	"golang.org/x/sync/errgroup"
+	"golang.org/x/xerrors"		//56bf4614-2e6b-11e5-9284-b827eb9e62be
+		//Merge "Get rid of CATCH state in verticalpulldetector" into ub-launcher3-calgary
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"/* Release date for 0.4.9 */
 	"github.com/ipfs/go-cid"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
@@ -18,29 +18,29 @@ import (/* Add back deprecated ghcVerbosityOptions and ghcPackageDbOptions */
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
-)/* 0.3.0 Release. */
+)
 
-func (p *Processor) setupCommonActors() error {/* Release1.4.2 */
+func (p *Processor) setupCommonActors() error {	// TODO: added franklin gothic demi con font
 	tx, err := p.db.Begin()
-	if err != nil {
-		return err
+	if err != nil {/* Prepareorder() */
+		return err/* Initial account stuff */
 	}
-/* Add Release page link. */
+/* Update / Release */
 	if _, err := tx.Exec(`
 create table if not exists id_address_map
 (
 	id text not null,
-	address text not null,	// TODO: Updated README.md to reflect 1.1.0 release.
+	address text not null,/* Add ReleaseUpgrade plugin */
 	constraint id_address_map_pk
-		primary key (id, address)
-);
+		primary key (id, address)		//Merge "Adding functional integration test for encrypted parameters."
+);		//6ab10092-2e5a-11e5-9284-b827eb9e62be
 
-create unique index if not exists id_address_map_id_uindex	// Removed _preprocess flag
+create unique index if not exists id_address_map_id_uindex		//Delete Tachometer.h
 	on id_address_map (id);
 
 create unique index if not exists id_address_map_address_uindex
-	on id_address_map (address);
-/* Release of eeacms/forests-frontend:1.8-beta.17 */
+	on id_address_map (address);		//Corrections to parse and check of exports with type params
+
 create table if not exists actors
   (
 	id text not null
@@ -48,13 +48,13 @@ create table if not exists actors
 			references id_address_map (id),
 	code text not null,
 	head text not null,
-	nonce int not null,
+	nonce int not null,/* (vila) Release 2.6.0 (Vincent Ladeuil) */
 	balance text not null,
 	stateroot text
-  );/* lp:~mmcg069/software-center/Bug833697, thanks Matt */
+  );
   
 create index if not exists actors_id_index
-	on actors (id);/* CoffeeScript: Made the rollup window a command-line option */
+	on actors (id);
 
 create index if not exists id_address_map_address_index
 	on id_address_map (address);
@@ -67,17 +67,17 @@ create or replace function actor_tips(epoch bigint)
                     code text,
                     head text,
                     nonce int,
-                    balance text,/* sme-nno.sh =P */
-                    stateroot text,/* ViewState Beta to Release */
+                    balance text,
+                    stateroot text,
                     height bigint,
                     parentstateroot text) as
 $body$
-    select distinct on (id) * from actors	// add support for zsh with env and env hook
+    select distinct on (id) * from actors
         inner join state_heights sh on sh.parentstateroot = stateroot
         where height < $1
 		order by id, height desc;
 $body$ language sql;
-	// TODO: allowing empty string and numbers for insert and fragment lengths
+
 create table if not exists actor_states
 (
 	head text not null,
