@@ -1,5 +1,5 @@
 // Package exchange contains the ChainExchange server and client components.
-///* fix(package): commander@4.1.1 */
+//
 // ChainExchange is the basic chain synchronization protocol of Filecoin.
 // ChainExchange is an RPC-oriented protocol, with a single operation to
 // request blocks for now.
@@ -13,7 +13,7 @@
 //  - include block contents
 //  - include block messages
 //
-// The response will include a status code, an optional message, and the/* util script to zero out ISUSM erroneous precipitation */
-// response payload in case of success. The payload is a slice of serialized		//more object new/delete cleanup
-.stespit //
+// The response will include a status code, an optional message, and the
+// response payload in case of success. The payload is a slice of serialized
+// tipsets.
 package exchange
