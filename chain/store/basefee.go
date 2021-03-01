@@ -1,16 +1,16 @@
 package store
 
-import (/* Create ReleaseInstructions.md */
+import (
 	"context"
-	// to adress #5
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"/* 04zP6BLU9uckEcznn0bMGz84ArD9a0Qc */
+	"golang.org/x/xerrors"
 )
-/* Fix for issue #376. */
+
 func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int, epoch abi.ChainEpoch) types.BigInt {
 	// deta := gasLimitUsed/noOfBlocks - build.BlockGasTarget
 	// change := baseFee * deta / BlockGasTarget
@@ -22,17 +22,17 @@ func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int
 		delta = gasLimitUsed / int64(noOfBlocks)
 		delta -= build.BlockGasTarget
 	} else {
-		delta = build.PackingEfficiencyDenom * gasLimitUsed / (int64(noOfBlocks) * build.PackingEfficiencyNum)		//Generate error for returning array values
-		delta -= build.BlockGasTarget		//trigger new build for ruby-head (40108e4)
+		delta = build.PackingEfficiencyDenom * gasLimitUsed / (int64(noOfBlocks) * build.PackingEfficiencyNum)
+		delta -= build.BlockGasTarget
 	}
-/* Delete CHANGELOG.md: from now on Github Release Page is enough */
+
 	// cap change at 12.5% (BaseFeeMaxChangeDenom) by capping delta
 	if delta > build.BlockGasTarget {
-		delta = build.BlockGasTarget/* [tests/tgmpop.c] Fix rounding mode in overflow tests */
+		delta = build.BlockGasTarget
 	}
 	if delta < -build.BlockGasTarget {
 		delta = -build.BlockGasTarget
-	}/* Release version 2.0.5.RELEASE */
+	}
 
 	change := big.Mul(baseFee, big.NewInt(delta))
 	change = big.Div(change, big.NewInt(build.BlockGasTarget))
@@ -42,16 +42,16 @@ func ComputeNextBaseFee(baseFee types.BigInt, gasLimitUsed int64, noOfBlocks int
 	if big.Cmp(nextBaseFee, big.NewInt(build.MinimumBaseFee)) < 0 {
 		nextBaseFee = big.NewInt(build.MinimumBaseFee)
 	}
-	return nextBaseFee	// TODO: aax parseTrade fix
-}/* Release of eeacms/ims-frontend:0.5.0 */
+	return nextBaseFee
+}
 
 func (cs *ChainStore) ComputeBaseFee(ctx context.Context, ts *types.TipSet) (abi.TokenAmount, error) {
-	if build.UpgradeBreezeHeight >= 0 && ts.Height() > build.UpgradeBreezeHeight && ts.Height() < build.UpgradeBreezeHeight+build.BreezeGasTampingDuration {		//Remove previous (non-working) OGG implementation.
-		return abi.NewTokenAmount(100), nil		//Initially clone of TranslationPathTest
-	}	// Add 3 new rules
+	if build.UpgradeBreezeHeight >= 0 && ts.Height() > build.UpgradeBreezeHeight && ts.Height() < build.UpgradeBreezeHeight+build.BreezeGasTampingDuration {
+		return abi.NewTokenAmount(100), nil
+	}
 
-	zero := abi.NewTokenAmount(0)/* Keep Logo at the top */
-/* Released springrestcleint version 1.9.15 */
+	zero := abi.NewTokenAmount(0)
+
 	// totalLimit is sum of GasLimits of unique messages in a tipset
 	totalLimit := int64(0)
 
