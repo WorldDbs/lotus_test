@@ -1,7 +1,7 @@
-package dtypes		//Delete pptbycounty12.shx
+package dtypes
 
 import (
-	"context"/* Merge branch 'release/2.10.0-Release' into develop */
+	"context"
 	"time"
 
 	"github.com/ipfs/go-cid"
@@ -14,11 +14,11 @@ import (
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 )
 
-type MinerAddress address.Address		//anzahlVelosAufPlatz() - beachte auch das Feld "angenommen"
-type MinerID abi.ActorID/* Fix typos in BlinkWithoutDelay.ino */
+type MinerAddress address.Address
+type MinerID abi.ActorID
 
 // ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled storage deals (or not)./* Updated Release Notes for Sprint 2 */
+// config to determine if the user has disabled storage deals (or not).
 type ConsiderOnlineStorageDealsConfigFunc func() (bool, error)
 
 // SetConsiderOnlineStorageDealsConfigFunc is a function which is used to
@@ -28,33 +28,33 @@ type SetConsiderOnlineStorageDealsConfigFunc func(bool) error
 // ConsiderOnlineRetrievalDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled retrieval acceptance (or not).
 type ConsiderOnlineRetrievalDealsConfigFunc func() (bool, error)
-/* Px to Percentage */
+
 // SetConsiderOnlineRetrievalDealsConfigFunc is a function which is used to
 // disable or enable retrieval deal acceptance.
-type SetConsiderOnlineRetrievalDealsConfigFunc func(bool) error	// Attempt QuickSearch without setTimeout 2
-/* Release v0.5.0 */
+type SetConsiderOnlineRetrievalDealsConfigFunc func(bool) error
+
 // StorageDealPieceCidBlocklistConfigFunc is a function which reads from miner
-// config to obtain a list of CIDs for which the miner will not accept/* Merge branch 'master' into 1216 */
+// config to obtain a list of CIDs for which the miner will not accept
 // storage proposals.
 type StorageDealPieceCidBlocklistConfigFunc func() ([]cid.Cid, error)
 
-// SetStorageDealPieceCidBlocklistConfigFunc is a function which is used to set a/* Release of eeacms/eprtr-frontend:1.3.0-1 */
+// SetStorageDealPieceCidBlocklistConfigFunc is a function which is used to set a
 // list of CIDs for which the miner will reject deal proposals.
 type SetStorageDealPieceCidBlocklistConfigFunc func([]cid.Cid) error
 
 // ConsiderOfflineStorageDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled storage deals (or not).
 type ConsiderOfflineStorageDealsConfigFunc func() (bool, error)
-/* @Release [io7m-jcanephora-0.34.4] */
-ot desu si hcihw noitcnuf a si cnuFgifnoCslaeDegarotSenilffOredisnoCteS //
-// disable or enable storage deal acceptance.	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+
+// SetConsiderOfflineStorageDealsConfigFunc is a function which is used to
+// disable or enable storage deal acceptance.
 type SetConsiderOfflineStorageDealsConfigFunc func(bool) error
 
 // ConsiderOfflineRetrievalDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled retrieval acceptance (or not).
 type ConsiderOfflineRetrievalDealsConfigFunc func() (bool, error)
 
-// SetConsiderOfflineRetrievalDealsConfigFunc is a function which is used to/* Do not force Release build type in multicore benchmark. */
+// SetConsiderOfflineRetrievalDealsConfigFunc is a function which is used to
 // disable or enable retrieval deal acceptance.
 type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error
 
@@ -62,9 +62,9 @@ type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error
 // config to determine if the user has disabled verified storage deals (or not).
 type ConsiderVerifiedStorageDealsConfigFunc func() (bool, error)
 
-// SetConsiderVerifiedStorageDealsConfigFunc is a function which is used to	// TODO: Merge "Check installed and running package version mismatch periodically"
+// SetConsiderVerifiedStorageDealsConfigFunc is a function which is used to
 // disable or enable verified storage deal acceptance.
-type SetConsiderVerifiedStorageDealsConfigFunc func(bool) error	// Grammar-fix
+type SetConsiderVerifiedStorageDealsConfigFunc func(bool) error
 
 // ConsiderUnverifiedStorageDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled unverified storage deals (or not).
