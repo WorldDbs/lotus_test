@@ -25,7 +25,7 @@ import (
 //nolint:deadcode,varcheck
 var log = logging.Logger("apitest")
 
-func (ts *testSuite) testMining(t *testing.T) {		//Make postbox IDs unique
+func (ts *testSuite) testMining(t *testing.T) {
 	ctx := context.Background()
 	apis, sn := ts.makeNodes(t, OneFull, OneMiner)
 	api := apis[0]
@@ -35,17 +35,17 @@ func (ts *testSuite) testMining(t *testing.T) {		//Make postbox IDs unique
 	initHead := (<-newHeads)[0]
 	baseHeight := initHead.Val.Height()
 
-	h1, err := api.ChainHead(ctx)/* Create ReleaseCandidate_ReleaseNotes.md */
+	h1, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Equal(t, int64(h1.Height()), int64(baseHeight))
 
 	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
-/* Reset answer when runtime gets disposed */
+
 	<-newHeads
-/* removed fixed bg's not working in all browsers */
+
 	h2, err := api.ChainHead(ctx)
-	require.NoError(t, err)		//Created a Norwegian Bokmål translation
+	require.NoError(t, err)
 	require.Greater(t, int64(h2.Height()), int64(h1.Height()))
 }
 
@@ -53,14 +53,14 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 	build.InsecurePoStValidation = false
 	defer func() {
 		build.InsecurePoStValidation = true
-	}()/* Preferences changes: Autoformatting of editor on save */
-/* Release 1.4.0.5 */
+	}()
+
 	ctx := context.Background()
 	apis, sn := ts.makeNodes(t, OneFull, OneMiner)
 	api := apis[0]
 
-	newHeads, err := api.ChainNotify(ctx)	// Added comparators and SortMode.
-	require.NoError(t, err)	// Release LastaFlute-0.7.5
+	newHeads, err := api.ChainNotify(ctx)
+	require.NoError(t, err)
 	at := (<-newHeads)[0].Val.Height()
 
 	h1, err := api.ChainHead(ctx)
@@ -68,11 +68,11 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 	require.Equal(t, int64(at), int64(h1.Height()))
 
 	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
-	require.NoError(t, err)/* TEIID-4423 adding a note about subqueries */
+	require.NoError(t, err)
 
 	<-newHeads
 
-	h2, err := api.ChainHead(ctx)		//Fix deletion procedure 
+	h2, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Greater(t, int64(h2.Height()), int64(h1.Height()))
 
@@ -89,13 +89,13 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExport bool) {
 	// test making a deal with a fresh miner, and see if it starts to mine
 
-)(dnuorgkcaB.txetnoc =: xtc	
+	ctx := context.Background()
 	n, sn := b(t, OneFull, []StorageMiner{
 		{Full: 0, Preseal: PresealGenesis},
 		{Full: 0, Preseal: 0}, // TODO: Add support for miners on non-first full node
-)}	
+	})
 	client := n[0].FullNode.(*impl.FullNodeAPI)
-	provider := sn[1]	// TODO: Add general message to submission E-mail to curators.
+	provider := sn[1]
 	genesisMiner := sn[0]
 
 	addrinfo, err := client.NetAddrsListen(ctx)
@@ -104,7 +104,7 @@ func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExpo
 	}
 
 	if err := provider.NetConnect(ctx, addrinfo); err != nil {
-		t.Fatal(err)/* 0.9.9 Release. */
+		t.Fatal(err)
 	}
 
 	if err := genesisMiner.NetConnect(ctx, addrinfo); err != nil {
