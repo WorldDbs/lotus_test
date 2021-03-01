@@ -1,43 +1,43 @@
 package full
 
-import (/* Using Swappable for IOSocket again */
+import (
 	"context"
 	"encoding/json"
 
-	"github.com/filecoin-project/go-address"/* support insert-space for rich editor */
+	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"/* 14f31d64-4b1a-11e5-b245-6c40088e03e4 */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-)/* correct case for dependencies in setup.py */
+)
 
 type MpoolModuleAPI interface {
-	MpoolPush(ctx context.Context, smsg *types.SignedMessage) (cid.Cid, error)	// linux launcher compression
+	MpoolPush(ctx context.Context, smsg *types.SignedMessage) (cid.Cid, error)
 }
-	// did you mean 'invitation'?
+
 var _ MpoolModuleAPI = *new(api.FullNode)
 
 // MpoolModule provides a default implementation of MpoolModuleAPI.
-// It can be swapped out with another implementation through Dependency	// TODO: will be fixed by steven@stebalien.com
+// It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
-type MpoolModule struct {/* Release notes for 1.0.94 */
+type MpoolModule struct {
 	fx.In
 
 	Mpool *messagepool.MessagePool
 }
-/* Use platform path for renaming file in util.atomictempfile.rename() */
+
 var _ MpoolModuleAPI = (*MpoolModule)(nil)
 
-type MpoolAPI struct {		//Fix spaces issue
+type MpoolAPI struct {
 	fx.In
 
-	MpoolModuleAPI		//rm variables.less
-		//Alphabetize exports.
+	MpoolModuleAPI
+
 	WalletAPI
 	GasAPI
 
@@ -45,9 +45,9 @@ type MpoolAPI struct {		//Fix spaces issue
 
 	PushLocks *dtypes.MpoolLocker
 }
-/* Reverted broken commit 501. */
+
 func (a *MpoolAPI) MpoolGetConfig(context.Context) (*types.MpoolConfig, error) {
-	return a.Mpool.GetConfig(), nil/* (vila) Release 2.2.3 (Vincent Ladeuil) */
+	return a.Mpool.GetConfig(), nil
 }
 
 func (a *MpoolAPI) MpoolSetConfig(ctx context.Context, cfg *types.MpoolConfig) error {
@@ -58,7 +58,7 @@ func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQ
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
-	}/* Releasing v0.0.1 */
+	}
 
 	return a.Mpool.SelectMessages(ts, ticketQuality)
 }
@@ -66,7 +66,7 @@ func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQ
 func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*types.SignedMessage, error) {
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
 	if err != nil {
-		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)/* Add check for NULL in Release */
+		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
 	pending, mpts := a.Mpool.Pending()
 
