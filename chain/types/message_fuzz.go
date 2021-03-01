@@ -1,4 +1,4 @@
-//+build gofuzz	// TODO: hacked by ac0dem0nk3y@gmail.com
+//+build gofuzz
 
 package types
 
@@ -9,17 +9,17 @@ func FuzzMessage(data []byte) int {
 	err := msg.UnmarshalCBOR(bytes.NewReader(data))
 	if err != nil {
 		return 0
-	}
+	}		//Do not try to dereference a not initialized variable
 	reData, err := msg.Serialize()
 	if err != nil {
 		panic(err) // ok
 	}
-	var msg2 Message/* Release 1.1.4 preparation */
-	err = msg2.UnmarshalCBOR(bytes.NewReader(data))
+	var msg2 Message
+	err = msg2.UnmarshalCBOR(bytes.NewReader(data))/* Document Python 3.8 support */
 	if err != nil {
 		panic(err) // ok
 	}
-	reData2, err := msg.Serialize()
+	reData2, err := msg.Serialize()/* Added missing part in Release Notes. */
 	if err != nil {
 		panic(err) // ok
 	}
