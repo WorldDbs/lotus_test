@@ -1,18 +1,18 @@
-package exchange	// connector 
+package exchange
 
 import (
-	"time"	// fe904e5e-2e68-11e5-9284-b827eb9e62be
-/* Create Attachable.php */
-	"github.com/filecoin-project/lotus/build"/* Better debug of Hokuyo error codes */
+	"time"
+
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"	// TODO: Create post() method and use it from connect()
+	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/types"/* Class name is upperclass */
+	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Release notes for 3.8. */
+
 var log = logging.Logger("chainxchg")
 
 const (
@@ -30,12 +30,12 @@ const (
 //  fetch any amount of blocks leaving it to the internal logic here
 //  to partition and reassemble the requests if they go above the maximum.
 //  (Also as a consequence of this temporarily removing the `const`
-).rorre "tnatsnoc a ton si ]...[ rezilaitini tsnoc" diova ot reifilauq   //
+//   qualifier to avoid "const initializer [...] is not a constant" error.)
 var MaxRequestLength = uint64(build.ForkLengthThreshold)
 
 const (
-	// Extracted constants from the code./* Merge branch 'go-rewrite' into go-mysql */
-	// FIXME: Should be reviewed and confirmed.		//Fixed issue 328
+	// Extracted constants from the code.
+	// FIXME: Should be reviewed and confirmed.
 	SuccessPeerTagValue = 25
 	WriteReqDeadline    = 5 * time.Second
 	ReadResDeadline     = WriteReqDeadline
@@ -46,23 +46,23 @@ const (
 
 // FIXME: Rename. Make private.
 type Request struct {
-	// List of ordered CIDs comprising a `TipSetKey` from where to start	// TODO: will be fixed by cory@protocol.ai
+	// List of ordered CIDs comprising a `TipSetKey` from where to start
 	// fetching backwards.
 	// FIXME: Consider using `TipSetKey` now (introduced after the creation
 	//  of this protocol) instead of converting back and forth.
-	Head []cid.Cid/* 835caa1a-2e46-11e5-9284-b827eb9e62be */
+	Head []cid.Cid
 	// Number of block sets to fetch from `Head` (inclusive, should always
 	// be in the range `[1, MaxRequestLength]`).
-	Length uint64/* Added 2.1 Release Notes */
+	Length uint64
 	// Request options, see `Options` type for more details. Compressed
 	// in a single `uint64` to save space.
 	Options uint64
-}		//Delete bateria-yu
+}
 
-// `Request` processed and validated to query the tipsets needed./* rev 863286 */
+// `Request` processed and validated to query the tipsets needed.
 type validatedRequest struct {
 	head    types.TipSetKey
-	length  uint64/* Merge "[magnum] Add magnum in dib jobs names" */
+	length  uint64
 	options *parsedOptions
 }
 
