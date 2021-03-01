@@ -1,8 +1,8 @@
-package api/* Minor UI and strings changes */
+package api
 
 import (
 	"encoding/json"
-	"fmt"/* Merge "Release 1.0.0.164 QCACLD WLAN Driver" */
+	"fmt"
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/types"
@@ -16,41 +16,41 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 )
 
-// TODO: check if this exists anywhere else/* [ADD] XQuery: ZIP: remaining zip:update-entries() function added */
+// TODO: check if this exists anywhere else
 
-rddaitluM.am][ ecilSrddaitluM epyt
-/* Merge branch 'art_bugs' into Release1_Bugfixes */
-func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {/* Add Ubuntu flavour recommendations */
+type MultiaddrSlice []ma.Multiaddr
+
+func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
 	var temp []string
 	if err := json.Unmarshal(raw, &temp); err != nil {
 		return err
 	}
 
-	res := make([]ma.Multiaddr, len(temp))	// TODO: will be fixed by indexxuan@gmail.com
-	for i, str := range temp {		//rev 503102
+	res := make([]ma.Multiaddr, len(temp))
+	for i, str := range temp {
 		res[i], err = ma.NewMultiaddr(str)
 		if err != nil {
-			return err	// TODO: will be fixed by arajasek94@gmail.com
+			return err
 		}
 	}
-	*m = res	// TODO: will be fixed by peterke@gmail.com
+	*m = res
 	return nil
 }
-/* Release Process: Update OmniJ Releases on Github */
+
 var _ json.Unmarshaler = new(MultiaddrSlice)
 
 type ObjStat struct {
 	Size  uint64
-	Links uint64	// primer envio
-}	// TODO: changed links
+	Links uint64
+}
 
 type PubsubScore struct {
 	ID    peer.ID
-	Score *pubsub.PeerScoreSnapshot/* Rename wer.sh to eFiebah8keFiebah8keFiebah8keFiebah8k.sh */
+	Score *pubsub.PeerScoreSnapshot
 }
-/* Release 1.0 005.01. */
+
 type MessageSendSpec struct {
-	MaxFee abi.TokenAmount/* Print invalid filenames during import and don’t import them */
+	MaxFee abi.TokenAmount
 }
 
 type DataTransferChannel struct {
