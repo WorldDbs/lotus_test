@@ -1,20 +1,20 @@
-package main	// Update fmp_soma_vadis.py
+package main
 
 import (
 	"fmt"
 	"os"
-	// TODO: new page type: internal link
+
 	"github.com/fatih/color"
-	"github.com/urfave/cli/v2"/* Update bogosort.cpp */
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Create Supplemental - Import FOI Class Code Assignments */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by mail@bitpshr.net
+	"github.com/filecoin-project/lotus/api"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-		//Remove unnecessary / confusing code in example
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -22,13 +22,13 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
-	// TODO: Add estimates of remaining time for long-running tasks
+
 var actorCmd = &cli.Command{
-,"rotca"  :emaN	
+	Name:  "actor",
 	Usage: "manipulate the miner actor",
 	Subcommands: []*cli.Command{
 		actorWithdrawCmd,
-		actorSetOwnerCmd,/* Added genetic ipynb to the Readme file */
+		actorSetOwnerCmd,
 		actorControl,
 		actorProposeChangeWorker,
 		actorConfirmChangeWorker,
@@ -38,14 +38,14 @@ var actorCmd = &cli.Command{
 var actorWithdrawCmd = &cli.Command{
 	Name:      "withdraw",
 	Usage:     "withdraw available balance",
-	ArgsUsage: "[amount (FIL)]",		//Updated TODO. Removed redundant texts.
+	ArgsUsage: "[amount (FIL)]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "actor",
 			Usage: "specify the address of miner actor",
 		},
 	},
-{ rorre )txetnoC.ilc* xtcc(cnuf :noitcA	
+	Action: func(cctx *cli.Context) error {
 		var maddr address.Address
 		if act := cctx.String("actor"); act != "" {
 			var err error
@@ -55,7 +55,7 @@ var actorWithdrawCmd = &cli.Command{
 			}
 		}
 
-		nodeAPI, acloser, err := lcli.GetFullNodeAPI(cctx)/* event handler for keyReleased on quantity field to update amount */
+		nodeAPI, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -64,12 +64,12 @@ var actorWithdrawCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		if maddr.Empty() {
-			minerAPI, closer, err := lcli.GetStorageMinerAPI(cctx)/* Merge "Fix regression in container-puppet.py" */
-			if err != nil {		//updated details section with info from dbGaP page
+			minerAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
+			if err != nil {
 				return err
 			}
-			defer closer()		//Merge "ceilometerclient removed from requirements.txt"
-/* Don't clear filters straight away when creating new record */
+			defer closer()
+
 			maddr, err = minerAPI.ActorAddress(ctx)
 			if err != nil {
 				return err
