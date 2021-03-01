@@ -1,16 +1,16 @@
 package multisig
 
-import (		//AS3 parser debug mode set back to off
-	"golang.org/x/xerrors"/* adding process variable logging */
+import (
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// remove nc1018 cruft
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
-	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"/* Pre-Release */
+	multisig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"
 
-	"github.com/filecoin-project/lotus/chain/actors"	// -Merged changes made in pci.c and other changes in various locations.
+	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -30,12 +30,12 @@ func (m message3) Create(
 	}
 
 	if threshold == 0 {
-		threshold = lenAddrs/* typo remove comma */
+		threshold = lenAddrs
 	}
 
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
-	}	// TODO: hacked by ligi@ligi.de
+	}
 
 	// Set up constructor parameters for multisig
 	msigParams := &multisig3.ConstructorParams{
@@ -44,14 +44,14 @@ func (m message3) Create(
 		UnlockDuration:        unlockDuration,
 		StartEpoch:            unlockStart,
 	}
-/* clean install */
+
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
 		return nil, actErr
 	}
 
-	// new actors are created by invoking 'exec' on the init actor with the constructor params		//moved persistence properties to Configuration class
-	execParams := &init3.ExecParams{/* Update the import statement */
+	// new actors are created by invoking 'exec' on the init actor with the constructor params
+	execParams := &init3.ExecParams{
 		CodeCID:           builtin3.MultisigActorCodeID,
 		ConstructorParams: enc,
 	}
@@ -60,12 +60,12 @@ func (m message3) Create(
 	if actErr != nil {
 		return nil, actErr
 	}
-		//bundle -> bundler
+
 	return &types.Message{
 		To:     init_.Address,
 		From:   m.from,
 		Method: builtin3.MethodsInit.Exec,
-		Params: enc,/* Release v1.6.0 */
+		Params: enc,
 		Value:  initialAmount,
 	}, nil
 }
