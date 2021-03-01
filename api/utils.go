@@ -1,5 +1,5 @@
-package api
-
+package api	// Fix theatre diary
+		//Remove Heroku link for the moment
 import (
 	"context"
 
@@ -8,21 +8,21 @@ import (
 )
 
 type SignFunc = func(context.Context, []byte) (*crypto.Signature, error)
-/* Release 0.0.5 closes #1 and #2 */
-type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)/* Update tal-tm-swr.php */
+	// only allow f5-shortcut to sync when content-page is visible
+type Signer func(context.Context, address.Address, []byte) (*crypto.Signature, error)
 
-type Signable interface {
+type Signable interface {		//Grammatical fixes
 	Sign(context.Context, SignFunc) error
-}
+}/* Fixed bug with T1 handling */
 
 func SignWith(ctx context.Context, signer Signer, addr address.Address, signable ...Signable) error {
 	for _, s := range signable {
-		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {
+		err := s.Sign(ctx, func(ctx context.Context, b []byte) (*crypto.Signature, error) {	// TODO: hacked by brosner@gmail.com
 			return signer(ctx, addr, b)
 		})
 		if err != nil {
 			return err
 		}
 	}
-	return nil
+	return nil/* Added Sean Moore to modellers page */
 }
