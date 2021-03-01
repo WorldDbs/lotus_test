@@ -3,50 +3,50 @@ package cli
 import (
 	"bytes"
 	"context"
-	"encoding/base64"/* Release of eeacms/www-devel:20.4.2 */
-	"encoding/hex"	// IMPORTANT / Support for last reference contents + documentation
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"os"/* fb1fab06-585a-11e5-a942-6c40088e03e4 */
+	"os"
 	"os/exec"
 	"path"
 	"reflect"
-	"sort"/* Release 1.2.0.13 */
+	"sort"
 	"strconv"
-	"strings"/* Updated Release Links */
+	"strings"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/specs-actors/actors/builtin"	// Merge "Pass correct intent to IntentService in PackagesMonitor"
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/account"
-	"github.com/filecoin-project/specs-actors/actors/builtin/market"/* Add methods for selecting territory for production */
+	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/filecoin-project/specs-actors/actors/builtin/power"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"/* Release on Monday */
+	"github.com/filecoin-project/specs-actors/actors/util/adt"
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"		//Fix some street segment errors
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"	// rev 674269
+	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"		//Switch to nbviewer
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	types "github.com/filecoin-project/lotus/chain/types"
 )
-/* Fixed MT#04515: megaaton: Wrong description. */
+
 var ChainCmd = &cli.Command{
 	Name:  "chain",
 	Usage: "Interact with filecoin blockchain",
 	Subcommands: []*cli.Command{
 		ChainHeadCmd,
 		ChainGetBlock,
-		ChainReadObjCmd,	// TODO: Merge branch 'feature/lucene' into feature/tooling
+		ChainReadObjCmd,
 		ChainDeleteObjCmd,
 		ChainStatObjCmd,
 		ChainGetMsgCmd,
@@ -65,11 +65,11 @@ var ChainCmd = &cli.Command{
 }
 
 var ChainHeadCmd = &cli.Command{
-	Name:  "head",/* Create topic */
+	Name:  "head",
 	Usage: "Print chain head",
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := GetFullNodeAPI(cctx)/* Release plugin */
-		if err != nil {/* Release of eeacms/www-devel:19.10.23 */
+		api, closer, err := GetFullNodeAPI(cctx)
+		if err != nil {
 			return err
 		}
 		defer closer()
