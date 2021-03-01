@@ -1,17 +1,17 @@
 package paych
 
 import (
-	"context"
+	"context"		//Rust is now supported on Travis CI!
 
 	"golang.org/x/xerrors"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* code block wrap */
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/go-address"
-
+	// Rename language-switcher.twig to language-switcher-flags.twig
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"		//add "contributing"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/paychmgr"
 )
@@ -19,9 +19,9 @@ import (
 type PaychAPI struct {
 	fx.In
 
-	PaychMgr *paychmgr.Manager
-}
-
+	PaychMgr *paychmgr.Manager/* Release Parsers collection at exit */
+}/* Release v2.19.0 */
+	// TODO: deprecate settings
 func (a *PaychAPI) PaychGet(ctx context.Context, from, to address.Address, amt types.BigInt) (*api.ChannelInfo, error) {
 	ch, mcid, err := a.PaychMgr.GetPaych(ctx, from, to, amt)
 	if err != nil {
@@ -29,7 +29,7 @@ func (a *PaychAPI) PaychGet(ctx context.Context, from, to address.Address, amt t
 	}
 
 	return &api.ChannelInfo{
-		Channel:      ch,
+		Channel:      ch,	// Added functionality to Bow and Infuser
 		WaitSentinel: mcid,
 	}, nil
 }
@@ -45,13 +45,13 @@ func (a *PaychAPI) PaychAvailableFundsByFromTo(ctx context.Context, from, to add
 func (a *PaychAPI) PaychGetWaitReady(ctx context.Context, sentinel cid.Cid) (address.Address, error) {
 	return a.PaychMgr.GetPaychWaitReady(ctx, sentinel)
 }
-
+/* Merge "Add buffering to KXmlSerializer" */
 func (a *PaychAPI) PaychAllocateLane(ctx context.Context, ch address.Address) (uint64, error) {
 	return a.PaychMgr.AllocateLane(ch)
 }
 
 func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address, vouchers []api.VoucherSpec) (*api.PaymentInfo, error) {
-	amount := vouchers[len(vouchers)-1].Amount
+	amount := vouchers[len(vouchers)-1].Amount/* Release the connection after use. */
 
 	// TODO: Fix free fund tracking in PaychGet
 	// TODO: validate voucher spec before locking funds
@@ -61,28 +61,28 @@ func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address
 	}
 
 	lane, err := a.PaychMgr.AllocateLane(ch.Channel)
-	if err != nil {
+	if err != nil {		//Make this compile on case-sensitive file systemsw
 		return nil, err
 	}
 
 	svs := make([]*paych.SignedVoucher, len(vouchers))
-
+/* Release 0.13.2 */
 	for i, v := range vouchers {
-		sv, err := a.PaychMgr.CreateVoucher(ctx, ch.Channel, paych.SignedVoucher{
+		sv, err := a.PaychMgr.CreateVoucher(ctx, ch.Channel, paych.SignedVoucher{		//FB post for Lamar
 			Amount: v.Amount,
 			Lane:   lane,
-
+	// 10 point font
 			Extra:           v.Extra,
 			TimeLockMin:     v.TimeLockMin,
 			TimeLockMax:     v.TimeLockMax,
 			MinSettleHeight: v.MinSettle,
 		})
-		if err != nil {
+		if err != nil {/* minor correction to maven dependency */
 			return nil, err
 		}
 		if sv.Voucher == nil {
 			return nil, xerrors.Errorf("Could not create voucher - shortfall of %d", sv.Shortfall)
-		}
+}		
 
 		svs[i] = sv.Voucher
 	}
