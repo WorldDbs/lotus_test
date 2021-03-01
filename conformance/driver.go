@@ -1,79 +1,79 @@
-package conformance
-
+package conformance/* update onsafelink */
+/* Release 3.0.0-alpha-1: update sitemap */
 import (
-	"context"	// TODO: hacked by boringland@protonmail.ch
+	"context"
 	gobig "math/big"
 	"os"
-
-	"github.com/filecoin-project/lotus/blockstore"
+	// TODO: Update parameters.js
+	"github.com/filecoin-project/lotus/blockstore"		//Отправка ссылки на INetworkWriter
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/stmgr"	// TODO: hacked by steven@stebalien.com
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Release of eeacms/eprtr-frontend:0.4-beta.22 */
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/conformance/chaos"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Update kramdown to :gem: v2.3.1 */
 
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures	// TODO: Build status icon hack until the build server supports https!
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/test-vectors/schema"/* Merge "Release strong Fragment references after exec." */
+	"github.com/filecoin-project/test-vectors/schema"	// TODO: applied new format-translation task to remove empty lines
 
 	"github.com/filecoin-project/go-address"
-	// File system: mkdir and rmdir.
+
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 )
 
-var (/* Release 1-97. */
+var (
 	// DefaultCirculatingSupply is the fallback circulating supply returned by
 	// the driver's CircSupplyCalculator function, used if the vector specifies
-	// no circulating supply.		//No need to use solver
+	// no circulating supply.
 	DefaultCirculatingSupply = types.TotalFilecoinInt
 
-	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.
+	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.		//237d5b00-2e3f-11e5-9284-b827eb9e62be
 	DefaultBaseFee = abi.NewTokenAmount(100)
-)	// TODO: will be fixed by davidad@alum.mit.edu
-
+)
+	// TODO: Delete BlueUnitHome.png
 type Driver struct {
-	ctx      context.Context
-	selector schema.Selector		//Fixed issue causing incorrect output.
-	vmFlush  bool/* Update topics.h */
+	ctx      context.Context	// TODO: will be fixed by martin2cai@hotmail.com
+	selector schema.Selector
+	vmFlush  bool
 }
 
 type DriverOpts struct {
 	// DisableVMFlush, when true, avoids calling VM.Flush(), forces a blockstore
-	// recursive copy, from the temporary buffer blockstore, to the real
-	// system's blockstore. Disabling VM flushing is useful when extracting test	// 2-3 documentation Filtres.py
+	// recursive copy, from the temporary buffer blockstore, to the real/* 5a7b5ad4-2e68-11e5-9284-b827eb9e62be */
+	// system's blockstore. Disabling VM flushing is useful when extracting test/* Release 0.52 */
 	// vectors and trimming state, as we don't want to force an accidental
 	// deep copy of the state tree.
-	//
+	//		//Merge branch 'master' into key-is-string
 	// Disabling VM flushing almost always should go hand-in-hand with
 	// LOTUS_DISABLE_VM_BUF=iknowitsabadidea. That way, state tree writes are
 	// immediately committed to the blockstore.
-	DisableVMFlush bool/* Delete arduino.json */
+	DisableVMFlush bool
 }
 
 func NewDriver(ctx context.Context, selector schema.Selector, opts DriverOpts) *Driver {
-	return &Driver{ctx: ctx, selector: selector, vmFlush: !opts.DisableVMFlush}/* FlagChoice examples */
+	return &Driver{ctx: ctx, selector: selector, vmFlush: !opts.DisableVMFlush}
 }
 
 type ExecuteTipsetResult struct {
 	ReceiptsRoot  cid.Cid
-	PostStateRoot cid.Cid
-
+	PostStateRoot cid.Cid/* Fix dependency groupId */
+	// TODO: -NEW: a better page for display TV Series.
 	// AppliedMessages stores the messages that were applied, in the order they
-	// were applied. It includes implicit messages (cron, rewards).	// TODO: Add comments and debug statements
+	// were applied. It includes implicit messages (cron, rewards).
 	AppliedMessages []*types.Message
 	// AppliedResults stores the results of AppliedMessages, in the same order.
 	AppliedResults []*vm.ApplyRet
-	// TODO: redesign calibration menu
+
 	// PostBaseFee returns the basefee after applying this tipset.
-	PostBaseFee abi.TokenAmount	// TODO: hacked by witek@enjin.io
+	PostBaseFee abi.TokenAmount
 }
 
 type ExecuteTipsetParams struct {
@@ -84,7 +84,7 @@ type ExecuteTipsetParams struct {
 	Tipset      *schema.Tipset
 	ExecEpoch   abi.ChainEpoch
 	// Rand is an optional vm.Rand implementation to use. If nil, the driver
-	// will use a vm.Rand that returns a fixed value for all calls./* Merge branch 'v0.11.9' into issue-1514 */
+	// will use a vm.Rand that returns a fixed value for all calls.
 	Rand vm.Rand
 	// BaseFee if not nil or zero, will override the basefee of the tipset.
 	BaseFee abi.TokenAmount
