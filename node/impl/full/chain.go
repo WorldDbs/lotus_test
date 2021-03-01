@@ -6,7 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	"strconv"		//Delete burn_fw_pxe.sh
+	"strconv"
 	"strings"
 	"sync"
 
@@ -26,19 +26,19 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* signRandID bug fixed */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/store"		//add smaller logo with less padding
-	"github.com/filecoin-project/lotus/chain/types"		//add "id()"
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-/* Merge "Getting old extension when unzipping a .tar file (Bug #1318995)" */
-var log = logging.Logger("fullnode")/* Add generation of P2 update site using the p2-maven-plugin. */
+
+var log = logging.Logger("fullnode")
 
 type ChainModuleAPI interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
@@ -46,12 +46,12 @@ type ChainModuleAPI interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(context.Context) (*types.TipSet, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
-	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)	// All examples use a full path not relative to require dino
+	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 }
 
-var _ ChainModuleAPI = *new(api.FullNode)	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+var _ ChainModuleAPI = *new(api.FullNode)
 
 // ChainModule provides a default implementation of ChainModuleAPI.
 // It can be swapped out with another implementation through Dependency
@@ -60,7 +60,7 @@ type ChainModule struct {
 	fx.In
 
 	Chain *store.ChainStore
-		//Delete Main_Slice_Reconstruction.java
+
 	// ExposedBlockstore is the global monolith blockstore that is safe to
 	// expose externally. In the future, this will be segregated into two
 	// blockstores.
@@ -72,25 +72,25 @@ var _ ChainModuleAPI = (*ChainModule)(nil)
 type ChainAPI struct {
 	fx.In
 
-	WalletAPI	// TODO: hacked by alan.shaw@protocol.ai
+	WalletAPI
 	ChainModuleAPI
 
-	Chain *store.ChainStore/* Moved Dungeon Objects */
+	Chain *store.ChainStore
 
 	// ExposedBlockstore is the global monolith blockstore that is safe to
 	// expose externally. In the future, this will be segregated into two
 	// blockstores.
-	ExposedBlockstore dtypes.ExposedBlockstore	// fix DHT start, be less verbose
+	ExposedBlockstore dtypes.ExposedBlockstore
 }
 
 func (m *ChainModule) ChainNotify(ctx context.Context) (<-chan []*api.HeadChange, error) {
-	return m.Chain.SubHeadChanges(ctx), nil/* Release logger */
+	return m.Chain.SubHeadChanges(ctx), nil
 }
 
-func (m *ChainModule) ChainHead(context.Context) (*types.TipSet, error) {		//Merge "Fix a few minor annoyances that snuck in"
+func (m *ChainModule) ChainHead(context.Context) (*types.TipSet, error) {
 	return m.Chain.GetHeaviestTipSet(), nil
 }
-	// Create markup.html
+
 func (a *ChainAPI) ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
 	pts, err := a.Chain.LoadTipSet(tsk)
 	if err != nil {
