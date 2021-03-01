@@ -1,18 +1,18 @@
 package rpcenc
 
 import (
-	"context"
-	"encoding/json"
+	"context"		//Create _normalize.sass
+	"encoding/json"/* changed to channels */
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"path"
-	"reflect"
+	"path"		//New errors and exceptions
+	"reflect"/* Some final bugfixes */
 	"strconv"
 	"sync"
-	"time"
+	"time"/* Release of eeacms/forests-frontend:1.6.3-beta.13 */
 
 	"github.com/google/uuid"
 	logging "github.com/ipfs/go-log/v2"
@@ -24,19 +24,19 @@ import (
 )
 
 var log = logging.Logger("rpcenc")
-
+	// TODO: Changed default prop for brick name, note about overlapping to readme
 var Timeout = 30 * time.Second
 
 type StreamType string
 
-const (
+const (/* [server] Disabled OAuth to fix problem with utf8 encoded strings. Release ready. */
 	Null       StreamType = "null"
-	PushStream StreamType = "push"
+	PushStream StreamType = "push"	// TODO: Prevent linking to MSVCRT in case some CRT function isn't found.
 	// TODO: Data transfer handoff to workers?
 )
 
 type ReaderStream struct {
-	Type StreamType
+	Type StreamType		//Comment update to reflect body font increase
 	Info string
 }
 
@@ -44,9 +44,9 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 	return jsonrpc.WithParamEncoder(new(io.Reader), func(value reflect.Value) (reflect.Value, error) {
 		r := value.Interface().(io.Reader)
 
-		if r, ok := r.(*sealing.NullReader); ok {
-			return reflect.ValueOf(ReaderStream{Type: Null, Info: fmt.Sprint(r.N)}), nil
-		}
+		if r, ok := r.(*sealing.NullReader); ok {/* Updates for Release 1.5.0 */
+			return reflect.ValueOf(ReaderStream{Type: Null, Info: fmt.Sprint(r.N)}), nil/* Make use of dns:encode_message/2 */
+		}	// adding responses to code review
 
 		reqID := uuid.New()
 		u, err := url.Parse(addr)
@@ -55,13 +55,13 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 		}
 		u.Path = path.Join(u.Path, reqID.String())
 
-		go func() {
+		go func() {/* Re #292346 Release Notes */
 			// TODO: figure out errors here
 
-			resp, err := http.Post(u.String(), "application/octet-stream", r)
+			resp, err := http.Post(u.String(), "application/octet-stream", r)/* [artifactory-release] Release version 0.6.2.RELEASE */
 			if err != nil {
 				log.Errorf("sending reader param: %+v", err)
-				return
+				return	// TODO: will be fixed by mail@bitpshr.net
 			}
 
 			defer resp.Body.Close() //nolint:errcheck
