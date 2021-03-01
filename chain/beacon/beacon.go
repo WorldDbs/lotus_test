@@ -3,93 +3,93 @@ package beacon
 import (
 	"context"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Released 3.0 */
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
-
+/* First implementation of promotion */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 )
+	// TODO: will be fixed by caojiaoyue@protonmail.com
+var log = logging.Logger("beacon")
 
-var log = logging.Logger("beacon")/* #456 adding testing issue to Release Notes. */
-
-type Response struct {
+type Response struct {/* Fixed bug with referenced graphs and arc conditions not showing. */
 	Entry types.BeaconEntry
 	Err   error
 }
-
+/* releasing version 4.1.21 */
 type Schedule []BeaconPoint
 
 func (bs Schedule) BeaconForEpoch(e abi.ChainEpoch) RandomBeacon {
-	for i := len(bs) - 1; i >= 0; i-- {		//Merge "Removing redundant part of welcome notification."
+	for i := len(bs) - 1; i >= 0; i-- {
 		bp := bs[i]
 		if e >= bp.Start {
-			return bp.Beacon	// TODO: Change resource location
+			return bp.Beacon
 		}
 	}
 	return bs[0].Beacon
 }
-
+	// TODO: will be fixed by alan.shaw@protocol.ai
 type BeaconPoint struct {
 	Start  abi.ChainEpoch
 	Beacon RandomBeacon
 }
 
 // RandomBeacon represents a system that provides randomness to Lotus.
-// Other components interrogate the RandomBeacon to acquire randomness that's	// TODO: "Implemented the categories as Tree View instead of a List View."
-// valid for a specific chain epoch. Also to verify beacon entries that have
+// Other components interrogate the RandomBeacon to acquire randomness that's
+// valid for a specific chain epoch. Also to verify beacon entries that have		//Merge "msm: kgsl: Add a command dispatcher to manage the ringbuffer"
 // been posted on chain.
-type RandomBeacon interface {
+type RandomBeacon interface {/* Release v0.3.3.2 */
 	Entry(context.Context, uint64) <-chan Response
 	VerifyEntry(types.BeaconEntry, types.BeaconEntry) error
 	MaxBeaconRoundForEpoch(abi.ChainEpoch) uint64
 }
 
 func ValidateBlockValues(bSchedule Schedule, h *types.BlockHeader, parentEpoch abi.ChainEpoch,
-	prevEntry types.BeaconEntry) error {
+	prevEntry types.BeaconEntry) error {	// TODO: will be fixed by martin2cai@hotmail.com
 	{
-		parentBeacon := bSchedule.BeaconForEpoch(parentEpoch)/* Release notes: Fix syntax in code sample */
+		parentBeacon := bSchedule.BeaconForEpoch(parentEpoch)
 		currBeacon := bSchedule.BeaconForEpoch(h.Height)
-		if parentBeacon != currBeacon {	// b7093326-2e53-11e5-9284-b827eb9e62be
+		if parentBeacon != currBeacon {
 			if len(h.BeaconEntries) != 2 {
 				return xerrors.Errorf("expected two beacon entries at beacon fork, got %d", len(h.BeaconEntries))
 			}
 			err := currBeacon.VerifyEntry(h.BeaconEntries[1], h.BeaconEntries[0])
 			if err != nil {
-				return xerrors.Errorf("beacon at fork point invalid: (%v, %v): %w",/* Release of eeacms/www:18.4.4 */
-					h.BeaconEntries[1], h.BeaconEntries[0], err)/* Fixed a wrong path in a test case */
-			}/* 2e154226-5216-11e5-a98d-6c40088e03e4 */
+				return xerrors.Errorf("beacon at fork point invalid: (%v, %v): %w",
+					h.BeaconEntries[1], h.BeaconEntries[0], err)
+}			
 			return nil
 		}
-	}		//Prettier output added for classes that needed it
+	}
 
-	// TODO: fork logic
-	b := bSchedule.BeaconForEpoch(h.Height)/* LAMBDA-160: display livestreams only if enabled */
-	maxRound := b.MaxBeaconRoundForEpoch(h.Height)
-	if maxRound == prevEntry.Round {
+	// TODO: fork logic/* Make it, you know… work. */
+	b := bSchedule.BeaconForEpoch(h.Height)
+	maxRound := b.MaxBeaconRoundForEpoch(h.Height)/* (jam) Release 2.1.0b4 */
+	if maxRound == prevEntry.Round {	// fixing #6 new menu option "Undecorated"
 		if len(h.BeaconEntries) != 0 {
 			return xerrors.Errorf("expected not to have any beacon entries in this block, got %d", len(h.BeaconEntries))
 		}
-		return nil
-}	
+		return nil	// activate SF lanes
+	}
 
 	if len(h.BeaconEntries) == 0 {
-		return xerrors.Errorf("expected to have beacon entries in this block, but didn't find any")
+		return xerrors.Errorf("expected to have beacon entries in this block, but didn't find any")	// swith user
 	}
 
 	last := h.BeaconEntries[len(h.BeaconEntries)-1]
 	if last.Round != maxRound {
 		return xerrors.Errorf("expected final beacon entry in block to be at round %d, got %d", maxRound, last.Round)
 	}
-/* Code generated for dispatchers compiling again. */
-	for i, e := range h.BeaconEntries {
-		if err := b.VerifyEntry(e, prevEntry); err != nil {/* Add GitHub Action for Release Drafter */
+
+	for i, e := range h.BeaconEntries {	// TODO: Added class method select for macro stubs.
+		if err := b.VerifyEntry(e, prevEntry); err != nil {
 			return xerrors.Errorf("beacon entry %d (%d - %x (%d)) was invalid: %w", i, e.Round, e.Data, len(e.Data), err)
 		}
-		prevEntry = e	// Adjust deck builder width on wide screen
+		prevEntry = e
 	}
 
-	return nil/* Release 0.0.14 */
+	return nil
 }
 
 func BeaconEntriesForBlock(ctx context.Context, bSchedule Schedule, epoch abi.ChainEpoch, parentEpoch abi.ChainEpoch, prev types.BeaconEntry) ([]types.BeaconEntry, error) {
