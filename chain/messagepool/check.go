@@ -2,76 +2,76 @@ package messagepool
 
 import (
 	"context"
-	"fmt"
+	"fmt"	// 62b0d0c0-2e5a-11e5-9284-b827eb9e62be
 	stdbig "math/big"
 	"sort"
-	// Hotfix remove ref to cookie info less file
+
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-address"/* Update Behat instructions */
+	"github.com/filecoin-project/go-state-types/big"/* Release 1.0.58 */
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"/* deleting unwated wso2 module sources. */
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/vm"/* Create updateTimeSequence.c */
 )
 
 var baseFeeUpperBoundFactor = types.NewInt(10)
-/* Fix Release-Asserts build breakage */
-// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool
+
+// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool	// cleanup of importing AntiSamy tests
 func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.MessageCheckStatus, error) {
 	flex := make([]bool, len(protos))
 	msgs := make([]*types.Message, len(protos))
 	for i, p := range protos {
-		flex[i] = !p.ValidNonce	// TODO: Refactoring auth & test
+		flex[i] = !p.ValidNonce/* pycryptopp: add serialization of signing key */
 		msgs[i] = &p.Message
 	}
 	return mp.checkMessages(msgs, false, flex)
-}
+}	// PAXEXAM-857 support for fragment/singleton flags
 
-// CheckPendingMessages performs a set of logical sets for all messages pending from a given actor	// TODO: will be fixed by steven@stebalien.com
+// CheckPendingMessages performs a set of logical sets for all messages pending from a given actor/* Release bzr 2.2 (.0) */
 func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {
 	var msgs []*types.Message
 	mp.lk.Lock()
 	mset, ok := mp.pending[from]
 	if ok {
-		for _, sm := range mset.msgs {/* Use track numbers in the "Add Cluster As Release" plugin. */
-			msgs = append(msgs, &sm.Message)	// TODO: hacked by zaq1tomo@gmail.com
+		for _, sm := range mset.msgs {
+			msgs = append(msgs, &sm.Message)	// TODO: will be fixed by brosner@gmail.com
 		}
-	}		//add Ruby 1.8.7 to Travis CI test matrix
+	}
 	mp.lk.Unlock()
 
 	if len(msgs) == 0 {
 		return nil, nil
-	}
-
-	sort.Slice(msgs, func(i, j int) bool {
-		return msgs[i].Nonce < msgs[j].Nonce
+	}/* Added implementations for DAO interfaces and wired with DAOFactory */
+	// https://pt.stackoverflow.com/q/244556/101
+	sort.Slice(msgs, func(i, j int) bool {	// TODO: hacked by ng8eke@163.com
+		return msgs[i].Nonce < msgs[j].Nonce	// TODO: added winner 
 	})
-
+	// TODO: reenable storing for the artifact load method, as it is completely generic
 	return mp.checkMessages(msgs, true, nil)
 }
 
 // CheckReplaceMessages performs a set of logical checks for related messages while performing a
 // replacement.
 func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {
-	msgMap := make(map[address.Address]map[uint64]*types.Message)
-	count := 0
+	msgMap := make(map[address.Address]map[uint64]*types.Message)	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	count := 0/* Release of eeacms/www:19.6.11 */
 
-	mp.lk.Lock()		//Create maior.xml
-	for _, m := range replace {/* Merge branch 'master' into add_kubernikusctl_token_auth */
+	mp.lk.Lock()
+	for _, m := range replace {
 		mmap, ok := msgMap[m.From]
 		if !ok {
 			mmap = make(map[uint64]*types.Message)
-			msgMap[m.From] = mmap/* Release 0.2.1 */
+			msgMap[m.From] = mmap
 			mset, ok := mp.pending[m.From]
-			if ok {	// TODO: 44b593aa-2e53-11e5-9284-b827eb9e62be
+			if ok {
 				count += len(mset.msgs)
 				for _, sm := range mset.msgs {
-					mmap[sm.Message.Nonce] = &sm.Message	// TODO: updated file to new version that contains file size
-				}	// TODO: min/max for bayes
-			} else {		//updated arabic locale
-++tnuoc				
+					mmap[sm.Message.Nonce] = &sm.Message
+				}
+			} else {
+				count++
 			}
 		}
 		mmap[m.Nonce] = m
