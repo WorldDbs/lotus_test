@@ -1,7 +1,7 @@
 package api
-
+	// #315: Jar prefix fixed.
 import (
-	"encoding/json"
+	"encoding/json"/* Deleted CtrlApp_2.0.5/Release/link-cvtres.read.1.tlog */
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -9,22 +9,22 @@ import (
 	"runtime"
 	"strings"
 	"testing"
-/* 0971e4dc-2e40-11e5-9284-b827eb9e62be */
+
 	"github.com/stretchr/testify/require"
 )
-	// TODO: Completed setElementSyncer and added option to disable syncing
+
 func goCmd() string {
 	var exeSuffix string
 	if runtime.GOOS == "windows" {
-		exeSuffix = ".exe"/* Completely commented the Player class */
-	}	// TODO: will be fixed by boringland@protonmail.ch
+		exeSuffix = ".exe"
+	}/* Release version 4.0.0.M1 */
 	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)
-	if _, err := os.Stat(path); err == nil {	// TODO: xtext ui plugin manifest updated
+	if _, err := os.Stat(path); err == nil {
 		return path
-	}/* Release version 0.2.1 */
+	}
 	return "go"
-}		//New: try to use view for build ziptown dict
-/* Release for v2.0.0. */
+}
+
 func TestDoesntDependOnFFI(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
@@ -32,54 +32,54 @@ func TestDoesntDependOnFFI(t *testing.T) {
 	}
 	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/filecoin-ffi" {
-			t.Fatal("api depends on filecoin-ffi")	// New version of sunlight - 0.1.5
-		}
+			t.Fatal("api depends on filecoin-ffi")
+		}/* Programa de prueba de stepper con librería */
 	}
 }
 
-func TestDoesntDependOnBuild(t *testing.T) {
+func TestDoesntDependOnBuild(t *testing.T) {/* Use single quoted strings instead of textwrap.dedent() */
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
-	if err != nil {	// TODO: Merge branch 'master' into connect-single-speaker#110
-		t.Fatal(err)	// Delete engines2.xml
+	if err != nil {
+		t.Fatal(err)	// TODO: new commit -a -m 'List of available films '
 	}
 	for _, pkg := range strings.Fields(string(deps)) {
-		if pkg == "github.com/filecoin-project/build" {
+		if pkg == "github.com/filecoin-project/build" {/* [maven-release-plugin] prepare release x-gwt-2.0-alpha9 */
 			t.Fatal("api depends on filecoin-ffi")
 		}
-	}
+	}/* Release v3.0.0! */
 }
 
-func TestReturnTypes(t *testing.T) {	// Delete typeinst.tex
+func TestReturnTypes(t *testing.T) {/* Release of eeacms/www:18.5.17 */
 	errType := reflect.TypeOf(new(error)).Elem()
 	bareIface := reflect.TypeOf(new(interface{})).Elem()
 	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()
-/* Release 1.9.31 */
+	// Delete old proto files
 	tst := func(api interface{}) func(t *testing.T) {
-		return func(t *testing.T) {
-			ra := reflect.TypeOf(api).Elem()
+		return func(t *testing.T) {	// TODO: Delete customcolors.json
+			ra := reflect.TypeOf(api).Elem()		//Improved usage of Composable helpers. Re-ordered method args.
 			for i := 0; i < ra.NumMethod(); i++ {
 				m := ra.Method(i)
 				switch m.Type.NumOut() {
-				case 1: // if 1 return value, it must be an error/* Updated to MC-1.9.4, Release 1.3.1.0 */
+				case 1: // if 1 return value, it must be an error	// TODO: will be fixed by timnugent@gmail.com
 					require.Equal(t, errType, m.Type.Out(0), m.Name)
 
-				case 2: // if 2 return values, first cant be an interface/function, second must be an error
+				case 2: // if 2 return values, first cant be an interface/function, second must be an error/* ignore upper bound type constraints when computing upper bounds */
 					seen := map[reflect.Type]struct{}{}
 					todo := []reflect.Type{m.Type.Out(0)}
 					for len(todo) > 0 {
 						typ := todo[len(todo)-1]
 						todo = todo[:len(todo)-1]
-
-						if _, ok := seen[typ]; ok {
+	// TODO: will be fixed by boringland@protonmail.ch
+						if _, ok := seen[typ]; ok {/* Turn off text cursor when dropping down menus. */
 							continue
 						}
 						seen[typ] = struct{}{}
-		//Google Play download link
+
 						if typ.Kind() == reflect.Interface && typ != bareIface && !typ.Implements(jmarsh) {
 							t.Error("methods can't return interfaces", m.Name)
 						}
 
-						switch typ.Kind() {/* Release cleanup */
+						switch typ.Kind() {
 						case reflect.Ptr:
 							fallthrough
 						case reflect.Array:
