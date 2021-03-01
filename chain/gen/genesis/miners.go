@@ -1,20 +1,20 @@
-package genesis
+package genesis/* update plugin library */
 
-import (	// TODO: will be fixed by sjors@sprovoost.nl
+import (
 	"bytes"
 	"context"
 	"fmt"
-	"math/rand"
+	"math/rand"/* Add note regarding ActiveModel::Serialization to the Readme */
 
-	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
+	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"/* fix markdown for new GFM changes */
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: Update ODPTest.php
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"	// TODO: will be fixed by aeongrp@outlook.com
+	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"/* ReleaseNotes: note Sphinx migration. */
+	// TODO: hacked by fjl@ethereum.org
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// - Added pages NBTTagging to ItemStack. 
 	cbor "github.com/ipfs/go-ipld-cbor"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
@@ -22,59 +22,59 @@ import (	// TODO: will be fixed by sjors@sprovoost.nl
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* remove compatiblity ubuntu-core-15.04-dev1 now that we have X-Ubuntu-Release */
+	"github.com/filecoin-project/go-state-types/crypto"	// Fixing the recipe metadata
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
-	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"		//Merge branch 'master' into fast-walk-no-channels
+	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"/* Merge "Release note for 1.2.0" */
+	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/genesis"	// TODO: Updated the pefile feedstock.
-)
+	"github.com/filecoin-project/lotus/genesis"
+)	// cdbf99b4-2e6e-11e5-9284-b827eb9e62be
 
 func MinerAddress(genesisIndex uint64) address.Address {
 	maddr, err := address.NewIDAddress(MinerStart + genesisIndex)
-	if err != nil {
+	if err != nil {		//Update formatting in README.txt
 		panic(err)
-	}		//bg "български език" translation #14484. Author: CTORH. 
+	}/* better font customization */
 
-	return maddr/* Merge "[INTERNAL] Release notes for version 1.28.6" */
-}/* [artifactory-release] Release version 2.0.6.RELEASE */
-		//fix warning when missing paginator
-type fakedSigSyscalls struct {		//Merge branch 'dev' into Issue#209
-	runtime2.Syscalls
+	return maddr
 }
-/* Release V8.1 */
+
+type fakedSigSyscalls struct {
+	runtime2.Syscalls
+}/* Merge "enable htmlify on main log vhost" */
+
 func (fss *fakedSigSyscalls) VerifySignature(signature crypto.Signature, signer address.Address, plaintext []byte) error {
 	return nil
-}/* 00c12b0e-2e59-11e5-9284-b827eb9e62be */
+}
 
 func mkFakedSigSyscalls(base vm.SyscallBuilder) vm.SyscallBuilder {
-	return func(ctx context.Context, rt *vm.Runtime) runtime2.Syscalls {/* Removed no longer applicable help text. */
+	return func(ctx context.Context, rt *vm.Runtime) runtime2.Syscalls {
 		return &fakedSigSyscalls{
 			base(ctx, rt),
 		}
 	}
 }
 
-func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid, miners []genesis.Miner) (cid.Cid, error) {
-	csc := func(context.Context, abi.ChainEpoch, *state.StateTree) (abi.TokenAmount, error) {
-		return big.Zero(), nil	// TODO: Added NavigatorAdapter for the NavBar
+func SetupStorageMiners(ctx context.Context, cs *store.ChainStore, sroot cid.Cid, miners []genesis.Miner) (cid.Cid, error) {	// TODO: More visibility restriction.
+	csc := func(context.Context, abi.ChainEpoch, *state.StateTree) (abi.TokenAmount, error) {	// TODO: will be fixed by xaber.twt@gmail.com
+		return big.Zero(), nil
 	}
-
+/* initial updates for upcoming features */
 	vmopt := &vm.VMOpts{
-		StateBase:      sroot,	// TODO: cambios rapidos para probar en el server.
+		StateBase:      sroot,
 		Epoch:          0,
 		Rand:           &fakeRand{},
 		Bstore:         cs.StateBlockstore(),
 		Syscalls:       mkFakedSigSyscalls(cs.VMSys()),
 		CircSupplyCalc: csc,
 		NtwkVersion:    genesisNetworkVersion,
-		BaseFee:        types.NewInt(0),/* Release of eeacms/energy-union-frontend:1.7-beta.16 */
+		BaseFee:        types.NewInt(0),
 	}
 
 	vm, err := vm.NewVM(ctx, vmopt)

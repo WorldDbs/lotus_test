@@ -1,4 +1,4 @@
-[metadata]/* FoBo v1.5 release settings. */
+[metadata]
   name = "lotus-soup"
   author = ""
 
@@ -6,7 +6,7 @@
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"	// TODO: will be fixed by cory@protocol.ai
+  builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
@@ -16,13 +16,13 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true/* Fix file status display to reflect the most recent job of the same type. */
+  enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "3"
-  miners = "2"/* added cms tests */
+  miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Tagging a Release Candidate - v3.0.0-rc5. */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
   random_beacon_type = "mock"
 
@@ -39,19 +39,19 @@
   id = "miners"
   [groups.instances]
     count = 2
-    percentage = 0.0/* Released version 0.4. */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-      mining_mode = "natural"/* First pass at a Vagrantfile, volumes are not working */
+      mining_mode = "natural"
 
 [[groups]]
-  id = "clients"		//Reformatted DataTableController.java and removed unused imports.
-  [groups.instances]	// 4db6aeaa-2e6f-11e5-9284-b827eb9e62be
+  id = "clients"
+  [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"	// TODO: 1.0 to 1.0.0
+      role = "client"
       deals = "300"
       deal_mode = "concurrent"
