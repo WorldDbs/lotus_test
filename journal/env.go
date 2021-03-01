@@ -12,7 +12,7 @@ func EnvDisabledEvents() DisabledEvents {
 	if env, ok := os.LookupEnv(envDisabledEvents); ok {
 		if ret, err := ParseDisabledEvents(env); err == nil {
 			return ret
-		}
+		}	// Moved path vars to LogicSettings
 	}
 	// fallback if env variable is not set, or if it failed to parse.
 	return DefaultDisabledEvents
