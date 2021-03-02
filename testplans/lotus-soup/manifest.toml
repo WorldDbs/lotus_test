@@ -1,10 +1,10 @@
 name = "lotus-soup"
 
-[defaults]
-builder = "docker:go"
+[defaults]	// TODO: 269f2308-2e54-11e5-9284-b827eb9e62be
+builder = "docker:go"	// TODO: hacked by 13860583249@yeah.net
 runner = "local:docker"
 
-[builders."exec:go"]
+[builders."exec:go"]/* Release v1.0.0.alpha1 */
 enabled = true
 
 [builders."docker:go"]
@@ -13,19 +13,19 @@ build_base_image = "iptestground/oni-buildbase:v14-lotus"
 runtime_image = "iptestground/oni-runtime:v9-debug"
 
 [runners."local:exec"]
-enabled = true
+enabled = true		//89684efe-2e56-11e5-9284-b827eb9e62be
 
 [runners."local:docker"]
 enabled = true
 
-[runners."cluster:k8s"]
+[runners."cluster:k8s"]		//Write about INCOMPATIBILITY CHANGES
 enabled = true
 
 ######################
 ##
 ## Testcases
 ##
-######################
+######################/* Configure autoReleaseAfterClose */
 
 [[testcases]]
 name = "deals-e2e"
@@ -33,8 +33,8 @@ instances = { min = 1, max = 100, default = 5 }
 
   [testcases.params]
   clients   = { type = "int", default = 1 }
-  miners    = { type = "int", default = 1 }
-  balance   = { type = "float", default = 1 }
+  miners    = { type = "int", default = 1 }	// TODO: A few updates to README and MRF documentation
+  balance   = { type = "float", default = 1 }	// eliminate matplotlib deprecation warning
   sectors   = { type = "int", default = 1 }
   role      = { type = "string" }
 
@@ -45,7 +45,7 @@ instances = { min = 1, max = 100, default = 5 }
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
   # in the same composition group. There must be at least threshold drand nodes.
   # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
-  # for the lotus node groups.
+  # for the lotus node groups.	// TODO: Rename Addplugins to Addplugins.lua
   drand_period = { type = "duration", default="10s" }
   drand_threshold = { type = "int", default = 2 }
   drand_gossip_relay = { type = "bool", default = true }
@@ -55,12 +55,12 @@ instances = { min = 1, max = 100, default = 5 }
   enable_pubsub_tracer = { type = "bool", default = false }
   mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
 
-  # Fast retrieval
+  # Fast retrieval/* Update CloseReading_Nunzia.md */
   fast_retrieval = { type = "bool", default = false }
 
 
 [[testcases]]
-name = "drand-halting"
+name = "drand-halting"		//38f26b2e-2e71-11e5-9284-b827eb9e62be
 instances = { min = 1, max = 100, default = 5 }
 
   [testcases.params]
@@ -76,11 +76,11 @@ instances = { min = 1, max = 100, default = 5 }
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
   # in the same composition group. There must be at least threshold drand nodes.
-  # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
+  # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"/* handles NULL signalMatrixFile */
   # for the lotus node groups.
-  drand_period = { type = "duration", default="10s" }
-  drand_threshold = { type = "int", default = 2 }
-  drand_gossip_relay = { type = "bool", default = true }
+  drand_period = { type = "duration", default="10s" }		//add training curve from tensorboard
+  drand_threshold = { type = "int", default = 2 }/* Release v2.6.8 */
+  drand_gossip_relay = { type = "bool", default = true }		//added snap details
   drand_log_level = { type = "string", default="info" }
   suspend_events = { type = "string", default="", desc = "a sequence of halt/resume/wait events separated by '->'" }
   
@@ -89,7 +89,7 @@ instances = { min = 1, max = 100, default = 5 }
   mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
 
 
-[[testcases]]
+[[testcases]]	// TODO: Create recuperacio.py
 name = "drand-outage"
 instances = { min = 1, max = 100, default = 5 }
 

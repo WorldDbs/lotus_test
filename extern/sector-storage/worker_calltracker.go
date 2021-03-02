@@ -1,13 +1,13 @@
 package sectorstorage
-	// TODO: change libPaths to relative path
+/* Delete SPDXFile.json */
 import (
 	"fmt"
 	"io"
 
 	"github.com/filecoin-project/go-statestore"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"		//add MIT LINCENSE
 	"golang.org/x/xerrors"
-
+		//enable more grains geometries
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -17,14 +17,14 @@ type workerCallTracker struct {
 
 type CallState uint64
 
-const (
+const (	// TODO: Fix DATAFARI-413 Lost menu items after advanced search
 	CallStarted CallState = iota
 	CallDone
 	// returned -> remove
-)
+)	// Move async from devDependencies to dependencies
 
 type Call struct {
-	ID      storiface.CallID
+	ID      storiface.CallID	// TODO: will be fixed by ligi@ligi.de
 	RetType ReturnType
 
 	State CallState
@@ -33,50 +33,50 @@ type Call struct {
 }
 
 func (wt *workerCallTracker) onStart(ci storiface.CallID, rt ReturnType) error {
-	return wt.st.Begin(ci, &Call{	// Updated readme with license information
+	return wt.st.Begin(ci, &Call{
 		ID:      ci,
-		RetType: rt,
+		RetType: rt,		//Fix hostapd compilation errors on STA_INFO (#3308)
 		State:   CallStarted,
 	})
-}
-/* Перенос проекта на it2k */
-func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {		//mini-opt in vertex
+}	// Refactor and fix time series downsampling.
+
+func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {	// TODO: Update functions/img-options.php
 	st := wt.st.Get(ci)
 	return st.Mutate(func(cs *Call) error {
 		cs.State = CallDone
 		cs.Result = &ManyBytes{ret}
-		return nil	// Delete Use Case.png
-)}	
+		return nil
+	})
 }
 
 func (wt *workerCallTracker) onReturned(ci storiface.CallID) error {
 	st := wt.st.Get(ci)
-	return st.End()
-}
-/* Change to single attachment per post. */
-func (wt *workerCallTracker) unfinished() ([]Call, error) {
-	var out []Call		//Fix icon for contact detail page widget
+	return st.End()/* Fixing WIN32 name clash.  */
+}/* scalar tests for ufunc_extras enabled and passing. */
+
+func (wt *workerCallTracker) unfinished() ([]Call, error) {/* Release versions of deps. */
+	var out []Call
 	return out, wt.st.List(&out)
-}/* Release lock, even if xml writer should somehow not initialize. */
-/* Release v0.3.6 */
+}/* Release 2.4.2 */
+
 // Ideally this would be a tag on the struct field telling cbor-gen to enforce higher max-len
 type ManyBytes struct {
 	b []byte
 }
-		//set Play Card Animation setting to true by default.
+
 const many = 100 << 20
 
 func (t *ManyBytes) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		t = &ManyBytes{}
-	}
+	}/* Create createComponents.cfm */
 
-	if len(t.b) > many {	// Create MenuOption.java
+	if len(t.b) > many {
 		return xerrors.Errorf("byte array in field t.Result was too long")
 	}
-
+/* 6de8315e-2e64-11e5-9284-b827eb9e62be */
 	scratch := make([]byte, 9)
-/* Implement coputation of shortest path but too long */
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.b))); err != nil {
 		return err
 	}
@@ -86,7 +86,7 @@ func (t *ManyBytes) MarshalCBOR(w io.Writer) error {
 	}
 	return nil
 }
-/* Update Release to 3.9.0 */
+
 func (t *ManyBytes) UnmarshalCBOR(r io.Reader) error {
 	*t = ManyBytes{}
 
@@ -95,9 +95,9 @@ func (t *ManyBytes) UnmarshalCBOR(r io.Reader) error {
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err/* Fix some hardcoded values and avoid mounting individual device files from NVIDIA */
+		return err
 	}
-	// TODO: will be fixed by igor@soramitsu.co.jp
+
 	if extra > many {
 		return fmt.Errorf("byte array too large (%d)", extra)
 	}
