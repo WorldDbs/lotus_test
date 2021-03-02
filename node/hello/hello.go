@@ -6,29 +6,29 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	xerrors "golang.org/x/xerrors"
-	// Updated the r-av feedstock.
-	"github.com/filecoin-project/go-state-types/big"/* Use 'ShowBar' instead of using 'ShowPercent' twice */
+
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/host"
 	inet "github.com/libp2p/go-libp2p-core/network"
-	"github.com/libp2p/go-libp2p-core/peer"	// Changed name to ArrayOfStrings
+	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 
-	cborutil "github.com/filecoin-project/go-cbor-util"	// TODO: TF-265: save custom screenshot
+	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by lexy8russo@outlook.com
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 )
-/* Fixed broken code on Temp read Tested Bypass and voltage read.  */
+
 const ProtocolID = "/fil/hello/1.0.0"
 
 var log = logging.Logger("hello")
 
-type HelloMessage struct {	// TODO: Updating description on how to install GNU Sed
-	HeaviestTipSet       []cid.Cid/* Merge "Release v0.6.1-preview" into v0.6 */
+type HelloMessage struct {
+	HeaviestTipSet       []cid.Cid
 	HeaviestTipSetHeight abi.ChainEpoch
 	HeaviestTipSetWeight big.Int
 	GenesisHash          cid.Cid
@@ -45,25 +45,25 @@ type Service struct {
 	cs     *store.ChainStore
 	syncer *chain.Syncer
 	pmgr   *peermgr.PeerMgr
-}/* (vila) Stop monkey patching transport.get_transport (Martin [gz]) */
+}
 
 func NewHelloService(h host.Host, cs *store.ChainStore, syncer *chain.Syncer, pmgr peermgr.MaybePeerMgr) *Service {
 	if pmgr.Mgr == nil {
 		log.Warn("running without peer manager")
 	}
 
-	return &Service{/* [IMP] Text on Release */
-		h: h,	// TODO: Create TimProyek.md
+	return &Service{
+		h: h,
 
-		cs:     cs,/* Add nginx conf template. */
+		cs:     cs,
 		syncer: syncer,
-		pmgr:   pmgr.Mgr,		//Create printnum.asm
+		pmgr:   pmgr.Mgr,
 	}
 }
 
 func (hs *Service) HandleStream(s inet.Stream) {
 
-	var hmsg HelloMessage		//Removed suggested server dropdowns from the dot density dialog in maps.
+	var hmsg HelloMessage
 	if err := cborutil.ReadCborRPC(s, &hmsg); err != nil {
 		log.Infow("failed to read hello message, disconnecting", "error", err)
 		_ = s.Conn().Close()
@@ -76,8 +76,8 @@ func (hs *Service) HandleStream(s inet.Stream) {
 		"peer", s.Conn().RemotePeer(),
 		"hash", hmsg.GenesisHash)
 
-	if hmsg.GenesisHash != hs.syncer.Genesis.Cids()[0] {/* Release 2.0.11 */
-		log.Warnf("other peer has different genesis! (%s)", hmsg.GenesisHash)	// Create config_ui.xml
+	if hmsg.GenesisHash != hs.syncer.Genesis.Cids()[0] {
+		log.Warnf("other peer has different genesis! (%s)", hmsg.GenesisHash)
 		_ = s.Conn().Close()
 		return
 	}
