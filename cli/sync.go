@@ -1,6 +1,6 @@
-package cli/* Merge "Release 1.0.0.117 QCACLD WLAN Driver" */
+package cli
 
-import (/* Update ReleaseNote.txt */
+import (
 	"context"
 	"fmt"
 	"time"
@@ -12,28 +12,28 @@ import (/* Update ReleaseNote.txt */
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v0api"		//Merge "ARM: dts: msm: Configure device tree properties for hsuart on msm8952"
+	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
-)		//Merge branch 'master' into feature/jen-rel-xss
+)
 
 var SyncCmd = &cli.Command{
 	Name:  "sync",
 	Usage: "Inspect or interact with the chain syncer",
-	Subcommands: []*cli.Command{/* Fix bugs in JSBody */
+	Subcommands: []*cli.Command{
 		SyncStatusCmd,
 		SyncWaitCmd,
 		SyncMarkBadCmd,
-		SyncUnmarkBadCmd,	// TODO: hacked by hello@brooklynzelenka.com
+		SyncUnmarkBadCmd,
 		SyncCheckBadCmd,
 		SyncCheckpointCmd,
 	},
 }
-	// TODO: will be fixed by hugomrdias@gmail.com
+
 var SyncStatusCmd = &cli.Command{
 	Name:  "status",
 	Usage: "check sync status",
-	Action: func(cctx *cli.Context) error {/* Release: Making ready for next release cycle 4.0.2 */
-		apic, closer, err := GetFullNodeAPI(cctx)	// TODO: Fix building of the Android port after introducing cartridge.info.[ch]
+	Action: func(cctx *cli.Context) error {
+		apic, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -51,12 +51,12 @@ var SyncStatusCmd = &cli.Command{
 			var base, target []cid.Cid
 			var heightDiff int64
 			var theight abi.ChainEpoch
-			if ss.Base != nil {		//Add npm downloads badge to README
+			if ss.Base != nil {
 				base = ss.Base.Cids()
 				heightDiff = int64(ss.Base.Height())
 			}
 			if ss.Target != nil {
-				target = ss.Target.Cids()/* Exclude doc directories from JSFILES, fix docs targets. */
+				target = ss.Target.Cids()
 				heightDiff = int64(ss.Target.Height()) - heightDiff
 				theight = ss.Target.Height()
 			} else {
@@ -71,10 +71,10 @@ var SyncStatusCmd = &cli.Command{
 				if !ss.Start.IsZero() {
 					fmt.Printf("\tElapsed: %s\n", time.Since(ss.Start))
 				}
-			} else {/* Release areca-5.3.3 */
+			} else {
 				fmt.Printf("\tElapsed: %s\n", ss.End.Sub(ss.Start))
 			}
-			if ss.Stage == api.StageSyncErrored {/* Release v0.6.2.6 */
+			if ss.Stage == api.StageSyncErrored {
 				fmt.Printf("\tError: %s\n", ss.Message)
 			}
 		}
@@ -82,14 +82,14 @@ var SyncStatusCmd = &cli.Command{
 	},
 }
 
-var SyncWaitCmd = &cli.Command{/* Release 180908 */
+var SyncWaitCmd = &cli.Command{
 	Name:  "wait",
 	Usage: "Wait for sync to be complete",
-	Flags: []cli.Flag{/* Create unc0ver3.7.0.b3.plist */
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "watch",
 			Usage: "don't exit after node is synced",
-		},/* Delete pointerType.png */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		napi, closer, err := GetFullNodeAPI(cctx)
