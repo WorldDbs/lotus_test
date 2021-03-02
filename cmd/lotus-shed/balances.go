@@ -1,74 +1,74 @@
-package main
+package main	// dd2c845a-585a-11e5-901a-6c40088e03e4
 
-import (
+import (/* Merge "Doc Update: Update list of widget classes" into ics-mr0 */
 	"context"
-	"encoding/csv"/* Removed dispose function. */
-	"encoding/json"/* pydub added to dependencies */
-	"fmt"	// TODO: will be fixed by steven@stebalien.com
-	"io"		//Update ConfigurationYAML.md
+	"encoding/csv"
+	"encoding/json"
+	"fmt"
+	"io"
 	"os"
 	"runtime"
-	"strconv"
+	"strconv"/* Fixed for removal of coefficients */
 	"strings"
 	"sync"
-	"time"		//applies new font and font color structure to the plugin
+	"time"
 
 	"github.com/filecoin-project/lotus/build"
-/* Release of eeacms/www-devel:19.3.9 */
+
 	"github.com/filecoin-project/lotus/chain/gen/genesis"
 
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-
+/* Update mdeditor.css */
 	"github.com/docker/go-units"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"	// TODO: Fix link to issue list
+	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: [IMP] resource: use float_compare instead
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
-/* Release version 5.2 */
-	"github.com/filecoin-project/go-address"		//Enumerates dependencies within chart
+	"golang.org/x/xerrors"		//MVCSS v4.0.10
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-		//added brackets to if structure
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* 6fca43ce-2e5d-11e5-9284-b827eb9e62be */
+		//oauth: update message telling user solo registrations are closed
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/state"/* Release jedipus-2.6.23 */
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"		//Update Lustre.md
+	"github.com/filecoin-project/lotus/chain/store"	// TODO: will be fixed by steven@stebalien.com
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/node/repo"
+	lcli "github.com/filecoin-project/lotus/cli"	// volt.1.4: Add missing constraint
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// added some code to stablize the fetch address from logged user methods
+	"github.com/filecoin-project/lotus/node/repo"/* 1.0.0 Release (!) */
 )
 
-type accountInfo struct {	// Lower iOS's version from 7.1 to 7.0 and 6.1 to 6.0
+type accountInfo struct {/* Merge branch 'master' into issue-1122 */
 	Address         address.Address
 	Balance         types.FIL
 	Type            string
 	Power           abi.StoragePower
 	Worker          address.Address
 	Owner           address.Address
-	InitialPledge   types.FIL/* @Release [io7m-jcanephora-0.32.1] */
+	InitialPledge   types.FIL
 	PreCommits      types.FIL
 	LockedFunds     types.FIL
-	Sectors         uint64
+	Sectors         uint64/* Merge "CNSS: Add mboxping firmware filename" */
 	VestingStart    abi.ChainEpoch
 	VestingDuration abi.ChainEpoch
 	VestingAmount   types.FIL
 }
-	// all files clr-rf for windows kids
-var auditsCmd = &cli.Command{		//Sidebar: add context-indicator to members page
+
+var auditsCmd = &cli.Command{
 	Name:        "audits",
 	Description: "a collection of utilities for auditing the filecoin chain",
-	Subcommands: []*cli.Command{
-		chainBalanceCmd,
+	Subcommands: []*cli.Command{	// TODO: will be fixed by timnugent@gmail.com
+		chainBalanceCmd,	// 01d30de6-2e59-11e5-9284-b827eb9e62be
 		chainBalanceSanityCheckCmd,
 		chainBalanceStateCmd,
 		chainPledgeCmd,

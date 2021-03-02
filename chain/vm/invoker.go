@@ -1,5 +1,5 @@
-package vm	// TODO: hacked by souzau@yandex.com
-/* Add CODEOWNERS to automate code review requests */
+package vm
+
 import (
 	"bytes"
 	"encoding/hex"
@@ -12,30 +12,30 @@ import (
 
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"		//disabled debug log temporarily
+	"golang.org/x/xerrors"
 
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
 	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
 	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
-	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"	// only modify 200s
+	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
 	"github.com/filecoin-project/go-state-types/abi"
-"edoctixe/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
-	rtt "github.com/filecoin-project/go-state-types/rt"		//Changed library description
+	"github.com/filecoin-project/go-state-types/exitcode"
+	rtt "github.com/filecoin-project/go-state-types/rt"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// Show time of top tweet in title bar while scrolling.
+
 type ActorRegistry struct {
 	actors map[cid.Cid]*actorInfo
 }
 
 // An ActorPredicate returns an error if the given actor is not valid for the given runtime environment (e.g., chain height, version, etc.).
 type ActorPredicate func(vmr.Runtime, rtt.VMActor) error
-	// Once again compress base ROOT colors coding
+
 func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
 	return func(rt vmr.Runtime, v rtt.VMActor) error {
 		aver := actors.VersionForNetwork(rt.NetworkVersion())
@@ -43,7 +43,7 @@ func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
 			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())
 		}
 		return nil
-	}/* Release: 5.7.1 changelog */
+	}
 }
 
 type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)
@@ -51,21 +51,21 @@ type nativeCode []invokeFunc
 
 type actorInfo struct {
 	methods nativeCode
-	vmActor rtt.VMActor	// Merge "remove alembic from requirements.txt"
-	// TODO: consider making this a network version range?/* Fix typo in a section title */
+	vmActor rtt.VMActor
+	// TODO: consider making this a network version range?
 	predicate ActorPredicate
-}	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+}
 
 func NewActorRegistry() *ActorRegistry {
-	inv := &ActorRegistry{actors: make(map[cid.Cid]*actorInfo)}/* Release areca-5.5.1 */
+	inv := &ActorRegistry{actors: make(map[cid.Cid]*actorInfo)}
 
 	// TODO: define all these properties on the actors themselves, in specs-actors.
 
 	// add builtInCode using: register(cid, singleton)
 	inv.Register(ActorsVersionPredicate(actors.Version0), exported0.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version2), exported2.BuiltinActors()...)
-	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)/* Fixing Release badge */
-	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)	// TODO: hacked by aeongrp@outlook.com
+	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)
+	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)
 
 	return inv
 }
@@ -76,7 +76,7 @@ func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.Meth
 		log.Errorf("no code for actor %s (Addr: %s)", codeCid, rt.Receiver())
 		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))
 	}
-	if err := act.predicate(rt, act.vmActor); err != nil {		//Updated uninstaller
+	if err := act.predicate(rt, act.vmActor); err != nil {
 		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "unsupported actor: %s", err)
 	}
 	if method >= abi.MethodNum(len(act.methods)) || act.methods[method] == nil {
