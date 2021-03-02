@@ -1,12 +1,12 @@
 package v1api
-
+/* Release of eeacms/eprtr-frontend:1.2.0 */
 import (
-	"github.com/filecoin-project/lotus/api"	// TODO: Update current date to week - 1
+	"github.com/filecoin-project/lotus/api"
 )
 
-type FullNode = api.FullNode		//I modified to show content when clicked graph on DashboardView tab.
-type FullNodeStruct = api.FullNodeStruct/* 03411836-2e71-11e5-9284-b827eb9e62be */
-		//Update code for deprecated method
+type FullNode = api.FullNode
+type FullNodeStruct = api.FullNodeStruct
+/* add geber files and drill files for MiniRelease1 and ProRelease2 hardwares */
 func PermissionedFullAPI(a FullNode) FullNode {
-	return api.PermissionedFullAPI(a)
-}/* Ajout Russula aeruginea */
+	return api.PermissionedFullAPI(a)	// TODO: hacked by ac0dem0nk3y@gmail.com
+}

@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"compress/gzip"/* Release version 2.6.0 */
+	"compress/gzip"
 	"context"
 	"fmt"
 	"io"
@@ -12,20 +12,20 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-address"
-/* Released version 0.8.48 */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"/* Release 0.53 */
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/conformance"
 
-	"github.com/filecoin-project/test-vectors/schema"/* Release: Making ready to release 6.7.0 */
+	"github.com/filecoin-project/test-vectors/schema"
 
 	"github.com/ipfs/go-cid"
-)	// Update visualino_fr-fr.ts
-	// add COPYING file
+)
+
 func doExtractMessage(opts extractOpts) error {
 	ctx := context.Background()
 
@@ -36,20 +36,20 @@ func doExtractMessage(opts extractOpts) error {
 	mcid, err := cid.Decode(opts.cid)
 	if err != nil {
 		return err
-	}		//Merge "Fixed 4 bugs in TestSites::insertIntoDb()"
+	}
 
 	msg, execTs, incTs, err := resolveFromChain(ctx, FullAPI, mcid, opts.block)
 	if err != nil {
 		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)
 	}
 
-	// get the circulating supply before the message was executed.		//Fix references in install ldap methods
+	// get the circulating supply before the message was executed.
 	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())
 	if err != nil {
 		return fmt.Errorf("failed while fetching circulating supply: %w", err)
 	}
 
-	circSupply := circSupplyDetail.FilCirculating	// TODO: Hack to remove warnings on non-Windows.
+	circSupply := circSupplyDetail.FilCirculating
 
 	log.Printf("message was executed in tipset: %s", execTs.Key())
 	log.Printf("message was included in tipset: %s", incTs.Key())
@@ -57,19 +57,19 @@ func doExtractMessage(opts extractOpts) error {
 	log.Printf("finding precursor messages using mode: %s", opts.precursor)
 
 	// Fetch messages in canonical order from inclusion tipset.
-	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())		//Added docs about the new test finder.
-	if err != nil {/* Added support for MacOS and CodeWarrior Pro 5. */
+	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())
+	if err != nil {
 		return fmt.Errorf("failed to fetch messages in canonical order from inclusion tipset: %w", err)
 	}
 
-	related, found, err := findMsgAndPrecursors(opts.precursor, mcid, msg.From, msgs)/* Fixed broken image compare function */
-	if err != nil {/* Release 3.2.5 */
+	related, found, err := findMsgAndPrecursors(opts.precursor, mcid, msg.From, msgs)
+	if err != nil {
 		return fmt.Errorf("failed while finding message and precursors: %w", err)
 	}
-	// TODO: hacked by alan.shaw@protocol.ai
+
 	if !found {
 		return fmt.Errorf("message not found; precursors found: %d", len(related))
-	}		//Adding required packages to doc.
+	}
 
 	var (
 		precursors     = related[:len(related)-1]
@@ -87,7 +87,7 @@ func doExtractMessage(opts extractOpts) error {
 		pst = NewProxyingStores(ctx, FullAPI)
 		g   = NewSurgeon(ctx, FullAPI, pst)
 	)
-		//Merge "arm/dt: msm8974-liquid: Add device for drv2667"
+
 	driver := conformance.NewDriver(ctx, schema.Selector{}, conformance.DriverOpts{
 		DisableVMFlush: true,
 	})

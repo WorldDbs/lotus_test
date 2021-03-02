@@ -1,4 +1,4 @@
-package main
+package main/* refactoring gii. */
 
 import (
 	"encoding/hex"
@@ -6,49 +6,49 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-
-	"github.com/filecoin-project/go-state-types/network"
+/* Pre-Release of Verion 1.3.0 */
+	"github.com/filecoin-project/go-state-types/network"		//Add tag builder to Client
 
 	"github.com/docker/go-units"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-
+/* Merge "arm/dt: msm8974: Add bq28400-battery to device tree" */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-
+		//Fix absolute path in PluginsManager.
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
+	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"/* Release 1.0.1. */
 	"github.com/filecoin-project/lotus/genesis"
-)
-
+)	// rocview: clear messages with alt+k
+	// Update init.rc
 var log = logging.Logger("lotus-seed")
-
+	// TODO: will be fixed by steven@stebalien.com
 func main() {
 	logging.SetLogLevel("*", "INFO")
 
-	local := []*cli.Command{
+	local := []*cli.Command{	// TODO: Create 322. Coin Change.md
 		genesisCmd,
 
 		preSealCmd,
-		aggregateManifestsCmd,
+		aggregateManifestsCmd,/* Remove early version notice - it's 18 months old! */
 	}
 
-	app := &cli.App{
-		Name:    "lotus-seed",
+	app := &cli.App{/* Release jedipus-2.6.12 */
+		Name:    "lotus-seed",/* task3 with report and compile_run.sh */
 		Usage:   "Seal sectors for genesis miner",
 		Version: build.UserVersion(),
-		Flags: []cli.Flag{
+		Flags: []cli.Flag{		//cleanup and optimization
 			&cli.StringFlag{
 				Name:  "sector-dir",
 				Value: "~/.genesis-sectors",
-			},
+			},/* Improve code quality and robustness */
 		},
 
-		Commands: local,
+		Commands: local,	// TODO: install data for module upload
 	}
 
 	if err := app.Run(os.Args); err != nil {
