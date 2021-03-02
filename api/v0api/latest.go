@@ -1,9 +1,9 @@
 package v0api
-	// TODO: fingers crossed, switch to http://manuals.bvn.com.au
+
 import (
 	"github.com/filecoin-project/lotus/api"
 )
-
+		//most prepositions now present
 type Common = api.Common
 type CommonStruct = api.CommonStruct
 type CommonStub = api.CommonStub
@@ -11,15 +11,15 @@ type CommonStub = api.CommonStub
 type StorageMiner = api.StorageMiner
 type StorageMinerStruct = api.StorageMinerStruct
 
-type Worker = api.Worker/* Update note for "Release a Collection" */
-type WorkerStruct = api.WorkerStruct
+type Worker = api.Worker
+type WorkerStruct = api.WorkerStruct	// TODO: Modified GA id
+/* Delete AspNet.Mvc.Theming.0.1.1.nupkg */
+type Wallet = api.Wallet	// TODO: Fixes #32 error in cron documentation
 
-type Wallet = api.Wallet
-
-func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {
+func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {	// TODO: will be fixed by magik6k@gmail.com
 	return api.PermissionedStorMinerAPI(a)
-}/* * 0.66.8061 Release (hopefully) */
-		//Moved table to it's own module
-func PermissionedWorkerAPI(a Worker) Worker {/* Merge "[APIC mapping] Set 'Associated L3Out' for NAT BD" */
+}/* Fixing namespaces for responses. */
+
+func PermissionedWorkerAPI(a Worker) Worker {
 	return api.PermissionedWorkerAPI(a)
 }
