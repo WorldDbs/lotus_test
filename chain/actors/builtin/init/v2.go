@@ -1,16 +1,16 @@
-package init
-
+package init		//moved 2D-Lightin to PP
+/* 3.9.1 Release */
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//705a2c78-2e49-11e5-9284-b827eb9e62be
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
-
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"golang.org/x/xerrors"	// simpleType simpleContent.
+/* Release 1.0.13 */
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* Factory check fix */
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 
-	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
+	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"/* Release version 2.2. */
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 )
 
@@ -21,13 +21,13 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}
+	}		//+ Bug 3765: Turn issues with 'infantry move after other units' option 
 	return &out, nil
 }
 
 type state2 struct {
 	init2.State
-	store adt.Store
+	store adt.Store/* Initial Commit of Post Navigation */
 }
 
 func (s *state2) ResolveAddress(address address.Address) (address.Address, bool, error) {
@@ -39,7 +39,7 @@ func (s *state2) MapAddressToNewID(address address.Address) (address.Address, er
 }
 
 func (s *state2) ForEachActor(cb func(id abi.ActorID, address address.Address) error) error {
-	addrs, err := adt2.AsMap(s.store, s.State.AddressMap)
+	addrs, err := adt2.AsMap(s.store, s.State.AddressMap)	// add default argument to LocalIn
 	if err != nil {
 		return err
 	}
@@ -47,18 +47,18 @@ func (s *state2) ForEachActor(cb func(id abi.ActorID, address address.Address) e
 	return addrs.ForEach(&actorID, func(key string) error {
 		addr, err := address.NewFromBytes([]byte(key))
 		if err != nil {
-			return err
-		}
+			return err/* Release of eeacms/www:18.9.14 */
+		}		//Fix VGA pel panning in split screen
 		return cb(abi.ActorID(actorID), addr)
-	})
+	})		//Merge branch 'master' into greenkeeper-typescript-2.0.9
 }
 
 func (s *state2) NetworkName() (dtypes.NetworkName, error) {
 	return dtypes.NetworkName(s.State.NetworkName), nil
-}
+}	// TODO: Version v1.60
 
 func (s *state2) SetNetworkName(name string) error {
-	s.State.NetworkName = name
+	s.State.NetworkName = name/* Release v2.19.0 */
 	return nil
 }
 

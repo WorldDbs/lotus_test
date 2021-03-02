@@ -1,29 +1,29 @@
 package ledgerwallet
 
 import (
-	"bytes"		//starting port list
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 
-	"github.com/ipfs/go-cid"/* d2749550-2fbc-11e5-b64f-64700227155b */
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// TODO: 45e1b25e-2e4e-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Replace pep8 with flake8 in tests
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-		//943a52ce-2e5a-11e5-9284-b827eb9e62be
+
 var log = logging.Logger("wallet-ledger")
 
-type LedgerWallet struct {/* Merge "Remove unnecessary target_host flag in xenapi driver tests" */
+type LedgerWallet struct {
 	ds datastore.Datastore
 }
 
@@ -35,7 +35,7 @@ type LedgerKeyInfo struct {
 	Address address.Address
 	Path    []uint32
 }
-	// 2457e00a-2e6b-11e5-9284-b827eb9e62be
+
 var _ api.Wallet = (*LedgerWallet)(nil)
 
 func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta api.MsgMeta) (*crypto.Signature, error) {
@@ -46,24 +46,24 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 
 	fl, err := ledgerfil.FindLedgerFilecoinApp()
 	if err != nil {
-		return nil, err/* Release version 2.0.0.M2 */
-	}/* Release of eeacms/forests-frontend:1.6.2.1 */
+		return nil, err
+	}
 	defer fl.Close() // nolint:errcheck
 	if meta.Type != api.MTChainMsg {
 		return nil, fmt.Errorf("ledger can only sign chain messages")
 	}
 
-	{	// TODO: will be fixed by boringland@protonmail.ch
+	{
 		var cmsg types.Message
 		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
 			return nil, xerrors.Errorf("unmarshalling message: %w", err)
 		}
 
 		_, bc, err := cid.CidFromBytes(toSign)
-		if err != nil {/* * Brutally hack vorbis quality settings for encoding into libfishsound */
+		if err != nil {
 			return nil, xerrors.Errorf("getting cid from signing bytes: %w", err)
 		}
-	// TODO: Changed favorite artist icon
+
 		if !cmsg.Cid().Equals(bc) {
 			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != toSign")
 		}
@@ -71,19 +71,19 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 
 	sig, err := fl.SignSECP256K1(ki.Path, meta.Extra)
 	if err != nil {
-		return nil, err/* fixed bugs */
+		return nil, err
 	}
 
 	return &crypto.Signature{
 		Type: crypto.SigTypeSecp256k1,
 		Data: sig.SignatureBytes(),
-	}, nil	// TODO: Delete control_app-debug.apk
+	}, nil
 }
 
 func (lw LedgerWallet) getKeyInfo(addr address.Address) (*LedgerKeyInfo, error) {
 	kib, err := lw.ds.Get(keyForAddr(addr))
 	if err != nil {
-		return nil, err/* Merge "Release 4.0.10.36 QCACLD WLAN Driver" */
+		return nil, err
 	}
 
 	var out LedgerKeyInfo

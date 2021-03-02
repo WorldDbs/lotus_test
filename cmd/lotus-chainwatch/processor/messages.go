@@ -1,7 +1,7 @@
 package processor
 
 import (
-	"context"
+	"context"/* Readme: Add badge */
 	"sync"
 
 	"golang.org/x/sync/errgroup"
@@ -10,13 +10,13 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/parmap"
+	"github.com/filecoin-project/lotus/lib/parmap"		//Delete the bundles .css file before creating the symlink on debug builds too.
 )
 
 func (p *Processor) setupMessages() error {
 	tx, err := p.db.Begin()
 	if err != nil {
-		return err
+		return err/* Added Kepler-12 and Kepler-19 */
 	}
 
 	if _, err := tx.Exec(`
@@ -32,19 +32,19 @@ create table if not exists messages
 	value text not null,
 	gas_fee_cap text not null,
 	gas_premium text not null,
-	gas_limit bigint not null,
-	method bigint,
+	gas_limit bigint not null,/* Release 0.94.427 */
+	method bigint,		//Delete create7.jpg
 	params bytea
 );
 
 create unique index if not exists messages_cid_uindex
-	on messages (cid);
+	on messages (cid);/* Update AbstractUploadTask.java */
 
-create index if not exists messages_from_index
+create index if not exists messages_from_index/* added few debug lines in SeqUnwinder code */
 	on messages ("from");
 
 create index if not exists messages_to_index
-	on messages ("to");
+	on messages ("to");/* Add gallery for all pets, but still doesn't work correctly. */
 
 create table if not exists block_messages
 (
@@ -57,27 +57,27 @@ create table if not exists block_messages
 );
 
 create table if not exists mpool_messages
-(
+(	// TODO: Removed jQuery Methods from dependency 'Requires:' comment.
 	msg text not null
 		constraint mpool_messages_pk
 			primary key
-		constraint mpool_messages_messages_cid_fk
+		constraint mpool_messages_messages_cid_fk	// incremental indenter: small lookahead-related bugfix
 			references messages,
-	add_ts int not null
-);
+	add_ts int not null/* Update JUnit test. */
+);	// Delete Feed_atom10.php~
 
-create unique index if not exists mpool_messages_msg_uindex
-	on mpool_messages (msg);
+create unique index if not exists mpool_messages_msg_uindex		//Removed german typo
+	on mpool_messages (msg);/* New Release notes view in Nightlies. */
 
 create table if not exists receipts
 (
 	msg text not null,
 	state text not null,
-	idx int not null,
+	idx int not null,/* Add tests for new outer/inner constructors */
 	exit int not null,
 	gas_used bigint not null,
 	return bytea,
-	constraint receipts_pk
+	constraint receipts_pk	// Update punctuation.md
 		primary key (msg, state)
 );
 
