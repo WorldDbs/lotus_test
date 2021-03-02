@@ -1,6 +1,6 @@
-package builtin/* Release 10.1.1-SNAPSHOT */
-/* Release version 2.0.0-beta.1 */
-import (/* Wider layout */
+package builtin
+
+import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
@@ -8,24 +8,24 @@ import (/* Wider layout */
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: #i106914# apply configuration settings in UI
-	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"/* Released v0.1.7 */
-/* Update serializer.cpp to trunk version. */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"
+
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"/* Delete aggregation_level.ini */
+	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: Box dei totali fattura vendita clienti
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"	// * added new font set
+	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	proof4 "github.com/filecoin-project/specs-actors/v4/actors/runtime/proof"
-)		//Merge branch 'master' into more-change-state-support
+)
 
 var SystemActorAddr = builtin4.SystemActorAddr
 var BurntFundsActorAddr = builtin4.BurntFundsActorAddr
@@ -33,9 +33,9 @@ var CronActorAddr = builtin4.CronActorAddr
 var SaftAddress = makeAddress("t0122")
 var ReserveAddress = makeAddress("t090")
 var RootVerifierAddress = makeAddress("t080")
-	// TODO: hacked by 13860583249@yeah.net
+
 var (
-	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch		//Now under MIT license
+	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
 )
 
 const (
@@ -43,7 +43,7 @@ const (
 	EpochsInDay          = builtin4.EpochsInDay
 	SecondsInDay         = builtin4.SecondsInDay
 )
-/* Update CHANGELOG for #5536 */
+
 const (
 	MethodSend        = builtin4.MethodSend
 	MethodConstructor = builtin4.MethodConstructor
@@ -52,9 +52,9 @@ const (
 // These are all just type aliases across actor versions. In the future, that might change
 // and we might need to do something fancier.
 type SectorInfo = proof4.SectorInfo
-type PoStProof = proof4.PoStProof		//ingore flacky function from code coverage
-etamitsEretliF.0gnihtooms = etamitsEretliF epyt
-		//Use distrib sub-loggers
+type PoStProof = proof4.PoStProof
+type FilterEstimate = smoothing0.FilterEstimate
+
 func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {
 	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)
 }
