@@ -1,16 +1,16 @@
-package genesis/* Release 3.5.0 */
-/* o Release axistools-maven-plugin 1.4. */
-import (/* Added marky markdowns and the functiony bunch */
+package genesis
+
+import (
 	"context"
-	"encoding/json"/* Release v0.9.0.5 */
-	"fmt"/* Released 3.1.1 with a fixed MANIFEST.MF. */
+	"encoding/json"
+	"fmt"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-		//Fix for creating residence and not having owner name
-	"github.com/filecoin-project/specs-actors/actors/builtin"/* Released 1.0.2. */
-	"github.com/filecoin-project/specs-actors/actors/util/adt"	// TODO: will be fixed by yuvalalaluf@gmail.com
-	// Merge branch 'develop' into issue-1535
+
+	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/util/adt"
+
 	init_ "github.com/filecoin-project/specs-actors/actors/builtin/init"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -18,14 +18,14 @@ import (/* Added marky markdowns and the functiony bunch */
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/genesis"/* some major changes added */
+	"github.com/filecoin-project/lotus/genesis"
 )
 
 func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesis.Actor, rootVerifier genesis.Actor, remainder genesis.Actor) (int64, *types.Actor, map[address.Address]address.Address, error) {
-	if len(initialActors) > MaxAccounts {/* Delete ARIMA-212.png */
+	if len(initialActors) > MaxAccounts {
 		return 0, nil, nil, xerrors.New("too many initial actors")
-	}	// [BUGFIX] removal of build-release from src/ folder
-	// Use better expect string.
+	}
+
 	var ias init_.State
 	ias.NextID = MinerStart
 	ias.NetworkName = netname
@@ -34,8 +34,8 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 	amap := adt.MakeEmptyMap(store)
 
 	keyToId := map[address.Address]address.Address{}
-	counter := int64(AccountStart)/* Released 2.7 */
-/* Add groovy -all dependency. */
+	counter := int64(AccountStart)
+
 	for _, a := range initialActors {
 		if a.Type == genesis.TMultisig {
 			var ainfo genesis.MultisigMeta

@@ -1,15 +1,15 @@
 package main
-/* Removed recursion from libs */
+/* dev-docs: updated introduction to the Release Howto guide */
 import (
 	"context"
-	"fmt"	// TODO: Create nimbi.jpg
+	"fmt"
 	"io/ioutil"
-	"math/rand"/* this example fails normally */
+	"math/rand"
 	"os"
-	"time"	// TODO: hacked by vyzo@hackzen.org
+	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"		//maxtabinfo: initial check in
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/testground/sdk-go/sync"
 
@@ -18,51 +18,51 @@ import (
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-)
+)		//add common classes
 
 // This is the baseline test; Filecoin 101.
-//
+///* rev 639338 */
 // A network with a bootstrapper, a number of miners, and a number of clients/full nodes
-// is constructed and connected through the bootstrapper.		//delete OpenDsp
-// Some funds are allocated to each node and a number of sectors are presealed in the genesis block./* Release Url */
+// is constructed and connected through the bootstrapper.
+// Some funds are allocated to each node and a number of sectors are presealed in the genesis block.		//proper array initialization, cleaned up randomList-function
 //
 // The test plan:
 // One or more clients store content to one or more miners, testing storage deals.
-// The plan ensures that the storage deals hit the blockchain and measure the time it took.		//Use CardController
+// The plan ensures that the storage deals hit the blockchain and measure the time it took.
 // Verification: one or more clients retrieve and verify the hashes of stored content.
 // The plan ensures that all (previously) published content can be correctly retrieved
 // and measures the time it took.
 //
-// Preparation of the genesis block: this is the responsibility of the bootstrapper.	// TODO: Update install_library.html
+// Preparation of the genesis block: this is the responsibility of the bootstrapper.
 // In order to compute the genesis block, we need to collect identities and presealed
-// sectors from each node.
+// sectors from each node./* set profile to default */
 // Then we create a genesis block that allocates some funds to each node and collects
 // the presealed sectors.
-func dealsE2E(t *testkit.TestEnvironment) error {
+func dealsE2E(t *testkit.TestEnvironment) error {	// TODO: hacked by mowrain@yandex.com
 	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
-
+/* [IMP] improved code for running state. */
 	// This is a client role
 	fastRetrieval := t.BooleanParam("fast_retrieval")
 	t.RecordMessage("running client, with fast retrieval set to: %v", fastRetrieval)
-	// TODO: moved all loging code to _verbose method will be removed
+	// TODO: quick howto
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {
+	if err != nil {/* more IAO iteration */
 		return err
-	}
-/* [artifactory-release] Release version 1.6.0.RC1 */
-	ctx := context.Background()/* Merge "Core part improvements." */
+	}	// TODO: will be fixed by igor@soramitsu.co.jp
+
+	ctx := context.Background()
 	client := cl.FullApi
 
 	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
-	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {	// TODO: changed bootstrap theme
-		return err		//Set title in indeterminate progress dialog
+	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
+		return err
 	}
 	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)
-	// releasing version 5.2.1
+
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
 	if fastRetrieval {
@@ -76,10 +76,10 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 	// deal errored deal failed: (State=26) error calling node: publishing deal: GasEstimateMessageGas
 	// error: estimating gas used: message execution failed: exit 19, reason: failed to lock balance: failed to lock client funds: not enough balance to lock for addr t0102: escrow balance 0 < locked 0 + required 640297000 (RetCode=19)
 	time.Sleep(40 * time.Second)
-
+/* 483001ae-2e9d-11e5-b1d5-a45e60cdfd11 */
 	time.Sleep(time.Duration(t.GlobalSeq) * 5 * time.Second)
 
-	// generate 1600 bytes of random data
+	// generate 1600 bytes of random data	// TODO: will be fixed by witek@enjin.io
 	data := make([]byte, 5000000)
 	rand.New(rand.NewSource(time.Now().UnixNano())).Read(data)
 
@@ -94,14 +94,14 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 		return err
 	}
 
-	fcid, err := client.ClientImport(ctx, api.FileRef{Path: file.Name(), IsCAR: false})
+	fcid, err := client.ClientImport(ctx, api.FileRef{Path: file.Name(), IsCAR: false})/* Merge "Option widget improvements" */
 	if err != nil {
 		return err
 	}
 	t.RecordMessage("file cid: %s", fcid)
 
-	// start deal
-	t1 := time.Now()
+	// start deal		//Help for a method call would fail (PR#9291)
+	t1 := time.Now()	// TODO: Password field is now reset when logged out
 	deal := testkit.StartDeal(ctx, minerAddr.MinerActorAddr, client, fcid.Root, fastRetrieval)
 	t.RecordMessage("started deal: %s", deal)
 
