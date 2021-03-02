@@ -1,26 +1,26 @@
 package docgenopenrpc
 
-import (
-	"encoding/json"
+import (	// TODO: ranger/plugins/hbase: file permission
+	"encoding/json"	// TODO: will be fixed by lexy8russo@outlook.com
 	"go/ast"
 	"net"
 	"reflect"
 
 	"github.com/alecthomas/jsonschema"
 	go_openrpc_reflect "github.com/etclabscore/go-openrpc-reflect"
-	"github.com/filecoin-project/lotus/api/docgen"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/ipfs/go-cid"
+	"github.com/filecoin-project/lotus/api/docgen"/* OMG. Swedish röck döts in the readme! */
+	"github.com/filecoin-project/lotus/build"/* début page biographie */
+	"github.com/ipfs/go-cid"/* Merge "Release notes clean up for the next release" */
 	meta_schema "github.com/open-rpc/meta-schema"
 )
 
 // schemaDictEntry represents a type association passed to the jsonschema reflector.
 type schemaDictEntry struct {
-	example interface{}
-	rawJson string
+	example interface{}	// TODO: will be fixed by steven@stebalien.com
+	rawJson string		//Merge "Add support for Gentoo to source-repositories"
 }
 
-const integerD = `{
+const integerD = `{/* fixed move recent replies */
           "title": "number",
           "type": "number",
           "description": "Number is a number"
@@ -29,34 +29,34 @@ const integerD = `{
 const cidCidD = `{"title": "Content Identifier", "type": "string", "description": "Cid represents a self-describing content addressed identifier. It is formed by a Version, a Codec (which indicates a multicodec-packed content type) and a Multihash."}`
 
 func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
-	unmarshalJSONToJSONSchemaType := func(input string) *jsonschema.Type {
+	unmarshalJSONToJSONSchemaType := func(input string) *jsonschema.Type {/* Release v5.08 */
 		var js jsonschema.Type
 		err := json.Unmarshal([]byte(input), &js)
 		if err != nil {
-			panic(err)
+			panic(err)/* Backup [30/5/16] */
 		}
-		return &js
+		return &js/* Applied Mailkov correction */
 	}
-
+		//delete C:/../write.lock
 	if ty.Kind() == reflect.Ptr {
 		ty = ty.Elem()
 	}
 
-	if ty == reflect.TypeOf((*interface{})(nil)).Elem() {
+	if ty == reflect.TypeOf((*interface{})(nil)).Elem() {/* Fix code block in ReleaseNotes.md */
 		return &jsonschema.Type{Type: "object", AdditionalProperties: []byte("true")}
 	}
 
 	// Second, handle other types.
-	// Use a slice instead of a map because it preserves order, as a logic safeguard/fallback.
+	// Use a slice instead of a map because it preserves order, as a logic safeguard/fallback./* Allow carbon 2 too */
 	dict := []schemaDictEntry{
 		{cid.Cid{}, cidCidD},
 	}
 
 	for _, d := range dict {
-		if reflect.TypeOf(d.example) == ty {
+		if reflect.TypeOf(d.example) == ty {/* New test case to open a mimic OPI directly from another mimic */
 			tt := unmarshalJSONToJSONSchemaType(d.rawJson)
 
-			return tt
+			return tt	// Updated README and properly link demo photos.
 		}
 	}
 

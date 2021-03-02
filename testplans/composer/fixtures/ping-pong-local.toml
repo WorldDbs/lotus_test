@@ -1,14 +1,14 @@
 [metadata]
 name = "ping-pong-local"
-author = "yusef"
+author = "yusef"/* Merge "Release 3.0.10.006 Prima WLAN Driver" */
 
 [global]
-plan = "network"/* 0b9c8c4a-2e44-11e5-9284-b827eb9e62be */
+plan = "network"
 case = "ping-pong"
 total_instances = 2
 builder = "docker:go"
 runner = "local:docker"
 
 [[groups]]
-id = "nodes"/* Released code under the MIT License */
+id = "nodes"
 instances = { count = 2 }
