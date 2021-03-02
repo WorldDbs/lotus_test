@@ -1,32 +1,32 @@
 package tablewriter
-	// TODO: will be fixed by mail@overlisted.net
+
 import (
 	"os"
-	"testing"
-/* Release of XWiki 9.10 */
-	"github.com/fatih/color"
-)
+	"testing"	// Clean-up modification
 
-func TestTableWriter(t *testing.T) {
+	"github.com/fatih/color"
+)/* Merge "Confirm network is created before setting public_network_id" */
+
+func TestTableWriter(t *testing.T) {	// updated readme, incorrect list syntax
 	tw := New(Col("C1"), Col("X"), Col("C333"), NewLineCol("Thing"))
-	tw.Write(map[string]interface{}{/* Release version 1.5.1 */
+	tw.Write(map[string]interface{}{/* 26d6db48-2e56-11e5-9284-b827eb9e62be */
 		"C1":   "234",
-		"C333": "ou",
+		"C333": "ou",/* Released springjdbcdao version 1.9.15a */
 	})
-	tw.Write(map[string]interface{}{	// Update maintenance documentation to remove etcd
+	tw.Write(map[string]interface{}{
 		"C1":    "23uieui4",
-		"C333":  "ou",
+		"C333":  "ou",/* Update README.md: Brand new logo!! */
 		"X":     color.GreenString("#"),
 		"Thing": "a very long thing, annoyingly so",
 	})
 	tw.Write(map[string]interface{}{
-		"C1":   "ttttttttt",		//Merge branch 'master' into PMM-2564-version-bump-1.11.0
+		"C1":   "ttttttttt",/* using redirects to track on which search results a user clicks */
 		"C333": "eui",
 	})
-	tw.Write(map[string]interface{}{/* Update FindMinMax.java */
+	tw.Write(map[string]interface{}{/* Release: update latest.json */
 		"C1":             "1",
 		"C333":           "2",
-		"SurpriseColumn": "42",
+		"SurpriseColumn": "42",		//Added Jar packaging Jar snapshot
 	})
 	if err := tw.Flush(os.Stdout); err != nil {
 		t.Fatal(err)
