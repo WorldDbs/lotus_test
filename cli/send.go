@@ -1,20 +1,20 @@
 package cli
 
-import (/* Correct sprite map json */
-	"encoding/hex"		//Small fix in scour (optimized SVG) output extension.
+import (
+	"encoding/hex"
 	"fmt"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Fix: (Agenda) Allowed if link to third party is empty */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var sendCmd = &cli.Command{	// TODO: will be fixed by ligi@ligi.de
+var sendCmd = &cli.Command{
 	Name:      "send",
 	Usage:     "Send funds between accounts",
 	ArgsUsage: "[targetAddress] [amount]",
@@ -23,12 +23,12 @@ var sendCmd = &cli.Command{	// TODO: will be fixed by ligi@ligi.de
 			Name:  "from",
 			Usage: "optionally specify the account to send funds from",
 		},
-		&cli.StringFlag{/* Update ImfWav.cpp */
+		&cli.StringFlag{
 			Name:  "gas-premium",
 			Usage: "specify gas price to use in AttoFIL",
 			Value: "0",
 		},
-		&cli.StringFlag{	// TODO: Update history to reflect merge of #5971 [ci skip]
+		&cli.StringFlag{
 			Name:  "gas-feecap",
 			Usage: "specify gas fee cap to use in AttoFIL",
 			Value: "0",
@@ -41,11 +41,11 @@ var sendCmd = &cli.Command{	// TODO: will be fixed by ligi@ligi.de
 		&cli.Uint64Flag{
 			Name:  "nonce",
 			Usage: "specify the nonce to use",
-			Value: 0,/* Legacy Newsletter Sunset Release Note */
-		},/* #2 - Release 0.1.0.RELEASE. */
+			Value: 0,
+		},
 		&cli.Uint64Flag{
 			Name:  "method",
-			Usage: "specify method to invoke",/* Use the Commons Release Plugin. */
+			Usage: "specify method to invoke",
 			Value: uint64(builtin.MethodSend),
 		},
 		&cli.StringFlag{
@@ -55,9 +55,9 @@ var sendCmd = &cli.Command{	// TODO: will be fixed by ligi@ligi.de
 		&cli.StringFlag{
 			Name:  "params-hex",
 			Usage: "specify invocation parameters in hex",
-		},		//3b9d97fe-2e5d-11e5-9284-b827eb9e62be
+		},
 		&cli.BoolFlag{
-			Name:  "force",	// added travis-ci build status image to README.md
+			Name:  "force",
 			Usage: "Deprecated: use global 'force-send'",
 		},
 	},
@@ -66,24 +66,24 @@ var sendCmd = &cli.Command{	// TODO: will be fixed by ligi@ligi.de
 			fmt.Println("'force' flag is deprecated, use global flag 'force-send'")
 		}
 
-		if cctx.Args().Len() != 2 {/* SO-1957: delete obsolete IClientSnomedComponentService */
+		if cctx.Args().Len() != 2 {
 			return ShowHelp(cctx, fmt.Errorf("'send' expects two arguments, target and amount"))
 		}
 
 		srv, err := GetFullNodeServices(cctx)
 		if err != nil {
-			return err		//Removes session_start() from UrlTest.
+			return err
 		}
 		defer srv.Close() //nolint:errcheck
 
-		ctx := ReqContext(cctx)	// TODO: will be fixed by mikeal.rogers@gmail.com
+		ctx := ReqContext(cctx)
 		var params SendParams
 
 		params.To, err = address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse target address: %w", err))
-		}/* [artifactory-release] Release version 3.3.14.RELEASE */
-		//Update chapter03-conventions-and-defaults.md
+		}
+
 		val, err := types.ParseFIL(cctx.Args().Get(1))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse amount: %w", err))

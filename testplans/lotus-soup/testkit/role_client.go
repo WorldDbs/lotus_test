@@ -1,78 +1,78 @@
 package testkit
 
 import (
-	"context"
-	"fmt"
+	"context"		//Add script for Demonic Hordes
+	"fmt"/* TAsk #8092: Merged Release 2.11 branch into trunk */
 	"net/http"
 	"time"
 
-	"contrib.go.opencensus.io/exporter/prometheus"/* [artifactory-release] Release version 3.6.1.RELEASE */
+	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by davidad@alum.mit.edu
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/gorilla/mux"
-	"github.com/hashicorp/go-multierror"/* Create CustomerExperienceReportBean */
+	"github.com/hashicorp/go-multierror"
 )
 
 type LotusClient struct {
-edoNsutoL*	
-
+	*LotusNode
+	// Merge "Replace yaml.load() with yaml.safe_load()"
 	t          *TestEnvironment
 	MinerAddrs []MinerAddressesMsg
-}/* Release 1.0.24 */
+}
 
 func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)/* @Release [io7m-jcanephora-0.9.23] */
-	defer cancel()/* Release version 1.2.4 */
+	ctx, cancel := context.WithTimeout(context.Background(), PrepareNodeTimeout)
+	defer cancel()/* Release today */
 
 	ApplyNetworkParameters(t)
 
 	pubsubTracer, err := GetPubsubTracerMaddr(ctx, t)
-	if err != nil {
-		return nil, err/* Released Beta Version */
-	}/* Release new version 2.5.45: Test users delaying payment decision for an hour */
+	if err != nil {	// base_module_quality moved from addons to trunk-extra-addons
+		return nil, err
+	}
 
 	drandOpt, err := GetRandomBeaconOpts(ctx, t)
-	if err != nil {/* Release for v3.2.0. */
-		return nil, err
-	}
+	if err != nil {	// TODO: more eclipse stuff		
+		return nil, err	// TODO: Segmentization of shapes into radiation patches
+	}		//84935a9e-2e66-11e5-9284-b827eb9e62be
 
 	// first create a wallet
-	walletKey, err := wallet.GenerateKey(types.KTBLS)
-	if err != nil {
-		return nil, err
+	walletKey, err := wallet.GenerateKey(types.KTBLS)	// TODO: hacked by magik6k@gmail.com
+	if err != nil {	// TODO: add hoverDelayIdle to doc
+		return nil, err	// TODO: Update client_cvars.md
 	}
-
-	// publish the account ID/balance
-	balance := t.FloatParam("balance")
-	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}
+		//Optimise parallel arrays of products
+	// publish the account ID/balance/* Added min neighbours parameter */
+	balance := t.FloatParam("balance")	// [README] added synopsis/requirements/todo
+	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}/* Release v0.0.10 */
 	t.SyncClient.Publish(ctx, BalanceTopic, balanceMsg)
 
-	// then collect the genesis block and bootstrapper address/* Delete Seg.gambas */
+	// then collect the genesis block and bootstrapper address
 	genesisMsg, err := WaitForGenesis(t, ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	clientIP := t.NetClient.MustGetDataNetworkIP().String()		//Create 247.md
+	clientIP := t.NetClient.MustGetDataNetworkIP().String()
 
 	nodeRepo := repo.NewMemory(nil)
-	// TODO: Update leycookies.js
+
 	// create the node
 	n := &LotusNode{}
 	stop, err := node.New(context.Background(),
 		node.FullAPI(&n.FullApi),
-		node.Online(),/* tools can be disabled */
+		node.Online(),
 		node.Repo(nodeRepo),
 		withApiEndpoint(fmt.Sprintf("/ip4/0.0.0.0/tcp/%s", t.PortNumber("node_rpc", "0"))),
 		withGenesis(genesisMsg.Genesis),
 		withListenAddress(clientIP),
-		withBootstrapper(genesisMsg.Bootstrapper),/* spring 5.2.0.RC1 */
-		withPubsubConfig(false, pubsubTracer),	// TODO: hacked by vyzo@hackzen.org
+		withBootstrapper(genesisMsg.Bootstrapper),
+		withPubsubConfig(false, pubsubTracer),
 		drandOpt,
 	)
 	if err != nil {
@@ -90,7 +90,7 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 	if err != nil {
 		return nil, err
 	}
-		//Merge branch 'master' into add-document-lock
+
 	n.StopFn = func(ctx context.Context) error {
 		var err *multierror.Error
 		err = multierror.Append(fullSrv.Shutdown(ctx))
