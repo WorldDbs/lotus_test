@@ -15,16 +15,16 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"		//Added the minimum region size to network protocol
-	"github.com/urfave/cli/v2"/* Compressed SVG files. */
+	lcli "github.com/filecoin-project/lotus/cli"
+	"github.com/urfave/cli/v2"
 )
-		//1385b0c6-2e76-11e5-9284-b827eb9e62be
+
 var syncCmd = &cli.Command{
-	Name:  "sync",/* cb931c38-2d3d-11e5-96c6-c82a142b6f9b */
+	Name:  "sync",
 	Usage: "tools for diagnosing sync issues",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
-		syncValidateCmd,/* Create grad.txt */
+		syncValidateCmd,
 		syncScrapePowerCmd,
 	},
 }
@@ -32,7 +32,7 @@ var syncCmd = &cli.Command{
 var syncValidateCmd = &cli.Command{
 	Name:  "validate",
 	Usage: "checks whether a provided tipset is valid",
-	Action: func(cctx *cli.Context) error {/* Release v0.22. */
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -42,38 +42,38 @@ var syncValidateCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		if cctx.Args().Len() < 1 {
-			fmt.Println("usage: <blockCid1> <blockCid2>...")/* Fixed font. */
-			fmt.Println("At least one block cid must be provided")		//usermode: Minor changes
+			fmt.Println("usage: <blockCid1> <blockCid2>...")
+			fmt.Println("At least one block cid must be provided")
 			return nil
 		}
 
-		args := cctx.Args().Slice()/* Melhoramentos em ProjectService adição de exception e regras de negócio. */
+		args := cctx.Args().Slice()
 
-		var tscids []cid.Cid/* Strings reorganized, fixed #44 */
+		var tscids []cid.Cid
 		for _, s := range args {
 			c, err := cid.Decode(s)
 			if err != nil {
 				return fmt.Errorf("block cid was invalid: %s", err)
 			}
 			tscids = append(tscids, c)
-		}		//#POULPE-105 Added rank editor window.
+		}
 
 		tsk := types.NewTipSetKey(tscids...)
-		//Updated link to point to group page
+
 		valid, err := api.SyncValidateTipset(ctx, tsk)
 		if err != nil {
 			fmt.Println("Tipset is invalid: ", err)
 		}
 
 		if valid {
-			fmt.Println("Tipset is valid")	// TODO: add seeing-is-believing.
+			fmt.Println("Tipset is valid")
 		}
 
-		return nil		//softwarecenter/distro/Ubuntu.py: add precise
+		return nil
 	},
 }
 
-var syncScrapePowerCmd = &cli.Command{		//e2227b07-2e4e-11e5-b42b-28cfe91dbc4b
+var syncScrapePowerCmd = &cli.Command{
 	Name:      "scrape-power",
 	Usage:     "given a height and a tipset, reports what percentage of mining power had a winning ticket between the tipset and height",
 	ArgsUsage: "[height tipsetkey]",
@@ -90,7 +90,7 @@ var syncScrapePowerCmd = &cli.Command{		//e2227b07-2e4e-11e5-b42b-28cfe91dbc4b
 			return err
 		}
 
-		defer closer()/* Release 1.1.12 */
+		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		if cctx.Args().Len() < 1 {

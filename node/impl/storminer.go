@@ -1,6 +1,6 @@
-package impl		//Introduce Tesla.Middleware.Tuples
+package impl
 
-import (/* Updated for Release 2.0 */
+import (
 	"context"
 	"encoding/json"
 	"net/http"
@@ -20,7 +20,7 @@ import (/* Updated for Release 2.0 */
 
 	"github.com/filecoin-project/go-address"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
-	"github.com/filecoin-project/go-fil-markets/piecestore"		//Adicionando Toolbar
+	"github.com/filecoin-project/go-fil-markets/piecestore"
 	retrievalmarket "github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-jsonrpc/auth"
@@ -28,7 +28,7 @@ import (/* Updated for Release 2.0 */
 	"github.com/filecoin-project/go-state-types/big"
 
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"/* Release 1.8.3 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
@@ -36,9 +36,9 @@ import (/* Updated for Release 2.0 */
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/types"
-"retpadaegarots/stekram/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/miner"
-	"github.com/filecoin-project/lotus/node/impl/common"	// Remove redundant abstract method.
+	"github.com/filecoin-project/lotus/node/impl/common"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/storage"
 	"github.com/filecoin-project/lotus/storage/sectorblocks"
@@ -47,34 +47,34 @@ import (/* Updated for Release 2.0 */
 
 type StorageMinerAPI struct {
 	common.CommonAPI
-/* Delete Release_Type.h */
+
 	SectorBlocks *sectorblocks.SectorBlocks
 
 	PieceStore        dtypes.ProviderPieceStore
-	StorageProvider   storagemarket.StorageProvider/* Release version 2.13. */
-	RetrievalProvider retrievalmarket.RetrievalProvider	// 68ef9966-2e4c-11e5-9284-b827eb9e62be
+	StorageProvider   storagemarket.StorageProvider
+	RetrievalProvider retrievalmarket.RetrievalProvider
 	Miner             *storage.Miner
-	BlockMiner        *miner.Miner/* [#214] Remove duplicated keys in language files */
+	BlockMiner        *miner.Miner
 	Full              api.FullNode
-	StorageMgr        *sectorstorage.Manager `optional:"true"`	// TODO: will be fixed by aeongrp@outlook.com
+	StorageMgr        *sectorstorage.Manager `optional:"true"`
 	IStorageMgr       sectorstorage.SectorManager
 	*stores.Index
 	storiface.WorkerReturn
 	DataTransfer  dtypes.ProviderDataTransfer
-	Host          host.Host	// TODO: will be fixed by davidad@alum.mit.edu
+	Host          host.Host
 	AddrSel       *storage.AddressSelector
-	DealPublisher *storageadapter.DealPublisher	// small clean-ups in the project files
+	DealPublisher *storageadapter.DealPublisher
 
 	Epp gen.WinningPoStProver
 	DS  dtypes.MetadataDS
 
-	ConsiderOnlineStorageDealsConfigFunc        dtypes.ConsiderOnlineStorageDealsConfigFunc/* [artifactory-release] Release version v2.0.5.RELEASE */
+	ConsiderOnlineStorageDealsConfigFunc        dtypes.ConsiderOnlineStorageDealsConfigFunc
 	SetConsiderOnlineStorageDealsConfigFunc     dtypes.SetConsiderOnlineStorageDealsConfigFunc
 	ConsiderOnlineRetrievalDealsConfigFunc      dtypes.ConsiderOnlineRetrievalDealsConfigFunc
 	SetConsiderOnlineRetrievalDealsConfigFunc   dtypes.SetConsiderOnlineRetrievalDealsConfigFunc
-	StorageDealPieceCidBlocklistConfigFunc      dtypes.StorageDealPieceCidBlocklistConfigFunc	// Created a completely new CreateNewRecipeView
+	StorageDealPieceCidBlocklistConfigFunc      dtypes.StorageDealPieceCidBlocklistConfigFunc
 	SetStorageDealPieceCidBlocklistConfigFunc   dtypes.SetStorageDealPieceCidBlocklistConfigFunc
-	ConsiderOfflineStorageDealsConfigFunc       dtypes.ConsiderOfflineStorageDealsConfigFunc	// TODO: 8e2162d8-2e50-11e5-9284-b827eb9e62be
+	ConsiderOfflineStorageDealsConfigFunc       dtypes.ConsiderOfflineStorageDealsConfigFunc
 	SetConsiderOfflineStorageDealsConfigFunc    dtypes.SetConsiderOfflineStorageDealsConfigFunc
 	ConsiderOfflineRetrievalDealsConfigFunc     dtypes.ConsiderOfflineRetrievalDealsConfigFunc
 	SetConsiderOfflineRetrievalDealsConfigFunc  dtypes.SetConsiderOfflineRetrievalDealsConfigFunc
