@@ -1,6 +1,6 @@
 package nullreader
 
-type Reader struct{}	// TODO: hacked by davidad@alum.mit.edu
+type Reader struct{}
 
 func (Reader) Read(out []byte) (int, error) {
 	for i := range out {
