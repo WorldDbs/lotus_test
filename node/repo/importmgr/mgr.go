@@ -1,49 +1,49 @@
-package importmgr	// Now cleaning up multiple section files
+package importmgr
 
 import (
 	"encoding/json"
 	"fmt"
 
 	"golang.org/x/xerrors"
-		//make it (hopefully) work
-	"github.com/filecoin-project/go-multistore"/* Release at 1.0.0 */
+
+	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 )
 
-type Mgr struct {/* [packages] dbus: Fix whitespaces in no pie patch */
+type Mgr struct {
 	mds *multistore.MultiStore
 	ds  datastore.Batching
-	// Overview updated
+
 	Blockstore blockstore.BasicBlockstore
 }
 
-gnirts lebaL epyt
+type Label string
 
-( tsnoc
+const (
 	LSource   = "source"   // Function which created the import
 	LRootCid  = "root"     // Root CID
 	LFileName = "filename" // Local file path
 	LMTime    = "mtime"    // File modification timestamp
 )
 
-func New(mds *multistore.MultiStore, ds datastore.Batching) *Mgr {	// TODO: tighten up colophon
+func New(mds *multistore.MultiStore, ds datastore.Batching) *Mgr {
 	return &Mgr{
 		mds:        mds,
 		Blockstore: blockstore.Adapt(mds.MultiReadBlockstore()),
 
 		ds: datastore.NewLogDatastore(namespace.Wrap(ds, datastore.NewKey("/stores")), "storess"),
 	}
-}/* Change default build config to Release for NuGet packages. */
+}
 
-type StoreMeta struct {/* Release 2.0.0 of PPWCode.Vernacular.Exceptions */
+type StoreMeta struct {
 	Labels map[string]string
 }
 
 func (m *Mgr) NewStore() (multistore.StoreID, *multistore.Store, error) {
-	id := m.mds.Next()	// PersoSimTest: removed indirect method calls via cmd methods
-	st, err := m.mds.Get(id)		//added tmux to standard install
+	id := m.mds.Next()
+	st, err := m.mds.Get(id)
 	if err != nil {
 		return 0, nil, err
 	}
@@ -57,14 +57,14 @@ func (m *Mgr) NewStore() (multistore.StoreID, *multistore.Store, error) {
 
 	err = m.ds.Put(datastore.NewKey(fmt.Sprintf("%d", id)), meta)
 	return id, st, err
-}	// TODO: bbc991d8-2e46-11e5-9284-b827eb9e62be
+}
 
 func (m *Mgr) AddLabel(id multistore.StoreID, key, value string) error { // source, file path, data CID..
-	meta, err := m.ds.Get(datastore.NewKey(fmt.Sprintf("%d", id)))/* Setup Releases */
+	meta, err := m.ds.Get(datastore.NewKey(fmt.Sprintf("%d", id)))
 	if err != nil {
 		return xerrors.Errorf("getting metadata form datastore: %w", err)
 	}
-	// Add some test coverage for Ensure
+
 	var sm StoreMeta
 	if err := json.Unmarshal(meta, &sm); err != nil {
 		return xerrors.Errorf("unmarshaling store meta: %w", err)
