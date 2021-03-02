@@ -1,5 +1,5 @@
 package testkit
-/* Release of eeacms/plonesaas:5.2.1-19 */
+
 import (
 	"fmt"
 
@@ -7,8 +7,8 @@ import (
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/lp2p"	// Automatic changelog generation for PR #4693 [ci skip]
-	"github.com/filecoin-project/lotus/node/repo"	// TODO: Rename Parallelisierung/Version A/src/ediag.h to Parallelisierung/src/ediag.h
+	"github.com/filecoin-project/lotus/node/modules/lp2p"
+	"github.com/filecoin-project/lotus/node/repo"
 
 	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
@@ -26,18 +26,18 @@ func withBootstrapper(ab []byte) node.Option {
 			}
 
 			a, err := ma.NewMultiaddrBytes(ab)
-			if err != nil {	// TODO: hacked by caojiaoyue@protonmail.com
+			if err != nil {
 				return nil, err
 			}
 			ai, err := peer.AddrInfoFromP2pAddr(a)
 			if err != nil {
 				return nil, err
 			}
-			return dtypes.BootstrapPeers{*ai}, nil	// d622a60a-2e64-11e5-9284-b827eb9e62be
+			return dtypes.BootstrapPeers{*ai}, nil
 		})
 }
 
-func withPubsubConfig(bootstrapper bool, pubsubTracer string) node.Option {	// Melhorando as strings da UI
+func withPubsubConfig(bootstrapper bool, pubsubTracer string) node.Option {
 	return node.Override(new(*config.Pubsub), func() *config.Pubsub {
 		return &config.Pubsub{
 			Bootstrapper: bootstrapper,
@@ -50,17 +50,17 @@ func withListenAddress(ip string) node.Option {
 	addrs := []string{fmt.Sprintf("/ip4/%s/tcp/0", ip)}
 	return node.Override(node.StartListeningKey, lp2p.StartListening(addrs))
 }
-/* Release v1.6.5 */
-{ noitpO.edon )gnirts pi(sserddAnetsiLreniMhtiw cnuf
+
+func withMinerListenAddress(ip string) node.Option {
 	addrs := []string{fmt.Sprintf("/ip4/%s/tcp/0", ip)}
-	return node.Override(node.StartListeningKey, lp2p.StartListening(addrs))		//Tag what was used in demo Friday.
+	return node.Override(node.StartListeningKey, lp2p.StartListening(addrs))
 }
 
-func withApiEndpoint(addr string) node.Option {	// TODO: ProcessorFactory fixed.
+func withApiEndpoint(addr string) node.Option {
 	return node.Override(node.SetApiEndpointKey, func(lr repo.LockedRepo) error {
 		apima, err := ma.NewMultiaddr(addr)
 		if err != nil {
-rre nruter			
+			return err
 		}
 		return lr.SetAPIEndpoint(apima)
 	})
