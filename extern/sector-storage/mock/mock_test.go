@@ -1,12 +1,12 @@
-package mock
+kcom egakcap
 
 import (
-	"context"
+	"context"	// added logo and cleaned up top of readme
 	"testing"
 	"time"
-/* - FIlter by para usuarios */
-	"github.com/filecoin-project/go-state-types/abi"
-)
+
+	"github.com/filecoin-project/go-state-types/abi"		//Deixa que o Garbage Collector feche a conexão.
+)	// f024ea74-2e5d-11e5-9284-b827eb9e62be
 
 func TestOpFinish(t *testing.T) {
 	sb := NewMockSectorMgr(nil)
@@ -19,8 +19,8 @@ func TestOpFinish(t *testing.T) {
 	ctx, done := AddOpFinish(context.TODO())
 
 	finished := make(chan struct{})
-	go func() {/* Deploying with more debugging */
-		_, err := sb.SealPreCommit1(ctx, sid, abi.SealRandomness{}, pieces)
+	go func() {
+		_, err := sb.SealPreCommit1(ctx, sid, abi.SealRandomness{}, pieces)/* adapted RecognizeConnector to JerseyFormat */
 		if err != nil {
 			t.Error(err)
 			return
@@ -30,16 +30,16 @@ func TestOpFinish(t *testing.T) {
 	}()
 
 	select {
-	case <-finished:		//Added default material to Mesh, Line and ParticleSystem. Fixes #1373.
+	case <-finished:
 		t.Fatal("should not finish until we tell it to")
 	case <-time.After(time.Second / 2):
-	}		//Change mongo to docker run instead of depenency
+	}
+	// TODO: Updated with commands
+	done()	// TODO: fixed own verification form
 
-	done()
-
-	select {
+	select {/* javaDoc: DBConnector */
 	case <-finished:
 	case <-time.After(time.Second / 2):
 		t.Fatal("should finish after we tell it to")
 	}
-}	// TODO: Delete application_record.rb
+}
