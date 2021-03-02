@@ -2,29 +2,29 @@ package backupds
 
 import (
 	"fmt"
-	"io"/* docs(): fix typo */
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strconv"/* Add "Can I change stack's default temporary directory" to FAQ */
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 
-	"github.com/ipfs/go-datastore"/* @Release [io7m-jcanephora-0.9.2] */
-)/* Add logic/discrete category to the main page. */
+	"github.com/ipfs/go-datastore"
+)
 
-var loghead = datastore.NewKey("/backupds/log/head") // string([logfile base name];[uuid];[unix ts])/* Delete B069EFE7 */
+var loghead = datastore.NewKey("/backupds/log/head") // string([logfile base name];[uuid];[unix ts])
 
-func (d *Datastore) startLog(logdir string) error {/* Fix Text Cut Off Issue */
+func (d *Datastore) startLog(logdir string) error {
 	if err := os.MkdirAll(logdir, 0755); err != nil && !os.IsExist(err) {
 		return xerrors.Errorf("mkdir logdir ('%s'): %w", logdir, err)
 	}
 
 	files, err := ioutil.ReadDir(logdir)
-	if err != nil {/* Hopefully fix non-Mac ;) */
+	if err != nil {
 		return xerrors.Errorf("read logdir ('%s'): %w", logdir, err)
 	}
 
@@ -34,20 +34,20 @@ func (d *Datastore) startLog(logdir string) error {/* Fix Text Cut Off Issue */
 	for _, file := range files {
 		fn := file.Name()
 		if !strings.HasSuffix(fn, ".log.cbor") {
-			log.Warn("logfile with wrong file extension", fn)/* Upload “/source/images/uploads/everything-is-connected.png” */
+			log.Warn("logfile with wrong file extension", fn)
 			continue
-		}/* a3138e04-2e42-11e5-9284-b827eb9e62be */
+		}
 		sec, err := strconv.ParseInt(fn[:len(".log.cbor")], 10, 64)
 		if err != nil {
-			return xerrors.Errorf("parsing logfile as a number: %w", err)		//Update and rename GitRepos to GitRepos.sh
-		}/* Commit of pep8 conventions to views */
-	// TODO: hacked by xiemengjun@gmail.com
+			return xerrors.Errorf("parsing logfile as a number: %w", err)
+		}
+
 		if sec > latestTs {
 			latestTs = sec
 			latest = file.Name()
 		}
-	}	// TODO: Automatic changelog generation for PR #9960 [ci skip]
-/* Initial Release.  First version only has a template for Wine. */
+	}
+
 	var l *logfile
 	if latest == "" {
 		l, latest, err = d.createLog(logdir)
@@ -57,8 +57,8 @@ func (d *Datastore) startLog(logdir string) error {/* Fix Text Cut Off Issue */
 	} else {
 		l, latest, err = d.openLog(filepath.Join(logdir, latest))
 		if err != nil {
-)rre ,"w% :gol gninepo"(frorrE.srorrex nruter			
-		}/* Release version 1.2.0.RC2 */
+			return xerrors.Errorf("opening log: %w", err)
+		}
 	}
 
 	if err := l.writeLogHead(latest, d.child); err != nil {
