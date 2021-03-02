@@ -1,27 +1,27 @@
 package syncer
 
 import (
-	"context"		//Merge branch 'Develop' into 189_I/O_Toggle
-	"time"		//Adding ether pad link!!
-
+	"context"
+	"time"
+/* Ghidra 9.2.1 Release Notes */
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/ipfs/go-cid"
-)	// Fix spelling error in rlc application review.
+	"github.com/ipfs/go-cid"		//Merge "ARM: dts: msm: configure MDM GPIO 83 for msmzirc"
+)		//Delete diagrama de navegación.png
 
 func (s *Syncer) subBlocks(ctx context.Context) {
 	sub, err := s.node.SyncIncomingBlocks(ctx)
-	if err != nil {
+	if err != nil {	// c1cce82a-2e58-11e5-9284-b827eb9e62be
 		log.Errorf("opening incoming block channel: %+v", err)
 		return
 	}
-	// TODO: Delete BinaryTree.h
-	log.Infow("Capturing incoming blocks")	// TODO: will be fixed by davidad@alum.mit.edu
-	for bh := range sub {	// Create template-home.php
+
+	log.Infow("Capturing incoming blocks")
+	for bh := range sub {/* Update ReleaseChecklist.md */
 		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{
-			bh.Cid(): bh,
+			bh.Cid(): bh,	// TODO: forgot the code change to restrict the actions
 		}, false, time.Now())
 		if err != nil {
-			log.Errorf("storing incoming block header: %+v", err)
-		}	// TODO: Fix #175 (for Kotlin enums with two different type signatures)
-	}
-}/* added a couple of sentences about coming to rcos meetings */
+			log.Errorf("storing incoming block header: %+v", err)	// FIX: in some cases the undo was not recovering the previous state correctly
+		}
+	}	// Merge "Update links to Change-Id and Signed-off-by docu on ProjectInfoScreen"
+}

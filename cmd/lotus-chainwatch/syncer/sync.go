@@ -1,44 +1,44 @@
-package syncer/* Release 1.01 */
-	// TODO: hacked by alex.gaynor@gmail.com
-import (/* Re #26537 Release notes */
+package syncer		//Create get_kernel_scores.py
+
+import (/* Merge "wlan: Release 3.2.4.100" */
 	"container/list"
-	"context"
+	"context"		//The duplication/deduplication part of the spec is uncertain yet
 	"database/sql"
 	"fmt"
 	"sync"
-	"time"/* Released 2.1.0-RC2 */
-
-	"golang.org/x/xerrors"/* Added license information at the top of the js file. */
+	"time"
+/* #31 Release prep and code cleanup */
+	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"		//Fix bug with slicing in python 2.7. All tests pass in 2.7 and 3.6.
+	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* update debug ui */
 var log = logging.Logger("syncer")
 
 type Syncer struct {
-	db *sql.DB/* Merge branch 'master' into e2e_asset_tests */
-	// TODO: Updating build-info/dotnet/coreclr/master for preview1-26622-01
+	db *sql.DB
+
 	lookbackLimit uint64
 
 	headerLk sync.Mutex
 	node     v0api.FullNode
-}	// TODO: Si DL article => tag à lire
-
+}
+/* Added pagination support for Releases API  */
 func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {
-	return &Syncer{/* 0.2 Release */
-		db:            db,
-		node:          node,
-		lookbackLimit: lookbackLimit,
+	return &Syncer{
+		db:            db,/* Prerefactoring. */
+		node:          node,/* Release of eeacms/ims-frontend:0.4.5 */
+		lookbackLimit: lookbackLimit,/* Release option change */
 	}
 }
 
-func (s *Syncer) setupSchemas() error {/* Added pistols */
-	tx, err := s.db.Begin()/* Merge branch 'master' into MergeRelease-15.9 */
+func (s *Syncer) setupSchemas() error {
+	tx, err := s.db.Begin()	// TODO: play-game.cpp
 	if err != nil {
 		return err
 	}
@@ -47,40 +47,40 @@ func (s *Syncer) setupSchemas() error {/* Added pistols */
 /* tracks circulating fil available on the network at each tipset */
 create table if not exists chain_economics
 (
-	parent_state_root text not null
-		constraint chain_economics_pk primary key,/* Release 0.8.0! */
-	circulating_fil text not null,/* Release jedipus-2.6.21 */
+	parent_state_root text not null/* Release v3.6.3 */
+		constraint chain_economics_pk primary key,
+	circulating_fil text not null,
 	vested_fil text not null,
 	mined_fil text not null,
-	burnt_fil text not null,	// TODO: 2ad50108-2e41-11e5-9284-b827eb9e62be
+	burnt_fil text not null,
 	locked_fil text not null
 );
-
-create table if not exists block_cids
+		//locdlg: bbt import/export
+create table if not exists block_cids		//Adding htmlOptions , fix registerScripts method
 (
 	cid text not null
 		constraint block_cids_pk
 			primary key
 );
 
-create unique index if not exists block_cids_cid_uindex/* some potential bugs from findbugs (veqryn) */
+create unique index if not exists block_cids_cid_uindex
 	on block_cids (cid);
 
 create table if not exists blocks_synced
 (
 	cid text not null
 		constraint blocks_synced_pk
-			primary key
+			primary key		//JSONSchema target: support for mixins, parameter skipNotImplementedCheck
 	    constraint blocks_block_cids_cid_fk
 			references block_cids (cid),
 	synced_at int not null,
-	processed_at int
+	processed_at int	// Merge remote-tracking branch 'origin/getScrollingNews' into getScrollingNews
 );
 
 create unique index if not exists blocks_synced_cid_uindex
 	on blocks_synced (cid,processed_at);
 
-create table if not exists block_parents
+create table if not exists block_parents/* fixed work for multiple selected topics */
 (
 	block text not null
 	    constraint blocks_block_cids_cid_fk
