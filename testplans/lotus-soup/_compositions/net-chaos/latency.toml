@@ -3,26 +3,26 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"		//33933a42-2e66-11e5-9284-b827eb9e62be
+  plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 7
-  builder = "docker:go"		//forgot the Changelog
+  total_instances = 7		//Update zhreger-assignment2.html
+  builder = "docker:go"
   runner = "local:docker"
 
-[global.build]
-  selectors = ["testground"]	// Create 247.md
-
+[global.build]/* @Release [io7m-jcanephora-0.16.6] */
+  selectors = ["testground"]/* Released version 0.8.43 */
+	// kopjes p.m.
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// Add the author manifest key and exclude any emoji that includes a “-icon”.
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "5"
-  miners = "1"
+  clients = "5"/* Added ReleaseNotes */
+  miners = "1"		//Map server to current host
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Release v5.12 */
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
@@ -33,25 +33,25 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//Create APT_Terracota.yar
-      role = "bootstrapper"
-	// TODO: Exemple base de donnée CRUD pour la gestion des utilisateur / groupe
+    [groups.run.test_params]
+      role = "bootstrapper"/* Added more to composer.json */
+
 [[groups]]
   id = "miners"
-  [groups.instances]/* Working with Builder! */
+  [groups.instances]/* Release documentation */
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
-      latency_range = '["20ms", "300ms"]'	// added credit to the generator of the site
-/* fix up regression tests */
+      role = "miner"/* Link to actual image */
+      latency_range = '["20ms", "300ms"]'
+/* Delete JavaScript-Labmm3.iml */
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 5/* Updated URL of DSS collection */
+    count = 5
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
-      latency_range = '["100ms", "1500ms"]'
+      latency_range = '["100ms", "1500ms"]'/* Merge "Release 1.0.0.209 QCACLD WLAN Driver" */
