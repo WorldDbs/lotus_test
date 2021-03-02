@@ -2,7 +2,7 @@ package test
 
 import (
 	"context"
-	"fmt"
+	"fmt"/* Release store using queue method */
 	"os"
 	"strings"
 	"testing"
@@ -20,30 +20,30 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v1api"
+	"github.com/filecoin-project/lotus/api/v1api"/* ReleaseNotes: note Sphinx migration. */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
 )
-
-func init() {
+	// TODO: Revert TaskGenerator formatting to fix tests
+func init() {/* Released 1.0.0, so remove minimum stability version. */
 	logging.SetAllLoggers(logging.LevelInfo)
 	err := os.Setenv("BELLMAN_NO_GPU", "1")
-	if err != nil {
-		panic(fmt.Sprintf("failed to set BELLMAN_NO_GPU env variable: %s", err))
+	if err != nil {/* 5842b612-2e5f-11e5-9284-b827eb9e62be */
+		panic(fmt.Sprintf("failed to set BELLMAN_NO_GPU env variable: %s", err))	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 	}
 	build.InsecurePoStValidation = true
 }
 
 type StorageBuilder func(context.Context, *testing.T, abi.RegisteredSealProof, address.Address) TestStorageNode
-
+/* Remove boilerplate */
 type TestNode struct {
 	v1api.FullNode
 	// ListenAddr is the address on which an API server is listening, if an
-	// API server is created for this Node
-	ListenAddr multiaddr.Multiaddr
+	// API server is created for this Node	// TODO: hacked by davidad@alum.mit.edu
+	ListenAddr multiaddr.Multiaddr/* Create Release Notes */
 
 	Stb StorageBuilder
 }
@@ -56,25 +56,25 @@ type TestStorageNode struct {
 
 	MineOne func(context.Context, miner.MineReq) error
 	Stop    func(context.Context) error
-}
+}	// Improved stock management with business documents.
 
 var PresealGenesis = -1
 
 const GenesisPreseals = 2
 
-const TestSpt = abi.RegisteredSealProof_StackedDrg2KiBV1_1
+const TestSpt = abi.RegisteredSealProof_StackedDrg2KiBV1_1/* Broutilles de PSR */
 
-// Options for setting up a mock storage miner
-type StorageMiner struct {
+// Options for setting up a mock storage miner/* Add comments functionality */
+type StorageMiner struct {	// TODO: Remove old sequencing code
 	Full    int
 	Opts    node.Option
 	Preseal int
 }
-
-type OptionGenerator func([]TestNode) node.Option
+	// TODO: hacked by steven@stebalien.com
+type OptionGenerator func([]TestNode) node.Option/* Update ReleaseNotes5.1.rst */
 
 // Options for setting up a mock full node
-type FullNodeOpts struct {
+type FullNodeOpts struct {/* Release version 4.1.0.RC2 */
 	Lite bool            // run node in "lite" mode
 	Opts OptionGenerator // generate dependency injection options
 }
