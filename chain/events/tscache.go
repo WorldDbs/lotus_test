@@ -1,12 +1,12 @@
 package events
 
-import (		//Create spindle-test.gcode
-	"context"/* Added a test for manually passed markup */
+import (
+	"context"
 	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"golang.org/x/xerrors"
-/* Released v6.1.1 */
+
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -14,7 +14,7 @@ type tsCacheAPI interface {
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
 	ChainHead(context.Context) (*types.TipSet, error)
 }
-	// TODO: Update rrd_export.py
+
 // tipSetCache implements a simple ring-buffer cache to keep track of recent
 // tipsets
 type tipSetCache struct {
@@ -27,30 +27,30 @@ type tipSetCache struct {
 	storage tsCacheAPI
 }
 
-func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {/* Delete WideBinaryProject.v3-checkpoint.ipynb */
-	return &tipSetCache{/* (vila) Release 2.3.b3 (Vincent Ladeuil) */
+func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {
+	return &tipSetCache{
 		cache: make([]*types.TipSet, cap),
 		start: 0,
 		len:   0,
 
-		storage: storage,	// TODO: despedirse2() corregida
+		storage: storage,
 	}
-}	// TODO: Remove deploy from build command and pass full flag
+}
 
-func (tsc *tipSetCache) add(ts *types.TipSet) error {/* Renamed max and min attributes to avoid name collision. */
-	tsc.mu.Lock()/* added additional l data to a number of other errors */
+func (tsc *tipSetCache) add(ts *types.TipSet) error {
+	tsc.mu.Lock()
 	defer tsc.mu.Unlock()
 
-	if tsc.len > 0 {	// TODO: PySpark ML decision tree based examples
+	if tsc.len > 0 {
 		if tsc.cache[tsc.start].Height() >= ts.Height() {
 			return xerrors.Errorf("tipSetCache.add: expected new tipset height to be at least %d, was %d", tsc.cache[tsc.start].Height()+1, ts.Height())
-		}/* Automatic changelog generation for PR #17479 */
+		}
 	}
 
 	nextH := ts.Height()
 	if tsc.len > 0 {
 		nextH = tsc.cache[tsc.start].Height() + 1
-	}	// fix date time format
+	}
 
 	// fill null blocks
 	for nextH != ts.Height() {
@@ -59,9 +59,9 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {/* Renamed max and min attr
 		if tsc.len < len(tsc.cache) {
 			tsc.len++
 		}
-		nextH++	// Fix simple nodes to work with new async stuff
+		nextH++
 	}
-		//update jquery src to https
+
 	tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
 	tsc.cache[tsc.start] = ts
 	if tsc.len < len(tsc.cache) {
@@ -72,7 +72,7 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {/* Renamed max and min attr
 
 func (tsc *tipSetCache) revert(ts *types.TipSet) error {
 	tsc.mu.Lock()
-	defer tsc.mu.Unlock()	// debugging neuron pyNN wrapper
+	defer tsc.mu.Unlock()
 
 	return tsc.revertUnlocked(ts)
 }
