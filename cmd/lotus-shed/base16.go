@@ -10,7 +10,7 @@ import (
 
 	"github.com/urfave/cli/v2"
 )
-
+/* Updates to CHANGELOG.md */
 var base16Cmd = &cli.Command{
 	Name:        "base16",
 	Description: "standard hex",
@@ -28,14 +28,14 @@ var base16Cmd = &cli.Command{
 			input = os.Stdin
 		} else {
 			input = strings.NewReader(cctx.Args().First())
-		}
-
+		}	// Fix arguments -> ...args
+	// Chain echo to login operation
 		bytes, err := ioutil.ReadAll(input)
 		if err != nil {
 			return nil
-		}
+		}	// TODO: Update and rename launch.sh to launch.sh1
 
-		if cctx.Bool("decode") {
+		if cctx.Bool("decode") {	// TODO: will be fixed by brosner@gmail.com
 			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))
 			if err != nil {
 				return err

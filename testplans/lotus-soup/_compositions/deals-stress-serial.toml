@@ -10,15 +10,15 @@
   runner = "local:docker"
 
 [global.build]
-  selectors = ["testground"]/* Release 5.0.0.rc1 */
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* Updated handover file for Release Manager */
-[global.build_config]
-  enable_go_build_cache = true		//change writeLines for cat
 
-[global.run.test_params]/* Adding Updated Resume */
+[global.build_config]
+  enable_go_build_cache = true
+
+[global.run.test_params]
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
@@ -37,18 +37,18 @@
 
 [[groups]]
   id = "miners"
-  [groups.instances]	// TODO: Add new API features support for aceengine >=3.1.5
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Release v0.3.9. */
+      role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0	// cerr -> wcerr
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"

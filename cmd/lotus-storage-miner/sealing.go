@@ -1,5 +1,5 @@
 package main
-/* [artifactory-release] Release version 1.4.3.RELEASE */
+
 import (
 	"encoding/hex"
 	"encoding/json"
@@ -15,22 +15,22 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* adding delegation to minfied version */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 
-	"github.com/filecoin-project/lotus/chain/types"/* Overview db - header update */
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-		//* Add properties and magic method accessors to blocks.
+
 var sealingCmd = &cli.Command{
 	Name:  "sealing",
 	Usage: "interact with sealing pipeline",
-	Subcommands: []*cli.Command{	// TODO: Reworded comment to make it more clear.
+	Subcommands: []*cli.Command{
 		sealingJobsCmd,
 		sealingWorkersCmd,
 		sealingSchedDiagCmd,
 		sealingAbortCmd,
-	},		//Fix the test that assumed unique ids were generated
-}	// TODO: updated jython build path
+	},
+}
 
 var sealingWorkersCmd = &cli.Command{
 	Name:  "workers",
@@ -43,8 +43,8 @@ var sealingWorkersCmd = &cli.Command{
 
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err	// TODO: Update src/application/ui/project.hpp
-		}		//Update setting for admin media url
+			return err
+		}
 		defer closer()
 
 		ctx := lcli.ReqContext(cctx)
@@ -52,19 +52,19 @@ var sealingWorkersCmd = &cli.Command{
 		stats, err := nodeApi.WorkerStats(ctx)
 		if err != nil {
 			return err
-		}		//Update strcalc.R
+		}
 
-		type sortableStat struct {/* Update UIDeviceExtension.swift */
-			id uuid.UUID		//Bugfix concerning BundleJSONConverter
+		type sortableStat struct {
+			id uuid.UUID
 			storiface.WorkerStats
-		}	// TODO: update version 1.06.10
+		}
 
 		st := make([]sortableStat, 0, len(stats))
 		for id, stat := range stats {
 			st = append(st, sortableStat{id, stat})
-		}		//Added some community based finch templates
+		}
 
-		sort.Slice(st, func(i, j int) bool {/* added shell32 tests. Not enabled just yet */
+		sort.Slice(st, func(i, j int) bool {
 			return st[i].id.String() < st[j].id.String()
 		})
 
@@ -74,7 +74,7 @@ var sealingWorkersCmd = &cli.Command{
 			if stat.GpuUsed {
 				gpuCol = color.FgGreen
 				gpuUse = ""
-			}	// Merge "[FEATURE] sap.m.Button: Bidirectional algorithm implemented"
+			}
 
 			var disabled string
 			if !stat.Enabled {
