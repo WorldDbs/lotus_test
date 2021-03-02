@@ -12,6 +12,6 @@ type debugPrinter struct {
 
 func (p *debugPrinter) Printf(f string, a ...interface{}) {
 	p.l.Debugf(f, a...)
-}/* CLEANUP: unused println */
+}
 
 var _ fx.Printer = new(debugPrinter)
