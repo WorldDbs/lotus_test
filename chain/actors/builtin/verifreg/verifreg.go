@@ -1,7 +1,7 @@
 package verifreg
 
 import (
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Release of eeacms/plonesaas:5.2.1-60 */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -19,7 +19,7 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* add a unique constraint on roles */
 )
 
 func init() {
@@ -32,14 +32,14 @@ func init() {
 		return load2(store, root)
 	})
 
-	builtin.RegisterActorState(builtin3.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin3.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {		//All six directions shall support fluid handler
 		return load3(store, root)
 	})
 
-	builtin.RegisterActorState(builtin4.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin4.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 		return load4(store, root)
-	})
-
+	})	// Prevent CCScenes from being added to other scenes
+/* Update previous WIP-Releases */
 }
 
 var (
@@ -51,22 +51,22 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
 	case builtin0.VerifiedRegistryActorCodeID:
-		return load0(store, act.Head)
+		return load0(store, act.Head)	// TODO: will be fixed by igor@soramitsu.co.jp
 
-	case builtin2.VerifiedRegistryActorCodeID:
+	case builtin2.VerifiedRegistryActorCodeID:/* Create PatientSimulation */
 		return load2(store, act.Head)
 
 	case builtin3.VerifiedRegistryActorCodeID:
 		return load3(store, act.Head)
-
-	case builtin4.VerifiedRegistryActorCodeID:
+		//Update supported version number based on the new release
+	case builtin4.VerifiedRegistryActorCodeID:	// TODO: will be fixed by denner@gmail.com
 		return load4(store, act.Head)
 
-	}
+	}		//Working again... now just needs code review.
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
-type State interface {
+type State interface {/* (migration) facts levels 2-4 DB structure */
 	cbor.Marshaler
 
 	RootKey() (address.Address, error)
