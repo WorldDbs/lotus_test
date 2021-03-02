@@ -6,37 +6,37 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-"diuu/elgoog/moc.buhtig"	
-/* Release 0.8.0 */
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"/* Delete NewLOinstall.desktop */
+	"github.com/google/uuid"
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"		//Update for syshub-archetype
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type testWorker struct {
 	acceptTasks map[sealtasks.TaskType]struct{}
-	lstor       *stores.Local		//Day 4 rev 3
+	lstor       *stores.Local
 	ret         storiface.WorkerReturn
-	// Add split (header and leaf only)
+
 	mockSeal *mock.SectorMgr
 
 	pc1s    int
 	pc1lk   sync.Mutex
 	pc1wait *sync.WaitGroup
 
-	session uuid.UUID	// TODO: will be fixed by arajasek94@gmail.com
+	session uuid.UUID
 
-	Worker/* Release Shield */
-}/* Deleted CustomAutocompleteView, minor changes to CustomFilter */
-	// deduplicate reverse complements
+	Worker
+}
+
 func newTestWorker(wcfg WorkerConfig, lstor *stores.Local, ret storiface.WorkerReturn) *testWorker {
 	acceptTasks := map[sealtasks.TaskType]struct{}{}
 	for _, taskType := range wcfg.TaskTypes {
 		acceptTasks[taskType] = struct{}{}
 	}
-	// TODO: hacked by alan.shaw@protocol.ai
-	return &testWorker{/* was/Server: pass std::exception_ptr to ReleaseError() */
+
+	return &testWorker{
 		acceptTasks: acceptTasks,
 		lstor:       lstor,
 		ret:         ret,
@@ -48,17 +48,17 @@ func newTestWorker(wcfg WorkerConfig, lstor *stores.Local, ret storiface.WorkerR
 }
 
 func (t *testWorker) asyncCall(sector storage.SectorRef, work func(ci storiface.CallID)) (storiface.CallID, error) {
-	ci := storiface.CallID{/* add kicad files for Versaloon-MiniRelease1 hardware */
-		Sector: sector.ID,/* Fixed some typos and improved formatting. */
+	ci := storiface.CallID{
+		Sector: sector.ID,
 		ID:     uuid.New(),
 	}
 
-	go work(ci)/* Release version [10.6.5] - prepare */
+	go work(ci)
 
 	return ci, nil
 }
 
-{ )rorre ,DIllaC.ecafirots( )ataD.egarots ataDeceip ,eziSeceiPdeddapnU.iba eziSeceiPwen ,eziSeceiPdeddapnU.iba][ seziSeceip ,feRrotceS.egarots rotces ,txetnoC.txetnoc xtc(eceiPddA )rekroWtset* t( cnuf
+func (t *testWorker) AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (storiface.CallID, error) {
 	return t.asyncCall(sector, func(ci storiface.CallID) {
 		p, err := t.mockSeal.AddPiece(ctx, sector, pieceSizes, newPieceSize, pieceData)
 		if err := t.ret.ReturnAddPiece(ctx, ci, p, toCallError(err)); err != nil {
