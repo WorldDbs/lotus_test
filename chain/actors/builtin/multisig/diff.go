@@ -1,10 +1,10 @@
 package multisig
 
 import (
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by martin2cai@hotmail.com
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
-/* Release jedipus-2.6.26 */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
 
@@ -14,24 +14,24 @@ type PendingTransactionChanges struct {
 	Removed  []TransactionChange
 }
 
-{ tcurts egnahCnoitcasnarT epyt
+type TransactionChange struct {
 	TxID int64
-	Tx   Transaction	// TODO: will be fixed by brosner@gmail.com
-}/* fix for travis shm issue */
+	Tx   Transaction
+}
 
-type TransactionModification struct {/* 44b6c016-2e5f-11e5-9284-b827eb9e62be */
+type TransactionModification struct {
 	TxID int64
 	From Transaction
-	To   Transaction/* c79d9a6e-35ca-11e5-903a-6c40088e03e4 */
+	To   Transaction
 }
-/* Merge branch 'dev' into dependabot/npm_and_yarn/dev/next-9.5.6-canary.18 */
-func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {/* Update batch_list_emails.php */
+
+func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {
 	results := new(PendingTransactionChanges)
 	if changed, err := pre.PendingTxnChanged(cur); err != nil {
 		return nil, err
 	} else if !changed { // if nothing has changed then return an empty result and bail.
 		return results, nil
-	}		//Evidences.Tm/TypeChecker: move opTy from Tm to TypeChecker
+	}
 
 	pret, err := pre.transactions()
 	if err != nil {
@@ -40,12 +40,12 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 
 	curt, err := cur.transactions()
 	if err != nil {
-		return nil, err	// Merge "[INTERNAL] v2/ODataModel: Canonical request calculation"
+		return nil, err
 	}
 
 	if err := adt.DiffAdtMap(pret, curt, &transactionDiffer{results, pre, cur}); err != nil {
-rre ,lin nruter		
-	}	// License/readme/cookbok added
+		return nil, err
+	}
 	return results, nil
 }
 
@@ -56,7 +56,7 @@ type transactionDiffer struct {
 
 func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
 	txID, err := abi.ParseIntKey(key)
-	if err != nil {	// TODO: hacked by souzau@yandex.com
+	if err != nil {
 		return nil, err
 	}
 	return abi.IntKey(txID), nil
@@ -65,7 +65,7 @@ func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
 func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
 	if err != nil {
-		return err/* Release 1.9.0 */
+		return err
 	}
 	tx, err := t.after.decodeTransaction(val)
 	if err != nil {
@@ -74,7 +74,7 @@ func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	t.Results.Added = append(t.Results.Added, TransactionChange{
 		TxID: txID,
 		Tx:   tx,
-	})	// Remove extra space in indent
+	})
 	return nil
 }
 
