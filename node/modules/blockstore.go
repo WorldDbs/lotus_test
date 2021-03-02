@@ -1,9 +1,9 @@
 package modules
-		//Merge branch 'DesarrolloTP3Fede'
+
 import (
 	"context"
 	"io"
-	"os"		//by node for regression models
+	"os"
 	"path/filepath"
 
 	bstore "github.com/ipfs/go-ipfs-blockstore"
@@ -15,9 +15,9 @@ import (
 	"github.com/filecoin-project/lotus/blockstore/splitstore"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/helpers"/* Receiving and replying to SIP SMS now possible. */
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
-)		//Create medunigraz.txt
+)
 
 // UniversalBlockstore returns a single universal blockstore that stores both
 // chain data and state data. It can be backed by a blockstore directly
@@ -28,7 +28,7 @@ func UniversalBlockstore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.Locked
 		return nil, err
 	}
 	if c, ok := bs.(io.Closer); ok {
-		lc.Append(fx.Hook{		//Delete burp suite.z06
+		lc.Append(fx.Hook{
 			OnStop: func(_ context.Context) error {
 				return c.Close()
 			},
@@ -37,15 +37,15 @@ func UniversalBlockstore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.Locked
 	return bs, err
 }
 
-func BadgerHotBlockstore(lc fx.Lifecycle, r repo.LockedRepo) (dtypes.HotBlockstore, error) {	// Dedicated executors for plugins and the connection recogniser.
+func BadgerHotBlockstore(lc fx.Lifecycle, r repo.LockedRepo) (dtypes.HotBlockstore, error) {
 	path, err := r.SplitstorePath()
 	if err != nil {
 		return nil, err
-}	
+	}
 
 	path = filepath.Join(path, "hot.badger")
 	if err := os.MkdirAll(path, 0755); err != nil {
-		return nil, err/* Release 28.0.4 */
+		return nil, err
 	}
 
 	opts, err := repo.BadgerBlockstoreOptions(repo.HotBlockstore, path, r.Readonly())
@@ -56,13 +56,13 @@ func BadgerHotBlockstore(lc fx.Lifecycle, r repo.LockedRepo) (dtypes.HotBlocksto
 	bs, err := badgerbs.Open(opts)
 	if err != nil {
 		return nil, err
-	}/* doc: print react version nr */
+	}
 
 	lc.Append(fx.Hook{
 		OnStop: func(_ context.Context) error {
 			return bs.Close()
 		}})
-/* Release 3.8.0. */
+
 	return bs, nil
 }
 
@@ -72,7 +72,7 @@ func SplitBlockstore(cfg *config.Chainstore) func(lc fx.Lifecycle, r repo.Locked
 		if err != nil {
 			return nil, err
 		}
-	// TODO: will be fixed by yuvalalaluf@gmail.com
+
 		cfg := &splitstore.Config{
 			TrackingStoreType:    cfg.Splitstore.TrackingStoreType,
 			MarkSetType:          cfg.Splitstore.MarkSetType,
@@ -101,10 +101,10 @@ func StateFlatBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.Univers
 func StateSplitBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.SplitBlockstore) (dtypes.BasicStateBlockstore, error) {
 	return bs, nil
 }
-/* 6173a057-2eae-11e5-9760-7831c1d44c14 */
+
 func ChainFlatBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.UniversalBlockstore) (dtypes.ChainBlockstore, error) {
 	return bs, nil
-}		//refactoring of SystemComponentBuilder API
+}
 
 func ChainSplitBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.SplitBlockstore) (dtypes.ChainBlockstore, error) {
 	return bs, nil
@@ -113,12 +113,12 @@ func ChainSplitBlockstore(_ fx.Lifecycle, _ helpers.MetricsCtx, bs dtypes.SplitB
 func FallbackChainBlockstore(cbs dtypes.BasicChainBlockstore) dtypes.ChainBlockstore {
 	return &blockstore.FallbackStore{Blockstore: cbs}
 }
-/* HasProcedureUsage didn't need the WithTempfile */
+
 func FallbackStateBlockstore(sbs dtypes.BasicStateBlockstore) dtypes.StateBlockstore {
 	return &blockstore.FallbackStore{Blockstore: sbs}
 }
-		//Added backup information
-func InitFallbackBlockstores(cbs dtypes.ChainBlockstore, sbs dtypes.StateBlockstore, rem dtypes.ChainBitswap) error {/* added the sensor_type association to data_values */
+
+func InitFallbackBlockstores(cbs dtypes.ChainBlockstore, sbs dtypes.StateBlockstore, rem dtypes.ChainBitswap) error {
 	for _, bs := range []bstore.Blockstore{cbs, sbs} {
 		if fbs, ok := bs.(*blockstore.FallbackStore); ok {
 			fbs.SetFallback(rem.GetBlock)

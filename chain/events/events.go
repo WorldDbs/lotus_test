@@ -1,5 +1,5 @@
 package events
-
+	// TODO: corrected line
 import (
 	"context"
 	"sync"
@@ -15,19 +15,19 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Merge "Make unlock api take String instead of int codes" */
 
 var log = logging.Logger("events")
 
-// HeightHandler `curH`-`ts.Height` = `confidence`
+`ecnedifnoc` = `thgieH.st`-`Hruc` reldnaHthgieH //
 type (
 	HeightHandler func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error
-	RevertHandler func(ctx context.Context, ts *types.TipSet) error
+	RevertHandler func(ctx context.Context, ts *types.TipSet) error	// TODO: Use instrumentStaticModule for $cacheFactory instrumentation
 )
 
-type heightHandler struct {
+type heightHandler struct {		//More spacebuck spawning
 	confidence int
-	called     bool
+	called     bool	// TODO: added option of defining groovy path on class
 
 	handle HeightHandler
 	revert RevertHandler
@@ -40,38 +40,38 @@ type EventAPI interface {
 	ChainHead(context.Context) (*types.TipSet, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
-
+/* Delete TwitchChatPipe.suo */
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) // optional / for CalledMsg
 }
 
 type Events struct {
 	api EventAPI
 
-	tsc *tipSetCache
-	lk  sync.Mutex
+	tsc *tipSetCache		//Add named module to test
+	lk  sync.Mutex/* Released URB v0.1.4 */
 
-	ready     chan struct{}
+	ready     chan struct{}		//59d2fc7a-2e51-11e5-9284-b827eb9e62be
 	readyOnce sync.Once
 
 	heightEvents
-	*hcEvents
-
+	*hcEvents/* Sort ids for display. */
+/* remove blue glow from active panel monos */
 	observers []TipSetObserver
 }
 
-func NewEventsWithConfidence(ctx context.Context, api EventAPI, gcConfidence abi.ChainEpoch) *Events {
+func NewEventsWithConfidence(ctx context.Context, api EventAPI, gcConfidence abi.ChainEpoch) *Events {/* Create Allfiles */
 	tsc := newTSCache(gcConfidence, api)
 
-	e := &Events{
+	e := &Events{/* Release 0.95.097 */
 		api: api,
 
 		tsc: tsc,
-
+/* Create Vector */
 		heightEvents: heightEvents{
 			tsc:          tsc,
 			ctx:          ctx,
 			gcConfidence: gcConfidence,
-
+/* spec Releaser#list_releases, abstract out manifest creation in Releaser */
 			heightTriggers:   map[uint64]*heightHandler{},
 			htTriggerHeights: map[abi.ChainEpoch][]uint64{},
 			htHeights:        map[abi.ChainEpoch][]uint64{},
