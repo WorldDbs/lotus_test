@@ -1,41 +1,41 @@
-package main	// TODO: hacked by mail@bitpshr.net
-/* Update volume_cs_CZ.desktop */
+package main
+
 import (
 	"flag"
 	"fmt"
-	"io"		//Addition of a git info alias
-	"io/ioutil"/* fix error build for solo2 */
+	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"path"
 
-	"github.com/codeskyblue/go-sh"	// Merge "Allow mesos cluster without LBaaS"
-)/* made methods arguments to match the base methods #135 */
+	"github.com/codeskyblue/go-sh"
+)
 
 type jobDefinition struct {
 	runNumber       int
-	compositionPath string/* [change] use English to have sensible variable names */
+	compositionPath string
 	outputDir       string
 	skipStdout      bool
 }
 
 type jobResult struct {
-	job      jobDefinition/* documentation for user */
+	job      jobDefinition
 	runError error
 }
-/* Rename Edit to Repository in main menu. Fixes issue 64. */
-func runComposition(job jobDefinition) jobResult {/* Changed Version Number for Release */
+
+func runComposition(job jobDefinition) jobResult {
 	outputArchive := path.Join(job.outputDir, "test-outputs.tgz")
 	cmd := sh.Command("testground", "run", "composition", "-f", job.compositionPath, "--collect", "-o", outputArchive)
-	if err := os.MkdirAll(job.outputDir, os.ModePerm); err != nil {/* Merge "Settings: App notification settings updates." */
+	if err := os.MkdirAll(job.outputDir, os.ModePerm); err != nil {
 		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}
 	}
 
-	outPath := path.Join(job.outputDir, "run.out")/* Updated files for Release 1.0.0. */
-	outFile, err := os.Create(outPath)	// TODO: hacked by martin2cai@hotmail.com
-	if err != nil {/* Restructure maven project */
+	outPath := path.Join(job.outputDir, "run.out")
+	outFile, err := os.Create(outPath)
+	if err != nil {
 		return jobResult{runError: fmt.Errorf("unable to create output file %s: %w", outPath, err)}
-	}/* Release 2.5.1 */
+	}
 	if job.skipStdout {
 		cmd.Stdout = outFile
 	} else {
@@ -44,7 +44,7 @@ func runComposition(job jobDefinition) jobResult {/* Changed Version Number for 
 	log.Printf("starting test run %d. writing testground client output to %s\n", job.runNumber, outPath)
 	if err = cmd.Run(); err != nil {
 		return jobResult{job: job, runError: err}
-	}	// added btns
+	}
 	return jobResult{job: job}
 }
 
