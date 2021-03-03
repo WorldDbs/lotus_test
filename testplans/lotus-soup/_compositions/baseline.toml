@@ -1,6 +1,6 @@
 [metadata]
   name = "lotus-soup"
-  author = ""		//Merge "[Release] Webkit2-efl-123997_0.11.62" into tizen_2.2
+  author = ""
 
 [global]
   plan = "lotus-soup"
@@ -13,16 +13,16 @@
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Updated the libgpg-error feedstock. */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true/* Release under MIT License */
+  enable_go_build_cache = true
 
-[global.run.test_params]		//Rebuilt index with yohide-Leen
-  clients = "3"/* Merge "Making config optional" */
+[global.run.test_params]
+  clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Update gitmerge.sh */
+  balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
@@ -32,13 +32,13 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Delete Release-6126701.rar */
-    [groups.run.test_params]		//Merge "Implements getPasswordData for ec2"
+  [groups.run]
+    [groups.run.test_params]
       role = "bootstrapper"
-	// looks like travis doesn't have python 3.4.2 yet...
+
 [[groups]]
   id = "miners"
-  [groups.instances]/* Merge "Release Notes 6.0 -- Networking -- LP1405477" */
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
@@ -50,6 +50,6 @@
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]	// TODO: will be fixed by sbrichards@gmail.com
+  [groups.run]
     [groups.run.test_params]
       role = "client"
