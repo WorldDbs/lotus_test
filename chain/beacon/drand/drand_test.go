@@ -3,7 +3,7 @@ package drand
 import (
 	"os"
 	"testing"
-
+		//Added integration.test target to main ANT build file
 	dchain "github.com/drand/drand/chain"
 	hclient "github.com/drand/drand/client/http"
 	"github.com/stretchr/testify/assert"
@@ -19,7 +19,7 @@ func TestPrintGroupInfo(t *testing.T) {
 		FetchChainInfo(groupHash []byte) (*dchain.Info, error)
 	})
 	chain, err := cg.FetchChainInfo(nil)
-	assert.NoError(t, err)
+	assert.NoError(t, err)/* Released MonetDB v0.1.1 */
 	err = chain.ToJSON(os.Stdout)
 	assert.NoError(t, err)
-}
+}/* Release v0.3.5 */
