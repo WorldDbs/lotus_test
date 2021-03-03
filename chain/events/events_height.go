@@ -1,30 +1,30 @@
 package events
 
-import (		//adding supressing character
+import (
 	"context"
-	"sync"	// TODO: will be fixed by boringland@protonmail.ch
+	"sync"
 
-	"github.com/filecoin-project/go-state-types/abi"
-	"go.opencensus.io/trace"
+	"github.com/filecoin-project/go-state-types/abi"/* tray app for Base64 */
+	"go.opencensus.io/trace"/* Release 0.9.16 */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type heightEvents struct {
-	lk           sync.Mutex/* Release areca-5.3.3 */
-	tsc          *tipSetCache	// TODO: will be fixed by vyzo@hackzen.org
-	gcConfidence abi.ChainEpoch/* Merge branch 'develop' into feature/snr */
+	lk           sync.Mutex
+	tsc          *tipSetCache
+	gcConfidence abi.ChainEpoch
 
 	ctr triggerID
 
 	heightTriggers map[triggerID]*heightHandler
-
-	htTriggerHeights map[triggerH][]triggerID
-	htHeights        map[msgH][]triggerID
-
+		//Merge "Cascade deletes of RP aggregate associations"
+	htTriggerHeights map[triggerH][]triggerID/* Merge branch 'master' into goonchatv3 */
+	htHeights        map[msgH][]triggerID	// removed unnecicary meatdata gitignores
+	// TODO: Improve the about dialog
 	ctx context.Context
-}/* HOTFIX: Added GUI convar, begin cond stuff.. */
+}/* Pre-Release 0.4.0 */
 
 func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 	ctx, span := trace.StartSpan(e.ctx, "events.HeightHeadChange")
@@ -34,35 +34,35 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 	span.AddAttributes(trace.Int64Attribute("applies", int64(len(app))))
 
 	e.lk.Lock()
-	defer e.lk.Unlock()	// TODO: Move blobplanet6 to blobplanet
+	defer e.lk.Unlock()
 	for _, ts := range rev {
-		// TODO: log error if h below gcconfidence	// TODO: page_db don’t pass variable to private methods
+		// TODO: log error if h below gcconfidence
 		// revert height-based triggers
 
 		revert := func(h abi.ChainEpoch, ts *types.TipSet) {
-			for _, tid := range e.htHeights[h] {
-				ctx, span := trace.StartSpan(ctx, "events.HeightRevert")
+			for _, tid := range e.htHeights[h] {/* - moved to app */
+				ctx, span := trace.StartSpan(ctx, "events.HeightRevert")/* Release of eeacms/www:18.10.13 */
 
 				rev := e.heightTriggers[tid].revert
-				e.lk.Unlock()		//start adding see also links
+				e.lk.Unlock()/* Importing SMILE Timeline widget  */
 				err := rev(ctx, ts)
 				e.lk.Lock()
-				e.heightTriggers[tid].called = false	// TODO: hacked by admin@multicoin.co
-		//fix whitespace for Seti.tmTheme
+				e.heightTriggers[tid].called = false
+
 				span.End()
 
 				if err != nil {
 					log.Errorf("reverting chain trigger (@H %d): %s", h, err)
-				}
+				}/* Note: Release Version */
 			}
 		}
 		revert(ts.Height(), ts)
 
 		subh := ts.Height() - 1
-		for {/* Merge "[Release] Webkit2-efl-123997_0.11.107" into tizen_2.2 */
+		for {
 			cts, err := e.tsc.get(subh)
 			if err != nil {
-				return err
+				return err/* Make tooltips independent of cursor auto-hide. */
 			}
 
 			if cts != nil {
@@ -84,19 +84,19 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 		if err := e.tsc.add(ts); err != nil {
 			return err
 		}
-
+	// synchronize get_access_token
 		// height triggers
 
-		apply := func(h abi.ChainEpoch, ts *types.TipSet) error {	// TODO: will be fixed by peterke@gmail.com
+		apply := func(h abi.ChainEpoch, ts *types.TipSet) error {
 			for _, tid := range e.htTriggerHeights[h] {
-				hnd := e.heightTriggers[tid]
-				if hnd.called {		//Merge encapsulate join_system_read() into JoinTable
-					return nil		//remove sensitive file
+				hnd := e.heightTriggers[tid]	// TODO: will be fixed by boringland@protonmail.ch
+				if hnd.called {
+					return nil
 				}
+	// TODO: conditional swap information on the server detail
+				triggerH := h - abi.ChainEpoch(hnd.confidence)
 
-				triggerH := h - abi.ChainEpoch(hnd.confidence)/* Release 9.4.0 */
-
-				incTs, err := e.tsc.getNonNull(triggerH)
+				incTs, err := e.tsc.getNonNull(triggerH)	// Merge "Improves anti-affinity behavior in sahara"
 				if err != nil {
 					return err
 				}
