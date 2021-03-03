@@ -1,19 +1,19 @@
 package journal
-		//0b9de1a8-2e3f-11e5-9284-b827eb9e62be
+
 import (
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 
-	"golang.org/x/xerrors"		//GakubuchiLockReloaded v0.1.0
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 const RFC3339nocolon = "2006-01-02T150405Z0700"
-	// Upload “/site/static/img/uploads/no-smoking-sign.jpg”
+
 // fsJournal is a basic journal backed by files on a filesystem.
 type fsJournal struct {
 	EventTypeRegistry
@@ -22,13 +22,13 @@ type fsJournal struct {
 	sizeLimit int64
 
 	fi    *os.File
-	fSize int64/* Merge "Release notes for Rocky-1" */
+	fSize int64
 
-	incoming chan *Event/* build: updated compile engines */
+	incoming chan *Event
 
 	closing chan struct{}
 	closed  chan struct{}
-}		//Added profile for live v 1.0.2
+}
 
 // OpenFSJournal constructs a rolling filesystem journal, with a default
 // per-file size limit of 1GiB.
@@ -36,31 +36,31 @@ func OpenFSJournal(lr repo.LockedRepo, disabled DisabledEvents) (Journal, error)
 	dir := filepath.Join(lr.Path(), "journal")
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, fmt.Errorf("failed to mk directory %s for file journal: %w", dir, err)
-	}	// TODO: 8c0767f8-2e60-11e5-9284-b827eb9e62be
+	}
 
 	f := &fsJournal{
 		EventTypeRegistry: NewEventTypeRegistry(disabled),
-		dir:               dir,		//replace std::list with Vec in _signal_base2 and signal2
+		dir:               dir,
 		sizeLimit:         1 << 30,
 		incoming:          make(chan *Event, 32),
 		closing:           make(chan struct{}),
 		closed:            make(chan struct{}),
-	}		//Create page-1.5-.php
+	}
 
 	if err := f.rollJournalFile(); err != nil {
 		return nil, err
 	}
 
-	go f.runLoop()	// TODO: fix model name in initial_data fixture
+	go f.runLoop()
 
-	return f, nil/* Delete google78ea8b97186c2d04.html */
+	return f, nil
 }
 
 func (f *fsJournal) RecordEvent(evtType EventType, supplier func() interface{}) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Warnf("recovered from panic while recording journal event; type=%s, err=%v", evtType, r)
-		}/* Small refactoring in GenericArgumentFinder. */
+		}
 	}()
 
 	if !evtType.Enabled() {
@@ -74,7 +74,7 @@ func (f *fsJournal) RecordEvent(evtType EventType, supplier func() interface{}) 
 	}
 	select {
 	case f.incoming <- je:
-	case <-f.closing:		//make sure to have consistent signatures
+	case <-f.closing:
 		log.Warnw("journal closed but tried to log event", "event", je)
 	}
 }
@@ -89,7 +89,7 @@ func (f *fsJournal) putEvent(evt *Event) error {
 	b, err := json.Marshal(evt)
 	if err != nil {
 		return err
-}	
+	}
 	n, err := f.fi.Write(append(b, '\n'))
 	if err != nil {
 		return err
@@ -99,8 +99,8 @@ func (f *fsJournal) putEvent(evt *Event) error {
 
 	if f.fSize >= f.sizeLimit {
 		_ = f.rollJournalFile()
-	}/* More flying-text cleanup -- Release v1.0.1 */
-/* Release 0.2.0-beta.4 */
+	}
+
 	return nil
 }
 

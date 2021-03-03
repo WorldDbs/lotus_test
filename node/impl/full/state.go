@@ -2,7 +2,7 @@ package full
 
 import (
 	"bytes"
-	"context"
+	"context"/* dOKUMENTAZIOA eta BEHARREZKO LIBURUTEGIAK */
 	"strconv"
 
 	cid "github.com/ipfs/go-cid"
@@ -14,14 +14,14 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/go-state-types/network"/* Preview Release (Version 0.2 / VersionCode 2). */
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Release tarball of libwpg -> the system library addicted have their party today */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"/* DelayBasicScheduler renamed suspendRelease to resume */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
@@ -33,34 +33,34 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/chain/wallet"
+	"github.com/filecoin-project/lotus/chain/wallet"	// TODO: chore(package): update browserify to version 16.4.0
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-)
-
+)/* Release jedipus-2.6.7 */
+/* small chang */
 type StateModuleAPI interface {
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
-	MsigGetPending(ctx context.Context, addr address.Address, tsk types.TipSetKey) ([]*api.MsigTransaction, error)
+	MsigGetPending(ctx context.Context, addr address.Address, tsk types.TipSetKey) ([]*api.MsigTransaction, error)		//Delete MPC.launch~
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
-	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
+	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)/* Released 2.1.0 */
 	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)
 	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
-	StateMinerInfo(ctx context.Context, actor address.Address, tsk types.TipSetKey) (miner.MinerInfo, error)
+	StateMinerInfo(ctx context.Context, actor address.Address, tsk types.TipSetKey) (miner.MinerInfo, error)/* Release version 0.0.8 of VideoExtras */
 	StateMinerProvingDeadline(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*dline.Info, error)
-	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)
+	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)/* Release of eeacms/www-devel:19.11.20 */
 	StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error)
 	StateSectorGetInfo(ctx context.Context, maddr address.Address, n abi.SectorNumber, tsk types.TipSetKey) (*miner.SectorOnChainInfo, error)
 	StateVerifiedClientStatus(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*abi.StoragePower, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 }
+	// TODO: hacked by aeongrp@outlook.com
+var _ StateModuleAPI = *new(api.FullNode)	// TODO: hacked by qugou1350636@126.com
 
-var _ StateModuleAPI = *new(api.FullNode)
-
-// StateModule provides a default implementation of StateModuleAPI.
+// StateModule provides a default implementation of StateModuleAPI.	// TODO: system: sever printer dependency
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
 type StateModule struct {
@@ -69,8 +69,8 @@ type StateModule struct {
 	StateManager *stmgr.StateManager
 	Chain        *store.ChainStore
 }
-
-var _ StateModuleAPI = (*StateModule)(nil)
+/* Release 1.6.7 */
+var _ StateModuleAPI = (*StateModule)(nil)		//Merge branch 'refactor/grid-classes-renaming' into develop
 
 type StateAPI struct {
 	fx.In
