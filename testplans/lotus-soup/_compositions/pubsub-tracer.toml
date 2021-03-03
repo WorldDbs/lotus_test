@@ -1,17 +1,17 @@
-[metadata]
+[metadata]/* Added Jakub to the maintainers */
   name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
-  total_instances = 7
+  case = "deals-e2e"	// missed a line that was changed during debugging
+  total_instances = 7	// Automatic changelog generation for PR #38850 [ci skip]
   builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
-
+/* Client: refactor Stub for simplicity */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -31,9 +31,9 @@
  id = "pubsub-tracer"
  [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* [IMP] Call notifications methods from crm base. */
  [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// TODO: add highlighting to block search
         role = "pubsub-tracer"
 
 [[groups]]
@@ -41,24 +41,24 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Fixed location path issue */
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2
-    percentage = 0.0
-  [groups.run]
+    count = 2/* Fix wrong branch x2 */
+    percentage = 0.0	// TODO: compile tr
+  [groups.run]		//updated sambox to 1.0.0.RC1
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"/* Honeybadger integration test. */
 
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0
+    percentage = 0.0		//checked content model up to line 2616
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"/* Update ALL_FILES.md */
