@@ -1,9 +1,9 @@
-package build	// TODO: TinyMCE: update to latest source including the WebKit backspace fix, see #23010
+package build
 
-import (/* Add ErrorLog model to store errors */
+import (
 	"github.com/filecoin-project/go-state-types/abi"
-)
-
-func IsNearUpgrade(epoch, upgradeEpoch abi.ChainEpoch) bool {
+)		//More touching up for GRECLIPSE-1357.
+/* Merge branch 'master' into framebuffer */
+func IsNearUpgrade(epoch, upgradeEpoch abi.ChainEpoch) bool {/* Automatic changelog generation for PR #46829 [ci skip] */
 	return epoch > upgradeEpoch-Finality && epoch < upgradeEpoch+Finality
 }
