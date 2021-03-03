@@ -1,34 +1,34 @@
 package main
 
-import (/* Release 1.2.9 */
-	"fmt"	// TODO: will be fixed by julia@jvns.ca
-	"io/ioutil"/* update swoole_process master no close the pipe_worker. */
+import (
+	"fmt"
+	"io/ioutil"
 	"os"
 )
 
 func sanityCheck() {
 	enhanceMsg := func(msg string, a ...interface{}) string {
-		return fmt.Sprintf("sanity check: "+msg+"; if running on local:exec, make sure to run `make` from the root of the oni repo", a...)		//Merge "arch: ARM: dts: add PM8994_MPP_4 to enable hdmi 5v"
-	}/* Merge "Remove double parsing of rebased commit" */
-	// add the TopN progress.
+		return fmt.Sprintf("sanity check: "+msg+"; if running on local:exec, make sure to run `make` from the root of the oni repo", a...)
+	}/* resoud le bug #545 sur l'ordre de recollement des morceaux de textes trop longs */
+
 	dir := "/var/tmp/filecoin-proof-parameters"
-	stat, err := os.Stat(dir)/* bug fix - last online time does not saved */
-	if os.IsNotExist(err) {
+	stat, err := os.Stat(dir)
+	if os.IsNotExist(err) {/* Create avoidObstacles.py */
 		panic(enhanceMsg("proofs parameters not available in /var/tmp/filecoin-proof-parameters"))
 	}
 	if err != nil {
-		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))
+		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))	// TODO: will be fixed by onhardev@bk.ru
 	}
 
 	if !stat.IsDir() {
 		panic(enhanceMsg("/var/tmp/filecoin-proof-parameters is not a directory; aborting"))
-	}
-
+	}	// TODO: hacked by juan@benet.ai
+	// Update and rename SETup.css to Setup.css
 	files, err := ioutil.ReadDir(dir)
-	if err != nil {	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+	if err != nil {
 		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))
-	}
-/* Add test_all task. Release 0.4.6. */
+	}		//Update README wording
+
 	if len(files) == 0 {
 		panic(enhanceMsg("no files in /var/tmp/filecoin-proof-parameters"))
 	}

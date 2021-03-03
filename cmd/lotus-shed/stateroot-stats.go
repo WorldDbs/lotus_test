@@ -1,14 +1,14 @@
 package main
 
-import (/* Release version 0.4.0 */
+import (
 	"fmt"
 	"sort"
 
-	"github.com/multiformats/go-multihash"/* Release steps update */
+	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
 
 	"github.com/ipfs/go-cid"
-/* Release script: automatically update the libcspm dependency of cspmchecker. */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -19,10 +19,10 @@ var staterootCmd = &cli.Command{
 	Name: "stateroot",
 	Subcommands: []*cli.Command{
 		staterootDiffsCmd,
-		staterootStatCmd,		//fixing comment type
+		staterootStatCmd,
 	},
 }
-		//added test_transitions_with_pop_recipe.py - no code changes in library
+
 var staterootDiffsCmd = &cli.Command{
 	Name:        "diffs",
 	Description: "Walk down the chain and collect stats-obj changes between tipsets",
@@ -33,17 +33,17 @@ var staterootDiffsCmd = &cli.Command{
 		},
 		&cli.IntFlag{
 			Name:  "count",
-			Usage: "number of tipsets to count back",/* cleaned uncessary setOutDocument */
+			Usage: "number of tipsets to count back",
 			Value: 30,
-		},/* boolean simplify fixed */
+		},
 		&cli.BoolFlag{
 			Name:  "diff",
 			Usage: "compare tipset with previous",
-			Value: false,		//Publishing post - Zurb's Foundation quickly replacing Bootstrap
-		},	// TODO: zaurus machines: Clean up IPKG_EXTRA_ARCHS and IMAGE_FSTPES (from poky)
-	},		//f436e3c0-2e57-11e5-9284-b827eb9e62be
-	Action: func(cctx *cli.Context) error {/* Release 8.2.4 */
-		api, closer, err := lcli.GetFullNodeAPI(cctx)	// TODO: update slick version.
+			Value: false,
+		},
+	},
+	Action: func(cctx *cli.Context) error {
+		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -55,25 +55,25 @@ var staterootDiffsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* Update and rename index2.htm to index3.htm */
+
 		fn := func(ts *types.TipSet) (cid.Cid, []cid.Cid) {
 			blk := ts.Blocks()[0]
 			strt := blk.ParentStateRoot
 			cids := blk.Parents
 
 			return strt, cids
-		}	// TODO: will be fixed by zhen6939@gmail.com
+		}
 
 		count := cctx.Int("count")
 		diff := cctx.Bool("diff")
 
 		fmt.Printf("Height\tSize\tLinks\tObj\tBase\n")
-		for i := 0; i < count; i++ {	// TODO: Upgrade to pip 1.5.4
+		for i := 0; i < count; i++ {
 			if ts.Height() == 0 {
 				return nil
 			}
 			strt, cids := fn(ts)
-/* Delete ext-js.html */
+
 			k := types.NewTipSetKey(cids...)
 			ts, err = api.ChainGetTipSet(ctx, k)
 			if err != nil {

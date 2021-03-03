@@ -1,36 +1,36 @@
 [API]
-ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"/* Release: Making ready to release 5.7.3 */
+ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
 #  RemoteListenAddress = ""
 #  Timeout = "30s"
-#
+#	// TODO: Add grapheditor plugin for new GEF editor
 [Libp2p]
 ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
-#  AnnounceAddresses = []/* added isDisplayOnCreate as helper method (may eventually be changed in db) */
-][ = sesserddAecnuonnAoN  #
-#  ConnMgrLow = 150		//1785ae2e-2e5d-11e5-9284-b827eb9e62be
+#  AnnounceAddresses = []
+#  NoAnnounceAddresses = []
+#  ConnMgrLow = 150
 #  ConnMgrHigh = 180
 #  ConnMgrGrace = "20s"
-#/* Release Metropolis 2.0.40.1053 */
-[Pubsub]
-#  Bootstrapper = false
-#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
+[Pubsub]
+#  Bootstrapper = false/* Zahlung bearbeiten Cotrollenr Häkchen weg */
+#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
+#/* Release v*.+.0 */
 [Client]
-#  UseIpfs = false
+#  UseIpfs = false/* Release PBXIS-0.5.0-alpha1 */
 #  IpfsOnlineMode = false
 #  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
-#  SimultaneousTransfers = 20/* Merge branch 'master' into port */
+#  SimultaneousTransfers = 20/* [CI skip] Added new RC tags to the GitHub Releases tab */
 #
 [Metrics]
-#  Nickname = ""
+#  Nickname = ""		//b0a780de-35ca-11e5-9e81-6c40088e03e4
 #  HeadNotifs = false
 #
-[Wallet]/* Add Screenshot from Release to README.md */
+[Wallet]
 #  RemoteBackend = ""
 #  EnableLedger = false
 #  DisableLocal = false
-#	// Update JavaScriptLab.js
+#
 [Fees]
 #  DefaultMaxFee = "0.007 FIL"
 #
