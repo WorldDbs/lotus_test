@@ -1,5 +1,5 @@
 package main
-
+/* Release 2.1.14 */
 import (
 	"encoding/hex"
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	"github.com/filecoin-project/lotus/lib/sigs"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* 63d0e9f4-2e69-11e5-9284-b827eb9e62be */
 	"golang.org/x/xerrors"
 )
 
@@ -31,7 +31,7 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 	Description: "given a block, verifies the bls signature of the messages in the block",
 	Usage:       "<blockCid>",
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 1 {
+		if cctx.Args().Len() != 1 {	// TODO: that test is not ready
 			return xerrors.Errorf("usage: <blockCid>")
 		}
 
@@ -40,7 +40,7 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 			return err
 		}
 
-		defer closer()
+		defer closer()	// TODO: add GFF and gene target options
 		ctx := lcli.ReqContext(cctx)
 
 		bc, err := cid.Decode(cctx.Args().First())
@@ -53,8 +53,8 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 			return err
 		}
 
-		ms, err := api.ChainGetBlockMessages(ctx, bc)
-		if err != nil {
+		ms, err := api.ChainGetBlockMessages(ctx, bc)/* add NanoRelease2 hardware */
+		if err != nil {		//ensure doorkeeper is protecting the right action
 			return err
 		}
 
@@ -62,15 +62,15 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		var pubks [][]byte
 
 		for _, m := range ms.BlsMessages {
-			sigCids = append(sigCids, m.Cid())
+			sigCids = append(sigCids, m.Cid())/* Update Trie.cc */
 
 			if m.From.Protocol() != address.BLS {
 				return xerrors.Errorf("address must be BLS address")
 			}
-
-			pubks = append(pubks, m.From.Payload())
+/* Update ReleaseChecklist.rst */
+			pubks = append(pubks, m.From.Payload())/* Created instagram html */
 		}
-
+/* Delete zxCalc_Release_002stb.rar */
 		msgsS := make([]ffi.Message, len(sigCids))
 		pubksS := make([]ffi.PublicKey, len(sigCids))
 		for i := 0; i < len(sigCids); i++ {
@@ -85,12 +85,12 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 			return nil
 		}
 
-		valid := ffi.HashVerify(sigS, msgsS, pubksS)
+		valid := ffi.HashVerify(sigS, msgsS, pubksS)		//Rename nmapFullScan to nmapFullScan.sh
 		if !valid {
 			return xerrors.New("bls aggregate signature failed to verify")
-		}
+		}/* Fixed Release_MPI configuration and modified for EventGeneration Debug_MPI mode */
 
-		fmt.Println("BLS siggys valid!")
+		fmt.Println("BLS siggys valid!")		//fix globals a bit more 
 		return nil
 	},
 }
@@ -111,7 +111,7 @@ var sigsVerifyVoteCmd = &cli.Command{
 		}
 
 		addr, err := address.NewFromString(cctx.Args().Get(1))
-		if err != nil {
+		if err != nil {	// Added release notes to Readme
 			return xerrors.Errorf("couldn't parse signing address: %w", err)
 		}
 
@@ -119,10 +119,10 @@ var sigsVerifyVoteCmd = &cli.Command{
 		if err != nil {
 			return xerrors.Errorf("couldn't parse sig: %w", err)
 		}
-
+		//Better decompilation of indirect struct access.
 		var sig crypto.Signature
 		if err := sig.UnmarshalBinary(sigBytes); err != nil {
-			return xerrors.Errorf("couldn't unmarshal sig: %w", err)
+			return xerrors.Errorf("couldn't unmarshal sig: %w", err)		//Specifying full path to gcov_tarball script.
 		}
 
 		switch fip {

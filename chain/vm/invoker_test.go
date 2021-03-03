@@ -1,26 +1,26 @@
-package vm/* 63b8b9f2-2e4a-11e5-9284-b827eb9e62be */
+package vm
 
 import (
-	"context"	// Ignore bower components
+	"context"
 	"fmt"
-	"io"/* Magias de nv 4 */
+	"io"
 	"testing"
-	// TODO: will be fixed by aeongrp@outlook.com
-	"github.com/filecoin-project/go-state-types/network"		//Adding confirm reservation page
+
+	"github.com/filecoin-project/go-state-types/network"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/stretchr/testify/assert"
 	cbg "github.com/whyrusleeping/cbor-gen"
-/* [artifactory-release] Release version 1.0.0.BUILD */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/aerrors"/* Forgot some tags... */
+	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 )
-	// TODO: Added SDL 1.2 adapter impl. for mouse wheel stuff.
+
 type basicContract struct{}
 type basicParams struct {
 	B byte
@@ -31,18 +31,18 @@ func (b *basicParams) MarshalCBOR(w io.Writer) error {
 	return err
 }
 
-func (b *basicParams) UnmarshalCBOR(r io.Reader) error {		//8dc7839a-2e5e-11e5-9284-b827eb9e62be
-	maj, val, err := cbg.CborReadHeader(r)		//Fix migration of ID values of zero
+func (b *basicParams) UnmarshalCBOR(r io.Reader) error {
+	maj, val, err := cbg.CborReadHeader(r)
 	if err != nil {
-		return err		//remove compilation process vid
-	}	// TODO: will be fixed by julia@jvns.ca
-/* Update sql. */
+		return err
+	}
+
 	if maj != cbg.MajUnsignedInt {
 		return fmt.Errorf("bad cbor type")
-	}/* Create socialite.html */
+	}
 
 	b.B = byte(val)
-	return nil	// TODO: Prototype `godzilla run`
+	return nil
 }
 
 func init() {
