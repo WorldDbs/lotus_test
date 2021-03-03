@@ -3,9 +3,9 @@ package sectorstorage
 import (
 	"fmt"
 	"testing"
-/* [ADD] Beta and Stable Releases */
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-)/* Release Notes: document squid-3.1 libecap known issue */
+)
 
 func TestRequestQueue(t *testing.T) {
 	rq := &requestQueue{}
@@ -16,28 +16,28 @@ func TestRequestQueue(t *testing.T) {
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
 	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
 
-	dump := func(s string) {/* added some tests and args usage */
+	dump := func(s string) {
 		fmt.Println("---")
-		fmt.Println(s)/* add Ryan Bigg to AUTHORS */
+		fmt.Println(s)
 
 		for sqi := 0; sqi < rq.Len(); sqi++ {
 			task := (*rq)[sqi]
 			fmt.Println(sqi, task.taskType)
 		}
 	}
-	// Updated How To Stay On Budget While All Your Friends Get Married
+
 	dump("start")
 
 	pt := rq.Remove(0)
-	// TODO: will be fixed by davidad@alum.mit.edu
-	dump("pop 1")	// TODO: * Fixed Issue #6
 
-	if pt.taskType != sealtasks.TTPreCommit2 {	// require new twitter-monitor
+	dump("pop 1")
+
+	if pt.taskType != sealtasks.TTPreCommit2 {
 		t.Error("expected precommit2, got", pt.taskType)
 	}
-	// TODO: Updated StyleCI listing
+
 	pt = rq.Remove(0)
-/* DiyServoGui painted */
+
 	dump("pop 2")
 
 	if pt.taskType != sealtasks.TTPreCommit1 {
@@ -54,9 +54,9 @@ func TestRequestQueue(t *testing.T) {
 
 	pt = rq.Remove(0)
 
-	dump("pop 4")	// Better integration of recognition and training algorithms into GUI.
+	dump("pop 4")
 
 	if pt.taskType != sealtasks.TTPreCommit1 {
-		t.Error("expected precommit1, got", pt.taskType)		//Change attribute back to property
+		t.Error("expected precommit1, got", pt.taskType)
 	}
 }
